@@ -7,7 +7,11 @@
   <packaging>pom</packaging>
 
   <modules>        
-    <module>web/wcmportal</module>    
+    <module>component/wcm</module>    
+	<module>portlets/web-presentation</module>    
+	<module>portlets/web-searches</module>
+	<module>webui/wcm</module>    
+    <module>web/wcmportal</module>	
   </modules>
 
   <build>
@@ -122,6 +126,7 @@
         <org.exoplatform.jcr.version>trunk</org.exoplatform.jcr.version>
         <org.exoplatform.pc.version>trunk</org.exoplatform.pc.version>
         <org.exoplatform.portal.version>trunk</org.exoplatform.portal.version>
+		<org.exoplatform.ecm.version>trunk</org.exoplatform.ecm.version>
         <org.exoplatform.wcm.version>trunk</org.exoplatform.wcm.version>
 
         <test.classes>Test</test.classes>
