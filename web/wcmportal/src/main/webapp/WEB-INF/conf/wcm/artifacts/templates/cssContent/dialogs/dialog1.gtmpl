@@ -1,0 +1,53 @@
+<% uicomponent.addInterceptor("ecm-explorer/interceptor/PreNodeSaveInterceptor.groovy", "post") ; %>
+<div class="UIFormWithTitle"> 
+	<% uiform.begin() %>
+  <div class="HorizontalLayout" style="border: 0px;">	  
+   <table class="UIFormGrid">
+			<tr>
+			  <td class="FieldLabel"><%=_ctx.appRes("CSSContent.dialog.label.name")%></td>
+			  <td class="FieldComponent">
+			  <%
+	        String[] fieldName = ["jcrPath=/node", "editable=if-null", "validate=name"] ;
+	        uicomponent.addTextField("name", fieldName) ; 
+      	%>	      
+        </td>
+			</tr>						  						
+			
+			<tr>
+			  <td class="FieldLabel"><%=_ctx.appRes("CSSContent.dialog.label.css-data")%></td>
+			  <td class="FieldComponent">
+				<%
+	        String[] fieldContent = ["jcrPath=/node/exo:CSSData", "options=default", ""] ;
+	        uicomponent.addWYSIWYGField("CSSData", fieldContent) ;        
+	      %>
+				</td>
+			</tr>
+		</table>    
+		    
+		<%/* start render action*/%>
+		<div class="UIAction"> 
+	    <table class="ActionContainer" align="center">
+	    	<tr>
+	    		<td align="center">
+			      <% for(action in uicomponent.getActions()) { 
+			      		 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action); 
+								 String link = uicomponent.event(action) ;
+			      %>
+			          <a href="$link" class="ActionButton LightBlueStyle">
+									<div class="ButtonLeft">
+									  <div class="ButtonRight">
+										  <div class="ButtonMiddle">
+										    $actionLabel
+								      </div>
+								    </div>
+							    </div>
+								</a>
+			      <%}%>          
+	      	</td>
+	      </tr>
+	    </table>
+	  </div>
+	  <%/* end render action*/%>
+  </div>
+  <%uiform.end()%>
+</div>
