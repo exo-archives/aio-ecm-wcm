@@ -39,8 +39,7 @@ public class ProcessWebContentAction implements Action {
     WcmService wcmService = (WcmService)container.getComponentInstanceOfType(WcmService.class);
     try{
       wcmService.processWebContent(node); 
-    }catch (Exception e) {
-      e.printStackTrace();
+    }catch (Exception e) {      
     }    
     return false;
   }
