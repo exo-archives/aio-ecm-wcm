@@ -356,7 +356,7 @@ public abstract class DialogFormFields extends UIForm {
     if("false".equals(editable)) uiInput.setEditable(false) ;
     else uiInput.setEditable(true) ;
     if(getNode() != null) {
-      if(jcrPath.equals("/node") && (editable.equals("false") || editable.equals("if-null"))) {
+      if(jcrPath.equals("/node") && ("false".equals(editable)) || "if-null".equals(editable)) {
         Node parentNode = getNode().getParent() ;
         if(parentNode != null && parentNode.getName().equals("languages")) {
           uiInput.setValue(getNode().getParent().getParent().getName()) ;
@@ -530,7 +530,6 @@ public abstract class DialogFormFields extends UIForm {
     String defaultValue = parsedArguments.get(DEFAULT_VALUES);
     String options = parsedArguments.get(OPTIONS);
     String script = parsedArguments.get(SCRIPT);
-    String[] scriptParams = parsedArguments.get(SCRIPT_PARAMS).split(",");
     List<SelectItemOption<String>> optionsList = new ArrayList<SelectItemOption<String>>();
     UIFormSelectBox uiSelectBox = findComponentById(name) ;
     if(uiSelectBox == null || isResetForm_) {
@@ -538,6 +537,7 @@ public abstract class DialogFormFields extends UIForm {
       addUIFormInput(uiSelectBox) ;
       if (script != null) {
         try {
+          String[] scriptParams = parsedArguments.get(SCRIPT_PARAMS).split(",");
           if("repository".equals(scriptParams[0])) scriptParams[0] = repositoryName_ ;
           executeScript(script, uiSelectBox, scriptParams);
         } catch(Exception e) {
@@ -738,7 +738,7 @@ public abstract class DialogFormFields extends UIForm {
     String visible = parsedArguments.get(VISIBLE);    
     JcrInputProperty inputProperty = new JcrInputProperty();
     inputProperty.setJcrPath(jcrPath);
-    if(defaultValue.length() > 0) {
+    if(defaultValue != null && defaultValue.length() > 0) {
       inputProperty.setValue(defaultValue) ;
     }
     if (nodetype != null || mixintype != null) {
