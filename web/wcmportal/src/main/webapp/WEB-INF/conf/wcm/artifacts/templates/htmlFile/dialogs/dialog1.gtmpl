@@ -1,0 +1,132 @@
+<%
+  String[] hiddenField1 = ["jcrPath=/node/jcr:content", "nodetype=nt:resource", "mixintype=dc:elementSet", "visible=false"] ; 
+  String[] hiddenField2 = ["jcrPath=/node/jcr:content/jcr:encoding", "visible=false", "UTF-8"] ;  
+  String[] hiddenField4 = ["jcrPath=/node/jcr:content/jcr:lastModified", "visible=false"] ;
+  String[] hiddenField5 = ["jcrPath=/node/jcr:content/dc:date", "visible=false"] ;
+  String[] hiddenField6 = ["jcrPath=/node/jcr:content/jcr:mimeType", "visible=false", "text/html"] ;
+  uicomponent.addHiddenField("hiddenInput1", hiddenField1) ;
+  uicomponent.addHiddenField("hiddenInput2", hiddenField2) ;
+  uicomponent.addCalendarField("hiddenInput4", hiddenField4) ;
+  uicomponent.addCalendarField("hiddenInput5", hiddenField5) ;
+  uicomponent.addHiddenField("hiddenInput6", hiddenField6) ;
+%>
+<div class="UIFormWithTitle">  
+  <% uiform.begin() %>
+  <div class="HorizontalLayout" style="border:0px;">
+    <table class="UIFormGrid">
+        <tr>
+          <td class="FieldLabel"><%=_ctx.appRes("HtmlFile.dialog.label.name")%></td>
+          <td class="FieldComponent">
+            <%
+              String[] fieldName = ["jcrPath=/node", "nodetype=nt:file", "mixintype=mix:votable,mix:commentable,mix:i18n", "editable=if-null", "validate=name"] ;
+              uicomponent.addTextField("name", fieldName) ; 
+            %>
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="FieldLabel"><%=_ctx.appRes("HtmlFile.dialog.label.refernceCss")%></td>
+          <td class="FieldComponent">
+            <%
+              String[] referenceCss = ["jcrPath=/node/exo:referenceCSS", "multiValues=true"] ;
+              uicomponent.addTextField("referenceCSS", referenceCss) ; 
+            %>
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="FieldLabel"><%=_ctx.appRes("HtmlFile.dialog.label.refernceJS")%></td>
+          <td class="FieldComponent">
+            <%
+              String[] referenceJS = ["jcrPath=/node/exo:referenceJS", "multiValues=true"] ;
+              uicomponent.addTextField("referenceJS", referenceJS) ; 
+            %>
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="FieldLabel"><%=_ctx.appRes("HtmlFile.dialog.label.refernceMultimedia")%></td>
+          <td class="FieldComponent">
+            <%
+              String[] referenceMultimedia = ["jcrPath=/node/exo:referenceMultimedia", "multiValues=true"] ;
+              uicomponent.addTextField("referenceMultimedia", referenceMultimedia) ; 
+            %>
+          </td>
+        </tr>               
+        
+        <tr>
+          <td class="FieldLabel"><%=_ctx.appRes("HtmlFile.dialog.label.referenceExtenalSites")%></td>
+          <td class="FieldComponent">
+            <%
+              String[] referenceExtenalSites = ["jcrPath=/node/exo:referenceExtenalSites", "multiValues=true"] ;
+              uicomponent.addTextField("referenceExtenalSites", referenceExtenalSites) ; 
+            %>
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="FieldLabel"><%=_ctx.appRes("HtmlFile.dialog.label.referencePortalPages")%></td>
+          <td class="FieldComponent">
+            <%
+              String[] referencePortalPages = ["jcrPath=/node/exo:referencePortalPages", "multiValues=true"] ;
+              uicomponent.addTextField("referencePortalPages", referencePortalPages) ; 
+            %>
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="FieldLabel"><%=_ctx.appRes("HtmlFile.dialog.label.referenceDMSContent")%></td>
+          <td class="FieldComponent">
+            <%
+              String[] referenceDMSContent = ["jcrPath=/node/exo:referenceDMSContent", "multiValues=true"] ;
+              uicomponent.addTextField("referenceDMSContent", referenceDMSContent) ; 
+            %>
+          </td>
+        </tr>
+      
+        <tr>
+          <td class="FieldLabel"><%=_ctx.appRes("HtmlFile.dialog.label.content")%></td>
+          <td class="FieldComponent">
+            <%
+              if(uicomponent.isEditing()) { 
+                def curNode = uicomponent.getNode() ;
+                if(curNode.hasNode("jcr:content")) {
+                  def content = curNode.getNode("jcr:content") ;                                      
+                  String[] fieldSummary = ["jcrPath=/node/jcr:content/jcr:data", "validate=empty"] ;
+                  uicomponent.addWYSIWYGField("contentHtml", fieldSummary) ;
+                }
+              } else {                           
+                String[] fieldSummary = ["jcrPath=/node/jcr:content/jcr:data"] ;
+                uicomponent.addWYSIWYGField("contentHtml", fieldSummary) ;                
+              }
+            %>      
+          </td>
+        </tr>       
+    </table>       
+    <%/* start render action*/%>
+    <div class="UIAction"> 
+      <table class="ActionContainer" align="center">
+        <tr>
+          <td align="center">
+            <% for(action in uicomponent.getActions()) { 
+                 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;
+                 String link = uicomponent.event(action) ;
+            %>
+              <a href="$link" class="ActionButton LightBlueStyle">
+                <div class="ButtonLeft">
+                  <div class="ButtonRight">
+                    <div class="ButtonMiddle">
+                      $actionLabel
+                    </div>
+                  </div>
+                </div>
+              </a>
+            <%}%>          
+          </td>
+        </tr>
+      </table>
+    </div>
+    <%/* end render action*/%>
+  </div>
+  <%uiform.end()%>
+</div>

@@ -41,8 +41,10 @@
 	<import>war:/conf/ecm/advanced/records-configuration.xml</import>
 	<import>war:/conf/ecm/advanced/queries-configuration.xml</import>
 	
-	<import>war:/conf/wcm/component-plugins-configuration.xml</import>
-	<import>war:/conf/wcm/drives-configuration.xml</import>
-	<import>war:/conf/wcm/node-hierarchy-configuration.xml</import>	
+	<import>war:/conf/wcm/system-configuration.xml</import>
+  <import>war:/conf/wcm/node-hierarchy-configuration.xml</import>
+  <import>war:/conf/wcm/shared-portal-configuration.xml</import>     
+  <import>war:/conf/wcm/drives-configuration.xml</import>
+  <import>war:/conf/wcm/templates-configuration.xml</import>	
 		
 </configuration>

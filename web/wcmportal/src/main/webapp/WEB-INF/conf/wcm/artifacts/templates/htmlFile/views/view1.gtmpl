@@ -1,0 +1,44 @@
+<%
+  import javax.jcr.NodeIterator;
+  import javax.jcr.Node;
+
+  def currentNode = uicomponent.getNode() ; 
+  def contentNode = currentNode.getNode("jcr:content") ;
+ 
+  public String getLocalCSS(Node currentNode) {
+    Node cssFolder = currentNode.getParent().getNode("css");
+    StringBuilder mergedCSS = new StringBuilder();
+    String css = "";
+    for(def iter = cssFolder.getNodes();iter.hasNext();) {
+      def cssFile = iter.next();
+      if(!cssFile.isNodeType("exo:cssFile")) continue ;
+      css = cssFile.getNode("jcr:content").getProperty("jcr:data").getString();
+      mergedCSS.append(css);
+    }
+    return mergedCSS.toString() ;
+  }
+  
+  public String getReferenceCss(Node currentNode) { }
+  
+  public String getLocalJS(Node currentNode) {    
+    Node jsFolder = currentNode.getParent().getNode("js");
+    StringBuilder mergedJS = new StringBuilder();
+    String js = "";
+    for(NodeIterator iter = jsFolder.getNodes();iter.hasNext();) {
+      Node jsFile = iter.nextNode();
+      if(!jsFile.isNodeType("exo:jsFile")) continue ;
+      js = jsFile.getNode("jcr:content").getProperty("jcr:data").getString();
+      mergedJS.append(js);
+    }
+    return mergedJS.toString() ;
+  }
+  
+  public String getReferenceJS(Node currentNode) { }
+  
+%>
+  
+<style><%=getLocalCSS(currentNode) ;%></style>
+
+<%=contentNode.getProperty("jcr:data").getString() ;%>
+
+<script><%=getLocalJS(currentNode);%></script>
