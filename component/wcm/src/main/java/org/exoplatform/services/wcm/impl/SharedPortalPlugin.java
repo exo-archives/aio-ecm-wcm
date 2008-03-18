@@ -51,6 +51,7 @@ public class SharedPortalPlugin extends BaseComponentPlugin {
     ManageableRepository manageableRepository = repositoryService.getRepository(repository) ;
     Session session = sessionProvider.getSession(workspace,manageableRepository) ;
     Node sharedPortalHome = (Node)session.getItem(path) ;
+    if(sharedPortalHome.hasNode(sharedPortalName)) return;
     sharedPortalHome.addNode(sharedPortalName,"exo:portalFolder");      
     session.save();        
   }    

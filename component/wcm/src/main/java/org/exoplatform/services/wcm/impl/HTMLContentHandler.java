@@ -56,13 +56,14 @@ public class HTMLContentHandler extends BaseWebContentHandler {
       webContentFolder.addMixin("exo:webContent") ;      
     }
     if(!file.isNodeType("exo:htmlFile")) {
-      file.addMixin("exo:htmlFile");      
+      file.addMixin("exo:htmlFile");
+      file.setProperty("exo:presentationType","exo:htmlFile");
     }
     String newPath = webContentFolder.getPath() + "/" +file.getName();    
     createWebContentSchema(webContentFolder);
     session.move(file.getPath(),newPath);
     session.save();
-    return newPath;
+    return file.getUUID();
   }
 
 

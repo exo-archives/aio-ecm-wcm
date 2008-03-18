@@ -29,23 +29,17 @@ import org.exoplatform.services.wcm.BaseWebContentHandler;
  */
 public class CSSContentHandler extends BaseWebContentHandler {
 
-  protected String getFileType() {
-    return "nt:file";
-  }
+  protected String getFileType() { return "nt:file"; }
 
-  protected String getFolderPathExpression() {
-    return null;
-  }
+  protected String getFolderPathExpression() { return null; }
 
-  protected String getFolderType() {
-    return "exo:cssFolder";
-  }
+  protected String getFolderType() { return "exo:cssFolder"; }
 
   public String handle(Node file) throws Exception {
-    if(!file.isNodeType("exo:cssFile")) {
-      file.addMixin("exo:cssFile");      
-    }
-    return file.getPath();
+    if(file.isNodeType("exo:cssFile")) return file.getUUID();
+    file.addMixin("exo:cssFile");      
+    file.setProperty("exo:presentationType","exo:cssFile");        
+    return file.getUUID();
   } 
 
 }

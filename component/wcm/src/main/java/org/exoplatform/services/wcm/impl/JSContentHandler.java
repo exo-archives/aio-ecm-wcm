@@ -36,10 +36,10 @@ public class JSContentHandler extends BaseWebContentHandler {
   protected String getFolderType() { return "exo:jsFolder"; }
 
   public String handle(Node file) throws Exception {
-    if(!file.isNodeType("exo:jsFile")) {
-      file.addMixin("exo:jsFile") ;      
-    }
-    return file.getPath() ;
+    if(file.isNodeType("exo:jsFile"))  return file.getUUID() ;     
+    file.addMixin("exo:jsFile") ;      
+    file.setProperty("exo:presentationType","exo:jsFile");    
+    return file.getUUID();
   }
 
 }
