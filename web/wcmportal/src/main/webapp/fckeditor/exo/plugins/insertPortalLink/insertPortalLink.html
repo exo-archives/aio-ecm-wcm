@@ -2,7 +2,7 @@
     PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
            "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head><title>Nhan Cu Vi Bat Thien</title>
+<head><title>InsertPortalLink</title>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="pragma" content="no-cache">
@@ -29,7 +29,7 @@
 			display: none;
 			border: 1px solid orange;
 			border-top: none;
-			height: 400px;
+			height: 246px;
 			background: #effffe;
 		}
 		.B-1 .B-1, .B-2 .B-2, .B-3 .B-3, .B-4 .B-4 {
@@ -47,29 +47,52 @@
 		<div style="position: relative; height: 0px;" id="Root" class="B-1">
 			<div class="H-Menu">
 				<div class="SMenu1 A-1" onclick="changeClass('B-1')">
-					<div>1-Menu</div>
+					<div>Link Info</div>
 				</div>
 				<div class="SMenu1 A-2" onclick="changeClass('B-2')">
-					<div>2-Menu</div>
-				</div>
-				<div class="SMenu1 A-3" onclick="changeClass('B-3')">
-					<div>3-Menu</div>
-				</div>
-				<div class="SMenu1 A-4" onclick="changeClass('B-4')">
-					<div>4-Menu</div>
+					<div>Target</div>
 				</div>
 			</div>
 			<div class="Display B-1">
-				Block 1
+
+				<div style="padding: 10px;">
+					
+					<br>
+					Title : <br>
+					<input type="text" style="width: 400px;"><br><br>
+					Url : <input type="button" value="Get portal link"><br><br>
+					<input type="text" style="width: 400px;"> <br><br>
+					<input type="button" value="Preview">
+					<input type="button" value="Save">
+				</div>
 			</div>
 			<div class="Display B-2">
-				Block 2
-			</div>
-			<div class="Display B-3">
-				Block 3
-			</div>
-			<div class="Display B-4">
-				Block 4
+				<div style="padding: 10px;">
+					<table cellspacing="0" cellpadding="0" width="100%" border="0">
+						<tr>
+							<td nowrap="nowrap">
+								<span fckLang="DlgLnkTarget">Target</span><br />
+								<select id="cmbTarget">
+									<option value=""selected="selected">&lt;not set&gt;</option>
+									<option value="frame" >&lt;frame&gt;</option>
+									<option value="popup" >&lt;popup window&gt;</option>
+									<option value="_blank" >New Window (_blank)</option>
+									<option value="_top" >Topmost Window (_top)</option>
+									<option value="_self" >Same Window (_self)</option>
+									<option value="_parent" >Parent Window (_parent)</option>
+								</select>
+							</td>
+							<td id="tdTargetFrame" nowrap="nowrap" width="100%">
+								<span>Target Frame Name</span><br>
+								<input id="txtTargetFrame" style="WIDTH: 100%" type="text">
+							</td>
+							<td id="tdPopupName" style="DISPLAY: none" nowrap="nowrap" width="100%">
+								<span>Popup Window Name</span><br>
+								<input id="txtPopupName" style="WIDTH: 100%" type="text">
+							</td>
+						</tr>
+					</table>
+				</div>
 			</div>
 		</div>
 	</div>
