@@ -2,7 +2,7 @@
 var eXoPlugin = {};
 
 FCKConfig.ToolbarSets["eXoBar"] = [
-	['Urani', 'InsertImage', 'InsertLink', 'InsertPortalLink', 'InsertDocument']
+	['InsertImage', 'InsertLink', 'InsertPortalLink', 'InsertDocument']
 ];
 
 // set eXo  plugin path;
