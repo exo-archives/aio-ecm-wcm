@@ -17,8 +17,7 @@
 			cursor: pointer;
 			height: 23px;
 			float: left;
-			background-color: #9b1a00;
-			color: white;
+			background-color: #D5D59D;
 			padding: 0px 10px 0px 10px;
 			margin-top: 4px;
 			margin-right: 3px;
@@ -56,12 +55,11 @@
 			<div class="Display B-1">
 
 				<div style="padding: 10px;">
-					
 					<br>
 					Title : <br>
-					<input type="text" style="width: 400px;"><br><br>
-					Url : <input type="button" value="Get portal link"><br><br>
-					<input type="text" style="width: 400px;"> <br><br>
+					<input type="text" style="width: 200px;"><br><br>
+					Url : <br><br>
+					<input type="text" style="width: 400px;"> <input type="button" value="Get portal link" onclick="getPortalLink();"><br><br>
 					<input type="button" value="Preview">
 					<input type="button" value="Save">
 				</div>
@@ -99,9 +97,25 @@
 </body>
 
 <script type="text/javascript">
+	var oEditor = window.parent.InnerDialogLoaded();
+	var FCKConfig = oEditor.FCKConfig;
+	var eXoPlugin = window.top.opener.eXoPlugin;
 	function changeClass(klass) {
 		var Root = document.getElementById("Root");
 		Root.className = klass ;
+	}
+	function getPortalLink() {
+			var width = 800;
+			var height = 600;
+			var iLeft = ( FCKConfig.ScreenWidth  - width ) / 2 ;
+			var iTop  = ( FCKConfig.ScreenHeight - height ) / 2 ;
+			var sOptions = "toolbar=no,status=no,resizable=yes,dependent=yes,scrollbars=yes" ;
+			sOptions += ",width=" + width ;
+			sOptions += ",height=" + height ;
+			sOptions += ",left=" + iLeft ;
+			sOptions += ",top=" + iTop ;
+			var newWindow = window.open( eXoPlugin.ExoFileBrowserURL, 'eXoImagesBrowseWindow', sOptions );
+			newWindow.focus();
 	}
 </script>
 </html>
