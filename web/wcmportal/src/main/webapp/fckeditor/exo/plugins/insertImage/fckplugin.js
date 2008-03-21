@@ -21,6 +21,6 @@
 	FCKCommands.RegisterCommand( 'InsertImage', eUranium ) ;
 	
 	var oElement = new FCKToolbarButton('InsertImage') ;
-	oElement.IconPath = FCKConfig.eXoPlugins + "insertImage/insertImage.gif" ;
+	oElement.IconPath = FCKConfig.eXoPath + "plugins/insertImage/insertImage.gif" ;
 	FCKToolbarItems.RegisterItem('InsertImage', oElement) ;	
 

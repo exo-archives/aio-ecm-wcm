@@ -1,20 +1,20 @@
 	
 var eXoPlugin = {};
+
 FCKConfig.ToolbarSets["eXoBar"] = [
-	['InsertImage', 'InsertLink', 'InsertPortalLink', 'InsertDocument']
+	['Urani', 'InsertImage', 'InsertLink', 'InsertPortalLink', 'InsertDocument']
 ];
 
-// Change the default plugin path.
-var eXoPath = FCKConfig.BasePath.substr(0, FCKConfig.BasePath.length - 7) + "exo/" ;
-FCKConfig.eXoPlugins = eXoPath + "plugins/";
-FCKConfig.Plugins.Add( 'urani', null, FCKConfig.eXoPlugins) ;
-FCKConfig.Plugins.Add( 'insertImage', null, FCKConfig.eXoPlugins) ;
-FCKConfig.Plugins.Add( 'insertLink', null, FCKConfig.eXoPlugins) ;
-FCKConfig.Plugins.Add( 'insertDocument', null, FCKConfig.eXoPlugins) ;
-FCKConfig.Plugins.Add( 'insertPortalLink', null, FCKConfig.eXoPlugins) ;
+// set eXo  plugin path;
+FCKConfig.eXoPath = FCKConfig.BasePath.substr(0, FCKConfig.BasePath.length - 7) + "exo/" ;
+FCKConfig.Plugins.Add( 'urani', null, FCKConfig.eXoPath + "plugins/") ;
+FCKConfig.Plugins.Add( 'insertImage', null, FCKConfig.eXoPath + "plugins/") ;
+FCKConfig.Plugins.Add( 'insertLink', null, FCKConfig.eXoPath + "plugins/") ;
+FCKConfig.Plugins.Add( 'insertDocument', null, FCKConfig.eXoPath + "plugins/") ;
+FCKConfig.Plugins.Add( 'insertPortalLink', null, FCKConfig.eXoPath + "plugins/") ;
 
-eXoPlugin.ExoImageBrowserURL = eXoPath + 'filemanager/browser/default/browser.html?Type=Image&Connector=/portal/connector' ;
-eXoPlugin.ExoFileBrowserURL = eXoPath + 'filemanager/browser/default/browser.html?Type=File&Connector=/portal/connector' ;
+eXoPlugin.ExoImageBrowserURL = FCKConfig.eXoPath + 'filemanager/browser/default/browser.html?Type=Image&Connector=/portal/connector' ;
+eXoPlugin.ExoFileBrowserURL = FCKConfig.eXoPath + 'filemanager/browser/default/browser.html?Type=File&Connector=/portal/connector' ;
 
 eXoPlugin.switchToolBar = function(R) {
 	var Setting = {
@@ -30,42 +30,22 @@ eXoPlugin.switchToolBar = function(R) {
 };
 
 //eXoPlugin.switchToolBar({oldBar: "Basic", newBar: "eXoBar"});
-
 eXoPlugin.addBar = function(R) {
 	var Setting = {
 		newBar: R.newBar || "",
 		targetBar: R.targetBar || ""
 	}
+
 	with (Setting) {
+		if (newBar == targetBar) return;
 		if (newBar && targetBar && FCKConfig.ToolbarSets[newBar] && FCKConfig.ToolbarSets[targetBar]) {
-			FCKConfig.ToolbarSets[targetBar].push(FCKConfig.ToolbarSets[newBar]);
+			FCKConfig.ToolbarSets[targetBar].push("/");
+			for (var o = 0; o < FCKConfig.ToolbarSets[newBar].length; ++o) {
+				FCKConfig.ToolbarSets[targetBar].push(FCKConfig.ToolbarSets[newBar][o]);
+			}
 		}
 	}
 };
-//eXoPlugin.addBar({newBar: "eXoBar", targetBar: "Basic" });
-//eXoPlugin.addBar({newBar: "eXoBar", targetBar: "Default" });
 
-FCKConfig.ToolbarSets["Default"] = [
-	['Source','DocProps','-','Save','NewPage','Preview','-','Templates'],
-	['Cut','Copy','Paste','PasteText','PasteWord','-','Print','SpellCheck'],
-	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
-	['Form','Checkbox','Radio','TextField','Textarea','Select','Button','HiddenField'],
-	['Image','Flash','Table','Rule','Smiley','SpecialChar','PageBreak','UniversalKey'],['FitWindow','-','About'],
-	'/',
-	['Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'],
-	['OrderedList','UnorderedList','-','Outdent','Indent'],
-	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
-	['Link','Unlink','Anchor'],['TextColor','BGColor'],
-	'/',
-	['Style','FontFormat','FontName','FontSize'],	
-	'/',
-	['InsertImage', 'InsertLink', 'InsertPortalLink', 'InsertDocument']
-] ;
-
-FCKConfig.ToolbarSets["Basic"] = [
-	['Bold','Italic','-','OrderedList','UnorderedList','-','Link','Unlink','-','About'],
-	'/',
-	['InsertImage', 'InsertLink', 'InsertPortalLink', 'InsertDocument']
-] ;
-	
-	
+eXoPlugin.addBar({newBar: "eXoBar", targetBar: "Basic" });
+eXoPlugin.addBar({newBar: "eXoBar", targetBar: "Default" });
