@@ -23,6 +23,7 @@
 		<link href="browser.css" type="text/css" rel="stylesheet">
 		<script type="text/javascript" src="js/fckxml.js"></script>
 		<script language="javascript">
+			var eXoPlugin = window.opener.eXoPlugin;
 			var FCK = window.opener.FCK;
 			var addURL = function(url) {
 				url = url.toString();
@@ -32,9 +33,8 @@
 					var newImage = FCK.CreateElement( "img" ) ;
 					newImage.setAttribute( "src", url ) ;
 				} else {
-					var newElement = FCK.CreateElement( "a" ) ;
-					newElement.innerHTML = url;
-					newElement.setAttribute("href", url);
+					var newElement = FCK.CreateElement( "span" ) ;
+					newElement.innerHTML = "<\%=uicomponent.createDocumentLink('"+url+"');\%>";
 				}
 			}
 					
@@ -159,4 +159,6 @@
 			</frameset>
 		</frameset>
 	</frameset>
+	<script type="text/javascript">
+	</script>
 </html>
