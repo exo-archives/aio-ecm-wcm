@@ -2,20 +2,19 @@
 var eXoPlugin = {};
 
 FCKConfig.ToolbarSets["eXoBar"] = [
-	['InsertImage', 'InsertLink', 'InsertPortalLink', 'InsertDocument']
+	['InsertImage', 'InsertPortalLink', 'InsertDocument']
 ];
 
 // set eXo  plugin path;
 FCKConfig.eXoPath = FCKConfig.BasePath.substr(0, FCKConfig.BasePath.length - 7) + "exo/" ;
 FCKConfig.Plugins.Add( 'urani', null, FCKConfig.eXoPath + "plugins/") ;
 FCKConfig.Plugins.Add( 'insertImage', null, FCKConfig.eXoPath + "plugins/") ;
-FCKConfig.Plugins.Add( 'insertLink', null, FCKConfig.eXoPath + "plugins/") ;
 FCKConfig.Plugins.Add( 'insertDocument', null, FCKConfig.eXoPath + "plugins/") ;
 FCKConfig.Plugins.Add( 'insertPortalLink', null, FCKConfig.eXoPath + "plugins/") ;
 
 eXoPlugin.ExoImageBrowserURL = FCKConfig.eXoPath + 'filemanager/browser/default/browser.html?Type=Image&Connector=/portal/connector' ;
 eXoPlugin.ExoFileBrowserURL = FCKConfig.eXoPath + 'filemanager/browser/default/browser.html?Type=File&Connector=/portal/connector' ;
-eXoPlugin.ExoPortalLinkBrowserURL = eXoPath + 'filemanager/portal/default/browser.html?Type=PortalLink&Connector=/portal/command' ;
+eXoPlugin.ExoPortalLinkBrowserURL = FCKConfig.eXoPath + 'filemanager/portal/default/browser.html?Type=PortalLink&Connector=/portal/command' ;
 
 eXoPlugin.switchToolBar = function(R) {
 	var Setting = {
