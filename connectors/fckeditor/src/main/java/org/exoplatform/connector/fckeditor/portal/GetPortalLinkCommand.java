@@ -55,10 +55,10 @@ public class GetPortalLinkCommand extends Command {
   public void execute(WebAppController controller, HttpServletRequest request, HttpServletResponse response)
   throws Exception {
     String contextPath = request.getContextPath();
-    String currentFolder = request.getParameter("currentFolder");    
+    String currentFolder = request.getParameter("CurrentFolder");    
     if(currentFolder == null) currentFolder = "/" ;
-    String url = "portal/private/classic" ;
-    String portalName = "classic";
+    String url = "portal/private/classic" ;    
+    String portalName = "classic";        
     String commandType = request.getParameter("Command") ;
     if(commandType == null) commandType = "" ;
     initRootElement(commandType,RESOURCE_TYPE,currentFolder,url) ;    
@@ -67,19 +67,40 @@ public class GetPortalLinkCommand extends Command {
       (UserPortalConfigService)PortalContainer.getComponent(UserPortalConfigService.class) ;
     List<PageNavigation> navigations = configService.getUserPortalConfig(portalName,userId).getNavigations() ;    
     for(PageNavigation navigation:navigations) {           
-      for(PageNode pageNode: navigation.getNodes()) {                
-        processPageNode(pageNode,"") ;        
+      for(PageNode pageNode: navigation.getNodes()) {               
+        if("/".equalsIgnoreCase(currentFolder)) {
+          processPageNode(pageNode) ;
+        }else {
+          PageNode node = getPageNode(pageNode,currentFolder) ;
+          if(node != null && node.getChildren() != null) {
+            for(PageNode child: node.getChildren()) {
+              processPageNode(child) ; 
+            }
+          }
+        }                                                 
       }
-    }            
+    }                     
     outRootElement(response);
-  } 
+  }
 
-  private void processPageNode(PageNode pageNode,String commandType) {        
+  private PageNode getPageNode(PageNode root,String uri) {
+    if(uri.equals("/"+root.getUri()+"/")) return root ;
+    List<PageNode> list = root.getChildren() ;        
+    if(list == null) return null ;
+    for(PageNode child: list) {      
+      if(uri.equals("/"+child.getUri()+"/")) return child ;
+      PageNode deepChild =  getPageNode(child,uri) ;
+      if(deepChild != null) return deepChild; 
+    }
+    return null ;
+  }
+  
+  private void processPageNode(PageNode pageNode) {         
     Element nodesElement = rootElement.getOwnerDocument().createElement("Folders");
     rootElement.appendChild(nodesElement);    
     Element fileElement = rootElement.getOwnerDocument().createElement("Folder");        
     fileElement.setAttribute("name", pageNode.getName());    
-    nodesElement.appendChild(fileElement);    
+    nodesElement.appendChild(fileElement);     
   }
 
   protected void initRootElement ( 
