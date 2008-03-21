@@ -25,7 +25,8 @@
                 <exclude>index.jsp</exclude>
                 <exclude>WEB-INF/web.xml</exclude>                     
                 <exclude>WEB-INF/conf/</exclude>                                     
-                <exclude>WEB-INF/classes/locale/navigation/</exclude>                     
+                <exclude>WEB-INF/classes/locale/navigation/</exclude>
+                <exclude>fckeditor/fckconfig.js</exclude>                     
               </excludes>
             </resource>
             <resource>
