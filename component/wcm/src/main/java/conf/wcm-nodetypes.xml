@@ -1,6 +1,17 @@
 <nodeTypes xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0"
   xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:exo="http://www.exoplatform.com/jcr/exo/1.0" >
 
+  <!-- Duplicating this definition in case the ECM node type definitions
+       have not been processed by the Repository Service yet. -->
+  <nodeType name="exo:presentationable" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
+    <propertyDefinitions>
+      <propertyDefinition name="exo:presentationType" requiredType="String" autoCreated="true" mandatory="false"
+        onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>	      
+      </propertyDefinition>      
+    </propertyDefinitions>
+  </nodeType>
+
   <nodeType name="exo:portalFolder" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
     <supertypes>
       <supertype>nt:folder</supertype>
