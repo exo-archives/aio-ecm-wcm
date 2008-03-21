@@ -25,17 +25,9 @@
 		<script language="javascript">
 			var eXoPlugin = window.opener.eXoPlugin;
 			var FCK = window.opener.FCK;
-			var addURL = function(url) {
-				url = url.toString();
-				if ((/(.jpg)$/i).test(url) || (/(.jpeg)$/i).test(url)
-					|| (/(.gif)$/i).test(url) || (/(.bmp)$/i).test(url)
-					|| (/(.png)$/i).test(url) ) {
-					var newImage = FCK.CreateElement( "img" ) ;
-					newImage.setAttribute( "src", url ) ;
-				} else {
-					var newElement = FCK.CreateElement( "span" ) ;
-					newElement.innerHTML = "<\%=uicomponent.createDocumentLink('"+url+"');\%>";
-				}
+			var addURL = function(url) {				
+			    var newElement = FCK.CreateElement( "span" ) ;
+				newElement.innerHTML = "<\%=uicomponent.createPortalLink('"+url+"');\%>";				
 			}
 					
 			function GetUrlParam( paramName )
@@ -75,6 +67,7 @@
 				var sUrl = this.ConnectorUrl + 'Command=' + command ;
 				sUrl += '&Type=' + this.ResourceType ;
 				sUrl += '&CurrentFolder=' + escape( this.CurrentFolder ) ;
+				sUrl += '&type=org.exoplatform.connector.fckeditor.portal.GetPortalLinkCommand' ;
 				
 				if ( params ) sUrl += '&' + params ;
 
