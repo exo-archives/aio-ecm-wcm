@@ -1,5 +1,8 @@
 	
 var eXoPlugin = {};
+eXoPlugin.BaseURL = window.parent.location.toString();
+eXoPlugin.BaseURL = eXoPlugin.BaseURL.substring(0, eXoPlugin.BaseURL.length - 1);
+eXoPlugin.PortalName = eXoPlugin.BaseURL.substring(eXoPlugin.BaseURL.lastIndexOf("/"));
 
 FCKConfig.ToolbarSets["eXoBar"] = [
 	['InsertImage', 'InsertPortalLink', 'InsertDocument']
@@ -45,6 +48,20 @@ eXoPlugin.addBar = function(R) {
 			}
 		}
 	}
+};
+
+eXoPlugin.getContent = function() {
+	var content = new String();
+	if (document.selection) {
+		var range = FCK.EditorWindow.document.selection.createRange();
+		content = range.text;
+	} else  {
+		var range = FCK.EditorWindow.getSelection();
+		content = range.getRangeAt(0);
+	}
+	if (content) content = content.toString().replace(/^\s+|\s+$/g, "");
+	if (content != "") return content;
+	else return null;
 };
 
 eXoPlugin.addBar({newBar: "eXoBar", targetBar: "Basic" });

@@ -40,9 +40,15 @@
 				else
 					return '' ;
 			}
+			
 			var selectFolder = function(url) {
-				alert(url);
+				var BasePath = eXoPlugin.BasePath;
+				var portalLink = eXoPlugin.BasePath;
+				//refer from insertPortalLink.html;
+				window.blur();
+				window.opener.setPortalField("inputURL", portalLink);
 			}
+			
 			var oConnector = new Object() ;
 			oConnector.CurrentFolder	= '/' ;
 
@@ -70,6 +76,7 @@
 				sUrl += '&Type=' + this.ResourceType ;
 				sUrl += '&CurrentFolder=' + escape( this.CurrentFolder ) ;
 				sUrl += '&type=org.exoplatform.connector.fckeditor.portal.GetPortalLinkCommand' ;
+				sUrl += '&portalName=' + eXoPlugin.PortalName ;
 				
 				if ( params ) sUrl += '&' + params ;
 
@@ -154,6 +161,4 @@
 			</frameset>
 		</frameset>
 	</frameset>
-	<script type="text/javascript">
-	</script>
 </html>

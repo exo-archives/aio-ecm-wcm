@@ -57,11 +57,11 @@
 				<div style="padding: 10px;">
 					<br>
 					Title : <br>
-					<input type="text" style="width: 200px;"><br><br>
+					<input type="text" style="width: 200px;" id="inputTitleLink"><br><br>
 					Url : <br><br>
-					<input type="text" style="width: 400px;"> <input type="button" value="Get portal link" onclick="getPortalLink();"><br><br>
+					<input type="text" style="width: 400px;" id="inputURL"> <input type="button" value="Get portal link" onclick="getPortalLink();"><br><br>
 					<input type="button" value="Preview">
-					<input type="button" value="Save">
+					<input type="button" value="Save" onclick="addURL()">
 				</div>
 			</div>
 			<div class="Display B-2">
@@ -97,12 +97,16 @@
 </body>
 
 <script type="text/javascript">
+	
 	var oEditor = window.parent.InnerDialogLoaded();
 	var FCKConfig = oEditor.FCKConfig;
 	var eXoPlugin = window.top.opener.eXoPlugin;
 	function changeClass(klass) {
 		var Root = document.getElementById("Root");
 		Root.className = klass ;
+	}
+	function Trim(text) {
+		if (text instanceof String) return text.replace(/^\s+|\s+$/g, "");
 	}
 	function getPortalLink() {
 			var width = 800;
@@ -116,6 +120,30 @@
 			sOptions += ",top=" + iTop ;
 			var newWindow = window.open( eXoPlugin.ExoPortalLinkBrowserURL, 'eXoImagesBrowseWindow', sOptions );
 			newWindow.focus();
+	}
+	
+	function setPortalField(id, value) {
+		var field = document.getElementById(id);
+		if (!field)  return;
+		field.value = value;
+	}
+	
+	function addURL() {
+		var content = eXoPlugin.getContent();
+		var title = content || Trim(document.getElementById("inputTitleLink").value);
+		var url = document.getElementById("inputURL").value;
+		if (Trim(url) == "") {
+			alert("Field URL is not empty"); 
+			return;
+		}
+		var newTag = oEditor.FCK.CreateElement( "a" ) ;
+		if (title) {
+			newTag.innerHTML = title;
+		} else {
+			newTag.innerHTML = url;
+		}
+		newTag.setAttribute("href", url);
+		window.top.Cancel();
 	}
 </script>
 </html>
