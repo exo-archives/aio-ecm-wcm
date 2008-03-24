@@ -97,10 +97,11 @@
 </body>
 
 <script type="text/javascript">
+	//refer form fckdialog.html
 	
 	var oEditor = window.parent.InnerDialogLoaded();
 	var FCKConfig = oEditor.FCKConfig;
-	var eXoPlugin = window.top.opener.eXoPlugin;
+	var eXoPlugin = oEditor.FCK.eXoPlugin;
 	function changeClass(klass) {
 		var Root = document.getElementById("Root");
 		Root.className = klass ;

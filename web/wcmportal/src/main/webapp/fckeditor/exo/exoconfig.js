@@ -66,3 +66,5 @@ eXoPlugin.getContent = function() {
 
 eXoPlugin.addBar({newBar: "eXoBar", targetBar: "Basic" });
 eXoPlugin.addBar({newBar: "eXoBar", targetBar: "Default" });
+
+FCK["eXoPlugin"] = eXoPlugin;
