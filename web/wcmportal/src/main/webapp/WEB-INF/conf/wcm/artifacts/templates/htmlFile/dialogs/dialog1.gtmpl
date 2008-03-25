@@ -18,7 +18,7 @@
           <td class="FieldLabel"><%=_ctx.appRes("HtmlFile.dialog.label.name")%></td>
           <td class="FieldComponent">
             <%
-              String[] fieldName = ["jcrPath=/node", "nodetype=nt:file", "mixintype=mix:votable,mix:commentable,mix:i18n", "editable=if-null", "validate=name"] ;
+              String[] fieldName = ["jcrPath=/node", "nodetype=nt:file", "mixintype=mix:votable,mix:commentable", "editable=if-null", "validate=name"] ;
               uicomponent.addTextField("name", fieldName) ; 
             %>
           </td>
@@ -28,8 +28,8 @@
           <td class="FieldLabel"><%=_ctx.appRes("HtmlFile.dialog.label.refernceCss")%></td>
           <td class="FieldComponent">
             <%
-              String[] referenceCss = ["jcrPath=/node/exo:referenceCSS", "multiValues=true"] ;
-              uicomponent.addTextField("referenceCSS", referenceCss) ; 
+              String[] referenceCss = ["jcrPath=/node/exo:referenceCSS", "multiValues=true", "selectorAction=selectDestPath", "selectorClass=org.exoplatform.ecm.webui.component.UIJCRBrowser", "selectorIcon=SelectPath24x24Icon", "editable=false"] ;
+              uicomponent.addActionField("referenceCSS", referenceCss) ; 
             %>
           </td>
         </tr>
@@ -38,8 +38,8 @@
           <td class="FieldLabel"><%=_ctx.appRes("HtmlFile.dialog.label.refernceJS")%></td>
           <td class="FieldComponent">
             <%
-              String[] referenceJS = ["jcrPath=/node/exo:referenceJS", "multiValues=true"] ;
-              uicomponent.addTextField("referenceJS", referenceJS) ; 
+              String[] referenceJS = ["jcrPath=/node/exo:referenceJS", "multiValues=true", "selectorAction=selectDestPath", "selectorClass=org.exoplatform.ecm.webui.component.UIJCRBrowser", "selectorIcon=SelectPath24x24Icon", "editable=false"] ;
+              uicomponent.addActionField("referenceJS", referenceJS) ; 
             %>
           </td>
         </tr>
@@ -48,8 +48,8 @@
           <td class="FieldLabel"><%=_ctx.appRes("HtmlFile.dialog.label.refernceMultimedia")%></td>
           <td class="FieldComponent">
             <%
-              String[] referenceMultimedia = ["jcrPath=/node/exo:referenceMultimedia", "multiValues=true"] ;
-              uicomponent.addTextField("referenceMultimedia", referenceMultimedia) ; 
+              String[] referenceMultimedia = ["jcrPath=/node/exo:referenceMultimedia", "multiValues=true", "selectorAction=selectDestPath", "selectorClass=org.exoplatform.ecm.webui.component.UIJCRBrowser", "selectorIcon=SelectPath24x24Icon", "editable=false"] ;
+              uicomponent.addActionField("referenceMultimedia", referenceMultimedia) ; 
             %>
           </td>
         </tr>               
@@ -58,8 +58,8 @@
           <td class="FieldLabel"><%=_ctx.appRes("HtmlFile.dialog.label.referenceExtenalSites")%></td>
           <td class="FieldComponent">
             <%
-              String[] referenceExtenalSites = ["jcrPath=/node/exo:referenceExtenalSites", "multiValues=true"] ;
-              uicomponent.addTextField("referenceExtenalSites", referenceExtenalSites) ; 
+              String[] referenceExtenalSites = ["jcrPath=/node/exo:referenceExtenalSites", "multiValues=true", "selectorAction=selectDestPath", "selectorClass=org.exoplatform.ecm.webui.component.UIJCRBrowser", "selectorIcon=SelectPath24x24Icon", "editable=false"] ;
+              uicomponent.addActionField("referenceExtenalSites", referenceExtenalSites) ; 
             %>
           </td>
         </tr>
@@ -68,8 +68,8 @@
           <td class="FieldLabel"><%=_ctx.appRes("HtmlFile.dialog.label.referencePortalPages")%></td>
           <td class="FieldComponent">
             <%
-              String[] referencePortalPages = ["jcrPath=/node/exo:referencePortalPages", "multiValues=true"] ;
-              uicomponent.addTextField("referencePortalPages", referencePortalPages) ; 
+              String[] referencePortalPages = ["jcrPath=/node/exo:referencePortalPages", "multiValues=true", "selectorAction=selectDestPath", "selectorClass=org.exoplatform.ecm.webui.component.UIJCRBrowser", "selectorIcon=SelectPath24x24Icon", "editable=false"] ;
+              uicomponent.addActionField("referencePortalPages", referencePortalPages) ; 
             %>
           </td>
         </tr>
@@ -78,8 +78,8 @@
           <td class="FieldLabel"><%=_ctx.appRes("HtmlFile.dialog.label.referenceDMSContent")%></td>
           <td class="FieldComponent">
             <%
-              String[] referenceDMSContent = ["jcrPath=/node/exo:referenceDMSContent", "multiValues=true"] ;
-              uicomponent.addTextField("referenceDMSContent", referenceDMSContent) ; 
+              String[] referenceDMSContent = ["jcrPath=/node/exo:referenceDMSContent", "multiValues=true", "selectorAction=selectDestPath", "selectorClass=org.exoplatform.ecm.webui.component.UIJCRBrowser", "selectorIcon=SelectPath24x24Icon", "editable=false"] ;
+              uicomponent.addActionField("referenceDMSContent", referenceDMSContent) ; 
             %>
           </td>
         </tr>
