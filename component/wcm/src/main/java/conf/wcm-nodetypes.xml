@@ -38,7 +38,8 @@
   
   <nodeType name="exo:htmlFile" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
   	<supertypes>
-      <supertype>exo:presentationable</supertype>
+      <supertype>exo:presentationable</supertype>      
+      <supertype>mix:referenceable</supertype>
     </supertypes>
   	<propertyDefinitions>
       <propertyDefinition name="exo:referenceCSS" requiredType="Reference" autoCreated="false" mandatory="false" onParentVersion="COPY"
@@ -71,12 +72,14 @@
   <nodeType name="exo:jsFile" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
   	<supertypes>
       <supertype>exo:presentationable</supertype>
+      <supertype>mix:referenceable</supertype>
     </supertypes>  	    
   </nodeType>
   
   <nodeType name="exo:cssFile" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
   	<supertypes>
       <supertype>exo:presentationable</supertype>
+      <supertype>mix:referenceable</supertype>
     </supertypes>  	    
   </nodeType>
   
