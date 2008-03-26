@@ -1,8 +1,7 @@
 	
 var eXoPlugin = {};
 eXoPlugin.BaseURL = window.parent.location.toString();
-eXoPlugin.BaseURL = eXoPlugin.BaseURL.substring(0, eXoPlugin.BaseURL.length - 1);
-eXoPlugin.PortalName = eXoPlugin.BaseURL.substring(eXoPlugin.BaseURL.lastIndexOf("/"));
+eXoPlugin.PortalName = "/" + window.parent.eXo.env.portal.portalName;
 
 FCKConfig.ToolbarSets["eXoBar"] = [
 	['Insert Image', 'Insert Portal Link', 'Insert DMS Document']
