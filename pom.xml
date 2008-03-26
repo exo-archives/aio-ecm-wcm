@@ -7,7 +7,8 @@
   <packaging>pom</packaging>
 
   <modules>        
-    <module>component/wcm</module>    
+    <module>component/wcm</module>
+	<module>component/search</module>    
 	<module>portlets/web-presentation</module>    
 	<module>portlets/web-searches</module>
 	<module>webui/wcm</module>    
