@@ -18,9 +18,9 @@
 	
 	eUranium.GetState = function() {}
 	
-	FCKCommands.RegisterCommand( 'InsertDocument', eUranium ) ;
+	FCKCommands.RegisterCommand( 'Insert DMS Document', eUranium ) ;
 	
-	var oElement = new FCKToolbarButton('InsertDocument') ;
+	var oElement = new FCKToolbarButton('Insert DMS Document') ;
 	oElement.IconPath = FCKConfig.eXoPath + "plugins/insertDocument/insertDocument.gif" ;
 	FCKToolbarItems.RegisterItem('Insert DMS Document', oElement) ;	
 
