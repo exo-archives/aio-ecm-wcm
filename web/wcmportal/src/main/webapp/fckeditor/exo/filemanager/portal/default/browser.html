@@ -15,6 +15,7 @@
  * 
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
+  insertPortalLink.html -------../filemanager/portal/default/browser.html.
 -->
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
@@ -42,9 +43,8 @@
 			}
 			
 			var selectFolder = function(url) {
-				var BasePath = eXoPlugin.BasePath;
-				var portalLink = eXoPlugin.BasePath;
 				//refer from insertPortalLink.html;
+				var portalLink = eXoPlugin.BaseURL + url;
 				window.blur();
 				window.opener.setPortalField("inputURL", portalLink);
 			}
