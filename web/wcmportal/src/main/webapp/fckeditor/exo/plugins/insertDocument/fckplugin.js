@@ -1,10 +1,26 @@
-var initFun = function(O) {
-	// init function
-}
+	var eUranium = new Object() ;
+		eUranium.Name = 'Urani' ;
+		
+		eUranium.Execute = function() {
+			var width = 800;
+			var height = 600;
+			var iLeft = ( FCKConfig.ScreenWidth  - width ) / 2 ;
+			var iTop  = ( FCKConfig.ScreenHeight - height ) / 2 ;
 
-FCKCommands.RegisterCommand( "InsertDocument", new FCKDialogCommand( "InsertDocument", "InsertDocument", FCKConfig.eXoPath + "plugins/insertDocument/insertDocument.html"	, 600, 400) ) ;
+			var sOptions = "toolbar=no,status=no,resizable=yes,dependent=yes,scrollbars=yes" ;
+			sOptions += ",width=" + width ;
+			sOptions += ",height=" + height ;
+			sOptions += ",left=" + iLeft ;
+			sOptions += ",top=" + iTop ;
+			var newWindow = window.open( eXoPlugin.ExoFileBrowserURL, 'eXoFileBrowseWindow', sOptions );
+			newWindow.focus();
+		}
+	
+	eUranium.GetState = function() {}
+	
+	FCKCommands.RegisterCommand( 'InsertDocument', eUranium ) ;
+	
+	var oElement = new FCKToolbarButton('InsertDocument') ;
+	oElement.IconPath = FCKConfig.eXoPath + "plugins/insertDocument/insertDocument.gif" ;
+	FCKToolbarItems.RegisterItem('Insert DMS Document', oElement) ;	
 
-var oInsertDocument = new FCKToolbarButton("InsertDocument") ;
-oInsertDocument.IconPath = FCKConfig.eXoPath + "plugins/insertDocument/insertDocument.gif" ;
-
-FCKToolbarItems.RegisterItem("InsertDocument", oInsertDocument) ;	

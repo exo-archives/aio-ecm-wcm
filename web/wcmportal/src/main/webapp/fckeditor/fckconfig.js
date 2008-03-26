@@ -19,6 +19,7 @@
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
  */
+
 FCKConfig.CustomConfigurationsPath = '../exo/exoconfig.js' ;
 
 FCKConfig.EditorAreaCSS = FCKConfig.BasePath + 'css/fck_editorarea.css' ;
@@ -38,9 +39,7 @@ FCKConfig.PreloadImages = [ FCKConfig.SkinPath + 'images/toolbar.start.gif', FCK
 
 FCKConfig.PluginsPath = FCKConfig.BasePath + 'plugins/' ;
 
-
-
-//FCKConfig.Plugins.Add( 'autogrow' ) ;
+// FCKConfig.Plugins.Add( 'autogrow' ) ;
 FCKConfig.AutoGrowMax = 400 ;
 
 // FCKConfig.ProtectedSource.Add( /<%[\s\S]*?%>/g ) ;	// ASP style server side code <%...%>
@@ -90,21 +89,21 @@ FCKConfig.ToolbarSets["Default"] = [
 	['Source','DocProps','-','Save','NewPage','Preview','-','Templates'],
 	['Cut','Copy','Paste','PasteText','PasteWord','-','Print','SpellCheck'],
 	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
-	['Form','Checkbox','Radio','TextField','Textarea','Select','Button','ImageButton','HiddenField'],
+	['Form','Checkbox','Radio','TextField','Textarea','Select','Button','ImageButton','HiddenField','Flash','Table','Rule','Smiley','SpecialChar','PageBreak','UniversalKey','FitWindow'],
 	'/',
 	['Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'],
 	['OrderedList','UnorderedList','-','Outdent','Indent'],
 	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
-	['Link','Unlink','Anchor'],
-	['Image','Flash','Table','Rule','Smiley','SpecialChar','PageBreak','UniversalKey'],
-	'/',
-	['Style','FontFormat','FontName','FontSize'],
 	['TextColor','BGColor'],
-	['FitWindow','-','About']
+	['Link','Unlink','Anchor'],	
+	'/',
+	['Style','FontFormat','FontName','FontSize','About']	
 ] ;
 
 FCKConfig.ToolbarSets["Basic"] = [
-	['Bold','Italic','-','OrderedList','UnorderedList','-','Link','Unlink','-','About']
+	['Bold','Italic','Underline','StrikeThrough','-','OrderedList','UnorderedList','-','Outdent','Indent','-','Link','Unlink'],
+	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
+	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat','-','About']
 ] ;
 
 FCKConfig.ContextMenu = ['Generic','Link','Anchor','Image','Flash','Select','Textarea','Checkbox','Radio','TextField','HiddenField','ImageButton','Button','BulletedList','NumberedList','Table','Form'] ;

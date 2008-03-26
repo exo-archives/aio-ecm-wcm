@@ -2,9 +2,9 @@ var initFun = function(O) {
 	// init function
 }
 
-FCKCommands.RegisterCommand( "InsertPortalLink", new FCKDialogCommand( "InsertPortalLink", "InsertPortalLink", FCKConfig.eXoPath + "plugins/insertPortalLink/insertPortalLink.html"	, 600, 400) ) ;
+FCKCommands.RegisterCommand( "Insert Portal Link", new FCKDialogCommand( "Insert Portal Link", "Insert Portal Link", FCKConfig.eXoPath + "plugins/insertPortalLink/insertPortalLink.html"	, 600, 400) ) ;
 
-var oInsertPortalLink = new FCKToolbarButton("InsertPortalLink") ;
+var oInsertPortalLink = new FCKToolbarButton("Insert Portal Link") ;
 oInsertPortalLink.IconPath = FCKConfig.eXoPath + "plugins/insertPortalLink/insertPortalLink.gif" ;
 
-FCKToolbarItems.RegisterItem("InsertPortalLink", oInsertPortalLink) ;
+FCKToolbarItems.RegisterItem("Insert Portal Link", oInsertPortalLink) ;

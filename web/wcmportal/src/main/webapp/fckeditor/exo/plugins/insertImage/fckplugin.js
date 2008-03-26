@@ -12,15 +12,15 @@
 			sOptions += ",height=" + height ;
 			sOptions += ",left=" + iLeft ;
 			sOptions += ",top=" + iTop ;
-			var newWindow = window.open( eXoPlugin.ExoFileBrowserURL, 'eXoImagesBrowseWindow', sOptions );
+			var newWindow = window.open( eXoPlugin.ExoImageBrowserURL, 'eXoImagesBrowseWindow', sOptions );
 			newWindow.focus();
 		}
 	
 	eUranium.GetState = function() {}
 	
-	FCKCommands.RegisterCommand( 'InsertImage', eUranium ) ;
+	FCKCommands.RegisterCommand( 'Insert Image', eUranium ) ;
 	
-	var oElement = new FCKToolbarButton('InsertImage') ;
+	var oElement = new FCKToolbarButton('Insert Image') ;
 	oElement.IconPath = FCKConfig.eXoPath + "plugins/insertImage/insertImage.gif" ;
-	FCKToolbarItems.RegisterItem('InsertImage', oElement) ;	
+	FCKToolbarItems.RegisterItem('Insert Image', oElement) ;	
 
