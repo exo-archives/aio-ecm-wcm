@@ -18,7 +18,7 @@
           <td class="FieldLabel"><%=_ctx.appRes("HtmlFile.dialog.label.name")%></td>
           <td class="FieldComponent">
             <%
-              String[] fieldName = ["jcrPath=/node", "nodetype=nt:file", "mixintype=mix:votable,mix:commentable", "editable=if-null", "validate=name"] ;
+              String[] fieldName = ["jcrPath=/node", "nodetype=nt:file", "mixintype=mix:votable,mix:commentable,exo:htmlFile", "editable=if-null", "validate=name"] ;
               uicomponent.addTextField("name", fieldName) ; 
             %>
           </td>
