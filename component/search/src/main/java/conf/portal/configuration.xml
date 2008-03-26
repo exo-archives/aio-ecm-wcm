@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<configuration>
+  <component>
+    <key>org.exoplatform.services.wcm.search.WcmSearchService</key>
+    <type>org.exoplatform.services.wcm.search.impl.WcmSearchServiceImpl</type>
+    <init-params>      
+      <properties-param>
+        <name>service-params</name>
+        <description>service-params</description>
+        <property name="defaultRepository" value="repository"/>
+        <property name="defaultWorksapce" value="collaboration"/>
+        <property name="useCachedResult" value="false"/>
+      </properties-param>
+    </init-params>
+  </component>
+       
+</configuration>
