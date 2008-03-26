@@ -150,15 +150,9 @@
 	}
 	
 	function previewLink() {
-		var width = 800;
-		var height = 500;
-		var iLeft = ( FCKConfig.ScreenWidth  - width ) / 2 ;
-		var iTop  = ( FCKConfig.ScreenHeight - height ) / 2 ;
-		var sOptions = "toolbar=yes,status=yes,resizable=yes,dependent=yes,scrollbars=yes" ;
-		sOptions += ",width=" + width ;
-		sOptions += ",height=" + height ;
-		sOptions += ",left=" + iLeft ;
-		sOptions += ",top=" + iTop ;
+		var sOptions = "toolbar=no,status=no,resizable=yes,dependent=yes,scrollbars=yes" ;
+		sOptions += ",width=" +  FCKConfig.ScreenWidth; ;
+		sOptions += ",height=" + FCKConfig.ScreenHeight;
 		var url = document.getElementById("inputURL").value;
 		if (url) window.open(url, "", sOptions);
 	}
