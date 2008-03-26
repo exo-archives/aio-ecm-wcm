@@ -1,7 +1,6 @@
-	var eUranium = new Object() ;
-		eUranium.Name = 'Urani' ;
+	var oImage = new Object() ;
 		
-		eUranium.Execute = function() {
+		oImage.Execute = function() {
 			var width = 800;
 			var height = 600;
 			var iLeft = ( FCKConfig.ScreenWidth  - width ) / 2 ;
@@ -16,9 +15,9 @@
 			newWindow.focus();
 		}
 	
-	eUranium.GetState = function() {}
+	oImage.GetState = function() {}
 	
-	FCKCommands.RegisterCommand( 'Insert Image', eUranium ) ;
+	FCKCommands.RegisterCommand( 'Insert Image', oImage ) ;
 	
 	var oElement = new FCKToolbarButton('Insert Image') ;
 	oElement.IconPath = FCKConfig.eXoPath + "plugins/insertImage/insertImage.gif" ;

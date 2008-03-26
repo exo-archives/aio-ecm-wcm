@@ -1,7 +1,6 @@
-	var eUranium = new Object() ;
-		eUranium.Name = 'Urani' ;
-		
-		eUranium.Execute = function() {
+	var oDocument = new Object() ;
+	
+		oDocument.Execute = function() {
 			var width = 800;
 			var height = 600;
 			var iLeft = ( FCKConfig.ScreenWidth  - width ) / 2 ;
@@ -16,9 +15,9 @@
 			newWindow.focus();
 		}
 	
-	eUranium.GetState = function() {}
+	oDocument.GetState = function() {}
 	
-	FCKCommands.RegisterCommand( 'Insert DMS Document', eUranium ) ;
+	FCKCommands.RegisterCommand( 'Insert DMS Document', oDocument ) ;
 	
 	var oElement = new FCKToolbarButton('Insert DMS Document') ;
 	oElement.IconPath = FCKConfig.eXoPath + "plugins/insertDocument/insertDocument.gif" ;
