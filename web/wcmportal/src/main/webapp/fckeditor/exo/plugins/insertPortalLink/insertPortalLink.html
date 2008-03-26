@@ -11,11 +11,12 @@
 		.H-Menu {
 			border-bottom: 1px solid orange;
 			background-color: #abcdef;
-			height: 28px;
+			height: 25px;
 		}
 		.None .SMenu1 {
 			cursor: pointer;
-			height: 23px;
+			height: 20px;
+			line-height: 20px;
 			float: left;
 			background-color: #D5D59D;
 			padding: 0px 10px 0px 10px;
@@ -57,10 +58,10 @@
 				<div style="padding: 10px;">
 					<br>
 					Title : <br>
-					<input type="text" style="width: 200px;" id="inputTitleLink"><br><br>
+					<input type="text" style="width: 200px;" id="inputTitle"><br><br>
 					Url : <br><br>
 					<input type="text" style="width: 400px;" id="inputURL"> <input type="button" value="Get portal link" onclick="getPortalLink();"><br><br>
-					<input type="button" value="Preview">
+					<input type="button" value="Preview" onclick="previewLink()">
 					<input type="button" value="Save" onclick="addURL()">
 				</div>
 			</div>
@@ -111,7 +112,7 @@
 	}
 	function getPortalLink() {
 			var width = 800;
-			var height = 600;
+			var height = 500;
 			var iLeft = ( FCKConfig.ScreenWidth  - width ) / 2 ;
 			var iTop  = ( FCKConfig.ScreenHeight - height ) / 2 ;
 			var sOptions = "toolbar=no,status=no,resizable=yes,dependent=yes,scrollbars=yes" ;
@@ -123,7 +124,7 @@
 			newWindow.focus();
 	}
 	
-	function setPortalField(id, value) {
+	function setField(id, value) {
 		var field = document.getElementById(id);
 		if (!field)  return;
 		field.value = value;
@@ -131,7 +132,7 @@
 	
 	function addURL() {
 		var content = eXoPlugin.getContent();
-		var title = content || document.getElementById("inputTitleLink").value;
+		var title = content || document.getElementById("inputTitle").value;
 		title = Trim(title);
 		var url = document.getElementById("inputURL").value;
 		if (Trim(url) == "") {
@@ -146,6 +147,20 @@
 		}
 		newTag.setAttribute("href", url);
 		window.top.Cancel();
+	}
+	
+	function previewLink() {
+		var width = 800;
+		var height = 500;
+		var iLeft = ( FCKConfig.ScreenWidth  - width ) / 2 ;
+		var iTop  = ( FCKConfig.ScreenHeight - height ) / 2 ;
+		var sOptions = "toolbar=yes,status=yes,resizable=yes,dependent=yes,scrollbars=yes" ;
+		sOptions += ",width=" + width ;
+		sOptions += ",height=" + height ;
+		sOptions += ",left=" + iLeft ;
+		sOptions += ",top=" + iTop ;
+		var url = document.getElementById("inputURL").value;
+		if (url) window.open(url, "", sOptions);
 	}
 </script>
 </html>
