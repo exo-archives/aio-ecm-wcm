@@ -107,7 +107,7 @@
 		Root.className = klass ;
 	}
 	function Trim(text) {
-		if (text instanceof String) return text.replace(/^\s+|\s+$/g, "");
+		if (typeof text == "string") return text.replace(/^\s+|\s+$/g, "");
 	}
 	function getPortalLink() {
 			var width = 800;
@@ -131,7 +131,8 @@
 	
 	function addURL() {
 		var content = eXoPlugin.getContent();
-		var title = content || Trim(document.getElementById("inputTitleLink").value);
+		var title = content || document.getElementById("inputTitleLink").value;
+		title = Trim(title);
 		var url = document.getElementById("inputURL").value;
 		if (Trim(url) == "") {
 			alert("Field URL is not empty"); 
