@@ -147,9 +147,9 @@ public class WcmSearchServiceImpl implements WcmSearchService {
 
   }
 
-  private Query createQuery(QueryManager queryManager,String keyword,String portalName) throws Exception{    
-    String queryStatement = "/jcr:root/Web Content/Live/" + portalName + "//*[jcr:contains(.,'"+keyword+"')] order by exo:dateCreated decending" ;
-    return queryManager.createQuery(queryStatement,Query.XPATH) ;    
+  private Query createQuery(QueryManager queryManager,String keyword,String portalName) throws Exception{        
+    String queryStatement = "/jcr:root/Web Content/Live/" + portalName + "//*[jcr:contains(.,'"+keyword+"')] order by @exo:dateCreated decending" ;    
+    return queryManager.createQuery(queryStatement,Query.XPATH) ;        
   }
 
   private void processPageNodeRecusive(PageNode root, List<PageNode> allPages) {
