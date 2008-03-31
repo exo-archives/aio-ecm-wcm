@@ -1,4 +1,5 @@
 <%
+  uicomponent.addInterceptor("ecm-explorer/interceptor/PostHTMLFileInterceptor.groovy", "post") ;
   String[] hiddenField1 = ["jcrPath=/node/jcr:content", "nodetype=nt:resource", "mixintype=dc:elementSet", "visible=false"] ; 
   String[] hiddenField2 = ["jcrPath=/node/jcr:content/jcr:encoding", "visible=false", "UTF-8"] ;  
   String[] hiddenField4 = ["jcrPath=/node/jcr:content/jcr:lastModified", "visible=false"] ;
@@ -22,68 +23,7 @@
               uicomponent.addTextField("name", fieldName) ; 
             %>
           </td>
-        </tr>
-        
-        <tr>
-          <td class="FieldLabel"><%=_ctx.appRes("HtmlFile.dialog.label.refernceCss")%></td>
-          <td class="FieldComponent">
-            <%
-              String[] referenceCss = ["jcrPath=/node/exo:referenceCSS", "multiValues=true", "selectorAction=selectDestPath", "selectorClass=org.exoplatform.ecm.webui.component.UIJCRBrowser", "selectorIcon=SelectPath24x24Icon", "editable=false"] ;
-              uicomponent.addActionField("referenceCSS", referenceCss) ; 
-            %>
-          </td>
-        </tr>
-        
-        <tr>
-          <td class="FieldLabel"><%=_ctx.appRes("HtmlFile.dialog.label.refernceJS")%></td>
-          <td class="FieldComponent">
-            <%
-              String[] referenceJS = ["jcrPath=/node/exo:referenceJS", "multiValues=true", "selectorAction=selectDestPath", "selectorClass=org.exoplatform.ecm.webui.component.UIJCRBrowser", "selectorIcon=SelectPath24x24Icon", "editable=false"] ;
-              uicomponent.addActionField("referenceJS", referenceJS) ; 
-            %>
-          </td>
-        </tr>
-        
-        <tr>
-          <td class="FieldLabel"><%=_ctx.appRes("HtmlFile.dialog.label.refernceMultimedia")%></td>
-          <td class="FieldComponent">
-            <%
-              String[] referenceMultimedia = ["jcrPath=/node/exo:referenceMultimedia", "multiValues=true", "selectorAction=selectDestPath", "selectorClass=org.exoplatform.ecm.webui.component.UIJCRBrowser", "selectorIcon=SelectPath24x24Icon", "editable=false"] ;
-              uicomponent.addActionField("referenceMultimedia", referenceMultimedia) ; 
-            %>
-          </td>
-        </tr>               
-        
-        <tr>
-          <td class="FieldLabel"><%=_ctx.appRes("HtmlFile.dialog.label.referenceExtenalSites")%></td>
-          <td class="FieldComponent">
-            <%
-              String[] referenceExtenalSites = ["jcrPath=/node/exo:referenceExtenalSites", "multiValues=true", "selectorAction=selectDestPath", "selectorClass=org.exoplatform.ecm.webui.component.UIJCRBrowser", "selectorIcon=SelectPath24x24Icon", "editable=false"] ;
-              uicomponent.addActionField("referenceExtenalSites", referenceExtenalSites) ; 
-            %>
-          </td>
-        </tr>
-        
-        <tr>
-          <td class="FieldLabel"><%=_ctx.appRes("HtmlFile.dialog.label.referencePortalPages")%></td>
-          <td class="FieldComponent">
-            <%
-              String[] referencePortalPages = ["jcrPath=/node/exo:referencePortalPages", "multiValues=true", "selectorAction=selectDestPath", "selectorClass=org.exoplatform.ecm.webui.component.UIJCRBrowser", "selectorIcon=SelectPath24x24Icon", "editable=false"] ;
-              uicomponent.addActionField("referencePortalPages", referencePortalPages) ; 
-            %>
-          </td>
-        </tr>
-        
-        <tr>
-          <td class="FieldLabel"><%=_ctx.appRes("HtmlFile.dialog.label.referenceDMSContent")%></td>
-          <td class="FieldComponent">
-            <%
-              String[] referenceDMSContent = ["jcrPath=/node/exo:referenceDMSContent", "multiValues=true", "selectorAction=selectDestPath", "selectorClass=org.exoplatform.ecm.webui.component.UIJCRBrowser", "selectorIcon=SelectPath24x24Icon", "editable=false"] ;
-              uicomponent.addActionField("referenceDMSContent", referenceDMSContent) ; 
-            %>
-          </td>
-        </tr>
-      
+        </tr>       
         <tr>
           <td class="FieldLabel"><%=_ctx.appRes("HtmlFile.dialog.label.content")%></td>
           <td class="FieldComponent">

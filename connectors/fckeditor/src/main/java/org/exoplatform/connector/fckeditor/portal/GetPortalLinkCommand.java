@@ -47,18 +47,15 @@ import org.w3c.dom.Element;
  */
 public class GetPortalLinkCommand extends Command {
 
-  private final String RESOURCE_TYPE = "PortalLink".intern();
-  private final String COMMAND_NAME = "GetFoldersOrFileCommand".intern();
-
+  private final String RESOURCE_TYPE = "PortalLink".intern();  
   private Element rootElement;    
 
   public void execute(WebAppController controller, HttpServletRequest request, HttpServletResponse response)
   throws Exception {
-    String contextPath = request.getContextPath();
     String currentFolder = request.getParameter("CurrentFolder");    
     if(currentFolder == null) currentFolder = "/" ;
-    String url = "portal/private/classic" ;    
-    String portalName = "classic";        
+    String url = "" ;    
+    String portalName = request.getParameter("PortalName");        
     String commandType = request.getParameter("Command") ;
     if(commandType == null) commandType = "" ;
     initRootElement(commandType,RESOURCE_TYPE,currentFolder,url) ;    

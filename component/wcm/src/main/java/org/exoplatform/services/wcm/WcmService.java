@@ -17,6 +17,8 @@
 
 package org.exoplatform.services.wcm;
 
+import java.util.Map;
+
 import javax.jcr.Node;
 
 /**
@@ -27,6 +29,10 @@ import javax.jcr.Node;
  */
 public interface WcmService {
   
-  public void processWebContent(Node webContent)  throws Exception; 
+  public void processWebContent(Node webContent)  throws Exception;
   
+  public String storeNode(String nodeTypeName, Node storeHomeNode, Map mappings, 
+      boolean isAddNew, String repository,String portletInstanceId) throws Exception ;
+  
+  public void updateWebContentReference(String repository,String worksapce,String path) throws Exception ;
 }

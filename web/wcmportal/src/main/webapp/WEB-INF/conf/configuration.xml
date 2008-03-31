@@ -45,6 +45,7 @@
   <import>war:/conf/wcm/node-hierarchy-configuration.xml</import>
   <import>war:/conf/wcm/shared-portal-configuration.xml</import>     
   <import>war:/conf/wcm/drives-configuration.xml</import>
-  <import>war:/conf/wcm/templates-configuration.xml</import>	
+  <import>war:/conf/wcm/templates-configuration.xml</import>
+  <import>war:/conf/wcm/scripts-configuration.xml</import>	
 		
 </configuration>
