@@ -113,6 +113,7 @@ public class WcmServiceImpl implements WcmService,Startable {
       List<Value> temp = new ArrayList<Value>() ;
       temp.add(value) ;
       for(Value v: storedNode.getProperty("exo:linkedApplications").getValues()) {
+        if(v.getString().equalsIgnoreCase(value.getString())) continue ;
         temp.add(v) ;
       }
       storedNode.setProperty("exo:linkedApplications",temp.toArray(new Value[temp.size()])) ;

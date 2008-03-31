@@ -39,10 +39,10 @@ import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
+import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
-import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.access.SystemIdentity;
 import org.exoplatform.services.jcr.core.ManageableRepository;
@@ -105,7 +105,12 @@ public class WcmSearchServiceImpl implements WcmSearchService {
     UserPortalConfig userPortalConfig = portalConfigService_.getUserPortalConfig(portalName,userId);       
     for(NodeIterator iter = queryResult.getNodes();iter.hasNext();) {
       Node document = iter.nextNode() ;
-      if(!document.hasProperty("exo:linkedApplications")) continue ;
+      if(document.getPrimaryNodeType().isNodeType("nt:resource")) 
+        document = document.getParent() ;
+      if(!document.hasProperty("exo:linkedApplications"))  { 
+        nodeSet.add(document) ;
+        continue ; 
+      }
       boolean found = false ;
       for(Value value: document.getProperty("exo:linkedApplications").getValues()) {
         String applicationId = value.getString();
@@ -122,10 +127,7 @@ public class WcmSearchServiceImpl implements WcmSearchService {
     List<Object> resultList = new ArrayList<Object>() ;
     for(Iterator<PageNode> iter = pageNodeSet.iterator();iter.hasNext();) {
       resultList.add(iter.next());
-    }        
-    for(Iterator<PageNode> iter = pageNodeSet.iterator();iter.hasNext();) {
-      resultList.add(iter.next());
-    }
+    }     
     for(Iterator<Node> iterator = nodeSet.iterator();iterator.hasNext();) {
       resultList.add(iterator.next());
     }
@@ -140,15 +142,16 @@ public class WcmSearchServiceImpl implements WcmSearchService {
     HashSet<Node> hashSet = new HashSet<Node>() ;    
     for(NodeIterator iterator = result.getNodes();iterator.hasNext();) {
       Node node = iterator.nextNode() ;
+      if(node.getPrimaryNodeType().isNodeType("nt:resource")) 
+        node = node.getParent() ;
       hashSet.add(node) ;
     }
     List<Object> document = Arrays.asList(hashSet.toArray()) ;      
     return new ObjectPageList(document,10) ;
-
   }
 
   private Query createQuery(QueryManager queryManager,String keyword,String portalName) throws Exception{
-   String sql = "select * from nt:base where contains(*,'" + keyword + "') and jcr:path like '/Web Content/Live/"+portalName+"/%' order by exo:dateCreated DESC" ;           
+    String sql = "select * from nt:base where contains(*,'" + keyword + "') and jcr:path like '/Web Content/Live/"+portalName+"/%' order by exo:dateCreated DESC" ;   
     return queryManager.createQuery(sql,Query.SQL) ;        
   }
 
@@ -172,9 +175,11 @@ public class WcmSearchServiceImpl implements WcmSearchService {
     UserPortalConfig userPortalConfig = portalConfigService_.getUserPortalConfig(portalName,userId);       
     for(NodeIterator iter = queryResult.getNodes();iter.hasNext();) {
       Node document = iter.nextNode() ;
+      if(document.getPrimaryNodeType().isNodeType("nt:resource")) 
+        document = document.getParent() ;
       if(!document.hasProperty("exo:linkedApplications")) continue ;
       for(Value value: document.getProperty("exo:linkedApplications").getValues()) {
-        String applicationId = value.getString();
+        String applicationId = value.getString();        
         for(PageNavigation pageNavigation:userPortalConfig.getNavigations()) {
           pageNodeSet.addAll(filter(pageNavigation,userId,applicationId)) ; 
         }        
@@ -195,30 +200,26 @@ public class WcmSearchServiceImpl implements WcmSearchService {
     return list;
   }
 
-  public PageNode filter(PageNode node, String userName,String applicationId,List<PageNode> allPageNode) throws Exception {    
-    Page page = portalConfigService_.getPage(node.getPageReference(),userName) ;       
-    if(!hasApplication(page,applicationId)) return null ;
-    allPageNode.add(node) ;
-    PageNode copyNode = node.clone();
-    copyNode.setChildren(new ArrayList<PageNode>());
+  public void filter(PageNode node, String userName,String applicationId,List<PageNode> allPageNode) throws Exception {    
+    Page page = portalConfigService_.getPage(node.getPageReference(),userName) ;
+    if(page == null) return ;
+    if(hasApplication(page,applicationId)) {
+      allPageNode.add(node);
+    }    
     List<PageNode> children = node.getChildren();
-    if(children == null) return copyNode;
-    for(PageNode child: children){
-      PageNode newNode = filter(child, userName,applicationId,allPageNode);
-      if(newNode != null ) { 
-        allPageNode.add(newNode) ;
-        copyNode.getChildren().add(newNode);
-      }
-    }
-    return copyNode;
+    if(children == null) return ;
+    for(PageNode child:children) {
+      filter(child,userName,applicationId,allPageNode) ;
+    }            
   }
 
-  private boolean hasApplication(Page page,String applicationId) {
-    if(page == null) return false ;
-    for(Object object:page.getChildren()) {
-      if(object instanceof UIPortlet) {
-        UIPortlet portlet = (UIPortlet) object ;
-        if(portlet.getId().equalsIgnoreCase(applicationId)) return true;
+  private boolean hasApplication(Page page,String applicationId) {    
+    for(Object object:page.getChildren()) {      
+      if(object instanceof Application) {
+        Application application = (Application) object ;
+        String instanceId = application.getInstanceId().split(":/")[1] ;               
+        if(applicationId.equalsIgnoreCase(instanceId)) 
+          return true;
       }
     }
     return false ;  
