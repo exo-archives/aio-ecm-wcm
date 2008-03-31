@@ -5,6 +5,7 @@
   String[] hiddenField5 = ["jcrPath=/node/jcr:content/dc:date", "visible=false"] ;
   String[] hiddenField6 = ["jcrPath=/node/jcr:content/jcr:mimeType", "visible=false", "text/javascript"] ;
   uicomponent.addHiddenField("hiddenInput1", hiddenField1) ;
+  uicomponent.addHiddenField("hiddenInput6", hiddenField6) ;
   uicomponent.addHiddenField("hiddenInput2", hiddenField2) ;
   uicomponent.addCalendarField("hiddenInput4", hiddenField4) ;
   uicomponent.addCalendarField("hiddenInput5", hiddenField5) ;
