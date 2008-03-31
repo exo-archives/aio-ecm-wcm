@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.jcr.Node;
+import javax.jcr.Property;
 import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.ValueFactory;
@@ -39,6 +40,7 @@ import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.wcm.WcmService;
 import org.exoplatform.services.wcm.WebContentHandler;
 import org.exoplatform.services.wcm.WebContentHandlerNotPound;
+import org.jibx.binding.def.StructureReference;
 import org.picocontainer.Startable;
 
 /**
@@ -137,6 +139,7 @@ public class WcmServiceImpl implements WcmService,Startable {
     HTMLNode head = getHTMLNodeByName(document.getRoot(),Name.HEAD) ;
     List<HTMLNode> styleNodes = getHTMLNodesByName(head,Name.STYLE) ;    
     List<Value> values = getReferenceValues(htmlFile,styleNodes) ;    
+    if(values.isEmpty()) return ;
     htmlFile.setProperty("exo:referenceCSS",values.toArray(new Value[values.size()])) ;
   }
 
@@ -218,6 +221,24 @@ public class WcmServiceImpl implements WcmService,Startable {
     String mimetype = node.getNode("jcr:content").getProperty("jcr:mimeType").getString() ;
     if(!mimetype.startsWith("text")) return null ;  
     return node.getNode("jcr:content").getProperty("jcr:data").getString() ;
+  }
+
+  public String getReferenceFileContent(Node htmlFile, String propertyName) throws Exception {    
+    if(!htmlFile.hasProperty(propertyName)) return "" ;
+    Property property = htmlFile.getProperty(propertyName) ;    
+    if(!property.getDefinition().isMultiple()) {
+      Value value =  property.getValue();
+      Node referenceNode = htmlFile.getSession().getNodeByUUID(value.getString()) ;      
+      return getTextFileContent(referenceNode) ;
+    }
+    StringBuffer stringBuffer = new StringBuffer();    
+    Session session = htmlFile.getSession();
+    for(Value value:property.getValues()) {
+      Node referenceNode = session.getNodeByUUID(value.getString()) ;      
+      String data = getTextFileContent(referenceNode);      
+      if(data != null) stringBuffer.append(data) ;
+    }        
+    return stringBuffer.toString();
   }
 
 }

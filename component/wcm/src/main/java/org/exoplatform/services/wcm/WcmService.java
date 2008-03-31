@@ -35,4 +35,6 @@ public interface WcmService {
       boolean isAddNew, String repository,String portletInstanceId) throws Exception ;
   
   public void updateWebContentReference(String repository,String worksapce,String path) throws Exception ;
+  
+  public String getReferenceFileContent(Node htmlFile,String property) throws Exception ;
 }
