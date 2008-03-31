@@ -178,7 +178,8 @@ public class WcmServiceImpl implements WcmService,Startable {
     }
     return values;
   }
-  private HTMLNode getHTMLNodeByName(HTMLNode root,Name name) {    
+  private HTMLNode getHTMLNodeByName(HTMLNode root,Name name) {
+    if(root == null) return null ;
     for(HTMLNode node: root.getChildren()) {      
       if(node.getName().equals(name)) return node;
     }
@@ -187,6 +188,7 @@ public class WcmServiceImpl implements WcmService,Startable {
 
   private List<HTMLNode> getHTMLNodesByName(HTMLNode root,Name name) {
     List<HTMLNode> list = new ArrayList<HTMLNode>();    
+    if(root == null) return list ;
     for(HTMLNode node: root.getChildren()) {      
       if(node.getName().equals(name)) list.add(node);
     }
