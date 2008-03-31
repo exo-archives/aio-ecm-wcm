@@ -31,6 +31,7 @@ import org.exoplatform.dms.application.JCRResourceResolver;
 import org.exoplatform.dms.webui.component.UISelectable;
 import org.exoplatform.dms.webui.form.UIBaseDialogForm;
 import org.exoplatform.dms.webui.utils.Utils;
+import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.templates.TemplateService;
@@ -151,10 +152,11 @@ public class UIDocumentForm extends UIBaseDialogForm implements UISelectable {
       nodeType = getNode().getPrimaryNodeType().getName() ;
     }       
     try {            
-      PortletRequestContext portletRequestContext = PortletRequestContext.getCurrentInstance();
-      String applicationID = portletRequestContext.getRequest().getWindowID() ;
+      PortletRequestContext portletRequestContext = PortletRequestContext.getCurrentInstance();      
+      String instanceId =  portletRequestContext.getApplication().getApplicationId() + "/" + portletRequestContext.getWindowId();
+      System.out.println("=============>"+instanceId);
       WcmService wcmService = getApplicationComponent(WcmService.class) ;
-      String addedPath = wcmService.storeNode(nodeType,homeNode,inputProperties,isAddNew(),repositoryName_,applicationID) ;      
+      String addedPath = wcmService.storeNode(nodeType,homeNode,inputProperties,isAddNew(),repositoryName_,instanceId) ;      
       try {
         homeNode.save() ;
         newNode = (Node)homeNode.getSession().getItem(addedPath);

@@ -149,7 +149,9 @@ public class UIContentChooser extends UIForm implements UISelectable {
       Session session = sessionProvider.getSession(worksapce,manageableRepository) ;
       try{
         Node node = session.getNodeByUUID(nodeUUID) ;
-        Value value = session.getValueFactory().createValue(context.getRequest().getWindowID()) ;        
+        PortletRequestContext portletRequestContext = PortletRequestContext.getCurrentInstance();      
+        String instanceId =  portletRequestContext.getApplication().getApplicationId() + "/" + portletRequestContext.getWindowId();
+        Value value = session.getValueFactory().createValue(instanceId) ;        
         if(!node.isNodeType("exo:applicationLinkable")) {
           node.addMixin("exo:applicationLinkable");
           node.setProperty("exo:linkedApplications",new Value[]{value}) ;
