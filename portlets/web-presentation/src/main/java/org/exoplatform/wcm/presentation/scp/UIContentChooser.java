@@ -22,6 +22,7 @@ import java.util.List;
 import javax.jcr.AccessDeniedException;
 import javax.jcr.Node;
 import javax.jcr.Session;
+import javax.jcr.Value;
 import javax.portlet.PortletPreferences;
 
 import org.exoplatform.dms.webui.component.UINodesExplorer;
@@ -32,6 +33,7 @@ import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.config.RepositoryEntry;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -55,18 +57,18 @@ import org.exoplatform.webui.form.UIFormStringInput;
     lifecycle = UIFormLifecycle.class,
     template = "system:/groovy/webui/form/UIFormWithTitle.gtmpl",
     events = {
-        @EventConfig(listeners = UIContentChooser.SaveActionListener.class),
-        @EventConfig(listeners = UIContentChooser.BackActionListener.class),
-        @EventConfig(listeners = UIContentChooser.BrowseDocumentActionListener.class)
+      @EventConfig(listeners = UIContentChooser.SaveActionListener.class),
+      @EventConfig(listeners = UIContentChooser.BackActionListener.class),
+      @EventConfig(listeners = UIContentChooser.BrowseDocumentActionListener.class)
     }
 )
 public class UIContentChooser extends UIForm implements UISelectable {
-  
+
   private static String FIELD_REPOSITORY = "Repository" ;
   private static String FIELD_WORKSPACE = "Workspace" ;
   private static String DOCUMENT_SELECTION = "DocumentSelection" ;
   static String FIELD_UUID = "UUID" ;
-  
+
   public UIContentChooser() throws Exception {
     UIFormSelectBox uiRepoSelectInput = new UIFormSelectBox(FIELD_REPOSITORY, null, getRepoOptions()) ;
     addUIFormInput(uiRepoSelectInput) ;
@@ -87,7 +89,7 @@ public class UIContentChooser extends UIForm implements UISelectable {
     getUIStringInput(selectField).setValue(node.getUUID()) ;
     SetPopupComponent(null) ;
   }
-  
+
   private List<SelectItemOption<String>> getRepoOptions() {
     RepositoryService service = getApplicationComponent(RepositoryService.class) ;
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
@@ -96,7 +98,7 @@ public class UIContentChooser extends UIForm implements UISelectable {
     }
     return options ;
   }
-  
+
   private List<SelectItemOption<String>> getWorkspaceOption(String repoName) throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>(3) ;
     Session session ;
@@ -114,7 +116,7 @@ public class UIContentChooser extends UIForm implements UISelectable {
     }
     return options ;
   }
-  
+
   public void SetPopupComponent(UIComponent uiComponent) throws Exception {
     UIPortletConfig uiConfig = getAncestorOfType(UIPortletConfig.class) ;
     if(uiComponent == null) {
@@ -127,21 +129,47 @@ public class UIContentChooser extends UIForm implements UISelectable {
     uiPopup.setWindowSize(610, 300);
     uiPopup.setShow(true) ;
   }
-  
-  public static class SaveActionListener extends EventListener<UIContentChooser> {
 
+  public static class SaveActionListener extends EventListener<UIContentChooser> {    
     public void execute(Event<UIContentChooser> event) throws Exception {
       UIContentChooser uiForm = event.getSource() ; 
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext() ;
-      PortletPreferences prefs = context.getRequest().getPreferences() ;
-      prefs.setValue(UISimplePresentationPortlet.REPOSITORY, uiForm.getUIFormSelectBox(FIELD_REPOSITORY).getValue()) ;
-      prefs.setValue(UISimplePresentationPortlet.WORKSPACE, uiForm.getUIFormSelectBox(FIELD_WORKSPACE).getValue()) ;
-      prefs.setValue(UISimplePresentationPortlet.UUID, uiForm.getUIStringInput(FIELD_UUID).getValue()) ;
-      prefs.store() ;
+      String repository = uiForm.getUIFormSelectBox(FIELD_REPOSITORY).getValue();
+      String worksapce = uiForm.getUIFormSelectBox(FIELD_WORKSPACE).getValue() ;
+      String nodeUUID = uiForm.getUIStringInput(FIELD_UUID).getValue() ;
+      PortletPreferences prefs = context.getRequest().getPreferences() ;            
+      prefs.setValue(UISimplePresentationPortlet.REPOSITORY, repository) ;
+      prefs.setValue(UISimplePresentationPortlet.WORKSPACE, worksapce) ;
+      prefs.setValue(UISimplePresentationPortlet.UUID, nodeUUID) ;
+      prefs.store() ;      
+      //TODO should use other way to set the application info      
+      RepositoryService repositoryService = uiForm.getApplicationComponent(RepositoryService.class) ;
+      SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider() ;
+      ManageableRepository manageableRepository = repositoryService.getRepository(repository) ;
+      Session session = sessionProvider.getSession(worksapce,manageableRepository) ;
+      try{
+        Node node = session.getNodeByUUID(nodeUUID) ;
+        Value value = session.getValueFactory().createValue(context.getRequest().getWindowID()) ;        
+        if(!node.isNodeType("exo:applicationLinkable")) {
+          node.addMixin("exo:applicationLinkable");
+          node.setProperty("exo:linkedApplications",new Value[]{value}) ;
+        }else {
+          List<Value> list = new ArrayList<Value>() ;
+          list.add(value) ;
+          for(Value v: node.getProperty("exo:linkedApplications").getValues()) {
+            list.add(v);
+          }
+          node.setProperty("exo:linkedApplications",list.toArray(new Value[list.size()])) ;         
+        }
+        session.save();
+      }catch (Exception e) {
+        e.printStackTrace();
+      }      
+
     }
-    
+
   }
-  
+
   public static class BackActionListener extends EventListener<UIContentChooser> {
 
     public void execute(Event<UIContentChooser> event) throws Exception {
@@ -150,9 +178,9 @@ public class UIContentChooser extends UIForm implements UISelectable {
       uiConfig.getChildren().clear() ;
       uiConfig.addChild(uiConfig.getBackComponent()) ;
     }
-    
+
   }
-  
+
   public static class BrowseDocumentActionListener extends EventListener<UIContentChooser> {
 
     public void execute(Event<UIContentChooser> event) throws Exception {
@@ -177,7 +205,7 @@ public class UIContentChooser extends UIForm implements UISelectable {
       uiExplorer.setComponent(uiChooser, new String [] {UIContentChooser.FIELD_UUID}) ;
       uiChooser.SetPopupComponent(uiExplorer) ;
     }
-    
+
   }
 
 }
