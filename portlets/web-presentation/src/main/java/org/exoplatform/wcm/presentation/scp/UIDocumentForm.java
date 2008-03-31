@@ -33,13 +33,14 @@ import org.exoplatform.dms.webui.form.UIBaseDialogForm;
 import org.exoplatform.dms.webui.utils.Utils;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
-import org.exoplatform.services.cms.CmsService;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.wcm.WcmService;
 import org.exoplatform.wcm.presentation.scp.UIPathChooser.ContentStorePath;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -149,12 +150,14 @@ public class UIDocumentForm extends UIBaseDialogForm implements UISelectable {
       homeNode = getNode().getParent();
       nodeType = getNode().getPrimaryNodeType().getName() ;
     }       
-    try {
-      CmsService cmsService = getApplicationComponent(CmsService.class) ;
-      String addedPath = cmsService.storeNode(nodeType, homeNode, inputProperties, isAddNew(), repositoryName_);
+    try {            
+      PortletRequestContext portletRequestContext = PortletRequestContext.getCurrentInstance();
+      String applicationID = portletRequestContext.getRequest().getWindowID() ;
+      WcmService wcmService = getApplicationComponent(WcmService.class) ;
+      String addedPath = wcmService.storeNode(nodeType,homeNode,inputProperties,isAddNew(),repositoryName_,applicationID) ;      
       try {
         homeNode.save() ;
-        newNode = homeNode.getNode(addedPath.substring(addedPath.lastIndexOf("/") + 1)) ;
+        newNode = (Node)homeNode.getSession().getItem(addedPath);
       } catch(Exception e) { return null ; }
     } catch (AccessControlException ace) {
       throw new AccessDeniedException(ace.getMessage());
