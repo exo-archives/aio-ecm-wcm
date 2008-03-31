@@ -44,7 +44,7 @@
 			
 			var selectFolder = function(url) {
 				//refer from insertPortalLink.html;
-				var portalLink = eXoPlugin.BaseURL + url;
+				var portalLink = eXoPlugin.portalPath + url;
 				window.blur();
 				window.opener.setField("inputURL", portalLink);
 			}
@@ -76,7 +76,7 @@
 				sUrl += '&Type=' + this.ResourceType ;
 				sUrl += '&CurrentFolder=' + escape( this.CurrentFolder ) ;
 				sUrl += '&type=org.exoplatform.connector.fckeditor.portal.GetPortalLinkCommand' ;
-				sUrl += '&portalName=' + eXoPlugin.PortalName ;
+				sUrl += '&PortalName=' + eXoPlugin.portalName ;
 				
 				if ( params ) sUrl += '&' + params ;
 
