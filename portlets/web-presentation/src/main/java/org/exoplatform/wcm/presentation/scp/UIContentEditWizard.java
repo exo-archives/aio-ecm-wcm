@@ -71,7 +71,7 @@ public class UIContentEditWizard extends UIContentWizard {
     String uuid = prefs.getValue(UISimplePresentationPortlet.UUID, null) ;
     RepositoryService repoService = getApplicationComponent(RepositoryService.class) ;
     ManageableRepository repo = repoService.getRepository(repoName) ;
-    Session session = SessionProviderFactory.createSystemProvider().getSession(workspace, repo) ;
+    Session session = SessionProviderFactory.createSessionProvider().getSession(workspace, repo) ;
     Node currentNode = session.getNodeByUUID(uuid);
     TemplateService tservice = getApplicationComponent(TemplateService.class) ;
     List documentNodeType = tservice.getDocumentTemplates(repoName) ;

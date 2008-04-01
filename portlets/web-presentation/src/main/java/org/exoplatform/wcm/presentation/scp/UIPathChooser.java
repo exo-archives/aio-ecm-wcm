@@ -131,7 +131,7 @@ public class UIPathChooser extends UIForm implements UISelectable {
     for(String name : repo.getWorkspaceNames()) {
       //TODO: use SessionProvider() or createSystemProvider() ?
       //session = SessionProviderFactory.createSessionProvider().getSession(name, repo) ;
-      session = SessionProviderFactory.createSystemProvider().getSession(name, repo) ;
+      session = SessionProviderFactory.createSessionProvider().getSession(name, repo) ;
       try {
         session.getRootNode() ;
         options.add(new SelectItemOption<String>(name, name)) ;

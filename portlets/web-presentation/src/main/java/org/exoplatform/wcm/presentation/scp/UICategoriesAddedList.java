@@ -19,29 +19,20 @@ package org.exoplatform.wcm.presentation.scp;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.jcr.AccessDeniedException;
 import javax.jcr.Node;
-import javax.portlet.PortletPreferences;
 
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.dms.webui.component.UISelectable;
-import org.exoplatform.dms.webui.utils.JCRExceptionManager;
-import org.exoplatform.dms.webui.utils.Utils;
 import org.exoplatform.services.cms.categories.CategoriesService;
 import org.exoplatform.wcm.presentation.scp.UIPathChooser.ContentStorePath;
-import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIGrid;
 import org.exoplatform.webui.core.UIWizard;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-import org.exoplatform.webui.exception.MessageException;
 
 /**
  * Created by The eXo Platform SARL

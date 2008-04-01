@@ -153,8 +153,7 @@ public class UIDocumentForm extends UIBaseDialogForm implements UISelectable {
     }       
     try {            
       PortletRequestContext portletRequestContext = PortletRequestContext.getCurrentInstance();      
-      String instanceId =  portletRequestContext.getApplication().getApplicationId() + "/" + portletRequestContext.getWindowId();
-      System.out.println("=============>"+instanceId);
+      String instanceId =  portletRequestContext.getApplication().getApplicationId() + "/" + portletRequestContext.getWindowId();      
       WcmService wcmService = getApplicationComponent(WcmService.class) ;
       String addedPath = wcmService.storeNode(nodeType,homeNode,inputProperties,isAddNew(),repositoryName_,instanceId) ;      
       try {
