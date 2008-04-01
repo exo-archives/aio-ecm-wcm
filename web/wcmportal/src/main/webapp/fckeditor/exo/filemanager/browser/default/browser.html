@@ -33,15 +33,21 @@
 					var newImage = FCK.CreateElement( "img" ) ;
 					newImage.setAttribute( "src", url ) ;
 				} else {
-					var newElement = FCK.CreateElement( "span" ) ;
-					newElement.innerHTML = "<\%=uicomponent.createDocumentLink('"+url+"');\%>";
+					var newElement = FCK.CreateElement( "a" ) ;
+					var workSpace = GetUrlParam( "workspace", url );
+					var path = GetUrlParam( "path", url );
+					var fullWebDAV = eXoPlugin.hostName + "/portal/rest/jcr/repository/" +  workSpace + path;
+					newElement.innerHTML = path.substring(path.lastIndexOf("/") + 1 , path.length);
+					newElement.setAttribute("href", fullWebDAV);
+					newElement.setAttribute("target", "_blank");
 				}
 			}
 					
-			function GetUrlParam( paramName )
+			function GetUrlParam( paramName, url )
 			{
 				var oRegex = new RegExp( '[\?&]' + paramName + '=([^&]+)', 'i' ) ;
-				var oMatch = oRegex.exec( window.top.location.search ) ;
+				if (!url) var oMatch = oRegex.exec( window.top.location.search ) ;
+				else var oMatch = oRegex.exec( url ) ; 
 				
 				if ( oMatch && oMatch.length > 1 )
 					return unescape( oMatch[1] ) ;
