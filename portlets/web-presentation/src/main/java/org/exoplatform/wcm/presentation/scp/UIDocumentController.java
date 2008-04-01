@@ -178,7 +178,7 @@ public class UIDocumentController extends UIContainer {
   private Node getParentNode() throws Exception {
     //TODO: need to review
     //String currentUser = Util.getPortalRequestContext().getRemoteUser();
-    SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider(); 
+    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider(); 
 //    if(currentUser == null) {
 //      sessionProvider = SessionProviderFactory.createSystemProvider() ;
 //    }else {
