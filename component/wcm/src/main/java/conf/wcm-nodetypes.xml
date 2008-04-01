@@ -3,6 +3,17 @@
 
   <!-- Duplicating this definition in case the ECM node type definitions
        have not been processed by the Repository Service yet. -->
+  <!-- DO NOT REMOVE THIS DEFINITION -->
+  <nodeType name="exo:presentationable" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
+    <propertyDefinitions>
+      <propertyDefinition name="exo:presentationType" requiredType="String" autoCreated="true" mandatory="false"
+        onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>	      
+      </propertyDefinition>      
+    </propertyDefinitions>
+  </nodeType>
+  <!-- DO NOT REMOVE THIS DEFINITION -->
+
   <nodeType name="exo:applicationLinkable" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
     <propertyDefinitions>
       <propertyDefinition name="exo:linkedApplications" requiredType="String" autoCreated="true" mandatory="false"
