@@ -33,7 +33,6 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormSelectBox;
 
@@ -51,7 +50,7 @@ import org.exoplatform.webui.form.UIFormSelectBox;
       @EventConfig(listeners = UIWorkspaceListForm.AddRootNodeActionListener.class)
     }
 )
-public class UIWorkspaceListForm extends UIForm {
+public class UIWorkspaceListForm extends UISCPForm {
 
   static private String WORKSPACE_NAME = "workspaceName" ;
   static private String ROOT_NODE_INFO = "rootNodeInfo" ;

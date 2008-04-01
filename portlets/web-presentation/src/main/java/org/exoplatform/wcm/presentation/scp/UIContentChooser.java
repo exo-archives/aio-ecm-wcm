@@ -28,12 +28,12 @@ import javax.portlet.PortletPreferences;
 import org.exoplatform.dms.webui.component.UINodesExplorer;
 import org.exoplatform.dms.webui.component.UISelectable;
 import org.exoplatform.dms.webui.form.UIFormInputSetWithAction;
+import org.exoplatform.dms.webui.form.UISCPForm;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.config.RepositoryEntry;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -43,7 +43,6 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 
@@ -62,7 +61,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
       @EventConfig(listeners = UIContentChooser.BrowseDocumentActionListener.class)
     }
 )
-public class UIContentChooser extends UIForm implements UISelectable {
+public class UIContentChooser extends UISCPForm implements UISelectable {
 
   private static String FIELD_REPOSITORY = "Repository" ;
   private static String FIELD_WORKSPACE = "Workspace" ;

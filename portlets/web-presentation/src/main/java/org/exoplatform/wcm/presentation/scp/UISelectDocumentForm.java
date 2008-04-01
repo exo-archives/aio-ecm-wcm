@@ -19,13 +19,13 @@ package org.exoplatform.wcm.presentation.scp;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.exoplatform.dms.webui.form.UISCPForm;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormSelectBox;
 
 /**
@@ -41,7 +41,7 @@ import org.exoplatform.webui.form.UIFormSelectBox;
       @EventConfig(listeners = UISelectDocumentForm.ChangeActionListener.class)
     }
 )
-public class UISelectDocumentForm extends UIForm {
+public class UISelectDocumentForm extends UISCPForm {
 
   final static public String FIELD_SELECT = "selectTemplate" ;
 
