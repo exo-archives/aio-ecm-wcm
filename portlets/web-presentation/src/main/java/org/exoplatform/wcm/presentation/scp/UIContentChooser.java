@@ -67,26 +67,21 @@ public class UIContentChooser extends UIForm implements UISelectable {
   private static String FIELD_REPOSITORY = "Repository" ;
   private static String FIELD_WORKSPACE = "Workspace" ;
   private static String DOCUMENT_SELECTION = "DocumentSelection" ;
-  static String FIELD_UUID = "UUID" ;
+  static String FIELD_DOCUMENT_PATH = "DocPath" ;
 
   public UIContentChooser() throws Exception {
     UIFormSelectBox uiRepoSelectInput = new UIFormSelectBox(FIELD_REPOSITORY, null, getRepoOptions()) ;
     addUIFormInput(uiRepoSelectInput) ;
     addUIFormInput(new UIFormSelectBox(FIELD_WORKSPACE, null, getWorkspaceOption(uiRepoSelectInput.getValue())).setValue("collaboration")) ;
     UIFormInputSetWithAction uiInputSet = new UIFormInputSetWithAction(DOCUMENT_SELECTION) ;
-    uiInputSet.addUIFormInput(new UIFormStringInput(FIELD_UUID, null, null).setEditable(false)) ;
-    uiInputSet.setActionInfo(FIELD_UUID, new String [] {"BrowseDocument"}) ;
+    uiInputSet.addUIFormInput(new UIFormStringInput(FIELD_DOCUMENT_PATH, null, null).setEditable(false)) ;
+    uiInputSet.setActionInfo(FIELD_DOCUMENT_PATH, new String [] {"BrowseDocument"}) ;
     addUIComponentInput(uiInputSet) ;
     setActions(new String [] {"Save", "Back"}) ;
   }
 
   public void doSelect(String selectField, String value) throws Exception {
-    String repoName = getUIFormSelectBox(FIELD_REPOSITORY).getValue() ;
-    String workspace = getUIFormSelectBox(FIELD_WORKSPACE).getValue() ;
-    ManageableRepository repo = getApplicationComponent(RepositoryService.class).getRepository(repoName) ;
-    Session session = SessionProviderFactory.createSystemProvider().getSession(workspace, repo) ;
-    Node node = (Node) session.getItem(value) ;
-    getUIStringInput(selectField).setValue(node.getUUID()) ;
+    getUIStringInput(selectField).setValue(value) ;
     SetPopupComponent(null) ;
   }
 
@@ -135,18 +130,17 @@ public class UIContentChooser extends UIForm implements UISelectable {
       UIContentChooser uiForm = event.getSource() ; 
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext() ;
       String repository = uiForm.getUIFormSelectBox(FIELD_REPOSITORY).getValue();
-      String worksapce = uiForm.getUIFormSelectBox(FIELD_WORKSPACE).getValue() ;
-      String nodeUUID = uiForm.getUIStringInput(FIELD_UUID).getValue() ;
+      String workspace = uiForm.getUIFormSelectBox(FIELD_WORKSPACE).getValue() ;
+      String docPath = uiForm.getUIStringInput(FIELD_DOCUMENT_PATH).getValue() ;
+      ManageableRepository repo = uiForm.getApplicationComponent(RepositoryService.class).getRepository(repository) ;
+      Session session = SessionProviderFactory.createSystemProvider().getSession(workspace, repo) ;
+      String nodeUUID = ((Node) session.getItem(docPath)).getUUID() ;
       PortletPreferences prefs = context.getRequest().getPreferences() ;            
       prefs.setValue(UISimplePresentationPortlet.REPOSITORY, repository) ;
-      prefs.setValue(UISimplePresentationPortlet.WORKSPACE, worksapce) ;
+      prefs.setValue(UISimplePresentationPortlet.WORKSPACE, workspace) ;
       prefs.setValue(UISimplePresentationPortlet.UUID, nodeUUID) ;
       prefs.store() ;      
       //TODO should use other way to set the application info      
-      RepositoryService repositoryService = uiForm.getApplicationComponent(RepositoryService.class) ;
-      SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider() ;
-      ManageableRepository manageableRepository = repositoryService.getRepository(repository) ;
-      Session session = sessionProvider.getSession(worksapce,manageableRepository) ;
       try{
         Node node = session.getNodeByUUID(nodeUUID) ;
         PortletRequestContext portletRequestContext = PortletRequestContext.getCurrentInstance();      
@@ -204,7 +198,7 @@ public class UIContentChooser extends UIForm implements UISelectable {
       String [] filterType = new String[documents.size()];
       documents.toArray(filterType) ;
       uiExplorer.setFilterType(filterType) ;
-      uiExplorer.setComponent(uiChooser, new String [] {UIContentChooser.FIELD_UUID}) ;
+      uiExplorer.setComponent(uiChooser, new String [] {UIContentChooser.FIELD_DOCUMENT_PATH}) ;
       uiChooser.SetPopupComponent(uiExplorer) ;
     }
 
