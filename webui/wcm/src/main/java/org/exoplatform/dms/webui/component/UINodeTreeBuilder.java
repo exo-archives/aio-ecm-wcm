@@ -58,7 +58,7 @@ public class UINodeTreeBuilder extends UIContainer {
   private String rootPath_ ;  
   
   public UINodeTreeBuilder() throws Exception {
-    UITree tree = addChild(UITree.class, null, null) ;
+    UITree tree = addChild(UITree.class, null, UITree.class.getSimpleName()+hashCode()) ;
     tree.setBeanLabelField("name") ;
     tree.setBeanIdField("path") ;
     tree.setIcon("nt_unstructured16x16Icon")  ;    
@@ -154,9 +154,10 @@ public class UINodeTreeBuilder extends UIContainer {
   
   public void setNodeSelect(String path) throws Exception {
     UINodesExplorer uiJCRBrowser = getParent() ;
-    String workspace = uiJCRBrowser.getWorkspace() ;
     String repositoryName = uiJCRBrowser.getRepository() ;    
-    Session session = SessionProviderFactory.createSessionProvider().getSession(workspace, getRepository(repositoryName)) ;
+    String workspace = uiJCRBrowser.getWorkspace() ;
+   //Session session = SessionProviderFactory.createSessionProvider().getSession(workspace, getRepository(repositoryName)) ;
+    Session session = SessionProviderFactory.createSystemProvider().getSession(workspace, getRepository(repositoryName)) ;
     currentNode_ = (Node) session.getItem(path);
     if(!rootNode_.getPath().equals("/")) {
       if(currentNode_.getPath().equals(rootNode_.getParent().getPath())) currentNode_ = rootNode_ ;

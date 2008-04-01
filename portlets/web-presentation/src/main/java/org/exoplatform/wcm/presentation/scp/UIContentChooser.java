@@ -192,7 +192,6 @@ public class UIContentChooser extends UIForm implements UISelectable {
       if(!"collaboration".equals(workspace)) defaultPath = "/" ;
       UINodesExplorer uiExplorer = uiChooser.createUIComponent(UINodesExplorer.class, null, null) ;
       uiExplorer.setRepository(repo) ;
-      uiExplorer.setWorkspace(workspace) ;
       uiExplorer.setIsDisable(workspace, true) ;
       uiExplorer.setRootPath(defaultPath) ;    
       if(event.getRequestContext().getRemoteUser() == null) {
