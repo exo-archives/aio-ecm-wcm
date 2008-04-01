@@ -133,16 +133,20 @@ public class UIContentChooser extends UIForm implements UISelectable {
       String workspace = uiForm.getUIFormSelectBox(FIELD_WORKSPACE).getValue() ;
       String docPath = uiForm.getUIStringInput(FIELD_DOCUMENT_PATH).getValue() ;
       ManageableRepository repo = uiForm.getApplicationComponent(RepositoryService.class).getRepository(repository) ;
-      Session session = SessionProviderFactory.createSystemProvider().getSession(workspace, repo) ;
-      String nodeUUID = ((Node) session.getItem(docPath)).getUUID() ;
+      Session session = SessionProviderFactory.createSystemProvider().getSession(workspace, repo) ;      
+      Node node = ((Node) session.getItem(docPath)) ;
+      if(!node.isNodeType("mix:referenceable")) {
+        node.addMixin("mix:referenceable") ;
+        session.save();
+      }
+      String nodeUUID = node.getUUID() ;
       PortletPreferences prefs = context.getRequest().getPreferences() ;            
       prefs.setValue(UISimplePresentationPortlet.REPOSITORY, repository) ;
       prefs.setValue(UISimplePresentationPortlet.WORKSPACE, workspace) ;
       prefs.setValue(UISimplePresentationPortlet.UUID, nodeUUID) ;
       prefs.store() ;      
       //TODO should use other way to set the application info      
-      try{
-        Node node = session.getNodeByUUID(nodeUUID) ;
+      try{        
         PortletRequestContext portletRequestContext = PortletRequestContext.getCurrentInstance();      
         String instanceId =  portletRequestContext.getApplication().getApplicationId() + "/" + portletRequestContext.getWindowId();
         Value value = session.getValueFactory().createValue(instanceId) ;        
@@ -153,6 +157,7 @@ public class UIContentChooser extends UIForm implements UISelectable {
           List<Value> list = new ArrayList<Value>() ;
           list.add(value) ;
           for(Value v: node.getProperty("exo:linkedApplications").getValues()) {
+            if(value.getString().equalsIgnoreCase(v.getString())) continue ;
             list.add(v);
           }
           node.setProperty("exo:linkedApplications",list.toArray(new Value[list.size()])) ;         
