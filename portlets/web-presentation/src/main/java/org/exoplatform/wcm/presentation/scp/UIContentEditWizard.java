@@ -73,14 +73,14 @@ public class UIContentEditWizard extends UIContentWizard {
     ManageableRepository repo = repoService.getRepository(repoName) ;
     Session session = SessionProviderFactory.createSessionProvider().getSession(workspace, repo) ;
     Node currentNode = session.getNodeByUUID(uuid);
+    ContentStorePath storePath = new ContentStorePath() ;
+    storePath.setRepository(repoName) ;
+    storePath.setWorkspace(workspace) ;
+    storePath.setPath(currentNode.getPath()) ;
     TemplateService tservice = getApplicationComponent(TemplateService.class) ;
     List documentNodeType = tservice.getDocumentTemplates(repoName) ;
     String nodeType = currentNode.getPrimaryNodeType().getName() ;
     if(documentNodeType.contains(nodeType)){
-      ContentStorePath storePath = new ContentStorePath() ;
-      storePath.setRepository(repoName) ;
-      storePath.setWorkspace(workspace) ;
-      storePath.setPath(currentNode.getPath()) ;
       uiDocumentForm.setContentStorePath(storePath) ;
       uiDocumentForm.setTemplateNode(nodeType) ;
       uiDocumentForm.setNodePath(currentNode.getPath()) ;
@@ -119,6 +119,7 @@ public class UIContentEditWizard extends UIContentWizard {
       NodeHierarchyCreator nodeHierarchyCreator = uiWizard.getApplicationComponent(NodeHierarchyCreator.class) ;
       UICategoryManager uiManager = uiWizard.getChild(UICategoryManager.class) ;
       UICategoriesAddedList uiCateAddedList = uiManager.getChild(UICategoriesAddedList.class) ;
+      uiCateAddedList.setStorePath(uiDocumentForm.getContentStorePath()) ;
       uiCateAddedList.updateGrid(categoriesService.getCategories(uiDocumentForm.getSavedNode(), repoName)) ;
       UINodesExplorer uiJCRBrowser = uiManager.getChild(UINodesExplorer.class) ;
       uiJCRBrowser.setSessionProvider(SessionProviderFactory.createSystemProvider()) ;
