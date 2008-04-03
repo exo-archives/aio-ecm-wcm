@@ -36,7 +36,7 @@ public class UICategoryManager extends UIContainer {
   
   public UICategoryManager() throws Exception {
     addChild(UICategoriesAddedList.class, null, null) ;
-    addChild(UINodesExplorer.class, null, null).setRendered(false) ;
+    addChild(UINodesExplorer.class, null, null) ;
   }
   
   public String[] getActions() { return ACTIONS ; }

@@ -24,6 +24,7 @@ import javax.jcr.Node;
 import javax.jcr.Session;
 
 import org.exoplatform.commons.utils.ObjectPageList;
+import org.exoplatform.dms.webui.component.UINodesExplorer;
 import org.exoplatform.dms.webui.component.UISelectable;
 import org.exoplatform.dms.webui.utils.JCRExceptionManager;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
@@ -75,6 +76,8 @@ public class UICategoriesAddedList extends UIContainer implements UISelectable{
     if(nodes == null) nodes = new ArrayList<Node>() ;
     ObjectPageList objPageList = new ObjectPageList(nodes, 10) ;
     uiGrid.getUIPageIterator().setPageList(objPageList) ;
+    if(nodes.size() > 0) setRenderSibbling(UICategoriesAddedList.class) ;
+    else setRenderSibbling(UINodesExplorer.class) ;
   }
   
   public Node getNode() throws Exception {
@@ -93,7 +96,6 @@ public class UICategoriesAddedList extends UIContainer implements UISelectable{
       node.save() ;
       node.getSession().save() ;
       updateGrid(categoriesService.getCategories(node, storePath_.getRepository())) ;
-      setRenderSibbling(UICategoriesAddedList.class) ;
     } catch(Exception e) {
       e.printStackTrace() ;
     }
@@ -112,6 +114,7 @@ public class UICategoriesAddedList extends UIContainer implements UISelectable{
       try {
         categoriesService.removeCategory(node, nodePath, storePath.getRepository()) ;
         uiAddedList.updateGrid(categoriesService.getCategories(node, storePath.getRepository())) ;
+        uiAddedList.setRenderSibbling(UICategoriesAddedList.class) ;
       } catch(AccessDeniedException ace) {
         throw new MessageException(new ApplicationMessage("UICategoriesAddedList.msg.access-denied",
                                    null, ApplicationMessage.WARNING)) ;
