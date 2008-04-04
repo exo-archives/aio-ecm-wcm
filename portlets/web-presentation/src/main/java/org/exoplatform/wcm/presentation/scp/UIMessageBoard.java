@@ -37,7 +37,7 @@ public class UIMessageBoard extends UIComponent {
     Writer writer = context.getWriter() ;
     writer.write("<div>") ;
       writer.write("<span>") ;
-        writer.write("Content not found or this portlet has not been configed yet.") ;
+        writer.write(context.getApplicationResourceBundle().getString("UIMessageBoard.msg.content-not-found")) ;
       writer.write("</span>") ;
     writer.write("</div>") ;
   }
