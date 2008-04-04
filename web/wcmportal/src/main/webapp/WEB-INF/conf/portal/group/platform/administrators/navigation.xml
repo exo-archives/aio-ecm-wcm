@@ -57,6 +57,12 @@
 	      <name>workflow</name>
 	      <label>#{administration.workflow}</label>     
 	      <page-reference>group::platform/administrators::Workflow</page-reference>            
+	    </node>
+	    <node>
+	      <uri>wcm/wcmAdmin</uri>
+	      <name>wcmAdmin</name>
+	      <label>#{administration.wcmAdmin}</label>     
+	      <page-reference>group::platform/administrators::WcmAdmin</page-reference>            
 	    </node>                
     </node>                                                    
   </page-nodes>

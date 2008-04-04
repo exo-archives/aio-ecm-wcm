@@ -8,10 +8,13 @@
   def wcmService = uicomponent.getComponentInstanceOfType(className) ;    
   def css= wcmService.getReferenceFileContent(currentNode,"exo:referenceCSS");
   def js= wcmService.getReferenceFileContent(currentNode,"exo:referenceJs");
-%>
+  def rcontext = _ctx.getRequestContext() ;
   
-<style><%=css%></style>
-
-<%=contentNode.getProperty("jcr:data").getString() ;%>
-
-<script><%=js%></script>
+  String iframeId = uicomponent.getId() + "ifame" ;
+  rcontext.getJavascriptManager().addCustomizedOnLoadScript("eXo.ecm.ECMUtils.replaceToIframe('$iframeId');");
+%>  
+<textarea id="<%=iframeId%>">
+  <style><%=css%></style>
+  <%=contentNode.getProperty("jcr:data").getString() ;%>
+  <script><%=js%></script>
+</textarea>
