@@ -13,6 +13,7 @@
 	<module>portlets/web-searches</module>
 	<module>webui/wcm</module>    
 	<module>connectors/fckeditor</module>    
+	<module>web/wcmResources</module>	
     <module>web/wcmportal</module>	
   </modules>
 
