@@ -8,7 +8,8 @@
 @import url("../../../icons/DefaultStylesheet.css");
 @import url("../browser/DefaultStylesheet.css");
 
-.UISimplePresentationPortlet {
+
+{
   *width: 99.7%; /* Bug on IE */
   margin: auto;
 }
@@ -606,6 +607,7 @@
 	width: 95%;
 	margin: auto;
 	padding: 10px 0px;
+	border: 1px solid red;
 }
 
 .UISimplePresentationPortlet .UIWorkspaceList {
@@ -966,3 +968,40 @@
 	margin: auto;
 }
 /*############################## -- End UIDocumentWorkspace -- ##############################*/
+
+/*====================================UINodesExplorer==================================*/
+.UISimplePresentationPortlet .UITabPane .UITabContentContainer .UINodesExplorer {
+	width: 95%;
+	margin: auto;
+	padding: 10px 0px;
+}
+
+.UISimplePresentationPortlet .UITabPane .UITabContentContainer .UIForm {
+	border: 1px solid #B1B0B0;
+	padding: 1px;
+}
+
+.UISimplePresentationPortlet .UITabPane .UITabContentContainer .UIFormWithTitle {
+	width: 100%;
+	border: 1px solid white;
+}
+
+.UISimplePresentationPortlet .UITabContent .Explorer {
+	padding-top: 10px;
+}
+
+.UISimplePresentationPortlet .UITabContent .Explorer .ExplorerTree {
+	background-color: #F3F3F3;
+	border: 1px solid #C6C6C9;
+	margin-top: 1px;
+	padding: 1px;
+}
+
+.UISimplePresentationPortlet .UITabContent .UINodesExplorer .UITreeList {
+	margin-left: 240px;
+	padding-top: 13px;
+}
+
+.UISimplePresentationPortlet .UINodesExplorer .UITreeList .UIGrid {
+	width: 100%;
+}
