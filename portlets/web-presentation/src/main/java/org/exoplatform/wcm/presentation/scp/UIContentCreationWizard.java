@@ -16,9 +16,22 @@
  */
 package org.exoplatform.wcm.presentation.scp;
 
+import java.util.Map;
+
+import javax.jcr.Node;
 import javax.portlet.PortletPreferences;
 
-import org.exoplatform.wcm.presentation.scp.UIPathChooser.ContentStorePath;
+import org.exoplatform.dms.model.ContentStorePath;
+import org.exoplatform.dms.webui.component.UICategoriesAddedList;
+import org.exoplatform.dms.webui.component.UICategoryManager;
+import org.exoplatform.dms.webui.component.UINodesExplorer;
+import org.exoplatform.dms.webui.utils.Utils;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.services.cms.BasePath;
+import org.exoplatform.services.cms.categories.CategoriesService;
+import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -40,6 +53,7 @@ import org.exoplatform.webui.event.Event.Phase;
     events = {
         @EventConfig(listeners = UIContentCreationWizard.ViewStep1ActionListener.class),
         @EventConfig(listeners = UIContentCreationWizard.ViewStep2ActionListener.class),
+        @EventConfig(listeners = UIContentCreationWizard.ViewStep3ActionListener.class),
         @EventConfig(listeners = UIContentCreationWizard.ViewStep4ActionListener.class),
         @EventConfig(listeners = UIContentCreationWizard.ViewStep5ActionListener.class),
         @EventConfig(listeners = UIContentWizard.AbortActionListener.class)
@@ -50,7 +64,7 @@ public class UIContentCreationWizard extends UIContentWizard {
 
   public UIContentCreationWizard() throws Exception {
     addChild(UIPathChooser.class, null, null) ;
-    addChild(UIDocumentController.class, null, null).setRendered(false) ;
+    addChild(UIDocumentForm.class, null, null).setRendered(false) ;
     addChild(UICategoryManager.class, null, null).setRendered(false) ;
     addChild(UIContentOptionForm.class, null, null).setRendered(false) ;
     setNumberSteps(4) ;
@@ -72,22 +86,64 @@ public class UIContentCreationWizard extends UIContentWizard {
       System.out.println("\n\n\n\n\n\nStep2");
       UIContentCreationWizard uiWizard = event.getSource() ;
       UIPathChooser uiChooser = uiWizard.getChild(UIPathChooser.class) ;
-      UIDocumentController uiDocumentController = uiWizard.getChild(UIDocumentController.class) ;
       uiChooser.invokeSetBindingBean() ;
       ContentStorePath storePath = uiChooser.getStorePath() ;
-      uiDocumentController.setStorePath(storePath) ;
-      if(uiDocumentController.getListFileType().size() == 0) {
+      Map<String, String> templates = Utils.getListFileType(storePath) ;
+      if(templates.size() == 0) {
         UIApplication uiApp = uiWizard.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.empty-file-type", null, ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      uiDocumentController.init() ;
+      if(!templates.containsKey("exo:htmlFile")) {
+        UIApplication uiApp = uiWizard.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIContentCreationWizard.msg.no-support-html", null, ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;        
+      }
+      UIDocumentForm uiDocForm = uiWizard.getChild(UIDocumentForm.class) ;
+      uiDocForm.setContentStorePath(storePath) ;
+      uiDocForm.addNew(true) ;
+      uiDocForm.setTemplateNode("exo:htmlFile") ;
+      uiDocForm.resetProperties() ;
       uiWizard.viewStep(2) ;
     }
     
   }
-  
+
+  public static class ViewStep3ActionListener extends EventListener<UIContentCreationWizard> {
+
+    public void execute(Event<UIContentCreationWizard> event) throws Exception {
+      System.out.println("\n\n\n\n\n\nStep3");
+      UIContentCreationWizard uiWizard = event.getSource() ;
+      UIDocumentForm uiForm = uiWizard.getChild(UIDocumentForm.class) ;
+      uiForm.save(event) ;
+      UIPathChooser uiPathChooser = uiWizard.getChild(UIPathChooser.class) ;
+      ContentStorePath storePath = uiPathChooser.getStorePath() ;
+      CategoriesService categoriesService = uiWizard.getApplicationComponent(CategoriesService.class) ;
+      ManageableRepository manaRepository = uiWizard.getApplicationComponent(RepositoryService.class).getRepository(storePath.getRepository()) ;
+      NodeHierarchyCreator nodeHierarchyCreator = uiWizard.getApplicationComponent(NodeHierarchyCreator.class) ;
+      UICategoryManager uiManager = uiWizard.getChild(UICategoryManager.class) ;
+      UICategoriesAddedList uiCateAddedList = uiManager.getChild(UICategoriesAddedList.class) ;
+      Node node = uiForm.getSavedNode() ; 
+      ContentStorePath documentStorePath = new ContentStorePath() ;
+      documentStorePath.setRepository(storePath.getRepository()) ;
+      documentStorePath.setWorkspace(storePath.getWorkspace()) ;
+      documentStorePath.setPath(node.getPath()) ;
+      uiCateAddedList.setStorePath(documentStorePath) ;
+      uiCateAddedList.updateGrid(categoriesService.getCategories(node, documentStorePath.getRepository())) ;
+      UINodesExplorer uiJCRBrowser = uiManager.getChild(UINodesExplorer.class) ;
+      uiJCRBrowser.setSessionProvider(SessionProviderFactory.createSystemProvider()) ;
+      uiJCRBrowser.setFilterType(null) ;
+      uiJCRBrowser.setRepository(documentStorePath.getRepository()) ;
+      uiJCRBrowser.setIsDisable(manaRepository.getConfiguration().getSystemWorkspaceName(), true) ;
+      uiJCRBrowser.setRootPath(nodeHierarchyCreator.getJcrPath(BasePath.EXO_TAXONOMIES_PATH)) ;
+      uiJCRBrowser.setIsTab(true) ;
+      uiJCRBrowser.setComponent(uiCateAddedList, null) ;
+      uiWizard.viewStep(3) ;
+    }
+  }
+
   public static class ViewStep4ActionListener extends EventListener<UIContentCreationWizard> {
 
     public void execute(Event<UIContentCreationWizard> event) throws Exception {

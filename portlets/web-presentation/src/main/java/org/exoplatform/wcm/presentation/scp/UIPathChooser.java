@@ -22,6 +22,7 @@ import java.util.List;
 import javax.jcr.AccessDeniedException;
 import javax.jcr.Session;
 
+import org.exoplatform.dms.model.ContentStorePath;
 import org.exoplatform.dms.webui.component.UINodesExplorer;
 import org.exoplatform.dms.webui.component.UISelectable;
 import org.exoplatform.dms.webui.form.UIFormInputSetWithAction;
@@ -194,22 +195,5 @@ public class UIPathChooser extends UISCPForm implements UISelectable {
     }
 
   }
-
-  public static class ContentStorePath {
-
-    private String repository_ ;
-    private String workspace_ ;
-    private String path_ ;
-
-    public String getPath() { return path_ ; }
-    public void setPath(String p) { path_ = p ; }
-
-    public String getRepository() { return repository_ ; }
-    public void setRepository(String repo) { repository_ = repo ; }
-
-    public String getWorkspace() { return workspace_ ; }
-    public void setWorkspace(String ws) { workspace_ = ws ; }
-
-  }
-
+  
 }

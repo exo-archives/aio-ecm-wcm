@@ -52,7 +52,7 @@
 				              for(i in 0..arrType.length-1) {
 				                String type = arrType[i] ;
 				                String name = node.getPrimaryNodeType().getName() ;
-				                if(node.getPrimaryNodeType().getName().equals(arrType[i])) {
+				                if(node.isNodeType(arrType[i])) {
 				                  if(arrType[i].equals("nt:file") && arrMimeType != null && arrMimeType.length > 0) {
 										        def contentNode = node.getNode("jcr:content") ;
 										        def mimeType = contentNode.getProperty("jcr:mimeType").getString() ;

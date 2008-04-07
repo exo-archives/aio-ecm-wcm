@@ -18,6 +18,7 @@ package org.exoplatform.dms.webui.form;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.jcr.Session;
 
@@ -74,6 +75,15 @@ public class UIWorkspaceListForm extends UISCPForm {
     addUIComponentInput(rootNodeInfo) ;
   }
   
+  
+  
+  public String getLabel(ResourceBundle res, String id) throws Exception {
+    String label = "UIWorkspaceListForm.label." + id ; 
+    return res.getString(label) ;
+  }
+
+
+
   public void setIsShowSystem(boolean isShowSystem) { isShowSystem_ = isShowSystem ; }
   
   public void setShowRootPathSelect(boolean isRender) { 

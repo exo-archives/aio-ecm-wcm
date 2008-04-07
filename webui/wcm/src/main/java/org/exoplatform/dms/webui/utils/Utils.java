@@ -40,14 +40,19 @@ import javax.jcr.nodetype.NodeTypeManager;
 import javax.portlet.PortletPreferences;
 import javax.servlet.http.HttpSession;
 
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.dms.model.ContentStorePath;
 import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.cms.JcrInputProperty;
 import org.exoplatform.services.cms.templates.TemplateService;
+import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.access.SystemIdentity;
 import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.impl.core.lock.LockManager;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.Membership;
@@ -481,4 +486,78 @@ public class Utils {
           .append(node.getPath());        
     return buffer.toString();
   }
+  
+  public static Map<String, String> getListFileType(ContentStorePath storePath) throws Exception {
+    String repo = storePath.getRepository() ;
+    Map<String, String> map = new HashMap<String, String>(3) ;
+    List<String> nodeTypes = new ArrayList<String>() ;
+    Node node = getNode(storePath) ;
+    NodeTypeManager ntManager = node.getSession().getWorkspace().getNodeTypeManager() ; 
+    NodeType currentNodeType = node.getPrimaryNodeType() ; 
+    NodeDefinition[] childDefs = currentNodeType.getChildNodeDefinitions() ;
+    TemplateService templateService = (TemplateService) PortalContainer.getInstance().getComponentInstanceOfType(TemplateService.class) ;
+    List templates = templateService.getDocumentTemplates(repo) ;
+    try {
+      for(int i = 0; i < templates.size(); i ++){
+        String nodeTypeName = templates.get(i).toString() ;        
+        String label = templateService.getTemplateLabel(nodeTypeName, repo) ;
+        NodeType nodeType = ntManager.getNodeType(nodeTypeName) ;
+        if(nodeType.isMixin()) {
+          if(!nodeTypes.contains(nodeTypeName)) {
+            map.put(nodeTypeName, label) ;
+            nodeTypes.add(nodeTypeName) ;
+            continue;
+          }
+        }
+        NodeType[] superTypes = nodeType.getSupertypes() ;
+        boolean isCanCreateDocument = false ;
+        for(NodeDefinition childDef : childDefs){
+          NodeType[] requiredChilds = childDef.getRequiredPrimaryTypes() ;
+          for(NodeType requiredChild : requiredChilds) {          
+            if(nodeTypeName.equals(requiredChild.getName())){            
+              isCanCreateDocument = true ;
+              break ;
+            }            
+          }
+          if(nodeTypeName.equals(childDef.getName()) || isCanCreateDocument) {
+            if(!nodeTypes.contains(nodeTypeName)) {
+              map.put(nodeTypeName, label) ;
+              nodeTypes.add(nodeTypeName) ;
+            }
+            isCanCreateDocument = true ;          
+          }
+        }      
+        if(!isCanCreateDocument){
+          for(NodeType superType:superTypes) {
+            for(NodeDefinition childDef : childDefs){          
+              for(NodeType requiredType : childDef.getRequiredPrimaryTypes()) {              
+                if (superType.getName().equals(requiredType.getName())) {
+                  if(!nodeTypes.contains(nodeTypeName)) {
+                    map.put(nodeTypeName, label) ;
+                    nodeTypes.add(nodeTypeName) ;
+                  }
+                  isCanCreateDocument = true ;
+                  break;
+                }
+              }
+              if(isCanCreateDocument) break ;
+            }
+            if(isCanCreateDocument) break ;
+          }
+        }            
+      }
+    } catch(Exception e) {}
+    
+    return map ;
+  }
+  
+  public static Node getNode(ContentStorePath storePath) throws Exception {
+    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
+    PortalContainer container = PortalContainer.getInstance() ;
+    RepositoryService repositoryService = (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class) ;
+    ManageableRepository manageableRepository = repositoryService.getRepository(storePath.getRepository());
+    Session session = sessionProvider.getSession(storePath.getWorkspace(), manageableRepository) ;
+    return (Node) session.getItem(storePath.getPath()) ;     
+  }
+  
 }

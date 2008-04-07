@@ -14,9 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.wcm.presentation.scp;
+package org.exoplatform.dms.webui.component;
 
-import org.exoplatform.dms.webui.component.UINodesExplorer;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
 

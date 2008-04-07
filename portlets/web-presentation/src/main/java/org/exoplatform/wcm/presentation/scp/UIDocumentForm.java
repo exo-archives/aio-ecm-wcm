@@ -28,6 +28,7 @@ import javax.jcr.RepositoryException;
 import javax.jcr.version.VersionException;
 
 import org.exoplatform.dms.application.JCRResourceResolver;
+import org.exoplatform.dms.model.ContentStorePath;
 import org.exoplatform.dms.webui.component.UISelectable;
 import org.exoplatform.dms.webui.form.UIBaseDialogForm;
 import org.exoplatform.dms.webui.utils.Utils;
@@ -38,13 +39,13 @@ import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.wcm.WcmService;
-import org.exoplatform.wcm.presentation.scp.UIPathChooser.ContentStorePath;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
+import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -97,13 +98,6 @@ public class UIDocumentForm extends UIBaseDialogForm implements UISelectable {
   
   public void addNew(boolean b) {isAddNew_ = b ;}
     
-  public void updateSelect(String selectField, String value) {
-    isUpdateSelect_ = true ;
-    getUIStringInput(selectField).setValue(value) ;
-    UIDocumentController uiContainer = getParent() ;
-    uiContainer.removeChildById("PopupComponent") ;
-  }
-  
   public String getTemplate() {
     TemplateService templateService = getApplicationComponent(TemplateService.class) ;
     String userName = Util.getPortalRequestContext().getRemoteUser() ;
@@ -144,9 +138,8 @@ public class UIDocumentForm extends UIBaseDialogForm implements UISelectable {
     Node homeNode ;
     UIApplication uiApp = getAncestorOfType(UIApplication.class);
     if(isAddNew()) {
-      UIDocumentController uiDFController = getParent() ;
       homeNode = getParentNode() ;
-      nodeType = uiDFController.getChild(UISelectDocumentForm.class).getSelectValue() ;
+      nodeType = documentType_ ;
     } else { 
       homeNode = getNode().getParent();
       nodeType = getNode().getPrimaryNodeType().getName() ;
@@ -255,7 +248,7 @@ public class UIDocumentForm extends UIBaseDialogForm implements UISelectable {
   public void doSelect(String selectField, String value) throws Exception {    
     isUpdateSelect_ = true ;
     getUIStringInput(selectField).setValue(value) ;
-    UIDocumentController uiContainer = getParent() ;
+    UIContainer uiContainer = getParent() ;
     uiContainer.removeChildById("PopupComponent") ;
   }
   

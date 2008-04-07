@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.wcm.presentation.scp;
+package org.exoplatform.dms.webui.component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,14 +24,12 @@ import javax.jcr.Node;
 import javax.jcr.Session;
 
 import org.exoplatform.commons.utils.ObjectPageList;
-import org.exoplatform.dms.webui.component.UINodesExplorer;
-import org.exoplatform.dms.webui.component.UISelectable;
+import org.exoplatform.dms.model.ContentStorePath;
 import org.exoplatform.dms.webui.utils.JCRExceptionManager;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.cms.categories.CategoriesService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.wcm.presentation.scp.UIPathChooser.ContentStorePath;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;

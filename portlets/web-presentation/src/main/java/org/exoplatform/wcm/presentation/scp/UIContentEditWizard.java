@@ -22,6 +22,9 @@ import javax.jcr.Node;
 import javax.jcr.Session;
 import javax.portlet.PortletPreferences;
 
+import org.exoplatform.dms.model.ContentStorePath;
+import org.exoplatform.dms.webui.component.UICategoriesAddedList;
+import org.exoplatform.dms.webui.component.UICategoryManager;
 import org.exoplatform.dms.webui.component.UINodesExplorer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.cms.BasePath;
@@ -30,7 +33,6 @@ import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
-import org.exoplatform.wcm.presentation.scp.UIPathChooser.ContentStorePath;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -71,7 +73,7 @@ public class UIContentEditWizard extends UIContentWizard {
     String uuid = prefs.getValue(UISimplePresentationPortlet.UUID, null) ;
     RepositoryService repoService = getApplicationComponent(RepositoryService.class) ;
     ManageableRepository repo = repoService.getRepository(repoName) ;
-    Session session = SessionProviderFactory.createSessionProvider().getSession(workspace, repo) ;
+    Session session = SessionProviderFactory.createSystemProvider().getSession(workspace, repo) ;
     Node currentNode = session.getNodeByUUID(uuid);
     ContentStorePath storePath = new ContentStorePath() ;
     storePath.setRepository(repoName) ;

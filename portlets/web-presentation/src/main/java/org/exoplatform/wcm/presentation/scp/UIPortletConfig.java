@@ -40,17 +40,15 @@ public class UIPortletConfig extends UIContainer {
   private UIComponent uiBackComponent_ ;
   
   public UIPortletConfig() throws Exception {
-    String uuid = getPortletPreference().getValue(UISimplePresentationPortlet.UUID, null) ;
-    if(uuid != null) addChild(UIContentEdit.class, null, null) ; 
-    else addChild(UIContentCreation.class, null, null) ;
-    uiBackComponent_ = getChild(0) ;
+    PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
+    PortletPreferences prefs = portletRequestContext.getRequest().getPreferences();
+    String uuid = prefs.getValue(UISimplePresentationPortlet.UUID, null) ;
+    boolean noNode = (uuid == null) ;
+    UIStartOptions uiOptions = createUIComponent(UIStartOptions.class, null, null).setCreateMode(noNode) ;
+    addChild(uiOptions) ;
+    uiBackComponent_ = uiOptions ;
   }
   
   public UIComponent getBackComponent() { return uiBackComponent_ ;}
-  
-  private PortletPreferences getPortletPreference() {
-    PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
-    return portletRequestContext.getRequest().getPreferences();
-  }
   
 }
