@@ -16,9 +16,9 @@
  */
 package org.exoplatform.wcm.presentation.scp;
 
-import org.exoplatform.dms.webui.form.UISCPForm;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
+import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 
 /**
@@ -33,7 +33,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
     template = "system:/groovy/webui/form/UIForm.gtmpl"
 )
 
-public class UIContentOptionForm extends UISCPForm {
+public class UIContentOptionForm extends UIForm {
   
   static String FIELD_COMMENT = "Comment" ;
   static String FIELD_TAGMAP = "Tagmap" ;

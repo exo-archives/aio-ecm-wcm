@@ -26,7 +26,6 @@ import org.exoplatform.dms.model.ContentStorePath;
 import org.exoplatform.dms.webui.component.UINodesExplorer;
 import org.exoplatform.dms.webui.component.UISelectable;
 import org.exoplatform.dms.webui.form.UIFormInputSetWithAction;
-import org.exoplatform.dms.webui.form.UISCPForm;
 import org.exoplatform.dms.webui.utils.Utils;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
@@ -41,6 +40,7 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 
@@ -59,7 +59,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
     }
 )
 //TODO: Tung.Pham says: This is the same as UIContentChooser, need to review
-public class UIPathChooser extends UISCPForm implements UISelectable {
+public class UIPathChooser extends UIForm implements UISelectable {
 
   private static String FIELD_REPOSITORY = "Repository" ;
   private static String FIELD_WORKSPACE = "Workspace" ;

@@ -36,13 +36,6 @@ public class UIContentWizard extends UIWizard {
   public void setNumberSteps(int s) { numberStep_ = s ; }
   public int getNumberSteps() {return numberStep_ ; }
     
-//  public String url(String name) throws Exception {
-//    UIComponent renderedChild = getChild(getCurrentStep() - 1);
-//    org.exoplatform.webui.config.Event event = config.getUIComponentEventConfig(name) ;
-//    if(event != null && !(renderedChild instanceof UIForm)) return event(name) ;
-//    return renderedChild.event(name) ;
-//  }
-  
   public static class AbortActionListener extends EventListener<UIContentWizard> {
 
     public void execute(Event<UIContentWizard> event) throws Exception {
