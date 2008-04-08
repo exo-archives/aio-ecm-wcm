@@ -87,7 +87,7 @@ public class UIContentCreationWizard extends UIContentWizard {
       UIContentCreationWizard uiWizard = event.getSource() ;
       UIPathChooser uiChooser = uiWizard.getChild(UIPathChooser.class) ;
       uiChooser.invokeSetBindingBean() ;
-      ContentStorePath storePath = uiChooser.getStorePath() ;
+      ContentStorePath storePath = uiChooser.getContentStorePath() ;
       Map<String, String> templates = Utils.getListFileType(storePath) ;
       if(templates.size() == 0) {
         UIApplication uiApp = uiWizard.getAncestorOfType(UIApplication.class) ;
@@ -119,7 +119,7 @@ public class UIContentCreationWizard extends UIContentWizard {
       UIDocumentForm uiForm = uiWizard.getChild(UIDocumentForm.class) ;
       uiForm.save(event) ;
       UIPathChooser uiPathChooser = uiWizard.getChild(UIPathChooser.class) ;
-      ContentStorePath storePath = uiPathChooser.getStorePath() ;
+      ContentStorePath storePath = uiPathChooser.getContentStorePath() ;
       CategoriesService categoriesService = uiWizard.getApplicationComponent(CategoriesService.class) ;
       ManageableRepository manaRepository = uiWizard.getApplicationComponent(RepositoryService.class).getRepository(storePath.getRepository()) ;
       NodeHierarchyCreator nodeHierarchyCreator = uiWizard.getApplicationComponent(NodeHierarchyCreator.class) ;
