@@ -29,4 +29,5 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
 public interface WcmSearchService {      
   public PageList searchWebContent(String keyword, String portalName,String repository,String worksapce, boolean documentSeach, boolean pageSearch,SessionProvider sessionProvider) throws Exception ;  
   public PageList searchWebContent(String keyword,String portalName, boolean documentSearch,boolean pageSearch,SessionProvider sessionProvider) throws Exception ;
+  public void updatePagesCache() throws Exception ;
 }

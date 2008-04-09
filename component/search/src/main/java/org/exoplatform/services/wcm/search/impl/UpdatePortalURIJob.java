@@ -19,6 +19,7 @@ package org.exoplatform.services.wcm.search.impl;
 
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.services.wcm.search.WcmSearchService;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -31,8 +32,13 @@ import org.quartz.JobExecutionException;
  */
 public class UpdatePortalURIJob implements Job {
 
-  public void execute(JobExecutionContext context) throws JobExecutionException {
-    ExoContainer container = ExoContainerContext.getCurrentContainer();    
-  }
-    
+	public void execute(JobExecutionContext context) throws JobExecutionException {			
+		try{
+			ExoContainer container = ExoContainerContext.getCurrentContainer();				
+			WcmSearchService searchService = (WcmSearchService)container.getComponentInstanceOfType(WcmSearchService.class) ;
+			searchService.updatePagesCache();
+		}catch (Exception e) {
+		}        
+	}
+
 }

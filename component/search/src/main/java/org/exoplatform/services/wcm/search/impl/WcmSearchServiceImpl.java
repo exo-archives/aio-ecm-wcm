@@ -19,14 +19,13 @@ package org.exoplatform.services.wcm.search.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Session;
-import javax.jcr.Value;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
@@ -35,18 +34,21 @@ import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.PropertiesParam;
+import org.exoplatform.portal.application.PortletPreferences;
+import org.exoplatform.portal.application.Preference;
 import org.exoplatform.portal.config.DataStorage;
-import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
+import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.access.SystemIdentity;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
 import org.exoplatform.services.wcm.search.WcmSearchService;
 
 /**
@@ -58,22 +60,18 @@ import org.exoplatform.services.wcm.search.WcmSearchService;
 public class WcmSearchServiceImpl implements WcmSearchService {
   private RepositoryService repositoryService ;
   private String defaultRepository ;
-  private String defaultWorksapce ;
-  private boolean useCachedResult ;
-  private DataStorage dataStorage_ ;
-  private UserACL userACL_ ;
+  private String defaultWorksapce ;  
+  private DataStorage dataStorage_ ;  
+  private HashMap<String, String> cachedPages_ = new HashMap<String, String>() ;
   private UserPortalConfigService portalConfigService_ ; 
 
-  public WcmSearchServiceImpl(RepositoryService repositoryService, DataStorage dataStorage, UserACL userACL,
-      UserPortalConfigService portalConfigService, InitParams initParams) {
+  public WcmSearchServiceImpl(RepositoryService repositoryService, DataStorage dataStorage, UserPortalConfigService portalConfigService, InitParams initParams) {
     this.repositoryService = repositoryService ;
-    this.dataStorage_ = dataStorage ;
-    this.userACL_ = userACL ;
+    this.dataStorage_ = dataStorage ;    
     this.portalConfigService_ = portalConfigService;    
     PropertiesParam serviceParams = initParams.getPropertiesParam("service-params") ;
     defaultRepository = serviceParams.getProperty("defaultRepository") ;
     defaultWorksapce = serviceParams.getProperty("defaultWorksapce") ;
-    useCachedResult = Boolean.parseBoolean(serviceParams.getProperty("useCachedResult")) ;
   }
 
   public PageList searchWebContent(String keyword, String portalName, boolean documentSearch,
@@ -84,146 +82,193 @@ public class WcmSearchServiceImpl implements WcmSearchService {
 
   public PageList searchWebContent(String keyword, String portalName, String repository,
       String worksapce, boolean documentSeach, boolean pageSearch, SessionProvider sessionProvider) throws Exception {
-
     if(documentSeach && pageSearch) {
-      return searchAll(keyword,portalName,repository,worksapce,sessionProvider) ;
+      return searchDocumentsAndPages(keyword,portalName,repository,worksapce,sessionProvider) ;
     }else if(documentSeach){
-      return searchDocument(keyword,portalName,repository,worksapce,sessionProvider) ;
+      return searchDocuments(keyword,portalName,repository,worksapce,sessionProvider) ;
     }
     return searchPortalPage(keyword,portalName,repository,worksapce,sessionProvider);
   }    
-
-  private PageList searchAll(String keyword,String portalName,String repository,String workspace,SessionProvider sessionProvider) throws Exception {
+  
+  public void updatePagesCache() throws Exception {
+    org.exoplatform.portal.config.Query<Page> pagesQuery = 
+      new org.exoplatform.portal.config.Query<Page>(null,null,null,Page.class) ;
+    List<Page> allPages = dataStorage_.find(pagesQuery).getAll();
+    for(Page page: allPages) {      
+      String portletId = null ;
+      for(Object obj: page.getChildren()) {
+        if(obj instanceof Application) {          
+          Application application = (Application) obj ;
+          String applicationId = application.getInstanceId();
+          if(!isWebContentApplication(applicationId)) continue ;
+          portletId = applicationId ;
+          break ;
+        }
+      }
+      if(portletId != null) {
+        updateCachedPage(page.getId(), portletId) ;
+      }
+    }
+  }
+  
+  private PageList searchDocumentsAndPages(String keyword,String portalName,String repository,String workspace,SessionProvider sessionProvider) throws Exception {
     ManageableRepository manageableRepository = repositoryService.getRepository(repository) ;
     Session session = sessionProvider.getSession(workspace,manageableRepository) ;
-    Query query = createQuery(session.getWorkspace().getQueryManager(),keyword,portalName) ;
-    QueryResult queryResult = query.execute() ;
-    String userId = session.getUserID();    
-    if(SystemIdentity.ANONIM.equals(userId)) userId = null ;    
-    HashSet<PageNode> pageNodeSet = new HashSet<PageNode>() ;    
-    HashSet<Node> nodeSet = new HashSet<Node>() ;
-    UserPortalConfig userPortalConfig = portalConfigService_.getUserPortalConfig(portalName,userId);       
-    for(NodeIterator iter = queryResult.getNodes();iter.hasNext();) {
-      Node document = iter.nextNode() ;
-      if(document.getPrimaryNodeType().isNodeType("nt:resource")) 
-        document = document.getParent() ;
-      if(!document.hasProperty("exo:linkedApplications"))  { 
-        nodeSet.add(document) ;
-        continue ; 
-      }
-      boolean found = false ;
-      for(Value value: document.getProperty("exo:linkedApplications").getValues()) {
-        String applicationId = value.getString();
-        for(PageNavigation pageNavigation:userPortalConfig.getNavigations()) {
-          List<PageNode> pageNodes = filter(pageNavigation,userId,applicationId) ;
-          if(!pageNodes.isEmpty()) {
-            found = true ;
-            pageNodeSet.addAll(filter(pageNavigation,userId,applicationId)) ;
-          }          
-        }        
-      }
-      if(!found) nodeSet.add(document) ;
-    }        
-    List<Object> resultList = new ArrayList<Object>() ;
-    for(Iterator<PageNode> iter = pageNodeSet.iterator();iter.hasNext();) {
-      resultList.add(iter.next());
-    }     
-    for(Iterator<Node> iterator = nodeSet.iterator();iterator.hasNext();) {
-      resultList.add(iterator.next());
+    QueryManager queryManager = session.getWorkspace().getQueryManager() ;    
+    List<Object> container = new ArrayList<Object>();    
+    if(portalName != null) {
+      List<Object> documents = findDocuments(queryManager, keyword, portalName) ;
+      List<Object> pageNodes = findPortalPages(keyword, portalName, repository, workspace, sessionProvider) ;
+      container.addAll(documents);
+      container.addAll(pageNodes);
+      return new ObjectPageList(container,10) ;
     }
-    return new ObjectPageList(resultList,10);    
+    for(String portal:getPortalNames()) {
+      List<Object> documents = findDocuments(queryManager, keyword, portal) ;
+      List<Object> pageNodes = findPortalPages(keyword, portal, repository, workspace, sessionProvider) ;
+      container.addAll(documents);
+      container.addAll(pageNodes);
+    }
+    return new ObjectPageList(container,10) ;
   }
 
-  private PageList searchDocument(String keyword,String portalName,String repository,String workspace, SessionProvider sessionProvider) throws Exception{
+  private PageList searchDocuments(String keyword,String portalName,String repository,String workspace, SessionProvider sessionProvider) throws Exception {
     ManageableRepository manageableRepository = repositoryService.getRepository(repository) ;
-    Session session = sessionProvider.getSession(workspace,manageableRepository) ;    
-    Query query = createQuery(session.getWorkspace().getQueryManager(),keyword,portalName) ;
-    QueryResult result = query.execute() ;
+    Session session = sessionProvider.getSession(workspace,manageableRepository) ;
+    QueryManager queryManager = session.getWorkspace().getQueryManager() ;    
+    if(portalName != null)  { 
+      return new ObjectPageList(findDocuments(queryManager, keyword, portalName),10) ;
+    }
+    List<Object> allDocuments = new ArrayList<Object>();
+    for(String portal:getPortalNames()) {
+      List<Object> list = findDocuments(queryManager, keyword, portal) ;
+      allDocuments.addAll(list) ;
+    }
+    return new ObjectPageList(allDocuments,10) ;
+  }
+
+  private List<String> getPortalNames() throws Exception  {
+    org.exoplatform.portal.config.Query<PortalConfig> query = 
+      new org.exoplatform.portal.config.Query<PortalConfig>(null,null,null,PortalConfig.class) ;        
+    List<PortalConfig> list = dataStorage_.find(query).getAll() ;
+    List<String> portalNames = new ArrayList<String>();
+    for(PortalConfig config: list) {
+      portalNames.add(config.getName()) ;            
+    }
+    return portalNames ;
+  }
+  private List<Object> findDocuments(QueryManager queryManager,String keyword,String portalName) throws Exception {
+    String sql = "select * from nt:base where contains(*,'" + keyword + "') and jcr:path like '/Web Content/Live/"+portalName+"/Documents/%' order by exo:dateCreated DESC" ;
+    Query query = queryManager.createQuery(sql, Query.SQL) ;
+    QueryResult queryResult = query.execute() ;
     HashSet<Node> hashSet = new HashSet<Node>() ;    
-    for(NodeIterator iterator = result.getNodes();iterator.hasNext();) {
+    for(NodeIterator iterator = queryResult.getNodes();iterator.hasNext();) {
       Node node = iterator.nextNode() ;
       if(node.getPrimaryNodeType().isNodeType("nt:resource")) 
         node = node.getParent() ;
       hashSet.add(node) ;
     }
-    List<Object> document = Arrays.asList(hashSet.toArray()) ;      
-    return new ObjectPageList(document,10) ;
+    List<Object> documents = Arrays.asList(hashSet.toArray()) ;
+    return documents ;
   }
 
-  private Query createQuery(QueryManager queryManager,String keyword,String portalName) throws Exception{
-    String sql = "select * from nt:base where contains(*,'" + keyword + "') and jcr:path like '/Web Content/Live/"+portalName+"/%' order by exo:dateCreated DESC" ;   
-    return queryManager.createQuery(sql,Query.SQL) ;        
-  }
-
-  private void processPageNodeRecusive(PageNode root, List<PageNode> allPages) {
-    List<PageNode> list = root.getChildren();
-    if(list == null || list.size()== 0) { return ; }
-    for(PageNode node:list) {
-      allPages.add(node);
-      processPageNodeRecusive(node,allPages) ;
+  private PageList searchPortalPage(String keyword,String portalName,String repository,String workspace, SessionProvider sessionProvider) throws Exception{    
+    if(portalName != null) {
+      List<Object> list = findPortalPages(keyword, portalName, repository, workspace, sessionProvider) ;
+      return new ObjectPageList(list,10) ;
     }
+    List<Object> container = new ArrayList<Object>() ;
+    for(String portal: getPortalNames()) {
+      List<Object> list = findPortalPages(keyword, portal, repository, workspace, sessionProvider) ;
+      container.addAll(list) ;
+    }
+    return new ObjectPageList(container,10);    
   }
 
-  private PageList searchPortalPage(String keyword,String portalName,String repository,String workspace, SessionProvider sessionProvider) throws Exception{
+  private List<Object> findPortalPages(String keyword,String portalName,String repository,String workspace, SessionProvider sessionProvider) throws Exception {    
+    String sql = "select * from nt:base where contains(*,'" + keyword + "') and jcr:path like '/Web Content/Live/"+portalName+"/html/%' order by exo:dateCreated DESC" ;
     ManageableRepository manageableRepository = repositoryService.getRepository(repository) ;
     Session session = sessionProvider.getSession(workspace,manageableRepository) ;
-    Query query = createQuery(session.getWorkspace().getQueryManager(),keyword,portalName) ;
+    QueryManager queryManager = session.getWorkspace().getQueryManager();
+    String userId = session.getUserID();
+    if(SystemIdentity.ANONIM.endsWith(userId)) userId = null ;
+    Query query = queryManager.createQuery(sql,Query.SQL) ;
     QueryResult queryResult = query.execute() ;
-    String userId = session.getUserID();    
-    if(SystemIdentity.ANONIM.equals(userId)) userId = null ;    
-    HashSet<PageNode> pageNodeSet = new HashSet<PageNode>() ;    
-    UserPortalConfig userPortalConfig = portalConfigService_.getUserPortalConfig(portalName,userId);       
-    for(NodeIterator iter = queryResult.getNodes();iter.hasNext();) {
-      Node document = iter.nextNode() ;
-      if(document.getPrimaryNodeType().isNodeType("nt:resource")) 
-        document = document.getParent() ;
-      if(!document.hasProperty("exo:linkedApplications")) continue ;
-      for(Value value: document.getProperty("exo:linkedApplications").getValues()) {
-        String applicationId = value.getString();        
-        for(PageNavigation pageNavigation:userPortalConfig.getNavigations()) {
-          pageNodeSet.addAll(filter(pageNavigation,userId,applicationId)) ; 
-        }        
-      }           
-    }        
-    List<PageNode> resultList = new ArrayList<PageNode>() ;
-    for(Iterator<PageNode> iter = pageNodeSet.iterator();iter.hasNext();) {
-      resultList.add(iter.next());
-    }    
-    return new ObjectPageList(resultList,10);    
+    List<Object> pageNodes = new ArrayList<Object>() ;    
+    UserPortalConfig userPortalConfig = portalConfigService_.getUserPortalConfig(portalName, userId) ;    
+    for(NodeIterator iterator = queryResult.getNodes();iterator.hasNext(); ) {
+      Node webContent = iterator.nextNode() ;
+      String key = buildKey(repository, workspace, webContent.getUUID()) ;
+      String referencedPage = cachedPages_.get(key) ;
+      if(!hasAccessPermission(referencedPage, userId)) continue ;
+      pageNodes.addAll(findPageNodes(userPortalConfig, referencedPage)) ;
+    }
+    return pageNodes ;
   }
 
-  public List<PageNode> filter(PageNavigation nav, String userName,String applicationId) throws Exception {
+  private List<PageNode> findPageNodes(UserPortalConfig userPortalConfig,String pageReferencedId) throws Exception {
+    List<PageNode> result = new ArrayList<PageNode>();
+    for(PageNavigation navigation: userPortalConfig.getNavigations()) {      
+      result.addAll(filter(navigation, pageReferencedId)) ;
+    }
+    return result ;
+  }
+
+  private boolean hasAccessPermission(String pageId,String accessUser) throws Exception {
+    if(pageId == null) return false ;
+    Page page = portalConfigService_.getPage(pageId, accessUser) ;
+    if(page != null) return true ;
+    return false ;
+  }
+
+  private List<PageNode> filter(PageNavigation nav, String pageReferencedId) throws Exception {
     List<PageNode> list = new ArrayList<PageNode>() ;    
     for(PageNode node: nav.getNodes()){
-      filter(node, userName,applicationId,list);      
+      filter(node, pageReferencedId,list);      
     }
     return list;
   }
 
-  public void filter(PageNode node, String userName,String applicationId,List<PageNode> allPageNode) throws Exception {    
-    Page page = portalConfigService_.getPage(node.getPageReference(),userName) ;
-    if(page == null) return ;
-    if(hasApplication(page,applicationId)) {
-      allPageNode.add(node);
-    }    
+  private void filter(PageNode node, String pageReferencedId,List<PageNode> allPageNode) throws Exception {
+    if(! pageReferencedId.equals(node.getPageReference())) return ;        
+    allPageNode.add(node.clone());  
     List<PageNode> children = node.getChildren();
     if(children == null) return ;
     for(PageNode child:children) {
-      filter(child,userName,applicationId,allPageNode) ;
+      filter(child,pageReferencedId,allPageNode) ;
     }            
+  }  
+
+  private boolean isWebContentApplication(String applicationId) {
+    //TODO this code use for SimpleContentPresentation portlet
+    if(applicationId.contains("/web-presentation/SimplePresentationPortlet/")) return true;
+    return false ;
   }
 
-  private boolean hasApplication(Page page,String applicationId) {    
-    for(Object object:page.getChildren()) {      
-      if(object instanceof Application) {
-        Application application = (Application) object ;
-        String instanceId = application.getInstanceId().split(":/")[1] ;               
-        if(applicationId.equalsIgnoreCase(instanceId)) 
-          return true;
+  private void updateCachedPage(String pageId,String portletId) throws Exception {
+    String windowId = portletId.substring(portletId.lastIndexOf("/")) ;
+    PortletPreferences portletPreferences = dataStorage_.getPortletPreferences(new ExoWindowID(windowId)) ;
+    String repository = null, worksapce = null, nodeUUID = null ;
+    //TODO this code use for SimpleContentPresentation portlet
+    for(Object obj:portletPreferences.getPreferences()) {
+      Preference preference = (Preference)obj ;
+      if("repository".equals(preference.getName())) {
+        repository = (String)preference.getValues().get(0);
+      }else if("workspace".equals(preference.getName())) {
+        worksapce = (String)preference.getValues().get(0);
+      }else if("nodeUUID".equals(preference.getName())) {
+        nodeUUID = (String)preference.getValues().get(0);
       }
     }
-    return false ;  
+    if(repository == null || worksapce == null || nodeUUID == null) return ;
+    String key = buildKey(repository, worksapce, nodeUUID) ;
+    cachedPages_.put(key,pageId) ;
   }
 
+  private String buildKey(String repository,String worksapce,String nodeUUID) {
+    StringBuffer stringBuffer = new StringBuffer() ;
+    stringBuffer.append(repository).append("::").append(worksapce).append("::").append(nodeUUID) ;
+    return stringBuffer.toString() ;
+  }
 
 }
