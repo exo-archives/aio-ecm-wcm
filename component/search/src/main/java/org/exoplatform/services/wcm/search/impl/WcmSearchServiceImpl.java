@@ -60,13 +60,13 @@ import org.exoplatform.services.wcm.search.WcmSearchService;
  * Mar 19, 2008  
  */
 public class WcmSearchServiceImpl implements WcmSearchService {
-  
+
   private RepositoryService repositoryService ;
   private String defaultRepository ;
   private String defaultWorksapce ;  
   private DataStorage dataStorage_ ;  
   private HashMap<String, String> cachedPages_ = new HashMap<String, String>() ;  
-  
+
   public WcmSearchServiceImpl(RepositoryService repositoryService, DataStorage dataStorage, InitParams initParams) {
     this.repositoryService = repositoryService ;
     this.dataStorage_ = dataStorage ;         
@@ -90,7 +90,7 @@ public class WcmSearchServiceImpl implements WcmSearchService {
     }
     return searchPortalPage(keyword,portalName,repository,worksapce,sessionProvider);
   }    
-  
+
   public void updatePagesCache() throws Exception {
     org.exoplatform.portal.config.Query<Page> pagesQuery = 
       new org.exoplatform.portal.config.Query<Page>(null,null,null,Page.class) ;
@@ -100,18 +100,18 @@ public class WcmSearchServiceImpl implements WcmSearchService {
       for(Object obj: page.getChildren()) {
         if(obj instanceof Application) {          
           Application application = (Application) obj ;
-          String applicationId = application.getInstanceId();
+          String applicationId = application.getInstanceId();          
           if(!isWebContentApplication(applicationId)) continue ;
           portletId = applicationId ;
           break ;
         }
       }
-      if(portletId != null) {
-        updateCachedPage(page.getId(), portletId) ;
+      if(portletId != null) {              
+        updateCachedPage(page.getPageId(), portletId) ;
       }
     }
   }
-  
+
   private PageList searchDocumentsAndPages(String keyword,String portalName,String repository,String workspace,SessionProvider sessionProvider) throws Exception {
     ManageableRepository manageableRepository = repositoryService.getRepository(repository) ;
     Session session = sessionProvider.getSession(workspace,manageableRepository) ;
@@ -159,7 +159,7 @@ public class WcmSearchServiceImpl implements WcmSearchService {
     return portalNames ;
   }
   private List<Object> findDocuments(QueryManager queryManager,String keyword,String portalName) throws Exception {
-    String sql = "select * from nt:base where contains(*,'" + keyword + "') and jcr:path like '/Web Content/Live/"+portalName+"/Documents/%' order by exo:dateCreated DESC" ;
+    String sql = "select * from nt:base where contains(*,'" + keyword + "') and jcr:path like '/Web Content/Live/"+portalName+"/documents/%' order by exo:dateCreated DESC" ;
     Query query = queryManager.createQuery(sql, Query.SQL) ;
     QueryResult queryResult = query.execute() ;
     HashSet<Node> hashSet = new HashSet<Node>() ;    
@@ -199,12 +199,16 @@ public class WcmSearchServiceImpl implements WcmSearchService {
     ExoContainer container = ExoContainerContext.getCurrentContainer() ;
     UserPortalConfigService portalConfigService = 
       (UserPortalConfigService)container.getComponentInstanceOfType(UserPortalConfigService.class) ;
-    UserPortalConfig userPortalConfig = portalConfigService.getUserPortalConfig(portalName, userId) ; 
-    
+    UserPortalConfig userPortalConfig = portalConfigService.getUserPortalConfig(portalName, userId) ;     
     for(NodeIterator iterator = queryResult.getNodes();iterator.hasNext(); ) {
       Node webContent = iterator.nextNode() ;
-      String key = buildKey(repository, workspace, webContent.getUUID()) ;
-      String referencedPage = cachedPages_.get(key) ;
+      String key = null ;
+      if(webContent.getPrimaryNodeType().isNodeType("nt:resource")) {
+        key = buildKey(repository, workspace, webContent.getParent().getUUID()) ;
+      }else {
+        key = buildKey(repository, workspace, webContent.getUUID()) ;
+      }                         
+      String referencedPage = cachedPages_.get(key) ;      
       if(!hasAccessPermission(referencedPage, userId,portalConfigService)) continue ;
       pageNodes.addAll(findPageNodes(userPortalConfig, referencedPage)) ;
     }
@@ -263,9 +267,9 @@ public class WcmSearchServiceImpl implements WcmSearchService {
       }else if("nodeUUID".equals(preference.getName())) {
         nodeUUID = (String)preference.getValues().get(0);
       }
-    }
+    }       
     if(repository == null || worksapce == null || nodeUUID == null) return ;
-    String key = buildKey(repository, worksapce, nodeUUID) ;
+    String key = buildKey(repository, worksapce, nodeUUID) ;    
     cachedPages_.put(key,pageId) ;
   }
 

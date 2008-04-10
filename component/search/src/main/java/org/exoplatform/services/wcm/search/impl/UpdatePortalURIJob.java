@@ -17,8 +17,10 @@
 
 package org.exoplatform.services.wcm.search.impl;
 
+import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.scheduler.BaseJob;
 import org.exoplatform.services.wcm.search.WcmSearchService;
 import org.quartz.JobExecutionContext;
@@ -31,8 +33,11 @@ import org.quartz.JobExecutionException;
  * Mar 19, 2008  
  */
 public class UpdatePortalURIJob extends BaseJob {
-
-	public void execute(JobExecutionContext context) throws JobExecutionException {			
+  
+  private static Log log_ = ExoLogger.getLogger("job.UpdatePortalURIJob");
+  
+	public void execute(JobExecutionContext context) throws JobExecutionException {
+	  log_.info("running portal page indexing ");
 		try{
 			ExoContainer container = ExoContainerContext.getCurrentContainer();			
 			WcmSearchService searchService = (WcmSearchService)container.getComponentInstanceOfType(WcmSearchService.class) ;
