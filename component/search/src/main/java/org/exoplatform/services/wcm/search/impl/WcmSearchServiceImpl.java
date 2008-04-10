@@ -32,6 +32,8 @@ import javax.jcr.query.QueryResult;
 
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.commons.utils.PageList;
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.PropertiesParam;
 import org.exoplatform.portal.application.PortletPreferences;
@@ -58,17 +60,16 @@ import org.exoplatform.services.wcm.search.WcmSearchService;
  * Mar 19, 2008  
  */
 public class WcmSearchServiceImpl implements WcmSearchService {
+  
   private RepositoryService repositoryService ;
   private String defaultRepository ;
   private String defaultWorksapce ;  
   private DataStorage dataStorage_ ;  
-  private HashMap<String, String> cachedPages_ = new HashMap<String, String>() ;
-  private UserPortalConfigService portalConfigService_ ; 
-
-  public WcmSearchServiceImpl(RepositoryService repositoryService, DataStorage dataStorage, UserPortalConfigService portalConfigService, InitParams initParams) {
+  private HashMap<String, String> cachedPages_ = new HashMap<String, String>() ;  
+  
+  public WcmSearchServiceImpl(RepositoryService repositoryService, DataStorage dataStorage, InitParams initParams) {
     this.repositoryService = repositoryService ;
-    this.dataStorage_ = dataStorage ;    
-    this.portalConfigService_ = portalConfigService;    
+    this.dataStorage_ = dataStorage ;         
     PropertiesParam serviceParams = initParams.getPropertiesParam("service-params") ;
     defaultRepository = serviceParams.getProperty("defaultRepository") ;
     defaultWorksapce = serviceParams.getProperty("defaultWorksapce") ;
@@ -195,12 +196,16 @@ public class WcmSearchServiceImpl implements WcmSearchService {
     Query query = queryManager.createQuery(sql,Query.SQL) ;
     QueryResult queryResult = query.execute() ;
     List<Object> pageNodes = new ArrayList<Object>() ;    
-    UserPortalConfig userPortalConfig = portalConfigService_.getUserPortalConfig(portalName, userId) ;    
+    ExoContainer container = ExoContainerContext.getCurrentContainer() ;
+    UserPortalConfigService portalConfigService = 
+      (UserPortalConfigService)container.getComponentInstanceOfType(UserPortalConfigService.class) ;
+    UserPortalConfig userPortalConfig = portalConfigService.getUserPortalConfig(portalName, userId) ; 
+    
     for(NodeIterator iterator = queryResult.getNodes();iterator.hasNext(); ) {
       Node webContent = iterator.nextNode() ;
       String key = buildKey(repository, workspace, webContent.getUUID()) ;
       String referencedPage = cachedPages_.get(key) ;
-      if(!hasAccessPermission(referencedPage, userId)) continue ;
+      if(!hasAccessPermission(referencedPage, userId,portalConfigService)) continue ;
       pageNodes.addAll(findPageNodes(userPortalConfig, referencedPage)) ;
     }
     return pageNodes ;
@@ -214,9 +219,9 @@ public class WcmSearchServiceImpl implements WcmSearchService {
     return result ;
   }
 
-  private boolean hasAccessPermission(String pageId,String accessUser) throws Exception {
+  private boolean hasAccessPermission(String pageId,String accessUser,UserPortalConfigService portalConfigService) throws Exception {
     if(pageId == null) return false ;
-    Page page = portalConfigService_.getPage(pageId, accessUser) ;
+    Page page = portalConfigService.getPage(pageId, accessUser) ;
     if(page != null) return true ;
     return false ;
   }
@@ -245,9 +250,8 @@ public class WcmSearchServiceImpl implements WcmSearchService {
     return false ;
   }
 
-  private void updateCachedPage(String pageId,String portletId) throws Exception {
-    String windowId = portletId.substring(portletId.lastIndexOf("/")) ;
-    PortletPreferences portletPreferences = dataStorage_.getPortletPreferences(new ExoWindowID(windowId)) ;
+  private void updateCachedPage(String pageId,String portletId) throws Exception {    
+    PortletPreferences portletPreferences = dataStorage_.getPortletPreferences(new ExoWindowID(portletId)) ;
     String repository = null, worksapce = null, nodeUUID = null ;
     //TODO this code use for SimpleContentPresentation portlet
     for(Object obj:portletPreferences.getPreferences()) {
