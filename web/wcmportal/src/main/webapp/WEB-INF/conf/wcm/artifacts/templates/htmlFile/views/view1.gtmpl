@@ -4,10 +4,17 @@
 
   def currentNode = uicomponent.getNode() ; 
   def contentNode = currentNode.getNode("jcr:content") ;
-  def className = "org.exoplatform.services.wcm.WcmService" ;    
-  def wcmService = uicomponent.getComponentInstanceOfType(className) ;    
-  def css= wcmService.getReferenceFileContent(currentNode,"exo:referenceCSS");
-  def js= wcmService.getReferenceFileContent(currentNode,"exo:referenceJs");
+  
+  def wcmServiceClass = "org.exoplatform.services.wcm.WcmService" ;    
+  def javaScriptClass="org.exoplatform.services.wcm.javascript.ExtendedJavaScriptService";
+  def skinClass="org.exoplatform.services.wcm.skin.ExtendedSkinService";
+  
+  def wcmService = uicomponent.getComponentInstanceOfType(wcmServiceClass) ;
+  def exSkinService = uicomponent.getComponentInstanceOfType(skinClass) ;
+  def exJSService = uicomponent.getComponentInstanceOfType(javaScriptClass) ;
+       
+  def css= exSkinService.getActiveStylesheet(currentNode.getParent());
+  def js=  exJSService.getActiveJavaScript(currentNode.getParent()) ;
   def rcontext = _ctx.getRequestContext() ;
   
   String iframeId = uicomponent.getId() + "ifame" ;

@@ -1,5 +1,4 @@
-<%
-  uicomponent.addInterceptor("ecm-explorer/interceptor/PostHTMLFileInterceptor.groovy", "post") ;
+<%  
   String[] hiddenField1 = ["jcrPath=/node/jcr:content", "nodetype=nt:resource", "mixintype=dc:elementSet", "visible=false"] ; 
   String[] hiddenField2 = ["jcrPath=/node/jcr:content/jcr:encoding", "visible=false", "UTF-8"] ;  
   String[] hiddenField4 = ["jcrPath=/node/jcr:content/jcr:lastModified", "visible=false"] ;
