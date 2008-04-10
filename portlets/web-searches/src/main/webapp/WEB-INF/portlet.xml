@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<portlet-app version="1.0" xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"> 
+  <portlet>
+		<description xml:lang="EN">Simple Search Portlet</description>
+		<portlet-name>SimpleSearchPortlet</portlet-name>
+		<display-name>Simple Search Portlet</display-name>
+		<portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>
+		
+		<init-param>
+      <name>webui.configuration</name>
+      <value>/WEB-INF/conf/portlet/web-searches/SimpleSearchPortlet/webui/configuration.xml</value>			
+		</init-param>
+		
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+		</supports>
+		<supported-locale>en</supported-locale>
+		
+		<portlet-info>
+			<title>Simple Search Portlet</title>
+			<short-title>Simple Search</short-title>
+			<keywords>SimpleSearch</keywords>
+		</portlet-info>
+		
+    <security-role-ref>
+      <role-name>admin</role-name>
+      <role-link>admin</role-link>
+    </security-role-ref>		
+  </portlet>  
+  
+</portlet-app>
