@@ -28,6 +28,14 @@
    	</component-plugins>    
    </component>
    
+   <component>   
+     <type>org.exoplatform.services.wcm.skin.ExtendedSkinService</type>
+   </component>
+   
+   <component>   
+     <type>org.exoplatform.services.wcm.javascript.ExtendedJavaScriptService</type>
+   </component>      
+       
    <external-component-plugins>
   	<target-component>org.exoplatform.services.jcr.RepositoryService</target-component>		
 	  <component-plugin>

@@ -28,32 +28,36 @@ import org.exoplatform.services.wcm.BaseWebContentHandler;
  *          hoa.pham@exoplatform.com
  * Mar 10, 2008  
  */
-public class PortalContentHanler extends BaseWebContentHandler {
-
-  private final String NT_FOLDER = "nt:folder".intern();
-
-  protected String getFileType() { return "exo:portalFolder"; }
-
+public class PortalContentHanler extends BaseWebContentHandler {  
+  
+  protected String getContentType() { return "exo:portalFolder"; }
   protected String getFolderPathExpression() { return null; }
-
-  protected String getFolderType() { return "nt:unstructured"; }
+  protected String getFolderType() { return NT_UNSTRUCTURED;  }
 
   public String handle(Node portalFolder) throws Exception {
     //TODO hard coded here
-    Session session = portalFolder.getSession();
-    portalFolder.addNode("html","exo:htmlFolder") ;    
-    portalFolder.addNode("js","exo:jsFolder") ;    
-    portalFolder.addNode("css","exo:cssFolder") ;    
-    Node multimedia = portalFolder.addNode("multimedia",NT_FOLDER);
-    multimedia.addMixin("exo:multimediaFolder");
-    Node images = multimedia.addNode("images",NT_FOLDER);
-    images.addMixin("exo:pictureFolder");
+    Session session = portalFolder.getSession();    
+    Node jsFolder = portalFolder.addNode("js","exo:jsFolder") ;    
+    addMixin(jsFolder,EXO_OWNABLE) ;
+    Node cssFolder = portalFolder.addNode("css","exo:cssFolder") ;    
+    addMixin(cssFolder, EXO_OWNABLE);
+    Node multimedia = portalFolder.addNode("multimedia",NT_FOLDER);    
+    addMixin(multimedia, "exo:multimediaFolder") ;
+    addMixin(multimedia, EXO_OWNABLE) ;    
+    Node images = multimedia.addNode("images",NT_FOLDER);    
+    addMixin(images, "exo:pictureFolder") ;
+    addMixin(images, EXO_OWNABLE);
     Node video = multimedia.addNode("videos",NT_FOLDER);
-    video.addMixin("exo:videoFolder");
-    Node audio = multimedia.addNode("audio",NT_FOLDER);
-    audio.addMixin("exo:musicFolder");    
-    Node document = portalFolder.addNode("Structured Document",NT_FOLDER) ;
-    document.addMixin("exo:documentFolder");    
+    addMixin(video, "exo:videoFolder") ;    
+    addMixin(video, EXO_OWNABLE) ;
+    Node audio = multimedia.addNode("audio",NT_FOLDER);    
+    addMixin(audio, "exo:musicFolder") ;
+    addMixin(audio, EXO_OWNABLE) ;
+    Node document = portalFolder.addNode("documents",NT_UNSTRUCTURED) ;
+    addMixin(document, "exo:documentFolder") ;
+    addMixin(document, EXO_OWNABLE) ;
+    Node webFolder = portalFolder.addNode("html","exo:webFolder") ;    
+    addMixin(webFolder, EXO_OWNABLE) ;
     session.save();
     return portalFolder.getPath();
   }  

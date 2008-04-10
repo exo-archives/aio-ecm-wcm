@@ -29,18 +29,27 @@ import org.exoplatform.container.component.BaseComponentPlugin;
  */
 public abstract class BaseWebContentHandler extends BaseComponentPlugin implements WebContentHandler {
   
-  protected abstract String getFileType() ;
+  protected final String EXO_OWNABLE = "exo:owneable".intern();
+  protected final String NT_FOLDER = "nt:folder".intern();
+  protected final String NT_UNSTRUCTURED = "nt:unstructured".intern();
+  protected final String NT_FILE = "nt:file".intern() ;
+  
+  protected abstract String getContentType() ;
   
   protected abstract String getFolderType();
   
   protected abstract String getFolderPathExpression();
   
   public boolean matchHandler(Node node) throws Exception {    
-    if(node.isNodeType(getFileType()) && node.getParent().isNodeType(getFolderType())
+    if(node.isNodeType(getContentType()) && node.getParent().isNodeType(getFolderType())
         // && file.getPath().matches(getFolderPathExpression())        
         )  {
       return true ;
     }    
     return false;
+  }
+  
+  protected void addMixin(Node node, String mixin) throws Exception {
+    if(!node.isNodeType(mixin)) node.addMixin(mixin) ;
   }
 }

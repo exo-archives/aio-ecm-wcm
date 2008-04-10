@@ -14,35 +14,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
+package org.exoplatform.services.jcr.ext.classify;
 
-package org.exoplatform.services.wcm.impl;
-
-import javax.jcr.Node;
-
-import org.exoplatform.services.wcm.BaseWebContentHandler;
+import org.exoplatform.container.component.ComponentPlugin;
 
 /**
- * Created by The eXo Platform SARL
- * Author : Pham Xuan Hoa
+ * Created by The eXo Platform SAS
+ * Author : Hoa.Pham
  *          hoa.pham@exoplatform.com
- * Mar 10, 2008  
+ * Apr 9, 2008  
  */
-public class ImageContentHandler extends BaseWebContentHandler {
+public class NodeClassifyPlugin implements ComponentPlugin {
 
-  public String getContentType() {
+  public String getDescription() {
+    // TODO Auto-generated method stub
     return null;
   }
 
-  public String getFolderPathExpression() {
+  public String getName() {
+    // TODO Auto-generated method stub
     return null;
   }
 
-  public String getFolderType() {
-    return null;
+  public void setDescription(String arg0) {
+    // TODO Auto-generated method stub
+    
   }
 
-  public String handle(Node file) throws Exception {
-    return null ;
+  public void setName(String arg0) {
+    // TODO Auto-generated method stub
+    
   }
 
 }

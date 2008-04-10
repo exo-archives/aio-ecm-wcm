@@ -29,17 +29,14 @@ import org.exoplatform.services.wcm.BaseWebContentHandler;
  */
 public class JSContentHandler extends BaseWebContentHandler {
 
-  protected String getFileType() { return "nt:file"; }
-
+  protected String getContentType() { return NT_FILE; }
   protected String getFolderPathExpression() { return null; }
-
   protected String getFolderType() { return "exo:jsFolder"; }
 
   public String handle(Node file) throws Exception {
-    if(file.isNodeType("exo:jsFile"))  return file.getUUID() ;     
-    file.addMixin("exo:jsFile") ;      
+    addMixin(file, "exo:jsFile") ;         
     file.setProperty("exo:presentationType","exo:jsFile");    
     return file.getUUID();
   }
-
+  
 }

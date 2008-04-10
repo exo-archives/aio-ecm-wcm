@@ -40,7 +40,6 @@ import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.wcm.WcmService;
 import org.exoplatform.services.wcm.WebContentHandler;
 import org.exoplatform.services.wcm.WebContentHandlerNotPound;
-import org.jibx.binding.def.StructureReference;
 import org.picocontainer.Startable;
 
 /**

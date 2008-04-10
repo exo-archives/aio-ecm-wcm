@@ -29,16 +29,13 @@ import org.exoplatform.services.wcm.BaseWebContentHandler;
  */
 public class CSSContentHandler extends BaseWebContentHandler {
 
-  protected String getFileType() { return "nt:file"; }
-
+  protected String getContentType() { return NT_FILE; }
   protected String getFolderPathExpression() { return null; }
-
   protected String getFolderType() { return "exo:cssFolder"; }
 
   public String handle(Node file) throws Exception {
-    if(file.isNodeType("exo:cssFile")) return file.getUUID();
-    file.addMixin("exo:cssFile");      
-    file.setProperty("exo:presentationType","exo:cssFile");        
+    addMixin(file, "exo:cssFile");
+    file.setProperty("exo:presentationType","exo:cssFile");                    
     return file.getUUID();
   } 
 

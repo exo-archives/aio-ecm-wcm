@@ -52,7 +52,7 @@ public class SharedPortalPlugin extends BaseComponentPlugin {
     Session session = sessionProvider.getSession(workspace,manageableRepository) ;
     Node sharedPortalHome = (Node)session.getItem(path) ;
     if(sharedPortalHome.hasNode(sharedPortalName)) return;
-    sharedPortalHome.addNode(sharedPortalName,"exo:portalFolder");      
+    sharedPortalHome.addNode(sharedPortalName,"exo:portalFolder");    
     session.save();        
   }    
 }
