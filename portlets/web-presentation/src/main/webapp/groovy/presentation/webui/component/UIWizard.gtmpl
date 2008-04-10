@@ -51,51 +51,20 @@
 				      	<table class="ActionContainer" align="right">
 				      		<tr>
 				      			<td align="right">
-					      			<a href="<%=uicomponent.event("Abort", "");%>" class="ActionButton LightBlueStyle">
+				      			<%
+				      			String [] actions = uicomponent.getActionsByStep() ;
+				      			for(int j = (actions.length-1); j >= 0; j-- ) {
+				      			%>
+					      			<a href="<%=uicomponent.url(actions[j]);%>" class="ActionButton LightBlueStyle">
 						            <div class="ButtonLeft">
 						              <div class="ButtonRight">
 						                <div class="ButtonMiddle">
-															<%=_ctx.appRes(uicomponent.getId() + ".label.abort")%>
+															<%=_ctx.appRes(uicomponent.getId() + ".action." + actions[j])%>
 							              </div>
 						              </div>
 						            </div>
-											</a>
-				              <%
-				                String action = "next";
-				                if(step == children.size()){
-				                  action = "done";			      
-				                  actionLink = uicomponent.event("ViewStep" + String.valueOf(step+1), "");
-				                } else {
-							            	actionLink = uicomponent.url("ViewStep" + String.valueOf(step+1));
-							            }
-							        %>  
-							        			                  
-											<a href="$actionLink" class="ActionButton LightBlueStyle">
-						            <div class="ButtonLeft">
-						              <div class="ButtonRight">
-						                <div class="ButtonMiddle">
-							                <%=_ctx.appRes(uicomponent.getId() + ".label."+action)%>
-							              </div>
-						              </div>
-						            </div>
-											</a>
-					    
-							        <% 
-							        if(step > 1) {
-				                actionLink = uicomponent.url("ViewStep" + String.valueOf(step-1));
-					              String display = "LightBlueStyle";
-							        %>
-					      			<a href="$actionLink" class="ActionButton $display">
-						            <div class="ButtonLeft">
-						              <div class="ButtonRight">
-						                <div class="ButtonMiddle">
-																<%=_ctx.appRes(uicomponent.getId() + ".label.back")%>
-							              </div>
-						              </div>
-						            </div>
-											</a>
-									    <% } %>
-						    
+											</a>				      			
+				      			<%}%>
 				      			</td>
 				      		</tr>
 				      	</table>

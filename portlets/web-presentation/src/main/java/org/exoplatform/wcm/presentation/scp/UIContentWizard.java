@@ -26,7 +26,7 @@ import org.exoplatform.webui.event.EventListener;
  *          thanhtungty@gmail.com
  * Mar 26, 2008  
  */
-public class UIContentWizard extends UIWizard {
+public abstract class UIContentWizard extends UIWizard {
   
   private int numberStep_ ; 
   
@@ -35,6 +35,13 @@ public class UIContentWizard extends UIWizard {
   
   public void setNumberSteps(int s) { numberStep_ = s ; }
   public int getNumberSteps() {return numberStep_ ; }
+  
+  public String url(String name) throws Exception {
+    if("Back".equals(name)) return event(name) ;
+    return super.url(name) ;
+  }
+  
+  public abstract String [] getActionsByStep() ;
     
   public static class AbortActionListener extends EventListener<UIContentWizard> {
 
@@ -43,6 +50,15 @@ public class UIContentWizard extends UIWizard {
       UIPortletConfig uiConfig = uiWizard.getAncestorOfType(UIPortletConfig.class) ;
       uiConfig.getChildren().clear() ;
       uiConfig.addChild(uiConfig.getBackComponent()) ;
+    }
+    
+  }
+  
+  public static class BackActionListener extends EventListener<UIContentCreationWizard> {
+
+    public void execute(Event<UIContentCreationWizard> event) throws Exception {
+      UIWizard uiWizard = event.getSource() ;
+      uiWizard.viewStep(uiWizard.getCurrentStep() - 1) ;
     }
     
   }

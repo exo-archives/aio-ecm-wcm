@@ -51,11 +51,12 @@ import org.exoplatform.webui.event.Event.Phase;
 @ComponentConfig(
     template = "app:/groovy/presentation/webui/component/UIWizard.gtmpl",
     events = {
-        @EventConfig(listeners = UIContentCreationWizard.ViewStep1ActionListener.class),
         @EventConfig(listeners = UIContentCreationWizard.ViewStep2ActionListener.class),
         @EventConfig(listeners = UIContentCreationWizard.ViewStep3ActionListener.class),
         @EventConfig(listeners = UIContentCreationWizard.ViewStep4ActionListener.class),
-        @EventConfig(listeners = UIContentCreationWizard.ViewStep5ActionListener.class),
+        @EventConfig(listeners = UIContentCreationWizard.CompleteActionListener.class),
+        @EventConfig(listeners = UIContentCreationWizard.FinishActionListener.class),
+        @EventConfig(listeners = UIContentWizard.BackActionListener.class),
         @EventConfig(listeners = UIContentWizard.AbortActionListener.class)
     }
 )
@@ -70,20 +71,57 @@ public class UIContentCreationWizard extends UIContentWizard {
     setNumberSteps(4) ;
   }
   
-  public static class ViewStep1ActionListener extends EventListener<UIContentCreationWizard> {
-
-    public void execute(Event<UIContentCreationWizard> event) throws Exception {
-      System.out.println("\n\n\n\n\n\nStep1");
-      UIContentCreationWizard uiWizard = event.getSource() ;
-      uiWizard.viewStep(1) ;
+  public String [] getActionsByStep() {
+    String [] actions = new String [] {} ;
+    switch (getCurrentStep()) {
+    case 1 :
+      actions = new String [] {"ViewStep2", "Abort"} ;
+      break ;
+    case 2 :
+      actions = new String [] {"Back", "ViewStep3", "Complete"} ;
+      break ;
+    case 3 :
+      actions = new String [] {"ViewStep4", "Finish"} ;
+      break ;
+    case 4 :
+      actions = new String [] {"Back", "Finish"} ;
+      break ;
+    default :
+      break ;
     }
-    
+    return actions ;
   }
   
+  public void saveContent(Event event) throws Exception {
+    UIDocumentForm uiForm = getChild(UIDocumentForm.class) ;
+    uiForm.save(event) ;
+    UIPathChooser uiPathChooser = getChild(UIPathChooser.class) ;
+    ContentStorePath storePath = uiPathChooser.getContentStorePath() ;
+    CategoriesService categoriesService = getApplicationComponent(CategoriesService.class) ;
+    ManageableRepository manaRepository = getApplicationComponent(RepositoryService.class).getRepository(storePath.getRepository()) ;
+    NodeHierarchyCreator nodeHierarchyCreator = getApplicationComponent(NodeHierarchyCreator.class) ;
+    UICategoryManager uiManager = getChild(UICategoryManager.class) ;
+    UICategoriesAddedList uiCateAddedList = uiManager.getChild(UICategoriesAddedList.class) ;
+    Node node = uiForm.getSavedNode() ; 
+    ContentStorePath documentStorePath = new ContentStorePath() ;
+    documentStorePath.setRepository(storePath.getRepository()) ;
+    documentStorePath.setWorkspace(storePath.getWorkspace()) ;
+    documentStorePath.setPath(node.getPath()) ;
+    uiCateAddedList.setStorePath(documentStorePath) ;
+    uiCateAddedList.updateGrid(categoriesService.getCategories(node, documentStorePath.getRepository())) ;
+    UINodesExplorer uiJCRBrowser = uiManager.getChild(UINodesExplorer.class) ;
+    uiJCRBrowser.setSessionProvider(SessionProviderFactory.createSystemProvider()) ;
+    uiJCRBrowser.setFilterType(null) ;
+    uiJCRBrowser.setRepository(documentStorePath.getRepository()) ;
+    uiJCRBrowser.setIsDisable(manaRepository.getConfiguration().getSystemWorkspaceName(), true) ;
+    uiJCRBrowser.setRootPath(nodeHierarchyCreator.getJcrPath(BasePath.EXO_TAXONOMIES_PATH)) ;
+    uiJCRBrowser.setIsTab(true) ;
+    uiJCRBrowser.setComponent(uiCateAddedList, null) ;      
+  }
+      
   public static class ViewStep2ActionListener extends EventListener<UIContentCreationWizard> {
 
     public void execute(Event<UIContentCreationWizard> event) throws Exception {
-      System.out.println("\n\n\n\n\n\nStep2");
       UIContentCreationWizard uiWizard = event.getSource() ;
       UIPathChooser uiChooser = uiWizard.getChild(UIPathChooser.class) ;
       uiChooser.invokeSetBindingBean() ;
@@ -114,32 +152,8 @@ public class UIContentCreationWizard extends UIContentWizard {
   public static class ViewStep3ActionListener extends EventListener<UIContentCreationWizard> {
 
     public void execute(Event<UIContentCreationWizard> event) throws Exception {
-      System.out.println("\n\n\n\n\n\nStep3");
       UIContentCreationWizard uiWizard = event.getSource() ;
-      UIDocumentForm uiForm = uiWizard.getChild(UIDocumentForm.class) ;
-      uiForm.save(event) ;
-      UIPathChooser uiPathChooser = uiWizard.getChild(UIPathChooser.class) ;
-      ContentStorePath storePath = uiPathChooser.getContentStorePath() ;
-      CategoriesService categoriesService = uiWizard.getApplicationComponent(CategoriesService.class) ;
-      ManageableRepository manaRepository = uiWizard.getApplicationComponent(RepositoryService.class).getRepository(storePath.getRepository()) ;
-      NodeHierarchyCreator nodeHierarchyCreator = uiWizard.getApplicationComponent(NodeHierarchyCreator.class) ;
-      UICategoryManager uiManager = uiWizard.getChild(UICategoryManager.class) ;
-      UICategoriesAddedList uiCateAddedList = uiManager.getChild(UICategoriesAddedList.class) ;
-      Node node = uiForm.getSavedNode() ; 
-      ContentStorePath documentStorePath = new ContentStorePath() ;
-      documentStorePath.setRepository(storePath.getRepository()) ;
-      documentStorePath.setWorkspace(storePath.getWorkspace()) ;
-      documentStorePath.setPath(node.getPath()) ;
-      uiCateAddedList.setStorePath(documentStorePath) ;
-      uiCateAddedList.updateGrid(categoriesService.getCategories(node, documentStorePath.getRepository())) ;
-      UINodesExplorer uiJCRBrowser = uiManager.getChild(UINodesExplorer.class) ;
-      uiJCRBrowser.setSessionProvider(SessionProviderFactory.createSystemProvider()) ;
-      uiJCRBrowser.setFilterType(null) ;
-      uiJCRBrowser.setRepository(documentStorePath.getRepository()) ;
-      uiJCRBrowser.setIsDisable(manaRepository.getConfiguration().getSystemWorkspaceName(), true) ;
-      uiJCRBrowser.setRootPath(nodeHierarchyCreator.getJcrPath(BasePath.EXO_TAXONOMIES_PATH)) ;
-      uiJCRBrowser.setIsTab(true) ;
-      uiJCRBrowser.setComponent(uiCateAddedList, null) ;
+      uiWizard.saveContent(event) ;
       uiWizard.viewStep(3) ;
     }
   }
@@ -147,17 +161,25 @@ public class UIContentCreationWizard extends UIContentWizard {
   public static class ViewStep4ActionListener extends EventListener<UIContentCreationWizard> {
 
     public void execute(Event<UIContentCreationWizard> event) throws Exception {
-      System.out.println("\n\n\n\n\n\nStep4");
       UIContentCreationWizard uiWizard = event.getSource() ;
       uiWizard.viewStep(4) ;
     }
     
   }
   
-  public static class ViewStep5ActionListener extends EventListener<UIContentCreationWizard> {
+  public static class CompleteActionListener extends EventListener<UIContentCreationWizard> {
 
     public void execute(Event<UIContentCreationWizard> event) throws Exception {
-      System.out.println("\n\n\n\n\n\nsave");
+      UIContentCreationWizard uiWizard = event.getSource() ;
+      uiWizard.saveContent(event) ;
+      uiWizard.createEvent("Finish", Phase.PROCESS, event.getRequestContext()).broadcast() ;
+    }
+    
+  }
+  
+  public static class FinishActionListener extends EventListener<UIContentCreationWizard> {
+
+    public void execute(Event<UIContentCreationWizard> event) throws Exception {
       UIContentCreationWizard uiWizard = event.getSource() ;
       UIDocumentForm uiDocumentForm = uiWizard.findFirstComponentOfType(UIDocumentForm.class) ;
       ContentStorePath storePath = uiDocumentForm.getContentStorePath() ;

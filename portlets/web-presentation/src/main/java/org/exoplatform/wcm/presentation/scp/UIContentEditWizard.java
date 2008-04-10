@@ -53,10 +53,10 @@ import org.exoplatform.webui.event.Event.Phase;
 @ComponentConfig(
     template = "app:/groovy/presentation/webui/component/UIWizard.gtmpl",
     events = {
-        @EventConfig(listeners = UIContentEditWizard.ViewStep1ActionListener.class),
         @EventConfig(listeners = UIContentEditWizard.ViewStep2ActionListener.class),
         @EventConfig(listeners = UIContentEditWizard.ViewStep3ActionListener.class),
-        @EventConfig(listeners = UIContentEditWizard.ViewStep4ActionListener.class),
+        @EventConfig(listeners = UIContentWizard.BackActionListener.class),
+        @EventConfig(listeners = UIContentEditWizard.FinishActionListener.class),
         @EventConfig(listeners = UIContentWizard.AbortActionListener.class)
     }
 )
@@ -97,20 +97,28 @@ public class UIContentEditWizard extends UIContentWizard {
     setNumberSteps(3) ;
   }
   
-  public static class ViewStep1ActionListener extends EventListener<UIContentEditWizard> {
-
-    public void execute(Event<UIContentEditWizard> event) throws Exception {
-      UIContentEditWizard uiWizard = event.getSource() ;
-      System.out.println("\n\n\n\n\n\nstep 1");
+  public String[] getActionsByStep() {
+    String [] actions = new String [] {} ;
+    switch (getCurrentStep()) {
+    case 1 :
+      actions = new String [] {"ViewStep2", "Abort"} ;
+      break ;
+    case 2 :
+      actions = new String [] {"Back", "ViewStep3", "Finish"} ;
+      break ;
+    case 3 :
+      actions = new String [] {"Back", "Finish"} ;
+      break ;
+    default :
+      break ;
     }
-    
+    return actions ;
   }
-
+  
   public static class ViewStep2ActionListener extends EventListener<UIContentEditWizard> {
 
     public void execute(Event<UIContentEditWizard> event) throws Exception {
       UIContentEditWizard uiWizard = event.getSource() ;
-      System.out.println("\n\n\n\n\n\nstep 2");
       UIDocumentForm uiDocumentForm = uiWizard.getChild(UIDocumentForm.class) ;
       uiDocumentForm.save(event) ;
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext() ;
@@ -141,17 +149,15 @@ public class UIContentEditWizard extends UIContentWizard {
     public void execute(Event<UIContentEditWizard> event) throws Exception {
       UIContentEditWizard uiWizard = event.getSource() ;
       uiWizard.viewStep(3) ;
-      System.out.println("\n\n\n\n\n\nstep 3");
     }
     
   }
 
 
-  public static class ViewStep4ActionListener extends EventListener<UIContentEditWizard> {
+  public static class FinishActionListener extends EventListener<UIContentEditWizard> {
 
     public void execute(Event<UIContentEditWizard> event) throws Exception {
       UIContentEditWizard uiWizard = event.getSource() ;
-      System.out.println("\n\n\n\n\n\nsave");
       uiWizard.createEvent("Abort", Phase.PROCESS, event.getRequestContext()).broadcast() ;
     }
     
