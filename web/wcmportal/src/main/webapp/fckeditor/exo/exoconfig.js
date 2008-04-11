@@ -4,6 +4,8 @@ var parentLocation = window.parent.location;
 eXoPlugin.hostName = parentLocation.href.substring(0, parentLocation.href.indexOf(parentLocation.pathname));
 eXoPlugin.portalName = window.parent.eXo.env.portal.portalName;
 
+eXoPlugin.availablePortals = ['classic' , 'webos'];
+
 with (window.parent.eXo.env.portal) {
 	eXoPlugin.portalPath = eXoPlugin.hostName + context + "/" + accessMode + "/" + portalName;
 }

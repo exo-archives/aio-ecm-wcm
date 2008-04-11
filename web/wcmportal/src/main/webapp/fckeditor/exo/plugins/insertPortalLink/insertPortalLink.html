@@ -41,6 +41,12 @@
 			background-color: #effffe;
 		}
 	</style>
+	<script type="text/javascript">
+	//refer form fckdialog.html
+	var oEditor = window.parent.InnerDialogLoaded();
+	var FCKConfig = oEditor.FCKConfig;
+	var eXoPlugin = oEditor.FCK.eXoPlugin;
+	</script>
 </head>
 <body>
 	<div class="None">
@@ -60,7 +66,20 @@
 					Title : <br>
 					<input type="text" style="width: 200px;" id="inputTitle"><br><br>
 					Url : <br><br>
-					<input type="text" style="width: 400px;" id="inputURL"> <input type="button" value="Get portal link" onclick="getPortalLink();"><br><br>
+					<input type="text" style="width: 200px;" id="inputURL"> 
+					Select portal:
+					<select onchange="setPortalName(this)">
+						<script type="text/javascript">
+							if (eXoPlugin && eXoPlugin.availablePortals) {
+								for (var i = 0; i < eXoPlugin.availablePortals.length; ++i) {
+									var portalName = eXoPlugin.availablePortals[i];
+									document.write( "<option value=" + portalName + " name=" + portalName + ">" + portalName + "</option>" );
+								}
+							}
+						</script>
+					</select>
+					<input type="button" value="Get portal link" onclick="getPortalLink();">
+					<br><br>
 					<input type="button" value="Preview" onclick="previewLink()">
 					<input type="button" value="Save" onclick="addURL()">
 				</div>
@@ -98,11 +117,6 @@
 </body>
 
 <script type="text/javascript">
-	//refer form fckdialog.html
-	
-	var oEditor = window.parent.InnerDialogLoaded();
-	var FCKConfig = oEditor.FCKConfig;
-	var eXoPlugin = oEditor.FCK.eXoPlugin;
 	function changeClass(klass) {
 		var Root = document.getElementById("Root");
 		Root.className = klass ;
@@ -110,6 +124,12 @@
 	function Trim(text) {
 		if (typeof text == "string") return text.replace(/^\s+|\s+$/g, "");
 	}
+	
+	function setPortalName(form) {
+		if (!eXoPlugin)  eXoPlugin = oEditor.FCK.eXoPlugin;
+		eXoPlugin.portalName = form.options[form.selectedIndex].value;
+	}
+	
 	function getPortalLink() {
 			var width = 800;
 			var height = 500;
