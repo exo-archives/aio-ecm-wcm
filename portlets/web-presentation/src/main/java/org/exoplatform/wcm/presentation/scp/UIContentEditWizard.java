@@ -56,6 +56,7 @@ import org.exoplatform.webui.event.Event.Phase;
         @EventConfig(listeners = UIContentEditWizard.ViewStep2ActionListener.class),
         @EventConfig(listeners = UIContentEditWizard.ViewStep3ActionListener.class),
         @EventConfig(listeners = UIContentWizard.BackActionListener.class),
+        @EventConfig(listeners = UIContentEditWizard.CompleteActionListener.class),
         @EventConfig(listeners = UIContentEditWizard.FinishActionListener.class),
         @EventConfig(listeners = UIContentWizard.AbortActionListener.class)
     }
@@ -101,7 +102,7 @@ public class UIContentEditWizard extends UIContentWizard {
     String [] actions = new String [] {} ;
     switch (getCurrentStep()) {
     case 1 :
-      actions = new String [] {"ViewStep2", "Abort"} ;
+      actions = new String [] {"Abort", "ViewStep2", "Complete"} ;
       break ;
     case 2 :
       actions = new String [] {"Back", "ViewStep3", "Finish"} ;
@@ -115,30 +116,34 @@ public class UIContentEditWizard extends UIContentWizard {
     return actions ;
   }
   
+  public void saveContent(Event event) throws Exception {
+    UIDocumentForm uiDocumentForm = getChild(UIDocumentForm.class) ;
+    uiDocumentForm.save(event) ;
+    PortletRequestContext context = (PortletRequestContext) event.getRequestContext() ;
+    PortletPreferences prefs = context.getRequest().getPreferences() ;
+    String repoName = prefs.getValue(UISimplePresentationPortlet.REPOSITORY, null) ;
+    CategoriesService categoriesService = getApplicationComponent(CategoriesService.class) ;
+    ManageableRepository manaRepository = getApplicationComponent(RepositoryService.class).getRepository(repoName) ;
+    NodeHierarchyCreator nodeHierarchyCreator = getApplicationComponent(NodeHierarchyCreator.class) ;
+    UICategoryManager uiManager = getChild(UICategoryManager.class) ;
+    UICategoriesAddedList uiCateAddedList = uiManager.getChild(UICategoriesAddedList.class) ;
+    uiCateAddedList.setStorePath(uiDocumentForm.getContentStorePath()) ;
+    uiCateAddedList.updateGrid(categoriesService.getCategories(uiDocumentForm.getSavedNode(), repoName)) ;
+    UINodesExplorer uiJCRBrowser = uiManager.getChild(UINodesExplorer.class) ;
+    uiJCRBrowser.setSessionProvider(SessionProviderFactory.createSystemProvider()) ;
+    uiJCRBrowser.setFilterType(null) ;
+    uiJCRBrowser.setRepository(repoName) ;
+    uiJCRBrowser.setIsDisable(manaRepository.getConfiguration().getSystemWorkspaceName(), true) ;
+    uiJCRBrowser.setRootPath(nodeHierarchyCreator.getJcrPath(BasePath.EXO_TAXONOMIES_PATH)) ;
+    uiJCRBrowser.setIsTab(true) ;
+    uiJCRBrowser.setComponent(uiCateAddedList, null) ;      
+  }
+  
   public static class ViewStep2ActionListener extends EventListener<UIContentEditWizard> {
 
     public void execute(Event<UIContentEditWizard> event) throws Exception {
       UIContentEditWizard uiWizard = event.getSource() ;
-      UIDocumentForm uiDocumentForm = uiWizard.getChild(UIDocumentForm.class) ;
-      uiDocumentForm.save(event) ;
-      PortletRequestContext context = (PortletRequestContext) event.getRequestContext() ;
-      PortletPreferences prefs = context.getRequest().getPreferences() ;
-      String repoName = prefs.getValue(UISimplePresentationPortlet.REPOSITORY, null) ;
-      CategoriesService categoriesService = uiWizard.getApplicationComponent(CategoriesService.class) ;
-      ManageableRepository manaRepository = uiWizard.getApplicationComponent(RepositoryService.class).getRepository(repoName) ;
-      NodeHierarchyCreator nodeHierarchyCreator = uiWizard.getApplicationComponent(NodeHierarchyCreator.class) ;
-      UICategoryManager uiManager = uiWizard.getChild(UICategoryManager.class) ;
-      UICategoriesAddedList uiCateAddedList = uiManager.getChild(UICategoriesAddedList.class) ;
-      uiCateAddedList.setStorePath(uiDocumentForm.getContentStorePath()) ;
-      uiCateAddedList.updateGrid(categoriesService.getCategories(uiDocumentForm.getSavedNode(), repoName)) ;
-      UINodesExplorer uiJCRBrowser = uiManager.getChild(UINodesExplorer.class) ;
-      uiJCRBrowser.setSessionProvider(SessionProviderFactory.createSystemProvider()) ;
-      uiJCRBrowser.setFilterType(null) ;
-      uiJCRBrowser.setRepository(repoName) ;
-      uiJCRBrowser.setIsDisable(manaRepository.getConfiguration().getSystemWorkspaceName(), true) ;
-      uiJCRBrowser.setRootPath(nodeHierarchyCreator.getJcrPath(BasePath.EXO_TAXONOMIES_PATH)) ;
-      uiJCRBrowser.setIsTab(true) ;
-      uiJCRBrowser.setComponent(uiCateAddedList, null) ;      
+      uiWizard.saveContent(event) ;
       uiWizard.viewStep(2) ;
     }
     
@@ -153,6 +158,15 @@ public class UIContentEditWizard extends UIContentWizard {
     
   }
 
+  public static class CompleteActionListener extends EventListener<UIContentEditWizard> {
+
+    public void execute(Event<UIContentEditWizard> event) throws Exception {
+      UIContentEditWizard uiWizard = event.getSource() ;
+      uiWizard.saveContent(event) ;
+      uiWizard.createEvent("Finish", Phase.PROCESS, event.getRequestContext()).broadcast() ;
+    }
+    
+  }
 
   public static class FinishActionListener extends EventListener<UIContentEditWizard> {
 
