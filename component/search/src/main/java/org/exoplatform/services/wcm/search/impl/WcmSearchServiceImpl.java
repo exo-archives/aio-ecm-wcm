@@ -239,8 +239,9 @@ public class WcmSearchServiceImpl implements WcmSearchService {
   }
 
   private void filter(PageNode node, String pageReferencedId,List<PageNode> allPageNode) throws Exception {
-    if(! pageReferencedId.equals(node.getPageReference())) return ;        
-    allPageNode.add(node.clone());  
+    if(pageReferencedId.equals(node.getPageReference())) {
+      allPageNode.add(node.clone());
+    }              
     List<PageNode> children = node.getChildren();
     if(children == null) return ;
     for(PageNode child:children) {
