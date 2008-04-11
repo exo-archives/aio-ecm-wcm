@@ -44,7 +44,7 @@
 			
 			var selectFolder = function(url) {
 				//refer from insertPortalLink.html;
-				var portalLink = eXoPlugin.portalPath + url;
+				var portalLink = eXoPlugin.hostName + eXoPlugin.context + "/" + eXoPlugin.accessMode + "/" + eXoPlugin.portalName + url;
 				window.blur();
 				window.opener.setField("inputURL", portalLink);
 			}

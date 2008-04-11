@@ -70,12 +70,12 @@
 					Select portal:
 					<select onchange="setPortalName(this)">
 						<script type="text/javascript">
-							if (eXoPlugin && eXoPlugin.availablePortals) {
-								for (var i = 0; i < eXoPlugin.availablePortals.length; ++i) {
-									var portalName = eXoPlugin.availablePortals[i];
-									document.write( "<option value=" + portalName + " name=" + portalName + ">" + portalName + "</option>" );
-								}
+							if (!eXoPlugin.availablePortals) eXoPlugin.availablePortals = ["classic"] ;
+							for (var i = 0; i < eXoPlugin.availablePortals.length; ++i) {
+								var portalName = eXoPlugin.availablePortals[i];
+								document.write( "<option value=" + portalName + " name=" + portalName + ">" + portalName + "</option>" );
 							}
+
 						</script>
 					</select>
 					<input type="button" value="Get portal link" onclick="getPortalLink();">
