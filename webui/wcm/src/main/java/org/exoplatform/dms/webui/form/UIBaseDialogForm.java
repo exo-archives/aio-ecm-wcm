@@ -1045,6 +1045,15 @@ public abstract class UIBaseDialogForm extends UIForm {
     }      
 
   }
+  
+  public void removeComponent(String name) {
+    if (!properties.isEmpty() && properties.containsKey(name)) {
+      properties.remove(name);
+      String jcrPath = propertiesName_.get(name);
+      propertiesName_.remove(name);
+      fieldNames_.remove(jcrPath);
+    }
+  }
 
   public abstract Node storeValue(Event event) throws Exception ;
   
