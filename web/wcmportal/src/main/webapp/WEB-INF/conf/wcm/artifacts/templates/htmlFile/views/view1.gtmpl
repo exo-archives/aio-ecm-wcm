@@ -6,8 +6,8 @@
   def contentNode = currentNode.getNode("jcr:content") ;
   
   def wcmServiceClass = "org.exoplatform.services.wcm.WcmService" ;    
-  def javaScriptClass="org.exoplatform.services.wcm.javascript.ExtendedJavaScriptService";
-  def skinClass="org.exoplatform.services.wcm.skin.ExtendedSkinService";
+  def javaScriptClass="org.exoplatform.services.wcm.javascript.XJavascriptService";
+  def skinClass="org.exoplatform.services.wcm.skin.XSkinService";
   
   def wcmService = uicomponent.getComponentInstanceOfType(wcmServiceClass) ;
   def exSkinService = uicomponent.getComponentInstanceOfType(skinClass) ;
@@ -15,13 +15,8 @@
        
   def css= exSkinService.getActiveStylesheet(currentNode.getParent());
   def js=  exJSService.getActiveJavaScript(currentNode.getParent()) ;
-  def rcontext = _ctx.getRequestContext() ;
-  
-  String iframeId = uicomponent.getId() + "ifame" ;
-  rcontext.getJavascriptManager().addCustomizedOnLoadScript("eXo.ecm.ECMUtils.replaceToIframe('$iframeId');");
+  def rcontext = _ctx.getRequestContext() ;    
 %>  
-<textarea id="<%=iframeId%>">
-  <style><%=css%></style>
-  <%=contentNode.getProperty("jcr:data").getString() ;%>
-  <script><%=js%></script>
-</textarea>
+<style><%=css%></style>
+<%=contentNode.getProperty("jcr:data").getString() ;%>
+<script><%=js%></script>
