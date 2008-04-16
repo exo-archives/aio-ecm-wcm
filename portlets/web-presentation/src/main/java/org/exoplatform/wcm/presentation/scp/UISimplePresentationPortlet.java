@@ -16,7 +16,6 @@
  */
 package org.exoplatform.wcm.presentation.scp;
 
-import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
 
 import org.exoplatform.webui.application.WebuiApplication;
@@ -51,15 +50,7 @@ public class UISimplePresentationPortlet extends UIPortletApplication {
   public void activateMode(int mode) throws Exception {
     getChildren().clear() ;
     if(PortletRequestContext.VIEW_MODE == mode) {
-      UIPresentation uiPresentation = createUIComponent(UIPresentation.class, null, UIPortletApplication.VIEW_MODE) ;
-      Node node = null ;
-      try {
-        node = uiPresentation.getNode() ;
-      } catch (ItemNotFoundException infe) {
-        node = null ;
-      }
-      if(node == null) addChild(UIMessageBoard.class, null, UIPortletApplication.VIEW_MODE) ;
-      else addChild(uiPresentation);
+      addChild(UIPresentation.class, null, UIPortletApplication.VIEW_MODE) ;
     } else if (PortletRequestContext.EDIT_MODE == mode) {      
       addChild(UIPortletConfig.class, null, UIPortletApplication.EDIT_MODE) ;
     }
