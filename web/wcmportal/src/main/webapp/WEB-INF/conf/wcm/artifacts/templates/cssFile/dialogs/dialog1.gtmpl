@@ -10,6 +10,13 @@
   uicomponent.addCalendarField("hiddenInput4", hiddenField4) ;
   uicomponent.addCalendarField("hiddenInput5", hiddenField5) ;
 %>
+<style>
+	.UIForm .HorizontalLayout textarea { 
+	  font-size:11px;
+	  height:275px;
+	  width:525px;
+	 }
+</style>
 <div class="UIFormWithTitle">  
   <% uiform.begin() %>
   <div class="HorizontalLayout" style="border:0px;">
