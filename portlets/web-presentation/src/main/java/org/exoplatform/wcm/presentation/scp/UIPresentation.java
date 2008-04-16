@@ -16,6 +16,9 @@
  */
 package org.exoplatform.wcm.presentation.scp;
 
+import java.io.Writer;
+
+import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
 import javax.jcr.Session;
 import javax.portlet.PortletPreferences;
@@ -87,6 +90,22 @@ public class UIPresentation extends UIBaseNodePresentation {
       return null ;
     }
   }
+  
+  public void processRender(WebuiRequestContext context) throws Exception {
+    try {
+      getNode() ;
+    } catch (ItemNotFoundException e) {
+      Writer writer = context.getWriter() ;
+      writer.write("<div>") ;
+      writer.write("<span>") ;
+      writer.write(context.getApplicationResourceBundle().getString("UIMessageBoard.msg.content-not-found")) ;
+      writer.write("</span>") ;
+      writer.write("</div>") ;
+      return ;
+    }
+    super.processRender(context) ;
+  }
+
   @Override
   public String getTemplatePath() throws Exception {
     TemplateService templateService = getApplicationComponent(TemplateService.class);   
