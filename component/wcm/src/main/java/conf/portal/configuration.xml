@@ -29,11 +29,11 @@
    </component>
    
    <component>   
-     <type>org.exoplatform.services.wcm.skin.ExtendedSkinService</type>
+     <type>org.exoplatform.services.wcm.skin.XSkinService</type>
    </component>
    
    <component>   
-     <type>org.exoplatform.services.wcm.javascript.ExtendedJavaScriptService</type>
+     <type>org.exoplatform.services.wcm.javascript.XJavascriptService</type>
    </component>      
        
    <external-component-plugins>

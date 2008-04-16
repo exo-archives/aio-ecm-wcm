@@ -17,9 +17,14 @@
 
 package org.exoplatform.services.wcm.impl;
 
-import javax.jcr.Node;
-import javax.jcr.Session;
+import java.util.HashMap;
 
+import javax.jcr.Node;
+
+import org.exoplatform.services.cms.JcrInputProperty;
+import org.exoplatform.services.cms.actions.ActionServiceContainer;
+import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.BaseWebContentHandler;
 
 /**
@@ -29,18 +34,22 @@ import org.exoplatform.services.wcm.BaseWebContentHandler;
  * Mar 10, 2008  
  */
 public class PortalContentHanler extends BaseWebContentHandler {  
-  
+
   protected String getContentType() { return "exo:portalFolder"; }
   protected String getFolderPathExpression() { return null; }
   protected String getFolderType() { return NT_UNSTRUCTURED;  }
+  private ActionServiceContainer actionServiceContainer_ ;
+
+  public PortalContentHanler(ActionServiceContainer actionServiceContainer) {
+    this.actionServiceContainer_ = actionServiceContainer ;
+  }
 
   public String handle(Node portalFolder) throws Exception {
-    //TODO hard coded here
-    Session session = portalFolder.getSession();    
+    //TODO hard coded here    
     Node jsFolder = portalFolder.addNode("js","exo:jsFolder") ;    
-    addMixin(jsFolder,EXO_OWNABLE) ;
+    addMixin(jsFolder,EXO_OWNABLE) ;        
     Node cssFolder = portalFolder.addNode("css","exo:cssFolder") ;    
-    addMixin(cssFolder, EXO_OWNABLE);
+    addMixin(cssFolder, EXO_OWNABLE);        
     Node multimedia = portalFolder.addNode("multimedia",NT_FOLDER);    
     addMixin(multimedia, "exo:multimediaFolder") ;
     addMixin(multimedia, EXO_OWNABLE) ;    
@@ -58,8 +67,54 @@ public class PortalContentHanler extends BaseWebContentHandler {
     addMixin(document, EXO_OWNABLE) ;
     Node webFolder = portalFolder.addNode("html","exo:webFolder") ;    
     addMixin(webFolder, EXO_OWNABLE) ;
-    session.save();
+    portalFolder.getSession().save();
+    bindCSSAction(cssFolder) ;    
+    bindJSAction(jsFolder) ;    
+    portalFolder.getSession().save();
     return portalFolder.getPath();
   }  
 
+  private void bindJSAction(Node jsNode) throws Exception {   
+    HashMap<String, JcrInputProperty> mappings = createScriptActionMapping("AddSharedJSActionListener", "add", "Add shared js action") ;
+    String repository = ((ManageableRepository)jsNode.getSession().getRepository()).getConfiguration().getName();
+    actionServiceContainer_.addAction(jsNode, repository, "exo:addSharedJSAction", mappings) ;
+    HashMap<String, JcrInputProperty> removeActionMappings = createScriptActionMapping("RemoveJSActionListener", "remove", "process when a js file is removed") ;
+    actionServiceContainer_.addAction(jsNode, repository, "exo:updateSharedJSAction", removeActionMappings) ;
+    HashMap<String, JcrInputProperty> updateActionMappings = createScriptActionMapping("UpdateJSActionListener", "modify", "process when a js file is update") ;
+    actionServiceContainer_.addAction(jsNode, repository, "exo:updateSharedJSAction", updateActionMappings) ;
+  }
+
+  private void bindCSSAction(Node cssNode) throws Exception {    
+    HashMap<String, JcrInputProperty> mappings = createScriptActionMapping("AddSharedCSSActionListener", "add", "process when a css file is added") ;
+    String repository = ((ManageableRepository)cssNode.getSession().getRepository()).getConfiguration().getName();
+    actionServiceContainer_.addAction(cssNode, repository, "exo:addSharedCSSAction", mappings) ;  
+    HashMap<String, JcrInputProperty> removeActionMappings = createScriptActionMapping("RemoveJSActionListener", "remove", "process when a css file is removed") ;
+    actionServiceContainer_.addAction(cssNode, repository, "exo:updateSharedCSSAction", removeActionMappings) ;
+    HashMap<String, JcrInputProperty> updateActionMappings = createScriptActionMapping("UpdateJSActionListener", "modify", "process when a css file is update") ;
+    actionServiceContainer_.addAction(cssNode, repository, "exo:updateSharedCSSAction", updateActionMappings) ;
+  }
+
+  private HashMap<String, JcrInputProperty> createScriptActionMapping(String name,String lifecycle,String description) throws Exception {
+    HashMap<String,JcrInputProperty> mappings = new HashMap<String,JcrInputProperty>();
+    JcrInputProperty nodeTypeInputProperty = new JcrInputProperty();
+    nodeTypeInputProperty.setJcrPath("/node");
+    nodeTypeInputProperty.setValue(name);
+    mappings.put("/node", nodeTypeInputProperty);
+
+    JcrInputProperty nameInputProperty = new JcrInputProperty();
+    nameInputProperty.setJcrPath("/node/exo:name");
+    nameInputProperty.setValue(name);
+    mappings.put("/node/exo:name", nameInputProperty);
+
+    JcrInputProperty lifeCycleInputProperty = new JcrInputProperty();
+    lifeCycleInputProperty.setJcrPath("/node/exo:lifecyclePhase");
+    lifeCycleInputProperty.setValue(lifecycle);
+    mappings.put("/node/exo:lifecyclePhase", lifeCycleInputProperty);
+
+    JcrInputProperty descriptionInputProperty = new JcrInputProperty();
+    descriptionInputProperty.setJcrPath("/node/exo:description");
+    descriptionInputProperty.setValue(description);
+    mappings.put("/node/exo:description", descriptionInputProperty); 
+    return mappings ;
+  }  
 }

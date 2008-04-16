@@ -26,6 +26,7 @@ import javax.jcr.query.QueryResult;
 
 import org.exoplatform.portal.webui.skin.SkinService;
 import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.config.RepositoryEntry;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.picocontainer.Startable;
@@ -36,12 +37,12 @@ import org.picocontainer.Startable;
  *          hoa.pham@exoplatform.com
  * Apr 9, 2008  
  */
-public class ExtendedSkinService implements Startable {
+public class XSkinService implements Startable {
 
   private SkinService skinService_ ; 
   private RepositoryService repositoryService_ ;
 
-  public ExtendedSkinService(SkinService skinService,RepositoryService repositoryService) {
+  public XSkinService(SkinService skinService,RepositoryService repositoryService) {
     this.skinService_ = skinService ;
     this.repositoryService_ = repositoryService ;
   }
@@ -58,21 +59,36 @@ public class ExtendedSkinService implements Startable {
     }
     return buffer.toString() ;    
   }
+  
+  public void makeSharedCSS(String repository,String workspace,String cssPath) throws Exception {
+    SessionProvider sessionProvider = SessionProvider.createSystemProvider();
+    ManageableRepository manageableRepository = repositoryService_.getRepository(repository) ;
+    Session session = sessionProvider.getSession(workspace, manageableRepository) ;
+    Node cssNode = (Node)session.getItem(cssPath) ;
+    cssNode.setProperty("exo:sharedCSS", true) ;
+    cssNode.save();
+    sessionProvider.close();
+  }
+  
+  public void merge(String repository,String workspace,String cssPath) throws Exception {        
+    SessionProvider sessionProvider = SessionProvider.createSystemProvider();
+    String sharedCss = getActiveSharedStylesheet(repository, workspace, sessionProvider);
+    skinService_.addSkin("WebContentSkin", "Default", "/portal/css/WebContent/Live/Stylesheet.css",false,sharedCss) ;
+    sessionProvider.close();
+  }
 
-  private String getActiveSharedStylesheet(String repository,SessionProvider sessionProvider) throws Exception{
+  private String getActiveSharedStylesheet(String repository,String workspace, SessionProvider sessionProvider) throws Exception{
     String sharedCSSQuery = "select * from exo:cssFile where exo:active='true' and exo:sharedCSS='true' order by exo:priority DESC " ;    
     ManageableRepository manageableRepository = (ManageableRepository)repositoryService_.getRepository(repository) ;
-    StringBuffer buffer = new StringBuffer();
-    for(String worskapce : manageableRepository.getWorkspaceNames()) {
-      Session session = sessionProvider.getSession(worskapce, manageableRepository) ;
-      QueryManager queryManager = session.getWorkspace().getQueryManager() ;
-      Query query = queryManager.createQuery(sharedCSSQuery, Query.SQL) ;
-      QueryResult queryResult = query.execute() ;
-      for(NodeIterator iterator = queryResult.getNodes();iterator.hasNext();) {
-        Node cssFile = iterator.nextNode();
-        buffer.append(getFileContent(cssFile)) ;
-      }
-    } 
+    StringBuffer buffer = new StringBuffer();    
+    Session session = sessionProvider.getSession(workspace, manageableRepository) ;
+    QueryManager queryManager = session.getWorkspace().getQueryManager() ;
+    Query query = queryManager.createQuery(sharedCSSQuery, Query.SQL) ;
+    QueryResult queryResult = query.execute() ;
+    for(NodeIterator iterator = queryResult.getNodes();iterator.hasNext();) {
+      Node cssFile = iterator.nextNode();
+      buffer.append(getFileContent(cssFile)) ;
+    }        
     return buffer.toString();
   }
 
@@ -82,11 +98,21 @@ public class ExtendedSkinService implements Startable {
   }
 
   public void start() {    
-    
+    SessionProvider provider = SessionProvider.createSystemProvider();
+    try {
+      RepositoryEntry repositoryEntry = repositoryService_.getDefaultRepository().getConfiguration() ;      
+      String repository = repositoryEntry.getName() ;
+      String worksapce = repositoryEntry.getDefaultWorkspaceName() ;      
+      String sharedCss = getActiveSharedStylesheet(repository,worksapce, provider) ;      
+      skinService_.addSkin("WebContentSkin", "Default", "/portal/css/WebContent/Live/Stylesheet.css",false,sharedCss) ;
+    }catch (Exception e) {
+    }finally {
+      provider.close();
+    }
   }
 
   public void stop() {
-    
+
   }      
 
 }
