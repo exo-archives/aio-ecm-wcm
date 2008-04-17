@@ -16,8 +16,6 @@
  */
 package org.exoplatform.wcm.presentation.scp;
 
-import javax.jcr.Node;
-
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;

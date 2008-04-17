@@ -27,6 +27,7 @@ import javax.jcr.Session;
 
 import org.exoplatform.dms.webui.utils.PermissionUtil;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -102,15 +103,13 @@ public class UINodeTreeBuilder extends UIContainer {
     }
     List<Node> sibblingList = new ArrayList<Node>() ;
     List<Node> childrenList = new ArrayList<Node>() ;
-    while(sibbling.hasNext()) {
-      Node sibblingNode = (Node)sibbling.next();
-      if(PermissionUtil.canRead(sibblingNode) && !sibblingNode.isNodeType("exo:hiddenable")) sibblingList.add(sibblingNode) ;      
-    }    
+    if(currentNode_.getName().equals(rootNode_.getName()) 
+        || currentNode_.getParent().getName().equals(rootNode_.getName())) {
+      sibblingList = getAllowedNodes(sibbling) ;
+    } else sibblingList = getNodes(sibbling) ;
     if(children != null) {
-      while(children.hasNext()) {
-        Node childrenNode = (Node)children.next();
-        if(PermissionUtil.canRead(childrenNode) && !childrenNode.isNodeType("exo:hiddenable")) childrenList.add(childrenNode) ;        
-      }
+      if(currentNode_.getName().equals(rootNode_.getName())) childrenList = getAllowedNodes(children) ;
+      else childrenList = getNodes(children) ;
     }
     if(nodeSelected.getPath().equals(rootNode_.getPath())) { tree.setSibbling(childrenList) ; } 
     else { tree.setSibbling(sibblingList) ; }
@@ -171,11 +170,10 @@ public class UINodeTreeBuilder extends UIContainer {
   public void setIsTab(boolean isTab) { isTab_ = isTab ; }
   
   public void changeNode(Node nodeSelected) throws Exception {
-    List<Node> nodes = new ArrayList<Node>() ;
     NodeIterator nodeIter = nodeSelected.getNodes() ;
-    while(nodeIter.hasNext()) {
-      nodes.add(nodeIter.nextNode()) ;
-    }
+    List<Node> nodes = new ArrayList<Node>(5) ;
+    if(currentNode_.getName().equals(rootNode_.getName())) nodes = getAllowedNodes(nodeIter) ;
+    else nodes = getNodes(nodeIter) ; 
     UIContainer uiParent = getParent() ;
     UIBaseNodeList uiTreeList = uiParent.getChild(UIBaseNodeList.class) ;
     uiTreeList.setNodeList(nodes) ;
@@ -191,6 +189,35 @@ public class UINodeTreeBuilder extends UIContainer {
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class) ;
     return repositoryService.getRepository(repositoryName) ;
   } 
+  
+  //TODO: This is temporary
+  //-------------------------------------------------------------------------------------
+  private List<Node> getNodes(Iterator itr) throws Exception {
+    List<Node> list = new ArrayList<Node>(5) ;
+      while(itr.hasNext()) {
+        Node node = (Node) itr.next();
+        if(PermissionUtil.canRead(node) && !node.isNodeType("exo:hiddenable")) list.add(node) ;        
+      }
+    return list ;
+  }
+
+  private List<Node> getAllowedNodes(Iterator itr) throws Exception {
+    List<Node> list = new ArrayList<Node>(5) ;
+      while(itr.hasNext()) {
+        Node node = (Node) itr.next();
+        if(PermissionUtil.canRead(node) && !node.isNodeType("exo:hiddenable") && isAllowed(node)) list.add(node) ;        
+      }
+    return list ;
+  }
+  
+  private boolean isAllowed(Node node) throws Exception {
+    String [] alloweds = {Util.getUIPortal().getName(), "Share Portal"} ;
+    for(String ele : alloweds) {
+      if(ele.equals(node.getName())) return true ;
+    }
+    return false ;
+  }
+  //-------------------------------------------------------------------------------------
   
   static public class ChangeNodeActionListener extends EventListener<UITree> {
     public void execute(Event<UITree> event) throws Exception {
