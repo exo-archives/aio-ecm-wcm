@@ -17,7 +17,10 @@
 
 package org.exoplatform.services.wcm.search;
 
+import javax.jcr.Node;
+
 import org.exoplatform.commons.utils.PageList;
+import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
 /**
@@ -30,4 +33,5 @@ public interface WcmSearchService {
   public PageList searchWebContent(String keyword, String portalName,String repository,String worksapce, boolean documentSeach, boolean pageSearch,SessionProvider sessionProvider) throws Exception ;  
   public PageList searchWebContent(String keyword,String portalName, boolean documentSearch,boolean pageSearch,SessionProvider sessionProvider) throws Exception ;
   public void updatePagesCache() throws Exception ;
+  public Node getAssociatedDocument(PageNode pageNode,SessionProvider sessionProvider) throws Exception ;
 }

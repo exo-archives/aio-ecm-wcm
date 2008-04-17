@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.jcr.Node;
@@ -278,6 +279,25 @@ public class WcmSearchServiceImpl implements WcmSearchService {
     StringBuffer stringBuffer = new StringBuffer() ;
     stringBuffer.append(repository).append("::").append(worksapce).append("::").append(nodeUUID) ;
     return stringBuffer.toString() ;
+  }
+
+  public Node getAssociatedDocument(PageNode pageNode,SessionProvider sessionProvider) throws Exception {
+    String pageReferenced = pageNode.getPageReference() ;
+    String nodeInfo = null ;
+    for(Iterator<String> iterator = cachedPages_.keySet().iterator();iterator.hasNext();) {
+      String key = iterator.next();
+      String value = cachedPages_.get(key) ;
+      if(value.equals(pageReferenced)) {
+        nodeInfo = key ;
+        break ;
+      }
+    }
+    if(nodeInfo == null) return null ;
+    String[] temp = nodeInfo.split("::") ;
+    String repository = temp[0];String worksapce = temp[1];String nodeUUID = temp[2];
+    ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+    Session session = sessionProvider.getSession(worksapce, manageableRepository) ;
+    return session.getNodeByUUID(nodeUUID) ;    
   }
 
 }
