@@ -16,8 +16,11 @@
 		<expiration-cache>0</expiration-cache>
 		<supports>
 			<mime-type>text/html</mime-type>
+			<portlet-mode>help</portlet-mode>
+			<portlet-mode>edit</portlet-mode>
 		</supports>
 		<supported-locale>en</supported-locale>
+		<resource-bundle>locale.portlet.web-searches.SimpleSearchPortlet</resource-bundle>
 		
 		<portlet-info>
 			<title>Simple Search Portlet</title>

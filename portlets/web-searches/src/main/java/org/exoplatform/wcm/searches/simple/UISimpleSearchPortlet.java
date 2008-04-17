@@ -16,7 +16,10 @@
  */
 package org.exoplatform.wcm.searches.simple;
 
+import org.exoplatform.wcm.searches.simple.UISimpleSearchForm;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.config.annotation.ComponentConfigs;
+import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 
@@ -27,15 +30,15 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
  * Apr 11, 2008  
  */
 
-@ComponentConfig (
+@ComponentConfig(
     lifecycle = UIApplicationLifecycle.class,
-    template = "app:/groovy/searches/webui/portlet/UISimpleSearchPortlet.gtmpl"
+    template = "app:/groovy/simple-search/webui/component/UISimpleSearchPortlet.gtmpl"      
 )
 
 public class UISimpleSearchPortlet extends UIPortletApplication {
 
   public UISimpleSearchPortlet() throws Exception {
-    
+    addChild(UISimpleSearchForm.class, null, null).setRendered(true);
+    addChild(UISearchResultForm.class, null, null).setRendered(true);
   }
-
 }

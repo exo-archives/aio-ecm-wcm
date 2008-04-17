@@ -47,6 +47,13 @@
       <version>${org.exoplatform.jcr.version}</version>
       <scope>provided</scope>
     </dependency>
+    
+    <dependency>
+      <groupId>org.exoplatform.wcm</groupId>
+      <artifactId>exo.wcm.component.search</artifactId>
+      <version>${org.exoplatform.wcm.version}</version>
+      <scope>provided</scope>
+    </dependency> 
   </dependencies>
     
 </project>
