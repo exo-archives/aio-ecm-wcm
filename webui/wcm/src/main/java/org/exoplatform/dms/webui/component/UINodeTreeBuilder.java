@@ -56,7 +56,8 @@ public class UINodeTreeBuilder extends UIContainer {
   private Node currentNode_ ;
   private Node rootNode_ = null ;
   private boolean isTab_ = false;
-  private String rootPath_ ;  
+  private String rootPath_ ;
+  private String [] allowedNodes ;
   
   public UINodeTreeBuilder() throws Exception {
     UITree tree = addChild(UITree.class, null, UITree.class.getSimpleName()+hashCode()) ;
@@ -192,6 +193,8 @@ public class UINodeTreeBuilder extends UIContainer {
   
   //TODO: This is temporary
   //-------------------------------------------------------------------------------------
+  public void setAllowedNodes(String [] strs) { allowedNodes = strs ; }
+  
   private List<Node> getNodes(Iterator itr) throws Exception {
     List<Node> list = new ArrayList<Node>(5) ;
       while(itr.hasNext()) {
@@ -202,6 +205,7 @@ public class UINodeTreeBuilder extends UIContainer {
   }
 
   private List<Node> getAllowedNodes(Iterator itr) throws Exception {
+    if(allowedNodes == null || allowedNodes.length < 1) return getNodes(itr) ;
     List<Node> list = new ArrayList<Node>(5) ;
       while(itr.hasNext()) {
         Node node = (Node) itr.next();
@@ -211,8 +215,7 @@ public class UINodeTreeBuilder extends UIContainer {
   }
   
   private boolean isAllowed(Node node) throws Exception {
-    String [] alloweds = {Util.getUIPortal().getName(), "Share Portal"} ;
-    for(String ele : alloweds) {
+    for(String ele : allowedNodes) {
       if(ele.equals(node.getName())) return true ;
     }
     return false ;

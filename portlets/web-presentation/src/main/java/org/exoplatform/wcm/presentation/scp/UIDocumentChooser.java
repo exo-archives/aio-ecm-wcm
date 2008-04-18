@@ -28,6 +28,7 @@ import org.exoplatform.dms.webui.component.UISelectable;
 import org.exoplatform.dms.webui.form.UIFormInputSetWithAction;
 import org.exoplatform.dms.webui.utils.Utils;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.config.RepositoryEntry;
@@ -157,6 +158,7 @@ public class UIDocumentChooser extends UIForm implements UISelectable {
      UINodesExplorer uiExplorer = uiChooser.createUIComponent(UINodesExplorer.class, null, null) ;
      uiExplorer.setRepository(repo) ;
      uiExplorer.setIsDisable(workspace, true) ;
+     uiExplorer.setAllowedNodes(new String [] {Util.getUIPortal().getName(), "Share Portal"}) ;
      uiExplorer.setRootPath(defaultPath) ;    
      if(event.getRequestContext().getRemoteUser() == null) {
        uiExplorer.setSessionProvider(SessionProviderFactory.createAnonimProvider()) ;

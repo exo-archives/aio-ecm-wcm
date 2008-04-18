@@ -120,4 +120,8 @@ public class UINodesExplorer extends UIContainer implements ComponentSelector{
       returnFieldName = initParams[0] ;
     }
   }
+  
+  public void setAllowedNodes(String [] strs) {
+    getChild(UINodeTreeBuilder.class).setAllowedNodes(strs) ;
+  }
 }
