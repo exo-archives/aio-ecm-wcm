@@ -27,7 +27,6 @@ import javax.jcr.Session;
 
 import org.exoplatform.dms.webui.utils.PermissionUtil;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.webui.application.WebuiRequestContext;
