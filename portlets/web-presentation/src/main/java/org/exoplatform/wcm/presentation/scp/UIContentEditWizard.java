@@ -20,6 +20,7 @@ import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.Session;
+import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
 import org.exoplatform.dms.model.ContentStorePath;
@@ -171,8 +172,8 @@ public class UIContentEditWizard extends UIContentWizard {
   public static class FinishActionListener extends EventListener<UIContentEditWizard> {
 
     public void execute(Event<UIContentEditWizard> event) throws Exception {
-      UIContentEditWizard uiWizard = event.getSource() ;
-      uiWizard.createEvent("Abort", Phase.PROCESS, event.getRequestContext()).broadcast() ;
+      PortletRequestContext context = (PortletRequestContext) event.getRequestContext() ;
+      context.setApplicationMode(PortletMode.VIEW) ;
     }
     
   }

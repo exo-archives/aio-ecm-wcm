@@ -19,6 +19,7 @@ package org.exoplatform.wcm.presentation.scp;
 import java.util.Map;
 
 import javax.jcr.Node;
+import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
 import org.exoplatform.dms.model.ContentStorePath;
@@ -189,7 +190,8 @@ public class UIContentCreationWizard extends UIContentWizard {
       prefs.setValue(UISimplePresentationPortlet.WORKSPACE, storePath.getWorkspace()) ;
       prefs.setValue(UISimplePresentationPortlet.UUID, uiDocumentForm.getSavedNode().getUUID()) ;
       prefs.store() ;
-      uiWizard.createEvent("Abort", Phase.PROCESS, event.getRequestContext()).broadcast() ;
+      //uiWizard.createEvent("Abort", Phase.PROCESS, event.getRequestContext()).broadcast() ;
+      context.setApplicationMode(PortletMode.VIEW) ;
     }
     
   }

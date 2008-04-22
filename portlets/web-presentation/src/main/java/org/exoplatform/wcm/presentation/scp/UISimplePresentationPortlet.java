@@ -16,6 +16,8 @@
  */
 package org.exoplatform.wcm.presentation.scp;
 
+import javax.portlet.PortletMode;
+
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -36,28 +38,29 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 
 public class UISimplePresentationPortlet extends UIPortletApplication {
 
-  private int mode_  = PortletRequestContext.VIEW_MODE ;
   static String REPOSITORY = "repository" ;
   static String WORKSPACE = "workspace" ;
   static String UUID = "nodeUUID" ;
+  
+  private PortletMode mode_ = PortletMode.VIEW ;
   
   public UISimplePresentationPortlet() throws Exception {
     activateMode(mode_) ;
   }
   
-  public void activateMode(int mode) throws Exception {
+  public void activateMode(PortletMode mode) throws Exception {
     getChildren().clear() ;
-    if(PortletRequestContext.VIEW_MODE == mode) {
+    if(PortletMode.VIEW.equals(mode)) {
       addChild(UIPresentation.class, null, UIPortletApplication.VIEW_MODE) ;
-    } else if (PortletRequestContext.EDIT_MODE == mode) {      
+    } else if (PortletMode.EDIT.equals(mode)) {      
       addChild(UIPortletConfig.class, null, UIPortletApplication.EDIT_MODE) ;
     }
   }
   
   public void processRender(WebuiApplication app, WebuiRequestContext context) throws Exception {
     PortletRequestContext pContext = (PortletRequestContext) context ;
-    int newMode = pContext.getApplicationMode() ;
-    if(mode_ != newMode) {
+    PortletMode newMode = pContext.getApplicationMode() ;
+    if(!mode_.equals(newMode)) {
       activateMode(newMode) ;
       mode_ = newMode ;
     }

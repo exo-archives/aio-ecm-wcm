@@ -22,6 +22,7 @@ import java.util.List;
 import javax.jcr.Node;
 import javax.jcr.Session;
 import javax.jcr.Value;
+import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
 import org.exoplatform.dms.model.ContentStorePath;
@@ -97,7 +98,7 @@ public class UIContentChooser extends UIDocumentChooser {
       }catch (Exception e) {
         e.printStackTrace();
       }      
-
+      context.setApplicationMode(PortletMode.VIEW ) ;
     }
 
   }
