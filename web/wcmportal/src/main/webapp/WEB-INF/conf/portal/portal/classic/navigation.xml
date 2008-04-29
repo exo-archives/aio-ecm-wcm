@@ -17,5 +17,11 @@
 	    <label>Presentation</label>
 	    <page-reference>portal::classic::presentation</page-reference>	    
 	  </node>	         	  	  	  	 	     	  	   
+	  <node>
+	    <uri>search</uri>
+	    <name>search</name>
+	    <label>Search</label>
+	    <page-reference>portal::classic::search</page-reference>	    
+	  </node>	         	  
 	</page-nodes>
 </node-navigation>
