@@ -31,5 +31,21 @@
       <show-application-mode>true</show-application-mode>
     </application>
   </page>                      
+  <page>
+  	<page-id>portal::classic::search</page-id>
+    <owner-type>portal</owner-type>
+    <owner-id>classic</owner-id>
+    <name>search</name>
+    <title>Search</title>
+	  <access-permissions>Everyone</access-permissions>
+	  <edit-permission>*:/platform/administrators</edit-permission>
+    <application>
+      <instance-id>portal#classic:/web-searches/SimpleSearchPortlet/search</instance-id>
+      <title>Presentation</title>
+      <show-info-bar>true</show-info-bar>      
+      <show-application-state>true</show-application-state>
+      <show-application-mode>true</show-application-mode>
+    </application>
+  </page>                      
 
 </page-set>
