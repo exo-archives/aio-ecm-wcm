@@ -1,0 +1,94 @@
+.UIBannerPortlet {
+	overflow: auto;
+  height: 74px;
+}
+
+.UIBannerPortlet .LeftBanner {
+	height: 74px;
+	padding: 0px 0px 0px 264px;
+  background: url('VistaSkin/background/Banner.png') no-repeat left top;
+}
+
+.UIBannerPortlet .MiddleBanner{
+	height: 74px;
+  background: url('VistaSkin/background/Banner.png') repeat-x right -219px;
+}
+
+.UIBannerPortlet .RightBanner {
+  height: 74px;
+  padding: 0px 60px 0px 0px ;
+  background: url('VistaSkin/background/Banner.png') no-repeat right -75px;
+}
+
+.UIBannerPortlet .BannerTitle {
+  height: 45px;
+  background: url('VistaSkin/background/Banner.png') no-repeat left -150px;
+  margin: 0px 0px 0px 5px;
+}
+
+.UIBannerPortlet .BannerTitle .QuickEdit{
+	float: right; 
+	padding-top: 10px; 
+	cursor: pointer;
+}
+
+.UIBannerPortlet .LoginContainer {
+}
+
+.UIBannerPortlet .LoginContainer .LoginContent {
+  float: right;
+  padding: 2px 0px 0px 0px;
+  line-height: 20px;
+}
+
+.UIBannerPortlet .LoginContainer .LoginContent a {
+  font-weight: bold;
+  color: #5098EB;
+	display: block;  
+}
+
+.UIBannerPortlet .LoginContainer .LoginContent a:hover {
+  color: #b3e2fb;
+}
+
+.UIBannerPortlet .LoginContent .SeperatorLine {
+  float: right;
+  width: 2px; height: 20px;
+  background: url('DefaultSkin/background/2x2.gif') repeat-y;
+  margin: 2px 7px;
+ }
+ 
+
+.UIBannerPortlet .LoginContent .LogoutIcon {
+  float: left;
+  height: 22px;
+  background: url('VistaSkin/background/Banner.png') no-repeat left -340px;
+  cursor: pointer; 
+  padding-left: 25px;
+}
+
+.UIBannerPortlet .LoginContent .LoginIcon {
+  height: 22px;
+  background: url('VistaSkin/background/Banner.png') no-repeat left -317px;
+  cursor: pointer;
+  padding-left: 25px;
+  float: right;
+}
+
+.UIBannerPortlet .LoginContent .LoginSeperatorLine {
+  float: left;
+  width: 2px; height: 20px;
+  background: url('DefaultSkin/background/2x2.gif') repeat-y;
+  margin: 4px 7px 0px 7px;
+ }
+ 
+.UIBannerPortlet .LoginContent .SettingIcon {
+  height: 22px;
+  background: url('VistaSkin/background/Banner.png') no-repeat left -293px;
+  margin-right: 2px;
+  padding-left: 28px;
+  cursor: pointer;
+	font-weight: bold;
+	float: right;
+	display: block;
+}

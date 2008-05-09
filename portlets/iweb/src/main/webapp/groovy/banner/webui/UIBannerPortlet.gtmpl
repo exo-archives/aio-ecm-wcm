@@ -1,0 +1,69 @@
+<%
+	import org.exoplatform.portal.application.PortalRequestContext;
+	import org.exoplatform.portal.webui.util.Util;
+	
+	def prContext = _ctx.getRequestContext().getParentAppRequestContext();
+	String signInAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ShowLoginForm', true)) ;" ;
+	String changeLanguageAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ChangeLanguage', true));" ;
+	String strMoveToEditMode = "ajaxGet('/portal/private/classic/?portal:componentId=banner&portal:action=ChangePortletMode&objectId=edit&ajaxRequest=true')";
+	String portletId = uicomponent.getId() ;
+	
+	String portalName = Util.getUIPortal().getName() ;
+  portalName = URLEncoder.encode(portalName, "UTF-8") ;
+  String signOutAction = prContext.getRequestContextPath() + "/public/" + portalName + "/" ;
+%>
+
+<div id="$portletId" class="UIBannerPortlet UIApplication">
+	
+	<div class="ApplicationMinWidth">
+  <div class="InlineContainer">
+    <div class="LeftBanner">
+      <div class="RightBanner">
+        <div class="MiddleBanner">
+        	<div class="BannerTitle">
+						<% 
+							if(uicomponent.isQuickEditable()) {		
+						%>
+							<a onclick="$strMoveToEditMode">
+								<div style="" class="QuickEdit">[QUICK EDIT]</div>
+							</a>
+						<%	
+							}
+						%>	
+					</div>
+					<div class="LoginContainer">
+						<div class="LoginContent">
+						<%if(prContext.getAccessPath() == PortalRequestContext.PRIVATE_ACCESS) {%>
+						  	
+					  	<div class="LoginLeft" style="float: left">
+					  		<%=_ctx.appRes("UILogged.note.loggedUser")%>
+						  	<span style="padding: 0px 10px 0px 2px; color: #529ef1; font-weight:bold;">
+						  		<%=prContext.getRemoteUser();%> 
+						  	</span>
+					  	</div>
+						  <div class="LoginRight" style="float: left;" title="Sign Out" onclick="location.href='$signOutAction'">
+						    <div class="LoginSeperatorLine"><span></span></div>				  	
+								<a class="LogoutIcon"><%=_ctx.appRes("UILogged.action.signout")%></a>
+							</div>							
+							<div style="clear: left;"><span></span></div>
+						<%} else {%>
+							<div class="SignIn">
+								<a class="LoginIcon" onclick="$signInAction"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>
+								<div class="SeperatorLine"><span></span></div>
+								<a class="SettingIcon" onclick="$changeLanguageAction">
+									<%=_ctx.appRes("UIChangeLanguage.title.LanguageSetting")%>
+								</a>
+								<div class="SeperatorLine"><span></span></div>
+								<div style="clear: right;"><span></span></div>
+							</div>
+					  <%}%> 
+						</div>
+						<div style="clear: right;"><span></span></div>
+					</div>
+        </div>
+      </div>   
+    </div>
+  </div>
+  </div>
+</div>
+

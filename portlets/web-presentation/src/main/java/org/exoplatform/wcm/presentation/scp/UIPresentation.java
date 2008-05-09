@@ -55,14 +55,7 @@ public class UIPresentation extends UIBaseNodePresentation {
   public Node getNode() throws Exception { 
     String repository = getPortletPreference().getValue(UISimplePresentationPortlet.REPOSITORY, "repository");
     String worksapce = getPortletPreference().getValue(UISimplePresentationPortlet.WORKSPACE, "collaboration");
-    String uuid = getPortletPreference().getValue(UISimplePresentationPortlet.UUID, "") ;
-//    String currentUser = Util.getPortalRequestContext().getRemoteUser();
-//    SessionProvider sessionProvider = null ;
-//    if(currentUser == null) {
-//      sessionProvider = SessionProviderFactory.createSystemProvider() ;
-//    }else {
-//      sessionProvider = SessionProviderFactory.createSessionProvider();
-//    }    
+    String uuid = getPortletPreference().getValue(UISimplePresentationPortlet.UUID, "") ;   
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
     Session session = SessionProviderFactory.createSystemProvider().getSession(worksapce, manageableRepository) ;
@@ -123,7 +116,7 @@ public class UIPresentation extends UIBaseNodePresentation {
       }
     }catch (Exception e) {
     }    
-    return resourceResolver ;
+    return resourceResolver ;   
   }
  
 }

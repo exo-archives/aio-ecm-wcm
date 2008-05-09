@@ -1,0 +1,24 @@
+<%
+String  strMoveToEditMode = "ajaxGet('/portal/private/classic?portal:componentId=footer&portal:action=ChangePortletMode&objectId=edit&ajaxRequest=true')";
+%>
+
+<div class="UIFooterPortlet" id="$uicomponent.id">
+  <div class="LeftFooter">
+    <div class="RightFooter">
+      <div class="RepeatFooter">
+        <div class="FooterInfoContainer">
+	        <div class="CopyrightInfo"><%=_ctx.appRes("UIFooterPortlet.label.copyrightText")%><%=_ctx.appRes("UIFooterPortlet.label.companyTitleText")%></div>
+	      </div>
+				<% 
+					if(uicomponent.isQuickEditable()) {		
+				%>
+					<a onclick="$strMoveToEditMode">
+						<div style="" class="QuickEdit">[QUICK EDIT]</div>
+					</a>
+				<%	
+					}
+				%>		      
+      </div>
+    </div>
+  </div>
+</div>

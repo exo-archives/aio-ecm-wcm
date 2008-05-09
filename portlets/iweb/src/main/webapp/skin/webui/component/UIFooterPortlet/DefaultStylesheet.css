@@ -1,0 +1,25 @@
+.UIFooterPortlet {
+  background: url('DefaultSkin/background/FooterBG.gif') repeat-x top;
+  margin: 0px 12px;
+}
+
+.UIFooterPortlet .RepeatFooter {
+  padding: 0px;
+  margin: 0px;
+}
+
+.UIFooterPortlet .RepeatFooter .QuickEdit{
+	float: right; 
+	padding-bottom: 10px; 
+	cursor: pointer;
+}
+
+
+.UIFooterPortlet .FooterInfoContainer {
+  line-height: 25px ;
+}
+
+.UIFooterPortlet .CopyrightInfo {
+  line-height: 25px;
+  text-align: center;
+}
