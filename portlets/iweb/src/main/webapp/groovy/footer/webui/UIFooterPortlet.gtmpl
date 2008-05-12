@@ -1,7 +1,4 @@
-<%
-String  strMoveToEditMode = "ajaxGet('/portal/private/classic?portal:componentId=footer&portal:action=ChangePortletMode&objectId=edit&ajaxRequest=true')";
-%>
-
+<%uiform.begin()%>
 <div class="UIFooterPortlet" id="$uicomponent.id">
   <div class="LeftFooter">
     <div class="RightFooter">
@@ -9,16 +6,21 @@ String  strMoveToEditMode = "ajaxGet('/portal/private/classic?portal:componentId
         <div class="FooterInfoContainer">
 	        <div class="CopyrightInfo"><%=_ctx.appRes("UIFooterPortlet.label.copyrightText")%><%=_ctx.appRes("UIFooterPortlet.label.companyTitleText")%></div>
 	      </div>
-				<% 
-					if(uicomponent.isQuickEditable()) {		
-				%>
-					<a onclick="$strMoveToEditMode">
-						<div style="" class="QuickEdit">[QUICK EDIT]</div>
-					</a>
-				<%	
-					}
-				%>		      
+					<% 
+						if(uicomponent.isQuickEditable()) {		
+							 for(action in uicomponent.getActions()) { 
+			        	 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;
+			           String link = uicomponent.event(action) ;			           
+					%>
+									<div class="QuickEdit">
+										<a href="$link">[$actionLabel]</a>
+									</div>
+					<%
+			         }
+						}
+					%>			      
       </div>
     </div>
   </div>
 </div>
+<% uiform.end() %>

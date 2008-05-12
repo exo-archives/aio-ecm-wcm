@@ -16,58 +16,81 @@
  */
 package org.exoplatform.wcm.web.footer;
 
+import java.io.InputStream;
+
+import javax.portlet.PortletMode;
 import javax.portlet.PortletRequest;
 
+import org.exoplatform.commons.utils.IOUtil;
+import org.exoplatform.dms.application.StringResourceResolver;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
+import org.exoplatform.webui.event.Event;
+import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.form.UIForm;
 
 /**
  * Author : Do Ngoc Anh *      
- * Email: anhdn86@gmail *
+ * Email: anh.do@exoplatform.com *
  * May 9, 2008  
  */
 
 @ComponentConfig(
-   lifecycle = UIFormLifecycle.class 
+    lifecycle = UIFormLifecycle.class, 
+    events = @EventConfig(listeners = UIFooterViewMode.QuickEditActionListener.class)     
 )
 
+public class UIFooterViewMode extends UIForm {
+  private final String     DEFAULT_TEMPLATE = "app:/groovy/footer/webui/UIFooterPortlet.gtmpl";
 
-public class UIFooterViewMode extends UIComponent{
-  private final String DEFAULT_TEMPLATE = "app:/groovy/footer/webui/UIFooterPortlet.gtmpl" ;   
-  private ResourceResolver resourceResolver;
-  
-  public UIFooterViewMode() throws Exception{  
-  }
-  
-  public String getTemplate(){
-    return DEFAULT_TEMPLATE;
-  }
-  
-  public ResourceResolver getTemplateResourceResolver(WebuiRequestContext context) throws Exception{
-    PortletRequestContext pContext = (PortletRequestContext)context;    
-    PortletRequest portletRequest = pContext.getRequest();    
-    
-    String repository = portletRequest.getPreferences().getValue("repository",null) ;
-    String workspace = portletRequest.getPreferences().getValue("workspace",null) ;
-    String nodeUUID = portletRequest.getPreferences().getValue("nodeUUID",null) ;
-    if(repository != null && workspace != null && nodeUUID != null) {
-      //load template from jcr      
-      
+  public UIFooterViewMode() throws Exception { }
+
+  public String getTemplate() { return DEFAULT_TEMPLATE; }
+
+  public String loadTemplateData() throws Exception {
+    PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+    String templateData = null ;
+    PortletRequest portletRequest = pContext.getRequest();
+    String repository = portletRequest.getPreferences().getValue("repository", null);
+    String workspace = portletRequest.getPreferences().getValue("workspace", null);
+    String nodeUUID = portletRequest.getPreferences().getValue("nodeUUID", null);
+    if (repository != null && workspace != null && nodeUUID != null) {
+      //load template from jcr: templateData=?      
     }
-    
-    resourceResolver = pContext.getApplication().getResourceResolver();
-    
-    return resourceResolver ;   
-  }  
-  
-  public boolean isQuickEditable() throws Exception{
-    PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance() ;
-    String quickEdit = pContext.getRequest().getPreferences().getValue("quickEdit","") ;
-    return (Boolean.parseBoolean(quickEdit)) ;    
+    //#################### need remove this code when can load template from jcr ####################
+    if(templateData == null) {
+      InputStream iStream = pContext.getApplication().getResourceResolver().getInputStream(DEFAULT_TEMPLATE);
+      templateData = IOUtil.getStreamContentAsString(iStream); 
+    }    
+    return templateData ;    
   }
   
+  public ResourceResolver getTemplateResourceResolver(WebuiRequestContext context, String template) {
+    try {
+      String templateData = loadTemplateData() ;
+      if(templateData != null) 
+        return new StringResourceResolver(templateData) ; 
+    } catch (Exception e) {
+    }    
+    return super.getTemplateResourceResolver(context, template);
+  }
+  
+
+  public boolean isQuickEditable() throws Exception {
+    PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+    String quickEdit = pContext.getRequest().getPreferences().getValue("quickEdit", "");
+    return (Boolean.parseBoolean(quickEdit));
+  }
+
+  public static class QuickEditActionListener extends EventListener<UIFooterViewMode> {
+    public void execute(Event<UIFooterViewMode> event) throws Exception {
+      PortletRequestContext pContext = (PortletRequestContext) event.getRequestContext();
+      pContext.setApplicationMode(PortletMode.EDIT);
+    }
+  }
+
 }

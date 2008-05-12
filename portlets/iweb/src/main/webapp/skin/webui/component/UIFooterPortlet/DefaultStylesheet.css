@@ -1,3 +1,4 @@
+/*==============================UIFooterPortlet=================================*/
 .UIFooterPortlet {
   background: url('DefaultSkin/background/FooterBG.gif') repeat-x top;
   margin: 0px 12px;
@@ -23,3 +24,69 @@
   line-height: 25px;
   text-align: center;
 }
+
+
+
+/*==============================UIFooterEditModeForm=================================*/
+.UIFooterEditModeForm{
+
+}
+
+.UIFooterEditModeForm .UIFooterEditModeFormGrid{
+	margin-top: 20px;
+}
+
+.UIFooterEditModeForm .UIFooterEditModeFormGrid textarea{
+	font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+	font-size: 11px;
+	width: 700px;	
+	height: 150px;
+}
+
+.UIFooterEditModeForm .UIFooterEditModeFormGrid input.checkbox{
+	width: auto;
+	float: left; 
+}
+.UIFooterEditModeForm .UIFooterEditModeFormGrid td.FieldLabel{
+	padding: 4px;
+	float: right;
+	vertical-align: top;
+}
+
+.UIFooterEditModeForm .UIFooterEditModeFormGrid td.FieldComponent{
+	padding: 4px;
+}
+
+
+/*==============================LightBlueStyle ActionButton=================================*/
+.UIFooterEditModeForm .UIAction .LightBlueStyle{
+
+}
+
+.UIFooterEditModeForm .UIAction .LightBlueStyle .ButtonLeft {
+  background: url('DefaultSkin/background/LightBlueStyle.gif') no-repeat left top;
+  padding: 0px 0px 0px 3px;
+}
+
+.UIFooterEditModeForm .UIAction .LightBlueStyle .ButtonRight {
+  background: url('DefaultSkin/background/LightBlueStyle.gif') no-repeat right top;
+  padding: 0px 3px 0px 0px ;
+}
+
+.UIFooterEditModeForm .UIAction .LightBlueStyle .ButtonMiddle {
+ 	line-height: 22px; text-align: center; 
+	background: url('DefaultSkin/background/LightBlueStyle.gif') repeat-x bottom;
+	white-space: nowrap;
+	display: table-cell;
+	padding: 0px 12px;
+}
+
+.UIFooterEditModeForm .UIAction a.LightBlueStyle {
+  color: #313131;
+  margin: 0px 6px; white-space: nowrap;
+}
+
+.UIFooterEditModeForm .UIAction a:hover.LightBlueStyle {
+  color: #1273df;
+}
+

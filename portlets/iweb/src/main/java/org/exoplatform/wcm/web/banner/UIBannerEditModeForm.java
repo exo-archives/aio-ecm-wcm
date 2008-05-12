@@ -16,7 +16,6 @@
  */
 package org.exoplatform.wcm.web.banner;
 
-
 import java.io.InputStream;
 
 import javax.portlet.PortletMode;
@@ -29,78 +28,82 @@ import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
+import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
-import org.exoplatform.webui.event.Event;
 
 /**
  * Author : Do Ngoc Anh *      
- * Email: anhdn86@gmail *
+ * Email: anh.do@exoplatform.com *
  * May 9, 2008  
  */
 
 @ComponentConfig(
-    lifecycle = UIFormLifecycle.class,
-    template = "app:/groovy/banner/webui/UIBannerEditModeForm.gtmpl",
+    lifecycle = UIFormLifecycle.class, 
+    template = "app:/groovy/banner/webui/UIBannerEditModeForm.gtmpl", 
     events = {
       @EventConfig(listeners = UIBannerEditModeForm.SaveActionListener.class),
-      @EventConfig(listeners = UIBannerEditModeForm.CancelActionListener.class)
+      @EventConfig(listeners = UIBannerEditModeForm.CancelActionListener.class) 
     }
 )
+    
+public class UIBannerEditModeForm extends UIForm {
 
-public class UIBannerEditModeForm extends UIForm {  
+  private final String DEFAULT_TEMPLATE = "app:/groovy/banner/webui/UIBannerPortlet.gtmpl".intern();
 
-  private final String DEFAULT_TEMPLATE = "app:/groovy/banner/webui/UIBannerPortlet.gtmpl".intern() ;  
-
-  public UIBannerEditModeForm() throws Exception {      
-    addUIFormInput( new UIFormTextAreaInput("template", "template", loadTemplateData()));
-    addUIFormInput(new UIFormCheckBoxInput("quickEdit", "quickEdit", null));
+  public UIBannerEditModeForm() throws Exception {    
+    addUIFormInput(new UIFormTextAreaInput("template", "template", loadTemplateData()));    
+    UIFormCheckBoxInput checkBoxInput = new UIFormCheckBoxInput("quickEdit", "quickEdit", null );    
+    addUIFormInput(checkBoxInput) ;
   }
 
-  private String loadTemplateData()  throws Exception {   
-    PortletRequestContext pContext = (PortletRequestContext)  WebuiRequestContext.getCurrentInstance() ;    
-    PortletRequest portletRequest = pContext.getRequest();    
-    
-    String repository = portletRequest.getPreferences().getValue("repository",null) ;
-    String workspace = portletRequest.getPreferences().getValue("workspace",null) ;
-    String nodeUUID = portletRequest.getPreferences().getValue("nodeUUID",null) ;
-    if(repository != null && workspace != null && nodeUUID != null) {
-      //load template from jcr      
+  private String loadTemplateData() throws Exception {
+    PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+    String templateData = null ;
+    PortletRequest portletRequest = pContext.getRequest();
+    String repository = portletRequest.getPreferences().getValue("repository", null);
+    String workspace = portletRequest.getPreferences().getValue("workspace", null);
+    String nodeUUID = portletRequest.getPreferences().getValue("nodeUUID", null);
+    if (repository != null && workspace != null && nodeUUID != null) {
+      //load template from jcr: templateData=?      
     }
-    
-    InputStream iStream = pContext.getApplication().getResourceResolver().getInputStream(DEFAULT_TEMPLATE);
-    return IOUtil.getStreamContentAsString(iStream);
-  
+    if(templateData == null) {
+      InputStream iStream = pContext.getApplication().getResourceResolver().getInputStream(DEFAULT_TEMPLATE);
+      templateData = IOUtil.getStreamContentAsString(iStream); 
+    }    
+    return templateData ;
   }
-   
-  public static class SaveActionListener extends EventListener<UIBannerEditModeForm>{
-    public void execute(Event<UIBannerEditModeForm> event) throws Exception{
+  
+  public void setQuickEditChecked(boolean checked){
+    getUIFormCheckBoxInput("quickEdit").setChecked(checked);
+  }
+    
+  public static class SaveActionListener extends EventListener<UIBannerEditModeForm> {
+    public void execute(Event<UIBannerEditModeForm> event) throws Exception {
       UIBannerEditModeForm editForm = event.getSource();
-      PortletRequestContext context = (PortletRequestContext) event.getRequestContext() ;
-      PortletPreferences portletPreferences = context.getRequest().getPreferences() ;
+      PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
+      PortletPreferences portletPreferences = context.getRequest().getPreferences();
       //store template in jcr
-      
-//      String repository = null ;
-//      String workspace = null ;
-//      String nodeUUID = null ;
-//      
+
+      //    String repository = null ;
+      //    String workspace = null ;
+      //    String nodeUUID = null ;
+
       //save portlet preference
       boolean quickEdit = editForm.getUIFormCheckBoxInput("quickEdit").isChecked();
-      portletPreferences.setValue("quickEdit",Boolean.toString(quickEdit)) ;
-      
-//      portletPreferences.setValue("repository",repository) ;
-//      portletPreferences.setValue("workspace",workspace) ;
-//      portletPreferences.setValue("nodeUUID",nodeUUID) ;
-      portletPreferences.store() ;            
-      context.setApplicationMode(PortletMode.VIEW) ;            
+      portletPreferences.setValue("quickEdit", Boolean.toString(quickEdit));
+      //    portletPreferences.setValue("repository",repository) ;
+      //    portletPreferences.setValue("workspace",workspace) ;
+      //    portletPreferences.setValue("nodeUUID",nodeUUID) ;
+      portletPreferences.store();
+      context.setApplicationMode(PortletMode.VIEW);
     }
   }
 
-  public static class CancelActionListener extends EventListener<UIBannerEditModeForm>{
-    public void execute(Event<UIBannerEditModeForm> event) throws Exception{
-      //return VIEW mode
+  public static class CancelActionListener extends EventListener<UIBannerEditModeForm> {
+    public void execute(Event<UIBannerEditModeForm> event) throws Exception {
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
       context.setApplicationMode(PortletMode.VIEW);
     }

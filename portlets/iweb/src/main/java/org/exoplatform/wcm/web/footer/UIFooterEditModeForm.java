@@ -36,79 +36,78 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
 
 /**
  * Author : Do Ngoc Anh *      
- * Email: anhdn86@gmail *
+ * Email: anh.do@exoplatform.com *
  * May 9, 2008  
  */
-
 @ComponentConfig(
-    template = "app:groovy/footer/webui/UIFooterEditModeForm.gtmpl",
-    lifecycle = UIFormLifecycle.class,
-    events =  {
+    template = "app:groovy/footer/webui/UIFooterEditModeForm.gtmpl", 
+    lifecycle = UIFormLifecycle.class, 
+    events = {
       @EventConfig(listeners = UIFooterEditModeForm.SaveActionListener.class),
-      @EventConfig(listeners = UIFooterEditModeForm.CancelActionListener.class)
-    } 
+      @EventConfig(listeners = UIFooterEditModeForm.CancelActionListener.class) 
+    }
 )
+public class UIFooterEditModeForm extends UIForm {
 
-public class UIFooterEditModeForm extends UIForm{
-  
-  private final String DEFAULT_TEMPLATE = "app:/groovy/footer/webui/UIFooterPortlet.gtmpl".intern(); 
-  
-  public UIFooterEditModeForm() throws Exception{
+  private final String DEFAULT_TEMPLATE = "app:/groovy/footer/webui/UIFooterPortlet.gtmpl".intern();
+
+  public UIFooterEditModeForm() throws Exception {
     addUIComponentInput(new UIFormTextAreaInput("template", "template", loadTemplateData()));
-    addUIComponentInput(new UIFormCheckBoxInput("quickEdit", "quickEdit", null));
+    UIFormCheckBoxInput checkBoxInput = new UIFormCheckBoxInput("quickEdit", "quickEdit", null );    
+    addUIFormInput(checkBoxInput) ;
   }
-  
-  public String loadTemplateData() throws Exception{
+
+  public String loadTemplateData() throws Exception {
     PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     PortletRequest pRequest = pContext.getRequest();
-    
     String repository = pRequest.getPreferences().getValue("repository", null);
     String workspace = pRequest.getPreferences().getValue("workspace", null);
     String nodeUUID = pRequest.getPreferences().getValue("nodeUUID", null);
-    
-    if(repository != null && workspace != null && nodeUUID != null){
-      //load template from jcr
+    if (repository != null && workspace != null && nodeUUID != null) {
+      // load template from jcr
     }
-    
-    InputStream iStream = pContext.getApplication().getResourceResolver().getInputStream(DEFAULT_TEMPLATE);
+    InputStream iStream = pContext.getApplication().getResourceResolver().getInputStream(
+        DEFAULT_TEMPLATE);
     return IOUtil.getStreamContentAsString(iStream);
-    
   }
-  
-  public static class SaveActionListener extends EventListener<UIFooterEditModeForm>{
-    
+
+  public void setQuickEditChecked(boolean checked){
+    getUIFormCheckBoxInput("quickEdit").setChecked(checked);
+  }
+
+  public static class SaveActionListener extends EventListener<UIFooterEditModeForm> {
+
     public void execute(Event<UIFooterEditModeForm> event) throws Exception {
       UIFooterEditModeForm editForm = event.getSource();
       PortletRequestContext pContext = (PortletRequestContext) event.getRequestContext();
       PortletRequest pRequest = pContext.getRequest();
-      PortletPreferences portletPreferences = pRequest.getPreferences(); 
-      
-      //store in jcr
-     
-//      String repository = null ;
-//      String workspace = null ;
-//      String nodeUUID = null ;
-      
-      //save portlet preference
+      PortletPreferences portletPreferences = pRequest.getPreferences();
+
+      // store in jcr
+
+      // String repository = null ;
+      // String workspace = null ;
+      // String nodeUUID = null ;
+
+      // save portlet preference
       boolean quickEdit = editForm.getUIFormCheckBoxInput("quickEdit").isChecked();
       portletPreferences.setValue("quickEdit", Boolean.toString(quickEdit));
-      
-      
-//    portletPreferences.setValue("repository",repository) ;
-//    portletPreferences.setValue("workspace",workspace) ;
-//    portletPreferences.setValue("nodeUUID",nodeUUID) ;
-      
-      portletPreferences.store();      
+
+      // portletPreferences.setValue("repository",repository) ;
+      // portletPreferences.setValue("workspace",workspace) ;
+      // portletPreferences.setValue("nodeUUID",nodeUUID) ;
+
+      portletPreferences.store();
       pContext.setApplicationMode(PortletMode.VIEW);
     }
-    
+
   }
-  
-  public static class CancelActionListener extends EventListener<UIFooterEditModeForm>{
-    
+
+  public static class CancelActionListener extends EventListener<UIFooterEditModeForm> {
     public void execute(Event<UIFooterEditModeForm> event) throws Exception {
       PortletRequestContext pContext = (PortletRequestContext) event.getRequestContext();
       pContext.setApplicationMode(PortletMode.VIEW);
     }
   }
+  
 }

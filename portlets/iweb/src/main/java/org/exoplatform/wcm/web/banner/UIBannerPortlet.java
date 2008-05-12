@@ -18,7 +18,6 @@ package org.exoplatform.wcm.web.banner;
 
 import javax.portlet.PortletMode;
 
-import org.exoplatform.dms.application.JCRResourceResolver;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -28,48 +27,44 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 
 /**
  * Author : Do Ngoc Anh *      
- * Email: anhdn86@gmail *
+ * Email: anh.do@exoplatform.com *
  * May 9, 2008  
  */
 
-@ComponentConfig(
-    lifecycle = UIApplicationLifecycle.class    
-)
-
+@ComponentConfig(lifecycle = UIApplicationLifecycle.class)
 public class UIBannerPortlet extends UIPortletApplication {
 
-  private PortletMode currenMode_ = PortletMode.VIEW ;  
-  
+  private PortletMode currenMode_ = PortletMode.VIEW;
+
   public UIBannerPortlet() throws Exception {
     activateMode(currenMode_);
   }
 
   public void activateMode(PortletMode mode) throws Exception {
-    getChildren().clear() ;    
-    if(PortletMode.VIEW.equals(mode)) {
-      addChild(UIBannerViewMode.class, null, UIPortletApplication.VIEW_MODE) ;      
-    } else if (PortletMode.EDIT.equals(mode)) {      
-      addChild(UIBannerEditModeForm.class, null, UIPortletApplication.EDIT_MODE) ;
-      getChild(UIBannerEditModeForm.class).getUIFormCheckBoxInput("quickEdit").setChecked(isQuickEditable());
+    getChildren().clear();
+    if (PortletMode.VIEW.equals(mode)) {
+      addChild(UIBannerViewMode.class, null, UIPortletApplication.VIEW_MODE);
+    } else if (PortletMode.EDIT.equals(mode)) {
+      addChild(UIBannerEditModeForm.class, null, UIPortletApplication.EDIT_MODE);      
+      if(isQuickEditable()) getChild(UIBannerEditModeForm.class).setQuickEditChecked(true);
     }
   }
-  
 
-  public boolean isQuickEditable() throws Exception{
-    PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance() ;
-    String quickEdit = pContext.getRequest().getPreferences().getValue("quickEdit","") ;
-    return (Boolean.parseBoolean(quickEdit)) ;    
+  public boolean isQuickEditable() throws Exception {
+    PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+    String quickEdit = pContext.getRequest().getPreferences().getValue("quickEdit", "");
+    return (Boolean.parseBoolean(quickEdit));
   }
-  
+
   public void processRender(WebuiApplication app, WebuiRequestContext context) throws Exception {
-    PortletRequestContext pContext = (PortletRequestContext) context ;
-    PortletMode newMode = pContext.getApplicationMode() ;    
-    if(!currenMode_.equals(newMode)) {
-      activateMode(newMode) ;
-      currenMode_ = newMode ;
+    PortletRequestContext pContext = (PortletRequestContext) context;
+    PortletMode newMode = pContext.getApplicationMode();
+    if (!currenMode_.equals(newMode)) {
+      activateMode(newMode);
+      currenMode_ = newMode;
     }
-    
-    super.processRender(app, context) ;
-  }  
- 
+
+    super.processRender(app, context);
+  }
+
 }

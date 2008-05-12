@@ -17,64 +17,51 @@
 package org.exoplatform.wcm.web.footer;
 
 import javax.portlet.PortletMode;
-import javax.portlet.PortletPreferences;
-import javax.portlet.PortletRequest;
 
-import org.exoplatform.portal.webui.application.UIApplication;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 
 /**
  * Author : Do Ngoc Anh *      
- * Email: anhdn86@gmail *
+ * Email: anh.do@exoplatform.com *
  * May 9, 2008  
  */
 
-@ComponentConfig(
-    lifecycle = UIApplicationLifecycle.class    
-  )
-
+@ComponentConfig(lifecycle = UIApplicationLifecycle.class)
 public class UIFooterPortlet extends UIPortletApplication {
 
   private PortletMode currentMode_ = PortletMode.VIEW;
-  
-  public UIFooterPortlet() throws Exception {
-    activeMode(currentMode_);
-  }
-   
+
+  public UIFooterPortlet() throws Exception { activeMode(currentMode_); }
+
   public void processRender(WebuiApplication app, WebuiRequestContext ctx) throws Exception {
-    PortletRequestContext pContext = (PortletRequestContext)ctx;
+    PortletRequestContext pContext = (PortletRequestContext) ctx;
     PortletMode newMode = pContext.getApplicationMode();
-    if(!currentMode_.equals(newMode)){
+    if (!currentMode_.equals(newMode)) {
       activeMode(newMode);
       currentMode_ = newMode;
     }
-    
     super.processRender(app, ctx);
   }
-  
-  public void activeMode(PortletMode mode) throws Exception{
+
+  public void activeMode(PortletMode mode) throws Exception {
     getChildren().clear();
-    
-    if(PortletMode.VIEW.equals(mode)){
+    if (PortletMode.VIEW.equals(mode)) {
       addChild(UIFooterViewMode.class, null, UIPortletApplication.VIEW_MODE);
-    }
-    else if(PortletMode.EDIT.equals(mode)){
+    } else if (PortletMode.EDIT.equals(mode)) {
       addChild(UIFooterEditModeForm.class, null, UIPortletApplication.EDIT_MODE);
-      getChild(UIFooterEditModeForm.class).getUIFormCheckBoxInput("quickEdit").setChecked(isQuickEditable());
+      if(isQuickEditable()) getChild(UIFooterEditModeForm.class).setQuickEditChecked(true);
     }
   }
-  
-  public boolean isQuickEditable() throws Exception{
-    PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance() ;
-    String quickEdit = pContext.getRequest().getPreferences().getValue("quickEdit","") ;
-    return (Boolean.parseBoolean(quickEdit)) ;    
+
+  public boolean isQuickEditable() throws Exception {
+    PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+    String quickEdit = pContext.getRequest().getPreferences().getValue("quickEdit", "");
+    return (Boolean.parseBoolean(quickEdit));
   }
-  
-  
+
 }

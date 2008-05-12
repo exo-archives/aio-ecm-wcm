@@ -1,3 +1,4 @@
+/*==============================UIBannerPortlet=================================*/
 .UIBannerPortlet {
 	overflow: auto;
   height: 74px;
@@ -92,3 +93,70 @@
 	float: right;
 	display: block;
 }
+
+
+
+
+/*==============================UIBannerEditModeForm=================================*/
+.UIBannerEditModeForm{
+
+}
+
+.UIBannerEditModeForm .UIBannerEditModeFormGrid{
+	margin-top: 20px;
+}
+
+.UIBannerEditModeForm .UIBannerEditModeFormGrid textarea{
+	font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+	font-size: 11px;
+	width: 700px;	
+	height: 150px;
+}
+
+.UIBannerEditModeForm .UIBannerEditModeFormGrid input.checkbox{
+	width: auto;
+	float: left; 
+}
+.UIBannerEditModeForm .UIBannerEditModeFormGrid td.FieldLabel{
+	padding: 4px;
+	float: right;
+	vertical-align: top;
+}
+
+.UIBannerEditModeForm .UIBannerEditModeFormGrid td.FieldComponent{
+	padding: 4px;
+}
+
+
+/*==============================LightBlueStyle ActionButton=================================*/
+.UIBannerEditModeForm .UIAction .LightBlueStyle{
+
+}
+
+.UIBannerEditModeForm .UIAction .LightBlueStyle .ButtonLeft {
+  background: url('DefaultSkin/background/LightBlueStyle.gif') no-repeat left top;
+  padding: 0px 0px 0px 3px;
+}
+
+.UIBannerEditModeForm .UIAction .LightBlueStyle .ButtonRight {
+  background: url('DefaultSkin/background/LightBlueStyle.gif') no-repeat right top;
+  padding: 0px 3px 0px 0px ;
+}
+
+.UIBannerEditModeForm .UIAction .LightBlueStyle .ButtonMiddle {
+ 	line-height: 22px; text-align: center; 
+	background: url('DefaultSkin/background/LightBlueStyle.gif') repeat-x bottom;
+	white-space: nowrap;
+	display: table-cell;
+	padding: 0px 12px;
+}
+
+.UIBannerEditModeForm .UIAction a.LightBlueStyle {
+  color: #313131;
+  margin: 0px 6px; white-space: nowrap;
+}
+
+.UIBannerEditModeForm .UIAction a:hover.LightBlueStyle {
+  color: #1273df;
+}
+

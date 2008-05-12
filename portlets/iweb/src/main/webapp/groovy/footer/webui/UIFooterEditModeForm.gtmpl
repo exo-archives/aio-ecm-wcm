@@ -1,31 +1,28 @@
-<% String fieldName ; %>
-<div class="UIForm $uicomponent.id">
+<% 
+	import java.util.ArrayList;
+	import java.util.List;
+
+	import org.exoplatform.webui.form.UIFormCheckBoxInput;
+	import org.exoplatform.webui.form.UIFormSelectBox;
+	import org.exoplatform.webui.form.UIFormStringInput;
+ %>
+<div class="UIForm $uicomponent.id" >
   <%uiform.begin()%>
-  <div class="HorizontalLayout">
-    <div class="FormContainer">
-      <table class="UIFormGrid">
-	      <% 
-	        for(field in uiform.getChildren()) { 
-	          if(field.isRendered()) {
-	      %>
-              <tr>
-	              <% 
-	              	fieldName = uicomponent.getLabel(field.getName());
-		              if(fieldName != null && fieldName.length() > 0 && !fieldName.equals(uicomponent.getId())) {
-	              %>                        
-  	              <td class="FieldLabel">
-                      <%=fieldName%>
-                  </td>
-  	              <td class="FieldComponent"><% uiform.renderField(field) %></td>
-	              <%} else {%>
-	                <td class="FieldComponent" colspan="2"><% uiform.renderField(field) %></td>
-	              <%}%>
-	            </tr>
-	      <%
-	          }
-	        }
-	      %>
+    <div class="UIFooterEditModeForm">
+      <table class="UIFooterEditModeFormGrid">
+				<tr>
+					<td class="FieldLabel"><b><%=uicomponent.getLabel(uiform.getUIFormTextAreaInput("template").getName())%></b></td>
+					<td class="FieldComponent"><% uiform.renderField(uiform.getUIFormTextAreaInput("template")) %></td>					
+				</tr>		
+				<tr>
+					<td ></td>													
+					<td>
+						<div class="FieldComponent"><% uiform.renderField(uiform.getUIFormCheckBoxInput("quickEdit")) %></div>
+						<div class="FieldLabel"><b><%=uicomponent.getLabel(uiform.getUIFormCheckBoxInput("quickEdit").getName())%></b></div>
+					</td>				
+				</tr>				
       </table>
+      
       <div class="UIAction"> 
         <table class="ActionContainer" align="center">
         	<tr>
@@ -49,6 +46,5 @@
         </table>
       </div>
     </div>
-  </div>
   <%uiform.end()%>
 </div>
