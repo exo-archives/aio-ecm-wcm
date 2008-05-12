@@ -60,7 +60,6 @@ import org.exoplatform.webui.form.validator.EmailAddressValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.NumberFormatValidator;
 
-import com.sun.java_cup.internal.lalr_item;
 
 /**
  * Created by The eXo Platform SARL

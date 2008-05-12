@@ -31,11 +31,15 @@ import org.exoplatform.resolver.ResourceResolver;
  * May 6, 2008  
  */
 public class StringResourceResolver extends ResourceResolver {
-
-  public StringResourceResolver() {} 
+  
+  private String templateData_ ;
+  
+  public StringResourceResolver(String templateData) {
+    this.templateData_ = templateData ;
+  } 
   
   public InputStream getInputStream(String template) throws Exception {  
-    return new ByteArrayInputStream(template.getBytes());
+    return new ByteArrayInputStream(templateData_.getBytes());
   }
   
   public List<InputStream> getInputStreams(String template) throws Exception {
