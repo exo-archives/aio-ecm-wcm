@@ -200,7 +200,7 @@
                     <field  name="groups">
                       <string>
                       	*:/platform/administrators,*:/platform/users,
-                      	member:/organization/management/executive-board
+                      	member:/organization/management/executive-board,*:/platform/web-contributor,
                       </string>
                     </field>
                   </object>
