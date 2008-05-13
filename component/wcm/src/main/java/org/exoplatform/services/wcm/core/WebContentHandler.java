@@ -15,9 +15,7 @@
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
 
-package org.exoplatform.services.wcm;
-
-import java.util.Map;
+package org.exoplatform.services.wcm.core;
 
 import javax.jcr.Node;
 
@@ -25,16 +23,12 @@ import javax.jcr.Node;
  * Created by The eXo Platform SARL
  * Author : Pham Xuan Hoa
  *          hoa.pham@exoplatform.com
- * Mar 6, 2008  
+ * Mar 10, 2008  
  */
-public interface WcmService {
+public interface WebContentHandler {
   
-  public void processWebContent(Node webContent)  throws Exception;
+  public boolean matchHandler(Node file) throws Exception ;
   
-  public String storeNode(String nodeTypeName, Node storeHomeNode, Map mappings, 
-      boolean isAddNew, String repository,String portletInstanceId) throws Exception ;
+  public String handle(Node file) throws Exception ;
   
-  public void updateWebContentReference(String repository,String worksapce,String path) throws Exception ;
-  
-  public String getReferenceFileContent(Node htmlFile,String property) throws Exception ;
 }

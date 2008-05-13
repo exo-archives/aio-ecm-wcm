@@ -15,7 +15,7 @@
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
 
-package org.exoplatform.services.wcm;
+package org.exoplatform.services.wcm.core;
 
 import javax.jcr.Node;
 

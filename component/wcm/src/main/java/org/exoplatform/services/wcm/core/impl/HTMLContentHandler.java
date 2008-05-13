@@ -15,12 +15,12 @@
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
 
-package org.exoplatform.services.wcm.impl;
+package org.exoplatform.services.wcm.core.impl;
 
 import javax.jcr.Node;
 import javax.jcr.Session;
 
-import org.exoplatform.services.wcm.BaseWebContentHandler;
+import org.exoplatform.services.wcm.core.BaseWebContentHandler;
 
 /**
  * Created by The eXo Platform SARL

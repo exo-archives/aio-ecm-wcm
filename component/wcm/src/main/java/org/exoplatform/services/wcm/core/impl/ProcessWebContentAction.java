@@ -15,20 +15,33 @@
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
 
-package org.exoplatform.services.wcm;
+package org.exoplatform.services.wcm.core.impl;
 
 import javax.jcr.Node;
+
+import org.apache.commons.chain.Context;
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.services.command.action.Action;
+import org.exoplatform.services.wcm.core.WcmService;
 
 /**
  * Created by The eXo Platform SARL
  * Author : Pham Xuan Hoa
  *          hoa.pham@exoplatform.com
- * Mar 10, 2008  
+ * Mar 11, 2008  
  */
-public interface WebContentHandler {
-  
-  public boolean matchHandler(Node file) throws Exception ;
-  
-  public String handle(Node file) throws Exception ;
-  
+public class ProcessWebContentAction implements Action {
+
+  public boolean execute(Context context) throws Exception {
+    Node node = (Node)context.get("currentItem") ;
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    WcmService wcmService = (WcmService)container.getComponentInstanceOfType(WcmService.class);
+    try{
+      wcmService.processWebContent(node); 
+    }catch (Exception e) {      
+    }    
+    return false;
+  }
+
 }

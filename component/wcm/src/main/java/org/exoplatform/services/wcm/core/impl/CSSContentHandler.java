@@ -15,33 +15,28 @@
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
 
-package org.exoplatform.services.wcm.impl;
+package org.exoplatform.services.wcm.core.impl;
 
 import javax.jcr.Node;
 
-import org.apache.commons.chain.Context;
-import org.exoplatform.container.ExoContainer;
-import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.services.command.action.Action;
-import org.exoplatform.services.wcm.WcmService;
+import org.exoplatform.services.wcm.core.BaseWebContentHandler;
 
 /**
  * Created by The eXo Platform SARL
  * Author : Pham Xuan Hoa
  *          hoa.pham@exoplatform.com
- * Mar 11, 2008  
+ * Mar 10, 2008  
  */
-public class ProcessWebContentAction implements Action {
+public class CSSContentHandler extends BaseWebContentHandler {
 
-  public boolean execute(Context context) throws Exception {
-    Node node = (Node)context.get("currentItem") ;
-    ExoContainer container = ExoContainerContext.getCurrentContainer();
-    WcmService wcmService = (WcmService)container.getComponentInstanceOfType(WcmService.class);
-    try{
-      wcmService.processWebContent(node); 
-    }catch (Exception e) {      
-    }    
-    return false;
-  }
+  protected String getContentType() { return NT_FILE; }
+  protected String getFolderPathExpression() { return null; }
+  protected String getFolderType() { return "exo:cssFolder"; }
+
+  public String handle(Node file) throws Exception {
+    addMixin(file, "exo:cssFile");
+    file.setProperty("exo:presentationType","exo:cssFile");                    
+    return file.getUUID();
+  } 
 
 }

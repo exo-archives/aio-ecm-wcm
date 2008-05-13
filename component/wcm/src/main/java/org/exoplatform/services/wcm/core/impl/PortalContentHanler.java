@@ -15,7 +15,7 @@
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
 
-package org.exoplatform.services.wcm.impl;
+package org.exoplatform.services.wcm.core.impl;
 
 import java.util.HashMap;
 
@@ -24,8 +24,7 @@ import javax.jcr.Node;
 import org.exoplatform.services.cms.JcrInputProperty;
 import org.exoplatform.services.cms.actions.ActionServiceContainer;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.wcm.BaseWebContentHandler;
+import org.exoplatform.services.wcm.core.BaseWebContentHandler;
 
 /**
  * Created by The eXo Platform SARL

@@ -2,28 +2,28 @@
 
 <configuration>
   <component>
-    <key>org.exoplatform.services.wcm.WcmService</key>
-    <type>org.exoplatform.services.wcm.impl.WcmServiceImpl</type>
+    <key>org.exoplatform.services.wcm.core.WcmService</key>
+    <type>org.exoplatform.services.wcm.core.impl.WcmServiceImpl</type>
     <component-plugins>
 	    <component-plugin>
 	   		<name>CSSContentHandler</name>
 	   		<set-method>addWebContentHandler</set-method>
-	   		<type>org.exoplatform.services.wcm.impl.CSSContentHandler</type>
+	   		<type>org.exoplatform.services.wcm.core.impl.CSSContentHandler</type>
 	   	</component-plugin>
 	   	<component-plugin>
 	   		<name>HTMLContentHandler</name>
 	   		<set-method>addWebContentHandler</set-method>
-	   		<type>org.exoplatform.services.wcm.impl.HTMLContentHandler</type>
+	   		<type>org.exoplatform.services.wcm.core.impl.HTMLContentHandler</type>
 	   	</component-plugin>
 	   	<component-plugin>
 	   		<name>JSContentHandler</name>
 	   		<set-method>addWebContentHandler</set-method>
-	   		<type>org.exoplatform.services.wcm.impl.JSContentHandler</type>
+	   		<type>org.exoplatform.services.wcm.core.impl.JSContentHandler</type>
 	   	</component-plugin>
 	   	<component-plugin>
 	   		<name>PortalContentHanler</name>
 	   		<set-method>addWebContentHandler</set-method>
-	   		<type>org.exoplatform.services.wcm.impl.PortalContentHanler</type>
+	   		<type>org.exoplatform.services.wcm.core.impl.PortalContentHanler</type>
 	   	</component-plugin>	   		   	
    	</component-plugins>    
    </component>
@@ -34,6 +34,17 @@
    
    <component>   
      <type>org.exoplatform.services.wcm.javascript.XJavascriptService</type>
+   </component>
+   
+   <component>   
+     <type>org.exoplatform.services.wcm.contribution.WebContributionService</type>
+     <init-params>
+       <properties-param>
+          <name>service.params</name>
+          <description>some init parameters for the service</description>
+          <property name="web.contributor.group" value="/platform/web-contributor"/>                        
+        </properties-param>       	      
+	   </init-params>
    </component>      
        
    <external-component-plugins>

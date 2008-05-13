@@ -128,6 +128,10 @@
       <propertyDefinition name="exo:referenceMultimedia" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY"
         protected="false" multiple="true">
         <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="exo:contentSumary" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY"
+        protected="false" multiple="true">
+        <valueConstraints/>
       </propertyDefinition>  	    
     </propertyDefinitions>
   </nodeType>

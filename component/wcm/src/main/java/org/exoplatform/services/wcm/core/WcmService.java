@@ -15,28 +15,26 @@
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
 
-package org.exoplatform.services.wcm.impl;
+package org.exoplatform.services.wcm.core;
+
+import java.util.Map;
 
 import javax.jcr.Node;
-
-import org.exoplatform.services.wcm.BaseWebContentHandler;
 
 /**
  * Created by The eXo Platform SARL
  * Author : Pham Xuan Hoa
  *          hoa.pham@exoplatform.com
- * Mar 10, 2008  
+ * Mar 6, 2008  
  */
-public class CSSContentHandler extends BaseWebContentHandler {
-
-  protected String getContentType() { return NT_FILE; }
-  protected String getFolderPathExpression() { return null; }
-  protected String getFolderType() { return "exo:cssFolder"; }
-
-  public String handle(Node file) throws Exception {
-    addMixin(file, "exo:cssFile");
-    file.setProperty("exo:presentationType","exo:cssFile");                    
-    return file.getUUID();
-  } 
-
+public interface WcmService {
+  
+  public void processWebContent(Node webContent)  throws Exception;
+  
+  public String storeNode(String nodeTypeName, Node storeHomeNode, Map mappings, 
+      boolean isAddNew, String repository,String portletInstanceId) throws Exception ;
+  
+  public void updateWebContentReference(String repository,String worksapce,String path) throws Exception ;
+  
+  public String getReferenceFileContent(Node htmlFile,String property) throws Exception ;
 }

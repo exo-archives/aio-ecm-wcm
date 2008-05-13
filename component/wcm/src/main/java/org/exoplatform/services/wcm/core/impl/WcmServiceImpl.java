@@ -15,7 +15,7 @@
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
 
-package org.exoplatform.services.wcm.impl;
+package org.exoplatform.services.wcm.core.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,9 +37,9 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
-import org.exoplatform.services.wcm.WcmService;
-import org.exoplatform.services.wcm.WebContentHandler;
-import org.exoplatform.services.wcm.WebContentHandlerNotPound;
+import org.exoplatform.services.wcm.core.WcmService;
+import org.exoplatform.services.wcm.core.WebContentHandler;
+import org.exoplatform.services.wcm.core.WebContentHandlerNotPound;
 import org.picocontainer.Startable;
 
 /**
