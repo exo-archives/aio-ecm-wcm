@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003-2007 eXo Platform SAS.
+ * Copyright (C) 2003-2008 eXo Platform SAS.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
@@ -18,52 +18,46 @@ package org.exoplatform.wcm.web.banner;
 
 import javax.portlet.PortletMode;
 
-import org.exoplatform.webui.application.WebuiApplication;
+import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.core.UIPortletApplication;
-import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
+import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.lifecycle.Lifecycle;
+import org.exoplatform.webui.event.Event;
+import org.exoplatform.webui.event.EventListener;
 
 /**
  * Author : Do Ngoc Anh *      
  * Email: anh.do@exoplatform.com *
- * May 9, 2008  
+ * May 13, 2008  
  */
 
-@ComponentConfig(lifecycle = UIApplicationLifecycle.class)
-public class UIBannerPortlet extends UIPortletApplication {
-
-  private PortletMode currenMode_ = PortletMode.VIEW;
-
-  public UIBannerPortlet() throws Exception {
-    activateMode(currenMode_);    
-  }
-
-  public void activateMode(PortletMode mode) throws Exception {
-    getChildren().clear();
-    if (PortletMode.VIEW.equals(mode)) {
-      addChild(UIViewModeContainer.class, null, UIPortletApplication.VIEW_MODE);
-    } else if (PortletMode.EDIT.equals(mode)) {
-      addChild(UIBannerEditModeForm.class, null, UIPortletApplication.EDIT_MODE);      
+@ComponentConfig(
+    lifecycle=Lifecycle.class,
+    template="app:/groovy/banner/webui/UIViewModeContainer.gtmpl",
+    events={
+      @EventConfig(listeners=UIViewModeContainer.QuickEditActionListener.class)
     }
-  }
+)
 
+public class UIViewModeContainer extends UIContainer {
+  
+  public UIViewModeContainer() throws Exception {
+    addChild(UIBannerViewMode.class,null,null) ;      
+  }
+  
   public boolean isQuickEditable() throws Exception {
     PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     String quickEdit = pContext.getRequest().getPreferences().getValue("quickEdit", "");
-    return (Boolean.parseBoolean(quickEdit));
+    return (Boolean.parseBoolean(quickEdit));    
   }
 
-  public void processRender(WebuiApplication app, WebuiRequestContext context) throws Exception {
-    PortletRequestContext pContext = (PortletRequestContext) context;
-    PortletMode newMode = pContext.getApplicationMode();
-    if (!currenMode_.equals(newMode)) {
-      activateMode(newMode);
-      currenMode_ = newMode;
+  public static class QuickEditActionListener extends EventListener<UIViewModeContainer> {
+    public void execute(Event<UIViewModeContainer> event) throws Exception {
+      PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
+      context.setApplicationMode(PortletMode.EDIT);
     }
-
-    super.processRender(app, context);
   }
-
+  
 }

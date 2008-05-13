@@ -82,7 +82,7 @@ public class UIFooterViewMode extends UIForm {
 
   public boolean isQuickEditable() throws Exception {
     PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
-    String quickEdit = pContext.getRequest().getPreferences().getValue("quickEdit", "");
+    String quickEdit = pContext.getRequest().getPreferences().getValue("quickEdit", "");    
     return (Boolean.parseBoolean(quickEdit));
   }
 

@@ -40,7 +40,7 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
  * May 9, 2008  
  */
 @ComponentConfig(
-    template = "app:groovy/footer/webui/UIFooterEditModeForm.gtmpl", 
+    template = "app:/groovy/footer/webui/UIFooterEditModeForm.gtmpl", 
     lifecycle = UIFormLifecycle.class, 
     events = {
       @EventConfig(listeners = UIFooterEditModeForm.SaveActionListener.class),
@@ -53,7 +53,10 @@ public class UIFooterEditModeForm extends UIForm {
 
   public UIFooterEditModeForm() throws Exception {
     addUIComponentInput(new UIFormTextAreaInput("template", "template", loadTemplateData()));
-    UIFormCheckBoxInput checkBoxInput = new UIFormCheckBoxInput("quickEdit", "quickEdit", null );    
+    UIFormCheckBoxInput checkBoxInput = new UIFormCheckBoxInput("quickEdit", "quickEdit", null );
+    PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+    String quickEdit = pContext.getRequest().getPreferences().getValue("quickEdit", "");
+    checkBoxInput.setChecked(Boolean.parseBoolean(quickEdit)) ;
     addUIFormInput(checkBoxInput) ;
   }
 

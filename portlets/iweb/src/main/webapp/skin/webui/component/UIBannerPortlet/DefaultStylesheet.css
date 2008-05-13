@@ -26,12 +26,6 @@
   margin: 0px 0px 0px 15px;
 }
 
-.UIBannerPortlet .BannerTitle .QuickEdit{
-	float: right; 
-	padding-top: 10px; 
-	cursor: pointer;
-}
-
 .UIBannerPortlet .LoginContainer .LoginContent {
   float: right;
   line-height: 22px;
@@ -107,6 +101,16 @@
 	display: block;
 }
 
+/*==============================UIViewModeContainer=================================*/
+.UIViewModeContainer{
+	background-color: red;
+}
+
+.UIViewModeContainer .QuickEdit{
+	float: right;
+	margin: 10px 4px;
+}
+
 
 /*==============================UIBannerEditModeForm=================================*/
 .UIBannerEditModeForm{
@@ -171,3 +175,11 @@
   color: #1273df;
 }
 
+/*========================================================================================*/
+.EditPortletIcon{
+	background:url('DefaultSkin/background/ContainerIcon.gif') no-repeat scroll center top;
+	float:right;
+	height:16px;
+	margin:4px;
+	padding-left:50px;
+}

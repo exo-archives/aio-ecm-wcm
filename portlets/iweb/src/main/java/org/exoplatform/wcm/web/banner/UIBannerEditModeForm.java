@@ -48,15 +48,18 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
       @EventConfig(listeners = UIBannerEditModeForm.CancelActionListener.class) 
     }
 )
-    
+
 public class UIBannerEditModeForm extends UIForm {
 
   private final String DEFAULT_TEMPLATE = "app:/groovy/banner/webui/UIBannerPortlet.gtmpl".intern();
 
   public UIBannerEditModeForm() throws Exception {    
     addUIFormInput(new UIFormTextAreaInput("template", "template", loadTemplateData()));    
-    UIFormCheckBoxInput checkBoxInput = new UIFormCheckBoxInput("quickEdit", "quickEdit", null );    
-    addUIFormInput(checkBoxInput) ;
+    UIFormCheckBoxInput checkBoxInput = new UIFormCheckBoxInput("quickEdit", "quickEdit", null );
+    PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+    String quickEdit = pContext.getRequest().getPreferences().getValue("quickEdit", "");
+    checkBoxInput.setChecked(Boolean.parseBoolean(quickEdit)) ;
+    addUIFormInput(checkBoxInput) ;    
   }
 
   private String loadTemplateData() throws Exception {
@@ -75,11 +78,7 @@ public class UIBannerEditModeForm extends UIForm {
     }    
     return templateData ;
   }
-  
-  public void setQuickEditChecked(boolean checked){
-    getUIFormCheckBoxInput("quickEdit").setChecked(checked);
-  }
-    
+
   public static class SaveActionListener extends EventListener<UIBannerEditModeForm> {
     public void execute(Event<UIBannerEditModeForm> event) throws Exception {
       UIBannerEditModeForm editForm = event.getSource();

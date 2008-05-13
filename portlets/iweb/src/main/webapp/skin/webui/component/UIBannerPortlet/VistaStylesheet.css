@@ -27,12 +27,6 @@
   margin: 0px 0px 0px 5px;
 }
 
-.UIBannerPortlet .BannerTitle .QuickEdit{
-	float: right; 
-	padding-top: 10px; 
-	cursor: pointer;
-}
-
 .UIBannerPortlet .LoginContainer {
 }
 
@@ -160,3 +154,11 @@
   color: #1273df;
 }
 
+/*========================================================================================*/
+.EditPortletIcon{
+	background:url('DefaultSkin/background/ContainerIcon.gif') no-repeat scroll center top;
+	float:right;
+	height:16px;
+	margin:4px;
+	padding-left:50px;
+}

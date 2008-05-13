@@ -18,7 +18,6 @@ package org.exoplatform.wcm.web.banner;
 
 import java.io.InputStream;
 
-import javax.portlet.PortletMode;
 import javax.portlet.PortletRequest;
 
 import org.exoplatform.commons.utils.IOUtil;
@@ -27,11 +26,8 @@ import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
-import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
-import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.webui.core.lifecycle.Lifecycle;
 
 /**
  * Author : Do Ngoc Anh *      
@@ -40,10 +36,9 @@ import org.exoplatform.webui.form.UIForm;
  */
 
 @ComponentConfig(
-  lifecycle = UIFormLifecycle.class, 
-  events = @EventConfig(listeners = UIBannerViewMode.QuickEditActionListener.class)
+  lifecycle = Lifecycle.class  
 )
-public class UIBannerViewMode extends UIForm {
+public class UIBannerViewMode extends UIComponent {
 
   private final String     DEFAULT_TEMPLATE = "app:/groovy/banner/webui/UIBannerPortlet.gtmpl".intern();
 
@@ -79,16 +74,4 @@ public class UIBannerViewMode extends UIForm {
     return super.getTemplateResourceResolver(context, template);
   }
   
-  public boolean isQuickEditable() throws Exception {
-    PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
-    String quickEdit = pContext.getRequest().getPreferences().getValue("quickEdit", "");
-    return (Boolean.parseBoolean(quickEdit));
-  }
-
-  public static class QuickEditActionListener extends EventListener<UIBannerViewMode> {
-    public void execute(Event<UIBannerViewMode> event) throws Exception {
-      PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
-      context.setApplicationMode(PortletMode.EDIT);
-    }
-  }
 }

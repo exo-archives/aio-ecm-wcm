@@ -12,27 +12,13 @@
   String signOutAction = prContext.getRequestContextPath() + "/public/" + portalName + "/" ;
 %>
 
-<div class="UIForm $uicomponent.id" class="UIBannerPortlet UIApplication">
-	  <%uiform.begin()%>
+<div class="$uicomponent.id" class="UIBannerPortlet UIApplication">
 	<div class="ApplicationMinWidth">
   <div class="InlineContainer">
     <div class="LeftBanner">
       <div class="RightBanner">
         <div class="MiddleBanner">
         	<div class="BannerTitle">
-						<% 
-							if(uicomponent.isQuickEditable()) {		
-								 for(action in uicomponent.getActions()) { 
-				        	 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;
-				           String link = uicomponent.event(action) ;			           
-						%>
-										<div class="QuickEdit">
-											<a href="$link">[$actionLabel]</a>
-										</div>
-						<%
-				         }
-							}
-						%>	
 					</div>
 					<div class="LoginContainer">
 						<div class="LoginContent">
@@ -68,6 +54,5 @@
     </div>
   </div>
   </div>
-    <%uiform.end()%>
 </div>
 

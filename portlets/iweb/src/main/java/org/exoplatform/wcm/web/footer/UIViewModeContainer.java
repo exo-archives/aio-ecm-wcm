@@ -18,49 +18,46 @@ package org.exoplatform.wcm.web.footer;
 
 import javax.portlet.PortletMode;
 
-import org.exoplatform.webui.application.WebuiApplication;
+import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.core.UIPortletApplication;
-import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
+import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.lifecycle.Lifecycle;
+import org.exoplatform.webui.event.Event;
+import org.exoplatform.webui.event.EventListener;
 
 /**
  * Author : Do Ngoc Anh *      
  * Email: anh.do@exoplatform.com *
- * May 9, 2008  
+ * May 13, 2008  
  */
 
-@ComponentConfig(lifecycle = UIApplicationLifecycle.class)
-public class UIFooterPortlet extends UIPortletApplication {
-
-  private PortletMode currentMode_ = PortletMode.VIEW;
-
-  public UIFooterPortlet() throws Exception { activeMode(currentMode_); }
-
-  public void processRender(WebuiApplication app, WebuiRequestContext ctx) throws Exception {
-    PortletRequestContext pContext = (PortletRequestContext) ctx;
-    PortletMode newMode = pContext.getApplicationMode();
-    if (!currentMode_.equals(newMode)) {
-      activeMode(newMode);
-      currentMode_ = newMode;
+@ComponentConfig(
+    lifecycle=Lifecycle.class,
+    template="app:/groovy/footer/webui/UIViewModeContainer.gtmpl",
+    events={
+      @EventConfig(listeners=UIViewModeContainer.QuickEditActionListener.class)
     }
-    super.processRender(app, ctx);
-  }
+)
 
-  public void activeMode(PortletMode mode) throws Exception {
-    getChildren().clear();
-    if (PortletMode.VIEW.equals(mode)) {
-      addChild(UIViewModeContainer.class, null, UIPortletApplication.VIEW_MODE);
-    } else if (PortletMode.EDIT.equals(mode)) {
-      addChild(UIFooterEditModeForm.class, null, UIPortletApplication.EDIT_MODE);      
-    }
+public class UIViewModeContainer extends UIContainer {
+  
+  public UIViewModeContainer() throws Exception {
+    addChild(UIFooterViewMode.class,null,null) ;    
   }
-
+  
   public boolean isQuickEditable() throws Exception {
     PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     String quickEdit = pContext.getRequest().getPreferences().getValue("quickEdit", "");
-    return (Boolean.parseBoolean(quickEdit));
+    return (Boolean.parseBoolean(quickEdit));    
   }
 
+  public static class QuickEditActionListener extends EventListener<UIViewModeContainer> {
+    public void execute(Event<UIViewModeContainer> event) throws Exception {
+      PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
+      context.setApplicationMode(PortletMode.EDIT);      
+    }
+  }
+  
 }
