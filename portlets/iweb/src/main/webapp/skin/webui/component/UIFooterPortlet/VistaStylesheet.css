@@ -102,7 +102,7 @@
 
 /*========================================================================================*/
 .EditPortletIcon{
-	background:url('DefaultSkin/background/ContainerIcon.gif') no-repeat scroll center top;
+	background:url('DefaultSkin/background/EditIcon.png') no-repeat scroll center top;
 	float:right;
 	height:16px;
 	margin:4px;

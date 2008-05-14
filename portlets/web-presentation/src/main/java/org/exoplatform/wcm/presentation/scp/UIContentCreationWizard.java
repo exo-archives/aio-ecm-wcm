@@ -189,8 +189,9 @@ public class UIContentCreationWizard extends UIContentWizard {
       prefs.setValue(UISimplePresentationPortlet.REPOSITORY, storePath.getRepository()) ;
       prefs.setValue(UISimplePresentationPortlet.WORKSPACE, storePath.getWorkspace()) ;
       prefs.setValue(UISimplePresentationPortlet.UUID, uiDocumentForm.getSavedNode().getUUID()) ;
-      prefs.store() ;
-      //uiWizard.createEvent("Abort", Phase.PROCESS, event.getRequestContext()).broadcast() ;
+      Boolean isQuickEdit = uiWizard.getChild(UIContentOptionForm.class).getUIFormCheckBoxInput("QuickEdit").isChecked();
+      prefs.setValue("QuickEdit", Boolean.toString(isQuickEdit));
+      prefs.store() ;      
       context.setApplicationMode(PortletMode.VIEW) ;
     }
     

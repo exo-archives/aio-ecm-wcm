@@ -43,7 +43,7 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
  */
 
 @ComponentConfig(
-    lifecycle = Lifecycle.class
+    lifecycle = Lifecycle.class    
 )
 
 public class UIPresentation extends UIBaseNodePresentation {
@@ -55,11 +55,11 @@ public class UIPresentation extends UIBaseNodePresentation {
   public Node getNode() throws Exception { 
     String repository = getPortletPreference().getValue(UISimplePresentationPortlet.REPOSITORY, "repository");
     String worksapce = getPortletPreference().getValue(UISimplePresentationPortlet.WORKSPACE, "collaboration");
-    String uuid = getPortletPreference().getValue(UISimplePresentationPortlet.UUID, "") ;   
+    String uuid = getPortletPreference().getValue(UISimplePresentationPortlet.UUID, "") ;
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
     Session session = SessionProviderFactory.createSystemProvider().getSession(worksapce, manageableRepository) ;
-    return session.getNodeByUUID(uuid) ;    
+    return session.getNodeByUUID(uuid) ;
   }
   
   public String getRepositoryName() {return getRepository() ;}
@@ -118,5 +118,5 @@ public class UIPresentation extends UIBaseNodePresentation {
     }    
     return resourceResolver ;   
   }
- 
+  
 }

@@ -51,7 +51,7 @@ public class UISimplePresentationPortlet extends UIPortletApplication {
   public void activateMode(PortletMode mode) throws Exception {
     getChildren().clear() ;
     if(PortletMode.VIEW.equals(mode)) {
-      addChild(UIPresentation.class, null, UIPortletApplication.VIEW_MODE) ;
+      addChild(UIPresentationContainer.class, null, UIPortletApplication.VIEW_MODE) ;
     } else if (PortletMode.EDIT.equals(mode)) {      
       addChild(UIPortletConfig.class, null, UIPortletApplication.EDIT_MODE) ;
     }

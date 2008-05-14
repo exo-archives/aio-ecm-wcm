@@ -16,7 +16,18 @@
  */
 package org.exoplatform.wcm.presentation.scp;
 
+import javax.jcr.ItemNotFoundException;
+import javax.jcr.Node;
+import javax.jcr.Session;
+import javax.portlet.PortletMode;
+import javax.portlet.PortletPreferences;
+
 import org.exoplatform.dms.webui.form.UIFormInputSetWithAction;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
@@ -24,6 +35,7 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputInfo;
 
 /**
@@ -74,8 +86,21 @@ public class UIStartOptions extends UIForm {
       uiInputWithAction.setActionInfo(FIELD_EDIT_OTHER, new String [] {"StartSelect"}) ;
       addUIComponentInput(uiInputWithAction) ;
     }    
+    
     return this ;
   }
+  
+  public Node getNode() throws Exception { 
+    PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+    PortletPreferences portletPreferences = pContext.getRequest().getPreferences();
+    String repository = portletPreferences.getValue(UISimplePresentationPortlet.REPOSITORY, "repository");
+    String worksapce = portletPreferences.getValue(UISimplePresentationPortlet.WORKSPACE, "collaboration");
+    String uuid = portletPreferences.getValue(UISimplePresentationPortlet.UUID, "") ;
+    RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
+    ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+    Session session = SessionProviderFactory.createSystemProvider().getSession(worksapce, manageableRepository) ;
+    return session.getNodeByUUID(uuid) ;
+  }  
   
   public <T extends UIComponent> void setComponent(Class<T> type, String config, String id) throws Exception {
     UIPortletConfig uiConfig = getParent() ;
@@ -84,39 +109,35 @@ public class UIStartOptions extends UIForm {
   }
   
   public static class StartExistingActionListener extends EventListener<UIStartOptions> {
-
     public void execute(Event<UIStartOptions> event) throws Exception {
      UIStartOptions uiOptions = event.getSource() ;
      uiOptions.setComponent(UIContentChooser.class, null, null) ;
-    }
-    
+    }    
   }
 
   public static class StartNewActionListener extends EventListener<UIStartOptions> {
-
     public void execute(Event<UIStartOptions> event) throws Exception {
       UIStartOptions uiOptions = event.getSource() ;
       uiOptions.setComponent(UIContentCreationWizard.class, null, null) ;
-    }
-    
+    }    
   }
   
   public static class StartEditActionListener extends EventListener<UIStartOptions> {
-
     public void execute(Event<UIStartOptions> event) throws Exception {
-      UIStartOptions uiOptions = event.getSource() ;
-      uiOptions.setComponent(UIContentEditWizard.class, null, null) ;
+      try{
+        event.getSource().getNode();
+        UIStartOptions uiOptions = event.getSource() ;
+        uiOptions.setComponent(UIContentEditWizard.class, null, null) ;
+      }
+      catch (ItemNotFoundException e){ }
     }
-    
   }
 
   public static class StartSelectActionListener extends EventListener<UIStartOptions> {
-
     public void execute(Event<UIStartOptions> event) throws Exception {
       UIStartOptions uiOptions = event.getSource() ;
       uiOptions.setComponent(UIContentChooser.class, null, null) ;
-    }
-    
+    }    
   }
-
+  
 }

@@ -16,6 +16,8 @@
  */
 package org.exoplatform.wcm.presentation.scp;
 
+import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.form.UIForm;
@@ -39,12 +41,19 @@ public class UIContentOptionForm extends UIForm {
   static String FIELD_TAGMAP = "Tagmap" ;
   static String FIELD_VOTE = "Vote" ;
   static String FIELD_REFERENCED = "Referenced" ;
+  static String FIELD_QUICKEDIT = "QuickEdit";
   
   public UIContentOptionForm() throws Exception {
+    PortletRequestContext pContext = (PortletRequestContext)WebuiRequestContext.getCurrentInstance();
+    String isQuickEdit = pContext.getRequest().getPreferences().getValue("QuickEdit", "").toString();
+    //add checkboxes
     addUIFormInput(new UIFormCheckBoxInput(FIELD_COMMENT, null, null)) ;
     addUIFormInput(new UIFormCheckBoxInput(FIELD_TAGMAP, null, null)) ;
     addUIFormInput(new UIFormCheckBoxInput(FIELD_VOTE, null, null)) ;
-    addUIFormInput(new UIFormCheckBoxInput(FIELD_REFERENCED, null, null)) ;
+    addUIFormInput(new UIFormCheckBoxInput(FIELD_REFERENCED, null, null)) ;    
+    UIFormCheckBoxInput quickEditCheckBoxInput = new UIFormCheckBoxInput(FIELD_QUICKEDIT, null, null);
+    quickEditCheckBoxInput.setChecked(Boolean.parseBoolean(isQuickEdit)); 
+    addUIFormInput(quickEditCheckBoxInput ) ;
   }
 
 }

@@ -28,6 +28,32 @@
 			<keywords>SimplePresentation</keywords>
 		</portlet-info>
 		
+		<portlet-preferences>
+      <preference>
+        <name>repository</name>
+        <value></value>
+        <read-only>false</read-only>
+      </preference>
+      
+      <preference>
+        <name>workspace</name>
+        <value></value>
+        <read-only>false</read-only>
+      </preference>
+      
+      <preference>
+        <name>nodeUUID</name>
+        <value></value>
+        <read-only>false</read-only>
+      </preference>
+      
+      <preference>
+        <name>QuickEdit</name>
+        <value></value>
+        <read-only>false</read-only>
+      </preference>
+		</portlet-preferences>
+		
     <security-role-ref>
       <role-name>admin</role-name>
       <role-link>admin</role-link>

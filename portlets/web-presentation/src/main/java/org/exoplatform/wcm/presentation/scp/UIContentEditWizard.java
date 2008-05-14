@@ -170,12 +170,14 @@ public class UIContentEditWizard extends UIContentWizard {
   }
 
   public static class FinishActionListener extends EventListener<UIContentEditWizard> {
-
     public void execute(Event<UIContentEditWizard> event) throws Exception {
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext() ;
-      context.setApplicationMode(PortletMode.VIEW) ;
-    }
-    
+      PortletPreferences portletPreferences = context.getRequest().getPreferences();
+      Boolean isQuickEdit = event.getSource().getChild(UIContentOptionForm.class).getUIFormCheckBoxInput("QuickEdit").isChecked();
+      portletPreferences.setValue("QuickEdit", Boolean.toString(isQuickEdit));
+      portletPreferences.store();
+      context.setApplicationMode(PortletMode.VIEW) ;      
+    }    
   }
 
 }

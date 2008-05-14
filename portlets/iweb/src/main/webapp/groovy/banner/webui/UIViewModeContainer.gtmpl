@@ -4,15 +4,14 @@
 			if(uicomponent.isQuickEditable()){
 		%>
 			<div style="position: relative;">
-				<div style="position:absolute; top:10px; right:20px;">
-				  <a class="EditPortletIcon" href="<%=uicomponent.event("QuickEdit")%>"><b>$actionLabel</b></a>
+				<div style="position:absolute; top:5px; right:5px;">
+				  <a class="EditPortletIcon" href="<%=uicomponent.event("QuickEdit")%>">$actionLabel</a>
 			  </div>
 		  </div>
 		<%		
 			}	
 		%>
-	<div>
-		
+	<div>		
 		<% uicomponent.renderChildren() %>
 	</div>
 </div>

@@ -25,7 +25,6 @@ import org.apache.commons.lang.StringUtils;
 import org.exoplatform.services.cms.scripts.CmsScript;
 import org.exoplatform.services.cms.records.RecordsService;
 import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.wcm.WcmService;
 
 public class PostHTMLFileInterceptor implements CmsScript { 
 
