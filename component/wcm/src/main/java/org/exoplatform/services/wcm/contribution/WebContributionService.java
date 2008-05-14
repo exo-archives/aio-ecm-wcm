@@ -39,7 +39,9 @@ public class WebContributionService {
   public boolean hasContributionPermission(String userId) {
     //TODO should use PermissionManagerService form new ecm component when it finish
     Identity identity = authService_.getCurrentIdentity() ;
-    return identity.isInGroup(contributorGroup_) ;    
+    if(identity != null && identity.getUsername().equalsIgnoreCase(userId)) 
+      return identity.isInGroup(contributorGroup_) ;
+    return false ;    
   }
   
 }
