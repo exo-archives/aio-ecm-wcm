@@ -48,13 +48,7 @@ public class UIBannerPortlet extends UIPortletApplication {
       addChild(UIBannerEditModeForm.class, null, UIPortletApplication.EDIT_MODE);      
     }
   }
-
-  public boolean isQuickEditable() throws Exception {
-    PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
-    String quickEdit = pContext.getRequest().getPreferences().getValue("quickEdit", "");
-    return (Boolean.parseBoolean(quickEdit));
-  }
-
+  
   public void processRender(WebuiApplication app, WebuiRequestContext context) throws Exception {
     PortletRequestContext pContext = (PortletRequestContext) context;
     PortletMode newMode = pContext.getApplicationMode();

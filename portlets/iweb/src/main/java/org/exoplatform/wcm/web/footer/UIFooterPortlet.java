@@ -56,11 +56,4 @@ public class UIFooterPortlet extends UIPortletApplication {
       addChild(UIFooterEditModeForm.class, null, UIPortletApplication.EDIT_MODE);      
     }
   }
-
-  public boolean isQuickEditable() throws Exception {
-    PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
-    String quickEdit = pContext.getRequest().getPreferences().getValue("quickEdit", "");
-    return (Boolean.parseBoolean(quickEdit));
-  }
-
 }

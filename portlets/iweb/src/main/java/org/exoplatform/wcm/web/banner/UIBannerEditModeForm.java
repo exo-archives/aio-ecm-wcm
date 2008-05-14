@@ -23,6 +23,7 @@ import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
 
 import org.exoplatform.commons.utils.IOUtil;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -57,9 +58,9 @@ public class UIBannerEditModeForm extends UIForm {
     addUIFormInput(new UIFormTextAreaInput("template", "template", loadTemplateData()));    
     UIFormCheckBoxInput checkBoxInput = new UIFormCheckBoxInput("quickEdit", "quickEdit", null );
     PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
-    String quickEdit = pContext.getRequest().getPreferences().getValue("quickEdit", "");
-    checkBoxInput.setChecked(Boolean.parseBoolean(quickEdit)) ;
-    addUIFormInput(checkBoxInput) ;    
+    String quickEdit = pContext.getRequest().getPreferences().getValue("quickEdit", "");    
+    checkBoxInput.setChecked(Boolean.parseBoolean(quickEdit)) ;    
+    addUIFormInput(checkBoxInput) ;            
   }
 
   private String loadTemplateData() throws Exception {

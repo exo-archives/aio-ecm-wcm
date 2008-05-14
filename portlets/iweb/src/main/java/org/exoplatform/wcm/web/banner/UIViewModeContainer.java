@@ -19,6 +19,8 @@ package org.exoplatform.wcm.web.banner;
 import javax.portlet.PortletMode;
 
 import org.exoplatform.portal.webui.container.UIContainer;
+import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.wcm.contribution.WebContributionService;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -50,7 +52,11 @@ public class UIViewModeContainer extends UIContainer {
   public boolean isQuickEditable() throws Exception {
     PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     String quickEdit = pContext.getRequest().getPreferences().getValue("quickEdit", "");
-    return (Boolean.parseBoolean(quickEdit));    
+    Boolean isQuickEdit  = Boolean.parseBoolean(quickEdit); 
+    WebContributionService contributionService = getApplicationComponent(WebContributionService.class) ;
+    String userId = Util.getPortalRequestContext().getRemoteUser();
+    Boolean displayQuickEdit = contributionService.hasContributionPermission(userId);    
+    return (isQuickEdit & displayQuickEdit );    
   }
 
   public static class QuickEditActionListener extends EventListener<UIViewModeContainer> {
