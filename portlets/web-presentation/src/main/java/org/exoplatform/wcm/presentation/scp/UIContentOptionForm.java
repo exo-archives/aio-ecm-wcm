@@ -45,7 +45,7 @@ public class UIContentOptionForm extends UIForm {
   
   public UIContentOptionForm() throws Exception {
     PortletRequestContext pContext = (PortletRequestContext)WebuiRequestContext.getCurrentInstance();
-    String isQuickEdit = pContext.getRequest().getPreferences().getValue("QuickEdit", "").toString();
+    String isQuickEdit = pContext.getRequest().getPreferences().getValue("QuickEdit", "False").toString();
     //add checkboxes
     addUIFormInput(new UIFormCheckBoxInput(FIELD_COMMENT, null, null)) ;
     addUIFormInput(new UIFormCheckBoxInput(FIELD_TAGMAP, null, null)) ;

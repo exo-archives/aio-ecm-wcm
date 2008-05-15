@@ -48,6 +48,7 @@
 					                <div class="Select16x16Icon" style="margin-left:15px;"></div>
 					              </a>
 				          <%  
+				          			break;
 				            } else {
 				              for(i in 0..arrType.length-1) {
 				                String type = arrType[i] ;
@@ -57,7 +58,8 @@
 										        def contentNode = node.getNode("jcr:content") ;
 										        def mimeType = contentNode.getProperty("jcr:mimeType").getString() ;
 										        for(mType in arrMimeType) {
-											        if(mimeType.equals(mType)) { %>
+											        if(mimeType.equals(mType)) { 
+															%>
 											          <a href="<%=uicomponent.event("Select", node.getPath())%>">
 			    			                  <div class="Select16x16Icon" style="margin-left:15px;"></div>
 				      		              </a>
@@ -65,11 +67,12 @@
 						                    break ;
 						                  }
 										        }
-				                  } else { %>
+				                  } else {
+													%>
 					             		  <a href="<%=uicomponent.event("Select", node.getPath())%>">
 						                  <div class="Select16x16Icon" style="margin-left:15px;"></div>
 				  		              </a>
-		              <%      		                    
+		              <%      	break;	                    
 				                  } 
 				                } 
 				              }
