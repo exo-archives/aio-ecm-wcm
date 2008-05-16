@@ -4,7 +4,7 @@
 			if(uicomponent.isQuickEditable()){
 		%>
 			<div style="position: relative;">
-				<div style="position:absolute; top:5px; right:5px;">
+				<div style="position:absolute; top:2px; right:2px;">
 				  <a class="EditPortletIcon" href="<%=uicomponent.event("QuickEdit")%>">$actionLabel</a>
 			  </div>
 		  </div>
