@@ -88,9 +88,6 @@
 	display: block;
 }
 
-
-
-
 /*==============================UIBannerEditModeForm=================================*/
 .UIBannerEditModeForm{
 
@@ -154,8 +151,8 @@
   color: #1273df;
 }
 
-/*========================================================================================*/
-.EditPortletIcon{
+/*==============================BannerQuickEdit=================================*/
+.BannerQuickEdit{
 	background:url('DefaultSkin/background/EditIcon.png') no-repeat scroll center top;
 	float:right;
 	height:16px;

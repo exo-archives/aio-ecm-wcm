@@ -101,15 +101,6 @@
 	display: block;
 }
 
-/*==============================UIViewModeContainer=================================*/
-.UIViewModeContainer{
-	background-color: red;
-}
-
-.UIViewModeContainer .QuickEdit{
-	float: right;
-	margin: 10px 4px;
-}
 
 
 /*==============================UIBannerEditModeForm=================================*/
@@ -175,11 +166,11 @@
   color: #1273df;
 }
 
-/*========================================================================================*/
-.EditPortletIcon{
-	background:url('DefaultSkin/background/EditIcon.png') no-repeat scroll center top;
+/*==============================BannerQuickEdit=================================*/
+.BannerQuickEdit{
+	background:url('DefaultSkin/background/EditIcon.gif') no-repeat scroll left top;
 	float:right;
-	height:16px;
-	margin:4px;
-	padding-left:50px;
+	line-height:16px;
+	margin:3px;
+	padding-left:15px;
 }

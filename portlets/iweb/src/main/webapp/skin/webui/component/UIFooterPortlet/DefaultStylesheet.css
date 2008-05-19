@@ -1,7 +1,7 @@
 /*==============================UIFooterPortlet=================================*/
 .UIFooterPortlet {
   background: url('DefaultSkin/background/FooterBG.gif') repeat-x top;
-  margin: 0px 12px;
+  margin: 0px 5px;
 }
 
 .UIFooterPortlet .RepeatFooter {
@@ -91,10 +91,10 @@
 }
 
 /*========================================================================================*/
-.EditPortletIcon{
-	background:url('DefaultSkin/background/EditIcon.png') no-repeat scroll center top;
+.FooterQuickEdit{
+	background:url('DefaultSkin/background/EditIcon.gif') no-repeat scroll left top;
 	float:right;
 	height:16px;
-	margin:4px;
-	padding-left:50px;
+	margin:3px;
+	padding-left:15px;
 }

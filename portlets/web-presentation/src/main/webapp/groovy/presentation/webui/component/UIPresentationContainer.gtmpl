@@ -9,9 +9,7 @@
 	<%		
 		}	
 	%>
-	<div>		
-		<% uicomponent.renderChildren() %>
-	</div>
+	<% uicomponent.renderChildren() %>
 </div>
 
 

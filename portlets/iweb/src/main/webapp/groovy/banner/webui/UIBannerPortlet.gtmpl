@@ -12,7 +12,7 @@
   String signOutAction = prContext.getRequestContextPath() + "/public/" + portalName + "/" ;
 %>
 
-<div class="$uicomponent.id" class="UIBannerPortlet UIApplication">
+<div class="$uicomponent.id UIBannerPortlet UIApplication">
 	<div class="ApplicationMinWidth">
   <div class="InlineContainer">
     <div class="LeftBanner">

@@ -22,14 +22,6 @@
 	width: auto;
 }
 
-.UIBrowseContentPortlet {
-	background: white;
-	border: 1px solid #b7b7b7;
-	margin: 10px auto;
-  overflow: auto;
-  width: 98%;
-}
-
 .UIBrowseContentPortlet .UIFormWithTitle {
 	margin: 10px auto;
 	width: 650px;

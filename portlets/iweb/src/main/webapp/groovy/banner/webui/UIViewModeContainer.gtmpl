@@ -1,19 +1,15 @@
 <div class="$uicomponent.id">		
 	<%
-			String actionLabel = _ctx.appRes("UIViewModeContainer.action.QuickEdit") ;
-			if(uicomponent.isQuickEditable()){
-		%>
-			<div style="position: relative;">
-				<div style="position:absolute; top:2px; right:2px;">
-				  <a class="EditPortletIcon" href="<%=uicomponent.event("QuickEdit")%>">$actionLabel</a>
-			  </div>
-		  </div>
-		<%		
-			}	
-		%>
-	<div>		
-		<% uicomponent.renderChildren() %>
-	</div>
+		String actionLabel = _ctx.appRes("UIViewModeContainer.action.QuickEdit") ;
+		if(uicomponent.isQuickEditable()){
+	%>
+		<div style="position: relative;">
+			  <a class="BannerQuickEdit" href="<%=uicomponent.event("QuickEdit")%>">$actionLabel</a>
+	  </div>
+	<%		
+		}	
+	%>
+	<% uicomponent.renderChildren() %>
 </div>
 
 

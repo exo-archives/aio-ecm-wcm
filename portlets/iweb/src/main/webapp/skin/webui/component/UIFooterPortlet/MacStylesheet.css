@@ -99,10 +99,10 @@
 }
 
 /*========================================================================================*/
-.EditPortletIcon{
+.FooterQuickEdit{
 	background:url('DefaultSkin/background/EditIcon.png') no-repeat scroll center top;
 	float:right;
 	height:16px;
-	margin:4px;
+	margin:3px 0px;
 	padding-left:50px;
 }
