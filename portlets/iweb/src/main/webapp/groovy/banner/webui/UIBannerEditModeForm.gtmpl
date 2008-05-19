@@ -15,11 +15,8 @@
 					<td class="FieldComponent"><% uiform.renderField(uiform.getUIFormTextAreaInput("template")) %></td>					
 				</tr>		
 				<tr>
-					<td ></td>													
-					<td>
-						<div class="FieldComponent"><% uiform.renderField(uiform.getUIFormCheckBoxInput("quickEdit")) %></div>
-						<div class="FieldLabel"><b><%=uicomponent.getLabel(uiform.getUIFormCheckBoxInput("quickEdit").getName())%></b></div>
-					</td>				
+					<td class="FieldLabel"><b><%=uicomponent.getLabel(uiform.getUIFormCheckBoxInput("quickEdit").getName())%></b></td>													
+					<td class="FieldComponent"><% uiform.renderField(uiform.getUIFormCheckBoxInput("quickEdit")) %></td>				
 				</tr>				
       </table>
       

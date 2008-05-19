@@ -1,10 +1,12 @@
-<div class="$uicomponent.id">		
+<div class="$uicomponent.id">
 	<%
 		String actionLabel = _ctx.appRes("UIViewModeContainer.action.QuickEdit") ;
 		if(uicomponent.isQuickEditable()){
 	%>
-		<div style="position: relative;">
+		<div style="position: relative; ">
+			<div  style="position: absolute;">
 			  <a class="EditPortletIcon" href="<%=uicomponent.event("QuickEdit")%>">$actionLabel</a>
+			</div>
 	  </div>
 	<%		
 		}	
