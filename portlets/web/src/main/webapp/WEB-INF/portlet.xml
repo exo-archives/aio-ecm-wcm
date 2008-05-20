@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<portlet-app version="1.0" xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"> 
+  <portlet>
+		<description xml:lang="EN">Web Portlet</description>
+		<portlet-name>Web</portlet-name>
+		<display-name>web</display-name>
+		<portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>
+		
+		<init-param>
+      <name>webui.configuration</name>
+      <value>/WEB-INF/conf/portlet/web-presentation/SimplePresentationPortlet/webui/configuration.xml</value>			
+		</init-param>
+		
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>help</portlet-mode>
+			<portlet-mode>edit</portlet-mode>
+		</supports>
+		<supported-locale>en</supported-locale>
+		
+		<portlet-info>
+			<title>Web</title>
+			<short-title>Web</short-title>
+			<keywords>Web</keywords>
+		</portlet-info>
+		
+    <security-role-ref>
+      <role-name>admin</role-name>
+      <role-link>admin</role-link>
+    </security-role-ref>		
+  </portlet>  
+  
+</portlet-app>
