@@ -113,6 +113,10 @@
       <supertype>exo:presentationable</supertype>
     </supertypes>
     <propertyDefinitions>
+      <propertyDefinition name="exo:webSummary" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY"
+        protected="false" multiple="true">
+        <valueConstraints/>
+      </propertyDefinition>
   	  <propertyDefinition name="exo:referenceExternalSites" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY"
         protected="false" multiple="true">
         <valueConstraints/>
@@ -128,11 +132,7 @@
       <propertyDefinition name="exo:referenceMultimedia" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY"
         protected="false" multiple="true">
         <valueConstraints/>
-      </propertyDefinition>
-      <propertyDefinition name="exo:contentSumary" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY"
-        protected="false" multiple="true">
-        <valueConstraints/>
-      </propertyDefinition>  	    
+      </propertyDefinition>        	    
     </propertyDefinitions>
   </nodeType>
   

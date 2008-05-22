@@ -23,6 +23,7 @@ import javax.jcr.Session;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
+import javax.servlet.ServletContext;
 
 import org.exoplatform.portal.webui.skin.SkinService;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -40,11 +41,13 @@ import org.picocontainer.Startable;
 public class XSkinService implements Startable {
 
   private SkinService skinService_ ; 
+  private ServletContext sContext_ ;
   private RepositoryService repositoryService_ ;
 
-  public XSkinService(SkinService skinService,RepositoryService repositoryService) {
+  public XSkinService(SkinService skinService,RepositoryService repositoryService, ServletContext servletContext) {
     this.skinService_ = skinService ;
     this.repositoryService_ = repositoryService ;
+    this.sContext_ = servletContext ;    
   }
 
   public String getActiveStylesheet(Node home) throws Exception {    
@@ -59,7 +62,7 @@ public class XSkinService implements Startable {
     }
     return buffer.toString() ;    
   }
-  
+
   public void makeSharedCSS(String repository,String workspace,String cssPath) throws Exception {
     SessionProvider sessionProvider = SessionProvider.createSystemProvider();
     ManageableRepository manageableRepository = repositoryService_.getRepository(repository) ;
@@ -69,11 +72,11 @@ public class XSkinService implements Startable {
     cssNode.save();
     sessionProvider.close();
   }
-  
+
   public void merge(String repository,String workspace,String cssPath) throws Exception {        
     SessionProvider sessionProvider = SessionProvider.createSystemProvider();
     String sharedCss = getActiveSharedStylesheet(repository, workspace, sessionProvider);
-    skinService_.addSkin("WebContentSkin", "Default", "/portal/css/WebContent/Live/Stylesheet.css",false,sharedCss) ;
+    skinService_.addPortalSkin("WebContentSkin", "Default", "/portal/css/WebContent/Live/Stylesheet.css",sContext_,sharedCss) ;
     sessionProvider.close();
   }
 
@@ -104,7 +107,7 @@ public class XSkinService implements Startable {
       String repository = repositoryEntry.getName() ;
       String worksapce = repositoryEntry.getDefaultWorkspaceName() ;      
       String sharedCss = getActiveSharedStylesheet(repository,worksapce, provider) ;      
-      skinService_.addSkin("WebContentSkin", "Default", "/portal/css/WebContent/Live/Stylesheet.css",false,sharedCss) ;
+      skinService_.addPortalSkin("WebContentSkin", "Default", "/portal/css/WebContent/Live/Stylesheet.css",sContext_,sharedCss) ;
     }catch (Exception e) {
     }finally {
       provider.close();

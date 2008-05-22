@@ -63,7 +63,7 @@ public class XJavascriptService implements Startable {
     }
     return buffer.toString() ;    
   }
-  
+
   public void makeSharedJavascript(String repository,String workspace,String javascriptPath) throws Exception {
     SessionProvider sessionProvider = SessionProvider.createSystemProvider();
     ManageableRepository manageableRepository = repositoryService_.getRepository(repository) ;
@@ -73,14 +73,14 @@ public class XJavascriptService implements Startable {
     jsNode.save();
     sessionProvider.close();
   }
-  
+
   public void mergeJavascript(String repository,String workspace,String jsPath) throws Exception {    
     if(jsConfigService_.isModuleLoaded(MODULE_NAME)) {      
-      jsConfigService_.removeJavaScript(MODULE_NAME,PATH,sContext_) ;
+      jsConfigService_.removeExtendedJavascript(MODULE_NAME,PATH,sContext_) ;
     }
     SessionProvider sessionProvider = SessionProvider.createSystemProvider();
     String javascript = getActiveSharedJavaScript(repository, workspace, sessionProvider) ;
-    jsConfigService_.addJavascript(MODULE_NAME, PATH, sContext_, javascript) ;
+    jsConfigService_.addExtendedJavascript(MODULE_NAME, PATH, sContext_, javascript) ;
     sessionProvider.close();
   }
 
@@ -111,7 +111,7 @@ public class XJavascriptService implements Startable {
       String workspace = repositoryService_.getDefaultRepository().getConfiguration().getDefaultWorkspaceName();      
       String sharedJS = getActiveSharedJavaScript(repository, workspace, provider) ;
       if(sharedJS != null && sharedJS.length()!= 0) {
-        jsConfigService_.addJavascript(MODULE_NAME, PATH,sContext_,sharedJS) ; 
+        jsConfigService_.addExtendedJavascript(MODULE_NAME, PATH,sContext_,sharedJS) ; 
       }                  
     } catch (Exception e) {
 
