@@ -5,7 +5,7 @@
 	%>
 		<div style="position: relative; ">
 			<div  style="position: absolute;">
-			  <a class="BannerQuickEdit" href="<%=uicomponent.event("QuickEdit")%>">$actionLabel</a>
+			  <a class="BannerQuickEdit" href="<%=uicomponent.event("QuickEdit")%>"></a>
 			</div>
 	  </div>
 	<%		
