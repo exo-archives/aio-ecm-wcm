@@ -6,6 +6,8 @@
  * version: $Id$
  */
 
+@import url("NodeTypes/DefaultStylesheet.css");
+
 .AddIcon16x16 {
   width: 16px; height: 16px;
   background: url('DefaultSkin/BlueCirclePlus.gif') no-repeat; 
