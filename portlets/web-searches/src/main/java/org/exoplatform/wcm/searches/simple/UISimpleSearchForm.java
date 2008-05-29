@@ -23,7 +23,6 @@ import java.util.List;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.Query;
-import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
@@ -75,7 +74,7 @@ public class UISimpleSearchForm extends UIForm {
   }
 
   public static class SimpleSearchActionListener extends EventListener<UISimpleSearchForm> {
-    public void execute(Event<UISimpleSearchForm> event) throws Exception {
+    public void execute(Event<UISimpleSearchForm> event) throws Exception {	  
       UISimpleSearchForm searchForm = event.getSource();
       UISimpleSearchPortlet searchPortlet = searchForm.getParent();
       UISearchResultForm searchResult = searchPortlet.getChild(UISearchResultForm.class);

@@ -16,10 +16,7 @@
  */
 package org.exoplatform.wcm.searches.simple;
 
-import org.exoplatform.wcm.searches.simple.UISimpleSearchForm;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.config.annotation.ComponentConfigs;
-import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 
