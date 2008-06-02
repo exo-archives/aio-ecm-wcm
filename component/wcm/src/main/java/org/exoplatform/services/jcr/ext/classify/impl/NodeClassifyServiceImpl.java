@@ -16,6 +16,10 @@
  */
 package org.exoplatform.services.jcr.ext.classify.impl;
 
+import java.util.List;
+
+import org.exoplatform.container.component.ComponentPlugin;
+import org.exoplatform.services.jcr.ext.classify.NodeClassifyPlugin;
 import org.exoplatform.services.jcr.ext.classify.NodeClassifyService;
 
 /**
@@ -25,5 +29,24 @@ import org.exoplatform.services.jcr.ext.classify.NodeClassifyService;
  * Apr 9, 2008  
  */
 public class NodeClassifyServiceImpl implements NodeClassifyService {
+
+  public void addClassifyPlugin(ComponentPlugin componentPlugin) throws Exception {
+    
+  }
+
+  public List<NodeClassifyPlugin> getAllClassifyPlugins() throws Exception {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public NodeClassifyPlugin getNodeClassifyPlugin(String type) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public void removeClassifyPlygin(String type) throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
 
 }

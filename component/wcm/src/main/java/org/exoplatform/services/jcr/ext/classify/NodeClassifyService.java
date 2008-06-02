@@ -16,6 +16,11 @@
  */
 package org.exoplatform.services.jcr.ext.classify;
 
+import java.util.List;
+
+import org.exoplatform.container.component.ComponentPlugin;
+
+
 /**
  * Created by The eXo Platform SAS
  * Author : Hoa.Pham
@@ -23,5 +28,10 @@ package org.exoplatform.services.jcr.ext.classify;
  * Apr 9, 2008  
  */
 public interface NodeClassifyService {
-
+  
+  public void addClassifyPlugin(ComponentPlugin componentPlugin) throws Exception ;
+  public List<NodeClassifyPlugin> getAllClassifyPlugins() throws Exception ;
+  public NodeClassifyPlugin getNodeClassifyPlugin(String type) throws Exception ;
+  public void removeClassifyPlygin(String type) throws Exception ;
+  
 }

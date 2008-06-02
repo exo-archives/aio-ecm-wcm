@@ -16,6 +16,8 @@
  */
 package org.exoplatform.services.jcr.ext.classify.impl;
 
+import javax.jcr.Node;
+
 import org.exoplatform.services.jcr.ext.classify.NodeClassifyPlugin;
 
 /**
@@ -25,5 +27,10 @@ import org.exoplatform.services.jcr.ext.classify.NodeClassifyPlugin;
  * Apr 9, 2008  
  */
 public class AlphabetClassifyPlugin extends NodeClassifyPlugin {
+
+  public void classifyChildrenNode(Node parent) throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
 
 }

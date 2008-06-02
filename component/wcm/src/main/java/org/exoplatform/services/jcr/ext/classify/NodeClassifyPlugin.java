@@ -16,6 +16,8 @@
  */
 package org.exoplatform.services.jcr.ext.classify;
 
+import javax.jcr.Node;
+
 import org.exoplatform.container.component.ComponentPlugin;
 
 /**
@@ -24,26 +26,16 @@ import org.exoplatform.container.component.ComponentPlugin;
  *          hoa.pham@exoplatform.com
  * Apr 9, 2008  
  */
-public class NodeClassifyPlugin implements ComponentPlugin {
-
-  public String getDescription() {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  public String getName() {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  public void setDescription(String arg0) {
-    // TODO Auto-generated method stub
-    
-  }
-
-  public void setName(String arg0) {
-    // TODO Auto-generated method stub
-    
-  }
-
+public abstract class NodeClassifyPlugin implements ComponentPlugin {
+  
+  private String name;
+  private String desc;
+  
+  public String getName() { return name; }
+  public void setName(String name) { this.name = name ; }
+  
+  public String getDescription() { return desc; }
+  public void setDescription(String desc) { this.desc = desc ;}  
+  
+  public abstract void classifyChildrenNode(Node parent) throws Exception ; 
 }
