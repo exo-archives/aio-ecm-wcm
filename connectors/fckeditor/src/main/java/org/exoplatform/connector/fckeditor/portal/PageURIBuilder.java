@@ -49,6 +49,7 @@ public class PageURIBuilder {
   final private String PRIVATE_ACCESS = "private".intern();
   final private String EVERYONE_PERMISSION = "Everyone".intern() ;
   final private String RESOURCE_TYPE = "PortalPageURI".intern();
+  final private String PORTAL_CONTEXT = "portal".intern();
 
   private UserPortalConfigService portalConfigService_ ;
   private DataStorage dataStorage_ ;
@@ -154,7 +155,7 @@ public class PageURIBuilder {
         break ;
       }
     }    
-    String pageUri = accessMode + "/" + portalName + "/" + pageNode.getUri() ;
+    String pageUri = PORTAL_CONTEXT + "/"+ accessMode + "/" + portalName + "/" + pageNode.getUri() ;
     Element foldersElement = rootElement.getOwnerDocument().createElement("Folders");
     rootElement.appendChild(foldersElement);    
     Element folderElement = rootElement.getOwnerDocument().createElement("Folder");        
