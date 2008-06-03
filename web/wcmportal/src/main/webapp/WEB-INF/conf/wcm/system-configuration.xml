@@ -28,7 +28,7 @@
 	                	<field  name="workspace"><string>collaboration</string></field>
 	                	<field  name="path"><string>/Web Content</string></field>
 	                	<field  name="isDeep"><boolean>true</boolean></field>
-	                	<field  name="nodeTypes"><boolean>nt:unstructured,nt:folder,nt:file</boolean></field>
+	                	<field  name="nodeTypes"><string>nt:unstructured,nt:folder,nt:file,exo:portalFolder</string></field>
 	                  <field  name="eventTypes"><string>addNode</string></field>	                  	                 
 	                  <field  name="actionClassName"><string>org.exoplatform.services.wcm.core.impl.WebSchemaCreationAction</string></field>
 	                </object>
