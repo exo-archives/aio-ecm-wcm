@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<configuration>	
+	<external-component-plugins>
+  	<target-component>org.exoplatform.services.wcm.core.WebSchemaConfigService</target-component>		
+	  <component-plugin>
+	    <name>init.shared.portal</name>
+	    <set-method>addSharedResourcePlugin</set-method>
+	    <type>org.exoplatform.services.wcm.core.impl.SharedResourceFolderPlugin</type>
+	    <init-params>
+	    	<properties-param>
+          <name>plugin.properties</name>
+          <description>share resource folder info</description>
+          <property name="location" value="repository::collaboration::/Web Content/Live"/>
+          <property name="folderName" value="shared portal"/>                     
+        </properties-param>	    		      
+	    </init-params>
+	  </component-plugin>
+	</external-component-plugins>
+		
+</configuration>
