@@ -28,7 +28,7 @@
 			var FCK = window.opener.FCK;
 			var addURL = function(url) {				
 			   var newElement = FCK.CreateElement( "span" ) ;
-						newElement.innerHTML = "<\%=uicomponent.createPortalLink('"+url+"');\%>";				
+				newElement.innerHTML = "<\%=uicomponent.createPortalLink('"+url+"');\%>";				
 			}
 					
 			function GetUrlParam( paramName )
@@ -44,7 +44,7 @@
 			
 			var selectFolder = function(url) {
 				//refer from insertPortalLink.html;
-				var portalLink = eXoPlugin.hostName + eXoPlugin.context + "/" + eXoPlugin.accessMode + "/" + eXoPlugin.portalName + url;
+				var portalLink = eXoPlugin.hostName + url;
 				window.blur();
 				window.opener.setField("inputURL", portalLink);
 			}
@@ -75,9 +75,6 @@
 				var sUrl = this.ConnectorUrl + 'Command=' + command ;
 				sUrl += '&Type=' + this.ResourceType ;
 				sUrl += '&CurrentFolder=' + escape( this.CurrentFolder ) ;
-				sUrl += '&type=org.exoplatform.connector.fckeditor.portal.GetPortalLinkCommand' ;
-				sUrl += '&PortalName=' + eXoPlugin.portalName ;
-				
 				if ( params ) sUrl += '&' + params ;
 
 				var oXML = new FCKXml() ;

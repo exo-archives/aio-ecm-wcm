@@ -8,37 +8,14 @@
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="expires" content="0">
 	<style type="text/css">
-		.H-Menu {
-			border-bottom: 1px solid orange;
-			background-color: #abcdef;
-			height: 25px;
-		}
-		.None .SMenu1 {
-			cursor: pointer;
-			height: 20px;
-			line-height: 20px;
-			float: left;
-			background-color: #D5D59D;
-			padding: 0px 10px 0px 10px;
-			margin-top: 4px;
-			margin-right: 3px;
-			border: 1px solid orange;
-			border-bottom: none;
-		}
 		.None .Display {
 			display: none;
 			border: 1px solid orange;
-			border-top: none;
 			height: 246px;
 			background: #effffe;
 		}
-		.B-1 .B-1, .B-2 .B-2, .B-3 .B-3, .B-4 .B-4 {
+		.B-1 .B-1 {
 			display: block;
-		}
-		.B-1 .A-1, .B-2 .A-2, .B-3 .A-3, .B-4 .A-4 {
-			color: black;
-			padding-top: 1px;
-			background-color: #effffe;
 		}
 	</style>
 	<script type="text/javascript">
@@ -51,65 +28,17 @@
 <body>
 	<div class="None">
 		<div style="position: relative; height: 0px;" id="Root" class="B-1">
-			<div class="H-Menu">
-				<div class="SMenu1 A-1" onclick="changeClass('B-1')">
-					<div>Link Info</div>
-				</div>
-				<div class="SMenu1 A-2" onclick="changeClass('B-2')">
-					<div>Target</div>
-				</div>
-			</div>
 			<div class="Display B-1">
-
 				<div style="padding: 10px;">
 					<br>
 					Title : <br>
 					<input type="text" style="width: 200px;" id="inputTitle"><br><br>
 					Url : <br><br>
 					<input type="text" style="width: 200px;" id="inputURL"> 
-					Select portal:
-					<select onchange="setPortalName(this)">
-						<script type="text/javascript">
-							if (!eXoPlugin.availablePortals) eXoPlugin.availablePortals = ["classic"] ;
-							for (var i = 0; i < eXoPlugin.availablePortals.length; ++i) {
-								var portalName = eXoPlugin.availablePortals[i];
-								document.write( "<option value=" + portalName + " name=" + portalName + ">" + portalName + "</option>" );
-							}
-
-						</script>
-					</select>
 					<input type="button" value="Get portal link" onclick="getPortalLink();">
 					<br><br>
 					<input type="button" value="Preview" onclick="previewLink()">
 					<input type="button" value="Save" onclick="addURL()">
-				</div>
-			</div>
-			<div class="Display B-2">
-				<div style="padding: 10px;">
-					<table cellspacing="0" cellpadding="0" width="100%" border="0">
-						<tr>
-							<td nowrap="nowrap">
-								<span fckLang="DlgLnkTarget">Target</span><br />
-								<select id="cmbTarget">
-									<option value=""selected="selected">&lt;not set&gt;</option>
-									<option value="frame" >&lt;frame&gt;</option>
-									<option value="popup" >&lt;popup window&gt;</option>
-									<option value="_blank" >New Window (_blank)</option>
-									<option value="_top" >Topmost Window (_top)</option>
-									<option value="_self" >Same Window (_self)</option>
-									<option value="_parent" >Parent Window (_parent)</option>
-								</select>
-							</td>
-							<td id="tdTargetFrame" nowrap="nowrap" width="100%">
-								<span>Target Frame Name</span><br>
-								<input id="txtTargetFrame" style="WIDTH: 100%" type="text">
-							</td>
-							<td id="tdPopupName" style="DISPLAY: none" nowrap="nowrap" width="100%">
-								<span>Popup Window Name</span><br>
-								<input id="txtPopupName" style="WIDTH: 100%" type="text">
-							</td>
-						</tr>
-					</table>
 				</div>
 			</div>
 		</div>
@@ -117,10 +46,6 @@
 </body>
 
 <script type="text/javascript">
-	function changeClass(klass) {
-		var Root = document.getElementById("Root");
-		Root.className = klass ;
-	}
 	function Trim(text) {
 		if (typeof text == "string") return text.replace(/^\s+|\s+$/g, "");
 	}
@@ -159,7 +84,7 @@
 			alert("Field URL is not empty"); 
 			return;
 		}
-		var newTag = oEditor.FCK.CreateElement( "a" ) ;
+		var newTag = oEditor.FCK.CreateElement( "a" );
 		if (title) {
 			newTag.innerHTML = title;
 		} else {
@@ -170,9 +95,9 @@
 	}
 	
 	function previewLink() {
-		var sOptions = "toolbar=no,status=no,resizable=yes,dependent=yes,scrollbars=yes" ;
-		sOptions += ",width=" +  FCKConfig.ScreenWidth; ;
-		sOptions += ",height=" + FCKConfig.ScreenHeight;
+		var sOptions = "toolbar=no, status=no, resizable=yes, dependent=yes, scrollbars=yes";
+		sOptions += ", width=" +  FCKConfig.ScreenWidth;
+		sOptions += ", height=" + FCKConfig.ScreenHeight;
 		var url = document.getElementById("inputURL").value;
 		if (url) window.open(url, "", sOptions);
 	}
