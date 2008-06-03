@@ -33,26 +33,26 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
  *          hoa.pham@exoplatform.com
  * Mar 10, 2008  
  */
-public class SharedPortalPlugin extends BaseComponentPlugin {
+public class SharedResourceFolderPlugin extends BaseComponentPlugin {
 
   private PropertiesParam pluginProperties ;  
 
-  public SharedPortalPlugin(InitParams initParams) throws Exception{
-    pluginProperties = initParams.getPropertiesParam("sharedPortal.properties") ;       
+  public SharedResourceFolderPlugin(InitParams initParams) throws Exception{
+    pluginProperties = initParams.getPropertiesParam("plugin.properties") ;       
   }
 
-  public void createSharePortaFolder(SessionProvider sessionProvider,RepositoryService repositoryService) throws Exception {
+  public void createSharedResourceFolder(SessionProvider sessionProvider,RepositoryService repositoryService) throws Exception {
     //TODO using NodeHierarchyCreatorService to get node/path by pathAlias
     //Path alias should be managed by the service with format: repository::workspace::path    
-    String sharedPortalPathAlias = pluginProperties.getProperty("storedLocationAlias") ;    
-    String temp[] = sharedPortalPathAlias.split("::");
+    String location = pluginProperties.getProperty("location") ;    
+    String temp[] = location.split("::");
     String repository = temp[0],workspace = temp[1], path= temp[2] ;
-    String sharedPortalName = pluginProperties.getProperty("sharedPortalName") ;
+    String folderName = pluginProperties.getProperty("folderName") ;
     ManageableRepository manageableRepository = repositoryService.getRepository(repository) ;
     Session session = sessionProvider.getSession(workspace,manageableRepository) ;
     Node sharedPortalHome = (Node)session.getItem(path) ;
-    if(sharedPortalHome.hasNode(sharedPortalName)) return;
-    sharedPortalHome.addNode(sharedPortalName,"exo:portalFolder");    
+    if(sharedPortalHome.hasNode(folderName)) return;
+    sharedPortalHome.addNode(folderName,"exo:portalFolder");    
     session.save();        
   }    
 }

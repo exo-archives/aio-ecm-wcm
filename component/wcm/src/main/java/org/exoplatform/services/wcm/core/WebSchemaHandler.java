@@ -14,21 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-
 package org.exoplatform.services.wcm.core;
 
 import javax.jcr.Node;
 
 /**
- * Created by The eXo Platform SARL
- * Author : Pham Xuan Hoa
+ * Created by The eXo Platform SAS
+ * @author : Hoa.Pham
  *          hoa.pham@exoplatform.com
- * Mar 10, 2008  
+ * Jun 3, 2008  
  */
-public interface WebContentHandler {
-  
-  public boolean matchHandler(Node file) throws Exception ;
-  
-  public String handle(Node file) throws Exception ;
-  
+public interface WebSchemaHandler {  
+  public boolean matchHandler(Node node) throws Exception ;
+  public void process(Node node) throws Exception ;
 }

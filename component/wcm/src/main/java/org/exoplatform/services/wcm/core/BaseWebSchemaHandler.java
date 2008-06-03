@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-
 package org.exoplatform.services.wcm.core;
 
 import javax.jcr.Node;
@@ -22,34 +21,34 @@ import javax.jcr.Node;
 import org.exoplatform.container.component.BaseComponentPlugin;
 
 /**
- * Created by The eXo Platform SARL
- * Author : Pham Xuan Hoa
+ * Created by The eXo Platform SAS
+ * @author : Hoa.Pham
  *          hoa.pham@exoplatform.com
- * Mar 10, 2008  
+ * May 28, 2008  
  */
-public abstract class BaseWebContentHandler extends BaseComponentPlugin implements WebContentHandler {
-  
+public abstract class BaseWebSchemaHandler extends BaseComponentPlugin implements WebSchemaHandler {
+
   protected final String EXO_OWNABLE = "exo:owneable".intern();
   protected final String NT_FOLDER = "nt:folder".intern();
   protected final String NT_UNSTRUCTURED = "nt:unstructured".intern();
-  protected final String NT_FILE = "nt:file".intern() ;
-  
-  protected abstract String getContentType() ;
-  
-  protected abstract String getFolderType();
-  
-  protected abstract String getFolderPathExpression();
-  
-  public boolean matchHandler(Node node) throws Exception {    
-    if(node.isNodeType(getContentType()) && node.getParent().isNodeType(getFolderType())
-        // && file.getPath().matches(getFolderPathExpression())        
-        )  {
+  protected final String NT_FILE = "nt:file".intern() ; 
+
+  public boolean matchHandler(Node node) throws Exception {
+    String handlerNodeType = getHandlerNodeType();    
+    if(node.getPrimaryNodeType().isNodeType(handlerNodeType) 
+        && node.getParent().isNodeType(getParentNodeType())) {
       return true ;
-    }    
-    return false;
+    }
+    return false ;    
   }
-  
+
+  public abstract void process(Node node) throws Exception ;
+
+  protected abstract String getHandlerNodeType() ;
+  protected abstract String getParentNodeType();
+
   protected void addMixin(Node node, String mixin) throws Exception {
     if(!node.isNodeType(mixin)) node.addMixin(mixin) ;
   }
+  
 }

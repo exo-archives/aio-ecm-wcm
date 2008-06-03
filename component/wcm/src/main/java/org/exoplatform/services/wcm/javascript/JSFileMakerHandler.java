@@ -14,15 +14,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
+package org.exoplatform.services.wcm.javascript;
 
-package org.exoplatform.services.wcm.core;
+import javax.jcr.Node;
+
+import org.exoplatform.services.wcm.core.BaseWebSchemaHandler;
 
 /**
- * Created by The eXo Platform SARL
- * Author : Pham Xuan Hoa
+ * Created by The eXo Platform SAS
+ * @author : Hoa.Pham
  *          hoa.pham@exoplatform.com
- * Mar 10, 2008  
+ * May 28, 2008  
  */
-public class WebContentHandlerNotPound extends Exception {
+public class JSFileMakerHandler extends BaseWebSchemaHandler {
+
+  protected String getHandlerNodeType() { return "nt:file"; }
+  protected String getParentNodeType() { return "exo:jsFolder" ;}
+
+  @Override
+  public void process(Node file) throws Exception {
+    addMixin(file, "exo:jsFile") ;         
+    file.setProperty("exo:presentationType","exo:jsFile");        
+  }
 
 }

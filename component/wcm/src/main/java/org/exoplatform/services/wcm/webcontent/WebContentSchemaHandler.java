@@ -14,29 +14,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-
-package org.exoplatform.services.wcm.core.impl;
+package org.exoplatform.services.wcm.webcontent;
 
 import javax.jcr.Node;
 import javax.jcr.Session;
 
-import org.exoplatform.services.wcm.core.BaseWebContentHandler;
+import org.exoplatform.services.wcm.core.BaseWebSchemaHandler;
 
 /**
- * Created by The eXo Platform SARL
- * Author : Pham Xuan Hoa
+ * Created by The eXo Platform SAS
+ * @author : Hoa.Pham
  *          hoa.pham@exoplatform.com
- * Mar 10, 2008  
+ * May 28, 2008  
  */
-public class HTMLContentHandler extends BaseWebContentHandler {   
+public class WebContentSchemaHandler extends BaseWebSchemaHandler {
 
-  public HTMLContentHandler() {  }
-
-  protected String getContentType() { return NT_FILE ; }
-  protected String getFolderPathExpression() { return null; }
-  protected String getFolderType() { return "exo:webFolder"; }
-
-  public String handle(Node file) throws Exception {    
+  protected String getHandlerNodeType() { return "nt:file"; }  
+  protected String getParentNodeType() { return "exo:webFolder"; }
+  
+  public void process(Node file) throws Exception {
     Session session = file.getSession();    
     Node webFolder = file.getParent();
     String fileName = file.getName();
@@ -56,11 +52,9 @@ public class HTMLContentHandler extends BaseWebContentHandler {
     webContent.setProperty("exo:presentationType","exo:webContent") ;       
     createSchema(webContent) ;
     session.save();
-    return webContent.getUUID();
-  } 
-
+  }
+  
   private void createSchema(Node webContent) throws Exception {
-    //TODO hard coded here. should define schema as init param    
     Node jsFolder = webContent.addNode("js","exo:jsFolder") ;
     addMixin(jsFolder, EXO_OWNABLE) ;    
     Node cssFolder = webContent.addNode("css","exo:cssFolder") ;
@@ -81,4 +75,5 @@ public class HTMLContentHandler extends BaseWebContentHandler {
     addMixin(document, EXO_OWNABLE) ;
     addMixin(document, "exo:documentFolder") ;
   }      
+
 }

@@ -14,35 +14,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-
-package org.exoplatform.services.wcm.core.impl;
+package org.exoplatform.services.wcm.skin;
 
 import javax.jcr.Node;
 
-import org.exoplatform.services.wcm.core.BaseWebContentHandler;
+import org.exoplatform.services.wcm.core.BaseWebSchemaHandler;
 
 /**
- * Created by The eXo Platform SARL
- * Author : Pham Xuan Hoa
+ * Created by The eXo Platform SAS
+ * @author : Hoa.Pham
  *          hoa.pham@exoplatform.com
- * Mar 10, 2008  
+ * May 28, 2008  
  */
-public class ImageContentHandler extends BaseWebContentHandler {
+public class CSSFileMakerHandler extends BaseWebSchemaHandler {
 
-  public String getContentType() {
-    return null;
+  protected String getHandlerNodeType() { return "nt:file"; }
+  protected String getParentNodeType() { return "exo:cssFolder" ;}
+  
+  public void process(Node file) throws Exception {  
+    addMixin(file, "exo:cssFile");
+    file.setProperty("exo:presentationType","exo:cssFile");                
   }
-
-  public String getFolderPathExpression() {
-    return null;
-  }
-
-  public String getFolderType() {
-    return null;
-  }
-
-  public String handle(Node file) throws Exception {
-    return null ;
-  }
-
+  
 }

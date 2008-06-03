@@ -14,27 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-
-package org.exoplatform.services.wcm.core;
-
-import java.util.Map;
-
-import javax.jcr.Node;
+package org.exoplatform.services.wcm.portal;
 
 /**
- * Created by The eXo Platform SARL
- * Author : Pham Xuan Hoa
+ * Created by The eXo Platform SAS
+ * @author : Hoa.Pham
  *          hoa.pham@exoplatform.com
- * Mar 6, 2008  
+ * May 28, 2008  
  */
-public interface WcmService {
-  
-  public void processWebContent(Node webContent)  throws Exception;
-  
-  public String storeNode(String nodeTypeName, Node storeHomeNode, Map mappings, 
-      boolean isAddNew, String repository,String portletInstanceId) throws Exception ;
-  
-  public void updateWebContentReference(String repository,String worksapce,String path) throws Exception ;
-  
-  public String getReferenceFileContent(Node htmlFile,String property) throws Exception ;
+public class PortalFolderCreationListener {
+
 }

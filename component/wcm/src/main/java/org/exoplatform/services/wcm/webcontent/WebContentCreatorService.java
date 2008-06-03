@@ -14,29 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-
-package org.exoplatform.services.wcm.core.impl;
-
-import javax.jcr.Node;
-
-import org.exoplatform.services.wcm.core.BaseWebContentHandler;
+package org.exoplatform.services.wcm.webcontent;
 
 /**
- * Created by The eXo Platform SARL
- * Author : Pham Xuan Hoa
+ * Created by The eXo Platform SAS
+ * @author : Hoa.Pham
  *          hoa.pham@exoplatform.com
- * Mar 10, 2008  
+ * May 28, 2008  
  */
-public class JSContentHandler extends BaseWebContentHandler {
+public interface WebContentCreatorService {
 
-  protected String getContentType() { return NT_FILE; }
-  protected String getFolderPathExpression() { return null; }
-  protected String getFolderType() { return "exo:jsFolder"; }
-
-  public String handle(Node file) throws Exception {
-    addMixin(file, "exo:jsFile") ;         
-    file.setProperty("exo:presentationType","exo:jsFile");    
-    return file.getUUID();
-  }
-  
 }
