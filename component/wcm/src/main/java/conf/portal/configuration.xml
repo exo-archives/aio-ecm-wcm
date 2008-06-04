@@ -29,14 +29,6 @@
    </component>
    
    <component>   
-     <type>org.exoplatform.services.wcm.skin.XSkinService</type>
-   </component>
-   
-   <component>   
-     <type>org.exoplatform.services.wcm.javascript.XJavascriptService</type>
-   </component>
-   
-   <component>   
      <type>org.exoplatform.services.wcm.contribution.WebContributionService</type>
      <init-params>
        <properties-param>
@@ -46,7 +38,29 @@
         </properties-param>       	      
 	   </init-params>
    </component>      
-       
+   
+   <component>   
+     <key>org.exoplatform.services.jcr.ext.classify.NodeClassifyService</key>
+     <type>org.exoplatform.services.jcr.ext.classify.impl.NodeClassifyServiceImpl</type>
+     <component-plugins>
+	    <component-plugin>
+	   		<name>AlphabetClassifyPlugin</name>
+	   		<set-method>addClassifyPlugin</set-method>
+	   		<type>org.exoplatform.services.jcr.ext.classify.impl.AlphabetClassifyPlugin</type>
+	   	</component-plugin>	   		   	
+	    <component-plugin>
+	   		<name>DateTimeClassifyPlugin</name>
+	   		<set-method>addClassifyPlugin</set-method>
+	   		<type>org.exoplatform.services.jcr.ext.classify.impl.DateTimeClassifyPlugin</type>
+	   	</component-plugin>	  
+	    <component-plugin>
+	   		<name>TypeClassifyPlugin</name>
+	   		<set-method>addClassifyPlugin</set-method>
+	   		<type>org.exoplatform.services.jcr.ext.classify.impl.TypeClassifyPlugin</type>
+	   	</component-plugin>	  	   		   	
+   	 </component-plugins>   
+   </component>
+          
    <external-component-plugins>
   	<target-component>org.exoplatform.services.jcr.RepositoryService</target-component>		
 	  <component-plugin>

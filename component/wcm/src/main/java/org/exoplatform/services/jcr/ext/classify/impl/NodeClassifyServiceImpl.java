@@ -16,9 +16,11 @@
  */
 package org.exoplatform.services.jcr.ext.classify.impl;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Collection;
 
 import org.exoplatform.container.component.ComponentPlugin;
+import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.classify.NodeClassifyPlugin;
 import org.exoplatform.services.jcr.ext.classify.NodeClassifyService;
 
@@ -28,25 +30,34 @@ import org.exoplatform.services.jcr.ext.classify.NodeClassifyService;
  *          hoa.pham@exoplatform.com
  * Apr 9, 2008  
  */
-public class NodeClassifyServiceImpl implements NodeClassifyService {
+public class NodeClassifyServiceImpl implements NodeClassifyService {	
+  private HashMap<String, NodeClassifyPlugin> nodeClassifyPlugins = new HashMap<String, NodeClassifyPlugin>() ;
 
-  public void addClassifyPlugin(ComponentPlugin componentPlugin) throws Exception {
-    
+  public NodeClassifyServiceImpl(RepositoryService repositoryService) { }
+
+  //do after
+  public <T extends NodeClassifyPlugin> T getNodeClassifyPluginByType(Class<T> clazz) throws Exception {
+    return null ;
   }
 
-  public List<NodeClassifyPlugin> getAllClassifyPlugins() throws Exception {
-    // TODO Auto-generated method stub
-    return null;
+  public void addClassifyPlugin(ComponentPlugin componentPlugin) throws Exception {
+    if(componentPlugin instanceof NodeClassifyPlugin) {
+      NodeClassifyPlugin classifyPlugin = (NodeClassifyPlugin)componentPlugin ;
+      nodeClassifyPlugins.put(classifyPlugin.getClass().getName(), classifyPlugin) ;      
+    }
+  }
+
+  public Collection<NodeClassifyPlugin> getAllClassifyPlugins() throws Exception {
+    Collection<NodeClassifyPlugin> collection = nodeClassifyPlugins.values();
+    return collection;
   }
 
   public NodeClassifyPlugin getNodeClassifyPlugin(String type) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
+    return nodeClassifyPlugins.get(type);   
   }
 
   public void removeClassifyPlygin(String type) throws Exception {
-    // TODO Auto-generated method stub
-    
+    nodeClassifyPlugins.remove(type);
   }
 
 }
