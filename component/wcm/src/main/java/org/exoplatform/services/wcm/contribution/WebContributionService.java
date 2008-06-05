@@ -17,8 +17,6 @@
 package org.exoplatform.services.wcm.contribution;
 
 import org.exoplatform.container.xml.InitParams;
-import org.exoplatform.services.organization.auth.AuthenticationService;
-import org.exoplatform.services.organization.auth.Identity;
 
 /**
  * Created by The eXo Platform SAS
@@ -28,19 +26,14 @@ import org.exoplatform.services.organization.auth.Identity;
  */
 public class WebContributionService {
 
-  private String contributorGroup_ ;
-  private AuthenticationService authService_ ;
+  private String contributorGroup_ ;  
 
-  public WebContributionService(AuthenticationService authService ,InitParams initParams) {
+  public WebContributionService(InitParams initParams) {
     contributorGroup_ = initParams.getPropertiesParam("service.params").getProperty("web.contributor.group") ;
-    this.authService_ = authService ;
   }
 
   public boolean hasContributionPermission(String userId) {
-    //TODO should use PermissionManagerService form new ecm component when it finish
-    Identity identity = authService_.getCurrentIdentity() ;
-    if(identity != null && identity.getUsername().equalsIgnoreCase(userId)) 
-      return identity.isInGroup(contributorGroup_) ;
+    //TODO should use PermissionManagerService form new ecm component when it finish    
     return false ;    
   }
   
