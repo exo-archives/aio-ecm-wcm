@@ -3,5 +3,8 @@
 <configuration>
   <component>    
     <type>org.exoplatform.connector.fckeditor.RESTResourcesConnector</type>    
-  </component>     
+  </component>
+  <component>    
+    <type>org.exoplatform.connector.fckeditor.FCKCoreConnector</type>    
+  </component>        
 </configuration>

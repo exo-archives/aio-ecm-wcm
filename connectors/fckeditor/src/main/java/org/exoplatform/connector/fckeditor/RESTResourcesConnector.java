@@ -32,6 +32,8 @@ import org.exoplatform.services.rest.URIParam;
 import org.exoplatform.services.rest.URITemplate;
 import org.exoplatform.services.rest.container.ResourceContainer;
 import org.exoplatform.services.rest.transformer.XMLOutputTransformer;
+import org.exoplatform.services.security.ConversationRegistry;
+import org.exoplatform.services.security.ConversationState;
 
 /**
  * Created by The eXo Platform SAS
@@ -47,14 +49,16 @@ public class RESTResourcesConnector implements ResourceContainer {
   private UserPortalConfigService portalConfigService_ ;
   private DataStorage portalDataStorage_ ;
   private UserACL portalUserACL_ ; 
+  private ConversationRegistry conversationRegistry_ ; ;
 
   public RESTResourcesConnector(InitParams params, RepositoryService repositoryService,ThreadLocalSessionProviderService sessionProviderService,
-      UserPortalConfigService portalConfigService, DataStorage dataStorage, UserACL userACL) throws Exception {
+      UserPortalConfigService portalConfigService, DataStorage dataStorage, UserACL userACL, ConversationRegistry conversationRegistry) throws Exception {
     this.repositoryService_ = repositoryService ;
     this.sessionProviderService_ = sessionProviderService;
     this.portalConfigService_ = portalConfigService ;
     this.portalDataStorage_ = dataStorage ;
     this.portalUserACL_ = userACL ;            
+    this.conversationRegistry_ = conversationRegistry ;
   }
 
   @HTTPMethod(HTTPMethods.GET)
@@ -74,8 +78,17 @@ public class RESTResourcesConnector implements ResourceContainer {
   @OutputTransformer(XMLOutputTransformer.class)
   public Response getPageURI(@QueryParam("CurrentFolder") String currentFolder, @QueryParam("Command") String command,@QueryParam("Type") String type) throws Exception {    
     PageURIBuilder builder = new PageURIBuilder(portalConfigService_,portalDataStorage_,portalUserACL_) ;
-    String userId = "root" ;
+    String userId = getCurrentUser() ;
+    System.out.println("============>"+userId);
     return builder.buildReponse(currentFolder, command, userId) ;
   }   
-
+  
+  private String getCurrentUser() {    
+    try{
+      ConversationState conversationState = ConversationState.getCurrent() ;      
+      return conversationState.getIdentity().getUserId() ;
+    }catch (Exception e) {
+    }
+    return null ;
+  }
 }
