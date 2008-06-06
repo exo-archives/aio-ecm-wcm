@@ -24,7 +24,6 @@ import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
-import org.exoplatform.services.organization.auth.AuthenticationService;
 import org.exoplatform.services.rest.HTTPMethod;
 import org.exoplatform.services.rest.OutputTransformer;
 import org.exoplatform.services.rest.QueryParam;
@@ -40,24 +39,22 @@ import org.exoplatform.services.rest.transformer.XMLOutputTransformer;
  *          hoa.pham@exoplatform.com
  * May 22, 2008  
  */
-@URITemplate("/fckconnector/")
+@URITemplate("/fckconnectorext/")
 public class RESTResourcesConnector implements ResourceContainer {
 
   private RepositoryService repositoryService_ ;
   private ThreadLocalSessionProviderService sessionProviderService_ ;  
   private UserPortalConfigService portalConfigService_ ;
   private DataStorage portalDataStorage_ ;
-  private UserACL portalUserACL_ ;
-  private AuthenticationService authenticationService_ ;
+  private UserACL portalUserACL_ ; 
 
   public RESTResourcesConnector(InitParams params, RepositoryService repositoryService,ThreadLocalSessionProviderService sessionProviderService,
-      UserPortalConfigService portalConfigService, DataStorage dataStorage, UserACL userACL, AuthenticationService authService) throws Exception {
+      UserPortalConfigService portalConfigService, DataStorage dataStorage, UserACL userACL) throws Exception {
     this.repositoryService_ = repositoryService ;
     this.sessionProviderService_ = sessionProviderService;
     this.portalConfigService_ = portalConfigService ;
     this.portalDataStorage_ = dataStorage ;
-    this.portalUserACL_ = userACL ;        
-    this.authenticationService_ = authService ;
+    this.portalUserACL_ = userACL ;            
   }
 
   @HTTPMethod(HTTPMethods.GET)
@@ -77,8 +74,8 @@ public class RESTResourcesConnector implements ResourceContainer {
   @OutputTransformer(XMLOutputTransformer.class)
   public Response getPageURI(@QueryParam("CurrentFolder") String currentFolder, @QueryParam("Command") String command,@QueryParam("Type") String type) throws Exception {    
     PageURIBuilder builder = new PageURIBuilder(portalConfigService_,portalDataStorage_,portalUserACL_) ;
-    String userId = authenticationService_.getCurrentIdentity().getUsername() ;
+    String userId = "root" ;
     return builder.buildReponse(currentFolder, command, userId) ;
   }   
-  
+
 }
