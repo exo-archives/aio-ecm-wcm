@@ -34,11 +34,13 @@ import org.w3c.dom.Document;
  *          hoa.pham@exoplatform.com
  * Jun 3, 2008  
  */
-@URITemplate("/fckconnector/")
+@URITemplate("/fckconnector/jcr/")
 public class FCKCoreConnector implements ResourceContainer {
   
   private final String GET_FILES = "GetFiles".intern();  
   private final String GET_FOLDERS = "FetFolders".intern();       
+  private final String RESOURCE_AS_FILE= "File".intern() ;
+  private final String RESOURCE_AS_IMAGES = "Image".intern() ;
   
   public FCKCoreConnector() { }
   
@@ -50,10 +52,15 @@ public class FCKCoreConnector implements ResourceContainer {
       @QueryParam("Type") String type) throws Exception {
     if(currentFolder == null || currentFolder.length() == 0) {
       currentFolder = "/" ;
-    }
+    }    
     repositoryName = "repository" ;
-    workspaceName = "collaboration" ;    
-    FCKConnectorXMLOutputBuilder connectorXMLOutputBuilder = new FCKConnectorXMLOutputBuilder(ExoContainerContext.getCurrentContainer()) ;
+    workspaceName = "collaboration" ;
+    FCKConnectorXMLOutputBuilder connectorXMLOutputBuilder = null ;
+    if(type == null || RESOURCE_AS_FILE.equals(type)) {
+      connectorXMLOutputBuilder = new FilesXMLOutputBuilder(ExoContainerContext.getCurrentContainer()) ; 
+    }else if(RESOURCE_AS_IMAGES.equals(type)) {
+      connectorXMLOutputBuilder = new ImagesXMLOutputBuilder(ExoContainerContext.getCurrentContainer()) ;
+    }    
     Document document = null ;
     if(GET_FOLDERS.equalsIgnoreCase(command)) {
       document = connectorXMLOutputBuilder.buildFoldersXMLOutput(repositoryName, workspaceName, currentFolder) ;
@@ -65,15 +72,43 @@ public class FCKCoreConnector implements ResourceContainer {
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true) ;
     return Response.Builder.ok(document).cacheControl(cacheControl).build() ;
-  }  
-
+  }
+  
+  @HTTPMethod(HTTPMethods.GET)
+  @URITemplate("/getFoldersAndFiles/")  
+  @OutputTransformer(XMLOutputTransformer.class)
+  public Response getFoldersAndFiles(@QueryParam("repositoryName") String repositoryName, @QueryParam("workspaceName") String workspaceName,
+      @QueryParam("CurrentFolder") String currentFolder, @QueryParam("Type") String type) throws Exception {
+    return null ;
+  }
+  
+  @HTTPMethod(HTTPMethods.GET)
+  @URITemplate("/getFiles/")  
+  @OutputTransformer(XMLOutputTransformer.class)
+  public Response getFiles(@QueryParam("repositoryName") String repositoryName, @QueryParam("workspaceName") String workspaceName,
+      @QueryParam("CurrentFolder") String currentFolder, @QueryParam("Type") String type) throws Exception {
+    return null ;
+  }
+  
+  @HTTPMethod(HTTPMethods.GET)
+  @URITemplate("/getFolders/")  
+  @OutputTransformer(XMLOutputTransformer.class)
+  public Response getFolders(@QueryParam("repositoryName") String repositoryName, @QueryParam("workspaceName") String workspaceName,
+      @QueryParam("CurrentFolder") String currentFolder, @QueryParam("Type") String type) throws Exception {
+    return null ;
+  }
+  
   @HTTPMethod(HTTPMethods.POST)
   @URITemplate("/createFolder/")
-  public void createFolder() {        
+  @OutputTransformer(XMLOutputTransformer.class) 
+  public Response createFolder(@QueryParam("repositoryName") String repositoryName, @QueryParam("workspaceName") String workspaceName,
+      @QueryParam("CurrentFolder") String currentFolder, @QueryParam("newFolderName") String newFolderName) {
+    return null ;
   }
 
   @HTTPMethod(HTTPMethods.POST)
   @URITemplate("/uploadFile/")
+  @OutputTransformer(XMLOutputTransformer.class)
   public void uploadFile() {    
   }
   
