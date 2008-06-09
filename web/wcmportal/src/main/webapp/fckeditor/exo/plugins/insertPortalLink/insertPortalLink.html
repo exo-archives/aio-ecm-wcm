@@ -7,15 +7,38 @@
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="expires" content="0">
+	<link  href="UIAction/Stylesheet.css" type="text/css" rel="stylesheet">
 	<style type="text/css">
-		.None .Display {
-			display: none;
-			border: 1px solid orange;
-			height: 246px;
-			background: #effffe;
+		A {
+			text-decoration: none;
+			color: black;
 		}
-		.B-1 .B-1 {
-			display: block;
+		
+		.DisplayB-1 {
+			padding: 10px;
+		}
+
+		.DisplayB-1 .DisplayB-2{
+			border: 1px solid #b7b7b7;
+			background-color: #efefef;
+			padding: 10px;
+		}
+
+		.DisplayB-1 .DisplayB-2 .FieldLabel{
+			padding: 4px;
+		}
+
+		.DisplayB-1 .DisplayB-2 .FieldComponent{
+			padding: 4px;
+		}
+
+		.DisplayB-1 .DisplayB-2 .FieldComponent input{
+			width: 230px;
+		}
+		
+		.DisplayB-1 .DisplayB-2 .UIFormGrid{
+			margin: auto;
+			width: auto;
 		}
 	</style>
 	<script type="text/javascript">
@@ -26,23 +49,69 @@
 	</script>
 </head>
 <body>
-	<div class="None">
-		<div style="position: relative; height: 0px;" id="Root" class="B-1">
-			<div class="Display B-1">
-				<div style="padding: 10px;">
-					<br>
-					Title : <br>
-					<input type="text" style="width: 200px;" id="inputTitle"><br><br>
-					Url : <br><br>
-					<input type="text" style="width: 200px;" id="inputURL"> 
-					<input type="button" value="Get portal link" onclick="getPortalLink();">
-					<br><br>
-					<input type="button" value="Preview" onclick="previewLink()">
-					<input type="button" value="Save" onclick="addURL()">
-				</div>
-			</div>
-		</div>
-	</div>
+<div class="DisplayB-1">
+	<div class="DisplayB-2">
+		<table class="UIFormGrid">
+    <tr>
+      <td class="FieldLabel">Title:</td>
+      <td class="FieldComponent" colspan=2>
+        <input type="text" />
+      </td>
+    </tr>
+    <tr>
+      <td class="FieldLabel">URL:</td>
+      <td class="FieldComponent">
+        <input type="text" />
+      </td>
+      <td class="FieldComponent">
+        <div class="UIAction">
+					  <table class="ActionContainer" align="center">
+						<tr>
+						  <td align="center">
+							<a href="javascript: getPortalLink();" class="ActionButton LightBlueStyle">
+							  <div class="ButtonLeft">
+								<div class="ButtonRight">
+								  <div class="ButtonMiddle">
+									Get Portal Link
+								  </div>
+								</div>
+							  </div>
+							</a>
+						  </td>
+						</tr>
+					  </table>
+					</div> 
+      </td>
+    </tr>
+	  </table>
+	  <div class="UIAction">
+      <table class="ActionContainer" align="center">
+        <tr>
+          <td align="center">
+            <a href="javascript: previewLink();" class="ActionButton LightBlueStyle">
+              <div class="ButtonLeft">
+                <div class="ButtonRight">
+                  <div class="ButtonMiddle">
+                    Preview
+                  </div>
+                </div>
+              </div>
+            </a>
+            <a href="javascript: addURL();" class="ActionButton LightBlueStyle">
+              <div class="ButtonLeft">
+                <div class="ButtonRight">
+                  <div class="ButtonMiddle">
+                    Save
+                  </div>
+                </div>
+              </div>
+            </a>
+          </td>
+        </tr>
+      </table>
+    </div> 
+  </div>
+</div>
 </body>
 
 <script type="text/javascript">
