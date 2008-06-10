@@ -1,0 +1,40 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head><title>explorer</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="expires" content="0">
+	<script type="text/javascript" src="js/kombai.js"></script>
+</head>
+<body>
+	<form name="doc">
+		show in folder:
+		<input type="text" id="dir" style="width: 256px;" value="/" onkeypress="if(event.keyCode == 13) return false;"/>
+		<input type="button" onclick="sendCommand()" value="sendCommand">
+	</form>
+</body>
+<script type="text/javascript">
+var eXoPlugin = window.opener.eXoPlugin;
+var root = eXoPlugin.hostName + eXoPlugin.eXoFileManager.GetFolders;
+function sendCommand() {
+	var dir = document.getElementById("dir").value;
+	dir = Kombai.remove.space(dir);
+	if (dir == "") {
+	 param = "Type=File&CurrentFolder=/";
+	} else {
+	 param = "Type=File&CurrentFolder=" + dir;
+	}
+	Kombai.request({
+			address: root,
+			data: param,
+			method: "GET",
+			onSuccess: function() {
+				Kombai.discover(this.responseXML);
+			},
+			onFailure: function() {
+				alert('Can"t connect to sever. Please try again.');
+			}
+		});
+}
+</script>
+</html>

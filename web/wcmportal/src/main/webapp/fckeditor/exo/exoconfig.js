@@ -1,22 +1,7 @@
-	
-var eXoPlugin = {};
-var parentLocation = window.parent.location;
-eXoPlugin.hostName = parentLocation.href.substring(0, parentLocation.href.indexOf(parentLocation.pathname));
-eXoPlugin.portalName = window.parent.eXo.env.portal.portalName;
-eXoPlugin.originPortalName = eXoPlugin.portalName;
-
-eXoPlugin.availablePortals = ['classic' , 'webos'];
-
-with (window.parent.eXo.env.portal) {
-	eXoPlugin.context = context;
-	eXoPlugin.accessMode = accessMode;
-}
-
 FCKConfig.ToolbarSets["eXoBar"] = [
 	['Insert Image', 'Insert Portal Link', 'Insert DMS Document', 'Explorer']
 ];
-
-// set eXo  plugin path;
+// set eXo plugin path;
 FCKConfig.eXoPath = FCKConfig.BasePath.substr(0, FCKConfig.BasePath.length - 7) + "exo/" ;
 FCKConfig.Plugins.Add( 'urani', null, FCKConfig.eXoPath + "plugins/") ;
 FCKConfig.Plugins.Add( 'explorer', null, FCKConfig.eXoPath + "plugins/") ;
@@ -24,9 +9,28 @@ FCKConfig.Plugins.Add( 'insertImage', null, FCKConfig.eXoPath + "plugins/") ;
 FCKConfig.Plugins.Add( 'insertDocument', null, FCKConfig.eXoPath + "plugins/") ;
 FCKConfig.Plugins.Add( 'insertPortalLink', null, FCKConfig.eXoPath + "plugins/") ;
 
+var eXoPlugin = {};
+var parentLocation = window.parent.location;
+eXoPlugin.hostName = parentLocation.href.substring(0, parentLocation.href.indexOf(parentLocation.pathname));
+
+with (window.parent.eXo.env.portal) {
+	eXoPlugin.portalName = portalName;
+	eXoPlugin.context = context;
+	eXoPlugin.accessMode = accessMode;
+}
+eXoPlugin.originPortalName = eXoPlugin.portalName;
+
+eXoPlugin.eXoFileManager = {
+	GetFiles : "/portal/rest/fckeditor/getFiles",
+	GetFolders : "/portal/rest/fckeditor/getFolders",
+	CreateFolder : "/portal/rest/fckeditor/createFolder",
+	UploadFile : "/portal/rest/fckeditor/createFolder"
+};
+
 eXoPlugin.ExoImageBrowserURL = FCKConfig.eXoPath + 'filemanager/browser/default/browser.html?Type=Image&Connector=/portal/connector' ;
 eXoPlugin.ExoFileBrowserURL = FCKConfig.eXoPath + 'filemanager/browser/default/browser.html?Type=File&Connector=/portal/connector' ;
 eXoPlugin.ExoPortalLinkBrowserURL = FCKConfig.eXoPath + 'filemanager/portal/default/browser.html?Type=PortalLink&Connector=/portal/rest/fckconnectorext/pageURI' ;
+
 
 eXoPlugin.switchToolBar = function(R) {
 	var Setting = {
