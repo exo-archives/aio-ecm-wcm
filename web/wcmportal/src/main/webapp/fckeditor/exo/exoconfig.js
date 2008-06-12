@@ -21,10 +21,8 @@ with (window.parent.eXo.env.portal) {
 eXoPlugin.originPortalName = eXoPlugin.portalName;
 
 eXoPlugin.eXoFileManager = {
-	GetFiles : "/portal/rest/fckconnector/jcr/getFiles",
-	GetFolders : "/portal/rest/fckconnector/jcr/getFolders",
-	CreateFolder : "/portal/rest/fckconnector/jcr/createFolder",
-	UploadFile : "/portal/rest/fckconnector/jcr/createFolder"
+	Connector: "/portal/rest/fckconnectorext/jcr/",
+	ResourceType : "File"
 };
 
 eXoPlugin.ExoImageBrowserURL = FCKConfig.eXoPath + 'filemanager/browser/default/browser.html?Type=Image&Connector=/portal/connector' ;

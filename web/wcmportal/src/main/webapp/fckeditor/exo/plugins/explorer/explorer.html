@@ -15,26 +15,51 @@
 </body>
 <script type="text/javascript">
 var eXoPlugin = window.opener.eXoPlugin;
-var root = eXoPlugin.hostName + eXoPlugin.eXoFileManager.GetFolders;
-function sendCommand() {
-	var dir = document.getElementById("dir").value;
-	dir = Kombai.remove.space(dir);
-	if (dir == "") {
-	 param = "Type=File&CurrentFolder=/";
-	} else {
-	 param = "Type=File&CurrentFolder=" + dir;
-	}
-	Kombai.request({
-			address: root,
+var exp = {
+	connector: eXoPlugin.eXoFileManager.Connector,
+	resourceType: eXoPlugin.eXoFileManager.ResourceType,
+	command: {
+		getFiles: "getFiles",
+		uploadFile: "uploadFile",
+		getFolders: "getFolders",
+		createFolder: "createFolder"
+	},
+	buildParam: function() {
+		if (arguments.length < 1) return null;
+		var arr = [];
+		for (var i = 0; i < arguments.length; ++i) {
+			arr.push(arguments[i]);
+		}
+		return arr.join("&");
+	},
+	sendRequest: function(connector, param, callback)  {
+		Kombai.request({
+			address: connector,
 			data: param,
 			method: "GET",
 			onSuccess: function() {
-				Kombai.discover(this.responseXML);
+				if (callback && callback instanceof Function) {
+					if (this.responseXML) callback(this.responseXML);
+					else callback(this.responseText);
+				}
 			},
 			onFailure: function() {
 				alert('Can"t connect to sever. Please try again.');
 			}
 		});
+	} 
+}
+
+
+
+function sendCommand() {
+	var connector = eXoPlugin.hostName + exp.connector + exp.command.getFiles;
+	var param = exp.buildParam("Type=" + exp.resourceType , "CurrentFolder=/");
+	
+	function show(idata){
+		alert(idata);
+	}
+	exp.sendRequest(connector, param, show);
 }
 </script>
 </html>
