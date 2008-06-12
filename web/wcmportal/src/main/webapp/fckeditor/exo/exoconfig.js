@@ -21,7 +21,7 @@ with (window.parent.eXo.env.portal) {
 eXoPlugin.originPortalName = eXoPlugin.portalName;
 
 eXoPlugin.eXoFileManager = {
-	Connector: "/portal/rest/fckconnectorext/jcr/",
+	Connector: "/portal/rest/fckconnector/jcr/",
 	ResourceType : "File"
 };
 
