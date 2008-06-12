@@ -16,10 +16,9 @@
  */
 package org.exoplatform.services.jcr.ext.classify.impl;
 
-import java.util.ArrayList;
-
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.PathNotFoundException;
 import javax.jcr.Session;
 
 import org.exoplatform.services.jcr.ext.classify.NodeClassifyPlugin;
@@ -33,28 +32,21 @@ import org.exoplatform.services.jcr.ext.classify.NodeClassifyPlugin;
 public class AlphabetClassifyPlugin extends NodeClassifyPlugin {  
   public void classifyChildrenNode(Node parent) throws Exception {    
     Session session = parent.getSession();
-    NodeIterator nodeIterator = parent.getNodes();        
-    ArrayList<Character> classifiedNodes = new ArrayList<Character>();
+    NodeIterator nodeIterator = parent.getNodes();            
     while(nodeIterator.hasNext()){
       Node child = nodeIterator.nextNode();
       char firstCharacter = child.getName().charAt(0);
-      int num = 0;
-      for(char classifiedChar: classifiedNodes ){        
-        if(firstCharacter != classifiedChar){ num ++; }
-        else{
-          String srcPath = child.getPath();
-          String destPath = parent.getNode(Character.toUpperCase(firstCharacter) + "_Node").getPath()+ "/"+  child.getName();
-          session.move(srcPath, destPath);          
-          break;
-        }
-      }      
-      if(num == classifiedNodes.size()){
-        classifiedNodes.add(firstCharacter);
-        Node newClassifiedNode = parent.addNode(Character.toUpperCase(firstCharacter)+ "_Node", "nt:unstructured");         
-        String srcPath = child.getPath();
-        String destPath = newClassifiedNode.getPath()+ "/"+  child.getName();
-        session.move(srcPath, destPath);        
-      }                      
+      Node classifiedNode = null;
+      try{
+        classifiedNode = parent.getNode(Character.toString(firstCharacter));
+      }
+      catch(PathNotFoundException ex){
+        classifiedNode = parent.addNode(Character.toString(firstCharacter));
+        session.save();
+      }
+      String srcPath = child.getPath();
+      String destPath = classifiedNode.getPath() + "/" + child.getName();
+      session.move(srcPath, destPath);
     }
     session.save();
   }
