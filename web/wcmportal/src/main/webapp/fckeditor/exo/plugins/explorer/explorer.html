@@ -1,9 +1,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head><title>explorer</title>
+<head><title>eXplorer</title>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="pragma" content="no-cache">
-	<meta http-equiv="expires" content="0">
+	<meta http-equiv="eXpires" content="0">
 	<script type="text/javascript" src="js/kombai.js"></script>
 </head>
 <body>
@@ -15,7 +15,7 @@
 </body>
 <script type="text/javascript">
 var eXoPlugin = window.opener.eXoPlugin;
-var exp = {
+var eXp = {
 	connector: eXoPlugin.eXoFileManager.Connector,
 	resourceType: eXoPlugin.eXoFileManager.ResourceType,
 	command: {
@@ -32,6 +32,20 @@ var exp = {
 		}
 		return arr.join("&");
 	},
+	getNodes: function(DomX, nodeName) {
+		if (!DomX || !nodeName) return null;
+		var node = Kombai.select({from: DomX, where: "nodeName == '" + nodeName + "'"});
+		if (node.length) return node;
+		else return null;
+	},
+	getSingleNode: function(DomX, nodeName) {
+		var nodes = this.getNodes(DomX, nodeName);
+		if (nodes[0]) return nodes[0];
+		else return null;
+	},
+	getNodeValue: function(node, name) {
+		return node.attributes.getNamedItem(name).value;
+	},
 	sendRequest: function(connector, param, callback)  {
 		Kombai.request({
 			address: connector,
@@ -47,19 +61,21 @@ var exp = {
 				alert('Can"t connect to sever. Please try again.');
 			}
 		});
-	} 
+	}
 }
 
 
 
 function sendCommand() {
-	var connector = eXoPlugin.hostName + exp.connector + exp.command.getFiles;
-	var param = exp.buildParam("Type=" + exp.resourceType , "CurrentFolder=/");
+	var connector = eXoPlugin.hostName + eXp.connector + eXp.command.getFolders;
+	var param = eXp.buildParam("Type=" + eXp.resourceType , "CurrentFolder=/");
 	
 	function show(idata){
-		alert(idata);
+		var rootNode = eXp.getSingleNode(idata, "Connector");
+		var resourceType = eXp.getNodeValue(rootNode, "resourceType");
+		Kombai.discover(resourceType);
 	}
-	exp.sendRequest(connector, param, show);
+	eXp.sendRequest(connector, param, show);
 }
 </script>
 </html>
