@@ -7,11 +7,8 @@
 	<script type="text/javascript" src="js/kombai.js"></script>
 </head>
 <body>
-	<form name="doc">
-		show in folder:
-		<input type="text" id="dir" style="width: 256px;" value="/" onkeypress="if(event.keyCode == 13) return false;"/>
-		<input type="button" onclick="sendCommand()" value="sendCommand">
-	</form>
+ <div > Get Folder: </div>
+ <div style="padding: 6px; background: #effffe" id="result"></div>
 </body>
 <script type="text/javascript">
 var eXoPlugin = window.opener.eXoPlugin;
@@ -66,16 +63,36 @@ var eXp = {
 
 
 
-function sendCommand() {
+window.onload = function () {
 	var connector = eXoPlugin.hostName + eXp.connector + eXp.command.getFolders;
 	var param = eXp.buildParam("Type=" + eXp.resourceType , "CurrentFolder=/");
-	
-	function show(idata){
-		var rootNode = eXp.getSingleNode(idata, "Connector");
-		var resourceType = eXp.getNodeValue(rootNode, "resourceType");
-		Kombai.discover(resourceType);
-	}
 	eXp.sendRequest(connector, param, show);
+}
+
+function createNode(name) {
+	var sHtml = "<div style='cursor: pointer' onclick=\"getDir('"+name+"');\" >" + name + "</div>";
+	return sHtml;
+}
+
+function getDir(name) {
+	var connector = eXoPlugin.hostName + eXp.connector + eXp.command.getFolders;
+	var param = eXp.buildParam("Type=" + eXp.resourceType , "CurrentFolder=/" + name + "/");
+	eXp.sendRequest(connector, param, show);
+}
+
+function show(iXML) {
+	var dir = eXp.getNodes(iXML, "Folder");
+	var sHtml = "";
+	for (var i = 0 ; i < dir.length; ++i) {
+		var name = eXp.getNodeValue(dir[i], "name");
+		sHtml += createNode(name);
+	}
+	var Result = Kombai.create.element({tagName: "div", innerHTML: sHtml});
+	var Hr = Kombai.create.element({tagName: "div"});
+	var result = document.getElementById("result");
+	Hr.style.border = "1px solid red";
+	Kombai.insert({element: Hr, refer: result});
+	Kombai.insert({element: Result, refer: result});
 }
 </script>
 </html>
