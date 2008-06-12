@@ -21,8 +21,23 @@
         <valueConstraints/>	      
       </propertyDefinition>      
     </propertyDefinitions>
+  </nodeType>            
+    
+  <nodeType name="exo:portalFolder" isMixin="false" hasOrderableChildNodes="true" primaryItemName="">
+    <supertypes>
+      <supertype>nt:unstructured</supertype>
+    </supertypes>    
   </nodeType>
-          
+  
+  <nodeType name="exo:webFolder" isMixin="false" hasOrderableChildNodes="true" primaryItemName="">
+    <supertypes>
+      <supertype>nt:unstructured</supertype>
+    </supertypes>    
+  </nodeType>
+  
+  <nodeType name="exo:multimediaFolder" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">  	    
+  </nodeType>
+    
   <nodeType name="exo:jsFolder" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
     <supertypes>
       <supertype>nt:folder</supertype>
@@ -34,7 +49,21 @@
       <supertype>nt:folder</supertype>
     </supertypes>
   </nodeType>
-  
+      
+  <nodeType name="exo:webContent" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+  	<supertypes>
+  	  <supertype>mix:referenceable</supertype>
+  	  <supertype>nt:unstructured</supertype>
+  	  <supertype>nt:hierarchyNode</supertype>  	        
+    </supertypes>
+    <propertyDefinitions>
+      <propertyDefinition name="exo:webSummary" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY"
+        protected="false" multiple="true">
+        <valueConstraints/>
+      </propertyDefinition>  	          	    
+    </propertyDefinitions>
+  </nodeType>
+       
   <nodeType name="exo:htmlFile" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
   	<supertypes>
       <supertype>exo:presentationable</supertype>      
@@ -102,53 +131,31 @@
   	<supertypes>
       <supertype>exo:presentationable</supertype>      
     </supertypes>  	    
-  </nodeType>    
-  
-  <nodeType name="exo:multimediaFolder" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">  	    
   </nodeType>
   
-  <nodeType name="exo:webContent" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
-  	<supertypes>
-  	  <supertype>mix:referenceable</supertype>
-  	  <supertype>nt:unstructured</supertype>
-  	  <supertype>nt:hierarchyNode</supertype>  	        
-    </supertypes>
-    <propertyDefinitions>
-      <propertyDefinition name="exo:webSummary" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY"
+           
+  <nodeType name="exo:webLinks" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
+    <propertyDefinitions>      
+  	  <propertyDefinition name="exo:externalSiteLinks" requiredType="Reference" autoCreated="false" mandatory="false" onParentVersion="COPY"
         protected="false" multiple="true">
         <valueConstraints/>
       </propertyDefinition>
-  	  <propertyDefinition name="exo:referenceExternalSites" requiredType="Reference" autoCreated="false" mandatory="false" onParentVersion="COPY"
+      <propertyDefinition name="exo:portalPageLinks" requiredType="Reference" autoCreated="false" mandatory="false" onParentVersion="COPY"
         protected="false" multiple="true">
         <valueConstraints/>
       </propertyDefinition>
-      <propertyDefinition name="exo:referencePortalPages" requiredType="Reference" autoCreated="false" mandatory="false" onParentVersion="COPY"
+      <propertyDefinition name="exo:insideDocumentLinks" requiredType="Reference" autoCreated="false" mandatory="false" onParentVersion="COPY"
         protected="false" multiple="true">
         <valueConstraints/>
       </propertyDefinition>
-      <propertyDefinition name="exo:referenceDMSContent" requiredType="Reference" autoCreated="false" mandatory="false" onParentVersion="COPY"
-        protected="false" multiple="true">
-        <valueConstraints/>
-      </propertyDefinition>
-      <propertyDefinition name="exo:referenceMultimedia" requiredType="Reference" autoCreated="false" mandatory="false" onParentVersion="COPY"
+      <propertyDefinition name="exo:multimediaLinks" requiredType="Reference" autoCreated="false" mandatory="false" onParentVersion="COPY"
         protected="false" multiple="true">
         <valueConstraints/>
       </propertyDefinition>        	    
-    </propertyDefinitions>
+    </propertyDefinitions>          	    
   </nodeType>
   
-  <nodeType name="exo:portalFolder" isMixin="false" hasOrderableChildNodes="true" primaryItemName="">
-    <supertypes>
-      <supertype>nt:unstructured</supertype>
-    </supertypes>    
-  </nodeType>
-  
-  <nodeType name="exo:webFolder" isMixin="false" hasOrderableChildNodes="true" primaryItemName="">
-    <supertypes>
-      <supertype>nt:unstructured</supertype>
-    </supertypes>    
-  </nodeType>
-  
+          
   <nodeType name="exo:addSharedCSSAction" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
     <supertypes>
       <supertype>exo:scriptAction</supertype>
