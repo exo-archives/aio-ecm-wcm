@@ -16,10 +16,9 @@
  */
 package org.exoplatform.services.jcr.ext.classify.impl;
 
-import java.util.ArrayList;
-
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.PathNotFoundException;
 import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
 
@@ -36,27 +35,21 @@ public class TypeClassifyPlugin extends NodeClassifyPlugin {
   
   public void classifyChildrenNode(Node parent) throws Exception {
     Session session = parent.getSession();
-    NodeIterator nodeIterator = parent.getNodes();        
-    ArrayList<NodeType> typesIterator = new ArrayList<NodeType>();
+    NodeIterator nodeIterator = parent.getNodes();            
     while(nodeIterator.hasNext()){
       Node child = nodeIterator.nextNode();
       NodeType typeOfChild = child.getPrimaryNodeType();
-      int num = 0;
-      for(NodeType nType: typesIterator){
-        if(!typeOfChild.getName().equals(nType.getName())){ num ++;}
-        else{
-          String srcPath = child.getPath();
-          String destPath = parent.getNode(typeOfChild.getName() + "_Nodes").getPath() + "/"+  child.getName();
-          session.move(srcPath, destPath);          
-        }
-      }      
-      if(num == typesIterator.size()){
-        typesIterator.add(typeOfChild);
-        Node newClassifiedNode = parent.addNode(typeOfChild.getName() + "_Nodes", "nt:unstructured");         
-        String srcPath = child.getPath();
-        String destPath = newClassifiedNode.getPath()+ "/"+  child.getName();
-        session.move(srcPath, destPath);        
-      }     
+      String typeName = typeOfChild.getName();
+      Node classifiedNode = null;
+      try {
+        classifiedNode = parent.getNode(typeName);
+      } catch (PathNotFoundException e) {
+        classifiedNode = parent.addNode(typeName);
+        session.save();
+      }
+      String srcPath = child.getPath();
+      String destPath = classifiedNode.getPath() + "/" + child.getName();
+      session.move(srcPath, destPath);
     }
     session.save();
   }
