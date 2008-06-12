@@ -31,7 +31,7 @@ public class WebContentSchemaHandler extends BaseWebSchemaHandler {
 
   protected String getHandlerNodeType() { return "nt:file"; }  
   protected String getParentNodeType() { return "exo:webFolder"; }
-  
+
   public void process(Node file) throws Exception {
     Session session = file.getSession();    
     Node webFolder = file.getParent();
@@ -41,19 +41,34 @@ public class WebContentSchemaHandler extends BaseWebSchemaHandler {
     file.setProperty("exo:presentationType","exo:htmlFile");    
     String tempFolderName = fileName + this.hashCode() ;
     Node tempFolder = webFolder.addNode(tempFolderName, NT_UNSTRUCTURED) ;    
-    String newPath = tempFolder.getPath() + "/" +file.getName();        
-    session.move(file.getPath(),newPath);    
-    //rename the folder
-    String realWebContentPath = webFolder.getPath() + "/" + fileName ;
-    session.move(tempFolder.getPath(),realWebContentPath) ;
-    Node webContent = (Node)session.getItem(realWebContentPath) ;
-    addMixin(webContent, "exo:webContent") ; 
-    addMixin(webContent, EXO_OWNABLE) ;
-    webContent.setProperty("exo:presentationType","exo:webContent") ;       
+    String tempPath = tempFolder.getPath() + "/" +file.getName();        
+    session.move(file.getPath(),tempPath);    
+    //rename the folder        
+    Node webContent = webFolder.addNode(fileName, "exo:webContent") ;
+    String htmlFilePath = webContent.getPath() + "/" + fileName ;
+    addMixin(webContent, EXO_OWNABLE) ;   
+    session.move(tempPath, htmlFilePath) ;
+    tempFolder.remove() ;
     createSchema(webContent) ;
     session.save();
   }
-  
+
+  public Node getCSSFolder(Node webContent) throws Exception {
+    return webContent.getNode("css") ;
+  }  
+
+  public Node getJSFolder(Node webContent) throws Exception {
+    return webContent.getNode("js");
+  }
+
+  public Node getImagesFolders(Node webContent) throws Exception {
+    return webContent.getNode("multimedia/images") ;
+  }
+
+  public Node getVideoFolder(Node webContent) throws Exception {
+    return webContent.getNode("multimedia/videos") ;
+  }
+
   private void createSchema(Node webContent) throws Exception {
     Node jsFolder = webContent.addNode("js","exo:jsFolder") ;
     addMixin(jsFolder, EXO_OWNABLE) ;    

@@ -107,29 +107,30 @@
   <nodeType name="exo:multimediaFolder" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">  	    
   </nodeType>
   
-  <nodeType name="exo:webContent" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
+  <nodeType name="exo:webContent" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
   	<supertypes>
   	  <supertype>mix:referenceable</supertype>
-      <supertype>exo:presentationable</supertype>
+  	  <supertype>nt:unstructured</supertype>
+  	  <supertype>nt:hierarchyNode</supertype>  	        
     </supertypes>
     <propertyDefinitions>
       <propertyDefinition name="exo:webSummary" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY"
         protected="false" multiple="true">
         <valueConstraints/>
       </propertyDefinition>
-  	  <propertyDefinition name="exo:referenceExternalSites" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY"
+  	  <propertyDefinition name="exo:referenceExternalSites" requiredType="Reference" autoCreated="false" mandatory="false" onParentVersion="COPY"
         protected="false" multiple="true">
         <valueConstraints/>
       </propertyDefinition>
-      <propertyDefinition name="exo:referencePortalPages" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY"
+      <propertyDefinition name="exo:referencePortalPages" requiredType="Reference" autoCreated="false" mandatory="false" onParentVersion="COPY"
         protected="false" multiple="true">
         <valueConstraints/>
       </propertyDefinition>
-      <propertyDefinition name="exo:referenceDMSContent" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY"
+      <propertyDefinition name="exo:referenceDMSContent" requiredType="Reference" autoCreated="false" mandatory="false" onParentVersion="COPY"
         protected="false" multiple="true">
         <valueConstraints/>
       </propertyDefinition>
-      <propertyDefinition name="exo:referenceMultimedia" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY"
+      <propertyDefinition name="exo:referenceMultimedia" requiredType="Reference" autoCreated="false" mandatory="false" onParentVersion="COPY"
         protected="false" multiple="true">
         <valueConstraints/>
       </propertyDefinition>        	    
