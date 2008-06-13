@@ -85,7 +85,7 @@ function LoadResources( resourceType, folderPath )
 	oListManager.Clear() ;
 	oConnector.ResourceType = resourceType ;
 	oConnector.CurrentFolder = folderPath ;
-	oConnector.SendCommand( 'GetFoldersAndFiles', null, GetFoldersAndFilesCallBack ) ;
+	oConnector.SendCommand( 'getFoldersAndFiles', null, GetFoldersAndFilesCallBack ) ;
 }
 
 function Refresh()
