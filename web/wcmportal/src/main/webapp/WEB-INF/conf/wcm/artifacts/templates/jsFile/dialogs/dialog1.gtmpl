@@ -47,7 +47,25 @@
               }
             %>      
           </td>
-        </tr>       
+        </tr>
+        <tr>
+        	<td class="FieldLabel"><%=_ctx.appRes("JSFile.dialog.label.active")%></td>
+        	<td class="FieldComponent">
+        		<%
+        			String[] fieldActive = ["jcrPath=/node/exo:active", "options=true,false", "onchange=true"] ;
+        			uicomponent.addSelectBoxField("activeJS", fieldActive) ;
+        		%>
+        	</td>
+        </tr>
+        <tr>
+        	<td class="FieldLabel"><%=_ctx.appRes("JSFile.dialog.label.priority")%></td>
+        	<td class="FieldComponent">
+        		<%
+        			String[] fieldPriority = ["jcrPath=/node/exo:priority"] ;
+        			uicomponent.addTextField("JSpriority", fieldPriority) ;
+        		%>
+        	</td>
+        </tr>          
     </table>       
     <%/* start render action*/%>
     <div class="UIAction"> 
