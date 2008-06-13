@@ -25,7 +25,7 @@ eXoPlugin.eXoFileManager = {
 	ResourceType : "File"
 };
 
-eXoPlugin.ExoImageBrowserURL = FCKConfig.eXoPath + 'filemanager/browser/default/browser.html?Type=Image&Connector=/portal/connector' ;
+eXoPlugin.ExoImageBrowserURL = FCKConfig.eXoPath + 'filemanager/browser/default/browser.html?Type=Image&Connector=/portal/rest/fckconnector/jcr/getFiles' ;
 eXoPlugin.ExoFileBrowserURL = FCKConfig.eXoPath + 'filemanager/browser/default/browser.html?Type=File&Connector=/portal/connector' ;
 eXoPlugin.ExoPortalLinkBrowserURL = FCKConfig.eXoPath + 'filemanager/portal/default/browser.html?Type=PortalLink&Connector=/portal/rest/fckconnectorext/pageURI' ;
 
