@@ -5,9 +5,13 @@
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="eXpires" content="0">
 	<script type="text/javascript" src="js/kombai.js"></script>
+	<style type="text/css">
+		A {
+			text-decoration: none;
+		}
+	</style>
 </head>
 <body>
- <div > Get Folder: </div>
  <div style="padding: 6px; background: #effffe" id="result"></div>
 </body>
 <script type="text/javascript">
@@ -70,12 +74,18 @@ window.onload = function () {
 }
 
 function createNode(refer, name) {
-	var sHtml = "<div style='cursor: pointer' onclick=\"getDir('" + refer + name + "');\" >" + name + "</div>";
+	var sHtml =  '<div style="cursor: pointer"  ><b>' + name + ' : </b>';
+		sHtml += '<a href="javascript: void(0);" onclick="getDir(\'getFoldersAndFiles\', \'' + refer + name + '\');"> getFoldersAndFiles </a>';
+		sHtml += ' | ';
+		sHtml += '<a href="javascript: void(0);" onclick="getDir(\'' + eXp.command.getFolders + '\', \'' + refer + name + '\');"> getFolders </a>';
+		sHtml += ' | ';
+		sHtml += '<a href="javascript: void(0);" onclick="getDir(\'' + eXp.command.getFiles + '\', \'' + refer + name + '\');"> getFiles </a>';
+		sHtml += '</div>';
 	return sHtml;
 }
 
-function getDir(name) {
-	var connector = eXoPlugin.hostName + eXp.connector + eXp.command.getFolders;
+function getDir(action, name) {
+	var connector = eXoPlugin.hostName + eXp.connector + action;
 	var param = eXp.buildParam("Type=" + eXp.resourceType , "CurrentFolder=" + name + "/");
 	eXp.sendRequest(connector, param, show);
 }
@@ -84,7 +94,7 @@ function show(iXML) {
 	var dir = eXp.getNodes(iXML, "Folder");
 	if (!dir) return;
 	var cur = eXp.getNodeValue(eXp.getSingleNode(iXML, "CurrentFolder"), "path");
-	var sHtml = "";
+	var sHtml = "<div>Current Folder : <span style='color: red'>" + cur + "</span></div>";
 	for (var i = 0 ; i < dir.length; ++i) {
 		var name = eXp.getNodeValue(dir[i], "name");
 		sHtml += createNode(cur, name);
@@ -92,7 +102,8 @@ function show(iXML) {
 	var Result = Kombai.create.element({tagName: "div", innerHTML: sHtml});
 	var Hr = Kombai.create.element({tagName: "div"});
 	var result = document.getElementById("result");
-	Hr.style.border = "1px solid red";
+	Hr.style.borderTop = "1px solid orange";
+	Hr.style.marginBottom = "20px";
 	Kombai.insert({element: Hr, refer: result});
 	Kombai.insert({element: Result, refer: result});
 }
