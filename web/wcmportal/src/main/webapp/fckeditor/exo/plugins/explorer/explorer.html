@@ -69,23 +69,25 @@ window.onload = function () {
 	eXp.sendRequest(connector, param, show);
 }
 
-function createNode(name) {
-	var sHtml = "<div style='cursor: pointer' onclick=\"getDir('"+name+"');\" >" + name + "</div>";
+function createNode(refer, name) {
+	var sHtml = "<div style='cursor: pointer' onclick=\"getDir('" + refer + name + "');\" >" + name + "</div>";
 	return sHtml;
 }
 
 function getDir(name) {
 	var connector = eXoPlugin.hostName + eXp.connector + eXp.command.getFolders;
-	var param = eXp.buildParam("Type=" + eXp.resourceType , "CurrentFolder=/" + name + "/");
+	var param = eXp.buildParam("Type=" + eXp.resourceType , "CurrentFolder=" + name + "/");
 	eXp.sendRequest(connector, param, show);
 }
 
 function show(iXML) {
 	var dir = eXp.getNodes(iXML, "Folder");
+	if (!dir) return;
+	var cur = eXp.getNodeValue(eXp.getSingleNode(iXML, "CurrentFolder"), "path");
 	var sHtml = "";
 	for (var i = 0 ; i < dir.length; ++i) {
 		var name = eXp.getNodeValue(dir[i], "name");
-		sHtml += createNode(name);
+		sHtml += createNode(cur, name);
 	}
 	var Result = Kombai.create.element({tagName: "div", innerHTML: sHtml});
 	var Hr = Kombai.create.element({tagName: "div"});
