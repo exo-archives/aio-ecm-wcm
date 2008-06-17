@@ -36,7 +36,7 @@ public class TypeClassifyPlugin extends NodeClassifyPlugin {
   public void classifyChildrenNode(Node parent) throws Exception {
     Session session = parent.getSession();
     NodeIterator nodeIterator = parent.getNodes();            
-    while(nodeIterator.hasNext()){
+    while (nodeIterator.hasNext()) {
       Node child = nodeIterator.nextNode();
       NodeType typeOfChild = child.getPrimaryNodeType();
       String typeName = typeOfChild.getName();

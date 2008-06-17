@@ -18,13 +18,20 @@ package org.exoplatform.services.jcr.ext.classify.impl;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.Session;
 
+import org.apache.commons.lang.StringUtils;
+import org.exoplatform.commons.utils.ISO8601;
+import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.services.jcr.ext.classify.NodeClassifyPlugin;
+
+
 
 /**
  * Created by The eXo Platform SAS
@@ -34,68 +41,183 @@ import org.exoplatform.services.jcr.ext.classify.NodeClassifyPlugin;
  */
 public class DateTimeClassifyPlugin extends NodeClassifyPlugin {
 
+  private String templDateTime;
+  private String propertyDateTime;
+  private Calendar startDateTime;
+  private Calendar endDateTime;  
+  private int increment;
+  private char incrementType;
+
+  public DateTimeClassifyPlugin(InitParams initParams) {
+    try {
+      String strTemplDateTime = initParams.getValueParam("DateTimeTemplate").getValue();
+      String strDateTimePropertyName = initParams.getValueParam("DateTimePropertyName").getValue();
+      String strStartDateTime = initParams.getValueParam("StartTime").getValue();
+      String strEndDateTime = initParams.getValueParam("EndTime").getValue();      
+      templDateTime = getWellTemplDateTime(strTemplDateTime);
+      propertyDateTime = getDateTimePropertyName(strDateTimePropertyName);
+      startDateTime = getCalendar(strStartDateTime);      
+      if (strEndDateTime == "") {
+        endDateTime = new GregorianCalendar();
+        endDateTime.set(Calendar.YEAR, 2050);
+        endDateTime.set(Calendar.MONTH, 0);
+        endDateTime.set(Calendar.DAY_OF_MONTH, 1);        
+      } else {
+        endDateTime = getCalendar(strEndDateTime);
+      }
+      
+      setIncrement();        
+    } catch (Exception e) { e.printStackTrace(); }    
+
+  }
+
   public void classifyChildrenNode(Node parent) throws Exception {
-    Session session = parent.getSession();
-    NodeIterator nodeIterator = parent.getNodes();
-    ArrayList<Integer> years = new ArrayList<Integer>();    
-    while(nodeIterator.hasNext()){      
-      Node child = nodeIterator.nextNode();
-      String srcPath = child.getPath();
-      Calendar calendar = child.getProperty("exo:dateCreated").getDate();
-      int _year = calendar.get(Calendar.YEAR);
-      int _month = calendar.get(Calendar.MONTH);
-      int _week = calendar.get(Calendar.WEEK_OF_MONTH);
-           
-      if(!years.contains(_year)){
-        years.add(_year);
-        Node yearNode = parent.addNode(Integer.toString(_year), "nt:unstructured");  
-        Node monthNode = yearNode.addNode(Integer.toString(_month), "nt:unstructured");
-        Node weekNode = monthNode.addNode(Integer.toString(_week), "nt:unstructured");
-        String destPath = weekNode.getPath() + "/" + child.getName();
-        session.move(srcPath, destPath);
+    try {
+      Session session = parent.getSession();    
+      for (NodeIterator nodes = parent.getNodes(); nodes.hasNext();) {
+        Node node = nodes.nextNode();      
+        Calendar calNode = node.getProperty(propertyDateTime).getDate();
+        if (calNode.after(startDateTime) && calNode.before(endDateTime)) {
+          try {            
+            for (NodeIterator iterator = parent.getNodes(); iterator.hasNext();) { 
+              Node child = iterator.nextNode();
+              Calendar calNodeChild = child.getProperty(propertyDateTime).getDate();          
+              Node currNode = createNewDateTimeNode(parent, getDateTimeStructured(templDateTime, calNodeChild));
+              String srcPath = child.getPath();
+              String destPath = currNode.getPath() + "/" + child.getName();
+              session.move(srcPath, destPath);
+              session.save();
+            } 
+          } catch (PathNotFoundException e) { }
+        } else {
+          System.out.println("\n\nERRO: Out of DateTime ranger!\n");
+          return;
+        }
       }
-      else{        
-        NodeIterator monthIterator = parent.getNode(Integer.toString(_year)).getNodes();
-        try{          
-          int num = 0;
-          while(monthIterator.hasNext()){
-            Node monthNode = monthIterator.nextNode();
-            if(Integer.parseInt(monthNode.getName()) != _month){ num ++; }
-            else{              
-              NodeIterator weekIterator = monthNode.getNodes();              
-              try{
-                int numWeek = 0;
-                while(weekIterator.hasNext()){
-                  Node weekNode = weekIterator.nextNode();
-                  if(Integer.parseInt(weekNode.getName()) != _week){ numWeek ++; }
-                  else{
-                    String destPath = monthNode.getNode(Integer.toString(_week)).getPath() + "/" + child.getName();
-                    session.move(srcPath, destPath);
-                    break;
-                  }
-                }
-                if(numWeek == weekIterator.getSize()){
-                  Node weekNode = monthNode.addNode(Integer.toString(_week), "nt:unstructured");
-                  String destPath = weekNode.getPath() + "/" + child.getName();
-                  session.move(srcPath, destPath);
-                }
-              }catch(PathNotFoundException ex){}
-              break;
-            }
-          }
-          if(num == monthIterator.getSize()){
-            Node monthNode = parent.getNode(Integer.toString(_year)).addNode(Integer.toString(_month), "nt:unstructured");
-            Node weekNode = monthNode.addNode(Integer.toString(_week));
-            String destPath = weekNode.getPath() + "/" + child.getName();
-            session.move(srcPath, destPath);
-          }          
-        }catch(PathNotFoundException ex){}                
-      }
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      System.out.println("\n\n ========ERR: maybe templDateTime or startDateTime are not valids!======= \n");
     }    
-    session.save();    
+  }
+
+  private String getDateTimeStructured(String templDateTime, Calendar calendar) {
+    int year =  calendar.get(Calendar.YEAR),
+    month =  calendar.get(Calendar.MONTH) + 1,   
+    woy =  calendar.get(Calendar.WEEK_OF_YEAR),
+    wom =  calendar.get(Calendar.WEEK_OF_MONTH),
+    dom =  calendar.get(Calendar.DAY_OF_MONTH),
+    dow =  calendar.get(Calendar.DAY_OF_WEEK),
+    startYear = startDateTime.get(Calendar.YEAR),
+    startMonth = startDateTime.get(Calendar.MONTH);
+    switch (incrementType) {
+    case 'Y':              
+      int n = (year - startYear) / (increment + 1);
+      year = n * (increment + 1) + startYear;  
+      break;      
+    case 'M':      
+      if (year != startYear) startMonth = 1;
+      int m = (month - startMonth) / (increment + 1);
+      month = m * (increment + 1) + startMonth;        
+      break;     
+    default:
+      break;
+    }    
+    templDateTime = templDateTime.replace("YYYY", Integer.toString(year))
+                                 .replace("MM", Integer.toString(month))
+                                 .replace("WW", Integer.toString(woy))
+                                 .replace("ww", Integer.toString(wom))
+                                 .replace("DD", Integer.toString(dom))
+                                 .replace("dd", Integer.toString(dow));          
+    String expr = templDateTime.substring(templDateTime.indexOf("{") + 1 , templDateTime.indexOf("}"));    
+    templDateTime = templDateTime.replace(expr, operateExpression(expr))
+                                 .replace("#", "").replace("{", "")
+                                 .replace("}", "");        
+    return templDateTime;
+  }  
+
+
+  private String operateExpression(String expression) {        
+    String [] items = StringUtils.split(expression, "+");
+    int rel = Integer.parseInt(items[0]) + Integer.parseInt(items[1]);
+    if (incrementType == 'Y') {
+      int endTime = endDateTime.get(Calendar.YEAR);
+      rel = (rel > endTime) ? endTime : rel;
+    } else if ((incrementType == 'M') && (rel > 12)) rel = 12;        
+    String result  = Integer.toString(rel);    
+    return result; 
+  }
+
+  private Node createNewDateTimeNode(Node parentNode, String path) throws Exception {  
+    String [] items = path.split("/");    
+    Node currNode = null;
+    for (int i = 0; i < items.length; i++) { 
+      try { 
+        currNode = parentNode.getNode(items[i]); 
+      } catch (Exception e) { currNode = parentNode.addNode(items[i]); }
+      parentNode = currNode;
+    }       
+    return currNode;
+  }    
+
+  private String getWellTemplDateTime(String templ) {
+    templ = templ.replace(" ", "");
+    List<String> temp = new ArrayList<String>();    
+    String [] items = templ.split("/");
+    for (String item : items) {
+      if (item.contains("-")) {
+        if (item.contains("#")) {
+          String subStr = item.substring(item.indexOf("+") + 1 , item.indexOf("}"));
+          try {
+            Integer.parseInt(subStr);
+            item = item.replace("+", "").replace(subStr, "");
+            if ((!"YYYY-#{YYYY}".equals(item)) && (!"MM-#{MM}".equals(item))) {
+              templ = "";
+              break;
+            } 
+          } catch (Exception e) {
+            templ = "";
+            break;
+          } 
+        } else {
+          String [] subItems = item.split("-");
+          for (String subItem : subItems) temp.add(subItem);          
+        }        
+      } else if (!isValidField(item)) {
+        templ = "";        
+        break;
+      }
+    }
+    return templ;
   }
   
-  private String parse(String DateTimeTempl, Calendar calendar){
-    return null;
+  private boolean isValidField(String field) {
+    if ((!"YYYY".equals(field)) && (!"MM".equals(field)) && (!"WW".equals(field.toUpperCase())) && (!"DD".equals(field.toUpperCase())))
+      return false;
+    else
+      return true;
+  }
+
+
+  private Calendar getCalendar(String datetime) {
+    Calendar calendar = new GregorianCalendar();
+    try {
+      calendar = ISO8601.parse(datetime);
+      return calendar;
+    } catch (Exception e) { 
+      e.printStackTrace();
+      return null;
+    }       
+  }
+
+  private String getDateTimePropertyName(String name) {
+    if (name == "")  return "exo:dateCreated";
+    else  return name;    
+  }
+
+  private void setIncrement() {
+    String subStr = templDateTime.substring(templDateTime.indexOf("+") + 1 , templDateTime.indexOf("}"));
+    increment = Integer.parseInt(subStr);
+    incrementType = templDateTime.charAt(templDateTime.indexOf("{") + 1);        
   }  
+
 }

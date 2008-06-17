@@ -29,10 +29,10 @@ import org.exoplatform.container.component.ComponentPlugin;
  */
 public interface NodeClassifyService {  
   
-  public void addClassifyPlugin(ComponentPlugin componentPlugin) throws Exception ;
-  public Collection<NodeClassifyPlugin> getAllClassifyPlugins() throws Exception ;
-  public NodeClassifyPlugin getNodeClassifyPlugin(String type) throws Exception ;
-  public void removeClassifyPlygin(String type) throws Exception ;    
-  public <T extends NodeClassifyPlugin> T getNodeClassifyPluginByType(Class<T> clazz) throws Exception ;
+  public void addClassifyPlugin(ComponentPlugin componentPlugin) throws Exception;
+  public Collection<NodeClassifyPlugin> getAllClassifyPlugins() throws Exception;
+  public NodeClassifyPlugin getNodeClassifyPlugin(String type) throws Exception;
+  public void removeClassifyPlygin(String type) throws Exception;    
+  public <T extends NodeClassifyPlugin> T getNodeClassifyPluginByType(Class<T> clazz) throws Exception;
   
 }

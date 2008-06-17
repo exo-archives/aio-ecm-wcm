@@ -33,14 +33,13 @@ public class AlphabetClassifyPlugin extends NodeClassifyPlugin {
   public void classifyChildrenNode(Node parent) throws Exception {    
     Session session = parent.getSession();
     NodeIterator nodeIterator = parent.getNodes();            
-    while(nodeIterator.hasNext()){
+    while (nodeIterator.hasNext()) {
       Node child = nodeIterator.nextNode();
       char firstCharacter = child.getName().charAt(0);
       Node classifiedNode = null;
-      try{
-        classifiedNode = parent.getNode(Character.toString(firstCharacter));
-      }
-      catch(PathNotFoundException ex){
+      try { 
+        classifiedNode = parent.getNode(Character.toString(firstCharacter)); 
+      } catch (PathNotFoundException ex) {
         classifiedNode = parent.addNode(Character.toString(firstCharacter));
         session.save();
       }

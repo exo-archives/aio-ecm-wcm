@@ -52,6 +52,24 @@
 	   		<name>DateTimeClassifyPlugin</name>
 	   		<set-method>addClassifyPlugin</set-method>
 	   		<type>org.exoplatform.services.jcr.ext.classify.impl.DateTimeClassifyPlugin</type>
+	   		<init-params>
+		   		<value-param>
+		   			<name>DateTimeTemplate</name>
+		   			<value>YYYY-#{YYYY+4}/MM</value>
+	   			</value-param>
+	   			<value-param>
+	   				<name>DateTimePropertyName</name>
+	   				<value></value>	   				
+	   			</value-param> 			
+	   			<value-param>
+	   				<name>StartTime</name>
+	   				<value>2002-2</value>	   				
+	   			</value-param> 			
+	   			<value-param>
+	   				<name>EndTime</name>
+	   				<value>2020-9</value>	   				
+	   			</value-param> 				   			
+	   		</init-params>	   		
 	   	</component-plugin>	  
 	    <component-plugin>
 	   		<name>TypeClassifyPlugin</name>

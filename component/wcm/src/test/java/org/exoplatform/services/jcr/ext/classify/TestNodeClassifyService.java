@@ -35,20 +35,20 @@ import org.exoplatform.services.wcm.BaseTestCase;
  * Jun 2, 2008  
  */
 public class TestNodeClassifyService extends BaseTestCase {
-  
+
   public void testClassifyPluginManager() throws Exception {
     NodeClassifyService classifyService = 
-      (NodeClassifyService)container.getComponentInstanceOfType(NodeClassifyService.class) ;
+      (NodeClassifyService)container.getComponentInstanceOfType(NodeClassifyService.class);
     String strAlphabetClassify = "org.exoplatform.services.jcr.ext.classify.impl.AlphabetClassifyPlugin";
     NodeClassifyPlugin classifyPlugin = classifyService.getNodeClassifyPlugin(strAlphabetClassify);
     assertNotNull(classifyPlugin);
   }
-  
+
   public void testAlphabetClassify() throws Exception {    
     NodeClassifyService classifyService = 
-      (NodeClassifyService)container.getComponentInstanceOfType(NodeClassifyService.class) ;
+      (NodeClassifyService)container.getComponentInstanceOfType(NodeClassifyService.class);
     AlphabetClassifyPlugin alphabetClassifyPlugin = 
-      (AlphabetClassifyPlugin)classifyService.getNodeClassifyPlugin(AlphabetClassifyPlugin.class.getName()) ;
+      (AlphabetClassifyPlugin)classifyService.getNodeClassifyPlugin(AlphabetClassifyPlugin.class.getName());
     Session session = repositoryService.getRepository(REPO_NAME).getSystemSession(COLLABORATION_WS);    
     Node root = session.getRootNode();    
     Node test = root.addNode("test", "nt:unstructured");
@@ -59,11 +59,11 @@ public class TestNodeClassifyService extends BaseTestCase {
     test.addNode("dot", "nt:unstructured");
     test.addNode("temp", "nt:unstructured");   
     session.save();
-    
+
     assertEquals(6, test.getNodes().getSize());
-    
-    alphabetClassifyPlugin.classifyChildrenNode(test) ;    
-      
+
+    alphabetClassifyPlugin.classifyChildrenNode(test);    
+
     try{
 //    -> classified nodes: E_Node, D_Node and T_Node (sub nodes of test node)      
       Node E_node = test.getNode("E_Node");
@@ -74,27 +74,27 @@ public class TestNodeClassifyService extends BaseTestCase {
       assertNotNull(E_node);
       assertNotNull(D_node);
       assertNotNull(T_node);
-      
+
 //    sub nodes of E_node: ebook, emule, economy  
       assertEquals(3, E_node.getNodes().getSize());
       assertNotNull(E_node.getNode("ebook"));
       assertNotNull(E_node.getNode("emule"));
       assertNotNull(E_node.getNode("economy"));
-      
+
 //    sub nodes of D_node: document, dot
       assertEquals(2, D_node.getNodes().getSize());
       assertNotNull(D_node.getNode("document"));
       assertNotNull(D_node.getNode("dot"));
-      
+
 //    sub nodes of T_node: temp      
       assertEquals(1, T_node.getNodes().getSize());
       assertNotNull(T_node.getNode("temp"));             
     }catch(PathNotFoundException ex){}    
-    
+
     test.remove();
     session.save();
   }
-  
+
   public void testDateTimeClassify() throws Exception{
     NodeClassifyService classifyService = 
       (NodeClassifyService)container.getComponentInstanceOfType(NodeClassifyService.class) ;
@@ -103,122 +103,97 @@ public class TestNodeClassifyService extends BaseTestCase {
     Session session = repositoryService.getRepository(REPO_NAME).getSystemSession(COLLABORATION_WS);    
     Node root = session.getRootNode();    
     Node test = root.addNode("test", "nt:unstructured");
-        
+
     Calendar c1 = new GregorianCalendar();
-    c1.set(Calendar.YEAR, 1986);
-    c1.set(Calendar.MONTH, 3);
-    c1.set(Calendar.DATE, 21);
-    
+    c1.set(Calendar.YEAR, 2013);
+    c1.set(Calendar.MONTH, 10);
+
     Calendar c2 = new GregorianCalendar();
-    c2.set(Calendar.YEAR, 1986);
-    c2.set(Calendar.MONTH, 3);
-    c2.set(Calendar.DATE, 23);
+    c2.set(Calendar.YEAR, 2013);
+    c2.set(Calendar.MONTH, 4);
 
     Calendar c3 = new GregorianCalendar();
-    c3.set(Calendar.YEAR, 1986);
-    c3.set(Calendar.MONTH, 3);
-    c3.set(Calendar.DATE, 2);
-    
+    c3.set(Calendar.YEAR, 2012);
+    c3.set(Calendar.MONTH, 8);
+
     Calendar c4 = new GregorianCalendar();
-    c4.set(Calendar.YEAR, 1986);
-    c4.set(Calendar.MONTH, 8);
-    c4.set(Calendar.DATE, 10);    
-    
+    c4.set(Calendar.YEAR, 2018);
+    c4.set(Calendar.MONTH, 2);
+
     Calendar c5 = new GregorianCalendar();
-    c5.set(Calendar.YEAR, 1987);
-    c5.set(Calendar.MONTH, 11);
-    c5.set(Calendar.DATE, 18);
-    
-    Node node1 = test.addNode("bird", "nt:unstructured");
-    Node node2 = test.addNode("dog", "nt:unstructured");
-    Node node3 = test.addNode("cat", "nt:unstructured");
-    Node node4 = test.addNode("fish", "nt:unstructured");
-    Node node5 = test.addNode("snack", "nt:unstructured");
-    
-    node1.setProperty("exo:dateCreated", c1);
-    node2.setProperty("exo:dateCreated", c2);
-    node3.setProperty("exo:dateCreated", c3);
-    node4.setProperty("exo:dateCreated", c4);
-    node5.setProperty("exo:dateCreated", c5);
-    
-    session.save();   
-    
-    dateClassifyPlugin.classifyChildrenNode(test);    
-    
-    try{
-      //2 sub nodes of test: 1986 and 1987      
-      Node n_1986 = test.getNode("1986");
-      Node n_1987 = test.getNode("1987");
-      
-      assertEquals(2, test.getNodes().getSize());
-      assertNotNull(n_1986);
-      assertNotNull(n_1987);
-  
-      //2 sub nodes of n_1986: 3 and 8
-      Node n_1986_3 = n_1986.getNode("3");
-      Node n_1986_8 = n_1986.getNode("8");
-      
-      assertEquals(2, n_1986.getNodes().getSize());
-      assertNotNull(n_1986_3);
-      assertNotNull(n_1986_8);
-      
-      //2 sub nodes of n_1986_3: 1 and 4
-      Node n_1986_3_1 = n_1986_3.getNode("1");
-      Node n_1986_3_4 = n_1986_3.getNode("4");
-      
-      assertEquals(2, n_1986_3.getNodes().getSize());
-      assertNotNull(n_1986_3_1);
-      assertNotNull(n_1986_3_4);
-      
-      //2 sub nodes of n_1986_3_4: bird and dog
-      Node n_1986_3_4_bird = n_1986_3_4.getNode("bird");
-      Node n_1986_3_4_dog = n_1986_3_4.getNode("dog");
-      
-      assertEquals(2, n_1986_3_4.getNodes().getSize());
-      assertNotNull(n_1986_3_4_bird);
-      assertNotNull(n_1986_3_4_dog);
-      
-      //1 sub node of n_1986_3_1: cat
-      Node n_1986_3_1_cat = n_1986_3_1.getNode("cat");
-      
-      assertEquals(1, n_1986_3_1.getNodes().getSize());
-      assertNotNull(n_1986_3_1_cat);
-      
-      //1 sub node of n_1986_8: 2
-      Node n_1986_8_2 = n_1986_8.getNode("2");
-      
-      assertEquals(1, n_1986_8.getNodes().getSize());
-      assertNotNull(n_1986_8_2);
-      
-      //1 sub node of n_1986_8_2: fish
-      Node n_1986_8_2_fish = n_1986_8_2.getNode("fish");
-      
-      assertEquals(1, n_1986_8_2.getNodes().getSize());
-      assertNotNull(n_1986_8_2_fish);
-      
-      //1 sub node of n_1987: 11
-      Node n_1987_11 = n_1987.getNode("11");
-      
-      assertEquals(1, n_1987.getNodes().getSize());
-      assertNotNull(n_1987_11);      
-      
-      //1 sub node of n_1987_11: 3
-      Node n_1987_11_3 = n_1987_11.getNode("3");
-      
-      assertEquals(1, n_1987_11.getNodes().getSize());
-      assertNotNull(n_1987_11_3);
-      
-      //1 sub node of n_1987_11_3: snack
-      Node n_1987_11_3_snack = n_1987_11_3.getNode("snack");
-      
-      assertEquals(1, n_1987_11_3.getNodes().getSize());
-      assertNotNull(n_1987_11_3_snack);
-    }catch(PathNotFoundException ex){}    
-     
+    c5.set(Calendar.YEAR, 2019);
+    c5.set(Calendar.MONTH, 2);
+
+    Node n1 = test.addNode("node1", "nt:unstructured");
+    n1.setProperty("exo:dateCreated", c1);
+    Node n2 = test.addNode("node2", "nt:unstructured");
+    n2.setProperty("exo:dateCreated", c2);
+    Node n3 = test.addNode("node3", "nt:unstructured");
+    n3.setProperty("exo:dateCreated", c3);
+    Node n4 = test.addNode("node4", "nt:unstructured");
+    n4.setProperty("exo:dateCreated", c4);
+    Node n5 = test.addNode("node5", "nt:unstructured");
+    n5.setProperty("exo:dateCreated", c5);
+
+    session.save();
+
+    assertEquals(5, test.getNodes().getSize());
+
+    dateClassifyPlugin.classifyChildrenNode(test);
+
+    //test node has 2 child nodes: "2012-2016" and "2017-2020"
+    assertEquals(2, test.getNodes().getSize());
+    Node n_2012 = test.getNode("2012-2016");
+    Node n_2017 = test.getNode("2017-2020");
+    assertNotNull(n_2012);
+    assertNotNull(n_2017);
+
+    //n_2012 node has 3 child nodes: "11" , "5" and "9" 
+    assertEquals(3, n_2012.getNodes().getSize());
+    Node n_2012_11 = n_2012.getNode("11");
+    Node n_2012_9 = n_2012.getNode("9");
+    Node n_2012_5 = n_2012.getNode("5");
+    assertNotNull(n_2012_11);
+    assertNotNull(n_2012_9);
+    assertNotNull(n_2012_5);        
+    /*    
+    n_2012_11 has one child node is "node1" - and it is leaft node
+    n_2012_5 has one child node is "node2" - and it is leaft node
+    n_2012_9 has one child node is "node3" - and it is leaft node
+     */
+    assertEquals(1, n_2012_11.getNodes().getSize());
+    Node leaft1 = n_2012_11.getNode("node1");
+    assertNotNull(leaft1);
+    assertEquals(0, leaft1.getNodes().getSize());
+
+    assertEquals(1, n_2012_5.getNodes().getSize());
+    Node leaft2 = n_2012_5.getNode("node2");
+    assertNotNull(leaft2);
+    assertEquals(0, leaft2.getNodes().getSize());
+
+    assertEquals(1, n_2012_9.getNodes().getSize());
+    Node leaft3 = n_2012_9.getNode("node3");
+    assertNotNull(leaft3);
+    assertEquals(0, leaft3.getNodes().getSize());
+
+    //n_2017 has 1 child node: "3"
+    assertEquals(1, n_2017.getNodes().getSize());
+    Node n_2017_3 = n_2017.getNode("3");
+    assertNotNull(n_2017_3);
+
+    //n_2017_3 has 2 child nodes: "node4" and "node5" -> they are leaft nodes.
+    assertEquals(2, n_2017_3.getNodes().getSize());
+    Node leaft4 = n_2017_3.getNode("node4");
+    Node leaft5 = n_2017_3.getNode("node5");
+    assertNotNull(leaft4);
+    assertEquals(0, leaft4.getNodes().getSize());
+    assertNotNull(leaft5);
+    assertEquals(0, leaft5.getNodes().getSize());
+
     test.remove();
     session.save();    
   }
-  
+
   public void testTypeClassify() throws Exception{    
     NodeClassifyService classifyService = 
       (NodeClassifyService)container.getComponentInstanceOfType(NodeClassifyService.class) ;
@@ -233,11 +208,11 @@ public class TestNodeClassifyService extends BaseTestCase {
     test.addNode("ball", "nt:unstructured");
     test.addNode("hat", "nt:unstructured");
     session.save();
-    
+
     assertEquals(5, test.getNodes().getSize());
-    
+
     typeClassifyPlugin.classifyChildrenNode(test);
-    
+
     try{
 //    -> classified nodes: nt:folder_Nodes, nt:unstructured_Nodes (sub nodes of test node)
       Node folder_node = test.getNode("nt:folder_Nodes");
@@ -246,19 +221,19 @@ public class TestNodeClassifyService extends BaseTestCase {
       assertEquals(2, test.getNodes().getSize());
       assertNotNull(folder_node);
       assertNotNull(unstructured_node );
-      
+
 //    sub nodes of nt:folder_Nodes : chicken, dog, bird
       assertEquals(3, folder_node.getNodes().getSize());
       assertNotNull(folder_node.getNode("chicken"));
       assertNotNull(folder_node.getNode("dog"));
       assertNotNull(folder_node.getNode("bird"));
-      
+
 //    sub nodes of nt:unstructured_Nodes: ball, hat
       assertEquals(2, unstructured_node.getNodes().getSize());
       assertNotNull(unstructured_node.getNode("ball"));
       assertNotNull(unstructured_node.getNode("hat"));
-                  
+
     }catch(PathNotFoundException ex){} 
   }
-  
+
 }

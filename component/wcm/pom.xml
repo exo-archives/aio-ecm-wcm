@@ -130,7 +130,7 @@
           </includes>
           <excludes>
             <exclude>**/*$*</exclude><!--nested classes prb, http://jira.codehaus.org/browse/SUREFIRE-288-->
-            <exclude>**/BaseECMTestCase.java</exclude>            
+            <exclude>**/BaseTestCase</exclude>            
           </excludes>
         </configuration>
       </plugin>

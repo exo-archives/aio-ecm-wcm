@@ -31,19 +31,19 @@ import org.exoplatform.services.jcr.ext.classify.NodeClassifyService;
  * Apr 9, 2008  
  */
 public class NodeClassifyServiceImpl implements NodeClassifyService {	
-  private HashMap<String, NodeClassifyPlugin> nodeClassifyPlugins = new HashMap<String, NodeClassifyPlugin>() ;
+  private HashMap<String, NodeClassifyPlugin> nodeClassifyPlugins = new HashMap<String, NodeClassifyPlugin>();
 
   public NodeClassifyServiceImpl(RepositoryService repositoryService) { }
 
   //do after
   public <T extends NodeClassifyPlugin> T getNodeClassifyPluginByType(Class<T> clazz) throws Exception {
-    return null ;
+    return null;
   }
 
   public void addClassifyPlugin(ComponentPlugin componentPlugin) throws Exception {
-    if(componentPlugin instanceof NodeClassifyPlugin) {
-      NodeClassifyPlugin classifyPlugin = (NodeClassifyPlugin)componentPlugin ;
-      nodeClassifyPlugins.put(classifyPlugin.getClass().getName(), classifyPlugin) ;      
+    if (componentPlugin instanceof NodeClassifyPlugin) {
+      NodeClassifyPlugin classifyPlugin = (NodeClassifyPlugin) componentPlugin;
+      nodeClassifyPlugins.put(classifyPlugin.getClass().getName(), classifyPlugin);      
     }
   }
 
