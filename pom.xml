@@ -109,7 +109,7 @@
             <phase>test-compile</phase>
             <configuration>
               <tasks if="emma.run">
-                <echo message="[EMMA] classes instrumentation execution:${exo.emma.enable}" />
+                <echo message="[EMMA] classes instrumentation execution..." />
                 <taskdef resource="emma_ant.properties" classpathref="maven.dependency.classpath" />
                 <mkdir dir="target" />
                 <mkdir dir="target/classes" />
@@ -117,7 +117,7 @@
                 <copy todir="target/emma/classes" verbose="false" overwrite="true">
                   <fileset dir="target/classes" />
                 </copy>
-                <emma enabled="${exo.emma.enable}">
+                <emma enabled="true">
                   <instr mode="overwrite" metadatafile="target/emma/metadata.em">
                     <filter excludes="*JiBX*" />
                     <filter excludes="*Entry*" />
@@ -142,9 +142,9 @@
             <phase>test</phase>
             <configuration>
               <tasks if="emma.run">
-                <echo message="[EMMA] report generation execution:${exo.emma.enable}" />
+                <echo message="[EMMA] report generation execution..." />
                 <taskdef resource="emma_ant.properties" classpathref="maven.dependency.classpath" />
-                <emma enabled="${exo.emma.enable}">                  
+                <emma enabled="true">                  
                   <merge outfile="${exo.projects.directory.src}/wcm/trunk/target/coverage.es">
                     <fileset dir="${exo.projects.directory.src}/wcm/trunk/">
                       <include name="**/target/emma/*.e*" />
@@ -220,7 +220,6 @@
         <org.exoplatform.wcm.version>trunk</org.exoplatform.wcm.version>
         <exo.test.classes>Test</exo.test.classes>
         <exo.test.skip>true</exo.test.skip>
-        <exo.emma.enable>false</exo.emma.enable>        
       </properties>
     </profile>
   </profiles>
