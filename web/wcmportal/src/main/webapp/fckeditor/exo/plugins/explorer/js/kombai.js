@@ -1,5 +1,4 @@
 	/*
-	* Kombai 
 	* Create by uoon (vnjs.net)
 	*/
 	var Kombai = {
