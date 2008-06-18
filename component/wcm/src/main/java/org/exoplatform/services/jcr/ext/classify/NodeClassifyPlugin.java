@@ -20,7 +20,7 @@ import javax.jcr.Node;
 
 import org.exoplatform.container.component.ComponentPlugin;
 
-/**
+/*
  * Created by The eXo Platform SAS
  * Author : Hoa.Pham
  *          hoa.pham@exoplatform.com

@@ -24,7 +24,7 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.classify.NodeClassifyPlugin;
 import org.exoplatform.services.jcr.ext.classify.NodeClassifyService;
 
-/**
+/*
  * Created by The eXo Platform SAS
  * Author : Hoa.Pham
  *          hoa.pham@exoplatform.com

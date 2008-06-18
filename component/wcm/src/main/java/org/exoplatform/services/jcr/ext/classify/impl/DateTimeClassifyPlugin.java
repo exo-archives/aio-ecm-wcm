@@ -23,7 +23,6 @@ import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
-import javax.jcr.PathNotFoundException;
 import javax.jcr.Session;
 
 import org.apache.commons.lang.StringUtils;
@@ -33,7 +32,7 @@ import org.exoplatform.services.jcr.ext.classify.NodeClassifyPlugin;
 
 
 
-/**
+/*
  * Created by The eXo Platform SAS
  * Author : Hoa.Pham
  *          hoa.pham@exoplatform.com
@@ -41,66 +40,43 @@ import org.exoplatform.services.jcr.ext.classify.NodeClassifyPlugin;
  */
 public class DateTimeClassifyPlugin extends NodeClassifyPlugin {
 
-  private String templDateTime;
+  private String templateDateTime;
   private String propertyDateTime;
   private Calendar startDateTime;
   private Calendar endDateTime;  
   private int increment;
   private char incrementType;
+  private final int months = 12;
 
-  public DateTimeClassifyPlugin(InitParams initParams) {
+  public DateTimeClassifyPlugin(final InitParams initParams) {
     try {
       String strTemplDateTime = initParams.getValueParam("DateTimeTemplate").getValue();
       String strDateTimePropertyName = initParams.getValueParam("DateTimePropertyName").getValue();
       String strStartDateTime = initParams.getValueParam("StartTime").getValue();
       String strEndDateTime = initParams.getValueParam("EndTime").getValue();      
-      templDateTime = getWellTemplDateTime(strTemplDateTime);
+      templateDateTime = getWellTemplDateTime(strTemplDateTime);
       propertyDateTime = getDateTimePropertyName(strDateTimePropertyName);
-      startDateTime = getCalendar(strStartDateTime);      
-      if (strEndDateTime == "") {
-        endDateTime = new GregorianCalendar();
-        endDateTime.set(Calendar.YEAR, 2050);
-        endDateTime.set(Calendar.MONTH, 0);
-        endDateTime.set(Calendar.DAY_OF_MONTH, 1);        
-      } else {
-        endDateTime = getCalendar(strEndDateTime);
-      }
-      
+      startDateTime = getCalendar(strStartDateTime);
+      endDateTime = getCalendar(strEndDateTime);           
       setIncrement();        
-    } catch (Exception e) { e.printStackTrace(); }    
-
+    } catch (Exception e) { }    
   }
 
   public void classifyChildrenNode(Node parent) throws Exception {
-    try {
-      Session session = parent.getSession();    
-      for (NodeIterator nodes = parent.getNodes(); nodes.hasNext();) {
-        Node node = nodes.nextNode();      
-        Calendar calNode = node.getProperty(propertyDateTime).getDate();
-        if (calNode.after(startDateTime) && calNode.before(endDateTime)) {
-          try {            
-            for (NodeIterator iterator = parent.getNodes(); iterator.hasNext();) { 
-              Node child = iterator.nextNode();
-              Calendar calNodeChild = child.getProperty(propertyDateTime).getDate();          
-              Node currNode = createNewDateTimeNode(parent, getDateTimeStructured(templDateTime, calNodeChild));
-              String srcPath = child.getPath();
-              String destPath = currNode.getPath() + "/" + child.getName();
-              session.move(srcPath, destPath);
-              session.save();
-            } 
-          } catch (PathNotFoundException e) { }
-        } else {
-          System.out.println("\n\nERRO: Out of DateTime ranger!\n");
-          return;
-        }
-      }
-    } catch (Exception ex) {
-      ex.printStackTrace();
-      System.out.println("\n\n ========ERR: maybe templDateTime or startDateTime are not valids!======= \n");
-    }    
+    Session session = parent.getSession();    
+    for (NodeIterator nodes = parent.getNodes(); nodes.hasNext();) {
+      Node node = nodes.nextNode();      
+      Calendar calNode = node.getProperty(propertyDateTime).getDate();
+      if ((calNode.before(startDateTime)) || (calNode.after(endDateTime))) continue;             
+      Node currNode = createNewDateTimeNode(parent, getDateTimeStructured(templateDateTime, calNode));      
+      String srcPath = node.getPath();
+      String destPath = currNode.getPath() + "/" + node.getName();
+      session.move(srcPath, destPath);
+      session.save();              
+    }       
   }
 
-  private String getDateTimeStructured(String templDateTime, Calendar calendar) {
+  private String getDateTimeStructured(String templDateTime, Calendar calendar) {    
     int year =  calendar.get(Calendar.YEAR),
     month =  calendar.get(Calendar.MONTH) + 1,   
     woy =  calendar.get(Calendar.WEEK_OF_YEAR),
@@ -119,19 +95,18 @@ public class DateTimeClassifyPlugin extends NodeClassifyPlugin {
       int m = (month - startMonth) / (increment + 1);
       month = m * (increment + 1) + startMonth;        
       break;     
-    default:
-      break;
-    }    
+    default: break;
+    }        
     templDateTime = templDateTime.replace("YYYY", Integer.toString(year))
-                                 .replace("MM", Integer.toString(month))
-                                 .replace("WW", Integer.toString(woy))
-                                 .replace("ww", Integer.toString(wom))
-                                 .replace("DD", Integer.toString(dom))
-                                 .replace("dd", Integer.toString(dow));          
+    .replace("MM", Integer.toString(month))
+    .replace("WW", Integer.toString(woy))
+    .replace("ww", Integer.toString(wom))
+    .replace("DD", Integer.toString(dom))
+    .replace("dd", Integer.toString(dow));          
     String expr = templDateTime.substring(templDateTime.indexOf("{") + 1 , templDateTime.indexOf("}"));    
     templDateTime = templDateTime.replace(expr, operateExpression(expr))
-                                 .replace("#", "").replace("{", "")
-                                 .replace("}", "");        
+    .replace("#", "").replace("{", "")
+    .replace("}", "");          
     return templDateTime;
   }  
 
@@ -142,7 +117,7 @@ public class DateTimeClassifyPlugin extends NodeClassifyPlugin {
     if (incrementType == 'Y') {
       int endTime = endDateTime.get(Calendar.YEAR);
       rel = (rel > endTime) ? endTime : rel;
-    } else if ((incrementType == 'M') && (rel > 12)) rel = 12;        
+    } else if ((incrementType == 'M') && (rel > months)) rel = months;        
     String result  = Integer.toString(rel);    
     return result; 
   }
@@ -189,12 +164,12 @@ public class DateTimeClassifyPlugin extends NodeClassifyPlugin {
     }
     return templ;
   }
-  
+
   private boolean isValidField(String field) {
     if ((!"YYYY".equals(field)) && (!"MM".equals(field)) && (!"WW".equals(field.toUpperCase())) && (!"DD".equals(field.toUpperCase())))
       return false;
     else
-      return true;
+      return true;   
   }
 
 
@@ -203,7 +178,7 @@ public class DateTimeClassifyPlugin extends NodeClassifyPlugin {
     try {
       calendar = ISO8601.parse(datetime);
       return calendar;
-    } catch (Exception e) { 
+    } catch (Exception e) {       
       e.printStackTrace();
       return null;
     }       
@@ -215,9 +190,9 @@ public class DateTimeClassifyPlugin extends NodeClassifyPlugin {
   }
 
   private void setIncrement() {
-    String subStr = templDateTime.substring(templDateTime.indexOf("+") + 1 , templDateTime.indexOf("}"));
+    String subStr = templateDateTime.substring(templateDateTime.indexOf("+") + 1 , templateDateTime.indexOf("}"));
     increment = Integer.parseInt(subStr);
-    incrementType = templDateTime.charAt(templDateTime.indexOf("{") + 1);        
+    incrementType = templateDateTime.charAt(templateDateTime.indexOf("{") + 1);        
   }  
 
 }

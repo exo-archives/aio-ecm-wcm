@@ -23,7 +23,7 @@ import javax.jcr.Session;
 
 import org.exoplatform.services.jcr.ext.classify.NodeClassifyPlugin;
 
-/**
+/*
  * Created by The eXo Platform SAS
  * Author : Hoa.Pham
  *          hoa.pham@exoplatform.com
