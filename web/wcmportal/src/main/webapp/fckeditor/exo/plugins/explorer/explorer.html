@@ -35,7 +35,7 @@ var eXp = {
 	},
 	getNodes: function(DomX, nodeName) {
 		if (!DomX || !nodeName) return null;
-		var node = Kombai.select({from: DomX, where: "nodeName == '" + nodeName + "'"});
+		var node = K.select({from: DomX, where: "nodeName == '" + nodeName + "'"});
 		if (node.length) return node;
 		else return null;
 	},
@@ -48,7 +48,7 @@ var eXp = {
 		return node.attributes.getNamedItem(name).value;
 	},
 	sendRequest: function(connector, param, callback)  {
-		Kombai.request({
+		K.request({
 			address: connector,
 			data: param,
 			method: "GET",
@@ -99,13 +99,13 @@ function show(iXML) {
 		var name = eXp.getNodeValue(dir[i], "name");
 		sHtml += createNode(cur, name);
 	}
-	var Result = Kombai.create.element({tagName: "div", innerHTML: sHtml});
-	var Hr = Kombai.create.element({tagName: "div"});
+	var Result = K.create.element({tagName: "div", innerHTML: sHtml});
+	var Hr = K.create.element({tagName: "div"});
 	var result = document.getElementById("result");
 	Hr.style.borderTop = "1px solid orange";
 	Hr.style.marginBottom = "20px";
-	Kombai.insert({element: Hr, refer: result});
-	Kombai.insert({element: Result, refer: result});
+	K.insert({element: Hr, refer: result});
+	K.insert({element: Result, refer: result});
 }
 </script>
 </html>

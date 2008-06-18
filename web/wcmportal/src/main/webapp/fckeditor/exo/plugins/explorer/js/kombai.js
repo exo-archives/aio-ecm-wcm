@@ -1,25 +1,35 @@
-
+	/*
+	* Kombai 
+	* Create by uoon (vnjs.net)
+	*/
 	var Kombai = {
-		add: {},
-		get: {},
-		set: {},
-		check: {},
-		remove: {},
-		create: {},
-		insert: {},
-		select: {},
-		request: {},
-		archive: {},
-		release: false
-	};
-
-	Kombai.archive = {
-		data: {},
-		method: {},
-		variable: {}
+		archive: {
+			data: {},
+			method: {},
+			variable: {}
+		},
+		K: {
+			add: {},
+			get: {},
+			set: {},
+			is: {},
+			remove: {},
+			create: {},
+			insert: {},
+			select: {},
+			request: {}
+		}
 	};
 	
-	Kombai.add = function(r) {
+	//begin function at Do Son - Hai Phong
+	var K = function(r) {return document.getElementById(r)}
+	
+	for (var o in Kombai.K) {
+		K[o] = Kombai.K[o];
+	}
+	
+	K.add = function(r) {
+		if (!r) return;
 		var setting = {
 			element: null,
 			//add className
@@ -33,7 +43,6 @@
 			//add method
 			method: null,
 			source: null,
-			
 			//add effect drag drop
 			onDrag: null,
 			onMove: null,
@@ -84,14 +93,20 @@
 		};
 		
 		function addEvent(O, E, L) {
-			if (O["on" + E] instanceof Function) {
-				var oL = O["on" + E];
-				O["on" + E] = function(event) {
-					oL(event);
-					L(event);
-				};
-			} else {
-				O["on" + E] = L;
+			if (O.addEventlistenerer) {
+	            O.addEventlistenerer(E, L, false);
+	        } else if (O.attachEvent) {
+	            O.attachEvent("on" + E, L);
+	        } else {
+				if (O["on" + E] instanceof Function) {
+					var oL = O["on" + E];
+					O["on" + E] = function(event) {
+						oL(event);
+						L(event);
+					};
+				} else {
+					O["on" + E] = L;
+				}
 			}
 		};
 		
@@ -108,7 +123,7 @@
 		};
 		
 		function addEffectDragDrop(E, D, M, U) {
-			//reference: Kombai.get.X, Y, eventSource;
+			//reference: K.get.X, Y, eventSource;
 			E.store = {
 				x: 0,
 				y: 0,
@@ -116,29 +131,29 @@
 				Y: 0
 			};
 			E.event = {
-				mouseDown: new Function(),
-				mouseMove: new Function(),
-				mouseUp: new Function()
+				mouseDown: function() {},
+				mouseMove: function() {},
+				mouseUp: function() {}
 			};
 			E.run = {
-				drag: D || new Function(),
-				move: M || new Function(),
-				drop: U || new Function()			
+				drag: D || function() {},
+				move: M || function() {},
+				drop: U || function() {}			
 			};
 			E.drop = function() {
 				E.store = null;
 				E.event = null;
 				E.run = null;
-				E.drop = new Function();
+				E.drop = function() {};
 				E.onmousedown = ignore;
 			};
 			E.penetrate = function(enviroment) {
 				if (typeof enviroment != "object") {
 					return;
 				}
-				var Xmin = Kombai.get.X(enviroment);
+				var Xmin = K.get.X(enviroment);
 				var Xmax = Xmin + enviroment.offsetWidth;
-				var Ymin = Kombai.get.Y(enviroment);
+				var Ymin = K.get.Y(enviroment);
 				var Ymax = Ymin + enviroment.offsetHeight;
 				var X = E.store.X;
 				var Y = E.store.Y;
@@ -166,8 +181,8 @@
 						E.style.top = parseInt(E.style.top) + (event.clientY - E.store.y) + "px";
 						E.store.x = event.clientX;
 						E.store.y = event.clientY;
-						E.store.X = Kombai.get.X(event);
-						E.store.Y = Kombai.get.Y(event);
+						E.store.X = K.get.X(event);
+						E.store.Y = K.get.Y(event);
 						E.run.move.call(E);
 						return false;
 					};
@@ -182,7 +197,7 @@
 					E.run.drag.call(E);
 					document.onmousemove = E.event.mouseMove;
 					document.onmouseup = function(event) {
-						var S = Kombai.get.eventSource(event);
+						var S = K.get.eventSource(event);
 						if (S != E) {
 							document.onmousemove = null;
 						}
@@ -197,8 +212,8 @@
 			}
 		};
 	};
-
-	Kombai.get = {
+	
+	K.get = {
 		browserName: function() {
 			return navigator.appName;
 		},
@@ -323,12 +338,12 @@
 			}
 			var E = r || window.event;
 			if (E.nodeName != undefined) {
-				var nX = 0;
+				var X = 0;
 				while (E) {
-					nX += E.offsetLeft;
+					X += E.offsetLeft;
 					E = E.offsetParent;
 				}
-				return nX;
+				return X;
 			} else if (E.clientX != undefined) {
 				return E.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
 			}
@@ -339,27 +354,27 @@
 			}
 			var E = r || window.event;
 			if (E.nodeName != undefined) {
-				var nY = 0;
+				var Y = 0;
 				while (E) {
-					nY += E.offsetTop;
+					Y += E.offsetTop;
 					E = E.offsetParent;
 				}
-				return nY;
+				return Y;
 			} else if (E.clientY != undefined) {
 				return E.clientY + document.body.scrollTop + document.documentElement.scrollTop;
 			}
 		}
 	};
 
-	Kombai.set = {
+	K.set = {
 		timeout: function(r) {
 			var setting = {
-				method: new Function(),
+				method: function() {},
 				delay: 1000,
 				param: [],
 				until: function() {return false;},
 				amount: 4294967295,
-				release: new Function()
+				release: function() {}
 			}
 			var n = 0;
 			for (var o in setting) {
@@ -378,10 +393,25 @@
 				}
 			};
 			setTimeout(repeat, setting.delay);
+		},
+		event: function(r) {
+			var setting = {
+				element: null,
+				type: null,
+				listener: function() {}
+			}
+			for (var o in setting) {
+				if (r[o] != undefined) {
+					setting[o] = r[o];
+				} else {
+					return;
+				}
+			}
+			setting.element["on" + setting.type] = setting.listener;
 		}
 	};
 	
-	Kombai.check = {
+	K.is = {
 		SA: function() {
 			return new RegExp("Safari").test(navigator.userAgent);
 		},
@@ -405,7 +435,7 @@
 		}
 	};
 	
-	Kombai.remove = {
+	K.remove = {
 		element: function(r) {
 			if (typeof r == "string") {
 				r = document.getElementById(r);
@@ -431,11 +461,34 @@
 			} else {
 				return new String();
 			}
+		},
+		event: function(r) {
+			var setting = {
+				element: null,
+				type: null,
+				listener: null
+			}
+			for (var o in r) {
+				if (r[o] != undefined) {
+					setting[o] = r[o]
+				} else {
+					return;
+				}
+			}
+			with (setting) {
+				if (element.removeEventListener) { 
+					element.removeEventListener(type, listener, false);
+				} else if (element.detachEvent) {
+					element.detachEvent("on" + type, listener);
+				} else {  
+					element["on" + type] = null;
+				}
+			}
 		}
 	};
 	
-	Kombai.create = {
-		newTable: function(r) {
+	K.create = {
+		database: function(r) {
 			return new function() {
 				if (!r || typeof r != "object") {
 					alert("Don't create database");
@@ -919,7 +972,7 @@
 				}//end method  parseCondition;
 				/*******************************/
 			}// end class;
-		},//end method newTable at Tam Diep - Ninh Binh;
+		},//end method  at Tam Diep - Ninh Binh;
 			
 		element: function(r) {
 			var setting = {
@@ -941,7 +994,7 @@
 		}
 	};
 	
-	Kombai.insert = function(r) {
+	K.insert = function(r) {
 		var setting = {
 			element: document.createElement("div"),
 			refer: document.body,
@@ -965,7 +1018,7 @@
 		}
 	};
 	
-	Kombai.select = function(r) {
+	K.select = function(r) {
 		var setting = {
 			from: document,
 			where: null
@@ -976,21 +1029,21 @@
 			}
 		}
 		if (setting.from && typeof setting.from == "array") {
-			var DOM = Kombai.create.newTable({fromCollection: setting.from})
+			var DOM = K.create.database({fromCollection: setting.from})
 		} else {
-			var DOM = Kombai.create.newTable({fromCollection: setting.from.getElementsByTagName("*")});
+			var DOM = K.create.database({fromCollection: setting.from.getElementsByTagName("*")});
 		}
 		return DOM.Select({Where: setting.where});
 	};
 	
 	Kombai.archive.data = {
-		oldRequest: Kombai.create.newTable({
+		oldRequest: K.create.database({
 			fieldName : ["index", "setting", "compare", "responseText", "responseXML"],
 			autoIncrement: "index"
 		})
 	};
 	
-	Kombai.request = function(r) {
+	K.request = function(r) {
 		var oldRequest = Kombai.archive.data.oldRequest;
 		if (!r || typeof r != "object") {
 			return;
@@ -1081,7 +1134,7 @@
 						}
 						oSelf.repeat = setTimeout(
 							function() {
-								Kombai.request(r);
+								K.request(r);
 							},
 							setting.delay
 						);
@@ -1153,7 +1206,7 @@
 		
 	/****************************************/	
 	
-	Kombai.dragdrop = function(element, environment, ondrop) {
+	K.dragdrop = function(element, environment, ondrop) {
 		if (typeof element == "string") {
 			element = document.getElementById(element);
 		}
@@ -1165,7 +1218,7 @@
 		} else {
 			element.style.zIndex = 1;
 		}
-		Kombai.add({
+		K.add({
 			element: element,
 			event: "dragdrop",
 			onDrop: function() {
@@ -1180,7 +1233,7 @@
 		});
 	};
 	
-	Kombai.move = function(element, content) {
+	K.move = function(element, content) {
 		if (!element) {
 			return;
 		}
@@ -1191,11 +1244,11 @@
 			if (typeof content == "string") {
 				content = document.getElementById(content);
 			}
-			Kombai.add({
+			K.add({
 				element: element,
 				event: "dragdrop",
 				onDrag: function() {
-					Kombai.add({
+					K.add({
 						element: content,
 						event: "dragdrop",
 						onDrop: function() {
@@ -1205,14 +1258,14 @@
 				}
 			});
 		} else {
-			Kombai.add({
+			K.add({
 				element: element,
 				event: "dragdrop"
 			});
 		}
 	};
 	
-	Kombai.discover = function(object) {
+	K.discover = function(object) {
 		remove();
 		if (!object) return;
 		var root = document.createElement("div");
@@ -1230,9 +1283,9 @@
 			info.style.zIndex = "9999" ;
 			info.style.position = "relative" ;
 		var closeButton = document.createElement("div");
-			closeButton.style.padding = "3px 0px 9px 0px";
-			closeButton.innerHTML = "<span style='cursor: pointer;' onclick='Kombai.discover(window);'> {..} window </span>";
-			closeButton.innerHTML += "<span style='cursor: pointer;' onclick='Kombai.discover(window.document);'> / document </span>";
+			closeButton.style.padding = "3px 0px 6px 0px";
+			closeButton.innerHTML = "<span style='cursor: pointer;' onclick='K.discover(window);'> {..} window </span>";
+			closeButton.innerHTML += "<span style='cursor: pointer;' onclick='K.discover(window.document);'> / document </span>";
 		var rightButton = document.createElement("div");
 			rightButton.style.textAlign = "right";
 			rightButton.style.margin = "-16px 0px 0px 200px";
@@ -1252,7 +1305,7 @@
 			closeButton.appendChild(rightButton);
 			rightButton.appendChild(trueClose);
 			trueClose.onclick = remove;
-			Kombai.move(closeButton, info);
+			K.move(closeButton, info);
 			
 		function inspect(o) {
 			var node = document.createElement("div");
@@ -1299,15 +1352,10 @@
 		show(blockContent, inspect(object));
 	} ;
 	
-	Kombai.addEventOnLoad = function(r) {
-		Kombai.add({element: window, event: "load", listener: r});
+	K.addEventOnLoad = function(r) {
+		K.add({element: window, event: "load", listener: r});
 	};
 	
-	Kombai.addEventOnResize = function(r) {
-		Kombai.add({element: window, event: "resize", listener: r});
+	K.addEventOnResize = function(r) {
+		K.add({element: window, event: "resize", listener: r});
 	};
-
-	Kombai.release = true;
-
-	
-	
