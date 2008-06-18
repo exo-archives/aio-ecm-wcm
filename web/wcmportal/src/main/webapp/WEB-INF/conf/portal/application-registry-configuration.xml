@@ -126,7 +126,7 @@
 		                  <field name="applicationName"><string>SimplePresentationPortlet</string></field>
 						          <field name="displayName"><string>Web Presentation</string></field>
 		                  <field name="applicationType"><string>portlet</string></field>
-		                  <field name="applicationGroup"><string>web</string></field>
+		                  <field name="applicationGroup"><string>web-presentation</string></field>
 		                  <field name="accessPermissions">
 								        <collection type="java.util.ArrayList" item-type="java.lang.String">													
 													<value><string>*:/platform/users</string></value>													
