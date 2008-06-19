@@ -2,7 +2,6 @@
 FCKConfig.ToolbarSets["eXoBar"] = [
 	['Insert Image', 'Insert Portal Link', 'Insert DMS Document', 'Explorer']
 ];
-
 // set eXo plugin path;
 FCKConfig.eXoPath = FCKConfig.BasePath.substr(0, FCKConfig.BasePath.length - 7) + "exo/" ;
 FCKConfig.Plugins.Add( 'urani', null, FCKConfig.eXoPath + "plugins/") ;
@@ -10,6 +9,7 @@ FCKConfig.Plugins.Add( 'explorer', null, FCKConfig.eXoPath + "plugins/") ;
 FCKConfig.Plugins.Add( 'insertImage', null, FCKConfig.eXoPath + "plugins/") ;
 FCKConfig.Plugins.Add( 'insertDocument', null, FCKConfig.eXoPath + "plugins/") ;
 FCKConfig.Plugins.Add( 'insertPortalLink', null, FCKConfig.eXoPath + "plugins/") ;
+
 
 //eXoPlugin config
 window.eXoPlugin = {
@@ -65,7 +65,7 @@ window.eXoPlugin = {
 		//demo => eXoPlugin.addBar({newBar: "eXoBar", targetBar: "Basic" });
 	},
 	getContent: function() {
-		var content = new String();
+		var content = "";
 		if (document.selection) {
 			var range = FCK.EditorWindow.document.selection.createRange();
 			content = range.text;
@@ -76,6 +76,19 @@ window.eXoPlugin = {
 		if (content) content = content.toString().replace(/^\s+|\s+$/g, "");
 		if (content != "") return content;
 		else return null;
+	},
+	loadScript: function() {
+		if (arguments.length < 2) {
+			return;
+		} else {
+			var win = arguments[0];
+			var src = arguments[1];
+		}
+		if (!win || win.document) return;
+		var eScript = win.document.createElement("script");
+		eScript.setAttribute("src", src);
+		var eHead = win.document.getElementsByTagName("head")[0];
+		eHead.appendChild(eScript);
 	}
 };
 FCK["eXoPlugin"] = eXoPlugin;

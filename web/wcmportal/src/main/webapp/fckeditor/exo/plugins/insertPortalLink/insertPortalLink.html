@@ -9,6 +9,7 @@
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="expires" content="0">
 	<link  href="skin/Stylesheet.css" type="text/css" rel="stylesheet">
+	
 	<style type="text/css">
 		A {
 			text-decoration: none;
@@ -44,9 +45,11 @@
 	</style>
 	<script type="text/javascript">
 	//refer form fckdialog.html
+	//web_NavigationPortlet
 	var oEditor = window.parent.InnerDialogLoaded();
 	var FCKConfig = oEditor.FCKConfig;
 	var eXoPlugin = oEditor.FCK.eXoPlugin;
+	eXoPlugin.loadScript(window, "lang/" + eXoPlugin.userLanguage + ".js");
 	</script>
 </head>
 <body>
@@ -54,13 +57,13 @@
 	<div class="DisplayB-2">
 		<table class="UIFormGrid">
     <tr>
-      <td class="FieldLabel">Title:</td>
+      <td class="FieldLabel" userLanguage="KLang.title">Title:</td>
       <td class="FieldComponent" colspan=2>
         <input type="text" id="inputTitle"/>
       </td>
     </tr>
     <tr>
-      <td class="FieldLabel">URL:</td>
+      <td class="FieldLabel" userLanguage="KLang.url">URL:</td>
       <td class="FieldComponent">
         <input type="text" id="inputURL"/>
       </td>
@@ -72,7 +75,7 @@
 							<a href="javascript: getPortalLink();" class="ActionButton LightBlueStyle">
 							  <div class="ButtonLeft">
 								<div class="ButtonRight">
-								  <div class="ButtonMiddle">
+								  <div class="ButtonMiddle" userLanguage="KLang.getPortalLink">
 									Get Portal Link
 								  </div>
 								</div>
@@ -92,7 +95,7 @@
             <a href="javascript: previewLink();" class="ActionButton LightBlueStyle">
               <div class="ButtonLeft">
                 <div class="ButtonRight">
-                  <div class="ButtonMiddle">
+                  <div class="ButtonMiddle" userLanguage="KLang.preview">
                     Preview
                   </div>
                 </div>
@@ -101,7 +104,7 @@
             <a href="javascript: addURL();" class="ActionButton LightBlueStyle">
               <div class="ButtonLeft">
                 <div class="ButtonRight">
-                  <div class="ButtonMiddle">
+                  <div class="ButtonMiddle" userLanguage="KLang.save">
                     Save
                   </div>
                 </div>
@@ -116,6 +119,7 @@
 </body>
 
 <script type="text/javascript">
+	
 	function Trim(text) {
 		if (typeof text == "string") return text.replace(/^\s+|\s+$/g, "");
 	}
@@ -171,5 +175,17 @@
 		var url = document.getElementById("inputURL").value;
 		if (url) window.open(url, "", sOptions);
 	}
+	
+	window.onload = function() {
+		//change language
+		if (KLang) {
+			var aElements = document.getElementsByTagName("*");
+			for (var i = 0 ; i < aElements.length; ++i) {
+				if (aElements[i].getAttribute && aElements[i].getAttribute("userLanguage")) {
+					aElements[i].innerHTML = eval(aElements[i].getAttribute("userLanguage"));
+				}
+			}
+		}
+	};
 </script>
 </html>
