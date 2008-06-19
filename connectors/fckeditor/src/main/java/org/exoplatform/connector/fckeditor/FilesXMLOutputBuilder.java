@@ -40,7 +40,7 @@ public class FilesXMLOutputBuilder extends FCKConnectorXMLOutputBuilder {
   
   public Document buildFilesXMLOutput(String repository,String workspace,String currentFolder) throws Exception {
     Node currentNode = getNode(repository, workspace, currentFolder) ;    
-    Element root = createRootElement(GET_FILES, currentNode) ;
+    Element root = createRootElement(GET_FILES, currentNode) ;    
     Document document = root.getOwnerDocument();
     Element filesElement = document.createElement("Files") ;
     root.appendChild(filesElement) ;    

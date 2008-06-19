@@ -78,8 +78,7 @@ public class RESTResourcesConnector implements ResourceContainer {
   @OutputTransformer(XMLOutputTransformer.class)
   public Response getPageURI(@QueryParam("CurrentFolder") String currentFolder, @QueryParam("Command") String command,@QueryParam("Type") String type) throws Exception {    
     PageURIBuilder builder = new PageURIBuilder(portalConfigService_,portalDataStorage_,portalUserACL_) ;
-    String userId = getCurrentUser() ;
-    System.out.println("============>"+userId);
+    String userId = getCurrentUser() ;    
     return builder.buildReponse(currentFolder, command, userId) ;
   }   
   

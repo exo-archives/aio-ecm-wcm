@@ -62,7 +62,7 @@ public abstract class FCKConnectorXMLOutputBuilder extends BaseComponentPlugin{
     this.sessionProviderService_ = (ThreadLocalSessionProviderService)container.getComponentInstanceOfType(ThreadLocalSessionProviderService.class) ;
   }
   
-  public abstract Document buildFilesXMLOutput(String repository,String workspace,String currentFolder) throws Exception ;
+  public abstract Document buildFilesXMLOutput(String repository,String workspace,String currentFolder) throws Exception ;  
   public abstract Document buildFoldersAndFilesXMLOutput(String repository,String workspace,String currentFolder) throws Exception ;  
   protected abstract String createFileLink(Node node) throws Exception ;  
   protected abstract String getFileType(Node node) throws Exception ;    
@@ -109,6 +109,26 @@ public abstract class FCKConnectorXMLOutputBuilder extends BaseComponentPlugin{
       file.setAttribute("url", url) ;
     }    
     return file ;
+  }
+  
+  protected Element createImageElement(Document document, Node child) throws Exception{
+    String fileType = getFileType(child );
+    Element image = document.createElement("Image");
+    image.setAttribute("name", child.getName());
+    image.setAttribute("dateCreated", child.getProperty("exo:dateCreated").getString());
+    image.setAttribute("dateModified", child.getProperty("exo:dateModified").getString());
+    image.setAttribute("creator", child.getProperty("exo:owner").getString());
+    image.setAttribute("fileType", fileType);
+    if(child.isNodeType(NT_FILE)) {         
+      long size = child.getNode("jcr:content").getProperty("jcr:data").getLength() ;      
+      image.setAttribute("size", "" + size/1000) ;      
+      image.setAttribute("url",createFileLink(child)) ;
+    }else {
+      image.setAttribute("size", "") ;
+      String url = createCommonWebdavURL(child) ;
+      image.setAttribute("url", url) ;
+    }    
+    return image;
   }
 
   protected Element createFolderElement(Document document, Node child) throws Exception {

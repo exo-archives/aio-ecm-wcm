@@ -38,7 +38,7 @@ import org.w3c.dom.Document;
 public class FCKCoreConnector implements ResourceContainer {
   
   private final String GET_FILES = "GetFiles".intern();  
-  private final String GET_FOLDERS = "FetFolders".intern();       
+  private final String GET_FOLDERS = "GetFolders".intern();       
   private final String RESOURCE_AS_FILE= "File".intern() ;
   private final String RESOURCE_AS_IMAGES = "Image".intern() ;
   
@@ -79,7 +79,22 @@ public class FCKCoreConnector implements ResourceContainer {
   @OutputTransformer(XMLOutputTransformer.class)
   public Response getFoldersAndFiles(@QueryParam("repositoryName") String repositoryName, @QueryParam("workspaceName") String workspaceName,
       @QueryParam("CurrentFolder") String currentFolder, @QueryParam("Type") String type) throws Exception {
-    return null ;
+    if(currentFolder == null || currentFolder.length() == 0){
+      currentFolder = "/";
+    }
+    repositoryName = "repository";
+    workspaceName = "collaboration";
+    FCKConnectorXMLOutputBuilder connectorXMLOutputBuilder = null;
+    if(type == null || RESOURCE_AS_FILE.equals(type)){
+      connectorXMLOutputBuilder = new FilesXMLOutputBuilder(ExoContainerContext.getCurrentContainer());
+    }
+    else if(RESOURCE_AS_IMAGES.equals(type)){
+      connectorXMLOutputBuilder = new ImagesXMLOutputBuilder(ExoContainerContext.getCurrentContainer());
+    }
+    Document document = connectorXMLOutputBuilder.buildFoldersAndFilesXMLOutput(repositoryName, workspaceName, currentFolder);
+    CacheControl cacheControl = new CacheControl();
+    cacheControl.setNoCache(true);
+    return Response.Builder.ok(document).cacheControl(cacheControl).build();
   }
   
   @HTTPMethod(HTTPMethods.GET)
@@ -87,7 +102,21 @@ public class FCKCoreConnector implements ResourceContainer {
   @OutputTransformer(XMLOutputTransformer.class)
   public Response getFiles(@QueryParam("repositoryName") String repositoryName, @QueryParam("workspaceName") String workspaceName,
       @QueryParam("CurrentFolder") String currentFolder, @QueryParam("Type") String type) throws Exception {
-    return null ;
+    if(currentFolder == null || currentFolder.length() == 0) {
+      currentFolder = "/" ;
+    }    
+    repositoryName = "repository" ;
+    workspaceName = "collaboration" ;
+    FCKConnectorXMLOutputBuilder connectorXMLOutputBuilder = null ;
+    if(type == null || RESOURCE_AS_FILE.equals(type)) {
+      connectorXMLOutputBuilder = new FilesXMLOutputBuilder(ExoContainerContext.getCurrentContainer()) ; 
+    }else if(RESOURCE_AS_IMAGES.equals(type)) {
+      connectorXMLOutputBuilder = new ImagesXMLOutputBuilder(ExoContainerContext.getCurrentContainer()) ;
+    }    
+    Document document = connectorXMLOutputBuilder.buildFilesXMLOutput(repositoryName, workspaceName, currentFolder) ;
+    CacheControl cacheControl = new CacheControl();
+    cacheControl.setNoCache(true) ;
+    return Response.Builder.ok(document).cacheControl(cacheControl).build() ;
   }
   
   @HTTPMethod(HTTPMethods.GET)
@@ -95,7 +124,21 @@ public class FCKCoreConnector implements ResourceContainer {
   @OutputTransformer(XMLOutputTransformer.class)
   public Response getFolders(@QueryParam("repositoryName") String repositoryName, @QueryParam("workspaceName") String workspaceName,
       @QueryParam("CurrentFolder") String currentFolder, @QueryParam("Type") String type) throws Exception {
-    return null ;
+    if(currentFolder == null || currentFolder.length() == 0) {
+      currentFolder = "/" ;
+    }    
+    repositoryName = "repository" ;
+    workspaceName = "collaboration" ;
+    FCKConnectorXMLOutputBuilder connectorXMLOutputBuilder = null ;
+    if(type == null || RESOURCE_AS_FILE.equals(type)) {
+      connectorXMLOutputBuilder = new FilesXMLOutputBuilder(ExoContainerContext.getCurrentContainer()) ; 
+    }else if(RESOURCE_AS_IMAGES.equals(type)) {
+      connectorXMLOutputBuilder = new ImagesXMLOutputBuilder(ExoContainerContext.getCurrentContainer()) ;
+    }    
+    Document document = connectorXMLOutputBuilder.buildFoldersXMLOutput(repositoryName, workspaceName, currentFolder) ;
+    CacheControl cacheControl = new CacheControl();
+    cacheControl.setNoCache(true) ;
+    return Response.Builder.ok(document).cacheControl(cacheControl).build() ;
   }
   
   @HTTPMethod(HTTPMethods.POST)
