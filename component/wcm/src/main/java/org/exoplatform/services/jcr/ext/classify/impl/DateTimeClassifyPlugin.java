@@ -28,6 +28,7 @@ import javax.jcr.Session;
 import org.apache.commons.lang.StringUtils;
 import org.exoplatform.commons.utils.ISO8601;
 import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.container.xml.PropertiesParam;
 import org.exoplatform.services.jcr.ext.classify.NodeClassifyPlugin;
 
 
@@ -40,40 +41,43 @@ import org.exoplatform.services.jcr.ext.classify.NodeClassifyPlugin;
  */
 public class DateTimeClassifyPlugin extends NodeClassifyPlugin {
 
+  private static final int MONTHS = 12;
+
   private String templateDateTime;
   private String propertyDateTime;
   private Calendar startDateTime;
   private Calendar endDateTime;  
   private int increment;
   private char incrementType;
-  private final int months = 12;
+
 
   public DateTimeClassifyPlugin(final InitParams initParams) {
     try {
-      String strTemplDateTime = initParams.getValueParam("DateTimeTemplate").getValue();
-      String strDateTimePropertyName = initParams.getValueParam("DateTimePropertyName").getValue();
-      String strStartDateTime = initParams.getValueParam("StartTime").getValue();
-      String strEndDateTime = initParams.getValueParam("EndTime").getValue();      
-      templateDateTime = getWellTemplDateTime(strTemplDateTime);
-      propertyDateTime = getDateTimePropertyName(strDateTimePropertyName);
-      startDateTime = getCalendar(strStartDateTime);
-      endDateTime = getCalendar(strEndDateTime);           
+      PropertiesParam propertiesParam = initParams.getPropertiesParam("plugin-params");
+      String templDateTimeParam = propertiesParam.getProperty("DateTimeTemplate");       
+      String startDateTimeParam = propertiesParam.getProperty("StartTime");
+      String endDateTimeParam = propertiesParam.getProperty("EndTime");            
+      propertyDateTime = propertiesParam.getProperty("DateTimePropertyName");      
+      if ("".equals(propertyDateTime)) propertyDateTime = "exo:dateCreated";      
+      templateDateTime = getWellTemplDateTime(templDateTimeParam);      
+      startDateTime = getCalendar(startDateTimeParam);
+      endDateTime = getCalendar(endDateTimeParam);           
       setIncrement();        
     } catch (Exception e) { }    
   }
 
   public void classifyChildrenNode(Node parent) throws Exception {
-    Session session = parent.getSession();    
+    Session session = parent.getSession();        
     for (NodeIterator nodes = parent.getNodes(); nodes.hasNext();) {
       Node node = nodes.nextNode();      
       Calendar calNode = node.getProperty(propertyDateTime).getDate();
       if ((calNode.before(startDateTime)) || (calNode.after(endDateTime))) continue;             
-      Node currNode = createNewDateTimeNode(parent, getDateTimeStructured(templateDateTime, calNode));      
+      Node currentNode = createNewDateTimeNode(parent, getDateTimeStructured(templateDateTime, calNode));      
       String srcPath = node.getPath();
-      String destPath = currNode.getPath() + "/" + node.getName();
+      String destPath = currentNode.getPath() + "/" + node.getName();
       session.move(srcPath, destPath);
       session.save();              
-    }       
+    }      
   }
 
   private String getDateTimeStructured(String templDateTime, Calendar calendar) {    
@@ -114,10 +118,9 @@ public class DateTimeClassifyPlugin extends NodeClassifyPlugin {
   private String operateExpression(String expression) {        
     String [] items = StringUtils.split(expression, "+");
     int rel = Integer.parseInt(items[0]) + Integer.parseInt(items[1]);
-    if (incrementType == 'Y') {
-      int endTime = endDateTime.get(Calendar.YEAR);
-      rel = (rel > endTime) ? endTime : rel;
-    } else if ((incrementType == 'M') && (rel > months)) rel = months;        
+    int endTime = endDateTime.get(Calendar.YEAR);
+    if ((incrementType == 'Y') && (rel > endTime)) rel = endTime;
+    else if ((incrementType == 'M') && (rel > MONTHS)) rel = MONTHS;        
     String result  = Integer.toString(rel);    
     return result; 
   }
@@ -167,9 +170,8 @@ public class DateTimeClassifyPlugin extends NodeClassifyPlugin {
 
   private boolean isValidField(String field) {
     if ((!"YYYY".equals(field)) && (!"MM".equals(field)) && (!"WW".equals(field.toUpperCase())) && (!"DD".equals(field.toUpperCase())))
-      return false;
-    else
-      return true;   
+      return false;    
+    return true;   
   }
 
 
@@ -178,15 +180,8 @@ public class DateTimeClassifyPlugin extends NodeClassifyPlugin {
     try {
       calendar = ISO8601.parse(datetime);
       return calendar;
-    } catch (Exception e) {       
-      e.printStackTrace();
-      return null;
-    }       
-  }
-
-  private String getDateTimePropertyName(String name) {
-    if (name == "")  return "exo:dateCreated";
-    else  return name;    
+    } catch (Exception e) { } 
+    return null;
   }
 
   private void setIncrement() {

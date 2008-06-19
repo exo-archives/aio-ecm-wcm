@@ -30,7 +30,7 @@ import org.exoplatform.services.jcr.ext.classify.NodeClassifyService;
  *          hoa.pham@exoplatform.com
  * Apr 9, 2008  
  */
-public class NodeClassifyServiceImpl implements NodeClassifyService {	
+public class NodeClassifyServiceImpl implements NodeClassifyService {
   private HashMap<String, NodeClassifyPlugin> nodeClassifyPlugins = new HashMap<String, NodeClassifyPlugin>();
 
   public NodeClassifyServiceImpl(RepositoryService repositoryService) { }
