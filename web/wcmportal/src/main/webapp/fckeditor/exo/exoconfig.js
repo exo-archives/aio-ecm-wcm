@@ -84,7 +84,7 @@ window.eXoPlugin = {
 			var win = arguments[0];
 			var src = arguments[1];
 		}
-		if (!win || win.document) return;
+		if (!win || !win.document) return;
 		var eScript = win.document.createElement("script");
 		eScript.setAttribute("src", src);
 		var eHead = win.document.getElementsByTagName("head")[0];
