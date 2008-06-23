@@ -20,7 +20,6 @@
 		}
 	};
 	
-	//begin function at Do Son - Hai Phong
 	var K = function(r) {return document.getElementById(r)}
 	
 	for (var o in Kombai.K) {

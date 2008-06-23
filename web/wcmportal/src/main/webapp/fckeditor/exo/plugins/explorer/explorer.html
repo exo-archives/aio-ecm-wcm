@@ -1,111 +1,430 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head><title>eXplorer</title>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8">
-	<meta http-equiv="cache-control" content="no-cache">
-	<meta http-equiv="pragma" content="no-cache">
-	<meta http-equiv="eXpires" content="0">
-	<script type="text/javascript" src="js/kombai.js"></script>
-	<style type="text/css">
-		A {
-			text-decoration: none;
-		}
-	</style>
-</head>
-<body>
- <div style="padding: 6px; background: #effffe" id="result"></div>
-</body>
-<script type="text/javascript">
-var eXoPlugin = window.opener.eXoPlugin;
-var eXp = {
-	connector: eXoPlugin.eXoFileManager.Connector,
-	resourceType: eXoPlugin.eXoFileManager.ResourceType,
-	command: {
-		getFiles: "getFiles",
-		uploadFile: "uploadFile",
-		getFolders: "getFolders",
-		createFolder: "createFolder"
-	},
-	buildParam: function() {
-		if (arguments.length < 1) return null;
-		var arr = [];
-		for (var i = 0; i < arguments.length; ++i) {
-			arr.push(arguments[i]);
-		}
-		return arr.join("&");
-	},
-	getNodes: function(DomX, nodeName) {
-		if (!DomX || !nodeName) return null;
-		var node = K.select({from: DomX, where: "nodeName == '" + nodeName + "'"});
-		if (node.length) return node;
-		else return null;
-	},
-	getSingleNode: function(DomX, nodeName) {
-		var nodes = this.getNodes(DomX, nodeName);
-		if (nodes[0]) return nodes[0];
-		else return null;
-	},
-	getNodeValue: function(node, name) {
-		return node.attributes.getNamedItem(name).value;
-	},
-	sendRequest: function(connector, param, callback)  {
-		K.request({
-			address: connector,
-			data: param,
-			method: "GET",
-			onSuccess: function() {
-				if (callback && callback instanceof Function) {
-					if (this.responseXML) callback(this.responseXML);
-					else callback(this.responseText);
-				}
-			},
-			onFailure: function() {
-				alert('Can"t connect to sever. Please try again.');
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
+		<meta http-equiv="cache-control" content="no-cache">
+		<meta http-equiv="pragma" content="no-cache">
+		<meta http-equiv="eXpires" content="0">
+		<link type="text/css" rel="stylesheet" href="css/explorer.css">
+		<link type="text/css" rel="stylesheet" href="../../../../../ecm/skin/icons/16x16/NodeTypes/DefaultStylesheet.css">
+		<script type="text/javascript" src="js/explorer.js"></script>
+		<script type="text/javascript" src="js/kombai.js"></script>
+		<script type="text/javascript">
+			var eXoPlugin = window.opener.eXoPlugin;
+			eXoPlugin.userLanguage = "vi";
+			eXoPlugin.loadScript(window, "lang/" + eXoPlugin.userLanguage + ".js");
+		</script>
+	</head>
+	<body onclick="hideContextMenu();" oncontextmenu="javascript: return false;">
+		<div class="BrowserSetting">
+			<div class="FolderNavigation">
+				<div class="FolderNavigationTitleBar">
+					<div class="FolderNavigationTitleText" userLanguage="KLang.FolderNavigation_Titlebar_Folder">
+						Folders
+					</div>
+				</div>
+				<div class="FolderNavigationTree">
+					<div class="ContextMenuContainer ContextMenuAddNewDocument">
+						<a href="javascript: void(0)" class="MenuItem"> 	
+							<div class="IconItem IconAdd" userLanguage="KLang.FolderNavigation_Contextmenu_AddNew">
+								Add New
+							</div>
+						</a>
+					</div>
+				</div>
+				
+			</div>
+			<div class="FolderSeparator"><span></span></div>
+			<div class="FolderExplorer">
+				<div class="FolderExplorerMenuBar">
+					<a href="javascript: void(0)">
+						<div class="FolderExplorerMenuBarItem IconRefresh" style="display: none" userLanguage="KLang.FolderExplorer_Menubar_Refresh">Refresh</div>
+					</a>
+					<a href="javascript: void(0)">
+						<div class="FolderExplorerMenuBarItem IconUpload" style="display: none" userLanguage="KLang.FolderExplorer_Menubar_Upload">Upload File</div>
+					</a>
+					<img src="img/IconSeparator2x26.gif" class="IconSeparator" style="display: none">
+					<a href="javascript: void(0)">
+						<div class="FolderExplorerMenuBarItem IconSetting" onclick="showSetting('FolderExplorerSetting')" userLanguage="KLang.FolderExplorer_Menubar_Setting">Setting</div>
+					</a>
+					<a href="javascript: void(0)">
+						<div class="FolderExplorerMenuBarItem IconHelp" style="display: none" userLanguage="KLang.FolderExplorer_Menubar_Help">Help</div>
+					</a>
+					<div style="clear: left;"><span></span></div>
+				</div>
+				<div class="FolderExplorerSetting" style="display: none;">
+					<div class="FolderExplorerSettingTitleBar" userLanguage="KLang.FolderExplorer_Setting_Titlebar">Settings</div>
+					<div class="FolderExplorerSettingDiv">
+						<table class="FolderExplorerSettingTable" align="center" cellpadding="0" cellspacing="0">
+							<tr>
+								<td userLanguage="KLang.FolderExplorer_Setting_View">View: </td>
+								<td userLanguage="KLang.FolderExplorer_Setting_Sort">Sorting: </td>
+							</tr>
+							<tr>
+							    <td><input type="radio" name="FolderExplorerView"><span userLanguage="KLang.FolderExplorer_Setting_Thumbnail">Thumbnails</span></td>
+								<td><input type="radio" onclick="sort('name')" name="FolderExplorerSort"><span userLanguage="KLang.FolderExplorer_Setting_Filename">By File Name</span></td>
+		                    </tr>
+							<tr>
+							    <td><input type="radio" name="FolderExplorerView"><span userLanguage="KLang.FolderExplorer_Setting_List">List</span></td>
+								<td><input type="radio" onclick="sort('date')" name="FolderExplorerSort"><span userLanguage="KLang.FolderExplorer_Setting_Date">By Date</span></td>
+		                    </tr>
+							<tr>
+							    <td/>
+								<td><input type="radio" onclick="sort('size')" name="FolderExplorerSort"><span userLanguage="KLang.FolderExplorer_Setting_Size">By Size</span></td>
+		                    </tr>
+						</table>
+						<table align="center">
+							<tr>
+								<td align="center">
+									<a href="javascript: void(0)" onclick="showSetting('FolderExplorerSetting')">
+										<div class="ButtonLeft">
+											<div class="ButtonRight">
+												<div class="ButtonMiddle" userLanguage="KLang.FolderExplorer_Button_Close">
+													Close
+												</div>
+											</div>
+										</div>
+									</a>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				
+				<div class="FolderExplorerDocumentDiv"><span></span></div>	
+				<div class="ContextMenuContainer ContextMenuListItemOption">
+					<a href="javascript: void(0)" class="MenuItem"> 	
+						<div class="IconItem IconView" userLanguage="KLang.FolderExplorer_Contextmenu_View">
+							View
+						</div>
+					</a>
+					<a href="javascript: void(0)" class="MenuItem"> 	
+						<div class="IconItem IconSelect" userLanguage="KLang.FolderExplorer_Contextmenu_Select">
+							Select
+						</div>
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="FolderExplorerStatusBar">
+			<span class="FolderExplorerFolderStatus"></span>
+			<span class="FolderExplorerItemStatus"></span>
+		</div>
+	</body>
+
+	<script type="text/javascript">
+
+	var eXp = {
+		connector: eXoPlugin.eXoFileManager.Connector,
+		resourceType: eXoPlugin.eXoFileManager.ResourceType,
+		command: {
+			getFiles: "getFiles",
+			uploadFile: "uploadFile",
+			getFolders: "getFolders",
+			createFolder: "createFolder"
+		},
+		buildParam: function() {
+			if (arguments.length < 1) return null;
+			var arr = [];
+			for (var i = 0; i < arguments.length; ++i) {
+				arr.push(arguments[i]);
 			}
-		});
+			return arr.join("&");
+		},
+		getNodes: function(DomX, nodeName) {
+			if (!DomX || !nodeName) return null;
+			var node = DomX.getElementsByTagName(nodeName);
+			if (node.length) return node;
+			else return null;
+		},
+		getSingleNode: function(DomX, nodeName) {
+			var nodes = this.getNodes(DomX, nodeName);
+			if (nodes[0]) return nodes[0];
+			else return null;
+		},
+		getNodeValue: function(node, name) {
+			return node.attributes.getNamedItem(name).value;
+		},
+		sendRequest: function(connector, param, callback)  {
+			K.request({
+				address: connector,
+				data: param,
+				method: "GET",
+				onSuccess: function() {
+					if (callback && callback instanceof Function) {
+						if (this.responseXML) callback(this.responseXML);
+						else callback(this.responseText);
+					}
+				},
+				onFailure: function() {
+					alert('Can\'t connect to sever. Please try again.');
+				}
+			});
+		}
 	}
-}
 
-
-
-window.onload = function () {
-	var connector = eXoPlugin.hostName + eXp.connector + eXp.command.getFolders;
-	var param = eXp.buildParam("Type=" + eXp.resourceType , "CurrentFolder=/");
-	eXp.sendRequest(connector, param, show);
-}
-
-function createNode(refer, name) {
-	var sHtml =  '<div style="cursor: pointer"  ><b>' + name + ' : </b>';
-		sHtml += '<a href="javascript: void(0);" onclick="getDir(\'getFoldersAndFiles\', \'' + refer + name + '\');"> getFoldersAndFiles </a>';
-		sHtml += ' | ';
-		sHtml += '<a href="javascript: void(0);" onclick="getDir(\'' + eXp.command.getFolders + '\', \'' + refer + name + '\');"> getFolders </a>';
-		sHtml += ' | ';
-		sHtml += '<a href="javascript: void(0);" onclick="getDir(\'' + eXp.command.getFiles + '\', \'' + refer + name + '\');"> getFiles </a>';
-		sHtml += '</div>';
-	return sHtml;
-}
-
-function getDir(action, name) {
-	var connector = eXoPlugin.hostName + eXp.connector + action;
-	var param = eXp.buildParam("Type=" + eXp.resourceType , "CurrentFolder=" + name + "/");
-	eXp.sendRequest(connector, param, show);
-}
-
-function show(iXML) {
-	var dir = eXp.getNodes(iXML, "Folder");
-	if (!dir) return;
-	var cur = eXp.getNodeValue(eXp.getSingleNode(iXML, "CurrentFolder"), "path");
-	var sHtml = "<div>Current Folder : <span style='color: red'>" + cur + "</span></div>";
-	for (var i = 0 ; i < dir.length; ++i) {
-		var name = eXp.getNodeValue(dir[i], "name");
-		sHtml += createNode(cur, name);
+	function requestInit() {
+		var connector = eXoPlugin.hostName + eXp.connector + "getFoldersAndFiles";
+		var param = eXp.buildParam("Type=" + eXp.resourceType , "CurrentFolder=/");
+		eXp.sendRequest(connector, param, treeInit);
 	}
-	var Result = K.create.element({tagName: "div", innerHTML: sHtml});
-	var Hr = K.create.element({tagName: "div"});
-	var result = document.getElementById("result");
-	Hr.style.borderTop = "1px solid orange";
-	Hr.style.marginBottom = "20px";
-	K.insert({element: Hr, refer: result});
-	K.insert({element: Result, refer: result});
-}
-</script>
+
+	function languageInit() {
+		//change language
+		if (KLang) {
+			var aElements = document.getElementsByTagName("*");
+			for (var i = 0 ; i < aElements.length; ++i) {
+				if (aElements[i].getAttribute && aElements[i].getAttribute("userLanguage")) {
+					aElements[i].innerHTML = eval(aElements[i].getAttribute("userLanguage"));
+				}
+			}
+		}
+	};
+	
+	function elementResize() {
+		getElementByClassName('BrowserSetting').style.height = document.documentElement.clientHeight - 20 + 'px';
+		// Height of 'FolderNavigationTitleBar': 22px;
+		// Border of 'FolderNavigationTitleBar': 1px;
+		// Height of 'FolderExplorerStatusBar': 20px;
+		// Total: 53px;
+		getElementByClassName('FolderNavigationTree').style.height = document.documentElement.clientHeight - 53 + 'px';
+		if (getElementByClassName('FolderExplorerSetting')[0].style.display == 'none') {
+			getElementByClassName('FolderExplorerDocumentDiv').style.height = document.documentElement.clientHeight - 59 + 'px';
+		}
+		else 
+			getElementByClassName('FolderExplorerDocumentDiv').style.height = document.documentElement.clientHeight - 225 + 'px';
+	}
+	
+	K.addEventOnLoad(languageInit);
+	K.addEventOnLoad(requestInit);
+	K.addEventOnLoad(elementResize);
+	
+	K.addEventOnResize(elementResize);
+
+	function getDir(action, name) {
+		var connector = eXoPlugin.hostName + eXp.connector + action;
+		var param = eXp.buildParam("Type=" + eXp.resourceType , "CurrentFolder=/" + name);
+		eXp.sendRequest(connector, param, treeGen);
+	}
+
+	function getFile(action, name) {
+		var connector = eXoPlugin.hostName + eXp.connector + action;
+		var param = eXp.buildParam("Type=" + eXp.resourceType , "CurrentFolder=/" + name);
+		eXp.sendRequest(connector, param, itemGen);
+	}
+
+	// This value is never lost
+	var sValue = getElementByClassName('FolderExplorerDocumentDiv').innerHTML;
+	
+	function treeInit(sXML) {
+		var sHTML = '';
+		
+		// Root generate
+		sHTML +=
+		'<div id="/Document" class="HomeNode" oncontextmenu="showContextMenu(\'ContextMenuAddNewDocument\', event)">' +
+			'<span>&nbsp;</span>' +
+		'</div>' + 
+		'<div id="/Documents-gr/" class="NodeGroup">';
+		
+		// First child generate
+		var oFolder = eXp.getNodes(sXML, "Folder");
+		
+		// If a node have no children, request return null.
+		if (oFolder != null) {
+			var iLength = oFolder.length;
+			for (var i = 0 ; i < iLength; ++i) {
+				var sName = eXp.getNodeValue(oFolder[i], "name");
+				// By default, noteType = nt:xxxxxx, but css = nt_xxxxxx16x16Icon. So need to replace ':' by '_' and append '16x16Icon'
+				var sType = eXp.getNodeValue(oFolder[i], "nodeType").replace(':','_') + '16x16Icon';
+				sHTML += 
+				'<div class="' + (i == oFolder.length - 1 ? 'Node LastNode' : 'Node') + '" oncontextmenu="showContextMenu(\'ContextMenuAddNewDocument\', event)" style="display: block">' +
+					'<div id="/' + sName + '-ec" class="IconExpand">' +
+						'<div id="/' + sName + '" class="' + sType + ' IconNode IconClose default16x16Icon" onclick="getDir(\'getFoldersAndFiles\', \'' + sName + '\'); openTree(this);">' +
+							'<a href="javascript: void(0)">' +
+								sName +
+							'</a>' +
+						'</div>' +
+					'</div>' +
+				'</div>';
+			}
+			getElementByClassName('FolderExplorerFolderStatus').innerHTML = iLength + ' folder(s)';
+		} else {
+			getElementByClassName('FolderExplorerFolderStatus').innerHTML = '0 folder(s)';
+		}
+		sHTML += '</div>';
+		getElementByClassName('FolderNavigationTree').innerHTML += sHTML;
+		
+		// Item generate
+		
+		var oFolder = eXp.getNodes(sXML, "File");
+
+		// If folder has no file
+		if (oFolder != null) {
+			var iLength = oFolder.length;
+			var oItemGroup = getElementByClassName('FolderExplorerDocumentTable');
+			// If list item is generated
+			if (oItemGroup == null || oItemGroup == '') {
+				sHTML = '<table class="FolderExplorerDocumentTable" align="center" cellpadding="4">';
+				for (var i = 0 ; i < iLength; ++i) {
+					var sName = eXp.getNodeValue(oFolder[i], "name");
+					// By default, noteType = nt:xxxxxx, but css = nt_xxxxxx16x16Icon. So need to replace ':' by '_' and append '16x16Icon'
+					var sType = eXp.getNodeValue(oFolder[i], "fileType").replace(':', '_') + '16x16Icon';
+					var sDateCreated = dateFormat(eXp.getNodeValue(oFolder[i], "dateCreated"));
+					var sSize = eXp.getNodeValue(oFolder[i], "size");
+					
+					sHTML += 
+					'<tr>' +
+						'<td class="ItemName ' + sType + '">' +
+							'<a href="javascript: void(0)" oncontextmenu="showContextMenu(\'ContextMenuListItemOption\', event)">' + sName + '</a>' +
+						'</td>' +
+						'<td class="ItemDate">' + sDateCreated + '</td>' +
+						'<td class="ItemSize">' + sSize + ' kB</td>' +
+					'</tr>';
+				}
+				sHTML += '</table>';
+				getElementByClassName('FolderExplorerDocumentDiv').innerHTML += sHTML;
+			}
+			getElementByClassName('FolderExplorerItemStatus').innerHTML = iLength + ' item(s)';
+		} else {
+			getElementByClassName('FolderExplorerItemStatus').innerHTML = '0 item(s)';
+			getElementByClassName('FolderExplorerDocumentDiv').innerHTML = sValue;
+		}
+	}
+	
+	
+	var DB = {};
+	function treeGen(sXML) {
+		var sHTML;
+		
+		// Folder generate
+		
+		// By default, currentFolder = /xxxxxx/, for my tree, it need to replace first and last '/'
+		var sCurrentFolder = eXp.getNodeValue(eXp.getSingleNode(sXML, 'CurrentFolder'), 'path');
+		sCurrentFolder = sCurrentFolder.substring(1, sCurrentFolder.length - 1);
+		
+		var oFolder = eXp.getNodes(sXML, "Folder");
+			
+		// If a node have no children, request return null.
+		if (oFolder != null) {
+			var iLength = oFolder.length;
+			var oNodeGroup = document.getElementById('/' + sCurrentFolder + '-gr/');
+			var sTemp = '';
+			// If object has requested, it's no need to request again
+			if (oNodeGroup == null) {
+				sHTML = '<div id="/' + sCurrentFolder + '-gr/" class="NodeGroup">';
+				
+				for (var i = 0 ; i < iLength; ++i) {
+					var sName = eXp.getNodeValue(oFolder[i], "name");
+					// By default, noteType = nt:xxxxxx, but css = nt_xxxxxx16x16Icon. So need to replace ':' by '_' and append '16x16Icon'
+					var sType = eXp.getNodeValue(oFolder[i], "nodeType").replace(':', '_') + '16x16Icon';
+					sHTML +=
+					'<div class="' + (i == iLength - 1 ? 'Node LastNode' : 'Node') + '" oncontextmenu="showContextMenu(\'ContextMenuAddNewDocument\', event)" style="display: block">' +
+						'<div id="/' + sCurrentFolder + '/' + sName + '-ec" class="IconExpand">' +
+							'<div id="/' + sCurrentFolder + '/' + sName + '" class="' + sType + ' IconNode IconClose default16x16Icon " onclick="getDir(\'getFoldersAndFiles\', \'' + sCurrentFolder + '/' + sName + '\'); openTree(this);">' +
+								'<a href="javascript: void(0)">' +
+									sName +
+								'</a>' +
+							'</div>' +
+						'</div>' +
+					'</div>';
+				}
+				sHTML += '</div>';
+				document.getElementById('/' + sCurrentFolder + '-ec').innerHTML += sHTML;
+			}
+			getElementByClassName('FolderExplorerFolderStatus').innerHTML = iLength + ' folder(s)';
+		} else {
+			getElementByClassName('FolderExplorerFolderStatus').innerHTML = '0 folder(s)';
+		}
+		
+		// Item generate
+		
+		var oFolder = eXp.getNodes(sXML, "File");
+		// If folder has no file
+		if (oFolder != null) {
+			DB = K.create.database({
+				fieldName: ["name", "date", "size", "type"]
+			});
+			
+			var iLength = oFolder.length;
+			var oItemGroup = getElementByClassName('FolderExplorerDocumentTable');
+			if (oItemGroup == null || oItemGroup == '') {
+				sHTML = '<table class="FolderExplorerDocumentTable" align="center" cellpadding="4">';
+				
+				for (var i = 0 ; i < iLength; ++i) {
+					var sName = eXp.getNodeValue(oFolder[i], "name");
+					// By default, noteType = nt:xxxxxx, but css = nt_xxxxxx16x16Icon. So need to replace ':' by '_' and append '16x16Icon'
+					var sType = eXp.getNodeValue(oFolder[i], "fileType").replace(':', '_') + '16x16Icon';
+					var sDateCreated = dateFormat(eXp.getNodeValue(oFolder[i], "dateCreated"));
+					var sSize = eXp.getNodeValue(oFolder[i], "size");
+					if (sSize == '') {
+						sSize = '-';
+					}
+					sHTML += 
+					'<tr>' +
+						'<td class="ItemName ' + sType + '">' +
+							'<a href="javascript: void(0)" oncontextmenu="showContextMenu(\'ContextMenuListItemOption\', event)">' + sName + '</a>' +
+						'</td>' +
+						'<td class="ItemDate">' + sDateCreated.getDate() + '/' + sDateCreated.getMonth() + '/' + sDateCreated.getFullYear() + ' ' + sDateCreated.getHours() + ':' + sDateCreated.getMinutes() + '</td>' +
+						'<td class="ItemSize">' + sSize + ' kB</td>' +
+					'</tr>';
+					
+					DB.Insert([sName, sDateCreated, sSize, sType]);
+				}
+				sHTML += '</table>';
+				getElementByClassName('FolderExplorerDocumentDiv').innerHTML += sHTML;
+			}
+			getElementByClassName('FolderExplorerItemStatus').innerHTML = iLength + ' item(s)';
+		} else {
+			getElementByClassName('FolderExplorerItemStatus').innerHTML = '0 item(s)';
+			getElementByClassName('FolderExplorerDocumentDiv').innerHTML = sValue;
+		}
+	}
+
+	function dateFormat(sFullDate) {
+		// Ex: sFullDate = 2008-06-20T08:54:37.015+07:00
+		var sDate = sFullDate.substring(0, 10);
+		var sYear = sFullDate.substring(0, 4);
+		var sMonth = sFullDate.substring(5, 7);
+		var sDay = sFullDate.substring(8, 10);
+		var sHour = sFullDate.substring(sFullDate.indexOf('T') + 1, sFullDate.indexOf('T') + 3);
+		var sMinute = sFullDate.substring(sFullDate.indexOf('T') + 4, sFullDate.indexOf('T') + 6);
+		var sSecond = sFullDate.substring(sFullDate.indexOf('T') + 7, sFullDate.indexOf('T') + 9);
+		var sMillisecond = sFullDate.substring(sFullDate.indexOf('T') + 10, sFullDate.indexOf('T') + 13);
+
+		var date = new Date();
+		date.setDate(sDay);
+		date.setMonth(sMonth);
+		date.setYear(sYear);
+		date.setHours(sHour);
+		date.setMinutes(sMinute);
+		date.setSeconds(sSecond);
+		date.setMilliseconds(sMillisecond);
+		
+		return (date);
+	} 
+
+	function sort(sCondition) {
+	
+		getElementByClassName('FolderExplorerDocumentDiv').innerHTML = sValue;
+
+		var sHTML = '<table class="FolderExplorerDocumentTable" align="center" cellpadding="4">';
+
+		var aResult = DB.Select({orderBy: sCondition});
+		var iLength = aResult.length;
+		for (var i = 0; i < iLength; i++) {
+			sHTML += 
+				'<tr>' +
+					'<td class="ItemName ' + aResult[i].type + '">' +
+						'<a href="javascript: void(0)" oncontextmenu="showContextMenu(\'ContextMenuListItemOption\', event)">' + aResult[i].name + '</a>' +
+					'</td>' +
+					'<td class="ItemDate">' + aResult[i].date.getDate() + '/' + aResult[i].date.getMonth() + '/' + aResult[i].date.getFullYear() + ' ' + aResult[i].date.getHours() + ':' + aResult[i].date.getMinutes() + '</td>' +
+					'<td class="ItemSize">' + aResult[i].size + ' kB</td>' +
+				'</tr>';
+		}
+		
+		sHTML += '</table>'
+		getElementByClassName('FolderExplorerDocumentDiv').innerHTML += sHTML;
+	}
+	
+	</script>
 </html>
