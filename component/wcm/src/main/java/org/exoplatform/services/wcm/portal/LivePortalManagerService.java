@@ -29,6 +29,10 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
  * Jun 19, 2008  
  */
 public interface LivePortalManagerService {  
+  public Node getLiveSharedPortal(final SessionProvider sessionProvider) throws Exception;
+  public List<Node> getLivePortals(final SessionProvider sessionProvider) throws Exception;
+  public Node getLivePortal(final String portalName, final SessionProvider sessionProvider) throws Exception;
+
   public Node getLiveSharedPortal(final String repository,final SessionProvider sessionProvider) throws Exception;
   public List<Node> getLivePortals(final String repository, final SessionProvider sessionProvider) throws Exception;
   public Node getLivePortal(final String repository, final String portalName, final SessionProvider sessionProvider) throws Exception;  

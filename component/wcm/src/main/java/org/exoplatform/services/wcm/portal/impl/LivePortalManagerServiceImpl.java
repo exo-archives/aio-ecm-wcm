@@ -47,7 +47,22 @@ public class LivePortalManagerServiceImpl implements LivePortalManagerService {
     this.wcmConfigService = configService;
     this.repositoryService = repositoryService;
   }  
+  
+  public Node getLivePortal(String portalName, SessionProvider sessionProvider) throws Exception {
+    String currentRepository = repositoryService.getCurrentRepository().getConfiguration().getName();
+    return getLivePortal(currentRepository, portalName, sessionProvider);    
+  }
 
+  public List<Node> getLivePortals(SessionProvider sessionProvider) throws Exception {
+    String currentRepository = repositoryService.getCurrentRepository().getConfiguration().getName();
+    return getLivePortals(currentRepository,sessionProvider);
+  }
+
+  public Node getLiveSharedPortal(SessionProvider sessionProvider) throws Exception {
+    String currentRepository = repositoryService.getCurrentRepository().getConfiguration().getName();
+    return getLiveSharedPortal(currentRepository, sessionProvider);    
+  }  
+  
   public Node getLivePortal(final String repository, final String portalName, final SessionProvider sessionProvider) throws Exception {
     Node portalsStorage = getLivePortalsStorage(sessionProvider, repository);
     return portalsStorage.getNode(portalName); 
@@ -70,7 +85,7 @@ public class LivePortalManagerServiceImpl implements LivePortalManagerService {
     String sharePortalName = wcmConfigService.getSharedPortalName(repository);
     return portalsStorage.getNode(sharePortalName);
   }
-
+  
   private Node getLivePortalsStorage(final SessionProvider sessionProvider, final String repository) throws Exception {
     NodeLocation locationEntry = wcmConfigService.getLivePortalsLocation(repository);
     String workspace = locationEntry.getWorkspace();
@@ -78,6 +93,5 @@ public class LivePortalManagerServiceImpl implements LivePortalManagerService {
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
     Session session = sessionProvider.getSession(workspace,manageableRepository);
     return (Node)session.getItem(portalsStoragePath);
-  }  
-  
+  }        
 }
