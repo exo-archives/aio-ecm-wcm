@@ -1,11 +1,23 @@
-<%def node = uicomponent.getNode();%>
-<table class="UIGrid">              
-  <tr>
-    <td style="width:25%"><%=_ctx.appRes("WebContent.view.label.data")%></td>
-    <td>
-      <%if(node.hasProperty("exo:htmlFragment")){%>
-        <%=node.getProperty("exo:htmlFragment").getString()%>
-      <%}%> 
-    </td>
-  </tr>  
-</table>
+<%
+  import javax.jcr.NodeIterator;
+  import javax.jcr.Node;
+
+  def currentNode = uicomponent.getNode() ; 
+  def htmlFile = currentNode.getNode(currentNode.getName()) ;
+  
+  def jsNode = currentNode.getNode("js");
+  def cssNode = currentNode.getNode("css");
+    
+  def javaScriptClass="org.exoplatform.services.wcm.javascript.XJavascriptService";
+  def skinClass="org.exoplatform.services.wcm.skin.XSkinService";
+    
+  def exSkinService = uicomponent.getComponentInstanceOfType(skinClass) ;
+  def exJSService = uicomponent.getComponentInstanceOfType(javaScriptClass) ;
+       
+  def css= exSkinService.getActiveStylesheet(jsNode);
+  def js=  exJSService.getActiveJavaScript(cssNode) ;
+  def rcontext = _ctx.getRequestContext() ;    
+%>  
+<style><%=css%></style>
+<%=htmlFile.getNode("jcr:content").getProperty("jcr:data").getString() ;%>
+<script><%=js%></script>
