@@ -3,7 +3,7 @@
   import javax.jcr.Node;
 
   def currentNode = uicomponent.getNode() ; 
-  def htmlFile = currentNode.getNode(currentNode.getName()) ;
+  def htmlFile = currentNode.getNode("default.html") ;
   
   def jsNode = currentNode.getNode("js");
   def cssNode = currentNode.getNode("css");
