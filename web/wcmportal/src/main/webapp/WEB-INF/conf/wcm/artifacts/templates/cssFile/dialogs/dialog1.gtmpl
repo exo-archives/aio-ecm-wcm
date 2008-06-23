@@ -16,6 +16,7 @@
 	  height:275px;
 	  width:525px;
 	 }
+	 
 </style>
 <div class="UIFormWithTitle">  
   <% uiform.begin() %>
@@ -49,15 +50,6 @@
           </td>
         </tr>
         <tr>
-        	<td class="FieldLabel"><%=_ctx.appRes("CSSFile.dialog.label.active")%></td>
-        	<td class="FieldComponent">
-        		<%
-        			String[] fieldActive = ["jcrPath=/node/exo:active", "options=true,false", "onchange=true"] ;
-        			uicomponent.addSelectBoxField("activeCSS", fieldActive) ;
-        		%>
-        	</td>
-        </tr>
-        <tr>
         	<td class="FieldLabel"><%=_ctx.appRes("CSSFile.dialog.label.priority")%></td>
         	<td class="FieldComponent">
         		<%
@@ -66,9 +58,18 @@
         		%>
         	</td>
         </tr>       
+        <tr>
+        	<td class="FieldLabel"><%=_ctx.appRes("CSSFile.dialog.label.active")%></td>
+        	<td class="FieldComponent">
+        		<%
+        			String[] fieldActive = ["jcrPath=/node/exo:active", "options=true,false", "onchange=true"] ;
+        			uicomponent.addSelectBoxField("activeCSS", fieldActive) ;
+        		%>
+        	</td>
+        </tr>
     </table>       
     <%/* start render action*/%>
-    <div class="UIAction"> 
+    <div class="UIAction" style="display:block;"> 
       <table class="ActionContainer" align="center">
         <tr>
           <td align="center">
