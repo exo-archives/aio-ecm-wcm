@@ -90,17 +90,19 @@
 			 					<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.WebContentHtml")%></td>
 			  				<td class="FieldComponent">
 								<%
-	       					String[] htmlContent = ["jcrPath=/node/MyFile.html", "nodetype=nt:file", "defaultValues=MyFile.html", "options=default", ""] ;
-	       					String[] htmlHiddenField1 = ["jcrPath=/node/MyFile.html/jcr:content", "nodetype=nt:resource", "mixintype=dc:elementSet", "visible=false"] ; 
-								  String[] htmlHiddenField2 = ["jcrPath=/node/MyFile.html/jcr:content/jcr:encoding", "visible=false", "UTF-8"] ;  
-								  String[] htmlHiddenField3 = ["jcrPath=/node/MyFile.html/jcr:content/jcr:lastModified", "visible=false"] ;
-								  String[] htmlHiddenField4 = ["jcrPath=/node/MyFile.html/jcr:content/dc:date", "visible=false"] ;
-								  String[] htmlHiddenField5 = ["jcrPath=/node/MyFile.html/jcr:content/jcr:mimeType", "visible=false", "text/html"] ;
+	       					String[] htmlHiddenField1 = ["jcrPath=/node/MyFile.html", "nodetype=nt:file", "defaultValues=MyFile.html"] ;
+	       					String[] htmlHiddenField2 = ["jcrPath=/node/MyFile.html/jcr:content", "nodetype=nt:resource", "mixintype=dc:elementSet", "visible=false"] ; 
+								  String[] htmlHiddenField3 = ["jcrPath=/node/MyFile.html/jcr:content/jcr:encoding", "visible=false", "UTF-8"] ;  
+								  String[] htmlHiddenField4 = ["jcrPath=/node/MyFile.html/jcr:content/jcr:lastModified", "visible=false"] ;
+								  String[] htmlHiddenField5 = ["jcrPath=/node/MyFile.html/jcr:content/dc:date", "visible=false"] ;
+								  String[] htmlHiddenField6 = ["jcrPath=/node/MyFile.html/jcr:content/jcr:mimeType", "visible=false", "text/html"] ;
 								  uicomponent.addHiddenField("htmlHiddenField1", htmlHiddenField1) ;
 								  uicomponent.addHiddenField("htmlHiddenField2", htmlHiddenField2) ;
-								  uicomponent.addCalendarField("htmlHiddenField3", htmlHiddenField3) ;
+								  uicomponent.addHiddenField("htmlHiddenField3", htmlHiddenField3) ;
 								  uicomponent.addCalendarField("htmlHiddenField4", htmlHiddenField4) ;
-								  uicomponent.addHiddenField("htmlHiddenField5", htmlHiddenField5) ;
+								  uicomponent.addCalendarField("htmlHiddenField5", htmlHiddenField5) ;
+								  uicomponent.addHiddenField("htmlHiddenField6", htmlHiddenField6) ;
+								  String[] htmlContent = ["jcrPath=/node/MyFile.html/jcr:content/jcr:data", "options=default", ""];
 	        				uicomponent.addWYSIWYGField("htmlData", htmlContent) ;        
 	      				%>
 								</td>
