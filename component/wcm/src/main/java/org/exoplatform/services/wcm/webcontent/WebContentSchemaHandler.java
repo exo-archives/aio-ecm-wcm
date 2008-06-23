@@ -29,25 +29,11 @@ import org.exoplatform.services.wcm.core.BaseWebSchemaHandler;
  */
 public class WebContentSchemaHandler extends BaseWebSchemaHandler {
 
-  protected String getHandlerNodeType() { return "nt:file"; }  
-  protected String getParentNodeType() { return "exo:webFolder"; }
+  protected String getHandlerNodeType() { return "exo:webContent"; }  
+  protected String getParentNodeType() { return "nt:base"; }
 
-  public void process(final Node file) throws Exception {
-    Session session = file.getSession();    
-    Node webFolder = file.getParent();
-    String fileName = file.getName();
-    //create temp folder
-    addMixin(file, "exo:htmlFile");
-    file.setProperty("exo:presentationType","exo:htmlFile");    
-    String tempFolderName = fileName + this.hashCode();
-    Node tempFolder = webFolder.addNode(tempFolderName, NT_UNSTRUCTURED);    
-    String tempPath = tempFolder.getPath() + "/" +file.getName();        
-    session.move(file.getPath(),tempPath);    
-    //rename the folder        
-    Node webContent = webFolder.addNode(fileName, "exo:webContent");
-    String htmlFilePath = webContent.getPath() + "/" + fileName;    
-    session.move(tempPath, htmlFilePath);
-    tempFolder.remove();
+  public void process(final Node webContent) throws Exception {
+    Session session = webContent.getSession();
     createSchema(webContent);
     session.save();
   }
@@ -89,7 +75,7 @@ public class WebContentSchemaHandler extends BaseWebSchemaHandler {
       Node audio = multimedia.addNode("audio",NT_FOLDER);    
       addMixin(audio, "exo:musicFolder");
     }                
-    if (webContent.hasNode("documents")) {
+    if (!webContent.hasNode("documents")) {
       Node document = webContent.addNode("documents",NT_UNSTRUCTURED);           
       addMixin(document, "exo:documentFolder"); 
     }    
