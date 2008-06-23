@@ -44,50 +44,49 @@ import org.exoplatform.services.security.ConversationState;
 @URITemplate("/fckconnectorext/")
 public class RESTResourcesConnector implements ResourceContainer {
 
-  private RepositoryService repositoryService_ ;
-  private ThreadLocalSessionProviderService sessionProviderService_ ;  
-  private UserPortalConfigService portalConfigService_ ;
-  private DataStorage portalDataStorage_ ;
-  private UserACL portalUserACL_ ; 
-  private ConversationRegistry conversationRegistry_ ; ;
+  private RepositoryService repositoryService;
+  private ThreadLocalSessionProviderService sessionProviderService;  
+  private UserPortalConfigService portalConfigService;
+  private DataStorage portalDataStorage;
+  private UserACL portalUserACL; 
+  private ConversationRegistry conversationRegistry; 
 
-  public RESTResourcesConnector(InitParams params, RepositoryService repositoryService,ThreadLocalSessionProviderService sessionProviderService,
+  public RESTResourcesConnector(InitParams params, RepositoryService repositoryService, ThreadLocalSessionProviderService sessionProviderService,
       UserPortalConfigService portalConfigService, DataStorage dataStorage, UserACL userACL, ConversationRegistry conversationRegistry) throws Exception {
-    this.repositoryService_ = repositoryService ;
-    this.sessionProviderService_ = sessionProviderService;
-    this.portalConfigService_ = portalConfigService ;
-    this.portalDataStorage_ = dataStorage ;
-    this.portalUserACL_ = userACL ;            
-    this.conversationRegistry_ = conversationRegistry ;
+    this.repositoryService = repositoryService;
+    this.sessionProviderService = sessionProviderService;
+    this.portalConfigService = portalConfigService;
+    this.portalDataStorage = dataStorage;
+    this.portalUserACL = userACL;            
+    this.conversationRegistry = conversationRegistry;
   }
 
   @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/images/")
-  public void getImages(@URIParam("location")String location,@URIParam("Type") String type, @URIParam("currentFolder") String currentFolder) {
+  public void getImages(@URIParam("location")String location, @URIParam("Type") String type, @URIParam("currentFolder") String currentFolder) {
     new Exception().printStackTrace();
   }
 
   @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/documents/")
   public void getDocuments() {    
-    new Exception().printStackTrace() ;
+    new Exception().printStackTrace();
   }  
 
   @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/pageURI/")    
   @OutputTransformer(XMLOutputTransformer.class)
-  public Response getPageURI(@QueryParam("CurrentFolder") String currentFolder, @QueryParam("Command") String command,@QueryParam("Type") String type) throws Exception {    
-    PageURIBuilder builder = new PageURIBuilder(portalConfigService_,portalDataStorage_,portalUserACL_) ;
-    String userId = getCurrentUser() ;    
-    return builder.buildReponse(currentFolder, command, userId) ;
+  public Response getPageURI(@QueryParam("CurrentFolder") String currentFolder, @QueryParam("Command") String command, @QueryParam("Type") String type) throws Exception {    
+    PageURIBuilder builder = new PageURIBuilder(portalConfigService, portalDataStorage, portalUserACL);
+    String userId = getCurrentUser();    
+    return builder.buildReponse(currentFolder, command, userId);
   }   
   
   private String getCurrentUser() {    
-    try{
-      ConversationState conversationState = ConversationState.getCurrent() ;      
-      return conversationState.getIdentity().getUserId() ;
-    }catch (Exception e) {
-    }
-    return null ;
+    try {
+      ConversationState conversationState = ConversationState.getCurrent();      
+      return conversationState.getIdentity().getUserId();
+    } catch (Exception e) { }
+    return null;
   }
 }

@@ -20,7 +20,6 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 
 import org.exoplatform.container.ExoContainer;
-import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -30,69 +29,78 @@ import org.w3c.dom.Element;
  *          hoa.pham@exoplatform.com
  * Jun 9, 2008  
  */
-public class ImagesXMLOutputBuilder extends FCKConnectorXMLOutputBuilder{
+public class ImagesXMLOutputBuilder extends FCKConnectorXMLOutputBuilder {
 
-  public ImagesXMLOutputBuilder(ExoContainer container) {
-    super(container);
-  }
+  private static final String[] IMAGE_MIMETYPE = {"image/gif", "image/jpeg", "image/bmp", "image/png", "image/tiff"};
 
-  public Document buildFilesXMLOutput(String repository, String workspace, String currentFolder)
-  throws Exception {
-    Node currNode = getNode(repository, workspace, currentFolder);
-    Element root = createRootElement(GET_FILES, currNode);
+  public ImagesXMLOutputBuilder(ExoContainer container) { super(container); }
+
+  public Document buildFilesXMLOutput(String repository, String workspace, String currentFolder) throws Exception {
+    Node currentNode = getNode(repository, workspace, currentFolder);    
+    Element root = createRootElement(GET_FILES, currentNode);    
     Document document = root.getOwnerDocument();
-    Element imagesElement = document.createElement("Images");
-    for(NodeIterator iterator = currNode.getNodes(); iterator.hasNext(); ){
-      Node child = iterator.nextNode();
-      if(child.isNodeType(EXO_HIDDENABLE)) continue;
-      Element image = createImageElement(document, child);
-      if(image == null) continue;
-      imagesElement.appendChild(image);
+    Element filesElement = document.createElement("Files");
+    root.appendChild(filesElement);    
+    for (NodeIterator iter = currentNode.getNodes(); iter.hasNext();) {
+      Node child = iter.nextNode();      
+      if (child.isNodeType(EXO_HIDDENABLE)) continue;
+      String fileType = getFileType(child);
+      if (fileType != null) {
+        Element file = createFileElement(document, child, fileType);
+        filesElement.appendChild(file);
+      }          
+    }    
+    return document;
+  }    
+
+
+  public Document buildFoldersAndFilesXMLOutput(String repository, String workspace, String currentFolder) throws Exception {
+    Node currentNode = getNode(repository, workspace, currentFolder);    
+    Element root = createRootElement(GET_ALL, currentNode);
+    Document document = root.getOwnerDocument();
+    Element foldersElement = document.createElement("Folders");
+    Element filesElement = document.createElement("Files");
+    root.appendChild(foldersElement);
+    root.appendChild(filesElement);
+    for (NodeIterator iter = currentNode.getNodes(); iter.hasNext();) {
+      Node child = iter.nextNode();
+      if (child.isNodeType(EXO_HIDDENABLE)) continue;      
+      String folderType = getFolderType(child);
+      if (folderType != null) {        
+        Element folder = createFolderElement(document, child, folderType);
+        foldersElement.appendChild(folder);
+      } else {
+        String fileType = getFileType(child);
+        if (fileType != null) {
+          Element file = createFileElement(document, child, fileType);
+          filesElement.appendChild(file);
+        }          
+      }      
     }
     return document;
   }
 
-  public Document buildFoldersAndFilesXMLOutput(String repository, String workspace,
-      String currentFolder) throws Exception {
-    Node currentNode = getNode(repository, workspace, currentFolder) ;    
-    Element root = createRootElement(GET_ALL, currentNode) ;
-    Document document = root.getOwnerDocument();
-    Element foldersElement = document.createElement("Folders") ;
-    Element filesElement = document.createElement("Images") ;
-    root.appendChild(foldersElement);
-    root.appendChild(filesElement) ;
-    for(NodeIterator iter = currentNode.getNodes();iter.hasNext();) {
-      Node child = iter.nextNode();
-      if(child.isNodeType(EXO_HIDDENABLE)) continue ;
-      Element folder = createFolderElement(document, child) ;
-      if(folder != null){
-        foldersElement.appendChild(folder) ;
-      }else {
-        Element image = createImageElement(document, child) ;
-        if(image != null) 
-          filesElement.appendChild(image) ;
-      }      
-    }
-    return document ;
-  }
-
-  protected String createFileLink(Node node) throws Exception {
-    
+  protected String createFileLink(Node node) throws Exception {        
     return null;
   }
-
+    
   protected String getFileType(Node node) throws Exception {
-    if(node.isNodeType(NT_FILE)) {
-      if(node.isNodeType("exo:presentationable"))
-        return node.getProperty("exo:presentationType").getString() ;
-      return NT_FILE ;
-    }else {
-      String primaryType = node.getPrimaryNodeType().getName() ;
-      String repository = ((ManageableRepository)node.getSession().getRepository()).getConfiguration().getName() ;
-      if(templateService_.getDocumentTemplates(repository).contains(primaryType)) 
-        return primaryType ;
-    }
-    return null ;
+    //get mimetype by resource resolver        
+    if (node.isNodeType(NT_FILE)) {      
+      String mimeType = node.getNode("jcr:content").getProperty("jcr:mimeType").getString();
+      if(isImageMimeType(mimeType))
+        return node.getPrimaryNodeType().getName();      
+    }     
+    return null;
   }  
+  
+  private boolean isImageMimeType(String mimeType){   
+    for (String s : IMAGE_MIMETYPE) {
+      if (s.endsWith(mimeType)) {
+        return true;        
+      }
+    }        
+    return false;
+  }
 
 }

@@ -36,59 +36,56 @@ import org.w3c.dom.Document;
  */
 @URITemplate("/fckconnector/jcr/")
 public class FCKCoreConnector implements ResourceContainer {
-  
-  private final String GET_FILES = "GetFiles".intern();  
-  private final String GET_FOLDERS = "GetFolders".intern();       
-  private final String RESOURCE_AS_FILE= "File".intern() ;
-  private final String RESOURCE_AS_IMAGES = "Image".intern() ;
-  
+
+  private static final String GET_FILES = "GetFiles".intern();  
+  private static final String GET_FOLDERS = "GetFolders".intern();       
+  private static final String RESOURCE_AS_FILE = "File".intern();
+  private static final String RESOURCE_AS_IMAGES = "Image".intern();
+
   public FCKCoreConnector() { }
-  
+
   @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/getResource/")  
   @OutputTransformer(XMLOutputTransformer.class)
-  public Response getResource( @QueryParam("repositoryName") String repositoryName, @QueryParam("workspaceName") String workspaceName,
+  public Response getResource(@QueryParam("repositoryName") String repositoryName, @QueryParam("workspaceName") String workspaceName,
       @QueryParam("CurrentFolder") String currentFolder, @QueryParam("Command") String command,
       @QueryParam("Type") String type) throws Exception {
-    if(currentFolder == null || currentFolder.length() == 0) {
-      currentFolder = "/" ;
-    }    
-    repositoryName = "repository" ;
-    workspaceName = "collaboration" ;
-    FCKConnectorXMLOutputBuilder connectorXMLOutputBuilder = null ;
-    if(type == null || RESOURCE_AS_FILE.equals(type)) {
-      connectorXMLOutputBuilder = new FilesXMLOutputBuilder(ExoContainerContext.getCurrentContainer()) ; 
-    }else if(RESOURCE_AS_IMAGES.equals(type)) {
-      connectorXMLOutputBuilder = new ImagesXMLOutputBuilder(ExoContainerContext.getCurrentContainer()) ;
-    }    
-    Document document = null ;
-    if(GET_FOLDERS.equalsIgnoreCase(command)) {
-      document = connectorXMLOutputBuilder.buildFoldersXMLOutput(repositoryName, workspaceName, currentFolder) ;
-    }else if(GET_FILES.equals(command)) {
-      document = connectorXMLOutputBuilder.buildFilesXMLOutput(repositoryName, workspaceName, currentFolder) ;
-    }else {
-      document = connectorXMLOutputBuilder.buildFoldersAndFilesXMLOutput(repositoryName, workspaceName, currentFolder) ;
+    if (currentFolder == null || currentFolder.length() == 0) currentFolder = "/";       
+    repositoryName = "repository";
+    workspaceName = "collaboration";
+    FCKConnectorXMLOutputBuilder connectorXMLOutputBuilder = null;
+    if (type == null || RESOURCE_AS_FILE.equals(type)) {
+      connectorXMLOutputBuilder = new FilesXMLOutputBuilder(ExoContainerContext.getCurrentContainer());
+    } else if (RESOURCE_AS_IMAGES.equals(type)) {
+      connectorXMLOutputBuilder = new ImagesXMLOutputBuilder(ExoContainerContext.getCurrentContainer());
+    }
+    Document document = null;
+    if (GET_FOLDERS.equalsIgnoreCase(command)) {
+      document = connectorXMLOutputBuilder.buildFoldersXMLOutput(repositoryName, workspaceName, currentFolder);
+    } else if (GET_FILES.equals(command)) {
+      document = connectorXMLOutputBuilder.buildFilesXMLOutput(repositoryName, workspaceName, currentFolder);
+    } else {
+      document = connectorXMLOutputBuilder.buildFoldersAndFilesXMLOutput(repositoryName, workspaceName, currentFolder);
     }
     CacheControl cacheControl = new CacheControl();
-    cacheControl.setNoCache(true) ;
-    return Response.Builder.ok(document).cacheControl(cacheControl).build() ;
+    cacheControl.setNoCache(true);
+    return Response.Builder.ok(document).cacheControl(cacheControl).build();
   }
-  
+
   @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/getFoldersAndFiles/")  
   @OutputTransformer(XMLOutputTransformer.class)
   public Response getFoldersAndFiles(@QueryParam("repositoryName") String repositoryName, @QueryParam("workspaceName") String workspaceName,
       @QueryParam("CurrentFolder") String currentFolder, @QueryParam("Type") String type) throws Exception {
-    if(currentFolder == null || currentFolder.length() == 0){
+    if (currentFolder == null || currentFolder.length() == 0) {
       currentFolder = "/";
     }
     repositoryName = "repository";
     workspaceName = "collaboration";
     FCKConnectorXMLOutputBuilder connectorXMLOutputBuilder = null;
-    if(type == null || RESOURCE_AS_FILE.equals(type)){
+    if (type == null || RESOURCE_AS_FILE.equals(type)) {
       connectorXMLOutputBuilder = new FilesXMLOutputBuilder(ExoContainerContext.getCurrentContainer());
-    }
-    else if(RESOURCE_AS_IMAGES.equals(type)){
+    } else if (RESOURCE_AS_IMAGES.equals(type)) {
       connectorXMLOutputBuilder = new ImagesXMLOutputBuilder(ExoContainerContext.getCurrentContainer());
     }
     Document document = connectorXMLOutputBuilder.buildFoldersAndFilesXMLOutput(repositoryName, workspaceName, currentFolder);
@@ -96,63 +93,70 @@ public class FCKCoreConnector implements ResourceContainer {
     cacheControl.setNoCache(true);
     return Response.Builder.ok(document).cacheControl(cacheControl).build();
   }
-  
+
   @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/getFiles/")  
   @OutputTransformer(XMLOutputTransformer.class)
   public Response getFiles(@QueryParam("repositoryName") String repositoryName, @QueryParam("workspaceName") String workspaceName,
       @QueryParam("CurrentFolder") String currentFolder, @QueryParam("Type") String type) throws Exception {
-    if(currentFolder == null || currentFolder.length() == 0) {
-      currentFolder = "/" ;
+    if (currentFolder == null || currentFolder.length() == 0) currentFolder = "/";       
+    repositoryName = "repository";
+    workspaceName = "collaboration";
+    FCKConnectorXMLOutputBuilder connectorXMLOutputBuilder = null;
+    if (type == null || RESOURCE_AS_FILE.equals(type)) {
+      connectorXMLOutputBuilder = new FilesXMLOutputBuilder(ExoContainerContext.getCurrentContainer()); 
+    } else if (RESOURCE_AS_IMAGES.equals(type)) {
+      connectorXMLOutputBuilder = new ImagesXMLOutputBuilder(ExoContainerContext.getCurrentContainer());
     }    
-    repositoryName = "repository" ;
-    workspaceName = "collaboration" ;
-    FCKConnectorXMLOutputBuilder connectorXMLOutputBuilder = null ;
-    if(type == null || RESOURCE_AS_FILE.equals(type)) {
-      connectorXMLOutputBuilder = new FilesXMLOutputBuilder(ExoContainerContext.getCurrentContainer()) ; 
-    }else if(RESOURCE_AS_IMAGES.equals(type)) {
-      connectorXMLOutputBuilder = new ImagesXMLOutputBuilder(ExoContainerContext.getCurrentContainer()) ;
-    }    
-    Document document = connectorXMLOutputBuilder.buildFilesXMLOutput(repositoryName, workspaceName, currentFolder) ;
+    Document document = connectorXMLOutputBuilder.buildFilesXMLOutput(repositoryName, workspaceName, currentFolder);
     CacheControl cacheControl = new CacheControl();
-    cacheControl.setNoCache(true) ;
-    return Response.Builder.ok(document).cacheControl(cacheControl).build() ;
+    cacheControl.setNoCache(true);
+    return Response.Builder.ok(document).cacheControl(cacheControl).build();
   }
-  
+
   @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/getFolders/")  
   @OutputTransformer(XMLOutputTransformer.class)
   public Response getFolders(@QueryParam("repositoryName") String repositoryName, @QueryParam("workspaceName") String workspaceName,
       @QueryParam("CurrentFolder") String currentFolder, @QueryParam("Type") String type) throws Exception {
-    if(currentFolder == null || currentFolder.length() == 0) {
-      currentFolder = "/" ;
+    if (currentFolder == null || currentFolder.length() == 0) currentFolder = "/";    
+    repositoryName = "repository";
+    workspaceName = "collaboration";
+    FCKConnectorXMLOutputBuilder connectorXMLOutputBuilder = null;
+    if (type == null || RESOURCE_AS_FILE.equals(type)) {
+      connectorXMLOutputBuilder = new FilesXMLOutputBuilder(ExoContainerContext.getCurrentContainer()); 
+    } else if (RESOURCE_AS_IMAGES.equals(type)) {
+      connectorXMLOutputBuilder = new ImagesXMLOutputBuilder(ExoContainerContext.getCurrentContainer());
     }    
-    repositoryName = "repository" ;
-    workspaceName = "collaboration" ;
-    FCKConnectorXMLOutputBuilder connectorXMLOutputBuilder = null ;
-    if(type == null || RESOURCE_AS_FILE.equals(type)) {
-      connectorXMLOutputBuilder = new FilesXMLOutputBuilder(ExoContainerContext.getCurrentContainer()) ; 
-    }else if(RESOURCE_AS_IMAGES.equals(type)) {
-      connectorXMLOutputBuilder = new ImagesXMLOutputBuilder(ExoContainerContext.getCurrentContainer()) ;
-    }    
-    Document document = connectorXMLOutputBuilder.buildFoldersXMLOutput(repositoryName, workspaceName, currentFolder) ;
+    Document document = connectorXMLOutputBuilder.buildFoldersXMLOutput(repositoryName, workspaceName, currentFolder);
     CacheControl cacheControl = new CacheControl();
-    cacheControl.setNoCache(true) ;
-    return Response.Builder.ok(document).cacheControl(cacheControl).build() ;
+    cacheControl.setNoCache(true);
+    return Response.Builder.ok(document).cacheControl(cacheControl).mediaType("text/xml").build();
   }
-  
-  @HTTPMethod(HTTPMethods.POST)
+
+  @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/createFolder/")
   @OutputTransformer(XMLOutputTransformer.class) 
   public Response createFolder(@QueryParam("repositoryName") String repositoryName, @QueryParam("workspaceName") String workspaceName,
-      @QueryParam("CurrentFolder") String currentFolder, @QueryParam("newFolderName") String newFolderName) {
-    return null ;
+       @QueryParam("CurrentFolder") String currentFolder, @QueryParam("Type") String type, @QueryParam("NewFolderName") String newFolderName) throws Exception {
+    if (currentFolder == null || currentFolder.length() == 0) currentFolder = "/";    
+    repositoryName = "repository";
+    workspaceName = "collaboration";
+    FCKConnectorXMLOutputBuilder connectorXMLOutputBuilder = null;
+    if (type == null || RESOURCE_AS_FILE.equals(type)) {
+      connectorXMLOutputBuilder = new FilesXMLOutputBuilder(ExoContainerContext.getCurrentContainer()); 
+    } else if (RESOURCE_AS_IMAGES.equals(type)) {
+      connectorXMLOutputBuilder = new ImagesXMLOutputBuilder(ExoContainerContext.getCurrentContainer());
+    }    
+    Document document = connectorXMLOutputBuilder.buildFoldersXMLOutput(repositoryName, workspaceName, currentFolder, newFolderName);
+    CacheControl cacheControl = new CacheControl();
+    cacheControl.setNoCache(true);
+    return Response.Builder.ok(document).cacheControl(cacheControl).build();
   }
 
   @HTTPMethod(HTTPMethods.POST)
   @URITemplate("/uploadFile/")
   @OutputTransformer(XMLOutputTransformer.class)
-  public void uploadFile() {    
-  }
-  
+  public void uploadFile() { }
+
 }

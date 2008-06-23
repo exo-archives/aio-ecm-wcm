@@ -24,7 +24,7 @@ import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-/**
+/*
  * Created by The eXo Platform SAS
  * @author : Hoa.Pham
  *          hoa.pham@exoplatform.com
@@ -32,81 +32,84 @@ import org.w3c.dom.Element;
  */
 public class FilesXMLOutputBuilder extends FCKConnectorXMLOutputBuilder {
   
-  private final String[] MSOFFICE_MIMETYPE = {"application/ppt","application/msword","application/xls"} ;
+  private static final String[] MSOFFICE_MIMETYPE = {"application/ppt", "application/msword", "application/xls"};
   
-  public FilesXMLOutputBuilder(ExoContainer container) {
-    super(container);
-  }
+  public FilesXMLOutputBuilder(ExoContainer container) { super(container); }
   
-  public Document buildFilesXMLOutput(String repository,String workspace,String currentFolder) throws Exception {
-    Node currentNode = getNode(repository, workspace, currentFolder) ;    
-    Element root = createRootElement(GET_FILES, currentNode) ;    
+  public Document buildFilesXMLOutput(String repository, String workspace, String currentFolder) throws Exception {
+    Node currentNode = getNode(repository, workspace, currentFolder);    
+    Element root = createRootElement(GET_FILES, currentNode);    
     Document document = root.getOwnerDocument();
-    Element filesElement = document.createElement("Files") ;
-    root.appendChild(filesElement) ;    
-    for(NodeIterator iter = currentNode.getNodes();iter.hasNext();) {
-      Node child = iter.nextNode() ;
-      if(child.isNodeType(EXO_HIDDENABLE)) continue ;
-      Element file = createFileElement(document, child) ;
-      if(file == null) continue ;
-      filesElement.appendChild(file) ;           
+    Element filesElement = document.createElement("Files");
+    root.appendChild(filesElement);    
+    for (NodeIterator iter = currentNode.getNodes(); iter.hasNext();) {
+      Node child = iter.nextNode();      
+      if (child.isNodeType(EXO_HIDDENABLE)) continue;
+      String fileType = getFileType(child) ;
+      if (fileType != null) {
+        Element file = createFileElement(document, child, fileType);
+        filesElement.appendChild(file);
+      }          
     }    
-    return document ;
+    return document;
   }    
 
-  public Document buildFoldersAndFilesXMLOutput(String repository,String workspace,String currentFolder) throws Exception {
-    Node currentNode = getNode(repository, workspace, currentFolder) ;    
-    Element root = createRootElement(GET_ALL, currentNode) ;
+  public Document buildFoldersAndFilesXMLOutput(String repository, String workspace, String currentFolder) throws Exception {
+    Node currentNode = getNode(repository, workspace, currentFolder);    
+    Element root = createRootElement(GET_ALL, currentNode);
     Document document = root.getOwnerDocument();
-    Element foldersElement = document.createElement("Folders") ;
-    Element filesElement = document.createElement("Files") ;
+    Element foldersElement = document.createElement("Folders");
+    Element filesElement = document.createElement("Files");
     root.appendChild(foldersElement);
-    root.appendChild(filesElement) ;
-    for(NodeIterator iter = currentNode.getNodes();iter.hasNext();) {
+    root.appendChild(filesElement);
+    for (NodeIterator iter = currentNode.getNodes(); iter.hasNext();) {
       Node child = iter.nextNode();
-      if(child.isNodeType(EXO_HIDDENABLE)) continue ;
-      Element folder = createFolderElement(document, child) ;
-      if(folder != null){
-        foldersElement.appendChild(folder) ;
-      }else {
-        Element file = createFileElement(document, child) ;
-        if(file != null) 
-          filesElement.appendChild(file) ;
+      if (child.isNodeType(EXO_HIDDENABLE)) continue;      
+      String folderType = getFolderType(child);
+      if (folderType != null) {        
+        Element folder = createFolderElement(document, child, folderType);
+        foldersElement.appendChild(folder);
+      } else {
+        String fileType = getFileType(child);
+        if (fileType != null) {
+          Element file = createFileElement(document, child, fileType);
+          filesElement.appendChild(file);
+        }          
       }      
     }
-    return document ;
+    return document;
   }
   
   protected String createFileLink(Node node) throws Exception {
-    String mimeType = node.getNode("jcr:content").getProperty("jcr:mimeType").getString() ;
+    String mimeType = node.getNode("jcr:content").getProperty("jcr:mimeType").getString();
     //TODO should use mimetype registry to check
-    boolean isMSOfficeType = false ;
-    for(String s:MSOFFICE_MIMETYPE) {
-      if(s.endsWith(mimeType)) {
+    boolean isMSOfficeType = false;
+    for (String s : MSOFFICE_MIMETYPE) {
+      if (s.endsWith(mimeType)) {
         isMSOfficeType = true;
         break;
       }
     }        
-    if(isMSOfficeType)  {
-      String repository = ((ManageableRepository)node.getSession().getRepository()).getConfiguration().getName();
+    if (isMSOfficeType)  {
+      String repository = ((ManageableRepository) node.getSession().getRepository()).getConfiguration().getName();
       String workspace = node.getSession().getWorkspace().getName();
-      String currentPath = node.getPath() ;
-      return "portal/rest/lnkproducer/openit.lnk?path=/"+repository + "/"+workspace + currentPath ;
+      String currentPath = node.getPath();
+      return "portal/rest/lnkproducer/openit.lnk?path=/" + repository + "/" + workspace + currentPath;
     }    
-    return createCommonWebdavURL(node) ;    
+    return createCommonWebdavURL(node);    
   }
   
   protected String getFileType(Node node) throws Exception {
-    if(node.isNodeType(NT_FILE)) {
-      if(node.isNodeType("exo:presentationable"))
-        return node.getProperty("exo:presentationType").getString() ;
-      return NT_FILE ;
-    }else {
-      String primaryType = node.getPrimaryNodeType().getName() ;
-      String repository = ((ManageableRepository)node.getSession().getRepository()).getConfiguration().getName() ;
-      if(templateService_.getDocumentTemplates(repository).contains(primaryType)) 
-        return primaryType ;
+    if (node.isNodeType(NT_FILE)) {
+      if (node.isNodeType("exo:presentationable"))
+        return node.getProperty("exo:presentationType").getString();
+      return NT_FILE;
+    } else {
+      String primaryType = node.getPrimaryNodeType().getName();
+      String repository = ((ManageableRepository) node.getSession().getRepository()).getConfiguration().getName();
+      if (templateService.getDocumentTemplates(repository).contains(primaryType)) 
+        return primaryType;
     }
-    return null ;
+    return null;
   }  
 }
