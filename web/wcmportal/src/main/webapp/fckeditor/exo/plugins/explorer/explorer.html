@@ -11,7 +11,6 @@
 		<script type="text/javascript" src="js/kombai.js"></script>
 		<script type="text/javascript">
 			var eXoPlugin = window.opener.eXoPlugin;
-			eXoPlugin.userLanguage = "vi";
 			eXoPlugin.loadScript(window, "lang/" + eXoPlugin.userLanguage + ".js");
 		</script>
 	</head>
@@ -198,7 +197,6 @@
 	K.addEventOnLoad(languageInit);
 	K.addEventOnLoad(requestInit);
 	K.addEventOnLoad(elementResize);
-	
 	K.addEventOnResize(elementResize);
 
 	function getDir(action, name) {
