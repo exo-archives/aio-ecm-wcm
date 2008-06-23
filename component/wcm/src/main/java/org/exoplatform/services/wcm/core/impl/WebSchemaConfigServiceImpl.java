@@ -16,23 +16,24 @@
  */
 package org.exoplatform.services.wcm.core.impl;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 
 import javax.jcr.Node;
+import javax.jcr.Session;
 
 import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.component.ComponentPlugin;
 import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.wcm.core.NodeLocation;
+import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
 import org.exoplatform.services.wcm.core.WebSchemaHandler;
-import org.exoplatform.services.wcm.core.WebSchemaHandlerNotFoundException;
 import org.picocontainer.Startable;
 
 /**
@@ -44,20 +45,17 @@ import org.picocontainer.Startable;
 public class WebSchemaConfigServiceImpl implements WebSchemaConfigService, Startable {
 
   private HashMap<String, WebSchemaHandler> webSchemaHandlers = new HashMap<String, WebSchemaHandler>();
-  private List<SharedResourceFolderPlugin> sharedFolderPlugins = new ArrayList<SharedResourceFolderPlugin>(0) ;    
-  private Log log = ExoLogger.getLogger("wcm:WebSchemaConfigService") ;
-  
-  public WebSchemaConfigServiceImpl() { }
-  
-  public void addSharedResourcePlugin(ComponentPlugin plugin) {
-    if(plugin instanceof SharedResourceFolderPlugin) {
-      sharedFolderPlugins.add((SharedResourceFolderPlugin)plugin) ;
-    }
-  }
-  
+  private WCMConfigurationService wcmConfigService;
+
+  private Log log = ExoLogger.getLogger("wcm:WebSchemaConfigService");
+
+  public WebSchemaConfigServiceImpl(WCMConfigurationService configurationService) { 
+    this.wcmConfigService = configurationService;
+  }     
+
   public void addWebSchemaHandler(ComponentPlugin plugin) throws Exception {
-    if(plugin instanceof WebSchemaHandler) {
-      String clazz = plugin.getClass().getName() ;
+    if (plugin instanceof WebSchemaHandler) {
+      String clazz = plugin.getClass().getName();
       webSchemaHandlers.put(clazz, (WebSchemaHandler)plugin);
     }
   }
@@ -66,35 +64,46 @@ public class WebSchemaConfigServiceImpl implements WebSchemaConfigService, Start
     return webSchemaHandlers.values();    
   }
 
-  public <T extends WebSchemaHandler> T getWebSchemaHandlerByType(Class<T> clazz) throws Exception {    
-    WebSchemaHandler schemaHandler = webSchemaHandlers.get(clazz.getName()) ;
-    if(schemaHandler == null) throw new WebSchemaHandlerNotFoundException() ;
+  public <T extends WebSchemaHandler> T getWebSchemaHandlerByType(Class<T> clazz){    
+    WebSchemaHandler schemaHandler = webSchemaHandlers.get(clazz.getName());
+    if (schemaHandler == null) return null;
     return clazz.cast(schemaHandler);    
   }
 
   public void createSchema(Node node) throws Exception {
-    for(WebSchemaHandler handler: getAllWebSchemaHandler()) {
-      if(handler.matchHandler(node)) {
-        handler.process(node) ;
-        return ;
+    for (WebSchemaHandler handler: getAllWebSchemaHandler()) {
+      if (handler.matchHandler(node)) {
+        handler.process(node);
+        return;
       }
     }    
   }
 
-  public void start() { 
+  private void createLiveSharePortalFolders() {
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     RepositoryService repositoryService = 
-      (RepositoryService)container.getComponentInstanceOfType(RepositoryService.class) ;
-    SessionProvider sessionProvider = SessionProvider.createSystemProvider() ;
-    for(SharedResourceFolderPlugin plugin: sharedFolderPlugins) {
+      (RepositoryService)container.getComponentInstanceOfType(RepositoryService.class);
+    SessionProvider sessionProvider = SessionProvider.createSystemProvider();
+    for (NodeLocation locationEntry: wcmConfigService.getAllLivePortalsLocation()) {
+      String repoName = locationEntry.getRepository();
       try {
-        plugin.createSharedResourceFolder(sessionProvider, repositoryService) ;
+        ManageableRepository repository = repositoryService.getRepository(repoName);      
+        Session session = sessionProvider.getSession(locationEntry.getWorkspace(), repository);
+        Node livePortalsStorage = (Node)session.getItem(locationEntry.getPath());
+        String liveSharedPortalName = wcmConfigService.getSharedPortalName(repoName);
+        livePortalsStorage.addNode(liveSharedPortalName, "exo:portalFolder");
+        session.save();
       } catch (Exception e) {
-        log.error("Can not create shared resource folder for plugin"+plugin.getName(), e);
-      }
+        log.error("Error when try to create share portal folder for repository: "+ repoName, e);
+      }            
     }
-    sessionProvider.close();
+  }
+  public void start() {
+    createLiveSharePortalFolders();
   }
 
-  public void stop() { }  
+  public void stop() {
+    // TODO Auto-generated method stub
+
+  }   
 }

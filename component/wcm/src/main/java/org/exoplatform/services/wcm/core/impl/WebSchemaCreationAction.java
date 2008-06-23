@@ -34,16 +34,16 @@ import org.exoplatform.services.wcm.core.WebSchemaConfigService;
  * Mar 11, 2008  
  */
 public class WebSchemaCreationAction implements Action {
-  private Log log = ExoLogger.getLogger("wcm:WebSchemaCreationAction") ;
+  private Log log = ExoLogger.getLogger("wcm:WebSchemaCreationAction");
   public boolean execute(Context context) throws Exception {    
-    Node node = (Node)context.get("currentItem") ;
+    Node node = (Node)context.get("currentItem");
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     WebSchemaConfigService schemaConfigService = 
-      (WebSchemaConfigService) container.getComponentInstanceOfType(WebSchemaConfigService.class) ;
-    try{      
-      schemaConfigService.createSchema(node) ;
-    }catch (Exception e) { 
-      log.error("Error when creat web schema for node"+node.getPath() , e) ;
+      (WebSchemaConfigService) container.getComponentInstanceOfType(WebSchemaConfigService.class);
+    try {      
+      schemaConfigService.createSchema(node);
+    } catch (Exception e) { 
+      log.error("Error when creat web schema for node"+node.getPath() , e);
     }       
     return false;
   }

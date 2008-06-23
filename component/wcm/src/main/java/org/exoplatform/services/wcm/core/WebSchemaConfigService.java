@@ -30,9 +30,8 @@ import org.exoplatform.container.component.ComponentPlugin;
  */
 public interface WebSchemaConfigService {
   
-  public void addWebSchemaHandler(ComponentPlugin plugin) throws Exception ;  
-  public Collection<WebSchemaHandler> getAllWebSchemaHandler() throws Exception ;  
-  public <T extends WebSchemaHandler> T getWebSchemaHandlerByType(Class<T> clazz) throws Exception;
-  
-  public void createSchema(Node node) throws Exception ;  
+  public void addWebSchemaHandler(ComponentPlugin plugin) throws Exception;  
+  public Collection<WebSchemaHandler> getAllWebSchemaHandler() throws Exception;  
+  public <T extends WebSchemaHandler> T getWebSchemaHandlerByType(Class<T> clazz);  
+  public void createSchema(final Node node) throws Exception;     
 }

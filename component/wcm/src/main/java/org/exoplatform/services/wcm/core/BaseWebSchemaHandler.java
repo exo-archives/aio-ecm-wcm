@@ -35,20 +35,20 @@ public abstract class BaseWebSchemaHandler extends BaseComponentPlugin implement
 
   public boolean matchHandler(Node node) throws Exception {
     String handlerNodeType = getHandlerNodeType();    
-    if(node.getPrimaryNodeType().isNodeType(handlerNodeType) 
+    if (node.getPrimaryNodeType().isNodeType(handlerNodeType) 
         && node.getParent().isNodeType(getParentNodeType())) {
-      return true ;
+      return true;
     }
-    return false ;    
+    return false;    
   }
 
-  public abstract void process(Node node) throws Exception ;
+  public abstract void process(Node node) throws Exception;
 
   protected abstract String getHandlerNodeType() ;
   protected abstract String getParentNodeType();
 
   protected void addMixin(Node node, String mixin) throws Exception {
-    if(!node.isNodeType(mixin)) node.addMixin(mixin) ;
+    if (!node.isNodeType(mixin)) node.addMixin(mixin);
   }
   
 }

@@ -1,6 +1,34 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <configuration>
+
+  <component>
+    <key>org.exoplatform.services.wcm.core.WCMConfigurationService</key>
+    <type>org.exoplatform.services.wcm.core.WCMConfigurationService</type>
+    <init-params>
+	   <properties-param>
+	      <name>share.portal.config</name>
+	      <description>share portal name for each repository</description>
+	      <property name="repository" value="repository"/>
+	      <property name="portalName" value="share portal"/>                        
+	    </properties-param>
+	    <object-param>
+	        <name>live.portals.location.config</name>
+	        <description>configuration for the cms path</description>
+	        <object type="org.exoplatform.services.wcm.core.NodeLocation">
+	        	<field  name="repository"><string>repository</string></field>
+	        	<field name="workspace"><string>collaboration</string></field>
+	        	<field name="path"><string>/Web Content/Live</string></field>
+	        </object>
+	     </object-param>	    
+	   </init-params>
+  </component>
+  
+  <component>
+    <key>org.exoplatform.services.wcm.portal.LivePortalManagerService</key>
+    <type>org.exoplatform.services.wcm.portal.impl.LivePortalManagerServiceImpl</type>    
+  </component>
+        
   <component>
     <key>org.exoplatform.services.wcm.core.WebSchemaConfigService</key>
     <type>org.exoplatform.services.wcm.core.impl.WebSchemaConfigServiceImpl</type>

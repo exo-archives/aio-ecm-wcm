@@ -14,17 +14,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.services.wcm.core;
+package org.exoplatform.services.wcm.portal;
+
+import java.util.List;
 
 import javax.jcr.Node;
 
-/**
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
+
+/*
  * Created by The eXo Platform SAS
  * @author : Hoa.Pham
  *          hoa.pham@exoplatform.com
- * Jun 3, 2008  
+ * Jun 19, 2008  
  */
-public interface WebSchemaHandler {  
-  public boolean matchHandler(final Node node) throws Exception;
-  public void process(final Node node) throws Exception;
+public interface LivePortalManagerService {  
+  public Node getLiveSharedPortal(final String repository,final SessionProvider sessionProvider) throws Exception;
+  public List<Node> getLivePortals(final String repository, final SessionProvider sessionProvider) throws Exception;
+  public Node getLivePortal(final String repository, final String portalName, final SessionProvider sessionProvider) throws Exception;  
 }
