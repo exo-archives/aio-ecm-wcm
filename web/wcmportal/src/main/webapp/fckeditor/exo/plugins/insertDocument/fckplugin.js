@@ -11,7 +11,7 @@
 			sOptions += ",height=" + height ;
 			sOptions += ",left=" + iLeft ;
 			sOptions += ",top=" + iTop ;
-			var newWindow = window.open( eXoPlugin.ExoFileBrowserURL, 'eXoFileBrowseWindow', sOptions );
+			var newWindow = window.open( FCKConfig.eXoPath + "explorer/explorer.html", 'eXoExplorerWindow', sOptions);
 			newWindow.focus();
 		}
 	
@@ -22,4 +22,6 @@
 	var oElement = new FCKToolbarButton('Insert DMS Document') ;
 	oElement.IconPath = FCKConfig.eXoPath + "plugins/insertDocument/insertDocument.gif" ;
 	FCKToolbarItems.RegisterItem('Insert DMS Document', oElement) ;	
+
+	eXoPlugin.command = {init: "getFolders"};
 
