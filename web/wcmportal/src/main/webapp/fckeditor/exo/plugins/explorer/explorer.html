@@ -233,7 +233,7 @@
 			for (var i = 0 ; i < iLength; ++i) {
 				var sName = eXp.getNodeValue(oFolder[i], "name");
 				// By default, noteType = nt:xxxxxx, but css = nt_xxxxxx16x16Icon. So need to replace ':' by '_' and append '16x16Icon'
-				var sType = eXp.getNodeValue(oFolder[i], "nodeType").replace(':','_') + '16x16Icon';
+				var sType = eXp.getNodeValue(oFolder[i], "folderType").replace(':','_') + '16x16Icon';
 				sHTML += 
 				'<div class="' + (i == oFolder.length - 1 ? 'Node LastNode' : 'Node') + '" oncontextmenu="showContextMenu(\'ContextMenuAddNewDocument\', event)" style="display: block">' +
 					'<div id="/' + sName + '-ec" class="IconExpand">' +
@@ -314,7 +314,7 @@
 				for (var i = 0 ; i < iLength; ++i) {
 					var sName = eXp.getNodeValue(oFolder[i], "name");
 					// By default, noteType = nt:xxxxxx, but css = nt_xxxxxx16x16Icon. So need to replace ':' by '_' and append '16x16Icon'
-					var sType = eXp.getNodeValue(oFolder[i], "nodeType").replace(':', '_') + '16x16Icon';
+					var sType = eXp.getNodeValue(oFolder[i], "folderType").replace(':', '_') + '16x16Icon';
 					sHTML +=
 					'<div class="' + (i == iLength - 1 ? 'Node LastNode' : 'Node') + '" oncontextmenu="showContextMenu(\'ContextMenuAddNewDocument\', event)" style="display: block">' +
 						'<div id="/' + sCurrentFolder + '/' + sName + '-ec" class="IconExpand">' +
