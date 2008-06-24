@@ -12,7 +12,7 @@
 			sOptions += ",height=" + height ;
 			sOptions += ",left=" + iLeft ;
 			sOptions += ",top=" + iTop ;
-			var newWindow = window.open( FCKConfig.eXoPath + "plugins/explorer/explorer.html", 'eXoExplorerWindow', sOptions );
+			var newWindow = window.open( FCKConfig.eXoPath + "explorer/explorer.html", 'eXoExplorerWindow', sOptions );
 			newWindow.focus();
 		}
 	
@@ -23,3 +23,6 @@
 	var oElement = new FCKToolbarButton('Explorer') ;
 	oElement.IconPath = FCKConfig.eXoPath + "plugins/explorer/explorer.jpg" ;
 	FCKToolbarItems.RegisterItem('Explorer', oElement) ;
+	
+	eXoPlugin.command = {init: "getFoldersAndFiles"};
+
