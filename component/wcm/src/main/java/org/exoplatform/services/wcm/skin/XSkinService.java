@@ -114,8 +114,7 @@ public class XSkinService implements Startable {
     }
   }
 
-  public void stop() {
-
+  public void stop() {    
   }      
 
 }

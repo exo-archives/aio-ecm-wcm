@@ -51,5 +51,4 @@ public class HTMLFileSchemaHandler extends BaseWebSchemaHandler {
     tempFolder.remove();    
     session.save();
   }
-
 }

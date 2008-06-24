@@ -91,8 +91,10 @@ public class WebSchemaConfigServiceImpl implements WebSchemaConfigService, Start
         Session session = sessionProvider.getSession(locationEntry.getWorkspace(), repository);
         Node livePortalsStorage = (Node)session.getItem(locationEntry.getPath());
         String liveSharedPortalName = wcmConfigService.getSharedPortalName(repoName);
-        livePortalsStorage.addNode(liveSharedPortalName, "exo:portalFolder");
-        session.save();
+        if(!livePortalsStorage.hasNode(liveSharedPortalName)) {
+          livePortalsStorage.addNode(liveSharedPortalName, "exo:portalFolder");
+          session.save(); 
+        }        
       } catch (Exception e) {
         log.error("Error when try to create share portal folder for repository: "+ repoName, e);
       }            
@@ -102,8 +104,5 @@ public class WebSchemaConfigServiceImpl implements WebSchemaConfigService, Start
     createLiveSharePortalFolders();
   }
 
-  public void stop() {
-    // TODO Auto-generated method stub
-
-  }   
+  public void stop() { }   
 }
