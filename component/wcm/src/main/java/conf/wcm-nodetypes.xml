@@ -58,7 +58,7 @@
     </supertypes>
     <propertyDefinitions>
       <propertyDefinition name="exo:webSummary" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY"
-        protected="false" multiple="true">
+        protected="false" multiple="false">
         <valueConstraints/>
       </propertyDefinition>  	          	    
     </propertyDefinitions>
