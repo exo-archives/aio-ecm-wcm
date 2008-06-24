@@ -79,8 +79,15 @@
 			{
 
 				//var sUrl = this.ConnectorUrl + 'Command=' + command ;
-				var sUrl = this.ConnectorUrl ;
-				sUrl += '&Type=' + this.ResourceType ;
+				
+				if (command == "CreateFolder") {
+					var sUrl = this.ConnectorUrl.replace("getFiles", "createFolder");
+				} else {
+					var sUrl = this.ConnectorUrl ;
+				}
+				
+				sUrl += 'Type=' + this.ResourceType ;
+
 				sUrl += '&CurrentFolder=' + escape( this.CurrentFolder ) ;
 				
 				if ( params ) sUrl += '&' + params ;

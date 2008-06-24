@@ -18,6 +18,7 @@ package org.exoplatform.connector.fckeditor;
 
 import java.io.InputStream;
 import java.security.AccessControlException;
+import java.util.Calendar;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -49,12 +50,8 @@ public abstract class FCKConnectorXMLOutputBuilder extends BaseComponentPlugin {
   protected static final String EXO_HIDDENABLE = "exo:hiddenable".intern();
   protected static final String NT_FILE = "nt:file".intern();
   protected static final String NT_FOLDER = "nt:folder".intern();
-  protected static final String NT_UNSTRUCTURED = "nt:unstructured".intern();
-  protected static final String EXO_CSS = "exo:cssFolder".intern();
-  protected static final String EXO_JS = "exo:jsFolder".intern();
-  protected static final String EXO_HTML = "exo:webFolder".intern();
-  protected static final String EXO_PORTAL = "exo:portalFolder".intern();
-  
+  protected static final String NT_UNSTRUCTURED = "nt:unstructured".intern();  
+
   protected static final String GET_FILES = "GetFiles".intern();  
   protected static final String GET_FOLDERS = "GetFolders".intern();  
   protected static final String GET_ALL = "GetFoldersAndFiles".intern();
@@ -140,8 +137,24 @@ public abstract class FCKConnectorXMLOutputBuilder extends BaseComponentPlugin {
   protected Element createFileElement(Document document, Node child, String fileType) throws Exception {   
     Element file = document.createElement("File");
     file.setAttribute("name", child.getName());    
-    file.setAttribute("dateCreated", child.getProperty("exo:dateCreated").getString());    
-    file.setAttribute("dateModified", child.getProperty("exo:dateModified").getString());    
+    Calendar dateCreated = child.getProperty("exo:dateCreated").getDate();
+    Calendar dateModified = child.getProperty("exo:dateCreated").getDate();
+    StringBuffer attributeDateCreated = new StringBuffer();
+    StringBuffer attributeDateModified = new StringBuffer();
+    attributeDateCreated.append("{Y:'").append(Integer.toString(dateCreated.get(Calendar.YEAR)))
+    .append("', M:'").append(Integer.toString(dateCreated.get(Calendar.MONTH) + 1))
+    .append("', D:'").append(Integer.toString(dateCreated.get(Calendar.DAY_OF_MONTH)))
+    .append("', H:'").append(Integer.toString(dateCreated.get(Calendar.HOUR_OF_DAY)))
+    .append("', M:'").append(Integer.toString(dateCreated.get(Calendar.MINUTE)))
+    .append("', S:'").append(Integer.toString(dateCreated.get(Calendar.SECOND))).append("'}");    
+    attributeDateModified.append("{Y:'").append(Integer.toString(dateModified.get(Calendar.YEAR)))
+    .append("', M:'").append(Integer.toString(dateModified.get(Calendar.MONTH) + 1))
+    .append("', D:'").append(Integer.toString(dateModified.get(Calendar.DAY_OF_MONTH)))
+    .append("', H:'").append(Integer.toString(dateModified.get(Calendar.HOUR_OF_DAY)))
+    .append("', M:'").append(Integer.toString(dateModified.get(Calendar.MINUTE)))
+    .append("', S:'").append(Integer.toString(dateModified.get(Calendar.SECOND))).append("'}");    
+    file.setAttribute("dateCreated", attributeDateCreated.toString());    
+    file.setAttribute("dateModified", attributeDateModified.toString());    
     file.setAttribute("creator", child.getProperty("exo:owner").getString());
     file.setAttribute("fileType", fileType);
     if (child.isNodeType(NT_FILE)) {         
@@ -169,12 +182,8 @@ public abstract class FCKConnectorXMLOutputBuilder extends BaseComponentPlugin {
     String primaryType = nodeType.getName();
     String repository = ((ManageableRepository) node.getSession().getRepository()).getConfiguration().getName();
     if (templateService.getDocumentTemplates(repository).contains(primaryType)) return null;    
-    if (NT_UNSTRUCTURED.equals(primaryType) || NT_FOLDER.equals(primaryType) 
-        || EXO_CSS.equals(primaryType) || EXO_JS.equals(primaryType) 
-        || EXO_HTML.equals(primaryType) || EXO_PORTAL.equals(primaryType) ) return primaryType;    
-    if (nodeType.isNodeType(NT_UNSTRUCTURED) || nodeType.isNodeType(NT_FOLDER)
-        || EXO_CSS.equals(primaryType) || EXO_JS.equals(primaryType) 
-        || EXO_HTML.equals(primaryType) || EXO_PORTAL.equals(primaryType)) {
+    if (NT_UNSTRUCTURED.equals(primaryType) || NT_FOLDER.equals(primaryType)) return primaryType;    
+    if (nodeType.isNodeType(NT_UNSTRUCTURED) || nodeType.isNodeType(NT_FOLDER)) {
       //check if the nodetype is exo:videoFolder...
       return primaryType;
     }    
@@ -227,5 +236,5 @@ public abstract class FCKConnectorXMLOutputBuilder extends BaseComponentPlugin {
     } catch (AccessControlException e) { }
     return false ;
   }
-  
+
 }
