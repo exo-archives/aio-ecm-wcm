@@ -1,6 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-	<head><title> eXo File Explorer</title>
+	<head>
+		<title> eXo File Explorer</title>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8">
 		<meta http-equiv="cache-control" content="no-cache">
 		<meta http-equiv="pragma" content="no-cache">
@@ -15,70 +16,71 @@
 		</script>
 	</head>
 	<body onclick="hideContextMenu();" oncontextmenu="javascript: return false;">
-		<div class="BrowserSetting">
+		<div class="Explorer">
 			<div class="FolderNavigation">
-				<div class="FolderNavigationTitleBar">
-					<div class="FolderNavigationTitleText" userLanguage="KLang.FolderNavigation_Titlebar_Folder">
+				<div class="TitleBar">
+					<div class="TitleText" userLanguage="KLang.TreeTitle">
 						Folders
 					</div>
 				</div>
-				<div class="FolderNavigationTree">
-					<div class="ContextMenuContainer ContextMenuAddNewDocument">
+				<div class="Tree">
+					<div class="ContextMenu AddNewDocument">
 						<a href="javascript: void(0)" class="MenuItem"> 	
-							<div class="IconItem IconAdd" userLanguage="KLang.FolderNavigation_Contextmenu_AddNew">
+							<div class="IconItem IconAdd" onclick="showAddForm(this.id, true)" userLanguage="KLang.CtxNewDoc">
 								Add New
 							</div>
 						</a>
 					</div>
 				</div>
-				
 			</div>
+			
 			<div class="FolderSeparator"><span></span></div>
+			
 			<div class="FolderExplorer">
-				<div class="FolderExplorerMenuBar">
+				<div class="MenuBar">
 					<a href="javascript: void(0)">
-						<div class="FolderExplorerMenuBarItem IconRefresh" style="display: none" userLanguage="KLang.FolderExplorer_Menubar_Refresh">Refresh</div>
+						<div class="Item IconRefresh" style="display: none" userLanguage="KLang.BtnRefresh">Refresh</div>
 					</a>
 					<a href="javascript: void(0)">
-						<div class="FolderExplorerMenuBarItem IconUpload" style="display: none" userLanguage="KLang.FolderExplorer_Menubar_Upload">Upload File</div>
+						<div class="Item IconUpload" style="display: none" userLanguage="KLang.BtnUpload">Upload File</div>
 					</a>
-					<img src="img/IconSeparator2x26.gif" class="IconSeparator" style="display: none">
+					<img src="images/IconSeparator2x26.gif" class="IconSeparator" style="display: none">
 					<a href="javascript: void(0)">
-						<div class="FolderExplorerMenuBarItem IconSetting" onclick="showSetting('FolderExplorerSetting')" userLanguage="KLang.FolderExplorer_Menubar_Setting">Setting</div>
+						<div class="Item IconSetting" onclick="showSetting('Setting')" userLanguage="KLang.BtnSetting">Setting</div>
 					</a>
 					<a href="javascript: void(0)">
-						<div class="FolderExplorerMenuBarItem IconHelp" style="display: none" userLanguage="KLang.FolderExplorer_Menubar_Help">Help</div>
+						<div class="Item IconHelp" style="display: none" userLanguage="KLang.BtnHelp">Help</div>
 					</a>
 					<div style="clear: left;"><span></span></div>
 				</div>
-				<div class="FolderExplorerSetting" style="display: none;">
-					<div class="FolderExplorerSettingTitleBar" userLanguage="KLang.FolderExplorer_Setting_Titlebar">Settings</div>
-					<div class="FolderExplorerSettingDiv">
-						<table class="FolderExplorerSettingTable" align="center" cellpadding="0" cellspacing="0">
+				<div class="Setting" style="display: none;">
+					<div class="TitleBar" userLanguage="KLang.SettingTitle">Settings</div>
+					<div class="SettingDiv">
+						<table class="SettingTable" align="center" cellpadding="0" cellspacing="0">
 							<tr>
-								<td userLanguage="KLang.FolderExplorer_Setting_View">View: </td>
-								<td userLanguage="KLang.FolderExplorer_Setting_Sort">Sorting: </td>
+								<td userLanguage="KLang.SetView">View: </td>
+								<td userLanguage="KLang.SetSort">Sorting: </td>
 							</tr>
 							<tr>
-							    <td><input type="radio" name="FolderExplorerView"><span userLanguage="KLang.FolderExplorer_Setting_Thumbnail">Thumbnails</span></td>
-								<td><input type="radio" onclick="sort('name')" name="FolderExplorerSort"><span userLanguage="KLang.FolderExplorer_Setting_Filename">By File Name</span></td>
+							    <td><input type="radio" name="View"><span userLanguage="KLang.ViewThumbnail">Thumbnails</span></td>
+								<td><input type="radio" onclick="sort('name')" name="Sort"><span userLanguage="KLang.SortName">By File Name</span></td>
 		                    </tr>
 							<tr>
-							    <td><input type="radio" name="FolderExplorerView"><span userLanguage="KLang.FolderExplorer_Setting_List">List</span></td>
-								<td><input type="radio" onclick="sort('date')" name="FolderExplorerSort"><span userLanguage="KLang.FolderExplorer_Setting_Date">By Date</span></td>
+							    <td><input type="radio" name="View"><span userLanguage="KLang.ViewList">List</span></td>
+								<td><input type="radio" onclick="sort('date')" name="Sort"><span userLanguage="KLang.SortDate">By Date</span></td>
 		                    </tr>
 							<tr>
 							    <td/>
-								<td><input type="radio" onclick="sort('size')" name="FolderExplorerSort"><span userLanguage="KLang.FolderExplorer_Setting_Size">By Size</span></td>
+								<td><input type="radio" onclick="sort('size')" name="Sort"><span userLanguage="KLang.Sort_Size">By Size</span></td>
 		                    </tr>
 						</table>
 						<table align="center">
 							<tr>
 								<td align="center">
-									<a href="javascript: void(0)" onclick="showSetting('FolderExplorerSetting')">
+									<a href="javascript: void(0)" onclick="showSetting('Setting')">
 										<div class="ButtonLeft">
 											<div class="ButtonRight">
-												<div class="ButtonMiddle" userLanguage="KLang.FolderExplorer_Button_Close">
+												<div class="ButtonMiddle" userLanguage="KLang.BtnClose">
 													Close
 												</div>
 											</div>
@@ -90,25 +92,48 @@
 					</div>
 				</div>
 				
-				<div class="FolderExplorerDocumentDiv"><span></span></div>	
-				<div class="ContextMenuContainer ContextMenuListItemOption">
-					<a href="javascript: void(0)" class="MenuItem"> 	
-						<div class="IconItem IconView" userLanguage="KLang.FolderExplorer_Contextmenu_View">
+				<div class="DocumentDiv"><span></span></div>	
+				<div id="a" class="ContextMenu ListItemOption">
+					<a id="b1" href="javascript: void(0)" class="MenuItem"> 	
+						<div id="c1" class="IconItem IconView" onclick="window.open(this.id.replace('-view',''),'','width=350,height=250')" userLanguage="KLang.CtxViewItem">
 							View
 						</div>
 					</a>
-					<a href="javascript: void(0)" class="MenuItem"> 	
-						<div class="IconItem IconSelect" userLanguage="KLang.FolderExplorer_Contextmenu_Select">
+					<a id="b2" href="javascript: void(0)" class="MenuItem"> 	
+						<div id="c2" class="IconItem IconSelect" onclick="alert(this.id.replace('-select',''))" userLanguage="KLang.CtxSelectItem">
 							Select
 						</div>
 					</a>
 				</div>
 			</div>
 		</div>
-		<div class="FolderExplorerStatusBar">
-			<span class="FolderExplorerFolderStatus"></span>
-			<span class="FolderExplorerItemStatus"></span>
+		<div class="StatusBar">
+			<span class="abcFolder"></span>
+			<span class="abcItem"></span>
 		</div>
+		
+		<div class="aaaa" id="aaaa">
+			<div class="xxxx bbbb" id="bbbb">
+				<div class="cccc" id="cccc">
+					<div class="dddd" id="dddde">
+						<div class="xxxx eeee" onclick="getElementByPath1('aaaa', 'bbbb/cccc/dddd/eeee')" id="xxxx">
+							abc
+						</div>
+					</div>
+				</div>
+				<div class="bbbb ffff" id="ffff">
+					</div>
+					<div class="dddd" id="ddddw">
+					</div>
+					<div class="hhhh" id="hhhh">
+					</div>
+					<div class="iiii" id="iiii">
+					</div>
+					<div class="kkkk" id="kkkk">
+				</div>
+			</div>
+		</div>
+		
 	</body>
 
 	<script type="text/javascript">
@@ -175,24 +200,27 @@
 			var aElements = document.getElementsByTagName("*");
 			for (var i = 0 ; i < aElements.length; ++i) {
 				if (aElements[i].getAttribute && aElements[i].getAttribute("userLanguage")) {
-					aElements[i].innerHTML = eval(aElements[i].getAttribute("userLanguage"));
+					var userLanguage = eval(aElements[i].getAttribute("userLanguage"));
+					var textNode = document.createTextNode(userLanguage);
+					aElements[i].innerHTML = "";
+					aElements[i].appendChild(textNode);
 				}
 			}
 		}
 	};
 	
 	function elementResize() {
-		getElementByClassName('BrowserSetting').style.height = document.documentElement.clientHeight - 20 + 'px';
+		getElementByClassName('Explorer')[0].style.height = document.documentElement.clientHeight - 20 + 'px';
 		// Height of 'FolderNavigationTitleBar': 22px;
 		// Border of 'FolderNavigationTitleBar': 1px;
 		// Height of 'FolderExplorerStatusBar': 20px;
 		// Total: 53px;
-		getElementByClassName('FolderNavigationTree').style.height = document.documentElement.clientHeight - 53 + 'px';
-		if (getElementByClassName('FolderExplorerSetting')[0].style.display == 'none') {
-			getElementByClassName('FolderExplorerDocumentDiv').style.height = document.documentElement.clientHeight - 59 + 'px';
+		getElementByClassName('Tree').style.height = document.documentElement.clientHeight - 53 + 'px';
+		if (getElementByClassName('Setting')[0].style.display == 'none') {
+			getElementByClassName('DocumentDiv').style.height = document.documentElement.clientHeight - 59 + 'px';
 		}
 		else 
-			getElementByClassName('FolderExplorerDocumentDiv').style.height = document.documentElement.clientHeight - 225 + 'px';
+			getElementByClassName('DocumentDiv').style.height = document.documentElement.clientHeight - 225 + 'px';
 	}
 	
 	K.addEventOnLoad(languageInit);
@@ -213,14 +241,14 @@
 	}
 
 	// This value is never lost
-	var sValue = getElementByClassName('FolderExplorerDocumentDiv').innerHTML;
+	var sValue = getElementByClassName('DocumentDiv').innerHTML;
 	
 	function treeInit(sXML) {
 		var sHTML = '';
 		
 		// Root generate
 		sHTML +=
-		'<div id="/Document" class="HomeNode" oncontextmenu="showContextMenu(\'ContextMenuAddNewDocument\', event)">' +
+		'<div id="/Document" class="HomeNode" oncontextmenu="showContextMenu(\'AddNewDocument\', event, this)">' +
 			'<span>&nbsp;</span>' +
 		'</div>' + 
 		'<div id="/Documents-gr/" class="NodeGroup">';
@@ -236,9 +264,9 @@
 				// By default, noteType = nt:xxxxxx, but css = nt_xxxxxx16x16Icon. So need to replace ':' by '_' and append '16x16Icon'
 				var sType = eXp.getNodeValue(oFolder[i], "folderType").replace(':','_') + '16x16Icon';
 				sHTML += 
-				'<div class="' + (i == oFolder.length - 1 ? 'Node LastNode' : 'Node') + '" oncontextmenu="showContextMenu(\'ContextMenuAddNewDocument\', event)" style="display: block">' +
+				'<div class="' + (i == oFolder.length - 1 ? 'Node LastNode' : 'Node') + '" style="display: block">' +
 					'<div id="/' + sName + '-ec" class="IconExpand">' +
-						'<div id="/' + sName + '" class="' + sType + ' IconNode IconClose default16x16Icon" onclick="getDir(\'getFoldersAndFiles\', \'' + sName + '\'); openTree(this);">' +
+						'<div id="/' + sName + '" class="' + sType + ' IconNode IconClose default16x16Icon" onclick="getDir(\'getFoldersAndFiles\', \'' + sName + '\'); openTree(this);" oncontextmenu="showContextMenu(\'AddNewDocument\', event, this)">' +
 							'<a href="javascript: void(0)">' +
 								sName +
 							'</a>' +
@@ -246,12 +274,12 @@
 					'</div>' +
 				'</div>';
 			}
-			getElementByClassName('FolderExplorerFolderStatus').innerHTML = iLength + ' folder(s)';
+			getElementByClassName('abcFolder').innerHTML = iLength + ' folder(s)';
 		} else {
-			getElementByClassName('FolderExplorerFolderStatus').innerHTML = '0 folder(s)';
+			getElementByClassName('abcFolder').innerHTML = '0 folder(s)';
 		}
 		sHTML += '</div>';
-		getElementByClassName('FolderNavigationTree').innerHTML += sHTML;
+		getElementByClassName('Tree').innerHTML += sHTML;
 		
 		// Item generate
 		
@@ -260,33 +288,36 @@
 		// If folder has no file
 		if (oFolder != null) {
 			var iLength = oFolder.length;
-			var oItemGroup = getElementByClassName('FolderExplorerDocumentTable');
+			var oItemGroup = getElementByClassName('DocumentTable');
 			// If list item is generated
 			if (oItemGroup == null || oItemGroup == '') {
-				sHTML = '<table class="FolderExplorerDocumentTable" align="center" cellpadding="4">';
+				sHTML = '<table class="DocumentTable" align="center" cellpadding="4">';
 				for (var i = 0 ; i < iLength; ++i) {
 					var sName = eXp.getNodeValue(oFolder[i], "name");
 					// By default, noteType = nt:xxxxxx, but css = nt_xxxxxx16x16Icon. So need to replace ':' by '_' and append '16x16Icon'
 					var sType = eXp.getNodeValue(oFolder[i], "fileType").replace(':', '_') + '16x16Icon';
 					var sDateCreated = dateFormat(eXp.getNodeValue(oFolder[i], "dateCreated"));
+					var sURL = eXoPlugin.hostName + '/' + eXp.getNodeValue(oFolder[i], "url");
 					var sSize = eXp.getNodeValue(oFolder[i], "size");
-					
+					if (sSize == '') {
+						sSize = '-';
+					}
 					sHTML += 
 					'<tr>' +
 						'<td class="ItemName ' + sType + '">' +
-							'<a href="javascript: void(0)" oncontextmenu="showContextMenu(\'ContextMenuListItemOption\', event)">' + sName + '</a>' +
+							'<a id="' + sURL + '" href="javascript: void(0)" oncontextmenu="showContextMenu(\'ListItemOption\', event, this)">' + sName + '</a>' +
 						'</td>' +
 						'<td class="ItemDate">' + sDateCreated + '</td>' +
 						'<td class="ItemSize">' + sSize + ' kB</td>' +
 					'</tr>';
 				}
 				sHTML += '</table>';
-				getElementByClassName('FolderExplorerDocumentDiv').innerHTML += sHTML;
+				getElementByClassName('DocumentDiv').innerHTML += sHTML;
 			}
-			getElementByClassName('FolderExplorerItemStatus').innerHTML = iLength + ' item(s)';
+			getElementByClassName('abcItem').innerHTML = iLength + ' item(s)';
 		} else {
-			getElementByClassName('FolderExplorerItemStatus').innerHTML = '0 item(s)';
-			getElementByClassName('FolderExplorerDocumentDiv').innerHTML = sValue;
+			getElementByClassName('abcItem').innerHTML = '0 item(s)';
+			getElementByClassName('DocumentDiv').innerHTML = sValue;
 		}
 	}
 	
@@ -317,9 +348,9 @@
 					// By default, noteType = nt:xxxxxx, but css = nt_xxxxxx16x16Icon. So need to replace ':' by '_' and append '16x16Icon'
 					var sType = eXp.getNodeValue(oFolder[i], "folderType").replace(':', '_') + '16x16Icon';
 					sHTML +=
-					'<div class="' + (i == iLength - 1 ? 'Node LastNode' : 'Node') + '" oncontextmenu="showContextMenu(\'ContextMenuAddNewDocument\', event)" style="display: block">' +
+					'<div class="' + (i == iLength - 1 ? 'Node LastNode' : 'Node') + '" style="display: block">' +
 						'<div id="/' + sCurrentFolder + '/' + sName + '-ec" class="IconExpand">' +
-							'<div id="/' + sCurrentFolder + '/' + sName + '" class="' + sType + ' IconNode IconClose default16x16Icon " onclick="getDir(\'getFoldersAndFiles\', \'' + sCurrentFolder + '/' + sName + '\'); openTree(this);">' +
+							'<div id="/' + sCurrentFolder + '/' + sName + '" class="' + sType + ' IconNode IconClose default16x16Icon " onclick="getDir(\'getFoldersAndFiles\', \'' + sCurrentFolder + '/' + sName + '\'); openTree(this);" oncontextmenu="showContextMenu(\'AddNewDocument\', event, this)">' +
 								'<a href="javascript: void(0)">' +
 									sName +
 								'</a>' +
@@ -330,9 +361,9 @@
 				sHTML += '</div>';
 				document.getElementById('/' + sCurrentFolder + '-ec').innerHTML += sHTML;
 			}
-			getElementByClassName('FolderExplorerFolderStatus').innerHTML = iLength + ' folder(s)';
+			getElementByClassName('abcFolder').innerHTML = iLength + ' folder(s)';
 		} else {
-			getElementByClassName('FolderExplorerFolderStatus').innerHTML = '0 folder(s)';
+			getElementByClassName('abcFolder').innerHTML = '0 folder(s)';
 		}
 		
 		// Item generate
@@ -345,15 +376,16 @@
 			});
 			
 			var iLength = oFolder.length;
-			var oItemGroup = getElementByClassName('FolderExplorerDocumentTable');
+			var oItemGroup = getElementByClassName('DocumentTable');
 			if (oItemGroup == null || oItemGroup == '') {
-				sHTML = '<table class="FolderExplorerDocumentTable" align="center" cellpadding="4">';
+				sHTML = '<table class="DocumentTable" align="center" cellpadding="4">';
 				
 				for (var i = 0 ; i < iLength; ++i) {
 					var sName = eXp.getNodeValue(oFolder[i], "name");
 					// By default, noteType = nt:xxxxxx, but css = nt_xxxxxx16x16Icon. So need to replace ':' by '_' and append '16x16Icon'
 					var sType = eXp.getNodeValue(oFolder[i], "fileType").replace(':', '_') + '16x16Icon';
 					var sDateCreated = dateFormat(eXp.getNodeValue(oFolder[i], "dateCreated"));
+					var sURL = eXoPlugin.hostName + '/' + eXp.getNodeValue(oFolder[i], "url");
 					var sSize = eXp.getNodeValue(oFolder[i], "size");
 					if (sSize == '') {
 						sSize = '-';
@@ -361,7 +393,7 @@
 					sHTML += 
 					'<tr>' +
 						'<td class="ItemName ' + sType + '">' +
-							'<a href="javascript: void(0)" oncontextmenu="showContextMenu(\'ContextMenuListItemOption\', event)">' + sName + '</a>' +
+							'<a id="' + sURL + '" href="javascript: void(0)" oncontextmenu="showContextMenu(\'ListItemOption\', event, this)">' + sName + '</a>' +
 						'</td>' +
 						'<td class="ItemDate">' + sDateCreated.getDate() + '/' + sDateCreated.getMonth() + '/' + sDateCreated.getFullYear() + ' ' + sDateCreated.getHours() + ':' + sDateCreated.getMinutes() + '</td>' +
 						'<td class="ItemSize">' + sSize + ' kB</td>' +
@@ -370,44 +402,20 @@
 					DB.Insert([sName, sDateCreated, sSize, sType]);
 				}
 				sHTML += '</table>';
-				getElementByClassName('FolderExplorerDocumentDiv').innerHTML += sHTML;
+				getElementByClassName('DocumentDiv').innerHTML += sHTML;
 			}
-			getElementByClassName('FolderExplorerItemStatus').innerHTML = iLength + ' item(s)';
+			getElementByClassName('abcItem').innerHTML = iLength + ' item(s)';
 		} else {
-			getElementByClassName('FolderExplorerItemStatus').innerHTML = '0 item(s)';
-			getElementByClassName('FolderExplorerDocumentDiv').innerHTML = sValue;
+			getElementByClassName('abcItem').innerHTML = '0 item(s)';
+			getElementByClassName('DocumentDiv').innerHTML = sValue;
 		}
 	}
 
-	function dateFormat(sFullDate) {
-		// Ex: sFullDate = 2008-06-20T08:54:37.015+07:00
-		date="{y: '2008', m: '06', d: '24', h: }"
-		var sDate = sFullDate.substring(0, 10);
-		var sYear = sFullDate.substring(0, 4);
-		var sMonth = sFullDate.substring(5, 7);
-		var sDay = sFullDate.substring(8, 10);
-		var sHour = sFullDate.substring(sFullDate.indexOf('T') + 1, sFullDate.indexOf('T') + 3);
-		var sMinute = sFullDate.substring(sFullDate.indexOf('T') + 4, sFullDate.indexOf('T') + 6);
-		var sSecond = sFullDate.substring(sFullDate.indexOf('T') + 7, sFullDate.indexOf('T') + 9);
-		var sMillisecond = sFullDate.substring(sFullDate.indexOf('T') + 10, sFullDate.indexOf('T') + 13);
-
-		var date = new Date();
-		date.setDate(sDay);
-		date.setMonth(sMonth);
-		date.setYear(sYear);
-		date.setHours(sHour);
-		date.setMinutes(sMinute);
-		date.setSeconds(sSecond);
-		date.setMilliseconds(sMillisecond);
-		
-		return (date);
-	} 
-
 	function sort(sCondition) {
 	
-		getElementByClassName('FolderExplorerDocumentDiv').innerHTML = sValue;
+		getElementByClassName('DocumentDiv').innerHTML = sValue;
 
-		var sHTML = '<table class="FolderExplorerDocumentTable" align="center" cellpadding="4">';
+		var sHTML = '<table class="DocumentTable" align="center" cellpadding="4">';
 
 		var aResult = DB.Select({orderBy: sCondition});
 		var iLength = aResult.length;
@@ -415,7 +423,7 @@
 			sHTML += 
 				'<tr>' +
 					'<td class="ItemName ' + aResult[i].type + '">' +
-						'<a href="javascript: void(0)" oncontextmenu="showContextMenu(\'ContextMenuListItemOption\', event)">' + aResult[i].name + '</a>' +
+						'<a href="javascript: void(0)" oncontextmenu="showContextMenu(\'ListItemOption\', event, this)">' + aResult[i].name + '</a>' +
 					'</td>' +
 					'<td class="ItemDate">' + aResult[i].date.getDate() + '/' + aResult[i].date.getMonth() + '/' + aResult[i].date.getFullYear() + ' ' + aResult[i].date.getHours() + ':' + aResult[i].date.getMinutes() + '</td>' +
 					'<td class="ItemSize">' + aResult[i].size + ' kB</td>' +
@@ -423,8 +431,49 @@
 		}
 		
 		sHTML += '</table>'
-		getElementByClassName('FolderExplorerDocumentDiv').innerHTML += sHTML;
+		getElementByClassName('DocumentDiv').innerHTML += sHTML;
 	}
 	
+	// Action is executed in: Right click Folder Explorer Navigator -> Choose Add new (bShow = true) or Right click Folder Explorer Navigator -> Choose Add new -> Click Create -> Click Cancel (bShow = false)
+	function showAddForm(id, bShow) {
+		var idd = id.replace('-add','');
+		var sMaxLength = 23;
+		var sHTML = 
+			'<div class="AddNewDocumentForm">' +
+				(idd == '/Document' ? '/' : (idd.length > sMaxLength ? ('...' + idd.substring(idd.length - sMaxLength)) : idd)) + '<p>' +
+				'<input id="' + id.replace('-add','-txt') + '" type="text"></p><p>' +
+				'<input value="Create" onclick="doAddForm(\'' + idd + '\',document.getElementById(\'' + idd + '-txt\').value)" type="button">' +
+				'<input value="Cancel" onclick="showAddForm(\'' + id + '\', false)" userlanguage="KLang.AddFolderCancel" type="button"></p>' +
+			'</div>';
+		var sMask = '<div class="AddNewDocumentMask"></div>';
+		if (bShow) {
+			getElementByClassName('Tree').innerHTML += sHTML;	
+			document.body.innerHTML += sMask;
+		}
+		else {
+			getElementByClassName('Tree').innerHTML = getElementByClassName('Tree').innerHTML.replace(sHTML, '', 'g');
+			document.body.innerHTML = document.body.innerHTML.replace(sMask, '', 'g');
+		}
+	}
+		
+	// Action is executed in: Right click Folder Explorer Navigator -> Choose Add new -> Click Create
+	function doAddForm(sCurrentFolder, sFolderName) {
+		if (sCurrentFolder == '/Document')
+			alert('aaaa')
+		var connector = eXoPlugin.hostName + eXp.connector + 'createFolder';
+		var param = eXp.buildParam("Type=" + eXp.resourceType , "CurrentFolder=" + (sCurrentFolder == '/Document' ? '' : sCurrentFolder) + "/", "NewFolderName=" + sFolderName);
+		eXp.sendRequest(connector, param, function(sXML) {
+											var oNodes = eXp.getNodes(sXML, "Error")[0];
+											var sErrorNumber = eXp.getNodeValue(oNodes, "number");
+											var sErrorText = eXp.getNodeValue(oNodes, "text");
+											if (sErrorNumber != '0') {
+												alert(sErrorText);
+											} else {
+												showAddForm(sCurrentFolder + '-add', false);
+												// problem when current folder = / or  create 2 folder in same parent
+												getDir('getFoldersAndFiles', sCurrentFolder.replace('/','') + '/');
+											}
+										});
+	}
 	</script>
 </html>
