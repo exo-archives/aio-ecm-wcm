@@ -60,11 +60,10 @@ public class WebContributionService {
    */
   public final boolean hasContributionPermission(final String userId) {
     ConversationState conversationState = conversationRegistry.getState(userId);
-    Identity identity = conversationState.getIdentity();
-    if (identity != null) {
-      MembershipEntry entry = MembershipEntry.parse(contributorGroup);
-      return identity.isMemberOf(entry);
-    }
+    try {
+      Identity identity = conversationState.getIdentity();
+      return identity.isMemberOf(contributorGroup);
+    } catch (Exception e) { }        
     return false;
   }
 }
