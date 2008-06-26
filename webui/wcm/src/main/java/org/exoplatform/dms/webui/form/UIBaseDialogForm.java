@@ -108,6 +108,7 @@ public abstract class UIBaseDialogForm extends UIForm {
   private static final String SCRIPT_PARAMS = "scriptParams" + SEPARATOR;
   private static final String MULTI_VALUES = "multiValues" + SEPARATOR;
   private static final String REPOSITORY = "repository";
+  private final String DEFAULT_VALUES = "defaultValues" + SEPARATOR ;
 
   public static final  String[]  ACTIONS = {"Save", "Cancel"};
 
@@ -616,6 +617,8 @@ public abstract class UIBaseDialogForm extends UIForm {
         multiValues = argument.substring(argument.indexOf(SEPARATOR) + 1);      
       } else if (argument.startsWith(VALIDATE)) {
         validateType = argument.substring(argument.indexOf(SEPARATOR) + 1);
+      } else if (argument.startsWith(DEFAULT_VALUES)) {
+        defaultValue = argument.substring(argument.indexOf(SEPARATOR) + 1);
       } else {
         defaultValue = argument;
       }
@@ -960,6 +963,8 @@ public abstract class UIBaseDialogForm extends UIForm {
         visible = argument.substring(argument.indexOf(SEPARATOR) + 1);
       } else if (argument.startsWith(EDITABLE)) {
         editable = argument.substring(argument.indexOf(SEPARATOR) + 1);
+      } else if (argument.startsWith(DEFAULT_VALUES)) {
+        defaultValue = argument.substring(argument.indexOf(SEPARATOR) + 1);
       } else {
         defaultValue = argument;
       }
