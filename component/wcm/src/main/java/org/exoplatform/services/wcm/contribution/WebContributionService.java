@@ -17,24 +17,54 @@
 package org.exoplatform.services.wcm.contribution;
 
 import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.services.security.ConversationRegistry;
+import org.exoplatform.services.security.ConversationState;
+import org.exoplatform.services.security.Identity;
+import org.exoplatform.services.security.MembershipEntry;
 
 /**
- * Created by The eXo Platform SAS
+ * Created by The eXo Platform SAS.
+ * 
  * @author : Hoa.Pham
- *          hoa.pham@exoplatform.com
- * May 13, 2008  
+ * hoa.pham@exoplatform.com
+ * May 13, 2008
  */
 public class WebContributionService {
 
-  private String contributorGroup_ ;  
+  /** The user in contributor group can contribute web content 
+   * in some special way like quick edit in some web presentation portlet.
+   */
+  private String contributorGroup;
 
-  public WebContributionService(InitParams initParams) {
-    contributorGroup_ = initParams.getPropertiesParam("service.params").getProperty("web.contributor.group") ;
+  /** The conversation registry. */
+  private ConversationRegistry conversationRegistry;
+
+  /**
+   * Instantiates a new web contribution service.
+   * 
+   * @param initParams the init params
+   * @param conversationRegistry the conversation registry service
+   */
+  public WebContributionService(ConversationRegistry registry, InitParams initParams) {
+    contributorGroup = initParams.getPropertiesParam("service.params")
+    .getProperty("web.contributor.group");
+    this.conversationRegistry = registry;
   }
 
-  public boolean hasContributionPermission(String userId) {
-    //TODO should use PermissionManagerService form new ecm component when it finish    
-    return false ;    
+  /**
+   * Checks for contribution role.
+   *
+   * @param userId the user id
+   *
+   * @return true, if userId has contribution role
+   */
+  public final boolean hasContributionPermission(final String userId) {
+    ConversationState conversationState = conversationRegistry.getState(userId);
+    Identity identity = conversationState.getIdentity();
+    if (identity != null) {
+      MembershipEntry entry = MembershipEntry.parse(contributorGroup);
+      return identity.isMemberOf(entry);
+    }
+    return false;
   }
-  
 }
