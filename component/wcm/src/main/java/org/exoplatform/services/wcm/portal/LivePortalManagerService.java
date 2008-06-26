@@ -20,6 +20,7 @@ import java.util.List;
 
 import javax.jcr.Node;
 
+import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
 /*
@@ -28,12 +29,99 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
  *          hoa.pham@exoplatform.com
  * Jun 19, 2008  
  */
+/**
+ * The Interface LivePortalManagerService.
+ */
 public interface LivePortalManagerService {  
+  
+  /**
+   * Gets the live shared portal on current repository
+   * 
+   * @param sessionProvider the session provider
+   * 
+   * @return the live shared portal
+   * 
+   * @throws Exception the exception
+   */
   public Node getLiveSharedPortal(final SessionProvider sessionProvider) throws Exception;
+  
+  /**
+   * Gets the all live portals on current repository
+   * 
+   * @param sessionProvider the session provider
+   * 
+   * @return the live portals
+   * 
+   * @throws Exception the exception
+   */
   public List<Node> getLivePortals(final SessionProvider sessionProvider) throws Exception;
+  
+  /**
+   * Gets the live portal by name
+   * 
+   * @param portalName the portal name
+   * @param sessionProvider the session provider
+   * 
+   * @return the live portal
+   * 
+   * @throws Exception the exception
+   */
   public Node getLivePortal(final String portalName, final SessionProvider sessionProvider) throws Exception;
 
+  /**
+   * Gets the live shared portal on specific repository
+   * 
+   * @param repository the repository
+   * @param sessionProvider the session provider
+   * 
+   * @return the live shared portal
+   * 
+   * @throws Exception the exception
+   */
   public Node getLiveSharedPortal(final String repository,final SessionProvider sessionProvider) throws Exception;
+  
+  /**
+   * Gets the live portals on specific repository
+   * 
+   * @param repository the repository
+   * @param sessionProvider the session provider
+   * 
+   * @return the live portals
+   * 
+   * @throws Exception the exception
+   */
   public List<Node> getLivePortals(final String repository, final SessionProvider sessionProvider) throws Exception;
-  public Node getLivePortal(final String repository, final String portalName, final SessionProvider sessionProvider) throws Exception;  
+  
+  /**
+   * Gets the live portal on specific repository
+   * 
+   * @param repository the repository
+   * @param portalName the portal name
+   * @param sessionProvider the session provider
+   * 
+   * @return the live portal
+   * 
+   * @throws Exception the exception
+   */
+  public Node getLivePortal(final String repository, final String portalName, final SessionProvider sessionProvider) throws Exception;
+  
+  /**
+   * Adds the live portal on current repository
+   * 
+   * @param portalConfig the portal config
+   * @param sessionProvider the session provider
+   * 
+   * @throws Exception the exception
+   */
+  public void addLivePortal(final PortalConfig portalConfig, final SessionProvider sessionProvider) throws Exception;
+  
+  /**
+   * Removes the live portal on current repository
+   * 
+   * @param portalConfig the portal config
+   * @param sessionProvider the session provider
+   * 
+   * @throws Exception the exception
+   */
+  public void removeLivePortal(final PortalConfig portalConfig, final SessionProvider sessionProvider) throws Exception;
 }
