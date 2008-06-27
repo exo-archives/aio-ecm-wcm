@@ -16,6 +16,8 @@
  */
 package org.exoplatform.connector.fckeditor;
 
+import javax.jcr.Node;
+
 import org.exoplatform.common.http.HTTPMethods;
 import org.exoplatform.connector.fckeditor.portal.PageURIBuilder;
 import org.exoplatform.container.xml.InitParams;
@@ -34,6 +36,10 @@ import org.exoplatform.services.rest.container.ResourceContainer;
 import org.exoplatform.services.rest.transformer.XMLOutputTransformer;
 import org.exoplatform.services.security.ConversationRegistry;
 import org.exoplatform.services.security.ConversationState;
+import org.exoplatform.services.wcm.core.WebSchemaConfigService;
+import org.exoplatform.services.wcm.portal.LivePortalManagerService;
+import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
+import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
 
 /**
  * Created by The eXo Platform SAS
@@ -63,7 +69,17 @@ public class RESTResourcesConnector implements ResourceContainer {
 
   @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/images/")
-  public void getImages(@URIParam("location")String location, @URIParam("Type") String type, @URIParam("currentFolder") String currentFolder) {
+  public void getImages(@URIParam("location")String location, @URIParam("Type") String type, @URIParam("currentFolder") String currentFolder,  @URIParam("portalName") String portalName) throws Exception { 
+    LivePortalManagerService livePortalManagerService = null ;
+    Node currentPortal = livePortalManagerService.getLivePortal(portalName, sessionProviderService.getSessionProvider(null));
+    Node sharePortal = livePortalManagerService.getLiveSharedPortal(sessionProviderService.getSessionProvider(null)) ;
+    WebSchemaConfigService configService = null;
+    PortalFolderSchemaHandler portalFolderSchemaHandler = configService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
+    Node multimedia = portalFolderSchemaHandler.getMultimediaFolder(currentPortal) ;
+    portalFolderSchemaHandler.getImagesFolder(currentPortal) ;
+    WebContentSchemaHandler contentSchemaHandler = configService.getWebSchemaHandlerByType(WebContentSchemaHandler.class);
+    //contentSchemaHandler.get
+    //currentPortal.getPath() ;   
     new Exception().printStackTrace();
   }
 

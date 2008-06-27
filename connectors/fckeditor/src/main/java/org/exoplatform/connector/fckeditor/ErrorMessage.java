@@ -24,23 +24,31 @@ package org.exoplatform.connector.fckeditor;
  */
 public class ErrorMessage {
   
+  public static final int FOLDER_CREATED = 0;
+  protected static final int FOLDER_EXISTED = 101;  
+  protected static final int FOLDER_INVALID_NAME = 102;
+  protected static final int FOLDER_PERMISSION_CREATING = 103;
+  protected static final int UNKNOWN_ERROR = 110;    
+  
   public String getErrorMessage(int errorNumber) throws Exception {
     String message = "";
     switch (errorNumber) {
-    case 0:
+    case FOLDER_CREATED:
       message = "No Errors Found. The folder has been created.";
       break;
-    case 101:
+    case FOLDER_EXISTED:
       message = "Folder already exists.";
       break;
-    case 102:
+    case FOLDER_INVALID_NAME:
       message = "Invalid folder name.";
       break;
-    case 103:
+    case FOLDER_PERMISSION_CREATING:
       message = "You have no permissions to create the folder.";
       break;    
-    default:
+    case UNKNOWN_ERROR:
       message = "Unknown error creating folder.";
+      break;    
+    default:      
       break;
     }
     return message;    
