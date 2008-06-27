@@ -18,7 +18,7 @@ package org.exoplatform.connector.fckeditor;
 
 import java.io.InputStream;
 import java.security.AccessControlException;
-import java.util.Calendar;
+import java.text.SimpleDateFormat;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -27,6 +27,7 @@ import javax.jcr.nodetype.NodeType;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.exoplatform.commons.utils.ISO8601;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.component.BaseComponentPlugin;
 import org.exoplatform.services.cms.templates.TemplateService;
@@ -97,26 +98,25 @@ public abstract class FCKConnectorXMLOutputBuilder extends BaseComponentPlugin {
     return document;
   }   
 
-  public Document buildFoldersXMLOutput(String repository, String workspace, String currentFolder, String newFolderName) throws Exception {
-    ErrorMessage errorMessage = new ErrorMessage();
+  public Document buildFoldersXMLOutput(String repository, String workspace, String currentFolder, String newFolderName) throws Exception {    
     Node currentNode = getNode(repository, workspace, currentFolder);
     Element root = createRootElement(CREATE_FOLDER, currentNode);    
     Document document = root.getOwnerDocument();    
-    Element error = createErrorElement(document, UNKNOWN_ERROR, errorMessage.getErrorMessage(UNKNOWN_ERROR));    
+    Element error = createErrorElement(document, UNKNOWN_ERROR);    
     if(hasAddNodePermission(currentNode)){    
       if (newFolderName != null) {
         try {
           currentNode.getNode(newFolderName);
-          error = createErrorElement(document, FOLDER_EXISTED, errorMessage.getErrorMessage(FOLDER_EXISTED));    
+          error = createErrorElement(document, ErrorMessage.FOLDER_CREATED);    
         } catch (Exception e) {
           currentNode.addNode(newFolderName);
-          error = createErrorElement(document, FOLDER_CREATED, errorMessage.getErrorMessage(FOLDER_CREATED));
+          error = createErrorElement(document, FOLDER_CREATED);
         } 
       } else {
-        error = createErrorElement(document, FOLDER_INVALID_NAME, errorMessage.getErrorMessage(FOLDER_INVALID_NAME));
+        error = createErrorElement(document, FOLDER_INVALID_NAME);
       }      
     } else {
-      error = createErrorElement(document, FOLDER_PERMISSION_CREATING, errorMessage.getErrorMessage(FOLDER_PERMISSION_CREATING));
+      error = createErrorElement(document, FOLDER_PERMISSION_CREATING);
     }    
     currentNode.save();
     root.appendChild(error);
@@ -136,25 +136,11 @@ public abstract class FCKConnectorXMLOutputBuilder extends BaseComponentPlugin {
 
   protected Element createFileElement(Document document, Node child, String fileType) throws Exception {   
     Element file = document.createElement("File");
-    file.setAttribute("name", child.getName());    
-    Calendar dateCreated = child.getProperty("exo:dateCreated").getDate();
-    Calendar dateModified = child.getProperty("exo:dateCreated").getDate();
-    StringBuffer attributeDateCreated = new StringBuffer();
-    StringBuffer attributeDateModified = new StringBuffer();
-    attributeDateCreated.append("{Y:'").append(Integer.toString(dateCreated.get(Calendar.YEAR)))
-    .append("', M:'").append(Integer.toString(dateCreated.get(Calendar.MONTH) + 1))
-    .append("', D:'").append(Integer.toString(dateCreated.get(Calendar.DAY_OF_MONTH)))
-    .append("', H:'").append(Integer.toString(dateCreated.get(Calendar.HOUR_OF_DAY)))
-    .append("', M:'").append(Integer.toString(dateCreated.get(Calendar.MINUTE)))
-    .append("', S:'").append(Integer.toString(dateCreated.get(Calendar.SECOND))).append("'}");    
-    attributeDateModified.append("{Y:'").append(Integer.toString(dateModified.get(Calendar.YEAR)))
-    .append("', M:'").append(Integer.toString(dateModified.get(Calendar.MONTH) + 1))
-    .append("', D:'").append(Integer.toString(dateModified.get(Calendar.DAY_OF_MONTH)))
-    .append("', H:'").append(Integer.toString(dateModified.get(Calendar.HOUR_OF_DAY)))
-    .append("', M:'").append(Integer.toString(dateModified.get(Calendar.MINUTE)))
-    .append("', S:'").append(Integer.toString(dateModified.get(Calendar.SECOND))).append("'}");    
-    file.setAttribute("dateCreated", attributeDateCreated.toString());    
-    file.setAttribute("dateModified", attributeDateModified.toString());    
+    file.setAttribute("name", child.getName());     
+    SimpleDateFormat dateFormat = new SimpleDateFormat();
+    dateFormat.applyPattern(ISO8601.SIMPLE_DATETIME_FORMAT);    
+    file.setAttribute("dateCreated", dateFormat.format(child.getProperty("exo:dateCreated").getDate()));    
+    file.setAttribute("dateModified", dateFormat.format(child.getProperty("exo:dateModified").getDate()));      
     file.setAttribute("creator", child.getProperty("exo:owner").getString());
     file.setAttribute("fileType", fileType);
     if (child.isNodeType(NT_FILE)) {         
@@ -169,10 +155,11 @@ public abstract class FCKConnectorXMLOutputBuilder extends BaseComponentPlugin {
     return file;
   }  
 
-  protected Element createErrorElement(Document document, int errorNumber, String text) throws Exception {
+  protected Element createErrorElement(Document document, int errorNumber) throws Exception {
+    ErrorMessage errorMessage = new ErrorMessage();
     Element error = document.createElement("Error");
     error.setAttribute("number", Integer.toString(errorNumber));
-    error.setAttribute("text", text);
+    error.setAttribute("text", errorMessage.getErrorMessage(errorNumber));
     return error;
   }
 
@@ -200,7 +187,7 @@ public abstract class FCKConnectorXMLOutputBuilder extends BaseComponentPlugin {
 
   protected Node getNode(String repository, String workspace, String path) throws Exception {
     SessionProvider sessionProvider = sessionProviderService.getSessionProvider(null);    
-    ManageableRepository manageableRepository = repositoryService.getRepository(repository);    
+    ManageableRepository manageableRepository = repositoryService.getRepository(repository);     
     Session session = sessionProvider.getSession(workspace, manageableRepository);
     return (Node) session.getItem(path);
   }      
