@@ -28,6 +28,7 @@ import org.exoplatform.services.rest.container.ResourceContainer;
 import org.exoplatform.services.rest.transformer.XMLOutputTransformer;
 import org.w3c.dom.Document;
 
+//TODO: Auto-generated Javadoc
 /*
  * Created by The eXo Platform SAS
  * Author : Anh Do Ngoc
@@ -35,11 +36,22 @@ import org.w3c.dom.Document;
  * Jun 24, 2008  
  */
 
+/**
+ * The Class DocumentConnector.
+ */
 @URITemplate("/document/")
 public class DocumentConnector extends BaseConnector implements ResourceContainer {
 
+  /**
+   * Instantiates a new document connector.
+   * 
+   * @param container the container
+   */
   public DocumentConnector(ExoContainer container) { super(container); }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.wcm.connector.fckeditor.BaseConnector#getFoldesAndFiles(java.lang.String, java.lang.String, java.lang.String)
+   */
   @Override
   @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/getFoldersAndFiles/")
@@ -51,11 +63,21 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
     return Response.Builder.ok(document).cacheControl(cacheControl).build();
   }
 
-  @Override
-  public void createFolder() { 
+  /* (non-Javadoc)
+   * @see org.exoplatform.wcm.connector.fckeditor.BaseConnector#createFolder()
+   */
+  @Override  
+  @HTTPMethod(HTTPMethods.GET)
+  @URITemplate("/createFolder/")
+  @OutputTransformer(XMLOutputTransformer.class)
+  public Response createFolder(@QueryParam("CurrentPortal") String currentPortalName, @QueryParam("CurrentFolder") String currentFolder, @QueryParam("Type") String type, @QueryParam("NewFolderName") String newFolderName) {
     
+    return null;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.wcm.connector.fckeditor.BaseConnector#uploadFile()
+   */
   @Override
   public void uploadFile() { }
 

@@ -63,8 +63,7 @@ public abstract class FCKConnectorXMLOutputBuilder extends BaseComponentPlugin {
   protected ThreadLocalSessionProviderService sessionProviderService;
 
   protected static final int FOLDER_CREATED = 0;
-  protected static final int FOLDER_EXISTED = 101;  
-  protected static final int FOLDER_INVALID_NAME = 102;
+  protected static final int FOLDER_EXISTED = 101;    
   protected static final int FOLDER_PERMISSION_CREATING = 103;
   protected static final int UNKNOWN_ERROR = 110;    
 
@@ -103,18 +102,14 @@ public abstract class FCKConnectorXMLOutputBuilder extends BaseComponentPlugin {
     Element root = createRootElement(CREATE_FOLDER, currentNode);    
     Document document = root.getOwnerDocument();    
     Element error = createErrorElement(document, UNKNOWN_ERROR);    
-    if(hasAddNodePermission(currentNode)){    
-      if (newFolderName != null) {
-        try {
-          currentNode.getNode(newFolderName);
-          error = createErrorElement(document, ErrorMessage.FOLDER_CREATED);    
-        } catch (Exception e) {
-          currentNode.addNode(newFolderName);
-          error = createErrorElement(document, FOLDER_CREATED);
-        } 
-      } else {
-        error = createErrorElement(document, FOLDER_INVALID_NAME);
-      }      
+    if(hasAddNodePermission(currentNode)){         
+      try {
+        currentNode.getNode(newFolderName);
+        error = createErrorElement(document, ErrorMessage.FOLDER_EXISTED);    
+      } catch (Exception e) {
+        currentNode.addNode(newFolderName);
+        error = createErrorElement(document, FOLDER_CREATED);
+      }                 
     } else {
       error = createErrorElement(document, FOLDER_PERMISSION_CREATING);
     }    

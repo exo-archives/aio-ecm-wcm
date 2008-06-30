@@ -26,8 +26,7 @@ public class ErrorMessage {
   
   public static final int FOLDER_CREATED = 0;
   protected static final int FOLDER_EXISTED = 101;  
-  protected static final int FOLDER_INVALID_NAME = 102;
-  protected static final int FOLDER_PERMISSION_CREATING = 103;
+  protected static final int FOLDER_PERMISSION_CREATING = 102;
   protected static final int UNKNOWN_ERROR = 110;    
   
   public String getErrorMessage(int errorNumber) throws Exception {
@@ -38,9 +37,6 @@ public class ErrorMessage {
       break;
     case FOLDER_EXISTED:
       message = "Folder already exists.";
-      break;
-    case FOLDER_INVALID_NAME:
-      message = "Invalid folder name.";
       break;
     case FOLDER_PERMISSION_CREATING:
       message = "You have no permissions to create the folder.";

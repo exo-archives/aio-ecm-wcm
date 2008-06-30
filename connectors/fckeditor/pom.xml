@@ -68,7 +68,14 @@
       <version>${org.exoplatform.ecm.version}</version>
       <scope>provided</scope>
     </dependency>        
-	
+    
+    <dependency>
+      <groupId>org.exoplatform.wcm</groupId>
+      <artifactId>exo.wcm.component.wcm</artifactId>
+      <version>${org.exoplatform.wcm.version}</version>
+      <scope>provided</scope>
+    </dependency>    
+       
     <dependency>
       <groupId>groovy</groupId>
       <artifactId>groovy-all</artifactId>

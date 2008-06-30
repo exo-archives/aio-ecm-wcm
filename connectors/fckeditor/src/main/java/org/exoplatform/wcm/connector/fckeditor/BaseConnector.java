@@ -36,6 +36,7 @@ import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+//TODO: Auto-generated Javadoc
 /*
  * Created by The eXo Platform SAS
  * Author : Anh Do Ngoc
@@ -43,37 +44,70 @@ import org.w3c.dom.Element;
  * Jun 26, 2008  
  */
 
+/**
+ * The Class BaseConnector.
+ */
 public abstract class BaseConnector extends FCKConnectorXMLOutputBuilder implements ResourceContainer {
 
+  /** The live portal manager service. */
   protected LivePortalManagerService livePortalManagerService;
+
+  /** The web schema config service. */
   protected WebSchemaConfigService webSchemaConfigService;
 
+  /** The Constant IMAGE_STORAGE. */
   protected static final String IMAGE_STORAGE = "Image";
+
+  /** The Constant DOCUMENT_STORAGE. */
   protected static final String DOCUMENT_STORAGE = "Document";
 
+  /**
+   * Instantiates a new base connector.
+   * 
+   * @param container the container
+   */
   public BaseConnector(ExoContainer container) {
     super(container);    
     livePortalManagerService = (LivePortalManagerService) container.getComponentInstanceOfType(LivePortalManagerService.class);
     webSchemaConfigService = (WebSchemaConfigService) container.getComponentInstanceOfType(WebSchemaConfigService.class);
   }
 
-  @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/getFoldersAndFiles/")
-  @OutputTransformer(XMLOutputTransformer.class)
-  public abstract Response getFoldesAndFiles(@QueryParam("CurrentPortal") String currentPortalName, 
+  /**
+   * Gets the foldes and files.
+   * 
+   * @param currentPortalName the current portal name
+   * @param currentFolder the current folder
+   * @param type the type
+   * 
+   * @return the foldes and files
+   * 
+   * @throws Exception the exception
+   */
+  public abstract Response getFoldesAndFiles(
+      @QueryParam("CurrentPortal") String currentPortalName, 
       @QueryParam("CurrentFolder") String currentFolder, 
       @QueryParam("Type") String type) throws Exception;
 
+  /**
+   * Upload file.
+   */
   @HTTPMethod(HTTPMethods.POST)
   @URITemplate("/upload/")
   @OutputTransformer(XMLOutputTransformer.class)
   public abstract void uploadFile(); 
 
+  /**
+   * Creates the folder.
+   * @return TODO
+   */
   @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/createFolder/")
-  @OutputTransformer(XMLOutputTransformer.class)
-  public abstract void createFolder();
+  @OutputTransformer(XMLOutputTransformer.class)  
+  public abstract Response createFolder(@QueryParam("CurrentPortal") String currentPortalName, @QueryParam("CurrentFolder") String currentFolder, @QueryParam("Type") String type, @QueryParam("NewFolderName") String newFolderName);
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.connector.fckeditor.FCKConnectorXMLOutputBuilder#buildFoldersAndFilesXMLOutput(java.lang.String, java.lang.String, java.lang.String)
+   */
   @Override
   public Document buildFoldersAndFilesXMLOutput(String currentPortalName, String currentFolder, String type) throws Exception {
     Node currentPortal = livePortalManagerService.getLivePortal(currentPortalName, sessionProviderService.getSessionProvider(null));
@@ -85,22 +119,33 @@ public abstract class BaseConnector extends FCKConnectorXMLOutputBuilder impleme
       document = createDocumentForPortal(currentPortal, type);
     } else if (currentFolder.replace("/", "").equals(sharePortal.getName())) {
       document = createDocumentForPortal(sharePortal, type);
-    } else {      
-      document = createDocumentForStorage(currentPortal, currentFolder, type);     
+    } else if (currentFolder.startsWith("/" + currentPortalName)) {      
+      document = createDocumentForStorage(currentPortal, currentFolder, type);    
+    } else {
+      document = createDocumentForStorage(sharePortal, currentFolder, type);
     }       
     return document;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.connector.fckeditor.FCKConnectorXMLOutputBuilder#buildFilesXMLOutput(java.lang.String, java.lang.String, java.lang.String)
+   */
   @Override
   public Document buildFilesXMLOutput(String repository, String workspace, String currentFolder) throws Exception {
     return null;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.connector.fckeditor.FCKConnectorXMLOutputBuilder#createFileLink(javax.jcr.Node)
+   */
   @Override
   protected String createFileLink(Node node) throws Exception {
     return null;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.connector.fckeditor.FCKConnectorXMLOutputBuilder#getFileType(javax.jcr.Node)
+   */
   @Override
   protected String getFileType(Node node) throws Exception {
     if (node.isNodeType(NT_FILE)) {
@@ -116,6 +161,16 @@ public abstract class BaseConnector extends FCKConnectorXMLOutputBuilder impleme
     return null;
   }
 
+  /**
+   * Creates the document for root.
+   * 
+   * @param currentPortal the current portal
+   * @param sharePortal the share portal
+   * 
+   * @return the document
+   * 
+   * @throws Exception the exception
+   */
   private Document createDocumentForRoot(Node currentPortal, Node sharePortal) throws Exception {
     Document document = null;      
     Node rootNode = currentPortal.getParent();
@@ -132,6 +187,16 @@ public abstract class BaseConnector extends FCKConnectorXMLOutputBuilder impleme
     return document;
   }
 
+  /**
+   * Creates the document for portal.
+   * 
+   * @param portal the portal
+   * @param type the type
+   * 
+   * @return the document
+   * 
+   * @throws Exception the exception
+   */
   private Document createDocumentForPortal(Node portal, String type) throws Exception {
     Element root = createRootElement(GET_ALL, portal);
     Document document = root.getOwnerDocument();
@@ -145,19 +210,19 @@ public abstract class BaseConnector extends FCKConnectorXMLOutputBuilder impleme
     return document;
   }
 
-  private Document createDocumentForStorage(Node currentPortal, String currentFolder, String type) throws Exception {
-    Node rootStorage = getStorage(currentPortal, type);
-    Node rootNode = currentPortal.getParent();   
-    String rootStorageFolder = "/" + currentPortal.getName() + "/" + rootStorage.getName() + "/";
-    Node currentNode = null;    
-    String relPath = "";
-    if (rootStorageFolder.equals(currentFolder)) {            
-      relPath = rootStorage.getPath().substring(rootNode.getPath().length() + 1);
-      currentNode = rootNode.getNode(relPath);  
-    } else {
-      relPath = currentFolder.replace(rootStorageFolder, "").substring(0, currentFolder.length()-rootStorageFolder.length()-1);
-      currentNode = rootStorage.getNode(relPath);
-    }    
+  /**
+   * Creates the document for storage.
+   * 
+   * @param portal the current portal
+   * @param currentFolder the current folder
+   * @param type the type
+   * 
+   * @return the document
+   * 
+   * @throws Exception the exception
+   */
+  private Document createDocumentForStorage(Node portal, String currentFolder, String type) throws Exception {   
+    Node currentNode = getCurrentFolder(portal, currentFolder, type);   
     Element root = createRootElement(GET_ALL, currentNode);
     Document document = root.getOwnerDocument();
     Element foldersElement = document.createElement("Folders");
@@ -182,6 +247,16 @@ public abstract class BaseConnector extends FCKConnectorXMLOutputBuilder impleme
     return document;
   } 
 
+  /**
+   * Gets the storage.
+   * 
+   * @param portal the portal
+   * @param type the type
+   * 
+   * @return the storage
+   * 
+   * @throws Exception the exception
+   */
   private Node getStorage(Node portal, String type) throws Exception {
     PortalFolderSchemaHandler portalFolderSchemaHandler = webSchemaConfigService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
     if (DOCUMENT_STORAGE.equals(type)) {
@@ -190,5 +265,20 @@ public abstract class BaseConnector extends FCKConnectorXMLOutputBuilder impleme
       return portalFolderSchemaHandler.getImagesFolder(portal);
     }
     return null;
+  }
+
+  private Node getCurrentFolder(Node portal, String currentFolder, String type) throws Exception {
+    String portalPath = portal.getPath() + "/";        
+    Node storage = getStorage(portal, type);
+    String currentFolderFullPath = null;    
+    if (! portalPath.endsWith(currentFolder)) {
+      String rootStorageFolder = "/" + portal.getName() + "/" + storage.getName() + "/";
+      if (! rootStorageFolder.equals(currentFolder)) {
+        currentFolderFullPath = currentFolder.replace(rootStorageFolder, "").substring(0, currentFolder.length() - rootStorageFolder.length() - 1);
+        return storage.getNode(currentFolderFullPath);
+      }
+      return storage;
+    }          
+    return portal;
   }
 }

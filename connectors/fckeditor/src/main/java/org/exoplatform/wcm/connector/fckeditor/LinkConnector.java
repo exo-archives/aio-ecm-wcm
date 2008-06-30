@@ -23,6 +23,9 @@ package org.exoplatform.wcm.connector.fckeditor;
  * Jun 24, 2008  
  */
 
+/**
+ * The Class LinkConnector.
+ */
 public class LinkConnector {
 
 }
