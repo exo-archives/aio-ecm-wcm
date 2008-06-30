@@ -16,16 +16,22 @@
  */
 package org.exoplatform.connector.fckeditor;
 
+import javax.jcr.Node;
+
 import org.exoplatform.common.http.HTTPMethods;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.rest.CacheControl;
 import org.exoplatform.services.rest.HTTPMethod;
+import org.exoplatform.services.rest.HeaderParam;
+import org.exoplatform.services.rest.InputTransformer;
 import org.exoplatform.services.rest.OutputTransformer;
 import org.exoplatform.services.rest.QueryParam;
 import org.exoplatform.services.rest.Response;
 import org.exoplatform.services.rest.URITemplate;
 import org.exoplatform.services.rest.container.ResourceContainer;
+import org.exoplatform.services.rest.transformer.PassthroughInputTransformer;
 import org.exoplatform.services.rest.transformer.XMLOutputTransformer;
+import org.exoplatform.upload.UploadService;
 import org.w3c.dom.Document;
 
 /**
@@ -155,8 +161,27 @@ public class FCKCoreConnector implements ResourceContainer {
   }
 
   @HTTPMethod(HTTPMethods.POST)
-  @URITemplate("/uploadFile/")
-  @OutputTransformer(XMLOutputTransformer.class)
-  public void uploadFile() { }
-
+  @URITemplate("/upload/") 
+  @InputTransformer(PassthroughInputTransformer.class)
+  @OutputTransformer(XMLOutputTransformer.class)  
+  public void uploadFile(@QueryParam("action") String action, @QueryParam("uploadId")String uploadId,
+      @QueryParam("CurrentFolder") String currentFolder, @QueryParam("Type") String type,
+      @HeaderParam("content-type") String mimetype, @HeaderParam("content-length") double contentLength,
+      @HeaderParam("fileName")String fileName) throws Exception{    
+    UploadService uploadService = null;
+    FileUploadHandler fileUploadHelper = new FileUploadHandler(uploadService);
+    if(FileUploadHandler.UPLOAD_ACTION.equals(action)) {
+      //fileUploadHelper.upload()
+    }else if(FileUploadHandler.PROGRESS_ACTION.equals(action)) {
+      fileUploadHelper.refreshProgress(uploadId);
+    }else if(FileUploadHandler.ABORT_ACTION.equals(action)) {
+      fileUploadHelper.abort(uploadId);
+    }else if(FileUploadHandler.DELETE_ACTION.endsWith(action)) {
+      fileUploadHelper.delete(uploadId);
+    }else if(FileUploadHandler.SAVE_ACTION.equals(action)) {
+      //get current node by current folder
+      Node currentNode = null;
+      fileUploadHelper.saveAsNTFile(uploadId,currentNode);
+    }
+  }
 }
