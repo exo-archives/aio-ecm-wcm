@@ -19,20 +19,11 @@ package org.exoplatform.wcm.connector.fckeditor;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 
-import org.exoplatform.common.http.HTTPMethods;
 import org.exoplatform.connector.fckeditor.FCKConnectorXMLOutputBuilder;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.rest.HTTPMethod;
-import org.exoplatform.services.rest.OutputTransformer;
-import org.exoplatform.services.rest.QueryParam;
-import org.exoplatform.services.rest.Response;
-import org.exoplatform.services.rest.URITemplate;
-import org.exoplatform.services.rest.container.ResourceContainer;
-import org.exoplatform.services.rest.transformer.XMLOutputTransformer;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
-import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -47,20 +38,25 @@ import org.w3c.dom.Element;
 /**
  * The Class BaseConnector.
  */
-public abstract class BaseConnector extends FCKConnectorXMLOutputBuilder implements ResourceContainer {
+public abstract class BaseConnector extends FCKConnectorXMLOutputBuilder {
 
   /** The live portal manager service. */
   protected LivePortalManagerService livePortalManagerService;
 
   /** The web schema config service. */
   protected WebSchemaConfigService webSchemaConfigService;
-
-  /** The Constant IMAGE_STORAGE. */
-  protected static final String IMAGE_STORAGE = "Image";
-
-  /** The Constant DOCUMENT_STORAGE. */
-  protected static final String DOCUMENT_STORAGE = "Document";
-
+  
+  /**
+   * Gets the storage.
+   * 
+   * @param portal the portal
+   * 
+   * @return the storage
+   * 
+   * @throws Exception the exception
+   */
+  protected abstract Node getStorage(Node portal) throws Exception;
+  
   /**
    * Instantiates a new base connector.
    * 
@@ -73,79 +69,51 @@ public abstract class BaseConnector extends FCKConnectorXMLOutputBuilder impleme
   }
 
   /**
-   * Gets the foldes and files.
+   * Builds the folders and files xml output.
    * 
    * @param currentPortalName the current portal name
    * @param currentFolder the current folder
-   * @param type the type
    * 
-   * @return the foldes and files
+   * @return the document
    * 
    * @throws Exception the exception
    */
-  public abstract Response getFoldesAndFiles(
-      @QueryParam("CurrentPortal") String currentPortalName, 
-      @QueryParam("CurrentFolder") String currentFolder, 
-      @QueryParam("Type") String type) throws Exception;
-
-  /**
-   * Upload file.
-   */
-  @HTTPMethod(HTTPMethods.POST)
-  @URITemplate("/upload/")
-  @OutputTransformer(XMLOutputTransformer.class)
-  public abstract void uploadFile(); 
-
-  /**
-   * Creates the folder.
-   * @return TODO
-   */
-  @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/createFolder/")
-  @OutputTransformer(XMLOutputTransformer.class)  
-  public abstract Response createFolder(@QueryParam("CurrentPortal") String currentPortalName, @QueryParam("CurrentFolder") String currentFolder, @QueryParam("Type") String type, @QueryParam("NewFolderName") String newFolderName);
-
-  /* (non-Javadoc)
-   * @see org.exoplatform.connector.fckeditor.FCKConnectorXMLOutputBuilder#buildFoldersAndFilesXMLOutput(java.lang.String, java.lang.String, java.lang.String)
-   */
-  @Override
-  public Document buildFoldersAndFilesXMLOutput(String currentPortalName, String currentFolder, String type) throws Exception {
+  protected Document buildFoldersAndFilesXMLOutput(String currentPortalName, String currentFolder) throws Exception {
     Node currentPortal = livePortalManagerService.getLivePortal(currentPortalName, sessionProviderService.getSessionProvider(null));
-    Node sharePortal = livePortalManagerService.getLiveSharedPortal(sessionProviderService.getSessionProvider(null));          
+    Node sharePortal = livePortalManagerService.getLiveSharedPortal(sessionProviderService.getSessionProvider(null));    
     Document document = null;
-    if (currentFolder == null || "/".equalsIgnoreCase(currentFolder)) {          
+    Node currentNode = null;
+    if (currentFolder == null || currentFolder.equals("/")) {      
       document = createDocumentForRoot(currentPortal, sharePortal);
-    } else if (currentFolder.replace("/", "").equals(currentPortalName)) {
-      document = createDocumentForPortal(currentPortal, type);
-    } else if (currentFolder.replace("/", "").equals(sharePortal.getName())) {
-      document = createDocumentForPortal(sharePortal, type);
-    } else if (currentFolder.startsWith("/" + currentPortalName)) {      
-      document = createDocumentForStorage(currentPortal, currentFolder, type);    
     } else {
-      document = createDocumentForStorage(sharePortal, currentFolder, type);
-    }       
+      try {
+        currentNode = getCurrentFolder(currentPortal, currentFolder);
+        if (currentNode == currentPortal) 
+          document = createDocumentForPortal(currentNode);
+        else
+          document = createDocumentForStorage(currentPortal, currentNode);
+      } catch (Exception e) {
+        currentNode = getCurrentFolder(sharePortal, currentFolder);
+        if (currentNode == sharePortal) 
+          document = createDocumentForPortal(currentNode);
+        else
+          document = createDocumentForStorage(sharePortal, currentNode);
+      }
+    }
     return document;
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.connector.fckeditor.FCKConnectorXMLOutputBuilder#buildFilesXMLOutput(java.lang.String, java.lang.String, java.lang.String)
-   */
+ 
   @Override
   public Document buildFilesXMLOutput(String repository, String workspace, String currentFolder) throws Exception {
     return null;
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.connector.fckeditor.FCKConnectorXMLOutputBuilder#createFileLink(javax.jcr.Node)
-   */
   @Override
   protected String createFileLink(Node node) throws Exception {
     return null;
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.connector.fckeditor.FCKConnectorXMLOutputBuilder#getFileType(javax.jcr.Node)
-   */
   @Override
   protected String getFileType(Node node) throws Exception {
     if (node.isNodeType(NT_FILE)) {
@@ -191,20 +159,19 @@ public abstract class BaseConnector extends FCKConnectorXMLOutputBuilder impleme
    * Creates the document for portal.
    * 
    * @param portal the portal
-   * @param type the type
    * 
    * @return the document
    * 
    * @throws Exception the exception
    */
-  private Document createDocumentForPortal(Node portal, String type) throws Exception {
+  private Document createDocumentForPortal(Node portal) throws Exception {
     Element root = createRootElement(GET_ALL, portal);
     Document document = root.getOwnerDocument();
     Element foldersElement = document.createElement("Folders");
     Element filesElement = document.createElement("Files");    
     root.appendChild(foldersElement);
     root.appendChild(filesElement);
-    Node storage = getStorage(portal, type);    
+    Node storage = getStorage(portal);    
     Element storageElement = createFolderElement(document, storage, storage.getPrimaryNodeType().getName());
     foldersElement.appendChild(storageElement);    
     return document;
@@ -215,21 +182,19 @@ public abstract class BaseConnector extends FCKConnectorXMLOutputBuilder impleme
    * 
    * @param portal the current portal
    * @param currentFolder the current folder
-   * @param type the type
    * 
    * @return the document
    * 
    * @throws Exception the exception
    */
-  private Document createDocumentForStorage(Node portal, String currentFolder, String type) throws Exception {   
-    Node currentNode = getCurrentFolder(portal, currentFolder, type);   
-    Element root = createRootElement(GET_ALL, currentNode);
+  private Document createDocumentForStorage(Node portal, Node currentFolder) throws Exception {         
+    Element root = createRootElement(GET_ALL, currentFolder);
     Document document = root.getOwnerDocument();
     Element foldersElement = document.createElement("Folders");
     Element filesElement = document.createElement("Files");
     root.appendChild(foldersElement);
     root.appendChild(filesElement);
-    for (NodeIterator nodeIterator = currentNode.getNodes(); nodeIterator.hasNext();) {
+    for (NodeIterator nodeIterator = currentFolder.getNodes(); nodeIterator.hasNext();) {
       Node child = nodeIterator.nextNode();
       if (child.isNodeType(EXO_HIDDENABLE)) continue;
       String folderType = getFolderType(child);
@@ -246,30 +211,20 @@ public abstract class BaseConnector extends FCKConnectorXMLOutputBuilder impleme
     }       
     return document;
   } 
-
+  
   /**
-   * Gets the storage.
+   * Gets the current folder.
    * 
    * @param portal the portal
-   * @param type the type
+   * @param currentFolder the current folder
    * 
-   * @return the storage
+   * @return the current folder
    * 
    * @throws Exception the exception
    */
-  private Node getStorage(Node portal, String type) throws Exception {
-    PortalFolderSchemaHandler portalFolderSchemaHandler = webSchemaConfigService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
-    if (DOCUMENT_STORAGE.equals(type)) {
-      return portalFolderSchemaHandler.getDocumentStorage(portal);
-    } else if (IMAGE_STORAGE.equals(type)) {
-      return portalFolderSchemaHandler.getImagesFolder(portal);
-    }
-    return null;
-  }
-
-  private Node getCurrentFolder(Node portal, String currentFolder, String type) throws Exception {
+  private Node getCurrentFolder(Node portal, String currentFolder) throws Exception {
     String portalPath = portal.getPath() + "/";        
-    Node storage = getStorage(portal, type);
+    Node storage = getStorage(portal);
     String currentFolderFullPath = null;    
     if (! portalPath.endsWith(currentFolder)) {
       String rootStorageFolder = "/" + portal.getName() + "/" + storage.getName() + "/";
@@ -281,4 +236,6 @@ public abstract class BaseConnector extends FCKConnectorXMLOutputBuilder impleme
     }          
     return portal;
   }
+
 }
+

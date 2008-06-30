@@ -107,7 +107,7 @@ public abstract class FCKConnectorXMLOutputBuilder extends BaseComponentPlugin {
         currentNode.getNode(newFolderName);
         error = createErrorElement(document, ErrorMessage.FOLDER_EXISTED);    
       } catch (Exception e) {
-        currentNode.addNode(newFolderName);
+        currentNode.addNode(newFolderName, "nt:unstructured");
         error = createErrorElement(document, FOLDER_CREATED);
       }                 
     } else {

@@ -16,6 +16,8 @@
  */
 package org.exoplatform.wcm.connector.fckeditor;
 
+import javax.jcr.Node;
+
 import org.exoplatform.common.http.HTTPMethods;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.services.rest.CacheControl;
@@ -26,6 +28,7 @@ import org.exoplatform.services.rest.Response;
 import org.exoplatform.services.rest.URITemplate;
 import org.exoplatform.services.rest.container.ResourceContainer;
 import org.exoplatform.services.rest.transformer.XMLOutputTransformer;
+import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
 import org.w3c.dom.Document;
 
 //TODO: Auto-generated Javadoc
@@ -51,34 +54,36 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
 
   /* (non-Javadoc)
    * @see org.exoplatform.wcm.connector.fckeditor.BaseConnector#getFoldesAndFiles(java.lang.String, java.lang.String, java.lang.String)
+   */  
+  /**
+   * Gets the foldes and files.
+   * 
+   * @param currentPortalName the current portal name
+   * @param currentFolder the current folder
+   * @param type the type
+   * 
+   * @return the foldes and files
+   * 
+   * @throws Exception the exception
    */
-  @Override
   @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/getFoldersAndFiles/")
   @OutputTransformer(XMLOutputTransformer.class)
   public Response getFoldesAndFiles(@QueryParam("CurrentPortal") String currentPortalName, @QueryParam("CurrentFolder") String currentFolder, @QueryParam("Type") String type) throws Exception {
-    Document document = buildFoldersAndFilesXMLOutput(currentPortalName, currentFolder, DOCUMENT_STORAGE);    
+    Document document = buildFoldersAndFilesXMLOutput(currentPortalName, currentFolder);    
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
     return Response.Builder.ok(document).cacheControl(cacheControl).build();
   }
-
-  /* (non-Javadoc)
-   * @see org.exoplatform.wcm.connector.fckeditor.BaseConnector#createFolder()
-   */
-  @Override  
-  @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/createFolder/")
-  @OutputTransformer(XMLOutputTransformer.class)
-  public Response createFolder(@QueryParam("CurrentPortal") String currentPortalName, @QueryParam("CurrentFolder") String currentFolder, @QueryParam("Type") String type, @QueryParam("NewFolderName") String newFolderName) {
-    
+  
+  @Override
+  protected Node getStorage(Node portal) throws Exception {
+    PortalFolderSchemaHandler portalFolderSchemaHandler = webSchemaConfigService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
+    return portalFolderSchemaHandler.getDocumentStorage(portal);
+  }
+  
+  @Override
+  public Document buildFoldersAndFilesXMLOutput(String repository, String workspace, String currentFolder) throws Exception {    
     return null;
   }
-
-  /* (non-Javadoc)
-   * @see org.exoplatform.wcm.connector.fckeditor.BaseConnector#uploadFile()
-   */
-  @Override
-  public void uploadFile() { }
-
 }
