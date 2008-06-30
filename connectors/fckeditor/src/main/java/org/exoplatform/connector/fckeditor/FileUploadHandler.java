@@ -43,7 +43,7 @@ public class FileUploadHandler {
   
   public void upload(String uploadId, String fileName, 
       InputStream data, double contentLength, String mimetype) throws Exception {
-    uploadService.createUploadResource(uploadId,fileName,data,contentLength,mimetype);    
+    //uploadService.createUploadResource(uploadId,fileName,data,contentLength,mimetype);    
   }
   
   public void refreshProgress(String uploadId) throws Exception { }
@@ -53,6 +53,6 @@ public class FileUploadHandler {
   public void delete(String uploadId) throws Exception {}
   
   public void saveAsNTFile(String uploadId,Node parent) { 
-    UploadResource resource = uploadService.getUploadResource(uploadId) ;    
+    //UploadResource resource = uploadService.getUploadResource(uploadId) ;    
   }
 }
