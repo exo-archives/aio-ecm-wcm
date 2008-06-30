@@ -31,7 +31,6 @@ import org.exoplatform.services.rest.transformer.XMLOutputTransformer;
 import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
 import org.w3c.dom.Document;
 
-// TODO: Auto-generated Javadoc
 /*
  * Created by The eXo Platform SAS
  * Author : Anh Do Ngoc
@@ -52,6 +51,17 @@ public class ImageConnector extends BaseConnector implements ResourceContainer {
    */
   public ImageConnector(ExoContainer container) { super(container); }
 
+  /**
+   * Gets the foldes and files.
+   * 
+   * @param currentPortalName the current portal name
+   * @param currentFolder the current folder
+   * @param type the type
+   * 
+   * @return the foldes and files
+   * 
+   * @throws Exception the exception
+   */
   @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/getFoldersAndFiles/")
   @OutputTransformer(XMLOutputTransformer.class)
@@ -62,13 +72,40 @@ public class ImageConnector extends BaseConnector implements ResourceContainer {
     return Response.Builder.ok(document).cacheControl(cacheControl).build();
   }
 
+  /**
+   * Creates the folder.
+   * 
+   * @param currentPortalName the current portal name
+   * @param currentFolder the current folder
+   * @param type the type
+   * @param newFolderName the new folder name
+   * 
+   * @return the response
+   * 
+   * @throws Exception the exception
+   */
+  @HTTPMethod(HTTPMethods.GET)
+  @URITemplate("/createFolder/")
+  @OutputTransformer(XMLOutputTransformer.class)
+  public Response createFolder(@QueryParam("CurrentPortal") String currentPortalName, @QueryParam("CurrentFolder") String currentFolder, @QueryParam("Type") String type, @QueryParam("NewFolderName") String newFolderName) throws Exception {    
+    Document document = buildFoldersAndFilesXMLOutput(currentPortalName, currentFolder, newFolderName, NT_FOLDER);    
+    CacheControl cacheControl = new CacheControl();
+    cacheControl.setNoCache(true);
+    return Response.Builder.ok(document).cacheControl(cacheControl).build();    
+  }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.wcm.connector.fckeditor.BaseConnector#getStorage(javax.jcr.Node)
+   */
   @Override
   protected Node getStorage(Node portal) throws Exception {
     PortalFolderSchemaHandler portalFolderSchemaHandler = webSchemaConfigService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
     return portalFolderSchemaHandler.getImagesFolder(portal);
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.connector.fckeditor.FCKConnectorXMLOutputBuilder#buildFoldersAndFilesXMLOutput(java.lang.String, java.lang.String, java.lang.String)
+   */
   @Override
   public Document buildFoldersAndFilesXMLOutput(String repository, String workspace, String currentFolder) throws Exception {
     return null;

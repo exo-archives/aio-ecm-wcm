@@ -25,9 +25,9 @@ package org.exoplatform.connector.fckeditor;
 public class ErrorMessage {
   
   public static final int FOLDER_CREATED = 0;
-  protected static final int FOLDER_EXISTED = 101;  
-  protected static final int FOLDER_PERMISSION_CREATING = 102;
-  protected static final int UNKNOWN_ERROR = 110;    
+  public static final int FOLDER_EXISTED = 101;  
+  public static final int FOLDER_PERMISSION_CREATING = 102;
+  public static final int UNKNOWN_ERROR = 110;    
   
   public String getErrorMessage(int errorNumber) throws Exception {
     String message = "";

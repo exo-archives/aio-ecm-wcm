@@ -18,7 +18,10 @@ package org.exoplatform.wcm.connector.fckeditor;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.PathNotFoundException;
+import javax.jcr.Session;
 
+import org.exoplatform.connector.fckeditor.ErrorMessage;
 import org.exoplatform.connector.fckeditor.FCKConnectorXMLOutputBuilder;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.services.jcr.core.ManageableRepository;
@@ -27,7 +30,7 @@ import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-//TODO: Auto-generated Javadoc
+
 /*
  * Created by The eXo Platform SAS
  * Author : Anh Do Ngoc
@@ -45,7 +48,7 @@ public abstract class BaseConnector extends FCKConnectorXMLOutputBuilder {
 
   /** The web schema config service. */
   protected WebSchemaConfigService webSchemaConfigService;
-  
+
   /**
    * Gets the storage.
    * 
@@ -56,7 +59,7 @@ public abstract class BaseConnector extends FCKConnectorXMLOutputBuilder {
    * @throws Exception the exception
    */
   protected abstract Node getStorage(Node portal) throws Exception;
-  
+
   /**
    * Instantiates a new base connector.
    * 
@@ -92,7 +95,7 @@ public abstract class BaseConnector extends FCKConnectorXMLOutputBuilder {
           document = createDocumentForPortal(currentNode);
         else
           document = createDocumentForStorage(currentPortal, currentNode);
-      } catch (Exception e) {
+      } catch (PathNotFoundException e) {
         currentNode = getCurrentFolder(sharePortal, currentFolder);
         if (currentNode == sharePortal) 
           document = createDocumentForPortal(currentNode);
@@ -103,7 +106,49 @@ public abstract class BaseConnector extends FCKConnectorXMLOutputBuilder {
     return document;
   }
 
- 
+  /**
+   * Builds the folders and files xml output.
+   * 
+   * @param currentPortalName the current portal name
+   * @param currentFolder the current folder
+   * @param newFolderName the new folder name
+   * @param newFolderType the new folder type
+   * 
+   * @return the document
+   * 
+   * @throws Exception the exception
+   */
+  protected Document buildFoldersAndFilesXMLOutput(String currentPortalName, String currentFolder, String newFolderName, String newFolderType) throws Exception {
+    Node currentPortal = livePortalManagerService.getLivePortal(currentPortalName, sessionProviderService.getSessionProvider(null));
+    Node sharePortal = livePortalManagerService.getLiveSharedPortal(sessionProviderService.getSessionProvider(null));
+    Node currentNode = null;    
+    Session session = currentPortal.getSession();
+    try {
+      currentNode = getCurrentFolder(currentPortal, currentFolder);
+    } catch (PathNotFoundException e) {
+      currentNode = getCurrentFolder(sharePortal, currentFolder);
+    }
+
+    Element root = createRootElement(CREATE_FOLDER, currentNode);    
+    Document document = root.getOwnerDocument();    
+    Element error = createErrorElement(document, UNKNOWN_ERROR);  
+
+    if(hasAddNodePermission(currentNode)) {
+      try {
+        currentNode.getNode(newFolderName);
+        error = createErrorElement(document, ErrorMessage.FOLDER_EXISTED);
+      } catch (PathNotFoundException e2) {
+        currentNode.addNode(newFolderName, newFolderType);
+        error = createErrorElement(document, ErrorMessage.FOLDER_CREATED);
+        session.save();        
+      }  
+    } else {
+      error = createErrorElement(document, ErrorMessage.FOLDER_PERMISSION_CREATING);
+    }
+    root.appendChild(error);
+    return document;
+  }
+
   @Override
   public Document buildFilesXMLOutput(String repository, String workspace, String currentFolder) throws Exception {
     return null;
@@ -211,7 +256,7 @@ public abstract class BaseConnector extends FCKConnectorXMLOutputBuilder {
     }       
     return document;
   } 
-  
+
   /**
    * Gets the current folder.
    * 
@@ -222,7 +267,7 @@ public abstract class BaseConnector extends FCKConnectorXMLOutputBuilder {
    * 
    * @throws Exception the exception
    */
-  private Node getCurrentFolder(Node portal, String currentFolder) throws Exception {
+  protected Node getCurrentFolder(Node portal, String currentFolder) throws Exception {
     String portalPath = portal.getPath() + "/";        
     Node storage = getStorage(portal);
     String currentFolderFullPath = null;    
