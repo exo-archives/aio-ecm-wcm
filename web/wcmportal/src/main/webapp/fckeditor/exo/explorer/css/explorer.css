@@ -1,0 +1,330 @@
+/* ################# Common Tag ###################*/
+html, body {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	position: relative;
+}
+
+table {
+	font-family: Tahoma;
+	font-size: 11px;
+}
+
+a {
+	color: black;
+	text-decoration: none;
+}
+
+.Explorer {
+	font-family: Tahoma;
+	font-size: 11px;	
+}
+
+.Explorer .FolderSeparator {
+	background: url('../images/FolderSeparator4x1.gif') repeat-y top right;
+	width: 4px;
+	height: 100%;
+	float: left;
+}
+
+/* Folder Navigation */
+.FolderNavigation {
+	width: 200px;	
+	float: left;	
+	height: 100%;
+}
+
+.FolderNavigation .TitleBar {
+	width: 200px;
+	background: url('../images/FolderNavigationTitleBar1x22.gif') repeat-x;
+	line-height: 22px;
+	font-weight: bold;
+	border-bottom: 1px solid #B7B7B7;
+	color: #424242;
+	height:22px;	
+}
+
+.FolderNavigation .TitleText {
+	padding-left: 15px;
+}
+
+.FolderNavigation .Tree {
+	padding: 10px 10px 0 10px;
+	font-weight: bold;
+	overflow: auto;
+	height: 100%;
+}
+
+/* Tree */
+.Tree .HomeNode {
+	background: url('../images/TreeRoot24x18.gif') no-repeat left;
+	padding-left: 24px; 
+	line-height: 18px;	
+}
+
+.Tree .Node {
+	background: url('../images/TreeDot8x10.gif') repeat-y 5px top;
+	line-height: 18px;
+	padding-top: 7px;	
+	white-space: nowrap;
+}
+
+.Tree .NodeGroup {
+}
+
+.Tree .LastNode{
+	background: url('../images/TreeDot8x10.gif') no-repeat 5px top;
+}
+
+.Tree .IconExpand {
+	background: url('../images/TreePlus18x16.gif') no-repeat 5px top;
+	height:auto;
+	padding-left:18px;
+}
+
+.Tree .IconCollapse {
+	background: url('../images/TreeMinus18x16.gif') no-repeat 5px top;
+	height:auto;
+	padding-left:18px;
+}
+
+.Tree .IconClose {
+	padding-left: 25px;
+	margin-left: 5px;
+}
+
+/* Folder Explorer */
+.FolderExplorer {
+	margin-left: 200px;	
+}
+
+.FolderExplorer .MenuBar {
+	background: url('../images/FolderExplorerMenuBar1x28.gif') repeat-x;
+	line-height: 28px;				
+	padding-left: 5px;
+	height: 28px;
+	border-bottom: 1px #B7B7B7 solid;
+}
+
+.FolderExplorer .MenuBar .Item {
+	float: left;
+	padding-left: 28px;
+	margin-right: 13px;
+}
+
+.FolderExplorer .MenuBar .IconRefresh {
+	background: url('../images/IconRefresh22x23.gif') no-repeat center left;
+}
+
+.FolderExplorer .MenuBar .IconUpload {
+	background: url('../images/IconUpload22x23.gif') no-repeat center left;
+}
+
+.FolderExplorer .MenuBar .IconSeparator {
+	float: left;
+	margin-right: 10px;
+}
+
+.FolderExplorer .MenuBar .IconSetting {
+	background: url('../images/IconSetting22x23.gif') no-repeat center left;
+}
+
+.FolderExplorer .MenuBar .IconHelp {
+	background: url('../images/IconHelp22x23.gif') no-repeat center left;
+}
+
+/* ################# Action Button ###################*/
+.ButtonMiddle {
+	background: url('../images/ButtonBackground6x44.gif') repeat-x bottom center;
+	line-height: 22px;
+	padding: 0 12px;
+}
+
+.ButtonLeft {
+	background: url('../images/ButtonBackground6x44.gif') no-repeat top left;
+	line-height: 22px;
+	padding-left: 3px;
+}
+
+.ButtonRight {
+	background: url('../images/ButtonBackground6x44.gif') no-repeat top right;
+	line-height: 22px;
+	padding-right: 3px;
+}
+
+/* ################# Menu Setting ###################*/
+.FolderExplorer .TitleBar {
+	text-align: center;
+	background: url('../images/FolderExplorerSettingTitleBar1x24.gif') repeat-x;
+	line-height: 24px;
+	font-weight: bold;
+}
+
+.FolderExplorer .SettingDiv {
+	background-color: #F7F7F7;
+	border-top: 1px #B7B7B7 solid;
+	border-bottom: 1px #B7B7B7 solid;
+	padding-bottom: 10px;
+}
+
+.SettingDiv .SettingTable {
+	text-align: center;
+	background-color: #F7F7F7;
+	margin-top: 10px;
+}
+
+.SettingDiv .SettingTable tr {
+	text-align: left;
+}
+
+.SettingDiv .SettingTable td {
+	width: 110px;
+	padding-left: 40px;
+	line-height: 23px;
+}
+
+.SettingDiv .SettingTable input {
+	margin-right: 10px;
+}
+
+.SettingDiv .SettingTable a {
+	color: #000000;
+	text-decoration: none;
+}
+
+.SettingDiv .SettingTable a:hover{
+	color: #058EE6;
+}
+
+/* ################# List Item ###################*/
+.DocumentDiv {
+	padding: 10px 0 0 10px;
+	overflow: auto;
+}
+
+.DocumentTable a {
+	padding-left: 20px; 
+}
+
+.DocumentTable .ItemName {
+	width: 50%;
+}
+
+.DocumentTable .ItemName a {
+	color: #058EE6;
+	text-decoration: none;
+}
+
+.DocumentTable .ItemDate {
+	width: 400px;
+	text-align: right;
+}
+
+.DocumentTable .ItemSize {
+	width: 100px;
+	text-align: right;
+}
+
+/* ################# Context Menu ###################*/
+.ContextMenu {
+	background:#C4C4C4 none repeat scroll 0%;
+	border:1px solid #7E7E7F;
+	background:#F6F6F6 none repeat 0%;
+	margin:1px;
+	padding:5px 0px;
+	position: absolute;
+}
+
+.ContextMenu .MenuItem {
+	cursor:pointer;
+	line-height:16px;
+	white-space:nowrap;
+}
+
+.ContextMenu .IconItem {
+	line-height:16px;
+	margin:0px 7px;
+	padding:5px 0px 5px 26px;
+}
+
+.AddNewDocument {
+	display: none;
+	width: 88px;
+	border: 1px #C7C7C7 solid;
+	position: absolute;
+}
+
+.AddNewDocument .IconAdd {
+	background: url('../images/IconNewDocument16x14.gif') no-repeat left center;
+	width:auto;
+}
+
+.ListItemOption {
+	display: none;
+	width: 88px;
+	border: 1px #C7C7C7 solid;
+	position: absolute;
+}
+
+.ListItemOption .IconView {
+	background: url('../images/IconView16x20.gif') no-repeat left center;
+	width: auto;
+}
+
+.ListItemOption .IconSelect {
+	background: url('../images/IconSelect16x20.gif') no-repeat left center;
+	width: auto;
+}
+
+.StatusBar {
+	width: 100%; 
+	height: 20px; 
+	line-height: 20px; 
+	background: #E3E1CD;
+}
+
+.StatusBar .abcFolder {
+	padding-left: 10px;
+}
+
+.StatusBar .abcItem {
+	padding-left: 150px;
+}
+
+.AddForm {
+	left: 250px; 
+	top: 200px; 
+	position: absolute;
+	border: 1px #000000 solid;
+	padding: 10px;
+	z-index: 1;
+	background: #ffffff;
+}
+
+.IFrameForm {
+	left: 250px; 
+	top: 200px; 
+	position: absolute;
+	border: 1px #000000 solid;
+	padding: 10px;
+	z-index: 1;
+	background: #ffffff;
+}
+
+.UploadForm {
+	
+}
+
+.Mask {
+	width: 100%; 
+	height: 100%; 
+	background: #000000; 
+	position: absolute; 
+	top: 0; 
+	left: 0; 
+	opacity: 0.1; 
+	z-index: 0;
+}
