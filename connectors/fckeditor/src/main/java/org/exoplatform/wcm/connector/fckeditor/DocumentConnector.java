@@ -98,18 +98,12 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
     return Response.Builder.ok(document).cacheControl(cacheControl).build();    
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.wcm.connector.fckeditor.BaseConnector#getStorage(javax.jcr.Node)
-   */
   @Override
   protected Node getStorage(Node portal) throws Exception {
     PortalFolderSchemaHandler portalFolderSchemaHandler = webSchemaConfigService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
     return portalFolderSchemaHandler.getDocumentStorage(portal);
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.connector.fckeditor.FCKConnectorXMLOutputBuilder#buildFoldersAndFilesXMLOutput(java.lang.String, java.lang.String, java.lang.String)
-   */
   @Override
   public Document buildFoldersAndFilesXMLOutput(String repository, String workspace, String currentFolder) throws Exception {    
     return null;

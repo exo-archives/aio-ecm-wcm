@@ -24,7 +24,7 @@ window.eXoPlugin = {
 		this.hostName = parentLocation.href.substring(0, parentLocation.href.indexOf(parentLocation.pathname));
 		
 		this.eXoFileManager = {
-			Connector: "/portal/rest/fckconnector/jcr/",
+			Connector: "/rest/image/",
 			ResourceType : "File"
 		};
 		

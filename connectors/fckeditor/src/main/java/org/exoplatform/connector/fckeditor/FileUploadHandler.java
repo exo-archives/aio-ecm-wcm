@@ -53,6 +53,6 @@ public class FileUploadHandler {
   public void delete(String uploadId) throws Exception {}
   
   public void saveAsNTFile(String uploadId,Node parent) { 
-    //UploadResource resource = uploadService.getUploadResource(uploadId) ;    
+    UploadResource resource = uploadService.getUploadResource(uploadId) ;    
   }
 }
