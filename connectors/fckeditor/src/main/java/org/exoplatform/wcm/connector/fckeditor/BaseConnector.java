@@ -95,7 +95,7 @@ public abstract class BaseConnector extends FCKConnectorXMLOutputBuilder {
           document = createDocumentForPortal(currentNode);
         else
           document = createDocumentForStorage(currentPortal, currentNode);
-      } catch (PathNotFoundException e) {
+      } catch (Exception e) {
         currentNode = getCurrentFolder(sharePortal, currentFolder);
         if (currentNode == sharePortal) 
           document = createDocumentForPortal(currentNode);
@@ -125,7 +125,7 @@ public abstract class BaseConnector extends FCKConnectorXMLOutputBuilder {
     Session session = currentPortal.getSession();
     try {
       currentNode = getCurrentFolder(currentPortal, currentFolder);
-    } catch (PathNotFoundException e) {
+    } catch (Exception e) {
       currentNode = getCurrentFolder(sharePortal, currentFolder);
     }
 
@@ -137,7 +137,7 @@ public abstract class BaseConnector extends FCKConnectorXMLOutputBuilder {
       try {
         currentNode.getNode(newFolderName);
         error = createErrorElement(document, ErrorMessage.FOLDER_EXISTED);
-      } catch (PathNotFoundException e2) {
+      } catch (Exception e2) {
         currentNode.addNode(newFolderName, newFolderType);
         error = createErrorElement(document, ErrorMessage.FOLDER_CREATED);
         session.save();        
