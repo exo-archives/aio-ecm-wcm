@@ -18,7 +18,6 @@ package org.exoplatform.connector.fckeditor;
 
 import java.io.InputStream;
 import java.security.AccessControlException;
-import java.text.SimpleDateFormat;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -27,7 +26,6 @@ import javax.jcr.nodetype.NodeType;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.exoplatform.commons.utils.ISO8601;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.component.BaseComponentPlugin;
 import org.exoplatform.services.cms.templates.TemplateService;
@@ -37,6 +35,7 @@ import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.upload.UploadService;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -60,7 +59,7 @@ public abstract class FCKConnectorXMLOutputBuilder extends BaseComponentPlugin {
 
   protected RepositoryService repositoryService;
   protected TemplateService templateService;  
-  protected ThreadLocalSessionProviderService sessionProviderService;
+  protected ThreadLocalSessionProviderService sessionProviderService;  
 
   protected static final int FOLDER_CREATED = 0;
   protected static final int FOLDER_EXISTED = 101;    
@@ -71,7 +70,7 @@ public abstract class FCKConnectorXMLOutputBuilder extends BaseComponentPlugin {
   public FCKConnectorXMLOutputBuilder(ExoContainer container) {    
     this.repositoryService = (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class);
     this.templateService = (TemplateService) container.getComponentInstanceOfType(TemplateService.class);
-    this.sessionProviderService = (ThreadLocalSessionProviderService) container.getComponentInstanceOfType(ThreadLocalSessionProviderService.class);   
+    this.sessionProviderService = (ThreadLocalSessionProviderService) container.getComponentInstanceOfType(ThreadLocalSessionProviderService.class);    
   }
 
   public abstract Document buildFilesXMLOutput(String repository, String workspace, String currentFolder) throws Exception;  
@@ -132,10 +131,12 @@ public abstract class FCKConnectorXMLOutputBuilder extends BaseComponentPlugin {
   protected Element createFileElement(Document document, Node child, String fileType) throws Exception {   
     Element file = document.createElement("File");
     file.setAttribute("name", child.getName());     
-    SimpleDateFormat dateFormat = new SimpleDateFormat();
-    dateFormat.applyPattern(ISO8601.SIMPLE_DATETIME_FORMAT);    
-    file.setAttribute("dateCreated", dateFormat.format(child.getProperty("exo:dateCreated").getDate()));    
-    file.setAttribute("dateModified", dateFormat.format(child.getProperty("exo:dateModified").getDate()));      
+    /*SimpleDateFormat dateFormat = new SimpleDateFormat();
+    dateFormat.applyPattern(ISO8601.SIMPLE_DATETIME_FORMAT);   */     
+    /*file.setAttribute("dateCreated", dateFormat.format(child.getProperty("exo:dateCreated").getDate()));    
+      file.setAttribute("dateModified", dateFormat.format(child.getProperty("exo:dateModified").getDate()));      */
+    file.setAttribute("dateCreated", child.getProperty("exo:dateCreated").getString());    
+    file.setAttribute("dateModified", child.getProperty("exo:dateModified").getString());      
     file.setAttribute("creator", child.getProperty("exo:owner").getString());
     file.setAttribute("fileType", fileType);
     if (child.isNodeType(NT_FILE)) {         
@@ -146,7 +147,7 @@ public abstract class FCKConnectorXMLOutputBuilder extends BaseComponentPlugin {
       file.setAttribute("size", "");
       String url = createCommonWebdavURL(child);
       file.setAttribute("url", url);
-    }    
+    }      
     return file;
   }  
 

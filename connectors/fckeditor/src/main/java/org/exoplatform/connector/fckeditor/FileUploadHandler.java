@@ -19,9 +19,13 @@ package org.exoplatform.connector.fckeditor;
 import java.io.InputStream;
 
 import javax.jcr.Node;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.exoplatform.upload.UploadResource;
 import org.exoplatform.upload.UploadService;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /*
  * Created by The eXo Platform SAS
@@ -35,24 +39,56 @@ public class FileUploadHandler {
   public final static String ABORT_ACTION = "abort".intern();
   public final static String DELETE_ACTION = "delete".intern();
   public final static String SAVE_ACTION = "save".intern();
-  
+
   private UploadService uploadService;
+
   public FileUploadHandler(UploadService uploadService) {
-    this.uploadService = uploadService;
+    this.uploadService = uploadService;    
   }
-  
-  public void upload(String uploadId, String fileName, 
-      InputStream data, double contentLength, String mimetype) throws Exception {
-    //uploadService.createUploadResource(uploadId,fileName,data,contentLength,mimetype);    
+
+  public Document upload(String uploadId, InputStream data, String contentType, double contentLength) throws Exception {
+    uploadService.createUploadResource(uploadId, data, contentType, contentLength);        
+    Document doc = null;
+    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+    DocumentBuilder builder = factory.newDocumentBuilder();
+    doc = builder.newDocument();
+    Element rootElement = doc.createElement("FileUpload");
+    rootElement.setAttribute("uploadID", uploadId);    
+    doc.appendChild(rootElement);
+    return doc;
   }
-  
-  public void refreshProgress(String uploadId) throws Exception { }
-  
-  public void abort(String uploadId) throws Exception {}
-  
-  public void delete(String uploadId) throws Exception {}
-  
-  public void saveAsNTFile(String uploadId,Node parent) { 
-    UploadResource resource = uploadService.getUploadResource(uploadId) ;    
+
+  public Document refreshProgress(String uploadId) throws Exception {    
+    double percent = 100;
+    UploadResource resource = uploadService.getUploadResource(uploadId);
+    if (resource.getStatus() == UploadResource.UPLOADING_STATUS) {
+      percent = (resource.getUploadedSize() * 100) / resource.getEstimatedSize();      
+    }    
+    Document doc = null;
+    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+    DocumentBuilder builder = factory.newDocumentBuilder();
+    doc = builder.newDocument();
+    Element rootElement = doc.createElement("FileUpload");
+    rootElement.setAttribute("uploadID", uploadId);
+    rootElement.setAttribute("uploadFile", resource.getFileName());
+    rootElement.setAttribute("percent", Double.toString(percent));
+    doc.appendChild(rootElement);
+    return doc;
+  }
+
+  public Document abort(String uploadId) throws Exception { 
+    uploadService.removeUpload(uploadId);
+    return null;
+  }
+
+  public Document delete(String uploadId) throws Exception { 
+    uploadService.removeUpload(uploadId);
+    return null;
+  }
+
+  public void saveAsNTFile(String uploadId, Node parent) throws Exception { 
+    /*UploadResource resource = uploadService.getUploadResource(uploadId) ;    
+    resource.getStoreLocation()
+    InputStream inputStream = new BufferedInputStream(new FileInputStream(resource.getStoreLocation()));*/    
   }
 }

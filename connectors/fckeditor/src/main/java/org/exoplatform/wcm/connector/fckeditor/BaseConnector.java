@@ -18,7 +18,6 @@ package org.exoplatform.wcm.connector.fckeditor;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
-import javax.jcr.PathNotFoundException;
 import javax.jcr.Session;
 
 import org.exoplatform.connector.fckeditor.ErrorMessage;
@@ -83,27 +82,22 @@ public abstract class BaseConnector extends FCKConnectorXMLOutputBuilder {
    */
   protected Document buildFoldersAndFilesXMLOutput(String currentPortalName, String currentFolder) throws Exception {
     Node currentPortal = livePortalManagerService.getLivePortal(currentPortalName, sessionProviderService.getSessionProvider(null));
-    Node sharePortal = livePortalManagerService.getLiveSharedPortal(sessionProviderService.getSessionProvider(null));    
-    Document document = null;
+    Node sharePortal = livePortalManagerService.getLiveSharedPortal(sessionProviderService.getSessionProvider(null));        
     Node currentNode = null;
     if (currentFolder == null || currentFolder.equals("/")) {      
-      document = createDocumentForRoot(currentPortal, sharePortal);
+      return createDocumentForRoot(currentPortal, sharePortal);
     } else {
       try {
         currentNode = getCurrentFolder(currentPortal, currentFolder);
         if (currentNode == currentPortal) 
-          document = createDocumentForPortal(currentNode);
-        else
-          document = createDocumentForStorage(currentPortal, currentNode);
-      } catch (Exception e) {
+          return createDocumentForPortal(currentNode);        
+      } catch (Exception e) {        
         currentNode = getCurrentFolder(sharePortal, currentFolder);
         if (currentNode == sharePortal) 
-          document = createDocumentForPortal(currentNode);
-        else
-          document = createDocumentForStorage(sharePortal, currentNode);
-      }
-    }
-    return document;
+          return createDocumentForPortal(currentNode);        
+      }      
+    }  
+    return createDocumentForStorage(currentNode);
   }
 
   /**
@@ -232,7 +226,7 @@ public abstract class BaseConnector extends FCKConnectorXMLOutputBuilder {
    * 
    * @throws Exception the exception
    */
-  private Document createDocumentForStorage(Node portal, Node currentFolder) throws Exception {         
+  private Document createDocumentForStorage(Node currentFolder) throws Exception {         
     Element root = createRootElement(GET_ALL, currentFolder);
     Document document = root.getOwnerDocument();
     Element foldersElement = document.createElement("Folders");

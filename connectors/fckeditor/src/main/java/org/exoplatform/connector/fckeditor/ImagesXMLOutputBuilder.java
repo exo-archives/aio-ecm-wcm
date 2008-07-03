@@ -20,6 +20,7 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 
 import org.exoplatform.container.ExoContainer;
+import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -81,7 +82,22 @@ public class ImagesXMLOutputBuilder extends FCKConnectorXMLOutputBuilder {
   }
 
   protected String createFileLink(Node node) throws Exception {        
-    return null;
+    String mimeType = node.getNode("jcr:content").getProperty("jcr:mimeType").getString();
+    //TODO should use mimetype registry to check
+    boolean isImageType = false;
+    for (String s : IMAGE_MIMETYPE) {
+      if (s.endsWith(mimeType)) {
+        isImageType = true;
+        break;
+      }
+    }        
+    if (isImageType)  {
+      String repository = ((ManageableRepository) node.getSession().getRepository()).getConfiguration().getName();
+      String workspace = node.getSession().getWorkspace().getName();
+      String currentPath = node.getPath();
+      return "portal/rest/lnkproducer/openit.lnk?path=/" + repository + "/" + workspace + currentPath;
+    }    
+    return createCommonWebdavURL(node); 
   }
     
   protected String getFileType(Node node) throws Exception {

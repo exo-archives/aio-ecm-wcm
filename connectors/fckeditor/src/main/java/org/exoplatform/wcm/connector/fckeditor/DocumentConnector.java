@@ -16,17 +16,22 @@
  */
 package org.exoplatform.wcm.connector.fckeditor;
 
+import java.io.InputStream;
+
 import javax.jcr.Node;
 
 import org.exoplatform.common.http.HTTPMethods;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.services.rest.CacheControl;
 import org.exoplatform.services.rest.HTTPMethod;
+import org.exoplatform.services.rest.HeaderParam;
+import org.exoplatform.services.rest.InputTransformer;
 import org.exoplatform.services.rest.OutputTransformer;
 import org.exoplatform.services.rest.QueryParam;
 import org.exoplatform.services.rest.Response;
 import org.exoplatform.services.rest.URITemplate;
 import org.exoplatform.services.rest.container.ResourceContainer;
+import org.exoplatform.services.rest.transformer.PassthroughInputTransformer;
 import org.exoplatform.services.rest.transformer.XMLOutputTransformer;
 import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
 import org.w3c.dom.Document;
@@ -96,6 +101,14 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
     return Response.Builder.ok(document).cacheControl(cacheControl).build();    
+  }
+  
+  @HTTPMethod(HTTPMethods.POST)
+  @URITemplate("/upload/") 
+  @InputTransformer(PassthroughInputTransformer.class)
+  @OutputTransformer(XMLOutputTransformer.class)  
+  public void uploadFile( @QueryParam("action") String action) throws Exception {  
+    
   }
 
   @Override

@@ -16,9 +16,15 @@
  */
 package org.exoplatform.connector.fckeditor;
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.InputStream;
+
 import javax.jcr.Node;
 
 import org.exoplatform.common.http.HTTPMethods;
+import org.exoplatform.commons.utils.IOUtil;
+import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.rest.CacheControl;
 import org.exoplatform.services.rest.HTTPMethod;
@@ -48,7 +54,11 @@ public class FCKCoreConnector implements ResourceContainer {
   private static final String RESOURCE_AS_FILE = "File".intern();
   private static final String RESOURCE_AS_IMAGES = "Image".intern();
 
-  public FCKCoreConnector() { }
+  protected UploadService uploadService;
+
+  public FCKCoreConnector(UploadService uploadService) { 
+    this.uploadService = uploadService;
+  }
 
   @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/getResource/")  
@@ -143,8 +153,12 @@ public class FCKCoreConnector implements ResourceContainer {
   @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/createFolder/")
   @OutputTransformer(XMLOutputTransformer.class) 
-  public Response createFolder(@QueryParam("repositoryName") String repositoryName, @QueryParam("workspaceName") String workspaceName,
-       @QueryParam("CurrentFolder") String currentFolder, @QueryParam("Type") String type, @QueryParam("NewFolderName") String newFolderName) throws Exception {
+  public Response createFolder(
+      @QueryParam("repositoryName") String repositoryName, 
+      @QueryParam("workspaceName") String workspaceName,
+      @QueryParam("CurrentFolder") String currentFolder, 
+      @QueryParam("Type") String type, 
+      @QueryParam("NewFolderName") String newFolderName) throws Exception {
     if (currentFolder == null || currentFolder.length() == 0) currentFolder = "/";    
     repositoryName = "repository";
     workspaceName = "collaboration";
@@ -164,24 +178,30 @@ public class FCKCoreConnector implements ResourceContainer {
   @URITemplate("/upload/") 
   @InputTransformer(PassthroughInputTransformer.class)
   @OutputTransformer(XMLOutputTransformer.class)  
-  public void uploadFile(@QueryParam("action") String action, @QueryParam("uploadId")String uploadId,
-      @QueryParam("CurrentFolder") String currentFolder, @QueryParam("Type") String type,
-      @HeaderParam("content-type") String mimetype, @HeaderParam("content-length") double contentLength,
-      @HeaderParam("fileName")String fileName) throws Exception{    
-    UploadService uploadService = null;
-    FileUploadHandler fileUploadHelper = new FileUploadHandler(uploadService);
-    if(FileUploadHandler.UPLOAD_ACTION.equals(action)) {
-      //fileUploadHelper.upload()
-    }else if(FileUploadHandler.PROGRESS_ACTION.equals(action)) {
-      fileUploadHelper.refreshProgress(uploadId);
-    }else if(FileUploadHandler.ABORT_ACTION.equals(action)) {
+  public Response uploadFile(
+      InputStream inputStream,
+      @QueryParam("action") String action, 
+      @QueryParam("uploadId") String uploadId,
+      @HeaderParam("content-length") String contentLength, 
+      @HeaderParam("content-type") String contentType) throws Exception {        
+    Document document = null;            
+    FileUploadHandler fileUploadHelper = new FileUploadHandler(uploadService);      
+    if (FileUploadHandler.UPLOAD_ACTION.equals(action)) {      
+      double length = Double.parseDouble(contentLength);
+      document = fileUploadHelper.upload(uploadId, inputStream, "UTF-8", length);      
+    } else if (FileUploadHandler.PROGRESS_ACTION.equals(action)) {
+      document = fileUploadHelper.refreshProgress(uploadId);
+    } else if (FileUploadHandler.ABORT_ACTION.equals(action)) {
       fileUploadHelper.abort(uploadId);
-    }else if(FileUploadHandler.DELETE_ACTION.endsWith(action)) {
+    } else if (FileUploadHandler.DELETE_ACTION.endsWith(action)) {
       fileUploadHelper.delete(uploadId);
-    }else if(FileUploadHandler.SAVE_ACTION.equals(action)) {
+    } else if (FileUploadHandler.SAVE_ACTION.equals(action)) {
       //get current node by current folder
       Node currentNode = null;
       fileUploadHelper.saveAsNTFile(uploadId,currentNode);
-    }
+    }        
+    CacheControl cacheControl = new CacheControl();
+    cacheControl.setNoCache(true);    
+    return Response.Builder.ok(document).cacheControl(cacheControl).build();
   }
 }
