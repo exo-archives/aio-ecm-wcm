@@ -47,7 +47,7 @@ public class FileUploadHandler {
   }
 
   public Document upload(String uploadId, InputStream data, String contentType, double contentLength) throws Exception {
-    uploadService.createUploadResource(uploadId, data, contentType, contentLength);        
+    //uploadService.createUploadResource(uploadId, data, contentType, contentLength);        
     Document doc = null;
     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
     DocumentBuilder builder = factory.newDocumentBuilder();
