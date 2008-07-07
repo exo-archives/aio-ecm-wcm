@@ -1,7 +1,7 @@
 /* ################# Common Tag ###################*/
 html, body {
-	margin: 0;
-	padding: 0;
+	margin: 0px;
+	padding: 0px;
 	width: 100%;
 	height: 100%;
 	overflow: hidden;
@@ -44,7 +44,7 @@ a {
 	font-weight: bold;
 	border-bottom: 1px solid #B7B7B7;
 	color: #424242;
-	height:22px;	
+	height: 22px;	
 }
 
 .FolderNavigation .TitleText {
@@ -52,7 +52,7 @@ a {
 }
 
 .FolderNavigation .Tree {
-	padding: 10px 10px 0 10px;
+	padding: 0px 10px 0px 10px;
 	font-weight: bold;
 	overflow: auto;
 	height: 100%;
@@ -81,14 +81,14 @@ a {
 
 .Tree .IconExpand {
 	background: url('../images/TreePlus18x16.gif') no-repeat 5px top;
-	height:auto;
-	padding-left:18px;
+	height: auto;
+	padding-left: 18px;
 }
 
 .Tree .IconCollapse {
 	background: url('../images/TreeMinus18x16.gif') no-repeat 5px top;
-	height:auto;
-	padding-left:18px;
+	height: auto;
+	padding-left: 18px;
 }
 
 .Tree .IconClose {
@@ -101,7 +101,7 @@ a {
 	margin-left: 200px;	
 }
 
-.FolderExplorer .MenuBar {
+.MenuBar {
 	background: url('../images/FolderExplorerMenuBar1x28.gif') repeat-x;
 	line-height: 28px;				
 	padding-left: 5px;
@@ -140,7 +140,7 @@ a {
 .ButtonMiddle {
 	background: url('../images/ButtonBackground6x44.gif') repeat-x bottom center;
 	line-height: 22px;
-	padding: 0 12px;
+	padding: 0px 12px;
 }
 
 .ButtonLeft {
@@ -200,8 +200,8 @@ a {
 }
 
 /* ################# List Item ###################*/
-.DocumentDiv {
-	padding: 10px 0 0 10px;
+.DisplayArea {
+	padding: 10px 0px 0px 10px;
 	overflow: auto;
 }
 
@@ -230,24 +230,24 @@ a {
 
 /* ################# Context Menu ###################*/
 .ContextMenu {
-	background:#C4C4C4 none repeat scroll 0%;
-	border:1px solid #7E7E7F;
-	background:#F6F6F6 none repeat 0%;
-	margin:1px;
-	padding:5px 0px;
+	background: #C4C4C4 none repeat scroll 0%;
+	border: 1px solid #7E7E7F;
+	background: #F6F6F6 none repeat 0%;
+	margin: 1px;
+	padding: 5px 0px;
 	position: absolute;
 }
 
 .ContextMenu .MenuItem {
-	cursor:pointer;
-	line-height:16px;
-	white-space:nowrap;
+	cursor: pointer;
+	line-height: 16px;
+	white-space: nowrap;
 }
 
 .ContextMenu .IconItem {
-	line-height:16px;
-	margin:0px 7px;
-	padding:5px 0px 5px 26px;
+	line-height: 16px;
+	margin: 0px 7px;
+	padding: 5px 0px 5px 26px;
 }
 
 .AddNewDocument {
@@ -259,7 +259,7 @@ a {
 
 .AddNewDocument .IconAdd {
 	background: url('../images/IconNewDocument16x14.gif') no-repeat left center;
-	width:auto;
+	width: auto;
 }
 
 .ListItemOption {
@@ -286,14 +286,6 @@ a {
 	background: #E3E1CD;
 }
 
-.StatusBar .abcFolder {
-	padding-left: 10px;
-}
-
-.StatusBar .abcItem {
-	padding-left: 150px;
-}
-
 .AddForm {
 	left: 250px; 
 	top: 200px; 
@@ -304,27 +296,35 @@ a {
 	background: #ffffff;
 }
 
-.IFrameForm {
-	left: 250px; 
-	top: 200px; 
+.Mask {
+	background: black; 
 	position: absolute;
-	border: 1px #000000 solid;
-	padding: 10px;
-	z-index: 1;
-	background: #ffffff;
+	display: none;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+	opacity: 0.5;
+	*filter: alpha(opacity = 50);
 }
 
 .UploadForm {
-	
+	background: white;
+	height: 128px;
+	margin: auto;
+	padding: 5px;
+	width: 300px;
 }
 
-.Mask {
-	width: 100%; 
-	height: 100%; 
-	background: #000000; 
-	position: absolute; 
-	top: 0; 
-	left: 0; 
-	opacity: 0.1; 
-	z-index: 0;
+.UploadForm iframe {
+	height: 0px;
+	border: none;
+}
+
+.PopupContainer {
+	position: absolute;
+	top: 30%;
+	left: 0px;
+	width: 100%;
+	display: none;
 }
