@@ -62,6 +62,20 @@
         <valueConstraints/>
       </propertyDefinition>  	          	    
     </propertyDefinitions>
+    <childNodeDefinitions>
+      <childNodeDefinition name="js" defaultPrimaryType="exo:jsFolder" autoCreated="false" mandatory="false"
+        onParentVersion="VERSION" protected="false" sameNameSiblings="false">
+        <requiredPrimaryTypes>
+          <requiredPrimaryType>nt:base</requiredPrimaryType>
+        </requiredPrimaryTypes>
+      </childNodeDefinition>
+      <childNodeDefinition name="css" defaultPrimaryType="exo:cssFolder" autoCreated="false" mandatory="false"
+        onParentVersion="VERSION" protected="false" sameNameSiblings="false">
+        <requiredPrimaryTypes>
+          <requiredPrimaryType>nt:base</requiredPrimaryType>
+        </requiredPrimaryTypes>
+      </childNodeDefinition>
+    </childNodeDefinitions>
   </nodeType>
        
   <nodeType name="exo:htmlFile" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
