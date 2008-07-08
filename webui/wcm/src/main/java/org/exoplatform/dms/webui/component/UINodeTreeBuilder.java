@@ -57,6 +57,7 @@ public class UINodeTreeBuilder extends UIContainer {
   private boolean isTab_ = false;
   private String rootPath_ ;
   private String [] allowedNodes ;
+  private List<String> listFilterNodeType = new ArrayList<String>();
   
   public UINodeTreeBuilder() throws Exception {
     UITree tree = addChild(UITree.class, null, UITree.class.getSimpleName()+hashCode()) ;
@@ -198,7 +199,17 @@ public class UINodeTreeBuilder extends UIContainer {
     List<Node> list = new ArrayList<Node>(5) ;
       while(itr.hasNext()) {
         Node node = (Node) itr.next();
-        if(PermissionUtil.canRead(node) && !node.isNodeType("exo:hiddenable")) list.add(node) ;        
+        if(PermissionUtil.canRead(node) && !node.isNodeType("exo:hiddenable")) {
+          if(listFilterNodeType.size() > 0) {
+            if(listFilterNodeType.contains(node.getPrimaryNodeType().getName())) {
+              list.add(node);
+            } else if(node.getParent().getPrimaryNodeType().getName().equals("exo:webFolder")) {
+              list.add(node);
+            }
+          } else {
+            list.add(node);
+          }
+        }        
       }
     return list ;
   }
@@ -208,7 +219,17 @@ public class UINodeTreeBuilder extends UIContainer {
     List<Node> list = new ArrayList<Node>(5) ;
       while(itr.hasNext()) {
         Node node = (Node) itr.next();
-        if(PermissionUtil.canRead(node) && !node.isNodeType("exo:hiddenable") && isAllowed(node)) list.add(node) ;        
+        if(PermissionUtil.canRead(node) && !node.isNodeType("exo:hiddenable") && isAllowed(node)) {
+          if(listFilterNodeType.size() > 0) {
+            if(listFilterNodeType.contains(node.getPrimaryNodeType().getName())) {
+              list.add(node);
+            } else if(node.getParent().getPrimaryNodeType().getName().equals("exo:webFolder")) {
+              list.add(node);
+            }
+          } else {
+            list.add(node);
+          }
+        }
       }
     return list ;
   }
@@ -230,4 +251,11 @@ public class UINodeTreeBuilder extends UIContainer {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiJCRBrowser) ;
     }
   }
+  
+  public void setFilterNodeType(String[] arrNodeTypeFilter) {
+    for(String filter: arrNodeTypeFilter) {
+      listFilterNodeType.add(filter);
+    }
+  }
+  
 }
