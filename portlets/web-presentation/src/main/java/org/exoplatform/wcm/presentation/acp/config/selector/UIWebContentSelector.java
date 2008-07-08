@@ -26,7 +26,6 @@ import org.exoplatform.dms.webui.component.UISelectable;
 import org.exoplatform.dms.webui.form.UIFormInputSetWithAction;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -127,15 +126,7 @@ public class UIWebContentSelector extends UIForm implements UISelectable{
       if(event.getRequestContext().getRemoteUser() == null) {
         uiExplorer.setSessionProvider(SessionProviderFactory.createAnonimProvider());
       }
-      TemplateService templateService = uiWebContentSelector.getApplicationComponent(TemplateService.class);
-//    List<String> documents = templateService.getDocumentTemplates(uiWebContentSelector.getRepositoryName());
-//    if(!documents.contains("exo:webContent")) {
-//    documents.add("exo:webContent");
-//    }
       String [] filterType = new String[] { "exo:webContent" };
-//    String[] viewNodeType = new String[] {"exo:webContent"};
-//    String[] filterType = new String[documents.size()];
-//    documents.toArray(filterType);
       uiExplorer.setFilterType(filterType);
       uiExplorer.setComponent(uiWebContentSelector, new String [] {UIWebContentSelector.PATH}); 
       uiWebContentSelector.showPopupComponent(uiExplorer); 
