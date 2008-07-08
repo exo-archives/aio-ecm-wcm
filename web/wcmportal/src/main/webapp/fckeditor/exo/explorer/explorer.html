@@ -559,7 +559,7 @@
 		var formUpload = K.select({from: popupContainer, where: "nodeName == 'FORM'"})[0];
 		formUpload["uploadId"].value = K.get.generalId();
 		if (formUpload) {
-			formUpload.action = "portal/rest/fckconnector/jcr/uploadFile/upload";
+			formUpload.action = eXp.connector + eXp.command.uploadFile;
 			formUpload.submit();
 		}
 	}
