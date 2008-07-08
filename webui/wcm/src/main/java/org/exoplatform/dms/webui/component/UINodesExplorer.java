@@ -33,61 +33,65 @@ import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
  */
 @ComponentConfig(lifecycle = UIContainerLifecycle.class)
 public class UINodesExplorer extends UIContainer implements ComponentSelector{
-  
+
   private UIComponent uiComponent ;
   private String returnFieldName = null ;
   private String repository_ = null;
   private String wsName_ = null ;
   private boolean isDisable_ = false ;  
   private SessionProvider sessionProvider_ ;
-  
+
   //Reference to ecm.UIJCRBrowser
   public UINodesExplorer() throws Exception {
     addChild(UIWorkspaceListForm.class, null, UIWorkspaceListForm.class.getSimpleName()+hashCode()) ;
     addChild(UINodeTreeBuilder.class, null, UINodeTreeBuilder.class.getSimpleName()+hashCode()) ;
     addChild(UITreeNodeList.class, null, UITreeNodeList.class.getSimpleName()+hashCode()) ;        
   }
-  
+
   public void setSessionProvider(SessionProvider provider) { this.sessionProvider_ = provider ; }
   public SessionProvider getSessionProvider() { return this.sessionProvider_ ; }
-  
+
   public void setRootPath(String path) throws Exception{
     getChild(UINodeTreeBuilder.class).setRootPath(path) ;
   }
-  
+
   public void setFilterType(String[] arrType) throws Exception {
     getChild(UIBaseNodeList.class).setFilterType(arrType) ;
   }
-  
+
   public void setMimeTypes(String[] arrMimeType) {
     getChild(UIBaseNodeList.class).setMimeTypes(arrMimeType) ;
   }
-  
+
   public void setIsShowSystem(boolean isShowSystem) {
     getChild(UIWorkspaceListForm.class).setIsShowSystem(isShowSystem) ;
   }
-  
+
   public void setIsTab(boolean isTab) { 
     getChild(UINodeTreeBuilder.class).setIsTab(isTab) ;
   }
-  
+
+  public void setFilterNodeType(String[] arrFilter) {  
+    getChild(UINodeTreeBuilder.class).setFilterNodeType(arrFilter); 
+  }
+
   public void setIsDisable(String wsName, boolean isDisable) {
     setWorkspace(wsName) ;
     isDisable_ = isDisable ;
     getChild(UIWorkspaceListForm.class).setIsDisable(wsName, isDisable) ;
   }
-  
+
   public boolean isDisable() { return isDisable_ ; }
-  
+
   public void setWorkspace(String wsName) { wsName_ = wsName ; }
-  
+
   public String getWorkspace() throws Exception { 
     if(wsName_ == null || wsName_.trim().length() ==0) {
       return getApplicationComponent(RepositoryService.class).getRepository(repository_).getConfiguration().getDefaultWorkspaceName() ;
     }
     return wsName_ ; 
   }
-  
+
   public void setRepository(String repo) {
     repository_ = repo ; 
     try {
@@ -97,17 +101,17 @@ public class UINodesExplorer extends UIContainer implements ComponentSelector{
       e.printStackTrace() ;
     }
   }
-  
+
   public String getRepository() { return repository_ ; }
-  
+
   public void setShowRootPathSelect(boolean isRendered) {
     UIWorkspaceListForm uiWorkspaceList = getChild(UIWorkspaceListForm.class) ;
     uiWorkspaceList.setShowRootPathSelect(isRendered) ;
   }
-  
+
   public UIComponent getReturnComponent() { return uiComponent ; }
   public String getReturnField() { return returnFieldName ; }
-  
+
   public void setComponent(UIComponent uicomponent, String[] initParams) {
     uiComponent = uicomponent ;
     if(initParams == null || initParams.length < 0) return ;
@@ -120,7 +124,7 @@ public class UINodesExplorer extends UIContainer implements ComponentSelector{
       returnFieldName = initParams[0] ;
     }
   }
-  
+
   public void setAllowedNodes(String [] strs) {
     getChild(UINodeTreeBuilder.class).setAllowedNodes(strs) ;
   }
