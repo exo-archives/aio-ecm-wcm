@@ -2,15 +2,16 @@
 <portlet-app version="1.0" xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd">
+             
   <portlet>
-		<description xml:lang="EN">Simple Presentation Portlet</description>
-		<portlet-name>SimplePresentationPortlet</portlet-name>
-		<display-name>Simple Presentation Portlet</display-name>
+		<description xml:lang="EN">Advanced Presentation Portlet</description>
+		<portlet-name>AdvancedPresentationPortlet</portlet-name>
+		<display-name>Advanced Content Presentation</display-name>
 		<portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>
 		
 		<init-param>
       <name>webui.configuration</name>
-      <value>/WEB-INF/conf/portlet/web-presentation/SimplePresentationPortlet/webui/configuration.xml</value>			
+      <value>/WEB-INF/conf/portlet/advancedPresentationPortlet/webui/configuration.xml</value>			
 		</init-param>
 		
 		<expiration-cache>0</expiration-cache>
@@ -20,18 +21,18 @@
 			<portlet-mode>edit</portlet-mode>
 		</supports>
 		<supported-locale>en</supported-locale>
-		<resource-bundle>locale.portlet.web-presentation.SimplePresentationPortlet</resource-bundle>
+		<resource-bundle>locale.portlet.web-presentation.AdvancedPresentationPortlet</resource-bundle>
 		
 		<portlet-info>
-			<title>Simple Presntation Portlet</title>
-			<short-title>Simple Presentation</short-title>
-			<keywords>SimplePresentation</keywords>
+			<title>Advanced Presntation Portlet</title>
+			<short-title>Advanced Presentation</short-title>
+			<keywords>AdvancedPresentation</keywords>
 		</portlet-info>
 		
     <security-role-ref>
       <role-name>admin</role-name>
       <role-link>admin</role-link>
     </security-role-ref>		
-  </portlet>  
+  </portlet>
   
 </portlet-app>
