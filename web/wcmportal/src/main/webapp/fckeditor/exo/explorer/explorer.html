@@ -264,18 +264,25 @@
 	var curLength = 0;
 	var curUploadId = 0;
 	
-	var repositoryName = FCKConfig.repositoryName;
-	var workspaceName = FCKConfig.workspaceName;
-	var jcrPath = FCKConfig.workspaceName;
-	var xParam = '';
-	if (repositoryName !== undefined) xParam += 'repositoryName=' + repositoryName + '&';
-	if (workspaceName !== undefined) xParam += 'workspaceName=' + workspaceName + '&';
-	if (jcrPath !== undefined) xParam += 'jcrPath=' + jcrPath + '&';
-	xParam = xParam.substring(0, xParam.length - 1);
+	function buildXParam() {
+		var repositoryName = FCKConfig.repositoryName;
+		var workspaceName = FCKConfig.workspaceName;
+		var jcrPath = FCKConfig.workspaceName;
+		var param = '';
+		if (repositoryName !== undefined) param += 'repositoryName=' + repositoryName + '&';
+		if (workspaceName !== undefined) param += 'workspaceName=' + workspaceName + '&';
+		if (jcrPath !== undefined) param += 'jcrPath=' + jcrPath;
+		return param;
+	}
 	
 	function requestInit() {
 		var connector = eXoPlugin.hostName + eXp.connector + eXp.command.init;
-		var param = eXp.buildParam(	"Type=" + eXp.resourceType , "CurrentFolder=/", "CurrentPortal=" + eXoPlugin.portalName, xParam);
+		var param = eXp.buildParam(
+					"type=" + eXp.resourceType,
+					"currentFolder=/",
+					"currentPortal=" + eXoPlugin.portalName,
+					buildXParam()
+				);
 		eXp.sendRequest(connector, param, "GET", treeInit);
 		curNode = document.getElementById('/');
 	}
@@ -331,8 +338,13 @@
 	
 	function getDir(sCurrentFolder) {
 		var connector = eXoPlugin.hostName + eXp.connector + 'getFoldersAndFiles';
-		var param = eXp.buildParam("Type=" + eXp.resourceType , "CurrentFolder=" + sCurrentFolder, "CurrentPortal=" + eXoPlugin.portalName, xParam);
-		eXp.sendRequest(connector, param, "GET",treeGen);
+		var param = eXp.buildParam(
+					"type=" + eXp.resourceType,
+					"currentFolder=" + sCurrentFolder,
+					"currentPortal=" + eXoPlugin.portalName,
+					buildXParam()
+				);
+		eXp.sendRequest(connector, param, "GET", treeGen);
 		curNode = document.getElementById(sCurrentFolder);
 	}
 	
@@ -507,7 +519,12 @@
 		
 	function doAddForm(sCurrentFolder, sFolderName) {
 		var connector = eXoPlugin.hostName + eXp.connector + 'createFolder';
-		var param = eXp.buildParam("Type=" + eXp.resourceType , "CurrentFolder=" + sCurrentFolder, "NewFolderName=" + sFolderName, "CurrentPortal=" + eXoPlugin.portalName);
+		var param = eXp.buildParam(
+					"type=" + eXp.resourceType,
+					"currentFolder=" + sCurrentFolder,
+					"newFolderName=" + sFolderName,
+					"currentPortal=" + eXoPlugin.portalName
+				);
 		eXp.sendRequest(
 			connector,
 			param,
@@ -539,7 +556,7 @@
 		var popupContainer = K("PopupContainer");
 		var formUpload = K.select({from: popupContainer, where: "nodeName == 'FORM'"})[0];
 		if (formUpload) {
-			formUpload.action = "portal/rest/fckconnector/jcr/upload?action=upload&uploadId=" + K.get.generalId();
+			formUpload.action = "portal/rest/fckconnector/jcr/uploadFile/upload?action=upload&uploadId=" + K.get.generalId();
 			formUpload.submit();
 		}
 	}
