@@ -149,7 +149,7 @@
 				</div>
 
 				<div id="UploadContainer" style="display: none;">
-					<form name="UploadForm" class="UploadForm" target="iFrameUpload" enctype="multipart/form-data" method="post">
+					<form class="UploadForm" target="iFrameUpload" enctype="multipart/form-data" method="post">
 						<table>
 							<tr>
 								${idShort}
@@ -157,7 +157,7 @@
 							<tr>
 								<td>
 									<input type="file">
-									<input id="UploadId" type="hidden" value="${UploadId}"/>
+									<input name="uploadId" type="hidden"/>
 								</td>
 								<td align="center">
 									<a href="javascript: void(0);">
@@ -557,8 +557,9 @@
 	function uploadFile() {
 		var popupContainer = K("PopupContainer");
 		var formUpload = K.select({from: popupContainer, where: "nodeName == 'FORM'"})[0];
+		formUpload["uploadId"].value = K.get.generalId();
 		if (formUpload) {
-			formUpload.action = "portal/rest/fckconnector/jcr/uploadFile/upload?action=upload&uploadId=" + K.get.generalId();
+			formUpload.action = "portal/rest/fckconnector/jcr/uploadFile/upload";
 			formUpload.submit();
 		}
 	}
