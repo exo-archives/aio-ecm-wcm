@@ -13,11 +13,6 @@
     This application is a portlet. It can not be used outside a portal.
     This web.xml file is mandatory in each .par archive file.
   </description>	
-	
-  <filter>
-    <filter-name>JcrFilter</filter-name>
-    <filter-class>org.exoplatform.frameworks.jcr.web.SimpleSessionFactoryInitializedFilter</filter-class>
-  </filter>  
   
   <filter>
     <filter-name>ResourceRequestFilter</filter-name>
@@ -26,13 +21,14 @@
   
   <filter-mapping>
     <filter-name>ResourceRequestFilter</filter-name>
-    <url-pattern>/*</url-pattern>
-  </filter-mapping>  
+    <url-pattern>/javascript/*</url-pattern>
+  </filter-mapping>
+
 
   <filter-mapping>
-    <filter-name>JcrFilter</filter-name>
-    <url-pattern>/repository/*</url-pattern>
-  </filter-mapping>
+    <filter-name>ResourceRequestFilter</filter-name>
+    <url-pattern>/css/*</url-pattern>
+  </filter-mapping>    
 	
   <listener>
     <listener-class>org.exoplatform.services.portletcontainer.impl.servlet.PortletApplicationListener</listener-class>
@@ -42,16 +38,7 @@
     <servlet-name>PortletWrapper</servlet-name>
     <servlet-class>org.exoplatform.services.portletcontainer.impl.servlet.ServletWrapper</servlet-class>
   </servlet>
-  <servlet>
-    <servlet-name>rssservlet</servlet-name>
-    <servlet-class>org.exoplatform.ecm.jcr.RssServlet</servlet-class>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
   
-  <servlet-mapping>
-    <servlet-name>rssservlet</servlet-name>
-    <url-pattern>/rss/*</url-pattern>
-  </servlet-mapping>  
   <servlet-mapping>
     <servlet-name>PortletWrapper</servlet-name>
     <url-pattern>/PortletWrapper</url-pattern>
