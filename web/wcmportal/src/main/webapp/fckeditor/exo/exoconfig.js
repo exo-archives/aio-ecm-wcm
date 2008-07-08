@@ -32,7 +32,7 @@ window.eXoPlugin = {
 		this.ExoFileBrowserURL = FCKConfig.eXoPath + 'filemanager/browser/default/browser.html?Type=File&Connector=/portal/rest/fckconnector/jcr/getFiles' ;
 		this.ExoPortalLinkBrowserURL = FCKConfig.eXoPath + 'filemanager/portal/default/browser.html?Type=PortalLink&Connector=/portal/rest/fckconnectorext/pageURI' ;
 		//detect user language
-		this.userLanguage = FCK.Language.GetActiveLanguage();
+		this.userLanguage = FCK.Language.GetActiveLanguage() || "en";
 	},
 	switchToolBar: function(r) {
 		var Setting = {

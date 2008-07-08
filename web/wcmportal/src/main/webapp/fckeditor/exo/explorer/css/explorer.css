@@ -1,7 +1,7 @@
 /* ################# Common Tag ###################*/
 html, body {
-	margin: 0px;
-	padding: 0px;
+	margin: 0;
+	padding: 0;
 	width: 100%;
 	height: 100%;
 	overflow: hidden;
@@ -44,7 +44,7 @@ a {
 	font-weight: bold;
 	border-bottom: 1px solid #B7B7B7;
 	color: #424242;
-	height: 22px;	
+	height:22px;	
 }
 
 .FolderNavigation .TitleText {
@@ -52,7 +52,7 @@ a {
 }
 
 .FolderNavigation .Tree {
-	padding: 0px 10px 0px 10px;
+	padding: 0 10px 0 10px;
 	font-weight: bold;
 	overflow: auto;
 	height: 100%;
@@ -81,14 +81,14 @@ a {
 
 .Tree .IconExpand {
 	background: url('../images/TreePlus18x16.gif') no-repeat 5px top;
-	height: auto;
-	padding-left: 18px;
+	height:auto;
+	padding-left:18px;
 }
 
 .Tree .IconCollapse {
 	background: url('../images/TreeMinus18x16.gif') no-repeat 5px top;
-	height: auto;
-	padding-left: 18px;
+	height:auto;
+	padding-left:18px;
 }
 
 .Tree .IconClose {
@@ -140,7 +140,7 @@ a {
 .ButtonMiddle {
 	background: url('../images/ButtonBackground6x44.gif') repeat-x bottom center;
 	line-height: 22px;
-	padding: 0px 12px;
+	padding: 0 12px;
 }
 
 .ButtonLeft {
@@ -201,7 +201,7 @@ a {
 
 /* ################# List Item ###################*/
 .DisplayArea {
-	padding: 10px 0px 0px 10px;
+	padding: 10px 0 0 10px;
 	overflow: auto;
 }
 
@@ -230,24 +230,24 @@ a {
 
 /* ################# Context Menu ###################*/
 .ContextMenu {
-	background: #C4C4C4 none repeat scroll 0%;
-	border: 1px solid #7E7E7F;
-	background: #F6F6F6 none repeat 0%;
-	margin: 1px;
-	padding: 5px 0px;
+	background:#C4C4C4 none repeat scroll 0%;
+	border:1px solid #7E7E7F;
+	background:#F6F6F6 none repeat 0%;
+	margin:1px;
+	padding:5px 0px;
 	position: absolute;
 }
 
 .ContextMenu .MenuItem {
-	cursor: pointer;
-	line-height: 16px;
-	white-space: nowrap;
+	cursor:pointer;
+	line-height:16px;
+	white-space:nowrap;
 }
 
 .ContextMenu .IconItem {
-	line-height: 16px;
-	margin: 0px 7px;
-	padding: 5px 0px 5px 26px;
+	line-height:16px;
+	margin:0px 7px;
+	padding:5px 0px 5px 26px;
 }
 
 .AddNewDocument {
@@ -259,7 +259,7 @@ a {
 
 .AddNewDocument .IconAdd {
 	background: url('../images/IconNewDocument16x14.gif') no-repeat left center;
-	width: auto;
+	width:auto;
 }
 
 .ListItemOption {
@@ -282,11 +282,22 @@ a {
 .StatusBar {
 	width: 100%; 
 	height: 20px; 
+	padding: 2px;
 	line-height: 20px; 
 	background: #E3E1CD;
 }
 
 .AddForm {
+	left: 250px; 
+	top: 200px; 
+	position: absolute;
+	border: 1px #000000 solid;
+	padding: 10px;
+	z-index: 1;
+	background: #ffffff;
+}
+
+.IFrameFormContainer {
 	left: 250px; 
 	top: 200px; 
 	position: absolute;

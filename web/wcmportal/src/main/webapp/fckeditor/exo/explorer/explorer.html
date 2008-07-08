@@ -11,127 +11,118 @@
 		<script type="text/javascript" src="js/explorer.js"></script>
 		<script type="text/javascript" src="js/kombai.js"></script>
 		<script type="text/javascript">
+			var FCKConfig = window.opener.FCKConfig;
 			var eXoPlugin = window.opener.eXoPlugin;
-			eXoPlugin.userLanguage = "vi";
 			eXoPlugin.loadScript(window, "lang/" + eXoPlugin.userLanguage + ".js");
 		</script>
 	</head>
 	<body onclick="hideContextMenu();" oncontextmenu="javascript: return false;" scroll="no">
 		<div id="root" class="Root" style="position: relative; width: 100%; height: 100%; overflow: hidden;">
-		<div id="Explorer" class="Explorer">
-			<div class="FolderNavigation">
-				<div class="TitleBar">
-					<div class="TitleText" userLanguage="KLang.TreeTitle">
+			<div id="Explorer" class="Explorer">
+				<div class="FolderNavigation">
+					<div class="MenuBar" userLanguage="KLang.TreeTitle">
 						Folders
 					</div>
+					<div class="Tree"></div>
 				</div>
-				<div class="Tree"></div> 
-			</div>
-			
-			<div class="FolderSeparator"><span></span></div>
-			
-			<div class="FolderExplorer">
-				<div class="MenuBar">
-					<a href="javascript: void(0)">
-						<div class="Item IconRefresh" style="display: none" userLanguage="KLang.BtnRefresh">Refresh</div>
-					</a>
-					<a href="javascript: void(0)" onclick="showUploadForm(true)">
-						<div class="Item IconUpload" userLanguage="KLang.BtnUpload">Upload File</div>
-					</a>
-					<img src="images/IconSeparator2x26.gif" class="IconSeparator" style="display: none">
-					<a href="javascript: void(0)" onclick="showSetting('Setting')">
-						<div class="Item IconSetting" userLanguage="KLang.BtnSetting">Setting</div>
-					</a>
-					<a href="javascript: void(0)">
-						<div class="Item IconHelp" style="display: none" userLanguage="KLang.BtnHelp">Help</div>
-					</a>
-					<div style="clear: left;"><span></span></div>
-				</div>
-				<div class="Setting" style="display: none;">
-					<div class="TitleBar" userLanguage="KLang.SettingTitle">Settings</div>
-					<div class="SettingDiv">
-						<table class="SettingTable" align="center" cellpadding="0" cellspacing="0">
-							<tr>
-								<td userLanguage="KLang.SetView">View: </td>
-								<td userLanguage="KLang.SetSort">Sorting: </td>
-							</tr>
-							<tr>
-							    <td><input type="radio" name="View"><span userLanguage="KLang.ViewThumbnail">Thumbnails</span></td>
-								<td><input type="radio" onclick="sort('name')" name="Sort"><span userLanguage="KLang.SortName">By File Name</span></td>
-		                    </tr>
-							<tr>
-							    <td><input type="radio" name="View"><span userLanguage="KLang.ViewList">List</span></td>
-								<td><input type="radio" onclick="sort('date')" name="Sort"><span userLanguage="KLang.SortDate">By Date</span></td>
-		                    </tr>
-							<tr>
-							    <td/>
-								<td><input type="radio" onclick="sort('size')" name="Sort"><span userLanguage="KLang.Sort_Size">By Size</span></td>
-		                    </tr>
-						</table>
-						<table align="center">
-							<tr>
-								<td align="center">
-									<a href="javascript: void(0)" onclick="showSetting('Setting')">
-										<div class="ButtonLeft">
-											<div class="ButtonRight">
-												<div class="ButtonMiddle" userLanguage="KLang.BtnClose">
-													Close
+				
+				<div class="FolderSeparator"><span></span></div>
+				
+				<div class="FolderExplorer">
+					<div class="MenuBar">
+						<a href="javascript: void(0);" onclick="showUploadForm(true)">
+							<div class="Item IconUpload" userLanguage="KLang.BtnUpload">Upload File</div>
+						</a>
+						<img src="images/IconSeparator2x26.gif" class="IconSeparator" style="display: none;">
+						<a href="javascript: void(0);" onclick="showSetting('Setting')">
+							<div class="Item IconSetting" userLanguage="KLang.BtnSetting">Setting</div>
+						</a>
+						<div style="clear: left;"><span style="display: none;"></span></div>
+					</div>
+					<div class="Setting" style="display: none;">
+						<div class="TitleBar" userLanguage="KLang.SettingTitle">Settings</div>
+						<div class="SettingDiv">
+							<table class="SettingTable" align="center" cellpadding="0" cellspacing="0">
+								<tr>
+									<td userLanguage="KLang.SetView">View: </td>
+									<td userLanguage="KLang.SetSort">Sorting: </td>
+								</tr>
+								<tr>
+								    <td><input type="radio" name="View"><span userLanguage="KLang.ViewThumbnail">Thumbnails</span></td>
+									<td><input type="radio" onclick="sort('name')" name="Sort"><span userLanguage="KLang.SortName">By File Name</span></td>
+			                    </tr>
+								<tr>
+								    <td><input type="radio" name="View"><span userLanguage="KLang.ViewList">List</span></td>
+									<td><input type="radio" onclick="sort('date')" name="Sort"><span userLanguage="KLang.SortDate">By Date</span></td>
+			                    </tr>
+								<tr>
+								    <td/>
+									<td><input type="radio" onclick="sort('size')" name="Sort"><span userLanguage="KLang.Sort_Size">By Size</span></td>
+			                    </tr>
+							</table>
+							<table align="center">
+								<tr>
+									<td align="center">
+										<a href="javascript: void(0);" onclick="showSetting('Setting')">
+											<div class="ButtonLeft">
+												<div class="ButtonRight">
+													<div class="ButtonMiddle" userLanguage="KLang.BtnClose">
+														Close
+													</div>
 												</div>
 											</div>
-										</div>
-									</a>
-								</td>
-							</tr>
-						</table>
+										</a>
+									</td>
+								</tr>
+							</table>
+						</div>
 					</div>
+					<div class="DisplayArea"><span></span></div>	
 				</div>
-				<div class="DocumentDiv"><span></span></div>	
 			</div>
-		</div>
+				
+			<div id="StatusBar" class="StatusBar">
+				<span class="Folder"></span>
+				<span class="Item"></span>
+			</div>
 			
-		<div id="StatusBar" class="StatusBar">
-			<span class="Folder"></span>
-			<span class="Item"></span>
-		</div>
-		
-		<div id="HideContainer" class="HideContainer" style="width: 0; height: 0; display: none">
-			<div class="HideTreeRoot">
-				<div id="/" class="HomeNode">
-					<span>&nbsp;</span>
+			<div id="HideContainer" class="HideContainer" style="display: none">
+				<div class="HideTreeRoot">
+					<div id="/" class="HomeNode">
+						<span>&nbsp;</span>
+					</div>
+					<div id="/group/" class="NodeGroup"></div>
 				</div>
-				<div id="/group/" class="NodeGroup"></div>
-			</div>
-			<div class="HideTreeNode">
-				<div class="Node ${sClass}" style="display: block">
-					<div class="IconExpand">
-						<div id="${sCurrentFolder}${sName}" class="${sType} IconNode IconClose default16x16Icon" onclick="getDir('getFoldersAndFiles', '${sCurrentFolder}${sName}'); openTree(this);" oncontextmenu="showContextMenu('AddNewDocument', event, this)">
-							<a href="javascript: void(0)">
-								${sName}
-							</a>
+				<div class="HideTreeNode">
+					<div class="Node ${sClass}" style="display: block">
+						<div class="IconExpand">
+							<div id="${sCurrentFolder}${sName}" class="${sType} IconNode IconClose default16x16Icon" onclick="getDir('${sCurrentFolder}${sName}'); openTree(this);" oncontextmenu="showContextMenu('AddNewDocument', event, this)">
+								<a href="javascript: void(0);">
+									${sShortName}
+								</a>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="HideTreeItem">
-				<table class="DocumentTable" align="center" cellpadding="4">
-					<tr>
-						<td class="ItemName ${sType}">
-							<a id="${sURL}" href="javascript: void(0)" oncontextmenu="showContextMenu('ListItemOption', event, this)">${sName}</a>
-						</td>
-						<td class="ItemDate">${sDateCreated}</td>
-						<td class="ItemSize">${sSize} kB</td>
-					</tr>
-				</table>
-			</div>
-			<div class="HideAddForm">
-				<div class="AddForm">
-					${idShort}
-					<p><input id="${idTxt}" type="text"></p>
-					<p>
+				<div class="HideTreeItem">
+					<table class="DocumentTable" align="center" cellpadding="4">
+						<tr>
+							<td class="ItemName ${sType}">
+								<a id="${sURL}" href="javascript: void(0);" oncontextmenu="showContextMenu('ListItemOption', event, this)">${sName}</a>
+							</td>
+							<td class="ItemDate">${sDateCreated}</td>
+							<td class="ItemSize">${sSize} kB</td>
+						</tr>
+					</table>
+				</div>
+				<div class="HideAddForm">
+					<div class="AddForm">
+						${idShort}
+						<input id="${idTxt}" type="text">
 						<table align="center">
 							<tr>
 								<td align="center">
-									<a href="javascript: void(0)" onclick="doAddForm('${idOrig}',document.getElementById('${idTxt}').value)">
+									<a href="javascript: void(0);" onclick="doAddForm('${idOrig}',document.getElementById('${idTxt}').value)">
 										<div class="ButtonLeft">
 											<div class="ButtonRight">
 												<div class="ButtonMiddle" userLanguage="KLang.BtnCreate">
@@ -142,7 +133,7 @@
 									</a>
 								</td>
 								<td align="center">
-									<a href="javascript: void(0)" onclick="showAddForm('${id}', false)">
+									<a href="javascript: void(0);" onclick="showAddForm('${id}', false)">
 										<div class="ButtonLeft">
 											<div class="ButtonRight">
 												<div class="ButtonMiddle" userLanguage="KLang.BtnCancel">
@@ -154,36 +145,26 @@
 								</td>
 							</tr>
 						</table>
-					</p>
+					</div>
 				</div>
-			</div>
-			<div class="HideMask">
-				<div class="Mask"></div>
-			</div>
-			<div class="HideIFrameForm">
-				<div class="IFrameFormContainer">
-					<iframe class="IFrameForm" id="IFrameForm">
-					</iframe>
-					<p>
-						<table align="center">
+
+				<div id="UploadContainer" style="display: none;">
+					<form name="UploadForm" class="UploadForm" target="iFrameUpload" enctype="multipart/form-data" method="post">
+						<table>
 							<tr>
-								<td align="center">
-									<a href="javascript: void(0)" onclick="saveAction()">
-										<div class="ButtonLeft">
-											<div class="ButtonRight">
-												<div class="ButtonMiddle" userLanguage="KLang.BtnSave">
-													Save
-												</div>
-											</div>
-										</div>
-									</a>
+								${idShort}
+							</tr>
+							<tr>
+								<td>
+									<input type="file">
+									<input id="UploadId" type="hidden" value="${UploadId}"/>
 								</td>
 								<td align="center">
-									<a href="javascript: void(0)" onclick="showUploadForm(false)">
+									<a href="javascript: void(0);">
 										<div class="ButtonLeft">
 											<div class="ButtonRight">
-												<div class="ButtonMiddle" userLanguage="KLang.BtnCancel">
-													Cancel
+												<div class="ButtonMiddle" userLanguage="KLang.BtnUpload" onclick="uploadFile()">
+													Upload
 												</div>
 											</div>
 										</div>
@@ -191,83 +172,34 @@
 								</td>
 							</tr>
 						</table>
-					</p>
-				</div>
-			</div>
-			<div class="HideUploadForm">
-				<div class="UploadForm"> 
-					<form id="UploadForm" enctype="multipart/form-data" action="/portal/rest/fckconnector/jcr/upload?action=upload&uploadId=1" method="post">
-						<input id="UploadId" type="hidden" value=""/>
-						${idShort}
-						<p>
-							<input type="file" id="${id}file/">
-							<div class="ProgressBar" id="ProgressBar">
-								<div class="ProgressBarLeft">
-									<div class="ProgressBarMiddle">
-										<div class="BlueProgressBar" style="width: 0%;">
-											<div class="ProgressBarLabel">0%</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</p>
-						<p>
-							<table align="center" id="UploadButton">
-								<tr>
-									<td align="center">
-										<a href="javascript: void(0)" onclick="uploadAction()">
-											<div class="ButtonLeft">
-												<div class="ButtonRight">
-													<div class="ButtonMiddle" userLanguage="KLang.BtnUpload">
-														Upload
-													</div>
-												</div>
-											</div>
-										</a>
-									</td>
-								</tr>
-							</table>
-							<table align="center" id="CancelButton" style="display: none">
-								<tr>
-									<td align="center">
-										<a href="javascript: void(0)" onclick="cancelAction(false)">
-											<div class="ButtonLeft">
-												<div class="ButtonRight">
-													<div class="ButtonMiddle" userLanguage="KLang.BtnCancel">
-														Cancel
-													</div>
-												</div>
-											</div>
-										</a>
-									</td>
-								</tr>
-							</table>
-						</p>
+						<iframe name="iFrameUpload" id="iFrameUpload" frameborder="0px" border="0px"></iframe>
 					<form>
 				</div>
 			</div>
 		</div>
-		</div>
 		<div id="Context" style="border: 1px solid red; position: absolute; top: 0px; left: 0px; width: 0px; height: 0px;">	
 			<div class="ContextMenu AddNewDocument">
-				<a href="javascript: void(0)" class="MenuItem"> 	
+				<a href="javascript: void(0);" class="MenuItem"> 	
 					<div class="IconItem IconAdd" onclick="showAddForm(this.id, true)" userLanguage="KLang.CtxNewDoc">
 						Add New
 					</div>
 				</a>
 			</div>
 			<div class="ContextMenu ListItemOption">
-				<a href="javascript: void(0)" class="MenuItem"> 	
+				<a href="javascript: void(0);" class="MenuItem"> 	
 					<div class="IconItem IconView" onclick="window.open(this.id.replace('/view/',''),'','width=350,height=250')" userLanguage="KLang.CtxViewItem">
 						View
 					</div>
 				</a>
-				<a href="javascript: void(0)" class="MenuItem"> 	
+				<a href="javascript: void(0);" class="MenuItem"> 	
 					<div class="IconItem IconSelect" onclick="alert(this.id.replace('/select/',''))" userLanguage="KLang.CtxSelectItem">
 						Select
 					</div>
 				</a>
 			</div>
+		</div>
+		<div class="Mask" id="Mask"></div>
+		<div class="PopupContainer"  id="PopupContainer">
 		</div>
 	</body>
 
@@ -278,7 +210,8 @@
 		resourceType: eXoPlugin.eXoFileManager.ResourceType,
 		command: {
 			init: "getFoldersAndFiles",
-			uploadFile: "uploadFile",
+			uploadFile: "uploadFile/upload",
+			controlUpload: "uploadFile/control",
 			createFolder: "createFolder"
 		},
 		buildParam: function() {
@@ -287,6 +220,7 @@
 			for (var i = 0; i < arguments.length; ++i) {
 				arr.push(arguments[i]);
 			}
+			arr.push("language=" + eXoPlugin.userLanguage);
 			return arr.join("&");
 		},
 		getNodes: function(DomX, nodeName) {
@@ -303,16 +237,15 @@
 		getNodeValue: function(node, name) {
 			return node.attributes.getNamedItem(name).value;
 		},
-		sendRequest: function(connector, param, callback)  {
+		sendRequest: function(connector, param, method, callback)  {
 			K.request({
 				address: connector,
 				data: param,
-				method: "GET",
+				method: method || "GET",
 				onSuccess: function() {
 				if (callback && callback instanceof Function) {
 						if (this.responseXML) {
 							var response = this.responseXML;
-							
 							callback(response);
 						}
 						else {
@@ -329,16 +262,25 @@
 	
 	var curNode = '';
 	var curLength = 0;
-
+	var curUploadId = 0;
+	
+	var repositoryName = FCKConfig.repositoryName;
+	var workspaceName = FCKConfig.workspaceName;
+	var jcrPath = FCKConfig.workspaceName;
+	var xParam = '';
+	if (repositoryName !== undefined) xParam += 'repositoryName=' + repositoryName + '&';
+	if (workspaceName !== undefined) xParam += 'workspaceName=' + workspaceName + '&';
+	if (jcrPath !== undefined) xParam += 'jcrPath=' + jcrPath + '&';
+	xParam = xParam.substring(0, xParam.length - 1);
+	
 	function requestInit() {
 		var connector = eXoPlugin.hostName + eXp.connector + eXp.command.init;
-		var param = eXp.buildParam("Type=" + eXp.resourceType , "CurrentFolder=/", "CurrentPortal=" + eXoPlugin.portalName);
-		eXp.sendRequest(connector, param, treeInit);
+		var param = eXp.buildParam(	"Type=" + eXp.resourceType , "CurrentFolder=/", "CurrentPortal=" + eXoPlugin.portalName, xParam);
+		eXp.sendRequest(connector, param, "GET", treeInit);
 		curNode = document.getElementById('/');
 	}
 
 	function languageInit() {
-		//change language
 		if (KLang) {
 			var aElements = document.getElementsByTagName("*");
 			for (var i = 0 ; i < aElements.length; ++i) {
@@ -353,34 +295,32 @@
 	};
 	
 	var oExplorer = document.getElementById('Explorer');
-	var oDocument = getElementsByClassPath(oExplorer, 'FolderExplorer/DocumentDiv')[0];
+	var oDocument = getElementsByClassPath(oExplorer, 'FolderExplorer/DisplayArea')[0];
 	
 	var oStatus = document.getElementById('StatusBar');
 	var oStatusFolder = getElementsByClassPath(oStatus, 'Folder')[0];
 	var oStatusFile = getElementsByClassPath(oStatus, 'Item')[0];
 	
 	var oHide = document.getElementById('HideContainer');
-	var oHideMask = getElementsByClassPath(oHide, 'HideMask')[0];
 	
 	var DB = {};
 	
 	function elementResize() {
-		// Height of 'FolderNavigationTitleBar': 22px;
-		// Border of 'FolderNavigationTitleBar': 1px;
-		// Height of 'FolderExplorerStatusBar': 20px;
-		// Total: 53px;
+		var oExplorer = K("Explorer");
+		var oDocument = getElementsByClassPath(oExplorer, 'FolderExplorer/DisplayArea')[0];
+		oExplorer.style.height = K.get.windowHeight() - oStatus.offsetHeight + 'px';
+
+		var oTreeTitle = getElementsByClassPath(oExplorer, 'FolderNavigation/MenuBar')[0];
 		var oTree = getElementsByClassPath(oExplorer, 'FolderNavigation/Tree')[0];
+		oTree.style.height = K.get.windowHeight() - (oStatus.offsetHeight + oTreeTitle.offsetHeight) + 'px';
 		
-		oExplorer.style.height = document.documentElement.clientHeight - 20 + 'px';
-		oTree.style.height = document.documentElement.clientHeight - 53 + 'px';
-		
+		var oSettingTitle = getElementsByClassPath(oExplorer, 'FolderExplorer/Setting/TitleBar')[0];
 		var oSetting = getElementsByClassPath(oExplorer, 'FolderExplorer/Setting')[0];
 		if (oSetting.style.display == 'none') {
-			oDocument.style.height = document.documentElement.clientHeight - 59 + 'px';
+			oDocument.style.height = K.get.windowHeight() - 59 + 'px';
 		}
 		else {
-			oDocument.style.height = document.documentElement.clientHeight - 225 + 'px';
-			alert(oSetting.offsetHeight)
+			oDocument.style.height = K.get.windowHeight() - (oSettingTitle.offsetHeight + oSetting.offsetHeight + oStatus.offsetHeight + 15) + 'px';
 		}
 	}
 	
@@ -389,13 +329,12 @@
 	K.addEventOnLoad(elementResize);
 	K.addEventOnResize(elementResize);
 	
-	function getDir(action, name) {
-		//alert('curLength=' + curLength);
-		var connector = eXoPlugin.hostName + eXp.connector + action;
-		var param = eXp.buildParam("Type=" + eXp.resourceType , "CurrentFolder=" + name, "CurrentPortal=" + eXoPlugin.portalName);
-		eXp.sendRequest(connector, param, treeGen);
-		curNode = document.getElementById(name);
-}
+	function getDir(sCurrentFolder) {
+		var connector = eXoPlugin.hostName + eXp.connector + 'getFoldersAndFiles';
+		var param = eXp.buildParam("Type=" + eXp.resourceType , "CurrentFolder=" + sCurrentFolder, "CurrentPortal=" + eXoPlugin.portalName, xParam);
+		eXp.sendRequest(connector, param, "GET",treeGen);
+		curNode = document.getElementById(sCurrentFolder);
+	}
 	
 	function treeInit(sXML) {
 		var oTree = getElementsByClassPath(oExplorer, 'FolderNavigation/Tree')[0];
@@ -409,11 +348,13 @@
 		if (oFolders != null) {
 			var iLength = oFolders.length;
 			for (var i = 0 ; i < iLength; i++) {
-				var sName = eXp.getNodeValue(oFolders[i], "name") + '/';
+				var sShortName = eXp.getNodeValue(oFolders[i], "name");
+				var sName = sShortName + '/';
 				var sType = eXp.getNodeValue(oFolders[i], "folderType").replace(':','_') + '16x16Icon';
 				var sHideTreeNode = getElementsByClassPath(oHide, 'HideTreeNode')[0].innerHTML;
 				if (i == iLength - 1) sHideTreeNode = sHideTreeNode.replace(/\${sClass}/g, 'LastNode');
 				else sHideTreeNode = sHideTreeNode.replace(/\${sClass}/g, '');
+				sHideTreeNode = sHideTreeNode.replace(/\${sShortName}/g, sShortName);
 				sHideTreeNode = sHideTreeNode.replace(/\${sName}/g, sName);
 				sHideTreeNode = sHideTreeNode.replace(/\${sType}/g, sType);
 				sHideTreeNode = sHideTreeNode.replace(/\${sCurrentFolder}/g, '/');
@@ -430,10 +371,7 @@
 	function treeGen(sXML) {
 		
 		var sHTML = '';
-		
 		var sCurrentFolder = curNode.id;
-
-		// Folder generator
 		var oFolders = eXp.getNodes(sXML, "Folder");
 		if (oFolders != null) {
 			var iLength = oFolders.length;
@@ -443,11 +381,13 @@
 			if (oNodeGroup == null) {
 				sHTML += '<div id="' + sCurrentFolder + 'group/" class="NodeGroup">';
 				for (var i = 0 ; i < iLength; ++i) {
-					var sName = eXp.getNodeValue(oFolders[i], "name") + '/';
+					var sShortName = eXp.getNodeValue(oFolders[i], "name");
+					var sName = sShortName + '/';
 					var sType = eXp.getNodeValue(oFolders[i], "folderType").replace(':', '_') + '16x16Icon';
 					var sHideTreeNode = getElementsByClassPath(oHide, 'HideTreeNode')[0].innerHTML;
 					if (i == iLength - 1) sHideTreeNode = sHideTreeNode.replace(/\${sClass}/g, 'LastNode');
 					else sHideTreeNode = sHideTreeNode.replace(/\${sClass}/g, '');
+					sHideTreeNode = sHideTreeNode.replace(/\${sShortName}/g, sShortName);
 					sHideTreeNode = sHideTreeNode.replace(/\${sName}/g, sName);
 					sHideTreeNode = sHideTreeNode.replace(/\${sType}/g, sType);
 					sHideTreeNode = sHideTreeNode.replace(/\${sCurrentFolder}/g, sCurrentFolder);
@@ -459,11 +399,13 @@
 					oParent.removeChild(document.getElementById(sCurrentFolder + 'group/'));
 					sHTML += '<div id="' + sCurrentFolder + 'group/" class="NodeGroup">';
 					for (var i = 0 ; i < iLength; ++i) {
-						var sName = eXp.getNodeValue(oFolders[i], "name") + '/';
+						var sShortName = eXp.getNodeValue(oFolders[i], "name");
+						var sName = sShortName + '/';
 						var sType = eXp.getNodeValue(oFolders[i], "folderType").replace(':', '_') + '16x16Icon';
 						var sHideTreeNode = getElementsByClassPath(oHide, 'HideTreeNode')[0].innerHTML;
 						if (i == iLength - 1) sHideTreeNode = sHideTreeNode.replace(/\${sClass}/g, 'LastNode');
 						else sHideTreeNode = sHideTreeNode.replace(/\${sClass}/g, '');
+						sHideTreeNode = sHideTreeNode.replace(/\${sShortName}/g, sShortName);
 						sHideTreeNode = sHideTreeNode.replace(/\${sName}/g, sName);
 						sHideTreeNode = sHideTreeNode.replace(/\${sType}/g, sType);
 						sHideTreeNode = sHideTreeNode.replace(/\${sCurrentFolder}/g, sCurrentFolder);
@@ -479,9 +421,7 @@
 			oStatusFolder.innerHTML = '0 folder(s)';
 		}
 		
-		// Item generator
 		sHTML = '';
-		
 		var oFiles = eXp.getNodes(sXML, "File");
 		DB = K.create.database({fieldName: ["name", "date", "size", "type", "url"]});
 		if (oFiles != null) {
@@ -495,7 +435,6 @@
 					var sURL = eXoPlugin.hostName + '/' + eXp.getNodeValue(oFiles[i], "url");
 					var sSize = eXp.getNodeValue(oFiles[i], "size");
 					if (sSize == '') sSize = '-';
-					//var oHideTreeTable = getElementsByClassPath(oHide, 'HideTreeItem/DocumentTable')[0].innerHTML;
 					var sHideTreeItem = getElementsByClassPath(oHide, 'HideTreeItem')[0].innerHTML;
 					sHideTreeItem = sHideTreeItem.replace(/\${sName}/g, sName);
 					sHideTreeItem = sHideTreeItem.replace(/\${sType}/g, sType);
@@ -539,7 +478,7 @@
 			HideTreeItem = HideTreeItem.replace(/\${sDateCreated}/g, aResult[i].date.getDate() + '/' + aResult[i].date.getMonth() + '/' + aResult[i].date.getFullYear() + ' ' + aResult[i].date.getHours() + ':' + aResult[i].date.getMinutes());
 			HideTreeItem = HideTreeItem.replace(/\${sURL}/g, aResult[i].url);
 			HideTreeItem = HideTreeItem.replace(/\${sSize}/g,  aResult[i].size);
-			sHTML += '<input type="hidden" id="checkgen">'
+			sHTML += '<input type="hidden" id="checkgen">';
 			sHTML += HideTreeItem;
 		}
 		oDocument.innerHTML += sHTML;
@@ -560,8 +499,7 @@
 		if (show) {
 			oExplorer.innerHTML += sHideAddForm;
 			oExplorer.innerHTML += oHideMask.innerHTML;
-		}
-		else {
+		} else {
 			oExplorer.innerHTML = oExplorer.innerHTML.replace(sHideAddForm, '');
 			oExplorer.innerHTML = oExplorer.innerHTML.replace(oHideMask.innerHTML, '', 'g');
 		}
@@ -570,67 +508,40 @@
 	function doAddForm(sCurrentFolder, sFolderName) {
 		var connector = eXoPlugin.hostName + eXp.connector + 'createFolder';
 		var param = eXp.buildParam("Type=" + eXp.resourceType , "CurrentFolder=" + sCurrentFolder, "NewFolderName=" + sFolderName, "CurrentPortal=" + eXoPlugin.portalName);
-		eXp.sendRequest(connector, param, function(sXML) {
-											var oNodes = eXp.getNodes(sXML, "Error")[0];
-											var sErrorNumber = eXp.getNodeValue(oNodes, "number");
-											var sErrorText = eXp.getNodeValue(oNodes, "text");
-											if (sErrorNumber != '0') {
-												alert(sErrorText);
-											} else {
-												showAddForm(sCurrentFolder + 'add/', false);
-												// problem when create 2 folder in same parent and same time
-												getDir('getFoldersAndFiles', sCurrentFolder);
-												//alert('addFolder '+sCurrentFolder)
-												//openTree(document.getElementById(sCurrentFolder));
-												
-												//alert(document.getElementById(sCurrentFolder + 'group/').style.display)
-												//document.getElementById(sCurrentFolder + 'group/').style.display = 'block';
-											}
-										});
+		eXp.sendRequest(
+			connector,
+			param,
+			"POST",
+			function(sXML) {
+				var oNodes = eXp.getNodes(sXML, "Error")[0];
+				var sErrorNumber = eXp.getNodeValue(oNodes, "number");
+				var sErrorText = eXp.getNodeValue(oNodes, "text");
+				if (sErrorNumber != '0') {
+					alert(sErrorText);
+				} else {
+					showAddForm(sCurrentFolder + 'add/', false);
+					getDir(sCurrentFolder);
+				}
+			}
+		);
 	}
 	
 	function showUploadForm(show) {
-		var oHideIFrame = getElementsByClassPath(oHide, 'HideIFrameForm')[0];
-		var oHideUploadForm = getElementsByClassPath(oHide, 'HideUploadForm')[0];
-		
-		var sMaxLength = 23;
-		var id = curNode.id;
-		var idShort = (id == '/' ? '/' : (id.length > sMaxLength ? ('...' + id.substring(id.length - sMaxLength)) : id))
-		
-		if (show) {
-			
-			oHideUploadForm.innerHTML = oHideUploadForm.innerHTML.replace(/\${id}/g, id);
-			oHideUploadForm.innerHTML = oHideUploadForm.innerHTML.replace(/\${idShort}/g, idShort);
-			//oHideUploadForm.innerHTML = oHideUploadForm.innerHTML.replace(/\${uploadId}/g, K.)
-		
-			oExplorer.innerHTML += oHideMask.innerHTML;
-			oExplorer.innerHTML += oHideIFrame.innerHTML;
-			
-			var new_ohif = getElementsByClassPath(oExplorer, 'IFrameForm')[0];
-			var oifd = new_ohif.contentWindow.document;
-			
-			var sHideUploadForm = getElementsByClassPath(oHide, 'UploadForm')[0].innerHTML;
-			
-			oifd.open();
-			oifd.write('<html>');
-			oifd.write('<head>');
-			oifd.write('<link type="text/css" rel="stylesheet" href="css/explorer.css">');
-			oifd.write('<script type="text/javascript" src="js/explorer.js"><\/script>');
-			oifd.write('</head>');
-			oifd.write('<body>');
-			oifd.write(sHideUploadForm);
-			oifd.write('</body>');
-			oifd.write('</html>');
-			oifd.close();
-
-		} else {
-			oHideUploadForm.innerHTML = oHideUploadForm.innerHTML.replace(id, '${id}');
-			oHideUploadForm.innerHTML = oHideUploadForm.innerHTML.replace(idShort, '${idShort}');
-			
-			oExplorer.innerHTML = oExplorer.innerHTML.replace(oHideIFrame.innerHTML, '');
-			oExplorer.innerHTML = oExplorer.innerHTML.replace(oHideMask.innerHTML, '');
-		}
+		var uploadContainer = K("UploadContainer");
+		var popupContainer = K("PopupContainer");
+		popupContainer.style.display = "block";
+		popupContainer.innerHTML = uploadContainer.innerHTML;
+		var mask = K("Mask");
+		mask.style.display = "block";
 	}
 	
+	function uploadFile() {
+		var popupContainer = K("PopupContainer");
+		var formUpload = K.select({from: popupContainer, where: "nodeName == 'FORM'"})[0];
+		if (formUpload) {
+			formUpload.action = "portal/rest/fckconnector/jcr/upload?action=upload&uploadId=" + K.get.generalId();
+			formUpload.submit();
+		}
+	}
 	</script>
 </html>
