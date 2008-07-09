@@ -16,109 +16,43 @@
  */
 package org.exoplatform.wcm.connector.fckeditor;
 
-import java.io.InputStream;
-
-import javax.jcr.Node;
-
 import org.exoplatform.common.http.HTTPMethods;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.services.rest.CacheControl;
 import org.exoplatform.services.rest.HTTPMethod;
-import org.exoplatform.services.rest.HeaderParam;
-import org.exoplatform.services.rest.InputTransformer;
 import org.exoplatform.services.rest.OutputTransformer;
 import org.exoplatform.services.rest.QueryParam;
 import org.exoplatform.services.rest.Response;
 import org.exoplatform.services.rest.URITemplate;
 import org.exoplatform.services.rest.container.ResourceContainer;
-import org.exoplatform.services.rest.transformer.PassthroughInputTransformer;
 import org.exoplatform.services.rest.transformer.XMLOutputTransformer;
-import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
 import org.w3c.dom.Document;
 
-
 /*
- * Created by The eXo Platform SAS
- * Author : Anh Do Ngoc
- *          anh.do@exoplatform.com
- * Jun 24, 2008  
+ * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
+ * Jun 24, 2008
  */
 
-/**
- * The Class DocumentConnector.
- */
 @URITemplate("/document/")
 public class DocumentConnector extends BaseConnector implements ResourceContainer {
 
-  /**
-   * Instantiates a new document connector.
-   * 
-   * @param container the container
-   */
-  public DocumentConnector(ExoContainer container) { super(container); }
+  public DocumentConnector(ExoContainer container) {
+    super(container);
+  }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.wcm.connector.fckeditor.BaseConnector#getFoldesAndFiles(java.lang.String, java.lang.String, java.lang.String)
-   */  
-  /**
-   * Gets the foldes and files.
-   * 
-   * @param currentPortalName the current portal name
-   * @param currentFolder the current folder
-   * @param type the type
-   * 
-   * @return the foldes and files
-   * 
-   * @throws Exception the exception
-   */
   @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/getFoldersAndFiles/")
   @OutputTransformer(XMLOutputTransformer.class)
-  public Response getFoldesAndFiles(@QueryParam("CurrentPortal") String currentPortalName, @QueryParam("CurrentFolder") String currentFolder, @QueryParam("Type") String type) throws Exception {
-    Document document = buildFoldersAndFilesXMLOutput(currentPortalName, currentFolder);    
+  public Response getFoldersAndFiles(@QueryParam("repositoryName")
+      String repositoryName, @QueryParam("workspaceName")
+      String workspaceName, @QueryParam("currentFolder")
+      String currentFolder, @QueryParam("command")
+      String command, @QueryParam("type")
+      String type) throws Exception {
+    Document document = null;
+    document = buildXMLDocumentOuput(repositoryName, workspaceName, currentFolder, command, type);
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
-    return Response.Builder.ok(document).cacheControl(cacheControl).build();
-  }
-
-  /**
-   * Creates the folder.
-   * 
-   * @param currentPortalName the current portal name
-   * @param currentFolder the current folder
-   * @param type the type
-   * @param newFolderName the new folder name
-   * 
-   * @return the response
-   * 
-   * @throws Exception the exception
-   */
-  @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/createFolder/")
-  @OutputTransformer(XMLOutputTransformer.class)
-  public Response createFolder(@QueryParam("CurrentPortal") String currentPortalName, @QueryParam("CurrentFolder") String currentFolder, @QueryParam("Type") String type, @QueryParam("NewFolderName") String newFolderName) throws Exception {    
-    Document document = buildFoldersAndFilesXMLOutput(currentPortalName, currentFolder, newFolderName, NT_FOLDER);    
-    CacheControl cacheControl = new CacheControl();
-    cacheControl.setNoCache(true);
-    return Response.Builder.ok(document).cacheControl(cacheControl).build();    
-  }
-  
-  @HTTPMethod(HTTPMethods.POST)
-  @URITemplate("/upload/") 
-  @InputTransformer(PassthroughInputTransformer.class)
-  @OutputTransformer(XMLOutputTransformer.class)  
-  public void uploadFile( @QueryParam("action") String action) throws Exception {  
-    
-  }
-
-  @Override
-  protected Node getStorage(Node portal) throws Exception {
-    PortalFolderSchemaHandler portalFolderSchemaHandler = webSchemaConfigService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
-    return portalFolderSchemaHandler.getDocumentStorage(portal);
-  }
-
-  @Override
-  public Document buildFoldersAndFilesXMLOutput(String repository, String workspace, String currentFolder) throws Exception {    
-    return null;
+    return Response.Builder.ok(document).mediaType("text/xml").cacheControl(cacheControl).build();
   }
 }

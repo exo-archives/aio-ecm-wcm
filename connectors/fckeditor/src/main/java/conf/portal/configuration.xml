@@ -2,12 +2,6 @@
 
 <configuration>
   <component>    
-    <type>org.exoplatform.connector.fckeditor.RESTResourcesConnector</type>    
-  </component>
-  <component>    
-    <type>org.exoplatform.connector.fckeditor.FCKCoreConnector</type>    
-  </component>      
-    <component>    
     <type>org.exoplatform.wcm.connector.fckeditor.DocumentConnector</type>    
   </component>      
   <component>    
