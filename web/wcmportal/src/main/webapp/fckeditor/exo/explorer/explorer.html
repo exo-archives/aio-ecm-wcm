@@ -556,10 +556,20 @@
 	function uploadFile() {
 		var popupContainer = K("PopupContainer");
 		var formUpload = K.select({from: popupContainer, where: "nodeName == 'FORM'"})[0];
+		formUpload.id =  K.get.generalId();
 		if (formUpload) {
-			formUpload.action = eXp.connector + eXp.command.uploadFile + "uploadId=" + K.get.generalId();
+			formUpload.action = eXp.connector + eXp.command.uploadFile + "?uploadId=" + formUpload.id;
 			formUpload.submit();
 		}
+		eXp.stopUpload = false;
+		K.set.timeout({
+			until: function() {return eXp.stopUpload;},
+			method: function() {
+				var connector = eXp.connector + eXp.command.controlUpload;
+				var param = eXp.buildParam("action=progress");
+				eXp.sendRequest(connector, param, function(iXML) {alert(iXML)});
+			}
+		});
 	}
 	</script>
 </html>
