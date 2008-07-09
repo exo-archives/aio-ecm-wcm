@@ -52,13 +52,13 @@ public class UICSSFileManager extends UIContainer {
   public void initCssPoupup() throws Exception {
     UIContentDialogForm uiContentDialogForm = createUIComponent(UIContentDialogForm.class, null, "CssDialogForm");
     String portalName = Util.getUIPortal().getName();
-    LivePortalManagerService portalManager = uiContentDialogForm.getApplicationComponent(LivePortalManagerService.class);
+    LivePortalManagerService portalManagerService = uiContentDialogForm.getApplicationComponent(LivePortalManagerService.class);
     SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
-    Node portalNode = portalManager.getLivePortal("repository", portalName, sessionProvider);
-    WebSchemaConfigService webConfigService = uiContentDialogForm.getApplicationComponent(WebSchemaConfigService.class);
-    PortalFolderSchemaHandler handler = webConfigService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
-    Node webContentStored = handler.getWebContentStorage(portalNode);
-    NodeLocation storedLocation = NodeLocation.make(webContentStored);
+    Node portalNode = portalManagerService.getLivePortal(portalName, sessionProvider);
+    WebSchemaConfigService configService = uiContentDialogForm.getApplicationComponent(WebSchemaConfigService.class);
+    PortalFolderSchemaHandler handler = configService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
+    Node webContentStorage = handler.getWebContentStorage(portalNode);
+    NodeLocation storedLocation = NodeLocation.make(webContentStorage);
     uiContentDialogForm.setStoredLocation(storedLocation);
     uiContentDialogForm.setContentType("exo:cssFile");
     uiContentDialogForm.addNew(true);

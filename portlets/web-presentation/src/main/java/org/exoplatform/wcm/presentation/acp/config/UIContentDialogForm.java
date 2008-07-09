@@ -29,8 +29,8 @@ import javax.jcr.Session;
 import javax.jcr.version.VersionException;
 
 import org.exoplatform.dms.application.JCRResourceResolver;
-import org.exoplatform.dms.webui.form.UIBaseDialogForm;
-import org.exoplatform.dms.webui.utils.Utils;
+import org.exoplatform.ecm.webui.form.UIBaseDialogForm;
+import org.exoplatform.ecm.webui.utils.DialogFormUtil;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
@@ -75,18 +75,18 @@ public class UIContentDialogForm extends UIBaseDialogForm {
   private NodeIdentifier savedNodeIdentifier;
 
   public UIContentDialogForm() throws Exception {
-    setActions(new String[] {"Save", "Cancel"});
+    setActions(ACTIONS);
   }
 
   public void setStoredLocation(NodeLocation location) {
-    this.storedLocation = location;
+    storedLocation = location;
     setRepositoryName(location.getRepository());
     setWorkspace(location.getWorkspace());
     setStoredPath(location.getPath());
   }
 
   public NodeIdentifier getSavedNodeIdentifier() {
-    return this.savedNodeIdentifier;
+    return savedNodeIdentifier;
   }
 
   public void addNew(boolean addNew) {
@@ -102,7 +102,7 @@ public class UIContentDialogForm extends UIBaseDialogForm {
     String userName = Util.getPortalRequestContext().getRemoteUser();
     try{
       resetScriptInterceptor();
-      return templateService.getTemplatePathByUser(true, contentType, userName, repositoryName_);
+      return templateService.getTemplatePathByUser(true, contentType, userName, this.repositoryName);
     } catch(Exception e) {
       UIApplication uiApp = getAncestorOfType(UIApplication.class);
       Object[] arg = {contentType};
@@ -112,7 +112,7 @@ public class UIContentDialogForm extends UIBaseDialogForm {
   }
 
   public void setContentType(String type){
-    this.contentType = type;
+    contentType = type;
   }
 
   @SuppressWarnings("unused")
@@ -120,9 +120,9 @@ public class UIContentDialogForm extends UIBaseDialogForm {
     try{
       if (resourceResolver == null) {
         RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
-        ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName_);
+        ManageableRepository manageableRepository = repositoryService.getRepository(this.repositoryName);
         String workspace = manageableRepository.getConfiguration().getSystemWorkspaceName();
-        resourceResolver = new JCRResourceResolver(repositoryName_, workspace, "exo:templateFile");
+        resourceResolver = new JCRResourceResolver(this.repositoryName, workspace, "exo:templateFile");
       }
     }catch(Exception e) {}
     return resourceResolver;
@@ -130,59 +130,6 @@ public class UIContentDialogForm extends UIBaseDialogForm {
 
   public void onchange(Event event) throws Exception {
 
-  }
-
-  @Override
-  public Node storeValue(Event event) throws Exception {
-    List inputs = getChildren() ;
-    Map inputProperties = Utils.prepareMap(inputs, getInputProperties());
-    Node newNode = null;
-    String nodeType;
-    Node homeNode;
-    UIApplication uiApplication = getAncestorOfType(UIApplication.class);
-    if (isAddNew()) {
-      homeNode = getParentNode();
-      nodeType = contentType;
-    } else {
-      homeNode = getNode().getParent();
-      nodeType = getNode().getPrimaryNodeType().getName();
-    }
-    try{
-      CmsService cmsService = getApplicationComponent(CmsService.class);
-      String addedPath = cmsService.storeNode(nodeType, homeNode, inputProperties, isAddNew, repositoryName_);
-      try{
-        homeNode.save();
-        newNode = (Node) homeNode.getSession().getItem(addedPath);
-      }catch(Exception e) {return null;} 
-    }catch(AccessControlException ace) {
-      throw new AccessDeniedException(ace.getMessage());
-    }catch(VersionException ve) {
-      uiApplication.addMessage(new ApplicationMessage("UIDocumentForm.msg.in-versioning", null, ApplicationMessage.WARNING));
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
-      return null;
-    }catch(ItemNotFoundException item) {
-      uiApplication.addMessage(new ApplicationMessage("UIDocumentForm.msg.item-not-found", null, ApplicationMessage.WARNING));
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
-      return null;
-    }catch(RepositoryException repo) {
-      repo.printStackTrace();
-      String key = "UIDocumentForm.msg.repository-exception";
-      if (ItemExistsException.class.isInstance(repo)) key = "UIDocumentForm.msg.not-allowed-same-name-sibling";
-      uiApplication.addMessage(new ApplicationMessage(key, null, ApplicationMessage.WARNING));
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
-      return null;
-    }catch(NumberFormatException nfe) {
-      uiApplication.addMessage(new ApplicationMessage("UIDocumentForm.msg.numberformat-exception", null, ApplicationMessage.WARNING));
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
-      return null;
-    }catch(Exception e) {
-      e.printStackTrace() ;
-      uiApplication.addMessage(new ApplicationMessage("UIDocumentForm.msg.cannot-save", null, ApplicationMessage.WARNING));
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
-      return null;
-    }
-    savedNodeIdentifier = NodeIdentifier.make(newNode);
-    return newNode;
   }
 
   private Node getParentNode() throws Exception {
@@ -205,13 +152,56 @@ public class UIContentDialogForm extends UIBaseDialogForm {
     }
   }
 
-  static  public class SaveActionListener extends EventListener<UIBaseDialogForm> {
-    public void execute(Event<UIBaseDialogForm> event) throws Exception {
-      UIBaseDialogForm dialogForm = event.getSource();
-      dialogForm.save(event);
-      UIQuickCreationWizard uiQuickWizard = event.getSource().getParent();
+  static  public class SaveActionListener extends EventListener<UIContentDialogForm> {
+    public void execute(Event<UIContentDialogForm> event) throws Exception {
+      UIContentDialogForm dialogForm = event.getSource();
+      List inputs = dialogForm.getChildren() ;
+      Map inputProperties = DialogFormUtil.prepareMap(inputs, dialogForm.getInputProperties());
+      Node newNode = null;
+      String nodeType;
+      Node homeNode;
+      UIApplication uiApplication = dialogForm.getAncestorOfType(UIApplication.class);
+      if (dialogForm.isAddNew()) {
+        homeNode = dialogForm.getParentNode();
+        nodeType = dialogForm.contentType;
+      } else {
+        homeNode = dialogForm.getNode().getParent();
+        nodeType = dialogForm.getNode().getPrimaryNodeType().getName();
+      }
+      try{
+        CmsService cmsService = dialogForm.getApplicationComponent(CmsService.class);
+        String addedPath = cmsService.storeNode(nodeType, homeNode, inputProperties, dialogForm.isAddNew, dialogForm.repositoryName);
+        try{
+          homeNode.save();
+          newNode = (Node) homeNode.getSession().getItem(addedPath);
+        }catch(Exception e) {} 
+      }catch(AccessControlException ace) {
+        throw new AccessDeniedException(ace.getMessage());
+      }catch(VersionException ve) {
+        uiApplication.addMessage(new ApplicationMessage("UIDocumentForm.msg.in-versioning", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
+      }catch(ItemNotFoundException item) {
+        uiApplication.addMessage(new ApplicationMessage("UIDocumentForm.msg.item-not-found", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
+      }catch(RepositoryException repo) {
+        repo.printStackTrace();
+        String key = "UIDocumentForm.msg.repository-exception";
+        if (ItemExistsException.class.isInstance(repo)) key = "UIDocumentForm.msg.not-allowed-same-name-sibling";
+        uiApplication.addMessage(new ApplicationMessage(key, null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
+      }catch(NumberFormatException nfe) {
+        uiApplication.addMessage(new ApplicationMessage("UIDocumentForm.msg.numberformat-exception", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
+      }catch(Exception e) {
+        e.printStackTrace() ;
+        uiApplication.addMessage(new ApplicationMessage("UIDocumentForm.msg.cannot-save", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
+      }
+      dialogForm.savedNodeIdentifier = NodeIdentifier.make(newNode);
+      UIQuickCreationWizard uiQuickWizard = dialogForm.getAncestorOfType(UIQuickCreationWizard.class);
       uiQuickWizard.viewStep(uiQuickWizard.getCurrentStep()+1);
     }
   }
+
 
 }
