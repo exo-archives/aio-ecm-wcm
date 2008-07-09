@@ -156,8 +156,7 @@
 							</tr>
 							<tr>
 								<td>
-									<input type="file">
-									<input name="uploadId" type="hidden"/>
+									<input type="file" name="file">
 								</td>
 								<td align="center">
 									<a href="javascript: void(0);">
@@ -557,9 +556,8 @@
 	function uploadFile() {
 		var popupContainer = K("PopupContainer");
 		var formUpload = K.select({from: popupContainer, where: "nodeName == 'FORM'"})[0];
-		formUpload["uploadId"].value = K.get.generalId();
 		if (formUpload) {
-			formUpload.action = eXp.connector + eXp.command.uploadFile;
+			formUpload.action = eXp.connector + eXp.command.uploadFile + "uploadId=" + K.get.generalId();
 			formUpload.submit();
 		}
 	}
