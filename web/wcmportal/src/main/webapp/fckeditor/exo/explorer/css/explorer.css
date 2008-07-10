@@ -153,39 +153,39 @@ a {
 	font-weight: bold;
 }
 
-.Workspace .SettingDiv {
+.Workspace .SettingArea {
 	background-color: #F7F7F7;
 	border-top: 1px #B7B7B7 solid;
 	border-bottom: 1px #B7B7B7 solid;
 	padding-bottom: 10px;
 }
 
-.SettingDiv .SettingTable {
+.SettingArea .SettingTable {
 	text-align: center;
 	background-color: #F7F7F7;
 	margin-top: 10px;
 }
 
-.SettingDiv .SettingTable tr {
+.SettingArea .SettingTable tr {
 	text-align: left;
 }
 
-.SettingDiv .SettingTable td {
+.SettingArea .SettingTable td {
 	width: 110px;
 	padding-left: 40px;
 	line-height: 23px;
 }
 
-.SettingDiv .SettingTable input {
+.SettingArea .SettingTable input {
 	margin-right: 10px;
 }
 
-.SettingDiv .SettingTable a {
+.SettingArea .SettingTable a {
 	color: #000000;
 	text-decoration: none;
 }
 
-.SettingDiv .SettingTable a:hover{
+.SettingArea .SettingTable a:hover{
 	color: #058EE6;
 }
 
