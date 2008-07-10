@@ -16,8 +16,11 @@
  */
 package org.exoplatform.wcm.connector.fckeditor;
 
+import javax.jcr.Node;
+
 import org.exoplatform.common.http.HTTPMethods;
 import org.exoplatform.container.ExoContainer;
+import org.exoplatform.ecm.connector.fckeditor.FCKUtils;
 import org.exoplatform.services.rest.CacheControl;
 import org.exoplatform.services.rest.HTTPMethod;
 import org.exoplatform.services.rest.OutputTransformer;
@@ -26,6 +29,7 @@ import org.exoplatform.services.rest.Response;
 import org.exoplatform.services.rest.URITemplate;
 import org.exoplatform.services.rest.container.ResourceContainer;
 import org.exoplatform.services.rest.transformer.XMLOutputTransformer;
+import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
 import org.w3c.dom.Document;
 
 /*
@@ -45,17 +49,28 @@ public class ImageConnector extends BaseConnector implements ResourceContainer {
   @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/getFoldersAndFiles/")
   @OutputTransformer(XMLOutputTransformer.class)
-  public Response getFoldersAndFiles(@QueryParam("repositoryName")
-      String repositoryName, @QueryParam("workspaceName")
-      String workspaceName, @QueryParam("currentFolder")
-      String currentFolder, @QueryParam("command")
-      String command, @QueryParam("type")
-      String type) throws Exception {
+  public Response getFoldersAndFiles(@QueryParam("repositoryName") String repositoryName, 
+      @QueryParam("workspaceName") String workspaceName, 
+      @QueryParam("jcrPath") String jcrPath, 
+      @QueryParam("currentFolder") String currentFolder,
+      @QueryParam("command") String command, 
+      @QueryParam("type") String type) throws Exception {
     Document document = null;
-    document = buildXMLDocumentOuput(repositoryName, workspaceName, currentFolder, command, type);
+    document = buildXMLDocumentOuput(repositoryName, workspaceName, jcrPath, currentFolder, command, type);
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
     return Response.Builder.ok(document).mediaType("text/xml").cacheControl(cacheControl).build();
+  }
+
+  @Override
+  protected Node getStorage(Node node) throws Exception {
+    PortalFolderSchemaHandler folderSchemaHandler = webSchemaConfigService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);    
+    return folderSchemaHandler.getImagesFolder(node);
+  }
+
+  @Override
+  protected String getStorageType() throws Exception {
+    return FCKUtils.IMAGE_TYPE;
   }
   
 }
