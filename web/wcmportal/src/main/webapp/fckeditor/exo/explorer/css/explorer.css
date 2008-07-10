@@ -106,11 +106,11 @@ a {
 }
 
 .Workspace .MenuBar .IconRefresh {
-	background: url('../images/IconRefresh22x23.gif') no-repeat center left;
+	background: url('../images/icons/Refresh22x23.gif') no-repeat center left;
 }
 
 .Workspace .MenuBar .IconUpload {
-	background: url('../images/IconUpload22x23.gif') no-repeat center left;
+	background: url('../images/icons/Upload22x23.gif') no-repeat center left;
 }
 
 .Workspace .MenuBar .IconSeparator {
@@ -119,11 +119,11 @@ a {
 }
 
 .Workspace .MenuBar .IconSetting {
-	background: url('../images/IconSetting22x23.gif') no-repeat center left;
+	background: url('../images/icons/Setting22x23.gif') no-repeat center left;
 }
 
 .Workspace .MenuBar .IconHelp {
-	background: url('../images/IconHelp22x23.gif') no-repeat center left;
+	background: url('../images/icons/Help22x23.gif') no-repeat center left;
 }
 
 /* ################# Action Button ###################*/
@@ -220,7 +220,7 @@ a {
 
 /* ################# Context Menu ###################*/
 .ContextMenu {
-	background:#C4C4C4 none repeat scroll 0%;
+	background: #C4C4C4 none repeat scroll 0%;
 	border: 1px solid #7E7E7F;
 	background: #F6F6F6 none repeat 0%;
 	margin: 1px;
@@ -247,7 +247,7 @@ a {
 }
 
 .AddNewDocument .IconAdd {
-	background: url('../images/IconNewDocument16x14.gif') no-repeat left center;
+	background: url('../images/icons/NewDocument16x14.gif') no-repeat left center;
 	width: auto;
 }
 
@@ -259,12 +259,12 @@ a {
 }
 
 .ListItemOption .IconView {
-	background: url('../images/IconView16x20.gif') no-repeat left center;
+	background: url('../images/icons/View16x20.gif') no-repeat left center;
 	width: auto;
 }
 
 .ListItemOption .IconSelect {
-	background: url('../images/IconSelect16x20.gif') no-repeat left center;
+	background: url('../images/icons/Select16x20.gif') no-repeat left center;
 	width: auto;
 }
 
