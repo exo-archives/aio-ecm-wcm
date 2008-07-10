@@ -15,7 +15,7 @@ FCKConfig.Plugins.Add( 'insertPortalLink', null, FCKConfig.eXoPath + "plugins/")
 window.eXoPlugin = {
 	init: function() {
 		with (window.parent.eXo.env.portal) {
-			this.originPortalName = this.portalName = portalName;
+   this.originPortalName = this.portalName = portalName;
 			this.context = context;
 			this.accessMode = accessMode;
 		}

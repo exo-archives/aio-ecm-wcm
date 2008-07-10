@@ -1,7 +1,7 @@
 /* ################# Common Tag ###################*/
 html, body {
-	margin: 0;
-	padding: 0;
+	margin: 0px;
+	padding: 0px;
 	width: 100%;
 	height: 100%;
 	overflow: hidden;
@@ -23,7 +23,7 @@ a {
 	font-size: 11px;	
 }
 
-.Explorer .FolderSeparator {
+.Explorer .Separator {
 	background: url('../images/FolderSeparator4x1.gif') repeat-y top right;
 	width: 4px;
 	height: 100%;
@@ -31,28 +31,18 @@ a {
 }
 
 /* Folder Navigation */
-.FolderNavigation {
+.Navigation {
 	width: 200px;	
 	float: left;	
 	height: 100%;
 }
 
-.FolderNavigation .TitleBar {
-	width: 200px;
-	background: url('../images/FolderNavigationTitleBar1x22.gif') repeat-x;
-	line-height: 22px;
-	font-weight: bold;
-	border-bottom: 1px solid #B7B7B7;
-	color: #424242;
-	height:22px;	
-}
-
-.FolderNavigation .TitleText {
+.Navigation .TitleText {
 	padding-left: 15px;
 }
 
-.FolderNavigation .Tree {
-	padding: 0 10px 0 10px;
+.Navigation .Tree {
+	padding: 0px 10px 0px 10px;
 	font-weight: bold;
 	overflow: auto;
 	height: 100%;
@@ -81,14 +71,14 @@ a {
 
 .Tree .IconExpand {
 	background: url('../images/TreePlus18x16.gif') no-repeat 5px top;
-	height:auto;
-	padding-left:18px;
+	height: auto;
+	padding-left: 18px;
 }
 
 .Tree .IconCollapse {
 	background: url('../images/TreeMinus18x16.gif') no-repeat 5px top;
-	height:auto;
-	padding-left:18px;
+	height: auto;
+	padding-left: 18px;
 }
 
 .Tree .IconClose {
@@ -97,42 +87,42 @@ a {
 }
 
 /* Folder Explorer */
-.FolderExplorer {
+.Workspace {
 	margin-left: 200px;	
 }
 
 .MenuBar {
-	background: url('../images/FolderExplorerMenuBar1x28.gif') repeat-x;
+	background: url('../images/MenuBar1x28.gif') repeat-x;
 	line-height: 28px;				
 	padding-left: 5px;
 	height: 28px;
 	border-bottom: 1px #B7B7B7 solid;
 }
 
-.FolderExplorer .MenuBar .Item {
+.Workspace .MenuBar .Item {
 	float: left;
 	padding-left: 28px;
 	margin-right: 13px;
 }
 
-.FolderExplorer .MenuBar .IconRefresh {
+.Workspace .MenuBar .IconRefresh {
 	background: url('../images/IconRefresh22x23.gif') no-repeat center left;
 }
 
-.FolderExplorer .MenuBar .IconUpload {
+.Workspace .MenuBar .IconUpload {
 	background: url('../images/IconUpload22x23.gif') no-repeat center left;
 }
 
-.FolderExplorer .MenuBar .IconSeparator {
+.Workspace .MenuBar .IconSeparator {
 	float: left;
 	margin-right: 10px;
 }
 
-.FolderExplorer .MenuBar .IconSetting {
+.Workspace .MenuBar .IconSetting {
 	background: url('../images/IconSetting22x23.gif') no-repeat center left;
 }
 
-.FolderExplorer .MenuBar .IconHelp {
+.Workspace .MenuBar .IconHelp {
 	background: url('../images/IconHelp22x23.gif') no-repeat center left;
 }
 
@@ -140,7 +130,7 @@ a {
 .ButtonMiddle {
 	background: url('../images/ButtonBackground6x44.gif') repeat-x bottom center;
 	line-height: 22px;
-	padding: 0 12px;
+	padding: 0px 12px;
 }
 
 .ButtonLeft {
@@ -156,14 +146,14 @@ a {
 }
 
 /* ################# Menu Setting ###################*/
-.FolderExplorer .TitleBar {
+.Workspace .TitleBar {
 	text-align: center;
-	background: url('../images/FolderExplorerSettingTitleBar1x24.gif') repeat-x;
+	background: url('../images/TitleBar1x24.gif') repeat-x;
 	line-height: 24px;
 	font-weight: bold;
 }
 
-.FolderExplorer .SettingDiv {
+.Workspace .SettingDiv {
 	background-color: #F7F7F7;
 	border-top: 1px #B7B7B7 solid;
 	border-bottom: 1px #B7B7B7 solid;
@@ -201,7 +191,7 @@ a {
 
 /* ################# List Item ###################*/
 .DisplayArea {
-	padding: 10px 0 0 10px;
+	padding: 10px 0px 0px 10px;
 	overflow: auto;
 }
 
@@ -231,35 +221,34 @@ a {
 /* ################# Context Menu ###################*/
 .ContextMenu {
 	background:#C4C4C4 none repeat scroll 0%;
-	border:1px solid #7E7E7F;
-	background:#F6F6F6 none repeat 0%;
-	margin:1px;
-	padding:5px 0px;
+	border: 1px solid #7E7E7F;
+	background: #F6F6F6 none repeat 0%;
+	margin: 1px;
+	padding: 5px 0px;
 	position: absolute;
 }
 
 .ContextMenu .MenuItem {
-	cursor:pointer;
-	line-height:16px;
-	white-space:nowrap;
+	cursor: pointer;
+	line-height: 16px;
+	white-space: nowrap;
 }
 
 .ContextMenu .IconItem {
-	line-height:16px;
-	margin:0px 7px;
-	padding:5px 0px 5px 26px;
+	line-height: 16px;
+	margin: 0px 7px;
+	padding: 5px 0px 5px 26px;
 }
 
 .AddNewDocument {
 	display: none;
-	width: 88px;
 	border: 1px #C7C7C7 solid;
 	position: absolute;
 }
 
 .AddNewDocument .IconAdd {
 	background: url('../images/IconNewDocument16x14.gif') no-repeat left center;
-	width:auto;
+	width: auto;
 }
 
 .ListItemOption {
