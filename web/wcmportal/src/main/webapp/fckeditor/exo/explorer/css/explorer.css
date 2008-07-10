@@ -24,7 +24,7 @@ a {
 }
 
 .Explorer .Separator {
-	background: url('../images/FolderSeparator4x1.gif') repeat-y top right;
+	background: url('../images/Separator4x1.gif') repeat-y top right;
 	width: 4px;
 	height: 100%;
 	float: left;
@@ -128,19 +128,19 @@ a {
 
 /* ################# Action Button ###################*/
 .ButtonMiddle {
-	background: url('../images/ButtonBackground6x44.gif') repeat-x bottom center;
+	background: url('../images/Button6x44.gif') repeat-x bottom center;
 	line-height: 22px;
 	padding: 0px 12px;
 }
 
 .ButtonLeft {
-	background: url('../images/ButtonBackground6x44.gif') no-repeat top left;
+	background: url('../images/Button6x44.gif') no-repeat top left;
 	line-height: 22px;
 	padding-left: 3px;
 }
 
 .ButtonRight {
-	background: url('../images/ButtonBackground6x44.gif') no-repeat top right;
+	background: url('../images/Button6x44.gif') no-repeat top right;
 	line-height: 22px;
 	padding-right: 3px;
 }
