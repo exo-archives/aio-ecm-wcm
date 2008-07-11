@@ -1,6 +1,6 @@
-	var eUranium = new Object() ;
-		eUranium.Name = 'Urani' ;
-		
+(function(){
+		var eUranium = new Object() ;
+		eUranium.Name = "Urani" ;
 		eUranium.Execute = function() {
 			var sumary = FCKeditorAPI.GetInstance("summary");
 			var content = FCKeditorAPI.GetInstance("content");
@@ -12,11 +12,9 @@
 				alert(range.getRangeAt(0))
 			}
 		}
-	
-	eUranium.GetState = function() {}
-	
-	FCKCommands.RegisterCommand( 'Urani', eUranium ) ;
-	
-	var oElement = new FCKToolbarButton('Urani') ;
-	oElement.IconPath =  FCKConfig.eXoPath + 'plugins/urani/urani.gif' ;
-	FCKToolbarItems.RegisterItem('Urani', oElement) ;	
+	eUranium.GetState = function() {};
+	FCKCommands.RegisterCommand( "Urani", eUranium );
+	var oElement = new FCKToolbarButton( "Urani" );
+	oElement.IconPath =  FCKConfig.eXoPath + "plugins/urani/urani.gif";
+	FCKToolbarItems.RegisterItem( "Urani", oElement );
+	})();

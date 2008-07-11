@@ -203,10 +203,15 @@
 	</body>
 
 	<script type="text/javascript">
-
+	function getUrlParam(paramName) {
+		var oRegex = new RegExp("[\?&]" + paramName + "=([^&]+)", "i");
+		var oMatch = oRegex.exec(window.location.search) ; 
+		if (oMatch && oMatch.length > 1) return oMatch[1];
+		else return "";
+	}
 	var eXp = {
-		resourceType: eXoPlugin.eXoFileManager.ResourceType,
-		connector: eXoPlugin.eXoFileManager.Connector,
+		resourceType: getUrlParam("Type") || eXoPlugin.eXoFileManager.ResourceType,
+		connector: getUrlParam("Connector") || eXoPlugin.eXoFileManager.Connector,
 		command: {
 			init: "getFoldersAndFiles",
 			uploadFile: "uploadFile/upload",
