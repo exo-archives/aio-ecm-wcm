@@ -13,7 +13,7 @@
 			var newWindow = window.open( FCKConfig.eXoPath + "explorer/explorer.html?Type=File&Connector=/portal/rest/fckconnector/jcr/", "eXoExplorer", sOptions );
 			newWindow.focus();
 		}
-	oDocument.GetState = function() {}
+	oDocument.GetState = function() {};
 	FCKCommands.RegisterCommand( "Insert DMS Document", oDocument ) ;
 	var oElement = new FCKToolbarButton( "Insert DMS Document" ) ;
 	oElement.IconPath = FCKConfig.eXoPath + "plugins/insertDocument/insertDocument.gif" ;
