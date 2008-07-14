@@ -47,13 +47,12 @@ function getElementsByClassPath(root, path) {
 }
 
 function showSetting() {
-	var sStatus = oSetting.style.display;
-	if (sStatus != 'block') {
+	var oSetting = K('explorer').select({where: "className == 'Setting'"})[0];
+	if (oSetting.style.display != 'block') {
 		oSetting.style.display = 'block';
 	} else { 
 		oSetting.style.display = 'none';
 	}
-	//elementResize();
 }
 
 function showContextMenu(id, e, oTarget) {
