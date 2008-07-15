@@ -36,11 +36,6 @@
     </init-params>
   </component>
   
-  <component>
-    <key>org.exoplatform.services.organization.auth.AuthenticationService</key>
-    <type>org.exoplatform.services.organization.auth.impl.AuthenticationServiceImpl</type>
-  </component>
-  
   <!-- REST -->
   <component>
     <type>org.exoplatform.services.jcr.ext.registry.RESTRegistryService</type>
@@ -156,15 +151,6 @@
             </properties-param>
           </init-params>
         </component-plugin>        
-  </external-component-plugins>
-  
-  <external-component-plugins>
-    <target-component>org.exoplatform.services.listener.ListenerService</target-component>
-    <component-plugin>
-      <name>exo.service.authentication.login</name>
-      <set-method>addListener</set-method>
-      <type>org.exoplatform.services.organization.auth.MembershipListener</type>
-    </component-plugin>
   </external-component-plugins>
   
   <remove-configuration>org.exoplatform.services.scheduler.JobSchedulerService</remove-configuration>    
