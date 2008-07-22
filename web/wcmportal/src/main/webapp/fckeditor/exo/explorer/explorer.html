@@ -23,18 +23,21 @@
 					<div class="MenuBar" userLanguage="KLang.TreeTitle">
 						Folders
 					</div>
-					<div class="Tree"></div>
+					<div class="Tree">
+						<div class="HomeNode">
+							<span style="display: none;"></span>
+						</div>
+						<div class="NodeGroup" style="margin-left: -20px;"></div>
+					</div>
 				</div>
-				
 				<div class="Separator"><span></span></div>
-				
 				<div class="Workspace">
 					<div class="MenuBar">
 						<a href="javascript: void(0);" onclick="showUploadForm(true)">
 							<div class="Item IconUpload" userLanguage="KLang.BtnUpload">Upload File</div>
 						</a>
 						<img src="images/IconSeparator2x26.gif" class="IconSeparator" style="display: none;">
-						<a href="javascript: void(0);" onclick="showSetting('Setting')">
+						<a href="javascript: void(0);" onclick="showSetting()">
 							<div class="Item IconSetting" userLanguage="KLang.BtnSetting">Setting</div>
 						</a>
 						<div style="clear: left;"><span style="display: none;"></span></div>
@@ -63,7 +66,7 @@
 							<table align="center">
 								<tr>
 									<td align="center">
-										<a href="javascript: void(0);" onclick="showSetting('Setting')">
+										<a href="javascript: void(0);" onclick="showSetting()">
 											<div class="ButtonLeft">
 												<div class="ButtonRight">
 													<div class="ButtonMiddle" userLanguage="KLang.BtnClose">
@@ -87,21 +90,16 @@
 			</div>
 			
 			<div id="hideContainer" class="HideContainer" style="display: none;">
-				<div class="TreeRoot">
-					<div id="/" class="HomeNode">
-						<span>&nbsp;</span>
-					</div>
-					<div id="/group/" class="NodeGroup"></div>
-				</div>
-				<div class="HideTreeNode">
-					<div class="Node ${sClass}" style="display: block">
-						<div class="IconExpand">
-							<div id="${sCurrentFolder}${sName}" class="${sType} IconNode IconClose default16x16Icon" onclick="getDir('${sCurrentFolder}${sName}'); openTree(this);" oncontextmenu="showContextMenu('AddNewDocument', event, this)">
+				<div class="TreeNode">
+					<div class="Node ${sClass}">
+						<div class="Collapse" onclick="openTree(this);">
+							<div class="IconNode ${sType}" title="${sCurrentFolder}${sName}" onclick="getDir(this);" oncontextmenu="showContextMenu('AddNewDocument', event, this)">
 								<a href="javascript: void(0);">
-									${sShortName}
+									${sName}
 								</a>
 							</div>
 						</div>
+						<div class="NodeGroup"></div>
 					</div>
 				</div>
 				<div class="HideTreeItem">
@@ -293,7 +291,6 @@
 					buildXParam()
 				);
 		eXp.sendRequest(connector, param, treeInit);
-		eXp.store.currentNode = K('/');
 	}
 
 	function languageInit() {
@@ -338,117 +335,54 @@
 	K.addEventOnLoad(elementResize);
 	K.addEventOnResize(elementResize);
 	
-	function getDir(sCurrentFolder) {
+	function getDir(currentNode) {
 		var connector = eXoPlugin.hostName + eXp.connector + 'getFoldersAndFiles';
 		var param = eXp.buildParam(
 					"type=" + eXp.resourceType,
-					"currentFolder=" + sCurrentFolder,
+					"currentFolder=" + currentNode.title,
 					"currentPortal=" + eXoPlugin.portalName,
 					buildXParam()
 				);
-		eXp.sendRequest(connector, param, treeGen);
-		eXp.store.currentNode = K(sCurrentFolder);
+		eXp.sendRequest(connector, param, deployData);
+		eXp.store.currentNode = currentNode;
 	}
 	
-	function treeInit(sXML) {
-		var oExplorer = K('explorer');
-		var oDocument = getElementsByClassPath(oExplorer, 'Workspace/DisplayArea')[0];
-		var oStatus = K('statusBar');
-		var oStatusFolder = getElementsByClassPath(oStatus, 'Folder')[0];
-		var oHide = K('hideContainer');
-		
-		var oTree = getElementsByClassPath(oExplorer, 'Navigation/Tree')[0];
-		var oTreeRoot = getElementsByClassPath(oHide, 'TreeRoot')[0];
-		oTree.innerHTML += oTreeRoot.innerHTML;
-		
-		var sHTML = '';
-		
-		// Folder generator
-		var oFolders = eXp.getNodes(sXML, "Folder");
-		if (oFolders != null) {
-			var iLength = oFolders.length;
-			for (var i = 0 ; i < iLength; i++) {
-				var sShortName = eXp.getNodeValue(oFolders[i], "name");
-				var sName = sShortName + '/';
-				var sType = eXp.getNodeValue(oFolders[i], "folderType").replace(':','_') + '16x16Icon';
-				var sHideTreeNode = getElementsByClassPath(oHide, 'HideTreeNode')[0].innerHTML;
-				if (i == iLength - 1) sHideTreeNode = sHideTreeNode.replace(/\${sClass}/g, 'LastNode');
-				else sHideTreeNode = sHideTreeNode.replace(/\${sClass}/g, '');
-				sHideTreeNode = sHideTreeNode.replace(/\${sShortName}/g, sShortName);
-				sHideTreeNode = sHideTreeNode.replace(/\${sName}/g, sName);
-				sHideTreeNode = sHideTreeNode.replace(/\${sType}/g, sType);
-				sHideTreeNode = sHideTreeNode.replace(/\${sCurrentFolder}/g, '/');
-				sHideTreeNode = sHideTreeNode.replace('oncontextmenu="showContextMenu(\'AddNewDocument\', event, this)"','');
-				sHTML += sHideTreeNode;
-			}
-			oStatusFolder.innerHTML = iLength + ' folder(s)';
-		} else {
-			oStatusFolder.innerHTML = '0 folder(s)';
-		}
-		K('/group/').innerHTML = sHTML;
-	}
-	
-	function treeGen(sXML) {
+	function deployData(iXML) {
 		var oExplorer = K('explorer');
 		var oDocument = getElementsByClassPath(oExplorer, 'Workspace/DisplayArea')[0];
 		var oStatus = K('statusBar');
 		var oStatusFile = getElementsByClassPath(oStatus, 'Item')[0];
 		var oStatusFolder = getElementsByClassPath(oStatus, 'Folder')[0];
 		var oHide = K('hideContainer');
-		
+		var currentNode = eXp.store.currentNode;
 		var sHTML = '';
-		var sCurrentFolder = eXp.store.currentNode.id;
-		var oFolders = eXp.getNodes(sXML, "Folder");
-		if (oFolders != null) {
+		var oFolders = eXp.getNodes(iXML, "Folder");
+		if (oFolders && oFolders.length) {
 			var iLength = oFolders.length;
-			var oParent = K(sCurrentFolder).parentNode;
-			
-			var oNodeGroup = K(sCurrentFolder + 'group/');
-			if (oNodeGroup == null) {
-				sHTML += '<div id="' + sCurrentFolder + 'group/" class="NodeGroup">';
-				for (var i = 0 ; i < iLength; ++i) {
-					var sShortName = eXp.getNodeValue(oFolders[i], "name");
-					var sName = sShortName + '/';
-					var sType = eXp.getNodeValue(oFolders[i], "folderType").replace(':', '_') + '16x16Icon';
-					var sHideTreeNode = getElementsByClassPath(oHide, 'HideTreeNode')[0].innerHTML;
-					if (i == iLength - 1) sHideTreeNode = sHideTreeNode.replace(/\${sClass}/g, 'LastNode');
-					else sHideTreeNode = sHideTreeNode.replace(/\${sClass}/g, '');
-					sHideTreeNode = sHideTreeNode.replace(/\${sShortName}/g, sShortName);
-					sHideTreeNode = sHideTreeNode.replace(/\${sName}/g, sName);
-					sHideTreeNode = sHideTreeNode.replace(/\${sType}/g, sType);
-					sHideTreeNode = sHideTreeNode.replace(/\${sCurrentFolder}/g, sCurrentFolder);
-					sHTML += sHideTreeNode;
-				}
-				sHTML += '</div>'
-			} else {
-				if (iLength > curLength) {
-					//oParent.removeChild(document.getElementById(sCurrentFolder + 'group/'));
-					sHTML += '<div id="' + sCurrentFolder + 'group/" class="NodeGroup">';
-					for (var i = 0 ; i < iLength; ++i) {
-						var sShortName = eXp.getNodeValue(oFolders[i], "name");
-						var sName = sShortName + '/';
-						var sType = eXp.getNodeValue(oFolders[i], "folderType").replace(':', '_') + '16x16Icon';
-						var sHideTreeNode = getElementsByClassPath(oHide, 'HideTreeNode')[0].innerHTML;
-						if (i == iLength - 1) sHideTreeNode = sHideTreeNode.replace(/\${sClass}/g, 'LastNode');
-						else sHideTreeNode = sHideTreeNode.replace(/\${sClass}/g, '');
-						sHideTreeNode = sHideTreeNode.replace(/\${sShortName}/g, sShortName);
-						sHideTreeNode = sHideTreeNode.replace(/\${sName}/g, sName);
-						sHideTreeNode = sHideTreeNode.replace(/\${sType}/g, sType);
-						sHideTreeNode = sHideTreeNode.replace(/\${sCurrentFolder}/g, sCurrentFolder);
-						sHTML += sHideTreeNode;
-					}
-					sHTML += '</div>'
-				}
+			for (var i = 0 ; i < iLength; i++) {
+				var sName = eXp.getNodeValue(oFolders[i], "name");
+					sName = sName + '/';
+				var sType = eXp.getNodeValue(oFolders[i], "folderType");
+					sType = sType.replace(":", "_") + "16x16Icon";
+				var sTreeNode = K('hideContainer').select({where: "className == 'TreeNode'"})[0].innerHTML;
+				if (i == iLength - 1) sTreeNode = sTreeNode.replace(/\${sClass}/g, 'LastNode');
+				else sTreeNode = sTreeNode.replace(/\${sClass}/g, '');
+				sTreeNode = sTreeNode.replace(/\${sName}/g, sName);
+				sTreeNode = sTreeNode.replace(/\${sType}/g, sType);
+				sTreeNode = sTreeNode.replace(/\${sCurrentFolder}/g, currentNode.title);
+				sHTML += sTreeNode;
 			}
 			oStatusFolder.innerHTML = iLength + ' folder(s)';
-			oParent.innerHTML += sHTML;
-			curLength = iLength;
 		} else {
 			oStatusFolder.innerHTML = '0 folder(s)';
 		}
+		var oNodeGroup =  K(currentNode.parentNode.parentNode).select({where: "className == 'NodeGroup'"})[0];
+		oNodeGroup.style.display = "block";
+		oNodeGroup.innerHTML = sHTML;
+		
 		
 		sHTML = '';
-		var oFiles = eXp.getNodes(sXML, "File");
+		var oFiles = eXp.getNodes(iXML, "File");
 		eXp.store.data = K.create.database({fieldName: ["name", "date", "size", "type", "url"]});
 		if (oFiles != null) {
 			var oItemGroup = K('checkgen');
@@ -490,108 +424,6 @@
 			oDocument.innerHTML = '';
 			oStatusFile.innerHTML = '0 files(s)';
 		}
-	}
-	
-	function sort(sCondition) {
-		var oExplorer = K('explorer');
-		var oDocument = getElementsByClassPath(oExplorer, 'Workspace/DisplayArea')[0];
-		var oHide = K('hideContainer');
-		
-		oDocument.innerHTML = '';
-		var sHTML = '';
-		var aResult = eXp.store.data.Select({orderBy: sCondition});
-		var iLength = aResult.length;
-		for (var i = 0; i < iLength; i++) {
-			var HideTreeItem = getElementsByClassPath(oHide, 'HideTreeItem')[0].innerHTML;
-			HideTreeItem = HideTreeItem.replace(/\${sName}/g, aResult[i].name);
-			HideTreeItem = HideTreeItem.replace(/\${sType}/g, aResult[i].type);
-			HideTreeItem = HideTreeItem.replace(/\${sDateCreated}/g, aResult[i].date.getDate() + '/' + aResult[i].date.getMonth() + '/' + aResult[i].date.getFullYear() + ' ' + aResult[i].date.getHours() + ':' + aResult[i].date.getMinutes());
-			HideTreeItem = HideTreeItem.replace(/\${sURL}/g, aResult[i].url);
-			HideTreeItem = HideTreeItem.replace(/\${sSize}/g,  aResult[i].size);
-			sHTML += '<input type="hidden" id="checkgen">';
-			sHTML += HideTreeItem;
-		}
-		oDocument.innerHTML += sHTML;
-	}
-	
-	function showAddForm(id, show) {
-		var oExplorer = K('explorer');
-		var oDocument = getElementsByClassPath(oExplorer, 'Workspace/DisplayArea')[0];
-		var oHide = K('hideContainer');
-		var idOrig = id.replace('add/','');
-		var sMaxLength = 23;
-		var idShort = (idOrig == '/' ? '/' : (idOrig.length > sMaxLength ? ('... ' + idOrig.substring(idOrig.length - sMaxLength)) : idOrig))
-		var idTxt = id.replace('add/','txt/');
-		
-		var sHideAddForm = getElementsByClassPath(oHide, 'HideAddForm')[0].innerHTML;
-		sHideAddForm = sHideAddForm.replace(/\${idOrig}/g, idOrig);
-		sHideAddForm = sHideAddForm.replace(/\${idShort}/g, idShort);
-		sHideAddForm = sHideAddForm.replace(/\${idTxt}/g, idTxt);
-		sHideAddForm = sHideAddForm.replace(/\${id}/g, id);
-		
-		if (show) {
-			oExplorer.innerHTML += sHideAddForm;
-			oExplorer.innerHTML += oHideMask.innerHTML;
-		} else {
-			oExplorer.innerHTML = oExplorer.innerHTML.replace(sHideAddForm, '');
-			oExplorer.innerHTML = oExplorer.innerHTML.replace(oHideMask.innerHTML, '', 'g');
-		}
-	}
-		
-	function doAddForm(sCurrentFolder, sFolderName) {
-		var connector = eXoPlugin.hostName + eXp.connector + 'createFolder';
-		var param = eXp.buildParam(
-					"type=" + eXp.resourceType,
-					"currentFolder=" + sCurrentFolder,
-					"newFolderName=" + sFolderName,
-					"currentPortal=" + eXoPlugin.portalName
-				);
-		eXp.sendRequest(
-			connector,
-			param,
-			function(sXML) {
-				var oNodes = eXp.getNodes(sXML, "Error")[0];
-				var sErrorNumber = eXp.getNodeValue(oNodes, "number");
-				var sErrorText = eXp.getNodeValue(oNodes, "text");
-				if (sErrorNumber != '0') {
-					alert(sErrorText);
-				} else {
-					showAddForm(sCurrentFolder + 'add/', false);
-					getDir(sCurrentFolder);
-				}
-			}
-		);
-	}
-	
-	function showUploadForm(show) {
-		var uploadContainer = K("UploadContainer");
-		var popupContainer = K("PopupContainer");
-		popupContainer.style.display = "block";
-		popupContainer.innerHTML = uploadContainer.innerHTML;
-		var mask = K("Mask");
-		mask.style.display = "block";
-	}
-	
-	function uploadFile() {
-		var popupContainer = K("PopupContainer");
-		var formUpload = K.select({from: popupContainer, where: "nodeName == 'FORM'"})[0];
-		formUpload.id =  eXp.getID();
-		var param = eXp.buildParam("uploadId=" + formUpload.id, "currentFolder=/", buildXParam());
-		if (formUpload) {
-			formUpload.action = eXp.connector + eXp.command.uploadFile + "?" + param;
-			formUpload.submit();
-			
-		}
-		eXp.stopUpload = false;
-		K.set.timeout({
-			until: function() {return eXp.stopUpload;},
-			amount: 3,
-			method: function() {
-				var connector = eXp.connector + eXp.command.controlUpload;
-				var param = eXp.buildParam("action=progress", "uploadId=" + formUpload.id, "currentFolder=/", buildXParam());
-				eXp.sendRequest(connector, param, function(iXML) {alert(iXML)});
-			}
-		});
 	}
 	</script>
 </html>

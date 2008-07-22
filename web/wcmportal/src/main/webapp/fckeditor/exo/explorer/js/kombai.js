@@ -57,7 +57,16 @@
 				} 
 				return K({String: ADN});
 			};
-		} else if (K.Element || K.check.isElement(E)) {
+			E.urlEncode = function() {
+				var ADN = this;
+				return K({String: encodeURIComponent(ADN)});
+			};
+			E.urlDecode = function() {
+				var ADN = this;
+				return K({String: decodeURIComponent(ADN)});
+			};
+		} else if (E.Element || K.check.isElement(E)) {
+			E = E.Element || E;
 			if (K.check.isString(R)) {
 				R = K({String: R});
 				E.trim = function() {
@@ -68,17 +77,53 @@
 				};
 				E.decode = function() {
 					return R.decode();
-				}
+				};
+				E.urlEncode = function() {
+					return R.urlEncode();
+				};
+				E.urlDecode = function() {
+					return R.urlDecode();
+				};
 			}
+			E.X = function() {
+				var ADN = this;
+				return ADN.style.left;
+			};
+			E.Y = function() {
+				var ADN = this;
+				return ADN.style.top;
+			};
 			E.add = function(r) {
 				var ADN = this;
 				r.element = ADN;
 				K.add(r);
 				return K({Element: ADN});
 			};
+			E.hide = function() {
+				var ADN = this;
+				ADN.style.display = "none";
+				return K({Element: ADN});
+			};
+			E.show = function() {
+				var ADN = this;
+				ADN.style.display = "block";
+				ADN.style.visibility = "visiable";
+				return K({Element: ADN});
+			};
+			E.opacity = function(r) {
+				var ADN = this;
+				if (K.check.isNumber(r)) {
+					if (K.check.isIE()) {
+						ADN.style.filter = "alpha(opacity = r)".replace("r", r);
+					} else {
+						ADN.style.opacity = r/100;
+					}
+				}
+				return K({Element: ADN});
+			};
 			E.initDragDrop = function(r) {
 				if (r === undefined) {
-					r = {};
+					var r = {};
 				}
 				var ADN = this;
 				ADN.store = {
@@ -170,21 +215,39 @@
 					var event = event || window.event;
 					event.cancelBubble = true;
 				}
-				K({Element: ADN});
+				return K({Element: ADN});
 			};
 			E.select = function(r) {
 				var ADN = this;
 				r.from = ADN;
 				return K.select(r);
 			};
-		} else if (E.Function || K.check.isFunction(E)) {
-			E.callBack = function(o) {
+			E.insert = function(r) {
+				var ADN = this;
+				r.refer = ADN;
+				K.insert(r);
+				return K({Element: ADN});
+			};
+			E.slow = function(r) {
 				var ADN = this;
 				var setting = {
-					param: o.param !== undefined ? o.param : [],
+					method: r.begin || function() {},
+					until: r.end || function() {return true;},
+					param: [ADN],
+					delay: 100,
+					release: r.release || function() {}
+				}
+				K.set.timeout(setting);
+			};
+		} else if (E.Function || K.check.isFunction(E)) {
+			E = E.Function || E;
+			E.callBack = function(r) {
+				var ADN = this;
+				var setting = {
+					param: r.param !== undefined ? r.param : [],
 					recall: {
-						method: (o.recall.method !== undefined) ? o.recall.method : function() {},
-						param: (o.recall.param !== undefined) ? o.recall.param : []
+						method: (r.recall.method !== undefined) ? r.recall.method : function() {},
+						param: (r.recall.param !== undefined) ? r.recall.param : []
 					}
 				};
 				ADN.apply(ADN, setting.param);
@@ -194,6 +257,11 @@
 					setting.recall.method.apply(setting.recall.method, setting.recall.param);
 				}
 			};
+			E.repeat = function(r) {
+				var ADN = this;
+				r.method = ADN;
+				K.set.timeout(r);
+			};
 		}
 		try {
 			return E;
@@ -202,6 +270,7 @@
 		}
 	};
 	
+	Kombai.K = K;
 	for (Kombai.archive.variable.property in Kombai.K) {
 		K[Kombai.archive.variable.property] = Kombai.K[Kombai.archive.variable.property];
 	}
@@ -320,6 +389,9 @@
 			} else {
 				return element.offsetWidth;
 			}
+		},
+		element: function(r) {
+			return document.getElementById(r);
 		},
 		screenHeight: function() {
 			return screen.availHeight;
@@ -452,7 +524,9 @@
 				method: function() {},
 				delay: 1000,
 				param: [],
-				until: function() {return false;},
+				until: function() {
+					return false;
+				},
 				amount: 4294967295,
 				release: function() {}
 			};
@@ -598,6 +672,7 @@
 					return;
 				}
 				//begin config database;
+				var generalId = new Date().getTime() + Math.random().toString().substring(2);
 				var reference = "7c4bc080af27ded752b36160dcb1c716";
 				var ADN = this;
 				var setting = {
@@ -1048,13 +1123,13 @@
 						var like = false;
 						if (notLike.test(r)) {
 							var aLike = notLike.exec(r);
-							isFalse = " == ";
-							isTrue = " != ";
+							var isFalse = " == ";
+							var isTrue = " != ";
 							like = true;
 						} else if (isLike.test(r)) {
 							var aLike = isLike.exec(r);
-							isFalse = " != ";
-							isTrue = " == ";
+							var isFalse = " != ";
+							var isTrue = " == ";
 							like = true;
 						}	
 						if (like) {
@@ -1368,17 +1443,17 @@
 		
 		function inspect(o) {
 			var node = document.createElement("div");
-			if (o instanceof Object) {
+			if (/object/.test(typeof o)) {
 				var v = {};
 				for (var p in o) {
 					try {v = o[p];}
 					catch(e) {v = "Can't Access !!!";}
-					if (v instanceof Object) {
+					if (/object/.test(typeof v)) {
 						var div = document.createElement("div");						
 						div.innerHTML = "<span style='margin-right: 2px;'>{..}</span>";
 						div.innerHTML += "<span style='color: #9b1a00'>" + p + "</span> : " + v;
 						node.appendChild(div);
-					} else if (v instanceof String) {
+					} else if (/string/.test(typeof v)) {
 						var div = document.createElement("div");
 						div.innerHTML = "<span style='margin-right: 15px;'>-</span>";
 						div.innerHTML += "<span style='color: #9b1a00'>" + p + "</span> : " + v.replace(/</g, "&lt;");
@@ -1390,7 +1465,7 @@
 						node.appendChild(div);
 					}
 				}
-			} else if (v instanceof String) {
+			} else if (/string/.test(typeof v)) {
 				node.innerHTML = o.replace(/</g, "&lt;");
 			} else {
 				node.innerHTML = o;
