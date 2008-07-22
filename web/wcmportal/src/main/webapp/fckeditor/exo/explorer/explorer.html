@@ -13,6 +13,7 @@
 		<script type="text/javascript">
 			var FCKConfig = window.opener.FCKConfig;
 			var eXoPlugin = window.opener.eXoPlugin;
+		
 			eXoPlugin.loadScript(window, "lang/" + eXoPlugin.userLanguage + ".js");
 		</script>
 	</head>
@@ -147,16 +148,42 @@
 				</div>
 
 				<div id="UploadContainer" style="display: none;">
-					<form class="UploadForm" target="iFrameUpload" enctype="multipart/form-data" method="post">
-						<table>
-							<tr>
-								${idShort}
+					<form class="UploadForm" style="overflow: auto;" target="iFrameUpload" enctype="multipart/form-data" method="post">
+						<table width="100%">
+							<tr class="UploadInfo">
+								<td>
+									Folder: ${idShort}
+									<div class="UploadProgress"></div>
+								</td>
 							</tr>
-							<tr>
+							<tr class="UploadAction">
+								<td>
+									Name: <br>
+									<input type="text" name="newName" maxlength="128">
+									<a href="javascript: void(0);">
+										<div class="ButtonLeft">
+											<div class="ButtonRight">
+												<div class="ButtonMiddle" onclick="uploadFile.Cancel()">
+													Cancel
+												</div>
+											</div>
+										</div>
+									</a>
+									<a href="javascript: void(0);">
+										<div class="ButtonLeft">
+											<div class="ButtonRight">
+												<div class="ButtonMiddle" onclick="uploadFile.Save()">
+													Save
+												</div>
+											</div>
+										</div>
+									</a>
+									<div style="clear: left;"><span style="display: none;"></span></div>
+								</td>
+							</tr>
+							<tr class="UploadField">
 								<td>
 									<input type="file" name="file">
-								</td>
-								<td align="center">
 									<a href="javascript: void(0);">
 										<div class="ButtonLeft">
 											<div class="ButtonRight">
@@ -218,6 +245,7 @@
 		},
 		store: {
 			currentNode: {},
+			currentFolder: "/",
 			data: {}
 		},
 		buildParam: function() {
@@ -345,6 +373,7 @@
 				);
 		eXp.sendRequest(connector, param, deployData);
 		eXp.store.currentNode = currentNode;
+		eXp.store.currentFolder = currentNode.title;
 	}
 	
 	function deployData(iXML) {

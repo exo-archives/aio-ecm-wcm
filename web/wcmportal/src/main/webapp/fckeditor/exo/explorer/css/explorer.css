@@ -42,7 +42,6 @@ a {
 }
 
 .Navigation .Tree {
-	padding: 0px 10px 0px 10px;
 	font-weight: bold;
 	overflow: auto;
 	height: 100%;
@@ -52,7 +51,8 @@ a {
 .Tree .HomeNode {
 	background: url('../images/TreeRoot24x18.gif') no-repeat left;
 	padding-left: 24px; 
-	line-height: 18px;	
+	height: 18px;
+	line-height: 18px;
 }
 
 .Tree .Node {
@@ -63,22 +63,28 @@ a {
 }
 
 .Tree .NodeGroup {
+	display: none;
+	padding-left: 20px;
 }
 
 .Tree .LastNode{
 	background: url('../images/TreeDot8x10.gif') no-repeat 5px top;
 }
 
-.Tree .IconExpand {
-	background: url('../images/TreePlus18x16.gif') no-repeat 5px top;
-	height: auto;
-	padding-left: 18px;
+.Tree .IconNode {
+	padding-left: 20px;
 }
 
-.Tree .IconCollapse {
+.Tree .Expand {
 	background: url('../images/TreeMinus18x16.gif') no-repeat 5px top;
 	height: auto;
-	padding-left: 18px;
+	padding-left: 23px;
+}
+
+.Tree .Collapse {
+	background: url('../images/TreePlus18x16.gif') no-repeat 5px top;
+	height: auto;
+	padding-left: 23px;
 }
 
 .Tree .IconClose {
@@ -310,10 +316,34 @@ a {
 
 .UploadForm {
 	background: white;
-	height: 128px;
+	height: 149px;
 	margin: auto;
 	padding: 5px;
-	width: 300px;
+	width: 310px;
+}
+
+.UploadForm .UploadAction {
+	display: none;
+}
+
+.UploadForm .UploadField {
+	display: block;
+}
+
+.UploadForm  .UploadProgress{
+	background: #abcdef;
+	color: orange;
+	height: 21px;
+	line-height: 21px;
+	text-align: center;
+	width: 0px;
+	margin-top: 3px;
+}
+
+.UploadForm input, a {
+	float: left;
+	margin: 2px 6px 0px 0px;
+	
 }
 
 .UploadForm iframe {

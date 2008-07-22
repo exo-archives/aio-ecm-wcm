@@ -237,24 +237,59 @@ function dateFormat(sFullDate) {
 	function uploadFile() {
 		var popupContainer = K("PopupContainer");
 		var formUpload = K.select({from: popupContainer, where: "nodeName == 'FORM'"})[0];
-		formUpload.id =  eXp.getID();
-		var param = eXp.buildParam("uploadId=" + formUpload.id, "currentFolder=/", buildXParam());
+		uploadFile.id =  eXp.getID();
+		var param = eXp.buildParam("uploadId=" + uploadFile.id, "currentFolder=" + eXp.store.currentFolder, buildXParam());
 		if (formUpload) {
 			formUpload.action = eXp.connector + eXp.command.uploadFile + "?" + param;
 			formUpload.submit();
 		}
-		eXp.stopUpload = false;
+		uploadFile.stopUpload = false;
 		K.set.timeout({
-			until: function() {return eXp.stopUpload;},
-			amount: 3,
+			until: function() {return uploadFile.stopUpload},
 			method: function() {
 				var connector = eXp.connector + eXp.command.controlUpload;
-				var param = eXp.buildParam("action=progress", "uploadId=" + formUpload.id, "currentFolder=/", buildXParam());
-				eXp.sendRequest(connector, param, function(iXML) {alert(iXML)});
-			},
-			release: function() {
-				K("PopupContainer").innerHTML = "";
-				K("Mask").hide();
+				var param = eXp.buildParam("action=progress", "uploadId=" + uploadFile.id, "currentFolder=" + eXp.store.currentFolder, buildXParam());
+				eXp.sendRequest(
+					connector,
+					param,
+					function(iXML) {
+						var oProgress = eXp.getSingleNode(iXML, "UploadProgress");
+						var nPercent = eXp.getNodeValue(oProgress, "percent");
+						var oTarget = K("PopupContainer").select({where: "className == 'UploadProgress'"})[0];
+						var oField = K("PopupContainer").select({where: "className == 'UploadField'"})[0];
+						oField.style.display = "none";
+						if (nPercent * 1 < 100) {
+							oTarget.innerHTML = nPercent + "%";
+							oTarget.style.width = nPercent + "%";
+							uploadFile.stopUpload = false;
+						} else {
+							oTarget.innerHTML = "100%";
+							oTarget.style.width = "100%";
+							uploadFile.stopUpload = true;
+							var oField = K("PopupContainer").select({where: "className == 'UploadAction'"})[0];
+							oField.style.display = "block";
+						}
+					}
+				);
 			}
 		});
 	}
+	
+	uploadFile.Abort = function() {
+		var connector = eXp.connector + eXp.command.controlUpload;
+		var param = eXp.buildParam("action=abort", "uploadId=" + uploadFile.id, "currentFolder=" + eXp.store.currentFolder, buildXParam());
+		eXp.sendRequest(connector,	param);
+	};
+	
+	uploadFile.Cancel = function() {
+		var connector = eXp.connector + eXp.command.controlUpload;
+		var param = eXp.buildParam("action=cancel", "uploadId=" + uploadFile.id, "currentFolder=" + eXp.store.currentFolder, buildXParam());
+		eXp.sendRequest(connector,	param);
+	};
+	
+	uploadFile.Save = function() {
+		var connector = eXp.connector + eXp.command.controlUpload;
+		var nodeName = K("PopupContainer").select({where: "nodeName == 'INPUT' && name == 'newName'"})[0];
+		var param = eXp.buildParam("action=save", "uploadId=" + uploadFile.id, "newName=" + nodeName.value, "currentFolder=" + eXp.store.currentFolder, buildXParam());
+		eXp.sendRequest(connector,	param);
+	};
