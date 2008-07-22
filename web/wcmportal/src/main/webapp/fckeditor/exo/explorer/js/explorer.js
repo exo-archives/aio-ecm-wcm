@@ -221,9 +221,17 @@ function dateFormat(sFullDate) {
 		var uploadContainer = K("UploadContainer");
 		var popupContainer = K("PopupContainer");
 		popupContainer.style.display = "block";
-		popupContainer.innerHTML = uploadContainer.innerHTML;
-		var mask = K("Mask");
-		mask.style.display = "block";
+		if (eXp.store.currentNode && eXp.store.currentNode.title) {
+			var sPath = eXp.store.currentNode.title;
+		} else var sPath = "/";
+		popupContainer.innerHTML = uploadContainer.innerHTML.replace(/\${idShort}/, sPath);
+		K("Mask").add({
+			event: "click",
+			listener: function() {
+				K("PopupContainer").innerHTML = "";
+				K("Mask").hide();
+			}
+		}).show();
 	}
 	
 	function uploadFile() {
@@ -234,7 +242,6 @@ function dateFormat(sFullDate) {
 		if (formUpload) {
 			formUpload.action = eXp.connector + eXp.command.uploadFile + "?" + param;
 			formUpload.submit();
-			
 		}
 		eXp.stopUpload = false;
 		K.set.timeout({
@@ -244,6 +251,10 @@ function dateFormat(sFullDate) {
 				var connector = eXp.connector + eXp.command.controlUpload;
 				var param = eXp.buildParam("action=progress", "uploadId=" + formUpload.id, "currentFolder=/", buildXParam());
 				eXp.sendRequest(connector, param, function(iXML) {alert(iXML)});
+			},
+			release: function() {
+				K("PopupContainer").innerHTML = "";
+				K("Mask").hide();
 			}
 		});
 	}
