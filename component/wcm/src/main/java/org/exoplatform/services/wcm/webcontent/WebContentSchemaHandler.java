@@ -57,6 +57,10 @@ public class WebContentSchemaHandler extends BaseWebSchemaHandler {
   public Node getLinkFolder(final Node webContent) throws Exception {
     return webContent.getNode("links");
   }
+  
+  public Node getDocumentFolder (final Node webContent) throws Exception {
+    return webContent.getNode("documents");
+  }
 
   private void createSchema(final Node webContent) throws Exception {
     if (!webContent.hasNode("js")) {
