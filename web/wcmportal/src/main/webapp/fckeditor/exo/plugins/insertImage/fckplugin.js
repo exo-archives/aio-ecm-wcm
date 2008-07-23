@@ -10,7 +10,7 @@
 			sOptions += ",height=" + height ;
 			sOptions += ",left=" + iLeft ;
 			sOptions += ",top=" + iTop ;
-			var newWindow = window.open( eXoPlugin.ExoImageBrowserURL, "eXoImagesBrowse", sOptions );
+			var newWindow = window.open( FCKConfig.eXoPath + "explorer/explorer.html?Type=File&Connector=/portal/rest/wcmImage/", "eXoExplorer", sOptions );
 			newWindow.focus();
 		}
 	oImage.GetState = function() {};
@@ -19,4 +19,3 @@
 	oElement.IconPath = FCKConfig.eXoPath + "plugins/insertImage/insertImage.gif" ;
 	FCKToolbarItems.RegisterItem( "Insert Image", oElement ) ;
 	})();
-

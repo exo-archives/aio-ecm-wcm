@@ -10,7 +10,7 @@
 			sOptions += ",height=" + height ;
 			sOptions += ",left=" + iLeft ;
 			sOptions += ",top=" + iTop ;
-			var newWindow = window.open( FCKConfig.eXoPath + "explorer/explorer.html?Type=File&Connector=/portal/rest/fckconnector/jcr/", "eXoExplorer", sOptions );
+			var newWindow = window.open( FCKConfig.eXoPath + "explorer/explorer.html?Type=File&Connector=/portal/rest/wcmDocument/", "eXoExplorer", sOptions );
 			newWindow.focus();
 		}
 	oDocument.GetState = function() {};
@@ -19,4 +19,3 @@
 	oElement.IconPath = FCKConfig.eXoPath + "plugins/insertDocument/insertDocument.gif" ;
 	FCKToolbarItems.RegisterItem( "Insert DMS Document", oElement ) ;	
 })();
-
