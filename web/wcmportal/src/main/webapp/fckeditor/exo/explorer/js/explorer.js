@@ -255,19 +255,23 @@ function dateFormat(sFullDate) {
 					function(iXML) {
 						var oProgress = eXp.getSingleNode(iXML, "UploadProgress");
 						var nPercent = eXp.getNodeValue(oProgress, "percent");
-						var oTarget = K("PopupContainer").select({where: "className == 'UploadProgress'"})[0];
-						var oField = K("PopupContainer").select({where: "className == 'UploadField'"})[0];
+						var oPopupContainer = K("PopupContainer");
+						var oProgress = oPopupContainer.select({where: "className == 'UploadProgress'"})[0];
+						var oInfo = oPopupContainer.select({where: "className == 'UploadInfo'"})[0];
+						var oField = oPopupContainer.select({where: "className == 'UploadField'"})[0];
+						var oAction = oPopupContainer.select({where: "className == 'UploadAction'"})[0];
 						oField.style.display = "none";
+						oInfo.style.display = "block";
 						if (nPercent * 1 < 100) {
-							oTarget.innerHTML = nPercent + "%";
-							oTarget.style.width = nPercent + "%";
+							oProgress.innerHTML = nPercent + "%";
+							oProgress.style.width = nPercent + "%";
 							uploadFile.stopUpload = false;
 						} else {
-							oTarget.innerHTML = "100%";
-							oTarget.style.width = "100%";
 							uploadFile.stopUpload = true;
-							var oField = K("PopupContainer").select({where: "className == 'UploadAction'"})[0];
-							oField.style.display = "block";
+							oProgress.innerHTML = "100%";
+							oProgress.style.width = "100%";
+							oInfo.style.display = "none";
+							oAction.style.display = "block";
 						}
 					}
 				);
@@ -278,18 +282,30 @@ function dateFormat(sFullDate) {
 	uploadFile.Abort = function() {
 		var connector = eXp.connector + eXp.command.controlUpload;
 		var param = eXp.buildParam("action=abort", "uploadId=" + uploadFile.id, "currentFolder=" + eXp.store.currentFolder, buildXParam());
-		eXp.sendRequest(connector,	param);
+		eXp.sendRequest(connector, param);
 	};
 	
 	uploadFile.Cancel = function() {
 		var connector = eXp.connector + eXp.command.controlUpload;
-		var param = eXp.buildParam("action=cancel", "uploadId=" + uploadFile.id, "currentFolder=" + eXp.store.currentFolder, buildXParam());
-		eXp.sendRequest(connector,	param);
+		var param = eXp.buildParam("action=delete", "uploadId=" + uploadFile.id, "currentFolder=" + eXp.store.currentFolder, buildXParam());
+		eXp.sendRequest(connector, param);
+		K("PopupContainer").innerHTML = "";
+		K("Mask").hide();
 	};
-	
+
+	uploadFile.Delete = function() {
+		var connector = eXp.connector + eXp.command.controlUpload;
+		var param = eXp.buildParam("action=delete", "uploadId=" + uploadFile.id, "currentFolder=" + eXp.store.currentFolder, buildXParam());
+		eXp.sendRequest(connector, param);
+		var oPopupContainer = K("PopupContainer");
+		K(oPopupContainer.select({where: "className == 'UploadAction'"})[0]).hide();
+		K(oPopupContainer.select({where: "className == 'UploadField'"})[0]).show();
+		oPopupContainer.select({where: "nodeName == 'FORM'"})[0].reset();
+	};
+
 	uploadFile.Save = function() {
 		var connector = eXp.connector + eXp.command.controlUpload;
 		var nodeName = K("PopupContainer").select({where: "nodeName == 'INPUT' && name == 'newName'"})[0];
 		var param = eXp.buildParam("action=save", "uploadId=" + uploadFile.id, "newName=" + nodeName.value, "currentFolder=" + eXp.store.currentFolder, buildXParam());
-		eXp.sendRequest(connector,	param);
+		eXp.sendRequest(connector, param);
 	};

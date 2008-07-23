@@ -316,10 +316,17 @@ a {
 
 .UploadForm {
 	background: white;
-	height: 149px;
-	margin: auto;
+	margin: 0px auto 0px auto;
 	padding: 5px;
 	width: 310px;
+}
+
+.UploadForm td {
+	width: 300px;
+}
+
+.UploadForm .UploadInfo {
+	display: none;
 }
 
 .UploadForm .UploadAction {
@@ -340,10 +347,9 @@ a {
 	margin-top: 3px;
 }
 
-.UploadForm input, a {
+.UploadForm input,a {
 	float: left;
 	margin: 2px 6px 0px 0px;
-	
 }
 
 .UploadForm iframe {

@@ -13,7 +13,7 @@
 		<script type="text/javascript">
 			var FCKConfig = window.opener.FCKConfig;
 			var eXoPlugin = window.opener.eXoPlugin;
-		
+			var oEditor = window.opener.FCK;
 			eXoPlugin.loadScript(window, "lang/" + eXoPlugin.userLanguage + ".js");
 		</script>
 	</head>
@@ -149,36 +149,60 @@
 
 				<div id="UploadContainer" style="display: none;">
 					<form class="UploadForm" style="overflow: auto;" target="iFrameUpload" enctype="multipart/form-data" method="post">
-						<table width="100%">
-							<tr class="UploadInfo">
+						<table height="150px;">
+							<tr>
 								<td>
 									Folder: ${idShort}
+								</td>
+							</tr>							
+							<tr class="UploadInfo">
+								<td >
 									<div class="UploadProgress"></div>
+									<a href="javascript: void(0);">
+										<div class="ButtonLeft">
+											<div class="ButtonRight">
+												<div class="ButtonMiddle" onclick="uploadFile.Abort()">
+													Abort
+												</div>
+											</div>
+										</div>
+									</a>
 								</td>
 							</tr>
 							<tr class="UploadAction">
 								<td>
 									Name: <br>
-									<input type="text" name="newName" maxlength="128">
-									<a href="javascript: void(0);">
-										<div class="ButtonLeft">
-											<div class="ButtonRight">
-												<div class="ButtonMiddle" onclick="uploadFile.Cancel()">
-													Cancel
+									<input type="text" name="newName" style="float: none; width: 99%;" maxlength="128"><br>
+									<div>
+										<a href="javascript: void(0);">
+											<div class="ButtonLeft">
+												<div class="ButtonRight">
+													<div class="ButtonMiddle" onclick="uploadFile.Cancel()">
+														Cancel
+													</div>
 												</div>
 											</div>
-										</div>
-									</a>
-									<a href="javascript: void(0);">
-										<div class="ButtonLeft">
-											<div class="ButtonRight">
-												<div class="ButtonMiddle" onclick="uploadFile.Save()">
-													Save
+										</a>
+										<a href="javascript: void(0);">
+											<div class="ButtonLeft">
+												<div class="ButtonRight">
+													<div class="ButtonMiddle" onclick="uploadFile.Delete()">
+														Delete
+													</div>
 												</div>
 											</div>
-										</div>
-									</a>
-									<div style="clear: left;"><span style="display: none;"></span></div>
+										</a>
+										<a href="javascript: void(0);">
+											<div class="ButtonLeft">
+												<div class="ButtonRight">
+													<div class="ButtonMiddle" onclick="uploadFile.Save()">
+														Save
+													</div>
+												</div>
+											</div>
+										</a>
+										<div style="clear: left;"><span style="display: none;"></span></div>
+									</div>	
 								</td>
 							</tr>
 							<tr class="UploadField">
@@ -228,6 +252,8 @@
 	</body>
 
 	<script type="text/javascript">
+	
+	
 	function getUrlParam(paramName) {
 		var oRegex = new RegExp("[\?&]" + paramName + "=([^&]+)", "i");
 		var oMatch = oRegex.exec(window.location.search) ; 
