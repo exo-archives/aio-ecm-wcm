@@ -24,19 +24,22 @@ import javax.jcr.PathNotFoundException;
 import javax.jcr.Session;
 
 import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.ecm.connector.fckeditor.FCKFileHandler;
 import org.exoplatform.ecm.connector.fckeditor.FCKFolderHandler;
+import org.exoplatform.ecm.connector.fckeditor.FCKMessage;
 import org.exoplatform.ecm.connector.fckeditor.FCKUtils;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.rest.CacheControl;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-// TODO: Auto-generated Javadoc
+//TODO: Auto-generated Javadoc
 /*
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Jun 26, 2008
@@ -59,6 +62,9 @@ public abstract class BaseConnector {
   /** The folder handler. */
   protected FCKFolderHandler                  folderHandler;
 
+  /** The fck message. */
+  private FCKMessage                          fckMessage;
+
   /** The local session provider. */
   protected ThreadLocalSessionProviderService localSessionProvider;
 
@@ -69,7 +75,9 @@ public abstract class BaseConnector {
    * Gets the root storage of portal.
    * 
    * @param node the node
+   * 
    * @return the root storage of portal
+   * 
    * @throws Exception the exception
    */
   protected abstract Node getRootStorageOfPortal(Node node) throws Exception;
@@ -78,7 +86,9 @@ public abstract class BaseConnector {
    * Gets the root storage of web content.
    * 
    * @param node the node
+   * 
    * @return the root storage of web content
+   * 
    * @throws Exception the exception
    */
   protected abstract Node getRootStorageOfWebContent(Node node) throws Exception;
@@ -87,6 +97,7 @@ public abstract class BaseConnector {
    * Gets the storage type.
    * 
    * @return the storage type
+   * 
    * @throws Exception the exception
    */
   protected abstract String getStorageType() throws Exception;
@@ -98,15 +109,16 @@ public abstract class BaseConnector {
    */
   public BaseConnector(ExoContainer container) {
     livePortalManagerService = (LivePortalManagerService) container
-        .getComponentInstanceOfType(LivePortalManagerService.class);
+    .getComponentInstanceOfType(LivePortalManagerService.class);
     webSchemaConfigService = (WebSchemaConfigService) container
-        .getComponentInstanceOfType(WebSchemaConfigService.class);
+    .getComponentInstanceOfType(WebSchemaConfigService.class);
     fileHandler = new FCKFileHandler(container);
     folderHandler = new FCKFolderHandler(container);
+    fckMessage = new FCKMessage(ExoContainerContext.getCurrentContainer());
     localSessionProvider = (ThreadLocalSessionProviderService) container
-        .getComponentInstanceOfType(ThreadLocalSessionProviderService.class);
+    .getComponentInstanceOfType(ThreadLocalSessionProviderService.class);
     repositoryService = (RepositoryService) container
-        .getComponentInstanceOfType(RepositoryService.class);
+    .getComponentInstanceOfType(RepositoryService.class);
   }
 
   /**
@@ -118,7 +130,9 @@ public abstract class BaseConnector {
    * @param currentFolder the current folder
    * @param command the command
    * @param type the type
+   * 
    * @return the document
+   * 
    * @throws Exception the exception
    */
   protected Document buildXMLDocumentOutput(String repositoryName, String workspaceName,
@@ -181,12 +195,14 @@ public abstract class BaseConnector {
    * @param workspaceName the workspace name
    * @param command the command
    * @param language the language
+   * 
    * @return the document
+   * 
    * @throws Exception the exception
    */
   protected Document buildXMLDocumentOutput(String newFolderName, String currentFolder,
       String jcrPath, String repositoryName, String workspaceName, String command, String language)
-      throws Exception {
+  throws Exception {
     Node currentPortal = getCurrentPortal(repositoryName, workspaceName, jcrPath);
     Node sharedPortal = getSharedPortal(repositoryName);
     Node webContent = getWebContentFolder(repositoryName, workspaceName, jcrPath);
@@ -218,6 +234,17 @@ public abstract class BaseConnector {
       else
         currentNode = rootStorageOfWebContent.getNode(relativePath);
     }
+    CacheControl cacheControl = new CacheControl();
+    cacheControl.setNoCache(true);
+    if (!FCKUtils.hasAddNodePermission(currentNode)) {
+      Object[] args = { currentNode.getPath() };
+      return fckMessage.createMessage(FCKMessage.FOLDER_PERMISSION_CREATING, FCKMessage.ERROR,
+          language, args);
+    }
+    if (currentNode.hasNode(newFolderName)) {
+      Object[] args = { currentNode.getPath(), newFolderName };
+      return fckMessage.createMessage(FCKMessage.FOLDER_EXISTED, FCKMessage.ERROR, language, args);
+    }
     currentNode.addNode(newFolderName, FCKUtils.NT_UNSTRUCTURED);
     currentNode.save();
     return createDocumentForContentStorage(currentNode, command);
@@ -230,7 +257,9 @@ public abstract class BaseConnector {
    * @param workspaceName the workspace name
    * @param jcrPath the jcr path
    * @param command the command
+   * 
    * @return the document
+   * 
    * @throws Exception the exception
    */
   private Document createDocumentForRoot(String repositoryName, String workspaceName,
@@ -267,11 +296,13 @@ public abstract class BaseConnector {
    * @param node the node
    * @param webContentNode the web content node
    * @param command the command
+   * 
    * @return the document
+   * 
    * @throws Exception the exception
    */
   private Document createStorageDocument(Node node, Node webContentNode, String command)
-      throws Exception {
+  throws Exception {
     Node storageNode = null;
     try {
       storageNode = getRootStorageOfPortal(node);
@@ -302,7 +333,9 @@ public abstract class BaseConnector {
    * 
    * @param rootNode the root node
    * @param command the command
+   * 
    * @return the document
+   * 
    * @throws Exception the exception
    */
   private Document createDocumentForContentStorage(Node rootNode, String command) throws Exception {
@@ -337,11 +370,13 @@ public abstract class BaseConnector {
    * @param repositoryName the repository name
    * @param workspaceName the workspace name
    * @param jcrPath the jcr path
+   * 
    * @return the current portal
+   * 
    * @throws Exception the exception
    */
   private Node getCurrentPortal(String repositoryName, String workspaceName, String jcrPath)
-      throws Exception {
+  throws Exception {
     Node sharedPortalNode = getSharedPortal(repositoryName);
     if (sharedPortalNode != null && jcrPath.startsWith(sharedPortalNode.getPath()))
       return sharedPortalNode;
@@ -359,7 +394,9 @@ public abstract class BaseConnector {
    * Gets the shared portal.
    * 
    * @param repositoryName the repository name
+   * 
    * @return the shared portal
+   * 
    * @throws Exception the exception
    */
   private Node getSharedPortal(String repositoryName) throws Exception {
@@ -378,11 +415,13 @@ public abstract class BaseConnector {
    * @param repositoryName the repository name
    * @param workspaceName the workspace name
    * @param jcrPath the jcr path
+   * 
    * @return the web content folder
+   * 
    * @throws Exception the exception
    */
   private Node getWebContentFolder(String repositoryName, String workspaceName, String jcrPath)
-      throws Exception {
+  throws Exception {
     Session session = getSession(repositoryName, workspaceName);
     try {
       Node webContent = (Node) session.getItem(jcrPath);
@@ -399,7 +438,9 @@ public abstract class BaseConnector {
    * 
    * @param repositoryName the repository name
    * @param workspaceName the workspace name
+   * 
    * @return the session
+   * 
    * @throws Exception the exception
    */
   private Session getSession(String repositoryName, String workspaceName) throws Exception {
@@ -422,11 +463,13 @@ public abstract class BaseConnector {
    * @param portalName the portal name
    * @param webContent the web content
    * @param storage the storage
+   * 
    * @return the root storage path
+   * 
    * @throws Exception the exception
    */
   private String getRootStoragePath(String portalName, String webContent, String storage)
-      throws Exception {
+  throws Exception {
     if (webContent == null)
       return "/" + portalName + "/" + storage + "/";
     else
