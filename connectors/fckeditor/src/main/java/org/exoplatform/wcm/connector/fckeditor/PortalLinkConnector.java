@@ -49,30 +49,54 @@ import org.exoplatform.services.security.ConversationState;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+//TODO: Auto-generated Javadoc
 /*
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Jul 11, 2008
  */
 
+/**
+ * The Class PortalLinkConnector.
+ */
 @URITemplate("/portalLinks/")
 public class PortalLinkConnector implements ResourceContainer {
 
+  /** The PUBLI c_ access. */
   final private String            PUBLIC_ACCESS       = "public".intern();
 
+  /** The PRIVAT e_ access. */
   final private String            PRIVATE_ACCESS      = "private".intern();
 
+  /** The EVERYON e_ permission. */
   final private String            EVERYONE_PERMISSION = "Everyone".intern();
 
+  /** The RESOURC e_ type. */
   final private String            RESOURCE_TYPE       = "PortalPageURI".intern();
 
+  /** The PORTA l_ context. */
   final private String            PORTAL_CONTEXT      = "portal".intern();
 
+  /** The portal config service. */
   private UserPortalConfigService portalConfigService;
 
+  /** The portal data storage. */
   private DataStorage             portalDataStorage;
 
+  /** The portal user acl. */
   private UserACL                 portalUserACL;
 
+  /**
+   * Instantiates a new portal link connector.
+   * 
+   * @param params the params
+   * @param repositoryService the repository service
+   * @param sessionProviderService the session provider service
+   * @param portalConfigService the portal config service
+   * @param dataStorage the data storage
+   * @param userACL the user acl
+   * @param conversationRegistry the conversation registry
+   * @throws Exception the exception
+   */
   public PortalLinkConnector(InitParams params, RepositoryService repositoryService,
       ThreadLocalSessionProviderService sessionProviderService,
       UserPortalConfigService portalConfigService, DataStorage dataStorage, UserACL userACL,
@@ -82,6 +106,15 @@ public class PortalLinkConnector implements ResourceContainer {
     this.portalUserACL = userACL;
   }
 
+  /**
+   * Gets the page uri.
+   * 
+   * @param currentFolder the current folder
+   * @param command the command
+   * @param type the type
+   * @return the page uri
+   * @throws Exception the exception
+   */
   @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/pageURI/")
   @OutputTransformer(XMLOutputTransformer.class)
@@ -93,6 +126,11 @@ public class PortalLinkConnector implements ResourceContainer {
     return buildReponse(currentFolder, command, userId);
   }
 
+  /**
+   * Gets the current user.
+   * 
+   * @return the current user
+   */
   private String getCurrentUser() {
     try {
       ConversationState conversationState = ConversationState.getCurrent();
@@ -102,7 +140,16 @@ public class PortalLinkConnector implements ResourceContainer {
     return null;
   }
 
-  public Response buildReponse(String currentFolder, String command, String userId)
+  /**
+   * Builds the reponse.
+   * 
+   * @param currentFolder the current folder
+   * @param command the command
+   * @param userId the user id
+   * @return the response
+   * @throws Exception the exception
+   */
+  private Response buildReponse(String currentFolder, String command, String userId)
   throws Exception {
     if (command == null)
       command = "";
@@ -117,6 +164,15 @@ public class PortalLinkConnector implements ResourceContainer {
     return Response.Builder.ok(document).cacheControl(cacheControl).build();
   }
 
+  /**
+   * Builds the portal xml response.
+   * 
+   * @param currentFolder the current folder
+   * @param command the command
+   * @param userId the user id
+   * @return the document
+   * @throws Exception the exception
+   */
   private Document buildPortalXMLResponse(String currentFolder, String command, String userId)
   throws Exception {
     Element rootElement = initRootElement(command, currentFolder);
@@ -140,6 +196,14 @@ public class PortalLinkConnector implements ResourceContainer {
     return rootElement.getOwnerDocument();
   }
 
+  /**
+   * Inits the root element.
+   * 
+   * @param commandStr the command str
+   * @param currentPath the current path
+   * @return the element
+   * @throws ParserConfigurationException the parser configuration exception
+   */
   private Element initRootElement(String commandStr, String currentPath)
   throws ParserConfigurationException {
     Document doc = null;
@@ -157,6 +221,15 @@ public class PortalLinkConnector implements ResourceContainer {
     return rootElement;
   }
 
+  /**
+   * Builds the navigation xml response.
+   * 
+   * @param currentFolder the current folder
+   * @param command the command
+   * @param userId the user id
+   * @return the document
+   * @throws Exception the exception
+   */
   private Document buildNavigationXMLResponse(String currentFolder, String command, String userId)
   throws Exception {
     Element rootElement = initRootElement(command, currentFolder);
@@ -181,6 +254,15 @@ public class PortalLinkConnector implements ResourceContainer {
     return rootElement.getOwnerDocument();
   }
 
+  /**
+   * Process page node.
+   * 
+   * @param portalName the portal name
+   * @param pageNode the page node
+   * @param rootElement the root element
+   * @param userId the user id
+   * @throws Exception the exception
+   */
   private void processPageNode(String portalName, PageNode pageNode, Element rootElement,
       String userId) throws Exception {
     String pageId = pageNode.getPageReference();
@@ -203,6 +285,13 @@ public class PortalLinkConnector implements ResourceContainer {
     foldersElement.appendChild(folderElement);
   }
 
+  /**
+   * Gets the page node.
+   * 
+   * @param root the root
+   * @param uri the uri
+   * @return the page node
+   */
   private PageNode getPageNode(PageNode root, String uri) {
     if (uri.equals("/" + root.getUri() + "/"))
       return root;
