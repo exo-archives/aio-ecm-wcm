@@ -9,5 +9,8 @@
   </component>      
   <component>    
     <type>org.exoplatform.wcm.connector.fckeditor.LinkConnector</type>    
-  </component>          
+  </component>       
+  <component>    
+    <type>org.exoplatform.wcm.connector.fckeditor.PortalLinkConnector</type>    
+  </component>     
 </configuration>

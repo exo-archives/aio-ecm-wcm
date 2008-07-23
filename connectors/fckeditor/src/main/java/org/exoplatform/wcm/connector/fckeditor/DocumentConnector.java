@@ -30,45 +30,122 @@ import org.exoplatform.services.rest.URITemplate;
 import org.exoplatform.services.rest.container.ResourceContainer;
 import org.exoplatform.services.rest.transformer.XMLOutputTransformer;
 import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
+import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
 import org.w3c.dom.Document;
 
+//TODO: Auto-generated Javadoc
 /*
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Jun 24, 2008
  */
 
-@URITemplate("/document/")
+/**
+ * The Class DocumentConnector.
+ */
+@URITemplate("/wcmDocument/")
 public class DocumentConnector extends BaseConnector implements ResourceContainer {
 
+  /**
+   * Instantiates a new document connector.
+   * 
+   * @param container the container
+   */
   public DocumentConnector(ExoContainer container) {
     super(container);
   }
 
+  /**
+   * Gets the folders and files.
+   * 
+   * @param repositoryName the repository name
+   * @param workspaceName the workspace name
+   * @param jcrPath the jcr path
+   * @param currentFolder the current folder
+   * @param command the command
+   * @param type the type
+   * 
+   * @return the folders and files
+   * 
+   * @throws Exception the exception
+   */
   @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/getFoldersAndFiles/")
   @OutputTransformer(XMLOutputTransformer.class)
-  public Response getFoldersAndFiles(@QueryParam("repositoryName") String repositoryName, 
-      @QueryParam("workspaceName") String workspaceName, 
-      @QueryParam("jcrPath") String jcrPath, 
-      @QueryParam("currentFolder") String currentFolder,
-      @QueryParam("command") String command, 
-      @QueryParam("type") String type) throws Exception {
+  public Response getFoldersAndFiles(@QueryParam("repositoryName")
+      String repositoryName, @QueryParam("workspaceName")
+      String workspaceName, @QueryParam("jcrPath")
+      String jcrPath, @QueryParam("currentFolder")
+      String currentFolder, @QueryParam("command")
+      String command, @QueryParam("type")
+      String type) throws Exception {
     Document document = null;
-    document = buildXMLDocumentOuput(repositoryName, workspaceName, jcrPath, currentFolder, command, type);
+    document = buildXMLDocumentOutput(repositoryName, workspaceName, jcrPath, currentFolder,
+        command, type);
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
     return Response.Builder.ok(document).mediaType("text/xml").cacheControl(cacheControl).build();
   }
 
-  @Override
-  protected Node getStorage(Node node) throws Exception {
-    PortalFolderSchemaHandler folderSchemaHandler = webSchemaConfigService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);    
-    return folderSchemaHandler.getDocumentStorage(node);     
+  /**
+   * Creates the folder.
+   * 
+   * @param repositoryName the repository name
+   * @param workspaceName the workspace name
+   * @param jcrPath the jcr path
+   * @param currentFolder the current folder
+   * @param newFolderName the new folder name
+   * @param command the command
+   * @param language the language
+   * 
+   * @return the response
+   * 
+   * @throws Exception the exception
+   */
+  @HTTPMethod(HTTPMethods.GET)
+  @URITemplate("/createFolder/")
+  @OutputTransformer(XMLOutputTransformer.class)
+  public Response createFolder(@QueryParam("repositoryName")
+      String repositoryName, @QueryParam("workspaceName")
+      String workspaceName, @QueryParam("jcrPath")
+      String jcrPath, @QueryParam("currentFolder")
+      String currentFolder, @QueryParam("newFolderName")
+      String newFolderName, @QueryParam("command")
+      String command, @QueryParam("language")
+      String language) throws Exception {
+    Document document = null;
+    document = buildXMLDocumentOutput(newFolderName, currentFolder, jcrPath, repositoryName,
+        workspaceName, command, language);
+    CacheControl cacheControl = new CacheControl();
+    cacheControl.setNoCache(true);
+    return Response.Builder.ok(document).mediaType("text/xml").cacheControl(cacheControl).build();
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.wcm.connector.fckeditor.BaseConnector#getRootStorageOfPortal(javax.jcr.Node)
+   */
+  @Override
+  protected Node getRootStorageOfPortal(Node portal) throws Exception {
+    PortalFolderSchemaHandler folderSchemaHandler = webSchemaConfigService
+    .getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
+    return folderSchemaHandler.getDocumentStorage(portal);
+  }
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.wcm.connector.fckeditor.BaseConnector#getRootStorageOfWebContent(javax.jcr.Node)
+   */
+  @Override
+  protected Node getRootStorageOfWebContent(Node webContent) throws Exception {
+    WebContentSchemaHandler webContentSchemaHandler = webSchemaConfigService
+    .getWebSchemaHandlerByType(WebContentSchemaHandler.class);
+    return webContentSchemaHandler.getDocumentFolder(webContent);
+  }
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.wcm.connector.fckeditor.BaseConnector#getStorageType()
+   */
   @Override
   protected String getStorageType() throws Exception {
     return FCKUtils.DOCUMENT_TYPE;
   }
-  
+
 }
