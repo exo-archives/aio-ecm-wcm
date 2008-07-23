@@ -126,7 +126,6 @@ function dateFormat(sFullDate) {
 		if (oFolders && iLength) {
 			for (var i = 0 ; i < iLength; i++) {
 				var sName = eXp.getNodeValue(oFolders[i], "name");
-					sName = sName + '/';
 				var sType = eXp.getNodeValue(oFolders[i], "folderType");
 					sType = sType.replace(":", "_") + "16x16Icon";
 				var sTreeNode = K('hideContainer').select({where: "className == 'TreeNode'"})[0].innerHTML;
