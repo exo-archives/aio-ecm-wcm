@@ -307,4 +307,6 @@ function dateFormat(sFullDate) {
 		var nodeName = K("PopupContainer").select({where: "nodeName == 'INPUT' && name == 'fileName'"})[0];
 		var param = eXp.buildParam("action=save", "uploadId=" + uploadFile.id, "fileName=" + nodeName.value, "currentFolder=" + eXp.store.currentFolder, buildXParam());
 		eXp.sendRequest(connector, param);
+		K("PopupContainer").innerHTML = "";
+		K("Mask").hide();
 	};

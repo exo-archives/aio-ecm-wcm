@@ -1510,7 +1510,7 @@
 				aStore[o].listener(event);
 			}
 		}
-	}
+	};
 	
 	K.addEventOnLoad = function(r) {
 		var attachEvent = Kombai.archive.method.attachEvent; 
