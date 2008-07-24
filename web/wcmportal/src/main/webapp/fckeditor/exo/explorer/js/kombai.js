@@ -107,7 +107,7 @@
 			E.show = function() {
 				var ADN = this;
 				ADN.style.display = "block";
-				ADN.style.visibility = "visiable";
+				ADN.style.visibility = "visible";
 				return K({Element: ADN});
 			};
 			E.opacity = function(r) {
@@ -1174,7 +1174,9 @@
 				}
 			}
 			var newNode = document.createElement(setting.tagName);
+			if (setting.innerHTML) {
 				newNode.innerHTML = setting.innerHTML;
+			}
 			if (setting.className) {
 				newNode.className = setting.className;
 			}
