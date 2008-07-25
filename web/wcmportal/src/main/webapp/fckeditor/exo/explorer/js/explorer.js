@@ -55,21 +55,18 @@ function showSetting() {
 	}
 }
 
-function showContextMenu(id, e, oTarget) {
-	var ctx = document.getElementById('Context');
-	
-	var ctxAdd = getElementsByClassPath(ctx, 'AddNewDocument/MenuItem/IconAdd')[0];
-	var ctxView = getElementsByClassPath(ctx, 'ListItemOption/MenuItem/IconView')[0];
-	var ctxSelect = getElementsByClassPath(ctx, 'ListItemOption/MenuItem/IconSelect')[0];
-	
-	var obj = getElementsByClassPath(ctx, id)[0];
-	obj.style.left = (e.clientX) + 'px';
-	obj.style.top = (e.clientY) + 'px';
-	obj.style.display = 'Block';
-	
-	ctxAdd.id = oTarget.id + 'add/';
-	ctxView.id = oTarget.id + 'view/';
-	ctxSelect.id = oTarget.id + 'select/';
+function showContextMenu(selection, event, element) {
+	var oContextMenu = K('contextMenu');
+	var oSelection = getElementsByClassPath(oContextMenu, selection)[0];
+	oSelection.style.left = K.get.X(event) + "px";
+	oSelection.style.top = K.get.Y(event) + "px";
+	oSelection.style.display = "block";
+	var oActions =  K.select({from: oSelection, where: "className like '%IconItem%'"});
+	if (oActions && oActions.length) {
+		for (var i = 0 ; i < oActions.length; i ++) {
+			oActions[i].title = element.title;
+		}
+	}
 	return false;
 }
 
@@ -152,6 +149,7 @@ function dateFormat(sFullDate) {
 		
 		oDocument.innerHTML = '';
 		var sHTML = '';
+		if (!eXp.store.data.Select) return;
 		var aResult = eXp.store.data.Select({orderBy: sCondition});
 		var iLength = aResult.length;
 		for (var i = 0; i < iLength; i++) {
@@ -167,31 +165,23 @@ function dateFormat(sFullDate) {
 		oDocument.innerHTML += sHTML;
 	}
 	
-	function showAddForm(id, show) {
-		var oExplorer = K('explorer');
-		var oDocument = getElementsByClassPath(oExplorer, 'Workspace/DisplayArea')[0];
-		var oHide = K('hideContainer');
-		var idOrig = id.replace('add/','');
-		var sMaxLength = 23;
-		var idShort = (idOrig == '/' ? '/' : (idOrig.length > sMaxLength ? ('... ' + idOrig.substring(idOrig.length - sMaxLength)) : idOrig))
-		var idTxt = id.replace('add/','txt/');
-		
-		var sHideAddForm = getElementsByClassPath(oHide, 'HideAddForm')[0].innerHTML;
-		sHideAddForm = sHideAddForm.replace(/\${idOrig}/g, idOrig);
-		sHideAddForm = sHideAddForm.replace(/\${idShort}/g, idShort);
-		sHideAddForm = sHideAddForm.replace(/\${idTxt}/g, idTxt);
-		sHideAddForm = sHideAddForm.replace(/\${id}/g, id);
-		
-		if (show) {
-			oExplorer.innerHTML += sHideAddForm;
-			oExplorer.innerHTML += oHideMask.innerHTML;
-		} else {
-			oExplorer.innerHTML = oExplorer.innerHTML.replace(sHideAddForm, '');
-			oExplorer.innerHTML = oExplorer.innerHTML.replace(oHideMask.innerHTML, '', 'g');
-		}
+	function showAddForm(event, element) {
+		var popupContainer = K("PopupContainer").show();
+		var formContainer = K("hideContainer").select({where: "className == 'AddFormContainer'"})[0];
+		popupContainer.innerHTML = formContainer.innerHTML.replace(/\${idShort}/g, element.title);
+		K("Mask").add({
+			event: "click",
+			listener: function() {
+				K("PopupContainer").innerHTML = "";
+				K("Mask").hide();
+			}
+		}).show();
 	}
 		
-	function doAddForm(sCurrentFolder, sFolderName) {
+	function doAddForm() {
+		var popupContainer = K("PopupContainer");
+		var sFolderName = popupContainer.select({where: "tagName == 'INPUT' && name == 'fileName'"})[0].value;
+		var sCurrentFolder = popupContainer.select({where: "tagName == 'INPUT' && name == 'hidden'"})[0].value;
 		var connector = eXoPlugin.hostName + eXp.connector + 'createFolder';
 		var param = eXp.buildParam(
 					"type=" + eXp.resourceType,
@@ -216,7 +206,7 @@ function dateFormat(sFullDate) {
 		);
 	}
 	
-	function showUploadForm(show) {
+	function showUploadForm() {
 		var uploadContainer = K("UploadContainer");
 		var popupContainer = K("PopupContainer");
 		popupContainer.style.display = "block";
@@ -286,7 +276,7 @@ function dateFormat(sFullDate) {
 		K(oPopupContainer.select({where: "className == 'UploadInfo'"})[0]).hide();
 		K(oPopupContainer.select({where: "className == 'UploadField'"})[0]).show();
 		oPopupContainer.select({where: "nodeName == 'FORM'"})[0].reset();
-		
+		oPopupContainer.select({where: "nodeName == 'FORM'"})[0].submit();
 	};
 	
 	uploadFile.Cancel = function() {

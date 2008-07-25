@@ -114,17 +114,19 @@
 						</tr>
 					</table>
 				</div>
-				<div class="HideAddForm">
+				
+				<div class="AddFormContainer" style="display: none;">
 					<div class="AddForm">
-						${idShort}
-						<input id="${idTxt}" type="text">
+						<div>Folder: ${idShort}</div>
+						New folder : <input name="fileName" type="text">
+						<input name="hidden" type="hidden" value="${idShort}">
 						<table align="center">
 							<tr>
 								<td align="center">
-									<a href="javascript: void(0);" onclick="doAddForm('${idOrig}',K('${idTxt}').value)">
+									<a href="javascript: void(0);">
 										<div class="ButtonLeft">
 											<div class="ButtonRight">
-												<div class="ButtonMiddle" userLanguage="KLang.BtnCreate">
+												<div class="ButtonMiddle" onclick="doAddForm()" userLanguage="KLang.BtnCreate">
 													Create
 												</div>
 											</div>
@@ -132,10 +134,10 @@
 									</a>
 								</td>
 								<td align="center">
-									<a href="javascript: void(0);" onclick="showAddForm('${id}', false)">
+									<a href="javascript: void(0);">
 										<div class="ButtonLeft">
 											<div class="ButtonRight">
-												<div class="ButtonMiddle" userLanguage="KLang.BtnCancel">
+												<div class="ButtonMiddle" onclick="K('Mask').onclick(event);" userLanguage="KLang.BtnCancel">
 													Cancel
 												</div>
 											</div>
@@ -146,6 +148,7 @@
 						</table>
 					</div>
 				</div>
+
 
 				<div id="UploadContainer" style="display: none;">
 					<form class="UploadForm" style="overflow: auto;" target="iFrameUpload" enctype="multipart/form-data" method="post">
@@ -225,17 +228,17 @@
 				</div>
 			</div>
 		</div>
-		<div id="Context" style="position: absolute; top: 0px; left: 0px; width: 0px; height: 0px;">	
+		<div id="contextMenu" style="position: absolute; top: 0px; left: 0px; width: 0px; height: 0px;">	
 			<div class="ContextMenu AddNewDocument">
 				<a href="javascript: void(0);" class="MenuItem"> 	
-					<div class="IconItem IconAdd" onclick="showAddForm(this.id, true)" userLanguage="KLang.CtxNewDoc">
+					<div class="IconItem IconAdd" onclick="showAddForm(event, this)" userLanguage="KLang.CtxNewDoc">
 						Add New
 					</div>
 				</a>
 			</div>
 			<div class="ContextMenu ListItemOption">
 				<a href="javascript: void(0);" class="MenuItem"> 	
-					<div class="IconItem IconView" onclick="window.open(this.id.replace('/view/',''),'','width=350,height=250')" userLanguage="KLang.CtxViewItem">
+					<div class="IconItem IconView" onclick="window.open(this.id.replace('/view/',''),'','width=350, height=250')" userLanguage="KLang.CtxViewItem">
 						View
 					</div>
 				</a>
