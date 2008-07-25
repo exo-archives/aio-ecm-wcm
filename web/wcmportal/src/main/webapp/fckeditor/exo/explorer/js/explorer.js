@@ -269,7 +269,6 @@ function dateFormat(sFullDate) {
 							uploadFile.stopUpload = true;
 							oProgress.innerHTML = "100%";
 							oProgress.style.width = "100%";
-							oInfo.style.display = "none";
 							oAction.style.display = "block";
 						}
 					}
@@ -282,6 +281,12 @@ function dateFormat(sFullDate) {
 		var connector = eXp.connector + eXp.command.controlUpload;
 		var param = eXp.buildParam("action=abort", "uploadId=" + uploadFile.id, "currentFolder=" + eXp.store.currentFolder, buildXParam());
 		eXp.sendRequest(connector, param);
+		uploadFile.stopUpload = true;
+		var oPopupContainer = K("PopupContainer");
+		K(oPopupContainer.select({where: "className == 'UploadInfo'"})[0]).hide();
+		K(oPopupContainer.select({where: "className == 'UploadField'"})[0]).show();
+		oPopupContainer.select({where: "nodeName == 'FORM'"})[0].reset();
+		
 	};
 	
 	uploadFile.Cancel = function() {

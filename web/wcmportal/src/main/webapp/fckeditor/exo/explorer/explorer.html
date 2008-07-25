@@ -455,7 +455,7 @@
 					sHideTreeItem = sHideTreeItem.replace(/\${sDateCreated}/g, sDateCreated.getDate() + '/' + sDateCreated.getMonth() + '/' + sDateCreated.getFullYear() + ' ' + sDateCreated.getHours() + ':' + sDateCreated.getMinutes());
 					sHideTreeItem = sHideTreeItem.replace(/\${sURL}/g, sURL);
 					sHideTreeItem = sHideTreeItem.replace(/\${sSize}/g, sSize);
-					sHTML += '<input type="hidden" id="checkgen">'
+					sHTML += '<input type="hidden" id="checkgen">';
 					sHTML += sHideTreeItem;
 					eXp.store.data.Insert([sName, sDateCreated, sSize, sType, sURL]);
 				}
@@ -479,5 +479,7 @@
 			oStatusFile.innerHTML = '0 files(s)';
 		}
 	}
+	
+
 	</script>
 </html>
