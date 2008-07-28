@@ -16,22 +16,25 @@
  */
 package org.exoplatform.wcm.connector.fckeditor;
 
+import java.io.InputStream;
+
 import javax.jcr.Node;
 
 import org.exoplatform.common.http.HTTPMethods;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.ecm.connector.fckeditor.FCKUtils;
-import org.exoplatform.services.rest.CacheControl;
 import org.exoplatform.services.rest.HTTPMethod;
+import org.exoplatform.services.rest.HeaderParam;
+import org.exoplatform.services.rest.InputTransformer;
 import org.exoplatform.services.rest.OutputTransformer;
 import org.exoplatform.services.rest.QueryParam;
 import org.exoplatform.services.rest.Response;
 import org.exoplatform.services.rest.URITemplate;
 import org.exoplatform.services.rest.container.ResourceContainer;
+import org.exoplatform.services.rest.transformer.PassthroughInputTransformer;
 import org.exoplatform.services.rest.transformer.XMLOutputTransformer;
 import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
-import org.w3c.dom.Document;
 
 //TODO: Auto-generated Javadoc
 /*
@@ -80,22 +83,7 @@ public class ImageConnector extends BaseConnector implements ResourceContainer {
       String currentFolder, @QueryParam("command")
       String command, @QueryParam("type")
       String type) throws Exception {
-    Document document = null;
-    document = buildXMLDocumentOutput(repositoryName, workspaceName, jcrPath, currentFolder,
-        command, type);
-    CacheControl cacheControl = new CacheControl();
-    cacheControl.setNoCache(true);
-    return Response.Builder.ok(document).mediaType("text/xml").cacheControl(cacheControl).build();
-  }
-
-  /* (non-Javadoc)
-   * @see org.exoplatform.wcm.connector.fckeditor.BaseConnector#getRootStorageOfPortal(javax.jcr.Node)
-   */
-  @Override
-  protected Node getRootStorageOfPortal(Node node) throws Exception {
-    PortalFolderSchemaHandler folderSchemaHandler = webSchemaConfigService
-    .getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
-    return folderSchemaHandler.getImagesFolder(node);
+    return buildXMLDocumentOutput(currentFolder, workspaceName, repositoryName, jcrPath, command);
   }
 
   /**
@@ -124,15 +112,85 @@ public class ImageConnector extends BaseConnector implements ResourceContainer {
       String newFolderName, @QueryParam("command")
       String command, @QueryParam("language")
       String language) throws Exception {
-    Document document = null;
-    document = buildXMLDocumentOutput(newFolderName, currentFolder, jcrPath, repositoryName,
+    return buildXMLDocumentOutput(newFolderName, currentFolder, jcrPath, repositoryName,
         workspaceName, command, language);
-    CacheControl cacheControl = new CacheControl();
-    cacheControl.setNoCache(true);
-    return Response.Builder.ok(document).mediaType("text/xml").cacheControl(cacheControl).build();
   }
 
-  /* (non-Javadoc)
+  /**
+   * Upload file.
+   * 
+   * @param inputStream the input stream
+   * @param repositoryName the repository name
+   * @param workspaceName the workspace name
+   * @param currentFolder the current folder
+   * @param uploadId the upload id
+   * @param language the language
+   * @param contentType the content type
+   * @param contentLength the content length
+   * 
+   * @return the response
+   * 
+   * @throws Exception the exception
+   */
+  @HTTPMethod(HTTPMethods.POST)
+  @URITemplate("/uploadFile/upload/")
+  @InputTransformer(PassthroughInputTransformer.class)
+  @OutputTransformer(XMLOutputTransformer.class)
+  public Response uploadFile(InputStream inputStream, @QueryParam("repositoryName")
+      String repositoryName, @QueryParam("workspaceName")
+      String workspaceName, @QueryParam("currentFolder")
+      String currentFolder, @QueryParam("uploadId")
+      String uploadId, @QueryParam("language")
+      String language, @HeaderParam("content-type")
+      String contentType, @HeaderParam("content-length")
+      String contentLength) throws Exception {
+    return null;
+  }
+
+  /**
+   * Process upload.
+   * 
+   * @param repositoryName the repository name
+   * @param workspaceName the workspace name
+   * @param currentFolder the current folder
+   * @param action the action
+   * @param language the language
+   * @param fileName the file name
+   * @param uploadId the upload id
+   * 
+   * @return the response
+   * 
+   * @throws Exception the exception
+   */
+  @HTTPMethod(HTTPMethods.GET)
+  @URITemplate("/uploadFile/control/")
+  @OutputTransformer(XMLOutputTransformer.class)
+  public Response processUpload(@QueryParam("repositoryName")
+      String repositoryName, @QueryParam("workspaceName")
+      String workspaceName, @QueryParam("currentFolder")
+      String currentFolder, @QueryParam("action")
+      String action, @QueryParam("language")
+      String language, @QueryParam("fileName")
+      String fileName, @QueryParam("uploadId")
+      String uploadId) throws Exception {
+    return null;
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see org.exoplatform.wcm.connector.fckeditor.BaseConnector#getRootStorageOfPortal(javax.jcr.Node)
+   */
+  @Override
+  protected Node getRootStorageOfPortal(Node portal) throws Exception {
+    PortalFolderSchemaHandler folderSchemaHandler = webSchemaConfigService
+    .getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
+    return folderSchemaHandler.getImagesFolder(portal);
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
    * @see org.exoplatform.wcm.connector.fckeditor.BaseConnector#getRootStorageOfWebContent(javax.jcr.Node)
    */
   @Override
@@ -142,12 +200,14 @@ public class ImageConnector extends BaseConnector implements ResourceContainer {
     return webContentSchemaHandler.getImagesFolders(webContent);
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see org.exoplatform.wcm.connector.fckeditor.BaseConnector#getStorageType()
    */
   @Override
   protected String getStorageType() throws Exception {
-    return FCKUtils.IMAGE_TYPE;
+    return FCKUtils.DOCUMENT_TYPE;
   }
 
 }

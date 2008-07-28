@@ -92,6 +92,18 @@ a {
 	margin-left: 5px;
 }
 
+.exo_portalFolder16x16Icon {
+	background:transparent url('../images/icons/nt-unstructured.gif') no-repeat scroll 0% 0%;
+	height:16px;
+	width:16px;
+}
+
+.exo_webContent16x16Icon {
+	background:transparent url('../images/icons/nt-unstructured.gif') no-repeat scroll 0% 0%;
+	height:16px;
+	width:16px;
+}
+
 /* Folder Explorer */
 .Workspace {
 	margin-left: 200px;	
@@ -283,11 +295,13 @@ a {
 }
 
 .AddForm {
+	left: 250px; 
+	top: 200px; 
+	position: absolute;
 	border: 1px #000000 solid;
 	padding: 10px;
+	z-index: 1;
 	background: #ffffff;
-	width: 300px;
-	margin: auto;
 }
 
 .IFrameFormContainer {
@@ -314,17 +328,10 @@ a {
 
 .UploadForm {
 	background: white;
-	margin: 0px auto 0px auto;
+	height: 149px;
+	margin: auto;
 	padding: 5px;
 	width: 310px;
-}
-
-.UploadForm td {
-	width: 300px;
-}
-
-.UploadForm .UploadInfo {
-	display: none;
 }
 
 .UploadForm .UploadAction {
@@ -345,9 +352,9 @@ a {
 	margin-top: 3px;
 }
 
-.UploadForm input,a {
-	float: left;
+.UploadForm input, a {
 	margin: 2px 6px 0px 0px;
+	
 }
 
 .UploadForm iframe {

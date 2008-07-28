@@ -187,7 +187,8 @@ function dateFormat(sFullDate) {
 					"type=" + eXp.resourceType,
 					"currentFolder=" + sCurrentFolder,
 					"newFolderName=" + sFolderName,
-					"currentPortal=" + eXoPlugin.portalName
+					"currentPortal=" + eXoPlugin.portalName,
+					buildXParam()
 				);
 		eXp.sendRequest(
 			connector,
