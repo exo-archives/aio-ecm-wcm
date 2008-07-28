@@ -165,7 +165,7 @@ public abstract class BaseConnector {
         document = fckMessage.createMessage(FCKMessage.FOLDER_EXISTED, FCKMessage.ERROR, language,
             args);
       } else {
-        currentNode.addNode(newFolderName, FCKUtils.NT_UNSTRUCTURED);
+        currentNode.addNode(newFolderName, FCKUtils.NT_FOLDER);
         currentNode.save();
         document = createDocumentForContentStorage(currentNode, command);
       }
