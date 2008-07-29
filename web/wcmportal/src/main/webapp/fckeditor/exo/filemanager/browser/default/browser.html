@@ -33,14 +33,17 @@
 					var newImage = FCK.CreateElement( "img" ) ;
 					newImage.setAttribute( "src", url ) ;
 				} else {
+					var seletion = eXoPlugin.getContent();
 					var newElement = FCK.CreateElement( "a" ) ;
 					var workSpace = GetUrlParam( "workspace", url );
 					var path = GetUrlParam( "path", url );
 					var fullWebDAV = eXoPlugin.hostName + "/portal/rest/jcr/repository/" +  workSpace + path;
-					newElement.innerHTML = path.substring(path.lastIndexOf("/") + 1 , path.length);
+					if (seletion) newElement.innerHTML = seletion;
+					else newElement.innerHTML = path.substring(path.lastIndexOf("/") + 1 , path.length);
 					newElement.setAttribute("href", fullWebDAV);
 					newElement.setAttribute("target", "_blank");
 				}
+				window.close();
 			}
 					
 			function GetUrlParam( paramName, url )
