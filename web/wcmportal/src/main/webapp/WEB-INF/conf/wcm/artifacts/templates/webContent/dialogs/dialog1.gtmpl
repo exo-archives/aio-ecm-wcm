@@ -1,6 +1,5 @@
 <% 
 	import javax.jcr.Node;
-	uicomponent.addInterceptor("ecm-explorer/interceptor/PreNodeSaveInterceptor.groovy", "post") ; 
 	def rcontext = _ctx.getRequestContext() ;
 	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIHorizontalTabs');
 %>
@@ -99,7 +98,7 @@
 										uicomponent.setChildPath(uicomponent.getNode().getPath()+"/default.html");
 										Node htmlNode = uicomponent.getChildNode();
 										String htmlData = htmlNode.getNode("jcr:content").getProperty("jcr:data").getValue().getString();
-										String[] htmlHiddenField1 = ["jcrPath=/node/default.html", "nodetype=nt:file", "defaultValues=default.html"] ;
+										String[] htmlHiddenField1 = ["jcrPath=/node/default.html", "nodetype=nt:file", "defaultValues=default.html", "mixintype=exo:htmlFile"] ;
 		       					String[] htmlHiddenField2 = ["jcrPath=/node/default.html/jcr:content", "nodetype=nt:resource", "mixintype=dc:elementSet", "visible=false"] ; 
 									  String[] htmlHiddenField3 = ["jcrPath=/node/default.html/jcr:content/jcr:encoding", "visible=false", "UTF-8"] ;  
 									  String[] htmlHiddenField4 = ["jcrPath=/node/default.html/jcr:content/jcr:lastModified", "visible=false"] ;
@@ -114,7 +113,7 @@
 										String[] htmlContent = ["jcrPath=/node/default.html/jcr:content/jcr:data", "options=default", htmlData];
 		        				uicomponent.addWYSIWYGField("htmlData", htmlContent) ;
 									} else {
-		       					String[] htmlHiddenField1 = ["jcrPath=/node/default.html", "nodetype=nt:file", "defaultValues=default.html"] ;
+		       					String[] htmlHiddenField1 = ["jcrPath=/node/default.html", "nodetype=nt:file", "defaultValues=default.html", "mixintype=exo:htmlFile"] ;
 		       					String[] htmlHiddenField2 = ["jcrPath=/node/default.html/jcr:content", "nodetype=nt:resource", "mixintype=dc:elementSet", "visible=false"] ; 
 									  String[] htmlHiddenField3 = ["jcrPath=/node/default.html/jcr:content/jcr:encoding", "visible=false", "UTF-8"] ;  
 									  String[] htmlHiddenField4 = ["jcrPath=/node/default.html/jcr:content/jcr:lastModified", "visible=false"] ;
