@@ -24,7 +24,7 @@ import javax.jcr.ItemNotFoundException;
 
 import org.exoplatform.wcm.presentation.acp.config.advanced.UIContentCreationWizard;
 import org.exoplatform.wcm.presentation.acp.config.quickcreation.UIQuickCreationWizard;
-import org.exoplatform.wcm.presentation.acp.config.selector.UIWebContentSelector;
+import org.exoplatform.wcm.presentation.acp.config.selector.UIWebContentSelectorForm;
 import org.exoplatform.web.application.RequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -92,7 +92,7 @@ public class UIWelcomeScreen extends UIForm {
         } else if(radioValue.equals("QuickCreate") || radioValue.equals("EditCurrentContent")) {
           startOption.setComponent(UIQuickCreationWizard.class, null, null);
         } else if(radioValue.equals("SelectOtherContent") || radioValue.equals("SelectExisted")) {
-          startOption.setComponent(UIWebContentSelector.class, null, null);
+          startOption.setComponent(UIWebContentSelectorForm.class, null, null);
         }
       }catch(ItemNotFoundException e) {}
     }

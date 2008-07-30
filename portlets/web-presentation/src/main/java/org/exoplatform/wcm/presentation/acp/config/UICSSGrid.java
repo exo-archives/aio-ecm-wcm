@@ -31,7 +31,7 @@ import org.exoplatform.webui.event.EventListener;
  */
 
 @ComponentConfig(
-    template = "app:/groovy/presentation/webui/component/UIGridWithButton.gtmpl",
+    template = "classpath:groovy/ecm/webui/UIGridWithButton.gtmpl",
     events = {
         @EventConfig(listeners = UICSSGrid.AddActionListener.class)
     }

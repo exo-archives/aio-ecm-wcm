@@ -21,11 +21,7 @@ import javax.jcr.Session;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
-import org.exoplatform.dms.webui.component.UINodesExplorer;
-import org.exoplatform.dms.webui.component.UISelectable;
-import org.exoplatform.dms.webui.form.UIFormInputSetWithAction;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.ecm.webui.selector.UISelectable;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -46,6 +42,7 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
+import org.exoplatform.webui.form.ext.UIFormInputSetWithAction;
 
 /**
  * Created by The eXo Platform SAS
@@ -58,13 +55,13 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
     lifecycle = UIFormLifecycle.class,
     template = "system:/groovy/webui/form/UIFormWithTitle.gtmpl",
     events = {
-      @EventConfig(listeners = UIWebContentSelector.SaveActionListener.class),
-      @EventConfig(listeners = UIWebContentSelector.BackActionListener.class),
-      @EventConfig(listeners = UIWebContentSelector.BrowseActionListener.class)
+      @EventConfig(listeners = UIWebContentSelectorForm.SaveActionListener.class),
+      @EventConfig(listeners = UIWebContentSelectorForm.BackActionListener.class),
+      @EventConfig(listeners = UIWebContentSelectorForm.BrowseActionListener.class)
     }
 )
 
-public class UIWebContentSelector extends UIForm implements UISelectable{
+public class UIWebContentSelectorForm extends UIForm implements UISelectable{
 
   final static String PATH = "path".intern();
   final static String FIELD_PATH = "location".intern();
@@ -73,7 +70,7 @@ public class UIWebContentSelector extends UIForm implements UISelectable{
   private String livePortalsPath;
   private String liveSharedPortalName;
 
-  public UIWebContentSelector() throws Exception {
+  public UIWebContentSelectorForm() throws Exception {
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     String repoName = repositoryService.getCurrentRepository().getConfiguration().getName();
     WCMConfigurationService configurationService = getApplicationComponent(WCMConfigurationService.class);
@@ -89,11 +86,11 @@ public class UIWebContentSelector extends UIForm implements UISelectable{
     addChild(uiPathSelection);
     setActions(new String[] {"Save", "Back"});
   }
-
-  public void doSelect(String selectField, String value) throws Exception {
-    getUIStringInput(selectField).setValue(value);
+  
+  public void doSelect(String selectField, Object value) throws Exception {
+    getUIStringInput(selectField).setValue((String)value);
     showPopupComponent(null);
-  }
+  }   
 
   public void showPopupComponent(UIComponent uiComponent) throws Exception {
     UIContainer uiParent = getParent();
@@ -105,6 +102,7 @@ public class UIWebContentSelector extends UIForm implements UISelectable{
     if( uiPopup == null)  uiPopup = uiParent.addChild(UIPopupWindow.class, null, null);
     uiPopup.setUIComponent(uiComponent);
     uiPopup.setWindowSize(610, 300);
+    uiPopup.setResizable(true);
     uiPopup.setShow(true);
   }
 
@@ -113,33 +111,23 @@ public class UIWebContentSelector extends UIForm implements UISelectable{
   public String getRepositoryName() { return repository; }
   public String getWorkspace() { return workspace; }
 
-  public static class BrowseActionListener extends EventListener<UIWebContentSelector> {
-    public void execute(Event<UIWebContentSelector> event) throws Exception {
-      UIWebContentSelector uiWebContentSelector = event.getSource();
-      UINodesExplorer uiExplorer = uiWebContentSelector.createUIComponent(UINodesExplorer.class, null, null);
-      uiExplorer.setRepository(uiWebContentSelector.getRepositoryName());
-      uiExplorer.setIsDisable(uiWebContentSelector.getWorkspace(), true);
-      String sharedPortal = uiWebContentSelector.getLiveSharedPortalName();
-      uiExplorer.setAllowedNodes(new String [] {Util.getUIPortal().getName(), sharedPortal});
-      uiExplorer.setRootPath(uiWebContentSelector.getLivePortalPath());
-      uiExplorer.setFilterNodeType(new String[] {"exo:webFolder", "exo:portalFolder"});
-      if(event.getRequestContext().getRemoteUser() == null) {
-        uiExplorer.setSessionProvider(SessionProviderFactory.createAnonimProvider());
-      }
-      String [] filterType = new String[] { "exo:webContent" };
-      uiExplorer.setFilterType(filterType);
-      uiExplorer.setComponent(uiWebContentSelector, new String [] {UIWebContentSelector.PATH}); 
-      uiWebContentSelector.showPopupComponent(uiExplorer); 
+  public static class BrowseActionListener extends EventListener<UIWebContentSelectorForm> {
+    public void execute(Event<UIWebContentSelectorForm> event) throws Exception {
+      UIWebContentSelectorForm uiWebContentSelector = event.getSource();
+      UIWebContentPathSelector webContentPathSelector = uiWebContentSelector.createUIComponent(UIWebContentPathSelector.class, null, null);
+      webContentPathSelector.setSourceComponent(uiWebContentSelector, new String[] {UIWebContentSelectorForm.PATH});
+      webContentPathSelector.init();      
+      uiWebContentSelector.showPopupComponent(webContentPathSelector);      
     }
   }
 
-  public static class SaveActionListener extends EventListener<UIWebContentSelector> {
-    public void execute(Event<UIWebContentSelector> event) throws Exception {
-      UIWebContentSelector uiWebContentSelector = event.getSource();
+  public static class SaveActionListener extends EventListener<UIWebContentSelectorForm> {
+    public void execute(Event<UIWebContentSelectorForm> event) throws Exception {
+      UIWebContentSelectorForm uiWebContentSelector = event.getSource();
       RepositoryService repositoryService = uiWebContentSelector.getApplicationComponent(RepositoryService.class);
       ManageableRepository manageableRepository = repositoryService.getRepository(uiWebContentSelector.getRepositoryName());
       Session session = SessionProvider.createSystemProvider().getSession(uiWebContentSelector.getWorkspace(), manageableRepository);
-      Node node = (Node) session.getItem(uiWebContentSelector.getUIStringInput(UIWebContentSelector.PATH).getValue());
+      Node node = (Node) session.getItem(uiWebContentSelector.getUIStringInput(UIWebContentSelectorForm.PATH).getValue());
       NodeIdentifier identifier = NodeIdentifier.make(node);
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
       PortletPreferences prefs = context.getRequest().getPreferences();
@@ -151,12 +139,13 @@ public class UIWebContentSelector extends UIForm implements UISelectable{
     }
   }
 
-  public static class BackActionListener extends EventListener<UIWebContentSelector> {
-    public void execute(Event<UIWebContentSelector> event) throws Exception {
-      UIWebContentSelector uiWeSelector = event.getSource();
+  public static class BackActionListener extends EventListener<UIWebContentSelectorForm> {
+    public void execute(Event<UIWebContentSelectorForm> event) throws Exception {
+      UIWebContentSelectorForm uiWeSelector = event.getSource();
       UIPortletConfig uiPConfig = uiWeSelector.getAncestorOfType(UIPortletConfig.class);
       uiPConfig.getChildren().clear();
       uiPConfig.addChild(uiPConfig.getBackComponent());
     }
   }
+  
 }
