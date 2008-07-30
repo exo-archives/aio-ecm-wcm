@@ -22,6 +22,8 @@ import java.util.List;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Session;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
@@ -66,9 +68,6 @@ public abstract class BaseConnector {
 
   /** The file upload handler. */
   private FileUploadHandler                   fileUploadHandler;
-
-  /** The fck message. */
-  private FCKMessage                          fckMessage;
 
   /** The local session provider. */
   protected ThreadLocalSessionProviderService localSessionProvider;
@@ -119,8 +118,7 @@ public abstract class BaseConnector {
     .getComponentInstanceOfType(WebSchemaConfigService.class);
     fileHandler = new FCKFileHandler(container);
     folderHandler = new FCKFolderHandler(container);
-    fileUploadHandler = new FileUploadHandler(container);
-    fckMessage = new FCKMessage(ExoContainerContext.getCurrentContainer());
+    fileUploadHandler = new FileUploadHandler(container);    
     localSessionProvider = (ThreadLocalSessionProviderService) container
     .getComponentInstanceOfType(ThreadLocalSessionProviderService.class);
     repositoryService = (RepositoryService) container
@@ -144,8 +142,7 @@ public abstract class BaseConnector {
    */
   protected Response buildXMLDocumentOutput(String newFolderName, String currentFolder,
       String jcrPath, String repositoryName, String workspaceName, String command, String language)
-  throws Exception {
-    Document document = null;
+  throws Exception {    
     Node currentPortalNode = getCurrentPortalNode(repositoryName, workspaceName, jcrPath);
     Node sharedPortalNode = getSharedPortalNode(repositoryName);
     String fullPath = getCurrentFolderFullPath(currentPortalNode, sharedPortalNode, currentFolder,
@@ -153,26 +150,9 @@ public abstract class BaseConnector {
     Node currentNode = getCurrentNode(repositoryName, workspaceName, fullPath);
     if (currentFolder.length() != 0 && !currentFolder.equals("/") && !fullPath.equals(jcrPath)
         && !fullPath.equals(currentPortalNode.getPath())) {
-      CacheControl cacheControl = new CacheControl();
-      cacheControl.setNoCache(true);
-      if (!FCKUtils.hasAddNodePermission(currentNode)) {
-        Object[] args = { currentNode.getPath() };
-        document = fckMessage.createMessage(FCKMessage.FOLDER_PERMISSION_CREATING,
-            FCKMessage.ERROR, language, args);
-      }
-      if (currentNode.hasNode(newFolderName)) {
-        Object[] args = { currentNode.getPath(), newFolderName };
-        document = fckMessage.createMessage(FCKMessage.FOLDER_EXISTED, FCKMessage.ERROR, language,
-            args);
-      } else {
-        currentNode.addNode(newFolderName, FCKUtils.NT_FOLDER);
-        currentNode.save();
-        document = createDocumentForContentStorage(currentNode, command);
-      }
+      return folderHandler.createNewFolder(currentNode, newFolderName, language);
     }
-    CacheControl cacheControl = new CacheControl();
-    cacheControl.setNoCache(true);
-    return Response.Builder.ok(document).mediaType("txt/xml").cacheControl(cacheControl).build();
+    return null;
   }
 
   /**
@@ -524,8 +504,12 @@ public abstract class BaseConnector {
         jcrPath);
     Session session = getSession(repositoryName, workspaceName);
     Node currentNode = (Node) session.getItem(fullPath);
-    return fileUploadHandler.upload(uploadId, contentType, Double.parseDouble(contentLength),
-        inputStream, currentNode, language);
+    if (currentFolder.length() != 0 && !currentFolder.equals("/") && !fullPath.equals(jcrPath)
+        && !fullPath.equals(currentPortalNode.getPath())) {
+      return fileUploadHandler.upload(uploadId, contentType, Double.parseDouble(contentLength),
+          inputStream, currentNode, language);  
+    }
+    return null;
   }
 
   /**
