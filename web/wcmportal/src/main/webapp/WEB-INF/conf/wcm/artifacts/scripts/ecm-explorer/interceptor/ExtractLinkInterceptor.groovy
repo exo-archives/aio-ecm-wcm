@@ -30,12 +30,12 @@ import javax.jcr.Node;
 import javax.jcr.Session;
 import javax.jcr.NodeIterator;
 
-public class SystemOutInterceptor implements CmsScript {
+public class ExtractLinkInterceptor implements CmsScript {
 
 	private LinkExtractorService linkExtractor_;
 	private RepositoryService repositoryService_;
 	
-	public SystemOutInterceptor(LinkExtractorService linkExtractor, RepositoryService repositoryService) {
+	public ExtractLinkInterceptor(LinkExtractorService linkExtractor, RepositoryService repositoryService) {
 		linkExtractor_ = linkExtractor;
 		repositoryService_ = repositoryService;
 	}
