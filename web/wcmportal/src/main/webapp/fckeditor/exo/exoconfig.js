@@ -2,6 +2,7 @@
 FCKConfig.ToolbarSets["eXoBar"] = [
 	['Insert Image', 'Insert Portal Link', 'Insert DMS Document', 'Explorer']
 ];
+
 // set eXo plugin path;
 FCKConfig.eXoPath = FCKConfig.BasePath.substr(0, FCKConfig.BasePath.length - 7) + "exo/" ;
 FCKConfig.Plugins.Add( 'urani', null, FCKConfig.eXoPath + "plugins/") ;
@@ -10,6 +11,9 @@ FCKConfig.Plugins.Add( 'insertImage', null, FCKConfig.eXoPath + "plugins/") ;
 FCKConfig.Plugins.Add( 'insertDocument', null, FCKConfig.eXoPath + "plugins/") ;
 FCKConfig.Plugins.Add( 'insertPortalLink', null, FCKConfig.eXoPath + "plugins/") ;
 
+//config style
+FCKConfig.EditorAreaCSS = ['/eXoResources/skin/Stylesheet.css', '/wcmResources/skin/Stylesheet.css', '/portal/css/WebContent/Live/Stylesheet.css'] ;
+FCKConfig.EditorAreaStyles = 'body{	background: none;	margin: 0px;}' ;
 
 //eXoPlugin config
 window.eXoPlugin = {
@@ -31,6 +35,7 @@ window.eXoPlugin = {
 		this.ExoImageBrowserURL = FCKConfig.eXoPath + 'filemanager/browser/default/browser.html?Type=Image&Connector=/portal/rest/fckconnector/jcr/getFiles' ;
 		this.ExoFileBrowserURL = FCKConfig.eXoPath + 'filemanager/browser/default/browser.html?Type=File&Connector=/portal/rest/fckconnector/jcr/getFiles' ;
 		this.ExoPortalLinkBrowserURL = FCKConfig.eXoPath + 'explorer/explorer.html?Type=PortalLink&Connector=/portal/rest/portalLinks/' ;
+		FCKConfig.LinkBrowserURL = FCKConfig.eXoPath + 'explorer/explorer.html?Type=Link&Connector=/portal/rest/wcmLink/';
 		//detect user language
 		this.userLanguage = FCK.Language.GetActiveLanguage() || "en";
 	},
@@ -92,7 +97,6 @@ window.eXoPlugin = {
 	}
 };
 FCK["eXoPlugin"] = eXoPlugin;
-
 
 eXoPlugin.init();
 eXoPlugin.addBar({newBar: "eXoBar", targetBar: "Basic" });
