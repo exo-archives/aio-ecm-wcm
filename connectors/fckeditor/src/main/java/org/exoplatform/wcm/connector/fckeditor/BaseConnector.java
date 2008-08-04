@@ -22,14 +22,10 @@ import java.util.List;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Session;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.exoplatform.container.ExoContainer;
-import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.ecm.connector.fckeditor.FCKFileHandler;
 import org.exoplatform.ecm.connector.fckeditor.FCKFolderHandler;
-import org.exoplatform.ecm.connector.fckeditor.FCKMessage;
 import org.exoplatform.ecm.connector.fckeditor.FCKUtils;
 import org.exoplatform.ecm.connector.fckeditor.FileUploadHandler;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -422,7 +418,7 @@ public abstract class BaseConnector {
     try {
       Node sharedPortal = livePortalManagerService.getLiveSharedPortal(repositoryName,
           localSessionProvider.getSessionProvider(null));
-      return sharedPortal;
+      return sharedPortal;      
     } catch (Exception e) {
       return null;
     }
