@@ -174,6 +174,7 @@ public class UIContentDialogForm extends UIBaseDialogForm {
         try{
           homeNode.save();
           newNode = (Node) homeNode.getSession().getItem(addedPath);
+          event.getRequestContext().setAttribute("nodePath",newNode.getPath());
         }catch(Exception e) {} 
       }catch(AccessControlException ace) {
         throw new AccessDeniedException(ace.getMessage());
@@ -202,6 +203,4 @@ public class UIContentDialogForm extends UIBaseDialogForm {
       uiQuickWizard.viewStep(uiQuickWizard.getCurrentStep()+1);
     }
   }
-
-
 }
