@@ -70,6 +70,11 @@
     <key>org.exoplatform.services.wcm.javascript.XJavascriptService</key>
     <type>org.exoplatform.services.wcm.javascript.XJavascriptService</type>    
   </component>
+  
+  <component>
+    <key>org.exoplatform.services.wcm.webcontent.TOCGeneratorService</key>
+    <type>org.exoplatform.services.wcm.webcontent.TOCGeneratorService</type>    
+  </component>
      
    <component>   
      <type>org.exoplatform.services.wcm.contribution.WebContributionService</type>
