@@ -1,6 +1,7 @@
 <%
   import javax.jcr.NodeIterator;
   import javax.jcr.Node;
+  import org.exoplatform.services.wcm.webcontent.TOCGeneratorService;
 
   def currentNode = uicomponent.getNode() ; 
   def htmlFile = currentNode.getNode("default.html") ;
@@ -14,10 +15,21 @@
   def exSkinService = uicomponent.getComponentInstanceOfType(skinClass) ;
   def exJSService = uicomponent.getComponentInstanceOfType(javaScriptClass) ;
        
-  def css= exSkinService.getActiveStylesheet(jsNode);
-  def js=  exJSService.getActiveJavaScript(cssNode) ;
-  def rcontext = _ctx.getRequestContext() ;    
-%>  
+  def css= exSkinService.getActiveStylesheet(cssNode);
+  def js=  exJSService.getActiveJavaScript(jsNode) ;
+  
+  TOCGeneratorService tocService = uicomponent.getApplicationComponent(TOCGeneratorService.class);
+	String tocContent = tocService.getTOC(htmlFile);
+	
+	css = css.replaceAll("<\\/?p>","");
+	js = js.replaceAll("<\\/?p>","");
+	
+	System.out.println("===========> css is: " + css);
+	System.out.println("===========> js is: " + js);
+%>
 <style><%=css%></style>
+<div class="toc">
+<%=tocContent%>
+</div>
 <%=htmlFile.getNode("jcr:content").getProperty("jcr:data").getString() ;%>
 <script><%=js%></script>
