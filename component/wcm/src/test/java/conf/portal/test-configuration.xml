@@ -122,6 +122,10 @@
     <type>org.exoplatform.services.organization.impl.mock.DummyOrganizationService</type>
   </component>
   
+  <component>
+    <type>org.exoplatform.services.wcm.webcontent.TOCGeneratorService</type>
+  </component>
+  
   <external-component-plugins>
     <target-component>org.exoplatform.services.naming.InitialContextInitializer</target-component>
     <component-plugin>
@@ -156,4 +160,7 @@
   <remove-configuration>org.exoplatform.services.scheduler.JobSchedulerService</remove-configuration>    
   <remove-configuration>org.exoplatform.services.transaction.ExoTransactionService</remove-configuration>
   <remove-configuration>org.exoplatform.services.cms.queries.QueryService</remove-configuration>  
+  <remove-configuration>org.exoplatform.services.wcm.javascript.XJavascriptService</remove-configuration>  
+  <remove-configuration>org.exoplatform.services.wcm.core.WebSchemaConfigService</remove-configuration>  
+  <remove-configuration>org.exoplatform.services.wcm.skin.XSkinService</remove-configuration>  
 </configuration>
