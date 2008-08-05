@@ -32,31 +32,55 @@ public class LinkBean {
   static final public String STATUS_ACTIVE = "active";
   static final public String STATUS_BROKEN = "broken";
   
-  private String strUrl;
-  private String strStatus;
+  private String link;
+  private String url;
+  private String status;
+  
+  public LinkBean() {
+    super();
+  }
+  
+  public LinkBean(String link) {
+    this.link = link;
+  }
+  
+  public LinkBean(String url, String status) {
+    this.url = url;
+    this.status = status;
+  }
   
   public String getStatus() {
-    return strStatus;
-  }
-  public void setStatus(String strStatus) {
-    this.strStatus = strStatus;
-  }
-  public String getUrl() {
-    return strUrl;
-  }
-  public void setUrl(String strUrl) {
-    this.strUrl = strUrl;
+    return status;
   }
   
-//  public String toString() {
-//    return STATUS + strStatus + SEPARATOR + URL + strUrl;
-//  }
-//  
-//  public LinkBean parse(String s) {
-//    String[] strLinkValues = s.split(SEPARATOR);
-//    LinkBean linkValue = new LinkBean();
-//    linkValue.setStatus(STATUS + strLinkValues[0]);
-//    linkValue.setUrl(URL + strLinkValues[1]);
-//    return linkValue;
-//  }
+  public void setStatus(String status) {
+    this.status = status;
+  }
+  
+  public String getUrl() {
+    return url;
+  }
+  
+  public String getLink() {
+    return link;
+  }
+
+  public void setLink(String link) {
+    this.link = link;
+  }
+  
+  public void setUrl(String url) {
+    this.url = url;
+  }
+  
+  public String getLinkUrl() {
+    // link pattern: "status=xxx@url=http://xxx.com
+    String[] links = link.split(SEPARATOR);
+    return links[1].replaceAll(URL, "");
+  }
+  
+  public String toPattern() {
+    return STATUS + status + SEPARATOR + URL + url;
+  }
+  
 }
