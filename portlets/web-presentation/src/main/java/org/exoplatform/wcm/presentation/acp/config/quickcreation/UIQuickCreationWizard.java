@@ -101,7 +101,7 @@ public class UIQuickCreationWizard extends UIBaseWizard {
       actions = new String[] {"ViewStep2", "Abort"};
       break;
     case STEP2:
-      actions = new String[] {"ViewStep3", "Abort"};
+      actions = new String[] {"Abort"};
       break;
     case STEP3:
       actions = new String[] {"Back", "ViewStep4", "Finish"};
