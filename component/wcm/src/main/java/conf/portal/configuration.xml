@@ -67,6 +67,11 @@
   </component>
   
   <component>
+    <key>org.exoplatform.services.wcm.webcontent.LinkExtractorService</key>
+    <type>org.exoplatform.services.wcm.webcontent.LinkExtractorService</type>    
+  </component>
+  
+  <component>
     <key>org.exoplatform.services.wcm.javascript.XJavascriptService</key>
     <type>org.exoplatform.services.wcm.javascript.XJavascriptService</type>    
   </component>
@@ -150,5 +155,25 @@
       <description>this listener  new live portal content storage</description>
     </component-plugin>
   </external-component-plugins>
-     
+  
+  <external-component-plugins>
+    <target-component>org.exoplatform.services.scheduler.JobSchedulerService</target-component>
+    <component-plugin>
+      <name>AddCronJob</name>
+      <set-method>addCronJob</set-method>
+      <type>org.exoplatform.services.scheduler.CronJob</type>
+      <description>add a cron job to the JobSchedulerService</description>
+      <init-params>
+        <properties-param>
+          <name>cronjob.info</name>
+          <description>Link validate job</description>
+          <property name="jobName" value="job"/>
+          <property name="groupName" value="group"/>
+          <property name="job" value="org.exoplatform.services.wcm.link.LinkValidatorJob"/>
+          <property name="expression" value="0 45 17 ? * *"/>
+        </properties-param>
+      </init-params>          
+    </component-plugin>    
+  </external-component-plugins>
+  
 </configuration>
