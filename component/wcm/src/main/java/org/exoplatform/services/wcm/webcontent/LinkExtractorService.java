@@ -24,14 +24,15 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Property;
 import javax.jcr.Session;
+import javax.jcr.Value;
+import javax.jcr.ValueFactory;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 
-import org.exoplatform.services.cms.actions.ActionServiceContainer;
 import org.exoplatform.services.html.HTMLNode;
 import org.exoplatform.services.html.parser.HTMLParser;
-import org.exoplatform.services.html.util.HyperLinkUtil;
-import org.exoplatform.services.wcm.core.WebSchemaConfigService;
+import org.exoplatform.services.wcm.link.HyperLinkUtilExtended;
+import org.exoplatform.services.wcm.link.LinkBean;
 
 /**
  * Created by The eXo Platform SAS
@@ -41,10 +42,8 @@ import org.exoplatform.services.wcm.core.WebSchemaConfigService;
  */
 public class LinkExtractorService {
   
-  private WebSchemaConfigService webSchemaConfigService_;
   
-  public LinkExtractorService(WebSchemaConfigService webSchemaConfigService, ActionServiceContainer actionServiceContainer) {
-    this.webSchemaConfigService_ = webSchemaConfigService;
+  public LinkExtractorService() {
   }
   
   /**
@@ -69,58 +68,70 @@ public class LinkExtractorService {
       Property jcrData = jcrContent.getProperty("jcr:data");
       String sContent = jcrData.getString();
       HTMLNode htmlRootNode = HTMLParser.createDocument(sContent).getRoot();
-      HyperLinkUtil linkUtil = new HyperLinkUtil();
-      for (Iterator<String> iterLink = linkUtil.getSiteLink(htmlRootNode).iterator(); iterLink.hasNext();) {
-        listHyperlink.add(iterLink.next());
-      }
-      for (Iterator<String> iterImage = linkUtil.getImageLink(htmlRootNode).iterator(); iterImage.hasNext();) {
-        listHyperlink.add(iterImage.next());
-      }
+      HyperLinkUtilExtended linkUtil = new HyperLinkUtilExtended();
+      for (Iterator<String> iterLink = linkUtil.getSiteLink(htmlRootNode).iterator(); iterLink.hasNext();)
+        listHyperlink.add(iterLink.next().replaceAll("SingleQuote", "'").replaceAll("SingleSharp", "#"));
+      for (Iterator<String> iterImage = linkUtil.getImageLink(htmlRootNode).iterator(); iterImage.hasNext();)
+        listHyperlink.add(iterImage.next().replaceAll("SingleQuote", "'").replaceAll("SingleSharp", "#"));
     }
     return listHyperlink;
   }
 
   /**
-   * Creates the link nodes and insert its to links folder in current web content node.
+   * Add exo:links (multi value) property of exo:linkable node type to web content node, with pattern
    * 
    * @param webContent the current web content node
    *  
    * @throws Exception the exception
    */
   public void createLinkNode(Node webContent) throws Exception {
-    WebContentSchemaHandler webContentSchemaHandler = webSchemaConfigService_.getWebSchemaHandlerByType(WebContentSchemaHandler.class);   
-    Node linkFolderNode = webContentSchemaHandler.getLinkFolder(webContent);
+    ValueFactory valueFactory = webContent.getSession().getValueFactory(); 
+    
+    if (webContent.canAddMixin("exo:linkable"))
+      webContent.addMixin("exo:linkable");
     
     // get old link from jcr
     List<String> listOld = new ArrayList<String>();
-    for (NodeIterator iteratorNode = linkFolderNode.getNodes();iteratorNode.hasNext();) {
-      listOld.add(iteratorNode.nextNode().getProperty("exo:linkURL").getString());
+    if (webContent.hasProperty("exo:links")) {
+      Property property = webContent.getProperty("exo:links");
+      for (Value value : property.getValues())
+        listOld.add(value.getString());
     }
     
     // get new link from web content form
     List<String> listNew = extractLink(webContent); 
     
-    // create temp list to save all link from jcr
-    List<String> listTmp = new ArrayList<String>();
-    listTmp.addAll(listOld);
+    // compare, remove old link, add new link, create new List
+    List<String> listResult = new ArrayList<String>();
     
-    // remove link from old list which is not avalable in new list
-    listOld.removeAll(listNew);
-    for(String linkUrl: listOld) {
-      // remove ':' and '/' charater because it's conflict in jcr
-      String linkName = linkUrl.replaceAll("://", "@").replaceAll("/", "|");
-      Node linkNode = linkFolderNode.getNode(linkName);
-      linkNode.remove();
-    }
+    for (int intOld = 0; intOld < listOld.size(); intOld++)
+      for (int intNew = 0; intNew < listNew.size(); intNew++)
+        if (listOld.get(intOld).split(LinkBean.SEPARATOR)[1].replaceAll(LinkBean.URL, "").equals(listNew.get(intNew)))
+          listResult.add(listOld.get(intOld));
 
-    // add link from new list which is not avalable in old list
-    listNew.removeAll(listTmp);
-    for(String linkUrl: listNew) {
-      // remove ':' and '/' charater because it's conflict in jcr
-      String linkName = linkUrl.replaceAll("://", "@").replaceAll("/", "|");
-      Node linkNode = linkFolderNode.addNode(linkName, "exo:link");
-      linkNode.setProperty("exo:linkURL", linkUrl);
+    List<String> listNew_ = new ArrayList<String>();
+    listNew_.addAll(listNew);
+    for (int intNew = 0; intNew < listNew.size(); intNew++)
+      for (int intOld = 0; intOld < listOld.size(); intOld++)
+        if (listNew.get(intNew).equals(listOld.get(intOld).split(LinkBean.SEPARATOR)[1].replaceAll(LinkBean.URL, "")))
+          listNew_.set(intNew, "");
+
+    for (String strNew_ : listNew_)
+      if (!strNew_.equals(""))
+        listResult.add(strNew_);
+
+    // Create an array of value to add to exo:links property
+    Value[] values = new Value[listResult.size()];
+    int intValue = 0;
+    for(String strUrl: listResult) {
+      if (strUrl.indexOf(LinkBean.STATUS) < 0)
+        values[intValue] = valueFactory.createValue(LinkBean.STATUS + LinkBean.STATUS_UNCHECKED + LinkBean.SEPARATOR + LinkBean.URL + strUrl);
+      else 
+        values[intValue] = valueFactory.createValue(strUrl);
+      intValue++;
     }
+    
+    webContent.setProperty("exo:links", values);
     
     webContent.getSession().save();   
   }
