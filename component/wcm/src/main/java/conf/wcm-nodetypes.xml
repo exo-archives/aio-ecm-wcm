@@ -83,7 +83,11 @@
       <supertype>exo:presentationable</supertype>      
       <supertype>mix:referenceable</supertype>
     </supertypes>
-  	<propertyDefinitions>      
+  	<propertyDefinitions>
+  	<propertyDefinition name="exo:htmlTOC" requiredType="String" autoCreated="true" mandatory="false"
+        onParentVersion="COPY" protected="false" multiple="true">
+        <valueConstraints/>	      
+      </propertyDefinition>  
     </propertyDefinitions>    
   </nodeType>
   
@@ -253,5 +257,19 @@
       </propertyDefinition>
     </propertyDefinitions>
   </nodeType>
-
+  
+  <nodeType name="exo:multiPageContent" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
+  	<supertypes>
+      <supertype>exo:presentationable</supertype>      
+    </supertypes>
+    <propertyDefinitions>
+      <propertyDefinition name="exo:presentationType" requiredType="String" autoCreated="true" mandatory="false"
+        onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>	      
+        <defaultValues>
+          <defaultValue>exo:multiPageContent</defaultValue>
+        </defaultValues>
+      </propertyDefinition>      
+    </propertyDefinitions>
+  </nodeType>                
 </nodeTypes>
