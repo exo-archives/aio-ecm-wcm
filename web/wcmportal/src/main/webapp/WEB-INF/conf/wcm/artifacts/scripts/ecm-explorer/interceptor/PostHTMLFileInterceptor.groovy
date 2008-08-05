@@ -15,35 +15,44 @@
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
 
-import java.util.Map;
-
 import javax.jcr.Node;
 import javax.jcr.Session;
 
 import org.apache.commons.lang.StringUtils;
-
+import org.exoplatform.services.wcm.webcontent.TOCGeneratorService;
 import org.exoplatform.services.cms.scripts.CmsScript;
-import org.exoplatform.services.cms.records.RecordsService;
 import org.exoplatform.services.jcr.RepositoryService;
 
-public class PostHTMLFileInterceptor implements CmsScript { 
-
-  private WcmService wcmService_ ;
-
-  public PostHTMLFileInterceptor(WcmService wcmService) {
-    wcmService_ = wcmService; 
-  }
-
+public class PostHTMLFileInterceptor implements CmsScript {
+	
+	private RepositoryService repositoryService;
+	private TOCGeneratorService tocService;
+	
+	public PostHTMLFileInterceptor(RepositoryService repositoryService, TOCGeneratorService tocGeneratorService) {
+		this.repositoryService = repositoryService;
+		tocService = tocGeneratorService;
+	}
+	
   public void execute(Object context) {
-    String path = (String) context;         		
-    String[] splittedPath = path.split("&workspaceName=");
-    String[] splittedContent = splittedPath[1].split("&repository=");      
-    String repository = splittedContent[1];
-    String worksapce = splittedContent[0] ;
-    String nodepath = splittedPath[0];
-    wcmService_.updateWebContentReference(repository,worksapce,nodepath) ;      
+		String path = (String) context;     
+    Session session = null ;
+		try{
+			String[] splittedPath = path.split("&workspaceName=");
+      String[] splittedContent = splittedPath[1].split("&repository=");
+      
+      session = repositoryService.getRepository(splittedContent[1]).getSystemSession(splittedContent[0]);
+	    Node webContentNode = (Node) session.getItem(splittedPath[0]);
+	    tocService.generateTOC(webContentNode);
+	    println("Post PostHTMLFile interceptor, created exo:Toc : " + splittedPath[0]);
+      session.save();
+      session.logout();
+		}catch(Exception e) {
+      if(session != null) {
+        session.logout() ;
+      }
+			e.printStackTrace() ;
+		}
   }
 
   public void setParams(String[] params) {}
-
 }
