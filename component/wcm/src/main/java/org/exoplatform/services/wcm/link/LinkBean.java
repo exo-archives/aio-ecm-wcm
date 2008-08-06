@@ -79,7 +79,7 @@ public class LinkBean {
     return links[1].replaceAll(URL, "");
   }
   
-  public String toPattern() {
+  public String toString() {
     return STATUS + status + SEPARATOR + URL + url;
   }
   
