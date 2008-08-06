@@ -28,6 +28,11 @@
     <key>org.exoplatform.services.wcm.portal.LivePortalManagerService</key>
     <type>org.exoplatform.services.wcm.portal.impl.LivePortalManagerServiceImpl</type>    
   </component>
+  
+  <component>
+    <key>org.exoplatform.services.wcm.link.LiveLinkManagerService</key>
+    <type>org.exoplatform.services.wcm.link.LiveLinkManagerServiceImpl</type>    
+  </component>
         
   <component>
     <key>org.exoplatform.services.wcm.core.WebSchemaConfigService</key>
@@ -170,7 +175,7 @@
           <property name="jobName" value="job"/>
           <property name="groupName" value="group"/>
           <property name="job" value="org.exoplatform.services.wcm.link.LinkValidatorJob"/>
-          <property name="expression" value="0 * 17 * * ?"/>
+          <property name="expression" value="0 * 14-18 * * ?"/>
         </properties-param>
       </init-params>          
     </component-plugin>    
