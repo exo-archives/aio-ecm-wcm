@@ -135,7 +135,7 @@ public class LinkExtractorService {
     for(String url: listResult) {
       if (url.indexOf(LinkBean.STATUS) < 0) {
         LinkBean linkBean = new LinkBean(url, LinkBean.STATUS_UNCHECKED);
-        values[i] = valueFactory.createValue(linkBean.toPattern());
+        values[i] = valueFactory.createValue(linkBean.toString());
       } else {  
         values[i] = valueFactory.createValue(url);
       }
