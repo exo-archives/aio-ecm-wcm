@@ -125,7 +125,7 @@ public class UIContentCreationWizard extends UIBaseWizard {
       String portalName = Util.getUIPortal().getName();
       SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
       LivePortalManagerService portalManager = uiContentDialogForm.getApplicationComponent(LivePortalManagerService.class);
-      Node portalNode = portalManager.getLivePortal("repository", portalName, sessionProvider);
+      Node portalNode = portalManager.getLivePortal(portalName, sessionProvider);
       WebSchemaConfigService webConfigService = uiContentDialogForm.getApplicationComponent(WebSchemaConfigService.class);
       PortalFolderSchemaHandler handler = webConfigService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
       Node webContentStored = handler.getWebContentStorage(portalNode);
