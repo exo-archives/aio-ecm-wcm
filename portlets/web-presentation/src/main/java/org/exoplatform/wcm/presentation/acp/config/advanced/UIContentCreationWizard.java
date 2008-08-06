@@ -51,7 +51,7 @@ import org.exoplatform.webui.event.EventListener;
 
 @ComponentConfigs( {
   @ComponentConfig(
-      template = "app:/groovy/presentation/webui/component/UIWizard.gtmpl",
+      template = "app:/groovy/advancedPresentation/config/UIWizard.gtmpl",
       events = {
           @EventConfig(listeners = UIContentCreationWizard.ViewStep1ActionListener.class),  
           @EventConfig(listeners = UIContentCreationWizard.ViewStep2ActionListener.class),
