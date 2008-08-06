@@ -44,7 +44,7 @@ import org.exoplatform.webui.form.UIFormRadioBoxInput;
 
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class, 
-    template = "app:/groovy/presentation/webui/component/UIWelcomeScreen.gtmpl",
+    template = "app:/groovy/advancedPresentation/config/UIWelcomeScreen.gtmpl",
     events = {
       @EventConfig(listeners = UIWelcomeScreen.StartProcessActionListener.class)
     }
@@ -66,7 +66,6 @@ public class UIWelcomeScreen extends UIForm {
 
     if(isNewConfig) {
       option.add(new SelectItemOption<String>(labelQuickCreate, "QuickCreate")) ;
-      option.add(new SelectItemOption<String>(labelAdvancedCreate, "AdvancedCreate")) ;
       option.add(new SelectItemOption<String>(labelSelectExisted, "SelectExisted")) ;
       UIFormRadioBoxInput radioInput = new UIFormRadioBoxInput("radio", "radio", option) ;
       radioInput.setAlign(UIFormRadioBoxInput.VERTICAL_ALIGN) ;
@@ -87,9 +86,7 @@ public class UIWelcomeScreen extends UIForm {
       try{
         UIWelcomeScreen startOption = event.getSource() ;
         String radioValue = startOption.<UIFormRadioBoxInput>getUIInput("radio").getValue() ;
-        if (radioValue.equals("AdvancedCreate")) {
-          startOption.setComponent(UIContentCreationWizard.class, null, null);
-        } else if(radioValue.equals("QuickCreate") || radioValue.equals("EditCurrentContent")) {
+        if(radioValue.equals("QuickCreate") || radioValue.equals("EditCurrentContent")) {
           startOption.setComponent(UIQuickCreationWizard.class, null, null);
         } else if(radioValue.equals("SelectOtherContent") || radioValue.equals("SelectExisted")) {
           startOption.setComponent(UIWebContentSelectorForm.class, null, null);
