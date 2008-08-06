@@ -37,10 +37,6 @@ public class HyperLinkUtilExtended extends HyperLinkUtil {
     map.put("frame", "src");
     map.put("meta", "url");
     
-    List<String> listAttribute = getAttributes(node, null, map,null);
-    for (int i = 0; i < listAttribute.size(); i++)
-      listAttribute.set(i, listAttribute.get(i).replaceAll("&#39;", "SingleQuote").replaceAll("#", "SingleSharp"));
-    
-    return listAttribute;
+    return getAttributes(node, null, map, null);
   }
 }
