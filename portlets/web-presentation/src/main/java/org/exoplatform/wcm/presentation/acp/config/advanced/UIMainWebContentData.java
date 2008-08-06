@@ -22,7 +22,7 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 
 @ComponentConfig(
     lifecycle=Lifecycle.class,
-    template =  "app:/groovy/presentation/webui/component/UITabPane_New.gtmpl"
+    template =  "app:/groovy/advancedPresentation/config/UITabPane_New.gtmpl"
 )
 public class UIMainWebContentData extends UITabPane {
 
