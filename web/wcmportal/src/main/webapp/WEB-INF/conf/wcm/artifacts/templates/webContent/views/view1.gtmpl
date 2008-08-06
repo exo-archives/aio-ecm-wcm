@@ -21,15 +21,10 @@
   TOCGeneratorService tocService = uicomponent.getApplicationComponent(TOCGeneratorService.class);
 	String tocContent = tocService.getTOC(htmlFile);
 	
-	css = css.replaceAll("<\\/?p>","");
-	js = js.replaceAll("<\\/?p>","");
-	
-	System.out.println("===========> css is: " + css);
-	System.out.println("===========> js is: " + js);
 %>
 <style><%=css%></style>
-<div class="toc">
-<%=tocContent%>
+<div class='toc'>
+	<%= tocContent%>
 </div>
-<%=htmlFile.getNode("jcr:content").getProperty("jcr:data").getString() ;%>
+<%=htmlFile.getNode("jcr:content").getProperty("jcr:data").getString()%>
 <script><%=js%></script>
