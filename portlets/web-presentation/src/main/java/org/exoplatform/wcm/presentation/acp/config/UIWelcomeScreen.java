@@ -22,7 +22,6 @@ import java.util.ResourceBundle;
 
 import javax.jcr.ItemNotFoundException;
 
-import org.exoplatform.wcm.presentation.acp.config.advanced.UIContentCreationWizard;
 import org.exoplatform.wcm.presentation.acp.config.quickcreation.UIQuickCreationWizard;
 import org.exoplatform.wcm.presentation.acp.config.selector.UIWebContentSelectorForm;
 import org.exoplatform.web.application.RequestContext;
@@ -54,28 +53,27 @@ public class UIWelcomeScreen extends UIForm {
   public UIWelcomeScreen() throws Exception {}
 
   public UIWelcomeScreen setCreateMode(boolean isNewConfig) throws Exception {
-    getChildren().clear() ;
-    List<SelectItemOption<String>> option = new ArrayList<SelectItemOption<String>>() ;
-    RequestContext context = RequestContext.<RequestContext>getCurrentInstance() ;
-    ResourceBundle res = context.getApplicationResourceBundle() ;
-    String labelQuickCreate = res.getString(getId() + ".label.QuickCreate") ;
-    String labelAdvancedCreate = res.getString(getId() + ".label.AdvancedCreate") ;
-    String labelSelectExisted = res.getString(getId() + ".label.SelectExisted") ;
-    String labelEditContent = res.getString(getId() + ".label.EditContent") ;
-    String labelSelectOther = res.getString(getId() + ".label.SelectOther") ;
+    getChildren().clear();
+    List<SelectItemOption<String>> option = new ArrayList<SelectItemOption<String>>();
+    RequestContext context = RequestContext.<RequestContext>getCurrentInstance();
+    ResourceBundle res = context.getApplicationResourceBundle();
+    String labelQuickCreate = res.getString(getId() + ".label.QuickCreate");
+    String labelSelectExisted = res.getString(getId() + ".label.SelectExisted");
+    String labelEditContent = res.getString(getId() + ".label.EditContent");
+    String labelSelectOther = res.getString(getId() + ".label.SelectOther");
 
     if(isNewConfig) {
-      option.add(new SelectItemOption<String>(labelQuickCreate, "QuickCreate")) ;
-      option.add(new SelectItemOption<String>(labelSelectExisted, "SelectExisted")) ;
-      UIFormRadioBoxInput radioInput = new UIFormRadioBoxInput("radio", "radio", option) ;
-      radioInput.setAlign(UIFormRadioBoxInput.VERTICAL_ALIGN) ;
-      addUIFormInput(radioInput) ;
+      option.add(new SelectItemOption<String>(labelQuickCreate, "QuickCreate"));
+      option.add(new SelectItemOption<String>(labelSelectExisted, "SelectExisted"));
+      UIFormRadioBoxInput radioInput = new UIFormRadioBoxInput("radio", "radio", option);
+      radioInput.setAlign(UIFormRadioBoxInput.VERTICAL_ALIGN);
+      addUIFormInput(radioInput);
     }else {
-      option.add(new SelectItemOption<String>(labelEditContent, "EditCurrentContent")) ;
-      option.add(new SelectItemOption<String>(labelSelectOther, "SelectOtherContent")) ;
-      UIFormRadioBoxInput radioInput = new UIFormRadioBoxInput("radio", "radio", option) ;
-      radioInput.setAlign(UIFormRadioBoxInput.VERTICAL_ALIGN) ;
-      addUIFormInput(radioInput) ;
+      option.add(new SelectItemOption<String>(labelEditContent, "EditCurrentContent"));
+      option.add(new SelectItemOption<String>(labelSelectOther, "SelectOtherContent"));
+      UIFormRadioBoxInput radioInput = new UIFormRadioBoxInput("radio", "radio", option);
+      radioInput.setAlign(UIFormRadioBoxInput.VERTICAL_ALIGN);
+      addUIFormInput(radioInput);
     }
 
     return this ;
@@ -84,8 +82,8 @@ public class UIWelcomeScreen extends UIForm {
   public static class StartProcessActionListener extends EventListener<UIWelcomeScreen> {
     public void execute(Event<UIWelcomeScreen> event) throws Exception {
       try{
-        UIWelcomeScreen startOption = event.getSource() ;
-        String radioValue = startOption.<UIFormRadioBoxInput>getUIInput("radio").getValue() ;
+        UIWelcomeScreen startOption = event.getSource();
+        String radioValue = startOption.<UIFormRadioBoxInput>getUIInput("radio").getValue();
         if(radioValue.equals("QuickCreate") || radioValue.equals("EditCurrentContent")) {
           startOption.setComponent(UIQuickCreationWizard.class, null, null);
         } else if(radioValue.equals("SelectOtherContent") || radioValue.equals("SelectExisted")) {
@@ -96,8 +94,8 @@ public class UIWelcomeScreen extends UIForm {
   }
 
   public <T extends UIComponent> void setComponent(Class<T> type, String config, String id) throws Exception {
-    UIPortletConfig uiConfig = getParent() ;
-    uiConfig.getChildren().clear() ;
-    uiConfig.addChild(type, config, id) ;
+    UIPortletConfig uiConfig = getParent();
+    uiConfig.getChildren().clear();
+    uiConfig.addChild(type, config, id);
   }
 }
