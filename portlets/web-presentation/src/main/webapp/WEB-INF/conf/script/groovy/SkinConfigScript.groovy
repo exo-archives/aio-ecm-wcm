@@ -1,20 +1,20 @@
 SkinService.addSkin(
     "web-presentation/AdvancedPresentationPortlet",
     "Default",
-    "/web-presentation/skin/webui/component/UIAdvancedPresentation/DefaultStylesheet.css",
+    "/web-presentation/skin/advancedPresentation/Default/Stylesheet.css",
     ServletContext
 ) ;
 
 SkinService.addSkin(
     "web-presentation/AdvancedPresentationPortlet",
     "Vista",
-    "/web-presentation/skin/webui/component/UIAdvancedPresentation/VistaStylesheet.css",
+    "/web-presentation/skin/advancedPresentation/Vista/Stylesheet.css",
     ServletContext
 ) ;
  
 SkinService.addSkin(
     "web-presentation/AdvancedPresentationPortlet",
     "Mac",
-    "/web-presentation/skin/webui/component/UIAdvancedPresentation/MacStylesheet.css",
+    "/web-presentation/skin/advancedPresentation/Mac/Stylesheet.css",
     ServletContext
 ) ;
