@@ -70,9 +70,9 @@ public class LinkExtractorService {
       HTMLNode htmlRootNode = HTMLParser.createDocument(sContent).getRoot();
       HyperLinkUtilExtended linkUtil = new HyperLinkUtilExtended();
       for (Iterator<String> iterLink = linkUtil.getSiteLink(htmlRootNode).iterator(); iterLink.hasNext();)
-        listHyperlink.add(iterLink.next().replaceAll("SingleQuote", "'").replaceAll("SingleSharp", "#"));
+        listHyperlink.add(iterLink.next());
       for (Iterator<String> iterImage = linkUtil.getImageLink(htmlRootNode).iterator(); iterImage.hasNext();)
-        listHyperlink.add(iterImage.next().replaceAll("SingleQuote", "'").replaceAll("SingleSharp", "#"));
+        listHyperlink.add(iterImage.next());
     }
     return listHyperlink;
   }
