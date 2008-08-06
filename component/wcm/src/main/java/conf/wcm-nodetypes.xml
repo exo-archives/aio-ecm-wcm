@@ -151,6 +151,15 @@
     </supertypes>    
   </nodeType>
   
+  <nodeType name="exo:linkable" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
+    <propertyDefinitions>
+      <propertyDefinition name="exo:links" requiredType="String" autoCreated="true" mandatory="false"
+        onParentVersion="COPY" protected="false" multiple="true">
+        <valueConstraints/>	      
+      </propertyDefinition>      
+    </propertyDefinitions>
+  </nodeType>            
+    
   <nodeType name="exo:link" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
   	<supertypes>
       <supertype>mix:referenceable</supertype>     
