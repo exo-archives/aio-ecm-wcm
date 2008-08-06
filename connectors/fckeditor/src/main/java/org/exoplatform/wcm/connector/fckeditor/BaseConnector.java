@@ -129,6 +129,9 @@ public abstract class BaseConnector {
    */
   protected Response buildXMLDocumentOutput(String currentFolder, String workspaceName,
       String repositoryName, String jcrPath, String command) throws Exception {
+    Session session = getSession(repositoryName, workspaceName);
+    Node webContentNode = getWebContentNode(session.getRootNode(), jcrPath);
+    if (webContentNode == null) return null;
     Document document = null;
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
@@ -144,7 +147,7 @@ public abstract class BaseConnector {
       currentFolderFullpath = getCurrentFolderFullPath(currentPortalNode, sharedPortalNode,
           currentFolder, jcrPath);
       currentNode = getCurrentNode(repositoryName, workspaceName, currentFolderFullpath);
-      Node webContentNode = getWebContentNode(currentNode, jcrPath);
+      webContentNode = getWebContentNode(currentNode, jcrPath);
       if (webContentNode == null)
         return null;
       if (currentFolderFullpath.equals(currentPortalNode.getPath())
