@@ -37,7 +37,7 @@ import org.exoplatform.webui.event.EventListener;
 
 @ComponentConfig(
     lifecycle=Lifecycle.class,
-    template="app:/groovy/presentation/webui/component/UIPresentationContainer.gtmpl",
+    template="app:/groovy/advancedPresentation/UIPresentationContainer.gtmpl",
     events = {
       @EventConfig(listeners=UIPresentationContainer.QuickEditActionListener.class)
     }
