@@ -16,6 +16,8 @@
  */
 package org.exoplatform.services.wcm.link;
 
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.scheduler.BaseJob;
 import org.exoplatform.services.scheduler.JobContext;
 
@@ -26,11 +28,18 @@ import org.exoplatform.services.scheduler.JobContext;
  * Aug 4, 2008  
  */
 public class LinkValidatorJob extends BaseJob {
-
-  @Override
+  
   public void execute(JobContext arg0) throws Exception {
-    LinkValidator linkValidator = new LinkValidatorImpl();
-    linkValidator.validate();
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    LiveLinkManagerService linkManagerService = 
+      (LiveLinkManagerService)container.getComponentInstanceOfType(LiveLinkManagerService.class);
+    if(linkManagerService == null) return;
+    try {
+      linkManagerService.validateLink();
+      System.out.println("____________________________________");
+      linkManagerService.validateLink("classic");
+    } catch (Exception e) {
+    }
   }
 
 }

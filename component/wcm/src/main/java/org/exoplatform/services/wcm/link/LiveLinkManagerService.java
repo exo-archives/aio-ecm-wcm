@@ -16,17 +16,24 @@
  */
 package org.exoplatform.services.wcm.link;
 
+import java.util.List;
+
 /**
  * Created by The eXo Platform SAS
  * Author : Phan Le Thanh Chuong
  *          chuong_phan@exoplatform.com
- * Aug 4, 2008  
+ * Aug 6, 2008  
  */
-public interface LinkValidator {
+public interface LiveLinkManagerService {
   
-  public void validate() throws Exception ;
+  public void validateLink() throws Exception;
   
-  public String getLinkStatus(String strUrl) throws Exception ;
+  public void validateLink(String portalName) throws Exception;
   
-  public String updateLinkStatus(String strUrl, String strStatus) throws Exception ;
+  public List<LinkBean> getBrokenLinks(String portalName) throws Exception;
+  
+  public List<LinkBean> getUncheckedLinks(String portalName) throws Exception;
+  
+  public List<LinkBean> getActiveLinks(String portalName) throws Exception;
+  
 }
