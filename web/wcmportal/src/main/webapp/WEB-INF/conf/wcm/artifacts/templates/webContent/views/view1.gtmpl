@@ -11,10 +11,10 @@
     
   def javaScriptClass="org.exoplatform.services.wcm.javascript.XJavascriptService";
   def skinClass="org.exoplatform.services.wcm.skin.XSkinService";
-    
+
   def exSkinService = uicomponent.getComponentInstanceOfType(skinClass) ;
   def exJSService = uicomponent.getComponentInstanceOfType(javaScriptClass) ;
-       
+
   def css= exSkinService.getActiveStylesheet(cssNode);
   def js=  exJSService.getActiveJavaScript(jsNode) ;
   
@@ -23,8 +23,14 @@
 	
 %>
 <style><%=css%></style>
-<div class='toc'>
-	<%= tocContent%>
-</div>
+<%
+	if(tocContent != null) {
+%>
+		<div class='toc'>
+			<%= tocContent%>
+		</div>
+<%
+	}
+%>
 <%=htmlFile.getNode("jcr:content").getProperty("jcr:data").getString()%>
 <script><%=js%></script>
