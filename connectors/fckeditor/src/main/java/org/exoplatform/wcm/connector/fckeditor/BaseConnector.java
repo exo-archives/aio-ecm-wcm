@@ -328,7 +328,7 @@ public abstract class BaseConnector {
       return webContentNode.getPath();
     } else if (currentFolder.equals(storageRelativePath)) {
       return rootStorageNode.getPath();
-    } else if (currentFolder.startsWith(webContentRelativePath)) {
+    } else if (webContentRelativePath!= null && currentFolder.startsWith(webContentRelativePath)) {
       rootStorageNode = getRootStorageOfWebContent(webContentNode);
       storageRelativePath = webContentRelativePath + rootStorageNode.getName() + "/";
       if (currentFolder.equals(storageRelativePath)) {
