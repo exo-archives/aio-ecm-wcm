@@ -11,7 +11,7 @@
 		
 		<init-param>
       <name>webui.configuration</name>
-      <value>/WEB-INF/conf/portlet/advancedPresentationPortlet/webui/configuration.xml</value>			
+      <value>/WEB-INF/conf/portlet/advancedPresentation/webui/configuration.xml</value>			
 		</init-param>
 		
 		<expiration-cache>0</expiration-cache>
@@ -21,7 +21,7 @@
 			<portlet-mode>edit</portlet-mode>
 		</supports>
 		<supported-locale>en</supported-locale>
-		<resource-bundle>locale.portlet.web-presentation.AdvancedPresentationPortlet</resource-bundle>
+		<resource-bundle>locale.portlet.advancedPresentation.AdvancedPresentationPortlet</resource-bundle>
 		
 		<portlet-info>
 			<title>Advanced Presntation Portlet</title>
