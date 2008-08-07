@@ -16,56 +16,75 @@
  */
 package org.exoplatform.services.wcm.skin;
 
+import java.util.List;
+
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
-import javax.jcr.Property;
 import javax.jcr.Session;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 import javax.servlet.ServletContext;
 
+import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.portal.webui.skin.SkinConfig;
 import org.exoplatform.portal.webui.skin.SkinService;
 import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.config.RepositoryEntry;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.picocontainer.Startable;
 
 /**
- * Created by The eXo Platform SAS
- * Author : Hoa.Pham
- *          hoa.pham@exoplatform.com
- * Apr 9, 2008  
+ * Created by The eXo Platform SAS Author : Hoa.Pham hoa.pham@exoplatform.com
+ * Apr 9, 2008
  */
 public class XSkinService implements Startable {
 
-  private SkinService skinService_ ; 
-  private ServletContext sContext_ ;
-  private RepositoryService repositoryService_ ;
+  private String SKIN_PATH = "/portal/css/portalContent/$portalName/Stylesheet.css".intern();    
+  public static final String DEFAULT_SKIN = "Default".intern();
+  final private String PORTAL_CONTENT_SKIN = "PortalContentSkin:".intern();
 
-  public XSkinService(SkinService skinService,RepositoryService repositoryService, ServletContext servletContext) {
-    this.skinService_ = skinService ;
-    this.repositoryService_ = repositoryService ;
-    this.sContext_ = servletContext ;    
+  private SkinService skinService ;   
+  private RepositoryService repositoryService ;
+  private LivePortalManagerService livePortalManagerService;  
+
+  /**
+   * Instantiates a new extended skin service to manage skin for web content
+   * 
+   * @param skinService the skin service
+   * @param repositoryService the repository service
+   * @param portalManagerService the portal manager service
+   */
+  public XSkinService(SkinService skinService,RepositoryService repositoryService,LivePortalManagerService portalManagerService) {
+    this.skinService = skinService ;
+    this.repositoryService = repositoryService ;       
+    this.livePortalManagerService = portalManagerService;
   }
 
+  /**
+   * Gets the active stylesheet.
+   * 
+   * @param home the home
+   * @return the active stylesheet
+   * @throws Exception the exception
+   */
   public String getActiveStylesheet(Node home) throws Exception {    
-    String cssQuery = "select * from exo:cssFile where jcr:path like '" +home.getPath()+ "/%' and exo:active='true'order by exo:priority DESC " ;   
-    QueryManager queryManager = home.getSession().getWorkspace().getQueryManager() ;
-    Query query = queryManager.createQuery(cssQuery, Query.SQL) ;
-    QueryResult queryResult = query.execute() ;
-    StringBuffer buffer = new StringBuffer() ;
-    for(NodeIterator iterator = queryResult.getNodes(); iterator.hasNext();) {
-      Node cssNode = iterator.nextNode() ;      
-      buffer.append(getFileContent(cssNode)) ;       
-    }
-    return buffer.toString() ;    
+    String cssQuery = "select * from exo:cssFile where jcr:path like '" +home.getPath()+ "/%' and exo:active='true'order by exo:priority DESC " ;
+    return queryCSSData(home,cssQuery);
   }
 
+  /**
+   * Make shared css.
+   * 
+   * @param repository the repository
+   * @param workspace the workspace
+   * @param cssPath the css path
+   * @throws Exception the exception
+   */
   public void makeSharedCSS(String repository,String workspace,String cssPath) throws Exception {
     SessionProvider sessionProvider = SessionProvider.createSystemProvider();
-    ManageableRepository manageableRepository = repositoryService_.getRepository(repository) ;
+    ManageableRepository manageableRepository = repositoryService.getRepository(repository) ;
     Session session = sessionProvider.getSession(workspace, manageableRepository) ;
     Node cssNode = (Node)session.getItem(cssPath) ;
     cssNode.setProperty("exo:sharedCSS", true) ;
@@ -73,48 +92,86 @@ public class XSkinService implements Startable {
     sessionProvider.close();
   }
 
-  public void merge(String repository,String workspace,String cssPath) throws Exception {        
+  /**
+   * update portal content skin add/edit/modify a css node in a portal
+   * 
+   * @param repository the repository
+   * @param workspace the workspace
+   * @param path the path of css node
+   * @throws Exception the exception
+   */
+  public void merge(String repository,String workspace,String path) throws Exception {        
     SessionProvider sessionProvider = SessionProvider.createSystemProvider();
-    String sharedCss = getActiveSharedStylesheet(repository, workspace, sessionProvider);
-    skinService_.addPortalSkin("WebContentSkin", "Default", "/portal/css/WebContent/Live/Stylesheet.css",sContext_,sharedCss) ;
+    for(String portalPath: livePortalManagerService.getLivePortalsPath()) {
+      if(path.startsWith(portalPath)) {
+        String portalName = livePortalManagerService.getPortalNameByPath(portalPath);
+        Node portal = livePortalManagerService.getLivePortal(portalName,sessionProvider);
+        addPortalSkin(portal,DEFAULT_SKIN);
+      }
+    }
     sessionProvider.close();
   }
 
-  private String getActiveSharedStylesheet(String repository,String workspace, SessionProvider sessionProvider) throws Exception{
-    String sharedCSSQuery = "select * from exo:cssFile where exo:active='true' and exo:sharedCSS='true' order by exo:priority DESC " ;    
-    ManageableRepository manageableRepository = (ManageableRepository)repositoryService_.getRepository(repository) ;
-    StringBuffer buffer = new StringBuffer();    
-    Session session = sessionProvider.getSession(workspace, manageableRepository) ;
-    QueryManager queryManager = session.getWorkspace().getQueryManager() ;
-    Query query = queryManager.createQuery(sharedCSSQuery, Query.SQL) ;
-    QueryResult queryResult = query.execute() ;
-    for(NodeIterator iterator = queryResult.getNodes();iterator.hasNext();) {
+  /**
+   * Gets the css path of given portalName and skin name
+   * 
+   * @param portalName the portal name
+   * @param skinName the skin name
+   * @return the skin path
+   */
+  public String getPortalContentSkinPath(String portalName,String skinName) {
+    String skinModule = PORTAL_CONTENT_SKIN.concat(portalName);
+    for(SkinConfig skinConfig: skinService.getPortalSkins(skinName)){
+      if(skinConfig.getModule().equals(skinModule)) {
+        return skinConfig.getCSSPath();
+      }
+    }
+    return null;
+  }   
+
+  private void addPortalSkin(Node portal,String skinName) throws Exception {    
+    String statement= "select * from exo:cssFile where jcr:path like '" 
+      + portal.getPath()+"/%' and exo:active='true' and exo:sharedCSS='true' order by exo:priority DESC ";    
+    String skinPath = SKIN_PATH.replaceAll("$portalName",portal.getName());
+    String skinCSS = queryCSSData(portal,statement);
+    String skinModule = PORTAL_CONTENT_SKIN.concat(portal.getName());
+    ServletContext servletContext = 
+      (ServletContext)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(ServletContext.class);    
+    skinService.addPortalSkin(skinModule,skinName,skinPath,servletContext,skinCSS);
+  }
+
+  private String queryCSSData(Node home,String statement) throws Exception {
+    QueryManager manager = home.getSession().getWorkspace().getQueryManager();
+    Query query = manager.createQuery(statement,Query.SQL);
+    QueryResult queryResult = query.execute();
+    StringBuffer buffer = new StringBuffer();
+    for(NodeIterator iterator = queryResult.getNodes();iterator.hasNext();iterator.next()) {
       Node cssFile = iterator.nextNode();
-      buffer.append(getFileContent(cssFile)) ;
-    }        
+      String css = cssFile.getNode("jcr:content").getProperty("jcr:data").getString();      
+      buffer.append(css) ;
+    }    
     return buffer.toString();
   }
 
-  private String getFileContent(Node file) throws Exception {
-    Property data = file.getNode("jcr:content").getProperty("jcr:data") ;
-    return data.getString() ;
-  }
-
+  /* (non-Javadoc)
+   * @see org.picocontainer.Startable#start()
+   */
   public void start() {    
     SessionProvider provider = SessionProvider.createSystemProvider();
     try {
-      RepositoryEntry repositoryEntry = repositoryService_.getDefaultRepository().getConfiguration() ;      
-      String repository = repositoryEntry.getName() ;
-      String worksapce = repositoryEntry.getDefaultWorkspaceName() ;      
-      String sharedCss = getActiveSharedStylesheet(repository,worksapce, provider) ;      
-      skinService_.addPortalSkin("WebContentSkin", "Default", "/portal/css/WebContent/Live/Stylesheet.css",sContext_,sharedCss) ;
+      List<Node> livePortals = livePortalManagerService.getLivePortals(provider);
+      for(Node portal:livePortals) {
+        addPortalSkin(portal,DEFAULT_SKIN);
+      }
     }catch (Exception e) {
     }finally {
       provider.close();
     }
   }
 
-  public void stop() {    
-  }      
+  /* (non-Javadoc)
+   * @see org.picocontainer.Startable#stop()
+   */
+  public void stop() { }      
 
 }

@@ -17,7 +17,11 @@
 package org.exoplatform.services.wcm.portal.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.jcr.ItemExistsException;
 import javax.jcr.Node;
@@ -40,9 +44,13 @@ import org.exoplatform.services.wcm.portal.LivePortalManagerService;
  * Jun 19, 2008  
  */
 
-public class LivePortalManagerServiceImpl implements LivePortalManagerService {
-
+/**
+ * The Class LivePortalManagerServiceImpl.
+ */
+public class LivePortalManagerServiceImpl implements LivePortalManagerService {    
   private final String PORTAL_FOLDER = "exo:portalFolder".intern();
+  private Map<String,String> livePortalPaths = new HashMap<String,String>();
+  
   private RepositoryService repositoryService; 
   private WCMConfigurationService wcmConfigService;
 
@@ -136,6 +144,7 @@ public class LivePortalManagerServiceImpl implements LivePortalManagerService {
     ExtendedNode newPortal = (ExtendedNode)livePortalsStorage.addNode(portalName,PORTAL_FOLDER);                  
     //Need set some other property for the portal node from portal config like access permission ..
     newPortal.getSession().save();
+    livePortalPaths.put(portalName,newPortal.getPath());    
   }
 
   /* (non-Javadoc)
@@ -145,5 +154,23 @@ public class LivePortalManagerServiceImpl implements LivePortalManagerService {
   throws Exception {    
     //we should not remove portal folder when a portal was removed. 
     //Should move the portal folder to other location to backup the content
+    livePortalPaths.remove(portalConfig.getName());
+  }
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.portal.LivePortalManagerService#getLivePortalsPath()
+   */
+  public Collection<String> getLivePortalsPath() throws Exception {
+    return livePortalPaths.values();    
+  }
+
+  public String getPortalNameByPath(String portalPath) throws Exception {
+    Set<String> keys = livePortalPaths.keySet();
+    for(String portalName: keys.toArray(new String[keys.size()])) {
+      if(livePortalPaths.get(portalName).equalsIgnoreCase(portalPath)) {
+        return portalName;
+      }
+    }    
+    return null;
   }        
 }
