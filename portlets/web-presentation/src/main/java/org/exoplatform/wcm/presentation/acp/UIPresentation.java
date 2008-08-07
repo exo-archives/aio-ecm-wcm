@@ -23,8 +23,8 @@ import javax.jcr.Node;
 import javax.jcr.Session;
 import javax.portlet.PortletPreferences;
 
-import org.exoplatform.dms.application.JCRResourceResolver;
-import org.exoplatform.dms.webui.component.UIBaseNodePresentation;
+import org.exoplatform.ecm.application.JCRResourceResolver;
+import org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.templates.TemplateService;
@@ -117,6 +117,18 @@ public class UIPresentation extends UIBaseNodePresentation {
     }catch (Exception e) {
     }    
     return resourceResolver ;   
+  }
+
+  public String getNodeType() throws Exception {   
+    return null;
+  }
+
+  public boolean isNodeTypeSupported() {
+    return false;
+  }
+
+  public void setNode(Node arg0) {
+    
   }
 
 }

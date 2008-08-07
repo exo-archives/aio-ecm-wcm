@@ -28,7 +28,7 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.version.VersionException;
 
-import org.exoplatform.dms.application.JCRResourceResolver;
+import org.exoplatform.ecm.application.JCRResourceResolver;
 import org.exoplatform.ecm.webui.form.UIBaseDialogForm;
 import org.exoplatform.ecm.webui.utils.DialogFormUtil;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
@@ -100,8 +100,7 @@ public class UIContentDialogForm extends UIBaseDialogForm {
   public String getTemplate() {
     TemplateService templateService = getApplicationComponent(TemplateService.class) ;
     String userName = Util.getPortalRequestContext().getRemoteUser();
-    try{
-      resetScriptInterceptor();
+    try{      
       return templateService.getTemplatePathByUser(true, contentType, userName, this.repositoryName);
     } catch(Exception e) {
       UIApplication uiApp = getAncestorOfType(UIApplication.class);
