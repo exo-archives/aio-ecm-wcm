@@ -30,7 +30,27 @@
               <field  name="showHiddenNode"><boolean>true</boolean></field>
               <field  name="allowCreateFolder"><string>both</string></field>       
             </object>
-          </object-param>                                                                                                      
+          </object-param>      
+           <object-param>        
+            <name>live web content center</name>
+            <description>live web content center</description>
+            <object type="org.exoplatform.services.cms.drives.DriveData">
+              <field  name="name"><string>Live Web Content Center</string></field>
+              <field  name="repository"><string>repository</string></field>
+              <field  name="workspace"><string>collaboration</string></field>
+              <field  name="permissions"><string>*:/platform/administrators</string></field>
+              <field  name="homePath"><string>/Web Content/Live</string></field>
+              <field  name="icon"><string></string></field>
+              <field  name="views">
+                <string>admin-view</string>
+              </field>
+              <field  name="viewPreferences"><boolean>false</boolean></field>
+              <field  name="viewNonDocument"><boolean>true</boolean></field>
+              <field  name="viewSideBar"><boolean>true</boolean></field>
+              <field  name="showHiddenNode"><boolean>true</boolean></field>
+              <field  name="allowCreateFolder"><string>both</string></field>       
+            </object>
+          </object-param>                                                                                                   
         </init-params>  
       </component-plugin> 
 
