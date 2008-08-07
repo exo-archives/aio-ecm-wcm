@@ -47,8 +47,9 @@
 	//refer form fckdialog.html
 	//web_NavigationPortlet
 	var oEditor = window.parent.InnerDialogLoaded();
+	var FCK = oEditor.FCK;
 	var FCKConfig = oEditor.FCKConfig;
-	var eXoPlugin = oEditor.FCK.eXoPlugin;
+	var eXoPlugin = FCK.eXoPlugin;
 	eXoPlugin.loadScript(window, "lang/" + eXoPlugin.userLanguage + ".js");
 	</script>
 </head>
