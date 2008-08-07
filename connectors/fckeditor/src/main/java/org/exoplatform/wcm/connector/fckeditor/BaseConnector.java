@@ -21,6 +21,7 @@ import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.PathNotFoundException;
 import javax.jcr.Session;
 
 import org.exoplatform.container.ExoContainer;
@@ -128,10 +129,7 @@ public abstract class BaseConnector {
    * @throws Exception the exception
    */
   protected Response buildXMLDocumentOutput(String currentFolder, String workspaceName,
-      String repositoryName, String jcrPath, String command) throws Exception {
-    Session session = getSession(repositoryName, workspaceName);
-    Node webContentNode = getWebContentNode(session.getRootNode(), jcrPath);
-    if (webContentNode == null) return null;
+      String repositoryName, String jcrPath, String command) throws Exception {    
     Document document = null;
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
@@ -147,11 +145,8 @@ public abstract class BaseConnector {
       currentFolderFullpath = getCurrentFolderFullPath(currentPortalNode, sharedPortalNode,
           currentFolder, jcrPath);
       currentNode = getCurrentNode(repositoryName, workspaceName, currentFolderFullpath);
-      webContentNode = getWebContentNode(currentNode, jcrPath);
-      if (webContentNode == null)
-        return null;
-      if (currentFolderFullpath.equals(currentPortalNode.getPath())
-          || currentFolderFullpath.equals(sharedPortalNode.getPath())) {
+      Node webContentNode = getWebContentNode(repositoryName, workspaceName, jcrPath);      
+      if (currentFolderFullpath.equals(currentPortalNode.getPath()) || currentFolderFullpath.equals(sharedPortalNode.getPath())) {
         document = createDocumentForPortal(currentNode, webContentNode, command);
       } else if (currentFolderFullpath.equals(jcrPath)) {
         document = createDocumentForPortal(webContentNode, null, command);
@@ -321,12 +316,11 @@ public abstract class BaseConnector {
       rootPortalNode = sharedPortalNode;
       currentPortalRelativePath = sharedPortalRelativePath;
     } else
-      rootPortalNode = currentPortalNode;
+    rootPortalNode = currentPortalNode;
     webContentNode = getWebContentNode(currentPortalNode, jcrPath);
-    if (webContentNode == null)
-      return null;
-    rootStorageNode = getRootStorageOfPortal(rootPortalNode);
-    webContentRelativePath = currentPortalRelativePath + webContentNode.getName() + "/";
+    if (webContentNode != null)
+      webContentRelativePath = currentPortalRelativePath + webContentNode.getName() + "/";
+    rootStorageNode = getRootStorageOfPortal(rootPortalNode);    
     storageRelativePath = currentPortalRelativePath + rootStorageNode.getName() + "/";
     if (currentFolder.equals(currentPortalRelativePath)) {
       return rootPortalNode.getPath();
@@ -430,6 +424,19 @@ public abstract class BaseConnector {
       if ("exo:webContent".equals(webContentNode.getPrimaryNodeType().getName()))
         return webContentNode;
     }
+    return null;
+  }
+  
+  private Node getWebContentNode(String repositoryName, String workspaceName, String jcrPath) throws Exception {
+    Session session = getSession(repositoryName, workspaceName);
+    Node webContent = null;
+    try {
+      webContent = (Node) session.getItem(jcrPath);
+      if ("exo:webContent".equals((webContent.getPrimaryNodeType().getName())))
+          return webContent;
+      else
+        return null;
+    } catch (PathNotFoundException exception){ }    
     return null;
   }
 
