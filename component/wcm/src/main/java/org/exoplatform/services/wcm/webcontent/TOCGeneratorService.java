@@ -44,6 +44,9 @@ import org.exoplatform.services.html.path.NodePathUtil;
 public class TOCGeneratorService {
 
   private final int MaxHeadingNumbers = 6;
+  private static final String TAG_NAME =  "tagName=".intern();
+  private static final String HEADING_LEVEL = "headingLevel=".intern();
+  private static final String HEADING_NUMBER_TEXT = "headingNumberText=".intern();
 
   public class Heading {
     HTMLNode node;
@@ -88,9 +91,9 @@ public class TOCGeneratorService {
         List<String> stringValues = new ArrayList<String>();
         for(Heading heading: headingList) {
           StringBuffer strBuf = new StringBuffer();
-          strBuf.append("tagName=").append(toLowerCaseTextValue(heading.node)).append("|")
-          .append("headingLevel=").append(heading.headingLevel).append("|")
-          .append("headingNumberText=").append(heading.headingNumberText);
+          strBuf.append(TAG_NAME).append(toLowerCaseTextValue(heading.node)).append("|")
+          .append(HEADING_LEVEL).append(heading.headingLevel).append("|")
+          .append(HEADING_NUMBER_TEXT).append(heading.headingNumberText);
           stringValues.add(strBuf.toString());
         }
         htmlNode.setProperty("exo:htmlTOC", stringValues.toArray(multiValues));
@@ -104,15 +107,15 @@ public class TOCGeneratorService {
       StringBuffer heading = new StringBuffer(); 
       for(Value value: values) {
         String[] contents = value.getString().split("\\|");
-        String tagName = contents[0].split("=")[1];
-        String headingLevel = contents[1].split("=")[1];
-        String headingNumberText = contents[2].split("=")[1];
+        String tagName = contents[0].substring(TAG_NAME.length());
+        String headingLevel = contents[1].substring(HEADING_LEVEL.length());
+        String headingNumberText = contents[2].substring(HEADING_NUMBER_TEXT.length());
         tagName = tagName.replaceAll("<\\/?([^>])+>", "").trim();
         tagName = "<h".concat(headingLevel).concat(">").concat(headingNumberText).concat(" ")
         .concat(tagName).concat("</h").concat(headingLevel).concat(">");
         heading.append(tagName);
       }
-      String result = heading.toString().replaceAll("\\n", "");
+      String result = heading.toString().replaceAll("\n", "");
       return result;
     } catch(PathNotFoundException ex) {
       return null;
@@ -178,7 +181,7 @@ public class TOCGeneratorService {
   private String toLowerCaseTextValue(HTMLNode node) {
     String text = node.getTextValue();
     int level = getHeadingLevel(node);
-    text = text.replace("\n", "");
+    text = text.replaceAll("\n", "");
     return text = text.replace("</H"+level+">", "</h"+level+">");
   }
 }
