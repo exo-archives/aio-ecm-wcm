@@ -54,7 +54,7 @@ public class PortalFolderSchemaHandler extends BaseWebSchemaHandler {
   public Node getImagesFolder(final Node portalFolder) throws Exception {
     return portalFolder.getNode("multimedia/images");
   }
-  
+ 
   public Node getVideoFolder(final Node portalFolder) throws Exception {
     return portalFolder.getNode("multimedia/videos");
   }
@@ -65,6 +65,10 @@ public class PortalFolderSchemaHandler extends BaseWebSchemaHandler {
   
   public Node getDocumentStorage(Node portalFolder) throws Exception {
     return portalFolder.getNode("documents");
+  }
+  
+  public Node getLinkFolder(Node portalFolder) throws Exception {
+    return portalFolder.getNode("link");
   }
   
   public Node getWebContentStorage (final Node portalFolder) throws Exception {

@@ -334,8 +334,7 @@
 		var param = '';
 		if (repositoryName !== undefined) param += 'repositoryName=' + repositoryName;
 		if (workspaceName !== undefined) param += '&workspaceName=' + workspaceName;
-		if (jcrPath === undefined) jcrPath = '';
-		param += "&jcrPath=" + jcrPath;
+		if (jcrPath !== undefined) param += "&jcrPath=" + jcrPath;		
 		return param;
 	}
 	

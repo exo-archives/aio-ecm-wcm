@@ -195,7 +195,7 @@ public class LinkConnector extends BaseConnector implements ResourceContainer {
   protected Node getRootStorageOfPortal(Node portal) throws Exception {
     PortalFolderSchemaHandler folderSchemaHandler = webSchemaConfigService
     .getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);    
-    return folderSchemaHandler.getLinksFolder(portal);
+    return folderSchemaHandler.getLinkFolder(portal);
   }
 
   /* (non-Javadoc)
