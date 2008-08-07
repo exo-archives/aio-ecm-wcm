@@ -86,8 +86,6 @@ public class TestTOCGeneratorService extends BaseTestCase {
   "</body>" +
   "</html>";
 
-
-
   public void testGenerateTOC() throws Exception {
     TOCGeneratorService tocService = (TOCGeneratorService) container.getComponentInstanceOfType(TOCGeneratorService.class);
     Session session = repositoryService.getRepository("repository").getSystemSession("collaboration");
