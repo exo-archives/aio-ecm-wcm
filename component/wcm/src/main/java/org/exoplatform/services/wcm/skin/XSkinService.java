@@ -16,6 +16,7 @@
  */
 package org.exoplatform.services.wcm.skin;
 
+import java.util.Iterator;
 import java.util.List;
 
 import javax.jcr.Node;
@@ -39,11 +40,8 @@ import org.picocontainer.Startable;
  * Created by The eXo Platform SAS Author : Hoa.Pham hoa.pham@exoplatform.com
  * Apr 9, 2008
  */
-public class XSkinService implements Startable {
-
-  private String SKIN_PATH = "/portal/css/portalContent/$portalName/Stylesheet.css".intern();    
-  public static final String DEFAULT_SKIN = "Default".intern();
-  final private String PORTAL_CONTENT_SKIN = "PortalContentSkin:".intern();
+public class XSkinService implements Startable {  
+  final private String WEB_CONTENT_SKIN = "eXoWebContentSkin:".intern();
 
   private SkinService skinService ;   
   private RepositoryService repositoryService ;
@@ -106,7 +104,10 @@ public class XSkinService implements Startable {
       if(path.startsWith(portalPath)) {
         String portalName = livePortalManagerService.getPortalNameByPath(portalPath);
         Node portal = livePortalManagerService.getLivePortal(portalName,sessionProvider);
-        addPortalSkin(portal,DEFAULT_SKIN);
+      //Add same eXoWebContentSkin for all skin in portal
+        for(Iterator<String> iterator= skinService.getAvailableSkins();iterator.hasNext();) {
+          addPortalSkin(portal,iterator.next()); 
+        }
       }
     }
     sessionProvider.close();
@@ -120,7 +121,7 @@ public class XSkinService implements Startable {
    * @return the skin path
    */
   public String getPortalContentSkinPath(String portalName,String skinName) {
-    String skinModule = PORTAL_CONTENT_SKIN.concat(portalName);
+    String skinModule = WEB_CONTENT_SKIN.concat(portalName);
     for(SkinConfig skinConfig: skinService.getPortalSkins(skinName)){
       if(skinConfig.getModule().equals(skinModule)) {
         return skinConfig.getCSSPath();
@@ -131,10 +132,11 @@ public class XSkinService implements Startable {
 
   private void addPortalSkin(Node portal,String skinName) throws Exception {    
     String statement= "select * from exo:cssFile where jcr:path like '" 
-      + portal.getPath()+"/%' and exo:active='true' and exo:sharedCSS='true' order by exo:priority DESC ";    
-    String skinPath = SKIN_PATH.replaceAll("$portalName",portal.getName());
+      + portal.getPath()+"/%' and exo:active='true' and exo:sharedCSS='true' order by exo:priority DESC ";
     String skinCSS = queryCSSData(portal,statement);
-    String skinModule = PORTAL_CONTENT_SKIN.concat(portal.getName());
+    if(skinCSS == null || skinCSS.length() == 0) return;
+    String skinPath = "/eXoWebContentSkin/" + portal.getName() + "/Stylesheet.css";   
+    String skinModule = WEB_CONTENT_SKIN.concat(portal.getName());
     ServletContext servletContext = 
       (ServletContext)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(ServletContext.class);    
     skinService.addPortalSkin(skinModule,skinName,skinPath,servletContext,skinCSS);
@@ -145,7 +147,7 @@ public class XSkinService implements Startable {
     Query query = manager.createQuery(statement,Query.SQL);
     QueryResult queryResult = query.execute();
     StringBuffer buffer = new StringBuffer();
-    for(NodeIterator iterator = queryResult.getNodes();iterator.hasNext();iterator.next()) {
+    for(NodeIterator iterator = queryResult.getNodes();iterator.hasNext();) {
       Node cssFile = iterator.nextNode();
       String css = cssFile.getNode("jcr:content").getProperty("jcr:data").getString();      
       buffer.append(css) ;
@@ -161,7 +163,10 @@ public class XSkinService implements Startable {
     try {
       List<Node> livePortals = livePortalManagerService.getLivePortals(provider);
       for(Node portal:livePortals) {
-        addPortalSkin(portal,DEFAULT_SKIN);
+        //Add same eXoWebContentSkin for all skin in portal
+        for(Iterator<String> iterator= skinService.getAvailableSkins();iterator.hasNext();) {
+          addPortalSkin(portal,iterator.next()); 
+        }        
       }
     }catch (Exception e) {
     }finally {
