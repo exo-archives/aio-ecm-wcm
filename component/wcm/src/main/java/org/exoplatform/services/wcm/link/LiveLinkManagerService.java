@@ -18,6 +18,8 @@ package org.exoplatform.services.wcm.link;
 
 import java.util.List;
 
+import javax.jcr.Node;
+
 /**
  * Created by The eXo Platform SAS
  * Author : Phan Le Thanh Chuong
@@ -27,13 +29,14 @@ import java.util.List;
 public interface LiveLinkManagerService {
   
   public void validateLink() throws Exception;
-  
   public void validateLink(String portalName) throws Exception;
   
   public List<LinkBean> getBrokenLinks(String portalName) throws Exception;
+  public List<String> getBrokenLinks(Node webContent) throws Exception ;
   
   public List<LinkBean> getUncheckedLinks(String portalName) throws Exception;
+  public List<String> getUncheckedLinks(Node webContent) throws Exception ;
   
   public List<LinkBean> getActiveLinks(String portalName) throws Exception;
-  
+  public List<String> getActiveLinks(Node webContent) throws Exception ;
 }

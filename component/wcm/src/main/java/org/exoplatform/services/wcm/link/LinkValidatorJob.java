@@ -16,8 +16,10 @@
  */
 package org.exoplatform.services.wcm.link;
 
+import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.scheduler.BaseJob;
 import org.exoplatform.services.scheduler.JobContext;
 
@@ -29,6 +31,8 @@ import org.exoplatform.services.scheduler.JobContext;
  */
 public class LinkValidatorJob extends BaseJob {
   
+  private Log log = ExoLogger.getLogger("wcm:LinkValidatorJob"); 
+  
   public void execute(JobContext arg0) throws Exception {
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     LiveLinkManagerService linkManagerService = 
@@ -36,9 +40,8 @@ public class LinkValidatorJob extends BaseJob {
     if(linkManagerService == null) return;
     try {
       linkManagerService.validateLink();
-      System.out.println("____________________________________");
-      linkManagerService.validateLink("classic");
     } catch (Exception e) {
+      log.error("Error when execute link validator job by scheduler", e);
     }
   }
 

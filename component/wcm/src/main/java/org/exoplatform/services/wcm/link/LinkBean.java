@@ -23,64 +23,59 @@ package org.exoplatform.services.wcm.link;
  * Sep 4, 2008  
  */
 public class LinkBean {
-  
+
   static final public String SEPARATOR = "@";
   static final public String STATUS = "status=";
   static final public String URL = "url=";
-  
+
   static final public String STATUS_UNCHECKED = "unchecked";
   static final public String STATUS_ACTIVE = "active";
   static final public String STATUS_BROKEN = "broken";
-  
-  private String link;
+
   private String url;
-  private String status;
-  
-  public LinkBean() {
-    super();
-  }
-  
-  public LinkBean(String link) {
-    this.link = link;
-  }
-  
+  private String status;         
+
   public LinkBean(String url, String status) {
     this.url = url;
     this.status = status;
   }
-  
+
   public String getStatus() {
     return status;
   }
-  
+
   public void setStatus(String status) {
     this.status = status;
   }
-  
+
   public String getUrl() {
     return url;
-  }
-  
-  public String getLink() {
-    return link;
-  }
+  }   
 
-  public void setLink(String link) {
-    this.link = link;
-  }
-  
   public void setUrl(String url) {
     this.url = url;
   }
-  
-  public String getLinkUrl() {
-    // link pattern: "status=xxx@url=http://xxx.com
-    String[] links = link.split(SEPARATOR);
-    return links[1].replaceAll(URL, "");
-  }
-  
+
   public String toString() {
     return STATUS + status + SEPARATOR + URL + url;
   }
+
+  public boolean isBroken() {
+    return STATUS_BROKEN.equalsIgnoreCase(status);
+  }
   
+  public boolean isUnchecked() {
+    return STATUS_UNCHECKED.equalsIgnoreCase(status);
+  }
+  
+  public boolean isActive() { 
+    return STATUS_ACTIVE.equalsIgnoreCase(status);
+  }
+
+  public static LinkBean parse(String link) {
+    String[] links = link.split(SEPARATOR);
+    String url = links[1].replaceAll(URL, "");
+    String status = links[0];
+    return new LinkBean(url,status);
+  }
 }

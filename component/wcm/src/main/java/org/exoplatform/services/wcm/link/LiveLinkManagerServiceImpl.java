@@ -16,6 +16,7 @@
  */
 package org.exoplatform.services.wcm.link;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -32,6 +33,8 @@ import javax.jcr.query.QueryResult;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.SimpleHttpConnectionManager;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.exoplatform.services.cache.CacheService;
+import org.exoplatform.services.cache.ExoCache;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -45,29 +48,76 @@ import org.exoplatform.services.wcm.portal.LivePortalManagerService;
  */
 public class LiveLinkManagerServiceImpl implements LiveLinkManagerService {
 
+  private ExoCache                 brokenLinksCache;
   private WCMConfigurationService  configurationService;
   private RepositoryService        repositoryService;
   private LivePortalManagerService livePortalManagerService;
 
-  public LiveLinkManagerServiceImpl(WCMConfigurationService configurationService, 
-      RepositoryService repositoryService, LivePortalManagerService livePortalManagerService) {
+  public LiveLinkManagerServiceImpl(
+      WCMConfigurationService   configurationService, 
+      RepositoryService         repositoryService, 
+      LivePortalManagerService  livePortalManagerService,
+      CacheService              cacheService) throws Exception {
     this.configurationService = configurationService;
     this.repositoryService = repositoryService;
     this.livePortalManagerService = livePortalManagerService;
+    this.brokenLinksCache = cacheService.getCacheInstance(this.getClass().getName());    
   }
-
+  
   public List<LinkBean> getActiveLinks(String portalName) throws Exception {
     return null;
   }
-
-  public List<LinkBean> getBrokenLinks(String portalName) throws Exception {
+  
+  public List<String> getActiveLinks(Node webContent) throws Exception {
     return null;
   }
+    
+  @SuppressWarnings("unchecked")
+  public List<LinkBean> getBrokenLinks(String portalName) throws Exception {
+    SessionProvider sessionProvider = SessionProvider.createSystemProvider();
+    Node portal = livePortalManagerService.getLivePortal(portalName, sessionProvider);
+    String path = portal.getPath();
+    Session session = portal.getSession();
+    List<LinkBean> listBrokenLinks = new ArrayList<LinkBean>();
+    QueryManager queryManager = session.getWorkspace().getQueryManager();
+    Query query = queryManager.createQuery("select * from exo:webContent where jcr:path like '" + path + "/%'", Query.SQL);
+    QueryResult results = query.execute();
+    NodeIterator iter = results.getNodes();
+    for (;iter.hasNext();) {
+      Node webContent = iter.nextNode();
+      List<String> listBrokenUrls = getBrokenLinks(webContent);
+      for (String brokenUrl : listBrokenUrls) {
+        LinkBean linkBean = new LinkBean(brokenUrl, LinkBean.STATUS_BROKEN);
+        listBrokenLinks.add(linkBean);
+      }
+    }
+    return listBrokenLinks;
+  }
 
+  @SuppressWarnings("unchecked")
+  public List<String> getBrokenLinks(Node webContent) throws Exception {
+    List<String> listBrokenUrls = (List<String>)brokenLinksCache.get(webContent.getUUID());
+    if(listBrokenUrls == null) {      
+      for(Value value:webContent.getProperty("exo:links").getValues()) {
+        String link = value.getString();
+        LinkBean linkBean = LinkBean.parse(link);
+        if(linkBean.isBroken()) {
+          listBrokenUrls.add(linkBean.getUrl());
+        }
+      }
+      brokenLinksCache.put(webContent.getUUID(), listBrokenUrls);
+    }
+    return listBrokenUrls;
+  }
+  
   public List<LinkBean> getUncheckedLinks(String portalName) throws Exception {
     return null;
   }
-
+  
+  public List<String> getUncheckedLinks(Node webContent) throws Exception {
+    return null;
+  }
+  
   public void validateLink() throws Exception {
     Collection<NodeLocation> nodeLocationCollection = configurationService.getAllLivePortalsLocation();
     for (NodeLocation nodeLocation : nodeLocationCollection) {
@@ -76,24 +126,7 @@ public class LiveLinkManagerServiceImpl implements LiveLinkManagerService {
       String path = nodeLocation.getPath();
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
       Session session = SessionProvider.createSystemProvider().getSession(workspace, manageableRepository);
-      ValueFactory valueFactory = session.getValueFactory();
-      QueryManager queryManager = session.getWorkspace().getQueryManager();
-      Query query = queryManager.createQuery("select * from exo:linkable where jcr:path like '" + path + "/%'", Query.SQL);
-      QueryResult results = query.execute();
-      NodeIterator iter = results.getNodes();
-      for (;iter.hasNext();) {
-        Node node = iter.nextNode();
-        Property links = node.getProperty("exo:links");
-        Value[] oldValues = links.getValues();
-        Value[] newValues = new Value[oldValues.length];
-        for (int iValues = 0; iValues < oldValues.length; iValues++) {
-          LinkBean linkBean = new LinkBean(oldValues[iValues].getString());
-          String strUrl = linkBean.getLinkUrl();
-          String strStatus = getLinkStatus(strUrl);
-          newValues[iValues] = valueFactory.createValue(updateLinkStatus(strUrl, strStatus));
-        }
-      }
-      session.save();
+      updateLinkStatus(session, "select * from exo:linkable where jcr:path like '" + path + "/%'");
     }
   }
 
@@ -102,42 +135,51 @@ public class LiveLinkManagerServiceImpl implements LiveLinkManagerService {
     Node portal = livePortalManagerService.getLivePortal(portalName, sessionProvider);
     String path = portal.getPath();
     Session session = portal.getSession();
+    updateLinkStatus(session, "select * from exo:linkable where jcr:path like '" + path + "/%'");
+  }
+
+  
+  
+  protected void updateLinkStatus(Session session, String queryCommand) throws Exception{
+    List<String> listBrokenLinks = new ArrayList<String>();
     ValueFactory valueFactory = session.getValueFactory();
     QueryManager queryManager = session.getWorkspace().getQueryManager();
-    Query query = queryManager.createQuery("select * from exo:linkable where jcr:path like '" + path + "/%'", Query.SQL);
+    Query query = queryManager.createQuery(queryCommand, Query.SQL);
     QueryResult results = query.execute();
     NodeIterator iter = results.getNodes();
     for (;iter.hasNext();) {
-      Node node = iter.nextNode();
-      Property links = node.getProperty("exo:links");
+      Node webContent = iter.nextNode();
+      Property links = webContent.getProperty("exo:links");
       Value[] oldValues = links.getValues();
       Value[] newValues = new Value[oldValues.length];
       for (int iValues = 0; iValues < oldValues.length; iValues++) {
-        LinkBean linkBean = new LinkBean(oldValues[iValues].getString());
-        String strUrl = linkBean.getLinkUrl();
+        LinkBean linkBean = LinkBean.parse(oldValues[iValues].getString());
+        String strUrl = linkBean.getUrl();
         String strStatus = getLinkStatus(strUrl);
-        newValues[iValues] = valueFactory.createValue(updateLinkStatus(strUrl, strStatus));
+        String updatedLink = new LinkBean(strUrl, strStatus).toString();
+        newValues[iValues] = valueFactory.createValue(updatedLink);
+        if (strStatus.equals(LinkBean.STATUS_BROKEN)) {
+          listBrokenLinks.add(strUrl);
+        }
       }
+      webContent.setProperty("exo:links",newValues);
+      brokenLinksCache.put(webContent.getUUID(), listBrokenLinks);
     }
     session.save();
   }
-
-  public String getLinkStatus(String strUrl) {
+  
+  protected String getLinkStatus(String strUrl) {
     try {
-      HttpClient httpClient = new HttpClient(new SimpleHttpConnectionManager());
-      PostMethod postMethod = new PostMethod(strUrl);
+      HttpClient httpClient = new HttpClient(new SimpleHttpConnectionManager());      
+      PostMethod postMethod = new PostMethod(strUrl);      
       if(httpClient.executeMethod(postMethod) == 200) {
-        return "active";
+        return LinkBean.STATUS_ACTIVE;
       } else {
-        return "broken";
+        return LinkBean.STATUS_BROKEN;
       }
     } catch (Exception e) {
-      return "broken";
+      return LinkBean.STATUS_BROKEN;
     }
   }
 
-  public String updateLinkStatus(String strUrl, String strStatus) throws Exception {
-    LinkBean linkBean = new LinkBean(strUrl, strStatus);
-    return linkBean.toString();
-  }
 }

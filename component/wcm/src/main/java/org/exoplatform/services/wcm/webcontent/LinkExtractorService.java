@@ -106,7 +106,7 @@ public class LinkExtractorService {
     
     for (String extractedLink : listExtractedLink) {
       for (String newUrl : listNewUrl) {
-        if (new LinkBean(extractedLink).getLinkUrl().equals(newUrl)) {
+        if (LinkBean.parse(extractedLink).getUrl().equals(newUrl)) {
           listResult.add(extractedLink);
         }
       }
@@ -118,8 +118,7 @@ public class LinkExtractorService {
     for (String newUrl : listNewUrl) {
       int i = 0;
       for (String extractedLink : listExtractedLink) {
-        LinkBean linkBean = new LinkBean(extractedLink);
-        if (newUrl.equals(linkBean.getLinkUrl())) 
+        if (newUrl.equals(LinkBean.parse(extractedLink).getUrl())) 
           listTemp.set(i, "");
         i++;
       }
