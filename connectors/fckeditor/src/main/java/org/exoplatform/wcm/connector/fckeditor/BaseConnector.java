@@ -146,8 +146,10 @@ public abstract class BaseConnector {
           currentFolder, jcrPath);
       currentNode = getCurrentNode(repositoryName, workspaceName, currentFolderFullpath);
       Node webContentNode = getWebContentNode(repositoryName, workspaceName, jcrPath);      
-      if (currentFolderFullpath.equals(currentPortalNode.getPath()) || currentFolderFullpath.equals(sharedPortalNode.getPath())) {
+      if (currentFolderFullpath.equals(currentPortalNode.getPath()) && !currentFolderFullpath.equals(sharedPortalNode.getPath())) {
         document = createDocumentForPortal(currentNode, webContentNode, command);
+      } else if (!sharedPortalNode.getPath().equals(currentPortalNode.getPath()) && currentFolderFullpath.equals(sharedPortalNode.getPath())) {
+        document = createDocumentForPortal(currentNode, null, command);
       } else if (currentFolderFullpath.equals(jcrPath)) {
         document = createDocumentForPortal(webContentNode, null, command);
       } else {
