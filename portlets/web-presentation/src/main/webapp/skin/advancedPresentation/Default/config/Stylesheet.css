@@ -3,3 +3,27 @@
 	float:left;
 	width: 188px; height: 219px;
 }
+
+.UIWebContentSelectorForm {
+	margin: 8px auto;
+}
+
+.UIWebContentPathSelector {
+	margin: 8px;
+	padding: 8px;
+	border: 1px solid #b7b7b7;
+	background: #F3F3F3;
+}
+
+.UIWebContentSelectorForm .UIFormGrid .UIFormInputSet {
+	padding: 0px;
+	width: auto;
+}
+
+.UIWebContentSelectorForm .UIFormGrid .UIFormInputSet .FormContainer {
+	padding: 0px;
+}
+
+.UIWebContentSelectorForm .UIFormGrid .UIFormGrid .FieldComponent {
+	padding: 0px;
+}
