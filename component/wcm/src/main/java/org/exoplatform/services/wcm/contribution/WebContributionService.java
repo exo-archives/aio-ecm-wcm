@@ -17,10 +17,8 @@
 package org.exoplatform.services.wcm.contribution;
 
 import org.exoplatform.container.xml.InitParams;
-import org.exoplatform.services.security.ConversationRegistry;
-import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.services.security.Identity;
-import org.exoplatform.services.security.MembershipEntry;
+import org.exoplatform.services.security.IdentityRegistry;
 
 /**
  * Created by The eXo Platform SAS.
@@ -37,7 +35,7 @@ public class WebContributionService {
   private String contributorGroup;
 
   /** The conversation registry. */
-  private ConversationRegistry conversationRegistry;
+  private IdentityRegistry identityRegistry;
 
   /**
    * Instantiates a new web contribution service.
@@ -45,10 +43,10 @@ public class WebContributionService {
    * @param initParams the init params
    * @param conversationRegistry the conversation registry service
    */
-  public WebContributionService(ConversationRegistry registry, InitParams initParams) {
+  public WebContributionService(IdentityRegistry registry, InitParams initParams) {
     contributorGroup = initParams.getPropertiesParam("service.params")
     .getProperty("web.contributor.group");
-    this.conversationRegistry = registry;
+    this.identityRegistry = registry;
   }
 
   /**
@@ -58,10 +56,9 @@ public class WebContributionService {
    *
    * @return true, if userId has contribution role
    */
-  public final boolean hasContributionPermission(final String userId) {
-    ConversationState conversationState = conversationRegistry.getState(userId);
+  public final boolean hasContributionPermission(final String userId) {    
     try {
-      Identity identity = conversationState.getIdentity();
+      Identity identity = identityRegistry.getIdentity(userId);
       return identity.isMemberOf(contributorGroup);
     } catch (Exception e) { }        
     return false;
