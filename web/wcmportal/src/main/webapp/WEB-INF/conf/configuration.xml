@@ -33,8 +33,7 @@
 	<import>war:/conf/ecm/advanced/scripts-configuration.xml</import>
 	<import>war:/conf/ecm/advanced/actions-configuration.xml</import>
 	<import>war:/conf/ecm/ontologies/taxonomy-configuration.xml</import>
-	<import>war:/conf/ecm/presentation/views-configuration.xml</import>
-	<import>war:/conf/ecm/presentation/drives-configuration.xml</import>
+	<import>war:/conf/ecm/presentation/views-configuration.xml</import>	
 	<import>war:/conf/ecm/presentation/metadata-configuration.xml</import>
 	<import>war:/conf/ecm/ontologies/folksonomy-configuration.xml</import>
 	<import>war:/conf/ecm/advanced/records-configuration.xml</import>
