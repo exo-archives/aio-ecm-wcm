@@ -1,175 +1,92 @@
-/*==============================UIBannerPortlet=================================*/
-.UIBannerPortlet {
-	overflow: auto;
+.UIDefaultLeft {
+	background: #d8d8d8 url(DefaultSkin/background/DefaultBackground.png) repeat-x;
+	margin-bottom: 20px;
+	border-bottom: 1px solid #99999a;
 }
 
-.UIBannerPortlet .LeftBanner {
-	height: 73px ;
-	padding: 0px 0px 0px 184px;
-  background: url('DefaultSkin/background/Banner.gif') no-repeat left top;
+.UIDefaultLeft .Logo {
+	width: 200px; 
+	float: left;
+	padding-top: 4px;
 }
 
-.UIBannerPortlet .MiddleBanner {
-	height: 73px;
-  background: url('DefaultSkin/background/MiddleBanner10x73.jpg') repeat-x ;
+.UIDefaultLeft .MiddleBanner {
+	height: 71px;
+	margin: 0px 0px 0px 200px;
 }
 
-.UIBannerPortlet .RightBanner {
-	height: 73px;
-  padding: 0px 30px 0px 0px ;
-  background: url('DefaultSkin/background/Banner.gif') no-repeat right -73px;
+.UIDefaultLeft .MiddleBanner .BannerTitle {
+	font-weight: bold; 
+	font-size: 16px;
+	color: #666666;	
+	letter-spacing: 0.2em;
+	font-variant: small-caps;
+	height: 40px;	
+	line-height: 40px;
+	padding-right: 160px;
 }
 
-.UIBannerPortlet .BannerTitle {
-  height: 38px;
-  background: url('DefaultSkin/background/Banner.gif') no-repeat left -146px;
-  margin: 0px 0px 0px 15px;
+.UIDefaultLeft .LeftLogin {
+	background: url(DefaultSkin/background/LeftLoginLeft.gif) no-repeat top left;
+	padding-left: 30px;
 }
 
-.UIBannerPortlet .LoginContainer .LoginContent {
-  float: right;
-  line-height: 22px;
-  padding: 4px 13px 0px 0px;
+.UIDefaultLeft .RightLogin {
+	background: url(DefaultSkin/background/RightLoginLeft.gif) no-repeat top right;
+	padding-right: 28px;
+} 
+
+.UIDefaultLeft .CenterLogin {
+	background: url(DefaultSkin/background/CenterLogin.gif) repeat-x;
+	height: 31px;
+} 
+
+.UIDefaultLeft .CenterLogin .LoginContent {
+	padding-top: 5px;
 }
 
-.UIBannerPortlet .LoginContainer .LoginContent .LoginLeft {
-  margin-top: 3px;
+.UIDefaultLeft .CenterLogin .LoginInfo {
+	float: right;
+	line-height: 31px;
 }
 
-.UIBannerPortlet .LoginContainer .LoginContent .LoginRight {
-  margin-top: 3px;
+.UIDefaultLeft .CenterLogin .LoginInfo .Welcome {
+	padding-top: 5px;
 }
 
-.UIBannerPortlet .LoginContainer .LoginContent a {
-  color: #0d62af;
-  display: block;
+.UIDefaultLeft .CenterLogin .LoginInfo span {
+	font-weight: bold;
+	color: #0066FF;
+
 }
 
-.UIBannerPortlet .LoginContainer .LoginContent a:hover {
-  color: #058ee6;
+.UIDefaultLeft .CenterLogin .LoginSeperatorLine {
+	float: right;
+	width: 2px;
+	background: url(DefaultSkin/background/SeperatorLine.gif) no-repeat;
+	margin: 7px 20px 0px 20px;
+	height: 20px;
 }
 
-.UIBannerPortlet .LoginContent .LoginSeperatorLine {
-  float: left;
-  width: 2px; height: 21px;
-  background: url('DefaultSkin/background/Banner.gif') repeat-y left -184px;
-  margin: 0px 7px;
- }
+.UIDefaultLeft .CenterLogin a {
+	display: block;
+	text-decoration: none;
+}
 
-.UIBannerPortlet .LoginContent .LogoutIcon {
-  height: 22px;
-  background: url('DefaultSkin/background/Banner.gif') no-repeat left -249px;
+.UIDefaultLeft .CenterLogin .LogoutIcon {
+	cursor: pointer;
+	font-weight: bold;
+	padding-left: 26px;
+	background: url(DefaultSkin/background/LogoutIcon.png) no-repeat center left;
+	color: #0066FF;
+}
+
+.UIDefaultLeft .CenterLogin .SettingLanguage {
+  background: url(DefaultSkin/background/LanguageIcon.png) no-repeat left center;
   padding-left: 26px;
-  float: left;
   cursor: pointer;
   font-weight: bold;
-}
-
-.UIBannerPortlet .LoginContent .LoginIcon {
-  height: 22px;
-  background: url('DefaultSkin/background/Banner.gif') no-repeat left -227px;
-  margin-right: 2px;
-  padding-left: 26px;
-  cursor: pointer;
-	float: right;
-	font-weight: bold;
-}
-
-.UIBannerPortlet .LoginContent .SignIn {
-  padding-top: 2px;
-}
-
-.UIBannerPortlet .LoginContent .PortalSetting {
   float: right;
-}
-
-.UIBannerPortlet .LoginContent .SeperatorLine {
-  float: right;
-  width: 2px; height: 21px;
-  background: url('DefaultSkin/background/Banner.gif') repeat-y left -184px;
-  margin: 2px 7px;
- }
- 
- .UIBannerPortlet .LoginContent .SettingIcon {
-  height: 22px;
-  background: url('DefaultSkin/background/Banner.gif') no-repeat left -205px;
-  margin-right: 2px;
-  padding-left: 26px;
-  cursor: pointer;
-	font-weight: bold;
-	float: right;
-	display: block;
-}
-
-
-
-/*==============================UIBannerEditModeForm=================================*/
-.UIBannerEditModeForm{
-
-}
-
-.UIBannerEditModeForm .UIBannerEditModeFormGrid{
-	margin-top: 20px;
-}
-
-.UIBannerEditModeForm .UIBannerEditModeFormGrid textarea{
-	font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-	font-size: 11px;
-	width: 700px;	
-	height: 150px;
-}
-
-.UIBannerEditModeForm .UIBannerEditModeFormGrid input.checkbox{
-	width: auto;
-	float: left; 
-}
-.UIBannerEditModeForm .UIBannerEditModeFormGrid td.FieldLabel{
-	padding: 4px;
-	float: right;
-	vertical-align: top;
-}
-
-.UIBannerEditModeForm .UIBannerEditModeFormGrid td.FieldComponent{
-	padding: 4px;
-}
-
-
-/*==============================LightBlueStyle ActionButton=================================*/
-.UIBannerEditModeForm .UIAction .LightBlueStyle{
-
-}
-
-.UIBannerEditModeForm .UIAction .LightBlueStyle .ButtonLeft {
-  background: url('DefaultSkin/background/LightBlueStyle.gif') no-repeat left top;
-  padding: 0px 0px 0px 3px;
-}
-
-.UIBannerEditModeForm .UIAction .LightBlueStyle .ButtonRight {
-  background: url('DefaultSkin/background/LightBlueStyle.gif') no-repeat right top;
-  padding: 0px 3px 0px 0px ;
-}
-
-.UIBannerEditModeForm .UIAction .LightBlueStyle .ButtonMiddle {
- 	line-height: 22px; text-align: center; 
-	background: url('DefaultSkin/background/LightBlueStyle.gif') repeat-x bottom;
-	white-space: nowrap;
-	display: table-cell;
-	padding: 0px 12px;
-}
-
-.UIBannerEditModeForm .UIAction a.LightBlueStyle {
-  color: #313131;
-  margin: 0px 6px; white-space: nowrap;
-}
-
-.UIBannerEditModeForm .UIAction a:hover.LightBlueStyle {
-  color: #1273df;
-}
-
-/*==============================BannerQuickEdit=================================*/
-.BannerQuickEdit{
-	background:url('DefaultSkin/background/QuickEdit.png') no-repeat scroll left top;
-	float:right;
-	height:50px;
-	padding-left:50px;
+  line-height: 31px;
+  color: #0066FF;
 }

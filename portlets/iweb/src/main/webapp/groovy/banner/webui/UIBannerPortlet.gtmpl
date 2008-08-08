@@ -12,47 +12,28 @@
   String signOutAction = prContext.getRequestContextPath() + "/public/" + portalName + "/" ;
 %>
 
-<div class="$uicomponent.id UIBannerPortlet UIApplication">
-	<div class="ApplicationMinWidth">
-  <div class="InlineContainer">
-    <div class="LeftBanner">
-      <div class="RightBanner">
-        <div class="MiddleBanner">
-        	<div class="BannerTitle">
-					</div>
-					<div class="LoginContainer">
-						<div class="LoginContent">
-						<%if(prContext.getAccessPath() == PortalRequestContext.PRIVATE_ACCESS) {%>
-						  	
-					  	<div class="LoginLeft" style="float: left">
-					  		<%=_ctx.appRes("UILogged.note.loggedUser")%>
-						  	<span style="padding: 0px 10px 0px 2px; color: #529ef1; font-weight:bold;">
-						  		<%=prContext.getRemoteUser();%> 
-						  	</span>
-					  	</div>
-						  <div class="LoginRight" style="float: left;" title="Sign Out" onclick="location.href='$signOutAction'">
-						    <div class="LoginSeperatorLine"><span></span></div>				  	
-								<a class="LogoutIcon"><%=_ctx.appRes("UILogged.action.signout")%></a>
-							</div>							
-							<div style="clear: left;"><span></span></div>
-						<%} else {%>
-							<div class="SignIn">
-								<a class="LoginIcon" onclick="$signInAction"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>
-								<div class="SeperatorLine"><span></span></div>
-								<a class="SettingIcon" onclick="$changeLanguageAction">
-									<%=_ctx.appRes("UIChangeLanguage.title.LanguageSetting")%>
-								</a>
-								<div class="SeperatorLine"><span></span></div>
-								<div style="clear: right;"><span></span></div>
-							</div>
-					  <%}%> 
-						</div>
-						<div style="clear: right;"><span></span></div>
-					</div>
-        </div>
-      </div>   
-    </div>
-  </div>
-  </div>
+<div class="UIDefaultLeft">
+	<div class="Logo" align="center">
+		<img src="/iweb/skin/webui/component/UIBannerPortlet/DefaultSkin/background/DefaultLogo.png" width="132" height="60"/>
+	</div>
+	<div class="MiddleBanner">
+		<div class="BannerTitle">eXo Enterprise Web OS</div>
+		<div class="LeftLogin">
+			<div class="RightLogin">
+				<div class="CenterLogin">
+					<% if(prContext.getAccessPath() == PortalRequestContext.PRIVATE_ACCESS) { %>
+						<a class="LoginInfo LogoutIcon" title="Sign Out" onclick="location.href='$signOutAction'"><%=_ctx.appRes("UILogged.action.signout")%></a>
+						<div class="LoginSeperatorLine"><span></span></div>
+						<div class="LoginInfo Welcome"><%=_ctx.appRes("UILogged.note.loggedUser")%>: <span><%=prContext.getRemoteUser();%> </span></div>
+						<div style="clear: right"><span></span></div>
+					<% } else { %>
+						<a class="LoginInfo LogoutIcon" title="Sign Out" onclick="$signInAction"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>
+						<div class="LoginSeperatorLine"><span></span></div>
+						<a class="SettingLanguage" onclick="$changeLanguageAction"><%=_ctx.appRes("UIChangeLanguage.title.LanguageSetting")%></a>
+						<div style="clear: right"><span></span></div>
+					<% } %>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
-
