@@ -4,8 +4,8 @@
   	<div class="LeftContent"><span></span></div>
     <div class="FormContainer">
     <div class="WelcomeScreen">
-    	<div class="WelcomeLable AlignLeft">Welcome you to Presentation content</div>
-    	<div class="AlignLeft">Please you check Edit this content or Select other content and click Ok button</div>
+    	<div class="WelcomeLable AlignLeft"><b><%=_ctx.appRes("UIWelcomeScreen.WelcomeLable")%></b></div>
+    	<div class="AlignLeft"><%=_ctx.appRes("UIWelcomeScreen.Text")%></div>
     </div>
       <table class="UIFormGrid">
 	      <% 
