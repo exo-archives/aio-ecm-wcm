@@ -298,13 +298,12 @@ a {
 }
 
 .AddForm {
-	left: 250px; 
-	top: 200px; 
-	position: absolute;
 	border: 1px #000000 solid;
 	padding: 10px;
 	z-index: 1;
 	background: #ffffff;
+	width: 300px;
+	margin: auto;
 }
 
 .IFrameFormContainer {
