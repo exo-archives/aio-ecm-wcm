@@ -215,6 +215,13 @@ function dateFormat(sFullDate) {
 			var sPath = eXp.store.currentNode.title;
 		} else var sPath = "/";
 		popupContainer.innerHTML = uploadContainer.innerHTML.replace(/\${idShort}/, sPath);
+		var iFrame = popupContainer.select({where: "className == 'iFrameUpload'"})[0];
+		var iContent = K("iContentUpLoad").innerHTML;
+		with (iFrame.contentWindow.document) {
+			open();
+			write(iContent);
+			close();
+		}
 		K("Mask").add({
 			event: "click",
 			listener: function() {
@@ -226,7 +233,8 @@ function dateFormat(sFullDate) {
 	
 	function uploadFile() {
 		var popupContainer = K("PopupContainer");
-		var formUpload = K.select({from: popupContainer, where: "nodeName == 'FORM'"})[0];
+		var iFrameUpload = popupContainer.select({where: "className == 'iFrameUpload'"})[0];
+		var formUpload = iFrameUpload.contentWindow.document.getElementsByTagName("form")[0];
 		uploadFile.id =  eXp.getID();
 		var param = eXp.buildParam("uploadId=" + uploadFile.id, "currentFolder=" + eXp.store.currentFolder, buildXParam());
 		if (formUpload) {
@@ -234,6 +242,11 @@ function dateFormat(sFullDate) {
 			formUpload.submit();
 		}
 		uploadFile.stopUpload = false;
+		var uploadField = popupContainer.select({where: "className == 'UploadField'"})[0];
+		uploadField.style.display = "none";
+		var UploadInfo = popupContainer.select({where: "className like 'UploadInfo%'"})[0];
+		UploadInfo.style.display = "";
+		return;
 		K.set.timeout({
 			until: function() {return uploadFile.stopUpload},
 			method: function() {
@@ -245,22 +258,20 @@ function dateFormat(sFullDate) {
 					function(iXML) {
 						var oProgress = eXp.getSingleNode(iXML, "UploadProgress");
 						var nPercent = eXp.getNodeValue(oProgress, "percent");
-						var oPopupContainer = K("PopupContainer");
-						var oProgress = oPopupContainer.select({where: "className == 'UploadProgress'"})[0];
-						var oInfo = oPopupContainer.select({where: "className == 'UploadInfo'"})[0];
-						var oField = oPopupContainer.select({where: "className == 'UploadField'"})[0];
-						var oAction = oPopupContainer.select({where: "className == 'UploadAction'"})[0];
-						oField.style.display = "none";
-						oInfo.style.display = "block";
+						var popupContainer = K("PopupContainer");
+						var uploadInfo = popupContainer.select({where: "className like 'UploadInfo%'"})[0];
+						var graphProgress = popupContainer.select({where: "className == 'GraphProgress'"})[0];
+						var numberProgress = popupContainer.select({where: "className == 'NumberProgress'"})[0];
 						if (nPercent * 1 < 100) {
-							oProgress.innerHTML = nPercent + "%";
-							oProgress.style.width = nPercent + "%";
+							graphProgress.style.width = nPercent + "%";
+							numberProgress.innerHTML = nPercent + "%";
 							uploadFile.stopUpload = false;
+							uploadInfo.className = "UploadInfo Abort";
 						} else {
+							graphProgress.style.width = 100 + "%";
+							numberProgress.innerHTML = 100 + "%";
 							uploadFile.stopUpload = true;
-							oProgress.innerHTML = "100%";
-							oProgress.style.width = "100%";
-							oAction.style.display = "block";
+							uploadInfo.className = "UploadInfo Delete";
 						}
 					}
 				);
@@ -274,10 +285,15 @@ function dateFormat(sFullDate) {
 		eXp.sendRequest(connector, param);
 		uploadFile.stopUpload = true;
 		var oPopupContainer = K("PopupContainer");
-		K(oPopupContainer.select({where: "className == 'UploadInfo'"})[0]).hide();
+		K(oPopupContainer.select({where: "className like 'UploadInfo%'"})[0]).hide();
 		K(oPopupContainer.select({where: "className == 'UploadField'"})[0]).show();
-		oPopupContainer.select({where: "nodeName == 'FORM'"})[0].reset();
-		oPopupContainer.select({where: "nodeName == 'FORM'"})[0].submit();
+		var iFrame = oPopupContainer.select({where: "className == 'iFrameUpload'"})[0];
+		var iContent = K("iContentUpLoad").innerHTML;
+		with (iFrame.contentWindow.document) {
+			open();
+			write(iContent);
+			close();
+		}
 	};
 	
 	uploadFile.Cancel = function() {

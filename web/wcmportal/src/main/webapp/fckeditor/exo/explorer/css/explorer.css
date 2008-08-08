@@ -145,19 +145,22 @@ a {
 }
 
 /* ################# Action Button ###################*/
-.ButtonMiddle {
+.ActionContainer .ActionButton {
+	float: left;
+}
+.ActionButton .ButtonMiddle {
 	background: url('../images/Button6x44.gif') repeat-x bottom center;
 	line-height: 22px;
 	padding: 0px 12px;
 }
 
-.ButtonLeft {
+.ActionButton .ButtonLeft {
 	background: url('../images/Button6x44.gif') no-repeat top left;
 	line-height: 22px;
 	padding-left: 3px;
 }
 
-.ButtonRight {
+.ActionButton .ButtonRight {
 	background: url('../images/Button6x44.gif') no-repeat top right;
 	line-height: 22px;
 	padding-right: 3px;
@@ -328,28 +331,41 @@ a {
 
 .UploadForm {
 	background: white;
-	height: 149px;
+	height: 108px;
 	margin: auto;
 	padding: 5px;
 	width: 310px;
 }
 
-.UploadForm .UploadAction {
-	display: none;
-}
-
-.UploadForm .UploadField {
+.UploadForm .Abort  .Abort {
 	display: block;
 }
 
-.UploadForm  .UploadProgress{
+.UploadForm .Abort  .Delete {
+	display: none;
+}
+
+.UploadForm .Delete  .Abort {
+	display: none;
+}
+
+.UploadForm .Delete  .Delete {
+	display: block;
+}
+
+.UploadForm  .UploadInfo .GraphProgress{
 	background: #abcdef;
+	width: 0px;
+	height: 21px;
+	line-height: 21px;
+}
+
+.UploadForm  .UploadInfo .NumberProgress{
 	color: orange;
 	height: 21px;
 	line-height: 21px;
+	margin-top: -21px;
 	text-align: center;
-	width: 0px;
-	margin-top: 3px;
 }
 
 .UploadForm input, a {
