@@ -53,14 +53,16 @@
     <div class="Content">
     	<div class="TextContent">
     		<% 
-    			def url = uicomponent.encodeHTML(contentNode.getProperty("exo:linkURL").getString());
-    			def description = uicomponent.encodeHTML(contentNode.getProperty("exo:linkDescription").getString());
-   		
-    			def content = "<pre>" + 
-			    							"  <b>" + _ctx.appRes("WebLink.view.label.url") + ": </b><a href='" + url + "' target='_blank'>" + url + "</a><br/>" +
-			    							"  <b>" + _ctx.appRes("WebLink.view.label.description") + ": </b>" + description +
-			    							"</pre>";
-    			println content;
+	    		if (contentNode.hasProperty("exo:linkURL") && contentNode.hasProperty("exo:linkDescription")) {
+	    			def url = uicomponent.encodeHTML(contentNode.getProperty("exo:linkURL").getString());
+	    			def description = uicomponent.encodeHTML(contentNode.getProperty("exo:linkDescription").getString());
+	   		
+	    			def content = "<pre>" + 
+				    							"  <b>" + _ctx.appRes("WebLink.view.label.url") + ": </b><a href='" + url + "' target='_blank'>" + url + "</a><br/>" +
+				    							"  <b>" + _ctx.appRes("WebLink.view.label.description") + ": </b>" + description +
+				    							"</pre>";
+	    			println content;
+    			}
     		%>
 	     </div>
     </div>  

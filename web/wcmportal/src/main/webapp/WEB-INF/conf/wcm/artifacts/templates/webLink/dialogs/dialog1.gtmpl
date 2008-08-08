@@ -5,7 +5,7 @@
 	  width:525px;
 	 }
 </style>
-<div class="UIFormWithTitle">  
+<div class="UIForm">  
   <% uiform.begin() %>
   <div class="HorizontalLayout" style="border:0px;">
     <table class="UIFormGrid">
@@ -13,7 +13,7 @@
           <td class="FieldLabel"><%=_ctx.appRes("WebLink.dialog.label.name")%></td>
           <td class="FieldComponent">
             <%
-              String[] fieldName = ["jcrPath=/node", "nodetype=exo:link", "editable=if-null", "validate=name"] ;
+              String[] fieldName = ["jcrPath=/node", "nodetype=exo:link", "editable=if-null", "validate=name,empty"] ;
               uicomponent.addTextField("name", fieldName) ; 
             %>
           </td>
@@ -23,7 +23,7 @@
         	<td class="FieldLabel"><%=_ctx.appRes("WebLink.dialog.label.url")%></td>
         	<td class="FieldComponent">
             <%
-              String[] fieldUrl = ["jcrPath=/node/exo:linkURL"] ;
+              String[] fieldUrl = ["jcrPath=/node/exo:linkURL", "validate=empty"] ;
               uicomponent.addTextField("LinkURL", fieldUrl) ; 
             %>
         	</td>
