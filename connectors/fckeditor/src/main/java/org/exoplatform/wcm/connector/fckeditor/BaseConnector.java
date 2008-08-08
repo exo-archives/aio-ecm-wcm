@@ -64,7 +64,7 @@ public abstract class BaseConnector {
   protected FCKFolderHandler                  folderHandler;
 
   /** The file upload handler. */
-  private FileUploadHandler                   fileUploadHandler;
+  protected FileUploadHandler                   fileUploadHandler;
 
   /** The local session provider. */
   protected ThreadLocalSessionProviderService localSessionProvider;

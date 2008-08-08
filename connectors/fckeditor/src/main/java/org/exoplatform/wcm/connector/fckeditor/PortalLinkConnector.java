@@ -84,7 +84,7 @@ public class PortalLinkConnector implements ResourceContainer {
 
   /** The portal user acl. */
   private UserACL                 portalUserACL;
-
+  
   /**
    * Instantiates a new portal link connector.
    * 
@@ -118,9 +118,9 @@ public class PortalLinkConnector implements ResourceContainer {
   @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/getFoldersAndFiles/")
   @OutputTransformer(XMLOutputTransformer.class)
-  public Response getPageURI(@QueryParam("CurrentFolder")
-      String currentFolder, @QueryParam("Command")
-      String command, @QueryParam("Type")
+  public Response getPageURI(@QueryParam("currentFolder")
+      String currentFolder, @QueryParam("command")
+      String command, @QueryParam("type")
       String type) throws Exception {
     String userId = getCurrentUser();
     return buildReponse(currentFolder, command, userId);
@@ -183,17 +183,17 @@ public class PortalLinkConnector implements ResourceContainer {
       }
     });
     // should use PermissionManager to check access permission
-    Element foldersElement = rootElement.getOwnerDocument().createElement("Folders");
+    Element foldersElement = rootElement.getOwnerDocument().createElement("Folders");    
     rootElement.appendChild(foldersElement);
     for (Object object : pageList.getAll()) {
       PortalConfig config = (PortalConfig) object;
       if (!portalUserACL.hasPermission(config, userId))
-        continue;      
+        continue;            
       Element folderElement = rootElement.getOwnerDocument().createElement("Folder");      
       folderElement.setAttribute("name", config.getName());
       folderElement.setAttribute("url", "");
       folderElement.setAttribute("folderType", "");
-      foldersElement.appendChild(folderElement);      
+      foldersElement.appendChild(folderElement);            
     }
     return rootElement.getOwnerDocument();
   }  
@@ -215,16 +215,18 @@ public class PortalLinkConnector implements ResourceContainer {
     List<PageNavigation> navigations = portalConfigService.getUserPortalConfig(portalName, userId)
     .getNavigations();
     Element foldersElement = rootElement.getOwnerDocument().createElement("Folders");
+    Element filesElement = rootElement.getOwnerDocument().createElement("Files");
     rootElement.appendChild(foldersElement);
+    rootElement.appendChild(filesElement);
     for (PageNavigation navigation : navigations) {
       for (PageNode pageNode : navigation.getNodes()) {
         if ("/".equalsIgnoreCase(pageNodeUri)) {
-          processPageNode(portalName, pageNode, foldersElement, userId);
+          processPageNode(portalName, pageNode, foldersElement, filesElement, userId);
         } else {
           PageNode node = getPageNode(pageNode, pageNodeUri);
           if (node != null && node.getChildren() != null) {
             for (PageNode child : node.getChildren()) {
-              processPageNode(portalName, child, foldersElement, userId);
+              processPageNode(portalName, child, foldersElement, filesElement, userId);
             }
           }
         }
@@ -264,12 +266,13 @@ public class PortalLinkConnector implements ResourceContainer {
    * 
    * @param portalName the portal name
    * @param pageNode the page node
-   * @param rootElement the root element
+   * @param foldersElement the root element
+   * @param filesElement TODO
    * @param userId the user id
    * @throws Exception the exception
    */
-  private void processPageNode(String portalName, PageNode pageNode, Element rootElement,
-      String userId) throws Exception {
+  private void processPageNode(String portalName, PageNode pageNode, Element foldersElement,
+      Element filesElement, String userId) throws Exception {
     String pageId = pageNode.getPageReference();
     Page page = portalConfigService.getPage(pageId, userId);
     if (page == null)
@@ -281,15 +284,21 @@ public class PortalLinkConnector implements ResourceContainer {
         break;
       }
     }
-    String pageUri = PORTAL_CONTEXT + "/" + accessMode + "/" + portalName + "/" + pageNode.getUri();    
-    Element folderElement = rootElement.getOwnerDocument().createElement("Folder");
+    String pageUri = PORTAL_CONTEXT + "/" + accessMode + "/" + portalName + "/" + pageNode.getUri();
+    
+    Element folderElement = foldersElement.getOwnerDocument().createElement("Folder");
     folderElement.setAttribute("name", pageNode.getName());
     folderElement.setAttribute("folderType", "");
-    folderElement.setAttribute("url", "");
-    folderElement.setAttribute("pageUri", pageUri);
-    rootElement.appendChild(folderElement);
+    folderElement.setAttribute("url", pageUri);    
+    foldersElement.appendChild(folderElement);    
+    
+    Element fileElement = filesElement.getOwnerDocument().createElement("File");
+    fileElement.setAttribute("name", pageNode.getName());
+    fileElement.setAttribute("fileType", "page node");
+    fileElement.setAttribute("url", pageUri);
+    filesElement.appendChild(fileElement);
   }
-
+  
   /**
    * Gets the page node.
    * 
