@@ -73,7 +73,7 @@ import org.exoplatform.webui.event.EventListener;
   @ComponentConfig(
       id = "ViewStep1",
       type = UIContainer.class,
-      template = "system:/groovy/portal/webui/page/UIWizardPageWelcome.gtmpl"
+      template = "app:/groovy/advancedPresentation/config/UIWizardWelcome.gtmpl"
   )
 })
 
