@@ -24,11 +24,10 @@ import javax.jcr.Node;
 import org.exoplatform.ecm.webui.tree.UIBaseNodeTreeSelector;
 import org.exoplatform.ecm.webui.tree.selectone.UISelectPathPanel;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 
 /**
@@ -38,10 +37,6 @@ import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
  */
 @ComponentConfig(lifecycle = UIContainerLifecycle.class)
 public class UIWebContentPathSelector extends UIBaseNodeTreeSelector {
-  
-  private UIComponent uiComponent;
-  private String returnFieldName;
-  
   /**
    * Instantiates a new uI web content path selector.
    * 
@@ -51,7 +46,7 @@ public class UIWebContentPathSelector extends UIBaseNodeTreeSelector {
     addChild(UIWebContentTreeBuilder.class,null, UIWebContentTreeBuilder.class.getSimpleName()+hashCode());
     addChild(UISelectPathPanel.class,null,UISelectPathPanel.class.getSimpleName()+hashCode());        
   }
-  
+
   /**
    * Inits the.
    * 
@@ -62,8 +57,8 @@ public class UIWebContentPathSelector extends UIBaseNodeTreeSelector {
     acceptedNodeTypes.add("exo:webContent");
     UISelectPathPanel selectPathPanel = getChild(UISelectPathPanel.class);
     selectPathPanel.setAcceptedNodeTypes(acceptedNodeTypes);       
-    LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);    
-    String currentPortalName = "classic";
+    LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
+    String currentPortalName = Util.getUIPortal().getName();
     SessionProvider provider = SessionProviderFactory.createSessionProvider();
     Node currentPortal = livePortalManagerService.getLivePortal(currentPortalName,provider);
     Node sharedPortal = livePortalManagerService.getLiveSharedPortal(provider);
@@ -72,34 +67,13 @@ public class UIWebContentPathSelector extends UIBaseNodeTreeSelector {
     builder.setSharedPortal(sharedPortal);
     builder.setRootTreeNode(currentPortal.getParent());
   }
-  
+
   /* (non-Javadoc)
    * @see org.exoplatform.ecm.webui.tree.UIBaseNodeTreeSelector#onChange(javax.jcr.Node, org.exoplatform.webui.application.WebuiRequestContext)
    */
+  @Override
   public void onChange(Node node, Object context) throws Exception {
     UISelectPathPanel selectPathPanel = getChild(UISelectPathPanel.class);
     selectPathPanel.setParentNode(node);
   }
-  
-  /**
-   * Gets the return component.
-   * 
-   * @return the return component
-   */
-  public UIComponent getSourceComponent() { return uiComponent; }
-  /* (non-Javadoc)
-   * @see org.exoplatform.ecm.webui.selector.ComponentSelector#setComponent(org.exoplatform.webui.core.UIComponent, java.lang.String[])
-   */
-  public void setSourceComponent(UIComponent uicomponent, String[] initParams) {
-    uiComponent = uicomponent ;
-    if(initParams == null || initParams.length < 0) return ;
-    for(int i = 0; i < initParams.length; i ++) {
-      if(initParams[i].indexOf("returnField") > -1) {
-        String[] array = initParams[i].split("=") ;
-        returnFieldName = array[1] ;
-        break ;
-      }
-      returnFieldName = initParams[0] ;
-    }
-  }   
 }

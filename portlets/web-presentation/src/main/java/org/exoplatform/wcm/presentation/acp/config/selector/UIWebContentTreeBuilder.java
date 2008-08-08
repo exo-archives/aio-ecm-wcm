@@ -143,7 +143,7 @@ public class UIWebContentTreeBuilder extends UINodeTreeBuilder {
   /* (non-Javadoc)
    * @see org.exoplatform.ecm.webui.tree.UINodeTreeBuilder#changeNode(java.lang.String, org.exoplatform.webui.application.WebuiRequestContext)
    */
-  public void changeNode(String path, WebuiRequestContext requestContext) throws Exception {
+  public void changeNode(String path, Object requestContext) throws Exception {
     if(path == null) return ;
     String rootPath = rootTreeNode.getPath();
     Node node = null;
@@ -160,7 +160,7 @@ public class UIWebContentTreeBuilder extends UINodeTreeBuilder {
     else {
       node = (Node)rootTreeNode.getSession().getItem(path);
       currentNode = node;
-    }    
+    }
     broadcastOnChange(node,requestContext);
   }
 }

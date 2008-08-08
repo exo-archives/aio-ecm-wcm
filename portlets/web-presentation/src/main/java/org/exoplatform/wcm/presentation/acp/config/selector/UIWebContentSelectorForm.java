@@ -79,7 +79,6 @@ public class UIWebContentSelectorForm extends UIForm implements UISelectable{
     workspace = nodeLocation.getWorkspace();
     livePortalsPath = nodeLocation.getPath();
     liveSharedPortalName = configurationService.getSharedPortalName(repository);
-    addChild(new UIFormTextAreaInput("Describe", "Describe", ""));
     UIFormInputSetWithAction uiPathSelection = new UIFormInputSetWithAction(FIELD_PATH);
     uiPathSelection.addUIFormInput(new UIFormStringInput(PATH, PATH, null).setEditable(false));
     uiPathSelection.setActionInfo(PATH, new String [] {"Browse"});
