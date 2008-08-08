@@ -282,7 +282,8 @@ public abstract class BaseConnector {
         Element folder = folderHandler.createFolderElement(document, child, folderType);
         folders.appendChild(folder);
       }
-      String fileType = fileHandler.getFileType(child, getStorageType());
+      String sourceType = getStorageType();
+      String fileType = fileHandler.getFileType(child, sourceType);
       if (fileType != null) {
         Element file = fileHandler.createFileElement(document, child, fileType);
         files.appendChild(file);

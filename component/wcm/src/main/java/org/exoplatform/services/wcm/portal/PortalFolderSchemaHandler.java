@@ -68,7 +68,7 @@ public class PortalFolderSchemaHandler extends BaseWebSchemaHandler {
   }
   
   public Node getLinkFolder(Node portalFolder) throws Exception {
-    return portalFolder.getNode("link");
+    return portalFolder.getNode("links");
   }
   
   public Node getWebContentStorage (final Node portalFolder) throws Exception {
