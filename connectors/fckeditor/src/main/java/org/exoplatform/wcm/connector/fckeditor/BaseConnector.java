@@ -64,7 +64,7 @@ public abstract class BaseConnector {
   protected FCKFolderHandler                  folderHandler;
 
   /** The file upload handler. */
-  protected FileUploadHandler                   fileUploadHandler;
+  protected FileUploadHandler                 fileUploadHandler;
 
   /** The local session provider. */
   protected ThreadLocalSessionProviderService localSessionProvider;
@@ -129,13 +129,14 @@ public abstract class BaseConnector {
    * @throws Exception the exception
    */
   protected Response buildXMLDocumentOutput(String currentFolder, String workspaceName,
-      String repositoryName, String jcrPath, String command) throws Exception {    
+      String repositoryName, String jcrPath, String command) throws Exception {
     Document document = null;
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
     Node sharedPortalNode = getSharedPortalNode(repositoryName);
     Node currentPortalNode = getCurrentPortalNode(repositoryName, workspaceName, jcrPath);
-    if (currentPortalNode ==  null) return null;
+    if (currentPortalNode == null)
+      return null;
     Node rootNode = currentPortalNode.getParent();
     String currentFolderFullpath = null;
     Node currentNode = null;
@@ -145,10 +146,12 @@ public abstract class BaseConnector {
       currentFolderFullpath = getCurrentFolderFullPath(currentPortalNode, sharedPortalNode,
           currentFolder, jcrPath);
       currentNode = getCurrentNode(repositoryName, workspaceName, currentFolderFullpath);
-      Node webContentNode = getWebContentNode(repositoryName, workspaceName, jcrPath);      
-      if (currentFolderFullpath.equals(currentPortalNode.getPath()) && !currentFolderFullpath.equals(sharedPortalNode.getPath())) {
+      Node webContentNode = getWebContentNode(repositoryName, workspaceName, jcrPath);
+      if (currentFolderFullpath.equals(currentPortalNode.getPath())
+          && !currentFolderFullpath.equals(sharedPortalNode.getPath())) {
         document = createDocumentForPortal(currentNode, webContentNode, command);
-      } else if (!sharedPortalNode.getPath().equals(currentPortalNode.getPath()) && currentFolderFullpath.equals(sharedPortalNode.getPath())) {
+      } else if (!sharedPortalNode.getPath().equals(currentPortalNode.getPath())
+          && currentFolderFullpath.equals(sharedPortalNode.getPath())) {
         document = createDocumentForPortal(currentNode, null, command);
       } else if (currentFolderFullpath.equals(jcrPath)) {
         document = createDocumentForPortal(webContentNode, null, command);
@@ -179,9 +182,10 @@ public abstract class BaseConnector {
     Node sharedPortalNode = getSharedPortalNode(repositoryName);
     String fullPath = getCurrentFolderFullPath(currentPortalNode, sharedPortalNode, currentFolder,
         jcrPath);
-    Node currentNode = getCurrentNode(repositoryName, workspaceName, fullPath);    
-    if (currentNode!= null && currentFolder.length() != 0 && !currentFolder.equals("/") && !jcrPath.equals(fullPath)
-        && !fullPath.equals(currentPortalNode.getPath()) && currentNode != null) {
+    Node currentNode = getCurrentNode(repositoryName, workspaceName, fullPath);
+    if (currentNode != null && currentFolder.length() != 0 && !currentFolder.equals("/")
+        && !jcrPath.equals(fullPath) && !fullPath.equals(currentPortalNode.getPath())
+        && currentNode != null) {
       return folderHandler.createNewFolder(currentNode, newFolderName, language);
     }
     return null;
@@ -197,7 +201,7 @@ public abstract class BaseConnector {
    * @return the document
    * @throws Exception the exception
    */
-  private Document createDocumentForRoot(Node rootNode, Node sharedPortalNode,
+  protected Document createDocumentForRoot(Node rootNode, Node sharedPortalNode,
       Node currentPortalNode, String command) throws Exception {
     Document document = null;
     Element rootElement = FCKUtils.createRootElement(command, rootNode, rootNode
@@ -232,7 +236,7 @@ public abstract class BaseConnector {
    * @return the document
    * @throws Exception the exception
    */
-  private Document createDocumentForPortal(Node rootNode, Node webContentNode, String command)
+  protected Document createDocumentForPortal(Node rootNode, Node webContentNode, String command)
   throws Exception {
     Node storageNode = null;
     try {
@@ -267,7 +271,7 @@ public abstract class BaseConnector {
    * @return the document
    * @throws Exception the exception
    */
-  private Document createDocumentForContentStorage(Node rootNode, String command) throws Exception {
+  protected Document createDocumentForContentStorage(Node rootNode, String command) throws Exception {
     Element rootElement = FCKUtils.createRootElement(command, rootNode, folderHandler
         .getFolderType(rootNode));
     Document document = rootElement.getOwnerDocument();
@@ -304,7 +308,7 @@ public abstract class BaseConnector {
    * @return the current folder full path
    * @throws Exception the exception
    */
-  private String getCurrentFolderFullPath(Node currentPortalNode, Node sharedPortalNode,
+  protected String getCurrentFolderFullPath(Node currentPortalNode, Node sharedPortalNode,
       String currentFolder, String jcrPath) throws Exception {
     String currentFolderRelativePath = null;
     String currentPortalRelativePath = "/" + currentPortalNode.getName() + "/";
@@ -319,11 +323,11 @@ public abstract class BaseConnector {
       rootPortalNode = sharedPortalNode;
       currentPortalRelativePath = sharedPortalRelativePath;
     } else
-    rootPortalNode = currentPortalNode;
+      rootPortalNode = currentPortalNode;
     webContentNode = getWebContentNode(currentPortalNode, jcrPath);
     if (webContentNode != null)
       webContentRelativePath = currentPortalRelativePath + webContentNode.getName() + "/";
-    rootStorageNode = getRootStorageOfPortal(rootPortalNode);    
+    rootStorageNode = getRootStorageOfPortal(rootPortalNode);
     storageRelativePath = currentPortalRelativePath + rootStorageNode.getName() + "/";
     if (currentFolder.equals(currentPortalRelativePath)) {
       return rootPortalNode.getPath();
@@ -331,7 +335,7 @@ public abstract class BaseConnector {
       return webContentNode.getPath();
     } else if (currentFolder.equals(storageRelativePath)) {
       return rootStorageNode.getPath();
-    } else if (webContentRelativePath!= null && currentFolder.startsWith(webContentRelativePath)) {
+    } else if (webContentRelativePath != null && currentFolder.startsWith(webContentRelativePath)) {
       rootStorageNode = getRootStorageOfWebContent(webContentNode);
       storageRelativePath = webContentRelativePath + rootStorageNode.getName() + "/";
       if (currentFolder.equals(storageRelativePath)) {
@@ -356,7 +360,7 @@ public abstract class BaseConnector {
    * @return the current node
    * @throws Exception the exception
    */
-  private Node getCurrentNode(String repositoryName, String workspaceName, String fullPath)
+  protected Node getCurrentNode(String repositoryName, String workspaceName, String fullPath)
   throws Exception {
     Session session = getSession(repositoryName, workspaceName);
     if (fullPath != null && fullPath.length() != 0)
@@ -373,7 +377,7 @@ public abstract class BaseConnector {
    * @return the current portal node
    * @throws Exception the exception
    */
-  private Node getCurrentPortalNode(String repositoryName, String workspaceName, String jcrPath)
+  protected Node getCurrentPortalNode(String repositoryName, String workspaceName, String jcrPath)
   throws Exception {
     Node sharedPortalNode = getSharedPortalNode(repositoryName);
     if (sharedPortalNode != null && jcrPath.startsWith(sharedPortalNode.getPath()))
@@ -395,7 +399,7 @@ public abstract class BaseConnector {
    * @return the shared portal node
    * @throws Exception the exception
    */
-  private Node getSharedPortalNode(String repositoryName) throws Exception {
+  protected Node getSharedPortalNode(String repositoryName) throws Exception {
     try {
       Node sharedPortal = livePortalManagerService.getLiveSharedPortal(repositoryName,
           localSessionProvider.getSessionProvider(null));
@@ -413,14 +417,14 @@ public abstract class BaseConnector {
    * @return the web content node
    * @throws Exception the exception
    */
-  private Node getWebContentNode(Node superNode, String jcrPath) throws Exception {
+  protected Node getWebContentNode(Node superNode, String jcrPath) throws Exception {
     if (superNode == null)
       return null;
     String superNodePath = superNode.getPath() + "/";
     String jcrTemp = jcrPath + "/";
     if (superNode != null && jcrTemp.equals(superNodePath)) {
       if ("exo:webContent".equals(superNode.getPrimaryNodeType().getName()))
-        return superNode;      
+        return superNode;
     } else if (superNode != null && jcrTemp.startsWith(superNodePath)) {
       String relativePath = jcrTemp.replaceFirst(superNodePath, "");
       Node webContentNode = superNode.getNode(relativePath);
@@ -429,17 +433,19 @@ public abstract class BaseConnector {
     }
     return null;
   }
-  
-  private Node getWebContentNode(String repositoryName, String workspaceName, String jcrPath) throws Exception {
+
+  protected Node getWebContentNode(String repositoryName, String workspaceName, String jcrPath)
+  throws Exception {
     Session session = getSession(repositoryName, workspaceName);
     Node webContent = null;
     try {
       webContent = (Node) session.getItem(jcrPath);
       if ("exo:webContent".equals((webContent.getPrimaryNodeType().getName())))
-          return webContent;
+        return webContent;
       else
         return null;
-    } catch (PathNotFoundException exception){ }    
+    } catch (PathNotFoundException exception) {
+    }
     return null;
   }
 
@@ -451,7 +457,7 @@ public abstract class BaseConnector {
    * @return the session
    * @throws Exception the exception
    */
-  private Session getSession(String repositoryName, String workspaceName) throws Exception {
+  protected Session getSession(String repositoryName, String workspaceName) throws Exception {
     ManageableRepository manageableRepository = null;
     if (repositoryName == null) {
       manageableRepository = repositoryService.getCurrentRepository();

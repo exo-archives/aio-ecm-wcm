@@ -16,27 +16,24 @@
  */
 package org.exoplatform.wcm.connector.fckeditor;
 
-import java.io.InputStream;
-
 import javax.jcr.Node;
 
 import org.exoplatform.common.http.HTTPMethods;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.ecm.connector.fckeditor.FCKUtils;
+import org.exoplatform.services.rest.CacheControl;
 import org.exoplatform.services.rest.HTTPMethod;
-import org.exoplatform.services.rest.HeaderParam;
-import org.exoplatform.services.rest.InputTransformer;
 import org.exoplatform.services.rest.OutputTransformer;
 import org.exoplatform.services.rest.QueryParam;
 import org.exoplatform.services.rest.Response;
 import org.exoplatform.services.rest.URITemplate;
 import org.exoplatform.services.rest.container.ResourceContainer;
-import org.exoplatform.services.rest.transformer.PassthroughInputTransformer;
 import org.exoplatform.services.rest.transformer.XMLOutputTransformer;
 import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
+import org.w3c.dom.Document;
 
-// TODO: Auto-generated Javadoc
+//TODO: Auto-generated Javadoc
 /*
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Jun 24, 2008
@@ -81,120 +78,55 @@ public class LinkConnector extends BaseConnector implements ResourceContainer {
       String currentFolder, @QueryParam("command")
       String command, @QueryParam("type")
       String type) throws Exception {
-    Response response = buildXMLDocumentOutput(currentFolder, workspaceName, repositoryName, jcrPath, command);
+    Response response = buildXMLDocumentOutput(currentFolder, workspaceName, repositoryName,
+        jcrPath, command);
     if (response == null)
       return Response.Builder.ok().build();
     else
       return response;
   }
 
-  /**
-   * Creates the folder.
-   * 
-   * @param repositoryName the repository name
-   * @param workspaceName the workspace name
-   * @param jcrPath the jcr path
-   * @param currentFolder the current folder
-   * @param newFolderName the new folder name
-   * @param command the command
-   * @param language the language
-   * 
-   * @return the response
-   * 
-   * @throws Exception the exception
+  /* (non-Javadoc)
+   * @see org.exoplatform.wcm.connector.fckeditor.BaseConnector#buildXMLDocumentOutput(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
    */
-  @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/createFolder/")
-  @OutputTransformer(XMLOutputTransformer.class)
-  public Response createFolder(@QueryParam("repositoryName")
-      String repositoryName, @QueryParam("workspaceName")
-      String workspaceName, @QueryParam("jcrPath")
-      String jcrPath, @QueryParam("currentFolder")
-      String currentFolder, @QueryParam("newFolderName")
-      String newFolderName, @QueryParam("command")
-      String command, @QueryParam("language")
-      String language) throws Exception {
-    Response response = buildXMLDocumentOutput(newFolderName, currentFolder, jcrPath, repositoryName,
-        workspaceName, command, language);
-    if (response == null)
-      return Response.Builder.ok().build();
-    else
-      return response;
+  protected Response buildXMLDocumentOutput(String currentFolder, String workspaceName,
+      String repositoryName, String jcrPath, String command) throws Exception {
+    Document document = null;
+    CacheControl cacheControl = new CacheControl();
+    cacheControl.setNoCache(true);
+    Node sharedPortalNode = getSharedPortalNode(repositoryName);
+    Node currentPortalNode = getCurrentPortalNode(repositoryName, workspaceName, jcrPath);
+    if (currentPortalNode == null)
+      return null;
+    Node rootNode = currentPortalNode.getParent();
+    String currentFolderFullpath = null;
+    Node currentNode = null;
+    if (currentFolder.length() == 0 || "/".equals(currentFolder)) {
+      document = createDocumentForRoot(rootNode, sharedPortalNode, currentPortalNode, command);
+    } else {
+      currentFolderFullpath = getCurrentFolderFullPath(currentPortalNode, sharedPortalNode,
+          currentFolder, jcrPath);
+      currentNode = getCurrentNode(repositoryName, workspaceName, currentFolderFullpath);
+      Node webContentNode = getWebContentNode(repositoryName, workspaceName, jcrPath);
+      if (currentFolderFullpath.equals(currentPortalNode.getPath())
+          || currentFolderFullpath.equals(sharedPortalNode.getPath())) {
+        document = createDocumentForPortal(currentNode, null, command);
+      } else if (currentFolderFullpath.equals(jcrPath)) {
+        document = createDocumentForPortal(webContentNode, null, command);
+      } else {
+        document = createDocumentForContentStorage(currentNode, command);
+      }
+    }
+    return Response.Builder.ok(document).mediaType("text/xml").cacheControl(cacheControl).build();
   }
 
-  /**
-   * Upload file.
-   * 
-   * @param inputStream the input stream
-   * @param repositoryName the repository name
-   * @param workspaceName the workspace name
-   * @param currentFolder the current folder
-   * @param jcrPath the jcr path
-   * @param uploadId the upload id
-   * @param language the language
-   * @param contentType the content type
-   * @param contentLength the content length
-   * 
-   * @return the response
-   * 
-   * @throws Exception the exception
-   */
-  @HTTPMethod(HTTPMethods.POST)
-  @URITemplate("/uploadFile/upload/")
-  @InputTransformer(PassthroughInputTransformer.class)
-  @OutputTransformer(XMLOutputTransformer.class)
-  public Response uploadFile(InputStream inputStream, @QueryParam("repositoryName")
-      String repositoryName, @QueryParam("workspaceName")
-      String workspaceName, @QueryParam("currentFolder")
-      String currentFolder, @QueryParam("jcrPath")
-      String jcrPath, @QueryParam("uploadId")
-      String uploadId, @QueryParam("language")
-      String language, @HeaderParam("content-type")
-      String contentType, @HeaderParam("content-length")
-      String contentLength) throws Exception {
-    return createUploadFileResponse(inputStream, repositoryName, workspaceName, currentFolder,
-        jcrPath, uploadId, language, contentType, contentLength);
-  }
-
-  /**
-   * Process upload.
-   * 
-   * @param repositoryName the repository name
-   * @param workspaceName the workspace name
-   * @param currentFolder the current folder
-   * @param jcrPath the jcr path
-   * @param action the action
-   * @param language the language
-   * @param fileName the file name
-   * @param uploadId the upload id
-   * 
-   * @return the response
-   * 
-   * @throws Exception the exception
-   */
-  @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/uploadFile/control/")
-  @OutputTransformer(XMLOutputTransformer.class)
-  public Response processUpload(@QueryParam("repositoryName")
-      String repositoryName, @QueryParam("workspaceName")
-      String workspaceName, @QueryParam("currentFolder")
-      String currentFolder, @QueryParam("jcrPath")
-      String jcrPath, @QueryParam("action")
-      String action, @QueryParam("language")
-      String language, @QueryParam("fileName")
-      String fileName, @QueryParam("uploadId")
-      String uploadId) throws Exception {
-    return createProcessUploadResponse(repositoryName, workspaceName, currentFolder, jcrPath,
-        action, language, fileName, uploadId);
-  }
-  
   /* (non-Javadoc)
    * @see org.exoplatform.wcm.connector.fckeditor.BaseConnector#getRootStorageOfPortal(javax.jcr.Node)
    */
   @Override
   protected Node getRootStorageOfPortal(Node portal) throws Exception {
     PortalFolderSchemaHandler folderSchemaHandler = webSchemaConfigService
-    .getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);    
+    .getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
     return folderSchemaHandler.getLinkFolder(portal);
   }
 
@@ -204,10 +136,10 @@ public class LinkConnector extends BaseConnector implements ResourceContainer {
   @Override
   protected Node getRootStorageOfWebContent(Node webContent) throws Exception {
     WebContentSchemaHandler webContentSchemaHandler = webSchemaConfigService
-    .getWebSchemaHandlerByType(WebContentSchemaHandler.class);    
+    .getWebSchemaHandlerByType(WebContentSchemaHandler.class);
     return webContentSchemaHandler.getLinkFolder(webContent);
   }
-  
+
   /* (non-Javadoc)
    * @see org.exoplatform.wcm.connector.fckeditor.BaseConnector#getStorageType()
    */
