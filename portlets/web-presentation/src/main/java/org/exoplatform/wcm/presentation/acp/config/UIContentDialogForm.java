@@ -28,7 +28,7 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.version.VersionException;
 
-import org.exoplatform.ecm.application.JCRResourceResolver;
+import org.exoplatform.ecm.resolver.JCRResourceResolver;
 import org.exoplatform.ecm.webui.form.UIBaseDialogForm;
 import org.exoplatform.ecm.webui.utils.DialogFormUtil;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
