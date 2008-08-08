@@ -27,3 +27,12 @@
 .UIWebContentSelectorForm .UIFormGrid .UIFormGrid .FieldComponent {
 	padding: 0px;
 }
+
+.UIWelcomeScreen .HorizontalLayout {
+	padding: 0px;
+}
+
+.UIWelcomeScreen .HorizontalLayout .FormContainer .WelcomeScreen {
+	padding-left: 200px;
+	padding-top: 15px;
+}
