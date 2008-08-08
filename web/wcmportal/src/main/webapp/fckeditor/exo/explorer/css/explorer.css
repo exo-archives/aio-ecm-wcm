@@ -304,6 +304,7 @@ a {
 	background: #ffffff;
 	width: 300px;
 	margin: auto;
+	overflow: auto;
 }
 
 .IFrameFormContainer {
