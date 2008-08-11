@@ -30,7 +30,6 @@ import org.exoplatform.services.rest.URITemplate;
 import org.exoplatform.services.rest.container.ResourceContainer;
 import org.exoplatform.services.rest.transformer.XMLOutputTransformer;
 import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
-import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
 import org.w3c.dom.Document;
 
 //TODO: Auto-generated Javadoc
@@ -81,7 +80,7 @@ public class LinkConnector extends BaseConnector implements ResourceContainer {
     Response response = buildXMLDocumentOutput(currentFolder, workspaceName, repositoryName,
         jcrPath, command);
     if (response == null)
-      return Response.Builder.ok().build();
+      return Response.Builder.badRequest().build();
     else
       return response;
   }
@@ -135,9 +134,7 @@ public class LinkConnector extends BaseConnector implements ResourceContainer {
    */
   @Override
   protected Node getRootStorageOfWebContent(Node webContent) throws Exception {
-    WebContentSchemaHandler webContentSchemaHandler = webSchemaConfigService
-    .getWebSchemaHandlerByType(WebContentSchemaHandler.class);
-    return webContentSchemaHandler.getLinkFolder(webContent);
+    throw new Exception("Unsupported.");
   }
 
   /* (non-Javadoc)

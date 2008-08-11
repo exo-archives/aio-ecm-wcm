@@ -83,7 +83,7 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
       String type) throws Exception {    
     Response response = buildXMLDocumentOutput(currentFolder, workspaceName, repositoryName, jcrPath, command);
     if (response == null)
-      return Response.Builder.ok().build();
+      return Response.Builder.badRequest().build();
     else
       return response;
   }
@@ -117,7 +117,7 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
     Response response = buildXMLDocumentOutput(newFolderName, currentFolder, jcrPath, repositoryName,
         workspaceName, command, language);
     if (response == null)
-      return Response.Builder.ok().build();
+      return Response.Builder.badRequest().build();
     else
       return response;
   }
