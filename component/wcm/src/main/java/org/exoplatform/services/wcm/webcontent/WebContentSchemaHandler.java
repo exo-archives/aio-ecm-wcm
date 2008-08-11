@@ -53,10 +53,6 @@ public class WebContentSchemaHandler extends BaseWebSchemaHandler {
   public Node getVideoFolder(final Node webContent) throws Exception {
     return webContent.getNode("multimedia/videos");
   }
-
-  public Node getLinkFolder(final Node webContent) throws Exception {
-    return webContent.getNode("links");
-  }
   
   public Node getDocumentFolder (final Node webContent) throws Exception {
     return webContent.getNode("documents");
@@ -82,10 +78,7 @@ public class WebContentSchemaHandler extends BaseWebSchemaHandler {
     if (!webContent.hasNode("documents")) {
       Node document = webContent.addNode("documents",NT_UNSTRUCTURED);           
       addMixin(document, "exo:documentFolder"); 
-    }    
-    if (!webContent.hasNode("links")) {
-      webContent.addNode("links",NT_UNSTRUCTURED); 
-    }    
+    }          
   }
-
+  
 }

@@ -62,7 +62,7 @@
 	   		<name>PortalFolderSchemaHandler</name>
 	   		<set-method>addWebSchemaHandler</set-method>
 	   		<type>org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler</type>
-	   	</component-plugin>	   		   	
+	   	</component-plugin>	   		   		   	
    	</component-plugins>    
    </component>
    

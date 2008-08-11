@@ -46,7 +46,8 @@ public class HTMLFileSchemaHandler extends BaseWebSchemaHandler {
     session.move(file.getPath(),tempPath);    
     //rename the folder        
     Node webContent = webFolder.addNode(fileName, "exo:webContent");
-    String htmlFilePath = webContent.getPath() + "/" + fileName;    
+    //the htmlFile become default.html file for the web content
+    String htmlFilePath = webContent.getPath() + "/default.html";    
     session.move(tempPath, htmlFilePath);
     tempFolder.remove();    
     session.save();

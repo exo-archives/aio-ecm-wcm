@@ -35,6 +35,18 @@
     </supertypes>    
   </nodeType>
   
+  <nodeType name="exo:themeFolder" isMixin="false" hasOrderableChildNodes="true" primaryItemName="">
+    <supertypes>
+      <supertype>nt:unstructured</supertype>
+    </supertypes>    
+  </nodeType>
+  
+  <nodeType name="exo:linkFolder" isMixin="false" hasOrderableChildNodes="true" primaryItemName="">
+    <supertypes>
+      <supertype>nt:unstructured</supertype>
+    </supertypes>    
+  </nodeType>
+  
   <nodeType name="exo:multimediaFolder" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">  	    
   </nodeType>
     
@@ -48,6 +60,20 @@
     <supertypes>
       <supertype>nt:folder</supertype>
     </supertypes>
+    <childNodeDefinitions>
+      <childNodeDefinition name="*" defaultPrimaryType="nt:folder" autoCreated="false" mandatory="false"
+        onParentVersion="VERSION" protected="false" sameNameSiblings="false">
+        <requiredPrimaryTypes>
+          <requiredPrimaryType>nt:base</requiredPrimaryType>
+        </requiredPrimaryTypes>
+      </childNodeDefinition>
+      <childNodeDefinition name="css" defaultPrimaryType="exo:cssFolder" autoCreated="false" mandatory="false"
+        onParentVersion="VERSION" protected="false" sameNameSiblings="false">
+        <requiredPrimaryTypes>
+          <requiredPrimaryType>nt:base</requiredPrimaryType>
+        </requiredPrimaryTypes>
+      </childNodeDefinition>
+    </childNodeDefinitions>
   </nodeType>
       
   <nodeType name="exo:webContent" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
