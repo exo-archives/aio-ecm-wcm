@@ -111,7 +111,11 @@ public class LinkConnector extends BaseConnector implements ResourceContainer {
           || currentFolderFullpath.equals(sharedPortalNode.getPath())) {
         document = createDocumentForPortal(currentNode, null, command);
       } else if (currentFolderFullpath.equals(jcrPath)) {
-        document = createDocumentForPortal(webContentNode, null, command);
+        if (webContentNode != null) {
+          document = createDocumentForPortal(webContentNode, null, command);
+        } else {
+          document = createDocumentForContentStorage(currentNode, command);
+        }
       } else {
         document = createDocumentForContentStorage(currentNode, command);
       }
