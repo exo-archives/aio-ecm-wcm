@@ -26,7 +26,6 @@ import org.exoplatform.ecm.webui.tree.UINodeTree;
 import org.exoplatform.ecm.webui.tree.UINodeTreeBuilder;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
 import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 
@@ -52,14 +51,14 @@ public class UIWebContentTreeBuilder extends UINodeTreeBuilder {
   public UIWebContentTreeBuilder() throws Exception {
     super();
   }
-  
+
   /**
    * Gets the current portal.
    * 
    * @return the current portal
    */
   public Node getCurrentPortal() { return currentPortal; }
-  
+
   /**
    * Sets the current portal.
    * 
@@ -75,7 +74,7 @@ public class UIWebContentTreeBuilder extends UINodeTreeBuilder {
    * @return the shared portal
    */
   public Node getSharedPortal() { return sharedPortal; }
-  
+
   /**
    * Sets the shared portal.
    * 
@@ -106,20 +105,34 @@ public class UIWebContentTreeBuilder extends UINodeTreeBuilder {
       Node webStorage = getWebContentStorage(sharedPortal);
       List<Node> children = filterWebContentFolder(webStorage);
       tree.setChildren(children);
-      tree.setSibbling(new ArrayList<Node>());
+      tree.setSibbling(children);
       tree.setParentSelected(rootTreeNode);
     }else if(currentPath.equals(currentPortalPath)) {
       Node webStorage = getWebContentStorage(currentPortal);
       List<Node> children = filterWebContentFolder(webStorage);      
       tree.setChildren(children);      
-      tree.setSibbling(new ArrayList<Node>());
+      tree.setSibbling(children);
       tree.setParentSelected(rootTreeNode);
     }else if(currentPath.startsWith(currentPortalPath) || currentPath.startsWith(sharedPortalPath)) {
-      List<Node> sibbling = filterWebContentFolder(currentNode.getParent());
-      List<Node> children = filterWebContentFolder(currentNode);
-      tree.setChildren(children);
-      tree.setSibbling(sibbling);
-      tree.setParentSelected(currentNode.getParent());
+      if(currentNode.getParent().getPath().equals(currentPortal.getPath())) {
+        Node webStorage = getWebContentStorage(currentPortal);
+        List<Node> children = filterWebContentFolder(webStorage);
+        tree.setChildren(children);
+        tree.setSibbling(children);
+        tree.setParentSelected(rootTreeNode);
+      } else if(currentNode.getParent().getPath().equals(sharedPortal.getPath())) {
+        Node webStorage = getWebContentStorage(sharedPortal);
+        List<Node> children = filterWebContentFolder(webStorage);
+        tree.setChildren(children);
+        tree.setSibbling(children);
+        tree.setParentSelected(rootTreeNode);
+      } else {
+        List<Node> sibbling = filterWebContentFolder(currentNode.getParent());
+        List<Node> children = filterWebContentFolder(currentNode);
+        tree.setChildren(children);
+        tree.setSibbling(sibbling);
+        tree.setParentSelected(currentNode.getParent());
+      }
     }    
   }
 
