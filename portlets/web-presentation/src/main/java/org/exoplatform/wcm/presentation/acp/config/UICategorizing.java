@@ -16,6 +16,11 @@
  */
 package org.exoplatform.wcm.presentation.acp.config;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.exoplatform.ecm.webui.selector.UISelectable;
+import org.exoplatform.ecm.webui.tree.selectmany.UICategoriesSelector;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
@@ -31,8 +36,25 @@ import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
     lifecycle = UIContainerLifecycle.class
 )
 
-public class UICategorizing extends UIContainer {
+public class UICategorizing extends UIContainer implements UISelectable {
+  
+  final static String PATH_CATEGORY = "path".intern(); 
+  
   public UICategorizing() throws Exception {
-
+   UICategoriesSelector uiCategoriesSelector = addChild(UICategoriesSelector.class, null, null);
+//   uiCategoriesSelector.setExistedCategories(getExistedCategory());
+//   uiCategoriesSelector.setRootCategoryPath("");
+   uiCategoriesSelector.init();
+  }
+  
+  private List<String> getExistedCategory() {
+    // if node is in edit 
+    //get existed category
+    return new ArrayList<String>();
+  }
+  
+  
+  public void doSelect(String name, Object value) throws Exception {
+    
   }
 }
