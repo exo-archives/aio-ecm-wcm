@@ -1,2 +1,3 @@
-@import url('../../shareSkin/pages/Stylesheet.css');
-@import url('../../shareSkin/NodeTypes/Stylesheet.css');
+@import url('/eXoECMResources/skin/DefaultSkin/Stylesheet.css');
+@import url('../shareSkin/pages/Stylesheet.css');
+@import url('../shareSkin/NodeTypes/Stylesheet.css');
