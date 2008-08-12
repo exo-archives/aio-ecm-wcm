@@ -1,0 +1,39 @@
+<%
+	import org.exoplatform.portal.application.PortalRequestContext;
+	import org.exoplatform.portal.webui.util.Util;
+	
+	def prContext = _ctx.getRequestContext().getParentAppRequestContext();
+	String signInAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ShowLoginForm', true)) ;" ;
+	String changeLanguageAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ChangeLanguage', true));" ;
+	String portletId = uicomponent.getId() ;
+	
+	String portalName = Util.getUIPortal().getName() ;
+  portalName = URLEncoder.encode(portalName, "UTF-8") ;
+  String signOutAction = prContext.getRequestContextPath() + "/public/" + portalName + "/" ;
+%>
+
+<div class="UIDefaultLeft">
+	<div class="Logo" align="center">
+		<img src="{logoPath}" width="132" height="60"/>
+	</div>
+	<div class="MiddleBanner">
+		<div class="BannerTitle">{slogan}</div>
+		<div class="LeftLogin">
+			<div class="RightLogin">
+				<div class="CenterLogin">
+					<% if(prContext.getAccessPath() == PortalRequestContext.PRIVATE_ACCESS) { %>
+						<a class="LoginInfo LogoutIcon" title="Sign Out" onclick="location.href='$signOutAction'"><%=_ctx.appRes("UILogged.action.signout")%></a>
+						<div class="LoginSeperatorLine"><span></span></div>
+						<div class="LoginInfo Welcome"><%=_ctx.appRes("UILogged.note.loggedUser")%>: <span><%=prContext.getRemoteUser();%> </span></div>
+						<div style="clear: right"><span></span></div>
+					<% } else { %>
+						<a class="LoginInfo LogoutIcon" title="Sign Out" onclick="$signInAction"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>
+						<div class="LoginSeperatorLine"><span></span></div>
+						<a class="SettingLanguage" onclick="$changeLanguageAction"><%=_ctx.appRes("UIChangeLanguage.title.LanguageSetting")%></a>
+						<div style="clear: right"><span></span></div>
+					<% } %>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

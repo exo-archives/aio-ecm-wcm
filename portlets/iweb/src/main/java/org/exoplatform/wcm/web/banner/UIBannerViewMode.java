@@ -18,11 +18,22 @@ package org.exoplatform.wcm.web.banner;
 
 import java.io.InputStream;
 
+import javax.jcr.Node;
+import javax.jcr.Session;
 import javax.portlet.PortletRequest;
 
 import org.exoplatform.commons.utils.IOUtil;
 import org.exoplatform.dms.application.StringResourceResolver;
+import org.exoplatform.ecm.resolver.NTFileResourceResolver;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
+import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.wcm.core.WebSchemaConfigService;
+import org.exoplatform.services.wcm.portal.LivePortalManagerService;
+import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -36,42 +47,60 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
  */
 
 @ComponentConfig(
-  lifecycle = Lifecycle.class  
+    lifecycle = Lifecycle.class  
 )
 public class UIBannerViewMode extends UIComponent {
 
-  private final String     DEFAULT_TEMPLATE = "app:/groovy/banner/webui/UIBannerPortlet.gtmpl".intern();
+  private final String DEFAULT_TEMPLATE = "app:/groovy/banner/webui/UIBannerPortlet.gtmpl".intern();
+  private PortletRequestContext portletRequestContext = null;
+  private PortletRequest portletRequest = null;
+  private String repository = null;
+  private String workspace = null;
+  private String nodeUUID = null;
+  
+  public UIBannerViewMode() throws Exception {
+    portletRequestContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+    portletRequest = portletRequestContext.getRequest();
+    repository = portletRequest.getPreferences().getValue("repository", null);
+    workspace = portletRequest.getPreferences().getValue("workspace", null);
+    nodeUUID = portletRequest.getPreferences().getValue("nodeUUID", null);
+  }
 
-  public UIBannerViewMode() throws Exception { }
-
-  public String getTemplate() { return DEFAULT_TEMPLATE; }
-
-  public String loadTemplateData() throws Exception {
-    PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
-    String templateData = null ;
-    PortletRequest portletRequest = pContext.getRequest();
-    String repository = portletRequest.getPreferences().getValue("repository", null);
-    String workspace = portletRequest.getPreferences().getValue("workspace", null);
-    String nodeUUID = portletRequest.getPreferences().getValue("nodeUUID", null);
-    if (repository != null && workspace != null && nodeUUID != null) {
-      //load template from jcr: templateData=?      
-    }
-    //#################### need remove this code when can load template from jcr ####################
-    if(templateData == null) {
-      InputStream iStream = pContext.getApplication().getResourceResolver().getInputStream(DEFAULT_TEMPLATE);
-      templateData = IOUtil.getStreamContentAsString(iStream); 
-    }    
-    return templateData ;    
+  public String getTemplate() {
+    if(isUseJCRTemplate())
+      return "jcr:" + nodeUUID;
+    return DEFAULT_TEMPLATE; 
   }
 
   public ResourceResolver getTemplateResourceResolver(WebuiRequestContext context, String template) {
-    try {
-      String templateData = loadTemplateData() ;
-      if(templateData != null) 
-        return new StringResourceResolver(templateData) ; 
-    } catch (Exception e) {
-    }    
+    if(isUseJCRTemplate()) {
+      return new NTFileResourceResolver(repository, workspace);
+    }
     return super.getTemplateResourceResolver(context, template);
   }
   
+  private boolean isUseJCRTemplate() {
+    if (repository != null && workspace != null && nodeUUID != null) {
+      try {
+        // Get JCR information
+        String portalName = Util.getUIPortal().getName();
+        LivePortalManagerService portalManagerService = getApplicationComponent(LivePortalManagerService.class);
+        SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
+        Node portalFolder = portalManagerService.getLivePortal(portalName, sessionProvider);
+        
+        // Get banner folder
+        WebSchemaConfigService configService = getApplicationComponent(WebSchemaConfigService.class);
+        PortalFolderSchemaHandler portalFolderSchemaHandler = configService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
+        Node bannerFolder = portalFolderSchemaHandler.getBannerThemes(portalFolder);
+
+        // Checking
+        if (bannerFolder.hasNode("banner.gtmpl"))
+          return true;
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+    return false;
+  }  
+
 }

@@ -95,7 +95,7 @@ public class LiveLinkManagerServiceImpl implements LiveLinkManagerService {
   }
 
   @SuppressWarnings("unchecked")
-  public List<String> getBrokenLinks(Node webContent) throws Exception {
+  public List<String> getBrokenLinks(Node webContent) throws Exception {    
     List<String> listBrokenUrls = (List<String>)brokenLinksCache.get(webContent.getUUID());
     if(listBrokenUrls == null) {      
       for(Value value:webContent.getProperty("exo:links").getValues()) {

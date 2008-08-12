@@ -1,6 +1,5 @@
 .UIDefaultLeft {
 	background: #d8d8d8 url(DefaultSkin/background/DefaultBackground.png) repeat-x;
-	margin-bottom: 20px;
 	border-bottom: 1px solid #99999a;
 }
 
@@ -82,7 +81,7 @@
 }
 
 .UIDefaultLeft .CenterLogin .SettingLanguage {
-  background: url(DefaultSkin/background/LanguageIcon.png) no-repeat left center;
+  background: url(DefaultSkin/background/LanguageIcon.gif) no-repeat left center;
   padding-left: 26px;
   cursor: pointer;
   font-weight: bold;

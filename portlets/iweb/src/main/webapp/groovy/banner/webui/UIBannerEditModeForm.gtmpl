@@ -5,19 +5,19 @@
 	import org.exoplatform.webui.form.UIFormCheckBoxInput;
 	import org.exoplatform.webui.form.UIFormSelectBox;
 	import org.exoplatform.webui.form.UIFormStringInput;
+	import org.exoplatform.webui.form.UIFormUploadInput;
+	import org.exoplatform.webui.form.UIFormStringInput;
  %>
 <div class="UIForm $uicomponent.id" >
   <%uiform.begin()%>
     <div class="UIBannerEditModeForm">
       <table class="UIBannerEditModeFormGrid">
-				<tr>
-					<td class="FieldLabel"><b><%=uicomponent.getLabel(uiform.getUIFormTextAreaInput("template").getName())%></b></td>
-					<td class="FieldComponent"><% uiform.renderField(uiform.getUIFormTextAreaInput("template")) %></td>					
-				</tr>		
-				<tr>
-					<td class="FieldLabel"><b><%=uicomponent.getLabel(uiform.getUIFormCheckBoxInput("quickEdit").getName())%></b></td>													
-					<td class="FieldComponent"><% uiform.renderField(uiform.getUIFormCheckBoxInput("quickEdit")) %></td>				
-				</tr>				
+      	<% for(field in uiform.getChildren()) { %>
+		      <tr>
+						<td class="FieldLabel"><b><%=uicomponent.getLabel(field.getName())%></b></td>
+						<td class="FieldComponent"><% uiform.renderField(field) %></td>					
+					</tr>
+				<% } %>
       </table>
       
       <div class="UIAction"> 
