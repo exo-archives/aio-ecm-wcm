@@ -39,13 +39,11 @@ import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
-import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
-import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormUploadInput;
 
@@ -82,16 +80,11 @@ public class UIBannerEditModeForm extends UIForm {
 
   public static class SaveActionListener extends EventListener<UIBannerEditModeForm> {
     
-    // 0. Get JCR information
-    // 1. Upload logo
-    // 2. Store template in jcr
-    // 3. Save portlet preference
     public void execute(Event<UIBannerEditModeForm> event) throws Exception {
       UIBannerEditModeForm editForm = event.getSource();
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
       PortletPreferences portletPreferences = context.getRequest().getPreferences();
       
-      // 0. Get JCR information
       String portalName = Util.getUIPortal().getName();
       LivePortalManagerService portalManagerService = editForm.getApplicationComponent(LivePortalManagerService.class);
       SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
@@ -101,13 +94,10 @@ public class UIBannerEditModeForm extends UIForm {
       String workspace = session.getWorkspace().getName();
       String nodeUUID = null;
    
-      // 1. Upload logo to banner folder
-      // Get banner folder
       WebSchemaConfigService configService = editForm.getApplicationComponent(WebSchemaConfigService.class);
       PortalFolderSchemaHandler portalFolderSchemaHandler = configService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
       Node bannerFolder = portalFolderSchemaHandler.getBannerThemes(portalFolder);
       
-      // Get upload(logo) data, check null, image type, image size... here
       UIFormUploadInput logo = (UIFormUploadInput)editForm.getUIInput("logoPath");
       InputStream logoData = logo.getUploadDataAsStream();      
       if (logoData == null){
@@ -116,7 +106,7 @@ public class UIBannerEditModeForm extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      // Store logo in JCR, get logo path as webDAV view
+
       String logoPath = "/portal/rest/jcr/" + repository + "/" + workspace; 
       Node logoNode = null;
       Node logoContent = null;
@@ -128,25 +118,22 @@ public class UIBannerEditModeForm extends UIForm {
         logoContent = logoNode.addNode("jcr:content", "nt:resource");
       }
       logoContent.setProperty("jcr:encoding", "UTF-8");
-      logoContent.setProperty("jcr:mimeType", new MimeTypeResolver().getMimeType("logo.jpg"));
+      MimeTypeResolver mimeTypeResolver = new MimeTypeResolver();
+      String logoType = mimeTypeResolver.getMimeType("logo.jpg");
+      logoContent.setProperty("jcr:mimeType", logoType);
       logoContent.setProperty("jcr:data", logoData);
       logoContent.setProperty("jcr:lastModified", new Date().getTime());
       
       logoPath = logoPath.concat(logoNode.getPath());
       
-      // Get slogan from editForm
       String slogan = editForm.getUIStringInput("slogan").getValue();
       
-      // 2. Store template in jcr
-      // Get default template
       InputStream inputStream = event.getRequestContext().getApplication().getResourceResolver().getInputStream(UIBannerEditModeForm.DEFAULT_TEMPLATE);
       String bannerTemplate = IOUtil.getStreamContentAsString(inputStream);
       
-      // Update with new information
       bannerTemplate = bannerTemplate.replaceAll("\\{logoPath\\}", logoPath);
       bannerTemplate = bannerTemplate.replaceAll("\\{slogan\\}", slogan);
       
-      // Store template in JCR, get node UUID
       Node bannerNode = null;
       Node bannerContent = null;
       if (bannerFolder.hasNode("banner.gtmpl")) {
@@ -158,16 +145,16 @@ public class UIBannerEditModeForm extends UIForm {
         bannerContent = bannerNode.addNode("jcr:content", "nt:resource");
       }
       bannerContent.setProperty("jcr:encoding", "UTF-8");
-      bannerContent.setProperty("jcr:mimeType", new MimeTypeResolver().getMimeType("logo.jpg"));
+      mimeTypeResolver = new MimeTypeResolver();
+      String bannerType = mimeTypeResolver.getMimeType("gtmpl");
+      bannerContent.setProperty("jcr:mimeType", bannerType);
       bannerContent.setProperty("jcr:data", bannerTemplate);
       bannerContent.setProperty("jcr:lastModified", new Date().getTime());
       
       nodeUUID = bannerNode.getUUID();
       
-      // Save all change
       session.save();
 
-      // 3. Save portlet preference
       boolean quickEdit = editForm.getUIFormCheckBoxInput("quickEdit").isChecked();
       portletPreferences.setValue("quickEdit", Boolean.toString(quickEdit));
       portletPreferences.setValue("repository", repository) ;

@@ -16,20 +16,13 @@
  */
 package org.exoplatform.wcm.web.banner;
 
-import java.io.InputStream;
-
 import javax.jcr.Node;
-import javax.jcr.Session;
 import javax.portlet.PortletRequest;
 
-import org.exoplatform.commons.utils.IOUtil;
-import org.exoplatform.dms.application.StringResourceResolver;
 import org.exoplatform.ecm.resolver.NTFileResourceResolver;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
-import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
