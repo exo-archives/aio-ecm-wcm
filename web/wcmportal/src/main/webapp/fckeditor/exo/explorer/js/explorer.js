@@ -194,15 +194,20 @@ function dateFormat(sFullDate) {
 			connector,
 			param,
 			function(sXML) {
-				var oNodes = eXp.getNodes(sXML, "Error")[0];
-				var sErrorNumber = eXp.getNodeValue(oNodes, "number");
-				var sErrorText = eXp.getNodeValue(oNodes, "text");
-				if (sErrorNumber != '0') {
-					alert(sErrorText);
-				} else {
-					showAddForm(sCurrentFolder + 'add/', false);
-					getDir(sCurrentFolder);
-				}
+				/*
+					var oNodes = eXp.getNodes(sXML, "Error")[0];
+					var sErrorNumber = eXp.getNodeValue(oNodes, "number");
+					var sErrorText = eXp.getNodeValue(oNodes, "text");
+					if (sErrorNumber != '0') {
+						alert(sErrorText);
+					} else {
+						showAddForm(sCurrentFolder + 'add/', false);
+						getDir(sCurrentFolder);
+					}
+				*/
+				getDir(eXp.store.currentNode);
+				K("PopupContainer").innerHTML = "";
+				K("Mask").hide();
 			}
 		);
 	}

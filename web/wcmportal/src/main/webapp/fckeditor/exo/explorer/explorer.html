@@ -64,7 +64,7 @@
 									<td><input type="radio" onclick="sort('size')" name="Sort"><span userLanguage="KLang.Sort_Size">By Size</span></td>
 			                    </tr>
 							</table>
-							<table align="center">
+							<table align="center" class="ActionContainer">
 								<tr>
 									<td align="center">
 										<a href="javascript: void(0);" class="ActionButton" onclick="showSetting()">
@@ -132,8 +132,6 @@
 											</div>
 										</div>
 									</a>
-								</td>
-								<td align="center">
 									<a href="javascript: void(0);" class="ActionButton">
 										<div class="ButtonLeft">
 											<div class="ButtonRight">
@@ -143,6 +141,7 @@
 											</div>
 										</div>
 									</a>
+									<div style="clear: left;"><span style="dislay: none"></span></div>
 								</td>
 							</tr>
 						</table>
@@ -151,7 +150,7 @@
 
 				<div id="UploadContainer" style="display: none;">
 					<div class="UploadForm" style="overflow: auto;">
-						<table border=0 bordercolor="red">
+						<table border=0 bordercolor="red" class="ActionContainer">
 							<tr>
 								<td colspan="2" style="width: 100%; overflow: hidden;">
 									<span userLanguage="KLang.LabelFolder"> Folder </span>: ${idShort}
@@ -321,7 +320,11 @@
 			else return null;
 		},
 		getNodeValue: function(node, name) {
-			return node.attributes.getNamedItem(name).value;
+			if (node || name !== undefined) {
+				var attribute = node.attributes.getNamedItem(name);
+				if (attribute) return attribute.value;
+			}
+			return new String();
 		},
 		getID: function() {
 			return Math.random().toString().substring(2);
@@ -439,6 +442,7 @@
 		var oHide = K('hideContainer');
 		var currentNode = eXp.store.currentNode;
 		var sHTML = '';
+		
 		var oFolders = eXp.getNodes(iXML, "Folder");
 		if (oFolders && oFolders.length) {
 			var iLength = oFolders.length;
@@ -464,7 +468,9 @@
 		
 		
 		sHTML = '';
+		
 		var oFiles = eXp.getNodes(iXML, "File");
+		
 		eXp.store.data = K.create.database({fieldName: ["name", "date", "size", "type", "url"]});
 		if (oFiles != null) {
 			var oItemGroup = K('checkgen');
@@ -472,11 +478,13 @@
 			if (oItemGroup == null || oItemGroup == '') {
 				for (var i = 0 ; i < iLength; ++i) {
 					var sName = eXp.getNodeValue(oFiles[i], "name");
+					
 					var sType = eXp.getNodeValue(oFiles[i], "fileType").replace(':', '_') + '16x16Icon';
 					var sDateCreated = dateFormat(eXp.getNodeValue(oFiles[i], "dateCreated"));
 					var sURL = eXoPlugin.hostName + '/' + eXp.getNodeValue(oFiles[i], "url");
 					var sSize = eXp.getNodeValue(oFiles[i], "size");
 					if (sSize == '') sSize = '-';
+					
 					var sHideTreeItem = getElementsByClassPath(oHide, 'HideTreeItem')[0].innerHTML;
 					sHideTreeItem = sHideTreeItem.replace(/\${sName}/g, sName);
 					sHideTreeItem = sHideTreeItem.replace(/\${sType}/g, sType);
@@ -486,6 +494,7 @@
 					sHTML += '<input type="hidden" id="checkgen">';
 					sHTML += sHideTreeItem;
 					eXp.store.data.Insert([sName, sDateCreated, sSize, sType, sURL]);
+
 				}
 				oDocument.innerHTML += sHTML;
 			} else {
@@ -499,6 +508,7 @@
 					eXp.store.data.Insert([sName, sDateCreated, sSize, sType]);
 				} 
 				sort('date');
+				
 			}
 			oStatusFile.innerHTML = iLength + ' files(s)';
 		} else {

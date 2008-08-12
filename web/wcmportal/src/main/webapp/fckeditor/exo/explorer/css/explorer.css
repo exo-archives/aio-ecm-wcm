@@ -145,9 +145,15 @@ a {
 }
 
 /* ################# Action Button ###################*/
+.ActionContainer {
+	width: auto;
+	margin: auto;
+}
+
 .ActionContainer .ActionButton {
 	float: left;
 }
+
 .ActionButton .ButtonMiddle {
 	background: url('../images/Button6x44.gif') repeat-x bottom center;
 	line-height: 22px;
