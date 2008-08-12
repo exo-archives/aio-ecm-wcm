@@ -161,7 +161,7 @@ public class PortalLinkConnector implements ResourceContainer {
     }
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
-    return Response.Builder.ok(document).cacheControl(cacheControl).build();
+    return Response.Builder.ok(document).mediaType("text/xml").cacheControl(cacheControl).build();
   }
 
   /**
