@@ -50,6 +50,7 @@
 	var FCK = oEditor.FCK;
 	var FCKConfig = oEditor.FCKConfig;
 	var eXoPlugin = FCK.eXoPlugin;
+	alert(eXoPlugin.userLanguage);
 	eXoPlugin.loadScript(window, "lang/" + eXoPlugin.userLanguage + ".js");
 	</script>
 </head>
@@ -183,9 +184,17 @@
 			var aElements = document.getElementsByTagName("*");
 			for (var i = 0 ; i < aElements.length; ++i) {
 				if (aElements[i].getAttribute && aElements[i].getAttribute("userLanguage")) {
-					aElements[i].innerHTML = eval(aElements[i].getAttribute("userLanguage"));
+					var userLanguage = eval(aElements[i].getAttribute("userLanguage"));
+					if (userLanguage) {
+						var textNode = document.createTextNode(userLanguage);
+						aElements[i].innerHTML = "";
+						aElements[i].appendChild(textNode);
+					}
 				}
 			}
+		} else {
+			eXoPlugin.loadScript(window, "lang/en.js");
+			setTimeout(languageInit, 2000);
 		}
 	};
 </script>
