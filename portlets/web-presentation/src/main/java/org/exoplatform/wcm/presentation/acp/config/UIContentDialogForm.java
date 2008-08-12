@@ -72,7 +72,7 @@ public class UIContentDialogForm extends UIBaseDialogForm {
   private boolean isAddNew = false;
   private JCRResourceResolver resourceResolver;
   private NodeLocation storedLocation;
-  private NodeIdentifier savedNodeIdentifier;
+  protected NodeIdentifier savedNodeIdentifier;
 
   public UIContentDialogForm() throws Exception {
     setActions(ACTIONS);

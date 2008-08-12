@@ -45,8 +45,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
 @ComponentConfig(
   lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIForm.gtmpl", 
   events = {
-    @EventConfig(listeners = UITagging.AddTagsActionListener.class),
-    @EventConfig(listeners = UITagging.CancelActionListener.class) 
+    @EventConfig(listeners = UITagging.AddTagsActionListener.class)
   }
 )
   public class UITagging extends UIForm {
@@ -137,13 +136,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
       event.getRequestContext().addUIComponentToUpdateByAjax(taggingForm);
     }
   }
-
-  public static class CancelActionListener extends EventListener<UITagging> {
-    public void execute(Event<UITagging> event) throws Exception {
-      System.out.println("================>close");
-    }
-  }
-
+  
   private void addTags(Node node, String repository, FolksonomyService folksonomyService)
   throws Exception {
     StringBuilder linkedTags = new StringBuilder();
