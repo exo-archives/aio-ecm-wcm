@@ -16,9 +16,24 @@
  */
 package org.exoplatform.wcm.presentation.acp.config;
 
+import javax.jcr.Node;
+import javax.jcr.Session;
+
+import org.exoplatform.services.cms.folksonomy.FolksonomyService;
+import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.wcm.presentation.acp.config.quickcreation.UIQuickCreationWizard;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.core.UIContainer;
-import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
+import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
+import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
+import org.exoplatform.webui.event.Event;
+import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.webui.form.UIFormInputInfo;
+import org.exoplatform.webui.form.UIFormStringInput;
 
 /**
  * Created by The eXo Platform SAS
@@ -28,11 +43,117 @@ import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
  */
 
 @ComponentConfig(
-    lifecycle = UIContainerLifecycle.class
+  lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIForm.gtmpl", 
+  events = {
+    @EventConfig(listeners = UITagging.AddTagsActionListener.class),
+    @EventConfig(listeners = UITagging.CancelActionListener.class) 
+  }
 )
+  public class UITagging extends UIForm {
+  final static public String TAG_NAMES       = "TagNames";
 
-public class UITagging extends UIContainer {
+  final static public String LINKED_TAGS     = "LinkedTags";
+
   public UITagging() throws Exception {
+    UIFormStringInput tagsName = new UIFormStringInput(TAG_NAMES, TAG_NAMES, null);
+    UIFormInputInfo linkedTags = new UIFormInputInfo(LINKED_TAGS, LINKED_TAGS, null);
+    linkedTags.setEnable(false);
+    addChild(tagsName);
+    addChild(linkedTags);
+  }
 
+  public static class AddTagsActionListener extends EventListener<UITagging> {
+    public void execute(Event<UITagging> event) throws Exception {
+      UITagging taggingForm = event.getSource();
+      UIQuickCreationWizard quickCreationWizard = taggingForm
+      .getAncestorOfType(UIQuickCreationWizard.class);
+      UIContentDialogForm contentDialogForm = quickCreationWizard
+      .getChild(UIContentDialogForm.class);
+      String webContentUUID = contentDialogForm.savedNodeIdentifier.getUUID();
+      RepositoryService repositoryService = taggingForm
+      .getApplicationComponent(RepositoryService.class);
+      ManageableRepository manageableRepository = repositoryService.getCurrentRepository();
+
+      String workspace = manageableRepository.getConfiguration().getDefaultWorkspaceName();
+      String repository = manageableRepository.getConfiguration().getName();
+      SessionProvider sessionProvider = SessionProvider.createSystemProvider();
+      Session session = sessionProvider.getSession(workspace, manageableRepository);
+      Node webContent = session.getNodeByUUID(webContentUUID);
+
+      FolksonomyService folksonomyService = taggingForm
+      .getApplicationComponent(FolksonomyService.class);
+      UIApplication uiApp = taggingForm.getAncestorOfType(UIApplication.class);
+      String tagName = taggingForm.getUIStringInput(TAG_NAMES).getValue();
+      String[] tagNames = null;
+      if (tagName == null || tagName.trim().length() == 0) {
+        uiApp.addMessage(new ApplicationMessage("UITagging.msg.tag-name-empty", null,
+            ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
+      }
+
+      if (tagName.indexOf(",") > -1)
+        tagNames = tagName.split(",");
+      else
+        tagNames = new String[] { tagName };
+
+      for (String t : tagNames) {
+        if (t.trim().length() == 0) {
+          uiApp.addMessage(new ApplicationMessage("UITaggingForm.msg.tag-name-empty", null,
+              ApplicationMessage.WARNING));
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          return;
+        }
+        if (t.trim().length() > 20) {
+          uiApp.addMessage(new ApplicationMessage("UITaggingForm.msg.tagName-too-long", null,
+              ApplicationMessage.WARNING));
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          return;
+        }
+        String[] arrFilterChar = { "&", "'", "$", "@", ":", "]", "[", "*", "%", "!", "/", "\\" };
+        for (String filterChar : arrFilterChar) {
+          if (t.indexOf(filterChar) > -1) {
+            uiApp.addMessage(new ApplicationMessage("UITaggingForm.msg.tagName-invalid", null,
+                ApplicationMessage.WARNING));
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+            return;
+          }
+        }
+      }
+      for (Node tag : folksonomyService.getLinkedTagsOfDocument(webContent, repository)) {
+        for (String t : tagNames) {
+          if (t.equals(tag.getName())) {
+            Object[] args = { t };
+            uiApp.addMessage(new ApplicationMessage("UITaggingForm.msg.name-exist", args,
+                ApplicationMessage.WARNING));
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+            return;
+          }
+        }
+      }
+      folksonomyService.addTag(webContent, tagNames, repository);
+      taggingForm.addTags(webContent, repository, folksonomyService);
+      taggingForm.getUIStringInput(TAG_NAMES).setValue(null);
+      event.getRequestContext().addUIComponentToUpdateByAjax(taggingForm);
+    }
+  }
+
+  public static class CancelActionListener extends EventListener<UITagging> {
+    public void execute(Event<UITagging> event) throws Exception {
+      System.out.println("================>close");
+    }
+  }
+
+  private void addTags(Node node, String repository, FolksonomyService folksonomyService)
+  throws Exception {
+    StringBuilder linkedTags = new StringBuilder();
+    for (Node tag : folksonomyService.getLinkedTagsOfDocument(node, repository)) {      
+      if (linkedTags.length() > 0)
+        linkedTags = linkedTags.append(",");
+      linkedTags.append(tag.getName());
+    }    
+    UIFormInputInfo uiLinkedTags = getChildById(LINKED_TAGS);    
+    uiLinkedTags.setValue("<br>[" + linkedTags.toString() + "]");
+    uiLinkedTags.setEnable(true);
   }
 }
