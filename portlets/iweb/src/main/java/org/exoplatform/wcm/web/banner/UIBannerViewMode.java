@@ -17,12 +17,15 @@
 package org.exoplatform.wcm.web.banner;
 
 import javax.jcr.Node;
+import javax.jcr.Session;
 import javax.portlet.PortletRequest;
 
 import org.exoplatform.ecm.resolver.NTFileResourceResolver;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
+import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
@@ -75,23 +78,13 @@ public class UIBannerViewMode extends UIComponent {
   private boolean isUseJCRTemplate() {
     if (repository != null && workspace != null && nodeUUID != null) {
       try {
-        // Get JCR information
-        String portalName = Util.getUIPortal().getName();
-        LivePortalManagerService portalManagerService = getApplicationComponent(LivePortalManagerService.class);
+        RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
         SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
-        Node portalFolder = portalManagerService.getLivePortal(portalName, sessionProvider);
-        
-        // Get banner folder
-        WebSchemaConfigService configService = getApplicationComponent(WebSchemaConfigService.class);
-        PortalFolderSchemaHandler portalFolderSchemaHandler = configService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
-        Node bannerFolder = portalFolderSchemaHandler.getBannerThemes(portalFolder);
-
-        // Checking
-        if (bannerFolder.hasNode("banner.gtmpl"))
-          return true;
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
+        ManageableRepository manageableRepository = (ManageableRepository)repositoryService.getRepository(repository);
+        Session session = sessionProvider.getSession(workspace, manageableRepository);
+        session.getNodeByUUID(nodeUUID);
+        return true;
+      } catch (Exception e) {}
     }
     return false;
   }  
