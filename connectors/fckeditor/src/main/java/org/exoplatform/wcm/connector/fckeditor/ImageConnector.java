@@ -85,7 +85,7 @@ public class ImageConnector extends BaseConnector implements ResourceContainer {
       String type) throws Exception {
     Response response = buildXMLDocumentOutput(currentFolder, workspaceName, repositoryName, jcrPath, command);
     if (response == null)
-      return Response.Builder.badRequest().build();
+      return Response.Builder.ok().build();
     else
       return response;
   }

@@ -188,7 +188,7 @@ public abstract class BaseConnector {
         jcrPath);
     Node currentNode = getCurrentNode(repositoryName, workspaceName, fullPath);
     if (currentNode != null && currentFolder.length() != 0 && !currentFolder.equals("/")
-        && !jcrPath.equals(fullPath) && !fullPath.equals(currentPortalNode.getPath())
+        && !fullPath.equals(currentPortalNode.getPath())
         && currentNode != null) {
       return folderHandler.createNewFolder(currentNode, newFolderName, language);
     }

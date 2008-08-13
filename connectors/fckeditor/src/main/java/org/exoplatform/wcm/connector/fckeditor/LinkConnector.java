@@ -80,7 +80,7 @@ public class LinkConnector extends BaseConnector implements ResourceContainer {
     Response response = buildXMLDocumentOutput(currentFolder, workspaceName, repositoryName,
         jcrPath, command);
     if (response == null)
-      return Response.Builder.badRequest().build();
+      return Response.Builder.ok().build();
     else
       return response;
   }
