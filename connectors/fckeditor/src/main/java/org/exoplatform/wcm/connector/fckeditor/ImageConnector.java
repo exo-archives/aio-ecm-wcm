@@ -131,6 +131,7 @@ public class ImageConnector extends BaseConnector implements ResourceContainer {
    * @param repositoryName the repository name
    * @param workspaceName the workspace name
    * @param currentFolder the current folder
+   * @param jcrPath the jcr path
    * @param uploadId the upload id
    * @param language the language
    * @param contentType the content type
@@ -147,12 +148,14 @@ public class ImageConnector extends BaseConnector implements ResourceContainer {
   public Response uploadFile(InputStream inputStream, @QueryParam("repositoryName")
       String repositoryName, @QueryParam("workspaceName")
       String workspaceName, @QueryParam("currentFolder")
-      String currentFolder, @QueryParam("uploadId")
+      String currentFolder, @QueryParam("jcrPath")
+      String jcrPath, @QueryParam("uploadId")
       String uploadId, @QueryParam("language")
       String language, @HeaderParam("content-type")
       String contentType, @HeaderParam("content-length")
       String contentLength) throws Exception {
-    return null;
+    return createUploadFileResponse(inputStream, repositoryName, workspaceName, currentFolder,
+        jcrPath, uploadId, language, contentType, contentLength);
   }
 
   /**
@@ -161,6 +164,7 @@ public class ImageConnector extends BaseConnector implements ResourceContainer {
    * @param repositoryName the repository name
    * @param workspaceName the workspace name
    * @param currentFolder the current folder
+   * @param jcrPath the jcr path
    * @param action the action
    * @param language the language
    * @param fileName the file name
@@ -176,12 +180,14 @@ public class ImageConnector extends BaseConnector implements ResourceContainer {
   public Response processUpload(@QueryParam("repositoryName")
       String repositoryName, @QueryParam("workspaceName")
       String workspaceName, @QueryParam("currentFolder")
-      String currentFolder, @QueryParam("action")
+      String currentFolder, @QueryParam("jcrPath")
+      String jcrPath, @QueryParam("action")
       String action, @QueryParam("language")
       String language, @QueryParam("fileName")
       String fileName, @QueryParam("uploadId")
       String uploadId) throws Exception {
-    return null;
+    return createProcessUploadResponse(repositoryName, workspaceName, currentFolder, jcrPath,
+        action, language, fileName, uploadId);
   }
 
   /*
