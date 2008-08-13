@@ -174,12 +174,9 @@ public class LiveLinkManagerServiceImpl implements LiveLinkManagerService {
       PostMethod postMethod = new PostMethod(strUrl);      
       if(httpClient.executeMethod(postMethod) == 200) {
         return LinkBean.STATUS_ACTIVE;
-      } else {
-        return LinkBean.STATUS_BROKEN;
       }
-    } catch (Exception e) {
-      return LinkBean.STATUS_BROKEN;
-    }
+    } catch (Exception e) {}
+    return LinkBean.STATUS_BROKEN;
   }
 
 }

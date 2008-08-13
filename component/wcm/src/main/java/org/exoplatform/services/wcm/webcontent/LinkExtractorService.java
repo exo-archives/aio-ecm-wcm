@@ -69,10 +69,16 @@ public class LinkExtractorService {
       String sContent = jcrData.getString();
       HTMLNode htmlRootNode = HTMLParser.createDocument(sContent).getRoot();
       HyperLinkUtilExtended linkUtil = new HyperLinkUtilExtended();
-      for (Iterator<String> iterLink = linkUtil.getSiteLink(htmlRootNode).iterator(); iterLink.hasNext();)
-        listHyperlink.add(iterLink.next());
-      for (Iterator<String> iterImage = linkUtil.getImageLink(htmlRootNode).iterator(); iterImage.hasNext();)
-        listHyperlink.add(iterImage.next());
+      for (Iterator<String> iterLink = linkUtil.getSiteLink(htmlRootNode).iterator(); iterLink.hasNext();) {
+        String link = iterLink.next();
+        if (!listHyperlink.contains(link))
+          listHyperlink.add(link);
+      }
+      for (Iterator<String> iterImage = linkUtil.getImageLink(htmlRootNode).iterator(); iterImage.hasNext();){
+        String image = iterImage.next();
+        if (!listHyperlink.contains(image))
+          listHyperlink.add(image);
+      }
     }
     return listHyperlink;
   }
@@ -87,15 +93,17 @@ public class LinkExtractorService {
   public void createLinkNode(Node webContent) throws Exception {
     ValueFactory valueFactory = webContent.getSession().getValueFactory(); 
     
-    if (webContent.canAddMixin("exo:linkable"))
+    if (webContent.canAddMixin("exo:linkable")) {
       webContent.addMixin("exo:linkable");
+    }
     
     // get old link from jcr
     List<String> listExtractedLink = new ArrayList<String>();
     if (webContent.hasProperty("exo:links")) {
       Property property = webContent.getProperty("exo:links");
-      for (Value value : property.getValues())
+      for (Value value : property.getValues()) {
         listExtractedLink.add(value.getString());
+      }
     }
     
     // get new url from web content form
@@ -116,34 +124,33 @@ public class LinkExtractorService {
     listTemp.addAll(listNewUrl);
     
     for (String newUrl : listNewUrl) {
-      int i = 0;
       for (String extractedLink : listExtractedLink) {
-        if (newUrl.equals(LinkBean.parse(extractedLink).getUrl())) 
-          listTemp.set(i, "");
-        i++;
+        if (newUrl.equals(LinkBean.parse(extractedLink).getUrl())) {
+          listTemp.set(listNewUrl.indexOf(newUrl), "");
+        }
       }
     }
     
-    for (String strTemp : listTemp)
-      if (!strTemp.equals(""))
+    for (String strTemp : listTemp) {
+      if (!strTemp.equals("")) {
         listResult.add(strTemp);
+      }
+    }
 
     // Create an array of value to add to exo:links property
     Value[] values = new Value[listResult.size()];
-    int i = 0;
     for(String url: listResult) {
       if (url.indexOf(LinkBean.STATUS) < 0) {
         LinkBean linkBean = new LinkBean(url, LinkBean.STATUS_UNCHECKED);
-        values[i] = valueFactory.createValue(linkBean.toString());
+        values[listResult.indexOf(url)] = valueFactory.createValue(linkBean.toString());
       } else {  
-        values[i] = valueFactory.createValue(url);
+        values[listResult.indexOf(url)] = valueFactory.createValue(url);
       }
-      i++;
     }
     
     webContent.setProperty("exo:links", values);
     
-    webContent.getSession().save();   
+    webContent.getSession().save();
   }
   
 }

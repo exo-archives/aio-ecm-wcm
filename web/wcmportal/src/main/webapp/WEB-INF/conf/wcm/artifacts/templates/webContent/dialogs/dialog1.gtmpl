@@ -1,4 +1,5 @@
 <% 
+	uicomponent.addInterceptor("ecm-explorer/interceptor/ExtractLinkInterceptor.groovy", "post") ;
 	uicomponent.addInterceptor("ecm-explorer/interceptor/PostHTMLFileInterceptor.groovy", "post") ;
 	import javax.jcr.Node;
 	def rcontext = _ctx.getRequestContext() ;
