@@ -251,7 +251,7 @@ function dateFormat(sFullDate) {
 		uploadField.style.display = "none";
 		var UploadInfo = popupContainer.select({where: "className like 'UploadInfo%'"})[0];
 		UploadInfo.style.display = "";
-		return;
+
 		K.set.timeout({
 			until: function() {return uploadFile.stopUpload},
 			method: function() {
@@ -277,6 +277,8 @@ function dateFormat(sFullDate) {
 							numberProgress.innerHTML = 100 + "%";
 							uploadFile.stopUpload = true;
 							uploadInfo.className = "UploadInfo Delete";
+							var uploadAction = popupContainer.select({where: "className == 'UploadAction'"})[0];
+							uploadAction.style.display = "";
 						}
 					}
 				);
@@ -316,7 +318,8 @@ function dateFormat(sFullDate) {
 		var oPopupContainer = K("PopupContainer");
 		K(oPopupContainer.select({where: "className == 'UploadAction'"})[0]).hide();
 		K(oPopupContainer.select({where: "className == 'UploadField'"})[0]).show();
-		oPopupContainer.select({where: "nodeName == 'FORM'"})[0].reset();
+		K(oPopupContainer.select({where: "className like 'UploadInfo%'"})[0]).hide();
+		K(oPopupContainer.select({where: "className == 'UploadField'"})[0]).show();
 	};
 
 	uploadFile.Save = function() {
