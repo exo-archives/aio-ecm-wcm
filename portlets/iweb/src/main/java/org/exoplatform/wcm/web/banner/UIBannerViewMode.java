@@ -78,6 +78,7 @@ public class UIBannerViewMode extends UIComponent {
         ManageableRepository manageableRepository = (ManageableRepository)repositoryService.getRepository(repository);
         Session session = sessionProvider.getSession(workspace, manageableRepository);
         session.getNodeByUUID(nodeUUID);
+        sessionProvider.close();
         return true;
       } catch (Exception e) {}
     }

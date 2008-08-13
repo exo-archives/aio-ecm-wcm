@@ -146,7 +146,7 @@ public class UIBannerEditModeForm extends UIForm {
       }
       bannerContent.setProperty("jcr:encoding", "UTF-8");
       mimeTypeResolver = new MimeTypeResolver();
-      String bannerType = mimeTypeResolver.getMimeType("gtmpl");
+      String bannerType = mimeTypeResolver.getMimeType("banner.gtmpl");
       bannerContent.setProperty("jcr:mimeType", bannerType);
       bannerContent.setProperty("jcr:data", bannerTemplate);
       bannerContent.setProperty("jcr:lastModified", new Date().getTime());
@@ -161,6 +161,8 @@ public class UIBannerEditModeForm extends UIForm {
       portletPreferences.setValue("workspace", workspace) ;
       portletPreferences.setValue("nodeUUID", nodeUUID) ;
       portletPreferences.store();
+      
+      sessionProvider.close();
       
       context.setApplicationMode(PortletMode.VIEW);
     }
