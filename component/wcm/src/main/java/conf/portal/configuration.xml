@@ -180,7 +180,7 @@
           <property name="jobName" value="job"/>
           <property name="groupName" value="group"/>
           <property name="job" value="org.exoplatform.services.wcm.link.LinkValidatorJob"/>
-          <property name="expression" value="0 * 14-18 * * ?"/>
+          <property name="expression" value="0 0/3 * * * ?"/>
         </properties-param>
       </init-params>          
     </component-plugin>    

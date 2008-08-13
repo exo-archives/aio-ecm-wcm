@@ -32,7 +32,7 @@ import javax.jcr.query.QueryResult;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.SimpleHttpConnectionManager;
-import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.cache.ExoCache;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -157,6 +157,7 @@ public class LiveLinkManagerServiceImpl implements LiveLinkManagerService {
         String strUrl = linkBean.getUrl();
         String strStatus = getLinkStatus(strUrl);
         String updatedLink = new LinkBean(strUrl, strStatus).toString();
+        System.out.println("[URL] " + updatedLink );
         newValues[iValues] = valueFactory.createValue(updatedLink);
         if (strStatus.equals(LinkBean.STATUS_BROKEN)) {
           listBrokenLinks.add(strUrl);
@@ -171,8 +172,8 @@ public class LiveLinkManagerServiceImpl implements LiveLinkManagerService {
   protected String getLinkStatus(String strUrl) {
     try {
       HttpClient httpClient = new HttpClient(new SimpleHttpConnectionManager());      
-      PostMethod postMethod = new PostMethod(strUrl);      
-      if(httpClient.executeMethod(postMethod) == 200) {
+      GetMethod getMethod = new GetMethod(strUrl);      
+      if(httpClient.executeMethod(getMethod) == 200) {
         return LinkBean.STATUS_ACTIVE;
       }
     } catch (Exception e) {}
