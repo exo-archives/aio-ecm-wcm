@@ -105,7 +105,7 @@
 				</div>
 				<div class="HideTreeItem">
 					<table class="DocumentTable" align="center" cellpadding="4">
-						<tr>
+						<tr style="height: 23px;">
 							<td class="ItemName ${sType}">
 								<a title="${sURL}" href="javascript: void(0);" oncontextmenu="showContextMenu('ListItemOption', event, this)">${sName}</a>
 							</td>
@@ -185,7 +185,7 @@
 								</td>
 							</tr>
 							<tr class="UploadInfo Abort" style="display: none;">
-								<td width="235" align="center">
+								<td width="235">
 									<div class="GraphProgress"></div>
 									<div class="NumberProgress">0%</div>
 								</td>
@@ -531,14 +531,13 @@
 		if (parrent.setField) {
 			parrent.setField("inputURL", sLink);
 		} else {
-			return;
-			var newTag = oEditor.FCK.CreateElement("a");
+			var newTag = FCK.CreateElement("a");
 			if (eXoPlugin.getContent()) {
 				newTag.innerHTML = eXoPlugin.getContent();
 			} else {
 				newTag.innerHTML = sLink;
 			}
-			newTag.setAttribute("href", url);
+			newTag.setAttribute("href", sLink);
 		}
 		window.close();
 	}
@@ -550,5 +549,6 @@
 		sOptions += ", height=" + FCKConfig.ScreenHeight;
 		if (sLink) window.open(sLink, "", sOptions);
 	}
+	
 	</script>
 </html>

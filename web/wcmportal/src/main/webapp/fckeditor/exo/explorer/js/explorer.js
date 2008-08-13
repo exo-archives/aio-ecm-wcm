@@ -63,11 +63,7 @@ function showContextMenu(selection, event, element) {
 	oSelection.style.top = K.get.Y(event) + "px";
 	oSelection.style.display = "block";
 	var oActions =  K.select({from: oSelection, where: "className like '%IconItem%'"});
-	if (oActions && oActions.length) {
-		for (var i = 0 ; i < oActions.length; i ++) {
-			oActions[i].title = element.title;
-		}
-	}
+	oSelection.title = element.title;
 	return false;
 }
 
