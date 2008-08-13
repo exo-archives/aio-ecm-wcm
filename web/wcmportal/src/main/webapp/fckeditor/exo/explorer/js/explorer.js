@@ -317,7 +317,6 @@ function dateFormat(sFullDate) {
 		eXp.sendRequest(connector, param);
 		var oPopupContainer = K("PopupContainer");
 		K(oPopupContainer.select({where: "className == 'UploadAction'"})[0]).hide();
-		K(oPopupContainer.select({where: "className == 'UploadField'"})[0]).show();
 		K(oPopupContainer.select({where: "className like 'UploadInfo%'"})[0]).hide();
 		K(oPopupContainer.select({where: "className == 'UploadField'"})[0]).show();
 	};
