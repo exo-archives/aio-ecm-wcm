@@ -89,3 +89,10 @@
   line-height: 31px;
   color: #0066FF;
 }
+
+.BannerQuickEdit{
+	background:url('DefaultSkin/background/QuickEdit.png') no-repeat scroll left top;
+	float:right;
+	height:50px;
+	padding-left:50px;
+}
