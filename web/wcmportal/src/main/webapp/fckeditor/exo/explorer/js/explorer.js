@@ -117,11 +117,10 @@ function dateFormat(sFullDate) {
 		var oStatus = K('statusBar');
 		var oStatusFolder = getElementsByClassPath(oStatus, 'Folder')[0];
 		var oTree = getElementsByClassPath(oExplorer, 'Navigation/Tree')[0];
-		
 		var sHTML = '';
 		var oFolders = eXp.getNodes(sXML, "Folder");
-		var iLength = oFolders.length;
-		if (oFolders && iLength) {
+		if (oFolders && oFolders.length) {
+			var iLength = oFolders.length;
 			for (var i = 0 ; i < iLength; i++) {
 				var sName = eXp.getNodeValue(oFolders[i], "name");
 				var sType = eXp.getNodeValue(oFolders[i], "folderType");
@@ -191,24 +190,20 @@ function dateFormat(sFullDate) {
 					"currentPortal=" + eXoPlugin.portalName,
 					buildXParam()
 				);
+		
 		eXp.sendRequest(
 			connector,
 			param,
 			function(sXML) {
-				/*
-					var oNodes = eXp.getNodes(sXML, "Error")[0];
-					var sErrorNumber = eXp.getNodeValue(oNodes, "number");
-					var sErrorText = eXp.getNodeValue(oNodes, "text");
-					if (sErrorNumber != '0') {
-						alert(sErrorText);
-					} else {
-						showAddForm(sCurrentFolder + 'add/', false);
-						getDir(sCurrentFolder);
-					}
-				*/
 				getDir(eXp.store.currentNode);
 				K("PopupContainer").innerHTML = "";
 				K("Mask").hide();
+				var oError = eXp.getSingleNode(sXML, "Message");
+				var sErrorNumber = eXp.getNodeValue(oError, "number");
+				var sErrorText = eXp.getNodeValue(oError, "text");
+				if (sErrorNumber != '0') {
+					alert(sErrorText);
+				}
 			}
 		);
 	}
@@ -252,16 +247,18 @@ function dateFormat(sFullDate) {
 		uploadField.style.display = "none";
 		var UploadInfo = popupContainer.select({where: "className like 'UploadInfo%'"})[0];
 		UploadInfo.style.display = "";
-
 		K.set.timeout({
 			until: function() {return uploadFile.stopUpload},
 			method: function() {
 				var connector = eXp.connector + eXp.command.controlUpload;
 				var param = eXp.buildParam("action=progress", "uploadId=" + uploadFile.id, "currentFolder=" + eXp.store.currentFolder, buildXParam());
-				eXp.sendRequest(
-					connector,
-					param,
-					function(iXML) {
+				K.request({
+					address: connector,
+					data: param,
+					method: "GET",
+					onSuccess: function() {
+						var iXML = this.responseXML;
+						if (!iXML) return;
 						var oProgress = eXp.getSingleNode(iXML, "UploadProgress");
 						var nPercent = eXp.getNodeValue(oProgress, "percent");
 						var popupContainer = K("PopupContainer");
@@ -281,8 +278,13 @@ function dateFormat(sFullDate) {
 							var uploadAction = popupContainer.select({where: "className == 'UploadAction'"})[0];
 							uploadAction.style.display = "";
 						}
+					},
+					onFailure: function() {
+						uploadFile.stopUpload = true;
+						alert("upload is failure.");
+						showUploadForm();
 					}
-				);
+				});
 			}
 		});
 	}

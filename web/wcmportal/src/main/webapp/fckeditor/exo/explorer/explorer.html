@@ -107,7 +107,7 @@
 					<table class="DocumentTable" align="center" cellpadding="4">
 						<tr>
 							<td class="ItemName ${sType}">
-								<a id="${sURL}" href="javascript: void(0);" oncontextmenu="showContextMenu('ListItemOption', event, this)">${sName}</a>
+								<a title="${sURL}" href="javascript: void(0);" oncontextmenu="showContextMenu('ListItemOption', event, this)">${sName}</a>
 							</td>
 							<td class="ItemDate">${sDateCreated}</td>
 							<td class="ItemSize">${sSize} kB</td>
@@ -258,12 +258,12 @@
 			</div>
 			<div class="ContextMenu ListItemOption">
 				<a href="javascript: void(0);" class="MenuItem"> 	
-					<div class="IconItem IconView" onclick="window.open(this.id.replace('/view/',''),'','width=350, height=250')" userLanguage="KLang.CtxViewItem">
+					<div class="IconItem IconView" onclick="previewLink()" userLanguage="KLang.CtxViewItem">
 						View
 					</div>
 				</a>
 				<a href="javascript: void(0);" class="MenuItem"> 	
-					<div class="IconItem IconSelect" onclick="alert(this.id.replace('/select/',''))" userLanguage="KLang.CtxSelectItem">
+					<div class="IconItem IconSelect" onclick="insertLink()" userLanguage="KLang.CtxSelectItem">
 						Select
 					</div>
 				</a>
@@ -493,7 +493,6 @@
 					var sURL = eXoPlugin.hostName + '/' + eXp.getNodeValue(oFiles[i], "url");
 					var sSize = eXp.getNodeValue(oFiles[i], "size");
 					if (sSize == '') sSize = '-';
-					
 					var sHideTreeItem = getElementsByClassPath(oHide, 'HideTreeItem')[0].innerHTML;
 					sHideTreeItem = sHideTreeItem.replace(/\${sName}/g, sName);
 					sHideTreeItem = sHideTreeItem.replace(/\${sType}/g, sType);
@@ -510,11 +509,11 @@
 				eXp.store.data.Drop();
 				for (var i = 0 ; i < iLength; ++i) {
 					var sName = eXp.getNodeValue(oFiles[i], "name");
-					var sType = eXp.getNodeValue(oFiles[i], "fileType").replace(':', '_') + '16x16Icon';
+					var sType = eXp.getNodeValue(oFiles[i], "fileType").replace(":", "_") + "16x16Icon";
 					var sDateCreated = dateFormat(eXp.getNodeValue(oFiles[i], "dateCreated"));
-					var sSize = eXp.getNodeValue(oFiles[i], "size");
-					if (sSize == '') sSize = '-';
-					eXp.store.data.Insert([sName, sDateCreated, sSize, sType]);
+					var sSize = eXp.getNodeValue(oFiles[i], "size") || "-";
+					var sURL = eXp.getNodeValue(oFiles[i], "url");
+					eXp.store.data.Insert([sName, sDateCreated, sSize, sType, sURL]);
 				} 
 				sort('date');
 			}
@@ -524,6 +523,32 @@
 			oDocument.innerHTML = '';
 			oStatusFile.innerHTML = '0 files(s)';
 		}
+	}
+	
+	function insertLink() {
+		var parrent = window.opener.window;
+		var sLink = K('contextMenu').select({where: "className == 'ContextMenu ListItemOption'"})[0].title;
+		if (parrent.setField) {
+			parrent.setField("inputURL", sLink);
+		} else {
+			return;
+			var newTag = oEditor.FCK.CreateElement("a");
+			if (eXoPlugin.getContent()) {
+				newTag.innerHTML = eXoPlugin.getContent();
+			} else {
+				newTag.innerHTML = sLink;
+			}
+			newTag.setAttribute("href", url);
+		}
+		window.close();
+	}
+	
+	function previewLink() {
+		var sLink = K('contextMenu').select({where: "className == 'ContextMenu ListItemOption'"})[0].title;
+		var sOptions = "toolbar=no, status=no, resizable=yes, dependent=yes, scrollbars=yes";
+		sOptions += ", width=" +  FCKConfig.ScreenWidth;
+		sOptions += ", height=" + FCKConfig.ScreenHeight;
+		if (sLink) window.open(sLink, "", sOptions);
 	}
 	</script>
 </html>
