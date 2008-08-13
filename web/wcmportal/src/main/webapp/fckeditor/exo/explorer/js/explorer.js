@@ -56,6 +56,7 @@ function showSetting() {
 }
 
 function showContextMenu(selection, event, element) {
+	if (eXp.disableCreatingFolder) return;
 	var oContextMenu = K('contextMenu');
 	var oSelection = getElementsByClassPath(oContextMenu, selection)[0];
 	oSelection.style.left = K.get.X(event) + "px";

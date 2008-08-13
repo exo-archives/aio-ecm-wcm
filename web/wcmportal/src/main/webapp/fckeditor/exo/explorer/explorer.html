@@ -34,7 +34,7 @@
 				<div class="Separator"><span></span></div>
 				<div class="Workspace">
 					<div class="MenuBar">
-						<a href="javascript: void(0);" onclick="showUploadForm(true)">
+						<a href="javascript: void(0);" class="UploadButton" onclick="showUploadForm(true)">
 							<div class="Item IconUpload" userLanguage="KLang.BtnUpload">Upload File</div>
 						</a>
 						<img src="images/IconSeparator2x26.gif" class="IconSeparator" style="display: none;">
@@ -288,6 +288,8 @@
 	var eXp = {
 		resourceType: getUrlParam("Type") || eXoPlugin.eXoFileManager.ResourceType,
 		connector: getUrlParam("Connector") || eXoPlugin.eXoFileManager.Connector,
+		disableUploading: getUrlParam("disableUploading") || false,
+		disableCreatingFolder: getUrlParam("disableCreatingFolder") || false,
 		command: {
 			init: "getFoldersAndFiles",
 			uploadFile: "uploadFile/upload",
@@ -415,9 +417,17 @@
 		}
 	}
 	
+	function disableUploading() {
+		if (eXp.disableUploading) {
+			var uploadButton = getElementsByClassPath(K('explorer'), "Workspace/MenuBar/UploadButton")[0]; 
+			uploadButton.style.display = "none";
+		}
+	}
+	
 	K.addEventOnLoad(languageInit);
 	K.addEventOnLoad(requestInit);
 	K.addEventOnLoad(elementResize);
+	K.addEventOnLoad(disableUploading);
 	K.addEventOnResize(elementResize);
 	
 	function getDir(currentNode) {
@@ -465,8 +475,7 @@
 		var oNodeGroup =  K(currentNode.parentNode.parentNode).select({where: "className == 'NodeGroup'"})[0];
 		oNodeGroup.style.display = "block";
 		oNodeGroup.innerHTML = sHTML;
-		
-		
+	
 		sHTML = '';
 		
 		var oFiles = eXp.getNodes(iXML, "File");
@@ -508,7 +517,6 @@
 					eXp.store.data.Insert([sName, sDateCreated, sSize, sType]);
 				} 
 				sort('date');
-				
 			}
 			oStatusFile.innerHTML = iLength + ' files(s)';
 		} else {
