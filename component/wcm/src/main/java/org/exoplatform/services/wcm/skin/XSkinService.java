@@ -135,11 +135,12 @@ public class XSkinService implements Startable {
       + portal.getPath()+"/%' and exo:active='true' and exo:sharedCSS='true' order by exo:priority DESC ";
     String skinCSS = queryCSSData(portal,statement);
     if(skinCSS == null || skinCSS.length() == 0) return;
-    String skinPath = "/eXoWebContentSkin/" + portal.getName() + "/Stylesheet.css";   
+    //this skin path use for rest service to get portal css
+    String skinPath = "/portal/rest/resources/" + portal.getName() + "/css/Stylesheet.css";    
     String skinModule = WEB_CONTENT_SKIN.concat(portal.getName());
     ServletContext servletContext = 
       (ServletContext)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(ServletContext.class);    
-    skinService.addPortalSkin(skinModule,skinName,skinPath,servletContext,skinCSS);
+    skinService.addPortalSkin(skinModule,skinName,skinPath,servletContext,skinCSS);   
   }
 
   private String queryCSSData(Node home,String statement) throws Exception {
