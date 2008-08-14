@@ -147,7 +147,10 @@ public class UIContentDialogForm extends UIBaseDialogForm {
 
   static public class CancelActionListener extends EventListener<UIContentDialogForm> {
     public void execute(Event<UIContentDialogForm> event) throws Exception {
-
+      UIContentDialogForm uiContentDialogForm = event.getSource();
+      UIPortletConfig uiPortletConfig = uiContentDialogForm.getAncestorOfType(UIPortletConfig.class);
+      uiPortletConfig.getChildren().clear();
+      uiPortletConfig.addChild(uiPortletConfig.getBackComponent());
     }
   }
 

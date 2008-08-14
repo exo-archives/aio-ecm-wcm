@@ -22,6 +22,7 @@ import javax.jcr.Node;
 import javax.jcr.Session;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
+import javax.portlet.PortletRequest;
 
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
@@ -38,15 +39,15 @@ import org.exoplatform.wcm.presentation.acp.UIAdvancedPresentationPortlet;
 import org.exoplatform.wcm.presentation.acp.config.UIBaseWizard;
 import org.exoplatform.wcm.presentation.acp.config.UIContentDialogForm;
 import org.exoplatform.wcm.presentation.acp.config.UIMiscellaneousInfo;
+import org.exoplatform.wcm.presentation.acp.config.UIPermissionSetting;
 import org.exoplatform.wcm.presentation.acp.config.UIPortletConfig;
 import org.exoplatform.wcm.presentation.acp.config.UISocialInfo;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
-import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
@@ -57,35 +58,80 @@ import org.exoplatform.webui.event.EventListener;
  * Jun 9, 2008  
  */
 
-@ComponentConfigs({
-  @ComponentConfig(
-      template = "app:/groovy/advancedPresentation/config/UIWizard.gtmpl",
-      events = {
-          @EventConfig(listeners = UIQuickCreationWizard.ViewStep1ActionListener.class),  
-          @EventConfig(listeners = UIQuickCreationWizard.ViewStep2ActionListener.class),
-          @EventConfig(listeners = UIQuickCreationWizard.ViewStep3ActionListener.class),
-          @EventConfig(listeners = UIQuickCreationWizard.ViewStep4ActionListener.class),
-          @EventConfig(listeners = UIQuickCreationWizard.AbortActionListener.class),
-          @EventConfig(listeners = UIQuickCreationWizard.BackActionListener.class),
-          @EventConfig(listeners = UIQuickCreationWizard.FinishActionListener.class)
-      }
-  ),
-  @ComponentConfig(
-      id = "ViewStep1",
-      type = UIContainer.class,
-      template = "app:/groovy/advancedPresentation/config/UIWizardWelcome.gtmpl"
-  )
-})
+@ComponentConfig(
+    template = "app:/groovy/advancedPresentation/config/UIWizard.gtmpl",
+    events = {
+        @EventConfig(listeners = UIQuickCreationWizard.ViewStep1ActionListener.class),
+        @EventConfig(listeners = UIQuickCreationWizard.ViewStep2ActionListener.class),
+        @EventConfig(listeners = UIQuickCreationWizard.ViewStep3ActionListener.class),
+        @EventConfig(listeners = UIQuickCreationWizard.ViewStep4ActionListener.class),
+        @EventConfig(listeners = UIQuickCreationWizard.AbortActionListener.class),
+        @EventConfig(listeners = UIQuickCreationWizard.BackActionListener.class),
+        @EventConfig(listeners = UIQuickCreationWizard.FinishActionListener.class)
+    }
+)
 
 public class UIQuickCreationWizard extends UIBaseWizard {
 
   public UIQuickCreationWizard() throws Exception {
-    addChild(UIContainer.class, "ViewStep1", null);
-    addChild(UIContentDialogForm.class, null, null).setRendered(false);    
+    addChild(UIContentDialogForm.class,null,null).setRendered(false);
     addChild(UISocialInfo.class, null, null).setRendered(false);
+    addChild(UIPermissionSetting.class,null,null).setRendered(false);
     addChild(UIMiscellaneousInfo.class, null, null).setRendered(false);
     setNumberSteps(4);
   }
+
+
+  public void init() throws Exception {
+    UIPortletConfig uiPortletConfig = this.getAncestorOfType(UIPortletConfig.class);
+    if(uiPortletConfig.isNewConfig()) {
+      String portalName = Util.getUIPortal().getName();
+      LivePortalManagerService portalManagerService = this.getApplicationComponent(LivePortalManagerService.class);
+      SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
+      Node portalNode = portalManagerService.getLivePortal(portalName, sessionProvider);
+      WebSchemaConfigService configService = this.getApplicationComponent(WebSchemaConfigService.class);
+      PortalFolderSchemaHandler handler = configService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
+      Node webContentStorage = handler.getWebContentStorage(portalNode);
+      NodeLocation storedLocation = NodeLocation.make(webContentStorage);
+      UIContentDialogForm uiCDForm = this.getChild(UIContentDialogForm.class);
+      uiCDForm.setStoredLocation(storedLocation);
+      uiCDForm.setContentType(this.EXO_WEB_CONTENT);
+      uiCDForm.addNew(true);
+      uiCDForm.resetProperties();
+    } else {
+      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
+      PortletPreferences prefs = ((PortletRequest) context.getRequest()).getPreferences();
+      String repositoryName = prefs.getValue(UIAdvancedPresentationPortlet.REPOSITORY, null);
+      String workspace = prefs.getValue(UIAdvancedPresentationPortlet.WORKSPACE, null);
+      String UUID = prefs.getValue(UIAdvancedPresentationPortlet.UUID, null);
+      RepositoryService repositoryService = this.getApplicationComponent(RepositoryService.class);
+      ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
+      Session session = SessionProvider.createSystemProvider().getSession(workspace, manageableRepository);
+      Node currentNode = session.getNodeByUUID(UUID);
+      NodeLocation nodeLocation = new NodeLocation();
+      nodeLocation.setRepository(repositoryName);
+      nodeLocation.setWorkspace(workspace);
+      nodeLocation.setPath(currentNode.getPath());
+      UIContentDialogForm uiCDForm = this.getChild(UIContentDialogForm.class);
+      TemplateService templateService = this.getApplicationComponent(TemplateService.class);
+      List documentNodeType = templateService.getDocumentTemplates(repositoryName);
+      String nodeType = currentNode.getPrimaryNodeType().getName();
+      if(documentNodeType.contains(nodeType)) {
+        uiCDForm.setStoredLocation(nodeLocation);
+        uiCDForm.setNodePath(currentNode.getPath());
+        uiCDForm.setContentType(this.EXO_WEB_CONTENT);
+        uiCDForm.addNew(false);
+        uiCDForm.resetProperties();
+      } else {
+        UIApplication uiApp = this.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.not-support", null)) ;
+        context.addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return;
+      }
+    }
+    getChild(UIContentDialogForm.class).setRendered(true);
+  }
+
 
   @Override
   public String[] getActionsByStep() {
@@ -98,13 +144,13 @@ public class UIQuickCreationWizard extends UIBaseWizard {
     String[] actions = new String[] {};
     switch(getCurrentStep()) {
     case STEP1:
-      actions = new String[] {"ViewStep2", "Abort"};
-      break;
-    case STEP2:
       actions = new String[] {"Abort"};
       break;
+    case STEP2:
+      actions = new String[] {"ViewStep3", "Finish"};
+      break;
     case STEP3:
-      actions = new String[] {"Back", "ViewStep4", "Finish"};
+      actions = new String[] {"ViewStep4", "Finish"};
       break;
     case STEP4:
       actions = new String[] {"Back", "Finish"};
@@ -117,62 +163,13 @@ public class UIQuickCreationWizard extends UIBaseWizard {
 
   public static class ViewStep1ActionListener extends EventListener<UIQuickCreationWizard> {
     public void execute(Event<UIQuickCreationWizard> event) throws Exception {
-      UIQuickCreationWizard uiQuickWizard = event.getSource();
-      uiQuickWizard.viewStep(1);
+
     }
   }
 
   public static class ViewStep2ActionListener extends EventListener<UIQuickCreationWizard> {
     public void execute(Event<UIQuickCreationWizard> event) throws Exception {
-      UIQuickCreationWizard uiQuickWizard = event.getSource();
-      UIPortletConfig uiPortletConfig = uiQuickWizard.getAncestorOfType(UIPortletConfig.class);
-      if(uiPortletConfig.isNewConfig()) {
-        String portalName = Util.getUIPortal().getName();
-        LivePortalManagerService portalManagerService = uiQuickWizard.getApplicationComponent(LivePortalManagerService.class);
-        SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
-        Node portalNode = portalManagerService.getLivePortal(portalName, sessionProvider);
-        WebSchemaConfigService configService = uiQuickWizard.getApplicationComponent(WebSchemaConfigService.class);
-        PortalFolderSchemaHandler handler = configService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
-        Node webContentStorage = handler.getWebContentStorage(portalNode);
-        NodeLocation storedLocation = NodeLocation.make(webContentStorage);
-        UIContentDialogForm uiCDForm = uiQuickWizard.getChild(UIContentDialogForm.class);
-        uiCDForm.setStoredLocation(storedLocation);
-        uiCDForm.setContentType(uiQuickWizard.EXO_WEB_CONTENT);
-        uiCDForm.addNew(true);
-        uiCDForm.resetProperties();
-        uiQuickWizard.viewStep(2);
-      } else {
-        PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
-        PortletPreferences prefs = context.getRequest().getPreferences();
-        String repositoryName = prefs.getValue(UIAdvancedPresentationPortlet.REPOSITORY, null);
-        String workspace = prefs.getValue(UIAdvancedPresentationPortlet.WORKSPACE, null);
-        String UUID = prefs.getValue(UIAdvancedPresentationPortlet.UUID, null);
-        RepositoryService repositoryService = uiQuickWizard.getApplicationComponent(RepositoryService.class);
-        ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
-        Session session = SessionProvider.createSystemProvider().getSession(workspace, manageableRepository);
-        Node currentNode = session.getNodeByUUID(UUID);
-        NodeLocation nodeLocation = new NodeLocation();
-        nodeLocation.setRepository(repositoryName);
-        nodeLocation.setWorkspace(workspace);
-        nodeLocation.setPath(currentNode.getPath());
-        UIContentDialogForm uiCDForm = uiQuickWizard.getChild(UIContentDialogForm.class);
-        TemplateService templateService = uiQuickWizard.getApplicationComponent(TemplateService.class);
-        List documentNodeType = templateService.getDocumentTemplates(repositoryName);
-        String nodeType = currentNode.getPrimaryNodeType().getName();
-        if(documentNodeType.contains(nodeType)) {
-          uiCDForm.setStoredLocation(nodeLocation);
-          uiCDForm.setNodePath(currentNode.getPath());
-          uiCDForm.setContentType(uiQuickWizard.EXO_WEB_CONTENT);
-          uiCDForm.addNew(false);
-          uiCDForm.resetProperties();
-          uiQuickWizard.viewStep(2);
-        } else {
-          UIApplication uiApp = uiQuickWizard.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.not-support", null)) ;
-          context.addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return;
-        }        
-      }
+
     }
   }
 

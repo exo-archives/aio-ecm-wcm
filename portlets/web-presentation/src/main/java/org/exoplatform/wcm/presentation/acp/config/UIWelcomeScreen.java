@@ -20,8 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import javax.jcr.ItemNotFoundException;
-
 import org.exoplatform.wcm.presentation.acp.config.quickcreation.UIQuickCreationWizard;
 import org.exoplatform.wcm.presentation.acp.config.selector.UIWebContentSelectorForm;
 import org.exoplatform.web.application.RequestContext;
@@ -79,23 +77,25 @@ public class UIWelcomeScreen extends UIForm {
     return this ;
   }
 
-  public static class StartProcessActionListener extends EventListener<UIWelcomeScreen> {
-    public void execute(Event<UIWelcomeScreen> event) throws Exception {
-      try{
-        UIWelcomeScreen startOption = event.getSource();
-        String radioValue = startOption.<UIFormRadioBoxInput>getUIInput("radio").getValue();
-        if(radioValue.equals("QuickCreate") || radioValue.equals("EditCurrentContent")) {
-          startOption.setComponent(UIQuickCreationWizard.class, null, null);
-        } else if(radioValue.equals("SelectOtherContent") || radioValue.equals("SelectExisted")) {
-          startOption.setComponent(UIWebContentSelectorForm.class, null, null);
-        }
-      }catch(ItemNotFoundException e) {}
-    }
-  }
-
   public <T extends UIComponent> void setComponent(Class<T> type, String config, String id) throws Exception {
     UIPortletConfig uiConfig = getParent();
     uiConfig.getChildren().clear();
     uiConfig.addChild(type, config, id);
+  }
+
+  public static class StartProcessActionListener extends EventListener<UIWelcomeScreen> {
+    public void execute(Event<UIWelcomeScreen> event) throws Exception {
+      UIWelcomeScreen uiWelcomeScreen = event.getSource();
+      String radioValue = uiWelcomeScreen.<UIFormRadioBoxInput>getUIInput("radio").getValue();
+      UIPortletConfig uiPortletConfig = uiWelcomeScreen.getAncestorOfType(UIPortletConfig.class);
+      if(radioValue.equals("QuickCreate") || radioValue.equals("EditCurrentContent")) {
+        uiWelcomeScreen.setRendered(false);
+        UIQuickCreationWizard uiQuickCreationWizard = uiPortletConfig.addChild(UIQuickCreationWizard.class, null, null);
+        uiQuickCreationWizard.init();
+      } else if(radioValue.equals("SelectOtherContent") || radioValue.equals("SelectExisted")) {
+        uiWelcomeScreen.setRendered(false);
+        uiPortletConfig.addChild(UIWebContentSelectorForm.class, null, null);
+      }
+    }
   }
 }

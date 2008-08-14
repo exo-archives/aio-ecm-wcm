@@ -46,7 +46,8 @@ public class UIPortletConfig extends UIContainer {
   public UIPortletConfig() throws Exception {      
     isNewConfig = checkNewConfig();
     UIWelcomeScreen uiWellcomeScreen = createUIComponent(UIWelcomeScreen.class, null, null).setCreateMode(isNewConfig);
-    addChild(uiWellcomeScreen) ;
+    addChild(uiWellcomeScreen);
+
     uiBackComponent = uiWellcomeScreen ;
   }
   private boolean checkNewConfig(){
@@ -69,7 +70,10 @@ public class UIPortletConfig extends UIContainer {
     return true ;
   }
 
-  public UIComponent getBackComponent() { return uiBackComponent; }
+  public UIComponent getBackComponent() {
+    uiBackComponent.setRendered(true);
+    return uiBackComponent; 
+  }
 
   public void setNewConfig(boolean newConfig) { isNewConfig = newConfig; }
 
