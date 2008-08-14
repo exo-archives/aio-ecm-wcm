@@ -157,7 +157,7 @@
 								</td>
 							</tr>
 							<tr class="UploadField">
-								<td width="238">
+								<td width="238px">
 									<iframe name="iFrameUpload" class="iFrameUpload" frameborder="0px" border="0px"
 											style="width: 100%; height: 23px;">
 									</iframe>
@@ -185,7 +185,7 @@
 								</td>
 							</tr>
 							<tr class="UploadInfo Abort" style="display: none;">
-								<td width="235">
+								<td width="238">
 									<div class="GraphProgress"></div>
 									<div class="NumberProgress">0%</div>
 								</td>
@@ -528,16 +528,18 @@
 	function insertLink() {
 		var parrent = window.opener.window;
 		var sLink = K('contextMenu').select({where: "className == 'ContextMenu ListItemOption'"})[0].title;
+		var sContent = eXoPlugin.getContent();
 		if (parrent.setField) {
 			parrent.setField("inputURL", sLink);
-		} else {
-			var newTag = FCK.CreateElement("a");
-			if (eXoPlugin.getContent()) {
-				newTag.innerHTML = eXoPlugin.getContent();
-			} else {
-				newTag.innerHTML = sLink;
-			}
-			newTag.setAttribute("href", sLink);
+		} else if (eXp.resourceType == "Link" || eXp.resourceType == "File") {
+			var newTag = FCK.CreateElement("A");
+			if (K.remove.space(sContent) != "") newTag.innerHTML = sContent;
+			else newTag.innerHTML = sLink;
+			
+			newTag.setAttribute("href", eXoPlugin.hostName + "/" + sLink);
+		} else if (eXp.resourceType == "Image"){
+			var newTag = FCK.CreateElement("IMG");
+			newTag.setAttribute("src", eXoPlugin.hostName + "/" + sLink);
 		}
 		window.close();
 	}

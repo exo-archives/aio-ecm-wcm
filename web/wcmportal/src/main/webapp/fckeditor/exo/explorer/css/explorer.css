@@ -152,6 +152,9 @@ a {
 
 .ActionContainer .ActionButton {
 	float: left;
+	margin: 0px 3px 0px 3px;
+	height: 23px;
+	line-height: 23px;
 }
 
 .ActionButton .ButtonMiddle {

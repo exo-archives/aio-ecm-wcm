@@ -10,7 +10,7 @@
 			sOptions += ",height=" + height ;
 			sOptions += ",left=" + iLeft ;
 			sOptions += ",top=" + iTop ;
-			var newWindow = window.open( FCKConfig.eXoPath + "explorer/explorer.html?Type=File&Connector=/portal/rest/wcmImage/", "eXoExplorer", sOptions );
+			var newWindow = window.open( FCKConfig.eXoPath + "explorer/explorer.html?Type=Image&Connector=/portal/rest/wcmImage/", "eXoExplorer", sOptions );
 			newWindow.focus();
 		}
 	oImage.GetState = function() {};
