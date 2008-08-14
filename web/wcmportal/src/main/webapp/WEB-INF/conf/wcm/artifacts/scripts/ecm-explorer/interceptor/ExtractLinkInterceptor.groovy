@@ -32,22 +32,24 @@ import javax.jcr.NodeIterator;
 
 public class ExtractLinkInterceptor implements CmsScript {
 
+  private final String WORKSPACE = "&workspaceName=".intern();
+  private final String REPOSITORY = "&repository=".intern();
+  
 	private LinkExtractorService linkExtractor;
-	private RepositoryService repositoryService;
+  private RepositoryService repositoryService;
 	
 	public ExtractLinkInterceptor(LinkExtractorService linkExtractor, RepositoryService repositoryService) {
-    linkExtractor = linkExtractor;
-    repositoryService = repositoryService;
+    this.linkExtractor = linkExtractor;
+    this.repositoryService = repositoryService;
 	}
 	
 	public void execute(Object context) {
 		String sContext = context.toString();
-    int iWorkspace = sContext.indexOf("&workspaceName=");
-    int iRepository = sContext.indexOf("&repository=");
+    int iWorkspace = sContext.indexOf(WORKSPACE);
+    int iRepository = sContext.indexOf(REPOSITORY);
 		String sNodePath = sContext.substring(1, iWorkspace);
-    String sWorkspace = sContext.substring(iWorkspace + 15, iRepository);
-    String sRepository = sContext.substring(iRepository + 12);
-    
+    String sWorkspace = sContext.substring(iWorkspace + WORKSPACE.length(), iRepository);
+    String sRepository = sContext.substring(iRepository + REPOSITORY.length());
     Session session = repositoryService.getRepository(sRepository).getSystemSession(sWorkspace) ;
     Node root = session.getRootNode();
     Node webContent = root.getNode(sNodePath);
