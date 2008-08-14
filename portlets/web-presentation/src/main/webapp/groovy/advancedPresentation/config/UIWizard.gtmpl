@@ -35,7 +35,7 @@
 															<div class="DetailStepContent">
 																<% 
 																	int numberSteps = uicomponent.getNumberSteps() ;
-																	int i = 2;
+																	int i = 1;
 																	String wizardStep = _ctx.appRes(uicomponent.getId() + ".label.wizardStep") ;
 																	String strStep ;
 																	def actionLink = "#" ;
@@ -47,7 +47,7 @@
 																		} else {
 																			print ("<a href=\"#\" style=\"color:red;font-weight:bold;\" title=\"$strStep\">") ;
 																		}
-																		print (wizardStep + " " + String.valueOf(i-1)) ;
+																		print (wizardStep + " " + String.valueOf(i)) ;
 																		println(": " + strStep +"</a>") ;
 																%>
 																<div class="DescripberStep"><%= _ctx.appRes(uicomponent.getId() + ".label.step" + String.valueOf(i)+ ".describe")%></div>
