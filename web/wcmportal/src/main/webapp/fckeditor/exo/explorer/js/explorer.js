@@ -161,10 +161,11 @@ function dateFormat(sFullDate) {
 		oDocument.innerHTML += sHTML;
 	}
 	
-	function showAddForm(event, element) {
+	function showAddForm() {
 		var popupContainer = K("PopupContainer").show();
 		var formContainer = K("hideContainer").select({where: "className == 'AddFormContainer'"})[0];
-		popupContainer.innerHTML = formContainer.innerHTML.replace(/\${idShort}/g, element.title);
+		var currenForder = K("contextMenu").select({where: "className like '%AddNewDocument'"})[0].title;
+		popupContainer.innerHTML = formContainer.innerHTML.replace(/\${idShort}/g, currenForder);
 		K("Mask").add({
 			event: "click",
 			listener: function() {
@@ -191,15 +192,15 @@ function dateFormat(sFullDate) {
 			connector,
 			param,
 			function(sXML) {
-				getDir(eXp.store.currentNode);
-				K("PopupContainer").innerHTML = "";
-				K("Mask").hide();
 				var oError = eXp.getSingleNode(sXML, "Message");
 				var sErrorNumber = eXp.getNodeValue(oError, "number");
 				var sErrorText = eXp.getNodeValue(oError, "text");
 				if (sErrorNumber != '0') {
 					alert(sErrorText);
 				}
+				K("PopupContainer").innerHTML = "";
+				K("Mask").hide();
+				getDir(eXp.store.currentNode);
 			}
 		);
 	}
