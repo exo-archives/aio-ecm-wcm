@@ -52,23 +52,21 @@ import org.exoplatform.webui.form.UIFormUploadInput;
  * Email: anh.do@exoplatform.com *
  * May 9, 2008  
  */
-
 @ComponentConfig(
     id = "basicEdit",
     lifecycle = UIFormLifecycle.class,
     template =  "system:/groovy/webui/form/UIForm.gtmpl",
     events = {
-      @EventConfig(listeners = UIBasicEditModeForm.SaveActionListener.class),
-      @EventConfig(listeners = UIBasicEditModeForm.CancelActionListener.class) 
+      @EventConfig(listeners = UIBannerBasicEditModeForm.SaveActionListener.class),
+      @EventConfig(listeners = UIBannerBasicEditModeForm.CancelActionListener.class) 
     }
 )
-
-public class UIBasicEditModeForm extends UIForm {
+public class UIBannerBasicEditModeForm extends UIForm {
 
   public static final String DEFAULT_TEMPLATE = "app:/groovy/banner/UIBannerTemplate.gtmpl".intern();
 
   @SuppressWarnings("unchecked")
-  public UIBasicEditModeForm() throws Exception {
+  public UIBannerBasicEditModeForm() throws Exception {
     setMultiPart(true);
     addUIFormInput(new UIFormUploadInput("logoPath", "logoPath")) ;        
     addUIFormInput(new UIFormStringInput("slogan", "slogan", null));
@@ -79,14 +77,14 @@ public class UIBasicEditModeForm extends UIForm {
     addUIFormInput(checkBoxInput) ;         
   }
 
-  public static class SaveActionListener extends EventListener<UIBasicEditModeForm> {
+  public static class SaveActionListener extends EventListener<UIBannerBasicEditModeForm> {
     
-    public void execute(Event<UIBasicEditModeForm> event) throws Exception {
-      UIBasicEditModeForm editForm = event.getSource();
+    public void execute(Event<UIBannerBasicEditModeForm> event) throws Exception {
+      UIBannerBasicEditModeForm bannerBasicEditModeForm = event.getSource();
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
       
       String portalName = Util.getUIPortal().getName();
-      LivePortalManagerService portalManagerService = editForm.getApplicationComponent(LivePortalManagerService.class);
+      LivePortalManagerService portalManagerService = bannerBasicEditModeForm.getApplicationComponent(LivePortalManagerService.class);
       SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
       Node portalFolder = portalManagerService.getLivePortal(portalName, sessionProvider);
       Session session = portalFolder.getSession();
@@ -94,14 +92,14 @@ public class UIBasicEditModeForm extends UIForm {
       String workspace = session.getWorkspace().getName();
       String nodeUUID = null;
    
-      WebSchemaConfigService configService = editForm.getApplicationComponent(WebSchemaConfigService.class);
+      WebSchemaConfigService configService = bannerBasicEditModeForm.getApplicationComponent(WebSchemaConfigService.class);
       PortalFolderSchemaHandler portalFolderSchemaHandler = configService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
       Node bannerFolder = portalFolderSchemaHandler.getBannerThemes(portalFolder);
       
-      UIFormUploadInput logo = (UIFormUploadInput)editForm.getUIInput("logoPath");
+      UIFormUploadInput logo = (UIFormUploadInput)bannerBasicEditModeForm.getUIInput("logoPath");
       InputStream logoData = logo.getUploadDataAsStream();      
       if (logoData == null){
-        UIApplication uiApp = editForm.getAncestorOfType(UIApplication.class);
+        UIApplication uiApp = bannerBasicEditModeForm.getAncestorOfType(UIApplication.class);
         uiApp.addMessage(new ApplicationMessage("UIBasicEditModeForm.msg.logoPath", null, ApplicationMessage.ERROR)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
@@ -124,9 +122,9 @@ public class UIBasicEditModeForm extends UIForm {
       logoContent.setProperty("jcr:lastModified", new Date().getTime());
       logoPath = logoPath.concat(logoNode.getPath());
       
-      String slogan = editForm.getUIStringInput("slogan").getValue();
+      String slogan = bannerBasicEditModeForm.getUIStringInput("slogan").getValue();
       
-      InputStream inputStream = event.getRequestContext().getApplication().getResourceResolver().getInputStream(UIBasicEditModeForm.DEFAULT_TEMPLATE);
+      InputStream inputStream = event.getRequestContext().getApplication().getResourceResolver().getInputStream(UIBannerBasicEditModeForm.DEFAULT_TEMPLATE);
       String bannerTemplate = IOUtil.getStreamContentAsString(inputStream);
       
       bannerTemplate = bannerTemplate.replaceAll("\\{logoPath\\}", logoPath);
@@ -154,7 +152,7 @@ public class UIBasicEditModeForm extends UIForm {
       session.save();
       
       PortletPreferences portletPreferences = context.getRequest().getPreferences();
-      boolean quickEdit = editForm.getUIFormCheckBoxInput("quickEdit").isChecked();
+      boolean quickEdit = bannerBasicEditModeForm.getUIFormCheckBoxInput("quickEdit").isChecked();
       portletPreferences.setValue("quickEdit", Boolean.toString(quickEdit));
       portletPreferences.setValue("repository", repository) ;
       portletPreferences.setValue("workspace", workspace) ;
@@ -167,8 +165,8 @@ public class UIBasicEditModeForm extends UIForm {
     }
   }
 
-  public static class CancelActionListener extends EventListener<UIBasicEditModeForm> {
-    public void execute(Event<UIBasicEditModeForm> event) throws Exception {
+  public static class CancelActionListener extends EventListener<UIBannerBasicEditModeForm> {
+    public void execute(Event<UIBannerBasicEditModeForm> event) throws Exception {
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
       context.setApplicationMode(PortletMode.VIEW);
     }

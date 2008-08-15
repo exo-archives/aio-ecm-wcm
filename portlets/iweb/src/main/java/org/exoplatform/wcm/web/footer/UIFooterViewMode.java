@@ -16,22 +16,20 @@
  */
 package org.exoplatform.wcm.web.footer;
 
-import java.io.InputStream;
-
-import javax.portlet.PortletMode;
+import javax.jcr.Session;
 import javax.portlet.PortletRequest;
 
-import org.exoplatform.commons.utils.IOUtil;
-import org.exoplatform.dms.application.StringResourceResolver;
+import org.exoplatform.ecm.resolver.NTFileResourceResolver;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.resolver.ResourceResolver;
+import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
-import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
-import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.webui.core.lifecycle.Lifecycle;
 
 /**
  * Author : Do Ngoc Anh *      
@@ -40,57 +38,50 @@ import org.exoplatform.webui.form.UIForm;
  */
 
 @ComponentConfig(
-    lifecycle = UIFormLifecycle.class, 
-    events = @EventConfig(listeners = UIFooterViewMode.QuickEditActionListener.class)     
+    lifecycle = Lifecycle.class
 )
+public class UIFooterViewMode extends UIComponent {
 
-public class UIFooterViewMode extends UIForm {
-  private final String     DEFAULT_TEMPLATE = "app:/groovy/footer/webui/UIFooterPortlet.gtmpl";
-
-  public UIFooterViewMode() throws Exception { }
-
-  public String getTemplate() { return DEFAULT_TEMPLATE; }
-
-  public String loadTemplateData() throws Exception {
-    PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
-    String templateData = null ;
-    PortletRequest portletRequest = pContext.getRequest();
-    String repository = portletRequest.getPreferences().getValue("repository", null);
-    String workspace = portletRequest.getPreferences().getValue("workspace", null);
-    String nodeUUID = portletRequest.getPreferences().getValue("nodeUUID", null);
-    if (repository != null && workspace != null && nodeUUID != null) {
-      //load template from jcr: templateData=?      
-    }
-    //#################### need remove this code when can load template from jcr ####################
-    if(templateData == null) {
-      InputStream iStream = pContext.getApplication().getResourceResolver().getInputStream(DEFAULT_TEMPLATE);
-      templateData = IOUtil.getStreamContentAsString(iStream); 
-    }    
-    return templateData ;    
-  }
+  private final String DEFAULT_TEMPLATE = "app:/groovy/footer/webui/UIFooterPortlet.gtmpl".intern();
+  private PortletRequestContext portletRequestContext = null;
+  private PortletRequest portletRequest = null;
+  private String repository = null;
+  private String workspace = null;
+  private String nodeUUID = null;
   
+  public UIFooterViewMode() throws Exception {
+    portletRequestContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+    portletRequest = portletRequestContext.getRequest();
+    repository = portletRequest.getPreferences().getValue("repository", null);
+    workspace = portletRequest.getPreferences().getValue("workspace", null);
+    nodeUUID = portletRequest.getPreferences().getValue("nodeUUID", null);
+  }
+
+  public String getTemplate() {
+    if(isUseJCRTemplate())
+      return "jcr:" + nodeUUID;
+    return DEFAULT_TEMPLATE; 
+  }
+
   public ResourceResolver getTemplateResourceResolver(WebuiRequestContext context, String template) {
-    try {
-      String templateData = loadTemplateData() ;
-      if(templateData != null) 
-        return new StringResourceResolver(templateData) ; 
-    } catch (Exception e) {
-    }    
+    if(isUseJCRTemplate()) {
+      return new NTFileResourceResolver(repository, workspace);
+    }
     return super.getTemplateResourceResolver(context, template);
   }
   
-
-  public boolean isQuickEditable() throws Exception {
-    PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
-    String quickEdit = pContext.getRequest().getPreferences().getValue("quickEdit", "");    
-    return (Boolean.parseBoolean(quickEdit));
-  }
-
-  public static class QuickEditActionListener extends EventListener<UIFooterViewMode> {
-    public void execute(Event<UIFooterViewMode> event) throws Exception {
-      PortletRequestContext pContext = (PortletRequestContext) event.getRequestContext();
-      pContext.setApplicationMode(PortletMode.EDIT);
+  private boolean isUseJCRTemplate() {
+    if (repository != null && workspace != null && nodeUUID != null) {
+      try {
+        RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
+        SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
+        ManageableRepository manageableRepository = (ManageableRepository)repositoryService.getRepository(repository);
+        Session session = sessionProvider.getSession(workspace, manageableRepository);
+        session.getNodeByUUID(nodeUUID);
+        sessionProvider.close();
+        return true;
+      } catch (Exception e) {}
     }
-  }
-
+    return false;
+  }  
 }

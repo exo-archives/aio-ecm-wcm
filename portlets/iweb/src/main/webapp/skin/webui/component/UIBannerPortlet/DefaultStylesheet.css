@@ -1,20 +1,20 @@
-.UIDefaultLeft {
+.UIBannerViewMode {
 	background: #d8d8d8 url(DefaultSkin/background/DefaultBackground.png) repeat-x;
 	border-bottom: 1px solid #99999a;
 }
 
-.UIDefaultLeft .Logo {
+.UIBannerViewMode .Logo {
 	width: 200px; 
 	float: left;
 	padding-top: 4px;
 }
 
-.UIDefaultLeft .MiddleBanner {
+.UIBannerViewMode .MiddleBanner {
 	height: 71px;
 	margin: 0px 0px 0px 200px;
 }
 
-.UIDefaultLeft .MiddleBanner .BannerTitle {
+.UIBannerViewMode .MiddleBanner .BannerTitle {
 	font-weight: bold; 
 	font-size: 16px;
 	color: #666666;	
@@ -25,41 +25,41 @@
 	padding-right: 160px;
 }
 
-.UIDefaultLeft .LeftLogin {
+.UIBannerViewMode .LeftLogin {
 	background: url(DefaultSkin/background/LeftLoginLeft.gif) no-repeat top left;
 	padding-left: 30px;
 }
 
-.UIDefaultLeft .RightLogin {
+.UIBannerViewMode .RightLogin {
 	background: url(DefaultSkin/background/RightLoginLeft.gif) no-repeat top right;
 	padding-right: 28px;
 } 
 
-.UIDefaultLeft .CenterLogin {
+.UIBannerViewMode .CenterLogin {
 	background: url(DefaultSkin/background/CenterLogin.gif) repeat-x;
 	height: 31px;
 } 
 
-.UIDefaultLeft .CenterLogin .LoginContent {
+.UIBannerViewMode .CenterLogin .LoginContent {
 	padding-top: 5px;
 }
 
-.UIDefaultLeft .CenterLogin .LoginInfo {
+.UIBannerViewMode .CenterLogin .LoginInfo {
 	float: right;
 	line-height: 31px;
 }
 
-.UIDefaultLeft .CenterLogin .LoginInfo .Welcome {
+.UIBannerViewMode .CenterLogin .LoginInfo .Welcome {
 	padding-top: 5px;
 }
 
-.UIDefaultLeft .CenterLogin .LoginInfo span {
+.UIBannerViewMode .CenterLogin .LoginInfo span {
 	font-weight: bold;
 	color: #0066FF;
 
 }
 
-.UIDefaultLeft .CenterLogin .LoginSeperatorLine {
+.UIBannerViewMode .CenterLogin .LoginSeperatorLine {
 	float: right;
 	width: 2px;
 	background: url(DefaultSkin/background/SeperatorLine.gif) no-repeat;
@@ -67,12 +67,12 @@
 	height: 20px;
 }
 
-.UIDefaultLeft .CenterLogin a {
+.UIBannerViewMode .CenterLogin a {
 	display: block;
 	text-decoration: none;
 }
 
-.UIDefaultLeft .CenterLogin .LogoutIcon {
+.UIBannerViewMode .CenterLogin .LogoutIcon {
 	cursor: pointer;
 	font-weight: bold;
 	padding-left: 26px;
@@ -80,7 +80,7 @@
 	color: #0066FF;
 }
 
-.UIDefaultLeft .CenterLogin .SettingLanguage {
+.UIBannerViewMode .CenterLogin .SettingLanguage {
   background: url(DefaultSkin/background/LanguageIcon.gif) no-repeat left center;
   padding-left: 26px;
   cursor: pointer;
@@ -90,9 +90,16 @@
   color: #0066FF;
 }
 
+.UIBannerPortlet .UIFormGrid td.FieldComponent textarea {
+	border:1px solid gray;
+	font-size:11px;
+	height: auto;
+	width: auto;
+}
+
 .BannerQuickEdit{
-	background:url('DefaultSkin/background/QuickEdit.png') no-repeat scroll left top;
-	float:right;
+	background:url(DefaultSkin/background/QuickEdit.png) no-repeat scroll left top;
+	float: right;
 	height:50px;
 	padding-left:50px;
 }

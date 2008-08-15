@@ -84,5 +84,4 @@ public class UIBannerViewMode extends UIComponent {
     }
     return false;
   }  
-
 }

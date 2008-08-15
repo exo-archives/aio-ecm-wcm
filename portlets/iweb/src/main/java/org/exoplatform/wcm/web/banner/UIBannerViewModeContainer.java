@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.wcm.web.footer;
+package org.exoplatform.wcm.web.banner;
 
 import javax.portlet.PortletMode;
 
@@ -37,32 +37,32 @@ import org.exoplatform.webui.event.EventListener;
 
 @ComponentConfig(
     lifecycle=Lifecycle.class,
-    template="app:/groovy/footer/webui/UIViewModeContainer.gtmpl",
+    template="app:/groovy/banner/webui/UIViewModeContainer.gtmpl",
     events={
-      @EventConfig(listeners=UIViewModeContainer.QuickEditActionListener.class)
+      @EventConfig(listeners=UIBannerViewModeContainer.QuickEditActionListener.class)
     }
 )
 
-public class UIViewModeContainer extends UIContainer {
+public class UIBannerViewModeContainer extends UIContainer {
   
-  public UIViewModeContainer() throws Exception {
-    addChild(UIFooterViewMode.class,null,null) ;    
+  public UIBannerViewModeContainer() throws Exception {
+    addChild(UIBannerViewMode.class,null,null) ;      
   }
   
   public boolean isQuickEditable() throws Exception {
     PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     String quickEdit = pContext.getRequest().getPreferences().getValue("quickEdit", "");
-    Boolean isQuickEdit  = Boolean.parseBoolean(quickEdit); 
+    boolean isQuickEdit  = Boolean.parseBoolean(quickEdit); 
     WebContributionService contributionService = getApplicationComponent(WebContributionService.class) ;
     String userId = Util.getPortalRequestContext().getRemoteUser();
-    Boolean displayQuickEdit = contributionService.hasContributionPermission(userId);    
+    boolean displayQuickEdit = contributionService.hasContributionPermission(userId);    
     return (isQuickEdit & displayQuickEdit);    
   }
 
-  public static class QuickEditActionListener extends EventListener<UIViewModeContainer> {
-    public void execute(Event<UIViewModeContainer> event) throws Exception {
+  public static class QuickEditActionListener extends EventListener<UIBannerViewModeContainer> {
+    public void execute(Event<UIBannerViewModeContainer> event) throws Exception {
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
-      context.setApplicationMode(PortletMode.EDIT);      
+      context.setApplicationMode(PortletMode.EDIT);
     }
   }
   

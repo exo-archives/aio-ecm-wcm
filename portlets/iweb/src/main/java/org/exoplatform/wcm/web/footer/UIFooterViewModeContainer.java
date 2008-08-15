@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.wcm.web.banner;
+package org.exoplatform.wcm.web.footer;
 
 import javax.portlet.PortletMode;
 
@@ -37,16 +37,16 @@ import org.exoplatform.webui.event.EventListener;
 
 @ComponentConfig(
     lifecycle=Lifecycle.class,
-    template="app:/groovy/banner/webui/UIViewModeContainer.gtmpl",
+    template="app:/groovy/footer/webui/UIViewModeContainer.gtmpl",
     events={
-      @EventConfig(listeners=UIViewModeContainer.QuickEditActionListener.class)
+      @EventConfig(listeners=UIFooterViewModeContainer.QuickEditActionListener.class)
     }
 )
 
-public class UIViewModeContainer extends UIContainer {
+public class UIFooterViewModeContainer extends UIContainer {
   
-  public UIViewModeContainer() throws Exception {
-    addChild(UIBannerViewMode.class,null,null) ;      
+  public UIFooterViewModeContainer() throws Exception {
+    addChild(UIFooterViewMode.class,null,null) ;    
   }
   
   public boolean isQuickEditable() throws Exception {
@@ -56,13 +56,13 @@ public class UIViewModeContainer extends UIContainer {
     WebContributionService contributionService = getApplicationComponent(WebContributionService.class) ;
     String userId = Util.getPortalRequestContext().getRemoteUser();
     boolean displayQuickEdit = contributionService.hasContributionPermission(userId);    
-    return (isQuickEdit & displayQuickEdit );    
+    return (isQuickEdit & displayQuickEdit);    
   }
 
-  public static class QuickEditActionListener extends EventListener<UIViewModeContainer> {
-    public void execute(Event<UIViewModeContainer> event) throws Exception {
+  public static class QuickEditActionListener extends EventListener<UIFooterViewModeContainer> {
+    public void execute(Event<UIFooterViewModeContainer> event) throws Exception {
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
-      context.setApplicationMode(PortletMode.EDIT);
+      context.setApplicationMode(PortletMode.EDIT);      
     }
   }
   

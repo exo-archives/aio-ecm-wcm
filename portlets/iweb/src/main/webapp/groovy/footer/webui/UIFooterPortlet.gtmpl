@@ -1,5 +1,4 @@
-<%uiform.begin()%>
-<div class="UIFooterPortlet" id="$uicomponent.id">
+<div class="UIFooterViewMode" id="$uicomponent.id">
   <div class="LeftFooter">
     <div class="RightFooter">
       <div class="RepeatFooter">
@@ -10,4 +9,3 @@
     </div>
   </div>
 </div>
-<% uiform.end() %>

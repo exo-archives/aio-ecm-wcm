@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.wcm.web.banner;
+package org.exoplatform.wcm.web.footer;
 
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UITabPane;
@@ -24,18 +24,16 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
  * Created by The eXo Platform SAS
  * Author : Phan Le Thanh Chuong
  *          chuong_phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * Aug 14, 2008  
+ * Aug 15, 2008  
  */
-@ComponentConfig(  
-    lifecycle=Lifecycle.class,
-    template =  "system:/groovy/webui/core/UITabPane_New.gtmpl"
+@ComponentConfig (
+    lifecycle = Lifecycle.class,
+    template = "system:/groovy/webui/core/UITabPane_New.gtmpl"
 )
-public class UIEditModeContainer extends UITabPane {
-
-  public UIEditModeContainer() throws Exception {
-    UIBasicEditModeForm basicEditModeForm = addChild(UIBasicEditModeForm.class, "basicEdit", null);
-    addChild(UIAdvanceEditModeForm.class, "advanceEdit", null);
+public class UIFooterEditModeContainer extends UITabPane {
+  public UIFooterEditModeContainer() throws Exception {
+    UIFooterBasicEditModeForm basicEditModeForm = addChild(UIFooterBasicEditModeForm.class, "basicEdit", null);
+    addChild(UIFooterAdvanceEditModeForm.class, "advanceEdit", null);
     setSelectedTab(basicEditModeForm.getId());
   }
-  
 }

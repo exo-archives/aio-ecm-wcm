@@ -12,7 +12,7 @@
   String signOutAction = prContext.getRequestContextPath() + "/public/" + portalName + "/" ;
 %>
 
-<div class="UIDefaultLeft">
+<div class="UIBannerViewMode">
 	<div class="Logo" align="center">
 		<img src="/iweb/skin/webui/component/UIBannerPortlet/DefaultSkin/background/DefaultLogo.png" width="132" height="60"/>
 	</div>

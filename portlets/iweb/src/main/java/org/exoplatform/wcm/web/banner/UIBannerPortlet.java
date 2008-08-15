@@ -34,30 +34,28 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 @ComponentConfig(lifecycle = UIApplicationLifecycle.class)
 public class UIBannerPortlet extends UIPortletApplication {
 
-  private PortletMode currenMode_ = PortletMode.VIEW;
+  private PortletMode currentMode = PortletMode.VIEW;
 
   public UIBannerPortlet() throws Exception {
-    activateMode(currenMode_);    
+    activeMode(currentMode);    
   }
 
-  public void activateMode(PortletMode mode) throws Exception {
+  public void activeMode(PortletMode mode) throws Exception {
     getChildren().clear();
     if (PortletMode.VIEW.equals(mode)) {
-      addChild(UIViewModeContainer.class, null, UIPortletApplication.VIEW_MODE);
+      addChild(UIBannerViewModeContainer.class, null, UIPortletApplication.VIEW_MODE);
     } else if (PortletMode.EDIT.equals(mode)) {
-      addChild(UIEditModeContainer.class, null, UIPortletApplication.EDIT_MODE);
+      addChild(UIBannerEditModeContainer.class, null, UIPortletApplication.EDIT_MODE);
     }
   }
   
-  public void processRender(WebuiApplication app, WebuiRequestContext context) throws Exception {
-    PortletRequestContext pContext = (PortletRequestContext) context;
-    PortletMode newMode = pContext.getApplicationMode();
-    if (!currenMode_.equals(newMode)) {
-      activateMode(newMode);
-      currenMode_ = newMode;
+  public void processRender(WebuiApplication webuiApplication, WebuiRequestContext webuiRequestContext) throws Exception {
+    PortletRequestContext portletRequestContext = (PortletRequestContext) webuiRequestContext;
+    PortletMode newMode = portletRequestContext.getApplicationMode();
+    if (!currentMode.equals(newMode)) {
+      activeMode(newMode);
+      currentMode = newMode;
     }
-
-    super.processRender(app, context);
+    super.processRender(webuiApplication, webuiRequestContext);
   }
-
 }

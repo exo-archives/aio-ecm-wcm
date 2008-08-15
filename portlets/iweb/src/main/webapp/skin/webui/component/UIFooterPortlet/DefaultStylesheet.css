@@ -1,99 +1,39 @@
-/*==============================UIFooterPortlet=================================*/
-.UIFooterPortlet {
+.UIFooterViewMode {
   background: url('DefaultSkin/background/FooterBG.gif') repeat-x top;
   height: auto;
   margin: 0px;
 }
 
-.UIFooterPortlet .RepeatFooter {
+.UIFooterViewMode .RepeatFooter {
   padding: 0px;
   margin: 0px;
 }
 
-.UIFooterPortlet .RepeatFooter .QuickEdit{
+.UIFooterViewMode .RepeatFooter .QuickEdit{
 	float: right; 
 	padding-bottom: 10px; 
 	cursor: pointer;
 }
 
 
-.UIFooterPortlet .FooterInfoContainer {
+.UIFooterViewMode .FooterInfoContainer {
   line-height: 25px ;
 }
 
-.UIFooterPortlet .CopyrightInfo {
+.UIFooterViewMode .CopyrightInfo {
   line-height: 25px;
   text-align: center;
 }
 
-
-
-/*==============================UIFooterEditModeForm=================================*/
-.UIFooterEditModeForm{
-
-}
-
-.UIFooterEditModeForm .UIFooterEditModeFormGrid{
-	margin-top: 20px;
-}
-
-.UIFooterEditModeForm .UIFooterEditModeFormGrid textarea{
-	font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
-	font-size: 11px;
-	width: 700px;	
-	height: 150px;
-}
-
-.UIFooterEditModeForm .UIFooterEditModeFormGrid input.checkbox{
+.UIFooterPortlet .UIFormGrid td.FieldComponent textarea {
+	border:1px solid gray;
+	font-size:11px;
+	height: auto;
 	width: auto;
-	float: left; 
-}
-.UIFooterEditModeForm .UIFooterEditModeFormGrid td.FieldLabel{
-	padding: 4px;
-	float: right;
-	vertical-align: top;
 }
 
-.UIFooterEditModeForm .UIFooterEditModeFormGrid td.FieldComponent{
-	padding: 4px;
-}
-
-
-/*==============================LightBlueStyle ActionButton=================================*/
-.UIFooterEditModeForm .UIAction .LightBlueStyle{
-
-}
-
-.UIFooterEditModeForm .UIAction .LightBlueStyle .ButtonLeft {
-  background: url('DefaultSkin/background/LightBlueStyle.gif') no-repeat left top;
-  padding: 0px 0px 0px 3px;
-}
-
-.UIFooterEditModeForm .UIAction .LightBlueStyle .ButtonRight {
-  background: url('DefaultSkin/background/LightBlueStyle.gif') no-repeat right top;
-  padding: 0px 3px 0px 0px ;
-}
-
-.UIFooterEditModeForm .UIAction .LightBlueStyle .ButtonMiddle {
- 	line-height: 22px; text-align: center; 
-	background: url('DefaultSkin/background/LightBlueStyle.gif') repeat-x bottom;
-	white-space: nowrap;
-	display: table-cell;
-	padding: 0px 12px;
-}
-
-.UIFooterEditModeForm .UIAction a.LightBlueStyle {
-  color: #313131;
-  margin: 0px 6px; white-space: nowrap;
-}
-
-.UIFooterEditModeForm .UIAction a:hover.LightBlueStyle {
-  color: #1273df;
-}
-
-/*========================================================================================*/
 .FooterQuickEdit{
-	background:url('DefaultSkin/background/QuickEdit.png') no-repeat scroll left top;
+	background:url(DefaultSkin/background/QuickEdit.png) no-repeat scroll left top;
 	float:right;
 	height:50px;
 	padding-left:50px;

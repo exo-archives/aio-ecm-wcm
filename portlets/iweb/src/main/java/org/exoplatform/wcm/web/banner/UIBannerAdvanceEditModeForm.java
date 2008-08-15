@@ -53,14 +53,15 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
     lifecycle = UIFormLifecycle.class,
     template = "system:/groovy/webui/form/UIForm.gtmpl",
     events = {
-      @EventConfig(listeners = UIAdvanceEditModeForm.SaveActionListener.class),
-      @EventConfig(listeners = UIAdvanceEditModeForm.CancelActionListener.class)
+      @EventConfig(listeners = UIBannerAdvanceEditModeForm.SaveActionListener.class),
+      @EventConfig(listeners = UIBannerAdvanceEditModeForm.CancelActionListener.class)
     }
 )
-public class UIAdvanceEditModeForm extends UIForm {
+public class UIBannerAdvanceEditModeForm extends UIForm {
+  
   private final String DEFAULT_BANNER = "app:/groovy/banner/webui/UIBannerPortlet.gtmpl".intern();
   
-  public UIAdvanceEditModeForm() throws Exception {
+  public UIBannerAdvanceEditModeForm() throws Exception {
     UIFormTextAreaInput formTextAreaInput = new UIFormTextAreaInput("template", "template", loadTemplate());
     formTextAreaInput.setRows(10);
     formTextAreaInput.setColumns(60);
@@ -90,13 +91,13 @@ public class UIAdvanceEditModeForm extends UIForm {
     return template;
   }
   
-  public static class SaveActionListener extends EventListener<UIAdvanceEditModeForm> {
-    public void execute(Event<UIAdvanceEditModeForm> event) throws Exception {
-      UIAdvanceEditModeForm advanceEditModeForm = event.getSource();
-      String template = advanceEditModeForm.getUIFormTextAreaInput("template").getValue();
+  public static class SaveActionListener extends EventListener<UIBannerAdvanceEditModeForm> {
+    public void execute(Event<UIBannerAdvanceEditModeForm> event) throws Exception {
+      UIBannerAdvanceEditModeForm bannerAdvanceEditModeForm = event.getSource();
+      String template = bannerAdvanceEditModeForm.getUIFormTextAreaInput("template").getValue();
       
       String portalName = Util.getUIPortal().getName();
-      LivePortalManagerService portalManagerService = advanceEditModeForm.getApplicationComponent(LivePortalManagerService.class);
+      LivePortalManagerService portalManagerService = bannerAdvanceEditModeForm.getApplicationComponent(LivePortalManagerService.class);
       SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
       Node portalFolder = portalManagerService.getLivePortal(portalName, sessionProvider);
       Session session = portalFolder.getSession();
@@ -104,7 +105,7 @@ public class UIAdvanceEditModeForm extends UIForm {
       String workspace = session.getWorkspace().getName();
       String uuid = null;
       
-      WebSchemaConfigService configService = advanceEditModeForm.getApplicationComponent(WebSchemaConfigService.class);
+      WebSchemaConfigService configService = bannerAdvanceEditModeForm.getApplicationComponent(WebSchemaConfigService.class);
       PortalFolderSchemaHandler portalFolderSchemaHandler = configService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
       Node bannerFolder = portalFolderSchemaHandler.getBannerThemes(portalFolder);
       
@@ -116,7 +117,7 @@ public class UIAdvanceEditModeForm extends UIForm {
         bannerContent.setProperty("jcr:data", template);
         bannerContent.setProperty("jcr:lastModified", new Date().getTime()); 
       } else {
-        bannerNode = bannerFolder.addNode("banner.gtmpl");
+        bannerNode = bannerFolder.addNode("banner.gtmpl", "nt:file");
         bannerNode.addMixin("mix:referenceable");
         bannerContent = bannerNode.addNode("jcr:content", "nt:resource");
         bannerContent.setProperty("jcr:encoding", "UTF-8");
@@ -141,8 +142,8 @@ public class UIAdvanceEditModeForm extends UIForm {
     }
   }
   
-  public static class CancelActionListener extends EventListener<UIAdvanceEditModeForm> {
-    public void execute(Event<UIAdvanceEditModeForm> event) throws Exception {
+  public static class CancelActionListener extends EventListener<UIBannerAdvanceEditModeForm> {
+    public void execute(Event<UIBannerAdvanceEditModeForm> event) throws Exception {
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
       context.setApplicationMode(PortletMode.VIEW);
     }
