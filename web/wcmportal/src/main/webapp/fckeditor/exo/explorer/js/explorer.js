@@ -46,67 +46,47 @@ function getElementsByClassPath(root, path) {
 	}
 }
 
-function showSetting() {
-	var oSetting = K('explorer').select({where: "className == 'Setting'"})[0];
-	if (oSetting.style.display != 'block') {
-		oSetting.style.display = 'block';
-	} else { 
-		oSetting.style.display = 'none';
+	function showSetting() {
+		var oSetting = K('explorer').select({where: "className == 'Setting'"})[0];
+		if (oSetting.style.display != 'block') {
+			oSetting.style.display = 'block';
+		} else { 
+			oSetting.style.display = 'none';
+		}
 	}
-}
 
-function showContextMenu(selection, event, element) {
-	if (eXp.disableCreatingFolder && selection == "AddNewDocument") return;
-	var oContextMenu = K('contextMenu');
-	var oSelection = getElementsByClassPath(oContextMenu, selection)[0];
-	oSelection.style.left = K.get.X(event) + "px";
-	oSelection.style.top = K.get.Y(event) + "px";
-	oSelection.style.display = "block";
-	var oActions =  K.select({from: oSelection, where: "className like '%IconItem%'"});
-	oSelection.title = element.title;
-	return false;
-}
-
-function hideContextMenu() {
-	var aObjects = getElementByClassName('ContextMenu');
-	iLength = aObjects.length;
-	for (var i = 0; i < iLength; i++) {
-		aObjects[i].style.display = 'none';
+	function openTree(obj) {
+		var oNodeOpen = obj.parentNode;
+		var oNodeGroup = K(oNodeOpen).select({where: "className == 'NodeGroup'"})[0];
+		if (oNodeGroup.style.display != "block") {
+			oNodeGroup.style.display = "block";
+			obj.className = "Expand";
+		} else {
+			oNodeGroup.style.display = "none";
+			obj.className = "Collapse";
+		}
 	}
-}
 
-function openTree(obj) {
-	var oNodeOpen = obj.parentNode;
-	var oNodeGroup = K(oNodeOpen).select({where: "className == 'NodeGroup'"})[0];
-	if (oNodeGroup.style.display != "block") {
-		oNodeGroup.style.display = "block";
-		obj.className = "Expand";
-	} else {
-		oNodeGroup.style.display = "none";
-		obj.className = "Collapse";
-	}
-}
-
-function dateFormat(sFullDate) {
-	var sYear = sFullDate.substring(0, 4);
-	var sMonth = sFullDate.substring(5, 7);
-	var sDay = sFullDate.substring(8, 10);
-	var sHour = sFullDate.substring(sFullDate.indexOf('T') + 1, sFullDate.indexOf('T') + 3);
-	var sMinute = sFullDate.substring(sFullDate.indexOf('T') + 4, sFullDate.indexOf('T') + 6);
-	var sSecond = sFullDate.substring(sFullDate.indexOf('T') + 7, sFullDate.indexOf('T') + 9);
-	var sMillisecond = sFullDate.substring(sFullDate.indexOf('T') + 10, sFullDate.indexOf('T') + 13);
-	
-	var date = new Date();
-	date.setDate(sDay);
-	date.setMonth(sMonth);
-	date.setYear(sYear);
-	date.setHours(sHour);
-	date.setMinutes(sMinute);
-	date.setSeconds(sSecond);
-	date.setMilliseconds(sMillisecond);
-	
-	return (date);
-} 
+	function dateFormat(sFullDate) {
+		var sYear = sFullDate.substring(0, 4);
+		var sMonth = sFullDate.substring(5, 7);
+		var sDay = sFullDate.substring(8, 10);
+		var sHour = sFullDate.substring(sFullDate.indexOf('T') + 1, sFullDate.indexOf('T') + 3);
+		var sMinute = sFullDate.substring(sFullDate.indexOf('T') + 4, sFullDate.indexOf('T') + 6);
+		var sSecond = sFullDate.substring(sFullDate.indexOf('T') + 7, sFullDate.indexOf('T') + 9);
+		var sMillisecond = sFullDate.substring(sFullDate.indexOf('T') + 10, sFullDate.indexOf('T') + 13);
+		
+		var date = new Date();
+		date.setDate(sDay);
+		date.setMonth(sMonth);
+		date.setYear(sYear);
+		date.setHours(sHour);
+		date.setMinutes(sMinute);
+		date.setSeconds(sSecond);
+		date.setMilliseconds(sMillisecond);
+		
+		return (date);
+	} 
 
 	function treeInit(sXML) {
 		var oExplorer = K('explorer');
@@ -161,6 +141,32 @@ function dateFormat(sFullDate) {
 		oDocument.innerHTML += sHTML;
 	}
 	
+	function removeMask() {
+		K("PopupContainer").innerHTML = "";
+		K("Mask").hide();
+	}
+	
+	function showContextMenu(selection, event, element) {
+		if (eXp.disableCreatingFolder && selection == "AddNewDocument") return;
+		var oContextMenu = K('contextMenu');
+		var oSelection = getElementsByClassPath(oContextMenu, selection)[0];
+		oSelection.style.left = K.get.X(event) + "px";
+		oSelection.style.top = K.get.Y(event) + "px";
+		oSelection.style.display = "block";
+		var oActions =  K.select({from: oSelection, where: "className like '%IconItem%'"});
+		oSelection.title = element.title;
+		eXp.store.temporaryNode = element;
+		return false;
+	}
+
+	function hideContextMenu() {
+		var aObjects = getElementByClassName('ContextMenu');
+		iLength = aObjects.length;
+		for (var i = 0; i < iLength; i++) {
+			aObjects[i].style.display = 'none';
+		}
+	}
+	
 	function showAddForm() {
 		var popupContainer = K("PopupContainer").show();
 		var formContainer = K("hideContainer").select({where: "className == 'AddFormContainer'"})[0];
@@ -168,10 +174,7 @@ function dateFormat(sFullDate) {
 		popupContainer.innerHTML = formContainer.innerHTML.replace(/\${idShort}/g, currenForder);
 		K("Mask").add({
 			event: "click",
-			listener: function() {
-				K("PopupContainer").innerHTML = "";
-				K("Mask").hide();
-			}
+			listener: removeMask
 		}).show();
 	}
 		
@@ -193,14 +196,17 @@ function dateFormat(sFullDate) {
 			param,
 			function(sXML) {
 				var oError = eXp.getSingleNode(sXML, "Message");
-				var sErrorNumber = eXp.getNodeValue(oError, "number");
+				var sErrorNumber = parseInt(eXp.getNodeValue(oError, "number"));
 				var sErrorText = eXp.getNodeValue(oError, "text");
-				if (sErrorNumber != '0') {
+				if (sErrorNumber - 100) {
 					alert(sErrorText);
+					getDir(eXp.store.currentNode);
+				} else {
+					alert(sErrorText);
+					eXp.store.currentNode = eXp.store.temporaryNode;
+					getDir(eXp.store.currentNode);
 				}
-				K("PopupContainer").innerHTML = "";
-				K("Mask").hide();
-				getDir(eXp.store.currentNode);
+				removeMask();
 			}
 		);
 	}
@@ -215,17 +221,14 @@ function dateFormat(sFullDate) {
 		popupContainer.innerHTML = uploadContainer.innerHTML.replace(/\${idShort}/, sPath);
 		var iFrame = popupContainer.select({where: "className == 'iFrameUpload'"})[0];
 		var iContent = K("iContentUpLoad").innerHTML;
-		with (iFrame.contentWindow.document) {
-			open();
-			write(iContent);
-			close();
+		with (iFrame.contentWindow) {
+			document.open();
+			document.write(iContent);
+			document.close();
 		}
 		K("Mask").add({
 			event: "click",
-			listener: function() {
-				K("PopupContainer").innerHTML = "";
-				K("Mask").hide();
-			}
+			listener: removeMask
 		}).show();
 	}
 	
@@ -296,10 +299,10 @@ function dateFormat(sFullDate) {
 		K(oPopupContainer.select({where: "className == 'UploadField'"})[0]).show();
 		var iFrame = oPopupContainer.select({where: "className == 'iFrameUpload'"})[0];
 		var iContent = K("iContentUpLoad").innerHTML;
-		with (iFrame.contentWindow.document) {
-			open();
-			write(iContent);
-			close();
+		with (iFrame.contentWindow) {
+			document.open();
+			document.write(iContent);
+			document.close();
 		}
 	};
 	
@@ -307,8 +310,7 @@ function dateFormat(sFullDate) {
 		var connector = eXp.connector + eXp.command.controlUpload;
 		var param = eXp.buildParam("action=delete", "uploadId=" + uploadFile.id, "currentFolder=" + eXp.store.currentFolder, buildXParam());
 		eXp.sendRequest(connector, param);
-		K("PopupContainer").innerHTML = "";
-		K("Mask").hide();
+		removeMask();
 	};
 
 	uploadFile.Delete = function() {
@@ -326,6 +328,6 @@ function dateFormat(sFullDate) {
 		var nodeName = K("PopupContainer").select({where: "nodeName == 'INPUT' && name == 'fileName'"})[0];
 		var param = eXp.buildParam("action=save", "uploadId=" + uploadFile.id, "fileName=" + nodeName.value, "currentFolder=" + eXp.store.currentFolder, buildXParam());
 		eXp.sendRequest(connector, param);
-		K("PopupContainer").innerHTML = "";
-		K("Mask").hide();
+		removeMask();
+		setTimeout(function(){getDir(eXp.store.currentNode)}, 1000);
 	};

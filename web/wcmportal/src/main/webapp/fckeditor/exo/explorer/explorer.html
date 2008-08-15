@@ -14,6 +14,7 @@
 			var FCKConfig = window.opener.FCKConfig;
 			var FCK = window.opener.FCK;
 			var eXoPlugin = FCK.eXoPlugin;
+			var KLang = null;
 			eXoPlugin.loadScript(window, "lang/" + eXoPlugin.userLanguage + ".js");
 		</script>
 	</head>
@@ -222,8 +223,8 @@
 												<a href="javascript: void(0);" class="ActionButton">
 													<div class="ButtonLeft">
 														<div class="ButtonRight">
-															<div class="ButtonMiddle" userLanguage="KLang.BtnCancel" onclick="uploadFile.Cancel()">
-																Cancel
+															<div class="ButtonMiddle" userLanguage="KLang.BtnSave" onclick="uploadFile.Save()">
+																Save
 															</div>
 														</div>
 													</div>
@@ -231,8 +232,8 @@
 												<a href="javascript: void(0);" class="ActionButton">
 													<div class="ButtonLeft">
 														<div class="ButtonRight">
-															<div class="ButtonMiddle" userLanguage="KLang.BtnSave" onclick="uploadFile.Save()">
-																Save
+															<div class="ButtonMiddle" userLanguage="KLang.BtnCancel" onclick="uploadFile.Cancel()">
+																Cancel
 															</div>
 														</div>
 													</div>
@@ -299,6 +300,7 @@
 		store: {
 			currentNode: {},
 			currentFolder: "/",
+			temporaryNode: {},
 			data: {}
 		},
 		buildParam: function() {
@@ -353,9 +355,6 @@
 		}
 	}
 	
-	var curLength = 0;
-	var curUploadId = 0;
-	
 	function buildXParam() {
 		var repositoryName = FCKConfig.repositoryName;
 		var workspaceName = FCKConfig.workspaceName;
@@ -393,33 +392,33 @@
 			}
 		} else {
 			eXoPlugin.loadScript(window, "lang/en.js");
-			setTimeout(languageInit, 2000);
+			setTimeout(languageInit, 1000);
 		}
 	};
 	
 
 	function elementResize() {
 		var oExplorer = K("explorer");
-		var oDocument = getElementsByClassPath(oExplorer, 'Workspace/DisplayArea')[0];
-		var oStatus = K('statusBar');
-		oExplorer.style.height = K.get.windowHeight() - oStatus.offsetHeight + 'px';
+		var oDocument = getElementsByClassPath(oExplorer, "Workspace/DisplayArea")[0];
+		var oStatus = K("statusBar");
+		oExplorer.style.height = K.get.windowHeight() - oStatus.offsetHeight + "px";
 
-		var oTreeTitle = getElementsByClassPath(oExplorer, 'Navigation/MenuBar')[0];
-		var oTree = getElementsByClassPath(oExplorer, 'Navigation/Tree')[0];
-		oTree.style.height = K.get.windowHeight() - (oStatus.offsetHeight + oTreeTitle.offsetHeight) + 'px';
+		var oTreeTitle = getElementsByClassPath(oExplorer, "Navigation/MenuBar")[0];
+		var oTree = getElementsByClassPath(oExplorer, "Navigation/Tree")[0];
+		oTree.style.height = K.get.windowHeight() - (oStatus.offsetHeight + oTreeTitle.offsetHeight) + "px";
 		
-		var oSettingTitle = getElementsByClassPath(oExplorer, 'Workspace/Setting/TitleBar')[0];
-		var oSetting = getElementsByClassPath(oExplorer, 'Workspace/Setting')[0];
-		if (oSetting.style.display == 'none') {
-			oDocument.style.height = K.get.windowHeight() - 59 + 'px';
+		var oSettingTitle = getElementsByClassPath(oExplorer, "Workspace/Setting/TitleBar")[0];
+		var oSetting = getElementsByClassPath(oExplorer, "Workspace/Setting")[0];
+		if (oSetting.style.display == "none") {
+			oDocument.style.height = K.get.windowHeight() - 59 + "px";
 		} else {
-			oDocument.style.height = K.get.windowHeight() - (oSettingTitle.offsetHeight + oSetting.offsetHeight + oStatus.offsetHeight + 15) + 'px';
+			oDocument.style.height = K.get.windowHeight() - (oSettingTitle.offsetHeight + oSetting.offsetHeight + oStatus.offsetHeight + 15) + "px";
 		}
 	}
 	
 	function disableUploading() {
 		if (eXp.disableUploading) {
-			var uploadButton = getElementsByClassPath(K('explorer'), "Workspace/MenuBar/UploadButton")[0]; 
+			var uploadButton = getElementsByClassPath(K("explorer"), "Workspace/MenuBar/UploadButton")[0]; 
 			uploadButton.style.display = "none";
 		}
 	}
@@ -444,14 +443,14 @@
 	}
 	
 	function deployData(iXML) {
-		var oExplorer = K('explorer');
+		var oExplorer = K("explorer");
 		var oDocument = getElementsByClassPath(oExplorer, 'Workspace/DisplayArea')[0];
-		var oStatus = K('statusBar');
+		var oStatus = K("statusBar");
 		var oStatusFile = getElementsByClassPath(oStatus, 'Item')[0];
 		var oStatusFolder = getElementsByClassPath(oStatus, 'Folder')[0];
-		var oHide = K('hideContainer');
+		var oHide = K("hideContainer");
 		var currentNode = eXp.store.currentNode;
-		var sHTML = '';
+		var sHTML = "";
 		
 		var oFolders = eXp.getNodes(iXML, "Folder");
 		if (oFolders && oFolders.length) {
@@ -476,7 +475,7 @@
 		oNodeGroup.style.display = "block";
 		oNodeGroup.innerHTML = sHTML;
 	
-		sHTML = '';
+		sHTML = "";
 		
 		var oFiles = eXp.getNodes(iXML, "File");
 		
@@ -487,22 +486,24 @@
 			if (oItemGroup == null || oItemGroup == '') {
 				for (var i = 0 ; i < iLength; ++i) {
 					var sName = eXp.getNodeValue(oFiles[i], "name");
-					
-					var sType = eXp.getNodeValue(oFiles[i], "fileType").replace(':', '_') + '16x16Icon';
+					var sType = eXp.getNodeValue(oFiles[i], "fileType").replace(":", "_") + "16x16Icon";
 					var sDateCreated = dateFormat(eXp.getNodeValue(oFiles[i], "dateCreated"));
-					var sURL = eXoPlugin.hostName + '/' + eXp.getNodeValue(oFiles[i], "url");
-					var sSize = eXp.getNodeValue(oFiles[i], "size");
-					if (sSize == '') sSize = '-';
+					var sURL = eXoPlugin.hostName + "/" + eXp.getNodeValue(oFiles[i], "url");
+					var sSize = parseInt(eXp.getNodeValue(oFiles[i], "size")) || "-";
 					var sHideTreeItem = getElementsByClassPath(oHide, 'HideTreeItem')[0].innerHTML;
 					sHideTreeItem = sHideTreeItem.replace(/\${sName}/g, sName);
 					sHideTreeItem = sHideTreeItem.replace(/\${sType}/g, sType);
-					sHideTreeItem = sHideTreeItem.replace(/\${sDateCreated}/g, sDateCreated.getDate() + '/' + sDateCreated.getMonth() + '/' + sDateCreated.getFullYear() + ' ' + sDateCreated.getHours() + ':' + sDateCreated.getMinutes());
+					sHideTreeItem = sHideTreeItem.replace(/\${sDateCreated}/g,
+															sDateCreated.getDate() + "/" +
+															sDateCreated.getMonth() + "/" + 
+															sDateCreated.getFullYear() + "" + 
+															sDateCreated.getHours() + ":" +
+															sDateCreated.getMinutes());
 					sHideTreeItem = sHideTreeItem.replace(/\${sURL}/g, sURL);
 					sHideTreeItem = sHideTreeItem.replace(/\${sSize}/g, sSize);
-					sHTML += '<input type="hidden" id="checkgen">';
+					sHTML += "<input type='hidden' id='checkgen'>";
 					sHTML += sHideTreeItem;
 					eXp.store.data.Insert([sName, sDateCreated, sSize, sType, sURL]);
-
 				}
 				oDocument.innerHTML += sHTML;
 			} else {
@@ -511,7 +512,7 @@
 					var sName = eXp.getNodeValue(oFiles[i], "name");
 					var sType = eXp.getNodeValue(oFiles[i], "fileType").replace(":", "_") + "16x16Icon";
 					var sDateCreated = dateFormat(eXp.getNodeValue(oFiles[i], "dateCreated"));
-					var sSize = eXp.getNodeValue(oFiles[i], "size") || "-";
+					var sSize = parseInt(eXp.getNodeValue(oFiles[i], "size")) || "-";
 					var sURL = eXp.getNodeValue(oFiles[i], "url");
 					eXp.store.data.Insert([sName, sDateCreated, sSize, sType, sURL]);
 				} 
