@@ -27,7 +27,7 @@
                 <exclude>WEB-INF/conf/</exclude>                                     
                 <exclude>WEB-INF/classes/locale/navigation/</exclude>
                 <exclude>fckeditor/fckconfig.js</exclude>
-                <exclude>groovy/portal/webui/workspace/UIPortalApplication.gtml</exclude>                     
+                <exclude>groovy/portal/webui/workspace/UIPortalApplication.gtmpl</exclude>                     
               </excludes>
             </resource>
             <resource>
