@@ -45,7 +45,7 @@ public class UIBannerPortlet extends UIPortletApplication {
     if (PortletMode.VIEW.equals(mode)) {
       addChild(UIViewModeContainer.class, null, UIPortletApplication.VIEW_MODE);
     } else if (PortletMode.EDIT.equals(mode)) {
-      addChild(UIBannerEditModeForm.class, null, UIPortletApplication.EDIT_MODE);      
+      addChild(UIEditModeContainer.class, null, UIPortletApplication.EDIT_MODE);
     }
   }
   

@@ -52,10 +52,10 @@ public class UIViewModeContainer extends UIContainer {
   public boolean isQuickEditable() throws Exception {
     PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     String quickEdit = pContext.getRequest().getPreferences().getValue("quickEdit", "");
-    Boolean isQuickEdit  = Boolean.parseBoolean(quickEdit); 
+    boolean isQuickEdit  = Boolean.parseBoolean(quickEdit); 
     WebContributionService contributionService = getApplicationComponent(WebContributionService.class) ;
     String userId = Util.getPortalRequestContext().getRemoteUser();
-    Boolean displayQuickEdit = contributionService.hasContributionPermission(userId);    
+    boolean displayQuickEdit = contributionService.hasContributionPermission(userId);    
     return (isQuickEdit & displayQuickEdit );    
   }
 
