@@ -23,9 +23,12 @@ import javax.jcr.Node;
 import javax.jcr.Session;
 
 import org.exoplatform.ecm.webui.selector.UISelectable;
+import org.exoplatform.ecm.webui.tree.selectmany.UICategoriesContainer;
 import org.exoplatform.ecm.webui.tree.selectmany.UICategoriesSelector;
+import org.exoplatform.ecm.webui.tree.selectmany.UISelectedCategoriesGrid;
 import org.exoplatform.services.cms.categories.CategoriesService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
