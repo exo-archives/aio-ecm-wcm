@@ -35,8 +35,12 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 
 public class UIMiscellaneousInfo extends UIForm {
   public UIMiscellaneousInfo() throws Exception {
-    addUIFormInput(new UIFormCheckBoxInput("checkBoxOne", "checkBoxOne", null)) ;
-    addUIFormInput(new UIFormCheckBoxInput("checkBoxTwo", "checkBoxTwo", null)) ;
-    addUIFormInput(new UIFormCheckBoxInput("checkBoxThree", "checkBoxThree", null)) ;
+    addUIFormInput(new UIFormCheckBoxInput("ShowTOC", "ShowTOC", null));
+    addUIFormInput(new UIFormCheckBoxInput("ShowTags", "ShowTags", null));
+    addUIFormInput(new UIFormCheckBoxInput("ShowCategory", "ShowCategory", null));
+    addUIFormInput(new UIFormCheckBoxInput("AllowVoting", "AllowVoting", null));
+    addUIFormInput(new UIFormCheckBoxInput("AllowComment", "AllowComment", null));
   }
+
+
 }

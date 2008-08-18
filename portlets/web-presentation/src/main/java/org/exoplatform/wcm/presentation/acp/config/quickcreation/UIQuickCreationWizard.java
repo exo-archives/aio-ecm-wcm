@@ -83,7 +83,7 @@ public class UIQuickCreationWizard extends UIBaseWizard {
 
 
   public void init() throws Exception {
-    UIPortletConfig uiPortletConfig = this.getAncestorOfType(UIPortletConfig.class);
+    UIPortletConfig uiPortletConfig = getAncestorOfType(UIPortletConfig.class);
     if(uiPortletConfig.isNewConfig()) {
       String portalName = Util.getUIPortal().getName();
       LivePortalManagerService portalManagerService = this.getApplicationComponent(LivePortalManagerService.class);
@@ -104,7 +104,7 @@ public class UIQuickCreationWizard extends UIBaseWizard {
       String repositoryName = prefs.getValue(UIAdvancedPresentationPortlet.REPOSITORY, null);
       String workspace = prefs.getValue(UIAdvancedPresentationPortlet.WORKSPACE, null);
       String UUID = prefs.getValue(UIAdvancedPresentationPortlet.UUID, null);
-      RepositoryService repositoryService = this.getApplicationComponent(RepositoryService.class);
+      RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
       ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
       Session session = SessionProvider.createSystemProvider().getSession(workspace, manageableRepository);
       Node currentNode = session.getNodeByUUID(UUID);
@@ -113,17 +113,17 @@ public class UIQuickCreationWizard extends UIBaseWizard {
       nodeLocation.setWorkspace(workspace);
       nodeLocation.setPath(currentNode.getPath());
       UIContentDialogForm uiCDForm = this.getChild(UIContentDialogForm.class);
-      TemplateService templateService = this.getApplicationComponent(TemplateService.class);
+      TemplateService templateService = getApplicationComponent(TemplateService.class);
       List documentNodeType = templateService.getDocumentTemplates(repositoryName);
       String nodeType = currentNode.getPrimaryNodeType().getName();
       if(documentNodeType.contains(nodeType)) {
         uiCDForm.setStoredLocation(nodeLocation);
         uiCDForm.setNodePath(currentNode.getPath());
-        uiCDForm.setContentType(this.EXO_WEB_CONTENT);
+        uiCDForm.setContentType(EXO_WEB_CONTENT);
         uiCDForm.addNew(false);
         uiCDForm.resetProperties();
       } else {
-        UIApplication uiApp = this.getAncestorOfType(UIApplication.class) ;
+        UIApplication uiApp = getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.not-support", null)) ;
         context.addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return;
@@ -150,7 +150,7 @@ public class UIQuickCreationWizard extends UIBaseWizard {
       actions = new String[] {"ViewStep3", "Finish"};
       break;
     case STEP3:
-      actions = new String[] {"ViewStep4", "Finish"};
+      actions = new String[] {"Back","ViewStep4", "Finish"};
       break;
     case STEP4:
       actions = new String[] {"Back", "Finish"};

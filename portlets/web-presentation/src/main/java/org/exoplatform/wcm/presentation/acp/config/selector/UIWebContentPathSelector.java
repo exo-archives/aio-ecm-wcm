@@ -66,6 +66,7 @@ public class UIWebContentPathSelector extends UIBaseNodeTreeSelector {
     builder.setCurrentPortal(currentPortal);
     builder.setSharedPortal(sharedPortal);
     builder.setRootTreeNode(currentPortal.getParent());
+    provider.close();
   }
 
   /* (non-Javadoc)

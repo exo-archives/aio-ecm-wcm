@@ -19,8 +19,13 @@ package org.exoplatform.wcm.presentation.acp.config;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.jcr.Node;
+import javax.jcr.Session;
+
 import org.exoplatform.ecm.webui.selector.UISelectable;
 import org.exoplatform.ecm.webui.tree.selectmany.UICategoriesSelector;
+import org.exoplatform.services.cms.categories.CategoriesService;
+import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
@@ -37,24 +42,57 @@ import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 )
 
 public class UICategorizing extends UIContainer implements UISelectable {
-  
+
   final static String PATH_CATEGORY = "path".intern(); 
-  
+
+  private Node webContentNode = null;
+  private List<String> existedCategories = new ArrayList<String>();
+
+
   public UICategorizing() throws Exception {
-   UICategoriesSelector uiCategoriesSelector = addChild(UICategoriesSelector.class, null, null);
-//   uiCategoriesSelector.setExistedCategories(getExistedCategory());
-//   uiCategoriesSelector.setRootCategoryPath("");
-   uiCategoriesSelector.init();
+    UICategoriesSelector uiCategoriesSelector = addChild(UICategoriesSelector.class, null, null);
   }
-  
-  private List<String> getExistedCategory() {
-    // if node is in edit 
-    //get existed category
-    return new ArrayList<String>();
+
+  public void initUICategoriesSelector() throws Exception {
+    UICategoriesSelector uiCategoriesSelector = getChild(UICategoriesSelector.class);
+    uiCategoriesSelector.setExistedCategoryList(getExistedCategories());
+    uiCategoriesSelector.setSourceComponent(this,null);
+    uiCategoriesSelector.init();
   }
-  
-  
+
+  @SuppressWarnings("unchecked")
   public void doSelect(String name, Object value) throws Exception {
-    
+    CategoriesService categoriesService = getApplicationComponent(CategoriesService.class);
+    Node webContentNode = getWebContentNode();
+    Session session = webContentNode.getSession();
+    String repositoryName = ((ManageableRepository)session.getRepository()).getConfiguration().getName();
+    List<String> newCategoryPaths = (List<String>) value;
+    List<String> oldCategoryPaths = getExistedCategories();
+    List<String> tempCategoryPaths = new ArrayList<String>(oldCategoryPaths);
+    tempCategoryPaths.removeAll(newCategoryPaths);
+
+    for(String categoryPath: tempCategoryPaths) {
+      categoriesService.removeCategory(webContentNode, categoryPath, repositoryName);
+    }
+    newCategoryPaths.removeAll(oldCategoryPaths);
+    for (String categoryPath: newCategoryPaths) {
+      categoriesService.addCategory(webContentNode, categoryPath, repositoryName);
+    }
+  }
+
+  public List<String> getExistedCategories() {
+    return this.existedCategories;
+  }
+
+  public void setExistedCategories(List<String> existedCategories) {
+    this.existedCategories = existedCategories;
+  }
+
+  public Node getWebContentNode() {
+    return this.webContentNode;
+  }
+
+  public void setWebContentNode(Node webContentNode) {
+    this.webContentNode = webContentNode;
   }
 }

@@ -158,7 +158,12 @@ public class UIContentDialogForm extends UIBaseDialogForm {
     public void execute(Event<UIContentDialogForm> event) throws Exception {
       UIContentDialogForm dialogForm = event.getSource();
       List inputs = dialogForm.getChildren() ;
+      System.out.println("===============> object size: "+ inputs.size());
+      for(Object obj: inputs) {
+        System.out.println("======================> object is: " + obj.toString());
+      }
       Map inputProperties = DialogFormUtil.prepareMap(inputs, dialogForm.getInputProperties());
+      
       Node newNode = null;
       String nodeType;
       Node homeNode;
@@ -202,6 +207,8 @@ public class UIContentDialogForm extends UIBaseDialogForm {
       }
       dialogForm.savedNodeIdentifier = NodeIdentifier.make(newNode);
       UIQuickCreationWizard uiQuickWizard = dialogForm.getAncestorOfType(UIQuickCreationWizard.class);
+      UISocialInfo uiSocialInfo = uiQuickWizard.getChild(UISocialInfo.class);
+      uiSocialInfo.initUICategorizing();
       uiQuickWizard.viewStep(uiQuickWizard.getCurrentStep()+1);
     }
   }
