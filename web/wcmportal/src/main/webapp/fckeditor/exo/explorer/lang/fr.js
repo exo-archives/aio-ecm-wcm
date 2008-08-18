@@ -18,8 +18,9 @@ var KLang = {
 	
 	BtnCreate									: "Create",
 	BtnCancel									: "Cancel",
-	BtnUpload									: "Upload",
+	BtnUpload									: "Upload"
 	BtnRefresh									: "Refresh",
+	BtnUpload									: "Upload",
 	BtnSetting									: "Setting",
 	BtnHelp										: "Help",
 	BtnClose									: "Close",
@@ -29,5 +30,5 @@ var KLang = {
 	
 	LabelFolder									: "Folder",
 	LabelName									: "Name",
-	LNewFolder									: "New Folder"
+	LNewFolder									: "New Folder",
 }
