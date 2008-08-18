@@ -53,6 +53,7 @@ function getElementsByClassPath(root, path) {
 		} else { 
 			oSetting.style.display = 'none';
 		}
+		elementResize();
 	}
 
 	function openTree(obj) {

@@ -119,7 +119,9 @@
 				<div class="AddFormContainer" style="display: none;">
 					<div class="AddForm">
 						<div> <span userLanguage="KLang.LabelFolder"> Folder </span>: ${idShort}</div>
-						<span userLanguage="KLang.LNewFolder"> New folder </span> : <input name="fileName" type="text">
+						<div style="margin: 3px 0px 3px 0px">
+							<span userLanguage="KLang.LNewFolder"> New folder </span> : <input name="fileName" type="text" />
+						</div>	
 						<input name="hidden" type="hidden" value="${idShort}">
 						<table class="ActionContainer" align="center">
 							<tr>
@@ -213,8 +215,10 @@
 							</tr>
 							<tr class="UploadAction" style="display: none;">
 								<td colspan="2">
-									<span userLanguage="KLang.LabelName"> Name </span>:
-									<input type="text" name="fileName" style="width: 238px;" maxlength="128"/>
+									<div style="margin: 3px 0px 3px 0px">
+										<span userLanguage="KLang.LabelName"> Name </span>:
+										<input type="text" name="fileName" style="width: 238px;" maxlength="128"/>
+									</div>
 									<table class="ActionContainer" align="center">
 										<tr>
 											<td>
