@@ -183,7 +183,7 @@ a {
 	font-weight: bold;
 }
 
-.Workspace .SettingArea {
+.Workspace .Setting {
 	background-color: #F7F7F7;
 	border-top: 1px #B7B7B7 solid;
 	border-bottom: 1px #B7B7B7 solid;
@@ -192,7 +192,6 @@ a {
 
 .Setting .SettingTable {
 	text-align: center;
-	background-color: #F7F7F7;
 	margin-top: 10px;
 }
 
