@@ -157,11 +157,7 @@ public class UIContentDialogForm extends UIBaseDialogForm {
   static  public class SaveActionListener extends EventListener<UIContentDialogForm> {
     public void execute(Event<UIContentDialogForm> event) throws Exception {
       UIContentDialogForm dialogForm = event.getSource();
-      List inputs = dialogForm.getChildren() ;
-      System.out.println("===============> object size: "+ inputs.size());
-      for(Object obj: inputs) {
-        System.out.println("======================> object is: " + obj.toString());
-      }
+      List inputs = dialogForm.getChildren();
       Map inputProperties = DialogFormUtil.prepareMap(inputs, dialogForm.getInputProperties());
       
       Node newNode = null;
