@@ -23,8 +23,11 @@ import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
+import org.exoplatform.webui.event.Event;
+import org.exoplatform.webui.event.EventListener;
 
 /**
  * Created by The eXo Platform SAS
@@ -34,7 +37,10 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
  */
 
 @ComponentConfig(
-    lifecycle = UIApplicationLifecycle.class
+    lifecycle = UIApplicationLifecycle.class,
+    events = {
+      @EventConfig(listeners = UIAdvancedPresentationPortlet.QuickEditActionListener.class)
+    }
 )
 
 public class UIAdvancedPresentationPortlet extends UIPortletApplication {
@@ -68,4 +74,10 @@ public class UIAdvancedPresentationPortlet extends UIPortletApplication {
     super.processRender(app, context) ;
   }
 
+  public static class QuickEditActionListener extends EventListener<UIAdvancedPresentationPortlet> {
+    public void execute(Event<UIAdvancedPresentationPortlet> event) throws Exception {
+      PortletRequestContext context = (PortletRequestContext)event.getRequestContext();
+      context.setApplicationMode(PortletMode.EDIT);
+    }
+  }
 }
