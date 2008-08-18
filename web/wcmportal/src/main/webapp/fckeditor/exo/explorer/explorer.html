@@ -540,10 +540,10 @@
 			if (K.remove.space(sContent) != "") newTag.innerHTML = sContent;
 			else newTag.innerHTML = sLink;
 			
-			newTag.setAttribute("href", eXoPlugin.hostName + sLink);
+			newTag.setAttribute("href", sLink);
 		} else if (eXp.resourceType == "Image"){
 			var newTag = FCK.CreateElement("IMG");
-			newTag.setAttribute("src", eXoPlugin.hostName + sLink);
+			newTag.setAttribute("src", sLink);
 		}
 		window.close();
 	}
