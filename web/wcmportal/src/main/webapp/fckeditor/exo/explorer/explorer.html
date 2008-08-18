@@ -46,43 +46,43 @@
 					</div>
 					<div class="Setting" style="display: none;">
 						<div class="TitleBar" userLanguage="KLang.SettingTitle">Settings</div>
-						<div class="SettingArea">
-							<table class="SettingTable" align="center" cellpadding="0" cellspacing="0">
+						<div class="SettingTable">
+							<table  align="center" cellpadding="0" cellspacing="0">
 								<tr>
 									<td userLanguage="KLang.SetView">View: </td>
 									<td userLanguage="KLang.SetSort">Sorting: </td>
 								</tr>
 								<tr>
-								    <td><input type="radio" name="View"><span userLanguage="KLang.ViewThumbnail">Thumbnails</span></td>
+									<td><input type="radio" name="View"><span userLanguage="KLang.ViewThumbnail">Thumbnails</span></td>
 									<td><input type="radio" onclick="sort('name')" name="Sort"><span userLanguage="KLang.SortName">By File Name</span></td>
-			                    </tr>
+								</tr>
 								<tr>
-								    <td><input type="radio" name="View"><span userLanguage="KLang.ViewList">List</span></td>
+									<td><input type="radio" name="View"><span userLanguage="KLang.ViewList">List</span></td>
 									<td><input type="radio" onclick="sort('date')" name="Sort"><span userLanguage="KLang.SortDate">By Date</span></td>
-			                    </tr>
+								</tr>
 								<tr>
-								    <td/>
+									<td/>
 									<td><input type="radio" onclick="sort('size')" name="Sort"><span userLanguage="KLang.Sort_Size">By Size</span></td>
-			                    </tr>
-							</table>
-							<table align="center" class="ActionContainer">
-								<tr>
-									<td align="center">
-										<a href="javascript: void(0);" class="ActionButton" onclick="showSetting()">
-											<div class="ButtonLeft">
-												<div class="ButtonRight">
-													<div class="ButtonMiddle" userLanguage="KLang.BtnClose">
-														Close
-													</div>
-												</div>
-											</div>
-										</a>
-									</td>
 								</tr>
 							</table>
 						</div>
+						<table align="center" class="ActionContainer">
+							<tr>
+								<td align="center">
+									<a href="javascript: void(0);" class="ActionButton" onclick="showSetting()">
+										<div class="ButtonLeft">
+											<div class="ButtonRight">
+												<div class="ButtonMiddle" userLanguage="KLang.BtnClose">
+													Close
+												</div>
+											</div>
+										</div>
+									</a>
+								</td>
+							</tr>
+						</table>
 					</div>
-					<div class="DisplayArea"><span></span></div>	
+					<div class="DisplayArea"></div>	
 				</div>
 			</div>
 			
@@ -400,21 +400,21 @@
 	
 
 	function elementResize() {
+		
 		var oExplorer = K("explorer");
-		var oDocument = getElementsByClassPath(oExplorer, "Workspace/DisplayArea")[0];
+		var oDisplayArea = getElementsByClassPath(oExplorer, "Workspace/DisplayArea")[0];
 		var oStatus = K("statusBar");
-		oExplorer.style.height = K.get.windowHeight() - oStatus.offsetHeight + "px";
-
+		var windowHeight = K.get.windowHeight();
+		oExplorer.style.height = windowHeight - oStatus.offsetHeight + "px";
 		var oTreeTitle = getElementsByClassPath(oExplorer, "Navigation/MenuBar")[0];
 		var oTree = getElementsByClassPath(oExplorer, "Navigation/Tree")[0];
-		oTree.style.height = K.get.windowHeight() - (oStatus.offsetHeight + oTreeTitle.offsetHeight) + "px";
-		
+		oTree.style.height = windowHeight - (oStatus.offsetHeight + oTreeTitle.offsetHeight) + "px";
 		var oSettingTitle = getElementsByClassPath(oExplorer, "Workspace/Setting/TitleBar")[0];
 		var oSetting = getElementsByClassPath(oExplorer, "Workspace/Setting")[0];
 		if (oSetting.style.display == "none") {
-			oDocument.style.height = K.get.windowHeight() - 59 + "px";
+			oDisplayArea.style.height = windowHeight - 59 + "px";
 		} else {
-			oDocument.style.height = K.get.windowHeight() - (oSettingTitle.offsetHeight + oSetting.offsetHeight + oStatus.offsetHeight + 15) + "px";
+			oDisplayArea.style.height = windowHeight - (oSettingTitle.offsetHeight + oSetting.offsetHeight + oStatus.offsetHeight + 15) + "px";
 		}
 	}
 	

@@ -190,32 +190,32 @@ a {
 	padding-bottom: 10px;
 }
 
-.SettingArea .SettingTable {
+.Setting .SettingTable {
 	text-align: center;
 	background-color: #F7F7F7;
 	margin-top: 10px;
 }
 
-.SettingArea .SettingTable tr {
+.Setting .SettingTable tr {
 	text-align: left;
 }
 
-.SettingArea .SettingTable td {
+.Setting .SettingTable td {
 	width: 110px;
 	padding-left: 40px;
 	line-height: 23px;
 }
 
-.SettingArea .SettingTable input {
+.Setting .SettingTable input {
 	margin-right: 10px;
 }
 
-.SettingArea .SettingTable a {
+.Setting .SettingTable a {
 	color: #000000;
 	text-decoration: none;
 }
 
-.SettingArea .SettingTable a:hover{
+.Setting .SettingTable a:hover{
 	color: #058EE6;
 }
 
