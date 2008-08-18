@@ -108,7 +108,7 @@
 					<table class="DocumentTable" align="center" cellpadding="4">
 						<tr style="height: 23px;">
 							<td class="ItemName ${sType}">
-								<a title="${sURL}" href="javascript: void(0);" oncontextmenu="showContextMenu('ListItemOption', event, this)">${sName}</a>
+								<a title="${sURL}" href="javascript: void(0);" onclick="insertLink(this)" oncontextmenu="showContextMenu('ListItemOption', event, this)">${sName}</a>
 							</td>
 							<td class="ItemDate">${sDateCreated}</td>
 							<td class="ItemSize">${sSize} kB</td>
@@ -528,9 +528,10 @@
 		}
 	}
 	
-	function insertLink() {
+	function insertLink(element) {
 		var parrent = window.opener.window;
-		var sLink = K('contextMenu').select({where: "className == 'ContextMenu ListItemOption'"})[0].title;
+		if (element) var sLink = element.title;
+		else var sLink = K('contextMenu').select({where: "className == 'ContextMenu ListItemOption'"})[0].title;
 		var sContent = eXoPlugin.getContent();
 		if (parrent.setField) {
 			parrent.setField("inputURL", sLink);
@@ -539,10 +540,10 @@
 			if (K.remove.space(sContent) != "") newTag.innerHTML = sContent;
 			else newTag.innerHTML = sLink;
 			
-			newTag.setAttribute("href", eXoPlugin.hostName + "/" + sLink);
+			newTag.setAttribute("href", eXoPlugin.hostName + sLink);
 		} else if (eXp.resourceType == "Image"){
 			var newTag = FCK.CreateElement("IMG");
-			newTag.setAttribute("src", eXoPlugin.hostName + "/" + sLink);
+			newTag.setAttribute("src", eXoPlugin.hostName + sLink);
 		}
 		window.close();
 	}
