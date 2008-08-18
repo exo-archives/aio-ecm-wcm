@@ -36,3 +36,11 @@
 	padding-left: 200px;
 	padding-top: 15px;
 }
+
+.BannerQuickEdit{
+	background:url('images/QuickEdit.png') no-repeat scroll left top;
+	float:right;
+	height:50px;
+	padding-left:50px;
+	margin-top:-12px;
+}
