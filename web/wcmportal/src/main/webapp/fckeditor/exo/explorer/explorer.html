@@ -168,7 +168,7 @@
 										<html style="padding: 0px; margin: 0px;">
 											<body style="margin: 0px; padding: 0px; overflow: hidden;">
 												<form enctype="multipart/form-data" method="post" target="iTarget" style="width: 235px;">
-													<input type="file" name="file" />
+													<input type="file" name="file" class="file" />
 												</form>
 												<iframe name="iTarget" id="iTarget" style="display: none"></iframe>
 											</body>
@@ -245,7 +245,26 @@
 										</tr>
 									</table>
 								</td>
-							</tr>							
+							</tr>	
+							<tr class="CancelAction">
+								<td colspan="2">
+									<table class="ActionContainer" align="center">
+										<tr>
+											<td>
+												<a href="javascript: void(0);" class="ActionButton" style="margin-top: 35px">
+													<div class="ButtonLeft">
+														<div class="ButtonRight">
+															<div class="ButtonMiddle" userLanguage="KLang.BtnCancel" onclick="removeMask()">
+																Cancel
+															</div>
+														</div>
+													</div>
+												</a>
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
 						</table>
 					</div>
 				</div>
@@ -555,6 +574,5 @@
 		sOptions += ", height=" + FCKConfig.ScreenHeight;
 		if (sLink) window.open(sLink, "", sOptions);
 	}
-	
 	</script>
 </html>

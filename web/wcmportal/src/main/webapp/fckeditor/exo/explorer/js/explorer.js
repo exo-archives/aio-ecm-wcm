@@ -227,10 +227,11 @@ function getElementsByClassPath(root, path) {
 			document.write(iContent);
 			document.close();
 		}
-		K("Mask").add({
+		K.set.event({
+			element: K("Mask").show(),
 			event: "click",
 			listener: removeMask
-		}).show();
+		});
 	}
 	
 	function uploadFile() {
@@ -248,6 +249,8 @@ function getElementsByClassPath(root, path) {
 		uploadField.style.display = "none";
 		var UploadInfo = popupContainer.select({where: "className like 'UploadInfo%'"})[0];
 		UploadInfo.style.display = "";
+		var CancelAction = popupContainer.select({where: "className == 'CancelAction'"})[0];
+		CancelAction.style.display = "none";
 		K.set.timeout({
 			until: function() {return uploadFile.stopUpload},
 			method: function() {
@@ -295,16 +298,8 @@ function getElementsByClassPath(root, path) {
 		var param = eXp.buildParam("action=abort", "uploadId=" + uploadFile.id, "currentFolder=" + eXp.store.currentFolder, buildXParam());
 		eXp.sendRequest(connector, param);
 		uploadFile.stopUpload = true;
-		var oPopupContainer = K("PopupContainer");
-		K(oPopupContainer.select({where: "className like 'UploadInfo%'"})[0]).hide();
-		K(oPopupContainer.select({where: "className == 'UploadField'"})[0]).show();
-		var iFrame = oPopupContainer.select({where: "className == 'iFrameUpload'"})[0];
-		var iContent = K("iContentUpLoad").innerHTML;
-		with (iFrame.contentWindow) {
-			document.open();
-			document.write(iContent);
-			document.close();
-		}
+		removeMask();
+		showUploadForm();
 	};
 	
 	uploadFile.Cancel = function() {
@@ -318,10 +313,8 @@ function getElementsByClassPath(root, path) {
 		var connector = eXp.connector + eXp.command.controlUpload;
 		var param = eXp.buildParam("action=delete", "uploadId=" + uploadFile.id, "currentFolder=" + eXp.store.currentFolder, buildXParam());
 		eXp.sendRequest(connector, param);
-		var oPopupContainer = K("PopupContainer");
-		K(oPopupContainer.select({where: "className == 'UploadAction'"})[0]).hide();
-		K(oPopupContainer.select({where: "className like 'UploadInfo%'"})[0]).hide();
-		K(oPopupContainer.select({where: "className == 'UploadField'"})[0]).show();
+		removeMask();
+		showUploadForm();
 	};
 
 	uploadFile.Save = function() {
