@@ -1,6 +1,10 @@
 <div class="$uicomponent.id">
-	<div style="position: relative; ">
-		<a class="BannerQuickEdit" href="<%=uicomponent.event("QuickEdit")%>"></a>
+	<% if(uicomponent.isQuickEditable()) {%>
+	<div style="position: relative; height: 0px;">
+		<div style="position: absolute; right: 0px; top: 0px">
+			<a href="<%=uicomponent.event("QuickEdit")%>"><div class="BannerQuickEdit"><span></span></div></a>
+		</div>
 	</div>
+	<% } %>
 	<% uicomponent.renderChildren() %>
 </div>
