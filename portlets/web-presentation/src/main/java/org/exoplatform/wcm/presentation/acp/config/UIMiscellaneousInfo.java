@@ -16,6 +16,10 @@
  */
 package org.exoplatform.wcm.presentation.acp.config;
 
+import javax.portlet.PortletPreferences;
+
+import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.form.UIForm;
@@ -40,7 +44,14 @@ public class UIMiscellaneousInfo extends UIForm {
     addUIFormInput(new UIFormCheckBoxInput("ShowCategory", "ShowCategory", null));
     addUIFormInput(new UIFormCheckBoxInput("AllowVoting", "AllowVoting", null));
     addUIFormInput(new UIFormCheckBoxInput("AllowComment", "AllowComment", null));
+    PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+    PortletPreferences prefs = context.getRequest().getPreferences();
+    String quickEdit = prefs.getValue("ShowQuickEdit", null);
+    boolean isQuickEdit = Boolean.parseBoolean(quickEdit);
+    UIFormCheckBoxInput uiFormCheckBoxInput = new UIFormCheckBoxInput("ShowQuickEdit", "ShowQuickEdit", null);
+    uiFormCheckBoxInput.setChecked(isQuickEdit);
+    addUIFormInput(uiFormCheckBoxInput);
   }
-
-
 }
+
+

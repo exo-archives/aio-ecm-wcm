@@ -205,7 +205,7 @@ public class UIContentDialogForm extends UIBaseDialogForm {
       UIQuickCreationWizard uiQuickWizard = dialogForm.getAncestorOfType(UIQuickCreationWizard.class);
       UISocialInfo uiSocialInfo = uiQuickWizard.getChild(UISocialInfo.class);
       uiSocialInfo.initUICategorizing();
-      uiQuickWizard.viewStep(uiQuickWizard.getCurrentStep()+1);
+      uiQuickWizard.viewStep(2);
     }
   }
 }

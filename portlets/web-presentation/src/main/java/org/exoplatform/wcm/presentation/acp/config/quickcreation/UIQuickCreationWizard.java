@@ -67,7 +67,8 @@ import org.exoplatform.webui.event.EventListener;
         @EventConfig(listeners = UIQuickCreationWizard.ViewStep4ActionListener.class),
         @EventConfig(listeners = UIQuickCreationWizard.AbortActionListener.class),
         @EventConfig(listeners = UIQuickCreationWizard.BackActionListener.class),
-        @EventConfig(listeners = UIQuickCreationWizard.FinishActionListener.class)
+        @EventConfig(listeners = UIQuickCreationWizard.FinishActionListener.class),
+        @EventConfig(listeners = UIQuickCreationWizard.CompleteActionListener.class)
     }
 )
 
@@ -153,7 +154,7 @@ public class UIQuickCreationWizard extends UIBaseWizard {
       actions = new String[] {"Back","ViewStep4", "Finish"};
       break;
     case STEP4:
-      actions = new String[] {"Back", "Finish"};
+      actions = new String[] {"Back", "Complete"};
       break;
     default:
       break;
@@ -169,7 +170,17 @@ public class UIQuickCreationWizard extends UIBaseWizard {
 
   public static class ViewStep2ActionListener extends EventListener<UIQuickCreationWizard> {
     public void execute(Event<UIQuickCreationWizard> event) throws Exception {
-
+      UIQuickCreationWizard uiQuickWizard = event.getSource();
+      UIContentDialogForm contentDialogForm = uiQuickWizard
+      .getChild(UIContentDialogForm.class);
+      NodeIdentifier nodeIdentifier = contentDialogForm.getSavedNodeIdentifier();
+      uiQuickWizard.viewStep(2);
+      UIApplication uiApplication = uiQuickWizard.getAncestorOfType(UIApplication.class);
+      if(nodeIdentifier == null ) {
+        uiApplication.addMessage(new ApplicationMessage("UIQuickCreationWizard.msg.StepbyStep", null, ApplicationMessage.INFO));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
+        return;
+      }
     }
   }
 
@@ -177,6 +188,15 @@ public class UIQuickCreationWizard extends UIBaseWizard {
     public void execute(Event<UIQuickCreationWizard> event) throws Exception {
       UIQuickCreationWizard uiQuickWizard = event.getSource();
       uiQuickWizard.viewStep(3);
+      UIContentDialogForm contentDialogForm = uiQuickWizard
+      .getChild(UIContentDialogForm.class);
+      NodeIdentifier nodeIdentifier = contentDialogForm.getSavedNodeIdentifier();
+      UIApplication uiApplication = uiQuickWizard.getAncestorOfType(UIApplication.class);
+      if(nodeIdentifier == null ) {
+        uiApplication.addMessage(new ApplicationMessage("UIQuickCreationWizard.msg.StepbyStep", null, ApplicationMessage.INFO));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
+        return;
+      }
     }
   }
 
@@ -184,6 +204,15 @@ public class UIQuickCreationWizard extends UIBaseWizard {
     public void execute(Event<UIQuickCreationWizard> event) throws Exception {
       UIQuickCreationWizard uiQuickWizard = event.getSource();
       uiQuickWizard.viewStep(4);
+      UIContentDialogForm contentDialogForm = uiQuickWizard
+      .getChild(UIContentDialogForm.class);
+      NodeIdentifier nodeIdentifier = contentDialogForm.getSavedNodeIdentifier();
+      UIApplication uiApplication = uiQuickWizard.getAncestorOfType(UIApplication.class);
+      if(nodeIdentifier == null) {
+        uiApplication.addMessage(new ApplicationMessage("UIQuickCreationWizard.msg.StepbyStep", null, ApplicationMessage.INFO));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
+        return;
+      }
     }
   }
 
@@ -199,6 +228,24 @@ public class UIQuickCreationWizard extends UIBaseWizard {
       prefs.setValue(UIAdvancedPresentationPortlet.UUID, identifier.getUUID()) ;
       prefs.store() ;      
       context.setApplicationMode(PortletMode.VIEW) ;
+    }
+  }
+
+  public static class CompleteActionListener extends EventListener<UIQuickCreationWizard> {
+    public void execute(Event<UIQuickCreationWizard> event) throws Exception {
+      UIQuickCreationWizard uiQuickCreationWizard = event.getSource();
+      UIMiscellaneousInfo uiMiscellaneousInfo = uiQuickCreationWizard.getChild(UIMiscellaneousInfo.class);
+      boolean quickEdit = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowQuickEdit").isChecked();
+      UIContentDialogForm uiContentDialogForm = uiQuickCreationWizard.getChild(UIContentDialogForm.class);
+      NodeIdentifier identifier = uiContentDialogForm.getSavedNodeIdentifier();
+      PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
+      PortletPreferences prefs = context.getRequest().getPreferences();
+      prefs.setValue(UIAdvancedPresentationPortlet.REPOSITORY, identifier.getRepository());
+      prefs.setValue(UIAdvancedPresentationPortlet.WORKSPACE, identifier.getWorkspace());
+      prefs.setValue(UIAdvancedPresentationPortlet.UUID, identifier.getUUID());
+      prefs.setValue("ShowQuickEdit", String.valueOf(quickEdit));
+      prefs.store();      
+      context.setApplicationMode(PortletMode.VIEW);
     }
   }
 }
