@@ -1,0 +1,78 @@
+<%
+	import org.exoplatform.portal.application.PortalRequestContext;
+	import org.exoplatform.portal.webui.util.Util;
+	
+	def prContext = _ctx.getRequestContext().getParentAppRequestContext();
+	String signInAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ShowLoginForm', true)) ;" ;
+	String changeLanguageAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ChangeLanguage', true));" ;
+	String portletId = uicomponent.getId() ;
+	
+	String portalName = Util.getUIPortal().getName() ;
+  portalName = URLEncoder.encode(portalName, "UTF-8") ;
+  String signOutAction = prContext.getRequestContextPath() + "/public/" + portalName + "/" ;
+%>
+<style>
+	.LoginContent {
+		position: absolute;
+		margin-top: 37px;
+		margin-left: 1000px;
+	}
+	
+	.LoginContent .LoginInfo {
+		float: right;
+		line-height: 31px;
+	}
+	
+	.LoginContent .LoginInfo .Welcome {
+		padding-top: 5px;
+	}
+	
+	.LoginContent .LoginInfo span {
+		font-weight: bold;
+		color: #0066FF;
+	}
+	
+	.LoginContent .LoginSeperatorLine {
+		float: right;
+		width: 2px;
+		background: url(images/SeperatorLine.gif) no-repeat;
+		margin: 7px 20px 0px 20px;
+		height: 20px;
+	}
+	
+	.LoginContent a {
+		display: block;
+		text-decoration: none;
+	}
+	
+	.LoginContent .LogoutIcon {
+		cursor: pointer;
+		font-weight: bold;
+		padding-left: 26px;
+		background: url(images/LogoutIcon.png) no-repeat center left;
+		color: #0066FF;
+	}
+	
+	.LoginContent .SettingLanguage {
+	  background: url(images/LanguageIcon.gif) no-repeat left center;
+	  padding-left: 26px;
+	  cursor: pointer;
+	  font-weight: bold;
+	  float: right;
+	  line-height: 31px;
+	  color: #0066FF;
+	}
+</style>
+<div class="LoginContent">
+	<% if(prContext.getAccessPath() == PortalRequestContext.PRIVATE_ACCESS) { %>
+		<a class="LoginInfo LogoutIcon" title="<%=_ctx.appRes("UILogged.action.signout")%>" onclick="eXo.portal.logout(); location.href='$signOutAction'"><%=_ctx.appRes("UILogged.action.signout")%></a>
+		<div class="LoginSeperatorLine"><span></span></div>
+		<div class="LoginInfo Welcome"><%=_ctx.appRes("UILogged.note.loggedUser")%>: <span><%=prContext.getRemoteUser();%> </span></div>
+		<div style="clear: right"><span></span></div>
+	<% } else { %>
+		<a class="LoginInfo LogoutIcon" title="<%=_ctx.appRes("UILoginForm.label.Signin")%>" onclick="$signInAction"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>
+		<div class="LoginSeperatorLine"><span></span></div>
+		<a class="SettingLanguage" onclick="$changeLanguageAction"><%=_ctx.appRes("UIChangeLanguage.title.LanguageSetting")%></a>
+		<div style="clear: right"><span></span></div>
+	<% } %>
+</div>

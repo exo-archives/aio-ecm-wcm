@@ -1,0 +1,41 @@
+.Banner {
+	background: #d8d8d8 url(images/DefaultBackground.png) repeat-x;
+	border-bottom: 1px solid #99999a;
+}
+
+.Banner .Logo {
+	width: 200px; 
+	float: left;
+	padding-top: 4px;
+}
+
+.Banner .MiddleBanner {
+	height: 71px;
+	margin: 0px 0px 0px 200px;
+}
+
+.Banner .MiddleBanner .BannerTitle {
+	font-weight: bold; 
+	font-size: 16px;
+	color: #666666;	
+	letter-spacing: 0.2em;
+	font-variant: small-caps;
+	height: 40px;	
+	line-height: 40px;
+	padding-right: 160px;
+}
+
+.Banner .LeftLogin {
+	background: url(images/LeftLoginLeft.gif) no-repeat top left;
+	padding-left: 30px;
+}
+
+.Banner .RightLogin {
+	background: url(images/RightLoginLeft.gif) no-repeat top right;
+	padding-right: 28px;
+} 
+
+.Banner .CenterLogin {
+	background: url(images/CenterLogin.gif) repeat-x;
+	height: 31px;
+}
