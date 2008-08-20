@@ -56,7 +56,7 @@ public class UIFooterViewModeContainer extends UIContainer {
     WebContributionService contributionService = getApplicationComponent(WebContributionService.class) ;
     String userId = Util.getPortalRequestContext().getRemoteUser();
     boolean displayQuickEdit = contributionService.hasContributionPermission(userId);    
-    return (isQuickEdit & displayQuickEdit);    
+    return (isQuickEdit && displayQuickEdit);    
   }
 
   public static class QuickEditActionListener extends EventListener<UIFooterViewModeContainer> {
