@@ -17,7 +17,10 @@
 package org.exoplatform.wcm.presentation.acp;
 
 import javax.portlet.PortletMode;
+import javax.portlet.PortletPreferences;
 
+import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.wcm.contribution.WebContributionService;
 import org.exoplatform.wcm.presentation.acp.config.UIPortletConfig;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -72,6 +75,17 @@ public class UIAdvancedPresentationPortlet extends UIPortletApplication {
       mode_ = newMode ;
     }
     super.processRender(app, context) ;
+  }
+  
+  public boolean isQuickEditable() throws Exception {
+    PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+    PortletPreferences prefs = context.getRequest().getPreferences();
+    String quickEdit = prefs.getValue("ShowQuickEdit", null);
+    boolean isQuickEdit = Boolean.parseBoolean(quickEdit);
+    WebContributionService webContributionService = getApplicationComponent(WebContributionService.class);
+    String userID = Util.getPortalRequestContext().getRemoteUser();
+    boolean displayQuickEdit = webContributionService.hasContributionPermission(userID);
+    return (isQuickEdit && displayQuickEdit);
   }
 
   public static class QuickEditActionListener extends EventListener<UIAdvancedPresentationPortlet> {

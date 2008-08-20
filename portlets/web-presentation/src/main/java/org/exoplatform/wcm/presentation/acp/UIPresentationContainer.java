@@ -51,12 +51,12 @@ public class UIPresentationContainer extends UIContainer{
 
   public boolean isQuickEditable() throws Exception {
     PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
-    String quickEdit = pContext.getRequest().getPreferences().getValue("QuickEdit", "");
+    String quickEdit = pContext.getRequest().getPreferences().getValue("ShowQuickEdit", "");
     Boolean isQuickEdit  = Boolean.parseBoolean(quickEdit); 
     WebContributionService contributionService = getApplicationComponent(WebContributionService.class) ;
     String userId = Util.getPortalRequestContext().getRemoteUser();
     Boolean displayQuickEdit = contributionService.hasContributionPermission(userId);    
-    return (isQuickEdit & displayQuickEdit);    
+    return (isQuickEdit && displayQuickEdit);    
   }
 
   public static class QuickEditActionListener extends EventListener<UIPresentation>{   
