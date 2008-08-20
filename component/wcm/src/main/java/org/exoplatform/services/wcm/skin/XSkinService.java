@@ -25,9 +25,8 @@ import javax.jcr.Session;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
-import javax.servlet.ServletContext;
 
-import org.exoplatform.container.ExoContainerContext;
+import org.apache.commons.lang.StringUtils;
 import org.exoplatform.portal.webui.skin.SkinConfig;
 import org.exoplatform.portal.webui.skin.SkinService;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -40,9 +39,8 @@ import org.picocontainer.Startable;
  * Created by The eXo Platform SAS Author : Hoa.Pham hoa.pham@exoplatform.com
  * Apr 9, 2008
  */
-public class XSkinService implements Startable {  
-  final private String WEB_CONTENT_SKIN = "eXoWebContentSkin:".intern();
-
+public class XSkinService implements Startable {    
+  private static String SKIN_PATH_REGEXP = "/portal/css/jcr/(.*)/(.*)/Stylesheet.css";
   private SkinService skinService ;   
   private RepositoryService repositoryService ;
   private LivePortalManagerService livePortalManagerService;  
@@ -99,48 +97,64 @@ public class XSkinService implements Startable {
    * @throws Exception the exception
    */
   public void merge(String repository,String workspace,String path) throws Exception {        
-    SessionProvider sessionProvider = SessionProvider.createSystemProvider();
-    for(String portalPath: livePortalManagerService.getLivePortalsPath()) {
-      if(path.startsWith(portalPath)) {
-        String portalName = livePortalManagerService.getPortalNameByPath(portalPath);
-        Node portal = livePortalManagerService.getLivePortal(portalName,sessionProvider);
-      //Add same eXoWebContentSkin for all skin in portal
-        for(Iterator<String> iterator= skinService.getAvailableSkins();iterator.hasNext();) {
-          addPortalSkin(portal,iterator.next()); 
-        }
+    SessionProvider sessionProvider = SessionProvider.createSystemProvider();    
+    Node sharedPortal = livePortalManagerService.getLiveSharedPortal(sessionProvider);
+    if(path.startsWith(sharedPortal.getPath())) {
+      for(Iterator<String> iterator= skinService.getAvailableSkins();iterator.hasNext();) {
+        addSharedPortalSkin(sharedPortal,iterator.next()); 
       }
-    }
+    }else {
+      for(String portalPath: livePortalManagerService.getLivePortalsPath()) {
+        if(path.startsWith(portalPath)) {
+          String portalName = livePortalManagerService.getPortalNameByPath(portalPath);
+          Node portal = livePortalManagerService.getLivePortal(portalName,sessionProvider);
+          for(Iterator<String> iterator= skinService.getAvailableSkins();iterator.hasNext();) {
+            addPortalSkin(portal,iterator.next()); 
+          }
+        } 
+      }
+    }    
     sessionProvider.close();
   }
-
-  /**
-   * Gets the css path of given portalName and skin name
-   * 
-   * @param portalName the portal name
-   * @param skinName the skin name
-   * @return the skin path
-   */
-  public String getPortalContentSkinPath(String portalName,String skinName) {
-    String skinModule = WEB_CONTENT_SKIN.concat(portalName);
-    for(SkinConfig skinConfig: skinService.getPortalSkins(skinName)){
+  
+  public String getPortalSkin(String requestURI) {    
+    if(!requestURI.matches(SKIN_PATH_REGEXP)) return null;       
+    String[] elements = requestURI.split("/");
+    String portalName = elements[4];
+    String skinName = elements[5];
+    String skinModule = portalName;
+    //get css for shared portal if the portalName is shared Portal
+    for(SkinConfig skinConfig: skinService.getPortalSkins(skinName)) {
       if(skinConfig.getModule().equals(skinModule)) {
-        return skinConfig.getCSSPath();
+        return skinService.getMergedCSS(skinConfig.getCSSPath());
       }
     }
-    return null;
-  }   
+    //get merged css for portal
+    SkinConfig skinConfig = skinService.getSkin(portalName,skinName);
+    if(skinConfig != null) {
+      return skinService.getMergedCSS(skinConfig.getCSSPath());
+    }
+    return null;    
+  }
+
+  private void addSharedPortalSkin(Node portal,String skinName) throws Exception {    
+    String statement= "select * from exo:cssFile where jcr:path like '" 
+      + portal.getPath()+"/%' and exo:active='true' and exo:sharedCSS='true' order by exo:priority DESC ";
+    String skinCSS = queryCSSData(portal,statement);    
+    if(skinCSS == null || skinCSS.length() == 0) return;
+    String skinPath = StringUtils.replaceOnce(SKIN_PATH_REGEXP,"(.*)",portal.getName());
+    skinPath = StringUtils.replaceOnce(skinPath,"(.*)",skinName);
+    skinService.addPortalSkin(portal.getName(),skinName,skinPath,skinCSS);    
+  }  
 
   private void addPortalSkin(Node portal,String skinName) throws Exception {    
     String statement= "select * from exo:cssFile where jcr:path like '" 
       + portal.getPath()+"/%' and exo:active='true' and exo:sharedCSS='true' order by exo:priority DESC ";
-    String skinCSS = queryCSSData(portal,statement);
+    String skinCSS = queryCSSData(portal,statement);    
     if(skinCSS == null || skinCSS.length() == 0) return;
-    //this skin path use for rest service to get portal css
-    String skinPath = "/portal/rest/resources/" + portal.getName() + "/css/Stylesheet.css";    
-    String skinModule = WEB_CONTENT_SKIN.concat(portal.getName());
-    ServletContext servletContext = 
-      (ServletContext)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(ServletContext.class);    
-    skinService.addPortalSkin(skinModule,skinName,skinPath,servletContext,skinCSS);   
+    String skinPath = StringUtils.replaceOnce(SKIN_PATH_REGEXP,"(.*)",portal.getName());
+    skinPath = StringUtils.replaceOnce(skinPath,"(.*)",skinName);            
+    skinService.addSkin(portal.getName(), skinName, skinPath, skinCSS);   
   }
 
   private String queryCSSData(Node home,String statement) throws Exception {
@@ -160,18 +174,24 @@ public class XSkinService implements Startable {
    * @see org.picocontainer.Startable#start()
    */
   public void start() {    
-    SessionProvider provider = SessionProvider.createSystemProvider();
+    SessionProvider sessionProvider = SessionProvider.createSystemProvider();
     try {
-      List<Node> livePortals = livePortalManagerService.getLivePortals(provider);
-      for(Node portal:livePortals) {
-        //Add same eXoWebContentSkin for all skin in portal
+      Node sharedPortal = livePortalManagerService.getLiveSharedPortal(sessionProvider);      
+      //Add same portal css for all skins
+      for(Iterator<String> iterator= skinService.getAvailableSkins();iterator.hasNext();) {
+        String skinName = iterator.next();
+        addSharedPortalSkin(sharedPortal,skinName);       
+      }
+      List<Node> livePortals = livePortalManagerService.getLivePortals(sessionProvider);
+      for(Node portal: livePortals) {
         for(Iterator<String> iterator= skinService.getAvailableSkins();iterator.hasNext();) {
-          addPortalSkin(portal,iterator.next()); 
-        }        
+          String skinName = iterator.next();                   
+          addPortalSkin(portal,skinName);          
+        }
       }
     }catch (Exception e) {
     }finally {
-      provider.close();
+      sessionProvider.close();
     }
   }
 
