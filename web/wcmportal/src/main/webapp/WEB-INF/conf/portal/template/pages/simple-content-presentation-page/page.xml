@@ -5,7 +5,7 @@
   <name></name>
   <container template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
     <application>
-      <instance-id>/web-presentation/SimplePresentationPortlet</instance-id>
+      <instance-id>/web-presentation/AdvancedPresentationPortlet</instance-id>
       <title>Presentation</title>
       <show-info-bar>true</show-info-bar>
       <show-application-state>true</show-application-state>    

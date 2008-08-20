@@ -36,7 +36,7 @@
   <!-- ================================================================== -->
   <filter>
     <filter-name>ResourceRequestFilter</filter-name>
-    <filter-class>org.exoplatform.portal.application.ResourceRequestFilter</filter-class>
+    <filter-class>org.exoplatform.services.wcm.portal.JCRResourceRequestFilter</filter-class>
   </filter>
 
   <filter>
