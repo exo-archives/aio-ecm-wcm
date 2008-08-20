@@ -16,10 +16,10 @@
  */
 package org.exoplatform.wcm.web.banner;
 
-import javax.jcr.Session;
+import javax.jcr.Node;
 import javax.portlet.PortletRequest;
 
-import org.exoplatform.ecm.resolver.NTFileResourceResolver;
+import org.exoplatform.dms.application.StringResourceResolver;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -42,13 +42,13 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 )
 public class UIBannerViewMode extends UIComponent {
 
-  private final String DEFAULT_TEMPLATE = "app:/groovy/banner/webui/UIBannerPortlet.gtmpl".intern();
+  private final String DEFAULT_HTML = "app:/groovy/banner/webui/UIBannerPortlet.gtmpl".intern();
   private PortletRequestContext portletRequestContext = null;
   private PortletRequest portletRequest = null;
   private String repository = null;
   private String workspace = null;
   private String nodeUUID = null;
-  
+
   public UIBannerViewMode() throws Exception {
     portletRequestContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     portletRequest = portletRequestContext.getRequest();
@@ -57,31 +57,34 @@ public class UIBannerViewMode extends UIComponent {
     nodeUUID = portletRequest.getPreferences().getValue("nodeUUID", null);
   }
 
-  public String getTemplate() {
-    if(isUseJCRTemplate())
-      return "jcr:" + nodeUUID;
-    return DEFAULT_TEMPLATE; 
+  public String getTemplate() {  
+    return DEFAULT_HTML; 
   }
 
   public ResourceResolver getTemplateResourceResolver(WebuiRequestContext context, String template) {
-    if(isUseJCRTemplate()) {
-      return new NTFileResourceResolver(repository, workspace);
-    }
+    String bannerData = loadJCRBanner();
+    if(bannerData != null) {
+      return new StringResourceResolver(bannerData);
+    }    
     return super.getTemplateResourceResolver(context, template);
   }
-  
-  private boolean isUseJCRTemplate() {
+
+  private String loadJCRBanner() {
     if (repository != null && workspace != null && nodeUUID != null) {
       try {
         RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
-        SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
+        // need use session provider if enable permission for banner
+        SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
         ManageableRepository manageableRepository = (ManageableRepository)repositoryService.getRepository(repository);
-        Session session = sessionProvider.getSession(workspace, manageableRepository);
-        session.getNodeByUUID(nodeUUID);
-        sessionProvider.close();
-        return true;
+        Node bannerWebContent = sessionProvider.getSession(workspace, manageableRepository).getNodeByUUID(nodeUUID);
+        String bannerCSS = bannerWebContent.getNode("css").getNode("default.css").getNode("jcr:content").getProperty("jcr:data").getString();
+        String bannerHTML = bannerWebContent.getNode("default.html").getNode("jcr:content").getProperty("jcr:data").getString();
+        String bannerAccess = bannerWebContent.getNode("documents").getNode("access.gtmpl").getNode("jcr:content").getProperty("jcr:data").getString();
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<style>").append(bannerCSS).append("</style>").append(bannerAccess).append(bannerHTML);
+        return buffer.toString();
       } catch (Exception e) {}
-    }
-    return false;
+    }    
+    return null;
   }  
 }
