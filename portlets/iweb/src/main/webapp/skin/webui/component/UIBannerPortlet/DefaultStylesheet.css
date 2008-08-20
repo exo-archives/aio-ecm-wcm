@@ -40,26 +40,27 @@
 	height: 31px;
 } 
 
-.UIBannerViewMode .CenterLogin .LoginContent {
-	padding-top: 5px;
+.LoginContent {
+	position: absolute;
+	margin-top: -32px;
+	margin-left: 1000px;
 }
 
-.UIBannerViewMode .CenterLogin .LoginInfo {
+.LoginContent .LoginInfo {
 	float: right;
 	line-height: 31px;
 }
 
-.UIBannerViewMode .CenterLogin .LoginInfo .Welcome {
+.LoginContent .LoginInfo .Welcome {
 	padding-top: 5px;
 }
 
-.UIBannerViewMode .CenterLogin .LoginInfo span {
+.LoginContent .LoginInfo span {
 	font-weight: bold;
 	color: #0066FF;
-
 }
 
-.UIBannerViewMode .CenterLogin .LoginSeperatorLine {
+.LoginContent .LoginSeperatorLine {
 	float: right;
 	width: 2px;
 	background: url(DefaultSkin/background/SeperatorLine.gif) no-repeat;
@@ -67,12 +68,12 @@
 	height: 20px;
 }
 
-.UIBannerViewMode .CenterLogin a {
+.LoginContent a {
 	display: block;
 	text-decoration: none;
 }
 
-.UIBannerViewMode .CenterLogin .LogoutIcon {
+.LoginContent .LogoutIcon {
 	cursor: pointer;
 	font-weight: bold;
 	padding-left: 26px;
@@ -80,7 +81,7 @@
 	color: #0066FF;
 }
 
-.UIBannerViewMode .CenterLogin .SettingLanguage {
+.LoginContent .SettingLanguage {
   background: url(DefaultSkin/background/LanguageIcon.gif) no-repeat left center;
   padding-left: 26px;
   cursor: pointer;
@@ -90,11 +91,10 @@
   color: #0066FF;
 }
 
-.UIBannerPortlet .UIFormGrid td.FieldComponent textarea {
-	border:1px solid gray;
+.UIBannerPortlet .UITabContent textarea {
 	font-size:11px;
-	height: auto;
-	width: auto;
+	height: 200px;
+	width: 500px;
 }
 
 .BannerQuickEdit{
