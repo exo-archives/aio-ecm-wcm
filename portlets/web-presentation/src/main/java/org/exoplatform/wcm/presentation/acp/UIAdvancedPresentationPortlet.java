@@ -19,6 +19,10 @@ package org.exoplatform.wcm.presentation.acp;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
+import org.exoplatform.portal.config.DataStorage;
+import org.exoplatform.portal.config.UserACL;
+import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.wcm.contribution.WebContributionService;
 import org.exoplatform.wcm.presentation.acp.config.UIPortletConfig;
@@ -82,9 +86,12 @@ public class UIAdvancedPresentationPortlet extends UIPortletApplication {
     PortletPreferences prefs = context.getRequest().getPreferences();
     String quickEdit = prefs.getValue("ShowQuickEdit", null);
     boolean isQuickEdit = Boolean.parseBoolean(quickEdit);
-    WebContributionService webContributionService = getApplicationComponent(WebContributionService.class);
-    String userID = Util.getPortalRequestContext().getRemoteUser();
-    boolean displayQuickEdit = webContributionService.hasContributionPermission(userID);
+    String portalName = Util.getUIPortal().getName();
+    String userId = context.getRemoteUser();
+    DataStorage dataStorage = getApplicationComponent(DataStorage.class);
+    PortalConfig portalConfig = dataStorage.getPortalConfig(portalName);
+    UserACL userACL = getApplicationComponent(UserACL.class);
+    boolean displayQuickEdit = userACL.hasEditPermission(portalConfig, userId);
     return (isQuickEdit && displayQuickEdit);
   }
 

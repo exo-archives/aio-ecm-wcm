@@ -89,7 +89,7 @@ public class UIPresentation extends UIBaseNodePresentation {
       getNode() ;
     } catch (ItemNotFoundException e) {
       Writer writer = context.getWriter() ;
-      writer.write("<div>") ;
+      writer.write("<div style=\"height: 55px; font-size: 13px; text-align: center; padding-top: 10px;\">") ;
       writer.write("<span>") ;
       writer.write(context.getApplicationResourceBundle().getString("UIMessageBoard.msg.content-not-found")) ;
       writer.write("</span>") ;
