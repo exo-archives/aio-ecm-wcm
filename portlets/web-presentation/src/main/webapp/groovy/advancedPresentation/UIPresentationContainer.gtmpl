@@ -1,6 +1,9 @@
 <div class="$uicomponent.id">
-	<% if(uicomponent.isQuickEditable()) {%>
-	<div style="position: relative; height: 0px;">
+	<%
+		def portletId = uicomponent.getPortletId();
+		def quickEditingBlockId = uicomponent.getPortletId() + "-QuickEditingBlock";
+	  if(uicomponent.isQuickEditable()) {%>
+	<div style="position: relative; height: 0px;" id="<%=quickEditingBlockId%>">
 		<div style="position: absolute; right: 0px; top: 0px">
 			<a href="<%=uicomponent.event("QuickEdit")%>"><div class="BannerQuickEdit"><span></span></div></a>
 		</div>
@@ -8,3 +11,11 @@
 	<% } %>
 	<% uicomponent.renderChildren() %>
 </div>
+<script type="text/javascript">
+	(function() {
+		var presentation = document.getElementById('<%= uicomponent.getPortletId() %>');
+		var parentNode = presentation.parentNode;
+		var quickEditingBlock = document.getElementById('<%=quickEditingBlockId%>');
+		parentNode.insertBefore(quickEditingBlock, presentation);
+	})();
+</script>
