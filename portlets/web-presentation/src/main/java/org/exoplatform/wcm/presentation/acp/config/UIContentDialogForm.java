@@ -73,9 +73,18 @@ public class UIContentDialogForm extends UIBaseDialogForm {
   private JCRResourceResolver resourceResolver;
   private NodeLocation storedLocation;
   protected NodeIdentifier savedNodeIdentifier;
+  protected Node webContent;
 
   public UIContentDialogForm() throws Exception {
     setActions(ACTIONS);
+  }
+  
+  protected Node getWebContent () {
+    return webContent;
+  }
+  
+  protected void setWebContent(Node node) {
+    webContent = node;
   }
 
   public void setStoredLocation(NodeLocation location) {
@@ -202,6 +211,7 @@ public class UIContentDialogForm extends UIBaseDialogForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
       }
       dialogForm.savedNodeIdentifier = NodeIdentifier.make(newNode);
+      dialogForm.setWebContent(newNode);
       UIQuickCreationWizard uiQuickWizard = dialogForm.getAncestorOfType(UIQuickCreationWizard.class);
       UISocialInfo uiSocialInfo = uiQuickWizard.getChild(UISocialInfo.class);
       uiSocialInfo.initUICategorizing();

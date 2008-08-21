@@ -39,6 +39,7 @@ import org.exoplatform.wcm.presentation.acp.UIAdvancedPresentationPortlet;
 import org.exoplatform.wcm.presentation.acp.config.UIBaseWizard;
 import org.exoplatform.wcm.presentation.acp.config.UIContentDialogForm;
 import org.exoplatform.wcm.presentation.acp.config.UIMiscellaneousInfo;
+import org.exoplatform.wcm.presentation.acp.config.UIPermissionManager;
 import org.exoplatform.wcm.presentation.acp.config.UIPermissionSetting;
 import org.exoplatform.wcm.presentation.acp.config.UIPortletConfig;
 import org.exoplatform.wcm.presentation.acp.config.UISocialInfo;
@@ -77,7 +78,7 @@ public class UIQuickCreationWizard extends UIBaseWizard {
   public UIQuickCreationWizard() throws Exception {
     addChild(UIContentDialogForm.class,null,null).setRendered(false);
     addChild(UISocialInfo.class, null, null).setRendered(false);
-    addChild(UIPermissionSetting.class,null,null).setRendered(false);
+    addChild(UIPermissionManager.class,null,null).setRendered(false);    
     addChild(UIMiscellaneousInfo.class, null, null).setRendered(false);
     setNumberSteps(4);
   }

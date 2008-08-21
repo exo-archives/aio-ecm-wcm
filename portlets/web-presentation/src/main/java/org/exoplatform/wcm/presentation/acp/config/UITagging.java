@@ -37,9 +37,9 @@ import org.exoplatform.webui.form.UIFormStringInput;
 
 /**
  * Created by The eXo Platform SAS
- * Author : DANG TAN DUNG
- *          dzungdev@gmail.com
- * May 28, 2008  
+ * Author : Anh Do Ngoc 
+ *          anh.do@exoplatform.com
+ * Aug 13, 2008  
  */
 
 @ComponentConfig(
@@ -49,8 +49,8 @@ import org.exoplatform.webui.form.UIFormStringInput;
   }
 )
   public class UITagging extends UIForm {
+  
   final static public String TAG_NAMES       = "TagNames";
-
   final static public String LINKED_TAGS     = "LinkedTags";
 
   public UITagging() throws Exception {
@@ -68,17 +68,11 @@ import org.exoplatform.webui.form.UIFormStringInput;
       .getAncestorOfType(UIQuickCreationWizard.class);
       UIContentDialogForm contentDialogForm = quickCreationWizard
       .getChild(UIContentDialogForm.class);
-      String webContentUUID = contentDialogForm.savedNodeIdentifier.getUUID();
+      Node webContent = contentDialogForm.getWebContent();      
       RepositoryService repositoryService = taggingForm
       .getApplicationComponent(RepositoryService.class);
       ManageableRepository manageableRepository = repositoryService.getCurrentRepository();
-
-      String workspace = manageableRepository.getConfiguration().getDefaultWorkspaceName();
-      String repository = manageableRepository.getConfiguration().getName();
-      SessionProvider sessionProvider = SessionProvider.createSystemProvider();
-      Session session = sessionProvider.getSession(workspace, manageableRepository);
-      Node webContent = session.getNodeByUUID(webContentUUID);
-
+      String repository = manageableRepository.getConfiguration().getName();      
       FolksonomyService folksonomyService = taggingForm
       .getApplicationComponent(FolksonomyService.class);
       UIApplication uiApp = taggingForm.getAncestorOfType(UIApplication.class);
