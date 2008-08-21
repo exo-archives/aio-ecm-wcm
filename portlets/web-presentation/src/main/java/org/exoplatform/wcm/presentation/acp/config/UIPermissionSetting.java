@@ -88,7 +88,7 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
    * @throws Exception the exception
    */
   public UIPermissionSetting() throws Exception {
-    UIFormInputSetWithAction permissionInputSet = new UIFormInputSetWithAction(USERS_INPUTSET);
+    UIFormInputSetWithAction permissionInputSet = new UIFormInputSetWithAction(USERS_INPUTSET);       
     UIFormStringInput formStringInput = new UIFormStringInput(USERS_STRINGINPUT, USERS_STRINGINPUT,
         null);
     formStringInput.addValidator(MandatoryValidator.class);
