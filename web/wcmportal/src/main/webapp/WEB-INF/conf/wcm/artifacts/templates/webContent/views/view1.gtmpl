@@ -20,11 +20,12 @@
   
   TOCGeneratorService tocService = uicomponent.getApplicationComponent(TOCGeneratorService.class);
 	String tocContent = tocService.getTOC(htmlFile);
-	
+	if((css != null) && (!css.equals(""))) {
 %>
-<style><%=css%></style>
+		<style><%=css%></style>
 <%
-	if(tocContent != null) {
+	}
+	if((tocContent != null) && (tocContent.length() > 0)) {
 %>
 		<div class='toc'>
 			<%= tocContent%>
@@ -33,4 +34,6 @@
 	}
 %>
 <%=htmlFile.getNode("jcr:content").getProperty("jcr:data").getString()%>
+<% if((js != null) && (!js.equals(""))) {%>
 <script><%=js%></script>
+<% } %>
