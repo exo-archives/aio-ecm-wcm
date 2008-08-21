@@ -160,7 +160,7 @@ public class WcmSearchServiceImpl implements WcmSearchService {
     return portalNames ;
   }
   private List<Object> findDocuments(QueryManager queryManager,String keyword,String portalName) throws Exception {
-    String sql = "select * from nt:base where contains(*,'" + keyword + "') and jcr:path like '/Web Content/Live/"+portalName+"/documents/%' order by exo:dateCreated DESC" ;
+    String sql = "select * from nt:base where contains(*,'" + keyword + "') and jcr:path like '/Web Content/Live/"+portalName+"/web content storage/%' order by exo:dateCreated DESC" ;
     Query query = queryManager.createQuery(sql, Query.SQL) ;
     QueryResult queryResult = query.execute() ;
     HashSet<Node> hashSet = new HashSet<Node>() ;    
