@@ -213,6 +213,8 @@ public class UIContentDialogForm extends UIBaseDialogForm {
       dialogForm.savedNodeIdentifier = NodeIdentifier.make(newNode);
       dialogForm.setWebContent(newNode);
       UIQuickCreationWizard uiQuickWizard = dialogForm.getAncestorOfType(UIQuickCreationWizard.class);
+      UIPermissionManager uiPermissionManager = uiQuickWizard.getChild(UIPermissionManager.class);
+      ((UIPermissionInfo) uiPermissionManager.getChild(UIPermissionInfo.class)).updateGrid();
       UISocialInfo uiSocialInfo = uiQuickWizard.getChild(UISocialInfo.class);
       uiSocialInfo.initUICategorizing();
       uiQuickWizard.viewStep(2);

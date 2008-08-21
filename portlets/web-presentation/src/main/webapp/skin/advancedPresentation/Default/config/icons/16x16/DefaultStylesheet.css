@@ -1,18 +1,17 @@
-.UIPermissionSetting .SelectUserIcon {
+.UIPermissionSetting .SelectUser {
 	width: 16px; height: 16px;
 	background: url('DefaultSkin/SmallUserIcon.gif') no-repeat;  
 	cursor: pointer;
 }
 
-.UIPermissionSetting .SelectMemberIcon {
+.UIPermissionSetting .SelectMember {
 	width: 16px; height: 16px;
 	background: url('DefaultSkin/SmallMemberIcon.gif') no-repeat;  
 	cursor: pointer;
 }
 
-.UIPermissionSetting .AddAnyIcon {
+.UIPermissionSetting .AddAny {
 	width: 16px; height: 16px;
 	background: url('DefaultSkin/SmallGroupIcon.gif') no-repeat;  
 	cursor: pointer;
 }
-

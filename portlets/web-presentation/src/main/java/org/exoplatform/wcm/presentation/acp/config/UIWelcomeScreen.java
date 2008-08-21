@@ -92,8 +92,6 @@ public class UIWelcomeScreen extends UIForm {
         uiWelcomeScreen.setRendered(false);
         UIQuickCreationWizard uiQuickCreationWizard = uiPortletConfig.addChild(UIQuickCreationWizard.class, null, null);
         uiQuickCreationWizard.init();
-        UIPermissionInfo uiPermissionInfo = uiQuickCreationWizard.findFirstComponentOfType(UIPermissionInfo.class);
-        uiPermissionInfo.updateGrid();
       } else if(radioValue.equals("SelectOtherContent") || radioValue.equals("SelectExisted")) {
         uiWelcomeScreen.setRendered(false);
         uiPortletConfig.addChild(UIWebContentSelectorForm.class, null, null);

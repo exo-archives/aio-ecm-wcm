@@ -28,6 +28,7 @@ import org.exoplatform.ecm.webui.selector.UISelectable;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.access.AccessControlEntry;
 import org.exoplatform.services.jcr.access.PermissionType;
+import org.exoplatform.services.jcr.access.SystemIdentity;
 import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -188,7 +189,12 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
 
   public static class AddAnyActionListener extends EventListener<UIPermissionSetting> {
     public void execute(Event<UIPermissionSetting> event) throws Exception {
-
+      UIPermissionSetting uiPermissionSetting = event.getSource();
+      UIFormInputSetWithAction uiInputSet = uiPermissionSetting.getChildById(USERS_INPUTSET);
+      ((UIFormStringInput) uiInputSet.getChildById(USERS_STRINGINPUT)).setValue(SystemIdentity.ANY);
+      uiPermissionSetting.getUIFormCheckBoxInput(ACCESSIBLE).setChecked(true);
+      uiPermissionSetting.getUIFormCheckBoxInput(EDITABLE).setChecked(false);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPermissionSetting.getParent());
     }
   }
 
