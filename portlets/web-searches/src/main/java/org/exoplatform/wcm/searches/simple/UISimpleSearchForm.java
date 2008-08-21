@@ -40,6 +40,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : Anh Do Ngoc
@@ -56,6 +57,11 @@ import org.exoplatform.webui.form.UIFormStringInput;
 )
 public class UISimpleSearchForm extends UIForm {
 
+  /**
+   * Instantiates a new uI simple search form.
+   * 
+   * @throws Exception the exception
+   */
   @SuppressWarnings("unchecked")
   public UISimpleSearchForm() throws Exception {
     List<SelectItemOption<String>> portals = new ArrayList<SelectItemOption<String>>();
@@ -73,7 +79,22 @@ public class UISimpleSearchForm extends UIForm {
 
   }
 
+  /**
+   * The listener interface for receiving simpleSearchAction events.
+   * The class that is interested in processing a simpleSearchAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSimpleSearchActionListener<code> method. When
+   * the simpleSearchAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SimpleSearchActionEvent
+   */
   public static class SimpleSearchActionListener extends EventListener<UISimpleSearchForm> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UISimpleSearchForm> event) throws Exception {	  
       UISimpleSearchForm searchForm = event.getSource();
       UISimpleSearchPortlet searchPortlet = searchForm.getParent();
@@ -117,7 +138,22 @@ public class UISimpleSearchForm extends UIForm {
     }
   }
 
+  /**
+   * The listener interface for receiving advanceSearchAction events.
+   * The class that is interested in processing a advanceSearchAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addAdvanceSearchActionListener<code> method. When
+   * the advanceSearchAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see AdvanceSearchActionEvent
+   */
   public static class AdvanceSearchActionListener extends EventListener<UISimpleSearchForm> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UISimpleSearchForm> event) throws Exception {
 
     }
