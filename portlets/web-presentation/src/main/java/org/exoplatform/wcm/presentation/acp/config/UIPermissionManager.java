@@ -16,13 +16,13 @@
  */
 package org.exoplatform.wcm.presentation.acp.config;
 
-
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 
+// TODO: Auto-generated Javadoc
 /*
  * Created by The eXo Platform SAS
  * Author : Anh Do Ngoc
@@ -30,24 +30,40 @@ import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
  * Aug 15, 2008  
  */
 
+/**
+ * The Class UIPermissionManager.
+ */
 @ComponentConfig(lifecycle = UIContainerLifecycle.class)
 public class UIPermissionManager extends UIContainer {
-  public UIPermissionManager() throws Exception {        
-    addChild(UIPermissionInfo.class, null, null);       
+  
+  /**
+   * Instantiates a new uI permission manager.
+   * 
+   * @throws Exception the exception
+   */
+  public UIPermissionManager() throws Exception {
+    addChild(UIPermissionInfo.class, null, null);
     addChild(UIPermissionSetting.class, null, null);
-  }  
+  }
 
+  /**
+   * Inits the popup permission.
+   * 
+   * @param uiSelector the ui selector
+   * 
+   * @throws Exception the exception
+   */
   public void initPopupPermission(UIComponent uiSelector) throws Exception {
-    UIPopupWindow uiPopup = getChildById(UIPermissionSetting.POPUP_SELECT) ;
-    if(uiPopup == null) {
+    UIPopupWindow uiPopup = getChildById(UIPermissionSetting.POPUP_SELECT);
+    if (uiPopup == null) {
       uiPopup = addChild(UIPopupWindow.class, null, UIPermissionSetting.POPUP_SELECT);
       uiPopup.setWindowSize(560, 300);
     } else {
-      uiPopup.setRendered(true) ;
+      uiPopup.setRendered(true);
     }
     uiPopup.setUIComponent(uiSelector);
-    uiPopup.setShow(true) ;
-    uiPopup.setResizable(true) ;
+    uiPopup.setShow(true);
+    uiPopup.setResizable(true);
   }
-  
+
 }

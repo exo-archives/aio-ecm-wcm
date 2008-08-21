@@ -46,37 +46,71 @@ import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
+// TODO: Auto-generated Javadoc
 /*
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Aug 15, 2008
  */
 
-@ComponentConfig(lifecycle = UIContainerLifecycle.class, events = {
-    @EventConfig(listeners = UIPermissionInfo.DeleteActionListener.class, confirm = "UIPermissionInfo.msg.confirm-delete-permission"),
-    @EventConfig(listeners = UIPermissionInfo.EditActionListener.class) })
-public class UIPermissionInfo extends UIContainer {
+/**
+ * The Class UIPermissionInfo.
+ */
+@ComponentConfig(
+    lifecycle = UIContainerLifecycle.class, 
+    events = {
+      @EventConfig(listeners = UIPermissionInfo.DeleteActionListener.class, confirm = "UIPermissionInfo.msg.confirm-delete-permission"),
+      @EventConfig(listeners = UIPermissionInfo.EditActionListener.class) 
+    }
+)
+  public class UIPermissionInfo extends UIContainer {
 
+  /** The PERMISSIO n_ field. */
   public static String[]  PERMISSION_FIELD  = { "usersOrGroups", "accessible", "editable" };
 
+  /** The PERMISSIO n_ action. */
   private static String[] PERMISSION_ACTION = { "Edit", "Delete" };
 
+  /**
+   * Instantiates a new uI permission info.
+   * 
+   * @throws Exception the exception
+   */
   public UIPermissionInfo() throws Exception {
     UIGrid uiGrid = createUIComponent(UIGrid.class, null, "PermissionInfo");
     uiGrid.getUIPageIterator().setId("PermissionInfoIterator");
     uiGrid.configure("usersOrGroups", PERMISSION_FIELD, PERMISSION_ACTION);
-    addChild(uiGrid);       
+    addChild(uiGrid);
   }
 
+  /**
+   * Gets the node owner.
+   * 
+   * @param node the node
+   * 
+   * @return the node owner
+   * 
+   * @throws Exception the exception
+   */
   public String getNodeOwner(Node node) throws Exception {
     return node.getProperty("exo:owner").getString();
   }
 
+  /**
+   * Gets the current web content.
+   * 
+   * @return the current web content
+   */
   private Node getCurrentWebContent() {
     UIQuickCreationWizard quickCreationWizard = getAncestorOfType(UIQuickCreationWizard.class);
     UIContentDialogForm contentDialogForm = quickCreationWizard.getChild(UIContentDialogForm.class);
     return contentDialogForm.getWebContent();
   }
 
+  /**
+   * Update grid.
+   * 
+   * @throws Exception the exception
+   */
   public void updateGrid() throws Exception {
     Node node = getCurrentWebContent();
     ExtendedNode webContent = (ExtendedNode) node;
@@ -137,11 +171,26 @@ public class UIPermissionInfo extends UIContainer {
     uiGrid.getUIPageIterator().setPageList(objPageList);
   }
 
+  /**
+   * The listener interface for receiving deleteAction events.
+   * The class that is interested in processing a deleteAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addDeleteActionListener<code> method. When
+   * the deleteAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see DeleteActionEvent
+   */
   public static class DeleteActionListener extends EventListener<UIPermissionInfo> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIPermissionInfo> event) throws Exception {
       UIPermissionInfo permissionInfo = event.getSource();
       RepositoryService repositoryService = permissionInfo
-          .getApplicationComponent(RepositoryService.class);
+      .getApplicationComponent(RepositoryService.class);
       ManageableRepository manageableRepository = repositoryService.getCurrentRepository();
       String workspace = manageableRepository.getConfiguration().getDefaultWorkspaceName();
       Session session = SessionProvider.createSystemProvider().getSession(workspace,
@@ -173,7 +222,22 @@ public class UIPermissionInfo extends UIContainer {
     }
   }
 
+  /**
+   * The listener interface for receiving editAction events.
+   * The class that is interested in processing a editAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addEditActionListener<code> method. When
+   * the editAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see EditActionEvent
+   */
   public static class EditActionListener extends EventListener<UIPermissionInfo> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIPermissionInfo> event) throws Exception {
       UIPermissionInfo permissionInfo = event.getSource();
       String name = event.getRequestContext().getRequestParameter(OBJECTID);
@@ -186,34 +250,70 @@ public class UIPermissionInfo extends UIContainer {
     }
   }
 
+  /**
+   * The Class PermissionBean.
+   */
   public class PermissionBean {
 
+    /** The users or groups. */
     private String  usersOrGroups;
 
+    /** The accessible. */
     private boolean accessible;
 
+    /** The editable. */
     private boolean editable;
 
+    /**
+     * Gets the users or groups.
+     * 
+     * @return the users or groups
+     */
     public String getUsersOrGroups() {
       return usersOrGroups;
     }
 
+    /**
+     * Sets the users or groups.
+     * 
+     * @param s the new users or groups
+     */
     public void setUsersOrGroups(String s) {
       usersOrGroups = s;
     }
 
+    /**
+     * Checks if is editable.
+     * 
+     * @return true, if is editable
+     */
     public boolean isEditable() {
       return editable;
     }
 
+    /**
+     * Sets the editable.
+     * 
+     * @param bool the new editable
+     */
     public void setEditable(boolean bool) {
       editable = bool;
     }
 
+    /**
+     * Checks if is accessible.
+     * 
+     * @return true, if is accessible
+     */
     public boolean isAccessible() {
       return accessible;
     }
 
+    /**
+     * Sets the accessible.
+     * 
+     * @param bool the new accessible
+     */
     public void setAccessible(boolean bool) {
       accessible = bool;
     }

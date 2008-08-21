@@ -17,12 +17,10 @@
 package org.exoplatform.wcm.presentation.acp.config;
 
 import javax.jcr.Node;
-import javax.jcr.Session;
 
 import org.exoplatform.services.cms.folksonomy.FolksonomyService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.wcm.presentation.acp.config.quickcreation.UIQuickCreationWizard;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -35,24 +33,32 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormStringInput;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
- * Author : Anh Do Ngoc 
- *          anh.do@exoplatform.com
- * Aug 13, 2008  
+ * Author : Anh Do Ngoc
+ * anh.do@exoplatform.com
+ * Aug 13, 2008
  */
 
 @ComponentConfig(
-  lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIForm.gtmpl", 
-  events = {
-    @EventConfig(listeners = UITagging.AddTagsActionListener.class)
-  }
+    lifecycle = UIFormLifecycle.class, 
+    template = "system:/groovy/webui/form/UIForm.gtmpl", 
+    events = { @EventConfig(listeners = UITagging.AddTagsActionListener.class) }
 )
-  public class UITagging extends UIForm {
-  
-  final static public String TAG_NAMES       = "TagNames";
-  final static public String LINKED_TAGS     = "LinkedTags";
+public class UITagging extends UIForm {
 
+  /** The Constant TAG_NAMES. */
+  final static public String TAG_NAMES   = "TagNames";
+
+  /** The Constant LINKED_TAGS. */
+  final static public String LINKED_TAGS = "LinkedTags";
+
+  /**
+   * Instantiates a new uI tagging.
+   * 
+   * @throws Exception the exception
+   */
   public UITagging() throws Exception {
     UIFormStringInput tagsName = new UIFormStringInput(TAG_NAMES, TAG_NAMES, null);
     UIFormInputInfo linkedTags = new UIFormInputInfo(LINKED_TAGS, LINKED_TAGS, null);
@@ -61,18 +67,33 @@ import org.exoplatform.webui.form.UIFormStringInput;
     addChild(linkedTags);
   }
 
+  /**
+   * The listener interface for receiving addTagsAction events.
+   * The class that is interested in processing a addTagsAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addAddTagsActionListener<code> method. When
+   * the addTagsAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see AddTagsActionEvent
+   */
   public static class AddTagsActionListener extends EventListener<UITagging> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UITagging> event) throws Exception {
       UITagging taggingForm = event.getSource();
       UIQuickCreationWizard quickCreationWizard = taggingForm
       .getAncestorOfType(UIQuickCreationWizard.class);
       UIContentDialogForm contentDialogForm = quickCreationWizard
       .getChild(UIContentDialogForm.class);
-      Node webContent = contentDialogForm.getWebContent();      
+      Node webContent = contentDialogForm.getWebContent();
       RepositoryService repositoryService = taggingForm
       .getApplicationComponent(RepositoryService.class);
       ManageableRepository manageableRepository = repositoryService.getCurrentRepository();
-      String repository = manageableRepository.getConfiguration().getName();      
+      String repository = manageableRepository.getConfiguration().getName();
       FolksonomyService folksonomyService = taggingForm
       .getApplicationComponent(FolksonomyService.class);
       UIApplication uiApp = taggingForm.getAncestorOfType(UIApplication.class);
@@ -130,16 +151,25 @@ import org.exoplatform.webui.form.UIFormStringInput;
       event.getRequestContext().addUIComponentToUpdateByAjax(taggingForm);
     }
   }
-  
+
+  /**
+   * Adds the tags.
+   * 
+   * @param node the node
+   * @param repository the repository
+   * @param folksonomyService the folksonomy service
+   * 
+   * @throws Exception the exception
+   */
   private void addTags(Node node, String repository, FolksonomyService folksonomyService)
   throws Exception {
     StringBuilder linkedTags = new StringBuilder();
-    for (Node tag : folksonomyService.getLinkedTagsOfDocument(node, repository)) {      
+    for (Node tag : folksonomyService.getLinkedTagsOfDocument(node, repository)) {
       if (linkedTags.length() > 0)
         linkedTags = linkedTags.append(",");
       linkedTags.append(tag.getName());
-    }    
-    UIFormInputInfo uiLinkedTags = getChildById(LINKED_TAGS);    
+    }
+    UIFormInputInfo uiLinkedTags = getChildById(LINKED_TAGS);
     uiLinkedTags.setValue("<br>[" + linkedTags.toString() + "]");
     uiLinkedTags.setEnable(true);
   }

@@ -46,30 +46,47 @@ import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.ext.UIFormInputSetWithAction;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Aug 13, 2008
  */
-@ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIForm.gtmpl", events = {
-  @EventConfig(listeners = UIPermissionSetting.SaveActionListener.class),
-  @EventConfig(listeners = UIPermissionSetting.ResetActionListener.class),
-  @EventConfig(listeners = UIPermissionSetting.SelectUserActionListener.class),
-  @EventConfig(listeners = UIPermissionSetting.SelectMemberActionListener.class),
-  @EventConfig(listeners = UIPermissionSetting.AddAnyActionListener.class) })
+@ComponentConfig(
+    lifecycle = UIFormLifecycle.class, 
+    template = "system:/groovy/webui/form/UIForm.gtmpl", 
+    events = {
+      @EventConfig(listeners = UIPermissionSetting.SaveActionListener.class),
+      @EventConfig(listeners = UIPermissionSetting.ResetActionListener.class),
+      @EventConfig(listeners = UIPermissionSetting.SelectUserActionListener.class),
+      @EventConfig(listeners = UIPermissionSetting.SelectMemberActionListener.class),
+      @EventConfig(listeners = UIPermissionSetting.AddAnyActionListener.class) 
+    }
+)
   public class UIPermissionSetting extends UIForm implements UISelectable {
 
+  /** The Constant USERS_INPUTSET. */
   final static public String USERS_INPUTSET    = "usersInputSet";
 
+  /** The Constant USERS_STRINGINPUT. */
   final static public String USERS_STRINGINPUT = "usersStringInput";
 
+  /** The Constant PERMISSION. */
   final static public String PERMISSION        = "permission";
 
+  /** The Constant POPUP_SELECT. */
   final static public String POPUP_SELECT      = "SelectUserOrGroup";
 
+  /** The Constant ACCESSIBLE. */
   final static public String ACCESSIBLE        = "accessible";
 
+  /** The Constant EDITABLE. */
   final static public String EDITABLE          = "editable";
 
+  /**
+   * Instantiates a new uI permission setting.
+   * 
+   * @throws Exception the exception
+   */
   public UIPermissionSetting() throws Exception {
     UIFormInputSetWithAction permissionInputSet = new UIFormInputSetWithAction(USERS_INPUTSET);
     UIFormStringInput formStringInput = new UIFormStringInput(USERS_STRINGINPUT, USERS_STRINGINPUT,
@@ -85,7 +102,22 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
     setActions(new String[] { "Save", "Reset" });
   }
 
+  /**
+   * The listener interface for receiving saveAction events.
+   * The class that is interested in processing a saveAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSaveActionListener<code> method. When
+   * the saveAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SaveActionEvent
+   */
   public static class SaveActionListener extends EventListener<UIPermissionSetting> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIPermissionSetting> event) throws Exception {
       UIPermissionSetting permissionSettingForm = event.getSource();
       UIPermissionManager permissionManager = permissionSettingForm.getParent();
@@ -149,7 +181,22 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
     }
   }
 
+  /**
+   * The listener interface for receiving resetAction events.
+   * The class that is interested in processing a resetAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addResetActionListener<code> method. When
+   * the resetAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see ResetActionEvent
+   */
   public static class ResetActionListener extends EventListener<UIPermissionSetting> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIPermissionSetting> event) throws Exception {
       UIPermissionSetting permissionSettingForm = event.getSource();
       UIFormInputSetWithAction formInputSet = permissionSettingForm.getChildById(USERS_INPUTSET);
@@ -159,7 +206,22 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
     }
   }
 
+  /**
+   * The listener interface for receiving selectUserAction events.
+   * The class that is interested in processing a selectUserAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSelectUserActionListener<code> method. When
+   * the selectUserAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SelectUserActionEvent
+   */
   public static class SelectUserActionListener extends EventListener<UIPermissionSetting> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIPermissionSetting> event) throws Exception {
       UIPermissionSetting permissionSettingForm = event.getSource();
       UIPermissionSelector permissionSelector = permissionSettingForm.createUIComponent(
@@ -173,7 +235,22 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
     }
   }
 
+  /**
+   * The listener interface for receiving selectMemberAction events.
+   * The class that is interested in processing a selectMemberAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSelectMemberActionListener<code> method. When
+   * the selectMemberAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SelectMemberActionEvent
+   */
   public static class SelectMemberActionListener extends EventListener<UIPermissionSetting> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIPermissionSetting> event) throws Exception {
       UIPermissionSetting permissionSettingForm = event.getSource();
       UIPermissionSelector permissionSelector = permissionSettingForm.createUIComponent(
@@ -187,7 +264,22 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
     }
   }
 
+  /**
+   * The listener interface for receiving addAnyAction events.
+   * The class that is interested in processing a addAnyAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addAddAnyActionListener<code> method. When
+   * the addAnyAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see AddAnyActionEvent
+   */
   public static class AddAnyActionListener extends EventListener<UIPermissionSetting> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIPermissionSetting> event) throws Exception {
       UIPermissionSetting uiPermissionSetting = event.getSource();
       UIFormInputSetWithAction uiInputSet = uiPermissionSetting.getChildById(USERS_INPUTSET);
@@ -198,10 +290,21 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
     }
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.selector.UISelectable#doSelect(java.lang.String, java.lang.Object)
+   */
   public void doSelect(String selectField, Object value) throws Exception {
     getUIStringInput(selectField).setValue((String) value);
   }
 
+  /**
+   * Fill form.
+   * 
+   * @param user the user
+   * @param node the node
+   * 
+   * @throws Exception the exception
+   */
   public void fillForm(String user, ExtendedNode node) throws Exception {
     UIFormInputSetWithAction inputSet = getChildById(USERS_INPUTSET);
     inputSet.getUIStringInput(USERS_STRINGINPUT).setValue(user);
@@ -233,6 +336,11 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
     }
   }
 
+  /**
+   * Lock form.
+   * 
+   * @param isLock the is lock
+   */
   protected void lockForm(boolean isLock) {
     UIFormInputSetWithAction inputSet = getChildById(USERS_INPUTSET);
     if (isLock) {
