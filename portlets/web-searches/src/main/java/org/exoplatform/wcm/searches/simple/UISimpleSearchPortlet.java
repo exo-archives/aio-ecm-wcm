@@ -20,22 +20,29 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
- * Author : Nguyen Ba Phu
- *          phu.nguyen@exoplatform.com
- * Apr 11, 2008  
+ * Author : Anh Do Ngoc
+ * anh.do@exoplatform.com
+ * May 23, 2007
  */
 
 @ComponentConfig(
-    lifecycle = UIApplicationLifecycle.class,
-    template = "app:/groovy/simple-search/webui/component/UISimpleSearchPortlet.gtmpl"      
+    lifecycle = UIApplicationLifecycle.class, 
+    template = "app:/groovy/simple-search/webui/component/UISimpleSearchPortlet.gtmpl"
 )
 
 public class UISimpleSearchPortlet extends UIPortletApplication {
-
+  
+  /**
+   * Instantiates a new uI simple search portlet.
+   * 
+   * @throws Exception the exception
+   */
   public UISimpleSearchPortlet() throws Exception {
     addChild(UISimpleSearchForm.class, null, null).setRendered(true);
     addChild(UISearchResultForm.class, null, null).setRendered(true);
   }
+  
 }

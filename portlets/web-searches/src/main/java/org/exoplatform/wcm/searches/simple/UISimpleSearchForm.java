@@ -41,8 +41,10 @@ import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 
 /**
- * Created by The eXo Platform SARL Author : Philippe Aristote
- * philippe.aristote@gmail.com May 23, 2007
+ * Created by The eXo Platform SAS
+ * Author : Anh Do Ngoc
+ * anh.do@exoplatform.com
+ * May 23, 2007
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class, 
@@ -57,7 +59,6 @@ public class UISimpleSearchForm extends UIForm {
   @SuppressWarnings("unchecked")
   public UISimpleSearchForm() throws Exception {
     List<SelectItemOption<String>> portals = new ArrayList<SelectItemOption<String>>();
-
     DataStorage service = getApplicationComponent(DataStorage.class);
     Query<PortalConfig> query = new Query<PortalConfig>(null, null, null, PortalConfig.class);
     List<PortalConfig> list = service.find(query).getAll();
@@ -65,7 +66,6 @@ public class UISimpleSearchForm extends UIForm {
     for (PortalConfig portalConfig : list) {
       portals.add(new SelectItemOption<String>(portalConfig.getName(), portalConfig.getName()));
     }
-
     addUIFormInput(new UIFormStringInput("SearchInput", "SearchInput", null));
     addUIFormInput(new UIFormSelectBox("PortalSelection", "PortalSelection", portals));
     addUIFormInput(new UIFormCheckBoxInput("PageCheckBoxInput", "PageCheckBoxInput", null));
@@ -98,7 +98,6 @@ public class UISimpleSearchForm extends UIForm {
       } else if (searchForm.getUIFormCheckBoxInput("PageCheckBoxInput").isChecked()) {
         searchPage = true;
       }
-
       String portalName = searchForm.getUIFormSelectBox("PortalSelection").getValue();
       if (portalName.equalsIgnoreCase("all"))
         portalName = null;
@@ -109,14 +108,11 @@ public class UISimpleSearchForm extends UIForm {
       } else {
         sessionProvider = SessionProviderFactory.createSystemProvider();
       }
-
       PageList resultList = searchService.searchWebContent(keyword, portalName, searchDocument,
           searchPage, sessionProvider);
       resultList.setPageSize(2);
       searchResult.setResultList(resultList);
       searchResult.setPortalName(portalName);
-      
-
       event.getRequestContext().addUIComponentToUpdateByAjax(searchPortlet);
     }
   }
@@ -126,4 +122,5 @@ public class UISimpleSearchForm extends UIForm {
 
     }
   }
+  
 }
