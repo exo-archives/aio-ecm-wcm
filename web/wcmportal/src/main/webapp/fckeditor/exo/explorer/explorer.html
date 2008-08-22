@@ -548,12 +548,12 @@
 	}
 	
 	function insertLink(element) {
-		var parrent = window.opener.window;
 		if (element) var sLink = element.title;
 		else var sLink = K('contextMenu').select({where: "className == 'ContextMenu ListItemOption'"})[0].title;
 		var sContent = eXoPlugin.getContent();
-		if (parrent.setField) {
-			parrent.setField("inputURL", sLink);
+		var parent = window.opener.window;
+		if (parent.document.getElementById("txtUrl")) {
+			parent.document.getElementById("txtUrl").value = sLink;
 		} else if (eXp.resourceType == "Link" || eXp.resourceType == "File") {
 			var newTag = FCK.CreateElement("A");
 			if (K.remove.space(sContent) != "") newTag.innerHTML = sContent;

@@ -66,7 +66,8 @@
     <tr>
       <td class="FieldLabel" userLanguage="KLang.url">URL:</td>
       <td class="FieldComponent">
-        <input type="text" id="inputURL"/>
+        <input type="text" id="txtUrl"/>
+		<!--/do not change the id/-->
       </td>
       <td class="FieldComponent">
         <div class="UIAction">
@@ -154,7 +155,7 @@
 		var content = eXoPlugin.getContent();
 		var title = content || document.getElementById("inputTitle").value;
 		title = Trim(title);
-		var url = document.getElementById("inputURL").value;
+		var url = document.getElementById("txtUrl").value;
 		if (Trim(url) == "") {
 			alert("Field URL is not empty"); 
 			return;
@@ -173,7 +174,7 @@
 		var sOptions = "toolbar=no, status=no, resizable=yes, dependent=yes, scrollbars=yes";
 		sOptions += ", width=" +  FCKConfig.ScreenWidth;
 		sOptions += ", height=" + FCKConfig.ScreenHeight;
-		var url = document.getElementById("inputURL").value;
+		var url = document.getElementById("txtUrl").value;
 		if (url) window.open(url, "", sOptions);
 	}
 	
