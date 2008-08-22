@@ -1,6 +1,6 @@
 /*
  * FCKeditor - The text editor for Internet - http://www.fckeditor.net
- * Copyright (C) 2003-2007 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2008 Frederico Caldeira Knabben
  *
  * == BEGIN LICENSE ==
  *
@@ -21,9 +21,9 @@
  * Editor configuration settings.
  *
  * Follow this link for more information:
- * http://wiki.fckeditor.net/Developer%27s_Guide/Configuration/Configurations_Settings
+ * http://docs.fckeditor.net/FCKeditor_2.x/Developers_Guide/Configuration/Configuration_Options
  */
-
+ 
 FCKConfig.CustomConfigurationsPath = '../exo/exoconfig.js' ;
 
 FCKConfig.EditorAreaCSS = FCKConfig.BasePath + 'css/fck_editorarea.css' ;
@@ -43,6 +43,9 @@ FCKConfig.Debug = false ;
 FCKConfig.AllowQueryStringDebug = true ;
 
 FCKConfig.SkinPath = FCKConfig.BasePath + 'skins/default/' ;
+
+FCKConfig.SkinEditorCSS = '' ;	// FCKConfig.SkinPath + "|<minified css>" ;
+FCKConfig.SkinDialogCSS = '' ;	// FCKConfig.SkinPath + "|<minified css>" ;
 FCKConfig.PreloadImages = [ FCKConfig.SkinPath + 'images/toolbar.start.gif', FCKConfig.SkinPath + 'images/toolbar.buttonarrow.gif' ] ;
 
 FCKConfig.PluginsPath = FCKConfig.BasePath + 'plugins/' ;
@@ -72,6 +75,8 @@ FCKConfig.FillEmptyBlocks	= true ;
 FCKConfig.FormatSource		= true ;
 FCKConfig.FormatOutput		= true ;
 FCKConfig.FormatIndentator	= '    ' ;
+FCKConfig.EMailProtection = 'encode' ; // none | encode | function
+FCKConfig.EMailProtectionFunction = 'mt(NAME,DOMAIN,SUBJECT,BODY)' ;
 
 FCKConfig.StartupFocus	= false ;
 FCKConfig.ForcePasteAsPlainText	= false ;
@@ -84,7 +89,7 @@ FCKConfig.SourcePopup	= false ;
 FCKConfig.ToolbarStartExpanded	= true ;
 FCKConfig.ToolbarCanCollapse	= true ;
 FCKConfig.IgnoreEmptyParagraphValue = true ;
-FCKConfig.PreserveSessionOnFileBrowser = false ;
+
 FCKConfig.FloatingPanelsZIndex = 10000 ;
 FCKConfig.HtmlEncodeOutput = false ;
 
@@ -99,6 +104,7 @@ FCKConfig.ToolbarSets["Default"] = [
 	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
 	'/',
 	['Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'],
+	['OrderedList','UnorderedList','-','Outdent','Indent','Blockquote','CreateDiv'],
 	['Link','Unlink','Anchor'],
 	['Image','Flash','Table','Rule','SpecialChar','PageBreak'],
 	['TextColor','BGColor'],
@@ -121,8 +127,10 @@ FCKConfig.Keystrokes = [
 	[ CTRL + 67 /*C*/, true ],
 	[ CTRL + 70 /*F*/, true ],
 	[ CTRL + 83 /*S*/, true ],
+	[ CTRL + 84 /*T*/, true ],
 	[ CTRL + 88 /*X*/, true ],
 	[ CTRL + 86 /*V*/, 'Paste' ],
+	[ CTRL + 45 /*INS*/, true ],
 	[ SHIFT + 45 /*INS*/, 'Paste' ],
 	[ CTRL + 88 /*X*/, 'Cut' ],
 	[ SHIFT + 46 /*DEL*/, 'Cut' ],
@@ -135,10 +143,10 @@ FCKConfig.Keystrokes = [
 	[ CTRL + 85 /*U*/, 'Underline' ],
 	[ CTRL + SHIFT + 83 /*S*/, 'Save' ],
 	[ CTRL + ALT + 13 /*ENTER*/, 'FitWindow' ],
-	[ CTRL + 9 /*TAB*/, 'Source' ]
+	[ SHIFT + 32 /*SPACE*/, 'Nbsp' ]
 ] ;
 
-FCKConfig.ContextMenu = ['Generic','Link','Anchor','Image','Flash','Select','Textarea','Checkbox','Radio','TextField','HiddenField','ImageButton','Button','BulletedList','NumberedList','Table','Form'] ;
+FCKConfig.ContextMenu = ['Generic','Link','Anchor','Image','Flash','Select','Textarea','Checkbox','Radio','TextField','HiddenField','ImageButton','Button','BulletedList','NumberedList','Table','Form','DivContainer'] ;
 FCKConfig.BrowserContextMenuOnCtrl = false ;
 
 FCKConfig.EnableMoreFontColors = true ;
@@ -187,6 +195,8 @@ FCKConfig.CleanWordKeepsStructure = false ;
 
 // Only inline elements are valid.
 FCKConfig.RemoveFormatTags = 'b,big,code,del,dfn,em,font,i,ins,kbd,q,samp,small,span,strike,strong,sub,sup,tt,u,var' ;
+// Attributes that will be removed
+FCKConfig.RemoveAttributes = 'class,style,lang,width,height,align,hspace,valign' ;
 
 FCKConfig.CustomStyles = 
 {
@@ -197,8 +207,8 @@ FCKConfig.CustomStyles =
 FCKConfig.CoreStyles = 
 {
 	// Basic Inline Styles.
-	'Bold'			: { Element : 'b', Overrides : 'strong' },
-	'Italic'		: { Element : 'i', Overrides : 'em' },
+	'Bold'			: { Element : 'strong', Overrides : 'b' },
+	'Italic'		: { Element : 'em', Overrides : 'i' },
 	'Underline'		: { Element : 'u' },
 	'StrikeThrough'	: { Element : 'strike' },
 	'Subscript'		: { Element : 'sub' },
@@ -238,7 +248,9 @@ FCKConfig.CoreStyles =
 		Overrides	: [ { Element : 'font', Attributes : { 'color' : null } } ]
 	},
 	
-	'BackColor'		: { Element : 'span', Styles : { 'background-color' : '#("Color","color")' } }
+	'BackColor'		: { Element : 'span', Styles : { 'background-color' : '#("Color","color")' } },
+
+	'SelectionHighlight' : { Element : 'span', Styles : { 'background-color' : 'navy', 'color' : 'white' } }
 };
 
 // The distance of an indentation step.
@@ -302,5 +314,12 @@ FCKConfig.SmileyPath	= FCKConfig.BasePath + 'images/smiley/msn/' ;
 FCKConfig.SmileyImages	= ['regular_smile.gif','sad_smile.gif','wink_smile.gif','teeth_smile.gif','confused_smile.gif','tounge_smile.gif','embaressed_smile.gif','omg_smile.gif','whatchutalkingabout_smile.gif','angry_smile.gif','angel_smile.gif','shades_smile.gif','devil_smile.gif','cry_smile.gif','lightbulb.gif','thumbs_down.gif','thumbs_up.gif','heart.gif','broken_heart.gif','kiss.gif','envelope.gif'] ;
 FCKConfig.SmileyColumns = 8 ;
 FCKConfig.SmileyWindowWidth		= 320 ;
-FCKConfig.SmileyWindowHeight	= 240 ;
+FCKConfig.SmileyWindowHeight	= 210 ;
+
+FCKConfig.BackgroundBlockerColor = '#ffffff' ;
+FCKConfig.BackgroundBlockerOpacity = 0.50 ;
+
+FCKConfig.MsWebBrowserControlCompat = false ;
+
+FCKConfig.PreventSubmitHandler = false ;
 
