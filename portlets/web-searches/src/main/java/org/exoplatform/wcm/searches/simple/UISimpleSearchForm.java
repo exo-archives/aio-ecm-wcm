@@ -16,7 +16,6 @@
  */
 package org.exoplatform.wcm.searches.simple;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +27,7 @@ import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.search.WcmSearchService;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -42,20 +42,23 @@ import org.exoplatform.webui.form.UIFormStringInput;
 
 // TODO: Auto-generated Javadoc
 /**
- * Created by The eXo Platform SAS
- * Author : Anh Do Ngoc
- * anh.do@exoplatform.com
+ * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * May 23, 2007
  */
-@ComponentConfig(
-    lifecycle = UIFormLifecycle.class, 
-    template = "app:/groovy/simple-search/webui/component/UISimpleSearchForm.gtmpl", 
-    events = {
-      @EventConfig(listeners = UISimpleSearchForm.SimpleSearchActionListener.class),
-      @EventConfig(listeners = UISimpleSearchForm.AdvanceSearchActionListener.class) 
-    }
-)
+@ComponentConfig(lifecycle = UIFormLifecycle.class, template = "app:/groovy/simple-search/webui/component/UISimpleSearchForm.gtmpl", events = {
+    @EventConfig(listeners = UISimpleSearchForm.SearchSimpleActionListener.class),
+    @EventConfig(listeners = UISimpleSearchForm.SearchAdvanceActionListener.class) })
 public class UISimpleSearchForm extends UIForm {
+
+  protected final static String KEYWORD_INPUT     = "keyword";
+
+  protected final static String DOCUMENT_CHECKING = "documentCheckBox";
+
+  protected final static String PAGE_CHECKING     = "pageCheckBox";
+
+  protected final static String PORTALS_SELECTION = "portalSelection";
+
+  protected final static String ALL_OPTION        = "all";
 
   /**
    * Instantiates a new uI simple search form.
@@ -64,63 +67,52 @@ public class UISimpleSearchForm extends UIForm {
    */
   @SuppressWarnings("unchecked")
   public UISimpleSearchForm() throws Exception {
-    List<SelectItemOption<String>> portals = new ArrayList<SelectItemOption<String>>();
-    DataStorage service = getApplicationComponent(DataStorage.class);
-    Query<PortalConfig> query = new Query<PortalConfig>(null, null, null, PortalConfig.class);
-    List<PortalConfig> list = service.find(query).getAll();
-    portals.add(new SelectItemOption<String>("all", "all"));
-    for (PortalConfig portalConfig : list) {
-      portals.add(new SelectItemOption<String>(portalConfig.getName(), portalConfig.getName()));
-    }
-    addUIFormInput(new UIFormStringInput("SearchInput", "SearchInput", null));
-    addUIFormInput(new UIFormSelectBox("PortalSelection", "PortalSelection", portals));
-    addUIFormInput(new UIFormCheckBoxInput("PageCheckBoxInput", "PageCheckBoxInput", null));
-    addUIFormInput(new UIFormCheckBoxInput("DocumentCheckBoxInput", "DocumentCheckBoxInput", null));
-
+    addUIFormInput(new UIFormStringInput(KEYWORD_INPUT, KEYWORD_INPUT, null));
+    addUIFormInput(new UIFormSelectBox(PORTALS_SELECTION, PORTALS_SELECTION, getPortalList()));
+    addUIFormInput(new UIFormCheckBoxInput(PAGE_CHECKING, PAGE_CHECKING, null));
+    addUIFormInput(new UIFormCheckBoxInput(DOCUMENT_CHECKING, DOCUMENT_CHECKING, null));
   }
 
   /**
-   * The listener interface for receiving simpleSearchAction events.
-   * The class that is interested in processing a simpleSearchAction
-   * event implements this interface, and the object created
-   * with that class is registered with a component using the
-   * component's <code>addSimpleSearchActionListener<code> method. When
+   * The listener interface for receiving simpleSearchAction events. The class
+   * that is interested in processing a simpleSearchAction event implements this
+   * interface, and the object created with that class is registered with a
+   * component using the component's
+   * <code>addSimpleSearchActionListener<code> method. When
    * the simpleSearchAction event occurs, that object's appropriate
    * method is invoked.
    * 
    * @see SimpleSearchActionEvent
    */
-  public static class SimpleSearchActionListener extends EventListener<UISimpleSearchForm> {
-    
-    /* (non-Javadoc)
+  public static class SearchSimpleActionListener extends EventListener<UISimpleSearchForm> {
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
-    public void execute(Event<UISimpleSearchForm> event) throws Exception {	  
-      UISimpleSearchForm searchForm = event.getSource();
-      UISimpleSearchPortlet searchPortlet = searchForm.getParent();
-      UISearchResultForm searchResult = searchPortlet.getChild(UISearchResultForm.class);
-      WcmSearchService searchService = searchForm.getApplicationComponent(WcmSearchService.class);
-      String keyword = searchForm.getUIStringInput("SearchInput").getValue();
-      if (keyword == null) {
-        UIApplication uiApp = Util.getPortalRequestContext().getUIApplication();
-        Util.getPortalRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-        event.getRequestContext().addUIComponentToUpdateByAjax(searchPortlet);
+    public void execute(Event<UISimpleSearchForm> event) throws Exception {
+      UISimpleSearchForm uiSearchForm = event.getSource();
+      UISimpleSearchPortlet uiPortletSearch = uiSearchForm.getParent();
+      UISearchResultForm uiSearchResult = uiPortletSearch.getChild(UISearchResultForm.class);
+      UIApplication uiApp = uiSearchForm.getAncestorOfType(UIApplication.class);
+      WcmSearchService searchService = uiSearchForm.getApplicationComponent(WcmSearchService.class);
+      String keyword = uiSearchForm.getUIStringInput(KEYWORD_INPUT).getValue();
+      if ((keyword == null) || (keyword.length() == 0)) {
+        uiApp.addMessage(new ApplicationMessage("UISimpleSearchForm.msg.keyword-require", null,
+            ApplicationMessage.WARNING));
+        uiSearchForm.clearAll();
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       }
-      boolean searchDocument = false;
-      boolean searchPage = false;
-
-      if (searchForm.getUIFormCheckBoxInput("PageCheckBoxInput").isChecked()
-          && searchForm.getUIFormCheckBoxInput("DocumentCheckBoxInput").isChecked()) {
-        searchDocument = true;
-        searchPage = true;
-      } else if (searchForm.getUIFormCheckBoxInput("DocumentCheckBoxInput").isChecked()) {
-        searchDocument = true;
-      } else if (searchForm.getUIFormCheckBoxInput("PageCheckBoxInput").isChecked()) {
-        searchPage = true;
+      if (!uiSearchForm.isDocumentChecked() && !uiSearchForm.isPageChecked()) {
+        uiApp.addMessage(new ApplicationMessage("UISimpleSearchForm.msg.case-require", null,
+            ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
       }
-      String portalName = searchForm.getUIFormSelectBox("PortalSelection").getValue();
-      if (portalName.equalsIgnoreCase("all"))
+      String portalName = uiSearchForm.getUIFormSelectBox(PORTALS_SELECTION).getValue();
+      if (portalName.equalsIgnoreCase(ALL_OPTION))
         portalName = null;
       String userId = Util.getPortalRequestContext().getRemoteUser();
       SessionProvider sessionProvider = null;
@@ -129,34 +121,63 @@ public class UISimpleSearchForm extends UIForm {
       } else {
         sessionProvider = SessionProviderFactory.createSystemProvider();
       }
-      PageList resultList = searchService.searchWebContent(keyword, portalName, searchDocument,
-          searchPage, sessionProvider);
+      PageList resultList = searchService.searchWebContent(keyword, portalName, uiSearchForm
+          .isDocumentChecked(), uiSearchForm.isPageChecked(), sessionProvider);
       resultList.setPageSize(2);
-      searchResult.setResultList(resultList);
-      searchResult.setPortalName(portalName);
-      event.getRequestContext().addUIComponentToUpdateByAjax(searchPortlet);
+      uiSearchResult.setResultList(resultList);
+      uiSearchResult.setPortalName(portalName);      
+      uiSearchForm.clearAll();
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortletSearch);
     }
   }
 
   /**
-   * The listener interface for receiving advanceSearchAction events.
-   * The class that is interested in processing a advanceSearchAction
-   * event implements this interface, and the object created
-   * with that class is registered with a component using the
-   * component's <code>addAdvanceSearchActionListener<code> method. When
+   * The listener interface for receiving advanceSearchAction events. The class
+   * that is interested in processing a advanceSearchAction event implements
+   * this interface, and the object created with that class is registered with a
+   * component using the component's
+   * <code>addAdvanceSearchActionListener<code> method. When
    * the advanceSearchAction event occurs, that object's appropriate
    * method is invoked.
    * 
    * @see AdvanceSearchActionEvent
    */
-  public static class AdvanceSearchActionListener extends EventListener<UISimpleSearchForm> {
-    
-    /* (non-Javadoc)
+  public static class SearchAdvanceActionListener extends EventListener<UISimpleSearchForm> {
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
     public void execute(Event<UISimpleSearchForm> event) throws Exception {
 
     }
   }
-  
+
+  private void clearAll() {
+    getUIStringInput(KEYWORD_INPUT).setValue(null);
+    getUIFormCheckBoxInput(DOCUMENT_CHECKING).setChecked(false);
+    getUIFormCheckBoxInput(PAGE_CHECKING).setChecked(false);   
+  }
+
+  private boolean isDocumentChecked() {
+    return getUIFormCheckBoxInput(DOCUMENT_CHECKING).isChecked();
+  }
+
+  private boolean isPageChecked() {
+    return getUIFormCheckBoxInput(PAGE_CHECKING).isChecked();
+  }
+
+  private List getPortalList() throws Exception {
+    List<SelectItemOption<String>> portals = new ArrayList<SelectItemOption<String>>();
+    DataStorage service = getApplicationComponent(DataStorage.class);
+    Query<PortalConfig> query = new Query<PortalConfig>(null, null, null, PortalConfig.class);
+    List<PortalConfig> list = service.find(query).getAll();
+    portals.add(new SelectItemOption<String>(ALL_OPTION, ALL_OPTION));
+    for (PortalConfig portalConfig : list) {      
+      portals.add(new SelectItemOption<String>(portalConfig.getName(), portalConfig.getName()));
+    }    
+    return portals;
+  }
+
 }

@@ -14,6 +14,14 @@
   <description>exo.wcm.portlet.web-seaches Portlet Suites</description>
 
   <dependencies>
+  
+	<dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.webui.core</artifactId>
+      <version>${org.exoplatform.portal.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    
     <dependency>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.webui.eXo</artifactId>
@@ -26,7 +34,28 @@
       <artifactId>exo.portal.webui.portal</artifactId>
       <version>${org.exoplatform.portal.version}</version>
       <scope>provided</scope>
+    </dependency>        
+    
+    <dependency>
+      <groupId>org.exoplatform.ecm</groupId>
+      <artifactId>exo.ecm.component.cms</artifactId>
+      <version>${org.exoplatform.ecm.version}</version>
+      <scope>provided</scope>
+    </dependency>        
+    
+    <dependency>
+      <groupId>org.exoplatform.wcm</groupId>
+      <artifactId>exo.wcm.component.wcm</artifactId>
+      <version>${org.exoplatform.wcm.version}</version>
+      <scope>provided</scope>
     </dependency>
+    
+    <dependency>
+      <groupId>org.exoplatform.wcm</groupId>
+      <artifactId>exo.wcm.webui.wcm</artifactId>
+      <version>${org.exoplatform.wcm.version}</version>
+      <scope>provided</scope>
+    </dependency>        
 
     <dependency>
       <groupId>org.exoplatform.jcr</groupId>
@@ -45,6 +74,13 @@
       <groupId>org.exoplatform.jcr</groupId>
       <artifactId>exo.jcr.component.ftp</artifactId>
       <version>${org.exoplatform.jcr.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.exoplatform.ecm</groupId>
+      <artifactId>exo.ecm.webui.ecm</artifactId>
+      <version>${org.exoplatform.ecm.version}</version>
       <scope>provided</scope>
     </dependency>
     
