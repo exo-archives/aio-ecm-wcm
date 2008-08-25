@@ -24,14 +24,21 @@ import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
 /**
- * Created by The eXo Platform SARL
- * Author : Pham Xuan Hoa
- *          hoa.pham@exoplatform.com
- * Mar 19, 2008  
+ * Created by The eXo Platform SARL Author : Pham Xuan Hoa
+ * hoa.pham@exoplatform.com Mar 19, 2008
  */
-public interface WcmSearchService {      
-  public PageList searchWebContent(String keyword, String portalName,String repository,String worksapce, boolean documentSeach, boolean pageSearch,SessionProvider sessionProvider) throws Exception ;  
-  public PageList searchWebContent(String keyword,String portalName, boolean documentSearch,boolean pageSearch,SessionProvider sessionProvider) throws Exception ;
-  public void updatePagesCache() throws Exception ;
-  public Node getAssociatedDocument(PageNode pageNode,SessionProvider sessionProvider) throws Exception ;
+public interface WcmSearchService {
+  
+  public PageList searchWebContent(String keyword, String portalName, String repository,
+      String worksapce, boolean documentSeach, boolean pageSearch, SessionProvider sessionProvider)
+      throws Exception;
+
+  public PageList searchWebContent(String keyword, String portalName, boolean documentSearch,
+      boolean pageSearch, SessionProvider sessionProvider) throws Exception;
+
+  public void updatePagesCache() throws Exception;
+
+  public Node getAssociatedDocument(PageNode pageNode, SessionProvider sessionProvider)
+      throws Exception;
+  
 }
