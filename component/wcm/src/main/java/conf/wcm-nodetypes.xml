@@ -82,11 +82,42 @@
   	  <supertype>nt:unstructured</supertype>
   	  <supertype>nt:hierarchyNode</supertype>  	        
     </supertypes>
-    <propertyDefinitions>
-      <propertyDefinition name="exo:webSummary" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY"
+    <propertyDefinitions>          	    
+      <propertyDefinition name="exo:showTOC" requiredType="Boolean" autoCreated="true" mandatory="false" onParentVersion="COPY"
         protected="false" multiple="false">
         <valueConstraints/>
-      </propertyDefinition>  	          	    
+        <defaultValues>
+	      <defaultValue>true</defaultValue>
+	    </defaultValues>
+      </propertyDefinition>
+      <propertyDefinition name="exo:showCategories" requiredType="Boolean" autoCreated="true" mandatory="false" onParentVersion="COPY"
+        protected="false" multiple="false">
+        <valueConstraints/>
+        <defaultValues>
+	      <defaultValue>true</defaultValue>
+	    </defaultValues>
+      </propertyDefinition>
+      <propertyDefinition name="exo:showTags" requiredType="Boolean" autoCreated="true" mandatory="false" onParentVersion="COPY"
+        protected="false" multiple="false">
+        <valueConstraints/>
+        <defaultValues>
+	      <defaultValue>true</defaultValue>
+	    </defaultValues>
+      </propertyDefinition>
+      <propertyDefinition name="exo:votingEnable" requiredType="Boolean" autoCreated="true" mandatory="false" onParentVersion="COPY"
+        protected="false" multiple="false">
+        <valueConstraints/>
+        <defaultValues>
+	      <defaultValue>true</defaultValue>
+	    </defaultValues>
+      </propertyDefinition>
+      <propertyDefinition name="exo:commentingEnable" requiredType="Boolean" autoCreated="true" mandatory="false" onParentVersion="COPY"
+        protected="false" multiple="false">
+        <valueConstraints/>
+        <defaultValues>
+	      <defaultValue>true</defaultValue>
+	    </defaultValues>
+      </propertyDefinition>
     </propertyDefinitions>
     <childNodeDefinitions>
       <childNodeDefinition name="js" defaultPrimaryType="exo:jsFolder" autoCreated="false" mandatory="false"
