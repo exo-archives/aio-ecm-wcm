@@ -26,7 +26,7 @@
 %>
 		<div class="ItemResult">
 			<div class="NodeName">
-				<a  href="<%=uicomponent.createDocumentLink(node);%>" target="_blank"><b><%= node.getParent().getName() %></b></a>
+				<a  href="<%=uicomponent.createDocumentLink(node);%>" target="_blank"><b><%= node.getName() %></b></a>
 			</div>
 		  <div class="NodeOwner">Owner: <b><%= owner%></b></div>			
 		  <div class="NodeTime">Date Created: <b><%= dateFormat.format(node.getProperty("exo:dateCreated").getDate().getTime()) %></b></div>

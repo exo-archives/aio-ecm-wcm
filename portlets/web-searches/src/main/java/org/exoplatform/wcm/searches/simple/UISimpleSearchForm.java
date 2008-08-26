@@ -45,9 +45,14 @@ import org.exoplatform.webui.form.UIFormStringInput;
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * May 23, 2007
  */
-@ComponentConfig(lifecycle = UIFormLifecycle.class, template = "app:/groovy/simple-search/webui/component/UISimpleSearchForm.gtmpl", events = {
-    @EventConfig(listeners = UISimpleSearchForm.SearchSimpleActionListener.class),
-    @EventConfig(listeners = UISimpleSearchForm.SearchAdvanceActionListener.class) })
+@ComponentConfig(
+    lifecycle = UIFormLifecycle.class, 
+    template = "app:/groovy/simple-search/webui/component/UISimpleSearchForm.gtmpl", 
+    events = {
+      @EventConfig(listeners = UISimpleSearchForm.SearchSimpleActionListener.class),
+      @EventConfig(listeners = UISimpleSearchForm.SearchAdvanceActionListener.class) 
+    }
+)
 public class UISimpleSearchForm extends UIForm {
 
   protected final static String KEYWORD_INPUT     = "keyword";
@@ -67,10 +72,21 @@ public class UISimpleSearchForm extends UIForm {
    */
   @SuppressWarnings("unchecked")
   public UISimpleSearchForm() throws Exception {
-    addUIFormInput(new UIFormStringInput(KEYWORD_INPUT, KEYWORD_INPUT, null));
-    addUIFormInput(new UIFormSelectBox(PORTALS_SELECTION, PORTALS_SELECTION, getPortalList()));
-    addUIFormInput(new UIFormCheckBoxInput(PAGE_CHECKING, PAGE_CHECKING, null));
-    addUIFormInput(new UIFormCheckBoxInput(DOCUMENT_CHECKING, DOCUMENT_CHECKING, null));
+    UIFormStringInput keywordInput = new UIFormStringInput(KEYWORD_INPUT, KEYWORD_INPUT, null);
+    UIFormSelectBox portalSelectBox = new UIFormSelectBox(PORTALS_SELECTION, PORTALS_SELECTION,
+        getPortalList());
+    UIFormCheckBoxInput pageCheckBoxInput = new UIFormCheckBoxInput(PAGE_CHECKING, PAGE_CHECKING,
+        null);
+    UIFormCheckBoxInput documentCheckBoxInput = new UIFormCheckBoxInput(DOCUMENT_CHECKING,
+        DOCUMENT_CHECKING, null);
+
+    pageCheckBoxInput.setChecked(true);
+    documentCheckBoxInput.setChecked(true);
+
+    addUIFormInput(keywordInput);
+    addUIFormInput(portalSelectBox);
+    addUIFormInput(pageCheckBoxInput);
+    addUIFormInput(documentCheckBoxInput);
   }
 
   /**
@@ -125,7 +141,7 @@ public class UISimpleSearchForm extends UIForm {
           .isDocumentChecked(), uiSearchForm.isPageChecked(), sessionProvider);
       resultList.setPageSize(2);
       uiSearchResult.setResultList(resultList);
-      uiSearchResult.setPortalName(portalName);      
+      uiSearchResult.setPortalName(portalName);
       uiSearchForm.clearAll();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortletSearch);
     }
@@ -157,7 +173,8 @@ public class UISimpleSearchForm extends UIForm {
   private void clearAll() {
     getUIStringInput(KEYWORD_INPUT).setValue(null);
     getUIFormCheckBoxInput(DOCUMENT_CHECKING).setChecked(false);
-    getUIFormCheckBoxInput(PAGE_CHECKING).setChecked(false);   
+    getUIFormCheckBoxInput(PAGE_CHECKING).setChecked(false);
+    getUIFormSelectBox(PORTALS_SELECTION).setValue(ALL_OPTION);
   }
 
   private boolean isDocumentChecked() {
@@ -168,15 +185,16 @@ public class UISimpleSearchForm extends UIForm {
     return getUIFormCheckBoxInput(PAGE_CHECKING).isChecked();
   }
 
+  @SuppressWarnings("unchecked")
   private List getPortalList() throws Exception {
     List<SelectItemOption<String>> portals = new ArrayList<SelectItemOption<String>>();
     DataStorage service = getApplicationComponent(DataStorage.class);
     Query<PortalConfig> query = new Query<PortalConfig>(null, null, null, PortalConfig.class);
     List<PortalConfig> list = service.find(query).getAll();
     portals.add(new SelectItemOption<String>(ALL_OPTION, ALL_OPTION));
-    for (PortalConfig portalConfig : list) {      
+    for (PortalConfig portalConfig : list) {
       portals.add(new SelectItemOption<String>(portalConfig.getName(), portalConfig.getName()));
-    }    
+    }
     return portals;
   }
 

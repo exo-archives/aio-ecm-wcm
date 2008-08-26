@@ -16,13 +16,18 @@
  */
 package org.exoplatform.wcm.searches.simple;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.jcr.Node;
 import javax.portlet.PortletRequest;
 
+import org.exoplatform.commons.utils.ISO8601;
 import org.exoplatform.commons.utils.PageList;
-import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.portal.config.UserPortalConfigService;
+import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -33,17 +38,24 @@ import org.exoplatform.webui.core.UIPageIterator;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.form.UIForm;
 
-//TODO: Auto-generated Javadoc
+// TODO: Auto-generated Javadoc
 
 /**
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * May 23, 2007
  */
 
-@ComponentConfigs( {
-  @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "app:/groovy/simple-search/webui/component/UISearchResultForm.gtmpl"),
-  @ComponentConfig(type = UIPageIterator.class, template = "system:/groovy/webui/core/UIPageIterator.gtmpl", events = @EventConfig(listeners = UIPageIterator.ShowPageActionListener.class)) })
-  public class UISearchResultForm extends UIForm {
+@ComponentConfigs({
+      @ComponentConfig(
+          lifecycle = UIFormLifecycle.class, 
+          template = "app:/groovy/simple-search/webui/component/UISearchResultForm.gtmpl"),
+      @ComponentConfig(
+          type = UIPageIterator.class, 
+          template = "system:/groovy/webui/core/UIPageIterator.gtmpl", 
+          events = @EventConfig(listeners = UIPageIterator.ShowPageActionListener.class)) 
+    }
+)
+public class UISearchResultForm extends UIForm {
 
   /** The page iterator_. */
   private UIPageIterator pageIterator_;
@@ -96,7 +108,10 @@ import org.exoplatform.webui.form.UIForm;
    * @return the date created
    */
   public String getDateCreated(PageNode pageNode) {
-    return "4/1/2008";
+    SimpleDateFormat formatter = new SimpleDateFormat(ISO8601.SIMPLE_DATETIME_FORMAT);
+    if (pageNode.getStartPublicationDate() != null)
+      return formatter.format(pageNode.getStartPublicationDate());
+    return "undifined";
   }
 
   /**
@@ -133,13 +148,22 @@ import org.exoplatform.webui.form.UIForm;
   public String createLink(PageNode pageNode) throws Exception {
     PortletRequestContext context = PortletRequestContext.getCurrentInstance();
     String userId = context.getRemoteUser();
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    UserPortalConfigService portalConfigService = (UserPortalConfigService) container
+        .getComponentInstanceOfType(UserPortalConfigService.class);
+    Page page = portalConfigService.getPage(pageNode.getPageReference(), userId);
+    if (page != null) {
+      String ownerId = page.getOwnerId();
+      String ownerType = page.getOwnerType();
+      if (ownerType.equals("portal"))
+        setPortalName(ownerId);
+      else
+        setPortalName(portalConfigService.getDefaultPortal());
+    }
     String url = null;
     if (userId == null) {
       url = getBaseUrl() + "portal/public/" + portalName_ + "/" + pageNode.getUri();
-    } else {
-      String[] fields = pageNode.getPageReference().split("::");
-      if (fields[0].equals("portal"))
-        portalName_ = fields[1];      
+    } else {      
       url = getBaseUrl() + "portal/private/" + portalName_ + "/" + pageNode.getUri();
     }
     return url;
@@ -154,7 +178,7 @@ import org.exoplatform.webui.form.UIForm;
     PortletRequestContext context = PortletRequestContext.getCurrentInstance();
     PortletRequest request = context.getRequest();
     return request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
-    + "/";
+        + "/";
   }
 
   /**
@@ -182,7 +206,7 @@ import org.exoplatform.webui.form.UIForm;
   public String createDocumentLink(Node node) throws Exception {
     String worksapce = node.getSession().getWorkspace().getName();
     String repository = ((ManageableRepository) node.getSession().getRepository())
-    .getConfiguration().getName();
+        .getConfiguration().getName();
     String url = getBaseUrl() + "portal/rest/jcr/" + repository + "/" + worksapce + node.getPath();
     return url;
   }

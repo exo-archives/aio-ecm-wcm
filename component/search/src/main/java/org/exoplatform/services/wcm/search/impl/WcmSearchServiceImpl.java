@@ -35,8 +35,6 @@ import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.container.xml.InitParams;
-import org.exoplatform.container.xml.PropertiesParam;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.application.Preference;
 import org.exoplatform.portal.config.DataStorage;
@@ -66,10 +64,6 @@ public class WcmSearchServiceImpl implements WcmSearchService {
 
   private RepositoryService                 repositoryService;
 
-  private String                            defaultRepository;
-
-  private String                            defaultWorksapce;
-
   private DataStorage                       dataStorage_;
 
   private HashMap<String, String>           cachedPages_ = new HashMap<String, String>();
@@ -80,31 +74,30 @@ public class WcmSearchServiceImpl implements WcmSearchService {
 
   private ThreadLocalSessionProviderService localSessionProviderService;
 
-  public WcmSearchServiceImpl(RepositoryService repositoryService, DataStorage dataStorage,
-      InitParams initParams) {
+  public WcmSearchServiceImpl(RepositoryService repositoryService, DataStorage dataStorage) {
     this.repositoryService = repositoryService;
     this.dataStorage_ = dataStorage;
-    PropertiesParam serviceParams = initParams.getPropertiesParam("service-params");
-    defaultRepository = serviceParams.getProperty("defaultRepository");
-    defaultWorksapce = serviceParams.getProperty("defaultWorksapce");
   }
 
   public PageList searchWebContent(String keyword, String portalName, boolean documentSearch,
       boolean pageSearch, SessionProvider sessionProvider) throws Exception {
     ExoContainer exoContainer = ExoContainerContext.getCurrentContainer();
     livePortalManagerService = (LivePortalManagerService) exoContainer
-    .getComponentInstanceOfType(LivePortalManagerService.class);
+        .getComponentInstanceOfType(LivePortalManagerService.class);
     webSchemaConfigService = (WebSchemaConfigService) exoContainer
-    .getComponentInstanceOfType(WebSchemaConfigService.class);
+        .getComponentInstanceOfType(WebSchemaConfigService.class);
     localSessionProviderService = (ThreadLocalSessionProviderService) exoContainer
-    .getComponentInstanceOfType(ThreadLocalSessionProviderService.class);
-    return searchWebContent(keyword, portalName, defaultRepository, defaultWorksapce,
-        documentSearch, pageSearch, sessionProvider);
+        .getComponentInstanceOfType(ThreadLocalSessionProviderService.class);
+    ManageableRepository manageableRepository = repositoryService.getCurrentRepository();
+    String repository = manageableRepository.getConfiguration().getName();
+    String workspace = manageableRepository.getConfiguration().getDefaultWorkspaceName();
+    return searchWebContent(keyword, portalName, repository, workspace, documentSearch, pageSearch,
+        sessionProvider);
   }
 
   public PageList searchWebContent(String keyword, String portalName, String repository,
       String worksapce, boolean documentSeach, boolean pageSearch, SessionProvider sessionProvider)
-  throws Exception {
+      throws Exception {
     if (documentSeach && pageSearch) {
       return searchDocumentsAndPages(keyword, portalName, repository, worksapce, sessionProvider);
     } else if (documentSeach) {
@@ -113,6 +106,7 @@ public class WcmSearchServiceImpl implements WcmSearchService {
     return searchPortalPage(keyword, portalName, repository, worksapce, sessionProvider);
   }
 
+  @SuppressWarnings("unchecked")
   public void updatePagesCache() throws Exception {
     org.exoplatform.portal.config.Query<Page> pagesQuery = new org.exoplatform.portal.config.Query<Page>(
         null, null, null, Page.class);
@@ -129,7 +123,7 @@ public class WcmSearchServiceImpl implements WcmSearchService {
           break;
         }
       }
-      if (portletId != null) {           
+      if (portletId != null) {
         updateCachedPage(page.getPageId(), portletId);
       }
     }
@@ -175,6 +169,7 @@ public class WcmSearchServiceImpl implements WcmSearchService {
     return new ObjectPageList(allDocuments, 10);
   }
 
+  @SuppressWarnings("unchecked")
   private List<String> getPortalNames() throws Exception {
     org.exoplatform.portal.config.Query<PortalConfig> query = new org.exoplatform.portal.config.Query<PortalConfig>(
         null, null, null, PortalConfig.class);
@@ -188,14 +183,14 @@ public class WcmSearchServiceImpl implements WcmSearchService {
 
   private List<Object> findDocuments(QueryManager queryManager, String keyword, String portalName,
       String repository) throws Exception {
-    Node webContentStorage = getWebContentStorage(portalName);
+    Node documentStorage = getDocumentFolder(portalName);
     String sql = "select * from nt:base where contains(*,'" + keyword + "') and jcr:path like '"
-    + webContentStorage.getPath() + "/%' order by exo:dateCreated DESC";
+        + documentStorage.getPath() + "/%' order by exo:dateCreated DESC";
     Query query = queryManager.createQuery(sql, Query.SQL);
     QueryResult queryResult = query.execute();
     HashSet<Node> hashSet = new HashSet<Node>();
     for (NodeIterator iterator = queryResult.getNodes(); iterator.hasNext();) {
-      Node node = iterator.nextNode();
+      Node node = iterator.nextNode();            
       if (node.getPrimaryNodeType().isNodeType("nt:resource"))
         node = node.getParent();
       hashSet.add(node);
@@ -223,7 +218,7 @@ public class WcmSearchServiceImpl implements WcmSearchService {
       String workspace, SessionProvider sessionProvider) throws Exception {
     Node webContentStorage = getWebContentStorage(portalName);
     String sql = "select * from nt:base where contains(*,'" + keyword + "') and jcr:path like '"
-    + webContentStorage.getPath() + "/%' order by exo:dateCreated DESC";
+        + webContentStorage.getPath() + "/%' order by exo:dateCreated DESC";
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
     Session session = sessionProvider.getSession(workspace, manageableRepository);
     QueryManager queryManager = session.getWorkspace().getQueryManager();
@@ -235,7 +230,7 @@ public class WcmSearchServiceImpl implements WcmSearchService {
     List<Object> pageNodes = new ArrayList<Object>();
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     UserPortalConfigService portalConfigService = (UserPortalConfigService) container
-    .getComponentInstanceOfType(UserPortalConfigService.class);
+        .getComponentInstanceOfType(UserPortalConfigService.class);
     UserPortalConfig userPortalConfig = portalConfigService.getUserPortalConfig(portalName, userId);
     for (NodeIterator iterator = queryResult.getNodes(); iterator.hasNext();) {
       Node webContent = iterator.nextNode();
@@ -255,7 +250,7 @@ public class WcmSearchServiceImpl implements WcmSearchService {
   }
 
   private List<PageNode> findPageNodes(UserPortalConfig userPortalConfig, String pageReferencedId)
-  throws Exception {
+      throws Exception {
     List<PageNode> result = new ArrayList<PageNode>();
     for (PageNavigation navigation : userPortalConfig.getNavigations()) {
       result.addAll(filter(navigation, pageReferencedId));
@@ -282,7 +277,7 @@ public class WcmSearchServiceImpl implements WcmSearchService {
   }
 
   private void filter(PageNode node, String pageReferencedId, List<PageNode> allPageNode)
-  throws Exception {
+      throws Exception {
     if (pageReferencedId.equals(node.getPageReference())) {
       allPageNode.add(node.clone());
     }
@@ -329,7 +324,7 @@ public class WcmSearchServiceImpl implements WcmSearchService {
   }
 
   public Node getAssociatedDocument(PageNode pageNode, SessionProvider sessionProvider)
-  throws Exception {
+      throws Exception {
     String pageReferenced = pageNode.getPageReference();
     String nodeInfo = null;
     for (Iterator<String> iterator = cachedPages_.keySet().iterator(); iterator.hasNext();) {
@@ -365,8 +360,15 @@ public class WcmSearchServiceImpl implements WcmSearchService {
   private Node getWebContentStorage(String portalName) throws Exception {
     Node portal = getSelectedPortal(portalName);
     PortalFolderSchemaHandler portalFolderSchemaHandler = webSchemaConfigService
-    .getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
+        .getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
     return portalFolderSchemaHandler.getWebContentStorage(portal);
+  }
+
+  private Node getDocumentFolder(String portalName) throws Exception {
+    Node portal = getSelectedPortal(portalName);
+    PortalFolderSchemaHandler portalFolderSchemaHandler = webSchemaConfigService
+        .getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
+    return portalFolderSchemaHandler.getDocumentStorage(portal);
   }
 
 }
