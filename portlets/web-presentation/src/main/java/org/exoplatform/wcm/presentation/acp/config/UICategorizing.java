@@ -23,12 +23,9 @@ import javax.jcr.Node;
 import javax.jcr.Session;
 
 import org.exoplatform.ecm.webui.selector.UISelectable;
-import org.exoplatform.ecm.webui.tree.selectmany.UICategoriesContainer;
 import org.exoplatform.ecm.webui.tree.selectmany.UICategoriesSelector;
-import org.exoplatform.ecm.webui.tree.selectmany.UISelectedCategoriesGrid;
 import org.exoplatform.services.cms.categories.CategoriesService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
@@ -58,6 +55,13 @@ public class UICategorizing extends UIContainer implements UISelectable {
 
   public void initUICategoriesSelector() throws Exception {
     UICategoriesSelector uiCategoriesSelector = getChild(UICategoriesSelector.class);
+    if(getExistedCategories().size() == 0) {
+      System.out.println("=========> (Run in UICategorizing) Don't have existedCategories ");
+    } else {
+      for(String c: getExistedCategories()) {
+      System.out.println("====> (Run in UICategorizing) existed category: " + c);
+      }
+    }
     uiCategoriesSelector.setExistedCategoryList(getExistedCategories());
     uiCategoriesSelector.setSourceComponent(this,null);
     uiCategoriesSelector.init();
@@ -77,7 +81,7 @@ public class UICategorizing extends UIContainer implements UISelectable {
     for(String categoryPath: tempCategoryPaths) {
       categoriesService.removeCategory(webContentNode, categoryPath, repositoryName);
     }
-    newCategoryPaths.removeAll(oldCategoryPaths);
+    newCategoryPaths.removeAll(new ArrayList<String>(oldCategoryPaths));
     for (String categoryPath: newCategoryPaths) {
       categoriesService.addCategory(webContentNode, categoryPath, repositoryName);
     }

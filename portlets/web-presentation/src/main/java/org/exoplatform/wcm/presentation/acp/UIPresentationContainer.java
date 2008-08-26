@@ -56,7 +56,7 @@ public class UIPresentationContainer extends UIContainer{
     WebContributionService contributionService = getApplicationComponent(WebContributionService.class) ;
     String userId = Util.getPortalRequestContext().getRemoteUser();
     Boolean displayQuickEdit = contributionService.hasContributionPermission(userId);
-    return (isQuickEdit && displayQuickEdit); 
+    return (isQuickEdit && displayQuickEdit);  
   }
 
   public String getPortletId() {

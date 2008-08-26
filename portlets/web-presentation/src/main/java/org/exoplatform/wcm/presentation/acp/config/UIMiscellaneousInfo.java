@@ -16,8 +16,16 @@
  */
 package org.exoplatform.wcm.presentation.acp.config;
 
+import javax.jcr.Node;
+import javax.jcr.Session;
 import javax.portlet.PortletPreferences;
 
+import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.wcm.core.NodeIdentifier;
+import org.exoplatform.wcm.presentation.acp.UIAdvancedPresentationPortlet;
+import org.exoplatform.wcm.presentation.acp.config.quickcreation.UIQuickCreationWizard;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -52,6 +60,34 @@ public class UIMiscellaneousInfo extends UIForm {
     uiFormCheckBoxInput.setChecked(isQuickEdit);
     addUIFormInput(uiFormCheckBoxInput);
   }
+  
+  public void init() throws Exception {
+    UIQuickCreationWizard quickCreationWizard = getAncestorOfType(UIQuickCreationWizard.class);
+    UIContentDialogForm contentDialogForm = quickCreationWizard.getChild(UIContentDialogForm.class);
+    NodeIdentifier nodeIdentifier = contentDialogForm.getSavedNodeIdentifier();
+    String repositoryName = nodeIdentifier.getRepository();
+    String workspace = nodeIdentifier.getWorkspace();
+    String UUID = nodeIdentifier.getUUID();
+    RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
+    ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
+    Session session = SessionProvider.createSystemProvider().getSession(workspace, manageableRepository);
+    Node webContentNode = session.getNodeByUUID(UUID);
+    boolean isShowToc = webContentNode.getProperty("exo:showTOC").getValue().getBoolean();
+    boolean isShowCategories = webContentNode.getProperty("exo:showCategories").getValue().getBoolean();
+    boolean isShowTags = webContentNode.getProperty("exo:showTags").getValue().getBoolean();
+    boolean isVotingEnable = webContentNode.getProperty("exo:votingEnable").getValue().getBoolean();
+    boolean isCommentingEnable = webContentNode.getProperty("exo:commentingEnable").getValue().getBoolean();
+    
+    UIFormCheckBoxInput TOCCheckBoxInput = getUIFormCheckBoxInput("ShowTOC");
+    UIFormCheckBoxInput TagCheckBoxInput = getUIFormCheckBoxInput("ShowTags");
+    UIFormCheckBoxInput CategoryCheckBoxInput = getUIFormCheckBoxInput("ShowCategory");
+    UIFormCheckBoxInput AllowVotingCheckBoxInput = getUIFormCheckBoxInput("AllowVoting");
+    UIFormCheckBoxInput AllowCommentCheckBoxInput = getUIFormCheckBoxInput("AllowComment");
+    
+    TOCCheckBoxInput.setChecked(isShowToc);
+    TagCheckBoxInput.setChecked(isShowTags);
+    CategoryCheckBoxInput.setChecked(isShowCategories);
+    AllowVotingCheckBoxInput.setChecked(isVotingEnable);
+    AllowCommentCheckBoxInput.setChecked(isCommentingEnable);
+  }
 }
-
-

@@ -130,7 +130,7 @@ public class UIContentDialogForm extends UIBaseDialogForm {
         RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
         ManageableRepository manageableRepository = repositoryService.getRepository(this.repositoryName);
         String workspace = manageableRepository.getConfiguration().getSystemWorkspaceName();
-        resourceResolver = new JCRResourceResolver(this.repositoryName, workspace, "exo:templateFile");
+        resourceResolver = new JCRResourceResolver(this.repositoryName, workspace, TemplateService.EXO_TEMPLATE_FILE_PROP);
       }
     }catch(Exception e) {}
     return resourceResolver;

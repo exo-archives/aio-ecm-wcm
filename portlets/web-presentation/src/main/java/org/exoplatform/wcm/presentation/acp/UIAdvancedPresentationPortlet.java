@@ -22,9 +22,7 @@ import javax.portlet.PortletPreferences;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.services.wcm.contribution.WebContributionService;
 import org.exoplatform.wcm.presentation.acp.config.UIPortletConfig;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -80,7 +78,7 @@ public class UIAdvancedPresentationPortlet extends UIPortletApplication {
     }
     super.processRender(app, context) ;
   }
-  
+
   public boolean isQuickEditable() throws Exception {
     PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     PortletPreferences prefs = context.getRequest().getPreferences();
