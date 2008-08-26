@@ -3,6 +3,12 @@ FCKConfig.ToolbarSets["eXoBar"] = [
 	['Insert Image', 'Insert Portal Link', 'Insert DMS Document', 'Explorer']
 ];
 
+FCKConfig.ToolbarSets["cssToolBar"] = [
+	['Insert Image']
+];
+
+FCKConfig.SourceModeOnStartup = false; //config from server by hide input tag;
+
 // set eXo plugin path;
 FCKConfig.eXoPath = FCKConfig.BasePath.substr(0, FCKConfig.BasePath.length - 7) + "exo/" ;
 FCKConfig.Plugins.Add( 'urani', null, FCKConfig.eXoPath + "plugins/") ;
@@ -97,6 +103,11 @@ window.eXoPlugin = {
 	}
 };
 FCK["eXoPlugin"] = eXoPlugin;
+
+window.parent.FCKeditor_OnComplete = function(FCK) {
+  if (FCKConfig.SourceModeOnStartup) FCK.SwitchEditMode();
+  FCKConfig.SourceModeOnStartup = false;
+}
 
 eXoPlugin.init();
 eXoPlugin.addBar({newBar: "eXoBar", targetBar: "Basic" });
