@@ -35,7 +35,7 @@
 	.LoginContent .LoginSeperatorLine {
 		float: right;
 		width: 2px;
-		background: url(images/SeperatorLine.gif) no-repeat;
+		background: url('/iweb/groovy/banner/resources/images/SeperatorLine.gif') no-repeat;
 		margin: 7px 20px 0px 20px;
 		height: 20px;
 	}
@@ -49,12 +49,12 @@
 		cursor: pointer;
 		font-weight: bold;
 		padding-left: 26px;
-		background: url(images/LogoutIcon.png) no-repeat center left;
+		background: url('/iweb/groovy/banner/resources/images/LogoutIcon.png') no-repeat center left;
 		color: #0066FF;
 	}
 	
 	.LoginContent .SettingLanguage {
-	  background: url(images/LanguageIcon.gif) no-repeat left center;
+	  background: url('/iweb/groovy/banner/resources/images/LanguageIcon.gif') no-repeat left center;
 	  padding-left: 26px;
 	  cursor: pointer;
 	  font-weight: bold;

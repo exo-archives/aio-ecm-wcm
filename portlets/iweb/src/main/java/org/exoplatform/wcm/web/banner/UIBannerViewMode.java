@@ -83,8 +83,10 @@ public class UIBannerViewMode extends UIComponent {
         StringBuffer buffer = new StringBuffer();
         buffer.append("<style>").append(bannerCSS).append("</style>").append(bannerAccess).append(bannerHTML);
         return buffer.toString();
-      } catch (Exception e) {}
-    }    
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
     return null;
   }  
 }

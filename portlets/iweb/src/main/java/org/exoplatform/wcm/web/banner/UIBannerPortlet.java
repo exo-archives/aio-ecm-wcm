@@ -35,6 +35,7 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 public class UIBannerPortlet extends UIPortletApplication {
 
   private PortletMode currentMode = PortletMode.VIEW;
+  private UIBannerEditModeForm bannerEditModeForm;
 
   public UIBannerPortlet() throws Exception {
     activeMode(currentMode);    
@@ -45,7 +46,8 @@ public class UIBannerPortlet extends UIPortletApplication {
     if (PortletMode.VIEW.equals(mode)) {
       addChild(UIBannerViewModeContainer.class, null, UIPortletApplication.VIEW_MODE);
     } else if (PortletMode.EDIT.equals(mode)) {
-      addChild(UIBannerEditModeContainer.class, null, UIPortletApplication.EDIT_MODE);
+      bannerEditModeForm = addChild(UIBannerEditModeForm.class, null, UIPortletApplication.EDIT_MODE);
+      bannerEditModeForm.init();
     }
   }
   
