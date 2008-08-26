@@ -28,7 +28,6 @@ import java.util.regex.Pattern;
 import javax.jcr.Node;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
-import javax.servlet.ServletContext;
 
 import org.exoplatform.commons.utils.IOUtil;
 import org.exoplatform.commons.utils.MimeTypeResolver;
