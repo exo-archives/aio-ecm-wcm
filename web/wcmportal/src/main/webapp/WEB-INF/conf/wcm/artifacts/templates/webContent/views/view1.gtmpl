@@ -1,7 +1,16 @@
 <%
   import javax.jcr.NodeIterator;
   import javax.jcr.Node;
+  import javax.jcr.Session;
+  import java.util.ArrayList;
+	import java.util.List;
   import org.exoplatform.services.wcm.webcontent.TOCGeneratorService;
+  import org.exoplatform.services.jcr.core.ManageableRepository;
+  import org.exoplatform.services.cms.categories.CategoriesService;
+  import org.exoplatform.webui.application.WebuiRequestContext;
+	import org.exoplatform.webui.application.portlet.PortletRequestContext;
+	import javax.portlet.PortletPreferences;
+	import org.exoplatform.services.cms.folksonomy.FolksonomyService;
 
   def currentNode = uicomponent.getNode() ; 
   def htmlFile = currentNode.getNode("default.html") ;
@@ -20,12 +29,21 @@
   
   TOCGeneratorService tocService = uicomponent.getApplicationComponent(TOCGeneratorService.class);
 	String tocContent = tocService.getTOC(htmlFile);
+	
+	ManageableRepository mRepository = (ManageableRepository)currentNode.getSession().getRepository();
+  String repositoryName = mRepository.getConfiguration().getName();
+	boolean isShowTOC = currentNode.getProperty("exo:showTOC").getValue().getBoolean();
+	boolean isShowCategories = currentNode.getProperty("exo:showCategories").getValue().getBoolean();
+	boolean isShowTags = currentNode.getProperty("exo:showTags").getValue().getBoolean();
+	boolean isVotingEnable = currentNode.getProperty("exo:votingEnable").getValue().getBoolean();
+	boolean isCommentingEnable = currentNode.getProperty("exo:commentingEnable").getValue().getBoolean();
+		
 	if((css != null) && (!css.equals(""))) {
 %>
 		<style><%=css%></style>
 <%
 	}
-	if((tocContent != null) && (tocContent.length() > 0)) {
+	if((tocContent != null) && (tocContent.length() > 0) && isShowTOC) {
 %>
 		<div class='toc'>
 			<%= tocContent%>
@@ -37,3 +55,38 @@
 <% if((js != null) && (!js.equals(""))) {%>
 <script><%=js%></script>
 <% } %>
+
+<% 
+	if(isShowCategories) {
+		StringBuffer categories = new StringBuffer();
+		CategoriesService categoriesService = uicomponent.getApplicationComponent(CategoriesService.class);
+		if(categoriesService.hasCategories(currentNode)) {
+      List<Node> categoryNodeList = categoriesService.getCategories(currentNode, repositoryName);
+      for (Node category: categoryNodeList) {
+        categories.append(category.getPath()).append(";");
+      }
+%>
+		<div>Categories:</div>
+		<div class="Categories"><%= categories.toString(); %></div>
+<%
+    }
+	}
+%>
+
+<% 
+	if(isShowTags) {
+		FolksonomyService folkService = uicomponent.getApplicationComponent(FolksonomyService.class);
+		StringBuffer tagBuff = new StringBuffer("[");
+		for(Node tag: folkService.getLinkedTagsOfDocument(currentNode, repositoryName)) {
+			tagBuff.append(tag.getName()).append(",");
+		}
+		tagBuff.replace(tagBuff.lastIndexOf(","), tagBuff.size(), "]");
+%>
+			<div>Tags:</div>
+			<div class="Tags"><%= tagBuff.toString(); %></div>
+<%		
+	}
+%>
+
+
+
