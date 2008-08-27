@@ -18,9 +18,11 @@ package org.exoplatform.wcm.presentation.scp;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import org.exoplatform.dms.model.ContentStorePath;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.web.application.RequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
@@ -48,21 +50,27 @@ import org.exoplatform.webui.form.UIFormSelectBox;
 public class UIPathChooser extends UIDocumentChooser {
 
   private boolean autoPath_ = true ;
+  private String autoOption;
+  private String specifyOption;
 
   public UIPathChooser() throws Exception {
     super(UIDocumentChooser.SELECT_PATH_MODE) ;
-    getChildren().clear() ;
-    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>(2) ;
-    options.add(new SelectItemOption<String>("Auto", "Auto", null)) ;
-    options.add(new SelectItemOption<String>("Specify", "Specify", null)) ;
-    UIFormSelectBox uiOptionInput = new UIFormSelectBox("PathOption", null, options).setValue("Auto") ;
+    getChildren().clear();
+    RequestContext context = RequestContext.getCurrentInstance();
+    ResourceBundle bundle = context.getApplicationResourceBundle();
+    autoOption = bundle.getString("UIPathChooser.label.auto");
+    specifyOption = bundle.getString("UIPathChooser.label.specify");
+    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>(2) ;      
+    options.add(new SelectItemOption<String>(autoOption, autoOption, null)) ;
+    options.add(new SelectItemOption<String>(specifyOption, specifyOption, null)) ;    
+    UIFormSelectBox uiOptionInput = new UIFormSelectBox("PathOption", null, options).setValue(autoOption) ;
     uiOptionInput.setOnChange("ChangeOption") ;
     addUIFormInput(uiOptionInput) ;
     activateMode(UIDocumentChooser.SELECT_PATH_MODE) ;
     setAutoPath(true) ;
     setActions(new String [] {}) ;
   }
-
+  
   public void setAutoPath(boolean auto) throws Exception {
     autoPath_ = auto ;
     this.<UIComponent>getChildById(FIELD_REPOSITORY).setRendered(!autoPath_) ;
@@ -89,7 +97,7 @@ public class UIPathChooser extends UIDocumentChooser {
     public void execute(Event<UIPathChooser> event) throws Exception {
       UIPathChooser uiForm = event.getSource() ;
       String selectedOption = uiForm.getUIFormSelectBox("PathOption").getValue() ;
-      uiForm.setAutoPath("Auto".equals(selectedOption)) ;
+      uiForm.setAutoPath(uiForm.autoOption.equals(selectedOption)) ;
     }
 
   }

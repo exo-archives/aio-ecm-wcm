@@ -1,2 +1,2 @@
-<Context path="/web-presentation" docBase="../../../eXoProjects/wcm/trunk/portlets/web-presentation/src/main/webapp" 
+<Context path="/web-presentation" docBase="../../../eXoProjects/wcm/branches/0.1/portlets/web-presentation/src/main/webapp" 
          debug="0" reloadable="true" />
