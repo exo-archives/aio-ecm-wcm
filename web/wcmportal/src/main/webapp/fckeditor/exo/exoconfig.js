@@ -1,14 +1,3 @@
-//config eXo plugin bar
-FCKConfig.ToolbarSets["eXoBar"] = [
-	['Insert Image', 'Insert Portal Link', 'Insert DMS Document', 'Explorer']
-];
-
-FCKConfig.ToolbarSets["cssToolBar"] = [
-	['Insert Image']
-];
-
-FCKConfig.SourceModeOnStartup = false; //config from server by hide input tag;
-
 // set eXo plugin path;
 FCKConfig.eXoPath = FCKConfig.BasePath.substr(0, FCKConfig.BasePath.length - 7) + "exo/" ;
 FCKConfig.Plugins.Add( 'urani', null, FCKConfig.eXoPath + "plugins/") ;
@@ -21,6 +10,18 @@ FCKConfig.Plugins.Add( 'insertPortalLink', null, FCKConfig.eXoPath + "plugins/")
 FCKConfig.EditorAreaCSS = ['/eXoResources/skin/Stylesheet.css', '/wcmResources/skin/Stylesheet.css', '/portal/css/WebContent/Live/Stylesheet.css'] ;
 FCKConfig.EditorAreaStyles = 'body{	background: none;	margin: 0px;}' ;
 
+//config eXo plugin bar
+FCKConfig.ToolbarSets["eXoBar"] = [
+	['Insert Image', 'Insert Portal Link', 'Insert DMS Document', 'Explorer']
+];
+
+FCKConfig.ToolbarSets["CSSToolBar"] = [
+	['Insert Image']
+];
+
+FCKConfig.ToolbarSets["JSToolBar"] = [ ];
+
+FCKConfig.SourceModeCommands = ['Insert Image'];
 //eXoPlugin config
 window.eXoPlugin = {
 	init: function() {
@@ -105,8 +106,23 @@ window.eXoPlugin = {
 FCK["eXoPlugin"] = eXoPlugin;
 
 window.parent.FCKeditor_OnComplete = function(FCK) {
-  if (FCKConfig.SourceModeOnStartup) FCK.SwitchEditMode();
-  FCKConfig.SourceModeOnStartup = false;
+	var oEditor = FCKeditorAPI.GetInstance(FCK.Name);
+	var useSourceMode = false;		
+	for ( var o in oEditor.Config )
+	{
+		//SourceModeOnStartup setted in 
+		if(encodeURIComponent(o) == 'SourceModeOnStartup')	{		
+			useSourceMode = oEditor.Config[o];		
+			break;
+	 	}
+	}	
+	if (useSourceMode) {
+		FCK.SwitchEditMode();
+		//enable some command can be used in source mode
+//		for(var commandName in FCKConfig.SourceModeButtons) {
+//			oEditor.window.parent.FCKToolbarItems.LoadedItems[commandName].Enable();
+//		}
+	}
 }
 
 eXoPlugin.init();
