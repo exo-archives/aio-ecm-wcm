@@ -16,10 +16,10 @@
  */
 package org.exoplatform.wcm.web.footer;
 
-import javax.jcr.Session;
+import javax.jcr.Node;
 import javax.portlet.PortletRequest;
 
-import org.exoplatform.ecm.resolver.NTFileResourceResolver;
+import org.exoplatform.dms.application.StringResourceResolver;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -58,30 +58,34 @@ public class UIFooterViewMode extends UIComponent {
   }
 
   public String getTemplate() {
-    if(isUseJCRTemplate())
-      return "jcr:" + nodeUUID;
     return DEFAULT_TEMPLATE; 
   }
 
   public ResourceResolver getTemplateResourceResolver(WebuiRequestContext context, String template) {
-    if(isUseJCRTemplate()) {
-      return new NTFileResourceResolver(repository, workspace);
-    }
+    String footerData = loadJCRFooter();
+    if(footerData != null) {
+      return new StringResourceResolver(footerData);
+    }    
     return super.getTemplateResourceResolver(context, template);
   }
   
-  private boolean isUseJCRTemplate() {
+  private String loadJCRFooter() {
     if (repository != null && workspace != null && nodeUUID != null) {
       try {
         RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
-        SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
+        // need use session provider if enable permission for banner
+        SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
         ManageableRepository manageableRepository = (ManageableRepository)repositoryService.getRepository(repository);
-        Session session = sessionProvider.getSession(workspace, manageableRepository);
-        session.getNodeByUUID(nodeUUID);
-        sessionProvider.close();
-        return true;
-      } catch (Exception e) {}
+        Node footerWebContent = sessionProvider.getSession(workspace, manageableRepository).getNodeByUUID(nodeUUID);
+        String footerCSS = footerWebContent.getNode("css").getNode("default.css").getNode("jcr:content").getProperty("jcr:data").getString();
+        String footerHTML = footerWebContent.getNode("default.html").getNode("jcr:content").getProperty("jcr:data").getString();
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<style>").append(footerCSS).append("</style>").append(footerHTML);
+        return buffer.toString();
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
     }
-    return false;
+    return null;
   }  
 }

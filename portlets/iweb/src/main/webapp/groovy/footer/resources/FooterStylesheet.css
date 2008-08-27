@@ -1,0 +1,19 @@
+.Footer {
+  background: url('/iweb/groovy/footer/resources/images/FooterBG.gif') repeat-x top;
+  height: auto;
+  margin: 0px;
+}
+
+.Footer .RepeatFooter {
+  padding: 0px;
+  margin: 0px;
+}
+
+.Footer .FooterInfoContainer {
+  line-height: 25px ;
+}
+
+.Footer .CopyrightInfo {
+  line-height: 25px;
+  text-align: center;
+}

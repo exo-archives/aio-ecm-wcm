@@ -25,11 +25,10 @@
   text-align: center;
 }
 
-.UIFooterPortlet .UIFormGrid td.FieldComponent textarea {
-	border:1px solid gray;
+.UIFooterPortlet .UITabContent textarea {
 	font-size:11px;
-	height: auto;
-	width: auto;
+	height: 200px;
+	width: 500px;
 }
 
 .FooterQuickEdit{

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.wcm.web.banner;
+package org.exoplatform.wcm.web.footer;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -64,134 +64,113 @@ import org.exoplatform.webui.form.UIFormInputBase;
  * Created by The eXo Platform SAS
  * Author : Phan Le Thanh Chuong
  *          chuong_phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * Aug 21, 2008  
+ * Aug 26, 2008  
  */
-@ComponentConfig (
+@ComponentConfig(
     lifecycle = UIFormLifecycle.class,
     events = {
-      @EventConfig(listeners = UIBannerEditModeForm.SaveActionListener.class),
-      @EventConfig(listeners = UIBannerEditModeForm.CancelActionListener.class)
+      @EventConfig(listeners = UIFooterEditModeForm.SaveActionListener.class),
+      @EventConfig(listeners = UIFooterEditModeForm.CancelActionListener.class)
     }
 )
-public class UIBannerEditModeForm extends UIDialogForm {
-
-  private Node bannerFolder;
-  private final String DEFAULT_HTML = "app:/groovy/banner/resources/banner.html".intern();
-  private final String DEFAULT_CSS = "app:/groovy/banner/resources/BannerStylesheet.css".intern();
-
-  public UIBannerEditModeForm() throws Exception {
-    super();
-  }
-
+public class UIFooterEditModeForm extends UIDialogForm {
+  
+  private Node footerFolder; 
+  private final String DEFAULT_HTML = "app:/groovy/footer/resources/footer.html".intern();
+  private final String DEFAULT_CSS = "app:/groovy/footer/resources/FooterStylesheet.css".intern();
+  
   public void init() throws Exception {
     String portalName = Util.getUIPortal().getName();
     LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
     SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
     Node portalFolder = livePortalManagerService.getLivePortal(portalName, sessionProvider);
-
+    
     WebSchemaConfigService webSchemaConfigService = getApplicationComponent(WebSchemaConfigService.class);
     PortalFolderSchemaHandler portalFolderSchemaHandler = webSchemaConfigService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
-    bannerFolder = portalFolderSchemaHandler.getBannerThemes(portalFolder);
-
-    setRepositoryName(((ManageableRepository)(bannerFolder.getSession().getRepository())).getConfiguration().getName());
-    setWorkspace(bannerFolder.getSession().getWorkspace().getName());
-    setStoredPath(bannerFolder.getPath());    
+    footerFolder = portalFolderSchemaHandler.getFooterThemes(portalFolder);
+    
+    setRepositoryName(((ManageableRepository) footerFolder.getSession().getRepository()).getConfiguration().getName());
+    setWorkspace(footerFolder.getSession().getWorkspace().getName());
+    setStoredPath(footerFolder.getPath());
     setContentType("exo:webContent");
-    if(bannerFolder.hasNode("banner")) {
-      setNodePath(bannerFolder.getNode("banner").getPath());
+    if (footerFolder.hasNode("footer")) {
+      setNodePath(footerFolder.getNode("footer").getPath());
       addNew(false);
     } else {
       addNew(true);
-    }    
+    }
   }
-
+  
   public void renderField(String name) throws Exception {
     if (isAddNew()) {
-      String jcrPath = ((JcrInputProperty)getInputProperties().get(name)).getJcrPath();
+      String jcrPath = ((JcrInputProperty) getInputProperty(name)).getJcrPath();
       if ("/node".equals(jcrPath)) {
-    	  UIFormInputBase<String> formTextField = findComponentById(name);
-        formTextField.setValue("banner");
-      } else if("/node/default.html/jcr:content/jcr:data".equals(jcrPath)) {
-    	UIFormInputBase<String> formWYSIWYGInput = findComponentById(name);
-        formWYSIWYGInput.setValue(loadHtml());
-      } else if("/node/css/default.css/jcr:content/jcr:data".equals(jcrPath)){
-        UIFormInputBase<String> formTextAreaInput = findComponentById(name);
-        formTextAreaInput.setValue(loadStyle());
-      }       
+        UIFormInputBase<String> formInputBase = findComponentById(name);
+        formInputBase.setValue("footer");
+      } else if ("/node/default.html/jcr:content/jcr:data".equals(jcrPath)) {
+        UIFormInputBase<String> formInputBase = findComponentById(name);
+        formInputBase.setValue(loadHtml());
+      } else if ("/node/css/default.css/jcr:content/jcr:data".equals(jcrPath)) {
+        UIFormInputBase<String> formInputBase = findComponentById(name);
+        formInputBase.setValue(loadCss());
+      }
     }
     super.renderField(name);
   }
-
-  private String loadHtml() throws Exception {    
+  
+  private String loadHtml() throws Exception {
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     InputStream inputStream = portletRequestContext.getApplication().getResourceResolver().getInputStream(DEFAULT_HTML);
-    return IOUtil.getStreamContentAsString(inputStream);    
+    String htmlContent = IOUtil.getStreamContentAsString(inputStream);
+    return htmlContent;
   }
-
-  private String loadStyle() throws Exception {    
+  
+  private String loadCss() throws Exception {
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     InputStream inputStream = portletRequestContext.getApplication().getResourceResolver().getInputStream(DEFAULT_CSS);
-    return IOUtil.getStreamContentAsString(inputStream);    
+    String cssContent = IOUtil.getStreamContentAsString(inputStream);
+    return cssContent;
   }
-
-  //TODO should use the method on UIDialogForm
-  public ResourceResolver getTemplateResourceResolver(WebuiRequestContext webuiRequestContext, String template) {    
+  
+  public ResourceResolver getTemplateResourceResolver(WebuiRequestContext webuiRequestContext, String template) {
     try {
       RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
       ManageableRepository manageableRepository = repositoryService.getRepository(this.repositoryName);
       String workspaceName = manageableRepository.getConfiguration().getSystemWorkspaceName();
       return new JCRResourceResolver(this.repositoryName, workspaceName, TemplateService.EXO_TEMPLATE_FILE_PROP);
-    } catch(Exception e){}
+    } catch(Exception e) {}
     return super.getTemplateResourceResolver(webuiRequestContext, template);
   }
-
-  public static class SaveActionListener extends EventListener<UIBannerEditModeForm> {
-    private final String DEFAULT_LOGIN = "app:/groovy/banner/resources/LoginFragment.gtmpl".intern();
+  
+  public static class SaveActionListener extends EventListener<UIFooterEditModeForm> {
     private final String SERVLET_HOME = "/iweb";
     
-    public void execute(Event<UIBannerEditModeForm> event) throws Exception {
-      UIBannerEditModeForm bannerEditModeForm = event.getSource();
-      bannerEditModeForm.init();
+    public void execute(Event<UIFooterEditModeForm> event) throws Exception {
+      UIFooterEditModeForm footerEditModeForm = event.getSource();
+      footerEditModeForm.init();
       
-      List<UIComponent> listComponent = bannerEditModeForm.getChildren();
-      Map<String, JcrInputProperty> inputProperties = DialogFormUtil.prepareMap(listComponent, bannerEditModeForm.getInputProperties());
+      List<UIComponent> listComponent = footerEditModeForm.getChildren();
+      Map<String, JcrInputProperty> inputProperties = DialogFormUtil.prepareMap(listComponent, footerEditModeForm.getInputProperties());
 
       String nodeType = null;
       Node homeNode = null;
-      if (!bannerEditModeForm.isAddNew()) {
-        homeNode = bannerEditModeForm.getNode().getParent();
-        nodeType = bannerEditModeForm.getNode().getPrimaryNodeType().getName();
+      if (!footerEditModeForm.isAddNew()) {
+        homeNode = footerEditModeForm.getNode().getParent();
+        nodeType = footerEditModeForm.getNode().getPrimaryNodeType().getName();
       } else {
-        homeNode = bannerEditModeForm.bannerFolder;
+        homeNode = footerEditModeForm.footerFolder;
         nodeType = "exo:webContent";
       }
-      CmsService cmsService = bannerEditModeForm.getApplicationComponent(CmsService.class);
-      String bannerWebContentPath = cmsService.storeNode(nodeType, homeNode, inputProperties, !bannerEditModeForm.isEditing(), bannerEditModeForm.repositoryName);
-      Node bannerWebContent = (Node) homeNode.getSession().getItem(bannerWebContentPath);
-
-      WebSchemaConfigService webSchemaConfigService = bannerEditModeForm.getApplicationComponent(WebSchemaConfigService.class);
-      WebContentSchemaHandler webContentSchemaHandler = webSchemaConfigService.getWebSchemaHandlerByType(WebContentSchemaHandler.class);
-      Node cssFolder = webContentSchemaHandler.getCSSFolder(bannerWebContent);
-      Node documentFolder = webContentSchemaHandler.getDocumentFolder(bannerWebContent);
-      Node imageFolder = webContentSchemaHandler.getImagesFolders(bannerWebContent);
+      CmsService cmsService = footerEditModeForm.getApplicationComponent(CmsService.class);
+      String footerWebContentPath = cmsService.storeNode(nodeType, homeNode, inputProperties, !footerEditModeForm.isEditing(), footerEditModeForm.repositoryName);
+      Node footerWebContent = (Node) homeNode.getSession().getItem(footerWebContentPath);
       
-      Node accessGTMPL = null;
-      if (documentFolder.hasNode("access.gtmpl")) {
-        accessGTMPL = documentFolder.getNode("access.gtmpl");
-        Node accessGTMPLContent = accessGTMPL.getNode("jcr:content");
-        accessGTMPLContent.setProperty("jcr:data", loadLogin());
-        accessGTMPLContent.setProperty("jcr:lastModified", new Date().getTime()); 
-      }
-      else {
-        accessGTMPL = documentFolder.addNode("access.gtmpl", "nt:file");
-        Node accessGTMPLContent = accessGTMPL.addNode("jcr:content", "nt:resource");
-        accessGTMPLContent.setProperty("jcr:encoding", "UTF-8");
-        accessGTMPLContent.setProperty("jcr:mimeType", "text/plain");
-        accessGTMPLContent.setProperty("jcr:data", loadLogin());
-        accessGTMPLContent.setProperty("jcr:lastModified", new Date().getTime()); 
-      }
-
-      String htmlContent = bannerWebContent.getProperty("default.html/jcr:content/jcr:data").getString();
+      WebSchemaConfigService webSchemaConfigService = footerEditModeForm.getApplicationComponent(WebSchemaConfigService.class);
+      WebContentSchemaHandler webContentSchemaHandler = webSchemaConfigService.getWebSchemaHandlerByType(WebContentSchemaHandler.class);
+      Node cssFolder = webContentSchemaHandler.getCSSFolder(footerWebContent);
+      Node imageFolder = webContentSchemaHandler.getImagesFolders(footerWebContent);
+      
+      String htmlContent = footerWebContent.getProperty("default.html/jcr:content/jcr:data").getString();
       List<String> listImageUrl = getListImageUrl(htmlContent);
       for (String imageUrl : listImageUrl) {
         String newImageUrl = saveImage2JCR(imageUrl, imageFolder);
@@ -199,7 +178,7 @@ public class UIBannerEditModeForm extends UIDialogForm {
           htmlContent = htmlContent.replaceAll(imageUrl, newImageUrl);
         }
       }
-      bannerWebContent.getNode("default.html/jcr:content").setProperty("jcr:data", htmlContent);
+      footerWebContent.getNode("default.html/jcr:content").setProperty("jcr:data", htmlContent);
       
       String cssContent = cssFolder.getProperty("default.css/jcr:content/jcr:data").getString();
       listImageUrl = getListImageUrl(cssContent);
@@ -216,19 +195,13 @@ public class UIBannerEditModeForm extends UIDialogForm {
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
       
       PortletPreferences portletPreferences = context.getRequest().getPreferences();
-      portletPreferences.setValue("repository", bannerEditModeForm.repositoryName) ;
-      portletPreferences.setValue("workspace", bannerWebContent.getSession().getWorkspace().getName()) ;
-      portletPreferences.setValue("nodeUUID", bannerWebContent.getUUID()) ;
+      portletPreferences.setValue("repository", footerEditModeForm.repositoryName) ;
+      portletPreferences.setValue("workspace", footerWebContent.getSession().getWorkspace().getName()) ;
+      portletPreferences.setValue("nodeUUID", footerWebContent.getUUID()) ;
       portletPreferences.store();
-      event.getRequestContext().setAttribute("nodePath", bannerWebContentPath);
+      event.getRequestContext().setAttribute("nodePath", footerWebContentPath);
       
       context.setApplicationMode(PortletMode.VIEW);
-    }
-    
-    private String loadLogin() throws Exception {
-      PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
-      InputStream inputStream = portletRequestContext.getApplication().getResourceResolver().getInputStream(DEFAULT_LOGIN);
-      return IOUtil.getStreamContentAsString(inputStream);
     }
     
     private List<String> getListImageUrl(String content) throws Exception {
@@ -280,12 +253,11 @@ public class UIBannerEditModeForm extends UIDialogForm {
       return null;
     }
   }
-
-  public static class CancelActionListener extends EventListener<UIBannerEditModeForm> {
-    public void execute(Event<UIBannerEditModeForm> event) throws Exception {
-      PortletRequestContext portletRequestContext = (PortletRequestContext)event.getRequestContext();
+  
+  public static class CancelActionListener extends EventListener<UIFooterEditModeForm> {
+    public void execute(Event<UIFooterEditModeForm> event) throws Exception {
+      PortletRequestContext portletRequestContext = (PortletRequestContext) event.getRequestContext();
       portletRequestContext.setApplicationMode(PortletMode.VIEW);
     }
   }
-
 }

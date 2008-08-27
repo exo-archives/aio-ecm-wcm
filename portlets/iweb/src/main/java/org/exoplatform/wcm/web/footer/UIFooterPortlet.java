@@ -45,7 +45,8 @@ public class UIFooterPortlet extends UIPortletApplication {
     if (PortletMode.VIEW.equals(mode)) {
       addChild(UIFooterViewModeContainer.class, null, UIPortletApplication.VIEW_MODE);
     } else if (PortletMode.EDIT.equals(mode)) {
-      addChild(UIFooterEditModeContainer.class, null, UIPortletApplication.EDIT_MODE);      
+      UIFooterEditModeForm footerEditModeForm = addChild(UIFooterEditModeForm.class, null, UIPortletApplication.EDIT_MODE);
+      footerEditModeForm.init();
     }
   }
   
