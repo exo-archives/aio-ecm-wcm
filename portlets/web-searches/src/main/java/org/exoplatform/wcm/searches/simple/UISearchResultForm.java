@@ -45,68 +45,40 @@ import org.exoplatform.webui.form.UIForm;
  * May 23, 2007
  */
 
-@ComponentConfigs({
-      @ComponentConfig(
-          lifecycle = UIFormLifecycle.class, 
-          template = "app:/groovy/simple-search/webui/component/UISearchResultForm.gtmpl"),
-      @ComponentConfig(
-          type = UIPageIterator.class, 
-          template = "system:/groovy/webui/core/UIPageIterator.gtmpl", 
-          events = @EventConfig(listeners = UIPageIterator.ShowPageActionListener.class)) 
-    }
-)
+@ComponentConfigs( {
+    @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "app:/groovy/simple-search/webui/component/UISearchResultForm.gtmpl"),
+    @ComponentConfig(type = UIPageIterator.class, template = "system:/groovy/webui/core/UIPageIterator.gtmpl", events = @EventConfig(listeners = UIPageIterator.ShowPageActionListener.class)) })
 public class UISearchResultForm extends UIForm {
 
-  /** The page iterator_. */
-  private UIPageIterator pageIterator_;
+  private UIPageIterator          pageIterator_;
 
-  /** The portal name_. */
-  private String         portalName_;
+  private String                  portalName_;
 
-  /**
-   * Instantiates a new uI search result form.
-   * 
-   * @throws Exception the exception
-   */
+  private PortletRequestContext   portletRequestContext;
+
+  private UserPortalConfigService userPortalConfigService;
+
   @SuppressWarnings("unchecked")
   public UISearchResultForm() throws Exception {
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    userPortalConfigService = (UserPortalConfigService) container
+        .getComponentInstanceOfType(UserPortalConfigService.class);
+    portletRequestContext = PortletRequestContext.getCurrentInstance();
     pageIterator_ = addChild(UIPageIterator.class, null, null);
   }
 
-  /**
-   * Gets the current page data.
-   * 
-   * @return the current page data
-   * @throws Exception the exception
-   */
   public List getCurrentPageData() throws Exception {
     return pageIterator_.getCurrentPageData();
   }
 
-  /**
-   * Sets the result list.
-   * 
-   * @param pageList the new result list
-   */
   public void setResultList(PageList pageList) {
     pageIterator_.setPageList(pageList);
   }
 
-  /**
-   * Sets the portal name.
-   * 
-   * @param name the new portal name
-   */
   public void setPortalName(String name) {
     this.portalName_ = name;
   }
 
-  /**
-   * Gets the date created.
-   * 
-   * @param pageNode the page node
-   * @return the date created
-   */
   public String getDateCreated(PageNode pageNode) {
     SimpleDateFormat formatter = new SimpleDateFormat(ISO8601.SIMPLE_DATETIME_FORMAT);
     if (pageNode.getStartPublicationDate() != null)
@@ -114,80 +86,51 @@ public class UISearchResultForm extends UIForm {
     return "undifined";
   }
 
-  /**
-   * Cast node.
-   * 
-   * @param object the object
-   * @return the node
-   */
   public Node castNode(Object object) {
     if (object instanceof Node)
       return (Node) object;
     return null;
   }
 
-  /**
-   * Cast page node.
-   * 
-   * @param object the object
-   * @return the page node
-   */
   public PageNode castPageNode(Object object) {
     if (object instanceof PageNode)
       return (PageNode) object;
     return null;
   }
 
-  /**
-   * Creates the link.
-   * 
-   * @param pageNode the page node
-   * @return the string
-   * @throws Exception the exception
-   */
   public String createLink(PageNode pageNode) throws Exception {
-    PortletRequestContext context = PortletRequestContext.getCurrentInstance();
-    String userId = context.getRemoteUser();
-    ExoContainer container = ExoContainerContext.getCurrentContainer();
-    UserPortalConfigService portalConfigService = (UserPortalConfigService) container
-        .getComponentInstanceOfType(UserPortalConfigService.class);
-    Page page = portalConfigService.getPage(pageNode.getPageReference(), userId);
+    String userId = portletRequestContext.getRemoteUser();
+    Page page = userPortalConfigService.getPage(pageNode.getPageReference(), userId);
     if (page != null) {
       String ownerId = page.getOwnerId();
       String ownerType = page.getOwnerType();
       if (ownerType.equals("portal"))
         setPortalName(ownerId);
       else
-        setPortalName(portalConfigService.getDefaultPortal());
+        setPortalName(userPortalConfigService.getDefaultPortal());
     }
     String url = null;
     if (userId == null) {
       url = getBaseUrl() + "portal/public/" + portalName_ + "/" + pageNode.getUri();
-    } else {      
+    } else {
       url = getBaseUrl() + "portal/private/" + portalName_ + "/" + pageNode.getUri();
     }
     return url;
   }
 
-  /**
-   * Gets the base url.
-   * 
-   * @return the base url
-   */
-  private String getBaseUrl() {
+  public String getPageOwner(PageNode pageNode) throws Exception {
+    String userId = portletRequestContext.getRemoteUser();
+    Page page = userPortalConfigService.getPage(pageNode.getPageReference(), userId);
+    return page.getOwnerId();
+  }
+
+  public String getBaseUrl() {
     PortletRequestContext context = PortletRequestContext.getCurrentInstance();
     PortletRequest request = context.getRequest();
     return request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
         + "/";
   }
 
-  /**
-   * Gets the size in kb.
-   * 
-   * @param node the node
-   * @return the size in kb
-   * @throws Exception the exception
-   */
   public String getSizeInKB(Node node) throws Exception {
     if (node.isNodeType("nt:file")) {
       long size = node.getNode("jcr:content").getProperty("jcr:data").getLength();
@@ -196,13 +139,6 @@ public class UISearchResultForm extends UIForm {
     return Integer.toString(node.getPath().length());
   }
 
-  /**
-   * Creates the document link.
-   * 
-   * @param node the node
-   * @return the string
-   * @throws Exception the exception
-   */
   public String createDocumentLink(Node node) throws Exception {
     String worksapce = node.getSession().getWorkspace().getName();
     String repository = ((ManageableRepository) node.getSession().getRepository())
@@ -211,11 +147,6 @@ public class UISearchResultForm extends UIForm {
     return url;
   }
 
-  /**
-   * Gets the uI page iterator.
-   * 
-   * @return the uI page iterator
-   */
   public UIPageIterator getUIPageIterator() {
     return pageIterator_;
   }

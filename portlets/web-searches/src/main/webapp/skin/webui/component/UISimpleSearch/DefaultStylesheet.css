@@ -57,15 +57,15 @@
 	padding-left: 100px;
 }
 
-.UISearchResultForm .Item .NodeTime{
-
-}
-
 .UISearchResultForm .Item .NodeOwner{
 
 }
 
 .UISearchResultForm .Item .NodeName{
+
+}
+
+.UISearchResultForm .Item .NodeDateCreated{
 
 }
 

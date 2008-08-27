@@ -5,22 +5,20 @@
 	import java.text.DateFormat;
 	import java.text.SimpleDateFormat;
 	import org.exoplatform.portal.webui.util.Util;  
+	import org.exoplatform.commons.utils.ISO8601;
 	import javax.jcr.Value;
 	
 	def currentPageData = uicomponent.getCurrentPageData();
-	DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
+	DateFormat dateFormat = new SimpleDateFormat(ISO8601.SIMPLE_DATETIME_FORMAT);
 %>
-<div id="$uicomponent.id" class="UISearchResultForm">
+<div id="$uicomponent.id" class="UIForm $uicomponent.id">
 <% 
 	if(currentPageData.size()==0){
 		println "<div style=\"color: blue;background-color: RGB(239, 239, 239); border: 1px solid RGB(219, 219, 219); padding-top: 50px; padding-left: 50px; height: 70px;\">Result not found !</div>" ;
-	}//end if currentPageData.size()==0
-	
-	else{
+	} else {
 		for(Object obj:currentPageData) {
-		  if(uicomponent.castNode(obj) != null) {
+		  if (uicomponent.castNode(obj) != null) {
 		    Node node = uicomponent.castNode(obj);	
-		    //get owner	 
 		    Value ownerVal  = node.getProperty("exo:owner").getValue();
 		    String owner = ownerVal.getString();   
 %>
@@ -28,9 +26,9 @@
 			<div class="NodeName">
 				<a  href="<%=uicomponent.createDocumentLink(node);%>" target="_blank"><b><%= node.getName() %></b></a>
 			</div>
-		  <div class="NodeOwner">Owner: <b><%= owner%></b></div>			
-		  <div class="NodeTime">Date Created: <b><%= dateFormat.format(node.getProperty("exo:dateCreated").getDate().getTime()) %></b></div>
-		  <div >Type: <b>document</b></div>
+ 		    <div class="NodeOwner"><%= _ctx.appRes(uicomponent.id + ".label.owner") %>: <b><%=owner%></b></div>			
+		    <div class="NodeDateCreated"><%= _ctx.appRes(uicomponent.id + ".label.dateCreated") %>: <b><%=dateFormat.format(node.getProperty("exo:dateCreated").getDate().getTime()) %></b></div>
+		    <div><%= _ctx.appRes(uicomponent.id + ".label.type") %>: <b>document</b></div>
 		</div>
 <%
 		  }//end if obj is node
@@ -39,9 +37,11 @@
 %>
 		<div class="ItemResult">
 			<div class="NodeName">
-				<a  href="<%=uicomponent.createLink(pnode);%>" target="_blank"><b><%= pnode.getName() %></b></a>				
+				<a  href="<%=uicomponent.createLink(pnode);%>" target="_blank"><b><%= pnode.getName() %></b></a>								
 			</div>
-		  <div >Type: <b>page</b></div>			
+			<div class="NodeOwner"><%= _ctx.appRes(uicomponent.id + ".label.owner") %>: <b><%=uicomponent.getPageOwner(pnode)%></b></div>			
+			<div class="NodeDateCreated">Date Created: <b><%=uicomponent.getDateCreated(pnode)%></b></div>				
+		    <div>Type: <b>page</b></div>			
 		</div>
 <%
 		  }//end if obj is PageNode

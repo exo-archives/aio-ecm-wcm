@@ -1,3 +1,102 @@
+/*##############################-SimpleSearchForm-################################*/
 .UISimpleSearchForm{
-	background-color: red;
+	background-color: RGB(210, 210, 210);	
+}
+
+.UISimpleSearchForm .UISimpleSearchFormGrid{
+	margin-top: 20px;
+}
+
+.UISimpleSearchForm .UISimpleSearchFormGrid input{
+	font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+	width: 400px;	
+}
+
+.UISimpleSearchForm .UISimpleSearchFormGrid input.checkbox{
+	width: auto;
+	float: left; 
+	padding-left: 20px;
+}
+
+.UISimpleSearchForm .UISimpleSearchFormGrid .CheckboxField{
+	float: left; 
+	padding-left: 18px;
+}
+
+.UISimpleSearchForm .UISimpleSearchFormGrid .CheckboxText{
+	float: left;
+	padding-left: 4px;
+	line-height: 18px;
+}
+
+.UISimpleSearchForm .UISimpleSearchFormGrid select{
+	width: 250px;
+	font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+}
+
+
+.UISimpleSearchForm .UISimpleSearchFormGrid td.FieldLabel{
+	padding: 4px;
+	text-align: right;
+	vertical-align: middle;
+}
+
+.UISimpleSearchForm .UISimpleSearchFormGrid td.FieldComponent{
+	padding: 4px;
+}
+
+/*##############################-SimpleSearchResult Form-################################*/
+.UISearchResultForm{
+	border-top:1px solid RGB(200, 200, 200);
+	background-color:  RGB(213, 213, 213);
+}
+
+.UISearchResultForm .ItemResult{
+	padding-top: 10px; 
+	padding-bottom: 10px; 
+	padding-left: 100px;
+}
+
+.UISearchResultForm .Item .NodeOwner{
+
+}
+
+.UISearchResultForm .Item .NodeName{
+
+}
+
+.UISearchResultForm .Item .NodeDateCreated{
+
+}
+
+/*##############################-LightBlueStyle ActionButton-################################*/
+.UISimpleSearchForm .UIAction .LightBlueStyle{
+
+}
+
+.UISimpleSearchForm .UIAction .LightBlueStyle .ButtonLeft {
+  background: url('DefaultSkin/background/LightBlueStyle.gif') no-repeat left top;
+  padding: 0px 0px 0px 3px;
+}
+
+.UISimpleSearchForm .UIAction .LightBlueStyle .ButtonRight {
+  background: url('DefaultSkin/background/LightBlueStyle.gif') no-repeat right top;
+  padding: 0px 3px 0px 0px ;
+}
+
+.UISimpleSearchForm .UIAction .LightBlueStyle .ButtonMiddle {
+ 	line-height: 22px; text-align: center; 
+	background: url('DefaultSkin/background/LightBlueStyle.gif') repeat-x bottom;
+	white-space: nowrap;
+	display: table-cell;
+	padding: 0px 12px;
+}
+
+.UISimpleSearchForm .UIAction a.LightBlueStyle {
+  color: #313131;
+  margin: 0px 6px; white-space: nowrap;
+}
+
+.UISimpleSearchForm .UIAction a:hover.LightBlueStyle {
+  color: #1273df;
 }
