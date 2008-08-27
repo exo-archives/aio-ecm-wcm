@@ -76,15 +76,18 @@
 <% 
 	if(isShowTags) {
 		FolksonomyService folkService = uicomponent.getApplicationComponent(FolksonomyService.class);
-		StringBuffer tagBuff = new StringBuffer("[");
-		for(Node tag: folkService.getLinkedTagsOfDocument(currentNode, repositoryName)) {
-			tagBuff.append(tag.getName()).append(",");
-		}
-		tagBuff.replace(tagBuff.lastIndexOf(","), tagBuff.size(), "]");
+		List<Node> tagList = folkService.getLinkedTagsOfDocument(currentNode, repositoryName);
+		if(tagList.size() > 0) {
+			StringBuffer tagBuff = new StringBuffer("[");
+			for(Node tag: tagList) {
+				tagBuff.append(tag.getName()).append(",");
+			}
+			tagBuff.replace(tagBuff.lastIndexOf(","), tagBuff.size(), "]");
 %>
-			<div>Tags:</div>
-			<div class="Tags"><%= tagBuff.toString(); %></div>
-<%		
+				<div>Tags:</div>
+				<div class="Tags"><%= tagBuff.toString(); %></div>
+<%	
+		}	
 	}
 %>
 
