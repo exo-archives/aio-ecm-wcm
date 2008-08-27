@@ -66,8 +66,7 @@
         categories.append(category.getPath()).append(";");
       }
 %>
-		<div>Categories:</div>
-		<div class="Categories"><%= categories.toString(); %></div>
+		<div class="Categories">Categories: <%= categories.toString(); %></div>
 <%
     }
 	}
@@ -84,12 +83,24 @@
 			}
 			tagBuff.replace(tagBuff.lastIndexOf(","), tagBuff.size(), "]");
 %>
-				<div>Tags:</div>
-				<div class="Tags"><%= tagBuff.toString(); %></div>
+				<div class="Tags">Tags: <%= tagBuff.toString(); %></div>
 <%	
 		}	
 	}
 %>
 
+<%
+	if(isCommentingEnable) {
+%>
+		<div class="Comment">Comment: <% _ctx.include(uicomponent.getViewTemplate("exo:comment", "view1")); %></div>
+<%	
+	}
+%>
 
-
+<% 
+//	if(isVotingEnable) {
+%>
+	<!--	<div class="Vote">Vote: <% //_ctx.include(uicomponent.getViewTemplate("exo:vote", "view1")); %></div> -->
+<%
+	//}
+%>
