@@ -148,8 +148,8 @@
 									  uicomponent.addCalendarField("cssHiddenField4", cssHiddenField4) ;
 									  uicomponent.addCalendarField("cssHiddenField5", cssHiddenField5) ;
 									  uicomponent.addHiddenField("cssHiddenField6", cssHiddenField6) ;
-										String[] fieldContentCSS = ["jcrPath=/node/css/default.css/jcr:content/jcr:data", "options=CSSToolBar,SourceModeOnStartup" ,cssData] ;
-										uicomponent.addWYSIWYGField("ContentCSS", fieldContentCSS) ; 
+										String[] fieldContentCSS = ["jcrPath=/node/css/default.css/jcr:content/jcr:data",cssData];
+										uicomponent.addTextAreaField("ContentCSS", fieldContentCSS) ; 
 									} else {
 										String[] cssHiddenField1 = ["jcrPath=/node/css/default.css", "nodetype=nt:file", "defaultValues=default.css"] ;
 										String[] cssHiddenField2 = ["jcrPath=/node/css/default.css/jcr:content", "nodetype=nt:resource", "mixintype=dc:elementSet", "visible=false"] ; 
@@ -163,8 +163,8 @@
 									  uicomponent.addCalendarField("cssHiddenField4", cssHiddenField4) ;
 									  uicomponent.addCalendarField("cssHiddenField5", cssHiddenField5) ;
 									  uicomponent.addHiddenField("cssHiddenField6", cssHiddenField6) ;
-										String[] fieldContentCSS = ["jcrPath=/node/css/default.css/jcr:content/jcr:data", "options=CSSToolBar,SourceModeOnStartup"] ;
-										uicomponent.addWYSIWYGField("ContentCSS", fieldContentCSS) ;
+										String[] fieldContentCSS = ["jcrPath=/node/css/default.css/jcr:content/jcr:data"] ;
+										uicomponent.addTextAreaField("ContentCSS", fieldContentCSS) ;
 								  }
 								%>
 								</td>
@@ -194,8 +194,8 @@
 									  uicomponent.addCalendarField("jsHiddenField4", jsHiddenField4) ;
 									  uicomponent.addCalendarField("jsHiddenField5", jsHiddenField5) ;
 									  uicomponent.addHiddenField("jsHiddenField6", jsHiddenField6) ;
-										String[] fieldContentJS = ["jcrPath=/node/js/default.js/jcr:content/jcr:data", "options=CSSToolBar,SourceModeOnStartup",jsData] ;
-										uicomponent.addWYSIWYGField("ContentJS", fieldContentJS) ; 
+										String[] fieldContentJS = ["jcrPath=/node/js/default.js/jcr:content/jcr:data",jsData] ;
+										uicomponent.addTextAreaField("ContentJS", fieldContentJS) ; 
 									} else {
 										String[] jsHiddenField1 = ["jcrPath=/node/js/default.js", "nodetype=nt:file", "defaultValues=default.js"] ;
 										String[] jsHiddenField2 = ["jcrPath=/node/js/default.js/jcr:content", "nodetype=nt:resource", "mixintype=dc:elementSet", "visible=false"] ; 
@@ -209,8 +209,8 @@
 									  uicomponent.addCalendarField("jsHiddenField4", jsHiddenField4) ;
 									  uicomponent.addCalendarField("jsHiddenField5", jsHiddenField5) ;
 									  uicomponent.addHiddenField("jsHiddenField6", jsHiddenField6) ;
-										String[] fieldContentJS = ["jcrPath=/node/js/default.js/jcr:content/jcr:data", "options=CSSToolBar,SourceModeOnStartup"] ;
-										uicomponent.addWYSIWYGField("ContentJS", fieldContentJS) ; 
+										String[] fieldContentJS = ["jcrPath=/node/js/default.js/jcr:content/jcr:data"] ;
+										uicomponent.addTextAreaField("ContentJS", fieldContentJS) ; 
 									}									
 								%>
 								</td>
