@@ -66,7 +66,7 @@ public class WcmSearchServiceImpl implements WcmSearchService {
   private String defaultRepository ;
   private String defaultWorksapce ;  
   private DataStorage dataStorage_ ;  
-  private HashMap<String, String> cachedPages_ = new HashMap<String, String>() ;  
+  private HashMap<String, List<String>> cachedPages_ = new HashMap<String, List<String>>() ;  
 
   public WcmSearchServiceImpl(RepositoryService repositoryService, DataStorage dataStorage, InitParams initParams) {
     this.repositoryService = repositoryService ;
@@ -209,9 +209,14 @@ public class WcmSearchServiceImpl implements WcmSearchService {
       }else {
         key = buildKey(repository, workspace, webContent.getUUID()) ;
       }                         
-      String referencedPage = cachedPages_.get(key) ;      
-      if(!hasAccessPermission(referencedPage, userId,portalConfigService)) continue ;
-      pageNodes.addAll(findPageNodes(userPortalConfig, referencedPage)) ;
+      List <String> referencedPages = cachedPages_.get(key) ;
+      
+      for (int i=0;i<referencedPages.size();i++) {
+    	  String referencedPage=referencedPages.get(i);
+    	  if(!hasAccessPermission(referencedPage, userId,portalConfigService)) continue ;
+          pageNodes.addAll(findPageNodes(userPortalConfig, referencedPage)) ;
+      }
+      
     }
     return pageNodes ;
   }
@@ -272,7 +277,10 @@ public class WcmSearchServiceImpl implements WcmSearchService {
     }       
     if(repository == null || worksapce == null || nodeUUID == null) return ;
     String key = buildKey(repository, worksapce, nodeUUID) ;    
-    cachedPages_.put(key,pageId) ;
+    List <String> pages = cachedPages_.get(key);
+    if (pages==null) pages=new ArrayList<String>();
+    if (!pages.contains(pageId)) pages.add(pageId);
+    cachedPages_.put(key,pages) ;
   }
 
   private String buildKey(String repository,String worksapce,String nodeUUID) {
@@ -286,8 +294,8 @@ public class WcmSearchServiceImpl implements WcmSearchService {
     String nodeInfo = null ;
     for(Iterator<String> iterator = cachedPages_.keySet().iterator();iterator.hasNext();) {
       String key = iterator.next();
-      String value = cachedPages_.get(key) ;
-      if(value.equals(pageReferenced)) {
+      List<String> values = cachedPages_.get(key) ;
+      if(values.contains(pageReferenced)) {
         nodeInfo = key ;
         break ;
       }
