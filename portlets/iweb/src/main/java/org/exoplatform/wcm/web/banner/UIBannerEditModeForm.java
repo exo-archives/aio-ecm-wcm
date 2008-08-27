@@ -58,6 +58,7 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.form.UIFormInputBase;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.wysiwyg.UIFormWYSIWYGInput;
@@ -111,13 +112,13 @@ public class UIBannerEditModeForm extends UIDialogForm {
     if (isAddNew()) {
       String jcrPath = ((JcrInputProperty)getInputProperties().get(name)).getJcrPath();
       if ("/node".equals(jcrPath)) {
-        UIFormStringInput formTextField = findComponentById(name);
+    	  UIFormInputBase<String> formTextField = findComponentById(name);
         formTextField.setValue("banner");
       } else if("/node/default.html/jcr:content/jcr:data".equals(jcrPath)) {
-        UIFormWYSIWYGInput formWYSIWYGInput = findComponentById(name);
+    	UIFormInputBase<String> formWYSIWYGInput = findComponentById(name);
         formWYSIWYGInput.setValue(loadHtml());
       } else if("/node/css/default.css/jcr:content/jcr:data".equals(jcrPath)){
-        UIFormTextAreaInput formTextAreaInput = findComponentById(name);
+        UIFormInputBase<String> formTextAreaInput = findComponentById(name);
         formTextAreaInput.setValue(loadStyle());
       }       
     }
