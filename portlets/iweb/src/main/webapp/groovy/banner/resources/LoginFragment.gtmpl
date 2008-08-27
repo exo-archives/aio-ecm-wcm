@@ -14,8 +14,8 @@
 <style>
 	.LoginContent {
 		position: absolute;
-		margin-top: 37px;
-		margin-left: 1000px;
+		top: 40px;
+		right: 35px;
 	}
 	
 	.LoginContent .LoginInfo {
