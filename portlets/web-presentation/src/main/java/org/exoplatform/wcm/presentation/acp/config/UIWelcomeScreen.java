@@ -20,11 +20,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+
 import org.exoplatform.wcm.presentation.acp.config.quickcreation.UIQuickCreationWizard;
 import org.exoplatform.wcm.presentation.acp.config.selector.UIWebContentSelectorForm;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.web.application.RequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
@@ -88,6 +91,7 @@ public class UIWelcomeScreen extends UIForm {
       UIWelcomeScreen uiWelcomeScreen = event.getSource();
       String radioValue = uiWelcomeScreen.<UIFormRadioBoxInput>getUIInput("radio").getValue();
       UIPortletConfig uiPortletConfig = uiWelcomeScreen.getAncestorOfType(UIPortletConfig.class);
+      UIApplication uiApplication = uiWelcomeScreen.getAncestorOfType(UIApplication.class);
       if(radioValue.equals("QuickCreate") || radioValue.equals("EditCurrentContent")) {
         uiWelcomeScreen.setRendered(false);
         UIQuickCreationWizard uiQuickCreationWizard = uiPortletConfig.addChild(UIQuickCreationWizard.class, null, null);
@@ -95,6 +99,9 @@ public class UIWelcomeScreen extends UIForm {
       } else if(radioValue.equals("SelectOtherContent") || radioValue.equals("SelectExisted")) {
         uiWelcomeScreen.setRendered(false);
         uiPortletConfig.addChild(UIWebContentSelectorForm.class, null, null);
+      } else {
+        uiApplication.addMessage(new ApplicationMessage("UIWelcomeScreen.msg.ChooseOption", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
       }
     }
   }
