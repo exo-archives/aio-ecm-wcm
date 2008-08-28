@@ -44,7 +44,6 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.ext.UIFormInputSetWithAction;
-import org.exoplatform.webui.form.validator.MandatoryValidator;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -90,8 +89,7 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
   public UIPermissionSetting() throws Exception {
     UIFormInputSetWithAction permissionInputSet = new UIFormInputSetWithAction(USERS_INPUTSET);       
     UIFormStringInput formStringInput = new UIFormStringInput(USERS_STRINGINPUT, USERS_STRINGINPUT,
-        null);
-    formStringInput.addValidator(MandatoryValidator.class);
+        null);    
     formStringInput.setEditable(false);
     permissionInputSet.addChild(formStringInput);
     permissionInputSet.setActionInfo(USERS_STRINGINPUT, new String[] { "SelectUser",
@@ -153,13 +151,13 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
           permsList.add(perm);
       }
       if (userOrGroup == null || userOrGroup.trim().length() == 0) {
-        uiApp.addMessage(new ApplicationMessage("UIPermissionForm.msg.userOrGroup-required", null,
+        uiApp.addMessage(new ApplicationMessage("UIPermissionSetting.msg.userOrGroup-required", null,
             ApplicationMessage.WARNING));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       }
       if (permsList.size() == 0) {
-        uiApp.addMessage(new ApplicationMessage("UIPermissionForm.msg.checkbox-require", null,
+        uiApp.addMessage(new ApplicationMessage("UIPermissionSetting.msg.checkbox-require", null,
             ApplicationMessage.WARNING));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;

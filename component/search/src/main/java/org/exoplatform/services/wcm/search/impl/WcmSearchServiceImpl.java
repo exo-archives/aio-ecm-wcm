@@ -190,7 +190,7 @@ public class WcmSearchServiceImpl implements WcmSearchService {
     QueryResult queryResult = query.execute();
     HashSet<Node> hashSet = new HashSet<Node>();
     for (NodeIterator iterator = queryResult.getNodes(); iterator.hasNext();) {
-      Node node = iterator.nextNode();            
+      Node node = iterator.nextNode();                  
       if (node.getPrimaryNodeType().isNodeType("nt:resource"))
         node = node.getParent();
       hashSet.add(node);
