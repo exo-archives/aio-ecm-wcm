@@ -18,6 +18,7 @@ package org.exoplatform.wcm.presentation.acp;
 
 import java.io.Writer;
 
+import javax.jcr.AccessDeniedException;
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
 import javax.jcr.Session;
@@ -26,10 +27,12 @@ import javax.portlet.PortletPreferences;
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
 import org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -58,7 +61,14 @@ public class UIPresentation extends UIBaseNodePresentation {
     String uuid = getPortletPreference().getValue(UIAdvancedPresentationPortlet.UUID, "") ;
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-    Session session = SessionProviderFactory.createSystemProvider().getSession(worksapce, manageableRepository) ;
+    String userId = Util.getPortalRequestContext().getRemoteUser();
+    SessionProvider sessionProvider = null;
+    if(userId == null) {
+      sessionProvider = SessionProviderFactory.createAnonimProvider();
+    }else {
+      sessionProvider = SessionProviderFactory.createSessionProvider();
+    }
+    Session session = sessionProvider.getSession(worksapce, manageableRepository) ;
     return session.getNodeByUUID(uuid) ;    
   }
 
@@ -95,6 +105,14 @@ public class UIPresentation extends UIBaseNodePresentation {
       writer.write("</span>") ;
       writer.write("</div>") ;
       return ;
+    } catch (AccessDeniedException e) {
+      Writer writer = context.getWriter() ;
+      writer.write("<div style=\"height: 55px; font-size: 13px; text-align: center; padding-top: 10px;\">") ;
+      writer.write("<span>") ;
+      writer.write(context.getApplicationResourceBundle().getString("UIMessageBoard.msg.no-permission")) ;
+      writer.write("</span>") ;
+      writer.write("</div>") ;
+      return;
     }
     super.processRender(context) ;
   }
@@ -128,7 +146,7 @@ public class UIPresentation extends UIBaseNodePresentation {
   }
 
   public void setNode(Node arg0) {
-    
+
   }
 
 }
