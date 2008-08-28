@@ -16,6 +16,7 @@
  */
 package org.exoplatform.wcm.presentation.acp.config;
 
+import java.security.AccessControlException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -46,7 +47,7 @@ import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
-// TODO: Auto-generated Javadoc
+//TODO: Auto-generated Javadoc
 /*
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Aug 15, 2008
@@ -58,12 +59,13 @@ import org.exoplatform.webui.event.EventListener;
 @ComponentConfig(
     lifecycle = UIContainerLifecycle.class, 
     events = {
-      @EventConfig(listeners = UIPermissionInfo.DeleteActionListener.class, 
+      @EventConfig(
+          listeners = UIPermissionInfo.DeleteActionListener.class, 
           confirm = "UIPermissionInfo.msg.confirm-delete-permission"),
       @EventConfig(listeners = UIPermissionInfo.EditActionListener.class) 
-    }
+  }
 )
-  public class UIPermissionInfo extends UIContainer {
+public class UIPermissionInfo extends UIContainer {
 
   /** The PERMISSIO n_ field. */
   public static String[]  PERMISSION_FIELD  = { "usersOrGroups", "accessible", "editable" };
@@ -105,6 +107,17 @@ import org.exoplatform.webui.event.EventListener;
     UIQuickCreationWizard quickCreationWizard = getAncestorOfType(UIQuickCreationWizard.class);
     UIContentDialogForm contentDialogForm = quickCreationWizard.getChild(UIContentDialogForm.class);
     return contentDialogForm.getWebContent();
+  }
+
+  private boolean hasChangePermissionRight(ExtendedNode node) throws Exception {
+    try {
+      node.checkPermission(PermissionType.ADD_NODE);
+      node.checkPermission(PermissionType.REMOVE);
+      node.checkPermission(PermissionType.SET_PROPERTY);
+      return true;
+    } catch (AccessControlException e) {
+      return false;
+    }
   }
 
   /**
@@ -184,7 +197,7 @@ import org.exoplatform.webui.event.EventListener;
    * @see DeleteActionEvent
    */
   public static class DeleteActionListener extends EventListener<UIPermissionInfo> {
-    
+
     /* (non-Javadoc)
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
@@ -207,19 +220,25 @@ import org.exoplatform.webui.event.EventListener;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       }
-      try {
-        node.removePermission(name);
-        node.save();
-        session.save();
-        permissionInfo.updateGrid();
-        event.getRequestContext().addUIComponentToUpdateByAjax(permissionInfo.getParent());
-      } catch (AccessDeniedException ace) {
-        session.refresh(false);
-        uiApp.addMessage(new ApplicationMessage("UIPermissionInfo.msg.access-denied", null,
-            ApplicationMessage.WARNING));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-        return;
-      }
+      if (permissionInfo.hasChangePermissionRight(node)) {
+        if (node.canAddMixin("exo:privilegeable")) {
+          node.addMixin("exo:privilegeable");
+          node.setPermission(nodeOwner, PermissionType.ALL);
+        }
+        try {
+          node.removePermission(name);
+          node.save();
+          session.save();
+          permissionInfo.updateGrid();
+          event.getRequestContext().addUIComponentToUpdateByAjax(permissionInfo.getParent());
+        } catch (AccessDeniedException ace) {
+          session.refresh(false);
+          uiApp.addMessage(new ApplicationMessage("UIPermissionInfo.msg.access-denied", null,
+              ApplicationMessage.WARNING));
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          return;
+        }
+      }      
     }
   }
 
@@ -235,7 +254,7 @@ import org.exoplatform.webui.event.EventListener;
    * @see EditActionEvent
    */
   public static class EditActionListener extends EventListener<UIPermissionInfo> {
-    
+
     /* (non-Javadoc)
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */

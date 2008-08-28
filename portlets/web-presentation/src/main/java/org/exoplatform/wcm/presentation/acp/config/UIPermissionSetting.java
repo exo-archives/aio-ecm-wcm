@@ -164,9 +164,10 @@ import org.exoplatform.webui.form.ext.UIFormInputSetWithAction;
       }
       String[] permsArray = permsList.toArray(new String[permsList.size()]);
       ExtendedNode node = (ExtendedNode) webContent;
-      if (node.canAddMixin("exo:privilegeable"))
+      if (node.canAddMixin("exo:privilegeable")) {
         node.addMixin("exo:privilegeable");
-      node.setPermission(node.getProperty("exo:owner").getString(), PermissionType.ALL);
+        node.setPermission(node.getProperty("exo:owner").getString(), PermissionType.ALL);
+      }
       node.setPermission(userOrGroup, permsArray);
       UIPermissionInfo permissionInfo = permissionManager.getChild(UIPermissionInfo.class);
       permissionInfo.updateGrid();
@@ -223,7 +224,7 @@ import org.exoplatform.webui.form.ext.UIFormInputSetWithAction;
     public void execute(Event<UIPermissionSetting> event) throws Exception {
       UIPermissionSetting permissionSettingForm = event.getSource();
       UIPermissionSelector permissionSelector = permissionSettingForm.createUIComponent(
-          UIPermissionSelector.class, null, null);
+          UIPermissionSelector.class, null, "UIPermissionUser");
       permissionSelector.setSelectedUser(true);
       permissionSelector.setSourceComponent(permissionSettingForm,
           new String[] { USERS_STRINGINPUT });
@@ -252,7 +253,7 @@ import org.exoplatform.webui.form.ext.UIFormInputSetWithAction;
     public void execute(Event<UIPermissionSetting> event) throws Exception {
       UIPermissionSetting permissionSettingForm = event.getSource();
       UIPermissionSelector permissionSelector = permissionSettingForm.createUIComponent(
-          UIPermissionSelector.class, null, null);
+          UIPermissionSelector.class, null, "UIPermissionMembership");
       permissionSelector.setSelectedMembership(true);
       permissionSelector.setSourceComponent(permissionSettingForm,
           new String[] { USERS_STRINGINPUT });
