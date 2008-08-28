@@ -18,4 +18,3 @@ import java.util.ArrayList;
   options.add(itemDesktop);
 
 return options;
-

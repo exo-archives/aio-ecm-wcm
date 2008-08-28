@@ -26,9 +26,9 @@
     <application>
       <instance-id>portal#classic:/web-presentation/AdvancedPresentationPortlet/presentation</instance-id>
       <title>Presentation</title>
-      <show-info-bar>true</show-info-bar>      
-      <show-application-state>true</show-application-state>
-      <show-application-mode>true</show-application-mode>
+      <show-info-bar>false</show-info-bar>      
+      <show-application-state>false</show-application-state>
+      <show-application-mode>false</show-application-mode>
     </application>
   </page>                      
   <page>
