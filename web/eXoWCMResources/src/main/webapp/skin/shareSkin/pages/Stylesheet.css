@@ -18,3 +18,10 @@
 	width:270px;
 	background: url('images/sitemap.gif') no-repeat center;	
 }
+
+.QuickEdit{
+	background:url('images/quickEdit.png') no-repeat scroll left top;
+	height:50px;
+	width: 50px;
+	padding-left: 0px;
+}
