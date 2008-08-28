@@ -101,9 +101,6 @@ public class UIWelcomeScreen extends UIForm {
       } else if(radioValue.equals("SelectOtherContent") || radioValue.equals("SelectExisted")) {
         uiWelcomeScreen.setRendered(false);
         uiPortletConfig.addChild(UIWebContentSelectorForm.class, null, null);
-      } else {
-        uiApplication.addMessage(new ApplicationMessage("UIWelcomeScreen.msg.ChooseOption", null, ApplicationMessage.WARNING));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
       }
     }
   }
