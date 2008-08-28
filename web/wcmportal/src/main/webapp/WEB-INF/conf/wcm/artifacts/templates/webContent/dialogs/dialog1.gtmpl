@@ -4,6 +4,7 @@
 	import javax.jcr.Node;
 	def rcontext = _ctx.getRequestContext() ;
 	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIHorizontalTabs');
+	def String htmlWYSIWYGFormId = "htmlData[" + uicomponent.hashCode() + "]";
 %>
 <style>
 	.UIForm .HorizontalLayout .textarea { 
@@ -103,7 +104,7 @@
 									  uicomponent.addCalendarField("htmlHiddenField5", htmlHiddenField5) ;
 									  uicomponent.addHiddenField("htmlHiddenField6", htmlHiddenField6) ;
 										String[] htmlContent = ["jcrPath=/node/default.html/jcr:content/jcr:data", "options=default", htmlData];
-		        				uicomponent.addWYSIWYGField("htmlData", htmlContent) ;
+		        				uicomponent.addWYSIWYGField(htmlWYSIWYGFormId, htmlContent) ;
 									} else {
 		       					String[] htmlHiddenField1 = ["jcrPath=/node/default.html", "nodetype=nt:file", "defaultValues=default.html", "mixintype=exo:htmlFile"] ;
 		       					String[] htmlHiddenField2 = ["jcrPath=/node/default.html/jcr:content", "nodetype=nt:resource", "mixintype=dc:elementSet", "visible=false"] ; 
@@ -118,7 +119,7 @@
 									  uicomponent.addCalendarField("htmlHiddenField5", htmlHiddenField5) ;
 									  uicomponent.addHiddenField("htmlHiddenField6", htmlHiddenField6) ;
 									  String[] htmlContent = ["jcrPath=/node/default.html/jcr:content/jcr:data", "options=default", ""];
-		        				uicomponent.addWYSIWYGField("htmlData", htmlContent) ;
+		        				uicomponent.addWYSIWYGField(htmlWYSIWYGFormId, htmlContent) ;
 		        			}
 	      				%>
 								</td>
