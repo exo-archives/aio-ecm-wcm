@@ -63,7 +63,7 @@
 </style>
 <div class="LoginContent">
 	<%if(prContext.getRemoteUser() != null) {%>
-		<a class="LoginInfo LogoutIcon" title="<%=_ctx.appRes("UILogged.action.signout")%>" onclick="eXo.portal.logout(); location.href='$signOutAction'"><%=_ctx.appRes("UILogged.action.signout")%></a>
+		<a class="LoginInfo LogoutIcon" title="<%=_ctx.appRes("UILogged.action.signout")%>" onclick="eXo.portal.logout();"><%=_ctx.appRes("UILogged.action.signout")%></a>
 		<div class="LoginSeperatorLine"><span></span></div>
 		<div class="LoginInfo Welcome"><%=_ctx.appRes("UILogged.note.loggedUser")%>: <span><%=prContext.getRemoteUser();%> </span></div>
 		<div style="clear: right"><span></span></div>
