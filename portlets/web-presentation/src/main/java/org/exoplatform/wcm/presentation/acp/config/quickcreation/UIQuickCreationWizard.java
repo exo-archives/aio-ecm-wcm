@@ -203,7 +203,6 @@ public class UIQuickCreationWizard extends UIBaseWizard {
   public static class ViewStep4ActionListener extends EventListener<UIQuickCreationWizard> {
     public void execute(Event<UIQuickCreationWizard> event) throws Exception {
       UIQuickCreationWizard uiQuickWizard = event.getSource();
-      uiQuickWizard.getChild(UIMiscellaneousInfo.class).init();
       uiQuickWizard.viewStep(4);
       UIContentDialogForm contentDialogForm = uiQuickWizard
       .getChild(UIContentDialogForm.class);
@@ -237,32 +236,24 @@ public class UIQuickCreationWizard extends UIBaseWizard {
       UIQuickCreationWizard uiQuickCreationWizard = event.getSource();
       UIContentDialogForm uiContentDialogForm = uiQuickCreationWizard.getChild(UIContentDialogForm.class);
       NodeIdentifier identifier = uiContentDialogForm.getSavedNodeIdentifier();
-      String repositoryName = identifier.getRepository();
-      String workspace = identifier.getWorkspace();
-      String UUID = identifier.getUUID();
-      RepositoryService repositoryService = uiQuickCreationWizard.getApplicationComponent(RepositoryService.class);
-      ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
-      Session session = SessionProvider.createSystemProvider().getSession(workspace, manageableRepository);
-      Node webContentNode = session.getNodeByUUID(UUID);
       UIMiscellaneousInfo uiMiscellaneousInfo = uiQuickCreationWizard.getChild(UIMiscellaneousInfo.class);
-      boolean isQuickEdit = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowQuickEdit").isChecked();
       boolean isShowTOC = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowTOC").isChecked();
+      boolean isQuickEdit = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowQuickEdit").isChecked();
       boolean isShowTags = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowTags").isChecked();
-      boolean isShowCategories = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowCategory").isChecked();
+      boolean isShowCategories = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowCategories").isChecked();
       boolean isAllowVoting = uiMiscellaneousInfo.getUIFormCheckBoxInput("AllowVoting").isChecked();
       boolean isAllowComment = uiMiscellaneousInfo.getUIFormCheckBoxInput("AllowComment").isChecked();
-      webContentNode.setProperty("exo:showTOC", isShowTOC);
-      webContentNode.setProperty("exo:showCategories", isShowCategories);
-      webContentNode.setProperty("exo:showTags", isShowTags);
-      webContentNode.setProperty("exo:votingEnable", isAllowVoting);
-      webContentNode.setProperty("exo:commentingEnable", isAllowComment);
-      session.save();
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
       PortletPreferences prefs = context.getRequest().getPreferences();
       prefs.setValue(UIAdvancedPresentationPortlet.REPOSITORY, identifier.getRepository());
       prefs.setValue(UIAdvancedPresentationPortlet.WORKSPACE, identifier.getWorkspace());
       prefs.setValue(UIAdvancedPresentationPortlet.UUID, identifier.getUUID());
+      prefs.setValue("ShowTOC", Boolean.toString(isShowTOC));
       prefs.setValue("ShowQuickEdit", Boolean.toString(isQuickEdit));
+      prefs.setValue("ShowTags", Boolean.toString(isShowTags));
+      prefs.setValue("ShowCategories", Boolean.toString(isShowCategories));
+      prefs.setValue("AllowVoting", Boolean.toString(isAllowVoting));
+      prefs.setValue("AllowComment", Boolean.toString(isAllowComment));
       prefs.store();      
       context.setApplicationMode(PortletMode.VIEW);
     }
