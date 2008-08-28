@@ -11,7 +11,15 @@
 	import org.exoplatform.webui.application.portlet.PortletRequestContext;
 	import javax.portlet.PortletPreferences;
 	import org.exoplatform.services.cms.folksonomy.FolksonomyService;
-
+	
+	public boolean getPortletPreference(String name) {
+    PortletRequestContext portletRequestContext = _ctx.getRequestContext() ;
+    String value = portletRequestContext.getRequest().getPreferences().getValue(name, null);
+    if(value != null) 
+      return Boolean.parseBoolean(value);
+    return false;
+  }
+  
   def currentNode = uicomponent.getNode() ; 
   def htmlFile = currentNode.getNode("default.html") ;
   
@@ -32,13 +40,14 @@
 	
 	ManageableRepository mRepository = (ManageableRepository)currentNode.getSession().getRepository();
   String repositoryName = mRepository.getConfiguration().getName();
-	boolean isShowTOC = currentNode.getProperty("exo:showTOC").getValue().getBoolean();
-	boolean isShowCategories = currentNode.getProperty("exo:showCategories").getValue().getBoolean();
-	boolean isShowTags = currentNode.getProperty("exo:showTags").getValue().getBoolean();
-	boolean isVotingEnable = currentNode.getProperty("exo:votingEnable").getValue().getBoolean();
-	boolean isCommentingEnable = currentNode.getProperty("exo:commentingEnable").getValue().getBoolean();
-		
-	if((css != null) && (!css.equals(""))) {
+  boolean quickEdit = getPortletPreference("ShowQuickEdit");
+	boolean isShowTOC = getPortletPreference("ShowTOC");
+	boolean isShowCategories = getPortletPreference("ShowCategories");
+	boolean isShowTags = getPortletPreference("ShowTags");
+	boolean isVotingEnable = getPortletPreference("AllowVoting");
+	boolean isCommentingEnable = getPortletPreference("AllowComment");
+
+	if((css != null) && (css.length() > 0)) {
 %>
 		<style><%=css%></style>
 <%
@@ -52,7 +61,7 @@
 	}
 %>
 <%=htmlFile.getNode("jcr:content").getProperty("jcr:data").getString()%>
-<% if((js != null) && (!js.equals(""))) {%>
+<% if((js != null) && (js.length() > 0)) {%>
 <script><%=js%></script>
 <% } %>
 
