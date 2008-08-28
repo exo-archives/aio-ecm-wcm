@@ -29,7 +29,7 @@ import javax.jcr.Session;
 import javax.jcr.version.VersionException;
 
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
-import org.exoplatform.ecm.webui.form.UIBaseDialogForm;
+import org.exoplatform.ecm.webui.form.UIDialogForm;
 import org.exoplatform.ecm.webui.utils.DialogFormUtil;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
@@ -66,10 +66,9 @@ import org.exoplatform.webui.event.EventListener;
     }
 )
 
-public class UIContentDialogForm extends UIBaseDialogForm {
+public class UIContentDialogForm extends UIDialogForm {
 
-  private String contentType;
-  private boolean isAddNew = false;
+  private String contentType;  
   private JCRResourceResolver resourceResolver;
   private NodeLocation storedLocation;
   protected NodeIdentifier savedNodeIdentifier;
@@ -96,16 +95,8 @@ public class UIContentDialogForm extends UIBaseDialogForm {
 
   public NodeIdentifier getSavedNodeIdentifier() {
     return savedNodeIdentifier;
-  }
-
-  public void addNew(boolean addNew) {
-    isAddNew = addNew;
-  }
-
-  public boolean isAddNew() {
-    return isAddNew;
-  }
-
+  }  
+  
   public String getTemplate() {
     TemplateService templateService = getApplicationComponent(TemplateService.class) ;
     String userName = Util.getPortalRequestContext().getRemoteUser();
@@ -151,9 +142,7 @@ public class UIContentDialogForm extends UIBaseDialogForm {
     Node parentNode = (Node) session.getItem(path);
     return parentNode;
   }
-
-  public boolean isEditing() { return !isAddNew; }
-
+  
   static public class CancelActionListener extends EventListener<UIContentDialogForm> {
     public void execute(Event<UIContentDialogForm> event) throws Exception {
       UIContentDialogForm uiContentDialogForm = event.getSource();
