@@ -4,7 +4,7 @@
 		if(uicomponent.isQuickEditable()){
 	%>
 		<div style="position: absolute; top: 0px; right: 0px">
-		  <a class="BannerQuickEdit" href="<%=uicomponent.event("QuickEdit")%>"></a>
+		  <a class="QuickEdit" href="<%=uicomponent.event("QuickEdit")%>"></a>
 	  </div>
 	<%		
 		}	
