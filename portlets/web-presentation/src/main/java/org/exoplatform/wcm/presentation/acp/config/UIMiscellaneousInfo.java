@@ -16,16 +16,8 @@
  */
 package org.exoplatform.wcm.presentation.acp.config;
 
-import javax.jcr.Node;
-import javax.jcr.Session;
 import javax.portlet.PortletPreferences;
 
-import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.wcm.core.NodeIdentifier;
-import org.exoplatform.wcm.presentation.acp.UIAdvancedPresentationPortlet;
-import org.exoplatform.wcm.presentation.acp.config.quickcreation.UIQuickCreationWizard;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -47,47 +39,19 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 
 public class UIMiscellaneousInfo extends UIForm {
   public UIMiscellaneousInfo() throws Exception {
-    addUIFormInput(new UIFormCheckBoxInput("ShowTOC", "ShowTOC", null));
-    addUIFormInput(new UIFormCheckBoxInput("ShowTags", "ShowTags", null));
-    addUIFormInput(new UIFormCheckBoxInput("ShowCategory", "ShowCategory", null));
-    addUIFormInput(new UIFormCheckBoxInput("AllowVoting", "AllowVoting", null));
-    addUIFormInput(new UIFormCheckBoxInput("AllowComment", "AllowComment", null));
     PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     PortletPreferences prefs = context.getRequest().getPreferences();
-    String quickEdit = prefs.getValue("ShowQuickEdit", null);
-    boolean isQuickEdit = Boolean.parseBoolean(quickEdit);
-    UIFormCheckBoxInput uiFormCheckBoxInput = new UIFormCheckBoxInput("ShowQuickEdit", "ShowQuickEdit", null);
-    uiFormCheckBoxInput.setChecked(isQuickEdit);
-    addUIFormInput(uiFormCheckBoxInput);
-  }
-  
-  public void init() throws Exception {
-    UIQuickCreationWizard quickCreationWizard = getAncestorOfType(UIQuickCreationWizard.class);
-    UIContentDialogForm contentDialogForm = quickCreationWizard.getChild(UIContentDialogForm.class);
-    NodeIdentifier nodeIdentifier = contentDialogForm.getSavedNodeIdentifier();
-    String repositoryName = nodeIdentifier.getRepository();
-    String workspace = nodeIdentifier.getWorkspace();
-    String UUID = nodeIdentifier.getUUID();
-    RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
-    ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
-    Session session = SessionProvider.createSystemProvider().getSession(workspace, manageableRepository);
-    Node webContentNode = session.getNodeByUUID(UUID);
-    boolean isShowToc = webContentNode.getProperty("exo:showTOC").getValue().getBoolean();
-    boolean isShowCategories = webContentNode.getProperty("exo:showCategories").getValue().getBoolean();
-    boolean isShowTags = webContentNode.getProperty("exo:showTags").getValue().getBoolean();
-    boolean isVotingEnable = webContentNode.getProperty("exo:votingEnable").getValue().getBoolean();
-    boolean isCommentingEnable = webContentNode.getProperty("exo:commentingEnable").getValue().getBoolean();
-    
-    UIFormCheckBoxInput TOCCheckBoxInput = getUIFormCheckBoxInput("ShowTOC");
-    UIFormCheckBoxInput TagCheckBoxInput = getUIFormCheckBoxInput("ShowTags");
-    UIFormCheckBoxInput CategoryCheckBoxInput = getUIFormCheckBoxInput("ShowCategory");
-    UIFormCheckBoxInput AllowVotingCheckBoxInput = getUIFormCheckBoxInput("AllowVoting");
-    UIFormCheckBoxInput AllowCommentCheckBoxInput = getUIFormCheckBoxInput("AllowComment");
-    
-    TOCCheckBoxInput.setChecked(isShowToc);
-    TagCheckBoxInput.setChecked(isShowTags);
-    CategoryCheckBoxInput.setChecked(isShowCategories);
-    AllowVotingCheckBoxInput.setChecked(isVotingEnable);
-    AllowCommentCheckBoxInput.setChecked(isCommentingEnable);
+    boolean isShowTOC = Boolean.parseBoolean(prefs.getValue("ShowTOC", null));
+    boolean isShowTags = Boolean.parseBoolean(prefs.getValue("ShowTags", null));
+    boolean isShowCategories = Boolean.parseBoolean(prefs.getValue("ShowCategories", null));
+    boolean isAllowVoting = Boolean.parseBoolean(prefs.getValue("AllowVoting", null));
+    boolean isAllowComment = Boolean.parseBoolean(prefs.getValue("AllowComment", null));
+    boolean isQuickEdit = Boolean.parseBoolean(prefs.getValue("ShowQuickEdit", null));
+    addUIFormInput(new UIFormCheckBoxInput("ShowTOC", "ShowTOC", null).setChecked(isShowTOC));
+    addUIFormInput(new UIFormCheckBoxInput("ShowTags", "ShowTags", null).setChecked(isShowTags));
+    addUIFormInput(new UIFormCheckBoxInput("ShowCategories", "ShowCategories", null).setChecked(isShowCategories));
+    addUIFormInput(new UIFormCheckBoxInput("AllowVoting", "AllowVoting", null).setChecked(isAllowVoting));
+    addUIFormInput(new UIFormCheckBoxInput("AllowComment", "AllowComment", null).setChecked(isAllowComment));
+    addUIFormInput(new UIFormCheckBoxInput("ShowQuickEdit", "ShowQuickEdit", null).setChecked(isQuickEdit));
   }
 }
