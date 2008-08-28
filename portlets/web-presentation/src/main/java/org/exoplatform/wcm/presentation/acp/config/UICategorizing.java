@@ -50,18 +50,11 @@ public class UICategorizing extends UIContainer implements UISelectable {
 
 
   public UICategorizing() throws Exception {
-    UICategoriesSelector uiCategoriesSelector = addChild(UICategoriesSelector.class, null, null);
+    addChild(UICategoriesSelector.class, null, null);
   }
 
   public void initUICategoriesSelector() throws Exception {
     UICategoriesSelector uiCategoriesSelector = getChild(UICategoriesSelector.class);
-    if(getExistedCategories().size() == 0) {
-      System.out.println("=========> (Run in UICategorizing) Don't have existedCategories ");
-    } else {
-      for(String c: getExistedCategories()) {
-      System.out.println("====> (Run in UICategorizing) existed category: " + c);
-      }
-    }
     uiCategoriesSelector.setExistedCategoryList(getExistedCategories());
     uiCategoriesSelector.setSourceComponent(this,null);
     uiCategoriesSelector.init();

@@ -82,13 +82,6 @@ public class UISocialInfo extends UITabPane {
         existedCategory.add(category.getPath());
       }
     }
-    if(existedCategory.size() == 0) {
-      System.out.println("==============> load vao node ko co category");
-    } else {
-      for(String categories: existedCategory) {
-        System.out.println("==========> (Run in UISocialInfo) existed category: "+ categories);
-      }
-    }
     return existedCategory;
   }
 }
