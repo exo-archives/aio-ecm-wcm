@@ -101,7 +101,7 @@
 <%
 	if(isCommentingEnable) {
 %>
-		<div class="comment">Comment: <% _ctx.include(uicomponent.getViewTemplate("exo:comment", "view1")); %></div>
+		<div class="comments">Comment: <% _ctx.include(uicomponent.getViewTemplate("exo:comment", "view1")); %></div>
 <%	
 	}
 %>
