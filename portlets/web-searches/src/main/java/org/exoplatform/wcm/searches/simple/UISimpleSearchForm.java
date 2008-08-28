@@ -114,7 +114,7 @@ public class UISimpleSearchForm extends UIForm {
       UIApplication uiApp = uiSearchForm.getAncestorOfType(UIApplication.class);
       WcmSearchService searchService = uiSearchForm.getApplicationComponent(WcmSearchService.class);
       String keyword = uiSearchForm.getUIStringInput(KEYWORD_INPUT).getValue();
-      if ((keyword == null) || (keyword.length() == 0)) {
+      if ((keyword == null) || (keyword.trim().length() == 0)) {
         uiApp.addMessage(new ApplicationMessage("UISimpleSearchForm.msg.keyword-require", null,
             ApplicationMessage.WARNING));
         uiSearchForm.clearAll();
