@@ -86,7 +86,7 @@ public class TOCGeneratorService {
     for(NodeIterator iterator = result.getNodes(); iterator.hasNext();) {
       Node htmlNode = iterator.nextNode();
       List<Heading> headingList = createHeadingList(htmlNode.getNode("jcr:content").getProperty("jcr:data").getString());
-      if (headingList != null) {
+      if(headingList != null) {
         String[] multiValues = new String[headingList.size()];
         List<String> stringValues = new ArrayList<String>();
         for(Heading heading: headingList) {
@@ -141,41 +141,44 @@ public class TOCGeneratorService {
     NodePath path = NodePathParser.toPath(bodyPath);
     HTMLNode node = NodePathUtil.lookFor(document.getRoot(),path);
     int firstLevel = 0;
-    for(HTMLNode htmlNode: node.getChildrenNode()) {
-      if(isHeadingTag(htmlNode.getName().name())) {
-        firstLevel = getHeadingLevel(htmlNode);
-        break;
+    if(node == null) {
+      return null;
+    } else {
+      for(HTMLNode htmlNode: node.getChildrenNode()) {
+        if(isHeadingTag(htmlNode.getName().name())) {
+          firstLevel = getHeadingLevel(htmlNode);
+          break;
+        }
       }
-    }
-    if(firstLevel == 0) return null;
+      if(firstLevel == 0) return null;
 
-    List<Heading> headingList = new ArrayList<Heading>();
-    for(HTMLNode htmlNode: node.getChildrenNode()) {
-      if(isHeadingTag(htmlNode.getName().name()) 
-          && (getHeadingLevel(htmlNode) >= firstLevel)) {
-        headingList.add(new Heading(htmlNode));
+      List<Heading> headingList = new ArrayList<Heading>();
+      for(HTMLNode htmlNode: node.getChildrenNode()) {
+        if(isHeadingTag(htmlNode.getName().name()) 
+            && (getHeadingLevel(htmlNode) >= firstLevel)) {
+          headingList.add(new Heading(htmlNode));
+        }
       }
-    }
 
-    int[] headingNumbers = new int[MaxHeadingNumbers + 1];
-    for(int i = 0; i < headingNumbers.length; i++) {
-      if(i < firstLevel) {
-        headingNumbers[i] = -1;
-      } else {
-        headingNumbers[i] = 0;
+      int[] headingNumbers = new int[MaxHeadingNumbers + 1];
+      for(int i = 0; i < headingNumbers.length; i++) {
+        if(i < firstLevel) {
+          headingNumbers[i] = -1;
+        } else {
+          headingNumbers[i] = 0;
+        }
       }
-    }
 
-    for(Heading heading: headingList) {
-      int headingLevel = getHeadingLevel(heading.node);
-      headingNumbers[headingLevel]++;
-      for(int i = headingLevel+1; i < headingNumbers.length;i++) {
-        headingNumbers[i] = 0;
+      for(Heading heading: headingList) {
+        int headingLevel = getHeadingLevel(heading.node);
+        headingNumbers[headingLevel]++;
+        for(int i = headingLevel+1; i < headingNumbers.length;i++) {
+          headingNumbers[i] = 0;
+        }
+        heading.setHeadingLabel(headingNumbers, firstLevel);
       }
-      heading.setHeadingLabel(headingNumbers, firstLevel);
+      return headingList;
     }
-
-    return headingList;
   }
 
   private String toLowerCaseTextValue(HTMLNode node) {
