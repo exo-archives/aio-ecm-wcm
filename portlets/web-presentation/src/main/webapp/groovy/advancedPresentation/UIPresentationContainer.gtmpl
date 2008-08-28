@@ -18,7 +18,9 @@
 		var presentation = document.getElementById('<%= uicomponent.getPortletId() %>');
 		var parentNode = presentation.parentNode;
 		var quickEditingBlock = document.getElementById('<%=quickEditingBlockId%>');
-		var newEditingBlock = quickEditingBlock.cloneNode(true);
+		if(quickEditingBlock != null) {
+			var newEditingBlock = quickEditingBlock.cloneNode(true);
+		}
 		quickEditingBlock.parentNode.removeChild(quickEditingBlock);
 		parentNode.insertBefore(newEditingBlock, presentation);
 	})();
