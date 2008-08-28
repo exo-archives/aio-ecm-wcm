@@ -41,7 +41,6 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
-import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.ext.UIFormInputSetWithAction;
 
 /**
@@ -85,7 +84,7 @@ public class UIWebContentSelectorForm extends UIForm implements UISelectable{
     addChild(uiPathSelection);
     setActions(new String[] {"Save", "Back"});
   }
-  
+
   public void doSelect(String selectField, Object value) throws Exception {
     getUIStringInput(selectField).setValue((String)value);
     showPopupComponent(null);
@@ -146,5 +145,5 @@ public class UIWebContentSelectorForm extends UIForm implements UISelectable{
       uiPConfig.addChild(uiPConfig.getBackComponent());
     }
   }
-  
+
 }
