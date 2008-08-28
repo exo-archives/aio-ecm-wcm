@@ -13,4 +13,15 @@
   <component>    
     <type>org.exoplatform.wcm.connector.fckeditor.PortalLinkConnector</type>    
   </component>     
+  
+  <external-component-plugins>
+    <target-component>org.exoplatform.services.ecm.fckconfig.FCKConfigService</target-component>
+    <component-plugin>
+      <name>FCK Dynamic Skin Plugins</name>
+      <set-method>addPlugin</set-method>
+      <type>org.exoplatform.services.wcm.fckconfig.FCKDynamicSkinPlugin</type>
+      <description>Add Dynamic Skin Plugins into FCK editor </description>
+    </component-plugin>    
+  </external-component-plugins>
+  
 </configuration>
