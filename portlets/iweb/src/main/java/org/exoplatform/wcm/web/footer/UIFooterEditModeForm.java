@@ -75,20 +75,11 @@ import org.exoplatform.webui.form.UIFormInputBase;
 )
 public class UIFooterEditModeForm extends UIDialogForm {
   
-  private Node footerFolder; 
   private final String DEFAULT_HTML = "app:/groovy/footer/resources/footer.html".intern();
   private final String DEFAULT_CSS = "app:/groovy/footer/resources/FooterStylesheet.css".intern();
   
   public void init() throws Exception {
-    String portalName = Util.getUIPortal().getName();
-    LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
-    SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
-    Node portalFolder = livePortalManagerService.getLivePortal(portalName, sessionProvider);
-    
-    WebSchemaConfigService webSchemaConfigService = getApplicationComponent(WebSchemaConfigService.class);
-    PortalFolderSchemaHandler portalFolderSchemaHandler = webSchemaConfigService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
-    footerFolder = portalFolderSchemaHandler.getFooterThemes(portalFolder);
-    
+    Node footerFolder = getFooterFolder();
     setRepositoryName(((ManageableRepository) footerFolder.getSession().getRepository()).getConfiguration().getName());
     setWorkspace(footerFolder.getSession().getWorkspace().getName());
     setStoredPath(footerFolder.getPath());
@@ -142,6 +133,19 @@ public class UIFooterEditModeForm extends UIDialogForm {
     return super.getTemplateResourceResolver(webuiRequestContext, template);
   }
   
+  private Node getFooterFolder() throws Exception {
+    String portalName = Util.getUIPortal().getName();
+    LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
+    SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
+    Node portalFolder = livePortalManagerService.getLivePortal(portalName, sessionProvider);
+    
+    WebSchemaConfigService webSchemaConfigService = getApplicationComponent(WebSchemaConfigService.class);
+    PortalFolderSchemaHandler portalFolderSchemaHandler = webSchemaConfigService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
+    Node footerFolder = portalFolderSchemaHandler.getFooterThemes(portalFolder);
+    
+    return footerFolder;
+  }
+  
   public static class SaveActionListener extends EventListener<UIFooterEditModeForm> {
     private final String SERVLET_HOME = "/iweb";
     
@@ -158,7 +162,7 @@ public class UIFooterEditModeForm extends UIDialogForm {
         homeNode = footerEditModeForm.getNode().getParent();
         nodeType = footerEditModeForm.getNode().getPrimaryNodeType().getName();
       } else {
-        homeNode = footerEditModeForm.footerFolder;
+        homeNode = footerEditModeForm.getFooterFolder();
         nodeType = "exo:webContent";
       }
       CmsService cmsService = footerEditModeForm.getApplicationComponent(CmsService.class);

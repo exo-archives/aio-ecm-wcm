@@ -75,7 +75,6 @@ import org.exoplatform.webui.form.UIFormInputBase;
 )
 public class UIBannerEditModeForm extends UIDialogForm {
 
-  private Node bannerFolder;
   private final String DEFAULT_HTML = "app:/groovy/banner/resources/banner.html".intern();
   private final String DEFAULT_CSS = "app:/groovy/banner/resources/BannerStylesheet.css".intern();
 
@@ -84,15 +83,7 @@ public class UIBannerEditModeForm extends UIDialogForm {
   }
 
   public void init() throws Exception {
-    String portalName = Util.getUIPortal().getName();
-    LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
-    SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
-    Node portalFolder = livePortalManagerService.getLivePortal(portalName, sessionProvider);
-
-    WebSchemaConfigService webSchemaConfigService = getApplicationComponent(WebSchemaConfigService.class);
-    PortalFolderSchemaHandler portalFolderSchemaHandler = webSchemaConfigService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
-    bannerFolder = portalFolderSchemaHandler.getBannerThemes(portalFolder);
-
+    Node bannerFolder = getBannerFolder();
     setRepositoryName(((ManageableRepository)(bannerFolder.getSession().getRepository())).getConfiguration().getName());
     setWorkspace(bannerFolder.getSession().getWorkspace().getName());
     setStoredPath(bannerFolder.getPath());    
@@ -145,6 +136,19 @@ public class UIBannerEditModeForm extends UIDialogForm {
     return super.getTemplateResourceResolver(webuiRequestContext, template);
   }
 
+  private Node getBannerFolder() throws Exception {
+    String portalName = Util.getUIPortal().getName();
+    LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
+    SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
+    Node portalFolder = livePortalManagerService.getLivePortal(portalName, sessionProvider);
+
+    WebSchemaConfigService webSchemaConfigService = getApplicationComponent(WebSchemaConfigService.class);
+    PortalFolderSchemaHandler portalFolderSchemaHandler = webSchemaConfigService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
+    Node bannerFolder = portalFolderSchemaHandler.getBannerThemes(portalFolder);
+    
+    return bannerFolder;
+  }
+  
   public static class SaveActionListener extends EventListener<UIBannerEditModeForm> {
     private final String DEFAULT_LOGIN = "app:/groovy/banner/resources/LoginFragment.gtmpl".intern();
     private final String SERVLET_HOME = "/iweb";
@@ -162,7 +166,7 @@ public class UIBannerEditModeForm extends UIDialogForm {
         homeNode = bannerEditModeForm.getNode().getParent();
         nodeType = bannerEditModeForm.getNode().getPrimaryNodeType().getName();
       } else {
-        homeNode = bannerEditModeForm.bannerFolder;
+        homeNode = bannerEditModeForm.getBannerFolder();
         nodeType = "exo:webContent";
       }
       CmsService cmsService = bannerEditModeForm.getApplicationComponent(CmsService.class);
