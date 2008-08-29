@@ -18,12 +18,6 @@ wcm.insertCSSFromTextArea2FCK = function(Instance, ContentCSS) {
 		eStyle.setAttribute("id", sContentCSSId);
 		eStyle.innerHTML = sValue;
 		eHead.appendChild(eStyle);
-	}
+	};
 }
 
-//kill gadget :D
-eXo.gadget = {
-	UIGadget: {
-		createGadget: function(){}
-	}
-}
