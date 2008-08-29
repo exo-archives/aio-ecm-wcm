@@ -155,7 +155,7 @@ function getElementsByClassPath(root, path) {
 		oSelection.style.top = K.get.Y(event) + "px";
 		oSelection.style.display = "block";
 		var oActions =  K.select({from: oSelection, where: "className like '%IconItem%'"});
-		oSelection.title = element.title;
+		oSelection.setAttribute("name", element.getAttribute("name"));
 		eXp.store.temporaryNode = element;
 		return false;
 	}
@@ -171,7 +171,7 @@ function getElementsByClassPath(root, path) {
 	function showAddForm() {
 		var popupContainer = K("PopupContainer").show();
 		var formContainer = K("hideContainer").select({where: "className == 'AddFormContainer'"})[0];
-		var currenForder = K("contextMenu").select({where: "className like '%AddNewDocument'"})[0].title;
+		var currenForder = K("contextMenu").select({where: "className like '%AddNewDocument'"})[0].getAttribute("name");
 		popupContainer.innerHTML = formContainer.innerHTML.replace(/\${idShort}/g, currenForder);
 		K("Mask").add({
 			event: "click",

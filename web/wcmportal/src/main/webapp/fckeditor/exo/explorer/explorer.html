@@ -95,7 +95,7 @@
 				<div class="TreeNode">
 					<div class="Node ${sClass}">
 						<div class="Collapse" onclick="openTree(this);">
-							<div class="IconNode nt_unstructured16x16Icon ${sType}" title="${sCurrentFolder}${sName}/" onclick="getDir(this);" oncontextmenu="showContextMenu('AddNewDocument', event, this)">
+							<div class="IconNode nt_unstructured16x16Icon ${sType}" name="${sCurrentFolder}${sName}/" onclick="getDir(this);" oncontextmenu="showContextMenu('AddNewDocument', event, this)">
 								<a href="javascript: void(0);">
 									${sName}
 								</a>
@@ -175,7 +175,17 @@
 										</html>
 									</xmp>
 								</td>
-								
+								<td>
+									<a href="javascript: void(0);" class="ActionButton">
+										<div class="ButtonLeft">
+											<div class="ButtonRight">
+												<div class="ButtonMiddle" userLanguage="KLang.BtnUpload" onclick="uploadFile()">
+													Upload
+												</div>
+											</div>
+										</div>
+									</a>
+								</td>
 							</tr>
 							<tr class="UploadInfo Abort" style="display: none;">
 								<td width="238">
@@ -240,17 +250,6 @@
 								<td colspan="2">
 									<table class="ActionContainer" align="center">
 										<tr>
-											<td>
-												<a href="javascript: void(0);" class="ActionButton" style="margin-top: 21px">
-													<div class="ButtonLeft">
-														<div class="ButtonRight">
-															<div class="ButtonMiddle" userLanguage="KLang.BtnUpload" onclick="uploadFile()">
-																Upload
-															</div>
-														</div>
-													</div>
-												</a>
-											</td>
 											<td>
 												<a href="javascript: void(0);" class="ActionButton" style="margin-top: 21px">
 													<div class="ButtonLeft">
@@ -455,13 +454,13 @@
 		var connector = eXoPlugin.hostName + eXp.connector + 'getFoldersAndFiles';
 		var param = eXp.buildParam(
 					"type=" + eXp.resourceType,
-					"currentFolder=" + currentNode.title,
+					"currentFolder=" + currentNode.getAttribute("name"),
 					"currentPortal=" + eXoPlugin.portalName,
 					buildXParam()
 				);
 		eXp.sendRequest(connector, param, deployData);
 		eXp.store.currentNode = currentNode;
-		eXp.store.currentFolder = currentNode.title;
+		eXp.store.currentFolder = currentNode.getAttribute("name");
 	}
 	
 	function deployData(iXML) {
@@ -486,7 +485,7 @@
 				else sTreeNode = sTreeNode.replace(/\${sClass}/g, '');
 				sTreeNode = sTreeNode.replace(/\${sName}/g, sName);
 				sTreeNode = sTreeNode.replace(/\${sType}/g, sType);
-				sTreeNode = sTreeNode.replace(/\${sCurrentFolder}/g, currentNode.title);
+				sTreeNode = sTreeNode.replace(/\${sCurrentFolder}/g, currentNode.getAttribute("name"));
 				sHTML += sTreeNode;
 			}
 			oStatusFolder.innerHTML = iLength + ' folder(s)';
@@ -554,7 +553,7 @@
 		var sContent = eXoPlugin.getContent();
 		var parent = window.opener.window;
 		if (parent.document.getElementById("txtUrl")) {
-			parent.document.getElementById("txtUrl").value = eXoPlugin.hostName + '/' + sLink;
+			parent.document.getElementById("txtUrl").value = sLink;
 		} else if (eXp.resourceType == "Link") {
 			var newTag = FCK.CreateElement("A");
 			if (K.remove.space(sContent) != "") newTag.innerHTML = sContent;
