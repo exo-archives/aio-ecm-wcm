@@ -6,6 +6,7 @@
   import java.text.SimpleDateFormat;
 	import org.exoplatform.portal.webui.util.Util;  
 	import javax.jcr.Value;
+	import org.exoplatform.services.wcm.search.WcmResult;
 	
 	def currentPageData = uicomponent.getCurrentPageData();
 	DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
@@ -17,9 +18,9 @@
 	}//end if currentPageData.size()==0
 	
 	else{
-		for(Object obj:currentPageData) {
-		  if(uicomponent.castNode(obj) != null) {
-		    Node node = uicomponent.castNode(obj);	
+		for(WcmResult result:currentPageData) {
+		  if(result.getType().equals(WcmResult.NODE)) {
+		    Node node = result.getNode();	
 		    //get owner	 
 		    Value ownerVal  = node.getProperty("exo:owner").getValue();
 		    String owner = ownerVal.getString();   
@@ -34,8 +35,8 @@
 		</div>
 <%
 		  }//end if obj is node
-		  else if(uicomponent.castPageNode(obj) != null){
-		    PageNode pnode = uicomponent.castPageNode(obj);
+		  else if(result.getType().equals(WcmResult.PAGE_NODE)){
+		    PageNode pnode = result.getPageNode();
 %>
 		<div class="ItemResult">
 			<div class="NodeName">

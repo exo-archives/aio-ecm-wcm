@@ -27,9 +27,12 @@ import java.util.List;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Session;
+import javax.jcr.Value;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
+import javax.jcr.query.Row;
+import javax.jcr.query.RowIterator;
 
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.commons.utils.PageList;
@@ -51,8 +54,11 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.access.SystemIdentity;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.jcr.impl.core.JCRPath;
+import org.exoplatform.services.jcr.impl.core.SessionImpl;
 import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
 import org.exoplatform.services.wcm.search.WcmSearchService;
+import org.exoplatform.services.wcm.search.WcmResult;
 
 /**
  * Created by The eXo Platform SARL
@@ -117,17 +123,17 @@ public class WcmSearchServiceImpl implements WcmSearchService {
     ManageableRepository manageableRepository = repositoryService.getRepository(repository) ;
     Session session = sessionProvider.getSession(workspace,manageableRepository) ;
     QueryManager queryManager = session.getWorkspace().getQueryManager() ;    
-    List<Object> container = new ArrayList<Object>();    
+    List<WcmResult> container = new ArrayList<WcmResult>();    
     if(portalName != null) {
-      List<Object> documents = findDocuments(queryManager, keyword, portalName) ;
-      List<Object> pageNodes = findPortalPages(keyword, portalName, repository, workspace, sessionProvider) ;
+      List<WcmResult> documents = findDocuments(queryManager, keyword, portalName, repository, workspace, sessionProvider) ;
+      List<WcmResult> pageNodes = findPortalPages(keyword, portalName, repository, workspace, sessionProvider) ;
       container.addAll(documents);
       container.addAll(pageNodes);
       return new ObjectPageList(container,10) ;
     }
     for(String portal:getPortalNames()) {
-      List<Object> documents = findDocuments(queryManager, keyword, portal) ;
-      List<Object> pageNodes = findPortalPages(keyword, portal, repository, workspace, sessionProvider) ;
+      List<WcmResult> documents = findDocuments(queryManager, keyword, portal, repository, workspace, sessionProvider) ;
+      List<WcmResult> pageNodes = findPortalPages(keyword, portal, repository, workspace, sessionProvider) ;
       container.addAll(documents);
       container.addAll(pageNodes);
     }
@@ -139,11 +145,11 @@ public class WcmSearchServiceImpl implements WcmSearchService {
     Session session = sessionProvider.getSession(workspace,manageableRepository) ;
     QueryManager queryManager = session.getWorkspace().getQueryManager() ;    
     if(portalName != null)  { 
-      return new ObjectPageList(findDocuments(queryManager, keyword, portalName),10) ;
+      return new ObjectPageList(findDocuments(queryManager, keyword, portalName, repository, workspace, sessionProvider),10) ;
     }
-    List<Object> allDocuments = new ArrayList<Object>();
+    List<WcmResult> allDocuments = new ArrayList<WcmResult>();
     for(String portal:getPortalNames()) {
-      List<Object> list = findDocuments(queryManager, keyword, portal) ;
+      List<WcmResult> list = findDocuments(queryManager, keyword, portal, repository, workspace, sessionProvider) ;
       allDocuments.addAll(list) ;
     }
     return new ObjectPageList(allDocuments,10) ;
@@ -159,35 +165,44 @@ public class WcmSearchServiceImpl implements WcmSearchService {
     }
     return portalNames ;
   }
-  private List<Object> findDocuments(QueryManager queryManager,String keyword,String portalName) throws Exception {
+  private List<WcmResult> findDocuments(QueryManager queryManager,String keyword,String portalName,String repository,String workspace, SessionProvider sessionProvider) throws Exception {
     String sql = "select * from nt:base where contains(*,'" + keyword + "') and jcr:path like '/Web Content/Live/"+portalName+"/documents/%' order by exo:dateCreated DESC" ;
+    ManageableRepository manageableRepository = repositoryService.getRepository(repository) ;
+    Session session = sessionProvider.getSession(workspace,manageableRepository) ;
+    
     Query query = queryManager.createQuery(sql, Query.SQL) ;
     QueryResult queryResult = query.execute() ;
-    HashSet<Node> hashSet = new HashSet<Node>() ;    
-    for(NodeIterator iterator = queryResult.getNodes();iterator.hasNext();) {
-      Node node = iterator.nextNode() ;
-      if(node.getPrimaryNodeType().isNodeType("nt:resource")) 
-        node = node.getParent() ;
-      hashSet.add(node) ;
-    }
-    List<Object> documents = Arrays.asList(hashSet.toArray()) ;
-    return documents ;
+    List<WcmResult> result = new ArrayList<WcmResult>() ;    
+    
+    for(RowIterator iterator = queryResult.getRows();iterator.hasNext();) {
+        Row r = iterator.nextRow();
+        String path = r.getValue("jcr:path").getString();
+        JCRPath nodePath = ((SessionImpl)session).getLocationFactory().parseJCRPath(path);
+        Node node = (Node)session.getItem(nodePath.getAsString(false));
+        if(node.getPrimaryNodeType().isNodeType("nt:resource")) 
+          node = node.getParent() ;
+        Long score = r.getValue("jcr:score").getLong();
+        WcmResult wcmResult = new WcmResult (node,score);
+        result.add(wcmResult) ;
+      }
+    
+    return result ;
   }
 
   private PageList searchPortalPage(String keyword,String portalName,String repository,String workspace, SessionProvider sessionProvider) throws Exception{    
     if(portalName != null) {
-      List<Object> list = findPortalPages(keyword, portalName, repository, workspace, sessionProvider) ;
+      List<WcmResult> list = findPortalPages(keyword, portalName, repository, workspace, sessionProvider) ;
       return new ObjectPageList(list,10) ;
     }
-    List<Object> container = new ArrayList<Object>() ;
+    List<WcmResult> container = new ArrayList<WcmResult>() ;
     for(String portal: getPortalNames()) {
-      List<Object> list = findPortalPages(keyword, portal, repository, workspace, sessionProvider) ;
+      List<WcmResult> list = findPortalPages(keyword, portal, repository, workspace, sessionProvider) ;
       container.addAll(list) ;
     }
     return new ObjectPageList(container,10);    
   }
 
-  private List<Object> findPortalPages(String keyword,String portalName,String repository,String workspace, SessionProvider sessionProvider) throws Exception {    
+  private List<WcmResult> findPortalPages(String keyword,String portalName,String repository,String workspace, SessionProvider sessionProvider) throws Exception {    
     String sql = "select * from nt:base where contains(*,'" + keyword + "') and jcr:path like '/Web Content/Live/"+portalName+"/html/%' order by exo:dateCreated DESC" ;
     ManageableRepository manageableRepository = repositoryService.getRepository(repository) ;
     Session session = sessionProvider.getSession(workspace,manageableRepository) ;
@@ -196,28 +211,37 @@ public class WcmSearchServiceImpl implements WcmSearchService {
     if(SystemIdentity.ANONIM.endsWith(userId)) userId = null ;
     Query query = queryManager.createQuery(sql,Query.SQL) ;
     QueryResult queryResult = query.execute() ;
-    List<Object> pageNodes = new ArrayList<Object>() ;    
+    List<WcmResult> pageNodes = new ArrayList<WcmResult>() ;    
     ExoContainer container = ExoContainerContext.getCurrentContainer() ;
     UserPortalConfigService portalConfigService = 
       (UserPortalConfigService)container.getComponentInstanceOfType(UserPortalConfigService.class) ;
-    UserPortalConfig userPortalConfig = portalConfigService.getUserPortalConfig(portalName, userId) ;     
-    for(NodeIterator iterator = queryResult.getNodes();iterator.hasNext(); ) {
-      Node webContent = iterator.nextNode() ;
-      String key = null ;
-      if(webContent.getPrimaryNodeType().isNodeType("nt:resource")) {
-        key = buildKey(repository, workspace, webContent.getParent().getUUID()) ;
-      }else {
-        key = buildKey(repository, workspace, webContent.getUUID()) ;
-      }                         
-      List <String> referencedPages = cachedPages_.get(key) ;
-      
-      for (int i=0;i<referencedPages.size();i++) {
-    	  String referencedPage=referencedPages.get(i);
-    	  if(!hasAccessPermission(referencedPage, userId,portalConfigService)) continue ;
-          pageNodes.addAll(findPageNodes(userPortalConfig, referencedPage)) ;
+    UserPortalConfig userPortalConfig = portalConfigService.getUserPortalConfig(portalName, userId) ;    
+    
+    for(RowIterator iterator = queryResult.getRows();iterator.hasNext();) {
+        Row r = iterator.nextRow();
+        String path = r.getValue("jcr:path").getString();
+        JCRPath nodePath = ((SessionImpl)session).getLocationFactory().parseJCRPath(path);
+        Node webContent = (Node)session.getItem(nodePath.getAsString(false));
+        Long score = r.getValue("jcr:score").getLong();
+        String key = null ;
+        if(webContent.getPrimaryNodeType().isNodeType("nt:resource")) {
+          key = buildKey(repository, workspace, webContent.getParent().getUUID()) ;
+        }else {
+          key = buildKey(repository, workspace, webContent.getUUID()) ;
+        }                         
+        List <String> referencedPages = cachedPages_.get(key) ;
+        if (referencedPages == null) return pageNodes;
+        for (int i=0;i<referencedPages.size();i++) {
+      	  String referencedPage=referencedPages.get(i);
+      	  if(!hasAccessPermission(referencedPage, userId,portalConfigService)) continue ;
+      	  List<PageNode> pages = findPageNodes(userPortalConfig, referencedPage);
+      	  for (int j=0;j<pages.size();j++) {
+      		  WcmResult result = new WcmResult (pages.get(j),score);
+      		  pageNodes.add(result);
+      	  }
+        }
+        
       }
-      
-    }
     return pageNodes ;
   }
 
@@ -307,5 +331,6 @@ public class WcmSearchServiceImpl implements WcmSearchService {
     Session session = sessionProvider.getSession(worksapce, manageableRepository) ;
     return session.getNodeByUUID(nodeUUID) ;    
   }
-
+  
+  
 }
