@@ -1,7 +1,20 @@
-.UIWelcomeScreen .LeftContent {
+.UIAdvancedPresentationPortlet .UIWelcomeScreen .WelcomeLable {
 	background: url('images/LeftContent188x219.gif') no-repeat left top;
-	float:left;
 	width: 188px; height: 219px;
+}
+
+.UIAdvancedPresentationPortlet .UIWelcomeScreen .AlignLeft {
+	float:left;
+}
+
+.UIAdvancedPresentationPortlet .UIWelcomeScreen .WelcomeLablePadding {
+	padding-left: 15px; 
+	font-weight: bold;
+}
+
+.UIAdvancedPresentationPortlet .UIWelcomeScreen .WelcomeTextPadding {
+	padding-left: 15px; 
+	line-height: 25px;
 }
 
 .UIWebContentSelectorForm {
@@ -41,11 +54,4 @@
 	width: 16px;	height: 16px;
   background: url('images/MagnifierIconNews.png') no-repeat ;
   cursor: pointer;	 
-}
-
-.BannerQuickEdit{
-	background:url('images/QuickEdit.png') no-repeat scroll left top;
-	height:50px;
-	width: 50px;
-	padding-left: 0px;
 }
