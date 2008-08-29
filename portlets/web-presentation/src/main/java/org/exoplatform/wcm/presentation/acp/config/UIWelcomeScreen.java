@@ -20,10 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-
 import org.exoplatform.wcm.presentation.acp.config.quickcreation.UIQuickCreationWizard;
 import org.exoplatform.wcm.presentation.acp.config.selector.UIWebContentSelectorForm;
-import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.web.application.RequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
