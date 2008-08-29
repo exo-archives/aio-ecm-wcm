@@ -155,7 +155,7 @@
 		var content = eXoPlugin.getContent();
 		var title = content || document.getElementById("inputTitle").value;
 		title = Trim(title);
-		var url = eXoPlugin.hostName + '/' + document.getElementById("txtUrl").value;
+		var url = document.getElementById("txtUrl").value;
 		if (Trim(url) == "") {
 			alert("Field URL is not empty"); 
 			return;
@@ -174,7 +174,7 @@
 		var sOptions = "toolbar=no, status=no, resizable=yes, dependent=yes, scrollbars=yes";
 		sOptions += ", width=" +  FCKConfig.ScreenWidth;
 		sOptions += ", height=" + FCKConfig.ScreenHeight;
-		var url = eXoPlugin.hostName + '/' + document.getElementById("txtUrl").value;
+		var url = document.getElementById("txtUrl").value;
 		if (url) window.open(url, "", sOptions);
 	}
 	

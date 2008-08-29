@@ -553,7 +553,7 @@
 		var sContent = eXoPlugin.getContent();
 		var parent = window.opener.window;
 		if (parent.document.getElementById("txtUrl")) {
-			parent.document.getElementById("txtUrl").value = sLink;
+			parent.document.getElementById("txtUrl").value = eXoPlugin.hostName + '/' + sLink;
 		} else if (eXp.resourceType == "Link" || eXp.resourceType == "File") {
 			var newTag = FCK.CreateElement("A");
 			if (K.remove.space(sContent) != "") newTag.innerHTML = sContent;
