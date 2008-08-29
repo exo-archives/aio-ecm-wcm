@@ -68,14 +68,14 @@ public class UIWelcomeScreen extends UIForm {
       option.add(new SelectItemOption<String>(labelSelectExisted, "SelectExisted"));
       UIFormRadioBoxInput radioInput = new UIFormRadioBoxInput("radio", "radio", option);
       radioInput.setAlign(UIFormRadioBoxInput.VERTICAL_ALIGN);
-      radioInput.setValue("SelectExisted");
+      radioInput.setValue("QuickCreate");
       addUIFormInput(radioInput);
     }else {
       option.add(new SelectItemOption<String>(labelEditContent, "EditCurrentContent"));
       option.add(new SelectItemOption<String>(labelSelectOther, "SelectOtherContent"));
       UIFormRadioBoxInput radioInput = new UIFormRadioBoxInput("radio", "radio", option);
       radioInput.setAlign(UIFormRadioBoxInput.VERTICAL_ALIGN);
-      radioInput.setValue("SelectOtherContent");
+      radioInput.setValue("EditCurrentContent");
       addUIFormInput(radioInput);
     }
 
