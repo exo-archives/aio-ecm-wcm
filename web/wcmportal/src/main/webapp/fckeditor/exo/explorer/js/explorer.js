@@ -216,8 +216,8 @@ function getElementsByClassPath(root, path) {
 		var uploadContainer = K("UploadContainer");
 		var popupContainer = K("PopupContainer");
 		popupContainer.style.display = "block";
-		if (eXp.store.currentNode && eXp.store.currentNode.title) {
-			var sPath = eXp.store.currentNode.title;
+		if (eXp.store.currentNode && eXp.store.currentNode.getAttribute) {
+			var sPath = eXp.store.currentNode.getAttribute("name");
 		} else var sPath = "/";
 		popupContainer.innerHTML = uploadContainer.innerHTML.replace(/\${idShort}/, sPath);
 		var iFrame = popupContainer.select({where: "className == 'iFrameUpload'"})[0];
@@ -234,63 +234,78 @@ function getElementsByClassPath(root, path) {
 		});
 	}
 	
+	function showAlert() {
+		removeMask();
+		var popupContainer = K("PopupContainer").show();
+		var alertContainer = K("hideContainer").select({where: "className == 'AlertContainer'"})[0];
+		popupContainer.innerHTML = alertContainer.innerHTML;
+		K("Mask").add({
+			event: "click",
+			listener: removeMask
+		}).show();
+	}
+	
 	function uploadFile() {
 		var popupContainer = K("PopupContainer");
 		var iFrameUpload = popupContainer.select({where: "className == 'iFrameUpload'"})[0];
 		var formUpload = iFrameUpload.contentWindow.document.getElementsByTagName("form")[0];
-		uploadFile.id =  eXp.getID();
-		var param = eXp.buildParam("uploadId=" + uploadFile.id, "currentFolder=" + eXp.store.currentFolder, buildXParam());
-		if (formUpload) {
-			formUpload.action = eXp.connector + eXp.command.uploadFile + "?" + param;
-			formUpload.submit();
-		}
-		uploadFile.stopUpload = false;
-		var uploadField = popupContainer.select({where: "className == 'UploadField'"})[0];
-		uploadField.style.display = "none";
-		var UploadInfo = popupContainer.select({where: "className like 'UploadInfo%'"})[0];
-		UploadInfo.style.display = "";
-		var CancelAction = popupContainer.select({where: "className == 'CancelAction'"})[0];
-		CancelAction.style.display = "none";
-		K.set.timeout({
-			until: function() {return uploadFile.stopUpload},
-			method: function() {
-				var connector = eXp.connector + eXp.command.controlUpload;
-				var param = eXp.buildParam("action=progress", "uploadId=" + uploadFile.id, "currentFolder=" + eXp.store.currentFolder, buildXParam());
-				K.request({
-					address: connector,
-					data: param,
-					method: "GET",
-					onSuccess: function() {
-						var iXML = this.responseXML;
-						if (!iXML) return;
-						var oProgress = eXp.getSingleNode(iXML, "UploadProgress");
-						var nPercent = eXp.getNodeValue(oProgress, "percent");
-						var popupContainer = K("PopupContainer");
-						var uploadInfo = popupContainer.select({where: "className like 'UploadInfo%'"})[0];
-						var graphProgress = popupContainer.select({where: "className == 'GraphProgress'"})[0];
-						var numberProgress = popupContainer.select({where: "className == 'NumberProgress'"})[0];
-						if (nPercent * 1 < 100) {
-							graphProgress.style.width = nPercent + "%";
-							numberProgress.innerHTML = nPercent + "%";
-							uploadFile.stopUpload = false;
-							uploadInfo.className = "UploadInfo Abort";
-						} else {
-							graphProgress.style.width = 100 + "%";
-							numberProgress.innerHTML = 100 + "%";
-							uploadFile.stopUpload = true;
-							uploadInfo.className = "UploadInfo Delete";
-							var uploadAction = popupContainer.select({where: "className == 'UploadAction'"})[0];
-							uploadAction.style.display = "";
-						}
-					},
-					onFailure: function() {
-						uploadFile.stopUpload = true;
-						alert("upload is failure.");
-						showUploadForm();
-					}
-				});
+		if (!formUpload.file.value == '') {
+			uploadFile.id =  eXp.getID();
+			var param = eXp.buildParam("uploadId=" + uploadFile.id, "currentFolder=" + eXp.store.currentFolder, buildXParam());
+			if (formUpload) {
+				formUpload.action = eXp.connector + eXp.command.uploadFile + "?" + param;
+				formUpload.submit();
 			}
-		});
+			uploadFile.stopUpload = false;
+			var uploadField = popupContainer.select({where: "className == 'UploadField'"})[0];
+			uploadField.style.display = "none";
+			var UploadInfo = popupContainer.select({where: "className like 'UploadInfo%'"})[0];
+			UploadInfo.style.display = "";
+			var CancelAction = popupContainer.select({where: "className == 'CancelAction'"})[0];
+			CancelAction.style.display = "none";
+			K.set.timeout({
+				until: function() {return uploadFile.stopUpload},
+				method: function() {
+					var connector = eXp.connector + eXp.command.controlUpload;
+					var param = eXp.buildParam("action=progress", "uploadId=" + uploadFile.id, "currentFolder=" + eXp.store.currentFolder, buildXParam());
+					K.request({
+						address: connector,
+						data: param,
+						method: "GET",
+						onSuccess: function() {
+							var iXML = this.responseXML;
+							if (!iXML) return;
+							var oProgress = eXp.getSingleNode(iXML, "UploadProgress");
+							var nPercent = eXp.getNodeValue(oProgress, "percent");
+							var popupContainer = K("PopupContainer");
+							var uploadInfo = popupContainer.select({where: "className like 'UploadInfo%'"})[0];
+							var graphProgress = popupContainer.select({where: "className == 'GraphProgress'"})[0];
+							var numberProgress = popupContainer.select({where: "className == 'NumberProgress'"})[0];
+							if (nPercent * 1 < 100) {
+								graphProgress.style.width = nPercent + "%";
+								numberProgress.innerHTML = nPercent + "%";
+								uploadFile.stopUpload = false;
+								uploadInfo.className = "UploadInfo Abort";
+							} else {
+								graphProgress.style.width = 100 + "%";
+								numberProgress.innerHTML = 100 + "%";
+								uploadFile.stopUpload = true;
+								uploadInfo.className = "UploadInfo Delete";
+								var uploadAction = popupContainer.select({where: "className == 'UploadAction'"})[0];
+								uploadAction.style.display = "";
+							}
+						},
+						onFailure: function() {
+							uploadFile.stopUpload = true;
+							alert("upload is failure.");
+							showUploadForm();
+						}
+					});
+				}
+			});
+		} else {
+			showAlert();
+		}
 	}
 	
 	uploadFile.Abort = function() {

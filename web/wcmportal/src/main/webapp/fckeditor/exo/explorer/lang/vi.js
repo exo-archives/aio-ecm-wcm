@@ -1,7 +1,7 @@
 
 var KLang = {
 	TreeTitle	 								: "Thư mục",
-	SettingTitle								: "Cấu hình",
+	SettingTitle							: "Cấu hình",
 	SetView										: "Xem",
 	SetSort										: "Sắp xếp",
 	
@@ -9,27 +9,27 @@ var KLang = {
 	SortDate									: "Ngày tháng",
 	SortSize									: "Kích thước",
 	
-	ViewThumbnail								: "Hình ảnh",
+	ViewThumbnail							: "Hình ảnh",
 	ViewList									: "Danh sách",
 	
 	CtxNewDoc									: "Thêm mới",
-	CtxViewItem									: "Xem",
-	CtxSelectItem								: "Chọn",
+	CtxViewItem								: "Xem",
+	CtxSelectItem							: "Chọn",
 	
 	BtnCreate									: "Tạo",
 	BtnCancel									: "Hủy",
 	BtnUpload									: "Tải lên",
-	BtnRefresh									: "Làm mới",
+	BtnRefresh								: "Làm mới",
 	BtnUpload									: "Upload",
-	BtnSetting									: "Setting",
+	BtnSetting								: "Setting",
 	BtnHelp										: "Giúp đỡ",
 	BtnClose									: "Đóng",
 	BtnSave										: "Lưu",
 	BtnAbort									: "Hủy bỏ",
 	BtnDelete									: "Xóa",
 	
-	LabelFolder									: "Thư mục",
+	LabelFolder								: "Thư mục",
 	LabelName									: "Tên",
-	LNewFolder									: "Thư mục mới"
-
+	LabelAlert								: "Hãy chọn file trước khi upload",
+	LNewFolder								: "Thư mục mới"
 }

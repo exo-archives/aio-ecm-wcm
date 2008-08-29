@@ -305,7 +305,7 @@ a {
 	background: #E3E1CD;
 }
 
-.AddForm {
+.AddForm, .AlertForm {
 	border: 1px #000000 solid;
 	padding: 10px;
 	z-index: 1;

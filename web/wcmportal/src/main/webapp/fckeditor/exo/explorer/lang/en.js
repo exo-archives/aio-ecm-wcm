@@ -1,7 +1,7 @@
 
 var KLang = {
 	TreeTitle	 								: "Folders",
-	SettingTitle								: "Setting",
+	SettingTitle							: "Setting",
 	SetView										: "View",
 	SetSort										: "Sort",
 	
@@ -9,25 +9,26 @@ var KLang = {
 	SortDate									: "Date",
 	SortSize									: "Size",
 	
-	ViewThumbnail								: "Thumbnail",
+	ViewThumbnail							: "Thumbnail",
 	ViewList									: "List",
 	
 	CtxNewDoc									: "Add new",
-	CtxViewItem									: "View",
-	CtxSelectItem								: "Select",
+	CtxViewItem								: "View",
+	CtxSelectItem							: "Select",
 	
 	BtnCreate									: "Create",
 	BtnCancel									: "Cancel",
 	BtnUpload									: "Upload",
-	BtnRefresh									: "Refresh",
-	BtnSetting									: "Setting",
+	BtnRefresh								: "Refresh",
+	BtnSetting								: "Setting",
 	BtnHelp										: "Help",
 	BtnClose									: "Close",
 	BtnSave										: "Save",
 	BtnAbort									: "Abort",
 	BtnDelete									: "Delete",
 	
-	LabelFolder									: "Folder",
+	LabelFolder								: "Folder",
+	LabelAlert								: "Please choose a file before upload",
 	LabelName									: "Name",
-	LNewFolder									: "New Folder"
+	LNewFolder								: "New Folder"
 }
