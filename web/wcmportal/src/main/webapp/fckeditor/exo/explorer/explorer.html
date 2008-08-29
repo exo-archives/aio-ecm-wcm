@@ -555,11 +555,15 @@
 		var parent = window.opener.window;
 		if (parent.document.getElementById("txtUrl")) {
 			parent.document.getElementById("txtUrl").value = eXoPlugin.hostName + '/' + sLink;
-		} else if (eXp.resourceType == "Link" || eXp.resourceType == "File") {
+		} else if (eXp.resourceType == "Link") {
 			var newTag = FCK.CreateElement("A");
 			if (K.remove.space(sContent) != "") newTag.innerHTML = sContent;
 			else newTag.innerHTML = sLink;
-			
+			newTag.setAttribute("href", sLink);
+		} else if (eXp.resourceType == "File") {
+			var newTag = FCK.CreateElement("A");
+			if (K.remove.space(sContent) != "") newTag.innerHTML = sContent;
+			else newTag.innerHTML = sLink.substring(sLink.lastIndexOf('/') + 1);
 			newTag.setAttribute("href", sLink);
 		} else if (eXp.resourceType == "Image"){
 			var newTag = FCK.CreateElement("IMG");
