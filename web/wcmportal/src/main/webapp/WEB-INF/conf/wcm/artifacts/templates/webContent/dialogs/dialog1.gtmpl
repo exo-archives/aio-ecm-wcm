@@ -7,6 +7,8 @@
 	def String htmlWYSIWYGFormId = "htmlData[" + uicomponent.hashCode() + "]";
 	def String cssFormId = "ContentCSS[" + uicomponent.hashCode() + "]";
 	def String jsFormId = "ContentJS[" + uicomponent.hashCode() + "]";
+	rcontext.getJavascriptManager().importJavascript('eXo.wcm.Util' , "/eXoWCMResources/javascript");
+	rcontext.getJavascriptManager().addOnLoadJavascript("wcm.insertCSSFromTextArea2FCK('" + htmlWYSIWYGFormId + "', '" + cssFormId + "')");
 %>
 <style>
 	.UIForm .HorizontalLayout .textarea { 
