@@ -26,7 +26,7 @@
           <td class="FieldLabel"><%=_ctx.appRes("CSSFile.dialog.label.name")%></td>
           <td class="FieldComponent">
             <%
-              String[] fieldName = ["jcrPath=/node", "nodetype=nt:file", "editable=if-null", "validate=name"] ;
+              String[] fieldName = ["jcrPath=/node", "nodetype=nt:file", "editable=if-null", "validate=name, empty"] ;
               uicomponent.addTextField("name", fieldName) ; 
             %>
           </td>
@@ -60,7 +60,7 @@
                 def curNode = uicomponent.getNode() ;
                 if(curNode.hasNode("jcr:content")) {
                   def content = curNode.getNode("jcr:content") ;                                      
-                  String[] fieldSummary = ["jcrPath=/node/jcr:content/jcr:data", "validate=empty"] ;
+                  String[] fieldSummary = ["jcrPath=/node/jcr:content/jcr:data"] ;
                   uicomponent.addTextAreaField("contentHtml", fieldSummary) ;                                                       
                   }
                 } else {                           
