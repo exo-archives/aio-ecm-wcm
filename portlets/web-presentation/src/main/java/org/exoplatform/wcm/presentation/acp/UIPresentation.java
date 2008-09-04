@@ -69,6 +69,7 @@ public class UIPresentation extends UIBaseNodePresentation {
       sessionProvider = SessionProviderFactory.createSessionProvider();
     }
     Session session = sessionProvider.getSession(worksapce, manageableRepository) ;
+    Node node = session.getNodeByUUID(uuid);
     return session.getNodeByUUID(uuid) ;    
   }
 
@@ -96,7 +97,7 @@ public class UIPresentation extends UIBaseNodePresentation {
 
   public void processRender(WebuiRequestContext context) throws Exception {
     try {
-      getNode() ;
+      getTemplatePath();
     } catch (ItemNotFoundException e) {
       Writer writer = context.getWriter() ;
       writer.write("<div style=\"height: 55px; font-size: 13px; text-align: center; padding-top: 10px;\">") ;
@@ -113,13 +114,21 @@ public class UIPresentation extends UIBaseNodePresentation {
       writer.write("</span>") ;
       writer.write("</div>") ;
       return;
-    }
+    } catch (Exception e) {
+      Writer writer = context.getWriter();
+      writer.write("<div style=\"height: 55px; font-size: 13px; text-align: center; padding-top: 10px;\">");
+      writer.write("<span>");
+      writer.write(context.getApplicationResourceBundle().getString("UIMessageBoard.msg.error-nodetype") + e.getLocalizedMessage());
+      writer.write("</span>");
+      writer.write("</div>");
+      return;
+    }  
     super.processRender(context) ;
   }
 
   @Override
   public String getTemplatePath() throws Exception {
-    TemplateService templateService = getApplicationComponent(TemplateService.class);   
+    TemplateService templateService = getApplicationComponent(TemplateService.class);
     return templateService.getTemplatePath(getNode(), false) ;
   }
 
