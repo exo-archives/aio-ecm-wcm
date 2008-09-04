@@ -19,7 +19,7 @@ package org.exoplatform.wcm.web.banner;
 import javax.jcr.Node;
 import javax.portlet.PortletRequest;
 
-import org.exoplatform.dms.application.StringResourceResolver;
+import org.exoplatform.ecm.resolver.StringResourceResolver;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.jcr.RepositoryService;
