@@ -77,7 +77,7 @@
         				 <td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.name")%></td>
           			 <td class="FieldComponent">
             		 <%
-              	 		String[] webContentFieldName = ["jcrPath=/node", "nodetype=exo:webContent", "editable=if-null","validate=name,empty"] ;
+              	 		String[] webContentFieldName = ["jcrPath=/node", "nodetype=exo:webContent", "mixintype=mix:votable,mix:commentable", "editable=if-null","validate=name,empty"] ;
               	 		uicomponent.addTextField("name", webContentFieldName) ; 
               	 		String[] webContentHiddenField1 = ["jcrPath=/node/css", "nodetype=exo:cssFolder", "defaultValues=css"] ;
               	 		String[] webContentHiddenField2 = ["jcrPath=/node/js", "nodetype=exo:jsFolder", "defaultValues=js"] ;

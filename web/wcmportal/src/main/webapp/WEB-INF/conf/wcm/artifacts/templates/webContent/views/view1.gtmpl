@@ -72,10 +72,11 @@
 		if(categoriesService.hasCategories(currentNode)) {
       List<Node> categoryNodeList = categoriesService.getCategories(currentNode, repositoryName);
       for (Node category: categoryNodeList) {
-        categories.append(category.getPath()).append(";");
+        categories.append(category.getName()).append(", ");
       }
+    	categories.replace(categories.lastIndexOf(", "), categories.size(), "");
 %>
-		<div class="Categories">Categories: <%= categories.toString(); %></div>
+		<div class="Categories"><%=_ctx.appRes("Category.view.label")%>: <%= categories.toString(); %></div>
 <%
     }
 	}
@@ -88,11 +89,11 @@
 		if(tagList.size() > 0) {
 			StringBuffer tagBuff = new StringBuffer("[");
 			for(Node tag: tagList) {
-				tagBuff.append(tag.getName()).append(",");
+				tagBuff.append(tag.getName()).append(", ");
 			}
-			tagBuff.replace(tagBuff.lastIndexOf(","), tagBuff.size(), "]");
+			tagBuff.replace(tagBuff.lastIndexOf(", "), tagBuff.size(), "]");
 %>
-				<div class="Tags">Tags: <%= tagBuff.toString(); %></div>
+				<div class="Tags"><%=_ctx.appRes("Tag.view.label")%>: <%= tagBuff.toString(); %></div>
 <%	
 		}	
 	}
@@ -101,15 +102,15 @@
 <%
 	if(isCommentingEnable) {
 %>
-		<div class="comments">Comment: <% _ctx.include(uicomponent.getViewTemplate("exo:comment", "view1")); %></div>
+		<div class="comments"><% _ctx.include(uicomponent.getViewTemplate("exo:comment", "view1")); %></div>
 <%	
 	}
 %>
 
 <% 
-//	if(isVotingEnable) {
+	if(isVotingEnable) {
 %>
-	<!--	<div class="Vote">Vote: <% //_ctx.include(uicomponent.getViewTemplate("exo:vote", "view1")); %></div> -->
+		<div class="Vote"><% _ctx.include(uicomponent.getViewTemplate("exo:vote", "view1")); %></div>
 <%
-	//}
+	}
 %>
