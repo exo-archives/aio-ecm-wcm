@@ -222,6 +222,11 @@ function getElementsByClassPath(root, path) {
 		popupContainer.innerHTML = uploadContainer.innerHTML.replace(/\${idShort}/, sPath);
 		var iFrame = popupContainer.select({where: "className == 'iFrameUpload'"})[0];
 		var iContent = K("iContentUpLoad").innerHTML;
+			iContent = iContent.replace(/&amp;/g, "&");
+			iContent = iContent.replace(/&lt;/g, "<");
+			iContent = iContent.replace(/&gt;/g, ">");
+			iContent = iContent.replace(/&quot;/g, "\"");
+		
 		with (iFrame.contentWindow) {
 			document.open();
 			document.write(iContent);
