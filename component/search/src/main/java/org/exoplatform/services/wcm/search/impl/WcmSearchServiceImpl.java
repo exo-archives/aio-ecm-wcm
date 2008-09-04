@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.jcr.Node;
@@ -66,7 +65,7 @@ public class WcmSearchServiceImpl implements WcmSearchService {
 
   private DataStorage                       dataStorage_;
 
-  private HashMap<String, String>           cachedPages_ = new HashMap<String, String>();
+  private HashMap<String, List<String>>     cachedPages = new HashMap<String, List<String>>();
 
   private LivePortalManagerService          livePortalManagerService;
 
@@ -113,6 +112,7 @@ public class WcmSearchServiceImpl implements WcmSearchService {
     List<Page> allPages = dataStorage_.find(pagesQuery).getAll();
     for (Page page : allPages) {
       String portletId = null;
+      List<String> listPageId = new ArrayList<String>();
       for (Object obj : page.getChildren()) {
         if (obj instanceof Application) {
           Application application = (Application) obj;
@@ -120,11 +120,14 @@ public class WcmSearchServiceImpl implements WcmSearchService {
           if (!isWebContentApplication(applicationId))
             continue;
           portletId = applicationId;
-          break;
+          String key = buildKey(portletId);
+          if ((cachedPages.containsKey(key)) && (!cachedPages.get(key).contains(page.getPageId()))) {
+            cachedPages.get(key).add(page.getPageId());
+          } else {
+            listPageId.add(page.getPageId());
+            cachedPages.put(key, listPageId);
+          }
         }
-      }
-      if (portletId != null) {
-        updateCachedPage(page.getPageId(), portletId);
       }
     }
   }
@@ -190,7 +193,7 @@ public class WcmSearchServiceImpl implements WcmSearchService {
     QueryResult queryResult = query.execute();
     HashSet<Node> hashSet = new HashSet<Node>();
     for (NodeIterator iterator = queryResult.getNodes(); iterator.hasNext();) {
-      Node node = iterator.nextNode();                  
+      Node node = iterator.nextNode();
       if (node.getPrimaryNodeType().isNodeType("nt:resource"))
         node = node.getParent();
       hashSet.add(node);
@@ -241,10 +244,12 @@ public class WcmSearchServiceImpl implements WcmSearchService {
       } else {
         key = buildKey(repository, workspace, webContent.getUUID());
       }
-      String referencedPage = cachedPages_.get(key);
-      if (!hasAccessPermission(referencedPage, userId, portalConfigService))
-        continue;
-      pageNodes.addAll(findPageNodes(userPortalConfig, referencedPage));
+      List<String> refs = cachedPages.get(key);
+      for (String ref : refs) {
+        if (!hasAccessPermission(ref, userId, portalConfigService))
+          continue;
+        pageNodes.addAll(findPageNodes(userPortalConfig, ref));
+      }
     }
     return pageNodes;
   }
@@ -296,7 +301,13 @@ public class WcmSearchServiceImpl implements WcmSearchService {
     return false;
   }
 
-  private void updateCachedPage(String pageId, String portletId) throws Exception {
+  private String buildKey(String repository, String worksapce, String nodeUUID) {
+    StringBuffer stringBuffer = new StringBuffer();
+    stringBuffer.append(repository).append("::").append(worksapce).append("::").append(nodeUUID);
+    return stringBuffer.toString();
+  }
+
+  private String buildKey(String portletId) throws Exception {
     PortletPreferences portletPreferences = dataStorage_.getPortletPreferences(new ExoWindowID(
         portletId));
     String repository = null, worksapce = null, nodeUUID = null;
@@ -312,38 +323,9 @@ public class WcmSearchServiceImpl implements WcmSearchService {
       }
     }
     if (repository == null || worksapce == null || nodeUUID == null)
-      return;
-    String key = buildKey(repository, worksapce, nodeUUID);
-    cachedPages_.put(key, pageId);
-  }
-
-  private String buildKey(String repository, String worksapce, String nodeUUID) {
-    StringBuffer stringBuffer = new StringBuffer();
-    stringBuffer.append(repository).append("::").append(worksapce).append("::").append(nodeUUID);
-    return stringBuffer.toString();
-  }
-
-  public Node getAssociatedDocument(PageNode pageNode, SessionProvider sessionProvider)
-      throws Exception {
-    String pageReferenced = pageNode.getPageReference();
-    String nodeInfo = null;
-    for (Iterator<String> iterator = cachedPages_.keySet().iterator(); iterator.hasNext();) {
-      String key = iterator.next();
-      String value = cachedPages_.get(key);
-      if (value.equals(pageReferenced)) {
-        nodeInfo = key;
-        break;
-      }
-    }
-    if (nodeInfo == null)
       return null;
-    String[] temp = nodeInfo.split("::");
-    String repository = temp[0];
-    String worksapce = temp[1];
-    String nodeUUID = temp[2];
-    ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-    Session session = sessionProvider.getSession(worksapce, manageableRepository);
-    return session.getNodeByUUID(nodeUUID);
+    String key = buildKey(repository, worksapce, nodeUUID);
+    return key;
   }
 
   private Node getSelectedPortal(String portalName) throws Exception {
@@ -369,6 +351,12 @@ public class WcmSearchServiceImpl implements WcmSearchService {
     PortalFolderSchemaHandler portalFolderSchemaHandler = webSchemaConfigService
         .getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
     return portalFolderSchemaHandler.getDocumentStorage(portal);
+  }
+
+  public Node getAssociatedDocument(PageNode pageNode, SessionProvider sessionProvider)
+      throws Exception {
+    // TODO Auto-generated method stub
+    return null;
   }
 
 }
