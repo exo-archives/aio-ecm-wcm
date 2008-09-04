@@ -48,12 +48,7 @@
     <filter-name>ThreadLocalSessionProviderInitializedFilter</filter-name>
     <filter-class>org.exoplatform.frameworks.jcr.web.ThreadLocalSessionProviderInitializedFilter</filter-class>
   </filter>
-
-  <filter>
-    <filter-name>FactoryInitializedFilter</filter-name>
-    <filter-class>org.exoplatform.frameworks.jcr.web.SimpleSessionFactoryInitializedFilter</filter-class>
-  </filter>
-  
+    
   <filter>
     <filter-name>AnonymousUserContextRedirectionFilter</filter-name>
     <filter-class>org.exoplatform.ws.frameworks.servlet.AnonymousUserContextRedirectionFilter</filter-class>
@@ -101,14 +96,9 @@
 
   <filter-mapping>
     <filter-name>ThreadLocalSessionProviderInitializedFilter</filter-name>
-    <url-pattern>/private/*</url-pattern>
+    <url-pattern>/*</url-pattern>
   </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>ThreadLocalSessionProviderInitializedFilter</filter-name>
-    <url-pattern>/public/*</url-pattern>
-  </filter-mapping>
-  
+       
   <filter-mapping>
   <!-- must be before ThreadLocalSessionProviderInitializedFilter for URI /rest/* -->
     <filter-name>AnonymousUserContextRedirectionFilter</filter-name>
@@ -118,22 +108,7 @@
    <filter-mapping>
     <filter-name>ThreadLocalSessionProviderInitializedFilter</filter-name>
     <url-pattern>/rest/*</url-pattern>
-  </filter-mapping> 
-
-  <filter-mapping>
-    <filter-name>FactoryInitializedFilter</filter-name>
-    <url-pattern>/connector</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>FactoryInitializedFilter</filter-name>
-    <url-pattern>/jcr/*</url-pattern>
-  </filter-mapping>
-  
-  <filter-mapping>
-    <filter-name>AnonymousUserContextRedirectionFilter</filter-name>
-    <url-pattern>/rest/*</url-pattern>
-  </filter-mapping>
+  </filter-mapping>    
 
   <!-- ================================================================== -->
   <!--           LISTENER                                                 -->
@@ -166,14 +141,7 @@
     <servlet-class>org.exoplatform.frameworks.jcr.web.CommandControllerServlet</servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
-
-  <servlet>
-    <servlet-name>DisplayJCRContent</servlet-name>
-    <description>eXo - Platform DisplayJCRContent Servlet.</description>
-    <servlet-class>org.exoplatform.frameworks.jcr.web.DisplayJCRContentServlet</servlet-class>
-    <load-on-startup>4</load-on-startup>
-  </servlet>
-
+    
   <servlet>
     <servlet-name>RestServer</servlet-name>
     <description>eXo - Platform REST Server</description>
@@ -215,12 +183,7 @@
   <servlet-mapping>
     <servlet-name>Controller</servlet-name>
     <url-pattern>/connector</url-pattern>
-  </servlet-mapping>
-
-  <servlet-mapping>
-    <servlet-name>DisplayJCRContent</servlet-name>
-    <url-pattern>/jcr/*</url-pattern>
-  </servlet-mapping>
+  </servlet-mapping>  
 
   <servlet-mapping>
     <servlet-name>RestServer</servlet-name>
