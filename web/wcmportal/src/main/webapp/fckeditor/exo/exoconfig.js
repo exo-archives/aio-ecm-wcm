@@ -1,7 +1,6 @@
 // set eXo plugin path;
 FCKConfig.eXoPath = FCKConfig.BasePath.substr(0, FCKConfig.BasePath.length - 7) + "exo/" ;
 FCKConfig.Plugins.Add( 'urani', null, FCKConfig.eXoPath + "plugins/") ;
-FCKConfig.Plugins.Add( 'explorer', null, FCKConfig.eXoPath + "plugins/") ;
 FCKConfig.Plugins.Add( 'insertImage', null, FCKConfig.eXoPath + "plugins/") ;
 FCKConfig.Plugins.Add( 'insertDocument', null, FCKConfig.eXoPath + "plugins/") ;
 FCKConfig.Plugins.Add( 'insertPortalLink', null, FCKConfig.eXoPath + "plugins/") ;
@@ -12,7 +11,7 @@ FCKConfig.EditorAreaStyles = 'body{	background: none;	margin: 0px;}' ;
 
 //config eXo plugin bar
 FCKConfig.ToolbarSets["eXoBar"] = [
-	['Insert Image', 'Insert Portal Link', 'Insert DMS Document', 'Explorer']
+	['Insert Image', 'Insert Portal Link', 'Insert DMS Document']
 ];
 
 FCKConfig.ToolbarSets["CSSToolBar"] = [
