@@ -2,6 +2,9 @@
 	<%
 		def portletId = uicomponent.getPortletId();
 		def quickEditingBlockId = uicomponent.getPortletId() + "-QuickEditingBlock";
+		def rcontext = _ctx.getRequestContext() ;
+ 		rcontext.getJavascriptManager().importJavascript('eXo.webpresentation.Utils','/web-presentation/javascript');
+	  rcontext.getJavascriptManager().addOnLoadJavascript('eXo.wcm.insertQuickeditingBlock("' + portletId + '","' + quickEditingBlockId + '")');
 	  if(uicomponent.isQuickEditable()) {%>
 	<div style="position: relative; height: 0px;" id="<%=quickEditingBlockId%>">
 		<div style="position: absolute; right: 0px; top: 0px">
@@ -13,15 +16,3 @@
 	<% uicomponent.renderChildren() %>
 
 </div>
-<script type="text/javascript">
-	(function() {
-		var presentation = document.getElementById('<%= uicomponent.getPortletId() %>');
-		var parentNode = presentation.parentNode;
-		var quickEditingBlock = document.getElementById('<%=quickEditingBlockId%>');
-		if(quickEditingBlock != null) {
-			var newEditingBlock = quickEditingBlock.cloneNode(true);
-		}
-		quickEditingBlock.parentNode.removeChild(quickEditingBlock);
-		parentNode.insertBefore(newEditingBlock, presentation);
-	})();
-</script>
