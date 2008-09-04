@@ -531,7 +531,7 @@
 					var sName = eXp.getNodeValue(oFiles[i], "name");
 					var sType = eXp.getNodeValue(oFiles[i], "fileType").replace(":", "_") + "16x16Icon";
 					var sDateCreated = dateFormat(eXp.getNodeValue(oFiles[i], "dateCreated"));
-					var sURL = eXoPlugin.hostName + "/" + eXp.getNodeValue(oFiles[i], "url");
+					var sURL = eXoPlugin.hostName + eXp.getNodeValue(oFiles[i], "url").replace(/\s/g, "%20");
 					var sSize = parseInt(eXp.getNodeValue(oFiles[i], "size")) || "-";
 					var sHideTreeItem = getElementsByClassPath(oHide, 'HideTreeItem')[0].innerHTML;
 					sHideTreeItem = sHideTreeItem.replace(/\${sName}/g, sName);
@@ -556,7 +556,7 @@
 					var sType = eXp.getNodeValue(oFiles[i], "fileType").replace(":", "_") + "16x16Icon";
 					var sDateCreated = dateFormat(eXp.getNodeValue(oFiles[i], "dateCreated"));
 					var sSize = parseInt(eXp.getNodeValue(oFiles[i], "size")) || "-";
-					var sURL = eXp.getNodeValue(oFiles[i], "url");
+					var sURL = eXoPlugin.hostName + eXp.getNodeValue(oFiles[i], "url").replace(/\s/g, "%20");
 					eXp.store.data.Insert([sName, sDateCreated, sSize, sType, sURL]);
 				} 
 				sort('date');

@@ -10,9 +10,11 @@
 	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>*:/platform/administrators</edit-permission>
     <application>
-      <instance-id>portal#classic:/web/HomePagePortlet/homepageportlet</instance-id>
-      <title>Home Page</title>
+      <instance-id>portal#classic:/web-presentation/AdvancedPresentationPortlet/homepage</instance-id>
+      <title>Homepage</title>
       <show-info-bar>false</show-info-bar>      
+      <show-application-state>false</show-application-state>
+      <show-application-mode>false</show-application-mode>
     </application>
   </page>                      
   <page>
