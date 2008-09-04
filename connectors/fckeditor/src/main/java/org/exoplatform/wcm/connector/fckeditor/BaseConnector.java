@@ -27,6 +27,7 @@ import javax.jcr.Session;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.ecm.connector.fckeditor.FCKFileHandler;
 import org.exoplatform.ecm.connector.fckeditor.FCKFolderHandler;
+import org.exoplatform.ecm.connector.fckeditor.FCKMessage;
 import org.exoplatform.ecm.connector.fckeditor.FCKUtils;
 import org.exoplatform.ecm.connector.fckeditor.FileUploadHandler;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -40,7 +41,7 @@ import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-//TODO: Auto-generated Javadoc
+// TODO: Auto-generated Javadoc
 /*
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Jun 26, 2008
@@ -65,6 +66,8 @@ public abstract class BaseConnector {
 
   /** The file upload handler. */
   protected FileUploadHandler                 fileUploadHandler;
+
+  protected FCKMessage                        fckMessage;
 
   /** The local session provider. */
   protected ThreadLocalSessionProviderService localSessionProvider;
@@ -105,16 +108,17 @@ public abstract class BaseConnector {
    */
   public BaseConnector(ExoContainer container) {
     livePortalManagerService = (LivePortalManagerService) container
-    .getComponentInstanceOfType(LivePortalManagerService.class);
+        .getComponentInstanceOfType(LivePortalManagerService.class);
     webSchemaConfigService = (WebSchemaConfigService) container
-    .getComponentInstanceOfType(WebSchemaConfigService.class);
+        .getComponentInstanceOfType(WebSchemaConfigService.class);
     fileHandler = new FCKFileHandler(container);
     folderHandler = new FCKFolderHandler(container);
+    fckMessage = new FCKMessage();
     fileUploadHandler = new FileUploadHandler(container);
     localSessionProvider = (ThreadLocalSessionProviderService) container
-    .getComponentInstanceOfType(ThreadLocalSessionProviderService.class);
+        .getComponentInstanceOfType(ThreadLocalSessionProviderService.class);
     repositoryService = (RepositoryService) container
-    .getComponentInstanceOfType(RepositoryService.class);
+        .getComponentInstanceOfType(RepositoryService.class);
   }
 
   /**
@@ -181,7 +185,9 @@ public abstract class BaseConnector {
    */
   protected Response buildXMLDocumentOutput(String newFolderName, String currentFolder,
       String jcrPath, String repositoryName, String workspaceName, String command, String language)
-  throws Exception {
+      throws Exception {
+    CacheControl cacheControl = new CacheControl();
+    cacheControl.setNoCache(true);
     Node currentPortalNode = getCurrentPortalNode(repositoryName, workspaceName, jcrPath);
     Node sharedPortalNode = getSharedPortalNode(repositoryName);
     String fullPath = getCurrentFolderFullPath(currentPortalNode, sharedPortalNode, currentFolder,
@@ -189,10 +195,11 @@ public abstract class BaseConnector {
     Node currentNode = getCurrentNode(repositoryName, workspaceName, fullPath);
     if (currentNode != null && currentFolder.length() != 0 && !currentFolder.equals("/")
         && !fullPath.equals(currentPortalNode.getPath())
-        && currentNode != null) {
+        && !fullPath.equals(sharedPortalNode.getPath()) && currentNode != null) {
       return folderHandler.createNewFolder(currentNode, newFolderName, language);
+    } else {
+      return folderHandler.createNewFolder(null, newFolderName, language);
     }
-    return null;
   }
 
   /**
@@ -241,7 +248,7 @@ public abstract class BaseConnector {
    * @throws Exception the exception
    */
   protected Document createDocumentForPortal(Node rootNode, Node webContentNode, String command)
-  throws Exception {
+      throws Exception {
     Node storageNode = null;
     try {
       storageNode = getRootStorageOfPortal(rootNode);
@@ -275,7 +282,8 @@ public abstract class BaseConnector {
    * @return the document
    * @throws Exception the exception
    */
-  protected Document createDocumentForContentStorage(Node rootNode, String command) throws Exception {
+  protected Document createDocumentForContentStorage(Node rootNode, String command)
+      throws Exception {
     Element rootElement = FCKUtils.createRootElement(command, rootNode, folderHandler
         .getFolderType(rootNode));
     Document document = rootElement.getOwnerDocument();
@@ -365,7 +373,7 @@ public abstract class BaseConnector {
    * @throws Exception the exception
    */
   protected Node getCurrentNode(String repositoryName, String workspaceName, String fullPath)
-  throws Exception {
+      throws Exception {
     Session session = getSession(repositoryName, workspaceName);
     if (fullPath != null && fullPath.length() != 0)
       return (Node) session.getItem(fullPath);
@@ -382,7 +390,7 @@ public abstract class BaseConnector {
    * @throws Exception the exception
    */
   protected Node getCurrentPortalNode(String repositoryName, String workspaceName, String jcrPath)
-  throws Exception {
+      throws Exception {
     Node sharedPortalNode = getSharedPortalNode(repositoryName);
     if (sharedPortalNode != null && jcrPath.startsWith(sharedPortalNode.getPath()))
       return sharedPortalNode;
@@ -439,7 +447,7 @@ public abstract class BaseConnector {
   }
 
   protected Node getWebContentNode(String repositoryName, String workspaceName, String jcrPath)
-  throws Exception {
+      throws Exception {
     Session session = getSession(repositoryName, workspaceName);
     Node webContent = null;
     try {
@@ -503,8 +511,10 @@ public abstract class BaseConnector {
         && !fullPath.equals(currentPortalNode.getPath())) {
       return fileUploadHandler.upload(uploadId, contentType, Double.parseDouble(contentLength),
           inputStream, currentNode, language);
+    } else {
+      return fileUploadHandler.upload(uploadId, contentType, Double.parseDouble(contentLength),
+          inputStream, null, language);
     }
-    return null;
   }
 
   /**
@@ -525,6 +535,8 @@ public abstract class BaseConnector {
       String currentFolder, String jcrPath, String action, String language, String fileName,
       String uploadId) throws Exception {
     if (FileUploadHandler.SAVE_ACTION.equals(action)) {
+      CacheControl cacheControl = new CacheControl();
+      cacheControl.setNoCache(true);
       Node currentPortalNode = getCurrentPortalNode(repositoryName, workspaceName, jcrPath);
       Node sharedPortalNode = getSharedPortalNode(repositoryName);
       String fullPath = getCurrentFolderFullPath(currentPortalNode, sharedPortalNode,
