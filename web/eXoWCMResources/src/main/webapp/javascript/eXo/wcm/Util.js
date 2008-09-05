@@ -1,10 +1,10 @@
-
 window.wcm = function() {}
 
 wcm.insertCSSFromTextArea2FCK = function(Instance, ContentCSS) {
 	var eContentCSS = document.getElementById(ContentCSS);
 	var sContentCSSId = ContentCSS + "_Inline";
 	eContentCSS.onblur = updateStyle;
+	
 	function updateStyle() {
 		var sValue = eContentCSS.value;
 		var iDoc = FCKeditorAPI.Instances[Instance].EditorWindow.document;
@@ -19,5 +19,18 @@ wcm.insertCSSFromTextArea2FCK = function(Instance, ContentCSS) {
 		eStyle.innerHTML = sValue;
 		eHead.appendChild(eStyle);
 	};
+	
+	(function checkFCKEditorAPI() {
+		try {
+			updateStyle();
+			if (updateStyle.time) {
+				clearTimeout(updateStyle.time);
+				updateStyle.time = null;
+			}
+		} catch(e) {
+			updateStyle.time = setTimeout(checkFCKEditorAPI, 500);
+		}
+	})();
+	
 }
 
