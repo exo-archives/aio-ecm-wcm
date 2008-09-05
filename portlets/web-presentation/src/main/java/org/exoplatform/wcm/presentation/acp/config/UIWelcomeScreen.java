@@ -25,6 +25,7 @@ import javax.jcr.Session;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
+import org.exoplatform.ecm.webui.selector.UISelectable;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
@@ -59,7 +60,7 @@ import org.exoplatform.webui.form.UIFormRadioBoxInput;
       @EventConfig(listeners = UIWelcomeScreen.BackActionListener.class)
     }
 )
-public class UIWelcomeScreen extends UIForm {
+public class UIWelcomeScreen extends UIForm implements UISelectable {
 
   public UIWelcomeScreen() throws Exception {}
 
@@ -119,6 +120,11 @@ public class UIWelcomeScreen extends UIForm {
     uiConfig.addChild(type, config, id);
   }
 
+  public void doSelect(String arg0, Object arg1) throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
+  
   public static class StartProcessActionListener extends EventListener<UIWelcomeScreen> {
     public void execute(Event<UIWelcomeScreen> event) throws Exception {
       UIWelcomeScreen uiWelcomeScreen = event.getSource();
@@ -144,4 +150,5 @@ public class UIWelcomeScreen extends UIForm {
       context.setApplicationMode(PortletMode.VIEW);
     }
   }
+
 }

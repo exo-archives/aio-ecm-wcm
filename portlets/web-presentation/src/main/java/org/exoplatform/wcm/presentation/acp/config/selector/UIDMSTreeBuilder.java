@@ -134,7 +134,10 @@ public class UIDMSTreeBuilder extends UINodeTreeBuilder {
     List<Node> webContentList = new ArrayList<Node>();
     for(NodeIterator iterator = parent.getNodes();iterator.hasNext();) {
       Node child = iterator.nextNode();
-      webContentList.add(child);
+      String childNodeType = child.getPrimaryNodeType().getName();
+      if(childNodeType.equals("nt:unstructured") || childNodeType.equals("nt:folder")) {
+        webContentList.add(child);
+      }
     }
     return webContentList;
   }
@@ -151,7 +154,6 @@ public class UIDMSTreeBuilder extends UINodeTreeBuilder {
   public void changeNode(String path, Object requestContext) throws Exception {
     if(path == null) return ;
     String rootPath = rootTreeNode.getPath();
-    System.out.println("================>Run in UIDMSTreeBuilder: rootPath: "+ rootPath);
     Node node = null;
     if(rootPath.equals(path) || !path.startsWith(rootPath)) {
       node = rootTreeNode;
