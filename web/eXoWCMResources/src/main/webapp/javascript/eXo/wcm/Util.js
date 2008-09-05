@@ -3,6 +3,7 @@ window.wcm = function() {}
 wcm.insertCSSFromTextArea2FCK = function(Instance, ContentCSS) {
 	var eContentCSS = document.getElementById(ContentCSS);
 	var sContentCSSId = ContentCSS + "_Inline";
+	var count = 1;
 	eContentCSS.onblur = updateStyle;
 	
 	function updateStyle() {
@@ -21,16 +22,17 @@ wcm.insertCSSFromTextArea2FCK = function(Instance, ContentCSS) {
 	};
 	
 	(function checkFCKEditorAPI() {
-		try {
-			updateStyle();
-			if (updateStyle.time) {
-				clearTimeout(updateStyle.time);
-				updateStyle.time = null;
+		if (count <= 5) {
+			try {
+				updateStyle();
+				if (updateStyle.time) {
+					clearTimeout(updateStyle.time);
+					updateStyle.time = null;
+				}
+			} catch(e) {
+				count++;
+				updateStyle.time = setTimeout(checkFCKEditorAPI, 500);
 			}
-		} catch(e) {
-			updateStyle.time = setTimeout(checkFCKEditorAPI, 500);
 		}
 	})();
-	
 }
-
