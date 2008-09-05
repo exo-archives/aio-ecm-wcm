@@ -68,8 +68,7 @@ public class UIPresentation extends UIBaseNodePresentation {
     }else {
       sessionProvider = SessionProviderFactory.createSessionProvider();
     }
-    Session session = sessionProvider.getSession(worksapce, manageableRepository) ;
-    Node node = session.getNodeByUUID(uuid);
+    Session session = sessionProvider.getSession(worksapce, manageableRepository) ;    
     return session.getNodeByUUID(uuid) ;    
   }
 
@@ -84,7 +83,7 @@ public class UIPresentation extends UIBaseNodePresentation {
     return getPortletPreference().getValue(UIAdvancedPresentationPortlet.REPOSITORY, "repository");    
   }    
   public Node getOriginalNode() throws Exception {
-    return null;
+    return getNode();
   }  
 
   public String getTemplate() {
