@@ -506,14 +506,12 @@ public abstract class BaseConnector {
     String fullPath = getCurrentFolderFullPath(currentPortalNode, sharedPortalNode, currentFolder,
         jcrPath);
     Session session = getSession(repositoryName, workspaceName);
-    Node currentNode = (Node) session.getItem(fullPath);
-    if (currentFolder.length() != 0 && !currentFolder.equals("/") && !fullPath.equals(jcrPath)
-        && !fullPath.equals(currentPortalNode.getPath())) {
+    try {
+      Node currentNode = (Node) session.getItem(fullPath);
       return fileUploadHandler.upload(uploadId, contentType, Double.parseDouble(contentLength),
           inputStream, currentNode, language);
-    } else {
-      return fileUploadHandler.upload(uploadId, contentType, Double.parseDouble(contentLength),
-          inputStream, null, language);
+    } catch (Exception e) {
+      return null;
     }
   }
 
@@ -543,7 +541,13 @@ public abstract class BaseConnector {
           currentFolder, jcrPath);
       Session session = getSession(repositoryName, workspaceName);
       Node currentNode = (Node) session.getItem(fullPath);
-      return fileUploadHandler.saveAsNTFile(currentNode, uploadId, fileName, language);
+      if (currentNode != null && currentFolder.length() != 0 && !currentFolder.equals("/")
+          && !fullPath.equals(currentPortalNode.getPath())
+          && !fullPath.equals(sharedPortalNode.getPath()) && currentNode != null) {
+        return fileUploadHandler.saveAsNTFile(currentNode, uploadId, fileName, language);
+      } else {
+        return fileUploadHandler.saveAsNTFile(null, uploadId, fileName, language);
+      }
     }
     return fileUploadHandler.control(uploadId, action);
   }
