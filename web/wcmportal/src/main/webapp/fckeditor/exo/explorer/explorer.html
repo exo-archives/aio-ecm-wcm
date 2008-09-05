@@ -54,7 +54,7 @@
 								</tr>
 								<tr>
 									<td><input type="radio" name="View"><span userLanguage="KLang.ViewThumbnail">Thumbnails</span></td>
-									<td><input type="radio" onclick="sort('name')" name="Sort"><span userLanguage="KLang.SortName">By File Name</span></td>
+									<td><input type="radio" onclick="sort('lowerName')" name="Sort"><span userLanguage="KLang.SortName">By File Name</span></td>
 								</tr>
 								<tr>
 									<td><input type="radio" name="View"><span userLanguage="KLang.ViewList">List</span></td>
@@ -522,7 +522,7 @@
 		
 		var oFiles = eXp.getNodes(iXML, "File");
 		
-		eXp.store.data = K.create.database({fieldName: ["name", "date", "size", "type", "url"]});
+		eXp.store.data = K.create.database({fieldName: ["name", "lowerName", "date", "size", "type", "url"]});
 		if (oFiles != null) {
 			var oItemGroup = K('checkgen');
 			var iLength = oFiles.length;
@@ -532,7 +532,7 @@
 					var sType = eXp.getNodeValue(oFiles[i], "fileType").replace(":", "_") + "16x16Icon";
 					var sDateCreated = dateFormat(eXp.getNodeValue(oFiles[i], "dateCreated"));
 					var sURL = eXoPlugin.hostName + eXp.getNodeValue(oFiles[i], "url").replace(/\s/g, "%20");
-					var sSize = parseInt(eXp.getNodeValue(oFiles[i], "size")) || "-";
+					var sSize = parseInt(eXp.getNodeValue(oFiles[i], "size") || "0");
 					var sHideTreeItem = getElementsByClassPath(oHide, 'HideTreeItem')[0].innerHTML;
 					sHideTreeItem = sHideTreeItem.replace(/\${sName}/g, sName);
 					sHideTreeItem = sHideTreeItem.replace(/\${sType}/g, sType);
@@ -546,7 +546,7 @@
 					sHideTreeItem = sHideTreeItem.replace(/\${sSize}/g, sSize);
 					sHTML += "<input type='hidden' id='checkgen'>";
 					sHTML += sHideTreeItem;
-					eXp.store.data.Insert([sName, sDateCreated, sSize, sType, sURL]);
+					eXp.store.data.Insert([sName, sName.toLowerCase(), sDateCreated, sSize, sType, sURL]);
 				}
 				oDocument.innerHTML += sHTML;
 			} else {
@@ -555,9 +555,9 @@
 					var sName = eXp.getNodeValue(oFiles[i], "name");
 					var sType = eXp.getNodeValue(oFiles[i], "fileType").replace(":", "_") + "16x16Icon";
 					var sDateCreated = dateFormat(eXp.getNodeValue(oFiles[i], "dateCreated"));
-					var sSize = parseInt(eXp.getNodeValue(oFiles[i], "size")) || "-";
+					var sSize = parseInt(eXp.getNodeValue(oFiles[i], "size") || "0");
 					var sURL = eXoPlugin.hostName + eXp.getNodeValue(oFiles[i], "url").replace(/\s/g, "%20");
-					eXp.store.data.Insert([sName, sDateCreated, sSize, sType, sURL]);
+					eXp.store.data.Insert([sName, sName.toLowerCase(), sDateCreated, sSize, sType, sURL]);
 				} 
 				sort('date');
 			}
