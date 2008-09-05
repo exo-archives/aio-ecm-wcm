@@ -41,6 +41,34 @@
 	padding: 0px;
 }
 
+.UIDMSSelectorForm {
+	margin: 8px auto;
+}
+
+.UIDMSPathSelector {
+	margin: 8px;
+	padding: 8px;
+	border: 1px solid #b7b7b7;
+	background: #F3F3F3;
+}
+
+.UIDMSSelectorForm .UIFormGrid .UIFormInputSet {
+	padding: 0px;
+	width: auto;
+}
+
+.UIDMSSelectorForm .UIFormGrid .UIFormInputSet .FormContainer {
+	padding: 0px;
+}
+
+.UIDMSSelectorForm .UIForm .UIFormGrid .FieldComponent {
+	padding: 0px;
+}
+
+.UIDMSSelectorForm .HorizontalLayout {
+	padding-top: 10px;
+}
+
 .UIWelcomeScreen .HorizontalLayout {
 	padding: 0px;
 }
