@@ -92,7 +92,7 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
       ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
       Session session = SessionProviderFactory.createSystemProvider().getSession(workspaceName, manageableRepository);
       Node node = session.getNodeByUUID(UUID);
-      if(node.getPrimaryNodeType().equals("exo:webContent")) {
+      if(node.getPrimaryNodeType().getName().equals("exo:webContent")) {
         option.add(new SelectItemOption<String>(labelEditContent, "EditCurrentWebContent"));
         option.add(new SelectItemOption<String>(labelSelectExistedContent, "SelectExistedContent"));
         UIFormRadioBoxInput radioInput = new UIFormRadioBoxInput("radio", "radio", option);
