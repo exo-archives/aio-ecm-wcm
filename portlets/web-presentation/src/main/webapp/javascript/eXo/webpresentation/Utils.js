@@ -24,3 +24,18 @@ Utils = function(){
 
 eXo.wcm = new Utils();
 	
+var isOpen = false;
+function showStepInfo() {
+	var oStepInfoStyle = document.getElementById('PageNodeContainer').style;
+	var oSelectInfoStyle = document.getElementById('SelectedPageInfo').style;
+	
+	if (isOpen) {
+		oStepInfoStyle.display = 'none';
+		oSelectInfoStyle.marginLeft = '0';
+		isOpen = false;
+	} else {
+		oStepInfoStyle.display = 'block';
+		oSelectInfoStyle.marginLeft = '250px';
+		isOpen = true;
+	}
+}
