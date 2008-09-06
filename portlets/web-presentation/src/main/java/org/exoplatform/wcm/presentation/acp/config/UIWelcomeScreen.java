@@ -73,12 +73,11 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
     String labelSelectExistedWebContent = res.getString(getId() + ".label.SelectExistedWebContent");
     String labelSelectExistedDMS = res.getString(getId() + ".label.SelectExistedDMS");
     String labelEditContent = res.getString(getId() + ".label.EditWebContent");
-    String labelSelectOther = res.getString(getId() + ".label.SelectOtherWebContent");
+    String labelSelectExistedContent = res.getString(getId() + ".label.ExistedContent");
 
     if(isNewConfig) {
       option.add(new SelectItemOption<String>(labelQuickCreate, "QuickCreateWebContent"));
-      option.add(new SelectItemOption<String>(labelSelectExistedWebContent, "SelectExistedWebContent"));
-      option.add(new SelectItemOption<String>(labelSelectExistedDMS,"SelectExistedDMS"));
+      option.add(new SelectItemOption<String>(labelSelectExistedContent, "SelectExistedContent"));
       UIFormRadioBoxInput radioInput = new UIFormRadioBoxInput("radio", "radio", option);
       radioInput.setAlign(UIFormRadioBoxInput.VERTICAL_ALIGN);
       radioInput.setValue("QuickCreateWebContent");
@@ -95,18 +94,17 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
       Node node = session.getNodeByUUID(UUID);
       if(node.getPrimaryNodeType().equals("exo:webContent")) {
         option.add(new SelectItemOption<String>(labelEditContent, "EditCurrentWebContent"));
-        option.add(new SelectItemOption<String>(labelSelectOther, "SelectOtherWebContent"));
-        option.add(new SelectItemOption<String>(labelSelectExistedDMS,"SelectExistedDMS"));
+        option.add(new SelectItemOption<String>(labelSelectExistedContent, "SelectExistedContent"));
         UIFormRadioBoxInput radioInput = new UIFormRadioBoxInput("radio", "radio", option);
         radioInput.setAlign(UIFormRadioBoxInput.VERTICAL_ALIGN);
         radioInput.setValue("EditCurrentWebContent");
         addUIFormInput(radioInput);
       } else {
-        option.add(new SelectItemOption<String>(labelSelectOther, "SelectOtherWebContent"));
+        option.add(new SelectItemOption<String>(labelSelectExistedWebContent, "SelectExistedWebContent"));
         option.add(new SelectItemOption<String>(labelSelectExistedDMS,"SelectExistedDMS"));
         UIFormRadioBoxInput radioInput = new UIFormRadioBoxInput("radio", "radio", option);
         radioInput.setAlign(UIFormRadioBoxInput.VERTICAL_ALIGN);
-        radioInput.setValue("SelectOtherWebContent");
+        radioInput.setValue("SelectExistedWebContent");
         addUIFormInput(radioInput);
       }
     }
@@ -122,9 +120,9 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
 
   public void doSelect(String arg0, Object arg1) throws Exception {
     // TODO Auto-generated method stub
-    
+
   }
-  
+
   public static class StartProcessActionListener extends EventListener<UIWelcomeScreen> {
     public void execute(Event<UIWelcomeScreen> event) throws Exception {
       UIWelcomeScreen uiWelcomeScreen = event.getSource();
@@ -134,7 +132,20 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
         uiWelcomeScreen.setRendered(false);
         UIQuickCreationWizard uiQuickCreationWizard = uiPortletConfig.addChild(UIQuickCreationWizard.class, null, null);
         uiQuickCreationWizard.init();
-      } else if(radioValue.equals("SelectOtherWebContent") || radioValue.equals("SelectExistedWebContent")) {
+      } else if(radioValue.equals("SelectExistedContent")) {
+        uiWelcomeScreen.getChildren().clear();
+        List<SelectItemOption<String>> option = new ArrayList<SelectItemOption<String>>();
+        RequestContext context = RequestContext.<RequestContext>getCurrentInstance();
+        ResourceBundle res = context.getApplicationResourceBundle();
+        String labelSelectExistedWebContent = res.getString(uiWelcomeScreen.getId() + ".label.SelectExistedWebContent");
+        String labelSelectExistedDMS = res.getString(uiWelcomeScreen.getId() + ".label.SelectExistedDMS");
+        option.add(new SelectItemOption<String>(labelSelectExistedWebContent, "SelectExistedWebContent"));
+        option.add(new SelectItemOption<String>(labelSelectExistedDMS, "SelectExistedDMS"));
+        UIFormRadioBoxInput radioInput = new UIFormRadioBoxInput("radio", "radio", option);
+        radioInput.setAlign(UIFormRadioBoxInput.VERTICAL_ALIGN);
+        radioInput.setValue("SelectExistedWebContent");
+        uiWelcomeScreen.addChild(radioInput);       
+      } else if(radioValue.equals("SelectExistedWebContent")) {
         uiWelcomeScreen.setRendered(false);
         uiPortletConfig.addChild(UIWebContentSelectorForm.class, null, null);
       } else if(radioValue.equals("SelectExistedDMS")) {
@@ -143,7 +154,7 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
       }
     }
   }
-  
+
   public static class BackActionListener extends EventListener<UIWelcomeScreen> {
     public void execute(Event<UIWelcomeScreen> event) throws Exception {
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
