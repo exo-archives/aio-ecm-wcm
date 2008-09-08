@@ -33,6 +33,7 @@ public class CSSFileMakerHandler extends BaseWebSchemaHandler {
   
   public void process(Node file) throws Exception {  
     addMixin(file, "exo:cssFile");
+    addMixin(file,"exo:owneable");
     file.setProperty("exo:presentationType","exo:cssFile");                
   }
   

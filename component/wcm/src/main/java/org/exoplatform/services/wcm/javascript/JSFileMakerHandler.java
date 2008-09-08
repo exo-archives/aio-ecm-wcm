@@ -33,7 +33,8 @@ public class JSFileMakerHandler extends BaseWebSchemaHandler {
 
   @Override
   public void process(Node file) throws Exception {
-    addMixin(file, "exo:jsFile") ;         
+    addMixin(file, "exo:jsFile") ;
+    addMixin(file,"exo:owneable");
     file.setProperty("exo:presentationType","exo:jsFile");        
   }
 

@@ -43,13 +43,49 @@ public class HTMLFileSchemaHandler extends BaseWebSchemaHandler {
     String tempFolderName = fileName + this.hashCode();
     Node tempFolder = webFolder.addNode(tempFolderName, NT_UNSTRUCTURED);    
     String tempPath = tempFolder.getPath() + "/" +file.getName();        
-    session.move(file.getPath(),tempPath);    
+    session.move(file.getPath(),tempPath);
+    session.save();
     //rename the folder        
     Node webContent = webFolder.addNode(fileName, "exo:webContent");
+    addMixin(webContent,"exo:privilegeable");
+    addMixin(webContent,"exo:owneable");
+    // need check why WebContentSchemaHandler doesn't run for this case
+    createSchema(webContent);
+    session.save();
     //the htmlFile become default.html file for the web content
     String htmlFilePath = webContent.getPath() + "/default.html";    
     session.move(tempPath, htmlFilePath);
     tempFolder.remove();    
     session.save();
+  }
+  
+  private void createSchema(final Node webContent) throws Exception {
+    if (!webContent.hasNode("js")) {
+      Node js = webContent.addNode("js","exo:jsFolder"); 
+      addMixin(js,"exo:owneable");
+    }   
+    if (!webContent.hasNode("css")) {
+      Node css = webContent.addNode("css","exo:cssFolder");
+      addMixin(css,"exo:owneable");
+    }       
+    if (!webContent.hasNode("medias")) {
+      Node multimedia = webContent.addNode("medias",NT_FOLDER);      
+      addMixin(multimedia, "exo:multimediaFolder");    
+      addMixin(multimedia,"exo:owneable");
+      Node images = multimedia.addNode("images",NT_FOLDER);
+      addMixin(images, "exo:pictureFolder");
+      addMixin(images,"exo:owneable");
+      Node video = multimedia.addNode("videos",NT_FOLDER);        
+      addMixin(video, "exo:videoFolder");    
+      addMixin(video,"exo:owneable");
+      Node audio = multimedia.addNode("audio",NT_FOLDER);    
+      addMixin(audio, "exo:musicFolder");
+      addMixin(audio,"exo:owneable");
+    }                
+    if (!webContent.hasNode("documents")) {
+      Node document = webContent.addNode("documents",NT_UNSTRUCTURED);           
+      addMixin(document, "exo:documentFolder");
+      addMixin(document,"exo:owneable");
+    }          
   }
 }

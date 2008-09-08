@@ -30,7 +30,7 @@ import org.exoplatform.services.wcm.core.BaseWebSchemaHandler;
 public class WebContentSchemaHandler extends BaseWebSchemaHandler {
 
   protected String getHandlerNodeType() { return "exo:webContent"; }  
-  protected String getParentNodeType() { return "nt:base"; }
+  protected String getParentNodeType() { return "exo:webFolder"; }
 
   public void process(final Node webContent) throws Exception {
     Session session = webContent.getSession();
@@ -47,11 +47,11 @@ public class WebContentSchemaHandler extends BaseWebSchemaHandler {
   }
 
   public Node getImagesFolders(final Node webContent) throws Exception {
-    return webContent.getNode("multimedia/images");
+    return webContent.getNode("medias/images");
   }
 
   public Node getVideoFolder(final Node webContent) throws Exception {
-    return webContent.getNode("multimedia/videos");
+    return webContent.getNode("medias/videos");
   }
   
   public Node getDocumentFolder (final Node webContent) throws Exception {
@@ -60,24 +60,31 @@ public class WebContentSchemaHandler extends BaseWebSchemaHandler {
 
   private void createSchema(final Node webContent) throws Exception {
     if (!webContent.hasNode("js")) {
-      webContent.addNode("js","exo:jsFolder"); 
+      Node js = webContent.addNode("js","exo:jsFolder"); 
+      addMixin(js,"exo:owneable");
     }   
     if (!webContent.hasNode("css")) {
-      webContent.addNode("css","exo:cssFolder"); 
+      Node css = webContent.addNode("css","exo:cssFolder");
+      addMixin(css,"exo:owneable");
     }       
-    if (!webContent.hasNode("multimedia")) {
-      Node multimedia = webContent.addNode("multimedia",NT_FOLDER);
+    if (!webContent.hasNode("medias")) {
+      Node multimedia = webContent.addNode("medias",NT_FOLDER);      
       addMixin(multimedia, "exo:multimediaFolder");    
+      addMixin(multimedia,"exo:owneable");
       Node images = multimedia.addNode("images",NT_FOLDER);
-      addMixin(images, "exo:pictureFolder");        
+      addMixin(images, "exo:pictureFolder");
+      addMixin(images,"exo:owneable");
       Node video = multimedia.addNode("videos",NT_FOLDER);        
       addMixin(video, "exo:videoFolder");    
+      addMixin(video,"exo:owneable");
       Node audio = multimedia.addNode("audio",NT_FOLDER);    
       addMixin(audio, "exo:musicFolder");
+      addMixin(audio,"exo:owneable");
     }                
     if (!webContent.hasNode("documents")) {
       Node document = webContent.addNode("documents",NT_UNSTRUCTURED);           
-      addMixin(document, "exo:documentFolder"); 
+      addMixin(document, "exo:documentFolder");
+      addMixin(document,"exo:owneable");
     }          
   }
   

@@ -50,7 +50,7 @@ import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 public class LivePortalManagerServiceImpl implements LivePortalManagerService {    
   private final String PORTAL_FOLDER = "exo:portalFolder".intern();
   private Map<String,String> livePortalPaths = new HashMap<String,String>();
-  
+
   private RepositoryService repositoryService; 
   private WCMConfigurationService wcmConfigService;
 
@@ -120,7 +120,7 @@ public class LivePortalManagerServiceImpl implements LivePortalManagerService {
     String sharePortalName = wcmConfigService.getSharedPortalName(repository);
     return portalsStorage.getNode(sharePortalName);
   }
-  
+
   private Node getLivePortalsStorage(final SessionProvider sessionProvider, final String repository) throws Exception {
     NodeLocation locationEntry = wcmConfigService.getLivePortalsLocation(repository);
     String workspace = locationEntry.getWorkspace();
@@ -141,8 +141,10 @@ public class LivePortalManagerServiceImpl implements LivePortalManagerService {
     if(livePortalsStorage.hasNode(portalName)) {
       throw new ItemExistsException("Live portal folder existed: " + portalName);
     }
-    ExtendedNode newPortal = (ExtendedNode)livePortalsStorage.addNode(portalName,PORTAL_FOLDER);                  
-    //Need set some other property for the portal node from portal config like access permission ..
+    ExtendedNode newPortal = (ExtendedNode)livePortalsStorage.addNode(portalName,PORTAL_FOLDER);
+    if (!newPortal.isNodeType("exo:owneable"))       
+      newPortal.addMixin("exo:owneable");
+    //Need set some other property for the portal node from portal config like access permission ..    
     newPortal.getSession().save();
     livePortalPaths.put(portalName,newPortal.getPath());    
   }

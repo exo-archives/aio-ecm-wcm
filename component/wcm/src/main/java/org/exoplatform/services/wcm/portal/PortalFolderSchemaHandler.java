@@ -73,7 +73,7 @@ public class PortalFolderSchemaHandler extends BaseWebSchemaHandler {
    * @throws Exception the exception
    */
   public Node getMultimediaFolder(final Node portalFolder) throws Exception {
-    return portalFolder.getNode("multimedia");
+    return portalFolder.getNode("medias");
   }
   
   /**
@@ -84,7 +84,7 @@ public class PortalFolderSchemaHandler extends BaseWebSchemaHandler {
    * @throws Exception the exception
    */
   public Node getImagesFolder(final Node portalFolder) throws Exception {
-    return portalFolder.getNode("multimedia/images");
+    return portalFolder.getNode("medias/images");
   }
  
   /**
@@ -95,7 +95,7 @@ public class PortalFolderSchemaHandler extends BaseWebSchemaHandler {
    * @throws Exception the exception
    */
   public Node getVideoFolder(final Node portalFolder) throws Exception {
-    return portalFolder.getNode("multimedia/videos");
+    return portalFolder.getNode("medias/videos");
   }
   
   /**
@@ -106,7 +106,7 @@ public class PortalFolderSchemaHandler extends BaseWebSchemaHandler {
    * @throws Exception the exception
    */
   public Node getAudioFolder(final Node portalFolder) throws Exception{
-    return portalFolder.getNode("multimedia/audio");
+    return portalFolder.getNode("medias/audio");
   }
   
   /**
@@ -139,7 +139,7 @@ public class PortalFolderSchemaHandler extends BaseWebSchemaHandler {
    * @throws Exception the exception
    */
   public Node getWebContentStorage (final Node portalFolder) throws Exception {
-    return portalFolder.getNode("web content storage");
+    return portalFolder.getNode("web contents");
   }    
   
   /**
@@ -150,7 +150,7 @@ public class PortalFolderSchemaHandler extends BaseWebSchemaHandler {
    * @throws Exception the exception
    */
   public Node getBannerThemes(Node portalFolder) throws Exception{
-    return portalFolder.getNode("themes/banner");
+    return portalFolder.getNode("site templates/banner");
   }
   
   /**
@@ -161,7 +161,7 @@ public class PortalFolderSchemaHandler extends BaseWebSchemaHandler {
    * @throws Exception the exception
    */
   public Node getFooterThemes(Node portalFolder) throws Exception{
-    return portalFolder.getNode("themes/footer");
+    return portalFolder.getNode("site templates/footer");
   }
   
   /**
@@ -172,7 +172,7 @@ public class PortalFolderSchemaHandler extends BaseWebSchemaHandler {
    * @throws Exception the exception
    */
   public Node getNavigationThemes(Node portalFolder) throws Exception{
-    return portalFolder.getNode("themes/navigation");
+    return portalFolder.getNode("site templates/navigation");
   }
   
   /**
@@ -183,7 +183,11 @@ public class PortalFolderSchemaHandler extends BaseWebSchemaHandler {
    * @throws Exception the exception
    */
   public Node getBreadcumsThemes(Node portalFolder) throws Exception{
-    return portalFolder.getNode("themes/breadcums");
+    return portalFolder.getNode("site templates/breadcums");
+  }
+  
+  public Node getHomepageThemes(Node portalFolder) throws Exception{
+    return portalFolder.getNode("site templates/home page");
   }
   
   /* (non-Javadoc)
@@ -200,26 +204,39 @@ public class PortalFolderSchemaHandler extends BaseWebSchemaHandler {
    * @see org.exoplatform.services.wcm.core.BaseWebSchemaHandler#process(javax.jcr.Node)
    */
   public void process(final Node portalFolder) throws Exception {
-    Node jsFolder = portalFolder.addNode("js","exo:jsFolder");                
-    Node cssFolder = portalFolder.addNode("css","exo:cssFolder");        
-    Node multimedia = portalFolder.addNode("multimedia",NT_FOLDER);    
+    Node jsFolder = portalFolder.addNode("js","exo:jsFolder");
+    addMixin(jsFolder,"exo:owneable");
+    Node cssFolder = portalFolder.addNode("css","exo:cssFolder");
+    addMixin(cssFolder,"exo:owneable");
+    Node multimedia = portalFolder.addNode("medias",NT_FOLDER);    
     addMixin(multimedia, "exo:multimediaFolder");       
+    addMixin(multimedia,"exo:owneable");
     Node images = multimedia.addNode("images",NT_FOLDER);    
-    addMixin(images, "exo:pictureFolder");    
+    addMixin(images, "exo:pictureFolder");
+    addMixin(images,"exo:owneable");
     Node video = multimedia.addNode("videos",NT_FOLDER);
-    addMixin(video, "exo:videoFolder");        
+    addMixin(video, "exo:videoFolder");
+    addMixin(video,"exo:owneable");
     Node audio = multimedia.addNode("audio",NT_FOLDER);    
-    addMixin(audio, "exo:musicFolder");    
+    addMixin(audio, "exo:musicFolder");
+    addMixin(audio,"exo:owneable");
     Node document = portalFolder.addNode("documents",NT_UNSTRUCTURED);
-    addMixin(document, "exo:documentFolder");        
-    portalFolder.addNode("web content storage","exo:webFolder");       
-    Node themes = portalFolder.addNode("themes","exo:themeFolder");
-    themes.addNode("banner","nt:unstructured");
-    themes.addNode("footer","nt:unstructured");
-    themes.addNode("navigation","nt:unstructured");
-    themes.addNode("breadcums","nt:unstructured");
-    portalFolder.addNode("links", "exo:linkFolder");
-    
+    addMixin(document, "exo:documentFolder");
+    addMixin(document,"exo:owneable");
+    Node webContents = portalFolder.addNode("web contents","exo:webFolder");
+    addMixin(webContents,"exo:owneable");
+    Node themes = portalFolder.addNode("site templates","exo:themeFolder");
+    addMixin(themes,"exo:owneable");
+    Node bannerFolder = themes.addNode("banner","nt:unstructured");
+    addMixin(bannerFolder,"exo:owneable");
+    Node footer = themes.addNode("footer","nt:unstructured");
+    addMixin(footer,"exo:owneable");
+    Node homepage = themes.addNode("homepage","nt:unstructured");
+    addMixin(homepage,"exo:owneable");
+//    themes.addNode("navigation","nt:unstructured");
+//    themes.addNode("breadcums","nt:unstructured");
+    Node links = portalFolder.addNode("links", "exo:linkFolder");
+    addMixin(links,"exo:owneable");
     portalFolder.getSession().save();
     bindCSSAction(cssFolder);    
     bindJSAction(jsFolder);    
