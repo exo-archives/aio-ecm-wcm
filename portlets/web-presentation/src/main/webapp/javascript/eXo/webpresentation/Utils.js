@@ -25,9 +25,10 @@ Utils = function(){
 eXo.wcm = new Utils();
 	
 var isOpen = false;
-function showStepInfo() {
-	var oStepInfoStyle = document.getElementById('PageNodeContainer').style;
-	var oSelectInfoStyle = document.getElementById('SelectedPageInfo').style;
+function showDivBlock(checkpoint, div1Class, div2Class) {
+	var root = eXo.core.DOMUtil.findAncestorsByClass(checkpoint, 'UIWizard')[0];
+	var oDiv1Style = eXo.core.DOMUtil.findDescendantsByClass(root, 'div', div1Class)[0].style;
+	var oDiv2Style = eXo.core.DOMUtil.findDescendantsByClass(root, 'div', div2Class)[0].style;
 	
 	if (isOpen) {
 		oStepInfoStyle.display = 'none';

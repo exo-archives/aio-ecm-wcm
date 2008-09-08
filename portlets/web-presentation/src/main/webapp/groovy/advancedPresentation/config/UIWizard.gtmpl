@@ -21,8 +21,8 @@
 							<div class="WizardStepContent">
 								<div class="UIWizardPageSetInfo">
 									<div class="OverflowContainer">
-										<div class="ShowStepInfo" onclick="showStepInfo()"><span></span></div>
-										<div class="PageNodeContainer" id="PageNodeContainer">
+										<div class="ShowStepInfo" onclick="showDivBlock(this, 'PageNodeContainer', 'SelectedPageInfo')"><span></span></div>
+										<div class="PageNodeContainer">
 											<div class="TopLeftContainerOptions">
 												<div class="TopRightContainerOptions">
 													<div class="TopCenterContainerOptions"><span/></div>
@@ -62,7 +62,7 @@
 												</div> <!-- End of MiddleRightContainerOptions -->
 											</div> <!-- End of MiddleLeftContainerOptions -->
 										</div>	<!-- End of PageNodeContainer -->
-										<div class="SelectedPageInfo" id="SelectedPageInfo">
+										<div class="SelectedPageInfo">
 											<div class="PageInfoContainer">
 												<% uicomponent.renderChildren() ;%>
 											</div>
