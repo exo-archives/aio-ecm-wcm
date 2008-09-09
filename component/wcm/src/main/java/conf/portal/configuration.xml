@@ -90,18 +90,7 @@
     <key>org.exoplatform.services.wcm.portal.PortalResourceProviderService</key>
     <type>org.exoplatform.services.wcm.portal.PortalResourceProviderService</type>    
   </component>
-     
-   <component>   
-     <type>org.exoplatform.services.wcm.contribution.WebContributionService</type>
-     <init-params>
-       <properties-param>
-          <name>service.params</name>
-          <description>some init parameters for the service</description>
-          <property name="web.contributor.group" value="/platform/web-contributor"/>                        
-        </properties-param>       	      
-	   </init-params>
-   </component>      
-   
+             
    <component>   
      <key>org.exoplatform.services.jcr.ext.classify.NodeClassifyService</key>
      <type>org.exoplatform.services.jcr.ext.classify.impl.NodeClassifyServiceImpl</type>
@@ -164,26 +153,5 @@
       <type>org.exoplatform.services.wcm.portal.listener.RemoveLivePortalEventListener</type>
       <description>this listener  new live portal content storage</description>
     </component-plugin>
-  </external-component-plugins>
-  
-  <external-component-plugins>
-    <target-component>org.exoplatform.services.scheduler.JobSchedulerService</target-component>
-    <component-plugin>
-      <name>AddCronJob</name>
-      <set-method>addCronJob</set-method>
-      <type>org.exoplatform.services.scheduler.CronJob</type>
-      <description>add a cron job to the JobSchedulerService</description>
-      <init-params>
-        <properties-param>
-          <name>cronjob.info</name>
-          <description>Link validate job</description>
-          <property name="jobName" value="job"/>
-          <property name="groupName" value="group"/>
-          <property name="job" value="org.exoplatform.services.wcm.link.LinkValidatorJob"/>
-          <property name="expression" value="0 0/3 * * * ?"/>
-        </properties-param>
-      </init-params>          
-    </component-plugin>    
-  </external-component-plugins>
-  
+  </external-component-plugins>   
 </configuration>
