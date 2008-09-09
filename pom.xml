@@ -15,7 +15,8 @@
 
   <modules>        
   	<module>component/wcm</module>
-	<module>component/search</module>    
+	<module>component/search</module>
+	<module>component/plugins</module>    
 	<module>portlets/iweb</module>    
 	<module>portlets/web-presentation</module>    
 	<module>portlets/web-searches</module>
