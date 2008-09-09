@@ -18,6 +18,7 @@ package org.exoplatform.services.wcm.webcontent;
 
 import javax.jcr.Node;
 import javax.jcr.Session;
+import javax.jcr.nodetype.NodeType;
 
 import org.exoplatform.services.wcm.core.BaseWebSchemaHandler;
 
@@ -30,8 +31,18 @@ import org.exoplatform.services.wcm.core.BaseWebSchemaHandler;
 public class WebContentSchemaHandler extends BaseWebSchemaHandler {
 
   protected String getHandlerNodeType() { return "exo:webContent"; }  
-  protected String getParentNodeType() { return "exo:webFolder"; }
-
+  protected String getParentNodeType() { return "nt:unstructured"; }
+  
+  public boolean matchHandler(Node node) throws Exception {    
+    String handlerNodeType = getHandlerNodeType();
+    NodeType parentNodeType = node.getParent().getPrimaryNodeType();    
+    if (node.getPrimaryNodeType().isNodeType(handlerNodeType) 
+        && parentNodeType.isNodeType("nt:unstructured")) {
+      return true;
+    }
+    return false;    
+  }
+  
   public void process(final Node webContent) throws Exception {
     Session session = webContent.getSession();
     createSchema(webContent);
@@ -57,8 +68,8 @@ public class WebContentSchemaHandler extends BaseWebSchemaHandler {
   public Node getDocumentFolder (final Node webContent) throws Exception {
     return webContent.getNode("documents");
   }
-
-  private void createSchema(final Node webContent) throws Exception {
+  
+  private void createSchema(final Node webContent) throws Exception {    
     if (!webContent.hasNode("js")) {
       Node js = webContent.addNode("js","exo:jsFolder"); 
       addMixin(js,"exo:owneable");
