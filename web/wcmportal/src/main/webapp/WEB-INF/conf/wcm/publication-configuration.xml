@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<configuration> 
+	<external-component-plugins>
+	  <target-component>org.exoplatform.services.ecm.publication.PublicationService</target-component>      
+	  <component-plugin>
+	    <name>Web Content Publishing</name>
+	    <set-method>addPublicationPlugin</set-method>
+	    <type>org.exoplatform.services.wcm.plugins.publication.WCMPublicationPlugin</type>
+	    <description>This publication lifecycle publish a web content or DMS document to a portal page.</description>	    	    	   
+	  </component-plugin>
+	</external-component-plugins>	
+</configuration>
