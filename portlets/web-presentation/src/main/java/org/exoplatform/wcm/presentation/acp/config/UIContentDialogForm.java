@@ -41,6 +41,9 @@ import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.NodeIdentifier;
 import org.exoplatform.services.wcm.core.NodeLocation;
+import org.exoplatform.services.wcm.core.WebSchemaConfigService;
+import org.exoplatform.services.wcm.portal.LivePortalManagerService;
+import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
 import org.exoplatform.wcm.presentation.acp.config.quickcreation.UIQuickCreationWizard;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -50,6 +53,7 @@ import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.form.UIFormStringInput;
 
 /**
  * Created by The eXo Platform SAS
@@ -68,7 +72,6 @@ import org.exoplatform.webui.event.EventListener;
 
 public class UIContentDialogForm extends UIDialogForm {
 
-  private String contentType;  
   private JCRResourceResolver resourceResolver;
   private NodeLocation storedLocation;
   protected NodeIdentifier savedNodeIdentifier;
@@ -77,11 +80,11 @@ public class UIContentDialogForm extends UIDialogForm {
   public UIContentDialogForm() throws Exception {
     setActions(ACTIONS);
   }
-  
+
   protected Node getWebContent () {
     return webContent;
   }
-  
+
   protected void setWebContent(Node node) {
     webContent = node;
   }
@@ -96,7 +99,7 @@ public class UIContentDialogForm extends UIDialogForm {
   public NodeIdentifier getSavedNodeIdentifier() {
     return savedNodeIdentifier;
   }  
-  
+
   public String getTemplate() {
     TemplateService templateService = getApplicationComponent(TemplateService.class) ;
     String userName = Util.getPortalRequestContext().getRemoteUser();
@@ -108,10 +111,6 @@ public class UIContentDialogForm extends UIDialogForm {
       uiApp.addMessage(new ApplicationMessage("UIDocumentForm.msg.not-support", arg, ApplicationMessage.ERROR));
       return null;
     }
-  }
-
-  public void setContentType(String type){
-    contentType = type;
   }
 
   @SuppressWarnings("unused")
@@ -142,13 +141,32 @@ public class UIContentDialogForm extends UIDialogForm {
     Node parentNode = (Node) session.getItem(path);
     return parentNode;
   }
-  
+
   static public class CancelActionListener extends EventListener<UIContentDialogForm> {
     public void execute(Event<UIContentDialogForm> event) throws Exception {
       UIContentDialogForm uiContentDialogForm = event.getSource();
+      UIQuickCreationWizard uiQuickCreationWizard = uiContentDialogForm.getAncestorOfType(UIQuickCreationWizard.class);
       UIPortletConfig uiPortletConfig = uiContentDialogForm.getAncestorOfType(UIPortletConfig.class);
-      uiPortletConfig.getChildren().clear();
-      uiPortletConfig.addChild(uiPortletConfig.getBackComponent());
+      UINameWebContentForm uiNameWebContentForm = uiQuickCreationWizard.getChild(UINameWebContentForm.class);
+      if(uiPortletConfig.isNewConfig()) {
+        String portalName = Util.getUIPortal().getName();
+        LivePortalManagerService livePortalManagerService = uiNameWebContentForm.getApplicationComponent(LivePortalManagerService.class);
+        SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
+        Node portalNode = livePortalManagerService.getLivePortal(portalName, sessionProvider);
+        WebSchemaConfigService webSchemaConfigService = uiNameWebContentForm.getApplicationComponent(WebSchemaConfigService.class);
+        PortalFolderSchemaHandler handler = webSchemaConfigService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
+        Node webContentStorage = handler.getWebContentStorage(portalNode);
+        String webContentName = ((UIFormStringInput)uiNameWebContentForm.getChildById(UINameWebContentForm.NAME_WEBCONTENT)).getValue();
+        Node webContentNode = webContentStorage.getNode(webContentName);
+        Session session = webContentNode.getSession();
+        webContentNode.remove();
+        session.save();
+        uiNameWebContentForm.reset();
+      } else {
+        uiNameWebContentForm.init();
+      }
+      uiContentDialogForm.reset();
+      uiQuickCreationWizard.viewStep(1);
     }
   }
 
@@ -157,7 +175,6 @@ public class UIContentDialogForm extends UIDialogForm {
       UIContentDialogForm dialogForm = event.getSource();
       List inputs = dialogForm.getChildren();
       Map inputProperties = DialogFormUtil.prepareMap(inputs, dialogForm.getInputProperties());
-      
       Node newNode = null;
       String nodeType;
       Node homeNode;
@@ -206,7 +223,7 @@ public class UIContentDialogForm extends UIDialogForm {
       ((UIPermissionInfo) uiPermissionManager.getChild(UIPermissionInfo.class)).updateGrid();
       UISocialInfo uiSocialInfo = uiQuickWizard.getChild(UISocialInfo.class);
       uiSocialInfo.initUICategorizing();
-      uiQuickWizard.viewStep(2);
+      uiQuickWizard.viewStep(3);
     }
   }
 }
