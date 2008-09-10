@@ -16,6 +16,8 @@
  */
 package org.exoplatform.services.wcm.webcontent;
 
+import java.util.Calendar;
+
 import javax.jcr.Node;
 import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
@@ -69,6 +71,37 @@ public class WebContentSchemaHandler extends BaseWebSchemaHandler {
     return webContent.getNode("documents");
   }
   
+  public void createDefaultSchema(Node webContent) throws Exception{
+    addMixin(webContent,"exo:owneable");
+    createSchema(webContent);
+    //create empty css file:
+    Node defaultCSS = addNodeAsNTFile(webContent.getNode("css"), "default.css", "text/css", "");
+    addMixin(defaultCSS, "exo:cssFile");
+    addMixin(defaultCSS,"exo:owneable");
+    
+    Node defaultJS = addNodeAsNTFile(webContent.getNode("js"), "default.js", "application/x-javascript", "");
+    addMixin(defaultJS, "exo:jsFile");
+    addMixin(defaultJS,"exo:owneable");
+    
+    Node defaultHTML = addNodeAsNTFile(webContent, "default.html", "text/html", "");
+    addMixin(defaultHTML, "exo:cssFile");
+    addMixin(defaultHTML,"exo:owneable");
+  }
+  
+  private Node addNodeAsNTFile(Node home, String fileName,String mimeType,String data) throws Exception{
+    Node file = home.addNode(fileName,"nt:file");
+    Node jcrContent = file.addNode("jcr:content","nt:resource");
+    Calendar cal = Calendar.getInstance();
+    jcrContent.addMixin("dc:elementSet");
+    jcrContent.setProperty("jcr:encoding", "UTF-8");
+    jcrContent.setProperty("jcr:lastModified", cal);
+    jcrContent.setProperty("jcr:mimeType", "text/html");
+    jcrContent.setProperty("jcr:data", "");
+    home.getSession().save();
+    return file;
+  }
+
+  
   private void createSchema(final Node webContent) throws Exception {    
     if (!webContent.hasNode("js")) {
       Node js = webContent.addNode("js","exo:jsFolder"); 
@@ -96,7 +129,7 @@ public class WebContentSchemaHandler extends BaseWebSchemaHandler {
       Node document = webContent.addNode("documents",NT_UNSTRUCTURED);           
       addMixin(document, "exo:documentFolder");
       addMixin(document,"exo:owneable");
-    }          
+    }
   }
   
 }
