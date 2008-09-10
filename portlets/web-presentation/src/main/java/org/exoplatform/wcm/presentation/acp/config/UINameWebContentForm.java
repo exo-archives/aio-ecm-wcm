@@ -76,7 +76,10 @@ public class UINameWebContentForm extends UIForm {
   public void init() throws Exception {
     if(!isNewConfig()) {
       Node currentNode = getNode();
-      String summary = currentNode.getProperty("exo:summary").getValue().getString();
+      String summary = ""; 
+      if(currentNode.hasProperty("exo:summary")) {
+      summary = currentNode.getProperty("exo:summary").getValue().getString();
+      }
       UIFormWYSIWYGInput uiFormWYSIWYGInput = getChild(UIFormWYSIWYGInput.class);
       uiFormWYSIWYGInput.setValue(summary);
       UIFormStringInput uiFormStringInput = getChild(UIFormStringInput.class);
