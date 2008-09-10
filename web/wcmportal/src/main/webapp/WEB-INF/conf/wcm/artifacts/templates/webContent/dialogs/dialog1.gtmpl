@@ -73,9 +73,9 @@
 				<div class="UITabContentContainer">
 					<div class="UITabContent" style="display: block;">
 						<table class="UIFormGrid">
-							<tr>
-        				 <td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.name")%></td>
-          			 <td class="FieldComponent">
+            	<tr>
+        				<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.name")%></td>
+          			<td class="FieldComponent">
             		 <%
               	 		String[] webContentFieldName = ["jcrPath=/node", "nodetype=exo:webContent", "mixintype=mix:votable,mix:commentable", "editable=if-null","validate=name,empty"] ;
               	 		uicomponent.addTextField("name", webContentFieldName) ; 
@@ -85,46 +85,33 @@
               	 		uicomponent.addHiddenField("webContentHiddenInput2", webContentHiddenField2) ;
             	   %>
           			 </td>
-        			</tr>
-							
+        			</tr>						
 							<tr>
 			 					<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.WebContentHtml")%></td>
 			  				<td class="FieldComponent">
 								<%
-									if(uicomponent.isEditing()) {
-										uicomponent.setChildPath(uicomponent.getNode().getPath()+"/default.html");
-										Node htmlNode = uicomponent.getChildNode();
-										String htmlData = htmlNode.getNode("jcr:content").getProperty("jcr:data").getValue().getString();
-										String[] htmlHiddenField1 = ["jcrPath=/node/default.html", "nodetype=nt:file", "defaultValues=default.html", "mixintype=exo:htmlFile"] ;
-		       					String[] htmlHiddenField2 = ["jcrPath=/node/default.html/jcr:content", "nodetype=nt:resource", "mixintype=dc:elementSet", "visible=false"] ; 
-									  String[] htmlHiddenField3 = ["jcrPath=/node/default.html/jcr:content/jcr:encoding", "visible=false", "UTF-8"] ;  
-									  String[] htmlHiddenField4 = ["jcrPath=/node/default.html/jcr:content/jcr:lastModified", "visible=false"] ;
-									  String[] htmlHiddenField5 = ["jcrPath=/node/default.html/jcr:content/dc:date", "visible=false"] ;
-									  String[] htmlHiddenField6 = ["jcrPath=/node/default.html/jcr:content/jcr:mimeType", "visible=false", "text/html"] ;
-									  uicomponent.addHiddenField("htmlHiddenField1", htmlHiddenField1) ;
-									  uicomponent.addHiddenField("htmlHiddenField2", htmlHiddenField2) ;
-									  uicomponent.addHiddenField("htmlHiddenField3", htmlHiddenField3) ;
-									  uicomponent.addCalendarField("htmlHiddenField4", htmlHiddenField4) ;
-									  uicomponent.addCalendarField("htmlHiddenField5", htmlHiddenField5) ;
-									  uicomponent.addHiddenField("htmlHiddenField6", htmlHiddenField6) ;
-										String[] htmlContent = ["jcrPath=/node/default.html/jcr:content/jcr:data", "options=default", htmlData];
-		        				uicomponent.addWYSIWYGField(htmlWYSIWYGFormId, htmlContent) ;
-									} else {
-		       					String[] htmlHiddenField1 = ["jcrPath=/node/default.html", "nodetype=nt:file", "defaultValues=default.html", "mixintype=exo:htmlFile"] ;
-		       					String[] htmlHiddenField2 = ["jcrPath=/node/default.html/jcr:content", "nodetype=nt:resource", "mixintype=dc:elementSet", "visible=false"] ; 
-									  String[] htmlHiddenField3 = ["jcrPath=/node/default.html/jcr:content/jcr:encoding", "visible=false", "UTF-8"] ;  
-									  String[] htmlHiddenField4 = ["jcrPath=/node/default.html/jcr:content/jcr:lastModified", "visible=false"] ;
-									  String[] htmlHiddenField5 = ["jcrPath=/node/default.html/jcr:content/dc:date", "visible=false"] ;
-									  String[] htmlHiddenField6 = ["jcrPath=/node/default.html/jcr:content/jcr:mimeType", "visible=false", "text/html"] ;
-									  uicomponent.addHiddenField("htmlHiddenField1", htmlHiddenField1) ;
-									  uicomponent.addHiddenField("htmlHiddenField2", htmlHiddenField2) ;
-									  uicomponent.addHiddenField("htmlHiddenField3", htmlHiddenField3) ;
-									  uicomponent.addCalendarField("htmlHiddenField4", htmlHiddenField4) ;
-									  uicomponent.addCalendarField("htmlHiddenField5", htmlHiddenField5) ;
-									  uicomponent.addHiddenField("htmlHiddenField6", htmlHiddenField6) ;
-									  String[] htmlContent = ["jcrPath=/node/default.html/jcr:content/jcr:data", "options=default", ""];
-		        				uicomponent.addWYSIWYGField(htmlWYSIWYGFormId, htmlContent) ;
-		        			}
+										String[] htmlHiddenField1 = ["jcrPath=/node/default.html", "nodetype=nt:file", "defaultValues=default.html", "mixintype=exo:htmlFile"];
+		       					String[] htmlHiddenField2 = ["jcrPath=/node/default.html/jcr:content", "nodetype=nt:resource", "mixintype=dc:elementSet", "visible=false"]; 
+									  String[] htmlHiddenField3 = ["jcrPath=/node/default.html/jcr:content/jcr:encoding", "visible=false", "UTF-8"];
+									  String[] htmlHiddenField4 = ["jcrPath=/node/default.html/jcr:content/jcr:lastModified", "visible=false"];
+									  String[] htmlHiddenField5 = ["jcrPath=/node/default.html/jcr:content/dc:date", "visible=false"];
+									  String[] htmlHiddenField6 = ["jcrPath=/node/default.html/jcr:content/jcr:mimeType", "visible=false", "text/html"];
+									  uicomponent.addHiddenField("htmlHiddenField1", htmlHiddenField1);
+									  uicomponent.addHiddenField("htmlHiddenField2", htmlHiddenField2);
+									  uicomponent.addHiddenField("htmlHiddenField3", htmlHiddenField3);
+									  uicomponent.addCalendarField("htmlHiddenField4", htmlHiddenField4);
+									  uicomponent.addCalendarField("htmlHiddenField5", htmlHiddenField5);
+									  uicomponent.addHiddenField("htmlHiddenField6", htmlHiddenField6);
+									  String htmlContent = "";
+										if(uicomponent.isEditing()) {
+											Node webContentNode = uicomponent.getNode();
+											if(webContentNode.hasNode("default.html")) {
+												Node htmlNode = webContentNode.getNode("default.html");
+												htmlContent = htmlNode.getNode("jcr:content").getProperty("jcr:data").getValue().getString();
+											}
+										}
+									  String[] htmlArguments = ["jcrPath=/node/default.html/jcr:content/jcr:data", "options=default", htmlContent];
+		        				uicomponent.addWYSIWYGField(htmlWYSIWYGFormId, htmlArguments) ;
 	      				%>
 								</td>
 							</tr>
@@ -137,10 +124,6 @@
 								<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.ContentCSS")%></td>
 								<td class="FieldComponent">
 								<%
-									if(uicomponent.isEditing()) {
-										uicomponent.setChildPath(uicomponent.getNode().getPath()+"/css/default.css");
-										Node cssNode = uicomponent.getChildNode();
-										String cssData = cssNode.getNode("jcr:content").getProperty("jcr:data").getValue().getString();
 										String[] cssHiddenField1 = ["jcrPath=/node/css/default.css", "nodetype=nt:file", "defaultValues=default.css"] ;
 										String[] cssHiddenField2 = ["jcrPath=/node/css/default.css/jcr:content", "nodetype=nt:resource", "mixintype=dc:elementSet", "visible=false"] ; 
 									  String[] cssHiddenField3 = ["jcrPath=/node/css/default.css/jcr:content/jcr:encoding", "visible=false", "UTF-8"] ;  
@@ -153,24 +136,16 @@
 									  uicomponent.addCalendarField("cssHiddenField4", cssHiddenField4) ;
 									  uicomponent.addCalendarField("cssHiddenField5", cssHiddenField5) ;
 									  uicomponent.addHiddenField("cssHiddenField6", cssHiddenField6) ;
-										String[] fieldContentCSS = ["jcrPath=/node/css/default.css/jcr:content/jcr:data",cssData];
-										uicomponent.addTextAreaField(cssFormId, fieldContentCSS) ; 
-									} else {
-										String[] cssHiddenField1 = ["jcrPath=/node/css/default.css", "nodetype=nt:file", "defaultValues=default.css"] ;
-										String[] cssHiddenField2 = ["jcrPath=/node/css/default.css/jcr:content", "nodetype=nt:resource", "mixintype=dc:elementSet", "visible=false"] ; 
-									  String[] cssHiddenField3 = ["jcrPath=/node/css/default.css/jcr:content/jcr:encoding", "visible=false", "UTF-8"] ;  
-									  String[] cssHiddenField4 = ["jcrPath=/node/css/default.css/jcr:content/jcr:lastModified", "visible=false"] ;
-									  String[] cssHiddenField5 = ["jcrPath=/node/css/default.css/jcr:content/dc:date", "visible=false"] ;
-									  String[] cssHiddenField6 = ["jcrPath=/node/css/default.css/jcr:content/jcr:mimeType", "visible=false", "text/css"] ;
-									  uicomponent.addHiddenField("cssHiddenField1", cssHiddenField1) ;
-									  uicomponent.addHiddenField("cssHiddenField2", cssHiddenField2) ;
-									  uicomponent.addHiddenField("cssHiddenField3", cssHiddenField3) ;
-									  uicomponent.addCalendarField("cssHiddenField4", cssHiddenField4) ;
-									  uicomponent.addCalendarField("cssHiddenField5", cssHiddenField5) ;
-									  uicomponent.addHiddenField("cssHiddenField6", cssHiddenField6) ;
-										String[] fieldContentCSS = ["jcrPath=/node/css/default.css/jcr:content/jcr:data"] ;
+									  String cssContent = "";
+										if(uicomponent.isEditing()) {
+											Node webContentNode = uicomponent.getNode();
+											if(webContentNode.hasNode("css/default.css")) {
+												Node cssNode = webContentNode.getNode("css/default.css");
+												cssContent = cssNode.getNode("jcr:content").getProperty("jcr:data").getValue().getString();
+											}
+										}
+										String[] fieldContentCSS = ["jcrPath=/node/css/default.css/jcr:content/jcr:data", cssContent] ;
 										uicomponent.addTextAreaField(cssFormId, fieldContentCSS) ;
-								  }
 								%>
 								</td>
 							</tr>
@@ -183,40 +158,28 @@
 								<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.ContentJS")%></td>
 								<td class="FieldComponent">
 								<%
-									if(uicomponent.isEditing()) {
-										uicomponent.setChildPath(uicomponent.getNode().getPath()+"/js/default.js");
-										Node jsNode = uicomponent.getChildNode();
-										String jsData = jsNode.getNode("jcr:content").getProperty("jcr:data").getValue().getString();
-										String[] jsHiddenField1 = ["jcrPath=/node/js/default.js", "nodetype=nt:file", "defaultValues=default.js"] ;
-										String[] jsHiddenField2 = ["jcrPath=/node/js/default.js/jcr:content", "nodetype=nt:resource", "mixintype=dc:elementSet", "visible=false"] ; 
-									  String[] jsHiddenField3 = ["jcrPath=/node/js/default.js/jcr:content/jcr:encoding", "visible=false", "UTF-8"] ;  
-									  String[] jsHiddenField4 = ["jcrPath=/node/js/default.js/jcr:content/jcr:lastModified", "visible=false"] ;
-									  String[] jsHiddenField5 = ["jcrPath=/node/js/default.js/jcr:content/dc:date", "visible=false"] ;
-									  String[] jsHiddenField6 = ["jcrPath=/node/js/default.js/jcr:content/jcr:mimeType", "visible=false", "application/x-javascript"] ;
-									  uicomponent.addHiddenField("jsHiddenField1", jsHiddenField1) ;
-									  uicomponent.addHiddenField("jsHiddenField2", jsHiddenField2) ;
-									  uicomponent.addHiddenField("jsHiddenField3", jsHiddenField3) ;
-									  uicomponent.addCalendarField("jsHiddenField4", jsHiddenField4) ;
-									  uicomponent.addCalendarField("jsHiddenField5", jsHiddenField5) ;
-									  uicomponent.addHiddenField("jsHiddenField6", jsHiddenField6) ;
-										String[] fieldContentJS = ["jcrPath=/node/js/default.js/jcr:content/jcr:data",jsData] ;
-										uicomponent.addTextAreaField(jsFormId, fieldContentJS) ; 
-									} else {
-										String[] jsHiddenField1 = ["jcrPath=/node/js/default.js", "nodetype=nt:file", "defaultValues=default.js"] ;
-										String[] jsHiddenField2 = ["jcrPath=/node/js/default.js/jcr:content", "nodetype=nt:resource", "mixintype=dc:elementSet", "visible=false"] ; 
-									  String[] jsHiddenField3 = ["jcrPath=/node/js/default.js/jcr:content/jcr:encoding", "visible=false", "UTF-8"] ;  
-									  String[] jsHiddenField4 = ["jcrPath=/node/js/default.js/jcr:content/jcr:lastModified", "visible=false"] ;
-									  String[] jsHiddenField5 = ["jcrPath=/node/js/default.js/jcr:content/dc:date", "visible=false"] ;
-									  String[] jsHiddenField6 = ["jcrPath=/node/js/default.js/jcr:content/jcr:mimeType", "visible=false", "application/x-javascript"] ;
-									  uicomponent.addHiddenField("jsHiddenField1", jsHiddenField1) ;
-									  uicomponent.addHiddenField("jsHiddenField2", jsHiddenField2) ;
-									  uicomponent.addHiddenField("jsHiddenField3", jsHiddenField3) ;
-									  uicomponent.addCalendarField("jsHiddenField4", jsHiddenField4) ;
-									  uicomponent.addCalendarField("jsHiddenField5", jsHiddenField5) ;
-									  uicomponent.addHiddenField("jsHiddenField6", jsHiddenField6) ;
-										String[] fieldContentJS = ["jcrPath=/node/js/default.js/jcr:content/jcr:data"] ;
-										uicomponent.addTextAreaField(jsFormId, fieldContentJS) ; 
-									}									
+										String[] jsHiddenField1 = ["jcrPath=/node/js/default.js", "nodetype=nt:file", "defaultValues=default.js"];
+										String[] jsHiddenField2 = ["jcrPath=/node/js/default.js/jcr:content", "nodetype=nt:resource", "mixintype=dc:elementSet", "visible=false"]; 
+									  String[] jsHiddenField3 = ["jcrPath=/node/js/default.js/jcr:content/jcr:encoding", "visible=false", "UTF-8"];  
+									  String[] jsHiddenField4 = ["jcrPath=/node/js/default.js/jcr:content/jcr:lastModified", "visible=false"];
+									  String[] jsHiddenField5 = ["jcrPath=/node/js/default.js/jcr:content/dc:date", "visible=false"];
+									  String[] jsHiddenField6 = ["jcrPath=/node/js/default.js/jcr:content/jcr:mimeType", "visible=false", "application/x-javascript"];
+									  uicomponent.addHiddenField("jsHiddenField1", jsHiddenField1);
+									  uicomponent.addHiddenField("jsHiddenField2", jsHiddenField2);
+									  uicomponent.addHiddenField("jsHiddenField3", jsHiddenField3);
+									  uicomponent.addCalendarField("jsHiddenField4", jsHiddenField4);
+									  uicomponent.addCalendarField("jsHiddenField5", jsHiddenField5);
+									  uicomponent.addHiddenField("jsHiddenField6", jsHiddenField6);
+									  String jsContent = "";
+										if(uicomponent.isEditing()) {
+											Node webContentNode = uicomponent.getNode();
+											if(webContentNode.hasNode("js/default.js")) {
+												Node jsNode = webContentNode.getNode("js/default.js");
+												jsContent = jsNode.getNode("jcr:content").getProperty("jcr:data").getValue().getString();
+											} 
+										} 
+										String[] fieldContentJS = ["jcrPath=/node/js/default.js/jcr:content/jcr:data", jsContent];
+										uicomponent.addTextAreaField(jsFormId, fieldContentJS); 								
 								%>
 								</td>
 							</tr>
