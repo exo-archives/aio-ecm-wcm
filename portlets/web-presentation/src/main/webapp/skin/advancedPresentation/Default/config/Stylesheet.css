@@ -83,3 +83,7 @@
   background: url('images/MagnifierIconNews.png') no-repeat ;
   cursor: pointer;	 
 }
+
+.UINameWebContentForm .UIForm .HorizontalLayout .FieldComponent {
+	width:750px;
+}
