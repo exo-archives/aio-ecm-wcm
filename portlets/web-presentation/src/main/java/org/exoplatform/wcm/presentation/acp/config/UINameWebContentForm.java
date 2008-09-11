@@ -21,8 +21,14 @@ import javax.jcr.Session;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
+import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.portal.webui.UIWelcomeComponent;
+import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.portal.webui.workspace.UIControlWorkspace;
+import org.exoplatform.portal.webui.workspace.UIPortalApplication;
+import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -37,9 +43,12 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.webui.core.UIComponentDecorator;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.IdentifierValidator;
@@ -58,7 +67,7 @@ import org.exoplatform.webui.form.wysiwyg.UIFormWYSIWYGInput;
     template = "system:/groovy/webui/form/UIForm.gtmpl",
     events = {
       @EventConfig(listeners = UINameWebContentForm.SaveActionListener.class),
-      @EventConfig(listeners = UINameWebContentForm.AbortActionListener.class)
+      @EventConfig(listeners = UINameWebContentForm.AbortActionListener.class, phase = Phase.DECODE)
     }
 )
 
@@ -68,9 +77,9 @@ public class UINameWebContentForm extends UIForm {
   public static final String SUMMARY_WEBCONTENT = "summary".intern();
 
   public UINameWebContentForm() throws Exception {
-    addChild(new UIFormStringInput(NAME_WEBCONTENT, NAME_WEBCONTENT, null)
+    addUIFormInput(new UIFormStringInput(NAME_WEBCONTENT, NAME_WEBCONTENT, null)
     .addValidator(MandatoryValidator.class).addValidator(IdentifierValidator.class));
-    addChild(new UIFormWYSIWYGInput(SUMMARY_WEBCONTENT, SUMMARY_WEBCONTENT, null));
+    addUIFormInput(new UIFormWYSIWYGInput(SUMMARY_WEBCONTENT, SUMMARY_WEBCONTENT, null));
   }
 
   public void init() throws Exception {
@@ -78,7 +87,7 @@ public class UINameWebContentForm extends UIForm {
       Node currentNode = getNode();
       String summary = ""; 
       if(currentNode.hasProperty("exo:summary")) {
-      summary = currentNode.getProperty("exo:summary").getValue().getString();
+        summary = currentNode.getProperty("exo:summary").getValue().getString();
       }
       UIFormWYSIWYGInput uiFormWYSIWYGInput = getChild(UIFormWYSIWYGInput.class);
       uiFormWYSIWYGInput.setValue(summary);
@@ -146,8 +155,8 @@ public class UINameWebContentForm extends UIForm {
 
   public static class AbortActionListener extends EventListener<UINameWebContentForm> {
     public void execute(Event<UINameWebContentForm> event) throws Exception {
-      PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
-      context.setApplicationMode(PortletMode.VIEW);
+    PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
+    context.setApplicationMode(PortletMode.VIEW);
     }
   }
 }
