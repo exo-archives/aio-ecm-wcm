@@ -10,14 +10,14 @@
 %>
 
 <div class="UIBannerViewMode">
-	<div class="Logo" align="center">
+	<span class="Logo">
 		<img src="/iweb/skin/webui/component/UIBannerPortlet/DefaultSkin/background/DefaultLogo.png" width="132" height="60"/>
-	</div>
+	</span>
+	<span class="BannerTitle">eXo Enterprise Web OS</span>
 	<div class="MiddleBanner">
-		<div class="BannerTitle">eXo Enterprise Web OS</div>
 		<div class="LeftLogin">
 			<div class="RightLogin">
-				<div class="CenterLogin"><span></span></div>
+				<div class="CenterLogin"><div style="float: right; width: 1px; height: 1px;"><span></span></div></div>
 			</div>
 		</div>
 	</div>

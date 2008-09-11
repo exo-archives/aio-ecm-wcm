@@ -1,4 +1,6 @@
-<div class="$uicomponent.id" style="position: relative">
+<div style="position: relative"><span></span></div>
+<div class="$uicomponent.id">
+	<% uicomponent.renderChildren() %>
 	<%
 		String actionLabel = _ctx.appRes("UIViewModeContainer.action.QuickEdit") ;
 		if(uicomponent.isQuickEditable()){
@@ -9,7 +11,6 @@
 	<%		
 		}	
 	%>
-	<% uicomponent.renderChildren() %>
 </div>
 
 

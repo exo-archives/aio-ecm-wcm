@@ -1,66 +1,68 @@
-.UIBannerViewMode {
+.UIBannerPortlet .ViewMode {
+	height: 72px;
+}
+
+.UIBannerPortlet .UIBannerViewMode {
 	background: #d8d8d8 url(DefaultSkin/background/DefaultBackground.png) repeat-x;
-	border-bottom: 1px solid #99999a;
+	height: 72px;
 }
 
-.UIBannerViewMode .Logo {
-	width: 200px; 
-	float: left;
-	padding-top: 4px;
+.UIBannerPortlet .UIBannerViewMode .Logo img {
+	vertical-align: -30px;
+	margin: 5px 75px 0px 30px;
 }
 
-.UIBannerViewMode .MiddleBanner {
-	height: 71px;
-	margin: 0px 0px 0px 200px;
-}
-
-.UIBannerViewMode .MiddleBanner .BannerTitle {
+.UIBannerPortlet .UIBannerViewMode .BannerTitle {
 	font-weight: bold; 
 	font-size: 16px;
 	color: #666666;	
 	letter-spacing: 0.2em;
 	font-variant: small-caps;
-	height: 40px;	
-	line-height: 40px;
-	padding-right: 160px;
 }
 
-.UIBannerViewMode .LeftLogin {
+.UIBannerPortlet .UIBannerViewMode .MiddleBanner {
+	position: absolute;
+	top: 40px;
+	left: 200px;
+	right: 0px;
+}
+
+.UIBannerPortlet .UIBannerViewMode .LeftLogin {
 	background: url(DefaultSkin/background/LeftLoginLeft.gif) no-repeat top left;
 	padding-left: 30px;
 }
 
-.UIBannerViewMode .RightLogin {
+.UIBannerPortlet .UIBannerViewMode .RightLogin {
 	background: url(DefaultSkin/background/RightLoginLeft.gif) no-repeat top right;
 	padding-right: 28px;
 } 
 
-.UIBannerViewMode .CenterLogin {
+.UIBannerPortlet .UIBannerViewMode .CenterLogin {
 	background: url(DefaultSkin/background/CenterLogin.gif) repeat-x;
 	height: 31px;
 } 
 
-.LoginContent {
+.UIBannerPortlet .LoginContent {
 	position: absolute;
 	top: 40px;
 	right: 35px;
 }
 
-.LoginContent .LoginInfo {
+.UIBannerPortlet .LoginContent .LoginInfo {
 	float: right;
 	line-height: 31px;
 }
 
-.LoginContent .LoginInfo .Welcome {
+.UIBannerPortlet .LoginContent .LoginInfo .Welcome {
 	padding-top: 5px;
 }
 
-.LoginContent .LoginInfo span {
+.UIBannerPortlet .LoginContent .LoginInfo span {
 	font-weight: bold;
 	color: #0066FF;
 }
 
-.LoginContent .LoginSeperatorLine {
+.UIBannerPortlet .LoginContent .LoginSeperatorLine {
 	float: right;
 	width: 2px;
 	background: url(DefaultSkin/background/SeperatorLine.gif) no-repeat;
@@ -68,12 +70,12 @@
 	height: 20px;
 }
 
-.LoginContent a {
+.UIBannerPortlet .LoginContent a {
 	display: block;
 	text-decoration: none;
 }
 
-.LoginContent .LogoutIcon {
+.UIBannerPortlet .LoginContent .LogoutIcon {
 	cursor: pointer;
 	font-weight: bold;
 	padding-left: 26px;
@@ -81,7 +83,7 @@
 	color: #0066FF;
 }
 
-.LoginContent .SettingLanguage {
+.UIBannerPortlet .LoginContent .SettingLanguage {
   background: url(DefaultSkin/background/LanguageIcon.gif) no-repeat left center;
   padding-left: 26px;
   cursor: pointer;
