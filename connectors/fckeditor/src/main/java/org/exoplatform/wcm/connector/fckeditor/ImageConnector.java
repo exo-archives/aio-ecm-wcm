@@ -80,11 +80,12 @@ public class ImageConnector extends BaseConnector implements ResourceContainer {
   String repositoryName, @QueryParam("workspaceName")
   String workspaceName, @QueryParam("jcrPath")
   String jcrPath, @QueryParam("currentFolder")
-  String currentFolder, @QueryParam("command")
+  String currentFolder, @QueryParam("currentPortal")
+  String currentPortal, @QueryParam("command")
   String command, @QueryParam("type")
   String type) throws Exception {
-    Response response = buildXMLResponseOnExpand(currentFolder, workspaceName, repositoryName,
-        jcrPath, command);
+    Response response = buildXMLResponseOnExpand(currentFolder, currentPortal, workspaceName,
+        repositoryName, jcrPath, command);
     if (response == null)
       return Response.Builder.ok().build();
     else

@@ -74,11 +74,12 @@ public class LinkConnector extends BaseConnector implements ResourceContainer {
   String repositoryName, @QueryParam("workspaceName")
   String workspaceName, @QueryParam("jcrPath")
   String jcrPath, @QueryParam("currentFolder")
-  String currentFolder, @QueryParam("command")
+  String currentFolder, @QueryParam("currentPortal")
+  String currentPortal, @QueryParam("command")
   String command, @QueryParam("type")
   String type) throws Exception {
-    Response response = buildXMLResponseOnExpand(currentFolder, workspaceName, repositoryName,
-        jcrPath, command);
+    Response response = buildXMLResponseOnExpand(currentFolder, currentPortal, workspaceName,
+        repositoryName, jcrPath, command);
     if (response == null)
       return Response.Builder.ok().build();
     else
@@ -88,16 +89,16 @@ public class LinkConnector extends BaseConnector implements ResourceContainer {
   /* (non-Javadoc)
    * @see org.exoplatform.wcm.connector.fckeditor.BaseConnector#buildXMLResponseOnExpand(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
    */
-  protected Response buildXMLResponseOnExpand(String currentFolder, String workspaceName,
-      String repositoryName, String jcrPath, String command) throws Exception {
+  protected Response buildXMLResponseOnExpand(String currentFolder, String currentPortal,
+      String workspaceName, String repositoryName, String jcrPath, String command) throws Exception {
     Node sharedPortal = livePortalManagerService.getLiveSharedPortal(repositoryName,
         localSessionProvider.getSessionProvider(null));
-    Node currentPortal = getCurrentPortalNode(sharedPortal, repositoryName, workspaceName, jcrPath);
+    Node currentPortalNode = getCurrentPortalNode(sharedPortal, repositoryName, workspaceName, jcrPath);
     if (currentFolder.length() == 0 || "/".equals(currentFolder))
-      return buildXMLResponseForRoot(currentPortal, sharedPortal, command);
-    String currentPortalRelPath = "/" + currentPortal.getName() + "/";
+      return buildXMLResponseForRoot(currentPortalNode, sharedPortal, command);
+    String currentPortalRelPath = "/" + currentPortalNode.getName() + "/";
     String sharePortalRelPath = "/" + sharedPortal.getName() + "/";
-    if (!currentPortal.getPath().equals(sharedPortal.getPath())
+    if (!currentPortalNode.getPath().equals(sharedPortal.getPath())
         && currentFolder.startsWith(sharePortalRelPath)) {
       if (currentFolder.equals(sharePortalRelPath)) {
         return buildXMLResponseForPortal(sharedPortal, null, command);
@@ -105,9 +106,9 @@ public class LinkConnector extends BaseConnector implements ResourceContainer {
         Node currentContentStorageNode = getCorrectContentStorage(sharedPortal, currentFolder);
         return buildXMLResponseForContentStorage(currentContentStorageNode, command);
       }
-    } else if (!currentPortal.getPath().equals(sharedPortal.getPath())
+    } else if (!currentPortalNode.getPath().equals(sharedPortal.getPath())
         && currentFolder.startsWith(currentPortalRelPath)) {
-      return buildXMLResponseCommon(currentPortal, null, currentFolder, command);
+      return buildXMLResponseCommon(currentPortalNode, null, currentFolder, command);
     } else {
       return buildXMLResponseCommon(sharedPortal, null, currentFolder, command);
     }

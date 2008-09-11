@@ -38,9 +38,7 @@ import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
 
 // TODO: Auto-generated Javadoc
 /*
- * Created by The eXo Platform SAS 
- * Author : Anh Do Ngoc 
- * anh.do@exoplatform.com
+ * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Sep 10, 2008
  */
 
@@ -68,9 +66,7 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
    * @param currentFolder the current folder
    * @param command the command
    * @param type the type
-   * 
    * @return the folders and files
-   * 
    * @throws Exception the exception
    */
   @HTTPMethod(HTTPMethods.GET)
@@ -80,11 +76,12 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
   String repositoryName, @QueryParam("workspaceName")
   String workspaceName, @QueryParam("jcrPath")
   String jcrPath, @QueryParam("currentFolder")
-  String currentFolder, @QueryParam("command")
+  String currentFolder, @QueryParam("currentPortal")
+  String currentPortal, @QueryParam("command")
   String command, @QueryParam("type")
   String type) throws Exception {
-    Response response = buildXMLResponseOnExpand(currentFolder, workspaceName, repositoryName,
-        jcrPath, command);
+    Response response = buildXMLResponseOnExpand(currentFolder, currentPortal, workspaceName,
+        repositoryName, jcrPath, command);
     if (response == null)
       return Response.Builder.ok().build();
     else
@@ -101,9 +98,7 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
    * @param newFolderName the new folder name
    * @param command the command
    * @param language the language
-   * 
    * @return the response
-   * 
    * @throws Exception the exception
    */
   @HTTPMethod(HTTPMethods.GET)
@@ -137,9 +132,7 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
    * @param language the language
    * @param contentType the content type
    * @param contentLength the content length
-   * 
    * @return the response
-   * 
    * @throws Exception the exception
    */
   @HTTPMethod(HTTPMethods.POST)
@@ -170,9 +163,7 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
    * @param language the language
    * @param fileName the file name
    * @param uploadId the upload id
-   * 
    * @return the response
-   * 
    * @throws Exception the exception
    */
   @HTTPMethod(HTTPMethods.GET)
@@ -191,7 +182,9 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
         action, language, fileName, uploadId);
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see org.exoplatform.wcm.connector.fckeditor.BaseConnector#getRootContentStorage(javax.jcr.Node)
    */
   @Override
@@ -207,7 +200,9 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
     }
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see org.exoplatform.wcm.connector.fckeditor.BaseConnector#getContentStorageType()
    */
   @Override
