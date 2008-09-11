@@ -6,7 +6,7 @@ FCKConfig.Plugins.Add( 'insertDocument', null, FCKConfig.eXoPath + "plugins/") ;
 FCKConfig.Plugins.Add( 'insertPortalLink', null, FCKConfig.eXoPath + "plugins/") ;
 
 //config style
-FCKConfig.EditorAreaCSS = ['/eXoResources/skin/Stylesheet.css', '/wcmResources/skin/Stylesheet.css', '/portal/css/WebContent/Live/Stylesheet.css'] ;
+FCKConfig.EditorAreaCSS = '';
 FCKConfig.EditorAreaStyles = 'body{	background: none;	margin: 0px;}' ;
 
 //config eXo plugin bar
