@@ -21,7 +21,8 @@
 							<div class="WizardStepContent">
 								<div class="UIWizardPageSetInfo">
 									<div class="OverflowContainer">
-										<div title="Show step information" class="ShowStepInfo" onclick="showDivBlock(this, 'PageNodeContainer', 'SelectedPageInfo')"><span></span></div>
+										<% String stepInfoTitle =  _ctx.appRes(uicomponent.getId() + ".label.stepInfo"); %>
+										<div title="$stepInfoTitle" class="ShowStepInfo" onclick="showDivBlock(this, 'PageNodeContainer', 'SelectedPageInfo')"><span></span></div>
 										<div class="PageNodeContainer">
 											<div class="TopLeftContainerOptions">
 												<div class="TopRightContainerOptions">
