@@ -93,6 +93,12 @@
   color: #0066FF;
 }
 
+.UIBannerPortlet .UITabPane {
+	border: 1px solid #b7b7b7;
+	background: white;
+	height: auto;
+}
+
 .UIBannerPortlet .UITabContent textarea {
 	font-size:11px;
 	height: 200px;
