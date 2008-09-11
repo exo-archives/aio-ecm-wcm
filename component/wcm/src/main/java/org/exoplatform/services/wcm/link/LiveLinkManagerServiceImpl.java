@@ -137,8 +137,6 @@ public class LiveLinkManagerServiceImpl implements LiveLinkManagerService {
     Session session = portal.getSession();
     updateLinkStatus(session, "select * from exo:linkable where jcr:path like '" + path + "/%'");
   }
-
-  
   
   protected void updateLinkStatus(Session session, String queryCommand) throws Exception{
     List<String> listBrokenLinks = new ArrayList<String>();
@@ -153,14 +151,17 @@ public class LiveLinkManagerServiceImpl implements LiveLinkManagerService {
       Value[] oldValues = links.getValues();
       Value[] newValues = new Value[oldValues.length];
       for (int iValues = 0; iValues < oldValues.length; iValues++) {
-        LinkBean linkBean = LinkBean.parse(oldValues[iValues].getString());
-        String strUrl = linkBean.getUrl();
-        String strStatus = getLinkStatus(strUrl);
-        String updatedLink = new LinkBean(strUrl, strStatus).toString();
-        System.out.println("[URL] " + updatedLink );
-        newValues[iValues] = valueFactory.createValue(updatedLink);
-        if (strStatus.equals(LinkBean.STATUS_BROKEN)) {
-          listBrokenLinks.add(strUrl);
+        String oldLink = oldValues[iValues].getString();
+        if (!oldLink.equals("")) {
+          LinkBean linkBean = LinkBean.parse(oldLink);
+          String oldUrl = linkBean.getUrl();
+          String oldStatus = getLinkStatus(oldUrl);
+          String updatedLink = new LinkBean(oldUrl, oldStatus).toString();
+          System.out.println("[URL] " + updatedLink );
+          newValues[iValues] = valueFactory.createValue(updatedLink);
+          if (oldStatus.equals(LinkBean.STATUS_BROKEN)) {
+            listBrokenLinks.add(oldUrl);
+          }
         }
       }
       webContent.setProperty("exo:links",newValues);
