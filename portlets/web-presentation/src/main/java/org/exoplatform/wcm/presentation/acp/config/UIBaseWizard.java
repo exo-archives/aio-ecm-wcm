@@ -16,7 +16,10 @@
  */
 package org.exoplatform.wcm.presentation.acp.config;
 
+import javax.portlet.PortletMode;
+
 import org.exoplatform.wcm.presentation.acp.config.advanced.UIContentCreationWizard;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.core.UIWizard;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -44,10 +47,8 @@ public abstract class UIBaseWizard extends UIWizard {
 
   public static class AbortActionListener extends EventListener<UIBaseWizard> {
     public void execute(Event<UIBaseWizard> event) throws Exception {
-      UIBaseWizard uiWizard = event.getSource();
-      UIPortletConfig uiSimpleContentConfig = uiWizard.getAncestorOfType(UIPortletConfig.class);
-      uiSimpleContentConfig.getChildren().clear();
-      uiSimpleContentConfig.addChild(uiSimpleContentConfig.getBackComponent());
+      PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
+      context.setApplicationMode(PortletMode.VIEW);
     }
   }
 
