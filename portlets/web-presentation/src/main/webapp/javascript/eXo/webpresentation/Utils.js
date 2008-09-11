@@ -31,12 +31,12 @@ function showDivBlock(checkpoint, div1Class, div2Class) {
 	var oDiv2Style = eXo.core.DOMUtil.findDescendantsByClass(root, 'div', div2Class)[0].style;
 	
 	if (isOpen) {
-		oStepInfoStyle.display = 'none';
-		oSelectInfoStyle.marginLeft = '0';
+		oDiv1Style.display = 'none';
+		oDiv2Style.marginLeft = '0';
 		isOpen = false;
 	} else {
-		oStepInfoStyle.display = 'block';
-		oSelectInfoStyle.marginLeft = '250px';
+		oDiv1Style.display = 'block';
+		oDiv2Style.marginLeft = '250px';
 		isOpen = true;
 	}
 }
