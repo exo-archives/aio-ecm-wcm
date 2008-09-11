@@ -13,12 +13,12 @@
 	  </application>
 
 	  <application>
-	  	<instance-id>portal#@owner@:/iweb/NavigationPortlet/toolbar</instance-id>
+	  	<instance-id>portal#@owner@:/web/NavigationPortlet/toolbar</instance-id>
 	    <show-info-bar>false</show-info-bar>
 	  </application>
 		
 	  <application>
-	    <instance-id>portal#@owner@:/iweb/BreadcumbsPortlet/breadcumbs</instance-id>
+	    <instance-id>portal#@owner@:/web/BreadcumbsPortlet/breadcumbs</instance-id>
 	    <show-info-bar>false</show-info-bar>
 	  </application>
 	  
