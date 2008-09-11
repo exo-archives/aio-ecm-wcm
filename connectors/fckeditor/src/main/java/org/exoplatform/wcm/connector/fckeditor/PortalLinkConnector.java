@@ -74,7 +74,7 @@ public class PortalLinkConnector implements ResourceContainer {
   final private String            RESOURCE_TYPE       = "PortalPageURI".intern();
 
   /** The PORTA l_ context. */
-  final private String            PORTAL_CONTEXT      = "portal".intern();
+  final private String            PORTAL_CONTEXT      = "/portal".intern();
 
   /** The portal config service. */
   private UserPortalConfigService portalConfigService;
