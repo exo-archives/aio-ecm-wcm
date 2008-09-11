@@ -36,18 +36,43 @@ import org.exoplatform.services.rest.transformer.XMLOutputTransformer;
 import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
 
+// TODO: Auto-generated Javadoc
 /*
- * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
+ * Created by The eXo Platform SAS 
+ * Author : Anh Do Ngoc 
+ * anh.do@exoplatform.com
  * Sep 10, 2008
  */
 
+/**
+ * The Class DocumentConnector.
+ */
 @URITemplate("/wcmDocument/")
 public class DocumentConnector extends BaseConnector implements ResourceContainer {
 
+  /**
+   * Instantiates a new document connector.
+   * 
+   * @param container the container
+   */
   public DocumentConnector(ExoContainer container) {
     super(container);
   }
 
+  /**
+   * Gets the folders and files.
+   * 
+   * @param repositoryName the repository name
+   * @param workspaceName the workspace name
+   * @param jcrPath the jcr path
+   * @param currentFolder the current folder
+   * @param command the command
+   * @param type the type
+   * 
+   * @return the folders and files
+   * 
+   * @throws Exception the exception
+   */
   @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/getFoldersAndFiles/")
   @OutputTransformer(XMLOutputTransformer.class)
@@ -66,6 +91,21 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
       return response;
   }
 
+  /**
+   * Creates the folder.
+   * 
+   * @param repositoryName the repository name
+   * @param workspaceName the workspace name
+   * @param jcrPath the jcr path
+   * @param currentFolder the current folder
+   * @param newFolderName the new folder name
+   * @param command the command
+   * @param language the language
+   * 
+   * @return the response
+   * 
+   * @throws Exception the exception
+   */
   @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/createFolder/")
   @OutputTransformer(XMLOutputTransformer.class)
@@ -85,6 +125,23 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
       return response;
   }
 
+  /**
+   * Upload file.
+   * 
+   * @param inputStream the input stream
+   * @param repositoryName the repository name
+   * @param workspaceName the workspace name
+   * @param currentFolder the current folder
+   * @param jcrPath the jcr path
+   * @param uploadId the upload id
+   * @param language the language
+   * @param contentType the content type
+   * @param contentLength the content length
+   * 
+   * @return the response
+   * 
+   * @throws Exception the exception
+   */
   @HTTPMethod(HTTPMethods.POST)
   @URITemplate("/uploadFile/upload/")
   @InputTransformer(PassthroughInputTransformer.class)
@@ -102,6 +159,22 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
         jcrPath, uploadId, language, contentType, contentLength);
   }
 
+  /**
+   * Process upload.
+   * 
+   * @param repositoryName the repository name
+   * @param workspaceName the workspace name
+   * @param currentFolder the current folder
+   * @param jcrPath the jcr path
+   * @param action the action
+   * @param language the language
+   * @param fileName the file name
+   * @param uploadId the upload id
+   * 
+   * @return the response
+   * 
+   * @throws Exception the exception
+   */
   @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/uploadFile/control/")
   @OutputTransformer(XMLOutputTransformer.class)
@@ -118,6 +191,9 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
         action, language, fileName, uploadId);
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.wcm.connector.fckeditor.BaseConnector#getRootContentStorage(javax.jcr.Node)
+   */
   @Override
   protected Node getRootContentStorage(Node parentNode) throws Exception {
     try {
@@ -131,6 +207,9 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
     }
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.wcm.connector.fckeditor.BaseConnector#getContentStorageType()
+   */
   @Override
   protected String getContentStorageType() throws Exception {
     return FCKUtils.DOCUMENT_TYPE;
