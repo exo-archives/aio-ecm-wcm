@@ -21,7 +21,7 @@
 							<div class="WizardStepContent">
 								<div class="UIWizardPageSetInfo">
 									<div class="OverflowContainer">
-										<div class="ShowStepInfo" onclick="showDivBlock(this, 'PageNodeContainer', 'SelectedPageInfo')"><span></span></div>
+										<div title="Show step information" class="ShowStepInfo" onclick="showDivBlock(this, 'PageNodeContainer', 'SelectedPageInfo')"><span></span></div>
 										<div class="PageNodeContainer">
 											<div class="TopLeftContainerOptions">
 												<div class="TopRightContainerOptions">
