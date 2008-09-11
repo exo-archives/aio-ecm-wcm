@@ -50,7 +50,6 @@ import org.exoplatform.webui.event.EventListener;
         @EventConfig(listeners = UIQuickCreationWizard.ViewStep3ActionListener.class),
         @EventConfig(listeners = UIQuickCreationWizard.ViewStep4ActionListener.class),
         @EventConfig(listeners = UIQuickCreationWizard.ViewStep5ActionListener.class),
-        @EventConfig(listeners = UIQuickCreationWizard.AbortActionListener.class),
         @EventConfig(listeners = UIQuickCreationWizard.BackActionListener.class),
         @EventConfig(listeners = UIQuickCreationWizard.FinishActionListener.class),
         @EventConfig(listeners = UIQuickCreationWizard.CompleteActionListener.class)
