@@ -68,6 +68,7 @@ public class ImageConnector extends BaseConnector implements ResourceContainer {
    * @param currentFolder the current folder
    * @param command the command
    * @param type the type
+   * @param currentPortal the current portal
    * 
    * @return the folders and files
    * 
@@ -102,6 +103,7 @@ public class ImageConnector extends BaseConnector implements ResourceContainer {
    * @param newFolderName the new folder name
    * @param command the command
    * @param language the language
+   * @param currentPortal the current portal
    * 
    * @return the response
    * 
@@ -114,11 +116,12 @@ public class ImageConnector extends BaseConnector implements ResourceContainer {
   String repositoryName, @QueryParam("workspaceName")
   String workspaceName, @QueryParam("jcrPath")
   String jcrPath, @QueryParam("currentFolder")
-  String currentFolder, @QueryParam("newFolderName")
+  String currentFolder, @QueryParam("currentPortal")
+  String currentPortal, @QueryParam("newFolderName")
   String newFolderName, @QueryParam("command")
   String command, @QueryParam("language")
   String language) throws Exception {
-    Response response = buildXMLDocumentOnCreateFolder(newFolderName, currentFolder, jcrPath,
+    Response response = buildXMLDocumentOnCreateFolder(newFolderName, currentFolder, currentPortal, jcrPath,
         repositoryName, workspaceName, command, language);
     if (response == null)
       return Response.Builder.ok().build();
@@ -138,6 +141,7 @@ public class ImageConnector extends BaseConnector implements ResourceContainer {
    * @param language the language
    * @param contentType the content type
    * @param contentLength the content length
+   * @param currentPortal the current portal
    * 
    * @return the response
    * 
@@ -150,14 +154,15 @@ public class ImageConnector extends BaseConnector implements ResourceContainer {
   public Response uploadFile(InputStream inputStream, @QueryParam("repositoryName")
   String repositoryName, @QueryParam("workspaceName")
   String workspaceName, @QueryParam("currentFolder")
-  String currentFolder, @QueryParam("jcrPath")
+  String currentFolder, @QueryParam("currentPortal")
+  String currentPortal,@QueryParam("jcrPath")
   String jcrPath, @QueryParam("uploadId")
   String uploadId, @QueryParam("language")
   String language, @HeaderParam("content-type")
   String contentType, @HeaderParam("content-length")
   String contentLength) throws Exception {
     return createUploadFileResponse(inputStream, repositoryName, workspaceName, currentFolder,
-        jcrPath, uploadId, language, contentType, contentLength);
+        currentPortal, jcrPath, uploadId, language, contentType, contentLength);
   }
 
   /**
@@ -171,6 +176,7 @@ public class ImageConnector extends BaseConnector implements ResourceContainer {
    * @param language the language
    * @param fileName the file name
    * @param uploadId the upload id
+   * @param currentPortal the current portal
    * 
    * @return the response
    * 
@@ -182,13 +188,14 @@ public class ImageConnector extends BaseConnector implements ResourceContainer {
   public Response processUpload(@QueryParam("repositoryName")
   String repositoryName, @QueryParam("workspaceName")
   String workspaceName, @QueryParam("currentFolder")
-  String currentFolder, @QueryParam("jcrPath")
+  String currentFolder, @QueryParam("currentPortal")
+  String currentPortal, @QueryParam("jcrPath")
   String jcrPath, @QueryParam("action")
   String action, @QueryParam("language")
   String language, @QueryParam("fileName")
   String fileName, @QueryParam("uploadId")
   String uploadId) throws Exception {
-    return createProcessUploadResponse(repositoryName, workspaceName, currentFolder, jcrPath,
+    return createProcessUploadResponse(repositoryName, workspaceName, currentFolder,currentPortal ,jcrPath,
         action, language, fileName, uploadId);
   }
 
