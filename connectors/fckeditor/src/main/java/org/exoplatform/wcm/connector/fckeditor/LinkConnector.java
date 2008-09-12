@@ -17,6 +17,7 @@
 package org.exoplatform.wcm.connector.fckeditor;
 
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
 
 import org.exoplatform.common.http.HTTPMethods;
 import org.exoplatform.container.ExoContainer;
@@ -29,6 +30,8 @@ import org.exoplatform.services.rest.URITemplate;
 import org.exoplatform.services.rest.container.ResourceContainer;
 import org.exoplatform.services.rest.transformer.XMLOutputTransformer;
 import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
  
 // TODO: Auto-generated Javadoc
 /*
@@ -43,6 +46,8 @@ import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
  */
 @URITemplate("/wcmLink/")
 public class LinkConnector extends BaseConnector implements ResourceContainer {
+  
+  private LinkFileHandler linkFileHandler; 
 
   /**
    * Instantiates a new link connector.
@@ -51,6 +56,7 @@ public class LinkConnector extends BaseConnector implements ResourceContainer {
    */
   public LinkConnector(ExoContainer container) {
     super(container);
+    linkFileHandler = new LinkFileHandler(container);
   }
 
   /**
@@ -119,6 +125,33 @@ public class LinkConnector extends BaseConnector implements ResourceContainer {
     } else {
       return buildXMLResponseCommon(sharedPortal, null, currentFolder, command);
     }
+  }
+  
+  protected Response buildXMLResponseForContentStorage(Node node, String command) throws Exception {
+    Element rootElement = FCKUtils.createRootElement(command, node, folderHandler
+        .getFolderType(node));
+    Document document = rootElement.getOwnerDocument();
+    Element folders = document.createElement("Foders");
+    Element files = document.createElement("Files");
+    for (NodeIterator iterator = node.getNodes(); iterator.hasNext();) {
+      Node child = iterator.nextNode();
+      if (child.isNodeType(FCKUtils.EXO_HIDDENABLE))
+        continue;
+      String folderType = folderHandler.getFolderType(child);
+      if (folderType != null) {
+        Element folder = folderHandler.createFolderElement(document, child, folderType);
+        folders.appendChild(folder);
+      }
+      String sourceType = getContentStorageType();
+      String fileType = linkFileHandler.getFileType(child, sourceType);
+      if (fileType != null) {
+        Element file = linkFileHandler.createFileElement(document, child, fileType);
+        files.appendChild(file);
+      }
+    }
+    rootElement.appendChild(folders);
+    rootElement.appendChild(files);
+    return getResponse(document);
   }
 
   /* (non-Javadoc)

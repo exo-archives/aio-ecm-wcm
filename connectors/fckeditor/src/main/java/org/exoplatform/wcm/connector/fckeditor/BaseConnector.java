@@ -51,16 +51,16 @@ import org.w3c.dom.Element;
 public abstract class BaseConnector {
 
   /** The folder handler. */
-  private FCKFolderHandler                    folderHandler;
+  protected FCKFolderHandler                  folderHandler;
 
   /** The file handler. */
-  private FCKFileHandler                      fileHandler;
+  protected FCKFileHandler                    fileHandler;
 
   /** The file upload handler. */
-  private FileUploadHandler                   fileUploadHandler;
+  protected FileUploadHandler                 fileUploadHandler;
 
   /** The repository service. */
-  protected RepositoryService                   repositoryService;
+  protected RepositoryService                 repositoryService;
 
   /** The local session provider. */
   protected ThreadLocalSessionProviderService localSessionProvider;
@@ -75,9 +75,7 @@ public abstract class BaseConnector {
    * Gets the root content storage.
    * 
    * @param node the node
-   * 
    * @return the root content storage
-   * 
    * @throws Exception the exception
    */
   protected abstract Node getRootContentStorage(Node node) throws Exception;
@@ -86,7 +84,6 @@ public abstract class BaseConnector {
    * Gets the content storage type.
    * 
    * @return the content storage type
-   * 
    * @throws Exception the exception
    */
   protected abstract String getContentStorageType() throws Exception;
@@ -119,9 +116,7 @@ public abstract class BaseConnector {
    * @param repositoryName the repository name
    * @param jcrPath the jcr path
    * @param command the command
-   * 
    * @return the response
-   * 
    * @throws Exception the exception
    */
   protected Response buildXMLResponseOnExpand(String currentFolder, String currentPortal,
@@ -169,9 +164,7 @@ public abstract class BaseConnector {
    * @param command the command
    * @param language the language
    * @param currentPortal the current portal
-   * 
    * @return the response
-   * 
    * @throws Exception the exception
    */
   protected Response buildXMLDocumentOnCreateFolder(String newFolderName, String currentFolder,
@@ -203,9 +196,7 @@ public abstract class BaseConnector {
    * @param webContent the web content
    * @param currentFolder the current folder
    * @param command the command
-   * 
    * @return the response
-   * 
    * @throws Exception the exception
    */
   protected Response buildXMLResponseCommon(Node activePortal, Node webContent,
@@ -232,9 +223,7 @@ public abstract class BaseConnector {
    * @param currentPortal the current portal
    * @param sharedPortal the shared portal
    * @param command the command
-   * 
    * @return the response
-   * 
    * @throws Exception the exception
    */
   protected Response buildXMLResponseForRoot(Node currentPortal, Node sharedPortal, String command)
@@ -269,9 +258,7 @@ public abstract class BaseConnector {
    * @param node the node
    * @param webContent the web content
    * @param command the command
-   * 
    * @return the response
-   * 
    * @throws Exception the exception
    */
   protected Response buildXMLResponseForPortal(Node node, Node webContent, String command)
@@ -301,9 +288,7 @@ public abstract class BaseConnector {
    * 
    * @param node the node
    * @param command the command
-   * 
    * @return the response
-   * 
    * @throws Exception the exception
    */
   protected Response buildXMLResponseForContentStorage(Node node, String command) throws Exception {
@@ -340,9 +325,7 @@ public abstract class BaseConnector {
    * @param currentPortal the current portal
    * @param sharedPortal the shared portal
    * @param webContent the web content
-   * 
    * @return the active folder
-   * 
    * @throws Exception the exception
    */
   private Node getActiveFolder(String currentFolder, Node currentPortal, Node sharedPortal,
@@ -377,9 +360,7 @@ public abstract class BaseConnector {
    * 
    * @param node the node
    * @param currentFolder the current folder
-   * 
    * @return the correct content storage
-   * 
    * @throws Exception the exception
    */
   protected Node getCorrectContentStorage(Node node, String currentFolder) throws Exception {
@@ -409,10 +390,9 @@ public abstract class BaseConnector {
    * Gets the response.
    * 
    * @param document the document
-   * 
    * @return the response
    */
-  private Response getResponse(Document document) {
+  protected Response getResponse(Document document) {
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
     return Response.Builder.ok(document).mediaType("text/xml").cacheControl(cacheControl).build();
@@ -424,9 +404,7 @@ public abstract class BaseConnector {
    * @param repositoryName the repository name
    * @param workspaceName the workspace name
    * @param jcrPath the jcr path
-   * 
    * @return the web content
-   * 
    * @throws Exception the exception
    */
   protected Node getWebContent(String repositoryName, String workspaceName, String jcrPath)
@@ -453,9 +431,7 @@ public abstract class BaseConnector {
    * @param repositoryName the repository name
    * @param workspaceName the workspace name
    * @param jcrPath the jcr path
-   * 
    * @return the current portal node
-   * 
    * @throws Exception the exception
    */
   protected Node getCurrentPortalNode(Node sharedPortal, String repositoryName,
@@ -477,9 +453,7 @@ public abstract class BaseConnector {
    * 
    * @param repositoryName the repository name
    * @param portalName the portal name
-   * 
    * @return the current portal node
-   * 
    * @throws Exception the exception
    */
   protected Node getCurrentPortalNode(String repositoryName, String portalName) throws Exception {
@@ -498,9 +472,7 @@ public abstract class BaseConnector {
    * 
    * @param repositoryName the repository name
    * @param workspaceName the workspace name
-   * 
    * @return the session
-   * 
    * @throws Exception the exception
    */
   private Session getSession(String repositoryName, String workspaceName) throws Exception {
@@ -530,14 +502,12 @@ public abstract class BaseConnector {
    * @param language the language
    * @param contentType the content type
    * @param contentLength the content length
-   * 
    * @return the response
-   * 
    * @throws Exception the exception
    */
   protected Response createUploadFileResponse(InputStream inputStream, String repositoryName,
-      String workspaceName, String currentFolder, String currentPortalName, String jcrPath, String uploadId,
-      String language, String contentType, String contentLength) throws Exception {
+      String workspaceName, String currentFolder, String currentPortalName, String jcrPath,
+      String uploadId, String language, String contentType, String contentLength) throws Exception {
     if (repositoryName == null)
       repositoryName = repositoryService.getCurrentRepository().getConfiguration().getName();
     if (workspaceName == null)
@@ -570,14 +540,12 @@ public abstract class BaseConnector {
    * @param fileName the file name
    * @param uploadId the upload id
    * @param portalName the portal name
-   * 
    * @return the response
-   * 
    * @throws Exception the exception
    */
   protected Response createProcessUploadResponse(String repositoryName, String workspaceName,
-      String currentFolder, String portalName ,String jcrPath, String action, String language, String fileName,
-      String uploadId) throws Exception {
+      String currentFolder, String portalName, String jcrPath, String action, String language,
+      String fileName, String uploadId) throws Exception {
     if (portalName == null || portalName.length() == 0)
       portalName = currentFolder.split("/")[1];
     if (repositoryName == null)
