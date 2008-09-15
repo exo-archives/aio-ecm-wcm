@@ -68,7 +68,7 @@ public class UIPresentation extends UIBaseNodePresentation {
     }else {
       sessionProvider = SessionProviderFactory.createSessionProvider();
     }
-    Session session = sessionProvider.getSession(worksapce, manageableRepository) ;    
+    Session session = sessionProvider.getSession(worksapce, manageableRepository);
     return session.getNodeByUUID(uuid) ;    
   }
 
@@ -106,6 +106,9 @@ public class UIPresentation extends UIBaseNodePresentation {
       writer.write("</div>") ;
       return ;
     } catch (AccessDeniedException e) {
+      System.out.println("\n\n\n");
+      e.printStackTrace();
+      System.out.println("\n\n\n");
       Writer writer = context.getWriter() ;
       writer.write("<div style=\"height: 55px; font-size: 13px; text-align: center; padding-top: 10px;\">") ;
       writer.write("<span>") ;
@@ -137,8 +140,8 @@ public class UIPresentation extends UIBaseNodePresentation {
         RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
         String repository = getRepository();
         ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-        String worksapce = manageableRepository.getConfiguration().getSystemWorkspaceName();
-        resourceResolver = new JCRResourceResolver(repository, worksapce, "exo:templateFile");
+        String workspace = manageableRepository.getConfiguration().getSystemWorkspaceName();
+        resourceResolver = new JCRResourceResolver(repository, workspace, "exo:templateFile");
       }
     }catch (Exception e) {
     }    
