@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<configuration>		       
+  
+  <component>
+    <type>org.exoplatform.services.deployment.ContentInitializerService</type>
+  </component>
+  
+	<external-component-plugins>
+   		<target-component>org.exoplatform.services.deployment.ContentInitializerService</target-component>    
+      <component-plugin> 
+        <name>Content Initializer Service</name>
+        <set-method>addPlugin</set-method>
+        <type>org.exoplatform.services.deployment.plugins.XMLDeploymentPlugin</type>
+        <description>XML Deployment Plugin</description>
+        <init-params>
+          <object-param>        
+            <name>Banner data</name>
+            <description>Deployment Descriptor</description>
+            <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
+              <field  name="target">
+              	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
+              		<field  name="repository"><string>repository</string></field>
+              		<field  name="workspace"><string>collaboration</string></field>
+              		<field  name="nodePath"><string>/Web Content/Live/share portal/web contents/site templates/banner</string></field>
+              	</object>
+              </field>
+              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/banner.xml</string></field>
+            </object>
+          </object-param>
+          <object-param>        
+            <name>Footer data</name>
+            <description>Deployment Descriptor</description>
+            <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
+              <field  name="target">
+              	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
+              		<field  name="repository"><string>repository</string></field>
+              		<field  name="workspace"><string>collaboration</string></field>
+              		<field  name="nodePath"><string>/Web Content/Live/share portal/web contents/site templates/footer</string></field>
+              	</object>
+              </field>
+              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/footer.xml</string></field>
+            </object>
+          </object-param>
+          <object-param>        
+            <name>Homepage data</name>
+            <description>Deployment Descriptor</description>
+            <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
+              <field  name="target">
+              	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
+              		<field  name="repository"><string>repository</string></field>
+              		<field  name="workspace"><string>collaboration</string></field>
+              		<field  name="nodePath"><string>/Web Content/Live/share portal/web contents/site templates/homepage</string></field>
+              	</object>
+              </field>
+              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/homepage.xml</string></field>
+            </object>
+          </object-param>
+        </init-params>  
+      </component-plugin> 
+   </external-component-plugins>
+   
+</configuration>

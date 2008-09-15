@@ -3,10 +3,25 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>classic</owner-id>
-    <window-id>portal#classic:/web/BannerPortlet/banner</window-id>
+    <window-id>portal#classic:/iweb/BannerPortlet/banner</window-id>
     <preference>
-      <name>template</name>
-      <value>par:/groovy/banner/webui/UIBannerPortlet.gtmpl</value>
+      <name>repository</name>
+      <value>repository</value>
+      <read-only>false</read-only>
+    </preference>
+    <preference>
+      <name>workspace</name>
+      <value>collaboration</value>
+      <read-only>false</read-only>
+    </preference>
+    <preference>
+      <name>nodeUUID</name>
+      <value>4a34a049c0a8012800fe621e3e7b7eb9</value>
+      <read-only>false</read-only>
+    </preference>
+    <preference>
+      <name>quickEdit</name>
+      <value>true</value>
       <read-only>false</read-only>
     </preference>
   </portlet-preferences>
@@ -14,10 +29,25 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>classic</owner-id>
-    <window-id>portal#classic:/web/FooterPortlet/footer</window-id>
+    <window-id>portal#classic:/iweb/FooterPortlet/footer</window-id>
     <preference>
-      <name>template</name>
-      <value>par:/groovy/banner/webui/UIFooterPortlet.gtmpl</value>
+      <name>repository</name>
+      <value>repository</value>
+      <read-only>false</read-only>
+    </preference>
+    <preference>
+      <name>workspace</name>
+      <value>collaboration</value>
+      <read-only>false</read-only>
+    </preference>
+    <preference>
+      <name>nodeUUID</name>
+      <value>4aa513a3c0a8012801ca49b9d89800d9</value>
+      <read-only>false</read-only>
+    </preference>
+    <preference>
+      <name>quickEdit</name>
+      <value>true</value>
       <read-only>false</read-only>
     </preference>
   </portlet-preferences>
@@ -37,10 +67,25 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>classic</owner-id>
-    <window-id>portal#classic:/web/HomePagePortlet/homepageportlet</window-id>
+    <window-id>portal#classic:/web-presentation/AdvancedPresentationPortlet/homepage</window-id>
     <preference>
-      <name>template</name>
-      <value>system:/templates/groovy/webui/component/UIHomePagePortlet.gtmpl</value>
+      <name>repository</name>
+      <value>repository</value>
+      <read-only>false</read-only>
+    </preference>
+    <preference>
+      <name>workspace</name>
+      <value>collaboration</value>
+      <read-only>false</read-only>
+    </preference>
+    <preference>
+      <name>nodeUUID</name>
+      <value>4fb52f2ac0a801280068e6791d3419d3</value>
+      <read-only>false</read-only>
+    </preference>
+    <preference>
+      <name>ShowQuickEdit</name>
+      <value>true</value>
       <read-only>false</read-only>
     </preference>
   </portlet-preferences>
