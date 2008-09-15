@@ -21,14 +21,8 @@ import javax.jcr.Session;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
-import org.exoplatform.portal.application.PortalRequestContext;
-import org.exoplatform.portal.webui.UIWelcomeComponent;
-import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.portal.webui.workspace.UIControlWorkspace;
-import org.exoplatform.portal.webui.workspace.UIPortalApplication;
-import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -43,8 +37,6 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIComponent;
-import org.exoplatform.webui.core.UIComponentDecorator;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -155,8 +147,8 @@ public class UINameWebContentForm extends UIForm {
 
   public static class AbortActionListener extends EventListener<UINameWebContentForm> {
     public void execute(Event<UINameWebContentForm> event) throws Exception {
-    PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
-    context.setApplicationMode(PortletMode.VIEW);
+      PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
+      context.setApplicationMode(PortletMode.VIEW);
     }
   }
 }
