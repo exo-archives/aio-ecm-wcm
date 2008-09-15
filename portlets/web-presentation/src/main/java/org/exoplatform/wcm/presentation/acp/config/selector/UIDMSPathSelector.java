@@ -16,7 +16,6 @@
  */
 package org.exoplatform.wcm.presentation.acp.config.selector;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.jcr.Node;
@@ -56,7 +55,9 @@ public class UIDMSPathSelector extends UIBaseNodeTreeSelector {
     TemplateService templateService = getApplicationComponent(TemplateService.class);
     List<String> acceptedNodeTypes = templateService.getDocumentTemplates(repositoryName);
     UISelectPathPanel uiSelectPathPanel = getChild(UISelectPathPanel.class);
-    uiSelectPathPanel.setAcceptedNodeTypes(acceptedNodeTypes);
+    String [] arrAcceptedNodeTypes = new String[acceptedNodeTypes.size()];
+    acceptedNodeTypes.toArray(arrAcceptedNodeTypes) ;
+    uiSelectPathPanel.setAcceptedNodeTypes(arrAcceptedNodeTypes);
     UIDMSTreeBuilder treeBuilder = getChild(UIDMSTreeBuilder.class);
     treeBuilder.setCurrentPortal(currentPortal);
     treeBuilder.setSharedPortal(sharedPortal);

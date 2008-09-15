@@ -16,9 +16,6 @@
  */
 package org.exoplatform.wcm.presentation.acp.config.selector;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.jcr.Node;
 
 import org.exoplatform.ecm.webui.tree.UIBaseNodeTreeSelector;
@@ -53,8 +50,7 @@ public class UIWebContentPathSelector extends UIBaseNodeTreeSelector {
    * @throws Exception the exception
    */
   public void init() throws Exception {
-    List<String> acceptedNodeTypes = new ArrayList<String>();
-    acceptedNodeTypes.add("exo:webContent");
+    String[] acceptedNodeTypes = {"exo:webContent"};
     UISelectPathPanel selectPathPanel = getChild(UISelectPathPanel.class);
     selectPathPanel.setAcceptedNodeTypes(acceptedNodeTypes);       
     LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
