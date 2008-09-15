@@ -16,13 +16,21 @@
  */
 package org.exoplatform.wcm.presentation.acp;
 
+import java.util.List;
+
+import javax.jcr.Node;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.jcr.access.AccessControlList;
+import org.exoplatform.services.jcr.core.ExtendedNode;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.wcm.presentation.acp.config.UIPortletConfig;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -77,20 +85,6 @@ public class UIAdvancedPresentationPortlet extends UIPortletApplication {
       mode_ = newMode ;
     }
     super.processRender(app, context) ;
-  }
-
-  public boolean isQuickEditable() throws Exception {
-    PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
-    PortletPreferences prefs = context.getRequest().getPreferences();
-    String quickEdit = prefs.getValue("ShowQuickEdit", null);
-    boolean isQuickEdit = Boolean.parseBoolean(quickEdit);
-    String portalName = Util.getUIPortal().getName();
-    String userId = context.getRemoteUser();
-    DataStorage dataStorage = getApplicationComponent(DataStorage.class);
-    PortalConfig portalConfig = dataStorage.getPortalConfig(portalName);
-    UserACL userACL = getApplicationComponent(UserACL.class);
-    boolean displayQuickEdit = userACL.hasEditPermission(portalConfig, userId);
-    return (isQuickEdit && displayQuickEdit);
   }
 
   public static class QuickEditActionListener extends EventListener<UIAdvancedPresentationPortlet> {
