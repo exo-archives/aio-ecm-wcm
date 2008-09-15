@@ -21,7 +21,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
 import javax.jcr.Session;
+import javax.jcr.query.Query;
+import javax.jcr.query.QueryManager;
+import javax.jcr.query.QueryResult;
 
 import org.exoplatform.ecm.webui.selector.UIPermissionSelector;
 import org.exoplatform.ecm.webui.selector.UISelectable;
@@ -45,7 +49,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.ext.UIFormInputSetWithAction;
 
-// TODO: Auto-generated Javadoc
+//TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Aug 13, 2008
@@ -61,7 +65,7 @@ import org.exoplatform.webui.form.ext.UIFormInputSetWithAction;
       @EventConfig(listeners = UIPermissionSetting.AddAnyActionListener.class) 
     }
 )
-  public class UIPermissionSetting extends UIForm implements UISelectable {
+public class UIPermissionSetting extends UIForm implements UISelectable {
 
   /** The Constant USERS_INPUTSET. */
   final static public String USERS_INPUTSET    = "usersInputSet";
@@ -112,7 +116,7 @@ import org.exoplatform.webui.form.ext.UIFormInputSetWithAction;
    * @see SaveActionEvent
    */
   public static class SaveActionListener extends EventListener<UIPermissionSetting> {
-    
+
     /* (non-Javadoc)
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
@@ -169,10 +173,25 @@ import org.exoplatform.webui.form.ext.UIFormInputSetWithAction;
         node.setPermission(node.getProperty("exo:owner").getString(), PermissionType.ALL);
       }
       node.setPermission(userOrGroup, permsArray);
-      UIPermissionInfo permissionInfo = permissionManager.getChild(UIPermissionInfo.class);
-      permissionInfo.updateGrid();
       node.save();
       session.save();
+      //TODO: should have a other method to set permission to child node of web content
+      String queryString = "select * from nt:base where jcr:path like '"+ node.getPath()+"/%'";
+      QueryManager queryManager = session.getWorkspace().getQueryManager();
+      Query query = queryManager.createQuery(queryString, Query.SQL) ;
+      QueryResult result = query.execute() ;
+      for(NodeIterator nodeIterator = result.getNodes(); nodeIterator.hasNext();) {
+        ExtendedNode childExNode = (ExtendedNode) nodeIterator.nextNode();
+        if (childExNode.canAddMixin("exo:privilegeable")) {
+          childExNode.addMixin("exo:privilegeable");
+          childExNode.setPermission(node.getProperty("exo:owner").getString(), PermissionType.ALL);
+        }
+        childExNode.setPermission(userOrGroup, permsArray);
+        childExNode.save();
+        session.save();
+      }
+      UIPermissionInfo permissionInfo = permissionManager.getChild(UIPermissionInfo.class);
+      permissionInfo.updateGrid();
       permissionSettingForm.reset();
       permissionSettingForm.getUIFormCheckBoxInput(ACCESSIBLE).setChecked(false);
       permissionSettingForm.getUIFormCheckBoxInput(EDITABLE).setChecked(false);
@@ -192,7 +211,7 @@ import org.exoplatform.webui.form.ext.UIFormInputSetWithAction;
    * @see ResetActionEvent
    */
   public static class ResetActionListener extends EventListener<UIPermissionSetting> {
-    
+
     /* (non-Javadoc)
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
@@ -217,7 +236,7 @@ import org.exoplatform.webui.form.ext.UIFormInputSetWithAction;
    * @see SelectUserActionEvent
    */
   public static class SelectUserActionListener extends EventListener<UIPermissionSetting> {
-    
+
     /* (non-Javadoc)
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
@@ -246,7 +265,7 @@ import org.exoplatform.webui.form.ext.UIFormInputSetWithAction;
    * @see SelectMemberActionEvent
    */
   public static class SelectMemberActionListener extends EventListener<UIPermissionSetting> {
-    
+
     /* (non-Javadoc)
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
@@ -275,7 +294,7 @@ import org.exoplatform.webui.form.ext.UIFormInputSetWithAction;
    * @see AddAnyActionEvent
    */
   public static class AddAnyActionListener extends EventListener<UIPermissionSetting> {
-    
+
     /* (non-Javadoc)
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
