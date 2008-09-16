@@ -30,6 +30,7 @@ import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.wcm.presentation.acp.UIAdvancedPresentationPortlet;
 import org.exoplatform.wcm.presentation.acp.config.UIPortletConfig;
+import org.exoplatform.wcm.webui.selector.document.UIDocumentPathSelector;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -146,7 +147,7 @@ public class UIDMSSelectorForm extends UIForm implements UISelectable{
   public static class BrowseActionListener extends EventListener<UIDMSSelectorForm> {
     public void execute(Event<UIDMSSelectorForm> event) throws Exception {
       UIDMSSelectorForm uiDMSSelectorForm = event.getSource();
-      UIDMSPathSelector uiDMSPathSelector = uiDMSSelectorForm.createUIComponent(UIDMSPathSelector.class, null, null);
+      UIDocumentPathSelector uiDMSPathSelector = uiDMSSelectorForm.createUIComponent(UIDocumentPathSelector.class, null, null);
       uiDMSPathSelector.setSourceComponent(uiDMSSelectorForm, new String[] {UIDMSSelectorForm.PATH});
       uiDMSPathSelector.init();
       uiDMSSelectorForm.showPopupComponent(uiDMSPathSelector);
