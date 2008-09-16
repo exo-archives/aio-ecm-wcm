@@ -21,9 +21,13 @@ import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.nodetype.NodeType;
 
+import org.exoplatform.container.xml.ManageableComponents;
 import org.exoplatform.ecm.webui.tree.UINodeTree;
 import org.exoplatform.ecm.webui.tree.UINodeTreeBuilder;
+import org.exoplatform.services.cms.templates.TemplateService;
+import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
 import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -137,10 +141,13 @@ public class UIWebContentTreeBuilder extends UINodeTreeBuilder {
   }
 
   private List<Node> filterWebContentFolder(Node parent) throws Exception {
-    List<Node> webContentList = new ArrayList<Node>();
+    List<Node> webContentList = new ArrayList<Node>();  
+    TemplateService templateService = getApplicationComponent(TemplateService.class);
+    String repository = ((ManageableRepository)parent.getSession().getRepository()).getConfiguration().getName();    
     for(NodeIterator iterator = parent.getNodes();iterator.hasNext();) {
       Node child = iterator.nextNode();
-      if(child.getPrimaryNodeType().getName().equals("nt:unstructured")) {
+      NodeType nodeType = child.getPrimaryNodeType();
+      if(nodeType.isNodeType("nt:unstructured") && !templateService.isManagedNodeType(nodeType.getName(),repository)) {
         webContentList.add(child);
       }
     }
