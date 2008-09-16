@@ -104,26 +104,6 @@ window.eXoPlugin = {
 };
 FCK["eXoPlugin"] = eXoPlugin;
 
-window.parent.FCKeditor_OnComplete = function(FCK) {
-	var oEditor = FCKeditorAPI.GetInstance(FCK.Name);
-	var useSourceMode = false;		
-	for ( var o in oEditor.Config )
-	{
-		//SourceModeOnStartup setted in 
-		if(encodeURIComponent(o) == 'SourceModeOnStartup')	{		
-			useSourceMode = oEditor.Config[o];		
-			break;
-	 	}
-	}	
-	if (useSourceMode) {
-		FCK.SwitchEditMode();
-		//enable some command can be used in source mode
-//		for(var commandName in FCKConfig.SourceModeButtons) {
-//			oEditor.window.parent.FCKToolbarItems.LoadedItems[commandName].Enable();
-//		}
-	}
-}
-
 eXoPlugin.init();
 eXoPlugin.addBar({newBar: "eXoBar", targetBar: "Basic" });
 eXoPlugin.addBar({newBar: "eXoBar", targetBar: "Default" });
