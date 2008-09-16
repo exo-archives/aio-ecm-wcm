@@ -30,9 +30,11 @@ import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.wcm.presentation.acp.UIAdvancedPresentationPortlet;
 import org.exoplatform.wcm.presentation.acp.config.UIPortletConfig;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIPopupWindow;
@@ -122,10 +124,17 @@ public class UIWebContentSelectorForm extends UIForm implements UISelectable{
   public static class SaveActionListener extends EventListener<UIWebContentSelectorForm> {
     public void execute(Event<UIWebContentSelectorForm> event) throws Exception {
       UIWebContentSelectorForm uiWebContentSelector = event.getSource();
+      String webContentPath = uiWebContentSelector.getUIStringInput(UIWebContentSelectorForm.PATH).getValue(); 
+      if(webContentPath == null) {
+        UIApplication uiApplication = uiWebContentSelector.getAncestorOfType(UIApplication.class);
+        uiApplication.addMessage(new ApplicationMessage("UIWebContentSelector.msg.require-choose", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
+        return;
+      }
       RepositoryService repositoryService = uiWebContentSelector.getApplicationComponent(RepositoryService.class);
       ManageableRepository manageableRepository = repositoryService.getRepository(uiWebContentSelector.getRepositoryName());
       Session session = SessionProvider.createSystemProvider().getSession(uiWebContentSelector.getWorkspace(), manageableRepository);
-      Node node = (Node) session.getItem(uiWebContentSelector.getUIStringInput(UIWebContentSelectorForm.PATH).getValue());
+      Node node = (Node) session.getItem(webContentPath);
       NodeIdentifier identifier = NodeIdentifier.make(node);
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
       PortletPreferences prefs = context.getRequest().getPreferences();
