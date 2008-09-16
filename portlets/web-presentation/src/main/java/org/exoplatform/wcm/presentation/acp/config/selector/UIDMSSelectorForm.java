@@ -30,10 +30,11 @@ import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.wcm.presentation.acp.UIAdvancedPresentationPortlet;
 import org.exoplatform.wcm.presentation.acp.config.UIPortletConfig;
-import org.exoplatform.wcm.presentation.acp.config.UIWelcomeScreen;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIPopupWindow;
@@ -111,10 +112,17 @@ public class UIDMSSelectorForm extends UIForm implements UISelectable{
   public static class SaveActionListener extends EventListener<UIDMSSelectorForm> {
     public void execute(Event<UIDMSSelectorForm> event) throws Exception {
       UIDMSSelectorForm uiDMSSelectorForm = event.getSource();
+      String dmsPath = uiDMSSelectorForm.getUIStringInput(UIDMSSelectorForm.PATH).getValue();
+      if(dmsPath == null) {
+        UIApplication uiApplication = uiDMSSelectorForm.getAncestorOfType(UIApplication.class);
+        uiApplication.addMessage(new ApplicationMessage("UIDMSSelectorForm.msg.require-choose", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
+        return;
+      }
       RepositoryService repositoryService = uiDMSSelectorForm.getApplicationComponent(RepositoryService.class);
       ManageableRepository manageableRepository = repositoryService.getRepository(uiDMSSelectorForm.getRepositoryName());
       Session session = SessionProviderFactory.createSystemProvider().getSession(uiDMSSelectorForm.getWorkspace(), manageableRepository);
-      Node node = (Node) session.getItem(uiDMSSelectorForm.getUIStringInput(UIDMSSelectorForm.PATH).getValue());
+      Node node = (Node) session.getItem(dmsPath);
       NodeIdentifier nodeIdentifier = NodeIdentifier.make(node);
       PortletRequestContext pContext = (PortletRequestContext) event.getRequestContext();
       PortletPreferences prefs = pContext.getRequest().getPreferences();
