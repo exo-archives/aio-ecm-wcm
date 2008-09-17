@@ -22,3 +22,7 @@
 .UIWizardPageSetInfo .OverflowContainer .SelectedPageInfo {
 	margin-left: 0;
 }
+
+.QuickEditContainer {
+	text-align: right;
+}
