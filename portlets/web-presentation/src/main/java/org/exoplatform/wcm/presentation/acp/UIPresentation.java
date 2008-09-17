@@ -55,21 +55,9 @@ public class UIPresentation extends UIBaseNodePresentation {
 
   public UIPresentation() throws Exception {}
 
-  public Node getNode() throws Exception {     
-    String repository = getPortletPreference().getValue(UIAdvancedPresentationPortlet.REPOSITORY, "repository");    
-    String worksapce = getPortletPreference().getValue(UIAdvancedPresentationPortlet.WORKSPACE, "collaboration");
-    String uuid = getPortletPreference().getValue(UIAdvancedPresentationPortlet.UUID, "") ;
-    RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
-    ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-    String userId = Util.getPortalRequestContext().getRemoteUser();
-    SessionProvider sessionProvider = null;
-    if(userId == null) {
-      sessionProvider = SessionProviderFactory.createAnonimProvider();
-    }else {
-      sessionProvider = SessionProviderFactory.createSessionProvider();
-    }
-    Session session = sessionProvider.getSession(worksapce, manageableRepository);
-    return session.getNodeByUUID(uuid) ;    
+  public Node getNode() throws Exception {
+    UIAdvancedPresentationPortlet uiportlet = getAncestorOfType(UIAdvancedPresentationPortlet.class);
+    return uiportlet.getReferencedContent();
   }
 
   public String getRepositoryName() {return getRepository() ;}

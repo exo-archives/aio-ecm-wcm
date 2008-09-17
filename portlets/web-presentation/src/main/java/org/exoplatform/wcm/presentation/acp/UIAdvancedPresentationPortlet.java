@@ -16,9 +16,9 @@
  */
 package org.exoplatform.wcm.presentation.acp;
 
-import java.util.List;
-
+import javax.jcr.AccessDeniedException;
 import javax.jcr.Node;
+import javax.jcr.Session;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
@@ -27,10 +27,11 @@ import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.services.jcr.access.AccessControlList;
+import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;
+import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.wcm.presentation.acp.config.UIPortletConfig;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -73,7 +74,8 @@ public class UIAdvancedPresentationPortlet extends UIPortletApplication {
     if(PortletMode.VIEW.equals(mode)) {
       addChild(UIPresentationContainer.class, null, UIPortletApplication.VIEW_MODE) ;
     } else if (PortletMode.EDIT.equals(mode)) {      
-      addChild(UIPortletConfig.class, null, UIPortletApplication.EDIT_MODE) ;
+      UIPortletConfig portletConfig = addChild(UIPortletConfig.class, null, UIPortletApplication.EDIT_MODE) ;
+      portletConfig.init();
     }
   }
 
@@ -85,6 +87,47 @@ public class UIAdvancedPresentationPortlet extends UIPortletApplication {
       mode_ = newMode ;
     }
     super.processRender(app, context) ;
+  }
+
+  public boolean canEditPortlet() throws Exception{
+    PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+    String portalName = Util.getUIPortal().getName();
+    String userId = context.getRemoteUser();
+    DataStorage dataStorage = getApplicationComponent(DataStorage.class);
+    PortalConfig portalConfig = dataStorage.getPortalConfig(portalName);
+    UserACL userACL = getApplicationComponent(UserACL.class);
+    return userACL.hasEditPermission(portalConfig, userId);
+  }
+
+  public Node getReferencedContent() throws Exception {
+    PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
+    PortletPreferences preferences = portletRequestContext.getRequest().getPreferences();
+    String repository = preferences.getValue(UIAdvancedPresentationPortlet.REPOSITORY, "repository");    
+    String worksapce = preferences.getValue(UIAdvancedPresentationPortlet.WORKSPACE, "collaboration");
+    String uuid = preferences.getValue(UIAdvancedPresentationPortlet.UUID, "") ;
+    RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
+    ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+    String userId = Util.getPortalRequestContext().getRemoteUser();
+    SessionProvider sessionProvider = null;
+    if(userId == null) {
+      sessionProvider = SessionProviderFactory.createAnonimProvider();
+    }else {
+      sessionProvider = SessionProviderFactory.createSessionProvider();
+    }
+    Session session = sessionProvider.getSession(worksapce, manageableRepository);
+    return session.getNodeByUUID(uuid) ;
+  }
+
+  public boolean canEditContent(final Node content) throws Exception{
+    if(!content.isNodeType("exo:webContent")) return false;
+    try {
+      ((ExtendedNode)content).checkPermission(PermissionType.ADD_NODE);
+      ((ExtendedNode)content).checkPermission(PermissionType.REMOVE);
+      ((ExtendedNode)content).checkPermission(PermissionType.SET_PROPERTY);
+    } catch (AccessDeniedException e) {
+      return false;
+    }
+    return true;
   }
 
   public static class QuickEditActionListener extends EventListener<UIAdvancedPresentationPortlet> {
