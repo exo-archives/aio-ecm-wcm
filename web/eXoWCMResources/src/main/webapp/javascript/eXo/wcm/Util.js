@@ -47,11 +47,13 @@ Utils = function(){
 	};
 		
 	Utils.prototype.insertQuickeditingBlock = function(portletID, quickEditingBlockId) {
-		var presentation = document.getElementById(portletID);
+		var presentation = document.getElementById(portletID);		
 		var parentNode = presentation.parentNode;
-		var quickEditingBlock = document.getElementById(quickEditingBlockId);
-		if(quickEditingBlock == null) {
-			parentNode.insertBefore(newEditingBlock, presentation);
+		var fistChild = eXo.core.DOMUtil.getChildrenByTagName(parentNode, "div")[0];
+		if (fistChild.id == quickEditingBlockId) return;
+		var quickEditingBlock = document.getElementById(quickEditingBlockId);		
+		if(quickEditingBlock != null) {
+			parentNode.insertBefore(quickEditingBlock, presentation);
 		}
 	};
 }
