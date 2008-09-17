@@ -6,7 +6,13 @@ import java.util.ResourceBundle;
 List categories = new ArrayList(); 
 WebuiRequestContext contextres = WebuiRequestContext.getCurrentInstance();
 ResourceBundle res = contextres.getApplicationResourceBundle();
-    
+
+SelectItemCategory appPageConfigs = new SelectItemCategory("WCM Page Configs") ;
+categories.add(appPageConfigs) ;
+appPageConfigs.addSelectItemOption(new SelectItemOption(res.getString("UIWizardPageSelectLayoutForm.label.appPages.Presentation"), "advanced-content-presentation-page", "Presentation")) ;
+appPageConfigs.addSelectItemOption(new SelectItemOption(res.getString("UIWizardPageSelectLayoutForm.label.appPages.Search"), "simple-searches-page", "Search")) ;
+appPageConfigs.addSelectItemOption(new SelectItemOption(res.getString("UIWizardPageSelectLayoutForm.label.appPages.Sitemap"), "sitemap-page", "Sitemap")) ;
+
 SelectItemCategory normalPageConfigs = new SelectItemCategory("normalPageConfigs") ;
 categories.add(normalPageConfigs);
 normalPageConfigs.addSelectItemOption(new SelectItemOption(res.getString("UIWizardPageSelectLayoutForm.label.normalPage.EmptyLayout"), "empty", "EmptyLayout"));
@@ -32,11 +38,4 @@ categories.add(mixPageConfigs);
 mixPageConfigs.addSelectItemOption(new SelectItemOption(res.getString("UIWizardPageSelectLayoutForm.label.mixPage.TwoColumnsOneRowLayout"), "two-columns-one-row", "TwoColumnsOneRowLayout"));
 mixPageConfigs.addSelectItemOption(new SelectItemOption(res.getString("UIWizardPageSelectLayoutForm.label.mixPage.OneRowTwoColumnsLayout"), "one-row-two-columns", "OneRowTwoColumnsLayout"));
 mixPageConfigs.addSelectItemOption(new SelectItemOption(res.getString("UIWizardPageSelectLayoutForm.label.mixPage.ThreeRowsTwoColumnsLayout"), "three-rows-two-columns", "ThreeRowsTwoColumnsLayout"));
-
-SelectItemCategory appPageConfigs = new SelectItemCategory("Application Page Configs") ;
-categories.add(appPageConfigs) ;
-appPageConfigs.addSelectItemOption(new SelectItemOption(res.getString("UIWizardPageSelectLayoutForm.label.appPages.Presentation"), "advanced-content-presentation-page", "Presentation")) ;
-appPageConfigs.addSelectItemOption(new SelectItemOption(res.getString("UIWizardPageSelectLayoutForm.label.appPages.Search"), "simple-searches-page", "Search")) ;
-appPageConfigs.addSelectItemOption(new SelectItemOption(res.getString("UIWizardPageSelectLayoutForm.label.appPages.Sitemap"), "sitemap-page", "Sitemap")) ;
-
 return categories;
