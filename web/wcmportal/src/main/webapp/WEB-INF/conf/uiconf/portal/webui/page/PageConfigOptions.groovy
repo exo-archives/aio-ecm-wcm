@@ -9,7 +9,7 @@ ResourceBundle res = contextres.getApplicationResourceBundle();
 
 SelectItemCategory appPageConfigs = new SelectItemCategory("WCM Page Configs") ;
 categories.add(appPageConfigs) ;
-appPageConfigs.addSelectItemOption(new SelectItemOption(res.getString("UIWizardPageSelectLayoutForm.label.appPages.Presentation"), "advanced-content-presentation-page", "Presentation")) ;
+appPageConfigs.addSelectItemOption(new SelectItemOption(res.getString("UIWizardPageSelectLayoutForm.label.appPages.Presentation"), "advanced-content-presentation-page", "simple-content-viewer")) ;
 appPageConfigs.addSelectItemOption(new SelectItemOption(res.getString("UIWizardPageSelectLayoutForm.label.appPages.Search"), "simple-searches-page", "Search")) ;
 appPageConfigs.addSelectItemOption(new SelectItemOption(res.getString("UIWizardPageSelectLayoutForm.label.appPages.Sitemap"), "sitemap-page", "Sitemap")) ;
 
