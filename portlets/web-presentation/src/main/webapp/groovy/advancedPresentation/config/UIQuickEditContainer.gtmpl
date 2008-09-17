@@ -1,0 +1,4 @@
+<% uicomponent.renderChildren() %>
+<div class="QuickEditContainer">
+  <a style="color: red; font-weight: bold;" href="<%=uicomponent.event("BackToNormalWizard")%>"><%= _ctx.appRes("UIQuickEditContainer.back") %></a>
+</div>
