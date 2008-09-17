@@ -72,8 +72,8 @@ import org.exoplatform.webui.form.UIFormStringInput;
 
 public class UIContentDialogForm extends UIDialogForm {
 
-  private JCRResourceResolver resourceResolver;
-  private NodeLocation storedLocation;
+  protected JCRResourceResolver resourceResolver;
+  protected NodeLocation storedLocation;
   protected NodeIdentifier savedNodeIdentifier;
   protected Node webContent;
 

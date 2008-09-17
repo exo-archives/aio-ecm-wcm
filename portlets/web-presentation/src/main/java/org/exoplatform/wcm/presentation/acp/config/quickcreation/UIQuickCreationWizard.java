@@ -26,7 +26,9 @@ import org.exoplatform.wcm.presentation.acp.config.UIContentDialogForm;
 import org.exoplatform.wcm.presentation.acp.config.UIMiscellaneousInfo;
 import org.exoplatform.wcm.presentation.acp.config.UINameWebContentForm;
 import org.exoplatform.wcm.presentation.acp.config.UIPermissionManager;
+import org.exoplatform.wcm.presentation.acp.config.UIPortletConfig;
 import org.exoplatform.wcm.presentation.acp.config.UISocialInfo;
+import org.exoplatform.wcm.presentation.acp.config.UIWelcomeScreen;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -180,8 +182,14 @@ public class UIQuickCreationWizard extends UIBaseWizard {
       prefs.setValue(UIAdvancedPresentationPortlet.REPOSITORY, identifier.getRepository());
       prefs.setValue(UIAdvancedPresentationPortlet.WORKSPACE, identifier.getWorkspace());
       prefs.setValue(UIAdvancedPresentationPortlet.UUID, identifier.getUUID());
-      prefs.store();      
-      context.setApplicationMode(PortletMode.VIEW);
+      prefs.store();
+      UIPortletConfig uiPortletConfig = uiQuickWizard.getAncestorOfType(UIPortletConfig.class);
+      if(uiPortletConfig.isEditPortletInCreatePageWinzard()) {
+        uiPortletConfig.getChildren().clear();
+        uiPortletConfig.addUIWelcomeScreen();
+      } else {        
+        context.setApplicationMode(PortletMode.VIEW);
+      }
     }
   }
 
@@ -209,7 +217,13 @@ public class UIQuickCreationWizard extends UIBaseWizard {
       prefs.setValue("AllowVoting", Boolean.toString(isAllowVoting));
       prefs.setValue("AllowComment", Boolean.toString(isAllowComment));
       prefs.store();      
-      context.setApplicationMode(PortletMode.VIEW);
+      UIPortletConfig uiPortletConfig = uiQuickCreationWizard.getAncestorOfType(UIPortletConfig.class);
+      if(uiPortletConfig.isEditPortletInCreatePageWinzard()) {
+        uiPortletConfig.getChildren().clear();
+        uiPortletConfig.addUIWelcomeScreen();
+      } else {        
+        context.setApplicationMode(PortletMode.VIEW);
+      }
     }
   }
 }
