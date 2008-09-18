@@ -19,6 +19,13 @@
       <artifactId>exo.kernel.container</artifactId>
       <version>${org.exoplatform.kernel.version}</version>
       <scope>compile</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.exoplatform.wcm</groupId>
+      <artifactId>exo.wcm.component.wcm</artifactId>
+      <version>${org.exoplatform.wcm.version}</version>
+      <scope>provided</scope>
     </dependency>    
 	
     <dependency>
