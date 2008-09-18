@@ -24,5 +24,12 @@
 }
 
 .QuickEditContainer {
+	border: 1px solid green;
+}
+
+.QuickEditBackButton {
 	text-align: right;
+	color: #0066FF;
+	margin:10px;
+	padding:10px;
 }
