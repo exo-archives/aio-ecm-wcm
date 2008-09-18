@@ -131,7 +131,13 @@ public class UIDMSSelectorForm extends UIForm implements UISelectable{
       prefs.setValue(UIAdvancedPresentationPortlet.WORKSPACE, nodeIdentifier.getWorkspace());
       prefs.setValue(UIAdvancedPresentationPortlet.UUID, nodeIdentifier.getUUID());
       prefs.store();
-      pContext.setApplicationMode(PortletMode.VIEW ) ;
+      UIPortletConfig uiPortletConfig = uiDMSSelectorForm.getAncestorOfType(UIPortletConfig.class);
+      if(uiPortletConfig.isEditPortletInCreatePageWinzard()) {
+        uiPortletConfig.getChildren().clear();
+        uiPortletConfig.addUIWelcomeScreen();
+      } else {        
+        pContext.setApplicationMode(PortletMode.VIEW);
+      }
     }
   }
 
