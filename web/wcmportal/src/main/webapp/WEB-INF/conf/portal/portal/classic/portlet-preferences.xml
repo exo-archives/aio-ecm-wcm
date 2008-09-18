@@ -19,8 +19,18 @@
       <value>4a34a049c0a8012800fe621e3e7b7eb9</value>
       <read-only>false</read-only>
     </preference>
+		<preference>
+      <name>loginUIUUID</name>
+      <value>6fcc8f85c0a8016300ca6922fbda7690</value>
+      <read-only>false</read-only>
+    </preference>
     <preference>
       <name>quickEdit</name>
+      <value>true</value>
+      <read-only>false</read-only>
+    </preference>
+    <preference>
+      <name>showLoginUI</name>
       <value>true</value>
       <read-only>false</read-only>
     </preference>

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.wcm.web.footer;
+package org.exoplatform.wcm.web.banner;
 
 import java.util.List;
 import java.util.Map;
@@ -50,85 +50,85 @@ import org.exoplatform.webui.event.EventListener;
  * Created by The eXo Platform SAS
  * Author : Phan Le Thanh Chuong
  *          chuong_phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * Aug 26, 2008  
+ * Aug 21, 2008  
  */
-@ComponentConfig(
+@ComponentConfig (
     lifecycle = UIFormLifecycle.class,
     events = {
-      @EventConfig(listeners = UIFooterEditModeForm.SaveActionListener.class),
-      @EventConfig(listeners = UIFooterEditModeForm.CancelActionListener.class)
+      @EventConfig(listeners = UIBannerEditContentForm.SaveActionListener.class),
+      @EventConfig(listeners = UIBannerEditContentForm.CancelActionListener.class)
     }
 )
-public class UIFooterEditModeForm extends UIDialogForm {
-  
+public class UIBannerEditContentForm extends UIDialogForm {
+
   private static PortletPreferences portletPreferences = ((PortletRequestContext) WebuiRequestContext.getCurrentInstance()).getRequest().getPreferences();
   
   public void init() throws Exception {
-    Node footerFolder = getSharedFooterFolder();
-    setRepositoryName(((ManageableRepository) footerFolder.getSession().getRepository()).getConfiguration().getName());
-    setWorkspace(footerFolder.getSession().getWorkspace().getName());
-    setStoredPath(footerFolder.getPath());
+    Node bannerFolder = getSharedBannerFolder();
+    setRepositoryName(((ManageableRepository)(bannerFolder.getSession().getRepository())).getConfiguration().getName());
+    setWorkspace(bannerFolder.getSession().getWorkspace().getName());
+    setStoredPath(bannerFolder.getPath());    
     setContentType("exo:webContent");
-    setNodePath(footerFolder.getSession().getNodeByUUID(portletPreferences.getValue("nodeUUID", null)).getPath());
+    setNodePath(bannerFolder.getSession().getNodeByUUID(portletPreferences.getValue("nodeUUID", null)).getPath());
     addNew(false);
   }
-  
-  public ResourceResolver getTemplateResourceResolver(WebuiRequestContext webuiRequestContext, String template) {
+
+  public ResourceResolver getTemplateResourceResolver(WebuiRequestContext webuiRequestContext, String template) {    
     try {
       RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
       ManageableRepository manageableRepository = repositoryService.getRepository(this.repositoryName);
       String workspaceName = manageableRepository.getConfiguration().getSystemWorkspaceName();
       return new JCRResourceResolver(this.repositoryName, workspaceName, TemplateService.EXO_TEMPLATE_FILE_PROP);
-    } catch(Exception e) {}
+    } catch(Exception e){}
     return super.getTemplateResourceResolver(webuiRequestContext, template);
   }
-  
-  private Node getSharedFooterFolder() throws Exception {
+
+  private Node getSharedBannerFolder() throws Exception {
     LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
     SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
     Node sharedPortalFolder = livePortalManagerService.getLiveSharedPortal(sessionProvider);
-    
+
     WebSchemaConfigService webSchemaConfigService = getApplicationComponent(WebSchemaConfigService.class);
     PortalFolderSchemaHandler portalFolderSchemaHandler = webSchemaConfigService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
-    Node sharedFooterFolder = portalFolderSchemaHandler.getFooterThemes(sharedPortalFolder);
+    Node sharedBannerFolder = portalFolderSchemaHandler.getBannerThemes(sharedPortalFolder);
     
-    return sharedFooterFolder;
+    return sharedBannerFolder;
   }
   
-  public static class SaveActionListener extends EventListener<UIFooterEditModeForm> {
-    public void execute(Event<UIFooterEditModeForm> event) throws Exception {
-      UIFooterEditModeForm footerEditModeForm = event.getSource();
-      footerEditModeForm.init();
+  public static class SaveActionListener extends EventListener<UIBannerEditContentForm> {
+    public void execute(Event<UIBannerEditContentForm> event) throws Exception {
+      UIBannerEditContentForm bannerEditModeForm = event.getSource();
+      bannerEditModeForm.init();
       
-      List<UIComponent> listComponent = footerEditModeForm.getChildren();
-      Map<String, JcrInputProperty> inputProperties = DialogFormUtil.prepareMap(listComponent, footerEditModeForm.getInputProperties());
+      List<UIComponent> listComponent = bannerEditModeForm.getChildren();
+      Map<String, JcrInputProperty> inputProperties = DialogFormUtil.prepareMap(listComponent, bannerEditModeForm.getInputProperties());
 
-      Node homeNode = footerEditModeForm.getNode().getParent();
-      String nodeType = footerEditModeForm.getNode().getPrimaryNodeType().getName();
+      Node homeNode = bannerEditModeForm.getNode().getParent();
+      String nodeType = bannerEditModeForm.getNode().getPrimaryNodeType().getName();
       
-      CmsService cmsService = footerEditModeForm.getApplicationComponent(CmsService.class);
-      String footerWebContentPath = cmsService.storeNode(nodeType, homeNode, inputProperties, !footerEditModeForm.isEditing(), footerEditModeForm.repositoryName);
-      Node footerWebContent = (Node) homeNode.getSession().getItem(footerWebContentPath);
+      CmsService cmsService = bannerEditModeForm.getApplicationComponent(CmsService.class);
+      String bannerWebContentPath = cmsService.storeNode(nodeType, homeNode, inputProperties, !bannerEditModeForm.isEditing(), bannerEditModeForm.repositoryName);
+      Node bannerWebContent = (Node) homeNode.getSession().getItem(bannerWebContentPath);
       
       homeNode.save();
       
-      portletPreferences.setValue("repository", footerEditModeForm.repositoryName) ;
-      portletPreferences.setValue("workspace", footerWebContent.getSession().getWorkspace().getName()) ;
-      portletPreferences.setValue("nodeUUID", footerWebContent.getUUID()) ;
+      portletPreferences.setValue("repository", bannerEditModeForm.repositoryName) ;
+      portletPreferences.setValue("workspace", bannerWebContent.getSession().getWorkspace().getName()) ;
+      portletPreferences.setValue("nodeUUID", bannerWebContent.getUUID()) ;
       portletPreferences.store();
       
-      event.getRequestContext().setAttribute("nodePath", footerWebContentPath);
+      event.getRequestContext().setAttribute("nodePath", bannerWebContentPath);
       
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
       context.setApplicationMode(PortletMode.VIEW);
     }
-    
   }
-  
-  public static class CancelActionListener extends EventListener<UIFooterEditModeForm> {
-    public void execute(Event<UIFooterEditModeForm> event) throws Exception {
-      PortletRequestContext portletRequestContext = (PortletRequestContext) event.getRequestContext();
-      portletRequestContext.setApplicationMode(PortletMode.VIEW);
+
+  public static class CancelActionListener extends EventListener<UIBannerEditContentForm> {
+    public void execute(Event<UIBannerEditContentForm> event) throws Exception {
+      PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
+      context.setApplicationMode(PortletMode.VIEW);
     }
   }
+
 }

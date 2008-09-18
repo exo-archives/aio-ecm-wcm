@@ -2,7 +2,7 @@
 <div class="$uicomponent.id">
 	<% uicomponent.renderChildren() %>
 	<%
-		String actionLabel = _ctx.appRes("UIViewModeContainer.action.QuickEdit") ;
+		String actionLabel = _ctx.appRes("UIBannerViewModeContainer.action.QuickEdit") ;
 		if(uicomponent.isQuickEditable()){
 	%>
 		<div style="position: absolute; top: 0px; right: 0px">

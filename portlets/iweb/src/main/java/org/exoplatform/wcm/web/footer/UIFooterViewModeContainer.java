@@ -39,7 +39,7 @@ import org.exoplatform.webui.event.EventListener;
 
 @ComponentConfig(
     lifecycle=Lifecycle.class,
-    template="app:/groovy/footer/webui/UIViewModeContainer.gtmpl",
+    template="app:/groovy/footer/webui/UIFooterViewModeContainer.gtmpl",
     events={
       @EventConfig(listeners=UIFooterViewModeContainer.QuickEditActionListener.class)
     }

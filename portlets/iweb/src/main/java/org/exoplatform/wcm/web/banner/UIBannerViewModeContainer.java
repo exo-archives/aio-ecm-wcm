@@ -39,7 +39,7 @@ import org.exoplatform.webui.event.EventListener;
 
 @ComponentConfig(
     lifecycle=Lifecycle.class,
-    template="app:/groovy/banner/webui/UIViewModeContainer.gtmpl",
+    template="app:/groovy/banner/webui/UIBannerViewModeContainer.gtmpl",
     events={
       @EventConfig(listeners=UIBannerViewModeContainer.QuickEditActionListener.class)
     }

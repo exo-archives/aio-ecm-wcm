@@ -17,6 +17,7 @@
 package org.exoplatform.wcm.web.banner;
 
 import javax.jcr.Node;
+import javax.jcr.Session;
 import javax.portlet.PortletRequest;
 
 import org.exoplatform.ecm.resolver.StringResourceResolver;
@@ -42,12 +43,13 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 )
 public class UIBannerViewMode extends UIComponent {
 
-  private final String DEFAULT_HTML = "app:/groovy/banner/webui/UIBannerPortlet.gtmpl".intern();
   private PortletRequestContext portletRequestContext = null;
   private PortletRequest portletRequest = null;
   private String repository = null;
   private String workspace = null;
   private String nodeUUID = null;
+  private String loginUIUUID = null;
+  private boolean showLoginUI = false;
 
   public UIBannerViewMode() throws Exception {
     portletRequestContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
@@ -55,10 +57,8 @@ public class UIBannerViewMode extends UIComponent {
     repository = portletRequest.getPreferences().getValue("repository", null);
     workspace = portletRequest.getPreferences().getValue("workspace", null);
     nodeUUID = portletRequest.getPreferences().getValue("nodeUUID", null);
-  }
-
-  public String getTemplate() {  
-    return DEFAULT_HTML; 
+    loginUIUUID = portletRequest.getPreferences().getValue("loginUIUUID", null);
+    showLoginUI = Boolean.parseBoolean(portletRequest.getPreferences().getValue("showLoginUI", null));
   }
 
   public ResourceResolver getTemplateResourceResolver(WebuiRequestContext context, String template) {
@@ -69,6 +69,10 @@ public class UIBannerViewMode extends UIComponent {
     return super.getTemplateResourceResolver(context, template);
   }
 
+  public String getTemplate() {
+    return loadJCRBanner();
+  }
+  
   private String loadJCRBanner() {
     if (repository != null && workspace != null && nodeUUID != null) {
       try {
@@ -76,12 +80,16 @@ public class UIBannerViewMode extends UIComponent {
         // need use session provider if enable permission for banner
         SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
         ManageableRepository manageableRepository = (ManageableRepository)repositoryService.getRepository(repository);
-        Node bannerWebContent = sessionProvider.getSession(workspace, manageableRepository).getNodeByUUID(nodeUUID);
+        Session session = sessionProvider.getSession(workspace, manageableRepository);
+        Node bannerWebContent = session.getNodeByUUID(nodeUUID);
         String bannerCSS = bannerWebContent.getNode("css").getNode("default.css").getNode("jcr:content").getProperty("jcr:data").getString();
         String bannerHTML = bannerWebContent.getNode("default.html").getNode("jcr:content").getProperty("jcr:data").getString();
-        String bannerAccess = bannerWebContent.getNode("documents").getNode("access.gtmpl").getNode("jcr:content").getProperty("jcr:data").getString();
+        String bannerAccess = session.getNodeByUUID(loginUIUUID).getNode("jcr:content").getProperty("jcr:data").getString();
         StringBuffer buffer = new StringBuffer();
-        buffer.append("<style>").append(bannerCSS).append("</style>").append(bannerAccess).append(bannerHTML);
+        if(showLoginUI)
+          buffer.append("<style>").append(bannerCSS).append("</style>").append(bannerAccess).append(bannerHTML);
+        else 
+          buffer.append("<style>").append(bannerCSS).append("</style>").append(bannerHTML);
         return buffer.toString();
       } catch (Exception e) {
         e.printStackTrace();
