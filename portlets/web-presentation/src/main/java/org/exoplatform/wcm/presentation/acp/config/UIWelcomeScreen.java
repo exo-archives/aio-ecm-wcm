@@ -77,7 +77,6 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
       addUIFormInput(radioInput);
     }else {
       UIAdvancedPresentationPortlet uiPresentationPortlet = getAncestorOfType(UIAdvancedPresentationPortlet.class);
-      System.out.println("===========> uiAdvancedPresentationPortlet: "+ uiPresentationPortlet);
       Node node = uiPresentationPortlet.getReferencedContent();
       if(uiPresentationPortlet.canEditContent(node)) {
         option.add(new SelectItemOption<String>(labelEditContent, "EditCurrentWebContent"));

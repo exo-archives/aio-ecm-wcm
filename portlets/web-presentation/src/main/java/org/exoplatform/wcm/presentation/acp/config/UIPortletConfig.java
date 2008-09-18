@@ -18,21 +18,13 @@ package org.exoplatform.wcm.presentation.acp.config;
 
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
-import javax.jcr.Session;
-import javax.portlet.PortletPreferences;
 
 import org.exoplatform.portal.webui.portal.UIPortal;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
-import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.wcm.presentation.acp.UIAdvancedPresentationPortlet;
 import org.exoplatform.wcm.presentation.acp.UINonEditable;
-import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
@@ -73,7 +65,6 @@ public class UIPortletConfig extends UIContainer {
   }
 
   public void addUIWelcomeScreen() throws Exception {
-    System.out.println("=========================> isNewConfig: "+ checkNewConfig());
     UIWelcomeScreen uiWellcomeScreen = addChild(UIWelcomeScreen.class, null, null);
     uiWellcomeScreen.setCreateMode(checkNewConfig());
     uiBackComponent = uiWellcomeScreen ;
