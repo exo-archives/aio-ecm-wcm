@@ -16,7 +16,9 @@
  */
 package org.exoplatform.wcm.presentation.acp;
 
-import javax.jcr.AccessDeniedException;
+import java.security.AccessControlException;
+
+import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
 import javax.jcr.Session;
 import javax.portlet.PortletMode;
@@ -105,6 +107,8 @@ public class UIAdvancedPresentationPortlet extends UIPortletApplication {
     String repository = preferences.getValue(UIAdvancedPresentationPortlet.REPOSITORY, "repository");    
     String worksapce = preferences.getValue(UIAdvancedPresentationPortlet.WORKSPACE, "collaboration");
     String uuid = preferences.getValue(UIAdvancedPresentationPortlet.UUID, "") ;
+    if(repository == null || worksapce == null || uuid == null) 
+      throw new ItemNotFoundException();
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
     String userId = Util.getPortalRequestContext().getRemoteUser();
@@ -124,7 +128,7 @@ public class UIAdvancedPresentationPortlet extends UIPortletApplication {
       ((ExtendedNode)content).checkPermission(PermissionType.ADD_NODE);
       ((ExtendedNode)content).checkPermission(PermissionType.REMOVE);
       ((ExtendedNode)content).checkPermission(PermissionType.SET_PROPERTY);
-    } catch (AccessDeniedException e) {
+    } catch (AccessControlException e) {
       return false;
     }
     return true;

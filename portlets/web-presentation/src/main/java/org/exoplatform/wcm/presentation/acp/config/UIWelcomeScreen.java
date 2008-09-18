@@ -21,20 +21,14 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.jcr.Node;
-import javax.jcr.Session;
 import javax.portlet.PortletMode;
-import javax.portlet.PortletPreferences;
 
 import org.exoplatform.ecm.webui.selector.UISelectable;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.wcm.presentation.acp.UIAdvancedPresentationPortlet;
 import org.exoplatform.wcm.presentation.acp.config.quickcreation.UIQuickCreationWizard;
 import org.exoplatform.wcm.presentation.acp.config.selector.UIDMSSelectorForm;
 import org.exoplatform.wcm.presentation.acp.config.selector.UIWebContentSelectorForm;
 import org.exoplatform.web.application.RequestContext;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -74,7 +68,6 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
     String labelSelectExistedDMS = res.getString(getId() + ".label.SelectExistedDMS");
     String labelEditContent = res.getString(getId() + ".label.EditWebContent");
     String labelSelectExistedContent = res.getString(getId() + ".label.ExistedContent");
-
     if(isNewConfig) {
       option.add(new SelectItemOption<String>(labelQuickCreate, "QuickCreateWebContent"));
       option.add(new SelectItemOption<String>(labelSelectExistedContent, "SelectExistedContent"));
@@ -83,16 +76,10 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
       radioInput.setValue("QuickCreateWebContent");
       addUIFormInput(radioInput);
     }else {
-      PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
-      PortletPreferences prefs = pContext.getRequest().getPreferences();
-      String repositoryName = prefs.getValue(UIAdvancedPresentationPortlet.REPOSITORY, null);
-      String workspaceName = prefs.getValue(UIAdvancedPresentationPortlet.WORKSPACE, null);
-      String UUID = prefs.getValue(UIAdvancedPresentationPortlet.UUID, null);
-      RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
-      ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
-      Session session = SessionProviderFactory.createSystemProvider().getSession(workspaceName, manageableRepository);
-      Node node = session.getNodeByUUID(UUID);
-      if(node.getPrimaryNodeType().getName().equals("exo:webContent")) {
+      UIAdvancedPresentationPortlet uiPresentationPortlet = getAncestorOfType(UIAdvancedPresentationPortlet.class);
+      System.out.println("===========> uiAdvancedPresentationPortlet: "+ uiPresentationPortlet);
+      Node node = uiPresentationPortlet.getReferencedContent();
+      if(uiPresentationPortlet.canEditContent(node)) {
         option.add(new SelectItemOption<String>(labelEditContent, "EditCurrentWebContent"));
         option.add(new SelectItemOption<String>(labelSelectExistedContent, "SelectExistedContent"));
         UIFormRadioBoxInput radioInput = new UIFormRadioBoxInput("radio", "radio", option);
@@ -108,7 +95,6 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
         addUIFormInput(radioInput);
       }
     }
-
     return this ;
   }
 

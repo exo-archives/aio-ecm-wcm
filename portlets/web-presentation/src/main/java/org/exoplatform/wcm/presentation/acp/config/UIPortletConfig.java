@@ -52,41 +52,30 @@ public class UIPortletConfig extends UIContainer {
   private boolean isNewConfig;
 
   public UIPortletConfig() throws Exception {
-    isNewConfig = checkNewConfig();
   }
 
   public void init() throws Exception {
-    if(isQuickEditable()) {
-      if(isNewConfig) {
-        addUIWelcomeScreen();
-        return;
-      }
-      PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
-      PortletPreferences prefs = pContext.getRequest().getPreferences();
-      String repositoryName = prefs.getValue(UIAdvancedPresentationPortlet.REPOSITORY, null);
-      String workspaceName = prefs.getValue(UIAdvancedPresentationPortlet.WORKSPACE, null);
-      String UUID = prefs.getValue(UIAdvancedPresentationPortlet.UUID, null);
-      RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
-      ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
-      Session session = SessionProviderFactory.createSystemProvider().getSession(workspaceName, manageableRepository);
-      try{
-        Node node = session.getNodeByUUID(UUID);
-        if(node.getPrimaryNodeType().getName().equals("exo:webContent")) {
-          addChild(UIQuickEditContainer.class, null, null);
-        } else {
-          addUIWelcomeScreen();
-        }
-      }catch(ItemNotFoundException e) {
-        addUIWelcomeScreen();
-      }
-    } else {
+    isNewConfig = checkNewConfig();
+    UIAdvancedPresentationPortlet uiPresentationPortlet = getAncestorOfType(UIAdvancedPresentationPortlet.class);
+    if(!uiPresentationPortlet.canEditPortlet()) {     
       addChild(UINonEditable.class, null, null);
+      return;
+    }     
+    try{
+      Node node = uiPresentationPortlet.getReferencedContent();
+      if(uiPresentationPortlet.canEditContent(node)) {
+        addChild(UIQuickEditContainer.class, null, null);
+        return;
+      }      
+    }catch(Exception e) {
     }
+    addUIWelcomeScreen();
   }
 
   public void addUIWelcomeScreen() throws Exception {
-    UIWelcomeScreen uiWellcomeScreen = createUIComponent(UIWelcomeScreen.class, null, null).setCreateMode(isNewConfig);
-    addChild(uiWellcomeScreen);
+    System.out.println("=========================> isNewConfig: "+ checkNewConfig());
+    UIWelcomeScreen uiWellcomeScreen = addChild(UIWelcomeScreen.class, null, null);
+    uiWellcomeScreen.setCreateMode(checkNewConfig());
     uiBackComponent = uiWellcomeScreen ;
   }
 
@@ -104,23 +93,13 @@ public class UIPortletConfig extends UIContainer {
   }
 
   private boolean checkNewConfig(){
-    PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance() ;
-    PortletPreferences prefs = portletRequestContext.getRequest().getPreferences() ;
-    String repository = prefs.getValue("repository", null) ;
-    String workspace = prefs.getValue("workspace", null) ;
-    String nodeUUID = prefs.getValue("nodeUUID", null) ;
-    if(repository == null || workspace == null ||nodeUUID ==null)
-      return true ;
-    RepositoryService repositoryService = getApplicationComponent(RepositoryService.class) ;
-    SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
+    UIAdvancedPresentationPortlet uiportlet = getAncestorOfType(UIAdvancedPresentationPortlet.class);
     try {
-      ManageableRepository manageableRepository = repositoryService.getRepository(repository) ;
-      Session session = sessionProvider.getSession(workspace, manageableRepository) ;
-      session.getNodeByUUID(nodeUUID) ;
-      return false ;
+      uiportlet.getReferencedContent();
+      return false;
     } catch (Exception e) {
-    }    
-    return true ;
+    }
+    return true;
   }
 
   public UIComponent getBackComponent() {
