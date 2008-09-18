@@ -73,14 +73,7 @@ public class UIPortletConfig extends UIContainer {
 
   public boolean isQuickEditable() throws Exception {
     UIAdvancedPresentationPortlet uiportlet = getAncestorOfType(UIAdvancedPresentationPortlet.class);
-    if(!uiportlet.canEditPortlet()) return false;
-    try {
-      Node content = uiportlet.getReferencedContent();
-      return uiportlet.canEditContent(content);
-    } catch (ItemNotFoundException e) {
-      //Content not found but user can create new content for the portlet
-      return true;
-    }        
+    return uiportlet.canEditPortlet();
   }
 
   private boolean checkNewConfig(){
