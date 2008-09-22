@@ -14,10 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-
 package org.exoplatform.services.wcm.core.impl;
 
 import javax.jcr.Node;
+import javax.jcr.Property;
 
 import org.apache.commons.chain.Context;
 import org.apache.commons.logging.Log;
@@ -26,27 +26,31 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.command.action.Action;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
-
 /**
- * Created by The eXo Platform SARL
- * Author : Pham Xuan Hoa
+ * Created by The eXo Platform SAS
+ * Author : Hoa Pham	
  *          hoa.pham@exoplatform.com
- * Mar 11, 2008  
+ * Sep 17, 2008  
  */
-public class WebSchemaCreationAction implements Action {
-  private static final Log log = ExoLogger.getLogger("wcm:WebSchemaCreationAction");
-  
-  public boolean execute(Context context) throws Exception {    
-    Node node = (Node)context.get("currentItem");
+public class WebSchemaModificationAction implements Action{
+  private Log log = ExoLogger.getLogger("wcm:WebSchemaModificationAction");
+  public boolean execute(Context context) throws Exception {
+    Property property = (Property)context.get("currentItem");
+    String propertyName = property.getName();
+    if(!propertyName.equals("jcr:data"))
+      return propertyName.equalsIgnoreCase("exo:active");//use exo:active in case of exo:cssFile or exo:jsFile
+    Node grandParent = property.getParent().getParent();
+    if(!grandParent.getPrimaryNodeType().getName().equals("nt:file")) 
+      return false;        
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     WebSchemaConfigService schemaConfigService = 
       (WebSchemaConfigService) container.getComponentInstanceOfType(WebSchemaConfigService.class);
-    try {      
-      schemaConfigService.createSchema(node);
+    try {            
+      schemaConfigService.updateSchemaOnModify(grandParent);
     } catch (Exception e) { 
-      log.error("Error when creat web schema for node"+node.getPath() , e);
+      log.error("Error when update schema when modify node: "+grandParent.getPath() , e);
     }       
-    return false;
+    return true;    
   }
 
 }

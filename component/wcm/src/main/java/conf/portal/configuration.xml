@@ -39,14 +39,14 @@
     <type>org.exoplatform.services.wcm.core.impl.WebSchemaConfigServiceImpl</type>
     <component-plugins>
 	    <component-plugin>
-	   		<name>CSSFileMakerHandler</name>
+	   		<name>CSSFileHandler</name>
 	   		<set-method>addWebSchemaHandler</set-method>
-	   		<type>org.exoplatform.services.wcm.skin.CSSFileMakerHandler</type>
+	   		<type>org.exoplatform.services.wcm.skin.CSSFileHandler</type>
 	   	</component-plugin>
 	   	<component-plugin>
-	   		<name>HTMLFileSchemaHandler</name>
+	   		<name>JSFileHandler</name>
 	   		<set-method>addWebSchemaHandler</set-method>
-	   		<type>org.exoplatform.services.wcm.webcontent.HTMLFileSchemaHandler</type>
+	   		<type>org.exoplatform.services.wcm.javascript.JSFileHandler</type>
 	   	</component-plugin>
 	   	<component-plugin>
 	   		<name>WebContentSchemaHandler</name>
@@ -54,10 +54,10 @@
 	   		<type>org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler</type>
 	   	</component-plugin>
 	   	<component-plugin>
-	   		<name>JSFileMakerHandler</name>
+	   		<name>HTMLFileSchemaHandler</name>
 	   		<set-method>addWebSchemaHandler</set-method>
-	   		<type>org.exoplatform.services.wcm.javascript.JSFileMakerHandler</type>
-	   	</component-plugin>
+	   		<type>org.exoplatform.services.wcm.webcontent.HTMLFileSchemaHandler</type>
+	   	</component-plugin>	   		   		   	
 	   	<component-plugin>
 	   		<name>PortalFolderSchemaHandler</name>
 	   		<set-method>addWebSchemaHandler</set-method>

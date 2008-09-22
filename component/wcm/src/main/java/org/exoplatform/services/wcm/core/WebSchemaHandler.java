@@ -19,12 +19,42 @@ package org.exoplatform.services.wcm.core;
 import javax.jcr.Node;
 
 /**
- * Created by The eXo Platform SAS
- * @author : Hoa.Pham
- *          hoa.pham@exoplatform.com
- * Jun 3, 2008  
+ * Created by The eXo Platform SAS.
+ * 
+ * @author : Hoa.Pham hoa.pham@exoplatform.com Jun 3, 2008
  */
 public interface WebSchemaHandler {  
+  
+  /**
+   * Match handler to process the schema
+   * 
+   * @param node the node
+   * @return true, if successful
+   * @throws Exception the exception
+   */
   public boolean matchHandler(final Node node) throws Exception;
-  public void process(final Node node) throws Exception;
+  
+  /**
+   * Process schema when crete node
+   * 
+   * @param node the node
+   * @throws Exception the exception
+   */
+  public void onCreateNode(final Node node) throws Exception;
+  
+  /**
+   * Update schema when modify node
+   * 
+   * @param node the node
+   * @throws Exception the exception
+   */
+  public void onModifyNode(final Node node) throws Exception;
+  
+  /**
+   * Update schema before a node is removed
+   * 
+   * @param node the node
+   * @throws Exception the exception
+   */
+  public void onRemoveNode(final Node node) throws Exception;
 }

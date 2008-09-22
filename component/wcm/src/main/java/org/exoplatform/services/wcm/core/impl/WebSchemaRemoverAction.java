@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-
 package org.exoplatform.services.wcm.core.impl;
 
 import javax.jcr.Node;
@@ -28,25 +27,25 @@ import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
 
 /**
- * Created by The eXo Platform SARL
- * Author : Pham Xuan Hoa
+ * Created by The eXo Platform SAS
+ * Author : Hoa Pham	
  *          hoa.pham@exoplatform.com
- * Mar 11, 2008  
+ * Sep 17, 2008  
  */
-public class WebSchemaCreationAction implements Action {
-  private static final Log log = ExoLogger.getLogger("wcm:WebSchemaCreationAction");
-  
-  public boolean execute(Context context) throws Exception {    
-    Node node = (Node)context.get("currentItem");
+public class WebSchemaRemoverAction implements Action{
+
+  private Log log = ExoLogger.getLogger("wcm:WebSchemaRemoverAction");
+  public boolean execute(Context context) throws Exception {
+   Node node = (Node)context.get("currentItem");   
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     WebSchemaConfigService schemaConfigService = 
       (WebSchemaConfigService) container.getComponentInstanceOfType(WebSchemaConfigService.class);
     try {      
-      schemaConfigService.createSchema(node);
+      schemaConfigService.updateSchemaOnRemove(node);
     } catch (Exception e) { 
-      log.error("Error when creat web schema for node"+node.getPath() , e);
+      log.error("Error when update web schema before remove node: "+node.getPath() , e);
     }       
-    return false;
+    return false;    
   }
 
 }

@@ -73,12 +73,30 @@ public class WebSchemaConfigServiceImpl implements WebSchemaConfigService, Start
   public void createSchema(Node node) throws Exception {
     for (WebSchemaHandler handler: getAllWebSchemaHandler()) {
       if (handler.matchHandler(node)) {
-        handler.process(node);
+        handler.onCreateNode(node);
         return;
       }
     }    
   }
+  
+  public void updateSchemaOnModify(Node node) throws Exception {
+    for (WebSchemaHandler handler: getAllWebSchemaHandler()) {
+      if (handler.matchHandler(node)) {
+        handler.onModifyNode(node);
+        return;
+      }
+    }
+  }
 
+  public void updateSchemaOnRemove(Node node) throws Exception {
+    for (WebSchemaHandler handler: getAllWebSchemaHandler()) {
+      if (handler.matchHandler(node)) {
+        handler.onRemoveNode(node);
+        return;
+      }
+    }
+  }
+  
   private void createLiveSharePortalFolders() {
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     RepositoryService repositoryService = 

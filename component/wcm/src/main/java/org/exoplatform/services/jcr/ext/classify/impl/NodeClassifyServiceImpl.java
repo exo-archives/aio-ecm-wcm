@@ -16,8 +16,8 @@
  */
 package org.exoplatform.services.jcr.ext.classify.impl;
 
-import java.util.HashMap;
 import java.util.Collection;
+import java.util.HashMap;
 
 import org.exoplatform.container.component.ComponentPlugin;
 import org.exoplatform.services.jcr.RepositoryService;

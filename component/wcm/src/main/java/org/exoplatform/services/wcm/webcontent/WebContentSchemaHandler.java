@@ -45,7 +45,7 @@ public class WebContentSchemaHandler extends BaseWebSchemaHandler {
     return false;    
   }
   
-  public void process(final Node webContent) throws Exception {
+  public void onCreateNode(final Node webContent) throws Exception {
     Session session = webContent.getSession();
     createSchema(webContent);
     session.save();

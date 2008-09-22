@@ -18,16 +18,20 @@ package org.exoplatform.services.wcm.javascript;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
-import javax.jcr.Property;
 import javax.jcr.Session;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 import javax.servlet.ServletContext;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.wcm.core.NodeLocation;
+import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.web.application.javascript.JavascriptConfigService;
 import org.picocontainer.Startable;
 
@@ -38,85 +42,86 @@ import org.picocontainer.Startable;
  * Apr 9, 2008  
  */
 public class XJavascriptService implements Startable {
-
-  private RepositoryService repositoryService_ ;
-  private JavascriptConfigService jsConfigService_ ;
-  private ServletContext sContext_ ;  
+  
+  private static String SHARED_JS_QUERY = "select * from exo:jsFile where jcr:path like '{path}' and exo:active='true' and exo:sharedJS='true' order by exo:priority DESC " ;
   final private String MODULE_NAME = "eXo.WCM.Live".intern();
-  final private String PATH = "/javascript/eXo/wcm/Live".intern();  
+  final private String PATH = "/javascript/eXo/wcm/live".intern();
+  
+  private RepositoryService repositoryService ;
+  private JavascriptConfigService jsConfigService ;
+  private WCMConfigurationService configurationService;
+  private ServletContext sContext ;    
+  private Log log = ExoLogger.getLogger("wcm:XJavascriptService");
 
-  public XJavascriptService(RepositoryService repositoryService,JavascriptConfigService jsConfigService,ServletContext servletContext) {    
-    this.repositoryService_ = repositoryService ;
-    this.jsConfigService_ = jsConfigService ;
-    sContext_ = servletContext ;
+  public XJavascriptService(RepositoryService repositoryService,JavascriptConfigService jsConfigService,ServletContext servletContext, WCMConfigurationService configurationService) {    
+    this.repositoryService = repositoryService ;
+    this.jsConfigService = jsConfigService ;
+    sContext = servletContext ;
+    this.configurationService = configurationService;
   }
 
   public String getActiveJavaScript(Node home) throws Exception {    
     String jsQuery = "select * from exo:jsFile where jcr:path like '" +home.getPath()+ "/%' and exo:active='true'order by exo:priority DESC " ;
-    QueryManager queryManager = home.getSession().getWorkspace().getQueryManager() ;
-    Query query = queryManager.createQuery(jsQuery, Query.SQL) ;
-    QueryResult queryResult = query.execute() ;
-    StringBuffer buffer = new StringBuffer() ;
-    for(NodeIterator iterator = queryResult.getNodes(); iterator.hasNext();) {
-      Node cssNode = iterator.nextNode() ;      
-      buffer.append(getFileContent(cssNode)) ;       
-    }
-    return buffer.toString() ;    
-  }
+    return getJSDataBySQLQuery(home.getSession(),jsQuery,null);        
+  }   
 
-  public void makeSharedJavascript(String repository,String workspace,String javascriptPath) throws Exception {
+  public void updatePortalJSOnModify(Node jsFile) throws Exception {
     SessionProvider sessionProvider = SessionProvider.createSystemProvider();
-    ManageableRepository manageableRepository = repositoryService_.getRepository(repository) ;
-    Session session = sessionProvider.getSession(workspace, manageableRepository) ;
-    Node jsNode = (Node)session.getItem(javascriptPath) ;
-    jsNode.setProperty("exo:sharedJS", true) ;
-    jsNode.save();
+    String javascript = getJavascriptOfAllPortals(sessionProvider,jsFile.getPath());
+    String modifiedJS = jsFile.getNode("jcr:content").getProperty("jcr:data").getString();
+    javascript = javascript.concat(modifiedJS);
+    addJavascript(javascript);
+    sessionProvider.close();
+  }    
+
+  public void updatePortalJSOnRemove(Node jsFile) throws Exception {
+    SessionProvider sessionProvider = SessionProvider.createSystemProvider();
+    String javascript = getJavascriptOfAllPortals(sessionProvider,jsFile.getPath());
+    addJavascript(javascript);
     sessionProvider.close();
   }
 
-  public void mergeJavascript(String repository,String workspace,String jsPath) throws Exception {    
-    if(jsConfigService_.isModuleLoaded(MODULE_NAME)) {      
-      jsConfigService_.removeExtendedJavascript(MODULE_NAME,PATH,sContext_) ;
+  private void addJavascript(String jsData) {
+    if(jsConfigService.isModuleLoaded(MODULE_NAME)) {      
+      jsConfigService.removeExtendedJavascript(MODULE_NAME,PATH,sContext) ;
     }
-    SessionProvider sessionProvider = SessionProvider.createSystemProvider();
-    String javascript = getActiveSharedJavaScript(repository, workspace, sessionProvider) ;
-    jsConfigService_.addExtendedJavascript(MODULE_NAME, PATH, sContext_, javascript) ;
-    sessionProvider.close();
+    jsConfigService.addExtendedJavascript(MODULE_NAME, PATH, sContext, jsData) ;
   }
 
-  private String getActiveSharedJavaScript(String repository,String workspace,SessionProvider sessionProvider) throws Exception{
-    String sharedJSQuery = "select * from exo:jsFile where exo:active='true' and exo:sharedJS='true' order by exo:priority DESC " ;
-    ManageableRepository manageableRepository = (ManageableRepository)repositoryService_.getRepository(repository) ;
-    StringBuffer buffer = new StringBuffer();    
-    Session session = sessionProvider.getSession(workspace, manageableRepository) ;
+  private String getJavascriptOfAllPortals(SessionProvider sessionProvider, String exceptPath) throws Exception {
+    ManageableRepository manageableRepository = repositoryService.getCurrentRepository();    
+    NodeLocation livePortalsLocation = configurationService.getLivePortalsLocation(manageableRepository.getConfiguration().getName());
+    String statement = StringUtils.replaceOnce(SHARED_JS_QUERY,"{path}",livePortalsLocation.getPath());    
+    Session session = sessionProvider.getSession(livePortalsLocation.getWorkspace(),manageableRepository);
+    return getJSDataBySQLQuery(session,statement,exceptPath);        
+  }
+
+  private String getJSDataBySQLQuery(Session session, String queryStatement, String exceptPath) throws Exception {
     QueryManager queryManager = session.getWorkspace().getQueryManager() ;
-    Query query = queryManager.createQuery(sharedJSQuery, Query.SQL) ;
+    Query query = queryManager.createQuery(queryStatement, Query.SQL) ;
     QueryResult queryResult = query.execute() ;
+    StringBuffer buffer = new StringBuffer();
     for(NodeIterator iterator = queryResult.getNodes();iterator.hasNext();) {
-      Node cssFile = iterator.nextNode();
-      buffer.append(getFileContent(cssFile)) ;
+      Node jsFile = iterator.nextNode();
+      if(jsFile.getPath().equalsIgnoreCase(exceptPath)) continue;
+      buffer.append(jsFile.getNode("jcr:content").getProperty("jcr:data").getString()) ;
     }
     return buffer.toString();
   }
 
-  private String getFileContent(Node file) throws Exception {
-    Property data = file.getNode("jcr:content").getProperty("jcr:data") ;
-    return data.getString() ;
-  }
-
-  public void start() {
-    SessionProvider provider = SessionProvider.createSystemProvider();
-    try {
-      String repository = repositoryService_.getDefaultRepository().getConfiguration().getName() ;
-      String workspace = repositoryService_.getDefaultRepository().getConfiguration().getDefaultWorkspaceName();      
-      String sharedJS = getActiveSharedJavaScript(repository, workspace, provider) ;
+  public void start() {    
+    SessionProvider sessionProvider = SessionProvider.createSystemProvider();
+    try {                         
+      String sharedJS = getJavascriptOfAllPortals(sessionProvider,null) ;
       if(sharedJS != null && sharedJS.length()!= 0) {
-        jsConfigService_.addExtendedJavascript(MODULE_NAME, PATH,sContext_,sharedJS) ; 
-      }                  
+        addJavascript(sharedJS); 
+      }       
     } catch (Exception e) {
-
+      if(log.isErrorEnabled()) {
+        log.error("Error when start XJavaScriptService",e);
+      }
     }finally {
-      provider.close();
+      sessionProvider.close();
     }     
   }
 

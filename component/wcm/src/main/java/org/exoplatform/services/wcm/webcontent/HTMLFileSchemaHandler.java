@@ -33,7 +33,7 @@ public class HTMLFileSchemaHandler extends BaseWebSchemaHandler {
   protected String getHandlerNodeType() {   return "nt:file"; }
   protected String getParentNodeType() { return "exo:webFolder"; }
 
-  public void process(final Node file) throws Exception {
+  public void onCreateNode(final Node file) throws Exception {
     Session session = file.getSession();    
     Node webFolder = file.getParent();
     String fileName = file.getName();

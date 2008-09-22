@@ -22,16 +22,68 @@ import javax.jcr.Node;
 
 import org.exoplatform.container.component.ComponentPlugin;
 
+// TODO: Auto-generated Javadoc
 /**
- * Created by The eXo Platform SAS
+ * Created by The eXo Platform SAS.
+ * 
  * @author : Hoa.Pham
- *          hoa.pham@exoplatform.com
- * May 28, 2008  
+ * hoa.pham@exoplatform.com
+ * May 28, 2008
  */
 public interface WebSchemaConfigService {
   
+  /**
+   * Adds the web schema handler.
+   * 
+   * @param plugin the plugin
+   * 
+   * @throws Exception the exception
+   */
   public void addWebSchemaHandler(ComponentPlugin plugin) throws Exception;  
+  
+  /**
+   * Gets the all web schema handler.
+   * 
+   * @return the all web schema handler
+   * 
+   * @throws Exception the exception
+   */
   public Collection<WebSchemaHandler> getAllWebSchemaHandler() throws Exception;  
+  
+  /**
+   * Gets the web schema handler by type.
+   * 
+   * @param clazz the clazz
+   * 
+   * @return the web schema handler by type
+   */
   public <T extends WebSchemaHandler> T getWebSchemaHandlerByType(Class<T> clazz);  
-  public void createSchema(final Node node) throws Exception;     
+  
+  /**
+   * Call this method when a node is created in observed tree. 
+   * 
+   * 
+   * @param node the node
+   * 
+   * @throws Exception the exception
+   */
+  public void createSchema(final Node node) throws Exception;
+  
+  /**
+   * Update schema when a node is modified
+   * 
+   * @param node the node
+   * 
+   * @throws Exception the exception
+   */
+  public void updateSchemaOnModify(final Node node) throws Exception;
+  
+  /**
+   * Update schema on when a node is removed
+   * 
+   * @param node the node
+   * 
+   * @throws Exception the exception
+   */
+  public void updateSchemaOnRemove(final Node node) throws Exception;
 }

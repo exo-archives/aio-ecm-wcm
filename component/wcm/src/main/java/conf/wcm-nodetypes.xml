@@ -80,7 +80,8 @@
   	<supertypes>
   	  <supertype>mix:referenceable</supertype>
   	  <supertype>nt:unstructured</supertype>
-  	  <supertype>nt:hierarchyNode</supertype>  	        
+  	  <supertype>nt:hierarchyNode</supertype>
+  	  <supertype>exo:rss-enable</supertype>  	    	       
     </supertypes>
     <childNodeDefinitions>
       <childNodeDefinition name="js" defaultPrimaryType="exo:jsFolder" autoCreated="false" mandatory="false"
