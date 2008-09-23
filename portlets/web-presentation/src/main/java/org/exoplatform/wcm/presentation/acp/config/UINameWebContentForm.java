@@ -21,6 +21,7 @@ import javax.jcr.Session;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
+import org.exoplatform.ecm.webui.form.field.UIFormTextField;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -66,12 +67,15 @@ import org.exoplatform.webui.form.wysiwyg.UIFormWYSIWYGInput;
 public class UINameWebContentForm extends UIForm {
 
   public static final String NAME_WEBCONTENT = "name".intern();
+  public static final String TITLE_WEBCONTENT = "title".intern();
   public static final String SUMMARY_WEBCONTENT = "summary".intern();
 
   public UINameWebContentForm() throws Exception {
     addUIFormInput(new UIFormStringInput(NAME_WEBCONTENT, NAME_WEBCONTENT, null)
     .addValidator(MandatoryValidator.class).addValidator(IdentifierValidator.class));
-    addUIFormInput(new UIFormWYSIWYGInput(SUMMARY_WEBCONTENT, SUMMARY_WEBCONTENT, null));
+    addUIFormInput(new UIFormStringInput(TITLE_WEBCONTENT, TITLE_WEBCONTENT, null)
+    .addValidator(MandatoryValidator.class).addValidator(IdentifierValidator.class));
+    addUIFormInput(new UIFormWYSIWYGInput(SUMMARY_WEBCONTENT, SUMMARY_WEBCONTENT, null));      
   }
 
   public void init() throws Exception {
