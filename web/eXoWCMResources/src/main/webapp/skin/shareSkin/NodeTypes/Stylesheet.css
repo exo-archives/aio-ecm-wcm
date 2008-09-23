@@ -17,3 +17,23 @@
   width: 16px; height: 16px;
   background: url('16x16/exo-portalFolder.gif') no-repeat;  
 }
+
+.exo_linkFolder16x16Icon{
+  width: 16px; height: 16px;
+  background: url('16x16/exo-linkFolder.gif') no-repeat;  
+}
+
+.exo_themeFolder16x16Icon{
+  width: 16px; height: 16px;
+  background: url('16x16/exo-themeFolder.gif') no-repeat;  
+}
+
+.exo_link16x16Icon{
+  width: 16px; height: 16px;
+  background: url('16x16/exo-webLink.gif') no-repeat;  
+}
+
+.exo_webContent16x16Icon{
+  width: 16px; height: 16px;
+  background: url('16x16/exo-webContent.gif') no-repeat;  
+}
