@@ -95,14 +95,14 @@ public class WebContentSchemaHandler extends BaseWebSchemaHandler {
     jcrContent.addMixin("dc:elementSet");
     jcrContent.setProperty("jcr:encoding", "UTF-8");
     jcrContent.setProperty("jcr:lastModified", cal);
-    jcrContent.setProperty("jcr:mimeType", "text/html");
-    jcrContent.setProperty("jcr:data", "");
+    jcrContent.setProperty("jcr:mimeType", mimeType);
+    jcrContent.setProperty("jcr:data", data);
     home.getSession().save();
     return file;
   }
 
   
-  private void createSchema(final Node webContent) throws Exception {    
+  protected void createSchema(final Node webContent) throws Exception {    
     if (!webContent.hasNode("js")) {
       Node js = webContent.addNode("js","exo:jsFolder"); 
       addMixin(js,"exo:owneable");
@@ -130,6 +130,9 @@ public class WebContentSchemaHandler extends BaseWebSchemaHandler {
       addMixin(document, "exo:documentFolder");
       addMixin(document,"exo:owneable");
     }
+    //because exo:webcontent is exo:rss-enable so need set exo:title of the webcontent
+    //by default, value of exo:title is webcontent name
+    webContent.setProperty("exo:title", webContent.getName());
   }
   
 }
