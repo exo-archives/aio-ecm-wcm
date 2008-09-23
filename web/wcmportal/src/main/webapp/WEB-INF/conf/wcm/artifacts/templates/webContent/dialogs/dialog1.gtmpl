@@ -90,7 +90,7 @@
 								<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.title")%></td>
 							  	<td class="FieldComponent">
 								<%
-							        String[] webContentFieldTitle = ["jcrPath=/node/exo:title", "validate=empty"];
+							        String[] webContentFieldTitle = ["jcrPath=/node/exo:title", "validate=empty", "editable=if-null"];
 							        uicomponent.addTextField("title", webContentFieldTitle) ;
 							    %>
 								</td>
