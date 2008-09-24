@@ -21,7 +21,6 @@ import javax.jcr.Session;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
-import org.exoplatform.ecm.webui.form.field.UIFormTextField;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -49,40 +48,30 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.wysiwyg.UIFormWYSIWYGInput;
 
 /**
- * Created by The eXo Platform SAS
- * Author : DANG TAN DUNG
- *          dzungdev@gmail.com
- * Sep 8, 2008  
+ * Created by The eXo Platform SAS Author : DANG TAN DUNG dzungdev@gmail.com Sep
+ * 8, 2008
  */
 
-@ComponentConfig(
-    lifecycle = UIFormLifecycle.class,
-    template = "system:/groovy/webui/form/UIForm.gtmpl",
-    events = {
-      @EventConfig(listeners = UINameWebContentForm.SaveActionListener.class),
-      @EventConfig(listeners = UINameWebContentForm.AbortActionListener.class, phase = Phase.DECODE)
-    }
-)
-
+@ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIForm.gtmpl", events = {
+    @EventConfig(listeners = UINameWebContentForm.SaveActionListener.class),
+    @EventConfig(listeners = UINameWebContentForm.AbortActionListener.class, phase = Phase.DECODE) })
 public class UINameWebContentForm extends UIForm {
 
-  public static final String NAME_WEBCONTENT = "name".intern();
-  public static final String TITLE_WEBCONTENT = "title".intern();
+  public static final String NAME_WEBCONTENT    = "name".intern();
+
   public static final String SUMMARY_WEBCONTENT = "summary".intern();
 
   public UINameWebContentForm() throws Exception {
-    addUIFormInput(new UIFormStringInput(NAME_WEBCONTENT, NAME_WEBCONTENT, null)
-    .addValidator(MandatoryValidator.class).addValidator(IdentifierValidator.class));
-    addUIFormInput(new UIFormStringInput(TITLE_WEBCONTENT, TITLE_WEBCONTENT, null)
-    .addValidator(MandatoryValidator.class).addValidator(IdentifierValidator.class));
-    addUIFormInput(new UIFormWYSIWYGInput(SUMMARY_WEBCONTENT, SUMMARY_WEBCONTENT, null));      
+    addUIFormInput(new UIFormStringInput(NAME_WEBCONTENT, NAME_WEBCONTENT, null).addValidator(
+        MandatoryValidator.class).addValidator(IdentifierValidator.class));
+    addUIFormInput(new UIFormWYSIWYGInput(SUMMARY_WEBCONTENT, SUMMARY_WEBCONTENT, null));
   }
 
   public void init() throws Exception {
-    if(!isNewConfig()) {
+    if (!isNewConfig()) {
       Node currentNode = getNode();
-      String summary = ""; 
-      if(currentNode.hasProperty("exo:summary")) {
+      String summary = "";
+      if (currentNode.hasProperty("exo:summary")) {
         summary = currentNode.getProperty("exo:summary").getValue().getString();
       }
       UIFormWYSIWYGInput uiFormWYSIWYGInput = getChild(UIFormWYSIWYGInput.class);
@@ -101,7 +90,8 @@ public class UINameWebContentForm extends UIForm {
     String UUID = prefs.getValue(UIAdvancedPresentationPortlet.UUID, null);
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
-    Session session = SessionProviderFactory.createSystemProvider().getSession(workspace, manageableRepository);
+    Session session = SessionProviderFactory.createSystemProvider().getSession(workspace,
+        manageableRepository);
     return session.getNodeByUUID(UUID);
   }
 
@@ -114,31 +104,42 @@ public class UINameWebContentForm extends UIForm {
     public void execute(Event<UINameWebContentForm> event) throws Exception {
       UINameWebContentForm uiNameWebContentForm = event.getSource();
       String portalName = Util.getUIPortal().getName();
-      LivePortalManagerService livePortalManagerService = uiNameWebContentForm.getApplicationComponent(LivePortalManagerService.class);
+      LivePortalManagerService livePortalManagerService = uiNameWebContentForm
+          .getApplicationComponent(LivePortalManagerService.class);
       SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
       Node portalNode = livePortalManagerService.getLivePortal(portalName, sessionProvider);
-      WebSchemaConfigService webSchemaConfigService = uiNameWebContentForm.getApplicationComponent(WebSchemaConfigService.class);
-      PortalFolderSchemaHandler handler = webSchemaConfigService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
+      WebSchemaConfigService webSchemaConfigService = uiNameWebContentForm
+          .getApplicationComponent(WebSchemaConfigService.class);
+      PortalFolderSchemaHandler handler = webSchemaConfigService
+          .getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
       Node webContentStorage = handler.getWebContentStorage(portalNode);
-      String webContentName = ((UIFormStringInput)uiNameWebContentForm.getChildById(NAME_WEBCONTENT)).getValue();
+      String webContentName = ((UIFormStringInput) uiNameWebContentForm
+          .getChildById(NAME_WEBCONTENT)).getValue();
       String summaryContent = uiNameWebContentForm.getChild(UIFormWYSIWYGInput.class).getValue();
       Node webContentNode = null;
-      if(uiNameWebContentForm.isNewConfig()) {
-        webContentNode = webContentStorage.addNode(webContentName,"exo:webContent");        
-        WebContentSchemaHandler webContentSchemaHandler = webSchemaConfigService.getWebSchemaHandlerByType(WebContentSchemaHandler.class);
+      if (uiNameWebContentForm.isNewConfig()) {
+        webContentNode = webContentStorage.addNode(webContentName, "exo:webContent");
+        WebContentSchemaHandler webContentSchemaHandler = webSchemaConfigService
+            .getWebSchemaHandlerByType(WebContentSchemaHandler.class);
         webContentSchemaHandler.createDefaultSchema(webContentNode);
-      }else {
+      } else {
         webContentNode = uiNameWebContentForm.getNode();
       }
+      if (webContentNode.canAddMixin("mix:votable"))
+        webContentNode.addMixin("mix:votable");
+      if (webContentNode.canAddMixin("mix:commentable"))
+        webContentNode.addMixin("mix:commentable");
       webContentNode.setProperty("exo:summary", summaryContent);
       webContentStorage.getSession().save();
-      String repositoryName = ((ManageableRepository)webContentNode.getSession().getRepository()).getConfiguration().getName();
-      String workspaceName = webContentNode.getSession().getWorkspace().getName();      
+      String repositoryName = ((ManageableRepository) webContentNode.getSession().getRepository())
+          .getConfiguration().getName();
+      String workspaceName = webContentNode.getSession().getWorkspace().getName();
       NodeLocation nodeLocation = new NodeLocation();
       nodeLocation.setRepository(repositoryName);
       nodeLocation.setWorkspace(workspaceName);
       nodeLocation.setPath(webContentNode.getParent().getPath());
-      UIQuickCreationWizard uiQuickCreationWizard = uiNameWebContentForm.getAncestorOfType(UIQuickCreationWizard.class);
+      UIQuickCreationWizard uiQuickCreationWizard = uiNameWebContentForm
+          .getAncestorOfType(UIQuickCreationWizard.class);
       UIContentDialogForm uiCDForm = uiQuickCreationWizard.getChild(UIContentDialogForm.class);
       uiCDForm.setStoredLocation(nodeLocation);
       uiCDForm.setNodePath(webContentNode.getPath());
