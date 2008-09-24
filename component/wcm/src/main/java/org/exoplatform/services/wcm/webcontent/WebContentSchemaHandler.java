@@ -96,8 +96,7 @@ public class WebContentSchemaHandler extends BaseWebSchemaHandler {
     jcrContent.setProperty("jcr:encoding", "UTF-8");
     jcrContent.setProperty("jcr:lastModified", cal);
     jcrContent.setProperty("jcr:mimeType", mimeType);
-    jcrContent.setProperty("jcr:data", data);
-    home.getSession().save();
+    jcrContent.setProperty("jcr:data", data);    
     return file;
   }
 

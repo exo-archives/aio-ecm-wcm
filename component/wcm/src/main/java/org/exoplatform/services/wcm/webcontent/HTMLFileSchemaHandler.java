@@ -19,8 +19,6 @@ package org.exoplatform.services.wcm.webcontent;
 import javax.jcr.Node;
 import javax.jcr.Session;
 
-import org.exoplatform.container.ExoContainer;
-import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.wcm.core.BaseWebSchemaHandler;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
 
@@ -52,9 +50,8 @@ public class HTMLFileSchemaHandler extends BaseWebSchemaHandler {
     Node webContent = webFolder.addNode(fileName, "exo:webContent");
     addMixin(webContent,"exo:privilegeable");
     addMixin(webContent,"exo:owneable");
-    // need check why WebContentSchemaHandler doesn't run for this case
-    ExoContainer container = ExoContainerContext.getCurrentContainer();
-    WebSchemaConfigService schemaConfigService = (WebSchemaConfigService)container.getComponentInstanceOfType(WebSchemaConfigService.class);
+    // need check why WebContentSchemaHandler doesn't run for this case    
+    WebSchemaConfigService schemaConfigService = getService(WebSchemaConfigService.class);
     WebContentSchemaHandler contentSchemaHandler = schemaConfigService.getWebSchemaHandlerByType(WebContentSchemaHandler.class);
     contentSchemaHandler.createSchema(webContent);
     session.save();

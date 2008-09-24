@@ -146,6 +146,12 @@ public class LivePortalManagerServiceImpl implements LivePortalManagerService {
       newPortal.addMixin("exo:owneable");
     //Need set some other property for the portal node from portal config like access permission ..    
     newPortal.getSession().save();
+    //put sharedPortal path to the map at the first time when run this method
+    if(livePortalPaths.size() == 0) {
+      String sharedPortalName = wcmConfigService.getSharedPortalName(currentRepository);
+      NodeLocation nodeLocation = wcmConfigService.getLivePortalsLocation(currentRepository);
+      livePortalPaths.put(sharedPortalName,nodeLocation.getPath() + "/"+ sharedPortalName);
+    }
     livePortalPaths.put(portalName,newPortal.getPath());    
   }
 
