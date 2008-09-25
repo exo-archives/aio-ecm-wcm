@@ -20,9 +20,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import org.apache.commons.logging.Log;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ObjectParameter;
 import org.exoplatform.container.xml.PropertiesParam;
+import org.exoplatform.services.log.ExoLogger;
 
 
 /*
@@ -32,16 +34,26 @@ import org.exoplatform.container.xml.PropertiesParam;
  * Jun 20, 2008  
  */
 public class WCMConfigurationService {
-
+  
+  private static Log log = ExoLogger.getLogger("wcm:WCMConfiguarationService");
   private HashMap<String, NodeLocation> livePortalsLocations = new HashMap<String, NodeLocation>();
   private HashMap<String, String> sharedPortals = new HashMap<String, String>();
-
-  public WCMConfigurationService(InitParams initParams) {
+  private String parameterizedPageURI;
+  private String publishingPortletName;
+  
+  public WCMConfigurationService(InitParams initParams) throws Exception{
+    parameterizedPageURI = initParams.getValueParam("parameterizedPageURI").getValue();
+    log.info("Page URI is used for view DMS Document as a web page: " + parameterizedPageURI);
+    publishingPortletName = initParams.getValueParam("publishingPortletName").getValue();
+    log.info("The portlet is used to publish content in a web page: " + publishingPortletName);
     Iterator<PropertiesParam> iterator = initParams.getPropertiesParamIterator();
     for (; iterator.hasNext(); ) {
       PropertiesParam param = iterator.next();
       if ("share.portal.config".endsWith(param.getName())) {
-        sharedPortals.put(param.getProperty("repository"), param.getProperty("portalName"));
+        String repository = param.getProperty("repository");
+        String portalName = param.getProperty("portalName");
+        sharedPortals.put(repository, portalName);
+        log.info("Name of shared portal to share resources for all portals in repository: "+ repository + " is: "+ portalName);
       }
     }
     Iterator<ObjectParameter> locations = initParams.getObjectParamIterator();
@@ -50,10 +62,16 @@ public class WCMConfigurationService {
       if ("live.portals.location.config".equals(objectParameter.getName())) {
         NodeLocation objectParam = (NodeLocation)objectParameter.getObject();
         livePortalsLocations.put(objectParam.getRepository(), objectParam);
+        log.info("Location that resources for all live portal is stored in repository:" + objectParam.getRepository() 
+            + " is in workspace: "+ objectParam.getWorkspace() + " and with path: "+objectParam.getPath());
+         
       }
     }
   }
-
+  
+  public String getParameterizedPageURI() { return this.parameterizedPageURI; }
+  public String getPublishingPortletName() { return this.publishingPortletName; }
+  
   public NodeLocation getLivePortalsLocation(final String repository) {
     return livePortalsLocations.get(repository);
   }

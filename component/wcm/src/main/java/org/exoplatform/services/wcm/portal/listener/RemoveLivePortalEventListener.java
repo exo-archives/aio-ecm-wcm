@@ -16,24 +16,25 @@
  */
 package org.exoplatform.services.wcm.portal.listener;
 
+import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.config.jcr.DataStorageImpl;
 import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
+import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 
-/*
+/**
  * Created by The eXo Platform SAS
  * @author : Hoa.Pham
  *          hoa.pham@exoplatform.com
  * Jun 23, 2008  
  */
 public class RemoveLivePortalEventListener extends Listener<DataStorageImpl,PortalConfig> {
-  
+  private Log log = ExoLogger.getLogger(RemoveLivePortalEventListener.class);
   /* (non-Javadoc)
    * @see org.exoplatform.services.listener.Listener#onEvent(org.exoplatform.services.listener.Event)
    */
@@ -42,10 +43,14 @@ public class RemoveLivePortalEventListener extends Listener<DataStorageImpl,Port
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     LivePortalManagerService livePortalManagerService = 
       (LivePortalManagerService)container.getComponentInstanceOfType(LivePortalManagerService.class);
-    ThreadLocalSessionProviderService providerService =
-      (ThreadLocalSessionProviderService)container.getComponentInstanceOfType(ThreadLocalSessionProviderService.class) ;
-    SessionProvider sessionProvider = providerService.getSystemSessionProvider(null);
-    livePortalManagerService.removeLivePortal(portalConfig,sessionProvider) ;
+    SessionProvider sessionProvider = SessionProvider.createSystemProvider();
+    try {
+      livePortalManagerService.removeLivePortal(portalConfig,sessionProvider) ;
+      log.info("Resources storage of portal: "+ portalConfig.getName() + " was invalid");
+    } catch (Exception e) {
+      log.error("Exception when remove resources storage for portal: "+ portalConfig.getName(),e);
+    }
+    sessionProvider.close();
   }
   
 }

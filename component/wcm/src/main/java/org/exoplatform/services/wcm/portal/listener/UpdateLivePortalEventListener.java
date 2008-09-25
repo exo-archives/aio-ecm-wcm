@@ -21,7 +21,7 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
 
-/*
+/**
  * Created by The eXo Platform SAS
  * @author : Hoa.Pham
  *          hoa.pham@exoplatform.com
