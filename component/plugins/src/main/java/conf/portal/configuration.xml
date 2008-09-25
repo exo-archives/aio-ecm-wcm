@@ -15,5 +15,40 @@
 	      </values-param>
 	    </init-params>
 	  </component-plugin>
-	</external-component-plugins>
+	</external-component-plugins>	
+	<external-component-plugins>
+		<target-component>org.exoplatform.services.listener.ListenerService</target-component>
+		<!-- page event listener -->
+		<component-plugin>
+      <name>UserPortalConfigService.page.onCreate</name>
+      <set-method>addListener</set-method>
+      <type>org.exoplatform.services.wcm.plugins.publication.listener.CreatePageEventListener</type>
+      <description>this listener update publication state of content when page is created</description>
+    </component-plugin>
+    <component-plugin>
+      <name>UserPortalConfigService.page.onUpdate</name>
+      <set-method>addListener</set-method>
+      <type>org.exoplatform.services.wcm.plugins.publication.listener.UpdatePageEventListener</type>
+      <description>this listener update publication state of content when page is updated</description>
+    </component-plugin>
+    <component-plugin>
+      <name>UserPortalConfigService.page.onRemove</name>
+      <set-method>addListener</set-method>
+      <type>org.exoplatform.services.wcm.plugins.publication.listener.RemovePageEventListener</type>
+      <description>this listener update publication state of content when page is removed</description>
+    </component-plugin>
+    <!-- portal navigation event listener -->
+    <component-plugin>
+      <name>UserPortalConfigService.navigation.onUpdate</name>
+      <set-method>addListener</set-method>
+      <type>org.exoplatform.services.wcm.plugins.publication.listener.UpdateNavigationEventListener</type>
+      <description>this listener update publication state of content when navigation is updated</description>
+    </component-plugin>
+    <component-plugin>
+      <name>UserPortalConfigService.navigation.onRemove</name>
+      <set-method>addListener</set-method>
+      <type>org.exoplatform.services.wcm.plugins.publication.listener.RemoveNavigationEventListener</type>
+      <description>this listener update publication state of content when navigation is removed</description>
+    </component-plugin>
+  </external-component-plugins>
 </configuration>
