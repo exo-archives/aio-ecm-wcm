@@ -178,7 +178,8 @@ public class XSkinService implements Startable {
     return schemaHandler.getCSSFolder(portal);
   }
   
-  public void start() {    
+  public void start() {  
+    log.info("Start WCMSkinService...");
     SessionProvider sessionProvider = SessionProvider.createSystemProvider();    
     try {      
       LivePortalManagerService livePortalManagerService = 

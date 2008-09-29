@@ -120,6 +120,7 @@ public class WebSchemaConfigServiceImpl implements WebSchemaConfigService, Start
     sessionProvider.close();
   }
   public void start() {
+    log.info("Start WebSchemaConfigServiceImpl...");
     createLiveSharePortalFolders();
   }
 

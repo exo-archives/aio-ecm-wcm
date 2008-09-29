@@ -106,6 +106,7 @@ public class XJavascriptService implements Startable {
   }
 
   public void start() {    
+    log.info("Start WCM Javascript service...");
     SessionProvider sessionProvider = SessionProvider.createSystemProvider();
     try {                         
       String sharedJS = getJavascriptOfAllPortals(sessionProvider,null) ;
