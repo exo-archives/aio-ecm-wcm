@@ -32,12 +32,10 @@ import org.exoplatform.services.rest.transformer.XMLOutputTransformer;
 import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
- 
+
 // TODO: Auto-generated Javadoc
 /*
- * Created by The eXo Platform SAS 
- * Author : Anh Do Ngoc 
- * anh.do@exoplatform.com
+ * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Jun 24, 2008
  */
 
@@ -46,8 +44,8 @@ import org.w3c.dom.Element;
  */
 @URITemplate("/wcmLink/")
 public class LinkConnector extends BaseConnector implements ResourceContainer {
-  
-  private LinkFileHandler linkFileHandler; 
+
+  private LinkFileHandler linkFileHandler;
 
   /**
    * Instantiates a new link connector.
@@ -68,9 +66,7 @@ public class LinkConnector extends BaseConnector implements ResourceContainer {
    * @param currentFolder the current folder
    * @param command the command
    * @param type the type
-   * 
    * @return the folders and files
-   * 
    * @throws Exception the exception
    */
   @HTTPMethod(HTTPMethods.GET)
@@ -92,8 +88,12 @@ public class LinkConnector extends BaseConnector implements ResourceContainer {
       return response;
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.wcm.connector.fckeditor.BaseConnector#buildXMLResponseOnExpand(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+  /*
+   * (non-Javadoc)
+   * 
+   * @see org.exoplatform.wcm.connector.fckeditor.BaseConnector#buildXMLResponseOnExpand(java.lang.String,
+   *      java.lang.String, java.lang.String, java.lang.String,
+   *      java.lang.String)
    */
   protected Response buildXMLResponseOnExpand(String currentFolder, String currentPortal,
       String workspaceName, String repositoryName, String jcrPath, String command) throws Exception {
@@ -104,9 +104,10 @@ public class LinkConnector extends BaseConnector implements ResourceContainer {
           .getDefaultWorkspaceName();
     Node sharedPortal = livePortalManagerService.getLiveSharedPortal(repositoryName,
         localSessionProvider.getSessionProvider(null));
-    Node currentPortalNode = getCurrentPortalNode(sharedPortal, repositoryName, workspaceName, jcrPath);
+    Node currentPortalNode = getCurrentPortalNode(repositoryName, jcrPath);
     if (currentPortalNode == null)
-      currentPortalNode = getCurrentPortalNode(repositoryName, currentPortal);
+      currentPortalNode = livePortalManagerService.getLivePortal(repositoryName, currentPortal,
+          localSessionProvider.getSessionProvider(null));
     if (currentFolder.length() == 0 || "/".equals(currentFolder))
       return buildXMLResponseForRoot(currentPortalNode, sharedPortal, command);
     String currentPortalRelPath = "/" + currentPortalNode.getName() + "/";
@@ -126,7 +127,7 @@ public class LinkConnector extends BaseConnector implements ResourceContainer {
       return buildXMLResponseCommon(sharedPortal, null, currentFolder, command);
     }
   }
-  
+
   protected Response buildXMLResponseForContentStorage(Node node, String command) throws Exception {
     Element rootElement = FCKUtils.createRootElement(command, node, folderHandler
         .getFolderType(node));
@@ -154,7 +155,9 @@ public class LinkConnector extends BaseConnector implements ResourceContainer {
     return getResponse(document);
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see org.exoplatform.wcm.connector.fckeditor.BaseConnector#getRootContentStorage(javax.jcr.Node)
    */
   @Override
@@ -168,7 +171,9 @@ public class LinkConnector extends BaseConnector implements ResourceContainer {
     }
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see org.exoplatform.wcm.connector.fckeditor.BaseConnector#getContentStorageType()
    */
   @Override

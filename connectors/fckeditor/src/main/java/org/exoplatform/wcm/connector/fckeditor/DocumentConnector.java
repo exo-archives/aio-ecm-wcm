@@ -19,15 +19,18 @@ package org.exoplatform.wcm.connector.fckeditor;
 import java.io.InputStream;
 
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
 
 import org.exoplatform.common.http.HTTPMethods;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.ecm.connector.fckeditor.FCKUtils;
+import org.exoplatform.services.rest.ContextParam;
 import org.exoplatform.services.rest.HTTPMethod;
 import org.exoplatform.services.rest.HeaderParam;
 import org.exoplatform.services.rest.InputTransformer;
 import org.exoplatform.services.rest.OutputTransformer;
 import org.exoplatform.services.rest.QueryParam;
+import org.exoplatform.services.rest.ResourceDispatcher;
 import org.exoplatform.services.rest.Response;
 import org.exoplatform.services.rest.URITemplate;
 import org.exoplatform.services.rest.container.ResourceContainer;
@@ -35,6 +38,8 @@ import org.exoplatform.services.rest.transformer.PassthroughInputTransformer;
 import org.exoplatform.services.rest.transformer.XMLOutputTransformer;
 import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 // TODO: Auto-generated Javadoc
 /*
@@ -48,6 +53,8 @@ import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
 @URITemplate("/wcmDocument/")
 public class DocumentConnector extends BaseConnector implements ResourceContainer {
 
+  protected DocumentLinkHandler documentLinkHandler;
+
   /**
    * Instantiates a new document connector.
    * 
@@ -55,6 +62,7 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
    */
   public DocumentConnector(ExoContainer container) {
     super(container);
+    documentLinkHandler = new DocumentLinkHandler(container);
   }
 
   /**
@@ -67,9 +75,7 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
    * @param command the command
    * @param type the type
    * @param currentPortal the current portal
-   * 
    * @return the folders and files
-   * 
    * @throws Exception the exception
    */
   @HTTPMethod(HTTPMethods.GET)
@@ -82,13 +88,43 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
   String currentFolder, @QueryParam("currentPortal")
   String currentPortal, @QueryParam("command")
   String command, @QueryParam("type")
-  String type) throws Exception {
+  String type, @ContextParam(ResourceDispatcher.CONTEXT_PARAM_BASE_URI)
+  String baseURI) throws Exception {
+    documentLinkHandler.setBaseURI(baseURI);
+    documentLinkHandler.setCurrentPortal(getCurrentPortalNode(repositoryName, jcrPath).getName());
     Response response = buildXMLResponseOnExpand(currentFolder, currentPortal, workspaceName,
         repositoryName, jcrPath, command);
     if (response == null)
       return Response.Builder.ok().build();
     else
       return response;
+  }
+
+  protected Response buildXMLResponseForContentStorage(Node node, String command) throws Exception {
+    Element rootElement = FCKUtils.createRootElement(command, node, folderHandler
+        .getFolderType(node));
+    Document document = rootElement.getOwnerDocument();
+    Element folders = document.createElement("Foders");
+    Element files = document.createElement("Files");
+    for (NodeIterator iterator = node.getNodes(); iterator.hasNext();) {
+      Node child = iterator.nextNode();
+      if (child.isNodeType(FCKUtils.EXO_HIDDENABLE))
+        continue;
+      String folderType = folderHandler.getFolderType(child);
+      if (folderType != null) {
+        Element folder = folderHandler.createFolderElement(document, child, folderType);
+        folders.appendChild(folder);
+      }
+      String sourceType = getContentStorageType();
+      String fileType = documentLinkHandler.getFileType(child, sourceType);
+      if (fileType != null) {
+        Element file = documentLinkHandler.createFileElement(document, child, fileType);
+        files.appendChild(file);
+      }
+    }
+    rootElement.appendChild(folders);
+    rootElement.appendChild(files);
+    return getResponse(document);
   }
 
   /**
@@ -102,9 +138,7 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
    * @param command the command
    * @param language the language
    * @param currentPortal the current portal
-   * 
    * @return the response
-   * 
    * @throws Exception the exception
    */
   @HTTPMethod(HTTPMethods.GET)
@@ -119,8 +153,8 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
   String newFolderName, @QueryParam("command")
   String command, @QueryParam("language")
   String language) throws Exception {
-    Response response = buildXMLDocumentOnCreateFolder(newFolderName, currentFolder, currentPortal, jcrPath,
-        repositoryName, workspaceName, command, language);
+    Response response = buildXMLDocumentOnCreateFolder(newFolderName, currentFolder, currentPortal,
+        jcrPath, repositoryName, workspaceName, command, language);
     if (response == null)
       return Response.Builder.ok().build();
     else
@@ -140,9 +174,7 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
    * @param contentType the content type
    * @param contentLength the content length
    * @param currentPortal the current portal
-   * 
    * @return the response
-   * 
    * @throws Exception the exception
    */
   @HTTPMethod(HTTPMethods.POST)
@@ -153,7 +185,7 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
   String repositoryName, @QueryParam("workspaceName")
   String workspaceName, @QueryParam("currentFolder")
   String currentFolder, @QueryParam("currentPortal")
-  String currentPortal,@QueryParam("jcrPath")
+  String currentPortal, @QueryParam("jcrPath")
   String jcrPath, @QueryParam("uploadId")
   String uploadId, @QueryParam("language")
   String language, @HeaderParam("content-type")
@@ -175,9 +207,7 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
    * @param fileName the file name
    * @param uploadId the upload id
    * @param currentPortal the current portal
-   * 
    * @return the response
-   * 
    * @throws Exception the exception
    */
   @HTTPMethod(HTTPMethods.GET)
@@ -193,8 +223,8 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
   String language, @QueryParam("fileName")
   String fileName, @QueryParam("uploadId")
   String uploadId) throws Exception {
-    return createProcessUploadResponse(repositoryName, workspaceName, currentFolder, currentPortal ,jcrPath,
-        action, language, fileName, uploadId);
+    return createProcessUploadResponse(repositoryName, workspaceName, currentFolder, currentPortal,
+        jcrPath, action, language, fileName, uploadId);
   }
 
   /*
