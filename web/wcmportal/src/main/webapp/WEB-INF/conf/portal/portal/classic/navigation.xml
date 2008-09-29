@@ -27,6 +27,7 @@
 	    <uri>contentviewer</uri>
 	    <name>contentviewer</name>
 	    <label>Content Viewer</label>
+	    <visible>false</visible>
 	    <page-reference>portal::classic::contentviewer</page-reference>
 	  </node> 	        	  
 	</page-nodes>
