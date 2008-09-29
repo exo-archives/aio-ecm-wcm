@@ -42,11 +42,11 @@ import org.picocontainer.Startable;
  * Apr 9, 2008  
  */
 public class XJavascriptService implements Startable {
-  
+
   private static String SHARED_JS_QUERY = "select * from exo:jsFile where jcr:path like '{path}' and exo:active='true' and exo:sharedJS='true' order by exo:priority DESC " ;
   final private String MODULE_NAME = "eXo.WCM.Live".intern();
   final private String PATH = "/javascript/eXo/wcm/live".intern();
-  
+
   private RepositoryService repositoryService ;
   private JavascriptConfigService jsConfigService ;
   private WCMConfigurationService configurationService;
@@ -65,20 +65,16 @@ public class XJavascriptService implements Startable {
     return getJSDataBySQLQuery(home.getSession(),jsQuery,null);        
   }   
 
-  public void updatePortalJSOnModify(Node jsFile) throws Exception {
-    SessionProvider sessionProvider = SessionProvider.createSystemProvider();
+  public void updatePortalJSOnModify(Node jsFile, SessionProvider sessionProvider) throws Exception {    
     String javascript = getJavascriptOfAllPortals(sessionProvider,jsFile.getPath());
     String modifiedJS = jsFile.getNode("jcr:content").getProperty("jcr:data").getString();
     javascript = javascript.concat(modifiedJS);
-    addJavascript(javascript);
-    sessionProvider.close();
+    addJavascript(javascript);    
   }    
 
-  public void updatePortalJSOnRemove(Node jsFile) throws Exception {
-    SessionProvider sessionProvider = SessionProvider.createSystemProvider();
+  public void updatePortalJSOnRemove(Node jsFile, SessionProvider sessionProvider) throws Exception {    
     String javascript = getJavascriptOfAllPortals(sessionProvider,jsFile.getPath());
-    addJavascript(javascript);
-    sessionProvider.close();
+    addJavascript(javascript);    
   }
 
   private void addJavascript(String jsData) {
@@ -116,13 +112,10 @@ public class XJavascriptService implements Startable {
       if(sharedJS != null && sharedJS.length()!= 0) {
         addJavascript(sharedJS); 
       }       
-    } catch (Exception e) {
-      if(log.isErrorEnabled()) {
-        log.error("Error when start XJavaScriptService",e);
-      }
-    }finally {
-      sessionProvider.close();
-    }     
+    } catch (Exception e) {      
+      log.error("Error when start XJavaScriptService",e);      
+    }
+    sessionProvider.close();        
   }
 
   public void stop() {     

@@ -19,10 +19,13 @@ package org.exoplatform.services.wcm.webcontent;
 import javax.jcr.Node;
 import javax.jcr.Session;
 
+import org.exoplatform.services.html.HTMLDocument;
+import org.exoplatform.services.html.parser.HTMLParser;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.BaseWebSchemaHandler;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
 
-/*
+/**
  * Created by The eXo Platform SAS
  * @author : Hoa.Pham
  *          hoa.pham@exoplatform.com
@@ -33,8 +36,46 @@ public class HTMLFileSchemaHandler extends BaseWebSchemaHandler {
 
   protected String getHandlerNodeType() {   return "nt:file"; }
   protected String getParentNodeType() { return "exo:webFolder"; }
+  
+  @SuppressWarnings("unused")
+  public boolean matchHandler(Node node, SessionProvider sessionProvider) throws Exception {
+    if(!matchNodeType(node))
+      return false;
+    if(!matchMimeType(node))
+      return false;    
+    if(!matchParentNodeType(node)) {
+      if(!isInWebContent(node))
+        return false;
+    }        
+    return true;
+  }
 
-  public void onCreateNode(final Node file) throws Exception {
+  private boolean matchNodeType(Node node) throws Exception{    
+    return node.getPrimaryNodeType().getName().equals("nt:file");
+  }
+
+  private boolean matchMimeType(Node node) throws Exception {
+    String mimeType = getFileMimeType(node);       
+    if("text/html".equals(mimeType))
+      return true;    
+    if("text/plain".equals(mimeType))
+      return true;
+    return false;
+  }
+
+  public boolean isInWebContent(Node file) throws Exception{
+    if(file.getParent().isNodeType("exo:webContent")) {
+      return file.isNodeType("exo:htmlFile");
+    } 
+    return false;
+  }
+  
+  private boolean matchParentNodeType(Node file) throws Exception{
+    return file.getParent().isNodeType("exo:webFolder");
+  }
+  
+  @SuppressWarnings("unused")
+  public void onCreateNode(final Node file, SessionProvider sessionProvider) throws Exception {
     Session session = file.getSession();    
     Node webFolder = file.getParent();
     String fileName = file.getName();
@@ -60,5 +101,14 @@ public class HTMLFileSchemaHandler extends BaseWebSchemaHandler {
     session.move(tempPath, htmlFilePath);
     tempFolder.remove();    
     session.save();
-  } 
+  }
+  
+  @SuppressWarnings("unused")
+  public void onModifyNode(final Node node, final SessionProvider sessionProvider) throws Exception{
+    if(!isInWebContent(node)) return;
+    String htmlData = node.getNode("jcr:content").getProperty("jcr:data").getString();
+    HTMLDocument document = HTMLParser.createDocument(htmlData);
+    //TODO something with TocGenerator
+  }
+  
 }

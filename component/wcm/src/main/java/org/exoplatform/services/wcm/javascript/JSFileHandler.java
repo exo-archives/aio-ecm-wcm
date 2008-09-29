@@ -21,7 +21,6 @@ import javax.jcr.Node;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.BaseWebSchemaHandler;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
-import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
 
 /**
@@ -36,17 +35,56 @@ public class JSFileHandler extends BaseWebSchemaHandler {
   protected String getParentNodeType() { return "exo:jsFolder" ;}
   private boolean isPortalJSFile = false;
 
-  public boolean matchHandler(Node node) throws Exception {
-    String handlerNodeType = getHandlerNodeType();    
-    if (!node.getPrimaryNodeType().isNodeType(handlerNodeType)) 
-      return false;   
-    isPortalJSFile = isPortalJSFile(node);
-    if(isPortalJSFile)        
-      return true;     
-    return node.getParent().isNodeType(getParentNodeType());
+  public boolean matchHandler(Node node, SessionProvider sessionProvider) throws Exception {
+    if(!matchNodeType(node)) 
+      return false;
+    if(!matchMimeType(node)) 
+      return false;
+    isPortalJSFile = isInPortalJSFolder(node,sessionProvider);
+    if(!matchParenNodeType(node)) {      
+      if(isPortalJSFile)
+        return true;
+    }    
+    return true;
   }
 
-  public void onCreateNode(Node file) throws Exception {
+  private boolean matchNodeType(Node node) throws Exception{    
+    return node.getPrimaryNodeType().getName().equals("nt:file");
+  }
+  
+  private boolean matchParenNodeType(Node node ) throws Exception{
+    return node.getParent().isNodeType("exo:jsFolder");
+  }
+  
+  private boolean matchMimeType(Node node) throws Exception{
+    String mimeType = getFileMimeType(node);
+    if("text/javascript".equals(mimeType))
+      return true;
+    if("application/x-javascript".equals(mimeType))
+      return true;
+    if("text/ecmascript".equals(mimeType))
+      return true;
+    if("text/plain".equals(mimeType))
+      return true;
+    return false;
+  }
+
+  private boolean isInPortalJSFolder(Node file, SessionProvider sessionProvider) throws Exception {
+    Node portal = findPortalNode(file,sessionProvider);
+    if(portal == null)  {      
+      return false;
+    }    
+    WebSchemaConfigService schemaConfigService = getService(WebSchemaConfigService.class);
+    PortalFolderSchemaHandler schemaHandler = schemaConfigService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);           
+    Node cssFolder = schemaHandler.getCSSFolder(portal);
+    if (file.getPath().startsWith(cssFolder.getPath())) 
+      isPortalJSFile = true;
+    isPortalJSFile = false;
+    return isPortalJSFile;
+  }    
+  
+  @SuppressWarnings("unused")
+  public void onCreateNode(Node file, SessionProvider sessionProvider) throws Exception {
     addMixin(file, "exo:jsFile") ;
     addMixin(file,"exo:owneable");
     file.setProperty("exo:presentationType","exo:jsFile");
@@ -54,36 +92,19 @@ public class JSFileHandler extends BaseWebSchemaHandler {
     if(isPortalJSFile) {
       file.setProperty("exo:sharedJS",true); 
     }    
-  }
+  }  
 
-  private boolean isPortalJSFile(Node file) throws Exception{    
-    LivePortalManagerService livePortalManagerService = getService(LivePortalManagerService.class);
-    WebSchemaConfigService schemaConfigService = getService(WebSchemaConfigService.class);
-    PortalFolderSchemaHandler schemaHandler = schemaConfigService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);    
-    SessionProvider sessionProvider = SessionProvider.createSystemProvider();
-    String portalName = null;
-    for(String portalPath: livePortalManagerService.getLivePortalsPath()) {
-      if(file.getPath().startsWith(portalPath)) {
-        portalName = livePortalManagerService.getPortalNameByPath(portalPath);
-        break;
-      }      
-    }
-    if(portalName == null) return false;
-    Node portal = livePortalManagerService.getLivePortal(portalName,sessionProvider);
-    Node jsFolder = schemaHandler.getJSFolder(portal);
-    return file.getPath().startsWith(jsFolder.getPath());
-  }
-  public void onModifyNode(Node file) throws Exception {
-    if(file.hasProperty("exo:sharedJS") && file.getProperty("exo:sharedJS").getBoolean()) { 
+  public void onModifyNode(Node file, SessionProvider sessionProvider) throws Exception {
+    if(isPortalJSFile) { 
       XJavascriptService javascriptService = getService(XJavascriptService.class);
-      javascriptService.updatePortalJSOnModify(file);
+      javascriptService.updatePortalJSOnModify(file, sessionProvider);
     }
   }
 
-  public void onRemoveNode(Node file) throws Exception { 
-    if(file.hasProperty("exo:sharedJS") && file.getProperty("exo:sharedJS").getBoolean()) { 
+  public void onRemoveNode(Node file, SessionProvider sessionProvider) throws Exception { 
+    if(isPortalJSFile) { 
       XJavascriptService javascriptService = getService(XJavascriptService.class);
-      javascriptService.updatePortalJSOnRemove(file);
+      javascriptService.updatePortalJSOnRemove(file, sessionProvider);
     }
   }
 

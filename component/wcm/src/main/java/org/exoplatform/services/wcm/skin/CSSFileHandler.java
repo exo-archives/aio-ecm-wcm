@@ -21,7 +21,6 @@ import javax.jcr.Node;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.BaseWebSchemaHandler;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
-import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
 
 /**
@@ -32,63 +31,74 @@ import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
  */
 public class CSSFileHandler extends BaseWebSchemaHandler {  
   protected String getHandlerNodeType() { return "nt:file"; }
-  protected String getParentNodeType() { return "exo:cssFolder" ;}  
+  protected String getParentNodeType() { return "exo:cssFolder" ; }
+  private boolean isInPortalCSSFolder = false;
 
-  private String portalContainCSSFile = null;
   public CSSFileHandler() { }
 
-  public boolean matchHandler(Node node) throws Exception {
-    String handlerNodeType = getHandlerNodeType();    
-    if (!node.getPrimaryNodeType().isNodeType(handlerNodeType)) 
-      return false;    
-    portalContainCSSFile = findPortalContainCSSFile(node);
-    //this css file belong to a portal
-    if(portalContainCSSFile != null) 
-      return true;
-    return node.getParent().isNodeType(getParentNodeType());
+  public boolean matchHandler(Node node, SessionProvider sessionProvider) throws Exception {
+    if(!matchNodeType(node))
+      return false;
+    if(!matchMimeType(node))
+      return false;
+    isInPortalCSSFolder = matchPortalCSSFolder(node,sessionProvider);
+    if(!matchParentNodeType(node)) {      
+      if(isInPortalCSSFolder)
+        return true;
+    }
+    return true;        
   }
 
-  public void onCreateNode(Node file) throws Exception {  
+  private boolean matchNodeType(Node node) throws Exception{        
+    return node.getPrimaryNodeType().getName().equals("nt:file");
+  }
+
+  private boolean matchMimeType(Node node) throws Exception{
+    String mimeType = getFileMimeType(node);
+    if("text/css".equals(mimeType))
+      return true;
+    if("text/plain".equals(mimeType))
+      return true;
+    return false;
+  }
+
+  private boolean matchParentNodeType(Node file) throws Exception{
+    return file.getParent().isNodeType("exo:cssFolder");
+  }
+
+  private boolean matchPortalCSSFolder(Node file, SessionProvider sessionProvider) throws Exception{
+    Node portal = findPortalNode(file,sessionProvider);    
+    if(portal == null) return false;
+    WebSchemaConfigService schemaConfigService = getService(WebSchemaConfigService.class);
+    PortalFolderSchemaHandler schemaHandler = schemaConfigService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);            
+    Node cssFolder = schemaHandler.getCSSFolder(portal);
+    return file.getPath().startsWith(cssFolder.getPath());     
+  }
+  
+  @SuppressWarnings("unused")
+  public void onCreateNode(Node file, SessionProvider sessionProvider) throws Exception {  
     addMixin(file, "exo:cssFile");
     addMixin(file,"exo:owneable");
     file.setProperty("exo:presentationType","exo:cssFile");
-    //If this cssFile belong to cssFolder of portal, the cssFile will be shared cssFile       
-    if(portalContainCSSFile != null) {
+    //If this cssFile belong to cssFolder of portal, the cssFile will be shared cssFile    
+    if(isInPortalCSSFolder) {
       file.setProperty("exo:sharedCSS",true);
     }
-  }
+  }  
 
-  private String findPortalContainCSSFile(Node file) throws Exception{    
-    LivePortalManagerService livePortalManagerService = getService(LivePortalManagerService.class);
-    WebSchemaConfigService schemaConfigService = getService(WebSchemaConfigService.class);
-    PortalFolderSchemaHandler schemaHandler = schemaConfigService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);    
-    SessionProvider sessionProvider = SessionProvider.createSystemProvider();
-    String portalName = null;
-    for(String portalPath: livePortalManagerService.getLivePortalsPath()) {
-      if(file.getPath().startsWith(portalPath)) {
-        portalName = livePortalManagerService.getPortalNameByPath(portalPath);
-        break;
-      }      
-    }
-    if(portalName == null) return null;
-    Node portal = livePortalManagerService.getLivePortal(portalName,sessionProvider);
-    Node cssFolder = schemaHandler.getCSSFolder(portal);
-    if (file.getPath().startsWith(cssFolder.getPath())) 
-      return portalName;
-    return null;
-  }
-
-  public void onModifyNode(Node file) throws Exception {
-    if(file.hasProperty("exo:sharedCSS") && file.getProperty("exo:sharedCSS").getBoolean() && portalContainCSSFile != null) {      
+  public void onModifyNode(Node file, SessionProvider sessionProvider) throws Exception {
+    if(isInPortalCSSFolder) {
+      Node portal = findPortalNode(file,sessionProvider);
       XSkinService skinService = getService(XSkinService.class);      
-      skinService.updatePortalSkinOnModify(file,portalContainCSSFile);
-    }
+      skinService.updatePortalSkinOnModify(file,portal); 
+    }          
   }
 
-  public void onRemoveNode(Node file) throws Exception {
-    if(file.hasProperty("exo:sharedCSS") && file.getProperty("exo:sharedCSS").getBoolean() && portalContainCSSFile != null) {      
+  public void onRemoveNode(Node file, SessionProvider sessionProvider) throws Exception {
+    if(isInPortalCSSFolder){          
       XSkinService skinService = getService(XSkinService.class);
-      skinService.updatePortalSkinOnRemove(file,portalContainCSSFile);
+      Node portal = findPortalNode(file,sessionProvider);
+      skinService.updatePortalSkinOnRemove(file,portal);
     }
   }    
 

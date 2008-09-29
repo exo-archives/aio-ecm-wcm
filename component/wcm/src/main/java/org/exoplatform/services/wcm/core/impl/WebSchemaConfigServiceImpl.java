@@ -70,28 +70,28 @@ public class WebSchemaConfigServiceImpl implements WebSchemaConfigService, Start
     return clazz.cast(schemaHandler);    
   }
 
-  public void createSchema(Node node) throws Exception {
+  public void createSchema(Node node, SessionProvider sessionProvider) throws Exception {
     for (WebSchemaHandler handler: getAllWebSchemaHandler()) {
-      if (handler.matchHandler(node)) {
-        handler.onCreateNode(node);
+      if (handler.matchHandler(node, sessionProvider)) {
+        handler.onCreateNode(node,sessionProvider);
         return;
       }
     }    
   }
   
-  public void updateSchemaOnModify(Node node) throws Exception {
+  public void updateSchemaOnModify(Node node, SessionProvider sessionProvider) throws Exception {
     for (WebSchemaHandler handler: getAllWebSchemaHandler()) {
-      if (handler.matchHandler(node)) {
-        handler.onModifyNode(node);
+      if (handler.matchHandler(node, sessionProvider)) {
+        handler.onModifyNode(node, sessionProvider);
         return;
       }
     }
   }
 
-  public void updateSchemaOnRemove(Node node) throws Exception {
+  public void updateSchemaOnRemove(Node node, SessionProvider sessionProvider) throws Exception {
     for (WebSchemaHandler handler: getAllWebSchemaHandler()) {
-      if (handler.matchHandler(node)) {
-        handler.onRemoveNode(node);
+      if (handler.matchHandler(node, sessionProvider)) {
+        handler.onRemoveNode(node, sessionProvider);
         return;
       }
     }
@@ -117,6 +117,7 @@ public class WebSchemaConfigServiceImpl implements WebSchemaConfigService, Start
         log.error("Error when try to create share portal folder for repository: "+ repoName, e);
       }            
     }
+    sessionProvider.close();
   }
   public void start() {
     createLiveSharePortalFolders();

@@ -20,8 +20,8 @@ import java.util.Calendar;
 
 import javax.jcr.Node;
 import javax.jcr.Session;
-import javax.jcr.nodetype.NodeType;
 
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.BaseWebSchemaHandler;
 
 /**
@@ -35,17 +35,8 @@ public class WebContentSchemaHandler extends BaseWebSchemaHandler {
   protected String getHandlerNodeType() { return "exo:webContent"; }  
   protected String getParentNodeType() { return "nt:unstructured"; }
   
-  public boolean matchHandler(Node node) throws Exception {    
-    String handlerNodeType = getHandlerNodeType();
-    NodeType parentNodeType = node.getParent().getPrimaryNodeType();    
-    if (node.getPrimaryNodeType().isNodeType(handlerNodeType) 
-        && parentNodeType.isNodeType("nt:unstructured")) {
-      return true;
-    }
-    return false;    
-  }
-  
-  public void onCreateNode(final Node webContent) throws Exception {
+  @SuppressWarnings("unused")
+  public void onCreateNode(final Node webContent, SessionProvider sessionProvider) throws Exception {
     Session session = webContent.getSession();
     createSchema(webContent);
     session.save();
@@ -86,21 +77,7 @@ public class WebContentSchemaHandler extends BaseWebSchemaHandler {
     Node defaultHTML = addNodeAsNTFile(webContent, "default.html", "text/html", "");
     addMixin(defaultHTML, "exo:cssFile");
     addMixin(defaultHTML,"exo:owneable");
-  }
-  
-  private Node addNodeAsNTFile(Node home, String fileName,String mimeType,String data) throws Exception{
-    Node file = home.addNode(fileName,"nt:file");
-    Node jcrContent = file.addNode("jcr:content","nt:resource");
-    Calendar cal = Calendar.getInstance();
-    jcrContent.addMixin("dc:elementSet");
-    jcrContent.setProperty("jcr:encoding", "UTF-8");
-    jcrContent.setProperty("jcr:lastModified", cal);
-    jcrContent.setProperty("jcr:mimeType", mimeType);
-    jcrContent.setProperty("jcr:data", data);    
-    return file;
-  }
-
-  
+  }     
   protected void createSchema(final Node webContent) throws Exception {    
     if (!webContent.hasNode("js")) {
       Node js = webContent.addNode("js","exo:jsFolder"); 
@@ -134,4 +111,14 @@ public class WebContentSchemaHandler extends BaseWebSchemaHandler {
     webContent.setProperty("exo:title", webContent.getName());
   }
   
+  private Node addNodeAsNTFile(Node home, String fileName,String mimeType,String data) throws Exception{
+    Node file = home.addNode(fileName,"nt:file");
+    Node jcrContent = file.addNode("jcr:content","nt:resource");    
+    jcrContent.addMixin("dc:elementSet");
+    jcrContent.setProperty("jcr:encoding", "UTF-8");
+    jcrContent.setProperty("jcr:lastModified", Calendar.getInstance());
+    jcrContent.setProperty("jcr:mimeType", mimeType);
+    jcrContent.setProperty("jcr:data", data);    
+    return file;
+  }
 }

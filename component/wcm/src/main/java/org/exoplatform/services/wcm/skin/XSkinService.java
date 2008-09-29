@@ -28,10 +28,13 @@ import javax.jcr.query.QueryResult;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.webui.skin.SkinConfig;
 import org.exoplatform.portal.webui.skin.SkinService;
+import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
@@ -44,10 +47,10 @@ import org.picocontainer.Startable;
 public class XSkinService implements Startable {    
   private static String SHARED_CSS_QUERY = "select * from exo:cssFile where jcr:path like '{path}/%' and exo:active='true' and exo:sharedCSS='true' order by exo:priority DESC ".intern();  
   private static String SKIN_PATH_REGEXP = "/portal/css/jcr/(.*)/(.*)/Stylesheet.css".intern();
-
-  private LivePortalManagerService livePortalManagerService;        
-  private Log log = ExoLogger.getLogger("wcm:XSkinService");
+  
+  private static Log log = ExoLogger.getLogger("wcm:XSkinService");           
   private WebSchemaConfigService schemaConfigService;
+  private WCMConfigurationService configurationService;
   private SkinService skinService ;
   /**
    * Instantiates a new extended skin service to manage skin for web content
@@ -56,9 +59,9 @@ public class XSkinService implements Startable {
    * @param repositoryService the repository service
    * @param portalManagerService the portal manager service
    */
-  public XSkinService(SkinService skinService,LivePortalManagerService livePortalManagerService,WebSchemaConfigService schemaConfigService) {
+  public XSkinService(SkinService skinService,WebSchemaConfigService schemaConfigService, WCMConfigurationService configurationService) {
     this.skinService = skinService ;
-    this.livePortalManagerService = livePortalManagerService;
+    this.configurationService = configurationService;
     this.schemaConfigService = schemaConfigService;
   }
 
@@ -94,29 +97,25 @@ public class XSkinService implements Startable {
     return null;    
   }
   
-  public void updatePortalSkinOnModify(final Node cssFile, final String portalName) throws Exception {            
+  public void updatePortalSkinOnModify(final Node cssFile, final Node portal) throws Exception {            
     String modifiedCSS = cssFile.getNode("jcr:content").getProperty("jcr:data").getString();
-    SessionProvider sessionProvider = SessionProvider.createSystemProvider();    
-    Node sharedPortal = livePortalManagerService.getLiveSharedPortal(sessionProvider);        
-    if(sharedPortal.getName().equals(portalName)) {
-      addSharedPortalSkin(sharedPortal,SHARED_CSS_QUERY,cssFile.getPath(),modifiedCSS,true);
-    }else {      
-      Node portal = livePortalManagerService.getLivePortal(portalName,sessionProvider);
+    String repository = ((ManageableRepository)portal.getSession().getRepository()).getConfiguration().getName();
+    String sharedPortalName = configurationService.getSharedPortalName(repository);
+    if(sharedPortalName.equals(portal.getName())) {
+      addSharedPortalSkin(portal,SHARED_CSS_QUERY,cssFile.getPath(),modifiedCSS,true);
+    }else {            
       addPortalSkin(portal,SHARED_CSS_QUERY,cssFile.getPath(),modifiedCSS, true);
-    }              
-    sessionProvider.close();
+    }                  
   }
 
-  public void updatePortalSkinOnRemove(Node cssFile, final String portalName) throws Exception {    
-    SessionProvider sessionProvider = SessionProvider.createSystemProvider();
-    Node sharedPortal = livePortalManagerService.getLiveSharedPortal(sessionProvider);            
-    if(sharedPortal.getName().equals(portalName)) {
-      addSharedPortalSkin(sharedPortal,SHARED_CSS_QUERY,cssFile.getPath(),null,true);
-    }else {      
-      Node portal = livePortalManagerService.getLivePortal(portalName,sessionProvider);
+  public void updatePortalSkinOnRemove(Node cssFile, final Node portal) throws Exception {
+    String repository = ((ManageableRepository)portal.getSession().getRepository()).getConfiguration().getName();
+    String sharedPortalName = configurationService.getSharedPortalName(repository);
+    if(sharedPortalName.equals(portal.getName())) {
+      addSharedPortalSkin(portal,SHARED_CSS_QUERY,cssFile.getPath(),null,true);
+    }else {            
       addPortalSkin(portal,SHARED_CSS_QUERY,cssFile.getPath(), null, true);
-    }              
-    sessionProvider.close();
+    }    
   }
 
   private void addPortalSkin(Node portal,String preStatement, String exceptedPath,String appendedCSS, boolean allowEmptyCSS) throws Exception {
@@ -182,6 +181,8 @@ public class XSkinService implements Startable {
   public void start() {    
     SessionProvider sessionProvider = SessionProvider.createSystemProvider();    
     try {      
+      LivePortalManagerService livePortalManagerService = 
+        (LivePortalManagerService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(LivePortalManagerService.class);
       Node sharedPortal = livePortalManagerService.getLiveSharedPortal(sessionProvider);
       addSharedPortalSkin(sharedPortal,SHARED_CSS_QUERY,null,null,false);
       List<Node> livePortals = livePortalManagerService.getLivePortals(sessionProvider);

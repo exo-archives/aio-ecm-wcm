@@ -18,13 +18,14 @@ package org.exoplatform.services.wcm.core;
 
 import javax.jcr.Node;
 
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
+
 /**
  * Created by The eXo Platform SAS.
  * 
  * @author : Hoa.Pham hoa.pham@exoplatform.com Jun 3, 2008
  */
 public interface WebSchemaHandler {  
-  
   /**
    * Match handler to process the schema
    * 
@@ -32,7 +33,7 @@ public interface WebSchemaHandler {
    * @return true, if successful
    * @throws Exception the exception
    */
-  public boolean matchHandler(final Node node) throws Exception;
+  public boolean matchHandler(final Node node, SessionProvider sessionProvider) throws Exception;
   
   /**
    * Process schema when crete node
@@ -40,7 +41,7 @@ public interface WebSchemaHandler {
    * @param node the node
    * @throws Exception the exception
    */
-  public void onCreateNode(final Node node) throws Exception;
+  public void onCreateNode(final Node node, SessionProvider sessionProvider) throws Exception;
   
   /**
    * Update schema when modify node
@@ -48,7 +49,7 @@ public interface WebSchemaHandler {
    * @param node the node
    * @throws Exception the exception
    */
-  public void onModifyNode(final Node node) throws Exception;
+  public void onModifyNode(final Node node, SessionProvider sessionProvider) throws Exception;
   
   /**
    * Update schema before a node is removed
@@ -56,5 +57,5 @@ public interface WebSchemaHandler {
    * @param node the node
    * @throws Exception the exception
    */
-  public void onRemoveNode(final Node node) throws Exception;
+  public void onRemoveNode(final Node node, SessionProvider sessionProvider) throws Exception;
 }

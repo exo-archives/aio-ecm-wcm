@@ -18,6 +18,7 @@ package org.exoplatform.services.wcm.portal;
 
 import javax.jcr.Node;
 
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.BaseWebSchemaHandler;
 
 /**
@@ -194,7 +195,7 @@ public class PortalFolderSchemaHandler extends BaseWebSchemaHandler {
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.core.BaseWebSchemaHandler#process(javax.jcr.Node)
    */
-  public void onCreateNode(final Node portalFolder) throws Exception {
+  public void onCreateNode(final Node portalFolder, SessionProvider sessionProvider) throws Exception {
     Node jsFolder = portalFolder.addNode("js","exo:jsFolder");
     addMixin(jsFolder,"exo:owneable");
     Node cssFolder = portalFolder.addNode("css","exo:cssFolder");
@@ -227,5 +228,5 @@ public class PortalFolderSchemaHandler extends BaseWebSchemaHandler {
     Node links = portalFolder.addNode("links", "exo:linkFolder");
     addMixin(links,"exo:owneable");
     portalFolder.getSession().save();       
-  }
+  }  
 }

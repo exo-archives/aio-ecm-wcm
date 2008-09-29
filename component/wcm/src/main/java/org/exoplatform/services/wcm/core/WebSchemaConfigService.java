@@ -21,6 +21,7 @@ import java.util.Collection;
 import javax.jcr.Node;
 
 import org.exoplatform.container.component.ComponentPlugin;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -67,7 +68,7 @@ public interface WebSchemaConfigService {
    * 
    * @throws Exception the exception
    */
-  public void createSchema(final Node node) throws Exception;
+  public void createSchema(final Node node, SessionProvider sessionProvider) throws Exception;
   
   /**
    * Update schema when a node is modified
@@ -76,7 +77,7 @@ public interface WebSchemaConfigService {
    * 
    * @throws Exception the exception
    */
-  public void updateSchemaOnModify(final Node node) throws Exception;
+  public void updateSchemaOnModify(final Node node, SessionProvider sessionProvider) throws Exception;
   
   /**
    * Update schema on when a node is removed
@@ -85,5 +86,5 @@ public interface WebSchemaConfigService {
    * 
    * @throws Exception the exception
    */
-  public void updateSchemaOnRemove(final Node node) throws Exception;
+  public void updateSchemaOnRemove(final Node node, SessionProvider sessionProvider) throws Exception;
 }

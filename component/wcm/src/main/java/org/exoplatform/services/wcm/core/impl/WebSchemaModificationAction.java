@@ -24,6 +24,7 @@ import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.command.action.Action;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
 /**
@@ -45,11 +46,13 @@ public class WebSchemaModificationAction implements Action{
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     WebSchemaConfigService schemaConfigService = 
       (WebSchemaConfigService) container.getComponentInstanceOfType(WebSchemaConfigService.class);
+    SessionProvider sessionProvider = SessionProvider.createSystemProvider();
     try {            
-      schemaConfigService.updateSchemaOnModify(grandParent);
+      schemaConfigService.updateSchemaOnModify(grandParent, sessionProvider);
     } catch (Exception e) { 
       log.error("Error when update schema when modify node: "+grandParent.getPath() , e);
     }       
+    sessionProvider.close();
     return true;    
   }
 
