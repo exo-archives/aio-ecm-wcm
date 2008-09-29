@@ -50,4 +50,20 @@
     </application>
   </page>                      
 
+  <page>
+  	<page-id>portal::classic::contentviewer</page-id>
+    <owner-type>portal</owner-type>
+    <owner-id>classic</owner-id>
+    <name>contentviewer</name>
+    <title>ContentViewer</title>
+	  <access-permissions>Everyone</access-permissions>
+	  <edit-permission>*:/platform/administrators</edit-permission>
+    <application>
+      <instance-id>portal#classic:/ecm/ContentViewerPortlet/contentviewer</instance-id>
+      <title>contentviewer</title>
+      <show-info-bar>false</show-info-bar>      
+      <show-application-state>false</show-application-state>
+      <show-application-mode>false</show-application-mode>
+    </application>
+  </page>
 </page-set>

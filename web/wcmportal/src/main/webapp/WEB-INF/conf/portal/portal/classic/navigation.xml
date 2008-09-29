@@ -22,6 +22,12 @@
 	    <name>search</name>
 	    <label>Search</label>
 	    <page-reference>portal::classic::search</page-reference>	    
-	  </node>	         	  
+	  </node>	
+	  <node>
+	    <uri>contentviewer</uri>
+	    <name>contentviewer</name>
+	    <label>Content Viewer</label>
+	    <page-reference>portal::classic::contentviewer</page-reference>
+	  </node> 	        	  
 	</page-nodes>
 </node-navigation>
