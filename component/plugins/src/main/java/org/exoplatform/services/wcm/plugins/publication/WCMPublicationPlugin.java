@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.jcr.Node;
 
@@ -121,5 +122,10 @@ public class WCMPublicationPlugin extends PublicationPlugin {
   private <T> T getServices(Class<T> clazz) {
     ExoContainer exoContainer = ExoContainerContext.getCurrentContainer();
     return clazz.cast(exoContainer.getComponentInstanceOfType(clazz));
+  }
+
+  @Override
+  public Node getNodeView(Node node, Map<String, Object> context) throws Exception {
+    return node;
   }
 }
