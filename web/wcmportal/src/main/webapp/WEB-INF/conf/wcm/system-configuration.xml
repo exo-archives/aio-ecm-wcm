@@ -24,7 +24,7 @@
 	        <object type="org.exoplatform.services.wcm.core.NodeLocation">
 	        	<field  name="repository"><string>repository</string></field>
 	        	<field name="workspace"><string>collaboration</string></field>
-	        	<field name="path"><string>/Web Content/Live</string></field>
+	        	<field name="path"><string>/sites content/live</string></field>
 	        </object>
 	     </object-param>	    
 	   </init-params>
@@ -46,7 +46,7 @@
 	              <value>
 	                <object type="org.exoplatform.services.jcr.impl.ext.action.ActionConfiguration">
 	                	<field  name="workspace"><string>collaboration</string></field>
-	                	<field  name="path"><string>/Web Content</string></field>
+	                	<field  name="path"><string>/sites content</string></field>
 	                	<field  name="isDeep"><boolean>true</boolean></field>
 	                	<field  name="nodeTypes"><string>nt:unstructured,nt:folder,nt:file,exo:portalFolder,exo:webContent,exo:webFolder</string></field>
 	                  <field  name="eventTypes"><string>addNode</string></field>	                  	                 
@@ -56,7 +56,7 @@
 	              <value>
 	                <object type="org.exoplatform.services.jcr.impl.ext.action.ActionConfiguration">
 	                	<field  name="workspace"><string>collaboration</string></field>
-	                	<field  name="path"><string>/Web Content</string></field>
+	                	<field  name="path"><string>/sites content</string></field>
 	                	<field  name="isDeep"><boolean>true</boolean></field>
 	                	<field  name="nodeTypes"><string>nt:file,nt:resource</string></field>
 	                  <field  name="eventTypes"><string>addProperty,changeProperty,removeProperty</string></field>	                  	                 
@@ -66,7 +66,7 @@
 	              <value>
 	                <object type="org.exoplatform.services.jcr.impl.ext.action.ActionConfiguration">
 	                	<field  name="workspace"><string>collaboration</string></field>
-	                	<field  name="path"><string>/Web Content</string></field>
+	                	<field  name="path"><string>/sites content</string></field>
 	                	<field  name="isDeep"><boolean>true</boolean></field>
 	                	<field  name="nodeTypes"><string>nt:file,nt:resource</string></field>
 	                  <field  name="eventTypes"><string>removeNode</string></field>	                  	                 

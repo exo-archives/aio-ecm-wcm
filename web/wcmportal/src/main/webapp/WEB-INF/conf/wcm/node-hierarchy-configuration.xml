@@ -22,8 +22,8 @@
 	          	<collection type="java.util.ArrayList">
 	          		<value>              	
 		             	<object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$JcrPath">              	 	
-		             		<field  name="alias"><string>webContent</string></field>
-		                <field  name="path"><string>/Web Content</string></field>		                				            	
+		             		<field  name="alias"><string>siteContent</string></field>
+		                <field  name="path"><string>/sites content</string></field>		                				            	
 		                <field name="permissions">
 				              <collection type="java.util.ArrayList">               
 				                <value>                            
@@ -50,8 +50,8 @@
               	</value>
               	<value>              	
 		             	<object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$JcrPath">              	 	
-		             		<field  name="alias"><string>liveWebContent</string></field>
-		                <field  name="path"><string>/Web Content/Live</string></field>		                				            	
+		             		<field  name="alias"><string>liveSiteContent</string></field>
+		                <field  name="path"><string>/sites content/live</string></field>		                				            	
 		                <field name="permissions">
 				              <collection type="java.util.ArrayList">               
 				                <value>                            
@@ -75,91 +75,7 @@
 			                </collection>
 			              </field>   			               
 	              	</object>
-              	</value>
-              	<value>              	
-		             	<object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$JcrPath">              	 	
-		             		<field  name="alias"><string>pendingWebContent</string></field>
-		                <field  name="path"><string>/Web Content/Pending</string></field>		                				            	
-		                <field name="permissions">
-				              <collection type="java.util.ArrayList">               
-				                <value>                            
-				                  <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">             
-				                      <field name="identity"><string>*:/platform/administrators</string></field>
-				                      <field name="read"><string>true</string></field>                
-				                      <field name="addNode"><string>true</string></field>                
-				                      <field name="setProperty"><string>true</string></field>                
-				                      <field name="remove"><string>true</string></field>                
-				                    </object>  
-				                </value>
-				                <value>                            
-				                  <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">             
-				                      <field name="identity"><string>any</string></field>
-				                      <field name="read"><string>true</string></field>                
-				                      <field name="addNode"><string>false</string></field>                
-				                      <field name="setProperty"><string>false</string></field>                
-				                      <field name="remove"><string>false</string></field>                
-				                    </object>  
-				                </value>			                  
-			                </collection>
-			              </field>   			               
-	              	</object>
-              	</value>
-              	<value>              	
-		             	<object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$JcrPath">              	 	
-		             		<field  name="alias"><string>validationRequestWebContent</string></field>
-		                <field  name="path"><string>/Web Content/Validation Request</string></field>		                				            	
-		                <field name="permissions">
-				              <collection type="java.util.ArrayList">               
-				                <value>                            
-				                  <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">             
-				                      <field name="identity"><string>*:/platform/administrators</string></field>
-				                      <field name="read"><string>true</string></field>                
-				                      <field name="addNode"><string>true</string></field>                
-				                      <field name="setProperty"><string>true</string></field>                
-				                      <field name="remove"><string>true</string></field>                
-				                    </object>  
-				                </value>
-				                <value>                            
-				                  <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">             
-				                      <field name="identity"><string>any</string></field>
-				                      <field name="read"><string>true</string></field>                
-				                      <field name="addNode"><string>false</string></field>                
-				                      <field name="setProperty"><string>false</string></field>                
-				                      <field name="remove"><string>false</string></field>                
-				                    </object>  
-				                </value>			                  
-			                </collection>
-			              </field>   			               
-	              	</object>
-              	</value>
-              	<value>              	
-		             	<object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$JcrPath">              	 	
-		             		<field  name="alias"><string>trashWebContent</string></field>
-		                <field  name="path"><string>/Web Content/Trash</string></field>		                				            	
-		                <field name="permissions">
-				              <collection type="java.util.ArrayList">               
-				                <value>                            
-				                  <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">             
-				                      <field name="identity"><string>*:/platform/administrators</string></field>
-				                      <field name="read"><string>true</string></field>                
-				                      <field name="addNode"><string>true</string></field>                
-				                      <field name="setProperty"><string>true</string></field>                
-				                      <field name="remove"><string>true</string></field>                
-				                    </object>  
-				                </value>
-				                <value>                            
-				                  <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">             
-				                      <field name="identity"><string>any</string></field>
-				                      <field name="read"><string>true</string></field>                
-				                      <field name="addNode"><string>false</string></field>                
-				                      <field name="setProperty"><string>false</string></field>                
-				                      <field name="remove"><string>false</string></field>                
-				                    </object>  
-				                </value>			                  
-			                </collection>
-			              </field>   			               
-	              	</object>
-              	</value>              	              	              
+              	</value>              	        	              	              
              	</collection>              	              	
 	          </field>
 	        </object>
