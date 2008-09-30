@@ -77,7 +77,8 @@ public class UIPortalNavigationExplorer extends UIContainer{
       tree.setSibbling(list);
       tree.setBeanIdField("uri");
       tree.setBeanLabelField("name");
-      tree.setBeanIconField("icon");
+      tree.setIcon("DefaultPageIcon");    
+      tree.setSelectedIcon("DefaultPageIcon");
     } else {
       UIPublicationTree tree = addChild(UIPublicationTree.class, null, "UIPageNodeTree");
       PageNavigation navigation = getPortalNavigation(portalName);
@@ -87,7 +88,8 @@ public class UIPortalNavigationExplorer extends UIContainer{
       tree.setSibbling(treeNode.getTreeNodeChildren());
       tree.setBeanIdField("uri");
       tree.setBeanLabelField("name");
-      tree.setBeanIconField("icon");
+      tree.setIcon("DefaultPageIcon");    
+      tree.setSelectedIcon("DefaultPageIcon");
     }
   }
 
