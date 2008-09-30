@@ -20,6 +20,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.jcr.Node;
 
@@ -79,5 +80,10 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
   @Override
   public void suspendPublishedContentFromPage(Node content, Page page) throws Exception {
     
+  }
+  
+  @SuppressWarnings("unused")
+  public Node getNodeView(Node node, Map<String, Object> context) throws Exception {
+    return node;
   }
 }

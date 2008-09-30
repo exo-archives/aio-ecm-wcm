@@ -27,6 +27,13 @@ import org.exoplatform.services.ecm.publication.PublicationPlugin;
  * hoa.pham@exoplatform.com
  * Sep 29, 2008
  */
+
+/**
+ * Base class of Webpage Publication plugins.
+ * Webpage publication plugins implement a publication lifecycle. Each time a new
+ * custom lifecycle needs to be defined, a new plugin has to be implemented
+ * and registered with the Publication Service.
+ */
 public abstract class WebpagePublicationPlugin extends PublicationPlugin { 
   
   /**
