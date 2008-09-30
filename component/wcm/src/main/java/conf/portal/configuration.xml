@@ -26,7 +26,7 @@
 	        <object type="org.exoplatform.services.wcm.core.NodeLocation">
 	        	<field  name="repository"><string>repository</string></field>
 	        	<field name="workspace"><string>collaboration</string></field>
-	        	<field name="path"><string>/Web Content/Live</string></field>
+	        	<field name="path"><string>/sites content/live</string></field>
 	        </object>
 	     </object-param>	    
 	   </init-params>
