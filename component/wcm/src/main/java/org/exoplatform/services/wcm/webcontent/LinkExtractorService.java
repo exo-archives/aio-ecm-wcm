@@ -91,6 +91,11 @@ public class LinkExtractorService {
    * @throws Exception the exception
    */
   public void createLinkNode(Node webContent) throws Exception {
+    
+    if (!webContent.isCheckedOut() || webContent.isLocked()) {
+      return;
+    }
+
     ValueFactory valueFactory = webContent.getSession().getValueFactory(); 
     
     if (webContent.canAddMixin("exo:linkable")) {
