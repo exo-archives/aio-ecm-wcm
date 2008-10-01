@@ -22,6 +22,7 @@
         <value>locale.wcm.dialogs</value>
         <value>locale.wcm.views</value>
         <value>locale.wcm.webui</value>
+        <value>locale.wcm.publication</value>
         <value>locale.portal.custom</value>
         <value>locale.navigation.portal.classic</value>
         <value>locale.navigation.portal.webos</value>
@@ -39,6 +40,7 @@
         <value>locale.portal.webui</value>
         <value>locale.ecm.webui</value>
         <value>locale.wcm.webui</value>
+        <value>locale.wcm.publication</value>
         <value>locale.portal.custom</value>
         <value>locale.ecm.dialogs</value>
         <value>locale.ecm.views</value>

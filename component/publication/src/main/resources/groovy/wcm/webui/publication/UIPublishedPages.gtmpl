@@ -1,0 +1,19 @@
+<div class="UISelectedPages" id="$uicomponent.id">
+  <div class="Container"> 
+	  <div class="ListPage">
+      <div class="OverflowContainer">
+	      <%                
+		      for(treeNode in uicomponent.getListTreeNode()){
+			      String selectedClass = "";
+						if (uicomponent.getSelectedTreeNode() != null) {
+							selectedClass = uicomponent.getSelectedTreeNode().equals(treeNode) ? "Selected" : "";
+						}
+		      	%>
+	        		<div class="ItemIcon $selectedClass" onclick="<%=uicomponent.event("SelectTreeNode", treeNode)%>" title="$treeNode">$treeNode</div>
+	      		<%
+	      	}
+	      %>
+      </div>
+	  </div>
+	</div>
+</div> 		

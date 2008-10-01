@@ -1,0 +1,127 @@
+.PanelContainer {
+	margin: auto;
+}
+
+.PanelContainer .PanelContent{
+	background: white;
+	padding: 5px;
+	margin: 0;
+	height: 300px;
+	overflow: auto;
+}
+
+.PanelLeft{
+	float: left;
+	width: 40%;
+}
+	
+.PanelRight{
+	float: right;
+	width: 40%;
+}
+
+.PanelCenter{
+	text-align: center;
+	width: 125px;
+	margin: auto;
+	padding-top: 100px;
+}
+
+.PanelCenter a img {
+	background: #bfd3df;
+	border: 1px solid white;
+	margin: 1px;
+	padding: 1px;
+}
+
+.PanelCenter .ArrowBack {
+	background: url('images/arrowBack.gif') no-repeat top left;
+	height: 33px;
+	width: 62px;
+	cursor: pointer;
+	margin: auto;
+}
+
+.PanelCenter .ArrowNext {
+	background: url('images/arrowNext.gif') no-repeat top left;
+	height: 33px;
+	width: 62px;
+	cursor: pointer;
+	margin: auto;
+}
+
+.Title{
+	color: #0d5398;
+	font-weight: bold;
+	padding: 0;
+	margin: 0;
+	text-align: center;
+	margin-bottom: 3px;
+}
+
+.SubTitle {
+	font-size: 11px;
+	color:#999999;
+	text-align: center;
+	margin-bottom: 3px;
+}
+
+.PanelBox{
+	border: 1px solid white;
+	background: #bfd3df;
+	padding: 1px;
+}
+
+.UISelectedPages .Container {
+  background: #f4f4f4;
+}
+
+.UISelectedPages .ListPage {
+  background: #f4f4f4;
+}
+
+.UISelectedPages .ListPage .OverflowContainer {
+  background: white;
+  height: 146px; 
+  width: auto;
+  padding: 7px 0px;
+  overflow: auto;
+}
+
+.UISelectedPages .ListPage  a:hover {
+  color: blue; 
+}
+
+.UISelectedPages .ListPage .ItemIcon {
+  height: 22px; 
+  line-height: 22px;
+  background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/GrayNextArrow.gif') no-repeat left;  
+  padding-left: 20px;
+  display: block;
+  cursor: pointer;
+}
+
+.UISelectedPages .ListPage .Selected {
+	height: 22px; 
+  line-height: 22px;
+  background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/BlueNextArrow.gif') no-repeat left;  
+  padding-left: 20px;
+  display: block;
+  cursor: pointer;
+  color: #058EE6;
+}
+
+
+
+.PanelContainer .UIContainerConfigOptions {
+	margin: 0;
+}
+
+.PanelContainer .UIContainerConfigOptions .ScrollArea {
+	border: none;
+}
+
+.PanelContainer .ContainerConfigOptions {
+	border: none;
+	padding: 0;
+}

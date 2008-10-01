@@ -44,6 +44,7 @@ public class UIPublishingPanel extends UIForm {
 
   public UIPublishingPanel() throws Exception {
     addChild(UIPortalNavigationExplorer.class,null,"UIPortalNavigationExplorer");
+    addChild(UIPublicationAction.class,null,"UIPublicationAction");
     addChild(UIPublishedPages.class,null,"UIPublishedPages");
   }
 

@@ -16,9 +16,15 @@
  */
 package org.exoplatform.services.wcm.publication.defaultlifecycle;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
+import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.lifecycle.Lifecycle;
+import org.exoplatform.webui.event.Event;
+import org.exoplatform.webui.event.EventListener;
 
 /**
  * Created by The eXo Platform SAS
@@ -28,9 +34,32 @@ import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
  */
 
 @ComponentConfig(
-    lifecycle = UIContainerLifecycle.class
+    lifecycle = Lifecycle.class,
+    template = "classpath:groovy/wcm/webui/publication/UIPublishedPages.gtmpl",
+    events = {
+      @EventConfig(listeners=UIPublishedPages.SelectTreeNodeActionListener.class)
+    }
 )
 
-public class UIPublishedPages extends UIContainer{
+public class UIPublishedPages extends UIContainer {
+  private String selectedTreeNode;
+  private List<String> listTreeNode;
 
+  public String getSelectedTreeNode() {return selectedTreeNode;}
+  public void setSelectedTreeNode(String selectedTreeNode) {this.selectedTreeNode = selectedTreeNode;}
+  public List<String> getListTreeNode() {return listTreeNode;}
+  public void setListTreeNode(List<String> listTreeNode) {this.listTreeNode = listTreeNode;}
+  
+  public UIPublishedPages() throws Exception {
+    // TODO: Need get from JCR
+    listTreeNode = new ArrayList<String>();
+  }
+
+  public static class SelectTreeNodeActionListener extends EventListener<UIPublishedPages> {
+    public void execute(Event<UIPublishedPages> event) throws Exception {
+      UIPublishedPages publishedPages = event.getSource();
+      String selectedTreeNode = event.getRequestContext().getRequestParameter(OBJECTID);
+      publishedPages.setSelectedTreeNode(selectedTreeNode);
+    }
+  }
 }

@@ -75,7 +75,7 @@ public class WCMConfigurationService {
   public NodeLocation getLivePortalsLocation(final String repository) {
     return livePortalsLocations.get(repository);
   }
-
+//TODO
   public String getSharedPortalName(final String repository) {
     return sharedPortals.get(repository);
   }

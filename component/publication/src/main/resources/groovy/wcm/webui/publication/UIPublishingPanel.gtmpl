@@ -1,38 +1,3 @@
-<style>
-	.PanelContainer {
-	}
-	.PanelContainer .PanelLeft {
-		border:1px solid green;
-		float:left;
-		margin-right:10px;
-		width:40%;
-		height:300px;
-	}
-	.PanelContainer .PanelCenter {
-		border:1px solid green;
-		float:left;
-		margin-right:10px;
-		height:300px;
-		width:15%;
-	}
-	.PanelContainer .PanelRight {
-		border:1px solid green;
-		float:left;
-		height:300px;
-		width:40%;
-	}
-	.PanelContainer .Title {
-	 	color: red;
-	 	margin: 10px;
-	 	padding: 0;
-	 	text-align: center;
-	 }
-	.PanelContainer .MoreInfo {
-		color: blue;
-		text-align: center;
-	}
-</style>
-
 <%
 	String currentPortal = uiform.getCurrentPortal();
 	currentPortal = currentPortal == null ? _ctx.appRes("UIPublishingPanel.currentPortal.none") : currentPortal;
@@ -42,10 +7,34 @@
 <div class="PanelContainer">
 	<div class="PanelLeft">
 		<dir class="Title"><%= _ctx.appRes("UIPublishingPanel.panelLeft.title"); %></dir>
-		<div class="MoreInfo">
+		<div class="SubTitle">
 			<span><%= _ctx.appRes("UIPublishingPanel.currentPortal.title"); %>: $currentPortal </span>
 			<span><%= _ctx.appRes("UIPublishingPanel.currentNode.title"); %>: $currentTreeNode </span>
 		</div>
-		<% uiform.renderChild("UIPortalNavigationExplorer") %>
 	</div>
+	<div class="PanelRight">
+		<div class="Title"><%= _ctx.appRes("UIPublishingPanel.panelRight.title"); %></div>
+	</div>
+	<div style="clear: both;"></div>
+</div>
+
+<div class="PanelContainer">
+	<div class="PanelLeft">
+		<div class="PanelBox">
+			<div class="PanelContent">
+				<% uiform.renderChild("UIPortalNavigationExplorer") %>
+			</div>
+		</div>
+	</div>
+	<div class="PanelRight">
+		<div class="PanelBox">
+			<div class="PanelContent">
+				<% uiform.renderChild("UIPublishedPages") %>
+			</div>
+		</div>
+	</div>
+	<div class="PanelCenter">
+		<% uiform.renderChild("UIPublicationAction") %>
+	</div>
+	<div style="clear: both;"></div>
 </div>
