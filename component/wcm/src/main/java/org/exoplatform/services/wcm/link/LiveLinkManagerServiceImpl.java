@@ -147,25 +147,27 @@ public class LiveLinkManagerServiceImpl implements LiveLinkManagerService {
     NodeIterator iter = results.getNodes();
     for (;iter.hasNext();) {
       Node webContent = iter.nextNode();
-      Property links = webContent.getProperty("exo:links");
-      Value[] oldValues = links.getValues();
-      Value[] newValues = new Value[oldValues.length];
-      for (int iValues = 0; iValues < oldValues.length; iValues++) {
-        String oldLink = oldValues[iValues].getString();
-        if (!oldLink.equals("")) {
-          LinkBean linkBean = LinkBean.parse(oldLink);
-          String oldUrl = linkBean.getUrl();
-          String oldStatus = getLinkStatus(oldUrl);
-          String updatedLink = new LinkBean(oldUrl, oldStatus).toString();
-          System.out.println("[URL] " + updatedLink );
-          newValues[iValues] = valueFactory.createValue(updatedLink);
-          if (oldStatus.equals(LinkBean.STATUS_BROKEN)) {
-            listBrokenLinks.add(oldUrl);
+      if (!webContent.hasProperty("jcr:isCheckedOut") || (webContent.hasProperty("jcr:isCheckedOut") && webContent.getProperty("jcr:isCheckedOut").getBoolean())) {
+        Property links = webContent.getProperty("exo:links");
+        Value[] oldValues = links.getValues();
+        Value[] newValues = new Value[oldValues.length];
+        for (int iValues = 0; iValues < oldValues.length; iValues++) {
+          String oldLink = oldValues[iValues].getString();
+          if (!oldLink.equals("")) {
+            LinkBean linkBean = LinkBean.parse(oldLink);
+            String oldUrl = linkBean.getUrl();
+            String oldStatus = getLinkStatus(oldUrl);
+            String updatedLink = new LinkBean(oldUrl, oldStatus).toString();
+            System.out.println("[URL] " + updatedLink );
+            newValues[iValues] = valueFactory.createValue(updatedLink);
+            if (oldStatus.equals(LinkBean.STATUS_BROKEN)) {
+              listBrokenLinks.add(oldUrl);
+            }
           }
         }
+        webContent.setProperty("exo:links",newValues);
+        brokenLinksCache.put(webContent.getUUID(), listBrokenLinks);
       }
-      webContent.setProperty("exo:links",newValues);
-      brokenLinksCache.put(webContent.getUUID(), listBrokenLinks);
     }
     session.save();
   }
