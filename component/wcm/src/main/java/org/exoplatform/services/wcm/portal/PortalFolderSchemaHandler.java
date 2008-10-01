@@ -142,7 +142,7 @@ public class PortalFolderSchemaHandler extends BaseWebSchemaHandler {
    * @throws Exception the exception
    */
   public Node getBannerThemes(Node portalFolder) throws Exception{
-    return portalFolder.getNode("web contents/site templates/banner");
+    return portalFolder.getNode("web contents/site artifacts/banner");
   }
   
   /**
@@ -153,7 +153,7 @@ public class PortalFolderSchemaHandler extends BaseWebSchemaHandler {
    * @throws Exception the exception
    */
   public Node getFooterThemes(Node portalFolder) throws Exception{
-    return portalFolder.getNode("web contents/site templates/footer");
+    return portalFolder.getNode("web contents/site artifacts/footer");
   }
   
   /**
@@ -164,7 +164,7 @@ public class PortalFolderSchemaHandler extends BaseWebSchemaHandler {
    * @throws Exception the exception
    */
   public Node getNavigationThemes(Node portalFolder) throws Exception{
-    return portalFolder.getNode("web contents/site templates/navigation");
+    return portalFolder.getNode("web contents/site artifacts/navigation");
   }
   
   /**
@@ -175,11 +175,11 @@ public class PortalFolderSchemaHandler extends BaseWebSchemaHandler {
    * @throws Exception the exception
    */
   public Node getBreadcumsThemes(Node portalFolder) throws Exception{
-    return portalFolder.getNode("web contents/site templates/breadcums");
+    return portalFolder.getNode("web contents/site artifacts/breadcums");
   }
   
   public Node getHomepageThemes(Node portalFolder) throws Exception{
-    return portalFolder.getNode("web contents/site templates/home page");
+    return portalFolder.getNode("web contents/site artifacts/home page");
   }
   
   /* (non-Javadoc)
@@ -217,7 +217,7 @@ public class PortalFolderSchemaHandler extends BaseWebSchemaHandler {
     addMixin(document,"exo:owneable");
     Node webContents = portalFolder.addNode("web contents","exo:webFolder");
     addMixin(webContents,"exo:owneable");
-    Node themes = webContents.addNode("site templates","exo:themeFolder");
+    Node themes = webContents.addNode("site artifacts","exo:themeFolder");
     addMixin(themes,"exo:owneable");
     Node bannerFolder = themes.addNode("banner","nt:unstructured");
     addMixin(bannerFolder,"exo:owneable");
