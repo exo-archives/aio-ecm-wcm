@@ -95,7 +95,7 @@ public class LinkConnector extends BaseConnector implements ResourceContainer {
    *      java.lang.String, java.lang.String, java.lang.String,
    *      java.lang.String)
    */
-  protected Response buildXMLResponseOnExpand(String currentFolder, String currentPortal,
+  protected Response buildXMLResponseOnExpand(String currentFolder, String runningPortal,
       String workspaceName, String repositoryName, String jcrPath, String command) throws Exception {
     if (repositoryName == null)
       repositoryName = repositoryService.getCurrentRepository().getConfiguration().getName();
@@ -104,10 +104,7 @@ public class LinkConnector extends BaseConnector implements ResourceContainer {
           .getDefaultWorkspaceName();
     Node sharedPortal = livePortalManagerService.getLiveSharedPortal(repositoryName,
         localSessionProvider.getSessionProvider(null));
-    Node currentPortalNode = getCurrentPortalNode(repositoryName, jcrPath);
-    if (currentPortalNode == null)
-      currentPortalNode = livePortalManagerService.getLivePortal(repositoryName, currentPortal,
-          localSessionProvider.getSessionProvider(null));
+    Node currentPortalNode = getCurrentPortalNode(repositoryName, jcrPath, runningPortal);    
     if (currentFolder.length() == 0 || "/".equals(currentFolder))
       return buildXMLResponseForRoot(currentPortalNode, sharedPortal, command);
     String currentPortalRelPath = "/" + currentPortalNode.getName() + "/";

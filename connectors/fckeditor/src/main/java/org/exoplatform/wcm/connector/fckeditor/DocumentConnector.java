@@ -91,7 +91,7 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
   String type, @ContextParam(ResourceDispatcher.CONTEXT_PARAM_BASE_URI)
   String baseURI) throws Exception {
     documentLinkHandler.setBaseURI(baseURI);
-    documentLinkHandler.setCurrentPortal(getCurrentPortalNode(repositoryName, jcrPath).getName());
+    documentLinkHandler.setCurrentPortal(getCurrentPortalNode(repositoryName, jcrPath, currentPortal).getName());
     Response response = buildXMLResponseOnExpand(currentFolder, currentPortal, workspaceName,
         repositoryName, jcrPath, command);
     if (response == null)
