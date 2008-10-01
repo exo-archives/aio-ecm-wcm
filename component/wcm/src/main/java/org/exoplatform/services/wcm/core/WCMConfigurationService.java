@@ -40,12 +40,14 @@ public class WCMConfigurationService {
   private HashMap<String, String> sharedPortals = new HashMap<String, String>();
   private String parameterizedPageURI;
   private String publishingPortletName;
-  
+  private String managedSitesContentDrive;  
   public WCMConfigurationService(InitParams initParams) throws Exception{
     parameterizedPageURI = initParams.getValueParam("parameterizedPageURI").getValue();
     log.info("Page URI is used for view DMS Document as a web page: " + parameterizedPageURI);
     publishingPortletName = initParams.getValueParam("publishingPortletName").getValue();
     log.info("The portlet is used to publish content in a web page: " + publishingPortletName);
+    managedSitesContentDrive = initParams.getValueParam("managedSitesContentDrive").getValue();
+    log.info("Main drive to manage sites content " + managedSitesContentDrive);
     Iterator<PropertiesParam> iterator = initParams.getPropertiesParamIterator();
     for (; iterator.hasNext(); ) {
       PropertiesParam param = iterator.next();
@@ -71,7 +73,7 @@ public class WCMConfigurationService {
   
   public String getParameterizedPageURI() { return this.parameterizedPageURI; }
   public String getPublishingPortletName() { return this.publishingPortletName; }
-  
+  public String getManagedSitesContentDriveName() {return this.managedSitesContentDrive; }
   public NodeLocation getLivePortalsLocation(final String repository) {
     return livePortalsLocations.get(repository);
   }

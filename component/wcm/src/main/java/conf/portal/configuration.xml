@@ -7,11 +7,15 @@
     <type>org.exoplatform.services.wcm.core.WCMConfigurationService</type>
     <init-params>
     	<value-param>
-	    	<name>parameterizedPageURI</name>
+	      <name>parameterizedPageURI</name>
 	      <value>/contentviewer</value>
 	    </value-param>
 	    <value-param>
-	    	<name>publishingPortletName</name>
+	      <name>managedSitesContentDrive</name>
+	      <value>Managed Sites</value>
+	    </value-param>    		    
+	    <value-param>
+	      <name>publishingPortletName</name>
 	      <value>/web-presentation/AdvancedPresentationPortlet</value>
 	    </value-param>
 	   <properties-param>

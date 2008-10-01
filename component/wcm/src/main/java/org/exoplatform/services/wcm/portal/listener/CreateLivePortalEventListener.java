@@ -16,39 +16,80 @@
  */
 package org.exoplatform.services.wcm.portal.listener;
 
+import javax.jcr.Node;
+import javax.jcr.Session;
+
 import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.config.jcr.DataStorageImpl;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.services.cms.drives.DriveData;
+import org.exoplatform.services.cms.drives.ManageDriveService;
+import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 
 /**
  * Created by The eXo Platform SAS
- * @author : Hoa.Pham
- *          hoa.pham@exoplatform.com
- * Jun 23, 2008  
+ * 
+ * @author : Hoa.Pham hoa.pham@exoplatform.com Jun 23, 2008
  */
 public class CreateLivePortalEventListener extends Listener<DataStorageImpl, PortalConfig> {
   private static Log log = ExoLogger.getLogger(CreateLivePortalEventListener.class);
-  /* (non-Javadoc)
+
+  /*
+   * (non-Javadoc)
+   * 
    * @see org.exoplatform.services.listener.Listener#onEvent(org.exoplatform.services.listener.Event)
    */
   public final void onEvent(final Event<DataStorageImpl, PortalConfig> event) throws Exception {
     PortalConfig portalConfig = event.getData();
     ExoContainer container = ExoContainerContext.getCurrentContainer();
-    LivePortalManagerService livePortalManagerService =
-      (LivePortalManagerService)container.getComponentInstanceOfType(LivePortalManagerService.class);    
+    LivePortalManagerService livePortalManagerService = (LivePortalManagerService) container
+        .getComponentInstanceOfType(LivePortalManagerService.class);
     SessionProvider sessionProvider = SessionProvider.createSystemProvider();
-    try {      
-      livePortalManagerService.addLivePortal(portalConfig,sessionProvider);
+    // Create site content storage for the portal
+    try {
+      livePortalManagerService.addLivePortal(portalConfig, sessionProvider);
       log.info("Create new resource storage for portal: " + portalConfig.getName());
     } catch (Exception e) {
-      log.error("Error when create new resource storage: " + portalConfig.getName(),e);
+      log.error("Error when create new resource storage: " + portalConfig.getName(), e);
+    }
+    // create drive for the site content storage
+    ManageDriveService manageDriveService = (ManageDriveService) container
+        .getComponentInstanceOfType(ManageDriveService.class);
+    WCMConfigurationService configurationService = (WCMConfigurationService) container
+        .getComponentInstanceOfType(WCMConfigurationService.class);
+    String managedSiteContentDrive = configurationService.getManagedSitesContentDriveName();
+    try {
+      Node portal = livePortalManagerService.getLivePortal(portalConfig.getName(), sessionProvider);
+      Session session = portal.getSession();      
+      String repository = ((ManageableRepository) session.getRepository())
+          .getConfiguration().getName();
+      String workspace = session.getWorkspace().getName();
+      DriveData mainDriveData = manageDriveService.getDriveByName(managedSiteContentDrive,
+          repository);      
+      String drive = portal.getName();
+      String permission = portalConfig.getEditPermission();
+      String homePath = portal.getPath();
+      String views = mainDriveData.getViews();
+      String icon = mainDriveData.getIcon();
+      boolean viewReferences = mainDriveData.getViewPreferences();
+      boolean viewNonDocument = mainDriveData.getViewNonDocument();
+      boolean viewSideBar = mainDriveData.getViewSideBar();
+      boolean showHiddenNode = mainDriveData.getShowHiddenNode();
+      String allowCreateFolder = mainDriveData.getAllowCreateFolder();
+      manageDriveService.addDrive(drive, workspace, permission, homePath, views, icon,
+          viewReferences, viewNonDocument, viewSideBar, showHiddenNode, repository,
+          allowCreateFolder);
+      log.info("Create new drive for portal: " + portalConfig.getName());
+    } catch (Exception e) {
+      log.error("Error when create drive for portal: " + portalConfig.getName(), e);
     }
     sessionProvider.close();
   }

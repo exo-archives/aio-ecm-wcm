@@ -160,8 +160,11 @@ public class LivePortalManagerServiceImpl implements LivePortalManagerService {
    */
   public void removeLivePortal(final PortalConfig portalConfig, final SessionProvider sessionProvider)
   throws Exception {    
-    //we should not remove portal folder when a portal was removed. 
-    //Should move the portal folder to other location to backup the content
+    //Remove site content folder for the portal in this version
+    //for next version, we will move it to backup ws
+    Node node = getLivePortal(portalConfig.getName(), sessionProvider);
+    node.remove();
+    node.getSession().save();
     livePortalPaths.remove(portalConfig.getName());
   }
 
