@@ -7,6 +7,7 @@ wcm.insertCSSFromTextArea2FCK = function(Instance, ContentCSS) {
 	
 	function updateStyle() {
 		var sValue = eContentCSS.value;
+		sValue += FCKConfig.InsertedLinkStyle;
 		var iDoc = FCKeditorAPI.Instances[Instance].EditorWindow.document;
 		if (eXo.core.Browser.isFF()) { //for FF			
 			var eHead = iDoc.getElementsByTagName("head")[0];

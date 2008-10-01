@@ -8,6 +8,7 @@ FCKConfig.Plugins.Add( 'insertPortalLink', null, FCKConfig.eXoPath + "plugins/")
 //config style
 FCKConfig.EditorAreaCSS = '';
 FCKConfig.EditorAreaStyles = 'body{	background: none;	margin: 0px;}' ;
+FCKConfig.InsertedLinkStyle = 'a{text-decoration: underline; color: green;}';
 
 //config eXo plugin bar
 FCKConfig.ToolbarSets["eXoBar"] = [
