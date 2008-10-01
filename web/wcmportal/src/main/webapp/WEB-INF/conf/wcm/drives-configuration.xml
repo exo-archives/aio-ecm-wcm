@@ -22,7 +22,7 @@
               <field  name="homePath"><string>/sites content/live</string></field>
               <field  name="icon"><string></string></field>
               <field  name="views">
-                <string>admin-view</string>
+              <string>admin-view</string>
               </field>
               <field  name="viewPreferences"><boolean>false</boolean></field>
               <field  name="viewNonDocument"><boolean>true</boolean></field>

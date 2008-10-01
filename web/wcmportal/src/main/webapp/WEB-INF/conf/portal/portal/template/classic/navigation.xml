@@ -11,12 +11,12 @@
       <label>Home</label>
       <page-reference>portal::@owner@::homepage</page-reference>
     </node> 
-  </page-nodes>
-  <node>
+    <node>
 	    <uri>contentviewer</uri>
 	    <name>contentviewer</name>
-	    <label>Hidden Content Viewer</label>
+	    <label>Content Viewer</label>
 	    <visible>false</visible>
 	    <page-reference>portal::@owner@::contentviewer</page-reference>
-	  </node>
+	</node>
+  </page-nodes>  
 </node-navigation>
