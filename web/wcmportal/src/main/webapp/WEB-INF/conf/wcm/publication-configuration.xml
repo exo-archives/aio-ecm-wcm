@@ -5,7 +5,7 @@
 	  <component-plugin>
 	    <name>Web Content Publishing</name>
 	    <set-method>addPublicationPlugin</set-method>
-	    <type>org.exoplatform.services.wcm.plugins.publication.WCMPublicationPlugin</type>
+	    <type>org.exoplatform.services.wcm.publication.defaultlifecycle.WCMPublicationPlugin</type>
 	    <description>This publication lifecycle publish a web content or DMS document to a portal page.</description>	    	    	   
 	  </component-plugin>
 	</external-component-plugins>	
