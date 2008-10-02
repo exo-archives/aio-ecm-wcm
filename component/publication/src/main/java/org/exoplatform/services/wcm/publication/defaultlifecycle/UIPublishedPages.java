@@ -37,29 +37,32 @@ import org.exoplatform.webui.event.EventListener;
     lifecycle = Lifecycle.class,
     template = "classpath:groovy/wcm/webui/publication/UIPublishedPages.gtmpl",
     events = {
-      @EventConfig(listeners=UIPublishedPages.SelectTreeNodeActionListener.class)
+      @EventConfig(listeners=UIPublishedPages.SelectNavigationNodeURIActionListener.class)
     }
 )
 
 public class UIPublishedPages extends UIContainer {
-  private String selectedTreeNode;
-  private List<String> listTreeNode;
-
-  public String getSelectedTreeNode() {return selectedTreeNode;}
-  public void setSelectedTreeNode(String selectedTreeNode) {this.selectedTreeNode = selectedTreeNode;}
-  public List<String> getListTreeNode() {return listTreeNode;}
-  public void setListTreeNode(List<String> listTreeNode) {this.listTreeNode = listTreeNode;}
+  
+  private String selectedNavigationNodeURI;
+  private List<String> listNavigationNodeURI;
+  
+  public List<String> getListNavigationNodeURI() {return listNavigationNodeURI;}
+  public void setListNavigationNodeURI(List<String> listNavigationNodeURI) {this.listNavigationNodeURI = listNavigationNodeURI;}
+  public String getSelectedNavigationNodeURI() {return selectedNavigationNodeURI;}
+  public void setSelectedNavigationNodeURI(String selectedNavigationNodeURI) {this.selectedNavigationNodeURI = selectedNavigationNodeURI;}
   
   public UIPublishedPages() throws Exception {
     // TODO: Need get from JCR
-    listTreeNode = new ArrayList<String>();
+    listNavigationNodeURI = new ArrayList<String>();
   }
 
-  public static class SelectTreeNodeActionListener extends EventListener<UIPublishedPages> {
+  public static class SelectNavigationNodeURIActionListener extends EventListener<UIPublishedPages> {
     public void execute(Event<UIPublishedPages> event) throws Exception {
       UIPublishedPages publishedPages = event.getSource();
       String selectedTreeNode = event.getRequestContext().getRequestParameter(OBJECTID);
-      publishedPages.setSelectedTreeNode(selectedTreeNode);
+      publishedPages.setSelectedNavigationNodeURI(selectedTreeNode);
     }
   }
+
+  
 }

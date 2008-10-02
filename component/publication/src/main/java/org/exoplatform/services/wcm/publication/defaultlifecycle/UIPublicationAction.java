@@ -17,7 +17,13 @@
 package org.exoplatform.services.wcm.publication.defaultlifecycle;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import javax.jcr.Node;
+import javax.jcr.Session;
+import javax.jcr.Value;
+import javax.jcr.ValueFactory;
 
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.application.Preference;
@@ -62,12 +68,14 @@ public class UIPublicationAction extends UIForm {
 
   public static class AddActionListener extends EventListener<UIPublicationAction> {
     public void execute(Event<UIPublicationAction> event) throws Exception {
+      // Get service and component
       UIPublicationAction publicationAction = event.getSource();
       UIPublishingPanel publishingPanel = publicationAction.getAncestorOfType(UIPublishingPanel.class);
       UIPortalNavigationExplorer portalNavigationExplorer = publishingPanel.getChild(UIPortalNavigationExplorer.class);
       UIPublishedPages publishedPages = publishingPanel.getChild(UIPublishedPages.class);
       UIApplication application = publicationAction.getAncestorOfType(UIApplication.class);
-      
+
+      // Get page
       TreeNode selectedNode = portalNavigationExplorer.getSelectedNode();
       PageNode pageNode = selectedNode.getPageNode();
       if (pageNode == null) {
@@ -77,27 +85,28 @@ public class UIPublicationAction extends UIForm {
       }
       UserPortalConfigService userPortalConfigService = publicationAction.getApplicationComponent(UserPortalConfigService.class);
       Page page = userPortalConfigService.getPage(pageNode.getPageReference(), event.getRequestContext().getRemoteUser());
-      
       UIPage uiPage = publishingPanel.createUIComponent(UIPage.class, null, null);
       PortalDataMapper.toUIPage(uiPage, page);
+      
+      // Create portlet
       UIPortlet uiPortlet = uiPage.createUIComponent(UIPortlet.class, null, null);
       uiPortlet.setShowInfoBar(false);
       WCMConfigurationService configurationService = publicationAction.getApplicationComponent(WCMConfigurationService.class);
       StringBuilder windowId = new StringBuilder();
       windowId.append(PortalConfig.PORTAL_TYPE)
-              .append("#")
-              .append(Util.getUIPortal().getOwner())
-              .append(":")
-              .append(configurationService.getPublishingPortletName())
-              .append("/")
-              .append(IdGenerator.generate());
+      .append("#")
+      .append(Util.getUIPortal().getOwner())
+      .append(":")
+      .append(configurationService.getPublishingPortletName())
+      .append("/")
+      .append(IdGenerator.generate());
       uiPortlet.setWindowId(windowId.toString());
-      
+
+      // Add preferences to portlet
       PortletPreferences portletPreferences = new PortletPreferences();
       portletPreferences.setWindowId(windowId.toString());
       portletPreferences.setOwnerType(PortalConfig.PORTAL_TYPE);
       portletPreferences.setOwnerId(Util.getUIPortal().getOwner());
-      
       ArrayList<Preference> listPreference = new ArrayList<Preference>();
       
       Preference preference = new Preference();
@@ -119,22 +128,56 @@ public class UIPublicationAction extends UIForm {
       listValue.add(publishingPanel.getNode().getUUID());
       preference.setName("nodeUUID");
       preference.setValues(listValue);
-      listPreference.add(preference);
       
+      listPreference.add(preference);
       portletPreferences.setPreferences(listPreference);
       
       DataStorage dataStorage = publicationAction.getApplicationComponent(DataStorage.class);
       dataStorage.save(portletPreferences);
       
+      // Add portlet to page
       uiPage.addChild(uiPortlet);
       page = PortalDataMapper.toPageModel(uiPage);
       userPortalConfigService.update(page);
+
+      // Add properties to node
+      Node node = publishingPanel.getNode();
+      Session session = node.getSession();
+      ValueFactory valueFactory = session.getValueFactory();
+      ArrayList<Value> listTmp;
       
+      if (node.hasProperty("publication:navigationNodeURIs")) {
+        listTmp = new ArrayList<Value>(Arrays.asList(node.getProperty("publication:navigationNodeURIs").getValues()));
+      } else {
+        listTmp = new ArrayList<Value>();
+      }
+      listTmp.add(valueFactory.createValue(selectedNode.getUri()));
+      node.setProperty("publication:navigationNodeURIs", listTmp.toArray(new Value[0]));
+      
+      if (node.hasProperty("publication:webPageIDs")) {
+        listTmp = new ArrayList<Value>(Arrays.asList(node.getProperty("publication:webPageIDs").getValues()));
+      } else {
+        listTmp = new ArrayList<Value>();
+      }
+      listTmp.add(valueFactory.createValue(page.getId()));
+      node.setProperty("publication:webPageIDs", listTmp.toArray(new Value[0]));
+      
+      if (node.hasProperty("publication:applicationIDs")) {
+        listTmp = new ArrayList<Value>(Arrays.asList(node.getProperty("publication:applicationIDs").getValues()));
+      } else {
+        listTmp = new ArrayList<Value>();
+      }
+      listTmp.add(valueFactory.createValue(uiPortlet.getWindowId()));
+      node.setProperty("publication:applicationIDs",  listTmp.toArray(new Value[0]));
+      
+      session.save();
+
+      // Display in PublishedPages
       String selectedNodeName = selectedNode.getUri();
-      List<String> listPublishedPage = publishedPages.getListTreeNode();
+      List<String> listPublishedPage = publishedPages.getListNavigationNodeURI();
       if (listPublishedPage.indexOf(selectedNodeName) < 0) { 
         listPublishedPage.add(selectedNodeName);
-        publishedPages.setListTreeNode(listPublishedPage);
+        publishedPages.setListNavigationNodeURI(listPublishedPage);
       } else {
         application.addMessage(new ApplicationMessage("UIPublicationAction.msg.duplicate", null, ApplicationMessage.WARNING));
         event.getRequestContext().addUIComponentToUpdateByAjax(application.getUIPopupMessages());
@@ -142,16 +185,27 @@ public class UIPublicationAction extends UIForm {
       }
     }
   }
-  
+
   public static class RemoveActionListener extends EventListener<UIPublicationAction> {
     public void execute(Event<UIPublicationAction> event) throws Exception {
       UIPublicationAction publicationAction = event.getSource();
       UIPublishingPanel publishingPanel = publicationAction.getAncestorOfType(UIPublishingPanel.class);
       UIPublishedPages publishedPages = publishingPanel.getChild(UIPublishedPages.class);
-      List<String> listPublishedPage = publishedPages.getListTreeNode();
-      String selectedNode = publishedPages.getSelectedTreeNode();
-      listPublishedPage.remove(selectedNode);
-      publishedPages.setListTreeNode(listPublishedPage);
+
+      Node node = publishingPanel.getNode();
+      Session session = node.getSession();
+      ValueFactory valueFactory = session.getValueFactory();
+      Value[] values;
+      if (node.hasProperty("publication:publishedPageIds")) {
+        values = new Value[node.getProperty("publication:publishedPageIds").getValues().length + 1];
+      } else {
+        values = new Value[1];
+      }
+//      values[values.length - 1] = valueFactory.createValue(page.getPageId());
+      node.setProperty("publication:publishedPageIds", values);
+      session.save();      
+      String selectedNode = publishedPages.getSelectedNavigationNodeURI();
+      
     }
   }
 }
