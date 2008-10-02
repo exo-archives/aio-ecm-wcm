@@ -31,6 +31,7 @@ import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
 import org.exoplatform.ecm.webui.utils.DialogFormUtil;
+import org.exoplatform.ecm.webui.utils.LockUtil;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.cms.CmsService;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -102,6 +103,16 @@ public class UIQuickEditWebContentForm extends UIContentDialogForm{
     Node parentNode = (Node) session.getItem(path);
     return parentNode;
   }
+  
+  private boolean nodeIsLocked(Node node) throws Exception {
+    if(!node.isLocked()) return false;        
+    String lockToken = LockUtil.getLockToken(node);
+    if(lockToken != null) {
+      node.getSession().addLockToken(lockToken);
+      return false;
+    }                
+    return true;
+  }
 
   public static class SaveActionListener extends EventListener<UIQuickEditWebContentForm> {
     public void execute(Event<UIQuickEditWebContentForm> event) throws Exception {
@@ -115,6 +126,15 @@ public class UIQuickEditWebContentForm extends UIContentDialogForm{
       ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
       Session session = SessionProviderFactory.createSystemProvider().getSession(workspaceName, manageableRepository);
       Node webContentNode = session.getNodeByUUID(UUID);
+      UIApplication uiApplication = uiQuickEditForm.getAncestorOfType(UIApplication.class);
+      
+      if (uiQuickEditForm.nodeIsLocked(webContentNode)) {
+        Object[] objs = { webContentNode.getPath() };
+        uiApplication.addMessage(new ApplicationMessage("UIPopupMenu.msg.node-locked", objs));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
+        return;
+      }
+      
       boolean isCheckedOut = true;
       if (!webContentNode.isCheckedOut()) {
         isCheckedOut = false;
@@ -126,7 +146,6 @@ public class UIQuickEditWebContentForm extends UIContentDialogForm{
       Node newNode = null;
       String nodeType;
       Node homeNode;
-      UIApplication uiApplication = uiQuickEditForm.getAncestorOfType(UIApplication.class);
       if (uiQuickEditForm.isAddNew()) {
         homeNode = uiQuickEditForm.getParentNode();
         nodeType = uiQuickEditForm.contentType;
