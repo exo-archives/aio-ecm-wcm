@@ -64,16 +64,14 @@ public class CreateLivePortalEventListener extends Listener<DataStorageImpl, Por
     ManageDriveService manageDriveService = (ManageDriveService) container
         .getComponentInstanceOfType(ManageDriveService.class);
     WCMConfigurationService configurationService = (WCMConfigurationService) container
-        .getComponentInstanceOfType(WCMConfigurationService.class);
-    String managedSiteContentDrive = configurationService.getManagedSitesContentDriveName();
+        .getComponentInstanceOfType(WCMConfigurationService.class);        
     try {
       Node portal = livePortalManagerService.getLivePortal(portalConfig.getName(), sessionProvider);
       Session session = portal.getSession();      
       String repository = ((ManageableRepository) session.getRepository())
           .getConfiguration().getName();
       String workspace = session.getWorkspace().getName();
-      DriveData mainDriveData = manageDriveService.getDriveByName(managedSiteContentDrive,
-          repository);      
+      DriveData mainDriveData = configurationService.getSiteDriveConfig();
       String drive = portal.getName();
       String permission = portalConfig.getEditPermission();
       String homePath = portal.getPath();

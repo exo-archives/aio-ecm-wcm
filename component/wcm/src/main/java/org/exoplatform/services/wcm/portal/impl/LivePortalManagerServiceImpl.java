@@ -163,8 +163,9 @@ public class LivePortalManagerServiceImpl implements LivePortalManagerService {
     //Remove site content folder for the portal in this version
     //for next version, we will move it to backup ws
     Node node = getLivePortal(portalConfig.getName(), sessionProvider);
+    Session session = node.getSession();
     node.remove();
-    node.getSession().save();
+    session.save();
     livePortalPaths.remove(portalConfig.getName());
   }
 

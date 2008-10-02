@@ -24,6 +24,7 @@ import org.apache.commons.logging.Log;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ObjectParameter;
 import org.exoplatform.container.xml.PropertiesParam;
+import org.exoplatform.services.cms.drives.DriveData;
 import org.exoplatform.services.log.ExoLogger;
 
 
@@ -40,14 +41,13 @@ public class WCMConfigurationService {
   private HashMap<String, String> sharedPortals = new HashMap<String, String>();
   private String parameterizedPageURI;
   private String publishingPortletName;
-  private String managedSitesContentDrive;  
+  private DriveData siteDriveConfig;
+  
   public WCMConfigurationService(InitParams initParams) throws Exception{
     parameterizedPageURI = initParams.getValueParam("parameterizedPageURI").getValue();
     log.info("Page URI is used for view DMS Document as a web page: " + parameterizedPageURI);
     publishingPortletName = initParams.getValueParam("publishingPortletName").getValue();
-    log.info("The portlet is used to publish content in a web page: " + publishingPortletName);
-    managedSitesContentDrive = initParams.getValueParam("managedSitesContentDrive").getValue();
-    log.info("Main drive to manage sites content " + managedSitesContentDrive);
+    log.info("The portlet is used to publish content in a web page: " + publishingPortletName);    
     Iterator<PropertiesParam> iterator = initParams.getPropertiesParamIterator();
     for (; iterator.hasNext(); ) {
       PropertiesParam param = iterator.next();
@@ -68,12 +68,15 @@ public class WCMConfigurationService {
             + " is in workspace: "+ objectParam.getWorkspace() + " and with path: "+objectParam.getPath());
          
       }
+      if("site.drive.config".equals(objectParameter.getName())) {
+        siteDriveConfig = (DriveData)objectParameter.getObject();
+      }
     }
   }
   
   public String getParameterizedPageURI() { return this.parameterizedPageURI; }
   public String getPublishingPortletName() { return this.publishingPortletName; }
-  public String getManagedSitesContentDriveName() {return this.managedSitesContentDrive; }
+  public DriveData getSiteDriveConfig() {return this.siteDriveConfig; }
   public NodeLocation getLivePortalsLocation(final String repository) {
     return livePortalsLocations.get(repository);
   }
