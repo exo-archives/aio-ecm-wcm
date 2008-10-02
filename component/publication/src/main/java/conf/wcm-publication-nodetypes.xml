@@ -6,7 +6,7 @@
 	  	<supertype>publication:publication</supertype>
 	  </supertypes>
     <propertyDefinitions>
-    	<propertyDefinition name="publication:webPageURIs" requiredType="String" autoCreated="false" mandatory="false"
+    	<propertyDefinition name="publication:navigationNodeURIs" requiredType="String" autoCreated="false" mandatory="false"
         onParentVersion="IGNORE" protected="false" multiple="true">
         <valueConstraints/>
       </propertyDefinition>
