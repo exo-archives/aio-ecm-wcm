@@ -27,7 +27,6 @@ import org.exoplatform.container.xml.PropertiesParam;
 import org.exoplatform.services.cms.drives.DriveData;
 import org.exoplatform.services.log.ExoLogger;
 
-
 /*
  * Created by The eXo Platform SAS
  * @author : Hoa.Pham
