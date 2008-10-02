@@ -21,6 +21,7 @@ import javax.jcr.Session;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
+import org.exoplatform.ecm.webui.utils.LockUtil;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -33,10 +34,12 @@ import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
 import org.exoplatform.wcm.presentation.acp.UIAdvancedPresentationPortlet;
 import org.exoplatform.wcm.presentation.acp.config.quickcreation.UIQuickCreationWizard;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -99,6 +102,16 @@ public class UINameWebContentForm extends UIForm {
     UIPortletConfig uiPortletConfig = getAncestorOfType(UIPortletConfig.class);
     return uiPortletConfig.isNewConfig();
   }
+  
+  private boolean nodeIsLocked(Node node) throws Exception {
+    if(!node.isLocked()) return false;        
+    String lockToken = LockUtil.getLockToken(node);
+    if(lockToken != null) {
+      node.getSession().addLockToken(lockToken);
+      return false;
+    }                
+    return true;
+  }
 
   public static class SaveActionListener extends EventListener<UINameWebContentForm> {
     public void execute(Event<UINameWebContentForm> event) throws Exception {
@@ -128,6 +141,14 @@ public class UINameWebContentForm extends UIForm {
       } else {
         webContentNode = uiNameWebContentForm.getNode();
       }
+      UIApplication uiApp = uiNameWebContentForm.getAncestorOfType(UIApplication.class);
+      if (uiNameWebContentForm.nodeIsLocked(webContentNode)) {
+        Object[] objs = { webContentNode.getPath() };
+        uiApp.addMessage(new ApplicationMessage("UIPopupMenu.msg.node-locked", objs));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
+      }
+      
       if (!webContentNode.isCheckedOut()) {
         webContentNode.checkout();
         uiCDForm.setCheckInOpened(true);
