@@ -256,7 +256,7 @@ function getElementsByClassPath(root, path) {
 		var formUpload = iFrameUpload.contentWindow.document.getElementsByTagName("form")[0];
 		if (!formUpload.file.value == '') {
 			uploadFile.id =  eXp.getID();
-			var param = eXp.buildParam("uploadId=" + uploadFile.id, "currentFolder=" + eXp.store.currentFolder, buildXParam());
+			var param = eXp.buildParam("uploadId=" + uploadFile.id, "currentFolder=" + eXp.store.currentFolder, "currentPortal=" + eXoPlugin.portalName, buildXParam());
 			if (formUpload) {				
 				formUpload.action = eXp.connector + eXp.command.uploadFile + "?" + param;
 				formUpload.submit();
@@ -272,7 +272,7 @@ function getElementsByClassPath(root, path) {
 				until: function() {return uploadFile.stopUpload},
 				method: function() {
 					var connector = eXp.connector + eXp.command.controlUpload;
-					var param = eXp.buildParam("action=progress", "uploadId=" + uploadFile.id, "currentFolder=" + eXp.store.currentFolder, buildXParam());
+					var param = eXp.buildParam("action=progress", "uploadId=" + uploadFile.id, "currentFolder=" + eXp.store.currentFolder, "currentPortal=" + eXoPlugin.portalName, buildXParam());
 					K.request({
 						address: connector,
 						data: param,
@@ -315,7 +315,7 @@ function getElementsByClassPath(root, path) {
 	
 	uploadFile.Abort = function() {
 		var connector = eXp.connector + eXp.command.controlUpload;
-		var param = eXp.buildParam("action=abort", "uploadId=" + uploadFile.id, "currentFolder=" + eXp.store.currentFolder, buildXParam());
+		var param = eXp.buildParam("action=abort", "uploadId=" + uploadFile.id, "currentFolder=" + eXp.store.currentFolder, "currentPortal=" + eXoPlugin.portalName, buildXParam());
 		eXp.sendRequest(connector, param);
 		uploadFile.stopUpload = true;
 		removeMask();
@@ -324,14 +324,14 @@ function getElementsByClassPath(root, path) {
 	
 	uploadFile.Cancel = function() {
 		var connector = eXp.connector + eXp.command.controlUpload;
-		var param = eXp.buildParam("action=delete", "uploadId=" + uploadFile.id, "currentFolder=" + eXp.store.currentFolder, buildXParam());
+		var param = eXp.buildParam("action=delete", "uploadId=" + uploadFile.id, "currentFolder=" + eXp.store.currentFolder, "currentPortal=" + eXoPlugin.portalName, buildXParam());
 		eXp.sendRequest(connector, param);
 		removeMask();
 	};
 
 	uploadFile.Delete = function() {
 		var connector = eXp.connector + eXp.command.controlUpload;
-		var param = eXp.buildParam("action=delete", "uploadId=" + uploadFile.id, "currentFolder=" + eXp.store.currentFolder, buildXParam());
+		var param = eXp.buildParam("action=delete", "uploadId=" + uploadFile.id, "currentFolder=" + eXp.store.currentFolder, "currentPortal=" + eXoPlugin.portalName, buildXParam());
 		eXp.sendRequest(connector, param);
 		removeMask();
 		showUploadForm();
@@ -340,7 +340,7 @@ function getElementsByClassPath(root, path) {
 	uploadFile.Save = function() {
 		var connector = eXp.connector + eXp.command.controlUpload;
 		var nodeName = K("PopupContainer").select({where: "nodeName == 'INPUT' && name == 'fileName'"})[0];
-		var param = eXp.buildParam("action=save", "uploadId=" + uploadFile.id, "fileName=" + nodeName.value, "currentFolder=" + eXp.store.currentFolder, buildXParam());
+		var param = eXp.buildParam("action=save", "uploadId=" + uploadFile.id, "fileName=" + nodeName.value, "currentFolder=" + eXp.store.currentFolder, "currentPortal=" + eXoPlugin.portalName, buildXParam());
 		eXp.sendRequest(
 			connector,
 			param,

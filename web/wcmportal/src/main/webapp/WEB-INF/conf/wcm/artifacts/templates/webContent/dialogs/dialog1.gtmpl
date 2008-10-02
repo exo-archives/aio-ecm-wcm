@@ -119,7 +119,7 @@
 											htmlContent = htmlNode.getNode("jcr:content").getProperty("jcr:data").getValue().getString();
 										}
 									}
-									String[] htmlArguments = ["jcrPath=/node/default.html/jcr:content/jcr:data", "options=default", htmlContent];
+									String[] htmlArguments = ["jcrPath=/node/default.html/jcr:content/jcr:data", "options=toolbar:CompleteWCM", htmlContent];
 			    					uicomponent.addWYSIWYGField(htmlWYSIWYGFormId, htmlArguments) ;
 			      				%>
 								</td>

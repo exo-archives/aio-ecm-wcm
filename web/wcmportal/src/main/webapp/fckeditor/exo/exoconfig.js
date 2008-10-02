@@ -10,10 +10,27 @@ FCKConfig.EditorAreaCSS = '';
 FCKConfig.EditorAreaStyles = 'body{	background: none;	margin: 0px;}' ;
 FCKConfig.InsertedLinkColor = 'green';
 
-//config eXo plugin bar
-FCKConfig.ToolbarSets["eXoBar"] = [
-	['Insert Image', 'Insert Portal Link', 'Insert DMS Document']
-];
+FCKConfig.ToolbarSets["CompleteWCM"] = [
+	['Source','DocProps','-','NewPage','Preview','-','Templates'],
+	['Cut','Copy','Paste','PasteText','PasteWord','-','Print','SpellCheck'],
+	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
+	'/',
+	['Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'],
+	['OrderedList','UnorderedList','-','Outdent','Indent','Blockquote','CreateDiv'],
+	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
+	['Link','Insert Portal Link','Unlink','Anchor'],
+	['Insert Image','Insert DMS Document','Flash','Table','Rule','SpecialChar','PageBreak'],
+	['TextColor','BGColor'],
+	['FitWindow','ShowBlocks'],
+	['Style','FontFormat','FontName','FontSize']
+] ;
+
+FCKConfig.ToolbarSets["BasicWCM"] = [
+	['Source','-','Bold','Italic','Underline','StrikeThrough','-','OrderedList','UnorderedList','Outdent','Indent'],
+	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
+	['Blockquote','-','Link','Unlink','Insert Portal Link','Insert Image','Insert DMS Document','-','FitWindow','ShowBlocks'],	
+	['Style','FontFormat','FontName','FontSize']
+] ;
 
 FCKConfig.ToolbarSets["CSSToolBar"] = [
 	['Insert Image']
@@ -106,5 +123,3 @@ window.eXoPlugin = {
 FCK["eXoPlugin"] = eXoPlugin;
 
 eXoPlugin.init();
-eXoPlugin.addBar({newBar: "eXoBar", targetBar: "Basic" });
-eXoPlugin.addBar({newBar: "eXoBar", targetBar: "Default" });
