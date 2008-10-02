@@ -106,6 +106,21 @@ public class UIQuickEditWebContentForm extends UIContentDialogForm{
   public static class SaveActionListener extends EventListener<UIQuickEditWebContentForm> {
     public void execute(Event<UIQuickEditWebContentForm> event) throws Exception {
       UIQuickEditWebContentForm uiQuickEditForm = event.getSource();
+      PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+      PortletPreferences prefs = pContext.getRequest().getPreferences();
+      String repositoryName = prefs.getValue(UIAdvancedPresentationPortlet.REPOSITORY, null);
+      String workspaceName = prefs.getValue(UIAdvancedPresentationPortlet.WORKSPACE, null);
+      String UUID = prefs.getValue(UIAdvancedPresentationPortlet.UUID, null);
+      RepositoryService repositoryService = uiQuickEditForm.getApplicationComponent(RepositoryService.class);
+      ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
+      Session session = SessionProviderFactory.createSystemProvider().getSession(workspaceName, manageableRepository);
+      Node webContentNode = session.getNodeByUUID(UUID);
+      boolean isCheckedOut = true;
+      if (!webContentNode.isCheckedOut()) {
+        isCheckedOut = false;
+        webContentNode.checkout();
+      }
+      
       List inputs = uiQuickEditForm.getChildren();
       Map inputProperties = DialogFormUtil.prepareMap(inputs, uiQuickEditForm.getInputProperties());
       Node newNode = null;
@@ -151,6 +166,11 @@ public class UIQuickEditWebContentForm extends UIContentDialogForm{
       }
       uiQuickEditForm.savedNodeIdentifier = NodeIdentifier.make(newNode);
       uiQuickEditForm.setWebContent(newNode);
+      
+      if (!isCheckedOut) {
+        newNode.checkin();
+      }
+      
       UIPortletConfig uiPortletConfig = uiQuickEditForm.getAncestorOfType(UIPortletConfig.class);
       if(uiPortletConfig.isEditPortletInCreatePageWinzard()) {
         uiPortletConfig.getChildren().clear();
