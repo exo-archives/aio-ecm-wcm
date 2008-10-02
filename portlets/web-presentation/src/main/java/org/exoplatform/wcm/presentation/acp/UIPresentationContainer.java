@@ -16,29 +16,9 @@
  */
 package org.exoplatform.wcm.presentation.acp;
 
-import java.security.AccessControlException;
-import java.util.List;
-
-import javax.jcr.AccessDeniedException;
-import javax.jcr.ItemNotFoundException;
-import javax.jcr.Node;
-import javax.jcr.Session;
 import javax.portlet.PortletMode;
-import javax.portlet.PortletPreferences;
 
-import org.exoplatform.portal.config.DataStorage;
-import org.exoplatform.portal.config.UserACL;
-import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.container.UIContainer;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.access.AccessControlList;
-import org.exoplatform.services.jcr.access.PermissionType;
-import org.exoplatform.services.jcr.core.ExtendedNode;
-import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -69,14 +49,6 @@ public class UIPresentationContainer extends UIContainer{
 
   public boolean isQuickEditable() throws Exception {
     UIAdvancedPresentationPortlet uiportlet = getAncestorOfType(UIAdvancedPresentationPortlet.class);
-//    if(!uiportlet.canEditPortlet()) return false;
-//    try {
-//      Node content = uiportlet.getReferencedContent();
-//      return uiportlet.canEditContent(content);
-//    } catch (ItemNotFoundException e) {
-//      //Content not found but user can create new content for the portlet
-//      return true;
-//    }
     return uiportlet.canEditPortlet();
   }
 
