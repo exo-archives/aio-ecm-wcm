@@ -27,7 +27,6 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.version.VersionException;
-import javax.portlet.PortletPreferences;
 
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
 import org.exoplatform.ecm.webui.form.UIDialogForm;
@@ -45,11 +44,9 @@ import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
-import org.exoplatform.wcm.presentation.acp.UIAdvancedPresentationPortlet;
 import org.exoplatform.wcm.presentation.acp.config.quickcreation.UIQuickCreationWizard;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -179,7 +176,7 @@ public class UIContentDialogForm extends UIDialogForm {
       UIContentDialogForm dialogForm = event.getSource();
       List inputs = dialogForm.getChildren();
       Map inputProperties = DialogFormUtil.prepareMap(inputs, dialogForm.getInputProperties());
-      
+
       Node newNode = null;
       Node oldWebContentNode = dialogForm.getNode();
       String summary = oldWebContentNode.getProperty("exo:summary").getValue().getString();
@@ -227,7 +224,7 @@ public class UIContentDialogForm extends UIDialogForm {
       }
       dialogForm.savedNodeIdentifier = NodeIdentifier.make(newNode);
       dialogForm.setWebContent(newNode);
-      
+
       if (dialogForm.isCheckInOpened()) {
         newNode.checkin();
       }
