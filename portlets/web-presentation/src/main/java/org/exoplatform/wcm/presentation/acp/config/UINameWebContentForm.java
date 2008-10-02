@@ -117,6 +117,9 @@ public class UINameWebContentForm extends UIForm {
           .getChildById(NAME_WEBCONTENT)).getValue();
       String summaryContent = uiNameWebContentForm.getChild(UIFormWYSIWYGInput.class).getValue();
       Node webContentNode = null;
+      UIQuickCreationWizard uiQuickCreationWizard = uiNameWebContentForm
+      .getAncestorOfType(UIQuickCreationWizard.class);
+      UIContentDialogForm uiCDForm = uiQuickCreationWizard.getChild(UIContentDialogForm.class);
       if (uiNameWebContentForm.isNewConfig()) {
         webContentNode = webContentStorage.addNode(webContentName, "exo:webContent");
         WebContentSchemaHandler webContentSchemaHandler = webSchemaConfigService
@@ -124,6 +127,11 @@ public class UINameWebContentForm extends UIForm {
         webContentSchemaHandler.createDefaultSchema(webContentNode);
       } else {
         webContentNode = uiNameWebContentForm.getNode();
+      }
+      if (!webContentNode.isCheckedOut()) {
+        webContentNode.checkout();
+        uiCDForm.setCheckInOpened(true);
+        webContentNode.getSession().save();
       }
       if (webContentNode.canAddMixin("mix:votable"))
         webContentNode.addMixin("mix:votable");
@@ -138,9 +146,6 @@ public class UINameWebContentForm extends UIForm {
       nodeLocation.setRepository(repositoryName);
       nodeLocation.setWorkspace(workspaceName);
       nodeLocation.setPath(webContentNode.getParent().getPath());
-      UIQuickCreationWizard uiQuickCreationWizard = uiNameWebContentForm
-          .getAncestorOfType(UIQuickCreationWizard.class);
-      UIContentDialogForm uiCDForm = uiQuickCreationWizard.getChild(UIContentDialogForm.class);
       uiCDForm.setStoredLocation(nodeLocation);
       uiCDForm.setNodePath(webContentNode.getPath());
       uiCDForm.setContentType("exo:webContent");
