@@ -86,8 +86,9 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
   }
 
   public void changeState(Node node, String newState,
-      HashMap<String, String> context)
-  throws IncorrectStateUpdateLifecycleException, Exception {    
+      HashMap<String, String> context) throws IncorrectStateUpdateLifecycleException, Exception {
+    
+    node.getSession().save();
   }
 
   public String[] getPossibleStates() { return new String[] { ENROLLED,UNPUBLISHED,PUBLISHED }; }

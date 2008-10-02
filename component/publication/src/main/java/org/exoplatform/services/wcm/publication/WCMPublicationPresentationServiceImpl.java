@@ -21,9 +21,13 @@ import java.util.Map;
 
 import javax.jcr.Node;
 
+import org.apache.commons.logging.Log;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleException;
+import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
+import org.exoplatform.services.log.ExoLogger;
+import org.picocontainer.Startable;
 
 /**
  * Created by The eXo Platform SAS
@@ -31,8 +35,9 @@ import org.exoplatform.services.ecm.publication.PublicationService;
  * hoa.pham@exoplatform.com
  * Sep 29, 2008
  */
-public class WCMPublicationPresentationServiceImpl implements WCMPublicationPresentationService{
+public class WCMPublicationPresentationServiceImpl implements WCMPublicationPresentationService, Startable {
   
+  private static Log log = ExoLogger.getLogger(WCMPublicationPresentationServiceImpl.class);
   private HashMap<String, WebpagePublicationPlugin> publicationPlugins = 
     new HashMap<String, WebpagePublicationPlugin>();  
   
@@ -53,7 +58,7 @@ public class WCMPublicationPresentationServiceImpl implements WCMPublicationPres
    */
   public void addPublicationPlugin(WebpagePublicationPlugin p) {
     publicationPlugins.put(p.getLifecycleName(),p);
-    publicationService.addPublicationPlugin(p);
+    publicationService.addPublicationPlugin(PublicationPlugin.class.cast(p));
   }
 
   /* (non-Javadoc)
@@ -96,5 +101,13 @@ public class WCMPublicationPresentationServiceImpl implements WCMPublicationPres
   public Map<String, WebpagePublicationPlugin> getWebpagePublicationPlugins() {
     return publicationPlugins;
   }  
-
+  
+  public void start() {
+    //Need implement startable interface to make sure all WebpagePublicationPlugin are injected to PublicationService
+    log.info("Start WCMPublicationPresentationService...");
+  }
+  
+  public void stop() {
+    
+  }  
 }
