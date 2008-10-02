@@ -12,10 +12,6 @@
 	      <name>publishingPortletName</name>
 	      <value>/web-presentation/AdvancedPresentationPortlet</value>
 	    </value-param>
-	    <value-param>
-	      <name>managedSitesContentDrive</name>
-	      <value>Managed Sites</value>
-	    </value-param>
 	   <properties-param>
 	      <name>share.portal.config</name>
 	      <description>share portal name for each repository</description>
