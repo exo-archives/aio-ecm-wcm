@@ -179,7 +179,10 @@ public class UIContentDialogForm extends UIDialogForm {
       UIContentDialogForm dialogForm = event.getSource();
       List inputs = dialogForm.getChildren();
       Map inputProperties = DialogFormUtil.prepareMap(inputs, dialogForm.getInputProperties());
+      
       Node newNode = null;
+      Node oldWebContentNode = dialogForm.getNode();
+      String summary = oldWebContentNode.getProperty("exo:summary").getValue().getString();
       String nodeType;
       Node homeNode;
       UIApplication uiApplication = dialogForm.getAncestorOfType(UIApplication.class);
@@ -187,8 +190,8 @@ public class UIContentDialogForm extends UIDialogForm {
         homeNode = dialogForm.getParentNode();
         nodeType = dialogForm.contentType;
       } else {
-        homeNode = dialogForm.getNode().getParent();
-        nodeType = dialogForm.getNode().getPrimaryNodeType().getName();
+        homeNode = oldWebContentNode.getParent();
+        nodeType = oldWebContentNode.getPrimaryNodeType().getName();
       }
       try{
         CmsService cmsService = dialogForm.getApplicationComponent(CmsService.class);
@@ -196,6 +199,8 @@ public class UIContentDialogForm extends UIDialogForm {
         try{
           homeNode.save();
           newNode = (Node) homeNode.getSession().getItem(addedPath);
+          newNode.setProperty("exo:summary", summary);
+          newNode.getSession().save();
           event.getRequestContext().setAttribute("nodePath",newNode.getPath());
         }catch(Exception e) {} 
       }catch(AccessControlException ace) {
@@ -222,6 +227,7 @@ public class UIContentDialogForm extends UIDialogForm {
       }
       dialogForm.savedNodeIdentifier = NodeIdentifier.make(newNode);
       dialogForm.setWebContent(newNode);
+      
       if (dialogForm.isCheckInOpened()) {
         newNode.checkin();
       }
