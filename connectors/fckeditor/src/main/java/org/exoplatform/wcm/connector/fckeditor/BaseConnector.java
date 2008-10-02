@@ -17,6 +17,7 @@
 package org.exoplatform.wcm.connector.fckeditor;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.jcr.Node;
@@ -74,9 +75,7 @@ public abstract class BaseConnector {
    * Gets the root content storage.
    * 
    * @param node the node
-   * 
    * @return the root content storage
-   * 
    * @throws Exception the exception
    */
   protected abstract Node getRootContentStorage(Node node) throws Exception;
@@ -85,7 +84,6 @@ public abstract class BaseConnector {
    * Gets the content storage type.
    * 
    * @return the content storage type
-   * 
    * @throws Exception the exception
    */
   protected abstract String getContentStorageType() throws Exception;
@@ -118,21 +116,14 @@ public abstract class BaseConnector {
    * @param repositoryName the repository name
    * @param jcrPath the jcr path
    * @param command the command
-   * 
    * @return the response
-   * 
    * @throws Exception the exception
    */
   protected Response buildXMLResponseOnExpand(String currentFolder, String runningPortal,
       String workspaceName, String repositoryName, String jcrPath, String command) throws Exception {
-    if (repositoryName == null)
-      repositoryName = repositoryService.getCurrentRepository().getConfiguration().getName();
-    if (workspaceName == null)
-      workspaceName = repositoryService.getCurrentRepository().getConfiguration()
-          .getDefaultWorkspaceName();
     Node sharedPortalNode = livePortalManagerService.getLiveSharedPortal(repositoryName,
         localSessionProvider.getSessionProvider(null));
-    Node currentPortalNode = getCurrentPortalNode(repositoryName, jcrPath, runningPortal);    
+    Node currentPortalNode = getCurrentPortalNode(repositoryName, jcrPath, runningPortal);
     if (currentFolder.length() == 0 || "/".equals(currentFolder))
       return buildXMLResponseForRoot(currentPortalNode, sharedPortalNode, command);
     String currentPortalRelPath = "/" + currentPortalNode.getName() + "/";
@@ -165,25 +156,18 @@ public abstract class BaseConnector {
    * @param command the command
    * @param language the language
    * @param runningPortal the current portal
-   * 
    * @return the response
-   * 
    * @throws Exception the exception
    */
   protected Response buildXMLDocumentOnCreateFolder(String newFolderName, String currentFolder,
       String runningPortal, String jcrPath, String repositoryName, String workspaceName,
       String command, String language) throws Exception {
-    if (repositoryName == null)
-      repositoryName = repositoryService.getCurrentRepository().getConfiguration().getName();
-    if (workspaceName == null)
-      workspaceName = repositoryService.getCurrentRepository().getConfiguration()
-          .getDefaultWorkspaceName();
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
     Node currentNode = null;
     Node sharedPortal = livePortalManagerService.getLiveSharedPortal(repositoryName,
         localSessionProvider.getSessionProvider(null));
-    Node currentPortalNode = getCurrentPortalNode(repositoryName, jcrPath, runningPortal);    
+    Node currentPortalNode = getCurrentPortalNode(repositoryName, jcrPath, runningPortal);
     Node webContent = getWebContent(repositoryName, workspaceName, jcrPath);
     currentNode = getActiveFolder(currentFolder, currentPortalNode, sharedPortal, webContent);
     return folderHandler.createNewFolder(currentNode, newFolderName, language);
@@ -196,9 +180,7 @@ public abstract class BaseConnector {
    * @param webContent the web content
    * @param currentFolder the current folder
    * @param command the command
-   * 
    * @return the response
-   * 
    * @throws Exception the exception
    */
   protected Response buildXMLResponseCommon(Node activePortal, Node webContent,
@@ -225,9 +207,7 @@ public abstract class BaseConnector {
    * @param currentPortal the current portal
    * @param sharedPortal the shared portal
    * @param command the command
-   * 
    * @return the response
-   * 
    * @throws Exception the exception
    */
   protected Response buildXMLResponseForRoot(Node currentPortal, Node sharedPortal, String command)
@@ -262,9 +242,7 @@ public abstract class BaseConnector {
    * @param node the node
    * @param webContent the web content
    * @param command the command
-   * 
    * @return the response
-   * 
    * @throws Exception the exception
    */
   protected Response buildXMLResponseForPortal(Node node, Node webContent, String command)
@@ -294,9 +272,7 @@ public abstract class BaseConnector {
    * 
    * @param node the node
    * @param command the command
-   * 
    * @return the response
-   * 
    * @throws Exception the exception
    */
   protected Response buildXMLResponseForContentStorage(Node node, String command) throws Exception {
@@ -333,14 +309,12 @@ public abstract class BaseConnector {
    * @param currentPortal the current portal
    * @param sharedPortal the shared portal
    * @param webContent the web content
-   * 
    * @return the active folder
-   * 
    * @throws Exception the exception
    */
   private Node getActiveFolder(String currentFolder, Node currentPortal, Node sharedPortal,
       Node webContent) throws Exception {
-    if (currentPortal == null)
+    if (currentFolder == null || currentFolder.trim().length() == 0)
       return null;
     String sharedPortalRelPath = "/" + sharedPortal.getName() + "/";
     String currentPortalRelPath = "/" + currentPortal.getName() + "/";
@@ -370,13 +344,11 @@ public abstract class BaseConnector {
    * 
    * @param node the node
    * @param currentFolder the current folder
-   * 
    * @return the correct content storage
-   * 
    * @throws Exception the exception
    */
   protected Node getCorrectContentStorage(Node node, String currentFolder) throws Exception {
-    if (node == null)
+    if (node == null || currentFolder == null || currentFolder.trim().length() == 0)
       return null;
     Node rootContentStorage = getRootContentStorage(node);
     String rootContentStorageRelPath = null;
@@ -393,16 +365,21 @@ public abstract class BaseConnector {
     }
     if (currentFolder.equals(rootContentStorageRelPath))
       return rootContentStorage;
-    String correctStorageRelPath = currentFolder.replace(rootContentStorageRelPath, "");
-    correctStorageRelPath = correctStorageRelPath.substring(0, correctStorageRelPath.length() - 1);
-    return rootContentStorage.getNode(correctStorageRelPath);
+    try {
+      String correctStorageRelPath = currentFolder.replace(rootContentStorageRelPath, "");
+      correctStorageRelPath = correctStorageRelPath
+          .substring(0, correctStorageRelPath.length() - 1);
+      return rootContentStorage.getNode(correctStorageRelPath);
+    } catch (Exception e) {
+      e.printStackTrace();
+      return null;
+    }
   }
 
   /**
    * Gets the response.
    * 
    * @param document the document
-   * 
    * @return the response
    */
   protected Response getResponse(Document document) {
@@ -417,24 +394,20 @@ public abstract class BaseConnector {
    * @param repositoryName the repository name
    * @param workspaceName the workspace name
    * @param jcrPath the jcr path
-   * 
    * @return the web content
-   * 
    * @throws Exception the exception
    */
   protected Node getWebContent(String repositoryName, String workspaceName, String jcrPath)
       throws Exception {
-    if (jcrPath == null)
+    if (jcrPath == null || jcrPath.trim().length() == 0)
       return null;
-    Session session = getSession(repositoryName, workspaceName);
-    Node webContent = null;
     try {
-      webContent = (Node) session.getItem(jcrPath);
+      Session session = getSession(repositoryName, workspaceName);
+      Node webContent = (Node) session.getItem(jcrPath);
       if ("exo:webContent".equals((webContent.getPrimaryNodeType().getName())))
         return webContent;
-      else
-        return null;
-    } catch (PathNotFoundException exception) {
+    } catch (Exception e) {
+      e.printStackTrace();
     }
     return null;
   }
@@ -445,9 +418,7 @@ public abstract class BaseConnector {
    * @param repositoryName the repository name
    * @param jcrPath the jcr path
    * @param runningPortal the running portal
-   * 
    * @return the current portal node
-   * 
    * @throws Exception the exception
    */
   protected Node getCurrentPortalNode(String repositoryName, String jcrPath, String runningPortal)
@@ -455,20 +426,25 @@ public abstract class BaseConnector {
     if (jcrPath == null || jcrPath.length() == 0)
       return null;
     Node currentPortal = null;
-    List<Node> livePortaNodes = livePortalManagerService.getLivePortals(repositoryName,
-        localSessionProvider.getSessionProvider(null));
-    Node sharedPortal = livePortalManagerService.getLiveSharedPortal(
-        localSessionProvider.getSessionProvider(null));
-    livePortaNodes.add(sharedPortal);
-    for (Node portalNode : livePortaNodes) {
-      String portalPath = portalNode.getPath();
-      if (jcrPath.startsWith(portalPath))
-        currentPortal = portalNode;
+    List<Node> livePortaNodes = new ArrayList<Node>();
+    try {
+      livePortaNodes = livePortalManagerService.getLivePortals(repositoryName, localSessionProvider
+          .getSessionProvider(null));
+      Node sharedPortal = livePortalManagerService.getLiveSharedPortal(localSessionProvider
+          .getSessionProvider(null));
+      livePortaNodes.add(sharedPortal);
+      for (Node portalNode : livePortaNodes) {
+        String portalPath = portalNode.getPath();
+        if (jcrPath.startsWith(portalPath))
+          currentPortal = portalNode;
+      }
+      if (currentPortal == null)
+        currentPortal = livePortalManagerService.getLivePortal(repositoryName, runningPortal,
+            localSessionProvider.getSessionProvider(null));
+      return currentPortal;
+    } catch (Exception e) {
+      return null;
     }
-    if (currentPortal == null)
-      currentPortal = livePortalManagerService.getLivePortal(repositoryName, runningPortal,
-          localSessionProvider.getSessionProvider(null));
-    return currentPortal;
   }
 
   /**
@@ -476,23 +452,20 @@ public abstract class BaseConnector {
    * 
    * @param repositoryName the repository name
    * @param workspaceName the workspace name
-   * 
    * @return the session
-   * 
    * @throws Exception the exception
    */
   private Session getSession(String repositoryName, String workspaceName) throws Exception {
     ManageableRepository manageableRepository = null;
-    if (repositoryName == null) {
-      manageableRepository = repositoryService.getCurrentRepository();
-    } else {
+    try {
       manageableRepository = repositoryService.getRepository(repositoryName);
-    }
-    if (workspaceName == null || workspaceName.length() == 0) {
       workspaceName = manageableRepository.getConfiguration().getDefaultWorkspaceName();
+      SessionProvider sessionProvider = localSessionProvider.getSessionProvider(null);
+      return sessionProvider.getSession(workspaceName, manageableRepository);
+    } catch (Exception e) {
+      e.printStackTrace();
+      return null;
     }
-    SessionProvider sessionProvider = localSessionProvider.getSessionProvider(null);
-    return sessionProvider.getSession(workspaceName, manageableRepository);
   }
 
   /**
@@ -508,30 +481,19 @@ public abstract class BaseConnector {
    * @param language the language
    * @param contentType the content type
    * @param contentLength the content length
-   * 
    * @return the response
-   * 
    * @throws Exception the exception
    */
   protected Response createUploadFileResponse(InputStream inputStream, String repositoryName,
       String workspaceName, String currentFolder, String runningPortalName, String jcrPath,
       String uploadId, String language, String contentType, String contentLength) throws Exception {
-    if (repositoryName == null)
-      repositoryName = repositoryService.getCurrentRepository().getConfiguration().getName();
-    if (workspaceName == null)
-      workspaceName = repositoryService.getCurrentRepository().getConfiguration()
-          .getDefaultWorkspaceName();
-    Node sharedPortal = livePortalManagerService.getLiveSharedPortal(repositoryName,
-        localSessionProvider.getSessionProvider(null));
-    Node currentPortal = getCurrentPortalNode(repositoryName, jcrPath, runningPortalName);    
+    Node sharedPortal = livePortalManagerService.getLiveSharedPortal(localSessionProvider
+        .getSessionProvider(null));
+    Node currentPortal = getCurrentPortalNode(repositoryName, jcrPath, runningPortalName);
     Node webContent = getWebContent(repositoryName, workspaceName, jcrPath);
     Node currentNode = getActiveFolder(currentFolder, currentPortal, sharedPortal, webContent);
-    try {
-      return fileUploadHandler.upload(uploadId, contentType, Double.parseDouble(contentLength),
-          inputStream, currentNode, language);
-    } catch (Exception e) {
-      return null;
-    }
+    return fileUploadHandler.upload(uploadId, contentType, Double.parseDouble(contentLength),
+        inputStream, currentNode, language);
   }
 
   /**
@@ -546,27 +508,17 @@ public abstract class BaseConnector {
    * @param fileName the file name
    * @param uploadId the upload id
    * @param runningPortalName the portal name
-   * 
    * @return the response
-   * 
    * @throws Exception the exception
    */
   protected Response createProcessUploadResponse(String repositoryName, String workspaceName,
-      String currentFolder, String runningPortalName, String jcrPath, String action, String language,
-      String fileName, String uploadId) throws Exception {
-    if (runningPortalName == null || runningPortalName.length() == 0)
-      runningPortalName = currentFolder.split("/")[1];
-    if (repositoryName == null)
-      repositoryName = repositoryService.getCurrentRepository().getConfiguration().getName();
-    if (workspaceName == null)
-      workspaceName = repositoryService.getCurrentRepository().getConfiguration()
-          .getDefaultWorkspaceName();
+      String currentFolder, String runningPortalName, String jcrPath, String action,
+      String language, String fileName, String uploadId) throws Exception {
     if (FileUploadHandler.SAVE_ACTION.equals(action)) {
       CacheControl cacheControl = new CacheControl();
       cacheControl.setNoCache(true);
-      Node sharedPortal = livePortalManagerService.getLiveSharedPortal(repositoryName,
-          localSessionProvider.getSessionProvider(null));
-      Node currentPortal = getCurrentPortalNode(repositoryName, jcrPath, runningPortalName);      
+      Node sharedPortal = livePortalManagerService.getLiveSharedPortal(localSessionProvider.getSessionProvider(null));
+      Node currentPortal = getCurrentPortalNode(repositoryName, jcrPath, runningPortalName);
       Node webContent = getWebContent(repositoryName, workspaceName, jcrPath);
       Node currentNode = getActiveFolder(currentFolder, currentPortal, sharedPortal, webContent);
       return fileUploadHandler.saveAsNTFile(currentNode, uploadId, fileName, language);
