@@ -19,6 +19,9 @@ package org.exoplatform.services.wcm.publication.defaultlifecycle;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.jcr.Node;
+import javax.jcr.Value;
+
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -51,11 +54,20 @@ public class UIPublishedPages extends UIContainer {
   public String getSelectedNavigationNodeURI() {return selectedNavigationNodeURI;}
   public void setSelectedNavigationNodeURI(String selectedNavigationNodeURI) {this.selectedNavigationNodeURI = selectedNavigationNodeURI;}
   
-  public UIPublishedPages() throws Exception {
-    // TODO: Need get from JCR
-    listNavigationNodeURI = new ArrayList<String>();
+  public void init() throws Exception {
+    UIPublishingPanel publishingPanel = getAncestorOfType(UIPublishingPanel.class);
+    Node contentNode = publishingPanel.getNode();
+    if (contentNode.hasProperty("publication:navigationNodeURIs")) {
+      listNavigationNodeURI = new ArrayList<String>();
+      Value[] values = contentNode.getProperty("publication:navigationNodeURIs").getValues();
+      for (Value value : values) {
+        listNavigationNodeURI.add(value.getString()); 
+      }
+    } else {
+      listNavigationNodeURI = new ArrayList<String>();
+    }
   }
-
+  
   public static class SelectNavigationNodeURIActionListener extends EventListener<UIPublishedPages> {
     public void execute(Event<UIPublishedPages> event) throws Exception {
       UIPublishedPages publishedPages = event.getSource();
@@ -63,6 +75,5 @@ public class UIPublishedPages extends UIContainer {
       publishedPages.setSelectedNavigationNodeURI(selectedTreeNode);
     }
   }
-
   
 }

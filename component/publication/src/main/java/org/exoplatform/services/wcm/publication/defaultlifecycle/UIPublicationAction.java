@@ -75,8 +75,26 @@ public class UIPublicationAction extends UIForm {
       UIPublishedPages publishedPages = publishingPanel.getChild(UIPublishedPages.class);
       UIApplication application = publicationAction.getAncestorOfType(UIApplication.class);
 
-      // Get page
+      
+      // Display in PublishedPages
       TreeNode selectedNode = portalNavigationExplorer.getSelectedNode();
+      Node node = publishingPanel.getNode();
+      String selectedNodeName = selectedNode.getUri();
+      if (node.hasProperty("publication:navigationNodeURIs")) {
+        Value[] values = node.getProperty("publication:navigationNodeURIs").getValues();
+        for (Value value : values) {
+          if (value.getString().equals(selectedNodeName)) {
+            application.addMessage(new ApplicationMessage("UIPublicationAction.msg.duplicate", null, ApplicationMessage.WARNING));
+            event.getRequestContext().addUIComponentToUpdateByAjax(application.getUIPopupMessages());
+            return;
+          }
+        }
+      }
+      List<String> listPublishedPage = publishedPages.getListNavigationNodeURI();
+      listPublishedPage.add(selectedNodeName);
+      publishedPages.setListNavigationNodeURI(listPublishedPage);
+      
+      // Get page
       PageNode pageNode = selectedNode.getPageNode();
       if (pageNode == null) {
         application.addMessage(new ApplicationMessage("UIPublicationAction.msg.wrongNode", null, ApplicationMessage.WARNING));
@@ -141,7 +159,6 @@ public class UIPublicationAction extends UIForm {
       userPortalConfigService.update(page);
 
       // Add properties to node
-      Node node = publishingPanel.getNode();
       Session session = node.getSession();
       ValueFactory valueFactory = session.getValueFactory();
       ArrayList<Value> listTmp;
@@ -171,18 +188,6 @@ public class UIPublicationAction extends UIForm {
       node.setProperty("publication:applicationIDs",  listTmp.toArray(new Value[0]));
       
       session.save();
-
-      // Display in PublishedPages
-      String selectedNodeName = selectedNode.getUri();
-      List<String> listPublishedPage = publishedPages.getListNavigationNodeURI();
-      if (listPublishedPage.indexOf(selectedNodeName) < 0) { 
-        listPublishedPage.add(selectedNodeName);
-        publishedPages.setListNavigationNodeURI(listPublishedPage);
-      } else {
-        application.addMessage(new ApplicationMessage("UIPublicationAction.msg.duplicate", null, ApplicationMessage.WARNING));
-        event.getRequestContext().addUIComponentToUpdateByAjax(application.getUIPopupMessages());
-        return;
-      }
     }
   }
 
@@ -191,21 +196,8 @@ public class UIPublicationAction extends UIForm {
       UIPublicationAction publicationAction = event.getSource();
       UIPublishingPanel publishingPanel = publicationAction.getAncestorOfType(UIPublishingPanel.class);
       UIPublishedPages publishedPages = publishingPanel.getChild(UIPublishedPages.class);
-
-      Node node = publishingPanel.getNode();
-      Session session = node.getSession();
-      ValueFactory valueFactory = session.getValueFactory();
-      Value[] values;
-      if (node.hasProperty("publication:publishedPageIds")) {
-        values = new Value[node.getProperty("publication:publishedPageIds").getValues().length + 1];
-      } else {
-        values = new Value[1];
-      }
-//      values[values.length - 1] = valueFactory.createValue(page.getPageId());
-      node.setProperty("publication:publishedPageIds", values);
-      session.save();      
-      String selectedNode = publishedPages.getSelectedNavigationNodeURI();
       
+      String selectedNode = publishedPages.getSelectedNavigationNodeURI();
     }
   }
 }

@@ -52,6 +52,8 @@ public class UIPublishingPanel extends UIForm {
     this.currentNode = node;
     UIPortalNavigationExplorer poExplorer = getChild(UIPortalNavigationExplorer.class);
     poExplorer.init(portalName,runningPortals);
+    UIPublishedPages publishedPages = getChild(UIPublishedPages.class);
+    publishedPages.init();
   }
 
   public String getCurrentPortal() {
