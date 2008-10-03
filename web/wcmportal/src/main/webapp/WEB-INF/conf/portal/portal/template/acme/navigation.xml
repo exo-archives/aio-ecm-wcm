@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <node-navigation>
 	<owner-type>portal</owner-type>
-	<owner-id>acme</owner-id>
+	<owner-id>@owner@</owner-id>
 	<priority>1</priority>
 	<page-nodes>
 		<node>

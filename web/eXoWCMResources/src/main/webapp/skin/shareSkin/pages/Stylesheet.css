@@ -26,3 +26,15 @@
 	padding-left: 0px;
 	float: right;
 }
+
+.UIItemSelector .ItemDetailList .TemplateContainer .ClassicSiteImage {
+ 	background:transparent url(images/classic.png) scroll center;
+	height:222px;
+	margin-top:9px;
+}
+
+.UIItemSelector .ItemDetailList .TemplateContainer .ACMESiteImage {
+ 	background:transparent url(images/acme.png) scroll center;
+	height:222px;
+	margin-top:9px;
+}

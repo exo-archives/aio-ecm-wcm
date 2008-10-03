@@ -5,13 +5,16 @@ import org.exoplatform.webui.core.model.SelectItemCategory;
 
 List options = new ArrayList();
 
-  SelectItemCategory guest = new SelectItemCategory("ClassicPortal");
-  guest.addSelectItemOption(
-      new PortalTemplateConfigOption("", "classic", "Classic Portal", "ClassicPortal").addGroup("/platform/administrators")
+  SelectItemCategory classic = new SelectItemCategory("ClassicSite");
+  classic.addSelectItemOption(
+      new PortalTemplateConfigOption("", "classic", "Classic Site", "ClassicSite").addGroup("/platform/administrators")
   );
-  guest.addSelectItemOption(
-      new PortalTemplateConfigOption("", "acme", "ACME Site", "ACMESite").addGroup("/platform/administrators")
+  
+  SelectItemCategory acme = new SelectItemCategory("ACMESite");
+  acme.addSelectItemOption(
+      new PortalTemplateConfigOption("ACME Site", "acme", "ACME Site", "ACMESite").addGroup("/platform/administrators")
   );
-  options.add(guest);
+  options.add(classic);
+  options.add(acme);
   
 return options ;
