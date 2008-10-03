@@ -37,4 +37,7 @@
 		<% uiform.renderChild("UIPublicationAction") %>
 	</div>
 	<div style="clear: both;"></div>
+	<div class="PanelBottom">
+		<% uiform.renderChild("UICloseForm") %>
+	</div>
 </div>

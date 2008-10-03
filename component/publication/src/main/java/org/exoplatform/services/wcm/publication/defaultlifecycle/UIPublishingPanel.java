@@ -46,6 +46,7 @@ public class UIPublishingPanel extends UIForm {
     addChild(UIPortalNavigationExplorer.class,null,"UIPortalNavigationExplorer");
     addChild(UIPublicationAction.class,null,"UIPublicationAction");
     addChild(UIPublishedPages.class,null,"UIPublishedPages");
+    addChild(UICloseForm.class, null, "UICloseForm");
   }
 
   public void initPanel(Node node,String portalName,List<String> runningPortals) throws Exception {
