@@ -18,7 +18,7 @@ FCKConfig.ToolbarSets["CompleteWCM"] = [
 	['Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'],
 	['OrderedList','UnorderedList','-','Outdent','Indent','Blockquote','CreateDiv'],
 	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
-	['Link','Insert Portal Link','Unlink','Anchor'],
+	['Link','Insert link to a site page','Unlink','Anchor'],
 	['Insert Image','Insert DMS Document','Flash','Table','Rule','SpecialChar','PageBreak'],
 	['TextColor','BGColor'],
 	['FitWindow','ShowBlocks'],
@@ -28,7 +28,7 @@ FCKConfig.ToolbarSets["CompleteWCM"] = [
 FCKConfig.ToolbarSets["BasicWCM"] = [
 	['Source','-','Bold','Italic','Underline','StrikeThrough','-','OrderedList','UnorderedList','Outdent','Indent'],
 	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
-	['Blockquote','-','Link','Unlink','Insert Portal Link','Insert Image','Insert DMS Document','-','FitWindow','ShowBlocks'],	
+	['Blockquote','-','Link','Unlink','Insert link to a site page','Insert Image','Insert DMS Document','-','FitWindow','ShowBlocks'],	
 	['Style','FontFormat','FontName','FontSize']
 ] ;
 

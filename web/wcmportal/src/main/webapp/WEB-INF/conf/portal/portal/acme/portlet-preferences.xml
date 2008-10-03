@@ -2,8 +2,8 @@
 <portlet-preferences-set>
   <portlet-preferences>
     <owner-type>portal</owner-type>
-    <owner-id>@owner@</owner-id>
-    <window-id>portal#@owner@:/iweb/BannerPortlet/banner</window-id>
+    <owner-id>acme</owner-id>
+    <window-id>portal#acme:/iweb/BannerPortlet/banner</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -38,8 +38,8 @@
   
   <portlet-preferences>
     <owner-type>portal</owner-type>
-    <owner-id>@owner@</owner-id>
-    <window-id>portal#@owner@:/iweb/FooterPortlet/footer</window-id>
+    <owner-id>acme</owner-id>
+    <window-id>portal#acme:/iweb/FooterPortlet/footer</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -65,8 +65,8 @@
   
   <portlet-preferences>
     <owner-type>portal</owner-type>
-    <owner-id>@owner@</owner-id>
-    <window-id>portal#@owner@:/web/GroovyPortlet/groovyportlet</window-id>
+    <owner-id>acme</owner-id>
+    <window-id>portal#acme:/web/GroovyPortlet/groovyportlet</window-id>
     <preference>
       <name>template</name>
       <value>par:/groovy/groovy/webui/component/UIGroovyPortlet.gtmpl</value>
@@ -76,8 +76,8 @@
       
   <portlet-preferences>
     <owner-type>portal</owner-type>
-    <owner-id>@owner@</owner-id>
-    <window-id>portal#@owner@:/web-presentation/AdvancedPresentationPortlet/homepage</window-id>
+    <owner-id>acme</owner-id>
+    <window-id>portal#acme:/web-presentation/AdvancedPresentationPortlet/homepage</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -102,8 +102,8 @@
   
   <portlet-preferences>
     <owner-type>portal</owner-type>
-    <owner-id>@owner@</owner-id>
-    <window-id>portal#@owner@:/web/NavigationPortlet/toolbar</window-id>
+    <owner-id>acme</owner-id>
+    <window-id>portal#acme:/web/NavigationPortlet/toolbar</window-id>
     <preference>
       <name>useAJAX</name>
       <value>false</value>
@@ -113,8 +113,8 @@
   
   <portlet-preferences>
 		<owner-type>portal</owner-type>
-		<owner-id>@owner@</owner-id>
-		<window-id>portal#@owner@:/web-presentation/AdvancedPresentationPortlet/presentation</window-id>
+		<owner-id>acme</owner-id>
+		<window-id>portal#acme:/web-presentation/AdvancedPresentationPortlet/presentation</window-id>
       <preference>
         <name>ShowTOC</name>
         <value>true</value>
