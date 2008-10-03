@@ -25,11 +25,15 @@ import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.ValueFactory;
 
+import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.application.Preference;
 import org.exoplatform.portal.config.DataStorage;
+import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.UserPortalConfigService;
+import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.application.UIPortlet;
@@ -176,7 +180,7 @@ public class UIPublicationAction extends UIForm {
       } else {
         listTmp = new ArrayList<Value>();
       }
-      listTmp.add(valueFactory.createValue(page.getId()));
+      listTmp.add(valueFactory.createValue(page.getPageId()));
       node.setProperty("publication:webPageIDs", listTmp.toArray(new Value[0]));
       
       if (node.hasProperty("publication:applicationIDs")) {
@@ -193,11 +197,60 @@ public class UIPublicationAction extends UIForm {
 
   public static class RemoveActionListener extends EventListener<UIPublicationAction> {
     public void execute(Event<UIPublicationAction> event) throws Exception {
+      // Get service and component
       UIPublicationAction publicationAction = event.getSource();
       UIPublishingPanel publishingPanel = publicationAction.getAncestorOfType(UIPublishingPanel.class);
       UIPublishedPages publishedPages = publishingPanel.getChild(UIPublishedPages.class);
+      UserPortalConfigService userPortalConfigService = publicationAction.getApplicationComponent(UserPortalConfigService.class);
+      DataStorage dataStorage = publicationAction.getApplicationComponent(DataStorage.class);
+      String selectedNavigationNodeURI = publishedPages.getSelectedNavigationNodeURI();
+      String portalName = selectedNavigationNodeURI.substring(1, selectedNavigationNodeURI.indexOf("/", 1));
+      String pageNodeUri = selectedNavigationNodeURI.replaceFirst("/\\w+/", "");
       
-      String selectedNode = publishedPages.getSelectedNavigationNodeURI();
+      // Display in PublishedPages
+      List<String> listNavigationNodeURI = publishedPages.getListNavigationNodeURI();
+      listNavigationNodeURI.remove(selectedNavigationNodeURI);
+      publishedPages.setListNavigationNodeURI(listNavigationNodeURI);
+      
+      // Remove portlet of page
+      PageNavigation pageNavigation = null;
+      Query<PageNavigation> query = new Query<PageNavigation>(PortalConfig.PORTAL_TYPE, portalName, PageNavigation.class);
+      PageList list = dataStorage.find(query);
+      for(Object object: list.getAll()) {
+        pageNavigation = PageNavigation.class.cast(object);
+      }
+      if (pageNavigation != null) {
+        Node contentNode = publishingPanel.getNode();
+        Session session = contentNode.getSession();
+        ValueFactory valueFactory = session.getValueFactory();
+        if (contentNode.hasProperty("publication:applicationIDs")) {
+          PageNode pageNode = pageNavigation.getNode(pageNodeUri);
+          Page page = userPortalConfigService.getPage(pageNode.getPageReference(), event.getRequestContext().getRemoteUser());
+          ArrayList<Object> children = new ArrayList<Object>(page.getChildren());
+          ArrayList<Value> listApplicationIDs = new ArrayList<Value>(Arrays.asList(contentNode.getProperty("publication:applicationIDs").getValues()));
+          ArrayList<Value> listWebPageIDs = new ArrayList<Value>(Arrays.asList(contentNode.getProperty("publication:webPageIDs").getValues()));
+          ArrayList<Value> listNavigationNodeURIs = new ArrayList<Value>(Arrays.asList(contentNode.getProperty("publication:navigationNodeURIs").getValues()));
+          for (Object object : page.getChildren()) {
+            if (object instanceof Application) {
+              Application application = (Application) object;
+              for (Value value : contentNode.getProperty("publication:applicationIDs").getValues()) {
+                if (value.getString().equals(application.getInstanceId())) {
+                  children.remove(object);
+                  listApplicationIDs.remove(value);
+                  listWebPageIDs.remove(valueFactory.createValue(page.getPageId()));
+                  listNavigationNodeURIs.remove(valueFactory.createValue(publishedPages.getSelectedNavigationNodeURI()));
+                }
+              }
+            }
+          }
+          page.setChildren(children);
+          userPortalConfigService.update(page);
+          contentNode.setProperty("publication:applicationIDs", listApplicationIDs.toArray(new Value[0]));
+          contentNode.setProperty("publication:webPageIDs", listWebPageIDs.toArray(new Value[0]));
+          contentNode.setProperty("publication:navigationNodeURIs", listNavigationNodeURIs.toArray(new Value[0]));
+          session.save();
+        }
+      }
     }
   }
 }

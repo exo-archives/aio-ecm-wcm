@@ -9,7 +9,7 @@
 							selectedClass = uicomponent.getSelectedNavigationNodeURI().equals(navigationURI) ? "Selected" : "";
 						}
 		      	%>
-	        		<div class="ItemIcon $selectedClass" onclick="<%=uicomponent.event("SelectTreeNode", navigationURI)%>" title="$navigationURI">$navigationURI</div>
+	        		<div class="ItemIcon $selectedClass" onclick="<%=uicomponent.event("SelectNavigationNodeURI", navigationURI)%>" title="$navigationURI">$navigationURI</div>
 	      		<%
 	      	}
 	      %>
