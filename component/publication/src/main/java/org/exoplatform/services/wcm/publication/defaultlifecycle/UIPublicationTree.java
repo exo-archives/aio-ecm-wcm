@@ -109,11 +109,11 @@ public class UIPublicationTree extends UITree {
     public void setChildrenByPageNodes(List<PageNode> pagesNodes) {
       if(pagesNodes == null) return;
       List<TreeNode> list = new ArrayList<TreeNode>();
-      for(PageNode pageNode: pagesNodes) {
-        if(!pageNode.isDisplay()) continue;                
+      for(PageNode pNode: pagesNodes) {
+        if(!pNode.isDisplay()) continue;                
         TreeNode treeNode = new TreeNode(portalName,navigation, true);
-        treeNode.setPageNode(pageNode);
-        treeNode.setChildrenByPageNodes(pageNode.getChildren());
+        treeNode.setPageNode(pNode);
+        treeNode.setChildrenByPageNodes(pNode.getChildren());
         list.add(treeNode);
       }
       setTreeNodeChildren(list);

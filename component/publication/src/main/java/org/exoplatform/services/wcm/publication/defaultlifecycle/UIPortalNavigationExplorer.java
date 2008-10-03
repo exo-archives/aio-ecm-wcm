@@ -125,6 +125,22 @@ public class UIPortalNavigationExplorer extends UIContainer{
       tree.setParentSelected(null);
       tree.setSibbling(sibbling);
       return;
+    }    
+    if(tree.getId().equals("UIPortalTree")) {
+      if(!uri.startsWith(currentNode.getUri())) {
+        List<TreeNode> sibbling = (List<TreeNode>) tree.getSibbling();
+        for (TreeNode childNode: sibbling) {
+          if(childNode.getUri().equals(uri)) {
+            currentNode = childNode;
+            break;
+          }
+        }
+        tree.setSelected(currentNode);
+        List<TreeNode> listChildNode = currentNode.getTreeNodeChildren(); 
+        tree.setChildren(listChildNode);
+        tree.setParentSelected(null);
+        tree.setSibbling(sibbling);
+      }
     }
     TreeNode selected = currentNode.searchTreeNodeByURI(uri);
     if(selected == null) return;
