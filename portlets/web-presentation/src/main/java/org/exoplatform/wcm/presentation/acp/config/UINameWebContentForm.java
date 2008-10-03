@@ -179,7 +179,13 @@ public class UINameWebContentForm extends UIForm {
   public static class AbortActionListener extends EventListener<UINameWebContentForm> {
     public void execute(Event<UINameWebContentForm> event) throws Exception {
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
-      context.setApplicationMode(PortletMode.VIEW);
+      UIPortletConfig uiPortletConfig = event.getSource().getAncestorOfType(UIPortletConfig.class);
+      if(uiPortletConfig.isEditPortletInCreatePageWizard()) {
+        uiPortletConfig.getChildren().clear();
+        uiPortletConfig.addUIWelcomeScreen();
+      } else {        
+        context.setApplicationMode(PortletMode.VIEW);
+      }
     }
   }
 }

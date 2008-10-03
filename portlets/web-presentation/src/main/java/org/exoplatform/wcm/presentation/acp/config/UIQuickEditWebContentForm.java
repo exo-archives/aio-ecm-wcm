@@ -103,7 +103,7 @@ public class UIQuickEditWebContentForm extends UIContentDialogForm{
     Node parentNode = (Node) session.getItem(path);
     return parentNode;
   }
-  
+
   private boolean nodeIsLocked(Node node) throws Exception {
     if(!node.isLocked()) return false;        
     String lockToken = LockUtil.getLockToken(node);
@@ -127,20 +127,20 @@ public class UIQuickEditWebContentForm extends UIContentDialogForm{
       Session session = SessionProviderFactory.createSystemProvider().getSession(workspaceName, manageableRepository);
       Node webContentNode = session.getNodeByUUID(UUID);
       UIApplication uiApplication = uiQuickEditForm.getAncestorOfType(UIApplication.class);
-      
+
       if (uiQuickEditForm.nodeIsLocked(webContentNode)) {
         Object[] objs = { webContentNode.getPath() };
         uiApplication.addMessage(new ApplicationMessage("UIPopupMenu.msg.node-locked", objs));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
         return;
       }
-      
+
       boolean isCheckedOut = true;
       if (!webContentNode.isCheckedOut()) {
         isCheckedOut = false;
         webContentNode.checkout();
       }
-      
+
       List inputs = uiQuickEditForm.getChildren();
       Map inputProperties = DialogFormUtil.prepareMap(inputs, uiQuickEditForm.getInputProperties());
       Node newNode = null;
@@ -185,11 +185,11 @@ public class UIQuickEditWebContentForm extends UIContentDialogForm{
       }
       uiQuickEditForm.savedNodeIdentifier = NodeIdentifier.make(newNode);
       uiQuickEditForm.setWebContent(newNode);
-      
+
       if (!isCheckedOut) {
         newNode.checkin();
       }
-      
+
       UIPortletConfig uiPortletConfig = uiQuickEditForm.getAncestorOfType(UIPortletConfig.class);
       if(uiPortletConfig.isEditPortletInCreatePageWizard()) {
         uiPortletConfig.getChildren().clear();
@@ -204,7 +204,13 @@ public class UIQuickEditWebContentForm extends UIContentDialogForm{
   public static class CancelActionListener extends EventListener<UIQuickEditWebContentForm> {
     public void execute(Event<UIQuickEditWebContentForm> event) throws Exception {
       PortletRequestContext context = (PortletRequestContext)event.getRequestContext();
-      context.setApplicationMode(PortletMode.VIEW);
+      UIPortletConfig uiPortletConfig = event.getSource().getAncestorOfType(UIPortletConfig.class);
+      if(uiPortletConfig.isEditPortletInCreatePageWizard()) {
+        uiPortletConfig.getChildren().clear();
+        uiPortletConfig.addUIWelcomeScreen();
+      } else {        
+        context.setApplicationMode(PortletMode.VIEW);
+      }
     }
   }
 }
