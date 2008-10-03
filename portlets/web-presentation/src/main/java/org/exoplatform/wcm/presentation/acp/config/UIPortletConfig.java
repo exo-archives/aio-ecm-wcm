@@ -16,7 +16,6 @@
  */
 package org.exoplatform.wcm.presentation.acp.config;
 
-import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
 
 import org.exoplatform.portal.webui.portal.UIPortal;
@@ -98,12 +97,12 @@ public class UIPortletConfig extends UIContainer {
   public void setNewConfig(boolean newConfig) { isNewConfig = newConfig; }  
   public boolean isNewConfig() { return isNewConfig; }
 
-  public boolean isEditPortletInCreatePageWinzard() {
+  public boolean isEditPortletInCreatePageWizard() {
     UIPortal uiPortal = Util.getUIPortal();
     UIPortalApplication uiApp = uiPortal.getAncestorOfType(UIPortalApplication.class);
     UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
-    // show maskworkpace is being in Portal page edit mode
-    if(uiMaskWS.getWindowWidth() > 0) return true;
+    // show maskworkpace is being in Portal page edit mode    
+    if(uiMaskWS.getWindowWidth() > 0 && uiMaskWS.getWindowHeight() < 0) return true;
     return false;
   }
 }
