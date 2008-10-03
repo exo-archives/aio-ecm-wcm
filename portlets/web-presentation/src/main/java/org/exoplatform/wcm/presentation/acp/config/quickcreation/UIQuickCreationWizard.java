@@ -28,7 +28,6 @@ import org.exoplatform.wcm.presentation.acp.config.UINameWebContentForm;
 import org.exoplatform.wcm.presentation.acp.config.UIPermissionManager;
 import org.exoplatform.wcm.presentation.acp.config.UIPortletConfig;
 import org.exoplatform.wcm.presentation.acp.config.UISocialInfo;
-import org.exoplatform.wcm.presentation.acp.config.UIWelcomeScreen;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -184,7 +183,7 @@ public class UIQuickCreationWizard extends UIBaseWizard {
       prefs.setValue(UIAdvancedPresentationPortlet.UUID, identifier.getUUID());
       prefs.store();
       UIPortletConfig uiPortletConfig = uiQuickWizard.getAncestorOfType(UIPortletConfig.class);
-      if(uiPortletConfig.isEditPortletInCreatePageWinzard()) {
+      if(uiPortletConfig.isEditPortletInCreatePageWizard()) {
         uiPortletConfig.getChildren().clear();
         uiPortletConfig.addUIWelcomeScreen();
       } else {        
@@ -218,7 +217,7 @@ public class UIQuickCreationWizard extends UIBaseWizard {
       prefs.setValue("AllowComment", Boolean.toString(isAllowComment));
       prefs.store();      
       UIPortletConfig uiPortletConfig = uiQuickCreationWizard.getAncestorOfType(UIPortletConfig.class);
-      if(uiPortletConfig.isEditPortletInCreatePageWinzard()) {
+      if(uiPortletConfig.isEditPortletInCreatePageWizard()) {
         uiPortletConfig.getChildren().clear();
         uiPortletConfig.addUIWelcomeScreen();
       } else {        

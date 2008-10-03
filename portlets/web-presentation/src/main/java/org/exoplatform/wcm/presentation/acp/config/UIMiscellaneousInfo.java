@@ -36,7 +36,6 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
     lifecycle = UIFormLifecycle.class,
     template = "system:/groovy/webui/form/UIForm.gtmpl"
 )
-
 public class UIMiscellaneousInfo extends UIForm {
   public UIMiscellaneousInfo() throws Exception {
     PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();

@@ -191,7 +191,7 @@ public class UIQuickEditWebContentForm extends UIContentDialogForm{
       }
       
       UIPortletConfig uiPortletConfig = uiQuickEditForm.getAncestorOfType(UIPortletConfig.class);
-      if(uiPortletConfig.isEditPortletInCreatePageWinzard()) {
+      if(uiPortletConfig.isEditPortletInCreatePageWizard()) {
         uiPortletConfig.getChildren().clear();
         uiPortletConfig.addUIWelcomeScreen();
       } else {        

@@ -144,7 +144,7 @@ public class UIWebContentSelectorForm extends UIForm implements UISelectable{
       prefs.setValue(UIAdvancedPresentationPortlet.UUID, identifier.getUUID());
       prefs.store();
       UIPortletConfig uiPortletConfig = uiWebContentSelector.getAncestorOfType(UIPortletConfig.class);
-      if(uiPortletConfig.isEditPortletInCreatePageWinzard()) {
+      if(uiPortletConfig.isEditPortletInCreatePageWizard()) {
         uiPortletConfig.getChildren().clear();
         uiPortletConfig.addUIWelcomeScreen();
       } else {        
