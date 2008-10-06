@@ -1,0 +1,15 @@
+<div class="$uicomponent.id" style="height:50px;">
+	<%
+		String actionLabel = _ctx.appRes("UIFooterViewModeContainer.action.QuickEdit") ;
+		if(uicomponent.isQuickEditable()){
+	%>
+  <div style="position: relative; ">
+	 	<a class="QuickEdit" href="<%=uicomponent.event("QuickEdit")%>"></a>
+	</div>
+	<%		
+		}	
+	%>
+	<% uicomponent.renderChildren() %>
+</div>
+
+

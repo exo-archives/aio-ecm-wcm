@@ -1,0 +1,53 @@
+.UIFooterViewMode {
+  background: url('DefaultSkin/background/FooterBG.gif') repeat-x top;
+  height: auto;
+  margin: 0px;
+}
+
+.UIFooterViewMode .RepeatFooter {
+  padding: 0px;
+  margin: 0px;
+}
+
+.UIFooterViewMode .RepeatFooter .QuickEdit{
+	float: right; 
+	padding-bottom: 10px; 
+	cursor: pointer;
+}
+
+
+.UIFooterViewMode .FooterInfoContainer {
+  line-height: 25px ;
+}
+
+.UIFooterViewMode .CopyrightInfo {
+  line-height: 25px;
+  text-align: center;
+}
+
+.UIFooterPortlet .UITabPane {
+	height: auto;
+}
+
+.UIFooterPortlet .UITabContent textarea {
+	font-size:11px;
+	height: 200px;
+	width: 500px;
+}
+
+.UIFooterPortlet .Warning {
+	background-position: left 10px;
+	margin: 10px;
+	padding: 10px;
+	text-align: center;
+	color: red;
+}
+
+.UIFooterPortlet .ViewSelector {
+	margin: 10px 8px;
+	padding: 10px;
+	text-align:right;
+	color: #0066ff;
+	background: #f7f7f7;
+	border: 1px solid #b7b7b7;
+}

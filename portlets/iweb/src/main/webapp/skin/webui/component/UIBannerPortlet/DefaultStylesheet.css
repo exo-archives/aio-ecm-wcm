@@ -1,0 +1,121 @@
+.UIBannerPortlet .ViewMode {
+	height: 72px;
+}
+
+.UIBannerPortlet .UIBannerViewMode {
+	background: #d8d8d8 url(DefaultSkin/background/DefaultBackground.png) repeat-x;
+	height: 72px;
+}
+
+.UIBannerPortlet .UIBannerViewMode .Logo img {
+	vertical-align: -30px;
+	margin: 5px 75px 0px 30px;
+}
+
+.UIBannerPortlet .UIBannerViewMode .BannerTitle {
+	font-weight: bold; 
+	font-size: 16px;
+	color: #666666;	
+	letter-spacing: 0.2em;
+	font-variant: small-caps;
+}
+
+.UIBannerPortlet .UIBannerViewMode .MiddleBanner {
+	position: absolute;
+	top: 40px;
+	left: 200px;
+	right: 0px;
+}
+
+.UIBannerPortlet .UIBannerViewMode .LeftLogin {
+	background: url(DefaultSkin/background/LeftLoginLeft.gif) no-repeat top left;
+	padding-left: 30px;
+}
+
+.UIBannerPortlet .UIBannerViewMode .RightLogin {
+	background: url(DefaultSkin/background/RightLoginLeft.gif) no-repeat top right;
+	padding-right: 28px;
+} 
+
+.UIBannerPortlet .UIBannerViewMode .CenterLogin {
+	background: url(DefaultSkin/background/CenterLogin.gif) repeat-x;
+	height: 31px;
+} 
+
+.UIBannerPortlet .LoginContent {
+	position: absolute;
+	top: 40px;
+	right: 35px;
+}
+
+.UIBannerPortlet .LoginContent .LoginInfo {
+	float: right;
+	line-height: 31px;
+}
+
+.UIBannerPortlet .LoginContent .LoginInfo .Welcome {
+	padding-top: 5px;
+}
+
+.UIBannerPortlet .LoginContent .LoginInfo span {
+	font-weight: bold;
+	color: #0066FF;
+}
+
+.UIBannerPortlet .LoginContent .LoginSeperatorLine {
+	float: right;
+	width: 2px;
+	background: url(DefaultSkin/background/SeperatorLine.gif) no-repeat;
+	margin: 7px 20px 0px 20px;
+	height: 20px;
+}
+
+.UIBannerPortlet .LoginContent a {
+	display: block;
+	text-decoration: none;
+}
+
+.UIBannerPortlet .LoginContent .LogoutIcon {
+	cursor: pointer;
+	font-weight: bold;
+	padding-left: 26px;
+	background: url(DefaultSkin/background/LogoutIcon.png) no-repeat center left;
+	color: #0066FF;
+}
+
+.UIBannerPortlet .LoginContent .SettingLanguage {
+  background: url(DefaultSkin/background/LanguageIcon.gif) no-repeat left center;
+  padding-left: 26px;
+  cursor: pointer;
+  font-weight: bold;
+  float: right;
+  line-height: 31px;
+  color: #0066FF;
+}
+
+.UIBannerPortlet .UITabPane {
+	height: auto;
+}
+
+.UIBannerPortlet .UITabContent textarea {
+	font-size:11px;
+	height: 200px;
+	width: 500px;
+}
+
+.UIBannerPortlet .Warning {
+	background-position: left 10px;
+	margin: 10px;
+	padding: 10px;
+	text-align: center;
+	color: red;
+}
+
+.UIBannerPortlet .ViewSelector {
+	margin: 10px 8px;
+	padding: 10px;
+	text-align:right;
+	color: #0066ff;
+	background: #f7f7f7;
+	border: 1px solid #b7b7b7;
+}

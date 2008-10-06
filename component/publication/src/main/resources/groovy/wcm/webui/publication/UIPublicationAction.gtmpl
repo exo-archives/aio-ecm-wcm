@@ -1,0 +1,14 @@
+<% uicomponent.begin(); %>
+	<div class="UIAction"> 
+		<% 
+			for(action in uicomponent.getActions()) { 
+				String link = uicomponent.event(action) ;
+				if (action.contains("Add")) {
+					%><div onclick="$link" class="ArrowNext"><span></span></div><br><%
+				} else if (action.contains("Remove")) {
+					%><div onclick="$link" class="ArrowBack"><span></span></div><%
+				}
+			}
+		%>          
+	</div>
+<% uicomponent.end(); %>

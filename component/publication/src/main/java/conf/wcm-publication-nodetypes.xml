@@ -1,0 +1,30 @@
+<nodeTypes xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0"
+  xmlns:jcr="http://www.jcp.org/jcr/1.0">
+        
+  <nodeType name="publication:webpagesPublication" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
+	  <supertypes>
+	  	<supertype>publication:publication</supertype>
+	  </supertypes>
+    <propertyDefinitions>
+    	<propertyDefinition name="publication:navigationNodeURIs" requiredType="String" autoCreated="false" mandatory="false"
+        onParentVersion="IGNORE" protected="false" multiple="true">
+        <valueConstraints/>
+      </propertyDefinition>
+    	<propertyDefinition name="publication:webPageIDs" requiredType="String" autoCreated="false" mandatory="false"
+        onParentVersion="IGNORE" protected="false" multiple="true">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="publication:applicationIDs" requiredType="String" autoCreated="false" mandatory="false"
+        onParentVersion="IGNORE" protected="false" multiple="true">
+        <valueConstraints/>
+      </propertyDefinition>            
+    </propertyDefinitions>
+  </nodeType>
+  
+  <nodeType name="publication:wcmPublication" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
+		<supertypes>      
+      <supertype>publication:webpagesPublication</supertype>
+    </supertypes>    
+  </nodeType>
+          
+</nodeTypes>

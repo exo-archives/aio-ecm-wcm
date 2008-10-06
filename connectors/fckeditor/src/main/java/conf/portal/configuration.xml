@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<configuration>
+  <component>    
+    <type>org.exoplatform.wcm.connector.fckeditor.DocumentConnector</type>    
+  </component>      
+  <component>    
+    <type>org.exoplatform.wcm.connector.fckeditor.ImageConnector</type>    
+  </component>      
+  <component>    
+    <type>org.exoplatform.wcm.connector.fckeditor.LinkConnector</type>    
+  </component>       
+  <component>    
+    <type>org.exoplatform.wcm.connector.fckeditor.PortalLinkConnector</type>    
+  </component>     
+  
+  <external-component-plugins>
+    <target-component>org.exoplatform.services.ecm.fckconfig.FCKConfigService</target-component>
+    <component-plugin>
+      <name>FCK Dynamic Skin Plugins</name>
+      <set-method>addPlugin</set-method>
+      <type>org.exoplatform.services.wcm.fckconfig.FCKDynamicSkinPlugin</type>
+      <description>Add Dynamic Skin Plugins into FCK editor </description>
+    </component-plugin>    
+  </external-component-plugins>
+  
+</configuration>

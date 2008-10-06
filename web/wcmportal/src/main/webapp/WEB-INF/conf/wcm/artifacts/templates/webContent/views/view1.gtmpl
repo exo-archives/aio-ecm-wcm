@@ -1,0 +1,116 @@
+<%
+  import javax.jcr.NodeIterator;
+  import javax.jcr.Node;
+  import javax.jcr.Session;
+  import java.util.ArrayList;
+	import java.util.List;
+  import org.exoplatform.services.wcm.webcontent.TOCGeneratorService;
+  import org.exoplatform.services.jcr.core.ManageableRepository;
+  import org.exoplatform.services.cms.categories.CategoriesService;
+  import org.exoplatform.webui.application.WebuiRequestContext;
+	import org.exoplatform.webui.application.portlet.PortletRequestContext;
+	import javax.portlet.PortletPreferences;
+	import org.exoplatform.services.cms.folksonomy.FolksonomyService;
+	
+	public boolean getPortletPreference(String name) {
+    PortletRequestContext portletRequestContext = _ctx.getRequestContext() ;
+    String value = portletRequestContext.getRequest().getPreferences().getValue(name, null);
+    if(value != null) 
+      return Boolean.parseBoolean(value);
+    return false;
+  }
+  
+  def currentNode = uicomponent.getNode() ; 
+  def htmlFile = currentNode.getNode("default.html") ;
+  
+  def jsNode = currentNode.getNode("js");
+  def cssNode = currentNode.getNode("css");
+    
+  def javaScriptClass="org.exoplatform.services.wcm.javascript.XJavascriptService";
+  def skinClass="org.exoplatform.services.wcm.skin.XSkinService";
+
+  def exSkinService = uicomponent.getComponentInstanceOfType(skinClass) ;
+  def exJSService = uicomponent.getComponentInstanceOfType(javaScriptClass) ;
+
+  def css= exSkinService.getActiveStylesheet(cssNode);
+  def js=  exJSService.getActiveJavaScript(jsNode) ;
+  
+  TOCGeneratorService tocService = uicomponent.getApplicationComponent(TOCGeneratorService.class);
+	String tocContent = tocService.getTOC(htmlFile);
+	
+	ManageableRepository mRepository = (ManageableRepository)currentNode.getSession().getRepository();
+  String repositoryName = mRepository.getConfiguration().getName();
+  boolean quickEdit = getPortletPreference("ShowQuickEdit");
+	boolean isShowTOC = getPortletPreference("ShowTOC");
+	boolean isShowCategories = getPortletPreference("ShowCategories");
+	boolean isShowTags = getPortletPreference("ShowTags");
+	boolean isVotingEnable = getPortletPreference("AllowVoting");
+	boolean isCommentingEnable = getPortletPreference("AllowComment");
+
+	if((css != null) && (css.length() > 0)) {
+%>
+		<style><%=css%></style>
+<%
+	}
+	if((tocContent != null) && (tocContent.length() > 0) && isShowTOC) {
+%>
+		<div class='toc'>
+			<%= tocContent%>
+		</div>
+<%
+	}
+%>
+<%=htmlFile.getNode("jcr:content").getProperty("jcr:data").getString()%>
+<% if((js != null) && (js.length() > 0)) {%>
+<script><%=js%></script>
+<% } %>
+
+<% 
+	if(isShowCategories) {
+		StringBuffer categories = new StringBuffer();
+		CategoriesService categoriesService = uicomponent.getApplicationComponent(CategoriesService.class);
+		if(categoriesService.hasCategories(currentNode)) {
+      List<Node> categoryNodeList = categoriesService.getCategories(currentNode, repositoryName);
+      for (Node category: categoryNodeList) {
+        categories.append(category.getName()).append(", ");
+      }
+    	categories.replace(categories.lastIndexOf(", "), categories.size(), "");
+%>
+		<div class="Categories"><%=_ctx.appRes("Category.view.label")%>: <%= categories.toString(); %></div>
+<%
+    }
+	}
+%>
+
+<% 
+	if(isShowTags) {
+		FolksonomyService folkService = uicomponent.getApplicationComponent(FolksonomyService.class);
+		List<Node> tagList = folkService.getLinkedTagsOfDocument(currentNode, repositoryName);
+		if(tagList.size() > 0) {
+			StringBuffer tagBuff = new StringBuffer("[");
+			for(Node tag: tagList) {
+				tagBuff.append(tag.getName()).append(", ");
+			}
+			tagBuff.replace(tagBuff.lastIndexOf(", "), tagBuff.size(), "]");
+%>
+				<div class="Tags"><%=_ctx.appRes("Tag.view.label")%>: <%= tagBuff.toString(); %></div>
+<%	
+		}	
+	}
+%>
+
+<%
+	if(isCommentingEnable) {
+%>
+		<div class="comments"><% _ctx.include(uicomponent.getViewTemplate("exo:comment", "view1")); %></div>
+<%	
+	}
+%>
+
+<% 
+	if(isVotingEnable) {
+%>
+		<div class="Vote"><% _ctx.include(uicomponent.getViewTemplate("exo:vote", "view1")); %></div>
+<%
+	}
+%>

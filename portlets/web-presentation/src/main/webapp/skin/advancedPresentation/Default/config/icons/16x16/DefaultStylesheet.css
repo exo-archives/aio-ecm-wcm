@@ -1,0 +1,23 @@
+.UIPermissionSetting .SelectUserIcon {
+	width: 16px; height: 16px;
+	background: url('DefaultSkin/SmallUserIcon.gif') no-repeat;  
+	cursor: pointer;
+}
+
+.UIPermissionSetting .SelectMemberIcon {
+	width: 16px; height: 16px;
+	background: url('DefaultSkin/SmallMemberIcon.gif') no-repeat;  
+	cursor: pointer;
+}
+
+.UIPermissionSetting .AddAnyIcon {
+	width: 16px; height: 16px;
+	background: url('DefaultSkin/SmallGroupIcon.gif') no-repeat;  
+	cursor: pointer;
+}
+
+.UIWebContentSelectorForm .BrowseIcon {
+	width: 16px; height: 16px;
+	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/BrowseContent.gif') no-repeat;  
+	cursor: pointer;
+}

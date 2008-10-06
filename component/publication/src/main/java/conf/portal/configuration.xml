@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<configuration>
+
+	<component>
+    <key>org.exoplatform.services.wcm.publication.WCMPublicationPresentationService</key>
+    <type>org.exoplatform.services.wcm.publication.WCMPublicationPresentationServiceImpl</type>
+  </component>	
+	<external-component-plugins>
+  	<target-component>org.exoplatform.services.jcr.RepositoryService</target-component>		
+	  <component-plugin>
+	    <name>add.nodeType</name>
+	    <set-method>addPlugin</set-method>
+	    <type>org.exoplatform.services.jcr.impl.AddNodeTypePlugin</type>
+	    <init-params>
+	      <values-param>
+	        <name>autoCreatedInNewRepository</name>
+	        <description>Node types configuration file</description>
+	        <value>jar:/conf/wcm-publication-nodetypes.xml</value>
+	      </values-param>
+	    </init-params>
+	  </component-plugin>
+	</external-component-plugins>	
+	<!--
+	<external-component-plugins>
+		<target-component>org.exoplatform.services.listener.ListenerService</target-component>
+		<component-plugin>
+      <name>UserPortalConfigService.page.onCreate</name>
+      <set-method>addListener</set-method>
+      <type>org.exoplatform.services.wcm.publication.defaultlifecycle.listener.CreatePageEventListener</type>
+      <description>this listener update publication state of content when page is created</description>
+    </component-plugin>
+    <component-plugin>
+      <name>UserPortalConfigService.page.onUpdate</name>
+      <set-method>addListener</set-method>
+      <type>org.exoplatform.services.wcm.publication.defaultlifecycle.listener.UpdatePageEventListener</type>
+      <description>this listener update publication state of content when page is updated</description>
+    </component-plugin>
+    <component-plugin>
+      <name>UserPortalConfigService.page.onRemove</name>
+      <set-method>addListener</set-method>
+      <type>org.exoplatform.services.wcm.publication.defaultlifecycle.listener.RemovePageEventListener</type>
+      <description>this listener update publication state of content when page is removed</description>
+    </component-plugin>
+    <component-plugin>
+      <name>UserPortalConfigService.navigation.onUpdate</name>
+      <set-method>addListener</set-method>
+      <type>org.exoplatform.services.wcm.publication.defaultlifecycle.listener.UpdateNavigationEventListener</type>
+      <description>this listener update publication state of content when navigation is updated</description>
+    </component-plugin>
+    <component-plugin>
+      <name>UserPortalConfigService.navigation.onRemove</name>
+      <set-method>addListener</set-method>
+      <type>org.exoplatform.services.wcm.publication.defaultlifecycle.listener.RemoveNavigationEventListener</type>
+      <description>this listener update publication state of content when navigation is removed</description>
+    </component-plugin>
+  </external-component-plugins>
+  -->
+</configuration>

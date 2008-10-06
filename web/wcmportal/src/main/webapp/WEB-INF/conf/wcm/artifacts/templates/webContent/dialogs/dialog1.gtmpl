@@ -1,0 +1,228 @@
+<% 
+	uicomponent.addInterceptor("ecm-explorer/interceptor/ExtractLinkInterceptor.groovy", "post") ;
+	uicomponent.addInterceptor("ecm-explorer/interceptor/PostHTMLFileInterceptor.groovy", "post") ;
+	import javax.jcr.Node;
+	def rcontext = _ctx.getRequestContext() ;
+	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIHorizontalTabs');
+	def String htmlWYSIWYGFormId = "htmlData[" + uicomponent.hashCode() + "]";
+	def String cssFormId = "ContentCSS[" + uicomponent.hashCode() + "]";
+	def String jsFormId = "ContentJS[" + uicomponent.hashCode() + "]";
+	rcontext.getJavascriptManager().importJavascript('eXo.wcm.Util' , "/eXoWCMResources/javascript");
+	rcontext.getJavascriptManager().addOnLoadJavascript("wcm.insertCSSFromTextArea2FCK('" + htmlWYSIWYGFormId + "', '" + cssFormId + "')");
+%>
+<style>
+	.UIForm .HorizontalLayout .textarea { 
+	  font-size:11px;
+	  height:275px;
+	  width:525px;
+	 }
+	 
+	 .UIForm .HorizontalLayout .FieldComponent {
+	 	width: 750px;
+	 }
+	 
+</style>
+<div class="UITabPane">
+	<div class="TabPaneContent"> 
+		<div class="WorkingAreaWithHelp">
+			<div class="UIHorizontalTabs" style="margin-top:5px;">
+				<div class="LeftHorizontalTabs">
+					<div class="RightHorizontalTabs">
+						<div class="CenterHorizontalTabs">
+							<div class="TabsContainer">
+							
+								<div class="UITab NormalTabStyle">
+									<div class="SelectedTab">
+										<div class="LeftTab">
+											<div class="RightTab">                
+												<div class="MiddleTab" onClick="eXo.webui.UIHorizontalTabs.displayTabContent(this);"><%=_ctx.appRes("WebContent.dialog.label.MainContent")%></div>
+											</div>
+										</div>
+									</div>
+								</div>  
+			            
+								<div class="UITab NormalTabStyle">
+									<div class="NormalTab">
+										<div class="LeftTab">
+											<div class="RightTab">                
+												<div class="MiddleTab" onClick="eXo.webui.UIHorizontalTabs.displayTabContent(this);"><%=_ctx.appRes("WebContent.dialog.label.cssFile")%></div>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="UITab NormalTabStyle">
+									<div class="NormalTab">
+										<div class="LeftTab">
+											<div class="RightTab">                
+												<div class="MiddleTab" onClick="eXo.webui.UIHorizontalTabs.displayTabContent(this);"><%=_ctx.appRes("WebContent.dialog.label.jsFile")%></div>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+							</div> <!-- End of TabsContainer-->
+						</div>	<!-- End of CenterHorizontalTabs -->
+					</div>
+				</div>
+			</div> <!-- End of UIHorizontalTabs -->
+			
+			<%/*Start UITabContentContainer*/%>
+			<%uiform.begin()%>
+			<div class="HorizontalLayout" style="border: none; margin:0px; background: none; padding: 0px">	  
+				<div class="UITabContentContainer">
+					<div class="UITabContent" style="display: block;">
+						<table class="UIFormGrid">
+		            		<tr>
+		        				<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.name")%></td>
+		          				<td class="FieldComponent">
+		            			<%
+			              	 		String[] webContentFieldName = ["jcrPath=/node", "nodetype=exo:webContent", "mixintype=mix:votable,mix:commentable", "editable=if-null","validate=name,empty"] ;
+			              	 		uicomponent.addTextField("name", webContentFieldName) ; 
+			              	 		String[] webContentHiddenField1 = ["jcrPath=/node/css", "nodetype=exo:cssFolder", "defaultValues=css"] ;
+			              	 		String[] webContentHiddenField2 = ["jcrPath=/node/js", "nodetype=exo:jsFolder", "defaultValues=js"] ;
+			              	 		uicomponent.addHiddenField("webContentHiddenInput1", webContentHiddenField1) ;
+			              	 		uicomponent.addHiddenField("webContentHiddenInput2", webContentHiddenField2) ;
+		            	   		%>
+		          			 	</td>
+		        			</tr>
+							<tr>
+								<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.title")%></td>
+							  	<td class="FieldComponent">
+								<%
+							        String[] webContentFieldTitle = ["jcrPath=/node/exo:title", "validate=empty", "editable=if-null"];
+							        uicomponent.addTextField("title", webContentFieldTitle) ;
+							    %>
+								</td>
+							</tr>						
+							<tr>
+					 			<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.WebContentHtml")%></td>
+					  			<td class="FieldComponent">
+								<%
+									String[] htmlHiddenField1 = ["jcrPath=/node/default.html", "nodetype=nt:file", "defaultValues=default.html", "mixintype=exo:htmlFile"];
+			   						String[] htmlHiddenField2 = ["jcrPath=/node/default.html/jcr:content", "nodetype=nt:resource", "mixintype=dc:elementSet", "visible=false"]; 
+									String[] htmlHiddenField3 = ["jcrPath=/node/default.html/jcr:content/jcr:encoding", "visible=false", "UTF-8"];
+									String[] htmlHiddenField4 = ["jcrPath=/node/default.html/jcr:content/jcr:lastModified", "visible=false"];
+									String[] htmlHiddenField5 = ["jcrPath=/node/default.html/jcr:content/dc:date", "visible=false"];
+									String[] htmlHiddenField6 = ["jcrPath=/node/default.html/jcr:content/jcr:mimeType", "visible=false", "text/html"];
+									uicomponent.addHiddenField("htmlHiddenField1", htmlHiddenField1);
+									uicomponent.addHiddenField("htmlHiddenField2", htmlHiddenField2);
+									uicomponent.addHiddenField("htmlHiddenField3", htmlHiddenField3);
+									uicomponent.addCalendarField("htmlHiddenField4", htmlHiddenField4);
+									uicomponent.addCalendarField("htmlHiddenField5", htmlHiddenField5);
+									uicomponent.addHiddenField("htmlHiddenField6", htmlHiddenField6);
+									String htmlContent = "";
+									if(uicomponent.isEditing()) {
+										Node webContentNode = uicomponent.getNode();
+										if(webContentNode.hasNode("default.html")) {
+											Node htmlNode = webContentNode.getNode("default.html");
+											htmlContent = htmlNode.getNode("jcr:content").getProperty("jcr:data").getValue().getString();
+										}
+									}
+									String[] htmlArguments = ["jcrPath=/node/default.html/jcr:content/jcr:data", "options=toolbar:CompleteWCM", htmlContent];
+			    					uicomponent.addWYSIWYGField(htmlWYSIWYGFormId, htmlArguments) ;
+			      				%>
+								</td>
+							</tr>
+						</table>
+					</div>  <!-- End of UITabContent -->
+			
+					<div class="UITabContent" style="display: none;">
+						<table class="UIFormGrid">
+							<tr>
+								<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.ContentCSS")%></td>
+								<td class="FieldComponent">
+								<%
+									String[] cssHiddenField1 = ["jcrPath=/node/css/default.css", "nodetype=nt:file", "defaultValues=default.css"] ;
+									String[] cssHiddenField2 = ["jcrPath=/node/css/default.css/jcr:content", "nodetype=nt:resource", "mixintype=dc:elementSet", "visible=false"] ; 
+									String[] cssHiddenField3 = ["jcrPath=/node/css/default.css/jcr:content/jcr:encoding", "visible=false", "UTF-8"] ;  
+									String[] cssHiddenField4 = ["jcrPath=/node/css/default.css/jcr:content/jcr:lastModified", "visible=false"] ;
+									String[] cssHiddenField5 = ["jcrPath=/node/css/default.css/jcr:content/dc:date", "visible=false"] ;
+									String[] cssHiddenField6 = ["jcrPath=/node/css/default.css/jcr:content/jcr:mimeType", "visible=false", "text/css"] ;
+									uicomponent.addHiddenField("cssHiddenField1", cssHiddenField1) ;
+									uicomponent.addHiddenField("cssHiddenField2", cssHiddenField2) ;
+									uicomponent.addHiddenField("cssHiddenField3", cssHiddenField3) ;
+									uicomponent.addCalendarField("cssHiddenField4", cssHiddenField4) ;
+									uicomponent.addCalendarField("cssHiddenField5", cssHiddenField5) ;
+									uicomponent.addHiddenField("cssHiddenField6", cssHiddenField6) ;
+									String cssContent = "";
+									if(uicomponent.isEditing()) {
+										Node webContentNode = uicomponent.getNode();
+										if(webContentNode.hasNode("css/default.css")) {
+											Node cssNode = webContentNode.getNode("css/default.css");
+											cssContent = cssNode.getNode("jcr:content").getProperty("jcr:data").getValue().getString();
+										}
+									}
+									String[] fieldContentCSS = ["jcrPath=/node/css/default.css/jcr:content/jcr:data", cssContent] ;
+									uicomponent.addTextAreaField(cssFormId, fieldContentCSS) ;
+								%>
+								</td>
+							</tr>
+						</table>
+					</div>
+					
+					<div class="UITabContent" style="display: none;">
+						<table class="UIFormGrid">
+							<tr>
+								<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.ContentJS")%></td>
+								<td class="FieldComponent">
+								<%
+									String[] jsHiddenField1 = ["jcrPath=/node/js/default.js", "nodetype=nt:file", "defaultValues=default.js"];
+									String[] jsHiddenField2 = ["jcrPath=/node/js/default.js/jcr:content", "nodetype=nt:resource", "mixintype=dc:elementSet", "visible=false"]; 
+									String[] jsHiddenField3 = ["jcrPath=/node/js/default.js/jcr:content/jcr:encoding", "visible=false", "UTF-8"];  
+									String[] jsHiddenField4 = ["jcrPath=/node/js/default.js/jcr:content/jcr:lastModified", "visible=false"];
+									String[] jsHiddenField5 = ["jcrPath=/node/js/default.js/jcr:content/dc:date", "visible=false"];
+									String[] jsHiddenField6 = ["jcrPath=/node/js/default.js/jcr:content/jcr:mimeType", "visible=false", "application/x-javascript"];
+									uicomponent.addHiddenField("jsHiddenField1", jsHiddenField1);
+									uicomponent.addHiddenField("jsHiddenField2", jsHiddenField2);
+									uicomponent.addHiddenField("jsHiddenField3", jsHiddenField3);
+									uicomponent.addCalendarField("jsHiddenField4", jsHiddenField4);
+									uicomponent.addCalendarField("jsHiddenField5", jsHiddenField5);
+									uicomponent.addHiddenField("jsHiddenField6", jsHiddenField6);
+									String jsContent = "";
+									if(uicomponent.isEditing()) {
+										Node webContentNode = uicomponent.getNode();
+										if(webContentNode.hasNode("js/default.js")) {
+											Node jsNode = webContentNode.getNode("js/default.js");
+											jsContent = jsNode.getNode("jcr:content").getProperty("jcr:data").getValue().getString();
+										} 
+									} 
+									String[] fieldContentJS = ["jcrPath=/node/js/default.js/jcr:content/jcr:data", jsContent];
+									uicomponent.addTextAreaField(jsFormId, fieldContentJS); 								
+								%>
+								</td>
+							</tr>
+						</table>
+					</div>
+			
+				</div>   <!-- End of UITabContentContainer -->     	
+				
+				<div class="UIAction"> 
+					<table align="center" class="ActionContainer">
+						<tr>
+							<td align="center">
+							<% 
+								for(action in uicomponent.getActions()) { 
+									String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;
+									String link = uicomponent.event(action) ;
+							%>
+									<a href="$link" class="ActionButton LightBlueStyle">
+										<div class="ButtonLeft">
+											<div class="ButtonRight">
+												<div class="ButtonMiddle">
+													$actionLabel
+												</div>
+											</div>
+										</div>
+									</a>
+								<%}%>          
+							</td>
+						</tr>
+					</table>
+				</div>  <!-- End of UIAction-->    	
+			</div>  
+		<%uiform.end()%>						 
+		</div>   <!-- End of WorkingAreaWithHelp -->
+	</div>  <!-- End of TabPaneContent -->
+</div>  <!-- End of UITabPane -->
+
