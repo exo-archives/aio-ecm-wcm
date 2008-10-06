@@ -30,6 +30,7 @@ import javax.jcr.Node;
 import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.ValueFactory;
+import javax.jcr.lock.LockException;
 
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.container.ExoContainer;
@@ -99,6 +100,12 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
     if(!isSharedPortal(portalName) && !runningPortals.contains(portalName)) {
       throw new PortalNotFoundException("The portal can be dead.");
     }
+    
+    //TODO: Need compare LockToken in session of current user with LockToken of LockedOwner
+    if (!node.isCheckedOut() || node.isLocked()) {
+      throw new LockException("This node is locked or checked-in");
+    }
+    
     return node.canAddMixin(WCM_PUBLICATION_MIXIN);   
   }
 
