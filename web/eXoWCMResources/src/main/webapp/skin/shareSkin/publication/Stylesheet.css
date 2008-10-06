@@ -35,7 +35,7 @@
 }
 
 .PanelCenter .ArrowBack {
-	background: url('images/arrowBack.gif') no-repeat top left;
+	background: #bfd3df url('images/arrowBack.gif') no-repeat top left;
 	height: 33px;
 	width: 62px;
 	cursor: pointer;
@@ -43,7 +43,7 @@
 }
 
 .PanelCenter .ArrowNext {
-	background: url('images/arrowNext.gif') no-repeat top left;
+	background: #bfd3df url('images/arrowNext.gif') no-repeat top left;
 	height: 33px;
 	width: 62px;
 	cursor: pointer;
@@ -111,7 +111,11 @@
   color: #058EE6;
 }
 
-
+.UISelectedPages .ListPage .NoItem {
+	font-style:italic;
+	text-align:center;
+	text-decoration:none;
+}
 
 .PanelContainer .UIContainerConfigOptions {
 	margin: 0;
