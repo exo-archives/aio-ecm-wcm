@@ -116,7 +116,7 @@
           <property name="groupName" value="WebContentManagement"/>
           <property name="job" value="org.exoplatform.services.wcm.search.impl.UpdatePortalURIJob"/>
           <property name="repeatCount" value="0"/>
-          <property name="period" value="30000"/>     
+          <property name="period" value="3000000"/>     
           <property name="startTime" value="+0"/>
           <property name="endTime" value=""/>               
         </properties-param>
@@ -134,7 +134,7 @@
           <property name="jobName" value="job"/>
           <property name="groupName" value="group"/>
           <property name="job" value="org.exoplatform.services.wcm.link.LinkValidatorJob"/>
-          <property name="expression" value="0 0/3 * * * ?"/>
+          <property name="expression" value="0 0/60 * * * ?"/>
         </properties-param>
       </init-params>          
     </component-plugin>

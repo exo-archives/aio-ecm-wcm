@@ -51,7 +51,8 @@
                 <include>WEB-INF/conf/uiconf/</include>                     
               </includes>
               <excludes>                   
-                <exclude>WEB-INF/conf/uiconf/portal/webui/page/</exclude>                                     
+                <exclude>WEB-INF/conf/uiconf/portal/webui/page/</exclude>
+                <exclude>WEB-INF/conf/uiconf/portal/webui/portal/PortalTemplateConfigOption.groovy</exclude>                                     
               </excludes>
             </resource>
             <resource>

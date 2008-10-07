@@ -28,8 +28,7 @@
   
   <!-->import>war:/conf/jcr/component-plugins-configuration.xml</import -->
       
-  <import>war:/conf/ecm/system-configuration.xml</import>    
-	<import>war:/conf/ecm/node-hierarchy-configuration.xml</import>
+  <import>war:/conf/ecm/system-configuration.xml</import>	
 	<import>war:/conf/ecm/workflow/jbpm-configuration.xml</import>
 	<import>war:/conf/ecm/workflow/publication-configuration.xml</import>
 	<import>war:/conf/ecm/presentation/templates-configuration.xml</import>
