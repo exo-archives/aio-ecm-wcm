@@ -18,6 +18,8 @@ package org.exoplatform.services.wcm.publication.defaultlifecycle;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.jcr.Node;
 
@@ -29,6 +31,10 @@ import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.portal.webui.workspace.UIPortalApplication;
+import org.exoplatform.services.resources.LocaleConfig;
+import org.exoplatform.services.resources.LocaleConfigService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.services.wcm.publication.defaultlifecycle.UIPublicationTree.TreeNode;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -65,29 +71,35 @@ public class UIPortalNavigationExplorer extends UIContainer{
     this.portalName = portalName;
     this.runningPortals = runningPortals;
     List<TreeNode> list = new ArrayList<TreeNode>();
+    UIPortalApplication portalApplication = Util.getUIPortalApplication();
+    Locale locale = portalApplication.getLocale();
+    LocaleConfig localeConfig = getApplicationComponent(LocaleConfigService.class).getLocaleConfig(locale.getLanguage());
+
     if(isSharedPortalContent()) {
       UIPublicationTree tree = addChild(UIPublicationTree.class, null, "UIPortalTree");      
       for(String portal : this.runningPortals) {
         PageNavigation pageNavigation = getPortalNavigation(portal);
-        TreeNode treeNode = new TreeNode(portal,pageNavigation,false);
+        ResourceBundle res = localeConfig.getNavigationResourceBundle(pageNavigation.getOwnerType(), pageNavigation.getOwnerId()) ;
+        TreeNode treeNode = new TreeNode(portal,pageNavigation, res, false);
         if(pageNavigation.getNodes()!= null) 
           treeNode.setChildrenByPageNodes(pageNavigation.getNodes());
         list.add(treeNode);
       }
       tree.setSibbling(list);
       tree.setBeanIdField("uri");
-      tree.setBeanLabelField("name");
+      tree.setBeanLabelField("resolvedLabel");
       tree.setIcon("DefaultPageIcon");    
       tree.setSelectedIcon("DefaultPageIcon");
     } else {
       UIPublicationTree tree = addChild(UIPublicationTree.class, null, "UIPageNodeTree");
       PageNavigation navigation = getPortalNavigation(portalName);
-      TreeNode treeNode = new TreeNode(portalName,navigation,true);
+      ResourceBundle res = localeConfig.getNavigationResourceBundle(navigation.getOwnerType(), navigation.getOwnerId()) ;
+      TreeNode treeNode = new TreeNode(portalName, navigation, res, true);
       if(navigation.getNodes()!= null)
         treeNode.setChildrenByPageNodes(navigation.getNodes());
       tree.setSibbling(treeNode.getTreeNodeChildren());
       tree.setBeanIdField("uri");
-      tree.setBeanLabelField("name");
+      tree.setBeanLabelField("resolvedLabel");
       tree.setIcon("DefaultPageIcon");    
       tree.setSelectedIcon("DefaultPageIcon");
     }
@@ -151,7 +163,10 @@ public class UIPortalNavigationExplorer extends UIContainer{
       List<TreeNode> list = new ArrayList<TreeNode>();
       for(String portal : this.runningPortals) {
         PageNavigation pageNavigation = getPortalNavigation(portal);
-        TreeNode treeNode = new TreeNode(portal,pageNavigation,false);
+        UIPortalApplication portalApplication = getApplicationComponent(UIPortalApplication.class);
+        LocaleConfig localeConfig = getApplicationComponent(LocaleConfigService.class).getLocaleConfig(portalApplication.getLocale().getLanguage());
+        ResourceBundle res = localeConfig.getNavigationResourceBundle(pageNavigation.getOwnerType(), pageNavigation.getOwnerId()) ;
+        TreeNode treeNode = new TreeNode(portal, pageNavigation, res, false);
         if(pageNavigation.getNodes() != null)
           treeNode.setChildrenByPageNodes(pageNavigation.getNodes());
         list.add(treeNode);

@@ -18,6 +18,7 @@ package org.exoplatform.services.wcm.publication.defaultlifecycle;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import org.apache.commons.lang.StringUtils;
 import org.exoplatform.portal.config.model.PageNavigation;
@@ -65,11 +66,14 @@ public class UIPublicationTree extends UITree {
     private PageNode pageNode;
     private PageNavigation navigation;    
     private List<TreeNode> children;
+    private ResourceBundle resourceBundle;
 
-    public TreeNode(String portalName, final PageNavigation navigation, boolean isPageNode) {
+    public TreeNode(String portalName, final PageNavigation navigation, final ResourceBundle res, boolean isPageNode) {
       this.portalName = portalName;
       this.navigation = navigation;
+      this.resourceBundle = res;
       this.isPageNode = isPageNode;
+
     }
     public String getUri() {
       if(isPageNode) {        
@@ -92,6 +96,7 @@ public class UIPublicationTree extends UITree {
 
     public void setPageNode(PageNode pageNode) {
       this.pageNode = pageNode;
+      this.pageNode.setResolvedLabel(resourceBundle);
       if(pageNode.getChildren() == null) {
         children = null;
       }      
@@ -103,6 +108,11 @@ public class UIPublicationTree extends UITree {
       if(isPageNode) return pageNode.getName();
       return portalName;
     }    
+    
+    public String getResolvedLabel() {
+      if(isPageNode) return pageNode.getResolvedLabel();
+      return portalName;
+    }
     public void setPortalName(String s) { this.portalName = s; }
     public String getPortalName() {return this.portalName; }
 
@@ -111,7 +121,7 @@ public class UIPublicationTree extends UITree {
       List<TreeNode> list = new ArrayList<TreeNode>();
       for(PageNode pNode: pagesNodes) {
         if(!pNode.isDisplay()) continue;                
-        TreeNode treeNode = new TreeNode(portalName,navigation, true);
+        TreeNode treeNode = new TreeNode(portalName,navigation,resourceBundle,true);
         treeNode.setPageNode(pNode);
         treeNode.setChildrenByPageNodes(pNode.getChildren());
         list.add(treeNode);
@@ -121,14 +131,14 @@ public class UIPublicationTree extends UITree {
 
     public TreeNode searchTreeNodeByURI(String uri) {
       if(uri.equals("/"+portalName)) {
-        TreeNode treeNode = new TreeNode(portalName, navigation, false);
+        TreeNode treeNode = new TreeNode(portalName, navigation,resourceBundle, false);
         treeNode.setChildrenByPageNodes(navigation.getNodes());
         return treeNode;
       }
       String pageNodeURI = StringUtils.substringAfter(uri, "/" + portalName + "/");
       PageNode other = PageNavigationUtils.searchPageNodeByUri(this.navigation, pageNodeURI);
       if(other == null) return null;
-      TreeNode treeNode = new TreeNode(portalName,navigation,true);
+      TreeNode treeNode = new TreeNode(portalName,navigation,resourceBundle, true);
       treeNode.setPageNode(other);
       treeNode.setChildrenByPageNodes(other.getChildren());
       return treeNode; 
