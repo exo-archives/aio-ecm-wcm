@@ -18,7 +18,6 @@ package org.exoplatform.services.wcm.publication.defaultlifecycle;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.jcr.Node;
 import javax.jcr.Value;
 
@@ -68,7 +67,7 @@ public class UIPublicationAction extends UIForm {
     for (Value navigationNodeURI : navigationNodeURIs) {
       listPublishedPage.add(navigationNodeURI.getString());
     }
-    publishedPages.setListNavigationNodeURI(listPublishedPage);
+    publishedPages.setListNavigationNodeURI(listPublishedPage);    
   }
   
   public static class AddActionListener extends EventListener<UIPublicationAction> {

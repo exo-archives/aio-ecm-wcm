@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javax.jcr.Node;
 import javax.jcr.Session;
@@ -51,6 +52,7 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.ecm.publication.IncorrectStateUpdateLifecycleException;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.util.IdGenerator;
+import org.exoplatform.services.resources.ResourceBundleService;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.services.wcm.publication.WebpagePublicationPlugin;
@@ -81,8 +83,10 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
   public static final String WCM_PUBLICATION_MIXIN = "publication:wcmPublication".intern(); 
   public static final String LIFECYCLE_NAME = "Web Content Publishing".intern();
   
+  private static final String LOCALE_FILE = "artifact.defaultlifecycle.WCMPublication".intern();
+  
   private PageEventListenerDelegate pageEventListenerDelegate;  
-  private NavigationEventListenerDelegate navigationEventListenerDelegate;
+  private NavigationEventListenerDelegate navigationEventListenerDelegate;  
   
   /**
    * Instantiates a new wCM publication plugin.
@@ -426,5 +430,18 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
    */
   public void updateLifecyleOnRemoveNavigation(PageNavigation navigation) throws Exception {
     navigationEventListenerDelegate.updateLifecyleOnRemoveNavigation(navigation);
+  }
+  
+  public String getLocalizedAndSubstituteMessage(Locale locale, String key, String[] values)
+      throws Exception {
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    ResourceBundleService resourceBundleService = (ResourceBundleService) container.getComponentInstanceOfType(ResourceBundleService.class);
+    ClassLoader cl=this.getClass().getClassLoader();
+    ResourceBundle resourceBundle=resourceBundleService.getResourceBundle(LOCALE_FILE,locale,cl);
+    String result = resourceBundle.getString(key);
+    if(values != null) {
+      return String.format(result,values); 
+    }        
+    return result;
   }    
 }
