@@ -72,8 +72,7 @@ public class UIPortalNavigationExplorer extends UIContainer{
     this.runningPortals = runningPortals;
     List<TreeNode> list = new ArrayList<TreeNode>();
     UIPortalApplication portalApplication = Util.getUIPortalApplication();
-    Locale locale = portalApplication.getLocale();
-    LocaleConfig localeConfig = getApplicationComponent(LocaleConfigService.class).getLocaleConfig(locale.getLanguage());
+    LocaleConfig localeConfig = getApplicationComponent(LocaleConfigService.class).getLocaleConfig(portalApplication.getLocale().getLanguage());
 
     if(isSharedPortalContent()) {
       UIPublicationTree tree = addChild(UIPublicationTree.class, null, "UIPortalTree");      
@@ -163,7 +162,7 @@ public class UIPortalNavigationExplorer extends UIContainer{
       List<TreeNode> list = new ArrayList<TreeNode>();
       for(String portal : this.runningPortals) {
         PageNavigation pageNavigation = getPortalNavigation(portal);
-        UIPortalApplication portalApplication = getApplicationComponent(UIPortalApplication.class);
+        UIPortalApplication portalApplication = Util.getUIPortalApplication();
         LocaleConfig localeConfig = getApplicationComponent(LocaleConfigService.class).getLocaleConfig(portalApplication.getLocale().getLanguage());
         ResourceBundle res = localeConfig.getNavigationResourceBundle(pageNavigation.getOwnerType(), pageNavigation.getOwnerId()) ;
         TreeNode treeNode = new TreeNode(portal, pageNavigation, res, false);
