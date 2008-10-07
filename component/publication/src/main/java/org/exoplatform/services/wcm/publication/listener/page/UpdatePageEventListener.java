@@ -14,16 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.services.wcm.publication.defaultlifecycle.listener;
+package org.exoplatform.services.wcm.publication.listener.page;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.jcr.Node;
-import javax.jcr.Session;
-import javax.jcr.Value;
-import javax.jcr.ValueFactory;
 
 import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainer;
@@ -34,14 +29,12 @@ import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
+import org.exoplatform.services.wcm.publication.WCMPublicationService;
 
 /**
  * Created by The eXo Platform SAS
@@ -54,28 +47,16 @@ public class UpdatePageEventListener extends Listener<UserPortalConfigService, P
   private static Log log = ExoLogger.getLogger(UpdatePageEventListener.class);
   private ExoContainer exoContainer = ExoContainerContext.getCurrentContainer();
   private DataStorage dataStorage = (DataStorage) exoContainer.getComponentInstanceOfType(DataStorage.class);
-
-  public void onEvent(Event<UserPortalConfigService, Page> event) throws Exception {
-    log.info("=======Upadate Page==="+event.getData().getPageId());    
     
-    Application application = getPublishingApplication(event.getData());
-    Map<String, String> data = getPortletPreferenceData(application.getInstanceId());
-
-    RepositoryService repositoryService = (RepositoryService) exoContainer.getComponentInstanceOfType(RepositoryService.class);
-    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
-    Session session = sessionProvider.getSession(data.get("workspace"), repositoryService.getRepository(data.get("repository")));
-    Node node = session.getNodeByUUID(data.get("nodeUUID"));
-    if (node.canAddMixin("publication:wcmPublication")) node.addMixin("publication:wcmPublication");
-    ValueFactory valueFactory = session.getValueFactory();
-    Value[] values;
-    if (node.hasProperty("publication:publishedPageIds")) {
-      values = new Value[node.getProperty("publication:publishedPageIds").getValues().length + 1];
-    } else {
-      values = new Value[1];
-    }
-    values[values.length - 1] = valueFactory.createValue(event.getData().getPageId());
-    node.setProperty("publication:publishedPageIds", values);
-    session.save();
+  public void onEvent(Event<UserPortalConfigService, Page> event) throws Exception {    
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    WCMPublicationService publicationService = 
+      (WCMPublicationService)container.getComponentInstanceOfType(WCMPublicationService.class);
+    try {
+      publicationService.updateLifecyleOnChangePage(event.getData());
+    } catch (Exception e) {
+      log.error("Exception when update publication lifecyle", e);
+    }       
   }
 
   private Application getPublishingApplication(Page page) {

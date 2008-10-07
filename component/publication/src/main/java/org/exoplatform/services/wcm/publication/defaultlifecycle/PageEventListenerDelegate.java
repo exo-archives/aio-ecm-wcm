@@ -14,25 +14,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.services.wcm.publication.defaultlifecycle.listener;
+package org.exoplatform.services.wcm.publication.defaultlifecycle;
 
-import org.apache.commons.logging.Log;
-import org.exoplatform.portal.config.UserPortalConfigService;
+import org.exoplatform.container.ExoContainer;
 import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.services.listener.Event;
-import org.exoplatform.services.listener.Listener;
-import org.exoplatform.services.log.ExoLogger;
 
 /**
  * Created by The eXo Platform SAS
  * Author : Hoa Pham	
  *          hoa.pham@exoplatform.com
- * Sep 24, 2008  
+ * Oct 6, 2008  
  */
-public class CreatePageEventListener extends Listener<UserPortalConfigService, Page>{  
-  private static Log log = ExoLogger.getLogger(CreatePageEventListener.class);
-  public void onEvent(Event<UserPortalConfigService, Page> event) throws Exception {
-    log.info("=======Create page==="+event.getData().getId() + "");    
+public class PageEventListenerDelegate {
+  
+  private String lifecycleName;
+  private ExoContainer container;
+  public PageEventListenerDelegate(String lifecycleName, ExoContainer container) {
+    this.lifecycleName = lifecycleName;
+    this.container = container;
   }
-
+  
+  public void updateLifecyleOnCreatePage(Page page) throws Exception {
+  }
+  
+  public void updateLifecyleOnChangePage(Page page) throws Exception { }
+  
+  public void updateLifecycleOnRemovePage(Page page) throws Exception { }
+  
 }

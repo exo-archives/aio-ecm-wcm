@@ -19,6 +19,7 @@ package org.exoplatform.services.wcm.publication;
 import javax.jcr.Node;
 
 import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
 
 /**
@@ -38,6 +39,8 @@ public abstract class WebpagePublicationPlugin extends PublicationPlugin {
   
   /**
    * Publish content node to a portal page.
+   * Base of each publication lifecycle implementation,a new portlet can be added to the page
+   * and the lifecyle state will be created
    * 
    * @param content the jcr content node
    * @param page the portal page
@@ -48,6 +51,8 @@ public abstract class WebpagePublicationPlugin extends PublicationPlugin {
   
   /**
    * Suspend published content from a portal page.
+   * Base of each publication lifecycle implementation, a portlet that is used to publish the content
+   * can be removed to the page and the lifecyle state will be created
    * 
    * @param content the content
    * @param page the page
@@ -55,4 +60,58 @@ public abstract class WebpagePublicationPlugin extends PublicationPlugin {
    * @throws Exception the exception
    */
   public abstract void suspendPublishedContentFromPage(Node content, Page page) throws Exception;
+      
+  /**
+   * Update lifecyle state of the any content relates to the page when page is created
+   * 
+   * @param page the page
+   * 
+   * @throws Exception the exception
+   */
+  public abstract void updateLifecyleOnCreatePage(Page page) throws Exception;
+  
+  /**
+   * Update lifecyle state of the any content relates to the page when page is changed
+   * 
+   * @param page the page
+   * 
+   * @throws Exception the exception
+   */
+  public abstract void updateLifecyleOnChangePage(Page page) throws Exception;
+  
+  /**
+   * Update lifecyle state of the any content relates to the page when page is removed
+   * 
+   * @param page the page
+   * 
+   * @throws Exception the exception
+   */
+  public abstract void updateLifecycleOnRemovePage(Page page) throws Exception;
+  
+  /**
+   * Update lifecyle state of the any content relates to a navigation when the navigation is created
+   * 
+   * @param navigation the navigation
+   * 
+   * @throws Exception the exception
+   */
+  public abstract void updateLifecyleOnCreateNavigation(PageNavigation navigation) throws Exception;
+  
+  /**
+   * Update lifecyle state of the any content relates to a navigation when the navigation is changed
+   * 
+   * @param navigation the navigation
+   * 
+   * @throws Exception the exception
+   */
+  public abstract void updateLifecycleOnChangeNavigation(PageNavigation navigation) throws Exception;
+  
+  /**
+   * Update lifecyle state of the any content relates to a navigation when the navigation is removed
+   * 
+   * @param navigation the navigation
+   * 
+   * @throws Exception the exception
+   */
+  public abstract void updateLifecyleOnRemoveNavigation(PageNavigation navigation) throws Exception;
 }

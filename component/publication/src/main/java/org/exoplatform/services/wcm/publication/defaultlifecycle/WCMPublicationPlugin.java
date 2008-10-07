@@ -62,31 +62,49 @@ import org.exoplatform.webui.form.UIForm;
 
 /**
  * Created by The eXo Platform SAS
- * Author : Hoa Pham	
- *          hoa.pham@exoplatform.com
- * Sep 30, 2008  
+ * Author : Hoa Pham
+ * hoa.pham@exoplatform.com
+ * Sep 30, 2008
  */
 public class WCMPublicationPlugin extends WebpagePublicationPlugin {
-
-  public static final String ENROLLED = "enrolled".intern();
-  public static final String UNPUBLISHED = "unpublished".intern();
+  
+  public static final String ENROLLED = "enrolled".intern(); 
+  public static final String UNPUBLISHED = "unpublished".intern();  
   public static final String PUBLISHED = "published".intern();
+  
   public static final String DEFAULT_STATE = UNPUBLISHED;
-
-  public static final String PUBLICATION = "publication:publication".intern();
-  public static final String LIFECYCLE_PROP = "publication:lifecycleName".intern();
+  public static final String PUBLICATION = "publication:publication".intern();    
+  public static final String LIFECYCLE_PROP = "publication:lifecycleName".intern();   
   public static final String CURRENT_STATE = "publication:currentState".intern();
-  public static final String HISTORY = "publication:history".intern();
-  public static final String WCM_PUBLICATION_MIXIN = "publication:wcmPublication".intern();
+  
+  public static final String HISTORY = "publication:history".intern();  
+  public static final String WCM_PUBLICATION_MIXIN = "publication:wcmPublication".intern(); 
   public static final String LIFECYCLE_NAME = "Web Content Publishing".intern();
-
-
+  
+  private PageEventListenerDelegate pageEventListenerDelegate;  
+  private NavigationEventListenerDelegate navigationEventListenerDelegate;
+  
+  /**
+   * Instantiates a new wCM publication plugin.
+   */
+  public WCMPublicationPlugin() {
+    pageEventListenerDelegate = new PageEventListenerDelegate(LIFECYCLE_NAME, ExoContainerContext.getCurrentContainer());
+    navigationEventListenerDelegate = new NavigationEventListenerDelegate(LIFECYCLE_NAME, ExoContainerContext.getCurrentContainer());
+    
+  }
+  
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.ecm.publication.PublicationPlugin#addMixin(javax.jcr.Node)
+   */
   public void addMixin(Node node) throws Exception {
     node.addMixin(WCM_PUBLICATION_MIXIN);
     node.setProperty(LIFECYCLE_PROP, LIFECYCLE_NAME);
     node.getSession().save();
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.ecm.publication.PublicationPlugin#canAddMixin(javax.jcr.Node)
+   */
   public boolean canAddMixin(Node node) throws Exception {
     List<String> runningPortals = getRunningPortals(node.getSession().getUserID());
     if(runningPortals.size() == 0) {
@@ -95,33 +113,44 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
     String portalName = getPortalForContent(node);
     if(portalName == null) {
       throw new PortalNotFoundException("This content doen't belong to any portal");
-    }
-
+    }   
     if(!isSharedPortal(portalName) && !runningPortals.contains(portalName)) {
       throw new PortalNotFoundException("The portal can be dead.");
     }
     
     //TODO: Need compare LockToken in session of current user with LockToken of LockedOwner
-    if (!node.isCheckedOut() || node.isLocked()) {
+    if (!node.isCheckedOut() || node.isLocked()) {      
       throw new LockException("This node is locked or checked-in");
     }
     
     return node.canAddMixin(WCM_PUBLICATION_MIXIN);   
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.ecm.publication.PublicationPlugin#changeState(javax.jcr.Node, java.lang.String, java.util.HashMap)
+   */
   public void changeState(Node node, String newState,
       HashMap<String, String> context) throws IncorrectStateUpdateLifecycleException, Exception {
     
     node.getSession().save();
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.ecm.publication.PublicationPlugin#getPossibleStates()
+   */
   public String[] getPossibleStates() { return new String[] { ENROLLED,UNPUBLISHED,PUBLISHED }; }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.ecm.publication.PublicationPlugin#getStateImage(javax.jcr.Node, java.util.Locale)
+   */
   public byte[] getStateImage(Node node, Locale locale) throws IOException,
   FileNotFoundException, Exception {  
     return null;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.ecm.publication.PublicationPlugin#getStateUI(javax.jcr.Node, org.exoplatform.webui.core.UIComponent)
+   */
   public UIForm getStateUI(Node node, UIComponent component) throws Exception {
     UIPublishingPanel form = component.createUIComponent(UIPublishingPanel.class,null,null);
     List<String> runningPortals = getRunningPortals(node.getSession().getUserID());
@@ -130,12 +159,24 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
     return form;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.ecm.publication.PublicationPlugin#getUserInfo(javax.jcr.Node, java.util.Locale)
+   */
   public String getUserInfo(Node node, Locale locale) throws Exception {
 
     return null;
-  }
-
-  public List<String> getRunningPortals(String userId) throws Exception {
+  }    
+  
+  /**
+   * Retrives all  the running portals.
+   * 
+   * @param userId the user id
+   * 
+   * @return the running portals
+   * 
+   * @throws Exception the exception
+   */
+  private List<String> getRunningPortals(String userId) throws Exception {
     List<String> listPortalName = new ArrayList<String>();
     DataStorage service = getServices(DataStorage.class);
     Query<PortalConfig> query = new Query<PortalConfig>(null, null, null, PortalConfig.class) ;
@@ -239,6 +280,9 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
     session.save();
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.publication.WebpagePublicationPlugin#suspendPublishedContentFromPage(javax.jcr.Node, org.exoplatform.portal.config.model.Page)
+   */
   public void suspendPublishedContentFromPage(Node content, Page page) throws Exception {
     Session session = content.getSession();
     ValueFactory valueFactory = session.getValueFactory();
@@ -268,6 +312,13 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
     session.save();
   }
   
+  /**
+   * Gets the services.
+   * 
+   * @param clazz the clazz
+   * 
+   * @return the services
+   */
   private String getNavigationNodeUriByPage(Page page) throws Exception {
     DataStorage dataStorage = getServices(DataStorage.class);
     RequestContext requestContext = WebuiRequestContext.getCurrentInstance();
@@ -292,6 +343,15 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
     return clazz.cast(exoContainer.getComponentInstanceOfType(clazz));
   }
 
+  /**
+   * Gets the portal for content.
+   * 
+   * @param contentNode the content node
+   * 
+   * @return the portal for content
+   * 
+   * @throws Exception the exception
+   */
   private String getPortalForContent(Node contentNode) throws Exception {
     LivePortalManagerService livePortalManagerService = getServices(LivePortalManagerService.class);
     for(String portalPath:livePortalManagerService.getLivePortalsPath()) {
@@ -303,14 +363,68 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
     return null;
   }
 
+  /**
+   * Checks if is shared portal.
+   * 
+   * @param portalName the portal name
+   * 
+   * @return true, if is shared portal
+   * 
+   * @throws Exception the exception
+   */
   private boolean isSharedPortal(String portalName) throws Exception{
     LivePortalManagerService livePortalManagerService = getServices(LivePortalManagerService.class);
     Node sharedPortal = livePortalManagerService.getLiveSharedPortal(SessionProviderFactory.createSessionProvider());
     return sharedPortal.getName().equals(portalName);    
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.ecm.publication.PublicationPlugin#getNodeView(javax.jcr.Node, java.util.Map)
+   */
   @SuppressWarnings("unused")
   public Node getNodeView(Node node, Map<String, Object> context) throws Exception {
     return node;
   }
+  
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.publication.WebpagePublicationPlugin#updateLifecycleOnChangeNavigation(org.exoplatform.portal.config.model.PageNavigation)
+   */
+  public void updateLifecycleOnChangeNavigation(PageNavigation navigation) throws Exception {
+    navigationEventListenerDelegate.updateLifecycleOnChangeNavigation(navigation);
+  }
+  
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.publication.WebpagePublicationPlugin#updateLifecycleOnRemovePage(org.exoplatform.portal.config.model.Page)
+   */
+  public void updateLifecycleOnRemovePage(Page page) throws Exception {
+    pageEventListenerDelegate.updateLifecycleOnRemovePage(page);
+  }
+  
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.publication.WebpagePublicationPlugin#updateLifecyleOnChangePage(org.exoplatform.portal.config.model.Page)
+   */
+  public void updateLifecyleOnChangePage(Page page) throws Exception {
+    pageEventListenerDelegate.updateLifecyleOnChangePage(page);
+  }
+  
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.publication.WebpagePublicationPlugin#updateLifecyleOnCreateNavigation(org.exoplatform.portal.config.model.PageNavigation)
+   */
+  public void updateLifecyleOnCreateNavigation(PageNavigation navigation) throws Exception {
+    navigationEventListenerDelegate.updateLifecyleOnCreateNavigation(navigation);
+  }
+  
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.publication.WebpagePublicationPlugin#updateLifecyleOnCreatePage(org.exoplatform.portal.config.model.Page)
+   */
+  public void updateLifecyleOnCreatePage(Page page) throws Exception {
+    pageEventListenerDelegate.updateLifecyleOnCreatePage(page);
+  }
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.publication.WebpagePublicationPlugin#updateLifecyleOnRemoveNavigation(org.exoplatform.portal.config.model.PageNavigation)
+   */
+  public void updateLifecyleOnRemoveNavigation(PageNavigation navigation) throws Exception {
+    navigationEventListenerDelegate.updateLifecyleOnRemoveNavigation(navigation);
+  }    
 }

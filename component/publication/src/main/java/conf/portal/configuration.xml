@@ -3,8 +3,8 @@
 <configuration>
 
 	<component>
-    <key>org.exoplatform.services.wcm.publication.WCMPublicationPresentationService</key>
-    <type>org.exoplatform.services.wcm.publication.WCMPublicationPresentationServiceImpl</type>
+    <key>org.exoplatform.services.wcm.publication.WCMPublicationService</key>
+    <type>org.exoplatform.services.wcm.publication.WCMPublicationServiceImpl</type>
   </component>	
 	<external-component-plugins>
   	<target-component>org.exoplatform.services.jcr.RepositoryService</target-component>		

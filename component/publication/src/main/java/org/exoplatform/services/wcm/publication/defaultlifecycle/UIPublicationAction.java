@@ -30,7 +30,7 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.services.wcm.publication.WCMPublicationPresentationService;
+import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.publication.defaultlifecycle.UIPublicationTree.TreeNode;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -108,7 +108,7 @@ public class UIPublicationAction extends UIForm {
       
       UserPortalConfigService userPortalConfigService = publicationAction.getApplicationComponent(UserPortalConfigService.class);
       Page page = userPortalConfigService.getPage(pageNode.getPageReference(), event.getRequestContext().getRemoteUser());
-      WCMPublicationPresentationService presentationService = publicationAction.getApplicationComponent(WCMPublicationPresentationService.class);
+      WCMPublicationService presentationService = publicationAction.getApplicationComponent(WCMPublicationService.class);
       WCMPublicationPlugin publicationPlugin = (WCMPublicationPlugin) presentationService.getWebpagePublicationPlugins().get(WCMPublicationPlugin.LIFECYCLE_NAME);
       publicationPlugin.publishContentToPage(node, page);
       
@@ -150,7 +150,7 @@ public class UIPublicationAction extends UIForm {
         }
       }
       
-      WCMPublicationPresentationService presentationService = publicationAction.getApplicationComponent(WCMPublicationPresentationService.class);
+      WCMPublicationService presentationService = publicationAction.getApplicationComponent(WCMPublicationService.class);
       WCMPublicationPlugin publicationPlugin = (WCMPublicationPlugin) presentationService.getWebpagePublicationPlugins().get(WCMPublicationPlugin.LIFECYCLE_NAME);
       publicationPlugin.suspendPublishedContentFromPage(publishingPanel.getNode(), page);
       

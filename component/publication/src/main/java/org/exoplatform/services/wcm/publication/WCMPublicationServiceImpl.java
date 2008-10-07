@@ -23,6 +23,7 @@ import javax.jcr.Node;
 
 import org.apache.commons.logging.Log;
 import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleException;
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
@@ -35,21 +36,22 @@ import org.picocontainer.Startable;
  * hoa.pham@exoplatform.com
  * Sep 29, 2008
  */
-public class WCMPublicationPresentationServiceImpl implements WCMPublicationPresentationService, Startable {
+public class WCMPublicationServiceImpl implements WCMPublicationService, Startable {
   
-  private static Log log = ExoLogger.getLogger(WCMPublicationPresentationServiceImpl.class);
+  private static Log log = ExoLogger.getLogger(WCMPublicationServiceImpl.class);
+  
   private HashMap<String, WebpagePublicationPlugin> publicationPlugins = 
     new HashMap<String, WebpagePublicationPlugin>();  
   
   private PublicationService publicationService;
 
   /**
-   * Instantiates a new WCM publication presentation service.
+   * Instantiates a new WCM publication service.
    * This service delegate to PublicationService to manage the publication
    * 
    * @param publicationService the publication service
    */
-  public WCMPublicationPresentationServiceImpl(PublicationService publicationService) {
+  public WCMPublicationServiceImpl(PublicationService publicationService) {
     this.publicationService = publicationService;
   }
 
@@ -84,7 +86,7 @@ public class WCMPublicationPresentationServiceImpl implements WCMPublicationPres
     WebpagePublicationPlugin publicationPlugin = publicationPlugins.get(lifecycleName);
     publicationPlugin.publishContentToPage(content,page);
   }
-  
+
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.publication.WCMPublicationPresentationService#publishContentToPage(javax.jcr.Node, org.exoplatform.portal.config.model.Page, java.lang.String)
    */
@@ -93,21 +95,93 @@ public class WCMPublicationPresentationServiceImpl implements WCMPublicationPres
     String lifecycleName = publicationService.getNodeLifecycleName(content);
     WebpagePublicationPlugin publicationPlugin = publicationPlugins.get(lifecycleName);
     publicationPlugin.publishContentToPage(content,page);
+  }    
+  
+  public void enrollNodeInLifecycle(Node node, String lifecycleName) throws Exception {
+    WebpagePublicationPlugin publicationPlugin = publicationPlugins.get(lifecycleName);
+    publicationPlugin.addMixin(node);
   }
-
+  
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.publication.WCMPublicationPresentationService#unsubcribeLifecycle(javax.jcr.Node)
+   */
+  public void unsubcribeLifecycle(Node node) throws NotInPublicationLifecycleException, Exception {
+    publicationService.unsubcribeLifecycle(node);    
+  }
+  
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.publication.WCMPublicationPresentationService#getWebpagePublicationPlugins()
    */
   public Map<String, WebpagePublicationPlugin> getWebpagePublicationPlugins() {
     return publicationPlugins;
   }  
-  
-  public void start() {
-    //Need implement startable interface to make sure all WebpagePublicationPlugin are injected to PublicationService
-    log.info("Start WCMPublicationPresentationService...");
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.publication.WCMPublicationPresentationService#updateLifecycleOnChangeNavigation(org.exoplatform.portal.config.model.PageNavigation)
+   */
+  public void updateLifecycleOnChangeNavigation(PageNavigation navigation) throws Exception {
+    for(WebpagePublicationPlugin publicationPlugin: publicationPlugins.values()) {
+      publicationPlugin.updateLifecycleOnChangeNavigation(navigation);
+    }    
+  }
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.publication.WCMPublicationPresentationService#updateLifecycleOnRemovePage(org.exoplatform.portal.config.model.Page)
+   */
+  public void updateLifecycleOnRemovePage(Page page) throws Exception {
+    for(WebpagePublicationPlugin publicationPlugin: publicationPlugins.values()) {
+      publicationPlugin.updateLifecycleOnRemovePage(page);
+    }
+  }
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.publication.WCMPublicationPresentationService#updateLifecyleOnChangePage(org.exoplatform.portal.config.model.Page)
+   */
+  public void updateLifecyleOnChangePage(Page page) throws Exception {   
+    for(WebpagePublicationPlugin publicationPlugin: publicationPlugins.values()) {
+      publicationPlugin.updateLifecyleOnChangePage(page);
+    }
+  }
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.publication.WCMPublicationPresentationService#updateLifecyleOnCreateNavigation(org.exoplatform.portal.config.model.PageNavigation)
+   */
+  public void updateLifecyleOnCreateNavigation(PageNavigation navigation) throws Exception {
+    for(WebpagePublicationPlugin publicationPlugin: publicationPlugins.values()) {
+      publicationPlugin.updateLifecyleOnCreateNavigation(navigation);
+    }
+  }
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.publication.WCMPublicationPresentationService#updateLifecyleOnCreatePage(org.exoplatform.portal.config.model.Page)
+   */
+  public void updateLifecyleOnCreatePage(Page page) throws Exception {
+    for(WebpagePublicationPlugin publicationPlugin: publicationPlugins.values()) {
+      publicationPlugin.updateLifecyleOnCreatePage(page);
+    }
+  }
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.publication.WCMPublicationPresentationService#updateLifecyleOnRemoveNavigation(org.exoplatform.portal.config.model.PageNavigation)
+   */
+  public void updateLifecyleOnRemoveNavigation(PageNavigation navigation) throws Exception {
+    for(WebpagePublicationPlugin publicationPlugin: publicationPlugins.values()) {
+      publicationPlugin.updateLifecyleOnRemoveNavigation(navigation);
+    }
   }
   
+  /* (non-Javadoc)
+   * @see org.picocontainer.Startable#start()
+   */
+  public void start() {
+    //Need implement startable interface to make sure all WebpagePublicationPlugin are injected to PublicationService
+    log.info("Start WCMPublicationService...");
+  }
+
+  /* (non-Javadoc)
+   * @see org.picocontainer.Startable#stop()
+   */
   public void stop() {
-    
-  }  
+
+  }   
 }
