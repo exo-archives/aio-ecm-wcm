@@ -16,8 +16,11 @@
  */
 package org.exoplatform.services.wcm.publication.defaultlifecycle;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.security.AccessControlException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,6 +53,8 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.ecm.publication.IncorrectStateUpdateLifecycleException;
+import org.exoplatform.services.ecm.publication.plugins.staticdirect.UINonPublishedForm;
+import org.exoplatform.services.ecm.publication.plugins.staticdirect.UIPublishedForm;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.resources.ResourceBundleService;
@@ -83,6 +88,7 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
   public static final String LIFECYCLE_NAME = "Web Content Publishing".intern();
   
   private static final String LOCALE_FILE = "artifact.defaultlifecycle.WCMPublication".intern();
+  public static final String IMG_PATH = "artifacts/".intern();
   
   private PageEventListenerDelegate pageEventListenerDelegate;  
   private NavigationEventListenerDelegate navigationEventListenerDelegate;  
@@ -148,7 +154,44 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
    */
   public byte[] getStateImage(Node node, Locale locale) throws IOException,
   FileNotFoundException, Exception {  
-    return null;
+
+    byte[] bytes = null;
+    String fileName= "WCM".intern();
+    String currentState = node.getProperty(CURRENT_STATE).getString();
+    if (currentState.equals(PUBLISHED)) {
+      fileName+="Published";
+    } else {
+      fileName+="Unpublished";
+    }
+    //should never be in state enrolled
+    
+    //add language
+    String fileNameLocalized =fileName+"_"+locale.getLanguage();
+    String completeFileName=IMG_PATH+fileNameLocalized+".gif";
+//    log.trace("loading file '" + name + "' from file system '" + completeFileName + "'");
+    
+    InputStream in = this.getClass().getClassLoader().getResourceAsStream(completeFileName);
+    if (in==null) {
+      completeFileName=IMG_PATH+fileName+".gif";
+      in = this.getClass().getClassLoader().getResourceAsStream(completeFileName);
+    }
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
+    transfer(in, out);
+    bytes = out.toByteArray();
+    return bytes;
+  }
+  
+  private static final int BUFFER_SIZE = 512;
+  public static int transfer(InputStream in, OutputStream out) throws IOException {
+    int total = 0;
+    byte[] buffer = new byte[BUFFER_SIZE];
+    int bytesRead = in.read( buffer );
+    while ( bytesRead != -1 ) {
+      out.write( buffer, 0, bytesRead );
+      total += bytesRead;
+      bytesRead = in.read( buffer );
+    }
+    return total;
   }
 
   /* (non-Javadoc)

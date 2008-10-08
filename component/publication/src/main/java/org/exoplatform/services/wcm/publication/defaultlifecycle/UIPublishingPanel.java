@@ -46,7 +46,7 @@ public class UIPublishingPanel extends UIForm {
     addChild(UIPortalNavigationExplorer.class,null,"UIPortalNavigationExplorer");
     addChild(UIPublicationAction.class,null,"UIPublicationAction");
     addChild(UIPublishedPages.class,null,"UIPublishedPages");
-    addChild(UICloseForm.class, null, "UICloseForm");
+    addChild(UIPublicationComponentStatus.class, null, "UIPublicationComponentStatus");
   }
 
   public void initPanel(Node node,String portalName,List<String> runningPortals) throws Exception {
@@ -55,6 +55,8 @@ public class UIPublishingPanel extends UIForm {
     poExplorer.init(portalName,runningPortals);
     UIPublishedPages publishedPages = getChild(UIPublishedPages.class);
     publishedPages.init();
+    UIPublicationComponentStatus publicationComponentStatus = getChild(UIPublicationComponentStatus.class);
+    publicationComponentStatus.setNode(currentNode);
   }
 
   public String getCurrentPortal() {

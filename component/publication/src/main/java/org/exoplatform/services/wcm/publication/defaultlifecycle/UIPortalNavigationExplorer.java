@@ -18,7 +18,6 @@ package org.exoplatform.services.wcm.publication.defaultlifecycle;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.jcr.Node;
