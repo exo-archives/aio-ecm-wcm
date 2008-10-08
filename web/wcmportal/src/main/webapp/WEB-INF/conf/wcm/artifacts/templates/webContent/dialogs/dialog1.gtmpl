@@ -61,6 +61,16 @@
 									</div>
 								</div>
 								
+								<div class="UITab NormalTabStyle">
+									<div class="NormalTab">
+										<div class="LeftTab">
+											<div class="RightTab">                
+												<div class="MiddleTab" onClick="eXo.webui.UIHorizontalTabs.displayTabContent(this);"><%=_ctx.appRes("WebContent.dialog.label.Summary")%></div>
+											</div>
+										</div>
+									</div>
+								</div>
+								
 							</div> <!-- End of TabsContainer-->
 						</div>	<!-- End of CenterHorizontalTabs -->
 					</div>
@@ -189,6 +199,26 @@
 									} 
 									String[] fieldContentJS = ["jcrPath=/node/js/default.js/jcr:content/jcr:data", jsContent];
 									uicomponent.addTextAreaField(jsFormId, fieldContentJS); 								
+								%>
+								</td>
+							</tr>
+						</table>
+					</div>
+					
+					<div class="UITabContent" style="display: none;">
+						<table class="UIFormGrid">
+							<tr>
+								<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.Summary")%></td>
+								<td class="FieldComponent">
+								<%
+									String summaryContent = "";
+									if(uicomponent.isEditing()) {
+										Node webContentNode = uicomponent.getNode();
+										if (webContentNode.hasProperty("exo:summary")) 
+											summaryContent = webContentNode.getProperty("exo:summary").getValue().getString();
+									}
+									String[] fieldSummary = ["jcrPath=/node/exo:summary", "editable=if-null", summaryContent] ;
+									uicomponent.addTextAreaField("exo:summary", fieldSummary) ;
 								%>
 								</td>
 							</tr>
