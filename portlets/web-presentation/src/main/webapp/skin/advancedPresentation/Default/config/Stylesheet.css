@@ -87,3 +87,8 @@
 .UINameWebContentForm .UIForm .HorizontalLayout .FieldComponent {
 	width:750px;
 }
+
+.UINameWebContentForm .UIForm .HorizontalLayout .textarea {
+	width: 80%;
+	height: 180px;
+}
