@@ -29,12 +29,14 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.services.ecm.publication.plugins.webui.UIPublicationLogList;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.publication.defaultlifecycle.UIPublicationTree.TreeNode;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
+import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -68,6 +70,10 @@ public class UIPublicationAction extends UIForm {
       listPublishedPage.add(navigationNodeURI.getString());
     }
     publishedPages.setListNavigationNodeURI(listPublishedPage);    
+    
+    UIComponent parent = publishingPanel.getParent();
+    UIPublicationLogList publicationLogList = parent.findFirstComponentOfType(UIPublicationLogList.class);
+    publicationLogList.updateGrid();
   }
   
   public static class AddActionListener extends EventListener<UIPublicationAction> {

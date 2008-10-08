@@ -26,15 +26,15 @@ import org.exoplatform.portal.config.model.PageNavigation;
  * Oct 6, 2008  
  */
 public class NavigationEventListenerDelegate {
-  
+
   private String lifecycleName;
   private ExoContainer container;
-  
+
   public NavigationEventListenerDelegate(String lifecycleName, ExoContainer container) {
     this.lifecycleName = lifecycleName;
     this.container = container;
   }
-  
+
   public void updateLifecyleOnCreateNavigation(PageNavigation navigation) throws Exception { }
   public void updateLifecycleOnChangeNavigation(PageNavigation navigation) throws Exception { }
   public void updateLifecyleOnRemoveNavigation(PageNavigation navigation) throws Exception { }

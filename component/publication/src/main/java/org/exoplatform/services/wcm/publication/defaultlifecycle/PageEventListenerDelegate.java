@@ -26,19 +26,19 @@ import org.exoplatform.portal.config.model.Page;
  * Oct 6, 2008  
  */
 public class PageEventListenerDelegate {
-  
+
   private String lifecycleName;
   private ExoContainer container;
   public PageEventListenerDelegate(String lifecycleName, ExoContainer container) {
     this.lifecycleName = lifecycleName;
     this.container = container;
   }
-  
+
   public void updateLifecyleOnCreatePage(Page page) throws Exception {
   }
-  
+
   public void updateLifecyleOnChangePage(Page page) throws Exception { }
-  
+
   public void updateLifecycleOnRemovePage(Page page) throws Exception { }
-  
+
 }

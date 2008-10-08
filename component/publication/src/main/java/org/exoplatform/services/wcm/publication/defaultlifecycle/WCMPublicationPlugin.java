@@ -24,6 +24,7 @@ import java.io.OutputStream;
 import java.security.AccessControlException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -35,6 +36,7 @@ import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.ValueFactory;
 import javax.jcr.lock.LockException;
+import javax.jcr.version.VersionException;
 
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.container.ExoContainer;
@@ -53,11 +55,9 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.ecm.publication.IncorrectStateUpdateLifecycleException;
-import org.exoplatform.services.ecm.publication.plugins.staticdirect.UINonPublishedForm;
-import org.exoplatform.services.ecm.publication.plugins.staticdirect.UIPublishedForm;
+import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.util.IdGenerator;
-import org.exoplatform.services.resources.ResourceBundleService;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.services.wcm.publication.WebpagePublicationPlugin;
@@ -73,35 +73,34 @@ import org.exoplatform.webui.form.UIForm;
  * Sep 30, 2008
  */
 public class WCMPublicationPlugin extends WebpagePublicationPlugin {
-  
+
   public static final String ENROLLED = "enrolled".intern(); 
   public static final String UNPUBLISHED = "unpublished".intern();  
   public static final String PUBLISHED = "published".intern();
-  
+
   public static final String DEFAULT_STATE = UNPUBLISHED;
   public static final String PUBLICATION = "publication:publication".intern();    
   public static final String LIFECYCLE_PROP = "publication:lifecycleName".intern();   
   public static final String CURRENT_STATE = "publication:currentState".intern();
-  
+
   public static final String HISTORY = "publication:history".intern();  
   public static final String WCM_PUBLICATION_MIXIN = "publication:wcmPublication".intern(); 
   public static final String LIFECYCLE_NAME = "Web Content Publishing".intern();
-  
-  private static final String LOCALE_FILE = "artifact.defaultlifecycle.WCMPublication".intern();
+
+  private static final String LOCALE_FILE = "artifacts.defaultlifecycle.WCMPublication".intern();  
   public static final String IMG_PATH = "artifacts/".intern();
-  
   private PageEventListenerDelegate pageEventListenerDelegate;  
   private NavigationEventListenerDelegate navigationEventListenerDelegate;  
-  
+
   /**
    * Instantiates a new wCM publication plugin.
    */
   public WCMPublicationPlugin() {
     pageEventListenerDelegate = new PageEventListenerDelegate(LIFECYCLE_NAME, ExoContainerContext.getCurrentContainer());
     navigationEventListenerDelegate = new NavigationEventListenerDelegate(LIFECYCLE_NAME, ExoContainerContext.getCurrentContainer());
-    
+
   }
-  
+
   /* (non-Javadoc)
    * @see org.exoplatform.services.ecm.publication.PublicationPlugin#addMixin(javax.jcr.Node)
    */
@@ -128,8 +127,12 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
     }
 
     //TODO: Need compare LockToken in session of current user with LockToken of LockedOwner
-    if (!node.isCheckedOut() || node.isLocked()) {      
-      throw new LockException("This node is locked or checked-in");
+    if (node.isLocked()) {
+      throw new LockException("This node is locked");
+    }
+
+    if (!node.isCheckedOut()) {
+      throw new VersionException("This node is checked-in");
     }
 
     return node.canAddMixin(WCM_PUBLICATION_MIXIN);   
@@ -141,7 +144,25 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
   public void changeState(Node node, String newState,
       HashMap<String, String> context) throws IncorrectStateUpdateLifecycleException, Exception {
 
-    node.getSession().save();
+    Session session = node.getSession();
+    node.setProperty(CURRENT_STATE, newState);
+    PublicationService publicationService = getServices(PublicationService.class);
+
+    if (newState.equals(ENROLLED)) {
+      String lifecycleName = node.getProperty("publication:lifecycleName").getString();
+      String[] logs = new String[] {new Date().toString(), ENROLLED, session.getUserID(), "PublicationService.WCMPublicationPlugin.changeState.enrolled", lifecycleName};
+      publicationService.addLog(node, logs);  
+    } else if (newState.equals(PUBLISHED)) {
+      String[] logs = new String[] {new Date().toString(), PUBLISHED, session.getUserID(), "PublicationService.WCMPublicationPlugin.changeState.published"};
+      publicationService.addLog(node, logs);  
+    } else if (newState.equals(UNPUBLISHED)) {
+      String[] logs = new String[] {new Date().toString(), UNPUBLISHED, session.getUserID(), "PublicationService.WCMPublicationPlugin.changeState.unpublished"};
+      publicationService.addLog(node, logs);
+    } else {
+      throw new Exception("WCMPublicationPlugin.changeState : Unknown state : " + node.getProperty(CURRENT_STATE).getString());
+    }
+
+    session.save();
   }
 
   /* (non-Javadoc)
@@ -158,18 +179,14 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
     byte[] bytes = null;
     String fileName= "WCM".intern();
     String currentState = node.getProperty(CURRENT_STATE).getString();
-    if (currentState.equals(PUBLISHED)) {
+    if (PUBLISHED.equals(currentState)) {
       fileName+="Published";
     } else {
       fileName+="Unpublished";
     }
-    //should never be in state enrolled
-    
-    //add language
     String fileNameLocalized =fileName+"_"+locale.getLanguage();
     String completeFileName=IMG_PATH+fileNameLocalized+".gif";
-//    log.trace("loading file '" + name + "' from file system '" + completeFileName + "'");
-    
+
     InputStream in = this.getClass().getClassLoader().getResourceAsStream(completeFileName);
     if (in==null) {
       completeFileName=IMG_PATH+fileName+".gif";
@@ -180,7 +197,7 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
     bytes = out.toByteArray();
     return bytes;
   }
-  
+
   private static final int BUFFER_SIZE = 512;
   public static int transfer(InputStream in, OutputStream out) throws IOException {
     int total = 0;
@@ -212,7 +229,7 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
 
     return null;
   }    
-  
+
   /**
    * Retrives all  the running portals.
    * 
@@ -304,7 +321,11 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
     } else {
       listTmp = new ArrayList<Value>();
     }
-    listTmp.add(valueFactory.createValue(getNavigationNodeUriByPage(page)));
+    String uris = "";
+    for (String uri : getNavigationNodeUriByPage(page)) {
+      listTmp.add(valueFactory.createValue(uri));
+      uris += uri + ", ";
+    }
     content.setProperty("publication:navigationNodeURIs", listTmp.toArray(new Value[0]));
 
     if (content.hasProperty("publication:webPageIDs")) {
@@ -323,6 +344,13 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
     listTmp.add(valueFactory.createValue(portlet.getInstanceId()));
     content.setProperty("publication:applicationIDs",  listTmp.toArray(new Value[0]));
 
+    if (!content.getProperty("publication:currentState").getString().equals(PUBLISHED))
+      changeState(content, PUBLISHED, null);
+
+    PublicationService publicationService = getServices(PublicationService.class);
+    String[] logs = new String[] {new Date().toString(), PUBLISHED, session.getUserID(), "PublicationService.WCMPublicationPlugin.nodePublished", uris};
+    publicationService.addLog(content, logs);
+
     session.save();
   }
 
@@ -336,6 +364,7 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
     ArrayList<Value> listApplicationIDs = new ArrayList<Value>(Arrays.asList(content.getProperty("publication:applicationIDs").getValues()));
     ArrayList<Value> listWebPageIDs = new ArrayList<Value>(Arrays.asList(content.getProperty("publication:webPageIDs").getValues()));
     ArrayList<Value> listNavigationNodeURIs = new ArrayList<Value>(Arrays.asList(content.getProperty("publication:navigationNodeURIs").getValues()));
+    String uris = "";
     for (Object object : page.getChildren()) {
       if (object instanceof Application) {
         Application application = (Application) object;
@@ -344,7 +373,10 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
             children.remove(object);
             listApplicationIDs.remove(value);
             listWebPageIDs.remove(valueFactory.createValue(page.getPageId()));
-            listNavigationNodeURIs.remove(valueFactory.createValue(getNavigationNodeUriByPage(page)));
+            for (String uri : getNavigationNodeUriByPage(page)) {
+              listNavigationNodeURIs.remove(valueFactory.createValue(uri));
+              uris += uri + ", ";
+            }
           }
         }
       }
@@ -355,7 +387,17 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
     content.setProperty("publication:applicationIDs", listApplicationIDs.toArray(new Value[0]));
     content.setProperty("publication:webPageIDs", listWebPageIDs.toArray(new Value[0]));
     content.setProperty("publication:navigationNodeURIs", listNavigationNodeURIs.toArray(new Value[0]));
+
+    PublicationService publicationService = getServices(PublicationService.class);
+    String[] logs = new String[] {new Date().toString(), PUBLISHED, session.getUserID(), "PublicationService.WCMPublicationPlugin.nodeRemoved", uris};
+    publicationService.addLog(content, logs);
+
     session.save();
+
+    Value[] listValues = content.getProperty("publication:navigationNodeURIs").getValues();
+    if (listValues.length == 0) {
+      changeState(content, UNPUBLISHED, null);
+    }
   }
 
   /**
@@ -365,8 +407,8 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
    * 
    * @return the services
    */
-  private String getNavigationNodeUriByPage(Page page) throws Exception {
-    //TODO need return a list of pageNodeURI
+  private List<String> getNavigationNodeUriByPage(Page page) throws Exception {
+    List<String> listPageNavigationUri = new ArrayList<String>();
     DataStorage dataStorage = getServices(DataStorage.class);    
     RequestContext requestContext = WebuiRequestContext.getCurrentInstance();
     for (String portalName : getRunningPortals(requestContext.getRemoteUser())) {
@@ -376,11 +418,11 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
         PageNavigation pageNavigation = PageNavigation.class.cast(object);
         List<PageNode> listPageNode = org.exoplatform.services.wcm.publication.defaultlifecycle.Util.findPageNodeByPageReference(pageNavigation, page.getPageId());        
         for (PageNode pageNode : listPageNode) {
-          return "/" + portalName + "/" + pageNode.getUri();
+          listPageNavigationUri.add("/" + portalName + "/" + pageNode.getUri());
         }
       }
     }
-    return null;
+    return listPageNavigationUri;
   }
 
   private <T> T getServices(Class<T> clazz) {
@@ -430,35 +472,35 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
   public Node getNodeView(Node node, Map<String, Object> context) throws Exception {
     return node;
   }
-  
+
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.publication.WebpagePublicationPlugin#updateLifecycleOnChangeNavigation(org.exoplatform.portal.config.model.PageNavigation)
    */
   public void updateLifecycleOnChangeNavigation(PageNavigation navigation) throws Exception {
     navigationEventListenerDelegate.updateLifecycleOnChangeNavigation(navigation);
   }
-  
+
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.publication.WebpagePublicationPlugin#updateLifecycleOnRemovePage(org.exoplatform.portal.config.model.Page)
    */
   public void updateLifecycleOnRemovePage(Page page) throws Exception {
     pageEventListenerDelegate.updateLifecycleOnRemovePage(page);
   }
-  
+
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.publication.WebpagePublicationPlugin#updateLifecyleOnChangePage(org.exoplatform.portal.config.model.Page)
    */
   public void updateLifecyleOnChangePage(Page page) throws Exception {
     pageEventListenerDelegate.updateLifecyleOnChangePage(page);
   }
-  
+
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.publication.WebpagePublicationPlugin#updateLifecyleOnCreateNavigation(org.exoplatform.portal.config.model.PageNavigation)
    */
   public void updateLifecyleOnCreateNavigation(PageNavigation navigation) throws Exception {
     navigationEventListenerDelegate.updateLifecyleOnCreateNavigation(navigation);
   }
-  
+
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.publication.WebpagePublicationPlugin#updateLifecyleOnCreatePage(org.exoplatform.portal.config.model.Page)
    */
@@ -472,13 +514,11 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
   public void updateLifecyleOnRemoveNavigation(PageNavigation navigation) throws Exception {
     navigationEventListenerDelegate.updateLifecyleOnRemoveNavigation(navigation);
   }
-  
+
   public String getLocalizedAndSubstituteMessage(Locale locale, String key, String[] values)
-      throws Exception {
-    ExoContainer container = ExoContainerContext.getCurrentContainer();
-    ResourceBundleService resourceBundleService = (ResourceBundleService) container.getComponentInstanceOfType(ResourceBundleService.class);
-    ClassLoader cl=this.getClass().getClassLoader();
-    ResourceBundle resourceBundle=resourceBundleService.getResourceBundle(LOCALE_FILE,locale,cl);
+  throws Exception {    
+    ClassLoader cl=this.getClass().getClassLoader();    
+    ResourceBundle resourceBundle= ResourceBundle.getBundle(LOCALE_FILE, locale, cl);
     String result = resourceBundle.getString(key);
     if(values != null) {
       return String.format(result,values); 

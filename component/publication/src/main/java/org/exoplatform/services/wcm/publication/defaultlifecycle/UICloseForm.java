@@ -18,7 +18,6 @@ package org.exoplatform.services.wcm.publication.defaultlifecycle;
 
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
@@ -48,7 +47,7 @@ public class UICloseForm extends UIForm {
       UIPopupWindow popupAction = publishingPanel.getAncestorOfType(UIPopupWindow.class) ;
       popupAction.setShow(false);
       popupAction.setRendered(false);
-//      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+//    event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }
 }
