@@ -21,7 +21,6 @@ import javax.jcr.Session;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
-import org.exoplatform.ecm.webui.utils.LockUtil;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -34,18 +33,17 @@ import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
 import org.exoplatform.wcm.presentation.acp.UIAdvancedPresentationPortlet;
 import org.exoplatform.wcm.presentation.acp.config.quickcreation.UIQuickCreationWizard;
-import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
+import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.validator.IdentifierValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.wysiwyg.UIFormWYSIWYGInput;
@@ -56,9 +54,9 @@ import org.exoplatform.webui.form.wysiwyg.UIFormWYSIWYGInput;
  */
 
 @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIForm.gtmpl", events = {
-    @EventConfig(listeners = UINameWebContentForm.SaveActionListener.class),
-    @EventConfig(listeners = UINameWebContentForm.AbortActionListener.class, phase = Phase.DECODE) })
-public class UINameWebContentForm extends UIForm {
+  @EventConfig(listeners = UINameWebContentForm.SaveActionListener.class),
+  @EventConfig(listeners = UINameWebContentForm.AbortActionListener.class, phase = Phase.DECODE) })
+  public class UINameWebContentForm extends UIForm {
 
   public static final String NAME_WEBCONTENT    = "name".intern();
 
@@ -67,7 +65,9 @@ public class UINameWebContentForm extends UIForm {
   public UINameWebContentForm() throws Exception {
     addUIFormInput(new UIFormStringInput(NAME_WEBCONTENT, NAME_WEBCONTENT, null).addValidator(
         MandatoryValidator.class).addValidator(IdentifierValidator.class));
-    addUIFormInput(new UIFormWYSIWYGInput(SUMMARY_WEBCONTENT, SUMMARY_WEBCONTENT, null));
+    UIFormTextAreaInput uiFormTextAreaInput = new UIFormTextAreaInput(SUMMARY_WEBCONTENT, SUMMARY_WEBCONTENT, null);
+    uiFormTextAreaInput.setColumns(250);
+    addUIFormInput(uiFormTextAreaInput);
   }
 
   public void init() throws Exception {
@@ -77,8 +77,8 @@ public class UINameWebContentForm extends UIForm {
       if (currentNode.hasProperty("exo:summary")) {
         summary = currentNode.getProperty("exo:summary").getValue().getString();
       }
-      UIFormWYSIWYGInput uiFormWYSIWYGInput = getChild(UIFormWYSIWYGInput.class);
-      uiFormWYSIWYGInput.setValue(summary);
+      UIFormTextAreaInput uiFormTextAreaInput = getChild(UIFormTextAreaInput.class);
+      uiFormTextAreaInput.setValue(summary);
       UIFormStringInput uiFormStringInput = getChild(UIFormStringInput.class);
       uiFormStringInput.setValue(currentNode.getName());
       uiFormStringInput.setEditable(false);
@@ -102,33 +102,23 @@ public class UINameWebContentForm extends UIForm {
     UIPortletConfig uiPortletConfig = getAncestorOfType(UIPortletConfig.class);
     return uiPortletConfig.isNewConfig();
   }
-  
-  private boolean nodeIsLocked(Node node) throws Exception {
-    if(!node.isLocked()) return false;        
-    String lockToken = LockUtil.getLockToken(node);
-    if(lockToken != null) {
-      node.getSession().addLockToken(lockToken);
-      return false;
-    }                
-    return true;
-  }
 
   public static class SaveActionListener extends EventListener<UINameWebContentForm> {
     public void execute(Event<UINameWebContentForm> event) throws Exception {
       UINameWebContentForm uiNameWebContentForm = event.getSource();
       String portalName = Util.getUIPortal().getName();
       LivePortalManagerService livePortalManagerService = uiNameWebContentForm
-          .getApplicationComponent(LivePortalManagerService.class);
+      .getApplicationComponent(LivePortalManagerService.class);
       SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
       Node portalNode = livePortalManagerService.getLivePortal(portalName, sessionProvider);
       WebSchemaConfigService webSchemaConfigService = uiNameWebContentForm
-          .getApplicationComponent(WebSchemaConfigService.class);
+      .getApplicationComponent(WebSchemaConfigService.class);
       PortalFolderSchemaHandler handler = webSchemaConfigService
-          .getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
+      .getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
       Node webContentStorage = handler.getWebContentStorage(portalNode);
       String webContentName = ((UIFormStringInput) uiNameWebContentForm
           .getChildById(NAME_WEBCONTENT)).getValue();
-      String summaryContent = uiNameWebContentForm.getChild(UIFormWYSIWYGInput.class).getValue();
+      String summaryContent = uiNameWebContentForm.getChild(UIFormTextAreaInput.class).getValue();
       Node webContentNode = null;
       UIQuickCreationWizard uiQuickCreationWizard = uiNameWebContentForm
       .getAncestorOfType(UIQuickCreationWizard.class);
@@ -136,23 +126,10 @@ public class UINameWebContentForm extends UIForm {
       if (uiNameWebContentForm.isNewConfig()) {
         webContentNode = webContentStorage.addNode(webContentName, "exo:webContent");
         WebContentSchemaHandler webContentSchemaHandler = webSchemaConfigService
-            .getWebSchemaHandlerByType(WebContentSchemaHandler.class);
+        .getWebSchemaHandlerByType(WebContentSchemaHandler.class);
         webContentSchemaHandler.createDefaultSchema(webContentNode);
       } else {
         webContentNode = uiNameWebContentForm.getNode();
-      }
-      UIApplication uiApp = uiNameWebContentForm.getAncestorOfType(UIApplication.class);
-      if (uiNameWebContentForm.nodeIsLocked(webContentNode)) {
-        Object[] objs = { webContentNode.getPath() };
-        uiApp.addMessage(new ApplicationMessage("UIPopupMenu.msg.node-locked", objs));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-        return;
-      }
-      
-      if (!webContentNode.isCheckedOut()) {
-        webContentNode.checkout();
-        uiCDForm.setCheckInOpened(true);
-        webContentNode.getSession().save();
       }
       if (webContentNode.canAddMixin("mix:votable"))
         webContentNode.addMixin("mix:votable");
@@ -161,7 +138,7 @@ public class UINameWebContentForm extends UIForm {
       webContentNode.setProperty("exo:summary", summaryContent);
       webContentStorage.getSession().save();
       String repositoryName = ((ManageableRepository) webContentNode.getSession().getRepository())
-          .getConfiguration().getName();
+      .getConfiguration().getName();
       String workspaceName = webContentNode.getSession().getWorkspace().getName();
       NodeLocation nodeLocation = new NodeLocation();
       nodeLocation.setRepository(repositoryName);

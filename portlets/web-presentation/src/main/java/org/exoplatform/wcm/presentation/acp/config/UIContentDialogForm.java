@@ -27,10 +27,12 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.version.VersionException;
+import javax.portlet.PortletPreferences;
 
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
 import org.exoplatform.ecm.webui.form.UIDialogForm;
 import org.exoplatform.ecm.webui.utils.DialogFormUtil;
+import org.exoplatform.ecm.webui.utils.LockUtil;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
@@ -44,9 +46,11 @@ import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
+import org.exoplatform.wcm.presentation.acp.UIAdvancedPresentationPortlet;
 import org.exoplatform.wcm.presentation.acp.config.quickcreation.UIQuickCreationWizard;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -76,10 +80,30 @@ public class UIContentDialogForm extends UIDialogForm {
   protected NodeLocation storedLocation;
   protected NodeIdentifier savedNodeIdentifier;
   protected Node webContent;
-  private boolean isCheckInOpened;
 
   public UIContentDialogForm() throws Exception {
     setActions(ACTIONS);
+  }
+
+  public void init() throws Exception {
+    PortletPreferences prefs = ((PortletRequestContext)WebuiRequestContext.getCurrentInstance()).getRequest().getPreferences();
+    String repositoryName = prefs.getValue(UIAdvancedPresentationPortlet.REPOSITORY, null);
+    String workspace = prefs.getValue(UIAdvancedPresentationPortlet.WORKSPACE, null);
+    String UUID = prefs.getValue(UIAdvancedPresentationPortlet.UUID, null);
+    RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
+    ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
+    SessionProvider provider = SessionProviderFactory.createSessionProvider();
+    Session session = provider.getSession(workspace, manageableRepository);
+    Node webContentNode = session.getNodeByUUID(UUID);
+    NodeLocation nodeLocation = new NodeLocation();
+    nodeLocation.setRepository(repositoryName);
+    nodeLocation.setWorkspace(workspace);
+    nodeLocation.setPath(webContentNode.getParent().getPath());
+    setStoredLocation(nodeLocation);
+    setNodePath(webContentNode.getPath());
+    setContentType("exo:webContent");
+    addNew(false);
+    resetProperties();
   }
 
   protected Node getWebContent () {
@@ -143,6 +167,16 @@ public class UIContentDialogForm extends UIDialogForm {
     return parentNode;
   }
 
+  private boolean nodeIsLocked(Node node) throws Exception {
+    if(!node.isLocked()) return false;        
+    String lockToken = LockUtil.getLockToken(node);
+    if(lockToken != null) {
+      node.getSession().addLockToken(lockToken);
+      return false;
+    }                
+    return true;
+  }
+
   static public class CancelActionListener extends EventListener<UIContentDialogForm> {
     public void execute(Event<UIContentDialogForm> event) throws Exception {
       UIContentDialogForm uiContentDialogForm = event.getSource();
@@ -174,22 +208,43 @@ public class UIContentDialogForm extends UIDialogForm {
   static  public class SaveActionListener extends EventListener<UIContentDialogForm> {
     public void execute(Event<UIContentDialogForm> event) throws Exception {
       UIContentDialogForm dialogForm = event.getSource();
-      List inputs = dialogForm.getChildren();
-      Map inputProperties = DialogFormUtil.prepareMap(inputs, dialogForm.getInputProperties());
-
-      Node newNode = null;
-      Node oldWebContentNode = dialogForm.getNode();
-      String summary = oldWebContentNode.getProperty("exo:summary").getValue().getString();
+      PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+      PortletPreferences prefs = pContext.getRequest().getPreferences();
+      String repositoryName = prefs.getValue(UIAdvancedPresentationPortlet.REPOSITORY, null);
+      String workspaceName = prefs.getValue(UIAdvancedPresentationPortlet.WORKSPACE, null);
+      String UUID = prefs.getValue(UIAdvancedPresentationPortlet.UUID, null);
+      RepositoryService repositoryService = dialogForm.getApplicationComponent(RepositoryService.class);
+      ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
+      Session session = SessionProviderFactory.createSystemProvider().getSession(workspaceName, manageableRepository);
+      Node webContentNode = session.getNodeByUUID(UUID);
+      String summary = "";
+      if (webContentNode.hasProperty("exo:summary"))
+        summary = webContentNode.getProperty("exo:summary").getValue().getString();
       String nodeType;
       Node homeNode;
       UIApplication uiApplication = dialogForm.getAncestorOfType(UIApplication.class);
+      if (dialogForm.nodeIsLocked(webContentNode)) {
+        Object[] objs = { webContentNode.getPath() };
+        uiApplication.addMessage(new ApplicationMessage("UIPopupMenu.msg.node-locked", objs));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
+        return;
+      }
+      boolean isCheckOut = true;
+      if (!webContentNode.isCheckedOut()) {
+        isCheckOut = false;
+        webContentNode.checkout();
+      }
+
+      List inputs = dialogForm.getChildren();
+      Map inputProperties = DialogFormUtil.prepareMap(inputs, dialogForm.getInputProperties());
       if (dialogForm.isAddNew()) {
         homeNode = dialogForm.getParentNode();
         nodeType = dialogForm.contentType;
       } else {
-        homeNode = oldWebContentNode.getParent();
-        nodeType = oldWebContentNode.getPrimaryNodeType().getName();
+        homeNode = dialogForm.getNode().getParent();
+        nodeType = dialogForm.getNode().getPrimaryNodeType().getName();
       }
+      Node newNode = null;
       try{
         CmsService cmsService = dialogForm.getApplicationComponent(CmsService.class);
         String addedPath = cmsService.storeNode(nodeType, homeNode, inputProperties, dialogForm.isAddNew, dialogForm.repositoryName);
@@ -225,7 +280,7 @@ public class UIContentDialogForm extends UIDialogForm {
       dialogForm.savedNodeIdentifier = NodeIdentifier.make(newNode);
       dialogForm.setWebContent(newNode);
 
-      if (dialogForm.isCheckInOpened()) {
+      if (!isCheckOut) {
         newNode.checkin();
       }
       UIQuickCreationWizard uiQuickWizard = dialogForm.getAncestorOfType(UIQuickCreationWizard.class);
@@ -235,13 +290,5 @@ public class UIContentDialogForm extends UIDialogForm {
       uiSocialInfo.initUICategorizing();
       uiQuickWizard.viewStep(3);
     }
-  }
-
-  public boolean isCheckInOpened() {
-    return isCheckInOpened;
-  }
-
-  public void setCheckInOpened(boolean isCheckInOpened) {
-    this.isCheckInOpened = isCheckInOpened;
   }
 }

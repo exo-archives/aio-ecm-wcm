@@ -113,11 +113,17 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
       UIWelcomeScreen uiWelcomeScreen = event.getSource();
       String radioValue = uiWelcomeScreen.<UIFormRadioBoxInput>getUIInput("radio").getValue();
       UIPortletConfig uiPortletConfig = uiWelcomeScreen.getAncestorOfType(UIPortletConfig.class);
-      if(radioValue.equals("QuickCreateWebContent") || radioValue.equals("EditCurrentWebContent")) {
+      if("QuickCreateWebContent".equals(radioValue)) {
         uiWelcomeScreen.setRendered(false);
         UIQuickCreationWizard uiQuickCreationWizard = uiPortletConfig.addChild(UIQuickCreationWizard.class, null, null);
         uiQuickCreationWizard.getChild(UINameWebContentForm.class).init();
-      } else if(radioValue.equals("SelectExistedContent")) {
+      } else if ("EditCurrentWebContent".equals(radioValue)) {
+        // nhay vao buoc 2 lun
+        uiWelcomeScreen.setRendered(false);
+        UIQuickCreationWizard uiQuickCreationWizard = uiPortletConfig.addChild(UIQuickCreationWizard.class, null, null);
+        uiQuickCreationWizard.getChild(UIContentDialogForm.class).init();
+        uiQuickCreationWizard.viewStep(2);
+      } else if("SelectExistedContent".equals(radioValue)) {
         uiWelcomeScreen.getChildren().clear();
         List<SelectItemOption<String>> option = new ArrayList<SelectItemOption<String>>();
         RequestContext context = RequestContext.<RequestContext>getCurrentInstance();
@@ -130,10 +136,10 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
         radioInput.setAlign(UIFormRadioBoxInput.VERTICAL_ALIGN);
         radioInput.setValue("SelectExistedWebContent");
         uiWelcomeScreen.addChild(radioInput);       
-      } else if(radioValue.equals("SelectExistedWebContent")) {
+      } else if("SelectExistedWebContent".equals(radioValue)) {
         uiWelcomeScreen.setRendered(false);
         uiPortletConfig.addChild(UIWebContentSelectorForm.class, null, null);
-      } else if(radioValue.equals("SelectExistedDMS")) {
+      } else if("SelectExistedDMS".equals(radioValue)) {
         uiWelcomeScreen.setRendered(false);
         uiPortletConfig.addChild(UIDMSSelectorForm.class, null, null);
       }
