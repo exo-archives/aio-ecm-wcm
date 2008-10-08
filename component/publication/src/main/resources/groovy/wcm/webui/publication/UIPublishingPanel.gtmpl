@@ -38,6 +38,6 @@
 	</div>
 	<div style="clear: both;"></div>
 	<div class="PanelBottom">
-		<% uiform.renderChild("UICloseForm") %>
+		<% uiform.renderChild("UIPublicationComponentStatus") %>
 	</div>
 </div>
