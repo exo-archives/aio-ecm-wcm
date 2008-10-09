@@ -16,13 +16,22 @@
 	  	<instance-id>portal#classic:/web/NavigationPortlet/toolbar</instance-id>
 	    <show-info-bar>false</show-info-bar>
 	  </application>
-		
-	  <application>
-	    <instance-id>portal#classic:/web/BreadcumbsPortlet/breadcumbs</instance-id>
-	    <show-info-bar>false</show-info-bar>
-	  </application>
 	  
-	
+	  <container template='system:/groovy/portal/webui/container/UITableColumnContainer.gtmpl'>
+	  	<container template='system:/groovy/portal/webui/container/UIContainer.gtmpl'>
+	  		<application>
+			    <instance-id>portal#classic:/web/BreadcumbsPortlet/breadcumbs</instance-id>
+	    		<show-info-bar>false</show-info-bar>
+			</application>	  	
+	  	</container>
+    	<container template='system:/groovy/portal/webui/container/UIContainer.gtmpl'>
+			<application>
+			    <instance-id>portal#classic:/web-presentation/SiteAdministrationPortlet/admintoolbar</instance-id>
+			    <show-info-bar>false</show-info-bar>
+		  	</application>	  	
+    	</container>
+  	  </container>  	  	  	
+  	  
 	  <page-body> </page-body>
 	  
 	  <application>

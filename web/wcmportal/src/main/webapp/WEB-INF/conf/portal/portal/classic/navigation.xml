@@ -21,8 +21,7 @@
 			<name>presentation</name>
 			<label>#{portal.classic.presentation}</label>
 			<page-reference>portal::classic::presentation</page-reference>	    
-		</node>	         	  	  	  	 	     	  	   
-	  
+		</node>	 
 		<node>
 			<uri>search</uri>
 			<name>search</name>

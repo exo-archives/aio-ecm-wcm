@@ -31,7 +31,23 @@
       <show-application-state>false</show-application-state>
       <show-application-mode>false</show-application-mode>
     </application>
-  </page>                      
+  </page>        
+  <page>
+  	<page-id>portal::classic::admintoolbar</page-id>
+    <owner-type>portal</owner-type>
+    <owner-id>classic</owner-id>
+    <name>admintoolbar</name>
+    <title>Toolbar</title>
+	  <access-permissions>Everyone</access-permissions>
+	  <edit-permission>*:/platform/administrators</edit-permission>
+    <application>
+      <instance-id>portal#classic:/web-presentation/SiteAdministrationPortlet/admintoolbar</instance-id>
+      <title>Toolbar</title>
+      <show-info-bar>false</show-info-bar>      
+      <show-application-state>false</show-application-state>
+      <show-application-mode>false</show-application-mode>
+    </application>
+  </page>               
   <page>
   	<page-id>portal::classic::search</page-id>
     <owner-type>portal</owner-type>
