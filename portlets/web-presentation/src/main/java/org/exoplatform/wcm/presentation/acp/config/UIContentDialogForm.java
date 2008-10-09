@@ -208,33 +208,35 @@ public class UIContentDialogForm extends UIDialogForm {
   static  public class SaveActionListener extends EventListener<UIContentDialogForm> {
     public void execute(Event<UIContentDialogForm> event) throws Exception {
       UIContentDialogForm dialogForm = event.getSource();
+      UIApplication uiApplication = dialogForm.getAncestorOfType(UIApplication.class);
       PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
       PortletPreferences prefs = pContext.getRequest().getPreferences();
       String repositoryName = prefs.getValue(UIAdvancedPresentationPortlet.REPOSITORY, null);
-      String workspaceName = prefs.getValue(UIAdvancedPresentationPortlet.WORKSPACE, null);
-      String UUID = prefs.getValue(UIAdvancedPresentationPortlet.UUID, null);
-      RepositoryService repositoryService = dialogForm.getApplicationComponent(RepositoryService.class);
-      ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
-      Session session = SessionProviderFactory.createSystemProvider().getSession(workspaceName, manageableRepository);
-      Node webContentNode = session.getNodeByUUID(UUID);
       String summary = "";
-      if (webContentNode.hasProperty("exo:summary"))
-        summary = webContentNode.getProperty("exo:summary").getValue().getString();
-      String nodeType;
-      Node homeNode;
-      UIApplication uiApplication = dialogForm.getAncestorOfType(UIApplication.class);
-      if (dialogForm.nodeIsLocked(webContentNode)) {
-        Object[] objs = { webContentNode.getPath() };
-        uiApplication.addMessage(new ApplicationMessage("UIPopupMenu.msg.node-locked", objs));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
-        return;
-      }
       boolean isCheckOut = true;
-      if (!webContentNode.isCheckedOut()) {
-        isCheckOut = false;
-        webContentNode.checkout();
+      if (repositoryName != null) {
+        String workspaceName = prefs.getValue(UIAdvancedPresentationPortlet.WORKSPACE, null);
+        String UUID = prefs.getValue(UIAdvancedPresentationPortlet.UUID, null);
+        RepositoryService repositoryService = dialogForm.getApplicationComponent(RepositoryService.class);
+        ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
+        Session session = SessionProviderFactory.createSystemProvider().getSession(workspaceName, manageableRepository);
+        Node webContentNode = session.getNodeByUUID(UUID);
+        if (webContentNode.hasProperty("exo:summary"))
+          summary = webContentNode.getProperty("exo:summary").getValue().getString();
+        if (dialogForm.nodeIsLocked(webContentNode)) {
+          Object[] objs = { webContentNode.getPath() };
+          uiApplication.addMessage(new ApplicationMessage("UIPopupMenu.msg.node-locked", objs));
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
+          return;
+        }
+        if (!webContentNode.isCheckedOut()) {
+          isCheckOut = false;
+          webContentNode.checkout();
+        }
       }
 
+      String nodeType;
+      Node homeNode;
       List inputs = dialogForm.getChildren();
       Map inputProperties = DialogFormUtil.prepareMap(inputs, dialogForm.getInputProperties());
       if (dialogForm.isAddNew()) {
