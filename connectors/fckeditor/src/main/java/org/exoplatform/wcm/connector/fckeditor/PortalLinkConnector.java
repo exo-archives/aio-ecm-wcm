@@ -176,7 +176,7 @@ public class PortalLinkConnector implements ResourceContainer {
   private Document buildPortalXMLResponse(String currentFolder, String command, String userId)
   throws Exception {
     Element rootElement = initRootElement(command, currentFolder);
-    Query<PortalConfig> query = new Query<PortalConfig>(null, null, null, PortalConfig.class);
+    Query<PortalConfig> query = new Query<PortalConfig>(null, null, null, null, PortalConfig.class);
     PageList pageList = portalDataStorage.find(query, new Comparator<PortalConfig>() {
       public int compare(PortalConfig pconfig1, PortalConfig pconfig2) {
         return pconfig1.getName().compareTo(pconfig2.getName());
