@@ -1,0 +1,34 @@
+.UISiteAdminToolBar {
+	background: url('background/CBToolbarBG1x27.gif') repeat-x;
+	height: 27px;
+	margin-bottom: 5px;
+}
+
+.UISiteAdminToolBar .LeftToolBar {
+	float: left;
+	margin-left: 10px;
+}
+
+.Icon {
+	height: 16px;
+}
+
+.AddPageIcon {
+  background: url('icons/Organization.gif') no-repeat ;
+}
+
+.EditPageIcon {
+  background: url('icons/Organization.gif') no-repeat ;
+}
+
+.EditPortalIcon {
+  background: url('icons/Organization.gif') no-repeat ;
+}
+
+.CreatePortalIcon{
+  background: url('icons/Organization.gif') no-repeat ;
+}
+
+.ChangePortalIcon {
+  background: url('icons/Organization.gif') no-repeat ;
+}

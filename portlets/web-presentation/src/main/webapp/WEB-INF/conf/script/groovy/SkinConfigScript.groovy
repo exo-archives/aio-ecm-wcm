@@ -18,3 +18,24 @@ SkinService.addSkin(
     "/web-presentation/skin/advancedPresentation/Mac/Stylesheet.css",
     ServletContext
 ) ;
+
+SkinService.addSkin(
+    "web-presentation/SiteAdministrationPortlet",
+    "Default",
+    "/web-presentation/skin/SiteAdministration/DefaultStylesheet.css",
+    ServletContext
+) ;
+
+SkinService.addSkin(
+    "web-presentation/SiteAdministrationPortlet",
+    "Vista",
+    "/web-presentation/skin/SiteAdministration/VistaStylesheet.css",
+    ServletContext
+) ;
+ 
+SkinService.addSkin(
+    "web-presentation/SiteAdministrationPortlet",
+    "Mac",
+    "/web-presentation/skin/SiteAdministration/MacStylesheet.css",
+    ServletContext
+) ;

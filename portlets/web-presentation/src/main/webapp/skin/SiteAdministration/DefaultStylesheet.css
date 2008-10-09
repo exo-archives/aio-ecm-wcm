@@ -1,0 +1,76 @@
+.UISiteAdminToolBar {
+	float: right;
+}
+
+.IconBlock {
+	line-height: 25px;	
+	padding-left: 20px;
+	padding-bottom: 4px;
+	margin-left: 10px;
+	float: left;
+	width: auto;
+}
+
+.AddPageIcon {
+	background: url('DefaultSkin/icons/AddPage.gif') no-repeat left center;  
+}
+
+.EditPageIcon {
+	background: url('DefaultSkin/icons/EditPage.gif') no-repeat left center;
+}
+
+.EditPortalIcon {
+	background: url('DefaultSkin/icons/EditPortal.gif') no-repeat left center;
+}
+
+.CreatePortalIcon{
+	background: url('DefaultSkin/icons/AddPortal.gif') no-repeat left center;
+}
+
+.ChangePortalIcon {
+	background: url('DefaultSkin/icons/Organization.gif') no-repeat left center;
+}
+
+.ExpandMoreActionIcon {
+	height: 25px;
+	background: url('DefaultSkin/icons/MoreActionIcon.gif') no-repeat left center;
+}
+
+.MoreActionBlock {
+	padding: 5px;
+	border: 1px solid gray;
+	position: absolute;
+	display: none;
+	background-color: RGB(240, 240, 240);
+}
+
+.SiteAdminMenuItemDecorator {
+	width: 150px;
+	border: 1px solid gray;
+	background: #f3f3f3;
+	padding-bottom: 6px;
+	display: none;
+	position: absolute;
+}
+
+.MenuItem a {
+	border-bottom: 1px solid #dbdcdd;
+	cursor: pointer;
+	line-height: 24px;
+	height: 24px; width: auto;
+	display: block;
+	white-space: nowrap;
+	color: #333333; font-weight: normal;
+}
+
+.MenuItem a:hover {
+	background-color: #dfe0e0;
+	border-bottom: 1px solid #dbdcdd;
+	color: #3e8df0;
+}
+
+.ItemIcon {
+  height: 24px; width: auto;
+  padding-left: 25px;
+  margin-left: 5px;
+}

@@ -67,4 +67,29 @@
     </security-role-ref>	
   </portlet>
   
+  <portlet>
+  	<description xml:lang="EN">Site Administration ToolBar</description>
+  	<portlet-name>SiteAdministrationPortlet</portlet-name>
+  	<display-name>Site Admin</display-name>
+	<portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>
+  	<init-param>
+      <name>webui.configuration</name>
+      <value>/WEB-INF/conf/portlet/SiteAdministration/webui/configuration.xml</value>			
+	</init-param>
+	<expiration-cache>0</expiration-cache>
+	<supports>
+		<mime-type>text/html</mime-type>
+		<portlet-mode>help</portlet-mode>
+		<portlet-mode>edit</portlet-mode>
+	</supports>
+	<supported-locale>en</supported-locale>
+	<resource-bundle>locale.portlet.SiteAdministration.SiteAdministrationToolBar</resource-bundle>
+	
+	<portlet-info>
+		<title>Site Administration ToolBar</title>
+		<short-title>Site Administration ToolBar</short-title>
+		<keywords>SiteAdministration</keywords>
+	</portlet-info>
+  </portlet>
+  
 </portlet-app>
