@@ -108,7 +108,7 @@ public class WcmSearchServiceImpl implements WcmSearchService {
   @SuppressWarnings("unchecked")
   public void updatePagesCache() throws Exception {
     org.exoplatform.portal.config.Query<Page> pagesQuery = new org.exoplatform.portal.config.Query<Page>(
-        null, null, null, Page.class);
+        null, null, null, null, Page.class);
     List<Page> allPages = dataStorage_.find(pagesQuery).getAll();
     for (Page page : allPages) {
       String portletId = null;
@@ -175,7 +175,7 @@ public class WcmSearchServiceImpl implements WcmSearchService {
   @SuppressWarnings("unchecked")
   private List<String> getPortalNames() throws Exception {
     org.exoplatform.portal.config.Query<PortalConfig> query = new org.exoplatform.portal.config.Query<PortalConfig>(
-        null, null, null, PortalConfig.class);
+        null, null, null, null, PortalConfig.class);
     List<PortalConfig> list = dataStorage_.find(query).getAll();
     List<String> portalNames = new ArrayList<String>();
     for (PortalConfig config : list) {

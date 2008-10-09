@@ -242,7 +242,7 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
   private List<String> getRunningPortals(String userId) throws Exception {
     List<String> listPortalName = new ArrayList<String>();
     DataStorage service = getServices(DataStorage.class);
-    Query<PortalConfig> query = new Query<PortalConfig>(null, null, null, PortalConfig.class) ;
+    Query<PortalConfig> query = new Query<PortalConfig>(null, null, null, null, PortalConfig.class) ;
     PageList pageList = service.find(query) ;
     UserACL userACL = getServices(UserACL.class);
     for(Object object:pageList.getAll()) {
