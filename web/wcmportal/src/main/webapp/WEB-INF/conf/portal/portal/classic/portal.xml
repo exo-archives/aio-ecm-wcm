@@ -17,7 +17,7 @@
 	    <show-info-bar>false</show-info-bar>
 	  </application>
 	  
-	  <container template='system:/groovy/portal/webui/container/UITableColumnContainer.gtmpl'>
+	  <container template='app:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl'>
 	  	<container template='system:/groovy/portal/webui/container/UIContainer.gtmpl'>
 	  		<application>
 			    <instance-id>portal#classic:/web/BreadcumbsPortlet/breadcumbs</instance-id>
