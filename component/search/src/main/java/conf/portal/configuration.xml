@@ -14,5 +14,10 @@
       </properties-param>
     </init-params>
   </component>
+  
+  <component>
+    <key>org.exoplatform.services.wcm.search.SiteSearchService</key>
+    <type>org.exoplatform.services.wcm.search.SiteSearchServiceImpl</type>    
+  </component>
        
 </configuration>
