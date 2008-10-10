@@ -6,7 +6,7 @@
 	def rcontext = _ctx.getRequestContext() ;
  	rcontext.getJavascriptManager().importJavascript('eXo.SiteAdministration.ShowAdminToolbar','/web-presentation/javascript');
 %>
-<div class="UISiteAdminToolBarm" id="$uicomponent.id">
+<div class="UISiteAdminToolBar" id="$uicomponent.id">
 	<% 
 	ArrayList<Event> listAction = uicomponent.getComponentConfig().getEvents();
 	String listHiddenActions = "";
