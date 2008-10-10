@@ -1,9 +1,10 @@
-.UISiteAdminToolBar {
+.UISiteAdminToolBar {	
 	float: right;
+	margin-right: 55px;		
 }
 
 .IconBlock {
-	line-height: 25px;	
+	line-height: 30px;	
 	padding-left: 20px;
 	padding-bottom: 4px;
 	margin-left: 10px;
@@ -32,7 +33,7 @@
 }
 
 .ExpandMoreActionIcon {
-	height: 25px;
+	height: 30px;
 	background: url('DefaultSkin/icons/MoreActionIcon.gif') no-repeat left center;
 }
 
