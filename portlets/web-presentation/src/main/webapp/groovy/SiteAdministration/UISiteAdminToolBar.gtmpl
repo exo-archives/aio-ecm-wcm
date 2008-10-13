@@ -17,7 +17,7 @@
 		String link = uicomponent.event(action);		
 	%>
 		<a class="Icon $actionIcon" href="$link">
-			<div onclick="eXo.portal.UIControlWorkspace.showWorkspace();">$actionLabel</div>
+			<div onclick="showWorkspaceArea();">$actionLabel</div>
 		</a>			      		
 	<%	
 	}
