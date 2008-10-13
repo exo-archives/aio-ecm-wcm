@@ -1,34 +1,40 @@
-.UISiteAdminToolBar {
-	background: url('background/CBToolbarBG1x27.gif') repeat-x;
-	height: 27px;
-	margin-bottom: 5px;
-}
-
-.UISiteAdminToolBar .LeftToolBar {
-	float: left;
-	margin-left: 10px;
+.UISiteAdminToolBar {	
+	height: 30px;
+	padding-right: 10px;
+	background-color: RGB(240, 240, 240);
 }
 
 .Icon {
-	height: 16px;
+	line-height: 30px;	
+	padding-left: 25px;	
+	margin-left: 15px;
+	float: right;
 }
 
 .AddPageIcon {
-  background: url('icons/Organization.gif') no-repeat ;
+	background: url('DefaultSkin/icons/AddPage.gif') no-repeat left center;  
 }
 
 .EditPageIcon {
-  background: url('icons/Organization.gif') no-repeat ;
+	background: url('DefaultSkin/icons/EditPage.gif') no-repeat left center;
 }
 
 .EditPortalIcon {
-  background: url('icons/Organization.gif') no-repeat ;
+	background: url('DefaultSkin/icons/EditPortal.gif') no-repeat left center;
 }
 
 .CreatePortalIcon{
-  background: url('icons/Organization.gif') no-repeat ;
+	background: url('DefaultSkin/icons/AddPortal.gif') no-repeat left center;
 }
 
 .ChangePortalIcon {
-  background: url('icons/Organization.gif') no-repeat ;
+	background: url('DefaultSkin/icons/Organization.gif') no-repeat left center;
+}
+
+.ExoLogo {
+	background: url('DefaultSkin/icons/favicon.ico') no-repeat left center;
+	height: 20px;
+	width: 20px;
+	float: left;
+	margin: 5px;
 }

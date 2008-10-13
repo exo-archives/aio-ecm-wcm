@@ -16,6 +16,9 @@
  */
 package org.exoplatform.wcm.webui.administration;
 
+import org.exoplatform.portal.config.DataStorage;
+import org.exoplatform.portal.config.UserACL;
+import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -32,7 +35,11 @@ public class UISiteAdministrationPortlet extends UIPortletApplication {
 
   public UISiteAdministrationPortlet() throws Exception {
     String userId = Util.getPortalRequestContext().getRemoteUser();
-    if (userId != null)
+    String portalName = Util.getUIPortal().getName();
+    DataStorage dataStorage = getApplicationComponent(DataStorage.class);
+    PortalConfig portalConfig = dataStorage.getPortalConfig(portalName);
+    UserACL userACL = getApplicationComponent(UserACL.class);
+    if (userACL.hasEditPermission(portalConfig, userId))
       addChild(UISiteAdminToolbar.class, null, UIPortletApplication.VIEW_MODE);
   }
 

@@ -12,30 +12,16 @@
 	String listHiddenActions = "";
 	for (int i = 0; i < listAction.size(); i++) {
 		String action = listAction.get(i).getName();
-		String actionLabel = _ctx.appRes(uicomponent.id + ".action." + action); 
+		String actionLabel = _ctx.appRes("UISiteAdminToolbar.action." + action); 
 		String actionIcon = action + "Icon";
-		String link = uicomponent.event(action);
-		if (i <= 1) {
+		String link = uicomponent.event(action);		
 	%>
-			<div class="IconBlock $actionIcon" onclick="eXo.portal.UIControlWorkspace.showWorkspace();">
-				<a href="$link">$actionLabel</a>
-			</div>      		
-	<%
-		} else {
-			listHiddenActions += "<div class=\"MenuItem NormalItem BlockIcon\"><a title=\"\" class=\"MenuItemRight\" href=\"" + link + "\"><div onclick=\"eXo.portal.UIControlWorkspace.showWorkspace();\" class=\"ItemIcon " + actionIcon + "\">" + actionLabel + "</div></a></div>";
-		}
+		<a class="Icon $actionIcon" href="$link">
+			<div onclick="eXo.portal.UIControlWorkspace.showWorkspace();">$actionLabel</div>
+		</a>			      		
+	<%	
 	}
-	%>
-	<div class="IconBlock ExpandMoreActionIcon" onclick="showMoreAction(this, 'UISiteAdminToolBar', 'ActionContainer', 'MenuItem',event);">
-	</div>
-	<div style="position:relative; top: 25px; left: -155px; float: left" >
-		<div id="ActionContainer" class="SiteAdminMenuItemDecorator">
-			<div class="SiteAdminLeftMiddleMenuDecorator">
-				<div class="SiteAdminRightMiddleMenuDecorator">
-					<div class="SiteAdminCenterMiddleMenuDecorator" >$listHiddenActions</div>
-				</div>
-			</div>		
-		</div>
-	</div>
-	<div style="clear:both"><span></span></div>
+	%>	
+	<div class="ExoLogo"><span></span></div>
+	<div style="clear:right"><span></span></div>
 </div>
