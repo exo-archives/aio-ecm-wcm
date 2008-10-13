@@ -114,7 +114,7 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
   public List<String> getRunningPortals(String userId) throws Exception {
     List<String> listPortalName = new ArrayList<String>();
     DataStorage service = getServices(DataStorage.class);
-    Query<PortalConfig> query = new Query<PortalConfig>(null, null, null, PortalConfig.class) ;
+    Query<PortalConfig> query = new Query<PortalConfig>(null, null, null, null, PortalConfig.class) ;
     PageList pageList = service.find(query) ;
     UserACL userACL = getServices(UserACL.class);
     for(Object object:pageList.getAll()) {
@@ -160,4 +160,10 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
   public Node getNodeView(Node node, Map<String, Object> context) throws Exception {
     return node;
   }
+
+@Override
+public String getLocalizedAndSubstituteMessage(Locale locale, String key,
+		String[] values) throws Exception {
+	return null;
+}
 }
