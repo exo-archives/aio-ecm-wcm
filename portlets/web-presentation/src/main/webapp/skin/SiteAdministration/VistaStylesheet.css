@@ -4,34 +4,34 @@
 	background-color: RGB(240, 240, 240);
 }
 
-.Icon {
+.UISiteAdminToolBar .Icon {
 	line-height: 30px;	
 	padding-left: 25px;	
 	margin-left: 15px;
 	float: right;
 }
 
-.AddPageIcon {
+.UISiteAdminToolBar .AddPageIcon {
 	background: url('DefaultSkin/icons/AddPage.gif') no-repeat left center;  
 }
 
-.EditPageIcon {
+.UISiteAdminToolBar .EditPageIcon {
 	background: url('DefaultSkin/icons/EditPage.gif') no-repeat left center;
 }
 
-.EditPortalIcon {
+.UISiteAdminToolBar .EditPortalIcon {
 	background: url('DefaultSkin/icons/EditPortal.gif') no-repeat left center;
 }
 
-.CreatePortalIcon{
+.UISiteAdminToolBar .CreatePortalIcon{
 	background: url('DefaultSkin/icons/AddPortal.gif') no-repeat left center;
 }
 
-.ChangePortalIcon {
+.UISiteAdminToolBar .ChangePortalIcon {
 	background: url('DefaultSkin/icons/Organization.gif') no-repeat left center;
 }
 
-.ExoLogo {
+.UISiteAdminToolBar .ExoLogo {
 	background: url('DefaultSkin/icons/favicon.ico') no-repeat left center;
 	height: 20px;
 	width: 20px;
