@@ -5,12 +5,10 @@
 		String actionLabel = _ctx.appRes("UIBannerViewModeContainer.action.QuickEdit") ;
 		if(uicomponent.isQuickEditable()){
 	%>
-		<div style="position: absolute; top: 0px; right: 0px">
+		<div style="position: absolute; top: 30px; right: 0px">
 		  <a class="QuickEdit" href="<%=uicomponent.event("QuickEdit")%>"></a>
 	  </div>
 	<%		
 		}	
 	%>
 </div>
-
-
