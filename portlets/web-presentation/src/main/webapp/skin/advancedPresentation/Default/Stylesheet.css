@@ -15,11 +15,11 @@
 	margin: auto;
 }
 
-.UIWizardPageSetInfo .OverflowContainer .PageNodeContainer {
+.UIAdvancedPresentationPortlet .UIWizardPageSetInfo .OverflowContainer .PageNodeContainer {
 	display: none;
 }
 
-.UIWizardPageSetInfo .OverflowContainer .SelectedPageInfo {
+.UIAdvancedPresentationPortlet .UIWizardPageSetInfo .OverflowContainer .SelectedPageInfo {
 	margin-left: 0;
 }
 
