@@ -7,7 +7,12 @@
   <creator>root</creator>
   
  	<portal-layout> 		
-		<application>
+      <application>
+	    <instance-id>portal#@owner@:/web-presentation/SiteAdministrationPortlet/admintoolbar</instance-id>
+	    <show-info-bar>false</show-info-bar>
+      </application>
+      
+ 	  <application>
 	    <instance-id>portal#@owner@:/iweb/BannerPortlet/banner</instance-id>
 	    <show-info-bar>false</show-info-bar>
 	  </application>

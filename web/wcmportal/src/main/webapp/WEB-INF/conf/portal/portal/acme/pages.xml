@@ -47,6 +47,22 @@
     </application>          
   </page>  
   <page>
+  	<page-id>portal::acme::admintoolbar</page-id>
+    <owner-type>portal</owner-type>
+    <owner-id>acme</owner-id>
+    <name>admintoolbar</name>
+    <title>Toolbar</title>
+	  <access-permissions>Everyone</access-permissions>
+	  <edit-permission>*:/platform/administrators</edit-permission>
+    <application>
+      <instance-id>portal#acme:/web-presentation/SiteAdministrationPortlet/admintoolbar</instance-id>
+      <title>Toolbar</title>
+      <show-info-bar>false</show-info-bar>      
+      <show-application-state>false</show-application-state>
+      <show-application-mode>false</show-application-mode>
+    </application>
+  </page> 
+  <page>
   	<page-id>portal::acme::contentviewer</page-id>
     <owner-type>portal</owner-type>
     <owner-id>acme</owner-id>
