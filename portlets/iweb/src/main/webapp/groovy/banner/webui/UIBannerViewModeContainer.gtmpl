@@ -1,3 +1,12 @@
+<% 
+	import org.exoplatform.webui.config.Event;
+	import org.exoplatform.webui.application.WebuiRequestContext;
+	import org.exoplatform.webui.application.portlet.PortletRequestContext;
+	
+	def rcontext = _ctx.getRequestContext() ;
+ 	rcontext.getJavascriptManager().importJavascript('eXo.CheckShowAdminToolBar','/iweb/javascript');
+ 	rcontext.getJavascriptManager().addOnLoadJavascript("isSiteToolbarShowed");
+%>
 <div style="position: relative"><span></span></div>
 <div class="$uicomponent.id">
 	<% uicomponent.renderChildren() %>
@@ -5,9 +14,9 @@
 		String actionLabel = _ctx.appRes("UIBannerViewModeContainer.action.QuickEdit") ;
 		if(uicomponent.isQuickEditable()){
 	%>
-		<div style="position: absolute; top: 30px; right: 0px">
-		  <a class="QuickEdit" href="<%=uicomponent.event("QuickEdit")%>"></a>
-	  </div>
+		  <div id="BannerQuickEdit" style="position: absolute; top: 30px; right: 0px">
+			  <a class="QuickEdit" href="<%=uicomponent.event("QuickEdit")%>"></a>
+		  </div>
 	<%		
 		}	
 	%>
