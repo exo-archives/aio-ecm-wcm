@@ -65,15 +65,17 @@ public class UIPublicationAction extends UIForm {
     
     Node node = publishingPanel.getNode();
     List<String> listPublishedPage = new ArrayList<String>();
-    Value[] navigationNodeURIs = node.getProperty("publication:navigationNodeURIs").getValues();
-    for (Value navigationNodeURI : navigationNodeURIs) {
-      listPublishedPage.add(navigationNodeURI.getString());
+    if (node.hasProperty("publication:navigationNodeURIs")) {
+      Value[] navigationNodeURIs = node.getProperty("publication:navigationNodeURIs").getValues();
+      for (Value navigationNodeURI : navigationNodeURIs) {
+        listPublishedPage.add(navigationNodeURI.getString());
+      }
+      publishedPages.setListNavigationNodeURI(listPublishedPage);    
+      
+      UIComponent parent = publishingPanel.getParent();
+      UIPublicationLogList publicationLogList = parent.findFirstComponentOfType(UIPublicationLogList.class);
+      publicationLogList.updateGrid();
     }
-    publishedPages.setListNavigationNodeURI(listPublishedPage);    
-    
-    UIComponent parent = publishingPanel.getParent();
-    UIPublicationLogList publicationLogList = parent.findFirstComponentOfType(UIPublicationLogList.class);
-    publicationLogList.updateGrid();
   }
   
   public static class AddActionListener extends EventListener<UIPublicationAction> {

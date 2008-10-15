@@ -141,9 +141,7 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
   /* (non-Javadoc)
    * @see org.exoplatform.services.ecm.publication.PublicationPlugin#changeState(javax.jcr.Node, java.lang.String, java.util.HashMap)
    */
-  public void changeState(Node node, String newState,
-      HashMap<String, String> context) throws IncorrectStateUpdateLifecycleException, Exception {
-
+  public void changeState(Node node, String newState, HashMap<String, String> context) throws IncorrectStateUpdateLifecycleException, Exception {
     Session session = node.getSession();
     node.setProperty(CURRENT_STATE, newState);
     PublicationService publicationService = getServices(PublicationService.class);
@@ -264,12 +262,12 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
     WCMConfigurationService configurationService = getServices(WCMConfigurationService.class);
     StringBuilder windowId = new StringBuilder();
     windowId.append(PortalConfig.PORTAL_TYPE)
-    .append("#")
-    .append(Util.getUIPortal().getOwner())
-    .append(":")
-    .append(configurationService.getPublishingPortletName())
-    .append("/")
-    .append(IdGenerator.generate());
+            .append("#")
+            .append(Util.getUIPortal().getOwner())
+            .append(":")
+            .append(configurationService.getPublishingPortletName())
+            .append("/")
+            .append(IdGenerator.generate());
     portlet.setInstanceId(windowId.toString());
 
     // Add preferences to portlet
@@ -279,27 +277,27 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
     portletPreferences.setOwnerId(Util.getUIPortal().getOwner());
     ArrayList<Preference> listPreference = new ArrayList<Preference>();
 
-    Preference preference = new Preference();
+    Preference preferenceR = new Preference();
     ArrayList<String> listValue = new ArrayList<String>();
     listValue.add(((ManageableRepository) content.getSession().getRepository()).getConfiguration().getName());
-    preference.setName("repository");
-    preference.setValues(listValue);
-    listPreference.add(preference);
+    preferenceR.setName("repository");
+    preferenceR.setValues(listValue);
+    listPreference.add(preferenceR);
 
-    preference = new Preference();
+    Preference preferenceW = new Preference();
     listValue = new ArrayList<String>();
     listValue.add(content.getSession().getWorkspace().getName());
-    preference.setName("workspace");
-    preference.setValues(listValue);
-    listPreference.add(preference);
+    preferenceW.setName("workspace");
+    preferenceW.setValues(listValue);
+    listPreference.add(preferenceW);
 
-    preference = new Preference();
+    Preference preferenceN = new Preference();
     listValue = new ArrayList<String>();
     listValue.add(content.getUUID());
-    preference.setName("nodeUUID");
-    preference.setValues(listValue);
-
-    listPreference.add(preference);
+    preferenceN.setName("nodeUUID");
+    preferenceN.setValues(listValue);
+    listPreference.add(preferenceN);
+    
     portletPreferences.setPreferences(listPreference);
 
     DataStorage dataStorage = getServices(DataStorage.class);
@@ -310,48 +308,12 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
     listPortlet.add(portlet);
     page.setChildren(listPortlet);
     userPortalConfigService.update(page);
-
-    // Add properties to node
-    Session session = content.getSession();
-    ValueFactory valueFactory = session.getValueFactory();
-    ArrayList<Value> listTmp;
-
-    if (content.hasProperty("publication:navigationNodeURIs")) {
-      listTmp = new ArrayList<Value>(Arrays.asList(content.getProperty("publication:navigationNodeURIs").getValues()));
-    } else {
-      listTmp = new ArrayList<Value>();
-    }
-    String uris = "";
-    for (String uri : getNavigationNodeUriByPage(page)) {
-      listTmp.add(valueFactory.createValue(uri));
-      uris += uri + ", ";
-    }
-    content.setProperty("publication:navigationNodeURIs", listTmp.toArray(new Value[0]));
-
-    if (content.hasProperty("publication:webPageIDs")) {
-      listTmp = new ArrayList<Value>(Arrays.asList(content.getProperty("publication:webPageIDs").getValues()));
-    } else {
-      listTmp = new ArrayList<Value>();
-    }
-    listTmp.add(valueFactory.createValue(page.getPageId()));
-    content.setProperty("publication:webPageIDs", listTmp.toArray(new Value[0]));
-
-    if (content.hasProperty("publication:applicationIDs")) {
-      listTmp = new ArrayList<Value>(Arrays.asList(content.getProperty("publication:applicationIDs").getValues()));
-    } else {
-      listTmp = new ArrayList<Value>();
-    }
-    listTmp.add(valueFactory.createValue(portlet.getInstanceId()));
-    content.setProperty("publication:applicationIDs",  listTmp.toArray(new Value[0]));
-
+    
+    // Update state
     if (!content.getProperty("publication:currentState").getString().equals(PUBLISHED))
       changeState(content, PUBLISHED, null);
-
-    PublicationService publicationService = getServices(PublicationService.class);
-    String[] logs = new String[] {new Date().toString(), PUBLISHED, session.getUserID(), "PublicationService.WCMPublicationPlugin.nodePublished", uris};
-    publicationService.addLog(content, logs);
-
-    session.save();
+    
+    updateLifecyleOnChangePage(page);
   }
 
   /* (non-Javadoc)
@@ -364,18 +326,16 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
     ArrayList<Value> listApplicationIDs = new ArrayList<Value>(Arrays.asList(content.getProperty("publication:applicationIDs").getValues()));
     ArrayList<Value> listWebPageIDs = new ArrayList<Value>(Arrays.asList(content.getProperty("publication:webPageIDs").getValues()));
     ArrayList<Value> listNavigationNodeURIs = new ArrayList<Value>(Arrays.asList(content.getProperty("publication:navigationNodeURIs").getValues()));
-    String uris = "";
     for (Object object : page.getChildren()) {
       if (object instanceof Application) {
         Application application = (Application) object;
         for (Value value : content.getProperty("publication:applicationIDs").getValues()) {
-          if (value.getString().equals(application.getInstanceId())) {
+          if (value.getString().split("@")[1].equals(application.getInstanceId())) {
             children.remove(object);
             listApplicationIDs.remove(value);
             listWebPageIDs.remove(valueFactory.createValue(page.getPageId()));
-            for (String uri : getNavigationNodeUriByPage(page)) {
+            for (String uri : getListPageNavigationUri(page)) {
               listNavigationNodeURIs.remove(valueFactory.createValue(uri));
-              uris += uri + ", ";
             }
           }
         }
@@ -384,20 +344,14 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
     page.setChildren(children);
     UserPortalConfigService userPortalConfigService = getServices(UserPortalConfigService.class);
     userPortalConfigService.update(page);
-    content.setProperty("publication:applicationIDs", listApplicationIDs.toArray(new Value[0]));
-    content.setProperty("publication:webPageIDs", listWebPageIDs.toArray(new Value[0]));
-    content.setProperty("publication:navigationNodeURIs", listNavigationNodeURIs.toArray(new Value[0]));
-
-    PublicationService publicationService = getServices(PublicationService.class);
-    String[] logs = new String[] {new Date().toString(), PUBLISHED, session.getUserID(), "PublicationService.WCMPublicationPlugin.nodeRemoved", uris};
-    publicationService.addLog(content, logs);
-
-    session.save();
-
+    
+    // Update state
     Value[] listValues = content.getProperty("publication:navigationNodeURIs").getValues();
     if (listValues.length == 0) {
       changeState(content, UNPUBLISHED, null);
     }
+    
+    updateLifecyleOnChangePage(page);
   }
 
   /**
@@ -407,7 +361,7 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
    * 
    * @return the services
    */
-  private List<String> getNavigationNodeUriByPage(Page page) throws Exception {
+  public List<String> getListPageNavigationUri(Page page) throws Exception {
     List<String> listPageNavigationUri = new ArrayList<String>();
     DataStorage dataStorage = getServices(DataStorage.class);    
     RequestContext requestContext = WebuiRequestContext.getCurrentInstance();
@@ -425,7 +379,7 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
     return listPageNavigationUri;
   }
 
-  private <T> T getServices(Class<T> clazz) {
+  public <T> T getServices(Class<T> clazz) {
     ExoContainer exoContainer = ExoContainerContext.getCurrentContainer();
     return clazz.cast(exoContainer.getComponentInstanceOfType(clazz));
   }
