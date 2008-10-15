@@ -17,6 +17,7 @@
 package org.exoplatform.wcm.presentation.acp;
 
 import javax.portlet.PortletMode;
+import javax.portlet.PortletPreferences;
 
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -48,8 +49,12 @@ public class UIPresentationContainer extends UIContainer{
   }
 
   public boolean isQuickEditable() throws Exception {
-    UIAdvancedPresentationPortlet uiportlet = getAncestorOfType(UIAdvancedPresentationPortlet.class);
-    return uiportlet.canEditPortlet();
+    PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
+    PortletPreferences prefs = portletRequestContext.getRequest().getPreferences();
+    boolean isQuickEdit = Boolean.parseBoolean(prefs.getValue("ShowQuickEdit", null));
+    UIAdvancedPresentationPortlet uiPresentationPortlet = getAncestorOfType(UIAdvancedPresentationPortlet.class);
+    if (isQuickEdit) return uiPresentationPortlet.canEditPortlet();
+    return false;
   }
 
   public String getPortletId() {
