@@ -82,6 +82,7 @@ public interface WCMPublicationService {
   */
  public Map<String, WebpagePublicationPlugin> getWebpagePublicationPlugins();
  
+ public boolean isEnrolledInWCMLifecycle(Node node) throws NotInPublicationLifecycleException, Exception;
  /**
   * Enroll in a web page publication lifecycle. The method will be retrieve the
   * web page publication lifecycle by lifecycle name and enroll to lifecycle

@@ -183,5 +183,14 @@ public class WCMPublicationServiceImpl implements WCMPublicationService, Startab
    */
   public void stop() {
 
+  }
+
+  public boolean isEnrolledInWCMLifecycle(Node node) throws NotInPublicationLifecycleException, Exception {
+    if(!publicationService.isNodeEnrolledInLifecycle(node))
+      return false;
+    String lifecyleName = publicationService.getNodeLifecycleName(node);
+    if(publicationPlugins.containsKey(lifecyleName))
+      return true;
+    throw new NotInWCMPublicationException();
   }   
 }
