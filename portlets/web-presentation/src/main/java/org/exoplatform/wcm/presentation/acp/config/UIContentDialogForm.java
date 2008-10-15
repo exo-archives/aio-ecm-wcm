@@ -182,10 +182,11 @@ public class UIContentDialogForm extends UIDialogForm {
       UIContentDialogForm uiContentDialogForm = event.getSource();
       UIQuickCreationWizard uiQuickCreationWizard = uiContentDialogForm.getAncestorOfType(UIQuickCreationWizard.class);
       UIPortletConfig uiPortletConfig = uiContentDialogForm.getAncestorOfType(UIPortletConfig.class);
-      UINameWebContentForm uiNameWebContentForm = uiQuickCreationWizard.getChild(UINameWebContentForm.class);
+      UIWebConentNameTabForm uiWebConentNameTabForm = uiQuickCreationWizard.getChild(UIWebConentNameTabForm.class);
+      UINameWebContentForm uiNameWebContentForm = uiWebConentNameTabForm.getChild(UINameWebContentForm.class);
       if(uiPortletConfig.isNewConfig()) {
         String portalName = Util.getUIPortal().getName();
-        LivePortalManagerService livePortalManagerService = uiNameWebContentForm.getApplicationComponent(LivePortalManagerService.class);
+        LivePortalManagerService livePortalManagerService = uiContentDialogForm.getApplicationComponent(LivePortalManagerService.class);
         SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
         Node portalNode = livePortalManagerService.getLivePortal(portalName, sessionProvider);
         WebSchemaConfigService webSchemaConfigService = uiNameWebContentForm.getApplicationComponent(WebSchemaConfigService.class);

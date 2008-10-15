@@ -16,20 +16,31 @@
  */
 package org.exoplatform.wcm.presentation.acp.config.selector;
 
+import java.util.Map;
+import java.util.Set;
+
 import javax.jcr.Node;
 import javax.jcr.Session;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
 import org.exoplatform.ecm.webui.selector.UISelectable;
+import org.exoplatform.portal.config.UserPortalConfigService;
+import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.NodeIdentifier;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
+import org.exoplatform.services.wcm.publication.NotInWCMPublicationException;
+import org.exoplatform.services.wcm.publication.WCMPublicationService;
+import org.exoplatform.services.wcm.publication.WebpagePublicationPlugin;
 import org.exoplatform.wcm.presentation.acp.UIAdvancedPresentationPortlet;
 import org.exoplatform.wcm.presentation.acp.config.UIPortletConfig;
+import org.exoplatform.wcm.presentation.acp.config.UIWCMPublicationGrid;
+import org.exoplatform.wcm.presentation.acp.config.UIWelcomeScreen;
 import org.exoplatform.wcm.webui.selector.webcontent.UIWebContentPathSelector;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -59,7 +70,8 @@ import org.exoplatform.webui.form.ext.UIFormInputSetWithAction;
     events = {
       @EventConfig(listeners = UIWebContentSelectorForm.SaveActionListener.class),
       @EventConfig(listeners = UIWebContentSelectorForm.BackActionListener.class),
-      @EventConfig(listeners = UIWebContentSelectorForm.BrowseActionListener.class)
+      @EventConfig(listeners = UIWebContentSelectorForm.BrowseActionListener.class),
+      @EventConfig(listeners = UIWebContentSelectorForm.BrowsePublicationActionListener.class)
     }
 )
 
@@ -67,6 +79,8 @@ public class UIWebContentSelectorForm extends UIForm implements UISelectable{
 
   final static String PATH = "path".intern();
   final static String FIELD_PATH = "location".intern();
+  final static String PUBLICATION = "publication".intern();
+  final static String PUBLICATION_PATH = "PublicationPath".intern();
   private String repository;
   private String workspace;
   private String livePortalsPath;
@@ -88,6 +102,24 @@ public class UIWebContentSelectorForm extends UIForm implements UISelectable{
     setActions(new String[] {"Save", "Back"});
   }
 
+  public void init() throws Exception {
+    WCMPublicationService wcmService = getApplicationComponent(WCMPublicationService.class);
+    Map<String,WebpagePublicationPlugin> publicationPluginMap = wcmService.getWebpagePublicationPlugins();
+    Set<String> keySet = publicationPluginMap.keySet();
+    if (keySet.size() > 1) {
+      UIFormInputSetWithAction uiPublicationSelector = new UIFormInputSetWithAction(PUBLICATION);
+      uiPublicationSelector.addUIFormInput(new UIFormStringInput(PUBLICATION_PATH, PUBLICATION_PATH, null).setEditable(false));
+      uiPublicationSelector.setActionInfo(PUBLICATION_PATH, new String [] {"BrowsePublication"});
+      addChild(uiPublicationSelector);
+    } else {
+      for (String str: keySet) {
+        WebpagePublicationPlugin publicationPlugin = publicationPluginMap.get(str);
+        String lifecycleName = publicationPlugin.getLifecycleName();
+        addChild(new UIFormStringInput(PUBLICATION, PUBLICATION, lifecycleName).setEditable(false));
+      }
+    }
+  }
+
   public void doSelect(String selectField, Object value) throws Exception {
     getUIStringInput(selectField).setValue((String)value);
     showPopupComponent(null);
@@ -102,7 +134,7 @@ public class UIWebContentSelectorForm extends UIForm implements UISelectable{
     UIPopupWindow uiPopup = uiParent.getChild(UIPopupWindow.class);
     if( uiPopup == null)  uiPopup = uiParent.addChild(UIPopupWindow.class, null, null);
     uiPopup.setUIComponent(uiComponent);
-    uiPopup.setWindowSize(610, 300);
+    uiPopup.setWindowSize(750, 450);
     uiPopup.setResizable(true);
     uiPopup.setShow(true);
   }
@@ -122,10 +154,21 @@ public class UIWebContentSelectorForm extends UIForm implements UISelectable{
     }
   }
 
+  public static class BrowsePublicationActionListener extends EventListener<UIWebContentSelectorForm> {
+    public void execute(Event<UIWebContentSelectorForm> event) throws Exception {
+      UIWebContentSelectorForm uiWebContentSelector = event.getSource();
+      UIWCMPublicationGrid publicationGrid = uiWebContentSelector.createUIComponent(UIWCMPublicationGrid.class, null, null);
+      publicationGrid.setSourceComponent(uiWebContentSelector);
+      publicationGrid.updateGrid();
+      uiWebContentSelector.showPopupComponent(publicationGrid);
+    }    
+  }
+
   public static class SaveActionListener extends EventListener<UIWebContentSelectorForm> {
     public void execute(Event<UIWebContentSelectorForm> event) throws Exception {
       UIWebContentSelectorForm uiWebContentSelector = event.getSource();
-      String webContentPath = uiWebContentSelector.getUIStringInput(UIWebContentSelectorForm.PATH).getValue(); 
+      String webContentPath = uiWebContentSelector.getUIStringInput(UIWebContentSelectorForm.PATH).getValue();
+      String lifecycleName =  uiWebContentSelector.getUIStringInput(UIWebContentSelectorForm.PUBLICATION_PATH).getValue();
       if(webContentPath == null) {
         UIApplication uiApplication = uiWebContentSelector.getAncestorOfType(UIApplication.class);
         uiApplication.addMessage(new ApplicationMessage("UIWebContentSelector.msg.require-choose", null, ApplicationMessage.WARNING));
@@ -135,14 +178,35 @@ public class UIWebContentSelectorForm extends UIForm implements UISelectable{
       RepositoryService repositoryService = uiWebContentSelector.getApplicationComponent(RepositoryService.class);
       ManageableRepository manageableRepository = repositoryService.getRepository(uiWebContentSelector.getRepositoryName());
       Session session = SessionProvider.createSystemProvider().getSession(uiWebContentSelector.getWorkspace(), manageableRepository);
-      Node node = (Node) session.getItem(webContentPath);
-      NodeIdentifier identifier = NodeIdentifier.make(node);
+      Node webContent = (Node) session.getItem(webContentPath);
+      NodeIdentifier identifier = NodeIdentifier.make(webContent);
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
       PortletPreferences prefs = context.getRequest().getPreferences();
       prefs.setValue(UIAdvancedPresentationPortlet.REPOSITORY, identifier.getRepository());
       prefs.setValue(UIAdvancedPresentationPortlet.WORKSPACE, identifier.getWorkspace());
       prefs.setValue(UIAdvancedPresentationPortlet.UUID, identifier.getUUID());
       prefs.store();
+      WCMPublicationService wcmPublicationService = uiWebContentSelector.getApplicationComponent(WCMPublicationService.class);
+      UIWelcomeScreen welcomeScreen = uiWebContentSelector.getAncestorOfType(UIWelcomeScreen.class);
+      UIPortletConfig portletConfig = welcomeScreen.getAncestorOfType(UIPortletConfig.class);
+      if (portletConfig.isEditPortletInCreatePageWizard()) {
+        wcmPublicationService.enrollNodeInLifecycle(webContent, lifecycleName);
+      } else {
+        String pageId = Util.getUIPortal().getSelectedNode().getPageReference();
+        UserPortalConfigService upcService = uiWebContentSelector.getApplicationComponent(UserPortalConfigService.class);
+        Page page = upcService.getPage(pageId);
+        try {
+          if (!wcmPublicationService.isEnrolledInWCMLifecycle(webContent)) {
+            wcmPublicationService.enrollNodeInLifecycle(webContent, lifecycleName);
+            wcmPublicationService.updateLifecyleOnChangePage(page);
+          }
+        }catch (NotInWCMPublicationException e){
+          wcmPublicationService.unsubcribeLifecycle(webContent);
+          wcmPublicationService.enrollNodeInLifecycle(webContent, lifecycleName);
+          wcmPublicationService.updateLifecyleOnChangePage(page);
+        }
+      }
+
       UIPortletConfig uiPortletConfig = uiWebContentSelector.getAncestorOfType(UIPortletConfig.class);
       if(uiPortletConfig.isEditPortletInCreatePageWizard()) {
         uiPortletConfig.getChildren().clear();

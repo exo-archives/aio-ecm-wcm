@@ -116,7 +116,7 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
       if("QuickCreateWebContent".equals(radioValue)) {
         uiWelcomeScreen.setRendered(false);
         UIQuickCreationWizard uiQuickCreationWizard = uiPortletConfig.addChild(UIQuickCreationWizard.class, null, null);
-        uiQuickCreationWizard.getChild(UINameWebContentForm.class).init();
+        uiQuickCreationWizard.getChild(UIWebConentNameTabForm.class).init();
       } else if ("EditCurrentWebContent".equals(radioValue)) {
         // nhay vao buoc 2 lun
         uiWelcomeScreen.setRendered(false);
@@ -138,10 +138,12 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
         uiWelcomeScreen.addChild(radioInput);       
       } else if("SelectExistedWebContent".equals(radioValue)) {
         uiWelcomeScreen.setRendered(false);
-        uiPortletConfig.addChild(UIWebContentSelectorForm.class, null, null);
+        UIWebContentSelectorForm webContentSelectorForm = uiPortletConfig.addChild(UIWebContentSelectorForm.class, null, null);
+        webContentSelectorForm.init();
       } else if("SelectExistedDMS".equals(radioValue)) {
         uiWelcomeScreen.setRendered(false);
-        uiPortletConfig.addChild(UIDMSSelectorForm.class, null, null);
+        UIDMSSelectorForm dmSelectorForm = uiPortletConfig.addChild(UIDMSSelectorForm.class, null, null);
+        dmSelectorForm.init();
       }
     }
   }

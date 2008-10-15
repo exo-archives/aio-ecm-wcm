@@ -21,6 +21,7 @@ import javax.jcr.Session;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
+import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -30,13 +31,16 @@ import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
+import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
 import org.exoplatform.wcm.presentation.acp.UIAdvancedPresentationPortlet;
 import org.exoplatform.wcm.presentation.acp.config.quickcreation.UIQuickCreationWizard;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -46,7 +50,6 @@ import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.validator.IdentifierValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
-import org.exoplatform.webui.form.wysiwyg.UIFormWYSIWYGInput;
 
 /**
  * Created by The eXo Platform SAS Author : DANG TAN DUNG dzungdev@gmail.com Sep
@@ -106,6 +109,15 @@ import org.exoplatform.webui.form.wysiwyg.UIFormWYSIWYGInput;
   public static class SaveActionListener extends EventListener<UINameWebContentForm> {
     public void execute(Event<UINameWebContentForm> event) throws Exception {
       UINameWebContentForm uiNameWebContentForm = event.getSource();
+      UIWebConentNameTabForm webConentNameTabForm = uiNameWebContentForm.getAncestorOfType(UIWebConentNameTabForm.class);
+      UIWCMPublicationGrid wcPublicationGrid = webConentNameTabForm.getChild(UIWCMPublicationGrid.class);
+      String lifecycleNameSelected = wcPublicationGrid.getLifecycleNameSelected();
+      UIApplication uiApplication = uiNameWebContentForm.getAncestorOfType(UIApplication.class);
+      if (lifecycleNameSelected == null) {
+        uiApplication.addMessage(new ApplicationMessage("UINameWebContentForm.msg.non-lifecyclename", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
+        return;
+      }
       String portalName = Util.getUIPortal().getName();
       LivePortalManagerService livePortalManagerService = uiNameWebContentForm
       .getApplicationComponent(LivePortalManagerService.class);
@@ -149,6 +161,20 @@ import org.exoplatform.webui.form.wysiwyg.UIFormWYSIWYGInput;
       uiCDForm.setContentType("exo:webContent");
       uiCDForm.addNew(false);
       uiCDForm.resetProperties();
+      WCMPublicationService wcmPublicationService = uiNameWebContentForm.getApplicationComponent(WCMPublicationService.class);
+      wcmPublicationService.enrollNodeInLifecycle(webContentNode, lifecycleNameSelected);
+      UIPortletConfig portletConfig = uiQuickCreationWizard.getAncestorOfType(UIPortletConfig.class);
+      if (!portletConfig.isEditPortletInCreatePageWizard()) {
+        String pageId = Util.getUIPortal().getSelectedNode().getPageReference();
+        UserPortalConfigService upcService = uiNameWebContentForm.getApplicationComponent(UserPortalConfigService.class);
+        wcmPublicationService.updateLifecyleOnChangePage(upcService.getPage(pageId));
+      }
+      PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
+      PortletPreferences prefs = context.getRequest().getPreferences();
+      prefs.setValue(UIAdvancedPresentationPortlet.REPOSITORY, repositoryName);
+      prefs.setValue(UIAdvancedPresentationPortlet.WORKSPACE, workspaceName);
+      prefs.setValue(UIAdvancedPresentationPortlet.UUID, webContentNode.getUUID());
+      prefs.store();
       uiQuickCreationWizard.viewStep(2);
     }
   }

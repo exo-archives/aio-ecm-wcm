@@ -24,10 +24,10 @@ import org.exoplatform.wcm.presentation.acp.UIAdvancedPresentationPortlet;
 import org.exoplatform.wcm.presentation.acp.config.UIBaseWizard;
 import org.exoplatform.wcm.presentation.acp.config.UIContentDialogForm;
 import org.exoplatform.wcm.presentation.acp.config.UIMiscellaneousInfo;
-import org.exoplatform.wcm.presentation.acp.config.UINameWebContentForm;
 import org.exoplatform.wcm.presentation.acp.config.UIPermissionManager;
 import org.exoplatform.wcm.presentation.acp.config.UIPortletConfig;
 import org.exoplatform.wcm.presentation.acp.config.UISocialInfo;
+import org.exoplatform.wcm.presentation.acp.config.UIWebConentNameTabForm;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -60,7 +60,7 @@ import org.exoplatform.webui.event.EventListener;
 public class UIQuickCreationWizard extends UIBaseWizard {
 
   public UIQuickCreationWizard() throws Exception {
-    addChild(UINameWebContentForm.class,null,null).setRendered(true);
+    addChild(UIWebConentNameTabForm.class,null,null).setRendered(true);
     addChild(UIContentDialogForm.class,null,null).setRendered(false);
     addChild(UISocialInfo.class, null, null).setRendered(false);
     addChild(UIPermissionManager.class,null,null).setRendered(false);    

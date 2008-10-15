@@ -17,6 +17,7 @@
 package org.exoplatform.wcm.presentation.acp.config;
 
 import javax.jcr.Node;
+import javax.portlet.PortletPreferences;
 
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
@@ -24,6 +25,8 @@ import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.wcm.presentation.acp.UIAdvancedPresentationPortlet;
 import org.exoplatform.wcm.presentation.acp.UINonEditable;
+import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
@@ -71,8 +74,12 @@ public class UIPortletConfig extends UIContainer {
 
 
   public boolean isQuickEditable() throws Exception {
-    UIAdvancedPresentationPortlet uiportlet = getAncestorOfType(UIAdvancedPresentationPortlet.class);
-    return uiportlet.canEditPortlet();
+    PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
+    PortletPreferences prefs = portletRequestContext.getRequest().getPreferences();
+    boolean isQuickEdit = Boolean.parseBoolean(prefs.getValue("ShowQuickEdit", null));
+    UIAdvancedPresentationPortlet uiPresentationPortlet = getAncestorOfType(UIAdvancedPresentationPortlet.class);
+    if (isQuickEdit) return uiPresentationPortlet.canEditPortlet();
+    return false;
   }
 
   private boolean checkNewConfig(){

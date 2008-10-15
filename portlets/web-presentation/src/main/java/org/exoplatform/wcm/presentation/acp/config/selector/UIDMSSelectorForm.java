@@ -16,20 +16,31 @@
  */
 package org.exoplatform.wcm.presentation.acp.config.selector;
 
+import java.util.Map;
+import java.util.Set;
+
 import javax.jcr.Node;
 import javax.jcr.Session;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
 import org.exoplatform.ecm.webui.selector.UISelectable;
+import org.exoplatform.portal.config.UserPortalConfigService;
+import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.wcm.core.NodeIdentifier;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
+import org.exoplatform.services.wcm.publication.NotInWCMPublicationException;
+import org.exoplatform.services.wcm.publication.WCMPublicationService;
+import org.exoplatform.services.wcm.publication.WebpagePublicationPlugin;
 import org.exoplatform.wcm.presentation.acp.UIAdvancedPresentationPortlet;
 import org.exoplatform.wcm.presentation.acp.config.UIPortletConfig;
+import org.exoplatform.wcm.presentation.acp.config.UIWCMPublicationGrid;
+import org.exoplatform.wcm.presentation.acp.config.UIWelcomeScreen;
 import org.exoplatform.wcm.webui.selector.document.UIDocumentPathSelector;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -58,13 +69,17 @@ import org.exoplatform.webui.form.ext.UIFormInputSetWithAction;
     events = {
       @EventConfig(listeners = UIDMSSelectorForm.SaveActionListener.class),
       @EventConfig(listeners = UIDMSSelectorForm.BackActionListener.class),
-      @EventConfig(listeners = UIDMSSelectorForm.BrowseActionListener.class)
+      @EventConfig(listeners = UIDMSSelectorForm.BrowseActionListener.class),
+      @EventConfig(listeners = UIDMSSelectorForm.BrowsePublicationActionListener.class)
     }
 )
 public class UIDMSSelectorForm extends UIForm implements UISelectable{
 
   final static String PATH = "path".intern();
   final static String FIELD_PATH = "location".intern();
+  final static String PUBLICATION = "publication".intern();
+  final static String PUBLICATION_PATH = "PublicationPath".intern();
+
   private String repository;
   private String workspace;
   private String livePortalsPath;
@@ -84,6 +99,24 @@ public class UIDMSSelectorForm extends UIForm implements UISelectable{
     uiPathSelection.setActionInfo(PATH, new String[] {"Browse"});
     addChild(uiPathSelection);
     setActions(new String[] {"Save","Back"});
+  }
+
+  public void init() throws Exception {
+    WCMPublicationService wcmService = getApplicationComponent(WCMPublicationService.class);
+    Map<String,WebpagePublicationPlugin> publicationPluginMap = wcmService.getWebpagePublicationPlugins();
+    Set<String> keySet = publicationPluginMap.keySet();
+    if (keySet.size() > 1) {
+      UIFormInputSetWithAction uiPublicationSelector = new UIFormInputSetWithAction(PUBLICATION);
+      uiPublicationSelector.addUIFormInput(new UIFormStringInput(PUBLICATION_PATH, PUBLICATION_PATH, null).setEditable(false));
+      uiPublicationSelector.setActionInfo(PUBLICATION_PATH, new String [] {"BrowsePublication"});
+      addChild(uiPublicationSelector);
+    } else {
+      for (String str: keySet) {
+        WebpagePublicationPlugin publicationPlugin = publicationPluginMap.get(str);
+        String lifecycleName = publicationPlugin.getLifecycleName();
+        addChild(new UIFormStringInput(PUBLICATION, PUBLICATION, lifecycleName).setEditable(false));
+      }
+    }
   }
 
   public String getLivePortalPath() { return livePortalsPath; }
@@ -110,10 +143,21 @@ public class UIDMSSelectorForm extends UIForm implements UISelectable{
     uiPopup.setShow(true);
   }
 
+  public static class BrowsePublicationActionListener extends EventListener<UIDMSSelectorForm> {
+    public void execute(Event<UIDMSSelectorForm> event) throws Exception {
+      UIDMSSelectorForm uiDSelectorForm = event.getSource();
+      UIWCMPublicationGrid publicationGrid = uiDSelectorForm.createUIComponent(UIWCMPublicationGrid.class, null, null);
+      publicationGrid.setSourceComponent(uiDSelectorForm);
+      publicationGrid.updateGrid();
+      uiDSelectorForm.showPopupComponent(publicationGrid);
+    }
+  }
+
   public static class SaveActionListener extends EventListener<UIDMSSelectorForm> {
     public void execute(Event<UIDMSSelectorForm> event) throws Exception {
       UIDMSSelectorForm uiDMSSelectorForm = event.getSource();
       String dmsPath = uiDMSSelectorForm.getUIStringInput(UIDMSSelectorForm.PATH).getValue();
+      String lifecycleName =  uiDMSSelectorForm.getUIStringInput(UIWebContentSelectorForm.PUBLICATION_PATH).getValue();
       if(dmsPath == null) {
         UIApplication uiApplication = uiDMSSelectorForm.getAncestorOfType(UIApplication.class);
         uiApplication.addMessage(new ApplicationMessage("UIDMSSelectorForm.msg.require-choose", null, ApplicationMessage.WARNING));
@@ -123,14 +167,37 @@ public class UIDMSSelectorForm extends UIForm implements UISelectable{
       RepositoryService repositoryService = uiDMSSelectorForm.getApplicationComponent(RepositoryService.class);
       ManageableRepository manageableRepository = repositoryService.getRepository(uiDMSSelectorForm.getRepositoryName());
       Session session = SessionProviderFactory.createSystemProvider().getSession(uiDMSSelectorForm.getWorkspace(), manageableRepository);
-      Node node = (Node) session.getItem(dmsPath);
-      NodeIdentifier nodeIdentifier = NodeIdentifier.make(node);
+      Node webContent = (Node) session.getItem(dmsPath);
+      NodeIdentifier nodeIdentifier = NodeIdentifier.make(webContent);
       PortletRequestContext pContext = (PortletRequestContext) event.getRequestContext();
       PortletPreferences prefs = pContext.getRequest().getPreferences();
       prefs.setValue(UIAdvancedPresentationPortlet.REPOSITORY, nodeIdentifier.getRepository());
       prefs.setValue(UIAdvancedPresentationPortlet.WORKSPACE, nodeIdentifier.getWorkspace());
       prefs.setValue(UIAdvancedPresentationPortlet.UUID, nodeIdentifier.getUUID());
       prefs.store();
+
+      WCMPublicationService wcmPublicationService = uiDMSSelectorForm.getApplicationComponent(WCMPublicationService.class);
+      UIWelcomeScreen welcomeScreen = uiDMSSelectorForm.getAncestorOfType(UIWelcomeScreen.class);
+      UIPortletConfig portletConfig = welcomeScreen.getAncestorOfType(UIPortletConfig.class);
+      if (portletConfig.isEditPortletInCreatePageWizard()) {
+        wcmPublicationService.enrollNodeInLifecycle(webContent, lifecycleName);
+      } else {
+        String pageId = Util.getUIPortal().getSelectedNode().getPageReference();
+        UserPortalConfigService upcService = uiDMSSelectorForm.getApplicationComponent(UserPortalConfigService.class);
+        Page page = upcService.getPage(pageId);
+        try {
+          if (!wcmPublicationService.isEnrolledInWCMLifecycle(webContent)) {
+            wcmPublicationService.enrollNodeInLifecycle(webContent, lifecycleName);
+            wcmPublicationService.updateLifecyleOnChangePage(page);
+          }
+        }catch (NotInWCMPublicationException e){
+          wcmPublicationService.unsubcribeLifecycle(webContent);
+          wcmPublicationService.enrollNodeInLifecycle(webContent, lifecycleName);
+          wcmPublicationService.updateLifecyleOnChangePage(page);
+        }
+      }
+
+
       UIPortletConfig uiPortletConfig = uiDMSSelectorForm.getAncestorOfType(UIPortletConfig.class);
       if(uiPortletConfig.isEditPortletInCreatePageWizard()) {
         uiPortletConfig.getChildren().clear();
