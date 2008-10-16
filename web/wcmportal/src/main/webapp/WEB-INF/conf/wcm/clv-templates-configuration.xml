@@ -15,7 +15,7 @@
 	        </value-param>
 	        <value-param>
 	        	<name>portlet.template.path</name>
-	        	<value>war:/conf/wcm/artifacts/views/application-templates/content-list-viewer</value>
+	        	<value>war:/conf/wcm/artifacts/application-templates/content-list-viewer</value>
 	        </value-param>	    
           <object-param>        
             <name>default.folder.list.viewer</name>
