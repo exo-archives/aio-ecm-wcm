@@ -6,7 +6,7 @@
   <container template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
     <application>
       <instance-id>/web-presentation/SingleContentViewer</instance-id>
-      <title>Presentation</title>
+      <title>Single Content Presentation</title>
       <show-info-bar>false</show-info-bar>
       <show-application-state>false</show-application-state>    
       <show-application-mode>false</show-application-mode>

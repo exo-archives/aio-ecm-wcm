@@ -134,7 +134,7 @@
 	                <value>                 
 		                <object type="org.exoplatform.application.registry.Application">                     
 		                  <field  name="categoryName"><string>web</string></field>
-		                  <field name="applicationName"><string>AdvancedPresentationPortlet</string></field>
+		                  <field name="applicationName"><string>SingleContentViewer</string></field>
 						          <field name="displayName"><string>Web Presentation</string></field>
 		                  <field name="applicationType"><string>portlet</string></field>
 		                  <field name="applicationGroup"><string>web-presentation</string></field>
