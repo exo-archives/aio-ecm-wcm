@@ -313,7 +313,7 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
     if (!content.getProperty("publication:currentState").getString().equals(PUBLISHED))
       changeState(content, PUBLISHED, null);
     
-    updateLifecyleOnChangePage(page);
+//    updateLifecyleOnChangePage(page);
   }
 
   /* (non-Javadoc)
@@ -351,7 +351,7 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
       changeState(content, UNPUBLISHED, null);
     }
     
-    updateLifecyleOnChangePage(page);
+//    updateLifecyleOnChangePage(page);
   }
 
   /**

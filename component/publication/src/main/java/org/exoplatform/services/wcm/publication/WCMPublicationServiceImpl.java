@@ -16,10 +16,13 @@
  */
 package org.exoplatform.services.wcm.publication;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.jcr.Node;
+import javax.jcr.Value;
 
 import org.apache.commons.logging.Log;
 import org.exoplatform.portal.config.model.Page;
@@ -100,6 +103,11 @@ public class WCMPublicationServiceImpl implements WCMPublicationService, Startab
   public void enrollNodeInLifecycle(Node node, String lifecycleName) throws Exception {
     WebpagePublicationPlugin publicationPlugin = publicationPlugins.get(lifecycleName);
     publicationPlugin.addMixin(node);
+    node.setProperty("publication:lifecycleName", lifecycleName);
+    node.setProperty("publication:currentState", "enrolled"); 
+    List<Value> history = new ArrayList<Value>();
+    node.setProperty("publication:history", history.toArray(new Value[history.size()]));
+    node.getSession().save();
   }
   
   /* (non-Javadoc)
