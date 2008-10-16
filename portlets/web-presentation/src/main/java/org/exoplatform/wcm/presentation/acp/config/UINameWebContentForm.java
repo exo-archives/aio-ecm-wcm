@@ -160,7 +160,13 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
       uiCDForm.setNodePath(webContentNode.getPath());
       uiCDForm.setContentType("exo:webContent");
       uiCDForm.addNew(false);
-      uiCDForm.resetProperties();
+      uiCDForm.resetProperties();      
+      PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
+      PortletPreferences prefs = context.getRequest().getPreferences();
+      prefs.setValue(UIAdvancedPresentationPortlet.REPOSITORY, repositoryName);
+      prefs.setValue(UIAdvancedPresentationPortlet.WORKSPACE, workspaceName);
+      prefs.setValue(UIAdvancedPresentationPortlet.UUID, webContentNode.getUUID());
+      prefs.store();
       WCMPublicationService wcmPublicationService = uiNameWebContentForm.getApplicationComponent(WCMPublicationService.class);
       wcmPublicationService.enrollNodeInLifecycle(webContentNode, lifecycleNameSelected);
       UIPortletConfig portletConfig = uiQuickCreationWizard.getAncestorOfType(UIPortletConfig.class);
@@ -169,12 +175,6 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
         UserPortalConfigService upcService = uiNameWebContentForm.getApplicationComponent(UserPortalConfigService.class);
         wcmPublicationService.updateLifecyleOnChangePage(upcService.getPage(pageId));
       }
-      PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
-      PortletPreferences prefs = context.getRequest().getPreferences();
-      prefs.setValue(UIAdvancedPresentationPortlet.REPOSITORY, repositoryName);
-      prefs.setValue(UIAdvancedPresentationPortlet.WORKSPACE, workspaceName);
-      prefs.setValue(UIAdvancedPresentationPortlet.UUID, webContentNode.getUUID());
-      prefs.store();
       uiQuickCreationWizard.viewStep(2);
     }
   }
