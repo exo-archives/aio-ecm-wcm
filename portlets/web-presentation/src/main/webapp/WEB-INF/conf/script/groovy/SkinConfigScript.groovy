@@ -1,21 +1,21 @@
 SkinService.addSkin(
-    "web-presentation/AdvancedPresentationPortlet",
+    "web-presentation/SingleContentViewer",
     "Default",
-    "/web-presentation/skin/advancedPresentation/Default/Stylesheet.css",
+    "/web-presentation/skin/SingleContentViewer/Default/Stylesheet.css",
     ServletContext
 ) ;
 
 SkinService.addSkin(
-    "web-presentation/AdvancedPresentationPortlet",
+    "web-presentation/SingleContentViewer",
     "Vista",
-    "/web-presentation/skin/advancedPresentation/Vista/Stylesheet.css",
+    "/web-presentation/skin/SingleContentViewer/Vista/Stylesheet.css",
     ServletContext
 ) ;
  
 SkinService.addSkin(
-    "web-presentation/AdvancedPresentationPortlet",
+    "web-presentation/SingleContentViewer",
     "Mac",
-    "/web-presentation/skin/advancedPresentation/Mac/Stylesheet.css",
+    "/web-presentation/skin/SingleContentViewer/Mac/Stylesheet.css",
     ServletContext
 ) ;
 

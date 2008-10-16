@@ -1,0 +1,18 @@
+<div class="$uicomponent.id">
+	<%
+		def portletId = uicomponent.getPortletId();
+		def quickEditingBlockId = uicomponent.getPortletId() + "-QuickEditingBlock";
+		def rcontext = _ctx.getRequestContext() ;
+ 		rcontext.getJavascriptManager().importJavascript('eXo.wcm.Util','/eXoWCMResources/javascript');
+	  rcontext.getJavascriptManager().addOnLoadJavascript('eXo.wcm.insertQuickeditingBlock("' + portletId + '","' + quickEditingBlockId + '")');
+	  if(uicomponent.isQuickEditable()) {%>
+	<div style="position: relative; height: 0px;" id="<%=quickEditingBlockId%>">
+		<div style="position: absolute; right: 0px; top: 0px">
+			<a href="<%=uicomponent.event("QuickEdit")%>" title="<%= _ctx.appRes("UIPresentationContainer.title");%>"><div class="QuickEdit"><span></span></div></a>
+		</div>
+	</div>
+
+	<% } %>
+	<% uicomponent.renderChildren() %>
+
+</div>

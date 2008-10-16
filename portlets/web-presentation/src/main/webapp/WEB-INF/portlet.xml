@@ -4,14 +4,14 @@
              xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd">
              
   <portlet>
-		<description xml:lang="EN">Advanced Presentation Portlet</description>
-		<portlet-name>AdvancedPresentationPortlet</portlet-name>
-		<display-name>Advanced Content Presentation</display-name>
+		<description xml:lang="EN">Single Content Viewer Portlet</description>
+		<portlet-name>SingleContentViewer</portlet-name>
+		<display-name>Single Content Viewer</display-name>
 		<portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>
 		
 		<init-param>
       <name>webui.configuration</name>
-      <value>/WEB-INF/conf/portlet/advancedPresentation/webui/configuration.xml</value>			
+      <value>/WEB-INF/conf/portlet/SingleContentViewer/webui/configuration.xml</value>			
 		</init-param>
 		
 		<expiration-cache>0</expiration-cache>
@@ -21,11 +21,11 @@
 			<portlet-mode>edit</portlet-mode>
 		</supports>
 		<supported-locale>en</supported-locale>
-		<resource-bundle>locale.portlet.advancedPresentation.AdvancedPresentationPortlet</resource-bundle>
+		<resource-bundle>locale.portlet.SingleContentViewer.AdvancedPresentationPortlet</resource-bundle>
 		
 		<portlet-info>
-			<title>Advanced Presntation Portlet</title>
-			<short-title>Advanced Presentation</short-title>
+			<title>Single Content Viewer</title>
+			<short-title>Content Viewer</short-title>
 			<keywords>AdvancedPresentation</keywords>
 		</portlet-info>
  
