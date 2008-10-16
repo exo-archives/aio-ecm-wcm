@@ -9,7 +9,7 @@
 	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>*:/platform/administrators</edit-permission>
     <application>
-      <instance-id>portal#classic:/web-presentation/AdvancedPresentationPortlet/homepage</instance-id>
+      <instance-id>portal#classic:/web-presentation/SingleContentViewer/homepage</instance-id>
       <title>Homepage</title>
       <show-info-bar>false</show-info-bar>      
       <show-application-state>false</show-application-state>
@@ -25,7 +25,7 @@
 	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>*:/platform/administrators</edit-permission>
     <application>
-      <instance-id>portal#classic:/web-presentation/AdvancedPresentationPortlet/presentation</instance-id>
+      <instance-id>portal#classic:/web-presentation/SingleContentViewer/presentation</instance-id>
       <title>Presentation</title>
       <show-info-bar>false</show-info-bar>      
       <show-application-state>false</show-application-state>

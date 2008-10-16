@@ -9,7 +9,7 @@
 	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>*:/platform/administrators</edit-permission>
     <application>
-      <instance-id>portal#@owner@:/web-presentation/AdvancedPresentationPortlet/homepage</instance-id>
+      <instance-id>portal#@owner@:/web-presentation/SingleContentViewer/homepage</instance-id>
       <title>Homepage</title>
       <show-info-bar>false</show-info-bar>
       <show-application-state>false</show-application-state>
@@ -21,12 +21,12 @@
     <owner-type>portal</owner-type>
     <owner-id>@owner@</owner-id>
     <name>presentation</name>
-    <title>Presentation</title>
+    <title>Single Content Viewer</title>
 	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>*:/platform/administrators</edit-permission>
     <application>
-      <instance-id>portal#@owner@:/web-presentation/AdvancedPresentationPortlet/presentation</instance-id>
-      <title>Presentation</title>
+      <instance-id>portal#@owner@:/web-presentation/SingleContentViewer/presentation</instance-id>
+      <title>Single Content Viewer</title>
       <show-info-bar>false</show-info-bar>      
       <show-application-state>false</show-application-state>
       <show-application-mode>false</show-application-mode>
