@@ -21,6 +21,7 @@ import javax.jcr.Session;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
+import org.exoplatform.ecm.webui.form.validator.ECMNameValidator;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
@@ -48,7 +49,6 @@ import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
-import org.exoplatform.webui.form.validator.IdentifierValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 
 /**
@@ -67,7 +67,7 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
 
   public UINameWebContentForm() throws Exception {
     addUIFormInput(new UIFormStringInput(NAME_WEBCONTENT, NAME_WEBCONTENT, null).addValidator(
-        MandatoryValidator.class).addValidator(IdentifierValidator.class));
+        MandatoryValidator.class).addValidator(ECMNameValidator.class));
     UIFormTextAreaInput uiFormTextAreaInput = new UIFormTextAreaInput(SUMMARY_WEBCONTENT, SUMMARY_WEBCONTENT, null);
     uiFormTextAreaInput.setColumns(250);
     addUIFormInput(uiFormTextAreaInput);
