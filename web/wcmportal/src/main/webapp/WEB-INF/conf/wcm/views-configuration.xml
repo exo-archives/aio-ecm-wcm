@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<configuration>  	     
+  <external-component-plugins>
+    <target-component>org.exoplatform.services.cms.views.ManageViewService</target-component>
+    	<component-plugin> 
+        <name>manage.view.plugin</name>
+        <set-method>setManageViewPlugin</set-method>
+        <type>org.exoplatform.services.cms.views.impl.ManageViewPlugin</type>
+        <description>this plugin manage user view</description>
+        <init-params>        			      
+		      <object-param>	      
+		        <name>WCM-View</name>
+		        <description>View configuration of Admin</description>
+		        <object type="org.exoplatform.services.cms.views.ViewConfig">		          
+		          <field  name="name"><string>wcm-view</string></field>
+		          <field  name="permissions"><string>*:/platform/administrators</string></field>
+		          <field  name="template"><string>/jcr:system/exo:ecm/views/templates/ecm-explorer/ListView</string></field>	
+		          <field  name="tabList">
+                <collection type="java.util.ArrayList">               
+                  <value>
+                    <object type="org.exoplatform.services.cms.views.ViewConfig$Tab">
+                      <field  name="tabName"><string>Advanced Actions</string></field>
+                      <field  name="buttons">
+                      	<string>
+                      		viewPermissions; manageVersions; exportNode; importNode; manageCategories; taggingDocument; vote; Comment
+                      	</string>
+                      </field>
+                    </object>
+                  </value>                  
+                  <value>
+                    <object type="org.exoplatform.services.cms.views.ViewConfig$Tab">
+                      <field  name="tabName"><string>Basic Actions</string></field>
+                      <field  name="buttons">
+                      	<string>
+                      		managePublications; addFolder; addDocument; editDocument; upload
+                      	</string>
+                      </field>
+                    </object>
+                  </value>                  
+                </collection>
+              </field>	          
+		        </object>
+		      </object-param>		     
+		     </init-params>	
+      </component-plugin> 
+  </external-component-plugins>
+    	  
+</configuration>

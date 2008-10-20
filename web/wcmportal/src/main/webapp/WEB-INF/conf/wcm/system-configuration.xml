@@ -37,9 +37,7 @@
               <field  name="permissions"><string>{accessPermission}</string></field>
               <field  name="homePath"><string>{sitePath}</string></field>
               <field  name="icon"><string></string></field>
-              <field  name="views">
-              <string>admin-view</string>
-              </field>
+              <field  name="views"><string>wcm-view,admin-view</string></field>
               <field  name="viewPreferences"><boolean>false</boolean></field>
               <field  name="viewNonDocument"><boolean>true</boolean></field>
               <field  name="viewSideBar"><boolean>true</boolean></field>

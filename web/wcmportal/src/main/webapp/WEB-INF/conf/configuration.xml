@@ -45,9 +45,10 @@
 	<import>war:/conf/wcm/system-configuration.xml</import>
 	<import>war:/conf/wcm/publication-configuration.xml</import>  
   <import>war:/conf/wcm/drives-configuration.xml</import>
-  <import>war:/conf/wcm/templates-configuration.xml</import>
+  <import>war:/conf/wcm/nodetypes-templates-configuration.xml</import>
   <import>war:/conf/wcm/scripts-configuration.xml</import>	
   <import>war:/conf/wcm/clv-templates-configuration.xml</import>
+  <import>war:/conf/wcm/views-configuration.xml</import>
   <import>war:/conf/wcm/deployment-configuration.xml</import>    
 		
 </configuration>

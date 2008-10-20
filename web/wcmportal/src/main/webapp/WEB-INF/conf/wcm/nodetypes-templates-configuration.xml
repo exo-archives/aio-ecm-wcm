@@ -75,7 +75,7 @@
 	        </value-param>
 	        <value-param>
 	        	<name>storedLocation</name>
-	        	<value>war:/conf/wcm/artifacts/templates</value>
+	        	<value>war:/conf/wcm/artifacts/nodetypes-templates</value>
 	        </value-param>
 	        <value-param>
 	        	<name>repository</name>
@@ -83,7 +83,7 @@
 	        </value-param>	        
           <object-param>
             <name>template.configuration</name>
-            <description>configuration for the localtion of templates to inject in jcr</description>
+            <description>configuration for the localtion of nodetypes templates to inject in jcr</description>
             <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig">            	
               <field  name="nodeTypes">
                 <collection type="java.util.ArrayList">               
