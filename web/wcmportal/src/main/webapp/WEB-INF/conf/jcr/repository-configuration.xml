@@ -56,12 +56,10 @@
           <properties>
             <property name="indexDir" value="../temp/jcrlucenedb/index/system"/>            
             <property name="support-highlighting" value="true"/>
-			      <property name="excerptprovider-class" value="org.exoplatform.services.jcr.impl.core.query.lucene.DefaultHTMLExcerpt"/>
-			      <!--
+			      <property name="excerptprovider-class" value="org.exoplatform.services.jcr.impl.core.query.lucene.DefaultHTMLExcerpt"/>			      
 			      <property name="synonymprovider-class" value="org.exoplatform.services.jcr.impl.core.query.lucene.PropertiesSynonymProvider" />
-            <property name="synonymprovider-config-path" value="/synonyms.properties" />
-            <property name="indexing-configuration-path" value="/indexing-configuration.xml" />
-            -->
+            <property name="synonymprovider-config-path" value="war:/conf/jcr/synonyms.properties" />
+            <property name="indexing-configuration-path" value="war:/conf/jcr/indexing-configuration.xml" />            
             <property name="query-class" value="org.exoplatform.services.jcr.impl.core.query.QueryImpl" />
             <property name="spellchecker-class" value="org.exoplatform.services.jcr.impl.core.query.lucene.spell.LuceneSpellChecker$OneHourRefreshInterval"/>
           </properties>
@@ -109,12 +107,10 @@
           <properties>
             <property name="indexDir" value="../temp/jcrlucenedb/index/collaboration"/>
             <property name="support-highlighting" value="true"/>
-			      <property name="excerptprovider-class" value="org.exoplatform.services.jcr.impl.core.query.lucene.DefaultHTMLExcerpt"/>
-			      <!--
+			      <property name="excerptprovider-class" value="org.exoplatform.services.jcr.impl.core.query.lucene.DefaultHTMLExcerpt"/>			      
 			      <property name="synonymprovider-class" value="org.exoplatform.services.jcr.impl.core.query.lucene.PropertiesSynonymProvider" />
-            <property name="synonymprovider-config-path" value="/synonyms.properties" />
-            <property name="indexing-configuration-path" value="/indexing-configuration.xml" />
-            -->
+            <property name="synonymprovider-config-path" value="war:/conf/jcr/synonyms.properties" />
+            <property name="indexing-configuration-path" value="war:/conf/jcr/indexing-configuration.xml" />            
             <property name="query-class" value="org.exoplatform.services.jcr.impl.core.query.QueryImpl" />
             <property name="spellchecker-class" value="org.exoplatform.services.jcr.impl.core.query.lucene.spell.LuceneSpellChecker$FiveMinutesRefreshInterval"/>
             <!-- Available SpellChecker
