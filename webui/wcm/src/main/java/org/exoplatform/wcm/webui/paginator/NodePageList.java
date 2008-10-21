@@ -21,6 +21,7 @@ import java.util.List;
 
 import javax.jcr.NodeIterator;
 
+import org.exoplatform.commons.exception.ExoMessageException;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.services.jcr.impl.core.query.lucene.TwoWayRangeIterator;
 
@@ -40,27 +41,29 @@ public class NodePageList  extends PageList{
   
   public NodePageList(NodeIterator nodeIterator, int pageSize) {
     super(pageSize);
-    this.nodeIterator = nodeIterator;    
+    this.nodeIterator = nodeIterator;
+    this.setAvailablePage((int)nodeIterator.getSize());
   }   
   
   protected void populateCurrentPage(int page) throws Exception {
     //Iterate next
-    if(page>currentPage_) {
-      long skipNextNum = ((page-currentPage_)+1)*getPageSize();
+    if (page > currentPage_) {
+      long skipNextNum = (page - (currentPage_ + 1)) * getPageSize();
       nodeIterator.skip(skipNextNum);
-    }else if(page<currentPage_) {
+    } else if(page < currentPage_) {
       //Iterate back
-      long skipBackNum = ((currentPage_ - page) + 1)* getPageSize();
+      int currentPageSize = currentListPage_.size();
+      long skipBackNum = ((currentPage_ - page) * getPageSize()) + currentPageSize;      
       ((TwoWayRangeIterator)nodeIterator).skipBack(skipBackNum);
     }
     currentListPage_ = new ArrayList();
     int count = 0;
     while (nodeIterator.hasNext()) {
+      currentListPage_.add(nodeIterator.next());
       count ++;
       if(count == getPageSize()) {
         break;
-      }
-      currentListPage_.add(nodeIterator.next());
+      }      
     }
     currentPage_ = page;
   }
@@ -75,6 +78,15 @@ public class NodePageList  extends PageList{
   
   public List getCurrentPageData() throws Exception {
     return currentPage();
+  }
+  
+  public List getPage(int page) throws Exception {
+    if (page < 1 || page > availablePage_) {
+      Object[] args = { Integer.toString(page), Integer.toString(availablePage_) };
+      throw new ExoMessageException("PageList.page-out-of-range", args);
+    }
+    populateCurrentPage(page);
+    return currentListPage_;
   }
   
   public void changePage(int page) throws Exception {
