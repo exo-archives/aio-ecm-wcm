@@ -22,8 +22,8 @@
     <owner-id>classic</owner-id>
     <name>presentation</name>
     <title>Presentation</title>
-	  <access-permissions>Everyone</access-permissions>
-	  <edit-permission>*:/platform/administrators</edit-permission>
+	<access-permissions>Everyone</access-permissions>
+	<edit-permission>*:/platform/administrators</edit-permission>
     <application>
       <instance-id>portal#classic:/web-presentation/SingleContentViewer/presentation</instance-id>
       <title>Presentation</title>
@@ -31,15 +31,31 @@
       <show-application-state>false</show-application-state>
       <show-application-mode>false</show-application-mode>
     </application>
-  </page>        
+  </page>          
+  <page>
+  	<page-id>portal::classic::contentlistviewer</page-id>
+    <owner-type>portal</owner-type>
+    <owner-id>classic</owner-id>
+    <name>contentlistviewer</name>
+    <title>Content List Viewer</title>
+	<access-permissions>Everyone</access-permissions>
+	<edit-permission>*:/platform/administrators</edit-permission>
+    <application>
+      <instance-id>portal#classic:/web-presentation/ContentListViewerPortlet/contentlistviewer</instance-id>
+      <title>Content List Viewer</title>
+      <show-info-bar>true</show-info-bar>      
+      <show-application-state>true</show-application-state>
+      <show-application-mode>true</show-application-mode>
+    </application>
+  </page>
   <page>
   	<page-id>portal::classic::admintoolbar</page-id>
     <owner-type>portal</owner-type>
     <owner-id>classic</owner-id>
     <name>admintoolbar</name>
     <title>Toolbar</title>
-	  <access-permissions>Everyone</access-permissions>
-	  <edit-permission>*:/platform/administrators</edit-permission>
+	<access-permissions>Everyone</access-permissions>
+	<edit-permission>*:/platform/administrators</edit-permission>
     <application>
       <instance-id>portal#classic:/web-presentation/SiteAdministrationPortlet/admintoolbar</instance-id>
       <title>Toolbar</title>
@@ -98,8 +114,8 @@
     <owner-id>classic</owner-id>
     <name>contentviewer</name>
     <title>ContentViewer</title>
-	  <access-permissions>Everyone</access-permissions>
-	  <edit-permission>*:/platform/administrators</edit-permission>
+    <access-permissions>Everyone</access-permissions> 
+    <edit-permission>*:/platform/administrators</edit-permission>
     <application>
       <instance-id>portal#classic:/ecm/ContentViewerPortlet/contentviewer</instance-id>
       <title>contentviewer</title>
@@ -108,4 +124,5 @@
       <show-application-mode>false</show-application-mode>
     </application>
   </page>
+
 </page-set>

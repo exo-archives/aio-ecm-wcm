@@ -23,6 +23,12 @@
 			<page-reference>portal::classic::presentation</page-reference>	    
 		</node>	 
 		<node>
+			<uri>contentlistviewer</uri>
+			<name>contentlistviewer</name>
+			<label>List Viewer</label>
+			<page-reference>portal::classic::contentlistviewer</page-reference>	    
+		</node>	 
+		<node>
 			<uri>search</uri>
 			<name>search</name>
 			<label>#{portal.classic.search}</label>
