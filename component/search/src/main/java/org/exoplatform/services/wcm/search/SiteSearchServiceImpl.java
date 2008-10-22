@@ -33,10 +33,11 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
-import org.exoplatform.services.wcm.search.AbstractQueryBuilder.LOGICAL;
-import org.exoplatform.services.wcm.search.AbstractQueryBuilder.ORDERBY;
-import org.exoplatform.services.wcm.search.AbstractQueryBuilder.PATH_TYPE;
-import org.exoplatform.services.wcm.search.AbstractQueryBuilder.QueryTermHelper;
+import org.exoplatform.services.wcm.utils.SQLQueryBuilder;
+import org.exoplatform.services.wcm.utils.AbstractQueryBuilder.LOGICAL;
+import org.exoplatform.services.wcm.utils.AbstractQueryBuilder.ORDERBY;
+import org.exoplatform.services.wcm.utils.AbstractQueryBuilder.PATH_TYPE;
+import org.exoplatform.services.wcm.utils.AbstractQueryBuilder.QueryTermHelper;
 
 /**
  * Created by The eXo Platform SAS
@@ -174,8 +175,10 @@ public class SiteSearchServiceImpl implements SiteSearchService {
       }else {
         queryBuilder.equal("jcr:primaryType",type,LOGICAL.OR);
       }
-    }
-    queryBuilder.closeGroup();
+    }       
+    //select * from nt:base where jcr:path lile folderPath/% and NOT jcr:path like folderPath/%/% AND (
+    //jcr:primaryType like exo:artile OR jcr:primaryType like exo:webocontent OR jcr:mixinTypes like exo:htmlFile
+    queryBuilder.closeGroup();   
   }
   
   /**
