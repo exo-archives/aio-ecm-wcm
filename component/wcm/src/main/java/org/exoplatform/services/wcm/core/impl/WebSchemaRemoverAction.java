@@ -40,7 +40,7 @@ public class WebSchemaRemoverAction implements Action{
    Node node = (Node)context.get("currentItem");   
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     WebSchemaConfigService schemaConfigService = 
-      (WebSchemaConfigService) container.getComponentInstanceOfType(WebSchemaConfigService.class);
+      (WebSchemaConfigService) container.getComponentInstanceOfType(WebSchemaConfigService.class);    
     SessionProvider sessionProvider = SessionProvider.createSystemProvider();
     try {      
       schemaConfigService.updateSchemaOnRemove(node, sessionProvider);

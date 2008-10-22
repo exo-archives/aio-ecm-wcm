@@ -16,6 +16,8 @@
  */
 package org.exoplatform.services.wcm.webcontent;
 
+import java.util.List;
+
 import javax.jcr.Node;
 import javax.jcr.Session;
 
@@ -24,19 +26,34 @@ import org.exoplatform.services.html.parser.HTMLParser;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.BaseWebSchemaHandler;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
+import org.exoplatform.services.wcm.webcontent.TOCGeneratorService.Heading;
 
 /**
- * Created by The eXo Platform SAS
+ * Created by The eXo Platform SAS.
+ * 
  * @author : Hoa.Pham
- *          hoa.pham@exoplatform.com
- * Jun 23, 2008  
+ * hoa.pham@exoplatform.com
+ * Jun 23, 2008
  */
 
 public class HTMLFileSchemaHandler extends BaseWebSchemaHandler {
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.core.BaseWebSchemaHandler#getHandlerNodeType()
+   */
   protected String getHandlerNodeType() {   return "nt:file"; }
-  protected String getParentNodeType() { return "exo:webFolder"; }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.core.BaseWebSchemaHandler#getParentNodeType()
+   */
+  protected String getParentNodeType() { return "exo:webFolder"; }  
+  
+  /** The link extractor. */
+  private LinkExtractor linkExtractor = new LinkExtractor();  
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.core.BaseWebSchemaHandler#matchHandler(javax.jcr.Node, org.exoplatform.services.jcr.ext.common.SessionProvider)
+   */
   @SuppressWarnings("unused")
   public boolean matchHandler(Node node, SessionProvider sessionProvider) throws Exception {
     if(!matchNodeType(node))
@@ -50,10 +67,28 @@ public class HTMLFileSchemaHandler extends BaseWebSchemaHandler {
     return true;
   }
 
+  /**
+   * Match node type.
+   * 
+   * @param node the node
+   * 
+   * @return true, if successful
+   * 
+   * @throws Exception the exception
+   */
   private boolean matchNodeType(Node node) throws Exception{    
     return node.getPrimaryNodeType().getName().equals("nt:file");
   }
 
+  /**
+   * Match mime type.
+   * 
+   * @param node the node
+   * 
+   * @return true, if successful
+   * 
+   * @throws Exception the exception
+   */
   private boolean matchMimeType(Node node) throws Exception {
     String mimeType = getFileMimeType(node);       
     if("text/html".equals(mimeType))
@@ -63,17 +98,38 @@ public class HTMLFileSchemaHandler extends BaseWebSchemaHandler {
     return false;
   }
 
+  /**
+   * Checks if is in web content.
+   * 
+   * @param file the file
+   * 
+   * @return true, if is in web content
+   * 
+   * @throws Exception the exception
+   */
   public boolean isInWebContent(Node file) throws Exception{
     if(file.getParent().isNodeType("exo:webContent")) {
       return file.isNodeType("exo:htmlFile");
     } 
     return false;
   }
-  
+
+  /**
+   * Match parent node type.
+   * 
+   * @param file the file
+   * 
+   * @return true, if successful
+   * 
+   * @throws Exception the exception
+   */
   private boolean matchParentNodeType(Node file) throws Exception{
     return file.getParent().isNodeType("exo:webFolder");
   }
-  
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.core.BaseWebSchemaHandler#onCreateNode(javax.jcr.Node, org.exoplatform.services.jcr.ext.common.SessionProvider)
+   */
   @SuppressWarnings("unused")
   public void onCreateNode(final Node file, SessionProvider sessionProvider) throws Exception {
     Session session = file.getSession();    
@@ -102,13 +158,27 @@ public class HTMLFileSchemaHandler extends BaseWebSchemaHandler {
     tempFolder.remove();    
     session.save();
   }
-  
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.core.BaseWebSchemaHandler#onModifyNode(javax.jcr.Node, org.exoplatform.services.jcr.ext.common.SessionProvider)
+   */
   @SuppressWarnings("unused")
-  public void onModifyNode(final Node node, final SessionProvider sessionProvider) throws Exception{
-    if(!isInWebContent(node)) return;
+  public void onModifyNode(final Node node, final SessionProvider sessionProvider) throws Exception{   
+    Node parent = node.getParent();
+    if(!parent.isNodeType("exo:webContent"))
+      return;    
+    if (!parent.isCheckedOut() || parent.isLocked() || !node.isCheckedOut() || node.isLocked()) {
+      return;
+    }
     String htmlData = node.getNode("jcr:content").getProperty("jcr:data").getString();
     HTMLDocument document = HTMLParser.createDocument(htmlData);
-    //TODO something with TocGenerator
+    List<String> newLinks = linkExtractor.extractLink(document);
+    linkExtractor.updateLinks(parent,newLinks);
+    TOCGeneratorService tocGeneratorService = getService(TOCGeneratorService.class);
+    List<Heading> headings = tocGeneratorService.extractHeadings(document);
+    if(headings != null) {
+      tocGeneratorService.updateTOC(node,headings);
+    }    
   }
-  
+
 }

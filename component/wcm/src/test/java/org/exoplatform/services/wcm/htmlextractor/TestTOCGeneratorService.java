@@ -18,6 +18,7 @@ package org.exoplatform.services.wcm.htmlextractor;
 
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -25,8 +26,11 @@ import javax.jcr.Node;
 import javax.jcr.Session;
 import javax.jcr.Value;
 
+import org.exoplatform.services.html.HTMLDocument;
+import org.exoplatform.services.html.parser.HTMLParser;
 import org.exoplatform.services.wcm.BaseTestCase;
 import org.exoplatform.services.wcm.webcontent.TOCGeneratorService;
+import org.exoplatform.services.wcm.webcontent.TOCGeneratorService.Heading;
 
 /**
  * Created by The eXo Platform SAS
@@ -94,11 +98,17 @@ public class TestTOCGeneratorService extends BaseTestCase {
     fileMap.put("htmlTwo", content2);
     fileMap.put("htmlThree", content3);
     fileMap.put("htmlFour", content4);
-
+    
+    
     Node myWebContent = createWebContentNodeToTest(session, "myWebContent", fileMap);
-    tocService.generateTOC(myWebContent);
+    HTMLDocument document = HTMLParser.createDocument(content1);
+    Node htmlOne = myWebContent.getNode("htmlOne");
+    List<Heading> headings = tocService.extractHeadings(document);
+    tocService.updateTOC(htmlOne,headings);
+    session.save();
+    //tocService.generateTOC(myWebContent);
 
-    Value[] values = myWebContent.getNode("htmlOne").getProperty("exo:htmlTOC").getValues();
+    Value[] values = htmlOne.getProperty("exo:htmlTOC").getValues();
     assertEquals(6, values.length);
     String tag1 = "tagName=<h1>the first h1 tag</h1>|headingLevel=1|headingNumberText=1";
     String tag2 = "tagName=<h2>the first h2 tag</h2>|headingLevel=2|headingNumberText=1.1";

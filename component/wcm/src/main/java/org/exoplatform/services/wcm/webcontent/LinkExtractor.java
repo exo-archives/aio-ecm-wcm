@@ -21,16 +21,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.jcr.Node;
-import javax.jcr.NodeIterator;
 import javax.jcr.Property;
-import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.ValueFactory;
-import javax.jcr.query.Query;
-import javax.jcr.query.QueryManager;
 
+import org.exoplatform.services.html.HTMLDocument;
 import org.exoplatform.services.html.HTMLNode;
-import org.exoplatform.services.html.parser.HTMLParser;
 import org.exoplatform.services.wcm.link.HyperLinkUtilExtended;
 import org.exoplatform.services.wcm.link.LinkBean;
 
@@ -40,46 +36,36 @@ import org.exoplatform.services.wcm.link.LinkBean;
  *          chuong_phan@exoplatform.com
  * Jul 29, 2008  
  */
-public class LinkExtractorService {
-  
-  
-  public LinkExtractorService() {
+public class LinkExtractor {
+
+
+  public LinkExtractor() {
   }
-  
+
   /**
    * Extract all link (<code>a</code>, <code>iframe</code>, <code>frame</code>, <code>href</code>) 
-   * and all image (<code>img</code>) from all HTML file from current web content node 
+   * and all image (<code>img</code>) from html document
    * 
-   * @param webContent the current web content node
+   * @param htmlDocument the html document
    * 
    * @return the list of link's URL
    * 
    * @throws Exception the exception
    */
-  public List<String> extractLink(Node webContent) throws Exception {
-    List<String> listHyperlink = new ArrayList<String>();
-    Session session = webContent.getSession();
-    QueryManager queryManager = session.getWorkspace().getQueryManager() ;
-    Query query = queryManager.createQuery("select * from exo:htmlFile where jcr:path like '" + webContent.getPath() + "/%'", Query.SQL) ;
-    NodeIterator nodeIterator = query.execute().getNodes() ;
-    for (;nodeIterator.hasNext();) {
-      Node htmlFile = nodeIterator.nextNode();
-      Node jcrContent = htmlFile.getNode("jcr:content");
-      Property jcrData = jcrContent.getProperty("jcr:data");
-      String sContent = jcrData.getString();
-      HTMLNode htmlRootNode = HTMLParser.createDocument(sContent).getRoot();
-      HyperLinkUtilExtended linkUtil = new HyperLinkUtilExtended();
-      for (Iterator<String> iterLink = linkUtil.getSiteLink(htmlRootNode).iterator(); iterLink.hasNext();) {
-        String link = iterLink.next();
-        if (!listHyperlink.contains(link))
-          listHyperlink.add(link);
-      }
-      for (Iterator<String> iterImage = linkUtil.getImageLink(htmlRootNode).iterator(); iterImage.hasNext();){
-        String image = iterImage.next();
-        if (!listHyperlink.contains(image))
-          listHyperlink.add(image);
-      }
+  public List<String> extractLink(HTMLDocument htmlDocument) throws Exception {
+    List<String> listHyperlink = new ArrayList<String>();        
+    HTMLNode htmlRootNode = htmlDocument.getRoot();
+    HyperLinkUtilExtended linkUtil = new HyperLinkUtilExtended();
+    for (Iterator<String> iterLink = linkUtil.getSiteLink(htmlRootNode).iterator(); iterLink.hasNext();) {
+      String link = iterLink.next();
+      if (!listHyperlink.contains(link))
+        listHyperlink.add(link);
     }
+    for (Iterator<String> iterImage = linkUtil.getImageLink(htmlRootNode).iterator(); iterImage.hasNext();){
+      String image = iterImage.next();
+      if (!listHyperlink.contains(image))
+        listHyperlink.add(image);
+    }   
     return listHyperlink;
   }
 
@@ -87,22 +73,16 @@ public class LinkExtractorService {
    * Add exo:links (multi value) property of exo:linkable node type to web content node, with pattern
    * 
    * @param webContent the current web content node
+   * @param newLinks the list of new links will be updated
    *  
    * @throws Exception the exception
    */
-  public void createLinkNode(Node webContent) throws Exception {
-    
-    if (!webContent.isCheckedOut() || webContent.isLocked()) {
-      return;
-    }
-
-    ValueFactory valueFactory = webContent.getSession().getValueFactory(); 
-    
+  public void updateLinks(Node webContent, List<String> newLinks) throws Exception {   
+    ValueFactory valueFactory = webContent.getSession().getValueFactory();    
     if (webContent.canAddMixin("exo:linkable")) {
       webContent.addMixin("exo:linkable");
     }
-    
-    // get old link from jcr
+    // get old link from exo:links property
     List<String> listExtractedLink = new ArrayList<String>();
     if (webContent.hasProperty("exo:links")) {
       Property property = webContent.getProperty("exo:links");
@@ -110,28 +90,23 @@ public class LinkExtractorService {
         listExtractedLink.add(value.getString());
       }
     }
-    
-    // get new url from web content form
-    List<String> listNewUrl = extractLink(webContent); 
-    
     // compare, remove old link, add new link, create new List
     List<String> listResult = new ArrayList<String>();
-    
+
     for (String extractedLink : listExtractedLink) {
-      for (String newUrl : listNewUrl) {
+      for (String newUrl : newLinks) {
         if (LinkBean.parse(extractedLink).getUrl().equals(newUrl)) {
           listResult.add(extractedLink);
         }
       }
     }
-    
     List<String> listTemp = new ArrayList<String>();
-    listTemp.addAll(listNewUrl);
-    
-    for (String newUrl : listNewUrl) {
+    listTemp.addAll(newLinks);
+
+    for (String newUrl : newLinks) {
       for (String extractedLink : listExtractedLink) {
         if (newUrl.equals(LinkBean.parse(extractedLink).getUrl())) {
-          listTemp.set(listNewUrl.indexOf(newUrl), "");
+          listTemp.set(newLinks.indexOf(newUrl), "");
         }
       }
     }
@@ -152,10 +127,7 @@ public class LinkExtractorService {
         values[listResult.indexOf(url)] = valueFactory.createValue(url);
       }
     }
-    
-    webContent.setProperty("exo:links", values);
-    
-    webContent.getSession().save();
+    webContent.setProperty("exo:links", values);    
   }
-  
+
 }

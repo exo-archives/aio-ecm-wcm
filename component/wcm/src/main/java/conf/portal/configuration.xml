@@ -98,12 +98,7 @@
     <key>org.exoplatform.services.wcm.skin.XSkinService</key>
     <type>org.exoplatform.services.wcm.skin.XSkinService</type>    
   </component>
-  
-  <component>
-    <key>org.exoplatform.services.wcm.webcontent.LinkExtractorService</key>
-    <type>org.exoplatform.services.wcm.webcontent.LinkExtractorService</type>    
-  </component>
-  
+    
   <component>
     <key>org.exoplatform.services.wcm.javascript.XJavascriptService</key>
     <type>org.exoplatform.services.wcm.javascript.XJavascriptService</type>    
