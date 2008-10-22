@@ -1,0 +1,11 @@
+.abc {
+	border: 1px solid red;	
+	height: 150px;
+}
+
+.UIViewerManagementForm .SelectFolderPathIcon {
+	background: url('DefaultSkin/icons/AddPage.gif') no-repeat left center;
+	width: 16px;
+	height: 16px;
+	margin-left: 10px;
+}

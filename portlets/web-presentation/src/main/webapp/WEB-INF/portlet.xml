@@ -92,4 +92,64 @@
 	</portlet-info>
   </portlet>
   
+  <portlet>
+  	<description xml:lang="EN">View content as list</description>
+  	<portlet-name>ContentListViewerPortlet</portlet-name>
+  	<display-name>Content List Viewer</display-name>
+  	<portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>
+  	<init-param>
+	  	<name>webui.configuration</name>
+	  	<value>/WEB-INF/conf/portlet/ContentListViewer/webui/configuration.xml</value>
+  	</init-param>
+  	<expiration-cache>0</expiration-cache>
+  	<supports>
+  		<mime-type>text/html</mime-type>
+  		<portlet-mode>help</portlet-mode>
+  		<portlet-mode>edit</portlet-mode>
+  	</supports>
+  	<supported-locale>en</supported-locale>
+  	<resource-bundle>locale.portlet.ContentListViewer.ContentListViewer</resource-bundle>
+  	<portlet-info>
+  		<title>Content List Viewer</title>
+  		<short-title>Content List Viewer</short-title>
+  		<keywords>Content List Viewer</keywords>
+  	</portlet-info>
+  	<portlet-preferences>	  	
+	    <preference>
+	    	<name>repository</name>
+	    	<value></value>
+	    	<read-only>false</read-only>
+	    </preference>
+	    <preference>
+	    	<name>workspace</name>
+	    	<value></value>
+	    	<read-only>false</read-only>
+	    </preference>
+	    <preference>
+	    	<name>folderPath</name>
+	    	<value></value>
+	    	<read-only>false</read-only>
+	    </preference>
+	    <preference>
+	    	<name>templatePath</name>
+	    	<value></value>
+	    	<read-only>false</read-only>
+	    </preference>
+	    <preference>
+	    	<name>itemsPerPage</name>
+	    	<value></value>	    	
+	    	<read-only>false</read-only>
+	    </preference>
+	    <preference>
+	    	<name>showQuickEdit</name>
+	    	<value>true</value>	    	
+	    	<read-only>false</read-only>
+	    </preference>
+  	</portlet-preferences>
+  	<security-role-ref>
+        <role-name>admin</role-name>
+    	<role-link>admin</role-link>
+    </security-role-ref>	
+  </portlet>
+  
 </portlet-app>

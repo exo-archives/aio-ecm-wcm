@@ -39,3 +39,25 @@ SkinService.addSkin(
     "/web-presentation/skin/SiteAdministration/MacStylesheet.css",
     ServletContext
 ) ;
+
+
+SkinService.addSkin(
+	"web-presentation/ContentListViewerPortlet",
+	"Default",
+	"/web-presentation/skin/ContentListViewer/DefaultStylesheet.css",
+	ServletContext
+);
+
+SkinService.addSkin(
+	"web-presentation/ContentListViewerPortlet",
+	"Mac",
+	"/web-presentation/skin/ContentListViewer/MacStylesheet.css",
+	ServletContext
+);
+
+SkinService.addSkin(
+	"web-presentation/ContentListViewerPortlet",
+	"Vista",
+	"/web-presentation/skin/ContentListViewer/VistaStylesheet.css",
+	ServletContext
+);
