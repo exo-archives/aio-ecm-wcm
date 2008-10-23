@@ -12,17 +12,8 @@
       </propertyDefinition>      
     </propertyDefinitions>
   </nodeType>
-  <!-- DO NOT REMOVE THIS DEFINITION -->
-
-  <nodeType name="exo:applicationLinkable" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
-    <propertyDefinitions>
-      <propertyDefinition name="exo:linkedApplications" requiredType="String" autoCreated="true" mandatory="false"
-        onParentVersion="COPY" protected="false" multiple="true">
-        <valueConstraints/>	      
-      </propertyDefinition>      
-    </propertyDefinitions>
-  </nodeType>            
-    
+  <!-- DO NOT REMOVE THIS DEFINITION -->          
+      
   <nodeType name="exo:portalFolder" isMixin="false" hasOrderableChildNodes="true" primaryItemName="">
     <supertypes>
       <supertype>nt:unstructured</supertype>
@@ -81,7 +72,8 @@
   	  <supertype>mix:referenceable</supertype>
   	  <supertype>nt:unstructured</supertype>
   	  <supertype>nt:hierarchyNode</supertype>
-  	  <supertype>exo:rss-enable</supertype>  	    	       
+  	  <supertype>exo:rss-enable</supertype>
+  	  <supertype>exo:thumbnail</supertype>  	    	    	      
     </supertypes>
     <childNodeDefinitions>
       <childNodeDefinition name="js" defaultPrimaryType="exo:jsFolder" autoCreated="false" mandatory="false"
@@ -103,6 +95,7 @@
   	<supertypes>
       <supertype>exo:presentationable</supertype>      
       <supertype>mix:referenceable</supertype>
+      <supertype>exo:thumbnail</supertype>
     </supertypes>
   	<propertyDefinitions>
   	<propertyDefinition name="exo:htmlTOC" requiredType="String" autoCreated="true" mandatory="false"
@@ -116,6 +109,7 @@
   	<supertypes>
       <supertype>exo:presentationable</supertype>
       <supertype>mix:referenceable</supertype>
+      <supertype>exo:thumbnail</supertype>
     </supertypes>  	    
     <propertyDefinitions>
       <propertyDefinition name="exo:active" requiredType="Boolean" autoCreated="true" mandatory="true"
@@ -143,6 +137,7 @@
   	<supertypes>
       <supertype>exo:presentationable</supertype>
       <supertype>mix:referenceable</supertype>
+      <supertype>exo:thumbnail</supertype>
     </supertypes>  	    
     <propertyDefinitions>
       <propertyDefinition name="exo:active" requiredType="Boolean" autoCreated="true" mandatory="true"
