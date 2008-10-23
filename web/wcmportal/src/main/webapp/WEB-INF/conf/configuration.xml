@@ -47,6 +47,7 @@
   <import>war:/conf/wcm/nodetypes-templates-configuration.xml</import>  
   <import>war:/conf/wcm/clv-templates-configuration.xml</import>
   <import>war:/conf/wcm/views-configuration.xml</import>
-  <import>war:/conf/wcm/deployment-configuration.xml</import>    
+  <import>war:/conf/wcm/deployment-configuration.xml</import>
+  <import>war:/conf/wcm/site-artifacts-initializer-configuration.xml</import>    
 		
 </configuration>
