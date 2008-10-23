@@ -58,6 +58,19 @@
   </component>
   
   <component>
+    <key>org.exoplatform.services.wcm.portal.artifacts.PortalArtifactsInitializerService</key>
+    <type>org.exoplatform.services.wcm.portal.artifacts.PortalArtifactsInitializerServiceImpl</type>
+    <init-params>
+      <values-param>
+        <name>ignored.portals</name>
+        <description>inital portals. the service will not deploy data to the inital portal</description>
+        <value>classic</value>
+        <value>acme</value>	        
+      </values-param>
+	  </init-params>    
+  </component>
+  
+  <component>
     <key>org.exoplatform.services.wcm.link.LiveLinkManagerService</key>
     <type>org.exoplatform.services.wcm.link.LiveLinkManagerServiceImpl</type>    
   </component>

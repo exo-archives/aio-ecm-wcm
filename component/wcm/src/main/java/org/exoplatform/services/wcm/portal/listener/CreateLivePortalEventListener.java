@@ -33,6 +33,7 @@ import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
+import org.exoplatform.services.wcm.portal.artifacts.PortalArtifactsInitializerService;
 
 /**
  * Created by The eXo Platform SAS
@@ -51,7 +52,7 @@ public class CreateLivePortalEventListener extends Listener<DataStorageImpl, Por
     PortalConfig portalConfig = event.getData();
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     LivePortalManagerService livePortalManagerService = (LivePortalManagerService) container
-        .getComponentInstanceOfType(LivePortalManagerService.class);
+    .getComponentInstanceOfType(LivePortalManagerService.class);
     SessionProvider sessionProvider = SessionProvider.createSystemProvider();
     // Create site content storage for the portal
     try {
@@ -59,37 +60,48 @@ public class CreateLivePortalEventListener extends Listener<DataStorageImpl, Por
       log.info("Create new resource storage for portal: " + portalConfig.getName());
     } catch (Exception e) {
       log.error("Error when create new resource storage: " + portalConfig.getName(), e);
-    }
+    }        
     // create drive for the site content storage
     ManageDriveService manageDriveService = (ManageDriveService) container
-        .getComponentInstanceOfType(ManageDriveService.class);
+    .getComponentInstanceOfType(ManageDriveService.class);
     WCMConfigurationService configurationService = (WCMConfigurationService) container
-        .getComponentInstanceOfType(WCMConfigurationService.class);        
+    .getComponentInstanceOfType(WCMConfigurationService.class);        
     try {
       Node portal = livePortalManagerService.getLivePortal(portalConfig.getName(), sessionProvider);
-      Session session = portal.getSession();      
-      String repository = ((ManageableRepository) session.getRepository())
-          .getConfiguration().getName();
-      String workspace = session.getWorkspace().getName();
-      DriveData mainDriveData = configurationService.getSiteDriveConfig();
-      String drive = portal.getName();
-      String permission = portalConfig.getEditPermission();
-      String homePath = portal.getPath();
-      String views = mainDriveData.getViews();
-      String icon = mainDriveData.getIcon();
-      boolean viewReferences = mainDriveData.getViewPreferences();
-      boolean viewNonDocument = mainDriveData.getViewNonDocument();
-      boolean viewSideBar = mainDriveData.getViewSideBar();
-      boolean showHiddenNode = mainDriveData.getShowHiddenNode();
-      String allowCreateFolder = mainDriveData.getAllowCreateFolder();
-      manageDriveService.addDrive(drive, workspace, permission, homePath, views, icon,
-          viewReferences, viewNonDocument, viewSideBar, showHiddenNode, repository,
-          allowCreateFolder);
-      log.info("Create new drive for portal: " + portalConfig.getName());
+      createPortalDrive(portal,portalConfig,configurationService,manageDriveService);
+    } catch (Exception e) {
+      log.error("Error when create drive for portal: " + portalConfig.getName(), e);
+    }      
+    //Deploy initial artifacts for this portal 
+    PortalArtifactsInitializerService artifactsInitializerService = (PortalArtifactsInitializerService)
+    container.getComponentInstanceOfType(PortalArtifactsInitializerService.class);
+    try {      
+      artifactsInitializerService.deployArtifactsToPortal(portalConfig.getName(),sessionProvider);
     } catch (Exception e) {
       log.error("Error when create drive for portal: " + portalConfig.getName(), e);
     }
     sessionProvider.close();
   }
 
+  private void createPortalDrive(Node portal, PortalConfig portalConfig, WCMConfigurationService wcmConfigService,ManageDriveService driveService) throws Exception {
+    Session session = portal.getSession();      
+    String repository = ((ManageableRepository) session.getRepository())
+    .getConfiguration().getName();
+    String workspace = session.getWorkspace().getName();
+    DriveData mainDriveData = wcmConfigService.getSiteDriveConfig();
+    String drive = portal.getName();
+    String permission = portalConfig.getEditPermission();
+    String homePath = portal.getPath();
+    String views = mainDriveData.getViews();
+    String icon = mainDriveData.getIcon();
+    boolean viewReferences = mainDriveData.getViewPreferences();
+    boolean viewNonDocument = mainDriveData.getViewNonDocument();
+    boolean viewSideBar = mainDriveData.getViewSideBar();
+    boolean showHiddenNode = mainDriveData.getShowHiddenNode();
+    String allowCreateFolder = mainDriveData.getAllowCreateFolder();
+    driveService.addDrive(drive, workspace, permission, homePath, views, icon,
+        viewReferences, viewNonDocument, viewSideBar, showHiddenNode, repository,
+        allowCreateFolder);
+    log.info("Create new drive for portal: " + portalConfig.getName());
+  }
 }
