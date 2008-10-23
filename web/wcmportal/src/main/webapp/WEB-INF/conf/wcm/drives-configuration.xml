@@ -21,7 +21,7 @@
               <field  name="permissions"><string>*:/platform/administrators</string></field>
               <field  name="homePath"><string>/sites content/live</string></field>
               <field  name="icon"><string></string></field>
-              <field  name="views"><string>wcm-view,admin-view,icon-view,cover-flow,thumnails-view</string></field>
+              <field  name="views"><string>wcm-view,admin-view,icon-view,cover-flow,thumbnails-view</string></field>
               <field  name="viewPreferences"><boolean>false</boolean></field>
               <field  name="viewNonDocument"><boolean>true</boolean></field>
               <field  name="viewSideBar"><boolean>true</boolean></field>
@@ -39,7 +39,7 @@
               <field  name="permissions"><string>*:/platform/administrators</string></field>
               <field  name="homePath"><string>/sites content/live/share portal</string></field>
               <field  name="icon"><string></string></field>
-              <field  name="views"><string>wcm-view,admin-view,icon-view,cover-flow,thumnails-view</string></field>
+              <field  name="views"><string>wcm-view,admin-view,icon-view,cover-flow,thumbnails-view</string></field>
               <field  name="viewPreferences"><boolean>false</boolean></field>
               <field  name="viewNonDocument"><boolean>true</boolean></field>
               <field  name="viewSideBar"><boolean>true</boolean></field>
