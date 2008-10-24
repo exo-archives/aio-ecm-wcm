@@ -27,34 +27,38 @@ import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
-import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 
 /*
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Oct 15, 2008
  */
 
-@ComponentConfig(lifecycle = UIApplicationLifecycle.class, 
-    events = { @EventConfig(listeners = UIContentListViewerPortlet.QuickEditActionListener.class) })
+@ComponentConfig(
+    lifecycle = UIApplicationLifecycle.class    
+)
 public class UIContentListViewerPortlet extends UIPortletApplication {
 
-  private PortletMode        mode            = PortletMode.VIEW;
+  private PortletMode        mode                    = PortletMode.VIEW;
 
-  public static final String REPOSITORY      = "repository";
+  public final static String REPOSITORY              = "repository";
 
-  public static final String WORKSPACE       = "workspace";
+  public final static String WORKSPACE               = "workspace";
 
-  public static final String ITEMS_PER_PAGE  = "itemsPerPage";
+  public final static String ITEMS_PER_PAGE          = "itemsPerPage";
 
-  public static final String FOLDER_PATH     = "folderPath";
+  public final static String FOLDER_PATH             = "folderPath";
 
-  public static final String TEMPLATE_PATH   = "templatePath";
+  public final static String FORM_VIEW_TEMPLATE_PATH = "formViewTemplatePath";
 
-  public static final String SHOW_QUICK_EDIT = "showQuickEdit";
+  public final static String PAGINATOR_TEMPlATE_PATH = "paginatorTemplatePath";
+
+  public final static String SHOW_QUICK_EDIT_BUTTON         = "showQuickEditButton";
+
+  public final static String SHOW_REFRESH_BUTTON     = "showRefreshButton";
+  
+  public final static String SHOW_THUMBNAILS_VIEW     = "showThumbnailsView";
 
   public UIContentListViewerPortlet() throws Exception {
     activateMode(mode);
@@ -73,7 +77,8 @@ public class UIContentListViewerPortlet extends UIPortletApplication {
   public void activateMode(PortletMode mode) throws Exception {
     getChildren().clear();
     if (PortletMode.VIEW.equals(mode)) {
-      UIFolderViewer folderViewer = addChild(UIFolderViewer.class, null, UIPortletApplication.VIEW_MODE);
+      UIFolderViewer folderViewer = addChild(UIFolderViewer.class, null,
+          UIPortletApplication.VIEW_MODE);
       folderViewer.init();
     } else if (PortletMode.EDIT.equals(mode)) {
       addChild(UIPortletConfig.class, null, UIPortletApplication.EDIT_MODE);
@@ -89,13 +94,6 @@ public class UIContentListViewerPortlet extends UIPortletApplication {
     PortalConfig portalConfig = dataStorage.getPortalConfig(portalName);
     UserACL userACL = getApplicationComponent(UserACL.class);
     return userACL.hasEditPermission(portalConfig, userId);
-  }      
-  
-  public static class QuickEditActionListener extends EventListener<UIContentListViewerPortlet> {
-    public void execute(Event<UIContentListViewerPortlet> event) throws Exception {
-      PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
-      context.setApplicationMode(PortletMode.EDIT);
-    }
   }
 
 }

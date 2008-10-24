@@ -131,20 +131,35 @@
 	    	<read-only>false</read-only>
 	    </preference>
 	    <preference>
-	    	<name>templatePath</name>
+	    	<name>formViewTemplatePath</name>
 	    	<value></value>
 	    	<read-only>false</read-only>
 	    </preference>
+	    <preference>
+	    	<name>paginatorTemplatePath</name>
+	    	<value></value>
+	    	<read-only>false</read-only>
+	    </preference>	    
 	    <preference>
 	    	<name>itemsPerPage</name>
 	    	<value></value>	    	
 	    	<read-only>false</read-only>
 	    </preference>
 	    <preference>
-	    	<name>showQuickEdit</name>
+	    	<name>showQuickEditButton</name>
 	    	<value>true</value>	    	
 	    	<read-only>false</read-only>
 	    </preference>
+	    <preference>
+	    	<name>showRefreshButton</name>
+	    	<value>true</value>	    	
+	    	<read-only>false</read-only>
+	    </preference>	    
+	    <preference>
+	    	<name>showThumbnailsView</name>
+	    	<value>true</value>	    	
+	    	<read-only>false</read-only>
+	    </preference>	    	    
   	</portlet-preferences>
   	<security-role-ref>
         <role-name>admin</role-name>

@@ -52,8 +52,10 @@ import org.exoplatform.webui.event.EventListener;
 
 @ComponentConfig(
     lifecycle = Lifecycle.class, 
-    template = "app:/groovy/ContentListViewer/UIFolderListViewer.gtmpl",
-    events = { @EventConfig(listeners = UIFolderViewer.QuickEditActionListener.class) }
+    template = "app:/groovy/ContentListViewer/UIFolderListViewer.gtmpl", 
+    events = { 
+      @EventConfig(listeners = UIFolderViewer.QuickEditActionListener.class)       
+    }
 )
 public class UIFolderViewer extends UIContainer implements RefreshDelegateActionListener {
 
@@ -90,12 +92,12 @@ public class UIFolderViewer extends UIContainer implements RefreshDelegateAction
     }
     PortletPreferences portletPreferences = getPortletPreference();
     int itemsPerPage = Integer.parseInt(portletPreferences.getValue(
-        UIContentListViewerPortlet.ITEMS_PER_PAGE, UIContentListViewerPortlet.ITEMS_PER_PAGE));
+        UIContentListViewerPortlet.ITEMS_PER_PAGE, null));
     PaginatedNodeIterator paginatedNodeIterator = new PaginatedNodeIterator(nodeIterator,
         itemsPerPage);
     UIContentListPresentation contentListPresentation = addChild(UIContentListPresentation.class,
         null, null);
-    String templatePath = getTemplatePath();
+    String templatePath = getFormViewTemplatePath();
     ResourceResolver resourceResolver = getTemplateResourceResolver();
     contentListPresentation.init(templatePath, resourceResolver, paginatedNodeIterator);
   }
@@ -115,24 +117,20 @@ public class UIFolderViewer extends UIContainer implements RefreshDelegateAction
   }
 
   protected String getRepository() {
-    return getPortletPreference().getValue(UIContentListViewerPortlet.REPOSITORY,
-        UIContentListViewerPortlet.REPOSITORY);
+    return getPortletPreference().getValue(UIContentListViewerPortlet.REPOSITORY, null);
   }
 
-  protected String getTemplatePath() {
-    return getPortletPreference().getValue(UIContentListViewerPortlet.TEMPLATE_PATH,
-        UIContentListViewerPortlet.TEMPLATE_PATH);
+  protected String getFormViewTemplatePath() {
+    return getPortletPreference()
+        .getValue(UIContentListViewerPortlet.FORM_VIEW_TEMPLATE_PATH, null);
   }
 
   public NodeIterator getRenderedContentNodes() throws Exception {
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     PortletPreferences preferences = portletRequestContext.getRequest().getPreferences();
-    String repository = preferences.getValue(UIContentListViewerPortlet.REPOSITORY,
-        UIContentListViewerPortlet.REPOSITORY);
-    String worksapce = preferences.getValue(UIContentListViewerPortlet.WORKSPACE,
-        UIContentListViewerPortlet.WORKSPACE);
-    String folderPath = preferences.getValue(UIContentListViewerPortlet.FOLDER_PATH,
-        UIContentListViewerPortlet.FOLDER_PATH);
+    String repository = preferences.getValue(UIContentListViewerPortlet.REPOSITORY, null);
+    String worksapce = preferences.getValue(UIContentListViewerPortlet.WORKSPACE, null);
+    String folderPath = preferences.getValue(UIContentListViewerPortlet.FOLDER_PATH, null);
     if (repository == null || worksapce == null || folderPath == null)
       throw new ItemNotFoundException();
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
@@ -180,7 +178,8 @@ public class UIFolderViewer extends UIContainer implements RefreshDelegateAction
   public boolean isQuickEditable() throws Exception {
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     PortletPreferences prefs = portletRequestContext.getRequest().getPreferences();
-    boolean isQuickEdit = Boolean.parseBoolean(prefs.getValue("showQuickEdit", null));
+    boolean isQuickEdit = Boolean.parseBoolean(prefs.getValue(
+        UIContentListViewerPortlet.SHOW_QUICK_EDIT_BUTTON, null));
     UIContentListViewerPortlet uiPresentationPortlet = getAncestorOfType(UIContentListViewerPortlet.class);
     if (isQuickEdit)
       return uiPresentationPortlet.canEditPortlet();
