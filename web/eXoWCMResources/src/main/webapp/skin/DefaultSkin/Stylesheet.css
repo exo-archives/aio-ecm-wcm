@@ -2,3 +2,5 @@
 @import url('../shareSkin/pages/Stylesheet.css');
 @import url('../shareSkin/NodeTypes/Stylesheet.css');
 @import url('../shareSkin/publication/Stylesheet.css');
+@import url('../shareSkin/content-list-viewer/list-by-folder/Stylesheet.css');
+@import url('../shareSkin/content-list-viewer/paginator/Stylesheet.css');
