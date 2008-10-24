@@ -1,5 +1,9 @@
 <% 
-import org.exoplatform.webui.core.UIPageIterator;
+/* 
+ * Go to "WCMResources/src/main/webapp/shareskin/content-list-viewer/list-by-folder/defaultFolderListViewer"
+ * to edit stylesheet if you want.
+ */
+import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
 import javax.jcr.Node;
 %>
 
@@ -10,7 +14,8 @@ import javax.jcr.Node;
 	String labelOwner = _ctx.appRes("UIFolderViewer.Item.label.owner");
 	String labelSummary = _ctx.appRes("UIFolderViewer.Item.label.summary");	
 	String labelDateModified = _ctx.appRes("UIFolderViewer.Item.label.datemodified");
-	String labelDateCreated = _ctx.appRes("UIFolderViewerItem.label.datecreated");
+	String labelDateCreated = _ctx.appRes("UIFolderViewer.Item.label.datecreated");
+	String labelRefreshAction = _ctx.appRes("UIFolderViewer.label.action.refresh");
 	
 	for (Node node : currentPageData) {				
 		String itemName = node.getName();
@@ -49,9 +54,11 @@ import javax.jcr.Node;
 			<tr>				
 				<% String link = uicomponent.event("Refresh"); %>
 				<td width="50%" align="right">
-					<div style="line-height: 20px; width: 50px; border: 1px solid red;"><a href="$link">Refresh</a></div>
+				<% if (uicomponent.showRefreshButton()) { %>
+					<div style="line-height: 20px; width: 50px; border: 1px solid red;"><a href="$link">$labelRefreshAction</a></div>
+				<% } %>
 				</td>
-				<td><%uicomponent.renderChild(UIPageIterator.class);%></td>
+				<td><%uicomponent.renderChild(UICustomizeablePaginator.class);%></td>
 			</tr>
 		</table>				
 	</div>				
