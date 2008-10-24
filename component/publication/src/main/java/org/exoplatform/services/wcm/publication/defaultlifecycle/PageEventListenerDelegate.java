@@ -19,6 +19,7 @@ package org.exoplatform.services.wcm.publication.defaultlifecycle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.jcr.Node;
@@ -34,7 +35,6 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.application.Preference;
 import org.exoplatform.portal.config.DataStorage;
-import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleException;
@@ -46,6 +46,8 @@ import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
+
+import com.sun.corba.se.impl.oa.poa.AOMEntry;
 
 /**
  * Created by The eXo Platform SAS
@@ -65,19 +67,27 @@ public class PageEventListenerDelegate {
     this.container = container;
   }
 
-  public void updateLifecyleOnCreatePage(Page page) throws Exception { }
-
-  public void updateLifecyleOnChangePage(Page page) throws Exception {
-     updateAddedApplication(page);
-     updateRemovedApplication(page);
+  public void updateLifecyleOnCreatePage(Page page) throws Exception { 
+    updateAddedApplication(page);
   }
 
-  public void updateLifecycleOnRemovePage(Page page) throws Exception { }
+  public void updateLifecyleOnChangePage(Page page) throws Exception {
+    updateAddedApplication(page);
+    updateRemovedApplication(page);
+  }
+
+  public void updateLifecycleOnRemovePage(Page page) throws Exception {
+    List<String> listPageApplicationId = getListApplicationIdByPage(page);
+    for (String applicationId : listPageApplicationId) {
+      Node content = getNodeByApplicationId(applicationId);
+      saveRemovedNode(page, applicationId, content);
+    }
+  }
   
   
   private void updateAddedApplication(Page page) throws Exception {
-    List<String> listApplicationId = getListApplicationIdByPage(page);
-    for (String applicationtId : listApplicationId) {
+    List<String> listPageApplicationId = getListApplicationIdByPage(page);
+    for (String applicationtId : listPageApplicationId) {
       Node content = getNodeByApplicationId(applicationtId);
       if (content != null) saveAddedNode(page, applicationtId, content);
     }
@@ -103,17 +113,8 @@ public class PageEventListenerDelegate {
   }
   
   private List<String> getListApplicationIdByPage(Page page) {
-    List<String> listApplicationId = new ArrayList<String>();
-    WCMConfigurationService configurationService = (WCMConfigurationService) container.getComponentInstanceOfType(WCMConfigurationService.class);    
-    for (Object object : page.getChildren()) {
-      if (object instanceof Application) {
-        Application application = (Application) object;
-        if (application.getInstanceId().contains(configurationService.getPublishingPortletName())) {
-          listApplicationId.add(application.getInstanceId());
-        }
-      }
-    }
-    return listApplicationId;
+    WCMConfigurationService configurationService = (WCMConfigurationService) container.getComponentInstanceOfType(WCMConfigurationService.class);
+    return Util.findAppInstancesByName(page, configurationService.getPublishingPortletName());
   }
   
   private Node getNodeByApplicationId(String applicationId) throws Exception {
@@ -154,66 +155,52 @@ public class PageEventListenerDelegate {
     QueryManager queryManager = session.getWorkspace().getQueryManager();
     Query query = queryManager.createQuery("select * from publication:wcmPublication where publication:lifecycleName='" + lifecycleName + "' and publication:webPageIDs like '%" + page.getPageId() + "%' and jcr:path like '" + path + "/%' order by jcr:score", Query.SQL);
     QueryResult results = query.execute();
-    NodeIterator nodeIterator = results.getNodes();
-    for (; nodeIterator.hasNext();) {
+    for (NodeIterator nodeIterator = results.getNodes(); nodeIterator.hasNext();) {
       listNodeApplicationId.add(nodeIterator.nextNode());
     }
     return listNodeApplicationId;
   }
   
-  private void saveAddedNode(Page page, String applicationId, Node content) throws Exception {
-    WCMPublicationService presentationService = (WCMPublicationService) container.getComponentInstanceOfType(WCMPublicationService.class);
-    PublicationService publicationService = (PublicationService) container.getComponentInstanceOfType(PublicationService.class);
-    WCMPublicationPlugin publicationPlugin = (WCMPublicationPlugin) presentationService.getWebpagePublicationPlugins().get(WCMPublicationPlugin.LIFECYCLE_NAME);
-    
-    Session session = content.getSession();
-    ValueFactory valueFactory = session.getValueFactory();
-    Value value = null;
+  private void saveAddedNode(Page page, String applicationId, Node content) throws Exception {    
+    PublicationService publicationService = (PublicationService) container.getComponentInstanceOfType(PublicationService.class);                 
     String nodeLifecycleName = null;
     try {
       nodeLifecycleName = publicationService.getNodeLifecycleName(content);
-    } catch (NotInPublicationLifecycleException e) {
-      // Do nothing
-    }
-    if (nodeLifecycleName == null || !nodeLifecycleName.equals(lifecycleName)) { 
-      return;
-    }
+    } catch (NotInPublicationLifecycleException e) { return; }
+    if (!lifecycleName.equals(nodeLifecycleName)) return;
     
-    ArrayList<Value> listTmp = new ArrayList<Value>();
-    if (content.hasProperty("publication:navigationNodeURIs")) {
-      listTmp = new ArrayList<Value>(Arrays.asList(content.getProperty("publication:navigationNodeURIs").getValues()));
-    }
-    String uris = "";
+    WCMPublicationService presentationService = (WCMPublicationService) container.getComponentInstanceOfType(WCMPublicationService.class);
+    WCMPublicationPlugin publicationPlugin = (WCMPublicationPlugin) presentationService.getWebpagePublicationPlugins().get(WCMPublicationPlugin.LIFECYCLE_NAME);
+    Session session = content.getSession();
+    ValueFactory valueFactory = session.getValueFactory();
+    
+    //Update navigationNodeURI
+    List<String> listExistedNavigationNodeUri = Util.getValuesAsString(content, "publication:navigationNodeURIs");    
+    String nodeURILogs = "";
     for (String uri : publicationPlugin.getListPageNavigationUri(page)) {
-      value = valueFactory.createValue(uri);
-      if (listTmp.indexOf(value) < 0) {
-        listTmp.add(value);
-      }
-      uris += uri + HISTORY_SEPARATOR;
-    }
-    content.setProperty("publication:navigationNodeURIs", listTmp.toArray(new Value[0]));
-
-    listTmp = new ArrayList<Value>();
-    if (content.hasProperty("publication:webPageIDs")) {
-      listTmp = new ArrayList<Value>(Arrays.asList(content.getProperty("publication:webPageIDs").getValues()));
-    }
-    value = valueFactory.createValue(page.getPageId());
-    listTmp.add(value);
-    content.setProperty("publication:webPageIDs", listTmp.toArray(new Value[0]));
-
-    listTmp = new ArrayList<Value>();
-    if (content.hasProperty("publication:applicationIDs")) {
-      listTmp = new ArrayList<Value>(Arrays.asList(content.getProperty("publication:applicationIDs").getValues()));
-    }
-    value = valueFactory.createValue(setMixedApplicationId(page.getPageId(), applicationId));
-    if (listTmp.indexOf(value) < 0) { 
-      listTmp.add(value);
-    }
-    content.setProperty("publication:applicationIDs", listTmp.toArray(new Value[0]));
+      if(!listExistedNavigationNodeUri.contains(uri)) {
+        listExistedNavigationNodeUri.add(uri);
+      }            
+      nodeURILogs += uri + HISTORY_SEPARATOR;
+    }                   
+    content.setProperty("publication:navigationNodeURIs", Util.toValues(valueFactory, listExistedNavigationNodeUri));
     
-    String[] logs = new String[] {new Date().toString(), WCMPublicationPlugin.PUBLISHED, session.getUserID(), "PublicationService.WCMPublicationPlugin.nodePublished", uris};
-    publicationService.addLog(content, logs);
+    //Update applicationIDs
+    List<String> appIdList = Util.getValuesAsString(content, "publication:applicationIDs");
+    String mixedAppId = setMixedApplicationId(page.getPageId(), applicationId);
+    if(!appIdList.contains(mixedAppId)) {
+      appIdList.add(mixedAppId);
+      content.setProperty("publication:applicationIDs", Util.toValues(valueFactory, appIdList));
+    }
+    //Update webpageIds
+    List<String> pageIdList = Util.getValuesAsString(content, "publication:webPageIDs");
+    pageIdList.add(page.getPageId());    
+    content.setProperty("publication:webPageIDs", Util.toValues(valueFactory, pageIdList));
     
+    publicationPlugin.changeState(content, "published", null);
+    
+    String[] logs = new String[] {new Date().toString(), WCMPublicationPlugin.PUBLISHED, session.getUserID(), "PublicationService.WCMPublicationPlugin.nodePublished", nodeURILogs};
+    publicationService.addLog(content, logs);    
     session.save();
   } 
   
@@ -239,13 +226,14 @@ public class PageEventListenerDelegate {
       listTmp = new ArrayList<Value>(Arrays.asList(content.getProperty("publication:navigationNodeURIs").getValues()));
       List<Value> list = new ArrayList<Value>(Arrays.asList(content.getProperty("publication:navigationNodeURIs").getValues()));
       for (Value value : listTmp) {
-        if (listPageNavigationUri.indexOf(value.getString()) < 0) {
+        if (!listPageNavigationUri.contains(value.getString())) {
           list.remove(value);
         }
       }
       content.setProperty("publication:navigationNodeURIs", list.toArray(new Value[0]));
     } else {
       content.setProperty("publication:navigationNodeURIs", new ArrayList<Value>().toArray(new Value[0]));
+      publicationPlugin.changeState(content, "unpublished", null);
     }
     
     String uris = "";

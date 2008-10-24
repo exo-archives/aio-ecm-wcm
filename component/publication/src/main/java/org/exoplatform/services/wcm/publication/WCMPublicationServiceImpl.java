@@ -102,12 +102,10 @@ public class WCMPublicationServiceImpl implements WCMPublicationService, Startab
   
   public void enrollNodeInLifecycle(Node node, String lifecycleName) throws Exception {
     WebpagePublicationPlugin publicationPlugin = publicationPlugins.get(lifecycleName);
-    publicationPlugin.addMixin(node);
+    publicationPlugin.addMixin(node);    
     node.setProperty("publication:lifecycleName", lifecycleName);
-    node.setProperty("publication:currentState", "enrolled"); 
-    List<Value> history = new ArrayList<Value>();
-    node.setProperty("publication:history", history.toArray(new Value[history.size()]));
-    node.getSession().save();
+    node.setProperty("publication:history", new ArrayList<Value>().toArray(new Value[0]));
+    publicationPlugin.changeState(node, "enrolled", null);    
   }
   
   /* (non-Javadoc)

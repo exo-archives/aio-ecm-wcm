@@ -19,6 +19,13 @@ package org.exoplatform.services.wcm.publication.defaultlifecycle;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.jcr.Node;
+import javax.jcr.Value;
+import javax.jcr.ValueFactory;
+
+import org.exoplatform.portal.config.model.Application;
+import org.exoplatform.portal.config.model.Container;
+import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 
@@ -30,25 +37,63 @@ import org.exoplatform.portal.config.model.PageNode;
  */
 public class Util {
   
-  public static List<PageNode> findPageNodeByPageReference(PageNavigation nav, String pageReferencedId) throws Exception {
+  public static List<PageNode> findPageNodeByPageId(PageNavigation nav, String pageId) throws Exception {
     List<PageNode> list = new ArrayList<PageNode>();
     for (PageNode node : nav.getNodes()) {
-      findPageNodeByPageReference(node, pageReferencedId, list);
+      findPageNodeByPageId(node, pageId, list);
     }
     return list;
   }
 
-  public static void findPageNodeByPageReference(PageNode node, String pageReferencedId, List<PageNode> allPageNode)
+  public static void findPageNodeByPageId(PageNode node, String pageId, List<PageNode> allPageNode)
       throws Exception {
-    if (pageReferencedId.equals(node.getPageReference())) {
+    if (pageId.equals(node.getPageReference())) {
       allPageNode.add(node.clone());
     }
     List<PageNode> children = node.getChildren();
     if (children == null)
       return;
     for (PageNode child : children) {
-      findPageNodeByPageReference(child, pageReferencedId, allPageNode);
+      findPageNodeByPageId(child, pageId, allPageNode);
+    }
+  }
+   
+  public static List<String> findAppInstancesByName(Page page, String applicationName) {
+    List<String> results = new ArrayList<String>();
+    findAppInstancesByContainerAndName(page, applicationName, results);
+    return results;
+  }
+  
+  private static void findAppInstancesByContainerAndName(Container container, String applicationName, List<String> results) {
+    ArrayList<Object> chidren = container.getChildren();
+    if(chidren == null) return ;
+    for(Object object: chidren) {
+      if(object instanceof Application) {
+        Application application = Application.class.cast(object);
+        if(application.getInstanceId().contains(applicationName)) {
+          results.add(application.getInstanceId());
+        }
+      }else if(object instanceof Container) {
+        Container child = Container.class.cast(object);
+        findAppInstancesByContainerAndName(child, applicationName, results);
+      }
     }
   }
   
-}
+  public static List<String> getValuesAsString(Node node, String propName) throws Exception {
+    if(!node.hasProperty(propName)) return new ArrayList<String>();
+    List<String> results = new ArrayList<String>();
+    for(Value value: node.getProperty(propName).getValues()) {
+      results.add(value.getString());
+    }
+    return results;
+  }
+  
+  public static Value[] toValues(ValueFactory factory, List<String> values) {
+    List<Value> list = new ArrayList<Value>();
+    for(String value: values) {
+      list.add(factory.createValue(value));
+    }
+    return list.toArray(new Value[list.size()]);
+  }
+} 

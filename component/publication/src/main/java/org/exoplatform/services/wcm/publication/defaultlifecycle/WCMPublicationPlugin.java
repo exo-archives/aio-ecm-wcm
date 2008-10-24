@@ -308,12 +308,6 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
     listPortlet.add(portlet);
     page.setChildren(listPortlet);
     userPortalConfigService.update(page);
-    
-    // Update state
-    if (!content.getProperty("publication:currentState").getString().equals(PUBLISHED))
-      changeState(content, PUBLISHED, null);
-    
-//    updateLifecyleOnChangePage(page);
   }
 
   /* (non-Javadoc)
@@ -344,14 +338,6 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
     page.setChildren(children);
     UserPortalConfigService userPortalConfigService = getServices(UserPortalConfigService.class);
     userPortalConfigService.update(page);
-    
-    // Update state
-    Value[] listValues = content.getProperty("publication:navigationNodeURIs").getValues();
-    if (listValues.length == 0) {
-      changeState(content, UNPUBLISHED, null);
-    }
-    
-//    updateLifecyleOnChangePage(page);
   }
 
   /**
@@ -370,7 +356,7 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
       PageList list = dataStorage.find(query);
       for(Object object: list.getAll()) {
         PageNavigation pageNavigation = PageNavigation.class.cast(object);
-        List<PageNode> listPageNode = org.exoplatform.services.wcm.publication.defaultlifecycle.Util.findPageNodeByPageReference(pageNavigation, page.getPageId());        
+        List<PageNode> listPageNode = org.exoplatform.services.wcm.publication.defaultlifecycle.Util.findPageNodeByPageId(pageNavigation, page.getPageId());        
         for (PageNode pageNode : listPageNode) {
           listPageNavigationUri.add("/" + portalName + "/" + pageNode.getUri());
         }
