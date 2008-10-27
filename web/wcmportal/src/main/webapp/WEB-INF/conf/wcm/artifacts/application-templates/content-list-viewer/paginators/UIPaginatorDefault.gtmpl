@@ -1,0 +1,51 @@
+<%
+	def totalPage = uicomponent.getAvailablePage();
+	def currentPage = uicomponent.getCurrentPage();
+%>
+
+<div class="UIPaginatorDeafault">
+
+  <%if(currentPage > 10) { %>
+	  <a href="<%=uicomponent.event("ShowPage","${currentPage -10}")%>" class="First" title="<%=_ctx.appRes("UIPaginatorDeafault.label.first")%>"></a>			
+  <% } else { %>
+	  <a class="FirstDis" title="<%=_ctx.appRes("UIPaginatorDeafault.label.first")%>"></a>			
+  <%}%>
+  <% if( currentPage - 1 > 0 ){%>        
+      <a href="<%=uicomponent.event("ShowPage","${currentPage - 1}")%>" class="Prev" title="<%=_ctx.appRes("UIPaginatorDeafault.label.previous")%>"></a>
+  <% } else {%>
+	  <a class="PrevDis" title="<%=_ctx.appRes("UIPaginatorDeafault.label.previous")%>"></a>
+  <%}%>
+  
+  <%
+  int min = 1;
+  int max = totalPage;
+  if(totalPage > 5 && currentPage > 2){
+    min = currentPage - 2;
+    max = currentPage + 3;
+    if (max > totalPage) max = totalPage;
+  } else if( totalPage > 5 && currentPage < 3 ){
+    min = 1;
+    max = 6;
+  }
+  for( i in min..max) { %>
+  <%  if( i == currentPage) { %>
+	    <a href="<%=uicomponent.event("ShowPage","$i")%>" class="Item Current"><%=i%></a>
+  <%  } else { %>
+	    <a href="<%=uicomponent.event("ShowPage","$i")%>" class="Item"><%=i%></a>
+  <%  } %> 
+  <%}%>    
+  
+  <% if(currentPage +1 <= totalPage) { %>
+       <a href="<%=uicomponent.event("ShowPage","${currentPage + 1}")%>" class="Next" title="<%=_ctx.appRes("UIPaginatorDeafault.label.next")%>"></a>	
+  <% } else { %>
+	   <a class="NextDis" title="<%=_ctx.appRes("UIPaginatorDeafault.label.next")%>"></a>
+  <%}%>
+  <% if(currentPage + 10 <= totalPage) {%>        
+       <a href="<%=uicomponent.event("ShowPage","${currentPage + 10}")%>" class="Last" title="<%=_ctx.appRes("UIPaginatorDeafault.label.last")%>"></a>					      
+  	  <% } else if(currentPage + 1 <= totalPage) { %>
+	   <a class="LastDis" title="<%=_ctx.appRes("UIPaginatorDeafault.label.last")%>"></a>
+  <% } else {%>
+	   <a class="LastDis" title="<%=_ctx.appRes("UIPaginatorDeafault.label.last")%>"></a>
+  <% }%>    	    
+  
+</div>

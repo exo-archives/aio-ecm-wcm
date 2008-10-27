@@ -41,7 +41,7 @@
             <name>default.paginator</name>
             <description>Default paginator groovy template</description>
             <object type="org.exoplatform.services.cms.views.PortletTemplatePlugin$PortletTemplateConfig">
-              <field  name="templateName"><string>UIDefaultPaginator.gtmpl</string></field>                            
+              <field  name="templateName"><string>UIPaginatorDefault.gtmpl</string></field>                            
               <field  name="category"><string>paginators</string></field>
               <!--
               <field  name="accessPermissions">

@@ -7,59 +7,50 @@ import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
 import javax.jcr.Node;
 %>
 
-<div id="$uicomponent.id" class="UIFolderViewer">
-	<% 	
-	def currentPageData = uicomponent.getCurrentPageData();			
-	String labelName = _ctx.appRes("UIFolderViewer.Item.label.name");
-	String labelOwner = _ctx.appRes("UIFolderViewer.Item.label.owner");
-	String labelSummary = _ctx.appRes("UIFolderViewer.Item.label.summary");	
-	String labelDateModified = _ctx.appRes("UIFolderViewer.Item.label.datemodified");
-	String labelDateCreated = _ctx.appRes("UIFolderViewer.Item.label.datecreated");
-	String labelRefreshAction = _ctx.appRes("UIFolderViewer.label.action.refresh");
-	
-	for (Node node : currentPageData) {				
-		String itemName = node.getName();
-		String itemLink = uicomponent.getURL(node);		
-		String itemSummary = uicomponent.getSummary(node);
-	    String itemTitle = uicomponent.getTitle(node);
-		String itemDateCreated = uicomponent.getCreatedDate(node);
-		String itemDateModified = uicomponent.getModifiedDate(node);
-		String itemOwner = uicomponent.getAuthor(node);		 			
-		if (itemTitle != null && itemTitle.trim().length() != 0) {
-			itemName = itemTitle;
+<div id="$uicomponent.id" class="UIContentListPresentationDefault">
+	<div class="Comment">
+		<% 	
+		def currentPageData = uicomponent.getCurrentPageData();			
+		String labelRefreshAction = _ctx.appRes("UIContentListPresentationDefault.label.action.refresh");
+		String labelReadMore = _ctx.appRes("UIContentListPresentationDefault.label.readmore");
+		for (Node node : currentPageData) {				
+			String itemName = node.getName();
+			String itemLink = uicomponent.getURL(node);		
+			String itemSummary = uicomponent.getSummary(node);
+		    String itemTitle = uicomponent.getTitle(node);
+			String itemDateCreated = uicomponent.getCreatedDate(node);
+			String itemOwner = uicomponent.getAuthor(node);			
+			String imgSrc = uicomponent.getIllustrativeImage(node);
+			if (itemTitle != null && itemTitle.trim().length() != 0) {
+				itemName = itemTitle;
+			}
+		%>	
+			<div class="CommentItem">
+				<div class="CommentUser"><a href="$itemLink">$itemName</a></div>			
+				<% if (itemDateCreated != null) { %>
+				<div class="CommentDate"><%=itemDateCreated%></div>		
+				<% } %>											
+				<% if (itemSummary != null && itemSummary.trim().length() != 0) { %>
+				<div class="CommentContent">
+					<% if(imgSrc != null) { %>
+						<img src="$imgSrc" width="91" height="53 /">				
+					<% } %>
+					<p><%=itemSummary%></p>
+				</div>			
+				<% } %>			
+				<div class="CommentViewMore"><a href="$itemLink"><%=labelReadMore%>&raquo;</a></div>			
+			</div>			
+		<%							
 		}
-	%>
-		<div class="Item" style="padding: 5px;">
-			<div><%=labelName%>:&nbsp;<a href="$itemLink">$itemName</a></div>
-			
-			<div><%=labelOwner%>:&nbsp;<%=itemOwner%></div>
-			
-			<% if (itemSummary != null && itemSummary.trim().length() != 0) { %>
-				<div><%=labelSummary%>:&nbsp;<%=itemSummary%></div>
-			<% } %>			
-			
-			<% if (itemDateCreated != null) { %>
-				<div><%=labelDateCreated%>:&nbsp;<%=itemDateCreated%></div>
-			<% } %>			
-			
-			<% if (itemDateModified != null) { %>
-				<div><%=labelDateModified%>:&nbsp;<%=itemDateModified%></div>
-			<% } %>			
-		</div>				
-	<%							
-	}
-	%>
-	<div style="background-color: RGB(219, 219, 219);">		
-		<table>
-			<tr>				
-				<% String link = uicomponent.event("Refresh"); %>
-				<td width="50%" align="right">
-				<% if (uicomponent.showRefreshButton()) { %>
-					<div style="line-height: 20px; width: 50px; border: 1px solid red;"><a href="$link">$labelRefreshAction</a></div>
-				<% } %>
-				</td>
-				<td><%uicomponent.renderChild(UICustomizeablePaginator.class);%></td>
-			</tr>
-		</table>				
-	</div>				
+		%>
+		<div class="CommentFunc">
+			<% if (uicomponent.showRefreshButton()) { %>
+				<% String link = uicomponent.event("Refresh"); %>				
+				<div class="CommentRefresh">
+					<a href="$link">$labelRefreshAction</a>
+				</div>
+			<% } %>
+			<%uicomponent.renderChild(UICustomizeablePaginator.class);%>
+		</div>					
+	</div>
 </div>
