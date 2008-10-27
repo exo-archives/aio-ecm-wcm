@@ -16,6 +16,8 @@
  */
 package org.exoplatform.services.wcm.publication.defaultlifecycle;
 
+import java.util.List;
+
 import javax.jcr.Node;
 import javax.jcr.Value;
 
@@ -54,17 +56,19 @@ public class NavigationEventListenerDelegate {
     UserPortalConfigService userPortalConfigService = Util.getServices(UserPortalConfigService.class);
     for (PageNode pageNode : pageNavigation.getNodes()) {
       Page page = userPortalConfigService.getPage(pageNode.getPageReference(), org.exoplatform.portal.webui.util.Util.getPortalRequestContext().getRemoteUser());
-      for (String applicationId : Util.getListApplicationIdByPage(page)) {
-        Node content = Util.getNodeByApplicationId(applicationId);
-        if (content != null) {
-          if (content.hasProperty("publication:applicationIDs")) {
-            for (Value value : content.getProperty("publication:applicationIDs").getValues()) {
-              if (!value.getString().equals(applicationId)) {
-                Util.saveAddedItem(page, applicationId, content, lifecycleName);
+      if (page != null) {
+        for (String applicationId : Util.getListApplicationIdByPage(page)) {
+          Node content = Util.getNodeByApplicationId(applicationId);
+          if (content != null) {
+            if (content.hasProperty("publication:applicationIDs")) {
+              for (Value value : content.getProperty("publication:applicationIDs").getValues()) {
+                if (!value.getString().equals(applicationId)) {
+                  Util.saveAddedItem(page, applicationId, content, lifecycleName);
+                }
               }
+            } else {
+              Util.saveAddedItem(page, applicationId, content, lifecycleName);
             }
-          } else {
-            Util.saveAddedItem(page, applicationId, content, lifecycleName);
           }
         }
       }
@@ -72,6 +76,9 @@ public class NavigationEventListenerDelegate {
   }
   
   private void updateRemovedPageNode(PageNavigation pageNavigation) throws Exception {
-    
+    List<PageNode> listPortalPageNode = pageNavigation.getNodes();
+    // PageNavigation -> got PageNodes -> + PortalName -> NavigationNodeUris
+    // Query -> got all Node published -> got node's NavigationNodeUris
+    // Compare -> If == -> remove node's properties
   }
 }

@@ -36,6 +36,7 @@ import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
+import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleException;
 import org.exoplatform.services.ecm.publication.PublicationService;
@@ -59,8 +60,10 @@ public class Util {
   
   public static List<PageNode> findPageNodeByPageId(PageNavigation nav, String pageId) throws Exception {
     List<PageNode> list = new ArrayList<PageNode>();
-    for (PageNode node : nav.getNodes()) {
-      findPageNodeByPageId(node, pageId, list);
+    if (nav.getOwnerType().equals(PortalConfig.PORTAL_TYPE)) {
+      for (PageNode node : nav.getNodes()) {
+        findPageNodeByPageId(node, pageId, list);
+      }
     }
     return list;
   }
@@ -162,7 +165,11 @@ public class Util {
     Session session = content.getSession();
     ValueFactory valueFactory = session.getValueFactory();
     
-    //Update navigationNodeURI
+    List<String> nodeAppIds = getValuesAsString(content, "publication:applicationIDs");
+    String mixedAppId = setMixedApplicationId(page.getPageId(), applicationId);
+    if(nodeAppIds.contains(mixedAppId))
+      return;
+
     List<String> listExistedNavigationNodeUri = getValuesAsString(content, "publication:navigationNodeURIs");    
     String nodeURILogs = "";
     for (String uri : publicationPlugin.getListPageNavigationUri(page)) {
@@ -173,17 +180,11 @@ public class Util {
     }                   
     content.setProperty("publication:navigationNodeURIs", toValues(valueFactory, listExistedNavigationNodeUri));
     
-    //Update applicationIDs
-    List<String> appIdList = getValuesAsString(content, "publication:applicationIDs");
-    String mixedAppId = setMixedApplicationId(page.getPageId(), applicationId);
-    if(!appIdList.contains(mixedAppId)) {
-      appIdList.add(mixedAppId);
-      content.setProperty("publication:applicationIDs", toValues(valueFactory, appIdList));
-    }
-    //Update webpageIds
-    List<String> pageIdList = getValuesAsString(content, "publication:webPageIDs");
-    pageIdList.add(page.getPageId());    
-    content.setProperty("publication:webPageIDs", toValues(valueFactory, pageIdList));
+    List<String> nodeWebPageIds = getValuesAsString(content, "publication:webPageIDs");
+    nodeWebPageIds.add(page.getPageId());
+    nodeAppIds.add(mixedAppId);
+    content.setProperty("publication:applicationIDs", toValues(valueFactory, nodeAppIds));
+    content.setProperty("publication:webPageIDs", toValues(valueFactory, nodeWebPageIds));
     
     publicationPlugin.changeState(content, "published", null);
     
