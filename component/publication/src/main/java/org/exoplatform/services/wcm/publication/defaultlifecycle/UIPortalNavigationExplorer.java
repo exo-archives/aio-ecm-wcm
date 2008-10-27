@@ -119,6 +119,7 @@ public class UIPortalNavigationExplorer extends UIContainer{
     return sharedPortal.getName().equals(portalName);    
   }
 
+  @SuppressWarnings("unchecked")
   public void selectTreeNodeByUri(String uri) throws Exception {
     UIPublicationTree tree = getChild(UIPublicationTree.class);
     if(currentNode == null) {

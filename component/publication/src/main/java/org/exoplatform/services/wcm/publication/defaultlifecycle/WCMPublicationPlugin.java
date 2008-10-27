@@ -39,7 +39,6 @@ import javax.jcr.lock.LockException;
 import javax.jcr.version.VersionException;
 
 import org.exoplatform.commons.utils.PageList;
-import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.application.Preference;
@@ -53,7 +52,6 @@ import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.ecm.publication.IncorrectStateUpdateLifecycleException;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
@@ -144,7 +142,7 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
   public void changeState(Node node, String newState, HashMap<String, String> context) throws IncorrectStateUpdateLifecycleException, Exception {
     Session session = node.getSession();
     node.setProperty(CURRENT_STATE, newState);
-    PublicationService publicationService = getServices(PublicationService.class);
+    PublicationService publicationService = Util.getServices(PublicationService.class);
 
     if (newState.equals(ENROLLED)) {
       String lifecycleName = node.getProperty("publication:lifecycleName").getString();
@@ -239,10 +237,10 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
    */
   private List<String> getRunningPortals(String userId) throws Exception {
     List<String> listPortalName = new ArrayList<String>();
-    DataStorage service = getServices(DataStorage.class);
+    DataStorage service = Util.getServices(DataStorage.class);
     Query<PortalConfig> query = new Query<PortalConfig>(null, null, null, null, PortalConfig.class) ;
     PageList pageList = service.find(query) ;
-    UserACL userACL = getServices(UserACL.class);
+    UserACL userACL = Util.getServices(UserACL.class);
     for(Object object:pageList.getAll()) {
       PortalConfig portalConfig = (PortalConfig)object;
       if(userACL.hasPermission(portalConfig, userId)) {
@@ -253,17 +251,17 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
   }
 
   public void publishContentToPage(Node content, Page page) throws Exception {
-    UserPortalConfigService userPortalConfigService = getServices(UserPortalConfigService.class);
+    UserPortalConfigService userPortalConfigService = Util.getServices(UserPortalConfigService.class);
     Application portlet = new Application();
     portlet.setApplicationType(org.exoplatform.web.application.Application.EXO_PORTLET_TYPE);
     portlet.setShowInfoBar(false);
 
     // Create portlet
-    WCMConfigurationService configurationService = getServices(WCMConfigurationService.class);
+    WCMConfigurationService configurationService = Util.getServices(WCMConfigurationService.class);
     StringBuilder windowId = new StringBuilder();
     windowId.append(PortalConfig.PORTAL_TYPE)
             .append("#")
-            .append(Util.getUIPortal().getOwner())
+            .append(org.exoplatform.portal.webui.util.Util.getUIPortal().getOwner())
             .append(":")
             .append(configurationService.getPublishingPortletName())
             .append("/")
@@ -274,7 +272,7 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
     PortletPreferences portletPreferences = new PortletPreferences();
     portletPreferences.setWindowId(windowId.toString());
     portletPreferences.setOwnerType(PortalConfig.PORTAL_TYPE);
-    portletPreferences.setOwnerId(Util.getUIPortal().getOwner());
+    portletPreferences.setOwnerId(org.exoplatform.portal.webui.util.Util.getUIPortal().getOwner());
     ArrayList<Preference> listPreference = new ArrayList<Preference>();
 
     Preference preferenceR = new Preference();
@@ -300,7 +298,7 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
     
     portletPreferences.setPreferences(listPreference);
 
-    DataStorage dataStorage = getServices(DataStorage.class);
+    DataStorage dataStorage = Util.getServices(DataStorage.class);
     dataStorage.save(portletPreferences);
 
     // Add portlet to page
@@ -336,7 +334,7 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
       }
     }
     page.setChildren(children);
-    UserPortalConfigService userPortalConfigService = getServices(UserPortalConfigService.class);
+    UserPortalConfigService userPortalConfigService = Util.getServices(UserPortalConfigService.class);
     userPortalConfigService.update(page);
   }
 
@@ -349,7 +347,7 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
    */
   public List<String> getListPageNavigationUri(Page page) throws Exception {
     List<String> listPageNavigationUri = new ArrayList<String>();
-    DataStorage dataStorage = getServices(DataStorage.class);    
+    DataStorage dataStorage = Util.getServices(DataStorage.class);    
     RequestContext requestContext = WebuiRequestContext.getCurrentInstance();
     for (String portalName : getRunningPortals(requestContext.getRemoteUser())) {
       Query<PageNavigation> query = new Query<PageNavigation>(PortalConfig.PORTAL_TYPE,portalName,PageNavigation.class);
@@ -358,16 +356,11 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
         PageNavigation pageNavigation = PageNavigation.class.cast(object);
         List<PageNode> listPageNode = org.exoplatform.services.wcm.publication.defaultlifecycle.Util.findPageNodeByPageId(pageNavigation, page.getPageId());        
         for (PageNode pageNode : listPageNode) {
-          listPageNavigationUri.add("/" + portalName + "/" + pageNode.getUri());
+          listPageNavigationUri.add(Util.setMixedNavigationUri(portalName, pageNode.getUri()));
         }
       }
     }
     return listPageNavigationUri;
-  }
-
-  public <T> T getServices(Class<T> clazz) {
-    ExoContainer exoContainer = ExoContainerContext.getCurrentContainer();
-    return clazz.cast(exoContainer.getComponentInstanceOfType(clazz));
   }
 
   /**
@@ -380,7 +373,7 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
    * @throws Exception the exception
    */
   private String getPortalForContent(Node contentNode) throws Exception {
-    LivePortalManagerService livePortalManagerService = getServices(LivePortalManagerService.class);
+    LivePortalManagerService livePortalManagerService = org.exoplatform.services.wcm.publication.defaultlifecycle.Util.getServices(LivePortalManagerService.class);
     for(String portalPath:livePortalManagerService.getLivePortalsPath()) {
       if(contentNode.getPath().startsWith(portalPath)) {
         return livePortalManagerService.getPortalNameByPath(portalPath);
@@ -400,7 +393,7 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
    * @throws Exception the exception
    */
   private boolean isSharedPortal(String portalName) throws Exception{
-    LivePortalManagerService livePortalManagerService = getServices(LivePortalManagerService.class);
+    LivePortalManagerService livePortalManagerService = Util.getServices(LivePortalManagerService.class);
     Node sharedPortal = livePortalManagerService.getLiveSharedPortal(SessionProviderFactory.createSessionProvider());
     return sharedPortal.getName().equals(portalName);    
   }
@@ -461,7 +454,7 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
     ResourceBundle resourceBundle= ResourceBundle.getBundle(LOCALE_FILE, locale, cl);
     String result = resourceBundle.getString(key);
     if(values != null) {
-      return String.format(result,values); 
+      return String.format(result, values); 
     }        
     return result;
   }    

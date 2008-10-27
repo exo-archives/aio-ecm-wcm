@@ -16,8 +16,14 @@
  */
 package org.exoplatform.services.wcm.publication.defaultlifecycle;
 
+import javax.jcr.Node;
+import javax.jcr.Value;
+
 import org.exoplatform.container.ExoContainer;
+import org.exoplatform.portal.config.UserPortalConfigService;
+import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
+import org.exoplatform.portal.config.model.PageNode;
 
 /**
  * Created by The eXo Platform SAS
@@ -28,14 +34,44 @@ import org.exoplatform.portal.config.model.PageNavigation;
 public class NavigationEventListenerDelegate {
 
   private String lifecycleName;
-  private ExoContainer container;
+//  private ExoContainer container;
 
   public NavigationEventListenerDelegate(String lifecycleName, ExoContainer container) {
     this.lifecycleName = lifecycleName;
-    this.container = container;
+//    this.container = container;
   }
 
   public void updateLifecyleOnCreateNavigation(PageNavigation navigation) throws Exception { }
-  public void updateLifecycleOnChangeNavigation(PageNavigation navigation) throws Exception { }
+  
+  public void updateLifecycleOnChangeNavigation(PageNavigation pageNavigation) throws Exception {
+    updateAddedPageNode(pageNavigation);
+    updateRemovedPageNode(pageNavigation);
+  }
+  
   public void updateLifecyleOnRemoveNavigation(PageNavigation navigation) throws Exception { }
+  
+  private void updateAddedPageNode(PageNavigation pageNavigation) throws Exception {
+    UserPortalConfigService userPortalConfigService = Util.getServices(UserPortalConfigService.class);
+    for (PageNode pageNode : pageNavigation.getNodes()) {
+      Page page = userPortalConfigService.getPage(pageNode.getPageReference(), org.exoplatform.portal.webui.util.Util.getPortalRequestContext().getRemoteUser());
+      for (String applicationId : Util.getListApplicationIdByPage(page)) {
+        Node content = Util.getNodeByApplicationId(applicationId);
+        if (content != null) {
+          if (content.hasProperty("publication:applicationIDs")) {
+            for (Value value : content.getProperty("publication:applicationIDs").getValues()) {
+              if (!value.getString().equals(applicationId)) {
+                Util.saveAddedItem(page, applicationId, content, lifecycleName);
+              }
+            }
+          } else {
+            Util.saveAddedItem(page, applicationId, content, lifecycleName);
+          }
+        }
+      }
+    }
+  }
+  
+  private void updateRemovedPageNode(PageNavigation pageNavigation) throws Exception {
+    
+  }
 }

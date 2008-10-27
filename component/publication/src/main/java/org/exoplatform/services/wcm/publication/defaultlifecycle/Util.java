@@ -17,17 +17,33 @@
 package org.exoplatform.services.wcm.publication.defaultlifecycle;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import javax.jcr.Node;
+import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.ValueFactory;
 
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.portal.application.PortletPreferences;
+import org.exoplatform.portal.application.Preference;
+import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleException;
+import org.exoplatform.services.ecm.publication.PublicationService;
+import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
+import org.exoplatform.services.wcm.core.WCMConfigurationService;
+import org.exoplatform.services.wcm.publication.WCMPublicationService;
 
 /**
  * Created by The eXo Platform SAS
@@ -36,6 +52,10 @@ import org.exoplatform.portal.config.model.PageNode;
  * Oct 2, 2008  
  */
 public class Util {
+  
+  private static final String APPLICATION_SEPARATOR = "@";
+  private static final String HISTORY_SEPARATOR = "; ";
+  private static final String URI_SEPARATOR = "/";
   
   public static List<PageNode> findPageNodeByPageId(PageNavigation nav, String pageId) throws Exception {
     List<PageNode> list = new ArrayList<PageNode>();
@@ -73,7 +93,7 @@ public class Util {
         if(application.getInstanceId().contains(applicationName)) {
           results.add(application.getInstanceId());
         }
-      }else if(object instanceof Container) {
+      } else if(object instanceof Container) {
         Container child = Container.class.cast(object);
         findAppInstancesByContainerAndName(child, applicationName, results);
       }
@@ -95,5 +115,144 @@ public class Util {
       list.add(factory.createValue(value));
     }
     return list.toArray(new Value[list.size()]);
+  }
+  
+  
+  public static Node getNodeByApplicationId(String applicationId) throws Exception {
+    SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
+    DataStorage dataStorage = getServices(DataStorage.class);
+    RepositoryService repositoryService = getServices(RepositoryService.class);
+    PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(applicationId));
+    String repositoryName = null;
+    String workspaceName = null;
+    String nodeUUID = null;
+    for (Object object : portletPreferences.getPreferences()) {
+      Preference preference = (Preference) object;
+      if (preference.getName().equals("repository")) {
+        repositoryName = preference.getValues().get(0).toString();
+      } else if (preference.getName().equals("workspace")) {
+        workspaceName = preference.getValues().get(0).toString();
+      } else if (preference.getName().equals("nodeUUID")) {
+        nodeUUID = preference.getValues().get(0).toString();
+      }
+      if (repositoryName != null && workspaceName != null && nodeUUID != null) {
+        Session session = sessionProvider.getSession(workspaceName, repositoryService.getRepository(repositoryName));
+        Node content = session.getNodeByUUID(nodeUUID);
+        return content;
+      }
+    }
+    return null;
+  }
+  
+  public static List<String> getListApplicationIdByPage(Page page) {
+    WCMConfigurationService configurationService = getServices(WCMConfigurationService.class);
+    return Util.findAppInstancesByName(page, configurationService.getPublishingPortletName());
+  }
+  
+  public static void saveAddedItem(Page page, String applicationId, Node content, String lifecycleName) throws Exception {    
+    PublicationService publicationService = getServices(PublicationService.class);                 
+    String nodeLifecycleName = null;
+    try {
+      nodeLifecycleName = publicationService.getNodeLifecycleName(content);
+    } catch (NotInPublicationLifecycleException e) { return; }
+    if (!lifecycleName.equals(nodeLifecycleName)) return;
+    
+    WCMPublicationService presentationService = getServices(WCMPublicationService.class);
+    WCMPublicationPlugin publicationPlugin = (WCMPublicationPlugin) presentationService.getWebpagePublicationPlugins().get(WCMPublicationPlugin.LIFECYCLE_NAME);
+    Session session = content.getSession();
+    ValueFactory valueFactory = session.getValueFactory();
+    
+    //Update navigationNodeURI
+    List<String> listExistedNavigationNodeUri = getValuesAsString(content, "publication:navigationNodeURIs");    
+    String nodeURILogs = "";
+    for (String uri : publicationPlugin.getListPageNavigationUri(page)) {
+      if(!listExistedNavigationNodeUri.contains(uri)) {
+        listExistedNavigationNodeUri.add(uri);
+      }            
+      nodeURILogs += uri + HISTORY_SEPARATOR;
+    }                   
+    content.setProperty("publication:navigationNodeURIs", toValues(valueFactory, listExistedNavigationNodeUri));
+    
+    //Update applicationIDs
+    List<String> appIdList = getValuesAsString(content, "publication:applicationIDs");
+    String mixedAppId = setMixedApplicationId(page.getPageId(), applicationId);
+    if(!appIdList.contains(mixedAppId)) {
+      appIdList.add(mixedAppId);
+      content.setProperty("publication:applicationIDs", toValues(valueFactory, appIdList));
+    }
+    //Update webpageIds
+    List<String> pageIdList = getValuesAsString(content, "publication:webPageIDs");
+    pageIdList.add(page.getPageId());    
+    content.setProperty("publication:webPageIDs", toValues(valueFactory, pageIdList));
+    
+    publicationPlugin.changeState(content, "published", null);
+    
+    String[] logs = new String[] {new Date().toString(), WCMPublicationPlugin.PUBLISHED, session.getUserID(), "PublicationService.WCMPublicationPlugin.nodePublished", nodeURILogs};
+    publicationService.addLog(content, logs);    
+    session.save();
+  } 
+  
+  public static void saveRemovedItem(Page page, String applicationId, Node content) throws Exception {
+    WCMPublicationService presentationService = getServices(WCMPublicationService.class);
+    PublicationService publicationService = getServices(PublicationService.class);
+    WCMPublicationPlugin publicationPlugin = (WCMPublicationPlugin) presentationService.getWebpagePublicationPlugins().get(WCMPublicationPlugin.LIFECYCLE_NAME);
+    
+    Session session = content.getSession();
+    ValueFactory valueFactory = session.getValueFactory();
+    List<Value> listTmp;
+    
+    listTmp = new ArrayList<Value>(Arrays.asList(content.getProperty("publication:applicationIDs").getValues()));
+    listTmp.remove(valueFactory.createValue(setMixedApplicationId(page.getPageId(), applicationId)));
+    content.setProperty("publication:applicationIDs", listTmp.toArray(new Value[0]));
+    
+    listTmp = new ArrayList<Value>(Arrays.asList(content.getProperty("publication:webPageIDs").getValues()));
+    listTmp.remove(0);
+    content.setProperty("publication:webPageIDs", listTmp.toArray(new Value[0]));
+    
+    List<String> listPageNavigationUri = publicationPlugin.getListPageNavigationUri(page);
+    if (listTmp.size() > 0) {
+      listTmp = new ArrayList<Value>(Arrays.asList(content.getProperty("publication:navigationNodeURIs").getValues()));
+      List<Value> list = new ArrayList<Value>(Arrays.asList(content.getProperty("publication:navigationNodeURIs").getValues()));
+      for (Value value : listTmp) {
+        if (!listPageNavigationUri.contains(value.getString())) {
+          list.remove(value);
+        }
+      }
+      content.setProperty("publication:navigationNodeURIs", list.toArray(new Value[0]));
+    } else {
+      content.setProperty("publication:navigationNodeURIs", new ArrayList<Value>().toArray(new Value[0]));
+      publicationPlugin.changeState(content, "unpublished", null);
+    }
+    
+    String uris = "";
+    for (String uri : listPageNavigationUri) {
+      uris += uri + HISTORY_SEPARATOR;
+    }
+    content.setProperty("publication:navigationNodeURIs", listTmp.toArray(new Value[0]));
+    String[] logs = new String[] {new Date().toString(), WCMPublicationPlugin.PUBLISHED, session.getUserID(), "PublicationService.WCMPublicationPlugin.nodeRemoved", uris};
+    publicationService.addLog(content, logs);
+    
+    session.save();
+  }
+  
+  public static String setMixedNavigationUri(String portalName, String pageNodeUri) {
+    return URI_SEPARATOR + portalName + URI_SEPARATOR + pageNodeUri;
+  }
+  
+  public static String[] parseMixedNavigationUri(String mixedNavigationUri) {
+    return mixedNavigationUri.split(URI_SEPARATOR);
+  }
+  
+  public static String setMixedApplicationId(String pageId, String applicationId) {
+    return pageId + APPLICATION_SEPARATOR + applicationId;
+  }
+  
+  public static String[] parseMixedApplicationId(String mixedApplicationId) {
+    return mixedApplicationId.split(APPLICATION_SEPARATOR);
+  }
+  
+  public static <T> T getServices(Class<T> clazz) {
+    ExoContainer exoContainer = ExoContainerContext.getCurrentContainer();
+    return clazz.cast(exoContainer.getComponentInstanceOfType(clazz));
   }
 } 
