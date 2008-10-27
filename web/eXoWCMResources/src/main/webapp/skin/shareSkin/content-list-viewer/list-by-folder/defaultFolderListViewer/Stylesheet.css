@@ -1,0 +1,97 @@
+.UIContentListPresentationDefault {
+
+}
+
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, code, del, dfn, em, img, q, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-weight: inherit;
+    font-style: inherit;
+    font-size: 100%;
+    font-family: inherit;
+    vertical-align: baseline;
+    outline: 0;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    line-height: 18px;
+    color: #000;
+}
+
+blockquote, q {
+    quotes: "" "";
+}
+
+a {
+    color: #437daa;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #024e7f;
+}
+
+/*	
+ Comment
+*/
+
+.Comment {
+    border: 1px solid #b7b7b7;
+    padding: 10px;
+    margin: 10px;
+    background: #fff;
+}
+
+.Comment .CommentItem {
+    border-bottom: 1px dotted #2f2f2f;
+    padding-top: 10px;
+}
+
+.Comment .CommentUser a {
+    font-size: 14px;
+    color: #0385d9;
+    font-weight: bold;
+}
+
+.Comment .CommentDate {
+    color: #8f8f8f;
+}
+
+.Comment .CommentContent p {
+    padding: 5px 0;
+}
+.Comment .CommentContent img {
+	float: left;
+	margin: 5px 10px 0 0;
+}
+.Comment .CommentViewMore {
+    text-align: right;
+}
+
+.Comment .CommentViewMore a {
+    color: #fd711c;
+    font-size: 10px;
+}
+
+.CommentFunc {
+    padding: 10px 0;
+    height: 1%;
+    overflow: hidden;
+}
+
+.CommentFunc .CommentRefresh {
+    width: 200px;
+    float: left;
+}
+
+.CommentFunc .CommentRefresh a {
+    display: block;
+    padding: 0 3px 3px 25px;
+    background: url(images/icoRefresh.gif) no-repeat;
+    color: #ff4200;
+    font-weight: bold;
+    font-size: 13px;
+}
