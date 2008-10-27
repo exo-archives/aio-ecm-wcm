@@ -135,6 +135,7 @@ public class UIFolderViewer extends UIContainer implements RefreshDelegateAction
       throw new ItemNotFoundException();
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+    repositoryService.getCurrentRepository();
     String userId = Util.getPortalRequestContext().getRemoteUser();
     SessionProvider sessionProvider = null;
     if (userId == null) {

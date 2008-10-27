@@ -32,7 +32,7 @@ import org.exoplatform.webui.config.annotation.EventConfig;
  */
 
 @ComponentConfig(
-    template = "classpath:groovy/ecm/webui/tree/selectone/UISelectPathPanel.gtmpl",
+    template = "app:/groovy/ContentListViewer/config/UISelectFolderPathPanel.gtmpl",
     events = { 
         @EventConfig(listeners = UISelectPathPanel.SelectActionListener.class) 
     }
@@ -52,8 +52,7 @@ public class UISelectFolderPathPanel extends UISelectPathPanel {
     Node documentsFolder = null;
     String parentNodePath = parentNode.getPath(); 
     if (parentNodePath.equals(root.getPath())) {
-      list.add(currentPortal);
-      list.add(sharedPortal);
+      list.clear();
     } else if (parentNodePath.equals(currentPortal.getPath())) {
       webContentsFolder = uiFolderPathTreeBuilder.getWebContentsFolder(currentPortal);
       documentsFolder = uiFolderPathTreeBuilder.getDocumentsFolder(currentPortal);

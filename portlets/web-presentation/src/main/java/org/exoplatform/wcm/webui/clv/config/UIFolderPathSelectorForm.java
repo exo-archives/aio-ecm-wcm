@@ -31,12 +31,14 @@ import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
  * Oct 15, 2008
  */
 
-@ComponentConfig(lifecycle = UIContainerLifecycle.class)
+@ComponentConfig(
+    lifecycle = UIContainerLifecycle.class
+)
 public class UIFolderPathSelectorForm extends UIBaseNodeTreeSelector {
   public UIFolderPathSelectorForm() throws Exception {
     addChild(UIFolderPathTreeBuilder.class, null, UIFolderPathTreeBuilder.class.getSimpleName()
         + hashCode());
-    addChild(UISelectFolderPathPanel.class, null, UISelectFolderPathPanel.class.getSimpleName() + hashCode());
+    addChild(UISelectFolderPathPanel.class, null, UISelectFolderPathPanel.class.getSimpleName() + hashCode());    
   }
 
   public void init() throws Exception {

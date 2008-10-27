@@ -16,6 +16,7 @@
  */
 package org.exoplatform.wcm.webui.clv.config;
 
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,8 +26,11 @@ import javax.jcr.nodetype.NodeType;
 
 import org.exoplatform.ecm.webui.tree.UINodeTree;
 import org.exoplatform.ecm.webui.tree.UINodeTreeBuilder;
+import org.exoplatform.services.cms.templates.TemplateService;
+import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
 import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 
@@ -35,10 +39,7 @@ import org.exoplatform.webui.config.annotation.EventConfig;
  * Oct 16, 2008
  */
 
-@ComponentConfig(
-    events = @EventConfig(listeners = UINodeTreeBuilder.ChangeNodeActionListener.class)
-)
-
+@ComponentConfig(events = @EventConfig(listeners = UINodeTreeBuilder.ChangeNodeActionListener.class))
 public class UIFolderPathTreeBuilder extends UINodeTreeBuilder {
 
   private Node currentPortal;
@@ -47,6 +48,23 @@ public class UIFolderPathTreeBuilder extends UINodeTreeBuilder {
 
   public UIFolderPathTreeBuilder() throws Exception {
     super();
+  }
+
+  public void processRender(WebuiRequestContext context) throws Exception {
+    Writer writer = context.getWriter();
+    String folderExplorerTitle = context.getApplicationResourceBundle().getString(
+        "UIFolderExplorer.title");
+    writer.write("<div class=\"FolderExplorer\">");
+    writer.write("<div class=\"TitleBox\">");
+    writer.write("<p>" + folderExplorerTitle + "</p>");
+    writer.write("</div>");
+    writer.write("<div class=\"FolderExplorerTree\">");
+    writer.write("<div class=\"FolderInnerExplorerTree\">");
+    buildTree();
+    super.renderChildren();
+    writer.write("</div>");
+    writer.write("</div>");
+    writer.write("</div>");
   }
 
   public Node getCurrentPortal() {
@@ -70,14 +88,13 @@ public class UIFolderPathTreeBuilder extends UINodeTreeBuilder {
     tree.setSelected(currentNode);
     String currentPath = currentNode.getPath();
     String currentPortalPath = currentPortal.getPath();
-    String sharedPortalPath = sharedPortal.getPath();    
+    String sharedPortalPath = sharedPortal.getPath();
     Node webContentsFolder = null;
     Node documentsFolder = null;
     if (currentNode.getPath().equals(rootTreeNode.getPath())) {
       List<Node> portals = new ArrayList<Node>();
       portals.add(currentPortal);
       portals.add(sharedPortal);
-      tree.setChildren(portals);
       tree.setSibbling(portals);
       tree.setParentSelected(rootTreeNode);
     } else if (currentPath.equals(sharedPortalPath)) {
@@ -98,9 +115,9 @@ public class UIFolderPathTreeBuilder extends UINodeTreeBuilder {
       tree.setChildren(children);
       tree.setSibbling(children);
       tree.setParentSelected(rootTreeNode);
-    } else {      
+    } else {
       List<Node> children = filterSubFolder(currentNode);
-      tree.setChildren(children);      
+      tree.setChildren(children);
       tree.setSibbling(children);
       tree.setParentSelected(currentNode.getParent());
     }
@@ -109,16 +126,21 @@ public class UIFolderPathTreeBuilder extends UINodeTreeBuilder {
 
   private List<Node> filterSubFolder(Node parent) throws Exception {
     List<Node> subFolderList = new ArrayList<Node>();
+    RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
+    String repository = repositoryService.getCurrentRepository().getConfiguration().getName();
+    TemplateService templateService = getApplicationComponent(TemplateService.class);
+    List<String> listDocumentTypes = templateService.getDocumentTemplates(repository);
     for (NodeIterator iterator = parent.getNodes(); iterator.hasNext();) {
       Node child = iterator.nextNode();
       NodeType nodeType = child.getPrimaryNodeType();
-      if (nodeType.isNodeType("nt:folder") || nodeType.isNodeType("nt:unstructured")) {
+      if ((nodeType.isNodeType("nt:folder") || nodeType.isNodeType("nt:unstructured"))
+          && (! listDocumentTypes.contains(nodeType.getName()))) {
         subFolderList.add(child);
       }
     }
     return subFolderList;
-  }  
-  
+  }
+
   public Node getWebContentsFolder(Node portal) throws Exception {
     WebSchemaConfigService configService = getApplicationComponent(WebSchemaConfigService.class);
     PortalFolderSchemaHandler portalFolderSchemaHandler = configService
@@ -132,5 +154,4 @@ public class UIFolderPathTreeBuilder extends UINodeTreeBuilder {
         .getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
     return portalFolderSchemaHandler.getDocumentStorage(portal);
   }
-
 }
