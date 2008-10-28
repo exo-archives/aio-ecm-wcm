@@ -1,19 +1,23 @@
 <%
 	def totalPage = uicomponent.getAvailablePage();
 	def currentPage = uicomponent.getCurrentPage();
+	String firstPage = _ctx.appRes("UIPaginatorDeafault.label.first");
+	String previousPage = _ctx.appRes("UIPaginatorDeafault.label.previous");
+	String nextPage = _ctx.appRes("UIPaginatorDeafault.label.next");
+	String lastPage = _ctx.appRes("UIPaginatorDeafault.label.last");
 %>
 
 <div class="UIPaginatorDeafault">
 
   <%if(currentPage > 10) { %>
-	  <a href="<%=uicomponent.event("ShowPage","${currentPage -10}")%>" class="First" title="<%=_ctx.appRes("UIPaginatorDeafault.label.first")%>"></a>			
+	  <a href="<%=uicomponent.event("ShowPage","${currentPage -10}")%>" class="First">$firstPage</a>			
   <% } else { %>
-	  <a class="FirstDis" title="<%=_ctx.appRes("UIPaginatorDeafault.label.first")%>"></a>			
+	  <a class="FirstDis">$firstPage</a>			
   <%}%>
   <% if( currentPage - 1 > 0 ){%>        
-      <a href="<%=uicomponent.event("ShowPage","${currentPage - 1}")%>" class="Prev" title="<%=_ctx.appRes("UIPaginatorDeafault.label.previous")%>"></a>
+      <a href="<%=uicomponent.event("ShowPage","${currentPage - 1}")%>" class="Prev">$previousPage</a>
   <% } else {%>
-	  <a class="PrevDis" title="<%=_ctx.appRes("UIPaginatorDeafault.label.previous")%>"></a>
+	  <a class="PrevDis">$previousPage</a>
   <%}%>
   
   <%
@@ -36,16 +40,16 @@
   <%}%>    
   
   <% if(currentPage +1 <= totalPage) { %>
-       <a href="<%=uicomponent.event("ShowPage","${currentPage + 1}")%>" class="Next" title="<%=_ctx.appRes("UIPaginatorDeafault.label.next")%>"></a>	
+       <a href="<%=uicomponent.event("ShowPage","${currentPage + 1}")%>" class="Next">$nextPage</a>	
   <% } else { %>
-	   <a class="NextDis" title="<%=_ctx.appRes("UIPaginatorDeafault.label.next")%>"></a>
+	   <a class="NextDis">$nextPage</a>
   <%}%>
   <% if(currentPage + 10 <= totalPage) {%>        
-       <a href="<%=uicomponent.event("ShowPage","${currentPage + 10}")%>" class="Last" title="<%=_ctx.appRes("UIPaginatorDeafault.label.last")%>"></a>					      
+       <a href="<%=uicomponent.event("ShowPage","${currentPage + 10}")%>" class="Last">$lastPage</a>					      
   	  <% } else if(currentPage + 1 <= totalPage) { %>
-	   <a class="LastDis" title="<%=_ctx.appRes("UIPaginatorDeafault.label.last")%>"></a>
+	   <a class="LastDis">$lastPage</a>
   <% } else {%>
-	   <a class="LastDis" title="<%=_ctx.appRes("UIPaginatorDeafault.label.last")%>"></a>
+	   <a class="LastDis">$lastPage</a>
   <% }%>    	    
   
 </div>

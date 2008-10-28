@@ -50,7 +50,11 @@ import javax.jcr.Node;
 					<a href="$link">$labelRefreshAction</a>
 				</div>
 			<% } %>
-			<%uicomponent.renderChild(UICustomizeablePaginator.class);%>
+			<% 
+			if (uicomponent.showPaginator()) { 
+				uicomponent.renderChild(UICustomizeablePaginator.class)
+			} 
+			%>
 		</div>					
 	</div>
 </div>
