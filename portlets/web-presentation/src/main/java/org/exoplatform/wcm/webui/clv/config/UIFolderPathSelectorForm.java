@@ -16,8 +16,6 @@
  */
 package org.exoplatform.wcm.webui.clv.config;
 
-import java.io.Writer;
-
 import javax.jcr.Node;
 
 import org.exoplatform.ecm.webui.tree.UIBaseNodeTreeSelector;
@@ -25,11 +23,10 @@ import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIPopupWindow;
-import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
+import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
@@ -39,42 +36,18 @@ import org.exoplatform.webui.event.EventListener;
  */
 
 @ComponentConfig(
-    lifecycle = UIContainerLifecycle.class, 
-    events = @EventConfig(listeners = UIFolderPathSelectorForm.CloseActionListener.class)
+    lifecycle = Lifecycle.class, 
+    events = @EventConfig(listeners = UIFolderPathSelectorForm.CloseActionListener.class),
+    template = "app:/groovy/ContentListViewer/config/UIFolderPathSelectorForm.gtmpl"
 )
 public class UIFolderPathSelectorForm extends UIBaseNodeTreeSelector {
   public UIFolderPathSelectorForm() throws Exception {
     addChild(UIFolderPathTreeBuilder.class, null, UIFolderPathTreeBuilder.class.getSimpleName()
         + hashCode());
     addChild(UISelectFolderPathPanel.class, null, UISelectFolderPathPanel.class.getSimpleName()
-        + hashCode());
+        + hashCode());    
   }
   
-  public void processRender(WebuiRequestContext context) throws Exception {    
-    Writer writer = context.getWriter();
-    String link = event(getComponentConfig().getEvents().get(0).getName());
-    writer.write("<div id=\"UIFolderPathSelectorForm\" style=\"padding: 10px;\">");
-    super.renderChildren();    
-    writer.write( "<div class=\"UIAction\">");
-    writer.write(   "<table class=\"ActionContainer\">");
-    writer.write(   "<tr>");
-    writer.write(   "<td>");
-    writer.write(     "<div onclick=\"" + link + "\" class=\"ActionButton LightBlueStyle\" onmouseover=\"this.style.color = '#058ee6'\" onmouseout=\"this.style.color='black'\">");
-    writer.write(       "<div class=\"ButtonLeft\">");
-    writer.write(         "<div class=\"ButtonRight\">");
-    writer.write(           "<div class=\"ButtonMiddle\">");
-    writer.write(             "<a href=\"javascript:void(0);\">Close</a>");
-    writer.write(           "</div>");
-    writer.write(         "</div>");
-    writer.write(       "</div>");
-    writer.write(     "</div>");
-    writer.write(   "</td>");
-    writer.write(   "</tr>");
-    writer.write(   "</table>");
-    writer.write( "</div>");
-    writer.write("</div>");
-  }
-
   public void init() throws Exception {
     UIFolderPathTreeBuilder treeBuilder = getChild(UIFolderPathTreeBuilder.class);
     UISelectFolderPathPanel pathPanel = getChild(UISelectFolderPathPanel.class);
