@@ -39,7 +39,9 @@ import org.exoplatform.webui.config.annotation.EventConfig;
  * Oct 16, 2008
  */
 
-@ComponentConfig(events = @EventConfig(listeners = UINodeTreeBuilder.ChangeNodeActionListener.class))
+@ComponentConfig(
+    events = @EventConfig(listeners = UINodeTreeBuilder.ChangeNodeActionListener.class)
+)
 public class UIFolderPathTreeBuilder extends UINodeTreeBuilder {
 
   private Node currentPortal;
@@ -134,7 +136,7 @@ public class UIFolderPathTreeBuilder extends UINodeTreeBuilder {
       Node child = iterator.nextNode();
       NodeType nodeType = child.getPrimaryNodeType();
       if ((nodeType.isNodeType("nt:folder") || nodeType.isNodeType("nt:unstructured"))
-          && (! listDocumentTypes.contains(nodeType.getName()))) {
+          && listDocumentTypes.contains(nodeType.getName())) {
         subFolderList.add(child);
       }
     }

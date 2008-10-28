@@ -92,9 +92,9 @@ public class UIFolderViewer extends UIContainer implements RefreshDelegateAction
     }
     PortletPreferences portletPreferences = getPortletPreference();
     int itemsPerPage = Integer.parseInt(portletPreferences.getValue(
-        UIContentListViewerPortlet.ITEMS_PER_PAGE, null));
+        UIContentListViewerPortlet.ITEMS_PER_PAGE, null));    
     PaginatedNodeIterator paginatedNodeIterator = new PaginatedNodeIterator(nodeIterator,
-        itemsPerPage);
+        itemsPerPage);    
     UIContentListPresentation contentListPresentation = addChild(UIContentListPresentation.class,
         null, null);
     String templatePath = getFormViewTemplatePath();

@@ -85,7 +85,7 @@ public class UIContentListPresentation extends UIContainer {
     uiPaginator = addChild(UICustomizeablePaginator.class, null, null);
     uiPaginator.setTemplatePath(paginatorTemplatePath);
     uiPaginator.setResourceResolver(resourceResolver);
-    uiPaginator.setPageList(dataPageList);
+    uiPaginator.setPageList(dataPageList);   
   }
 
   public boolean showRefreshButton() {
@@ -93,6 +93,17 @@ public class UIContentListPresentation extends UIContainer {
     String isShow = portletPreferences.getValue(UIContentListViewerPortlet.SHOW_REFRESH_BUTTON,
         null);
     return (isShow != null) ? Boolean.parseBoolean(isShow) : false;
+  }
+  
+  public boolean showPaginator() throws Exception {
+    PortletPreferences portletPreferences = ((UIFolderViewer) getParent()).getPortletPreference();
+    String itemsPerPage = portletPreferences.getValue(UIContentListViewerPortlet.ITEMS_PER_PAGE,
+        null);
+    int totalItems = uiPaginator.getTotalItems();
+    if (totalItems > Integer.parseInt(itemsPerPage)) {
+      return true;
+    }     
+    return false;
   }
 
   public String getTemplate() {

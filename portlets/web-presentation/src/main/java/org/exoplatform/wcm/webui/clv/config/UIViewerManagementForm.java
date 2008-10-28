@@ -155,7 +155,7 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
     if (uiPopup == null)
       uiPopup = uiParent.addChild(UIPopupWindow.class, null, null);
     uiPopup.setUIComponent(uiComponent);
-    uiPopup.setWindowSize(610, 300);
+    uiPopup.setWindowSize(610, -1);    
     uiPopup.setResizable(true);
     uiPopup.setShow(true);
   }
@@ -181,6 +181,7 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
   public static class SaveActionListener extends EventListener<UIViewerManagementForm> {
     public void execute(Event<UIViewerManagementForm> event) throws Exception {
       UIViewerManagementForm viewerManagementForm = event.getSource();
+      UIApplication uiApp = viewerManagementForm.getAncestorOfType(UIApplication.class);
       RepositoryService repositoryService = viewerManagementForm.getApplicationComponent(RepositoryService.class);
       ManageableRepository manageableRepository = repositoryService.getCurrentRepository();
       String repository = manageableRepository.getConfiguration().getName();
@@ -200,6 +201,10 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
       String viewThumbnails = viewerManagementForm.getUIFormCheckBoxInput(
           UIViewerManagementForm.VIEWER_THUMBNAILS_VIEW).isChecked() ? "true" : "false";
 
+      if (folderPath == null || folderPath.length() == 0) {
+        uiApp.addMessage(new ApplicationMessage("UIMessageBoard.msg.empty-folder-path", null, ApplicationMessage.WARNING));
+        return;
+      }
       PortletRequestContext portletRequestContext = (PortletRequestContext) event
           .getRequestContext();
       PortletPreferences portletPreferences = portletRequestContext.getRequest().getPreferences();
@@ -216,8 +221,7 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
           .setValue(UIContentListViewerPortlet.SHOW_REFRESH_BUTTON, showRefreshButton);
       portletPreferences.setValue(UIContentListViewerPortlet.SHOW_THUMBNAILS_VIEW, viewThumbnails);
       portletPreferences.store();
-      if (Utils.isEditPortletInCreatePageWizard()) {        
-        UIApplication uiApp = viewerManagementForm.getAncestorOfType(UIApplication.class);
+      if (Utils.isEditPortletInCreatePageWizard()) {                
         uiApp.addMessage(new ApplicationMessage("UIMessageBoard.msg.saving-success", null, ApplicationMessage.INFO));
       } else {
         portletRequestContext.setApplicationMode(PortletMode.VIEW); 
@@ -228,10 +232,14 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
   public static class CancelActionListener extends EventListener<UIViewerManagementForm> {
     public void execute(Event<UIViewerManagementForm> event) throws Exception {
       UIViewerManagementForm viewerManagementForm = event.getSource();
-      viewerManagementForm.getUIStringInput(UIViewerManagementForm.FOLDER_PATH_INPUT).setValue(null);
-      viewerManagementForm.getUIFormCheckBoxInput(UIViewerManagementForm.VIEWER_BUTTON_QUICK_EDIT).setChecked(true);
-      viewerManagementForm.getUIFormCheckBoxInput(UIViewerManagementForm.VIEWER_BUTTON_REFRESH).setChecked(true);
-      viewerManagementForm.getUIFormCheckBoxInput(UIViewerManagementForm.VIEWER_THUMBNAILS_VIEW).setChecked(true);
+      UIApplication uiApp = viewerManagementForm.getAncestorOfType(UIApplication.class);
+      PortletRequestContext portletRequestContext = (PortletRequestContext) event
+      .getRequestContext();
+      if (Utils.isEditPortletInCreatePageWizard()) {                
+        uiApp.addMessage(new ApplicationMessage("UIMessageBoard.msg.none-action-excuted", null, ApplicationMessage.INFO));
+      } else {
+        portletRequestContext.setApplicationMode(PortletMode.VIEW); 
+      }    
     }
   }
 
