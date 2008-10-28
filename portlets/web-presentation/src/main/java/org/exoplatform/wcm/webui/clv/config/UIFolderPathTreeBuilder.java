@@ -136,7 +136,7 @@ public class UIFolderPathTreeBuilder extends UINodeTreeBuilder {
       Node child = iterator.nextNode();
       NodeType nodeType = child.getPrimaryNodeType();
       if ((nodeType.isNodeType("nt:folder") || nodeType.isNodeType("nt:unstructured"))
-          && listDocumentTypes.contains(nodeType.getName())) {
+          && (!listDocumentTypes.contains(nodeType.getName()))) {
         subFolderList.add(child);
       }
     }

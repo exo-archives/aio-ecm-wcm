@@ -23,6 +23,8 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 
 import org.exoplatform.ecm.webui.tree.selectone.UISelectPathPanel;
+import org.exoplatform.services.cms.templates.TemplateService;
+import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 
@@ -41,6 +43,10 @@ public class UISelectFolderPathPanel extends UISelectPathPanel {
 
   public List<Node> getSelectableNodes() throws Exception {
     List<Node> list = new ArrayList<Node>();
+    RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
+    String repository = repositoryService.getCurrentRepository().getConfiguration().getName();
+    TemplateService templateService = getApplicationComponent(TemplateService.class);
+    List<String> listDocumentTypes = templateService.getDocumentTemplates(repository);
     if(parentNode == null) return list;
     UIFolderPathSelectorForm uiFolderPathSelectorForm = getParent();
     UIFolderPathTreeBuilder uiFolderPathTreeBuilder = uiFolderPathSelectorForm
@@ -67,7 +73,7 @@ public class UISelectFolderPathPanel extends UISelectPathPanel {
       for(NodeIterator iterator = parentNode.getNodes();iterator.hasNext();) {
         Node child = iterator.nextNode();
         if(child.isNodeType("exo:hiddenable")) continue;
-        if(matchMimeType(child) && matchNodeType(child)) {
+        if(matchMimeType(child) && matchNodeType(child) && !listDocumentTypes.contains(child.getPrimaryNodeType().getName())) {
           list.add(child);
         }
       }
