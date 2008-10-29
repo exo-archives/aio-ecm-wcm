@@ -200,8 +200,7 @@ public class PortalFolderSchemaHandler extends BaseWebSchemaHandler {
     addMixin(jsFolder,"exo:owneable");
     Node cssFolder = portalFolder.addNode("css","exo:cssFolder");
     addMixin(cssFolder,"exo:owneable");
-    Node multimedia = portalFolder.addNode("medias",NT_FOLDER);    
-    addMixin(multimedia, "exo:multimediaFolder");       
+    Node multimedia = portalFolder.addNode("medias","exo:multimediaFolder");           
     addMixin(multimedia,"exo:owneable");
     Node images = multimedia.addNode("images",NT_FOLDER);    
     addMixin(images, "exo:pictureFolder");

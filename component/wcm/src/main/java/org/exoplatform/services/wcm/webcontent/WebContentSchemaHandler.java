@@ -53,7 +53,11 @@ public class WebContentSchemaHandler extends BaseWebSchemaHandler {
   public Node getImagesFolders(final Node webContent) throws Exception {
     return webContent.getNode("medias/images");
   }
-
+  
+  public Node getIllustrationImage(final Node webContent) throws Exception {
+    return webContent.getNode("medias/images/illustration");
+  }
+  
   public Node getVideoFolder(final Node webContent) throws Exception {
     return webContent.getNode("medias/videos");
   }
@@ -88,8 +92,7 @@ public class WebContentSchemaHandler extends BaseWebSchemaHandler {
       addMixin(css,"exo:owneable");
     }       
     if (!webContent.hasNode("medias")) {
-      Node multimedia = webContent.addNode("medias",NT_FOLDER);      
-      addMixin(multimedia, "exo:multimediaFolder");    
+      Node multimedia = webContent.addNode("medias","exo:multimediaFolder");      
       addMixin(multimedia,"exo:owneable");
       Node images = multimedia.addNode("images",NT_FOLDER);
       addMixin(images, "exo:pictureFolder");
