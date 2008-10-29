@@ -63,7 +63,7 @@
 									<div class="NormalTab">
 										<div class="LeftTab">
 											<div class="RightTab">                
-												<div class="MiddleTab" onClick="eXo.webui.UIHorizontalTabs.displayTabContent(this);"><%=_ctx.appRes("WebContent.dialog.label.Summary")%></div>
+												<div class="MiddleTab" onClick="eXo.webui.UIHorizontalTabs.displayTabContent(this);"><%=_ctx.appRes("WebContent.dialog.label.Illustration")%></div>
 											</div>
 										</div>
 									</div>
@@ -87,10 +87,18 @@
 		            			<%
 			              	 		String[] webContentFieldName = ["jcrPath=/node", "nodetype=exo:webContent", "mixintype=mix:votable,mix:commentable", "editable=if-null","validate=name,empty"] ;
 			              	 		uicomponent.addTextField("name", webContentFieldName) ; 
-			              	 		String[] webContentHiddenField1 = ["jcrPath=/node/css", "nodetype=exo:cssFolder", "defaultValues=css"] ;
-			              	 		String[] webContentHiddenField2 = ["jcrPath=/node/js", "nodetype=exo:jsFolder", "defaultValues=js"] ;
-			              	 		uicomponent.addHiddenField("webContentHiddenInput1", webContentHiddenField1) ;
-			              	 		uicomponent.addHiddenField("webContentHiddenInput2", webContentHiddenField2) ;
+			              	 		String[] cssFolder = ["jcrPath=/node/css", "nodetype=exo:cssFolder", "defaultValues=css"] ;
+			              	 		String[] jsFolder = ["jcrPath=/node/js", "nodetype=exo:jsFolder", "defaultValues=js"] ;
+			              	 		String[] mediasFolder = ["jcrPath=/node/medias", "nodetype=exo:multimediaFolder", "defaultValues=medias"] ;
+			              	 		String[] imagesFolder = ["jcrPath=/node/medias/images", "nodetype=nt:folder", "defaultValues=images"] ;
+			              	 		String[] videoFolder = ["jcrPath=/node/medias/videos", "nodetype=nt:folder", "defaultValues=videos"] ;
+			              	 		String[] audioFolder = ["jcrPath=/node/medias/videos", "nodetype=nt:folder", "defaultValues=audio"] ;
+			              	 		uicomponent.addHiddenField("cssFolder", cssFolder) ;
+			              	 		uicomponent.addHiddenField("jsFolder", jsFolder);
+			              	 		uicomponent.addHiddenField("mediasFolder", mediasFolder);
+			              	 		uicomponent.addHiddenField("imagesFolder", imagesFolder);
+			              	 		uicomponent.addHiddenField("videoFolder", videoFolder);
+			              	 		uicomponent.addHiddenField("audioFolder", audioFolder);
 		            	   		%>
 		          			 	</td>
 		        			</tr>
@@ -205,6 +213,60 @@
 					
 					<div class="UITabContent" style="display: none;">
 						<table class="UIFormGrid">
+						<tr>
+								<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.illustrationImage")%></td>
+								<td class="FieldComponent">
+								<%
+									String[] illustrationHiddenField1 = ["jcrPath=/node/medias/images/illustration", "nodetype=nt:file", "defaultValues=illustration"];
+									String[] illustrationHiddenField2 = ["jcrPath=/node/medias/images/illustration/jcr:content", "nodetype=nt:resource", "mixintype=dc:elementSet", "visible=false"]; 
+									String[] illustrationHiddenField3 = ["jcrPath=/node/medias/images/illustration/jcr:content/jcr:encoding", "visible=false", "UTF-8"];  
+									String[] illustrationHiddenField4 = ["jcrPath=/node/medias/images/illustration/jcr:content/jcr:lastModified", "visible=false"];
+									String[] illustrationHiddenField5 = ["jcrPath=/node/medias/images/illustration/jcr:content/dc:date", "visible=false"];									
+									uicomponent.addHiddenField("illustrationHiddenField1", illustrationHiddenField1);
+									uicomponent.addHiddenField("illustrationHiddenField2", illustrationHiddenField2);
+									uicomponent.addHiddenField("illustrationHiddenField3", illustrationHiddenField3);
+									uicomponent.addCalendarField("illustrationHiddenField4", illustrationHiddenField4);
+									uicomponent.addCalendarField("illustrationHiddenField5", illustrationHiddenField5);									
+									if(uicomponent.isEditing()) { 
+										def curNode = uicomponent.getNode() ;
+										if(curNode.hasNode("medias/iamges/illustration")) {
+											def imageNode = curNode.getNode("medias/images/illustration") ;
+											def resourceNode = imageNode.getNode("jcr:content");
+											if(resourceNode.getProperty("jcr:data").getStream().available() > 0) {
+											def imgSrc = uicomponent.getImage(imageNode, "jcr:content");
+											def actionLink = uicomponent.event("RemoveData", "/medias/images/illustration");
+										%>		
+										<div>
+											<image src="$imgSrc" width="100px" height="80px"/>
+											<a href="$actionLink">
+												<img src="/eXoResources/skin/DefaultSkin/background/Blank.gif" class="ActionIcon Remove16x16Icon"/>
+											</a>
+										</div>
+										<%
+											} else {
+									   		String[] fieldImage = ["jcrPath=/node/medias/images/illustration/jcr:content/jcr:data"] ;
+									      uicomponent.addUploadField("illustration", fieldImage) ;								
+												}
+											}
+										} else if(uicomponent.dataRemoved()) {
+							        String[] fieldImage = ["jcrPath=/node/medias/images/illustration/jcr:content/jcr:data"] ;
+							        uicomponent.addUploadField("image", fieldImage) ;						
+										}	else {
+							        String[] fieldImage = ["jcrPath=/node/medias/images/illustration/jcr:content/jcr:data"] ;
+							        uicomponent.addUploadField("image", fieldImage) ;
+										}																											 						
+									%>
+								</td>
+							</tr>
+							<tr>		          					
+	      				<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.imageMimeType")%></td>
+	      				<td class="FieldComponent">
+		      				<%
+		        					String[] fieldMediamimetype = ["jcrPath=/node/medias/images/illustration/jcr:content/jcr:mimeType", "image/gif", "options=image/gif,image/png,image/jpg,image/jpeg"] ;
+		        					uicomponent.addSelectBoxField("mediamimetype", fieldMediamimetype) ;
+		      				%>
+		    				</td>
+	    				</tr>							
 							<tr>
 								<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.Summary")%></td>
 								<td class="FieldComponent">
@@ -220,6 +282,7 @@
 								%>
 								</td>
 							</tr>
+							
 						</table>
 					</div>
 			
