@@ -9,8 +9,8 @@
 
 <div class="UIPaginatorDeafault">
 
-  <%if(currentPage > 10) { %>
-	  <a href="<%=uicomponent.event("ShowPage","${currentPage -10}")%>" class="First">$firstPage</a>			
+  <%if(currentPage > 1) { %>
+	  <a href="<%=uicomponent.event("ShowPage","1")%>" class="First">$firstPage</a>			
   <% } else { %>
 	  <a class="FirstDis">$firstPage</a>			
   <%}%>
@@ -39,15 +39,13 @@
   <%  } %> 
   <%}%>    
   
-  <% if(currentPage +1 <= totalPage) { %>
+  <% if(currentPage + 1 <= totalPage) { %>
        <a href="<%=uicomponent.event("ShowPage","${currentPage + 1}")%>" class="Next">$nextPage</a>	
   <% } else { %>
 	   <a class="NextDis">$nextPage</a>
   <%}%>
-  <% if(currentPage + 10 <= totalPage) {%>        
-       <a href="<%=uicomponent.event("ShowPage","${currentPage + 10}")%>" class="Last">$lastPage</a>					      
-  	  <% } else if(currentPage + 1 <= totalPage) { %>
-	   <a class="LastDis">$lastPage</a>
+  <% if(currentPage < totalPage) {%>        
+       <a href="<%=uicomponent.event("ShowPage","$totalPage")%>" class="Last">$lastPage</a>					        	  
   <% } else {%>
 	   <a class="LastDis">$lastPage</a>
   <% }%>    	    
