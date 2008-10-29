@@ -354,7 +354,7 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
       PageList list = dataStorage.find(query);
       for(Object object: list.getAll()) {
         PageNavigation pageNavigation = PageNavigation.class.cast(object);
-        List<PageNode> listPageNode = org.exoplatform.services.wcm.publication.defaultlifecycle.Util.findPageNodeByPageId(pageNavigation, page.getPageId());        
+        List<PageNode> listPageNode = Util.findPageNodeByPageId(pageNavigation, page.getPageId());        
         for (PageNode pageNode : listPageNode) {
           listPageNavigationUri.add(Util.setMixedNavigationUri(portalName, pageNode.getUri()));
         }
