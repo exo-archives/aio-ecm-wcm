@@ -20,19 +20,24 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
 import javax.portlet.PortletPreferences;
 
 import org.exoplatform.commons.utils.ISO8601;
 import org.exoplatform.commons.utils.PageList;
+import org.exoplatform.ecm.webui.utils.Utils;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
+import org.exoplatform.services.cms.thumbnail.ThumbnailService;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.services.organization.UserProfileHandler;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
+import org.exoplatform.services.wcm.core.WebSchemaConfigService;
+import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
 import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -50,15 +55,15 @@ import org.exoplatform.webui.event.EventListener;
  */
 
 @ComponentConfigs( {
-    @ComponentConfig(
-        lifecycle = Lifecycle.class, 
-        events = @EventConfig(listeners = UIContentListPresentation.RefreshActionListener.class)                  
-    ),
-    @ComponentConfig(
-        type = UICustomizeablePaginator.class, 
-        events = @EventConfig(listeners = UICustomizeablePaginator.ShowPageActionListener.class)       
-    )
-        
+  @ComponentConfig(
+      lifecycle = Lifecycle.class, 
+      events = @EventConfig(listeners = UIContentListPresentation.RefreshActionListener.class)                  
+  ),
+  @ComponentConfig(
+      type = UICustomizeablePaginator.class, 
+      events = @EventConfig(listeners = UICustomizeablePaginator.ShowPageActionListener.class)       
+  )
+
 })
 public class UIContentListPresentation extends UIContainer {
   private String                   templatePath;
@@ -70,13 +75,13 @@ public class UIContentListPresentation extends UIContainer {
   private String                   contentColumn;
 
   private SimpleDateFormat         dateFormatter = new SimpleDateFormat(
-                                                     ISO8601.SIMPLE_DATETIME_FORMAT);
+      ISO8601.SIMPLE_DATETIME_FORMAT);
 
   public UIContentListPresentation() {
   }
 
   public void init(String templatePath, ResourceResolver resourceResolver, PageList dataPageList)
-      throws Exception {
+  throws Exception {
     PortletPreferences portletPreferences = ((UIFolderViewer) getParent()).getPortletPreference();
     String paginatorTemplatePath = portletPreferences.getValue(
         UIContentListViewerPortlet.PAGINATOR_TEMPlATE_PATH, null);
@@ -94,7 +99,7 @@ public class UIContentListPresentation extends UIContainer {
         null);
     return (isShow != null) ? Boolean.parseBoolean(isShow) : false;
   }
-  
+
   public boolean showPaginator() throws Exception {
     PortletPreferences portletPreferences = ((UIFolderViewer) getParent()).getPortletPreference();
     String itemsPerPage = portletPreferences.getValue(UIContentListViewerPortlet.ITEMS_PER_PAGE,
@@ -158,11 +163,11 @@ public class UIContentListPresentation extends UIContainer {
     String repository = portletPreferences.getValue(UIContentListViewerPortlet.REPOSITORY, null);
     String workspace = portletPreferences.getValue(UIContentListViewerPortlet.WORKSPACE, null);
     String baseURI = portletRequestContext.getRequest().getScheme() + "://"
-        + portletRequestContext.getRequest().getServerName() + ":"
-        + String.format("%s", portletRequestContext.getRequest().getServerPort());
+    + portletRequestContext.getRequest().getServerName() + ":"
+    + String.format("%s", portletRequestContext.getRequest().getServerPort());
     String parameterizedPageURI = wcmConfigurationService.getParameterizedPageURI();
     link = baseURI + portalURI + parameterizedPageURI.substring(1, parameterizedPageURI.length())
-        + "/" + repository + "/" + workspace + node.getPath();
+    + "/" + repository + "/" + workspace + node.getPath();
     return link;
   }
 
@@ -205,7 +210,22 @@ public class UIContentListPresentation extends UIContainer {
     return null;
   }
 
-  public String getIllustrativeImage(Node node) {
+  public String getIllustrativeImage(Node node) throws Exception {            
+    if(node.isNodeType("exo:webContent")) {
+      WebSchemaConfigService schemaConfigService = getApplicationComponent(WebSchemaConfigService.class);
+      WebContentSchemaHandler contentSchemaHandler = schemaConfigService.getWebSchemaHandlerByType(WebContentSchemaHandler.class);      
+      try {
+        Node thumbnailImage = contentSchemaHandler.getIllustrationImage(node);
+        return Utils.getThumbnailImage(thumbnailImage,ThumbnailService.MEDIUM_SIZE);
+      } catch (ItemNotFoundException e) {
+      }      
+    }
+    PortletRequestContext requestContext = WebuiRequestContext.getCurrentInstance();
+    String showThumbnailPref = requestContext.getRequest().getPreferences().getValue(UIContentListViewerPortlet.SHOW_THUMBNAILS_VIEW,"false");
+    boolean isShowThumbnail = Boolean.parseBoolean(showThumbnailPref);
+    if(isShowThumbnail) {
+      return Utils.getThumbnailImage(node,ThumbnailService.MEDIUM_SIZE);
+    }
     return null;
   }
 
@@ -233,7 +253,7 @@ public class UIContentListPresentation extends UIContainer {
     public void execute(Event<UIContentListPresentation> event) throws Exception {
       UIContentListPresentation contentListPresentation = event.getSource();
       RefreshDelegateActionListener refreshListener = (RefreshDelegateActionListener) contentListPresentation
-          .getParent();
+      .getParent();
       refreshListener.onRefresh(event);
     }
   }
