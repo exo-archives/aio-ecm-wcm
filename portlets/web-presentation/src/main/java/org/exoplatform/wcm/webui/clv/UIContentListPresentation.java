@@ -217,7 +217,7 @@ public class UIContentListPresentation extends UIContainer {
       try {
         Node thumbnailImage = contentSchemaHandler.getIllustrationImage(node);
         return Utils.getThumbnailImage(thumbnailImage,ThumbnailService.MEDIUM_SIZE);
-      } catch (ItemNotFoundException e) {
+      } catch (Exception e) {
       }      
     }
     PortletRequestContext requestContext = WebuiRequestContext.getCurrentInstance();
