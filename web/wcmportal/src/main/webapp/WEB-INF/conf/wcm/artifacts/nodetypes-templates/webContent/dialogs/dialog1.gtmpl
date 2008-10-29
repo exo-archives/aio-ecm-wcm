@@ -229,7 +229,7 @@
 									uicomponent.addCalendarField("illustrationHiddenField5", illustrationHiddenField5);									
 									if(uicomponent.isEditing()) { 
 										def curNode = uicomponent.getNode() ;
-										if(curNode.hasNode("medias/iamges/illustration")) {
+										if(curNode.hasNode("medias/images/illustration")) {
 											def imageNode = curNode.getNode("medias/images/illustration") ;
 											def resourceNode = imageNode.getNode("jcr:content");
 											if(resourceNode.getProperty("jcr:data").getStream().available() > 0) {
