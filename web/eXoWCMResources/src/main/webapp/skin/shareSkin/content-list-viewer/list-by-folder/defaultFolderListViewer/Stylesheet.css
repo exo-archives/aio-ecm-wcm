@@ -26,56 +26,56 @@ a:hover {
  Comment
 */
 
-.Comment {
+.Caption {
     border: 1px solid #b7b7b7;
     padding: 10px;
     margin: 10px;
     background: #fff;
 }
 
-.Comment .CommentItem {
+.Caption .CaptionItem {
     border-bottom: 1px dotted #2f2f2f;
     padding-top: 10px;
 }
 
-.Comment .CommentUser a {
+.Caption .CaptionTitle a {
     font-size: 14px;
     color: #0385d9;
     font-weight: bold;
 }
 
-.Comment .CommentDate {
+.Caption .CaptionDate {
     color: #8f8f8f;
 }
 
-.Comment .CommentContent p {
+.Caption .CaptionContent p {
     padding: 5px 0;
 }
-.Comment .CommentContent img {
+.Caption .CaptionContent img {
 	float: left;
 	margin: 5px 10px 0 0;
 }
-.Comment .CommentViewMore {
+.Caption .CaptionViewMore {
     text-align: right;
 }
 
-.Comment .CommentViewMore a {
+.Caption .CaptionViewMore a {
     color: #fd711c;
     font-size: 10px;
 }
 
-.CommentFunc {
+.CaptionFunc {
     padding: 10px 0;
     height: 1%;
     overflow: hidden;
 }
 
-.CommentFunc .CommentRefresh {
+.CaptionFunc .CaptionRefresh {
     width: 200px;
     float: left;
 }
 
-.CommentFunc .CommentRefresh a {
+.CaptionFunc .CaptionRefresh a {
     display: block;
     padding: 0 3px 3px 25px;
     background: url(images/icoRefresh.gif) no-repeat;
