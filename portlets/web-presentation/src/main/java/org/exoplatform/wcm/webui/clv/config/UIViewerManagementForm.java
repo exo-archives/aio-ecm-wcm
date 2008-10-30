@@ -94,6 +94,7 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
     PortletPreferences portletPreferences = getPortletPreferences();
     String folderPath = portletPreferences.getValue(UIContentListViewerPortlet.FOLDER_PATH,
         UIContentListViewerPortlet.FOLDER_PATH);
+
     List<SelectItemOption<String>> formViewerTemplateList = getTemplateList(PORTLET_NAME,
         FORM_VIEW_TEMPLATE_CATEGORY);
     List<SelectItemOption<String>> paginatorTemplateList = getTemplateList(PORTLET_NAME,
@@ -136,6 +137,34 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
         VIEWER_DATE_CREATED, null);
     dateCreatedViewerCheckbox.setChecked(true);
 
+    
+    String quickEditAble = portletPreferences.getValue(
+        UIContentListViewerPortlet.SHOW_QUICK_EDIT_BUTTON, null);
+    viewerButtonQuickEditCheckbox.setChecked(Boolean.parseBoolean(quickEditAble));
+    String refreshAble = portletPreferences.getValue(
+        UIContentListViewerPortlet.SHOW_REFRESH_BUTTON, null);
+    viewerButtonRefreshCheckbox.setChecked(Boolean.parseBoolean(refreshAble));
+    String imageShowAble = portletPreferences.getValue(
+        UIContentListViewerPortlet.SHOW_THUMBNAILS_VIEW, null);    
+    thumbnailsViewCheckbox.setChecked(Boolean.parseBoolean(imageShowAble));
+    String titleShowAble = portletPreferences.getValue(UIContentListViewerPortlet.SHOW_TITLE, null);
+    titleViewerCheckbox.setChecked(Boolean.parseBoolean(titleShowAble));
+    String summaryShowAble = portletPreferences.getValue(UIContentListViewerPortlet.SHOW_SUMMARY,
+        null);
+    summaryViewerCheckbox.setChecked(Boolean.parseBoolean(summaryShowAble));
+    String dateShowAble = portletPreferences.getValue(UIContentListViewerPortlet.SHOW_DATE_CREATED,
+        null);
+    dateCreatedViewerCheckbox.setChecked(Boolean.parseBoolean(dateShowAble));
+    String formViewTemplate = portletPreferences.getValue(
+        UIContentListViewerPortlet.FORM_VIEW_TEMPLATE_PATH, null);
+    formViewTemplateSelector.setValue(formViewTemplate);
+    String paginatorTemplate = portletPreferences.getValue(
+        UIContentListViewerPortlet.PAGINATOR_TEMPlATE_PATH, null);
+    paginatorTemplateSelector.setValue(paginatorTemplate);
+    String itemsPerPageVal = portletPreferences.getValue(UIContentListViewerPortlet.ITEMS_PER_PAGE,
+        null);
+    itemsPerPage.setValue(itemsPerPageVal);
+    
     addChild(folderPathInputSet);
     addChild(formViewTemplateSelector);
     addChild(paginatorTemplateSelector);
@@ -146,7 +175,7 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
     addChild(titleViewerCheckbox);
     addChild(dateCreatedViewerCheckbox);
     addChild(summaryViewerCheckbox);
-
+    
     setActions(new String[] { "Save", "Cancel" });
   }
 
