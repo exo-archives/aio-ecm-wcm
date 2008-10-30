@@ -127,7 +127,7 @@
 									uicomponent.addCalendarField("htmlHiddenField4", htmlHiddenField4);
 									uicomponent.addCalendarField("htmlHiddenField5", htmlHiddenField5);
 									uicomponent.addHiddenField("htmlHiddenField6", htmlHiddenField6);
-									String htmlContent = "<img class=\"WebContentPageOnTop\"/><h3>Type the title at here</h3><span class=\"DropCap\">T</span>ype the text here";
+									String htmlContent = "<div class=\"WebContentPageOnTop\"><img width=\"100px\" height=\"100px\"/></div><h3>Type the title at here</h3><span class=\"DropCap\">T</span>ype the text here";
 									if(uicomponent.isEditing()) {
 										Node webContentNode = uicomponent.getNode();
 										if(webContentNode.hasNode("default.html")) {
@@ -237,8 +237,8 @@
 									uicomponent.addCalendarField("cssHiddenField4", cssHiddenField4) ;
 									uicomponent.addCalendarField("cssHiddenField5", cssHiddenField5) ;
 									uicomponent.addHiddenField("cssHiddenField6", cssHiddenField6) ;
-									String cssContent = ".WebContentPageOnTop {width: 100px; height: 100px; float: left; margin-right: 2px;}" + 
-														".DropCap {font-size: 28px; float: left; margin-right: 2px;}";
+									String cssContent = ".WebContentPageOnTop {\n\twidth: 100px; \n\theight: 100px; \n\tfloat: left; \n\tmargin-right: 2px;\n}\n\n" + 
+														".DropCap {\n\tfont-size: 28px; \n\tfloat: left; \n\tmargin-right: 2px;\n}";
 									
 									if(uicomponent.isEditing()) {
 										Node webContentNode = uicomponent.getNode();

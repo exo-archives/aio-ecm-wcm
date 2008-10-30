@@ -5,10 +5,11 @@
  */
 import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
 import javax.jcr.Node;
+import org.exoplatform.wcm.webui.clv.UIContentListViewerPortlet;
 %>
 
 <div id="$uicomponent.id" class="UIContentListPresentationDefault">
-	<div class="Comment">
+	<div class="Caption">
 		<% 	
 		def currentPageData = uicomponent.getCurrentPageData();			
 		String labelRefreshAction = _ctx.appRes("UIContentListPresentationDefault.label.action.refresh");
@@ -25,28 +26,30 @@ import javax.jcr.Node;
 				itemName = itemTitle;
 			}
 		%>	
-			<div class="CommentItem">
-				<div class="CommentUser"><a href="$itemLink">$itemName</a></div>			
-				<% if (itemDateCreated != null) { %>
-				<div class="CommentDate"><%=itemDateCreated%></div>		
+			<div class="CaptionItem">
+				<% if (uicomponent.isShowField(UIContentListViewerPortlet.SHOW_TITLE)) {%>
+				<div class="CaptionTitle"><a href="$itemLink">$itemName</a></div>		
+				<% } %>	
+				<% if (itemDateCreated != null && uicomponent.isShowField(UIContentListViewerPortlet.SHOW_DATE_CREATED)) { %>
+				<div class="CaptionDate"><%=itemDateCreated%></div>		
 				<% } %>											
-				<% if (itemSummary != null && itemSummary.trim().length() != 0) { %>
-				<div class="CommentContent">
-					<% if(imgSrc != null) { %>
+				<% if (itemSummary != null && itemSummary.trim().length() != 0 && uicomponent.isShowField(UIContentListViewerPortlet.SHOW_SUMMARY)) { %>
+				<div class="CaptionContent">				
+					<% if(imgSrc != null && uicomponent.isShowField(UIContentListViewerPortlet.SHOW_THUMBNAILS_VIEW)) { %>
 						<img src="$imgSrc" width="91" height="53 /">				
 					<% } %>
 					<p><%=itemSummary%></p>
 				</div>			
 				<% } %>			
-				<div class="CommentViewMore"><a href="$itemLink"><%=labelReadMore%>&raquo;</a></div>			
+				<div class="CaptionViewMore"><a href="$itemLink"><%=labelReadMore%>&raquo;</a></div>			
 			</div>			
 		<%							
 		}
 		%>
-		<div class="CommentFunc">
+		<div class="CaptionFunc">
 			<% if (uicomponent.showRefreshButton()) { %>
 				<% String link = uicomponent.event("Refresh"); %>				
-				<div class="CommentRefresh">
+				<div class="CaptionRefresh">
 					<a href="$link">$labelRefreshAction</a>
 				</div>
 			<% } %>

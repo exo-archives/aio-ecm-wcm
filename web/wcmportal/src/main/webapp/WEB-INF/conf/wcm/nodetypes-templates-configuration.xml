@@ -46,6 +46,8 @@
               <field  name="contentTypes">
                 <collection type="java.util.ArrayList">
                  	<value><string>exo:webContent</string></value>
+                 	<value><string>exo:pictureOnHeadWebcontent</string></value>
+                 	<value><string>exo:twoColumnsWebcontent</string></value>                 	                 	
                 </collection>
             	</field>
             </object>
