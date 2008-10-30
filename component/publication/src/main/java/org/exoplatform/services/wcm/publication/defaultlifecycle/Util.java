@@ -77,7 +77,7 @@ public class Util {
   }
    
   public static List<String> findAppInstancesByName(Page page, String applicationName) {
-    List<String> results = new ArrayList<String>();
+    List<String> results = new ArrayList<String>();    
     findAppInstancesByContainerAndName(page, applicationName, results);
     return results;
   }
@@ -96,6 +96,24 @@ public class Util {
         findAppInstancesByContainerAndName(child, applicationName, results);
       }
     }
+  }   
+  
+  private static void removedAppInstancesInContainerByNames(Container container, List<String> removingApplicationIds) {
+    ArrayList<Object> chidren = container.getChildren();    
+    ArrayList<Object> chidrenTmp = new ArrayList<Object>();
+    if(chidren == null) return ;
+    for(Object object: chidren) {
+      if(object instanceof Application) {
+        Application application = Application.class.cast(object);
+        if(!removingApplicationIds.contains(application.getInstanceId())) {
+          chidrenTmp.add(object);
+        }        
+      } else if(object instanceof Container) {
+        Container child = Container.class.cast(object);
+        removedAppInstancesInContainerByNames(child,removingApplicationIds);
+      }
+    }
+    container.setChildren(chidrenTmp);
   }
   
   public static List<String> getValuesAsString(Node node, String propName) throws Exception {
@@ -141,6 +159,10 @@ public class Util {
       }
     }
     return null;
+  }
+  
+  public static void removeApplicationFromPage(Page page, List<String> removedApplicationIds) {
+    removedAppInstancesInContainerByNames(page, removedApplicationIds);
   }
   
   public static List<String> getListApplicationIdByPage(Page page) {

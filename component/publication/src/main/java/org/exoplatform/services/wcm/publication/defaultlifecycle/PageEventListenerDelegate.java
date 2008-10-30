@@ -179,13 +179,14 @@ public class PageEventListenerDelegate {
     
     List<String> listPageNavigationUri = publicationPlugin.getListPageNavigationUri(page);
     List<String> listExistedNavigationNodeUri = Util.getValuesAsString(content, "publication:navigationNodeURIs");
-    List<String> listExistedNavigationNodeUriTmp = Util.getValuesAsString(content, "publication:navigationNodeURIs");
-    for (String existedNavigationNodeUri : listExistedNavigationNodeUri) {
-      if (!listPageNavigationUri.contains(existedNavigationNodeUri)) {
-        listExistedNavigationNodeUriTmp.remove(existedNavigationNodeUri);
+    List<String> listExistedNavigationNodeUriTmp = new ArrayList<String>();
+    listExistedNavigationNodeUriTmp.addAll(listExistedNavigationNodeUri);
+    for (String existedNavigationNodeUri : listExistedNavigationNodeUriTmp) {
+      if (listPageNavigationUri.contains(existedNavigationNodeUri)) {
+        listExistedNavigationNodeUri.remove(existedNavigationNodeUri);
       }
     }
-    content.setProperty("publication:navigationNodeURIs", Util.toValues(valueFactory, listExistedNavigationNodeUriTmp));
+    content.setProperty("publication:navigationNodeURIs", Util.toValues(valueFactory, listExistedNavigationNodeUri));
     
     String uris = "";
     for (String uri : listPageNavigationUri) {

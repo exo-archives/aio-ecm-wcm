@@ -23,7 +23,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.AccessControlException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -33,8 +32,6 @@ import java.util.ResourceBundle;
 
 import javax.jcr.Node;
 import javax.jcr.Session;
-import javax.jcr.Value;
-import javax.jcr.ValueFactory;
 import javax.jcr.lock.LockException;
 import javax.jcr.version.VersionException;
 
@@ -312,28 +309,17 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
    * @see org.exoplatform.services.wcm.publication.WebpagePublicationPlugin#suspendPublishedContentFromPage(javax.jcr.Node, org.exoplatform.portal.config.model.Page)
    */
   public void suspendPublishedContentFromPage(Node content, Page page) throws Exception {
-    Session session = content.getSession();
-    ValueFactory valueFactory = session.getValueFactory();
-    ArrayList<Object> children = new ArrayList<Object>(page.getChildren());
-    ArrayList<Value> listApplicationIDs = new ArrayList<Value>(Arrays.asList(content.getProperty("publication:applicationIDs").getValues()));
-    ArrayList<Value> listWebPageIDs = new ArrayList<Value>(Arrays.asList(content.getProperty("publication:webPageIDs").getValues()));
-    ArrayList<Value> listNavigationNodeURIs = new ArrayList<Value>(Arrays.asList(content.getProperty("publication:navigationNodeURIs").getValues()));
-    for (Object object : page.getChildren()) {
-      if (object instanceof Application) {
-        Application application = (Application) object;
-        for (Value value : content.getProperty("publication:applicationIDs").getValues()) {
-          if (value.getString().split("@")[1].equals(application.getInstanceId())) {
-            children.remove(object);
-            listApplicationIDs.remove(value);
-            listWebPageIDs.remove(valueFactory.createValue(page.getPageId()));
-            for (String uri : getListPageNavigationUri(page)) {
-              listNavigationNodeURIs.remove(valueFactory.createValue(uri));
-            }
-          }
-        }
+    String pageId = page.getPageId();
+    List<String> mixedApplicationIDs = Util.getValuesAsString(content, "publication:applicationIDs");
+    ArrayList<String> removedApplicationIDs = new ArrayList<String>();
+    for(String mixedID: mixedApplicationIDs) {
+      if(mixedID.startsWith(pageId)) {
+        String realAppID = Util.parseMixedApplicationId(mixedID)[1];
+        removedApplicationIDs.add(realAppID);
       }
     }
-    page.setChildren(children);
+    if(removedApplicationIDs.size() == 0) return;
+    Util.removeApplicationFromPage(page, removedApplicationIDs);
     UserPortalConfigService userPortalConfigService = Util.getServices(UserPortalConfigService.class);
     userPortalConfigService.update(page);
   }
