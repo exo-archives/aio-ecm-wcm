@@ -99,6 +99,12 @@ public class UIContentListPresentation extends UIContainer {
         null);
     return (isShow != null) ? Boolean.parseBoolean(isShow) : false;
   }
+  
+  public boolean isShowField(String field) {
+    PortletPreferences portletPreferences = ((UIFolderViewer) getParent()).getPortletPreference();
+    String showAble = portletPreferences.getValue(field, null);
+    return (showAble != null) ? Boolean.parseBoolean(showAble) : false;
+  }
 
   public boolean showPaginator() throws Exception {
     PortletPreferences portletPreferences = ((UIFolderViewer) getParent()).getPortletPreference();

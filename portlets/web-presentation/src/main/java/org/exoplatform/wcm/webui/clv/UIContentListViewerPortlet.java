@@ -35,9 +35,7 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
  * Oct 15, 2008
  */
 
-@ComponentConfig(
-    lifecycle = UIApplicationLifecycle.class    
-)
+@ComponentConfig(lifecycle = UIApplicationLifecycle.class)
 public class UIContentListViewerPortlet extends UIPortletApplication {
 
   private PortletMode        mode                    = PortletMode.VIEW;
@@ -54,11 +52,17 @@ public class UIContentListViewerPortlet extends UIPortletApplication {
 
   public final static String PAGINATOR_TEMPlATE_PATH = "paginatorTemplatePath";
 
-  public final static String SHOW_QUICK_EDIT_BUTTON         = "showQuickEditButton";
+  public final static String SHOW_QUICK_EDIT_BUTTON  = "showQuickEditButton";
 
   public final static String SHOW_REFRESH_BUTTON     = "showRefreshButton";
-  
-  public final static String SHOW_THUMBNAILS_VIEW     = "showThumbnailsView";
+
+  public final static String SHOW_THUMBNAILS_VIEW    = "showThumbnailsView";
+
+  public final static String SHOW_TITLE              = "showTitle";
+
+  public final static String SHOW_SUMMARY            = "showSummary";
+
+  public final static String SHOW_DATE_CREATED        = "showDateCreated";
 
   public UIContentListViewerPortlet() throws Exception {
     activateMode(mode);

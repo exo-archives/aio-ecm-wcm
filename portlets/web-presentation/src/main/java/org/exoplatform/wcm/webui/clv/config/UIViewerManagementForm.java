@@ -55,15 +55,10 @@ import org.exoplatform.webui.form.UIFormStringInput;
  * Oct 15, 2008
  */
 
-@ComponentConfig(
-    lifecycle = UIFormLifecycle.class, 
-    template = "app:/groovy/ContentListViewer/config/UIFolderListViewerConfigForm.gtmpl", 
-    events = {
-      @EventConfig(listeners = UIViewerManagementForm.SaveActionListener.class),
-      @EventConfig(listeners = UIViewerManagementForm.CancelActionListener.class),
-      @EventConfig(listeners = UIViewerManagementForm.SelectFolderPathActionListener.class)     
-    }
-)
+@ComponentConfig(lifecycle = UIFormLifecycle.class, template = "app:/groovy/ContentListViewer/config/UIFolderListViewerConfigForm.gtmpl", events = {
+    @EventConfig(listeners = UIViewerManagementForm.SaveActionListener.class),
+    @EventConfig(listeners = UIViewerManagementForm.CancelActionListener.class),
+    @EventConfig(listeners = UIViewerManagementForm.SelectFolderPathActionListener.class) })
 public class UIViewerManagementForm extends UIForm implements UISelectable {
 
   public final static String PORTLET_NAME                 = "Content List Viewer";
@@ -86,7 +81,13 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
 
   public final static String VIEWER_BUTTON_REFRESH        = "ViewerButtonRefresh";
 
-  public static final String VIEWER_THUMBNAILS_VIEW       = "ViewerThumbnailsView";
+  public static final String VIEWER_THUMBNAILS_IMAGE      = "ViewerThumbnailsView";
+
+  public static final String VIEWER_TITLE                 = "ViewerTitle";
+
+  public static final String VIEWER_DATE_CREATED          = "ViewerDateCreated";
+
+  public static final String VIEWER_SUMMARY               = "ViewerSummary";
 
   @SuppressWarnings("unchecked")
   public UIViewerManagementForm() throws Exception {
@@ -106,7 +107,8 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
     UIFormStringInput folderPathInput = new UIFormStringInput(FOLDER_PATH_INPUT, FOLDER_PATH_INPUT,
         null);
     folderPathInput.setEditable(false);
-    if (folderPath != null) folderPathInput.setValue(folderPath);
+    if (folderPath != null)
+      folderPathInput.setValue(folderPath);
     folderPathInputSet.addChild(folderPathInput);
     folderPathInputSet.setActionInfo(FOLDER_PATH_INPUT, new String[] { "SelectFolderPath" });
     UIFormSelectBox itemsPerPage = new UIFormSelectBox(ITEMS_PER_PAGE_SELECTOR,
@@ -121,9 +123,18 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
     UIFormCheckBoxInput viewerButtonRefreshCheckbox = new UIFormCheckBoxInput(
         VIEWER_BUTTON_REFRESH, VIEWER_BUTTON_REFRESH, null);
     viewerButtonRefreshCheckbox.setChecked(true);
-    UIFormCheckBoxInput thumbnailsViewCheckbox = new UIFormCheckBoxInput(VIEWER_THUMBNAILS_VIEW,
-        VIEWER_THUMBNAILS_VIEW, null);
+    UIFormCheckBoxInput thumbnailsViewCheckbox = new UIFormCheckBoxInput(VIEWER_THUMBNAILS_IMAGE,
+        VIEWER_THUMBNAILS_IMAGE, null);
     thumbnailsViewCheckbox.setChecked(true);
+    UIFormCheckBoxInput titleViewerCheckbox = new UIFormCheckBoxInput(VIEWER_TITLE, VIEWER_TITLE,
+        null);
+    titleViewerCheckbox.setChecked(true);
+    UIFormCheckBoxInput summaryViewerCheckbox = new UIFormCheckBoxInput(VIEWER_SUMMARY,
+        VIEWER_SUMMARY, null);
+    summaryViewerCheckbox.setChecked(true);
+    UIFormCheckBoxInput dateCreatedViewerCheckbox = new UIFormCheckBoxInput(VIEWER_DATE_CREATED,
+        VIEWER_DATE_CREATED, null);
+    dateCreatedViewerCheckbox.setChecked(true);
 
     addChild(folderPathInputSet);
     addChild(formViewTemplateSelector);
@@ -132,6 +143,10 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
     addChild(viewerButtonQuickEditCheckbox);
     addChild(viewerButtonRefreshCheckbox);
     addChild(thumbnailsViewCheckbox);
+    addChild(titleViewerCheckbox);
+    addChild(dateCreatedViewerCheckbox);
+    addChild(summaryViewerCheckbox);
+
     setActions(new String[] { "Save", "Cancel" });
   }
 
@@ -155,7 +170,7 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
     if (uiPopup == null)
       uiPopup = uiParent.addChild(UIPopupWindow.class, null, null);
     uiPopup.setUIComponent(uiComponent);
-    uiPopup.setWindowSize(610, -1);    
+    uiPopup.setWindowSize(610, -1);
     uiPopup.setResizable(true);
     uiPopup.setShow(true);
   }
@@ -182,12 +197,13 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
     public void execute(Event<UIViewerManagementForm> event) throws Exception {
       UIViewerManagementForm viewerManagementForm = event.getSource();
       UIApplication uiApp = viewerManagementForm.getAncestorOfType(UIApplication.class);
-      RepositoryService repositoryService = viewerManagementForm.getApplicationComponent(RepositoryService.class);
+      RepositoryService repositoryService = viewerManagementForm
+          .getApplicationComponent(RepositoryService.class);
       ManageableRepository manageableRepository = repositoryService.getCurrentRepository();
       String repository = manageableRepository.getConfiguration().getName();
       String workspace = manageableRepository.getConfiguration().getDefaultWorkspaceName();
-      String folderPath = viewerManagementForm.getUIStringInput(UIViewerManagementForm.FOLDER_PATH_INPUT)
-          .getValue();
+      String folderPath = viewerManagementForm.getUIStringInput(
+          UIViewerManagementForm.FOLDER_PATH_INPUT).getValue();
       String formViewTemplatePath = viewerManagementForm.getUIFormSelectBox(
           UIViewerManagementForm.FORM_VIEW_TEMPLATES_SELECTOR).getValue();
       String paginatorTemplatePath = viewerManagementForm.getUIFormSelectBox(
@@ -199,10 +215,16 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
       String showRefreshButton = viewerManagementForm.getUIFormCheckBoxInput(
           UIViewerManagementForm.VIEWER_BUTTON_REFRESH).isChecked() ? "true" : "false";
       String viewThumbnails = viewerManagementForm.getUIFormCheckBoxInput(
-          UIViewerManagementForm.VIEWER_THUMBNAILS_VIEW).isChecked() ? "true" : "false";
-
+          UIViewerManagementForm.VIEWER_THUMBNAILS_IMAGE).isChecked() ? "true" : "false";
+      String viewTitle = viewerManagementForm.getUIFormCheckBoxInput(
+          UIViewerManagementForm.VIEWER_TITLE).isChecked() ? "true" : "false";
+      String viewSummary = viewerManagementForm.getUIFormCheckBoxInput(
+          UIViewerManagementForm.VIEWER_SUMMARY).isChecked() ? "true" : "false";
+      String viewDateCreated = viewerManagementForm.getUIFormCheckBoxInput(
+          UIViewerManagementForm.VIEWER_DATE_CREATED).isChecked() ? "true" : "false";
       if (folderPath == null || folderPath.length() == 0) {
-        uiApp.addMessage(new ApplicationMessage("UIMessageBoard.msg.empty-folder-path", null, ApplicationMessage.WARNING));
+        uiApp.addMessage(new ApplicationMessage("UIMessageBoard.msg.empty-folder-path", null,
+            ApplicationMessage.WARNING));
         return;
       }
       PortletRequestContext portletRequestContext = (PortletRequestContext) event
@@ -220,12 +242,16 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
       portletPreferences
           .setValue(UIContentListViewerPortlet.SHOW_REFRESH_BUTTON, showRefreshButton);
       portletPreferences.setValue(UIContentListViewerPortlet.SHOW_THUMBNAILS_VIEW, viewThumbnails);
+      portletPreferences.setValue(UIContentListViewerPortlet.SHOW_TITLE, viewTitle);
+      portletPreferences.setValue(UIContentListViewerPortlet.SHOW_DATE_CREATED, viewDateCreated);
+      portletPreferences.setValue(UIContentListViewerPortlet.SHOW_SUMMARY, viewSummary);
       portletPreferences.store();
-      if (Utils.isEditPortletInCreatePageWizard()) {                
-        uiApp.addMessage(new ApplicationMessage("UIMessageBoard.msg.saving-success", null, ApplicationMessage.INFO));
+      if (Utils.isEditPortletInCreatePageWizard()) {
+        uiApp.addMessage(new ApplicationMessage("UIMessageBoard.msg.saving-success", null,
+            ApplicationMessage.INFO));
       } else {
-        portletRequestContext.setApplicationMode(PortletMode.VIEW); 
-      }      
+        portletRequestContext.setApplicationMode(PortletMode.VIEW);
+      }
     }
   }
 
@@ -234,12 +260,13 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
       UIViewerManagementForm viewerManagementForm = event.getSource();
       UIApplication uiApp = viewerManagementForm.getAncestorOfType(UIApplication.class);
       PortletRequestContext portletRequestContext = (PortletRequestContext) event
-      .getRequestContext();
-      if (Utils.isEditPortletInCreatePageWizard()) {                
-        uiApp.addMessage(new ApplicationMessage("UIMessageBoard.msg.none-action-excuted", null, ApplicationMessage.INFO));
+          .getRequestContext();
+      if (Utils.isEditPortletInCreatePageWizard()) {
+        uiApp.addMessage(new ApplicationMessage("UIMessageBoard.msg.none-action-excuted", null,
+            ApplicationMessage.INFO));
       } else {
-        portletRequestContext.setApplicationMode(PortletMode.VIEW); 
-      }    
+        portletRequestContext.setApplicationMode(PortletMode.VIEW);
+      }
     }
   }
 

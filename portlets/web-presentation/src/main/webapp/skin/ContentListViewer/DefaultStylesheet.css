@@ -29,3 +29,8 @@
 	border:1px solid #B1B0B0;
 	padding:10px;
 }
+
+.UIForm .HorizontalLayout .UIFormInputSet {
+	margin-left:33px;
+	padding: 0px;
+}
