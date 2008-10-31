@@ -34,7 +34,7 @@ public class WCMPaginatedQueryResult extends PaginatedQueryResult {
   
   /** The allow duplicated. */
   private boolean allowDuplicated;
-  
+  private long queryTime;  
   /** The displayed node paths. */
   private List<String> displayedNodePaths = new ArrayList<String>();
   
@@ -60,6 +60,9 @@ public class WCMPaginatedQueryResult extends PaginatedQueryResult {
     super(queryResult,pageSize);    
     this.allowDuplicated = allowDuplicated;
   }
+  
+  public void setQueryTime(long time) { this.queryTime = time; }
+  public long getQueryTimeInSecond() { return this.queryTime/1000; }
   
   /* (non-Javadoc)
    * @see org.exoplatform.wcm.webui.paginator.PaginatedQueryResult#filterNodeToDisplay(javax.jcr.Node)

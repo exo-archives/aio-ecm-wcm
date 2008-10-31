@@ -46,22 +46,22 @@ import org.exoplatform.services.wcm.utils.AbstractQueryBuilder.QueryTermHelper;
  * Oct 8, 2008
  */
 public class SiteSearchServiceImpl implements SiteSearchService {
-  
+
   /** The live portal manager service. */
   private LivePortalManagerService livePortalManagerService;
-  
+
   /** The ecm template service. */
   private TemplateService templateService;
-  
+
   /** The wcm configuration service. */
   private WCMConfigurationService configurationService;
-  
+
   /** The jcr repository service. */
   private RepositoryService repositoryService;
-  
+
   /** The current repository. */
   private String currentRepository;  
-  
+
   /**
    * Instantiates a new site search service impl.
    * 
@@ -82,11 +82,20 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     this.configurationService = configurationService;
     this.currentRepository = repositoryService.getCurrentRepository().getConfiguration().getName();
   }
-  
+
+  public WCMPaginatedQueryResult searchSiteContents(QueryCriteria queryCriteria, SessionProvider sessionProvider, int pageSize, boolean allowDuplicated) throws Exception {
+    long startTime = System.currentTimeMillis();
+    QueryResult queryResult = searchSiteContents(queryCriteria,sessionProvider);    
+    long queryTime = System.currentTimeMillis() - startTime;
+    WCMPaginatedQueryResult paginatedQueryResult = new WCMPaginatedQueryResult(queryResult,pageSize,allowDuplicated);
+    paginatedQueryResult.setQueryTime(queryTime);
+    return paginatedQueryResult;
+  }
+
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.search.SiteSearchService#search(org.exoplatform.services.wcm.search.QueryCriteria, org.exoplatform.services.jcr.ext.common.SessionProvider)
    */
-  public QueryResult search(QueryCriteria queryCriteria, SessionProvider sessionProvider) throws Exception {
+  public QueryResult searchSiteContents(QueryCriteria queryCriteria, SessionProvider sessionProvider) throws Exception {
     SQLQueryBuilder queryBuilder = new SQLQueryBuilder();
     mapQueryPath(queryCriteria,queryBuilder,sessionProvider);
     mapQueryTypes(queryCriteria,queryBuilder,sessionProvider);
@@ -95,7 +104,7 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     String queryStatement = queryBuilder.createQueryStatement();
     System.out.println("====queryStatement==========>" + queryStatement);
     NodeLocation location = configurationService.getLivePortalsLocation(currentRepository);
-    Session session = sessionProvider.getSession(location.getWorkspace(),repositoryService.getCurrentRepository());
+    Session session = sessionProvider.getSession(location.getWorkspace(),repositoryService.getCurrentRepository());    
     QueryManager queryManager = session.getWorkspace().getQueryManager();
     Query query = queryManager.createQuery(queryStatement,Query.SQL);
     return query.execute();    
@@ -121,7 +130,7 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     }
     queryBuilder.setQueryPath(queryPath,PATH_TYPE.DECENDANTS);
   }
-  
+
   /**
    * Map query term.
    * 
@@ -134,7 +143,7 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     String queryTerm = queryTermHelper.contains(keyword).allowFuzzySearch().allowSynonymSearch().buildTerm();
     queryBuilder.contains(null,queryTerm,LOGICAL.NULL);
   }
-  
+
   /**
    * Map query types.
    * 
@@ -180,7 +189,7 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     //jcr:primaryType like exo:artile OR jcr:primaryType like exo:webocontent OR jcr:mixinTypes like exo:htmlFile
     queryBuilder.closeGroup();   
   }
-  
+
   /**
    * Order by.
    * 
@@ -190,6 +199,5 @@ public class SiteSearchServiceImpl implements SiteSearchService {
    */
   private void orderBy(final QueryCriteria queryCriteria, final SQLQueryBuilder queryBuilder, SessionProvider sessionProvider) {
     queryBuilder.orderBy("exo:dateCreated",ORDERBY.ASC);
-  }
-  
+  }    
 }

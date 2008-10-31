@@ -42,7 +42,8 @@ public class QueryCriteria {
   private Calendar lastModifiedDate;
   private boolean searchWebpage = true;
   private boolean searchDocument = true;
-  private String keyword;  
+  private String keyword;
+  
   public String getSiteName() { return siteName; }
   public void setSiteName(String siteName) { this.siteName = siteName; }
   
