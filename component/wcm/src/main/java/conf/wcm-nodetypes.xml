@@ -95,8 +95,7 @@
   	  <supertype>mix:referenceable</supertype>
   	  <supertype>nt:unstructured</supertype>
   	  <supertype>nt:hierarchyNode</supertype>
-  	  <supertype>exo:rss-enable</supertype>
-  	  <supertype>exo:thumbnail</supertype>  	    	    	      
+  	  <supertype>exo:rss-enable</supertype>  	    	    	    	     
     </supertypes>
     <childNodeDefinitions>
       <childNodeDefinition name="js" defaultPrimaryType="exo:jsFolder" autoCreated="false" mandatory="false"
@@ -123,8 +122,7 @@
   <nodeType name="exo:htmlFile" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
   	<supertypes>
       <supertype>exo:presentationable</supertype>      
-      <supertype>mix:referenceable</supertype>
-      <supertype>exo:thumbnail</supertype>
+      <supertype>mix:referenceable</supertype>      
     </supertypes>
   	<propertyDefinitions>
   	<propertyDefinition name="exo:htmlTOC" requiredType="String" autoCreated="true" mandatory="false"
@@ -137,8 +135,7 @@
   <nodeType name="exo:jsFile" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
   	<supertypes>
       <supertype>exo:presentationable</supertype>
-      <supertype>mix:referenceable</supertype>
-      <supertype>exo:thumbnail</supertype>
+      <supertype>mix:referenceable</supertype>      
     </supertypes>  	    
     <propertyDefinitions>
       <propertyDefinition name="exo:active" requiredType="Boolean" autoCreated="true" mandatory="true"
@@ -165,8 +162,7 @@
   <nodeType name="exo:cssFile" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
   	<supertypes>
       <supertype>exo:presentationable</supertype>
-      <supertype>mix:referenceable</supertype>
-      <supertype>exo:thumbnail</supertype>
+      <supertype>mix:referenceable</supertype>      
     </supertypes>  	    
     <propertyDefinitions>
       <propertyDefinition name="exo:active" requiredType="Boolean" autoCreated="true" mandatory="true"
