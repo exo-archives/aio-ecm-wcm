@@ -78,6 +78,14 @@
                     <field  name="description"><string>the /platform/guests group</string></field>
                     <field  name="label"><string>Guests</string></field>
                   </object>
+                </value>
+                <value>
+                  <object type="org.exoplatform.services.organization.OrganizationConfig$Group">
+                    <field  name="name"><string>web-contributors</string></field>
+                    <field  name="parentId"><string>/platform</string></field>
+                    <field  name="description"><string>the /platform/web-contributors group</string></field>
+                    <field  name="label"><string>Web Contributors</string></field>
+                  </object>
                 </value>                                                
                 <value>
                   <object type="org.exoplatform.services.organization.OrganizationConfig$Group">
@@ -190,6 +198,7 @@
                     <field  name="groups">
                       <string>
                       	*:/platform/administrators,*:/platform/users,
+                      	*:/platform/web-contributors,
                       	member:/organization/management/executive-board
                       </string>
                     </field>
@@ -205,8 +214,7 @@
                     <field  name="email"><string>john@localhost</string></field>
                     <field  name="groups">
                       <string>
-                      	validator:/platform/administrators,manager:/platform/users,
-                      	*:/organization/management/executive-board
+                      	*:/platform/web-contributors,*:/platform/administrators, *:/platform/users                      	
                       </string>
                     </field>
                   </object>
