@@ -17,6 +17,7 @@
 package org.exoplatform.wcm.web.footer;
 
 import javax.jcr.Node;
+import javax.jcr.Session;
 import javax.portlet.PortletRequest;
 
 import org.exoplatform.ecm.resolver.StringResourceResolver;
@@ -47,14 +48,14 @@ public class UIFooterViewMode extends UIComponent {
   private PortletRequest portletRequest = null;
   private String repository = null;
   private String workspace = null;
-  private String nodeUUID = null;
+  private String nodeIdentifier = null;
   
   public UIFooterViewMode() throws Exception {
     portletRequestContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     portletRequest = portletRequestContext.getRequest();
     repository = portletRequest.getPreferences().getValue("repository", null);
     workspace = portletRequest.getPreferences().getValue("workspace", null);
-    nodeUUID = portletRequest.getPreferences().getValue("nodeUUID", null);
+    nodeIdentifier = portletRequest.getPreferences().getValue("nodeIdentifier", null);
   }
 
   public String getTemplate() {
@@ -70,13 +71,21 @@ public class UIFooterViewMode extends UIComponent {
   }
   
   private String loadJCRFooter() {
-    if (repository != null && workspace != null && nodeUUID != null) {
+    if (repository != null && workspace != null && nodeIdentifier != null) {
       try {
         RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
         // need use session provider if enable permission for banner
         SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
         ManageableRepository manageableRepository = (ManageableRepository)repositoryService.getRepository(repository);
-        Node footerWebContent = sessionProvider.getSession(workspace, manageableRepository).getNodeByUUID(nodeUUID);
+        Session session = sessionProvider.getSession(workspace, manageableRepository);
+        
+        Node footerWebContent = null;
+        try {
+          footerWebContent = session.getNodeByUUID(nodeIdentifier);
+        } catch (Exception e) {
+          footerWebContent = (Node) session.getItem(nodeIdentifier);
+        }
+        
         String footerCSS = footerWebContent.getNode("css").getNode("default.css").getNode("jcr:content").getProperty("jcr:data").getString();
         String footerHTML = footerWebContent.getNode("default.html").getNode("jcr:content").getProperty("jcr:data").getString();
         StringBuffer buffer = new StringBuffer();

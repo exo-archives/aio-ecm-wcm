@@ -63,7 +63,7 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
 
   public static String REPOSITORY = "repository" ;
   public static String WORKSPACE = "workspace" ;
-  public static String UUID = "nodeUUID" ;
+  public static String identifier = "nodeIdentifier" ;
 
   private PortletMode mode_ = PortletMode.VIEW ;
 
@@ -106,8 +106,8 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
     PortletPreferences preferences = portletRequestContext.getRequest().getPreferences();
     String repository = preferences.getValue(UISingleContentViewerPortlet.REPOSITORY, "repository");    
     String worksapce = preferences.getValue(UISingleContentViewerPortlet.WORKSPACE, "collaboration");
-    String uuid = preferences.getValue(UISingleContentViewerPortlet.UUID, "") ;
-    if(repository == null || worksapce == null || uuid == null) 
+    String nodeIdentifier = preferences.getValue(UISingleContentViewerPortlet.identifier, "") ;
+    if(repository == null || worksapce == null || nodeIdentifier == null) 
       throw new ItemNotFoundException();
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
@@ -119,7 +119,15 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
       sessionProvider = SessionProviderFactory.createSessionProvider();
     }
     Session session = sessionProvider.getSession(worksapce, manageableRepository);
-    return session.getNodeByUUID(uuid) ;
+    
+    Node content = null;
+    try {
+      content = session.getNodeByUUID(nodeIdentifier);
+    } catch (Exception e) {
+      content = (Node) session.getItem(nodeIdentifier);
+    }
+    
+    return content;
   }
 
   public boolean canEditContent(final Node content) throws Exception{

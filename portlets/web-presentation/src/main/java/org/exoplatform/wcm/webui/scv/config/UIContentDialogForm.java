@@ -91,7 +91,7 @@ public class UIContentDialogForm extends UIDialogForm {
     PortletPreferences prefs = ((PortletRequestContext)WebuiRequestContext.getCurrentInstance()).getRequest().getPreferences();
     String repositoryName = prefs.getValue(UISingleContentViewerPortlet.REPOSITORY, null);
     String workspace = prefs.getValue(UISingleContentViewerPortlet.WORKSPACE, null);
-    String UUID = prefs.getValue(UISingleContentViewerPortlet.UUID, null);
+    String UUID = prefs.getValue(UISingleContentViewerPortlet.identifier, null);
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
     SessionProvider provider = SessionProviderFactory.createSessionProvider();
@@ -219,7 +219,7 @@ public class UIContentDialogForm extends UIDialogForm {
       boolean isCheckOut = true;
       if (repositoryName != null) {
         String workspaceName = prefs.getValue(UISingleContentViewerPortlet.WORKSPACE, null);
-        String UUID = prefs.getValue(UISingleContentViewerPortlet.UUID, null);
+        String UUID = prefs.getValue(UISingleContentViewerPortlet.identifier, null);
         RepositoryService repositoryService = dialogForm.getApplicationComponent(RepositoryService.class);
         ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
         Session session = SessionProviderFactory.createSystemProvider().getSession(workspaceName, manageableRepository);

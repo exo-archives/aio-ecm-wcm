@@ -8,22 +8,22 @@
      
  	<portal-layout> 		
  	  <application>
-	    <instance-id>portal#@owner@:/web-presentation/SiteAdministrationPortlet/admintoolbar</instance-id>
+	    <instance-id>portal#@owner@:/web-presentation/SiteAdministrationPortlet/@owner@-admintoolbar</instance-id>
 	    <show-info-bar>false</show-info-bar>
       </application>
       
 	  <application>
-	    <instance-id>portal#@owner@:/iweb/BannerPortlet/banner</instance-id>
+	    <instance-id>portal#@owner@:/iweb/BannerPortlet/@owner@-banner</instance-id>
 	    <show-info-bar>false</show-info-bar>
 	  </application>
 
 	  <application>
-	  	<instance-id>portal#@owner@:/web/NavigationPortlet/toolbar</instance-id>
+	  	<instance-id>portal#@owner@:/web/NavigationPortlet/@owner@-toolbar</instance-id>
 	    <show-info-bar>false</show-info-bar>
 	  </application>
 		
 	  <application>
-	    <instance-id>portal#@owner@:/web/BreadcumbsPortlet/breadcumbs</instance-id>
+	    <instance-id>portal#@owner@:/web/BreadcumbsPortlet/@owner@-breadcumbs</instance-id>
 	    <show-info-bar>false</show-info-bar>
 	  </application>
 	  
@@ -31,7 +31,7 @@
 	  <page-body> </page-body>
 	  
 	  <application>
-	    <instance-id>portal#@owner@:/iweb/FooterPortlet/footer</instance-id>
+	    <instance-id>portal#@owner@:/iweb/FooterPortlet/@owner@-footer</instance-id>
 	    <show-info-bar>false</show-info-bar>
 	  </application>
   </portal-layout>

@@ -1,11 +1,4 @@
 <div style="background: white; border: 1px solid #b7b7b7; margin: 10px; padding: 10px;">
-	<% 
-		if (uicomponent.useSharedPortal()) {
-			%>
-				<div class="Warning"><%= _ctx.appRes("UIBannerEditModeContainer.warning") %></div>
-			<%
-		}
-	%>
 	<% uicomponent.renderChildren() %>
 	<div class="ViewSelector">
 	  <a style="color: #058ee6; font-weight: bold; text-decoration: underline" href="<%=uicomponent.event("ViewWebContentSelector")%>"><%= _ctx.appRes("UIBannerEditModeContainer.selector") %></a>

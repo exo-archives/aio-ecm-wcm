@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.jcr.Node;
+import javax.jcr.Session;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
@@ -69,7 +70,17 @@ public class UIBannerEditContentForm extends UIDialogForm {
     setWorkspace(bannerFolder.getSession().getWorkspace().getName());
     setStoredPath(bannerFolder.getPath());    
     setContentType("exo:webContent");
-    setNodePath(bannerFolder.getSession().getNodeByUUID(portletPreferences.getValue("nodeUUID", null)).getPath());
+
+    Session session = bannerFolder.getSession();
+    String nodeIdentifier = portletPreferences.getValue("nodeIdentifier", null);
+    Node content = null;
+    try {
+      content = session.getNodeByUUID(nodeIdentifier);
+    } catch (Exception e) {
+      content = (Node) session.getItem(nodeIdentifier);
+    }
+    setNodePath(content.getPath());
+    
     addNew(false);
   }
 
@@ -114,7 +125,7 @@ public class UIBannerEditContentForm extends UIDialogForm {
       
       portletPreferences.setValue("repository", bannerEditModeForm.repositoryName) ;
       portletPreferences.setValue("workspace", bannerWebContent.getSession().getWorkspace().getName()) ;
-      portletPreferences.setValue("nodeUUID", bannerWebContent.getUUID()) ;
+      portletPreferences.setValue("nodeIdentifier", bannerWebContent.getUUID()) ;
       portletPreferences.store();
       
       event.getRequestContext().setAttribute("nodePath", bannerWebContentPath);

@@ -175,7 +175,7 @@ public class UIQuickCreationWizard extends UIBaseWizard {
       PortletPreferences prefs = context.getRequest().getPreferences();
       prefs.setValue(UISingleContentViewerPortlet.REPOSITORY, identifier.getRepository());
       prefs.setValue(UISingleContentViewerPortlet.WORKSPACE, identifier.getWorkspace());
-      prefs.setValue(UISingleContentViewerPortlet.UUID, identifier.getUUID());
+      prefs.setValue(UISingleContentViewerPortlet.identifier, identifier.getUUID());
       prefs.store();
       UIPortletConfig uiPortletConfig = uiQuickWizard.getAncestorOfType(UIPortletConfig.class);
       if(uiPortletConfig.isEditPortletInCreatePageWizard()) {
@@ -203,7 +203,7 @@ public class UIQuickCreationWizard extends UIBaseWizard {
       PortletPreferences prefs = context.getRequest().getPreferences();
       prefs.setValue(UISingleContentViewerPortlet.REPOSITORY, identifier.getRepository());
       prefs.setValue(UISingleContentViewerPortlet.WORKSPACE, identifier.getWorkspace());
-      prefs.setValue(UISingleContentViewerPortlet.UUID, identifier.getUUID());
+      prefs.setValue(UISingleContentViewerPortlet.identifier, identifier.getUUID());
       prefs.setValue("ShowTOC", Boolean.toString(isShowTOC));
       prefs.setValue("ShowQuickEdit", Boolean.toString(isQuickEdit));
       prefs.setValue("ShowTags", Boolean.toString(isShowTags));

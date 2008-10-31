@@ -47,8 +47,8 @@ public class UIBannerViewMode extends UIComponent {
   private PortletRequest portletRequest = null;
   private String repository = null;
   private String workspace = null;
-  private String nodeUUID = null;
-  private String loginUIUUID = null;
+  private String nodeIdentifier = null;
+  private String loginIdentifier = null;
   private boolean showLoginUI = false;
 
   public UIBannerViewMode() throws Exception {
@@ -56,8 +56,8 @@ public class UIBannerViewMode extends UIComponent {
     portletRequest = portletRequestContext.getRequest();
     repository = portletRequest.getPreferences().getValue("repository", null);
     workspace = portletRequest.getPreferences().getValue("workspace", null);
-    nodeUUID = portletRequest.getPreferences().getValue("nodeUUID", null);
-    loginUIUUID = portletRequest.getPreferences().getValue("loginUIUUID", null);
+    nodeIdentifier = portletRequest.getPreferences().getValue("nodeIdentifier", null);
+    loginIdentifier = portletRequest.getPreferences().getValue("loginIdentifier", null);
     showLoginUI = Boolean.parseBoolean(portletRequest.getPreferences().getValue("showLoginUI", null));
   }
 
@@ -74,17 +74,31 @@ public class UIBannerViewMode extends UIComponent {
   }
   
   private String loadJCRBanner() {
-    if (repository != null && workspace != null && nodeUUID != null) {
+    if (repository != null && workspace != null && nodeIdentifier != null) {
       try {
         RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
         // need use session provider if enable permission for banner
         SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
         ManageableRepository manageableRepository = (ManageableRepository)repositoryService.getRepository(repository);
         Session session = sessionProvider.getSession(workspace, manageableRepository);
-        Node bannerWebContent = session.getNodeByUUID(nodeUUID);
+        
+        Node bannerWebContent = null;
+        try {
+          bannerWebContent = session.getNodeByUUID(nodeIdentifier);
+        } catch (Exception e) {
+          bannerWebContent = (Node) session.getItem(nodeIdentifier);
+        }
+        
+        Node loginContent = null;
+        try {
+          loginContent = session.getNodeByUUID(loginIdentifier);
+        } catch (Exception e) {
+          loginContent = (Node) session.getItem(loginIdentifier);
+        }
+        
         String bannerCSS = bannerWebContent.getNode("css").getNode("default.css").getNode("jcr:content").getProperty("jcr:data").getString();
         String bannerHTML = bannerWebContent.getNode("default.html").getNode("jcr:content").getProperty("jcr:data").getString();
-        String bannerAccess = session.getNodeByUUID(loginUIUUID).getNode("jcr:content").getProperty("jcr:data").getString();
+        String bannerAccess = loginContent.getNode("jcr:content").getProperty("jcr:data").getString();
         StringBuffer buffer = new StringBuffer();
         if(showLoginUI)
           buffer.append("<style>").append(bannerCSS).append("</style>").append(bannerAccess).append(bannerHTML);

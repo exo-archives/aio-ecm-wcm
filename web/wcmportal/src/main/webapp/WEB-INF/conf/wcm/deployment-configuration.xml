@@ -2,22 +2,10 @@
 
 <configuration>
 
-	<component>
-    <key>org.exoplatform.services.wcm.portal.artifacts.PortalArtifactsInitializerService</key>
-    <type>org.exoplatform.services.wcm.portal.artifacts.PortalArtifactsInitializerServiceImpl</type>
-    <init-params>
-      <values-param>
-        <name>initial.portals</name>
-        <description>inital portals. the service will not deploy data to the inital portal</description>
-        <value>classic</value>
-        <value>acme</value>	        
-      </values-param>
-	  </init-params>    
-  </component>
-  
   <component>
     <type>org.exoplatform.services.deployment.ContentInitializerService</type>
   </component>  
+  
 	<external-component-plugins>
    		<target-component>org.exoplatform.services.deployment.ContentInitializerService</target-component>    
       <component-plugin> 
@@ -34,10 +22,10 @@
               	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
               		<field  name="repository"><string>repository</string></field>
               		<field  name="workspace"><string>collaboration</string></field>
-              		<field  name="nodePath"><string>/sites content/live/share portal/web contents/site artifacts/banner</string></field>
+              		<field  name="nodePath"><string>/sites content/live/acme/web contents/site artifacts/banner</string></field>
               	</object>
               </field>
-              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/banner.xml</string></field>
+              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme/Banner.xml</string></field>
             </object>
           </object-param>
           <object-param>        
@@ -48,10 +36,10 @@
               	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
               		<field  name="repository"><string>repository</string></field>
               		<field  name="workspace"><string>collaboration</string></field>
-              		<field  name="nodePath"><string>/sites content/live/share portal/web contents/site artifacts/banner</string></field>
+              		<field  name="nodePath"><string>/sites content/live/acme/web contents/site artifacts/banner</string></field>
               	</object>
               </field>
-              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/loginUI.xml</string></field>
+              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme/loginUI.xml</string></field>
             </object>
           </object-param>
           <object-param>        
@@ -62,10 +50,10 @@
               	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
               		<field  name="repository"><string>repository</string></field>
               		<field  name="workspace"><string>collaboration</string></field>
-              		<field  name="nodePath"><string>/sites content/live/share portal/web contents/site artifacts/footer</string></field>
+              		<field  name="nodePath"><string>/sites content/live/acme/web contents/site artifacts/footer</string></field>
               	</object>
               </field>
-              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/footer.xml</string></field>
+              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme/Footer.xml</string></field>
             </object>
           </object-param>
           <object-param>        
@@ -76,80 +64,69 @@
               	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
               		<field  name="repository"><string>repository</string></field>
               		<field  name="workspace"><string>collaboration</string></field>
-              		<field  name="nodePath"><string>/sites content/live/share portal/web contents/site artifacts/homepage</string></field>
+              		<field  name="nodePath"><string>/sites content/live/acme/web contents/site artifacts/homepage</string></field>
               	</object>
               </field>
-              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/homepage.xml</string></field>
+              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme/Homepage.xml</string></field>
             </object>
           </object-param>
-        </init-params>  
-      </component-plugin> 
-   </external-component-plugins>
-      
-   <external-component-plugins>
-   		<target-component>org.exoplatform.services.wcm.portal.artifacts.PortalArtifactsInitializerService</target-component>    
-      <component-plugin> 
-        <name>Inital webcontent artifact for each site</name>
-        <set-method>addPlugin</set-method>
-        <type>org.exoplatform.services.deployment.plugins.XMLDeploymentPlugin</type>
-        <description>This plugin deploy some inital webcontent as site artifact to site artifact folder of portal when a portal is created</description>
-        <init-params>
+          
           <object-param>        
-            <name>Banner data</name>
+            <name>Banner data a</name>
             <description>Deployment Descriptor</description>
             <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
               <field  name="target">
               	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
               		<field  name="repository"><string>repository</string></field>
               		<field  name="workspace"><string>collaboration</string></field>
-              		<field  name="nodePath"><string>/sites content/live/{portalName}/web contents/site artifacts/banner</string></field>
+              		<field  name="nodePath"><string>/sites content/live/classic/web contents/site artifacts/banner</string></field>
               	</object>
               </field>
-              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme-templates/banner.xml</string></field>
+              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/classic/Banner.xml</string></field>
             </object>
           </object-param>
           <object-param>        
-            <name>Login data</name>
+            <name>Login data a</name>
             <description>Deployment Descriptor</description>
             <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
               <field  name="target">
               	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
               		<field  name="repository"><string>repository</string></field>
               		<field  name="workspace"><string>collaboration</string></field>
-              		<field  name="nodePath"><string>/sites content/live/{portalName}/web contents/site artifacts/banner</string></field>
+              		<field  name="nodePath"><string>/sites content/live/classic/web contents/site artifacts/banner</string></field>
               	</object>
               </field>
-              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme-templates/loginUI.xml</string></field>
+              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/classic/loginUI.xml</string></field>
             </object>
           </object-param>
           <object-param>        
-            <name>Footer data</name>
+            <name>Footer data a</name>
             <description>Deployment Descriptor</description>
             <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
               <field  name="target">
               	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
               		<field  name="repository"><string>repository</string></field>
               		<field  name="workspace"><string>collaboration</string></field>
-              		<field  name="nodePath"><string>/sites content/live/{portalName}/web contents/site artifacts/footer</string></field>
+              		<field  name="nodePath"><string>/sites content/live/classic/web contents/site artifacts/footer</string></field>
               	</object>
               </field>
-              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme-templates/footer.xml</string></field>
+              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/classic/Footer.xml</string></field>
             </object>
           </object-param>
           <object-param>        
-            <name>Homepage data</name>
+            <name>Homepage data a</name>
             <description>Deployment Descriptor</description>
             <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
               <field  name="target">
               	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
               		<field  name="repository"><string>repository</string></field>
               		<field  name="workspace"><string>collaboration</string></field>
-              		<field  name="nodePath"><string>/sites content/live/{portalName}/web contents/site artifacts/homepage</string></field>
+              		<field  name="nodePath"><string>/sites content/live/classic/web contents/site artifacts/homepage</string></field>
               	</object>
               </field>
-              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme-templates/homepage.xml</string></field>
+              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/classic/Homepage.xml</string></field>
             </object>
-          </object-param>
+          </object-param> 
         </init-params>  
       </component-plugin> 
    </external-component-plugins>

@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.jcr.Node;
+import javax.jcr.Session;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
@@ -69,7 +70,17 @@ public class UIFooterEditContentForm extends UIDialogForm {
     setWorkspace(footerFolder.getSession().getWorkspace().getName());
     setStoredPath(footerFolder.getPath());
     setContentType("exo:webContent");
-    setNodePath(footerFolder.getSession().getNodeByUUID(portletPreferences.getValue("nodeUUID", null)).getPath());
+    
+    Session session = footerFolder.getSession();
+    String nodeIdentifier = portletPreferences.getValue("nodeIdentifier", null);
+    Node content = null;
+    try {
+      content = session.getNodeByUUID(nodeIdentifier);
+    } catch (Exception e) {
+      content = (Node) session.getItem(nodeIdentifier);
+    }
+    setNodePath(content.getPath());
+    
     addNew(false);
   }
   
@@ -114,7 +125,7 @@ public class UIFooterEditContentForm extends UIDialogForm {
       
       portletPreferences.setValue("repository", footerEditModeForm.repositoryName) ;
       portletPreferences.setValue("workspace", footerWebContent.getSession().getWorkspace().getName()) ;
-      portletPreferences.setValue("nodeUUID", footerWebContent.getUUID()) ;
+      portletPreferences.setValue("nodeIdentifier", footerWebContent.getUUID()) ;
       portletPreferences.store();
       
       event.getRequestContext().setAttribute("nodePath", footerWebContentPath);

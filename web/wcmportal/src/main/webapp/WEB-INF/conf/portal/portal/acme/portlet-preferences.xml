@@ -3,7 +3,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>acme</owner-id>
-    <window-id>portal#acme:/iweb/BannerPortlet/banner</window-id>
+    <window-id>portal#acme:/iweb/BannerPortlet/acme-banner</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -15,13 +15,13 @@
       <read-only>false</read-only>
     </preference>
     <preference>
-      <name>nodeUUID</name>
-      <value>4a34a049c0a8012800fe621e3e7b7eb9</value>
+      <name>nodeIdentifier</name>
+      <value>/sites content/live/acme/web contents/site artifacts/banner/Default</value>
       <read-only>false</read-only>
     </preference>
 		<preference>
-      <name>loginUIUUID</name>
-      <value>6fcc8f85c0a8016300ca6922fbda7690</value>
+      <name>loginIdentifier</name>
+      <value>/sites content/live/acme/web contents/site artifacts/banner/loginUI</value>
       <read-only>false</read-only>
     </preference>
     <preference>
@@ -39,7 +39,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>acme</owner-id>
-    <window-id>portal#acme:/iweb/FooterPortlet/footer</window-id>
+    <window-id>portal#acme:/iweb/FooterPortlet/acme-footer</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -51,8 +51,8 @@
       <read-only>false</read-only>
     </preference>
     <preference>
-      <name>nodeUUID</name>
-      <value>4aa513a3c0a8012801ca49b9d89800d9</value>
+      <name>nodeIdentifier</name>
+      <value>/sites content/live/acme/web contents/site artifacts/footer/Default</value>
       <read-only>false</read-only>
     </preference>
     <preference>
@@ -62,22 +62,10 @@
     </preference>
   </portlet-preferences>
   
-  
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>acme</owner-id>
-    <window-id>portal#acme:/web/GroovyPortlet/groovyportlet</window-id>
-    <preference>
-      <name>template</name>
-      <value>par:/groovy/groovy/webui/component/UIGroovyPortlet.gtmpl</value>
-      <read-only>false</read-only>
-    </preference>
-  </portlet-preferences>
-      
-  <portlet-preferences>
-    <owner-type>portal</owner-type>
-    <owner-id>acme</owner-id>
-    <window-id>portal#acme:/web-presentation/SingleContentViewer/homepage</window-id>
+    <window-id>portal#acme:/web-presentation/SingleContentViewer/acme-homepage</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -89,8 +77,8 @@
       <read-only>false</read-only>
     </preference>
     <preference>
-      <name>nodeUUID</name>
-      <value>4fb52f2ac0a801280068e6791d3419d3</value>
+      <name>nodeIdentifier</name>
+      <value>/sites content/live/acme/web contents/site artifacts/homepage/Default</value>
       <read-only>false</read-only>
     </preference>
     <preference>
@@ -103,7 +91,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>acme</owner-id>
-    <window-id>portal#acme:/web/NavigationPortlet/toolbar</window-id>
+    <window-id>portal#acme:/web/NavigationPortlet/acme-toolbar</window-id>
     <preference>
       <name>useAJAX</name>
       <value>false</value>
@@ -114,7 +102,7 @@
   <portlet-preferences>
 		<owner-type>portal</owner-type>
 		<owner-id>acme</owner-id>
-		<window-id>portal#acme:/web-presentation/SingleContentViewer/presentation</window-id>
+		<window-id>portal#acme:/web-presentation/SingleContentViewer/acme-presentation</window-id>
       <preference>
         <name>ShowTOC</name>
         <value>true</value>

@@ -103,14 +103,6 @@
 	width: 500px;
 }
 
-.UIBannerPortlet .Warning {
-	background-position: left 10px;
-	margin: 10px;
-	padding: 10px;
-	text-align: center;
-	color: red;
-}
-
 .UIBannerPortlet .ViewSelector {
 	margin: 10px 8px;
 	padding: 10px;
@@ -118,4 +110,14 @@
 	color: #0066ff;
 	background: #f7f7f7;
 	border: 1px solid #b7b7b7;
+}
+
+.UIForm .HorizontalLayout .location .UIFormInputSet {
+	margin:0;
+	padding:0;
+	width:0;
+}
+.UIWebContentSelectorForm .UIFormGrid {
+	margin:0;
+	width:auto;
 }

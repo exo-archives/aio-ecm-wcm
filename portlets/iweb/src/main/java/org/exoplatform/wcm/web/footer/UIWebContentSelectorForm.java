@@ -41,6 +41,7 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.ext.UIFormInputSetWithAction;
 
@@ -82,12 +83,15 @@ public class UIWebContentSelectorForm extends UIForm implements UISelectable{
     UIFormInputSetWithAction uiPathSelection = new UIFormInputSetWithAction(FIELD_PATH);
     uiPathSelection.addUIFormInput(new UIFormStringInput(PATH, PATH, null).setEditable(false));
     uiPathSelection.setActionInfo(PATH, new String [] {"Browse"});
+    addChild(new UIFormInputInfo("selectedFooter", "selectedFooter", "None"));
     addChild(uiPathSelection);
     setActions(new String[] {"Save", "Cancel"});
   }
 
-  public void doSelect(String selectField, Object value) throws Exception {
+  public void doSelect(String selectField, Object data) throws Exception {
+    String value = (String) data;
     getUIStringInput(selectField).setValue((String)value);
+    getUIFormInputInfo("selectedFooter").setValue(value);
     showPopupComponent(null);
   }   
 
@@ -139,7 +143,7 @@ public class UIWebContentSelectorForm extends UIForm implements UISelectable{
       PortletPreferences prefs = context.getRequest().getPreferences();
       prefs.setValue("repository", identifier.getRepository());
       prefs.setValue("workspace", identifier.getWorkspace());
-      prefs.setValue("nodeUUID", identifier.getUUID());
+      prefs.setValue("nodeIdentifier", identifier.getUUID());
       prefs.store();
       context.setApplicationMode(PortletMode.VIEW) ;
     }

@@ -53,26 +53,6 @@ public class UIFooterEditModeContainer extends UIContainer {
     footerEditContentForm.init();
   }
   
-  public boolean useSharedPortal() throws Exception {
-    PortletRequestContext portletRequestContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
-    PortletPreferences portletPreferences = portletRequestContext.getRequest().getPreferences();
-    String repositoryName = portletPreferences.getValue("repository", "");
-    String workspaceName = portletPreferences.getValue("workspace", "");
-    String nodeUUID = portletPreferences.getValue("nodeUUID", "");
-
-    RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
-    ManageableRepository repository = repositoryService.getRepository(repositoryName);
-    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
-    Node bannerWebContent = sessionProvider.getSession(workspaceName, repository).getNodeByUUID(nodeUUID);
-    
-    LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
-    String sharedPortalName = livePortalManagerService.getLiveSharedPortal(sessionProvider).getName();
-    
-    if (bannerWebContent.getPath().indexOf(sharedPortalName) >= 0)
-      return true;
-    return false;
-  }
-  
   public static class ViewWebContentSelectorActionListener extends EventListener<UIFooterEditModeContainer> {
     public void execute(Event<UIFooterEditModeContainer> event) throws Exception {
       UIFooterEditModeContainer footerEditModeContainer = event.getSource();

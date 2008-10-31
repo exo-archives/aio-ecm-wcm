@@ -93,7 +93,7 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
     PortletPreferences prefs = context.getRequest().getPreferences();
     String repositoryName = prefs.getValue(UISingleContentViewerPortlet.REPOSITORY, null);
     String workspace = prefs.getValue(UISingleContentViewerPortlet.WORKSPACE, null);
-    String UUID = prefs.getValue(UISingleContentViewerPortlet.UUID, null);
+    String UUID = prefs.getValue(UISingleContentViewerPortlet.identifier, null);
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
     Session session = SessionProviderFactory.createSystemProvider().getSession(workspace,
@@ -165,7 +165,7 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
       PortletPreferences prefs = context.getRequest().getPreferences();
       prefs.setValue(UISingleContentViewerPortlet.REPOSITORY, repositoryName);
       prefs.setValue(UISingleContentViewerPortlet.WORKSPACE, workspaceName);
-      prefs.setValue(UISingleContentViewerPortlet.UUID, webContentNode.getUUID());
+      prefs.setValue(UISingleContentViewerPortlet.identifier, webContentNode.getUUID());
       prefs.store();
       WCMPublicationService wcmPublicationService = uiNameWebContentForm.getApplicationComponent(WCMPublicationService.class);
       wcmPublicationService.enrollNodeInLifecycle(webContentNode, lifecycleNameSelected);
