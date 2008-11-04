@@ -62,11 +62,11 @@ public class UIBannerViewMode extends UIComponent {
   }
 
   public ResourceResolver getTemplateResourceResolver(WebuiRequestContext context, String template) {
-    String bannerData = loadJCRBanner();
-    if(bannerData != null) {
-      return new StringResourceResolver(bannerData);
+    String bannerData = loadJCRBanner();    
+    if(bannerData == null) {
+      bannerData = "<div style=\"text-align:center; padding-top:20px\"><%= _ctx.appRes(\"UIBannerPortlet.label.none\") %></div>";
     }    
-    return super.getTemplateResourceResolver(context, template);
+    return new StringResourceResolver(bannerData);
   }
 
   public String getTemplate() {
@@ -105,9 +105,7 @@ public class UIBannerViewMode extends UIComponent {
         else 
           buffer.append("<style>").append(bannerCSS).append("</style>").append(bannerHTML);
         return buffer.toString();
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
+      } catch (Exception e) {}
     }
     return null;
   }  

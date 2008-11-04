@@ -43,7 +43,6 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 )
 public class UIFooterViewMode extends UIComponent {
 
-  private final String DEFAULT_TEMPLATE = "app:/groovy/footer/webui/UIFooterPortlet.gtmpl".intern();
   private PortletRequestContext portletRequestContext = null;
   private PortletRequest portletRequest = null;
   private String repository = null;
@@ -58,16 +57,12 @@ public class UIFooterViewMode extends UIComponent {
     nodeIdentifier = portletRequest.getPreferences().getValue("nodeIdentifier", null);
   }
 
-  public String getTemplate() {
-    return DEFAULT_TEMPLATE; 
-  }
-
   public ResourceResolver getTemplateResourceResolver(WebuiRequestContext context, String template) {
     String footerData = loadJCRFooter();
-    if(footerData != null) {
-      return new StringResourceResolver(footerData);
+    if(footerData == null) {
+      footerData = "<div style=\"text-align:center; padding-top:20px\"><%= _ctx.appRes(\"UIFooterPortlet.label.none\") %></div>";
     }    
-    return super.getTemplateResourceResolver(context, template);
+    return new StringResourceResolver(footerData);
   }
   
   private String loadJCRFooter() {
