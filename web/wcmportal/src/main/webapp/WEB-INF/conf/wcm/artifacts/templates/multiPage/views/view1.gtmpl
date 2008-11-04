@@ -1,0 +1,40 @@
+<%
+	import javax.jcr.Node;
+	import javax.jcr.NodeIterator;
+	import javax.jcr.Session;
+	import javax.jcr.query.Query;
+	import javax.jcr.query.QueryManager;
+	import javax.jcr.query.QueryResult;
+
+  def currentNode = uicomponent.getNode();
+  
+  def jsNode = currentNode.getNode("js");
+  def cssNode = currentNode.getNode("css");
+    
+  def javaScriptClass="org.exoplatform.services.wcm.javascript.XJavascriptService";
+  def skinClass="org.exoplatform.services.wcm.skin.XSkinService";
+    
+  def exSkinService = uicomponent.getComponentInstanceOfType(skinClass) ;
+  def exJSService = uicomponent.getComponentInstanceOfType(javaScriptClass) ;
+       
+  def css= exSkinService.getActiveStylesheet(jsNode);
+  def js=  exJSService.getActiveJavaScript(cssNode) ;
+  def rcontext = _ctx.getRequestContext();
+  Session session = currentNode.getSession();
+  QueryManager queryManager = session.getWorkspace().getQueryManager();
+  String webContentPath = currentNode.getPath();
+  String sql = "select * from exo:htmlFile where jcr:path like '"+webContentPath+"/%' order by exo:dateCreated DESC" ;
+  Query query = queryManager.createQuery(sql,Query.SQL) ;
+  QueryResult queryResult = query.execute() ;
+%>
+	<style><%=css%></style>
+	<script><%=js%></script>
+<%
+  for(NodeIterator iterator = queryResult.getNodes();iterator.hasNext(); ) {
+  	Node htmlFile = iterator.nextNode();
+%>
+		<%= htmlFile.getName();%>
+		<%=htmlFile.getNode("jcr:content").getProperty("jcr:data").getString() ;%>
+<%	
+  }
+%>
