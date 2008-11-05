@@ -2,17 +2,17 @@
 <portlet-app version="1.0" xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd">
-  <portlet>
+	<portlet>
 		<description xml:lang="EN">Simple Search Portlet</description>
-		<portlet-name>SimpleSearchPortlet</portlet-name>
-		<display-name>Simple Search Portlet</display-name>
+		<portlet-name>WCMAdvanceSearchPortlet</portlet-name>
+		<display-name>WCM Advance Search Portlet</display-name>
 		<portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>
 		
 		<init-param>
-      <name>webui.configuration</name>
-      <value>/WEB-INF/conf/portlet/web-searches/SimpleSearchPortlet/webui/configuration.xml</value>			
+			<name>webui.configuration</name>
+			<value>/WEB-INF/conf/portlet/wcm-search/AdvanceSearchPortlet/webui/configuration.xml</value>			
 		</init-param>
-		
+			
 		<expiration-cache>0</expiration-cache>
 		<supports>
 			<mime-type>text/html</mime-type>
@@ -20,18 +20,55 @@
 			<portlet-mode>edit</portlet-mode>
 		</supports>
 		<supported-locale>en</supported-locale>
-		<resource-bundle>locale.portlet.web-searches.SimpleSearchPortlet</resource-bundle>
+		<resource-bundle>locale.portlet.wcm-search.WCMAdvanceSearchPortlet</resource-bundle>
 		
 		<portlet-info>
-			<title>Simple Search Portlet</title>
-			<short-title>Simple Search</short-title>
-			<keywords>SimpleSearch</keywords>
+			<title>WCM Advance Search Portlet</title>
+			<short-title>WCM Advance Search</short-title>
+			<keywords>AdvanceSearch</keywords>
 		</portlet-info>
-		
-    <security-role-ref>
-      <role-name>admin</role-name>
-      <role-link>admin</role-link>
-    </security-role-ref>		
-  </portlet>  
-  
+			
+		<portlet-preferences>
+			<preference>
+		    	<name>repository</name>
+		    	<value>repository</value>
+		    	<read-only>false</read-only>
+		    </preference>
+		    <preference>
+		    	<name>workspace</name>
+		    	<value>collaboration</value>
+		    	<read-only>false</read-only>
+		    </preference>
+			<preference>
+				<name>searchMode</name>
+				<value>searchPageMode</value>
+				<read-only>false</read-only>
+			</preference>		    
+			<preference>
+				<name>searchFormTemplatePath</name>
+				<value>/jcr:system/exo:ecm/views/templates/WCM Advance Search/search-form/UIDefaultSearchForm.gtmpl</value>
+				<read-only>false</read-only>
+			</preference>
+			<preference>
+				<name>searchBoxTemplatePath</name>
+				<value>/jcr:system/exo:ecm/views/templates/WCM Advance Search/search-box/UIDefaultSearchBox.gtmpl</value>
+				<read-only>false</read-only>
+			</preference>
+			<preference>
+				<name>searchResultTemplatePath</name>
+				<value>/jcr:system/exo:ecm/views/templates/WCM Advance Search/search-result/UIDefaultSearchResult.gtmpl</value>
+				<read-only>false</read-only>
+			</preference>
+			<preference>
+				<name>searchPaginatorTemplatePath</name>
+				<value>/jcr:system/exo:ecm/views/templates/WCM Advance Search/search-paginator/UIDefaultSearchPaginator.gtmpl</value>
+				<read-only>false</read-only>
+			</preference>							
+		</portlet-preferences>
+			
+		<security-role-ref>
+			<role-name>admin</role-name>
+			<role-link>admin</role-link>
+		</security-role-ref>		
+	</portlet>    
 </portlet-app>

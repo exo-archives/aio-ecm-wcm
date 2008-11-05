@@ -1,20 +1,20 @@
 SkinService.addSkin(
-    "web-searches/SimpleSearchPortlet",
+    "web-searches/WCMAdvanceSearchPortlet",
     "Default",
-    "/web-searches/skin/webui/component/UISimpleSearch/DefaultStylesheet.css",
+    "/web-searches/skin/webui/UIAdvanceSearch/DefaultStylesheet.css",
     ServletContext
 ) ;
 
 SkinService.addSkin(
-    "web-searches/SimpleSearchPortlet",
+    "web-searches/WCMAdvanceSearchPortlet",
     "Mac",
-    "/web-searches/skin/webui/component/UISimpleSearch/MacStylesheet.css",
+    "/web-searches/skin/webui/UIAdvanceSearch/MacStylesheet.css",
     ServletContext
 ) ;
 
 SkinService.addSkin(
-    "web-searches/SimpleSearchPortlet",
+    "web-searches/WCMAdvanceSearchPortlet",
     "Vista",
-    "/web-searches/skin/webui/component/UISimpleSearch/VistaStylesheet.css",
+    "/web-searches/skin/webui/UIAdvanceSearch/VistaStylesheet.css",
     ServletContext
 ) ;
