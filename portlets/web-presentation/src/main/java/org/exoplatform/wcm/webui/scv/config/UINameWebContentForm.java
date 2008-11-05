@@ -16,8 +16,13 @@
  */
 package org.exoplatform.wcm.webui.scv.config;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.jcr.Node;
 import javax.jcr.Session;
+import javax.jcr.nodetype.NodeType;
+import javax.jcr.nodetype.NodeTypeManager;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
@@ -25,6 +30,7 @@ import org.exoplatform.ecm.webui.form.validator.ECMNameValidator;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -43,12 +49,13 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
+import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
-import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 
 /**
@@ -56,32 +63,47 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
  * 8, 2008
  */
 
-@ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIForm.gtmpl", events = {
-  @EventConfig(listeners = UINameWebContentForm.SaveActionListener.class),
-  @EventConfig(listeners = UINameWebContentForm.AbortActionListener.class, phase = Phase.DECODE) })
-  public class UINameWebContentForm extends UIForm {
+@ComponentConfig(
+    lifecycle = UIFormLifecycle.class, 
+    template = "app:/groovy/SingleContentViewer/config/UINameWebContentForm.gtmpl", 
+    events = {
+      @EventConfig(listeners = UINameWebContentForm.SaveActionListener.class),
+      @EventConfig(listeners = UINameWebContentForm.AbortActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UINameWebContentForm.ChangeTemplateTypeActionListener.class, phase = Phase.DECODE)
+    }
+)
+public class UINameWebContentForm extends UIForm {
 
   public static final String NAME_WEBCONTENT    = "name".intern();
-
   public static final String SUMMARY_WEBCONTENT = "summary".intern();
+  public static final String FIELD_SELECT = "selectTemplate".intern();
 
   public UINameWebContentForm() throws Exception {
     addUIFormInput(new UIFormStringInput(NAME_WEBCONTENT, NAME_WEBCONTENT, null).addValidator(
         MandatoryValidator.class).addValidator(ECMNameValidator.class));
-    UIFormTextAreaInput uiFormTextAreaInput = new UIFormTextAreaInput(SUMMARY_WEBCONTENT, SUMMARY_WEBCONTENT, null);
-    uiFormTextAreaInput.setColumns(250);
-    addUIFormInput(uiFormTextAreaInput);
+    setActions(new String[] {"Save", "Abort"});
   }
 
   public void init() throws Exception {
+    TemplateService templateService = getApplicationComponent(TemplateService.class);
+    RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
+    String repositoryName = repositoryService.getCurrentRepository().getConfiguration().getName();
+    NodeTypeManager nodeTypeManager = repositoryService.getRepository(repositoryName).getNodeTypeManager();
+    List<String> documentTemplates = templateService.getDocumentTemplates(repositoryName);
+    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>();
+    for (String documentTemplate: documentTemplates) {
+      NodeType nodeType = nodeTypeManager.getNodeType(documentTemplate);
+      if (nodeType.isNodeType("exo:webContent")) {
+        String contentType = nodeType.getName();
+        String templateLabel = templateService.getTemplateLabel(contentType, repositoryName);
+        options.add(new SelectItemOption<String>(templateLabel, contentType));
+      }
+    }
+    UIFormSelectBox templateSelect = new UIFormSelectBox(FIELD_SELECT, FIELD_SELECT, options) ;
+    templateSelect.setOnChange("ChangeTemplateType");
+    addUIFormInput(templateSelect) ;
     if (!isNewConfig()) {
       Node currentNode = getNode();
-      String summary = "";
-      if (currentNode.hasProperty("exo:summary")) {
-        summary = currentNode.getProperty("exo:summary").getValue().getString();
-      }
-      UIFormTextAreaInput uiFormTextAreaInput = getChild(UIFormTextAreaInput.class);
-      uiFormTextAreaInput.setValue(summary);
       UIFormStringInput uiFormStringInput = getChild(UIFormStringInput.class);
       uiFormStringInput.setValue(currentNode.getName());
       uiFormStringInput.setEditable(false);
@@ -130,7 +152,6 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
       Node webContentStorage = handler.getWebContentStorage(portalNode);
       String webContentName = ((UIFormStringInput) uiNameWebContentForm
           .getChildById(NAME_WEBCONTENT)).getValue();
-      String summaryContent = uiNameWebContentForm.getChild(UIFormTextAreaInput.class).getValue();
       Node webContentNode = null;
       UIQuickCreationWizard uiQuickCreationWizard = uiNameWebContentForm
       .getAncestorOfType(UIQuickCreationWizard.class);
@@ -147,7 +168,6 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
         webContentNode.addMixin("mix:votable");
       if (webContentNode.canAddMixin("mix:commentable"))
         webContentNode.addMixin("mix:commentable");
-      webContentNode.setProperty("exo:summary", summaryContent);
       webContentStorage.getSession().save();
       String repositoryName = ((ManageableRepository) webContentNode.getSession().getRepository())
       .getConfiguration().getName();
@@ -158,7 +178,9 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
       nodeLocation.setPath(webContentNode.getParent().getPath());
       uiCDForm.setStoredLocation(nodeLocation);
       uiCDForm.setNodePath(webContentNode.getPath());
-      uiCDForm.setContentType("exo:webContent");
+      String contentType = uiNameWebContentForm.getUIFormSelectBox(FIELD_SELECT).getValue();
+      System.out.println("==========================> content type: " + contentType);
+      uiCDForm.setContentType(contentType);
       uiCDForm.addNew(false);
       uiCDForm.resetProperties();
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
@@ -189,6 +211,15 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
       } else {        
         context.setApplicationMode(PortletMode.VIEW);
       }
+    }
+  }
+
+  public static class ChangeTemplateTypeActionListener extends EventListener<UINameWebContentForm> {
+    public void execute(Event<UINameWebContentForm> event) throws Exception {
+      UINameWebContentForm uiNameWebContentForm = event.getSource();
+      String contentType = uiNameWebContentForm.getUIFormSelectBox(FIELD_SELECT).getValue();
+      System.out.println("============================> in ra di nao");
+      System.out.println("======================> template type: "+ contentType);
     }
   }
 }
