@@ -215,7 +215,6 @@ public class UIContentDialogForm extends UIDialogForm {
       PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
       PortletPreferences prefs = pContext.getRequest().getPreferences();
       String repositoryName = prefs.getValue(UISingleContentViewerPortlet.REPOSITORY, null);
-      String summary = "";
       boolean isCheckOut = true;
       if (repositoryName != null) {
         String workspaceName = prefs.getValue(UISingleContentViewerPortlet.WORKSPACE, null);
@@ -224,8 +223,6 @@ public class UIContentDialogForm extends UIDialogForm {
         ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
         Session session = SessionProviderFactory.createSystemProvider().getSession(workspaceName, manageableRepository);
         Node webContentNode = session.getNodeByUUID(UUID);
-        if (webContentNode.hasProperty("exo:summary"))
-          summary = webContentNode.getProperty("exo:summary").getValue().getString();
         if (dialogForm.nodeIsLocked(webContentNode)) {
           Object[] objs = { webContentNode.getPath() };
           uiApplication.addMessage(new ApplicationMessage("UIPopupMenu.msg.node-locked", objs));
@@ -256,7 +253,6 @@ public class UIContentDialogForm extends UIDialogForm {
         try{
           homeNode.save();
           newNode = (Node) homeNode.getSession().getItem(addedPath);
-          newNode.setProperty("exo:summary", summary);
           newNode.getSession().save();
           event.getRequestContext().setAttribute("nodePath",newNode.getPath());
         }catch(Exception e) {} 
