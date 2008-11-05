@@ -263,7 +263,6 @@ public class UIContentDialogForm extends UIDialogForm {
         try{
           homeNode.save();
           newNode = (Node) homeNode.getSession().getItem(addedPath);
-          newNode.getSession().save();
           event.getRequestContext().setAttribute("nodePath",newNode.getPath());
         }catch(Exception e) {} 
       }catch(AccessControlException ace) {
