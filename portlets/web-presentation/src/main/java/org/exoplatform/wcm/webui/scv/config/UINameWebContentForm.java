@@ -77,6 +77,7 @@ public class UINameWebContentForm extends UIForm {
   public static final String NAME_WEBCONTENT    = "name".intern();
   public static final String SUMMARY_WEBCONTENT = "summary".intern();
   public static final String FIELD_SELECT = "selectTemplate".intern();
+  private String pictureCSS;
 
   public UINameWebContentForm() throws Exception {
     addUIFormInput(new UIFormStringInput(NAME_WEBCONTENT, NAME_WEBCONTENT, null).addValidator(
@@ -101,6 +102,8 @@ public class UINameWebContentForm extends UIForm {
     }
     UIFormSelectBox templateSelect = new UIFormSelectBox(FIELD_SELECT, FIELD_SELECT, options) ;
     templateSelect.setOnChange("ChangeTemplateType");
+    templateSelect.setDefaultValue("exo:webContent");
+    setPictureCSS("exo_webContent");
     addUIFormInput(templateSelect) ;
     if (!isNewConfig()) {
       Node currentNode = getNode();
@@ -126,6 +129,14 @@ public class UINameWebContentForm extends UIForm {
   public boolean isNewConfig() {
     UIPortletConfig uiPortletConfig = getAncestorOfType(UIPortletConfig.class);
     return uiPortletConfig.isNewConfig();
+  }
+
+  public String getPictureCSS() {
+    return pictureCSS;
+  }
+
+  public void setPictureCSS(String pictureCSS) {
+    this.pictureCSS = pictureCSS;
   }
 
   public static class SaveActionListener extends EventListener<UINameWebContentForm> {
@@ -179,7 +190,6 @@ public class UINameWebContentForm extends UIForm {
       uiCDForm.setStoredLocation(nodeLocation);
       uiCDForm.setNodePath(webContentNode.getPath());
       String contentType = uiNameWebContentForm.getUIFormSelectBox(FIELD_SELECT).getValue();
-      System.out.println("==========================> content type: " + contentType);
       uiCDForm.setContentType(contentType);
       uiCDForm.addNew(false);
       uiCDForm.resetProperties();
@@ -218,8 +228,14 @@ public class UINameWebContentForm extends UIForm {
     public void execute(Event<UINameWebContentForm> event) throws Exception {
       UINameWebContentForm uiNameWebContentForm = event.getSource();
       String contentType = uiNameWebContentForm.getUIFormSelectBox(FIELD_SELECT).getValue();
-      System.out.println("============================> in ra di nao");
-      System.out.println("======================> template type: "+ contentType);
+      if (contentType.equals("exo:webContent")) {
+        uiNameWebContentForm.setPictureCSS("exo_webContent");
+      } else if (contentType.equals("exo:twoColumnsWebcontent")) {
+        uiNameWebContentForm.setPictureCSS("exo_twoColumnsWebcontent");
+      } else {
+        uiNameWebContentForm.setPictureCSS("exo_pictureOnHeadWebcontent");
+      }
     }
   }
+
 }
