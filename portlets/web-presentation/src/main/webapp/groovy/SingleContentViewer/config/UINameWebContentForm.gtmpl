@@ -27,9 +27,12 @@
 	      <%
 	          }
 	        }
-	      %>	      
+	      %>	 
+	      			<tr>
+	      				<td></td>
+	      				<td><div class="<%= uicomponent.getPictureCSS(); %>"><span></span></div></td>
+	      			</tr>     
       </table>
-      <div class="DefaultWebContentLayout"></div>      
       <div class="UIAction"> 
         <table class="ActionContainer">
         	<tr>

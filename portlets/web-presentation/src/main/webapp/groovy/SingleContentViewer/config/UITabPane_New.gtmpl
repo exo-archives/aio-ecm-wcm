@@ -19,6 +19,7 @@
 			              if(!uiChild.isRendered()) continue ;
 			              String style = "NormalTab" ;
 			              String tabId = uiChild.getId();
+			              System.out.println("=======================> chay vao UITabPane_New.gtmpl -- tabId: "+ tabId);
 			              if(tabId.equals(selTabId)) style="SelectedTab" ;
 			          %>
 			            <div class="UITab NormalTabStyle">
