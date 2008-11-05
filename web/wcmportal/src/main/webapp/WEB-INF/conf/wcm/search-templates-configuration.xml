@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<configuration>  
+  <external-component-plugins>
+   	<target-component>org.exoplatform.services.cms.views.ApplicationTemplateManagerService</target-component>
+      <component-plugin> 
+        <name>search.templates.plugin</name>
+        <set-method>addPlugin</set-method>
+        <type>org.exoplatform.services.cms.views.PortletTemplatePlugin</type>
+        <description>This plugin is used to import views templates for search ui</description>
+        <init-params>
+        	<value-param>
+	        	<name>portletName</name>
+	        	<value>WCM Advance Search</value>
+	        </value-param>
+	        <value-param>
+	        	<name>portlet.template.path</name>
+	        	<value>war:/conf/wcm/artifacts/application-templates/wcm-search</value>
+	        </value-param>	    
+          <object-param>        
+            <name>default.searchForm</name>
+            <description>Default search form template</description>
+            <object type="org.exoplatform.services.cms.views.PortletTemplatePlugin$PortletTemplateConfig">
+              <field  name="templateName"><string>UIDefaultSearchForm.gtmpl</string></field>  
+              <field  name="category"><string>search-form</string></field>
+            </object>
+          </object-param>		  	      		           
+          <object-param>        
+            <name>default.searchResult</name>
+            <description>Default search form template</description>
+            <object type="org.exoplatform.services.cms.views.PortletTemplatePlugin$PortletTemplateConfig">
+              <field  name="templateName"><string>UIDefaultSearchResult.gtmpl</string></field>  
+              <field  name="category"><string>search-result</string></field>
+            </object>
+          </object-param>	
+          <object-param>        
+            <name>default.searchPaginator</name>
+            <description>Default search paginator template</description>
+            <object type="org.exoplatform.services.cms.views.PortletTemplatePlugin$PortletTemplateConfig">
+              <field  name="templateName"><string>UIDefaultSearchPaginator.gtmpl</string></field>  
+              <field  name="category"><string>search-paginator</string></field>
+            </object>
+          </object-param>	          
+          <object-param>        
+            <name>default.searchBox</name>
+            <description>Default search box template</description>
+            <object type="org.exoplatform.services.cms.views.PortletTemplatePlugin$PortletTemplateConfig">
+              <field  name="templateName"><string>UIDefaultSearchBox.gtmpl</string></field>  
+              <field  name="category"><string>search-box</string></field>
+            </object>
+          </object-param>	          
+        </init-params>  
+      </component-plugin> 
+   </external-component-plugins>       	
+</configuration>

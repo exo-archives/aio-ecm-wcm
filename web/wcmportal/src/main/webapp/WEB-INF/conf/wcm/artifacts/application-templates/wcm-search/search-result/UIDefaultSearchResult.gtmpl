@@ -1,0 +1,34 @@
+<% 
+/* 
+ * Go to "WCMResources/src/main/webapp/shareskin/content-list-viewer/list-by-folder/defaultFolderListViewer"
+ * to edit stylesheet if you want.
+ */
+import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
+import javax.jcr.Node;
+%>
+
+<div id="$uicomponent.id" class="UIAdvanceSearchResultDefault">
+	<div class="Caption">
+		<% 	
+		def currentPageData = uicomponent.getCurrentPageData();					
+		for (Node node : currentPageData) {				
+			String itemName = node.getName();
+			String itemLink = uicomponent.getURL(node);		
+		    String itemTitle = uicomponent.getTitle(node);
+			String itemDateCreated = uicomponent.getCreatedDate(node);
+			if (itemTitle != null && itemTitle.trim().length() != 0) {
+				itemName = itemTitle;
+			}
+		%>	
+			<div class="CaptionItem">				
+				<div class="CaptionTitle"><a href="$itemLink">$itemName</a></div>		
+				<div class="CaptionDate"><%=itemDateCreated%></div>						
+			</div>			
+		<%							
+		}
+		%>
+		<div class="CaptionFunc">			
+			<% uicomponent.renderChild(UICustomizeablePaginator.class) %>
+		</div>					
+	</div>
+</div>

@@ -1,0 +1,5 @@
+<div class="UIForm $uicomponent.id" >
+	<%uiform.begin()%>
+	<div>SEARCH BOX</div>
+	<%uiform.end()%>
+</div>

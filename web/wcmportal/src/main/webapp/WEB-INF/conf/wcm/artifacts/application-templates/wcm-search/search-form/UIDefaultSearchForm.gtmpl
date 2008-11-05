@@ -1,0 +1,66 @@
+<% 
+import java.util.ArrayList;
+import java.util.List;
+import org.exoplatform.webui.form.UIFormCheckBoxInput;
+import org.exoplatform.webui.form.UIFormSelectBox;
+import org.exoplatform.webui.form.UIFormStringInput;
+import org.exoplatform.wcm.webui.search.UIAdvanceSearchForm;
+%>
+
+<div class="UIForm $uicomponent.id" >
+<%uiform.begin()%>
+<%  
+	UIFormStringInput uiKeywordInput = uicomponent.getUIStringInput(UIAdvanceSearchForm.KEYWORD_INPUT);
+	UIFormSelectBox uiPortalSelectBox = uicomponent.getUIFormSelectBox(UIAdvanceSearchForm.PORTALS_SELECTOR);
+	UIFormCheckBoxInput uiPageCheckBox = uicomponent.getUIFormCheckBoxInput(UIAdvanceSearchForm.PAGE_CHECKING);
+	UIFormCheckBoxInput uiDocumentCheckBox = uicomponent.getUIFormCheckBoxInput(UIAdvanceSearchForm.DOCUMENT_CHECKING);      
+%>
+	<div class="HorizontalLayout">
+		<div class="FormContainer">
+			<table class="UIFormGrid">
+				<tr>
+					<td class="FieldLabel"><%= _ctx.appRes(uicomponent.id + "." + uiKeywordInput.getName() + "." + "label" ) %></td>
+					<td class="FieldComponent"><% uiform.renderField(uiKeywordInput) %></td>					
+				</tr>
+				<tr>
+					<td class="FieldLabel"><%= _ctx.appRes(uicomponent.id + "." + uiPortalSelectBox.getName() + "." + "label" ) %></td>
+					<td class="FieldComponent">
+						<div style="float: left;"><% uiform.renderField(uiPortalSelectBox) %></div>
+						<div style="padding-top: 5px;">
+							<div class="CheckboxField"><% uiform.renderField(uiPageCheckBox) %></div>																			
+							<div class="CheckboxText"><%= _ctx.appRes(uicomponent.id + "." + uiPageCheckBox.getName() + "." + "label" ) %></div>
+							<div class="CheckboxField"><% uiform.renderField(uiDocumentCheckBox) %></div>																			
+							<div class="CheckboxText"><%= _ctx.appRes(uicomponent.id + "." + uiDocumentCheckBox.getName() + "." + "label" ) %></div>							
+						</div>
+					</td>					
+				</tr>				
+			</table>
+			<div class="UIAction">
+				<table class="ActionContainer">
+					<tr>
+						<td>
+							<% 
+							for (action in uicomponent.getActions()) { 
+								String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
+								String link = uicomponent.event(action);
+							%>
+								<div onclick="$link" class="ActionButton LightBlueStyle" onmouseover="this.style.color = '#058ee6'" onmouseout="this.style.color='black'">
+									<div class="ButtonLeft">
+										<div class="ButtonRight">
+											<div class="ButtonMiddle">
+								            	<a href="javascript:void(0);">$actionLabel</a>
+								            </div>
+										</div>
+									</div>
+								</div>								
+							<% 
+							} 
+							%>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+<%uiform.end()%>
+</div>
