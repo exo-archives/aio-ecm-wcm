@@ -124,7 +124,7 @@ public class UIAdvanceSearchForm extends UIForm {
       queryCriteria.setSiteName(selectedPortal);
       queryCriteria.setKeyword(keyword);
       WCMPaginatedQueryResult paginatedQueryResult = new WCMPaginatedQueryResult(siteSearchService
-          .search(queryCriteria, provider), 5, true);      
+          .searchSiteContents(queryCriteria, provider), 5, true);      
       uiSearchResult.setPageList(paginatedQueryResult);
     }
   }
