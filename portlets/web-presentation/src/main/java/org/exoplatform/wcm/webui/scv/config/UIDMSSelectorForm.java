@@ -179,7 +179,7 @@ public class UIDMSSelectorForm extends UIForm implements UISelectable{
       PortletPreferences prefs = pContext.getRequest().getPreferences();
       prefs.setValue(UISingleContentViewerPortlet.REPOSITORY, nodeIdentifier.getRepository());
       prefs.setValue(UISingleContentViewerPortlet.WORKSPACE, nodeIdentifier.getWorkspace());
-      prefs.setValue(UISingleContentViewerPortlet.identifier, nodeIdentifier.getUUID());
+      prefs.setValue(UISingleContentViewerPortlet.IDENTIFIER, nodeIdentifier.getUUID());
       prefs.store();
 
       WCMPublicationService wcmPublicationService = uiDMSSelectorForm.getApplicationComponent(WCMPublicationService.class);

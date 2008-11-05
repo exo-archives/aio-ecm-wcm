@@ -115,7 +115,7 @@ public class UINameWebContentForm extends UIForm {
     PortletPreferences prefs = context.getRequest().getPreferences();
     String repositoryName = prefs.getValue(UISingleContentViewerPortlet.REPOSITORY, null);
     String workspace = prefs.getValue(UISingleContentViewerPortlet.WORKSPACE, null);
-    String UUID = prefs.getValue(UISingleContentViewerPortlet.identifier, null);
+    String UUID = prefs.getValue(UISingleContentViewerPortlet.IDENTIFIER, null);
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
     Session session = SessionProviderFactory.createSystemProvider().getSession(workspace,
@@ -187,7 +187,7 @@ public class UINameWebContentForm extends UIForm {
       PortletPreferences prefs = context.getRequest().getPreferences();
       prefs.setValue(UISingleContentViewerPortlet.REPOSITORY, repositoryName);
       prefs.setValue(UISingleContentViewerPortlet.WORKSPACE, workspaceName);
-      prefs.setValue(UISingleContentViewerPortlet.identifier, webContentNode.getUUID());
+      prefs.setValue(UISingleContentViewerPortlet.IDENTIFIER, webContentNode.getUUID());
       prefs.store();
       WCMPublicationService wcmPublicationService = uiNameWebContentForm.getApplicationComponent(WCMPublicationService.class);
       wcmPublicationService.enrollNodeInLifecycle(webContentNode, lifecycleNameSelected);

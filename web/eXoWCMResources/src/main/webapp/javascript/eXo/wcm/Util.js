@@ -20,20 +20,16 @@ wcm.insertCSSFromTextArea2FCK = function(Instance, ContentCSS) {
 			eStyle.innerHTML = sValue;
 			eHead.appendChild(eStyle);
 		} else {
-			var eHTML = iDoc.getElementsByTagName('HTML')[0];
-			var strHTML = eHTML.outerHTML		
-			var its = strHTML.split("<STYLE");
-			its[1] = its[1] + "<STYLE type=text/css>" + sValue + "</STYLE>";
-			var newStrHTML = "";		
-			for (var i = 0; i < its.length; i++) {			
-				if (its[i].match(/<\/STYLE>/)) {
-					var it = "<STYLE" + its[i];
-					its[i] = it;				
-				}
-				newStrHTML += its[i];
+			var eHtml = iDoc.getElementsByTagName('html')[0];
+			var strHTML = eHtml.innerHTML;
+			var eStyle = iDoc.getElementById(sContentCSSId);
+			if (eStyle) {
+				strHTML = strHTML.replace(eStyle.outerHTML, '');
 			}
+			strHTML += '<style id="' + sContentCSSId + '">' + sValue + '</style>';
+
 			iDoc.open();
-			iDoc.write(newStrHTML);
+			iDoc.write(strHTML);
 			iDoc.close();
 		}		
 	};

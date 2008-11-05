@@ -182,7 +182,7 @@ public class UIWebContentSelectorForm extends UIForm implements UISelectable{
       PortletPreferences prefs = context.getRequest().getPreferences();
       prefs.setValue(UISingleContentViewerPortlet.REPOSITORY, identifier.getRepository());
       prefs.setValue(UISingleContentViewerPortlet.WORKSPACE, identifier.getWorkspace());
-      prefs.setValue(UISingleContentViewerPortlet.identifier, identifier.getUUID());
+      prefs.setValue(UISingleContentViewerPortlet.IDENTIFIER, identifier.getUUID());
       prefs.store();
       WCMPublicationService wcmPublicationService = uiWebContentSelector.getApplicationComponent(WCMPublicationService.class);
       UIPortletConfig portletConfig = uiWebContentSelector.getAncestorOfType(UIPortletConfig.class);

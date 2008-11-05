@@ -78,7 +78,7 @@ public class UIQuickEditWebContentForm extends UIContentDialogForm{
     PortletPreferences prefs = pContext.getRequest().getPreferences();
     String repositoryName = prefs.getValue(UISingleContentViewerPortlet.REPOSITORY, null);
     String workspaceName = prefs.getValue(UISingleContentViewerPortlet.WORKSPACE, null);
-    String UUID = prefs.getValue(UISingleContentViewerPortlet.identifier, null);
+    String UUID = prefs.getValue(UISingleContentViewerPortlet.IDENTIFIER, null);
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
     Session session = SessionProviderFactory.createSystemProvider().getSession(workspaceName, manageableRepository);
@@ -123,7 +123,7 @@ public class UIQuickEditWebContentForm extends UIContentDialogForm{
       PortletPreferences prefs = pContext.getRequest().getPreferences();
       String repositoryName = prefs.getValue(UISingleContentViewerPortlet.REPOSITORY, null);
       String workspaceName = prefs.getValue(UISingleContentViewerPortlet.WORKSPACE, null);
-      String UUID = prefs.getValue(UISingleContentViewerPortlet.identifier, null);
+      String UUID = prefs.getValue(UISingleContentViewerPortlet.IDENTIFIER, null);
       RepositoryService repositoryService = uiQuickEditForm.getApplicationComponent(RepositoryService.class);
       ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
       Session session = SessionProviderFactory.createSystemProvider().getSession(workspaceName, manageableRepository);

@@ -63,7 +63,7 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
 
   public static String REPOSITORY = "repository" ;
   public static String WORKSPACE = "workspace" ;
-  public static String identifier = "nodeIdentifier" ;
+  public static String IDENTIFIER = "nodeIdentifier" ;
 
   private PortletMode mode_ = PortletMode.VIEW ;
 
@@ -106,7 +106,7 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
     PortletPreferences preferences = portletRequestContext.getRequest().getPreferences();
     String repository = preferences.getValue(UISingleContentViewerPortlet.REPOSITORY, "repository");    
     String worksapce = preferences.getValue(UISingleContentViewerPortlet.WORKSPACE, "collaboration");
-    String nodeIdentifier = preferences.getValue(UISingleContentViewerPortlet.identifier, "") ;
+    String nodeIdentifier = preferences.getValue(UISingleContentViewerPortlet.IDENTIFIER, "") ;
     if(repository == null || worksapce == null || nodeIdentifier == null) 
       throw new ItemNotFoundException();
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
