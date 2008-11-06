@@ -13,4 +13,28 @@
     </supertypes>
   </nodeType>                  
   
+  <nodeType name="metadata:siteMetadata" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
+  	<supertypes>
+      <supertype>exo:metadata</supertype>      
+    </supertypes>
+    <propertyDefinitions>
+    	<propertyDefinition name="metadata:siteTitle" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY"
+        protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="description" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY"
+        protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="keywords" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY"
+        protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="robots" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY"
+        protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>            
+    </propertyDefinitions>
+  </nodeType>
+                
 </nodeTypes>

@@ -44,13 +44,13 @@
 	<import>war:/conf/ecm/advanced/queries-configuration.xml</import>
 				
 	<import>war:/conf/wcm/system-configuration.xml</import>
-	<import>war:/conf/wcm/publication-configuration.xml</import>  
-	<import>war:/conf/wcm/drives-configuration.xml</import>
-	<import>war:/conf/wcm/nodetypes-templates-configuration.xml</import>  
-	<import>war:/conf/wcm/clv-templates-configuration.xml</import>
-	<import>war:/conf/wcm/search-templates-configuration.xml</import>  
-	<import>war:/conf/wcm/views-configuration.xml</import>
-	<import>war:/conf/wcm/deployment-configuration.xml</import>
-	<import>war:/conf/wcm/site-artifacts-initializer-configuration.xml</import>    
-			
+	<import>war:/conf/wcm/publication-configuration.xml</import>  	
+  <import>war:/conf/wcm/drives-configuration.xml</import>
+  <import>war:/conf/wcm/nodetypes-templates-configuration.xml</import>  
+  <import>war:/conf/wcm/clv-templates-configuration.xml</import>
+  <import>war:/conf/wcm/search-templates-configuration.xml</import>
+  <import>war:/conf/wcm/views-configuration.xml</import>
+  <import>war:/conf/wcm/deployment-configuration.xml</import>
+  <import>war:/conf/wcm/site-artifacts-initializer-configuration.xml</import>
+  <import>war:/conf/wcm/metadata-templates-configuration.xml</import>  		    		
 </configuration>
