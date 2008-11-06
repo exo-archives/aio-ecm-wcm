@@ -67,7 +67,7 @@ import org.exoplatform.webui.form.UIForm;
  * hoa.pham@exoplatform.com
  * Sep 30, 2008
  */
-public class WCMPublicationPlugin extends WebpagePublicationPlugin {
+public class WCMPublicationPlugin extends WebpagePublicationPlugin{
 
   public static final String ENROLLED = "enrolled".intern(); 
   public static final String UNPUBLISHED = "unpublished".intern();  
@@ -389,6 +389,7 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
    */
   @SuppressWarnings("unused")
   public Node getNodeView(Node node, Map<String, Object> context) throws Exception {
+    
     return node;
   }
 
@@ -443,5 +444,5 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
       return String.format(result, values); 
     }        
     return result;
-  }    
+  }     
 }

@@ -18,7 +18,9 @@ package org.exoplatform.services.wcm.publication.defaultlifecycle;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -39,6 +41,7 @@ import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
+import org.exoplatform.services.wcm.metadata.PageMetadataService;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
 
 /**
@@ -48,9 +51,9 @@ import org.exoplatform.services.wcm.publication.WCMPublicationService;
  * Oct 6, 2008  
  */
 public class PageEventListenerDelegate {
-  
+
   private String lifecycleName;
-  
+
   public PageEventListenerDelegate(String lifecycleName, ExoContainer container) {
     this.lifecycleName = lifecycleName;
   }
@@ -71,7 +74,7 @@ public class PageEventListenerDelegate {
       saveRemovedApplication(page, applicationId, content);
     }
   }
-  
+
   private void updateAddedApplication(Page page) throws Exception {
     List<String> listPageApplicationId = Util.getListApplicationIdByPage(page);
     for (String applicationtId : listPageApplicationId) {
@@ -79,7 +82,7 @@ public class PageEventListenerDelegate {
       if (content != null) saveAddedApplication(page, applicationtId, content, lifecycleName);
     }
   }
-  
+
   private void updateRemovedApplication(Page page) throws Exception {
     List<Node> listNode = getListNodeByApplicationId(page);
     List<String> listApplicationId = Util.getListApplicationIdByPage(page);
@@ -93,19 +96,19 @@ public class PageEventListenerDelegate {
       }
     }
   }
-  
+
   private List<Node> getListNodeByApplicationId(Page page) throws Exception {
     RepositoryService repositoryService = Util.getServices(RepositoryService.class);
     WCMConfigurationService configurationService = Util.getServices(WCMConfigurationService.class);
     ManageableRepository repository = repositoryService.getCurrentRepository();
     NodeLocation nodeLocation = configurationService.getLivePortalsLocation(repository.getConfiguration().getName());
-    
+
     String repositoryName = nodeLocation.getRepository();
     String workspaceName = nodeLocation.getWorkspace();
     String path = nodeLocation.getPath();
     SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
     Session session = sessionProvider.getSession(workspaceName, repositoryService.getRepository(repositoryName));
-    
+
     List<Node> listPublishedNode = new ArrayList<Node>();
     QueryManager queryManager = session.getWorkspace().getQueryManager();
     Query query = queryManager.createQuery("select * from publication:wcmPublication where publication:lifecycleName='" + lifecycleName + "' and publication:webPageIDs like '%" + page.getPageId() + "%' and jcr:path like '" + path + "/%' order by jcr:score", Query.SQL);
@@ -115,7 +118,7 @@ public class PageEventListenerDelegate {
     }
     return listPublishedNode;
   }
-  
+
   private void saveAddedApplication(Page page, String applicationId, Node content, String lifecycleName) throws Exception {    
     PublicationService publicationService = Util.getServices(PublicationService.class);                 
     String nodeLifecycleName = null;
@@ -123,12 +126,12 @@ public class PageEventListenerDelegate {
       nodeLifecycleName = publicationService.getNodeLifecycleName(content);
     } catch (NotInPublicationLifecycleException e) { return; }
     if (!lifecycleName.equals(nodeLifecycleName)) return;
-    
+
     WCMPublicationService presentationService = Util.getServices(WCMPublicationService.class);
     WCMPublicationPlugin publicationPlugin = (WCMPublicationPlugin) presentationService.getWebpagePublicationPlugins().get(WCMPublicationPlugin.LIFECYCLE_NAME);
     Session session = content.getSession();
     ValueFactory valueFactory = session.getValueFactory();
-    
+
     List<String> nodeAppIds = Util.getValuesAsString(content, "publication:applicationIDs");
     String mixedAppId = Util.setMixedApplicationId(page.getPageId(), applicationId);
     if(nodeAppIds.contains(mixedAppId))
@@ -140,35 +143,38 @@ public class PageEventListenerDelegate {
     if (listPageNavigationUri.isEmpty())  {
       return ;
     }
+    PageMetadataService pageMetadataService = Util.getServices(PageMetadataService.class);    
+    HashMap<String,String> pageMetadata = pageMetadataService.extractMetadata(content);    
     for (String uri : listPageNavigationUri) {
       if(!listExistedNavigationNodeUri.contains(uri)) {
-        listExistedNavigationNodeUri.add(uri);
+        listExistedNavigationNodeUri.add(uri);           
+        pageMetadataService.addMetadata(uri,pageMetadata);        
       }            
       nodeURILogs += uri + Util.HISTORY_SEPARATOR;
     }                   
     content.setProperty("publication:navigationNodeURIs", Util.toValues(valueFactory, listExistedNavigationNodeUri));
-    
+
     List<String> nodeWebPageIds = Util.getValuesAsString(content, "publication:webPageIDs");
     nodeWebPageIds.add(page.getPageId());
     nodeAppIds.add(mixedAppId);
     content.setProperty("publication:applicationIDs", Util.toValues(valueFactory, nodeAppIds));
     content.setProperty("publication:webPageIDs", Util.toValues(valueFactory, nodeWebPageIds));
-    
+
     publicationPlugin.changeState(content, "published", null);
-    
+
     String[] logs = new String[] {new Date().toString(), WCMPublicationPlugin.PUBLISHED, session.getUserID(), "PublicationService.WCMPublicationPlugin.nodePublished", nodeURILogs};
     publicationService.addLog(content, logs);    
     session.save();
   } 
-  
+
   private void saveRemovedApplication(Page page, String applicationId, Node content) throws Exception {
     WCMPublicationService presentationService = Util.getServices(WCMPublicationService.class);
     PublicationService publicationService = Util.getServices(PublicationService.class);
     WCMPublicationPlugin publicationPlugin = (WCMPublicationPlugin) presentationService.getWebpagePublicationPlugins().get(WCMPublicationPlugin.LIFECYCLE_NAME);
-    
+
     Session session = content.getSession();
     ValueFactory valueFactory = session.getValueFactory();
-    
+
     List<String> listExistedApplicationId = Util.getValuesAsString(content, "publication:applicationIDs");
     listExistedApplicationId.remove(Util.setMixedApplicationId(page.getPageId(), applicationId));
     content.setProperty("publication:applicationIDs", Util.toValues(valueFactory, listExistedApplicationId));
@@ -176,18 +182,20 @@ public class PageEventListenerDelegate {
     List<String> listExistedPageId = Util.getValuesAsString(content, "publication:webPageIDs");
     listExistedPageId.remove(0);
     content.setProperty("publication:webPageIDs", Util.toValues(valueFactory, listExistedPageId));
-    
+
     List<String> listPageNavigationUri = publicationPlugin.getListPageNavigationUri(page);
     List<String> listExistedNavigationNodeUri = Util.getValuesAsString(content, "publication:navigationNodeURIs");
     List<String> listExistedNavigationNodeUriTmp = new ArrayList<String>();
     listExistedNavigationNodeUriTmp.addAll(listExistedNavigationNodeUri);
+    PageMetadataService pageMetadataService = Util.getServices(PageMetadataService.class);
     for (String existedNavigationNodeUri : listExistedNavigationNodeUriTmp) {
       if (listPageNavigationUri.contains(existedNavigationNodeUri)) {
         listExistedNavigationNodeUri.remove(existedNavigationNodeUri);
+        pageMetadataService.removeMetadata(existedNavigationNodeUri);
       }
     }
     content.setProperty("publication:navigationNodeURIs", Util.toValues(valueFactory, listExistedNavigationNodeUri));
-    
+
     String uris = "";
     for (String uri : listPageNavigationUri) {
       uris += uri + Util.HISTORY_SEPARATOR;
@@ -195,11 +203,11 @@ public class PageEventListenerDelegate {
 
     String[] logs = new String[] {new Date().toString(), WCMPublicationPlugin.PUBLISHED, session.getUserID(), "PublicationService.WCMPublicationPlugin.nodeRemoved", uris};
     publicationService.addLog(content, logs);
-    
+
     if (listExistedPageId.isEmpty()) { 
       publicationPlugin.changeState(content, "unpublished", null);
     }
-    
+
     session.save();
   }
 }

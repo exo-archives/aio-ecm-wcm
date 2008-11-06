@@ -19,6 +19,7 @@ package org.exoplatform.services.wcm.publication.defaultlifecycle;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
 import javax.jcr.Session;
 import javax.jcr.Value;
@@ -151,17 +152,17 @@ public class Util {
         workspaceName = preference.getValues().get(0).toString();
       } else if (preference.getName().equals("nodeIdentifier")) {
         nodeIdentifier = preference.getValues().get(0).toString();
+      }      
+    }
+    if (repositoryName != null && workspaceName != null && nodeIdentifier != null) {
+      Session session = sessionProvider.getSession(workspaceName, repositoryService.getRepository(repositoryName));        
+      Node content = null;
+      try {
+        content = session.getNodeByUUID(nodeIdentifier);
+      } catch (ItemNotFoundException e) {
+        content = (Node)session.getItem(nodeIdentifier);
       }
-      if (repositoryName != null && workspaceName != null && nodeIdentifier != null) {
-        Session session = sessionProvider.getSession(workspaceName, repositoryService.getRepository(repositoryName));
-        Node content = null;
-        try {
-          content = session.getNodeByUUID(nodeIdentifier);; 
-        } catch (Exception e) {
-          content = (Node) session.getItem(nodeIdentifier);
-        }
-        return content;
-      }
+      return content;
     }
     return null;
   }

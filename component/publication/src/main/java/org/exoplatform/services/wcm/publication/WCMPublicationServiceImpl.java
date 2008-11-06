@@ -18,7 +18,6 @@ package org.exoplatform.services.wcm.publication;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.jcr.Node;
@@ -179,16 +178,13 @@ public class WCMPublicationServiceImpl implements WCMPublicationService, Startab
   /* (non-Javadoc)
    * @see org.picocontainer.Startable#start()
    */
-  public void start() {
-    //Need implement startable interface to make sure all WebpagePublicationPlugin are injected to PublicationService
-    log.info("Start WCMPublicationService...");
+  public void start()   {   
   }
 
   /* (non-Javadoc)
    * @see org.picocontainer.Startable#stop()
    */
-  public void stop() {
-
+  public void stop() {   
   }
 
   public boolean isEnrolledInWCMLifecycle(Node node) throws NotInPublicationLifecycleException, Exception {
