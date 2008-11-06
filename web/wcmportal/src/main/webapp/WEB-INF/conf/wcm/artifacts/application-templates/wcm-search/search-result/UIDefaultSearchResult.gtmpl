@@ -3,15 +3,17 @@
  * Go to "WCMResources/src/main/webapp/shareskin/content-list-viewer/list-by-folder/defaultFolderListViewer"
  * to edit stylesheet if you want.
  */
-import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
 import javax.jcr.Node;
+import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
+import org.exoplatform.services.wcm.search.PaginatedQueryResult.ResultNode;
 %>
 
 <div id="$uicomponent.id" class="UIAdvanceSearchResultDefault">
 	<div class="Caption">
 		<% 	
 		def currentPageData = uicomponent.getCurrentPageData();					
-		for (Node node : currentPageData) {				
+		for (ResultNode resultNode : currentPageData) {
+			Node node = resultNode.getNode();
 			String itemName = node.getName();
 			String itemLink = uicomponent.getURL(node);		
 		    String itemTitle = uicomponent.getTitle(node);
@@ -19,10 +21,14 @@ import javax.jcr.Node;
 			if (itemTitle != null && itemTitle.trim().length() != 0) {
 				itemName = itemTitle;
 			}
+			String itemExcerpt = resultNode.getExcerpt();
+			String itemScore = resultNode.getScore();
 		%>	
 			<div class="CaptionItem">				
 				<div class="CaptionTitle"><a href="$itemLink">$itemName</a></div>		
-				<div class="CaptionDate"><%=itemDateCreated%></div>						
+				<div class="CaptionDate"><%=itemDateCreated%></div>
+				<div class="CaptionExcerpt"><%=itemExcerpt%></div>
+				<div class="CaptionScore"><%=itemScore%></div>
 			</div>			
 		<%							
 		}

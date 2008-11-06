@@ -24,7 +24,6 @@ import javax.jcr.query.QueryResult;
 import javax.jcr.query.Row;
 import javax.jcr.query.RowIterator;
 
-import org.exoplatform.services.jcr.impl.core.query.lucene.TwoWayRangeIterator;
 import org.exoplatform.services.wcm.utils.PaginatedNodeIterator;
 
 /**
@@ -37,7 +36,7 @@ public class PaginatedQueryResult extends PaginatedNodeIterator {
   
   /** The row iterator. */
   private RowIterator rowIterator;
-  
+  protected QueryResult queryResult;
   /**
    * Instantiates a new paginated query result.
    * 
@@ -60,23 +59,27 @@ public class PaginatedQueryResult extends PaginatedNodeIterator {
     this.nodeIterator = queryResult.getNodes();
     this.setAvailablePage((int)nodeIterator.getSize());
     this.rowIterator = queryResult.getRows();
+    this.queryResult = queryResult;
   }    
   
   /* (non-Javadoc)
    * @see org.exoplatform.wcm.webui.paginator.PaginatedNodeIterator#populateCurrentPage(int)
    */
   protected void populateCurrentPage(int page) throws Exception {   
-    checkAndSetPosition(page);
-    TwoWayRangeIterator twoWayRangeIterator = (TwoWayRangeIterator)nodeIterator;
+    checkAndSetPosition(page);    
     currentListPage_ = new ArrayList();
     int count = 0;
+    RowIterator iterator = queryResult.getRows();    
     while (nodeIterator.hasNext()) {
       Node node = nodeIterator.nextNode();
       Node viewNode = filterNodeToDisplay(node);      
       if(viewNode != null) {
         //Skip back 1 position to get current row mapping to the node
-        twoWayRangeIterator.skipBack(1);
-        Row row = rowIterator.nextRow();
+        long position = nodeIterator.getPosition();
+        long rowPosition = iterator.getPosition();
+        long skipNum = position - rowPosition;
+        iterator.skip(skipNum -1);
+        Row row = iterator.nextRow();
         ResultNode resultNode = new ResultNode(viewNode,row);
         currentListPage_.add(resultNode);
         count ++;
@@ -118,9 +121,6 @@ public class PaginatedQueryResult extends PaginatedNodeIterator {
     /** The excerpt. */
     private String excerpt;
     
-    /** The spell suggestion. */
-    private String spellSuggestion;
-    
     /**
      * Instantiates a new result node.
      * 
@@ -132,7 +132,6 @@ public class PaginatedQueryResult extends PaginatedNodeIterator {
     public ResultNode(Node node, Row row) throws RepositoryException{
       this.node = node;      
       this.excerpt = row.getValue("rep:excerpt(.)").getString();
-      this.spellSuggestion = row.getValue("rep:spellcheck()").getString();
       this.score = row.getValue("jcr:score").getLong();
     }
     
@@ -182,22 +181,5 @@ public class PaginatedQueryResult extends PaginatedNodeIterator {
       this.excerpt = excerpt;
     }
 
-    /**
-     * Gets the spell suggestion.
-     * 
-     * @return the spell suggestion
-     */
-    public String getSpellSuggestion() {
-      return spellSuggestion;
-    }
-
-    /**
-     * Sets the spell suggestion.
-     * 
-     * @param spellSuggestion the new spell suggestion
-     */
-    public void setSpellSuggestion(String spellSuggestion) {
-      this.spellSuggestion = spellSuggestion;
-    }    
   }
 }

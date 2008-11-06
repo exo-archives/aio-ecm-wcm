@@ -1,77 +1,31 @@
-.UIPaginatorDeafault {
+.UIPaginatorDefault {
     margin: 0 10px 0 210px;
     text-align: right;
 }
 
-.UIPaginatorDeafault a {
+.UIPaginatorDefault a {
     padding: 5px;
-    font-size: 12px;
+    font-size: 14px;
     margin-left: 3px;	
+    text-decoration: underline;
 }
 
-.UIPaginatorDeafault a:hover {
-    color: #ff4200;
+.UIPaginatorDefault a.Current {
+	font-weight: bold;
+	color: black;
+	text-decoration: none;
 }
 
-.UIPaginatorDeafault a.Item {
-	color: black;	
-}
-
-.UIPaginatorDeafault a.Current {
-    font-weight: bold;
-    color: red;
-}
-
-.UIPaginatorDeafault a.Prev, 
-.UIPaginatorDeafault a.First, 
-.UIPaginatorDeafault a.Next, 
-.UIPaginatorDeafault a.Last, 
-.UIPaginatorDeafault a.PrevDis, 
-.UIPaginatorDeafault a.FirstDis, 
-.UIPaginatorDeafault a.NextDis, 
-.UIPaginatorDeafault a.LastDis {
-    padding-right: 13px;
+.UIPaginatorDefault a.Prev, 
+.UIPaginatorDefault a.Next {
+  padding-right: 16px;
 	font-weight: bold;
 }
-/* Enabled Item */
-.UIPaginatorDeafault a.Prev {
-    background: url(images/icoPrevEna.gif) no-repeat right;
+
+.UIPaginatorDefault a.Prev {
+    background: url(images/prev.gif) no-repeat right;
 }
 
-.UIPaginatorDeafault a.First {
-    background: url(images/icoFirstEna.gif) no-repeat right;
-}
-
-.UIPaginatorDeafault a.Next {
-    background: url(images/icoNextEna.gif) no-repeat right;
-}
-
-.UIPaginatorDeafault a.Last {
-    background: url(images/icoLastEna.gif) no-repeat right;
-}
-/* Disabled Item */
-.UIPaginatorDeafault a.PrevDis, 
-.UIPaginatorDeafault a.FirstDis {
-    color: #666;
-}
-
-.UIPaginatorDeafault a.NextDis, 
-.UIPaginatorDeafault a.LastDis {
-	color: #196697;	
-}
-
-.UIPaginatorDeafault a.PrevDis {
-    background: url(images/icoPrevDis.gif) no-repeat right;
-}
-
-.UIPaginatorDeafault a.FirstDis {
-    background: url(images/icoFirstDis.gif) no-repeat right;
-}
-
-.UIPaginatorDeafault a.NextDis {
-    background: url(images/icoNextDis.gif) no-repeat right;
-}
-
-.UIPaginatorDeafault a.LastDis {
-    background: url(images/icoLastDis.gif) no-repeat right;
+.UIPaginatorDefault a.Next {
+    background: url(images/next.gif) no-repeat right;
 }

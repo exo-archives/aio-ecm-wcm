@@ -22,8 +22,6 @@ import java.util.List;
 import javax.jcr.Node;
 import javax.jcr.query.QueryResult;
 
-import org.exoplatform.services.wcm.utils.PaginatedQueryResult;
-
 /**
  * Created by The eXo Platform SAS
  * Author : Hoa Pham
@@ -37,7 +35,7 @@ public class WCMPaginatedQueryResult extends PaginatedQueryResult {
   private long queryTime;  
   /** The displayed node paths. */
   private List<String> displayedNodePaths = new ArrayList<String>();
-  
+  private String spellSuggestion;
   /**
    * Instantiates a new wCM paginated query result.
    * 
@@ -74,7 +72,7 @@ public class WCMPaginatedQueryResult extends PaginatedQueryResult {
     }
     if(displayNode.isNodeType("exo:htmlFile")) {
       Node parent = displayNode.getParent();
-      if(parent.isNodeType("exo:webcontent"))
+      if(parent.isNodeType("exo:webContent"))
         displayNode = parent;
     }
     if(!allowDuplicated) {
@@ -83,5 +81,13 @@ public class WCMPaginatedQueryResult extends PaginatedQueryResult {
       displayedNodePaths.add(displayNode.getPath());
     }
     return displayNode;
+  }
+
+  public String getSpellSuggestion() {
+    return spellSuggestion;
+  }
+
+  public void setSpellSuggestion(String spellSuggestion) {
+    this.spellSuggestion = spellSuggestion;
   }
 }

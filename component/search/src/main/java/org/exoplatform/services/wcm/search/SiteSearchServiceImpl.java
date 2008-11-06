@@ -21,11 +21,14 @@ import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.Session;
+import javax.jcr.Value;
 import javax.jcr.nodetype.NodeType;
 import javax.jcr.nodetype.NodeTypeManager;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
+import javax.jcr.query.Row;
+import javax.jcr.query.RowIterator;
 
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -89,6 +92,18 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     long queryTime = System.currentTimeMillis() - startTime;
     WCMPaginatedQueryResult paginatedQueryResult = new WCMPaginatedQueryResult(queryResult,pageSize,allowDuplicated);
     paginatedQueryResult.setQueryTime(queryTime);
+    String checkingWord = queryCriteria.getKeyword();
+    NodeLocation location = configurationService.getLivePortalsLocation(currentRepository);
+    Session session = sessionProvider.getSession(location.getWorkspace(),repositoryService.getCurrentRepository());    
+    QueryManager queryManager = session.getWorkspace().getQueryManager();
+    Query query = queryManager.createQuery("SELECT rep:spellcheck() FROM nt:base WHERE jcr:path = '/' AND SPELLCHECK('" + checkingWord + "')", Query.SQL);
+    RowIterator rows = query.execute().getRows();
+    Value value = rows.nextRow().getValue("rep:spellcheck()");
+    String suggestion = null;
+    if (value != null) {
+      suggestion = value.getString();
+    }
+    paginatedQueryResult.setSpellSuggestion(suggestion);
     return paginatedQueryResult;
   }
 
@@ -102,7 +117,6 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     mapQueryTerm(queryCriteria,queryBuilder);
     orderBy(queryCriteria,queryBuilder,sessionProvider);
     String queryStatement = queryBuilder.createQueryStatement();
-    System.out.println("====queryStatement==========>" + queryStatement);
     NodeLocation location = configurationService.getLivePortalsLocation(currentRepository);
     Session session = sessionProvider.getSession(location.getWorkspace(),repositoryService.getCurrentRepository());    
     QueryManager queryManager = session.getWorkspace().getQueryManager();
