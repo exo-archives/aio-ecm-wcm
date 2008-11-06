@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import org.apache.commons.lang.StringUtils;
+import org.exoplatform.portal.config.UserPortalConfigService;
+import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.webui.navigation.PageNavigationUtils;
@@ -116,10 +118,13 @@ public class UIPublicationTree extends UITree {
     public void setPortalName(String s) { this.portalName = s; }
     public String getPortalName() {return this.portalName; }
 
-    public void setChildrenByPageNodes(List<PageNode> pagesNodes) {
+    public void setChildrenByPageNodes(List<PageNode> pagesNodes) throws Exception {
       if(pagesNodes == null) return;
       List<TreeNode> list = new ArrayList<TreeNode>();
+      UserPortalConfigService userPortalConfigService = Util.getServices(UserPortalConfigService.class);
       for(PageNode pNode: pagesNodes) {
+        Page page = userPortalConfigService.getPage(pNode.getPageReference(), org.exoplatform.portal.webui.util.Util.getPortalRequestContext().getRemoteUser());
+        if (page == null) continue;
         if(!pNode.isDisplay()) continue;                
         TreeNode treeNode = new TreeNode(portalName,navigation,resourceBundle,true);
         treeNode.setPageNode(pNode);
@@ -129,7 +134,7 @@ public class UIPublicationTree extends UITree {
       setTreeNodeChildren(list);
     }
 
-    public TreeNode searchTreeNodeByURI(String uri) {
+    public TreeNode searchTreeNodeByURI(String uri) throws Exception {
       if(uri.equals("/"+portalName)) {
         TreeNode treeNode = new TreeNode(portalName, navigation,resourceBundle, false);
         treeNode.setChildrenByPageNodes(navigation.getNodes());
