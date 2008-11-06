@@ -289,7 +289,7 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin {
     Preference preferenceN = new Preference();
     listValue = new ArrayList<String>();
     listValue.add(content.getUUID());
-    preferenceN.setName("nodeUUID");
+    preferenceN.setName("nodeIdentifier");
     preferenceN.setValues(listValue);
     listPreference.add(preferenceN);
     

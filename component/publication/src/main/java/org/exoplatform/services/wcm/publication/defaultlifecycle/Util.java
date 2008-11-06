@@ -142,19 +142,24 @@ public class Util {
     if (portletPreferences == null) return null;
     String repositoryName = null;
     String workspaceName = null;
-    String nodeUUID = null;
+    String nodeIdentifier = null;
     for (Object object : portletPreferences.getPreferences()) {
       Preference preference = (Preference) object;
       if (preference.getName().equals("repository")) {
         repositoryName = preference.getValues().get(0).toString();
       } else if (preference.getName().equals("workspace")) {
         workspaceName = preference.getValues().get(0).toString();
-      } else if (preference.getName().equals("nodeUUID")) {
-        nodeUUID = preference.getValues().get(0).toString();
+      } else if (preference.getName().equals("nodeIdentifier")) {
+        nodeIdentifier = preference.getValues().get(0).toString();
       }
-      if (repositoryName != null && workspaceName != null && nodeUUID != null) {
+      if (repositoryName != null && workspaceName != null && nodeIdentifier != null) {
         Session session = sessionProvider.getSession(workspaceName, repositoryService.getRepository(repositoryName));
-        Node content = session.getNodeByUUID(nodeUUID);
+        Node content = null;
+        try {
+          content = session.getNodeByUUID(nodeIdentifier);; 
+        } catch (Exception e) {
+          content = (Node) session.getItem(nodeIdentifier);
+        }
         return content;
       }
     }
