@@ -144,6 +144,12 @@ public class LivePortalManagerServiceImpl implements LivePortalManagerService {
     ExtendedNode newPortal = (ExtendedNode)livePortalsStorage.addNode(portalName,PORTAL_FOLDER);
     if (!newPortal.isNodeType("exo:owneable"))       
       newPortal.addMixin("exo:owneable");
+    if(newPortal.canAddMixin("metadata:siteMetadata")) {
+      newPortal.addMixin("metadata:siteMetadata");
+      newPortal.setProperty("metadata:siteTitle",portalName);
+      newPortal.setProperty("keywords",portalName);
+      newPortal.setProperty("robots","index,follow");
+    }
     //Need set some other property for the portal node from portal config like access permission ..    
     newPortal.getSession().save();
     //put sharedPortal path to the map at the first time when run this method
@@ -184,5 +190,14 @@ public class LivePortalManagerServiceImpl implements LivePortalManagerService {
       }
     }    
     return null;
+  }
+
+  public Node getLivePortalByChild(Node childNode) throws Exception {
+    for(String portalPath: livePortalPaths.values()) {
+      if(childNode.getPath().startsWith(portalPath)) {
+        return (Node)childNode.getSession().getItem(portalPath);
+      }
+    }
+    throw new Exception("The node doen't belong to any site content storage");
   }        
 }

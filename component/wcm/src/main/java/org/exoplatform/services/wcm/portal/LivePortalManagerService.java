@@ -82,6 +82,7 @@ public interface LivePortalManagerService {
    */
   public Node getLiveSharedPortal(final String repository,final SessionProvider sessionProvider) throws Exception;
   
+  public Node getLivePortalByChild(Node childNode) throws Exception;  
   /**
    * Gets the live portals on specific repository.
    * 
