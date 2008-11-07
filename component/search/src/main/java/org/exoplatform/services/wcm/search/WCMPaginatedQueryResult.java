@@ -75,6 +75,9 @@ public class WCMPaginatedQueryResult extends PaginatedQueryResult {
       if(parent.isNodeType("exo:webContent"))
         displayNode = parent;
     }
+    if(displayNode.isNodeType("exo:jsFile") || displayNode.isNodeType("exo:cssFile")) {
+      displayNode = null;
+    }
     if(!allowDuplicated) {
       if(displayedNodePaths.contains(displayNode.getPath())) 
         return null;

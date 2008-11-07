@@ -1,6 +1,6 @@
 .UIPaginatorDefault {
     margin: 0 10px 0 210px;
-    text-align: right;
+    text-align: center;
 }
 
 .UIPaginatorDefault a {
@@ -8,6 +8,7 @@
     font-size: 14px;
     margin-left: 3px;	
     text-decoration: underline;
+    color: #3A3AE7;
 }
 
 .UIPaginatorDefault a.Current {

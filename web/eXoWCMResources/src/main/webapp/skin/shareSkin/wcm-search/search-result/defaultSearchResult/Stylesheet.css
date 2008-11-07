@@ -1,54 +1,56 @@
-.UIAdvanceSearchResultDefault {
-
-}
-
-body {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 11px;
-    line-height: 18px;
-    color: #000;
-}
-
-blockquote, q {
-    quotes: "" "";
-}
-
-a {
-    color: #437daa;
-    text-decoration: none;
-}
-
-a:hover {
-    color: #024e7f;
-}
-
-/*	
- Comment
-*/
-
-.Caption {
+.SearchResult {
     border: 1px solid #b7b7b7;
     padding: 10px;
     margin: 10px;
     background: #fff;
 }
 
-.Caption .CaptionItem {
-    border-bottom: 1px dotted #2f2f2f;
+.SearchResult .SearchItem {
     padding-top: 10px;
 }
 
-.Caption .CaptionTitle a {
+.SearchResult .ItemTitle a {
     font-size: 14px;
     color: #0385d9;
     font-weight: bold;
+    padding-left: 20px;
 }
 
-.Caption .CaptionDate {
-    color: #8f8f8f;
+.SearchResult .ItemExcerpt {
+	color: black;
 }
 
-.CaptionFunc {
+.SearchResult .ItemInfo {
+	color: green;
+}
+
+.SearchResult .ItemUrl {
+	
+}
+
+.SearchResult .ItemSize {
+
+}
+
+.SearchResult .ItemSame a {
+	color: #9977DF;
+	text-decoration: underline;
+}
+
+.SearchResult .ItemDetails {
+	display: none;
+	padding-left: 15px;
+}
+
+.SearchResult .ItemScore {
+
+}
+
+.SearchResult .ItemNone {
+
+}
+
+.SearchResult .ItemFunc {
     padding: 10px 0;
     height: 1%;
     overflow: hidden;

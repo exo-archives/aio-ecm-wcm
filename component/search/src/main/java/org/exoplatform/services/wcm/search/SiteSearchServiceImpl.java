@@ -27,7 +27,6 @@ import javax.jcr.nodetype.NodeTypeManager;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
-import javax.jcr.query.Row;
 import javax.jcr.query.RowIterator;
 
 import org.exoplatform.services.cms.templates.TemplateService;

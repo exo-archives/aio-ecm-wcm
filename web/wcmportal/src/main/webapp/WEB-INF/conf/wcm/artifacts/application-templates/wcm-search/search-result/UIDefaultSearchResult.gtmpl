@@ -1,40 +1,98 @@
 <% 
-/* 
- * Go to "WCMResources/src/main/webapp/shareskin/content-list-viewer/list-by-folder/defaultFolderListViewer"
- * to edit stylesheet if you want.
- */
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.jcr.Node;
+import javax.jcr.Value;
+
+import org.exoplatform.ecm.webui.utils.Utils;
 import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
 import org.exoplatform.services.wcm.search.PaginatedQueryResult.ResultNode;
-%>
-
-<div id="$uicomponent.id" class="UIAdvanceSearchResultDefault">
-	<div class="Caption">
-		<% 	
-		def currentPageData = uicomponent.getCurrentPageData();					
-		for (ResultNode resultNode : currentPageData) {
-			Node node = resultNode.getNode();
-			String itemName = node.getName();
-			String itemLink = uicomponent.getURL(node);		
+import org.exoplatform.services.wcm.publication.defaultlifecycle.Util;
+		%>
+		<div id="$uicomponent.id" class="UIAdvanceSearchResultDefault">
+		<div class="SearchResult">
+		<%
+		def currentPageData = uicomponent.getCurrentPageData();
+		if (currentPageData != null && !currentPageData.isEmpty()) {
+			%>
+			<div class="SearchTime"><%= _ctx.appRes("UIDefaultSearchResult.label.time") %>: <%= uicomponent.getSearchTime() %></div>
+			<%
+			for (ResultNode resultNode : currentPageData) {
+				Node node = resultNode.getNode();
+	
+				String itemNodeType = Utils.getNodeTypeIcon(node, "16x16Icon");
+	
+				String itemName = node.getName();
 		    String itemTitle = uicomponent.getTitle(node);
-			String itemDateCreated = uicomponent.getCreatedDate(node);
-			if (itemTitle != null && itemTitle.trim().length() != 0) {
-				itemName = itemTitle;
-			}
-			String itemExcerpt = resultNode.getExcerpt();
-			String itemScore = resultNode.getScore();
-		%>	
-			<div class="CaptionItem">				
-				<div class="CaptionTitle"><a href="$itemLink">$itemName</a></div>		
-				<div class="CaptionDate"><%=itemDateCreated%></div>
-				<div class="CaptionExcerpt"><%=itemExcerpt%></div>
-				<div class="CaptionScore"><%=itemScore%></div>
+				if (itemTitle != null && itemTitle.trim().length() != 0) {
+					itemName = itemTitle;
+				}
+	
+				String itemUrl = uicomponent.getURL(node);		
+				List<String> listNavigationNodeUris = new ArrayList<String>();
+				if (node.hasProperty("publication:navigationNodeURIs")) {
+					for (Value value : node.getProperty("publication:navigationNodeURIs").getValues()) {
+						listNavigationNodeUris.add(value.getString());
+					}
+				}
+				if (!listNavigationNodeUris.isEmpty()) {
+					itemUrl = Util.parseMixedNavigationUri(listNavigationNodeUris.get(0))[1];
+				}
+				
+				String itemExcerpt = resultNode.getExcerpt();
+	
+				String itemScore = resultNode.getScore();
+	
+				int length = 0;
+				if (node.getPrimaryNodeType().equals("nt:file")) {
+					length = node.getNode("jcr:content").getProperty("jcr:data").getString().length() / 1000;
+				}
+				%>
+				<div class="SearchItem">				
+					<div class="$itemNodeType ItemTitle"><a href="$itemUrl">$itemName</a></div>		
+					<div class="ItemExcerpt"><%=itemExcerpt%></div>
+					<div class="ItemInfo">
+						<span class="ItemUrl"><%=itemUrl%></span>&nbsp;-&nbsp;
+						<span class="ItemSize"><%=length%> <%= _ctx.appRes("UIDefaultSearchResult.label.kb") %></span>&nbsp;-&nbsp;
+						<span class="ItemScore"><%=itemScore%></span>
+						<%
+				if (!listNavigationNodeUris.isEmpty()) {
+						%>
+						&nbsp;-&nbsp;<span class="ItemSame" onclick="showObject(document.getElementById('ItemDetails'))"><a href="javascript:void(0)"><%= _ctx.appRes("UIDefaultSearchResult.label.similar") %></a></span>
+						<div class="ItemDetails" id="ItemDetails">
+							<% 
+					for (String navigationNodeUri : listNavigationNodeUris) {
+						itemUrl = Util.parseMixedNavigationUri(navigationNodeUri)[1];
+							%>
+							<div class="SearchItem">
+							<div class="$itemNodeType ItemTitle"><a href="$itemUrl">$itemName</a></div>		
+							<div class="ItemExcerpt"><%=itemExcerpt%></div>
+							<div class="ItemInfo">
+								<span class="ItemUrl"><%=itemUrl%></span>&nbsp;-&nbsp;
+								<span class="ItemSize"><%=length%> <%= _ctx.appRes("UIDefaultSearchResult.label.kb") %></span>&nbsp;-&nbsp;
+								<span class="ItemScore"><%=itemScore%></span>
+							</div>
+						</div>
+					<%
+				  }
+					%>
+					</div>
+				<%
+				}
+				%>
+				</div>
 			</div>			
 		<%							
 		}
 		%>
-		<div class="CaptionFunc">			
+		<div class="ItemFunc">			
 			<% uicomponent.renderChild(UICustomizeablePaginator.class) %>
-		</div>					
-	</div>
+		</div>	
+	<%
+} else {
+	%><div class="ItemNone"><%= _ctx.appRes("UIDefaultSearchResult.label.noresult") %></div><%	
+}
+%>			
+</div>
 </div>

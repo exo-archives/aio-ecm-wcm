@@ -126,6 +126,7 @@ public class UIAdvanceSearchForm extends UIForm {
       WCMPaginatedQueryResult paginatedQueryResult = new WCMPaginatedQueryResult(siteSearchService
           .searchSiteContents(queryCriteria, provider), 5, true);      
       uiSearchResult.setPageList(paginatedQueryResult);
+      uiSearchResult.setSearchTime(paginatedQueryResult.getQueryTimeInSecond());
     }
   }
 

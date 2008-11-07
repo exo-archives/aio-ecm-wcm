@@ -34,8 +34,7 @@ import org.exoplatform.services.wcm.utils.PaginatedNodeIterator;
  */
 public class PaginatedQueryResult extends PaginatedNodeIterator {
   
-  /** The row iterator. */
-  private RowIterator rowIterator;
+  /** The row iterator. */  
   protected QueryResult queryResult;
   /**
    * Instantiates a new paginated query result.
@@ -57,8 +56,7 @@ public class PaginatedQueryResult extends PaginatedNodeIterator {
   public PaginatedQueryResult(QueryResult queryResult,int pageSize) throws Exception{
     super(pageSize);         
     this.nodeIterator = queryResult.getNodes();
-    this.setAvailablePage((int)nodeIterator.getSize());
-    this.rowIterator = queryResult.getRows();
+    this.setAvailablePage((int)nodeIterator.getSize());    
     this.queryResult = queryResult;
   }    
   
@@ -85,7 +83,9 @@ public class PaginatedQueryResult extends PaginatedNodeIterator {
         count ++;
         if(count == getPageSize()) 
           break;        
-      }
+      } else {
+        available_ = available_ - 1;
+      }      
     }           
     currentPage_ = page;
   }      

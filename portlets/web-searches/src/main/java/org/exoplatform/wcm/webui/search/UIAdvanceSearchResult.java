@@ -55,6 +55,8 @@ public class UIAdvanceSearchResult extends UIContainer {
 
   private SimpleDateFormat         dateFormatter = new SimpleDateFormat(
                                                      ISO8601.SIMPLE_DATETIME_FORMAT);
+  
+  private long                     searchTime;
 
   public void init(String templatePath, ResourceResolver resourceResolver) throws Exception {
     PortletRequestContext portletRequestContext = (PortletRequestContext) WebuiRequestContext
@@ -114,5 +116,13 @@ public class UIAdvanceSearchResult extends UIContainer {
       return dateFormatter.format(calendar.getTime());
     }
     return null;
+  }
+
+  public long getSearchTime() {
+    return searchTime;
+  }
+
+  public void setSearchTime(long searchTime) {
+    this.searchTime = searchTime;
   }
 }
