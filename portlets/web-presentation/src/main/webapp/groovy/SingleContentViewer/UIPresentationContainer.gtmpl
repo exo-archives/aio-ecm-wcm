@@ -14,5 +14,5 @@
 
 	<% } %>
 	<% uicomponent.renderChildren() %>
-
+	<div style="clear: both;"><span></span></div>
 </div>
