@@ -21,13 +21,6 @@
       <scope>compile</scope>
     </dependency>    
 	
-		<dependency>
-      <groupId>org.exoplatform.core</groupId>
-      <artifactId>exo.core.component.resources.api</artifactId>
-      <version>${org.exoplatform.portal.version}</version>
-      <scope>compile</scope>
-    </dependency>
-    
     <dependency>
       <groupId>org.exoplatform.jcr</groupId>
       <artifactId>exo.jcr.component.core</artifactId>
