@@ -1,0 +1,20 @@
+.SearchBox {
+	padding: 5px;
+}
+
+.SearchBox .KeywordInput {
+	float: left;
+}
+
+.SearchBox .KeywordInput input {
+	border: 1px solid gray;
+	width: 300px;	
+}
+
+.SearchBox .SearchBoxIcon {
+	margin-left: 305px;	
+	width: 16px;
+	height: 16px;
+    background: url(images/SearchIcon.png) no-repeat right;	
+	cursor: pointer;
+}
