@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -71,7 +70,9 @@ public class PageEventListenerDelegate {
     List<String> listPageApplicationId = Util.getListApplicationIdByPage(page);
     for (String applicationId : listPageApplicationId) {
       Node content = Util.getNodeByApplicationId(applicationId);
-      saveRemovedApplication(page, applicationId, content);
+      if (content != null) {
+        saveRemovedApplication(page, applicationId, content);
+      }
     }
   }
 
