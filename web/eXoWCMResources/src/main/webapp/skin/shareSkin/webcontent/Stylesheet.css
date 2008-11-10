@@ -12,3 +12,9 @@
 	background: url('16x16/exo-webLink.gif') no-repeat;
 	width: 16px; height: 16px;
 }
+
+.BrowseIcon {
+	width: 16px;	height: 16px;
+  background: url('16x16/exo-browseIcon.png') no-repeat ;
+  cursor: pointer;	 
+}
