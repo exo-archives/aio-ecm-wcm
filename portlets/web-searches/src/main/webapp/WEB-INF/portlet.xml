@@ -3,7 +3,7 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd">
 	<portlet>
-		<description xml:lang="EN">Simple Search Portlet</description>
+		<description xml:lang="EN">Advance Search Portlet</description>
 		<portlet-name>WCMAdvanceSearchPortlet</portlet-name>
 		<display-name>WCM Advance Search Portlet</display-name>
 		<portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>
@@ -63,7 +63,22 @@
 				<name>searchPaginatorTemplatePath</name>
 				<value>/jcr:system/exo:ecm/views/templates/WCM Advance Search/search-paginator/UIDefaultSearchPaginator.gtmpl</value>
 				<read-only>false</read-only>
-			</preference>							
+			</preference>			
+			<preference>
+				<name>searchPageLayoutTemplatePath</name>
+				<value>/jcr:system/exo:ecm/views/templates/WCM Advance Search/search-page-layout/UISearchPageLayoutDefault.gtmpl</value>
+				<read-only>false</read-only>
+			</preference>					
+			<preference>
+				<name>itemsPerPage</name>
+				<value>10</value>
+				<read-only>false</read-only>
+			</preference>			
+		    <preference>
+		    	<name>showQuickEditButton</name>
+		    	<value>true</value>	    	
+		    	<read-only>false</read-only>
+		    </preference>			
 		</portlet-preferences>
 			
 		<security-role-ref>

@@ -16,20 +16,27 @@
  */
 package org.exoplatform.wcm.webui.search;
 
+import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
 import javax.jcr.Node;
 import javax.portlet.PortletPreferences;
+import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.exoplatform.commons.utils.ISO8601;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.container.UIContainer;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
+import org.exoplatform.services.wcm.search.QueryCriteria;
+import org.exoplatform.services.wcm.search.SiteSearchService;
+import org.exoplatform.services.wcm.search.WCMPaginatedQueryResult;
 import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -45,7 +52,7 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 @ComponentConfigs( {
     @ComponentConfig(lifecycle = Lifecycle.class),
     @ComponentConfig(type = UICustomizeablePaginator.class, events = @EventConfig(listeners = UICustomizeablePaginator.ShowPageActionListener.class)) })
-public class UIAdvanceSearchResult extends UIContainer {
+public class UISearchResult extends UIContainer {
 
   private String                   templatePath;
 
@@ -53,22 +60,65 @@ public class UIAdvanceSearchResult extends UIContainer {
 
   private UICustomizeablePaginator uiPaginator;
 
-  private SimpleDateFormat         dateFormatter = new SimpleDateFormat(
-                                                     ISO8601.SIMPLE_DATETIME_FORMAT);
-  
-  private long                     searchTime;
+  private SimpleDateFormat         dateFormatter    = new SimpleDateFormat(
+                                                        ISO8601.SIMPLE_DATETIME_FORMAT);
+
+  public final static String       PARAMETER_REGX   = "(portal=.*)&(keyword=.*)";
+
+  public final static String       RESULT_NOT_FOUND = "UISearchResult.msg.result-not-found";
 
   public void init(String templatePath, ResourceResolver resourceResolver) throws Exception {
     PortletRequestContext portletRequestContext = (PortletRequestContext) WebuiRequestContext
         .getCurrentInstance();
     PortletPreferences portletPreferences = portletRequestContext.getRequest().getPreferences();
     String paginatorTemplatePath = portletPreferences.getValue(
-        UIAdvanceSearchPortlet.SEARCH_PAGINATOR_TEMPLATE_PATH, null);
+        UIWCMSearchPortlet.SEARCH_PAGINATOR_TEMPLATE_PATH, null);
     this.templatePath = templatePath;
     this.resourceResolver = resourceResolver;
     uiPaginator = addChild(UICustomizeablePaginator.class, null, null);
     uiPaginator.setTemplatePath(paginatorTemplatePath);
     uiPaginator.setResourceResolver(resourceResolver);
+  }
+
+  public void processRender(WebuiRequestContext context) throws Exception {
+    PortletRequestContext porletRequestContext = (PortletRequestContext) context;
+    HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) porletRequestContext
+        .getRequest();
+    String queryString = requestWrapper.getQueryString();
+    if (queryString != null && queryString.matches(PARAMETER_REGX)) {
+      String[] params = queryString.split("&");
+      String currentPortal = params[0].split("=")[1];
+      String keyword = params[1].split("=")[1];
+      SiteSearchService siteSearchService = getApplicationComponent(SiteSearchService.class);
+      QueryCriteria queryCriteria = new QueryCriteria();
+      queryCriteria.setSiteName(currentPortal);
+      queryCriteria.setKeyword(keyword);
+      PortletPreferences portletPreferences = ((PortletRequestContext) context.getCurrentInstance())
+          .getRequest().getPreferences();
+      SessionProvider provider = SessionProviderFactory.createSessionProvider();
+      int itemsPerPage = Integer.parseInt(portletPreferences.getValue(
+          UIWCMSearchPortlet.ITEMS_PER_PAGE, null));
+      WCMPaginatedQueryResult paginatedQueryResult = new WCMPaginatedQueryResult(siteSearchService
+          .searchSiteContents(queryCriteria, provider), itemsPerPage, true);
+      setPageList(paginatedQueryResult);
+    }
+    if (uiPaginator.getTotalItems() == 0) {
+      renderErrorMessage(context, RESULT_NOT_FOUND);
+      return;
+    }
+    super.processRender(context);
+  }
+
+  private void renderErrorMessage(WebuiRequestContext context, String keyBundle) throws Exception {
+    Writer writer = context.getWriter();
+    String message = context.getApplicationResourceBundle().getString(keyBundle);
+    writer
+        .write("<div style=\"height: 55px; font-size: 13px; text-align: center; padding-top: 10px; border: 1px solid gray; margin: 10px;\">");
+    writer.write("<span>");
+    writer.write(message);
+    writer.write("</span>");
+    writer.write("</div>");
+    writer.close();
   }
 
   public void setPageList(PageList dataPageList) {
@@ -99,8 +149,8 @@ public class UIAdvanceSearchResult extends UIContainer {
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     String portalURI = portalRequestContext.getPortalURI();
     PortletPreferences portletPreferences = portletRequestContext.getRequest().getPreferences();
-    String repository = portletPreferences.getValue(UIAdvanceSearchPortlet.REPOSITORY, null);
-    String workspace = portletPreferences.getValue(UIAdvanceSearchPortlet.WORKSPACE, null);
+    String repository = portletPreferences.getValue(UIWCMSearchPortlet.REPOSITORY, null);
+    String workspace = portletPreferences.getValue(UIWCMSearchPortlet.WORKSPACE, null);
     String baseURI = portletRequestContext.getRequest().getScheme() + "://"
         + portletRequestContext.getRequest().getServerName() + ":"
         + String.format("%s", portletRequestContext.getRequest().getServerPort());
@@ -118,11 +168,14 @@ public class UIAdvanceSearchResult extends UIContainer {
     return null;
   }
 
-  public long getSearchTime() {
-    return searchTime;
-  }
-
-  public void setSearchTime(long searchTime) {
-    this.searchTime = searchTime;
+  public boolean isShowPaginator() throws Exception {
+    PortletPreferences portletPreferences = ((PortletRequestContext) WebuiRequestContext
+        .getCurrentInstance()).getRequest().getPreferences();
+    String itemsPerPage = portletPreferences.getValue(UIWCMSearchPortlet.ITEMS_PER_PAGE, null);
+    int totalItems = uiPaginator.getTotalItems();
+    if (totalItems > Integer.parseInt(itemsPerPage)) {
+      return true;
+    }
+    return false;
   }
 }

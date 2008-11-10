@@ -1,16 +1,20 @@
 /*------------------org.exoplatform.wcm.webui.search.UIWCMSearchForm-------------------*/
-.UIAdvanceSearchForm .HorizontalLayout .CheckboxField{
+.UISearchForm {
+	margin: 10px;
+}
+
+.UISearchForm .HorizontalLayout .CheckboxField{
 	float: left; 
 	padding-left: 18px;
 }
 
-.UIAdvanceSearchForm .HorizontalLayout .CheckboxText{
+.UISearchForm .HorizontalLayout .CheckboxText{
 	float: left;
 	padding-left: 4px;
 	line-height: 18px;
 }
 
-.UIAdvanceSearchForm .HorizontalLayout input{
+.UISearchForm .HorizontalLayout input{
 	font-size: 11px;
 	width: 400px;
 }

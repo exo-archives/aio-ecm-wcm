@@ -29,7 +29,7 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.wcm.webui.Utils;
-import org.exoplatform.wcm.webui.search.UIAdvanceSearchPortlet;
+import org.exoplatform.wcm.webui.search.UIWCMSearchPortlet;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -41,6 +41,7 @@ import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 
 /*
@@ -56,24 +57,28 @@ public class UISearchPageLayoutManager extends UIForm {
 
   public static final String PORTLET_NAME                       = "WCM Advance Search".intern();
 
-  public static final String SEARCH_FORM_TEMPLATE_CATEGORY      = "search-form".intern();
+  public static final String SEARCH_PAGE_LAYOUT_CATEGORY        = "search-page-layout".intern();
 
-  public static final String SEARCH_PAGINATOR_TEMPLATE_CATEGORY = "search-paginator".intern();
-
-  public static final String SEARCH_RESULT_TEMPLATE_CATEGORY    = "search-result".intern();
-
-  public static final String SEARCH_FORM_TEMPLATE_SELECTOR      = "searchFormSelector".intern();
-
-  public static final String SEARCH_PAGINATOR_TEMPLATE_SELECTOR = "searchPaginatorSelector"
+  public static final String SEARCH_PAGE_LAYOUT_SELECTOR        = "searchPageLayoutSelector"
                                                                     .intern();
 
-  public static final String SEARCH_RESULT_TEMPLATE_SELECTOR    = "searchResultSelector".intern();
+  public static final String SEARCH_FORM_TEMPLATE_CATEGORY      = "search-form".intern();
 
-  public static final String SEARCH_BOX_TEMPLATE_CATEGORY       = "search-box".intern();
+  public static final String SEARCH_PAGINATOR_TEMPLATE_CATEGORY = "search-paginator";
 
-  public static final String SEARCH_BOX_TEMPLATE_SELECTOR       = "searchBoxSelector".intern();
+  public static final String SEARCH_RESULT_TEMPLATE_CATEGORY    = "search-result";
 
-  public static final String SEARCH_MODE_SELECTOR               = "searchModeSelector".intern();
+  public static final String SEARCH_FORM_TEMPLATE_SELECTOR      = "searchFormSelector";
+
+  public static final String SEARCH_PAGINATOR_TEMPLATE_SELECTOR = "searchPaginatorSelector";
+
+  public static final String SEARCH_RESULT_TEMPLATE_SELECTOR    = "searchResultSelector";
+
+  public static final String SEARCH_BOX_TEMPLATE_CATEGORY       = "search-box";
+
+  public static final String SEARCH_BOX_TEMPLATE_SELECTOR       = "searchBoxSelector";
+
+  public static final String SEARCH_MODE_SELECTOR               = "searchModeSelector";
 
   public static final String SEARCH_BOX_MODE_OPTION             = "searchBoxMode";
 
@@ -81,7 +86,14 @@ public class UISearchPageLayoutManager extends UIForm {
 
   public static final String SEARCH_MODES_OPTION                = "searchModes";
 
+  public final static String ITEMS_PER_PAGE_SELECTOR            = "itemsPerPageSelector";
+
+  public final static String VIEWER_BUTTON_QUICK_EDIT           = "viewerButtonQuickEdit";
+
+  @SuppressWarnings("unchecked")
   public UISearchPageLayoutManager() throws Exception {
+    PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
+    PortletPreferences portletPreferences = portletRequestContext.getRequest().getPreferences();
     List<SelectItemOption<String>> searchModeList = createSearchModeList();
     List<SelectItemOption<String>> searchFormTemplateList = createTemplateList(PORTLET_NAME,
         SEARCH_FORM_TEMPLATE_CATEGORY);
@@ -91,9 +103,17 @@ public class UISearchPageLayoutManager extends UIForm {
         SEARCH_PAGINATOR_TEMPLATE_CATEGORY);
     List<SelectItemOption<String>> searchBoxTemplateList = createTemplateList(PORTLET_NAME,
         SEARCH_BOX_TEMPLATE_CATEGORY);
+    List<SelectItemOption<String>> searchPageLayoutTemplateList = createTemplateList(PORTLET_NAME,
+        SEARCH_PAGE_LAYOUT_CATEGORY);
+    List<SelectItemOption<String>> itemsPerPageList = new ArrayList<SelectItemOption<String>>();
+    itemsPerPageList.add(new SelectItemOption<String>("5", "5"));
+    itemsPerPageList.add(new SelectItemOption<String>("10", "10"));
+    itemsPerPageList.add(new SelectItemOption<String>("20", "20"));
 
     UIFormSelectBox searchModeSelector = new UIFormSelectBox(SEARCH_MODE_SELECTOR,
         SEARCH_MODE_SELECTOR, searchModeList);
+    UIFormSelectBox itemsPerPageSelector = new UIFormSelectBox(ITEMS_PER_PAGE_SELECTOR,
+        ITEMS_PER_PAGE_SELECTOR, itemsPerPageList);
     UIFormSelectBox searchFormTemplateSelector = new UIFormSelectBox(SEARCH_FORM_TEMPLATE_SELECTOR,
         SEARCH_FORM_TEMPLATE_SELECTOR, searchFormTemplateList).setRendered(false);
     UIFormSelectBox searchResultTemplateSelector = new UIFormSelectBox(
@@ -102,16 +122,27 @@ public class UISearchPageLayoutManager extends UIForm {
     UIFormSelectBox searchPaginatorTemplateSelector = new UIFormSelectBox(
         SEARCH_PAGINATOR_TEMPLATE_SELECTOR, SEARCH_PAGINATOR_TEMPLATE_SELECTOR,
         searchPaginatorTemplateList).setRendered(false);
+    UIFormSelectBox searchPageLayoutTemplateSelector = new UIFormSelectBox(
+        SEARCH_PAGE_LAYOUT_SELECTOR, SEARCH_PAGE_LAYOUT_SELECTOR, searchPageLayoutTemplateList)
+        .setRendered(false);
     UIFormSelectBox searchBoxTemplateSelector = new UIFormSelectBox(SEARCH_BOX_TEMPLATE_SELECTOR,
         SEARCH_BOX_TEMPLATE_SELECTOR, searchBoxTemplateList).setRendered(false);
+    UIFormCheckBoxInput viewerButtonQuickEditCheckbox = new UIFormCheckBoxInput(
+        VIEWER_BUTTON_QUICK_EDIT, VIEWER_BUTTON_QUICK_EDIT, null);
+    String quickEditAble = portletPreferences.getValue(UIWCMSearchPortlet.SHOW_QUICK_EDIT_BUTTON,
+        null);
+    viewerButtonQuickEditCheckbox.setChecked(Boolean.parseBoolean(quickEditAble));
 
     searchModeSelector.setOnChange("SelectSearchMode");
-    
+
     addUIFormInput(searchModeSelector);
+    addUIFormInput(itemsPerPageSelector);
     addUIFormInput(searchBoxTemplateSelector);
     addUIFormInput(searchFormTemplateSelector);
     addUIFormInput(searchResultTemplateSelector);
     addUIFormInput(searchPaginatorTemplateSelector);
+    addUIFormInput(searchPageLayoutTemplateSelector);
+    addChild(viewerButtonQuickEditCheckbox);
 
     setActions(new String[] { "Save", "Cancel" });
   }
@@ -151,8 +182,9 @@ public class UISearchPageLayoutManager extends UIForm {
 
   public static class SaveActionListener extends EventListener<UISearchPageLayoutManager> {
     public void execute(Event<UISearchPageLayoutManager> event) throws Exception {
-      UISearchPageLayoutManager uiLayoutManager = event.getSource();
-      RepositoryService repositoryService = uiLayoutManager
+      UISearchPageLayoutManager uiSearchLayoutManager = event.getSource();
+      UIApplication uiApp = uiSearchLayoutManager.getAncestorOfType(UIApplication.class);
+      RepositoryService repositoryService = uiSearchLayoutManager
           .getApplicationComponent(RepositoryService.class);
       ManageableRepository manageableRepository = repositoryService.getCurrentRepository();
       String repository = manageableRepository.getConfiguration().getName();
@@ -161,31 +193,46 @@ public class UISearchPageLayoutManager extends UIForm {
           .getRequestContext();
       PortletPreferences portletPreferences = portletRequestContext.getRequest().getPreferences();
 
-      String searchMode = uiLayoutManager.getUIFormSelectBox(
+      String searchMode = uiSearchLayoutManager.getUIFormSelectBox(
           UISearchPageLayoutManager.SEARCH_MODE_SELECTOR).getValue();
-      String searchBoxTemplatePath = uiLayoutManager.getUIFormSelectBox(
+      if (UISearchPageLayoutManager.SEARCH_MODES_OPTION.equals(searchMode)) {
+        uiApp.addMessage(new ApplicationMessage(
+            "UISearchPageLayoutManager.message.search-mode-selecting", null,
+            ApplicationMessage.WARNING));
+        return;
+      }
+      String searchBoxTemplatePath = uiSearchLayoutManager.getUIFormSelectBox(
           UISearchPageLayoutManager.SEARCH_BOX_TEMPLATE_SELECTOR).getValue();
-      String searchResultTemplatePath = uiLayoutManager.getUIFormSelectBox(
+      String searchResultTemplatePath = uiSearchLayoutManager.getUIFormSelectBox(
           UISearchPageLayoutManager.SEARCH_RESULT_TEMPLATE_SELECTOR).getValue();
-      String searchFormTemplatePath = uiLayoutManager.getUIFormSelectBox(
+      String searchFormTemplatePath = uiSearchLayoutManager.getUIFormSelectBox(
           UISearchPageLayoutManager.SEARCH_FORM_TEMPLATE_SELECTOR).getValue();
-      String searchPaginatorTemplatePath = uiLayoutManager.getUIFormSelectBox(
+      String searchPaginatorTemplatePath = uiSearchLayoutManager.getUIFormSelectBox(
           UISearchPageLayoutManager.SEARCH_PAGINATOR_TEMPLATE_SELECTOR).getValue();
+      String searchPageLayoutTemplatePath = uiSearchLayoutManager.getUIFormSelectBox(
+          UISearchPageLayoutManager.SEARCH_PAGE_LAYOUT_SELECTOR).getValue();
+      String itemsPerPage = uiSearchLayoutManager.getUIFormSelectBox(
+          UISearchPageLayoutManager.ITEMS_PER_PAGE_SELECTOR).getValue();
+      String showQuickEditable = uiSearchLayoutManager.getUIFormCheckBoxInput(
+          UISearchPageLayoutManager.VIEWER_BUTTON_QUICK_EDIT).isChecked() ? "true" : "false";
 
-      portletPreferences.setValue(UIAdvanceSearchPortlet.REPOSITORY, repository);
-      portletPreferences.setValue(UIAdvanceSearchPortlet.WORKSPACE, workspace);
-      portletPreferences.setValue(UIAdvanceSearchPortlet.SEARCH_MODE, searchMode);
-      portletPreferences.setValue(UIAdvanceSearchPortlet.SEARCH_BOX_TEMPLATE_PATH,
+      portletPreferences.setValue(UIWCMSearchPortlet.REPOSITORY, repository);
+      portletPreferences.setValue(UIWCMSearchPortlet.WORKSPACE, workspace);
+      portletPreferences.setValue(UIWCMSearchPortlet.SEARCH_MODE, searchMode);
+      portletPreferences.setValue(UIWCMSearchPortlet.SEARCH_BOX_TEMPLATE_PATH,
           searchBoxTemplatePath);
-      portletPreferences.setValue(UIAdvanceSearchPortlet.SEARCH_RESULT_TEMPLATE_PATH,
+      portletPreferences.setValue(UIWCMSearchPortlet.SEARCH_RESULT_TEMPLATE_PATH,
           searchResultTemplatePath);
-      portletPreferences.setValue(UIAdvanceSearchPortlet.SEARCH_FORM_TEMPLATE_PATH,
+      portletPreferences.setValue(UIWCMSearchPortlet.SEARCH_FORM_TEMPLATE_PATH,
           searchFormTemplatePath);
-      portletPreferences.setValue(UIAdvanceSearchPortlet.SEARCH_PAGINATOR_TEMPLATE_PATH,
-          searchPaginatorTemplatePath);      
+      portletPreferences.setValue(UIWCMSearchPortlet.SEARCH_PAGINATOR_TEMPLATE_PATH,
+          searchPaginatorTemplatePath);
+      portletPreferences.setValue(UIWCMSearchPortlet.SEARCH_PAGE_LAYOUT_TEMPLATE_PATH,
+          searchPageLayoutTemplatePath);
+      portletPreferences.setValue(UIWCMSearchPortlet.ITEMS_PER_PAGE, itemsPerPage);
+      portletPreferences.setValue(UIWCMSearchPortlet.SHOW_QUICK_EDIT_BUTTON, showQuickEditable);
       portletPreferences.store();
       if (Utils.isEditPortletInCreatePageWizard()) {
-        UIApplication uiApp = uiLayoutManager.getAncestorOfType(UIApplication.class);
         uiApp.addMessage(new ApplicationMessage("UIMessageBoard.msg.saving-success", null,
             ApplicationMessage.INFO));
       } else {
@@ -213,19 +260,21 @@ public class UISearchPageLayoutManager extends UIForm {
           .getUIFormSelectBox(UISearchPageLayoutManager.SEARCH_RESULT_TEMPLATE_SELECTOR);
       UIFormSelectBox uiSearchPaginatorTemplateSelector = uiSearchPageLayoutManager
           .getUIFormSelectBox(UISearchPageLayoutManager.SEARCH_PAGINATOR_TEMPLATE_SELECTOR);
-
+      UIFormSelectBox uiSearchPageLayoutTemplateSelector = uiSearchPageLayoutManager
+          .getUIFormSelectBox(UISearchPageLayoutManager.SEARCH_PAGE_LAYOUT_SELECTOR);
       if (UISearchPageLayoutManager.SEARCH_BOX_MODE_OPTION.equals(searchMode)) {
         uiSearchBoxTemplateSelector.setRendered(true);
         uiSearchFormTemplateSelector.setRendered(false);
         uiSearchPaginatorTemplateSelector.setRendered(false);
         uiSearchResultTemplateSelector.setRendered(false);
+        uiSearchPageLayoutTemplateSelector.setRendered(false);
       } else if (UISearchPageLayoutManager.SEARCH_PAGE_MODE_OPTION.equals(searchMode)) {
         uiSearchBoxTemplateSelector.setRendered(false);
         uiSearchFormTemplateSelector.setRendered(true);
         uiSearchPaginatorTemplateSelector.setRendered(true);
         uiSearchResultTemplateSelector.setRendered(true);
+        uiSearchPageLayoutTemplateSelector.setRendered(true);
       }
-      
       event.getRequestContext().addUIComponentToUpdateByAjax(uiSearchPageLayoutManager.getParent());
     }
   }

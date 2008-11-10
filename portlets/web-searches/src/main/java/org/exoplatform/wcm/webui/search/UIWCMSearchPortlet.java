@@ -17,12 +17,14 @@
 package org.exoplatform.wcm.webui.search;
 
 import javax.portlet.PortletMode;
+import javax.portlet.PortletPreferences;
 
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.wcm.webui.search.config.UIPortletConfig;
+import org.exoplatform.wcm.webui.search.config.UISearchPageLayoutManager;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -34,28 +36,36 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Oct 31, 2008
  */
-@ComponentConfig(
-    lifecycle = UIApplicationLifecycle.class
-)
-public class UIAdvanceSearchPortlet extends UIPortletApplication {
+@ComponentConfig(lifecycle = UIApplicationLifecycle.class)
+public class UIWCMSearchPortlet extends UIPortletApplication {
 
-  private PortletMode mode = PortletMode.VIEW;
-  
-  public static final String SEARCH_FORM_TEMPLATE_PATH = "searchFormTemplatePath";
-  
-  public static final String SEARCH_RESULT_TEMPLATE_PATH = "searchResultTemplatePath";
-  
-  public static final String SEARCH_BOX_TEMPLATE_PATH = "searchBoxTemplatePath";
-  
-  public static final String SEARCH_PAGINATOR_TEMPLATE_PATH = "searchPaginatorTemplatePath";
-  
-  public static final String SEARCH_MODE = "searchMode";
-    
-  public static final String REPOSITORY = "repository";
-  
-  public static final String WORKSPACE = "workspace";
+  private PortletMode        mode                             = PortletMode.VIEW;
 
-  public UIAdvanceSearchPortlet() throws Exception {    
+  public static final String SEARCH_FORM_TEMPLATE_PATH        = "searchFormTemplatePath".intern();
+
+  public static final String SEARCH_RESULT_TEMPLATE_PATH      = "searchResultTemplatePath".intern();
+
+  public static final String SEARCH_BOX_TEMPLATE_PATH         = "searchBoxTemplatePath".intern();
+
+  public static final String SEARCH_PAGINATOR_TEMPLATE_PATH   = "searchPaginatorTemplatePath"
+                                                                  .intern();
+
+  public static final String SEARCH_PAGE_LAYOUT_TEMPLATE_PATH = "searchPageLayoutTemplatePath"
+                                                                  .intern();
+
+  public static final String SEARCH_MODE                      = "searchMode";
+
+  public static final String REPOSITORY                       = "repository";
+
+  public static final String WORKSPACE                        = "workspace";
+
+  public static final String SEARCH_BOX_CONTAINER             = "uiSearchBoxContainer".intern();
+
+  public final static String ITEMS_PER_PAGE                   = "itemsPerPage";
+
+  public final static String SHOW_QUICK_EDIT_BUTTON           = "showQuickEditButton";
+
+  public UIWCMSearchPortlet() throws Exception {
     activateMode(mode);
   }
 
@@ -72,7 +82,17 @@ public class UIAdvanceSearchPortlet extends UIPortletApplication {
   public void activateMode(PortletMode mode) throws Exception {
     getChildren().clear();
     if (PortletMode.VIEW.equals(mode)) {
-      addChild(UIAdvanceSearchPageContainer.class, null, UIPortletApplication.VIEW_MODE);
+      PortletRequestContext context = (PortletRequestContext) WebuiRequestContext
+          .getCurrentInstance();
+      PortletPreferences portletPreferences = context.getRequest().getPreferences();
+      String searchMode = portletPreferences.getValue(UIWCMSearchPortlet.SEARCH_MODE, null);
+      String searchBoxTemplatePath = portletPreferences.getValue(
+          UIWCMSearchPortlet.SEARCH_BOX_TEMPLATE_PATH, null);
+      if (UISearchPageLayoutManager.SEARCH_BOX_MODE_OPTION.equals(searchMode)) {
+        addChild(UISearchBoxContainer.class, null, SEARCH_BOX_CONTAINER);
+      } else if (UISearchPageLayoutManager.SEARCH_PAGE_MODE_OPTION.equals(searchMode)) {
+        addChild(UISearchPageLayout.class, null, UIPortletApplication.VIEW_MODE);
+      }
     } else if (PortletMode.EDIT.equals(mode)) {
       addChild(UIPortletConfig.class, null, UIPortletApplication.EDIT_MODE);
     }

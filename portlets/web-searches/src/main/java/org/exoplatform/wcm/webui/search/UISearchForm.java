@@ -19,6 +19,8 @@ package org.exoplatform.wcm.webui.search;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.portlet.PortletPreferences;
+
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.model.PortalConfig;
@@ -28,9 +30,12 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.search.QueryCriteria;
 import org.exoplatform.services.wcm.search.SiteSearchService;
 import org.exoplatform.services.wcm.search.WCMPaginatedQueryResult;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -44,8 +49,8 @@ import org.exoplatform.webui.form.UIFormStringInput;
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Oct 31, 2008
  */
-@ComponentConfig(lifecycle = UIFormLifecycle.class, events = { @EventConfig(listeners = UIAdvanceSearchForm.SearchActionListener.class) })
-public class UIAdvanceSearchForm extends UIForm {
+@ComponentConfig(lifecycle = UIFormLifecycle.class, events = { @EventConfig(listeners = UISearchForm.SearchActionListener.class) })
+public class UISearchForm extends UIForm {
 
   private String             templatePath;
 
@@ -62,7 +67,7 @@ public class UIAdvanceSearchForm extends UIForm {
   public static final String ALL_OPTION        = "all";
 
   @SuppressWarnings("unchecked")
-  public UIAdvanceSearchForm() throws Exception {
+  public UISearchForm() throws Exception {
     UIFormStringInput uiKeywordInput = new UIFormStringInput(KEYWORD_INPUT, KEYWORD_INPUT, null);
     UIFormSelectBox uiPortalSelectBox = new UIFormSelectBox(PORTALS_SELECTOR, PORTALS_SELECTOR,
         getPortalList());
@@ -104,29 +109,37 @@ public class UIAdvanceSearchForm extends UIForm {
     return portals;
   }
 
-  public static class SearchActionListener extends EventListener<UIAdvanceSearchForm> {
-    public void execute(Event<UIAdvanceSearchForm> event) throws Exception {
-      UIAdvanceSearchForm uiSearchForm = event.getSource();
+  public static class SearchActionListener extends EventListener<UISearchForm> {
+    public void execute(Event<UISearchForm> event) throws Exception {
+      UISearchForm uiSearchForm = event.getSource();
+      PortletRequestContext portletRequestContext = (PortletRequestContext) event
+          .getRequestContext();
+      PortletPreferences portletPreferences = portletRequestContext.getRequest().getPreferences();
+      UIApplication uiApp = uiSearchForm.getAncestorOfType(UIApplication.class);
       SiteSearchService siteSearchService = uiSearchForm
           .getApplicationComponent(SiteSearchService.class);
       SessionProvider provider = SessionProviderFactory.createSessionProvider();
-      UIAdvanceSearchPageContainer uiSearchPageContainer = uiSearchForm.getParent();
-      UIAdvanceSearchResult uiSearchResult = uiSearchPageContainer
-          .getChild(UIAdvanceSearchResult.class);
-      UIFormStringInput uiKeywordInput = uiSearchForm
-          .getUIStringInput(UIAdvanceSearchForm.KEYWORD_INPUT);
+      UISearchPageLayout uiSearchPageContainer = uiSearchForm.getParent();
+      UISearchResult uiSearchResult = uiSearchPageContainer.getChild(UISearchResult.class);
+      UIFormStringInput uiKeywordInput = uiSearchForm.getUIStringInput(UISearchForm.KEYWORD_INPUT);
       UIFormSelectBox uiPortalSelectBox = uiSearchForm
-          .getUIFormSelectBox(UIAdvanceSearchForm.PORTALS_SELECTOR);
+          .getUIFormSelectBox(UISearchForm.PORTALS_SELECTOR);
       String keyword = uiKeywordInput.getValue();
-      String selectedPortal = (uiPortalSelectBox.getValue().equals(UIAdvanceSearchForm.ALL_OPTION)) ? null
+      if (keyword == null || keyword.trim().length() == 0) {
+        uiApp.addMessage(new ApplicationMessage("UISearchForm.message.keyword-not-empty", null,
+            ApplicationMessage.WARNING));
+        return;
+      }
+      String selectedPortal = (uiPortalSelectBox.getValue().equals(UISearchForm.ALL_OPTION)) ? null
           : uiPortalSelectBox.getValue();
       QueryCriteria queryCriteria = new QueryCriteria();
       queryCriteria.setSiteName(selectedPortal);
       queryCriteria.setKeyword(keyword);
+      int itemsPerPage = Integer.parseInt(portletPreferences.getValue(
+          UIWCMSearchPortlet.ITEMS_PER_PAGE, null));
       WCMPaginatedQueryResult paginatedQueryResult = new WCMPaginatedQueryResult(siteSearchService
-          .searchSiteContents(queryCriteria, provider), 5, true);      
-      uiSearchResult.setPageList(paginatedQueryResult);
-      uiSearchResult.setSearchTime(paginatedQueryResult.getQueryTimeInSecond());
+          .searchSiteContents(queryCriteria, provider), itemsPerPage, true);
+      uiSearchResult.setPageList(paginatedQueryResult);   
     }
   }
 
