@@ -1,6 +1,8 @@
 @import url("config/icons/16x16/DefaultStylesheet.css");
 @import url("config/Stylesheet.css");
-
+.UISingleContentViewerPortlet {
+	overflow: auto;
+}
 .ShowStepInfo {
 	background: url('icons/24x24/HelpIcon.png') no-repeat;
 	width: 24px;
