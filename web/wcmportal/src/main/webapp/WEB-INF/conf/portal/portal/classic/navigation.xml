@@ -29,11 +29,18 @@
 			<page-reference>portal::classic::contentlistviewer</page-reference>	    
 		</node>	 
 		<node>
+			<uri>searchResult</uri>
+			<name>searchResult</name>
+			<label>#{portal.classic.searchResult}</label>
+			<visible>false</visible>			
+			<page-reference>portal::classic::searchResult</page-reference>	    
+		</node>  
+		<node>
 			<uri>search</uri>
 			<name>search</name>
 			<label>#{portal.classic.search}</label>
 			<page-reference>portal::classic::search</page-reference>	    
-		</node>  
+		</node> 
 		<node>
 			<uri>contentviewer</uri>
 			<name>contentviewer</name>

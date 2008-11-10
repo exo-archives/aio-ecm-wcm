@@ -18,6 +18,22 @@
 	        	<value>war:/conf/wcm/artifacts/application-templates/wcm-search</value>
 	        </value-param>	    
           <object-param>        
+            <name>default.searchPageLayout</name>
+            <description>Default search page layout template</description>
+            <object type="org.exoplatform.services.cms.views.PortletTemplatePlugin$PortletTemplateConfig">
+              <field  name="templateName"><string>UISearchPageLayoutDefault.gtmpl</string></field>  
+              <field  name="category"><string>search-page-layout</string></field>
+            </object>
+          </object-param>		  	      		           	        
+          <object-param>        
+            <name>default.searchResultLayout</name>
+            <description>Default search result layout template</description>
+            <object type="org.exoplatform.services.cms.views.PortletTemplatePlugin$PortletTemplateConfig">
+              <field  name="templateName"><string>UIResultPageLayoutDefault.gtmpl</string></field>  
+              <field  name="category"><string>search-page-layout</string></field>
+            </object>
+          </object-param>		          
+          <object-param>        
             <name>default.searchForm</name>
             <description>Default search form template</description>
             <object type="org.exoplatform.services.cms.views.PortletTemplatePlugin$PortletTemplateConfig">
