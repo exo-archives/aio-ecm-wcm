@@ -49,7 +49,8 @@ import org.exoplatform.webui.form.UIFormSelectBox;
  * Oct 31, 2008
  */
 
-@ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIForm.gtmpl", events = {
+@ComponentConfig(lifecycle = UIFormLifecycle.class, 
+    template = "system:/groovy/webui/form/UIForm.gtmpl", events = {
     @EventConfig(listeners = UISearchPageLayoutManager.SaveActionListener.class),
     @EventConfig(listeners = UISearchPageLayoutManager.CancelActionListener.class),
     @EventConfig(listeners = UISearchPageLayoutManager.SelectSearchModeActionListener.class) })
