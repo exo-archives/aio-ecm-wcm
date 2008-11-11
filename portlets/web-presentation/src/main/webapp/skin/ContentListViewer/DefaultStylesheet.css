@@ -1,36 +1,48 @@
-.UIViewerManagementForm .SelectFolderPathIcon {
-	background: url('DefaultSkin/icons/AddPage.gif') no-repeat left center;
-	width: 16px;
-	height: 16px;
-	margin-left: 10px;
+/*---------------------------UIContentListViewerPortlet---------------------------------*/
+.UIContentListViewerPortlet {
+
 }
 
-.UIFolderPathSelectorForm {
+/*---------------------------UIFolderPathSelectorForm------------------------------------*/
+.UIContentListViewerPortlet .UIFolderPathSelectorForm {
 	padding: 10px;
 }
 
-.FolderExplorer {
+
+.UIContentListViewerPortlet .UIFolderPathSelectorForm .FolderExplorer {
 	float:left;
 	width:230px;
 }
 
-.TitleBox {
+.UIContentListViewerPortlet .UIFolderPathSelectorForm .UITreeList {
+	margin-left:240px;
+}
+
+.UIContentListViewerPortlet .UIFolderPathSelectorForm .TitleBox {
 	border: 1px solid #B1B0B0; 
 	background-color: #F3F3F3; 
 	margin-bottom: 10px;
 	padding-left: 10px;
 }
 
-.FolderExplorerTree {
+.UIContentListViewerPortlet .UIFolderPathSelectorForm .FolderExplorer .FolderExplorerTree {
 	background:#F3F3F3 none repeat scroll 0 0;
 }
 
-.FolderExplorerTree .FolderInnerExplorerTree {
+.UIContentListViewerPortlet .UIFolderPathSelectorForm .FolderExplorer .FolderExplorerTree .FolderInnerExplorerTree {
 	border:1px solid #B1B0B0;
 	padding:10px;
 }
 
-.UIForm .HorizontalLayout .UIFormInputSet {
+/*---------------------------UIViewerManagementForm------------------------------------*/
+.UIContentListViewerPortlet .UIViewerManagementForm .SelectFolderPathIcon {
+	background: url('DefaultSkin/icons/AddPage.gif') no-repeat left center;
+	width: 16px;
+	height: 16px;
+	margin-left: 10px;
+}
+
+.UIContentListViewerPortlet .UIViewerManagementForm .FolderPathInputSet .UIFormInputSet {
 	margin-left:33px;
 	padding: 0px;
 }

@@ -1,4 +1,4 @@
-<div id="$uicomponent.id" style="padding: 10px;">
+<div id="$uicomponent.id" class="$uicomponent.id">
 	<% uicomponent.renderChildren() %>
 	<% 
 	String action = uicomponent.getComponentConfig().getEvents().get(0).getName();
