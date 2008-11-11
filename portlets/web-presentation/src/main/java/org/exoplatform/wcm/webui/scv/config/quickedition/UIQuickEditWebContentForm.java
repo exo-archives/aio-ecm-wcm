@@ -89,7 +89,7 @@ public class UIQuickEditWebContentForm extends UIContentDialogForm{
     nodeLocation.setPath(webContentNode.getParent().getPath());
     this.setStoredLocation(nodeLocation);
     this.setNodePath(webContentNode.getPath());
-    this.setContentType("exo:webContent");
+    this.setContentType(webContentNode.getPrimaryNodeType().getName());
     this.addNew(false);
     this.resetProperties();
   }

@@ -102,7 +102,7 @@ public class UINameWebContentForm extends UIForm {
     }
     UIFormSelectBox templateSelect = new UIFormSelectBox(FIELD_SELECT, FIELD_SELECT, options) ;
     templateSelect.setOnChange("ChangeTemplateType");
-    templateSelect.setDefaultValue("exo:webContent");
+//  templateSelect.setDefaultValue("exo:webContent");
     setPictureCSS("exo_webContent");
     addUIFormInput(templateSelect) ;
     if (!isNewConfig()) {
@@ -167,11 +167,33 @@ public class UINameWebContentForm extends UIForm {
       UIQuickCreationWizard uiQuickCreationWizard = uiNameWebContentForm
       .getAncestorOfType(UIQuickCreationWizard.class);
       UIContentDialogForm uiCDForm = uiQuickCreationWizard.getChild(UIContentDialogForm.class);
+      String contentType = uiNameWebContentForm.getUIFormSelectBox(FIELD_SELECT).getValue();
       if (uiNameWebContentForm.isNewConfig()) {
-        webContentNode = webContentStorage.addNode(webContentName, "exo:webContent");
+        webContentNode = webContentStorage.addNode(webContentName, contentType);
         WebContentSchemaHandler webContentSchemaHandler = webSchemaConfigService
         .getWebSchemaHandlerByType(WebContentSchemaHandler.class);
         webContentSchemaHandler.createDefaultSchema(webContentNode);
+        String htmlContent = "";
+        String cssContent = "";
+        if (contentType.equals("exo:pictureOnHeadWebcontent")) {
+          htmlContent = "<div class=\"WebContentPageOnTop\"><img width=\"100px\" height=\"100px\"/></div><h3>Type the title at here</h3><span class=\"DropCap\">T</span>ype the text here";
+          cssContent = ".WebContentPageOnTop {\n\twidth: 100px; \n\theight: 100px; \n\tfloat: left; \n\tmargin-right: 2px;\n}\n\n.DropCap {\n\tfont-size: 28px; \n\tfloat: left; \n\tmargin-right: 2px;\n}";
+          webContentNode.getNode("default.html/jcr:content").setProperty("jcr:data", htmlContent);
+          webContentNode.getNode("css/default.css/jcr:content").setProperty("jcr:data", cssContent);
+        } else if (contentType.equals("exo:twoColumnsWebcontent")) {
+          htmlContent = "<table class=\"WebContentTwoColumns\" cellspacing=\"10\">" +
+          "<tr>" +
+          "<td>&nbsp;" +
+          "</td>" + 
+          "<td>&nbsp;" +
+          "</td>" +                                 
+          "</tr>" +
+          "</table>";
+          cssContent = ".WebContentTwoColumns {\n\twidth: 100%; \n\theight: 100%;\n}\n\n";
+          webContentNode.getNode("default.html/jcr:content").setProperty("jcr:data", htmlContent);
+          webContentNode.getNode("css/default.css/jcr:content").setProperty("jcr:data", cssContent);
+        }
+
       } else {
         webContentNode = uiNameWebContentForm.getNode();
       }
@@ -189,7 +211,7 @@ public class UINameWebContentForm extends UIForm {
       nodeLocation.setPath(webContentNode.getParent().getPath());
       uiCDForm.setStoredLocation(nodeLocation);
       uiCDForm.setNodePath(webContentNode.getPath());
-      String contentType = uiNameWebContentForm.getUIFormSelectBox(FIELD_SELECT).getValue();
+      System.out.println("============> webContentNode has primaryNodeType: "+ webContentNode.getPrimaryNodeType().getName());
       uiCDForm.setContentType(contentType);
       uiCDForm.addNew(false);
       uiCDForm.resetProperties();

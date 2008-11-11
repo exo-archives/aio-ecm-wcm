@@ -108,7 +108,7 @@ public class UIContentDialogForm extends UIDialogForm {
     nodeLocation.setPath(webContentNode.getParent().getPath());
     setStoredLocation(nodeLocation);
     setNodePath(webContentNode.getPath());
-    setContentType("exo:webContent");
+    setContentType(webContentNode.getPrimaryNodeType().getName());
     addNew(false);
     resetProperties();
   }
@@ -135,8 +135,8 @@ public class UIContentDialogForm extends UIDialogForm {
   public String getTemplate() {
     TemplateService templateService = getApplicationComponent(TemplateService.class) ;
     String userName = Util.getPortalRequestContext().getRemoteUser();
-    try{      
-      return templateService.getTemplatePathByUser(true, contentType, userName, this.repositoryName);
+    try{
+      return templateService.getTemplatePathByUser(true, contentType, userName, repositoryName);
     } catch(Exception e) {
       UIApplication uiApp = getAncestorOfType(UIApplication.class);
       Object[] arg = {contentType};
