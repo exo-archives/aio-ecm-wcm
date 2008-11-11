@@ -1,16 +1,16 @@
 .exo_webContent {
-	background: url('16x16/exo-webContent.gif') no-repeat;
-	width: 16px; height: 16px;
+	background: url('277x182/freeLayoutWebcontent.gif') no-repeat;
+	width: 277px; height: 182px;
 }
 
 .exo_twoColumnsWebcontent {
-	background: url('16x16/exo-cssFolder.gif') no-repeat;
-	width: 16px; height: 16px;
+	background: url('277x182/twoColumnsWebcontent.gif') no-repeat;
+	width: 277px; height: 182px;
 }
 
 .exo_pictureOnHeadWebcontent {
-	background: url('16x16/exo-webLink.gif') no-repeat;
-	width: 16px; height: 16px;
+	background: url('277x182/pictureOnHeadWebcontent.gif') no-repeat;
+	width: 277px; height: 182px;
 }
 
 .BrowseIcon {
