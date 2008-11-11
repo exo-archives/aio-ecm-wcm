@@ -21,8 +21,10 @@ import java.io.Writer;
 import javax.jcr.AccessDeniedException;
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
+import javax.jcr.RepositoryException;
 import javax.portlet.PortletPreferences;
 
+import org.apache.commons.lang.StringUtils;
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
 import org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation;
 import org.exoplatform.resolver.ResourceResolver;
@@ -98,6 +100,14 @@ public class UIPresentation extends UIBaseNodePresentation {
       writer.write(context.getApplicationResourceBundle().getString("UIMessageBoard.msg.no-permission")) ;
       writer.write("</span>") ;
       writer.write("</div>") ;
+      return;
+    } catch (RepositoryException e) {
+      Writer writer = context.getWriter();
+      writer.write("<div style=\"height: 55px; font-size: 13px; text-align: center; padding-top: 10px;\">");
+      writer.write("<span>");
+      writer.write(context.getApplicationResourceBundle().getString("UIMessageBoard.msg.error-nodetype") + StringUtils.substringBeforeLast(e.getLocalizedMessage(), " "));
+      writer.write("</span>");
+      writer.write("</div>");
       return;
     } catch (Exception e) {
       Writer writer = context.getWriter();
