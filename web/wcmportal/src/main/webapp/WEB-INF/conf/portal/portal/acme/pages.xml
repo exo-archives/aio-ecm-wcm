@@ -11,41 +11,187 @@
     <application>
       <instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-homepage</instance-id>
       <title>Homepage</title>
-      <show-info-bar>false</show-info-bar>      
-      <show-application-state>false</show-application-state>
-      <show-application-mode>false</show-application-mode>
     </application>
-  </page>                      
+		<container id="acme-container" template="system:/groovy/portal/webui/container/UITableColumnContainer.gtmpl">
+  		<container id="acme-service-product" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+  			<container id="acme-service" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  			<application>
+			    	<instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-service</instance-id>
+			    	<show-info-bar>false</show-info-bar>
+			  	</application>
+	  		</container>
+	  		<container id="acme-product" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  			<application>
+			    	<instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-product</instance-id>
+			    	<show-info-bar>false</show-info-bar>
+			  	</application>
+	  		</container>
+  		</container>
+  		<container id="acme-feature" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+  			<application>
+			    <instance-id>portal#acme:/web-presentation/ContentListViewerPortlet/acme-feature</instance-id>
+			    <show-info-bar>false</show-info-bar>
+			  </application>
+  		</container>
+  		<container id="acme-about" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+  			<application>
+		    	<instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-about</instance-id>
+		    	<show-info-bar>false</show-info-bar>
+		  	</application>
+		  </container>
+  	</container>
+  </page>
+  
   <page>
-  	<page-id>portal::acme::presentation</page-id>
+  	<page-id>portal::acme::news</page-id>
     <owner-type>portal</owner-type>
     <owner-id>acme</owner-id>
-    <name>presentation</name>
-    <title>Presentation</title>
+    <name>news</name>
+    <title>News</title>
+	  <access-permissions>Everyone</access-permissions>
+	  <edit-permission>*:/platform/administrators</edit-permission>
+    <container id="acme-container" template="system:/groovy/portal/webui/container/UITableColumnContainer.gtmpl">
+  		<container id="acme-news" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+  			<application>
+			    <instance-id>portal#acme:/web-presentation/ContentListViewerPortlet/acme-news</instance-id>
+			    <show-info-bar>false</show-info-bar>
+			  </application>
+  		</container>
+  		<container id="acme-service-product" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+  			<container id="acme-service" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  			<application>
+			    	<instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-service</instance-id>
+			    	<show-info-bar>false</show-info-bar>
+			  	</application>
+	  		</container>
+	  		<container id="acme-product" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  			<application>
+			    	<instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-product</instance-id>
+			    	<show-info-bar>false</show-info-bar>
+			  	</application>
+	  		</container>
+  		</container>
+  	</container>
+  </page>
+  
+  <page>
+  	<page-id>portal::acme::about</page-id>
+    <owner-type>portal</owner-type>
+    <owner-id>acme</owner-id>
+    <name>about</name>
+    <title>About Us</title>
+	  <access-permissions>Everyone</access-permissions>
+	  <edit-permission>*:/platform/administrators</edit-permission>
+    <container id="acme-container" template="system:/groovy/portal/webui/container/UITableColumnContainer.gtmpl">
+  		<container id="acme-about" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+  			<application>
+			    <instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-about</instance-id>
+			    <show-info-bar>false</show-info-bar>
+			  </application>
+  		</container>
+  		<container id="acme-service-product" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+  			<container id="acme-service" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  			<application>
+			    	<instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-service</instance-id>
+			    	<show-info-bar>false</show-info-bar>
+			  	</application>
+	  		</container>
+	  		<container id="acme-product" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  			<application>
+			    	<instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-product</instance-id>
+			    	<show-info-bar>false</show-info-bar>
+			  	</application>
+	  		</container>
+  		</container>
+  	</container>
+  </page>
+  
+  <page>
+  	<page-id>portal::acme::contact</page-id>
+    <owner-type>portal</owner-type>
+    <owner-id>acme</owner-id>
+    <name>contact</name>
+    <title>Contact</title>
+	  <access-permissions>Everyone</access-permissions>
+	  <edit-permission>*:/platform/administrators</edit-permission>
+    <container id="acme-container" template="system:/groovy/portal/webui/container/UITableColumnContainer.gtmpl">
+  		<container id="acme-contact" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+  			<application>
+			    <instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-contact</instance-id>
+			    <show-info-bar>false</show-info-bar>
+			  </application>
+  		</container>
+  		<container id="acme-about" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+  			<application>
+			    <instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-about</instance-id>
+			    <show-info-bar>false</show-info-bar>
+			  </application>
+  		</container>
+  	</container>
+  </page>
+  
+  <page>
+  	<page-id>portal::acme::product</page-id>
+    <owner-type>portal</owner-type>
+    <owner-id>acme</owner-id>
+    <name>product</name>
+    <title>Product</title>
+	  <access-permissions>Everyone</access-permissions>
+	  <edit-permission>*:/platform/administrators</edit-permission>
+    <container id="acme-container" template="system:/groovy/portal/webui/container/UITableColumnContainer.gtmpl">
+  		<container id="acme-product" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+  			<application>
+			    <instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-product</instance-id>
+			    <show-info-bar>false</show-info-bar>
+			  </application>
+  		</container>
+  		<container id="acme-services" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+  			<application>
+			    <instance-id>portal#acme:/web-presentation/ContentListViewerPortlet/acme-services</instance-id>
+			    <show-info-bar>false</show-info-bar>
+			  </application>
+  		</container>
+  	</container>
+  </page>
+  
+  <page>
+  	<page-id>portal::acme::services</page-id>
+    <owner-type>portal</owner-type>
+    <owner-id>acme</owner-id>
+    <name>services</name>
+    <title>Services</title>
+	  <access-permissions>Everyone</access-permissions>
+	  <edit-permission>*:/platform/administrators</edit-permission>
+    <container id="acme-container" template="system:/groovy/portal/webui/container/UITableColumnContainer.gtmpl">
+  		<container id="acme-services" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+  			<application>
+			    <instance-id>portal#acme:/web-presentation/ContentListViewerPortlet/acme-services</instance-id>
+			    <show-info-bar>false</show-info-bar>
+			  </application>
+  		</container>
+  		<container id="acme-product" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+  			<application>
+			    <instance-id>portal#acme:/web-presentation/ContentListViewerPortlet/acme-products</instance-id>
+			    <show-info-bar>false</show-info-bar>
+			  </application>
+  		</container>
+  	</container>
+  </page>
+  
+  <page>
+  	<page-id>portal::acme::search</page-id>
+    <owner-type>portal</owner-type>
+    <owner-id>acme</owner-id>
+    <name>search</name>
+    <title>Search</title>
 	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>*:/platform/administrators</edit-permission>
     <application>
-      <instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-presentation</instance-id>
-      <title>Presentation</title>
+      <instance-id>portal#acme:/web-searches/WCMAdvanceSearchPortlet/search</instance-id>
       <show-info-bar>false</show-info-bar>      
-      <show-application-state>false</show-application-state>
-      <show-application-mode>false</show-application-mode>
     </application>
-  </page>                         
-  <page>
-  	<page-id>portal::acme::sitemap</page-id>
-    <owner-type>portal</owner-type>
-    <owner-id>acme</owner-id>
-    <name>sitemap</name>
-    <title>Site Map</title>
-	  <access-permissions>Everyone</access-permissions>	  
-	  <edit-permission>*:/platform/administrators</edit-permission>
-	  <application>
-      <instance-id>portal#acme:/web/SiteMapPortlet/acme-sitemapportlet</instance-id>
-      <title>Site Map</title>
-      <show-info-bar>false</show-info-bar>      
-    </application>          
-  </page>  
+  </page>
+  
   <page>
   	<page-id>portal::acme::admintoolbar</page-id>
     <owner-type>portal</owner-type>
@@ -56,12 +202,10 @@
 	  <edit-permission>*:/platform/administrators</edit-permission>
     <application>
       <instance-id>portal#acme:/web-presentation/SiteAdministrationPortlet/acme-admintoolbar</instance-id>
-      <title>Toolbar</title>
       <show-info-bar>false</show-info-bar>      
-      <show-application-state>false</show-application-state>
-      <show-application-mode>false</show-application-mode>
     </application>
   </page> 
+  
   <page>
   	<page-id>portal::acme::contentviewer</page-id>
     <owner-type>portal</owner-type>
@@ -72,10 +216,7 @@
 	  <edit-permission>*:/platform/administrators</edit-permission>
     <application>
       <instance-id>portal#acme:/ecm/ContentViewerPortlet/acme-contentviewer</instance-id>
-      <title>contentviewer</title>
       <show-info-bar>false</show-info-bar>      
-      <show-application-state>false</show-application-state>
-      <show-application-mode>false</show-application-mode>
     </application>
   </page>
 </page-set>
