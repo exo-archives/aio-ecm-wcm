@@ -18,6 +18,12 @@
 	margin-left:240px;
 }
 
+.UIContentListViewerPortlet .UIFolderPathSelectorForm .UITreeList .UIGrid .Select16x16Icon {
+	background: url('DefaultSkin/icons/AddPage.gif') no-repeat left center;
+	width: 16px;
+	height: 16px;
+}
+
 .UIContentListViewerPortlet .UIFolderPathSelectorForm .TitleBox {
 	border: 1px solid #B1B0B0; 
 	background-color: #F3F3F3; 
