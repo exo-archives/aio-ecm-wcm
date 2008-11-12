@@ -8,14 +8,14 @@ SkinService.addSkin(
 SkinService.addSkin(
     "web-presentation/SingleContentViewer",
     "Vista",
-    "/web-presentation/skin/SingleContentViewer/Vista/Stylesheet.css",
+    "/web-presentation/skin/SingleContentViewer/Default/Stylesheet.css",
     ServletContext
 ) ;
  
 SkinService.addSkin(
     "web-presentation/SingleContentViewer",
     "Mac",
-    "/web-presentation/skin/SingleContentViewer/Mac/Stylesheet.css",
+    "/web-presentation/skin/SingleContentViewer/Default/Stylesheet.css",
     ServletContext
 ) ;
 
