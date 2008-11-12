@@ -1,5 +1,4 @@
 <div class="UISelectedPages" id="$uicomponent.id">
-  <div class="Container"> 
 	  <div class="ListPage">
       <div class="OverflowContainer">
 	      <%
@@ -22,5 +21,4 @@
 	      %>
       </div>
 	  </div>
-	</div>
 </div> 		

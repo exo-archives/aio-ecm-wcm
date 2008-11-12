@@ -1,56 +1,18 @@
-.PanelContainer {
+.WCMPublication .PanelContainer {
 	margin: auto;
 }
 
-.PanelContainer .PanelContent{
-	background: white;
-	padding: 5px;
-	margin: 0;
-	height: 180px;
-	overflow: auto;
-}
-
-.PanelLeft{
+.WCMPublication .PanelContainer .PanelLeft{
 	float: left;
 	width: 40%;
 }
-	
-.PanelRight{
+
+.WCMPublication .PanelContainer .PanelRight{
 	float: right;
 	width: 40%;
 }
 
-.PanelCenter{
-	text-align: center;
-	width: 125px;
-	margin: auto;
-	padding-top: 50px;
-}
-
-.PanelCenter a img {
-	background: #bfd3df;
-	border: 1px solid white;
-	margin: 1px;
-	padding: 1px;
-}
-
-.PanelCenter .ArrowBack {
-	background: #bfd3df url('images/arrowBack.gif') no-repeat top left;
-	height: 33px;
-	width: 62px;
-	cursor: pointer;
-	margin: auto;
-}
-
-.PanelCenter .ArrowNext {
-	background: #bfd3df url('images/arrowNext.gif') no-repeat top left;
-	height: 33px;
-	width: 62px;
-	cursor: pointer;
-	margin: auto;
-}
-
-.Title{
+.WCMPublication .PanelContainer .Title{
 	color: #0d5398;
 	font-weight: bold;
 	padding: 0;
@@ -59,28 +21,81 @@
 	margin-bottom: 3px;
 }
 
-.SubTitle {
+.WCMPublication .PanelContainer .SubTitle {
 	font-size: 11px;
 	color:#999999;
 	text-align: center;
 	margin-bottom: 3px;
 }
 
-.PanelBox{
+.WCMPublication .PanelContainer .PanelCenter{
+	text-align: center;
+	width: 125px;
+	margin: auto;
+	padding-top: 50px;
+}
+
+.WCMPublication .PanelContainer .PanelCenter a img {
+	background: #bfd3df;
+	border: 1px solid white;
+	margin: 1px;
+	padding: 1px;
+}
+
+.WCMPublication .PanelContainer .PanelCenter .ArrowBack {
+	background: #bfd3df url('icons/16x16/arrowBack.gif') no-repeat top left;
+	height: 33px;
+	width: 62px;
+	cursor: pointer;
+	margin: auto;
+}
+
+.WCMPublication .PanelContainer .PanelCenter .ArrowNext {
+	background: #bfd3df url('icons/16x16/arrowNext.gif') no-repeat top left;
+	height: 33px;
+	width: 62px;
+	cursor: pointer;
+	margin: auto;
+}
+
+.WCMPublication .PanelContainer .PanelBox{
 	border: 1px solid white;
 	background: #bfd3df;
 	padding: 1px;
 }
 
-.UISelectedPages .Container {
+.WCMPublication .PanelContainer .PanelBox .PanelContent{
+	background: white;
+	padding: 5px;
+	margin: 0;
+	height: 180px;
+	overflow: auto;
+}
+
+/* ===== Overwrite stylesheet ===== */
+.WCMPublication .PanelContainer .UIContainerConfigOptions {
+	margin: 0;
+}
+
+.WCMPublication .PanelContainer .UIContainerConfigOptions .ScrollArea {
+	border: none;
+}
+
+.WCMPublication .PanelContainer .ContainerConfigOptions {
+	border: none;
+	padding: 0;
+}
+/* ===== Overwrite stylesheet ===== */
+
+/*.UISelectedPages .Container {
+  background: #f4f4f4;
+}*/
+
+.WCMPublication .UISelectedPages .ListPage {
   background: #f4f4f4;
 }
 
-.UISelectedPages .ListPage {
-  background: #f4f4f4;
-}
-
-.UISelectedPages .ListPage .OverflowContainer {
+.WCMPublication .UISelectedPages .ListPage .OverflowContainer {
   background: white;
   height: 146px; 
   width: auto;
@@ -88,11 +103,11 @@
   overflow: auto;
 }
 
-.UISelectedPages .ListPage  a:hover {
+.WCMPublication .UISelectedPages .ListPage  a:hover {
   color: blue; 
 }
 
-.UISelectedPages .ListPage .ItemIcon {
+.WCMPublication .UISelectedPages .ListPage .ItemIcon {
   height: 22px; 
   line-height: 22px;
   background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/GrayNextArrow.gif') no-repeat left;  
@@ -101,7 +116,7 @@
   cursor: pointer;
 }
 
-.UISelectedPages .ListPage .Selected {
+.WCMPublication .UISelectedPages .ListPage .Selected {
 	height: 22px; 
   line-height: 22px;
   background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/BlueNextArrow.gif') no-repeat left;  
@@ -111,21 +126,8 @@
   color: #058EE6;
 }
 
-.UISelectedPages .ListPage .NoItem {
+.WCMPublication .UISelectedPages .ListPage .NoItem {
 	font-style:italic;
 	text-align:center;
 	text-decoration:none;
-}
-
-.PanelContainer .UIContainerConfigOptions {
-	margin: 0;
-}
-
-.PanelContainer .UIContainerConfigOptions .ScrollArea {
-	border: none;
-}
-
-.PanelContainer .ContainerConfigOptions {
-	border: none;
-	padding: 0;
 }
