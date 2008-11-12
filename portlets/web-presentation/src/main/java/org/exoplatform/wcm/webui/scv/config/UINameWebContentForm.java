@@ -102,7 +102,7 @@ public class UINameWebContentForm extends UIForm {
     }
     UIFormSelectBox templateSelect = new UIFormSelectBox(FIELD_SELECT, FIELD_SELECT, options) ;
     templateSelect.setOnChange("ChangeTemplateType");
-//  templateSelect.setDefaultValue("exo:webContent");
+    templateSelect.setDefaultValue("exo:webContent");
     setPictureCSS("exo_webContent");
     addUIFormInput(templateSelect) ;
     if (!isNewConfig()) {
@@ -176,8 +176,9 @@ public class UINameWebContentForm extends UIForm {
         String htmlContent = "";
         String cssContent = "";
         if (contentType.equals("exo:pictureOnHeadWebcontent")) {
-          htmlContent = "<div class=\"WebContentPageOnTop\"><img width=\"100px\" height=\"100px\"/></div><h3>Type the title at here</h3><span class=\"DropCap\">T</span>ype the text here";
-          cssContent = ".WebContentPageOnTop {\n\twidth: 100px; \n\theight: 100px; \n\tfloat: left; \n\tmargin-right: 2px;\n}\n\n.DropCap {\n\tfont-size: 28px; \n\tfloat: left; \n\tmargin-right: 2px;\n}";
+          htmlContent = "<div class=\"WebContentPageOnTop\"><img width=\"100px\" height=\"100px\"/></div><div class=\"WebContentHint\"><h3>Type the title at here</h3><span class=\"DropCap\">T</span>ype the text here</div><div style=\"clear: left\"><span></span></div>";
+          cssContent = ".WebContentPageOnTop {\n\tfloat: left; \n\tmargin-right: 2px;\n}\n\n" + 
+          ".DropCap {\n\tfont-size: 28px; \n\tmargin-right: 2px;\n} \n.WebContentHint {\n\tfloat: left}";
           webContentNode.getNode("default.html/jcr:content").setProperty("jcr:data", htmlContent);
           webContentNode.getNode("css/default.css/jcr:content").setProperty("jcr:data", cssContent);
         } else if (contentType.equals("exo:twoColumnsWebcontent")) {
@@ -211,7 +212,6 @@ public class UINameWebContentForm extends UIForm {
       nodeLocation.setPath(webContentNode.getParent().getPath());
       uiCDForm.setStoredLocation(nodeLocation);
       uiCDForm.setNodePath(webContentNode.getPath());
-      System.out.println("============> webContentNode has primaryNodeType: "+ webContentNode.getPrimaryNodeType().getName());
       uiCDForm.setContentType(contentType);
       uiCDForm.addNew(false);
       uiCDForm.resetProperties();
