@@ -18,6 +18,7 @@ package org.exoplatform.services.wcm.metadata.web;
 
 import java.io.IOException;
 import java.security.AccessControlException;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.jcr.ItemNotFoundException;
@@ -57,18 +58,26 @@ public class PageMetadataRequestFilter implements Filter {
   throws IOException, ServletException {
     HttpServletRequest req = (HttpServletRequest) servletRequest;
     try {
-      if(!checkAndSetMetadataIfRequestToSCVPortlet(req)) {      
-        checkAndSetMetadataIfRequestToPCVPortlet(req);       
-      }      
+      boolean check = checkAndSetMetadataIfRequestToPCVPortlet(req);
+      if(!check)
+        checkAndSetMetadataIfRequestToSCVPortlet(req);
+      if(!check)
+        setPortalMetadata(req);
     } catch (Exception e) { } 
     chain.doFilter(servletRequest,servletResponse);
   }  
 
-  private boolean checkAndSetMetadataIfRequestToSCVPortlet(HttpServletRequest req) throws Exception {
+  private void setPortalMetadata(HttpServletRequest req) throws Exception {
     String pathInfo = req.getPathInfo();
-    ExoContainer container = ExoContainerContext.getCurrentContainer();
-    PageMetadataService metadataRegistry = 
-      (PageMetadataService)container.getComponentInstanceOfType(PageMetadataService.class);
+    PageMetadataService metadataRegistry = getService(PageMetadataService.class);      
+    ThreadLocalSessionProviderService localSessionProviderService = getService(ThreadLocalSessionProviderService.class);
+    HashMap<String,String> metadata = metadataRegistry.getPortalMetadata(pathInfo,localSessionProviderService.getSessionProvider(null));
+    if(metadata != null) 
+      req.setAttribute(PortalRequestContext.REQUEST_METADATA,metadata);
+  }
+  private boolean checkAndSetMetadataIfRequestToSCVPortlet(HttpServletRequest req) throws Exception {
+    String pathInfo = req.getPathInfo();    
+    PageMetadataService metadataRegistry = getService(PageMetadataService.class);      
     ThreadLocalSessionProviderService localSessionProviderService = getService(ThreadLocalSessionProviderService.class);
     SessionProvider sessionProvider = localSessionProviderService.getSessionProvider(null);
     Map<String,String> pageMetadata = metadataRegistry.getMetadata(pathInfo,sessionProvider);
@@ -103,8 +112,8 @@ public class PageMetadataRequestFilter implements Filter {
     Session session = null;
     try {
       session = sessionProvider.getSession(workspace,repositoryService.getRepository(repository));
-      node = session.getNodeByUUID(nodeIdentifier);      
-    } catch (ItemNotFoundException e) {
+      node = session.getNodeByUUID(nodeIdentifier);            
+    } catch (ItemNotFoundException e) {      
       node = (Node)session.getItem(nodeIdentifier);
     }catch (PathNotFoundException e) {
       req.setAttribute("ParameterizedContentViewerPortlet.data.object",new ItemNotFoundException());      

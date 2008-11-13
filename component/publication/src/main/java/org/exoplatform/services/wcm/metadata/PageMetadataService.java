@@ -34,5 +34,7 @@ public interface PageMetadataService {
   public void addMetadata(String pageURI, HashMap<String,String> metadata) throws Exception;  
   public void removeMetadata(String pageURI) throws Exception; 
   public HashMap<String, String> extractMetadata(Node node) throws Exception;
-  public Map<String,String> getMetadata(String pageURI, SessionProvider sessionProvider) throws Exception ;  
+  public Map<String,String> getMetadata(String pageURI, SessionProvider sessionProvider) throws Exception ;
+  public HashMap<String,String> getPortalMetadata(String uri, SessionProvider sessionProvider) throws Exception;
+  
 }

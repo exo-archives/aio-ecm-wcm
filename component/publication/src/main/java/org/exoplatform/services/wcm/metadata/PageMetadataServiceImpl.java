@@ -25,7 +25,6 @@ import javax.jcr.NodeIterator;
 import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.nodetype.NodeType;
-import javax.jcr.nodetype.NodeTypeManager;
 import javax.jcr.nodetype.PropertyDefinition;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
@@ -77,6 +76,34 @@ public class PageMetadataServiceImpl implements PageMetadataService, Startable {
     return metadata;
   }
 
+  public HashMap<String, String> getPortalMetadata(String uri, SessionProvider sessionProvider)
+  throws Exception {
+    String portalName = uri.split("/")[1];
+    HashMap<String,String> metadata = (HashMap<String,String>)pageMetadataCache.get("/"+portalName);
+    if(metadata != null)
+      return metadata;
+    try {
+      Node portal = livePortalManagerService.getLivePortal(portalName,sessionProvider);
+      metadata = extractPortalMetadata(portal);
+      addMetadata("/" + portalName,metadata);
+      return metadata;
+    } catch (Exception e) {
+    }       
+    return null;
+  }
+
+  private HashMap<String,String> extractPortalMetadata(Node portalNode) throws Exception {
+    HashMap<String,String> metadata = new HashMap<String,String>();
+    NodeType siteMedata = portalNode.getSession().getWorkspace().getNodeTypeManager().getNodeType("metadata:siteMetadata");
+    for(PropertyDefinition pdef: siteMedata.getDeclaredPropertyDefinitions()) {
+      String metadataName = pdef.getName();
+      String metadataValue = getProperty(portalNode,metadataName);
+      if(metadataValue != null) 
+        metadata.put(metadataName,metadataValue);              
+    }
+    return metadata;
+  }
+
   private Node findNodeByNavigationNodeURI(String uri, SessionProvider sessionProvider) throws Exception {
     ManageableRepository manageableRepository = repositoryService.getCurrentRepository();
     String repository = manageableRepository.getConfiguration().getName();
@@ -95,19 +122,12 @@ public class PageMetadataServiceImpl implements PageMetadataService, Startable {
 
   public HashMap<String, String> extractMetadata(Node node) throws Exception {
     HashMap<String, String> medatata = new HashMap<String,String>();
-    Node portalNode = findPortal(node);
-    NodeTypeManager nodeTypeManager = node.getSession().getWorkspace().getNodeTypeManager();
+    Node portalNode = findPortal(node);    
     String siteTitle = null;
     if(portalNode != null) {
       siteTitle = getProperty(portalNode,"metadata:siteTitle");
       if(siteTitle == null) siteTitle = portalNode.getName();
-      NodeType siteMedata = nodeTypeManager.getNodeType("metadata:siteMetadata");
-      for(PropertyDefinition pdef: siteMedata.getDeclaredPropertyDefinitions()) {
-        String metadataName = pdef.getName();
-        String metadataValue = getProperty(portalNode,metadataName);
-        if(metadataValue != null) 
-          medatata.put(metadataName,metadataValue);              
-      }
+      medatata = extractPortalMetadata(portalNode);
       medatata.remove("metadata:siteTitle");
     }
     String pageTitle = getProperty(node,"exo:title");
@@ -120,10 +140,21 @@ public class PageMetadataServiceImpl implements PageMetadataService, Startable {
     medatata.put(PAGE_TITLE,pageTitle);
     if(description != null) {
       medatata.put("description",description); 
-    }    
+    }
+    String keywords = createKeywords(node,pageTitle);
+    medatata.put("keywords",keywords);
     return medatata;
   }
-
+  
+  private String createKeywords(Node node, String title) throws Exception {    
+    if(node.hasProperty("exo:category")) {
+      StringBuffer buffer = new StringBuffer();
+      for(Value value: node.getProperty("exo:category").getValues()) 
+        buffer.append(value.getString()).append(",");
+      return buffer.toString();
+    }
+    return title.replaceFirst(" ",",");
+  }
   private String getProperty(Node node, String propertyName) throws Exception {
     return node.hasProperty(propertyName)?node.getProperty(propertyName).getString():null;
   }
@@ -183,5 +214,5 @@ public class PageMetadataServiceImpl implements PageMetadataService, Startable {
 
   public void stop() {
     log.info("Stoping PageMetadataService...");
-  }         
+  }          
 }
