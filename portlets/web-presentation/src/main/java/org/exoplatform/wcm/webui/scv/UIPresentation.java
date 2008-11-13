@@ -95,7 +95,7 @@ public class UIPresentation extends UIBaseNodePresentation {
       e.printStackTrace();
       System.out.println("\n\n\n");
       Writer writer = context.getWriter() ;
-      writer.write("<div style=\"padding-bottom: 20px; font-size: 13px; text-align: center; padding-top: 10px;\">") ;
+      writer.write("<div class=\"Message\">") ;
       writer.write("<span>") ;
       writer.write(context.getApplicationResourceBundle().getString("UIMessageBoard.msg.no-permission")) ;
       writer.write("</span>") ;
@@ -103,7 +103,7 @@ public class UIPresentation extends UIBaseNodePresentation {
       return;
     } catch (RepositoryException e) {
       Writer writer = context.getWriter();
-      writer.write("<div style=\"height: 55px; font-size: 13px; text-align: center; padding-top: 10px;\">");
+      writer.write("<div class=\"Message\">");
       writer.write("<span>");
       writer.write(context.getApplicationResourceBundle().getString("UIMessageBoard.msg.error-nodetype") + StringUtils.substringBeforeLast(e.getLocalizedMessage(), " "));
       writer.write("</span>");
@@ -111,7 +111,7 @@ public class UIPresentation extends UIBaseNodePresentation {
       return;
     } catch (Exception e) {
       Writer writer = context.getWriter();
-      writer.write("<div style=\"padding-bottom: 20px; font-size: 13px; text-align: center; padding-top: 10px;\">");
+      writer.write("<div class=\"Message\">");
       writer.write("<span>");
       writer.write(context.getApplicationResourceBundle().getString("UIMessageBoard.msg.error-nodetype") + e.getLocalizedMessage());
       writer.write("</span>");

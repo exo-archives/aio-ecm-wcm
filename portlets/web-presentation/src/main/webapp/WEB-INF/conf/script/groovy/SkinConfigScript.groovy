@@ -1,21 +1,21 @@
 SkinService.addSkin(
     "web-presentation/SingleContentViewer",
     "Default",
-    "/web-presentation/skin/SingleContentViewer/Default/Stylesheet.css",
+    "/web-presentation/skin/SingleContentViewer/DefaultSkin/Stylesheet.css",
     ServletContext
 ) ;
 
 SkinService.addSkin(
     "web-presentation/SingleContentViewer",
     "Vista",
-    "/web-presentation/skin/SingleContentViewer/Default/Stylesheet.css",
+    "/web-presentation/skin/SingleContentViewer/DefaultSkin/Stylesheet.css",
     ServletContext
 ) ;
  
 SkinService.addSkin(
     "web-presentation/SingleContentViewer",
     "Mac",
-    "/web-presentation/skin/SingleContentViewer/Default/Stylesheet.css",
+    "/web-presentation/skin/SingleContentViewer/DefaultSkin/Stylesheet.css",
     ServletContext
 ) ;
 
