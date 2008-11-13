@@ -1,7 +1,7 @@
 <% 
 	import org.exoplatform.wcm.webui.search.UISearchBox;
 %>
-<div class="UIForm $uicomponent.id">
+<div class="UIDefaultSearchBox">
 <% uiform.begin() %>
 	<% String link = uiform.url(uiform.getActions()[0]); %>
 	<div class="SearchBox">

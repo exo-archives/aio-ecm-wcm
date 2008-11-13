@@ -1,56 +1,58 @@
-.Caption {
+.UIContentListViewerPortlet .UIContentListPresentationDefault .Caption {
     border: 1px solid #b7b7b7;
     padding: 10px;
     margin: 10px;
     background: #fff;
 }
 
-.Caption .CaptionItem {
+.UIContentListViewerPortlet .UIContentListPresentationDefault .Caption .CaptionItem {
     border-bottom: 1px dotted #2f2f2f;
     padding-top: 10px;
 }
 
-.Caption .CaptionTitle a {
+.UIContentListViewerPortlet .UIContentListPresentationDefault .Caption .CaptionTitle a {
     font-size: 14px;
     color: #0385d9;
     font-weight: bold;
 }
 
-.Caption .CaptionDate {
+.UIContentListViewerPortlet .UIContentListPresentationDefault .Caption .CaptionDate {
     color: #8f8f8f;
 }
 
-.Caption .CaptionContent p {
+.UIContentListViewerPortlet .UIContentListPresentationDefault .Caption .CaptionContent p {
     padding: 5px 0;
 }
-.Caption .CaptionContent img {
+
+.UIContentListViewerPortlet .UIContentListPresentationDefault .Caption .CaptionContent img {
 	float: left;
 	margin: 5px 10px 0 0;
 }
-.Caption .CaptionViewMore {
+
+.UIContentListViewerPortlet .UIContentListPresentationDefault .Caption .CaptionViewMore {
     text-align: right;
 }
 
-.Caption .CaptionViewMore a {
+.UIContentListViewerPortlet .UIContentListPresentationDefault .Caption .CaptionViewMore a {
     color: #fd711c;
     font-size: 10px;
 }
 
-.CaptionFunc {
+.UIContentListViewerPortlet .UIContentListPresentationDefault .Caption .CaptionFunc {
     padding: 10px 0;
     height: 1%;
     overflow: hidden;
 }
 
-.CaptionFunc .CaptionRefresh {
+.UIContentListViewerPortlet .UIContentListPresentationDefault .Caption .CaptionFunc .CaptionRefresh {
     width: 200px;
     float: left;
 }
 
-.CaptionFunc .CaptionRefresh a {
+.UIContentListViewerPortlet .UIContentListPresentationDefault .Caption .CaptionFunc .CaptionRefresh a {
     display: block;
     padding: 0 3px 3px 25px;
-    background: url(images/icoRefresh.gif) no-repeat;
+    background: url(icons/RefreshIcon.gif) no-repeat;
     color: #ff4200;
     font-weight: bold;
     font-size: 13px;

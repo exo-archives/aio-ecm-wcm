@@ -62,6 +62,8 @@ public class UISearchResult extends UIContainer {
 
   private SimpleDateFormat         dateFormatter    = new SimpleDateFormat(
                                                         ISO8601.SIMPLE_DATETIME_FORMAT);
+  
+  private long                     searchTime;
 
   public final static String       PARAMETER_REGX   = "(portal=.*)&(keyword=.*)";
 
@@ -177,5 +179,13 @@ public class UISearchResult extends UIContainer {
       return true;
     }
     return false;
+  }
+
+  public long getSearchTime() {
+    return searchTime;
+  }
+
+  public void setSearchTime(long searchTime) {
+    this.searchTime = searchTime;
   }
 }

@@ -1,56 +1,56 @@
-.SearchResult {
+.UIWCMSearchPortlet .UIAdvanceSearchResultDefault .SearchResult {
     border: 1px solid #b7b7b7;
     padding: 10px;
     margin: 10px;
     background: #fff;
 }
 
-.SearchResult .SearchItem {
+.UIWCMSearchPortlet .UIAdvanceSearchResultDefault .SearchResult .SearchItem {
     padding-top: 10px;
 }
 
-.SearchResult .ItemTitle a {
+.UIWCMSearchPortlet .UIAdvanceSearchResultDefault .SearchResult .ItemTitle a {
     font-size: 14px;
     color: #0385d9;
     font-weight: bold;
     padding-left: 20px;
 }
 
-.SearchResult .ItemExcerpt {
+.UIWCMSearchPortlet .UIAdvanceSearchResultDefault .SearchResult .ItemExcerpt {
 	color: black;
 }
 
-.SearchResult .ItemInfo {
+.UIWCMSearchPortlet .UIAdvanceSearchResultDefault .SearchResult .ItemInfo {
 	color: green;
 }
 
-.SearchResult .ItemUrl {
+.UIWCMSearchPortlet .UIAdvanceSearchResultDefault .SearchResult .ItemUrl {
 	
 }
 
-.SearchResult .ItemSize {
+.UIWCMSearchPortlet .UIAdvanceSearchResultDefault .SearchResult .ItemSize {
 
 }
 
-.SearchResult .ItemSame a {
+.UIWCMSearchPortlet .UIAdvanceSearchResultDefault .SearchResult .ItemSame a {
 	color: #9977DF;
 	text-decoration: underline;
 }
 
-.SearchResult .ItemDetails {
+.UIWCMSearchPortlet .UIAdvanceSearchResultDefault .SearchResult .ItemDetails {
 	display: none;
 	padding-left: 15px;
 }
 
-.SearchResult .ItemScore {
+.UIWCMSearchPortlet .UIAdvanceSearchResultDefault .SearchResult .ItemScore {
 
 }
 
-.SearchResult .ItemNone {
+.UIWCMSearchPortlet .UIAdvanceSearchResultDefault .SearchResult .ItemNone {
 
 }
 
-.SearchResult .ItemFunc {
+.UIWCMSearchPortlet .UIAdvanceSearchResultDefault .SearchResult .ItemFunc {
     padding: 10px 0;
     height: 1%;
     overflow: hidden;

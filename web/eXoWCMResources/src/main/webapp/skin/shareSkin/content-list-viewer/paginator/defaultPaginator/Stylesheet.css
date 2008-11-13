@@ -1,77 +1,77 @@
-.UIPaginatorDeafault {
+.UIContentListViewerPortlet .UIPaginatorDefault {
     margin: 0 10px 0 210px;
     text-align: right;
 }
 
-.UIPaginatorDeafault a {
+.UIContentListViewerPortlet .UIPaginatorDefault a {
     padding: 5px;
     font-size: 12px;
     margin-left: 3px;	
 }
 
-.UIPaginatorDeafault a:hover {
+.UIContentListViewerPortlet .UIPaginatorDefault a:hover {
     color: #ff4200;
 }
 
-.UIPaginatorDeafault a.Item {
+.UIContentListViewerPortlet .UIPaginatorDefault a.Item {
 	color: black;	
 }
 
-.UIPaginatorDeafault a.Current {
+.UIContentListViewerPortlet .UIPaginatorDefault a.Current {
     font-weight: bold;
     color: red;
 }
 
-.UIPaginatorDeafault a.Prev, 
-.UIPaginatorDeafault a.First, 
-.UIPaginatorDeafault a.Next, 
-.UIPaginatorDeafault a.Last, 
-.UIPaginatorDeafault a.PrevDis, 
-.UIPaginatorDeafault a.FirstDis, 
-.UIPaginatorDeafault a.NextDis, 
-.UIPaginatorDeafault a.LastDis {
+.UIContentListViewerPortlet .UIPaginatorDefault a.Prev, 
+.UIContentListViewerPortlet .UIPaginatorDefault a.First, 
+.UIContentListViewerPortlet .UIPaginatorDefault a.Next, 
+.UIContentListViewerPortlet .UIPaginatorDefault a.Last, 
+.UIContentListViewerPortlet .UIPaginatorDefault a.PrevDis, 
+.UIContentListViewerPortlet .UIPaginatorDefault a.FirstDis, 
+.UIContentListViewerPortlet .UIPaginatorDefault a.NextDis, 
+.UIContentListViewerPortlet .UIPaginatorDefault a.LastDis {
     padding-right: 13px;
 	font-weight: bold;
 }
 /* Enabled Item */
-.UIPaginatorDeafault a.Prev {
-    background: url(images/icoPrevEna.gif) no-repeat right;
+.UIContentListViewerPortlet .UIPaginatorDefault a.Prev {
+    background: url(icons/icoPrevEna.gif) no-repeat right;
 }
 
-.UIPaginatorDeafault a.First {
-    background: url(images/icoFirstEna.gif) no-repeat right;
+.UIContentListViewerPortlet .UIPaginatorDefault a.First {
+    background: url(icons/icoFirstEna.gif) no-repeat right;
 }
 
-.UIPaginatorDeafault a.Next {
-    background: url(images/icoNextEna.gif) no-repeat right;
+.UIContentListViewerPortlet .UIPaginatorDefault a.Next {
+    background: url(icons/icoNextEna.gif) no-repeat right;
 }
 
-.UIPaginatorDeafault a.Last {
-    background: url(images/icoLastEna.gif) no-repeat right;
+.UIContentListViewerPortlet .UIPaginatorDefault a.Last {
+    background: url(icons/icoLastEna.gif) no-repeat right;
 }
 /* Disabled Item */
-.UIPaginatorDeafault a.PrevDis, 
-.UIPaginatorDeafault a.FirstDis {
+.UIContentListViewerPortlet .UIPaginatorDefault a.PrevDis, 
+.UIContentListViewerPortlet .UIPaginatorDefault a.FirstDis {
     color: #666;
 }
 
-.UIPaginatorDeafault a.NextDis, 
-.UIPaginatorDeafault a.LastDis {
+.UIContentListViewerPortlet .UIPaginatorDefault a.NextDis, 
+.UIContentListViewerPortlet .UIPaginatorDefault a.LastDis {
 	color: #196697;	
 }
 
-.UIPaginatorDeafault a.PrevDis {
-    background: url(images/icoPrevDis.gif) no-repeat right;
+.UIContentListViewerPortlet .UIPaginatorDefault a.PrevDis {
+    background: url(icons/icoPrevDis.gif) no-repeat right;
 }
 
-.UIPaginatorDeafault a.FirstDis {
-    background: url(images/icoFirstDis.gif) no-repeat right;
+.UIContentListViewerPortlet .UIPaginatorDefault a.FirstDis {
+    background: url(icons/icoFirstDis.gif) no-repeat right;
 }
 
-.UIPaginatorDeafault a.NextDis {
-    background: url(images/icoNextDis.gif) no-repeat right;
+.UIContentListViewerPortlet .UIPaginatorDefault a.NextDis {
+    background: url(icons/icoNextDis.gif) no-repeat right;
 }
 
-.UIPaginatorDeafault a.LastDis {
-    background: url(images/icoLastDis.gif) no-repeat right;
+.UIContentListViewerPortlet .UIPaginatorDefault a.LastDis {
+    background: url(icons/icoLastDis.gif) no-repeat right;
 }

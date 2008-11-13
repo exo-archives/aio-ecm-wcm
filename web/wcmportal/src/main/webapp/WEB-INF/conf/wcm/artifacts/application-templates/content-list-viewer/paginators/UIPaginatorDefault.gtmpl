@@ -7,7 +7,7 @@
 	String lastPage = _ctx.appRes("UIPaginatorDeafault.label.last");
 %>
 
-<div class="UIPaginatorDeafault">
+<div class="UIPaginatorDefault">
 
   <%if(currentPage > 1) { %>
 	  <a href="<%=uicomponent.event("ShowPage","1")%>" class="First">$firstPage</a>			

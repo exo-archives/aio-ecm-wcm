@@ -1,16 +1,16 @@
-.UIACMESearchBox .Search {
+.UIWCMSearchPortlet .UIACMESearchBox .Search {
 	background: url(background/SearchBackground.gif) left -30px repeat-x;
 	height: 30px;
 }
 
-.UIACMESearchBox .KeywordInput {
+.UIWCMSearchPortlet .UIACMESearchBox .KeywordInput {
 	background: url(background/SearchBackground.gif) left top no-repeat;
 	padding: 4px 0 0 14px;
 	height: 26px;
 	float: left;
 }
 
-.UIACMESearchBox .KeywordInput input {
+.UIWCMSearchPortlet .UIACMESearchBox .KeywordInput input {
 	background: none;
 	border: none;
 	width: 200px;
@@ -21,7 +21,7 @@
 	margin-top: 4px;
 }
 
-.UIACMESearchBox .SearchBoxIcon {
+.UIWCMSearchPortlet .UIACMESearchBox .SearchBoxIcon {
 	background:url(background/SearchIcon.gif) top left no-repeat;
 	width: 98px;
 	height: 30px;
