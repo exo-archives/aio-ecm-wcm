@@ -165,14 +165,7 @@
 	width:16px;
 }
 
-.UISingleContentViewerPortlet .UIWebContentPathSelector .Select16x16Icon {
-	background-image:url('icons/16x16/SelectPage.gif');
-	cursor:pointer;
-	height:16px;
-	width:16px;
-}
-
-.UISingleContentViewerPortlet .UIDocumentPathSelector .Select16x16Icon {
+.UISingleContentViewerPortlet .Select16x16Icon {
 	background-image:url('icons/16x16/SelectPage.gif');
 	cursor:pointer;
 	height:16px;
@@ -228,4 +221,17 @@
 	color: #0066FF;
 	margin:10px;
 	padding:10px;
+}
+
+.UISingleContentViewerPortlet .UICategorizing .UICategoriesSelector .Explorer {
+	float: left;
+	width: 216px;
+}
+
+.UISingleContentViewerPortlet .UICategorizing .UICategoriesSelector .UITreeList {
+	margin-left: 222px;
+}
+
+.UISingleContentViewerPortlet .UICategorizing .ActionContainer {
+	padding-left: 50%;
 }
