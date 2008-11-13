@@ -347,6 +347,12 @@ public abstract class BaseConnector {
     String currentPortalRelPath = "/" + currentPortal.getName() + "/";
     Node currentNode = null;
     Node activePortal = null;
+    if (currentFolder.startsWith(currentPortalRelPath)
+        && !currentFolder.equals(currentPortalRelPath))
+      activePortal = currentPortal;
+    else if (currentFolder.startsWith(sharedPortalRelPath)
+        && !currentFolder.equals(sharedPortalRelPath))
+      activePortal = sharedPortal;
     String webContentRelPath = null;
     if (webContent != null)
       webContentRelPath = currentPortalRelPath + webContent.getName() + "/";
@@ -355,12 +361,6 @@ public abstract class BaseConnector {
       currentNode = getCorrectContentStorage(activePortal, webContent, currentFolder);
     } else if ((webContent == null)
         || (webContent != null && !currentFolder.startsWith(webContentRelPath))) {
-      if (currentFolder.startsWith(currentPortalRelPath)
-          && !currentFolder.equals(currentPortalRelPath))
-        activePortal = currentPortal;
-      else if (currentFolder.startsWith(sharedPortalRelPath)
-          && !currentFolder.equals(sharedPortalRelPath))
-        activePortal = sharedPortal;
       currentNode = getCorrectContentStorage(activePortal, null, currentFolder);
     }
     return currentNode;
