@@ -3,7 +3,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>classic</owner-id>
-    <window-id>portal#classic:/iweb/BannerPortlet/classic-banner</window-id>
+    <window-id>portal#classic:/web-presentation/SingleContentViewer/classic-banner</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -31,7 +31,7 @@
     </preference>
     <preference>
       <name>showLoginUI</name>
-      <value>false</value>
+      <value>true</value>
       <read-only>false</read-only>
     </preference>
   </portlet-preferences>
@@ -39,7 +39,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>classic</owner-id>
-    <window-id>portal#classic:/iweb/FooterPortlet/classic-footer</window-id>
+    <window-id>portal#classic:/web-presentation/SingleContentViewer/classic-footer</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>

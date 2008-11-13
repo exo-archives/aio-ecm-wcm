@@ -3,7 +3,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>acme</owner-id>
-    <window-id>portal#acme:/iweb/BannerPortlet/acme-banner</window-id>
+    <window-id>portal#acme:/web-presentation/SingleContentViewer/acme-banner</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -39,7 +39,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>acme</owner-id>
-    <window-id>portal#acme:/iweb/FooterPortlet/acme-footer</window-id>
+    <window-id>portal#acme:/web-presentation/SingleContentViewer/acme-footer</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -102,7 +102,7 @@
 	  </preference>
 	  <preference>
 	    <name>searchBoxTemplatePath</name>
-	    <value>/jcr:system/exo:ecm/views/templates/WCM Advance Search/search-box/UIDefaultSearchBox.gtmpl</value>
+	    <value>/jcr:system/exo:ecm/views/templates/WCM Advance Search/search-box/UIACMESearchBox.gtmpl</value>
 	  </preference>
 	  <preference>
 	    <name>searchPaginatorTemplatePath</name>

@@ -12,15 +12,15 @@
 	    <show-info-bar>false</show-info-bar>
   	</application>	  
   	
-  	<container id="24081984" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-  		<container id="09081983" template="system:/groovy/portal/webui/container/UITableColumnContainer.gtmpl">
-  			<container id="03101985" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+  	<container id="HeaderContainer" template="system:/groovy/portal/webui/container/UIContainer.gtmpl" height="141px">
+  		<container id="BannerContainer" template="system:/groovy/portal/webui/container/UITableColumnContainer.gtmpl">
+  			<container id="Banner" template="system:/groovy/portal/webui/container/UIContainer.gtmpl" width="262px" height="65px">
   				<application>
-				    <instance-id>portal#acme:/iweb/BannerPortlet/acme-banner</instance-id>
+				    <instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-banner</instance-id>
 				    <show-info-bar>false</show-info-bar>
 				  </application>
   			</container>
-  			<container id="09101983" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+  			<container id="Search" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
 	  			<application>
 				    <instance-id>portal#acme:/web-searches/WCMAdvanceSearchPortlet/acme-searchbox</instance-id>
 				    <show-info-bar>false</show-info-bar>
@@ -43,7 +43,7 @@
 	  <page-body> </page-body>
 	  
 	  <application>
-	    <instance-id>portal#acme:/iweb/FooterPortlet/acme-footer</instance-id>
+	    <instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-footer</instance-id>
 	    <show-info-bar>false</show-info-bar>
 	  </application>
   </portal-layout>

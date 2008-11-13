@@ -13,7 +13,7 @@
       </application>	  	
       
 	  <application>
-	    <instance-id>portal#classic:/iweb/BannerPortlet/classic-banner</instance-id>
+	    <instance-id>portal#classic:/web-presentation/SingleContentViewer/classic-banner</instance-id>
 	    <show-info-bar>false</show-info-bar>
 	  </application>
 	  
@@ -30,7 +30,7 @@
 	  <page-body> </page-body>
 	  
 	  <application>
-	    <instance-id>portal#classic:/iweb/FooterPortlet/classic-footer</instance-id>
+	    <instance-id>portal#classic:/web-presentation/SingleContentViewer/classic-footer</instance-id>
 	    <show-info-bar>false</show-info-bar>
 	  </application>
   </portal-layout>

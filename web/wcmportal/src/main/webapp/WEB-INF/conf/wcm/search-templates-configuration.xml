@@ -65,6 +65,14 @@
               <field  name="category"><string>search-box</string></field>
             </object>
           </object-param>	          
+          <object-param>        
+            <name>acme.searchBox</name>
+            <description>ACME search box template</description>
+            <object type="org.exoplatform.services.cms.views.PortletTemplatePlugin$PortletTemplateConfig">
+              <field  name="templateName"><string>UIACMESearchBox.gtmpl</string></field>  
+              <field  name="category"><string>search-box</string></field>
+            </object>
+          </object-param>
         </init-params>  
       </component-plugin> 
    </external-component-plugins>       	
