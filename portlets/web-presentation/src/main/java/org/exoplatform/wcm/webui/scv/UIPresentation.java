@@ -91,9 +91,6 @@ public class UIPresentation extends UIBaseNodePresentation {
       writer.write("</div>") ;
       return ;
     } catch (AccessDeniedException e) {
-      System.out.println("\n\n\n");
-      e.printStackTrace();
-      System.out.println("\n\n\n");
       Writer writer = context.getWriter() ;
       writer.write("<div class=\"Message\">") ;
       writer.write("<span>") ;
