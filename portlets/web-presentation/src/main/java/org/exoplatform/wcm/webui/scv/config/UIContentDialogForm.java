@@ -30,6 +30,7 @@ import javax.jcr.version.VersionException;
 import javax.portlet.PortletPreferences;
 
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
+import org.exoplatform.ecm.webui.form.DialogFormActionListeners;
 import org.exoplatform.ecm.webui.form.UIDialogForm;
 import org.exoplatform.ecm.webui.utils.DialogFormUtil;
 import org.exoplatform.ecm.webui.utils.LockUtil;
@@ -72,7 +73,8 @@ import org.exoplatform.webui.form.UIFormStringInput;
     lifecycle = UIFormLifecycle.class,
     events = {
       @EventConfig(listeners = UIContentDialogForm.SaveActionListener.class),
-      @EventConfig(listeners = UIContentDialogForm.CancelActionListener.class)
+      @EventConfig(listeners = UIContentDialogForm.CancelActionListener.class),
+      @EventConfig(listeners = DialogFormActionListeners.RemoveDataActionListener.class)
     }
 )
 
