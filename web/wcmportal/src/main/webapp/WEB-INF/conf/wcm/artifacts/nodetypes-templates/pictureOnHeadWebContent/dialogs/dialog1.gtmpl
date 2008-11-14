@@ -1,5 +1,9 @@
 <% 
 	import javax.jcr.Node;
+	import org.exoplatform.download.DownloadService;
+	import org.exoplatform.download.InputStreamDownloadResource;
+	import java.io.InputStream;
+	
 	def rcontext = _ctx.getRequestContext() ;
 	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIHorizontalTabs');
 	def String htmlWYSIWYGFormId = "htmlData[" + uicomponent.hashCode() + "]";
@@ -113,15 +117,19 @@
 							</tr>
 							<tr>		          					
 					      <td class="FieldLabel"><%=_ctx.appRes("Sample.dialog.label.upload-image")%></td>
-					      <td class="FieldComponent">aa
+					      <td class="FieldComponent">
 						      <%
 						        if(uicomponent.isEditing()) { 
 											def curNode = uicomponent.getNode() ;
-											if(curNode.hasNode("image")) {
-												def imageNode = curNode.getNode("image") ;
-												if(imageNode.getProperty("jcr:data").getStream().available() > 0) {
-													def imgSrc = uicomponent.getImage(curNode, "image");
-													def actionLink = uicomponent.event("RemoveData", "/image");
+											if (curNode.hasProperty("exo:image")) {
+												if(curNode.getProperty("exo:image").getStream().available() > 0) {
+													DownloadService dservice = uicomponent.getApplicationComponent(DownloadService.class);
+											    InputStream input = curNode.getProperty("exo:image").getStream();
+											    InputStreamDownloadResource dresource = new InputStreamDownloadResource(input, "image");
+											    dresource.setDownloadName(curNode.getName());
+											    
+											    def imgSrc = dservice.getDownloadLink(dservice.addDownloadResource(dresource));
+													def actionLink = uicomponent.event("RemoveData", "exo:image");
 										%>		
 													<div>
 														<image src="$imgSrc" width="100px" height="80px"/>
@@ -131,20 +139,38 @@
 													</div>
 										<%
 												} else {
-									        String[] fieldImage = ["jcrPath=/node/image/jcr:data"] ;
-									        uicomponent.addUploadField("image", fieldImage) ;								
+									        String[] fieldImage = ["jcrPath=/node/exo:image"] ;
+									        uicomponent.addUploadField("imagee", fieldImage) ;								
 												}
+											}	else {
+								        String[] fieldImage = ["jcrPath=/node/exo:image"] ;
+								        uicomponent.addUploadField("imagee", fieldImage) ;								
 											}
-										} else if(uicomponent.dataRemoved()) {
-							        String[] fieldImage = ["jcrPath=/node/image/jcr:data"] ;
-							        uicomponent.addUploadField("image", fieldImage) ;						
-										}	else {
-							        String[] fieldImage = ["jcrPath=/node/image/jcr:data"] ;
-							        uicomponent.addUploadField("image", fieldImage) ;
+										} else {
+											String[] fieldImage = ["jcrPath=/node/exo:image"] ;
+							        uicomponent.addUploadField("imagee", fieldImage) ;
 										}
 						      %>
 						    </td>
 					    </tr>
+					    <tr>
+								<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.title")%></td>
+							  	<td class="FieldComponent">
+									<%
+							        String[] imageWidth = ["jcrPath=/node/exo:imageWidth", "validate=number", "defaultValues=150"];
+							        uicomponent.addTextField("imageWidth", imageWidth) ;
+							    %>
+								</td>
+							</tr>
+							<tr>
+								<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.title")%></td>
+							  	<td class="FieldComponent">
+									<%
+							        String[] imageHeight = ["jcrPath=/node/exo:imageHeight", "validate=number", "defaultValues=150"];
+							        uicomponent.addTextField("imageHeight", imageHeight) ;
+							    %>
+								</td>
+							</tr>
 							<tr>
 					 			<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.WebContentHtml")%></td>
 					  			<td class="FieldComponent">
@@ -161,7 +187,7 @@
 									uicomponent.addCalendarField("htmlHiddenField4", htmlHiddenField4);
 									uicomponent.addCalendarField("htmlHiddenField5", htmlHiddenField5);
 									uicomponent.addHiddenField("htmlHiddenField6", htmlHiddenField6);
-									String htmlContent = "<div class=\"WebContentPageOnTop\"><img width=\"100px\" height=\"100px\"/></div><div class=\"WebContentHint\"><h3>Type the title at here</h3><span class=\"DropCap\">T</span>ype the text here</div><div style=\"clear: left\"><span></span></div>";
+									String htmlContent = "<h3>Type the title at here</h3><span class=\"DropCap\">T</span>ype the text here</div>";
 									if(uicomponent.isEditing()) {
 										Node webContentNode = uicomponent.getNode();
 										if(webContentNode.hasNode("default.html")) {
@@ -271,8 +297,7 @@
 									uicomponent.addCalendarField("cssHiddenField4", cssHiddenField4) ;
 									uicomponent.addCalendarField("cssHiddenField5", cssHiddenField5) ;
 									uicomponent.addHiddenField("cssHiddenField6", cssHiddenField6) ;
-									String cssContent = ".WebContentPageOnTop {\n\tfloat: left; \n\tmargin-right: 2px;\n}\n\n" + 
-														".DropCap {\n\tfont-size: 28px; \n\tmargin-right: 2px;\n} \n.WebContentHint {\n\tfloat: left}";
+									String cssContent = ".DropCap {\n\tfont-size: 28px;\n}";
 									
 									if(uicomponent.isEditing()) {
 										Node webContentNode = uicomponent.getNode();

@@ -11,6 +11,9 @@
 	import org.exoplatform.webui.application.portlet.PortletRequestContext;
 	import javax.portlet.PortletPreferences;
 	import org.exoplatform.services.cms.folksonomy.FolksonomyService;
+	import org.exoplatform.download.DownloadService;
+	import org.exoplatform.download.InputStreamDownloadResource;
+	import java.io.InputStream;
 	
 	public boolean getPortletPreference(String name) {
     PortletRequestContext portletRequestContext = _ctx.getRequestContext() ;
@@ -25,7 +28,7 @@
   
   def jsNode = currentNode.getNode("js");
   def cssNode = currentNode.getNode("css");
-    
+  
   def javaScriptClass="org.exoplatform.services.wcm.javascript.XJavascriptService";
   def skinClass="org.exoplatform.services.wcm.skin.XSkinService";
 
@@ -47,6 +50,19 @@
 	boolean isVotingEnable = getPortletPreference("AllowVoting");
 	boolean isCommentingEnable = getPortletPreference("AllowComment");
 
+	if (currentNode.hasProperty("exo:image")) {
+		DownloadService dservice = uicomponent.getApplicationComponent(DownloadService.class);
+		InputStream input = currentNode.getProperty("exo:image").getStream();
+		InputStreamDownloadResource dresource = new InputStreamDownloadResource(input, "image");
+		dresource.setDownloadName(currentNode.getName());
+		
+		def image = dservice.getDownloadLink(dservice.addDownloadResource(dresource));
+		def imageWidth = currentNode.getProperty("exo:imageWidth").getString() + "px";
+		def imageHeight = currentNode.getProperty("exo:imageHeight").getString() + "px";
+		%>
+			<div style="float:left"><img src="$image" width="$imageWidth" height="$imageHeight"/></div>
+		<%
+	}
 	if((css != null) && (css.length() > 0)) {
 %>
 		<style><%=css%></style>
@@ -61,6 +77,7 @@
 	}
 %>
 <%=htmlFile.getNode("jcr:content").getProperty("jcr:data").getString()%>
+<div style="clear:both"><span></span></div>
 <% if((js != null) && (js.length() > 0)) {%>
 <script><%=js%></script>
 <% } %>
