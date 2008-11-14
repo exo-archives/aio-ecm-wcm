@@ -83,6 +83,8 @@ public class UIContentDialogForm extends UIDialogForm {
   public NodeIdentifier savedNodeIdentifier;
   protected Node webContent;
 
+  private boolean isEditNotIntegrity;
+
   public UIContentDialogForm() throws Exception {
     setActions(ACTIONS);
   }
@@ -187,7 +189,13 @@ public class UIContentDialogForm extends UIDialogForm {
   static public class CancelActionListener extends EventListener<UIContentDialogForm> {
     public void execute(Event<UIContentDialogForm> event) throws Exception {
       UIContentDialogForm uiContentDialogForm = event.getSource();
-      UIQuickCreationWizard uiQuickCreationWizard = uiContentDialogForm.getAncestorOfType(UIQuickCreationWizard.class);
+      UIQuickCreationWizard uiQuickCreationWizard = uiContentDialogForm.getAncestorOfType(UIQuickCreationWizard.class);      
+      if (uiContentDialogForm.isEditNotIntegrity()) {
+        UIPortletConfig uiPortletConfig = uiQuickCreationWizard.getAncestorOfType(UIPortletConfig.class);
+        uiPortletConfig.getChildren().clear();
+        uiPortletConfig.addUIWelcomeScreen();
+        return;
+      }
       UIPortletConfig uiPortletConfig = uiContentDialogForm.getAncestorOfType(UIPortletConfig.class);
       UIWebConentNameTabForm uiWebConentNameTabForm = uiQuickCreationWizard.getChild(UIWebConentNameTabForm.class);
       UINameWebContentForm uiNameWebContentForm = uiWebConentNameTabForm.getChild(UINameWebContentForm.class);
@@ -205,9 +213,8 @@ public class UIContentDialogForm extends UIDialogForm {
         webContentNode.remove();
         session.save();
         uiNameWebContentForm.reset();
-      } else {
-        uiNameWebContentForm.init();
       }
+      uiNameWebContentForm.back();
       uiContentDialogForm.reset();
       uiQuickCreationWizard.viewStep(1);
     }
@@ -244,7 +251,6 @@ public class UIContentDialogForm extends UIDialogForm {
           webContentNode.checkout();
         }
       }
-
       String nodeType;
       Node homeNode;
       List inputs = dialogForm.getChildren();
@@ -294,11 +300,19 @@ public class UIContentDialogForm extends UIDialogForm {
         newNode.checkin();
       }
       UIQuickCreationWizard uiQuickWizard = dialogForm.getAncestorOfType(UIQuickCreationWizard.class);
-      UIPermissionManager uiPermissionManager = uiQuickWizard.getChild(UIPermissionManager.class);
-      ((UIPermissionInfo) uiPermissionManager.getChild(UIPermissionInfo.class)).updateGrid();
       UISocialInfo uiSocialInfo = uiQuickWizard.getChild(UISocialInfo.class);
       uiSocialInfo.initUICategorizing();
+      UIPermissionManager uiPermissionManager = uiSocialInfo.getChild(UIPermissionManager.class);
+      ((UIPermissionInfo) uiPermissionManager.getChild(UIPermissionInfo.class)).updateGrid();
       uiQuickWizard.viewStep(3);
     }
+  }
+
+  public boolean isEditNotIntegrity() {
+    return isEditNotIntegrity;
+  }
+
+  public void setEditNotIntegrity(boolean isEditNotIntegrity) {
+    this.isEditNotIntegrity = isEditNotIntegrity;
   }
 }

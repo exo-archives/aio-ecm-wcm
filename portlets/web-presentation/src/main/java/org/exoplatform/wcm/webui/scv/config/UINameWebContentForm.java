@@ -82,6 +82,7 @@ public class UINameWebContentForm extends UIForm {
   public UINameWebContentForm() throws Exception {
     addUIFormInput(new UIFormStringInput(NAME_WEBCONTENT, NAME_WEBCONTENT, null).addValidator(
         MandatoryValidator.class).addValidator(ECMNameValidator.class));
+
     setActions(new String[] {"Save", "Abort"});
   }
 
@@ -105,12 +106,20 @@ public class UINameWebContentForm extends UIForm {
     templateSelect.setDefaultValue("exo:webContent");
     setPictureCSS("exo_webContent");
     addUIFormInput(templateSelect) ;
+  }
+
+  public void back() throws Exception {
     if (!isNewConfig()) {
       Node currentNode = getNode();
       UIFormStringInput uiFormStringInput = getChild(UIFormStringInput.class);
       uiFormStringInput.setValue(currentNode.getName());
       uiFormStringInput.setEditable(false);
+      return;
     }
+    UIFormSelectBox templateSelect = getChild(UIFormSelectBox.class);
+    templateSelect.setOnChange("ChangeTemplateType");
+    templateSelect.setDefaultValue("exo:webContent");
+    setPictureCSS("exo_webContent");
   }
 
   public Node getNode() throws Exception {

@@ -21,7 +21,6 @@ import javax.portlet.PortletPreferences;
 
 import org.exoplatform.services.wcm.core.NodeIdentifier;
 import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
-import org.exoplatform.wcm.webui.scv.config.access.UIPermissionManager;
 import org.exoplatform.wcm.webui.scv.config.social.UISocialInfo;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -44,10 +43,7 @@ import org.exoplatform.webui.event.EventListener;
         @EventConfig(listeners = UIQuickCreationWizard.ViewStep1ActionListener.class),
         @EventConfig(listeners = UIQuickCreationWizard.ViewStep2ActionListener.class),
         @EventConfig(listeners = UIQuickCreationWizard.ViewStep3ActionListener.class),
-        @EventConfig(listeners = UIQuickCreationWizard.ViewStep4ActionListener.class),
-        @EventConfig(listeners = UIQuickCreationWizard.ViewStep5ActionListener.class),
         @EventConfig(listeners = UIQuickCreationWizard.BackActionListener.class),
-        @EventConfig(listeners = UIQuickCreationWizard.FinishActionListener.class),
         @EventConfig(listeners = UIQuickCreationWizard.CompleteActionListener.class)
     }
 )
@@ -58,9 +54,7 @@ public class UIQuickCreationWizard extends UIBaseWizard {
     addChild(UIWebConentNameTabForm.class,null,null).setRendered(true);
     addChild(UIContentDialogForm.class,null,null).setRendered(false);
     addChild(UISocialInfo.class, null, null).setRendered(false);
-    addChild(UIPermissionManager.class,null,null).setRendered(false);    
-    addChild(UIMiscellaneousInfo.class, null, null).setRendered(false);
-    setNumberSteps(5);
+    setNumberSteps(3);
   }
 
   @Override
@@ -69,8 +63,6 @@ public class UIQuickCreationWizard extends UIBaseWizard {
     final int STEP1 = 1;
     final int STEP2 = 2;
     final int STEP3 = 3;
-    final int STEP4 = 4;
-    final int STEP5 = 5;
 
     String[] actions = new String[] {};
     switch(getCurrentStep()) {
@@ -81,12 +73,6 @@ public class UIQuickCreationWizard extends UIBaseWizard {
       actions = new String[] {};
       break;
     case STEP3:
-      actions = new String[] {"ViewStep4", "Finish"};
-      break;
-    case STEP4:
-      actions = new String[] {"Back","ViewStep5", "Finish"};
-      break;
-    case STEP5:
       actions = new String[] {"Back", "Complete"};
       break;
     default:
@@ -134,65 +120,11 @@ public class UIQuickCreationWizard extends UIBaseWizard {
     }
   }
 
-  public static class ViewStep4ActionListener extends EventListener<UIQuickCreationWizard> {
-    public void execute(Event<UIQuickCreationWizard> event) throws Exception {
-      UIQuickCreationWizard uiQuickWizard = event.getSource();
-      uiQuickWizard.viewStep(4);
-      UIContentDialogForm contentDialogForm = uiQuickWizard
-      .getChild(UIContentDialogForm.class);
-      NodeIdentifier nodeIdentifier = contentDialogForm.getSavedNodeIdentifier();
-      UIApplication uiApplication = uiQuickWizard.getAncestorOfType(UIApplication.class);
-      if(nodeIdentifier == null) {
-        uiApplication.addMessage(new ApplicationMessage("UIQuickCreationWizard.msg.StepbyStep", null, ApplicationMessage.INFO));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
-        return;
-      }
-    }
-  }
-
-  public static class ViewStep5ActionListener extends EventListener<UIQuickCreationWizard> {
-    public void execute(Event<UIQuickCreationWizard> event) throws Exception {
-      UIQuickCreationWizard uiQuickWizard = event.getSource();
-      uiQuickWizard.viewStep(5);
-      UIContentDialogForm contentDialogForm = uiQuickWizard
-      .getChild(UIContentDialogForm.class);
-      NodeIdentifier nodeIdentifier = contentDialogForm.getSavedNodeIdentifier();
-      UIApplication uiApplication = uiQuickWizard.getAncestorOfType(UIApplication.class);
-      if(nodeIdentifier == null) {
-        uiApplication.addMessage(new ApplicationMessage("UIQuickCreationWizard.msg.StepbyStep", null, ApplicationMessage.INFO));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
-        return;
-      }
-    }
-  }
-
-  public static class FinishActionListener extends EventListener<UIQuickCreationWizard> {
-    public void execute(Event<UIQuickCreationWizard> event) throws Exception {
-      UIQuickCreationWizard uiQuickWizard = event.getSource();
-      UIContentDialogForm uiContentDialogForm = uiQuickWizard.getChild(UIContentDialogForm.class);
-      NodeIdentifier identifier = uiContentDialogForm.getSavedNodeIdentifier();
-      PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
-      PortletPreferences prefs = context.getRequest().getPreferences();
-      prefs.setValue(UISingleContentViewerPortlet.REPOSITORY, identifier.getRepository());
-      prefs.setValue(UISingleContentViewerPortlet.WORKSPACE, identifier.getWorkspace());
-      prefs.setValue(UISingleContentViewerPortlet.IDENTIFIER, identifier.getUUID());
-      prefs.store();
-      UIPortletConfig uiPortletConfig = uiQuickWizard.getAncestorOfType(UIPortletConfig.class);
-      if(uiPortletConfig.isEditPortletInCreatePageWizard()) {
-        uiPortletConfig.getChildren().clear();
-        uiPortletConfig.addUIWelcomeScreen();
-      } else {        
-        context.setApplicationMode(PortletMode.VIEW);
-      }
-    }
-  }
-
   public static class CompleteActionListener extends EventListener<UIQuickCreationWizard> {
     public void execute(Event<UIQuickCreationWizard> event) throws Exception {
       UIQuickCreationWizard uiQuickCreationWizard = event.getSource();
-      UIContentDialogForm uiContentDialogForm = uiQuickCreationWizard.getChild(UIContentDialogForm.class);
-      NodeIdentifier identifier = uiContentDialogForm.getSavedNodeIdentifier();
-      UIMiscellaneousInfo uiMiscellaneousInfo = uiQuickCreationWizard.getChild(UIMiscellaneousInfo.class);
+      UISocialInfo uiSocialInfo = uiQuickCreationWizard.getChild(UISocialInfo.class);
+      UIMiscellaneousInfo uiMiscellaneousInfo = uiSocialInfo.getChild(UIMiscellaneousInfo.class);
       boolean isShowTOC = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowTOC").isChecked();
       boolean isQuickEdit = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowQuickEdit").isChecked();
       boolean isShowTags = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowTags").isChecked();
@@ -201,6 +133,8 @@ public class UIQuickCreationWizard extends UIBaseWizard {
       boolean isAllowComment = uiMiscellaneousInfo.getUIFormCheckBoxInput("AllowComment").isChecked();
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
       PortletPreferences prefs = context.getRequest().getPreferences();
+      UIContentDialogForm uiContentDialogForm = uiQuickCreationWizard.getChild(UIContentDialogForm.class);
+      NodeIdentifier identifier = uiContentDialogForm.getSavedNodeIdentifier();
       prefs.setValue(UISingleContentViewerPortlet.REPOSITORY, identifier.getRepository());
       prefs.setValue(UISingleContentViewerPortlet.WORKSPACE, identifier.getWorkspace());
       prefs.setValue(UISingleContentViewerPortlet.IDENTIFIER, identifier.getUUID());

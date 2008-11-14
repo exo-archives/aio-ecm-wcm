@@ -62,6 +62,7 @@ public class UIPortletConfig extends UIContainer {
         return;
       }      
     }catch(Exception e) {
+      e.printStackTrace();
     }
     addUIWelcomeScreen();
   }
@@ -77,6 +78,7 @@ public class UIPortletConfig extends UIContainer {
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     PortletPreferences prefs = portletRequestContext.getRequest().getPreferences();
     boolean isQuickEdit = Boolean.parseBoolean(prefs.getValue("ShowQuickEdit", null));
+    System.out.println("===============> isQuickEdit (UIPortletConfig): "+ isQuickEdit);
     UISingleContentViewerPortlet uiPresentationPortlet = getAncestorOfType(UISingleContentViewerPortlet.class);
     if (isQuickEdit) return uiPresentationPortlet.canEditPortlet();
     return false;

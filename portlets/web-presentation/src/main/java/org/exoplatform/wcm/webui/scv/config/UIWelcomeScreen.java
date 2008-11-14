@@ -118,7 +118,9 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
         // nhay vao buoc 2 lun
         uiWelcomeScreen.setRendered(false);
         UIQuickCreationWizard uiQuickCreationWizard = uiPortletConfig.addChild(UIQuickCreationWizard.class, null, null);
-        uiQuickCreationWizard.getChild(UIContentDialogForm.class).init();
+        UIContentDialogForm contentDialogForm  = uiQuickCreationWizard.getChild(UIContentDialogForm.class);
+        contentDialogForm.setEditNotIntegrity(true);
+        contentDialogForm.init();
         uiQuickCreationWizard.viewStep(2);
       } else if("SelectExistedContent".equals(radioValue)) {
         uiWelcomeScreen.getChildren().clear();

@@ -28,7 +28,9 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.wcm.webui.scv.config.UIContentDialogForm;
+import org.exoplatform.wcm.webui.scv.config.UIMiscellaneousInfo;
 import org.exoplatform.wcm.webui.scv.config.UIQuickCreationWizard;
+import org.exoplatform.wcm.webui.scv.config.access.UIPermissionManager;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UITabPane;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
@@ -48,6 +50,8 @@ public class UISocialInfo extends UITabPane {
   public UISocialInfo() throws Exception {
     UITagging uiTagging = addChild(UITagging.class, null, null);
     addChild(UICategorizing.class, null, null);
+    addChild(UIPermissionManager.class, null, null);
+    addChild(UIMiscellaneousInfo.class, null, null);
     setSelectedTab(uiTagging.getId()) ;
   }
 

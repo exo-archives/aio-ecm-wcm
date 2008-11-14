@@ -46,11 +46,11 @@ public class UIMiscellaneousInfo extends UIForm {
     boolean isAllowVoting = Boolean.parseBoolean(prefs.getValue("AllowVoting", null));
     boolean isAllowComment = Boolean.parseBoolean(prefs.getValue("AllowComment", null));
     boolean isQuickEdit = Boolean.parseBoolean(prefs.getValue("ShowQuickEdit", null));
-    addUIFormInput(new UIFormCheckBoxInput("ShowTOC", "ShowTOC", null).setChecked(isShowTOC));
-    addUIFormInput(new UIFormCheckBoxInput("ShowTags", "ShowTags", null).setChecked(isShowTags));
-    addUIFormInput(new UIFormCheckBoxInput("ShowCategories", "ShowCategories", null).setChecked(isShowCategories));
-    addUIFormInput(new UIFormCheckBoxInput("AllowVoting", "AllowVoting", null).setChecked(isAllowVoting));
-    addUIFormInput(new UIFormCheckBoxInput("AllowComment", "AllowComment", null).setChecked(isAllowComment));
-    addUIFormInput(new UIFormCheckBoxInput("ShowQuickEdit", "ShowQuickEdit", null).setChecked(isQuickEdit));
+    addChild(new UIFormCheckBoxInput("ShowTOC", "ShowTOC", null).setChecked(isShowTOC));
+    addChild(new UIFormCheckBoxInput("ShowTags", "ShowTags", null).setChecked(isShowTags));
+    addChild(new UIFormCheckBoxInput("ShowCategories", "ShowCategories", null).setChecked(isShowCategories));
+    addChild(new UIFormCheckBoxInput("AllowVoting", "AllowVoting", null).setChecked(isAllowVoting));
+    addChild(new UIFormCheckBoxInput("AllowComment", "AllowComment", null).setChecked(isAllowComment));
+    addChild(new UIFormCheckBoxInput("ShowQuickEdit", "ShowQuickEdit", null).setChecked(isQuickEdit));
   }
 }
