@@ -85,7 +85,7 @@
 		        				<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.name")%></td>
 		          				<td class="FieldComponent">
 		            			<%
-			              	 		String[] webContentFieldName = ["jcrPath=/node", "nodetype=exo:webContent", "mixintype=mix:votable,mix:commentable", "editable=if-null","validate=name,empty"] ;
+			              	 		String[] webContentFieldName = ["jcrPath=/node", "nodetype=exo:pictureOnHeadWebcontent", "mixintype=mix:votable,mix:commentable", "editable=if-null","validate=name,empty"] ;
 			              	 		uicomponent.addTextField("name", webContentFieldName) ; 
 			              	 		String[] cssFolder = ["jcrPath=/node/css", "nodetype=exo:cssFolder", "defaultValues=css"] ;
 			              	 		String[] jsFolder = ["jcrPath=/node/js", "nodetype=exo:jsFolder", "defaultValues=js"] ;
@@ -110,7 +110,41 @@
 							        uicomponent.addTextField("title", webContentFieldTitle) ;
 							    %>
 								</td>
-							</tr>						
+							</tr>
+							<tr>		          					
+					      <td class="FieldLabel"><%=_ctx.appRes("Sample.dialog.label.upload-image")%></td>
+					      <td class="FieldComponent">aa
+						      <%
+						        if(uicomponent.isEditing()) { 
+											def curNode = uicomponent.getNode() ;
+											if(curNode.hasNode("image")) {
+												def imageNode = curNode.getNode("image") ;
+												if(imageNode.getProperty("jcr:data").getStream().available() > 0) {
+													def imgSrc = uicomponent.getImage(curNode, "image");
+													def actionLink = uicomponent.event("RemoveData", "/image");
+										%>		
+													<div>
+														<image src="$imgSrc" width="100px" height="80px"/>
+														<a href="$actionLink">
+															<img src="/eXoResources/skin/DefaultSkin/background/Blank.gif" alt="" class="ActionIcon Remove16x16Icon"/>
+														</a>
+													</div>
+										<%
+												} else {
+									        String[] fieldImage = ["jcrPath=/node/image/jcr:data"] ;
+									        uicomponent.addUploadField("image", fieldImage) ;								
+												}
+											}
+										} else if(uicomponent.dataRemoved()) {
+							        String[] fieldImage = ["jcrPath=/node/image/jcr:data"] ;
+							        uicomponent.addUploadField("image", fieldImage) ;						
+										}	else {
+							        String[] fieldImage = ["jcrPath=/node/image/jcr:data"] ;
+							        uicomponent.addUploadField("image", fieldImage) ;
+										}
+						      %>
+						    </td>
+					    </tr>
 							<tr>
 					 			<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.WebContentHtml")%></td>
 					  			<td class="FieldComponent">

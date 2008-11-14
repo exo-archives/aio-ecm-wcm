@@ -1,0 +1,18 @@
+#UIContainer-ACMEPortalContainer {
+	background: url(background/BG_Header.gif) top left repeat-x;
+	padding: 0;
+} 
+
+#UIContainer-ACMEPortalContainer #UIContainer-BannerContainer {
+	padding: 0;
+}
+
+#UIContainer-ACMEPortalContainer #UIContainer-Banner {
+	padding: 0;
+}
+
+#UIContainer-ACMEPortalContainer #UIContainer-Search {
+	float: right;
+	margin: 35px 35px 0 0;
+	padding: 0;
+}

@@ -11,6 +11,14 @@
   	<supertypes>
       <supertype>exo:webContent</supertype>      
     </supertypes>
+    <childNodeDefinitions>
+    	<childNodeDefinition name="image" defaultPrimaryType="nt:resource" autoCreated="false" mandatory="false"
+        onParentVersion="VERSION" protected="false" sameNameSiblings="true">
+        <requiredPrimaryTypes>
+          <requiredPrimaryType>nt:resource</requiredPrimaryType>
+        </requiredPrimaryTypes>
+      </childNodeDefinition>
+    </childNodeDefinitions>
   </nodeType>                  
   
   <nodeType name="metadata:siteMetadata" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">

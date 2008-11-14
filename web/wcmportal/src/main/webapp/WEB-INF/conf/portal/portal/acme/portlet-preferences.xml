@@ -19,19 +19,9 @@
       <value>/sites content/live/acme/web contents/site artifacts/banner/Default</value>
       <read-only>false</read-only>
     </preference>
-		<preference>
-      <name>loginIdentifier</name>
-      <value>/sites content/live/acme/web contents/site artifacts/banner/loginUI</value>
-      <read-only>false</read-only>
-    </preference>
     <preference>
-      <name>quickEdit</name>
+      <name>ShowQuickEdit</name>
       <value>true</value>
-      <read-only>false</read-only>
-    </preference>
-    <preference>
-      <name>showLoginUI</name>
-      <value>false</value>
       <read-only>false</read-only>
     </preference>
   </portlet-preferences>
@@ -56,7 +46,7 @@
       <read-only>false</read-only>
     </preference>
     <preference>
-      <name>quickEdit</name>
+      <name>ShowQuickEdit</name>
       <value>true</value>
       <read-only>false</read-only>
     </preference>

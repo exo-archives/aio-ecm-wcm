@@ -72,7 +72,7 @@
           </object-param>
           
           <object-param>        
-            <name>Banner data a</name>
+            <name>Banner data</name>
             <description>Deployment Descriptor</description>
             <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
               <field  name="target">
@@ -86,21 +86,21 @@
             </object>
           </object-param>
           <object-param>        
-            <name>Login data a</name>
+            <name>Login data</name>
             <description>Deployment Descriptor</description>
             <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
               <field  name="target">
               	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
               		<field  name="repository"><string>repository</string></field>
               		<field  name="workspace"><string>collaboration</string></field>
-              		<field  name="nodePath"><string>/sites content/live/classic/web contents/site artifacts/banner</string></field>
+              		<field  name="nodePath"><string>/sites content/live/classic/web contents/site artifacts/access</string></field>
               	</object>
               </field>
-              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/classic/loginUI.xml</string></field>
+              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/classic/Access.xml</string></field>
             </object>
           </object-param>
           <object-param>        
-            <name>Footer data a</name>
+            <name>Footer data</name>
             <description>Deployment Descriptor</description>
             <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
               <field  name="target">
@@ -114,7 +114,7 @@
             </object>
           </object-param>
           <object-param>        
-            <name>Homepage data a</name>
+            <name>Homepage data</name>
             <description>Deployment Descriptor</description>
             <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
               <field  name="target">

@@ -10,12 +10,22 @@
  	  <application>
 	    <instance-id>portal#classic:/web-presentation/SiteAdministrationPortlet/classic-admintoolbar</instance-id>
 	    <show-info-bar>false</show-info-bar>
-      </application>	  	
+    </application>	  	
       
-	  <application>
-	    <instance-id>portal#classic:/web-presentation/SingleContentViewer/classic-banner</instance-id>
-	    <show-info-bar>false</show-info-bar>
-	  </application>
+  	<container id="DefaultPortalContainer" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
+  		<container id="Banner" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+  			<application>
+				  <instance-id>portal#classic:/web-presentation/SingleContentViewer/classic-banner</instance-id>
+				  <show-info-bar>false</show-info-bar>
+				</application>
+  		</container>
+  		<container id="Login" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  		<application>
+				  <instance-id>portal#classic:/web-presentation/SingleContentViewer/classic-login</instance-id>
+				  <show-info-bar>false</show-info-bar>
+				</application>
+  		</container>
+  	</container>
 	  
 	  <application>
 	  	<instance-id>portal#classic:/web/NavigationPortlet/classic-toolbar</instance-id>

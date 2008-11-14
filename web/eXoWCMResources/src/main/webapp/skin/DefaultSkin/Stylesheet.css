@@ -1,6 +1,7 @@
 @import url('/eXoECMResources/skin/DefaultSkin/Stylesheet.css');
 
-@import url('../shareSkin/portal/Stylesheet.css');
+@import url('../shareSkin/portal/defaultPortal/Stylesheet.css');
+@import url('../shareSkin/portal/acmePortal/Stylesheet.css');
 
 @import url('../shareSkin/pages/Stylesheet.css');
 @import url('../shareSkin/NodeTypes/Stylesheet.css');
