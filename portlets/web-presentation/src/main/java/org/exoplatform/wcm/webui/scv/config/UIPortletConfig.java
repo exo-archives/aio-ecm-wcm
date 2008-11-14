@@ -61,9 +61,7 @@ public class UIPortletConfig extends UIContainer {
         addChild(UIQuickEditContainer.class, null, null);
         return;
       }      
-    }catch(Exception e) {
-      e.printStackTrace();
-    }
+    }catch(Exception e) {}
     addUIWelcomeScreen();
   }
 
