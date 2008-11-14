@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.jcr.Node;
+import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
 import javax.jcr.nodetype.NodeTypeManager;
@@ -178,7 +179,13 @@ public class UINameWebContentForm extends UIForm {
       UIContentDialogForm uiCDForm = uiQuickCreationWizard.getChild(UIContentDialogForm.class);
       String contentType = uiNameWebContentForm.getUIFormSelectBox(FIELD_SELECT).getValue();
       if (uiNameWebContentForm.isNewConfig()) {
-        webContentNode = webContentStorage.addNode(webContentName, contentType);
+        try {
+          webContentNode = webContentStorage.addNode(webContentName, contentType);          
+        } catch (RepositoryException e) {
+          uiApplication.addMessage(new ApplicationMessage("UINameWebContentForm.msg.non-firstwhiteletter", null, ApplicationMessage.WARNING));
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
+          return;
+        }
         WebContentSchemaHandler webContentSchemaHandler = webSchemaConfigService
         .getWebSchemaHandlerByType(WebContentSchemaHandler.class);
         webContentSchemaHandler.createDefaultSchema(webContentNode);
