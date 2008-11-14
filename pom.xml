@@ -18,7 +18,6 @@
 		<module>component/publication</module>
 		<module>component/search</module>
 		<module>webui/wcm</module>
-		<module>portlets/iweb</module>    
 		<module>portlets/web-presentation</module>    
 		<module>portlets/web-searches</module>
 		<module>connectors/fckeditor</module>    
