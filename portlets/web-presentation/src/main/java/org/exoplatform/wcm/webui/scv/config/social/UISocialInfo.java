@@ -48,11 +48,11 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 
 public class UISocialInfo extends UITabPane {
   public UISocialInfo() throws Exception {
-    UITagging uiTagging = addChild(UITagging.class, null, null);
+    UIPermissionManager uiPermission = addChild(UIPermissionManager.class, null, null);
+    addChild(UITagging.class, null, null);
     addChild(UICategorizing.class, null, null);
-    addChild(UIPermissionManager.class, null, null);
     addChild(UIMiscellaneousInfo.class, null, null);
-    setSelectedTab(uiTagging.getId()) ;
+    setSelectedTab(uiPermission.getId()) ;
   }
 
   public void initUICategorizing() throws Exception {
