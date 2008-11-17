@@ -24,7 +24,7 @@
   }
   for( i in min..max) { %>
   <%  if( i == currentPage) { %>
-	    <a href="<%=uicomponent.event("ShowPage","$i")%>" class="Item Current"><%=i%></a>
+	    <a class="Item Current"><%=i%></a>
   <%  } else { %>
 	    <a href="<%=uicomponent.event("ShowPage","$i")%>" class="Item"><%=i%></a>
   <%  } %> 
