@@ -13,49 +13,32 @@
 	font-style:italic;
 }
 
-.UISingleContentViewerPortlet .ShowStepInfo {
-	background: url('icons/24x24/HelpIcon.png') no-repeat;
-	width: 24px;
-	height: 24px;
-	cursor: pointer;
+.UISingleContentViewerPortlet .EditMode {
+	padding: 5px;
 }
 
-.UISingleContentViewerPortlet .UIWizardPageSetInfo .OverflowContainer .PageNodeContainer {
-	display: none;
-}
-
-.UISingleContentViewerPortlet .UIWizardPageSetInfo .OverflowContainer .PageInfoContainer {
-	margin-left: 0;
-	border: 0;
-	padding: 0;
-	background: #EBEDF2;
-}
-
-.UISingleContentViewerPortlet .UIWizardPageSetInfo .OverflowContainer .SelectedPageInfo {
-	background: none;
-	border: 0; 
-	padding: 0;
-	margin: 0;
-}
-
-.UISingleContentViewerPortlet .UITabPane .TabPaneContent {
-	padding: 0;
-}
-
-.UISingleContentViewerPortlet .UIWelcomeScreen {
-	border: 1px #C6C6C6 solid;
-	width: 98%;
-	height: auto;
-	margin: auto;
-}
-
-.UISingleContentViewerPortlet .UIWelcomeScreen .WelcomeLable {
+.UISingleContentViewerPortlet .UIWelcomeScreen .LeftColumn {
+	float: left;
 	background: url('background/LeftContent188x219.gif') no-repeat left top;
 	width: 188px; height: 219px;
 }
 
-.UISingleContentViewerPortlet .UIWelcomeScreen .AlignLeft {
-	float:left;
+.UISingleContentViewerPortlet .UIWelcomeScreen .FormContainer {
+	margin-left: 200px;
+}
+
+.UISingleContentViewerPortlet .UIWelcomeScreen .WelcomeScreen {
+	padding: 20px 0px 10px;
+	font-weight: bold;
+	text-align: center;
+}
+
+.UISingleContentViewerPortlet .UIWelcomeScreen .WelcomeLable {
+	font-size: 15px;
+	color: #058ee6;
+	line-height: 30px;
+	padding-bottom: 5px;
+	text-align: left;
 }
 
 .UISingleContentViewerPortlet .UIWelcomeScreen .WelcomeLablePadding {
@@ -68,13 +51,50 @@
 	line-height: 25px;
 }
 
-.UIWelcomeScreen .HorizontalLayout {
-	padding: 0px;
+.UISingleContentViewerPortlet .UIWizard {
+	width: auto;
+	background: white;
 }
 
-.UIWelcomeScreen .HorizontalLayout .FormContainer .WelcomeScreen {
-	padding-left: 200px;
-	padding-top: 15px;
+.UISingleContentViewerPortlet .UIPermissionSetting .UIFormInputSet {
+	padding: 10px 0px;
+	width: auto;
+}
+
+.UISingleContentViewerPortlet .UIPermissionSetting td.FieldLabel {
+	width: 140px;
+}
+
+.UISingleContentViewerPortlet .ShowStepInfo {
+	float: left;
+	background: url('background/ShowStepInfo.gif') no-repeat;
+	width: 80px;
+	height: 25px; line-height: 25px;
+	cursor: pointer;
+	margin: 4px 5px;
+	padding-left: 30px;
+}
+
+.UISingleContentViewerPortlet .UIWizard .UIWizardPageSetInfo .PageNodeContainer {
+	display: none;
+}
+
+.UISingleContentViewerPortlet .UIWizard .UIWizardPageSetInfo .PageInfoContainer {
+	border: 0;
+	padding: 0;	margin: 0;
+	background: white;
+}
+
+.UISingleContentViewerPortlet .UIWizard .UIWizardPageSetInfo .SelectedPageInfo {
+	background: none;
+	border: 0; 
+	padding: 0;
+	margin: 0;
+}
+
+.UIWelcomeScreen .HorizontalLayout {
+	padding: 0px;
+	background: white;
 }
 
 .UIWebContentSelectorForm {
@@ -191,13 +211,13 @@
 	background: #F3F3F3;
 }
 
-.UISingleContentViewerPortlet .UIWebContentPathSelector .Explorer {
+.UISingleContentViewerPortlet .Explorer {
 	float: left;
-	width: 216px;
+	width: 230px;
 }
 
-.UISingleContentViewerPortlet .UIWebContentPathSelector .UITreeList {
-	margin-left: 222px;
+.UISingleContentViewerPortlet .UITreeList {
+	margin-left: 240px;
 }
 
 .UISingleContentViewerPortlet .UIDocumentPathSelector {
@@ -205,15 +225,6 @@
 	padding: 8px;
 	border: 1px solid #b7b7b7;
 	background: #F3F3F3;
-}
-
-.UISingleContentViewerPortlet .UIDocumentPathSelector .Explorer {
-	float: left;
-	width: 216px;
-}
-
-.UISingleContentViewerPortlet .UIDocumentPathSelector .UITreeList {
-	margin-left: 222px;
 }
 
 .UISingleContentViewerPortlet .UIDMSPathSelector {
@@ -233,15 +244,6 @@
 	color: #0066FF;
 	margin:10px;
 	padding:10px;
-}
-
-.UISingleContentViewerPortlet .UICategorizing .UICategoriesSelector .Explorer {
-	float: left;
-	width: 216px;
-}
-
-.UISingleContentViewerPortlet .UICategorizing .UICategoriesSelector .UITreeList {
-	margin-left: 222px;
 }
 
 .UISingleContentViewerPortlet .UICategorizing .ActionContainer {

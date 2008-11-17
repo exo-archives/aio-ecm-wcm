@@ -21,8 +21,6 @@
 							<div class="WizardStepContent">
 								<div class="UIWizardPageSetInfo">
 									<div class="OverflowContainer">
-										<% String stepInfoTitle =  _ctx.appRes(uicomponent.getId() + ".label.stepInfo"); %>
-										<div title="$stepInfoTitle" class="ShowStepInfo" onclick="showDivBlock(this, 'PageNodeContainer', 'SelectedPageInfo')"><span></span></div>
 										<div class="PageNodeContainer">
 											<div class="TopLeftContainerOptions">
 												<div class="TopRightContainerOptions">
@@ -73,25 +71,27 @@
 							</div>
 							<div class="WizardControlBar">
 								<div class="OverflowContainer">
+									<% String stepInfoTitle =  _ctx.appRes(uicomponent.getId() + ".label.stepInfo"); %>
+									<div title="$stepInfoTitle" class="ShowStepInfo" onclick="showDivBlock(this, 'PageNodeContainer', 'SelectedPageInfo')">Show step info</div>
 									<div class="ActionBar">
 										<div class="UIAction">
-											<table align="right" class="ActionContainer">
+											<table class="ActionContainer">
 												<tbody>
 													<tr>
-														<td align="right">
+														<td>
 															<%
 																String [] actions = uicomponent.getActionsByStep() ;
 																for(int j = (actions.length-1); j >= 0; j-- ) {
 															%>
-																<a href="<%=uicomponent.url(actions[j]);%>" class="ActionButton LightBlueStyle">
-																<div class="ButtonLeft">
-																	<div class="ButtonRight">
-																		<div class="ButtonMiddle">
-																			<%=_ctx.appRes(uicomponent.getId() + ".action." + actions[j])%>
+																<div onclick="<%=uicomponent.url(actions[j]);%>" class="ActionButton LightBlueStyle">
+																	<div class="ButtonLeft">
+																		<div class="ButtonRight">
+																			<div class="ButtonMiddle">
+																				<a href="javascript:void(0);"><%=_ctx.appRes(uicomponent.getId() + ".action." + actions[j])%></a>
+																			</div>
 																		</div>
 																	</div>
-																</div>
-																</a>				      			
+																</div>				      			
 															<%}%>
 														</td>
 													</tr>
