@@ -64,7 +64,10 @@ Utils = function(){
 		var presentation = document.getElementById(portletID);		
 		var parentNode = presentation.parentNode;
 		var fistChild = eXo.core.DOMUtil.getChildrenByTagName(parentNode, "div")[0];
-		if (fistChild.id == quickEditingBlockId) return;
+		if (fistChild.id == quickEditingBlockId) {
+			var quickEditingBlock = document.getElementById(quickEditingBlockId);
+			quickEditingBlock.parentNode.removeChild(quickEditingBlock);
+		}
 		var quickEditingBlock = document.getElementById(quickEditingBlockId);		
 		if(quickEditingBlock != null) {
 			parentNode.insertBefore(quickEditingBlock, presentation);
