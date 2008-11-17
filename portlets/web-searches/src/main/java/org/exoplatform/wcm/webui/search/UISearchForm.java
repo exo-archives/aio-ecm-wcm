@@ -49,8 +49,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Oct 31, 2008
  */
-@ComponentConfig(lifecycle = UIFormLifecycle.class, events = { 
-  @EventConfig(listeners = UISearchForm.SearchActionListener.class) })
+@ComponentConfig(lifecycle = UIFormLifecycle.class, events = { @EventConfig(listeners = UISearchForm.SearchActionListener.class) })
 public class UISearchForm extends UIForm {
 
   private String             templatePath;
@@ -132,6 +131,12 @@ public class UISearchForm extends UIForm {
       String documentChecked = (uiDocumentCheckbox.isChecked()) ? "true" : "false";
       if (keyword == null || keyword.trim().length() == 0) {
         uiApp.addMessage(new ApplicationMessage("UISearchForm.message.keyword-not-empty",
+                                                null,
+                                                ApplicationMessage.WARNING));
+        return;
+      }
+      if (!Boolean.parseBoolean(pageChecked) && !Boolean.parseBoolean(documentChecked)) {
+        uiApp.addMessage(new ApplicationMessage("UISearchForm.message.not-checked",
                                                 null,
                                                 ApplicationMessage.WARNING));
         return;
