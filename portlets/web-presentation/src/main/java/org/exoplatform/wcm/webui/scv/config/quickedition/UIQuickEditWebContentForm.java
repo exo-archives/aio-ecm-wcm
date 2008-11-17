@@ -131,11 +131,16 @@ public class UIQuickEditWebContentForm extends UIContentDialogForm{
       PortletPreferences prefs = pContext.getRequest().getPreferences();
       String repositoryName = prefs.getValue(UISingleContentViewerPortlet.REPOSITORY, null);
       String workspaceName = prefs.getValue(UISingleContentViewerPortlet.WORKSPACE, null);
-      String UUID = prefs.getValue(UISingleContentViewerPortlet.IDENTIFIER, null);
+      String nodeIdentifier = prefs.getValue(UISingleContentViewerPortlet.IDENTIFIER, null);
       RepositoryService repositoryService = uiQuickEditForm.getApplicationComponent(RepositoryService.class);
       ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
       Session session = SessionProviderFactory.createSystemProvider().getSession(workspaceName, manageableRepository);
-      Node webContentNode = session.getNodeByUUID(UUID);
+      Node webContentNode = null; 
+      try {
+        webContentNode = session.getNodeByUUID(nodeIdentifier);
+      } catch (Exception e) {
+        webContentNode = (Node) session.getItem(nodeIdentifier);
+      }
       UIApplication uiApplication = uiQuickEditForm.getAncestorOfType(UIApplication.class);
 
       if (uiQuickEditForm.nodeIsLocked(webContentNode)) {
