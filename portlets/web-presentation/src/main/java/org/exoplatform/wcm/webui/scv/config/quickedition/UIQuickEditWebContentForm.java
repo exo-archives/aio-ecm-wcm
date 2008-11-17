@@ -30,6 +30,7 @@ import javax.jcr.version.VersionException;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
+import org.exoplatform.ecm.webui.form.DialogFormActionListeners;
 import org.exoplatform.ecm.webui.utils.DialogFormUtil;
 import org.exoplatform.ecm.webui.utils.LockUtil;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
@@ -63,7 +64,8 @@ import org.exoplatform.webui.event.EventListener;
     lifecycle = UIFormLifecycle.class,
     events = {
       @EventConfig(listeners = UIQuickEditWebContentForm.SaveActionListener.class),
-      @EventConfig(listeners = UIQuickEditWebContentForm.CancelActionListener.class)
+      @EventConfig(listeners = UIQuickEditWebContentForm.CancelActionListener.class),
+      @EventConfig(listeners = DialogFormActionListeners.RemoveDataActionListener.class)
     }
 )
 
