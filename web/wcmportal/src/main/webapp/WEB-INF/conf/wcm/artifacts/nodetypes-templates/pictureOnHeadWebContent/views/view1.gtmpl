@@ -119,7 +119,7 @@
 <%
 	if(isCommentingEnable) {
 %>
-		<div class="comments"><% _ctx.include(uicomponent.getViewTemplate("exo:comment", "view1")); %></div>
+		<div class="comments"><% _ctx.include(uicomponent.getViewTemplate("exo:comments", "view1")); %></div>
 <%	
 	}
 %>
@@ -127,7 +127,7 @@
 <% 
 	if(isVotingEnable) {
 %>
-		<div class="Vote"><% _ctx.include(uicomponent.getViewTemplate("exo:vote", "view1")); %></div>
+		<div class="Vote"><% _ctx.include(uicomponent.getViewTemplate("mix:votable", "view1")); %></div>
 <%
 	}
 %>

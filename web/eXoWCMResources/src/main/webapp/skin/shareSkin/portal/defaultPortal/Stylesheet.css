@@ -4,6 +4,7 @@
 
 #UIContainer-DefaultPortalContainer .UITableColumnContainer {
 	width: 100%;
+	position: relative;
 }
 
 #UIContainer-DefaultPortalContainer #UIContainer-Banner {
