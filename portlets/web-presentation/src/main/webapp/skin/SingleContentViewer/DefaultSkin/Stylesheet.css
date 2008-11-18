@@ -235,15 +235,25 @@
 }
 
 
-.QuickEditContainer {
-	border: 1px solid green;
+.UISingleContentViewerPortlet .QuickEditContainer {
+	border: 1px solid #b7b7b7;
+	background: white;
 }
 
-.QuickEditBackButton {
+.UISingleContentViewerPortlet .QuickEditBackButton {
 	text-align: right;
-	color: #0066FF;
-	margin:10px;
 	padding:10px;
+	background: url('background/WizardStepBar.gif') repeat-x bottom;
+	border-top: 1px solid #b7b7b7;
+}
+
+.UISingleContentViewerPortlet .QuickEditBackButton a {
+	color: #ff5400;
+	font-weight: bold; font-size: 12px;
+}
+
+.UISingleContentViewerPortlet .QuickEditBackButton a:hover {
+	text-decoration: underline;
 }
 
 .UISingleContentViewerPortlet .UICategorizing .ActionContainer {
