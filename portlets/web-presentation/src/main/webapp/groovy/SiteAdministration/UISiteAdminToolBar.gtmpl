@@ -8,20 +8,24 @@
 %>
 <div class="UISiteAdminToolBar" id="$uicomponent.id">
 	<% 
-	ArrayList<Event> listAction = uicomponent.getComponentConfig().getEvents();
-	String listHiddenActions = "";
-	for (int i = 0; i < listAction.size(); i++) {
-		String action = listAction.get(i).getName();
-		String actionLabel = _ctx.appRes("UISiteAdminToolbar.action." + action); 
-		String actionIcon = action + "Icon";
-		String link = uicomponent.event(action);		
+	ArrayList<Event> listAction = uicomponent.getComponentConfig().getEvents();	
+	String addPageLink = uicomponent.event("AddPage");
+	String editPageLink = uicomponent.event("EditPage");
+	String createPortalLink = uicomponent.event("CreatePortal");
+	String editPortalLink = uicomponent.event("EditPortal");
+	String changePortalLink = uicomponent.event("ChangePortal");
+	
+	String addPageActionLabel = _ctx.appRes("UISiteAdminToolbar.action.AddPage");
+	String editPageActionLabel = _ctx.appRes("UISiteAdminToolbar.action.EditPage");
+	String createPortalActionLabel = _ctx.appRes("UISiteAdminToolbar.action.CreatePortal");
+	String changePortalActionLabel = _ctx.appRes("UISiteAdminToolbar.action.ChangePortal");
+	String editPortalActionLabel = _ctx.appRes("UISiteAdminToolbar.action.EditPortal");	 			
 	%>
-		<a class="Icon $actionIcon" href="$link">
-			<div onclick="showWorkspaceArea();">$actionLabel</div>
-		</a>			      		
-	<%	
-	}
-	%>	
+	<a class="Icon AddPageIcon" href="$addPageLink" onclick="showWorkspaceArea();">$addPageActionLabel</a>
+	<a class="Icon EditPageIcon" href="$editPageLink" onclick="showWorkspaceArea();">$editPageActionLabel</a>
+	<a class="Icon CreatePortalIcon" href="$createPortalLink">$createPortalActionLabel</a>
+	<a class="Icon EditPortalIcon" href="$editPortalLink" onclick="showWorkspaceArea();">$editPortalActionLabel</a>
+	<a class="Icon ChangePortalIcon" href="$changePortalLink">$changePortalActionLabel</a>			      				
 	<div class="ExoLogo"><span></span></div>
 	<div style="clear:right"><span></span></div>
 </div>

@@ -1,37 +1,40 @@
-.UISiteAdminToolBar {	
+.UISiteAdministrationPortlet {
+}
+
+.UISiteAdministrationPortlet .UISiteAdminToolBar {	
 	height: 30px;
 	padding-right: 10px;
 	background-color: RGB(240, 240, 240);
 }
 
-.UISiteAdminToolBar .Icon {
+.UISiteAdministrationPortlet .UISiteAdminToolBar .Icon {
 	line-height: 30px;	
 	padding-left: 25px;	
 	margin-left: 15px;
 	float: right;
 }
 
-.UISiteAdminToolBar .AddPageIcon {
+.UISiteAdministrationPortlet .UISiteAdminToolBar .AddPageIcon {
 	background: url('DefaultSkin/icons/AddPage.gif') no-repeat left center;  
 }
 
-.UISiteAdminToolBar .EditPageIcon {
+.UISiteAdministrationPortlet .UISiteAdminToolBar .EditPageIcon {
 	background: url('DefaultSkin/icons/EditPage.gif') no-repeat left center;
 }
 
-.UISiteAdminToolBar .EditPortalIcon {
+.UISiteAdministrationPortlet .UISiteAdminToolBar .EditPortalIcon {
 	background: url('DefaultSkin/icons/EditPortal.gif') no-repeat left center;
 }
 
-.UISiteAdminToolBar .CreatePortalIcon{
+.UISiteAdministrationPortlet .UISiteAdminToolBar .CreatePortalIcon{
 	background: url('DefaultSkin/icons/AddPortal.gif') no-repeat left center;
 }
 
-.UISiteAdminToolBar .ChangePortalIcon {
+.UISiteAdministrationPortlet .UISiteAdminToolBar .ChangePortalIcon {
 	background: url('DefaultSkin/icons/Organization.gif') no-repeat left center;
 }
 
-.UISiteAdminToolBar .ExoLogo {
+.UISiteAdministrationPortlet .UISiteAdminToolBar .ExoLogo {
 	background: url('DefaultSkin/icons/favicon.gif') no-repeat left center;
 	height: 20px;
 	width: 20px;

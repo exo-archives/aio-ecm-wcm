@@ -90,8 +90,7 @@ public class UIContentListViewerPortlet extends UIPortletApplication {
   }
 
   public boolean canEditPortlet() throws Exception {
-    PortletRequestContext context = (PortletRequestContext) WebuiRequestContext
-        .getCurrentInstance();
+    PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     String portalName = Util.getUIPortal().getName();
     String userId = context.getRemoteUser();
     DataStorage dataStorage = getApplicationComponent(DataStorage.class);
@@ -99,5 +98,5 @@ public class UIContentListViewerPortlet extends UIPortletApplication {
     UserACL userACL = getApplicationComponent(UserACL.class);
     return userACL.hasEditPermission(portalConfig, userId);
   }
-
+  
 }
