@@ -29,14 +29,14 @@ SkinService.addSkin(
 SkinService.addSkin(
     "web-presentation/SiteAdministrationPortlet",
     "Vista",
-    "/web-presentation/skin/SiteAdministration/VistaStylesheet.css",
+    "/web-presentation/skin/SiteAdministration/DefaultStylesheet.css",
     ServletContext
 ) ;
  
 SkinService.addSkin(
     "web-presentation/SiteAdministrationPortlet",
     "Mac",
-    "/web-presentation/skin/SiteAdministration/MacStylesheet.css",
+    "/web-presentation/skin/SiteAdministration/DefaultStylesheet.css",
     ServletContext
 ) ;
 
@@ -51,13 +51,13 @@ SkinService.addSkin(
 SkinService.addSkin(
 	"web-presentation/ContentListViewerPortlet",
 	"Mac",
-	"/web-presentation/skin/ContentListViewer/MacStylesheet.css",
+	"/web-presentation/skin/ContentListViewer/DefaultStylesheet.css",
 	ServletContext
 );
 
 SkinService.addSkin(
 	"web-presentation/ContentListViewerPortlet",
 	"Vista",
-	"/web-presentation/skin/ContentListViewer/VistaStylesheet.css",
+	"/web-presentation/skin/ContentListViewer/DefaultStylesheet.css",
 	ServletContext
 );
