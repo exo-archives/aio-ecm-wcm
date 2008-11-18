@@ -1,4 +1,6 @@
-function showWorkspaceArea() {
-	 eXo.portal.UIControlWorkspace.showControlWorkspace = false;
-	 eXo.portal.UIControlWorkspace.showWorkspace();
+function showWorkspaceArea(showable) {	
+	if (showable === true) {		
+		eXo.portal.UIControlWorkspace.showControlWorkspace = false;
+		eXo.portal.UIControlWorkspace.showWorkspace();
+	} 
 }

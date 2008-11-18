@@ -19,12 +19,14 @@
 	String editPageActionLabel = _ctx.appRes("UISiteAdminToolbar.action.EditPage");
 	String createPortalActionLabel = _ctx.appRes("UISiteAdminToolbar.action.CreatePortal");
 	String changePortalActionLabel = _ctx.appRes("UISiteAdminToolbar.action.ChangePortal");
-	String editPortalActionLabel = _ctx.appRes("UISiteAdminToolbar.action.EditPortal");	 			
+	String editPortalActionLabel = _ctx.appRes("UISiteAdminToolbar.action.EditPortal");
+		 			
+	boolean showable  = uicomponent.isShowWorkspaceArea();	 			
 	%>
-	<a class="Icon AddPageIcon" href="$addPageLink" onclick="showWorkspaceArea();">$addPageActionLabel</a>
-	<a class="Icon EditPageIcon" href="$editPageLink" onclick="showWorkspaceArea();">$editPageActionLabel</a>
+	<a class="Icon AddPageIcon" href="$addPageLink" onclick="showWorkspaceArea($showable);">$addPageActionLabel</a>
+	<a class="Icon EditPageIcon" href="$editPageLink" onclick="showWorkspaceArea($showable);">$editPageActionLabel</a>
 	<a class="Icon CreatePortalIcon" href="$createPortalLink">$createPortalActionLabel</a>
-	<a class="Icon EditPortalIcon" href="$editPortalLink" onclick="showWorkspaceArea();">$editPortalActionLabel</a>
+	<a class="Icon EditPortalIcon" href="$editPortalLink" onclick="showWorkspaceArea($showable);">$editPortalActionLabel</a>
 	<a class="Icon ChangePortalIcon" href="$changePortalLink">$changePortalActionLabel</a>			      				
 	<div class="ExoLogo"><span></span></div>
 	<div style="clear:right"><span></span></div>

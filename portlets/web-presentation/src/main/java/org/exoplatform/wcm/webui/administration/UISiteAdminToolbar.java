@@ -21,6 +21,8 @@ import org.exoplatform.portal.webui.workspace.UIPortalToolPanel;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
 import org.exoplatform.portal.webui.workspace.UIControlWorkspace.UIControlWSWorkingArea;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.event.Event;
@@ -62,6 +64,15 @@ import org.exoplatform.webui.event.EventListener;
 public class UISiteAdminToolbar extends UIContainer {
 
   public UISiteAdminToolbar() {    
+  }
+  
+  public boolean isShowWorkspaceArea() throws Exception {
+    UserACL userACL = getApplicationComponent(UserACL.class);
+    PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+    String userId = context.getRemoteUser();
+    if (userACL.hasAccessControlWorkspacePermission(userId))
+      return true;
+    return false;
   }
     
 
