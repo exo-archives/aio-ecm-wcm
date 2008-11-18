@@ -89,7 +89,8 @@ FCKConfig.ShowBorders	= true ;
 FCKConfig.SourcePopup	= false ;
 FCKConfig.ToolbarStartExpanded	= true ;
 FCKConfig.ToolbarCanCollapse	= true ;
-FCKConfig.IgnoreEmptyParagraphValue = true ;
+FCKConfig.IgnoreEmptyParagraphValue = false ;
+FCKConfig.ProtectedSource.Add(/<span><\/span>/g);
 
 FCKConfig.FloatingPanelsZIndex = 10000 ;
 FCKConfig.HtmlEncodeOutput = false ;
