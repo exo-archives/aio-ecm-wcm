@@ -21,14 +21,14 @@
   		</container>
   		<container id="Login" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
 	  		<application>
-				  <instance-id>portal#classic:/web-presentation/SingleContentViewer/classic-login</instance-id>
+				  <instance-id>portal#classic:/web-presentation/SingleContentViewer/classic-access</instance-id>
 				  <show-info-bar>false</show-info-bar>
 				</application>
   		</container>
   	</container>
 	  
 	  <application>
-	  	<instance-id>portal#classic:/web/NavigationPortlet/classic-toolbar</instance-id>
+	  	<instance-id>portal#classic:/web-presentation/SingleContentViewer/classic-toolbar</instance-id>
 	    <show-info-bar>false</show-info-bar>
 	  </application>
 	  

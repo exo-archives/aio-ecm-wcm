@@ -119,7 +119,7 @@
 	  <access-permissions>Everyone</access-permissions>	  
 	  <edit-permission>*:/platform/administrators</edit-permission>
 	  <application>
-      <instance-id>portal#classic:/web/SiteMapPortlet/classic-sitemapportlet</instance-id>
+      <instance-id>portal#classic:/web-presentation/SingleContentViewer/classic-sitemap</instance-id>
       <title>Site Map</title>
       <show-info-bar>false</show-info-bar>      
     </application>          

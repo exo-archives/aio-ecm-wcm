@@ -29,7 +29,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>classic</owner-id>
-    <window-id>portal#classic:/web-presentation/SingleContentViewer/classic-login</window-id>
+    <window-id>portal#classic:/web-presentation/SingleContentViewer/classic-access</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -43,6 +43,32 @@
     <preference>
       <name>nodeIdentifier</name>
       <value>/sites content/live/classic/web contents/site artifacts/access/Default</value>
+      <read-only>false</read-only>
+    </preference>
+    <preference>
+      <name>ShowQuickEdit</name>
+      <value>true</value>
+      <read-only>false</read-only>
+    </preference>
+  </portlet-preferences>
+  
+  <portlet-preferences>
+    <owner-type>portal</owner-type>
+    <owner-id>classic</owner-id>
+    <window-id>portal#classic:/web-presentation/SingleContentViewer/classic-toolbar</window-id>
+    <preference>
+      <name>repository</name>
+      <value>repository</value>
+      <read-only>false</read-only>
+    </preference>
+    <preference>
+      <name>workspace</name>
+      <value>collaboration</value>
+      <read-only>false</read-only>
+    </preference>
+    <preference>
+      <name>nodeIdentifier</name>
+      <value>/sites content/live/classic/web contents/site artifacts/navigation/Default</value>
       <read-only>false</read-only>
     </preference>
     <preference>
@@ -95,6 +121,32 @@
     <preference>
       <name>nodeIdentifier</name>
      <value>/sites content/live/classic/web contents/site artifacts/homepage/Default</value>
+      <read-only>false</read-only>
+    </preference>
+    <preference>
+      <name>ShowQuickEdit</name>
+      <value>true</value>
+      <read-only>false</read-only>
+    </preference>
+  </portlet-preferences>
+  
+  <portlet-preferences>
+    <owner-type>portal</owner-type>
+    <owner-id>classic</owner-id>
+    <window-id>portal#classic:/web-presentation/SingleContentViewer/classic-sitemap</window-id>
+    <preference>
+      <name>repository</name>
+      <value>repository</value>
+      <read-only>false</read-only>
+    </preference>
+    <preference>
+      <name>workspace</name>
+      <value>collaboration</value>
+      <read-only>false</read-only>
+    </preference>
+    <preference>
+      <name>nodeIdentifier</name>
+     <value>/sites content/live/classic/web contents/site artifacts/sitemap/Default</value>
       <read-only>false</read-only>
     </preference>
     <preference>

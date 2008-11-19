@@ -100,17 +100,17 @@
             </object>
           </object-param>
           <object-param>        
-            <name>Footer data</name>
+            <name>Navigation data</name>
             <description>Deployment Descriptor</description>
             <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
               <field  name="target">
               	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
               		<field  name="repository"><string>repository</string></field>
               		<field  name="workspace"><string>collaboration</string></field>
-              		<field  name="nodePath"><string>/sites content/live/classic/web contents/site artifacts/footer</string></field>
+              		<field  name="nodePath"><string>/sites content/live/classic/web contents/site artifacts/navigation</string></field>
               	</object>
               </field>
-              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/classic/Footer.xml</string></field>
+              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/classic/Navigation.xml</string></field>
             </object>
           </object-param>
           <object-param>        
@@ -126,7 +126,35 @@
               </field>
               <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/classic/Homepage.xml</string></field>
             </object>
+          </object-param>
+          <object-param>        
+            <name>Sitemap data</name>
+            <description>Deployment Descriptor</description>
+            <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
+              <field  name="target">
+              	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
+              		<field  name="repository"><string>repository</string></field>
+              		<field  name="workspace"><string>collaboration</string></field>
+              		<field  name="nodePath"><string>/sites content/live/classic/web contents/site artifacts/sitemap</string></field>
+              	</object>
+              </field>
+              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/classic/Sitemap.xml</string></field>
+            </object>
           </object-param> 
+          <object-param>        
+            <name>Footer data</name>
+            <description>Deployment Descriptor</description>
+            <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
+              <field  name="target">
+              	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
+              		<field  name="repository"><string>repository</string></field>
+              		<field  name="workspace"><string>collaboration</string></field>
+              		<field  name="nodePath"><string>/sites content/live/classic/web contents/site artifacts/footer</string></field>
+              	</object>
+              </field>
+              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/classic/Footer.xml</string></field>
+            </object>
+          </object-param>
         </init-params>  
       </component-plugin> 
    </external-component-plugins>
