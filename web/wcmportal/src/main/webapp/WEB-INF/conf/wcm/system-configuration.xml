@@ -6,7 +6,7 @@
     <init-params>
     	<value-param>
 	      <name>parameterizedPageURI</name>
-	      <value>/contentviewer</value>
+	      <value>/parameterizedviewer</value>
 	    </value-param>
 	    <value-param>
 	      <name>publishingPortletName</name>

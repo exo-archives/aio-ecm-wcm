@@ -42,11 +42,11 @@
 			<page-reference>portal::classic::search</page-reference>	    
 		</node> 
 		<node>
-			<uri>contentviewer</uri>
-			<name>contentviewer</name>
-			<label>#{portal.classic.contentviewer}</label>
+			<uri>parameterizedviewer</uri>
+			<name>parameterizedviewer</name>
+			<label>#{portal.classic.parameterizedviewer}</label>
 			<visible>false</visible>
-			<page-reference>portal::classic::contentviewer</page-reference>
+			<page-reference>portal::classic::parameterizedviewer</page-reference>
 		</node> 	        	    
 		<node>
 			<uri>sitemap</uri>

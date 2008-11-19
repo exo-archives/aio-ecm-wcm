@@ -125,16 +125,16 @@
     </application>          
   </page>  
   <page>
-  	<page-id>portal::classic::contentviewer</page-id>
+  	<page-id>portal::classic::parameterizedviewer</page-id>
     <owner-type>portal</owner-type>
     <owner-id>classic</owner-id>
-    <name>contentviewer</name>
-    <title>ContentViewer</title>
+    <name>parameterizedviewer</name>
+    <title>ParameterizedViewer</title>
     <access-permissions>Everyone</access-permissions> 
     <edit-permission>*:/platform/administrators</edit-permission>
     <application>
-      <instance-id>portal#classic:/ecm/ContentViewerPortlet/classic-contentviewer</instance-id>
-      <title>contentviewer</title>
+      <instance-id>portal#classic:/web-presentation/ParameterizedContentViewerPortlet/classic-parameterizedviewer</instance-id>
+      <title>parameterizedviewer</title>
       <show-info-bar>false</show-info-bar>      
       <show-application-state>false</show-application-state>
       <show-application-mode>false</show-application-mode>
