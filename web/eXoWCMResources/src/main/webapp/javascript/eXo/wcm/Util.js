@@ -80,3 +80,8 @@ function showObject(div) {
 	if (!div.style.display || div.style.display == 'none') div.style.display = 'block';
 	else div.style.display = 'none';
 }
+
+function getHostName() {
+	var parentLocation = window.parent.location;
+	return parentLocation.href.substring(0, parentLocation.href.indexOf(parentLocation.pathname));
+}
