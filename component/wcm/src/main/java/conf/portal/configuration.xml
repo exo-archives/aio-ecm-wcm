@@ -78,6 +78,14 @@
   <component>    
     <type>org.exoplatform.services.wcm.navigation.RESTNavigationService</type>    
   </component>
+  
+  <component>    
+    <type>org.exoplatform.services.wcm.organization.RESTOrganizationService</type>    
+  </component>
+  
+  <component>    
+    <type>org.exoplatform.services.wcm.resourcebundle.RESTResourceBundleService</type>    
+  </component>
             
   <component>
     <key>org.exoplatform.services.wcm.core.WebSchemaConfigService</key>

@@ -39,20 +39,39 @@ import org.exoplatform.ws.frameworks.json.transformer.Bean2JsonOutputTransformer
 
 /**
  * Created by The eXo Platform SAS
- * Author : Hoa Pham	
- *          hoa.phamvu@exoplatform.com
- * Nov 12, 2008  
+ * Author : Hoa Pham
+ * hoa.phamvu@exoplatform.com
+ * Nov 12, 2008
  */
 @URITemplate("/wcmNavigation/")
 public class RESTNavigationService implements ResourceContainer{
 
-  private UserPortalConfigService portalConfigService;     
+  private UserPortalConfigService portalConfigService;       
   private LocaleConfigService localeConfigService;
+  
+  /**
+   * Instantiates a new rest navigation service.
+   * 
+   * @param portalConfigService the portal config service
+   * @param localeConfigService the locale config service
+   * 
+   * @throws Exception the exception
+   */
   public RESTNavigationService(UserPortalConfigService portalConfigService, LocaleConfigService localeConfigService) throws Exception {
     this.portalConfigService = portalConfigService;        
     this.localeConfigService = localeConfigService;
   }
-
+  
+  /**
+   * Retrieve  the navigations of current user on a portal name
+   * 
+   * @param portalName the portal name
+   * @param language the language
+   * 
+   * @return the navigations
+   * 
+   * @throws Exception the exception
+   */
   @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/getPortalNavigations/")
   @OutputTransformer(Bean2JsonOutputTransformer.class)
@@ -62,19 +81,24 @@ public class RESTNavigationService implements ResourceContainer{
     if(language == null) 
       language = Locale.ENGLISH.getLanguage();
     List<PageNavigation> navigations = portalConfigService.getUserPortalConfig(portalName, userId).getNavigations();
-    LocaleConfig localeConfig = localeConfigService.getLocaleConfig(language);
+    LocaleConfig localeConfig = localeConfigService.getLocaleConfig(language);   
     for(PageNavigation nav : navigations) {
       if(nav.getOwnerType().equals(PortalConfig.USER_TYPE)) continue ;
       ResourceBundle res = localeConfig.getNavigationResourceBundle(nav.getOwnerType(), nav.getOwnerId()) ;
       for(PageNode node : nav.getNodes()) {
-        resolveLabel(res, node) ;
+        processPageNode(res, node) ;
       }
     }
     PortalNavigation portalNavigation = new PortalNavigation(navigations);    
     return Response.Builder.ok(portalNavigation).mediaType("text/xml").build();
   }     
-  
+
   //TODO need retrieve current user from REST in REST 2.0
+  /**
+   * Gets the current user id.
+   * 
+   * @return the current user id
+   */
   private String getCurrentUserId() {
     try {
       ConversationState conversationState = ConversationState.getCurrent();
@@ -84,20 +108,52 @@ public class RESTNavigationService implements ResourceContainer{
     return null;
   }
 
-  private void resolveLabel(ResourceBundle res, PageNode node) {
-    node.setResolvedLabel(res) ;
+  /**
+   * Process page node.
+   * 
+   * @param res the res
+   * @param node the node
+   */
+  private void processPageNode(ResourceBundle res, PageNode node) {
+    node.setResolvedLabel(res) ;    
+    if(node.isVisible()) {
+      boolean isDisplay = node.isDisplay();
+      if(!isDisplay) node.setVisible(false);
+    }
     if(node.getChildren() == null) return;
     for(PageNode childNode : node.getChildren()) {
-      resolveLabel(res, childNode) ;
+      processPageNode(res, childNode) ;
     }
   }
 
+  /**
+   * The Class PortalNavigation.
+   */
   public static class PortalNavigation {
+    
     private List<PageNavigation> navigations = new ArrayList<PageNavigation>();
+    
+    /**
+     * Instantiates a new portal navigation.
+     * 
+     * @param list the list
+     */
     public PortalNavigation(List<PageNavigation> list) {
       this.navigations = list;
     }    
+    
+    /**
+     * Gets the navigations.
+     * 
+     * @return the navigations
+     */
     public List<PageNavigation> getNavigations() { return this.navigations; }
+    
+    /**
+     * Sets the navigations.
+     * 
+     * @param list the new navigations
+     */
     public void setNavigations(List<PageNavigation> list) { this.navigations = list; }
   }      
 }
