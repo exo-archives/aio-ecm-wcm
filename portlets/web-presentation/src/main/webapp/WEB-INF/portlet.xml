@@ -182,4 +182,33 @@
     </security-role-ref>	
   </portlet>
   
+    
+  <portlet>
+  	<description xml:lang="EN">Parameterized Content Viewer</description>
+  	<portlet-name>ParameterizedContentViewerPortlet</portlet-name>
+  	<display-name xml:lang="EN">Parameterized Content Viewer</display-name>
+  	<portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>    
+  	
+  	<init-param>
+      <name>webui.configuration</name>
+      <value>/WEB-INF/conf/portlet/ParameterizedContentViewer/webui/configuration.xml</value>
+    </init-param>    
+  	
+  	<expiration-cache>0</expiration-cache>
+  	
+    <supports>
+      <mime-type>text/html</mime-type>
+      <portlet-mode>help</portlet-mode>
+      <portlet-mode>edit</portlet-mode>
+    </supports>    
+    <supported-locale>en</supported-locale>    
+    <resource-bundle>locale.portlet.ParameterizedViewer.ParameterizedContentViewer</resource-bundle>    																														
+    
+     <portlet-info>
+      <title>Parameterized Content Viewer</title>
+      <short-title>Parameterized Content Viewer</short-title>
+      <keywords>portlet, content</keywords>
+    </portlet-info>
+  </portlet>
+  
 </portlet-app>
