@@ -70,14 +70,16 @@
 		StringBuffer categories = new StringBuffer();
 		CategoriesService categoriesService = uicomponent.getApplicationComponent(CategoriesService.class);
 		if(categoriesService.hasCategories(currentNode)) {
-      List<Node> categoryNodeList = categoriesService.getCategories(currentNode, repositoryName);
-      for (Node category: categoryNodeList) {
-        categories.append(category.getName()).append(", ");
-      }
-    	categories.replace(categories.lastIndexOf(", "), categories.size(), "");
+			if (currentNode.getProperty("exo:category").getValues().length > 0) {
+       List<Node> categoryNodeList = categoriesService.getCategories(currentNode, repositoryName);
+       for (Node category: categoryNodeList) {
+         categories.append(category.getName()).append(", ");
+       }
+    	 categories.replace(categories.lastIndexOf(", "), categories.size(), "");
 %>
-		<div class="Categories"><%=_ctx.appRes("Category.view.label")%>: <%= categories.toString(); %></div>
-<%
+		   <div class="Categories"><%=_ctx.appRes("Category.view.label")%>: <%= categories.toString(); %></div>
+<%		
+			}
     }
 	}
 %>
