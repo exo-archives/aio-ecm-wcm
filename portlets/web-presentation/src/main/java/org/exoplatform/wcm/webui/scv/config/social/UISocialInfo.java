@@ -55,29 +55,15 @@ public class UISocialInfo extends UITabPane {
     setSelectedTab(uiPermission.getId()) ;
   }
 
-  public void initUICategorizing() throws Exception {
+  public void initUICategorizing(Node webContentNode) throws Exception {
     UICategorizing uiCategorizing = getChild(UICategorizing.class);
-    uiCategorizing.setWebContentNode(getWebContentNode());
-    uiCategorizing.setExistedCategories(getExistedCategory());
+    uiCategorizing.setWebContentNode(webContentNode);
+    uiCategorizing.setExistedCategories(getExistedCategory(webContentNode));
     uiCategorizing.initUICategoriesSelector();
   }
 
-  private Node getWebContentNode() throws Exception {
-    UIQuickCreationWizard uiQuickCreationWizard = getAncestorOfType(UIQuickCreationWizard.class);
-    UIContentDialogForm uiContentDialogForm = uiQuickCreationWizard.getChild(UIContentDialogForm.class);
-    String webContentUUID = uiContentDialogForm.savedNodeIdentifier.getUUID();
-    RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
-    ManageableRepository manageableRepository = repositoryService.getCurrentRepository();
-    String workspace = manageableRepository.getConfiguration().getDefaultWorkspaceName();
-    SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
-    Session session = sessionProvider.getSession(workspace, manageableRepository);
-    Node webContentNode = session.getNodeByUUID(webContentUUID);
-    return webContentNode;
-  }
-
-  private List<String> getExistedCategory() throws Exception {
+  private List<String> getExistedCategory(Node webContentNode) throws Exception {
     List<String> existedCategory = new ArrayList<String>();
-    Node webContentNode = getWebContentNode();
     Session session = webContentNode.getSession();
     String repositoryName = ((ManageableRepository)session.getRepository()).getConfiguration().getName();
     CategoriesService categoriesService = getApplicationComponent(CategoriesService.class);

@@ -303,7 +303,7 @@ public class UIContentDialogForm extends UIDialogForm {
       }
       UIQuickCreationWizard uiQuickWizard = dialogForm.getAncestorOfType(UIQuickCreationWizard.class);
       UISocialInfo uiSocialInfo = uiQuickWizard.getChild(UISocialInfo.class);
-      uiSocialInfo.initUICategorizing();
+      uiSocialInfo.initUICategorizing(newNode);
       UIPermissionManager uiPermissionManager = uiSocialInfo.getChild(UIPermissionManager.class);
       ((UIPermissionInfo) uiPermissionManager.getChild(UIPermissionInfo.class)).updateGrid();
       uiQuickWizard.viewStep(3);

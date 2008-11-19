@@ -21,6 +21,7 @@ import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.Session;
+import javax.jcr.Value;
 
 import org.exoplatform.ecm.webui.selector.UISelectable;
 import org.exoplatform.ecm.webui.tree.selectmany.UICategoriesSelector;
@@ -68,15 +69,11 @@ public class UICategorizing extends UIContainer implements UISelectable {
     String repositoryName = ((ManageableRepository)session.getRepository()).getConfiguration().getName();
     List<String> newCategoryPaths = (List<String>) value;
     List<String> oldCategoryPaths = getExistedCategories();
-    List<String> tempCategoryPaths = new ArrayList<String>(oldCategoryPaths);
-    tempCategoryPaths.removeAll(newCategoryPaths);
-
-    for(String categoryPath: tempCategoryPaths) {
-      categoriesService.removeCategory(webContentNode, categoryPath, repositoryName);
+    for (String oldCategory: oldCategoryPaths) {
+      categoriesService.removeCategory(webContentNode, oldCategory, repositoryName);
     }
-    newCategoryPaths.removeAll(new ArrayList<String>(oldCategoryPaths));
-    for (String categoryPath: newCategoryPaths) {
-      categoriesService.addCategory(webContentNode, categoryPath, repositoryName);
+    for (String newCategory: newCategoryPaths) {
+      categoriesService.addCategory(webContentNode, newCategory, repositoryName);
     }
   }
 
