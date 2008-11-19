@@ -16,7 +16,7 @@
 	      <name>share.portal.config</name>
 	      <description>share portal name for each repository</description>
 	      <property name="repository" value="repository"/>
-	      <property name="portalName" value="share portal"/>                        
+	      <property name="portalName" value="shared"/>                        
 	    </properties-param>
 	    <object-param>
 	        <name>live.portals.location.config</name>

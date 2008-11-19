@@ -30,14 +30,14 @@
             </object>
           </object-param>            
 		  <object-param>        
-            <name>shared portal</name>
-            <description>shared portal</description>
+            <name>shared</name>
+            <description>shared</description>
             <object type="org.exoplatform.services.cms.drives.DriveData">
-              <field  name="name"><string>shared portal</string></field>
+              <field  name="name"><string>shared</string></field>
               <field  name="repository"><string>repository</string></field>
               <field  name="workspace"><string>collaboration</string></field>
               <field  name="permissions"><string>*:/platform/administrators</string></field>
-              <field  name="homePath"><string>/sites content/live/share portal</string></field>
+              <field  name="homePath"><string>/sites content/live/shared</string></field>
               <field  name="icon"><string></string></field>
               <field  name="views"><string>wcm-view,admin-view,icon-view,cover-flow,thumbnails-view</string></field>
               <field  name="viewPreferences"><boolean>false</boolean></field>
