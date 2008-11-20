@@ -23,8 +23,11 @@ function getNavigations(renderFunction) {
 
 function getCurrentNodes(navigations) {
 	var currentNodes = new Array();
-	
 	var prefixPortalBaseURL = eXo.env.portal.context + '/' + eXo.env.portal.accessMode + '/' + eXo.env.portal.portalName + '/';
+	if (prefixPortalBaseURL == (eXo.env.server.portalBaseURL+"/")) {
+		currentNodes[0] = navigations[0].nodes[0];
+		return currentNodes;
+	}
 	var currentUri = eXo.env.server.portalBaseURL.substring(prefixPortalBaseURL.length,eXo.env.server.portalBaseURL.length);
 	var currentNodeUris = currentUri.split("/");
 	
