@@ -21,7 +21,7 @@ function getNavigations(renderFunction) {
 	http.send(null);
 }
 
-function getCurrentNodes() {
+function getCurrentNodes(navigations) {
 	var currentNodes = new Array();
 	
 	var prefixPortalBaseURL = eXo.env.portal.context + '/' + eXo.env.portal.accessMode + '/' + eXo.env.portal.portalName + '/';
@@ -36,7 +36,7 @@ function getCurrentNodes() {
 			}
 		}
 	}
-	getChild(currentNodeUris, currentNodes[0].children, 1);
+	
 	function getChild(currentNodeUris, children, index) {
 		for (var i in children) {
 			if(currentNodeUris[index] == children[i].name) {
@@ -48,5 +48,9 @@ function getCurrentNodes() {
 			getChild(currentNodeUris, currentNodes[index].children, ++index); 
 		}
 	}
+	
+	if (currentNodeUris.length > 1)
+		getChild(currentNodeUris, currentNodes[0].children, 1);
+		
 	return currentNodes;
 }

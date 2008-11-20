@@ -73,7 +73,7 @@
     </preference>
     <preference>
       <name>ShowQuickEdit</name>
-      <value>true</value>
+      <value>false</value>
       <read-only>false</read-only>
     </preference>
   </portlet-preferences>
