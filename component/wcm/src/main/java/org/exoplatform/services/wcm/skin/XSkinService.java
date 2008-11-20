@@ -134,7 +134,7 @@ public class XSkinService implements Startable {
     for(Iterator<String> iterator= skinService.getAvailableSkins();iterator.hasNext();) {
       String skinName = iterator.next();
       skinPath = StringUtils.replaceOnce(skinPath,"(.*)",skinName);
-      skinService.addSkin(portal.getName(), skinName, skinPath, cssData);
+      //skinService.(portal.getName(), skinName, skinPath, cssData);
     }       
   }  
 
