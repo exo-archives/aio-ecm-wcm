@@ -179,7 +179,20 @@ public class UIDocumentDialogForm extends UIDialogForm {
 
   public static class CancelActionListener extends EventListener<UIDocumentDialogForm> {
     public void execute(Event<UIDocumentDialogForm> event) throws Exception {
-
+      UIDocumentDialogForm uiDocumentDialogForm = event.getSource();
+      Node documentNode = uiDocumentDialogForm.getNode();
+      Session session = documentNode.getSession();
+      ManageableRepository manageableRepository = (ManageableRepository) session.getRepository();
+      String repository = manageableRepository.getConfiguration().getName();
+      String workspace = manageableRepository.getConfiguration().getSystemWorkspaceName();
+      UIContentViewerContainer uiContentViewerContainer = uiDocumentDialogForm.getParent();
+      uiContentViewerContainer.removeChild(UIDocumentDialogForm.class);
+      UIContentViewer uiContentViewer = uiContentViewerContainer.addChild(UIContentViewer.class,
+                                                                          null,
+                                                                          null);
+      uiContentViewer.setNode(documentNode);
+      uiContentViewer.setRepository(repository);
+      uiContentViewer.setWorkspace(workspace);
     }
   }
 
