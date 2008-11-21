@@ -60,9 +60,8 @@ public class UISearchResult extends UIContainer {
 
   private UICustomizeablePaginator uiPaginator;
 
-  private SimpleDateFormat         dateFormatter    = new SimpleDateFormat(
-                                                        ISO8601.SIMPLE_DATETIME_FORMAT);
-  
+  private SimpleDateFormat         dateFormatter    = new SimpleDateFormat(ISO8601.SIMPLE_DATETIME_FORMAT);
+
   private long                     searchTime;
 
   public final static String       PARAMETER_REGX   = "(portal=.*)&(keyword=.*)";
@@ -70,11 +69,10 @@ public class UISearchResult extends UIContainer {
   public final static String       RESULT_NOT_FOUND = "UISearchResult.msg.result-not-found";
 
   public void init(String templatePath, ResourceResolver resourceResolver) throws Exception {
-    PortletRequestContext portletRequestContext = (PortletRequestContext) WebuiRequestContext
-        .getCurrentInstance();
+    PortletRequestContext portletRequestContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     PortletPreferences portletPreferences = portletRequestContext.getRequest().getPreferences();
-    String paginatorTemplatePath = portletPreferences.getValue(
-        UIWCMSearchPortlet.SEARCH_PAGINATOR_TEMPLATE_PATH, null);
+    String paginatorTemplatePath = portletPreferences.getValue(UIWCMSearchPortlet.SEARCH_PAGINATOR_TEMPLATE_PATH,
+                                                               null);
     this.templatePath = templatePath;
     this.resourceResolver = resourceResolver;
     uiPaginator = addChild(UICustomizeablePaginator.class, null, null);
@@ -82,10 +80,10 @@ public class UISearchResult extends UIContainer {
     uiPaginator.setResourceResolver(resourceResolver);
   }
 
+  @SuppressWarnings("static-access")
   public void processRender(WebuiRequestContext context) throws Exception {
     PortletRequestContext porletRequestContext = (PortletRequestContext) context;
-    HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) porletRequestContext
-        .getRequest();
+    HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) porletRequestContext.getRequest();
     String queryString = requestWrapper.getQueryString();
     if (queryString != null && queryString.matches(PARAMETER_REGX)) {
       String[] params = queryString.split("&");
@@ -95,13 +93,17 @@ public class UISearchResult extends UIContainer {
       QueryCriteria queryCriteria = new QueryCriteria();
       queryCriteria.setSiteName(currentPortal);
       queryCriteria.setKeyword(keyword);
-      PortletPreferences portletPreferences = ((PortletRequestContext) context.getCurrentInstance())
-          .getRequest().getPreferences();
+      queryCriteria.setSearchWebpage(true);
+      queryCriteria.setSearchDocument(true);
+      PortletPreferences portletPreferences = ((PortletRequestContext) context.getCurrentInstance()).getRequest()
+                                                                                                    .getPreferences();
       SessionProvider provider = SessionProviderFactory.createSessionProvider();
-      int itemsPerPage = Integer.parseInt(portletPreferences.getValue(
-          UIWCMSearchPortlet.ITEMS_PER_PAGE, null));
-      WCMPaginatedQueryResult paginatedQueryResult = new WCMPaginatedQueryResult(siteSearchService
-          .searchSiteContents(queryCriteria, provider), itemsPerPage, true);
+      int itemsPerPage = Integer.parseInt(portletPreferences.getValue(UIWCMSearchPortlet.ITEMS_PER_PAGE,
+                                                                      null));
+      WCMPaginatedQueryResult paginatedQueryResult = new WCMPaginatedQueryResult(siteSearchService.searchSiteContents(queryCriteria,
+                                                                                                                      provider),
+                                                                                 itemsPerPage,
+                                                                                 true);
       setPageList(paginatedQueryResult);
     }
     if (uiPaginator.getTotalItems() == 0) {
@@ -114,8 +116,7 @@ public class UISearchResult extends UIContainer {
   private void renderErrorMessage(WebuiRequestContext context, String keyBundle) throws Exception {
     Writer writer = context.getWriter();
     String message = context.getApplicationResourceBundle().getString(keyBundle);
-    writer
-        .write("<div style=\"height: 55px; font-size: 13px; text-align: center; padding-top: 10px; border: 1px solid gray; margin: 10px;\">");
+    writer.write("<div style=\"height: 55px; font-size: 13px; text-align: center; padding-top: 10px; border: 1px solid gray; margin: 10px;\">");
     writer.write("<span>");
     writer.write(message);
     writer.write("</span>");
@@ -141,7 +142,7 @@ public class UISearchResult extends UIContainer {
 
   public String getTitle(Node node) throws Exception {
     return node.hasProperty("exo:title") ? node.getProperty("exo:title").getValue().getString()
-        : node.getName();
+                                        : node.getName();
   }
 
   public String getURL(Node node) throws Exception {
@@ -171,8 +172,8 @@ public class UISearchResult extends UIContainer {
   }
 
   public boolean isShowPaginator() throws Exception {
-    PortletPreferences portletPreferences = ((PortletRequestContext) WebuiRequestContext
-        .getCurrentInstance()).getRequest().getPreferences();
+    PortletPreferences portletPreferences = ((PortletRequestContext) WebuiRequestContext.getCurrentInstance()).getRequest()
+                                                                                                              .getPreferences();
     String itemsPerPage = portletPreferences.getValue(UIWCMSearchPortlet.ITEMS_PER_PAGE, null);
     int totalItems = uiPaginator.getTotalItems();
     if (totalItems > Integer.parseInt(itemsPerPage)) {
