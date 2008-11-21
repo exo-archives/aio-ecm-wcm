@@ -1,26 +1,3 @@
-function getNavigations(renderFunction) {
-	var http;
-	var navigations;
-	
-	var serviceUrl = getHostName() + '/portal/rest/wcmNavigation/getPortalNavigations?portalName=' + eXo.env.portal.portalName + '&language=en';
-	
-	if (window.ActiveXObject)
-		http = new ActiveXObject('Microsoft.XMLHTTP');
-	else
-		http = new XMLHttpRequest();
-	http.open('GET', serviceUrl, true);
-	http.onreadystatechange = function() {
-		if (http.readyState == 4) {
-			navigations = http.responseText;
-			navigations = navigations.substring(1, navigations.length - 1);
-			navigations = navigations.replace('"navigations":', 'var navigations = ');
-			eval(navigations);
-			renderFunction(navigations);
-		}
-	};
-	http.send(null);
-}
-
 function getCurrentNodes(navigations) {
 	var currentNodes = new Array();
 	var prefixPortalBaseURL = eXo.env.portal.context + '/' + eXo.env.portal.accessMode + '/' + eXo.env.portal.portalName + '/';

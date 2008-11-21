@@ -15,7 +15,7 @@
         <description>XML Deployment Plugin</description>
         <init-params>
           <object-param>        
-            <name>Banner data</name>
+            <name>ACME Banner data</name>
             <description>Deployment Descriptor</description>
             <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
               <field  name="target">
@@ -29,21 +29,21 @@
             </object>
           </object-param>
           <object-param>        
-            <name>Login data</name>
+            <name>ACME Access data</name>
             <description>Deployment Descriptor</description>
             <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
               <field  name="target">
               	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
               		<field  name="repository"><string>repository</string></field>
               		<field  name="workspace"><string>collaboration</string></field>
-              		<field  name="nodePath"><string>/sites content/live/acme/web contents/site artifacts/banner</string></field>
+              		<field  name="nodePath"><string>/sites content/live/acme/web contents/site artifacts/access</string></field>
               	</object>
               </field>
-              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme/loginUI.xml</string></field>
+              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme/Access.xml</string></field>
             </object>
           </object-param>
           <object-param>        
-            <name>Footer data</name>
+            <name>ACME Footer data</name>
             <description>Deployment Descriptor</description>
             <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
               <field  name="target">
@@ -57,7 +57,7 @@
             </object>
           </object-param>
           <object-param>        
-            <name>Homepage data</name>
+            <name>ACME Homepage data</name>
             <description>Deployment Descriptor</description>
             <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
               <field  name="target">
@@ -72,7 +72,7 @@
           </object-param>
           
           <object-param>        
-            <name>Banner data</name>
+            <name>Classic Banner data</name>
             <description>Deployment Descriptor</description>
             <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
               <field  name="target">
@@ -86,7 +86,7 @@
             </object>
           </object-param>
           <object-param>        
-            <name>Login data</name>
+            <name>Classic Access data</name>
             <description>Deployment Descriptor</description>
             <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
               <field  name="target">
@@ -100,7 +100,7 @@
             </object>
           </object-param>
           <object-param>        
-            <name>Navigation data</name>
+            <name>Classic Navigation data</name>
             <description>Deployment Descriptor</description>
             <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
               <field  name="target">
@@ -114,7 +114,7 @@
             </object>
           </object-param>
           <object-param>        
-            <name>Breadcrumb data</name>
+            <name>Classic Breadcrumb data</name>
             <description>Deployment Descriptor</description>
             <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
               <field  name="target">
@@ -128,7 +128,7 @@
             </object>
           </object-param>
           <object-param>        
-            <name>Homepage data</name>
+            <name>Classic Homepage data</name>
             <description>Deployment Descriptor</description>
             <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
               <field  name="target">
@@ -142,7 +142,7 @@
             </object>
           </object-param>
           <object-param>        
-            <name>Sitemap data</name>
+            <name>Classic Sitemap data</name>
             <description>Deployment Descriptor</description>
             <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
               <field  name="target">
@@ -156,7 +156,7 @@
             </object>
           </object-param> 
           <object-param>        
-            <name>Footer data</name>
+            <name>Classic Footer data</name>
             <description>Deployment Descriptor</description>
             <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
               <field  name="target">
