@@ -86,15 +86,6 @@ function getHostName() {
 	return parentLocation.href.substring(0, parentLocation.href.indexOf(parentLocation.pathname));
 }
 
-eXo.core.Browser.addOnLoadCallback('getNavigations', getNavigations);
-function getNavigations() {
-	var serviceUrl = getHostName() + '/portal/rest/wcmNavigation/getPortalNavigations?portalName=' + eXo.env.portal.portalName + '&language=en';
-	var navigation = ajaxAsyncGetRequest(serviceUrl, false);
-	navigation = navigation.substring(1, navigation.length - 1);
-	navigation = navigation.replace('"navigations":', '');
-	window.navigations = eval(navigation);
-}
-
 /*----------------------------Login web content-------------------------------*/
 function validateUser() {
 	var baseURL;
