@@ -419,7 +419,7 @@ public abstract class BaseConnector {
     try {
       Session session = getSession(repositoryName, workspaceName);
       Node webContent = (Node) session.getItem(jcrPath);
-      if ("exo:webContent".equals((webContent.getPrimaryNodeType().getName())))
+      if (webContent.isNodeType("exo:webContent"))
         return webContent;
     } catch (Exception e) {
       e.printStackTrace();
