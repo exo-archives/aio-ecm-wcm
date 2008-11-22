@@ -16,7 +16,8 @@
   def scriptsPaths = uicomponent.getJavascriptURLs();
   def title = rcontext.getTitle();
   def metaInformation = rcontext.getMetaInformation();
-  
+  def userName = rcontext.getRemoteUser();
+  def language = rcontext.getLocale().getLanguage();  
   List<PageNavigation> navigations = Util.getUIPortal().getNavigations();
   NavigationService navigationService = uicomponent.getApplicationComponent(NavigationService.class);
   def JSONnavigation = navigationService.getNavigationsAsJSON(navigations);
@@ -69,6 +70,8 @@
       eXo.env.server.context = '<%=docBase%>' ;
       eXo.env.server.portalBaseURL = '<%=rcontext.getURLBuilder().getBaseURL()%>' ;
       eXo.env.client.skin = '$skin' ;
+      eXo.env.portal.userName='<%=userName%>';
+      eXo.env.portal.language='<%=language%>'
       eXo.env.portal.navigations = <%= JSONnavigation %> ;
       eXo.env.portal.selectedNodeUri = '<%= selectedNodeUri %>';
     </script>
