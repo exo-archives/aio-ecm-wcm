@@ -89,11 +89,15 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
                                      @QueryParam("command") String command,
                                      @QueryParam("type") String type,
                                      @ContextParam(ResourceDispatcher.CONTEXT_PARAM_BASE_URI) String baseURI) throws Exception {
+    Node sharedPortal = livePortalManagerService.getLiveSharedPortal(repositoryName,
+                                                                     localSessionProvider.getSessionProvider(null));
+    Node activePortal = getCurrentPortalNode(repositoryName, jcrPath, currentPortal, null);
+    if (sharedPortal.getPath().equals(activePortal.getPath())) {
+      documentLinkHandler.setCurrentPortal(currentPortal);
+    } else {
+      documentLinkHandler.setCurrentPortal(activePortal.getName());
+    }
     documentLinkHandler.setBaseURI(baseURI);
-    documentLinkHandler.setCurrentPortal(getCurrentPortalNode(repositoryName,
-                                                              jcrPath,
-                                                              currentPortal,
-                                                              null).getName());
     Response response = buildXMLResponseOnExpand(currentFolder,
                                                  currentPortal,
                                                  workspaceName,
