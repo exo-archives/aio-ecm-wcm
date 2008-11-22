@@ -102,7 +102,7 @@ public class UIPresentation extends UIBaseNodePresentation {
       Writer writer = context.getWriter();
       writer.write("<div class=\"Message\">");
       writer.write("<span>");
-      writer.write(context.getApplicationResourceBundle().getString("UIMessageBoard.msg.error-nodetype") + StringUtils.substringBeforeLast(e.getLocalizedMessage(), " "));
+      writer.write(context.getApplicationResourceBundle().getString("UIMessageBoard.msg.error-nodetype"));
       writer.write("</span>");
       writer.write("</div>");
       return;
@@ -110,7 +110,7 @@ public class UIPresentation extends UIBaseNodePresentation {
       Writer writer = context.getWriter();
       writer.write("<div class=\"Message\">");
       writer.write("<span>");
-      writer.write(context.getApplicationResourceBundle().getString("UIMessageBoard.msg.error-nodetype") + e.getLocalizedMessage());
+      writer.write(context.getApplicationResourceBundle().getString("UIMessageBoard.msg.error-nodetype"));
       writer.write("</span>");
       writer.write("</div>");
       return;
