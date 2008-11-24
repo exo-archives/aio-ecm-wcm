@@ -1,6 +1,5 @@
 function getCurrentNodes(navigations) {
 	var currentNodes = new Array();
-	alert('eXo.env.portal.selectedNodeUri: '+eXo.env.portal.selectedNodeUri);
 	var currentNodeUris = new Array();
 	if (eXo.env.portal.selectedNodeUri.indexOf("/" > 0)) eXo.env.portal.selectedNodeUri.split("/");
 	currentNodeUris[0] = eXo.env.portal.selectedNodeUri;
