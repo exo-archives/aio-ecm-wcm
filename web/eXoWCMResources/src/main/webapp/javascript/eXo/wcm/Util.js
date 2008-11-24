@@ -103,7 +103,7 @@ function validateUser() {
 			eXo.core.DOMUtil.removeClass(logXXXObj, "LoginIcon");
 			eXo.core.DOMUtil.addClass(logXXXObj, "LogoutIcon");
 		}
-		logXXXObj.onclick = eXo.portal.logout();;
+		logXXXObj.onclick = function() { eXo.portal.logout(); }
 	} else {
 		welcomeObj.style.display = "none";
 		if (eXo.core.DOMUtil.hasClass(logXXXObj, "LogoutIcon")) {
