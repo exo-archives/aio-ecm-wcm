@@ -141,6 +141,8 @@ public class UIContentViewer extends UIBaseNodePresentation {
     String requestURI = requestWrapper.getRequestURI();
     String pageNodeSelected = uiPortal.getSelectedNode().getName();
     String parameters = null;
+    Object object = requestWrapper.getAttribute("ParameterizedContentViewerPortlet.data.object");
+
     try {
       parameters = URLDecoder.decode(StringUtils.substringAfter(requestURI,
                                                                 portalURI.concat(pageNodeSelected
@@ -165,42 +167,47 @@ public class UIContentViewer extends UIBaseNodePresentation {
     } else {
       sessionProvider = SessionProviderFactory.createSessionProvider();
     }
-
-    try {
-      RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
-      ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      session = sessionProvider.getSession(workspace, manageableRepository);
-    } catch (AccessControlException ace) {
-      renderErrorMessage(context, ACCESS_CONTROL_EXC);
-      return;
-    } catch (Exception e) {
-      renderErrorMessage(context, CONTENT_NOT_FOUND_EXC);
-      return;
-    }
-    if (params.length > 2) {
-      StringBuffer identifier = new StringBuffer();
-      for (int i = 2; i < params.length; i++) {
-        identifier.append("/").append(params[i]);
-      }
-      nodeIdentifier = identifier.toString();
-      boolean isUUID = false;
+    if (object instanceof ItemNotFoundException || object instanceof AccessControlException
+        || object instanceof ItemNotFoundException || object == null) {
       try {
-        currentNode = (Node) session.getItem(nodeIdentifier);
+        RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
+        ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+        session = sessionProvider.getSession(workspace, manageableRepository);
+      } catch (AccessControlException ace) {
+        renderErrorMessage(context, ACCESS_CONTROL_EXC);
+        return;
       } catch (Exception e) {
-        isUUID = true;
+        renderErrorMessage(context, CONTENT_NOT_FOUND_EXC);
+        return;
       }
-      if (isUUID) {
-        try {
-          String uuid = params[params.length - 1];
-          currentNode = session.getNodeByUUID(uuid);
-        } catch (ItemNotFoundException exc) {
-          renderErrorMessage(context, CONTENT_NOT_FOUND_EXC);
-          return;
+      if (params.length > 2) {
+        StringBuffer identifier = new StringBuffer();
+        for (int i = 2; i < params.length; i++) {
+          identifier.append("/").append(params[i]);
         }
+        nodeIdentifier = identifier.toString();
+        boolean isUUID = false;
+        try {
+          currentNode = (Node) session.getItem(nodeIdentifier);
+        } catch (Exception e) {
+          isUUID = true;
+        }
+        if (isUUID) {
+          try {
+            String uuid = params[params.length - 1];
+            currentNode = session.getNodeByUUID(uuid);
+          } catch (ItemNotFoundException exc) {
+            renderErrorMessage(context, CONTENT_NOT_FOUND_EXC);
+            return;
+          }
+        }
+      } else if (params.length == 2) {
+        currentNode = session.getRootNode();
       }
-    } else if (params.length == 2) {
-      currentNode = session.getRootNode();
+    } else {
+      currentNode = (Node) object;
     }
+
     TemplateService templateService = getApplicationComponent(TemplateService.class);
     List<String> documentTypes = templateService.getDocumentTemplates(repository);
     Boolean isDocumentType = false;
