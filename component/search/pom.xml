@@ -2,7 +2,7 @@
   <parent>
     <groupId>org.exoplatform.wcm</groupId>
     <artifactId>config</artifactId>
-    <version>trunk</version>
+    <version>1.0-SNAPSHOT</version>
   </parent> 
 
   <modelVersion>4.0.0</modelVersion>
