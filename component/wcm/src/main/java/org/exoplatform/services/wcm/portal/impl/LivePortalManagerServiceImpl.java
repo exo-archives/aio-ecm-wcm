@@ -18,10 +18,9 @@ package org.exoplatform.services.wcm.portal.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.jcr.ItemExistsException;
 import javax.jcr.Node;
@@ -49,7 +48,7 @@ import org.exoplatform.services.wcm.portal.LivePortalManagerService;
  */
 public class LivePortalManagerServiceImpl implements LivePortalManagerService {    
   private final String PORTAL_FOLDER = "exo:portalFolder".intern();
-  private Map<String,String> livePortalPaths = new HashMap<String,String>();
+  private ConcurrentHashMap<String,String> livePortalPaths = new ConcurrentHashMap<String,String>();
 
   private RepositoryService repositoryService; 
   private WCMConfigurationService wcmConfigService;

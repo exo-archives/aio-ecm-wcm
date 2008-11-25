@@ -17,7 +17,7 @@
 package org.exoplatform.services.wcm.core.impl;
 
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.jcr.Node;
 import javax.jcr.Session;
@@ -44,7 +44,7 @@ import org.picocontainer.Startable;
  */
 public class WebSchemaConfigServiceImpl implements WebSchemaConfigService, Startable {
 
-  private HashMap<String, WebSchemaHandler> webSchemaHandlers = new HashMap<String, WebSchemaHandler>();
+  private ConcurrentHashMap<String, WebSchemaHandler> webSchemaHandlers = new ConcurrentHashMap<String, WebSchemaHandler>();
   private WCMConfigurationService wcmConfigService;
 
   private Log log = ExoLogger.getLogger("wcm:WebSchemaConfigService");
@@ -56,7 +56,7 @@ public class WebSchemaConfigServiceImpl implements WebSchemaConfigService, Start
   public void addWebSchemaHandler(ComponentPlugin plugin) throws Exception {
     if (plugin instanceof WebSchemaHandler) {
       String clazz = plugin.getClass().getName();
-      webSchemaHandlers.put(clazz, (WebSchemaHandler)plugin);
+      webSchemaHandlers.putIfAbsent(clazz, (WebSchemaHandler)plugin);
     }
   }
 

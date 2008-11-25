@@ -131,10 +131,10 @@ public class XSkinService implements Startable {
         return;
     }
     String skinPath = StringUtils.replaceOnce(SKIN_PATH_REGEXP,"(.*)",portal.getName());
-    for(Iterator<String> iterator= skinService.getAvailableSkins();iterator.hasNext();) {
+    for(Iterator<String> iterator= skinService.getAvailableSkinNames().iterator();iterator.hasNext();) {
       String skinName = iterator.next();
       skinPath = StringUtils.replaceOnce(skinPath,"(.*)",skinName);
-      //skinService.(portal.getName(), skinName, skinPath, cssData);
+      skinService.addPortalSkin(portal.getName(), skinName, skinPath, cssData);
     }       
   }  
 
@@ -151,7 +151,7 @@ public class XSkinService implements Startable {
         return;
     }
     String skinPath = StringUtils.replaceOnce(SKIN_PATH_REGEXP,"(.*)",portal.getName());
-    for(Iterator<String> iterator= skinService.getAvailableSkins();iterator.hasNext();) {
+    for(Iterator<String> iterator= skinService.getAvailableSkinNames().iterator();iterator.hasNext();) {
       String skinName = iterator.next();
       skinPath = StringUtils.replaceOnce(skinPath,"(.*)",skinName);
       skinService.addPortalSkin(portal.getName(),skinName, skinPath, cssData);
