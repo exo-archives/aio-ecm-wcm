@@ -29,7 +29,6 @@ import javax.jcr.query.QueryResult;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.portal.webui.skin.SkinConfig;
 import org.exoplatform.portal.webui.skin.SkinService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -46,7 +45,7 @@ import org.picocontainer.Startable;
  */
 public class XSkinService implements Startable {    
   private static String SHARED_CSS_QUERY = "select * from exo:cssFile where jcr:path like '{path}/%' and exo:active='true' and exo:sharedCSS='true' order by exo:priority DESC ".intern();  
-  private static String SKIN_PATH_REGEXP = "/portal/css/jcr/(.*)/(.*)/Stylesheet.css".intern();
+  public final static String SKIN_PATH_REGEXP = "/portal/css/jcr/(.*)/(.*)/Stylesheet.css".intern();
   
   private static Log log = ExoLogger.getLogger("wcm:XSkinService");           
   private WebSchemaConfigService schemaConfigService;
@@ -61,6 +60,7 @@ public class XSkinService implements Startable {
    */
   public XSkinService(SkinService skinService,WebSchemaConfigService schemaConfigService, WCMConfigurationService configurationService) {
     this.skinService = skinService ;
+    this.skinService.addResourceResolver(new WCMSkinResourceResolver(this.skinService));
     this.configurationService = configurationService;
     this.schemaConfigService = schemaConfigService;
   }
@@ -75,27 +75,7 @@ public class XSkinService implements Startable {
   public String getActiveStylesheet(Node home) throws Exception {    
     String cssQuery = "select * from exo:cssFile where jcr:path like '" +home.getPath()+ "/%' and exo:active='true'order by exo:priority DESC " ;
     return getCSSDataBySQLQuery(home.getSession(),cssQuery,null);
-  }
-
-  public String getPortalSkin(String requestURI) {    
-    if(!requestURI.matches(SKIN_PATH_REGEXP)) return null;       
-    String[] elements = requestURI.split("/");
-    String portalName = elements[4];
-    String skinName = elements[5];
-    String skinModule = portalName;
-    //get css for shared portal if the portalName is shared Portal
-    for(SkinConfig skinConfig: skinService.getPortalSkins(skinName)) {
-      if(skinConfig.getModule().equals(skinModule)) {
-        return skinService.getMergedCSS(skinConfig.getCSSPath());
-      }
-    }
-    //get merged css for portal
-    SkinConfig skinConfig = skinService.getSkin(portalName,skinName);
-    if(skinConfig != null) {
-      return skinService.getMergedCSS(skinConfig.getCSSPath());
-    }
-    return null;    
-  }
+  }  
   
   public void updatePortalSkinOnModify(final Node cssFile, final Node portal) throws Exception {            
     String modifiedCSS = cssFile.getNode("jcr:content").getProperty("jcr:data").getString();
