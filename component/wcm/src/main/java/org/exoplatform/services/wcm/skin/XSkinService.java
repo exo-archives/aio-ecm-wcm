@@ -45,7 +45,7 @@ import org.picocontainer.Startable;
  */
 public class XSkinService implements Startable {    
   private static String SHARED_CSS_QUERY = "select * from exo:cssFile where jcr:path like '{path}/%' and exo:active='true' and exo:sharedCSS='true' order by exo:priority DESC ".intern();  
-  public final static String SKIN_PATH_REGEXP = "/portal/css/jcr/(.*)/(.*)/Stylesheet.css".intern();
+  public final static String SKIN_PATH_REGEXP = "/portal/css/jcr/(.*)/(.*)/(.*).css".intern();
   
   private static Log log = ExoLogger.getLogger("wcm:XSkinService");           
   private WebSchemaConfigService schemaConfigService;
