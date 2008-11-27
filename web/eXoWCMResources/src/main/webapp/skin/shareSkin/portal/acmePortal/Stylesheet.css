@@ -1,3 +1,7 @@
+body {
+	background: #fff;
+}
+
 #UIContainer-ACMEPortalContainer {
 	background: url(background/BG_Header.gif) top left repeat-x;
 	padding: 0;
@@ -5,14 +9,24 @@
 
 #UIContainer-ACMEPortalContainer #UIContainer-BannerContainer {
 	padding: 0;
+	height: 65px;
 }
 
 #UIContainer-ACMEPortalContainer #UIContainer-Banner {
 	padding: 0;
+	line-height: 0;
+}
+
+#UIContainer-ACMEPortalContainer #UIContainer-Banner .UISingleContentViewerPortlet {
+	overflow: hidden;
 }
 
 #UIContainer-ACMEPortalContainer #UIContainer-Search {
 	float: right;
 	margin: 35px 35px 0 0;
+	padding: 0;
+}
+
+#UIContainer-ACMEPortalContainer #UIContainer-Navigation {
 	padding: 0;
 }

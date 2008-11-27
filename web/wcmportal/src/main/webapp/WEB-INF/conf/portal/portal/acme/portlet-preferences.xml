@@ -29,6 +29,32 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>acme</owner-id>
+    <window-id>portal#acme:/web-presentation/SingleContentViewer/acme-navigation</window-id>
+    <preference>
+      <name>repository</name>
+      <value>repository</value>
+      <read-only>false</read-only>
+    </preference>
+    <preference>
+      <name>workspace</name>
+      <value>collaboration</value>
+      <read-only>false</read-only>
+    </preference>
+    <preference>
+      <name>nodeIdentifier</name>
+      <value>/sites content/live/acme/web contents/site artifacts/navigation/Default</value>
+      <read-only>false</read-only>
+    </preference>
+    <preference>
+      <name>ShowQuickEdit</name>
+      <value>false</value>
+      <read-only>false</read-only>
+    </preference>
+  </portlet-preferences>
+  
+  <portlet-preferences>
+    <owner-type>portal</owner-type>
+    <owner-id>acme</owner-id>
     <window-id>portal#acme:/web-presentation/SingleContentViewer/acme-footer</window-id>
     <preference>
       <name>repository</name>

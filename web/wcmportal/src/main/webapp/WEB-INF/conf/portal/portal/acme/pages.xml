@@ -17,26 +17,26 @@
   			<container id="acme-service" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
 	  			<application>
 			    	<instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-service</instance-id>
-			    	<show-info-bar>false</show-info-bar>
+			    	<title>Service</title>
 			  	</application>
 	  		</container>
 	  		<container id="acme-product" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
 	  			<application>
 			    	<instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-product</instance-id>
-			    	<show-info-bar>false</show-info-bar>
+			    	<title>Product</title>
 			  	</application>
 	  		</container>
   		</container>
   		<container id="acme-feature" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
   			<application>
 			    <instance-id>portal#acme:/web-presentation/ContentListViewerPortlet/acme-feature</instance-id>
-			    <show-info-bar>false</show-info-bar>
+			    <title>Feature</title>
 			  </application>
   		</container>
   		<container id="acme-about" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
   			<application>
 		    	<instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-about</instance-id>
-		    	<show-info-bar>false</show-info-bar>
+		    	<title>About</title>
 		  	</application>
 		  </container>
   	</container>

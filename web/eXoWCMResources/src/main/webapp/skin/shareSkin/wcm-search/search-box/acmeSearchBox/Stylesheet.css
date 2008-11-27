@@ -1,6 +1,7 @@
 .UIWCMSearchPortlet .UIACMESearchBox .Search {
 	background: url(background/SearchBackground.gif) left -30px repeat-x;
 	height: 30px;
+	float: right;
 }
 
 .UIWCMSearchPortlet .UIACMESearchBox .KeywordInput {
