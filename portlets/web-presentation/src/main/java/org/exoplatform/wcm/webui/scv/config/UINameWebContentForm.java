@@ -209,6 +209,87 @@ public class UINameWebContentForm extends UIForm {
           cssContent = ".WebContentTwoColumns {\n\twidth: 100%; \n\theight: 100%;\n}\n\n";
           webContentNode.getNode("default.html/jcr:content").setProperty("jcr:data", htmlContent);
           webContentNode.getNode("css/default.css/jcr:content").setProperty("jcr:data", cssContent);
+        } else if(contentType.equals("exo:siteBreadcrumb")) {
+          htmlContent = "<div id=\"breadcrumb-generator\"><span></span></div>";
+          cssContent = ".UIWindow .UIBreadcrumbsPortlet {\n\tmargin: 0px;\n}" +
+                       "\n\n.UIBreadcrumbsPortlet {\n\tmargin: 0 0 3px 0;\n}" +
+                       "\n\n.UIBreadcrumbs {\n\tline-height: 25px ;\n}" +
+                       "\n\n.UIBreadcrumbs a {\n\tfloat: left ;\n\tcolor: #6d7fa1 ;\n}" +
+                       "\n\n.UIBreadcrumbs a.Selected {\n\tcolor: black;\n}" +
+                       "\n\n.UIBreadcrumbs .HomeIcon {\n\tfloat: left;\n\tmargin: 4px 5px 0 0 ;\n\tbackground:url('/portal/rest/jcr/repository/collaboration/sites content/live/classic/web contents/site artifacts/breadcrumb/Default/medias/images/HomeIcon.gif') no-repeat center center;\n\theight:16px;\n\twidth:24px;\n}" +
+                       "\n\n.UIBreadcrumbs .LeftBreadcrumbsBar {\n\tbackground: url('/portal/rest/jcr/repository/collaboration/sites content/live/classic/web contents/site artifacts/breadcrumb/Default/medias/images/BreadcrumbBG.gif') repeat-x left top;\n\theight: 25px;\n}" +
+                       "\n\n.UIBreadcrumbs .RightBreadcrumbsBar {\n\theight: 25px;\n}" +
+                       "\n\n.UIBreadcrumbs .BreadcrumbsInfoBar {\n\theight: 25px;\n\tline-height: 25px;\n\tpadding-left: 10px;\n}" +
+                       "\n\n.UIBreadcrumbs .RightBlackGridArrowIcon {\n\tfloat: left;\n\tmargin: 5px 0px 0px 0px;\n\tbackground:url('/portal/rest/jcr/repository/collaboration/sites content/live/classic/web contents/site artifacts/breadcrumb/Default/medias/images/BreadcrumbsArrowIcon.gif') repeat 0 0;\n\theight:16px;\n\twidth:16px;\n}";
+          String jsContent = "function renderBreadcrumb() {\n\t" +
+                              "var navigations = eXo.env.portal.navigations;\n" +
+                              "var selectedNodeUri = eXo.env.portal.selectedNodeUri;\n" +
+                              "var breadcumbs = getCurrentNodes(navigations, selectedNodeUri);\n" +
+                              "var size = breadcumbs.length;\n" +
+                              "var html = '';\n" +
+                              "html += '<div class=\"UIBreadcrumbsPortlet\">'+\n\t" +
+                                          "'<div class=\"UIBreadcrumbs\">' +\n\t" +
+                                            "'<div class=\"LeftBreadcrumbsBar\">' +\n\t" +
+                                              "'<div class=\"RightBreadcrumbsBar\">' +\n\t" +
+                                                "'<div class=\"BreadcrumbsInfoBar\">' +\n\t" +
+                                                  "'<div class=\"HomeIcon LeftBlock BCHome16x16Icon\"><span></span></div>';\n" +
+                              "if (size > 0) {\n\t" +
+                                "var note = \"LeftBlock\";\n" +
+                                "for (var i = 0; i < size; i++) {\n\t" +
+                                  "var localPath = breadcumbs[i]; \n" +
+                                  "if(i == size -1) note = \"Selected\";\n\t" +
+                                    "var link = (localPath.label == null) ? \"#\" : getHostName() + eXo.env.portal.context + '/' + eXo.env.portal.accessMode + '/' + eXo.env.portal.portalName + '/' +  localPath.uri;\n" +     
+                                    "html += '<a href=\"' + link + '\" class=\"'+ note+'\">'+ localPath.resolvedLabel+'</a>';\n" +
+                                    "if(i != size-1) {\n" +
+                                    "html += '<div class=\"RightBlackGridArrowIcon LeftBlock\"><span></span></div>';\n" +
+                                  "}\n" +
+                                "}\n" +
+                              "}\n" +
+                              "html +=          '<div style=\"clear:left\"><span></span></div>' +\n" +
+                                              "'</div>' +\n" +
+                                            "'</div>' +\n" +
+                                          "'</div>' +\n" +
+                                        "'</div>' +\n" +
+                                      "'</div>';\n" +
+                                "document.getElementById(\"breadcrumb-generator\").innerHTML = html;\n" +
+                              "}\n\n" +
+                              "function renderBreadcrumbPCV() {\n\t" +
+                                "var wcmContentTitle = eXo.env.portal.wcmContentTitle;\n" +
+                                "var previousURI = eXo.env.portal.previousURI;\n" +
+                                "var navigations = eXo.env.portal.navigations;\n" +
+                                "var breadcumbs = getCurrentNodes(navigations, previousURI);\n" +
+                                "var size = breadcumbs.length;\n" +
+                                "var htmlPCV = '';\n" +
+                                "htmlPCV += '<div class=\"UIBreadcrumbsPortlet\">'+\n\t" +
+                                              "'<div class=\"UIBreadcrumbs\">' +\n\t" +
+                                                "'<div class=\"LeftBreadcrumbsBar\">' +\n\t" +
+                                                  "'<div class=\"RightBreadcrumbsBar\">' +\n\t" +
+                                                    "'<div class=\"BreadcrumbsInfoBar\">' +\n\t" +
+                                                      "'<div class=\"HomeIcon LeftBlock BCHome16x16Icon\"><span></span></div>';\n" +
+                                "var link = getHostName() + eXo.env.portal.context + '/' + eXo.env.portal.accessMode + '/' + eXo.env.portal.portalName + '/' +  breadcumbs[size-1].uri;\n" +
+                                "htmlPCV += '<a href=\"' + link + '\" class=\"LeftBlock\">'+ breadcumbs[size-1].resolvedLabel +'</a>';\n" +
+                                "htmlPCV += '<div class=\"RightBlackGridArrowIcon LeftBlock\"><span></span></div>';\n" +
+                                "htmlPCV += '<a href=\"#\" class=\"Selected\">'+ wcmContentTitle+'</a>';\n" +
+                                "htmlPCV +=           '<div style=\"clear:left\"><span></span></div>' +\n" +
+                                                    "'</div>' +\n" +
+                                                  "'</div>' +\n" +
+                                                "'</div>' +\n" +
+                                              "'</div>' +\n" +
+                                            "'</div>';\n" +
+                                "document.getElementById(\"breadcrumb-generator\").innerHTML = htmlPCV;\n" +
+                                "}\n\n" +
+                                "eXo.core.Browser.addOnLoadCallback(\n" +
+                                "'renderBreadcrumb',function() {\n\t" +
+                                "if (eXo.env.portal.wcmContentTitle != 'null') {\n\t" +
+                                  "renderBreadcrumbPCV();\n"+
+                                "} else {\n\t" +
+                                "renderBreadcrumb();\n" +
+                                "}\n" +
+                                "}\n" +     
+                                ");";
+          webContentNode.getNode("default.html/jcr:content").setProperty("jcr:data", htmlContent);
+          webContentNode.getNode("css/default.css/jcr:content").setProperty("jcr:data", cssContent);
+          webContentNode.getNode("js/default.js/jcr:content").setProperty("jcr:data", jsContent);
         }
 
       } else {

@@ -101,10 +101,9 @@ public class PageMetadataRequestFilter implements Filter {
     if(index<1) return false;
     String parameter = pathInfo.substring(index);
     if(!parameter.matches(PCV_PARAMETER_REGX)) return false;
-    String[] parameters = parameter.split("/");
-    String repository = parameters[0];
-    String workspace = parameters[1];
-    String nodeIdentifier = parameters[2];
+    String repository = parameter.split("/", 4)[2];
+    String workspace = parameter.split("/", 5)[3];
+    String nodeIdentifier = "/"+parameter.split("/",5)[4];
     RepositoryService repositoryService = getService(RepositoryService.class);
     ThreadLocalSessionProviderService localSessionProviderService = getService(ThreadLocalSessionProviderService.class);
     SessionProvider sessionProvider = localSessionProviderService.getSessionProvider(null);
@@ -131,7 +130,11 @@ public class PageMetadataRequestFilter implements Filter {
         req.setAttribute(PortalRequestContext.REQUEST_TITLE,title);
         pageMetadata.remove(PageMetadataService.PAGE_TITLE);
       }
-      req.setAttribute(PortalRequestContext.REQUEST_METADATA,pageMetadata);          
+      req.setAttribute(PortalRequestContext.REQUEST_METADATA,pageMetadata);
+      if (node.hasProperty("exo:title")) {
+        req.setAttribute("WCM.Content.Title",node.getProperty("exo:title").getValue().getString());
+      }
+      req.setAttribute("WCM.Content.Title", node.getName());
       return true;
     }      
     return false;
@@ -144,6 +147,4 @@ public class PageMetadataRequestFilter implements Filter {
 
   public void destroy() {    
   }
-
-
 }

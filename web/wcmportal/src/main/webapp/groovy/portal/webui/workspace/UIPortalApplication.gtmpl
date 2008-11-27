@@ -7,6 +7,7 @@
 	import org.exoplatform.portal.webui.util.Util;	
 	import org.exoplatform.services.wcm.navigation.NavigationService;
 	import org.exoplatform.portal.config.model.PageNavigation;
+	import javax.servlet.http.HttpSession;
 		
   def rcontext = _ctx.getRequestContext() ;
   String docBase =  rcontext.getRequestContextPath() ;  
@@ -22,6 +23,10 @@
   NavigationService navigationService = uicomponent.getApplicationComponent(NavigationService.class);
   def JSONnavigation = navigationService.getNavigationsAsJSON(navigations);
   def selectedNodeUri = Util.getUIPortal().getSelectedNode().getUri();
+  def wcmContentTitle = _ctx.getRequestContext().getRequest().getAttribute("WCM.Content.Title");
+  HttpSession session = _ctx.getRequestContext().getRequest().getSession();
+  def previousURI = session.getAttribute("previousURI");
+  session.setAttribute("previousURI", selectedNodeUri);
 %>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="$dir">
@@ -74,6 +79,8 @@
       eXo.env.portal.language='<%=language%>'
       eXo.env.portal.navigations = <%= JSONnavigation %> ;
       eXo.env.portal.selectedNodeUri = '<%= selectedNodeUri %>';
+      eXo.env.portal.wcmContentTitle = '<%= wcmContentTitle %>';
+      eXo.env.portal.previousURI = '<%= previousURI %>';
     </script>
   </head>
 

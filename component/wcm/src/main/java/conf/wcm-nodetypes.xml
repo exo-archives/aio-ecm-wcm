@@ -256,5 +256,12 @@
         </defaultValues>
       </propertyDefinition>      
     </propertyDefinitions>
-  </nodeType>                
+  </nodeType>             
+  
+  <nodeType name="exo:siteBreadcrumb" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+  	<supertypes>
+      <supertype>exo:webContent</supertype>      
+    </supertypes>
+  </nodeType>
+     
 </nodeTypes>
