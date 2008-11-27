@@ -45,7 +45,8 @@ import org.picocontainer.Startable;
  */
 public class XSkinService implements Startable {    
   private static String SHARED_CSS_QUERY = "select * from exo:cssFile where jcr:path like '{path}/%' and exo:active='true' and exo:sharedCSS='true' order by exo:priority DESC ".intern();  
-  public final static String SKIN_PATH_REGEXP = "/portal/css/jcr/(.*)/(.*)/(.*).css".intern();
+  public final static String SKIN_PATH_REGEXP = "/portal/css/jcr/(.*)/(.*)/(.*).css".intern();  
+  private final static String SKIN_PATH_PATTERN = "/portal/css/jcr/(.*)/(.*)/Stylesheet.css".intern();
   
   private static Log log = ExoLogger.getLogger("wcm:XSkinService");           
   private WebSchemaConfigService schemaConfigService;
@@ -110,7 +111,7 @@ public class XSkinService implements Startable {
       if(cssData == null || cssData.length() == 0)        
         return;
     }
-    String skinPath = StringUtils.replaceOnce(SKIN_PATH_REGEXP,"(.*)",portal.getName());
+    String skinPath = StringUtils.replaceOnce(SKIN_PATH_PATTERN,"(.*)",portal.getName());    
     for(Iterator<String> iterator= skinService.getAvailableSkinNames().iterator();iterator.hasNext();) {
       String skinName = iterator.next();
       skinPath = StringUtils.replaceOnce(skinPath,"(.*)",skinName);
@@ -130,7 +131,7 @@ public class XSkinService implements Startable {
       if(cssData == null || cssData.length() == 0)        
         return;
     }
-    String skinPath = StringUtils.replaceOnce(SKIN_PATH_REGEXP,"(.*)",portal.getName());
+    String skinPath = StringUtils.replaceOnce(SKIN_PATH_PATTERN,"(.*)",portal.getName());
     for(Iterator<String> iterator= skinService.getAvailableSkinNames().iterator();iterator.hasNext();) {
       String skinName = iterator.next();
       skinPath = StringUtils.replaceOnce(skinPath,"(.*)",skinName);
