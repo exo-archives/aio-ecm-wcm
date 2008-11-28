@@ -1,7 +1,11 @@
 package org.exoplatform.wcm.webui.administration;
 
 import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
+import org.exoplatform.portal.config.UserPortalConfigService;
+import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.UIWelcomeComponent;
 import org.exoplatform.portal.webui.UIManagement.ManagementMode;
 import org.exoplatform.portal.webui.container.UIContainer;
@@ -52,124 +56,188 @@ import org.exoplatform.webui.event.EventListener;
  * Oct 6, 2008  
  */
 
-@ComponentConfig(template = "app:/groovy/SiteAdministration/UISiteAdminToolBar.gtmpl", 
-    events = {
-      @EventConfig(listeners = UISiteAdminToolbar.AddPageActionListener.class),
-      @EventConfig(listeners = UISiteAdminToolbar.EditPageActionListener.class),
-      @EventConfig(listeners = UISiteAdminToolbar.EditPortalActionListener.class),
-      @EventConfig(listeners = UISiteAdminToolbar.CreatePortalActionListener.class),
-      @EventConfig(listeners = UISiteAdminToolbar.ChangePortalActionListener.class) 
-    }
-)
+@ComponentConfig(template = "app:/groovy/SiteAdministration/UISiteAdminToolBar.gtmpl", events = {
+		@EventConfig(listeners = UISiteAdminToolbar.AddPageActionListener.class),
+		@EventConfig(listeners = UISiteAdminToolbar.EditPageActionListener.class),
+		@EventConfig(listeners = UISiteAdminToolbar.EditPortalActionListener.class),
+		@EventConfig(listeners = UISiteAdminToolbar.CreatePortalActionListener.class),
+		@EventConfig(listeners = UISiteAdminToolbar.ChangePortalActionListener.class) })
 public class UISiteAdminToolbar extends UIContainer {
 
-  public UISiteAdminToolbar() {    
-  }
-  
-  public boolean isShowWorkspaceArea() throws Exception {
-    UserACL userACL = getApplicationComponent(UserACL.class);
-    PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
-    String userId = context.getRemoteUser();
-    if (userACL.hasAccessControlWorkspacePermission(userId))
-      return true;
-    return false;
-  }
-    
+	public static final String MESSAGE = "UISiteAdminToolbar.msg.not-permission";
 
-  public static class AddPageActionListener extends EventListener<UISiteAdminToolbar> {
-    public void execute(Event<UISiteAdminToolbar> event) throws Exception {       
-      UIPortalApplication uiApp = Util.getUIPortalApplication();
-      PortalRequestContext portalContext = Util.getPortalRequestContext();
-      event.setRequestContext(Util.getPortalRequestContext());    
-      UIControlWorkspace uiControl = uiApp.getChild(UIControlWorkspace.class);
-      UIControlWSWorkingArea uiWorking = uiControl.getChildById(UIControlWorkspace.WORKING_AREA_ID);
-      uiWorking.setUIComponent(uiWorking.createUIComponent(UIWizardPageCreationBar.class, null, null));      
-      uiApp.setEditting(true) ;
-      UIWorkingWorkspace uiWorkingWS = uiApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
-      uiWorkingWS.setRenderedChild(UIPortalToolPanel.class) ;
-      UIPortalToolPanel uiToolPanel = uiWorkingWS.getChild(UIPortalToolPanel.class) ;
-      uiToolPanel.setShowMaskLayer(false);
-      portalContext.addUIComponentToUpdateByAjax(uiWorkingWS);
-      uiToolPanel.setWorkingComponent(UIPageCreationWizard.class, null) ;
-      UIPageCreationWizard uiWizard = (UIPageCreationWizard) uiToolPanel.getUIComponent() ;
-      UIWizardPageSetInfo uiPageSetInfo = uiWizard.getChild(UIWizardPageSetInfo.class);
-      uiPageSetInfo.setShowPublicationDate(false) ;
-      uiWorking.setUIComponent(uiWorking.createUIComponent(UIWelcomeComponent.class, null, null));      
-    }
-  }
-  
-  public static class EditPageActionListener extends EventListener<UISiteAdminToolbar> {
-    public void execute(Event<UISiteAdminToolbar> event) throws Exception {        
-      PortalRequestContext portalContext = Util.getPortalRequestContext();   
-      event.setRequestContext(Util.getPortalRequestContext());
-      UIPortalApplication uiApp = Util.getUIPortalApplication();
-      uiApp.setEditting(true);
-      UIWorkingWorkspace uiWorkingWS = uiApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
-      uiWorkingWS.setRenderedChild(UIPortalToolPanel.class) ;
-      UIPortalToolPanel uiToolPanel = uiWorkingWS.getChild(UIPortalToolPanel.class) ;
-      uiToolPanel.setShowMaskLayer(false);
-      portalContext.addUIComponentToUpdateByAjax(uiWorkingWS);     
-      uiToolPanel.setWorkingComponent(UIPageEditWizard.class, null);
-      UIPageEditWizard uiWizard = (UIPageEditWizard)uiToolPanel.getUIComponent();
-      uiWizard.setDescriptionWizard(1);
-      UIWizardPageSetInfo uiPageSetInfo = uiWizard.getChild(UIWizardPageSetInfo.class);
-      uiPageSetInfo.setEditMode();      
-      uiPageSetInfo.createEvent("ChangeNode", Event.Phase.DECODE, event.getRequestContext()).broadcast();
-    }
-  }
+	public UISiteAdminToolbar() {
+	}
 
-  public static class CreatePortalActionListener extends EventListener<UISiteAdminToolbar> {
-    public void execute(Event<UISiteAdminToolbar> event) throws Exception {
-      event.setRequestContext(Util.getPortalRequestContext());
-      PortalRequestContext portalContext = Util.getPortalRequestContext();
-      UIPortalApplication uiApp = Util.getUIPortalApplication();
-      UserACL userACL = uiApp.getApplicationComponent(UserACL.class);
-      if (!userACL.hasCreatePortalPermission(portalContext.getRemoteUser())) {
-        uiApp.addMessage(new ApplicationMessage("UIPortalBrowser.msg.Invalid-createPermission",
-            null));
-        portalContext.addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-        return;
-      }
-      UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
-      UIPortalForm uiNewPortal = uiMaskWS.createUIComponent(UIPortalForm.class, "CreatePortal", "UIPortalForm");
-      uiMaskWS.setUIComponent(uiNewPortal);
-      uiMaskWS.setShow(true);
-      portalContext.addUIComponentToUpdateByAjax(uiMaskWS);
-    }
-  }
-  
-  public static class EditPortalActionListener extends EventListener<UISiteAdminToolbar> {
-    public void execute(Event<UISiteAdminToolbar> event) throws Exception {      
-      event.setRequestContext(Util.getPortalRequestContext());
-      UIPortal uiPortal = Util.getUIPortal();      
-      UIPortalApplication uiPortalApp = Util.getUIPortalApplication();
-      if (!uiPortal.isModifiable()) {        
-        uiPortalApp.addMessage(new ApplicationMessage("UIPortalManagement.msg.Invalid-editPermission", new String[]{uiPortal.getName()}));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortalApp.getUIPopupMessages());
-        return ;
-      }      
-      UIControlWorkspace uiControlWorkspace = uiPortalApp.getChild(UIControlWorkspace.class);
-      UIControlWSWorkingArea uiControlWSWorkingArea = uiControlWorkspace.getChildById(UIControlWorkspace.WORKING_AREA_ID);
-      uiControlWSWorkingArea.setUIComponent(uiControlWSWorkingArea.createUIComponent(UIPortalManagement.class, null, null));      
-      PortalRequestContext pcontext = Util.getPortalRequestContext();      
-      ((UIPortalApplication)pcontext.getUIApplication()).setEditting(true);
-      UIPortalManagement uiManagement = (UIPortalManagement)uiControlWSWorkingArea.getUIComponent();      
-      uiManagement.setMode(ManagementMode.EDIT, event);
-    }
-  }
+	public boolean isShowWorkspaceArea() throws Exception {
+		UserACL userACL = getApplicationComponent(UserACL.class);
+		PortletRequestContext context = (PortletRequestContext) WebuiRequestContext
+				.getCurrentInstance();
+		String userId = context.getRemoteUser();
+		if (userACL.hasAccessControlWorkspacePermission(userId))
+			return true;
+		return false;
+	}
 
-  public static class ChangePortalActionListener extends EventListener<UISiteAdminToolbar> {
-    public void execute(Event<UISiteAdminToolbar> event) throws Exception {
-      event.setRequestContext(Util.getPortalRequestContext());
-      PortalRequestContext portalContext = Util.getPortalRequestContext();
-      UIPortalApplication uiApp = Util.getUIPortalApplication();
-      UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
-      UIPortalSelector uiPortalSelector = uiMaskWS.createUIComponent(UIPortalSelector.class, null,
-          null);
-      uiMaskWS.setUIComponent(uiPortalSelector);
-      uiMaskWS.setShow(true);
-      portalContext.addUIComponentToUpdateByAjax(uiMaskWS);      
-    }
-  }
+	public static class AddPageActionListener extends
+			EventListener<UISiteAdminToolbar> {
+		public void execute(Event<UISiteAdminToolbar> event) throws Exception {
+			UIPortalApplication uiApp = Util.getUIPortalApplication();
+			PortalRequestContext portalContext = Util.getPortalRequestContext();
+			event.setRequestContext(Util.getPortalRequestContext());
+			UserACL userACL = uiApp.getApplicationComponent(UserACL.class);
+			String remoteUser = portalContext.getRemoteUser();
+			if (!userACL.hasAccessControlWorkspacePermission(remoteUser)) {
+				uiApp.addMessage(new ApplicationMessage(
+						UISiteAdminToolbar.MESSAGE, null));
+				portalContext.addUIComponentToUpdateByAjax(uiApp
+						.getUIPopupMessages());
+				return;
+			}
+			UIControlWorkspace uiControl = uiApp
+					.getChild(UIControlWorkspace.class);
+			UIControlWSWorkingArea uiWorking = uiControl
+					.getChildById(UIControlWorkspace.WORKING_AREA_ID);
+			uiWorking.setUIComponent(uiWorking.createUIComponent(
+					UIWizardPageCreationBar.class, null, null));
+			uiApp.setEditting(true);
+			UIWorkingWorkspace uiWorkingWS = uiApp
+					.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
+			uiWorkingWS.setRenderedChild(UIPortalToolPanel.class);
+			UIPortalToolPanel uiToolPanel = uiWorkingWS
+					.getChild(UIPortalToolPanel.class);
+			uiToolPanel.setShowMaskLayer(false);
+			portalContext.addUIComponentToUpdateByAjax(uiWorkingWS);
+			uiToolPanel.setWorkingComponent(UIPageCreationWizard.class, null);
+			UIPageCreationWizard uiWizard = (UIPageCreationWizard) uiToolPanel
+					.getUIComponent();
+			UIWizardPageSetInfo uiPageSetInfo = uiWizard
+					.getChild(UIWizardPageSetInfo.class);
+			uiPageSetInfo.setShowPublicationDate(false);
+			uiWorking.setUIComponent(uiWorking.createUIComponent(
+					UIWelcomeComponent.class, null, null));
+		}
+	}
+
+	public static class EditPageActionListener extends
+			EventListener<UISiteAdminToolbar> {
+		public void execute(Event<UISiteAdminToolbar> event) throws Exception {
+			PortalRequestContext portalContext = Util.getPortalRequestContext();
+			event.setRequestContext(Util.getPortalRequestContext());
+			UIPortalApplication uiApp = Util.getUIPortalApplication();
+			UserACL userACL = uiApp.getApplicationComponent(UserACL.class);
+			String remoteUser = portalContext.getRemoteUser();
+			UIPortal uiPortal = Util.getUIPortal();
+			String pageId = uiPortal.getSelectedNode().getPageReference();
+			UserPortalConfigService portalConfigService = uiApp
+					.getApplicationComponent(UserPortalConfigService.class);
+			Page currentPage = portalConfigService.getPage(pageId, remoteUser);
+			if (!userACL.hasAccessControlWorkspacePermission(remoteUser)
+					|| !userACL.hasEditPermission(currentPage, remoteUser)) {
+				uiApp.addMessage(new ApplicationMessage(
+						UISiteAdminToolbar.MESSAGE, null));
+				portalContext.addUIComponentToUpdateByAjax(uiApp
+						.getUIPopupMessages());
+				return;
+			}
+			uiApp.setEditting(true);
+			UIWorkingWorkspace uiWorkingWS = uiApp
+					.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
+			uiWorkingWS.setRenderedChild(UIPortalToolPanel.class);
+			UIPortalToolPanel uiToolPanel = uiWorkingWS
+					.getChild(UIPortalToolPanel.class);
+			uiToolPanel.setShowMaskLayer(false);
+			portalContext.addUIComponentToUpdateByAjax(uiWorkingWS);
+			uiToolPanel.setWorkingComponent(UIPageEditWizard.class, null);
+			UIPageEditWizard uiWizard = (UIPageEditWizard) uiToolPanel
+					.getUIComponent();
+			uiWizard.setDescriptionWizard(1);
+			UIWizardPageSetInfo uiPageSetInfo = uiWizard
+					.getChild(UIWizardPageSetInfo.class);
+			uiPageSetInfo.setEditMode();
+			uiPageSetInfo.createEvent("ChangeNode", Event.Phase.DECODE,
+					event.getRequestContext()).broadcast();
+		}
+	}
+
+	public static class CreatePortalActionListener extends
+			EventListener<UISiteAdminToolbar> {
+		public void execute(Event<UISiteAdminToolbar> event) throws Exception {
+			event.setRequestContext(Util.getPortalRequestContext());
+			PortalRequestContext portalContext = Util.getPortalRequestContext();
+			UIPortalApplication uiApp = Util.getUIPortalApplication();
+			UserACL userACL = uiApp.getApplicationComponent(UserACL.class);
+			if (!userACL.hasCreatePortalPermission(portalContext
+					.getRemoteUser())) {
+				uiApp.addMessage(new ApplicationMessage(
+						UISiteAdminToolbar.MESSAGE, null));
+				portalContext.addUIComponentToUpdateByAjax(uiApp
+						.getUIPopupMessages());
+				return;
+			}
+			UIMaskWorkspace uiMaskWS = uiApp
+					.getChildById(UIPortalApplication.UI_MASK_WS_ID);
+			UIPortalForm uiNewPortal = uiMaskWS.createUIComponent(
+					UIPortalForm.class, "CreatePortal", "UIPortalForm");
+			uiMaskWS.setUIComponent(uiNewPortal);
+			uiMaskWS.setShow(true);
+			portalContext.addUIComponentToUpdateByAjax(uiMaskWS);
+		}
+	}
+
+	public static class EditPortalActionListener extends
+			EventListener<UISiteAdminToolbar> {
+		@SuppressWarnings("deprecation")
+		public void execute(Event<UISiteAdminToolbar> event) throws Exception {
+			event.setRequestContext(Util.getPortalRequestContext());
+			PortalRequestContext portalContext = Util.getPortalRequestContext();
+			UIPortal uiPortal = Util.getUIPortal();
+			UIPortalApplication uiApp = Util.getUIPortalApplication();
+			UserACL userACL = uiApp.getApplicationComponent(UserACL.class);
+			String remoteUser = portalContext.getRemoteUser();
+			DataStorage dataStorage = uiApp
+					.getApplicationComponent(DataStorage.class);
+			PortalConfig portalConfig = dataStorage.getPortalConfig(uiPortal
+					.getName());
+			if (!uiPortal.isModifiable()
+					|| !userACL.hasCreatePortalPermission(remoteUser)
+					|| !userACL.hasEditPermission(portalConfig, remoteUser)) {
+				uiApp.addMessage(new ApplicationMessage(
+						UISiteAdminToolbar.MESSAGE, new String[] { uiPortal
+								.getName() }));
+				event.getRequestContext().addUIComponentToUpdateByAjax(
+						uiApp.getUIPopupMessages());
+				return;
+			}
+			UIControlWorkspace uiControlWorkspace = uiApp
+					.getChild(UIControlWorkspace.class);
+			UIControlWSWorkingArea uiControlWSWorkingArea = uiControlWorkspace
+					.getChildById(UIControlWorkspace.WORKING_AREA_ID);
+			uiControlWSWorkingArea.setUIComponent(uiControlWSWorkingArea
+					.createUIComponent(UIPortalManagement.class, null, null));
+			PortalRequestContext pcontext = Util.getPortalRequestContext();
+			((UIPortalApplication) pcontext.getUIApplication())
+					.setEditting(true);
+			UIPortalManagement uiManagement = (UIPortalManagement) uiControlWSWorkingArea
+					.getUIComponent();
+			uiManagement.setMode(ManagementMode.EDIT, event);
+		}
+	}
+
+	public static class ChangePortalActionListener extends
+			EventListener<UISiteAdminToolbar> {
+		public void execute(Event<UISiteAdminToolbar> event) throws Exception {
+			event.setRequestContext(Util.getPortalRequestContext());
+			PortalRequestContext portalContext = Util.getPortalRequestContext();
+			UIPortalApplication uiApp = Util.getUIPortalApplication();
+			UIMaskWorkspace uiMaskWS = uiApp
+					.getChildById(UIPortalApplication.UI_MASK_WS_ID);
+			UIPortalSelector uiPortalSelector = uiMaskWS.createUIComponent(
+					UIPortalSelector.class, null, null);
+			uiMaskWS.setUIComponent(uiPortalSelector);
+			uiMaskWS.setShow(true);
+			portalContext.addUIComponentToUpdateByAjax(uiMaskWS);
+		}
+	}
 
 }
