@@ -35,6 +35,20 @@
 			<page-reference>portal::acme::search</page-reference>	    
 		</node>
 		<node>
+			<uri>searchResult</uri>
+			<name>searchResult</name>
+			<label>#{portal.acme.searchResult}</label>
+			<visible>false</visible>			
+			<page-reference>portal::acme::searchResult</page-reference>	    
+		</node>
+		<node>
+			<uri>parameterizedviewer</uri>
+			<name>parameterizedviewer</name>
+			<label>#{portal.acme.parameterizedviewer}</label>
+			<visible>false</visible>
+			<page-reference>portal::acme::parameterizedviewer</page-reference>
+		</node> 
+		<node>
 			<uri>about</uri>
 			<name>about</name>
 			<label>#{portal.acme.about}</label>

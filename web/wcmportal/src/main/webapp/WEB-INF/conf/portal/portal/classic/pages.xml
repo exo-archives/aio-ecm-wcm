@@ -89,7 +89,7 @@
 	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>*:/platform/administrators</edit-permission>
     <application>
-      <instance-id>portal#classic:/web-searches/WCMAdvanceSearchPortlet/searchResult</instance-id>
+      <instance-id>portal#classic:/web-searches/WCMAdvanceSearchPortlet/classic-searchResult</instance-id>
       <title>SearchResult</title>
       <show-info-bar>false</show-info-bar>      
       <show-application-state>false</show-application-state>
