@@ -5,7 +5,7 @@
   	<supertypes>
       <supertype>exo:webContent</supertype>      
     </supertypes>
-  </nodeType>                
+  </nodeType>
   
   <nodeType name="exo:pictureOnHeadWebcontent" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
   	<supertypes>
@@ -24,7 +24,13 @@
         protected="false" multiple="false">
         <valueConstraints/>
       </propertyDefinition>
-    </propertyDefinitions>
+    </propertyDefinitions>  
+  </nodeType>
+  
+  <nodeType name="exo:siteSearchBox" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+  	<supertypes>
+      <supertype>exo:webContent</supertype>      
+    </supertypes>  
   </nodeType>                  
   
   <nodeType name="metadata:siteMetadata" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
