@@ -21,7 +21,10 @@ import javax.portlet.PortletPreferences;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
+import org.exoplatform.webui.event.Event;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 
@@ -34,7 +37,10 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template = "system:/groovy/webui/form/UIForm.gtmpl"
+    template = "system:/groovy/webui/form/UIForm.gtmpl",
+    events = {
+      @EventConfig(listeners = UIMiscellaneousInfo.SaveToPortletPreferenceActionListener.class)
+    }
 )
 public class UIMiscellaneousInfo extends UIForm {
   public UIMiscellaneousInfo() throws Exception {
@@ -46,11 +52,45 @@ public class UIMiscellaneousInfo extends UIForm {
     boolean isAllowVoting = Boolean.parseBoolean(prefs.getValue("AllowVoting", null));
     boolean isAllowComment = Boolean.parseBoolean(prefs.getValue("AllowComment", null));
     boolean isQuickEdit = Boolean.parseBoolean(prefs.getValue("ShowQuickEdit", null));
-    addChild(new UIFormCheckBoxInput("ShowTOC", "ShowTOC", null).setChecked(isShowTOC));
-    addChild(new UIFormCheckBoxInput("ShowTags", "ShowTags", null).setChecked(isShowTags));
-    addChild(new UIFormCheckBoxInput("ShowCategories", "ShowCategories", null).setChecked(isShowCategories));
-    addChild(new UIFormCheckBoxInput("AllowVoting", "AllowVoting", null).setChecked(isAllowVoting));
-    addChild(new UIFormCheckBoxInput("AllowComment", "AllowComment", null).setChecked(isAllowComment));
-    addChild(new UIFormCheckBoxInput("ShowQuickEdit", "ShowQuickEdit", null).setChecked(isQuickEdit));
+    UIFormCheckBoxInput<Boolean> showTocBox = new UIFormCheckBoxInput("ShowTOC", "ShowTOC", null).setChecked(isShowTOC);
+    UIFormCheckBoxInput<Boolean> ShowTagBox = new UIFormCheckBoxInput("ShowTags", "ShowTags", null).setChecked(isShowTags);
+    UIFormCheckBoxInput<Boolean> ShowCategoryBox = new UIFormCheckBoxInput("ShowCategories", "ShowCategories", null).setChecked(isShowCategories);
+    UIFormCheckBoxInput<Boolean> AllowVotingBox = new UIFormCheckBoxInput("AllowVoting", "AllowVoting", null).setChecked(isAllowVoting);
+    UIFormCheckBoxInput<Boolean> AllowCommentBox = new UIFormCheckBoxInput("AllowComment", "AllowComment", null).setChecked(isAllowComment);
+    UIFormCheckBoxInput<Boolean> ShowQuickEditBox = new UIFormCheckBoxInput("ShowQuickEdit", "ShowQuickEdit", null).setChecked(isQuickEdit);
+    showTocBox.setOnChange("SaveToPortletPreference");
+    ShowTagBox.setOnChange("SaveToPortletPreference");
+    ShowCategoryBox.setOnChange("SaveToPortletPreference");
+    AllowVotingBox.setOnChange("SaveToPortletPreference");
+    AllowCommentBox.setOnChange("SaveToPortletPreference");
+    ShowQuickEditBox.setOnChange("SaveToPortletPreference");
+    addUIFormInput(showTocBox);
+    addUIFormInput(ShowTagBox);
+    addUIFormInput(ShowCategoryBox);
+    addUIFormInput(AllowVotingBox);
+    addUIFormInput(AllowCommentBox);
+    addUIFormInput(ShowQuickEditBox);
+    setActions(new String[] {} );
+  }
+  
+  static public class SaveToPortletPreferenceActionListener extends EventListener<UIMiscellaneousInfo> {
+    public void execute(Event<UIMiscellaneousInfo> event) throws Exception {
+      UIMiscellaneousInfo uiMiscellaneousInfo = event.getSource();
+      boolean isShowTOC = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowTOC").isChecked();
+      boolean isQuickEdit = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowQuickEdit").isChecked();
+      boolean isShowTags = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowTags").isChecked();
+      boolean isShowCategories = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowCategories").isChecked();
+      boolean isAllowVoting = uiMiscellaneousInfo.getUIFormCheckBoxInput("AllowVoting").isChecked();
+      boolean isAllowComment = uiMiscellaneousInfo.getUIFormCheckBoxInput("AllowComment").isChecked();
+      PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
+      PortletPreferences prefs = context.getRequest().getPreferences();
+      prefs.setValue("ShowTOC", Boolean.toString(isShowTOC));
+      prefs.setValue("ShowQuickEdit", Boolean.toString(isQuickEdit));
+      prefs.setValue("ShowTags", Boolean.toString(isShowTags));
+      prefs.setValue("ShowCategories", Boolean.toString(isShowCategories));
+      prefs.setValue("AllowVoting", Boolean.toString(isAllowVoting));
+      prefs.setValue("AllowComment", Boolean.toString(isAllowComment));
+      prefs.store();    
+    }     
   }
 }

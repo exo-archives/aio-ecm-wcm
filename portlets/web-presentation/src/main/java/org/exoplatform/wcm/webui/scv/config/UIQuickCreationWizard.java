@@ -125,12 +125,6 @@ public class UIQuickCreationWizard extends UIBaseWizard {
       UIQuickCreationWizard uiQuickCreationWizard = event.getSource();
       UISocialInfo uiSocialInfo = uiQuickCreationWizard.getChild(UISocialInfo.class);
       UIMiscellaneousInfo uiMiscellaneousInfo = uiSocialInfo.getChild(UIMiscellaneousInfo.class);
-      boolean isShowTOC = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowTOC").isChecked();
-      boolean isQuickEdit = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowQuickEdit").isChecked();
-      boolean isShowTags = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowTags").isChecked();
-      boolean isShowCategories = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowCategories").isChecked();
-      boolean isAllowVoting = uiMiscellaneousInfo.getUIFormCheckBoxInput("AllowVoting").isChecked();
-      boolean isAllowComment = uiMiscellaneousInfo.getUIFormCheckBoxInput("AllowComment").isChecked();
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
       PortletPreferences prefs = context.getRequest().getPreferences();
       UIContentDialogForm uiContentDialogForm = uiQuickCreationWizard.getChild(UIContentDialogForm.class);
@@ -138,12 +132,6 @@ public class UIQuickCreationWizard extends UIBaseWizard {
       prefs.setValue(UISingleContentViewerPortlet.REPOSITORY, identifier.getRepository());
       prefs.setValue(UISingleContentViewerPortlet.WORKSPACE, identifier.getWorkspace());
       prefs.setValue(UISingleContentViewerPortlet.IDENTIFIER, identifier.getUUID());
-      prefs.setValue("ShowTOC", Boolean.toString(isShowTOC));
-      prefs.setValue("ShowQuickEdit", Boolean.toString(isQuickEdit));
-      prefs.setValue("ShowTags", Boolean.toString(isShowTags));
-      prefs.setValue("ShowCategories", Boolean.toString(isShowCategories));
-      prefs.setValue("AllowVoting", Boolean.toString(isAllowVoting));
-      prefs.setValue("AllowComment", Boolean.toString(isAllowComment));
       prefs.store();      
       UIPortletConfig uiPortletConfig = uiQuickCreationWizard.getAncestorOfType(UIPortletConfig.class);
       if(uiPortletConfig.isEditPortletInCreatePageWizard()) {
