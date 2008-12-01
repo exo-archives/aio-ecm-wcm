@@ -12,7 +12,7 @@
       <instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-homepage</instance-id>
       <title>Homepage</title>
     </application>
-		<container id="ACMEContainer" template="system:/groovy/portal/webui/container/UITableColumnContainer.gtmpl">
+		<container id="ACMEContainer" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
   		<container id="ACMESerProContainer" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
   			<application>
 			    <instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-serpro</instance-id>
