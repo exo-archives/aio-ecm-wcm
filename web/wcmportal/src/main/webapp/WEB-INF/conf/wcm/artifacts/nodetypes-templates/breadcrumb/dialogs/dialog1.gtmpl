@@ -187,13 +187,16 @@
 									uicomponent.addCalendarField("htmlHiddenField4", htmlHiddenField4);
 									uicomponent.addCalendarField("htmlHiddenField5", htmlHiddenField5);
 									uicomponent.addHiddenField("htmlHiddenField6", htmlHiddenField6);
-									String htmlContent = "<div id=\"breadcrumb-generator\"><span></span></div>";
+									String htmlContent = null;
 									if(uicomponent.isEditing()) {
 										Node webContentNode = uicomponent.getNode();
 										if(webContentNode.hasNode("default.html")) {
 											Node htmlNode = webContentNode.getNode("default.html");
 											htmlContent = htmlNode.getNode("jcr:content").getProperty("jcr:data").getValue().getString();
 										}
+									}
+									if(htmlContent == null || htmlContent.equals("")) {
+										htmlContent = "<div id=\"breadcrumb-generator\"><span></span></div>";
 									}
 									String[] htmlArguments = ["jcrPath=/node/default.html/jcr:content/jcr:data", "options=toolbar:CompleteWCM,width:400", htmlContent];
 			    					uicomponent.addWYSIWYGField(htmlWYSIWYGFormId, htmlArguments) ;
@@ -297,7 +300,16 @@
 									uicomponent.addCalendarField("cssHiddenField4", cssHiddenField4) ;
 									uicomponent.addCalendarField("cssHiddenField5", cssHiddenField5) ;
 									uicomponent.addHiddenField("cssHiddenField6", cssHiddenField6) ;
-									String cssContent = ".UIWindow .UIBreadcrumbsPortlet {\n\tmargin: 0px;\n}" +
+									String cssContent = null;
+									if(uicomponent.isEditing()) {
+										Node webContentNode = uicomponent.getNode();
+										if(webContentNode.hasNode("css/default.css")) {
+											Node cssNode = webContentNode.getNode("css/default.css");
+											cssContent = cssNode.getNode("jcr:content").getProperty("jcr:data").getValue().getString();
+										}
+									}
+									if(cssContent == null || cssContent.equals("")) {
+										cssContent = ".UIWindow .UIBreadcrumbsPortlet {\n\tmargin: 0px;\n}" +
 																			"\n\n.UIBreadcrumbsPortlet {\n\tmargin: 0 0 3px 0;\n}" +
 																			"\n\n.UIBreadcrumbs {\n\tline-height: 25px ;\n}" +
 																			"\n\n.UIBreadcrumbs a {\n\tfloat: left ;\n\tcolor: #6d7fa1 ;\n}" +
@@ -307,13 +319,6 @@
 																			"\n\n.UIBreadcrumbs .RightBreadcrumbsBar {\n\theight: 25px;\n}" +
 																			"\n\n.UIBreadcrumbs .BreadcrumbsInfoBar {\n\theight: 25px;\n\tline-height: 25px;\n\tpadding-left: 10px;\n}" +
 																			"\n\n.UIBreadcrumbs .RightBlackGridArrowIcon {\n\tfloat: left;\n\tmargin: 5px 0px 0px 0px;\n\tbackground:url('/portal/rest/jcr/repository/collaboration/sites content/live/classic/web contents/site artifacts/breadcrumb/Default/medias/images/BreadcrumbsArrowIcon.gif') repeat 0 0;\n\theight:16px;\n\twidth:16px;\n}";
-									
-									if(uicomponent.isEditing()) {
-										Node webContentNode = uicomponent.getNode();
-										if(webContentNode.hasNode("css/default.css")) {
-											Node cssNode = webContentNode.getNode("css/default.css");
-											cssContent = cssNode.getNode("jcr:content").getProperty("jcr:data").getValue().getString();
-										}
 									}
 									String[] fieldContentCSS = ["jcrPath=/node/css/default.css/jcr:content/jcr:data", cssContent] ;
 									uicomponent.addTextAreaField(cssFormId, fieldContentCSS) ;
@@ -341,7 +346,16 @@
 									uicomponent.addCalendarField("jsHiddenField4", jsHiddenField4);
 									uicomponent.addCalendarField("jsHiddenField5", jsHiddenField5);
 									uicomponent.addHiddenField("jsHiddenField6", jsHiddenField6);
-									String jsContent = 	"eXo.core.Browser.addOnLoadCallback('renderBreadcrumb', renderBreadcrumb);\n\n\t" +
+									String jsContent = 	null;
+									if(uicomponent.isEditing()) {
+										Node webContentNode = uicomponent.getNode();
+										if(webContentNode.hasNode("js/default.js")) {
+											Node jsNode = webContentNode.getNode("js/default.js");
+											jsContent = jsNode.getNode("jcr:content").getProperty("jcr:data").getValue().getString();
+										} 
+									}
+									if(jsContent == null || jsContent.equals("")) {
+										jsContent = 	"eXo.core.Browser.addOnLoadCallback('renderBreadcrumb', renderBreadcrumb);\n\n\t" +
 																			"function renderBreadcrumb() {\n\t" +
 																				"var breadcumbs = getBreadcrumbs();\n" +
 																				"var size = breadcumbs.length;\n" +
@@ -372,13 +386,7 @@
 																							"'</div>';\n" +
 																				"document.getElementById(\"breadcrumb-generator\").innerHTML = html;\n" +
 																			"}";
-									if(uicomponent.isEditing()) {
-										Node webContentNode = uicomponent.getNode();
-										if(webContentNode.hasNode("js/default.js")) {
-											Node jsNode = webContentNode.getNode("js/default.js");
-											jsContent = jsNode.getNode("jcr:content").getProperty("jcr:data").getValue().getString();
-										} 
-									} 
+									}
 									String[] fieldContentJS = ["jcrPath=/node/js/default.js/jcr:content/jcr:data", jsContent];
 									uicomponent.addTextAreaField(jsFormId, fieldContentJS); 								
 								%>

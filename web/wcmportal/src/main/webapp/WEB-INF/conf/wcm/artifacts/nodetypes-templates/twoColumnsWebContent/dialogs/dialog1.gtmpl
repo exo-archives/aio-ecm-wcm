@@ -127,7 +127,16 @@
 									uicomponent.addCalendarField("htmlHiddenField4", htmlHiddenField4);
 									uicomponent.addCalendarField("htmlHiddenField5", htmlHiddenField5);
 									uicomponent.addHiddenField("htmlHiddenField6", htmlHiddenField6);
-									String htmlContent = "<table class=\"WebContentTwoColumns\" cellspacing=\"10\">" +
+									String htmlContent = null;
+									if(uicomponent.isEditing()) {
+										Node webContentNode = uicomponent.getNode();
+										if(webContentNode.hasNode("default.html")) {
+											Node htmlNode = webContentNode.getNode("default.html");
+											htmlContent = htmlNode.getNode("jcr:content").getProperty("jcr:data").getValue().getString();
+										}
+									}
+									if(htmlContent == null || htmlContent.equals("")) {
+										htmlContent = "<table class=\"WebContentTwoColumns\" cellspacing=\"10\">" +
 															"<tr>" +
 																"<td>&nbsp;" +
 																"</td>" + 
@@ -135,12 +144,6 @@
 																"</td>" + 																
 															"</tr>" +
 														 "</table>";
-									if(uicomponent.isEditing()) {
-										Node webContentNode = uicomponent.getNode();
-										if(webContentNode.hasNode("default.html")) {
-											Node htmlNode = webContentNode.getNode("default.html");
-											htmlContent = htmlNode.getNode("jcr:content").getProperty("jcr:data").getValue().getString();
-										}
 									}
 									String[] htmlArguments = ["jcrPath=/node/default.html/jcr:content/jcr:data", "options=toolbar:CompleteWCM,width:400", htmlContent];
 			    					uicomponent.addWYSIWYGField(htmlWYSIWYGFormId, htmlArguments) ;
@@ -244,13 +247,16 @@
 									uicomponent.addCalendarField("cssHiddenField4", cssHiddenField4) ;
 									uicomponent.addCalendarField("cssHiddenField5", cssHiddenField5) ;
 									uicomponent.addHiddenField("cssHiddenField6", cssHiddenField6) ;
-									String cssContent = ".WebContentTwoColumns {\n\twidth: 100%; \n\theight: 100%;\n}\n\n";
+									String cssContent = null;
 									if(uicomponent.isEditing()) {
 										Node webContentNode = uicomponent.getNode();
 										if(webContentNode.hasNode("css/default.css")) {
 											Node cssNode = webContentNode.getNode("css/default.css");
 											cssContent = cssNode.getNode("jcr:content").getProperty("jcr:data").getValue().getString();
 										}
+									}
+									if(cssContent == null || cssContent.equals("")) {
+										cssContent = ".WebContentTwoColumns {\n\twidth: 100%; \n\theight: 100%;\n}\n\n";
 									}
 									String[] fieldContentCSS = ["jcrPath=/node/css/default.css/jcr:content/jcr:data", cssContent] ;
 									uicomponent.addTextAreaField(cssFormId, fieldContentCSS) ;
