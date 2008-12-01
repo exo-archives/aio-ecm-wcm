@@ -29,6 +29,7 @@ import org.exoplatform.container.component.ComponentPlugin;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
@@ -49,7 +50,7 @@ public class WebSchemaConfigServiceImpl implements WebSchemaConfigService, Start
 
   private Log log = ExoLogger.getLogger("wcm:WebSchemaConfigService");
 
-  public WebSchemaConfigServiceImpl(WCMConfigurationService configurationService) { 
+  public WebSchemaConfigServiceImpl(WCMConfigurationService configurationService, NodeHierarchyCreator hierarchyCreator) { 
     this.wcmConfigService = configurationService;
   }     
 
@@ -119,7 +120,7 @@ public class WebSchemaConfigServiceImpl implements WebSchemaConfigService, Start
     }
     sessionProvider.close();
   }
-  public void start() {
+  public void start() {    
     log.info("Start WebSchemaConfigServiceImpl...");
     createLiveSharePortalFolders();
   }
