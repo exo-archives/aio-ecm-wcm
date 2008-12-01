@@ -14,18 +14,10 @@
     </application>
 		<container id="ACMEContainer" template="system:/groovy/portal/webui/container/UITableColumnContainer.gtmpl">
   		<container id="ACMESerProContainer" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-  			<container id="ACMEService" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-	  			<application>
-			    	<instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-service</instance-id>
-			    	<title>Service</title>
-			  	</application>
-	  		</container>
-	  		<container id="ACMEProduct" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-	  			<application>
-			    	<instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-product</instance-id>
-			    	<title>Product</title>
-			  	</application>
-	  		</container>
+  			<application>
+			    <instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-serpro</instance-id>
+			    <title>Services and Products</title>
+			  </application>
   		</container>
   		<container id="ACMEFeatures" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
   			<application>
@@ -57,19 +49,11 @@
 			    <title>News</title>
 			  </application>
   		</container>
-  		<container id="ACMESerOriContainer" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-  			<container id="acmeService" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-	  			<application>
-			    	<instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-service</instance-id>
-			    	<title>Service</title>
-			  	</application>
-	  		</container>
-	  		<container id="ACMEProduct" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-	  			<application>
-			    	<instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-product</instance-id>
-			    	<title>Product</title>
-			  	</application>
-	  		</container>
+  		<container id="ACMESerProContainer" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+  			<application>
+			    <instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-serpro</instance-id>
+			    <title>Services and Products</title>
+			  </application>
   		</container>
   	</container>
   </page>
@@ -90,18 +74,10 @@
 			  </application>
   		</container>
   		<container id="ACMESerProContainer" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-  			<container id="acme-service" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-	  			<application>
-			    	<instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-service</instance-id>
-			    	<title>Service</title>
-			  	</application>
-	  		</container>
-	  		<container id="ACMEProduct" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-	  			<application>
-			    	<instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-product</instance-id>
-			    	<title>Product</title>
-			  	</application>
-	  		</container>
+  			<application>
+			    <instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-serpro</instance-id>
+			    <title>Services and Products</title>
+			  </application>
   		</container>
   	</container>
   </page>
