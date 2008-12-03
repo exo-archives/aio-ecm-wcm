@@ -12,7 +12,7 @@ import org.exoplatform.wcm.webui.clv.UIContentListViewerPortlet;
     	<div class="LeftTitle">
         	<div class="RightTitle">
             	<div class="CenterTitle">
-               		<div class="IconNews"><a class="TextTitle"><<  Featured News  >></a></div> 
+               		<div class="IconNews"><a class="TextTitle">Featured News</a></div> 
                 </div>
             </div>
         </div>
