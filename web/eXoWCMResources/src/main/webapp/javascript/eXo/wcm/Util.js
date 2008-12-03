@@ -85,3 +85,39 @@ function getHostName() {
 	var parentLocation = window.parent.location;
 	return parentLocation.href.substring(0, parentLocation.href.indexOf(parentLocation.pathname));
 }
+
+function getKeynum(event) {
+  var keynum = false ;
+  if(window.event) { /* IE */
+    keynum = window.event.keyCode;
+    event = window.event ;
+  } else if(event.which) { /* Netscape/Firefox/Opera */
+    keynum = event.which ;
+  }
+  if(keynum == 0) {
+    keynum = event.keyCode ;
+  }
+  return keynum ;
+}
+
+function quickSearch(resultPageURI) {
+  var searchBox = document.getElementById("siteSearchBox");
+  var keyWordInput = eXo.core.DOMUtil.findFirstDescendantByClass(searchBox, "input", "keyword");
+  var keyword = keyWordInput.value;
+  var resultPageURIDefault = "/searchResult";
+  var params = "portal=" + eXo.env.portal.portalName + "&keyword=" + keyword;
+  var baseURI = getHostName() + eXo.env.portal.context + "/" + eXo.env.portal.accessMode + "/" + eXo.env.portal.portalName; 
+  if (resultPageURI != undefined) {
+	baseURI += resultPageURI; 
+  } else {
+	baseURI += resultPageURIDefault;  
+  }
+  window.location = baseURI + "?" + params;
+}
+
+function quickSearchOnEnter(event, resultPageURI) {
+  var keyNum = getKeynum(event);
+  if (keyNum == 13) {
+    quickSearch(resultPageURI);
+  }
+}
