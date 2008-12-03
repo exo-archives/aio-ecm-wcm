@@ -38,7 +38,7 @@
       <supertype>exo:metadata</supertype>      
     </supertypes>
     <propertyDefinitions>
-    	<propertyDefinition name="metadata:siteTitle" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY"
+    	<propertyDefinition name="siteTitle" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY"
         protected="false" multiple="false">
         <valueConstraints/>
       </propertyDefinition>

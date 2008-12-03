@@ -6,7 +6,7 @@
 	      <td class="FieldLabel"><%=_ctx.appRes("SiteMetadata.dialog.label.title")%></td>
 	      <td class="FieldComponent">
 		      <%
-		        String[] fieldTitle = ["jcrPath=/node/metadata:siteMetadata/metadata:siteTitle"] ;
+		        String[] fieldTitle = ["jcrPath=/node/metadata:siteMetadata/siteTitle"] ;
 		        uicomponent.addTextField("title", fieldTitle) ;
 		      %>
 		    </td>
