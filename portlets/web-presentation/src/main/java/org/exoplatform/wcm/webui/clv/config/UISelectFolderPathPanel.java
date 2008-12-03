@@ -33,51 +33,61 @@ import org.exoplatform.webui.config.annotation.EventConfig;
  * Oct 17, 2008
  */
 
-@ComponentConfig(
-    template = "app:/groovy/ContentListViewer/config/UISelectFolderPathPanel.gtmpl",
-    events = { 
-        @EventConfig(listeners = UISelectPathPanel.SelectActionListener.class) 
-    }
-)
+@ComponentConfig(template = "app:/groovy/ContentListViewer/config/UISelectFolderPathPanel.gtmpl", events = { @EventConfig(listeners = UISelectPathPanel.SelectActionListener.class) })
 public class UISelectFolderPathPanel extends UISelectPathPanel {
 
-  public List<Node> getSelectableNodes() throws Exception {
-    List<Node> list = new ArrayList<Node>();
-    RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
-    String repository = repositoryService.getCurrentRepository().getConfiguration().getName();
-    TemplateService templateService = getApplicationComponent(TemplateService.class);
-    List<String> listDocumentTypes = templateService.getDocumentTemplates(repository);
-    if(parentNode == null) return list;
-    UIFolderPathSelectorForm uiFolderPathSelectorForm = getParent();
-    UIFolderPathTreeBuilder uiFolderPathTreeBuilder = uiFolderPathSelectorForm
-        .getChild(UIFolderPathTreeBuilder.class);
-    Node root = uiFolderPathTreeBuilder.getRootTreeNode();
-    Node currentPortal = uiFolderPathTreeBuilder.getCurrentPortal();
-    Node sharedPortal = uiFolderPathTreeBuilder.getSharedPortal();
-    Node webContentsFolder = null;
-    Node documentsFolder = null;
-    String parentNodePath = parentNode.getPath(); 
-    if (parentNodePath.equals(root.getPath())) {
-      list.clear();
-    } else if (parentNodePath.equals(currentPortal.getPath())) {
-      webContentsFolder = uiFolderPathTreeBuilder.getWebContentsFolder(currentPortal);
-      documentsFolder = uiFolderPathTreeBuilder.getDocumentsFolder(currentPortal);
-      list.add(webContentsFolder);
-      list.add(documentsFolder);
-    } else if (parentNodePath.equals(sharedPortal.getPath())) {
-      webContentsFolder = uiFolderPathTreeBuilder.getWebContentsFolder(sharedPortal);
-      documentsFolder = uiFolderPathTreeBuilder.getDocumentsFolder(sharedPortal);
-      list.add(webContentsFolder);
-      list.add(documentsFolder);
-    } else {
-      for(NodeIterator iterator = parentNode.getNodes();iterator.hasNext();) {
-        Node child = iterator.nextNode();
-        if(child.isNodeType("exo:hiddenable")) continue;
-        if(matchMimeType(child) && matchNodeType(child) && !listDocumentTypes.contains(child.getPrimaryNodeType().getName())) {
-          list.add(child);
-        }
-      }
-    }
-    return list;
-  }
+	public UISelectFolderPathPanel() throws Exception {
+	}
+
+	public List<Node> getSelectableNodes() throws Exception {
+		List<Node> list = new ArrayList<Node>();
+		RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
+		String repository = repositoryService.getCurrentRepository()
+				.getConfiguration().getName();
+		TemplateService templateService = getApplicationComponent(TemplateService.class);
+		List<String> listDocumentTypes = templateService
+				.getDocumentTemplates(repository);
+		if (parentNode == null)
+			return list;
+		UIFolderPathSelectorForm uiFolderPathSelectorForm = getParent();
+		UIFolderPathTreeBuilder uiFolderPathTreeBuilder = uiFolderPathSelectorForm
+				.getChild(UIFolderPathTreeBuilder.class);
+		Node root = uiFolderPathTreeBuilder.getRootTreeNode();
+		Node currentPortal = uiFolderPathTreeBuilder.getCurrentPortal();
+		Node sharedPortal = uiFolderPathTreeBuilder.getSharedPortal();
+		Node webContentsFolder = null;
+		Node documentsFolder = null;
+		String parentNodePath = parentNode.getPath();
+		if (parentNodePath.equals(root.getPath())) {
+			list.clear();
+		} else if (parentNodePath.equals(currentPortal.getPath())) {
+			webContentsFolder = uiFolderPathTreeBuilder
+					.getWebContentsFolder(currentPortal);
+			documentsFolder = uiFolderPathTreeBuilder
+					.getDocumentsFolder(currentPortal);
+			list.add(webContentsFolder);
+			list.add(documentsFolder);
+		} else if (parentNodePath.equals(sharedPortal.getPath())) {
+			webContentsFolder = uiFolderPathTreeBuilder
+					.getWebContentsFolder(sharedPortal);
+			documentsFolder = uiFolderPathTreeBuilder
+					.getDocumentsFolder(sharedPortal);
+			list.add(webContentsFolder);
+			list.add(documentsFolder);
+		} else {
+			for (NodeIterator iterator = parentNode.getNodes(); iterator
+					.hasNext();) {
+				Node child = iterator.nextNode();
+				if (child.isNodeType("exo:hiddenable"))
+					continue;
+				if (matchMimeType(child)
+						&& matchNodeType(child)
+						&& !listDocumentTypes.contains(child
+								.getPrimaryNodeType().getName())) {
+					list.add(child);
+				}
+			}
+		}
+		return list;
+	}
 }
