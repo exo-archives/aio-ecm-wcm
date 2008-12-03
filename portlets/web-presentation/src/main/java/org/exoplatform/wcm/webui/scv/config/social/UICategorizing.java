@@ -73,6 +73,7 @@ public class UICategorizing extends UIContainer implements UISelectable {
       categoriesService.removeCategory(webContentNode, oldCategory, repositoryName);
     }
     for (String newCategory: newCategoryPaths) {
+      newCategory = "/jcr:system/exo:ecm/exo:taxonomies/" + newCategory;
       categoriesService.addCategory(webContentNode, newCategory, repositoryName);
     }
   }
