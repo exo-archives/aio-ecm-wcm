@@ -1,0 +1,61 @@
+<% 
+/* 
+ * Go to "WCMResources/src/main/webapp/shareskin/content-list-viewer/list-by-folder/defaultFolderListViewer"
+ * to edit stylesheet if you want.
+ */
+import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
+import javax.jcr.Node;
+import org.exoplatform.wcm.webui.clv.UIContentListViewerPortlet;
+%>
+<div id="$uicomponent.id" class="ACMEContentListViewer">
+	<div class="Caption">
+		<% 	
+		def currentPageData = uicomponent.getCurrentPageData();			
+		String labelRefreshAction = _ctx.appRes("UIContentListPresentationDefault.label.action.refresh");
+		String labelReadMore = _ctx.appRes("UIContentListPresentationDefault.label.readmore");
+		for (Node node : currentPageData) {				
+			String itemName = node.getName();
+			String itemLink = uicomponent.getURL(node);		
+			String itemSummary = uicomponent.getSummary(node);
+		    String itemTitle = uicomponent.getTitle(node);
+			String itemDateCreated = uicomponent.getCreatedDate(node);
+			String itemOwner = uicomponent.getAuthor(node);			
+			String imgSrc = uicomponent.getIllustrativeImage(node);
+			if (itemTitle != null && itemTitle.trim().length() != 0) {
+				itemName = itemTitle;
+			}
+		%>	
+			<div class="CaptionItem">
+				<% if (uicomponent.isShowField(UIContentListViewerPortlet.SHOW_TITLE)) {%>
+				<div class="CaptionTitle"><a href="$itemLink">$itemName</a></div>		
+				<% } %>	
+				<% if (itemDateCreated != null && uicomponent.isShowField(UIContentListViewerPortlet.SHOW_DATE_CREATED)) { %>
+				<div class="CaptionDate"><%=itemDateCreated%></div>		
+				<% } %>											
+				<% if (itemSummary != null && itemSummary.trim().length() != 0 && uicomponent.isShowField(UIContentListViewerPortlet.SHOW_SUMMARY)) { %>
+				<div class="CaptionContent">				
+					<% if(imgSrc != null && uicomponent.isShowField(UIContentListViewerPortlet.SHOW_THUMBNAILS_VIEW)) { %>
+						<img src="$imgSrc" width="91" height="53 /">				
+					<% } %>
+					<p><%=itemSummary%></p>
+				</div>			
+				<% } %>
+				<div class="LeftButtonContent">
+            <div class="RightButtonContent">
+                <div class="CenterButtonContent"><a href="$itemLink"><%=labelReadMore%>&raquo;</a></div>
+            </div>
+        </div>
+        <div style="clear:left"><span></span></div>
+			</div>			
+		<%							
+		}
+		%>
+		<div class="CaptionFunc">
+			<% 
+			if (uicomponent.showPaginator()) { 
+				uicomponent.renderChild(UICustomizeablePaginator.class)
+			} 
+			%>
+		</div>					
+	</div>
+</div>

@@ -38,13 +38,21 @@
             </object>
           </object-param>
           <object-param>        
-            <name>acme.folder.list.viewer</name>
-            <description>ACME folder list viewer groovy template</description>
+            <name>acme.folder.list.viewer.with.title</name>
+            <description>ACME folder list viewer with title groovy template</description>
             <object type="org.exoplatform.services.cms.views.PortletTemplatePlugin$PortletTemplateConfig">
-              <field  name="templateName"><string>ACMEContentListViewer.gtmpl</string></field>                            
+              <field  name="templateName"><string>ACMEContentListViewerWithTitle.gtmpl</string></field>                            
               <field  name="category"><string>list-by-folder</string></field>
             </object>
-          </object-param>			  	      		 
+          </object-param>
+          <object-param>        
+            <name>acme.folder.list.viewer.without.title</name>
+            <description>ACME folder list viewer without title groovy template</description>
+            <object type="org.exoplatform.services.cms.views.PortletTemplatePlugin$PortletTemplateConfig">
+              <field  name="templateName"><string>ACMEContentListViewerWithoutTitle.gtmpl</string></field>                            
+              <field  name="category"><string>list-by-folder</string></field>
+            </object>
+          </object-param>		  	      		 
           <object-param>        
             <name>default.paginator</name>
             <description>Default paginator groovy template</description>

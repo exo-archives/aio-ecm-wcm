@@ -8,30 +8,32 @@
     <title>Home Page</title>
 	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>*:/platform/administrators</edit-permission>
-    <application>
-      <instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-homepage</instance-id>
-      <title>Homepage</title>
-    </application>
-		<container id="ACMEContainer" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
-  		<container id="ACMESerProContainer" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-  			<application>
-			    <instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-serpro</instance-id>
-			    <title>Services and Products</title>
-			  </application>
-  		</container>
-  		<container id="ACMEFeatures" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-  			<application>
-			    <instance-id>portal#acme:/web-presentation/ContentListViewerPortlet/acme-feature</instance-id>
-			    <title>Features</title>
-			  </application>
-  		</container>
-  		<container id="ACMEAbout" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-  			<application>
-		    	<instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-about</instance-id>
-		    	<title>About</title>
-		  	</application>
-		  </container>
-  	</container>
+	  <container id="ACMEHomepage" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  	<application>
+	      <instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-homepage</instance-id>
+	      <title>Homepage</title>
+	    </application>
+			<container id="ACMEContainer" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
+	  		<container id="ACMESerProContainer" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  			<application>
+				    <instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-serpro</instance-id>
+				    <title>Services and Products</title>
+				  </application>
+	  		</container>
+	  		<container id="ACMEFeatures" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  			<application>
+				    <instance-id>portal#acme:/web-presentation/ContentListViewerPortlet/acme-feature</instance-id>
+				    <title>Features</title>
+				  </application>
+	  		</container>
+	  		<container id="ACMEAbout" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  			<application>
+			    	<instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-about</instance-id>
+			    	<title>About</title>
+			  	</application>
+			  </container>
+	  	</container>
+	  </container>
   </page>
   
   <page>
@@ -42,20 +44,22 @@
     <title>News</title>
 	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>*:/platform/administrators</edit-permission>
-    <container id="ACMEContainer" template="system:/groovy/portal/webui/container/UITableColumnContainer.gtmpl">
-  		<container id="ACMENews" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-  			<application>
-			    <instance-id>portal#acme:/web-presentation/ContentListViewerPortlet/acme-news</instance-id>
-			    <title>News</title>
-			  </application>
-  		</container>
-  		<container id="ACMESerProContainer" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-  			<application>
-			    <instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-serpro</instance-id>
-			    <title>Services and Products</title>
-			  </application>
-  		</container>
-  	</container>
+	  <container id="ACMENewsPage" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  	<container id="ACMEContainer" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
+	  		<container id="ACMENews" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  			<application>
+				    <instance-id>portal#acme:/web-presentation/ContentListViewerPortlet/acme-news</instance-id>
+				    <title>News</title>
+				  </application>
+	  		</container>
+	  		<container id="ACMESerProContainer" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  			<application>
+				    <instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-serpro</instance-id>
+				    <title>Services and Products</title>
+				  </application>
+	  		</container>
+	  	</container>
+	  </container>
   </page>
   
   <page>
@@ -66,20 +70,22 @@
     <title>About Us</title>
 	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>*:/platform/administrators</edit-permission>
-    <container id="ACMEContainer" template="system:/groovy/portal/webui/container/UITableColumnContainer.gtmpl">
-  		<container id="ACMEAbout" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-  			<application>
-			    <instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-about</instance-id>
-			    <title>About</title>
-			  </application>
-  		</container>
-  		<container id="ACMESerProContainer" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-  			<application>
-			    <instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-serpro</instance-id>
-			    <title>Services and Products</title>
-			  </application>
-  		</container>
-  	</container>
+	  <container id="ACMEAboutPage" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  	<container id="ACMEContainer" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
+	  		<container id="ACMEAbout" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  			<application>
+				    <instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-about</instance-id>
+				    <title>About</title>
+				  </application>
+	  		</container>
+	  		<container id="ACMESerProContainer" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  			<application>
+				    <instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-serpro</instance-id>
+				    <title>Services and Products</title>
+				  </application>
+	  		</container>
+	  	</container>
+	  </container>
   </page>
   
   <page>
@@ -90,20 +96,22 @@
     <title>Contact</title>
 	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>*:/platform/administrators</edit-permission>
-    <container id="ACMEContainer" template="system:/groovy/portal/webui/container/UITableColumnContainer.gtmpl">
-  		<container id="ACMEContact" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-  			<application>
-			    <instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-contact</instance-id>
-			    <title>Contact</title>
-			  </application>
-  		</container>
-  		<container id="ACMEAbout" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-  			<application>
-			    <instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-about</instance-id>
-			    <title>About</title>
-			  </application>
-  		</container>
-  	</container>
+	  <container id="ACMEContactPage" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  	<container id="ACMEContainer" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
+	  		<container id="ACMEContact" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  			<application>
+				    <instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-contact</instance-id>
+				    <title>Contact</title>
+				  </application>
+	  		</container>
+	  		<container id="ACMEAbout" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  			<application>
+				    <instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-about</instance-id>
+				    <title>About</title>
+				  </application>
+	  		</container>
+	  	</container>
+	  </container>
   </page>
   
   <page>
@@ -114,20 +122,22 @@
     <title>Product</title>
 	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>*:/platform/administrators</edit-permission>
-    <container id="ACMEContainer" template="system:/groovy/portal/webui/container/UITableColumnContainer.gtmpl">
-  		<container id="ACMEProduct" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-  			<application>
-			    <instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-product</instance-id>
-			    <title>Product</title>
-			  </application>
-  		</container>
-  		<container id="ACMEServices" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-  			<application>
-			    <instance-id>portal#acme:/web-presentation/ContentListViewerPortlet/acme-services</instance-id>
-			    <title>Services</title>
-			  </application>
-  		</container>
-  	</container>
+	  <container id="ACMEProductsPage" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  	<container id="ACMEContainer" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
+	  		<container id="ACMEProduct" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  			<application>
+				    <instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-product</instance-id>
+				    <title>Product</title>
+				  </application>
+	  		</container>
+	  		<container id="ACMEServices" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  			<application>
+				    <instance-id>portal#acme:/web-presentation/ContentListViewerPortlet/acme-services</instance-id>
+				    <title>Services</title>
+				  </application>
+	  		</container>
+	  	</container>
+	  </container>
   </page>
   
   <page>
@@ -138,20 +148,22 @@
     <title>Services</title>
 	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>*:/platform/administrators</edit-permission>
-    <container id="ACMEContainer" template="system:/groovy/portal/webui/container/UITableColumnContainer.gtmpl">
-  		<container id="ACMEServices" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-  			<application>
-			    <instance-id>portal#acme:/web-presentation/ContentListViewerPortlet/acme-services</instance-id>
-			    <title>Services</title>
-			  </application>
-  		</container>
-  		<container id="ACMEProducts" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-  			<application>
-			    <instance-id>portal#acme:/web-presentation/ContentListViewerPortlet/acme-products</instance-id>
-			    <title>Products</title>
-			  </application>
-  		</container>
-  	</container>
+	  <container id="ACMEServicesPage" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  	<container id="ACMEContainer" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
+	  		<container id="ACMEServices" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  			<application>
+				    <instance-id>portal#acme:/web-presentation/ContentListViewerPortlet/acme-services</instance-id>
+				    <title>Services</title>
+				  </application>
+	  		</container>
+	  		<container id="ACMEProducts" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  			<application>
+				    <instance-id>portal#acme:/web-presentation/ContentListViewerPortlet/acme-products</instance-id>
+				    <title>Products</title>
+				  </application>
+	  		</container>
+	  	</container>
+	  </container>
   </page>
   
   <page>

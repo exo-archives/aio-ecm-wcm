@@ -172,12 +172,78 @@
     </preference>
     <preference>
     	<name>folderPath</name>
-    	<value>/sites content/live/acme/web contents/Products</value>
+    	<value>/sites content/live/acme/web contents/News</value>
     	<read-only>false</read-only>
     </preference>
     <preference>
     	<name>formViewTemplatePath</name>
-    	<value>/jcr:system/exo:ecm/views/templates/Content List Viewer/list-by-folder/ACMEContentListViewer.gtmpl</value>
+    	<value>/jcr:system/exo:ecm/views/templates/Content List Viewer/list-by-folder/ACMEContentListViewerWithTitle.gtmpl</value>
+    	<read-only>false</read-only>
+    </preference>
+    <preference>
+    	<name>paginatorTemplatePath</name>
+    	<value></value>
+    	<read-only>false</read-only>
+    </preference>	    
+    <preference>
+    	<name>itemsPerPage</name>
+    	<value>5</value>	    	
+    	<read-only>false</read-only>
+    </preference>
+    <preference>
+    	<name>showQuickEditButton</name>
+    	<value>true</value>	    	
+    	<read-only>false</read-only>
+    </preference>
+    <preference>
+    	<name>showRefreshButton</name>
+    	<value>false</value>	    	
+    	<read-only>false</read-only>
+    </preference>	    
+    <preference>
+    	<name>showThumbnailsView</name>
+    	<value>false</value>	    	
+    	<read-only>false</read-only>
+    </preference>	    	    
+    <preference>
+    	<name>showTitle</name>
+    	<value>true</value>	    	
+    	<read-only>false</read-only>
+    </preference>
+    <preference>
+    	<name>showDateCreated</name>
+    	<value>false</value>	    	
+    	<read-only>false</read-only>
+    </preference>
+    <preference>
+    	<name>showSummary</name>
+    	<value>true</value>	    	
+    	<read-only>false</read-only>
+    </preference>	 
+  </portlet-preferences>
+  
+  <portlet-preferences>
+    <owner-type>portal</owner-type>
+    <owner-id>acme</owner-id>
+    <window-id>portal#acme:/web-presentation/ContentListViewerPortlet/acme-news</window-id>
+    <preference>
+    	<name>repository</name>
+    	<value>repository</value>
+    	<read-only>false</read-only>
+    </preference>
+    <preference>
+    	<name>workspace</name>
+    	<value>collaboration</value>
+    	<read-only>false</read-only>
+    </preference>
+    <preference>
+    	<name>folderPath</name>
+    	<value>/sites content/live/acme/web contents/News</value>
+    	<read-only>false</read-only>
+    </preference>
+    <preference>
+    	<name>formViewTemplatePath</name>
+    	<value>/jcr:system/exo:ecm/views/templates/Content List Viewer/list-by-folder/ACMEContentListViewerWithoutTitle.gtmpl</value>
     	<read-only>false</read-only>
     </preference>
     <preference>
