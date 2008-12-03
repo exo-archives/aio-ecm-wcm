@@ -25,16 +25,78 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
 /**
  * Created by The eXo Platform SAS
- * Author : Hoa Pham	
- *          hoa.phamvu@exoplatform.com
- * Nov 4, 2008  
+ * Author : Hoa Pham
+ * hoa.phamvu@exoplatform.com
+ * Nov 4, 2008
  */
-public interface PageMetadataService {  
-  public final static String PAGE_TITLE = "pageTitle";
-  public void addMetadata(String pageURI, HashMap<String,String> metadata) throws Exception;  
-  public void removeMetadata(String pageURI) throws Exception; 
-  public HashMap<String, String> extractMetadata(Node node) throws Exception;
-  public Map<String,String> getMetadata(String pageURI, SessionProvider sessionProvider) throws Exception ;
-  public HashMap<String,String> getPortalMetadata(String uri, SessionProvider sessionProvider) throws Exception;
+public interface PageMetadataService {     
   
+  /** The Constant HTTP META TAG KEYWORDS. */
+  public final static String KEYWORDS = "keywords".intern();
+  
+  /** The Constant HTTP META TAG ROBOTS. */
+  public final static String ROBOTS = "robots".intern();
+  
+  /** The Constant HTTP META TAG DESCRIPTION. */
+  public final static String DESCRIPTION = "description".intern();
+  
+  /** The Constant eXo  META TAG SITE_TITLE. */
+  public final static String SITE_TITLE = "siteTitle";  
+  
+  /** The Constant eXO Metatag PAGE_TITLE. */
+  public final static String PAGE_TITLE = "pageTitle";
+  
+  /**
+   * store the metadata information for a pageURI
+   * 
+   * @param pageURI the page uri
+   * @param metadata the metadata
+   * 
+   * @throws Exception the exception
+   */
+  public void addMetadata(String pageURI, HashMap<String,String> metadata) throws Exception;  
+  
+  /**
+   * Removes the metadata information for a page
+   * 
+   * @param pageURI the page uri
+   * 
+   * @throws Exception the exception
+   */
+  public void removeMetadata(String pageURI) throws Exception; 
+  
+  /**
+   * Extract metadata information from node
+   * 
+   * @param node the node
+   * 
+   * @return the hash map< string, string>
+   * 
+   * @throws Exception the exception
+   */
+  public HashMap<String, String> extractMetadata(Node node) throws Exception;
+  
+  /**
+   * Gets the metadata.
+   * 
+   * @param pageURI the page uri
+   * @param sessionProvider the session provider
+   * 
+   * @return the metadata
+   * 
+   * @throws Exception the exception
+   */
+  public Map<String,String> getMetadata(String pageURI, SessionProvider sessionProvider) throws Exception ;
+  
+  /**
+   * Retrieves  the portal metadata information for each request uri
+   * 
+   * @param uri the uri
+   * @param sessionProvider the session provider
+   * 
+   * @return the portal metadata
+   * 
+   * @throws Exception the exception
+   */
+  public HashMap<String,String> getPortalMetadata(String uri, SessionProvider sessionProvider) throws Exception;    
 }

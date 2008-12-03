@@ -17,8 +17,8 @@
 package org.exoplatform.services.wcm.metadata;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -32,6 +32,8 @@ import javax.jcr.query.QueryManager;
 import org.apache.commons.logging.Log;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.cache.ExoCache;
+import org.exoplatform.services.cms.categories.CategoriesService;
+import org.exoplatform.services.cms.folksonomy.FolksonomyService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.config.RepositoryEntry;
 import org.exoplatform.services.jcr.core.ManageableRepository;
@@ -50,24 +52,28 @@ import org.picocontainer.Startable;
  */
 public class PageMetadataServiceImpl implements PageMetadataService, Startable {
   private static Log log = ExoLogger.getLogger(PageMetadataServiceImpl.class); 
-  private HashSet<String> publishingNavigationNodeURIs = new HashSet<String>();  
+  private CopyOnWriteArraySet<String> publishingNavigationNodeURIs = new CopyOnWriteArraySet<String>();  
   private ExoCache pageMetadataCache;   
   private RepositoryService repositoryService;
   private LivePortalManagerService livePortalManagerService;
   private WCMConfigurationService configurationService;
-
-  public PageMetadataServiceImpl(RepositoryService repositoryService, LivePortalManagerService livePortalManagerService, WCMConfigurationService configurationService,CacheService cacheService) throws Exception {
+  private CategoriesService categoriesService;
+  private FolksonomyService folksonomyService;
+  public PageMetadataServiceImpl(RepositoryService repositoryService, LivePortalManagerService livePortalManagerService, 
+      WCMConfigurationService configurationService,CacheService cacheService, CategoriesService categoriesService, FolksonomyService folksonomyService) throws Exception {
     this.repositoryService = repositoryService;
     this.pageMetadataCache = cacheService.getCacheInstance(PageMetadataServiceImpl.class.getName());
     this.livePortalManagerService = livePortalManagerService;
     this.configurationService = configurationService;
+    this.categoriesService = categoriesService;
+    this.folksonomyService = folksonomyService;
   }    
 
   public Map<String,String> getMetadata(String pageUri,SessionProvider sessionProvider) throws Exception {
     HashMap<String,String> metadata = (HashMap<String,String>)pageMetadataCache.get(pageUri);
     if(metadata != null) return metadata;
     if(!publishingNavigationNodeURIs.contains(pageUri)) 
-      throw new UnsupportedOperationException("the service unsupported action for page with URI"+ pageUri);        
+      return null;
     Node content = findNodeByNavigationNodeURI(pageUri,sessionProvider);
     if(content == null)
       return metadata;
@@ -124,11 +130,12 @@ public class PageMetadataServiceImpl implements PageMetadataService, Startable {
     HashMap<String, String> medatata = new HashMap<String,String>();
     Node portalNode = findPortal(node);    
     String siteTitle = null;
+    String portalKeywords = null;
     if(portalNode != null) {
-      siteTitle = getProperty(portalNode,"metadata:siteTitle");
+      siteTitle = getProperty(portalNode,SITE_TITLE);
       if(siteTitle == null) siteTitle = portalNode.getName();
       medatata = extractPortalMetadata(portalNode);
-      medatata.remove("metadata:siteTitle");
+      portalKeywords = medatata.get(KEYWORDS);
     }
     String pageTitle = getProperty(node,"exo:title");
     if(pageTitle == null)
@@ -139,24 +146,31 @@ public class PageMetadataServiceImpl implements PageMetadataService, Startable {
     String description = getProperty(node,"exo:summary");    
     medatata.put(PAGE_TITLE,pageTitle);
     if(description != null) {
-      medatata.put("description",description); 
+      medatata.put(DESCRIPTION,description); 
     }
-    String keywords = createKeywords(node,pageTitle);
-    medatata.put("keywords",keywords);
+    String keywords = computeContentKeywords(node,pageTitle);
+    if(portalKeywords != null) {
+      keywords = keywords.concat(",").concat(portalKeywords);
+    }
+    medatata.put(KEYWORDS,keywords);    
     return medatata;
   }
-  
-  private String createKeywords(Node node, String title) throws Exception {    
-    if(node.hasProperty("exo:category")) {
-      StringBuffer buffer = new StringBuffer();
-      for(Value value: node.getProperty("exo:category").getValues()) 
-        buffer.append(value.getString()).append(",");
-      return buffer.toString();
+
+  private String computeContentKeywords(Node node, String title) throws Exception {
+    StringBuilder builder = new StringBuilder();    
+    String repository = ((ManageableRepository)node.getSession().getRepository()).getConfiguration().getName();    
+    for(Node category: categoriesService.getCategories(node,repository)) {
+      builder.append(category.getName()).append(",");
+    }    
+    for(Node tag: folksonomyService.getLinkedTagsOfDocument(node,repository)) {
+      builder.append(tag.getName()).append(",");
     }
-    return title.replaceFirst(" ",",");
+    builder.append(title.replaceAll(" ",","));
+    return builder.toString();
   }
+
   private String getProperty(Node node, String propertyName) throws Exception {
-    return node.hasProperty(propertyName)?node.getProperty(propertyName).getString():null;
+    return node.hasProperty(propertyName)? node.getProperty(propertyName).getString():null;
   }
 
   protected Node findPortal(Node child) throws Exception{                       
