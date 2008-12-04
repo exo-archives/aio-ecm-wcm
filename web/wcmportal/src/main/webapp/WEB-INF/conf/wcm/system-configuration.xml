@@ -122,26 +122,7 @@
 	</external-component-plugins>
 		
   <external-component-plugins>
-    <target-component>org.exoplatform.services.scheduler.JobSchedulerService</target-component>
-    <component-plugin>
-      <name>UpdatePortalURIJob</name>
-      <set-method>addPeriodJob</set-method>
-      <type>org.exoplatform.services.scheduler.PeriodJob</type>
-      <description>add a job to the JobSchedulerService</description>
-      <init-params>
-        <properties-param>
-          <name>job.info</name>
-          <description>save the monitor data  periodically</description>
-          <property name="jobName" value="UpdatePortalURIJob"/>
-          <property name="groupName" value="WebContentManagement"/>
-          <property name="job" value="org.exoplatform.services.wcm.search.impl.UpdatePortalURIJob"/>
-          <property name="repeatCount" value="0"/>
-          <property name="period" value="3000000"/>     
-          <property name="startTime" value="+0"/>
-          <property name="endTime" value=""/>               
-        </properties-param>
-      </init-params>
-    </component-plugin>
+    <target-component>org.exoplatform.services.scheduler.JobSchedulerService</target-component>    
     <component-plugin>
       <name>AddCronJob</name>
       <set-method>addCronJob</set-method>
