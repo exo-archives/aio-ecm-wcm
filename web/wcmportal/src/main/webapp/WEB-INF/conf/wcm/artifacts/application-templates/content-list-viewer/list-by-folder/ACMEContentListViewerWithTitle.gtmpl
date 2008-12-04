@@ -8,15 +8,17 @@ import javax.jcr.Node;
 import org.exoplatform.wcm.webui.clv.UIContentListViewerPortlet;
 %>
 <div id="$uicomponent.id" class="ACMEContentListViewer">
+	<% if(uicomponent.getContentColumn() != null && uicomponent.isShowHeader()) {%>
 	<div class="TitleCenterCol">
     	<div class="LeftTitle">
         	<div class="RightTitle">
             	<div class="CenterTitle">
-               		<div class="IconNews"><a class="TextTitle">Featured News</a></div> 
+               		<div class="IconNews"><a class="TextTitle"><%= uicomponent.getContentColumn() %></a></div> 
                 </div>
             </div>
         </div>
   </div>
+  <% } %>
 	<div class="Caption">
 		<% 	
 		def currentPageData = uicomponent.getCurrentPageData();			
