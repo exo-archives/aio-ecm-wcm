@@ -60,6 +60,8 @@ import org.exoplatform.webui.form.UIFormStringInput;
     @EventConfig(listeners = UIViewerManagementForm.CancelActionListener.class),
     @EventConfig(listeners = UIViewerManagementForm.SelectFolderPathActionListener.class) })
 public class UIViewerManagementForm extends UIForm implements UISelectable {
+  
+ public final static String HEADER                        = "Header";
 
   public final static String PORTLET_NAME                 = "Content List Viewer";
 
@@ -88,12 +90,16 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
   public static final String VIEWER_DATE_CREATED          = "ViewerDateCreated";
 
   public static final String VIEWER_SUMMARY               = "ViewerSummary";
+  
+  public static final String VIEWER_HEADER                = "ViewerHeader";
 
   @SuppressWarnings("unchecked")
   public UIViewerManagementForm() throws Exception {
     PortletPreferences portletPreferences = getPortletPreferences();
     String folderPath = portletPreferences.getValue(UIContentListViewerPortlet.FOLDER_PATH,
         UIContentListViewerPortlet.FOLDER_PATH);
+    
+    UIFormStringInput headerInput = new UIFormStringInput(HEADER, HEADER, null);
 
     List<SelectItemOption<String>> formViewerTemplateList = getTemplateList(PORTLET_NAME,
         FORM_VIEW_TEMPLATE_CATEGORY);
@@ -136,6 +142,8 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
     UIFormCheckBoxInput dateCreatedViewerCheckbox = new UIFormCheckBoxInput(VIEWER_DATE_CREATED,
         VIEWER_DATE_CREATED, null);
     dateCreatedViewerCheckbox.setChecked(true);
+    UIFormCheckBoxInput viewerHeader = new UIFormCheckBoxInput(VIEWER_HEADER,VIEWER_HEADER,null);
+    viewerHeader.setChecked(true);
 
     
     String quickEditAble = portletPreferences.getValue(
@@ -165,6 +173,7 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
         null);
     itemsPerPage.setValue(itemsPerPageVal);
     
+    addChild(headerInput);
     addChild(folderPathInputSet);
     addChild(formViewTemplateSelector);
     addChild(paginatorTemplateSelector);
@@ -175,6 +184,7 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
     addChild(titleViewerCheckbox);
     addChild(dateCreatedViewerCheckbox);
     addChild(summaryViewerCheckbox);
+    addChild(viewerHeader);
     
     setActions(new String[] { "Save", "Cancel" });
   }
@@ -233,6 +243,7 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
       String workspace = manageableRepository.getConfiguration().getDefaultWorkspaceName();
       String folderPath = viewerManagementForm.getUIStringInput(
           UIViewerManagementForm.FOLDER_PATH_INPUT).getValue();
+      String header = viewerManagementForm.getUIStringInput(UIViewerManagementForm.HEADER).getValue();
       String formViewTemplatePath = viewerManagementForm.getUIFormSelectBox(
           UIViewerManagementForm.FORM_VIEW_TEMPLATES_SELECTOR).getValue();
       String paginatorTemplatePath = viewerManagementForm.getUIFormSelectBox(
@@ -251,6 +262,8 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
           UIViewerManagementForm.VIEWER_SUMMARY).isChecked() ? "true" : "false";
       String viewDateCreated = viewerManagementForm.getUIFormCheckBoxInput(
           UIViewerManagementForm.VIEWER_DATE_CREATED).isChecked() ? "true" : "false";
+      String viewerHeader = viewerManagementForm.getUIFormCheckBoxInput(
+          UIViewerManagementForm.VIEWER_HEADER).isChecked() ? "true" : "false";
       if (folderPath == null || folderPath.length() == 0) {
         uiApp.addMessage(new ApplicationMessage("UIMessageBoard.msg.empty-folder-path", null,
             ApplicationMessage.WARNING));
@@ -274,6 +287,9 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
       portletPreferences.setValue(UIContentListViewerPortlet.SHOW_TITLE, viewTitle);
       portletPreferences.setValue(UIContentListViewerPortlet.SHOW_DATE_CREATED, viewDateCreated);
       portletPreferences.setValue(UIContentListViewerPortlet.SHOW_SUMMARY, viewSummary);
+      portletPreferences.setValue(UIContentListViewerPortlet.HEADER,header);
+      portletPreferences.setValue(UIContentListViewerPortlet.SHOW_HEADER, viewerHeader);
+      
       portletPreferences.store();
       if (Utils.isEditPortletInCreatePageWizard()) {
         uiApp.addMessage(new ApplicationMessage("UIMessageBoard.msg.saving-success", null,

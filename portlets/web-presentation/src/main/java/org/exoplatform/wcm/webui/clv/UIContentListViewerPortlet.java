@@ -47,6 +47,8 @@ public class UIContentListViewerPortlet extends UIPortletApplication {
   public final static String ITEMS_PER_PAGE          = "itemsPerPage";
 
   public final static String FOLDER_PATH             = "folderPath";
+  
+  public final static String HEADER                  = "Header";
 
   public final static String FORM_VIEW_TEMPLATE_PATH = "formViewTemplatePath";
 
@@ -62,7 +64,9 @@ public class UIContentListViewerPortlet extends UIPortletApplication {
 
   public final static String SHOW_SUMMARY            = "showSummary";
 
-  public final static String SHOW_DATE_CREATED        = "showDateCreated";
+  public final static String SHOW_DATE_CREATED       = "showDateCreated";
+  
+  public final static String SHOW_HEADER             = "showHeader";
 
   public UIContentListViewerPortlet() throws Exception {
     activateMode(mode);

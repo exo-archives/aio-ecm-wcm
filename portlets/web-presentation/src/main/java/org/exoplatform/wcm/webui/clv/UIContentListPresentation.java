@@ -72,6 +72,7 @@ public class UIContentListPresentation extends UIContainer {
   private UICustomizeablePaginator uiPaginator;
 
   private String                   contentColumn;
+  private boolean                  showHeader;
 
   private SimpleDateFormat         dateFormatter = new SimpleDateFormat(
       ISO8601.SIMPLE_DATETIME_FORMAT);
@@ -261,6 +262,14 @@ public class UIContentListPresentation extends UIContainer {
       .getParent();
       refreshListener.onRefresh(event);
     }
+  }
+
+  public boolean isShowHeader() {
+    return showHeader;
+  }
+
+  public void setShowHeader(boolean showHeader) {
+    this.showHeader = showHeader;
   }
 
 }

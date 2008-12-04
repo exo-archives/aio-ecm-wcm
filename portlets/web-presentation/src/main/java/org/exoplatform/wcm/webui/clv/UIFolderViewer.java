@@ -37,6 +37,7 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.utils.PaginatedNodeIterator;
+import org.exoplatform.wcm.webui.clv.config.UIViewerManagementForm;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -100,6 +101,8 @@ public class UIFolderViewer extends UIContainer implements RefreshDelegateAction
     String templatePath = getFormViewTemplatePath();
     ResourceResolver resourceResolver = getTemplateResourceResolver();
     contentListPresentation.init(templatePath, resourceResolver, paginatedNodeIterator);
+    contentListPresentation.setContentColumn(portletPreferences.getValue(UIContentListViewerPortlet.HEADER, null));
+    contentListPresentation.setShowHeader(Boolean.parseBoolean(portletPreferences.getValue(UIContentListViewerPortlet.SHOW_HEADER, null)));
   }
 
   public String getMessage() throws Exception {
