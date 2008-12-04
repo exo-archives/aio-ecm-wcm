@@ -23,6 +23,7 @@ import javax.jcr.Node;
 import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.nodetype.NodeType;
+import javax.jcr.nodetype.NodeTypeIterator;
 import javax.jcr.nodetype.NodeTypeManager;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
@@ -190,6 +191,23 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     NodeTypeManager manager = repositoryService.getRepository(currentRepository).getNodeTypeManager();
     queryBuilder.openGroup(LOGICAL.AND);
     queryBuilder.equal("jcr:primaryType","nt:resource",LOGICAL.NULL);
+    //query on exo:rss-enable nodetypes for title, summary field
+    queryBuilder.equal("jcr:mixinTypes","exo:rss-enable",LOGICAL.OR);    
+    //query on metadata nodetype
+    List<String> publicatioTypes = new ArrayList<String>(4);    
+    for(NodeTypeIterator iterator = manager.getAllNodeTypes(); iterator.hasNext();) {
+      NodeType nodeType = iterator.nextNodeType();
+      if(nodeType.isNodeType("publication:webpagesPublication")) {
+        publicatioTypes.add(nodeType.getName());
+        continue;
+      }
+      if(!nodeType.isNodeType("exo:metadata")) continue;
+      if(nodeType.isMixin()) {
+        queryBuilder.equal("jcr:mixinTypes",nodeType.getName(),LOGICAL.OR);
+      }else {
+        queryBuilder.equal("jcr:primaryType",nodeType.getName(),LOGICAL.OR);
+      }      
+    }
     for(String type: selectedNodeTypes) {      
       NodeType nodetype = manager.getNodeType(type);
       if(nodetype.isMixin()) {
@@ -198,9 +216,25 @@ public class SiteSearchServiceImpl implements SiteSearchService {
         queryBuilder.equal("jcr:primaryType",type,LOGICAL.OR);
       }
     }       
-    //select * from nt:base where jcr:path lile folderPath/% and NOT jcr:path like folderPath/%/% AND (
-    //jcr:primaryType like exo:artile OR jcr:primaryType like exo:webocontent OR jcr:mixinTypes like exo:htmlFile
-    queryBuilder.closeGroup();   
+    queryBuilder.closeGroup();
+    if(queryCriteria.isSearchWebpage()) {
+      queryBuilder.openGroup(LOGICAL.AND);
+      queryBuilder.equal("jcr:mixinTypes","publication:webpagesPublication",LOGICAL.NULL);
+      publicatioTypes.remove("publication:webpagesPublication");
+      for(String publicationType: publicatioTypes) {
+        queryBuilder.equal("jcr:mixinTypes",publicationType,LOGICAL.OR);
+      }
+      queryBuilder.closeGroup();
+    }
+    if(queryCriteria.isSearchDocument()) {
+      queryBuilder.openGroup(LOGICAL.AND);
+      queryBuilder.notEqual("jcr:mixinTypes","publication:webpagesPublication",LOGICAL.NULL);
+      publicatioTypes.remove("publication:webpagesPublication");
+      for(String publicationType: publicatioTypes) {
+        queryBuilder.notEqual("jcr:mixinTypes",publicationType,LOGICAL.OR);
+      }
+      queryBuilder.closeGroup();
+    }           
   }
 
   /**
