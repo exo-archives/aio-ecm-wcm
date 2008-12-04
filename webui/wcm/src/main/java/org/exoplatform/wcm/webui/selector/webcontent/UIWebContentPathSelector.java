@@ -41,7 +41,7 @@ public class UIWebContentPathSelector extends UIBaseNodeTreeSelector {
    */
   public UIWebContentPathSelector() throws Exception {
     addChild(UIWebContentTreeBuilder.class,null, UIWebContentTreeBuilder.class.getSimpleName()+hashCode());
-    addChild(UISelectPathPanel.class,null,UISelectPathPanel.class.getSimpleName()+hashCode());        
+    addChild(UISelectPathPanel.class,null,UISelectPathPanel.class.getSimpleName()+hashCode());
   }
 
   /**
@@ -72,5 +72,6 @@ public class UIWebContentPathSelector extends UIBaseNodeTreeSelector {
   public void onChange(Node node, Object context) throws Exception {
     UISelectPathPanel selectPathPanel = getChild(UISelectPathPanel.class);
     selectPathPanel.setParentNode(node);
+    selectPathPanel.updateGrid();
   }
 }

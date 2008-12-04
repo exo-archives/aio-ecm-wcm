@@ -69,5 +69,6 @@ public class UIDocumentPathSelector extends UIBaseNodeTreeSelector {
   public void onChange(Node node, Object context) throws Exception {
     UISelectPathPanel uiSelectPathPanel = getChild(UISelectPathPanel.class);
     uiSelectPathPanel.setParentNode(node);
+    uiSelectPathPanel.updateGrid();
   }
 }
