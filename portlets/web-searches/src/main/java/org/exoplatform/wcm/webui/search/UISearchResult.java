@@ -100,10 +100,7 @@ public class UISearchResult extends UIContainer {
       SessionProvider provider = SessionProviderFactory.createSessionProvider();
       int itemsPerPage = Integer.parseInt(portletPreferences.getValue(UIWCMSearchPortlet.ITEMS_PER_PAGE,
                                                                       null));
-      WCMPaginatedQueryResult paginatedQueryResult = new WCMPaginatedQueryResult(siteSearchService.searchSiteContents(queryCriteria,
-                                                                                                                      provider),
-                                                                                 itemsPerPage,
-                                                                                 true);
+      WCMPaginatedQueryResult paginatedQueryResult = siteSearchService.searchSiteContents(queryCriteria, provider, itemsPerPage, false);
       setPageList(paginatedQueryResult);
     }
     if (uiPaginator.getTotalItems() == 0) {

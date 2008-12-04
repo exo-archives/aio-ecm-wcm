@@ -52,112 +52,111 @@ import org.exoplatform.webui.form.UIFormStringInput;
 @ComponentConfig(lifecycle = UIFormLifecycle.class, events = { @EventConfig(listeners = UISearchForm.SearchActionListener.class) })
 public class UISearchForm extends UIForm {
 
-  private String             templatePath;
+	private String             templatePath;
 
-  private ResourceResolver   resourceResolver;
+	private ResourceResolver   resourceResolver;
 
-  public static final String KEYWORD_INPUT     = "keywordInput";
+	public static final String KEYWORD_INPUT     = "keywordInput";
 
-  public static final String DOCUMENT_CHECKING = "documentCheckBox";
+	public static final String DOCUMENT_CHECKING = "documentCheckBox";
 
-  public static final String PAGE_CHECKING     = "pageCheckBox";
+	public static final String PAGE_CHECKING     = "pageCheckBox";
 
-  public static final String PORTALS_SELECTOR  = "portalSelector";
+	public static final String PORTALS_SELECTOR  = "portalSelector";
 
-  public static final String ALL_OPTION        = "all";
+	public static final String ALL_OPTION        = "all";
 
-  @SuppressWarnings("unchecked")
-  public UISearchForm() throws Exception {
-    UIFormStringInput uiKeywordInput = new UIFormStringInput(KEYWORD_INPUT, KEYWORD_INPUT, null);
-    UIFormSelectBox uiPortalSelectBox = new UIFormSelectBox(PORTALS_SELECTOR,
-                                                            PORTALS_SELECTOR,
-                                                            getPortalList());
-    UIFormCheckBoxInput uiPageCheckBox = new UIFormCheckBoxInput(PAGE_CHECKING, PAGE_CHECKING, null);
-    uiPageCheckBox.setChecked(true);
-    UIFormCheckBoxInput uiDocumentCheckBox = new UIFormCheckBoxInput(DOCUMENT_CHECKING,
-                                                                     DOCUMENT_CHECKING,
-                                                                     null);
-    uiDocumentCheckBox.setChecked(true);
+	@SuppressWarnings("unchecked")
+	public UISearchForm() throws Exception {
+		UIFormStringInput uiKeywordInput = new UIFormStringInput(KEYWORD_INPUT, KEYWORD_INPUT, null);
+		UIFormSelectBox uiPortalSelectBox = new UIFormSelectBox(PORTALS_SELECTOR,
+				PORTALS_SELECTOR,
+				getPortalList());
+		UIFormCheckBoxInput uiPageCheckBox = new UIFormCheckBoxInput(PAGE_CHECKING, PAGE_CHECKING, null);
+		uiPageCheckBox.setChecked(true);
+		UIFormCheckBoxInput uiDocumentCheckBox = new UIFormCheckBoxInput(DOCUMENT_CHECKING,
+				DOCUMENT_CHECKING,
+				null);
+		uiDocumentCheckBox.setChecked(true);
 
-    addUIFormInput(uiKeywordInput);
-    addUIFormInput(uiPortalSelectBox);
-    addUIFormInput(uiPageCheckBox);
-    addUIFormInput(uiDocumentCheckBox);
-  }
+		addUIFormInput(uiKeywordInput);
+		addUIFormInput(uiPortalSelectBox);
+		addUIFormInput(uiPageCheckBox);
+		addUIFormInput(uiDocumentCheckBox);
+	}
 
-  public void init(String templatePath, ResourceResolver resourceResolver) {
-    this.templatePath = templatePath;
-    this.resourceResolver = resourceResolver;
-  }
+	public void init(String templatePath, ResourceResolver resourceResolver) {
+		this.templatePath = templatePath;
+		this.resourceResolver = resourceResolver;
+	}
 
-  public String getTemplate() {
-    return templatePath;
-  }
+	public String getTemplate() {
+		return templatePath;
+	}
 
-  public ResourceResolver getTemplateResourceResolver(WebuiRequestContext context, String template) {
-    return resourceResolver;
-  }
+	public ResourceResolver getTemplateResourceResolver(WebuiRequestContext context, String template) {
+		return resourceResolver;
+	}
 
-  @SuppressWarnings("unchecked")
-  private List getPortalList() throws Exception {
-    List<SelectItemOption<String>> portals = new ArrayList<SelectItemOption<String>>();
-    DataStorage service = getApplicationComponent(DataStorage.class);
-    Query<PortalConfig> query = new Query<PortalConfig>(null, null, null, null, PortalConfig.class);
-    List<PortalConfig> list = service.find(query).getAll();
-    portals.add(new SelectItemOption<String>(ALL_OPTION, ALL_OPTION));
-    for (PortalConfig portalConfig : list) {
-      portals.add(new SelectItemOption<String>(portalConfig.getName(), portalConfig.getName()));
-    }
-    return portals;
-  }
+	@SuppressWarnings("unchecked")
+	private List getPortalList() throws Exception {
+		List<SelectItemOption<String>> portals = new ArrayList<SelectItemOption<String>>();
+		DataStorage service = getApplicationComponent(DataStorage.class);
+		Query<PortalConfig> query = new Query<PortalConfig>(null, null, null, null, PortalConfig.class);
+		List<PortalConfig> list = service.find(query).getAll();
+		portals.add(new SelectItemOption<String>(ALL_OPTION, ALL_OPTION));
+		for (PortalConfig portalConfig : list) {
+			portals.add(new SelectItemOption<String>(portalConfig.getName(), portalConfig.getName()));
+		}
+		return portals;
+	}
 
-  public static class SearchActionListener extends EventListener<UISearchForm> {
-    @SuppressWarnings("unchecked")
-    public void execute(Event<UISearchForm> event) throws Exception {
-      UISearchForm uiSearchForm = event.getSource();
-      PortletRequestContext portletRequestContext = (PortletRequestContext) event.getRequestContext();
-      PortletPreferences portletPreferences = portletRequestContext.getRequest().getPreferences();
-      UIApplication uiApp = uiSearchForm.getAncestorOfType(UIApplication.class);
-      SiteSearchService siteSearchService = uiSearchForm.getApplicationComponent(SiteSearchService.class);
-      SessionProvider provider = SessionProviderFactory.createSessionProvider();
-      UISearchPageLayout uiSearchPageContainer = uiSearchForm.getParent();
-      UISearchResult uiSearchResult = uiSearchPageContainer.getChild(UISearchResult.class);
-      UIFormStringInput uiKeywordInput = uiSearchForm.getUIStringInput(UISearchForm.KEYWORD_INPUT);
-      UIFormSelectBox uiPortalSelectBox = uiSearchForm.getUIFormSelectBox(UISearchForm.PORTALS_SELECTOR);
-      String keyword = uiKeywordInput.getValue();
-      UIFormCheckBoxInput uiPageCheckbox = uiSearchForm.getUIFormCheckBoxInput(UISearchForm.PAGE_CHECKING);
-      UIFormCheckBoxInput uiDocumentCheckbox = uiSearchForm.getUIFormCheckBoxInput(UISearchForm.DOCUMENT_CHECKING);
-      String pageChecked = (uiPageCheckbox.isChecked()) ? "true" : "false";
-      String documentChecked = (uiDocumentCheckbox.isChecked()) ? "true" : "false";
-      if (keyword == null || keyword.trim().length() == 0) {
-        uiApp.addMessage(new ApplicationMessage("UISearchForm.message.keyword-not-empty",
-                                                null,
-                                                ApplicationMessage.WARNING));
-        return;
-      }
-      if (!Boolean.parseBoolean(pageChecked) && !Boolean.parseBoolean(documentChecked)) {
-        uiApp.addMessage(new ApplicationMessage("UISearchForm.message.not-checked",
-                                                null,
-                                                ApplicationMessage.WARNING));
-        return;
-      }
-      String selectedPortal = (uiPortalSelectBox.getValue().equals(UISearchForm.ALL_OPTION)) ? null
-                                                                                            : uiPortalSelectBox.getValue();
-      QueryCriteria queryCriteria = new QueryCriteria();
-      queryCriteria.setSiteName(selectedPortal);
-      queryCriteria.setKeyword(keyword);
-      queryCriteria.setSearchDocument(Boolean.parseBoolean(documentChecked));
-      queryCriteria.setSearchWebpage(Boolean.parseBoolean(pageChecked));
-      int itemsPerPage = Integer.parseInt(portletPreferences.getValue(UIWCMSearchPortlet.ITEMS_PER_PAGE,
-                                                                      null));
-      WCMPaginatedQueryResult paginatedQueryResult = new WCMPaginatedQueryResult(siteSearchService.searchSiteContents(queryCriteria,
-                                                                                                                      provider),
-                                                                                 itemsPerPage,
-                                                                                 true);
-      uiSearchResult.setPageList(paginatedQueryResult);
-      uiSearchResult.setSearchTime(paginatedQueryResult.getQueryTimeInSecond());
-      portletRequestContext.addUIComponentToUpdateByAjax(uiSearchPageContainer);
-    }
-  }
+	public static class SearchActionListener extends EventListener<UISearchForm> {
+		@SuppressWarnings("unchecked")
+		public void execute(Event<UISearchForm> event) throws Exception {
+			UISearchForm uiSearchForm = event.getSource();
+			PortletRequestContext portletRequestContext = (PortletRequestContext) event.getRequestContext();
+			PortletPreferences portletPreferences = portletRequestContext.getRequest().getPreferences();
+			UIApplication uiApp = uiSearchForm.getAncestorOfType(UIApplication.class);
+			SiteSearchService siteSearchService = uiSearchForm.getApplicationComponent(SiteSearchService.class);
+			SessionProvider provider = SessionProviderFactory.createSessionProvider();
+			UISearchPageLayout uiSearchPageContainer = uiSearchForm.getParent();
+			UISearchResult uiSearchResult = uiSearchPageContainer.getChild(UISearchResult.class);
+			UIFormStringInput uiKeywordInput = uiSearchForm.getUIStringInput(UISearchForm.KEYWORD_INPUT);
+			UIFormSelectBox uiPortalSelectBox = uiSearchForm.getUIFormSelectBox(UISearchForm.PORTALS_SELECTOR);
+			String keyword = uiKeywordInput.getValue();
+			UIFormCheckBoxInput uiPageCheckbox = uiSearchForm.getUIFormCheckBoxInput(UISearchForm.PAGE_CHECKING);
+			UIFormCheckBoxInput uiDocumentCheckbox = uiSearchForm.getUIFormCheckBoxInput(UISearchForm.DOCUMENT_CHECKING);
+			String pageChecked = (uiPageCheckbox.isChecked()) ? "true" : "false";
+			String documentChecked = (uiDocumentCheckbox.isChecked()) ? "true" : "false";
+			if (keyword == null || keyword.trim().length() == 0) {
+				uiApp.addMessage(new ApplicationMessage("UISearchForm.message.keyword-not-empty",
+						null,
+						ApplicationMessage.WARNING));
+				return;
+			}
+			if (!Boolean.parseBoolean(pageChecked) && !Boolean.parseBoolean(documentChecked)) {
+				uiApp.addMessage(new ApplicationMessage("UISearchForm.message.not-checked",
+						null,
+						ApplicationMessage.WARNING));
+				return;
+			}
+			String selectedPortal = (uiPortalSelectBox.getValue().equals(UISearchForm.ALL_OPTION)) ? null
+					: uiPortalSelectBox.getValue();
+			QueryCriteria queryCriteria = new QueryCriteria();
+			queryCriteria.setSiteName(selectedPortal);
+			queryCriteria.setKeyword(keyword);
+			queryCriteria.setSearchDocument(Boolean.parseBoolean(documentChecked));
+			queryCriteria.setSearchWebpage(Boolean.parseBoolean(pageChecked));
+			int itemsPerPage = Integer.parseInt(portletPreferences.getValue(UIWCMSearchPortlet.ITEMS_PER_PAGE,
+					null));
+			WCMPaginatedQueryResult paginatedQueryResult = siteSearchService.searchSiteContents(queryCriteria, provider, itemsPerPage, false);
+			uiSearchResult.setPageList(paginatedQueryResult);
+			long timeSearch = paginatedQueryResult.getQueryTimeInSecond();
+			System.out.println("\n\n==============> search time = " + timeSearch );
+			uiSearchResult.setSearchTime(paginatedQueryResult.getQueryTimeInSecond());
+			portletRequestContext.addUIComponentToUpdateByAjax(uiSearchPageContainer);
+		}
+	}
 
 }
