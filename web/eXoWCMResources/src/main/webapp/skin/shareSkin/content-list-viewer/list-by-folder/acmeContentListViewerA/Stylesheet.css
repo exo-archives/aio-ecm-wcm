@@ -1,0 +1,53 @@
+.UIContentListViewerPortlet .ACMEContentListViewerA .LeftTitle {
+	background: url(background/Title.gif) left -92px no-repeat;
+	padding-left: 3px;
+}
+
+.UIContentListViewerPortlet .ACMEContentListViewerA .RightTitle {
+	background: url(background/Title.gif) right -92px no-repeat;
+	padding-right: 3px;
+}
+
+.UIContentListViewerPortlet .ACMEContentListViewerA .CenterTitle {
+	background: url(background/Title.gif) left -137px repeat-x;
+	padding: 0 2px;
+	height: 45px;
+	text-align: center;
+}
+
+.UIContentListViewerPortlet .ACMEContentListViewerA .Icon {
+	height: 33px;
+	padding-top: 13px;
+	text-align: center;
+}
+
+.UIContentListViewerPortlet .ACMEContentListViewerA .Icon .TextTitle {
+	font-size: 18px;
+	color: #fff;
+}
+
+.UIContentListViewerPortlet .ACMEContentListViewerA .Caption {
+  background:#FFFFFF url(background/BG_TopCenterCol.jpg) no-repeat scroll right 1px;
+	padding:10px 20px;
+}
+
+.UIContentListViewerPortlet .ACMEContentListViewerA .Caption .CaptionItem {
+  margin-bottom:20px;
+}
+
+.UIContentListViewerPortlet .ACMEContentListViewerA .Caption .CaptionTitle {
+	font-size:12px;
+	font-weight:bold;
+	margin-bottom:5px;
+}
+
+.UIContentListViewerPortlet .ACMEContentListViewerA .Caption .CaptionTitle a {
+  color:#005151;
+	text-decoration:underline;
+}
+
+.UIContentListViewerPortlet .ACMEContentListViewerA .Caption .CaptionContent p {
+  font-size:11px;
+	line-height:16px;
+	margin:0;
+}

@@ -22,7 +22,7 @@
 	  		</container>
 	  		<container id="ACMEFeatures" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
 	  			<application>
-				    <instance-id>portal#acme:/web-presentation/ContentListViewerPortlet/acme-feature</instance-id>
+				    <instance-id>portal#acme:/web-presentation/ContentListViewerPortlet/acme-news-header</instance-id>
 				    <title>Features</title>
 				  </application>
 	  		</container>
@@ -48,7 +48,7 @@
 	  	<container id="ACMEContainer" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
 	  		<container id="ACMENews" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
 	  			<application>
-				    <instance-id>portal#acme:/web-presentation/ContentListViewerPortlet/acme-news</instance-id>
+				    <instance-id>portal#acme:/web-presentation/ContentListViewerPortlet/acme-news-noheader</instance-id>
 				    <title>News</title>
 				  </application>
 	  		</container>
@@ -132,7 +132,7 @@
 	  		</container>
 	  		<container id="ACMEServices" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
 	  			<application>
-				    <instance-id>portal#acme:/web-presentation/ContentListViewerPortlet/acme-services</instance-id>
+				    <instance-id>portal#acme:/web-presentation/ContentListViewerPortlet/acme-services-header</instance-id>
 				    <title>Services</title>
 				  </application>
 	  		</container>
@@ -152,13 +152,13 @@
 	  	<container id="ACMEContainer" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
 	  		<container id="ACMEServices" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
 	  			<application>
-				    <instance-id>portal#acme:/web-presentation/ContentListViewerPortlet/acme-services</instance-id>
+				    <instance-id>portal#acme:/web-presentation/ContentListViewerPortlet/acme-services-noheader</instance-id>
 				    <title>Services</title>
 				  </application>
 	  		</container>
 	  		<container id="ACMEProducts" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
 	  			<application>
-				    <instance-id>portal#acme:/web-presentation/ContentListViewerPortlet/acme-products</instance-id>
+				    <instance-id>portal#acme:/web-presentation/ContentListViewerPortlet/acme-products-header</instance-id>
 				    <title>Products</title>
 				  </application>
 	  		</container>

@@ -1,0 +1,50 @@
+.UIContentListViewerPortlet .ACMEContentListViewerB .LeftTitle {}
+
+.UIContentListViewerPortlet .ACMEContentListViewerB .RightTitle {
+	background: url(background/Title.gif) no-repeat scroll right top;
+	padding-right:3px;
+}
+
+.UIContentListViewerPortlet .ACMEContentListViewerB .CenterTitle {
+	background: url(background/Title.gif) left -46px repeat-x;
+	padding: 0 10px;
+	height: 45px;
+	text-align: left;
+}
+
+.UIContentListViewerPortlet .ACMEContentListViewerB .Icon {
+	background:transparent url(icons/IconTitle.jpg) no-repeat scroll left top;
+	height:33px;
+	padding:13px 0 0 50px;
+}
+
+.UIContentListViewerPortlet .ACMEContentListViewerB .Icon .TextTitle {
+	font-size: 18px;
+	color: #fff;
+}
+
+.UIContentListViewerPortlet .ACMEContentListViewerB .Caption {
+	padding:10px 20px;
+	background: #fff;
+}
+
+.UIContentListViewerPortlet .ACMEContentListViewerB .Caption .CaptionItem {
+  margin-bottom:20px;
+}
+
+.UIContentListViewerPortlet .ACMEContentListViewerB .Caption .CaptionTitle {
+	font-size:12px;
+	font-weight:bold;
+	margin-bottom:5px;
+}
+
+.UIContentListViewerPortlet .ACMEContentListViewerB .Caption .CaptionTitle a {
+  color:#005151;
+	text-decoration:underline;
+}
+
+.UIContentListViewerPortlet .ACMEContentListViewerB .Caption .CaptionContent p {
+  font-size:11px;
+	line-height:16px;
+	margin:0;
+}

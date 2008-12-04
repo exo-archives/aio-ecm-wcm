@@ -7,13 +7,13 @@ import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
 import javax.jcr.Node;
 import org.exoplatform.wcm.webui.clv.UIContentListViewerPortlet;
 %>
-<div id="$uicomponent.id" class="ACMEContentListViewer">
+<div id="$uicomponent.id" class="ACMEContentListViewerA">
 	<% if(uicomponent.getContentColumn() != null && uicomponent.isShowHeader()) {%>
 	<div class="TitleCenterCol">
     	<div class="LeftTitle">
         	<div class="RightTitle">
             	<div class="CenterTitle">
-               		<div class="IconNews"><a class="TextTitle"><%= uicomponent.getContentColumn() %></a></div> 
+               		<div class="Icon"><a class="TextTitle"><%= uicomponent.getContentColumn() %></a></div> 
                 </div>
             </div>
         </div>

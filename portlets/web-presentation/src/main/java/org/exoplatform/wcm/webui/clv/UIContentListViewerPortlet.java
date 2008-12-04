@@ -48,7 +48,7 @@ public class UIContentListViewerPortlet extends UIPortletApplication {
 
   public final static String FOLDER_PATH             = "folderPath";
   
-  public final static String HEADER                  = "Header";
+  public final static String HEADER                  = "header";
 
   public final static String FORM_VIEW_TEMPLATE_PATH = "formViewTemplatePath";
 
