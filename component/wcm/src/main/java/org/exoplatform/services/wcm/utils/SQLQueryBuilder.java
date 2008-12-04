@@ -190,18 +190,18 @@ public class SQLQueryBuilder extends AbstractQueryBuilder {
   public void setQueryPath(String path, PATH_TYPE pathtype) {
     if(PATH_TYPE.EXACT == pathtype) {
       if(path.indexOf("[%]")>0)
-        pathClause = new StringBuffer().append("jcr:path LIKE '").append(path).append("' ");
+        pathClause = new StringBuilder().append("jcr:path LIKE '").append(path).append("' ");
       else 
-        pathClause = new StringBuffer().append("jcr:path = '").append(path).append("' ");
+        pathClause = new StringBuilder().append("jcr:path = '").append(path).append("' ");
     }else if(PATH_TYPE.CHILDNODES == pathtype) {
       pathClause = 
-        new StringBuffer().append("jcr:path LIKE '").append(path).append("/%'")
+        new StringBuilder().append("jcr:path LIKE '").append(path).append("/%'")
         .append("AND NOT jcr:path like '").append(path).append("/%/%' ");                          
     }else if(PATH_TYPE.DECENDANTS == pathtype) {
-      pathClause =  new StringBuffer().append("jcr:path LIKE '").append(path).append("/%' ");                          
+      pathClause =  new StringBuilder().append("jcr:path LIKE '").append(path).append("/%' ");                          
     }else if(PATH_TYPE.DECENDANTS_OR_SELFT == pathtype) {
       pathClause = 
-        new StringBuffer().append("jcr:path LIKE '").append(path).append("'")
+        new StringBuilder().append("jcr:path LIKE '").append(path).append("'")
         .append("OR jcr:path LIKE '").append(path).append("/%' ");
     }
   }
@@ -239,10 +239,10 @@ public class SQLQueryBuilder extends AbstractQueryBuilder {
    */
   public void fromNodeTypes(String[] nodetypes) {
     if(nodetypes == null) {
-      fromClause = new StringBuffer("FROM nt:base");
+      fromClause = new StringBuilder("FROM nt:base");
       return; 
     } 
-    fromClause = new StringBuffer("FROM ");
+    fromClause = new StringBuilder("FROM ");
     for(int i = 0; i<nodetypes.length; i++) {
       fromClause.append(nodetypes[i]);
       if(i<nodetypes.length-1) 
@@ -255,10 +255,10 @@ public class SQLQueryBuilder extends AbstractQueryBuilder {
    */
   public void selectTypes(String[] returnTypes) {
     if(returnTypes == null) {
-      selectClause = new StringBuffer("SELECT * ");
+      selectClause = new StringBuilder("SELECT * ");
       return; 
     } 
-    selectClause = new StringBuffer("SELECT ");
+    selectClause = new StringBuilder("SELECT ");
     for(int i = 0; i<returnTypes.length; i++) {
       selectClause.append(returnTypes[i]);
       if(i<returnTypes.length-1) 
@@ -284,7 +284,7 @@ public class SQLQueryBuilder extends AbstractQueryBuilder {
    */
   public void excerpt(boolean enable) {
     if(enable)
-      excerptClause = new StringBuffer("excerpt(.)");
+      excerptClause = new StringBuilder("excerpt(.)");
   }
   
   /* (non-Javadoc)

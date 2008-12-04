@@ -31,28 +31,28 @@ package org.exoplatform.services.wcm.utils;
 public abstract class AbstractQueryBuilder {
   
   /** The from clause. */
-  protected StringBuffer fromClause = new StringBuffer();
+  protected StringBuilder fromClause = new StringBuilder();
   
   /** The properties clause. */
-  protected StringBuffer propertiesClause = new StringBuffer();
+  protected StringBuilder propertiesClause = new StringBuilder();
   
   /** The path clause. */
-  protected StringBuffer pathClause= new StringBuffer();
+  protected StringBuilder pathClause= new StringBuilder();
   
   /** The order by clause. */
-  protected StringBuffer orderByClause = new StringBuffer();
+  protected StringBuilder orderByClause = new StringBuilder();
   
   /** The select clause. */
-  protected StringBuffer selectClause = new StringBuffer();
+  protected StringBuilder selectClause = new StringBuilder();
   
   /** The contains clause. */
-  protected StringBuffer containsClause = new StringBuffer();
+  protected StringBuilder containsClause = new StringBuilder();
   
   /** The spell check clause. */
-  protected StringBuffer spellCheckClause = new StringBuffer();
+  protected StringBuilder spellCheckClause = new StringBuilder();
   
   /** The excerpt clause. */
-  protected StringBuffer excerptClause = new StringBuffer();
+  protected StringBuilder excerptClause = new StringBuilder();
 
   /**
    * Checks a property is null.

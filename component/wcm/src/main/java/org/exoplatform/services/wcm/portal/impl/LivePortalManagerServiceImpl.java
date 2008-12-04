@@ -145,7 +145,7 @@ public class LivePortalManagerServiceImpl implements LivePortalManagerService {
       newPortal.addMixin("exo:owneable");
     if(newPortal.canAddMixin("metadata:siteMetadata")) {
       newPortal.addMixin("metadata:siteMetadata");
-      newPortal.setProperty("metadata:siteTitle",portalName);
+      newPortal.setProperty("siteTitle",portalName);
       newPortal.setProperty("keywords",portalName);
       newPortal.setProperty("robots","index,follow");
     }

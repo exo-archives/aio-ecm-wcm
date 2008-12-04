@@ -26,6 +26,7 @@ import javax.servlet.ServletContext;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
+import org.exoplatform.services.deployment.ContentInitializerService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -52,8 +53,9 @@ public class XJavascriptService implements Startable {
   private WCMConfigurationService configurationService;
   private ServletContext sContext ;    
   private Log log = ExoLogger.getLogger("wcm:XJavascriptService");
-
-  public XJavascriptService(RepositoryService repositoryService,JavascriptConfigService jsConfigService,ServletContext servletContext, WCMConfigurationService configurationService) {    
+  @SuppressWarnings("unused")
+  public XJavascriptService(RepositoryService repositoryService,JavascriptConfigService jsConfigService,ServletContext servletContext, 
+      WCMConfigurationService configurationService, ContentInitializerService contentInitializerService) {    
     this.repositoryService = repositoryService ;
     this.jsConfigService = jsConfigService ;
     sContext = servletContext ;

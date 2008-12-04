@@ -30,6 +30,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.webui.skin.SkinService;
+import org.exoplatform.services.deployment.ContentInitializerService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
@@ -52,14 +53,17 @@ public class XSkinService implements Startable {
   private WebSchemaConfigService schemaConfigService;
   private WCMConfigurationService configurationService;
   private SkinService skinService ;
+  
   /**
    * Instantiates a new extended skin service to manage skin for web content
    * 
    * @param skinService the skin service
    * @param repositoryService the repository service
    * @param portalManagerService the portal manager service
+   * @param initializerService the content initializer service. this param makes sure that the service started after the content initializer service is started
    */
-  public XSkinService(SkinService skinService,WebSchemaConfigService schemaConfigService, WCMConfigurationService configurationService) {
+  @SuppressWarnings("unused")
+  public XSkinService(SkinService skinService,WebSchemaConfigService schemaConfigService, WCMConfigurationService configurationService, ContentInitializerService initializerService) {
     this.skinService = skinService ;
     this.skinService.addResourceResolver(new WCMSkinResourceResolver(this.skinService));
     this.configurationService = configurationService;
