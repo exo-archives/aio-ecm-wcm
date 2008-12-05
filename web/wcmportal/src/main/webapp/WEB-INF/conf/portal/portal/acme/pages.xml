@@ -28,7 +28,7 @@
 	  		</container>
 	  		<container id="ACMEAbout" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
 	  			<application>
-			    	<instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-about</instance-id>
+			    	<instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-about-header</instance-id>
 			    	<title>About</title>
 			  	</application>
 			  </container>
@@ -74,7 +74,7 @@
 	  	<container id="ACMEContainer" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
 	  		<container id="ACMEAbout" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
 	  			<application>
-				    <instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-about</instance-id>
+				    <instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-about-noheader</instance-id>
 				    <title>About</title>
 				  </application>
 	  		</container>
@@ -106,7 +106,7 @@
 	  		</container>
 	  		<container id="ACMEAbout" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
 	  			<application>
-				    <instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-about</instance-id>
+				    <instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-about-header</instance-id>
 				    <title>About</title>
 				  </application>
 	  		</container>

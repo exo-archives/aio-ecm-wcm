@@ -107,7 +107,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>acme</owner-id>
-    <window-id>portal#acme:/web-presentation/SingleContentViewer/acme-about</window-id>
+    <window-id>portal#acme:/web-presentation/SingleContentViewer/acme-about-noheader</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -120,7 +120,33 @@
     </preference>
     <preference>
       <name>nodeIdentifier</name>
-      <value>/sites content/live/acme/web contents/About</value>
+      <value>/sites content/live/acme/web contents/About/AboutNoHeader</value>
+      <read-only>false</read-only>
+    </preference>
+    <preference>
+      <name>ShowQuickEdit</name>
+      <value>true</value>
+      <read-only>false</read-only>
+    </preference>
+  </portlet-preferences>
+  
+  <portlet-preferences>
+    <owner-type>portal</owner-type>
+    <owner-id>acme</owner-id>
+    <window-id>portal#acme:/web-presentation/SingleContentViewer/acme-about-header</window-id>
+    <preference>
+      <name>repository</name>
+      <value>repository</value>
+      <read-only>false</read-only>
+    </preference>
+    <preference>
+      <name>workspace</name>
+      <value>collaboration</value>
+      <read-only>false</read-only>
+    </preference>
+    <preference>
+      <name>nodeIdentifier</name>
+      <value>/sites content/live/acme/web contents/About/AboutHeader</value>
       <read-only>false</read-only>
     </preference>
     <preference>

@@ -23,8 +23,18 @@
 	color: #fff;
 }
 
+.UIContentListViewerPortlet .ACMEContentListViewerB .CaptionBackground {
+	background: #999999;
+	padding:0;
+}
+
+.UIContentListViewerPortlet .ACMEContentListViewerB .CaptionLeft {
+	background: url(background/BG_BottomCenterCol.gif) no-repeat left bottom;
+	padding-left:1px;
+}
+
 .UIContentListViewerPortlet .ACMEContentListViewerB .Caption {
-	padding:10px 20px;
+	padding:10px 15px;
 	background: #fff;
 }
 
