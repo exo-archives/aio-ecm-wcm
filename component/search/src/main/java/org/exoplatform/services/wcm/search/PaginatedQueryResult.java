@@ -88,7 +88,7 @@ public class PaginatedQueryResult extends PaginatedNodeIterator {
       }      
     }           
     currentPage_ = page;
-    setAvailablePage(available_);
+    //setAvailablePage(available_);
   }      
   
   /**

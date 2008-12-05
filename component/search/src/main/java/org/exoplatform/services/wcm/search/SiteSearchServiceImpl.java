@@ -67,16 +67,16 @@ public class SiteSearchServiceImpl implements SiteSearchService {
 	 * Instantiates a new site search service impl.
 	 * 
 	 * @param portalManagerService
-	 *            the portal manager service
+	 *          the portal manager service
 	 * @param templateService
-	 *            the template service
+	 *          the template service
 	 * @param configurationService
-	 *            the configuration service
+	 *          the configuration service
 	 * @param repositoryService
-	 *            the repository service
+	 *          the repository service
 	 * 
 	 * @throws Exception
-	 *             the exception
+	 *           the exception
 	 */
 	public SiteSearchServiceImpl(LivePortalManagerService portalManagerService,
 			TemplateService templateService,
@@ -94,8 +94,7 @@ public class SiteSearchServiceImpl implements SiteSearchService {
 			QueryCriteria queryCriteria, SessionProvider sessionProvider,
 			int pageSize, boolean allowDuplicated) throws Exception {
 		long startTime = System.currentTimeMillis();
-		QueryResult queryResult = searchSiteContents(queryCriteria,
-				sessionProvider);
+		QueryResult queryResult = searchSiteContents(queryCriteria, sessionProvider);
 		long queryTime = System.currentTimeMillis() - startTime;
 		WCMPaginatedQueryResult paginatedQueryResult = new WCMPaginatedQueryResult(
 				queryResult, pageSize, allowDuplicated);
@@ -149,14 +148,14 @@ public class SiteSearchServiceImpl implements SiteSearchService {
 	 * Map query path.
 	 * 
 	 * @param queryCriteria
-	 *            the query criteria
+	 *          the query criteria
 	 * @param queryBuilder
-	 *            the query builder
+	 *          the query builder
 	 * @param sessionProvider
-	 *            the session provider
+	 *          the session provider
 	 * 
 	 * @throws Exception
-	 *             the exception
+	 *           the exception
 	 */
 	private void mapQueryPath(final QueryCriteria queryCriteria,
 			final SQLQueryBuilder queryBuilder, SessionProvider sessionProvider)
@@ -168,8 +167,8 @@ public class SiteSearchServiceImpl implements SiteSearchService {
 					sessionProvider);
 			queryPath = portal.getPath();
 		} else {
-			queryPath = configurationService.getLivePortalsLocation(
-					currentRepository).getPath();
+			queryPath = configurationService
+					.getLivePortalsLocation(currentRepository).getPath();
 		}
 		queryBuilder.setQueryPath(queryPath, PATH_TYPE.DECENDANTS);
 	}
@@ -178,9 +177,9 @@ public class SiteSearchServiceImpl implements SiteSearchService {
 	 * Map query term.
 	 * 
 	 * @param queryCriteria
-	 *            the query criteria
+	 *          the query criteria
 	 * @param queryBuilder
-	 *            the query builder
+	 *          the query builder
 	 */
 	private void mapQueryTerm(final QueryCriteria queryCriteria,
 			final SQLQueryBuilder queryBuilder) {
@@ -195,14 +194,14 @@ public class SiteSearchServiceImpl implements SiteSearchService {
 	 * Map query types.
 	 * 
 	 * @param queryCriteria
-	 *            the query criteria
+	 *          the query criteria
 	 * @param queryBuilder
-	 *            the query builder
+	 *          the query builder
 	 * @param sessionProvider
-	 *            the session provider
+	 *          the session provider
 	 * 
 	 * @throws Exception
-	 *             the exception
+	 *           the exception
 	 */
 	private void mapQueryTypes(final QueryCriteria queryCriteria,
 			final SQLQueryBuilder queryBuilder, SessionProvider sessionProvider)
@@ -228,8 +227,8 @@ public class SiteSearchServiceImpl implements SiteSearchService {
 			selectedNodeTypes.add("exo:htmlFile");
 			selectedNodeTypes.add("nt:file");
 		}
-		NodeTypeManager manager = repositoryService.getRepository(
-				currentRepository).getNodeTypeManager();
+		NodeTypeManager manager = repositoryService
+				.getRepository(currentRepository).getNodeTypeManager();
 		queryBuilder.openGroup(LOGICAL.AND);
 		queryBuilder.equal("jcr:primaryType", "nt:resource", LOGICAL.NULL);
 		// query on exo:rss-enable nodetypes for title, summary field
@@ -246,11 +245,9 @@ public class SiteSearchServiceImpl implements SiteSearchService {
 			if (!nodeType.isNodeType("exo:metadata"))
 				continue;
 			if (nodeType.isMixin()) {
-				queryBuilder.equal("jcr:mixinTypes", nodeType.getName(),
-						LOGICAL.OR);
+				queryBuilder.equal("jcr:mixinTypes", nodeType.getName(), LOGICAL.OR);
 			} else {
-				queryBuilder.equal("jcr:primaryType", nodeType.getName(),
-						LOGICAL.OR);
+				queryBuilder.equal("jcr:primaryType", nodeType.getName(), LOGICAL.OR);
 			}
 		}
 		for (String type : selectedNodeTypes) {
@@ -261,16 +258,14 @@ public class SiteSearchServiceImpl implements SiteSearchService {
 				queryBuilder.equal("jcr:primaryType", type, LOGICAL.OR);
 			}
 		}
-		queryBuilder.closeGroup();		
-		if (queryCriteria.isSearchDocument()
-				&& !queryCriteria.isSearchWebpage()) {
+		queryBuilder.closeGroup();
+		if (queryCriteria.isSearchDocument() && !queryCriteria.isSearchWebpage()) {
 			queryBuilder.openGroup(LOGICAL.AND);
 			queryBuilder.notEqual("jcr:mixinTypes",
 					"publication:webpagesPublication", LOGICAL.NULL);
 			publicatioTypes.remove("publication:webpagesPublication");
 			for (String publicationType : publicatioTypes) {
-				queryBuilder.notEqual("jcr:mixinTypes", publicationType,
-						LOGICAL.OR);
+				queryBuilder.notEqual("jcr:mixinTypes", publicationType, LOGICAL.OR);
 			}
 			queryBuilder.closeGroup();
 		}
@@ -280,11 +275,11 @@ public class SiteSearchServiceImpl implements SiteSearchService {
 	 * Order by.
 	 * 
 	 * @param queryCriteria
-	 *            the query criteria
+	 *          the query criteria
 	 * @param queryBuilder
-	 *            the query builder
+	 *          the query builder
 	 * @param sessionProvider
-	 *            the session provider
+	 *          the session provider
 	 */
 	private void orderBy(final QueryCriteria queryCriteria,
 			final SQLQueryBuilder queryBuilder, SessionProvider sessionProvider) {

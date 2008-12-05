@@ -23,16 +23,14 @@ import javax.jcr.Node;
 import javax.jcr.query.QueryResult;
 
 /**
- * Created by The eXo Platform SAS
- * Author : Hoa Pham
- * hoa.phamvu@exoplatform.com
+ * Created by The eXo Platform SAS Author : Hoa Pham hoa.phamvu@exoplatform.com
  * Oct 21, 2008
  */
-public class WCMPaginatedQueryResult extends PaginatedQueryResult {  
+public class WCMPaginatedQueryResult extends PaginatedQueryResult {
 
 	/** The allow duplicated. */
 	private boolean allowDuplicated;
-	private long queryTime;  
+	private long queryTime;
 	/** The displayed node paths. */
 	private List<String> displayedNodePaths = new ArrayList<String>();
 	private String spellSuggestion;
@@ -41,7 +39,8 @@ public class WCMPaginatedQueryResult extends PaginatedQueryResult {
 	/**
 	 * Instantiates a new wCM paginated query result.
 	 * 
-	 * @param pageSize the page size
+	 * @param pageSize
+	 *          the page size
 	 */
 	public WCMPaginatedQueryResult(int pageSize) {
 		super(pageSize);
@@ -50,49 +49,65 @@ public class WCMPaginatedQueryResult extends PaginatedQueryResult {
 	/**
 	 * Instantiates a new wCM paginated query result.
 	 * 
-	 * @param queryResult the query result
-	 * @param pageSize the page size
-	 * @param allowDuplicated the allow duplicated
+	 * @param queryResult
+	 *          the query result
+	 * @param pageSize
+	 *          the page size
+	 * @param allowDuplicated
+	 *          the allow duplicated
 	 * 
-	 * @throws Exception the exception
+	 * @throws Exception
+	 *           the exception
 	 */
-	public WCMPaginatedQueryResult(QueryResult queryResult,int pageSize, boolean allowDuplicated) throws Exception{
-		super(queryResult,pageSize);    
+	public WCMPaginatedQueryResult(QueryResult queryResult, int pageSize,
+			boolean allowDuplicated) throws Exception {
+		super(queryResult, pageSize);
 		this.allowDuplicated = allowDuplicated;
 	}
 
-	public void setQueryTime(long time) { this.queryTime = time; }
-	public long getQueryTimeInSecond() { return this.queryTime/1000; }
+	public void setQueryTime(long time) {
+		this.queryTime = time;
+	}
 
-	public QueryCriteria getQueryCriteria() { return this.queryCriteria; }
+	public long getQueryTimeInSecond() {
+		return this.queryTime / 1000;
+	}
+
+	public QueryCriteria getQueryCriteria() {
+		return this.queryCriteria;
+	}
 
 	public void setQueryCriteria(QueryCriteria queryCriteria) {
 		this.queryCriteria = queryCriteria;
-	}    
+	}
 
-	/* (non-Javadoc)
-	 * @see org.exoplatform.wcm.webui.paginator.PaginatedQueryResult#filterNodeToDisplay(javax.jcr.Node)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.exoplatform.wcm.webui.paginator.PaginatedQueryResult#filterNodeToDisplay
+	 * (javax.jcr.Node)
 	 */
-	protected Node filterNodeToDisplay(Node node) throws Exception {		
+	protected Node filterNodeToDisplay(Node node) throws Exception {
 		Node displayNode = node;
-		if(displayNode.isNodeType("nt:resource")) {
+		if (displayNode.isNodeType("nt:resource")) {
 			displayNode = node.getParent();
 		}
-		if(displayNode.isNodeType("exo:htmlFile")) {
+		if (displayNode.isNodeType("exo:htmlFile")) {
 			Node parent = displayNode.getParent();
-			if(parent.isNodeType("exo:webContent"))
+			if (parent.isNodeType("exo:webContent"))
 				displayNode = parent;
-		}    					
-		if(queryCriteria.isSearchWebpage() && !queryCriteria.isSearchDocument()) {
-			if(!displayNode.isNodeType("publication:webpagesPublication"))
+		}
+		if (queryCriteria.isSearchWebpage() && !queryCriteria.isSearchDocument()) {
+			if (!displayNode.isNodeType("publication:webpagesPublication"))
 				return null;
 		}
-		if(queryCriteria.isSearchDocument() && !queryCriteria.isSearchWebpage()) {
-			if(displayNode.isNodeType("publication:webpagesPublication"))
+		if (queryCriteria.isSearchDocument() && !queryCriteria.isSearchWebpage()) {
+			if (displayNode.isNodeType("publication:webpagesPublication"))
 				return null;
 		}
-		if(!allowDuplicated) {
-			if(displayedNodePaths.contains(displayNode.getPath())) 
+		if (!allowDuplicated) {
+			if (displayedNodePaths.contains(displayNode.getPath()))
 				return null;
 			displayedNodePaths.add(displayNode.getPath());
 		}
