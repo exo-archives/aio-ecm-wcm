@@ -1,0 +1,109 @@
+==============================================
+	eXo WCM 1.0 release candidate read me
+==============================================
+
+- Introduction
+	This document includes purpose, scope, definitions, features about web content management.
+	
+- Features in this version: 
+	+  WCM-138 : Allow users to publish web content from JCR File Explorer
+	+  WCM-328 : Create CLV portlet
+	+  WCM-407 : Turn navigation, banner and breadcrumbs Portlets into SCV
+	+  WCM-206 : Enlarge the width of FCK Editor in web content edit template
+	+  WCM-161 : Make the home page use ACP and a web content
+	+  WCM-436 : Make login form is changeable for each portal
+	+  WCM-160 : Restrict the number of possible documents types when the user creates a new document using JCR File Explorer
+	+  WCM-356 : Allow user choose layout specific when create webcontent in SCV
+	+  WCM-308 : New search portlet implementation
+	+  WCM-211 : Implement new Site Administration Portlet allow to switch to page edit mode through a link in the toolbar
+	+  WCM-371 : Seach Engine Optimization: Allow to manage site page metadata
+	+  WCM-329 : Deploy separated site artifacts(banner, footer, home pages) for each site
+	+  WCM-226 : Show dialog form directly when swith to edit mode
+	+  WCM-170 : Allow ACP Portlet to select any content type
+	+  WCM-484 : Make search box embeddable into webcontent
+	
+- Improvements in this version:
+	+  WCM-267 : Add a back button to the presentation portlet
+	+  WCM-318 : Make a separate design for acme website and acme portal template
+	+  WCM-130 : Add some properties for exo:webContent nodetype
+	+  WCM-145 : Remove the Portlet header in the "Presentation" page
+	+  WCM-155 : Change default radio button in ACP wizard
+	+  WCM-165 : Add new step for ACP wizard
+	+  WCM-169 : Now we can't comment for web content.
+	+  WCM-188 : Upload content similar folder's name.
+	+  WCM-187 : Should have question mark icon at group present 4 step, which create web content.
+	+  WCM-236 : Improve the web content node type definition
+	+  WCM-240 : Change policy to TOCGenerator and LinkExtractor for webcontent
+	+  WCM-259 : Improve the new FCK plugins
+	+  WCM-271 : Clean group navigation in portal configuaration
+	+  WCM-274 : Improve the design of the warning message when editing a shared banner
+	+  WCM-276 : Change predefined page templates
+	+  WCM-313 : Ask the portal team to specify default permissions when creating a new portal
+	+  WCM-346 : create some big icons for wcm nodetypes
+	+  WCM-385 : Need some images for selecting web layout in the first step in SCV
+	+  WCM-390 : Improve the web design of webcontent sub type
+	+  WCM-408 : Make the two subwebcontents samples use Groovy
+	+  WCM-406 : Open left workspace only if needed
+	+  WCM-410 : Add edit button in PCV
+	+  WCM-414 : Merge permission setting/preference setting step as tab in social setting
+	+  WCM-421 : CSS clean for wcm
+	+  WCM-94  : Add some table properties for fckeditor
+	+  WCM-158 : Specify only the document name when adding a link to a DMS document
+	+  WCM-164 : Deploy banner/footer data at the first time in to themes folders
+	+  WCM-189 : remove wcm.webui package
+	+  WCM-213 : Ask designers for a WCM specific home page
+	+  WCM-223 : Improve portlet edition in page edit mode
+	+  WCM-237 : set webcontent name as exo:title property of exo:rss-enable
+	+  WCM-250 : Use Parameterized page url when insert document in fckeditor
+	+  WCM-268 : Rename "site content" to "web content" in document type definition
+	+  WCM-273 : Prepare some real content for wcm
+	+  WCM-290 : Should simulate default webcontents artifacts as beeing published
+	+  WCM-289 : Add a "shared portal" drive
+	+  WCM-311 : Reconfigure the default available Portlets in Application registry
+	+  WCM-316 : Modify the WCM bar positioning
+	+  WCM-317 : In the WCM toolbar, rename "Edit page" to "Edit page layout"
+	+  WCM-314 : Simplifies the site explorer toolbars
+	+  WCM-321 : Make relationship between navigation node publication datetime and WCM publication plugin
+	+  WCM-345 : create new Illustration tab to allow upload illustratoion imgage for webcontent
+	+  WCM-347 : Leverage JCR 1.10
+	+  WCM-354 : Create some new webcontent subtypes with inital layout for webcontent
+	+  WCM-476 : In the breadcrums, display the document name in case the PCV page is viewed
+	+  WCM-529 : Add new portlet preference allow user specifice content header/column for clv
+	+  WCM-545 : Improve Folder selector in CLV
+	+  WCM-544 : Improve document selector/webcontent selector in SCV
+	+  WCM-548 : Search portlet UI improvement
+	+  WCM-549 : Improve clv edit mode form
+	+  WCM-546 : improve select document/webcontent form
+	+  WCM-552 : Improve webcontent name form
+	+  WCM-553 : Improve permission selector
+	+  WCM-554 : Allow search when use put text to search text field and enter
+	+  WCM-112 : Don't have tooltip for edit function.
+	+  WCM-207 : Improve the permission panel design in SCP wizard
+	+  WCM-234 : after insert portal link successfully--> should change color of this link or have underline this link.
+	+  WCM-261 : Rename "site templates" folder
+	+  WCM-167 : When display category, which display only name of category.
+	+  WCM-194 : Rename some folders in the site structure
+	+  WCM-209 : Make sure "quick edit" only is selected by default in last step of SCP
+	+  WCM-210 : Make the SCP wizard come back to the initial step when using portal edit mode
+	+  WCM-224 : Change ACP portlet name to Simple Content Viewer and clean code
+	+  WCM-275 : "share portal" should be "shared" in Site Explorer
+	+  WCM-288 : We can't create new page in "content viewer"
+	+  WCM-335 : Arrange the eXo logo in the WCM toolbar
+	+  WCM-341 : Improve the "Change portal" icon in the WCM toolbar
+	+  WCM-361 : Rename "Site Content Management" navigation node to "Site Management"
+	
+- Bugs in this version: a lot of bugs are fixed.
+
+- System Requirements
+    + Web Browser: IE6, IE7, FF2, FF3, Safari, Google Chrome. Best for Frirefox.
+	+ JVM: version 1.5.0_xx only
+	+ Application Server : Tomcat, JBoss, Jonas, Websphere
+	+ Building Tools: Maven 2.0.6 and up
+
+- Other resources and links
+    + Company site        http://www.exoplatform.com
+    + Community JIRA      http://jira.exoplatform.org
+    + Comminity site      http://www.exoplatform.org
+    + Developers wiki     http://wiki.exoplatform.org
+    + Documentation       http://docs.exoplatform.org 
+	
