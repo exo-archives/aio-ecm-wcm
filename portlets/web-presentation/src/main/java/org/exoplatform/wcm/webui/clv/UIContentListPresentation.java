@@ -21,6 +21,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import javax.jcr.Node;
+import javax.jcr.Session;
 import javax.portlet.PortletPreferences;
 
 import org.exoplatform.commons.utils.ISO8601;
@@ -31,6 +32,7 @@ import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.thumbnail.ThumbnailService;
+import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.services.organization.UserProfileHandler;
@@ -216,15 +218,23 @@ public class UIContentListPresentation extends UIContainer {
     return null;
   }
 
-  public String getIllustrativeImage(Node node) throws Exception {            
+  public String getIllustrativeImage(Node node) throws Exception {
+    String imagePath = null;
     if(node.isNodeType("exo:webContent")) {
       WebSchemaConfigService schemaConfigService = getApplicationComponent(WebSchemaConfigService.class);
-      WebContentSchemaHandler contentSchemaHandler = schemaConfigService.getWebSchemaHandlerByType(WebContentSchemaHandler.class);      
+      WebContentSchemaHandler contentSchemaHandler = schemaConfigService.getWebSchemaHandlerByType(WebContentSchemaHandler.class);
+      Node illustrativeImage = null;
       try {
-        Node thumbnailImage = contentSchemaHandler.getIllustrationImage(node);
-        return Utils.getThumbnailImage(thumbnailImage,ThumbnailService.MEDIUM_SIZE);
-      } catch (Exception e) {
-      }      
+        illustrativeImage = contentSchemaHandler.getIllustrationImage(node);
+        imagePath = Utils.getThumbnailImage(illustrativeImage,ThumbnailService.MEDIUM_SIZE);
+      } catch (Exception e) { }
+      if(imagePath == null && illustrativeImage != null) {
+        Session session = illustrativeImage.getSession();
+        String repository = ((ManageableRepository)session.getRepository()).getConfiguration().getName();
+        String workspace = session.getWorkspace().getName();
+        imagePath = "/portal/rest/jcr/"+repository+"/" + workspace + illustrativeImage.getPath();
+      }
+      return imagePath;
     }
     PortletRequestContext requestContext = WebuiRequestContext.getCurrentInstance();
     String showThumbnailPref = requestContext.getRequest().getPreferences().getValue(UIContentListViewerPortlet.SHOW_THUMBNAILS_VIEW,"false");
