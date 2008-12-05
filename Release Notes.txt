@@ -1,9 +1,10 @@
 ==============================================
-	eXo WCM 1.0 release candidate read me
+	eXo WCM 1.0 release candidate
 ==============================================
 
 - Introduction
-	This document includes purpose, scope, definitions, features about web content management.
+	This is the release candidate that close to final release for next 2 weeks.Most of wcm features were implemented in this 
+	release.Please look at in this release notes for more detail
 	
 - Features in this version: 
 	+  WCM-138 : Allow users to publish web content from JCR File Explorer
