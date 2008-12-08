@@ -134,7 +134,7 @@ public class SiteSearchServiceImpl implements SiteSearchService {
 		mapQueryTypes(queryCriteria, queryBuilder, sessionProvider);
 		mapQueryTerm(queryCriteria, queryBuilder);
 		orderBy(queryCriteria, queryBuilder, sessionProvider);
-		String queryStatement = queryBuilder.createQueryStatement();
+		String queryStatement = queryBuilder.createQueryStatement();		
 		NodeLocation location = configurationService
 				.getLivePortalsLocation(currentRepository);
 		Session session = sessionProvider.getSession(location.getWorkspace(),
@@ -185,8 +185,13 @@ public class SiteSearchServiceImpl implements SiteSearchService {
 			final SQLQueryBuilder queryBuilder) {
 		String keyword = queryCriteria.getKeyword();
 		QueryTermHelper queryTermHelper = new QueryTermHelper();
-		String queryTerm = queryTermHelper.contains(keyword).allowFuzzySearch()
-				.allowSynonymSearch().buildTerm();
+		String queryTerm = null;
+		if (keyword.contains("*")) {
+			queryTerm = queryTermHelper.contains(keyword).buildTerm();
+		} else {
+			queryTerm = queryTermHelper.contains(keyword).allowFuzzySearch()
+					.allowSynonymSearch().buildTerm();
+		}
 		queryBuilder.contains(null, queryTerm, LOGICAL.NULL);
 	}
 
