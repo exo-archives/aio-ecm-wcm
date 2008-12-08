@@ -220,6 +220,8 @@ public class PortalFolderSchemaHandler extends BaseWebSchemaHandler {
     addMixin(themes,"exo:owneable");
     Node bannerFolder = themes.addNode("banner","nt:unstructured");
     addMixin(bannerFolder,"exo:owneable");
+    Node searchboxFolder = themes.addNode("searchbox","nt:unstructured");
+    addMixin(searchboxFolder,"exo:owneable");
     Node navigationFolder = themes.addNode("navigation","nt:unstructured");
     addMixin(navigationFolder,"exo:owneable");
     Node breadcumbsFolder = themes.addNode("breadcrumb","nt:unstructured");

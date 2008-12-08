@@ -175,7 +175,7 @@
 	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>*:/platform/administrators</edit-permission>
     <application>
-      <instance-id>portal#acme:/web-searches/WCMAdvanceSearchPortlet/search</instance-id>
+      <instance-id>portal#acme:/web-searches/WCMAdvanceSearchPortlet/acme-search</instance-id>
       <title>Search</title>
     </application>
   </page>

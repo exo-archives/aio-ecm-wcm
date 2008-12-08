@@ -33,6 +33,12 @@
     </supertypes>  
   </nodeType>                  
   
+  <nodeType name="exo:siteNavigationWebContent" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+  	<supertypes>
+      <supertype>exo:webContent</supertype>      
+    </supertypes>  
+  </nodeType>
+  
   <nodeType name="metadata:siteMetadata" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
   	<supertypes>
       <supertype>exo:metadata</supertype>      

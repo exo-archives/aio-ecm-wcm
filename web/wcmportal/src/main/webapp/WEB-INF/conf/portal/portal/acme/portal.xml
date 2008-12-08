@@ -22,7 +22,7 @@
   			</container>
   			<container id="Search" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
 	  			<application>
-				    <instance-id>portal#acme:/web-searches/WCMAdvanceSearchPortlet/acme-searchbox</instance-id>
+				    <instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-searchbox</instance-id>
 				    <show-info-bar>false</show-info-bar>
 				  </application>
   			</container>
