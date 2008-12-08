@@ -55,7 +55,33 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>classic</owner-id>
-    <window-id>portal#classic:/web-presentation/SingleContentViewer/classic-toolbar</window-id>
+    <window-id>portal#classic:/web-presentation/SingleContentViewer/classic-searchbox</window-id>
+    <preference>
+      <name>repository</name>
+      <value>repository</value>
+      <read-only>false</read-only>
+    </preference>
+    <preference>
+      <name>workspace</name>
+      <value>collaboration</value>
+      <read-only>false</read-only>
+    </preference>
+    <preference>
+      <name>nodeIdentifier</name>
+      <value>/sites content/live/classic/web contents/site artifacts/searchbox/Default</value>
+      <read-only>false</read-only>
+    </preference>
+    <preference>
+      <name>ShowQuickEdit</name>
+      <value>true</value>
+      <read-only>false</read-only>
+    </preference>
+  </portlet-preferences>
+  
+  <portlet-preferences>
+    <owner-type>portal</owner-type>
+    <owner-id>classic</owner-id>
+    <window-id>portal#classic:/web-presentation/SingleContentViewer/classic-navigation</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -73,7 +99,7 @@
     </preference>
     <preference>
       <name>ShowQuickEdit</name>
-      <value>false</value>
+      <value>true</value>
       <read-only>false</read-only>
     </preference>
   </portlet-preferences>

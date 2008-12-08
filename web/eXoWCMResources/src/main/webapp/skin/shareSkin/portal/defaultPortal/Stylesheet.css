@@ -3,19 +3,10 @@
 } 
 
 #UIContainer-DefaultPortalContainer .UITableColumnContainer {
-	width: 100%;
-	_width: 99.6%;
+	width: 99%;
 	position: relative;
 }
 
-#UIContainer-DefaultPortalContainer #UIContainer-Banner {
+#UIContainer-DefaultPortalContainer .UIContainer {
 	padding: 0;
-}
-
-#UIContainer-DefaultPortalContainer #UIContainer-Login {
-	padding: 0;
-}
-
-.UITableColumnContainer {
-	width: 99%;
 }
