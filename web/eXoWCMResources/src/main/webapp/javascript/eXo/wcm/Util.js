@@ -125,3 +125,18 @@ function quickSearchOnEnter(event, resultPageURI) {
     quickSearch(resultPageURI);
   }
 }
+
+function search(comId) {
+	var searchForm = document.getElementById(comId);
+	var inputKey = eXo.core.DOMUtil.findDescendantById(searchForm, "keywordInput");
+
+	searchForm.onsubmit = function() {return false;};
+
+	inputKey.onkeypress = function(event) {
+	  var keyNum = getKeynum(event);
+	  if (keyNum == 13) {
+			var searchButton = eXo.core.DOMUtil.findFirstDescendantByClass(this.form, "div", "SearchButton");
+			searchButton.onclick();
+  	  }		
+	}
+}	
