@@ -86,6 +86,10 @@ function getHostName() {
 	return parentLocation.href.substring(0, parentLocation.href.indexOf(parentLocation.pathname));
 }
 
+function getRuntimeContextPath() {
+	return getHostName() + eXo.env.portal.context + '/' + eXo.env.portal.accessMode + '/' + eXo.env.portal.portalName + '/';
+}
+
 function getKeynum(event) {
   var keynum = false ;
   if(window.event) { /* IE */
