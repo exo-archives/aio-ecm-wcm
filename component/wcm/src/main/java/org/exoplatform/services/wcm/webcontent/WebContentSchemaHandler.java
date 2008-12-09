@@ -79,7 +79,7 @@ public class WebContentSchemaHandler extends BaseWebSchemaHandler {
     addMixin(defaultJS,"exo:owneable");
     
     Node defaultHTML = addNodeAsNTFile(webContent, "default.html", "text/html", "");
-    addMixin(defaultHTML, "exo:cssFile");
+    addMixin(defaultHTML, "exo:htmlFile");
     addMixin(defaultHTML,"exo:owneable");
     
     Node illustration = addNodeAsNTFile(webContent.getNode("medias/images"), "illustration", "", "");
