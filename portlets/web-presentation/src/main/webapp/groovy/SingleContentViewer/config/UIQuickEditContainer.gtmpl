@@ -9,7 +9,7 @@
  	rcontext.getJavascriptManager().importJavascript('eXo.webpresentation.Utils','/web-presentation/javascript');
 	rcontext.getJavascriptManager().addOnLoadJavascript('eXo.wcm.removeQuickeditingBlock("' + portletId + '","' + quickEditingBlockId + '")');
 %>
-<div class="QuickEditContainer">
+<div class="QuickEditContainer" id="$uicomponent.id">
 	<% uicomponent.renderChildren() %>
 	<div class="QuickEditBackButton">
   	<a href="<%=uicomponent.event("BackToNormalWizard")%>"><%= _ctx.appRes("UIQuickEditContainer.back") %></a>
