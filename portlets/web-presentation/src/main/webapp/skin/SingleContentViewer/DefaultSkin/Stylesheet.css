@@ -37,8 +37,13 @@
 	font-size: 15px;
 	color: #058ee6;
 	line-height: 30px;
+	height: 30px;
 	padding-bottom: 5px;
 	text-align: left;
+}
+
+.UISingleContentViewerPortlet .UIWelcomeScreen .WelcomeText {
+	height: 20px;
 }
 
 .UISingleContentViewerPortlet .UIWelcomeScreen .WelcomeLablePadding {
@@ -92,11 +97,15 @@
 	margin: 0;
 }
 
+.UISingleContentViewerPortlet .UIForm .HorizontalLayout .textarea {
+	width: 525px;
+	height: 275px;
+}
+
 .UIWelcomeScreen .HorizontalLayout {
 	padding: 0px;
 	background: white;
 }
-
 .UIWebContentSelectorForm {
 	margin: 8px auto;
 }
@@ -238,6 +247,10 @@
 .UISingleContentViewerPortlet .QuickEditContainer {
 	border: 1px solid #b7b7b7;
 	background: white;
+}
+
+.UISingleContentViewerPortlet .QuickEditContainer .UIFormGrid {
+	width: 99%;
 }
 
 .UISingleContentViewerPortlet .QuickEditBackButton {
