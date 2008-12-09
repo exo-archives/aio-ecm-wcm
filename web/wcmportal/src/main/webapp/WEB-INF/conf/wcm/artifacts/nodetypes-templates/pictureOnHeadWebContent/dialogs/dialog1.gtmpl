@@ -116,7 +116,7 @@
 								</td>
 							</tr>
 							<tr>		          					
-					      <td class="FieldLabel"><%=_ctx.appRes("Sample.dialog.label.upload-image")%></td>
+					      <td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.image")%></td>
 					      <td class="FieldComponent">
 						      <%
 						        if(uicomponent.isEditing()) { 
@@ -154,7 +154,7 @@
 						    </td>
 					    </tr>
 					    <tr>
-								<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.title")%></td>
+								<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.imageWidth")%></td>
 							  	<td class="FieldComponent">
 									<%
 							        String[] imageWidth = ["jcrPath=/node/exo:imageWidth", "validate=number", "defaultValues=150"];
@@ -163,7 +163,7 @@
 								</td>
 							</tr>
 							<tr>
-								<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.title")%></td>
+								<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.imageHeight")%></td>
 							  	<td class="FieldComponent">
 									<%
 							        String[] imageHeight = ["jcrPath=/node/exo:imageHeight", "validate=number", "defaultValues=150"];
