@@ -171,7 +171,7 @@ public class UISearchForm extends UIForm {
 					UIWCMSearchPortlet.ITEMS_PER_PAGE, null));
 			try {
 				WCMPaginatedQueryResult paginatedQueryResult = siteSearchService
-						.searchSiteContents(queryCriteria, provider, itemsPerPage, false);
+						.searchSiteContents(queryCriteria, provider, itemsPerPage);
 				uiSearchResult.setPageList(paginatedQueryResult);
 				long timeSearch = paginatedQueryResult.getQueryTimeInSecond();
 				uiSearchResult.setSearchTime(timeSearch);

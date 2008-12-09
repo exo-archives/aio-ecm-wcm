@@ -115,7 +115,7 @@ public class UISearchResult extends UIContainer {
 					UIWCMSearchPortlet.ITEMS_PER_PAGE, null));
 			try {
 				WCMPaginatedQueryResult paginatedQueryResult = siteSearchService
-						.searchSiteContents(queryCriteria, provider, itemsPerPage, false);
+						.searchSiteContents(queryCriteria, provider, itemsPerPage);
 				setPageList(paginatedQueryResult);
 			} catch (Exception e) {
 				UIApplication uiApp = getAncestorOfType(UIApplication.class);
