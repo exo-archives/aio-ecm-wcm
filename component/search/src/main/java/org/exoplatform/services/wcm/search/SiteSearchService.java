@@ -39,5 +39,5 @@ public interface SiteSearchService {
    * @throws Exception the exception
    */
   public QueryResult searchSiteContents(QueryCriteria queryCriteria, SessionProvider sessionProvider) throws Exception;
-  public WCMPaginatedQueryResult searchSiteContents(QueryCriteria queryCriteria, SessionProvider sessionProvider, int pageSize, boolean allowDuplicated) throws Exception;
+  public WCMPaginatedQueryResult searchSiteContents(QueryCriteria queryCriteria, SessionProvider sessionProvider, int pageSize) throws Exception;
 }

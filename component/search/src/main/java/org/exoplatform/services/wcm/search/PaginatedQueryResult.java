@@ -33,7 +33,7 @@ import org.exoplatform.services.wcm.utils.PaginatedNodeIterator;
  * Oct 17, 2008
  */
 public class PaginatedQueryResult extends PaginatedNodeIterator {
-  
+
   /** The row iterator. */  
   protected QueryResult queryResult;
   /**
@@ -41,6 +41,7 @@ public class PaginatedQueryResult extends PaginatedNodeIterator {
    * 
    * @param pageSize the page size
    */
+
   public PaginatedQueryResult(int pageSize) {
     super(pageSize);
   }
@@ -57,20 +58,20 @@ public class PaginatedQueryResult extends PaginatedNodeIterator {
     super(pageSize);         
     this.nodeIterator = queryResult.getNodes();
     this.setAvailablePage((int)nodeIterator.getSize());    
-    this.queryResult = queryResult;
+    this.queryResult = queryResult;    
   }    
-  
+
   /* (non-Javadoc)
    * @see org.exoplatform.wcm.webui.paginator.PaginatedNodeIterator#populateCurrentPage(int)
    */
   protected void populateCurrentPage(int page) throws Exception {   
-    checkAndSetPosition(page);    
+    checkAndSetPosition(page);        
     currentListPage_ = new ArrayList();
-    int count = 0;
+    int count = 0;    
     RowIterator iterator = queryResult.getRows();    
-    while (nodeIterator.hasNext()) {
+    while (nodeIterator.hasNext()) {      
       Node node = nodeIterator.nextNode();
-      Node viewNode = filterNodeToDisplay(node);      
+      Node viewNode = filterNodeToDisplay(node);            
       if(viewNode != null) {
         //Skip back 1 position to get current row mapping to the node
         long position = nodeIterator.getPosition();
@@ -80,17 +81,15 @@ public class PaginatedQueryResult extends PaginatedNodeIterator {
         Row row = iterator.nextRow();
         ResultNode resultNode = new ResultNode(viewNode,row);
         currentListPage_.add(resultNode);
-        count ++;
+        count ++;        
         if(count == getPageSize()) 
-          break;        
-      } else {
-        available_ = available_ - 1;
-      }      
-    }           
+          break;                    
+      }
+    }    
     currentPage_ = page;
-    //setAvailablePage(available_);
   }      
-  
+
+
   /**
    * Filter node to display.
    * 
@@ -107,21 +106,21 @@ public class PaginatedQueryResult extends PaginatedNodeIterator {
     }
     return displayNode;
   }
-  
+
   /**
    * The Class ResultNode.
    */
   public static class ResultNode { 
-    
+
     /** The node. */
     private Node node;
-    
+
     /** The score. */
     private float score;
-    
+
     /** The excerpt. */
-    private String excerpt;
-    
+    private String excerpt;        
+
     /**
      * Instantiates a new result node.
      * 
@@ -135,28 +134,28 @@ public class PaginatedQueryResult extends PaginatedNodeIterator {
       this.excerpt = row.getValue("rep:excerpt(.)").getString();
       this.score = row.getValue("jcr:score").getLong();
     }
-    
+
     /**
      * Gets the node.
      * 
      * @return the node
      */
     public Node getNode() { return node; }
-    
+
     /**
      * Sets the node.
      * 
      * @param node the new node
      */
     public void setNode(Node node) { this.node = node; }
-    
+
     /**
      * Gets the score.
      * 
      * @return the score
      */
     public float getScore() { return score; }
-    
+
     /**
      * Sets the score.
      * 
@@ -182,5 +181,18 @@ public class PaginatedQueryResult extends PaginatedNodeIterator {
       this.excerpt = excerpt;
     }
 
+    public String getTitle() throws Exception {
+      if(node.hasProperty("exo:title")) {
+        return node.getProperty("exo:title").getString();
+      }
+      return node.getName();
+    }
+
+    public String getSummary() throws Exception {
+      if(node.hasProperty("exo:summary")) {
+        return node.getProperty("exo:summary").getString();
+      }
+      return null;
+    }
   }
 }
