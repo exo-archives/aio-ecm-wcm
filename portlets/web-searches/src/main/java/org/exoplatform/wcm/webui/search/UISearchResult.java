@@ -17,6 +17,7 @@
 package org.exoplatform.wcm.webui.search;
 
 import java.io.Writer;
+import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -38,11 +39,13 @@ import org.exoplatform.services.wcm.search.QueryCriteria;
 import org.exoplatform.services.wcm.search.SiteSearchService;
 import org.exoplatform.services.wcm.search.WCMPaginatedQueryResult;
 import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 
 /*
@@ -91,6 +94,7 @@ public class UISearchResult extends UIContainer {
 				.getRequest();
 		String queryString = requestWrapper.getQueryString();
 		if (queryString != null && queryString.matches(PARAMETER_REGX)) {
+			queryString = URLDecoder.decode(queryString, "UTF-8");
 			String[] params = queryString.split("&");
 			String currentPortal = params[0].split("=")[1];
 			String keyword = params[1].split("=")[1];
@@ -109,9 +113,16 @@ public class UISearchResult extends UIContainer {
 			SessionProvider provider = SessionProviderFactory.createSessionProvider();
 			int itemsPerPage = Integer.parseInt(portletPreferences.getValue(
 					UIWCMSearchPortlet.ITEMS_PER_PAGE, null));
-			WCMPaginatedQueryResult paginatedQueryResult = siteSearchService
-					.searchSiteContents(queryCriteria, provider, itemsPerPage, false);
-			setPageList(paginatedQueryResult);
+			try {
+				WCMPaginatedQueryResult paginatedQueryResult = siteSearchService
+						.searchSiteContents(queryCriteria, provider, itemsPerPage, false);
+				setPageList(paginatedQueryResult);
+			} catch (Exception e) {
+				UIApplication uiApp = getAncestorOfType(UIApplication.class);
+				uiApp.addMessage(new ApplicationMessage(
+						UISearchForm.MESSAGE_NOT_SUPPORT_KEYWORD, null,
+						ApplicationMessage.WARNING));
+			}
 		}
 		if (uiPaginator.getTotalItems() == 0) {
 			renderErrorMessage(context, RESULT_NOT_FOUND);

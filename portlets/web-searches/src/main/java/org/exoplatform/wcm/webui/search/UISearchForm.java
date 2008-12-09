@@ -66,6 +66,12 @@ public class UISearchForm extends UIForm {
 
 	public static final String ALL_OPTION = "all";
 
+	public static final String MESSAGE_NOT_CHECKED_TYPE_SEARCH = "UISearchForm.message.not-checked";
+	
+	public static final String MESSAGE_NOT_SUPPORT_KEYWORD = "UISearchForm.message.keyword-not-support";
+	
+	public static final String MESSAGE_NOT_EMPTY_KEYWORD = "UISearchForm.message.keyword-not-empty";
+
 	@SuppressWarnings("unchecked")
 	public UISearchForm() throws Exception {
 		UIFormStringInput uiKeywordInput = new UIFormStringInput(KEYWORD_INPUT,
@@ -142,15 +148,14 @@ public class UISearchForm extends UIForm {
 			String documentChecked = (uiDocumentCheckbox.isChecked()) ? "true"
 					: "false";
 			if (keyword == null || keyword.trim().length() == 0) {
-				uiApp.addMessage(new ApplicationMessage(
-						"UISearchForm.message.keyword-not-empty", null,
+				uiApp.addMessage(new ApplicationMessage(MESSAGE_NOT_EMPTY_KEYWORD, null,
 						ApplicationMessage.WARNING));
 				return;
 			}
 			if (!Boolean.parseBoolean(pageChecked)
 					&& !Boolean.parseBoolean(documentChecked)) {
 				uiApp.addMessage(new ApplicationMessage(
-						"UISearchForm.message.not-checked", null,
+						MESSAGE_NOT_CHECKED_TYPE_SEARCH, null,
 						ApplicationMessage.WARNING));
 				return;
 			}
@@ -164,11 +169,18 @@ public class UISearchForm extends UIForm {
 			queryCriteria.setSearchWebpage(Boolean.parseBoolean(pageChecked));
 			int itemsPerPage = Integer.parseInt(portletPreferences.getValue(
 					UIWCMSearchPortlet.ITEMS_PER_PAGE, null));
-			WCMPaginatedQueryResult paginatedQueryResult = siteSearchService
-					.searchSiteContents(queryCriteria, provider, itemsPerPage, false);
-			uiSearchResult.setPageList(paginatedQueryResult);
-			long timeSearch = paginatedQueryResult.getQueryTimeInSecond();
-			uiSearchResult.setSearchTime(paginatedQueryResult.getQueryTimeInSecond());
+			try {
+				WCMPaginatedQueryResult paginatedQueryResult = siteSearchService
+						.searchSiteContents(queryCriteria, provider, itemsPerPage, false);
+				uiSearchResult.setPageList(paginatedQueryResult);
+				long timeSearch = paginatedQueryResult.getQueryTimeInSecond();
+				uiSearchResult.setSearchTime(timeSearch);
+			} catch (Exception e) {
+				uiApp.addMessage(new ApplicationMessage(
+						MESSAGE_NOT_SUPPORT_KEYWORD, null,
+						ApplicationMessage.WARNING));
+				return;
+			}
 			portletRequestContext.addUIComponentToUpdateByAjax(uiSearchPageContainer);
 		}
 	}
