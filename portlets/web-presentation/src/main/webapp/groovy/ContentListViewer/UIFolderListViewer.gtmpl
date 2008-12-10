@@ -19,7 +19,7 @@
 		uicomponent.renderChildren();
 	} else {
 	%>
-		<div style="height: 55px; font-size: 13px; text-align: center; padding-top: 10px;">
+		<div style="height: 55px; font-size: 13px; text-align: center; padding-top: 10px;font-style: italic;color: red; background: white;border: 1px solid #B7B7B7;">
 			<span><%=uicomponent.getMessage()%></span>
 		</div>
 	<% } %>
