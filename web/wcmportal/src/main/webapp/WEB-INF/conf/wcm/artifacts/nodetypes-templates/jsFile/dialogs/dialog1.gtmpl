@@ -17,9 +17,9 @@
 	  width:525px;
 	 }
 </style>
-<div class="UIFormWithTitle">  
+<div class="UIForm">  
   <% uiform.begin() %>
-  <div class="HorizontalLayout" style="border:0px;">
+  <div class="HorizontalLayout">
     <table class="UIFormGrid">
         <tr>
           <td class="FieldLabel"><%=_ctx.appRes("JSFile.dialog.label.name")%></td>

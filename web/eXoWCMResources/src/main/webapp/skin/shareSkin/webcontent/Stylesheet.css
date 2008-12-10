@@ -18,3 +18,9 @@
   background: url('16x16/exo-browseIcon.png') no-repeat ;
   cursor: pointer;	 
 }
+
+.FormHint {
+	padding: 10px 5px;
+	text-align: center;
+	font-weight: bold;
+}
