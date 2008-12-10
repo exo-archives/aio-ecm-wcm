@@ -7,40 +7,29 @@
 		<node>
 			<uri>home</uri>
 			<name>home</name>
-			<label>#{portal.acme.home}</label>
+			<label>#{portal.@owner@.home}</label>
 			<page-reference>portal::@owner@::homepage</page-reference>	    
 		</node>	         	  	  	  	 	     	  	    
 		<node>
-			<uri>news</uri>
-			<name>news</name>
-			<label>#{portal.acme.news}</label>
-			<page-reference>portal::@owner@::presentation</page-reference>
-		</node>    
+			<uri>searchResult</uri>
+			<name>searchResult</name>
+			<label>#{portal.@owner@.searchResult}</label>
+			<visible>false</visible>			
+			<page-reference>portal::@owner@::searchResult</page-reference>	    
+		</node>
 		<node>
-			<uri>products</uri>
-			<name>products</name>
-			<label>#{portal.acme.products}</label>
-			<page-reference>portal::@owner@::presentation</page-reference>	    
-		</node>	         	  	  	  	 	     	  	   
-	  
-		<node>
-			<uri>contact</uri>
-			<name>contact</name>
-			<label>#{portal.acme.contact}</label>
-			<page-reference>portal::@owner@::presentation</page-reference>	    
-		</node>  
+			<uri>parameterizedviewer</uri>
+			<name>parameterizedviewer</name>
+			<label>#{portal.@owner@.parameterizedviewer}</label>
+			<visible>false</visible>
+			<page-reference>portal::@owner@::parameterizedviewer</page-reference>
+		</node> 
 		<node>
 			<uri>contentviewer</uri>
 			<name>contentviewer</name>
-			<label>#{portal.acme.contentviewer}</label>
+			<label>#{portal.@owner@.contentviewer}</label>
 			<visible>false</visible>
 			<page-reference>portal::@owner@::contentviewer</page-reference>
 		</node> 	        	    
-		<node>
-			<uri>sitemap</uri>
-			<name>sitemap</name>
-			<label>#{portal.acme.sitemap}</label>
-			<page-reference>portal::@owner@::sitemap</page-reference>	    
-		</node>	  	  
 	</page-nodes>
 </node-navigation>

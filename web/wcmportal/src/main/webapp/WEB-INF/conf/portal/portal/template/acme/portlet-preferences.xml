@@ -19,18 +19,60 @@
       <value>/sites content/live/@owner@/web contents/site artifacts/banner/Default</value>
       <read-only>false</read-only>
     </preference>
-		<preference>
-      <name>loginIdentifier</name>
-      <value>/sites content/live/@owner@/web contents/site artifacts/banner/loginUI</value>
-      <read-only>false</read-only>
-    </preference>
     <preference>
-      <name>quickEdit</name>
+      <name>ShowQuickEdit</name>
       <value>true</value>
       <read-only>false</read-only>
     </preference>
+  </portlet-preferences>
+  
+  <portlet-preferences>
+    <owner-type>portal</owner-type>
+    <owner-id>@owner@</owner-id>
+    <window-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-navigation</window-id>
     <preference>
-      <name>showLoginUI</name>
+      <name>repository</name>
+      <value>repository</value>
+      <read-only>false</read-only>
+    </preference>
+    <preference>
+      <name>workspace</name>
+      <value>collaboration</value>
+      <read-only>false</read-only>
+    </preference>
+    <preference>
+      <name>nodeIdentifier</name>
+      <value>/sites content/live/@owner@/web contents/site artifacts/navigation/Default</value>
+      <read-only>false</read-only>
+    </preference>
+    <preference>
+      <name>ShowQuickEdit</name>
+      <value>true</value>
+      <read-only>false</read-only>
+    </preference>
+  </portlet-preferences>
+  
+  <portlet-preferences>
+    <owner-type>portal</owner-type>
+    <owner-id>@owner@</owner-id>
+    <window-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-breadcrumb</window-id>
+    <preference>
+      <name>repository</name>
+      <value>repository</value>
+      <read-only>false</read-only>
+    </preference>
+    <preference>
+      <name>workspace</name>
+      <value>collaboration</value>
+      <read-only>false</read-only>
+    </preference>
+    <preference>
+      <name>nodeIdentifier</name>
+      <value>/sites content/live/@owner@/web contents/site artifacts/breadcrumb/Default</value>
+      <read-only>false</read-only>
+    </preference>
+    <preference>
+      <name>ShowQuickEdit</name>
       <value>true</value>
       <read-only>false</read-only>
     </preference>
@@ -56,7 +98,7 @@
       <read-only>false</read-only>
     </preference>
     <preference>
-      <name>quickEdit</name>
+      <name>ShowQuickEdit</name>
       <value>true</value>
       <read-only>false</read-only>
     </preference>
@@ -91,38 +133,27 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>@owner@</owner-id>
-    <window-id>portal#@owner@:/web/NavigationPortlet/@owner@-toolbar</window-id>
+    <window-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-searchbox</window-id>
     <preference>
-      <name>useAJAX</name>
-      <value>false</value>
+      <name>repository</name>
+      <value>repository</value>
+      <read-only>false</read-only>
+    </preference>
+    <preference>
+      <name>workspace</name>
+      <value>collaboration</value>
+      <read-only>false</read-only>
+    </preference>
+    <preference>
+      <name>nodeIdentifier</name>
+      <value>/sites content/live/@owner@/web contents/site artifacts/searchbox/Default</value>
+      <read-only>false</read-only>
+    </preference>
+    <preference>
+      <name>ShowQuickEdit</name>
+      <value>true</value>
       <read-only>false</read-only>
     </preference>
   </portlet-preferences>
   
-  <portlet-preferences>
-		<owner-type>portal</owner-type>
-		<owner-id>@owner@</owner-id>
-		<window-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-presentation</window-id>
-      <preference>
-        <name>ShowTOC</name>
-        <value>true</value>
-        <read-only>false</read-only>
-      </preference>
-      <preference>
-        <name>ShowTags</name>
-        <value>true</value>
-        <read-only>false</read-only>
-      </preference>
-      <preference>
-        <name>ShowCategories</name>
-        <value>true</value>
-        <read-only>false</read-only>
-      </preference>
-      <preference>
-        <name>ShowQuickEdit</name>
-        <value>true</value>
-        <read-only>false</read-only>
-      </preference>
-    </portlet-preferences>
-      
 </portlet-preferences-set>

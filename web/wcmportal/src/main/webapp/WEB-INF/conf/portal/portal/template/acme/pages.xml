@@ -8,30 +8,34 @@
     <title>Home Page</title>
 	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>*:/platform/administrators</edit-permission>
-    <application>
-      <instance-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-homepage</instance-id>
-      <title>Homepage</title>
-      <show-info-bar>false</show-info-bar>      
-      <show-application-state>false</show-application-state>
-      <show-application-mode>false</show-application-mode>
-    </application>
-  </page>                      
-  <page>
-  	<page-id>portal::@owner@::presentation</page-id>
-    <owner-type>portal</owner-type>
-    <owner-id>@owner@</owner-id>
-    <name>presentation</name>
-    <title>Presentation</title>
-	  <access-permissions>Everyone</access-permissions>
-	  <edit-permission>*:/platform/administrators</edit-permission>
-    <application>
-      <instance-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-presentation</instance-id>
-      <title>Presentation</title>
-      <show-info-bar>false</show-info-bar>      
-      <show-application-state>false</show-application-state>
-      <show-application-mode>false</show-application-mode>
-    </application>
-  </page>              
+	  <container id="@owner@Homepage" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  	<application>
+	      <instance-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-homepage</instance-id>
+	      <title>Homepage</title>
+	    </application>
+			<container id="@owner@Container" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
+	  		<container id="@owner@SerProContainer" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  			<application>
+				    <instance-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-serpro</instance-id>
+				    <title>Services and Products</title>
+				  </application>
+	  		</container>
+	  		<container id="@owner@Features" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  			<application>
+				    <instance-id>portal#@owner@:/web-presentation/ContentListViewerPortlet/@owner@-news-header</instance-id>
+				    <title>Features</title>
+				  </application>
+	  		</container>
+	  		<container id="@owner@About" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  			<application>
+			    	<instance-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-about-header</instance-id>
+			    	<title>About</title>
+			  	</application>
+			  </container>
+	  	</container>
+	  </container>
+  </page>
+  
   <page>
   	<page-id>portal::@owner@::admintoolbar</page-id>
     <owner-type>portal</owner-type>
@@ -42,26 +46,10 @@
 	  <edit-permission>*:/platform/administrators</edit-permission>
     <application>
       <instance-id>portal#@owner@:/web-presentation/SiteAdministrationPortlet/@owner@-admintoolbar</instance-id>
-      <title>Toolbar</title>
-      <show-info-bar>false</show-info-bar>      
-      <show-application-state>false</show-application-state>
-      <show-application-mode>false</show-application-mode>
+      <title>AdminToolbar</title>
     </application>
-  </page>            
-  <page>
-  	<page-id>portal::@owner@::sitemap</page-id>
-    <owner-type>portal</owner-type>
-    <owner-id>@owner@</owner-id>
-    <name>sitemap</name>
-    <title>Site Map</title>
-	  <access-permissions>Everyone</access-permissions>	  
-	  <edit-permission>*:/platform/administrators</edit-permission>
-	  <application>
-      <instance-id>portal#@owner@:/web/SiteMapPortlet/@owner@-sitemapportlet</instance-id>
-      <title>Site Map</title>
-      <show-info-bar>false</show-info-bar>      
-    </application>          
-  </page>  
+  </page> 
+  
   <page>
   	<page-id>portal::@owner@::contentviewer</page-id>
     <owner-type>portal</owner-type>
@@ -72,7 +60,38 @@
 	  <edit-permission>*:/platform/administrators</edit-permission>
     <application>
       <instance-id>portal#@owner@:/ecm/ContentViewerPortlet/@owner@-contentviewer</instance-id>
-      <title>contentviewer</title>
+      <title>ContentViewer</title>
+    </application>
+  </page>
+  
+  <page>
+  	<page-id>portal::@owner@::searchResult</page-id>
+    <owner-type>portal</owner-type>
+    <owner-id>@owner@</owner-id>
+    <name>searchResult</name>
+    <title>SearchResult</title>
+	  <access-permissions>Everyone</access-permissions>
+	  <edit-permission>*:/platform/administrators</edit-permission>
+    <application>
+      <instance-id>portal#@owner@:/web-searches/WCMAdvanceSearchPortlet/@owner@-searchResult</instance-id>
+      <title>SearchResult</title>
+      <show-info-bar>false</show-info-bar>      
+      <show-application-state>false</show-application-state>
+      <show-application-mode>false</show-application-mode>
+    </application>
+  </page> 
+  
+  <page>
+  	<page-id>portal::@owner@::parameterizedviewer</page-id>
+    <owner-type>portal</owner-type>
+    <owner-id>@owner@</owner-id>
+    <name>parameterizedviewer</name>
+    <title>ParameterizedViewer</title>
+    <access-permissions>Everyone</access-permissions> 
+    <edit-permission>*:/platform/administrators</edit-permission>
+    <application>
+      <instance-id>portal#@owner@:/web-presentation/ParameterizedContentViewerPortlet/@owner@-parameterizedviewer</instance-id>
+      <title>parameterizedviewer</title>
       <show-info-bar>false</show-info-bar>      
       <show-application-state>false</show-application-state>
       <show-application-mode>false</show-application-mode>
