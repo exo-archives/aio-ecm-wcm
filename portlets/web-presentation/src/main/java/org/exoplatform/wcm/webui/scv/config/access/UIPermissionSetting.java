@@ -27,7 +27,7 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
-import org.exoplatform.ecm.webui.selector.UIPermissionSelector;
+import org.exoplatform.ecm.webui.selector.UIGroupMemberSelector;
 import org.exoplatform.ecm.webui.selector.UISelectable;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.access.AccessControlEntry;
@@ -243,13 +243,9 @@ public class UIPermissionSetting extends UIForm implements UISelectable {
      */
     public void execute(Event<UIPermissionSetting> event) throws Exception {
       UIPermissionSetting permissionSettingForm = event.getSource();
-      UIPermissionSelector permissionSelector = permissionSettingForm.createUIComponent(
-          UIPermissionSelector.class, null, "UIPermissionUser");
-      permissionSelector.setSelectedUser(true);
-      permissionSelector.setSourceComponent(permissionSettingForm,
-          new String[] { USERS_STRINGINPUT });
+      UIWCMUserContainer uiWCMUserContainer = permissionSettingForm.createUIComponent(UIWCMUserContainer.class, null, null);
       permissionSettingForm.getAncestorOfType(UIPermissionManager.class).initPopupPermission(
-          permissionSelector);
+          uiWCMUserContainer);
       event.getRequestContext().addUIComponentToUpdateByAjax(permissionSettingForm.getParent());
     }
   }
@@ -272,13 +268,9 @@ public class UIPermissionSetting extends UIForm implements UISelectable {
      */
     public void execute(Event<UIPermissionSetting> event) throws Exception {
       UIPermissionSetting permissionSettingForm = event.getSource();
-      UIPermissionSelector permissionSelector = permissionSettingForm.createUIComponent(
-          UIPermissionSelector.class, null, "UIPermissionMembership");
-      permissionSelector.setSelectedMembership(true);
-      permissionSelector.setSourceComponent(permissionSettingForm,
-          new String[] { USERS_STRINGINPUT });
-      permissionSettingForm.getAncestorOfType(UIPermissionManager.class).initPopupPermission(
-          permissionSelector);
+      UIGroupMemberSelector uiGroupMemberSelector = permissionSettingForm.createUIComponent(UIGroupMemberSelector.class, null, null);
+      uiGroupMemberSelector.setSourceComponent(permissionSettingForm, new String[] { USERS_STRINGINPUT });
+      permissionSettingForm.getAncestorOfType(UIPermissionManager.class).initPopupPermission(uiGroupMemberSelector);
       event.getRequestContext().addUIComponentToUpdateByAjax(permissionSettingForm.getParent());
     }
   }
