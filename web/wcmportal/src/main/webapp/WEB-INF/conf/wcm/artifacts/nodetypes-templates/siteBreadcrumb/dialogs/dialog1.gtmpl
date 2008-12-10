@@ -1,9 +1,5 @@
 <% 
 	import javax.jcr.Node;
-	import org.exoplatform.download.DownloadService;
-	import org.exoplatform.download.InputStreamDownloadResource;
-	import java.io.InputStream;
-	
 	def rcontext = _ctx.getRequestContext() ;
 	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIHorizontalTabs');
 	def String htmlWYSIWYGFormId = "htmlData[" + uicomponent.hashCode() + "]";
@@ -114,63 +110,7 @@
 							        uicomponent.addTextField("title", webContentFieldTitle) ;
 							    %>
 								</td>
-							</tr>
-							<tr>		          					
-					      <td class="FieldLabel"><%=_ctx.appRes("Sample.dialog.label.upload-image")%></td>
-					      <td class="FieldComponent">
-						      <%
-						        if(uicomponent.isEditing()) { 
-											def curNode = uicomponent.getNode() ;
-											if (curNode.hasProperty("exo:image")) {
-												if(curNode.getProperty("exo:image").getStream().available() > 0) {
-													DownloadService dservice = uicomponent.getApplicationComponent(DownloadService.class);
-											    InputStream input = curNode.getProperty("exo:image").getStream();
-											    InputStreamDownloadResource dresource = new InputStreamDownloadResource(input, "image");
-											    dresource.setDownloadName(curNode.getName());
-											    
-											    def imgSrc = dservice.getDownloadLink(dservice.addDownloadResource(dresource));
-													def actionLink = uicomponent.event("RemoveData", "exo:image");
-										%>		
-													<div>
-														<image src="$imgSrc" width="100px" height="80px"/>
-														<a href="$actionLink">
-															<img src="/eXoResources/skin/DefaultSkin/background/Blank.gif" alt="" class="ActionIcon Remove16x16Icon"/>
-														</a>
-													</div>
-										<%
-												} else {
-									        String[] fieldImage = ["jcrPath=/node/exo:image"] ;
-									        uicomponent.addUploadField("imagee", fieldImage) ;								
-												}
-											}	else {
-								        String[] fieldImage = ["jcrPath=/node/exo:image"] ;
-								        uicomponent.addUploadField("imagee", fieldImage) ;								
-											}
-										} else {
-											String[] fieldImage = ["jcrPath=/node/exo:image"] ;
-							        uicomponent.addUploadField("imagee", fieldImage) ;
-										}
-						      %>
-						    </td>
-					    </tr>
-					    <tr>
-								<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.title")%></td>
-							  	<td class="FieldComponent">
-									<%
-							        String[] imageWidth = ["jcrPath=/node/exo:imageWidth", "validate=number", "defaultValues=150"];
-							        uicomponent.addTextField("imageWidth", imageWidth) ;
-							    %>
-								</td>
-							</tr>
-							<tr>
-								<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.title")%></td>
-							  	<td class="FieldComponent">
-									<%
-							        String[] imageHeight = ["jcrPath=/node/exo:imageHeight", "validate=number", "defaultValues=150"];
-							        uicomponent.addTextField("imageHeight", imageHeight) ;
-							    %>
-								</td>
-							</tr>
+							</tr>						
 							<tr>
 					 			<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.WebContentHtml")%></td>
 					  			<td class="FieldComponent">
@@ -199,8 +139,8 @@
 										htmlContent = "<div id=\"breadcrumb-generator\"><span></span></div>";
 									}
 									String[] htmlArguments = ["jcrPath=/node/default.html/jcr:content/jcr:data", "options=toolbar:CompleteWCM,width:400", htmlContent];
-			    					uicomponent.addWYSIWYGField(htmlWYSIWYGFormId, htmlArguments) ;
-			      				%>
+			    				uicomponent.addWYSIWYGField(htmlWYSIWYGFormId, htmlArguments) ;
+			      		%>
 								</td>
 							</tr>
 						</table>
@@ -388,7 +328,7 @@
 																			"}";
 									}
 									String[] fieldContentJS = ["jcrPath=/node/js/default.js/jcr:content/jcr:data", jsContent];
-									uicomponent.addTextAreaField(jsFormId, fieldContentJS); 								
+									uicomponent.addTextAreaField(jsFormId, fieldContentJS);							
 								%>
 								</td>
 							</tr>

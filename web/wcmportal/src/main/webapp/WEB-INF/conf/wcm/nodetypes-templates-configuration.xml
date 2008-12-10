@@ -323,7 +323,7 @@
                         <collection type="java.util.ArrayList">
                           <value>                    
                             <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">             
-                              <field name="templateFile"><string>/breadcrumb/views/view1.gtmpl</string></field>
+                              <field name="templateFile"><string>/siteBreadcrumb/views/view1.gtmpl</string></field>
                               <field name="roles"><string>*</string></field>                
                             </object>                      
                           </value>                          
@@ -333,7 +333,7 @@
                         <collection type="java.util.ArrayList">                          
                           <value>                    
                             <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">             
-                              <field name="templateFile"><string>/breadcrumb/dialogs/dialog1.gtmpl</string></field>
+                              <field name="templateFile"><string>/siteBreadcrumb/dialogs/dialog1.gtmpl</string></field>
                               <field name="roles"><string>*:/platform/administrators</string></field>                
                             </object>                      
                           </value>                      
