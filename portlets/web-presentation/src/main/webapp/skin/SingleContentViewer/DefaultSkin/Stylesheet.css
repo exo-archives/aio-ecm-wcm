@@ -15,6 +15,9 @@
 
 .UISingleContentViewerPortlet .EditMode {
 	padding: 5px;
+	background: white;
+	border: 1px solid #B7B7B7;
+	margin: 5px;
 }
 
 .UISingleContentViewerPortlet .UIWelcomeScreen .LeftColumn {
@@ -272,7 +275,7 @@
 
 
 .UISingleContentViewerPortlet .ExplorerTree .InnerExplorerTree {
-	padding:0px;
+	padding: 0px;
 	border: none;
 }
 
@@ -280,3 +283,12 @@
 	background:#F3F3F3;
 	border:1px solid #B7B7B7;
 }
+
+.UISingleContentViewerPortlet .location .UIFormGrid td {
+	padding: 0px;
+}
+
+.UISingleContentViewerPortlet .location .UIFormGrid {
+	width: 100%;
+}
+
