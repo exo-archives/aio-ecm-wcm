@@ -127,7 +127,11 @@ function getElementsByClassPath(root, path) {
 		oDocument.innerHTML = '';
 		var sHTML = '';
 		if (!eXp.store.data.Select) return;
-		var aResult = eXp.store.data.Select({orderBy: sCondition});
+		var aResult;
+		if (sCondition)
+			aResult	= eXp.store.data.Select({orderBy: sCondition});
+		else 
+			aResult	= eXp.store.data.Select();
 		var iLength = aResult.length;
 		for (var i = 0; i < iLength; i++) {
 			var HideTreeItem = getElementsByClassPath(oHide, 'HideTreeItem')[0].innerHTML;

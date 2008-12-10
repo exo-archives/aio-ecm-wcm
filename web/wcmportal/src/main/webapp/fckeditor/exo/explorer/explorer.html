@@ -559,7 +559,7 @@
 					var sURL = eXp.getNodeValue(oFiles[i], "url").replace(/\s/g, "%20");
 					eXp.store.data.Insert([sName, sName.toLowerCase(), sDateCreated, sSize, sType, sURL]);
 				} 
-				sort('date');
+				sort();
 			}
 			oStatusFile.innerHTML = iLength + ' files(s)';
 		} else {
