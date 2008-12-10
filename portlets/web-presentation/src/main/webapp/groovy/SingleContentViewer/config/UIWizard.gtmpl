@@ -45,7 +45,7 @@
 																			actionLink = uicomponent.url("ViewStep" + String.valueOf(i));
 																			print ("<a href=\"$actionLink\" title=\"$strStep\">") ;
 																		} else {
-																			print ("<a href=\"#\" style=\"color:red;font-weight:bold;\" title=\"$strStep\">") ;
+																			print ("<a href=\"#\" style=\"color:blue;font-weight:bold;\" title=\"$strStep\">") ;
 																		}
 																		print (wizardStep + " " + String.valueOf(i)) ;
 																		println(": " + strStep +"</a>") ;

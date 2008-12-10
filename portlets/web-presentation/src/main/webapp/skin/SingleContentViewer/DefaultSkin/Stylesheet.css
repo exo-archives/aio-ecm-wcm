@@ -78,6 +78,7 @@
 	cursor: pointer;
 	margin: 4px 5px;
 	padding-left: 30px;
+	color: blue;
 }
 
 .UISingleContentViewerPortlet .UIWizard .UIWizardPageSetInfo .PageNodeContainer {
