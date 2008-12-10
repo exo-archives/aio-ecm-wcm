@@ -1,56 +1,72 @@
-.UIWCMSearchPortlet .UIAdvanceSearchResultDefault .SearchResult {
-    border: 1px solid #b7b7b7;
-    padding: 10px;
-    margin: 10px;
-    background: #fff;
+.UIWCMSearchPortlet .UIAdvanceSearchResultDefault {
+	padding: 10px;		
+	background: white;
 }
 
-.UIWCMSearchPortlet .UIAdvanceSearchResultDefault .SearchResult .SearchItem {
+.UIWCMSearchPortlet .UIAdvanceSearchResultDefault .ResultHeader {
+	background:#F0F7F9 none repeat scroll 0 0;
+	border-top:1px solid #6B90DA;
+	overflow:hidden;
+}
+
+.UIWCMSearchPortlet .UIAdvanceSearchResultDefault .ResultHeader .CaptionSearchType {
+	float:left;
+	padding:4px 0.5em 0 4px;
+}
+
+.UIWCMSearchPortlet .UIAdvanceSearchResultDefault .ResultHeader .SearchSummary {
+	margin:0.1em 0;
+	padding:0.2em;
+	text-align:right;
+	white-space:nowrap;
+}
+
+.UIWCMSearchPortlet .UIAdvanceSearchResultDefault .SearchItem {
     padding-top: 10px;
 }
 
-.UIWCMSearchPortlet .UIAdvanceSearchResultDefault .SearchResult .ItemTitle a {
+.UIWCMSearchPortlet .UIAdvanceSearchResultDefault  .ItemTitle a {
     font-size: 14px;
     color: #0385d9;
     font-weight: bold;
     padding-left: 20px;
 }
 
-.UIWCMSearchPortlet .UIAdvanceSearchResultDefault .SearchResult .ItemExcerpt {
+.UIWCMSearchPortlet .UIAdvanceSearchResultDefault .ItemExcerpt {
 	color: black;
 }
 
-.UIWCMSearchPortlet .UIAdvanceSearchResultDefault .SearchResult .ItemInfo {
+.UIWCMSearchPortlet .UIAdvanceSearchResultDefault .ItemInfo {
 	color: green;
 }
 
-.UIWCMSearchPortlet .UIAdvanceSearchResultDefault .SearchResult .ItemUrl {
+.UIWCMSearchPortlet .UIAdvanceSearchResultDefault .ItemUrl {
 	
 }
 
-.UIWCMSearchPortlet .UIAdvanceSearchResultDefault .SearchResult .ItemSize {
+.UIWCMSearchPortlet .UIAdvanceSearchResultDefault .ItemSize {
 
 }
 
-.UIWCMSearchPortlet .UIAdvanceSearchResultDefault .SearchResult .ItemSame a {
+.UIWCMSearchPortlet .UIAdvanceSearchResultDefault .ItemSame a {
 	color: #9977DF;
 	text-decoration: underline;
 }
 
-.UIWCMSearchPortlet .UIAdvanceSearchResultDefault .SearchResult .ItemDetails {
+.UIWCMSearchPortlet .UIAdvanceSearchResultDefault .ItemDetails {
 	display: none;
 	padding-left: 15px;
 }
 
-.UIWCMSearchPortlet .UIAdvanceSearchResultDefault .SearchResult .ItemScore {
+.UIWCMSearchPortlet .UIAdvanceSearchResultDefault  .ItemScore {
 
 }
 
-.UIWCMSearchPortlet .UIAdvanceSearchResultDefault .SearchResult .ItemNone {
+.UIWCMSearchPortlet .UIAdvanceSearchResultDefault .ItemNone {
 
 }
 
-.UIWCMSearchPortlet .UIAdvanceSearchResultDefault .SearchResult .ItemFunc {
+.UIWCMSearchPortlet .UIAdvanceSearchResultDefault .ItemFunc {
     padding: 10px 0;
     height: 1%;
     overflow: hidden;

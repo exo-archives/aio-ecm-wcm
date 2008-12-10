@@ -1,0 +1,25 @@
+/*------------------org.exoplatform.wcm.webui.search.UIWCMSearchForm-------------------*/
+.UIWCMSearchPortlet .UISearchForm {	
+}
+
+.UIWCMSearchPortlet .UISearchForm .SearchHorizontalLayout {
+	background:white none repeat scroll 0 0;	
+	padding:10px;
+}
+
+.UIWCMSearchPortlet .UISearchForm .SearchHorizontalLayout .CheckboxField{
+	float: left; 
+	padding-left: 18px;
+}
+
+.UIWCMSearchPortlet .UISearchForm .SearchHorizontalLayout .CheckboxText{
+	float: left;
+	padding-left: 4px;
+	line-height: 18px;
+}
+
+.UIWCMSearchPortlet .UISearchForm .SearchHorizontalLayout input{
+	font-size: 11px;
+	width: 400px;
+}
+/*-------------------------------------------------------------------------------------*/
