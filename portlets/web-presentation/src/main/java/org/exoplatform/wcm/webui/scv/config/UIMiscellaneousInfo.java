@@ -52,27 +52,14 @@ public class UIMiscellaneousInfo extends UIForm {
     boolean isAllowVoting = Boolean.parseBoolean(prefs.getValue("AllowVoting", null));
     boolean isAllowComment = Boolean.parseBoolean(prefs.getValue("AllowComment", null));
     boolean isQuickEdit = Boolean.parseBoolean(prefs.getValue("ShowQuickEdit", null));
-    UIFormCheckBoxInput<Boolean> showTocBox = new UIFormCheckBoxInput("ShowTOC", "ShowTOC", null).setChecked(isShowTOC);
-    UIFormCheckBoxInput<Boolean> ShowTagBox = new UIFormCheckBoxInput("ShowTags", "ShowTags", null).setChecked(isShowTags);
-    UIFormCheckBoxInput<Boolean> ShowCategoryBox = new UIFormCheckBoxInput("ShowCategories", "ShowCategories", null).setChecked(isShowCategories);
-    UIFormCheckBoxInput<Boolean> AllowVotingBox = new UIFormCheckBoxInput("AllowVoting", "AllowVoting", null).setChecked(isAllowVoting);
-    UIFormCheckBoxInput<Boolean> AllowCommentBox = new UIFormCheckBoxInput("AllowComment", "AllowComment", null).setChecked(isAllowComment);
-    UIFormCheckBoxInput<Boolean> ShowQuickEditBox = new UIFormCheckBoxInput("ShowQuickEdit", "ShowQuickEdit", null).setChecked(isQuickEdit);
-    showTocBox.setOnChange("SaveToPortletPreference");
-    ShowTagBox.setOnChange("SaveToPortletPreference");
-    ShowCategoryBox.setOnChange("SaveToPortletPreference");
-    AllowVotingBox.setOnChange("SaveToPortletPreference");
-    AllowCommentBox.setOnChange("SaveToPortletPreference");
-    ShowQuickEditBox.setOnChange("SaveToPortletPreference");
-    addUIFormInput(showTocBox);
-    addUIFormInput(ShowTagBox);
-    addUIFormInput(ShowCategoryBox);
-    addUIFormInput(AllowVotingBox);
-    addUIFormInput(AllowCommentBox);
-    addUIFormInput(ShowQuickEditBox);
-    setActions(new String[] {} );
+    addUIFormInput(new UIFormCheckBoxInput("ShowTOC", "ShowTOC", null).setChecked(isShowTOC));
+    addUIFormInput(new UIFormCheckBoxInput("ShowTags", "ShowTags", null).setChecked(isShowTags));
+    addUIFormInput(new UIFormCheckBoxInput("ShowCategories", "ShowCategories", null).setChecked(isShowCategories));
+    addUIFormInput(new UIFormCheckBoxInput("AllowVoting", "AllowVoting", null).setChecked(isAllowVoting));
+    addUIFormInput(new UIFormCheckBoxInput("AllowComment", "AllowComment", null).setChecked(isAllowComment));
+    addUIFormInput(new UIFormCheckBoxInput("ShowQuickEdit", "ShowQuickEdit", null).setChecked(isQuickEdit));
   }
-  
+
   static public class SaveToPortletPreferenceActionListener extends EventListener<UIMiscellaneousInfo> {
     public void execute(Event<UIMiscellaneousInfo> event) throws Exception {
       UIMiscellaneousInfo uiMiscellaneousInfo = event.getSource();
@@ -90,7 +77,9 @@ public class UIMiscellaneousInfo extends UIForm {
       prefs.setValue("ShowCategories", Boolean.toString(isShowCategories));
       prefs.setValue("AllowVoting", Boolean.toString(isAllowVoting));
       prefs.setValue("AllowComment", Boolean.toString(isAllowComment));
-      prefs.store();    
+      prefs.store();
     }     
   }
+
+
 }

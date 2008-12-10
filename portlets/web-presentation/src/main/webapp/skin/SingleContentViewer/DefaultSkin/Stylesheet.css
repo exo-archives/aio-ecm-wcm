@@ -216,8 +216,6 @@
 .UISingleContentViewerPortlet .UIWebContentPathSelector {
 	margin: 8px;
 	padding: 8px;
-	border: 1px solid #b7b7b7;
-	background: #F3F3F3;
 }
 
 .UISingleContentViewerPortlet .Explorer {
@@ -232,8 +230,6 @@
 .UISingleContentViewerPortlet .UIDocumentPathSelector {
 	margin: 8px;
 	padding: 8px;
-	border: 1px solid #b7b7b7;
-	background: #F3F3F3;
 }
 
 .UISingleContentViewerPortlet .UIDMSPathSelector {
@@ -271,4 +267,15 @@
 
 .UISingleContentViewerPortlet .UICategorizing .ActionContainer {
 	padding-left: 50%;
+}
+
+
+.UISingleContentViewerPortlet .ExplorerTree .InnerExplorerTree {
+	padding:0px;
+	border: none;
+}
+
+.UISingleContentViewerPortlet .UITrees {
+	background:#F3F3F3;
+	border:1px solid #B7B7B7;
 }
