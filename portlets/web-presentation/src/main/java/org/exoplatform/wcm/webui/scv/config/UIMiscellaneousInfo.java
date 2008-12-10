@@ -49,14 +49,10 @@ public class UIMiscellaneousInfo extends UIForm {
     boolean isShowTOC = Boolean.parseBoolean(prefs.getValue("ShowTOC", null));
     boolean isShowTags = Boolean.parseBoolean(prefs.getValue("ShowTags", null));
     boolean isShowCategories = Boolean.parseBoolean(prefs.getValue("ShowCategories", null));
-    boolean isAllowVoting = Boolean.parseBoolean(prefs.getValue("AllowVoting", null));
-    boolean isAllowComment = Boolean.parseBoolean(prefs.getValue("AllowComment", null));
     boolean isQuickEdit = Boolean.parseBoolean(prefs.getValue("ShowQuickEdit", null));
     addUIFormInput(new UIFormCheckBoxInput("ShowTOC", "ShowTOC", null).setChecked(isShowTOC));
     addUIFormInput(new UIFormCheckBoxInput("ShowTags", "ShowTags", null).setChecked(isShowTags));
     addUIFormInput(new UIFormCheckBoxInput("ShowCategories", "ShowCategories", null).setChecked(isShowCategories));
-    addUIFormInput(new UIFormCheckBoxInput("AllowVoting", "AllowVoting", null).setChecked(isAllowVoting));
-    addUIFormInput(new UIFormCheckBoxInput("AllowComment", "AllowComment", null).setChecked(isAllowComment));
     addUIFormInput(new UIFormCheckBoxInput("ShowQuickEdit", "ShowQuickEdit", null).setChecked(isQuickEdit));
   }
 
@@ -67,16 +63,12 @@ public class UIMiscellaneousInfo extends UIForm {
       boolean isQuickEdit = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowQuickEdit").isChecked();
       boolean isShowTags = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowTags").isChecked();
       boolean isShowCategories = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowCategories").isChecked();
-      boolean isAllowVoting = uiMiscellaneousInfo.getUIFormCheckBoxInput("AllowVoting").isChecked();
-      boolean isAllowComment = uiMiscellaneousInfo.getUIFormCheckBoxInput("AllowComment").isChecked();
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
       PortletPreferences prefs = context.getRequest().getPreferences();
       prefs.setValue("ShowTOC", Boolean.toString(isShowTOC));
       prefs.setValue("ShowQuickEdit", Boolean.toString(isQuickEdit));
       prefs.setValue("ShowTags", Boolean.toString(isShowTags));
       prefs.setValue("ShowCategories", Boolean.toString(isShowCategories));
-      prefs.setValue("AllowVoting", Boolean.toString(isAllowVoting));
-      prefs.setValue("AllowComment", Boolean.toString(isAllowComment));
       prefs.store();
     }     
   }
