@@ -26,15 +26,21 @@ import javax.jcr.ItemExistsException;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Session;
+import javax.jcr.query.Query;
+import javax.jcr.query.QueryResult;
 
+import org.apache.commons.logging.Log;
+import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
+import org.picocontainer.Startable;
 
 /*
  * Created by The eXo Platform SAS
@@ -46,10 +52,11 @@ import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 /**
  * The Class LivePortalManagerServiceImpl.
  */
-public class LivePortalManagerServiceImpl implements LivePortalManagerService {    
-  private final String PORTAL_FOLDER = "exo:portalFolder".intern();
-  private ConcurrentHashMap<String,String> livePortalPaths = new ConcurrentHashMap<String,String>();
+public class LivePortalManagerServiceImpl implements LivePortalManagerService, Startable{    
+  private final String PORTAL_FOLDER = "exo:portalFolder".intern();  
+  private static Log log = ExoLogger.getLogger(LivePortalManagerServiceImpl.class);
 
+  private ConcurrentHashMap<String,String> livePortalPaths = new ConcurrentHashMap<String,String>();  
   private RepositoryService repositoryService; 
   private WCMConfigurationService wcmConfigService;
 
@@ -138,7 +145,7 @@ public class LivePortalManagerServiceImpl implements LivePortalManagerService {
     Node livePortalsStorage = getLivePortalsStorage(sessionProvider,currentRepository) ;
     String portalName = portalConfig.getName();
     if(livePortalsStorage.hasNode(portalName)) {
-      throw new ItemExistsException("Live portal folder existed: " + portalName);
+      return;      
     }
     ExtendedNode newPortal = (ExtendedNode)livePortalsStorage.addNode(portalName,PORTAL_FOLDER);
     if (!newPortal.isNodeType("exo:owneable"))       
@@ -198,5 +205,28 @@ public class LivePortalManagerServiceImpl implements LivePortalManagerService {
       }
     }
     throw new Exception("The node doen't belong to any site content storage");
+  }
+
+  public void start() {
+    log.info("Start LivePortalManagementService....");
+    SessionProvider sessionProvider = SessionProvider.createSystemProvider();
+    try {
+      ManageableRepository repository = repositoryService.getCurrentRepository();
+      NodeLocation nodeLocation = wcmConfigService.getLivePortalsLocation(repository.getConfiguration().getName());
+      Session session = sessionProvider.getSession(nodeLocation.getWorkspace(),repository);
+      String statement = "select * from exo:portalFolder where jcr:path like '" + nodeLocation.getPath() + "/%'";
+      Query query = session.getWorkspace().getQueryManager().createQuery(statement,Query.SQL);
+      QueryResult result = query.execute();
+      for(NodeIterator iterator = result.getNodes(); iterator.hasNext();) {
+        Node portalNode = iterator.nextNode();
+        livePortalPaths.putIfAbsent(portalNode.getName(),portalNode.getPath());
+      }
+    } catch (Exception e) {
+      log.error("Error when starting LivePortalManagerService: ",e);
+    }
+
+  }
+
+  public void stop() {    
   }        
 }
