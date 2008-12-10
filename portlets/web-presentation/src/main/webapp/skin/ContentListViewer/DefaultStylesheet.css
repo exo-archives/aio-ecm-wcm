@@ -48,7 +48,16 @@
 	margin-left: 10px;
 }
 
-.UIContentListViewerPortlet .UIViewerManagementForm .FolderPathInputSet .UIFormInputSet {
-	margin-left:33px;
+.UIContentListViewerPortlet .UIViewerManagementForm .FolderPathInputSet .UIFormInputSet .FormContainer {
+	margin-left: -2px;
 	padding: 0px;
+}
+
+.UIContentListViewerPortlet .UIForm .HorizontalLayout .UIFormInputSet {
+	margin-left: -2px;
+	padding: 0px;
+}
+
+.UIContentListViewerPortlet .UIViewerManagementForm .FieldLabel {		
+	width: 125px;
 }

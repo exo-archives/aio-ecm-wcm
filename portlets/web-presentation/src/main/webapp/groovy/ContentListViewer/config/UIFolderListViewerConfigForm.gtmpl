@@ -11,6 +11,7 @@
 	String fieldName;
 %>
 <div class="UIForm $uicomponent.id">
+	<div class="TitleBar"><%=_ctx.appRes(uicomponent.getName() + ".title")%></div>
   <%uiform.begin()%>
   <div class="HorizontalLayout">
     <div class="FormContainer">
