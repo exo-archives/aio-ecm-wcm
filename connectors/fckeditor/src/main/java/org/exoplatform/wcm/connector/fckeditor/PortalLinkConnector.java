@@ -16,7 +16,9 @@
  */
 package org.exoplatform.wcm.connector.fckeditor;
 
+import java.text.SimpleDateFormat;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -24,7 +26,10 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.exoplatform.common.http.HTTPMethods;
+import org.exoplatform.commons.utils.ISO8601;
 import org.exoplatform.commons.utils.PageList;
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.Query;
@@ -34,8 +39,6 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.rest.CacheControl;
 import org.exoplatform.services.rest.HTTPMethod;
 import org.exoplatform.services.rest.OutputTransformer;
@@ -44,12 +47,10 @@ import org.exoplatform.services.rest.Response;
 import org.exoplatform.services.rest.URITemplate;
 import org.exoplatform.services.rest.container.ResourceContainer;
 import org.exoplatform.services.rest.transformer.XMLOutputTransformer;
-import org.exoplatform.services.security.ConversationRegistry;
 import org.exoplatform.services.security.ConversationState;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-//TODO: Auto-generated Javadoc
 /*
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Jul 11, 2008
@@ -76,8 +77,6 @@ public class PortalLinkConnector implements ResourceContainer {
   /** The PORTA l_ context. */
   final private String            PORTAL_CONTEXT      = "/portal".intern();
 
-  /** The portal config service. */
-  private UserPortalConfigService portalConfigService;
 
   /** The portal data storage. */
   private DataStorage             portalDataStorage;
@@ -97,11 +96,7 @@ public class PortalLinkConnector implements ResourceContainer {
    * @param conversationRegistry the conversation registry
    * @throws Exception the exception
    */
-  public PortalLinkConnector(InitParams params, RepositoryService repositoryService,
-      ThreadLocalSessionProviderService sessionProviderService,
-      UserPortalConfigService portalConfigService, DataStorage dataStorage, UserACL userACL,
-      ConversationRegistry conversationRegistry) throws Exception {
-    this.portalConfigService = portalConfigService;
+  public PortalLinkConnector(InitParams params, DataStorage dataStorage, UserACL userACL) throws Exception {
     this.portalDataStorage = dataStorage;
     this.portalUserACL = userACL;
   }
@@ -212,8 +207,10 @@ public class PortalLinkConnector implements ResourceContainer {
     Element rootElement = initRootElement(command, currentFolder);
     String portalName = currentFolder.substring(1, currentFolder.indexOf("/", 1));
     String pageNodeUri = currentFolder.substring(portalName.length() + 1);
-    List<PageNavigation> navigations = portalConfigService.getUserPortalConfig(portalName, userId)
-    .getNavigations();
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    UserPortalConfigService portalConfigService = (UserPortalConfigService)container.getComponentInstanceOfType(UserPortalConfigService.class);
+    
+    List<PageNavigation> navigations = portalConfigService.getUserPortalConfig(portalName, userId).getNavigations();
     Element foldersElement = rootElement.getOwnerDocument().createElement("Folders");
     Element filesElement = rootElement.getOwnerDocument().createElement("Files");
     rootElement.appendChild(foldersElement);
@@ -221,12 +218,12 @@ public class PortalLinkConnector implements ResourceContainer {
     for (PageNavigation navigation : navigations) {
       for (PageNode pageNode : navigation.getNodes()) {
         if ("/".equalsIgnoreCase(pageNodeUri)) {
-          processPageNode(portalName, pageNode, foldersElement, filesElement, userId);
+          processPageNode(portalName, pageNode, foldersElement, filesElement, userId, portalConfigService);
         } else {
           PageNode node = getPageNode(pageNode, pageNodeUri);
           if (node != null && node.getChildren() != null) {
             for (PageNode child : node.getChildren()) {
-              processPageNode(portalName, child, foldersElement, filesElement, userId);
+              processPageNode(portalName, child, foldersElement, filesElement, userId, portalConfigService);
             }
           }
         }
@@ -272,7 +269,8 @@ public class PortalLinkConnector implements ResourceContainer {
    * @throws Exception the exception
    */
   private void processPageNode(String portalName, PageNode pageNode, Element foldersElement,
-      Element filesElement, String userId) throws Exception {
+      Element filesElement, String userId, UserPortalConfigService portalConfigService) throws Exception {
+    if(!pageNode.isDisplay()) return;
     String pageId = pageNode.getPageReference();
     Page page = portalConfigService.getPage(pageId, userId);
     if (page == null)
@@ -289,13 +287,17 @@ public class PortalLinkConnector implements ResourceContainer {
     Element folderElement = foldersElement.getOwnerDocument().createElement("Folder");
     folderElement.setAttribute("name", pageNode.getName());
     folderElement.setAttribute("folderType", "");
-    folderElement.setAttribute("url", pageUri);    
-    foldersElement.appendChild(folderElement);    
+    folderElement.setAttribute("url", pageUri);        
+    foldersElement.appendChild(folderElement);
     
+    SimpleDateFormat formatter = new SimpleDateFormat(ISO8601.SIMPLE_DATETIME_FORMAT);
+    String datetime = formatter.format(new Date());
     Element fileElement = filesElement.getOwnerDocument().createElement("File");
     fileElement.setAttribute("name", pageNode.getName());
-    fileElement.setAttribute("fileType", "page node");
+    fileElement.setAttribute("dateCreated", datetime);    
+    fileElement.setAttribute("fileType", "page node");    
     fileElement.setAttribute("url", pageUri);
+    fileElement.setAttribute("size", "");
     filesElement.appendChild(fileElement);
   }
   
