@@ -21,6 +21,7 @@ import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.jcr.Node;
 import javax.portlet.PortletPreferences;
@@ -63,12 +64,18 @@ public class UISearchResult extends UIContainer {
 
 	private UICustomizeablePaginator uiPaginator;
 
+	private String keyword;
+
+	private String resultType;
+
+	private String suggetions;
+
 	private SimpleDateFormat dateFormatter = new SimpleDateFormat(
 			ISO8601.SIMPLE_DATETIME_FORMAT);
 
 	private long searchTime;
 
-	public final static String PARAMETER_REGX = "(portal=.+)&(keyword=.+)";
+	public final static String PARAMETER_REGX = "(portal=.*)&(keyword=.*)";
 
 	public final static String RESULT_NOT_FOUND = "UISearchResult.msg.result-not-found";
 
@@ -89,19 +96,40 @@ public class UISearchResult extends UIContainer {
 
 	@SuppressWarnings("static-access")
 	public void processRender(WebuiRequestContext context) throws Exception {
+		Writer writer = context.getWriter();
 		PortletRequestContext porletRequestContext = (PortletRequestContext) context;
+		ResourceBundle bundle = context.getApplicationResourceBundle();
+		String resultType = bundle.getString("UISearchForm.documentCheckBox.label")
+				+ "s" + " and " + bundle.getString("UISearchForm.pageCheckBox.label")
+				+ "s";
 		HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) porletRequestContext
 				.getRequest();
 		String queryString = requestWrapper.getQueryString();
-		if (queryString != null && queryString.matches(PARAMETER_REGX)) {
+		setResultType(resultType);
+		String message1 = bundle.getString("UISearchResult.msg.your-search");
+		String message2 = bundle.getString("UISearchResult.msg.did-not-match");
+		String suggestions = bundle.getString("UISearchResult.msg.suggestions");
+		String keyword_entered = bundle
+				.getString("UISearchResult.msg.keyword_entered");
+
+		if (queryString != null && queryString.trim().length() != 0
+				&& queryString.matches(PARAMETER_REGX)) {
 			queryString = URLDecoder.decode(queryString, "UTF-8");
 			String[] params = queryString.split("&");
 			String currentPortal = params[0].split("=")[1];
-			String keyword = params[1].split("=")[1];
-			if (keyword == null || keyword.trim().length() == 0) {
-				renderErrorMessage(context, RESULT_NOT_FOUND);
+			String keyword = null;
+			if (params[1].trim().endsWith("=")) { // keyword empty
+				writer.write("<div class=\"UIAdvanceSearchResultDefault\">");
+				writer
+						.write("<div class=\"ResultHeader\"><div class=\"CaptionSearchType\"><b>"
+								+ getResultType()
+								+ "</b></div><div style=\"clear: left;\"><span></span></div></div>");
+				writer.write("<p>" + keyword_entered + "</p>");
 				return;
 			}
+			keyword = params[1].split("=")[1];
+			setKeyword(keyword);
+
 			SiteSearchService siteSearchService = getApplicationComponent(SiteSearchService.class);
 			QueryCriteria queryCriteria = new QueryCriteria();
 			queryCriteria.setSiteName(currentPortal);
@@ -116,6 +144,8 @@ public class UISearchResult extends UIContainer {
 			try {
 				WCMPaginatedQueryResult paginatedQueryResult = siteSearchService
 						.searchSiteContents(queryCriteria, provider, itemsPerPage);
+				setSearchTime(paginatedQueryResult.getQueryTimeInSecond());
+				setSuggetions(paginatedQueryResult.getSpellSuggestion());
 				setPageList(paginatedQueryResult);
 			} catch (Exception e) {
 				UIApplication uiApp = getAncestorOfType(UIApplication.class);
@@ -123,30 +153,63 @@ public class UISearchResult extends UIContainer {
 						UISearchForm.MESSAGE_NOT_SUPPORT_KEYWORD, null,
 						ApplicationMessage.WARNING));
 			}
+		} else if (queryString == null || queryString.trim().length() == 0) {
+			writer.write("<div class=\"UIAdvanceSearchResultDefault\">");
+			writer
+					.write("<div class=\"ResultHeader\"><div class=\"CaptionSearchType\"><b>"
+							+ getResultType()
+							+ "</b></div><div style=\"clear: left;\"><span></span></div></div>");
+			writer.write("<p>" + keyword_entered + "</p>");
+			return;
 		}
 		if (uiPaginator.getTotalItems() == 0) {
-			renderErrorMessage(context, RESULT_NOT_FOUND);
+			String keyword = getKeyword();
+			writer.write("<div class=\"UIAdvanceSearchResultDefault\">");
+			writer
+					.write("<div class=\"ResultHeader\"><div class=\"CaptionSearchType\"><b>"
+							+ getResultType()
+							+ "</b></div><div style=\"clear: left;\"><span></span></div></div>");
+			if (keyword == null || keyword.trim().length() == 0) {
+				// for case "click button search in search form"
+				writer.write("<p>" + keyword_entered + "</p>");
+			} else {
+				writer.write("<p>");
+				writer.write(message1 + " - <b>" + keyword + "</b> - " + message2 + "&nbsp;"
+						+ resultType.toLowerCase() + "<br><br>");
+				writer.write(suggestions + "<br>");
+				String keySuggestion = getSuggetions();
+				if (keySuggestion == null || keySuggestion.equals("null")) {
+					String newKeyword = bundle
+							.getString("UISearchResult.msg.try-different-key");
+					writer.write("<ul><li>" + newKeyword + "</li></ul>");
+				} else {
+					setKeyword(keySuggestion);
+					writer
+							.write("<ul><li><a class=\"KeySuggestions\" style=\"cursor: pointer;\">"
+									+ keySuggestion + "</a></li></ul>");
+				}
+				writer.write("</p>");
+			}
+			writer.write("</div>");
 			return;
 		}
 		super.processRender(context);
 	}
 
-	private void renderErrorMessage(WebuiRequestContext context, String keyBundle)
-			throws Exception {
-		Writer writer = context.getWriter();
-		String message = context.getApplicationResourceBundle()
-				.getString(keyBundle);
-		writer
-				.write("<div style=\"height: 55px; font-size: 13px; text-align: center; padding-top: 10px; border: 1px solid gray; margin: 10px;\">");
-		writer.write("<span>");
-		writer.write(message);
-		writer.write("</span>");
-		writer.write("</div>");
-		writer.close();
-	}
-
 	public void setPageList(PageList dataPageList) {
 		uiPaginator.setPageList(dataPageList);
+	}
+
+	public int getTotalItem() {
+		return uiPaginator.getPageList().getAvailable();
+	}
+
+	public int getItemsPerPage() {
+		return uiPaginator.getPageList().getPageSize();
+	}
+
+	public int getCurrentPage() {
+		return uiPaginator.getCurrentPage();
 	}
 
 	public String getTemplate() {
@@ -222,4 +285,29 @@ public class UISearchResult extends UIContainer {
 	public void setSearchTime(long searchTime) {
 		this.searchTime = searchTime;
 	}
+
+	public String getSuggetions() {
+		return suggetions;
+	}
+
+	public void setSuggetions(String suggetions) {
+		this.suggetions = suggetions;
+	}
+
+	public String getKeyword() {
+		return this.keyword;
+	}
+
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
+	}
+
+	public String getResultType() {
+		return this.resultType;
+	}
+
+	public void setResultType(String resultType) {
+		this.resultType = resultType;
+	}
+
 }
