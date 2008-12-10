@@ -12,7 +12,6 @@
 	    <show-info-bar>false</show-info-bar>
   	</application>	  
   	
-  	<container id="ACMEPortalContainer" template="system:/groovy/portal/webui/container/UIContainer.gtmpl" height="141px">
   		<container id="BannerContainer" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
   			<container id="Banner" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
   				<application>
@@ -27,13 +26,11 @@
 				  </application>
   			</container>
   		</container>
-  		<container id="Navigation" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-	  		<application>
-			  	<instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-navigation</instance-id>
-	  		  <show-info-bar>false</show-info-bar>
-			  </application>
-  		</container>
-  	</container>
+  		
+  		<application>
+		  	<instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-navigation</instance-id>
+  		  <show-info-bar>false</show-info-bar>
+		  </application>
   	
   	<application>
 			<instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-breadcrumb</instance-id>
