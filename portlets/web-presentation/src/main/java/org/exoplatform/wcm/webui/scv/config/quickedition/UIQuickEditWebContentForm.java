@@ -34,6 +34,7 @@ import org.exoplatform.ecm.webui.form.DialogFormActionListeners;
 import org.exoplatform.ecm.webui.utils.DialogFormUtil;
 import org.exoplatform.ecm.webui.utils.LockUtil;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.cms.CmsService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
@@ -212,6 +213,7 @@ public class UIQuickEditWebContentForm extends UIContentDialogForm{
       } else {        
         PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
         context.setApplicationMode(PortletMode.VIEW);
+        context.getJavascriptManager().addJavascript("location.reload()");
       }
     }
   }
@@ -223,8 +225,9 @@ public class UIQuickEditWebContentForm extends UIContentDialogForm{
       if(uiPortletConfig.isEditPortletInCreatePageWizard()) {
         uiPortletConfig.getChildren().clear();
         uiPortletConfig.addUIWelcomeScreen();
-      } else {        
+      } else {   
         context.setApplicationMode(PortletMode.VIEW);
+        context.getJavascriptManager().addJavascript("location.reload()");
       }
     }
   }
