@@ -16,8 +16,6 @@
  */
 package org.exoplatform.services.wcm.search;
 
-import javax.jcr.query.QueryResult;
-
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
 /**
@@ -26,18 +24,6 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
  * hoa.pham@exoplatform.com
  * Oct 7, 2008
  */
-public interface SiteSearchService {    
-  
-  /**
-   * Search the content base on query criteria
-   * 
-   * @param queryCriteria the query criteria
-   * @param sessionProvider the session provider
-   * 
-   * @return the query result
-   * 
-   * @throws Exception the exception
-   */
-  public QueryResult searchSiteContents(QueryCriteria queryCriteria, SessionProvider sessionProvider) throws Exception;
+public interface SiteSearchService {  
   public WCMPaginatedQueryResult searchSiteContents(QueryCriteria queryCriteria, SessionProvider sessionProvider, int pageSize) throws Exception;
 }

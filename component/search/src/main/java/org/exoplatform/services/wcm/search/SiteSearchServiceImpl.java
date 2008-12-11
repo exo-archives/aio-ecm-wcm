@@ -19,7 +19,6 @@ package org.exoplatform.services.wcm.search;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.jcr.Node;
 import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.nodetype.NodeType;
@@ -62,7 +61,7 @@ public class SiteSearchServiceImpl implements SiteSearchService {
 
   /** The current repository. */
   private String currentRepository;
-  
+
   /**
    * Instantiates a new site search service impl.
    * 
@@ -86,24 +85,30 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     this.templateService = templateService;
     this.repositoryService = repositoryService;
     this.configurationService = configurationService;
-    this.currentRepository = repositoryService.getCurrentRepository()
-    .getConfiguration().getName();
+    this.currentRepository = repositoryService.getCurrentRepository().getConfiguration().getName();
   }
 
   public WCMPaginatedQueryResult searchSiteContents( QueryCriteria queryCriteria, SessionProvider sessionProvider, int pageSize) throws Exception {
-    long startTime = System.currentTimeMillis();
-    QueryResult queryResult = searchSiteContents(queryCriteria, sessionProvider);
-    long queryTime = System.currentTimeMillis() - startTime;
-    WCMPaginatedQueryResult paginatedQueryResult = new WCMPaginatedQueryResult( queryResult, pageSize);
-    paginatedQueryResult.setQueryTime(queryTime);
-    String checkingWord = queryCriteria.getKeyword();
-    NodeLocation location = configurationService
-    .getLivePortalsLocation(currentRepository);
-    Session session = sessionProvider.getSession(location.getWorkspace(),
-        repositoryService.getCurrentRepository());
+    NodeLocation location = configurationService.getLivePortalsLocation(currentRepository);
+    Session session = sessionProvider.getSession(location.getWorkspace(),repositoryService.getCurrentRepository());
     QueryManager queryManager = session.getWorkspace().getQueryManager();
-    Query query = queryManager.createQuery(
-        "SELECT rep:spellcheck() FROM nt:base WHERE jcr:path = '/' AND SPELLCHECK('"
+    long startTime = System.currentTimeMillis();
+    QueryResult queryResult = searchSiteContent(queryCriteria, queryManager);
+    String suggestion = getSpellSuggestion(queryCriteria.getKeyword(),queryManager);
+    long queryTime = System.currentTimeMillis() - startTime;
+    WCMPaginatedQueryResult paginatedQueryResult = null;
+    if(queryResult.getNodes().getSize()>50) {
+      paginatedQueryResult = new WCMPaginatedQueryResult( queryResult, queryCriteria, pageSize); 
+    }else {
+      paginatedQueryResult = new SmallPaginatedQueryResult(queryResult, queryCriteria, pageSize);
+    }   
+    paginatedQueryResult.setQueryTime(queryTime);    
+    paginatedQueryResult.setSpellSuggestion(suggestion);    
+    return paginatedQueryResult;
+  }  
+  
+  private String getSpellSuggestion(String checkingWord, QueryManager queryManager) throws Exception{
+    Query query = queryManager.createQuery("SELECT rep:spellcheck() FROM nt:base WHERE jcr:path = '/' AND SPELLCHECK('"
         + checkingWord + "')", Query.SQL);
     RowIterator rows = query.execute().getRows();
     Value value = rows.nextRow().getValue("rep:spellcheck()");
@@ -111,32 +116,15 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     if (value != null) {
       suggestion = value.getString();
     }
-    paginatedQueryResult.setSpellSuggestion(suggestion);
-    paginatedQueryResult.setQueryCriteria(queryCriteria);
-    return paginatedQueryResult;
+    return suggestion;
   }
-
-  /*
-   * (non-Javadoc)
-   * 
-   * @see
-   * org.exoplatform.services.wcm.search.SiteSearchService#search(org.exoplatform
-   * .services.wcm.search.QueryCriteria,
-   * org.exoplatform.services.jcr.ext.common.SessionProvider)
-   */
-  public QueryResult searchSiteContents(QueryCriteria queryCriteria,
-      SessionProvider sessionProvider) throws Exception {
+  private QueryResult searchSiteContent(QueryCriteria queryCriteria, QueryManager queryManager) throws Exception {
     SQLQueryBuilder queryBuilder = new SQLQueryBuilder();
-    mapQueryPath(queryCriteria, queryBuilder, sessionProvider);
-    mapQueryTypes(queryCriteria, queryBuilder, sessionProvider);
+    mapQueryPath(queryCriteria, queryBuilder);
+    mapQueryTypes(queryCriteria, queryBuilder);
     mapQueryTerm(queryCriteria, queryBuilder);
-    orderBy(queryCriteria, queryBuilder, sessionProvider);
-    String queryStatement = queryBuilder.createQueryStatement();		
-    NodeLocation location = configurationService
-    .getLivePortalsLocation(currentRepository);
-    Session session = sessionProvider.getSession(location.getWorkspace(),
-        repositoryService.getCurrentRepository());
-    QueryManager queryManager = session.getWorkspace().getQueryManager();
+    orderBy(queryCriteria, queryBuilder);
+    String queryStatement = queryBuilder.createQueryStatement();
     Query query = queryManager.createQuery(queryStatement, Query.SQL);
     return query.execute();
   }
@@ -154,18 +142,13 @@ public class SiteSearchServiceImpl implements SiteSearchService {
    * @throws Exception
    *           the exception
    */
-  private void mapQueryPath(final QueryCriteria queryCriteria,
-      final SQLQueryBuilder queryBuilder, SessionProvider sessionProvider)
-  throws Exception {
+  private void mapQueryPath(final QueryCriteria queryCriteria,final SQLQueryBuilder queryBuilder) throws Exception {
     String siteName = queryCriteria.getSiteName();
     String queryPath = null;
     if (siteName != null) {
-      Node portal = livePortalManagerService.getLivePortal(siteName,
-          sessionProvider);
-      queryPath = portal.getPath();
+      queryPath = livePortalManagerService.getPortalPathByName(siteName);      
     } else {
-      queryPath = configurationService
-      .getLivePortalsLocation(currentRepository).getPath();
+      queryPath = configurationService.getLivePortalsLocation(currentRepository).getPath();
     }
     queryBuilder.setQueryPath(queryPath, PATH_TYPE.DECENDANTS);
   }
@@ -205,9 +188,7 @@ public class SiteSearchServiceImpl implements SiteSearchService {
    * @throws Exception
    *           the exception
    */
-  private void mapQueryTypes(final QueryCriteria queryCriteria,
-      final SQLQueryBuilder queryBuilder, SessionProvider sessionProvider)
-  throws Exception {    
+  private void mapQueryTypes(final QueryCriteria queryCriteria, final SQLQueryBuilder queryBuilder) throws Exception {    
     queryBuilder.selectTypes(null);    
     // Searh on nt:base
     queryBuilder.fromNodeTypes(null);
@@ -265,8 +246,7 @@ public class SiteSearchServiceImpl implements SiteSearchService {
    * @param sessionProvider
    *          the session provider
    */
-  private void orderBy(final QueryCriteria queryCriteria,
-      final SQLQueryBuilder queryBuilder, SessionProvider sessionProvider) {
-    queryBuilder.orderBy("exo:dateCreated", ORDERBY.ASC);
+  private void orderBy(final QueryCriteria queryCriteria, final SQLQueryBuilder queryBuilder) {
+    queryBuilder.orderBy("jcr:score", ORDERBY.DESC);
   }
 }

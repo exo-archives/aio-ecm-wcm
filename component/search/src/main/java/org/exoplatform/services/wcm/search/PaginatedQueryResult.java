@@ -16,7 +16,7 @@
  */
 package org.exoplatform.services.wcm.search;
 
-import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
@@ -59,14 +59,16 @@ public class PaginatedQueryResult extends PaginatedNodeIterator {
     this.nodeIterator = queryResult.getNodes();
     this.setAvailablePage((int)nodeIterator.getSize());    
     this.queryResult = queryResult;    
-  }    
-
+  }      
   /* (non-Javadoc)
    * @see org.exoplatform.wcm.webui.paginator.PaginatedNodeIterator#populateCurrentPage(int)
    */
-  protected void populateCurrentPage(int page) throws Exception {   
-    checkAndSetPosition(page);        
-    currentListPage_ = new ArrayList();
+  protected void populateCurrentPage(int page) throws Exception {
+    if(page == currentPage_ && (currentListPage_ != null && !currentListPage_.isEmpty())) {
+      return;
+    }
+    checkAndSetPosition(page);            
+    currentListPage_ = new CopyOnWriteArrayList<ResultNode>();
     int count = 0;    
     RowIterator iterator = queryResult.getRows();    
     while (nodeIterator.hasNext()) {      
@@ -75,9 +77,9 @@ public class PaginatedQueryResult extends PaginatedNodeIterator {
       if(viewNode != null) {
         //Skip back 1 position to get current row mapping to the node
         long position = nodeIterator.getPosition();
-        long rowPosition = iterator.getPosition();
+        long rowPosition = iterator.getPosition();        
         long skipNum = position - rowPosition;
-        iterator.skip(skipNum -1);
+        iterator.skip(skipNum -1);        
         Row row = iterator.nextRow();
         ResultNode resultNode = new ResultNode(viewNode,row);
         currentListPage_.add(resultNode);
@@ -85,7 +87,7 @@ public class PaginatedQueryResult extends PaginatedNodeIterator {
         if(count == getPageSize()) 
           break;                    
       }
-    }    
+    }        
     currentPage_ = page;
   }      
 

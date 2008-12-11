@@ -16,8 +16,6 @@
  */
 package org.exoplatform.services.wcm.search;
 
-import java.util.concurrent.CopyOnWriteArrayList;
-
 import javax.jcr.Node;
 import javax.jcr.query.QueryResult;
 
@@ -27,12 +25,9 @@ import javax.jcr.query.QueryResult;
  */
 public class WCMPaginatedQueryResult extends PaginatedQueryResult {
 
-  private long queryTime;
-  /** The displayed node paths. */
-  private CopyOnWriteArrayList<String> displayedNodePaths = new CopyOnWriteArrayList<String>();
+  private long queryTime;  
   private String spellSuggestion;
-  private QueryCriteria queryCriteria;
-
+  private QueryCriteria queryCriteria;  
   /**
    * Instantiates a new wCM paginated query result.
    * 
@@ -56,8 +51,9 @@ public class WCMPaginatedQueryResult extends PaginatedQueryResult {
    * @throws Exception
    *           the exception
    */
-  public WCMPaginatedQueryResult(QueryResult queryResult, int pageSize) throws Exception {
+  public WCMPaginatedQueryResult(QueryResult queryResult, QueryCriteria queryCriteria, int pageSize) throws Exception {
     super(queryResult, pageSize);
+    this.queryCriteria = queryCriteria;
   }
 
   public void setQueryTime(long time) {
@@ -100,11 +96,7 @@ public class WCMPaginatedQueryResult extends PaginatedQueryResult {
     if (queryCriteria.isSearchDocument() && !queryCriteria.isSearchWebpage()) {
       if (displayNode.isNodeType("publication:webpagesPublication"))
         return null;
-    }
-    String path = displayNode.getPath();
-    if(displayedNodePaths.contains(path)) 
-      return null;		
-    displayedNodePaths.add(path);
+    }    
     return displayNode;
   }
 
