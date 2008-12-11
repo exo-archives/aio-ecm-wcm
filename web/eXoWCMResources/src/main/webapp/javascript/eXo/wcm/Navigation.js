@@ -19,7 +19,7 @@ function getCurrentNodes(navigations, selectedNodeUri) {
 				break;
 			}
 		}
-		if (currentNodes[index].children != null) {
+		if (currentNodes[index].children != null && currentNodes[index].children != '') {
 			getChild(currentNodeUris, currentNodes[index].children, ++index); 
 		}
 	}
