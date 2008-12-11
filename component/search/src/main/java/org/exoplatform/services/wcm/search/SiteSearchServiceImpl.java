@@ -18,6 +18,7 @@ package org.exoplatform.services.wcm.search;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 import javax.jcr.Session;
 import javax.jcr.Value;
@@ -29,8 +30,10 @@ import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 import javax.jcr.query.RowIterator;
 
+import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
@@ -59,65 +62,111 @@ public class SiteSearchServiceImpl implements SiteSearchService {
   /** The jcr repository service. */
   private RepositoryService repositoryService;
 
-  /** The current repository. */
-  private String currentRepository;
+  /** The exclude node types. */
+  private CopyOnWriteArraySet<String> excludeNodeTypes = new CopyOnWriteArraySet<String>();
+
+  /** The include node types. */
+  private CopyOnWriteArraySet<String> includeNodeTypes = new CopyOnWriteArraySet<String>();
+
+  /** The exclude mime types. */
+  private CopyOnWriteArraySet<String> excludeMimeTypes = new CopyOnWriteArraySet<String>();
+
+  /** The include mime types. */
+  private CopyOnWriteArraySet<String> includeMimeTypes = new CopyOnWriteArraySet<String>();
 
   /**
    * Instantiates a new site search service impl.
    * 
-   * @param portalManagerService
-   *          the portal manager service
-   * @param templateService
-   *          the template service
-   * @param configurationService
-   *          the configuration service
-   * @param repositoryService
-   *          the repository service
+   * @param portalManagerService the portal manager service
+   * @param templateService the template service
+   * @param configurationService the configuration service
+   * @param repositoryService the repository service
+   * @param initParams the init params
    * 
-   * @throws Exception
-   *           the exception
+   * @throws Exception the exception
    */
-  public SiteSearchServiceImpl(LivePortalManagerService portalManagerService,
-      TemplateService templateService,
-      WCMConfigurationService configurationService,
-      RepositoryService repositoryService) throws Exception {
+  public SiteSearchServiceImpl(LivePortalManagerService portalManagerService, TemplateService templateService,
+      WCMConfigurationService configurationService, RepositoryService repositoryService, InitParams initParams) throws Exception {
     this.livePortalManagerService = portalManagerService;
     this.templateService = templateService;
     this.repositoryService = repositoryService;
-    this.configurationService = configurationService;
-    this.currentRepository = repositoryService.getCurrentRepository().getConfiguration().getName();
+    this.configurationService = configurationService;        
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.search.SiteSearchService#addExcludeIncludeDataTypePlugin(org.exoplatform.services.wcm.search.ExcludeIncludeDataTypePlugin)
+   */
+  public void addExcludeIncludeDataTypePlugin(ExcludeIncludeDataTypePlugin plugin) {    
+    excludeNodeTypes.addAll(plugin.getExcludeNodeTypes());
+    excludeMimeTypes.addAll(plugin.getExcludeMimeTypes());
+    includeMimeTypes.addAll(plugin.getIncludeMimeTypes());
+    includeNodeTypes.addAll(plugin.getIncludeNodeTypes());    
+  }
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.search.SiteSearchService#searchSiteContents(org.exoplatform.services.wcm.search.QueryCriteria, org.exoplatform.services.jcr.ext.common.SessionProvider, int)
+   */
   public WCMPaginatedQueryResult searchSiteContents( QueryCriteria queryCriteria, SessionProvider sessionProvider, int pageSize) throws Exception {
-    NodeLocation location = configurationService.getLivePortalsLocation(currentRepository);
-    Session session = sessionProvider.getSession(location.getWorkspace(),repositoryService.getCurrentRepository());
+    ManageableRepository currentRepository = repositoryService.getCurrentRepository();
+    NodeLocation location = configurationService.getLivePortalsLocation(currentRepository.getConfiguration().getName());    
+    Session session = sessionProvider.getSession(location.getWorkspace(),currentRepository);
     QueryManager queryManager = session.getWorkspace().getQueryManager();
     long startTime = System.currentTimeMillis();
     QueryResult queryResult = searchSiteContent(queryCriteria, queryManager);
-    String suggestion = getSpellSuggestion(queryCriteria.getKeyword(),queryManager);
+    String suggestion = getSpellSuggestion(queryCriteria.getKeyword(),currentRepository);
     long queryTime = System.currentTimeMillis() - startTime;
     WCMPaginatedQueryResult paginatedQueryResult = null;
     if(queryResult.getNodes().getSize()>50) {
       paginatedQueryResult = new WCMPaginatedQueryResult( queryResult, queryCriteria, pageSize); 
-    }else {
+    }else {      
       paginatedQueryResult = new SmallPaginatedQueryResult(queryResult, queryCriteria, pageSize);
     }   
     paginatedQueryResult.setQueryTime(queryTime);    
     paginatedQueryResult.setSpellSuggestion(suggestion);    
     return paginatedQueryResult;
   }  
-  
-  private String getSpellSuggestion(String checkingWord, QueryManager queryManager) throws Exception{
-    Query query = queryManager.createQuery("SELECT rep:spellcheck() FROM nt:base WHERE jcr:path = '/' AND SPELLCHECK('"
-        + checkingWord + "')", Query.SQL);
-    RowIterator rows = query.execute().getRows();
-    Value value = rows.nextRow().getValue("rep:spellcheck()");
+
+  /**
+   * Gets the spell suggestion.
+   * 
+   * @param checkingWord the checking word
+   * @param queryManager the query manager
+   * 
+   * @return the spell suggestion
+   * 
+   * @throws Exception the exception
+   */
+  private String getSpellSuggestion(String checkingWord, ManageableRepository manageableRepository) throws Exception{
+    //Retrieve spell suggestion in special way to avoid access denied exception  
     String suggestion = null;
-    if (value != null) {
-      suggestion = value.getString();
-    }
+    Session session = null;
+    try{
+      session = manageableRepository.getSystemSession(manageableRepository.getConfiguration().getDefaultWorkspaceName());
+      QueryManager queryManager = session.getWorkspace().getQueryManager();
+      Query query = queryManager.createQuery("SELECT rep:spellcheck() FROM nt:base WHERE jcr:path like '/' AND SPELLCHECK('" + checkingWord + "')", Query.SQL);
+      RowIterator rows = query.execute().getRows();
+      Value value = rows.nextRow().getValue("rep:spellcheck()");    
+      if (value != null) {
+        suggestion = value.getString();
+      }
+    }catch (Exception e) {
+    }finally{
+      if(session != null)
+        session.logout();
+    }   
     return suggestion;
   }
+
+  /**
+   * Search site content.
+   * 
+   * @param queryCriteria the query criteria
+   * @param queryManager the query manager
+   * 
+   * @return the query result
+   * 
+   * @throws Exception the exception
+   */
   private QueryResult searchSiteContent(QueryCriteria queryCriteria, QueryManager queryManager) throws Exception {
     SQLQueryBuilder queryBuilder = new SQLQueryBuilder();
     mapQueryPath(queryCriteria, queryBuilder);
@@ -132,15 +181,10 @@ public class SiteSearchServiceImpl implements SiteSearchService {
   /**
    * Map query path.
    * 
-   * @param queryCriteria
-   *          the query criteria
-   * @param queryBuilder
-   *          the query builder
-   * @param sessionProvider
-   *          the session provider
+   * @param queryCriteria the query criteria
+   * @param queryBuilder the query builder
    * 
-   * @throws Exception
-   *           the exception
+   * @throws Exception the exception
    */
   private void mapQueryPath(final QueryCriteria queryCriteria,final SQLQueryBuilder queryBuilder) throws Exception {
     String siteName = queryCriteria.getSiteName();
@@ -148,7 +192,8 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     if (siteName != null) {
       queryPath = livePortalManagerService.getPortalPathByName(siteName);      
     } else {
-      queryPath = configurationService.getLivePortalsLocation(currentRepository).getPath();
+      String repository = repositoryService.getCurrentRepository().getConfiguration().getName();
+      queryPath = configurationService.getLivePortalsLocation(repository).getPath();
     }
     queryBuilder.setQueryPath(queryPath, PATH_TYPE.DECENDANTS);
   }
@@ -156,10 +201,8 @@ public class SiteSearchServiceImpl implements SiteSearchService {
   /**
    * Map query term.
    * 
-   * @param queryCriteria
-   *          the query criteria
-   * @param queryBuilder
-   *          the query builder
+   * @param queryCriteria the query criteria
+   * @param queryBuilder the query builder
    */
   private void mapQueryTerm(final QueryCriteria queryCriteria,
       final SQLQueryBuilder queryBuilder) {
@@ -178,24 +221,20 @@ public class SiteSearchServiceImpl implements SiteSearchService {
   /**
    * Map query types.
    * 
-   * @param queryCriteria
-   *          the query criteria
-   * @param queryBuilder
-   *          the query builder
-   * @param sessionProvider
-   *          the session provider
+   * @param queryCriteria the query criteria
+   * @param queryBuilder the query builder
    * 
-   * @throws Exception
-   *           the exception
+   * @throws Exception the exception
    */
   private void mapQueryTypes(final QueryCriteria queryCriteria, final SQLQueryBuilder queryBuilder) throws Exception {    
     queryBuilder.selectTypes(null);    
     // Searh on nt:base
     queryBuilder.fromNodeTypes(null);
-    List<String> selectedNodeTypes = templateService.getDocumentTemplates(currentRepository);    
+    ManageableRepository currentRepository = repositoryService.getCurrentRepository();
+    List<String> selectedNodeTypes = templateService.getDocumentTemplates(currentRepository.getConfiguration().getName());    
     selectedNodeTypes.remove("exo:cssFile");
     selectedNodeTypes.remove("exo:jsFile");    
-    NodeTypeManager manager = repositoryService.getRepository(currentRepository).getNodeTypeManager();    
+    NodeTypeManager manager = currentRepository.getNodeTypeManager();    
     queryBuilder.openGroup(LOGICAL.AND);
     queryBuilder.equal("jcr:primaryType", "nt:resource", LOGICAL.NULL);
     // query on exo:rss-enable nodetypes for title, summary field
@@ -225,28 +264,25 @@ public class SiteSearchServiceImpl implements SiteSearchService {
         queryBuilder.equal("jcr:primaryType", type, LOGICAL.OR);
       }
     }
-    queryBuilder.closeGroup();
-    //unwanted document document types: exo:cssFile, exo:jsFile
-    //TODO should use component plugin to add restriction type
-    queryBuilder.openGroup(LOGICAL.AND);
-    queryBuilder.notEqual("jcr:mimeType","text/css",LOGICAL.NULL);
-    queryBuilder.notEqual("jcr:mimeType","text/javascript",LOGICAL.AND);
-    queryBuilder.notEqual("jcr:mimeType","application/x-javascript",LOGICAL.AND);
-    queryBuilder.notEqual("jcr:mimeType","text/ecmascript",LOGICAL.AND);    
     queryBuilder.closeGroup();    
+    //unwanted document document types: exo:cssFile, exo:jsFile
+    if(excludeMimeTypes.size()<1) return;
+    queryBuilder.openGroup(LOGICAL.AND);
+    String[] mimetypes = excludeMimeTypes.toArray(new String[]{});      
+    queryBuilder.notEqual("jcr:mimeType",mimetypes[0],LOGICAL.NULL);
+    for(int i=1; i<mimetypes.length; i++) {
+      queryBuilder.notEqual("jcr:mimeType",mimetypes[i],LOGICAL.AND);
+    }       
+    queryBuilder.closeGroup();
   }
 
   /**
    * Order by.
    * 
-   * @param queryCriteria
-   *          the query criteria
-   * @param queryBuilder
-   *          the query builder
-   * @param sessionProvider
-   *          the session provider
+   * @param queryCriteria the query criteria
+   * @param queryBuilder the query builder
    */
   private void orderBy(final QueryCriteria queryCriteria, final SQLQueryBuilder queryBuilder) {
     queryBuilder.orderBy("jcr:score", ORDERBY.DESC);
-  }
+  }  
 }

@@ -28,17 +28,33 @@ import org.exoplatform.commons.exception.ExoMessageException;
 
 /**
  * Created by The eXo Platform SAS
- * Author : Hoa Pham	
- *          hoa.phamvu@exoplatform.com
- * Dec 10, 2008  
+ * Author : Hoa Pham
+ * hoa.phamvu@exoplatform.com
+ * Dec 10, 2008
  */
 public class SmallPaginatedQueryResult extends WCMPaginatedQueryResult{
+  
+  /** The array list. */
   private CopyOnWriteArrayList<ResultNode> arrayList = new CopyOnWriteArrayList<ResultNode>();
   
+  /**
+   * Instantiates a new small paginated query result.
+   * 
+   * @param pageSize the page size
+   */
   public SmallPaginatedQueryResult(int pageSize) {
     super(pageSize);
   }
 
+  /**
+   * Instantiates a new small paginated query result.
+   * 
+   * @param queryResult the query result
+   * @param queryCriteria the query criteria
+   * @param pageSize the page size
+   * 
+   * @throws Exception the exception
+   */
   public SmallPaginatedQueryResult(QueryResult queryResult, QueryCriteria queryCriteria, int pageSize) throws Exception{
     super(queryResult,queryCriteria,pageSize);    
     RowIterator rowIterator = queryResult.getRows();    
@@ -59,16 +75,25 @@ public class SmallPaginatedQueryResult extends WCMPaginatedQueryResult{
     setAvailablePage(arrayList.size());    
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.utils.PaginatedNodeIterator#getPage(int)
+   */
   public List getPage(int page) throws Exception {
     checkAndSetPage(page);
     populateCurrentPage(page);
     return currentListPage_;
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.search.PaginatedQueryResult#populateCurrentPage(int)
+   */
   protected void populateCurrentPage(int page) throws Exception {    
     currentListPage_ = arrayList.subList(getFrom(), getTo());
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.commons.utils.PageList#checkAndSetPage(int)
+   */
   protected void checkAndSetPage(int page) throws Exception {
     if (page < 1 || page > availablePage_) {
       Object[] args = { Integer.toString(page), Integer.toString(availablePage_) };

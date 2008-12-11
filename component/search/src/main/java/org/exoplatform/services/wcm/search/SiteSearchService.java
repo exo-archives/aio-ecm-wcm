@@ -18,6 +18,7 @@ package org.exoplatform.services.wcm.search;
 
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : Hoa Pham
@@ -25,5 +26,24 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
  * Oct 7, 2008
  */
 public interface SiteSearchService {  
+  
+  /**
+   * Adds the exclude include data type plugin.
+   * 
+   * @param plugin the plugin
+   */
+  public void addExcludeIncludeDataTypePlugin(ExcludeIncludeDataTypePlugin plugin);  
+  
+  /**
+   * Search site contents.
+   * 
+   * @param queryCriteria the query criteria
+   * @param sessionProvider the session provider
+   * @param pageSize the page size
+   * 
+   * @return the wCM paginated query result
+   * 
+   * @throws Exception the exception
+   */
   public WCMPaginatedQueryResult searchSiteContents(QueryCriteria queryCriteria, SessionProvider sessionProvider, int pageSize) throws Exception;
 }

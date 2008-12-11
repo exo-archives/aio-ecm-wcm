@@ -19,20 +19,26 @@ package org.exoplatform.services.wcm.search;
 import javax.jcr.Node;
 import javax.jcr.query.QueryResult;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS Author : Hoa Pham hoa.phamvu@exoplatform.com
  * Oct 21, 2008
  */
 public class WCMPaginatedQueryResult extends PaginatedQueryResult {
 
+  /** The query time. */
   private long queryTime;  
+  
+  /** The spell suggestion. */
   private String spellSuggestion;
+  
+  /** The query criteria. */
   private QueryCriteria queryCriteria;  
+  
   /**
    * Instantiates a new wCM paginated query result.
    * 
-   * @param pageSize
-   *          the page size
+   * @param pageSize the page size
    */
   public WCMPaginatedQueryResult(int pageSize) {
     super(pageSize);
@@ -41,33 +47,49 @@ public class WCMPaginatedQueryResult extends PaginatedQueryResult {
   /**
    * Instantiates a new wCM paginated query result.
    * 
-   * @param queryResult
-   *          the query result
-   * @param pageSize
-   *          the page size
-   * @param allowDuplicated
-   *          the allow duplicated
+   * @param queryResult the query result
+   * @param pageSize the page size
+   * @param queryCriteria the query criteria
    * 
-   * @throws Exception
-   *           the exception
+   * @throws Exception the exception
    */
   public WCMPaginatedQueryResult(QueryResult queryResult, QueryCriteria queryCriteria, int pageSize) throws Exception {
     super(queryResult, pageSize);
     this.queryCriteria = queryCriteria;
   }
 
+  /**
+   * Sets the query time.
+   * 
+   * @param time the new query time
+   */
   public void setQueryTime(long time) {
     this.queryTime = time;
   }
 
+  /**
+   * Gets the query time in second.
+   * 
+   * @return the query time in second
+   */
   public long getQueryTimeInSecond() {
     return this.queryTime / 1000;
   }
 
+  /**
+   * Gets the query criteria.
+   * 
+   * @return the query criteria
+   */
   public QueryCriteria getQueryCriteria() {
     return this.queryCriteria;
   }
 
+  /**
+   * Sets the query criteria.
+   * 
+   * @param queryCriteria the new query criteria
+   */
   public void setQueryCriteria(QueryCriteria queryCriteria) {
     this.queryCriteria = queryCriteria;
   }
@@ -100,10 +122,20 @@ public class WCMPaginatedQueryResult extends PaginatedQueryResult {
     return displayNode;
   }
 
+  /**
+   * Gets the spell suggestion.
+   * 
+   * @return the spell suggestion
+   */
   public String getSpellSuggestion() {
     return spellSuggestion;
   }
 
+  /**
+   * Sets the spell suggestion.
+   * 
+   * @param spellSuggestion the new spell suggestion
+   */
   public void setSpellSuggestion(String spellSuggestion) {
     this.spellSuggestion = spellSuggestion;
   }
