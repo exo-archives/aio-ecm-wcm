@@ -93,12 +93,14 @@
 			              	 		uicomponent.addTextField("name", webContentFieldName) ; 
 			              	 		String[] cssFolder = ["jcrPath=/node/css", "nodetype=exo:cssFolder", "defaultValues=css"] ;
 			              	 		String[] jsFolder = ["jcrPath=/node/js", "nodetype=exo:jsFolder", "defaultValues=js"] ;
+			              	 		String[] documentsFolder = ["jcrPath=/node/documents", "nodetype=nt:unstructured","mixintype=exo:documentFolder", "defaultValues=documents"] ;
 			              	 		String[] mediasFolder = ["jcrPath=/node/medias", "nodetype=exo:multimediaFolder", "defaultValues=medias"] ;
 			              	 		String[] imagesFolder = ["jcrPath=/node/medias/images", "nodetype=nt:folder", "defaultValues=images"] ;
 			              	 		String[] videoFolder = ["jcrPath=/node/medias/videos", "nodetype=nt:folder", "defaultValues=videos"] ;
 			              	 		String[] audioFolder = ["jcrPath=/node/medias/videos", "nodetype=nt:folder", "defaultValues=audio"] ;
 			              	 		uicomponent.addHiddenField("cssFolder", cssFolder) ;
 			              	 		uicomponent.addHiddenField("jsFolder", jsFolder);
+			              	 		uicomponent.addHiddenField("documentsFolder", documentsFolder);
 			              	 		uicomponent.addHiddenField("mediasFolder", mediasFolder);
 			              	 		uicomponent.addHiddenField("imagesFolder", imagesFolder);
 			              	 		uicomponent.addHiddenField("videoFolder", videoFolder);

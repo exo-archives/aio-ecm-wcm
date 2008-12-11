@@ -89,12 +89,14 @@
 			              	 		uicomponent.addTextField("name", webContentFieldName) ; 
 			              	 		String[] cssFolder = ["jcrPath=/node/css", "nodetype=exo:cssFolder", "defaultValues=css"] ;
 			              	 		String[] jsFolder = ["jcrPath=/node/js", "nodetype=exo:jsFolder", "defaultValues=js"] ;
+			              	 		String[] documentsFolder = ["jcrPath=/node/documents", "nodetype=nt:unstructured","mixintype=exo:documentFolder","defaultValues=documents"] ;
 			              	 		String[] mediasFolder = ["jcrPath=/node/medias", "nodetype=exo:multimediaFolder", "defaultValues=medias"] ;
 			              	 		String[] imagesFolder = ["jcrPath=/node/medias/images", "nodetype=nt:folder", "defaultValues=images"] ;
 			              	 		String[] videoFolder = ["jcrPath=/node/medias/videos", "nodetype=nt:folder", "defaultValues=videos"] ;
 			              	 		String[] audioFolder = ["jcrPath=/node/medias/videos", "nodetype=nt:folder", "defaultValues=audio"] ;
 			              	 		uicomponent.addHiddenField("cssFolder", cssFolder) ;
 			              	 		uicomponent.addHiddenField("jsFolder", jsFolder);
+			              	 		uicomponent.addHiddenField("documentsFolder", documentsFolder);
 			              	 		uicomponent.addHiddenField("mediasFolder", mediasFolder);
 			              	 		uicomponent.addHiddenField("imagesFolder", imagesFolder);
 			              	 		uicomponent.addHiddenField("videoFolder", videoFolder);
@@ -144,9 +146,6 @@
 					</div>  <!-- End of UITabContent -->
 					<!-- Start of Illustration tab -->
 					<div class="UITabContent" style="display: none;">
-						<div class="FormHint">
-							In this panel, you can specify an image that will be shown when your web content is displayed in lists. In addition, you can specify some summary text to come with this image. 
-						</div>
 						<table class="UIFormGrid">
 						<tr>
 								<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.illustrationImage")%></td>
@@ -223,9 +222,6 @@
 					<!-- End of Illustration tab -->		
 								
 					<div class="UITabContent" style="display: none;">
-						<div class="FormHint">
-							In this panel, you can specify the main stylesheet for your web content. This style will override the one defined at the portal level and at the shared level. 
-						</div>
 						<table class="UIFormGrid">
 							<tr>
 								<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.ContentCSS")%></td>
@@ -260,9 +256,6 @@
 					</div>
 					
 					<div class="UITabContent" style="display: none;">
-						<div class="FormHint">
-							In this panel, you can specify some Java Script code that can be executed when your web content is rendered.
-						</div>
 						<table class="UIFormGrid">
 							<tr>
 								<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.ContentJS")%></td>
