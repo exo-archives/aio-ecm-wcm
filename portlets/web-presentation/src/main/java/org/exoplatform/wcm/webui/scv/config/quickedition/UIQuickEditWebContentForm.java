@@ -41,6 +41,7 @@ import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.NodeIdentifier;
 import org.exoplatform.services.wcm.core.NodeLocation;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
 import org.exoplatform.wcm.webui.scv.config.UIContentDialogForm;
 import org.exoplatform.wcm.webui.scv.config.UIPortletConfig;
@@ -213,7 +214,7 @@ public class UIQuickEditWebContentForm extends UIContentDialogForm{
       } else {        
         PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
         context.setApplicationMode(PortletMode.VIEW);
-        context.getJavascriptManager().addJavascript("location.reload()");
+        Utils.refreshBrowser(context);
       }
     }
   }
@@ -227,7 +228,7 @@ public class UIQuickEditWebContentForm extends UIContentDialogForm{
         uiPortletConfig.addUIWelcomeScreen();
       } else {   
         context.setApplicationMode(PortletMode.VIEW);
-        context.getJavascriptManager().addJavascript("location.reload()");
+        Utils.refreshBrowser(context);
       }
     }
   }

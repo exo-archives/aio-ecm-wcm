@@ -20,6 +20,7 @@ import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
 import org.exoplatform.services.wcm.core.NodeIdentifier;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
 import org.exoplatform.wcm.webui.scv.config.social.UISocialInfo;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -139,6 +140,7 @@ public class UIQuickCreationWizard extends UIBaseWizard {
         uiPortletConfig.addUIWelcomeScreen();
       } else {        
         context.setApplicationMode(PortletMode.VIEW);
+        Utils.refreshBrowser(context);
       }
     }
   }

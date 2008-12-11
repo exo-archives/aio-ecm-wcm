@@ -41,6 +41,7 @@ import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
 import org.exoplatform.wcm.webui.scv.config.publication.UIWCMPublicationGrid;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -236,6 +237,7 @@ public class UINameWebContentForm extends UIForm {
         uiPortletConfig.addUIWelcomeScreen();
       } else {        
         context.setApplicationMode(PortletMode.VIEW);
+        Utils.refreshBrowser(context);
       }
     }
   }

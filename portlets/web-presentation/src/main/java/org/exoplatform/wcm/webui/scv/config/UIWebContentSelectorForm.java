@@ -37,6 +37,7 @@ import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.publication.NotInWCMPublicationException;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.publication.WebpagePublicationPlugin;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
 import org.exoplatform.wcm.webui.scv.config.publication.UIWCMPublicationGrid;
 import org.exoplatform.wcm.webui.selector.webcontent.UIWebContentPathSelector;
@@ -210,6 +211,7 @@ public class UIWebContentSelectorForm extends UIForm implements UISelectable{
         uiPortletConfig.addUIWelcomeScreen();
       } else {        
         context.setApplicationMode(PortletMode.VIEW);
+        Utils.refreshBrowser(context);
       }
     }
   }

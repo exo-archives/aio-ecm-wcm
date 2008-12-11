@@ -24,6 +24,7 @@ import javax.jcr.Node;
 import javax.portlet.PortletMode;
 
 import org.exoplatform.ecm.webui.selector.UISelectable;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
 import org.exoplatform.web.application.RequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -151,6 +152,7 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
     public void execute(Event<UIWelcomeScreen> event) throws Exception {
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
       context.setApplicationMode(PortletMode.VIEW);
+      Utils.refreshBrowser(context);
     }
   }
 
