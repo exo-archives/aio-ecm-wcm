@@ -54,6 +54,7 @@ import org.exoplatform.webui.event.EventListener;
 
 @ComponentConfig(
     lifecycle = UIApplicationLifecycle.class,
+    template = "app:/groovy/SingleContentViewer/UISingleContentViewerPortlet.gtmpl",
     events = {
       @EventConfig(listeners = UISingleContentViewerPortlet.QuickEditActionListener.class)
     }
