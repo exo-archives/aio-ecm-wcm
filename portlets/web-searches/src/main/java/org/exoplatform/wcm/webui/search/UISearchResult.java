@@ -116,9 +116,11 @@ public class UISearchResult extends UIContainer {
 				&& queryString.matches(PARAMETER_REGX)) {
 			queryString = URLDecoder.decode(queryString, "UTF-8");
 			String[] params = queryString.split("&");
-			String currentPortal = params[0].split("=")[1];
-			String keyword = null;
-			if (params[1].trim().endsWith("=")) { // keyword empty
+			String portalParam = params[0];
+			String currentPortal = portalParam.split("=")[1];
+			String keywordParam = queryString.substring(portalParam.length() + 1);
+			String keyword = keywordParam.substring("keyword=".length());
+			if (keyword == null || keyword.trim().length() == 0) { // keyword empty
 				writer.write("<div class=\"UIAdvanceSearchResultDefault\">");
 				writer
 						.write("<div class=\"ResultHeader\"><div class=\"CaptionSearchType\"><b>"
@@ -126,10 +128,8 @@ public class UISearchResult extends UIContainer {
 								+ "</b></div><div style=\"clear: left;\"><span></span></div></div>");
 				writer.write("<p>" + keyword_entered + "</p>");
 				return;
-			}
-			keyword = params[1].split("=")[1];
+			}		
 			setKeyword(keyword);
-
 			SiteSearchService siteSearchService = getApplicationComponent(SiteSearchService.class);
 			QueryCriteria queryCriteria = new QueryCriteria();
 			queryCriteria.setSiteName(currentPortal);

@@ -98,17 +98,21 @@ public class UISearchForm extends UIForm {
 		PortletRequestContext portletRequestContext = (PortletRequestContext) context;
 		HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) portletRequestContext
 				.getRequest();
-		String queryString = requestWrapper.getQueryString();		
+		String queryString = requestWrapper.getQueryString();
 		UIFormStringInput keywordInput = getUIStringInput(KEYWORD_INPUT);
-		if (queryString != null && queryString.matches(UISearchResult.PARAMETER_REGX)) {
+		if (queryString != null
+				&& queryString.matches(UISearchResult.PARAMETER_REGX)) {
 			queryString = URLDecoder.decode(queryString, "UTF-8");
 			String[] params = queryString.split("&");
-			if (params[1].trim().endsWith("=")) {
+			String portalParam = params[0];
+			String currentPortal = portalParam.split("=")[1];
+			String keywordParam = queryString.substring(portalParam.length() + 1);
+			String keyword = keywordParam.substring("keyword=".length());
+			if (keyword == null || keyword.trim().length() == 0) {
 				keywordInput.setValue(null);
 			} else {
-				keywordInput.setValue(params[1].split("=")[1]);
+				keywordInput.setValue(keyword);
 			}
-			String currentPortal = params[0].split("=")[1];
 			getUIFormSelectBox(PORTALS_SELECTOR).setValue(currentPortal);
 		}
 		super.processRender(context);
@@ -187,10 +191,12 @@ public class UISearchForm extends UIForm {
 			if ("true".equals(pageChecked) && "false".equals(documentChecked)) {
 				resultType = bundle.getString("UISearchForm.pageCheckBox.label") + "s";
 			} else if ("false".equals(pageChecked) && "true".equals(documentChecked)) {
-				resultType = bundle.getString("UISearchForm.documentCheckBox.label") + "s";
+				resultType = bundle.getString("UISearchForm.documentCheckBox.label")
+						+ "s";
 			} else if ("true".equals(pageChecked) && "true".equals(documentChecked)) {
-				resultType = bundle.getString("UISearchForm.documentCheckBox.label") + "s"
-						+ " and " + bundle.getString("UISearchForm.pageCheckBox.label") + "s";
+				resultType = bundle.getString("UISearchForm.documentCheckBox.label")
+						+ "s" + " and "
+						+ bundle.getString("UISearchForm.pageCheckBox.label") + "s";
 			}
 			uiSearchResult.setKeyword(keyword);
 			uiSearchResult.setResultType(resultType);
