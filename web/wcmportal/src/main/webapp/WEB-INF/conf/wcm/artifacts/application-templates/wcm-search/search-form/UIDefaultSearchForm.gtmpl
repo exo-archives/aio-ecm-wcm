@@ -16,7 +16,7 @@ UIFormCheckBoxInput uiDocumentCheckBox = uicomponent.getUIFormCheckBoxInput(UISe
 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action.Search");
 String link = uicomponent.event("Search");
 def context = _ctx.getRequestContext();
-context.getJavascriptManager().addJavascript('search("' + uicomponent.id + '")');
+context.getJavascriptManager().addJavascript('search("' + uicomponent.id + '");');
 %>
 
 <div class="UIForm $uicomponent.id" >
