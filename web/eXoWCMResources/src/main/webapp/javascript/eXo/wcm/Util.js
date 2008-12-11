@@ -140,3 +140,16 @@ function search(comId) {
   	  }		
 	}
 }	
+
+function keepKeywordOnBoxSearch() {
+	var searchBox = document.getElementById("siteSearchBox");
+  var keyWordInput = eXo.core.DOMUtil.findFirstDescendantByClass(searchBox, "input", "keyword");
+  var queryString = location.search;
+  var portalParam = queryString.split('&')[0];
+  var keyword = queryString.substring((portalParam + "keyword=").length +1);
+  if (keyword != undefined && keyword.length != 0) {
+  	keyWordInput.value = keyword; 
+  }
+}
+
+eXo.core.Browser.addOnLoadCallback("keepKeywordOnBoxSearch", keepKeywordOnBoxSearch);
