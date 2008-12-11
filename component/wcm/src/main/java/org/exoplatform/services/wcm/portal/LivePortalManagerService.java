@@ -50,7 +50,9 @@ public interface LivePortalManagerService {
    * @return the live portals path
    * @throws Exception the exception
    */
-  public String getPortalNameByPath(String portalPath) throws Exception;  
+  public String getPortalNameByPath(String portalPath) throws Exception;
+  public String getPortalPathByName(String portalName) throws Exception;
+  
   public Collection<String> getLivePortalsPath() throws Exception;  
   
   /**

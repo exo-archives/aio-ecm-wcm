@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.jcr.ItemExistsException;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Session;
@@ -30,7 +29,6 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryResult;
 
 import org.apache.commons.logging.Log;
-import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ExtendedNode;
@@ -228,5 +226,9 @@ public class LivePortalManagerServiceImpl implements LivePortalManagerService, S
   }
 
   public void stop() {    
+  }
+
+  public String getPortalPathByName(String portalName) throws Exception {
+    return livePortalPaths.get(portalName);    
   }        
 }

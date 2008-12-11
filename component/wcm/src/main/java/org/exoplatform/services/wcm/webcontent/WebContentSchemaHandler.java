@@ -36,6 +36,17 @@ public class WebContentSchemaHandler extends BaseWebSchemaHandler {
   protected String getParentNodeType() { return "nt:unstructured"; }
   
   @SuppressWarnings("unused")
+  public boolean matchHandler(Node node, SessionProvider sessionProvider) throws Exception {    
+    String handlerNodeType = getHandlerNodeType();    
+    String parentNodeType = getParentNodeType();
+    if(!node.isNodeType(handlerNodeType)) 
+      return false;
+    if(!node.getParent().isNodeType(parentNodeType)) 
+      return false;    
+    return true;    
+  }
+  
+  @SuppressWarnings("unused")
   public void onCreateNode(final Node webContent, SessionProvider sessionProvider) throws Exception {
     Session session = webContent.getSession();
     createSchema(webContent);
