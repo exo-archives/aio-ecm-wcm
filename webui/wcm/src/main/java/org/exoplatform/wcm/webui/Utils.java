@@ -20,6 +20,7 @@ import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 
 /**
  * Created by The eXo Platform SAS
@@ -36,6 +37,10 @@ public class Utils {
     // show maskworkpace is being in Portal page edit mode    
     if(uiMaskWS.getWindowWidth() > 0 && uiMaskWS.getWindowHeight() < 0) return true;
     return false;
+  }
+  
+  public static void refreshBrowser(PortletRequestContext context) {
+    context.getJavascriptManager().addJavascript("location.reload();");
   }
   
 }
