@@ -33,7 +33,7 @@
 	      <td class="FieldLabel"><%=_ctx.appRes("SiteMetadata.dialog.label.robots")%></td>
 	      <td class="FieldComponent">
 		      <%
-		        String[] fieldRobots = ["jcrPath=/node/metadata:siteMetadata/robots", "defaultValues=index, follow"] ;
+		        String[] fieldRobots = ["jcrPath=/node/metadata:siteMetadata/robots", "defaultValues=index,follow"] ;
 		        uicomponent.addTextField("robots", fieldRobots) ;
 		      %>
 		    </td>
