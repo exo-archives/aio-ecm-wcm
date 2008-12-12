@@ -30,7 +30,7 @@
 	      %>	 
 	      			<tr>
 	      				<td></td>
-	      				<td><div class="<%= uicomponent.getPictureCSS() %>"><span></span></div></td>
+	      				<td><div class="<%= uicomponent.getPictureDescribe() %>"><span></span></div></td>
 	      			</tr>     
       </table>
       <div class="UIAction"> 
