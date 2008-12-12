@@ -7,27 +7,27 @@
 		<node>
 			<uri>home</uri>
 			<name>home</name>
-			<label>portal.template.home</label>
+			<label>#{portal.template.home}</label>
 			<page-reference>portal::@owner@::homepage</page-reference>	    
 		</node>	         	  	  	  	 	     	  	    
 		<node>
 			<uri>searchResult</uri>
 			<name>searchResult</name>
-			<label>portal.template.searchResult</label>
+			<label>#{portal.template.searchResult}</label>
 			<visible>false</visible>			
 			<page-reference>portal::@owner@::searchResult</page-reference>	    
 		</node>
 		<node>
 			<uri>parameterizedviewer</uri>
 			<name>parameterizedviewer</name>
-			<label>portal.template.parameterizedviewer</label>
+			<label>#{portal.template.parameterizedviewer}</label>
 			<visible>false</visible>
 			<page-reference>portal::@owner@::parameterizedviewer</page-reference>
 		</node> 
 		<node>
 			<uri>contentviewer</uri>
 			<name>contentviewer</name>
-			<label>portal.template.contentviewer</label>
+			<label>#{portal.template.contentviewer}</label>
 			<visible>false</visible>
 			<page-reference>portal::@owner@::contentviewer</page-reference>
 		</node> 	        	    
