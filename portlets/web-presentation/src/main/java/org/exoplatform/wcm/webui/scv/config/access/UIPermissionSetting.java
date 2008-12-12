@@ -269,6 +269,7 @@ public class UIPermissionSetting extends UIForm implements UISelectable {
     public void execute(Event<UIPermissionSetting> event) throws Exception {
       UIPermissionSetting permissionSettingForm = event.getSource();
       UIGroupMemberSelector uiGroupMemberSelector = permissionSettingForm.createUIComponent(UIGroupMemberSelector.class, null, null);
+      uiGroupMemberSelector.setShowAnyPermission(false);
       uiGroupMemberSelector.setSourceComponent(permissionSettingForm, new String[] { USERS_STRINGINPUT });
       permissionSettingForm.getAncestorOfType(UIPermissionManager.class).initPopupPermission(uiGroupMemberSelector);
       event.getRequestContext().addUIComponentToUpdateByAjax(permissionSettingForm.getParent());
