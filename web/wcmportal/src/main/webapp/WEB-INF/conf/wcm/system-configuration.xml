@@ -120,7 +120,8 @@
 	    </init-params>
 	  </component-plugin>	  
 	</external-component-plugins>
-		
+
+<!--		
   <external-component-plugins>
     <target-component>org.exoplatform.services.scheduler.JobSchedulerService</target-component>    
     <component-plugin>
@@ -140,6 +141,7 @@
       </init-params>          
     </component-plugin>
   </external-component-plugins>
+ -->
   <external-component-plugins>
     <target-component>org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator</target-component>
     <component-plugin>
