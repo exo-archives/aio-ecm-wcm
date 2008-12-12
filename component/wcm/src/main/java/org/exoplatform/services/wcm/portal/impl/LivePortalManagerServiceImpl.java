@@ -221,8 +221,9 @@ public class LivePortalManagerServiceImpl implements LivePortalManagerService, S
       }
     } catch (Exception e) {
       log.error("Error when starting LivePortalManagerService: ",e);
-    }
-
+    }finally {
+      sessionProvider.close(); 
+    }    
   }
 
   public void stop() {    

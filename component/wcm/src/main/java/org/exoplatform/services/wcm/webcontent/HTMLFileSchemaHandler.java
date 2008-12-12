@@ -163,7 +163,9 @@ public class HTMLFileSchemaHandler extends BaseWebSchemaHandler {
    * @see org.exoplatform.services.wcm.core.BaseWebSchemaHandler#onModifyNode(javax.jcr.Node, org.exoplatform.services.jcr.ext.common.SessionProvider)
    */
   @SuppressWarnings("unused")
-  public void onModifyNode(final Node node, final SessionProvider sessionProvider) throws Exception{   
+  public void onModifyNode(final Node node, final SessionProvider sessionProvider) throws Exception{
+    //In version 1.0 the TOC generator and link extractor is disable
+    if(true) return;    
     Node parent = node.getParent();
     if(!parent.isNodeType("exo:webContent"))
       return;    
