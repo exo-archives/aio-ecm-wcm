@@ -1,15 +1,10 @@
 <%
-  import javax.jcr.NodeIterator;
   import javax.jcr.Node;
-  import javax.jcr.Session;
-  import java.util.ArrayList;
 	import java.util.List;
-  import org.exoplatform.services.wcm.webcontent.TOCGeneratorService;
   import org.exoplatform.services.jcr.core.ManageableRepository;
   import org.exoplatform.services.cms.categories.CategoriesService;
   import org.exoplatform.webui.application.WebuiRequestContext;
 	import org.exoplatform.webui.application.portlet.PortletRequestContext;
-	import javax.portlet.PortletPreferences;
 	import org.exoplatform.services.cms.folksonomy.FolksonomyService;
 	import org.exoplatform.download.DownloadService;
 	import org.exoplatform.download.InputStreamDownloadResource;
@@ -26,28 +21,16 @@
   def currentNode = uicomponent.getNode() ; 
   def htmlFile = currentNode.getNode("default.html") ;
   
-  def jsNode = currentNode.getNode("js");
-  def cssNode = currentNode.getNode("css");
+  def exSkinService = uicomponent.getComponentInstanceOfType("org.exoplatform.services.wcm.skin.XSkinService") ;
+  def exJSService = uicomponent.getComponentInstanceOfType("org.exoplatform.services.wcm.javascript.XJavascriptService") ;
+  def css= exSkinService.getActiveStylesheet(currentNode);
+  def js=  exJSService.getActiveJavaScript(currentNode) ;
   
-  def javaScriptClass="org.exoplatform.services.wcm.javascript.XJavascriptService";
-  def skinClass="org.exoplatform.services.wcm.skin.XSkinService";
-
-  def exSkinService = uicomponent.getComponentInstanceOfType(skinClass) ;
-  def exJSService = uicomponent.getComponentInstanceOfType(javaScriptClass) ;
-
-  def css= exSkinService.getActiveStylesheet(cssNode);
-  def js=  exJSService.getActiveJavaScript(jsNode) ;
-  
-  TOCGeneratorService tocService = uicomponent.getApplicationComponent(TOCGeneratorService.class);
-	String tocContent = tocService.getTOC(htmlFile);
-	
 	ManageableRepository mRepository = (ManageableRepository)currentNode.getSession().getRepository();
   String repositoryName = mRepository.getConfiguration().getName();
-  boolean quickEdit = getPortletPreference("ShowQuickEdit");
-	boolean isShowTOC = getPortletPreference("ShowTOC");
+  boolean isShowTitle = getPortletPreference("ShowTitle");
 	boolean isShowCategories = getPortletPreference("ShowCategories");
 	boolean isShowTags = getPortletPreference("ShowTags");
-
 
 	if (currentNode.hasProperty("exo:image")) {
 		DownloadService dservice = uicomponent.getApplicationComponent(DownloadService.class);
@@ -64,14 +47,9 @@
 	}
 	if((css != null) && (css.length() > 0)) {
 %>
-		<style><%=css%></style>
-<%
-	}
-	if((tocContent != null) && (tocContent.length() > 0) && isShowTOC) {
-%>
-		<div class='toc'>
-			<%= tocContent%>
-		</div>
+		<style>
+			<%=css%>
+		</style>
 <%
 	}
 %>
@@ -83,53 +61,49 @@
 <% } %>
 
 <% 
-	if (isShowCategories || isShowTags) {
+	if (isShowTitle || isShowCategories || isShowTags) {
 		%>
-			<div class="WebContentContainer">
-				<div class="WebContentDetails">
-					<%=htmlFile.getNode("jcr:content").getProperty("jcr:data").getString()%>
+				<div class="WebContentInformation">
+					<% 
+						if (isShowTitle && currentNode.hasProperty("exo:title")) {
+							%>
+								<h1 class="WebContentTitle"><%= currentNode.getProperty("exo:title").getString(); %></h1>
+							<%
+						}
+						if(isShowCategories) {
+							StringBuffer categories = new StringBuffer();
+							CategoriesService categoriesService = uicomponent.getApplicationComponent(CategoriesService.class);
+							if(categoriesService.hasCategories(currentNode)) {
+								if (currentNode.getProperty("exo:category").getValues().length > 0) {
+					      	List<Node> categoryNodeList = categoriesService.getCategories(currentNode, repositoryName);
+					       	for (Node category: categoryNodeList) {
+					        	categories.append(category.getName()).append(", ");
+					       	}
+					    	 	categories.replace(categories.lastIndexOf(", "), categories.size(), "");
+									%>
+							  		<span class="Categories"><strong><%=_ctx.appRes("Category.view.label")%>:</strong> <%= categories.toString(); %></span>
+									<%		
+								}
+					    }
+						}
+						if(isShowTags) {
+							FolksonomyService folkService = uicomponent.getApplicationComponent(FolksonomyService.class);
+							List<Node> tagList = folkService.getLinkedTagsOfDocument(currentNode, repositoryName);
+							if(tagList.size() > 0) {
+								StringBuffer tagBuff = new StringBuffer("[");
+								for(Node tag: tagList) {
+									tagBuff.append(tag.getName()).append(", ");
+								}
+								tagBuff.replace(tagBuff.lastIndexOf(", "), tagBuff.size(), "]");
+								%>
+									<span class="Tags"><strong><%=_ctx.appRes("Tag.view.label")%>:</strong> <%= tagBuff.toString(); %></span>
+								<%	
+							}	
+						}
+					%>
 				</div>
-			
-				<% 
-					if(isShowCategories) {
-						StringBuffer categories = new StringBuffer();
-						CategoriesService categoriesService = uicomponent.getApplicationComponent(CategoriesService.class);
-						if(categoriesService.hasCategories(currentNode)) {
-							if (currentNode.getProperty("exo:category").getValues().length > 0) {
-				       List<Node> categoryNodeList = categoriesService.getCategories(currentNode, repositoryName);
-				       for (Node category: categoryNodeList) {
-				         categories.append(category.getName()).append(", ");
-				       }
-				    	 categories.replace(categories.lastIndexOf(", "), categories.size(), "");
-				%>
-						   <div class="Categories"><strong><%=_ctx.appRes("Category.view.label")%>:</strong> <%= categories.toString(); %></div>
-				<%		
-							}
-				    }
-					}
-				%>
-				
-				<% 
-					if(isShowTags) {
-						FolksonomyService folkService = uicomponent.getApplicationComponent(FolksonomyService.class);
-						List<Node> tagList = folkService.getLinkedTagsOfDocument(currentNode, repositoryName);
-						if(tagList.size() > 0) {
-							StringBuffer tagBuff = new StringBuffer("[");
-							for(Node tag: tagList) {
-								tagBuff.append(tag.getName()).append(", ");
-							}
-							tagBuff.replace(tagBuff.lastIndexOf(", "), tagBuff.size(), "]");
-				%>
-								<div class="Tags"><strong><%=_ctx.appRes("Tag.view.label")%>:</strong> <%= tagBuff.toString(); %></div>
-				<%	
-						}	
-					}
-				%>
-			</div>
-		<%
-	} else {
-		%>
-			<%=htmlFile.getNode("jcr:content").getProperty("jcr:data").getString()%>
 		<%
 	}
- %>
+%>
+
+<%=htmlFile.getNode("jcr:content").getProperty("jcr:data").getString()%>

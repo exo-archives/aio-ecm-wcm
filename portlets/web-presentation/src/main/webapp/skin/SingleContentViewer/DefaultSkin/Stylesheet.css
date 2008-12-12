@@ -1,9 +1,9 @@
 .UISingleContentViewerPortlet {
 	overflow: auto;
+	background: #fff;
 }
 
 .UISingleContentViewerPortlet .Message {
-	background: white;
 	border: 1px solid #b7b7b7;
 	height: 55px;
 	padding: 10px;
@@ -15,7 +15,6 @@
 
 .UISingleContentViewerPortlet .EditMode {
 	padding: 5px;
-	background: white;
 	border: 1px solid #B7B7B7;
 	margin: 5px;
 }

@@ -46,11 +46,11 @@ public class UIMiscellaneousInfo extends UIForm {
   public UIMiscellaneousInfo() throws Exception {
     PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     PortletPreferences prefs = context.getRequest().getPreferences();
-    boolean isShowTOC = Boolean.parseBoolean(prefs.getValue("ShowTOC", null));
+    boolean isShowTitle = Boolean.parseBoolean(prefs.getValue("ShowTitle", null));
     boolean isShowTags = Boolean.parseBoolean(prefs.getValue("ShowTags", null));
     boolean isShowCategories = Boolean.parseBoolean(prefs.getValue("ShowCategories", null));
     boolean isQuickEdit = Boolean.parseBoolean(prefs.getValue("ShowQuickEdit", null));
-    addUIFormInput(new UIFormCheckBoxInput("ShowTOC", "ShowTOC", null).setChecked(isShowTOC));
+    addUIFormInput(new UIFormCheckBoxInput("ShowTitle", "ShowTitle", null).setChecked(isShowTitle));
     addUIFormInput(new UIFormCheckBoxInput("ShowTags", "ShowTags", null).setChecked(isShowTags));
     addUIFormInput(new UIFormCheckBoxInput("ShowCategories", "ShowCategories", null).setChecked(isShowCategories));
     addUIFormInput(new UIFormCheckBoxInput("ShowQuickEdit", "ShowQuickEdit", null).setChecked(isQuickEdit));
@@ -59,13 +59,13 @@ public class UIMiscellaneousInfo extends UIForm {
   static public class SaveToPortletPreferenceActionListener extends EventListener<UIMiscellaneousInfo> {
     public void execute(Event<UIMiscellaneousInfo> event) throws Exception {
       UIMiscellaneousInfo uiMiscellaneousInfo = event.getSource();
-      boolean isShowTOC = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowTOC").isChecked();
+      boolean isShowTitle = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowTitle").isChecked();
       boolean isQuickEdit = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowQuickEdit").isChecked();
       boolean isShowTags = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowTags").isChecked();
       boolean isShowCategories = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowCategories").isChecked();
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
       PortletPreferences prefs = context.getRequest().getPreferences();
-      prefs.setValue("ShowTOC", Boolean.toString(isShowTOC));
+      prefs.setValue("ShowTitle", Boolean.toString(isShowTitle));
       prefs.setValue("ShowQuickEdit", Boolean.toString(isQuickEdit));
       prefs.setValue("ShowTags", Boolean.toString(isShowTags));
       prefs.setValue("ShowCategories", Boolean.toString(isShowCategories));
