@@ -5,12 +5,12 @@
   		<tr>
 	      <td class="FieldLabel"><%=_ctx.appRes("SiteMetadata.dialog.label.title")%></td>
 	      <td class="FieldComponent">
-		      <%
+		      <%                                                            
 		        String[] fieldTitle = ["jcrPath=/node/metadata:siteMetadata/siteTitle"] ;
-		        uicomponent.addTextField("title", fieldTitle) ;
+		        uicomponent.addTextField("siteTitle", fieldTitle) ;
 		      %>
 		    </td>
-		  </tr>
+		  </tr>  		
 		  <tr>
 	      <td class="FieldLabel"><%=_ctx.appRes("SiteMetadata.dialog.label.description")%></td>
 	      <td class="FieldComponent">
@@ -19,7 +19,7 @@
 		        uicomponent.addTextField("description", fieldDescription) ;
 		      %>
 		    </td>
-		  </tr>
+		  </tr>		  
 		  <tr>
 	      <td class="FieldLabel"><%=_ctx.appRes("SiteMetadata.dialog.label.keywords")%></td>
 	      <td class="FieldComponent">
