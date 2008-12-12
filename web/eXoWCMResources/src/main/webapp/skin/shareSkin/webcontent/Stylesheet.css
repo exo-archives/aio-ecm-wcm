@@ -13,6 +13,21 @@
 	width: 277px; height: 182px;
 }
 
+.exo_siteSearchBox {
+	background: url('277x182/siteSearchBoxWebContent.gif') no-repeat;
+	width: 277px; height: 182px;
+}
+
+.exo_siteNavigationWebContent {
+	background: url('277x182/siteNavigationWebContent.gif') no-repeat;
+	width: 277px; height: 182px;
+}
+
+.exo_siteBreadcrumb {
+	background: url('277x182/siteBreadcrumWebContent.gif') no-repeat;
+	width: 277px; height: 182px;
+}
+
 .BrowseIcon {
 	width: 16px;	height: 16px;
   background: url('16x16/exo-browseIcon.png') no-repeat ;
