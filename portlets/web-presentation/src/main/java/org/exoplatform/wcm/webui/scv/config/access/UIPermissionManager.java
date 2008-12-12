@@ -57,7 +57,7 @@ public class UIPermissionManager extends UIContainer {
     UIPopupWindow uiPopup = getChildById(UIPermissionSetting.POPUP_SELECT);
     if (uiPopup == null) {
       uiPopup = addChild(UIPopupWindow.class, null, UIPermissionSetting.POPUP_SELECT);
-      uiPopup.setWindowSize(665, 450);
+      uiPopup.setWindowSize(800, 450);
     } else {
       uiPopup.setRendered(true);
     }
