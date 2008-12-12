@@ -79,7 +79,7 @@ public class UINameWebContentForm extends UIForm {
   public static final String NAME_WEBCONTENT    = "name".intern();
   public static final String SUMMARY_WEBCONTENT = "summary".intern();
   public static final String FIELD_SELECT = "selectTemplate".intern();
-  private String pictureCSS;
+  private String pictureDescribe;
 
   public UINameWebContentForm() throws Exception {
     addUIFormInput(new UIFormStringInput(NAME_WEBCONTENT, NAME_WEBCONTENT, null).addValidator(
@@ -106,7 +106,7 @@ public class UINameWebContentForm extends UIForm {
     UIFormSelectBox templateSelect = new UIFormSelectBox(FIELD_SELECT, FIELD_SELECT, options) ;
     templateSelect.setOnChange("ChangeTemplateType");
     templateSelect.setDefaultValue("exo:webContent");
-    setPictureCSS("exo_webContent");
+    setPictureDescribe("exo_webContent");
     addUIFormInput(templateSelect) ;
   }
 
@@ -121,7 +121,7 @@ public class UINameWebContentForm extends UIForm {
     UIFormSelectBox templateSelect = getChild(UIFormSelectBox.class);
     templateSelect.setOnChange("ChangeTemplateType");
     templateSelect.setDefaultValue("exo:webContent");
-    setPictureCSS("exo_webContent");
+    setPictureDescribe("exo_webContent");
   }
 
   public Node getNode() throws Exception {
@@ -142,13 +142,6 @@ public class UINameWebContentForm extends UIForm {
     return uiPortletConfig.isNewConfig();
   }
 
-  public String getPictureCSS() {
-    return pictureCSS;
-  }
-
-  public void setPictureCSS(String pictureCSS) {
-    this.pictureCSS = pictureCSS;
-  }
 
   public static class SaveActionListener extends EventListener<UINameWebContentForm> {
     public void execute(Event<UINameWebContentForm> event) throws Exception {
@@ -246,14 +239,23 @@ public class UINameWebContentForm extends UIForm {
     public void execute(Event<UINameWebContentForm> event) throws Exception {
       UINameWebContentForm uiNameWebContentForm = event.getSource();
       String contentType = uiNameWebContentForm.getUIFormSelectBox(FIELD_SELECT).getValue();
-      if (contentType.equals("exo:webContent")) {
-        uiNameWebContentForm.setPictureCSS("exo_webContent");
-      } else if (contentType.equals("exo:twoColumnsWebcontent")) {
-        uiNameWebContentForm.setPictureCSS("exo_twoColumnsWebcontent");
-      } else {
-        uiNameWebContentForm.setPictureCSS("exo_pictureOnHeadWebcontent");
-      }
+//      if (contentType.equals("exo:webContent")) {
+//        uiNameWebContentForm.setPictureCSS("exo_webContent");
+//      } else if (contentType.equals("exo:twoColumnsWebcontent")) {
+//        uiNameWebContentForm.setPictureCSS("exo_twoColumnsWebcontent");
+//      } else {
+//        uiNameWebContentForm.setPictureCSS("exo_pictureOnHeadWebcontent");
+//      }
+      uiNameWebContentForm.setPictureDescribe(contentType.replace(":", "_"));
     }
+  }
+
+  public String getPictureDescribe() {
+    return pictureDescribe;
+  }
+
+  public void setPictureDescribe(String pictureDescribe) {
+    this.pictureDescribe = pictureDescribe;
   }
 
 }
