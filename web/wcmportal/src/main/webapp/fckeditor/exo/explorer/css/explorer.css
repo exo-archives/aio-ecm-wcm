@@ -85,6 +85,7 @@ a {
 	background: url('../images/TreePlus18x16.gif') no-repeat 5px top;
 	height: auto;
 	padding-left: 23px;
+	border: 1px solid white;
 }
 
 .Tree .IconClose {
