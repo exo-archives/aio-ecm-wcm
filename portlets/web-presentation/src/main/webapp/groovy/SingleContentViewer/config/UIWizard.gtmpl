@@ -1,4 +1,6 @@
-<div class="UIWizard" id="$uicomponent.id">
+<div style="height: 0px;"><div style="width: 500px;" ><span style="display: none;"></span></div></div>
+<div class="UIWizard" id="$uicomponent.id" 
+style="!width: expression(this.previousSibling.offsetWidth - 2 + 'px'); margin: auto; min-width: 700px;">
 	<div class="PageDecoratorContent">
 		<div class="WizardDecorator">
 			<div class="WizardTopLeft">

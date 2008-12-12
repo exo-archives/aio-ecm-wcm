@@ -3,8 +3,8 @@
 } 
 
 #UIContainer-DefaultPortalContainer .UITableColumnContainer {
-	width: 99%;
-	position: relative;
+	_width: 99%;
+	_position: relative;
 }
 
 #UIContainer-DefaultPortalContainer .UIContainer {

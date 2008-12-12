@@ -2,54 +2,23 @@
 
 }
 
-.UIParameterizedContentViewerPortlet .UIContentViewerContainer {
-
+.UIParameterizedContentViewerPortlet .ContentViewerBar {
+	background: url(DefaultSkin/images/BgViewerBar.png) repeat-x top center;
+	padding: 0px 0px 5px 15px;
+	height: 30px;
 }
 
-.UIParameterizedContentViewerPortlet .UIContentViewerContainer .ContentViewerBar .LeftBar {
-	background: url(DefaultSkin/images/LeftBar.gif) no-repeat left;
-	padding-left: 2px;
-}
-
-.UIParameterizedContentViewerPortlet .UIContentViewerContainer .ContentViewerBar .RightBar {
-	background: url(DefaultSkin/images/RightBar.gif) no-repeat right;
-	padding-right: 2px;
-}
-
-.UIParameterizedContentViewerPortlet .UIContentViewerContainer .ContentViewerBar .CenterBar {
-	background: url(DefaultSkin/images/CenterBar.gif) repeat-x center;
-	height: 33px;
-}
-
-.UIParameterizedContentViewerPortlet .UIContentViewerContainer .ContentViewerBar .LeftButton {
-	background: url(DefaultSkin/images/LeftButton.gif) no-repeat left;
-	padding-left: 9px;
-	float: left;
-	margin: 5px 0px 0px 8px;
-}
-
-.UIParameterizedContentViewerPortlet .UIContentViewerContainer .ContentViewerBar .RightButton {
-	background: url(DefaultSkin/images/RightButton.gif) no-repeat right;
-	padding-right: 9px;
-}
-
-.UIParameterizedContentViewerPortlet .UIContentViewerContainer .ContentViewerBar .CenterButton {
-	background: url(DefaultSkin/images/CenterButton.gif) repeat-x center;
-	height: 24px;
-	padding: 0px 8px;
+.UIParameterizedContentViewerPortlet .ContentViewerBar .BackButton {
+	background: url(DefaultSkin/images/BackIcon.gif) no-repeat center;
+	width: 30px; height: 30px;
 	cursor: pointer;
-}
-
-.UIParameterizedContentViewerPortlet .UIContentViewerContainer .ContentViewerBar .BackIcon{
-	background: url(DefaultSkin/images/BackIcon.gif) no-repeat left center;
-	padding-left: 20px;
-	font-weight: bold;
-	line-height: 22px;
+	float: left;
+	margin-top: 5px;
 }
 
 .UIParameterizedContentViewerPortlet .UIContentViewerContainer .ContentViewerBar .DocumentQuickEdit {
-	background: url('DefaultSkin/images/quickDocumentEdit.png') no-repeat right top;
-	height:50px;
-	width: 50px;	
+	background: url('DefaultSkin/images/quickEdit.png') no-repeat right top;
+	height: 30px;
+	width: 65px;	
 	float: right;
 }

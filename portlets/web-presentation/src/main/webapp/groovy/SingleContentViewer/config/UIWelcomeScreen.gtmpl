@@ -9,7 +9,9 @@
  	rcontext.getJavascriptManager().importJavascript('eXo.webpresentation.Utils','/web-presentation/javascript');
 	rcontext.getJavascriptManager().addOnLoadJavascript('eXo.wcm.removeQuickeditingBlock("' + portletId + '","' + quickEditingBlockId + '")');
 %>
-<div class="$uicomponent.id">
+<div style="height: 0px;"><div style="width: 500px;" ><span style="display: none;"></span></div></div>
+<div class="$uicomponent.id"
+	style="!width: expression(this.previousSibling.offsetWidth - 2 + 'px'); margin: auto; min-width: 500px;" >
   <%uiform.begin()%>
   <div class="HorizontalLayout">
   	<div class="LeftColumn"><span></span></div>

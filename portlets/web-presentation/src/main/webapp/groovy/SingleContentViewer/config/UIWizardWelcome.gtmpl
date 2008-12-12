@@ -1,4 +1,6 @@
-<div class="UIWizardWelcome">
+<div style="height: 0px;"><div style="width: 675px;" ><span style="display: none;"></span></div></div>
+<div class="UIWizardWelcome"
+	style="!width: expression(this.previousSibling.offsetWidth - 2 + 'px'); margin: auto; min-width: 675px;">
 	<div class="WelcomeText"><b><%=_ctx.appRes("UIWizardWelcome.WelcomeLabel")%></b>
 	  <br><%=_ctx.appRes("UIWizardWelcome.WelcomeText")%></br>
 	</div>
