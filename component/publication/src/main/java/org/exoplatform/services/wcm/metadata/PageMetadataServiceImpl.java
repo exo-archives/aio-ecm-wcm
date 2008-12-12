@@ -17,32 +17,18 @@
 package org.exoplatform.services.wcm.metadata;
 
 import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 import javax.jcr.Node;
-import javax.jcr.NodeIterator;
-import javax.jcr.Session;
-import javax.jcr.Value;
 import javax.jcr.nodetype.NodeType;
 import javax.jcr.nodetype.PropertyDefinition;
-import javax.jcr.query.Query;
-import javax.jcr.query.QueryManager;
 
 import org.apache.commons.logging.Log;
-import org.exoplatform.services.cache.CacheService;
-import org.exoplatform.services.cache.ExoCache;
 import org.exoplatform.services.cms.categories.CategoriesService;
 import org.exoplatform.services.cms.folksonomy.FolksonomyService;
-import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.config.RepositoryEntry;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
-import org.exoplatform.services.wcm.core.NodeLocation;
-import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
-import org.picocontainer.Startable;
 
 /**
  * Created by The eXo Platform SAS
@@ -50,49 +36,24 @@ import org.picocontainer.Startable;
  *          hoa.phamvu@exoplatform.com
  * Nov 3, 2008  
  */
-public class PageMetadataServiceImpl implements PageMetadataService, Startable {
-  private static Log log = ExoLogger.getLogger(PageMetadataServiceImpl.class); 
-  private CopyOnWriteArraySet<String> publishingNavigationNodeURIs = new CopyOnWriteArraySet<String>();  
-  private ExoCache pageMetadataCache;   
-  private RepositoryService repositoryService;
-  private LivePortalManagerService livePortalManagerService;
-  private WCMConfigurationService configurationService;
+public class PageMetadataServiceImpl implements PageMetadataService {
+  private static Log log = ExoLogger.getLogger(PageMetadataServiceImpl.class);
+  
+  private LivePortalManagerService livePortalManagerService; 
   private CategoriesService categoriesService;
   private FolksonomyService folksonomyService;
-  public PageMetadataServiceImpl(RepositoryService repositoryService, LivePortalManagerService livePortalManagerService, 
-      WCMConfigurationService configurationService,CacheService cacheService, CategoriesService categoriesService, FolksonomyService folksonomyService) throws Exception {
-    this.repositoryService = repositoryService;
-    this.pageMetadataCache = cacheService.getCacheInstance(PageMetadataServiceImpl.class.getName());
-    this.livePortalManagerService = livePortalManagerService;
-    this.configurationService = configurationService;
+  public PageMetadataServiceImpl(LivePortalManagerService livePortalManagerService, CategoriesService categoriesService, FolksonomyService folksonomyService) throws Exception {        
+    this.livePortalManagerService = livePortalManagerService;    
     this.categoriesService = categoriesService;
     this.folksonomyService = folksonomyService;
-  }    
-
-  public Map<String,String> getMetadata(String pageUri,SessionProvider sessionProvider) throws Exception {
-    HashMap<String,String> metadata = (HashMap<String,String>)pageMetadataCache.get(pageUri);
-    if(metadata != null) return metadata;
-    if(!publishingNavigationNodeURIs.contains(pageUri)) 
-      return null;
-    Node content = findNodeByNavigationNodeURI(pageUri,sessionProvider);
-    if(content == null)
-      return metadata;
-    metadata = extractMetadata(content);
-    addMetadata(pageUri,metadata);
-    return metadata;
-  }
-
+  }      
+  
   public HashMap<String, String> getPortalMetadata(String uri, SessionProvider sessionProvider)
   throws Exception {
-    String portalName = uri.split("/")[1];
-    HashMap<String,String> metadata = (HashMap<String,String>)pageMetadataCache.get("/"+portalName);
-    if(metadata != null)
-      return metadata;
+    String portalName = uri.split("/")[1];      
     try {
       Node portal = livePortalManagerService.getLivePortal(portalName,sessionProvider);
-      metadata = extractPortalMetadata(portal);
-      addMetadata("/" + portalName,metadata);
-      return metadata;
+      return extractPortalMetadata(portal);      
     } catch (Exception e) {
     }       
     return null;
@@ -108,24 +69,8 @@ public class PageMetadataServiceImpl implements PageMetadataService, Startable {
         metadata.put(metadataName,metadataValue);              
     }
     return metadata;
-  }
-
-  private Node findNodeByNavigationNodeURI(String uri, SessionProvider sessionProvider) throws Exception {
-    ManageableRepository manageableRepository = repositoryService.getCurrentRepository();
-    String repository = manageableRepository.getConfiguration().getName();
-    NodeLocation storageLocation = configurationService.getLivePortalsLocation(repository);
-    String queryStatement = "select * from publication:webpagesPublication where jcr:path like '" +
-    storageLocation.getPath() + "/%' and publication:currentState='Published' and publication:navigationNodeURIs like '" + uri + "'";
-    Session session = sessionProvider.getSession(storageLocation.getWorkspace(),manageableRepository);
-    QueryManager queryManager = session.getWorkspace().getQueryManager();
-    Query query = queryManager.createQuery(queryStatement,Query.SQL);    
-    NodeIterator nodeIterator = query.execute().getNodes();
-    if(nodeIterator.getSize() == 0)
-      return null;
-    return nodeIterator.nextNode();
-  }
-
-
+  }  
+  
   public HashMap<String, String> extractMetadata(Node node) throws Exception {
     HashMap<String, String> medatata = new HashMap<String,String>();
     Node portalNode = findPortal(node);    
@@ -179,54 +124,5 @@ public class PageMetadataServiceImpl implements PageMetadataService, Startable {
     } catch (Exception e) {
     }
     return null;
-  }
-
-  public void addMetadata(String pageURI, HashMap<String, String> metadata) throws Exception {
-    publishingNavigationNodeURIs.add(pageURI);
-    pageMetadataCache.put(pageURI,metadata);
-  }
-
-  public void removeMetadata(String pageURI) throws Exception {
-    publishingNavigationNodeURIs.remove(pageURI);
-    pageMetadataCache.remove(pageURI);
-  }
-
-  private void initialize(String repoName, SessionProvider sessionProvider) throws Exception {    
-    NodeLocation siteContentStorage = configurationService.getLivePortalsLocation(repoName);
-    String queryStatement = "select * from publication:webpagesPublication where jcr:path like '" +
-    siteContentStorage.getPath() + "/%' and publication:currentState='Published'";
-    ManageableRepository manageableRepository = repositoryService.getRepository(repoName);
-    Session session = sessionProvider.getSession(siteContentStorage.getWorkspace(),manageableRepository);
-    QueryManager queryManager = session.getWorkspace().getQueryManager();
-    Query query = queryManager.createQuery(queryStatement,Query.SQL);
-    for(NodeIterator iterator = query.execute().getNodes();iterator.hasNext();) {
-      Node node = iterator.nextNode();
-      if(!node.hasProperty("publication:navigationNodeURIs")) 
-        continue;
-      Value[]values = node.getProperty("publication:navigationNodeURIs").getValues();
-      if(values.length == 0)
-        continue;        
-      HashMap<String,String> metadata = extractMetadata(node);
-      for(Value value: values) {
-        addMetadata(value.getString(),metadata);
-      }
-    }    
-  }
-
-  public void start() {
-    log.info("Starting PageMetadataService...");
-    SessionProvider sessionProvider = SessionProvider.createSystemProvider();
-    for(RepositoryEntry repositoryEntry : repositoryService.getConfig().getRepositoryConfigurations()) {
-      try {
-        initialize(repositoryEntry.getName(),sessionProvider);
-      } catch (Exception e) {
-        log.error("Exception when initialize metadata for reoisitory: "+ repositoryEntry.getName(),e);
-      }
-    }
-    sessionProvider.close();
-  }
-
-  public void stop() {
-    log.info("Stoping PageMetadataService...");
-  }          
+  }               
 }

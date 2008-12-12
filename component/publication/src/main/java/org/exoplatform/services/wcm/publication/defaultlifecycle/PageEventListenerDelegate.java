@@ -143,13 +143,10 @@ public class PageEventListenerDelegate {
     List<String> listPageNavigationUri = publicationPlugin.getListPageNavigationUri(page);
     if (listPageNavigationUri.isEmpty())  {
       return ;
-    }
-    PageMetadataService pageMetadataService = Util.getServices(PageMetadataService.class);    
-    HashMap<String,String> pageMetadata = pageMetadataService.extractMetadata(content);    
+    }            
     for (String uri : listPageNavigationUri) {
       if(!listExistedNavigationNodeUri.contains(uri)) {
-        listExistedNavigationNodeUri.add(uri);           
-        pageMetadataService.addMetadata(uri,pageMetadata);        
+        listExistedNavigationNodeUri.add(uri);                           
       }            
       nodeURILogs += uri + Util.HISTORY_SEPARATOR;
     }                   
@@ -187,12 +184,10 @@ public class PageEventListenerDelegate {
     List<String> listPageNavigationUri = publicationPlugin.getListPageNavigationUri(page);
     List<String> listExistedNavigationNodeUri = Util.getValuesAsString(content, "publication:navigationNodeURIs");
     List<String> listExistedNavigationNodeUriTmp = new ArrayList<String>();
-    listExistedNavigationNodeUriTmp.addAll(listExistedNavigationNodeUri);
-    PageMetadataService pageMetadataService = Util.getServices(PageMetadataService.class);
+    listExistedNavigationNodeUriTmp.addAll(listExistedNavigationNodeUri);    
     for (String existedNavigationNodeUri : listExistedNavigationNodeUriTmp) {
       if (listPageNavigationUri.contains(existedNavigationNodeUri)) {
-        listExistedNavigationNodeUri.remove(existedNavigationNodeUri);
-        pageMetadataService.removeMetadata(existedNavigationNodeUri);
+        listExistedNavigationNodeUri.remove(existedNavigationNodeUri);        
       }
     }
     content.setProperty("publication:navigationNodeURIs", Util.toValues(valueFactory, listExistedNavigationNodeUri));

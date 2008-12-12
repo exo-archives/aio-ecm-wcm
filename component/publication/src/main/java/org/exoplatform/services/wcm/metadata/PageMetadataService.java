@@ -17,7 +17,6 @@
 package org.exoplatform.services.wcm.metadata;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import javax.jcr.Node;
 
@@ -44,26 +43,7 @@ public interface PageMetadataService {
   public final static String SITE_TITLE = "siteTitle";  
   
   /** The Constant eXO Metatag PAGE_TITLE. */
-  public final static String PAGE_TITLE = "pageTitle";
-  
-  /**
-   * store the metadata information for a pageURI
-   * 
-   * @param pageURI the page uri
-   * @param metadata the metadata
-   * 
-   * @throws Exception the exception
-   */
-  public void addMetadata(String pageURI, HashMap<String,String> metadata) throws Exception;  
-  
-  /**
-   * Removes the metadata information for a page
-   * 
-   * @param pageURI the page uri
-   * 
-   * @throws Exception the exception
-   */
-  public void removeMetadata(String pageURI) throws Exception; 
+  public final static String PAGE_TITLE = "pageTitle";     
   
   /**
    * Extract metadata information from node
@@ -75,18 +55,6 @@ public interface PageMetadataService {
    * @throws Exception the exception
    */
   public HashMap<String, String> extractMetadata(Node node) throws Exception;
-  
-  /**
-   * Gets the metadata.
-   * 
-   * @param pageURI the page uri
-   * @param sessionProvider the session provider
-   * 
-   * @return the metadata
-   * 
-   * @throws Exception the exception
-   */
-  public Map<String,String> getMetadata(String pageURI, SessionProvider sessionProvider) throws Exception ;
   
   /**
    * Retrieves  the portal metadata information for each request uri

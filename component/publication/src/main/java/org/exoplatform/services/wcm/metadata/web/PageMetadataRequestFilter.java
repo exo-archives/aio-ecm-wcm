@@ -77,9 +77,7 @@ public class PageMetadataRequestFilter implements Filter {
   throws IOException, ServletException {
     HttpServletRequest req = (HttpServletRequest) servletRequest;
     try {
-      boolean check = checkAndSetMetadataIfRequestToPCVPortlet(req);
-      if(!check)
-        checkAndSetMetadataIfRequestToSCVPortlet(req);
+      boolean check = checkAndSetMetadataIfRequestToPCVPortlet(req);      
       if(!check)
         setPortalMetadata(req);
     } catch (Exception e) {      
@@ -101,34 +99,7 @@ public class PageMetadataRequestFilter implements Filter {
     HashMap<String,String> metadata = metadataRegistry.getPortalMetadata(pathInfo,localSessionProviderService.getSessionProvider(null));
     if(metadata != null) 
       req.setAttribute(PortalRequestContext.REQUEST_METADATA,metadata);
-  }
-  
-  /**
-   * Check and set metadata if request to scv portlet.
-   * 
-   * @param req the req
-   * 
-   * @return true, if successful
-   * 
-   * @throws Exception the exception
-   */
-  private boolean checkAndSetMetadataIfRequestToSCVPortlet(HttpServletRequest req) throws Exception {
-    String pathInfo = req.getPathInfo();    
-    PageMetadataService metadataRegistry = getService(PageMetadataService.class);      
-    ThreadLocalSessionProviderService localSessionProviderService = getService(ThreadLocalSessionProviderService.class);
-    SessionProvider sessionProvider = localSessionProviderService.getSessionProvider(null);
-    Map<String,String> pageMetadata = metadataRegistry.getMetadata(pathInfo,sessionProvider);        
-    if(pageMetadata == null || pageMetadata.isEmpty()) {
-      return false;
-    }                 
-    String pageTitle = pageMetadata.get(PageMetadataService.PAGE_TITLE);
-    if(pageTitle != null) {      
-      req.setAttribute(PortalRequestContext.REQUEST_TITLE,pageTitle);      
-    }    
-    req.setAttribute(PortalRequestContext.REQUEST_METADATA,pageMetadata);          
-    return true;
-  }  
-
+  }    
   /**
    * Check and set metadata if request to pcv portlet.
    * 

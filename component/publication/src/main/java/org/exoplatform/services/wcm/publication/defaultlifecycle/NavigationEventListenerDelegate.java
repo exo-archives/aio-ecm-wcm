@@ -164,16 +164,13 @@ public class NavigationEventListenerDelegate {
 
     List<String> listExistedApplicationId = Util.getValuesAsString(content, "publication:applicationIDs");
     String mixedApplicationId = Util.setMixedApplicationId(pageNode.getPageReference(), applicationId);
-    if(listExistedApplicationId.contains(mixedApplicationId)) return ;
-    PageMetadataService metadataService = Util.getServices(PageMetadataService.class);   
-    HashMap<String,String> metadata = metadataService.extractMetadata(content); 
+    if(listExistedApplicationId.contains(mixedApplicationId)) return ;        
     listExistedApplicationId.add(mixedApplicationId);
     content.setProperty("publication:applicationIDs", Util.toValues(valueFactory, listExistedApplicationId));
 
     List<String> listExistedNavigationNodeUri = Util.getValuesAsString(content, "publication:navigationNodeURIs");    
     String mixedNavigationNodeUri = Util.setMixedNavigationUri(portalName, pageNode.getUri());
-    listExistedNavigationNodeUri.add(mixedNavigationNodeUri);
-    metadataService.addMetadata(mixedNavigationNodeUri,metadata);
+    listExistedNavigationNodeUri.add(mixedNavigationNodeUri);    
     String nodeURILogs = mixedNavigationNodeUri + Util.HISTORY_SEPARATOR;
     content.setProperty("publication:navigationNodeURIs", Util.toValues(valueFactory, listExistedNavigationNodeUri));
 
@@ -195,11 +192,9 @@ public class NavigationEventListenerDelegate {
     ValueFactory valueFactory = session.getValueFactory();
 
     List<String> listExistedNavigationNodeUri = Util.getValuesAsString(content, "publication:navigationNodeURIs");
-    List<String> listExistedNavigationNodeUriTmp = Util.getValuesAsString(content, "publication:navigationNodeURIs");
-    PageMetadataService metadataService = Util.getServices(PageMetadataService.class);
+    List<String> listExistedNavigationNodeUriTmp = Util.getValuesAsString(content, "publication:navigationNodeURIs");    
     if (listExistedNavigationNodeUri.contains(navigationNodeUri)) {
-      listExistedNavigationNodeUriTmp.remove(navigationNodeUri);      
-      metadataService.removeMetadata(navigationNodeUri);
+      listExistedNavigationNodeUriTmp.remove(navigationNodeUri);            
     }
     content.setProperty("publication:navigationNodeURIs", Util.toValues(valueFactory, listExistedNavigationNodeUriTmp));
 
