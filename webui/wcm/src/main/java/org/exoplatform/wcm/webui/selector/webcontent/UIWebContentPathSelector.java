@@ -25,6 +25,7 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.core.UIPopupComponent;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 
 /**
@@ -33,7 +34,7 @@ import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
  * @author : Hoa.Pham hoa.pham@exoplatform.com Jun 23, 2008
  */
 @ComponentConfig(lifecycle = UIContainerLifecycle.class)
-public class UIWebContentPathSelector extends UIBaseNodeTreeSelector {
+public class UIWebContentPathSelector extends UIBaseNodeTreeSelector implements UIPopupComponent{
   /**
    * Instantiates a new uI web content path selector.
    * 
@@ -73,5 +74,15 @@ public class UIWebContentPathSelector extends UIBaseNodeTreeSelector {
     UISelectPathPanel selectPathPanel = getChild(UISelectPathPanel.class);
     selectPathPanel.setParentNode(node);
     selectPathPanel.updateGrid();
+  }
+
+  public void activate() throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
+
+  public void deActivate() throws Exception {
+    // TODO Auto-generated method stub
+    
   }
 }

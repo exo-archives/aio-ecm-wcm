@@ -29,6 +29,7 @@ import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.core.UIPopupComponent;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 
 /**
@@ -38,7 +39,7 @@ import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
  * Sep 3, 2008  
  */
 @ComponentConfig(lifecycle = UIContainerLifecycle.class)
-public class UIDocumentPathSelector extends UIBaseNodeTreeSelector {
+public class UIDocumentPathSelector extends UIBaseNodeTreeSelector implements UIPopupComponent{
 
   public UIDocumentPathSelector() throws Exception {
     addChild(UIDocumentTreeBuilder.class, null, UIDocumentTreeBuilder.class.getSimpleName() + hashCode());
@@ -70,5 +71,15 @@ public class UIDocumentPathSelector extends UIBaseNodeTreeSelector {
     UISelectPathPanel uiSelectPathPanel = getChild(UISelectPathPanel.class);
     uiSelectPathPanel.setParentNode(node);
     uiSelectPathPanel.updateGrid();
+  }
+
+  public void activate() throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
+
+  public void deActivate() throws Exception {
+    // TODO Auto-generated method stub
+    
   }
 }

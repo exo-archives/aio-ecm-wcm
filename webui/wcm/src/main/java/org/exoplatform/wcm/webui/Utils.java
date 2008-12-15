@@ -16,10 +16,14 @@
  */
 package org.exoplatform.wcm.webui;
 
+import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
+import org.exoplatform.services.security.Identity;
+import org.exoplatform.services.security.IdentityRegistry;
+import org.exoplatform.services.security.MembershipEntry;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 
 /**
@@ -43,4 +47,14 @@ public class Utils {
     context.getJavascriptManager().addJavascript("location.reload();");
   }
   
+  public static boolean canEditCurrentPortal(String remoteUser) throws Exception {
+    if(remoteUser == null) return false;
+    IdentityRegistry identityRegistry = Util.getUIPortalApplication().getApplicationComponent(IdentityRegistry.class);        
+    Identity identity = identityRegistry.getIdentity(remoteUser);
+    if(identity == null) return false;
+    UIPortal uiPortal = Util.getUIPortal();
+    String editPermission = uiPortal.getEditPermission();
+    MembershipEntry membershipEntry = MembershipEntry.parse(editPermission);    
+    return identity.isMemberOf(membershipEntry);
+  }
 }
