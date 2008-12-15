@@ -23,7 +23,7 @@
                       <field  name="tabName"><string>Advanced Actions</string></field>
                       <field  name="buttons">
                       	<string>
-                      		viewPermissions; manageVersions; exportNode; importNode; manageCategories; taggingDocument; vote; Comment
+                      		viewMetadatas; viewPermissions; viewProperties; manageVersions; exportNode; importNode; manageCategories; taggingDocument; vote; Comment
                       	</string>
                       </field>
                     </object>
