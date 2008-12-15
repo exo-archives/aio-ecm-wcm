@@ -16,11 +16,9 @@
  */
 package org.exoplatform.wcm.webui.scv.config;
 
-import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
 import org.exoplatform.services.wcm.core.NodeIdentifier;
-import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
 import org.exoplatform.wcm.webui.scv.config.social.UISocialInfo;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -123,9 +121,7 @@ public class UIQuickCreationWizard extends UIBaseWizard {
 
   public static class CompleteActionListener extends EventListener<UIQuickCreationWizard> {
     public void execute(Event<UIQuickCreationWizard> event) throws Exception {
-      UIQuickCreationWizard uiQuickCreationWizard = event.getSource();
-      UISocialInfo uiSocialInfo = uiQuickCreationWizard.getChild(UISocialInfo.class);
-      UIMiscellaneousInfo uiMiscellaneousInfo = uiSocialInfo.getChild(UIMiscellaneousInfo.class);
+      UIQuickCreationWizard uiQuickCreationWizard = event.getSource();            
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
       PortletPreferences prefs = context.getRequest().getPreferences();
       UIContentDialogForm uiContentDialogForm = uiQuickCreationWizard.getChild(UIContentDialogForm.class);
@@ -134,14 +130,8 @@ public class UIQuickCreationWizard extends UIBaseWizard {
       prefs.setValue(UISingleContentViewerPortlet.WORKSPACE, identifier.getWorkspace());
       prefs.setValue(UISingleContentViewerPortlet.IDENTIFIER, identifier.getUUID());
       prefs.store();      
-      UIPortletConfig uiPortletConfig = uiQuickCreationWizard.getAncestorOfType(UIPortletConfig.class);
-      if(uiPortletConfig.isEditPortletInCreatePageWizard()) {
-        uiPortletConfig.getChildren().clear();
-        uiPortletConfig.addUIWelcomeScreen();
-      } else {        
-        context.setApplicationMode(PortletMode.VIEW);
-        Utils.refreshBrowser(context);
-      }
+      UIPortletConfig uiPortletConfig = uiQuickCreationWizard.getAncestorOfType(UIPortletConfig.class);     
+      uiPortletConfig.closePopupAndUpdateUI(context,true);
     }
   }
 }

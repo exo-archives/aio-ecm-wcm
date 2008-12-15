@@ -35,11 +35,12 @@ import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.wcm.webui.scv.config.UIPortletConfig;
+import org.exoplatform.wcm.webui.scv.config.UIStartEditionInPageWizard;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 import org.exoplatform.webui.event.Event;
@@ -54,10 +55,7 @@ import org.exoplatform.webui.event.EventListener;
 
 @ComponentConfig(
     lifecycle = UIApplicationLifecycle.class,
-    template = "app:/groovy/SingleContentViewer/UISingleContentViewerPortlet.gtmpl",
-    events = {
-      @EventConfig(listeners = UISingleContentViewerPortlet.QuickEditActionListener.class)
-    }
+    template = "app:/groovy/SingleContentViewer/UISingleContenViewerPortlet.gtmlp"
 )
 
 public class UISingleContentViewerPortlet extends UIPortletApplication {
@@ -68,17 +66,26 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
 
   private PortletMode mode_ = PortletMode.VIEW ;
 
-  public UISingleContentViewerPortlet() throws Exception {
+  public UISingleContentViewerPortlet() throws Exception {    
     activateMode(mode_) ;
   }
 
   public void activateMode(PortletMode mode) throws Exception {
-    getChildren().clear() ;
+    getChildren().clear() ;    
+    addChild(UIPopupContainer.class, null, null);
     if(PortletMode.VIEW.equals(mode)) {
-      addChild(UIPresentationContainer.class, null, UIPortletApplication.VIEW_MODE) ;
-    } else if (PortletMode.EDIT.equals(mode)) {      
-      UIPortletConfig portletConfig = addChild(UIPortletConfig.class, null, UIPortletApplication.EDIT_MODE) ;
+      addChild(UIPresentationContainer.class, null, UIPortletApplication.VIEW_MODE);
+    } else if (PortletMode.EDIT.equals(mode)) {
+      UIPopupContainer maskPopupContainer = getChild(UIPopupContainer.class);
+      UIStartEditionInPageWizard portletEditMode = createUIComponent(UIStartEditionInPageWizard.class,null,null);
+      addChild(portletEditMode);
+      UIPortletConfig portletConfig = portletEditMode.createUIComponent(UIPortletConfig.class,null,null);      
+      portletEditMode.addChild(portletConfig);
       portletConfig.init();
+      portletConfig.setRendered(true);      
+      maskPopupContainer.activate(portletConfig,1024,768);
+      PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
+      portletRequestContext.addUIComponentToUpdateByAjax(maskPopupContainer);
     }
   }
 
@@ -144,9 +151,8 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
   }
 
   public static class QuickEditActionListener extends EventListener<UISingleContentViewerPortlet> {
-    public void execute(Event<UISingleContentViewerPortlet> event) throws Exception {
-      PortletRequestContext context = (PortletRequestContext)event.getRequestContext();
-      context.setApplicationMode(PortletMode.EDIT);
+    public void execute(Event<UISingleContentViewerPortlet> event) throws Exception {            
+      //TODO
     }
   }
 }

@@ -23,6 +23,7 @@ import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
 import org.exoplatform.wcm.webui.scv.config.quickedition.UIQuickEditContainer;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -30,6 +31,8 @@ import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
+import org.exoplatform.webui.core.UIPopupComponent;
+import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 /**
  * Created by The eXo Platform SAS
@@ -40,7 +43,7 @@ import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 @ComponentConfig (
     lifecycle = UIContainerLifecycle.class
 )
-public class UIPortletConfig extends UIContainer {
+public class UIPortletConfig extends UIContainer implements UIPopupComponent{
 
   private UIComponent uiBackComponent;
   private boolean isNewConfig;
@@ -54,7 +57,11 @@ public class UIPortletConfig extends UIContainer {
     if(!uiPresentationPortlet.canEditPortlet()) {     
       addChild(UINonEditable.class, null, null);
       return;
-    }     
+    }    
+    if(Utils.isEditPortletInCreatePageWizard()) {
+      addUIWelcomeScreen();
+      return;
+    }    
     try{
       Node node = uiPresentationPortlet.getReferencedContent();
       if(uiPresentationPortlet.canEditContent(node)) {
@@ -75,7 +82,7 @@ public class UIPortletConfig extends UIContainer {
   public boolean isQuickEditable() throws Exception {
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     PortletPreferences prefs = portletRequestContext.getRequest().getPreferences();
-    boolean isQuickEdit = Boolean.parseBoolean(prefs.getValue("ShowQuickEdit", null));
+    boolean isQuickEdit = Boolean.parseBoolean(prefs.getValue("ShowQuickEdit", null));        
     UISingleContentViewerPortlet uiPresentationPortlet = getAncestorOfType(UISingleContentViewerPortlet.class);
     if (isQuickEdit) return uiPresentationPortlet.canEditPortlet();
     return false;
@@ -110,5 +117,21 @@ public class UIPortletConfig extends UIContainer {
     // show maskworkpace is being in Portal page edit mode    
     if(uiMaskWS.getWindowWidth() > 0 && uiMaskWS.getWindowHeight() < 0) return true;
     return false;
+  }
+
+  public void closePopupAndUpdateUI(WebuiRequestContext requestContext,boolean isUpdate) throws Exception {    
+    UISingleContentViewerPortlet uiPresentationPortlet = getAncestorOfType(UISingleContentViewerPortlet.class);    
+    UIPopupContainer popupAction = uiPresentationPortlet.getChild(UIPopupContainer.class) ;
+    popupAction.deActivate() ;                
+    requestContext.addUIComponentToUpdateByAjax(popupAction) ;
+    if(isUpdate && !isEditPortletInCreatePageWizard()) {
+      Utils.refreshBrowser((PortletRequestContext)requestContext);
+    }
+  }
+
+  public void activate() throws Exception {    
+  }
+
+  public void deActivate() throws Exception {    
   }
 }

@@ -16,13 +16,15 @@
  */
 package org.exoplatform.wcm.webui.scv.config;
 
+import org.exoplatform.portal.webui.container.UIContainer;
+import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
+import org.exoplatform.webui.core.UIPopupContainer;
+import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-import org.exoplatform.webui.form.UIForm;
 
 /**
  * Created by The eXo Platform SAS
@@ -32,17 +34,23 @@ import org.exoplatform.webui.form.UIForm;
  */
 
 @ComponentConfig(
-    lifecycle = UIFormLifecycle.class,
-    template = "app:/groovy/SingleContentViewer/config/UINonEditable.gtmpl",
+    lifecycle = Lifecycle.class,
+    template = "app:/groovy/SingleContentViewer/config/UIStartEditionInPageWizard.gtmpl",
     events= {
-      @EventConfig(listeners = UINonEditable.BackToViewActionListener.class)
+      @EventConfig(name = "Edit", listeners = UIStartEditionInPageWizard.EditPortletActionListener.class)
     }
 )
-public class UINonEditable extends UIForm {
-  public static class BackToViewActionListener extends EventListener<UINonEditable> {
-    public void execute(Event<UINonEditable> event) throws Exception {
+public class UIStartEditionInPageWizard extends UIContainer {
+  
+  public static class EditPortletActionListener extends EventListener<UIStartEditionInPageWizard> {
+    public void execute(Event<UIStartEditionInPageWizard> event) throws Exception {
+      UIStartEditionInPageWizard editMode = event.getSource();
+      UISingleContentViewerPortlet uiportlet = editMode.getAncestorOfType(UISingleContentViewerPortlet.class);
+      UIPopupContainer popupContainer = uiportlet.getChild(UIPopupContainer.class);
+      UIPortletConfig portletConfig = editMode.getChild(UIPortletConfig.class);
+      popupContainer.activate(portletConfig,1024,768);      
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
-      
+      context.addUIComponentToUpdateByAjax(popupContainer);
     }
   }
 }

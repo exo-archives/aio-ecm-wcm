@@ -51,6 +51,7 @@ public class UIQuickEditContainer extends UIContainer {
       UIPortletConfig uiPortletConfig = uiQuickEditContainer.getAncestorOfType(UIPortletConfig.class);
       uiPortletConfig.getChildren().clear();
       uiPortletConfig.addUIWelcomeScreen();
+      
     }
   }
 }

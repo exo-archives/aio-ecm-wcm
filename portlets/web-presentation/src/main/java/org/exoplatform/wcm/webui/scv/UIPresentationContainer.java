@@ -16,10 +16,10 @@
  */
 package org.exoplatform.wcm.webui.scv;
 
-import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
 import org.exoplatform.portal.webui.container.UIContainer;
+import org.exoplatform.wcm.webui.scv.config.UIPortletConfig;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -44,8 +44,8 @@ import org.exoplatform.webui.event.EventListener;
 
 
 public class UIPresentationContainer extends UIContainer{
-  public UIPresentationContainer() throws Exception{
-    addChild(UIPresentation.class, null, null);
+  public UIPresentationContainer() throws Exception{                
+    addChild(UIPresentation.class,null,null);
   }
 
   public boolean isQuickEditable() throws Exception {
@@ -64,10 +64,19 @@ public class UIPresentationContainer extends UIContainer{
 
 
 
-  public static class QuickEditActionListener extends EventListener<UIPresentation>{   
-    public void execute(Event<UIPresentation> event) throws Exception {
-      PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
-      context.setApplicationMode(PortletMode.EDIT);
+  public static class QuickEditActionListener extends EventListener<UIPresentationContainer>{   
+    public void execute(Event<UIPresentationContainer> event) throws Exception {
+      UIPresentationContainer uicomp = event.getSource();
+      UISingleContentViewerPortlet uiportlet = uicomp.getAncestorOfType(UISingleContentViewerPortlet.class);
+      PortletRequestContext context = (PortletRequestContext)event.getRequestContext();      
+      org.exoplatform.webui.core.UIPopupContainer maskPopupContainer = uiportlet.getChild(org.exoplatform.webui.core.UIPopupContainer.class);     
+      UIPortletConfig portletConfig = maskPopupContainer.createUIComponent(UIPortletConfig.class,null,null);
+      uicomp.addChild(portletConfig);
+      portletConfig.init();
+      portletConfig.setRendered(true);      
+      maskPopupContainer.activate(portletConfig,1024,768);      
+      context.addUIComponentToUpdateByAjax(maskPopupContainer);
+  
     }
   }
 

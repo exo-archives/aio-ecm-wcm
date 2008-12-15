@@ -22,14 +22,9 @@ import java.util.List;
 import javax.jcr.Node;
 import javax.jcr.Session;
 
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.cms.categories.CategoriesService;
-import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.wcm.webui.scv.config.UIContentDialogForm;
 import org.exoplatform.wcm.webui.scv.config.UIMiscellaneousInfo;
-import org.exoplatform.wcm.webui.scv.config.UIQuickCreationWizard;
 import org.exoplatform.wcm.webui.scv.config.access.UIPermissionManager;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UITabPane;

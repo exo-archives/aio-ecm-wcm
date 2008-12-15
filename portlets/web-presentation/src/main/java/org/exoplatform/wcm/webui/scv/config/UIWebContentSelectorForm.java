@@ -21,7 +21,6 @@ import java.util.Set;
 
 import javax.jcr.Node;
 import javax.jcr.Session;
-import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
 import org.exoplatform.ecm.webui.selector.UISelectable;
@@ -37,7 +36,6 @@ import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.publication.NotInWCMPublicationException;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.publication.WebpagePublicationPlugin;
-import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
 import org.exoplatform.wcm.webui.scv.config.publication.UIWCMPublicationGrid;
 import org.exoplatform.wcm.webui.selector.webcontent.UIWebContentPathSelector;
@@ -47,7 +45,6 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
-import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
@@ -125,17 +122,16 @@ public class UIWebContentSelectorForm extends UIForm implements UISelectable{
   }   
 
   public void showPopupComponent(UIComponent uiComponent) throws Exception {
-    UIContainer uiParent = getParent();
-    if(uiComponent == null) {
-      uiParent.removeChild(UIPopupWindow.class);
-      return ;
+    UIPopupWindow uiPopup = getChild(UIPopupWindow.class);
+    if(uiPopup == null) {
+      uiPopup = addChild(UIPopupWindow.class, null, null);
+      uiPopup.setWindowSize(560, 300);
+    } else {
+      uiPopup.setRendered(true) ;
     }
-    UIPopupWindow uiPopup = uiParent.getChild(UIPopupWindow.class);
-    if( uiPopup == null)  uiPopup = uiParent.addChild(UIPopupWindow.class, null, null);
     uiPopup.setUIComponent(uiComponent);
-    uiPopup.setWindowSize(750, 450);
-    uiPopup.setResizable(true);
-    uiPopup.setShow(true);
+    uiPopup.setShow(true) ;
+    uiPopup.setResizable(true) ;        
   }
 
   public String getLivePortalPath() { return livePortalsPath; }
@@ -206,13 +202,7 @@ public class UIWebContentSelectorForm extends UIForm implements UISelectable{
       }
 
       UIPortletConfig uiPortletConfig = uiWebContentSelector.getAncestorOfType(UIPortletConfig.class);
-      if(uiPortletConfig.isEditPortletInCreatePageWizard()) {
-        uiPortletConfig.getChildren().clear();
-        uiPortletConfig.addUIWelcomeScreen();
-      } else {        
-        context.setApplicationMode(PortletMode.VIEW);
-        Utils.refreshBrowser(context);
-      }
+      uiPortletConfig.closePopupAndUpdateUI(event.getRequestContext(),true);
     }
   }
 

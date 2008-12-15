@@ -3,11 +3,8 @@
 	import org.exoplatform.webui.application.portlet.PortletRequestContext;
 	
 	PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
-	def portletId = pContext.getWindowId();
-	def quickEditingBlockId = portletId + "-QuickEditingBlock";
-	def rcontext = _ctx.getRequestContext() ;
- 	rcontext.getJavascriptManager().importJavascript('eXo.webpresentation.Utils','/web-presentation/javascript');
-	rcontext.getJavascriptManager().addOnLoadJavascript('eXo.wcm.removeQuickeditingBlock("' + portletId + '","' + quickEditingBlockId + '")');
+	def portletId = pContext.getWindowId();	
+	def rcontext = _ctx.getRequestContext() ; 		
 %>
 <div class="QuickEditContainer" id="$uicomponent.id">
 <div style="height: 0px;"><div style="width: 675px;" ><span style="display: none;"></span></div></div>

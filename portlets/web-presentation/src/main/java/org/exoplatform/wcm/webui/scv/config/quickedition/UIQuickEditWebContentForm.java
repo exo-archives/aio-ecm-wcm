@@ -27,21 +27,18 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.version.VersionException;
-import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
 import org.exoplatform.ecm.webui.form.DialogFormActionListeners;
 import org.exoplatform.ecm.webui.utils.DialogFormUtil;
 import org.exoplatform.ecm.webui.utils.LockUtil;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.cms.CmsService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.NodeIdentifier;
 import org.exoplatform.services.wcm.core.NodeLocation;
-import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
 import org.exoplatform.wcm.webui.scv.config.UIContentDialogForm;
 import org.exoplatform.wcm.webui.scv.config.UIPortletConfig;
@@ -206,30 +203,15 @@ public class UIQuickEditWebContentForm extends UIContentDialogForm{
       if (!isCheckedOut) {
         newNode.checkin();
       }
-
       UIPortletConfig uiPortletConfig = uiQuickEditForm.getAncestorOfType(UIPortletConfig.class);
-      if(uiPortletConfig.isEditPortletInCreatePageWizard()) {
-        uiPortletConfig.getChildren().clear();
-        uiPortletConfig.addUIWelcomeScreen();
-      } else {        
-        PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
-        context.setApplicationMode(PortletMode.VIEW);
-        Utils.refreshBrowser(context);
-      }
+      uiPortletConfig.closePopupAndUpdateUI(event.getRequestContext(),true);
     }
   }
 
   public static class CancelActionListener extends EventListener<UIQuickEditWebContentForm> {
-    public void execute(Event<UIQuickEditWebContentForm> event) throws Exception {
-      PortletRequestContext context = (PortletRequestContext)event.getRequestContext();
-      UIPortletConfig uiPortletConfig = event.getSource().getAncestorOfType(UIPortletConfig.class);
-      if(uiPortletConfig.isEditPortletInCreatePageWizard()) {
-        uiPortletConfig.getChildren().clear();
-        uiPortletConfig.addUIWelcomeScreen();
-      } else {   
-        context.setApplicationMode(PortletMode.VIEW);
-        Utils.refreshBrowser(context);
-      }
+    public void execute(Event<UIQuickEditWebContentForm> event) throws Exception {      
+      UIPortletConfig uiPortletConfig = event.getSource().getAncestorOfType(UIPortletConfig.class);                     
+      uiPortletConfig.closePopupAndUpdateUI(event.getRequestContext(),false);
     }
   }
 }

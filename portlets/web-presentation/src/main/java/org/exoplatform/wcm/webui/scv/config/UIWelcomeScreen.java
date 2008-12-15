@@ -21,13 +21,10 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.jcr.Node;
-import javax.portlet.PortletMode;
 
 import org.exoplatform.ecm.webui.selector.UISelectable;
-import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
 import org.exoplatform.web.application.RequestContext;
-import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
@@ -150,9 +147,9 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
 
   public static class BackActionListener extends EventListener<UIWelcomeScreen> {
     public void execute(Event<UIWelcomeScreen> event) throws Exception {
-      PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
-      context.setApplicationMode(PortletMode.VIEW);
-      Utils.refreshBrowser(context);
+      UIWelcomeScreen uiWelcomeScreen = event.getSource();
+      UIPortletConfig uiPortletConfig = uiWelcomeScreen.getAncestorOfType(UIPortletConfig.class);      
+      uiPortletConfig.closePopupAndUpdateUI(event.getRequestContext(),true);
     }
   }
 

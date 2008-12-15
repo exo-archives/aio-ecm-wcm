@@ -21,7 +21,6 @@ import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.Session;
-import javax.jcr.Value;
 
 import org.exoplatform.ecm.webui.selector.UISelectable;
 import org.exoplatform.ecm.webui.tree.selectmany.UICategoriesSelector;
