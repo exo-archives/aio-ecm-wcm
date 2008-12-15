@@ -239,13 +239,6 @@ public class UINameWebContentForm extends UIForm {
     public void execute(Event<UINameWebContentForm> event) throws Exception {
       UINameWebContentForm uiNameWebContentForm = event.getSource();
       String contentType = uiNameWebContentForm.getUIFormSelectBox(FIELD_SELECT).getValue();
-//      if (contentType.equals("exo:webContent")) {
-//        uiNameWebContentForm.setPictureCSS("exo_webContent");
-//      } else if (contentType.equals("exo:twoColumnsWebcontent")) {
-//        uiNameWebContentForm.setPictureCSS("exo_twoColumnsWebcontent");
-//      } else {
-//        uiNameWebContentForm.setPictureCSS("exo_pictureOnHeadWebcontent");
-//      }
       uiNameWebContentForm.setPictureDescribe(contentType.replace(":", "_"));
     }
   }
