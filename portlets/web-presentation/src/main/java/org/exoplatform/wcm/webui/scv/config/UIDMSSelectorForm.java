@@ -21,7 +21,6 @@ import java.util.Set;
 
 import javax.jcr.Node;
 import javax.jcr.Session;
-import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
 import org.exoplatform.ecm.webui.selector.UISelectable;
@@ -39,7 +38,6 @@ import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.publication.WebpagePublicationPlugin;
 import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
 import org.exoplatform.wcm.webui.scv.config.publication.UIWCMPublicationGrid;
-import org.exoplatform.wcm.webui.selector.document.UIDocumentPathSelector;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -132,7 +130,9 @@ public class UIDMSSelectorForm extends UIForm implements UISelectable{
 
   public void doSelect(String selectField, Object value) throws Exception {
     getUIStringInput(selectField).setValue((String)value);
-    showPopupComponent(null);
+    UIPortletConfig uiPortletConfig = getAncestorOfType(UIPortletConfig.class);
+    UIPopupWindow uiPopup = uiPortletConfig.getChildById(UIPortletConfig.POPUP_DMS_SELECTOR);
+    uiPopup.setShow(false);
   }
 
   public void showPopupComponent(UIComponent uiComponent) throws Exception {
@@ -202,14 +202,8 @@ public class UIDMSSelectorForm extends UIForm implements UISelectable{
         }
       }
 
-
       UIPortletConfig uiPortletConfig = uiDMSSelectorForm.getAncestorOfType(UIPortletConfig.class);
-      if(uiPortletConfig.isEditPortletInCreatePageWizard()) {
-        uiPortletConfig.getChildren().clear();
-        uiPortletConfig.addUIWelcomeScreen();
-      } else {        
-        pContext.setApplicationMode(PortletMode.VIEW);
-      }
+      uiPortletConfig.closePopupAndUpdateUI(event.getRequestContext(),true);
     }
   }
 
@@ -225,10 +219,8 @@ public class UIDMSSelectorForm extends UIForm implements UISelectable{
   public static class BrowseActionListener extends EventListener<UIDMSSelectorForm> {
     public void execute(Event<UIDMSSelectorForm> event) throws Exception {
       UIDMSSelectorForm uiDMSSelectorForm = event.getSource();
-      UIDocumentPathSelector uiDMSPathSelector = uiDMSSelectorForm.createUIComponent(UIDocumentPathSelector.class, null, null);
-      uiDMSPathSelector.setSourceComponent(uiDMSSelectorForm, new String[] {UIDMSSelectorForm.PATH});
-      uiDMSPathSelector.init();
-      uiDMSSelectorForm.showPopupComponent(uiDMSPathSelector);
+      ((UIPortletConfig) uiDMSSelectorForm.getParent()).initPopupDMSSelector();
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiDMSSelectorForm.getParent());
     }
   }
 

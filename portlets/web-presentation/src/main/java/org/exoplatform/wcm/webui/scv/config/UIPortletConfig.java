@@ -26,6 +26,8 @@ import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
 import org.exoplatform.wcm.webui.scv.config.quickedition.UIQuickEditContainer;
+import org.exoplatform.wcm.webui.selector.document.UIDocumentPathSelector;
+import org.exoplatform.wcm.webui.selector.webcontent.UIWebContentPathSelector;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -33,6 +35,7 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIPopupComponent;
 import org.exoplatform.webui.core.UIPopupContainer;
+import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 /**
  * Created by The eXo Platform SAS
@@ -47,6 +50,9 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent{
 
   private UIComponent uiBackComponent;
   private boolean isNewConfig;
+
+  final static String POPUP_WEBCONTENT_SELECTOR = "PopupWebContentSelector".intern();
+  final static String POPUP_DMS_SELECTOR = "PopupDMSSelector".intern();
 
   public UIPortletConfig() throws Exception {
   }
@@ -133,5 +139,33 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent{
   }
 
   public void deActivate() throws Exception {    
+  }
+
+  public void initPopupWebContentSelector() throws Exception {
+    UIPopupWindow uiPopup = getChildById(POPUP_WEBCONTENT_SELECTOR);
+    if(uiPopup == null) {
+      uiPopup = addChild(UIPopupWindow.class, null, POPUP_WEBCONTENT_SELECTOR);
+    }
+    uiPopup.setWindowSize(800, 600);
+    UIWebContentPathSelector webContentPathSelector = this.createUIComponent(UIWebContentPathSelector.class, null, null);
+    UIWebContentSelectorForm uiWebContentSelector = this.getChild(UIWebContentSelectorForm.class);
+    webContentPathSelector.setSourceComponent(uiWebContentSelector, new String[] {UIWebContentSelectorForm.PATH});
+    webContentPathSelector.init();
+    uiPopup.setUIComponent(webContentPathSelector);
+    uiPopup.setShow(true);
+  }
+
+  public void initPopupDMSSelector() throws Exception {
+    UIPopupWindow uiPopup = getChildById(POPUP_DMS_SELECTOR);
+    if(uiPopup == null) {
+      uiPopup = addChild(UIPopupWindow.class, null, POPUP_DMS_SELECTOR);
+    }
+    UIDocumentPathSelector dmsSelector = this.createUIComponent(UIDocumentPathSelector.class, null, null);
+    UIDMSSelectorForm dmsSelectorForm = this.getChild(UIDMSSelectorForm.class);
+    dmsSelector.setSourceComponent(dmsSelectorForm, new String[] {UIDMSSelectorForm.PATH});
+    dmsSelector.init();
+    uiPopup.setWindowSize(800, 600);
+    uiPopup.setUIComponent(dmsSelector);
+    uiPopup.setShow(true);
   }
 }

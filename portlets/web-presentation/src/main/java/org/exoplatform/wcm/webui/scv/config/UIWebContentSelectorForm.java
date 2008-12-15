@@ -38,7 +38,6 @@ import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.publication.WebpagePublicationPlugin;
 import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
 import org.exoplatform.wcm.webui.scv.config.publication.UIWCMPublicationGrid;
-import org.exoplatform.wcm.webui.selector.webcontent.UIWebContentPathSelector;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -118,7 +117,9 @@ public class UIWebContentSelectorForm extends UIForm implements UISelectable{
 
   public void doSelect(String selectField, Object value) throws Exception {
     getUIStringInput(selectField).setValue((String)value);
-    showPopupComponent(null);
+    UIPortletConfig uiPortletConfig = this.getAncestorOfType(UIPortletConfig.class);
+    UIPopupWindow uiPopup = uiPortletConfig.getChildById(UIPortletConfig.POPUP_WEBCONTENT_SELECTOR);
+    uiPopup.setShow(false);
   }   
 
   public void showPopupComponent(UIComponent uiComponent) throws Exception {
@@ -142,10 +143,8 @@ public class UIWebContentSelectorForm extends UIForm implements UISelectable{
   public static class BrowseActionListener extends EventListener<UIWebContentSelectorForm> {
     public void execute(Event<UIWebContentSelectorForm> event) throws Exception {
       UIWebContentSelectorForm uiWebContentSelector = event.getSource();
-      UIWebContentPathSelector webContentPathSelector = uiWebContentSelector.createUIComponent(UIWebContentPathSelector.class, null, null);
-      webContentPathSelector.setSourceComponent(uiWebContentSelector, new String[] {UIWebContentSelectorForm.PATH});
-      webContentPathSelector.init();      
-      uiWebContentSelector.showPopupComponent(webContentPathSelector);      
+      ((UIPortletConfig) uiWebContentSelector.getParent()).initPopupWebContentSelector();
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiWebContentSelector.getParent());
     }
   }
 
