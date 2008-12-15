@@ -23,7 +23,7 @@ import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.wcm.webui.clv.config.UIPortletConfig;
-import org.exoplatform.wcm.webui.scv.config.UIStartEditionInPageWizard;
+import org.exoplatform.wcm.webui.clv.config.UIStartEditionInPageWizard;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -87,10 +87,9 @@ public class UIContentListViewerPortlet extends UIPortletApplication {
 
   public void activateMode(PortletMode mode) throws Exception {
     getChildren().clear();
-   UIPopupContainer uiPopup = addChild(UIPopupContainer.class, null, "UIViewerManagementPopup");
-   uiPopup.getChild(UIPopupWindow.class).setId("UIViewerManagementPopupWindow") ;
-    
-    
+    UIPopupContainer uiPopup = addChild(UIPopupContainer.class, null, "UIViewerManagementPopup");
+    uiPopup.getChild(UIPopupWindow.class).setId("UIViewerManagementPopupWindow");
+
     if (PortletMode.VIEW.equals(mode)) {
       UIFolderViewer folderViewer = addChild(UIFolderViewer.class,
                                              null,
@@ -107,7 +106,7 @@ public class UIContentListViewerPortlet extends UIPortletApplication {
                                                                         null);
       portletEditMode.addChild(portletConfig);
       portletConfig.setRendered(true);
-      maskPopupContainer.activate(portletConfig, 1024, 768);
+      maskPopupContainer.activate(portletConfig, 700, -1);
       PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
       portletRequestContext.addUIComponentToUpdateByAjax(maskPopupContainer);
     }

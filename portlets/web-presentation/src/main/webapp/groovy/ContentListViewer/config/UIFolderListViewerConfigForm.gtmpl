@@ -10,13 +10,15 @@
 	String fieldName;
 %>
 <div class="UIForm $uicomponent.id">
-	<div class="TitleBar"><%=_ctx.appRes(uicomponent.getName() + ".title")%></div>
+	<div class="TitleBar" style="background: white;">
+		<b><%=_ctx.appRes(uicomponent.getName() + ".title")%></b>	
+	</div>
   <%uiform.begin()%>
   <div class="HorizontalLayout">
     <div class="FormContainer">
       <table class="UIFormGrid">
 	      <% 
-	        for(field in uiform.getChildren()) { 
+	        for(field in uiform.getChildren()) {	        		        		     
 	          if(field.isRendered()) {
 	      %>
               <tr>

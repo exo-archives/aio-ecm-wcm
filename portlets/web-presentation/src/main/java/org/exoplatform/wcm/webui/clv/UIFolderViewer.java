@@ -195,7 +195,7 @@ public class UIFolderViewer extends UIContainer implements RefreshDelegateAction
                                                                                null);
       uiFolderViewer.addChild(uiPortletConfig);
       uiPortletConfig.setRendered(true);
-      uiMaskPopupContainer.activate(uiPortletConfig, 600, 500);
+      uiMaskPopupContainer.activate(uiPortletConfig, 700, -1);
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
       context.addUIComponentToUpdateByAjax(uiMaskPopupContainer);
     }

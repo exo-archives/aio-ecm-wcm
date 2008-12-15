@@ -41,6 +41,10 @@
 }
 
 /*---------------------------UIViewerManagementForm------------------------------------*/
+.UIContentListViewerPortlet .UIViewerManagementForm {
+	margin: 10px;
+}
+
 .UIContentListViewerPortlet .UIViewerManagementForm .SelectFolderPathIcon {
 	background: url('DefaultSkin/icons/AddPage.gif') no-repeat left center;
 	width: 16px;
@@ -60,4 +64,11 @@
 
 .UIContentListViewerPortlet .UIViewerManagementForm .FieldLabel {		
 	width: 125px;
+}
+
+.UIContentListViewerPortlet .UIViewerManagementForm .TitleBar {
+	background: white;
+	padding: 10px;
+	text-align: center;
+	font-size: 12px;
 }

@@ -217,7 +217,7 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
       return;
     }
     uiComponent.setRendered(true);
-    uiPopupContainer.activate(uiComponent, 500, 400);
+    uiPopupContainer.activate(uiComponent, 600, 300);
     WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
     context.addUIComponentToUpdateByAjax(uiPopupContainer);
   }
