@@ -112,7 +112,13 @@
 							        uicomponent.addTextField("title", webContentFieldTitle) ;
 							    %>
 								</td>
-							</tr>						
+							</tr>
+							<tr>
+								<td class="FieldLabel"></td>
+								<td class="FieldComponent">
+									<div class="WebContentSynchronize Refresh16x16Icon" onclick="wcm.insertCSSFromTextArea2FCK('<%= htmlWYSIWYGFormId %>', '<%= cssFormId %>')"><%=_ctx.appRes("WebContent.dialog.label.Synchronize")%></div>
+								</td>
+							</tr>
 							<tr>
 					 			<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.WebContentHtml")%></td>
 					  			<td class="FieldComponent">
@@ -139,13 +145,11 @@
 									}
 									if(htmlContent == null || htmlContent.equals("")) {
 										htmlContent = "<table class=\"WebContentTwoColumns\" cellspacing=\"10\">" +
-															"<tr>" +
-																"<td>&nbsp;" +
-																"</td>" + 
-																"<td>&nbsp;" +
-																"</td>" + 																
-															"</tr>" +
-														 "</table>";
+																		"<tr>" +
+																			"<td class=\"WebContentColumn\">&nbsp;</td>" + 
+																			"<td class=\"WebContentColumn\">&nbsp;</td>" +
+																		"</tr>" +
+																	 "</table>";
 									}
 									String[] htmlArguments = ["jcrPath=/node/default.html/jcr:content/jcr:data", "options=toolbar:CompleteWCM,width:400", htmlContent];
 			    					uicomponent.addWYSIWYGField(htmlWYSIWYGFormId, htmlArguments) ;
@@ -264,7 +268,7 @@
 										}
 									}
 									if(cssContent == null || cssContent.equals("")) {
-										cssContent = ".WebContentTwoColumns {\n\twidth: 100%; \n\theight: 100%;\n}\n\n";
+										cssContent = ".WebContentTwoColumns {\n\twidth: 100%; \n\theight: 100%;\n}\n\n.WebContentColumn {\n\twidth: 50%\n}";
 									}
 									String[] fieldContentCSS = ["jcrPath=/node/css/default.css/jcr:content/jcr:data", cssContent] ;
 									uicomponent.addTextAreaField(cssFormId, fieldContentCSS) ;

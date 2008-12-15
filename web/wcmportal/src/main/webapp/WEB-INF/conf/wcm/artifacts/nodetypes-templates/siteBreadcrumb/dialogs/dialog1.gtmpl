@@ -112,6 +112,12 @@
 							        uicomponent.addTextField("title", webContentFieldTitle) ;
 							    %>
 								</td>
+							</tr>
+							<tr>
+								<td class="FieldLabel"></td>
+								<td class="FieldComponent">
+									<div class="WebContentSynchronize Refresh16x16Icon" onclick="wcm.insertCSSFromTextArea2FCK('<%= htmlWYSIWYGFormId %>', '<%= cssFormId %>')"><%=_ctx.appRes("WebContent.dialog.label.Synchronize")%></div>
+								</td>
 							</tr>						
 							<tr>
 					 			<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.WebContentHtml")%></td>
@@ -138,7 +144,7 @@
 										}
 									}
 									if(htmlContent == null || htmlContent.equals("")) {
-										htmlContent = "<div id=\"breadcrumb-generator\"><span></span></div>";
+										htmlContent = "<div id=\"breadcrumb-generator\"><div class=\"UIWCMBreadcrumbsPortlet\"><div class=\"BCHome16x16Icon\"><span></span></div></div></div>";
 									}
 									String[] htmlArguments = ["jcrPath=/node/default.html/jcr:content/jcr:data", "options=toolbar:CompleteWCM,width:400", htmlContent];
 			    				uicomponent.addWYSIWYGField(htmlWYSIWYGFormId, htmlArguments) ;
@@ -257,16 +263,34 @@
 										}
 									}
 									if(cssContent == null || cssContent.equals("")) {
-										cssContent = ".UIWindow .UIBreadcrumbsPortlet {\n\tmargin: 0px;\n}" +
-																			"\n\n.UIBreadcrumbsPortlet {\n\tmargin: 0 0 3px 0;\n}" +
-																			"\n\n.UIBreadcrumbs {\n\tline-height: 25px ;\n}" +
-																			"\n\n.UIBreadcrumbs a {\n\tfloat: left ;\n\tcolor: #6d7fa1 ;\n}" +
-																			"\n\n.UIBreadcrumbs a.Selected {\n\tcolor: black;\n}" +
-																			"\n\n.UIBreadcrumbs .HomeIcon {\n\tfloat: left;\n\tmargin: 4px 5px 0 0 ;\n\tbackground:url('/portal/rest/jcr/repository/collaboration/sites content/live/classic/web contents/site artifacts/breadcrumb/Default/medias/images/HomeIcon.gif') no-repeat center center;\n\theight:16px;\n\twidth:24px;\n}" +
-																			"\n\n.UIBreadcrumbs .LeftBreadcrumbsBar {\n\tbackground: url('/portal/rest/jcr/repository/collaboration/sites content/live/classic/web contents/site artifacts/breadcrumb/Default/medias/images/BreadcrumbBG.gif') repeat-x left top;\n\theight: 25px;\n}" +
-																			"\n\n.UIBreadcrumbs .RightBreadcrumbsBar {\n\theight: 25px;\n}" +
-																			"\n\n.UIBreadcrumbs .BreadcrumbsInfoBar {\n\theight: 25px;\n\tline-height: 25px;\n\tpadding-left: 10px;\n}" +
-																			"\n\n.UIBreadcrumbs .RightBlackGridArrowIcon {\n\tfloat: left;\n\tmargin: 5px 0px 0px 0px;\n\tbackground:url('/portal/rest/jcr/repository/collaboration/sites content/live/classic/web contents/site artifacts/breadcrumb/Default/medias/images/BreadcrumbsArrowIcon.gif') repeat 0 0;\n\theight:16px;\n\twidth:16px;\n}";
+										cssContent = 	".UIWindow .UIBreadcrumbsPortlet {\n" +
+																	"\tmargin: 0px;\n" +
+																	"}\n" +
+																	".UIBreadcrumbs a {\n" +
+																	"\tfloat: left ; \n" +
+																	"}\n" +
+																	".UIBreadcrumbs a.LeftBlock {\n" +
+																	"\tcolor:#000;\n" +
+																	"\tfloat:left;\n" +
+																	"\tfont-size:13px; \n" +
+																	"}\n" +
+																	".UIBreadcrumbs a.Selected {\n" +
+																	"\tcolor:#005151;\n" +
+																	"\tfont-size:13px;\n" +
+																	"\tfont-weight:bold;\n" +
+																	"}\n" +
+																	".UIBreadcrumbs .BreadcrumbsInfoBar {\n" +
+																	"\theight: 22px;\n" +
+																	"\tpadding: 10px 10px 0px; \n" +
+																	"\toverflow: hidden;\n" +
+																	"}\n" +
+																	".UIBreadcrumbs .RightBlackGridArrowIcon {\n" +
+																	"\tfloat: left;\n" +
+																	"\tmargin: 1px;\n" +
+																	"\tbackground:url('/portal/rest/jcr/repository/collaboration/sites content/live/{portalName}/web contents/site artifacts/breadcrumb/Default/medias/images/BreadcrumbsArrowIcon.gif') repeat 0 0;\n" +
+																	"\theight:16px;\n" +
+																	"\twidth:16px;\n" +
+																	"}";
 									}
 									String[] fieldContentCSS = ["jcrPath=/node/css/default.css/jcr:content/jcr:data", cssContent] ;
 									uicomponent.addTextAreaField(cssFormId, fieldContentCSS) ;
@@ -311,12 +335,12 @@
 																				"var breadcumbs = getBreadcrumbs();\n" +
 																				"var size = breadcumbs.length;\n" +
 																				"var html = '';\n" +
-																				"html += '<div class=\"UIBreadcrumbsPortlet\">'+\n\t" +
+																				"html += '<div class=\"UIWCMBreadcrumbsPortlet\">'+\n\t" +
 																									"'<div class=\"UIBreadcrumbs\">' +\n\t" +
 																										"'<div class=\"LeftBreadcrumbsBar\">' +\n\t" +
 																											"'<div class=\"RightBreadcrumbsBar\">' +\n\t" +
 																												"'<div class=\"BreadcrumbsInfoBar\">' +\n\t" +
-																													"'<div class=\"HomeIcon LeftBlock BCHome16x16Icon\"><span></span></div>';\n" +
+																													"'<div class=\"HomeIcon\"><span></span></div>';\n" +
 																				"if (size > 0) {\n\t" +
 																					"var note = \"LeftBlock\";\n" +
 																					"for (var i = 0; i < size; i++) {\n\t" +
