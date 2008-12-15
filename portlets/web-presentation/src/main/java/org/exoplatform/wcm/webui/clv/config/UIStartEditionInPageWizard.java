@@ -30,7 +30,7 @@ import org.exoplatform.webui.event.EventListener;
  * Created by The eXo Platform SAS Author : Do Ngoc Anh anh.do@exoplatform.com
  * anhdn86@gmail.com Dec 15, 2008
  */
-@ComponentConfig(lifecycle = Lifecycle.class, template = "app:/groovy/SingleContentViewer/config/UIStartEditionInPageWizard.gtmpl", events = { @EventConfig(name = "Edit", listeners = UIStartEditionInPageWizard.EditPortletActionListener.class) })
+@ComponentConfig(lifecycle = Lifecycle.class, template = "app:/groovy/ContentListViewer/config/UIStartEditionInPageWizard.gtmpl", events = { @EventConfig(name = "Edit", listeners = UIStartEditionInPageWizard.EditPortletActionListener.class) })
 public class UIStartEditionInPageWizard extends UIContainer {
 
   public static class EditPortletActionListener extends EventListener<UIStartEditionInPageWizard> {
