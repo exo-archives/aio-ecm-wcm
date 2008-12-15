@@ -18,6 +18,9 @@ package org.exoplatform.wcm.webui.clv.config;
 
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.core.UIPopupComponent;
+import org.exoplatform.webui.core.UIPopupContainer;
+import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 
 /*
@@ -27,14 +30,24 @@ import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
  * Oct 15, 2008  
  */
 
-@ComponentConfig (
-    lifecycle = UIContainerLifecycle.class
-)
+@ComponentConfig(lifecycle = UIContainerLifecycle.class)
+public class UIPortletConfig extends UIContainer implements UIPopupComponent {
 
-public class UIPortletConfig extends UIContainer{
-  
-  public UIPortletConfig() throws Exception {
-    addChild(UIViewerManagementForm.class, null, null);    
-  }
-  
+	public UIPortletConfig() throws Exception {
+		addChild(UIViewerManagementForm.class, null, null);
+		UIPopupContainer uiPopup = addChild(UIPopupContainer.class, null, "UIFolderPathSelecctPopup");
+		uiPopup.getChild(UIPopupWindow.class).setId("UIFolderPathSelecctPopupWindow") ;
+		
+	}
+
+	public void activate() throws Exception {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void deActivate() throws Exception {
+		// TODO Auto-generated method stub
+
+	}
+
 }

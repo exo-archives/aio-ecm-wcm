@@ -25,7 +25,8 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIPopupWindow;
+import org.exoplatform.webui.core.UIPopupComponent;
+import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -35,19 +36,15 @@ import org.exoplatform.webui.event.EventListener;
  * Oct 15, 2008
  */
 
-@ComponentConfig(
-    lifecycle = Lifecycle.class, 
-    events = @EventConfig(listeners = UIFolderPathSelectorForm.CloseActionListener.class),
-    template = "app:/groovy/ContentListViewer/config/UIFolderPathSelectorForm.gtmpl"
-)
-public class UIFolderPathSelectorForm extends UIBaseNodeTreeSelector {
+@ComponentConfig(lifecycle = Lifecycle.class, events = @EventConfig(listeners = UIFolderPathSelectorForm.CloseActionListener.class), template = "app:/groovy/ContentListViewer/config/UIFolderPathSelectorForm.gtmpl")
+public class UIFolderPathSelectorForm extends UIBaseNodeTreeSelector implements UIPopupComponent {
   public UIFolderPathSelectorForm() throws Exception {
     addChild(UIFolderPathTreeBuilder.class, null, UIFolderPathTreeBuilder.class.getSimpleName()
         + hashCode());
     addChild(UISelectFolderPathPanel.class, null, UISelectFolderPathPanel.class.getSimpleName()
-        + hashCode());    
+        + hashCode());
   }
-  
+
   public void init() throws Exception {
     UIFolderPathTreeBuilder treeBuilder = getChild(UIFolderPathTreeBuilder.class);
     UISelectFolderPathPanel pathPanel = getChild(UISelectFolderPathPanel.class);
@@ -72,11 +69,19 @@ public class UIFolderPathSelectorForm extends UIBaseNodeTreeSelector {
   public static class CloseActionListener extends EventListener<UIFolderPathSelectorForm> {
     public void execute(Event<UIFolderPathSelectorForm> event) throws Exception {
       UIFolderPathSelectorForm uiFolderPathSelectorForm = event.getSource();
-      UIPortletConfig uiPortletConfig = uiFolderPathSelectorForm
-          .getAncestorOfType(UIPortletConfig.class);
-      uiPortletConfig.removeChild(UIPopupWindow.class);
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortletConfig);
+      UIPopupContainer uiPopupContainer = uiFolderPathSelectorForm.getAncestorOfType(UIPopupContainer.class);
+      uiPopupContainer.deActivate();
     }
+  }
+
+  public void activate() throws Exception {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void deActivate() throws Exception {
+    // TODO Auto-generated method stub
+
   }
 
 }

@@ -24,7 +24,6 @@ import javax.jcr.NodeIterator;
 import javax.jcr.Session;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
-import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
@@ -37,10 +36,12 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.utils.PaginatedNodeIterator;
+import org.exoplatform.wcm.webui.clv.config.UIPortletConfig;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -50,13 +51,7 @@ import org.exoplatform.webui.event.EventListener;
  * Oct 15, 2008
  */
 
-@ComponentConfig(
-    lifecycle = Lifecycle.class, 
-    template = "app:/groovy/ContentListViewer/UIFolderListViewer.gtmpl", 
-    events = { 
-      @EventConfig(listeners = UIFolderViewer.QuickEditActionListener.class)       
-    }
-)
+@ComponentConfig(lifecycle = Lifecycle.class, template = "app:/groovy/ContentListViewer/UIFolderListViewer.gtmpl", events = { @EventConfig(listeners = UIFolderViewer.QuickEditActionListener.class) })
 public class UIFolderViewer extends UIContainer implements RefreshDelegateActionListener {
 
   private boolean canViewListContent;
@@ -91,17 +86,20 @@ public class UIFolderViewer extends UIContainer implements RefreshDelegateAction
       return;
     }
     PortletPreferences portletPreferences = getPortletPreference();
-    int itemsPerPage = Integer.parseInt(portletPreferences.getValue(
-        UIContentListViewerPortlet.ITEMS_PER_PAGE, null));    
+    int itemsPerPage = Integer.parseInt(portletPreferences.getValue(UIContentListViewerPortlet.ITEMS_PER_PAGE,
+                                                                    null));
     PaginatedNodeIterator paginatedNodeIterator = new PaginatedNodeIterator(nodeIterator,
-        itemsPerPage);    
+                                                                            itemsPerPage);
     UIContentListPresentation contentListPresentation = addChild(UIContentListPresentation.class,
-        null, null);
+                                                                 null,
+                                                                 null);
     String templatePath = getFormViewTemplatePath();
     ResourceResolver resourceResolver = getTemplateResourceResolver();
     contentListPresentation.init(templatePath, resourceResolver, paginatedNodeIterator);
-    contentListPresentation.setContentColumn(portletPreferences.getValue(UIContentListViewerPortlet.HEADER, null));
-    contentListPresentation.setShowHeader(Boolean.parseBoolean(portletPreferences.getValue(UIContentListViewerPortlet.SHOW_HEADER, null)));
+    contentListPresentation.setContentColumn(portletPreferences.getValue(UIContentListViewerPortlet.HEADER,
+                                                                         null));
+    contentListPresentation.setShowHeader(Boolean.parseBoolean(portletPreferences.getValue(UIContentListViewerPortlet.SHOW_HEADER,
+                                                                                           null)));
   }
 
   public String getMessage() throws Exception {
@@ -123,8 +121,7 @@ public class UIFolderViewer extends UIContainer implements RefreshDelegateAction
   }
 
   protected String getFormViewTemplatePath() {
-    return getPortletPreference()
-        .getValue(UIContentListViewerPortlet.FORM_VIEW_TEMPLATE_PATH, null);
+    return getPortletPreference().getValue(UIContentListViewerPortlet.FORM_VIEW_TEMPLATE_PATH, null);
   }
 
   public NodeIterator getRenderedContentNodes() throws Exception {
@@ -173,16 +170,15 @@ public class UIFolderViewer extends UIContainer implements RefreshDelegateAction
   }
 
   public String getPortletId() {
-    PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext
-        .getCurrentInstance();
+    PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     return pContext.getWindowId();
   }
 
   public boolean isQuickEditable() throws Exception {
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     PortletPreferences prefs = portletRequestContext.getRequest().getPreferences();
-    boolean isQuickEdit = Boolean.parseBoolean(prefs.getValue(
-        UIContentListViewerPortlet.SHOW_QUICK_EDIT_BUTTON, null));
+    boolean isQuickEdit = Boolean.parseBoolean(prefs.getValue(UIContentListViewerPortlet.SHOW_QUICK_EDIT_BUTTON,
+                                                              null));
     UIContentListViewerPortlet uiPresentationPortlet = getAncestorOfType(UIContentListViewerPortlet.class);
     if (isQuickEdit)
       return uiPresentationPortlet.canEditPortlet();
@@ -191,8 +187,17 @@ public class UIFolderViewer extends UIContainer implements RefreshDelegateAction
 
   public static class QuickEditActionListener extends EventListener<UIFolderViewer> {
     public void execute(Event<UIFolderViewer> event) throws Exception {
+      UIFolderViewer uiFolderViewer = event.getSource();
+      UIContentListViewerPortlet uiListViewerPortlet = uiFolderViewer.getAncestorOfType(UIContentListViewerPortlet.class);
+      UIPopupContainer uiMaskPopupContainer = uiListViewerPortlet.getChild(UIPopupContainer.class);
+      UIPortletConfig uiPortletConfig = uiMaskPopupContainer.createUIComponent(UIPortletConfig.class,
+                                                                               null,
+                                                                               null);
+      uiFolderViewer.addChild(uiPortletConfig);
+      uiPortletConfig.setRendered(true);
+      uiMaskPopupContainer.activate(uiPortletConfig, 600, 500);
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
-      context.setApplicationMode(PortletMode.EDIT);
+      context.addUIComponentToUpdateByAjax(uiMaskPopupContainer);
     }
   }
 

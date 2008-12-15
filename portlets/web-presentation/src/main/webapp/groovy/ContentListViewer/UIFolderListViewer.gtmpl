@@ -1,25 +1,28 @@
-<div class="$uicomponent.id">
+<div class="$uicomponent.id" id="$uicomponent.id">
 	<%
+		import org.exoplatform.wcm.webui.clv.UIContentListPresentation;
+		import org.exoplatform.webui.core.UIPopupContainer;
+	
 		def portletId = uicomponent.getPortletId();
 		def quickEditingBlockId = uicomponent.getPortletId() + "-QuickEditingBlock";
 		def rcontext = _ctx.getRequestContext() ;
 		rcontext.getJavascriptManager().importJavascript('eXo.wcm.Util','/eXoWCMResources/javascript');
 		rcontext.getJavascriptManager().addOnLoadJavascript('eXo.wcm.insertQuickeditingBlock("' + portletId + '","' + quickEditingBlockId + '")');
-		if(uicomponent.isQuickEditable()) {		
+		if(uicomponent.isQuickEditable()) {					
 	%>
 			<div style="position: relative; height: 0px;" id="<%=quickEditingBlockId%>">
 				<div style="position: absolute; right: 0px; top: 0px">
-					<a href="<%=uicomponent.event("QuickEdit")%>" title="<%= _ctx.appRes("UIPresentationContainer.title");%>"><div class="QuickEdit"><span></span></div></a>
+					<a href="<%=uicomponent.event("QuickEdit")%>" title="<%= _ctx.appRes("UIPresentationContainer.title");%>"><div class="QuickEdit"><span></span></div></a>					 
 				</div>
 			</div>
 	<% } %>		
 
-	<% 	
-	if (uicomponent.canViewListContent()) {
-		uicomponent.renderChildren();
+	<% 			
+	if (uicomponent.canViewListContent()) {			
+		uicomponent.renderChild(UIContentListPresentation.class);
 	} else {
 	%>
-		<div style="height: 55px; font-size: 13px; text-align: center; padding-top: 10px;font-style: italic;color: red; background: white;border: 1px solid #B7B7B7;">
+		<div style="height: 100px; text-align: center; color: red; background: white;border: 1px solid gray;">
 			<span><%=uicomponent.getMessage()%></span>
 		</div>
 	<% } %>

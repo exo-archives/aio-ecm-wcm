@@ -23,10 +23,13 @@ import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.wcm.webui.clv.config.UIPortletConfig;
+import org.exoplatform.wcm.webui.scv.config.UIStartEditionInPageWizard;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.core.UIPopupContainer;
+import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 
@@ -47,7 +50,7 @@ public class UIContentListViewerPortlet extends UIPortletApplication {
   public final static String ITEMS_PER_PAGE          = "itemsPerPage";
 
   public final static String FOLDER_PATH             = "folderPath";
-  
+
   public final static String HEADER                  = "header";
 
   public final static String FORM_VIEW_TEMPLATE_PATH = "formViewTemplatePath";
@@ -65,7 +68,7 @@ public class UIContentListViewerPortlet extends UIPortletApplication {
   public final static String SHOW_SUMMARY            = "showSummary";
 
   public final static String SHOW_DATE_CREATED       = "showDateCreated";
-  
+
   public final static String SHOW_HEADER             = "showHeader";
 
   public UIContentListViewerPortlet() throws Exception {
@@ -84,12 +87,29 @@ public class UIContentListViewerPortlet extends UIPortletApplication {
 
   public void activateMode(PortletMode mode) throws Exception {
     getChildren().clear();
+   UIPopupContainer uiPopup = addChild(UIPopupContainer.class, null, "UIViewerManagementPopup");
+   uiPopup.getChild(UIPopupWindow.class).setId("UIViewerManagementPopupWindow") ;
+    
+    
     if (PortletMode.VIEW.equals(mode)) {
-      UIFolderViewer folderViewer = addChild(UIFolderViewer.class, null,
-          UIPortletApplication.VIEW_MODE);
+      UIFolderViewer folderViewer = addChild(UIFolderViewer.class,
+                                             null,
+                                             UIPortletApplication.VIEW_MODE);
       folderViewer.init();
     } else if (PortletMode.EDIT.equals(mode)) {
-      addChild(UIPortletConfig.class, null, UIPortletApplication.EDIT_MODE);
+      UIPopupContainer maskPopupContainer = getChild(UIPopupContainer.class);
+      UIStartEditionInPageWizard portletEditMode = createUIComponent(UIStartEditionInPageWizard.class,
+                                                                     null,
+                                                                     null);
+      addChild(portletEditMode);
+      UIPortletConfig portletConfig = portletEditMode.createUIComponent(UIPortletConfig.class,
+                                                                        null,
+                                                                        null);
+      portletEditMode.addChild(portletConfig);
+      portletConfig.setRendered(true);
+      maskPopupContainer.activate(portletConfig, 1024, 768);
+      PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
+      portletRequestContext.addUIComponentToUpdateByAjax(maskPopupContainer);
     }
   }
 
@@ -102,5 +122,5 @@ public class UIContentListViewerPortlet extends UIPortletApplication {
     UserACL userACL = getApplicationComponent(UserACL.class);
     return userACL.hasEditPermission(portalConfig, userId);
   }
-  
+
 }
