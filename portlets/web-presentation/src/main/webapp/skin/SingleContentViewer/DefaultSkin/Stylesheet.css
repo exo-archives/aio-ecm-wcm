@@ -327,3 +327,13 @@
 	line-height: 20px;
 	margin-bottom: 1px solid #b7b7b7;
 }
+
+.UISingleContentViewerPortlet .UIStartEditionInPageWizard {
+	text-align: center;
+	padding: 20px;	
+}
+
+.UISingleContentViewerPortlet .UIStartEditionInPageWizard a:hover {
+	font-size: 12px;
+	color: #058EE6	
+}
