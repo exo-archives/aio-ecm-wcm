@@ -42,14 +42,15 @@
 	background: white url('16x16/LightBulbOn.gif') no-repeat 5px 9px;
 }
 
+.WebContentMain {
+	float: right;
+	line-height: 16px;
+}
+
 .WebContentSynchronize {
-	background-repeat:no-repeat;
-	color:#058EE6;
+	float: right;
 	cursor:pointer;
-	font-weight:bold;
-	height:auto;
-	line-height:20px;
-	padding-left:23px;
+	margin-left: 5px;
 }
 
 .WebContentInformation {

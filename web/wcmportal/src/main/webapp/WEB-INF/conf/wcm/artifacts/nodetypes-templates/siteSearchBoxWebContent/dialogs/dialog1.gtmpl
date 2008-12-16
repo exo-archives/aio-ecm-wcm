@@ -120,7 +120,10 @@
 								</td>
 							</tr>				
 							<tr>
-					 			<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.WebContentHtml")%></td>
+					 			<td class="FieldLabel">
+					 				<div title="<%=_ctx.appRes("WebContent.dialog.label.Synchronize")%>" class="WebContentSynchronize Refresh16x16Icon" onclick="wcm.insertCSSFromTextArea2FCK('<%= htmlWYSIWYGFormId %>', '<%= cssFormId %>')"></div>
+									<div class="WebContentMain"><%=_ctx.appRes("WebContent.dialog.label.WebContentHtml")%></div>
+					 			</td>
 					  			<td class="FieldComponent">
 								<%
 									String[] htmlHiddenField1 = ["jcrPath=/node/default.html", "nodetype=nt:file", "defaultValues=default.html", "mixintype=exo:htmlFile"];
@@ -135,7 +138,7 @@
 									uicomponent.addCalendarField("htmlHiddenField4", htmlHiddenField4);
 									uicomponent.addCalendarField("htmlHiddenField5", htmlHiddenField5);
 									uicomponent.addHiddenField("htmlHiddenField6", htmlHiddenField6);									
-									String htmlContent = "<div class=\"UIWCMSearchBoxPortlet\"><div class=\"ACMESearchBox\"><div class=\"Search" id=\"siteSearchBox\"><div class=\"KeywordInput\"><input type=\"text\" onkeypress=\"quickSearchOnEnter(event)\" name=\"keyword\" /></div><div class=\"SearchBoxIcon\" onclick=\"quickSearch()\"><span></span></div></div><div style=\"clear: right;\"><span></span></div></div></div>";
+									String htmlContent = "<div class=\"UIWCMSearchBoxPortlet\"><div class=\"ACMESearchBox\"><div class=\"siteSearchBox\" id=\"siteSearchBox\"><div class=\"keywordInput\"><input type=\"text\" onkeypress=\"quickSearchOnEnter(event)\" name=\"keyword\" class=\"keyword\"/></div><div class=\"SearchBoxIcon\" onclick=\"quickSearch()\"><span></span></div></div><div style=\"clear: right;\"><span></span></div></div></div>";
 									
 									if(uicomponent.isEditing()) {
 										Node webContentNode = uicomponent.getNode();
