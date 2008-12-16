@@ -1,5 +1,7 @@
 window.wcm = function() {}
 wcm.insertCSSFromTextArea2FCK = function(Instance, ContentCSS) {
+	if (!Instance) return;
+	
 	var eContentCSS = document.getElementById(ContentCSS);
 	var sContentCSSId = ContentCSS + "_Inline";
 	var count = 1;
@@ -7,6 +9,7 @@ wcm.insertCSSFromTextArea2FCK = function(Instance, ContentCSS) {
 	
 	function updateStyle() {
 		var sValue = eContentCSS.value;
+		
 		var iDoc = FCKeditorAPI.Instances[Instance].EditorWindow.document;
 		if (eXo.core.Browser.isFF()) { //for FF			
 			var eHead = iDoc.getElementsByTagName("head")[0];

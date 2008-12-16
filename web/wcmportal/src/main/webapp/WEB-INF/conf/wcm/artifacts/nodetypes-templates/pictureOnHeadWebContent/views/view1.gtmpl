@@ -42,7 +42,7 @@
 		def imageWidth = currentNode.getProperty("exo:imageWidth").getString() + "px";
 		def imageHeight = currentNode.getProperty("exo:imageHeight").getString() + "px";
 		%>
-			<div style="float:left"><img src="$image" width="$imageWidth" height="$imageHeight"/></div>
+			<div style="float:left; padding-right: 10px;"><img src="$image" width="$imageWidth" height="$imageHeight"/></div>
 		<%
 	}
 	if((css != null) && (css.length() > 0)) {

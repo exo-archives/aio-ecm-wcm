@@ -204,7 +204,7 @@
 										}
 									}
 									if(htmlContent == null || htmlContent.equals("")) {
-										htmlContent = "<h3>Type the title at here</h3><span class=\"DropCap\">T</span>ype the text here</div>";
+										htmlContent = "<h3>Type the title at here</h3><div class=\"DropCap\">T</div>ype the text here";
 									}
 									String[] htmlArguments = ["jcrPath=/node/default.html/jcr:content/jcr:data", "options=toolbar:CompleteWCM,width:400", htmlContent];
 			    					uicomponent.addWYSIWYGField(htmlWYSIWYGFormId, htmlArguments) ;
@@ -323,7 +323,7 @@
 										}
 									}
 									if(cssContent == null || cssContent.equals("")) {
-										cssContent = ".DropCap {\n\tfont-size: 28px;\n}";
+										cssContent = ".DropCap {\n\tfont-size: 100px;\n\tline-height:66px;\n\tmargin: 0 5px;\n\tfloat: left\n}";
 									}
 									String[] fieldContentCSS = ["jcrPath=/node/css/default.css/jcr:content/jcr:data", cssContent] ;
 									uicomponent.addTextAreaField(cssFormId, fieldContentCSS) ;

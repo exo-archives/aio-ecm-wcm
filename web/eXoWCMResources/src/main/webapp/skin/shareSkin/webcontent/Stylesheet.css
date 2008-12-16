@@ -35,11 +35,11 @@
 }
 
 .FormHint {
-	padding: 0 5px 10px 20px;
-	font-weight: bold;
-	color: #4D627D;
-	padding-left:20px;
-	background: url('16x16/LightBulbOn.gif') no-repeat;
+	border:1px solid #B7B7B7;
+	color:#4D627D;
+	font-weight:bold;
+	padding:10px 5px 10px 25px;
+	background: white url('16x16/LightBulbOn.gif') no-repeat 5px 9px;
 }
 
 .WebContentSynchronize {
