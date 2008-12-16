@@ -63,47 +63,52 @@
 <% 
 	if (isShowTitle || isShowCategories || isShowTags) {
 		%>
-				<div class="WebContentInformation">
-					<% 
-						if (isShowTitle && currentNode.hasProperty("exo:title")) {
-							%>
-								<h1 class="WebContentTitle"><%= currentNode.getProperty("exo:title").getString(); %></h1>
-							<%
-						}
-						if(isShowCategories) {
-							StringBuffer categories = new StringBuffer();
-							CategoriesService categoriesService = uicomponent.getApplicationComponent(CategoriesService.class);
-							if(categoriesService.hasCategories(currentNode)) {
-								if (currentNode.getProperty("exo:category").getValues().length > 0) {
-					      	List<Node> categoryNodeList = categoriesService.getCategories(currentNode, repositoryName);
-					       	for (Node category: categoryNodeList) {
-					        	categories.append(category.getName()).append(", ");
-					       	}
-					    	 	categories.replace(categories.lastIndexOf(", "), categories.size(), "");
-									%>
-							  		<span class="Categories"><strong><%=_ctx.appRes("Category.view.label")%>:</strong> <%= categories.toString(); %></span>
-									<%		
-								}
-					    }
-						}
-						if(isShowTags) {
-							FolksonomyService folkService = uicomponent.getApplicationComponent(FolksonomyService.class);
-							List<Node> tagList = folkService.getLinkedTagsOfDocument(currentNode, repositoryName);
-							if(tagList.size() > 0) {
-								StringBuffer tagBuff = new StringBuffer("[");
-								for(Node tag: tagList) {
-									tagBuff.append(tag.getName()).append(", ");
-								}
-								tagBuff.replace(tagBuff.lastIndexOf(", "), tagBuff.size(), "]");
+				<div class="WebContentContainer">
+					<div class="WebContentInformation">
+						<% 
+							if (isShowTitle && currentNode.hasProperty("exo:title")) {
 								%>
-									<span class="Tags"><strong><%=_ctx.appRes("Tag.view.label")%>:</strong> <%= tagBuff.toString(); %></span>
-								<%	
-							}	
-						}
-					%>
+									<h1 class="WebContentTitle"><%= currentNode.getProperty("exo:title").getString(); %></h1>
+								<%
+							}
+							if(isShowCategories) {
+								StringBuffer categories = new StringBuffer();
+								CategoriesService categoriesService = uicomponent.getApplicationComponent(CategoriesService.class);
+								if(categoriesService.hasCategories(currentNode)) {
+									if (currentNode.getProperty("exo:category").getValues().length > 0) {
+						      	List<Node> categoryNodeList = categoriesService.getCategories(currentNode, repositoryName);
+						       	for (Node category: categoryNodeList) {
+						        	categories.append(category.getName()).append(", ");
+						       	}
+						    	 	categories.replace(categories.lastIndexOf(", "), categories.size(), "");
+										%>
+								  		<span class="Categories"><strong><%=_ctx.appRes("Category.view.label")%>:</strong> <%= categories.toString(); %></span>
+										<%		
+									}
+						    }
+							}
+							if(isShowTags) {
+								FolksonomyService folkService = uicomponent.getApplicationComponent(FolksonomyService.class);
+								List<Node> tagList = folkService.getLinkedTagsOfDocument(currentNode, repositoryName);
+								if(tagList.size() > 0) {
+									StringBuffer tagBuff = new StringBuffer("[");
+									for(Node tag: tagList) {
+										tagBuff.append(tag.getName()).append(", ");
+									}
+									tagBuff.replace(tagBuff.lastIndexOf(", "), tagBuff.size(), "]");
+									%>
+										<span class="Tags"><strong><%=_ctx.appRes("Tag.view.label")%>:</strong> <%= tagBuff.toString(); %></span>
+									<%	
+								}	
+							}
+						%>
+					</div>
+					<%=htmlFile.getNode("jcr:content").getProperty("jcr:data").getString()%>
 				</div>
+		<%
+	} else {
+		%>
+			<%=htmlFile.getNode("jcr:content").getProperty("jcr:data").getString()%>
 		<%
 	}
 %>
-
-<%=htmlFile.getNode("jcr:content").getProperty("jcr:data").getString()%>
