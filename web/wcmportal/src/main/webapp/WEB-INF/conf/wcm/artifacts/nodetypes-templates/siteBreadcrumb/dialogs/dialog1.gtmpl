@@ -114,12 +114,6 @@
 								</td>
 							</tr>
 							<tr>
-								<td class="FieldLabel"></td>
-								<td class="FieldComponent">
-									<div class="WebContentSynchronize Refresh16x16Icon" onclick="wcm.insertCSSFromTextArea2FCK('<%= htmlWYSIWYGFormId %>', '<%= cssFormId %>')"><%=_ctx.appRes("WebContent.dialog.label.Synchronize")%></div>
-								</td>
-							</tr>						
-							<tr>
 					 			<td class="FieldLabel">
 					 				<div title="<%=_ctx.appRes("WebContent.dialog.label.Synchronize")%>" class="WebContentSynchronize Refresh16x16Icon" onclick="wcm.insertCSSFromTextArea2FCK('<%= htmlWYSIWYGFormId %>', '<%= cssFormId %>')"></div>
 									<div class="WebContentMain"><%=_ctx.appRes("WebContent.dialog.label.WebContentHtml")%></div>
