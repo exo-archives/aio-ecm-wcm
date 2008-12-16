@@ -18,6 +18,7 @@ package org.exoplatform.services.wcm.javascript;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.Repository;
 import javax.jcr.Session;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
@@ -95,16 +96,30 @@ public class XJavascriptService implements Startable {
   }
 
   private String getJSDataBySQLQuery(Session session, String queryStatement, String exceptPath) throws Exception {
-    QueryManager queryManager = session.getWorkspace().getQueryManager() ;
-    Query query = queryManager.createQuery(queryStatement, Query.SQL) ;
-    QueryResult queryResult = query.execute() ;
-    StringBuffer buffer = new StringBuffer();
-    for(NodeIterator iterator = queryResult.getNodes();iterator.hasNext();) {
-      Node jsFile = iterator.nextNode();
-      if(jsFile.getPath().equalsIgnoreCase(exceptPath)) continue;
-      buffer.append(jsFile.getNode("jcr:content").getProperty("jcr:data").getString()) ;
+    Session querySession = null;
+    QueryManager queryManager = null;
+    try {
+      if(session.isLive()) {
+        queryManager = session.getWorkspace().getQueryManager();
+      }else {
+        Repository repository = session.getRepository();
+        querySession = repository.login(session.getWorkspace().getName());
+        queryManager = querySession.getWorkspace().getQueryManager();
+      }
+      Query query = queryManager.createQuery(queryStatement, Query.SQL) ;
+      QueryResult queryResult = query.execute() ;
+      StringBuffer buffer = new StringBuffer();
+      for(NodeIterator iterator = queryResult.getNodes();iterator.hasNext();) {
+        Node jsFile = iterator.nextNode();
+        if(jsFile.getPath().equalsIgnoreCase(exceptPath)) continue;
+        buffer.append(jsFile.getNode("jcr:content").getProperty("jcr:data").getString()) ;
+      }
+      return buffer.toString(); 
     }
-    return buffer.toString();
+    finally{
+      if(querySession != null)
+        querySession.logout();
+    }
   }
 
   public void start() {    
