@@ -54,5 +54,6 @@
   <import>war:/conf/wcm/views-configuration.xml</import>
   <import>war:/conf/wcm/deployment-configuration.xml</import>
   <import>war:/conf/wcm/site-artifacts-initializer-configuration.xml</import>
-  <import>war:/conf/wcm/metadata-templates-configuration.xml</import>  		    		
+  <import>war:/conf/wcm/metadata-templates-configuration.xml</import>
+  <import>war:/conf/wcm/webui-properties-configuration.xml</import>    		    		
 </configuration>
