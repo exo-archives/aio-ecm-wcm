@@ -17,6 +17,8 @@
 package org.exoplatform.wcm.webui.scv.config;
 
 import org.exoplatform.portal.webui.container.UIContainer;
+import org.exoplatform.wcm.webui.WebUIPropertiesConfigService;
+import org.exoplatform.wcm.webui.WebUIPropertiesConfigService.PopupWindowProperties;
 import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -48,7 +50,9 @@ public class UIStartEditionInPageWizard extends UIContainer {
       UISingleContentViewerPortlet uiportlet = editMode.getAncestorOfType(UISingleContentViewerPortlet.class);
       UIPopupContainer popupContainer = uiportlet.getChild(UIPopupContainer.class);
       UIPortletConfig portletConfig = editMode.getChild(UIPortletConfig.class);
-      popupContainer.activate(portletConfig,1024,768);      
+      WebUIPropertiesConfigService propertiesConfigService = editMode.getApplicationComponent(WebUIPropertiesConfigService.class);
+      PopupWindowProperties popupProperties = (PopupWindowProperties)propertiesConfigService.getProperties(WebUIPropertiesConfigService.SCV_POPUP_SIZE_EDIT_PORTLET_MODE);
+      popupContainer.activate(portletConfig,popupProperties.getWidth(),popupProperties.getHeight());            
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
       context.addUIComponentToUpdateByAjax(popupContainer);
     }

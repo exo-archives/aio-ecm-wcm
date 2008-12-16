@@ -19,6 +19,8 @@ package org.exoplatform.wcm.webui.scv;
 import javax.portlet.PortletPreferences;
 
 import org.exoplatform.portal.webui.container.UIContainer;
+import org.exoplatform.wcm.webui.WebUIPropertiesConfigService;
+import org.exoplatform.wcm.webui.WebUIPropertiesConfigService.PopupWindowProperties;
 import org.exoplatform.wcm.webui.scv.config.UIPortletConfig;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -73,8 +75,10 @@ public class UIPresentationContainer extends UIContainer{
       UIPortletConfig portletConfig = maskPopupContainer.createUIComponent(UIPortletConfig.class,null,null);
       uicomp.addChild(portletConfig);
       portletConfig.init();
-      portletConfig.setRendered(true);      
-      maskPopupContainer.activate(portletConfig,1024,768);      
+      portletConfig.setRendered(true);
+      WebUIPropertiesConfigService propertiesConfigService = uicomp.getApplicationComponent(WebUIPropertiesConfigService.class);
+      PopupWindowProperties popupProperties = (PopupWindowProperties)propertiesConfigService.getProperties(WebUIPropertiesConfigService.SCV_POPUP_SIZE_QUICK_EDIT);
+      maskPopupContainer.activate(portletConfig,popupProperties.getWidth(),popupProperties.getHeight());            
       context.addUIComponentToUpdateByAjax(maskPopupContainer);
   
     }

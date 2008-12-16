@@ -125,7 +125,7 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent{
     return false;
   }
 
-  public void closePopupAndUpdateUI(WebuiRequestContext requestContext,boolean isUpdate) throws Exception {    
+  public void closePopupAndUpdateUI(WebuiRequestContext requestContext, boolean isUpdate) throws Exception {    
     UISingleContentViewerPortlet uiPresentationPortlet = getAncestorOfType(UISingleContentViewerPortlet.class);    
     UIPopupContainer popupAction = uiPresentationPortlet.getChild(UIPopupContainer.class) ;
     popupAction.deActivate() ;                

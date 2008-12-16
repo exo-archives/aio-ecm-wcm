@@ -34,6 +34,8 @@ import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.wcm.webui.WebUIPropertiesConfigService;
+import org.exoplatform.wcm.webui.WebUIPropertiesConfigService.PopupWindowProperties;
 import org.exoplatform.wcm.webui.scv.config.UIPortletConfig;
 import org.exoplatform.wcm.webui.scv.config.UIStartEditionInPageWizard;
 import org.exoplatform.webui.application.WebuiApplication;
@@ -83,7 +85,9 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
       portletEditMode.addChild(portletConfig);
       portletConfig.init();
       portletConfig.setRendered(true);      
-      maskPopupContainer.activate(portletConfig,1024,768);
+      WebUIPropertiesConfigService propertiesConfigService = getApplicationComponent(WebUIPropertiesConfigService.class);
+      PopupWindowProperties popupProperties = (PopupWindowProperties)propertiesConfigService.getProperties(WebUIPropertiesConfigService.SCV_POPUP_SIZE_EDIT_PORTLET_MODE);
+      maskPopupContainer.activate(portletConfig,popupProperties.getWidth(),popupProperties.getHeight());
       PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
       portletRequestContext.addUIComponentToUpdateByAjax(maskPopupContainer);
     }
