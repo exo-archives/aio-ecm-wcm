@@ -56,14 +56,8 @@ import org.exoplatform.webui.event.EventListener;
  */
 
 @ComponentConfigs( {
-  @ComponentConfig(
-      lifecycle = Lifecycle.class, 
-      events = @EventConfig(listeners = UIContentListPresentation.RefreshActionListener.class)                  
-  ),
-  @ComponentConfig(
-      type = UICustomizeablePaginator.class, 
-      events = @EventConfig(listeners = UICustomizeablePaginator.ShowPageActionListener.class)       
-  )
+    @ComponentConfig(lifecycle = Lifecycle.class, events = @EventConfig(listeners = UIContentListPresentation.RefreshActionListener.class)),
+    @ComponentConfig(type = UICustomizeablePaginator.class, events = @EventConfig(listeners = UICustomizeablePaginator.ShowPageActionListener.class))
 
 })
 public class UIContentListPresentation extends UIContainer {
@@ -74,34 +68,35 @@ public class UIContentListPresentation extends UIContainer {
   private UICustomizeablePaginator uiPaginator;
 
   private String                   contentColumn;
+
   private boolean                  showHeader;
 
-  private SimpleDateFormat         dateFormatter = new SimpleDateFormat(
-      ISO8601.SIMPLE_DATETIME_FORMAT);
+  private String                   header;
+
+  private SimpleDateFormat         dateFormatter = new SimpleDateFormat(ISO8601.SIMPLE_DATETIME_FORMAT);
 
   public UIContentListPresentation() {
   }
 
-  public void init(String templatePath, ResourceResolver resourceResolver, PageList dataPageList)
-  throws Exception {
+  public void init(String templatePath, ResourceResolver resourceResolver, PageList dataPageList) throws Exception {
     PortletPreferences portletPreferences = ((UIFolderViewer) getParent()).getPortletPreference();
-    String paginatorTemplatePath = portletPreferences.getValue(
-        UIContentListViewerPortlet.PAGINATOR_TEMPlATE_PATH, null);
+    String paginatorTemplatePath = portletPreferences.getValue(UIContentListViewerPortlet.PAGINATOR_TEMPlATE_PATH,
+                                                               null);
     this.templatePath = templatePath;
     this.resourceResolver = resourceResolver;
     uiPaginator = addChild(UICustomizeablePaginator.class, null, null);
     uiPaginator.setTemplatePath(paginatorTemplatePath);
     uiPaginator.setResourceResolver(resourceResolver);
-    uiPaginator.setPageList(dataPageList);   
+    uiPaginator.setPageList(dataPageList);
   }
 
   public boolean showRefreshButton() {
     PortletPreferences portletPreferences = ((UIFolderViewer) getParent()).getPortletPreference();
     String isShow = portletPreferences.getValue(UIContentListViewerPortlet.SHOW_REFRESH_BUTTON,
-        null);
+                                                null);
     return (isShow != null) ? Boolean.parseBoolean(isShow) : false;
   }
-  
+
   public boolean isShowField(String field) {
     PortletPreferences portletPreferences = ((UIFolderViewer) getParent()).getPortletPreference();
     String showAble = portletPreferences.getValue(field, null);
@@ -111,11 +106,11 @@ public class UIContentListPresentation extends UIContainer {
   public boolean showPaginator() throws Exception {
     PortletPreferences portletPreferences = ((UIFolderViewer) getParent()).getPortletPreference();
     String itemsPerPage = portletPreferences.getValue(UIContentListViewerPortlet.ITEMS_PER_PAGE,
-        null);
+                                                      null);
     int totalItems = uiPaginator.getTotalItems();
     if (totalItems > Integer.parseInt(itemsPerPage)) {
       return true;
-    }     
+    }
     return false;
   }
 
@@ -153,12 +148,12 @@ public class UIContentListPresentation extends UIContainer {
 
   public String getTitle(Node node) throws Exception {
     return node.hasProperty("exo:title") ? node.getProperty("exo:title").getValue().getString()
-        : node.getName();
+                                        : node.getName();
   }
 
   public String getSummary(Node node) throws Exception {
     return node.hasProperty("exo:summary") ? node.getProperty("exo:summary").getValue().getString()
-        : null;
+                                          : null;
   }
 
   public String getURL(Node node) throws Exception {
@@ -171,11 +166,11 @@ public class UIContentListPresentation extends UIContainer {
     String repository = portletPreferences.getValue(UIContentListViewerPortlet.REPOSITORY, null);
     String workspace = portletPreferences.getValue(UIContentListViewerPortlet.WORKSPACE, null);
     String baseURI = portletRequestContext.getRequest().getScheme() + "://"
-    + portletRequestContext.getRequest().getServerName() + ":"
-    + String.format("%s", portletRequestContext.getRequest().getServerPort());
+        + portletRequestContext.getRequest().getServerName() + ":"
+        + String.format("%s", portletRequestContext.getRequest().getServerPort());
     String parameterizedPageURI = wcmConfigurationService.getParameterizedPageURI();
     link = baseURI + portalURI + parameterizedPageURI.substring(1, parameterizedPageURI.length())
-    + "/" + repository + "/" + workspace + node.getPath();
+        + "/" + repository + "/" + workspace + node.getPath();
     return link;
   }
 
@@ -220,27 +215,33 @@ public class UIContentListPresentation extends UIContainer {
 
   public String getIllustrativeImage(Node node) throws Exception {
     String imagePath = null;
-    if(node.isNodeType("exo:webContent")) {
+    if (node.isNodeType("exo:webContent")) {
       WebSchemaConfigService schemaConfigService = getApplicationComponent(WebSchemaConfigService.class);
       WebContentSchemaHandler contentSchemaHandler = schemaConfigService.getWebSchemaHandlerByType(WebContentSchemaHandler.class);
       Node illustrativeImage = null;
       try {
         illustrativeImage = contentSchemaHandler.getIllustrationImage(node);
-        imagePath = Utils.getThumbnailImage(illustrativeImage,ThumbnailService.MEDIUM_SIZE);
-      } catch (Exception e) { }
-      if(imagePath == null && illustrativeImage != null) {
+        imagePath = Utils.getThumbnailImage(illustrativeImage, ThumbnailService.MEDIUM_SIZE);
+      } catch (Exception e) {
+      }
+      if (imagePath == null && illustrativeImage != null) {
         Session session = illustrativeImage.getSession();
-        String repository = ((ManageableRepository)session.getRepository()).getConfiguration().getName();
+        String repository = ((ManageableRepository) session.getRepository()).getConfiguration()
+                                                                            .getName();
         String workspace = session.getWorkspace().getName();
-        imagePath = "/portal/rest/jcr/"+repository+"/" + workspace + illustrativeImage.getPath();
+        imagePath = "/portal/rest/jcr/" + repository + "/" + workspace
+            + illustrativeImage.getPath();
       }
       return imagePath;
     }
     PortletRequestContext requestContext = WebuiRequestContext.getCurrentInstance();
-    String showThumbnailPref = requestContext.getRequest().getPreferences().getValue(UIContentListViewerPortlet.SHOW_THUMBNAILS_VIEW,"false");
+    String showThumbnailPref = requestContext.getRequest()
+                                             .getPreferences()
+                                             .getValue(UIContentListViewerPortlet.SHOW_THUMBNAILS_VIEW,
+                                                       "false");
     boolean isShowThumbnail = Boolean.parseBoolean(showThumbnailPref);
-    if(isShowThumbnail) {
-      return Utils.getThumbnailImage(node,ThumbnailService.MEDIUM_SIZE);
+    if (isShowThumbnail) {
+      return Utils.getThumbnailImage(node, ThumbnailService.MEDIUM_SIZE);
     }
     return null;
   }
@@ -268,8 +269,7 @@ public class UIContentListPresentation extends UIContainer {
   public static class RefreshActionListener extends EventListener<UIContentListPresentation> {
     public void execute(Event<UIContentListPresentation> event) throws Exception {
       UIContentListPresentation contentListPresentation = event.getSource();
-      RefreshDelegateActionListener refreshListener = (RefreshDelegateActionListener) contentListPresentation
-      .getParent();
+      RefreshDelegateActionListener refreshListener = (RefreshDelegateActionListener) contentListPresentation.getParent();
       refreshListener.onRefresh(event);
     }
   }
@@ -281,5 +281,11 @@ public class UIContentListPresentation extends UIContainer {
   public void setShowHeader(boolean showHeader) {
     this.showHeader = showHeader;
   }
-
+  
+  public void setHeader(String header) {
+    this.header = header;
+  }
+  public String getHeader() {
+    return this.header;
+  }
 }

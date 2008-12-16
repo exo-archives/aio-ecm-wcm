@@ -41,7 +41,6 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIPopupContainer;
-import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -101,6 +100,8 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
                                                     UIContentListViewerPortlet.FOLDER_PATH);
 
     UIFormStringInput headerInput = new UIFormStringInput(HEADER, HEADER, null);
+    String headerValue = portletPreferences.getValue(UIContentListViewerPortlet.HEADER, null);
+    headerInput.setValue(headerValue);
 
     List<SelectItemOption<String>> formViewerTemplateList = getTemplateList(PORTLET_NAME,
                                                                             FORM_VIEW_TEMPLATE_CATEGORY);
@@ -154,7 +155,8 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
                                                                             null);
     dateCreatedViewerCheckbox.setChecked(true);
     UIFormCheckBoxInput viewerHeader = new UIFormCheckBoxInput(VIEWER_HEADER, VIEWER_HEADER, null);
-    viewerHeader.setChecked(true);
+    viewerHeader.setChecked(Boolean.parseBoolean(portletPreferences.getValue(UIContentListViewerPortlet.SHOW_HEADER,
+                                                                             null)));
 
     String quickEditAble = portletPreferences.getValue(UIContentListViewerPortlet.SHOW_QUICK_EDIT_BUTTON,
                                                        null);

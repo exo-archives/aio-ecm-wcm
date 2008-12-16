@@ -100,6 +100,8 @@ public class UIFolderViewer extends UIContainer implements RefreshDelegateAction
                                                                          null));
     contentListPresentation.setShowHeader(Boolean.parseBoolean(portletPreferences.getValue(UIContentListViewerPortlet.SHOW_HEADER,
                                                                                            null)));
+    contentListPresentation.setHeader(portletPreferences.getValue(UIContentListViewerPortlet.HEADER,
+                                                                  null));
   }
 
   public String getMessage() throws Exception {

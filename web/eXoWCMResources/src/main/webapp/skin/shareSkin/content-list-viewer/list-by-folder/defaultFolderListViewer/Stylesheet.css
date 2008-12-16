@@ -1,27 +1,39 @@
-.UIContentListViewerPortlet .UIContentListPresentationDefault .Caption {
-    border: 1px solid #b7b7b7;
-    padding: 10px;
-    margin: 10px;
-    background: #fff;
+.UIContentListViewerPortlet .UIContentListPresentationDefault {
+	border: 1px solid #b7b7b7;    
+	margin: 10px;
+	background: #fff;
+}
+
+.UIContentListViewerPortlet .UIContentListPresentationDefault .Caption {    
+	padding: 10px;
+}
+
+.UIContentListViewerPortlet .UIContentListPresentationDefault .Header {
+	background:transparent url(icons/BgCategoryTitle1x25.gif) repeat-x scroll 0 0;
+	border-bottom:1px solid #B7B7B7;
+	line-height:25px;	
+	padding-left:10px;
+	font-weight:bold;
+	color:#424242;
 }
 
 .UIContentListViewerPortlet .UIContentListPresentationDefault .Caption .CaptionItem {
-    border-bottom: 1px dotted #2f2f2f;
-    padding-top: 10px;
+	border-bottom: 1px dotted #2f2f2f;
+	padding-top: 10px;
 }
 
 .UIContentListViewerPortlet .UIContentListPresentationDefault .Caption .CaptionTitle a {
-    font-size: 14px;
-    color: #0385d9;
-    font-weight: bold;
+	font-size: 14px;
+	color: #0385d9;
+	font-weight: bold;
 }
 
 .UIContentListViewerPortlet .UIContentListPresentationDefault .Caption .CaptionDate {
-    color: #8f8f8f;
+	color: #8f8f8f;
 }
 
 .UIContentListViewerPortlet .UIContentListPresentationDefault .Caption .CaptionContent p {
-    padding: 5px 0;
+  padding: 5px 0;
 }
 
 .UIContentListViewerPortlet .UIContentListPresentationDefault .Caption .CaptionContent img {
@@ -30,12 +42,12 @@
 }
 
 .UIContentListViewerPortlet .UIContentListPresentationDefault .Caption .CaptionViewMore {
-    text-align: right;
+	text-align: right;
 }
 
 .UIContentListViewerPortlet .UIContentListPresentationDefault .Caption .CaptionViewMore a {
-    color: #fd711c;
-    font-size: 10px;
+	color: #fd711c;
+	font-size: 10px;
 }
 
 .UIContentListViewerPortlet .UIContentListPresentationDefault .Caption .CaptionFunc {

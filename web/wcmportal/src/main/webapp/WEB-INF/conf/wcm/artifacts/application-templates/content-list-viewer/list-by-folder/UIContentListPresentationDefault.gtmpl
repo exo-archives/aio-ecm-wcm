@@ -9,6 +9,14 @@ import org.exoplatform.wcm.webui.clv.UIContentListViewerPortlet;
 %>
 
 <div id="$uicomponent.id" class="UIContentListPresentationDefault">
+	<%
+	String header = uicomponent.getHeader();
+	if (uicomponent.isShowHeader() && header != null && header.trim().length() != 0 ) {
+	%>
+		<div class="Header"><%= header %></div>		
+	<%
+	}
+	%>
 	<div class="Caption">
 		<% 	
 		def currentPageData = uicomponent.getCurrentPageData();			
