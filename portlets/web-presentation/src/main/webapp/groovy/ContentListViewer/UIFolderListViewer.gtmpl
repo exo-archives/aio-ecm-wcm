@@ -22,7 +22,7 @@
 		uicomponent.renderChild(UIContentListPresentation.class);
 	} else {
 	%>
-		<div style="height: 100px; text-align: center; color: red; background: white;border: 1px solid gray;">
+		<div style="height: 100px; text-align: center; font-size: 13px; background: white;border: 1px solid gray; padding: 10px;margin: 5px;">
 			<span><%=uicomponent.getMessage()%></span>
 		</div>
 	<% } %>

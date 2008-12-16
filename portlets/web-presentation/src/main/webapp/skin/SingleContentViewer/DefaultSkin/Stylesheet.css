@@ -9,8 +9,7 @@
 	padding: 10px;
 	margin: 5px;
 	text-align: center;
-	color:red;
-	font-style:italic;
+	font-size: 13px;
 }
 
 .UISingleContentViewerPortlet .EditMode {
@@ -300,6 +299,5 @@
 	background: url(/eXoResources/skin/DefaultSkin/webui/component/UIPageIterator/background/ArrowPageIterator.gif) no-repeat scroll left top;;
 	float:left;
 	height:16px;
-	/*margin: 0px;*/
 	width:16px;
 }
