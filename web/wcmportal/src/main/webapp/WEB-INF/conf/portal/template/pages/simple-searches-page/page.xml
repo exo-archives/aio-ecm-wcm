@@ -5,7 +5,7 @@
   <name></name>
   <container template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
     <application>
-      <instance-id>/web-searches/SimpleSearchPortlet</instance-id>
+      <instance-id>/web-searches/WCMAdvanceSearchPortlet</instance-id>
       <title>Search</title>
       <show-info-bar>true</show-info-bar>
       <show-application-state>true</show-application-state>    
