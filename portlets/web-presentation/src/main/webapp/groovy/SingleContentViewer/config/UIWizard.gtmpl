@@ -47,7 +47,7 @@ style="!width: expression(this.previousSibling.offsetWidth - 2 + 'px'); margin: 
 																			actionLink = uicomponent.url("ViewStep" + String.valueOf(i));
 																			print ("<a href=\"$actionLink\" title=\"$strStep\">") ;
 																		} else {
-																			print ("<a href=\"#\" style=\"color:blue;font-weight:bold;\" title=\"$strStep\">") ;
+																			print ("<a href=\"#\" style=\"color: #058ee6;font-weight: bold;\" title=\"$strStep\">") ;
 																		}
 																		print (wizardStep + " " + String.valueOf(i)) ;
 																		println(": " + strStep +"</a>") ;

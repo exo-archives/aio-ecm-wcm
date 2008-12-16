@@ -1,6 +1,9 @@
 .UISingleContentViewerPortlet {
 	overflow: auto;
-	background: #fff;
+}
+
+.UISingleContentViewerPortlet .WebContentContainer {
+	background: white;
 }
 
 .UISingleContentViewerPortlet .Message {
@@ -10,12 +13,14 @@
 	margin: 5px;
 	text-align: center;
 	font-size: 13px;
+	background: white;
 }
 
 .UISingleContentViewerPortlet .EditMode {
 	padding: 5px;
 	border: 1px solid #B7B7B7;
 	margin: 5px;
+	background: white;
 }
 
 .UISingleContentViewerPortlet .UIWelcomeScreen .LeftColumn {
@@ -74,12 +79,13 @@
 .UISingleContentViewerPortlet .ShowStepInfo {
 	float: left;
 	background: url('background/ShowStepInfo.gif') no-repeat;
-	width: 80px;
+	width: 90px;
 	height: 25px; line-height: 25px;
 	cursor: pointer;
 	margin: 4px 5px;
-	padding-left: 30px;
-	color: blue;
+	padding-left: 27px;
+	color: #275377;
+	font-weight: bold;
 }
 
 .UISingleContentViewerPortlet .UIWizard .UIWizardPageSetInfo .PageNodeContainer {
@@ -249,6 +255,7 @@
 
 .UISingleContentViewerPortlet .QuickEditContainer .UIFormGrid td.FieldLabel {
 	white-space: nowrap;
+	width: 50px;
 }
 
 .UISingleContentViewerPortlet .QuickEditContainer .UIFormGrid {
@@ -300,4 +307,23 @@
 	float:left;
 	height:16px;
 	width:16px;
+}
+
+.UISingleContentViewerPortlet .UIContainerConfigOptions {
+	border: 1px solid #b7b7b7;
+}
+
+.UISingleContentViewerPortlet .UIContainerConfigOptions .ContainerConfigOptions {
+	line-height: 16px;
+	border: 1px solid white;
+}
+
+.UISingleContentViewerPortlet .UIContainerConfigOptions .ContainerConfigOptions .DescripberStep {
+	padding: 5px 0px;
+}
+
+.UISingleContentViewerPortlet .UIContainerConfigOptions .ContainerConfigOptions .StepNavigationTitle {
+	font-weight: bold;
+	line-height: 20px;
+	margin-bottom: 1px solid #b7b7b7;
 }
