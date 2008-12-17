@@ -24,6 +24,8 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.wcm.webui.Utils;
+import org.exoplatform.wcm.webui.WebUIPropertiesConfigService;
+import org.exoplatform.wcm.webui.WebUIPropertiesConfigService.PopupWindowProperties;
 import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
 import org.exoplatform.wcm.webui.scv.config.quickedition.UIQuickEditContainer;
 import org.exoplatform.wcm.webui.selector.document.UIDocumentPathSelector;
@@ -209,7 +211,20 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent{
       Utils.refreshBrowser((PortletRequestContext)requestContext);
     }
   }
-
+  
+  public void showPopup(WebuiRequestContext requestContext) throws Exception{
+    UISingleContentViewerPortlet viewerPortlet = getAncestorOfType(UISingleContentViewerPortlet.class);
+    UIPopupContainer popupContainer = viewerPortlet.getChild(UIPopupContainer.class);
+    WebUIPropertiesConfigService propertiesConfigService = getApplicationComponent(WebUIPropertiesConfigService.class);
+    PopupWindowProperties properties = null;
+    if(Utils.isEditPortletInCreatePageWizard()) {
+      properties = (PopupWindowProperties)propertiesConfigService.getProperties(WebUIPropertiesConfigService.SCV_POPUP_SIZE_EDIT_PORTLET_MODE);        
+    }else {
+      properties = (PopupWindowProperties) propertiesConfigService.getProperties(WebUIPropertiesConfigService.SCV_POPUP_SIZE_QUICK_EDIT);
+    }
+    popupContainer.activate(this,properties.getWidth(),properties.getHeight());
+    requestContext.addUIComponentToUpdateByAjax(popupContainer);
+  }
   /* (non-Javadoc)
    * @see org.exoplatform.webui.core.UIPopupComponent#activate()
    */

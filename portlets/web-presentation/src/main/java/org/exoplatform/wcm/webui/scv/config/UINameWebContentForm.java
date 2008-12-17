@@ -286,16 +286,9 @@ public class UINameWebContentForm extends UIForm {
     /* (non-Javadoc)
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
-    public void execute(Event<UINameWebContentForm> event) throws Exception {
-      PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
+    public void execute(Event<UINameWebContentForm> event) throws Exception {      
       UIPortletConfig uiPortletConfig = event.getSource().getAncestorOfType(UIPortletConfig.class);
-      if(uiPortletConfig.isEditPortletInCreatePageWizard()) {
-        uiPortletConfig.getChildren().clear();
-        uiPortletConfig.addUIWelcomeScreen();
-      } else {        
-        context.setApplicationMode(PortletMode.VIEW);
-        Utils.refreshBrowser(context);
-      }
+      uiPortletConfig.closePopupAndUpdateUI(event.getRequestContext(),true);
     }
   }
 

@@ -300,6 +300,8 @@ public class UIContentDialogForm extends UIDialogForm {
       uiNameWebContentForm.back();
       uiContentDialogForm.reset();
       uiQuickCreationWizard.viewStep(1);
+      UIPortletConfig portletConfig = uiQuickCreationWizard.getAncestorOfType(UIPortletConfig.class);
+      portletConfig.showPopup(event.getRequestContext());
     }
   }
 
@@ -406,8 +408,10 @@ public class UIContentDialogForm extends UIDialogForm {
       UISocialInfo uiSocialInfo = uiQuickWizard.getChild(UISocialInfo.class);
       uiSocialInfo.initUICategorizing(newNode);
       UIPermissionManager uiPermissionManager = uiSocialInfo.getChild(UIPermissionManager.class);
-      ((UIPermissionInfo) uiPermissionManager.getChild(UIPermissionInfo.class)).updateGrid();
+      uiPermissionManager.getChild(UIPermissionInfo.class).updateGrid();
       uiQuickWizard.viewStep(3);
+      UIPortletConfig portletConfig = uiQuickWizard.getAncestorOfType(UIPortletConfig.class);
+      portletConfig.showPopup(event.getRequestContext());
     }
   }
 

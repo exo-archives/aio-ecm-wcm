@@ -320,6 +320,7 @@ public class UIDMSSelectorForm extends UIForm implements UISelectable{
       UIPortletConfig uiPortletConfig = uiSelectorForm.getAncestorOfType(UIPortletConfig.class);
       uiPortletConfig.getChildren().clear();
       uiPortletConfig.addChild(uiPortletConfig.getBackComponent());
+      uiPortletConfig.showPopup(event.getRequestContext());
     }
   }
 

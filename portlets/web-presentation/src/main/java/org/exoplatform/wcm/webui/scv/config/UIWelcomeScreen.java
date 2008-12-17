@@ -23,11 +23,15 @@ import java.util.ResourceBundle;
 import javax.jcr.Node;
 
 import org.exoplatform.ecm.webui.selector.UISelectable;
+import org.exoplatform.wcm.webui.Utils;
+import org.exoplatform.wcm.webui.WebUIPropertiesConfigService;
+import org.exoplatform.wcm.webui.WebUIPropertiesConfigService.PopupWindowProperties;
 import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
 import org.exoplatform.web.application.RequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -150,13 +154,12 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
     public void execute(Event<UIWelcomeScreen> event) throws Exception {
       UIWelcomeScreen uiWelcomeScreen = event.getSource();
       String radioValue = uiWelcomeScreen.<UIFormRadioBoxInput>getUIInput("radio").getValue();
-      UIPortletConfig uiPortletConfig = uiWelcomeScreen.getAncestorOfType(UIPortletConfig.class);
+      UIPortletConfig uiPortletConfig = uiWelcomeScreen.getAncestorOfType(UIPortletConfig.class);      
       if("QuickCreateWebContent".equals(radioValue)) {
         uiWelcomeScreen.setRendered(false);
         UIQuickCreationWizard uiQuickCreationWizard = uiPortletConfig.addChild(UIQuickCreationWizard.class, null, null);
         uiQuickCreationWizard.getChild(UIWebConentNameTabForm.class).init();
       } else if ("EditCurrentWebContent".equals(radioValue)) {
-        // nhay vao buoc 2 lun
         uiWelcomeScreen.setRendered(false);
         UIQuickCreationWizard uiQuickCreationWizard = uiPortletConfig.addChild(UIQuickCreationWizard.class, null, null);
         UIContentDialogForm contentDialogForm  = uiQuickCreationWizard.getChild(UIContentDialogForm.class);
@@ -185,6 +188,7 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
         UIDMSSelectorForm dmSelectorForm = uiPortletConfig.addChild(UIDMSSelectorForm.class, null, null);
         dmSelectorForm.init();
       }
+      uiPortletConfig.showPopup(event.getRequestContext());
     }
   }
 

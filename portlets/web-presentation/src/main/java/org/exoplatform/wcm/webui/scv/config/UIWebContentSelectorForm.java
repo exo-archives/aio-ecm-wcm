@@ -329,6 +329,7 @@ public class UIWebContentSelectorForm extends UIForm implements UISelectable{
       UIPortletConfig uiPConfig = uiWeSelector.getAncestorOfType(UIPortletConfig.class);
       uiPConfig.getChildren().clear();
       uiPConfig.addChild(uiPConfig.getBackComponent());
+      uiPConfig.showPopup(event.getRequestContext());
     }
   }
 
