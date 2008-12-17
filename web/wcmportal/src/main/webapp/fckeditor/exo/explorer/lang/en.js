@@ -1,4 +1,3 @@
-
 var KLang = {
 	TreeTitle	 								: "Folders",
 	SettingTitle							: "Setting",

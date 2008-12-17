@@ -1,4 +1,3 @@
-
 var KLang = {
 	TreeTitle	 								: "Thư mục",
 	SettingTitle							: "Cấu hình",
@@ -20,7 +19,6 @@ var KLang = {
 	BtnCancel									: "Hủy",
 	BtnUpload									: "Tải lên",
 	BtnRefresh								: "Làm mới",
-	BtnUpload									: "Upload",
 	BtnSetting								: "Setting",
 	BtnHelp										: "Giúp đỡ",
 	BtnClose									: "Đóng",

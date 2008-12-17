@@ -1,5 +1,3 @@
-
-
 var KLang = {
 	title			:		"Tiêu đề",
 	url				:		"Địa chỉ :",

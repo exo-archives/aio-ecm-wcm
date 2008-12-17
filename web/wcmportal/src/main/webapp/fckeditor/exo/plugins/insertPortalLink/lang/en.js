@@ -1,5 +1,3 @@
-
-
 var KLang = {
 	title			:		"Title",
 	url				:		"Url :",
