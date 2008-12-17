@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+  <UISiteAdminToolbar>
+    <action>
+      <AddPage>Tạo mới trang</AddPage>
+      <EditPage>Chỉnh sửa bố cục trang</EditPage>
+      <EditPortal>Chỉnh sửa portal</EditPortal>
+      <CreatePortal>Tạo mới portal</CreatePortal>
+      <ChangePortal>Thay đổi portal</ChangePortal>
+    </action>
+  </UISiteAdminToolbar>
+</bundle>
+
