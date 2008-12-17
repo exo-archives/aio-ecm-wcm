@@ -28,6 +28,16 @@
 	width: 277px; height: 182px;
 }
 
+.single-content-viewer {
+	background: url('277x182/SingleContentViewer.png') no-repeat;
+	width: 277px; height: 182px;
+}
+
+.content-list-viewer {
+	background: url('277x182/ContentListViewer.png') no-repeat;
+	width: 277px; height: 182px;
+}
+
 .BrowseIcon {
 	width: 16px;	height: 16px;
   background: url('16x16/exo-browseIcon.png') no-repeat ;

@@ -271,7 +271,7 @@
 }
 
 .UISingleContentViewerPortlet .QuickEditBackButton a {
-	color: #ff5400;
+	color: #058ee6;
 	font-weight: bold; font-size: 12px;
 }
 
@@ -328,6 +328,10 @@
 	margin-bottom: 1px solid #b7b7b7;
 }
 
+.UICategoriesSelector .UICategoriesSelectPanel .UIGrid {
+	!width: 95%;
+}
+
 .UISingleContentViewerPortlet .UIStartEditionInPageWizard {
 	text-align: center;
 	padding: 20px;	
@@ -335,5 +339,5 @@
 
 .UISingleContentViewerPortlet .UIStartEditionInPageWizard a:hover {
 	font-size: 12px;
-	color: #058EE6	
+	color: #058EE6;	
 }
