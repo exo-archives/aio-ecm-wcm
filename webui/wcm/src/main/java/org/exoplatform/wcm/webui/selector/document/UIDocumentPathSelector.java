@@ -35,17 +35,27 @@ import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 /**
  * Created by The eXo Platform SAS
  * Author : DANG TAN DUNG
- *          dzungdev@gmail.com
- * Sep 3, 2008  
+ * dzungdev@gmail.com
+ * Sep 3, 2008
  */
 @ComponentConfig(lifecycle = UIContainerLifecycle.class)
 public class UIDocumentPathSelector extends UIBaseNodeTreeSelector implements UIPopupComponent{
 
+  /**
+   * Instantiates a new UI document path selector.
+   * 
+   * @throws Exception the exception
+   */
   public UIDocumentPathSelector() throws Exception {
     addChild(UIDocumentTreeBuilder.class, null, UIDocumentTreeBuilder.class.getSimpleName() + hashCode());
     addChild(UISelectPathPanel.class, null, UISelectPathPanel.class.getSimpleName() + hashCode());
   }
 
+  /**
+   * Inits the.
+   * 
+   * @throws Exception the exception
+   */
   public void init() throws Exception {
     LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
     String currentPortalName = Util.getUIPortal().getName();
@@ -66,6 +76,9 @@ public class UIDocumentPathSelector extends UIBaseNodeTreeSelector implements UI
     sessionProvider.close();
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.tree.UIBaseNodeTreeSelector#onChange(javax.jcr.Node, java.lang.Object)
+   */
   @Override
   public void onChange(Node node, Object context) throws Exception {
     UISelectPathPanel uiSelectPathPanel = getChild(UISelectPathPanel.class);
@@ -73,13 +86,15 @@ public class UIDocumentPathSelector extends UIBaseNodeTreeSelector implements UI
     uiSelectPathPanel.updateGrid();
   }
 
-  public void activate() throws Exception {
-    // TODO Auto-generated method stub
-    
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.core.UIPopupComponent#activate()
+   */
+  public void activate() throws Exception {    
   }
 
-  public void deActivate() throws Exception {
-    // TODO Auto-generated method stub
-    
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.core.UIPopupComponent#deActivate()
+   */
+  public void deActivate() throws Exception {    
   }
 }

@@ -32,20 +32,29 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 /**
  * Created by The eXo Platform SAS
  * Author : DANG TAN DUNG
- *          dzungdev@gmail.com
- * Sep 3, 2008  
+ * dzungdev@gmail.com
+ * Sep 3, 2008
  */
 @ComponentConfig(
     events = @EventConfig(listeners = UINodeTreeBuilder.ChangeNodeActionListener.class)
 )
 public class UIDocumentTreeBuilder extends UINodeTreeBuilder {
 
+  /** The current portal. */
   private Node currentPortal;
+  
+  /** The shared portal. */
   private Node sharedPortal;
 
+  /**
+   * Instantiates a new uI document tree builder.
+   * 
+   * @throws Exception the exception
+   */
   public UIDocumentTreeBuilder() throws Exception {
     super();
   }
+  
   /**
    * Gets the current portal.
    * 
@@ -82,6 +91,9 @@ public class UIDocumentTreeBuilder extends UINodeTreeBuilder {
    * build web content tree for web content path selector
    *
    */  
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.tree.UINodeTreeBuilder#buildTree()
+   */
   public void buildTree() throws Exception {       
     UINodeTree tree = getChild(UINodeTree.class) ;   
     tree.setSelected(currentNode);
@@ -130,6 +142,15 @@ public class UIDocumentTreeBuilder extends UINodeTreeBuilder {
     }    
   }
 
+  /**
+   * Filter document folder.
+   * 
+   * @param parent the parent
+   * 
+   * @return the list< node>
+   * 
+   * @throws Exception the exception
+   */
   private List<Node> filterDocumentFolder(Node parent) throws Exception {
     List<Node> webContentList = new ArrayList<Node>();
     for(NodeIterator iterator = parent.getNodes();iterator.hasNext();) {
@@ -142,6 +163,15 @@ public class UIDocumentTreeBuilder extends UINodeTreeBuilder {
     return webContentList;
   }
 
+  /**
+   * Gets the document storage.
+   * 
+   * @param portal the portal
+   * 
+   * @return the document storage
+   * 
+   * @throws Exception the exception
+   */
   private Node getDocumentStorage(Node portal) throws Exception {
     WebSchemaConfigService configService = getApplicationComponent(WebSchemaConfigService.class);
     PortalFolderSchemaHandler portalFolderSchemaHandler = configService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);

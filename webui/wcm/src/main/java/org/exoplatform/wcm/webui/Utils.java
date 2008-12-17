@@ -23,17 +23,21 @@ import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.services.security.Identity;
 import org.exoplatform.services.security.IdentityRegistry;
-import org.exoplatform.services.security.MembershipEntry;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 
 /**
  * Created by The eXo Platform SAS
- * Author : Hoa Pham	
- *          hoa.phamvu@exoplatform.com
- * Oct 23, 2008  
+ * Author : Hoa Pham
+ * hoa.phamvu@exoplatform.com
+ * Oct 23, 2008
  */
 public class Utils {
   
+  /**
+   * Checks if is edits the portlet in create page wizard.
+   * 
+   * @return true, if is edits the portlet in create page wizard
+   */
   public static boolean isEditPortletInCreatePageWizard() {
     UIPortal uiPortal = Util.getUIPortal();
     UIPortalApplication uiApp = uiPortal.getAncestorOfType(UIPortalApplication.class);
@@ -43,10 +47,24 @@ public class Utils {
     return false;
   }
   
+  /**
+   * Refresh browser.
+   * 
+   * @param context the context
+   */
   public static void refreshBrowser(PortletRequestContext context) {
     context.getJavascriptManager().addJavascript("location.reload();");
   }
   
+  /**
+   * Can edit current portal.
+   * 
+   * @param remoteUser the remote user
+   * 
+   * @return true, if successful
+   * 
+   * @throws Exception the exception
+   */
   public static boolean canEditCurrentPortal(String remoteUser) throws Exception {
     if(remoteUser == null) return false;
     IdentityRegistry identityRegistry = Util.getUIPortalApplication().getApplicationComponent(IdentityRegistry.class);        
@@ -54,7 +72,7 @@ public class Utils {
     if(identity == null) return false;
     UIPortal uiPortal = Util.getUIPortal();
     String editPermission = uiPortal.getEditPermission();
-    MembershipEntry membershipEntry = MembershipEntry.parse(editPermission);    
-    return identity.isMemberOf(membershipEntry);
+    UserACL userACL = Util.getUIPortalApplication().getApplicationComponent(UserACL.class);
+    return userACL.hasPermission(editPermission);
   }
 }
