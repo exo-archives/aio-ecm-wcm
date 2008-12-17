@@ -1,8 +1,7 @@
 function getCurrentNodes(navigations, selectedNodeUri) {
 	var currentNodes = new Array();
-	var currentNodeUris = new Array();
-	currentNodeUris = selectedNodeUri.split("/");
-	
+	var currentNodeUris = new Array();	
+	currentNodeUris = selectedNodeUri.split("/");	
 	for (var i in navigations) {
 		for (var j in navigations[i].nodes) {
 			if(navigations[i].nodes[j].name == currentNodeUris[0]) {
@@ -10,24 +9,22 @@ function getCurrentNodes(navigations, selectedNodeUri) {
 				break;
 			}
 		}
-	}
-	
-	function getChild(currentNodeUris, children, index) {
-		for (var i in children) {
-			if(currentNodeUris[index] == children[i].name) {
-				currentNodes[index] = children[i];
+	}		
+	var parent = currentNodes[0];	
+	for(var k = 1; k<currentNodeUris.length; k++) {		
+		if(parent.children == 'null')	{		
+			break;
+		}		
+		for(var n in parent.children) {	
+			var node = parent.children[n];			
+			if(currentNodeUris[k] == node.name) {
+				currentNodes[k]=node;
+				parent = node;			
 				break;
 			}
 		}
-		if (currentNodes[index].children != null && currentNodes[index].children != '') {
-			getChild(currentNodeUris, currentNodes[index].children, ++index); 
-		}
 	}
-	
-	if (currentNodeUris.length > 1)
-		getChild(currentNodeUris, currentNodes[0].children, 1);
-		
-	return currentNodes;
+	return currentNodes;	
 }
 
 function getBreadcrumbArr(navigations, previousURI, wcmContentTitle) {
