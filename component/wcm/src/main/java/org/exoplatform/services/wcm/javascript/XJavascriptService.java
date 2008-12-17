@@ -16,6 +16,8 @@
  */
 package org.exoplatform.services.wcm.javascript;
 
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Repository;
@@ -53,7 +55,9 @@ public class XJavascriptService implements Startable {
   private JavascriptConfigService jsConfigService ;
   private WCMConfigurationService configurationService;
   private ServletContext sContext ;    
-  private Log log = ExoLogger.getLogger("wcm:XJavascriptService");
+  private CopyOnWriteArrayList<String> javascriptMimeTypes = new CopyOnWriteArrayList<String>();
+  
+  private Log log = ExoLogger.getLogger("wcm:XJavascriptService");  
   @SuppressWarnings("unused")
   public XJavascriptService(RepositoryService repositoryService,JavascriptConfigService jsConfigService,ServletContext servletContext, 
       WCMConfigurationService configurationService, ContentInitializerService contentInitializerService) {    
@@ -61,10 +65,13 @@ public class XJavascriptService implements Startable {
     this.jsConfigService = jsConfigService ;
     sContext = servletContext ;
     this.configurationService = configurationService;
+    javascriptMimeTypes.addIfAbsent("text/javascript");
+    javascriptMimeTypes.addIfAbsent("application/x-javascript");
+    javascriptMimeTypes.addIfAbsent("text/ecmascript");
   }
 
   public String getActiveJavaScript(Node home) throws Exception {    
-    String jsQuery = "select * from exo:jsFile where jcr:path like '" +home.getPath()+ "/%' and exo:active='true'order by exo:priority DESC " ;
+    String jsQuery = "select * from exo:jsFile where jcr:path like '" + home.getPath()+ "/%' and exo:active='true'order by exo:priority DESC " ;
     return getJSDataBySQLQuery(home.getSession(),jsQuery,null);        
   }   
 
@@ -111,8 +118,11 @@ public class XJavascriptService implements Startable {
       StringBuffer buffer = new StringBuffer();
       for(NodeIterator iterator = queryResult.getNodes();iterator.hasNext();) {
         Node jsFile = iterator.nextNode();
+        Node jcrContent = jsFile.getNode("jcr:content");
+        String mimeType = jcrContent.getProperty("jcr:mimeType").getString();
+        if(!javascriptMimeTypes.contains(mimeType)) continue;
         if(jsFile.getPath().equalsIgnoreCase(exceptPath)) continue;
-        buffer.append(jsFile.getNode("jcr:content").getProperty("jcr:data").getString()) ;
+        buffer.append(jcrContent.getProperty("jcr:data").getString()) ;
       }
       return buffer.toString(); 
     }
