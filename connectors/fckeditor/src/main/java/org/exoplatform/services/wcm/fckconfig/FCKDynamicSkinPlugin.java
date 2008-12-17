@@ -29,11 +29,14 @@ import org.exoplatform.webui.form.wysiwyg.FCKEditorConfig;
 /**
  * Created by The eXo Platform SAS
  * Author : Phan Le Thanh Chuong
- *          chuong_phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * Aug 28, 2008  
+ * chuong_phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * Aug 28, 2008
  */
 public class FCKDynamicSkinPlugin extends FCKConfigPlugin {
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.ecm.fckconfig.FCKConfigPlugin#addParameters(org.exoplatform.webui.form.wysiwyg.FCKEditorConfig, org.exoplatform.services.ecm.fckconfig.FCKEditorContext)
+   */
   public void addParameters(FCKEditorConfig editorConfig, FCKEditorContext editorContext) throws Exception {
     StringBuffer cssMergedBuffer = new StringBuffer();
     ExoContainer exoContainer = ExoContainerContext.getCurrentContainer();

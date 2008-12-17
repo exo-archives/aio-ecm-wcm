@@ -63,37 +63,33 @@ import org.w3c.dom.Element;
 public class PortalLinkConnector implements ResourceContainer {
 
   /** The PUBLI c_ access. */
-  final private String            PUBLIC_ACCESS       = "public".intern();
+  final private String PUBLIC_ACCESS       = "public".intern();
 
   /** The PRIVAT e_ access. */
-  final private String            PRIVATE_ACCESS      = "private".intern();
+  final private String PRIVATE_ACCESS      = "private".intern();
 
   /** The EVERYON e_ permission. */
-  final private String            EVERYONE_PERMISSION = "Everyone".intern();
+  final private String EVERYONE_PERMISSION = "Everyone".intern();
 
   /** The RESOURC e_ type. */
-  final private String            RESOURCE_TYPE       = "PortalPageURI".intern();
+  final private String RESOURCE_TYPE       = "PortalPageURI".intern();
 
   /** The PORTA l_ context. */
-  final private String            PORTAL_CONTEXT      = "/portal".intern();
-
+  final private String PORTAL_CONTEXT      = "/portal".intern();
 
   /** The portal data storage. */
-  private DataStorage             portalDataStorage;
+  private DataStorage  portalDataStorage;
 
   /** The portal user acl. */
-  private UserACL                 portalUserACL;
-  
+  private UserACL      portalUserACL;
+
   /**
    * Instantiates a new portal link connector.
    * 
    * @param params the params
-   * @param repositoryService the repository service
-   * @param sessionProviderService the session provider service
-   * @param portalConfigService the portal config service
    * @param dataStorage the data storage
    * @param userACL the user acl
-   * @param conversationRegistry the conversation registry
+   * 
    * @throws Exception the exception
    */
   public PortalLinkConnector(InitParams params, DataStorage dataStorage, UserACL userACL) throws Exception {
@@ -107,16 +103,17 @@ public class PortalLinkConnector implements ResourceContainer {
    * @param currentFolder the current folder
    * @param command the command
    * @param type the type
+   * 
    * @return the page uri
+   * 
    * @throws Exception the exception
    */
   @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/getFoldersAndFiles/")
   @OutputTransformer(XMLOutputTransformer.class)
-  public Response getPageURI(@QueryParam("currentFolder")
-      String currentFolder, @QueryParam("command")
-      String command, @QueryParam("type")
-      String type) throws Exception {
+  public Response getPageURI(@QueryParam("currentFolder") String currentFolder,
+                             @QueryParam("command") String command,
+                             @QueryParam("type") String type) throws Exception {
     String userId = getCurrentUser();
     return buildReponse(currentFolder, command, userId);
   }
@@ -141,13 +138,12 @@ public class PortalLinkConnector implements ResourceContainer {
    * @param currentFolder the current folder
    * @param command the command
    * @param userId the user id
+   * 
    * @return the response
+   * 
    * @throws Exception the exception
    */
-  private Response buildReponse(String currentFolder, String command, String userId)
-  throws Exception {
-    if (command == null)
-      command = "";
+  private Response buildReponse(String currentFolder, String command, String userId) throws Exception {
     Document document = null;
     if (currentFolder == null || "/".equals(currentFolder)) {
       document = buildPortalXMLResponse("/", command, userId);
@@ -165,11 +161,12 @@ public class PortalLinkConnector implements ResourceContainer {
    * @param currentFolder the current folder
    * @param command the command
    * @param userId the user id
+   * 
    * @return the document
+   * 
    * @throws Exception the exception
    */
-  private Document buildPortalXMLResponse(String currentFolder, String command, String userId)
-  throws Exception {
+  private Document buildPortalXMLResponse(String currentFolder, String command, String userId) throws Exception {
     Element rootElement = initRootElement(command, currentFolder);
     Query<PortalConfig> query = new Query<PortalConfig>(null, null, null, null, PortalConfig.class);
     PageList pageList = portalDataStorage.find(query, new Comparator<PortalConfig>() {
@@ -178,20 +175,21 @@ public class PortalLinkConnector implements ResourceContainer {
       }
     });
     // should use PermissionManager to check access permission
-    Element foldersElement = rootElement.getOwnerDocument().createElement("Folders");    
+    Element foldersElement = rootElement.getOwnerDocument().createElement("Folders");
     rootElement.appendChild(foldersElement);
     for (Object object : pageList.getAll()) {
       PortalConfig config = (PortalConfig) object;
-      if (!portalUserACL.hasPermission(config, userId))
-        continue;            
-      Element folderElement = rootElement.getOwnerDocument().createElement("Folder");      
+      if (!portalUserACL.hasPermission(config, userId)) {
+        continue;
+      }
+      Element folderElement = rootElement.getOwnerDocument().createElement("Folder");
       folderElement.setAttribute("name", config.getName());
       folderElement.setAttribute("url", "");
       folderElement.setAttribute("folderType", "");
-      foldersElement.appendChild(folderElement);            
+      foldersElement.appendChild(folderElement);
     }
     return rootElement.getOwnerDocument();
-  }  
+  }
 
   /**
    * Builds the navigation xml response.
@@ -199,18 +197,20 @@ public class PortalLinkConnector implements ResourceContainer {
    * @param currentFolder the current folder
    * @param command the command
    * @param userId the user id
+   * 
    * @return the document
+   * 
    * @throws Exception the exception
    */
-  private Document buildNavigationXMLResponse(String currentFolder, String command, String userId)
-  throws Exception {
+  private Document buildNavigationXMLResponse(String currentFolder, String command, String userId) throws Exception {
     Element rootElement = initRootElement(command, currentFolder);
-    String portalName = currentFolder.substring(1, currentFolder.indexOf("/", 1));
+    String portalName = currentFolder.substring(1, currentFolder.indexOf('/', 1));
     String pageNodeUri = currentFolder.substring(portalName.length() + 1);
     ExoContainer container = ExoContainerContext.getCurrentContainer();
-    UserPortalConfigService portalConfigService = (UserPortalConfigService)container.getComponentInstanceOfType(UserPortalConfigService.class);
-    
-    List<PageNavigation> navigations = portalConfigService.getUserPortalConfig(portalName, userId).getNavigations();
+    UserPortalConfigService pConfig = (UserPortalConfigService) container.getComponentInstanceOfType(UserPortalConfigService.class);
+
+    List<PageNavigation> navigations = pConfig.getUserPortalConfig(portalName, userId)
+                                              .getNavigations();
     Element foldersElement = rootElement.getOwnerDocument().createElement("Folders");
     Element filesElement = rootElement.getOwnerDocument().createElement("Files");
     rootElement.appendChild(foldersElement);
@@ -218,12 +218,12 @@ public class PortalLinkConnector implements ResourceContainer {
     for (PageNavigation navigation : navigations) {
       for (PageNode pageNode : navigation.getNodes()) {
         if ("/".equalsIgnoreCase(pageNodeUri)) {
-          processPageNode(portalName, pageNode, foldersElement, filesElement, userId, portalConfigService);
+          processPageNode(portalName, pageNode, foldersElement, filesElement, userId, pConfig);
         } else {
           PageNode node = getPageNode(pageNode, pageNodeUri);
           if (node != null && node.getChildren() != null) {
             for (PageNode child : node.getChildren()) {
-              processPageNode(portalName, child, foldersElement, filesElement, userId, portalConfigService);
+              processPageNode(portalName, child, foldersElement, filesElement, userId, pConfig);
             }
           }
         }
@@ -231,18 +231,18 @@ public class PortalLinkConnector implements ResourceContainer {
     }
     return rootElement.getOwnerDocument();
   }
-  
 
   /**
    * Inits the root element.
    * 
    * @param commandStr the command str
    * @param currentPath the current path
+   * 
    * @return the element
+   * 
    * @throws ParserConfigurationException the parser configuration exception
    */
-  private Element initRootElement(String commandStr, String currentPath)
-  throws ParserConfigurationException {
+  private Element initRootElement(String commandStr, String currentPath) throws ParserConfigurationException {
     Document doc = null;
     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
     DocumentBuilder builder = factory.newDocumentBuilder();
@@ -266,15 +266,24 @@ public class PortalLinkConnector implements ResourceContainer {
    * @param foldersElement the root element
    * @param filesElement TODO
    * @param userId the user id
+   * @param portalConfigService the portal config service
+   * 
    * @throws Exception the exception
    */
-  private void processPageNode(String portalName, PageNode pageNode, Element foldersElement,
-      Element filesElement, String userId, UserPortalConfigService portalConfigService) throws Exception {
-    if(!pageNode.isDisplay()) return;
+  private void processPageNode(String portalName,
+                               PageNode pageNode,
+                               Element foldersElement,
+                               Element filesElement,
+                               String userId,
+                               UserPortalConfigService portalConfigService) throws Exception {
+    if (!pageNode.isDisplay()) {
+      return;
+    }
     String pageId = pageNode.getPageReference();
     Page page = portalConfigService.getPage(pageId, userId);
-    if (page == null)
+    if (page == null) {
       return;
+    }
     String accessMode = PRIVATE_ACCESS;
     for (String role : page.getAccessPermissions()) {
       if (EVERYONE_PERMISSION.equalsIgnoreCase(role)) {
@@ -283,43 +292,48 @@ public class PortalLinkConnector implements ResourceContainer {
       }
     }
     String pageUri = PORTAL_CONTEXT + "/" + accessMode + "/" + portalName + "/" + pageNode.getUri();
-    
+
     Element folderElement = foldersElement.getOwnerDocument().createElement("Folder");
     folderElement.setAttribute("name", pageNode.getName());
     folderElement.setAttribute("folderType", "");
-    folderElement.setAttribute("url", pageUri);        
+    folderElement.setAttribute("url", pageUri);
     foldersElement.appendChild(folderElement);
-    
-    SimpleDateFormat formatter = new SimpleDateFormat(ISO8601.SIMPLE_DATETIME_FORMAT);
+
+    SimpleDateFormat formatter = new SimpleDateFormat(ISO8601.SIMPLE_DATETIME_FORMAT);    
     String datetime = formatter.format(new Date());
     Element fileElement = filesElement.getOwnerDocument().createElement("File");
     fileElement.setAttribute("name", pageNode.getName());
-    fileElement.setAttribute("dateCreated", datetime);    
-    fileElement.setAttribute("fileType", "page node");    
+    fileElement.setAttribute("dateCreated", datetime);
+    fileElement.setAttribute("fileType", "page node");
     fileElement.setAttribute("url", pageUri);
     fileElement.setAttribute("size", "");
     filesElement.appendChild(fileElement);
   }
-  
+
   /**
    * Gets the page node.
    * 
    * @param root the root
    * @param uri the uri
+   * 
    * @return the page node
    */
   private PageNode getPageNode(PageNode root, String uri) {
-    if (uri.equals("/" + root.getUri() + "/"))
+    if (uri.equals("/" + root.getUri() + "/")) {
       return root;
+    }
     List<PageNode> list = root.getChildren();
-    if (list == null)
+    if (list == null) {
       return null;
+    }
     for (PageNode child : list) {
-      if (uri.equals("/" + child.getUri() + "/"))
+      if (uri.equals("/" + child.getUri() + "/")) {
         return child;
+      }
       PageNode deepChild = getPageNode(child, uri);
-      if (deepChild != null)
+      if (deepChild != null) {
         return deepChild;
+      }
     }
     return null;
   }

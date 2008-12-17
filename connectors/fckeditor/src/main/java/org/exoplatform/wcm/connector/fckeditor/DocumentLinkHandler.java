@@ -33,22 +33,39 @@ import org.exoplatform.services.wcm.core.WCMConfigurationService;
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Sep 26, 2008
  */
+/**
+ * The Class DocumentLinkHandler.
+ */
 public class DocumentLinkHandler extends FCKFileHandler {
 
+  /** The base uri. */
   private String baseURI;
 
+  /** The current portal. */
   private String currentPortal;
 
+  /**
+   * Instantiates a new document link handler.
+   * 
+   * @param container the container
+   */
   public DocumentLinkHandler(ExoContainer container) {
     super(container);
   }
 
+  /**
+   * Sets the base uri.
+   * 
+   * @param baseURI the new base uri
+   */
   public void setBaseURI(String baseURI) {
     this.baseURI = baseURI;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.connector.fckeditor.FCKFileHandler#getFileURL(javax.jcr.Node)
+   */
   public String getFileURL(final Node node) throws Exception {
-    // baseURI:http://localhost:8080/portal/rest
     String accessMode = "private";
     AccessControlList acl = ((ExtendedNode) node).getACL();
     for (AccessControlEntry entry : acl.getPermissionEntries()) {
@@ -60,7 +77,6 @@ public class DocumentLinkHandler extends FCKFileHandler {
     }
     WCMConfigurationService configurationService = (WCMConfigurationService) ExoContainerContext
         .getCurrentContainer().getComponentInstanceOfType(WCMConfigurationService.class);
-    // pageURI: /contentviewer
     String parameterizedPageViewerURI = configurationService.getParameterizedPageURI();
     String repository = ((ManageableRepository) node.getSession().getRepository())
         .getConfiguration().getName();
@@ -70,10 +86,20 @@ public class DocumentLinkHandler extends FCKFileHandler {
         + repository + "/" + workspace + nodePath;
   }
 
+  /**
+   * Sets the current portal.
+   * 
+   * @param currentPortal the new current portal
+   */
   public void setCurrentPortal(String currentPortal) {
     this.currentPortal = currentPortal;
   }
 
+  /**
+   * Gets the current portal.
+   * 
+   * @return the current portal
+   */
   public String getCurrentPortal() {
     return this.currentPortal;
   }

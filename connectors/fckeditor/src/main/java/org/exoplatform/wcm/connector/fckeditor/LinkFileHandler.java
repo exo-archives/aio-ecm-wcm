@@ -27,12 +27,23 @@ import org.exoplatform.ecm.connector.fckeditor.FCKFileHandler;
  *          anh.do@exoplatform.com
  * Sep 12, 2008  
  */
+/**
+ * The Class LinkFileHandler.
+ */
 public class LinkFileHandler extends FCKFileHandler {
 
+  /**
+   * Instantiates a new link file handler.
+   * 
+   * @param container the container
+   */
   public LinkFileHandler(ExoContainer container) {
     super(container);
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.connector.fckeditor.FCKFileHandler#getFileURL(javax.jcr.Node)
+   */
   protected String getFileURL(final Node file) throws Exception {
     return file.getProperty("exo:linkURL").getString();
   }
