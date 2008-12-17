@@ -33,6 +33,7 @@ import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 
 /**
@@ -143,7 +144,12 @@ public class UIPresentation extends UIBaseNodePresentation {
       writer.write("</span>");
       writer.write("</div>");
       return;
-    }  
+    }      
+    UISingleContentViewerPortlet viewerPortlet = getAncestorOfType(UISingleContentViewerPortlet.class);
+    UIPopupContainer popupContainer = viewerPortlet.getChild(UIPopupContainer.class);
+    if(popupContainer!= null) {
+      popupContainer.deActivate();
+    }
     super.processRender(context) ;
   }
 
