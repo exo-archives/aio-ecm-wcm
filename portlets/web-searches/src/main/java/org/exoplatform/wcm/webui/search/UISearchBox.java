@@ -21,6 +21,7 @@ import java.net.URLEncoder;
 import javax.portlet.PortletPreferences;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.logging.Log;
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.portal.UIPortal;
@@ -28,6 +29,7 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -39,42 +41,78 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 
 /*
- * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
+ * Created by The eXo Platform SAS 
+ * Author : Anh Do Ngoc 
+ * anh.do@exoplatform.com
  * Oct 31, 2008
  */
-@ComponentConfig(lifecycle = UIFormLifecycle.class, events = { @EventConfig(listeners = UISearchBox.SearchActionListener.class) })
+/**
+ * The Class UISearchBox.
+ */
+@ComponentConfig(
+  lifecycle = UIFormLifecycle.class, 
+  events = { 
+    @EventConfig(listeners = UISearchBox.SearchActionListener.class)    
+  }                 
+)
 public class UISearchBox extends UIForm {
 
+  /** The template path. */
   private String             templatePath;
+  
+  /** The log. */
+  private static  Log log = ExoLogger.getLogger(UISearchBox.class);
 
-  public static final String KEYWORD_INPUT     = "keywordInput";
+  /** The Constant KEYWORD_INPUT. */
+  public static final String KEYWORD_INPUT     = "keywordInput".intern();
 
-  public static final String PORTAL_NAME_PARAM = "portal";
+  /** The Constant PORTAL_NAME_PARAM. */
+  public static final String PORTAL_NAME_PARAM = "portal".intern();
 
-  public static final String KEYWORD_PARAM     = "keyword";
+  /** The Constant KEYWORD_PARAM. */
+  public static final String KEYWORD_PARAM     = "keyword".intern();
 
+  
+  /**
+   * Instantiates a new uI search box.
+   * 
+   * @throws Exception the exception
+   */
   public UISearchBox() throws Exception {
     UIFormStringInput uiKeywordInput = new UIFormStringInput(KEYWORD_INPUT, KEYWORD_INPUT, null);
     addChild(uiKeywordInput);
   }
 
+  /**
+   * Sets the template path.
+   * 
+   * @param templatePath the new template path
+   */
   public void setTemplatePath(String templatePath) {
     this.templatePath = templatePath;
   }
-
-  private PortletPreferences getPortletPreference() {
-    PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
-    return portletRequestContext.getRequest().getPreferences();
-  }
-
-  private String getRepository() {
-    return getPortletPreference().getValue(UIWCMSearchPortlet.REPOSITORY, null);
-  }
-
+  
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.core.UIComponent#getTemplate()
+   */
   public String getTemplate() {
     return templatePath;
   }
 
+  /**
+   * Gets the repository.
+   * 
+   * @return the repository
+   */
+  private String getRepository() {
+    PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
+    PortletPreferences portletPreferences = portletRequestContext.getRequest().getPreferences();
+    return portletPreferences.getValue(UIWCMSearchPortlet.REPOSITORY, null);
+  }
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.core.UIComponent#getTemplateResourceResolver(org.exoplatform.webui.application.WebuiRequestContext, java.lang.String)
+   */
   public ResourceResolver getTemplateResourceResolver(WebuiRequestContext context, String template) {
     try {
       RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
@@ -83,11 +121,27 @@ public class UISearchBox extends UIForm {
       String workspace = manageableRepository.getConfiguration().getSystemWorkspaceName();
       return new JCRResourceResolver(repository, workspace, "exo:templateFile");
     } catch (Exception e) {
+      if (log.isDebugEnabled()) { log.debug(e); }
       return null;
     }
   }
 
+  /**
+   * The listener interface for receiving searchAction events.
+   * The class that is interested in processing a searchAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSearchActionListener<code> method. When
+   * the searchAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SearchActionEvent
+   */
   public static class SearchActionListener extends EventListener<UISearchBox> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UISearchBox> event) throws Exception {
       UISearchBox uiSearchBox = event.getSource();
       UIPortal uiPortal = Util.getUIPortal();

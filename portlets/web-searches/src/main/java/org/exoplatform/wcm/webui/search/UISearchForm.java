@@ -49,32 +49,53 @@ import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 
 /*
- * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
+ * Created by The eXo Platform SAS 
+ * Author : Anh Do Ngoc 
+ * anh.do@exoplatform.com
  * Oct 31, 2008
+ */
+/**
+ * The Class UISearchForm.
  */
 @ComponentConfig(lifecycle = UIFormLifecycle.class, events = { @EventConfig(listeners = UISearchForm.SearchActionListener.class) })
 public class UISearchForm extends UIForm {
 
+	/** The template path. */
 	private String templatePath;
 
+	/** The resource resolver. */
 	private ResourceResolver resourceResolver;
 
-	public static final String KEYWORD_INPUT = "keywordInput";
+	/** The Constant KEYWORD_INPUT. */
+	public static final String KEYWORD_INPUT = "keywordInput".intern();
 
-	public static final String DOCUMENT_CHECKING = "documentCheckBox";
+	/** The Constant DOCUMENT_CHECKING. */
+	public static final String DOCUMENT_CHECKING = "documentCheckBox".intern();
 
-	public static final String PAGE_CHECKING = "pageCheckBox";
+	/** The Constant PAGE_CHECKING. */
+	public static final String PAGE_CHECKING = "pageCheckBox".intern();
 
-	public static final String PORTALS_SELECTOR = "portalSelector";
+	/** The Constant PORTALS_SELECTOR. */
+	public static final String PORTALS_SELECTOR = "portalSelector".intern();
 
-	public static final String ALL_OPTION = "all";
+	/** The Constant ALL_OPTION. */
+	public static final String ALL_OPTION = "all".intern();
 
-	public static final String MESSAGE_NOT_CHECKED_TYPE_SEARCH = "UISearchForm.message.not-checked";
+	/** The Constant MESSAGE_NOT_CHECKED_TYPE_SEARCH. */
+	public static final String MESSAGE_NOT_CHECKED_TYPE_SEARCH = "UISearchForm.message.not-checked".intern();
 
-	public static final String MESSAGE_NOT_SUPPORT_KEYWORD = "UISearchForm.message.keyword-not-support";
+	/** The Constant MESSAGE_NOT_SUPPORT_KEYWORD. */
+	public static final String MESSAGE_NOT_SUPPORT_KEYWORD = "UISearchForm.message.keyword-not-support".intern();
 
-	public static final String MESSAGE_NOT_EMPTY_KEYWORD = "UISearchForm.message.keyword-not-empty";
+	/** The Constant MESSAGE_NOT_EMPTY_KEYWORD. */
+	public static final String MESSAGE_NOT_EMPTY_KEYWORD = "UISearchForm.message.keyword-not-empty".intern();
 
+	
+	/**
+	 * Instantiates a new uI search form.
+	 * 
+	 * @throws Exception the exception
+	 */
 	@SuppressWarnings("unchecked")
 	public UISearchForm() throws Exception {
 		UIFormStringInput uiKeywordInput = new UIFormStringInput(KEYWORD_INPUT,
@@ -94,21 +115,23 @@ public class UISearchForm extends UIForm {
 		addUIFormInput(uiDocumentCheckBox);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.exoplatform.webui.form.UIForm#processRender(org.exoplatform.webui.application.WebuiRequestContext)
+	 */
 	public void processRender(WebuiRequestContext context) throws Exception {
 		PortletRequestContext portletRequestContext = (PortletRequestContext) context;
 		HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) portletRequestContext
 				.getRequest();
 		String queryString = requestWrapper.getQueryString();
 		UIFormStringInput keywordInput = getUIStringInput(KEYWORD_INPUT);
-		if (queryString != null
-				&& queryString.matches(UISearchResult.PARAMETER_REGX)) {
+		if (queryString != null && queryString.matches(UISearchResult.PARAMETER_REGX)) {
 			queryString = URLDecoder.decode(queryString, "UTF-8");
 			String[] params = queryString.split("&");
 			String portalParam = params[0];
 			String currentPortal = portalParam.split("=")[1];
 			String keywordParam = queryString.substring(portalParam.length() + 1);
 			String keyword = keywordParam.substring("keyword=".length());
-			if (keyword == null || keyword.trim().length() == 0) {
+			if (keyword == null || keyword.length() == 0) {
 				keywordInput.setValue(null);
 			} else {
 				keywordInput.setValue(keyword);
@@ -118,20 +141,39 @@ public class UISearchForm extends UIForm {
 		super.processRender(context);
 	}
 
+	/**
+	 * Inits the.
+	 * 
+	 * @param templatePath the template path
+	 * @param resourceResolver the resource resolver
+	 */
 	public void init(String templatePath, ResourceResolver resourceResolver) {
 		this.templatePath = templatePath;
 		this.resourceResolver = resourceResolver;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.exoplatform.webui.core.UIComponent#getTemplate()
+	 */
 	public String getTemplate() {
 		return templatePath;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.exoplatform.webui.core.UIComponent#getTemplateResourceResolver(org.exoplatform.webui.application.WebuiRequestContext, java.lang.String)
+	 */
 	public ResourceResolver getTemplateResourceResolver(
 			WebuiRequestContext context, String template) {
 		return resourceResolver;
 	}
 
+	/**
+	 * Gets the portal list.
+	 * 
+	 * @return the portal list
+	 * 
+	 * @throws Exception the exception
+	 */
 	@SuppressWarnings("unchecked")
 	private List getPortalList() throws Exception {
 		List<SelectItemOption<String>> portals = new ArrayList<SelectItemOption<String>>();
@@ -147,7 +189,22 @@ public class UISearchForm extends UIForm {
 		return portals;
 	}
 
+	/**
+	 * The listener interface for receiving searchAction events.
+	 * The class that is interested in processing a searchAction
+	 * event implements this interface, and the object created
+	 * with that class is registered with a component using the
+	 * component's <code>addSearchActionListener<code> method. When
+	 * the searchAction event occurs, that object's appropriate
+	 * method is invoked.
+	 * 
+	 * @see SearchActionEvent
+	 */
 	public static class SearchActionListener extends EventListener<UISearchForm> {
+		
+		/* (non-Javadoc)
+		 * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+		 */
 		@SuppressWarnings("unchecked")
 		public void execute(Event<UISearchForm> event) throws Exception {
 			UISearchForm uiSearchForm = event.getSource();

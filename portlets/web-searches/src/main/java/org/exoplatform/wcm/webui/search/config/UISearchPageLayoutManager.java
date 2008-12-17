@@ -49,49 +49,79 @@ import org.exoplatform.webui.form.UIFormSelectBox;
  * Oct 31, 2008
  */
 
-@ComponentConfig(lifecycle = UIFormLifecycle.class, template = "app:/groovy/webui/wcm-search/config/UISearchPageLayoutManager.gtmpl", events = {
+/**
+ * The Class UISearchPageLayoutManager.
+ */
+@ComponentConfig(
+  lifecycle = UIFormLifecycle.class, 
+  template = "app:/groovy/webui/wcm-search/config/UISearchPageLayoutManager.gtmpl", 
+  events = {
 		@EventConfig(listeners = UISearchPageLayoutManager.SaveActionListener.class),
 		@EventConfig(listeners = UISearchPageLayoutManager.CancelActionListener.class),
-		@EventConfig(listeners = UISearchPageLayoutManager.SelectSearchModeActionListener.class) })
+		@EventConfig(listeners = UISearchPageLayoutManager.SelectSearchModeActionListener.class) 
+  }  
+)
 public class UISearchPageLayoutManager extends UIForm {
 
+	/** The Constant PORTLET_NAME. */
 	public static final String PORTLET_NAME = "WCM Advance Search".intern();
 
+	/** The Constant SEARCH_PAGE_LAYOUT_CATEGORY. */
 	public static final String SEARCH_PAGE_LAYOUT_CATEGORY = "search-page-layout"
 			.intern();
 
+	/** The Constant SEARCH_PAGE_LAYOUT_SELECTOR. */
 	public static final String SEARCH_PAGE_LAYOUT_SELECTOR = "searchPageLayoutSelector"
 			.intern();
 
+	/** The Constant SEARCH_FORM_TEMPLATE_CATEGORY. */
 	public static final String SEARCH_FORM_TEMPLATE_CATEGORY = "search-form"
 			.intern();
 
+	/** The Constant SEARCH_PAGINATOR_TEMPLATE_CATEGORY. */
 	public static final String SEARCH_PAGINATOR_TEMPLATE_CATEGORY = "search-paginator";
 
+	/** The Constant SEARCH_RESULT_TEMPLATE_CATEGORY. */
 	public static final String SEARCH_RESULT_TEMPLATE_CATEGORY = "search-result";
 
+	/** The Constant SEARCH_FORM_TEMPLATE_SELECTOR. */
 	public static final String SEARCH_FORM_TEMPLATE_SELECTOR = "searchFormSelector";
 
+	/** The Constant SEARCH_PAGINATOR_TEMPLATE_SELECTOR. */
 	public static final String SEARCH_PAGINATOR_TEMPLATE_SELECTOR = "searchPaginatorSelector";
 
+	/** The Constant SEARCH_RESULT_TEMPLATE_SELECTOR. */
 	public static final String SEARCH_RESULT_TEMPLATE_SELECTOR = "searchResultSelector";
 
+	/** The Constant SEARCH_BOX_TEMPLATE_CATEGORY. */
 	public static final String SEARCH_BOX_TEMPLATE_CATEGORY = "search-box";
 
+	/** The Constant SEARCH_BOX_TEMPLATE_SELECTOR. */
 	public static final String SEARCH_BOX_TEMPLATE_SELECTOR = "searchBoxSelector";
 
+	/** The Constant SEARCH_MODE_SELECTOR. */
 	public static final String SEARCH_MODE_SELECTOR = "searchModeSelector";
 
+	/** The Constant SEARCH_BOX_MODE_OPTION. */
 	public static final String SEARCH_BOX_MODE_OPTION = "searchBoxMode";
 
+	/** The Constant SEARCH_PAGE_MODE_OPTION. */
 	public static final String SEARCH_PAGE_MODE_OPTION = "searchPageMode";
 
+	/** The Constant SEARCH_MODES_OPTION. */
 	public static final String SEARCH_MODES_OPTION = "searchModes";
 
+	/** The Constant ITEMS_PER_PAGE_SELECTOR. */
 	public final static String ITEMS_PER_PAGE_SELECTOR = "itemsPerPageSelector";
 
+	/** The Constant VIEWER_BUTTON_QUICK_EDIT. */
 	public final static String VIEWER_BUTTON_QUICK_EDIT = "viewerButtonQuickEdit";
 
+	/**
+	 * Instantiates a new uI search page layout manager.
+	 * 
+	 * @throws Exception the exception
+	 */
 	@SuppressWarnings("unchecked")
 	public UISearchPageLayoutManager() throws Exception {
 		PortletRequestContext portletRequestContext = WebuiRequestContext
@@ -194,6 +224,16 @@ public class UISearchPageLayoutManager extends UIForm {
 		setActions(new String[] { "Save", "Cancel" });
 	}
 
+	/**
+	 * Creates the template list.
+	 * 
+	 * @param portletName the portlet name
+	 * @param category the category
+	 * 
+	 * @return the list< select item option< string>>
+	 * 
+	 * @throws Exception the exception
+	 */
 	private List<SelectItemOption<String>> createTemplateList(String portletName,
 			String category) throws Exception {
 		List<SelectItemOption<String>> templateList = new ArrayList<SelectItemOption<String>>();
@@ -214,6 +254,13 @@ public class UISearchPageLayoutManager extends UIForm {
 		return templateList;
 	}
 
+	/**
+	 * Creates the search mode list.
+	 * 
+	 * @return the list< select item option< string>>
+	 * 
+	 * @throws Exception the exception
+	 */
 	private List<SelectItemOption<String>> createSearchModeList()
 			throws Exception {
 		PortletRequestContext portletRequestContext = WebuiRequestContext
@@ -234,8 +281,23 @@ public class UISearchPageLayoutManager extends UIForm {
 		return searchModesList;
 	}
 
+	/**
+	 * The listener interface for receiving saveAction events.
+	 * The class that is interested in processing a saveAction
+	 * event implements this interface, and the object created
+	 * with that class is registered with a component using the
+	 * component's <code>addSaveActionListener<code> method. When
+	 * the saveAction event occurs, that object's appropriate
+	 * method is invoked.
+	 * 
+	 * @see SaveActionEvent
+	 */
 	public static class SaveActionListener extends
 			EventListener<UISearchPageLayoutManager> {
+		
+		/* (non-Javadoc)
+		 * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+		 */
 		public void execute(Event<UISearchPageLayoutManager> event)
 				throws Exception {
 			UISearchPageLayoutManager uiSearchLayoutManager = event.getSource();
@@ -314,8 +376,23 @@ public class UISearchPageLayoutManager extends UIForm {
 		}
 	}
 
+	/**
+	 * The listener interface for receiving cancelAction events.
+	 * The class that is interested in processing a cancelAction
+	 * event implements this interface, and the object created
+	 * with that class is registered with a component using the
+	 * component's <code>addCancelActionListener<code> method. When
+	 * the cancelAction event occurs, that object's appropriate
+	 * method is invoked.
+	 * 
+	 * @see CancelActionEvent
+	 */
 	public static class CancelActionListener extends
 			EventListener<UISearchPageLayoutManager> {
+		
+		/* (non-Javadoc)
+		 * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+		 */
 		public void execute(Event<UISearchPageLayoutManager> event)
 				throws Exception {
 			PortletRequestContext context = (PortletRequestContext) event
@@ -324,8 +401,23 @@ public class UISearchPageLayoutManager extends UIForm {
 		}
 	}
 
+	/**
+	 * The listener interface for receiving selectSearchModeAction events.
+	 * The class that is interested in processing a selectSearchModeAction
+	 * event implements this interface, and the object created
+	 * with that class is registered with a component using the
+	 * component's <code>addSelectSearchModeActionListener<code> method. When
+	 * the selectSearchModeAction event occurs, that object's appropriate
+	 * method is invoked.
+	 * 
+	 * @see SelectSearchModeActionEvent
+	 */
 	public static class SelectSearchModeActionListener extends
 			EventListener<UISearchPageLayoutManager> {
+		
+		/* (non-Javadoc)
+		 * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+		 */
 		public void execute(Event<UISearchPageLayoutManager> event)
 				throws Exception {
 			UISearchPageLayoutManager uiSearchPageLayoutManager = event.getSource();

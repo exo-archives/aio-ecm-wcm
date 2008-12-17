@@ -53,32 +53,53 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Oct 31, 2008
  */
+/**
+ * The Class UISearchResult.
+ */
 @ComponentConfigs( {
 		@ComponentConfig(lifecycle = Lifecycle.class),
 		@ComponentConfig(type = UICustomizeablePaginator.class, events = @EventConfig(listeners = UICustomizeablePaginator.ShowPageActionListener.class)) })
 public class UISearchResult extends UIContainer {
 
+	/** The template path. */
 	private String templatePath;
 
+	/** The resource resolver. */
 	private ResourceResolver resourceResolver;
 
+	/** The ui paginator. */
 	private UICustomizeablePaginator uiPaginator;
 
+	/** The keyword. */
 	private String keyword;
 
+	/** The result type. */
 	private String resultType;
 
+	/** The suggetions. */
 	private String suggetions;
 
+	/** The date formatter. */
 	private SimpleDateFormat dateFormatter = new SimpleDateFormat(
 			ISO8601.SIMPLE_DATETIME_FORMAT);
 
+	/** The search time. */
 	private long searchTime;
 
+	/** The Constant PARAMETER_REGX. */
 	public final static String PARAMETER_REGX = "(portal=.*)&(keyword=.*)";
 
+	/** The Constant RESULT_NOT_FOUND. */
 	public final static String RESULT_NOT_FOUND = "UISearchResult.msg.result-not-found";
 
+	/**
+	 * Inits the.
+	 * 
+	 * @param templatePath the template path
+	 * @param resourceResolver the resource resolver
+	 * 
+	 * @throws Exception the exception
+	 */
 	public void init(String templatePath, ResourceResolver resourceResolver)
 			throws Exception {
 		PortletRequestContext portletRequestContext = (PortletRequestContext) WebuiRequestContext
@@ -94,6 +115,9 @@ public class UISearchResult extends UIContainer {
 		uiPaginator.setResourceResolver(resourceResolver);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.exoplatform.webui.core.UIComponent#processRender(org.exoplatform.webui.application.WebuiRequestContext)
+	 */
 	@SuppressWarnings("static-access")
 	public void processRender(WebuiRequestContext context) throws Exception {
 		Writer writer = context.getWriter();
@@ -196,40 +220,91 @@ public class UISearchResult extends UIContainer {
 		super.processRender(context);
 	}
 
+	/**
+	 * Sets the page list.
+	 * 
+	 * @param dataPageList the new page list
+	 */
 	public void setPageList(PageList dataPageList) {
 		uiPaginator.setPageList(dataPageList);
 	}
 
+	/**
+	 * Gets the total item.
+	 * 
+	 * @return the total item
+	 */
 	public int getTotalItem() {
 		return uiPaginator.getPageList().getAvailable();
 	}
 
+	/**
+	 * Gets the items per page.
+	 * 
+	 * @return the items per page
+	 */
 	public int getItemsPerPage() {
 		return uiPaginator.getPageList().getPageSize();
 	}
 
+	/**
+	 * Gets the current page.
+	 * 
+	 * @return the current page
+	 */
 	public int getCurrentPage() {
 		return uiPaginator.getCurrentPage();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.exoplatform.portal.webui.portal.UIPortalComponent#getTemplate()
+	 */
 	public String getTemplate() {
 		return templatePath;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.exoplatform.webui.core.UIComponent#getTemplateResourceResolver(org.exoplatform.webui.application.WebuiRequestContext, java.lang.String)
+	 */
 	public ResourceResolver getTemplateResourceResolver(
 			WebuiRequestContext context, String template) {
 		return resourceResolver;
 	}
 
+	/**
+	 * Gets the current page data.
+	 * 
+	 * @return the current page data
+	 * 
+	 * @throws Exception the exception
+	 */
 	public List getCurrentPageData() throws Exception {
 		return uiPaginator.getCurrentPageData();
 	}
 
+	/**
+	 * Gets the title.
+	 * 
+	 * @param node the node
+	 * 
+	 * @return the title
+	 * 
+	 * @throws Exception the exception
+	 */
 	public String getTitle(Node node) throws Exception {
 		return node.hasProperty("exo:title") ? node.getProperty("exo:title")
 				.getValue().getString() : node.getName();
 	}
 
+	/**
+	 * Gets the uRL.
+	 * 
+	 * @param node the node
+	 * 
+	 * @return the uRL
+	 * 
+	 * @throws Exception the exception
+	 */
 	public String getURL(Node node) throws Exception {
 		String link = null;
 		PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
@@ -257,6 +332,15 @@ public class UISearchResult extends UIContainer {
 		return link;
 	}
 
+	/**
+	 * Gets the created date.
+	 * 
+	 * @param node the node
+	 * 
+	 * @return the created date
+	 * 
+	 * @throws Exception the exception
+	 */
 	public String getCreatedDate(Node node) throws Exception {
 		if (node.hasProperty("exo:dateCreated")) {
 			Calendar calendar = node.getProperty("exo:dateCreated").getValue()
@@ -266,6 +350,13 @@ public class UISearchResult extends UIContainer {
 		return null;
 	}
 
+	/**
+	 * Checks if is show paginator.
+	 * 
+	 * @return true, if is show paginator
+	 * 
+	 * @throws Exception the exception
+	 */
 	public boolean isShowPaginator() throws Exception {
 		PortletPreferences portletPreferences = ((PortletRequestContext) WebuiRequestContext
 				.getCurrentInstance()).getRequest().getPreferences();
@@ -278,34 +369,74 @@ public class UISearchResult extends UIContainer {
 		return false;
 	}
 
+	/**
+	 * Gets the search time.
+	 * 
+	 * @return the search time
+	 */
 	public long getSearchTime() {
 		return searchTime;
 	}
 
+	/**
+	 * Sets the search time.
+	 * 
+	 * @param searchTime the new search time
+	 */
 	public void setSearchTime(long searchTime) {
 		this.searchTime = searchTime;
 	}
 
+	/**
+	 * Gets the suggetions.
+	 * 
+	 * @return the suggetions
+	 */
 	public String getSuggetions() {
 		return suggetions;
 	}
 
+	/**
+	 * Sets the suggetions.
+	 * 
+	 * @param suggetions the new suggetions
+	 */
 	public void setSuggetions(String suggetions) {
 		this.suggetions = suggetions;
 	}
 
+	/**
+	 * Gets the keyword.
+	 * 
+	 * @return the keyword
+	 */
 	public String getKeyword() {
 		return this.keyword;
 	}
 
+	/**
+	 * Sets the keyword.
+	 * 
+	 * @param keyword the new keyword
+	 */
 	public void setKeyword(String keyword) {
 		this.keyword = keyword;
 	}
 
+	/**
+	 * Gets the result type.
+	 * 
+	 * @return the result type
+	 */
 	public String getResultType() {
 		return this.resultType;
 	}
 
+	/**
+	 * Sets the result type.
+	 * 
+	 * @param resultType the new result type
+	 */
 	public void setResultType(String resultType) {
 		this.resultType = resultType;
 	}

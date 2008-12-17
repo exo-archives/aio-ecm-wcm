@@ -19,10 +19,6 @@ package org.exoplatform.wcm.webui.search;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
-import org.exoplatform.portal.config.DataStorage;
-import org.exoplatform.portal.config.UserACL;
-import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.wcm.webui.search.config.UIPortletConfig;
 import org.exoplatform.wcm.webui.search.config.UISearchPageLayoutManager;
 import org.exoplatform.webui.application.WebuiApplication;
@@ -36,39 +32,60 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Oct 31, 2008
  */
+/**
+ * The Class UIWCMSearchPortlet.
+ */
 @ComponentConfig(lifecycle = UIApplicationLifecycle.class)
 public class UIWCMSearchPortlet extends UIPortletApplication {
 
+  /** The mode. */
   private PortletMode        mode                             = PortletMode.VIEW;
 
+  /** The Constant SEARCH_FORM_TEMPLATE_PATH. */
   public static final String SEARCH_FORM_TEMPLATE_PATH        = "searchFormTemplatePath".intern();
 
+  /** The Constant SEARCH_RESULT_TEMPLATE_PATH. */
   public static final String SEARCH_RESULT_TEMPLATE_PATH      = "searchResultTemplatePath".intern();
 
+  /** The Constant SEARCH_BOX_TEMPLATE_PATH. */
   public static final String SEARCH_BOX_TEMPLATE_PATH         = "searchBoxTemplatePath".intern();
 
-  public static final String SEARCH_PAGINATOR_TEMPLATE_PATH   = "searchPaginatorTemplatePath"
-                                                                  .intern();
+  /** The Constant SEARCH_PAGINATOR_TEMPLATE_PATH. */
+  public static final String SEARCH_PAGINATOR_TEMPLATE_PATH   = "searchPaginatorTemplatePath".intern();
 
-  public static final String SEARCH_PAGE_LAYOUT_TEMPLATE_PATH = "searchPageLayoutTemplatePath"
-                                                                  .intern();
+  /** The Constant SEARCH_PAGE_LAYOUT_TEMPLATE_PATH. */
+  public static final String SEARCH_PAGE_LAYOUT_TEMPLATE_PATH = "searchPageLayoutTemplatePath".intern();
 
+  /** The Constant SEARCH_MODE. */
   public static final String SEARCH_MODE                      = "searchMode";
 
+  /** The Constant REPOSITORY. */
   public static final String REPOSITORY                       = "repository";
 
+  /** The Constant WORKSPACE. */
   public static final String WORKSPACE                        = "workspace";
 
+  /** The Constant SEARCH_BOX_CONTAINER. */
   public static final String SEARCH_BOX_CONTAINER             = "uiSearchBoxContainer".intern();
 
+  /** The Constant ITEMS_PER_PAGE. */
   public final static String ITEMS_PER_PAGE                   = "itemsPerPage";
 
+  /** The Constant SHOW_QUICK_EDIT_BUTTON. */
   public final static String SHOW_QUICK_EDIT_BUTTON           = "showQuickEditButton";
 
+  /**
+   * Instantiates a new uIWCM search portlet.
+   * 
+   * @throws Exception the exception
+   */
   public UIWCMSearchPortlet() throws Exception {
     activateMode(mode);
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.core.UIPortletApplication#processRender(org.exoplatform.webui.application.WebuiApplication, org.exoplatform.webui.application.WebuiRequestContext)
+   */
   public void processRender(WebuiApplication app, WebuiRequestContext context) throws Exception {
     PortletRequestContext pContext = (PortletRequestContext) context;
     PortletMode newMode = pContext.getApplicationMode();
@@ -79,15 +96,19 @@ public class UIWCMSearchPortlet extends UIPortletApplication {
     super.processRender(app, context);
   }
 
-  public void activateMode(PortletMode mode) throws Exception {
+  /**
+   * Activate mode.
+   * 
+   * @param mode the mode
+   * 
+   * @throws Exception the exception
+   */
+  private void activateMode(PortletMode mode) throws Exception {
     getChildren().clear();
     if (PortletMode.VIEW.equals(mode)) {
-      PortletRequestContext context = (PortletRequestContext) WebuiRequestContext
-          .getCurrentInstance();
+      PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
       PortletPreferences portletPreferences = context.getRequest().getPreferences();
-      String searchMode = portletPreferences.getValue(UIWCMSearchPortlet.SEARCH_MODE, null);
-      String searchBoxTemplatePath = portletPreferences.getValue(
-          UIWCMSearchPortlet.SEARCH_BOX_TEMPLATE_PATH, null);
+      String searchMode = portletPreferences.getValue(UIWCMSearchPortlet.SEARCH_MODE, null);      
       if (UISearchPageLayoutManager.SEARCH_BOX_MODE_OPTION.equals(searchMode)) {
         addChild(UISearchBoxContainer.class, null, SEARCH_BOX_CONTAINER);
       } else if (UISearchPageLayoutManager.SEARCH_PAGE_MODE_OPTION.equals(searchMode)) {
@@ -96,17 +117,6 @@ public class UIWCMSearchPortlet extends UIPortletApplication {
     } else if (PortletMode.EDIT.equals(mode)) {
       addChild(UIPortletConfig.class, null, UIPortletApplication.EDIT_MODE);
     }
-  }
-
-  public boolean canEditPortlet() throws Exception {
-    PortletRequestContext context = (PortletRequestContext) WebuiRequestContext
-        .getCurrentInstance();
-    String portalName = Util.getUIPortal().getName();
-    String userId = context.getRemoteUser();
-    DataStorage dataStorage = getApplicationComponent(DataStorage.class);
-    PortalConfig portalConfig = dataStorage.getPortalConfig(portalName);
-    UserACL userACL = getApplicationComponent(UserACL.class);
-    return userACL.hasEditPermission(portalConfig, userId);
   }
 
 }

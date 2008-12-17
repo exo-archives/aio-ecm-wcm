@@ -20,6 +20,7 @@ import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
 import org.exoplatform.portal.webui.container.UIContainer;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -27,17 +28,35 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-
+ 
 /*
- * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
+ * Created by The eXo Platform SAS 
+ * Author : Anh Do Ngoc 
+ * anh.do@exoplatform.com
  * Nov 10, 2008
  */
 
-@ComponentConfig(lifecycle = Lifecycle.class, template = "app:/groovy/webui/wcm-search/UISearchBoxContainer.gtmpl", events = { @EventConfig(listeners = UISearchBoxContainer.QuickEditActionListener.class) })
+/**
+ * The Class UISearchBoxContainer.
+ */
+@ComponentConfig(                
+  lifecycle = Lifecycle.class, 
+  template = "app:/groovy/webui/wcm-search/UISearchBoxContainer.gtmpl", 
+  events = { 
+    @EventConfig(listeners = UISearchBoxContainer.QuickEditActionListener.class)    
+  }  
+)
 public class UISearchBoxContainer extends UIContainer {
 
+  /** The Constant SEARCH_BOX. */
   public static final String SEARCH_BOX = "uiSearchBox".intern();
 
+  
+  /**
+   * Instantiates a new uI search box container.
+   * 
+   * @throws Exception the exception
+   */
   public UISearchBoxContainer() throws Exception {
     PortletRequestContext context = (PortletRequestContext) WebuiRequestContext
         .getCurrentInstance();
@@ -48,24 +67,52 @@ public class UISearchBoxContainer extends UIContainer {
     uiSearchBox.setTemplatePath(searchBoxTemplatePath);
   }
 
+  /**
+   * Checks if is quick editable.
+   * 
+   * @return true, if is quick editable
+   * 
+   * @throws Exception the exception
+   */
   public boolean isQuickEditable() throws Exception {
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     PortletPreferences prefs = portletRequestContext.getRequest().getPreferences();
-    boolean isQuickEdit = Boolean.parseBoolean(prefs.getValue(
-        UIWCMSearchPortlet.SHOW_QUICK_EDIT_BUTTON, null));
-    UIWCMSearchPortlet uiSearchPortlet = getAncestorOfType(UIWCMSearchPortlet.class);
-    if (isQuickEdit)
-      return uiSearchPortlet.canEditPortlet();
+    boolean ableEdit = Boolean.parseBoolean(prefs.getValue(
+        UIWCMSearchPortlet.SHOW_QUICK_EDIT_BUTTON, null));    
+    String remoteUser = portletRequestContext.getRemoteUser();
+    if (ableEdit) {
+      return Utils.canEditCurrentPortal(remoteUser);
+    }
     return false;
   }
   
+  /**
+   * Gets the portlet id.
+   * 
+   * @return the portlet id
+   */
   public String getPortletId() {
     PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext
         .getCurrentInstance();
     return pContext.getWindowId();
   }
 
+  /**
+   * The listener interface for receiving quickEditAction events.
+   * The class that is interested in processing a quickEditAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addQuickEditActionListener<code> method. When
+   * the quickEditAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see QuickEditActionEvent
+   */
   public static class QuickEditActionListener extends EventListener<UISearchBoxContainer> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UISearchBoxContainer> event) throws Exception {
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
       context.setApplicationMode(PortletMode.EDIT);
