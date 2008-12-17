@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+  <!--/n  ##################################################################
+  # org.exoplatform.wcm.webui.clv.config.UIViewerManagementForm    #
+  ##################################################################
+  -->
+  <UIViewerManagementForm>
+    <action>
+      <Save>Lưu lại</Save>
+      <Cancel>Huỷ bỏ</Cancel>
+    </action>
+    <label>
+      <FolderPathInputSet>UIViewerManagementForm</FolderPathInputSet>
+      <FolderPathInput>Đường dẫn đến thư mục</FolderPathInput>
+      <FormViewTemplate>Mẫu form trình bày kết quả</FormViewTemplate>
+      <PaginatorTemplate>Mẫu form phân trang</PaginatorTemplate>
+      <ItemsPerPage>Số kết quả mỗi trang</ItemsPerPage>
+      <ViewerButtonQuickEdit>Cho phép chỉnh sửa nhanh</ViewerButtonQuickEdit>
+      <ViewerButtonRefresh>Cho phép làm mới trang trình bày</ViewerButtonRefresh>
+      <ViewerThumbnailsView>Hiển thị ảnh minh hoạ tài liệu</ViewerThumbnailsView>
+      <ViewerTitle>Hiển thị tiêu đề tài liệu</ViewerTitle>
+      <ViewerDateCreated>Hiển thị ngày tạo tài liệu</ViewerDateCreated>
+      <ViewerSummary>Hiển thị sơ lược nội dung tài liệu</ViewerSummary>
+      <Header>Tiêu đề form trình bày kết quả</Header>
+      <ViewerHeader>Hiển thị tiêu đề form trình bày kết quả</ViewerHeader>
+    </label>
+    <title>Lựa chọn thư mục chứa tài liệu hoăc nội dung được hiển thị</title>
+  </UIViewerManagementForm>
+  <!--/n  ###################################################################
+  #			message when list content  							  #	
+  ###################################################################
+  -->
+  <UIMessageBoard>
+    <msg>
+      <folder-not-found>Trang hiển thị này chưa được cấu hình.</folder-not-found>
+      <no-permission>Xin lỗi, bạn không có quyền truy cập thư mục này!</no-permission>
+      <folder-empty>Thư mục rỗng.</folder-empty>
+      <error-nodetype>Lỗi hệ thống.</error-nodetype>
+      <saving-success>Việc chỉnh sửa thành công!\nXin vui lòng chuyển sang chế độ hiển thị để thấy được sự thay đổi.</saving-success>
+      <empty-folder-path>Xin vui lòng lựa chọn thư mục.</empty-folder-path>
+      <none-action-excuted>Sẽ không có hành động nào có hiệu lực.</none-action-excuted>
+    </msg>
+  </UIMessageBoard>
+  <!--/n  ###################################################################
+  -->
+  <UIFolderTreeList>
+    <title>Lựa chọn một thư mục để hiển thị các tài liệu và nội dung con.</title>
+  </UIFolderTreeList>
+  <UIFolderExplorer>
+    <title>Bạn có thể lựa chọn một trong các thư mục dưới đây.</title>
+  </UIFolderExplorer>
+  <!--/n  ###################################################################
+  -->
+  <UIPopupWindow>
+    <title>
+      <UIFolderPathSelectorForm>Lựa chọn thư mục</UIFolderPathSelectorForm>
+    </title>
+  </UIPopupWindow>
+  <!--/n  ###################################################################
+  -->
+  <UIStartEditionInPageWizard>
+    <msg>
+      <edit-portlet>Click ở đây để chỉnh sửa ứng dụng.</edit-portlet>
+    </msg>
+  </UIStartEditionInPageWizard>
+  <!--/n  ###################################################################
+  -->
+  <UIViewerManagementPopupWindow>
+    <title>
+      <UIPortletConfig>Quản lý trình hiển thị nội dung theo danh sách.</UIPortletConfig>
+    </title>
+  </UIViewerManagementPopupWindow>
+  <UIFolderPathSelecctPopupWindow>
+    <title>
+      <UIFolderPathSelectorForm>Lựa chọn một thư mục để hiển thị các tài liệu và nội dung con.</UIFolderPathSelectorForm>
+    </title>
+  </UIFolderPathSelecctPopupWindow>
+</bundle>
+
