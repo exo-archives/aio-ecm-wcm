@@ -18,12 +18,9 @@ package org.exoplatform.wcm.webui.pcv;
 
 import javax.jcr.Node;
 
-import org.exoplatform.portal.config.DataStorage;
-import org.exoplatform.portal.config.UserACL;
-import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.container.UIContainer;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -33,30 +30,56 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
 /**
- * Created by The eXo Platform SAS Author : Phan Le Thanh Chuong
- * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com Nov 4, 2008
+ * Created by The eXo Platform
+ * SAS Author : Phan Le Thanh Chuong
+ * chuong.phan@exoplatform.com,
+ * phan.le.thanh.chuong@gmail.com Nov 4, 2008
  */
 
 @ComponentConfig(lifecycle = Lifecycle.class, template = "app:/groovy/ParameterizedContentViewer/UIContentViewerContainer.gtmpl", events = { @EventConfig(listeners = UIContentViewerContainer.QuickEditActionListener.class) })
 public class UIContentViewerContainer extends UIContainer {
 
-  public static final String WEB_CONTENT_DIALOG = "webContentDialog";
+  /** The Constant WEB_CONTENT_sDIALOG. */
+  public static final String WEB_CONTENT_sDIALOG = "webContentDialog";
 
+  /**
+   * Instantiates a new uI content viewer container.
+   * 
+   * @throws Exception the exception
+   */
   public UIContentViewerContainer() throws Exception {
     addChild(UIContentViewer.class, null, null);
   }
 
+  /**
+   * Checks if is quick edit able.
+   * 
+   * @return true, if is quick edit able
+   * 
+   * @throws Exception the exception
+   */
   public boolean isQuickEditAble() throws Exception {
-    PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
-    String portalName = Util.getUIPortal().getName();
+    PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();    
     String userId = context.getRemoteUser();
-    DataStorage dataStorage = getApplicationComponent(DataStorage.class);
-    PortalConfig portalConfig = dataStorage.getPortalConfig(portalName);
-    UserACL userACL = getApplicationComponent(UserACL.class);
-    return userACL.hasEditPermission(portalConfig, userId);
+    return Utils.canEditCurrentPortal(userId);
   }
 
+  /**
+   * The listener interface for receiving quickEditAction events.
+   * The class that is interested in processing a quickEditAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addQuickEditActionListener<code> method. When
+   * the quickEditAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see QuickEditActionEvent
+   */
   public static class QuickEditActionListener extends EventListener<UIContentViewerContainer> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIContentViewerContainer> event) throws Exception {
       UIContentViewerContainer uiContentViewerContainer = event.getSource();
       UIContentViewer uiContentViewer = uiContentViewerContainer.getChild(UIContentViewer.class);

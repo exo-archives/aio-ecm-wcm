@@ -16,10 +16,7 @@
  */
 package org.exoplatform.wcm.webui.pcv;
 
-import org.exoplatform.portal.config.DataStorage;
-import org.exoplatform.portal.config.UserACL;
-import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -27,27 +24,41 @@ import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 
 /*
- * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
+ * Created by The eXo Platform SAS 
+ * Author : Anh Do Ngoc 
+ * anh.do@exoplatform.com
  * Sep 24, 2008
  */
 
+/**
+ * The Class UIParameterizedContentViewerPortlet.
+ */
 @ComponentConfig(lifecycle = UIApplicationLifecycle.class)
 public class UIParameterizedContentViewerPortlet extends UIPortletApplication {
 
+  /** The Constant QUICK_EDIT_ABLE. */
   public final static String QUICK_EDIT_ABLE = "quickEditable";
 
+  /**
+   * Instantiates a new uI parameterized content viewer portlet.
+   * 
+   * @throws Exception the exception
+   */
   public UIParameterizedContentViewerPortlet() throws Exception {
     addChild(UIContentViewerContainer.class, null, null);
   }
 
+  /**
+   * Can edit portlet.
+   * 
+   * @return true, if successful
+   * 
+   * @throws Exception the exception
+   */
   public boolean canEditPortlet() throws Exception {
     PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
-    String portalName = Util.getUIPortal().getName();
     String userId = context.getRemoteUser();
-    DataStorage dataStorage = getApplicationComponent(DataStorage.class);
-    PortalConfig portalConfig = dataStorage.getPortalConfig(portalName);
-    UserACL userACL = getApplicationComponent(UserACL.class);
-    return userACL.hasEditPermission(portalConfig, userId);
+    return Utils.canEditCurrentPortal(userId);
   }
 
 }

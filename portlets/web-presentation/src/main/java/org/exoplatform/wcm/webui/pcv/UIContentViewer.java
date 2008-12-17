@@ -51,50 +51,79 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
  * Sep 24, 2008
  */
 
+/**
+ * The Class UIContentViewer.
+ */
 @ComponentConfig(lifecycle = Lifecycle.class)
 public class UIContentViewer extends UIBaseNodePresentation {
 
+  /** The content node. */
   private Node                contentNode;
 
+  /** The resource resolver. */
   private JCRResourceResolver resourceResolver;
 
+  /** The repository. */
   private String              repository;
 
+  /** The workspace. */
   private String              workspace;
 
+  /** The Constant CONTENT_NOT_FOUND_EXC. */
   public final static String  CONTENT_NOT_FOUND_EXC = "UIMessageBoard.msg.content-not-found";
 
+  /** The Constant ACCESS_CONTROL_EXC. */
   public final static String  ACCESS_CONTROL_EXC    = "UIMessageBoard.msg.access-control-exc";
 
+  /** The Constant CONTENT_UNSUPPORT_EXC. */
   public final static String  CONTENT_UNSUPPORT_EXC = "UIMessageBoard.msg.content-unsupport-exc";
 
+  /** The Constant PARAMETER_REGX. */
   public final static String  PARAMETER_REGX        = "(.*)/(.*)";
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation#getNode()
+   */
   @Override
   public Node getNode() throws Exception {
     return contentNode;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation#getOriginalNode()
+   */
   @Override
   public Node getOriginalNode() throws Exception {
     return getNode();
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation#getRepositoryName()
+   */
   @Override
   public String getRepositoryName() throws Exception {
     return repository;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation#getWorkspaceName()
+   */
   public String getWorkspaceName() throws Exception {
     return workspace;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation#getTemplatePath()
+   */
   @Override
   public String getTemplatePath() throws Exception {
     TemplateService templateService = getApplicationComponent(TemplateService.class);
     return templateService.getTemplatePath(getNode(), false);
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.portal.webui.portal.UIPortalComponent#getTemplate()
+   */
   public String getTemplate() {
     try {
       return getTemplatePath();
@@ -103,6 +132,9 @@ public class UIContentViewer extends UIBaseNodePresentation {
     }
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.core.UIComponent#getTemplateResourceResolver(org.exoplatform.webui.application.WebuiRequestContext, java.lang.String)
+   */
   public ResourceResolver getTemplateResourceResolver(WebuiRequestContext context, String template) {
     try {
       resourceResolver = new JCRResourceResolver(repository, workspace, "exo:templateFile");
@@ -112,26 +144,48 @@ public class UIContentViewer extends UIBaseNodePresentation {
     return resourceResolver;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.presentation.NodePresentation#getNodeType()
+   */
   public String getNodeType() throws Exception {
     return contentNode.getPrimaryNodeType().getName();
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.presentation.NodePresentation#isNodeTypeSupported()
+   */
   public boolean isNodeTypeSupported() {
     return false;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.presentation.NodePresentation#setNode(javax.jcr.Node)
+   */
   public void setNode(Node node) {
     this.contentNode = node;
   }
 
+  /**
+   * Sets the repository.
+   * 
+   * @param repository the new repository
+   */
   public void setRepository(String repository) {
     this.repository = repository;
   }
 
+  /**
+   * Sets the workspace.
+   * 
+   * @param workspace the new workspace
+   */
   public void setWorkspace(String workspace) {
     this.workspace = workspace;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.core.UIComponent#processRender(org.exoplatform.webui.application.WebuiRequestContext)
+   */
   public void processRender(WebuiRequestContext context) throws Exception {
     PortletRequestContext porletRequestContext = (PortletRequestContext) context;
     HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) porletRequestContext.getRequest();
@@ -147,9 +201,7 @@ public class UIContentViewer extends UIBaseNodePresentation {
       parameters = URLDecoder.decode(StringUtils.substringAfter(requestURI,
                                                                 portalURI.concat(pageNodeSelected
                                                                     + "/")), "UTF-8");
-    } catch (UnsupportedEncodingException e) {
-      e.printStackTrace();
-    }
+    } catch (UnsupportedEncodingException e) { }
     if (!parameters.matches(PARAMETER_REGX)) {
       renderErrorMessage(context, CONTENT_NOT_FOUND_EXC);
       return;
@@ -233,6 +285,14 @@ public class UIContentViewer extends UIBaseNodePresentation {
     }
   }
 
+  /**
+   * Render error message.
+   * 
+   * @param context the context
+   * @param keyBundle the key bundle
+   * 
+   * @throws Exception the exception
+   */
   private void renderErrorMessage(WebuiRequestContext context, String keyBundle) throws Exception {
     Writer writer = context.getWriter();
     String message = context.getApplicationResourceBundle().getString(keyBundle);

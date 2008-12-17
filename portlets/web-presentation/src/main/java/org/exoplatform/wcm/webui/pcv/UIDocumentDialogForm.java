@@ -48,25 +48,44 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
 /**
- * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com,
+ * Created by The eXo Platform SAS
+ * Author : Anh Do Ngoc
+ * anh.do@exoplatform.com,
  * anhdn86@gmail.com Nov 13, 2008
  */
 
-@ComponentConfig(lifecycle = UIFormLifecycle.class, events = {
+@ComponentConfig(
+  lifecycle = UIFormLifecycle.class, events = {
     @EventConfig(listeners = UIDocumentDialogForm.SaveActionListener.class),
-    @EventConfig(listeners = UIDocumentDialogForm.CancelActionListener.class) })
+    @EventConfig(listeners = UIDocumentDialogForm.CancelActionListener.class)   
+  }  
+)
 public class UIDocumentDialogForm extends UIDialogForm {
 
+  /** The document node. */
   private Node documentNode;
 
+  /**
+   * Sets the document node.
+   * 
+   * @param node the new document node
+   */
   public void setDocumentNode(Node node) {
     documentNode = node;
   }
 
+  /**
+   * Gets the document node.
+   * 
+   * @return the document node
+   */
   public Node getDocumentNode() {
     return documentNode;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.form.UIDialogForm#getTemplate()
+   */
   public String getTemplate() {
     TemplateService templateService = getApplicationComponent(TemplateService.class);
     String userName = Util.getPortalRequestContext().getRemoteUser();
@@ -82,6 +101,9 @@ public class UIDocumentDialogForm extends UIDialogForm {
     }
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.core.UIComponent#getTemplateResourceResolver(org.exoplatform.webui.application.WebuiRequestContext, java.lang.String)
+   */
   @SuppressWarnings("unused")
   public ResourceResolver getTemplateResourceResolver(WebuiRequestContext context, String template) {
     try {
@@ -93,14 +115,26 @@ public class UIDocumentDialogForm extends UIDialogForm {
                                                    workspace,
                                                    TemplateService.EXO_TEMPLATE_FILE_PROP);
       }
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+    } catch (Exception e) { }
     return resourceResolver;
   }
 
+  /**
+   * The listener interface for receiving saveAction events.
+   * The class that is interested in processing a saveAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSaveActionListener<code> method. When
+   * the saveAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SaveActionEvent
+   */
   public static class SaveActionListener extends EventListener<UIDocumentDialogForm> {
 
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIDocumentDialogForm> event) throws Exception {
       UIDocumentDialogForm uiDocumentDialogForm = event.getSource();
       UIApplication uiApp = uiDocumentDialogForm.getAncestorOfType(UIApplication.class);
@@ -177,7 +211,22 @@ public class UIDocumentDialogForm extends UIDialogForm {
 
   }
 
+  /**
+   * The listener interface for receiving cancelAction events.
+   * The class that is interested in processing a cancelAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addCancelActionListener<code> method. When
+   * the cancelAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see CancelActionEvent
+   */
   public static class CancelActionListener extends EventListener<UIDocumentDialogForm> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIDocumentDialogForm> event) throws Exception {
       UIDocumentDialogForm uiDocumentDialogForm = event.getSource();
       Node documentNode = uiDocumentDialogForm.getNode();
