@@ -54,10 +54,10 @@ public class UICategorizing extends UIContainer implements UISelectable {
   }
 
   public void initUICategoriesSelector() throws Exception {
-    UICategoriesSelector uiCategoriesSelector = getChild(UICategoriesSelector.class);
-    uiCategoriesSelector.setExistedCategoryList(getExistedCategories());
-    uiCategoriesSelector.setSourceComponent(this,null);
-    uiCategoriesSelector.init();
+    UICategoriesSelector uiCateSelector = getChild(UICategoriesSelector.class);
+    uiCateSelector.setExistedCategoryList(getExistedCategories());
+    uiCateSelector.setSourceComponent(this,null);
+    uiCateSelector.init();
   }
 
   @SuppressWarnings("unchecked")

@@ -89,7 +89,7 @@ public class UIQuickEditWebContentForm extends UIContentDialogForm{
     } catch (Exception e) {
       webContentNode = (Node) session.getItem(nodeIdentifier);
     }
-      
+
     NodeLocation nodeLocation = new NodeLocation();
     nodeLocation.setRepository(repositoryName);
     nodeLocation.setWorkspace(workspaceName);
@@ -174,9 +174,15 @@ public class UIQuickEditWebContentForm extends UIContentDialogForm{
           homeNode.save();
           newNode = (Node) homeNode.getSession().getItem(addedPath);
           event.getRequestContext().setAttribute("nodePath",newNode.getPath());
-        }catch(Exception e) {} 
+        }catch(Exception e) {
+          if(UISingleContentViewerPortlet.scvLog.isDebugEnabled()) {
+            UISingleContentViewerPortlet.scvLog.debug(e);
+          }
+        } 
       }catch(AccessControlException ace) {
-        throw new AccessDeniedException(ace.getMessage());
+        if(UISingleContentViewerPortlet.scvLog.isDebugEnabled()) {
+          UISingleContentViewerPortlet.scvLog.debug(ace);
+        }
       }catch(VersionException ve) {
         uiApplication.addMessage(new ApplicationMessage("UIDocumentForm.msg.in-versioning", null, ApplicationMessage.WARNING));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
@@ -184,7 +190,6 @@ public class UIQuickEditWebContentForm extends UIContentDialogForm{
         uiApplication.addMessage(new ApplicationMessage("UIDocumentForm.msg.item-not-found", null, ApplicationMessage.WARNING));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
       }catch(RepositoryException repo) {
-        repo.printStackTrace();
         String key = "UIDocumentForm.msg.repository-exception";
         if (ItemExistsException.class.isInstance(repo)) key = "UIDocumentForm.msg.not-allowed-same-name-sibling";
         uiApplication.addMessage(new ApplicationMessage(key, null, ApplicationMessage.WARNING));
@@ -193,7 +198,6 @@ public class UIQuickEditWebContentForm extends UIContentDialogForm{
         uiApplication.addMessage(new ApplicationMessage("UIDocumentForm.msg.numberformat-exception", null, ApplicationMessage.WARNING));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
       }catch(Exception e) {
-        e.printStackTrace() ;
         uiApplication.addMessage(new ApplicationMessage("UIDocumentForm.msg.cannot-save", null, ApplicationMessage.WARNING));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
       }

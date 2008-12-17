@@ -74,7 +74,11 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent{
         addChild(UIQuickEditContainer.class, null, null);
         return;
       }      
-    }catch(Exception e) {}
+    }catch(Exception e) {
+      if(UISingleContentViewerPortlet.scvLog.isDebugEnabled()) {
+        UISingleContentViewerPortlet.scvLog.debug(e);
+      }
+    }
     addUIWelcomeScreen();
   }
 
@@ -100,6 +104,9 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent{
       uiportlet.getReferencedContent();
       return false;
     } catch (Exception e) {
+      if(UISingleContentViewerPortlet.scvLog.isDebugEnabled()) {
+        UISingleContentViewerPortlet.scvLog.debug(e);
+      }
     }
     return true;
   }
@@ -146,12 +153,12 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent{
     if(uiPopup == null) {
       uiPopup = addChild(UIPopupWindow.class, null, POPUP_WEBCONTENT_SELECTOR);
     }
-    uiPopup.setWindowSize(800, 600);
     UIWebContentPathSelector webContentPathSelector = this.createUIComponent(UIWebContentPathSelector.class, null, null);
     UIWebContentSelectorForm uiWebContentSelector = this.getChild(UIWebContentSelectorForm.class);
     webContentPathSelector.setSourceComponent(uiWebContentSelector, new String[] {UIWebContentSelectorForm.PATH});
-    webContentPathSelector.init();
     uiPopup.setUIComponent(webContentPathSelector);
+    webContentPathSelector.init();
+    uiPopup.setWindowSize(800, 600);
     uiPopup.setShow(true);
   }
 
@@ -163,9 +170,9 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent{
     UIDocumentPathSelector dmsSelector = this.createUIComponent(UIDocumentPathSelector.class, null, null);
     UIDMSSelectorForm dmsSelectorForm = this.getChild(UIDMSSelectorForm.class);
     dmsSelector.setSourceComponent(dmsSelectorForm, new String[] {UIDMSSelectorForm.PATH});
+    uiPopup.setUIComponent(dmsSelector);
     dmsSelector.init();
     uiPopup.setWindowSize(800, 600);
-    uiPopup.setUIComponent(dmsSelector);
     uiPopup.setShow(true);
   }
 }

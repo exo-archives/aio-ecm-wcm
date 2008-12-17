@@ -42,7 +42,6 @@ public class UINonEditable extends UIForm {
   public static class BackToViewActionListener extends EventListener<UINonEditable> {
     public void execute(Event<UINonEditable> event) throws Exception {
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
-      
     }
   }
 }

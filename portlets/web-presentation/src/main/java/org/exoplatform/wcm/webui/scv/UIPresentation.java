@@ -133,6 +133,9 @@ public class UIPresentation extends UIBaseNodePresentation {
         resourceResolver = new JCRResourceResolver(repository, workspace, "exo:templateFile");
       }
     }catch (Exception e) {
+      if(UISingleContentViewerPortlet.scvLog.isDebugEnabled()) {
+        UISingleContentViewerPortlet.scvLog.debug(e);
+      }
     }    
     return resourceResolver ;   
   }

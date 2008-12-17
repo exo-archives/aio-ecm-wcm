@@ -24,9 +24,7 @@ import javax.jcr.Session;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
-import org.exoplatform.portal.config.DataStorage;
-import org.exoplatform.portal.config.UserACL;
-import org.exoplatform.portal.config.model.PortalConfig;
+import org.apache.commons.logging.Log;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -34,6 +32,8 @@ import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.WebUIPropertiesConfigService;
 import org.exoplatform.wcm.webui.WebUIPropertiesConfigService.PopupWindowProperties;
 import org.exoplatform.wcm.webui.scv.config.UIPortletConfig;
@@ -45,8 +45,6 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
-import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 
 /**
  * Created by The eXo Platform SAS
@@ -65,6 +63,8 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
   public static String REPOSITORY = "repository" ;
   public static String WORKSPACE = "workspace" ;
   public static String IDENTIFIER = "nodeIdentifier" ;
+  
+  public static final Log scvLog = ExoLogger.getLogger("wcm:SingleContentViewer");
 
   private PortletMode mode_ = PortletMode.VIEW ;
 
@@ -72,7 +72,7 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
     activateMode(mode_) ;
   }
 
-  public void activateMode(PortletMode mode) throws Exception {
+  private void activateMode(PortletMode mode) throws Exception {
     getChildren().clear() ;    
     addChild(UIPopupContainer.class, null, null);
     if(PortletMode.VIEW.equals(mode)) {
@@ -105,12 +105,8 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
 
   public boolean canEditPortlet() throws Exception{
     PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
-    String portalName = Util.getUIPortal().getName();
     String userId = context.getRemoteUser();
-    DataStorage dataStorage = getApplicationComponent(DataStorage.class);
-    PortalConfig portalConfig = dataStorage.getPortalConfig(portalName);
-    UserACL userACL = getApplicationComponent(UserACL.class);
-    return userACL.hasEditPermission(portalConfig, userId);
+    return Utils.canEditCurrentPortal(userId);
   }
 
   public Node getReferencedContent() throws Exception {
@@ -131,14 +127,14 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
       sessionProvider = SessionProviderFactory.createSessionProvider();
     }
     Session session = sessionProvider.getSession(worksapce, manageableRepository);
-    
+
     Node content = null;
     try {
       content = session.getNodeByUUID(nodeIdentifier);
     } catch (Exception e) {
       content = (Node) session.getItem(nodeIdentifier);
     }
-    
+
     return content;
   }
 
@@ -152,11 +148,5 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
       return false;
     }
     return true;
-  }
-
-  public static class QuickEditActionListener extends EventListener<UISingleContentViewerPortlet> {
-    public void execute(Event<UISingleContentViewerPortlet> event) throws Exception {            
-      //TODO
-    }
   }
 }

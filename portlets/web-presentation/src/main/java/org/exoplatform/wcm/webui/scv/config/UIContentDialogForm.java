@@ -42,6 +42,8 @@ import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.impl.ExoLog;
 import org.exoplatform.services.wcm.core.NodeIdentifier;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
@@ -158,7 +160,11 @@ public class UIContentDialogForm extends UIDialogForm {
         String workspace = manageableRepository.getConfiguration().getSystemWorkspaceName();
         resourceResolver = new JCRResourceResolver(this.repositoryName, workspace, TemplateService.EXO_TEMPLATE_FILE_PROP);
       }
-    }catch(Exception e) {}
+    }catch(Exception e) {
+      if(UISingleContentViewerPortlet.scvLog.isDebugEnabled()) {
+        UISingleContentViewerPortlet.scvLog.debug(e);
+      }
+    }
     return resourceResolver;
   }
 
@@ -272,9 +278,16 @@ public class UIContentDialogForm extends UIDialogForm {
           homeNode.save();
           newNode = (Node) homeNode.getSession().getItem(addedPath);
           event.getRequestContext().setAttribute("nodePath",newNode.getPath());
-        }catch(Exception e) {} 
+        }catch(Exception e) {
+          if(UISingleContentViewerPortlet.scvLog.isDebugEnabled()) {
+            UISingleContentViewerPortlet.scvLog.debug(e);
+          }
+        } 
       }catch(AccessControlException ace) {
-        throw new AccessDeniedException(ace.getMessage());
+//        throw new AccessDeniedException(ace.getMessage());
+        if(UISingleContentViewerPortlet.scvLog.isDebugEnabled()) {
+          UISingleContentViewerPortlet.scvLog.debug(ace);
+        }
       }catch(VersionException ve) {
         uiApplication.addMessage(new ApplicationMessage("UIDocumentForm.msg.in-versioning", null, ApplicationMessage.WARNING));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
@@ -282,7 +295,6 @@ public class UIContentDialogForm extends UIDialogForm {
         uiApplication.addMessage(new ApplicationMessage("UIDocumentForm.msg.item-not-found", null, ApplicationMessage.WARNING));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
       }catch(RepositoryException repo) {
-        repo.printStackTrace();
         String key = "UIDocumentForm.msg.repository-exception";
         if (ItemExistsException.class.isInstance(repo)) key = "UIDocumentForm.msg.not-allowed-same-name-sibling";
         uiApplication.addMessage(new ApplicationMessage(key, null, ApplicationMessage.WARNING));
@@ -291,7 +303,6 @@ public class UIContentDialogForm extends UIDialogForm {
         uiApplication.addMessage(new ApplicationMessage("UIDocumentForm.msg.numberformat-exception", null, ApplicationMessage.WARNING));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
       }catch(Exception e) {
-        e.printStackTrace() ;
         uiApplication.addMessage(new ApplicationMessage("UIDocumentForm.msg.cannot-save", null, ApplicationMessage.WARNING));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
       }

@@ -80,7 +80,7 @@ public class UIPresentationContainer extends UIContainer{
       PopupWindowProperties popupProperties = (PopupWindowProperties)propertiesConfigService.getProperties(WebUIPropertiesConfigService.SCV_POPUP_SIZE_QUICK_EDIT);
       maskPopupContainer.activate(portletConfig,popupProperties.getWidth(),popupProperties.getHeight());            
       context.addUIComponentToUpdateByAjax(maskPopupContainer);
-  
+
     }
   }
 
