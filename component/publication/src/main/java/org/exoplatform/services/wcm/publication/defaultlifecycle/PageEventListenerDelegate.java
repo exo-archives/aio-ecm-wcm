@@ -18,7 +18,6 @@ package org.exoplatform.services.wcm.publication.defaultlifecycle;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.jcr.Node;
@@ -40,32 +39,59 @@ import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
-import org.exoplatform.services.wcm.metadata.PageMetadataService;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
 
 /**
  * Created by The eXo Platform SAS
- * Author : Hoa Pham	
- *          hoa.pham@exoplatform.com
- * Oct 6, 2008  
+ * Author : Hoa Pham
+ * hoa.pham@exoplatform.com
+ * Oct 6, 2008
  */
 public class PageEventListenerDelegate {
 
+  /** The lifecycle name. */
   private String lifecycleName;
 
+  /**
+   * Instantiates a new page event listener delegate.
+   * 
+   * @param lifecycleName the lifecycle name
+   * @param container the container
+   */
   public PageEventListenerDelegate(String lifecycleName, ExoContainer container) {
     this.lifecycleName = lifecycleName;
   }
 
+  /**
+   * Update lifecyle on create page.
+   * 
+   * @param page the page
+   * 
+   * @throws Exception the exception
+   */
   public void updateLifecyleOnCreatePage(Page page) throws Exception { 
     updateAddedApplication(page);
   }
 
+  /**
+   * Update lifecyle on change page.
+   * 
+   * @param page the page
+   * 
+   * @throws Exception the exception
+   */
   public void updateLifecyleOnChangePage(Page page) throws Exception {
     updateAddedApplication(page);
     updateRemovedApplication(page);
   }
 
+  /**
+   * Update lifecycle on remove page.
+   * 
+   * @param page the page
+   * 
+   * @throws Exception the exception
+   */
   public void updateLifecycleOnRemovePage(Page page) throws Exception {
     List<String> listPageApplicationId = Util.getListApplicationIdByPage(page);
     for (String applicationId : listPageApplicationId) {
@@ -76,6 +102,13 @@ public class PageEventListenerDelegate {
     }
   }
 
+  /**
+   * Update added application.
+   * 
+   * @param page the page
+   * 
+   * @throws Exception the exception
+   */
   private void updateAddedApplication(Page page) throws Exception {
     List<String> listPageApplicationId = Util.getListApplicationIdByPage(page);
     for (String applicationtId : listPageApplicationId) {
@@ -84,6 +117,13 @@ public class PageEventListenerDelegate {
     }
   }
 
+  /**
+   * Update removed application.
+   * 
+   * @param page the page
+   * 
+   * @throws Exception the exception
+   */
   private void updateRemovedApplication(Page page) throws Exception {
     List<Node> listNode = getListNodeByApplicationId(page);
     List<String> listApplicationId = Util.getListApplicationIdByPage(page);
@@ -98,6 +138,15 @@ public class PageEventListenerDelegate {
     }
   }
 
+  /**
+   * Gets the list node by application id.
+   * 
+   * @param page the page
+   * 
+   * @return the list node by application id
+   * 
+   * @throws Exception the exception
+   */
   private List<Node> getListNodeByApplicationId(Page page) throws Exception {
     RepositoryService repositoryService = Util.getServices(RepositoryService.class);
     WCMConfigurationService configurationService = Util.getServices(WCMConfigurationService.class);
@@ -120,6 +169,16 @@ public class PageEventListenerDelegate {
     return listPublishedNode;
   }
 
+  /**
+   * Save added application.
+   * 
+   * @param page the page
+   * @param applicationId the application id
+   * @param content the content
+   * @param lifecycleName the lifecycle name
+   * 
+   * @throws Exception the exception
+   */
   private void saveAddedApplication(Page page, String applicationId, Node content, String lifecycleName) throws Exception {    
     PublicationService publicationService = Util.getServices(PublicationService.class);                 
     String nodeLifecycleName = null;
@@ -165,6 +224,15 @@ public class PageEventListenerDelegate {
     session.save();
   } 
 
+  /**
+   * Save removed application.
+   * 
+   * @param page the page
+   * @param applicationId the application id
+   * @param content the content
+   * 
+   * @throws Exception the exception
+   */
   private void saveRemovedApplication(Page page, String applicationId, Node content) throws Exception {
     WCMPublicationService presentationService = Util.getServices(WCMPublicationService.class);
     PublicationService publicationService = Util.getServices(PublicationService.class);

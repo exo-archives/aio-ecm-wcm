@@ -69,22 +69,46 @@ import org.exoplatform.webui.form.UIForm;
  */
 public class WCMPublicationPlugin extends WebpagePublicationPlugin{
 
+  /** The Constant ENROLLED. */
   public static final String ENROLLED = "enrolled".intern(); 
+  
+  /** The Constant UNPUBLISHED. */
   public static final String UNPUBLISHED = "unpublished".intern();  
+  
+  /** The Constant PUBLISHED. */
   public static final String PUBLISHED = "published".intern();
 
+  /** The Constant DEFAULT_STATE. */
   public static final String DEFAULT_STATE = UNPUBLISHED;
+  
+  /** The Constant PUBLICATION. */
   public static final String PUBLICATION = "publication:publication".intern();    
+  
+  /** The Constant LIFECYCLE_PROP. */
   public static final String LIFECYCLE_PROP = "publication:lifecycleName".intern();   
+  
+  /** The Constant CURRENT_STATE. */
   public static final String CURRENT_STATE = "publication:currentState".intern();
 
+  /** The Constant HISTORY. */
   public static final String HISTORY = "publication:history".intern();  
+  
+  /** The Constant WCM_PUBLICATION_MIXIN. */
   public static final String WCM_PUBLICATION_MIXIN = "publication:wcmPublication".intern(); 
+  
+  /** The Constant LIFECYCLE_NAME. */
   public static final String LIFECYCLE_NAME = "Web Content Publishing".intern();
 
+  /** The Constant LOCALE_FILE. */
   private static final String LOCALE_FILE = "artifacts.defaultlifecycle.WCMPublication".intern();  
+  
+  /** The Constant IMG_PATH. */
   public static final String IMG_PATH = "artifacts/".intern();
+  
+  /** The page event listener delegate. */
   private PageEventListenerDelegate pageEventListenerDelegate;  
+  
+  /** The navigation event listener delegate. */
   private NavigationEventListenerDelegate navigationEventListenerDelegate;  
 
   /**
@@ -191,7 +215,19 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin{
     return bytes;
   }
 
+  /** The Constant BUFFER_SIZE. */
   private static final int BUFFER_SIZE = 512;
+  
+  /**
+   * Transfer.
+   * 
+   * @param in the in
+   * @param out the out
+   * 
+   * @return the int
+   * 
+   * @throws IOException Signals that an I/O exception has occurred.
+   */
   public static int transfer(InputStream in, OutputStream out) throws IOException {
     int total = 0;
     byte[] buffer = new byte[BUFFER_SIZE];
@@ -247,6 +283,9 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin{
     return listPortalName;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.publication.WebpagePublicationPlugin#publishContentToPage(javax.jcr.Node, org.exoplatform.portal.config.model.Page)
+   */
   public void publishContentToPage(Node content, Page page) throws Exception {
     UserPortalConfigService userPortalConfigService = Util.getServices(UserPortalConfigService.class);
     Application portlet = new Application();
@@ -327,9 +366,11 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin{
   /**
    * Gets the services.
    * 
-   * @param clazz the clazz
+   * @param page the page
    * 
    * @return the services
+   * 
+   * @throws Exception the exception
    */
   public List<String> getListPageNavigationUri(Page page) throws Exception {
     List<String> listPageNavigationUri = new ArrayList<String>();
@@ -435,6 +476,9 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin{
     navigationEventListenerDelegate.updateLifecyleOnRemoveNavigation(navigation);
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.ecm.publication.PublicationPlugin#getLocalizedAndSubstituteMessage(java.util.Locale, java.lang.String, java.lang.String[])
+   */
   public String getLocalizedAndSubstituteMessage(Locale locale, String key, String[] values)
   throws Exception {    
     ClassLoader cl=this.getClass().getClassLoader();    

@@ -32,22 +32,42 @@ import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 
 /**
  * Created by The eXo Platform SAS
- * Author : Hoa Pham	
- *          hoa.phamvu@exoplatform.com
- * Nov 3, 2008  
+ * Author : Hoa Pham
+ * hoa.phamvu@exoplatform.com
+ * Nov 3, 2008
  */
 public class PageMetadataServiceImpl implements PageMetadataService {
+  
+  /** The log. */
   private static Log log = ExoLogger.getLogger(PageMetadataServiceImpl.class);
   
+  /** The live portal manager service. */
   private LivePortalManagerService livePortalManagerService; 
+  
+  /** The categories service. */
   private CategoriesService categoriesService;
+  
+  /** The folksonomy service. */
   private FolksonomyService folksonomyService;
+  
+  /**
+   * Instantiates a new page metadata service impl.
+   * 
+   * @param livePortalManagerService the live portal manager service
+   * @param categoriesService the categories service
+   * @param folksonomyService the folksonomy service
+   * 
+   * @throws Exception the exception
+   */
   public PageMetadataServiceImpl(LivePortalManagerService livePortalManagerService, CategoriesService categoriesService, FolksonomyService folksonomyService) throws Exception {        
     this.livePortalManagerService = livePortalManagerService;    
     this.categoriesService = categoriesService;
     this.folksonomyService = folksonomyService;
   }      
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.metadata.PageMetadataService#getPortalMetadata(java.lang.String, org.exoplatform.services.jcr.ext.common.SessionProvider)
+   */
   public HashMap<String, String> getPortalMetadata(String uri, SessionProvider sessionProvider)
   throws Exception {
     String portalName = uri.split("/")[1];      
@@ -59,6 +79,15 @@ public class PageMetadataServiceImpl implements PageMetadataService {
     return null;
   }
 
+  /**
+   * Extract portal metadata.
+   * 
+   * @param portalNode the portal node
+   * 
+   * @return the hash map< string, string>
+   * 
+   * @throws Exception the exception
+   */
   private HashMap<String,String> extractPortalMetadata(Node portalNode) throws Exception {
     HashMap<String,String> metadata = new HashMap<String,String>();
     NodeType siteMedata = portalNode.getSession().getWorkspace().getNodeTypeManager().getNodeType("metadata:siteMetadata");
@@ -71,6 +100,9 @@ public class PageMetadataServiceImpl implements PageMetadataService {
     return metadata;
   }  
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.metadata.PageMetadataService#extractMetadata(javax.jcr.Node)
+   */
   public HashMap<String, String> extractMetadata(Node node) throws Exception {
     HashMap<String, String> medatata = new HashMap<String,String>();
     Node portalNode = findPortal(node);    
@@ -101,6 +133,16 @@ public class PageMetadataServiceImpl implements PageMetadataService {
     return medatata;
   }
 
+  /**
+   * Compute content keywords.
+   * 
+   * @param node the node
+   * @param title the title
+   * 
+   * @return the string
+   * 
+   * @throws Exception the exception
+   */
   private String computeContentKeywords(Node node, String title) throws Exception {
     StringBuilder builder = new StringBuilder();    
     String repository = ((ManageableRepository)node.getSession().getRepository()).getConfiguration().getName();    
@@ -114,10 +156,29 @@ public class PageMetadataServiceImpl implements PageMetadataService {
     return builder.toString();
   }
 
+  /**
+   * Gets the property.
+   * 
+   * @param node the node
+   * @param propertyName the property name
+   * 
+   * @return the property
+   * 
+   * @throws Exception the exception
+   */
   private String getProperty(Node node, String propertyName) throws Exception {
     return node.hasProperty(propertyName)? node.getProperty(propertyName).getString():null;
   }
 
+  /**
+   * Find portal.
+   * 
+   * @param child the child
+   * 
+   * @return the node
+   * 
+   * @throws Exception the exception
+   */
   protected Node findPortal(Node child) throws Exception{                       
     try {
       return livePortalManagerService.getLivePortalByChild(child);

@@ -28,12 +28,18 @@ import org.exoplatform.services.wcm.publication.WCMPublicationService;
 
 /**
  * Created by The eXo Platform SAS
- * Author : Hoa Pham	
- *          hoa.pham@exoplatform.com
- * Sep 24, 2008  
+ * Author : Hoa Pham
+ * hoa.pham@exoplatform.com
+ * Sep 24, 2008
  */
 public class UpdateNavigationEventListener extends Listener<UserPortalConfigService, PageNavigation>{
+  
+  /** The log. */
   private static Log log = ExoLogger.getLogger(UpdateNavigationEventListener.class);
+  
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.listener.Listener#onEvent(org.exoplatform.services.listener.Event)
+   */
   public void onEvent(Event<UserPortalConfigService, PageNavigation> event) throws Exception {
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     WCMPublicationService publicationService = 

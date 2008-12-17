@@ -27,9 +27,9 @@ import org.exoplatform.webui.form.UIForm;
 
 /**
  * Created by The eXo Platform SAS
- * Author : Hoa Pham	
- *          hoa.pham@exoplatform.com
- * Sep 9, 2008  
+ * Author : Hoa Pham
+ * hoa.pham@exoplatform.com
+ * Sep 9, 2008
  */
 @ComponentConfig (
     lifecycle = UIApplicationLifecycle.class,
@@ -37,11 +37,28 @@ import org.exoplatform.webui.form.UIForm;
 )
 public class UIPublishingPanel extends UIForm {
 
+  /** The current node. */
   private Node currentNode;
 
+  /**
+   * Gets the node.
+   * 
+   * @return the node
+   */
   public Node getNode() {return this.currentNode;}
+  
+  /**
+   * Sets the node.
+   * 
+   * @param node the new node
+   */
   public void setNode(Node node) {this.currentNode = node; }  
 
+  /**
+   * Instantiates a new uI publishing panel.
+   * 
+   * @throws Exception the exception
+   */
   public UIPublishingPanel() throws Exception {
     addChild(UIPortalNavigationExplorer.class,null,"UIPortalNavigationExplorer");
     addChild(UIPublicationAction.class,null,"UIPublicationAction");
@@ -49,6 +66,15 @@ public class UIPublishingPanel extends UIForm {
     addChild(UIPublicationComponentStatus.class, null, "UIPublicationComponentStatus");
   }
 
+  /**
+   * Inits the panel.
+   * 
+   * @param node the node
+   * @param portalName the portal name
+   * @param runningPortals the running portals
+   * 
+   * @throws Exception the exception
+   */
   public void initPanel(Node node,String portalName,List<String> runningPortals) throws Exception {
     this.currentNode = node;
     UIPortalNavigationExplorer poExplorer = getChild(UIPortalNavigationExplorer.class);
@@ -59,6 +85,11 @@ public class UIPublishingPanel extends UIForm {
     publicationComponentStatus.setNode(currentNode);
   }
 
+  /**
+   * Gets the current portal.
+   * 
+   * @return the current portal
+   */
   public String getCurrentPortal() {
     UIPortalNavigationExplorer portalNavigationExplorer = getChild(UIPortalNavigationExplorer.class);
     TreeNode selectedNode = portalNavigationExplorer.getSelectedNode();
@@ -66,6 +97,11 @@ public class UIPublishingPanel extends UIForm {
     return null;
   }
 
+  /**
+   * Gets the current tree node.
+   * 
+   * @return the current tree node
+   */
   public String getCurrentTreeNode() {
     UIPortalNavigationExplorer portalNavigationExplorer = getChild(UIPortalNavigationExplorer.class);
     TreeNode selectedNode = portalNavigationExplorer.getSelectedNode();

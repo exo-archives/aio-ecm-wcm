@@ -40,8 +40,6 @@ import org.picocontainer.Startable;
  */
 public class WCMPublicationServiceImpl implements WCMPublicationService, Startable {
   
-  private static Log log = ExoLogger.getLogger(WCMPublicationServiceImpl.class);
-  
   private HashMap<String, WebpagePublicationPlugin> publicationPlugins = 
     new HashMap<String, WebpagePublicationPlugin>();  
   

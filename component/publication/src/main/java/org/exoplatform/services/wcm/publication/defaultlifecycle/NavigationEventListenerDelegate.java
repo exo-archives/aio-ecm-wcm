@@ -18,7 +18,6 @@ package org.exoplatform.services.wcm.publication.defaultlifecycle;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.jcr.Node;
@@ -43,27 +42,47 @@ import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
-import org.exoplatform.services.wcm.metadata.PageMetadataService;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
 
 /**
  * Created by The eXo Platform SAS
- * Author : Hoa Pham	
- *          hoa.pham@exoplatform.com
- * Oct 6, 2008  
+ * Author : Hoa Pham
+ * hoa.pham@exoplatform.com
+ * Oct 6, 2008
  */
 public class NavigationEventListenerDelegate {
 
+  /** The lifecycle name. */
   private String lifecycleName;
 
+  /**
+   * Instantiates a new navigation event listener delegate.
+   * 
+   * @param lifecycleName the lifecycle name
+   * @param container the container
+   */
   public NavigationEventListenerDelegate(String lifecycleName, ExoContainer container) {
     this.lifecycleName = lifecycleName;
   }
 
+  /**
+   * Update lifecyle on create navigation.
+   * 
+   * @param pageNavigation the page navigation
+   * 
+   * @throws Exception the exception
+   */
   public void updateLifecyleOnCreateNavigation(PageNavigation pageNavigation) throws Exception {
     // TODO: Don't support in this version
   }
 
+  /**
+   * Update lifecycle on change navigation.
+   * 
+   * @param pageNavigation the page navigation
+   * 
+   * @throws Exception the exception
+   */
   public void updateLifecycleOnChangeNavigation(PageNavigation pageNavigation) throws Exception {
     if (pageNavigation.getOwnerType().equals(PortalConfig.PORTAL_TYPE)) {
       updateRemovedPageNode(pageNavigation);
@@ -71,10 +90,24 @@ public class NavigationEventListenerDelegate {
     }
   }
 
+  /**
+   * Update lifecyle on remove navigation.
+   * 
+   * @param pageNavigation the page navigation
+   * 
+   * @throws Exception the exception
+   */
   public void updateLifecyleOnRemoveNavigation(PageNavigation pageNavigation) throws Exception {
     // TODO: Don't support in this version
   }
 
+  /**
+   * Update added page node.
+   * 
+   * @param pageNavigation the page navigation
+   * 
+   * @throws Exception the exception
+   */
   private void updateAddedPageNode(PageNavigation pageNavigation) throws Exception {
     UserPortalConfigService userPortalConfigService = Util.getServices(UserPortalConfigService.class);
     for (PageNode pageNode : pageNavigation.getNodes()) {
@@ -93,6 +126,13 @@ public class NavigationEventListenerDelegate {
     }
   }
 
+  /**
+   * Update removed page node.
+   * 
+   * @param pageNavigation the page navigation
+   * 
+   * @throws Exception the exception
+   */
   private void updateRemovedPageNode(PageNavigation pageNavigation) throws Exception {
     String portalName = pageNavigation.getOwnerId();
     List<PageNode> listPortalPageNode = pageNavigation.getNodes();
@@ -151,6 +191,16 @@ public class NavigationEventListenerDelegate {
     }
   }
 
+  /**
+   * Save added page node.
+   * 
+   * @param portalName the portal name
+   * @param pageNode the page node
+   * @param applicationId the application id
+   * @param content the content
+   * 
+   * @throws Exception the exception
+   */
   private void saveAddedPageNode(String portalName, PageNode pageNode, String applicationId, Node content) throws Exception {    
     PublicationService publicationService = Util.getServices(PublicationService.class);                 
     String nodeLifecycleName = null;
@@ -187,6 +237,16 @@ public class NavigationEventListenerDelegate {
     session.save();
   }
 
+  /**
+   * Save removed page node.
+   * 
+   * @param navigationNodeUri the navigation node uri
+   * @param pageId the page id
+   * @param applicationId the application id
+   * @param content the content
+   * 
+   * @throws Exception the exception
+   */
   private void saveRemovedPageNode(String navigationNodeUri, String pageId, String applicationId, Node content) throws Exception {
     Session session = content.getSession();
     ValueFactory valueFactory = session.getValueFactory();

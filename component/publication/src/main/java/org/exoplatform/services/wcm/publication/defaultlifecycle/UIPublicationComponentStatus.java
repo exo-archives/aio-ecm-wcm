@@ -36,8 +36,8 @@ import org.exoplatform.webui.form.UIForm;
 /**
  * Created by The eXo Platform SAS
  * Author : Romain Dénarié
- *          romain.denarie@exoplatform.com
- * 29 mai 08  
+ * romain.denarie@exoplatform.com
+ * 29 mai 08
  */
 @ComponentConfig (
     lifecycle = UIFormLifecycle.class,
@@ -49,23 +49,51 @@ import org.exoplatform.webui.form.UIForm;
 
 public class UIPublicationComponentStatus extends UIForm {
 
+  /** The node_. */
   private Node node_;
 
+  /**
+   * Instantiates a new uI publication component status.
+   * 
+   * @throws Exception the exception
+   */
   public UIPublicationComponentStatus() throws Exception {
   }
 
+  /**
+   * Instantiates a new uI publication component status.
+   * 
+   * @param node the node
+   * 
+   * @throws Exception the exception
+   */
   public UIPublicationComponentStatus(Node node) throws Exception {
     this.node_=node;
   }
 
+  /**
+   * Gets the node.
+   * 
+   * @return the node
+   */
   public Node getNode() {
     return this.node_;
   }
 
+  /**
+   * Sets the node.
+   * 
+   * @param node the new node
+   */
   public void setNode(Node node) {
     this.node_=node;
   }
 
+  /**
+   * Gets the node name.
+   * 
+   * @return the node name
+   */
   public String getNodeName() {
     try {
       return node_.getName();
@@ -74,6 +102,11 @@ public class UIPublicationComponentStatus extends UIForm {
     }
   }
 
+  /**
+   * Gets the life cycle name.
+   * 
+   * @return the life cycle name
+   */
   public String getLifeCycleName () {
     try {
       PublicationService service = getApplicationComponent(PublicationService.class) ;
@@ -83,6 +116,11 @@ public class UIPublicationComponentStatus extends UIForm {
     }
   }
 
+  /**
+   * Gets the state name.
+   * 
+   * @return the state name
+   */
   public String getStateName () {
     try {
       PublicationService service = getApplicationComponent(PublicationService.class) ;
@@ -92,6 +130,13 @@ public class UIPublicationComponentStatus extends UIForm {
     }
   }
 
+  /**
+   * Gets the link state image.
+   * 
+   * @param locale the locale
+   * 
+   * @return the link state image
+   */
   public String getLinkStateImage (Locale locale) {
     try {
       DownloadService dS = getApplicationComponent(DownloadService.class);
@@ -106,7 +151,22 @@ public class UIPublicationComponentStatus extends UIForm {
     }
   }
 
+  /**
+   * The listener interface for receiving closeAction events.
+   * The class that is interested in processing a closeAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addCloseActionListener<code> method. When
+   * the closeAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see CloseActionEvent
+   */
   public static class CloseActionListener extends EventListener<UIPublicationComponentStatus> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIPublicationComponentStatus> event) throws Exception {
       UIPublicationComponentStatus publicationComponentStatus = event.getSource();
       UIPublishingPanel publishingPanel = publicationComponentStatus.getAncestorOfType(UIPublishingPanel.class);

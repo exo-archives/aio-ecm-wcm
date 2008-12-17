@@ -44,9 +44,9 @@ import org.exoplatform.webui.event.EventListener;
 
 /**
  * Created by The eXo Platform SAS
- * Author : Hoa Pham	
- *          hoa.pham@exoplatform.com
- * Sep 9, 2008  
+ * Author : Hoa Pham
+ * hoa.pham@exoplatform.com
+ * Sep 9, 2008
  */
 
 @ComponentConfig(
@@ -59,13 +59,31 @@ import org.exoplatform.webui.event.EventListener;
 
 public class UIPortalNavigationExplorer extends UIContainer{
 
+  /** The portal name. */
   private String portalName;
+  
+  /** The running portals. */
   private List<String> runningPortals = new ArrayList<String>();
+  
+  /** The current node. */
   private TreeNode currentNode = null;
 
+  /**
+   * Instantiates a new uI portal navigation explorer.
+   * 
+   * @throws Exception the exception
+   */
   public UIPortalNavigationExplorer() throws Exception {
   }
 
+  /**
+   * Inits the.
+   * 
+   * @param portalName the portal name
+   * @param runningPortals the running portals
+   * 
+   * @throws Exception the exception
+   */
   public void init(String portalName, List<String> runningPortals) throws Exception {    
     this.portalName = portalName;
     this.runningPortals = runningPortals;
@@ -103,6 +121,15 @@ public class UIPortalNavigationExplorer extends UIContainer{
     }
   }
 
+  /**
+   * Gets the portal navigation.
+   * 
+   * @param portalName the portal name
+   * 
+   * @return the portal navigation
+   * 
+   * @throws Exception the exception
+   */
   private PageNavigation getPortalNavigation(String portalName) throws Exception{
     DataStorage dataStorage = getApplicationComponent(DataStorage.class);
     Query<PageNavigation> query = new Query<PageNavigation>(PortalConfig.PORTAL_TYPE,portalName,PageNavigation.class);
@@ -113,12 +140,26 @@ public class UIPortalNavigationExplorer extends UIContainer{
     return null;
   }
 
+  /**
+   * Checks if is shared portal content.
+   * 
+   * @return true, if is shared portal content
+   * 
+   * @throws Exception the exception
+   */
   private boolean isSharedPortalContent() throws Exception{
     LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
     Node sharedPortal = livePortalManagerService.getLiveSharedPortal(SessionProviderFactory.createSessionProvider());
     return sharedPortal.getName().equals(portalName);    
   }
 
+  /**
+   * Select tree node by uri.
+   * 
+   * @param uri the uri
+   * 
+   * @throws Exception the exception
+   */
   @SuppressWarnings("unchecked")
   public void selectTreeNodeByUri(String uri) throws Exception {
     UIPublicationTree tree = getChild(UIPublicationTree.class);
@@ -198,7 +239,22 @@ public class UIPortalNavigationExplorer extends UIContainer{
   }
 
 
+  /**
+   * The listener interface for receiving changeNodeAction events.
+   * The class that is interested in processing a changeNodeAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addChangeNodeActionListener<code> method. When
+   * the changeNodeAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see ChangeNodeActionEvent
+   */
   public static class ChangeNodeActionListener extends EventListener<UIPortalNavigationExplorer> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIPortalNavigationExplorer> event) throws Exception {
       String uri = event.getRequestContext().getRequestParameter(OBJECTID);
       UIPortalNavigationExplorer portalNavigationExplorer = event.getSource();
@@ -206,10 +262,20 @@ public class UIPortalNavigationExplorer extends UIContainer{
     }
   }
 
+  /**
+   * Gets the selected node.
+   * 
+   * @return the selected node
+   */
   public TreeNode getSelectedNode() {
     return currentNode;
   }
 
+  /**
+   * Sets the selected node.
+   * 
+   * @param selectedNode the new selected node
+   */
   public void setSelectedNode(TreeNode selectedNode) {
     this.currentNode = selectedNode;
   }
