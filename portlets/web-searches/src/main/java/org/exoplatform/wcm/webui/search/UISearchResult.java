@@ -124,8 +124,7 @@ public class UISearchResult extends UIContainer {
 		PortletRequestContext porletRequestContext = (PortletRequestContext) context;
 		ResourceBundle bundle = context.getApplicationResourceBundle();
 		String resultType = bundle.getString("UISearchForm.documentCheckBox.label")
-				+ "s" + " and " + bundle.getString("UISearchForm.pageCheckBox.label")
-				+ "s";
+				+ " & " + bundle.getString("UISearchForm.pageCheckBox.label");
 		HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) porletRequestContext
 				.getRequest();
 		String queryString = requestWrapper.getQueryString();

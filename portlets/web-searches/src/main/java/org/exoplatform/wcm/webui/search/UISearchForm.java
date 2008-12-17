@@ -248,12 +248,11 @@ public class UISearchForm extends UIForm {
 			if ("true".equals(pageChecked) && "false".equals(documentChecked)) {
 				resultType = bundle.getString("UISearchForm.pageCheckBox.label") + "s";
 			} else if ("false".equals(pageChecked) && "true".equals(documentChecked)) {
-				resultType = bundle.getString("UISearchForm.documentCheckBox.label")
-						+ "s";
+				resultType = bundle.getString("UISearchForm.documentCheckBox.label");
 			} else if ("true".equals(pageChecked) && "true".equals(documentChecked)) {
 				resultType = bundle.getString("UISearchForm.documentCheckBox.label")
-						+ "s" + " and "
-						+ bundle.getString("UISearchForm.pageCheckBox.label") + "s";
+						+ " & "
+						+ bundle.getString("UISearchForm.pageCheckBox.label");
 			}
 			uiSearchResult.setKeyword(keyword);
 			uiSearchResult.setResultType(resultType);
