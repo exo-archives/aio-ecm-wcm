@@ -162,7 +162,10 @@ public class XSkinService implements Startable {
       for(NodeIterator iterator = queryResult.getNodes();iterator.hasNext();) {
         Node cssFile = iterator.nextNode();
         if(cssFile.getPath().equals(exceptedPath)) continue;
-        String css = cssFile.getNode("jcr:content").getProperty("jcr:data").getString();      
+        Node jcrContent = cssFile.getNode("jcr:content");
+        String mimeType = jcrContent.getProperty("jcr:mimeType").getString();
+        if(!"text/css".equals(mimeType)) continue;
+        String css = jcrContent.getProperty("jcr:data").getString();      
         buffer.append(css) ;
       }    
       return buffer.toString(); 
