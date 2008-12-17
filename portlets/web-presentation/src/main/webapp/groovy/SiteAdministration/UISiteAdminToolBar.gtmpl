@@ -15,11 +15,11 @@
 	String editPortalLink = uicomponent.event("EditPortal");
 	String changePortalLink = uicomponent.event("ChangePortal");
 	
-	String addPageActionLabel = _ctx.appRes("UISiteAdminToolbar.action.AddPage");
+	String addPageActionLabel = _ctx.appRes("UISiteAdminToolbar.action.AddPage");	
 	String editPageActionLabel = _ctx.appRes("UISiteAdminToolbar.action.EditPage");
 	String createPortalActionLabel = _ctx.appRes("UISiteAdminToolbar.action.CreatePortal");
 	String changePortalActionLabel = _ctx.appRes("UISiteAdminToolbar.action.ChangePortal");
-	String editPortalActionLabel = _ctx.appRes("UISiteAdminToolbar.action.EditPortal");
+	String editPortalActionLabel = _ctx.appRes("UISiteAdminToolbar.action.EditPortal");	
 		 			
 	boolean showable  = uicomponent.isShowWorkspaceArea();	 			
 	%>

@@ -127,7 +127,7 @@ public class UIFolderViewer extends UIContainer implements RefreshDelegateAction
    * @throws Exception the exception
    */
   public String getMessage() throws Exception {
-    WebuiRequestContext requestContext = WebuiRequestContext.getCurrentInstance();
+    WebuiRequestContext requestContext = WebuiRequestContext.getCurrentInstance();    
     return requestContext.getApplicationResourceBundle().getString(messageKey);
   }
 

@@ -11,7 +11,7 @@
     </action>
     <label>
       <FolderPathInputSet>UIViewerManagementForm</FolderPathInputSet>
-      <FolderPathInput>Đường dẫn đến thư mục</FolderPathInput>
+      <FolderPathInput>Thư mục</FolderPathInput>
       <FormViewTemplate>Mẫu form trình bày kết quả</FormViewTemplate>
       <PaginatorTemplate>Mẫu form phân trang</PaginatorTemplate>
       <ItemsPerPage>Số kết quả mỗi trang</ItemsPerPage>
