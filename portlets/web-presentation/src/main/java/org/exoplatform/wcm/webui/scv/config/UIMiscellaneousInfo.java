@@ -31,8 +31,8 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 /**
  * Created by The eXo Platform SAS
  * Author : DANG TAN DUNG
- *          dzungdev@gmail.com
- * May 29, 2008  
+ * dzungdev@gmail.com
+ * May 29, 2008
  */
 
 @ComponentConfig(
@@ -43,6 +43,12 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
     }
 )
 public class UIMiscellaneousInfo extends UIForm {
+
+  /**
+   * Instantiates a new uI miscellaneous info.
+   * 
+   * @throws Exception the exception
+   */
   public UIMiscellaneousInfo() throws Exception {
     PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     PortletPreferences prefs = context.getRequest().getPreferences();
@@ -56,7 +62,22 @@ public class UIMiscellaneousInfo extends UIForm {
     addUIFormInput(new UIFormCheckBoxInput("ShowQuickEdit", "ShowQuickEdit", null).setChecked(isQuickEdit));
   }
 
+  /**
+   * The listener interface for receiving saveToPortletPreferenceAction events.
+   * The class that is interested in processing a saveToPortletPreferenceAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSaveToPortletPreferenceActionListener<code> method. When
+   * the saveToPortletPreferenceAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SaveToPortletPreferenceActionEvent
+   */
   static public class SaveToPortletPreferenceActionListener extends EventListener<UIMiscellaneousInfo> {
+
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIMiscellaneousInfo> event) throws Exception {
       UIMiscellaneousInfo uiMiscellaneousInfo = event.getSource();
       boolean isShowTitle = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowTitle").isChecked();

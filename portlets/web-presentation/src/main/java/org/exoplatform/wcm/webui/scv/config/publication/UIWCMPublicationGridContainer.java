@@ -24,21 +24,32 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 /**
  * Created by The eXo Platform SAS
  * Author : DANG TAN DUNG
- *          dzungdev@gmail.com
- * Oct 10, 2008  
+ * dzungdev@gmail.com
+ * Oct 10, 2008
  */
 @ComponentConfig (
     lifecycle = UIContainerLifecycle.class
 )
 
 public class UIWCMPublicationGridContainer extends UIContainer{
+
+  /**
+   * Instantiates a new uIWCM publication grid container.
+   * 
+   * @throws Exception the exception
+   */
   public UIWCMPublicationGridContainer() throws Exception {
     UIFormCheckBoxInput<String> checkBoxInput = new UIFormCheckBoxInput<String>("lifecycleName", null, null);
     checkBoxInput.setLabel("LifecycleName: ");
     addChild(checkBoxInput);
     addChild(UIWCMPublicationGrid.class, null, null);
   }
-  
+
+  /**
+   * Inits the.
+   * 
+   * @throws Exception the exception
+   */
   public void init() throws Exception {
     getChild(UIWCMPublicationGrid.class).updateGrid();
   }

@@ -31,8 +31,8 @@ import org.exoplatform.webui.event.EventListener;
 /**
  * Created by The eXo Platform SAS
  * Author : DANG TAN DUNG
- *          dzungdev@gmail.com
- * Sep 15, 2008  
+ * dzungdev@gmail.com
+ * Sep 15, 2008
  */
 
 @ComponentConfig(
@@ -43,8 +43,23 @@ import org.exoplatform.webui.event.EventListener;
     }
 )
 public class UIStartEditionInPageWizard extends UIContainer {
-  
+
+  /**
+   * The listener interface for receiving editPortletAction events.
+   * The class that is interested in processing a editPortletAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addEditPortletActionListener<code> method. When
+   * the editPortletAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see EditPortletActionEvent
+   */
   public static class EditPortletActionListener extends EventListener<UIStartEditionInPageWizard> {
+
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIStartEditionInPageWizard> event) throws Exception {
       UIStartEditionInPageWizard editMode = event.getSource();
       UISingleContentViewerPortlet uiportlet = editMode.getAncestorOfType(UISingleContentViewerPortlet.class);

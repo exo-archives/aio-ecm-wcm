@@ -31,9 +31,9 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
 /**
- * Author : Do Ngoc Anh *      
+ * Author : Do Ngoc Anh *
  * Email: anh.do@exoplatform.com *
- * May 14, 2008  
+ * May 14, 2008
  */
 
 @ComponentConfig(
@@ -46,10 +46,23 @@ import org.exoplatform.webui.event.EventListener;
 
 
 public class UIPresentationContainer extends UIContainer{
+  
+  /**
+   * Instantiates a new uI presentation container.
+   * 
+   * @throws Exception the exception
+   */
   public UIPresentationContainer() throws Exception{                
     addChild(UIPresentation.class,null,null);
   }
 
+  /**
+   * Checks if is quick editable.
+   * 
+   * @return true, if is quick editable
+   * 
+   * @throws Exception the exception
+   */
   public boolean isQuickEditable() throws Exception {
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     PortletPreferences prefs = portletRequestContext.getRequest().getPreferences();
@@ -59,6 +72,11 @@ public class UIPresentationContainer extends UIContainer{
     return false;
   }
 
+  /**
+   * Gets the portlet id.
+   * 
+   * @return the portlet id
+   */
   public String getPortletId() {
     PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     return pContext.getWindowId();
@@ -66,7 +84,22 @@ public class UIPresentationContainer extends UIContainer{
 
 
 
+  /**
+   * The listener interface for receiving quickEditAction events.
+   * The class that is interested in processing a quickEditAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addQuickEditActionListener<code> method. When
+   * the quickEditAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see QuickEditActionEvent
+   */
   public static class QuickEditActionListener extends EventListener<UIPresentationContainer>{   
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIPresentationContainer> event) throws Exception {
       UIPresentationContainer uicomp = event.getSource();
       UISingleContentViewerPortlet uiportlet = uicomp.getAncestorOfType(UISingleContentViewerPortlet.class);

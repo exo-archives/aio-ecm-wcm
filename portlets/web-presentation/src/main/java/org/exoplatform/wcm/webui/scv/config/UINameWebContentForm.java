@@ -76,11 +76,23 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
 )
 public class UINameWebContentForm extends UIForm {
 
+  /** The Constant NAME_WEBCONTENT. */
   public static final String NAME_WEBCONTENT    = "name".intern();
+
+  /** The Constant SUMMARY_WEBCONTENT. */
   public static final String SUMMARY_WEBCONTENT = "summary".intern();
+
+  /** The Constant FIELD_SELECT. */
   public static final String FIELD_SELECT = "selectTemplate".intern();
+
+  /** The picture describe. */
   private String pictureDescribe;
 
+  /**
+   * Instantiates a new uI name web content form.
+   * 
+   * @throws Exception the exception
+   */
   public UINameWebContentForm() throws Exception {
     addUIFormInput(new UIFormStringInput(NAME_WEBCONTENT, NAME_WEBCONTENT, null).addValidator(
         MandatoryValidator.class).addValidator(ECMNameValidator.class));
@@ -88,6 +100,11 @@ public class UINameWebContentForm extends UIForm {
     setActions(new String[] {"Save", "Abort"});
   }
 
+  /**
+   * Inits the.
+   * 
+   * @throws Exception the exception
+   */
   public void init() throws Exception {
     TemplateService templateService = getApplicationComponent(TemplateService.class);
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
@@ -110,6 +127,11 @@ public class UINameWebContentForm extends UIForm {
     addUIFormInput(templateSelect) ;
   }
 
+  /**
+   * Back.
+   * 
+   * @throws Exception the exception
+   */
   public void back() throws Exception {
     if (!isNewConfig()) {
       Node currentNode = getNode();
@@ -124,6 +146,13 @@ public class UINameWebContentForm extends UIForm {
     setPictureDescribe("exo_webContent");
   }
 
+  /**
+   * Gets the node.
+   * 
+   * @return the node
+   * 
+   * @throws Exception the exception
+   */
   public Node getNode() throws Exception {
     PortletRequestContext context = WebuiRequestContext.getCurrentInstance();
     PortletPreferences prefs = context.getRequest().getPreferences();
@@ -137,13 +166,33 @@ public class UINameWebContentForm extends UIForm {
     return session.getNodeByUUID(UUID);
   }
 
+  /**
+   * Checks if is new config.
+   * 
+   * @return true, if is new config
+   */
   public boolean isNewConfig() {
     UIPortletConfig uiPortletConfig = getAncestorOfType(UIPortletConfig.class);
     return uiPortletConfig.isNewConfig();
   }
 
 
+  /**
+   * The listener interface for receiving saveAction events.
+   * The class that is interested in processing a saveAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSaveActionListener<code> method. When
+   * the saveAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SaveActionEvent
+   */
   public static class SaveActionListener extends EventListener<UINameWebContentForm> {
+
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UINameWebContentForm> event) throws Exception {
       UINameWebContentForm uiNameWebContentForm = event.getSource();
       UIWebConentNameTabForm webConentNameTabForm = uiNameWebContentForm.getAncestorOfType(UIWebConentNameTabForm.class);
@@ -221,7 +270,22 @@ public class UINameWebContentForm extends UIForm {
     }
   }
 
+  /**
+   * The listener interface for receiving abortAction events.
+   * The class that is interested in processing a abortAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addAbortActionListener<code> method. When
+   * the abortAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see AbortActionEvent
+   */
   public static class AbortActionListener extends EventListener<UINameWebContentForm> {
+
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UINameWebContentForm> event) throws Exception {
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
       UIPortletConfig uiPortletConfig = event.getSource().getAncestorOfType(UIPortletConfig.class);
@@ -235,7 +299,22 @@ public class UINameWebContentForm extends UIForm {
     }
   }
 
+  /**
+   * The listener interface for receiving changeTemplateTypeAction events.
+   * The class that is interested in processing a changeTemplateTypeAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addChangeTemplateTypeActionListener<code> method. When
+   * the changeTemplateTypeAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see ChangeTemplateTypeActionEvent
+   */
   public static class ChangeTemplateTypeActionListener extends EventListener<UINameWebContentForm> {
+
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UINameWebContentForm> event) throws Exception {
       UINameWebContentForm uiNameWebContentForm = event.getSource();
       String contentType = uiNameWebContentForm.getUIFormSelectBox(FIELD_SELECT).getValue();
@@ -243,10 +322,20 @@ public class UINameWebContentForm extends UIForm {
     }
   }
 
+  /**
+   * Gets the picture describe.
+   * 
+   * @return the picture describe
+   */
   public String getPictureDescribe() {
     return pictureDescribe;
   }
 
+  /**
+   * Sets the picture describe.
+   * 
+   * @param pictureDescribe the new picture describe
+   */
   public void setPictureDescribe(String pictureDescribe) {
     this.pictureDescribe = pictureDescribe;
   }

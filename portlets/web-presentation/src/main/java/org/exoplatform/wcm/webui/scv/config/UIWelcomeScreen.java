@@ -34,11 +34,13 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormRadioBoxInput;
+
+
 /**
  * Created by The eXo Platform SAS
  * Author : DANG TAN DUNG
- *          dzungdev@gmail.com
- * May 26, 2008  
+ * dzungdev@gmail.com
+ * May 26, 2008
  */
 
 @ComponentConfig(
@@ -51,8 +53,22 @@ import org.exoplatform.webui.form.UIFormRadioBoxInput;
 )
 public class UIWelcomeScreen extends UIForm implements UISelectable {
 
+  /**
+   * Instantiates a new uI welcome screen.
+   * 
+   * @throws Exception the exception
+   */
   public UIWelcomeScreen() throws Exception {}
 
+  /**
+   * Sets the create mode.
+   * 
+   * @param isNewConfig the is new config
+   * 
+   * @return the uI welcome screen
+   * 
+   * @throws Exception the exception
+   */
   public UIWelcomeScreen setCreateMode(boolean isNewConfig) throws Exception {
     getChildren().clear();
     List<SelectItemOption<String>> option = new ArrayList<SelectItemOption<String>>();
@@ -92,18 +108,45 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
     return this ;
   }
 
+  /**
+   * Sets the component.
+   * 
+   * @param type the type
+   * @param config the config
+   * @param id the id
+   * 
+   * @throws Exception the exception
+   */
   public <T extends UIComponent> void setComponent(Class<T> type, String config, String id) throws Exception {
     UIPortletConfig uiConfig = getParent();
     uiConfig.getChildren().clear();
     uiConfig.addChild(type, config, id);
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.selector.UISelectable#doSelect(java.lang.String, java.lang.Object)
+   */
   public void doSelect(String arg0, Object arg1) throws Exception {
     // TODO Auto-generated method stub
 
   }
 
+  /**
+   * The listener interface for receiving startProcessAction events.
+   * The class that is interested in processing a startProcessAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addStartProcessActionListener<code> method. When
+   * the startProcessAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see StartProcessActionEvent
+   */
   public static class StartProcessActionListener extends EventListener<UIWelcomeScreen> {
+
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIWelcomeScreen> event) throws Exception {
       UIWelcomeScreen uiWelcomeScreen = event.getSource();
       String radioValue = uiWelcomeScreen.<UIFormRadioBoxInput>getUIInput("radio").getValue();
@@ -145,7 +188,22 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
     }
   }
 
+  /**
+   * The listener interface for receiving backAction events.
+   * The class that is interested in processing a backAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addBackActionListener<code> method. When
+   * the backAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see BackActionEvent
+   */
   public static class BackActionListener extends EventListener<UIWelcomeScreen> {
+
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIWelcomeScreen> event) throws Exception {
       UIWelcomeScreen uiWelcomeScreen = event.getSource();
       UIPortletConfig uiPortletConfig = uiWelcomeScreen.getAncestorOfType(UIPortletConfig.class);      

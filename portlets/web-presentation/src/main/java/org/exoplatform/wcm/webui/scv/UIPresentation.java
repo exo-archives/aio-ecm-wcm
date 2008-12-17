@@ -38,8 +38,8 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 /**
  * Created by The eXo Platform SAS
  * Author : DANG TAN DUNG
- *          dzungdev@gmail.com
- * Jun 9, 2008  
+ * dzungdev@gmail.com
+ * Jun 9, 2008
  */
 @ComponentConfig(
     lifecycle = Lifecycle.class    
@@ -47,29 +47,56 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 
 public class UIPresentation extends UIBaseNodePresentation {
 
+  /** The resource resolver. */
   private JCRResourceResolver  resourceResolver ;
 
+  /**
+   * Instantiates a new uI presentation.
+   * 
+   * @throws Exception the exception
+   */
   public UIPresentation() throws Exception {}
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation#getNode()
+   */
   public Node getNode() throws Exception {
     UISingleContentViewerPortlet uiportlet = getAncestorOfType(UISingleContentViewerPortlet.class);
     return uiportlet.getReferencedContent();
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation#getRepositoryName()
+   */
   public String getRepositoryName() {return getRepository() ;}
 
+  /**
+   * Gets the portlet preference.
+   * 
+   * @return the portlet preference
+   */
   private PortletPreferences getPortletPreference() {
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     return portletRequestContext.getRequest().getPreferences();
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation#getRepository()
+   */
   public String getRepository() {
     return getPortletPreference().getValue(UISingleContentViewerPortlet.REPOSITORY, "repository");    
   }    
+  
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation#getOriginalNode()
+   */
   public Node getOriginalNode() throws Exception {
     return getNode();
   }  
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.portal.webui.portal.UIPortalComponent#getTemplate()
+   */
   public String getTemplate() {
     try{
       return getTemplatePath() ;
@@ -78,6 +105,9 @@ public class UIPresentation extends UIBaseNodePresentation {
     }
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.core.UIComponent#processRender(org.exoplatform.webui.application.WebuiRequestContext)
+   */
   public void processRender(WebuiRequestContext context) throws Exception {
     try {
       getTemplatePath();
@@ -117,12 +147,18 @@ public class UIPresentation extends UIBaseNodePresentation {
     super.processRender(context) ;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation#getTemplatePath()
+   */
   @Override
   public String getTemplatePath() throws Exception {
     TemplateService templateService = getApplicationComponent(TemplateService.class);
     return templateService.getTemplatePath(getNode(), false) ;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.core.UIComponent#getTemplateResourceResolver(org.exoplatform.webui.application.WebuiRequestContext, java.lang.String)
+   */
   public ResourceResolver getTemplateResourceResolver(WebuiRequestContext context, String template) {
     try{
       if(resourceResolver == null) {
@@ -140,16 +176,21 @@ public class UIPresentation extends UIBaseNodePresentation {
     return resourceResolver ;   
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.presentation.NodePresentation#getNodeType()
+   */
   public String getNodeType() throws Exception {   
     return null;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.presentation.NodePresentation#isNodeTypeSupported()
+   */
   public boolean isNodeTypeSupported() {
     return false;
   }
 
-  public void setNode(Node arg0) {
-
+  public void setNode(Node node) {
+    
   }
-
 }

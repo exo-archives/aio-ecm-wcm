@@ -20,7 +20,6 @@ import java.security.AccessControlException;
 import java.util.List;
 import java.util.Map;
 
-import javax.jcr.AccessDeniedException;
 import javax.jcr.ItemExistsException;
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
@@ -42,8 +41,6 @@ import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.log.ExoLogger;
-import org.exoplatform.services.log.impl.ExoLog;
 import org.exoplatform.services.wcm.core.NodeIdentifier;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
@@ -67,8 +64,8 @@ import org.exoplatform.webui.form.UIFormStringInput;
 /**
  * Created by The eXo Platform SAS
  * Author : DANG TAN DUNG
- *          dzungdev@gmail.com
- * Jun 9, 2008  
+ * dzungdev@gmail.com
+ * Jun 9, 2008
  */
 
 @ComponentConfig (
@@ -82,17 +79,35 @@ import org.exoplatform.webui.form.UIFormStringInput;
 
 public class UIContentDialogForm extends UIDialogForm {
 
+  /** The resource resolver. */
   protected JCRResourceResolver resourceResolver;
+
+  /** The stored location. */
   protected NodeLocation storedLocation;
+
+  /** The saved node identifier. */
   public NodeIdentifier savedNodeIdentifier;
+
+  /** The web content. */
   protected Node webContent;
 
+  /** The is edit not integrity. */
   private boolean isEditNotIntegrity;
 
+  /**
+   * Instantiates a new uI content dialog form.
+   * 
+   * @throws Exception the exception
+   */
   public UIContentDialogForm() throws Exception {
     setActions(ACTIONS);
   }
 
+  /**
+   * Inits the.
+   * 
+   * @throws Exception the exception
+   */
   public void init() throws Exception {
     PortletPreferences prefs = ((PortletRequestContext)WebuiRequestContext.getCurrentInstance()).getRequest().getPreferences();
     String repositoryName = prefs.getValue(UISingleContentViewerPortlet.REPOSITORY, null);
@@ -119,14 +134,29 @@ public class UIContentDialogForm extends UIDialogForm {
     resetProperties();
   }
 
+  /**
+   * Gets the web content.
+   * 
+   * @return the web content
+   */
   public Node getWebContent () {
     return webContent;
   }
 
+  /**
+   * Sets the web content.
+   * 
+   * @param node the new web content
+   */
   protected void setWebContent(Node node) {
     webContent = node;
   }
 
+  /**
+   * Sets the stored location.
+   * 
+   * @param location the new stored location
+   */
   public void setStoredLocation(NodeLocation location) {
     storedLocation = location;
     setRepositoryName(location.getRepository());
@@ -134,10 +164,18 @@ public class UIContentDialogForm extends UIDialogForm {
     setStoredPath(location.getPath());
   }
 
+  /**
+   * Gets the saved node identifier.
+   * 
+   * @return the saved node identifier
+   */
   public NodeIdentifier getSavedNodeIdentifier() {
     return savedNodeIdentifier;
   }  
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.form.UIDialogForm#getTemplate()
+   */
   public String getTemplate() {
     TemplateService templateService = getApplicationComponent(TemplateService.class) ;
     String userName = Util.getPortalRequestContext().getRemoteUser();
@@ -151,6 +189,9 @@ public class UIContentDialogForm extends UIDialogForm {
     }
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.core.UIComponent#getTemplateResourceResolver(org.exoplatform.webui.application.WebuiRequestContext, java.lang.String)
+   */
   @SuppressWarnings("unused")
   public ResourceResolver getTemplateResourceResolver(WebuiRequestContext context, String template) {
     try{
@@ -168,10 +209,20 @@ public class UIContentDialogForm extends UIDialogForm {
     return resourceResolver;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.form.UIDialogForm#onchange(org.exoplatform.webui.event.Event)
+   */
   public void onchange(Event event) throws Exception {
 
   }
 
+  /**
+   * Gets the parent node.
+   * 
+   * @return the parent node
+   * 
+   * @throws Exception the exception
+   */
   private Node getParentNode() throws Exception {
     String repository = storedLocation.getRepository();
     String path = storedLocation.getPath();
@@ -184,6 +235,15 @@ public class UIContentDialogForm extends UIDialogForm {
     return parentNode;
   }
 
+  /**
+   * Node is locked.
+   * 
+   * @param node the node
+   * 
+   * @return true, if successful
+   * 
+   * @throws Exception the exception
+   */
   private boolean nodeIsLocked(Node node) throws Exception {
     if(!node.isLocked()) return false;        
     String lockToken = LockUtil.getLockToken(node);
@@ -194,7 +254,22 @@ public class UIContentDialogForm extends UIDialogForm {
     return true;
   }
 
+  /**
+   * The listener interface for receiving cancelAction events.
+   * The class that is interested in processing a cancelAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addCancelActionListener<code> method. When
+   * the cancelAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see CancelActionEvent
+   */
   static public class CancelActionListener extends EventListener<UIContentDialogForm> {
+
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIContentDialogForm> event) throws Exception {
       UIContentDialogForm uiContentDialogForm = event.getSource();
       UIQuickCreationWizard uiQuickCreationWizard = uiContentDialogForm.getAncestorOfType(UIQuickCreationWizard.class);      
@@ -228,7 +303,22 @@ public class UIContentDialogForm extends UIDialogForm {
     }
   }
 
+  /**
+   * The listener interface for receiving saveAction events.
+   * The class that is interested in processing a saveAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSaveActionListener<code> method. When
+   * the saveAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SaveActionEvent
+   */
   static  public class SaveActionListener extends EventListener<UIContentDialogForm> {
+
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIContentDialogForm> event) throws Exception {
       UIContentDialogForm dialogForm = event.getSource();
       UIApplication uiApplication = dialogForm.getAncestorOfType(UIApplication.class);
@@ -284,7 +374,7 @@ public class UIContentDialogForm extends UIDialogForm {
           }
         } 
       }catch(AccessControlException ace) {
-//        throw new AccessDeniedException(ace.getMessage());
+//      throw new AccessDeniedException(ace.getMessage());
         if(UISingleContentViewerPortlet.scvLog.isDebugEnabled()) {
           UISingleContentViewerPortlet.scvLog.debug(ace);
         }
@@ -321,10 +411,20 @@ public class UIContentDialogForm extends UIDialogForm {
     }
   }
 
+  /**
+   * Checks if is edits the not integrity.
+   * 
+   * @return true, if is edits the not integrity
+   */
   public boolean isEditNotIntegrity() {
     return isEditNotIntegrity;
   }
 
+  /**
+   * Sets the edits the not integrity.
+   * 
+   * @param isEditNotIntegrity the new edits the not integrity
+   */
   public void setEditNotIntegrity(boolean isEditNotIntegrity) {
     this.isEditNotIntegrity = isEditNotIntegrity;
   }

@@ -31,8 +31,8 @@ import org.exoplatform.webui.event.EventListener;
 /**
  * Created by The eXo Platform SAS
  * Author : DANG TAN DUNG
- *          dzungdev@gmail.com
- * Sep 16, 2008  
+ * dzungdev@gmail.com
+ * Sep 16, 2008
  */
 @ComponentConfig (
     lifecycle = Lifecycle.class,
@@ -44,12 +44,32 @@ import org.exoplatform.webui.event.EventListener;
 
 public class UIQuickEditContainer extends UIContainer {
   
+  /**
+   * Instantiates a new uI quick edit container.
+   * 
+   * @throws Exception the exception
+   */
   public UIQuickEditContainer() throws Exception {
     UIQuickEditWebContentForm quickEditWebContentForm = addChild(UIQuickEditWebContentForm.class, null, null);
     quickEditWebContentForm.init();
   }
   
+  /**
+   * The listener interface for receiving backToNormalWizardAction events.
+   * The class that is interested in processing a backToNormalWizardAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addBackToNormalWizardActionListener<code> method. When
+   * the backToNormalWizardAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see BackToNormalWizardActionEvent
+   */
   public static class BackToNormalWizardActionListener extends EventListener<UIQuickEditContainer> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIQuickEditContainer> event) throws Exception {
       UIQuickEditContainer uiQuickEditContainer = event.getSource();
       UISingleContentViewerPortlet viewerPortlet = uiQuickEditContainer.getAncestorOfType(UISingleContentViewerPortlet.class);

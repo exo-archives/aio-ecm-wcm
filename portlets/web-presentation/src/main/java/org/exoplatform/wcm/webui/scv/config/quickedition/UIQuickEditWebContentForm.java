@@ -20,7 +20,6 @@ import java.security.AccessControlException;
 import java.util.List;
 import java.util.Map;
 
-import javax.jcr.AccessDeniedException;
 import javax.jcr.ItemExistsException;
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
@@ -55,8 +54,8 @@ import org.exoplatform.webui.event.EventListener;
 /**
  * Created by The eXo Platform SAS
  * Author : DANG TAN DUNG
- *          dzungdev@gmail.com
- * Sep 16, 2008  
+ * dzungdev@gmail.com
+ * Sep 16, 2008
  */
 
 @ComponentConfig (
@@ -70,10 +69,18 @@ import org.exoplatform.webui.event.EventListener;
 
 public class UIQuickEditWebContentForm extends UIContentDialogForm{
 
+  /**
+   * Instantiates a new uI quick edit web content form.
+   * 
+   * @throws Exception the exception
+   */
   public UIQuickEditWebContentForm() throws Exception {
     setActions(ACTIONS);
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.wcm.webui.scv.config.UIContentDialogForm#init()
+   */
   public void init() throws Exception {
     PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     PortletPreferences prefs = pContext.getRequest().getPreferences();
@@ -101,6 +108,13 @@ public class UIQuickEditWebContentForm extends UIContentDialogForm{
     this.resetProperties();
   }
 
+  /**
+   * Gets the parent node.
+   * 
+   * @return the parent node
+   * 
+   * @throws Exception the exception
+   */
   private Node getParentNode() throws Exception {
     String repository = storedLocation.getRepository();
     String path = storedLocation.getPath();
@@ -113,6 +127,15 @@ public class UIQuickEditWebContentForm extends UIContentDialogForm{
     return parentNode;
   }
 
+  /**
+   * Node is locked.
+   * 
+   * @param node the node
+   * 
+   * @return true, if successful
+   * 
+   * @throws Exception the exception
+   */
   private boolean nodeIsLocked(Node node) throws Exception {
     if(!node.isLocked()) return false;        
     String lockToken = LockUtil.getLockToken(node);
@@ -123,7 +146,22 @@ public class UIQuickEditWebContentForm extends UIContentDialogForm{
     return true;
   }
 
+  /**
+   * The listener interface for receiving saveAction events.
+   * The class that is interested in processing a saveAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSaveActionListener<code> method. When
+   * the saveAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SaveActionEvent
+   */
   public static class SaveActionListener extends EventListener<UIQuickEditWebContentForm> {
+
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIQuickEditWebContentForm> event) throws Exception {
       UIQuickEditWebContentForm uiQuickEditForm = event.getSource();
       PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
@@ -212,7 +250,22 @@ public class UIQuickEditWebContentForm extends UIContentDialogForm{
     }
   }
 
+  /**
+   * The listener interface for receiving cancelAction events.
+   * The class that is interested in processing a cancelAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addCancelActionListener<code> method. When
+   * the cancelAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see CancelActionEvent
+   */
   public static class CancelActionListener extends EventListener<UIQuickEditWebContentForm> {
+
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIQuickEditWebContentForm> event) throws Exception {      
       UIPortletConfig uiPortletConfig = event.getSource().getAncestorOfType(UIPortletConfig.class);                     
       uiPortletConfig.closePopupAndUpdateUI(event.getRequestContext(),false);

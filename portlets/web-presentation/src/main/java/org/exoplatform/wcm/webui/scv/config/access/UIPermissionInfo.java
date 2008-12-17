@@ -48,7 +48,6 @@ import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
-//TODO: Auto-generated Javadoc
 /*
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Aug 15, 2008
@@ -110,6 +109,15 @@ public class UIPermissionInfo extends UIContainer {
     return contentDialogForm.getWebContent();
   }
 
+  /**
+   * Checks for change permission right.
+   * 
+   * @param node the node
+   * 
+   * @return true, if successful
+   * 
+   * @throws Exception the exception
+   */
   private boolean hasChangePermissionRight(ExtendedNode node) throws Exception {
     try {
       node.checkPermission(PermissionType.ADD_NODE);

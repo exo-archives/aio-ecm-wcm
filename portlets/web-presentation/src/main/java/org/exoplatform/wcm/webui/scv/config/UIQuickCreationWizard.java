@@ -32,8 +32,8 @@ import org.exoplatform.webui.event.EventListener;
 /**
  * Created by The eXo Platform SAS
  * Author : DANG TAN DUNG
- *          dzungdev@gmail.com
- * Jun 9, 2008  
+ * dzungdev@gmail.com
+ * Jun 9, 2008
  */
 
 @ComponentConfig(
@@ -49,6 +49,11 @@ import org.exoplatform.webui.event.EventListener;
 
 public class UIQuickCreationWizard extends UIBaseWizard {
 
+  /**
+   * Instantiates a new uI quick creation wizard.
+   * 
+   * @throws Exception the exception
+   */
   public UIQuickCreationWizard() throws Exception {
     addChild(UIWebConentNameTabForm.class,null,null).setRendered(true);
     addChild(UIContentDialogForm.class,null,null).setRendered(false);
@@ -56,6 +61,9 @@ public class UIQuickCreationWizard extends UIBaseWizard {
     setNumberSteps(3);
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.wcm.webui.scv.config.UIBaseWizard#getActionsByStep()
+   */
   @Override
   public String[] getActionsByStep() {
 
@@ -80,14 +88,44 @@ public class UIQuickCreationWizard extends UIBaseWizard {
     return actions;
   }
 
+  /**
+   * The listener interface for receiving viewStep1Action events.
+   * The class that is interested in processing a viewStep1Action
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addViewStep1ActionListener<code> method. When
+   * the viewStep1Action event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see ViewStep1ActionEvent
+   */
   public static class ViewStep1ActionListener extends EventListener<UIQuickCreationWizard> {
+
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIQuickCreationWizard> event) throws Exception {
       UIQuickCreationWizard uiQuickWizard = event.getSource();
       uiQuickWizard.viewStep(1);
     }
   }
 
+  /**
+   * The listener interface for receiving viewStep2Action events.
+   * The class that is interested in processing a viewStep2Action
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addViewStep2ActionListener<code> method. When
+   * the viewStep2Action event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see ViewStep2ActionEvent
+   */
   public static class ViewStep2ActionListener extends EventListener<UIQuickCreationWizard> {
+
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIQuickCreationWizard> event) throws Exception {
       UIQuickCreationWizard uiQuickWizard = event.getSource();
       UIContentDialogForm contentDialogForm = uiQuickWizard
@@ -103,7 +141,22 @@ public class UIQuickCreationWizard extends UIBaseWizard {
     }
   }
 
+  /**
+   * The listener interface for receiving viewStep3Action events.
+   * The class that is interested in processing a viewStep3Action
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addViewStep3ActionListener<code> method. When
+   * the viewStep3Action event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see ViewStep3ActionEvent
+   */
   public static class ViewStep3ActionListener extends EventListener<UIQuickCreationWizard> {
+
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIQuickCreationWizard> event) throws Exception {
       UIQuickCreationWizard uiQuickWizard = event.getSource();
       uiQuickWizard.viewStep(3);
@@ -119,7 +172,22 @@ public class UIQuickCreationWizard extends UIBaseWizard {
     }
   }
 
+  /**
+   * The listener interface for receiving completeAction events.
+   * The class that is interested in processing a completeAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addCompleteActionListener<code> method. When
+   * the completeAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see CompleteActionEvent
+   */
   public static class CompleteActionListener extends EventListener<UIQuickCreationWizard> {
+
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIQuickCreationWizard> event) throws Exception {
       UIQuickCreationWizard uiQuickCreationWizard = event.getSource();            
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext();

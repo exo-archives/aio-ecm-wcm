@@ -37,26 +37,43 @@ import org.exoplatform.webui.core.UIPopupComponent;
 import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
+
 /**
  * Created by The eXo Platform SAS
  * Author : DANG TAN DUNG
- *          dzungdev@gmail.com
- * May 26, 2008  
+ * dzungdev@gmail.com
+ * May 26, 2008
  */
 @ComponentConfig (
     lifecycle = UIContainerLifecycle.class
 )
 public class UIPortletConfig extends UIContainer implements UIPopupComponent{
 
+  /** The ui back component. */
   private UIComponent uiBackComponent;
+
+  /** The is new config. */
   private boolean isNewConfig;
 
+  /** The Constant POPUP_WEBCONTENT_SELECTOR. */
   final static String POPUP_WEBCONTENT_SELECTOR = "PopupWebContentSelector".intern();
+
+  /** The Constant POPUP_DMS_SELECTOR. */
   final static String POPUP_DMS_SELECTOR = "PopupDMSSelector".intern();
 
+  /**
+   * Instantiates a new uI portlet config.
+   * 
+   * @throws Exception the exception
+   */
   public UIPortletConfig() throws Exception {
   }
 
+  /**
+   * Inits the.
+   * 
+   * @throws Exception the exception
+   */
   public void init() throws Exception {
     isNewConfig = checkNewConfig();
     UISingleContentViewerPortlet uiPresentationPortlet = getAncestorOfType(UISingleContentViewerPortlet.class);
@@ -82,6 +99,11 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent{
     addUIWelcomeScreen();
   }
 
+  /**
+   * Adds the ui welcome screen.
+   * 
+   * @throws Exception the exception
+   */
   public void addUIWelcomeScreen() throws Exception {
     UIWelcomeScreen uiWellcomeScreen = addChild(UIWelcomeScreen.class, null, null);
     uiWellcomeScreen.setCreateMode(checkNewConfig());
@@ -89,6 +111,13 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent{
   }
 
 
+  /**
+   * Checks if is quick editable.
+   * 
+   * @return true, if is quick editable
+   * 
+   * @throws Exception the exception
+   */
   public boolean isQuickEditable() throws Exception {
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     PortletPreferences prefs = portletRequestContext.getRequest().getPreferences();
@@ -98,6 +127,11 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent{
     return false;
   }
 
+  /**
+   * Check new config.
+   * 
+   * @return true, if successful
+   */
   private boolean checkNewConfig(){
     UISingleContentViewerPortlet uiportlet = getAncestorOfType(UISingleContentViewerPortlet.class);
     try {
@@ -111,18 +145,44 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent{
     return true;
   }
 
+  /**
+   * Gets the back component.
+   * 
+   * @return the back component
+   */
   public UIComponent getBackComponent() {
     uiBackComponent.setRendered(true);
     return uiBackComponent; 
   }
 
+  /**
+   * Sets the back component.
+   * 
+   * @param uicomponent the new back component
+   */
   public void setBackComponent(UIComponent uicomponent) {
     this.uiBackComponent = uicomponent;
   }
 
+  /**
+   * Sets the new config.
+   * 
+   * @param newConfig the new new config
+   */
   public void setNewConfig(boolean newConfig) { isNewConfig = newConfig; }  
+
+  /**
+   * Checks if is new config.
+   * 
+   * @return true, if is new config
+   */
   public boolean isNewConfig() { return isNewConfig; }
 
+  /**
+   * Checks if is edits the portlet in create page wizard.
+   * 
+   * @return true, if is edits the portlet in create page wizard
+   */
   public boolean isEditPortletInCreatePageWizard() {
     UIPortal uiPortal = Util.getUIPortal();
     UIPortalApplication uiApp = uiPortal.getAncestorOfType(UIPortalApplication.class);
@@ -132,6 +192,14 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent{
     return false;
   }
 
+  /**
+   * Close popup and update ui.
+   * 
+   * @param requestContext the request context
+   * @param isUpdate the is update
+   * 
+   * @throws Exception the exception
+   */
   public void closePopupAndUpdateUI(WebuiRequestContext requestContext, boolean isUpdate) throws Exception {    
     UISingleContentViewerPortlet uiPresentationPortlet = getAncestorOfType(UISingleContentViewerPortlet.class);    
     UIPopupContainer popupAction = uiPresentationPortlet.getChild(UIPopupContainer.class) ;
@@ -142,12 +210,23 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent{
     }
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.core.UIPopupComponent#activate()
+   */
   public void activate() throws Exception {    
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.core.UIPopupComponent#deActivate()
+   */
   public void deActivate() throws Exception {    
   }
 
+  /**
+   * Inits the popup web content selector.
+   * 
+   * @throws Exception the exception
+   */
   public void initPopupWebContentSelector() throws Exception {
     UIPopupWindow uiPopup = getChildById(POPUP_WEBCONTENT_SELECTOR);
     if(uiPopup == null) {
@@ -162,6 +241,11 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent{
     uiPopup.setShow(true);
   }
 
+  /**
+   * Inits the popup dms selector.
+   * 
+   * @throws Exception the exception
+   */
   public void initPopupDMSSelector() throws Exception {
     UIPopupWindow uiPopup = getChildById(POPUP_DMS_SELECTOR);
     if(uiPopup == null) {

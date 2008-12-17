@@ -27,8 +27,8 @@ import org.exoplatform.webui.form.UIForm;
 /**
  * Created by The eXo Platform SAS
  * Author : DANG TAN DUNG
- *          dzungdev@gmail.com
- * Sep 15, 2008  
+ * dzungdev@gmail.com
+ * Sep 15, 2008
  */
 
 @ComponentConfig(
@@ -39,7 +39,23 @@ import org.exoplatform.webui.form.UIForm;
     }
 )
 public class UINonEditable extends UIForm {
+
+  /**
+   * The listener interface for receiving backToViewAction events.
+   * The class that is interested in processing a backToViewAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addBackToViewActionListener<code> method. When
+   * the backToViewAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see BackToViewActionEvent
+   */
   public static class BackToViewActionListener extends EventListener<UINonEditable> {
+
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UINonEditable> event) throws Exception {
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
     }

@@ -55,8 +55,8 @@ import org.exoplatform.webui.form.ext.UIFormInputSetWithAction;
 /**
  * Created by The eXo Platform SAS
  * Author : DANG TAN DUNG
- *          dzungdev@gmail.com
- * May 27, 2008  
+ * dzungdev@gmail.com
+ * May 27, 2008
  */
 
 @ComponentConfig(
@@ -72,15 +72,35 @@ import org.exoplatform.webui.form.ext.UIFormInputSetWithAction;
 
 public class UIWebContentSelectorForm extends UIForm implements UISelectable{
 
+  /** The Constant PATH. */
   final static String PATH = "path".intern();
+
+  /** The Constant FIELD_PATH. */
   final static String FIELD_PATH = "location".intern();
+
+  /** The Constant PUBLICATION. */
   final static String PUBLICATION = "publication".intern();
+
+  /** The Constant PUBLICATION_PATH. */
   final static String PUBLICATION_PATH = "PublicationPath".intern();
+
+  /** The repository. */
   private String repository;
+
+  /** The workspace. */
   private String workspace;
+
+  /** The live portals path. */
   private String livePortalsPath;
+
+  /** The live shared portal name. */
   private String liveSharedPortalName;
 
+  /**
+   * Instantiates a new uI web content selector form.
+   * 
+   * @throws Exception the exception
+   */
   public UIWebContentSelectorForm() throws Exception {
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     String repoName = repositoryService.getCurrentRepository().getConfiguration().getName();
@@ -97,6 +117,11 @@ public class UIWebContentSelectorForm extends UIForm implements UISelectable{
     setActions(new String[] {"Save", "Back"});
   }
 
+  /**
+   * Inits the.
+   * 
+   * @throws Exception the exception
+   */
   public void init() throws Exception {
     WCMPublicationService wcmService = getApplicationComponent(WCMPublicationService.class);
     Map<String,WebpagePublicationPlugin> publicationPluginMap = wcmService.getWebpagePublicationPlugins();
@@ -115,6 +140,9 @@ public class UIWebContentSelectorForm extends UIForm implements UISelectable{
     }
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.selector.UISelectable#doSelect(java.lang.String, java.lang.Object)
+   */
   public void doSelect(String selectField, Object value) throws Exception {
     getUIStringInput(selectField).setValue((String)value);
     UIPortletConfig uiPortletConfig = this.getAncestorOfType(UIPortletConfig.class);
@@ -122,6 +150,13 @@ public class UIWebContentSelectorForm extends UIForm implements UISelectable{
     uiPopup.setShow(false);
   }   
 
+  /**
+   * Show popup component.
+   * 
+   * @param uiComponent the ui component
+   * 
+   * @throws Exception the exception
+   */
   public void showPopupComponent(UIComponent uiComponent) throws Exception {
     UIPopupWindow uiPopup = getChild(UIPopupWindow.class);
     if(uiPopup == null) {
@@ -135,12 +170,50 @@ public class UIWebContentSelectorForm extends UIForm implements UISelectable{
     uiPopup.setResizable(true) ;        
   }
 
+  /**
+   * Gets the live portal path.
+   * 
+   * @return the live portal path
+   */
   public String getLivePortalPath() { return livePortalsPath; }
+
+  /**
+   * Gets the live shared portal name.
+   * 
+   * @return the live shared portal name
+   */
   public String getLiveSharedPortalName() { return liveSharedPortalName; }
+
+  /**
+   * Gets the repository name.
+   * 
+   * @return the repository name
+   */
   public String getRepositoryName() { return repository; }
+
+  /**
+   * Gets the workspace.
+   * 
+   * @return the workspace
+   */
   public String getWorkspace() { return workspace; }
 
+  /**
+   * The listener interface for receiving browseAction events.
+   * The class that is interested in processing a browseAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addBrowseActionListener<code> method. When
+   * the browseAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see BrowseActionEvent
+   */
   public static class BrowseActionListener extends EventListener<UIWebContentSelectorForm> {
+
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIWebContentSelectorForm> event) throws Exception {
       UIWebContentSelectorForm uiWebContentSelector = event.getSource();
       ((UIPortletConfig) uiWebContentSelector.getParent()).initPopupWebContentSelector();
@@ -148,7 +221,22 @@ public class UIWebContentSelectorForm extends UIForm implements UISelectable{
     }
   }
 
+  /**
+   * The listener interface for receiving browsePublicationAction events.
+   * The class that is interested in processing a browsePublicationAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addBrowsePublicationActionListener<code> method. When
+   * the browsePublicationAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see BrowsePublicationActionEvent
+   */
   public static class BrowsePublicationActionListener extends EventListener<UIWebContentSelectorForm> {
+
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIWebContentSelectorForm> event) throws Exception {
       UIWebContentSelectorForm uiWebContentSelector = event.getSource();
       UIWCMPublicationGrid publicationGrid = uiWebContentSelector.createUIComponent(UIWCMPublicationGrid.class, null, null);
@@ -158,7 +246,22 @@ public class UIWebContentSelectorForm extends UIForm implements UISelectable{
     }    
   }
 
+  /**
+   * The listener interface for receiving saveAction events.
+   * The class that is interested in processing a saveAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSaveActionListener<code> method. When
+   * the saveAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SaveActionEvent
+   */
   public static class SaveActionListener extends EventListener<UIWebContentSelectorForm> {
+
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIWebContentSelectorForm> event) throws Exception {
       UIWebContentSelectorForm uiWebContentSelector = event.getSource();
       String webContentPath = uiWebContentSelector.getUIStringInput(UIWebContentSelectorForm.PATH).getValue();
@@ -205,7 +308,22 @@ public class UIWebContentSelectorForm extends UIForm implements UISelectable{
     }
   }
 
+  /**
+   * The listener interface for receiving backAction events.
+   * The class that is interested in processing a backAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addBackActionListener<code> method. When
+   * the backAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see BackActionEvent
+   */
   public static class BackActionListener extends EventListener<UIWebContentSelectorForm> {
+
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIWebContentSelectorForm> event) throws Exception {
       UIWebContentSelectorForm uiWeSelector = event.getSource();
       UIPortletConfig uiPConfig = uiWeSelector.getAncestorOfType(UIPortletConfig.class);

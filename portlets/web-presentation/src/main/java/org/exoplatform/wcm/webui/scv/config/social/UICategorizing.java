@@ -33,8 +33,8 @@ import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 /**
  * Created by The eXo Platform SAS
  * Author : DANG TAN DUNG
- *          dzungdev@gmail.com
- * May 28, 2008  
+ * dzungdev@gmail.com
+ * May 28, 2008
  */
 
 @ComponentConfig(
@@ -43,16 +43,30 @@ import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 
 public class UICategorizing extends UIContainer implements UISelectable {
 
+  /** The Constant PATH_CATEGORY. */
   final static String PATH_CATEGORY = "path".intern(); 
 
+  /** The web content node. */
   private Node webContentNode = null;
+
+  /** The existed categories. */
   private List<String> existedCategories = new ArrayList<String>();
 
 
+  /**
+   * Instantiates a new uI categorizing.
+   * 
+   * @throws Exception the exception
+   */
   public UICategorizing() throws Exception {
     addChild(UICategoriesSelector.class, null, null);
   }
 
+  /**
+   * Inits the ui categories selector.
+   * 
+   * @throws Exception the exception
+   */
   public void initUICategoriesSelector() throws Exception {
     UICategoriesSelector uiCateSelector = getChild(UICategoriesSelector.class);
     uiCateSelector.setExistedCategoryList(getExistedCategories());
@@ -60,6 +74,9 @@ public class UICategorizing extends UIContainer implements UISelectable {
     uiCateSelector.init();
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.selector.UISelectable#doSelect(java.lang.String, java.lang.Object)
+   */
   @SuppressWarnings("unchecked")
   public void doSelect(String name, Object value) throws Exception {
     CategoriesService categoriesService = getApplicationComponent(CategoriesService.class);
@@ -77,18 +94,38 @@ public class UICategorizing extends UIContainer implements UISelectable {
     }
   }
 
+  /**
+   * Gets the existed categories.
+   * 
+   * @return the existed categories
+   */
   public List<String> getExistedCategories() {
     return this.existedCategories;
   }
 
+  /**
+   * Sets the existed categories.
+   * 
+   * @param existedCategories the new existed categories
+   */
   public void setExistedCategories(List<String> existedCategories) {
     this.existedCategories = existedCategories;
   }
 
+  /**
+   * Gets the web content node.
+   * 
+   * @return the web content node
+   */
   public Node getWebContentNode() {
     return this.webContentNode;
   }
 
+  /**
+   * Sets the web content node.
+   * 
+   * @param webContentNode the new web content node
+   */
   public void setWebContentNode(Node webContentNode) {
     this.webContentNode = webContentNode;
   }

@@ -36,8 +36,8 @@ import org.exoplatform.webui.event.EventListener;
 /**
  * Created by The eXo Platform SAS
  * Author : DANG TAN DUNG
- *          dzungdev@gmail.com
- * Oct 9, 2008  
+ * dzungdev@gmail.com
+ * Oct 9, 2008
  */
 @ComponentConfig (
     template = "app:/groovy/SingleContentViewer/config/UIWCMPublicationGrid.gtmpl",
@@ -48,19 +48,40 @@ import org.exoplatform.webui.event.EventListener;
 
 public class UIWCMPublicationGrid extends UIGrid {
 
+  /** The Constant LIFECYCLE_NAME. */
   public static final String LIFECYCLE_NAME = "LifecycleName".intern();
+
+  /** The Constant LIFECYCLE_DESC. */
   public static final String LIFECYCLE_DESC = "LifecycleDesc".intern();
+
+  /** The LIFECYCL e_ fields. */
   private String[] LIFECYCLE_FIELDS = {LIFECYCLE_NAME, LIFECYCLE_DESC};
+
+  /** The LIFECYCL e_ actions. */
   private String[] LIFECYCLE_ACTIONS = {"Select"};
+
+  /** The lifecycle name selected. */
   private String lifecycleNameSelected;
+
+  /** The is view grid. */
   private boolean isViewGrid;
+
+  /** The source component. */
   private UIComponent sourceComponent;
 
+  /**
+   * Instantiates a new uIWCM publication grid.
+   * 
+   * @throws Exception the exception
+   */
   public UIWCMPublicationGrid() throws Exception {
     configure(LIFECYCLE_NAME, LIFECYCLE_FIELDS, LIFECYCLE_ACTIONS);
     getUIPageIterator().setId("WCMPublicationIterator");
   }
 
+  /**
+   * Update grid.
+   */
   public void updateGrid() {
     WCMPublicationService wcmPublicationService = getApplicationComponent(WCMPublicationService.class);
     Map<String,WebpagePublicationPlugin> publicationPlugins = wcmPublicationService.getWebpagePublicationPlugins();
@@ -84,52 +105,123 @@ public class UIWCMPublicationGrid extends UIGrid {
     getUIPageIterator().setPageList(objectPageList);
   }
 
+  /**
+   * Gets the lifecycle name selected.
+   * 
+   * @return the lifecycle name selected
+   */
   public String getLifecycleNameSelected() { return lifecycleNameSelected; }
 
+  /**
+   * Checks if is view grid.
+   * 
+   * @return true, if is view grid
+   */
   public boolean isViewGrid() {
     return isViewGrid;
   }
 
+  /**
+   * The Class LifecycleBean.
+   */
   public static class LifecycleBean {
+
+    /** The Lifecycle name. */
     private String LifecycleName;
+
+    /** The Lifecycle desc. */
     private String LifecycleDesc;
+
+    /**
+     * Gets the lifecycle desc.
+     * 
+     * @return the lifecycle desc
+     */
     public String getLifecycleDesc() {
       return LifecycleDesc;
     }
+
+    /**
+     * Sets the lifecycle desc.
+     * 
+     * @param lifecycleDesc the new lifecycle desc
+     */
     public void setLifecycleDesc(String lifecycleDesc) {
       LifecycleDesc = lifecycleDesc;
     }
+
+    /**
+     * Gets the lifecycle name.
+     * 
+     * @return the lifecycle name
+     */
     public String getLifecycleName() {
       return LifecycleName;
     }
+
+    /**
+     * Sets the lifecycle name.
+     * 
+     * @param lifecycleName the new lifecycle name
+     */
     public void setLifecycleName(String lifecycleName) {
       LifecycleName = lifecycleName;
     }
 
   }
 
+  /**
+   * The listener interface for receiving selectAction events.
+   * The class that is interested in processing a selectAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSelectActionListener<code> method. When
+   * the selectAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SelectActionEvent
+   */
   public static class SelectActionListener extends EventListener<UIWCMPublicationGrid> {
+
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIWCMPublicationGrid> event) throws Exception {
       UIWCMPublicationGrid wcmPublicationGrid = event.getSource();
       String lifecycleName = event.getRequestContext().getRequestParameter(OBJECTID);
       wcmPublicationGrid.setLifecycleNameSelected(lifecycleName);
       UIPopupWindow popupWindow = wcmPublicationGrid.getAncestorOfType(UIPopupWindow.class);
       if (popupWindow == null) {
-      event.getRequestContext().addUIComponentToUpdateByAjax(wcmPublicationGrid);
+        event.getRequestContext().addUIComponentToUpdateByAjax(wcmPublicationGrid);
       } else {
         ((UISelectable)wcmPublicationGrid.getSourceComponent()).doSelect("PublicationPath", lifecycleName);
       }
     }    
   }
 
+  /**
+   * Sets the lifecycle name selected.
+   * 
+   * @param lifecycleNameSelected the new lifecycle name selected
+   */
   public void setLifecycleNameSelected(String lifecycleNameSelected) {
     this.lifecycleNameSelected = lifecycleNameSelected;
   }
 
+  /**
+   * Gets the source component.
+   * 
+   * @return the source component
+   */
   public UIComponent getSourceComponent() {
     return sourceComponent;
   }
 
+  /**
+   * Sets the source component.
+   * 
+   * @param sourceComponent the new source component
+   */
   public void setSourceComponent(UIComponent sourceComponent) {
     this.sourceComponent = sourceComponent;
   }

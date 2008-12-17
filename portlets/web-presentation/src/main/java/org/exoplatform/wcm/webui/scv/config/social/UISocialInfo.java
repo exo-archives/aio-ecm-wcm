@@ -29,11 +29,12 @@ import org.exoplatform.wcm.webui.scv.config.access.UIPermissionManager;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UITabPane;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
+
 /**
  * Created by The eXo Platform SAS
  * Author : DANG TAN DUNG
- *          dzungdev@gmail.com
- * May 28, 2008  
+ * dzungdev@gmail.com
+ * May 28, 2008
  */
 
 @ComponentConfig(
@@ -42,6 +43,12 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 )
 
 public class UISocialInfo extends UITabPane {
+  
+  /**
+   * Instantiates a new uI social info.
+   * 
+   * @throws Exception the exception
+   */
   public UISocialInfo() throws Exception {
     UIPermissionManager uiPermission = addChild(UIPermissionManager.class, null, null);
     addChild(UITagging.class, null, null);
@@ -50,6 +57,13 @@ public class UISocialInfo extends UITabPane {
     setSelectedTab(uiPermission.getId()) ;
   }
 
+  /**
+   * Inits the ui categorizing.
+   * 
+   * @param webContentNode the web content node
+   * 
+   * @throws Exception the exception
+   */
   public void initUICategorizing(Node webContentNode) throws Exception {
     UICategorizing uiCategorizing = getChild(UICategorizing.class);
     uiCategorizing.setWebContentNode(webContentNode);
@@ -57,6 +71,15 @@ public class UISocialInfo extends UITabPane {
     uiCategorizing.initUICategoriesSelector();
   }
 
+  /**
+   * Gets the existed category.
+   * 
+   * @param webContentNode the web content node
+   * 
+   * @return the existed category
+   * 
+   * @throws Exception the exception
+   */
   private List<String> getExistedCategory(Node webContentNode) throws Exception {
     List<String> existedCategory = new ArrayList<String>();
     Session session = webContentNode.getSession();

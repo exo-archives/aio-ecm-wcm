@@ -49,8 +49,8 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 /**
  * Created by The eXo Platform SAS
  * Author : DANG TAN DUNG
- *          dzungdev@gmail.com
- * Jun 9, 2008  
+ * dzungdev@gmail.com
+ * Jun 9, 2008
  */
 
 @ComponentConfig(
@@ -60,18 +60,37 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 
 public class UISingleContentViewerPortlet extends UIPortletApplication {
 
+  /** The REPOSITORY. */
   public static String REPOSITORY = "repository" ;
+  
+  /** The WORKSPACE. */
   public static String WORKSPACE = "workspace" ;
+  
+  /** The IDENTIFIER. */
   public static String IDENTIFIER = "nodeIdentifier" ;
   
+  /** The Constant scvLog. */
   public static final Log scvLog = ExoLogger.getLogger("wcm:SingleContentViewer");
 
+  /** The mode_. */
   private PortletMode mode_ = PortletMode.VIEW ;
 
+  /**
+   * Instantiates a new uI single content viewer portlet.
+   * 
+   * @throws Exception the exception
+   */
   public UISingleContentViewerPortlet() throws Exception {    
     activateMode(mode_) ;
   }
 
+  /**
+   * Activate mode.
+   * 
+   * @param mode the mode
+   * 
+   * @throws Exception the exception
+   */
   private void activateMode(PortletMode mode) throws Exception {
     getChildren().clear() ;    
     addChild(UIPopupContainer.class, null, null);
@@ -93,6 +112,9 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
     }
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.core.UIPortletApplication#processRender(org.exoplatform.webui.application.WebuiApplication, org.exoplatform.webui.application.WebuiRequestContext)
+   */
   public void processRender(WebuiApplication app, WebuiRequestContext context) throws Exception {
     PortletRequestContext pContext = (PortletRequestContext) context ;
     PortletMode newMode = pContext.getApplicationMode() ;
@@ -103,12 +125,26 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
     super.processRender(app, context) ;
   }
 
+  /**
+   * Can edit portlet.
+   * 
+   * @return true, if successful
+   * 
+   * @throws Exception the exception
+   */
   public boolean canEditPortlet() throws Exception{
     PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     String userId = context.getRemoteUser();
     return Utils.canEditCurrentPortal(userId);
   }
 
+  /**
+   * Gets the referenced content.
+   * 
+   * @return the referenced content
+   * 
+   * @throws Exception the exception
+   */
   public Node getReferencedContent() throws Exception {
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     PortletPreferences preferences = portletRequestContext.getRequest().getPreferences();
@@ -138,6 +174,15 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
     return content;
   }
 
+  /**
+   * Can edit content.
+   * 
+   * @param content the content
+   * 
+   * @return true, if successful
+   * 
+   * @throws Exception the exception
+   */
   public boolean canEditContent(final Node content) throws Exception{
     if(!content.isNodeType("exo:webContent")) return false;
     try {
