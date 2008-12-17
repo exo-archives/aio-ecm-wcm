@@ -33,11 +33,13 @@ import javax.jcr.query.QueryResult;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.SimpleHttpConnectionManager;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.logging.Log;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.cache.ExoCache;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
@@ -52,7 +54,8 @@ public class LiveLinkManagerServiceImpl implements LiveLinkManagerService {
   private WCMConfigurationService  configurationService;
   private RepositoryService        repositoryService;
   private LivePortalManagerService livePortalManagerService;
-
+  private static Log log = ExoLogger.getLogger(LiveLinkManagerServiceImpl.class); 
+  
   public LiveLinkManagerServiceImpl(
       WCMConfigurationService   configurationService, 
       RepositoryService         repositoryService, 
@@ -160,7 +163,7 @@ public class LiveLinkManagerServiceImpl implements LiveLinkManagerService {
           String oldUrl = linkBean.getUrl();
           String oldStatus = getLinkStatus(oldUrl);
           String updatedLink = new LinkBean(oldUrl, oldStatus).toString();
-          System.out.println("[URL] " + updatedLink );
+          log.info(updatedLink);
           newValues[iValues] = valueFactory.createValue(updatedLink);
           if (oldStatus.equals(LinkBean.STATUS_BROKEN)) {
             listBrokenLinks.add(oldUrl);

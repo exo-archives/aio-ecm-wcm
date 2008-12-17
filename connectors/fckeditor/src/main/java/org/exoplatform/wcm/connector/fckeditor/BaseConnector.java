@@ -387,7 +387,6 @@ public abstract class BaseConnector {
       correctStorageRelPath = correctStorageRelPath.substring(0, correctStorageRelPath.length() - 1);
       return rootContentStorage.getNode(correctStorageRelPath);
     } catch (Exception e) {
-      e.printStackTrace();
       return null;
     }
   }
@@ -422,7 +421,6 @@ public abstract class BaseConnector {
       if (webContent.isNodeType("exo:webContent"))
         return webContent;
     } catch (Exception e) {
-      e.printStackTrace();
     }
     return null;
   }
@@ -471,7 +469,6 @@ public abstract class BaseConnector {
       SessionProvider sessionProvider = localSessionProvider.getSessionProvider(null);
       return sessionProvider.getSession(workspaceName, manageableRepository);
     } catch (Exception e) {
-      e.printStackTrace();
       return null;
     }
   }

@@ -70,7 +70,6 @@ public class UIPublicationComponentStatus extends UIForm {
     try {
       return node_.getName();
     } catch (Exception e) {
-      e.printStackTrace();
       return "Error in getNodeName";
     }
   }
@@ -80,7 +79,6 @@ public class UIPublicationComponentStatus extends UIForm {
       PublicationService service = getApplicationComponent(PublicationService.class) ;
       return service.getNodeLifecycleName(node_);
     } catch (Exception e) {
-      e.printStackTrace();
       return "Error in getLifeCycleName";
     }
   }
@@ -90,7 +88,6 @@ public class UIPublicationComponentStatus extends UIForm {
       PublicationService service = getApplicationComponent(PublicationService.class) ;
       return service.getCurrentState(node_);
     } catch (Exception e) {
-      e.printStackTrace();
       return "Error in getStateName";
     }
   }
@@ -105,7 +102,6 @@ public class UIPublicationComponentStatus extends UIForm {
       String id = dS.addDownloadResource(new InputStreamDownloadResource(iS, "image/gif"));
       return dS.getDownloadLink(id);
     } catch (Exception e) {
-      e.printStackTrace();
       return "Error in getStateImage";
     }
   }
