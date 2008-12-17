@@ -16,10 +16,14 @@
  */
 package org.exoplatform.wcm.webui.scv.config.quickedition;
 
+import org.exoplatform.wcm.webui.WebUIPropertiesConfigService;
+import org.exoplatform.wcm.webui.WebUIPropertiesConfigService.PopupWindowProperties;
+import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
 import org.exoplatform.wcm.webui.scv.config.UIPortletConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
+import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -48,10 +52,15 @@ public class UIQuickEditContainer extends UIContainer {
   public static class BackToNormalWizardActionListener extends EventListener<UIQuickEditContainer> {
     public void execute(Event<UIQuickEditContainer> event) throws Exception {
       UIQuickEditContainer uiQuickEditContainer = event.getSource();
+      UISingleContentViewerPortlet viewerPortlet = uiQuickEditContainer.getAncestorOfType(UISingleContentViewerPortlet.class);
+      UIPopupContainer popupContainer = viewerPortlet.getChild(UIPopupContainer.class);
       UIPortletConfig uiPortletConfig = uiQuickEditContainer.getAncestorOfType(UIPortletConfig.class);
       uiPortletConfig.getChildren().clear();
-      uiPortletConfig.addUIWelcomeScreen();
-      
+      uiPortletConfig.addUIWelcomeScreen();      
+      WebUIPropertiesConfigService propertiesConfigService = uiQuickEditContainer.getApplicationComponent(WebUIPropertiesConfigService.class);
+      PopupWindowProperties popupProperties = (PopupWindowProperties)propertiesConfigService.getProperties(WebUIPropertiesConfigService.SCV_POPUP_SIZE_EDIT_PORTLET_MODE);
+      popupContainer.activate(uiPortletConfig,popupProperties.getWidth(),popupProperties.getHeight());
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer);
     }
   }
 }
