@@ -38,43 +38,69 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
  * Oct 15, 2008
  */
 
+/**
+ * The Class UIContentListViewerPortlet.
+ */
 @ComponentConfig(lifecycle = UIApplicationLifecycle.class)
 public class UIContentListViewerPortlet extends UIPortletApplication {
 
+  /** The mode. */
   private PortletMode        mode                    = PortletMode.VIEW;
 
+  /** The Constant REPOSITORY. */
   public final static String REPOSITORY              = "repository";
 
+  /** The Constant WORKSPACE. */
   public final static String WORKSPACE               = "workspace";
 
+  /** The Constant ITEMS_PER_PAGE. */
   public final static String ITEMS_PER_PAGE          = "itemsPerPage";
 
+  /** The Constant FOLDER_PATH. */
   public final static String FOLDER_PATH             = "folderPath";
 
+  /** The Constant HEADER. */
   public final static String HEADER                  = "header";
 
+  /** The Constant FORM_VIEW_TEMPLATE_PATH. */
   public final static String FORM_VIEW_TEMPLATE_PATH = "formViewTemplatePath";
 
+  /** The Constant PAGINATOR_TEMPlATE_PATH. */
   public final static String PAGINATOR_TEMPlATE_PATH = "paginatorTemplatePath";
 
+  /** The Constant SHOW_QUICK_EDIT_BUTTON. */
   public final static String SHOW_QUICK_EDIT_BUTTON  = "showQuickEditButton";
 
+  /** The Constant SHOW_REFRESH_BUTTON. */
   public final static String SHOW_REFRESH_BUTTON     = "showRefreshButton";
 
+  /** The Constant SHOW_THUMBNAILS_VIEW. */
   public final static String SHOW_THUMBNAILS_VIEW    = "showThumbnailsView";
 
+  /** The Constant SHOW_TITLE. */
   public final static String SHOW_TITLE              = "showTitle";
 
+  /** The Constant SHOW_SUMMARY. */
   public final static String SHOW_SUMMARY            = "showSummary";
 
+  /** The Constant SHOW_DATE_CREATED. */
   public final static String SHOW_DATE_CREATED       = "showDateCreated";
 
+  /** The Constant SHOW_HEADER. */
   public final static String SHOW_HEADER             = "showHeader";
 
+  /**
+   * Instantiates a new uI content list viewer portlet.
+   * 
+   * @throws Exception the exception
+   */
   public UIContentListViewerPortlet() throws Exception {
     activateMode(mode);
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.core.UIPortletApplication#processRender(org.exoplatform.webui.application.WebuiApplication, org.exoplatform.webui.application.WebuiRequestContext)
+   */
   public void processRender(WebuiApplication app, WebuiRequestContext context) throws Exception {
     PortletRequestContext pContext = (PortletRequestContext) context;
     PortletMode newMode = pContext.getApplicationMode();
@@ -85,7 +111,14 @@ public class UIContentListViewerPortlet extends UIPortletApplication {
     super.processRender(app, context);
   }
 
-  public void activateMode(PortletMode mode) throws Exception {
+  /**
+   * Activate mode.
+   * 
+   * @param mode the mode
+   * 
+   * @throws Exception the exception
+   */
+  private void activateMode(PortletMode mode) throws Exception {
     getChildren().clear();
     UIPopupContainer uiPopup = addChild(UIPopupContainer.class, null, "UIViewerManagementPopup");
     uiPopup.getChild(UIPopupWindow.class).setId("UIViewerManagementPopupWindow");
@@ -112,6 +145,13 @@ public class UIContentListViewerPortlet extends UIPortletApplication {
     }
   }
 
+  /**
+   * Can edit portlet.
+   * 
+   * @return true, if successful
+   * 
+   * @throws Exception the exception
+   */
   public boolean canEditPortlet() throws Exception {
     PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     String portalName = Util.getUIPortal().getName();

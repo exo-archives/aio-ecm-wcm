@@ -24,6 +24,25 @@ import org.exoplatform.webui.event.Event;
  *          anh.do@exoplatform.com
  * Oct 22, 2008  
  */
+/**
+ * The listener interface for receiving refreshDelegateAction events.
+ * The class that is interested in processing a refreshDelegateAction
+ * event implements this interface, and the object created
+ * with that class is registered with a component using the
+ * component's <code>addRefreshDelegateActionListener<code> method. When
+ * the refreshDelegateAction event occurs, that object's appropriate
+ * method is invoked.
+ * 
+ * @see RefreshDelegateActionEvent
+ */
 public interface RefreshDelegateActionListener {  
+  
+  /**
+   * On refresh.
+   * 
+   * @param event the event
+   * 
+   * @throws Exception the exception
+   */
   public void onRefresh(Event<UIContentListPresentation> event) throws Exception;
 }

@@ -28,17 +28,36 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 
+// TODO: Auto-generated Javadoc
 /*
- * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
+ * Created by The eXo Platform SAS 
+ * Author : Anh Do Ngoc 
+ * anh.do@exoplatform.com
  * Oct 17, 2008
  */
 
-@ComponentConfig(template = "app:/groovy/ContentListViewer/config/UISelectFolderPathPanel.gtmpl", events = { @EventConfig(listeners = UISelectPathPanel.SelectActionListener.class) })
+/**
+ * The Class UISelectFolderPathPanel.
+ */
+@ComponentConfig(
+  template = "app:/groovy/ContentListViewer/config/UISelectFolderPathPanel.gtmpl", 
+  events = { 
+      @EventConfig(listeners = UISelectPathPanel.SelectActionListener.class)      
+  }  
+)
 public class UISelectFolderPathPanel extends UISelectPathPanel {
 
+	/**
+	 * Instantiates a new uI select folder path panel.
+	 * 
+	 * @throws Exception the exception
+	 */
 	public UISelectFolderPathPanel() throws Exception {
 	}
 
+	/* (non-Javadoc)
+	 * @see org.exoplatform.ecm.webui.tree.selectone.UISelectPathPanel#getSelectableNodes()
+	 */
 	public List<Node> getSelectableNodes() throws Exception {
 		List<Node> list = new ArrayList<Node>();
 		RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);

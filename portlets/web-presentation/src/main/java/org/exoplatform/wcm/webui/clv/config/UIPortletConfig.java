@@ -30,9 +30,17 @@ import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
  * Oct 15, 2008  
  */
 
+/**
+ * The Class UIPortletConfig.
+ */
 @ComponentConfig(lifecycle = UIContainerLifecycle.class)
 public class UIPortletConfig extends UIContainer implements UIPopupComponent {
 
+	/**
+	 * Instantiates a new uI portlet config.
+	 * 
+	 * @throws Exception the exception
+	 */
 	public UIPortletConfig() throws Exception {
 		addChild(UIViewerManagementForm.class, null, null);
 		UIPopupContainer uiPopup = addChild(UIPopupContainer.class, null, "UIFolderPathSelecctPopup");
@@ -40,14 +48,16 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent {
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see org.exoplatform.webui.core.UIPopupComponent#activate()
+	 */
 	public void activate() throws Exception {
-		// TODO Auto-generated method stub
-
 	}
 
+	/* (non-Javadoc)
+	 * @see org.exoplatform.webui.core.UIPopupComponent#deActivate()
+	 */
 	public void deActivate() throws Exception {
-		// TODO Auto-generated method stub
-
 	}
 
 }

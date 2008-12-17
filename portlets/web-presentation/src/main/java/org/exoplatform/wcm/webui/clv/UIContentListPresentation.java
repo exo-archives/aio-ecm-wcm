@@ -55,29 +55,52 @@ import org.exoplatform.webui.event.EventListener;
  * Oct 21, 2008
  */
 
+/**
+ * The Class UIContentListPresentation.
+ */
 @ComponentConfigs( {
     @ComponentConfig(lifecycle = Lifecycle.class, events = @EventConfig(listeners = UIContentListPresentation.RefreshActionListener.class)),
     @ComponentConfig(type = UICustomizeablePaginator.class, events = @EventConfig(listeners = UICustomizeablePaginator.ShowPageActionListener.class))
 
 })
 public class UIContentListPresentation extends UIContainer {
+  
+  /** The template path. */
   private String                   templatePath;
 
+  /** The resource resolver. */
   private ResourceResolver         resourceResolver;
 
+  /** The ui paginator. */
   private UICustomizeablePaginator uiPaginator;
 
+  /** The content column. */
   private String                   contentColumn;
 
+  /** The show header. */
   private boolean                  showHeader;
 
+  /** The header. */
   private String                   header;
 
+  /** The date formatter. */
   private SimpleDateFormat         dateFormatter = new SimpleDateFormat(ISO8601.SIMPLE_DATETIME_FORMAT);
 
+  /**
+   * Instantiates a new uI content list presentation.
+   */
   public UIContentListPresentation() {
   }
 
+  /**
+   * Inits the.
+   * 
+   * @param templatePath the template path
+   * @param resourceResolver the resource resolver
+   * @param dataPageList the data page list
+   * 
+   * @throws Exception the exception
+   */
   public void init(String templatePath, ResourceResolver resourceResolver, PageList dataPageList) throws Exception {
     PortletPreferences portletPreferences = ((UIFolderViewer) getParent()).getPortletPreference();
     String paginatorTemplatePath = portletPreferences.getValue(UIContentListViewerPortlet.PAGINATOR_TEMPlATE_PATH,
@@ -90,6 +113,11 @@ public class UIContentListPresentation extends UIContainer {
     uiPaginator.setPageList(dataPageList);
   }
 
+  /**
+   * Show refresh button.
+   * 
+   * @return true, if successful
+   */
   public boolean showRefreshButton() {
     PortletPreferences portletPreferences = ((UIFolderViewer) getParent()).getPortletPreference();
     String isShow = portletPreferences.getValue(UIContentListViewerPortlet.SHOW_REFRESH_BUTTON,
@@ -97,12 +125,26 @@ public class UIContentListPresentation extends UIContainer {
     return (isShow != null) ? Boolean.parseBoolean(isShow) : false;
   }
 
+  /**
+   * Checks if is show field.
+   * 
+   * @param field the field
+   * 
+   * @return true, if is show field
+   */
   public boolean isShowField(String field) {
     PortletPreferences portletPreferences = ((UIFolderViewer) getParent()).getPortletPreference();
     String showAble = portletPreferences.getValue(field, null);
     return (showAble != null) ? Boolean.parseBoolean(showAble) : false;
   }
 
+  /**
+   * Show paginator.
+   * 
+   * @return true, if successful
+   * 
+   * @throws Exception the exception
+   */
   public boolean showPaginator() throws Exception {
     PortletPreferences portletPreferences = ((UIFolderViewer) getParent()).getPortletPreference();
     String itemsPerPage = portletPreferences.getValue(UIContentListViewerPortlet.ITEMS_PER_PAGE,
@@ -114,48 +156,113 @@ public class UIContentListPresentation extends UIContainer {
     return false;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.portal.webui.portal.UIPortalComponent#getTemplate()
+   */
   public String getTemplate() {
     return templatePath;
   }
 
+  /**
+   * Gets the datetime fommatter.
+   * 
+   * @return the datetime fommatter
+   */
   public SimpleDateFormat getDatetimeFommatter() {
     return dateFormatter;
   }
 
+  /**
+   * Sets the date time format.
+   * 
+   * @param format the new date time format
+   */
   public void setDateTimeFormat(String format) {
     dateFormatter.applyPattern(format);
   }
 
+  /**
+   * Gets the content column.
+   * 
+   * @return the content column
+   */
   public String getContentColumn() {
     return this.contentColumn;
   }
 
+  /**
+   * Sets the content column.
+   * 
+   * @param column the new content column
+   */
   public void setContentColumn(String column) {
     this.contentColumn = column;
   }
 
+  /**
+   * Gets the uI page iterator.
+   * 
+   * @return the uI page iterator
+   */
   public UIPageIterator getUIPageIterator() {
     return uiPaginator;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.core.UIComponent#getTemplateResourceResolver(org.exoplatform.webui.application.WebuiRequestContext, java.lang.String)
+   */
   public ResourceResolver getTemplateResourceResolver(WebuiRequestContext context, String template) {
     return resourceResolver;
   }
 
+  /**
+   * Gets the current page data.
+   * 
+   * @return the current page data
+   * 
+   * @throws Exception the exception
+   */
   public List getCurrentPageData() throws Exception {
     return uiPaginator.getCurrentPageData();
   }
 
+  /**
+   * Gets the title.
+   * 
+   * @param node the node
+   * 
+   * @return the title
+   * 
+   * @throws Exception the exception
+   */
   public String getTitle(Node node) throws Exception {
     return node.hasProperty("exo:title") ? node.getProperty("exo:title").getValue().getString()
                                         : node.getName();
   }
 
+  /**
+   * Gets the summary.
+   * 
+   * @param node the node
+   * 
+   * @return the summary
+   * 
+   * @throws Exception the exception
+   */
   public String getSummary(Node node) throws Exception {
     return node.hasProperty("exo:summary") ? node.getProperty("exo:summary").getValue().getString()
                                           : null;
   }
 
+  /**
+   * Gets the uRL.
+   * 
+   * @param node the node
+   * 
+   * @return the uRL
+   * 
+   * @throws Exception the exception
+   */
   public String getURL(Node node) throws Exception {
     String link = null;
     PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
@@ -174,6 +281,15 @@ public class UIContentListPresentation extends UIContainer {
     return link;
   }
 
+  /**
+   * Gets the author.
+   * 
+   * @param node the node
+   * 
+   * @return the author
+   * 
+   * @throws Exception the exception
+   */
   public String getAuthor(Node node) throws Exception {
     if (node.hasProperty("exo:owner")) {
       String ownerId = node.getProperty("exo:owner").getValue().getString();
@@ -185,6 +301,15 @@ public class UIContentListPresentation extends UIContainer {
     return null;
   }
 
+  /**
+   * Gets the created date.
+   * 
+   * @param node the node
+   * 
+   * @return the created date
+   * 
+   * @throws Exception the exception
+   */
   public String getCreatedDate(Node node) throws Exception {
     if (node.hasProperty("exo:dateCreated")) {
       Calendar calendar = node.getProperty("exo:dateCreated").getValue().getDate();
@@ -193,6 +318,15 @@ public class UIContentListPresentation extends UIContainer {
     return null;
   }
 
+  /**
+   * Gets the modified date.
+   * 
+   * @param node the node
+   * 
+   * @return the modified date
+   * 
+   * @throws Exception the exception
+   */
   public String getModifiedDate(Node node) throws Exception {
     if (node.hasProperty("exo:dateModified")) {
       Calendar calendar = node.getProperty("exo:dateModified").getValue().getDate();
@@ -201,18 +335,48 @@ public class UIContentListPresentation extends UIContainer {
     return null;
   }
 
+  /**
+   * Gets the content type.
+   * 
+   * @param node the node
+   * 
+   * @return the content type
+   */
   public String getContentType(Node node) {
     return null;
   }
 
+  /**
+   * Gets the content icon.
+   * 
+   * @param node the node
+   * 
+   * @return the content icon
+   */
   public String getContentIcon(Node node) {
     return null;
   }
 
+  /**
+   * Gets the content size.
+   * 
+   * @param node the node
+   * 
+   * @return the content size
+   */
   public String getContentSize(Node node) {
     return null;
   }
 
+  /**
+   * Gets the illustrative image.
+   * 
+   * @param node the node
+   * 
+   * @return the illustrative image
+   * 
+   * @throws Exception the exception
+   */
   public String getIllustrativeImage(Node node) throws Exception {
     String imagePath = null;
     if (node.isNodeType("exo:webContent")) {
@@ -246,27 +410,77 @@ public class UIContentListPresentation extends UIContainer {
     return null;
   }
 
+  /**
+   * Gets the categories.
+   * 
+   * @param node the node
+   * 
+   * @return the categories
+   */
   public List<String> getCategories(Node node) {
     return null;
   }
 
+  /**
+   * Gets the tags.
+   * 
+   * @param node the node
+   * 
+   * @return the tags
+   */
   public List<String> getTags(Node node) {
     return null;
   }
 
+  /**
+   * Gets the voting rate.
+   * 
+   * @param node the node
+   * 
+   * @return the voting rate
+   */
   public float getVotingRate(Node node) {
     return 0;
   }
 
+  /**
+   * Gets the number of comments.
+   * 
+   * @param node the node
+   * 
+   * @return the number of comments
+   */
   public int getNumberOfComments(Node node) {
     return 0;
   }
 
+  /**
+   * Gets the related contents.
+   * 
+   * @param node the node
+   * 
+   * @return the related contents
+   */
   public List<Node> getRelatedContents(Node node) {
     return null;
   }
 
+  /**
+   * The listener interface for receiving refreshAction events.
+   * The class that is interested in processing a refreshAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addRefreshActionListener<code> method. When
+   * the refreshAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see RefreshActionEvent
+   */
   public static class RefreshActionListener extends EventListener<UIContentListPresentation> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIContentListPresentation> event) throws Exception {
       UIContentListPresentation contentListPresentation = event.getSource();
       RefreshDelegateActionListener refreshListener = (RefreshDelegateActionListener) contentListPresentation.getParent();
@@ -274,17 +488,38 @@ public class UIContentListPresentation extends UIContainer {
     }
   }
 
+  /**
+   * Checks if is show header.
+   * 
+   * @return true, if is show header
+   */
   public boolean isShowHeader() {
     return showHeader;
   }
 
+  /**
+   * Sets the show header.
+   * 
+   * @param showHeader the new show header
+   */
   public void setShowHeader(boolean showHeader) {
     this.showHeader = showHeader;
   }
   
+  /**
+   * Sets the header.
+   * 
+   * @param header the new header
+   */
   public void setHeader(String header) {
     this.header = header;
   }
+  
+  /**
+   * Gets the header.
+   * 
+   * @return the header
+   */
   public String getHeader() {
     return this.header;
   }

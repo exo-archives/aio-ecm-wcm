@@ -34,24 +34,40 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 
+// TODO: Auto-generated Javadoc
 /*
- * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
+ * Created by The eXo Platform SAS 
+ * Author : Anh Do Ngoc 
+ * anh.do@exoplatform.com
  * Oct 16, 2008
  */
 
+/**
+ * The Class UIFolderPathTreeBuilder.
+ */
 @ComponentConfig(
     events = @EventConfig(listeners = UINodeTreeBuilder.ChangeNodeActionListener.class)
 )
 public class UIFolderPathTreeBuilder extends UINodeTreeBuilder {
 
+  /** The current portal. */
   private Node currentPortal;
 
+  /** The shared portal. */
   private Node sharedPortal;
 
+  /**
+   * Instantiates a new uI folder path tree builder.
+   * 
+   * @throws Exception the exception
+   */
   public UIFolderPathTreeBuilder() throws Exception {
     super();
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.tree.UINodeTreeBuilder#processRender(org.exoplatform.webui.application.WebuiRequestContext)
+   */
   public void processRender(WebuiRequestContext context) throws Exception {
     Writer writer = context.getWriter();
     String folderExplorerTitle = context.getApplicationResourceBundle().getString(
@@ -69,22 +85,45 @@ public class UIFolderPathTreeBuilder extends UINodeTreeBuilder {
     writer.write("</div>");
   }
 
+  /**
+   * Gets the current portal.
+   * 
+   * @return the current portal
+   */
   public Node getCurrentPortal() {
     return currentPortal;
   }
 
+  /**
+   * Sets the current portal.
+   * 
+   * @param currentPortal the new current portal
+   */
   public void setCurrentPortal(Node currentPortal) {
     this.currentPortal = currentPortal;
   }
 
+  /**
+   * Gets the shared portal.
+   * 
+   * @return the shared portal
+   */
   public Node getSharedPortal() {
     return sharedPortal;
   }
 
+  /**
+   * Sets the shared portal.
+   * 
+   * @param sharedPortal the new shared portal
+   */
   public void setSharedPortal(Node sharedPortal) {
     this.sharedPortal = sharedPortal;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.tree.UINodeTreeBuilder#buildTree()
+   */
   public void buildTree() throws Exception {
     UINodeTree tree = getChild(UINodeTree.class);
     tree.setSelected(currentNode);
@@ -126,6 +165,15 @@ public class UIFolderPathTreeBuilder extends UINodeTreeBuilder {
 
   }
 
+  /**
+   * Filter sub folder.
+   * 
+   * @param parent the parent
+   * 
+   * @return the list< node>
+   * 
+   * @throws Exception the exception
+   */
   private List<Node> filterSubFolder(Node parent) throws Exception {
     List<Node> subFolderList = new ArrayList<Node>();
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
@@ -143,6 +191,15 @@ public class UIFolderPathTreeBuilder extends UINodeTreeBuilder {
     return subFolderList;
   }
 
+  /**
+   * Gets the web contents folder.
+   * 
+   * @param portal the portal
+   * 
+   * @return the web contents folder
+   * 
+   * @throws Exception the exception
+   */
   public Node getWebContentsFolder(Node portal) throws Exception {
     WebSchemaConfigService configService = getApplicationComponent(WebSchemaConfigService.class);
     PortalFolderSchemaHandler portalFolderSchemaHandler = configService
@@ -150,6 +207,15 @@ public class UIFolderPathTreeBuilder extends UINodeTreeBuilder {
     return portalFolderSchemaHandler.getWebContentStorage(portal);
   }
 
+  /**
+   * Gets the documents folder.
+   * 
+   * @param portal the portal
+   * 
+   * @return the documents folder
+   * 
+   * @throws Exception the exception
+   */
   public Node getDocumentsFolder(Node portal) throws Exception {
     WebSchemaConfigService configService = getApplicationComponent(WebSchemaConfigService.class);
     PortalFolderSchemaHandler portalFolderSchemaHandler = configService

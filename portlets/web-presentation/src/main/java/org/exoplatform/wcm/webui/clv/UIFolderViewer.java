@@ -51,16 +51,31 @@ import org.exoplatform.webui.event.EventListener;
  * Oct 15, 2008
  */
 
+/**
+ * The Class UIFolderViewer.
+ */
 @ComponentConfig(lifecycle = Lifecycle.class, template = "app:/groovy/ContentListViewer/UIFolderListViewer.gtmpl", events = { @EventConfig(listeners = UIFolderViewer.QuickEditActionListener.class) })
 public class UIFolderViewer extends UIContainer implements RefreshDelegateActionListener {
 
+  /** The can view list content. */
   private boolean canViewListContent;
 
+  /** The message key. */
   private String  messageKey;
 
+  /**
+   * Instantiates a new uI folder viewer.
+   * 
+   * @throws Exception the exception
+   */
   public UIFolderViewer() throws Exception {
   }
 
+  /**
+   * Inits the.
+   * 
+   * @throws Exception the exception
+   */
   public void init() throws Exception {
     NodeIterator nodeIterator = null;
     canViewListContent = true;
@@ -104,28 +119,62 @@ public class UIFolderViewer extends UIContainer implements RefreshDelegateAction
                                                                   null));
   }
 
+  /**
+   * Gets the message.
+   * 
+   * @return the message
+   * 
+   * @throws Exception the exception
+   */
   public String getMessage() throws Exception {
     WebuiRequestContext requestContext = WebuiRequestContext.getCurrentInstance();
     return requestContext.getApplicationResourceBundle().getString(messageKey);
   }
 
+  /**
+   * Can view list content.
+   * 
+   * @return true, if successful
+   */
   public boolean canViewListContent() {
     return canViewListContent;
   }
 
+  /**
+   * Gets the portlet preference.
+   * 
+   * @return the portlet preference
+   */
   protected PortletPreferences getPortletPreference() {
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     return portletRequestContext.getRequest().getPreferences();
   }
 
+  /**
+   * Gets the repository.
+   * 
+   * @return the repository
+   */
   protected String getRepository() {
     return getPortletPreference().getValue(UIContentListViewerPortlet.REPOSITORY, null);
   }
 
+  /**
+   * Gets the form view template path.
+   * 
+   * @return the form view template path
+   */
   protected String getFormViewTemplatePath() {
     return getPortletPreference().getValue(UIContentListViewerPortlet.FORM_VIEW_TEMPLATE_PATH, null);
   }
 
+  /**
+   * Gets the rendered content nodes.
+   * 
+   * @return the rendered content nodes
+   * 
+   * @throws Exception the exception
+   */
   public NodeIterator getRenderedContentNodes() throws Exception {
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     PortletPreferences preferences = portletRequestContext.getRequest().getPreferences();
@@ -163,6 +212,13 @@ public class UIFolderViewer extends UIContainer implements RefreshDelegateAction
     return query.execute().getNodes();
   }
 
+  /**
+   * Gets the template resource resolver.
+   * 
+   * @return the template resource resolver
+   * 
+   * @throws Exception the exception
+   */
   private ResourceResolver getTemplateResourceResolver() throws Exception {
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     String repository = getRepository();
@@ -171,11 +227,23 @@ public class UIFolderViewer extends UIContainer implements RefreshDelegateAction
     return new JCRResourceResolver(repository, workspace, "exo:templateFile");
   }
 
+  /**
+   * Gets the portlet id.
+   * 
+   * @return the portlet id
+   */
   public String getPortletId() {
     PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     return pContext.getWindowId();
   }
 
+  /**
+   * Checks if is quick editable.
+   * 
+   * @return true, if is quick editable
+   * 
+   * @throws Exception the exception
+   */
   public boolean isQuickEditable() throws Exception {
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     PortletPreferences prefs = portletRequestContext.getRequest().getPreferences();
@@ -187,7 +255,22 @@ public class UIFolderViewer extends UIContainer implements RefreshDelegateAction
     return false;
   }
 
+  /**
+   * The listener interface for receiving quickEditAction events.
+   * The class that is interested in processing a quickEditAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addQuickEditActionListener<code> method. When
+   * the quickEditAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see QuickEditActionEvent
+   */
   public static class QuickEditActionListener extends EventListener<UIFolderViewer> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIFolderViewer> event) throws Exception {
       UIFolderViewer uiFolderViewer = event.getSource();
       UIContentListViewerPortlet uiListViewerPortlet = uiFolderViewer.getAncestorOfType(UIContentListViewerPortlet.class);
@@ -203,6 +286,9 @@ public class UIFolderViewer extends UIContainer implements RefreshDelegateAction
     }
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.wcm.webui.clv.RefreshDelegateActionListener#onRefresh(org.exoplatform.webui.event.Event)
+   */
   public void onRefresh(Event<UIContentListPresentation> event) throws Exception {
     UIContentListPresentation contentListPresentation = event.getSource();
     UIFolderViewer uiFolderViewer = contentListPresentation.getParent();

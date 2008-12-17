@@ -55,47 +55,77 @@ import org.exoplatform.webui.form.UIFormStringInput;
  * Oct 15, 2008
  */
 
-@ComponentConfig(lifecycle = UIFormLifecycle.class, template = "app:/groovy/ContentListViewer/config/UIFolderListViewerConfigForm.gtmpl", events = {
+/**
+ * The Class UIViewerManagementForm.
+ */
+@ComponentConfig(
+  lifecycle = UIFormLifecycle.class, 
+  template = "app:/groovy/ContentListViewer/config/UIFolderListViewerConfigForm.gtmpl",
+  events = {
     @EventConfig(listeners = UIViewerManagementForm.SaveActionListener.class),
     @EventConfig(listeners = UIViewerManagementForm.CancelActionListener.class),
-    @EventConfig(listeners = UIViewerManagementForm.SelectFolderPathActionListener.class) })
+    @EventConfig(listeners = UIViewerManagementForm.SelectFolderPathActionListener.class)    
+  }
+)
 public class UIViewerManagementForm extends UIForm implements UISelectable {
 
+  /** The Constant HEADER. */
   public final static String HEADER                       = "Header";
 
+  /** The Constant PORTLET_NAME. */
   public final static String PORTLET_NAME                 = "Content List Viewer";
 
+  /** The Constant FORM_VIEW_TEMPLATE_CATEGORY. */
   public final static String FORM_VIEW_TEMPLATE_CATEGORY  = "list-by-folder";
 
+  /** The Constant PAGINATOR_TEMPLATE_CATEGORY. */
   public final static String PAGINATOR_TEMPLATE_CATEGORY  = "paginators";
 
+  /** The Constant FOLDER_PATH_INPUTSET. */
   public final static String FOLDER_PATH_INPUTSET         = "FolderPathInputSet";
 
+  /** The Constant FOLDER_PATH_INPUT. */
   public final static String FOLDER_PATH_INPUT            = "FolderPathInput";
 
+  /** The Constant FORM_VIEW_TEMPLATES_SELECTOR. */
   public final static String FORM_VIEW_TEMPLATES_SELECTOR = "FormViewTemplate";
 
+  /** The Constant PAGINATOR_TEMPLATES_SELECTOR. */
   public final static String PAGINATOR_TEMPLATES_SELECTOR = "PaginatorTemplate";
 
+  /** The Constant ITEMS_PER_PAGE_SELECTOR. */
   public final static String ITEMS_PER_PAGE_SELECTOR      = "ItemsPerPage";
 
+  /** The Constant VIEWER_BUTTON_QUICK_EDIT. */
   public final static String VIEWER_BUTTON_QUICK_EDIT     = "ViewerButtonQuickEdit";
 
+  /** The Constant VIEWER_BUTTON_REFRESH. */
   public final static String VIEWER_BUTTON_REFRESH        = "ViewerButtonRefresh";
 
+  /** The Constant VIEWER_THUMBNAILS_IMAGE. */
   public static final String VIEWER_THUMBNAILS_IMAGE      = "ViewerThumbnailsView";
 
+  /** The Constant VIEWER_TITLE. */
   public static final String VIEWER_TITLE                 = "ViewerTitle";
 
+  /** The Constant VIEWER_DATE_CREATED. */
   public static final String VIEWER_DATE_CREATED          = "ViewerDateCreated";
 
+  /** The Constant VIEWER_SUMMARY. */
   public static final String VIEWER_SUMMARY               = "ViewerSummary";
 
+  /** The Constant VIEWER_HEADER. */
   public static final String VIEWER_HEADER                = "ViewerHeader";
 
+  /**
+   * Instantiates a new uI viewer management form.
+   * 
+   * @throws Exception the exception
+   */
   @SuppressWarnings("unchecked")
   public UIViewerManagementForm() throws Exception {
-    PortletPreferences portletPreferences = getPortletPreferences();
+    PortletPreferences portletPreferences = ((PortletRequestContext) WebuiRequestContext.getCurrentInstance()).getRequest()
+                                                                                                              .getPreferences();
     String folderPath = portletPreferences.getValue(UIContentListViewerPortlet.FOLDER_PATH,
                                                     UIContentListViewerPortlet.FOLDER_PATH);
 
@@ -201,16 +231,21 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
     setActions(new String[] { "Save", "Cancel" });
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.selector.UISelectable#doSelect(java.lang.String, java.lang.Object)
+   */
   public void doSelect(String selectField, Object value) throws Exception {
     getUIStringInput(selectField).setValue((String) value);
     showPopupComponent(null);
   }
 
-  public PortletPreferences getPortletPreferences() {
-    PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
-    return portletRequestContext.getRequest().getPreferences();
-  }
-
+  /**
+   * Show popup component.
+   * 
+   * @param uiComponent the ui component
+   * 
+   * @throws Exception the exception
+   */
   public void showPopupComponent(UIComponent uiComponent) throws Exception {
     UIPortletConfig uiPortletConfig = getAncestorOfType(UIPortletConfig.class);
     UIPopupContainer uiPopupContainer = uiPortletConfig.getChild(UIPopupContainer.class);
@@ -224,6 +259,16 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
     context.addUIComponentToUpdateByAjax(uiPopupContainer);
   }
 
+  /**
+   * Gets the template list.
+   * 
+   * @param portletName the portlet name
+   * @param category the category
+   * 
+   * @return the template list
+   * 
+   * @throws Exception the exception
+   */
   private List<SelectItemOption<String>> getTemplateList(String portletName, String category) throws Exception {
     List<SelectItemOption<String>> templateOptionList = new ArrayList<SelectItemOption<String>>();
     ApplicationTemplateManagerService templateManagerService = getApplicationComponent(ApplicationTemplateManagerService.class);
@@ -243,7 +288,22 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
     return templateOptionList;
   }
 
+  /**
+   * The listener interface for receiving saveAction events.
+   * The class that is interested in processing a saveAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSaveActionListener<code> method. When
+   * the saveAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SaveActionEvent
+   */
   public static class SaveActionListener extends EventListener<UIViewerManagementForm> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIViewerManagementForm> event) throws Exception {
       UIViewerManagementForm viewerManagementForm = event.getSource();
       UIApplication uiApp = viewerManagementForm.getAncestorOfType(UIApplication.class);
@@ -316,7 +376,22 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
     }
   }
 
+  /**
+   * The listener interface for receiving cancelAction events.
+   * The class that is interested in processing a cancelAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addCancelActionListener<code> method. When
+   * the cancelAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see CancelActionEvent
+   */
   public static class CancelActionListener extends EventListener<UIViewerManagementForm> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIViewerManagementForm> event) throws Exception {
       UIViewerManagementForm viewerManagementForm = event.getSource();
       UIApplication uiApp = viewerManagementForm.getAncestorOfType(UIApplication.class);
@@ -333,7 +408,22 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
     }
   }
 
+  /**
+   * The listener interface for receiving selectFolderPathAction events.
+   * The class that is interested in processing a selectFolderPathAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSelectFolderPathActionListener<code> method. When
+   * the selectFolderPathAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SelectFolderPathActionEvent
+   */
   public static class SelectFolderPathActionListener extends EventListener<UIViewerManagementForm> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIViewerManagementForm> event) throws Exception {
       UIViewerManagementForm uiViewerManagementForm = event.getSource();
       UIFolderPathSelectorForm folderPathSelector = uiViewerManagementForm.createUIComponent(UIFolderPathSelectorForm.class,
