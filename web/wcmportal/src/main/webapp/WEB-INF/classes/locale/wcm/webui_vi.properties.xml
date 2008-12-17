@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+  <UIWizardPageSelectLayoutForm>
+    <label>
+      <appPages>
+        <Presentation>Ứng dụng hiển thị đơn nội dung</Presentation>
+        <ContentListViewer>Ứng dụng hiển thị đa nội dung</ContentListViewer>
+        <Search>Tìm kiếm</Search>
+        <Sitemap>Sơ đồ trang</Sitemap>
+      </appPages>
+    </label>
+  </UIWizardPageSelectLayoutForm>
+  <ClassicSite>
+    <label>Site Classic</label>
+  </ClassicSite>
+  <ACMESite>
+    <label>Site ACME</label>
+  </ACMESite>
+  <Views>
+    <label>
+      <wcm-view>WCM View</wcm-view>
+      <admin-view>Admin View</admin-view>
+      <icon-view>Icon View</icon-view>
+      <thumbails-view>Thumbnails View</thumbails-view>
+      <cover-flow>Cover Flow View</cover-flow>
+    </label>
+  </Views>
+  <!--/n  ####################################################################################
+  #		../src/main/webapp/WEB-INF/conf/wcm/artifacts/application-templates        		 #
+  #		/content-list-viewer/paginators/UIDefaultPaginator.gtmpl		   		   					 #													
+  ####################################################################################
+  -->
+  <UIPaginatorDefault>
+    <label>
+      <previous>Trước</previous>
+      <next>Sau</next>
+    </label>
+  </UIPaginatorDefault>
+  <UIDefaultSearchResult>
+    <label>
+      <resutlsCaption>Kết quả</resutlsCaption>
+      <ofAboutCaption>trong khoảng</ofAboutCaption>
+      <forCaption>cho</forCaption>
+      <timeUnitCaption>giây</timeUnitCaption>
+      <kb>kB</kb>
+      <noresult>Không có kết quả</noresult>
+      <similar>Tương tự</similar>
+    </label>
+  </UIDefaultSearchResult>
+  <!--/n  ####################################################################################
+  #		../src/main/webapp/WEB-INF/conf/wcm/artifacts/application-templates            #
+  #		/content-list-viewer/list-by-folder/UIContentListPresentationDefault.gtmpl     #													
+  ####################################################################################
+  -->
+  <UIContentListPresentationDefault>
+    <label>
+      <action>
+        <refresh>Làm mới</refresh>
+      </action>
+      <readmore>Chi tiết</readmore>
+    </label>
+  </UIContentListPresentationDefault>
+  <!--/n  ####################################################################################
+  -->
+  <UITabPane>
+    <title>
+      <metadata>
+        <siteMetadata>Site Metadata</siteMetadata>
+      </metadata>
+    </title>
+  </UITabPane>
+</bundle>
+

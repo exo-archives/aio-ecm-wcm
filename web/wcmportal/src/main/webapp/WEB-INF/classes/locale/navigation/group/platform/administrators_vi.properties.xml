@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+  <administration>
+    Quản trị
+    <application-registry>Đăng ký ứng dụng</application-registry>
+    <newAccount>Tài khoản</newAccount>
+    <comunity-management>Quản lý cộng đồng</comunity-management>
+    <i18n>Quốc tế hóa</i18n>
+    <wcm>Quản lý site</wcm>
+    <siteExplorer>Sites Explorer</siteExplorer>
+    <wcmAdmin>Quản trị site</wcmAdmin>
+  </administration>
+</bundle>
+

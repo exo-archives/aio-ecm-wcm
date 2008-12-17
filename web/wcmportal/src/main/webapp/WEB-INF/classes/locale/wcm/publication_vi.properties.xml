@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+  <UIPublishingPanel>
+    <panelLeft>
+      <title>Nội dung này có thể được xuất bản vào những trang dưới đây</title>
+    </panelLeft>
+    <panelRight>
+      <title>Nội dung này đã được xuất bản vào những trang dưới đây</title>
+    </panelRight>
+    <currentPortal>
+      <title>Site hiện tại</title>
+      <none>Không có gì</none>
+    </currentPortal>
+    <currentNode>
+      <title>Node hiện tại</title>
+      <none>Không có gì</none>
+    </currentNode>
+  </UIPublishingPanel>
+  <UIPublicationComponentStatus>
+    <action>
+      <Close>Đóng</Close>
+    </action>
+  </UIPublicationComponentStatus>
+  <UITabPane>
+    <title>
+      <UIPublishingPanel>Form xuất bản</UIPublishingPanel>
+    </title>
+  </UITabPane>
+  <UIPublicationAction>
+    <msg>
+      <none>Trang nội dung này đã được lựa chọn</none>
+      <duplicate>Nội dung đã được xuất bản vào trang này</duplicate>
+      <wrongNode>Đây không phải là một trang nội dung, hãy chọn cái khác</wrongNode>
+    </msg>
+    <action>
+      <add>Xuất bản nội dung vào trang</add>
+      <remove>Xóa nội dung ra khỏi trang</remove>
+    </action>
+  </UIPublicationAction>
+  <UIPublishedPages>
+    <label>
+      <noitem>Nội dung này chưa được xuất bản vào trang nào</noitem>
+    </label>
+  </UIPublishedPages>
+</bundle>
+

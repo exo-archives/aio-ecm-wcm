@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+  <portal>
+    <classic>
+      <home>Trang chủ</home>
+      <presentation>Ứng dụng trình bày đơn nội dung</presentation>
+      <search>Tìm kiếm</search>
+      <searchResult>Kết quả tìm kiếm</searchResult>
+      <products>Sản phẩm</products>
+      <register>Đăng ký</register>
+      <sitemap>Sơ đồ trang</sitemap>
+      <parameterizedviewer>Ứng dụng trình bày nội dung theo tham số</parameterizedviewer>
+    </classic>
+  </portal>
+</bundle>
+
