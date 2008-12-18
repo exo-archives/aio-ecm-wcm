@@ -25,7 +25,7 @@
 		<node>
 			<uri>contentlistviewer</uri>
 			<name>contentlistviewer</name>
-			<label>List Viewer</label>
+			<label>#{portal.classic.listViewer}</label>
 			<page-reference>portal::classic::contentlistviewer</page-reference>	    
 		</node>	 
 		<node>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bundle>
-  <administration>Quản trị
+  <administration>
+ 	<portalAdmin>Quản trị</portalAdmin>  
     <application-registry>Đăng ký ứng dụng</application-registry>
     <newAccount>Tài khoản</newAccount>
     <comunity-management>Quản lý cộng đồng</comunity-management>

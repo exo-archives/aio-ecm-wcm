@@ -3,7 +3,8 @@
   <portal>
     <classic>
       <home>Trang chủ</home>
-      <presentation>Ứng dụng trình bày đơn nội dung</presentation>
+      <presentation>Trình bày đơn nội dung</presentation>
+      <listViewer>Trình bày đa nội dung</listViewer>
       <search>Tìm kiếm</search>
       <searchResult>Kết quả tìm kiếm</searchResult>
       <products>Sản phẩm</products>
