@@ -111,13 +111,13 @@ function quickSearch(resultPageURI) {
   var searchBox = document.getElementById("siteSearchBox");
   var keyWordInput = eXo.core.DOMUtil.findFirstDescendantByClass(searchBox, "input", "keyword");
   var keyword = keyWordInput.value;
-  var resultPageURIDefault = "/searchResult";
+  var resultPageURIDefault = "searchResult";
   var params = "portal=" + eXo.env.portal.portalName + "&keyword=" + keyword;
   var baseURI = getHostName() + eXo.env.portal.context + "/" + eXo.env.portal.accessMode + "/" + eXo.env.portal.portalName; 
   if (resultPageURI != undefined) {
-	baseURI += resultPageURI; 
+		baseURI = baseURI + "/" + resultPageURI; 
   } else {
-	baseURI += resultPageURIDefault;  
+		baseURI = baseURI + "/" + resultPageURIDefault;  
   }
   window.location = baseURI + "?" + params;
 }
