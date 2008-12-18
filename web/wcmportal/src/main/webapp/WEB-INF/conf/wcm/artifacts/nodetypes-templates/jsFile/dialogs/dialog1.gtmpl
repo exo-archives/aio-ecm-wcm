@@ -35,7 +35,7 @@
         	<td class="FieldLabel"><%=_ctx.appRes("JSFile.dialog.label.active")%></td>
         	<td class="FieldComponent">
         		<%
-        			String[] fieldActive = ["jcrPath=/node/exo:active", "options=true,false", "onchange=true"] ;
+        			String[] fieldActive = ["jcrPath=/node/exo:active", "options=true,false", "onchange=false"] ;
         			uicomponent.addSelectBoxField("activeJS", fieldActive) ;
         		%>
         	</td>
