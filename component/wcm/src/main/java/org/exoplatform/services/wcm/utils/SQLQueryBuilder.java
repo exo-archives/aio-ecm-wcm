@@ -276,7 +276,7 @@ public class SQLQueryBuilder extends AbstractQueryBuilder {
     if(ORDERBY.ASC == orderby)
       orderByClause.append(properyName).append(" ASC");
     else 
-      orderByClause.append(properyName).append("DESC");
+      orderByClause.append(properyName).append(" DESC");
   }
 
   /* (non-Javadoc)
