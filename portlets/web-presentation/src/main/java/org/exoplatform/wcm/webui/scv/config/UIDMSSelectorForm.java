@@ -315,7 +315,7 @@ public class UIDMSSelectorForm extends UIForm implements UISelectable{
     /* (non-Javadoc)
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
-    public void execute(Event<UIDMSSelectorForm> event) {
+    public void execute(Event<UIDMSSelectorForm> event) throws Exception{
       UIDMSSelectorForm uiSelectorForm = event.getSource();
       UIPortletConfig uiPortletConfig = uiSelectorForm.getAncestorOfType(UIPortletConfig.class);
       uiPortletConfig.getChildren().clear();
