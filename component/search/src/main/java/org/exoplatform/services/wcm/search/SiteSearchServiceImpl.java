@@ -173,7 +173,7 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     mapQueryTypes(queryCriteria, queryBuilder);
     mapQueryTerm(queryCriteria, queryBuilder);
     orderBy(queryCriteria, queryBuilder);
-    String queryStatement = queryBuilder.createQueryStatement();
+    String queryStatement = queryBuilder.createQueryStatement();    
     Query query = queryManager.createQuery(queryStatement, Query.SQL);
     return query.execute();
   }
@@ -266,13 +266,13 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     queryBuilder.closeGroup();    
     //unwanted document document types: exo:cssFile, exo:jsFile
     if(excludeMimeTypes.size()<1) return;
-    queryBuilder.openGroup(LOGICAL.AND);
+    queryBuilder.openGroup(LOGICAL.AND_NOT);
     String[] mimetypes = excludeMimeTypes.toArray(new String[]{});      
-    queryBuilder.notEqual("jcr:mimeType",mimetypes[0],LOGICAL.NULL);
+    queryBuilder.equal("jcr:mimeType",mimetypes[0],LOGICAL.NULL);
     for(int i=1; i<mimetypes.length; i++) {
-      queryBuilder.notEqual("jcr:mimeType",mimetypes[i],LOGICAL.AND);
+      queryBuilder.equal("jcr:mimeType",mimetypes[i],LOGICAL.OR);
     }       
-    queryBuilder.closeGroup();
+    queryBuilder.closeGroup();    
   }
 
   /**

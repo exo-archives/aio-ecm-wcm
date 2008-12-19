@@ -72,7 +72,7 @@ public class PaginatedQueryResult extends PaginatedNodeIterator {
     int count = 0;    
     RowIterator iterator = queryResult.getRows();    
     while (nodeIterator.hasNext()) {      
-      Node node = nodeIterator.nextNode();
+      Node node = nodeIterator.nextNode();      
       Node viewNode = filterNodeToDisplay(node);            
       if(viewNode != null) {
         //Skip back 1 position to get current row mapping to the node
