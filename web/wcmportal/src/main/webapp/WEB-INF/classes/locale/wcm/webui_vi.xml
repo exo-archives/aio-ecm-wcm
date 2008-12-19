@@ -69,5 +69,15 @@
       </metadata>
     </title>
   </UITabPane>
+  <ContentType>
+    <lable>
+      <SiteBreadcrum>Thanh hiển thị vị trí hiện tại</SiteBreadcrum>
+      <SiteNavigation>Thanh định hướng</SiteNavigation>
+      <Twocolumnslayoutwebcontent>Bố cục nội dung trang web có hai cột</Twocolumnslayoutwebcontent>
+      <Pictureonheadlayoutwebcontent>Bố cục nội dung trang web có một ảnh</Pictureonheadlayoutwebcontent>
+      <Sitesearchboxwebcontent>hộp tìm kiếm</Sitesearchboxwebcontent>
+      <Freelayoutwebcontent>Bố cục tuỳ biến</Freelayoutwebcontent>
+    </lable>
+  </ContentType>
 </bundle>
 

@@ -18,16 +18,18 @@ package org.exoplatform.wcm.webui.scv.config;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
 import javax.jcr.nodetype.NodeTypeManager;
-import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
+import org.apache.commons.lang.StringUtils;
 import org.exoplatform.ecm.webui.form.validator.ECMNameValidator;
+import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
@@ -41,7 +43,6 @@ import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
-import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
 import org.exoplatform.wcm.webui.scv.config.publication.UIWCMPublicationGrid;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -112,12 +113,20 @@ public class UINameWebContentForm extends UIForm {
     NodeTypeManager nodeTypeManager = repositoryService.getRepository(repositoryName).getNodeTypeManager();
     List<String> documentTemplates = templateService.getDocumentTemplates(repositoryName);
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>();
+    PortalRequestContext requestContext = Util.getPortalRequestContext();
+    ResourceBundle resourceBundle = requestContext.getApplicationResourceBundle();
     for (String documentTemplate: documentTemplates) {
       NodeType nodeType = nodeTypeManager.getNodeType(documentTemplate);
       if (nodeType.isNodeType("exo:webContent")) {
         String contentType = nodeType.getName();
-        String templateLabel = templateService.getTemplateLabel(contentType, repositoryName);
-        options.add(new SelectItemOption<String>(templateLabel, contentType));
+        String templateLabel = StringUtils.deleteWhitespace(templateService.getTemplateLabel(contentType, repositoryName));
+        String resolveLabel = templateLabel;
+        try {
+          resolveLabel = resourceBundle.getString("ContentType.lable."+ templateLabel);
+        } catch(Exception e) {
+
+        }
+        options.add(new SelectItemOption<String>(resolveLabel, contentType));
       }
     }
     UIFormSelectBox templateSelect = new UIFormSelectBox(FIELD_SELECT, FIELD_SELECT, options) ;
