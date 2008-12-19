@@ -19,11 +19,13 @@ package org.exoplatform.wcm.webui.search;
 import java.io.Writer;
 import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.jcr.Node;
+import javax.jcr.Value;
 import javax.portlet.PortletPreferences;
 import javax.servlet.http.HttpServletRequestWrapper;
 
@@ -303,6 +305,18 @@ public class UISearchResult extends UIContainer {
 	 * 
 	 * @throws Exception the exception
 	 */
+	public List<String> getURLs(Node node) throws Exception {
+	  List<String> urls = new ArrayList<String>();
+	  if (!node.hasProperty("publication:navigationNodeURIs")) {
+	    urls.add(getURL(node));
+	  } else {
+	    for (Value value : node.getProperty("publication:navigationNodeURIs").getValues()) {
+	      urls.add(value.getString());
+      }
+	  }	  
+	  return urls;
+	}
+	
 	public String getURL(Node node) throws Exception {
 		String link = null;
 		PortalRequestContext portalRequestContext = Util.getPortalRequestContext();

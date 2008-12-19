@@ -79,9 +79,13 @@ Utils = function(){
 }
 eXo.wcm = new Utils();
 
-function showObject(div) {
-	if (!div.style.display || div.style.display == 'none') div.style.display = 'block';
-	else div.style.display = 'none';
+function showObject(obj) {
+	var element = eXo.core.DOMUtil.findNextElementByTagName(obj, "div");
+	if (!element.style.display || element.style.display == 'none') {
+		element.style.display = 'block';
+	} else {
+		element.style.display = 'none';
+	}
 }
 
 function getHostName() {
@@ -140,7 +144,7 @@ function search(comId) {
 	  if (keyNum == 13) {
 			var searchButton = eXo.core.DOMUtil.findFirstDescendantByClass(this.form, "div", "SearchButton");
 			searchButton.onclick();
-  	  }		
+  	}		
 	}
 }	
 
