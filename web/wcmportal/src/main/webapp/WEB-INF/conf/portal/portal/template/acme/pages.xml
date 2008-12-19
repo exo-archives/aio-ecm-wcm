@@ -37,6 +37,90 @@
   </page>
   
   <page>
+  	<page-id>portal::@owner@::news</page-id>
+    <owner-type>portal</owner-type>
+    <owner-id>@owner@</owner-id>
+    <name>news</name>
+    <title>News</title>
+	  <access-permissions>Everyone</access-permissions>
+	  <edit-permission>*:/platform/administrators</edit-permission>
+	  <application>
+	    <instance-id>portal#@owner@:/web-presentation/ContentListViewerPortlet/@owner@-news</instance-id>
+	    <title>News</title>
+	  </application>
+  </page>
+  
+  <page>
+  	<page-id>portal::@owner@::about</page-id>
+    <owner-type>portal</owner-type>
+    <owner-id>@owner@</owner-id>
+    <name>about</name>
+    <title>About Us</title>
+	  <access-permissions>Everyone</access-permissions>
+	  <edit-permission>*:/platform/administrators</edit-permission>
+	  <application>
+	    <instance-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-about</instance-id>
+	    <title>About</title>
+	  </application>
+  </page>
+  
+  <page>
+  	<page-id>portal::@owner@::contact</page-id>
+    <owner-type>portal</owner-type>
+    <owner-id>@owner@</owner-id>
+    <name>contact</name>
+    <title>Contact</title>
+	  <access-permissions>Everyone</access-permissions>
+	  <edit-permission>*:/platform/administrators</edit-permission>
+	  <application>
+	    <instance-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-contact</instance-id>
+	    <title>Contact</title>
+	  </application>
+  </page>
+  
+  <page>
+  	<page-id>portal::@owner@::product</page-id>
+    <owner-type>portal</owner-type>
+    <owner-id>@owner@</owner-id>
+    <name>product</name>
+    <title>Product</title>
+	  <access-permissions>Everyone</access-permissions>
+	  <edit-permission>*:/platform/administrators</edit-permission>
+	  <application>
+	    <instance-id>portal#@owner@:/web-presentation/ContentListViewerPortlet/@owner@-services</instance-id>
+	    <title>Services</title>
+	  </application>
+  </page>
+  
+  <page>
+  	<page-id>portal::@owner@::services</page-id>
+    <owner-type>portal</owner-type>
+    <owner-id>@owner@</owner-id>
+    <name>services</name>
+    <title>Services</title>
+	  <access-permissions>Everyone</access-permissions>
+	  <edit-permission>*:/platform/administrators</edit-permission>
+	  <application>
+	    <instance-id>portal#@owner@:/web-presentation/ContentListViewerPortlet/@owner@-services</instance-id>
+	    <title>Services</title>
+	  </application>
+  </page>
+  
+  <page>
+  	<page-id>portal::@owner@::search</page-id>
+    <owner-type>portal</owner-type>
+    <owner-id>@owner@</owner-id>
+    <name>search</name>
+    <title>Search</title>
+	  <access-permissions>Everyone</access-permissions>
+	  <edit-permission>*:/platform/administrators</edit-permission>
+    <application>
+      <instance-id>portal#@owner@:/web-searches/WCMAdvanceSearchPortlet/@owner@-search</instance-id>
+      <title>Search</title>
+    </application>
+  </page>
+  
+  <page>
   	<page-id>portal::@owner@::admintoolbar</page-id>
     <owner-type>portal</owner-type>
     <owner-id>@owner@</owner-id>

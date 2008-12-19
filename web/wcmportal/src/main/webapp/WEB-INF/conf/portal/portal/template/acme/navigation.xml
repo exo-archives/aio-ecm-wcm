@@ -11,6 +11,30 @@
 			<page-reference>portal::@owner@::homepage</page-reference>	    
 		</node>	         	  	  	  	 	     	  	    
 		<node>
+			<uri>news</uri>
+			<name>news</name>
+			<label>#{portal.template.news}</label>
+			<page-reference>portal::@owner@::news</page-reference>
+		</node>    
+		<node>
+			<uri>products</uri>
+			<name>products</name>
+			<label>#{portal.template.products}</label>
+			<page-reference>portal::@owner@::product</page-reference>	    
+		</node>	         	  	  	  	 	     	  	   
+	  <node>
+			<uri>services</uri>
+			<name>services</name>
+			<label>#{portal.template.services}</label>
+			<page-reference>portal::@owner@::services</page-reference>	    
+		</node>
+		<node>
+			<uri>search</uri>
+			<name>search</name>
+			<label>#{portal.template.search}</label>
+			<page-reference>portal::@owner@::search</page-reference>	    
+		</node>
+		<node>
 			<uri>searchResult</uri>
 			<name>searchResult</name>
 			<label>#{portal.template.searchResult}</label>
@@ -24,5 +48,24 @@
 			<visible>false</visible>
 			<page-reference>portal::@owner@::parameterizedviewer</page-reference>
 		</node> 
+		<node>
+			<uri>about</uri>
+			<name>about</name>
+			<label>#{portal.template.about}</label>
+			<page-reference>portal::@owner@::about</page-reference>	    
+		</node>
+		<node>
+			<uri>contact</uri>
+			<name>contact</name>
+			<label>#{portal.template.contact}</label>
+			<page-reference>portal::@owner@::contact</page-reference>	    
+		</node>  
+		<node>
+			<uri>contentviewer</uri>
+			<name>contentviewer</name>
+			<label>#{portal.template.contentviewer}</label>
+			<visible>false</visible>
+			<page-reference>portal::@owner@::contentviewer</page-reference>
+		</node> 	        	    
 	</page-nodes>
 </node-navigation>
