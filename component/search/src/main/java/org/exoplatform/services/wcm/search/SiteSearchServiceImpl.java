@@ -209,11 +209,10 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     String keyword = queryCriteria.getKeyword();
     QueryTermHelper queryTermHelper = new QueryTermHelper();
     String queryTerm = null;
-    if (keyword.contains("*")) {
+    if (keyword.contains("*") || keyword.contains("?") || keyword.contains("~")) {
       queryTerm = queryTermHelper.contains(keyword).buildTerm();
     } else {
-      queryTerm = queryTermHelper.contains(keyword).allowFuzzySearch()
-      .allowSynonymSearch().buildTerm();
+      queryTerm = queryTermHelper.contains(keyword).allowFuzzySearch().buildTerm();
     }
     queryBuilder.contains(null, queryTerm, LOGICAL.NULL);
   }
