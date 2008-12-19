@@ -452,5 +452,9 @@ public class UISearchResult extends UIContainer {
 	public void setResultType(String resultType) {
 		this.resultType = resultType;
 	}
+	
+	public int getNumberOfPage() {
+	  return uiPaginator.getPageList().getAvailablePage();	  
+	}
 
 }

@@ -21,7 +21,7 @@ import org.exoplatform.services.wcm.publication.defaultlifecycle.Util;
     String ofAboutCaption = _ctx.appRes("UIDefaultSearchResult.label.ofAboutCaption");
     String forCaption = _ctx.appRes("UIDefaultSearchResult.label.forCaption");
     String timeUnitCaption = _ctx.appRes("UIDefaultSearchResult.label.timeUnitCaption");
-    String newSuggestion = _ctx.appRes("UISearchResult.msg.new-suggestion");    
+    String newSuggestion = _ctx.appRes("UISearchResult.msg.new-suggestion");
     String keyword = uicomponent.getKeyword();
     int totalItem = uicomponent.getTotalItem();
     int currentPage = uicomponent.getCurrentPage();
@@ -72,7 +72,11 @@ import org.exoplatform.services.wcm.publication.defaultlifecycle.Util;
     <%
     if (suggestion != null) {
       %>
-      <div><%= newSuggestion %> : <%= suggestion %></div>
+      <div>
+        <%= newSuggestion %>
+        :
+        <%= suggestion %>
+      </div>
       <%
     }
     %>
@@ -90,7 +94,7 @@ import org.exoplatform.services.wcm.publication.defaultlifecycle.Util;
 
       String itemUrl = uicomponent.getURL(node);
       List<String> listNavigationNodeUris = uicomponent.getURLs(node);
-      
+
       if (!listNavigationNodeUris.isEmpty()) {
         itemUrl = Util.parseMixedNavigationUri(listNavigationNodeUris.get(0))[1];
       }
@@ -128,17 +132,17 @@ import org.exoplatform.services.wcm.publication.defaultlifecycle.Util;
           </span>
           <%
           if (!listNavigationNodeUris.isEmpty()) {
-				if (listNavigationNodeUris.size() != 1) {
+            if (listNavigationNodeUris.size() != 1) {
+              %>
+              &nbsp;-&nbsp;
+              <span class="ItemSame" onclick="showObject(this)">
+                <a href="javascript:void(0)">
+                  <%= _ctx.appRes("UIDefaultSearchResult.label.similar") %>
+                </a>
+              </span>
+              <%
+            }
             %>
-	            &nbsp;-&nbsp;
-		         <span class="ItemSame" onclick="showObject(this)">
-		           <a href="javascript:void(0)">
-		             <%= _ctx.appRes("UIDefaultSearchResult.label.similar") %>
-		           </a>
-		         </span>
-				<%
-				}
-				%>
             <div class="ItemDetails" id="ItemDetails">
               <%
               for (String navigationNodeUri : listNavigationNodeUris) {
@@ -181,8 +185,10 @@ import org.exoplatform.services.wcm.publication.defaultlifecycle.Util;
     }
     %>
     <div class="ItemFunc">
-      <%
-      uicomponent.renderChild(UICustomizeablePaginator.class)
+      <%      
+      if (uicomponent.getNumberOfPage() > 1) {
+        uicomponent.renderChild(UICustomizeablePaginator.class);
+      }
       %>
     </div>
     <%
