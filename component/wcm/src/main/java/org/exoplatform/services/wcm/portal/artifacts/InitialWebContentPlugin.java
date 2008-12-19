@@ -90,7 +90,8 @@ public class InitialWebContentPlugin extends BasePortalArtifactsPlugin {
       String targetPath = deploymentDescriptor.getTarget().getNodePath();
       String realTargetFolder = StringUtils.replace(targetPath,"{portalName}",portalName);
       InputStream inputStream = configurationManager.getInputStream(sourcePath);
-      session.importXML(realTargetFolder, inputStream, ImportUUIDBehavior.IMPORT_UUID_CREATE_NEW);      
+      session.importXML(realTargetFolder, inputStream, ImportUUIDBehavior.IMPORT_UUID_CREATE_NEW);
+      session.save();
       Node targetNode = (Node)session.getItem(realTargetFolder);      
       configure(targetNode,portalName);
       session.save();      
