@@ -99,19 +99,17 @@ public class UISearchForm extends UIForm {
 	@SuppressWarnings("unchecked")
 	public UISearchForm() throws Exception {
 	  PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
-	  PortletPreferences preferences = context.getRequest().getPreferences();
-	  Boolean pageChecked = Boolean.parseBoolean(preferences.getValue(UIWCMSearchPortlet.PAGE_CHECKED, null));
-	  Boolean documentChecked = Boolean.parseBoolean(preferences.getValue(UIWCMSearchPortlet.DOCUMENT_CHECKED, null));
+	  PortletPreferences preferences = context.getRequest().getPreferences();	  
 		UIFormStringInput uiKeywordInput = new UIFormStringInput(KEYWORD_INPUT,
 				KEYWORD_INPUT, null);
 		UIFormSelectBox uiPortalSelectBox = new UIFormSelectBox(PORTALS_SELECTOR,
 				PORTALS_SELECTOR, getPortalList());
 		UIFormCheckBoxInput uiPageCheckBox = new UIFormCheckBoxInput(PAGE_CHECKING,
 				PAGE_CHECKING, null);
-		uiPageCheckBox.setChecked(pageChecked);
+		uiPageCheckBox.setChecked(true);
 		UIFormCheckBoxInput uiDocumentCheckBox = new UIFormCheckBoxInput(
 				DOCUMENT_CHECKING, DOCUMENT_CHECKING, null);
-		uiDocumentCheckBox.setChecked(documentChecked);
+		uiDocumentCheckBox.setChecked(true);
 
 		addUIFormInput(uiKeywordInput);
 		addUIFormInput(uiPortalSelectBox);
@@ -248,17 +246,7 @@ public class UISearchForm extends UIForm {
 						MESSAGE_NOT_CHECKED_TYPE_SEARCH, null, ApplicationMessage.WARNING));
 				return;
 			}
-			String resultType = null;
-			if (uiPageCheckbox.isChecked()) {
-			  portletPreferences.setValue(UIWCMSearchPortlet.PAGE_CHECKED, "true");
-			} else {
-			  portletPreferences.setValue(UIWCMSearchPortlet.PAGE_CHECKED, "false");
-			}
-			if (uiDocumentCheckbox.isChecked()) {
-			  portletPreferences.setValue(UIWCMSearchPortlet.DOCUMENT_CHECKED, "true");
-			} else {
-			  portletPreferences.setValue(UIWCMSearchPortlet.DOCUMENT_CHECKED, "false");
-			}
+			String resultType = null;			
 			if (uiPageCheckbox.isChecked() && uiDocumentCheckbox.isChecked()) {
 			  resultType = bundle.getString("UISearchForm.documentCheckBox.label")
 	      + " & " + bundle.getString("UISearchForm.pageCheckBox.label");
