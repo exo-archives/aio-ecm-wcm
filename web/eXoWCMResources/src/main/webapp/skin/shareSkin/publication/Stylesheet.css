@@ -131,3 +131,7 @@
 	text-align:center;
 	text-decoration:none;
 }
+
+.UIPublicationLogList .UIGrid .Text {
+	white-space: normal;
+}

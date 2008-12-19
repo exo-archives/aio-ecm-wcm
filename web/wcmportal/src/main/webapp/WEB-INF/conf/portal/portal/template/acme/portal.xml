@@ -12,28 +12,25 @@
 	    <show-info-bar>false</show-info-bar>
   	</application>	  
   	
-  	<container id="@owner@PortalContainer" template="system:/groovy/portal/webui/container/UIContainer.gtmpl" height="141px">
-  		<container id="BannerContainer" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
-  			<container id="Banner" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-  				<application>
-				    <instance-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-banner</instance-id>
-				    <show-info-bar>false</show-info-bar>
-				  </application>
-  			</container>
-  			<container id="Search" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-	  			<application>
-				    <instance-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-searchbox</instance-id>
-				    <show-info-bar>false</show-info-bar>
-				  </application>
-  			</container>
+  	<container id="BannerContainer" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
+  		<container id="Banner" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+  			<application>
+			    <instance-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-banner</instance-id>
+			    <show-info-bar>false</show-info-bar>
+			  </application>
   		</container>
-  		<container id="Navigation" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+  		<container id="WCMSearchBox" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
 	  		<application>
-			  	<instance-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-navigation</instance-id>
-	  		  <show-info-bar>false</show-info-bar>
+			    <instance-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-searchbox</instance-id>
+			    <show-info-bar>false</show-info-bar>
 			  </application>
   		</container>
   	</container>
+  		
+  	<application>
+		 	<instance-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-navigation</instance-id>
+  	  <show-info-bar>false</show-info-bar>
+		</application>
   	
   	<application>
 			<instance-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-breadcrumb</instance-id>

@@ -764,7 +764,7 @@
 	  </preference>
 	  <preference>
 	    <name>searchMode</name>
-	    <value>searchBoxMode</value>
+	    <value>searchPageMode</value>
 	  </preference>
 	  <preference>
 	    <name>showQuickEditButton</name>
