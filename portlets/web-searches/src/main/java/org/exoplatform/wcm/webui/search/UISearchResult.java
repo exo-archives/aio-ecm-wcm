@@ -125,12 +125,14 @@ public class UISearchResult extends UIContainer {
 		Writer writer = context.getWriter();
 		PortletRequestContext porletRequestContext = (PortletRequestContext) context;
 		ResourceBundle bundle = context.getApplicationResourceBundle();
-		String resultType = bundle.getString("UISearchForm.documentCheckBox.label")
-				+ " & " + bundle.getString("UISearchForm.pageCheckBox.label");
+		PortletPreferences portletPreferences = porletRequestContext.getRequest().getPreferences();		
+		if (resultType == null || resultType.length() == 0) {
+		  resultType = bundle.getString("UISearchForm.documentCheckBox.label")
+      + " & " + bundle.getString("UISearchForm.pageCheckBox.label");  
+		}
 		HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) porletRequestContext
 				.getRequest();
-		String queryString = requestWrapper.getQueryString();
-		setResultType(resultType);
+		String queryString = requestWrapper.getQueryString();		
 		String message1 = bundle.getString("UISearchResult.msg.your-search");
 		String message2 = bundle.getString("UISearchResult.msg.did-not-match");
 		String suggestions = bundle.getString("UISearchResult.msg.suggestions");
@@ -160,9 +162,7 @@ public class UISearchResult extends UIContainer {
 			queryCriteria.setSiteName(currentPortal);
 			queryCriteria.setKeyword(keyword);
 			queryCriteria.setSearchWebpage(true);
-			queryCriteria.setSearchDocument(true);
-			PortletPreferences portletPreferences = ((PortletRequestContext) context
-					.getCurrentInstance()).getRequest().getPreferences();
+			queryCriteria.setSearchDocument(true);			
 			SessionProvider provider = SessionProviderFactory.createSessionProvider();
 			int itemsPerPage = Integer.parseInt(portletPreferences.getValue(
 					UIWCMSearchPortlet.ITEMS_PER_PAGE, null));

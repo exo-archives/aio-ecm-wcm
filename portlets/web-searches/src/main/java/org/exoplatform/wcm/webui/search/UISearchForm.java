@@ -98,16 +98,20 @@ public class UISearchForm extends UIForm {
 	 */
 	@SuppressWarnings("unchecked")
 	public UISearchForm() throws Exception {
+	  PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+	  PortletPreferences preferences = context.getRequest().getPreferences();
+	  Boolean pageChecked = Boolean.parseBoolean(preferences.getValue(UIWCMSearchPortlet.PAGE_CHECKED, null));
+	  Boolean documentChecked = Boolean.parseBoolean(preferences.getValue(UIWCMSearchPortlet.DOCUMENT_CHECKED, null));
 		UIFormStringInput uiKeywordInput = new UIFormStringInput(KEYWORD_INPUT,
 				KEYWORD_INPUT, null);
 		UIFormSelectBox uiPortalSelectBox = new UIFormSelectBox(PORTALS_SELECTOR,
 				PORTALS_SELECTOR, getPortalList());
 		UIFormCheckBoxInput uiPageCheckBox = new UIFormCheckBoxInput(PAGE_CHECKING,
 				PAGE_CHECKING, null);
-		uiPageCheckBox.setChecked(true);
+		uiPageCheckBox.setChecked(pageChecked);
 		UIFormCheckBoxInput uiDocumentCheckBox = new UIFormCheckBoxInput(
 				DOCUMENT_CHECKING, DOCUMENT_CHECKING, null);
-		uiDocumentCheckBox.setChecked(true);
+		uiDocumentCheckBox.setChecked(documentChecked);
 
 		addUIFormInput(uiKeywordInput);
 		addUIFormInput(uiPortalSelectBox);
@@ -245,15 +249,24 @@ public class UISearchForm extends UIForm {
 				return;
 			}
 			String resultType = null;
-			if ("true".equals(pageChecked) && "false".equals(documentChecked)) {
-				resultType = bundle.getString("UISearchForm.pageCheckBox.label") + "s";
-			} else if ("false".equals(pageChecked) && "true".equals(documentChecked)) {
-				resultType = bundle.getString("UISearchForm.documentCheckBox.label");
-			} else if ("true".equals(pageChecked) && "true".equals(documentChecked)) {
-				resultType = bundle.getString("UISearchForm.documentCheckBox.label")
-						+ " & "
-						+ bundle.getString("UISearchForm.pageCheckBox.label");
+			if (uiPageCheckbox.isChecked()) {
+			  portletPreferences.setValue(UIWCMSearchPortlet.PAGE_CHECKED, "true");
+			} else {
+			  portletPreferences.setValue(UIWCMSearchPortlet.PAGE_CHECKED, "false");
 			}
+			if (uiDocumentCheckbox.isChecked()) {
+			  portletPreferences.setValue(UIWCMSearchPortlet.DOCUMENT_CHECKED, "true");
+			} else {
+			  portletPreferences.setValue(UIWCMSearchPortlet.DOCUMENT_CHECKED, "false");
+			}
+			if (uiPageCheckbox.isChecked() && uiDocumentCheckbox.isChecked()) {
+			  resultType = bundle.getString("UISearchForm.documentCheckBox.label")
+	      + " & " + bundle.getString("UISearchForm.pageCheckBox.label");
+			} else if (uiPageCheckbox.isChecked() && !uiDocumentCheckbox.isChecked()) {
+			  resultType = bundle.getString("UISearchForm.pageCheckBox.label");
+			} else if (!uiPageCheckbox.isChecked() && uiDocumentCheckbox.isChecked()) {
+			  resultType = bundle.getString("UISearchForm.documentCheckBox.label");
+      }
 			uiSearchResult.setKeyword(keyword);
 			uiSearchResult.setResultType(resultType);
 			String selectedPortal = (uiPortalSelectBox.getValue()
