@@ -338,7 +338,7 @@ public abstract class AbstractQueryBuilder {
   /**
    * The Enum LOGICAL function for query
    */
-  public enum LOGICAL { AND, OR, NULL};
+  public enum LOGICAL { AND, OR, NULL, NOT, AND_NOT, OR_NOT};
   
   /**
    * The Enum ORDERBY function for query

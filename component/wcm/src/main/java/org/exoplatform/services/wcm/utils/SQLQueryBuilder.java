@@ -301,6 +301,10 @@ public class SQLQueryBuilder extends AbstractQueryBuilder {
     propertiesClause = propertiesClause.append("AND( ");
     else if(LOGICAL.OR == logical)
       propertiesClause = propertiesClause.append("OR( ");
+    else if(LOGICAL.AND_NOT == logical) 
+      propertiesClause = propertiesClause.append("AND NOT(");
+    else if(LOGICAL.OR_NOT == logical)
+      propertiesClause = propertiesClause.append("OR NOT(");    
     else
       propertiesClause = propertiesClause.append("( ");
   }
