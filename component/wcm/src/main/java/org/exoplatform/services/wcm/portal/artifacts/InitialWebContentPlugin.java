@@ -39,6 +39,7 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 
 /**
  * Created by The eXo Platform SAS
@@ -53,6 +54,7 @@ public class InitialWebContentPlugin extends BasePortalArtifactsPlugin {
   private ConfigurationManager configurationManager;  
   private RepositoryService repositoryService;
   private ExoCache artifactsCache; 
+  private LivePortalManagerService livePortalManagerService;
   /**
    * Instantiates a new initial web content plugin.
    * 
@@ -61,12 +63,13 @@ public class InitialWebContentPlugin extends BasePortalArtifactsPlugin {
    * @param repositoryService the repository service
    */
   public InitialWebContentPlugin(InitParams initParams, ConfigurationManager configurationManager,
-      RepositoryService repositoryService, CacheService cacheService) throws Exception {
+      RepositoryService repositoryService, CacheService cacheService, LivePortalManagerService livePortalManagerService) throws Exception {
     super(initParams, configurationManager, repositoryService);
     this.initParams = initParams;
     this.configurationManager = configurationManager;
     this.repositoryService = repositoryService;
-    this.artifactsCache = cacheService.getCacheInstance(this.getClass().getName());    
+    this.artifactsCache = cacheService.getCacheInstance(this.getClass().getName());
+    this.livePortalManagerService = livePortalManagerService;
   }
 
   /* (non-Javadoc)
@@ -91,11 +94,11 @@ public class InitialWebContentPlugin extends BasePortalArtifactsPlugin {
       String realTargetFolder = StringUtils.replace(targetPath,"{portalName}",portalName);
       InputStream inputStream = configurationManager.getInputStream(sourcePath);
       session.importXML(realTargetFolder, inputStream, ImportUUIDBehavior.IMPORT_UUID_CREATE_NEW);
-      session.save();
-      Node targetNode = (Node)session.getItem(realTargetFolder);      
-      configure(targetNode,portalName);
-      session.save();      
-    }    
+      session.save();           
+    }
+    Node portalNode = livePortalManagerService.getLivePortal(portalName,sessionProvider);         
+    configure(portalNode,portalName);
+    portalNode.getSession().save();    
   }
 
   /**
