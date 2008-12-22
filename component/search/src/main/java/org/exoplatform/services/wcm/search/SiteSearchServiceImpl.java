@@ -209,6 +209,7 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     String keyword = queryCriteria.getKeyword();
     QueryTermHelper queryTermHelper = new QueryTermHelper();
     String queryTerm = null;
+    keyword = keyword.replaceAll("'","''");
     if (keyword.contains("*") || keyword.contains("?") || keyword.contains("~")) {
       queryTerm = queryTermHelper.contains(keyword).buildTerm();
     } else {
