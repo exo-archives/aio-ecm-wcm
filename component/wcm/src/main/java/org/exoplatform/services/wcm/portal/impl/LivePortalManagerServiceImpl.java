@@ -154,6 +154,9 @@ public class LivePortalManagerServiceImpl implements LivePortalManagerService, S
       newPortal.setProperty("keywords",portalName);
       newPortal.setProperty("robots","index,follow");
     }
+    if(newPortal.canAddMixin("dc:elementSet")) {
+      newPortal.addMixin("dc:elementSet");      
+    }
     //Need set some other property for the portal node from portal config like access permission ..    
     newPortal.getSession().save();
     //put sharedPortal path to the map at the first time when run this method

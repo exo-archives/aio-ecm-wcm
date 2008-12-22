@@ -20,6 +20,7 @@ import java.util.HashMap;
 
 import javax.jcr.Node;
 import javax.jcr.nodetype.NodeType;
+import javax.jcr.nodetype.NodeTypeManager;
 import javax.jcr.nodetype.PropertyDefinition;
 
 import org.apache.commons.logging.Log;
@@ -90,12 +91,23 @@ public class PageMetadataServiceImpl implements PageMetadataService {
    */
   private HashMap<String,String> extractPortalMetadata(Node portalNode) throws Exception {
     HashMap<String,String> metadata = new HashMap<String,String>();
-    NodeType siteMedata = portalNode.getSession().getWorkspace().getNodeTypeManager().getNodeType("metadata:siteMetadata");
+    NodeTypeManager manager = portalNode.getSession().getWorkspace().getNodeTypeManager();    
+    NodeType siteMedata = manager.getNodeType("metadata:siteMetadata");    
     for(PropertyDefinition pdef: siteMedata.getDeclaredPropertyDefinitions()) {
       String metadataName = pdef.getName();
       String metadataValue = getProperty(portalNode,metadataName);
       if(metadataValue != null) 
         metadata.put(metadataName,metadataValue);              
+    }    
+    NodeType dcElementSet = portalNode.getSession().getWorkspace().getNodeTypeManager().getNodeType("dc:elementSet");
+    for(PropertyDefinition pdef: dcElementSet.getDeclaredPropertyDefinitions()) {
+      String metadataName = pdef.getName();
+      String metadataValue = getProperty(portalNode,metadataName);
+      if(metadataValue != null) {
+        String metaTagName = metadataName.replaceFirst(":",".");
+        metaTagName = metaTagName.replace("dc","DC");
+        metadata.put(metaTagName,metadataValue);
+      }                             
     }
     return metadata;
   }  
