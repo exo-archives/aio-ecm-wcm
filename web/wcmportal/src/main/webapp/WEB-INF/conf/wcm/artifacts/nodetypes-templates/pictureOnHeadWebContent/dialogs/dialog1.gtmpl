@@ -201,7 +201,7 @@
 										}
 									}
 									if(htmlContent == null || htmlContent.equals("")) {
-										htmlContent = "<h3>Type the title at here</h3><div class=\"DropCap\">T</div>ype the text here";
+										htmlContent = "<div class=\"DropCap\">T</div>ype the text here";
 									}
 									String[] htmlArguments = ["jcrPath=/node/default.html/jcr:content/jcr:data", "options=toolbar:CompleteWCM,width:400", htmlContent];
 			    					uicomponent.addWYSIWYGField(htmlWYSIWYGFormId, htmlArguments) ;
