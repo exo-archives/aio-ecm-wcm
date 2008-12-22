@@ -332,6 +332,13 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin{
     preferenceN.setValues(listValue);
     listPreference.add(preferenceN);
     
+    Preference preferenceQ = new Preference();
+    listValue = new ArrayList<String>();
+    listValue.add("true");
+    preferenceQ.setName("ShowQuickEdit");
+    preferenceQ.setValues(listValue);
+    listPreference.add(preferenceQ);
+    
     portletPreferences.setPreferences(listPreference);
 
     DataStorage dataStorage = Util.getServices(DataStorage.class);
