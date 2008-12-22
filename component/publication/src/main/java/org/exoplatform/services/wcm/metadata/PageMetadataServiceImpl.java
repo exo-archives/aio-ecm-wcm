@@ -19,11 +19,15 @@ package org.exoplatform.services.wcm.metadata;
 import java.util.HashMap;
 
 import javax.jcr.Node;
+import javax.jcr.Property;
+import javax.jcr.PropertyType;
+import javax.jcr.Value;
 import javax.jcr.nodetype.NodeType;
 import javax.jcr.nodetype.NodeTypeManager;
 import javax.jcr.nodetype.PropertyDefinition;
 
 import org.apache.commons.logging.Log;
+import org.exoplatform.commons.utils.ISO8601;
 import org.exoplatform.services.cms.categories.CategoriesService;
 import org.exoplatform.services.cms.folksonomy.FolksonomyService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
@@ -40,7 +44,7 @@ import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 public class PageMetadataServiceImpl implements PageMetadataService {
   
   /** The log. */
-  private static Log log = ExoLogger.getLogger(PageMetadataServiceImpl.class);
+  private static Log log = ExoLogger.getLogger("wcm:PageMetadataService");
   
   /** The live portal manager service. */
   private LivePortalManagerService livePortalManagerService; 
@@ -76,6 +80,9 @@ public class PageMetadataServiceImpl implements PageMetadataService {
       Node portal = livePortalManagerService.getLivePortal(portalName,sessionProvider);
       return extractPortalMetadata(portal);      
     } catch (Exception e) {
+      if(log.isDebugEnabled())
+        log.debug(e);
+      e.printStackTrace();
     }       
     return null;
   }
@@ -99,19 +106,30 @@ public class PageMetadataServiceImpl implements PageMetadataService {
       if(metadataValue != null) 
         metadata.put(metadataName,metadataValue);              
     }    
-    NodeType dcElementSet = portalNode.getSession().getWorkspace().getNodeTypeManager().getNodeType("dc:elementSet");
+    HashMap<String,String> dcElementSet = extractDCElementSetMetadata(portalNode);
+    metadata.putAll(dcElementSet);
+    return metadata;
+  }  
+  
+  private HashMap<String,String> extractDCElementSetMetadata(Node node) throws Exception {
+    HashMap<String,String> metadata = new HashMap<String,String>();
+    Node checkNode = node;
+    if(node.isNodeType("nt:file"))
+      checkNode = (Node)node.getPrimaryItem();    
+    if(!checkNode.isNodeType("dc:elementSet")) return metadata;
+    
+    NodeType dcElementSet = node.getSession().getWorkspace().getNodeTypeManager().getNodeType("dc:elementSet");
     for(PropertyDefinition pdef: dcElementSet.getDeclaredPropertyDefinitions()) {
       String metadataName = pdef.getName();
-      String metadataValue = getProperty(portalNode,metadataName);
-      if(metadataValue != null) {
+      String metadataValue = getValues(checkNode, metadataName);
+      if(metadataValue != null && metadataValue.length() >0) {
         String metaTagName = metadataName.replaceFirst(":",".");
         metaTagName = metaTagName.replace("dc","DC");
         metadata.put(metaTagName,metadataValue);
       }                             
     }
     return metadata;
-  }  
-  
+  }
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.metadata.PageMetadataService#extractMetadata(javax.jcr.Node)
    */
@@ -141,7 +159,9 @@ public class PageMetadataServiceImpl implements PageMetadataService {
     if(portalKeywords != null) {
       keywords = keywords.concat(",").concat(portalKeywords);
     }
+    HashMap<String,String> dcElementSet = extractDCElementSetMetadata(node);
     medatata.put(KEYWORDS,keywords);    
+    medatata.putAll(dcElementSet);
     return medatata;
   }
 
@@ -167,7 +187,7 @@ public class PageMetadataServiceImpl implements PageMetadataService {
     builder.append(title.replaceAll(" ",","));
     return builder.toString();
   }
-
+  
   /**
    * Gets the property.
    * 
@@ -181,7 +201,35 @@ public class PageMetadataServiceImpl implements PageMetadataService {
   private String getProperty(Node node, String propertyName) throws Exception {
     return node.hasProperty(propertyName)? node.getProperty(propertyName).getString():null;
   }
-
+  
+  private String getValues(Node node, String propertyName) throws Exception {
+    try {
+      Property property = node.getProperty(propertyName);
+      PropertyDefinition definition = property.getDefinition();      
+      if(!definition.isMultiple())
+        return property.getValue().getString();      
+      int propertyType = definition.getRequiredType();
+      if(PropertyType.BINARY == propertyType)
+        return null;
+      if(PropertyType.REFERENCE == propertyType)
+        return null;      
+      StringBuilder builder = new StringBuilder();
+      for(Value value: property.getValues()) {
+        if(propertyType == PropertyType.DATE) {
+          String v = ISO8601.format(value.getDate());
+          builder.append(v).append(",");
+        }else {
+          builder.append(value.getString()).append(","); 
+        }        
+      }
+      if(builder.charAt(builder.length()-1) == ',') {
+        builder.deleteCharAt(builder.length() -1);
+      }
+      return builder.toString();
+    } catch (Exception e) { 
+      return null;
+    }    
+  }
   /**
    * Find portal.
    * 
