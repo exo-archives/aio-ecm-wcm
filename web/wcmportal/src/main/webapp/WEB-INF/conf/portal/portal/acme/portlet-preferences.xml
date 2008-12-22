@@ -748,7 +748,7 @@
 	  <window-id>portal#acme:/web-searches/WCMAdvanceSearchPortlet/acme-search</window-id>
 	  <preference>
 	    <name>searchPageLayoutTemplatePath</name>
-	    <value>/jcr:system/exo:ecm/views/templates/WCM Advance Search/search-page-layout/UIResultPageLayoutDefault.gtmpl</value>
+	    <value>/jcr:system/exo:ecm/views/templates/WCM Advance Search/search-page-layout/UISearchPageLayoutDefault.gtmpl</value>
 	  </preference>
 	  <preference>
 	    <name>searchFormTemplatePath</name>
