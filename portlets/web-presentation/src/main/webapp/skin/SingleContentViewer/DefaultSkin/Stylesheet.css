@@ -267,7 +267,7 @@
 	padding: 0px 10px;
 	height: 36px; line-height: 36px;
 	background: url('background/WizardStepBar.gif') repeat-x bottom;
-	border-top: 1px solid #b7b7b7;
+	border-bottom: 1px solid #b7b7b7;
 }
 
 .UISingleContentViewerPortlet .QuickEditBackButton a {
