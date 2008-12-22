@@ -86,7 +86,7 @@ public class UISearchResult extends UIContainer {
 			ISO8601.SIMPLE_DATETIME_FORMAT);
 
 	/** The search time. */
-	private long searchTime;
+	private float searchTime;
 
 	/** The Constant PARAMETER_REGX. */
 	public final static String PARAMETER_REGX = "(portal=.*)&(keyword=.*)";
@@ -386,7 +386,7 @@ public class UISearchResult extends UIContainer {
 	 * 
 	 * @return the search time
 	 */
-	public long getSearchTime() {
+	public float getSearchTime() {
 		return searchTime;
 	}
 
@@ -395,7 +395,7 @@ public class UISearchResult extends UIContainer {
 	 * 
 	 * @param searchTime the new search time
 	 */
-	public void setSearchTime(long searchTime) {
+	public void setSearchTime(float searchTime) {
 		this.searchTime = searchTime;
 	}
 

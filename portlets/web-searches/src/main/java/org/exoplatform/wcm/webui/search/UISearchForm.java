@@ -271,8 +271,8 @@ public class UISearchForm extends UIForm {
 				WCMPaginatedQueryResult paginatedQueryResult = siteSearchService
 						.searchSiteContents(queryCriteria, provider, itemsPerPage);
 				uiSearchResult.setPageList(paginatedQueryResult);
-				uiSearchResult.setSearchTime(paginatedQueryResult
-						.getQueryTimeInSecond());
+				float timeSearch = paginatedQueryResult.getQueryTimeInSecond();
+				uiSearchResult.setSearchTime(timeSearch);
 				uiSearchResult.setSuggetions(paginatedQueryResult.getSpellSuggestion());
 			} catch (Exception e) {
 				uiApp.addMessage(new ApplicationMessage(MESSAGE_NOT_SUPPORT_KEYWORD,
