@@ -72,8 +72,8 @@ public class WCMPaginatedQueryResult extends PaginatedQueryResult {
    * 
    * @return the query time in second
    */
-  public long getQueryTimeInSecond() {
-    return this.queryTime / 1000;
+  public float getQueryTimeInSecond() {
+    return (float) this.queryTime / 1000;
   }
 
   /**

@@ -120,7 +120,7 @@ public class SiteSearchServiceImpl implements SiteSearchService {
       paginatedQueryResult = new WCMPaginatedQueryResult( queryResult, queryCriteria, pageSize); 
     }else {      
       paginatedQueryResult = new SmallPaginatedQueryResult(queryResult, queryCriteria, pageSize);
-    }   
+    }       
     paginatedQueryResult.setQueryTime(queryTime);    
     paginatedQueryResult.setSpellSuggestion(suggestion);    
     return paginatedQueryResult;
