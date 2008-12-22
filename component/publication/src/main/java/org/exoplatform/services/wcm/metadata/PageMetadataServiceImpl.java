@@ -81,8 +81,7 @@ public class PageMetadataServiceImpl implements PageMetadataService {
       return extractPortalMetadata(portal);      
     } catch (Exception e) {
       if(log.isDebugEnabled())
-        log.debug(e);
-      e.printStackTrace();
+        log.debug(e);      
     }       
     return null;
   }
