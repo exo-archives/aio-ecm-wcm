@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+  <!--/n  #########################################################################################
+        
+  #			org.exoplatform.wcm.webui.search.UIWCMSearchForm                          #
+          #########################################################################################
+  -->
+  <UISearchForm>
+    <keywordInput>
+      <label>Rechercher</label>
+    </keywordInput>
+    <portalSelector>
+      <label>Site</label>
+    </portalSelector>
+    <documentCheckBox>
+      <label>Documents</label>
+    </documentCheckBox>
+    <pageCheckBox>
+      <label>Pages</label>
+    </pageCheckBox>
+    <action>
+      <Search>Rechercher</Search>
+    </action>
+    <message>
+      <keyword-not-empty>Le mot n'est pas vide.</keyword-not-empty>
+      <not-checked>Vous devez sélectionner un type de contenu à rechercher.</not-checked>
+      <keyword-not-support>Le moteur de recherche ne peut actuellement fonctionner avec les mots spécifiés.</keyword-not-support>
+    </message>
+  </UISearchForm>
+  <!--/n  #########################################################################################
+        
+  #			org.exoplatform.wcm.webui.search.config.UISearchPageLayoutManager         #
+          #########################################################################################
+  -->
+  <UISearchPageLayoutManager>
+    <mode>
+      <selectOption>
+        <label>---Mode de recherche----</label>
+      </selectOption>
+      <box-search>
+        <label>Boîte</label>
+      </box-search>
+      <page-search>
+        <label>Page</label>
+      </page-search>
+    </mode>
+    <action>
+      <Save>Sauver</Save>
+      <Cancel>Annuler</Cancel>
+    </action>
+    <label>
+      <searchFormSelector>Modèles de formulaires</searchFormSelector>
+      <searchPaginatorSelector>Modèle de pagination</searchPaginatorSelector>
+      <searchResultSelector>Modèles de résultats</searchResultSelector>
+      <searchBoxSelector>Modèles pour les boîtes</searchBoxSelector>
+      <searchModeSelector>Modes de recherche</searchModeSelector>
+      <itemsPerPageSelector>Eléments par page</itemsPerPageSelector>
+      <searchPageLayoutSelector>Disposition de la page de recherche</searchPageLayoutSelector>
+      <viewerButtonQuickEdit>Edition rapide</viewerButtonQuickEdit>
+    </label>
+    <message>
+      <search-mode-selecting>Vous devez sélectionner un mode de recherche.</search-mode-selecting>
+    </message>
+  </UISearchPageLayoutManager>
+  <!--/n  #########################################################################################
+        
+  #			org.exoplatform.wcm.webui.search.UISearchResult                           #
+          #########################################################################################
+  -->
+  <UISearchResult>
+    <msg>
+      <your-search>Votre recherche</your-search>
+      <did-not-match>n'a délivré aucun résultat.</did-not-match>
+      <suggestions>Suggestions:</suggestions>
+      <try-different-key>Utiliser d'autres critères de recherche.</try-different-key>
+      <keyword_entered>Insérer des mots à rechercher.</keyword_entered>
+      <new-suggestion>Voulez-vous dire</new-suggestion>
+    </msg>
+  </UISearchResult>
+</bundle>
+

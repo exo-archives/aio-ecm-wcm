@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+  <!--/n  ##################################################################
+        
+  # org.exoplatform.wcm.webui.clv.config.UIViewerManagementForm    #
+          ##################################################################
+  -->
+  <UIViewerManagementForm>
+    <action>
+      <Save>Sauver</Save>
+      <Cancel>Annuler</Cancel>
+    </action>
+    <label>
+      <FolderPathInputSet>UIViewerManagementForm</FolderPathInputSet>
+      <FolderPathInput>Chemin du dossier</FolderPathInput>
+      <FormViewTemplate>Gabarit de visualisation</FormViewTemplate>
+      <PaginatorTemplate>Gabarit de pagination</PaginatorTemplate>
+      <ItemsPerPage>Eléments par page</ItemsPerPage>
+      <ViewerButtonQuickEdit>Montrer le bouton d'édition rapide</ViewerButtonQuickEdit>
+      <ViewerButtonRefresh>Montrer le bouton de rafraichissement</ViewerButtonRefresh>
+      <ViewerThumbnailsView>Montrer les vignettes</ViewerThumbnailsView>
+      <ViewerTitle>Montrer le titre</ViewerTitle>
+      <ViewerDateCreated>Montrer la date de création</ViewerDateCreated>
+      <ViewerSummary>Montrer le résumé</ViewerSummary>
+      <Header>Entête</Header>
+      <ViewerHeader>Montrer l'entête</ViewerHeader>
+    </label>
+    <title>Sélectionner un dossier pour montrer ses contenus web ou ses documents</title>
+  </UIViewerManagementForm>
+  <!--/n  ###################################################################
+        
+  #			message when list content  							#
+          ###################################################################
+  -->
+  <UIMessageBoard>
+    <msg>
+      <folder-not-found>Ce visualiseur n'a pas été configuré.</folder-not-found>
+      <no-permission>Accès au répertoire refusé</no-permission>
+      <folder-empty>Aucun contenu à montrer</folder-empty>
+      <error-nodetype>Erreur inconnue.</error-nodetype>
+      <saving-success>Succès. Vous pouvez voir les changements en passant en mode visualisation.</saving-success>
+      <empty-folder-path>Vous devez sélectionner un dossier.</empty-folder-path>
+      <none-action-excuted>Aucune action ne sera effectuée</none-action-excuted>
+    </msg>
+  </UIMessageBoard>
+  <!--/n  ###################################################################
+  -->
+  <UIFolderTreeList>
+    <title>Sélectionner un dossier pour afficher son contenu</title>
+  </UIFolderTreeList>
+  <UIFolderExplorer>
+    <title>Sélectionner un dossier</title>
+  </UIFolderExplorer>
+  <!--/n  ###################################################################
+  -->
+  <UIPopupWindow>
+    <title>
+      <UIFolderPathSelectorForm>Sélectionner un dossier</UIFolderPathSelectorForm>
+    </title>
+  </UIPopupWindow>
+  <!--/n  ###################################################################
+  -->
+  <UIStartEditionInPageWizard>
+    <msg>
+      <edit-portlet>Cliquer ici pour éditer cette Portlet</edit-portlet>
+    </msg>
+  </UIStartEditionInPageWizard>
+  <!--/n  ###################################################################
+  -->
+  <UIViewerManagementPopupWindow>
+    <title>
+      <UIPortletConfig>Gestion du Content List Viewer</UIPortletConfig>
+    </title>
+  </UIViewerManagementPopupWindow>
+  <UIFolderPathSelecctPopupWindow>
+    <title>
+      <UIFolderPathSelectorForm>Sélectionner un dossier à visualiser</UIFolderPathSelectorForm>
+    </title>
+  </UIFolderPathSelecctPopupWindow>
+</bundle>
+

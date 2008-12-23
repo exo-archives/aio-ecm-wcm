@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+  <administration>
+ 	<portalAdmin>Administration</portalAdmin>  
+    <application-registry>Gestion des applications</application-registry>
+    <newAccount>Création de compte</newAccount>
+    <comunity-management>Gestion des communautés</comunity-management>
+    <i18n>Internationalisation</i18n>
+    <wcm>Gestion des sites</wcm>
+    <siteExplorer>Explorateur de sites</siteExplorer>
+    <wcmAdmin>Administration des sites</wcmAdmin>
+  </administration>
+</bundle>
+

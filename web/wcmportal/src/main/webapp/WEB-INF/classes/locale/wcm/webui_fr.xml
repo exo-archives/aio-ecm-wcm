@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+  <UIWizardPageSelectLayoutForm>
+    <label>
+      <appPages>
+        <Presentation>Visualiseur de contenu simple</Presentation>
+        <ContentListViewer>Visualiseur de contenus multiples</ContentListViewer>
+        <Search>Recherche</Search>
+        <Sitemap>Plan du site</Sitemap>
+      </appPages>
+    </label>
+  </UIWizardPageSelectLayoutForm>
+  <ClassicSite>
+    <label>Site Classic</label>
+  </ClassicSite>
+  <ACMESite>
+    <label>Site ACME</label>
+  </ACMESite>
+  <Views>
+    <label>
+      <wcm-view>Vue WCM</wcm-view>
+      <admin-view>Vue administration</admin-view>
+      <icon-view>Vue icônes</icon-view>
+      <thumbails-view>Vue vignettes</thumbails-view>
+      <cover-flow>Vue défilé</cover-flow>
+    </label>
+  </Views>
+  <!--/n  ####################################################################################
+          # ../src/main/webapp/WEB-INF/conf/wcm/artifacts/application-templates              #
+          #	/content-list-viewer/paginators/UIDefaultPaginator.gtmpl                         #
+          ####################################################################################
+  -->
+  <UIPaginatorDefault>
+    <label>
+      <previous>Précédent</previous>
+      <next>Suivant</next>
+    </label>
+  </UIPaginatorDefault>
+  <UIDefaultSearchResult>
+    <label>
+      <resutlsCaption>Résultats</resutlsCaption>
+      <ofAboutCaption>de environ</ofAboutCaption>
+      <forCaption>pour</forCaption>
+      <timeUnitCaption>secondes</timeUnitCaption>
+      <kb>kB</kb>
+      <noresult>Pas de résultat</noresult>
+      <similar>Pages où le même contenu apparait</similar>
+    </label>
+  </UIDefaultSearchResult>
+  <!--/n  ####################################################################################
+          # ../src/main/webapp/WEB-INF/conf/wcm/artifacts/application-templates              #
+          # /content-list-viewer/list-by-folder/UIContentListPresentationDefault.gtmpl       #
+          ####################################################################################
+  -->
+  <UIContentListPresentationDefault>
+    <label>
+      <action>
+        <refresh>Rafraîchir</refresh>
+      </action>
+      <readmore>En savoir plus</readmore>
+    </label>
+  </UIContentListPresentationDefault>
+  <!--/n  ####################################################################################
+  -->
+  <UITabPane>
+    <title>
+      <metadata>
+        <siteMetadata>Métadonnées du site</siteMetadata>
+      </metadata>
+    </title>
+  </UITabPane>
+  <ContentType>
+    <lable>
+      <SiteBreadcrum>Fil d'ariane</SiteBreadcrum>
+      <SiteNavigation>Navigation</SiteNavigation>
+      <Twocolumnslayoutwebcontent>Deux colonnes</Twocolumnslayoutwebcontent>
+      <Pictureonheadlayoutwebcontent>Image en entête</Pictureonheadlayoutwebcontent>
+      <Sitesearchboxwebcontent>Recherche</Sitesearchboxwebcontent>
+      <Freelayoutwebcontent>Disposition libre</Freelayoutwebcontent>
+    </lable>
+  </ContentType>
+  <portal>
+    <template>
+	  <home>Accueil</home>
+	  <news>Actualité</news>
+	  <products>Produits</products>
+	  <services>Services</services>
+	  <search>Recherche</search>
+	  <contact>Contact</contact>
+	  <about>A propos</about>
+	  <contentviewer>Visualiseur de contenus</contentviewer>
+	  <parameterizedviewer>Visualiseur de contenus paramétré</parameterizedviewer>
+	  <searchResult>Résultats de recherche</searchResult>
+	</template>
+  </portal>
+</bundle>

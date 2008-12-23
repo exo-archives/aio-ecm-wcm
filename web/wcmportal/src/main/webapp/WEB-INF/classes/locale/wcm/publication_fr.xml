@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+  <UIPublishingPanel>
+    <panelLeft>
+      <title>Ci-dessous sont les pages possibles où le contenu peut être affiché</title>
+    </panelLeft>
+    <panelRight>
+      <title>Ci-dessous sont les pages où le contenu est affiché</title>
+    </panelRight>
+    <currentPortal>
+      <title>Site courant</title>
+      <none>Aucun</none>
+    </currentPortal>
+    <currentNode>
+      <title>Noeud courant</title>
+      <none>Aucun</none>
+    </currentNode>
+  </UIPublishingPanel>
+  <UIPublicationComponentStatus>
+    <action>
+      <Close>Fermer</Close>
+    </action>
+  </UIPublicationComponentStatus>
+  <UITabPane>
+    <title>
+      <UIPublishingPanel>Panneau de publication</UIPublishingPanel>
+    </title>
+  </UITabPane>
+  <UIPublicationAction>
+    <msg>
+      <none>Aucun noeud de navigation sélectionné</none>
+      <duplicate>Le contenu a déjà été ajouté à la page</duplicate>
+      <wrongNode>Ceci n'est pas un noeud de page. Veuillez sélectionner un autre noeud.</wrongNode>
+    </msg>
+    <action>
+      <add>Publier le contenu dans la page</add>
+      <remove>Annuler la publication du contenu dans la page</remove>
+    </action>
+  </UIPublicationAction>
+  <UIPublishedPages>
+    <label>
+      <noitem>Ce contenu n'a été publié dans aucune page pour le moment</noitem>
+    </label>
+  </UIPublishedPages>
+</bundle>
+

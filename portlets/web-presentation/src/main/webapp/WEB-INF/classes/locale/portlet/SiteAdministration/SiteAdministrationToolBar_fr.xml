@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+  <UISiteAdminToolbar>
+    <action>
+      <AddPage>Ajouter une page</AddPage>
+      <EditPage>Editer la mise en page</EditPage>
+      <EditPortal>Editer le site</EditPortal>
+      <CreatePortal>Créer un site</CreatePortal>
+      <ChangePortal>Changer de site</ChangePortal>
+    </action>
+	<msg>
+	  <not-permission>Vous n'avez pas les droits nécessaires pour effectuer cette action.</not-permission>
+	</msg>
+  </UISiteAdminToolbar>
+</bundle>
+

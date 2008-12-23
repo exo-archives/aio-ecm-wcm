@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+  <portal>
+    <classic>
+      <home>Accueil</home>
+      <presentation>Contenu simple</presentation>
+      <listViewer>Contenus multiples</listViewer>
+      <search>Recherche</search>
+      <searchResult>Résultats de recherche</searchResult>
+      <products>Produit</products>
+      <register>S'enregistrer</register>
+      <sitemap>Plan du site</sitemap>
+      <parameterizedviewer>Visualiseur de contenu paramétré</parameterizedviewer>
+    </classic>
+  </portal>
+</bundle>
+
