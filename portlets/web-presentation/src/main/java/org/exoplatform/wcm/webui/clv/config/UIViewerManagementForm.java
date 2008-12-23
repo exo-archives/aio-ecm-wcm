@@ -371,7 +371,6 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
         UIFolderViewer uiFolderViewer = uiContentListViewerPortlet.getChild(UIFolderViewer.class);
         uiFolderViewer.getChildren().clear();
         uiFolderViewer.init();
-        Utils.refreshBrowser(portletRequestContext);
       }
       UIPopupContainer uiPopupContainer = (UIPopupContainer) viewerManagementForm.getAncestorOfType(UIPopupContainer.class);
       uiPopupContainer.deActivate();
