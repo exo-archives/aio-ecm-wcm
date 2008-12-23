@@ -302,8 +302,9 @@ public class UIWebContentSelectorForm extends UIForm implements UISelectable{
           wcmPublicationService.updateLifecyleOnChangePage(page);
         }
       }
-
       UIPortletConfig uiPortletConfig = uiWebContentSelector.getAncestorOfType(UIPortletConfig.class);
+      uiPortletConfig.getChildren().clear();
+      uiPortletConfig.init();
       uiPortletConfig.closePopupAndUpdateUI(event.getRequestContext(),true);
     }
   }
