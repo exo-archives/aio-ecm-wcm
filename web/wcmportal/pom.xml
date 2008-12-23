@@ -36,7 +36,7 @@
           <dependentWarExcludes>
             templates/,WEB-INF/conf/mail/,WEB-INF/conf/*.xml,WEB-INF/conf/**/*.xml, WEB-INF/conf/portal/,
             index.jsp,WEB-INF/web.xml,WEB-INF/webui-configuration.xml,WEB-INF/locale/navigation/**/*.properties,WEB-INF/locale/navigation/**/*.xml,                                           
-            WEB-INF/conf/script/groovy/SkinConfigScript.groovy,groovy/portal/webui/workspace/UIWorkingWorkspace.gtmpl
+            WEB-INF/conf/script/groovy/SkinConfigScript.groovy,groovy/portal/webui/workspace/UIWorkingWorkspace.gtmpl,groovy/portal/webui/workspace/UIPortalApplication.gtmpl
           </dependentWarExcludes>                       
         </configuration>
        </plugin>
