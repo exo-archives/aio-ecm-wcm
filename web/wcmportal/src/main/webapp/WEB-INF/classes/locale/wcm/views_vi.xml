@@ -30,5 +30,17 @@
       </action>
     </view>
   </SiteMetadata>
+  
+  <Category>
+  	<view>
+  		<label>Phân loại</label>
+  	</view>
+  </Category>
+  
+  <Tag>
+  	<view>
+  		<label>Thẻ</label>
+  	</view>
+  </Tag>
 </bundle>
 
