@@ -197,9 +197,9 @@ public class UISearchResult extends UIContainer {
 			if (keyword == null || keyword.trim().length() == 0) {
 				// for case "click button search in search form"
 				writer.write("<p>" + keyword_entered + "</p>");
-			} else {
+			} else { // suggestion-------------------------------------->
 				writer.write("<p>");
-				writer.write(message1 + " - <b>" + keyword + "</b> - " + message2 + "&nbsp;" + "<br><br>");
+				writer.write(message1 + " - <b style=\"font-size: 15px; font-style: italic;\">" + keyword + "</b> - " + message2 + "&nbsp;" + "<br><br>");
 				writer.write(suggestions + "<br>");
 				String keySuggestion = getSuggetions();
 				if (keySuggestion == null || keySuggestion.equals("null")) {

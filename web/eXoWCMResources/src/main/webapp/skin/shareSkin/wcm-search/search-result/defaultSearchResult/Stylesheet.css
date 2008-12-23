@@ -4,25 +4,28 @@
 }
 
 .UIWCMSearchPortlet .UIAdvanceSearchResultDefault .ResultHeader {
-	background:#F0F7F9 none repeat scroll 0 0;
-	border-top:1px solid #6B90DA;
-	overflow:hidden;
+	background: #F0F0F0 none repeat scroll 0 0;
+	border-top: 1px solid #BFBFBF;
+	overflow: hidden;
+	line-height: 25px;
 }
 
 .UIWCMSearchPortlet .UIAdvanceSearchResultDefault .ResultHeader .CaptionSearchType {
-	float:left;
-	padding:4px 0.5em 0 4px;
+	float: left;
+	padding: 0px 0.5em 0 4px;
+	font-size: 12px;
 }
 
 .UIWCMSearchPortlet .UIAdvanceSearchResultDefault .ResultHeader .SearchSummary {
-	margin:0.1em 0;
-	padding:0.2em;
-	text-align:right;
-	white-space:nowrap;
+	margin: 0.1em 0;
+	padding: 0px 4px;
+	text-align: right;
+	white-space: nowrap;
 }
 
 .UIWCMSearchPortlet .UIAdvanceSearchResultDefault .SearchItem {
-    padding-top: 10px;
+	padding: 10px 10px 5px;
+	line-height: 20px;
 }
 
 .UIWCMSearchPortlet .UIAdvanceSearchResultDefault  .ItemTitle a {

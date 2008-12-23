@@ -72,10 +72,10 @@ import org.exoplatform.services.wcm.publication.defaultlifecycle.Util;
     <%
     if (suggestion != null) {
       %>
-      <div>
+      <div style="padding: 10px 0px 0px; font-size: 15px; font-style: italic;">
         <%= newSuggestion %>
         :
-        <%= suggestion %>
+        <strong><%= suggestion %></strong>
       </div>
       <%
     }
