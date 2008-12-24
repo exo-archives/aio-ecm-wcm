@@ -54,8 +54,7 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
  */
 
 @ComponentConfig(
-    lifecycle = UIApplicationLifecycle.class,
-    template = "app:/groovy/SingleContentViewer/UISingleContentViewerPortlet.gtmpl"
+    lifecycle = UIApplicationLifecycle.class    
 )
 
 public class UISingleContentViewerPortlet extends UIPortletApplication {
