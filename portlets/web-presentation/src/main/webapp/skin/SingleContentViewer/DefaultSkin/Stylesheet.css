@@ -219,6 +219,7 @@
 	cursor:pointer;
 	height:16px;
 	width:16px;
+	margin: auto;
 }
 
 .UISingleContentViewerPortlet .UIWebContentPathSelector {
@@ -278,11 +279,6 @@
 .UISingleContentViewerPortlet .QuickEditBackButton a:hover {
 	text-decoration: underline;
 }
-
-.UISingleContentViewerPortlet .UICategorizing .ActionContainer {
-	padding-left: 50%;
-}
-
 
 .UISingleContentViewerPortlet .ExplorerTree .InnerExplorerTree {
 	padding: 0px;
