@@ -92,7 +92,7 @@ import org.exoplatform.services.wcm.publication.defaultlifecycle.Util;
       String itemUrl = uicomponent.getURL(node);
       List<String> listNavigationNodeUris = uicomponent.getURLs(node);
       if (!listNavigationNodeUris.isEmpty()) {
-        itemUrl = Util.parseMixedNavigationUri(listNavigationNodeUris.get(0))[1];
+        itemUrl = uicomponent.getPublishedNodeURI(listNavigationNodeUris.get(0));        
       }
       String itemExcerpt = resultNode.getExcerpt();
       String itemScore = resultNode.getScore();
@@ -129,8 +129,8 @@ import org.exoplatform.services.wcm.publication.defaultlifecycle.Util;
             %>
             <div class="ItemDetails" id="ItemDetails">
               <%
-              for (String navigationNodeUri : listNavigationNodeUris) {
-                itemUrl = Util.parseMixedNavigationUri(navigationNodeUri)[1];
+              for (int i = 1; i < listNavigationNodeUris.size(); i ++) {
+                itemUrl = uicomponent.getPublishedNodeURI(listNavigationNodeUris.get(i));                
                 %>
                 <div class="SearchItem">
                   <div class="$itemNodeType ItemTitle">
