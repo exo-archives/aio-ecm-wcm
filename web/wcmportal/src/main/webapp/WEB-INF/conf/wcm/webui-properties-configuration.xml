@@ -9,13 +9,13 @@
 			  <name>SCV.popup.size.in.edit.portlet.mode</name>
 			  <description>size of popup in edit mode of portlet</description>
 			  <property name="width" value="850"/>
-			  <property name="height" value="400"/>			                             
+			  <property name="height" value="525"/>			                             
 			</properties-param>
 			<properties-param>
 			  <name>SCV.popup.size.in.quickdedit</name>
 			  <description>size of popup in edit mode of portlet</description>
-			  <property name="width" value="1024"/>
-			  <property name="height" value="800"/>			                             
+			  <property name="width" value="950"/>
+			  <property name="height" value="750"/>			                             
 			</properties-param>			
 	 	</init-params>    
   </component>	   
