@@ -8,7 +8,7 @@
 	  if(uicomponent.isQuickEditable()) {%>
 	<div style="position: relative; height: 0px;" id="<%=quickEditingBlockId%>">
 		<div style="position: absolute; width: 65px; right: 0px; top: 0px">
-			<a href="<%=uicomponent.event("QuickEdit")%>" title="<%= _ctx.appRes("UIPresentationContainer.title");%>"><div class="QuickEdit"><span></span></div></a>
+			<a class="QuickEdit" href="<%=uicomponent.event("QuickEdit")%>" title="<%= _ctx.appRes("UIPresentationContainer.title");%>"></a>
 		</div>
 	</div>
 
