@@ -252,7 +252,7 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent{
     webContentPathSelector.setSourceComponent(uiWebContentSelector, new String[] {UIWebContentSelectorForm.PATH});
     uiPopup.setUIComponent(webContentPathSelector);
     webContentPathSelector.init();
-    uiPopup.setWindowSize(800, 600);
+    uiPopup.setWindowSize(600,400);
     uiPopup.setShow(true);
   }
 
@@ -271,7 +271,7 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent{
     dmsSelector.setSourceComponent(dmsSelectorForm, new String[] {UIDMSSelectorForm.PATH});
     uiPopup.setUIComponent(dmsSelector);
     dmsSelector.init();
-    uiPopup.setWindowSize(800, 600);
+    uiPopup.setWindowSize(600,400);
     uiPopup.setShow(true);
   }
 }

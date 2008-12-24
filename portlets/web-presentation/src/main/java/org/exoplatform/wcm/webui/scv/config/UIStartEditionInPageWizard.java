@@ -65,6 +65,8 @@ public class UIStartEditionInPageWizard extends UIContainer {
       UISingleContentViewerPortlet uiportlet = editMode.getAncestorOfType(UISingleContentViewerPortlet.class);
       UIPopupContainer popupContainer = uiportlet.getChild(UIPopupContainer.class);
       UIPortletConfig portletConfig = editMode.getChild(UIPortletConfig.class);
+      portletConfig.getChildren().clear();
+      portletConfig.addUIWelcomeScreen();
       WebUIPropertiesConfigService propertiesConfigService = editMode.getApplicationComponent(WebUIPropertiesConfigService.class);
       PopupWindowProperties popupProperties = (PopupWindowProperties)propertiesConfigService.getProperties(WebUIPropertiesConfigService.SCV_POPUP_SIZE_EDIT_PORTLET_MODE);
       popupContainer.activate(portletConfig,popupProperties.getWidth(),popupProperties.getHeight());            

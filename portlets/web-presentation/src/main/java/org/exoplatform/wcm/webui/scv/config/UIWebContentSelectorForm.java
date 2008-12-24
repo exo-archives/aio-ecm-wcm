@@ -286,7 +286,9 @@ public class UIWebContentSelectorForm extends UIForm implements UISelectable{
       WCMPublicationService wcmPublicationService = uiWebContentSelector.getApplicationComponent(WCMPublicationService.class);
       UIPortletConfig portletConfig = uiWebContentSelector.getAncestorOfType(UIPortletConfig.class);
       if (portletConfig.isEditPortletInCreatePageWizard()) {
-        wcmPublicationService.enrollNodeInLifecycle(webContent, lifecycleName);
+        if (!wcmPublicationService.isEnrolledInWCMLifecycle(webContent)) {
+          wcmPublicationService.enrollNodeInLifecycle(webContent, lifecycleName);          
+        }
       } else {
         String pageId = Util.getUIPortal().getSelectedNode().getPageReference();
         UserPortalConfigService upcService = uiWebContentSelector.getApplicationComponent(UserPortalConfigService.class);

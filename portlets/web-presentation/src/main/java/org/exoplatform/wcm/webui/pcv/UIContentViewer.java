@@ -198,9 +198,10 @@ public class UIContentViewer extends UIBaseNodePresentation {
     Object object = requestWrapper.getAttribute("ParameterizedContentViewerPortlet.data.object");
 
     try {
-      parameters = URLDecoder.decode(StringUtils.substringAfter(requestURI,
-                                                                portalURI.concat(pageNodeSelected
-                                                                    + "/")), "UTF-8");
+      parameters = URLDecoder.decode(StringUtils.substringAfter(requestURI,portalURI.concat(pageNodeSelected + "/")), "UTF-8");
+      System.out.println("========>"+ parameters);
+      parameters = parameters.replaceAll("%20"," ");
+      System.out.println("========>"+ parameters);
     } catch (UnsupportedEncodingException e) { }
     if (!parameters.matches(PARAMETER_REGX)) {
       renderErrorMessage(context, CONTENT_NOT_FOUND_EXC);

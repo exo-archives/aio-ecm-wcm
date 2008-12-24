@@ -277,7 +277,9 @@ public class UIDMSSelectorForm extends UIForm implements UISelectable{
       WCMPublicationService wcmPublicationService = uiDMSSelectorForm.getApplicationComponent(WCMPublicationService.class);
       UIPortletConfig portletConfig = uiDMSSelectorForm.getAncestorOfType(UIPortletConfig.class);
       if (portletConfig.isEditPortletInCreatePageWizard()) {
-        wcmPublicationService.enrollNodeInLifecycle(webContent, lifecycleName);
+        if (!wcmPublicationService.isEnrolledInWCMLifecycle(webContent)) {
+          wcmPublicationService.enrollNodeInLifecycle(webContent, lifecycleName);          
+        }
       } else {
         String pageId = Util.getUIPortal().getSelectedNode().getPageReference();
         UserPortalConfigService upcService = uiDMSSelectorForm.getApplicationComponent(UserPortalConfigService.class);
