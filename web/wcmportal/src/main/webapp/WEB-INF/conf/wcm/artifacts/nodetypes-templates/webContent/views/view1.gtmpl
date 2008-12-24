@@ -31,7 +31,9 @@
 	if((css != null) && (css.length() > 0)) {
 %>
 		<style type="text/css">
+		/* <![CDATA[ */			
 			<%=css%>
+		/* ]]> */
 		</style>
 <%
 	}
@@ -39,7 +41,9 @@
 
 <% if((js != null) && (js.length() > 0)) {%>
 	<script type="text/javascript">
+	/* <![CDATA[ */	
 		<%=js%>
+	/* ]]> */		
 	</script>
 <% } %>
 
