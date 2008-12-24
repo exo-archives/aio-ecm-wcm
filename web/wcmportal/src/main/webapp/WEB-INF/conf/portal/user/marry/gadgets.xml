@@ -2,5 +2,8 @@
 <gadgets>
 	<owner-type>user</owner-type>
 	<owner-id>marry</owner-id>
-	
+	<container id="Sample">
+		<name>My Gadgets</name>
+		<description>Sample's Description</description>  	
+  </container>	
 </gadgets>
