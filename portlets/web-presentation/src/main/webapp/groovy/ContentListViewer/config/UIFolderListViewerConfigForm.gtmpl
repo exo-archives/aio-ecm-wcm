@@ -10,7 +10,7 @@
 	String fieldName;
 %>
 <div class="UIForm $uicomponent.id">
-	<div class="TitleBar" style="background: white;">
+	<div class="TitleBar">
 		<b><%=_ctx.appRes(uicomponent.getName() + ".title")%></b>	
 	</div>
   <%uiform.begin()%>
