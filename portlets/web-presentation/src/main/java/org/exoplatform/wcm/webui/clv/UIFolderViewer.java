@@ -96,9 +96,7 @@ public class UIFolderViewer extends UIContainer implements RefreshDelegateAction
       return;
     }
     if (nodeIterator.getSize() == 0) {
-      messageKey = "UIMessageBoard.msg.folder-empty";
-      canViewListContent = false;
-      return;
+      messageKey = "UIMessageBoard.msg.folder-empty";      
     }
     PortletPreferences portletPreferences = getPortletPreference();
     int itemsPerPage = Integer.parseInt(portletPreferences.getValue(UIContentListViewerPortlet.ITEMS_PER_PAGE,

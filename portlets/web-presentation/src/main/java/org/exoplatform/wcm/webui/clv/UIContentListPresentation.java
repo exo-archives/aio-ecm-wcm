@@ -204,7 +204,7 @@ public class UIContentListPresentation extends UIContainer {
    * 
    * @return the uI page iterator
    */
-  public UIPageIterator getUIPageIterator() {
+  public UIPageIterator getUIPageIterator() {    
     return uiPaginator;
   }
 
@@ -222,7 +222,7 @@ public class UIContentListPresentation extends UIContainer {
    * 
    * @throws Exception the exception
    */
-  public List getCurrentPageData() throws Exception {
+  public List getCurrentPageData() throws Exception {    
     return uiPaginator.getCurrentPageData();
   }
 
