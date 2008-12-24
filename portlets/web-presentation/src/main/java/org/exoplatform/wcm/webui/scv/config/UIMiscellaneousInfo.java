@@ -18,10 +18,12 @@ package org.exoplatform.wcm.webui.scv.config;
 
 import javax.portlet.PortletPreferences;
 
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -91,6 +93,9 @@ public class UIMiscellaneousInfo extends UIForm {
       prefs.setValue("ShowTags", Boolean.toString(isShowTags));
       prefs.setValue("ShowCategories", Boolean.toString(isShowCategories));
       prefs.store();
+      UIApplication uiApplication = uiMiscellaneousInfo.getAncestorOfType(UIApplication.class);
+      uiApplication.addMessage(new ApplicationMessage("UIMiscellaneousInfo.msg-successfully", null, ApplicationMessage.INFO));
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
     }     
   }
 

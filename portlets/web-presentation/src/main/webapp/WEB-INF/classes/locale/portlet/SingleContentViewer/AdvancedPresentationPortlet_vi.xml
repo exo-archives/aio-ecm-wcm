@@ -44,6 +44,7 @@
     <action>
       <SaveToPortletPreference>Lưu lại</SaveToPortletPreference>
     </action>
+    <msg-successfully>Bạn đã lưu thành công!</msg-successfully>
   </UIMiscellaneousInfo>
   <!--/n  ###################################################################
   # org.exoplatform.wcm.webui.scv.config.UIQuickCreationWizard      #
