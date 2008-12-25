@@ -80,7 +80,7 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
    * @throws Exception the exception
    */
   public UISingleContentViewerPortlet() throws Exception {    
-    activateMode(mode_) ;
+    activateMode(mode_) ;    
   }
 
   /**
@@ -91,8 +91,12 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
    * @throws Exception the exception
    */
   private void activateMode(PortletMode mode) throws Exception {
-    getChildren().clear() ;    
-    addChild(UIPopupContainer.class, null, null);
+    getChildren().clear() ;        
+    PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
+    //only add popup container in private mode to pass w3c validator
+    if(portletRequestContext.getRemoteUser() != null) {
+      addChild(UIPopupContainer.class, null, null);
+    }
     if(PortletMode.VIEW.equals(mode)) {
       addChild(UIPresentationContainer.class, null, UIPortletApplication.VIEW_MODE);
     } else if (PortletMode.EDIT.equals(mode)) {
@@ -105,8 +109,7 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
       portletConfig.setRendered(true);      
       WebUIPropertiesConfigService propertiesConfigService = getApplicationComponent(WebUIPropertiesConfigService.class);
       PopupWindowProperties popupProperties = (PopupWindowProperties)propertiesConfigService.getProperties(WebUIPropertiesConfigService.SCV_POPUP_SIZE_EDIT_PORTLET_MODE);
-      maskPopupContainer.activate(portletConfig,popupProperties.getWidth(),popupProperties.getHeight());
-      PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
+      maskPopupContainer.activate(portletConfig,popupProperties.getWidth(),popupProperties.getHeight());      
       portletRequestContext.addUIComponentToUpdateByAjax(maskPopupContainer);
     }
   }
