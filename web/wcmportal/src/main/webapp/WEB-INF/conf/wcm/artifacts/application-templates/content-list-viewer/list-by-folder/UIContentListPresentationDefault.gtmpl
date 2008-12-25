@@ -22,8 +22,8 @@ import org.exoplatform.wcm.webui.clv.UIContentListViewerPortlet;
 		String labelRefreshAction = _ctx.appRes("UIContentListPresentationDefault.label.action.refresh");		
 		if (uicomponent.getUIPageIterator().getAvailable() == 0) {
 		%>
-			<div style="height: 100px; text-align: center; font-size: 13px; background: white; padding: 10px; margin: 5px;">
-			<%= uicomponent.getParent.getMessage() %>
+			<div style="height: 20px; text-align: center; font-size: 13px; background: white; padding: 10px; margin: 5px;">
+			<%= uicomponent.getParent().getMessage() %>
 			</div>
 		<%
 		} else {			
