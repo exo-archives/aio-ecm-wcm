@@ -12,12 +12,11 @@
 	    <show-info-bar>false</show-info-bar>
     </application>	  	
       
-	  <container id="DefaultPortalContainer" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
+	  <container id="DefaultPortalContainer" template="system:/groovy/wcm/webui/container/UIDivColumnContainer.gtmpl">
       <container id="Banner" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
         <application>
           <instance-id>portal#classic:/web-presentation/SingleContentViewer/classic-banner</instance-id>
-          <theme>Default:DefaultTheme::Vista:VistaTheme::Mac:MacTheme</theme>
-          <properties size="0"/>
+          <show-info-bar>false</show-info-bar>
         </application>
       </container>
       <container id="AccessContainer" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">

@@ -1,3 +1,21 @@
+.UIWCMColumnContainer {
+  background: white ;
+  border: none ;
+  margin: auto;
+  overflow: hidden;
+  background: white url('/portal/rest/jcr/repository/collaboration/sites content/live/classic/web contents/site artifacts/banner/Default/medias/images/BgBanner.png') repeat-x;
+}
+
+.UIWCMColumnContainer .BannerTDContainer {
+  float: left;
+  width: 550px;
+  overflow: hidden; 
+}
+
+.UIWCMColumnContainer .AccessContainerTDContainer {
+	float: right;
+}
+
 #UIContainer-DefaultPortalContainer {
 	padding: 0;
 } 
