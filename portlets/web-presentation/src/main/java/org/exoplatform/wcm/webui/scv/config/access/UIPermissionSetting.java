@@ -17,6 +17,7 @@
 package org.exoplatform.wcm.webui.scv.config.access;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -27,6 +28,7 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
+import org.exoplatform.ecm.webui.form.UIFormInputSetWithAction;
 import org.exoplatform.ecm.webui.selector.UIGroupMemberSelector;
 import org.exoplatform.ecm.webui.selector.UISelectable;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -48,7 +50,6 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormStringInput;
-import org.exoplatform.webui.form.ext.UIFormInputSetWithAction;
 
 /**
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
@@ -93,11 +94,12 @@ public class UIPermissionSetting extends UIForm implements UISelectable {
   public UIPermissionSetting() throws Exception {
     UIFormInputSetWithAction permissionInputSet = new UIFormInputSetWithAction(USERS_INPUTSET);       
     UIFormStringInput formStringInput = new UIFormStringInput(USERS_STRINGINPUT, USERS_STRINGINPUT,
-        null);    
+        null);
     formStringInput.setEditable(false);
     permissionInputSet.addChild(formStringInput);
     permissionInputSet.setActionInfo(USERS_STRINGINPUT, new String[] { "SelectUser",
         "SelectMember", "AddAny" });
+    permissionInputSet.showActionInfo(true);
     addChild(permissionInputSet);
     addChild(new UIFormCheckBoxInput<String>(ACCESSIBLE, ACCESSIBLE, null));
     addChild(new UIFormCheckBoxInput<String>(EDITABLE, EDITABLE, null));
