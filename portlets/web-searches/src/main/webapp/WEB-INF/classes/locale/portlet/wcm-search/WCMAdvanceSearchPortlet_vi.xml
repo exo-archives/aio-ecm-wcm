@@ -67,7 +67,7 @@
   <UISearchResult>
     <msg>
       <your-search>Không tìm thấy</your-search>
-      <did-not-match>trong tài liệu hay trang nào.</did-not-match>
+      <did-not-match>trong </did-not-match>
       <suggestions>Đề xuất:</suggestions>
       <try-different-key>Hãy thử những từ khoá khác.</try-different-key>
       <keyword_entered>Xin vui lòng nhập vào từ khoá tìm kiếm!</keyword_entered>

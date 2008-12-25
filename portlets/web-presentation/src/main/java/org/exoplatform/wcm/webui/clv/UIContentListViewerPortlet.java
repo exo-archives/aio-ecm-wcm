@@ -22,6 +22,7 @@ import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.clv.config.UIPortletConfig;
 import org.exoplatform.wcm.webui.clv.config.UIStartEditionInPageWizard;
 import org.exoplatform.webui.application.WebuiApplication;
@@ -153,13 +154,9 @@ public class UIContentListViewerPortlet extends UIPortletApplication {
    * @throws Exception the exception
    */
   public boolean canEditPortlet() throws Exception {
-    PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
-    String portalName = Util.getUIPortal().getName();
-    String userId = context.getRemoteUser();
-    DataStorage dataStorage = getApplicationComponent(DataStorage.class);
-    PortalConfig portalConfig = dataStorage.getPortalConfig(portalName);
-    UserACL userACL = getApplicationComponent(UserACL.class);
-    return userACL.hasEditPermission(portalConfig, userId);
+    PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();    
+    String userId = context.getRemoteUser();       
+    return Utils.canEditCurrentPortal(userId);
   }
 
 }

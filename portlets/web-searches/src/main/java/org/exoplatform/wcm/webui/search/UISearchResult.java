@@ -191,7 +191,7 @@ public class UISearchResult extends UIContainer {
       } else { // suggestion-------------------------------------->
         writer.write("<p>");
         writer.write(message1 + " - <b style=\"font-size: 15px; font-style: italic;\">" + keyword
-            + "</b> - " + message2 + "&nbsp;" + "<br><br>");
+            + "</b> - " + message2 + "&nbsp;" + getResultType().toLowerCase() + "&nbsp;" + "<br><br>");
         writer.write(suggestions + "<br>");
         String keySuggestion = getSuggetions();
         if (keySuggestion == null || keySuggestion.equals("null")) {
