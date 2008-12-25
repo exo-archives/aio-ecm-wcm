@@ -76,16 +76,24 @@
 	width: 140px;
 }
 
-.UISingleContentViewerPortlet .ShowStepInfo {
+.UISingleContentViewerPortlet .LeftShowStepInfo {
 	float: left;
-	background: url('background/ShowStepInfo.gif') no-repeat;
-	width: 90px;
-	height: 25px; line-height: 25px;
+	padding-left: 28px;
 	cursor: pointer;
 	margin: 4px 5px;
-	padding-left: 27px;
+	background: url('background/ShowStepInfo.gif') no-repeat left top;
+}
+
+.UISingleContentViewerPortlet .RightShowStepInfo {
+	background: url('background/ShowStepInfo.gif') no-repeat right top;
+	padding-right: 7px;
+}
+
+.UISingleContentViewerPortlet .MiddleShowStepInfo {
+	background: url('background/ShowStepInfo.gif') repeat-x center -25px;
 	color: #275377;
 	font-weight: bold;
+	height: 25px; line-height: 25px;
 }
 
 .UISingleContentViewerPortlet .UIWizard .UIWizardPageSetInfo .PageNodeContainer {
@@ -257,6 +265,10 @@
 .UISingleContentViewerPortlet .QuickEditContainer .UIFormGrid td.FieldLabel {
 	white-space: nowrap;
 	width: 75px;
+}
+
+.UINameWebContentForm .UIFormGrid td.FieldLabel {
+	white-space: nowrap;
 }
 
 .UISingleContentViewerPortlet .QuickEditContainer .UIFormGrid {

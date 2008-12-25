@@ -1,13 +1,23 @@
-.UIWCMSearchPortlet .UIAdvanceSearchResultDefault {
-	padding: 10px;		
+.UIWCMSearchPortlet {
 	background: white;
+	padding: 1px;
+}
+
+.UIWCMSearchPortlet .UIAdvanceSearchResultDefault {
+	margin: 10px;		
+	border: 1px solid #b7b7b7;
+}
+
+.UIWCMSearchPortlet .UIAdvanceSearchResultDefault p {
+	padding: 0px 10px;
 }
 
 .UIWCMSearchPortlet .UIAdvanceSearchResultDefault .ResultHeader {
-	background: #F0F0F0 none repeat scroll 0 0;
-	border-top: 1px solid #BFBFBF;
-	overflow: hidden;
+	background: url(/eXoWCMResources/skin/shareSkin/content-list-viewer/list-by-folder/defaultFolderListViewer/icons/BgCategoryTitle1x25.gif) repeat-x;
+	border-bottom: 1px solid #B7B7B7;
 	line-height: 25px;
+	overflow: hidden;
+	padding: 0px 5px;
 }
 
 .UIWCMSearchPortlet .UIAdvanceSearchResultDefault .ResultHeader .CaptionSearchType {
@@ -17,7 +27,6 @@
 }
 
 .UIWCMSearchPortlet .UIAdvanceSearchResultDefault .ResultHeader .SearchSummary {
-	margin: 0.1em 0;
 	padding: 0px 4px;
 	text-align: right;
 	white-space: nowrap;
