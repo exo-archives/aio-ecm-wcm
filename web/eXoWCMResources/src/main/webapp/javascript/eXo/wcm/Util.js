@@ -193,11 +193,18 @@ UIPopupWindow.prototype.init = function(popupId, isShow, isResizable, showCloseB
 	
 	popup.style.visibility = "hidden" ;
 	if(isShow == true) {
-		var iframes = DOMUtil.findDescendantsByTagName(popup, "iframe") ;
+		var iframes = DOMUtil.findDescendantsByTagName(popup, "iframe") ;						
 		if(iframes.length > 0) {
 			setTimeout("eXo.webui.UIPopupWindow.show('" + popupId + "'," + isShowMask + ")", 500) ;
+		} else if(eXo.core.Browser.browserType == 'ie' ) {		
+		  var pageWinzard = DOMUtil.findDescendantById(portalApp, "UIPageCreationWizard") ;				  
+		  if(pageWinzard) {
+			setTimeout("eXo.webui.UIPopupWindow.show('" + popupId + "'," + isShowMask + ")", 1) ;
+		  } else {
+			this.show(popup, isShowMask) ;
+		  }
 		} else {			
-			setTimeout("eXo.webui.UIPopupWindow.show('" + popupId + "'," + isShowMask + ")", 50) ;
+			this.show(popup, isShowMask) ;
 		}
 	}
 } ;
