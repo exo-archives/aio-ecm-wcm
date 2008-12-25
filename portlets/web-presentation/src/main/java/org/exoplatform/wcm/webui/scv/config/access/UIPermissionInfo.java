@@ -29,13 +29,13 @@ import javax.jcr.Node;
 import javax.jcr.Session;
 
 import org.exoplatform.commons.utils.ObjectPageList;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.access.AccessControlEntry;
 import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.access.SystemIdentity;
 import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.wcm.webui.scv.config.UIContentDialogForm;
 import org.exoplatform.wcm.webui.scv.config.UIQuickCreationWizard;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -216,8 +216,7 @@ public class UIPermissionInfo extends UIContainer {
       .getApplicationComponent(RepositoryService.class);
       ManageableRepository manageableRepository = repositoryService.getCurrentRepository();
       String workspace = manageableRepository.getConfiguration().getDefaultWorkspaceName();
-      Session session = SessionProvider.createSystemProvider().getSession(workspace,
-          manageableRepository);
+      Session session = SessionProviderFactory.createSessionProvider().getSession(workspace, manageableRepository);
       UIApplication uiApp = permissionInfo.getAncestorOfType(UIApplication.class);
       String name = event.getRequestContext().getRequestParameter(OBJECTID);
       Node webContent = permissionInfo.getCurrentWebContent();
