@@ -208,6 +208,7 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent{
     popupAction.deActivate() ;                
     requestContext.addUIComponentToUpdateByAjax(popupAction) ;
     if(isUpdate && !isEditPortletInCreatePageWizard()) {
+      getChildren().clear();
       Utils.refreshBrowser((PortletRequestContext)requestContext);
     }
   }
