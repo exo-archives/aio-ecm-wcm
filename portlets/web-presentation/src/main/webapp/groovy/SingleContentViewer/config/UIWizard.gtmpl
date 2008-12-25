@@ -74,7 +74,7 @@ style="!width: expression(this.previousSibling.offsetWidth - 2 + 'px'); margin: 
 							<div class="WizardControlBar">
 								<div class="OverflowContainer">
 									<% String stepInfoTitle =  _ctx.appRes(uicomponent.getId() + ".label.stepInfo"); %>
-									<div title="$stepInfoTitle" class="ShowStepInfo" onclick="showDivBlock(this, 'PageNodeContainer', 'SelectedPageInfo')">Show step info</div>
+									<div title="$stepInfoTitle" class="ShowStepInfo" onclick="showDivBlock(this, 'PageNodeContainer', 'SelectedPageInfo')"><%= _ctx.appRes(uicomponent.getId() + ".label.stepInfo") %></div>
 									<div class="ActionBar">
 										<div class="UIAction">
 											<table class="ActionContainer">
