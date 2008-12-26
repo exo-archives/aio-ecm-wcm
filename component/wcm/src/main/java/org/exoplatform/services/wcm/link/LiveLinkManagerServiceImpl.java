@@ -16,6 +16,7 @@
  */
 package org.exoplatform.services.wcm.link;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -34,6 +35,8 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.SimpleHttpConnectionManager;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.logging.Log;
+import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.container.xml.PropertiesParam;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.cache.ExoCache;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -54,27 +57,46 @@ public class LiveLinkManagerServiceImpl implements LiveLinkManagerService {
   private WCMConfigurationService  configurationService;
   private RepositoryService        repositoryService;
   private LivePortalManagerService livePortalManagerService;
+  private String internalServerPath;
+
   private static Log log = ExoLogger.getLogger(LiveLinkManagerServiceImpl.class); 
-  
+
   public LiveLinkManagerServiceImpl(
       WCMConfigurationService   configurationService, 
       RepositoryService         repositoryService, 
       LivePortalManagerService  livePortalManagerService,
-      CacheService              cacheService) throws Exception {
+      CacheService              cacheService,
+      InitParams initParams) throws Exception {
     this.configurationService = configurationService;
     this.repositoryService = repositoryService;
     this.livePortalManagerService = livePortalManagerService;
-    this.brokenLinksCache = cacheService.getCacheInstance(this.getClass().getName());    
+    this.brokenLinksCache = cacheService.getCacheInstance(this.getClass().getName());
+    readServerConfig(initParams);
   }
-  
+
   public List<LinkBean> getActiveLinks(String portalName) throws Exception {
     return null;
   }
-  
+
+  private void readServerConfig(InitParams initParams) {
+    try {
+      PropertiesParam propertiesParam = initParams.getPropertiesParam("server.config");
+      String scheme = propertiesParam.getProperty("scheme");
+      String hostName = propertiesParam.getProperty("hostName");
+      String port = propertiesParam.getProperty("port");
+      StringBuilder builder = new StringBuilder();
+      builder.append(scheme).append("://").append(hostName).append(":").append(port);
+      internalServerPath = builder.toString();
+      log.info("server path for internal link validation:" + internalServerPath);
+    } catch (Exception e) {
+      log.error("The internal server config: scheme, hostName, port need be configed as parameter");
+    }    
+  }
+
   public List<String> getActiveLinks(Node webContent) throws Exception {
     return null;
   }
-    
+
   @SuppressWarnings("unchecked")
   public List<LinkBean> getBrokenLinks(String portalName) throws Exception {
     SessionProvider sessionProvider = SessionProvider.createSystemProvider();
@@ -112,15 +134,15 @@ public class LiveLinkManagerServiceImpl implements LiveLinkManagerService {
     }
     return listBrokenUrls;
   }
-  
+
   public List<LinkBean> getUncheckedLinks(String portalName) throws Exception {
     return null;
   }
-  
+
   public List<String> getUncheckedLinks(Node webContent) throws Exception {
     return null;
   }
-  
+
   public void validateLink() throws Exception {
     Collection<NodeLocation> nodeLocationCollection = configurationService.getAllLivePortalsLocation();
     for (NodeLocation nodeLocation : nodeLocationCollection) {
@@ -140,7 +162,7 @@ public class LiveLinkManagerServiceImpl implements LiveLinkManagerService {
     Session session = portal.getSession();
     updateLinkStatus(session, "select * from exo:linkable where jcr:path like '" + path + "/%'");
   }
-  
+
   protected void updateLinkStatus(Session session, String queryCommand) throws Exception{
     List<String> listBrokenLinks = new ArrayList<String>();
     ValueFactory valueFactory = session.getValueFactory();
@@ -175,15 +197,24 @@ public class LiveLinkManagerServiceImpl implements LiveLinkManagerService {
     }
     session.save();
   }
-  
+
   protected String getLinkStatus(String strUrl) {
     try {
+      String fullUrl = strUrl;
+      if(strUrl.startsWith("/")) {
+        fullUrl = internalServerPath + strUrl;
+      }                    
+      fullUrl = fullUrl.replaceAll(" ","%20");
       HttpClient httpClient = new HttpClient(new SimpleHttpConnectionManager());      
-      GetMethod getMethod = new GetMethod(strUrl);      
+      GetMethod getMethod = new GetMethod(fullUrl);      
       if(httpClient.executeMethod(getMethod) == 200) {
         return LinkBean.STATUS_ACTIVE;
       }
-    } catch (Exception e) {}
+    } catch (Exception e) {
+      if(log.isDebugEnabled()) {
+        log.debug("Exception when validate link:" + strUrl , e);
+      }      
+    }
     return LinkBean.STATUS_BROKEN;
   }
 

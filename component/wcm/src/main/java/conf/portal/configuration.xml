@@ -76,7 +76,16 @@
   
   <component>
     <key>org.exoplatform.services.wcm.link.LiveLinkManagerService</key>
-    <type>org.exoplatform.services.wcm.link.LiveLinkManagerServiceImpl</type>    
+    <type>org.exoplatform.services.wcm.link.LiveLinkManagerServiceImpl</type>
+    <init-params>
+    	<properties-param>
+	      <name>server.config</name>
+	      <description>server.address</description>
+	      <property name="scheme" value="http"/>
+	      <property name="hostName" value="localhost"/>		          
+	      <property name="port" value="8080"/>	      
+		  </properties-param>      
+	  </init-params>        
   </component>
               
   <component>
