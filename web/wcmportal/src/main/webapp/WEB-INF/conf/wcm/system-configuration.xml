@@ -46,8 +46,22 @@
             </object>
           </object-param>                                                                                                   	    
 	   </init-params>
-  </component>    
-  
+  </component>
+      
+  <component>
+    <key>org.exoplatform.services.wcm.link.LiveLinkManagerService</key>
+    <type>org.exoplatform.services.wcm.link.LiveLinkManagerServiceImpl</type>
+    <init-params>
+    	<properties-param>
+	      <name>server.config</name>
+	      <description>server.address</description>
+	      <property name="scheme" value="http"/>
+	      <property name="hostName" value="localhost"/>		          
+	      <property name="port" value="8080"/>	      
+		  </properties-param>      
+	  </init-params>        
+  </component>
+    
   <external-component-plugins>
     <target-component>org.exoplatform.portal.config.UserACL</target-component>
     <component-plugin>
@@ -120,8 +134,7 @@
 	    </init-params>
 	  </component-plugin>	  
 	</external-component-plugins>
-
-<!--		
+			
   <external-component-plugins>
     <target-component>org.exoplatform.services.scheduler.JobSchedulerService</target-component>    
     <component-plugin>
@@ -141,7 +154,7 @@
       </init-params>          
     </component-plugin>
   </external-component-plugins>
- -->
+  
   <external-component-plugins>
     <target-component>org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator</target-component>
     <component-plugin>
