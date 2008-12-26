@@ -1,0 +1,555 @@
+====================================================================================================
+								eXo WCM 1.0 FINAL RELEASE NOTES								
+Product name: eXo Web Content Management
+Release version: 1.0-final
+Main page: http://wiki.exoplatform.org/xwiki/bin/view/WCM/
+====================================================================================================
+
+I. Introduction
+Web content management (WCM) solution is emerging to help webmasters who handle all tasks needed to run a website, including development, deployment, design, content publication and monitoring. WCM allows making website operations more easily. In addition, the webmasters are no more the only actors in the splotlight. Each member of the community is welcomed to collaborate and contribute depending on his/her rights. All these features contribute to make the website management more agile and less onerous.
+
+System Requirements
+	Web Browser: IE6, IE7, FF2, FF3, Safari, Google Chrome. Best for Frirefox 3, IE7
+	JVM: version 1.5.0_xx only
+	Application Server : Tomcat, JBoss, Jonas, Websphere
+	Building Tools: Maven 2.0.6 and up		
+Resources and links
+	Company site        http://www.exoplatform.com
+	Community JIRA      http://jira.exoplatform.org
+	Community site      http://www.exoplatform.org
+	Developers wiki     http://wiki.exoplatform.org	
+	Mailing list: 	    exoplatform@objectweb.org
+	
+II. Main features				
+   1. Quickly setup a website
+   2. Managing multiple sites in one only place.
+   3. Easy to create a web content.
+   4. Support content categorization, comments, versioning, permissions.
+   5. Media library.
+   6. Advanced CSS & Java Script support in web contents.
+   7. Fast access and edition features
+   8. Web pages management.
+   9. Using Web DAV.
+  10. Easy to publish web content.
+  11. Search Engine Optimization
+  12. Powerfull search: support scoring, hilighting, excerpt, wildcard,fuzzy, spellcheck & suggestion
+  13. Broken links detection engine
+  14. Simple language for integrating dynamic content
+  15. Simple or multiple content viewers
+  16. Simply and quickly manage your site with Site Administration Toolbar
+  
+III. Changelog history
+** Bug
+    * [WCM-30] - Should not limit links to ECM documents to nt:file
+    * [WCM-32] - Make the array edition consistent with array visualization
+    * [WCM-37] - UI issue in UINode explorer
+    * [WCM-69] - Issue while merging Portal CSS
+    * [WCM-93] - CUSTOMER PROJECT: In web content, when creating a link to a document, selected text is replaced by document name
+    * [WCM-104] - Make sure the Portal CSS style is merged
+    * [WCM-106] - Make inline edition icons semi transmarent
+    * [WCM-107] - Review the upload dialog in FCK Editor
+    * [WCM-110] - Not have Browse button to choose path for Location at create content page
+    * [WCM-111] - Can edit page content, when haven't signed in.
+    * [WCM-113] - Error dislay when add category for page.
+    * [WCM-114] - Can't refresh- Without login still can edit banner and access Exo start.
+    * [WCM-115] - After sign in, sitll displayting login form.
+    * [WCM-116] - When edit footer --> not type any word on footer text --> click save --> display message "Unknown error"
+    * [WCM-117] - Edit logo can still upload .doc file.
+    * [WCM-118] - Not display Edit icon and Exo logo on IE browser
+    * [WCM-119] - Can't view after create content page
+    * [WCM-120] - Can't edit footer on IE
+    * [WCM-121] - Error with edit banner
+    * [WCM-122] - Error display "Login" button
+    * [WCM-123] - "Unknown error" message at step 1 when edit current web content.
+    * [WCM-124] - Bad interface with Login
+    * [WCM-125] - Cannot search document or page in search portlet
+    * [WCM-126] - After login--> choose presentation-->  lick portlet mode -->click edit function--> have nothing.
+    * [WCM-127] - Not have login button
+    * [WCM-128] - Double quick edit icon
+    * [WCM-129] - change content of massage confirm delete at step 3 on presentation.
+    * [WCM-132] - After add link successfully still display form insert link.
+    * [WCM-133] - Should have "back" button on step 2 when edit we content in presentation.
+    * [WCM-134] - Can't view image of public page, when user haven't logined.
+    * [WCM-135] - Mistake with permission.
+    * [WCM-136] - When login by John user don't have edit footer icon.
+    * [WCM-137] - Should have message to inform.
+    * [WCM-139] - forced field can be blank.
+    * [WCM-140] - Bad interface with permission form when create web content.
+    * [WCM-141] - should omit edit icon on permission form when create web content.
+    * [WCM-142] - should change content of message when delete permission of root user.
+    * [WCM-143] - Error interface after edit banner
+    * [WCM-144] - Error when search name field type only by press space bar
+    * [WCM-146] - In searchService, if 2 pages have same content, the key is the same in cachedPages_, so, only one is cached
+    * [WCM-147] - Unkown error at step 3 of presentation navigation.
+    * [WCM-149] - When click on abort button still display message "The field "name" is required"
+    * [WCM-150] - Don't have login button with IE6 
+    * [WCM-151] - don't have any edit when unchecked quick edit
+    * [WCM-152] - When double click on save button at step 1--> display "unknown error message"
+    * [WCM-153] - Can't edit if login by user John
+    * [WCM-156] - CSS stylesheet is not retrieved when using ACP
+    * [WCM-157] - Link in FCK Editor plugin do not work
+    * [WCM-159] - Make sure Document search works
+    * [WCM-162] - Cannot view a content in public mode
+    * [WCM-163] - At step 4 wen create web content by presentation --> checked in show comment--> bad interface
+    * [WCM-166] - When user didn't choose any node to upload document--> can't upload but don't display any message.
+    * [WCM-168] - Error permission.
+    * [WCM-173] - Should be able to have an empty CSS
+    * [WCM-175] - after edit banner, not change logo --> logout--> can't see exo logo.
+    * [WCM-178] - IE6- After login, can't see eXo logo.
+    * [WCM-179] - IE6- bad interface with icons on banner.
+    * [WCM-180] - IE6-login icon was bad interface.
+    * [WCM-181] - IE6-very small edit banner form and from edit banner form to main form is very far.
+    * [WCM-182] - Can't delete on form upload image at step 1 of presentation
+    * [WCM-183] - When choose sort by file name on setting of "insert DMS document "form --> not execute
+    * [WCM-184] - Insert/edit flash FCK--> error
+    * [WCM-185] - After upload one image or one document successfully --> then upload one more--> error
+    * [WCM-186] - Bad interface with form add document in sites explorer.
+    * [WCM-190] - Main content at step 1 in presentation error
+    * [WCM-191] - Unknown error in "Select existed web content"
+    * [WCM-192] - Create HTML file --> not type any word in name field--> click save button=> still can save and generate chaos name.
+    * [WCM-193] - When create podcast file(multimedia file)--> still can upload text file(as file.doc)
+    * [WCM-195] - Not have tooltip for Question mark at presentation.
+    * [WCM-196] - When create HTML file on Web content storage by root, owner display_anonim(creator unidentified)
+    * [WCM-197] - When create page by wizard, at step 3 drag "AnvandedPresentation portlet" then edit it, we still can edit page name.
+    * [WCM-198] - after Inserting  current portal link successful--> then view and click this link--> have nothing.
+    * [WCM-199] - Unknown error when choose "Existed Document management " to view.
+    * [WCM-200] - Can't edit banner and footer.
+    * [WCM-203] - Copy one .css file by WebDAV to css folder of classic portal --> then view, not effect to WCM style.
+    * [WCM-205] - HTML file both create in sites explorer and copy by WebDAV--> then view in presentation--> click quick edit--> Can't edit
+    * [WCM-208] - Change "application page config" in predefined page templates
+    * [WCM-215] - Insert image and DMS document link when create web content --> error "Can't connect with server"
+    * [WCM-216] - Insert link from links folder of current portal when create quick web content--> view this web content--> click this link --> can't connect
+    * [WCM-217] - at step 1 of presentation, can't insert image and DMS document link
+    * [WCM-219] - At step 1 in presentation--> click insert image--> not choose any node to upload imagae-->  can still  upload image.
+    * [WCM-220] - Login root--> create web content--> set permission any one can access this content--> login by john can still edit this web content
+    * [WCM-221] - Login john user--> create web content by "create page by wizard" --> at step 3 drag AdvancedPresentation--> create main content--> click insert image --> have nothing.
+    * [WCM-222] - In WcmSearchService, search function should return a List of WcmResult instead of List containing Node and PageNode
+    * [WCM-225] - When create CSS default --> not affect to Main content.
+    * [WCM-227] - CSS default have affected to main content but not stable.
+    * [WCM-228] - Click save button again and again when add categorizing --> still display message "add category sucessful". But have only one  category.
+    * [WCM-229] - When click save button when edit footer--> display message "unknown error"
+    * [WCM-230] - Create web content at step 3 to add categorizing--> not add anycategory --> click save button--> still display message "add category sucessfully".
+    * [WCM-232] - Have edit footer on sites explorer.
+    * [WCM-235] - Can't download a upload file.
+    * [WCM-238] - At step 1, when create quick web content --> click Save button --> display  message "unknown error"
+    * [WCM-242] - Can't copy HTML file to Web content by WebDAV.
+    * [WCM-243] - Preview portal link--> mistake. 
+    * [WCM-244] - unknown error message
+    * [WCM-245] - Unknown error message when choose upload file to view in presentation portlet.
+    * [WCM-249] - Can't edit file, which copy in WebDAV
+    * [WCM-251] - Make sure SCV Portlet is compatible with versioning
+    * [WCM-252] - Make SCV Portlet "publication aware"
+    * [WCM-253] - Ensure lock is managed by SCV Portlet
+    * [WCM-254] - No alignment icons in FCK editor when editing a webcontent
+    * [WCM-255] - Style, format, font and size selectors are transparent in FCK Editor
+    * [WCM-256] - Rename the "Click on this to access advanced options for this page" label
+    * [WCM-260] - Take into account lock and versioning in the link validator job
+    * [WCM-262] - When click preview in "insert portal link"--> have problem
+    * [WCM-263] - When view document on sites Explorer--> bad interface.
+    * [WCM-266] - Wrong portal name when including a document in shared portal
+    * [WCM-272] - lost icon popcast document, when insert document into webcontent.
+    * [WCM-278] - Unknown error message, when double click on Save button at editing banner
+    * [WCM-279] - Click "show comment"--> have nothing
+    * [WCM-280] - Error when display year of comment for web content
+    * [WCM-282] - Bad interface when" view file" of web content in "sites explorer".
+    * [WCM-283] - IE6-Lose icon on tree portal , Wheen insert image or insert document at presentation portlet.
+    * [WCM-284] - Don't have view WebDAV when click on gird of sites explorer
+    * [WCM-285] - When change in default.CSS --> not affect to main content.
+    * [WCM-286] - French- After creating web content successfully in presentation --> instead of view this content display "edit current web content"
+    * [WCM-294] - Summary and title fields should appear in the same edit template
+    * [WCM-298] - Unknown error message when public checked in article.
+    * [WCM-299] - Should have tooltip for 2 buttons on publication.
+    * [WCM-300] - display content viewer name --> error
+    * [WCM-302] - At step 2 of creating web content--> insert portal link and then click preview button--> can't create web content.
+    * [WCM-303] - "Can't connect with server" message when insert image on web content, which create in sites explorer
+    * [WCM-304] - unknown error when didn't choose page to add --> then click add node button
+    * [WCM-305] - Error interface when delete one weeb content on sites Explorer.
+    * [WCM-307] - name field, when type "space" on this --> display massage warning.
+    * [WCM-309] - Make icons clickable in the new WCM toolbar
+    * [WCM-310] - Could we retract the user workspace when adding a page from the WCM toolbar ?
+    * [WCM-312] - User workspace is closed when already opened and the user clicks on edit page
+    * [WCM-322] - When unchecked on "show quick edit" in step 5 of quick creation web content--> still display quick edit icon.
+    * [WCM-323] - Logout button mistake place.
+    * [WCM-324] - Lost logout button
+    * [WCM-325] - error navigation with new portal.
+    * [WCM-326] - should change name of popup form, when select DMS document to view on presentation
+    * [WCM-327] - Have unsuitable icon on banner.
+    * [WCM-330] - unknown error when choose node to public.
+    * [WCM-331] - image of life cycle not display on publication form.
+    * [WCM-332] - error interface with permission form
+    * [WCM-334] - When click "remove node page" --> not remove in right list.
+    * [WCM-336] - Unknow error in special case when edit banner
+    * [WCM-338] - Error text on some form, when add page
+    * [WCM-339] - Lost icon of view properties in sites explorer.
+    * [WCM-340] - Form display icon of banner portlet was be small when edit portal.
+    * [WCM-342] - Edit portal --> choose edit banner--> choose path to edit --> Save button no action.
+    * [WCM-343] - Unknown error when edit page layout.
+    * [WCM-344] - should change size of "add page" form.
+    * [WCM-352] - Unknown error when edit content of page.
+    * [WCM-353] - Not remove node in right column of manage publication, when delete page.
+    * [WCM-355] - Create web content in sites explorer --> then choose this web content--> click manage publication--> display unknown error.
+    * [WCM-358] - Bad interface when choose web content to view in list viewer.
+    * [WCM-359] - lost quick edit icon when unpublished web content in presentation portlet
+    * [WCM-360] - Remove the summary field from the first step of SCV
+    * [WCM-362] - When choose a web content to publish in a page --> not display in right column of manage publication
+    * [WCM-363] - Don't clear name of web content in list viewer when this web content was deleted in sites explorer.
+    * [WCM-364] - Fist page/Last page action do not work in UIPaginator of CLV
+    * [WCM-365] - in form list all content  when choose content to view --> bad interface
+    * [WCM-366] - in presentation portlet After insert image and document successful--> lost "next" button
+    * [WCM-368] - When unchecked on "show thumbnail view" in list viewer portlet--> still display thumbnail.
+    * [WCM-369] - When click quick edit in list viewer portlet--> loaded form not correct.
+    * [WCM-370] - Small UI bug on OrganizationPortlet
+    * [WCM-375] - Login--> add new page successfully--> can't access on sites explorer.
+    * [WCM-376] - When create new web content--> in Illustration tab don't have "Browse" button to choose image
+    * [WCM-377] -  display message"Can't connect with server" When insert image of edit banner.
+    * [WCM-379] - Edit portal--> choose banner portlet--> then click "save" button--> display "unknown error" message
+    * [WCM-380] - Create web content--> insert image--> when upload image, we set name for it--> not display on form
+    * [WCM-381] - Bad display when single content viewer didn't configure.
+    * [WCM-382] - Lost "L" on share portal name on sites explorer
+    * [WCM-383] - Can't view content when publish one web content.
+    * [WCM-386] - arrow of admistration navigation and sites management --> can't action
+    * [WCM-387] - icon of folders on sites explorer --> not straight
+    * [WCM-388] - Not clear a deleted page on tree in left coulumn of publication.
+    * [WCM-389] - Choose existed web content to view in single content viewer--> have bad interface with this form.
+    * [WCM-391] - Can not browse navigation node in navigation portlet
+    * [WCM-392] - Picture layout web content--> when insert another image--> view--> affect to footer
+    * [WCM-393] - Lost button to choose path in edit form banner and footer
+    * [WCM-394] - Bad interface when view picture on head of content in sites explorer
+    * [WCM-395] - Create new portal--> choose Locale is French--> when view this portal--> not display French
+    * [WCM-396] - Use full text in publication history log
+    * [WCM-397] - Exception while clicking on the publication icon in Site Explorer
+    * [WCM-398] - List viewer didn't display illustration of web content. Even checked "show image" in edit mode.
+    * [WCM-399] - Not clear node name in right colums When unpublished web content.
+    * [WCM-401] - When create new portal--> choose this portal to use--> display "the banner was removed or deleted"
+    * [WCM-402] - Lost icon Add folder when choose folder to view in list viewer portlet.
+    * [WCM-403] - Click view version icon --> but nothing.
+    * [WCM-404] - Lost icon of document and medias in sites explorer.
+    * [WCM-405] - searchModeSelector is box search--> can't put mouse on here to type. 
+    * [WCM-411] - Can't upload image when choose "image" folder of web content.
+    * [WCM-413] - Bad interface with add category tab.
+    * [WCM-415] - Dupblicate quick edit icon on search portlet.
+    * [WCM-416] - After upload image for illustration--> can't delete it.
+    * [WCM-417] - access WCM in public--> can't see login button and language seeting.
+    * [WCM-418] - Lost add icon when edit  class banner portlet in edit portal.
+    * [WCM-419] - Lost web content folder on the tree on insert image.
+    * [WCM-420] - Unknown error when choose another web content to view in edit page layout.
+    * [WCM-422] - Not load again template picture of web content.
+    * [WCM-423] - Search function didn't excutive.
+    * [WCM-424] - Configure web content by single content viewer --> with "space" is the first letter--> unknown error
+    * [WCM-425] - can't refresh homepage automatically.
+    * [WCM-426] - Click edit homepage--> then click cancel button--> display unknown error
+    * [WCM-427] - Open Homepage -->When open side bar on the left--> display one scroll bar on homepage
+    * [WCM-428] - Search time display wrong.
+    * [WCM-429] - Upload more than 7 file on document folder--> and then upload once more--> display "unknown error" message
+    * [WCM-430] - result of search was wrong.
+    * [WCM-431] - When unchecked document search --> but still display document have word search.
+    * [WCM-442] - When didn't check both page search and document search--> don't have any message
+    * [WCM-443] - Should change names of permission tab and MiscellaneousInfo tab.
+    * [WCM-444] - Lost quick edit icon on banner--> when choose some Navigation
+    * [WCM-446] - Can't put mouse on textbox search.
+    * [WCM-447] - Display unknown message--> when edit login portlet
+    * [WCM-448] - Bad interface after create web content and create new page.
+    * [WCM-449] - Have a lot of quick edit icon--> when view a web content on PCV
+    * [WCM-450] - Broken interface with IE6
+    * [WCM-451] - Click edit portal on toolbar--> no action
+    * [WCM-452] - Create new page and create web content for it--> after create web content--> display bad interface
+    * [WCM-453] - Create web content --> add only one category for this content--> not successfully.
+    * [WCM-454] - Have more retangle on the left of PCV
+    * [WCM-455] - When search result have 2 page or more than--> then click on page number to change page to 5th--> disappear result search.
+    * [WCM-458] - All options of Miscellaneous Info tab, when checked it, it is not action.
+    * [WCM-459] - When view article on PCV--> display bad interface
+    * [WCM-460] - Create Two columns web content layout--> type name field have space--> can't save
+    * [WCM-461] - Search box function--> can't search
+    * [WCM-462] - Small typo in the WCM publication panel
+    * [WCM-463] - Quick edit icon of Navagation--> not clearly(very small)
+    * [WCM-464] - When open side bar on the left--> lost sites management on navigation bar
+    * [WCM-465] - When choose only  one category for web content--> then edit this content--> can't delete this category.
+    * [WCM-466] - View on web content on PCV--> then click quick edit icon--> then click "Cancel" button--> not action
+    * [WCM-467] - Create picture on head web content successfully--> then edit it--> click insert image--> not display web content folder on the tree.
+    * [WCM-469] - Display visible navigation on navigation bar.
+    * [WCM-470] - Create web content --> then insert acme portal link in this--> then click preview button--> click Save button--> Not display any content in web content
+    * [WCM-471] - IE6 - Can't view web content by PCV.
+    * [WCM-472] - When click on edit banner--> Navigation bad display--> always press F5 to refresh
+    * [WCM-475] - Finish webcontent Miscellaneous features
+    * [WCM-477] - Missing dc:elementSet form
+    * [WCM-480] - Check & fix bugs with new skin service in portal 2.5
+    * [WCM-481] - Wrong order when AddNodeTypePlugins
+    * [WCM-482] - Display unknown error--> after typing name of web content
+    * [WCM-483] - Can't create new document on sites explorer
+    * [WCM-495] - Create one article --> type data on content field--> click save button--> when view this article--> still display "content is empty"
+    * [WCM-496] - create web content with illustration image--> then edit this web content--> don't have illustration
+    * [WCM-497] - Error with code--> When create new page
+    * [WCM-499] - When view page --> lost navigation
+    * [WCM-513] - Make sure non published webcontents are excluded from page-based reseach
+    * [WCM-517] - Error display message when add category for web content.
+    * [WCM-518] - Search in sites explorer--> can't type any letter.
+    * [WCM-531] - After maximize a portlet, unable to reduce it or to change page
+    * [WCM-532] - In  search portlet, I cannot use wilcard
+    * [WCM-533] - In search portlet, I have webcontents in results, unless I have uncheck page
+    * [WCM-534] - In JCR explorer, if the result of a search is a html content, we see in result the htmlFile and not the web content
+    * [WCM-537] - Unknow error when click cancel on Categorizing tab
+    * [WCM-538] - When choose another web content to view in SCV--> not display web content in tree.
+    * [WCM-539] - Have a lot of page when result didn't have a lot of page such that.
+    * [WCM-547] - Bug when edit webcontent in SCV in IE7
+    * [WCM-550] - in permission  form--> choose platform/administration/--> have 2 john user on the right column.
+    * [WCM-551] - When delete illustration image in web content--> display error.
+    * [WCM-556] - Should change UI of edit list viewer form.
+    * [WCM-557] - Should change UI of edit list viewer form.
+    * [WCM-558] - can't choose category in add new page and then create web content for this page
+    * [WCM-559] - Create new page of portal--> and then delete this page--> still display this page in navigation bar
+    * [WCM-560] - ACME portal: need login to view content by PCV in public mode
+    * [WCM-561] - Can not edit site metadata
+    * [WCM-562] - Don't have icon to choose "any permission" in "permission" form
+    * [WCM-568] - In Picture and head layout webcontent, duplicate label title
+    * [WCM-569] - Breadcrum Portlet disappears
+    * [WCM-570] - In "Misc" tab, when user clicks on a checkbox, the first panel appears back again
+    * [WCM-577] - When choose another web content to view in edit banner--> display bad interface
+    * [WCM-578] - bad interface with edit breadcrumb of ACME
+    * [WCM-580] - Remember the preferences in Search Portlet
+    * [WCM-581] - When edit navigation of ACME portal--> chaos interface.
+    * [WCM-582] - Bad interface when open sites explorer and edit search portlet
+    * [WCM-583] - lost quick edit icon of navigation of  on IE
+    * [WCM-585] - SCV always show PictureOnHead image layout for webcontent layout nodetypes that have no image
+    * [WCM-586] - Bread cum display not good
+    * [WCM-587] - Should keep keyword search after display result search.
+    * [WCM-588] - Navigation bar is very short with Bread cum
+    * [WCM-590] - Repair the menu on Mac
+    * [WCM-598] - Fix display bugs in edit page layout of acme
+    * [WCM-612] - Hide next icon on navigation bar because of quick edit icon.
+    * [WCM-613] - After create new page--> always press F5 to see just created page.
+    * [WCM-614] - Lost navigation when create one page belong to Navigation.
+    * [WCM-615] - Type keyword--> then click search button--> nothing
+    * [WCM-617] - IE, Don't have quick edit icon of product in ACME
+    * [WCM-618] - After display search result--> bread cum display error.
+    * [WCM-620] - ACME, sometime display quick edit icon on banner and sometimes not display 
+    * [WCM-621] - make two textbox on SCV same size
+    * [WCM-622] - When change languge into French--> display mistake with language in "select view"
+    * [WCM-623] - Can't connect services when insert DMS document on "two columns web layout" template
+    * [WCM-625] - Chaos interface of search portlet
+    * [WCM-626] - Some error displaly with permission form.
+    * [WCM-627] - should change name of form when choose permission for group
+    * [WCM-628] - Don't have quick edit icon for search portlet.
+    * [WCM-631] - In ACME search box, allow enter key to trigger the search
+    * [WCM-633] - When view WebDAV in sites explorer by IE explorer--> display error code
+    * [WCM-641] - Should change style at "edit mode" form of List viewer
+    * [WCM-642] - When access to Sites explorer--> lost quick edit icon of banner, login and box search
+    * [WCM-653] - Lost sites explorer when click "sites management"
+    * [WCM-654] - Duplicate text in edit banner.
+    * [WCM-655] - Broken Navigation bar  when have so much Navigation
+    * [WCM-660] - Rename Portlet names
+    * [WCM-662] - Should change name of form popup single content viewer
+    * [WCM-664] - Error message when creating a page from "Search page" template
+    * [WCM-665] - Add an image for "Simple Content Viewer" predefined page
+    * [WCM-668] - Have two forms when create web content for new page.
+    * [WCM-670] - When unchecked "show tag" and "show category" still display in web content
+    * [WCM-671] - Make same size text in SCV and LCV
+    * [WCM-672] - Broken interface when edit banner.
+    * [WCM-673] - Broken interface of Sites map portlet
+    * [WCM-679] - Lost content in SCV when change page without closing popup
+    * [WCM-680] - Should change text  "Documents &Page" based on search criteria
+    * [WCM-681] - Active feild in Stylesheet form can't change.
+    * [WCM-682] - "similar" link in search result-->have mistake
+    * [WCM-683] - Omit "similar" link when have only one link
+    * [WCM-684] - Remove the corners in the "login" icon
+    * [WCM-693] - Broken UI when edit new created portal
+    * [WCM-694] - Lost text in History tab of publication
+    * [WCM-695] - ACME search page --> Not good interface
+    * [WCM-696] - Can't search article
+    * [WCM-700] - Avoid login, breacrumbs and navigation to blink
+    * [WCM-701] - Change the mouse cursor when the user hovers the path selector in CLV
+    * [WCM-703] - Title appears twice in "Picture on head" subwebcontent
+    * [WCM-707] - Missing white background in text with "Picture on head" subwebcontent
+    * [WCM-708] - Should have webcontents rendered the same way in SCV and PCV
+    * [WCM-715] - Change label text on single content viewer
+    * [WCM-716] - in SCV the second times can't change web content to view.
+    * [WCM-717] - Lost icon web choose existed web content to view by SCV
+    * [WCM-718] - Check W3C with homepage classic --> display 45 errors.
+    * [WCM-719] - Check W3C with Registry classic --> display 42 errors.
+    * [WCM-720] - Check W3C with SCV portlet classic --> display 44 errors.
+    * [WCM-721] - Check W3C with LCV portlet classic --> display 42 errors.
+    * [WCM-722] - Check W3C with Search portlet classic --> display 54 errors.
+    * [WCM-723] - Check W3C with Sitemap portlet classic --> display 51 errors.
+    * [WCM-726] - Display popup when create new page--> not good
+    * [WCM-727] - Can't view DMS document on search result
+    * [WCM-728] - Save button at Misc tab same finish button.
+    * [WCM-729] - IE, lose delete icon on add category
+    * [WCM-730] - can't come back search result.
+    * [WCM-731] - Lost all icons on SE--> all come back default icon
+    * [WCM-732] - Search results didn't correct
+    * [WCM-733] - Protected Navigation Entry is visible in the Nav Bar when it should not be
+    * [WCM-738] - Mistake when typo
+    * [WCM-741] - Translate "Show step info"
+    * [WCM-744] - The refresh button should appear also when there is no content to display
+    * [WCM-745] - Don't have tooltip with icon to choose permission
+    * [WCM-746] - hide and unhide form to public web content in sites explorer
+    * [WCM-748] - Make uilogin, breadcrumbs, navigation pass w3c validator
+    * [WCM-751] - Safari: Some bug UI, when use Safari explorer
+    * [WCM-754] - Shift the search icon to the left in the basic search
+    * [WCM-755] - Broken link checker wrong for internal link
+
+** Delivery Item
+    * [WCM-246] - Publish an eXo WCM beta version
+    * [WCM-333] - Create eXo WCM Administration Guide v1.0
+    * [WCM-434] - Clean code,  make javadoc for all wcm code to prepare for release
+    * [WCM-503] - Release WCM 1.0-rc1
+    * [WCM-520] - Release WCM 1.0-final
+    * [WCM-643] - Release WCM 1.0RC2
+
+** Doc
+    * [WCM-75] - Need to create some documentation in the wiki
+    * [WCM-105] - Create the component registry documentation in the wiki for WCM
+    * [WCM-502] - Document the JS functions used in webcontents
+    * [WCM-512] - Add a list of features for WCM in the wiki
+    * [WCM-594] - Add WCM product to the wiki home page
+    * [WCM-595] - Add WCM to the web site
+    * [WCM-629] - Improve the wiki documentation for WCM
+    * [WCM-688] - Create a README file
+    * [WCM-711] - Have a product description panel in the wiki WCM home page
+    * [WCM-740] - Add documentation about content sorter plugins in the wiki
+
+** Improvement
+    * [WCM-35] - Create a UIPortalNavigationExplorer
+    * [WCM-78] - Improve winzard in edit mode for SCP
+    * [WCM-79] - Improve some skin for FCK Plugin
+    * [WCM-86] - Wcm service refactor
+    * [WCM-94] - Add some table properties for fckeditor
+    * [WCM-103] - Create new icon set for wcm nodetype
+    * [WCM-112] - Don't have tooltip for edit function.
+    * [WCM-130] - Add some properties for exo:webContent nodetype 
+    * [WCM-145] - Remove the Portlet header in the "Presentation" page
+    * [WCM-155] - Change default radio button in ACP wizard
+    * [WCM-158] - Specify only the document name when adding a link to a DMS document
+    * [WCM-164] - Deploy banner/footer data at the first time in to themes folders
+    * [WCM-165] - Add new step for ACP wizard
+    * [WCM-167] - When display category, which display only name of category.
+    * [WCM-169] - Now we can't comment for web content.
+    * [WCM-187] - Should have question mark icon at group present 4 step, which create web content.
+    * [WCM-188] - Upload content similar folder's name.
+    * [WCM-189] - remove wcm.webui package
+    * [WCM-194] - Rename some folders in the site structure
+    * [WCM-207] - Improve the permission panel design in SCP wizard
+    * [WCM-209] - Make sure "quick edit" only is selected by default in last step of SCP
+    * [WCM-210] - Make the SCP wizard come back to the initial step when using portal edit mode
+    * [WCM-213] - Ask designers for a WCM specific home page
+    * [WCM-223] - Improve portlet edition in page edit mode
+    * [WCM-224] - Change ACP portlet name to Simple Content Viewer and clean code
+    * [WCM-234] - after insert portal link successfully--> should change color of this link or have underline this link.
+    * [WCM-236] - Improve the web content node type definition
+    * [WCM-237] - set webcontent name as exo:title property of exo:rss-enable
+    * [WCM-240] - Change policy to TOCGenerator and LinkExtractor for webcontent
+    * [WCM-250] - Use Parameterized page url when insert document in fckeditor
+    * [WCM-258] - Create a navigation through webcontent
+    * [WCM-259] - Improve the new FCK plugins
+    * [WCM-261] - Rename "site templates" folder
+    * [WCM-264] - Change drives in v1
+    * [WCM-267] - Add a back button to the presentation portlet
+    * [WCM-268] - Rename "site content" to "web content" in document type definition
+    * [WCM-271] - Clean group navigation in portal configuaration
+    * [WCM-274] - Improve the design of the warning message when editing a shared banner
+    * [WCM-275] - "share portal" should be "shared" in Site Explorer
+    * [WCM-276] - Change predefined page templates
+    * [WCM-289] - Add a "shared portal" drive
+    * [WCM-290] - Should simulate default webcontents artifacts as beeing published
+    * [WCM-311] - Reconfigure the default available Portlets in Application registry
+    * [WCM-314] - Simplifies the site explorer toolbars
+    * [WCM-316] - Modify the WCM bar positioning
+    * [WCM-317] - In the WCM toolbar, rename "Edit page" to "Edit page layout"
+    * [WCM-318] - Make a separate design for acme website and acme portal template
+    * [WCM-321] - Make relationship between navigation node publication datetime and WCM publication plugin
+    * [WCM-335] - Arrange the eXo logo in the WCM toolbar
+    * [WCM-341] - Improve the "Change portal" icon in the WCM toolbar
+    * [WCM-345] - create new Illustration tab to allow upload illustratoion imgage for webcontent
+    * [WCM-346] - create some big icons for wcm nodetypes
+    * [WCM-347] - Leverage JCR 1.10
+    * [WCM-354] - Create some new webcontent subtypes with inital layout for webcontent
+    * [WCM-361] - Rename "Site Content Management" navigation node to "Site Management"
+    * [WCM-372] - Reuse the Portal maven version scheme
+    * [WCM-385] - Need some images for selecting web layout in the first step in SCV
+    * [WCM-390] - Improve the web design of webcontent sub type
+    * [WCM-406] - Open left workspace only if needed
+    * [WCM-408] - Make the two subwebcontents samples use Groovy
+    * [WCM-410] - Add edit button in PCV
+    * [WCM-414] - Merge permission setting/preference setting step as tab in social setting 
+    * [WCM-421] - CSS clean for wcm
+    * [WCM-476] - In the breadcrums, display the document name in case the PCV page is viewed
+    * [WCM-516] - Can't search with some letter in french.
+    * [WCM-529] - Add new portlet preference allow user specifice content header/column for clv
+    * [WCM-546] - improve select document/webcontent form
+    * [WCM-548] - Search portlet UI improvement
+    * [WCM-549] - Improve clv edit mode form
+    * [WCM-552] - Improve webcontent name form
+    * [WCM-553] - Improve permission selector
+    * [WCM-554] - Allow search when use put text to search text field and enter
+    * [WCM-563] - Change the message when SCV is not configured
+    * [WCM-565] - Rearrange the "Help" icon in the SCV wizard
+    * [WCM-566] - Make edit icon appear on navigation (classic portal)
+    * [WCM-567] - Reduce the size of link area quick edit icon
+    * [WCM-571] - Change the label of voting and commenting in the "Misc" panel of SCV
+    * [WCM-572] - Improve the style of categories when displayed in SCV
+    * [WCM-584] - Improve classic search box position
+    * [WCM-591] - Add explanation text in panels of the SCV wizard
+    * [WCM-592] - Make the "Back" button in PCV smaller
+    * [WCM-593] - Remove the border around the JCR SE Portlet
+    * [WCM-596] - Put quick edit mode in a popup
+    * [WCM-597] - Sort pages in same order when adding a link to a page
+    * [WCM-599] - Rename items in the top toolbar
+    * [WCM-608] - Temporary remove options in "Misc" panel of SCV wizard
+    * [WCM-616] - Display edit form in popup mask for clv
+    * [WCM-619] - Should change style keyword search for ACME
+    * [WCM-630] - Show title of webcontent in view template
+    * [WCM-632] - In ACME website, make active the "Sent" button in the "Contact" page
+    * [WCM-640] - Show background of breadcrumbs, navigation, login, search, etc... when editing with SCV
+    * [WCM-658] - Improve edit dialog form
+    * [WCM-659] - Change the view configuration of WCM drives for sites
+    * [WCM-661] - Add Content List Viewer to predefined WCM page templates
+    * [WCM-674] - Change some text 
+    * [WCM-697] - Improve the UI of the search result panel
+    * [WCM-705] - Make quick-edit parameter turned on when publishing a content from site explorer
+    * [WCM-706] - Remove the WebOS image in the predefined page images
+    * [WCM-709] - In the SCV quickedit popup, move the link "Click on this to access advanced options for configuring the content" to the top
+    * [WCM-710] - Quickstart improvements
+    * [WCM-725] - Should change WebOS template picture when create page for group and user
+    * [WCM-737] - Fix a minor typo in the footer
+    * [WCM-739] - Remove scroll in fisrt step of create content in scv
+    * [WCM-747] - Insert new logo of WCM
+    * [WCM-753] - Merge "basic" and "advanced" tabs in SE
+
+** New Feature
+    * [WCM-53] - Have a new page edit mode
+    * [WCM-54] - Allow easy creation of Portal banners and footers
+    * [WCM-87] - New file manager plugin for fckeditor
+    * [WCM-108] - Parameterized Content Viewer
+    * [WCM-138] - Allow users to publish web content from JCR File Explorer
+    * [WCM-160] - Restrict the number of possible documents types when the user creates a new document using JCR File Explorer
+    * [WCM-161] - Make the home page use ACP and a web content
+    * [WCM-170] - Allow ACP Portlet to select any content type
+    * [WCM-206] - Enlarge the width of FCK Editor in web content edit template
+    * [WCM-211] - Implement new Site Administration Portlet allow to switch to page edit mode through a link in the toolbar
+    * [WCM-226] - Show dialog form directly when swith to edit mode 
+    * [WCM-308] - New search portlet implementation
+    * [WCM-328] - Create CLV portlet
+    * [WCM-329] - Deploy separated site artifacts(banner, footer, home pages) for each site
+    * [WCM-356] - Allow user choose layout specific when create webcontent in SCV
+    * [WCM-371] - Seach Engine Optimization: Allow to manage site page metadata
+    * [WCM-407] - Turn navigation, banner and breadcrumbs Portlets into SCV
+    * [WCM-435] - Make account portlet is changable
+    * [WCM-436] - Make login form is changeable for each portal
+    * [WCM-445] - Translations into Vietnammese
+    * [WCM-484] - Make search box embeddable into webcontent
+    * [WCM-634] - Provide a link to synchronize css tab to main content tab
+    * [WCM-687] - Translations into French
+    * [WCM-713] - SEO support: Dublin Core on site nodes with RFC 2731
+
+** Task
+    * [WCM-320] - Ensure WCM toolbar is permission enabled
+    * [WCM-433] - Remove iweb projects
+    * [WCM-456] - Move PCV portlet from ecm to web-presentation in wcm
+    * [WCM-555] - sniff test for WCM 1.0 RC
+    * [WCM-657] - Before releasing WCM, make sure it passes W3C compliance checks
+    * [WCM-689] - Test before release
+    * [WCM-699] - Check the Wiki documentation
+	
+If you have questions, please send a mail to the list exoplatform@objectweb.org.
+Thank your for using eXo WCM product!
+The eXo WCM team.	
+		
