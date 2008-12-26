@@ -55,13 +55,14 @@
   %>
   <div class="VIEW-CONTAINER" >
     <div id="$uicomponent.id">    
-      <table class="UITableColumnContainer" style="table-layout: fixed; margin: 0px auto; $style">
-        <tr class="TRContainer">
-          <% for(uiChild in uicomponent.getChildren()) { %>
-            <td class="${uiChild.id}TDContainer"><% uicomponent.renderUIComponent(uiChild) %></td>
-          <% } %>
-       </tr>
-      </table>
+		<div class="UIWCMColumnContainer" style="margin: 0px auto; $style">
+			<div class="WCMTRContainer">
+				<% for(uiChild in uicomponent.getChildren()) { %>
+					<div class="${uiChild.id}TDContainer"><% uicomponent.renderUIComponent(uiChild) %></div>
+				<% } %>
+				<div style="clear: both; height: 0px; width: 50%;"><span></span></div>
+			</div>
+		</div>
     </div>    
   </div>
   <%/*Debug On IE  -----For DND */%>
