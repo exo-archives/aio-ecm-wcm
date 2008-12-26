@@ -20,24 +20,14 @@
                 <collection type="java.util.ArrayList">               
                   <value>
                     <object type="org.exoplatform.services.cms.views.ViewConfig$Tab">
-                      <field  name="tabName"><string>Advanced Actions</string></field>
+                      <field  name="tabName"><string>WCM Actions</string></field>
                       <field  name="buttons">
                       	<string>
-                      		viewMetadatas; viewPermissions; viewProperties; manageVersions; exportNode; importNode; manageCategories; taggingDocument; vote; Comment
+                      		addFolder; addDocument; editDocument; upload; managePublications; viewPermissions; viewMetadatas; manageCategories; taggingDocument; vote; Comment; viewProperties; manageVersions; exportNode; importNode
                       	</string>
                       </field>
                     </object>
-                  </value>                  
-                  <value>
-                    <object type="org.exoplatform.services.cms.views.ViewConfig$Tab">
-                      <field  name="tabName"><string>Basic Actions</string></field>
-                      <field  name="buttons">
-                      	<string>
-                      		managePublications; addFolder; addDocument; editDocument; upload
-                      	</string>
-                      </field>
-                    </object>
-                  </value>                  
+                  </value>                                                      
                 </collection>
               </field>	          
 		        </object>
