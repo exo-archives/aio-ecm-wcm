@@ -48,7 +48,7 @@ import org.exoplatform.wcm.webui.clv.UIContentListViewerPortlet;
 						<% if (itemSummary != null && itemSummary.trim().length() != 0 && uicomponent.isShowField(UIContentListViewerPortlet.SHOW_SUMMARY)) { %>
 						<div class="CaptionContent">				
 							<% if(imgSrc != null && uicomponent.isShowField(UIContentListViewerPortlet.SHOW_THUMBNAILS_VIEW)) { %>
-								<img src="$imgSrc" width="91" height="53 /">				
+								<img style="float: left;" src="$imgSrc" width="91" height="53 /">				
 							<% } %>
 							<p><%=itemSummary%></p>
 						</div>			

@@ -33,6 +33,7 @@
 
 .UIContentListViewerPortlet .ACMEContentListViewerA .Caption .CaptionItem {
   margin-bottom:20px;
+  overflow: hidden;
 }
 
 .UIContentListViewerPortlet .ACMEContentListViewerA .Caption .CaptionTitle {

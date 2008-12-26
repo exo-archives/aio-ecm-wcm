@@ -20,18 +20,18 @@
 				    <title>Services and Products</title>
 				  </application>
 	  		</container>
-	  		<container id="@owner@Features" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-	  			<application>
-				    <instance-id>portal#@owner@:/web-presentation/ContentListViewerPortlet/@owner@-news-header</instance-id>
-				    <title>Features</title>
-				  </application>
-	  		</container>
 	  		<container id="@owner@About" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
 	  			<application>
 			    	<instance-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-about-header</instance-id>
 			    	<title>About</title>
 			  	</application>
 			  </container>
+	  		<container id="@owner@Features" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  			<application>
+				    <instance-id>portal#@owner@:/web-presentation/ContentListViewerPortlet/@owner@-news-header</instance-id>
+				    <title>Features</title>
+				  </application>
+	  		</container>
 	  	</container>
 	  </container>
   </page>
@@ -44,10 +44,22 @@
     <title>News</title>
 	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>*:/platform/administrators</edit-permission>
-	  <application>
-	    <instance-id>portal#@owner@:/web-presentation/ContentListViewerPortlet/@owner@-news</instance-id>
-	    <title>News</title>
-	  </application>
+	  <container id="@owner@NewsPage" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  	<container id="@owner@Container" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
+	  		<container id="@owner@SerProContainer" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  			<application>
+				    <instance-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-serpro</instance-id>
+				    <title>Services and Products</title>
+				  </application>
+	  		</container>
+	  		<container id="@owner@News" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  			<application>
+				    <instance-id>portal#@owner@:/web-presentation/ContentListViewerPortlet/@owner@-news-noheader</instance-id>
+				    <title>News</title>
+				  </application>
+	  		</container>
+	  	</container>
+	  </container>
   </page>
   
   <page>
@@ -58,10 +70,22 @@
     <title>About Us</title>
 	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>*:/platform/administrators</edit-permission>
-	  <application>
-	    <instance-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-about</instance-id>
-	    <title>About</title>
-	  </application>
+	  <container id="@owner@AboutPage" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  	<container id="@owner@Container" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
+	  		<container id="@owner@SerProContainer" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  			<application>
+				    <instance-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-serpro</instance-id>
+				    <title>Services and Products</title>
+				  </application>
+	  		</container>
+	  		<container id="@owner@About" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  			<application>
+				    <instance-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-about-noheader</instance-id>
+				    <title>About</title>
+				  </application>
+	  		</container>
+	  	</container>
+	  </container>
   </page>
   
   <page>
@@ -72,10 +96,22 @@
     <title>Contact</title>
 	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>*:/platform/administrators</edit-permission>
-	  <application>
-	    <instance-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-contact</instance-id>
-	    <title>Contact</title>
-	  </application>
+	  <container id="@owner@ContactPage" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  	<container id="@owner@Container" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
+	  		<container id="@owner@About" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  			<application>
+				    <instance-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-about-header</instance-id>
+				    <title>About</title>
+				  </application>
+	  		</container>
+	  		<container id="@owner@Contact" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  			<application>
+				    <instance-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-contact</instance-id>
+				    <title>Contact</title>
+				  </application>
+	  		</container>
+	  	</container>
+	  </container>
   </page>
   
   <page>
@@ -86,10 +122,22 @@
     <title>Product</title>
 	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>*:/platform/administrators</edit-permission>
-	  <application>
-	    <instance-id>portal#@owner@:/web-presentation/ContentListViewerPortlet/@owner@-services</instance-id>
-	    <title>Services</title>
-	  </application>
+	  <container id="@owner@ProductsPage" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  	<container id="@owner@Container" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
+	  		<container id="@owner@Services" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  			<application>
+				    <instance-id>portal#@owner@:/web-presentation/ContentListViewerPortlet/@owner@-services-header</instance-id>
+				    <title>Services</title>
+				  </application>
+	  		</container>
+	  		<container id="@owner@Product" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  			<application>
+				    <instance-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-product</instance-id>
+				    <title>Product</title>
+				  </application>
+	  		</container>
+	  	</container>
+	  </container>
   </page>
   
   <page>
@@ -100,10 +148,22 @@
     <title>Services</title>
 	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>*:/platform/administrators</edit-permission>
-	  <application>
-	    <instance-id>portal#@owner@:/web-presentation/ContentListViewerPortlet/@owner@-services</instance-id>
-	    <title>Services</title>
-	  </application>
+	  <container id="@owner@ServicesPage" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  	<container id="@owner@Container" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
+	  		<container id="@owner@Products" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  			<application>
+				    <instance-id>portal#@owner@:/web-presentation/ContentListViewerPortlet/@owner@-products-header</instance-id>
+				    <title>Products</title>
+				  </application>
+	  		</container>
+	  		<container id="@owner@Services" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  			<application>
+				    <instance-id>portal#@owner@:/web-presentation/ContentListViewerPortlet/@owner@-services-noheader</instance-id>
+				    <title>Services</title>
+				  </application>
+	  		</container>
+	  	</container>
+	  </container>
   </page>
   
   <page>
