@@ -163,9 +163,7 @@ public class HTMLFileSchemaHandler extends BaseWebSchemaHandler {
    * @see org.exoplatform.services.wcm.core.BaseWebSchemaHandler#onModifyNode(javax.jcr.Node, org.exoplatform.services.jcr.ext.common.SessionProvider)
    */
   @SuppressWarnings("unused")
-  public void onModifyNode(final Node node, final SessionProvider sessionProvider) throws Exception{
-    //In version 1.0 the TOC generator and link extractor is disable
-    if(true) return;    
+  public void onModifyNode(final Node node, final SessionProvider sessionProvider) throws Exception {        
     Node parent = node.getParent();
     if(!parent.isNodeType("exo:webContent"))
       return;    
@@ -176,11 +174,11 @@ public class HTMLFileSchemaHandler extends BaseWebSchemaHandler {
     HTMLDocument document = HTMLParser.createDocument(htmlData);
     List<String> newLinks = linkExtractor.extractLink(document);
     linkExtractor.updateLinks(parent,newLinks);
-    TOCGeneratorService tocGeneratorService = getService(TOCGeneratorService.class);
-    List<Heading> headings = tocGeneratorService.extractHeadings(document);
-    if(headings != null) {
-      tocGeneratorService.updateTOC(node,headings);
-    }    
+//    TOCGeneratorService tocGeneratorService = getService(TOCGeneratorService.class);
+//    List<Heading> headings = tocGeneratorService.extractHeadings(document);
+//    if(headings != null) {
+//      tocGeneratorService.updateTOC(node,headings);
+//    }    
   }
 
 }
