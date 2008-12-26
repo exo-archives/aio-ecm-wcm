@@ -70,7 +70,7 @@
   <UISearchResult>
     <msg>
       <your-search>Votre recherche</your-search>
-      <did-not-match>n'a délivré aucun résultat.</did-not-match>
+      <did-not-match>n'a délivré aucun </did-not-match>
       <suggestions>Suggestions:</suggestions>
       <try-different-key>Utiliser d'autres critères de recherche.</try-different-key>
       <keyword_entered>Insérer des mots à rechercher.</keyword_entered>
