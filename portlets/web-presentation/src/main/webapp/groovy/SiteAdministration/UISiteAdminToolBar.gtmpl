@@ -7,27 +7,41 @@
  	rcontext.getJavascriptManager().importJavascript('eXo.SiteAdministration.ShowAdminToolbar','/web-presentation/javascript');
 %>
 <div class="UISiteAdminToolBar" id="$uicomponent.id">
-	<% 
-	ArrayList<Event> listAction = uicomponent.getComponentConfig().getEvents();	
+	<% 	
 	String addPageLink = uicomponent.event("AddPage");
 	String editPageLink = uicomponent.event("EditPage");
 	String createPortalLink = uicomponent.event("CreatePortal");
 	String editPortalLink = uicomponent.event("EditPortal");
 	String changePortalLink = uicomponent.event("ChangePortal");
+	String skinSettingsLink = uicomponent.event("SkinSettings");
+	String languageSettingsLink = uicomponent.event("LanguageSettings");
+	String accountSettingsLink = uicomponent.event("AccountSettings");
 	
 	String addPageActionLabel = _ctx.appRes("UISiteAdminToolbar.action.AddPage");	
 	String editPageActionLabel = _ctx.appRes("UISiteAdminToolbar.action.EditPage");
 	String createPortalActionLabel = _ctx.appRes("UISiteAdminToolbar.action.CreatePortal");
 	String changePortalActionLabel = _ctx.appRes("UISiteAdminToolbar.action.ChangePortal");
-	String editPortalActionLabel = _ctx.appRes("UISiteAdminToolbar.action.EditPortal");	
-		 			
+	String editPortalActionLabel = _ctx.appRes("UISiteAdminToolbar.action.EditPortal");
+	String skinSettingsActionLabel = _ctx.appRes("UISiteAdminToolbar.action.SkinSettings");
+	String languageSettingsActionLabel = _ctx.appRes("UISiteAdminToolbar.action.LanguageSettings");
+	String accountSettingsActionLabel = _ctx.appRes("UISiteAdminToolbar.action.AccountSettings");
+	String viewMoreActionLabel = _ctx.appRes("UISiteAdminToolbar.action.ViewMore");
+		 					 			
 	boolean showable  = uicomponent.isShowWorkspaceArea();	 			
 	%>
-	<a class="Icon AddPageIcon" href="$addPageLink" onclick="showWorkspaceArea($showable);">$addPageActionLabel</a>
-	<a class="Icon EditPageIcon" href="$editPageLink" onclick="showWorkspaceArea($showable);">$editPageActionLabel</a>
-	<a class="Icon CreatePortalIcon" href="$createPortalLink">$createPortalActionLabel</a>
-	<a class="Icon EditPortalIcon" href="$editPortalLink" onclick="showWorkspaceArea($showable);">$editPortalActionLabel</a>
-	<a class="Icon ChangePortalIcon" href="$changePortalLink">$changePortalActionLabel</a>			      				
+	<a class="Icon ViewMoreIcon" onmouseover="viewMoreActions(this)" onmouseout="hideMoreActions(this)">$viewMoreActionLabel</a>	
+	<div class="MoreActionsMenu" id="MoreActionsMenu">
+		<a class="VerIcon SkinSettingsIcon" href="$skinSettingsLink" onmouseover="changeMenuBackground(this)" onmouseout="resetMenuBackground(this)">$skinSettingsActionLabel</a>
+		<div style="clear:right"><span/></div>
+		<a class="VerIcon LanguageSettingsIcon" href="$languageSettingsLink" onmouseover="changeMenuBackground(this)" onmouseout="resetMenuBackground(this)">$languageSettingsActionLabel</a>
+		<div style="clear:right"><span/></div>
+		<a class="VerIcon AccountSettingsIcon" href="$accountSettingsLink" onmouseover="changeMenuBackground(this)" onmouseout="resetMenuBackground(this)">$accountSettingsActionLabel</a>
+	</div>	
+	<a class="Icon AddPageIcon" href="$addPageLink" onmouseover="changeMenuBackground(this)" onmouseout="resetMenuBackground(this)" onclick="showWorkspaceArea($showable);">$addPageActionLabel</a>
+	<a class="Icon EditPageIcon" href="$editPageLink" onmouseover="changeMenuBackground(this)" onmouseout="resetMenuBackground(this)" onclick="showWorkspaceArea($showable);">$editPageActionLabel</a>
+	<a class="Icon CreatePortalIcon" href="$createPortalLink" onmouseover="changeMenuBackground(this)" onmouseout="resetMenuBackground(this)">$createPortalActionLabel</a>
+	<a class="Icon EditPortalIcon" href="$editPortalLink" onmouseover="changeMenuBackground(this)" onmouseout="resetMenuBackground(this)" onclick="showWorkspaceArea($showable);">$editPortalActionLabel</a>
+	<a class="Icon ChangePortalIcon" href="$changePortalLink" onmouseover="changeMenuBackground(this)" onmouseout="resetMenuBackground(this)">$changePortalActionLabel</a>			      				
 	<div class="ExoLogo"><span></span></div>
-	<div style="clear:right"><span></span></div>
+	<div style="clear:right"><span/></div>
 </div>

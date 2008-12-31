@@ -160,6 +160,36 @@ function keepKeywordOnBoxSearch() {
 }
 eXo.core.Browser.addOnLoadCallback("keepKeywordOnBoxSearch", keepKeywordOnBoxSearch);
 
+function viewMoreActions(viewMoreObj) {	
+	var moreActionsMenu = eXo.core.DOMUtil.findNextElementByTagName(viewMoreObj, "div");
+	moreActionsMenu.style.display = "block";
+	moreActionsMenu.onmouseover = function(){
+		if(window.hiddenmenu) clearTimeout(window.hiddenmenu);
+	}
+	moreActionsMenu.onmouseout = function(){
+		window.hiddenmenu = setTimeout("hideElement('"+this.id+"');",100);
+	}
+	if(window.hiddenmenu) clearTimeout(window.hiddenmenu);
+}
+
+function hideMoreActions(viewMoreObj) {
+	var moreActionsMenu = eXo.core.DOMUtil.findNextElementByTagName(viewMoreObj, "div");
+	window.hiddenmenu = setTimeout("hideElement('"+moreActionsMenu.id+"');",100);
+}
+
+function hideElement(element) {
+	var element = (typeof(element) == "string")?document.getElementById(element):element;
+	element.style.display = "none";
+}
+
+function changeMenuBackground(menuItem) {
+	menuItem.style.backgroundColor = "RGB(230, 230, 230)";
+}
+
+function resetMenuBackground(menuItem) {
+	menuItem.style.backgroundColor = "";
+}
+
 //TODO this code need be removed after portal support this 
 UIPopupWindow.prototype.init = function(popupId, isShow, isResizable, showCloseButton, isShowMask) {
 	var DOMUtil = eXo.core.DOMUtil ;

@@ -1,29 +1,44 @@
 .UISiteAdministrationPortlet {
+	position: relative;
 }
 
 .UISiteAdministrationPortlet .UISiteAdminToolBar {	
-	height: 30px;
+	height: 32px;
 	padding-right: 10px;
-	background-color: RGB(240, 240, 240);
+	background: url('DefaultSkin/background/admin-toobar.png') repeat-x scroll 0 0;
 }
 
 .UISiteAdministrationPortlet .UISiteAdminToolBar .Icon {
 	line-height: 30px;	
-	padding-left: 25px;	
+	padding-left: 35px;	
 	margin-left: 15px;
 	float: right;
 }
 
+.UISiteAdministrationPortlet .UISiteAdminToolBar .VerIcon {	
+	line-height: 32px;	
+	padding-left: 35px;		
+	display: block;	
+}
+
+.UISiteAdministrationPortlet .UISiteAdminToolBar .SkinSettingsIcon {
+	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat left -504px; /* orientation=lt */
+	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat right -504px; /* orientation=rt */
+}
+
 .UISiteAdministrationPortlet .UISiteAdminToolBar .AddPageIcon {
-	background: url('DefaultSkin/icons/AddPage.gif') no-repeat left center;  
+	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat left -376px; /* orientation=lt */
+	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat right -376px; /* orientation=rt */  
 }
 
 .UISiteAdministrationPortlet .UISiteAdminToolBar .EditPageIcon {
-	background: url('DefaultSkin/icons/EditPage.gif') no-repeat left center;
+	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat left -408px; /* orientation=lt */
+	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat right -408px; /* orientation=rt */
 }
 
 .UISiteAdministrationPortlet .UISiteAdminToolBar .EditPortalIcon {
-	background: url('DefaultSkin/icons/EditPortal.gif') no-repeat left center;
+	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat left -440px; /* orientation=lt */
+	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat right -440px; /* orientation=rt */
 }
 
 .UISiteAdministrationPortlet .UISiteAdminToolBar .CreatePortalIcon{
@@ -31,7 +46,35 @@
 }
 
 .UISiteAdministrationPortlet .UISiteAdminToolBar .ChangePortalIcon {
-	background: url('DefaultSkin/icons/Organization.gif') no-repeat left center;
+	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat left -248px; /* orientation=lt */
+	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat right -248px; /* orientation=rt */
+}
+
+.UISiteAdministrationPortlet .UISiteAdminToolBar .LanguageSettingsIcon {
+	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat left -280px; /* orientation=lt */
+	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat right -280px; /* orientation=rt */
+}
+
+.UISiteAdministrationPortlet .UISiteAdminToolBar .AccountSettingsIcon {
+	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat left -216px; /* orientation=lt */
+	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat right -216px; /* orientation=rt */
+}
+
+.UISiteAdministrationPortlet .UISiteAdminToolBar .ViewMoreIcon {
+	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat left -184px; /* orientation=lt */
+	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat right -184px; /* orientation=rt */	
+	cursor: pointer;
+}
+
+.UISiteAdministrationPortlet .UISiteAdminToolBar .MoreActionsMenu {
+	border: 1px solid gray;
+	background-color: white;
+	padding: 10px;		
+	position: absolute;
+	top: 32px;
+	right: 0px;	
+	z-index: 1;
+	display: none;
 }
 
 .UISiteAdministrationPortlet .UISiteAdminToolBar .ExoLogo {

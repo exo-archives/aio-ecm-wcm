@@ -2,6 +2,10 @@
 <bundle>
   <UISiteAdminToolbar>
     <action>
+    	<ViewMore>Chức năng khác</ViewMore>
+    	<AccountSettings>Thiết lập tài khoản</AccountSettings>
+    	<LanguageSettings>Thiết lập ngôn ngữ</LanguageSettings>
+    	<SkinSettings>Thiết lập giao diện</SkinSettings>>
       <AddPage>Tạo mới trang</AddPage>
       <EditPage>Chỉnh sửa bố cục trang</EditPage>
       <EditPortal>Chỉnh sửa portal</EditPortal>
