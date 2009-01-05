@@ -16,6 +16,7 @@
 	String skinSettingsLink = uicomponent.event("SkinSettings");
 	String languageSettingsLink = uicomponent.event("LanguageSettings");
 	String accountSettingsLink = uicomponent.event("AccountSettings");
+	String addContentLink = uicomponent.event("AddContent");
 	
 	String addPageActionLabel = _ctx.appRes("UISiteAdminToolbar.action.AddPage");	
 	String editPageActionLabel = _ctx.appRes("UISiteAdminToolbar.action.EditPage");
@@ -26,6 +27,7 @@
 	String languageSettingsActionLabel = _ctx.appRes("UISiteAdminToolbar.action.LanguageSettings");
 	String accountSettingsActionLabel = _ctx.appRes("UISiteAdminToolbar.action.AccountSettings");
 	String viewMoreActionLabel = _ctx.appRes("UISiteAdminToolbar.action.ViewMore");
+	String addContentActionLabel = _ctx.appRes("UISiteAdminToolbar.action.AddContent");
 		 					 			
 	boolean showable  = uicomponent.isShowWorkspaceArea();	 			
 	%>
@@ -37,6 +39,7 @@
 		<div style="clear:right"><span/></div>
 		<a class="VerIcon AccountSettingsIcon" href="$accountSettingsLink" onmouseover="changeMenuBackground(this)" onmouseout="resetMenuBackground(this)">$accountSettingsActionLabel</a>
 	</div>	
+	<a class="Icon AddContentIcon" href="$addContentLink" onclick="showWorkspaceArea($showable);">$addContentActionLabel</a>
 	<a class="Icon AddPageIcon" href="$addPageLink" onmouseover="changeMenuBackground(this)" onmouseout="resetMenuBackground(this)" onclick="showWorkspaceArea($showable);">$addPageActionLabel</a>
 	<a class="Icon EditPageIcon" href="$editPageLink" onmouseover="changeMenuBackground(this)" onmouseout="resetMenuBackground(this)" onclick="showWorkspaceArea($showable);">$editPageActionLabel</a>
 	<a class="Icon CreatePortalIcon" href="$createPortalLink" onmouseover="changeMenuBackground(this)" onmouseout="resetMenuBackground(this)">$createPortalActionLabel</a>

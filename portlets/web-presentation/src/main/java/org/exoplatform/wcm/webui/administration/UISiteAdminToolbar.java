@@ -1,13 +1,23 @@
 package org.exoplatform.wcm.webui.administration;
 
+import java.util.ArrayList;
+
+import javax.portlet.PortletMode;
+
 import org.exoplatform.portal.account.UIAccountSetting;
 import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.portal.application.PortletPreferences;
+import org.exoplatform.portal.application.Preference;
+import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.UIWelcomeComponent;
 import org.exoplatform.portal.webui.UIManagement.ManagementMode;
+import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.container.UIContainer;
+import org.exoplatform.portal.webui.page.UIPage;
 import org.exoplatform.portal.webui.page.UIPageCreationWizard;
 import org.exoplatform.portal.webui.page.UIPageEditWizard;
 import org.exoplatform.portal.webui.page.UIWizardPageCreationBar;
@@ -18,6 +28,7 @@ import org.exoplatform.portal.webui.portal.UIPortalForm;
 import org.exoplatform.portal.webui.portal.UIPortalManagement;
 import org.exoplatform.portal.webui.portal.UIPortalSelector;
 import org.exoplatform.portal.webui.portal.UISkinSelector;
+import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIControlWorkspace;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
@@ -25,6 +36,8 @@ import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIPortalToolPanel;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
 import org.exoplatform.portal.webui.workspace.UIControlWorkspace.UIControlWSWorkingArea;
+import org.exoplatform.services.jcr.util.IdGenerator;
+import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -70,7 +83,8 @@ import org.exoplatform.webui.event.EventListener;
     @EventConfig(listeners = UISiteAdminToolbar.ChangePortalActionListener.class),
     @EventConfig(listeners = UISiteAdminToolbar.SkinSettingsActionListener.class),
     @EventConfig(listeners = UISiteAdminToolbar.LanguageSettingsActionListener.class),
-    @EventConfig(listeners = UISiteAdminToolbar.AccountSettingsActionListener.class) 
+    @EventConfig(listeners = UISiteAdminToolbar.AccountSettingsActionListener.class),
+    @EventConfig(listeners = UISiteAdminToolbar.AddContentActionListener.class)
 })
 public class UISiteAdminToolbar extends UIContainer {
 
@@ -354,4 +368,75 @@ public class UISiteAdminToolbar extends UIContainer {
     }
   }
   
+  public static class AddContentActionListener extends EventListener<UISiteAdminToolbar> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
+    public void execute(Event<UISiteAdminToolbar> event) throws Exception {
+      UISiteAdminToolbar siteAdminToolbar = event.getSource();
+      UIPortal uiPortal = Util.getUIPortal();
+//      SessionProvider currentSessionProvider = SessionProviderFactory.createSessionProvider();
+      UIPortlet uiPortlet = new UIPortlet();
+      uiPortlet.setShowInfoBar(false);
+
+      // Create portlet
+      WCMConfigurationService configurationService = siteAdminToolbar.getApplicationComponent(WCMConfigurationService.class);
+      StringBuilder windowId = new StringBuilder();
+      windowId.append(PortalConfig.PORTAL_TYPE)
+              .append("#")
+              .append(uiPortal.getOwner())
+              .append(":")
+              .append(configurationService.getPublishingPortletName())
+              .append("/")
+              .append(IdGenerator.generate());
+      uiPortlet.setWindowId(windowId.toString());
+      uiPortlet.setCurrentPortletMode(PortletMode.EDIT);
+
+      // Add preferences to portlet
+      PortletPreferences portletPreferences = new PortletPreferences();
+      portletPreferences.setWindowId(windowId.toString());
+      portletPreferences.setOwnerType(PortalConfig.PORTAL_TYPE);
+      portletPreferences.setOwnerId(org.exoplatform.portal.webui.util.Util.getUIPortal().getOwner());
+      ArrayList<Preference> listPreference = new ArrayList<Preference>();
+
+      Preference preferenceR = new Preference();
+      ArrayList<String> listValue = new ArrayList<String>();
+      listValue.add("repository");
+      preferenceR.setName("repository");
+      preferenceR.setValues(listValue);
+      listPreference.add(preferenceR);
+
+      Preference preferenceW = new Preference();
+      listValue = new ArrayList<String>();
+      listValue.add("collaboration");
+      preferenceW.setName("workspace");
+      preferenceW.setValues(listValue);
+      listPreference.add(preferenceW);
+
+      Preference preferenceQ = new Preference();
+      listValue = new ArrayList<String>();
+      listValue.add("true");
+      preferenceQ.setName("ShowQuickEdit");
+      preferenceQ.setValues(listValue);
+      listPreference.add(preferenceQ);
+      
+      portletPreferences.setPreferences(listPreference);
+
+      DataStorage dataStorage = siteAdminToolbar.getApplicationComponent(DataStorage.class);
+      dataStorage.save(portletPreferences);
+
+      // Add portlet to page
+      UserPortalConfigService userPortalConfigService = siteAdminToolbar.getApplicationComponent(UserPortalConfigService.class);
+      Page page = userPortalConfigService.getPage(uiPortal.getSelectedNode().getPageReference(), Util.getPortalRequestContext().getRemoteUser());
+      ArrayList<Object> listPortlet = page.getChildren();
+      listPortlet.add(PortalDataMapper.toPortletModel(uiPortlet));
+      page.setChildren(listPortlet);
+      userPortalConfigService.update(page);
+      UIPage uiPage = uiPortal.findFirstComponentOfType(UIPage.class);
+      uiPage.setChildren(null);
+      PortalDataMapper.toUIPage(uiPage, page);
+      Utils.refreshBrowser((PortletRequestContext) event.getRequestContext());
+    }
+  }
 }
