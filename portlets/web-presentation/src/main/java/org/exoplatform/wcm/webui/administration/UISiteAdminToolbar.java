@@ -2,6 +2,7 @@ package org.exoplatform.wcm.webui.administration;
 
 import java.util.ArrayList;
 
+import javax.faces.component.UIComponent;
 import javax.portlet.PortletMode;
 
 import org.exoplatform.portal.account.UIAccountSetting;
@@ -37,6 +38,7 @@ import org.exoplatform.portal.webui.workspace.UIPortalToolPanel;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
 import org.exoplatform.portal.webui.workspace.UIControlWorkspace.UIControlWSWorkingArea;
 import org.exoplatform.services.jcr.util.IdGenerator;
+import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -46,6 +48,7 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.w3c.tidy.Out;
 
 // TODO: Auto-generated Javadoc
 /*
@@ -383,15 +386,15 @@ public class UISiteAdminToolbar extends UIContainer {
       // Create portlet
       WCMConfigurationService configurationService = siteAdminToolbar.getApplicationComponent(WCMConfigurationService.class);
       StringBuilder windowId = new StringBuilder();
+      String random = IdGenerator.generate();
       windowId.append(PortalConfig.PORTAL_TYPE)
               .append("#")
               .append(uiPortal.getOwner())
               .append(":")
               .append(configurationService.getPublishingPortletName())
               .append("/")
-              .append(IdGenerator.generate());
+              .append(random);
       uiPortlet.setWindowId(windowId.toString());
-      uiPortlet.setCurrentPortletMode(PortletMode.EDIT);
 
       // Add preferences to portlet
       PortletPreferences portletPreferences = new PortletPreferences();
@@ -436,6 +439,7 @@ public class UISiteAdminToolbar extends UIContainer {
       UIPage uiPage = uiPortal.findFirstComponentOfType(UIPage.class);
       uiPage.setChildren(null);
       PortalDataMapper.toUIPage(uiPage, page);
+      ((UIPortlet)uiPage.findComponentById(random)).setCurrentPortletMode(PortletMode.EDIT);
       Utils.refreshBrowser((PortletRequestContext) event.getRequestContext());
     }
   }
