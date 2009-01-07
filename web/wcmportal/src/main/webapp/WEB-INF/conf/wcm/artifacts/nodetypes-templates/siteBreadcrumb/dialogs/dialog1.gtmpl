@@ -1,6 +1,8 @@
 <% 
 	import javax.jcr.Node;
+  import org.exoplatform.portal.webui.util.Util;
 	def rcontext = _ctx.getRequestContext() ;
+	def docBase = Util.getPortalRequestContext().getRequestContextPath();
 	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIHorizontalTabs');
 	def String htmlWYSIWYGFormId = "htmlData[" + uicomponent.hashCode() + "]";
 	def String cssFormId = "ContentCSS[" + uicomponent.hashCode() + "]";
@@ -284,7 +286,7 @@
 																	".UIBreadcrumbs .RightBlackGridArrowIcon {\n" +
 																	"\tfloat: left;\n" +
 																	"\tmargin: 1px;\n" +
-																	"\tbackground:url('/portal/rest/jcr/repository/collaboration/sites content/live/{portalName}/web contents/site artifacts/breadcrumb/Default/medias/images/BreadcrumbsArrowIcon.gif') repeat 0 0;\n" +
+																	"\tbackground:url('$docBase/rest/jcr/repository/collaboration/sites content/live/{portalName}/web contents/site artifacts/breadcrumb/Default/medias/images/BreadcrumbsArrowIcon.gif') repeat 0 0;\n" +
 																	"\theight:16px;\n" +
 																	"\twidth:16px;\n" +
 																	"}";
