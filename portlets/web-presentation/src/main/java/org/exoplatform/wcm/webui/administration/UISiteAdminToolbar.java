@@ -2,10 +2,8 @@ package org.exoplatform.wcm.webui.administration;
 
 import java.util.ArrayList;
 
-import javax.faces.component.UIComponent;
 import javax.portlet.PortletMode;
 
-import org.exoplatform.portal.account.UIAccountSetting;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.application.Preference;
@@ -15,7 +13,6 @@ import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.UIWelcomeComponent;
-import org.exoplatform.portal.webui.UIManagement.ManagementMode;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.page.UIPage;
@@ -23,22 +20,18 @@ import org.exoplatform.portal.webui.page.UIPageCreationWizard;
 import org.exoplatform.portal.webui.page.UIPageEditWizard;
 import org.exoplatform.portal.webui.page.UIWizardPageCreationBar;
 import org.exoplatform.portal.webui.page.UIWizardPageSetInfo;
-import org.exoplatform.portal.webui.portal.UILanguageSelector;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.portal.UIPortalForm;
-import org.exoplatform.portal.webui.portal.UIPortalManagement;
-import org.exoplatform.portal.webui.portal.UIPortalSelector;
-import org.exoplatform.portal.webui.portal.UISkinSelector;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIControlWorkspace;
+import org.exoplatform.portal.webui.workspace.UIExoStart;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIPortalToolPanel;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
 import org.exoplatform.portal.webui.workspace.UIControlWorkspace.UIControlWSWorkingArea;
 import org.exoplatform.services.jcr.util.IdGenerator;
-import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -48,7 +41,6 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-import org.w3c.tidy.Out;
 
 // TODO: Auto-generated Javadoc
 /*
@@ -87,9 +79,11 @@ import org.w3c.tidy.Out;
     @EventConfig(listeners = UISiteAdminToolbar.SkinSettingsActionListener.class),
     @EventConfig(listeners = UISiteAdminToolbar.LanguageSettingsActionListener.class),
     @EventConfig(listeners = UISiteAdminToolbar.AccountSettingsActionListener.class),
-    @EventConfig(listeners = UISiteAdminToolbar.AddContentActionListener.class)
-})
-public class UISiteAdminToolbar extends UIContainer {
+    @EventConfig(listeners = UISiteAdminToolbar.AddContentActionListener.class),
+    @EventConfig(listeners = UISiteAdminToolbar.BrowsePortalActionListener.class),
+    @EventConfig(listeners = UISiteAdminToolbar.BrowsePageActionListener.class),
+    @EventConfig(listeners = UISiteAdminToolbar.EditPageAndNavigationActionListener.class) })
+    public class UISiteAdminToolbar extends UIContainer {
 
   /** The Constant MESSAGE. */
   public static final String MESSAGE = "UISiteAdminToolbar.msg.not-permission";
@@ -211,7 +205,7 @@ public class UISiteAdminToolbar extends UIContainer {
       UIWizardPageSetInfo uiPageSetInfo = uiWizard.getChild(UIWizardPageSetInfo.class);
       uiPageSetInfo.setEditMode();
       uiPageSetInfo.createEvent("ChangeNode", Event.Phase.DECODE, event.getRequestContext())
-                   .broadcast();
+      .broadcast();
     }
   }
 
@@ -247,7 +241,7 @@ public class UISiteAdminToolbar extends UIContainer {
       UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
       UIPortalForm uiNewPortal = uiMaskWS.createUIComponent(UIPortalForm.class,
                                                             "CreatePortal",
-                                                            "UIPortalForm");
+      "UIPortalForm");
       uiMaskWS.setUIComponent(uiNewPortal);
       uiMaskWS.setShow(true);
       portalContext.addUIComponentToUpdateByAjax(uiMaskWS);
@@ -288,14 +282,89 @@ public class UISiteAdminToolbar extends UIContainer {
         return;
       }
       UIControlWorkspace uiControlWorkspace = uiApp.getChild(UIControlWorkspace.class);
-      UIControlWSWorkingArea uiControlWSWorkingArea = uiControlWorkspace.getChildById(UIControlWorkspace.WORKING_AREA_ID);
-      uiControlWSWorkingArea.setUIComponent(uiControlWSWorkingArea.createUIComponent(UIPortalManagement.class,
-                                                                                     null,
-                                                                                     null));
-      PortalRequestContext pcontext = Util.getPortalRequestContext();
-      ((UIPortalApplication) pcontext.getUIApplication()).setEditting(true);
-      UIPortalManagement uiManagement = (UIPortalManagement) uiControlWSWorkingArea.getUIComponent();
-      uiManagement.setMode(ManagementMode.EDIT, event);
+      uiControlWorkspace.getChild(UIExoStart.class)
+      .createEvent("EditPortal", Event.Phase.PROCESS, event.getRequestContext())
+      .broadcast();
+    }
+  }
+
+  /**
+   * The listener interface for receiving browsePortalAction events. The class
+   * that is interested in processing a browsePortalAction event implements this
+   * interface, and the object created with that class is registered with a
+   * component using the component's
+   * <code>addBrowsePortalActionListener<code> method. When
+   * the browsePortalAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see BrowsePortalActionEvent
+   */
+  public static class BrowsePortalActionListener extends EventListener<UISiteAdminToolbar> {
+
+    /*
+     * (non-Javadoc)
+     * @see
+     * org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui
+     * .event.Event)
+     */
+    public void execute(Event<UISiteAdminToolbar> event) throws Exception {
+      event.setRequestContext(Util.getPortalRequestContext());
+      PortalRequestContext portalContext = Util.getPortalRequestContext();
+      UIPortal uiPortal = Util.getUIPortal();
+      UIPortalApplication uiApp = Util.getUIPortalApplication();
+      UserACL userACL = uiApp.getApplicationComponent(UserACL.class);
+      String remoteUser = portalContext.getRemoteUser();
+      if (!uiPortal.isModifiable() || !userACL.hasCreatePortalPermission(remoteUser)
+          || !Utils.canEditCurrentPortal(remoteUser)) {
+        uiApp.addMessage(new ApplicationMessage(UISiteAdminToolbar.MESSAGE,
+                                                new String[] { uiPortal.getName() }));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
+      }
+      UIControlWorkspace uiControlWorkspace = uiApp.getChild(UIControlWorkspace.class);
+      UIExoStart uiExoStart = uiControlWorkspace.getChild(UIExoStart.class);
+      uiExoStart.createEvent("BrowsePortal", Event.Phase.PROCESS, event.getRequestContext())
+      .broadcast();
+    }
+  }
+
+  /**
+   * The listener interface for receiving browsePageAction events. The class
+   * that is interested in processing a browsePageAction event implements this
+   * interface, and the object created with that class is registered with a
+   * component using the component's
+   * <code>addBrowsePageActionListener<code> method. When
+   * the browsePageAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see BrowsePageActionEvent
+   */
+  public static class BrowsePageActionListener extends EventListener<UISiteAdminToolbar> {
+
+    /*
+     * (non-Javadoc)
+     * @see
+     * org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui
+     * .event.Event)
+     */
+    public void execute(Event<UISiteAdminToolbar> event) throws Exception {
+      event.setRequestContext(Util.getPortalRequestContext());
+      PortalRequestContext portalContext = Util.getPortalRequestContext();
+      UIPortal uiPortal = Util.getUIPortal();
+      UIPortalApplication uiApp = Util.getUIPortalApplication();
+      UserACL userACL = uiApp.getApplicationComponent(UserACL.class);
+      String remoteUser = portalContext.getRemoteUser();
+      if (!uiPortal.isModifiable() || !userACL.hasCreatePortalPermission(remoteUser)
+          || !Utils.canEditCurrentPortal(remoteUser)) {
+        uiApp.addMessage(new ApplicationMessage(UISiteAdminToolbar.MESSAGE,
+                                                new String[] { uiPortal.getName() }));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
+      }
+      UIControlWorkspace uiControlWorkspace = uiApp.getChild(UIControlWorkspace.class);
+      UIExoStart uiExoStart = uiControlWorkspace.getChild(UIExoStart.class);
+      uiExoStart.createEvent("BrowsePage", Event.Phase.PROCESS, event.getRequestContext())
+      .broadcast();
     }
   }
 
@@ -320,66 +389,154 @@ public class UISiteAdminToolbar extends UIContainer {
      */
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       event.setRequestContext(Util.getPortalRequestContext());
-      PortalRequestContext portalContext = Util.getPortalRequestContext();
       UIPortalApplication uiApp = Util.getUIPortalApplication();
-      UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
-      UIPortalSelector uiPortalSelector = uiMaskWS.createUIComponent(UIPortalSelector.class,
-                                                                     null,
-                                                                     null);
-      uiMaskWS.setUIComponent(uiPortalSelector);
-      uiMaskWS.setShow(true);
-      portalContext.addUIComponentToUpdateByAjax(uiMaskWS);
+      UIControlWorkspace uiControlWorkspace = uiApp.getChild(UIControlWorkspace.class);
+      UIExoStart uiExoStart = uiControlWorkspace.getChild(UIExoStart.class);
+      uiExoStart.createEvent("ChangePortal", Event.Phase.PROCESS, event.getRequestContext())
+      .broadcast();
     }
   }
 
+  /**
+   * The listener interface for receiving skinSettingsAction events. The class
+   * that is interested in processing a skinSettingsAction event implements this
+   * interface, and the object created with that class is registered with a
+   * component using the component's
+   * <code>addSkinSettingsActionListener<code> method. When
+   * the skinSettingsAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SkinSettingsActionEvent
+   */
   public static class SkinSettingsActionListener extends EventListener<UISiteAdminToolbar> {
+
+    /*
+     * (non-Javadoc)
+     * @see
+     * org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui
+     * .event.Event)
+     */
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       event.setRequestContext(Util.getPortalRequestContext());
-      PortalRequestContext portalContext = Util.getPortalRequestContext();
       UIPortalApplication uiApp = Util.getUIPortalApplication();
-      UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
-      UISkinSelector uiSkinSelector = uiMaskWS.createUIComponent(UISkinSelector.class, null, null);
-      uiMaskWS.setUIComponent(uiSkinSelector);
-      uiMaskWS.setShow(true);
-      portalContext.addUIComponentToUpdateByAjax(uiMaskWS);
+      UIControlWorkspace uiControlWorkspace = uiApp.getChild(UIControlWorkspace.class);
+      UIExoStart uiExoStart = uiControlWorkspace.getChild(UIExoStart.class);
+      uiExoStart.createEvent("SkinSettings", Event.Phase.PROCESS, event.getRequestContext())
+      .broadcast();
     }
   }
 
+  /**
+   * The listener interface for receiving languageSettingsAction events. The
+   * class that is interested in processing a languageSettingsAction event
+   * implements this interface, and the object created with that class is
+   * registered with a component using the component's
+   * <code>addLanguageSettingsActionListener<code> method. When
+   * the languageSettingsAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see LanguageSettingsActionEvent
+   */
   public static class LanguageSettingsActionListener extends EventListener<UISiteAdminToolbar> {
+
+    /*
+     * (non-Javadoc)
+     * @see
+     * org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui
+     * .event.Event)
+     */
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       event.setRequestContext(Util.getPortalRequestContext());
-      PortalRequestContext portalContext = Util.getPortalRequestContext();
       UIPortalApplication uiApp = Util.getUIPortalApplication();
-      UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
-      UILanguageSelector uiLanguageSelector = uiMaskWS.createUIComponent(UILanguageSelector.class, null, null);
-      uiMaskWS.setUIComponent(uiLanguageSelector);
-      uiMaskWS.setShow(true);
-      portalContext.addUIComponentToUpdateByAjax(uiMaskWS);
+      UIControlWorkspace uiControlWorkspace = uiApp.getChild(UIControlWorkspace.class);
+      UIExoStart uiExoStart = uiControlWorkspace.getChild(UIExoStart.class);
+      uiExoStart.createEvent("LanguageSettings", Event.Phase.PROCESS, event.getRequestContext())
+      .broadcast();
     }
   }
-  
+
+  /**
+   * The listener interface for receiving accountSettingsAction events. The
+   * class that is interested in processing a accountSettingsAction event
+   * implements this interface, and the object created with that class is
+   * registered with a component using the component's
+   * <code>addAccountSettingsActionListener<code> method. When
+   * the accountSettingsAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see AccountSettingsActionEvent
+   */
   public static class AccountSettingsActionListener extends EventListener<UISiteAdminToolbar> {
+
+    /*
+     * (non-Javadoc)
+     * @see
+     * org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui
+     * .event.Event)
+     */
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       event.setRequestContext(Util.getPortalRequestContext());
-      PortalRequestContext portalContext = Util.getPortalRequestContext();
       UIPortalApplication uiApp = Util.getUIPortalApplication();
-      UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
-      UIAccountSetting uiAccountSetting = uiMaskWS.createUIComponent(UIAccountSetting.class, null, null);
-      uiMaskWS.setUIComponent(uiAccountSetting);
-      uiMaskWS.setShow(true);
-      portalContext.addUIComponentToUpdateByAjax(uiMaskWS);
+      UIControlWorkspace uiControlWorkspace = uiApp.getChild(UIControlWorkspace.class);
+      UIExoStart uiExoStart = uiControlWorkspace.getChild(UIExoStart.class);
+      uiExoStart.createEvent("AccountSettings", Event.Phase.PROCESS, event.getRequestContext())
+      .broadcast();
     }
   }
-  
+
+  /**
+   * The listener interface for receiving editPageAndNavigationAction events.
+   * The class that is interested in processing a editPageAndNavigationAction
+   * event implements this interface, and the object created with that class is
+   * registered with a component using the component's
+   * <code>addEditPageAndNavigationActionListener<code> method. When
+   * the editPageAndNavigationAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see EditPageAndNavigationActionEvent
+   */
+  public static class EditPageAndNavigationActionListener extends EventListener<UISiteAdminToolbar> {
+
+    /*
+     * (non-Javadoc)
+     * @see
+     * org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui
+     * .event.Event)
+     */
+    public void execute(Event<UISiteAdminToolbar> event) throws Exception {
+      event.setRequestContext(Util.getPortalRequestContext());
+      UIPortalApplication uiApp = Util.getUIPortalApplication();
+      UIControlWorkspace uiControlWorkspace = uiApp.getChild(UIControlWorkspace.class);
+      UIExoStart uiExoStart = uiControlWorkspace.getChild(UIExoStart.class);
+      uiExoStart.createEvent("EditPage", Event.Phase.PROCESS, event.getRequestContext())
+      .broadcast();
+    }
+  }
+
+  /**
+   * The listener interface for receiving addContentAction events. The class
+   * that is interested in processing a addContentAction event implements this
+   * interface, and the object created with that class is registered with a
+   * component using the component's
+   * <code>addAddContentActionListener<code> method. When
+   * the addContentAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see AddContentActionEvent
+   */
   public static class AddContentActionListener extends EventListener<UISiteAdminToolbar> {
-    
-    /* (non-Javadoc)
-     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+
+    /*
+     * (non-Javadoc)
+     * @see
+     * org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui
+     * .event.Event)
      */
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       UISiteAdminToolbar siteAdminToolbar = event.getSource();
       UIPortal uiPortal = Util.getUIPortal();
-//      SessionProvider currentSessionProvider = SessionProviderFactory.createSessionProvider();
+      // SessionProvider currentSessionProvider =
+      // SessionProviderFactory.createSessionProvider();
       UIPortlet uiPortlet = new UIPortlet();
       uiPortlet.setShowInfoBar(false);
 
@@ -388,12 +545,12 @@ public class UISiteAdminToolbar extends UIContainer {
       StringBuilder windowId = new StringBuilder();
       String random = IdGenerator.generate();
       windowId.append(PortalConfig.PORTAL_TYPE)
-              .append("#")
-              .append(uiPortal.getOwner())
-              .append(":")
-              .append(configurationService.getPublishingPortletName())
-              .append("/")
-              .append(random);
+      .append("#")
+      .append(uiPortal.getOwner())
+      .append(":")
+      .append(configurationService.getPublishingPortletName())
+      .append("/")
+      .append(random);
       uiPortlet.setWindowId(windowId.toString());
 
       // Add preferences to portlet
@@ -423,7 +580,7 @@ public class UISiteAdminToolbar extends UIContainer {
       preferenceQ.setName("ShowQuickEdit");
       preferenceQ.setValues(listValue);
       listPreference.add(preferenceQ);
-      
+
       portletPreferences.setPreferences(listPreference);
 
       DataStorage dataStorage = siteAdminToolbar.getApplicationComponent(DataStorage.class);
@@ -431,7 +588,8 @@ public class UISiteAdminToolbar extends UIContainer {
 
       // Add portlet to page
       UserPortalConfigService userPortalConfigService = siteAdminToolbar.getApplicationComponent(UserPortalConfigService.class);
-      Page page = userPortalConfigService.getPage(uiPortal.getSelectedNode().getPageReference(), Util.getPortalRequestContext().getRemoteUser());
+      Page page = userPortalConfigService.getPage(uiPortal.getSelectedNode().getPageReference(),
+                                                  Util.getPortalRequestContext().getRemoteUser());
       ArrayList<Object> listPortlet = page.getChildren();
       listPortlet.add(PortalDataMapper.toPortletModel(uiPortlet));
       page.setChildren(listPortlet);
@@ -439,7 +597,7 @@ public class UISiteAdminToolbar extends UIContainer {
       UIPage uiPage = uiPortal.findFirstComponentOfType(UIPage.class);
       uiPage.setChildren(null);
       PortalDataMapper.toUIPage(uiPage, page);
-      ((UIPortlet)uiPage.findComponentById(random)).setCurrentPortletMode(PortletMode.EDIT);
+      ((UIPortlet) uiPage.findComponentById(random)).setCurrentPortletMode(PortletMode.EDIT);
       Utils.refreshBrowser((PortletRequestContext) event.getRequestContext());
     }
   }
