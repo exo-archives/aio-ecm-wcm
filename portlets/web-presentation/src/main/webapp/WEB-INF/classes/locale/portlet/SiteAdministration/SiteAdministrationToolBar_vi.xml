@@ -11,6 +11,11 @@
       <EditPortal>Chỉnh sửa portal</EditPortal>
       <CreatePortal>Tạo mới portal</CreatePortal>
       <ChangePortal>Thay đổi portal</ChangePortal>
+      <BrowsePortal>Quản lý portals</BrowsePortal>
+      <BrowsePage>Quản lý trang</BrowsePage>
+      <Logout>Đăng xuất</Logout>
+      <AddContent>Tạo mới nội dung</AddContent>
+      <EditPageAndNavigation>Chỉnh sửa navigation</EditPageAndNavigation>   
     </action>
   </UISiteAdminToolbar>
 </bundle>
