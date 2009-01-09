@@ -17,6 +17,9 @@
 	String languageSettingsLink = uicomponent.event("LanguageSettings");
 	String accountSettingsLink = uicomponent.event("AccountSettings");
 	String addContentLink = uicomponent.event("AddContent");
+	String browsePortalLink = uicomponent.event("BrowsePortal");
+	String browsePageLink = uicomponent.event("BrowsePage");
+	String editPageAndNavLink = uicomponent.event("EditPageAndNavigation");		
 	
 	String addPageActionLabel = _ctx.appRes("UISiteAdminToolbar.action.AddPage");	
 	String editPageActionLabel = _ctx.appRes("UISiteAdminToolbar.action.EditPage");
@@ -28,6 +31,10 @@
 	String accountSettingsActionLabel = _ctx.appRes("UISiteAdminToolbar.action.AccountSettings");
 	String viewMoreActionLabel = _ctx.appRes("UISiteAdminToolbar.action.ViewMore");
 	String addContentActionLabel = _ctx.appRes("UISiteAdminToolbar.action.AddContent");
+	String browsePortalActionLabel = _ctx.appRes("UISiteAdminToolbar.action.BrowsePortal");
+	String browsePageActionLabel = _ctx.appRes("UISiteAdminToolbar.action.BrowsePage");
+	String logoutActionLabel = _ctx.appRes("UISiteAdminToolbar.action.Logout");
+	String editPageAndNaviActionLabel = _ctx.appRes("UISiteAdminToolbar.action.EditPageAndNavigation");
 		 					 			
 	boolean showable  = uicomponent.isShowWorkspaceArea();	 			
 	%>
@@ -38,8 +45,15 @@
 		<a class="VerIcon LanguageSettingsIcon" href="$languageSettingsLink" onmouseover="changeMenuBackground(this)" onmouseout="resetMenuBackground(this)">$languageSettingsActionLabel</a>
 		<div style="clear:right"><span/></div>
 		<a class="VerIcon AccountSettingsIcon" href="$accountSettingsLink" onmouseover="changeMenuBackground(this)" onmouseout="resetMenuBackground(this)">$accountSettingsActionLabel</a>
-	</div>	
-	<a class="Icon AddContentIcon" href="$addContentLink" onclick="showWorkspaceArea($showable);">$addContentActionLabel</a>
+		<div style="clear:right"><span/></div>
+		<a class="VerIcon BrowsePortalIcon" href="$browsePortalLink" onmouseover="changeMenuBackground(this)" onmouseout="resetMenuBackground(this)" onclick="showWorkspaceArea($showable);">$browsePortalActionLabel</a>
+		<div style="clear:right"><span/></div>
+		<a class="VerIcon BrowsePageIcon" href="$browsePageLink" onmouseover="changeMenuBackground(this)" onmouseout="resetMenuBackground(this)" onclick="showWorkspaceArea($showable);">$browsePageActionLabel</a>
+		<div style="clear:right"><span/></div>
+		<a class="VerIcon EditPageAndNavIcon" href="$editPageAndNavLink" onmouseover="changeMenuBackground(this)" onmouseout="resetMenuBackground(this)" onclick="showWorkspaceArea($showable);">$editPageAndNaviActionLabel</a>
+	</div>
+	<a class="Icon LogoutIcon" onclick="eXo.portal.logout();" onmouseover="changeMenuBackground(this)" onmouseout="resetMenuBackground(this)">$logoutActionLabel</a>	
+	<a class="Icon AddContentIcon" href="$addContentLink" onmouseover="changeMenuBackground(this)" onmouseout="resetMenuBackground(this)">$addContentActionLabel</a>
 	<a class="Icon AddPageIcon" href="$addPageLink" onmouseover="changeMenuBackground(this)" onmouseout="resetMenuBackground(this)" onclick="showWorkspaceArea($showable);">$addPageActionLabel</a>
 	<a class="Icon EditPageIcon" href="$editPageLink" onmouseover="changeMenuBackground(this)" onmouseout="resetMenuBackground(this)" onclick="showWorkspaceArea($showable);">$editPageActionLabel</a>
 	<a class="Icon CreatePortalIcon" href="$createPortalLink" onmouseover="changeMenuBackground(this)" onmouseout="resetMenuBackground(this)">$createPortalActionLabel</a>
