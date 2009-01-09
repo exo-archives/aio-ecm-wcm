@@ -27,6 +27,7 @@ import javax.jcr.SimpleCredentials;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
+import javax.servlet.ServletContext;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -48,28 +49,31 @@ import org.picocontainer.Startable;
  */
 public class XSkinService implements Startable {    
   private static String SHARED_CSS_QUERY = "select * from exo:cssFile where jcr:path like '{path}/%' and exo:active='true' and exo:sharedCSS='true' order by exo:priority DESC ".intern();  
-  public final static String SKIN_PATH_REGEXP = "/portal/css/jcr/(.*)/(.*)/(.*).css".intern();  
-  private final static String SKIN_PATH_PATTERN = "/portal/css/jcr/(.*)/(.*)/Stylesheet.css".intern();
+  public final static String SKIN_PATH_REGEXP = "/(.*)/css/jcr/(.*)/(.*)/(.*).css".intern();  
+  private final static String SKIN_PATH_PATTERN = "/{docBase}/css/jcr/(.*)/(.*)/Stylesheet.css".intern();
 
   private static Log log = ExoLogger.getLogger("wcm:XSkinService");           
   private WebSchemaConfigService schemaConfigService;
   private WCMConfigurationService configurationService;
   private SkinService skinService ;
+  private ServletContext servletContext;
 
   /**
-   * Instantiates a new extended skin service to manage skin for web content
+   * Instantiates a new extended skin service to manage skin for web content.
    * 
    * @param skinService the skin service
-   * @param repositoryService the repository service
-   * @param portalManagerService the portal manager service
    * @param initializerService the content initializer service. this param makes sure that the service started after the content initializer service is started
+   * @param schemaConfigService the schema config service
+   * @param configurationService the configuration service
+   * @param servletContext the servlet context
    */
   @SuppressWarnings("unused")
-  public XSkinService(SkinService skinService,WebSchemaConfigService schemaConfigService, WCMConfigurationService configurationService, ContentInitializerService initializerService) {
+  public XSkinService(SkinService skinService,WebSchemaConfigService schemaConfigService, WCMConfigurationService configurationService, ContentInitializerService initializerService, ServletContext servletContext) {
     this.skinService = skinService ;
     this.skinService.addResourceResolver(new WCMSkinResourceResolver(this.skinService));
     this.configurationService = configurationService;
     this.schemaConfigService = schemaConfigService;
+    this.servletContext = servletContext;
   }
 
   /**
@@ -117,7 +121,7 @@ public class XSkinService implements Startable {
       if(cssData == null || cssData.length() == 0)        
         return;
     }
-    String skinPath = StringUtils.replaceOnce(SKIN_PATH_PATTERN,"(.*)",portal.getName());    
+    String skinPath = StringUtils.replaceOnce(SKIN_PATH_PATTERN,"(.*)",portal.getName()).replaceFirst("\\{docBase\\}", servletContext.getServletContextName());    
     for(Iterator<String> iterator= skinService.getAvailableSkinNames().iterator();iterator.hasNext();) {
       String skinName = iterator.next();
       skinPath = StringUtils.replaceOnce(skinPath,"(.*)",skinName);
@@ -137,7 +141,7 @@ public class XSkinService implements Startable {
       if(cssData == null || cssData.length() == 0)        
         return;
     }
-    String skinPath = StringUtils.replaceOnce(SKIN_PATH_PATTERN,"(.*)",portal.getName());
+    String skinPath = StringUtils.replaceOnce(SKIN_PATH_PATTERN,"(.*)",portal.getName()).replaceFirst("\\{docBase\\}", servletContext.getServletContextName());
     for(Iterator<String> iterator= skinService.getAvailableSkinNames().iterator();iterator.hasNext();) {
       String skinName = iterator.next();
       skinPath = StringUtils.replaceOnce(skinPath,"(.*)",skinName);
