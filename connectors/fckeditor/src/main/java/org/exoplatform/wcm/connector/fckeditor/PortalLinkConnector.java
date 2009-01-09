@@ -21,6 +21,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -74,14 +75,14 @@ public class PortalLinkConnector implements ResourceContainer {
   /** The RESOURC e_ type. */
   final private String RESOURCE_TYPE       = "PortalPageURI".intern();
 
-  /** The PORTA l_ context. */
-  final private String PORTAL_CONTEXT      = "/portal".intern();
-
   /** The portal data storage. */
   private DataStorage  portalDataStorage;
 
   /** The portal user acl. */
   private UserACL      portalUserACL;
+  
+  /** The servlet context. */
+  private ServletContext servletContext;
 
   /**
    * Instantiates a new portal link connector.
@@ -89,12 +90,14 @@ public class PortalLinkConnector implements ResourceContainer {
    * @param params the params
    * @param dataStorage the data storage
    * @param userACL the user acl
+   * @param servletContext the servlet context
    * 
    * @throws Exception the exception
    */
-  public PortalLinkConnector(InitParams params, DataStorage dataStorage, UserACL userACL) throws Exception {
+  public PortalLinkConnector(InitParams params, DataStorage dataStorage, UserACL userACL, ServletContext servletContext) throws Exception {
     this.portalDataStorage = dataStorage;
     this.portalUserACL = userACL;
+    this.servletContext = servletContext;
   }
 
   /**
@@ -291,7 +294,7 @@ public class PortalLinkConnector implements ResourceContainer {
         break;
       }
     }
-    String pageUri = PORTAL_CONTEXT + "/" + accessMode + "/" + portalName + "/" + pageNode.getUri();
+    String pageUri = "/" + servletContext.getServletContextName() + "/" + accessMode + "/" + portalName + "/" + pageNode.getUri();
 
     Element folderElement = foldersElement.getOwnerDocument().createElement("Folder");
     folderElement.setAttribute("name", pageNode.getName());
