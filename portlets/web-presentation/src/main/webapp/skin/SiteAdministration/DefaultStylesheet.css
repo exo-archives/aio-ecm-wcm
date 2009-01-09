@@ -21,9 +21,29 @@
 	display: block;	
 }
 
+.UISiteAdministrationPortlet .UISiteAdminToolBar .EditPageAndNavIcon {
+	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat left -408px; /* orientation=lt */
+	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat right -408px; /* orientation=rt */
+}
+
+.UISiteAdministrationPortlet .UISiteAdminToolBar .AddContentIcon {
+	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat left -376px; /* orientation=lt */
+	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat right -376px; /* orientation=rt */
+}
+
 .UISiteAdministrationPortlet .UISiteAdminToolBar .SkinSettingsIcon {
 	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat left -504px; /* orientation=lt */
 	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat right -504px; /* orientation=rt */
+}
+
+.UISiteAdministrationPortlet .UISiteAdminToolBar .BrowsePortalIcon {
+	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat left -536px; /* orientation=lt */
+	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat right -536px; /* orientation=rt */
+}
+
+.UISiteAdministrationPortlet .UISiteAdminToolBar .BrowsePageIcon {
+	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat left -472px; /* orientation=lt */
+	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat right -472px; /* orientation=rt */
 }
 
 .UISiteAdministrationPortlet .UISiteAdminToolBar .AddPageIcon {
@@ -63,6 +83,12 @@
 .UISiteAdministrationPortlet .UISiteAdminToolBar .ViewMoreIcon {
 	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat left -184px; /* orientation=lt */
 	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat right -184px; /* orientation=rt */	
+	cursor: pointer;
+}
+
+.UISiteAdministrationPortlet .UISiteAdminToolBar .LogoutIcon {
+	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat left -91px; /* orientation=lt */
+	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat right -91px; /* orientation=rt */	
 	cursor: pointer;
 }
 
