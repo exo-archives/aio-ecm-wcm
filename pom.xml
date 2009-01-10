@@ -7,7 +7,7 @@
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.exoplatform.wcm</groupId>
+  <groupId>org.exoplatform.ecm.wcm</groupId>
   <artifactId>config</artifactId>
   <name>eXo WCM Config</name>
   <version>1.1-SNAPSHOT</version>

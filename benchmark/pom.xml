@@ -1,12 +1,12 @@
 <project>
   <parent>
-    <groupId>org.exoplatform.wcm</groupId>
+    <groupId>org.exoplatform.ecm.wcm</groupId>
     <artifactId>config</artifactId>
     <version>1.1-SNAPSHOT</version>
   </parent> 
 
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>exo.wcm.benchmark</artifactId>
+  <artifactId>exo.ecm.wcm.benchmark</artifactId>
   <version>${org.exoplatform.wcm.version}</version>
   <packaging>jar</packaging>
   <name>eXo WCM Benchmark</name>
