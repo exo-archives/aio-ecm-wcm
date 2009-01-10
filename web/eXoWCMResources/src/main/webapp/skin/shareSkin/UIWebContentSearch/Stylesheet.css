@@ -1,0 +1,78 @@
+.UIWCMSearchContent {
+	padding: 10px 0px;
+}
+
+.UIWCMSearchContent .Label {
+	float: left;
+	padding: 0px 5px 0px 10px;
+}
+	
+.UIWCMSearchContent select.selectbox {
+	float: left;
+	width: 90px;
+	margin: 8px 5px;
+}
+
+.UIWCMSearchContent input {
+	float: left;
+	width: 200px;
+	margin: 8px 5px;
+}
+
+.UIWCMSearchContent a {
+	display: block; 
+	background: url('background/SearchIcon.png') no-repeat center;
+	width: 20px;
+	height: 20px;
+	float: left;
+	margin: 6px;
+}
+
+/******************************************************/
+.UIWCMSearchContainer {
+	background: #f7f7f7;
+	border: 1px solid #b7b7b7;
+}	
+	
+.UIWCMSearchContainer .UIBreadcumbs .LeftBreadcumbsBar {
+	background: white;
+	border: 1px solid #b7b7b7;
+}
+
+.UIWCMSearchContainer .UITreeBuilder {
+	float: left;
+	border: 1px solid #B1B0B0;
+}	
+	
+.UIWCMSearchContainer .UITreeBuilder .Explorer {
+	float: none;
+}
+
+.UIWCMSearchContainer .UISelectPathPanel {
+	margin-left: 240px;
+	border: 1px solid #B1B0B0;
+	background: white;
+}	
+
+.UIWCMSearchContainer .UISelectPathPanel .UITreeList {
+	padding: 20px;
+	margin: 0px;
+}	
+
+.UIWCMSearchContainer .SelectContent .Title {
+	background: #D2DDF1 url(/eXoResources/skin/DefaultSkin/webui/component/UIGrid/background/ThGridRepeatBg1x19.jpg) repeat-x;
+	height: 20px;
+	line-height: 20px;
+	padding: 0px 10px;
+	font-weight: bold;
+	border-bottom: 1px solid #B1B0B0;
+}	
+	
+.UIWCMSearchContainer .ExplorerTree .InnerExplorerTree {
+	border: none;
+	padding: 10px;
+}
+
+.UIWCMSearchContainer .ExplorerTree .UITrees {
+	background: white;
+}

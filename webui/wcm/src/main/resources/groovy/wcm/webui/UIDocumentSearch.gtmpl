@@ -1,0 +1,18 @@
+<div class="UIWCMSearchContent $uicomponent.id">
+	<div class="UIBarStyle">
+		<div class="NormalBarStyle">
+			<div class="LeftBar">
+				<div class="RightBar">
+					<div class="MiddleBar">
+						<%uiform.begin();%>
+							<div class="Label"><%= _ctx.appRes("UISinglePortletContentViewer.SelectContent.searchbox.title") %>:</div>
+							<%uicomponent.renderChildren();%>
+							<a href="<%= uicomponent.event("SearchDMS") %>"></a>
+							<div style="clear:left"><span></span></div>
+						<%uiform.end();%>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

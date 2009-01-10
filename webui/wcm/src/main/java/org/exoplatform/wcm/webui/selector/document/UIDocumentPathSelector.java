@@ -16,6 +16,7 @@
  */
 package org.exoplatform.wcm.webui.selector.document;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.jcr.Node;
@@ -29,8 +30,14 @@ import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.config.annotation.ComponentConfigs;
+import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIBreadcumbs;
 import org.exoplatform.webui.core.UIPopupComponent;
-import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
+import org.exoplatform.webui.core.UIBreadcumbs.LocalPath;
+import org.exoplatform.webui.core.lifecycle.Lifecycle;
+import org.exoplatform.webui.event.Event;
+import org.exoplatform.webui.event.EventListener;
 
 /**
  * Created by The eXo Platform SAS
@@ -38,7 +45,22 @@ import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
  * dzungdev@gmail.com
  * Sep 3, 2008
  */
-@ComponentConfig(lifecycle = UIContainerLifecycle.class)
+@ComponentConfigs({
+  @ComponentConfig(
+      lifecycle = Lifecycle.class,
+      template = "classpath:groovy/wcm/webui/UIDocumentPathSelector.gtmpl",
+      events = {
+        @EventConfig(listeners = UIDocumentPathSelector.SelectPathActionListener.class)
+      }
+  ),
+  @ComponentConfig(
+      type = UIBreadcumbs.class,
+      id = "UIBreadcrumbDocumentPathSelector",
+      template = "system:/groovy/webui/core/UIBreadcumbs.gtmpl",
+      events = @EventConfig(listeners = UIBreadcumbs.SelectPathActionListener.class)
+  )
+}
+)
 public class UIDocumentPathSelector extends UIBaseNodeTreeSelector implements UIPopupComponent{
 
   /**
@@ -46,7 +68,14 @@ public class UIDocumentPathSelector extends UIBaseNodeTreeSelector implements UI
    * 
    * @throws Exception the exception
    */
+
+  private Node currentPortal;
+  private Node sharedPortal;
+  private Node currentNode;
+
   public UIDocumentPathSelector() throws Exception {
+    addChild(UIBreadcumbs.class, "UIBreadcrumbDocumentPathSelector", "UIBreadcrumbDocumentPathSelector");
+    addChild(UIDocumentSearch.class, null, null);
     addChild(UIDocumentTreeBuilder.class, null, UIDocumentTreeBuilder.class.getSimpleName() + hashCode());
     addChild(UISelectPathPanel.class, null, UISelectPathPanel.class.getSimpleName() + hashCode());
   }
@@ -60,14 +89,14 @@ public class UIDocumentPathSelector extends UIBaseNodeTreeSelector implements UI
     LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
     String currentPortalName = Util.getUIPortal().getName();
     SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
-    Node currentPortal = livePortalManagerService.getLivePortal(currentPortalName, sessionProvider);
-    Node sharedPortal = livePortalManagerService.getLiveSharedPortal(sessionProvider);
+    currentPortal = livePortalManagerService.getLivePortal(currentPortalName, sessionProvider);
+    sharedPortal = livePortalManagerService.getLiveSharedPortal(sessionProvider);
     String repositoryName = ((ManageableRepository)(currentPortal.getSession().getRepository())).getConfiguration().getName();
     TemplateService templateService = getApplicationComponent(TemplateService.class);
     List<String> acceptedNodeTypes = templateService.getDocumentTemplates(repositoryName);
     UISelectPathPanel uiSelectPathPanel = getChild(UISelectPathPanel.class);
     String [] arrAcceptedNodeTypes = new String[acceptedNodeTypes.size()];
-    acceptedNodeTypes.toArray(arrAcceptedNodeTypes) ;
+    acceptedNodeTypes.toArray(arrAcceptedNodeTypes);
     uiSelectPathPanel.setAcceptedNodeTypes(arrAcceptedNodeTypes);
     UIDocumentTreeBuilder treeBuilder = getChild(UIDocumentTreeBuilder.class);
     treeBuilder.setCurrentPortal(currentPortal);
@@ -82,8 +111,24 @@ public class UIDocumentPathSelector extends UIBaseNodeTreeSelector implements UI
   @Override
   public void onChange(Node node, Object context) throws Exception {
     UISelectPathPanel uiSelectPathPanel = getChild(UISelectPathPanel.class);
+    changeFolder(node);
+    setCurrentNode(node);
     uiSelectPathPanel.setParentNode(node);
     uiSelectPathPanel.updateGrid();
+  }
+
+  private void changeFolder(Node selectedNode) throws Exception {
+    UIBreadcumbs uiBreadcrumb = getChild(UIBreadcumbs.class);
+    uiBreadcrumb.setPath(getPath(null, selectedNode));
+  }
+
+  private List<LocalPath> getPath(List<LocalPath> list, Node selectedNode) throws Exception {
+    if(list == null) list = new ArrayList<LocalPath>(5);
+    if(selectedNode == null || selectedNode.getPath().equalsIgnoreCase(currentPortal.getParent().getPath()) 
+        || selectedNode.getPath().equals("/")) return list;
+    list.add(0, new LocalPath(selectedNode.getPath(), selectedNode.getName()));    
+    getPath(list, selectedNode.getParent());
+    return list;
   }
 
   /* (non-Javadoc)
@@ -96,5 +141,63 @@ public class UIDocumentPathSelector extends UIBaseNodeTreeSelector implements UI
    * @see org.exoplatform.webui.core.UIPopupComponent#deActivate()
    */
   public void deActivate() throws Exception {    
+  }
+
+  /**
+   * @return the currentPortal
+   */
+  public Node getCurrentPortal() {
+    return currentPortal;
+  }
+
+  /**
+   * @param currentPortal the currentPortal to set
+   */
+  public void setCurrentPortal(Node currentPortal) {
+    this.currentPortal = currentPortal;
+  }
+
+  /**
+   * @return the sharedPortal
+   */
+  public Node getSharedPortal() {
+    return sharedPortal;
+  }
+
+  /**
+   * @param sharedPortal the sharedPortal to set
+   */
+  public void setSharedPortal(Node sharedPortal) {
+    this.sharedPortal = sharedPortal;
+  }
+
+  /**
+   * @return the currentNode
+   */
+  public Node getCurrentNode() {
+    return currentNode;
+  }
+
+  /**
+   * @param currentNode the currentNode to set
+   */
+  public void setCurrentNode(Node currentNode) {
+    this.currentNode = currentNode;
+  }
+
+  public static class SelectPathActionListener extends EventListener<UIBreadcumbs> {
+    public void execute(Event<UIBreadcumbs> event) throws Exception {
+      UIBreadcumbs uiBreadcumbs = event.getSource();
+      String selectedNodePath = event.getRequestContext().getRequestParameter(OBJECTID);
+      UIDocumentPathSelector uiDocumentPathSelector = uiBreadcumbs.getAncestorOfType(UIDocumentPathSelector.class);
+      Node currentPortal = uiDocumentPathSelector.getCurrentPortal();
+      Node sharedPortal = uiDocumentPathSelector.getSharedPortal();
+      if(selectedNodePath.equals(currentPortal.getPath()) || selectedNodePath.equals(sharedPortal.getPath())) {
+        selectedNodePath = currentPortal.getParent().getPath();
+      }
+      UIDocumentTreeBuilder uiDocumentTreeBuilder = uiDocumentPathSelector.getChild(UIDocumentTreeBuilder.class);
+      uiDocumentTreeBuilder.changeNode(selectedNodePath, event.getRequestContext());
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiDocumentPathSelector);
+    }
   }
 }
