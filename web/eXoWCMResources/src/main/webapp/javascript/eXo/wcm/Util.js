@@ -160,6 +160,8 @@ function keepKeywordOnBoxSearch() {
 }
 eXo.core.Browser.addOnLoadCallback("keepKeywordOnBoxSearch", keepKeywordOnBoxSearch);
 
+
+/*------------------the top toolbar---------------*/
 function viewMoreActions(viewMoreObj) {	
 	var moreActionsMenu = eXo.core.DOMUtil.findNextElementByTagName(viewMoreObj, "div");
 	moreActionsMenu.style.display = "block";
@@ -167,14 +169,14 @@ function viewMoreActions(viewMoreObj) {
 		if(window.hiddenmenu) clearTimeout(window.hiddenmenu);
 	}
 	moreActionsMenu.onmouseout = function(){
-		window.hiddenmenu = setTimeout("hideElement('"+this.id+"');",100);
+		window.hiddenmenu = setTimeout("hideElement('" + this.id + "');",100);
 	}
 	if(window.hiddenmenu) clearTimeout(window.hiddenmenu);
 }
 
 function hideMoreActions(viewMoreObj) {
 	var moreActionsMenu = eXo.core.DOMUtil.findNextElementByTagName(viewMoreObj, "div");
-	window.hiddenmenu = setTimeout("hideElement('"+moreActionsMenu.id+"');",100);
+	window.hiddenmenu = setTimeout("hideElement('" + moreActionsMenu.id + "');",100);
 }
 
 function hideElement(element) {
@@ -189,6 +191,21 @@ function changeMenuBackground(menuItem) {
 function resetMenuBackground(menuItem) {
 	menuItem.style.backgroundColor = "";
 }
+
+function showToptoolbarNavs(exoLogo, event) {
+	event = event || window.event ;
+   event.cancelBubble = true ;
+
+	var navs = eXo.core.DOMUtil.findNextElementByTagName(exoLogo, "div");
+	eXo.portal.UIExoStartMenu.buildMenu(navs);
+	if (navs.style.display == "block") {
+		navs.style.display = "none";
+	} else {
+		navs.style.display = "block";
+	}
+	eXo.core.DOMUtil.hideElementList.push(navs);
+}
+/*------------------end the top toolbar--------------------*/
 
 //TODO this code need be removed after portal support this 
 UIPopupWindow.prototype.init = function(popupId, isShow, isResizable, showCloseButton, isShowMask) {
