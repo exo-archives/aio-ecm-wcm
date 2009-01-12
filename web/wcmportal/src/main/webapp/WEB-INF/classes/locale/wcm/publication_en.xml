@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+  <UIPublishingPanel>
+    <panelLeft>
+      <title>Below are the possible pages where the content can be shown</title>
+    </panelLeft>
+    <panelRight>
+      <title>Below are the pages where the content is shown</title>
+    </panelRight>
+    <currentPortal>
+      <title>Current site</title>
+      <none>None</none>
+    </currentPortal>
+    <currentNode>
+      <title>Current node</title>
+      <none>None</none>
+    </currentNode>
+  </UIPublishingPanel>
+  <UIPublicationComponentStatus>
+    <action>
+      <Close>Close</Close>
+    </action>
+  </UIPublicationComponentStatus>
+  <UITabPane>
+    <title>
+      <UIPublishingPanel>Publication Panel</UIPublishingPanel>
+    </title>
+  </UITabPane>
+  <UIPublicationAction>
+    <msg>
+      <none>No page node is selected</none>
+      <duplicate>The content is already published to the page</duplicate>
+      <wrongNode>This is not a page node, please choose another one.</wrongNode>
+    </msg>
+    <action>
+      <add>Publish content to page</add>
+      <remove>Suspend content from page</remove>
+    </action>
+  </UIPublicationAction>
+  <UIPublishedPages>
+    <label>
+      <noitem>This content is not published in any page node yet</noitem>
+    </label>
+  </UIPublishedPages>
+</bundle>
+

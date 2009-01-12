@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+  <PublicationService>
+    <WCMPublicationPlugin>
+      <changeState>
+        <enrolled>The web content has been enrolled to lifecycle %s</enrolled>
+        <published>The web content has been published</published>
+        <unpublished>The web content has been unpublished</unpublished>
+      </changeState>
+      <nodePublished>The web content has been published to the page site %s</nodePublished>
+      <nodeRemoved>The web content has been removed from the page site %s</nodeRemoved>
+    </WCMPublicationPlugin>
+  </PublicationService>
+</bundle>
+

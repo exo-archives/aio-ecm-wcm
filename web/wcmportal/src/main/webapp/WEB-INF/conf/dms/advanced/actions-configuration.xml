@@ -10,21 +10,6 @@
 	<external-component-plugins>
     <target-component>org.exoplatform.services.cms.actions.ActionServiceContainer</target-component>       
       <component-plugin>
-        <name>exo:businessProcessAction</name>
-        <set-method>addPlugin</set-method>
-        <type>org.exoplatform.services.cms.actions.impl.BPActionPlugin</type>
-        <init-params>
-          <object-param>
-            <name>predefined.actions</name>
-            <description>description</description>
-            <object type="org.exoplatform.services.cms.actions.impl.ActionConfig">
-            	<field  name="repository"><string>repository</string></field>
-              <field  name="workspace"><string>collaboration</string></field>                
-            </object>
-          </object-param>
-        </init-params>          
-      </component-plugin>
-      <component-plugin>
         <name>exo:scriptAction</name>   
         <set-method>addPlugin</set-method>
         <type>org.exoplatform.services.cms.actions.impl.ScriptActionPlugin</type>

@@ -42,7 +42,7 @@
 	        </value-param>
 	        <value-param>
 	        	<name>predefinedViewsLocation</name>
-	        	<value>war:/conf/ecm/artifacts</value>
+	        	<value>war:/conf/dms/artifacts</value>
 	        </value-param>	        
 	        <value-param>
 	        	<name>repository</name>

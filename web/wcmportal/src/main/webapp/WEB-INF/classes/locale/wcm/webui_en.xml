@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+  <UIWizardPageSelectLayoutForm>
+    <label>
+      <appPages>
+        <Presentation>Simple Content Viewer</Presentation>
+        <ContentListViewer>Content List Viewer</ContentListViewer>
+        <Search>Search</Search>
+        <Sitemap>Sitemap</Sitemap>
+      </appPages>
+    </label>
+  </UIWizardPageSelectLayoutForm>
+  <ClassicSite>
+    <label>Classic Site</label>
+  </ClassicSite>
+  <ACMESite>
+    <label>ACME Site</label>
+  </ACMESite>
+  <Views>
+    <label>
+      <wcm-view>WCM View</wcm-view>
+      <admin-view>Admin View</admin-view>
+      <icon-view>Icon View</icon-view>
+      <thumbails-view>Thumbnails View</thumbails-view>
+      <cover-flow>Cover Flow View</cover-flow>
+    </label>
+  </Views>
+  <!--/n  ####################################################################################
+  #		../src/main/webapp/WEB-INF/conf/wcm/artifacts/application-templates        		 #
+  #		/content-list-viewer/paginators/UIDefaultPaginator.gtmpl		   		   					 #													
+  ####################################################################################
+  -->
+  <UIPaginatorDefault>
+    <label>
+      <previous>Prev</previous>
+      <next>Next</next>
+    </label>
+  </UIPaginatorDefault>
+  <UIDefaultSearchResult>
+    <label>
+      <resutlsCaption>Results</resutlsCaption>
+      <ofAboutCaption>of about</ofAboutCaption>
+      <forCaption>for</forCaption>
+      <timeUnitCaption>seconds</timeUnitCaption>
+      <kb>kB</kb>
+      <noresult>No result</noresult>
+      <similar>Pages where the same content appears</similar>
+    </label>
+  </UIDefaultSearchResult>
+  <!--/n  ####################################################################################
+  #		../src/main/webapp/WEB-INF/conf/wcm/artifacts/application-templates            #
+  #		/content-list-viewer/list-by-folder/UIContentListPresentationDefault.gtmpl     #													
+  ####################################################################################
+  -->
+  <UIContentListPresentationDefault>
+    <label>
+      <action>
+        <refresh>Refresh</refresh>
+      </action>
+      <readmore>Read more</readmore>
+    </label>
+  </UIContentListPresentationDefault>
+  <!--/n  ####################################################################################
+  -->
+  <UITabPane>
+    <title>
+      <metadata>
+        <siteMetadata>Site Metadata</siteMetadata>
+      </metadata>
+    </title>
+  </UITabPane>
+  <ContentType>
+    <lable>
+      <SiteBreadcrum>Site Breadcrum</SiteBreadcrum>
+      <SiteNavigation>Site Navigation</SiteNavigation>
+      <Twocolumnslayoutwebcontent>Two columns layout webcontent</Twocolumnslayoutwebcontent>
+      <Pictureonheadlayoutwebcontent>Picture on head layout webcontent</Pictureonheadlayoutwebcontent>
+      <Sitesearchboxwebcontent>Site search box webcontent</Sitesearchboxwebcontent>
+      <Freelayoutwebcontent>Free layout webcontent</Freelayoutwebcontent>
+    </lable>
+  </ContentType>
+  <portal>
+    <template>
+      <home>Home</home>
+      <news>News</news>
+      <products>Products</products>
+      <services>Services</services>
+      <search>Search</search>
+      <contact>Contact us</contact>
+      <about>About us</about>
+      <contentviewer>Content Viewer</contentviewer>
+      <parameterizedviewer>Parameterized Viewer</parameterizedviewer>
+      <searchResult>Search Result</searchResult>
+    </template>
+  </portal>
+  <UISinglePortletContentViewer>
+    <SelectContent>
+      <leftcolumn>
+        <title>Select a folder to display its children as content</title>
+      </leftcolumn>
+      <rightcolumn>
+        <title>Below is the possible can be selected</title>
+      </rightcolumn>
+      <searchbox>
+        <title>Search</title>
+      </searchbox>
+    </SelectContent>
+  </UISinglePortletContentViewer>
+</bundle>
+

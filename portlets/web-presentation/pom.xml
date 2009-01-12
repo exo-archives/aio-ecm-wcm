@@ -37,15 +37,15 @@
     </dependency>        
     
     <dependency>
-      <groupId>org.exoplatform.ecm</groupId>
-      <artifactId>exo.ecm.component.cms</artifactId>
-      <version>${org.exoplatform.ecm.version}</version>
+      <groupId>org.exoplatform.ecm.dms</groupId>
+      <artifactId>exo.ecm.dms.component.cms</artifactId>
+      <version>${org.exoplatform.ecm.dms.version}</version>
       <scope>provided</scope>
     </dependency>        
     
     <dependency>
-      <groupId>org.exoplatform.wcm</groupId>
-      <artifactId>exo.wcm.component.wcm</artifactId>
+      <groupId>org.exoplatform.ecm.wcm</groupId>
+      <artifactId>exo.ecm.wcm.component.wcm</artifactId>
       <version>${org.exoplatform.wcm.version}</version>
       <scope>provided</scope>
     </dependency>               
@@ -71,30 +71,30 @@
     </dependency>
     
     <dependency>
-      <groupId>org.exoplatform.ecm</groupId>
-      <artifactId>exo.ecm.webui.ecm</artifactId>
-      <version>${org.exoplatform.ecm.version}</version>
+      <groupId>org.exoplatform.ecm.dms</groupId>
+      <artifactId>exo.ecm.dms.webui.ecm</artifactId>
+      <version>${org.exoplatform.ecm.dms.version}</version>
       <scope>provided</scope>
     </dependency>
     
     <dependency>
-      <groupId>org.exoplatform.wcm</groupId>
-      <artifactId>exo.wcm.webui.wcm</artifactId>
+      <groupId>org.exoplatform.ecm.wcm</groupId>
+      <artifactId>exo.ecm.wcm.webui.wcm</artifactId>
       <version>${org.exoplatform.wcm.version}</version>
       <scope>provided</scope>
     </dependency>
     
     <dependency>
-      <groupId>org.exoplatform.wcm</groupId>
-      <artifactId>exo.wcm.component.publication</artifactId>
+      <groupId>org.exoplatform.ecm.wcm</groupId>
+      <artifactId>exo.ecm.wcm.component.publication</artifactId>
       <version>${org.exoplatform.wcm.version}</version>
       <scope>provided</scope>
     </dependency>
     
     <dependency>
-      <groupId>org.exoplatform.ecm</groupId>
-      <artifactId>exo.ecm.component.publication</artifactId>
-      <version>${org.exoplatform.ecm.version}</version>
+      <groupId>org.exoplatform.ecm.dms</groupId>
+      <artifactId>exo.ecm.dms.component.publication</artifactId>
+      <version>${org.exoplatform.ecm.dms.version}</version>
       <scope>provided</scope>
     </dependency>
  </dependencies>

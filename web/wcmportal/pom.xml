@@ -19,9 +19,9 @@
       <scope>runtime</scope>      
     </dependency>
 	<dependency>
-      <groupId>org.exoplatform.ecm</groupId>
-      <artifactId>exo.ecm.web.portal</artifactId>
-      <version>${org.exoplatform.ecm.version}</version>
+      <groupId>org.exoplatform.ecm.dms</groupId>
+      <artifactId>exo.ecm.dms.web.portal</artifactId>
+      <version>${org.exoplatform.ecm.dms.version}</version>
       <type>war</type>
       <scope>runtime</scope>      
     </dependency>

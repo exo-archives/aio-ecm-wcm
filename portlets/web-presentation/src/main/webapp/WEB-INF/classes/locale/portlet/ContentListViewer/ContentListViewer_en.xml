@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+  <!--/n  ##################################################################
+  # org.exoplatform.wcm.webui.clv.config.UIViewerManagementForm    #
+  ##################################################################
+  -->
+  <UIViewerManagementForm>
+    <action>
+      <Save>Save</Save>
+      <Cancel>Cancel</Cancel>
+    </action>
+    <label>
+      <FolderPathInputSet>UIViewerManagementForm</FolderPathInputSet>
+      <FolderPathInput>Folder path</FolderPathInput>
+      <FormViewTemplate>Viewer template</FormViewTemplate>
+      <PaginatorTemplate>Paginator template</PaginatorTemplate>
+      <ItemsPerPage>Items per page</ItemsPerPage>
+      <ViewerButtonQuickEdit>Show quick edit button</ViewerButtonQuickEdit>
+      <ViewerButtonRefresh>Show refresh button</ViewerButtonRefresh>
+      <ViewerThumbnailsView>Show image</ViewerThumbnailsView>
+      <ViewerTitle>Show title</ViewerTitle>
+      <ViewerDateCreated>Show date created</ViewerDateCreated>
+      <ViewerSummary>Show summary</ViewerSummary>
+      <Header>Header</Header>
+      <ViewerHeader>Show header</ViewerHeader>
+    </label>
+    <title>Select folder to display its children documents or webcontent</title>
+  </UIViewerManagementForm>
+  <!--/n  ###################################################################
+  #			message when list content  							  #	
+  ###################################################################
+  -->
+  <UIMessageBoard>
+    <msg>
+      <folder-not-found>This viewer has not been configured yet.</folder-not-found>
+      <no-permission>Folder access denied.</no-permission>
+      <folder-empty>There is no content to show.</folder-empty>
+      <error-nodetype>Unknown error.</error-nodetype>
+      <saving-success>Successful. You can see the effect when changing to view mode.</saving-success>
+      <empty-folder-path>You must select a folder.</empty-folder-path>
+      <none-action-excuted>No action will be executed.</none-action-excuted>
+    </msg>
+  </UIMessageBoard>
+  <!--/n  ###################################################################
+  -->
+  <UIFolderTreeList>
+    <title>Select a folder to display its children as content</title>
+  </UIFolderTreeList>
+  <UIFolderExplorer>
+    <title>Below is the possible folder can be selected</title>
+  </UIFolderExplorer>
+  <!--/n  ###################################################################
+  -->
+  <UIPopupWindow>
+    <title>
+      <UIFolderPathSelectorForm>Select folder</UIFolderPathSelectorForm>
+    </title>
+  </UIPopupWindow>
+  <!--/n  ###################################################################
+  -->
+  <UIStartEditionInPageWizard>
+    <msg>
+      <edit-portlet>Click here to edit this portlet</edit-portlet>
+    </msg>
+  </UIStartEditionInPageWizard>
+  <!--/n  ###################################################################
+  -->
+  <UIViewerManagementPopupWindow>
+    <title>
+      <UIPortletConfig>Content list viewer management</UIPortletConfig>
+    </title>
+  </UIViewerManagementPopupWindow>
+  <UIFolderPathSelecctPopupWindow>
+    <title>
+      <UIFolderPathSelectorForm>Select folder to view</UIFolderPathSelectorForm>
+    </title>
+  </UIFolderPathSelecctPopupWindow>
+</bundle>
+

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+  <UISiteAdminToolbar>
+    <action>
+      <AddPage>Add page</AddPage>
+      <AddContent>Add content</AddContent>
+      <EditPage>Edit page layout</EditPage>
+      <BrowsePage>Manage pages</BrowsePage>
+      <EditPortal>Edit site</EditPortal>
+      <CreatePortal>Create site</CreatePortal>
+      <ChangePortal>Change site</ChangePortal>
+      <BrowsePortal>Manage sites</BrowsePortal>
+      <SkinSettings>Skin Settings</SkinSettings>
+      <LanguageSettings>Language Settings</LanguageSettings>
+      <AccountSettings>Account Settings</AccountSettings>
+      <ViewMore>More Actions</ViewMore>
+      <Logout>Logout</Logout>
+      <EditPageAndNavigation>Edit Navigation</EditPageAndNavigation>
+    </action>
+    <msg>
+      <not-permission>You don't have permission to do this action.</not-permission>
+    </msg>
+  </UISiteAdminToolbar>
+</bundle>
+

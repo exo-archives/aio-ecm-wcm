@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+  <portal>
+    <classic>
+      <home>Home</home>
+      <presentation>Single Content Viewer</presentation>
+      <listViewer>Content List Viewer</listViewer>
+      <search>Search</search>
+      <searchResult>Search Result</searchResult>
+      <products>Products</products>
+      <register>Register</register>
+      <sitemap>Sitemap</sitemap>
+      <parameterizedviewer>Parameterized Content Viewer</parameterizedviewer>
+      <viewer>Viewer</viewer>
+    </classic>
+  </portal>
+</bundle>
+

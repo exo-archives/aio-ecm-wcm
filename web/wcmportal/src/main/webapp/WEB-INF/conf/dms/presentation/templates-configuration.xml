@@ -20,7 +20,7 @@
 	        </value-param>
 	        <value-param>
 	        	<name>storedLocation</name>
-	        	<value>war:/conf/ecm/artifacts/templates</value>
+	        	<value>war:/conf/dms/artifacts/templates</value>
 	        </value-param>
 	        <value-param>
 	        	<name>repository</name>
