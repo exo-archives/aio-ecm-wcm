@@ -23,7 +23,6 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.nodetype.NodeType;
 
-import org.exoplatform.container.xml.ManageableComponents;
 import org.exoplatform.ecm.webui.tree.UINodeTree;
 import org.exoplatform.ecm.webui.tree.UINodeTreeBuilder;
 import org.exoplatform.services.cms.templates.TemplateService;

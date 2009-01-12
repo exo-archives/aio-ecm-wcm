@@ -42,14 +42,16 @@
 .UIWCMSearchContainer .UITreeBuilder {
 	float: left;
 	border: 1px solid #B1B0B0;
+	width: 300px;
 }	
 	
 .UIWCMSearchContainer .UITreeBuilder .Explorer {
 	float: none;
+	width: auto;
 }
 
 .UIWCMSearchContainer .UISelectPathPanel {
-	margin-left: 240px;
+	margin-left: 310px;
 	border: 1px solid #B1B0B0;
 	background: white;
 }	
@@ -66,6 +68,7 @@
 	padding: 0px 10px;
 	font-weight: bold;
 	border-bottom: 1px solid #B1B0B0;
+	overflow: hidden;
 }	
 	
 .UIWCMSearchContainer .ExplorerTree .InnerExplorerTree {

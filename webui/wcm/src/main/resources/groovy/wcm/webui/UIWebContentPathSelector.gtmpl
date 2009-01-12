@@ -9,11 +9,11 @@
 	<div> <% uicomponent.renderChild(UIWebContentSearch.class); %> </div>
 	<div class="SelectContent"> 
 		<div class="UITreeBuilder">
-			<div class="Title"><%= _ctx.appRes("UISinglePortletContentViewer.SelectContent.leftcolumn.title") %></div>
+			<div class="Title" title="<%= _ctx.appRes("UISinglePortletContentViewer.SelectContent.leftcolumn.title") %>"><%= _ctx.appRes("UISinglePortletContentViewer.SelectContent.leftcolumn.title") %></div>
 			<% uicomponent.renderChild(UIWebContentTreeBuilder.class); %>
 		</div>
 		<div class="UISelectPathPanel">
-			<div class="Title"><%= _ctx.appRes("UISinglePortletContentViewer.SelectContent.rightcolumn.title") %></div>
+			<div class="Title" title="<%= _ctx.appRes("UISinglePortletContentViewer.SelectContent.rightcolumn.title") %>"><%= _ctx.appRes("UISinglePortletContentViewer.SelectContent.rightcolumn.title") %></div>
 			<% uicomponent.renderChild(UISelectPathPanel.class); %>
 		</div>
 	</div>
