@@ -15,19 +15,28 @@
 			<name>news</name>
 			<label>#{portal.classic.register}</label>
 			<page-reference>portal::classic::register</page-reference>
-		</node>    
+		</node>   
+		
 		<node>
-			<uri>presentation</uri>
-			<name>presentation</name>
-			<label>#{portal.classic.presentation}</label>
-			<page-reference>portal::classic::presentation</page-reference>	    
-		</node>	 
-		<node>
-			<uri>contentlistviewer</uri>
-			<name>contentlistviewer</name>
-			<label>#{portal.classic.listViewer}</label>
-			<page-reference>portal::classic::contentlistviewer</page-reference>	    
-		</node>	 
+      <uri>viewer</uri>
+      <name>viewer</name>
+      <label>#{portal.classic.viewer}</label>     
+      <page-reference>portal::classic::presentation</page-reference>      
+      
+      <node>
+				<uri>viewer/presentation</uri>
+				<name>presentation</name>
+				<label>#{portal.classic.presentation}</label>
+				<page-reference>portal::classic::presentation</page-reference>	    
+			</node>	 
+			<node>
+				<uri>viewer/contentlistviewer</uri>
+				<name>contentlistviewer</name>
+				<label>#{portal.classic.listViewer}</label>
+				<page-reference>portal::classic::contentlistviewer</page-reference>	    
+			</node>  	   	    	   	   
+    </node>
+
 		<node>
 			<uri>searchResult</uri>
 			<name>searchResult</name>
