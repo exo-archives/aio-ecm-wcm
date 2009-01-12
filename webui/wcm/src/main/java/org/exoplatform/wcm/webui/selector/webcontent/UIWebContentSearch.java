@@ -30,7 +30,6 @@ import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.ecm.webui.tree.selectone.UISelectPathPanel;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -104,7 +103,12 @@ public class UIWebContentSearch extends UIForm {
     if(currentNode == null) return list;
     Session session = SessionProviderFactory.createSessionProvider().getSession(workspace, maRepository);
     String sqlQuery = "SELECT * FROM nt:base " 
-      + "WHERE jcr:primaryType like 'exo:webContent' "
+      + "WHERE (jcr:primaryType like 'exo:webContent' "
+      + "OR jcr:primaryType like 'exo:twoColumnsWebcontent' " 
+      + "OR jcr:primaryType like 'exo:pictureOnHeadWebcontent' "
+      + "OR jcr:primaryType like 'exo:siteNavigationWebContent' "
+      + "OR jcr:primaryType like 'exo:siteBreadcrumb' "
+      + "OR jcr:primaryType like 'exo:siteSearchBox') "
       + "AND jcr:path like '"
       + currentNode.getPath()
       + "/"
@@ -125,7 +129,7 @@ public class UIWebContentSearch extends UIForm {
     public void execute(Event<UIWebContentSearch> event) throws Exception {
       UIWebContentSearch uiWCSearch = event.getSource();
       UIWebContentPathSelector uiWCPathSelector = uiWCSearch.getAncestorOfType(UIWebContentPathSelector.class);
-      
+
       Node currentNode = uiWCPathSelector.getCurrentNode();
       String workspace = currentNode.getSession().getWorkspace().getName();
       ManageableRepository maRepository = (ManageableRepository) currentNode.getSession().getRepository();
