@@ -1,7 +1,9 @@
 package org.exoplatform.wcm.webui.administration;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import javax.jcr.Node;
 import javax.portlet.PortletMode;
 
 import org.exoplatform.portal.application.PortalRequestContext;
@@ -11,18 +13,22 @@ import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.UIWelcomeComponent;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.container.UIContainer;
+import org.exoplatform.portal.webui.navigation.PageNavigationUtils;
 import org.exoplatform.portal.webui.page.UIPage;
 import org.exoplatform.portal.webui.page.UIPageCreationWizard;
 import org.exoplatform.portal.webui.page.UIPageEditWizard;
 import org.exoplatform.portal.webui.page.UIWizardPageCreationBar;
 import org.exoplatform.portal.webui.page.UIWizardPageSetInfo;
+import org.exoplatform.portal.webui.portal.PageNodeEvent;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.portal.UIPortalForm;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIControlWorkspace;
 import org.exoplatform.portal.webui.workspace.UIExoStart;
@@ -31,8 +37,10 @@ import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIPortalToolPanel;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
 import org.exoplatform.portal.webui.workspace.UIControlWorkspace.UIControlWSWorkingArea;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
+import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -82,7 +90,8 @@ import org.exoplatform.webui.event.EventListener;
     @EventConfig(listeners = UISiteAdminToolbar.AddContentActionListener.class),
     @EventConfig(listeners = UISiteAdminToolbar.BrowsePortalActionListener.class),
     @EventConfig(listeners = UISiteAdminToolbar.BrowsePageActionListener.class),
-    @EventConfig(listeners = UISiteAdminToolbar.EditPageAndNavigationActionListener.class) })
+    @EventConfig(listeners = UISiteAdminToolbar.EditPageAndNavigationActionListener.class),
+    @EventConfig(listeners = UISiteAdminToolbar.ChangePageActionListener.class) })
     public class UISiteAdminToolbar extends UIContainer {
 
   /** The Constant MESSAGE. */
@@ -108,6 +117,21 @@ import org.exoplatform.webui.event.EventListener;
       return true;
     return false;
   }
+
+  public List<PageNavigation> getNavigations() throws Exception {
+    List<PageNavigation> allNav = Util.getUIPortal().getNavigations();
+    String remoteUser = Util.getPortalRequestContext().getRemoteUser();
+    List<PageNavigation> result = new ArrayList<PageNavigation>();
+    for (PageNavigation nav : allNav) {
+      result.add(PageNavigationUtils.filter(nav, remoteUser));
+    }
+    return result;
+  }
+  
+  public String getCurrentPortalName() {    
+    return Util.getUIPortal().getName();
+  }
+  
 
   /**
    * The listener interface for receiving addPageAction events. The class that
@@ -510,6 +534,18 @@ import org.exoplatform.webui.event.EventListener;
       UIExoStart uiExoStart = uiControlWorkspace.getChild(UIExoStart.class);
       uiExoStart.createEvent("EditPage", Event.Phase.PROCESS, event.getRequestContext())
       .broadcast();
+    }
+  }
+
+  public static class ChangePageActionListener extends EventListener<UISiteAdminToolbar> {
+    public void execute(Event<UISiteAdminToolbar> event) throws Exception {
+      String uri = event.getRequestContext().getRequestParameter(OBJECTID);
+      UIPortal uiPortal = Util.getUIPortal();
+      uiPortal.setMode(UIPortal.COMPONENT_VIEW_MODE);
+      PageNodeEvent<UIPortal> pnevent = new PageNodeEvent<UIPortal>(uiPortal,
+          PageNodeEvent.CHANGE_PAGE_NODE,
+          uri);
+      uiPortal.broadcast(pnevent, Event.Phase.PROCESS);
     }
   }
 
