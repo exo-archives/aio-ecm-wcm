@@ -73,7 +73,7 @@ public class UIWebContentPathSelector extends UIBaseNodeTreeSelector implements 
     addChild(UIBreadcumbs.class, "UIBreadcrumbWebContentPathSelector", "UIBreadcrumbWebContentPathSelector");
     addChild(UIWebContentSearch.class, null, null);
     addChild(UIWebContentTreeBuilder.class,null, UIWebContentTreeBuilder.class.getName()+hashCode());
-    addChild(UISelectPathPanel.class,null, UIWebContentTreeBuilder.class.getName()+hashCode());
+    addChild(UISelectPathPanel.class,null, UISelectPathPanel.class.getName()+hashCode());
   }
 
   /**
