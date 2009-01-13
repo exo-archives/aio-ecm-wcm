@@ -71,7 +71,7 @@ public class QueryCriteria {
   private String keyword;  
   
   private String queryPath;
-  private boolean searchWebContent;
+  private boolean searchWebContent = true;
   
   /**
    * Gets the site name.
