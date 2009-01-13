@@ -188,14 +188,18 @@ public class SiteSearchServiceImpl implements SiteSearchService {
    */
   private void mapQueryPath(final QueryCriteria queryCriteria,final SQLQueryBuilder queryBuilder) throws Exception {
     String siteName = queryCriteria.getSiteName();
-    String queryPath = null;
+    String sitePath = null;
     if (siteName != null) {
-      queryPath = livePortalManagerService.getPortalPathByName(siteName);      
+      sitePath = livePortalManagerService.getPortalPathByName(siteName);      
     } else {
       String repository = repositoryService.getCurrentRepository().getConfiguration().getName();
-      queryPath = configurationService.getLivePortalsLocation(repository).getPath();
+      sitePath = configurationService.getLivePortalsLocation(repository).getPath();
     }
-    queryBuilder.setQueryPath(queryPath, PATH_TYPE.DECENDANTS);
+    String queryPath = queryCriteria.getQueryPath();
+    if(!queryPath.startsWith(sitePath)) {
+      queryPath = sitePath;
+    }
+    queryBuilder.setQueryPath(queryPath, PATH_TYPE.DECENDANTS_OR_SELFT);
   }
 
   /**

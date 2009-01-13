@@ -68,7 +68,10 @@ public class QueryCriteria {
   private boolean searchDocument = true;
   
   /** The keyword. */
-  private String keyword;
+  private String keyword;  
+  
+  private String queryPath;
+  private boolean searchWebContent;
   
   /**
    * Gets the site name.
@@ -262,5 +265,21 @@ public class QueryCriteria {
    */
   public void setSearchDocument(boolean searchDocument) {
     this.searchDocument = searchDocument;
+  }
+
+  public String getQueryPath() {
+    return queryPath;
+  }
+
+  public void setQueryPath(String queryPath) {
+    this.queryPath = queryPath;
+  }
+
+  public boolean isSearchWebContent() {
+    return searchWebContent;
+  }
+
+  public void setSearchWebContent(boolean searchWebContent) {
+    this.searchWebContent = searchWebContent;
   }
 }

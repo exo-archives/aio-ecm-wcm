@@ -111,14 +111,21 @@ public class WCMPaginatedQueryResult extends PaginatedQueryResult {
       if (parent.isNodeType("exo:webContent"))
         displayNode = parent;
     }
-    if (queryCriteria.isSearchWebpage() && !queryCriteria.isSearchDocument()) {
-      if (!displayNode.isNodeType("publication:webpagesPublication"))
-        return null;
-    }
-    if (queryCriteria.isSearchDocument() && !queryCriteria.isSearchWebpage()) {
-      if (displayNode.isNodeType("publication:webpagesPublication"))
-        return null;
-    }    
+    if(queryCriteria.isSearchWebContent()) {
+      if(!queryCriteria.isSearchDocument()) {
+        if(!displayNode.isNodeType("exo:webContent")) 
+          return null;
+      }
+      if(queryCriteria.isSearchWebpage()) {
+        if (!displayNode.isNodeType("publication:webpagesPublication"))
+          return null;
+      }
+    }else {
+      if(queryCriteria.isSearchDocument()) {
+        if(displayNode.isNodeType("exo:webContent")) 
+          return null;
+      }
+    }            
     return displayNode;
   }
 
