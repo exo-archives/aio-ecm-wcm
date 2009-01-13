@@ -125,6 +125,10 @@ public class WCMPaginatedQueryResult extends PaginatedQueryResult {
         if(displayNode.isNodeType("exo:webContent")) 
           return null;
       }
+      if(queryCriteria.isSearchWebpage()) {
+        if (!displayNode.isNodeType("publication:webpagesPublication"))
+          return null;
+      }
     }            
     return displayNode;
   }
