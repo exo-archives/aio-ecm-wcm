@@ -199,7 +199,7 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     if(!queryPath.startsWith(sitePath)) {
       queryPath = sitePath;
     }
-    queryBuilder.setQueryPath(queryPath, PATH_TYPE.DECENDANTS_OR_SELFT);
+    queryBuilder.setQueryPath(queryPath, PATH_TYPE.DECENDANTS);
   }
 
   /**

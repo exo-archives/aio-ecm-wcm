@@ -106,5 +106,8 @@
       </searchbox>
     </SelectContent>
   </UISinglePortletContentViewer>
+  <UIWebContentSearch>
+  	<msg-choose-portal>You don't choose any portal. Please choosing a portal to search!</msg-choose-portal>
+  </UIWebContentSearch>
 </bundle>
 

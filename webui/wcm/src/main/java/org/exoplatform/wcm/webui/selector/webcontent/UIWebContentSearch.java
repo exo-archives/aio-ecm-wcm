@@ -20,18 +20,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.jcr.Node;
-import javax.jcr.NodeIterator;
 import javax.jcr.Session;
+import javax.jcr.nodetype.NodeType;
+import javax.jcr.nodetype.NodeTypeIterator;
+import javax.jcr.nodetype.NodeTypeManager;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
-import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.ecm.webui.tree.selectone.UISelectPathPanel;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.wcm.search.PaginatedQueryResult;
+import org.exoplatform.services.wcm.search.QueryCriteria;
+import org.exoplatform.services.wcm.search.SiteSearchService;
+import org.exoplatform.services.wcm.search.WCMPaginatedQueryResult;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -58,8 +65,8 @@ import org.exoplatform.webui.form.UIFormStringInput;
 public class UIWebContentSearch extends UIForm {
 
   private static final String KEYWORD_INPUT = "keyword".intern();
-  private static final String SEARCH_TYPE_NAME = "name".intern();
-  private static final String SEARCH_TYPE_TEXT_FULL = "full text".intern();
+  private static final String SEARCH_TYPE_NAME = "By name".intern();
+  private static final String SEARCH_TYPE_TEXT_FULL = "By content".intern();
   private static final String SEARCH_TYPE = "searchtype".intern();
 
   public UIWebContentSearch() throws Exception {
@@ -72,78 +79,85 @@ public class UIWebContentSearch extends UIForm {
     addChild(uiFormSelectBox);
   }
 
-
-  private List<Node> searchFullText(Node currentNode,String keyword, String workspace, ManageableRepository maRepository) throws Exception {
-    List<Node> list = new ArrayList<Node>(10);
-    if(currentNode == null) return list;
-    Session session = SessionProviderFactory.createSessionProvider().getSession(workspace, maRepository);
-    String sqlQuery = "select * from nt:base " +
-    "where " +
-    "jcr:path like '" + currentNode.getPath() +"/%'" +
-    " and contains(.,'"+keyword+"')" +
-    " and (jcr:primaryType like 'exo:webContent' or jcr:primaryType like 'nt:file' or jcr:primaryType like 'nt:resource')" +
-    " order by exo:dateCreated DESC";
-    QueryManager queManager = session.getWorkspace().getQueryManager();
-    Query query = queManager.createQuery(sqlQuery, Query.SQL);
-    QueryResult result = query.execute();
-    for(NodeIterator nodeIterator = result.getNodes();nodeIterator.hasNext();) {
-      Node child = nodeIterator.nextNode();
-      Node parentNode = child.getParent();
-      while(!parentNode.isNodeType("exo:webContent")) {
-        parentNode = parentNode.getParent();
-      }
-      if(child.isNodeType("exo:hiddenable")) continue;
-      list.add(parentNode);
-    }
-    return list;
+  private WCMPaginatedQueryResult searchFullText(Node currentNode,String keyword) throws Exception {   
+    QueryCriteria qCriteria = new QueryCriteria();
+    qCriteria.setSearchDocument(false);
+    qCriteria.setSearchWebpage(false);
+    qCriteria.setSearchWebContent(true);
+    qCriteria.setQueryPath(currentNode.getPath());
+    qCriteria.setKeyword(keyword);
+    SiteSearchService siteSearchService = getApplicationComponent(SiteSearchService.class);
+    int pageSize = 10;
+    return siteSearchService.searchSiteContents(qCriteria, SessionProviderFactory.createSessionProvider(), pageSize);
   }
 
-  private List<Node> searchWebContentByName(Node currentNode, String keyword, String workspace, ManageableRepository maRepository) throws Exception {
-    List<Node> list = new ArrayList<Node>(10);
-    if(currentNode == null) return list;
+  private PaginatedQueryResult searchWebContentByName(Node currentNode, String keyword, String workspace, ManageableRepository maRepository) throws Exception {
     Session session = SessionProviderFactory.createSessionProvider().getSession(workspace, maRepository);
+    List<String> webContentTypes = getWebContentTypes(session);
     String sqlQuery = "SELECT * FROM nt:base " 
-      + "WHERE (jcr:primaryType like 'exo:webContent' "
-      + "OR jcr:primaryType like 'exo:twoColumnsWebcontent' " 
-      + "OR jcr:primaryType like 'exo:pictureOnHeadWebcontent' "
-      + "OR jcr:primaryType like 'exo:siteNavigationWebContent' "
-      + "OR jcr:primaryType like 'exo:siteBreadcrumb' "
-      + "OR jcr:primaryType like 'exo:siteSearchBox') "
-      + "AND jcr:path like '"
-      + currentNode.getPath()
-      + "/"
-      + keyword
-      + "' "
-      + "OR jcr:path like '" + currentNode.getPath() + "/%/" + keyword + "' ";
+      + "WHERE (";
+    String tempQuery = "";
+    int count = 0;
+    int size = webContentTypes.size();
+    for(String contentType : webContentTypes) {
+      if(count == size -1 ) {
+        tempQuery += "jcr:primaryType like '" + contentType +"') ";
+      } else { 
+        tempQuery += "jcr:primaryType like '" + contentType +"' OR ";
+      }
+      count++;
+    }
+    sqlQuery += tempQuery
+    + "AND jcr:path like '"
+    + currentNode.getPath()
+    + "/"
+    + keyword
+    + "' "
+    + "OR jcr:path like '" + currentNode.getPath() + "/%/" + keyword + "' "
+    + "ORDER BY jcr:score DESC";
     QueryManager queManager = session.getWorkspace().getQueryManager();
     Query query = queManager.createQuery(sqlQuery, Query.SQL);
-    QueryResult result = query.execute();
-    for(NodeIterator nodeIterator = result.getNodes(); nodeIterator.hasNext();) {
-      Node child = nodeIterator.nextNode();
-      if(child.isNodeType("exo:hiddenable")) continue;
-      list.add(child);
+    QueryResult queryResult = query.execute();
+    PaginatedQueryResult paginatedQueryResult = null;
+    int pageSize = 10;
+    paginatedQueryResult = new PaginatedQueryResult(queryResult, pageSize); 
+    return paginatedQueryResult;
+  }
+
+  private List<String> getWebContentTypes(Session session) throws Exception {
+    List<String> list = new ArrayList<String>(10);
+    NodeTypeManager nodeTypeManager = session.getWorkspace().getNodeTypeManager();
+    for(NodeTypeIterator nodeTypeIterator = nodeTypeManager.getAllNodeTypes(); nodeTypeIterator.hasNext();) {
+      NodeType nodeType = nodeTypeIterator.nextNodeType();
+      if(nodeType.isNodeType("exo:webContent")) list.add(nodeType.getName());
     }
     return list;
   }
+
+
+
   static public class SearchWebContentActionListener extends EventListener<UIWebContentSearch> {
     public void execute(Event<UIWebContentSearch> event) throws Exception {
       UIWebContentSearch uiWCSearch = event.getSource();
       UIWebContentPathSelector uiWCPathSelector = uiWCSearch.getAncestorOfType(UIWebContentPathSelector.class);
-
       Node currentNode = uiWCPathSelector.getCurrentNode();
+      if(currentNode.getPath().equals("/sites content/live")) {
+        UIApplication uiApp = uiWCSearch.getAncestorOfType(UIApplication.class);
+        uiApp.addMessage(new ApplicationMessage("UIWebContentSearch.msg-choose-portal",null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+      }
       String workspace = currentNode.getSession().getWorkspace().getName();
       ManageableRepository maRepository = (ManageableRepository) currentNode.getSession().getRepository();
       String searchType = uiWCSearch.getUIFormSelectBox(SEARCH_TYPE).getValue();
       String keyword = uiWCSearch.getUIStringInput(KEYWORD_INPUT).getValue();
-      List<Node> resultNodes = new ArrayList<Node>();
-      if(searchType.equals(SEARCH_TYPE_NAME)) {
-        resultNodes = uiWCSearch.searchWebContentByName(currentNode, keyword, workspace, maRepository);
-      } else {
-        resultNodes = uiWCSearch.searchFullText(currentNode, keyword, workspace, maRepository);
-      }
-      ObjectPageList objPageList = new ObjectPageList(resultNodes, 10);
       UISelectPathPanel uiSelectPathPanel = uiWCPathSelector.getChild(UISelectPathPanel.class);
-      uiSelectPathPanel.getUIPageIterator().setPageList(objPageList);
+      if(searchType.equals(SEARCH_TYPE_NAME)) {
+        PaginatedQueryResult paginatedQueryResult = uiWCSearch.searchWebContentByName(currentNode, keyword, workspace, maRepository);
+        uiSelectPathPanel.getUIPageIterator().setPageList(paginatedQueryResult);
+      } else {
+        WCMPaginatedQueryResult wcmPQResult = uiWCSearch.searchFullText(currentNode, keyword);
+        uiSelectPathPanel.getUIPageIterator().setPageList(wcmPQResult);
+      }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiWCPathSelector);
     }
   }
