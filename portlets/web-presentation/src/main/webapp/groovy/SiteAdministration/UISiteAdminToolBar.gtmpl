@@ -225,26 +225,34 @@
 	%>
 	<a class="HozIcon ViewMoreIcon" onmouseover="viewMoreActions(this)" onmouseout="hideMoreActions(this)">$viewMoreActionLabel</a>	
 	<div class="MoreActionsMenu" id="MoreActionsMenu">
-		<a class="VerIcon SkinSettingsIcon" href="$skinSettingsLink" onmouseover="changeMenuBackground(this)" onmouseout="resetMenuBackground(this)">$skinSettingsActionLabel</a>
+		<a class="VerIcon SkinSettingsIcon" href="$skinSettingsLink">$skinSettingsActionLabel</a>
 		<div style="clear:right"><span/></div>
-		<a class="VerIcon LanguageSettingsIcon" href="$languageSettingsLink" onmouseover="changeMenuBackground(this)" onmouseout="resetMenuBackground(this)">$languageSettingsActionLabel</a>
+		<a class="VerIcon LanguageSettingsIcon" href="$languageSettingsLink">$languageSettingsActionLabel</a>
 		<div style="clear:right"><span/></div>
-		<a class="VerIcon AccountSettingsIcon" href="$accountSettingsLink" onmouseover="changeMenuBackground(this)" onmouseout="resetMenuBackground(this)">$accountSettingsActionLabel</a>
+		<a class="VerIcon AccountSettingsIcon" href="$accountSettingsLink">$accountSettingsActionLabel</a>
 		<div style="clear:right"><span/></div>
-		<a class="VerIcon BrowsePortalIcon" href="$browsePortalLink" onmouseover="changeMenuBackground(this)" onmouseout="resetMenuBackground(this)" onclick="showWorkspaceArea($showable);">$browsePortalActionLabel</a>
+		<a class="VerIcon BrowsePortalIcon" href="$browsePortalLink" onclick="showWorkspaceArea($showable);">$browsePortalActionLabel</a>
 		<div style="clear:right"><span/></div>
-		<a class="VerIcon BrowsePageIcon" href="$browsePageLink" onmouseover="changeMenuBackground(this)" onmouseout="resetMenuBackground(this)" onclick="showWorkspaceArea($showable);">$browsePageActionLabel</a>
+		<a class="VerIcon BrowsePageIcon" href="$browsePageLink" onclick="showWorkspaceArea($showable);">$browsePageActionLabel</a>
 		<div style="clear:right"><span/></div>
-		<a class="VerIcon EditPageAndNavIcon" href="$editPageAndNavLink" onmouseover="changeMenuBackground(this)" onmouseout="resetMenuBackground(this)" onclick="showWorkspaceArea($showable);">$editPageAndNaviActionLabel</a>
+		<a class="VerIcon EditPageAndNavIcon" href="$editPageAndNavLink" onclick="showWorkspaceArea($showable);">$editPageAndNaviActionLabel</a>
 	</div>
-	<a class="HozIcon LogoutIcon" onclick="eXo.portal.logout();" onmouseover="changeMenuBackground(this)" onmouseout="resetMenuBackground(this)">$logoutActionLabel</a>	
-	<a class="HozIcon AddContentIcon" href="$addContentLink" onmouseover="changeMenuBackground(this)" onmouseout="resetMenuBackground(this)">$addContentActionLabel</a>
-	<a class="HozIcon AddPageIcon" href="$addPageLink" onmouseover="changeMenuBackground(this)" onmouseout="resetMenuBackground(this)" onclick="showWorkspaceArea($showable);">$addPageActionLabel</a>
-	<a class="HozIcon EditPageIcon" href="$editPageLink" onmouseover="changeMenuBackground(this)" onmouseout="resetMenuBackground(this)" onclick="showWorkspaceArea($showable);">$editPageActionLabel</a>
-	<a class="HozIcon CreatePortalIcon" href="$createPortalLink" onmouseover="changeMenuBackground(this)" onmouseout="resetMenuBackground(this)">$createPortalActionLabel</a>
-	<a class="HozIcon EditPortalIcon" href="$editPortalLink" onmouseover="changeMenuBackground(this)" onmouseout="resetMenuBackground(this)" onclick="showWorkspaceArea($showable);">$editPortalActionLabel</a>
-	<a class="HozIcon ChangePortalIcon" href="$changePortalLink" onmouseover="changeMenuBackground(this)" onmouseout="resetMenuBackground(this)">$changePortalActionLabel</a>				      			
-	<div class="ExoLogo" onclick="showToptoolbarNavs(this, event);"><span/></div>
+	<div class="SeparationIcon"><span/></div>
+	<a class="HozIcon LogoutIcon" onclick="eXo.portal.logout();" >$logoutActionLabel</a>
+	<div class="SeparationIcon"><span/></div>	
+	<a class="HozIcon AddContentIcon" href="$addContentLink" >$addContentActionLabel</a>
+	<div class="SeparationIcon"><span/></div>
+	<a class="HozIcon AddPageIcon" href="$addPageLink" onclick="showWorkspaceArea($showable);">$addPageActionLabel</a>
+	<div class="SeparationIcon"><span/></div>
+	<a class="HozIcon EditPageIcon" href="$editPageLink" onclick="showWorkspaceArea($showable);">$editPageActionLabel</a>
+	<div class="SeparationIcon"><span/></div>
+	<a class="HozIcon CreatePortalIcon" href="$createPortalLink" >$createPortalActionLabel</a>
+	<div class="SeparationIcon"><span/></div>
+	<a class="HozIcon EditPortalIcon" href="$editPortalLink" onclick="showWorkspaceArea($showable);">$editPortalActionLabel</a>
+	<div class="SeparationIcon"><span/></div>
+	<a class="HozIcon ChangePortalIcon" href="$changePortalLink">$changePortalActionLabel</a>
+	<div class="SeparationIcon"><span/></div>
+	<div class="ExoLogo" onclick="showToptoolbarNavs(this, event);"><span/></div>	
 	<div id="StartMenuContainer" class="StartMenuContainer" style="display: none; top: 0px; position: absolute; top: 32px; border: 1px solid gray; width: 100px;">
 		<div class="StartMenuDecorator">			
 			<div class="StartMenuML">
