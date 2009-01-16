@@ -3,16 +3,27 @@
 }
 
 .UISiteAdministrationPortlet .UISiteAdminToolBar {	
-	height: 32px;
-	padding-right: 10px;
-	background: url('DefaultSkin/background/admin-toobar.png') repeat-x scroll 0 0;
+	background: url('DefaultSkin/icons/IconTopToolBar.gif') repeat-x scroll 0 0;	
+}
+
+.UISiteAdministrationPortlet .UISiteAdminToolBar a:hover {	
+	background-color: #d7d7d7;
+	height: 30px;	
 }
 
 .UISiteAdministrationPortlet .UISiteAdminToolBar .HozIcon {
-	line-height: 30px;	
-	padding-left: 35px;	
-	margin-left: 15px;
-	float: right;
+	line-height: 32px;	
+	padding-left: 35px;
+	padding-right: 5px;		
+	float: right;		
+}
+
+.UISiteAdministrationPortlet .UISiteAdminToolBar .SeparationIcon {
+	float: right;	
+	width: 3px;
+	height: 30px;
+	background: url('DefaultSkin/icons/IconTopToolBar.gif') no-repeat left -320px;
+	background: url('DefaultSkin/icons/IconTopToolBar.gif') no-repeat right -320px;	
 }
 
 .UISiteAdministrationPortlet .UISiteAdminToolBar .VerIcon {	
@@ -21,74 +32,77 @@
 	display: block;	
 }
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar .EditPageAndNavIcon {
-	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat left -408px; /* orientation=lt */
-	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat right -408px; /* orientation=rt */
+.UISiteAdministrationPortlet .UISiteAdminToolBar .EditPageAndNavIcon {	
+	background: url('DefaultSkin/icons/IconTopToolBar.gif') no-repeat left -512px; /* orientation=lt */
+	background: url('DefaultSkin/icons/IconTopToolBar.gif') no-repeat right -512px; /* orientation=rt */
 }
 
 .UISiteAdministrationPortlet .UISiteAdminToolBar .AddContentIcon {
-	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat left -376px; /* orientation=lt */
-	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat right -376px; /* orientation=rt */
+	background: url('DefaultSkin/icons/IconTopToolBar.gif') no-repeat left -256px; /* orientation=lt */
+	background: url('DefaultSkin/icons/IconTopToolBar.gif') no-repeat right -256px; /* orientation=rt */
 }
 
 .UISiteAdministrationPortlet .UISiteAdminToolBar .SkinSettingsIcon {
-	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat left -504px; /* orientation=lt */
-	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat right -504px; /* orientation=rt */
+	background: url('DefaultSkin/icons/IconTopToolBar.gif') no-repeat left -352px; /* orientation=lt */
+	background: url('DefaultSkin/icons/IconTopToolBar.gif') no-repeat right -352px; /* orientation=rt */
 }
 
 .UISiteAdministrationPortlet .UISiteAdminToolBar .BrowsePortalIcon {
-	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat left -536px; /* orientation=lt */
-	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat right -536px; /* orientation=rt */
+	background: url('DefaultSkin/icons/IconTopToolBar.gif') no-repeat left -448px; /* orientation=lt */
+	background: url('DefaultSkin/icons/IconTopToolBar.gif') no-repeat right -448px; /* orientation=rt */
 }
 
 .UISiteAdministrationPortlet .UISiteAdminToolBar .BrowsePageIcon {
-	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat left -472px; /* orientation=lt */
-	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat right -472px; /* orientation=rt */
+	background: url('DefaultSkin/icons/IconTopToolBar.gif') no-repeat left -480px; /* orientation=lt */
+	background: url('DefaultSkin/icons/IconTopToolBar.gif') no-repeat right -480px; /* orientation=rt */
 }
 
 .UISiteAdministrationPortlet .UISiteAdminToolBar .AddPageIcon {
-	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat left -376px; /* orientation=lt */
-	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat right -376px; /* orientation=rt */  
+	background: url('DefaultSkin/icons/IconTopToolBar.gif') no-repeat left -128px; /* orientation=lt */
+	background: url('DefaultSkin/icons/IconTopToolBar.gif') no-repeat right -128px; /* orientation=rt */  
 }
 
 .UISiteAdministrationPortlet .UISiteAdminToolBar .EditPageIcon {
-	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat left -408px; /* orientation=lt */
-	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat right -408px; /* orientation=rt */
+	background: url('DefaultSkin/icons/IconTopToolBar.gif') no-repeat left -160px; /* orientation=lt */
+	background: url('DefaultSkin/icons/IconTopToolBar.gif') no-repeat right -160px; /* orientation=rt */
 }
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar .EditPortalIcon {
-	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat left -440px; /* orientation=lt */
-	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat right -440px; /* orientation=rt */
+.UISiteAdministrationPortlet .UISiteAdminToolBar .EditPortalIcon {	
+	background: url('DefaultSkin/icons/IconTopToolBar.gif') no-repeat left -192px; /* orientation=lt */
+	background: url('DefaultSkin/icons/IconTopToolBar.gif') no-repeat right -192px; /* orientation=rt */
 }
 
 .UISiteAdministrationPortlet .UISiteAdminToolBar .CreatePortalIcon{
-	background: url('DefaultSkin/icons/AddPortal.gif') no-repeat left center;
+	background: url('DefaultSkin/icons/IconTopToolBar.gif') no-repeat left -224px; /* orientation=lt */
+	background: url('DefaultSkin/icons/IconTopToolBar.gif') no-repeat right -224px; /* orientation=rt */
 }
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar .ChangePortalIcon {
-	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat left -248px; /* orientation=lt */
-	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat right -248px; /* orientation=rt */
-}
 
 .UISiteAdministrationPortlet .UISiteAdminToolBar .LanguageSettingsIcon {
-	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat left -280px; /* orientation=lt */
-	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat right -280px; /* orientation=rt */
+	background: url('DefaultSkin/icons/IconTopToolBar.gif') no-repeat left -384px; /* orientation=lt */
+	background: url('DefaultSkin/icons/IconTopToolBar.gif') no-repeat right -384px; /* orientation=rt */
 }
 
 .UISiteAdministrationPortlet .UISiteAdminToolBar .AccountSettingsIcon {
-	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat left -216px; /* orientation=lt */
-	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat right -216px; /* orientation=rt */
+	background: url('DefaultSkin/icons/IconTopToolBar.gif') no-repeat left -416px; /* orientation=lt */
+	background: url('DefaultSkin/icons/IconTopToolBar.gif') no-repeat right -416px; /* orientation=rt */
 }
 
 .UISiteAdministrationPortlet .UISiteAdminToolBar .ViewMoreIcon {
-	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat left -184px; /* orientation=lt */
-	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat right -184px; /* orientation=rt */	
+	background: url('DefaultSkin/icons/IconTopToolBar.gif') no-repeat left -288px; /* orientation=lt */
+	background: url('DefaultSkin/icons/IconTopToolBar.gif') no-repeat right -288px; /* orientation=rt */	
 	cursor: pointer;
 }
 
 .UISiteAdministrationPortlet .UISiteAdminToolBar .LogoutIcon {
-	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat left -91px; /* orientation=lt */
-	background: url('DefaultSkin/icons/ActionsIcon.gif') no-repeat right -91px; /* orientation=rt */	
+	background: url('DefaultSkin/icons/IconTopToolBar.gif') no-repeat left -64px; /* orientation=lt */
+	background: url('DefaultSkin/icons/IconTopToolBar.gif') no-repeat right -64px; /* orientation=rt */	
+	cursor: pointer;
+}
+
+.UISiteAdministrationPortlet .UISiteAdminToolBar .ChangePortalIcon {
+	background: url('DefaultSkin/icons/IconTopToolBar.gif') no-repeat left -96px; /* orientation=lt */
+	background: url('DefaultSkin/icons/IconTopToolBar.gif') no-repeat right -96px; /* orientation=rt */	
 	cursor: pointer;
 }
 
@@ -104,9 +118,8 @@
 }
 
 .UISiteAdministrationPortlet .UISiteAdminToolBar .ExoLogo {
-	background: url('DefaultSkin/icons/favicon.gif') no-repeat left center;
-	height: 20px;
-	width: 20px;
-	float: left;
-	margin: 5px;
+	background: url('DefaultSkin/icons/eXoLogo.gif') no-repeat left center;
+	height: 32px;
+	width: 51px;
+	float: left;	
 }
