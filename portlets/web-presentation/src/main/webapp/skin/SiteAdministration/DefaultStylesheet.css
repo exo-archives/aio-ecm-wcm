@@ -6,16 +6,25 @@
 	background: url('DefaultSkin/icons/IconTopToolBar.gif') repeat-x scroll 0 0;	
 }
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar a:hover {	
-	background-color: #d7d7d7;
-	height: 30px;	
-}
-
 .UISiteAdministrationPortlet .UISiteAdminToolBar .HozIcon {
 	line-height: 32px;	
 	padding-left: 35px;
 	padding-right: 5px;		
 	float: right;		
+}
+
+.UISiteAdministrationPortlet .UISiteAdminToolBar .VerIcon {	
+	line-height: 32px;	
+	padding-left: 35px;		
+	display: block;	
+}
+
+.UISiteAdministrationPortlet .UISiteAdminToolBar a.HozIcon:hover {	
+	background-color: #d7d7d7;
+}
+
+.UISiteAdministrationPortlet .UISiteAdminToolBar a.VerIcon:hover {	
+	background-color: #d7d7d7;
 }
 
 .UISiteAdministrationPortlet .UISiteAdminToolBar .SeparationIcon {
@@ -24,12 +33,6 @@
 	height: 30px;
 	background: url('DefaultSkin/icons/IconTopToolBar.gif') no-repeat left -320px;
 	background: url('DefaultSkin/icons/IconTopToolBar.gif') no-repeat right -320px;	
-}
-
-.UISiteAdministrationPortlet .UISiteAdminToolBar .VerIcon {	
-	line-height: 32px;	
-	padding-left: 35px;		
-	display: block;	
 }
 
 .UISiteAdministrationPortlet .UISiteAdminToolBar .EditPageAndNavIcon {	
