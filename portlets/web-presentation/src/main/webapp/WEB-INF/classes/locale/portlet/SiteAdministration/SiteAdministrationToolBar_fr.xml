@@ -7,6 +7,15 @@
       <EditPortal>Editer le site</EditPortal>
       <CreatePortal>Créer un site</CreatePortal>
       <ChangePortal>Changer de site</ChangePortal>
+      <BrowsePortal></BrowsePortal>
+      <SkinSettings></SkinSettings>
+      <LanguageSettings></LanguageSettings>
+      <AccountSettings></AccountSettings>
+      <BrowsePage></BrowsePage>
+      <AddContent></AddContent>
+      <ViewMore></ViewMore>      
+      <Logout></Logout>
+      <EditPageAndNavigation>Edit Navigation</EditPageAndNavigation>
     </action>
 	<msg>
 	  <not-permission>Vous n'avez pas les droits nécessaires pour effectuer cette action.</not-permission>
