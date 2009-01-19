@@ -11,6 +11,7 @@
       <register>S'enregistrer</register>
       <sitemap>Plan du site</sitemap>
       <parameterizedviewer>Visualiseur de contenu paramétré</parameterizedviewer>
+      <viewer>Insert name of Viewer in Franch</viewer>
     </classic>
   </portal>
 </bundle>

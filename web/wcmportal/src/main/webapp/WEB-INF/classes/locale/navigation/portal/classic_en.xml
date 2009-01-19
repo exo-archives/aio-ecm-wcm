@@ -11,7 +11,7 @@
       <register>Register</register>
       <sitemap>Sitemap</sitemap>
       <parameterizedviewer>Parameterized Content Viewer</parameterizedviewer>
-      <viewer>Viewer</viewer>
+      <viewer>Viewers</viewer>
     </classic>
   </portal>
 </bundle>
