@@ -17,6 +17,7 @@
 package org.exoplatform.wcm.webui.scv.config;
 
 import javax.jcr.Node;
+import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
 import org.exoplatform.portal.webui.portal.UIPortal;
@@ -204,15 +205,20 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent{
    */
   public void closePopupAndUpdateUI(WebuiRequestContext requestContext, boolean isUpdate) throws Exception {    
     UISingleContentViewerPortlet uiPresentationPortlet = getAncestorOfType(UISingleContentViewerPortlet.class);    
-    UIPopupContainer popupAction = uiPresentationPortlet.getChild(UIPopupContainer.class) ;
-    popupAction.deActivate() ;                
-    requestContext.addUIComponentToUpdateByAjax(popupAction) ;
+    UIPopupContainer popupAction = uiPresentationPortlet.getChild(UIPopupContainer.class);
+    popupAction.deActivate();                
+    requestContext.addUIComponentToUpdateByAjax(popupAction);
+    PortletRequestContext portletContext = (PortletRequestContext) requestContext;
+    PortletMode portletMode = portletContext.getApplicationMode();
+    if(!isEditPortletInCreatePageWizard() && PortletMode.EDIT.equals(portletMode)) {
+      uiPresentationPortlet.activateMode(PortletMode.VIEW);
+    }
     if(isUpdate && !isEditPortletInCreatePageWizard()) {
       getChildren().clear();
       Utils.refreshBrowser((PortletRequestContext)requestContext);
     }
   }
-  
+
   public void showPopup(WebuiRequestContext requestContext) throws Exception{
     UISingleContentViewerPortlet viewerPortlet = getAncestorOfType(UISingleContentViewerPortlet.class);
     UIPopupContainer popupContainer = viewerPortlet.getChild(UIPopupContainer.class);

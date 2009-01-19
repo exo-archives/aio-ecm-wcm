@@ -90,7 +90,7 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
    * 
    * @throws Exception the exception
    */
-  private void activateMode(PortletMode mode) throws Exception {
+  public void activateMode(PortletMode mode) throws Exception {
     getChildren().clear() ;        
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     //only add popup container in private mode to pass w3c validator
