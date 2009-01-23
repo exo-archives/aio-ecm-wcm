@@ -13,6 +13,9 @@
   <component>    
     <type>org.exoplatform.wcm.connector.fckeditor.PortalLinkConnector</type>    
   </component>     
+  <component>    
+    <type>org.exoplatform.wcm.connector.fckeditor.GadgetConnector</type>    
+  </component>
   
   <external-component-plugins>
     <target-component>org.exoplatform.services.ecm.fckconfig.FCKConfigService</target-component>

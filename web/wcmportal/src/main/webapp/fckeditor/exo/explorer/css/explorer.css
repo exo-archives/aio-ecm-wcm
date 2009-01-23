@@ -225,6 +225,11 @@ a {
 	overflow: auto;
 }
 
+.ThumbnailTable {
+	float: left;
+	width:100px;
+}
+
 .DocumentTable a {
 	padding-left: 20px; 
 }

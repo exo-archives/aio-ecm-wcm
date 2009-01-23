@@ -4,6 +4,7 @@ FCKConfig.Plugins.Add( 'urani', null, FCKConfig.eXoPath + "plugins/") ;
 FCKConfig.Plugins.Add( 'insertImage', null, FCKConfig.eXoPath + "plugins/") ;
 FCKConfig.Plugins.Add( 'insertDocument', null, FCKConfig.eXoPath + "plugins/") ;
 FCKConfig.Plugins.Add( 'insertPortalLink', null, FCKConfig.eXoPath + "plugins/") ;
+FCKConfig.Plugins.Add( 'insertGadget', null, FCKConfig.eXoPath + "plugins/") ;
 
 //config style
 FCKConfig.EditorAreaCSS = '';
@@ -19,7 +20,7 @@ FCKConfig.ToolbarSets["CompleteWCM"] = [
 	['OrderedList','UnorderedList','-','Outdent','Indent','Blockquote','CreateDiv'],
 	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
 	['Link','Insert link to a site page','Unlink','Anchor'],
-	['Insert Image','Insert DMS Document','Flash','Table','Rule','SpecialChar','PageBreak'],
+	['Insert Gadget', 'Insert Image','Insert DMS Document','Flash','Table','Rule','SpecialChar','PageBreak'],
 	['TextColor','BGColor'],
 	['FitWindow','ShowBlocks'],
 	['Style','FontFormat','FontName','FontSize']
@@ -58,6 +59,7 @@ window.eXoPlugin = {
 		
 		this.ExoImageBrowserURL = FCKConfig.eXoPath + 'filemanager/browser/default/browser.html?Type=Image&Connector=/portal/rest/fckconnector/jcr/getFiles' ;
 		this.ExoFileBrowserURL = FCKConfig.eXoPath + 'filemanager/browser/default/browser.html?Type=File&Connector=/portal/rest/fckconnector/jcr/getFiles' ;
+		this.ExoGadgetBrowserURL = FCKConfig.eXoPath + 'filemanager/browser/default/browser.html?Type=Gadget&Connector=/portal/rest/wcmGadget/' ;
 		this.ExoPortalLinkBrowserURL = FCKConfig.eXoPath + 'explorer/explorer.html?Type=PortalLink&Connector=/portal/rest/portalLinks/&disableUploading=true&disableCreatingFolder=true' ;
 		FCKConfig.LinkBrowserURL = FCKConfig.eXoPath + 'explorer/explorer.html?Type=Link&Connector=/portal/rest/wcmLink/';
 		//detect user language
