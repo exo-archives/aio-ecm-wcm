@@ -184,26 +184,9 @@ function hideElement(element) {
 	element.style.display = "none";
 }
 
-function changeMenuBackground(menuItem) {
-	menuItem.style.backgroundColor = "RGB(230, 230, 230)";
-}
-
-function resetMenuBackground(menuItem) {
-	menuItem.style.backgroundColor = "";
-}
-
-function showToptoolbarNavs(exoLogo, event) {
-	event = event || window.event ;
-   event.cancelBubble = true ;
-
-	var navs = eXo.core.DOMUtil.findNextElementByTagName(exoLogo, "div");
-	eXo.portal.UIExoStartMenu.buildMenu(navs);
-	if (navs.style.display == "block") {
-		navs.style.display = "none";
-	} else {
-		navs.style.display = "block";
-	}
-	eXo.core.DOMUtil.hideElementList.push(navs);
+function showToptoolbarNavs(exoLogo) {
+	var navs = eXo.core.DOMUtil.findAncestorByClass(exoLogo, "StartMenuContainer");
+	eXo.portal.UIExoStartMenu.buildMenu(navs);	
 }
 /*------------------end the top toolbar--------------------*/
 
