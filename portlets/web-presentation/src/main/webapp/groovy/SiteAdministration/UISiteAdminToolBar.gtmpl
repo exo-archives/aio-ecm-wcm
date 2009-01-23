@@ -1,4 +1,6 @@
 <% 
+	import java.util.List;
+	import javax.jcr.Node;
 	import org.exoplatform.webui.config.Event;
 	import org.exoplatform.webui.application.WebuiRequestContext;
 	import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -6,22 +8,20 @@
   import org.exoplatform.portal.config.model.PageNode ;
   import org.exoplatform.web.application.JavascriptManager;
   import org.exoplatform.portal.config.model.PageNavigation ;
-  import org.exoplatform.portal.webui.util.Util;
+  import org.exoplatform.portal.webui.util.Util;	 
   
 	def rcontext = _ctx.getRequestContext() ;
  	rcontext.getJavascriptManager().importJavascript('eXo.SiteAdministration.ShowAdminToolbar','/web-presentation/javascript'); 	
   JavascriptManager jsmanager = rcontext.getJavascriptManager();
   
   jsmanager.importJavascript('eXo.portal.UIExoStartMenu');
-  jsmanager.addOnLoadJavascript('eXo.portal.UIExoStartMenu.onLoad');
-  jsmanager.addOnLoadJavascript('eXo.portal.UIExoStartMenu.onLoad');
-  jsmanager.addOnLoadJavascript('eXo.portal.UIExoStartMenu.onLoad');
+  jsmanager.addOnLoadJavascript('eXo.portal.UIExoStartMenu.onLoad');  
 %>
 
 <%
-  void renderSinglePageNode(PageNavigation nav, PageNode node) {
-    String  href = uicomponent.event("ChangePage",  nav.getId() + "::" + node.getUri()) ;
-    String icon = node.getIcon();
+  void renderSinglePageNode(String portalName, PageNode node) {    
+    String  href = uicomponent.getBaseURI(portalName) + "/" + node.getUri();   
+    String icon = node.getIcon();    
     if(icon == null) icon = "DefaultPageIcon";
     String label = (node.resolvedLabel.length() > 60 ? node.resolvedLabel.substring(0, 57) + "..." : node.resolvedLabel); 
     print """
@@ -31,7 +31,7 @@
           	<div class="LabelText">
 		""";
 						if(node.pageReference != null) {
-				        print """<a href="#" onclick="$href" title="$node.resolvedLabel">$label</a>""";
+				        print """<a href="$href" title="$node.resolvedLabel">$label</a>""";
 						} else {
 								print """<a href="#" title="$node.resolvedLabel">$label</a>""";
 						}
@@ -43,8 +43,8 @@
     """ ;
   }
   
-  void renderPageNode(PageNavigation nav, PageNode node) {
-    String  href = uicomponent.event("ChangePage",   nav.getId() + "::" +  node.getUri()) ;
+  void renderPageNode(String portalName, PageNode node) {    
+    String  href = uicomponent.getBaseURI(portalName) + "/" + node.getUri(); 
     String icon = node.getIcon();
     String scrollUpTitle = _ctx.appRes("UIExoStart.tooltip.scrollUp") ;
   	String scrollDownTitle = _ctx.appRes("UIExoStart.tooltip.scrollDown") ;
@@ -59,8 +59,8 @@
               <div class="LabelText ">
 		""";
 					if(node.pageReference != null ){
-            	print """<a href="#" onclick="$href" title="$node.resolvedLabel">$label</a>""";
-          }else {
+            	print """<a href="$href" title="$node.resolvedLabel">$label</a>""";
+          } else {
           		print """<a href="#" title="$node.resolvedLabel">$label</a>""";
           }
     print """
@@ -85,8 +85,11 @@
 						      <div class="MenuContainer">          
 						      """ ;
 						      for(child in node.getChildren()) {
-						        if(child.getChildren() != null && child.getChildren().size() > 0) renderPageNode(nav, child) ;
-						        else renderSinglePageNode(nav, child) ;
+						        if(child.getChildren() != null && child.getChildren().size() > 0) {
+						        	renderPageNode(portalName, child);
+						        } else {
+						        	renderSinglePageNode(portalName, child);
+						        }
 						      }
 						      print """
 						      </div>
@@ -108,7 +111,7 @@
     """ ;
   }
   
-  void renderPageNavigation(PageNavigation navigation) {
+  void renderPageNavigation(PageNavigation navigation, String portalName) {
   	nodes = navigation.getNodes() ;
   	if(nodes.size() < 1) return ;
   	String navTitle = _ctx.appRes("UIPageNavigation.label.titleBar") ;
@@ -120,10 +123,13 @@
 	        	<div class="TitleBar">$navTitle</div>
 				    """ ;
 				    for(node in nodes) {
-				      if(node.getChildren() != null && node.getChildren().size() > 0) {
-				        renderPageNode(navigation, node) ;
-				      }
-				      else renderSinglePageNode(navigation, node) ;
+				    	if (node.isDisplay()) {				    	
+					      if(node.getChildren() != null && node.getChildren().size() > 0) {
+					        renderPageNode(portalName, node);
+					      } else {
+					      	renderSinglePageNode(portalName, node) ;
+				      	}
+			      	}
 				    }
 				    print """
     			</div>
@@ -132,21 +138,11 @@
     """ ;    
   }
   
-  void renderNavigations() {
-    String portalName = uicomponent.getCurrentPortalName();    
-    String scrollUpTitle = _ctx.appRes("UIExoStart.tooltip.scrollUp") ;
+  
+  void renderNavigations(String portalName) {
+  	String scrollUpTitle = _ctx.appRes("UIExoStart.tooltip.scrollUp") ;
   	String scrollDownTitle = _ctx.appRes("UIExoStart.tooltip.scrollDown") ;
-    print """
-      <div class="MenuItem">
-        <div class="LabelItem">
-          <div class="NavigationBackground">
-            <div class="NavigationArrowIcon">
-              <div class="LabelText" title="$portalName">${portalName}</div>
-            </div>
-          </div>
-        </div>
-    """ ;    
-    navigations = uicomponent.getNavigations() ;       	
+		navigations = uicomponent.getNavigationsOfPortal(portalName);       	
    	if (navigations != null && navigations.size() > 0) {
        	print """ 
         <div class="MenuItemContainer NavigationContainer" style="top: -1000px;">
@@ -166,7 +162,7 @@
 					      	<div class="MenuContainer"> 
 					      	""" ;
 						      for(navigation in navigations) {
-						        renderPageNavigation(navigation) ;
+						        renderPageNavigation(navigation, portalName) ;
 						      }
 					      	print """
 					      	</div>
@@ -185,7 +181,66 @@
           </div>  
         </div>
     		""" ;
-    }
+    }  
+  }  
+  
+  void renderTopToolbarNavs() {    
+    List<Node> portals = uicomponent.getAllPortals();
+    print """      
+      <div class="MenuItem">        
+      	<div class="ExoLogo" onmouseover="showToptoolbarNavs(this);"><span/></div>
+    """ ;    
+    print """ 
+        <div class="MenuItemContainer NavigationContainer" style="top: -1000px;">
+          <div class="StartMenuDecorator">
+            <div class="StartMenuTL">
+              <div class="StartMenuTR">
+                <div class="StartMenuTC"><span></span></div>
+              </div>
+            </div>
+            <div class="StartMenuML">
+              <div class="StartMenuMR">
+                <div class="StartMenuBG" style="padding: 5px 0px;">
+					        <div class="TopNavigator" style="display: none;">
+					        	<div class="UpNavigatorIcon"><span></span></div>
+					        </div>
+									<div class="BlockMenu">
+					      	<div class="MenuContainer">					      	
+					      	""" ;
+					      	for (Node portal : portals) {	
+					      		String portalName = portal.getName();					      
+								    print """
+								      <div class="MenuItem">
+								        <div class="LabelItem">
+								          <div class="NavigationBackground">
+								            <div class="NavigationArrowIcon">
+								              <div class="LabelText" title="$portalName">${portalName}</div>
+								            </div>
+								          </div>
+								        </div>							     							   
+								    """ ; 
+								    renderNavigations(portalName);
+								    print """
+								      </div>
+								    """ ;					 
+							    }     	
+					      	print """
+					      	</div>
+					      	</div>
+					      	<div class="BottomNavigator" style="display: none;">
+					      		<div class="DownNavigatorIcon"><span></span></div>
+					      	</div>
+                </div>
+              </div>
+            </div>
+            <div class="StartMenuBL">
+              <div class="StartMenuBR">
+              <div class="StartMenuBC"><span></span></div>
+              </div>
+            </div>
+          </div>  
+        </div>
+    		""" ;
     print """
       </div>
     """ ;
@@ -252,14 +307,13 @@
 	<div class="SeparationIcon"><span/></div>
 	<a class="HozIcon ChangePortalIcon" href="$changePortalLink">$changePortalActionLabel</a>
 	<div class="SeparationIcon"><span/></div>	
-	<div class="ExoLogo" onclick="showToptoolbarNavs(this, event);"><span/></div>	
-	<div id="StartMenuContainer" class="StartMenuContainer" style="display: none; top: 0px; position: absolute; top: 32px; border: 1px solid gray; width: 100px;">
+	<div id="StartMenuContainer" class="StartMenuContainer" style="display: block;  position: absolute; top: 0px;">
 		<div class="StartMenuDecorator">			
 			<div class="StartMenuML">
 				<div class="StartMenuMR">
 					<div class="StartMenuBG">      
 						<div class="MenuItemContainer" style="top: -1000px;">						
-						<% renderNavigations(); %>
+						<% renderTopToolbarNavs(); %>
 						</div>
 					</div>
 				</div>

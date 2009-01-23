@@ -21,6 +21,7 @@
 
 .UISiteAdministrationPortlet .UISiteAdminToolBar a.HozIcon:hover {	
 	background-color: #d7d7d7;
+	height: 30px;
 }
 
 .UISiteAdministrationPortlet .UISiteAdminToolBar a.VerIcon:hover {	

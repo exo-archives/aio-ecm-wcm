@@ -2,9 +2,11 @@ package org.exoplatform.wcm.webui.administration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.jcr.Node;
 import javax.portlet.PortletMode;
+import javax.servlet.http.HttpServletRequest;
 
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.application.PortletPreferences;
@@ -14,6 +16,7 @@ import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
+import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.UIWelcomeComponent;
 import org.exoplatform.portal.webui.application.UIPortlet;
@@ -39,6 +42,8 @@ import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
 import org.exoplatform.portal.webui.workspace.UIControlWorkspace.UIControlWSWorkingArea;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.util.IdGenerator;
+import org.exoplatform.services.resources.LocaleConfig;
+import org.exoplatform.services.resources.LocaleConfigService;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.wcm.webui.Utils;
@@ -92,7 +97,7 @@ import org.exoplatform.webui.event.EventListener;
     @EventConfig(listeners = UISiteAdminToolbar.BrowsePageActionListener.class),
     @EventConfig(listeners = UISiteAdminToolbar.EditPageAndNavigationActionListener.class),
     @EventConfig(listeners = UISiteAdminToolbar.ChangePageActionListener.class) })
-    public class UISiteAdminToolbar extends UIContainer {
+public class UISiteAdminToolbar extends UIContainer {
 
   /** The Constant MESSAGE. */
   public static final String MESSAGE = "UISiteAdminToolbar.msg.not-permission";
@@ -127,11 +132,57 @@ import org.exoplatform.webui.event.EventListener;
     }
     return result;
   }
-  
-  public String getCurrentPortalName() {    
-    return Util.getUIPortal().getName();
+
+  public List<PageNavigation> getNavigationsOfPortal(String portalName) throws Exception {
+    UserPortalConfigService portalConfigService = getApplicationComponent(UserPortalConfigService.class);
+    UIPortalApplication uiApp = Util.getUIPortalApplication();
+    LocaleConfig localeConfig = getApplicationComponent(LocaleConfigService.class).getLocaleConfig(uiApp.getLocale()
+                                                                                                        .getLanguage());
+    String remoteUser = Util.getPortalRequestContext().getRemoteUser();
+    List<PageNavigation> navs = portalConfigService.getUserPortalConfig(portalName, remoteUser)
+                                                   .getNavigations();
+    for (PageNavigation nav : navs) {
+      if (nav.getOwnerType().equals(PortalConfig.USER_TYPE))
+        continue;
+      ResourceBundle res = localeConfig.getNavigationResourceBundle(nav.getOwnerType(),
+                                                                    nav.getOwnerId());
+      for (PageNode node : nav.getNodes()) {
+        resolveLabel(res, node);        
+      }
+    }    
+    return navs;
   }
-  
+
+  public String getBaseURI(String portalName) {
+    PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
+    HttpServletRequest servletRequest = portalRequestContext.getRequest();
+    String baseURI = servletRequest.getScheme() + "://" + servletRequest.getServerName() + ":"
+        + servletRequest.getServerPort() + servletRequest.getContextPath() + "/private/" + portalName;     
+    return baseURI;
+  }
+
+  private void resolveLabel(ResourceBundle res, PageNode node) {
+    node.setResolvedLabel(res);
+    if (node.getChildren() == null)
+      return;
+    for (PageNode childNode : node.getChildren()) {
+      resolveLabel(res, childNode);
+    }
+  }
+
+  public List<Node> getAllPortals() throws Exception {
+    LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
+    SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
+    List<Node> portalList = livePortalManagerService.getLivePortals(sessionProvider);
+    Node sharedPortal = livePortalManagerService.getLiveSharedPortal(sessionProvider);
+    for (Node portal : portalList) {
+      if (portal.getPath().equals(sharedPortal.getPath())) {
+        portalList.remove(portal);
+        break;
+      }
+    }
+    return portalList;
+  }
 
   /**
    * The listener interface for receiving addPageAction events. The class that
@@ -229,7 +280,7 @@ import org.exoplatform.webui.event.EventListener;
       UIWizardPageSetInfo uiPageSetInfo = uiWizard.getChild(UIWizardPageSetInfo.class);
       uiPageSetInfo.setEditMode();
       uiPageSetInfo.createEvent("ChangeNode", Event.Phase.DECODE, event.getRequestContext())
-      .broadcast();
+                   .broadcast();
     }
   }
 
@@ -265,7 +316,7 @@ import org.exoplatform.webui.event.EventListener;
       UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
       UIPortalForm uiNewPortal = uiMaskWS.createUIComponent(UIPortalForm.class,
                                                             "CreatePortal",
-      "UIPortalForm");
+                                                            "UIPortalForm");
       uiMaskWS.setUIComponent(uiNewPortal);
       uiMaskWS.setShow(true);
       portalContext.addUIComponentToUpdateByAjax(uiMaskWS);
@@ -307,8 +358,8 @@ import org.exoplatform.webui.event.EventListener;
       }
       UIControlWorkspace uiControlWorkspace = uiApp.getChild(UIControlWorkspace.class);
       uiControlWorkspace.getChild(UIExoStart.class)
-      .createEvent("EditPortal", Event.Phase.PROCESS, event.getRequestContext())
-      .broadcast();
+                        .createEvent("EditPortal", Event.Phase.PROCESS, event.getRequestContext())
+                        .broadcast();
     }
   }
 
@@ -348,7 +399,7 @@ import org.exoplatform.webui.event.EventListener;
       UIControlWorkspace uiControlWorkspace = uiApp.getChild(UIControlWorkspace.class);
       UIExoStart uiExoStart = uiControlWorkspace.getChild(UIExoStart.class);
       uiExoStart.createEvent("BrowsePortal", Event.Phase.PROCESS, event.getRequestContext())
-      .broadcast();
+                .broadcast();
     }
   }
 
@@ -388,7 +439,7 @@ import org.exoplatform.webui.event.EventListener;
       UIControlWorkspace uiControlWorkspace = uiApp.getChild(UIControlWorkspace.class);
       UIExoStart uiExoStart = uiControlWorkspace.getChild(UIExoStart.class);
       uiExoStart.createEvent("BrowsePage", Event.Phase.PROCESS, event.getRequestContext())
-      .broadcast();
+                .broadcast();
     }
   }
 
@@ -417,7 +468,7 @@ import org.exoplatform.webui.event.EventListener;
       UIControlWorkspace uiControlWorkspace = uiApp.getChild(UIControlWorkspace.class);
       UIExoStart uiExoStart = uiControlWorkspace.getChild(UIExoStart.class);
       uiExoStart.createEvent("ChangePortal", Event.Phase.PROCESS, event.getRequestContext())
-      .broadcast();
+                .broadcast();
     }
   }
 
@@ -446,7 +497,7 @@ import org.exoplatform.webui.event.EventListener;
       UIControlWorkspace uiControlWorkspace = uiApp.getChild(UIControlWorkspace.class);
       UIExoStart uiExoStart = uiControlWorkspace.getChild(UIExoStart.class);
       uiExoStart.createEvent("SkinSettings", Event.Phase.PROCESS, event.getRequestContext())
-      .broadcast();
+                .broadcast();
     }
   }
 
@@ -475,7 +526,7 @@ import org.exoplatform.webui.event.EventListener;
       UIControlWorkspace uiControlWorkspace = uiApp.getChild(UIControlWorkspace.class);
       UIExoStart uiExoStart = uiControlWorkspace.getChild(UIExoStart.class);
       uiExoStart.createEvent("LanguageSettings", Event.Phase.PROCESS, event.getRequestContext())
-      .broadcast();
+                .broadcast();
     }
   }
 
@@ -504,7 +555,7 @@ import org.exoplatform.webui.event.EventListener;
       UIControlWorkspace uiControlWorkspace = uiApp.getChild(UIControlWorkspace.class);
       UIExoStart uiExoStart = uiControlWorkspace.getChild(UIExoStart.class);
       uiExoStart.createEvent("AccountSettings", Event.Phase.PROCESS, event.getRequestContext())
-      .broadcast();
+                .broadcast();
     }
   }
 
@@ -533,18 +584,19 @@ import org.exoplatform.webui.event.EventListener;
       UIControlWorkspace uiControlWorkspace = uiApp.getChild(UIControlWorkspace.class);
       UIExoStart uiExoStart = uiControlWorkspace.getChild(UIExoStart.class);
       uiExoStart.createEvent("EditPage", Event.Phase.PROCESS, event.getRequestContext())
-      .broadcast();
+                .broadcast();
     }
   }
 
   public static class ChangePageActionListener extends EventListener<UISiteAdminToolbar> {
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       String uri = event.getRequestContext().getRequestParameter(OBJECTID);
+      System.out.println("\n\nuri: " + uri);
       UIPortal uiPortal = Util.getUIPortal();
       uiPortal.setMode(UIPortal.COMPONENT_VIEW_MODE);
       PageNodeEvent<UIPortal> pnevent = new PageNodeEvent<UIPortal>(uiPortal,
-          PageNodeEvent.CHANGE_PAGE_NODE,
-          uri);
+                                                                    PageNodeEvent.CHANGE_PAGE_NODE,
+                                                                    uri);
       uiPortal.broadcast(pnevent, Event.Phase.PROCESS);
     }
   }
@@ -581,12 +633,12 @@ import org.exoplatform.webui.event.EventListener;
       StringBuilder windowId = new StringBuilder();
       String random = IdGenerator.generate();
       windowId.append(PortalConfig.PORTAL_TYPE)
-      .append("#")
-      .append(uiPortal.getOwner())
-      .append(":")
-      .append(configurationService.getPublishingPortletName())
-      .append("/")
-      .append(random);
+              .append("#")
+              .append(uiPortal.getOwner())
+              .append(":")
+              .append(configurationService.getPublishingPortletName())
+              .append("/")
+              .append(random);
       uiPortlet.setWindowId(windowId.toString());
 
       // Add preferences to portlet
