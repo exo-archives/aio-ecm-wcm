@@ -67,11 +67,9 @@ public class UIWebContentPathSelector extends UIBaseNodeTreeSelector implements 
 
   private Node currentPortal;
   private Node sharedPortal;
-  private Node currentNode;
 
   public UIWebContentPathSelector() throws Exception {
     addChild(UIBreadcumbs.class, "UIBreadcrumbWebContentPathSelector", "UIBreadcrumbWebContentPathSelector");
-    addChild(UIWebContentSearch.class, null, null);
     addChild(UIWebContentTreeBuilder.class,null, UIWebContentTreeBuilder.class.getName()+hashCode());
     addChild(UISelectPathPanel.class,null, UISelectPathPanel.class.getName()+hashCode());
   }
@@ -104,7 +102,6 @@ public class UIWebContentPathSelector extends UIBaseNodeTreeSelector implements 
   public void onChange(Node node, Object context) throws Exception {
     UISelectPathPanel selectPathPanel = getChild(UISelectPathPanel.class);
     changeFolder(node);
-    setCurrentNode(node);
     selectPathPanel.setParentNode(node);
     selectPathPanel.updateGrid();
   }
@@ -162,7 +159,6 @@ public class UIWebContentPathSelector extends UIBaseNodeTreeSelector implements 
   }
 
   public static class SelectPathActionListener extends EventListener<UIBreadcumbs> {
-    @Override
     public void execute(Event<UIBreadcumbs> event) throws Exception {
       UIBreadcumbs uiBreadcumbs = event.getSource();
       String selectedNodePath = event.getRequestContext().getRequestParameter(OBJECTID);
@@ -175,19 +171,5 @@ public class UIWebContentPathSelector extends UIBaseNodeTreeSelector implements 
       UIWebContentTreeBuilder uiWCTreeBuilder = uiWCPathSelector.getChild(UIWebContentTreeBuilder.class);
       uiWCTreeBuilder.changeNode(selectedNodePath, event.getRequestContext());
     }
-  }
-
-  /**
-   * @return the currentNode
-   */
-  public Node getCurrentNode() {
-    return currentNode;
-  }
-
-  /**
-   * @param currentNode the currentNode to set
-   */
-  public void setCurrentNode(Node currentNode) {
-    this.currentNode = currentNode;
   }
 }

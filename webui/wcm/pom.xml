@@ -67,6 +67,12 @@
       <artifactId>exo.ecm.wcm.component.search</artifactId>
       <version>${org.exoplatform.wcm.version}</version>
     </dependency>
+    
+    <dependency>
+      <groupId>org.exoplatform.ecm.wcm</groupId>
+      <artifactId>exo.ecm.wcm.component.publication</artifactId>
+      <version>${org.exoplatform.wcm.version}</version>
+    </dependency>
   </dependencies>
   
   <build>

@@ -1,0 +1,72 @@
+<%
+	import org.exoplatform.wcm.webui.selector.webcontent.UIWebContentSearchForm;
+%>
+<div>
+<%uiform.begin();%>
+			Location: <%uicomponent.renderChild(UIWebContentSearchForm.LOCATION);%>
+	
+	<div> 
+	<input type="radio" name="<%=UIWebContentSearchForm.RADIO_SEARCH%>" value="<%=UIWebContentSearchForm.SEARCH_BY_NAME%>" checked />
+			Search By Name: <%uicomponent.renderChild(UIWebContentSearchForm.SEARCH_BY_NAME);%>
+	</div>
+	
+	<div>		 
+	<input type="radio" name="<%=UIWebContentSearchForm.RADIO_SEARCH%>" value="<%=UIWebContentSearchForm.SEARCH_BY_CONTENT%>" />
+			A word or phrase in context: <%uicomponent.renderChild(UIWebContentSearchForm.SEARCH_BY_CONTENT);%>
+	</div>
+	
+	<div>
+  <input type="radio" name="<%=UIWebContentSearchForm.RADIO_SEARCH%>" value="<%=UIWebContentSearchForm.PROPERTY%>" />
+    <label class="Label">Property:</label> <%uicomponent.renderChild(UIWebContentSearchForm.PROPERTY);%>
+    <img class="IconConstraint AddMetadataTypeIcon" onclick="<%=uicomponent.event("AddMetadataType")%>" src="/eXoResources/skin/DefaultSkin/background/Blank.gif" alt="" title="Add metadata" />
+    <label calss="Label">Contain : </label> <%uicomponent.renderChild(UIWebContentSearchForm.CONTAIN)%>
+ </div>
+ 
+ <div>
+  <input type="radio" name="<%=UIWebContentSearchForm.RADIO_SEARCH%>" value="<%=UIWebContentSearchForm.TIME_OPTION%>" />
+   <%uicomponent.renderChild(UIWebContentSearchForm.TIME_OPTION);%> 
+   from
+   <%uicomponent.renderChild(UIWebContentSearchForm.START_TIME);%>
+   to
+   <%uicomponent.renderChild(UIWebContentSearchForm.END_TIME);%>
+ </div>
+ 
+ <div>
+  <input type="radio" name="<%=UIWebContentSearchForm.RADIO_SEARCH%>" value="<%=UIWebContentSearchForm.DOC_TYPE%>" />
+  Document type:
+    <%uicomponent.renderChild(UIWebContentSearchForm.DOC_TYPE);%>
+  <img class="IconConstraint AddMetadataTypeIcon" onclick="#" src="/eXoResources/skin/DefaultSkin/background/Blank.gif" alt="" title="Add document type" />
+ </div>
+ 
+ <div>
+ <input type="radio" name="<%=UIWebContentSearchForm.RADIO_SEARCH%>" value="<%=UIWebContentSearchForm.CATEGORY_TYPE%>" />
+   Category type:
+   <%uicomponent.renderChild(UIWebContentSearchForm.CATEGORY_TYPE);%>
+   <img class="IconConstraint AddMetadataTypeIcon" onclick="#" src="/eXoResources/skin/DefaultSkin/background/Blank.gif" alt="" title="Add category type" />
+ </div>
+ 
+ <div class="UIAction"> 
+ <table class="ActionContainer">
+   <tr>
+     <td>
+         <% for(action in uicomponent.getActions()) { 
+              String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) 
+              String link = uicomponent.event(action) ;
+         %>
+           <div onclick="$link" class="ActionButton LightBlueStyle" >
+             <div class="ButtonLeft">
+               <div class="ButtonRight">
+                 <div class="ButtonMiddle">
+                   <a href="javascript:void(0);">$actionLabel</a>
+                 </div>
+               </div>
+             </div>
+           </div>
+       <%}%>
+     </td>
+   </tr>          
+ </table>
+</div>
+ 
+<%uiform.end();%>
+</div>

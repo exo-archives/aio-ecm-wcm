@@ -79,3 +79,12 @@
 .UIWCMSearchContainer .ExplorerTree .UITrees {
 	background: white;
 }
+
+.AddMetadataTypeIcon {
+	width: 24px;	height: 24px;
+  background: url('background/ManageMetadataIcon.gif') no-repeat ;
+}
+
+.IconConstraint {
+	cursor: pointer;
+}

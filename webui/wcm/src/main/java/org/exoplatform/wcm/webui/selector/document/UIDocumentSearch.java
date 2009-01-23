@@ -144,7 +144,7 @@ public class UIDocumentSearch extends UIForm {
       Node currentNode = uiDMSPathSelector.getCurrentNode();
       if(currentNode.getPath().equals("/sites content/live")) {
         UIApplication uiApp = uiDMSSearch.getAncestorOfType(UIApplication.class);
-        uiApp.addMessage(new ApplicationMessage("UIWebContentSearch.msg-choose-portal",null, ApplicationMessage.WARNING));
+        uiApp.addMessage(new ApplicationMessage("UIWebContentSearchForm.msg-choose-portal",null, ApplicationMessage.WARNING));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
       }
       String workspace = currentNode.getSession().getWorkspace().getName();

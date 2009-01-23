@@ -23,15 +23,11 @@ import java.util.ResourceBundle;
 import javax.jcr.Node;
 
 import org.exoplatform.ecm.webui.selector.UISelectable;
-import org.exoplatform.wcm.webui.Utils;
-import org.exoplatform.wcm.webui.WebUIPropertiesConfigService;
-import org.exoplatform.wcm.webui.WebUIPropertiesConfigService.PopupWindowProperties;
 import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
 import org.exoplatform.web.application.RequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
-import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
