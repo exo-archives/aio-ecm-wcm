@@ -40,6 +40,7 @@ import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.services.wcm.search.QueryCriteria.DATE_RANGE_SELECTED;
 import org.exoplatform.services.wcm.search.QueryCriteria.DatetimeRange;
+import org.exoplatform.services.wcm.search.QueryCriteria.QueryProperty;
 import org.exoplatform.services.wcm.utils.SQLQueryBuilder;
 import org.exoplatform.services.wcm.utils.AbstractQueryBuilder.LOGICAL;
 import org.exoplatform.services.wcm.utils.AbstractQueryBuilder.ORDERBY;
@@ -186,6 +187,7 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     }    
     mapCategoriesCondition(queryCriteria,queryBuilder);
     mapDatetimeRangeSelected(queryCriteria,queryBuilder);
+    mapMetadataProperties(queryCriteria,queryBuilder);
     orderBy(queryCriteria, queryBuilder);
     String queryStatement = queryBuilder.createQueryStatement();
     //TODO use for test when develope
@@ -263,6 +265,19 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     if(categoryUUIDs.length>1) {
       for(int i=1; i<categoryUUIDs.length; i++) {
         queryBuilder.like("exo:category",categoryUUIDs[i],LOGICAL.OR);
+      }
+    }
+    queryBuilder.closeGroup();
+  }
+  
+  private void mapMetadataProperties(final QueryCriteria queryCriteria, SQLQueryBuilder queryBuilder) {
+    QueryProperty[] queryProperty = queryCriteria.getQueryMetadatas();
+    if(queryProperty == null) return;
+    queryBuilder.openGroup(LOGICAL.AND);
+    queryBuilder.like(queryProperty[0].getName(),queryProperty[0].getName(),LOGICAL.NULL);
+    if(queryProperty.length>1) {
+      for(int i=1; i<queryProperty.length; i++) {
+        queryBuilder.like(queryProperty[i].getName(),queryProperty[i].getName(),LOGICAL.OR);
       }
     }
     queryBuilder.closeGroup();

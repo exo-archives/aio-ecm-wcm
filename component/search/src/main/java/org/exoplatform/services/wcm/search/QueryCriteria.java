@@ -30,54 +30,56 @@ import java.util.Calendar;
  * can easy create query statement to search.
  * */
 public class QueryCriteria {  
-  
+
   /** The site name. */
   private String siteName;
-  
+
   /** The categories. */
   private String[] categoryUUIDs = null;
-  
+
   /** The tags. */
   private String[] tagUUIDs = null;
-  
+
   /** The start publication date. */
   private DatetimeRange startPublicationDateRange = null;
-  
+
   /** The end publication date. */
   private DatetimeRange endPublicationDateRange = null;
-  
+
   /** The authors. */
   private String[] authors = null;  
-  
+
   /** The content types. */
   private String[] contentTypes = null;
-  
+
   /** The mime types. */
   private String[] mimeTypes = null;
-  
+
   /** The created date. */
   private DatetimeRange createdDateRange = null;
-  
+
   /** The last modified date. */
   private DatetimeRange lastModifiedDateRange = null;
-  
+
   /** The search webpage. */
   private boolean searchWebpage = true;
-  
+
   /** The search document. */
   private boolean searchDocument = true;
-  
+
   /** The keyword. */
   private String keyword = null;  
-  
+
   /** The query path. */
   private String queryPath = null;
-  
+
   /** The search web content. */
   private boolean searchWebContent = true;  
-  
+
   /** The fulltext search. */
-  private boolean fulltextSearch = true;
+  private boolean fulltextSearch = true;  
+  
+  private QueryProperty[] queryMetadatas = null;
   
   private DATE_RANGE_SELECTED dateRangeSelected = null;
   /**
@@ -86,36 +88,36 @@ public class QueryCriteria {
    * @return the site name
    */
   public String getSiteName() { return siteName; }
-  
+
   /**
    * Sets the site name.
    * 
    * @param siteName the new site name
    */
   public void setSiteName(String siteName) { this.siteName = siteName; }
-  
-  
+
+
   /**
    * Gets the authors.
    * 
    * @return the authors
    */
   public String[] getAuthors() { return authors; }
-  
+
   /**
    * Sets the authors.
    * 
    * @param authors the new authors
    */
   public void setAuthors(String[] authors) { this.authors = authors; }
-  
+
   /**
    * Gets the content types.
    * 
    * @return the content types
    */
   public String[] getContentTypes() { return contentTypes; }
-  
+
   /**
    * Sets the content types.
    * 
@@ -129,14 +131,14 @@ public class QueryCriteria {
    * @return the mime types
    */
   public String[] getMimeTypes() { return mimeTypes; }
-  
+
   /**
    * Sets the mime types.
    * 
    * @param mimeTypes the new mime types
    */
   public void setMimeTypes(String[] mimeTypes) { this.mimeTypes = mimeTypes; }  
-  
+
   /**
    * Gets the start publication date range.
    * 
@@ -217,7 +219,7 @@ public class QueryCriteria {
   public boolean isFulltextSearch() {
     return fulltextSearch;
   }
-  
+
 
   /**
    * Sets the fulltext search.
@@ -234,21 +236,21 @@ public class QueryCriteria {
    * @return the keyword
    */
   public String getKeyword() { return this.keyword; }
-  
+
   /**
    * Sets the keyword.
    * 
    * @param s the new keyword
    */
   public void setKeyword(String s) { this.keyword = s; }
-  
+
   /**
    * Checks if is search webpage.
    * 
    * @return true, if is search webpage
    */
   public boolean isSearchWebpage() { return searchWebpage;}
-  
+
   /**
    * Sets the search webpage.
    * 
@@ -257,14 +259,14 @@ public class QueryCriteria {
   public void setSearchWebpage(boolean searchWebpage) { 
     this.searchWebpage = searchWebpage;
   }
-  
+
   /**
    * Checks if is search document.
    * 
    * @return true, if is search document
    */
   public boolean isSearchDocument() { return searchDocument;}
-  
+
   /**
    * Sets the search document.
    * 
@@ -309,18 +311,18 @@ public class QueryCriteria {
   public void setSearchWebContent(boolean searchWebContent) {
     this.searchWebContent = searchWebContent;
   }
-  
+
   /**
    * The Class DatetimeRange.
    */
   public static class DatetimeRange {
-    
+
     /** The from date. */
     private Calendar fromDate;
-    
+
     /** The to date. */
     private Calendar toDate;
-    
+
     /**
      * Instantiates a new datetime range.
      * 
@@ -331,7 +333,7 @@ public class QueryCriteria {
       this.fromDate = fromDate;
       this.toDate = toDate;
     }
-    
+
     /**
      * Gets the from date.
      * 
@@ -340,7 +342,7 @@ public class QueryCriteria {
     public Calendar getFromDate() {
       return fromDate;
     }
-    
+
     /**
      * Sets the from date.
      * 
@@ -349,7 +351,7 @@ public class QueryCriteria {
     public void setFromDate(Calendar fromDate) {
       this.fromDate = fromDate;
     }
-    
+
     /**
      * Gets the to date.
      * 
@@ -358,7 +360,7 @@ public class QueryCriteria {
     public Calendar getToDate() {
       return toDate;
     }
-    
+
     /**
      * Sets the to date.
      * 
@@ -368,7 +370,7 @@ public class QueryCriteria {
       this.toDate = toDate;
     }    
   }
-  
+
   public enum DATE_RANGE_SELECTED {CREATED, MODIFIDED, START_PUBLICATION, END_PUBLICATION}
 
   public DATE_RANGE_SELECTED getDateRangeSelected() {
@@ -394,4 +396,32 @@ public class QueryCriteria {
   public void setTagUUIDs(String[] tagUUIDs) {
     this.tagUUIDs = tagUUIDs;
   };
+
+
+  public class QueryProperty {
+    private String name;
+    private String value;
+    public String getName() {
+      return name;
+    }
+    public void setName(String name) {
+      this.name = name;
+    }
+    public String getValue() {
+      return value;
+    }
+    public void setValue(String value) {
+      this.value = value;
+    }    
+  }
+
+
+  public QueryProperty[] getQueryMetadatas() {
+    return queryMetadatas;
+  }
+
+  public void setQueryMetadatas(QueryProperty[] queryMetadatas) {
+    this.queryMetadatas = queryMetadatas;
+  }
+    
 }
