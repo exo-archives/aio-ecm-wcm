@@ -7,7 +7,7 @@ import javax.jcr.Value;
 
 import org.exoplatform.ecm.webui.utils.Utils;
 import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
-import org.exoplatform.services.wcm.search.PaginatedQueryResult.ResultNode;
+import org.exoplatform.services.wcm.search.ResultNode;
 import org.exoplatform.services.wcm.publication.defaultlifecycle.Util;
 %>
 
