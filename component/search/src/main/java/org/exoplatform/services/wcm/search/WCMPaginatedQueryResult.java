@@ -16,8 +16,13 @@
  */
 package org.exoplatform.services.wcm.search;
 
+import java.util.Arrays;
+
 import javax.jcr.Node;
 import javax.jcr.query.QueryResult;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.ArrayUtils;
 
 /**
  * Created by The eXo Platform SAS Author : Hoa Pham hoa.phamvu@exoplatform.com
@@ -129,6 +134,12 @@ public class WCMPaginatedQueryResult extends PaginatedQueryResult {
           return null;
       }
     }            
+    String[] contentTypes = queryCriteria.getContentTypes();
+    if(contentTypes != null && contentTypes.length>0) {
+      String primaryNodeType = displayNode.getPrimaryNodeType().getName();
+      if(!ArrayUtils.contains(contentTypes,primaryNodeType))
+        return null;
+    }
     return displayNode;
   }
 
