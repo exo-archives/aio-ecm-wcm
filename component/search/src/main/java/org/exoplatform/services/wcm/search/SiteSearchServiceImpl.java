@@ -38,6 +38,8 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
+import org.exoplatform.services.wcm.search.QueryCriteria.DATE_RANGE_SELECTED;
+import org.exoplatform.services.wcm.search.QueryCriteria.DatetimeRange;
 import org.exoplatform.services.wcm.utils.SQLQueryBuilder;
 import org.exoplatform.services.wcm.utils.AbstractQueryBuilder.LOGICAL;
 import org.exoplatform.services.wcm.utils.AbstractQueryBuilder.ORDERBY;
@@ -112,7 +114,13 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     Session session = sessionProvider.getSession(location.getWorkspace(),currentRepository);
     QueryManager queryManager = session.getWorkspace().getQueryManager();
     long startTime = System.currentTimeMillis();
-    QueryResult queryResult = searchSiteContent(queryCriteria, queryManager);
+    QueryResult queryResult = null;
+    //TODO use for test
+    try {
+      queryResult = searchSiteContent(queryCriteria, queryManager); 
+    } catch (Exception e) {     
+      e.printStackTrace();
+    }    
     String suggestion = getSpellSuggestion(queryCriteria.getKeyword(),currentRepository);
     long queryTime = System.currentTimeMillis() - startTime;
     WCMPaginatedQueryResult paginatedQueryResult = null;
@@ -168,12 +176,20 @@ public class SiteSearchServiceImpl implements SiteSearchService {
    * @throws Exception the exception
    */
   private QueryResult searchSiteContent(QueryCriteria queryCriteria, QueryManager queryManager) throws Exception {
-    SQLQueryBuilder queryBuilder = new SQLQueryBuilder();
-    mapQueryPath(queryCriteria, queryBuilder);
+    SQLQueryBuilder queryBuilder = new SQLQueryBuilder();    
     mapQueryTypes(queryCriteria, queryBuilder);
-    mapQueryTerm(queryCriteria, queryBuilder);
+    if(queryCriteria.isFulltextSearch()) {
+      mapQueryPath(queryCriteria, queryBuilder);
+      mapFulltextQueryTearm(queryCriteria, queryBuilder); 
+    }else {
+      searchByNodeName(queryCriteria,queryBuilder);
+    }    
+    mapCategoriesCondition(queryCriteria,queryBuilder);
+    mapDatetimeRangeSelected(queryCriteria,queryBuilder);
     orderBy(queryCriteria, queryBuilder);
-    String queryStatement = queryBuilder.createQueryStatement();    
+    String queryStatement = queryBuilder.createQueryStatement();
+    //TODO use for test when develope
+    System.out.println("=============>"+queryStatement);
     Query query = queryManager.createQuery(queryStatement, Query.SQL);
     return query.execute();
   }
@@ -194,12 +210,8 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     } else {
       String repository = repositoryService.getCurrentRepository().getConfiguration().getName();
       sitePath = configurationService.getLivePortalsLocation(repository).getPath();
-    }
-    String queryPath = queryCriteria.getQueryPath();
-    if(!queryPath.startsWith(sitePath)) {
-      queryPath = sitePath;
-    }
-    queryBuilder.setQueryPath(queryPath, PATH_TYPE.DECENDANTS);
+    }        
+    queryBuilder.setQueryPath(sitePath, PATH_TYPE.DECENDANTS);
   }
 
   /**
@@ -208,20 +220,53 @@ public class SiteSearchServiceImpl implements SiteSearchService {
    * @param queryCriteria the query criteria
    * @param queryBuilder the query builder
    */
-  private void mapQueryTerm(final QueryCriteria queryCriteria,
+  private void mapFulltextQueryTearm(final QueryCriteria queryCriteria,
       final SQLQueryBuilder queryBuilder) {
     String keyword = queryCriteria.getKeyword();
-    QueryTermHelper queryTermHelper = new QueryTermHelper();
-    String queryTerm = null;
-    keyword = keyword.replaceAll("'","''");
-    if (keyword.contains("*") || keyword.contains("?") || keyword.contains("~")) {
-      queryTerm = queryTermHelper.contains(keyword).buildTerm();
-    } else {
-      queryTerm = queryTermHelper.contains(keyword).allowFuzzySearch().buildTerm();
-    }
-    queryBuilder.contains(null, queryTerm, LOGICAL.NULL);
+    QueryTermHelper queryTermHelper = new QueryTermHelper();    
+      String queryTerm = null;
+      keyword = keyword.replaceAll("'","''");
+      if (keyword.contains("*") || keyword.contains("?") || keyword.contains("~")) {
+        queryTerm = queryTermHelper.contains(keyword).buildTerm();
+      } else {
+        queryTerm = queryTermHelper.contains(keyword).allowFuzzySearch().buildTerm();
+      }
+      queryBuilder.contains(null, queryTerm, LOGICAL.NULL);
+      return;        
   }
-
+  
+  private void searchByNodeName(final QueryCriteria queryCriteria, final SQLQueryBuilder queryBuilder) {    
+    queryBuilder.queryByNodeName(queryCriteria.getQueryPath(),queryCriteria.getKeyword());
+  }      
+  
+  private void mapDatetimeRangeSelected(final QueryCriteria queryCriteria, final SQLQueryBuilder queryBuilder) {
+    DATE_RANGE_SELECTED selectedDateRange = queryCriteria.getDateRangeSelected();
+    if(selectedDateRange == null) return;
+    if(DATE_RANGE_SELECTED.CREATED == selectedDateRange) {
+      DatetimeRange createdDateRange = queryCriteria.getCreatedDateRange();
+      queryBuilder.betweenDates("exo:dateCreated",createdDateRange.getFromDate(),createdDateRange.getToDate(),LOGICAL.AND);
+    }else if(DATE_RANGE_SELECTED.MODIFIDED == selectedDateRange){
+      DatetimeRange modifiedDateRange = queryCriteria.getLastModifiedDateRange();
+      queryBuilder.betweenDates("exo:dateModified",modifiedDateRange.getFromDate(),modifiedDateRange.getToDate(),LOGICAL.AND);
+    }else if(DATE_RANGE_SELECTED.START_PUBLICATION == selectedDateRange) {
+      throw new UnsupportedOperationException();
+    }else if(DATE_RANGE_SELECTED.END_PUBLICATION == selectedDateRange) {
+      throw new UnsupportedOperationException();
+    }    
+  }  
+  
+  private void mapCategoriesCondition(QueryCriteria queryCriteria, SQLQueryBuilder queryBuilder) {
+    String[] categoryUUIDs = queryCriteria.getCategoryUUIDs();
+    if(categoryUUIDs == null) return;
+    queryBuilder.openGroup(LOGICAL.AND);
+    queryBuilder.like("exo:category",categoryUUIDs[0],LOGICAL.NULL);
+    if(categoryUUIDs.length>1) {
+      for(int i=1; i<categoryUUIDs.length; i++) {
+        queryBuilder.like("exo:category",categoryUUIDs[i],LOGICAL.OR);
+      }
+    }
+    queryBuilder.closeGroup();
+  }
   /**
    * Map query types.
    * 

@@ -19,7 +19,6 @@ package org.exoplatform.services.wcm.search;
 import javax.jcr.Node;
 import javax.jcr.query.QueryResult;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS Author : Hoa Pham hoa.phamvu@exoplatform.com
  * Oct 21, 2008

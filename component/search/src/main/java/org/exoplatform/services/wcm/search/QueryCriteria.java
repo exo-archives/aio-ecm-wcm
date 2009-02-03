@@ -35,31 +35,31 @@ public class QueryCriteria {
   private String siteName;
   
   /** The categories. */
-  private String[] categories;
+  private String[] categoryUUIDs = null;
   
   /** The tags. */
-  private String[] tags;
+  private String[] tagUUIDs = null;
   
   /** The start publication date. */
-  private Calendar startPublicationDate;
+  private DatetimeRange startPublicationDateRange = null;
   
   /** The end publication date. */
-  private Calendar endPublicationDate;
+  private DatetimeRange endPublicationDateRange = null;
   
   /** The authors. */
-  private String[] authors;  
+  private String[] authors = null;  
   
   /** The content types. */
-  private String[] contentTypes;
+  private String[] contentTypes = null;
   
   /** The mime types. */
-  private String[] mimeTypes;
+  private String[] mimeTypes = null;
   
   /** The created date. */
-  private Calendar createdDate;
+  private DatetimeRange createdDateRange = null;
   
   /** The last modified date. */
-  private Calendar lastModifiedDate;
+  private DatetimeRange lastModifiedDateRange = null;
   
   /** The search webpage. */
   private boolean searchWebpage = true;
@@ -68,11 +68,18 @@ public class QueryCriteria {
   private boolean searchDocument = true;
   
   /** The keyword. */
-  private String keyword;  
+  private String keyword = null;  
   
-  private String queryPath;
-  private boolean searchWebContent = true;
+  /** The query path. */
+  private String queryPath = null;
   
+  /** The search web content. */
+  private boolean searchWebContent = true;  
+  
+  /** The fulltext search. */
+  private boolean fulltextSearch = true;
+  
+  private DATE_RANGE_SELECTED dateRangeSelected = null;
   /**
    * Gets the site name.
    * 
@@ -87,68 +94,7 @@ public class QueryCriteria {
    */
   public void setSiteName(String siteName) { this.siteName = siteName; }
   
-  /**
-   * Gets the categories.
-   * 
-   * @return the categories
-   */
-  public String[] getCategories() { return categories; }
   
-  /**
-   * Sets the categories.
-   * 
-   * @param categories the new categories
-   */
-  public void setCategories(String[] categories) { this.categories = categories; }
-  
-  /**
-   * Gets the tags.
-   * 
-   * @return the tags
-   */
-  public String[] getTags() { return tags; }
-  
-  /**
-   * Sets the tags.
-   * 
-   * @param tags the new tags
-   */
-  public void setTags(String[] tags) { this.tags = tags; }
-
-  /**
-   * Gets the start publication date.
-   * 
-   * @return the start publication date
-   */
-  public Calendar getStartPublicationDate() { return startPublicationDate; }
-
-  /**
-   * Sets the start publication date.
-   * 
-   * @param startPublicationDate the new start publication date
-   */
-  public void setStartPublicationDate(Calendar startPublicationDate) { 
-    this.startPublicationDate = startPublicationDate; 
-  }
-
-  /**
-   * Gets the end publication date.
-   * 
-   * @return the end publication date
-   */
-  public Calendar getEndPublicationDate() {
-    return endPublicationDate;
-  }
-
-  /**
-   * Sets the end publication date.
-   * 
-   * @param endPublicationDate the new end publication date
-   */
-  public void setEndPublicationDate(Calendar endPublicationDate) {
-    this.endPublicationDate = endPublicationDate;
-  }
-
   /**
    * Gets the authors.
    * 
@@ -189,38 +135,99 @@ public class QueryCriteria {
    * 
    * @param mimeTypes the new mime types
    */
-  public void setMimeTypes(String[] mimeTypes) { this.mimeTypes = mimeTypes; }
-
-  /**
-   * Gets the created date.
-   * 
-   * @return the created date
-   */
-  public Calendar getCreatedDate() { return createdDate; }
+  public void setMimeTypes(String[] mimeTypes) { this.mimeTypes = mimeTypes; }  
   
   /**
-   * Sets the created date.
+   * Gets the start publication date range.
    * 
-   * @param createdDate the new created date
+   * @return the start publication date range
    */
-  public void setCreatedDate(Calendar createdDate) { this.createdDate = createdDate; }
+  public DatetimeRange getStartPublicationDateRange() {
+    return startPublicationDateRange;
+  }
 
   /**
-   * Gets the last modified date.
+   * Sets the start publication date range.
    * 
-   * @return the last modified date
+   * @param startPublicationDateRange the new start publication date range
    */
-  public Calendar getLastModifiedDate() { return lastModifiedDate; }
-  
+  public void setStartPublicationDateRange(DatetimeRange startPublicationDateRange) {
+    this.startPublicationDateRange = startPublicationDateRange;
+  }
+
   /**
-   * Sets the last modified date.
+   * Gets the end publication date range.
    * 
-   * @param lastModifiedDate the new last modified date
+   * @return the end publication date range
    */
-  public void setLastModifiedDate(Calendar lastModifiedDate) {
-    this.lastModifiedDate = lastModifiedDate;
+  public DatetimeRange getEndPublicationDateRange() {
+    return endPublicationDateRange;
+  }
+
+  /**
+   * Sets the end publication date range.
+   * 
+   * @param endPublicationDateRange the new end publication date range
+   */
+  public void setEndPublicationDateRange(DatetimeRange endPublicationDateRange) {
+    this.endPublicationDateRange = endPublicationDateRange;
+  }
+
+  /**
+   * Gets the created date range.
+   * 
+   * @return the created date range
+   */
+  public DatetimeRange getCreatedDateRange() {
+    return createdDateRange;
+  }
+
+  /**
+   * Sets the created date range.
+   * 
+   * @param createdDateRange the new created date range
+   */
+  public void setCreatedDateRange(DatetimeRange createdDateRange) {
+    this.createdDateRange = createdDateRange;
+  }
+
+  /**
+   * Gets the last modified date range.
+   * 
+   * @return the last modified date range
+   */
+  public DatetimeRange getLastModifiedDateRange() {
+    return lastModifiedDateRange;
+  }
+
+  /**
+   * Sets the last modified date range.
+   * 
+   * @param lastModifiedDateRange the new last modified date range
+   */
+  public void setLastModifiedDateRange(DatetimeRange lastModifiedDateRange) {
+    this.lastModifiedDateRange = lastModifiedDateRange;
+  }
+
+  /**
+   * Checks if is fulltext search.
+   * 
+   * @return true, if is fulltext search
+   */
+  public boolean isFulltextSearch() {
+    return fulltextSearch;
   }
   
+
+  /**
+   * Sets the fulltext search.
+   * 
+   * @param fulltextSearch the new fulltext search
+   */
+  public void setFulltextSearch(boolean fulltextSearch) {
+    this.fulltextSearch = fulltextSearch;
+  }
+
   /**
    * Gets the keyword.
    * 
@@ -267,19 +274,124 @@ public class QueryCriteria {
     this.searchDocument = searchDocument;
   }
 
+  /**
+   * Gets the query path.
+   * 
+   * @return the query path
+   */
   public String getQueryPath() {
     return queryPath;
   }
 
+  /**
+   * Sets the query path.
+   * 
+   * @param queryPath the new query path
+   */
   public void setQueryPath(String queryPath) {
     this.queryPath = queryPath;
   }
 
+  /**
+   * Checks if is search web content.
+   * 
+   * @return true, if is search web content
+   */
   public boolean isSearchWebContent() {
     return searchWebContent;
   }
 
+  /**
+   * Sets the search web content.
+   * 
+   * @param searchWebContent the new search web content
+   */
   public void setSearchWebContent(boolean searchWebContent) {
     this.searchWebContent = searchWebContent;
   }
+  
+  /**
+   * The Class DatetimeRange.
+   */
+  public static class DatetimeRange {
+    
+    /** The from date. */
+    private Calendar fromDate;
+    
+    /** The to date. */
+    private Calendar toDate;
+    
+    /**
+     * Instantiates a new datetime range.
+     * 
+     * @param fromDate the from date
+     * @param toDate the to date
+     */
+    public DatetimeRange(Calendar fromDate, Calendar toDate) {
+      this.fromDate = fromDate;
+      this.toDate = toDate;
+    }
+    
+    /**
+     * Gets the from date.
+     * 
+     * @return the from date
+     */
+    public Calendar getFromDate() {
+      return fromDate;
+    }
+    
+    /**
+     * Sets the from date.
+     * 
+     * @param fromDate the new from date
+     */
+    public void setFromDate(Calendar fromDate) {
+      this.fromDate = fromDate;
+    }
+    
+    /**
+     * Gets the to date.
+     * 
+     * @return the to date
+     */
+    public Calendar getToDate() {
+      return toDate;
+    }
+    
+    /**
+     * Sets the to date.
+     * 
+     * @param toDate the new to date
+     */
+    public void setToDate(Calendar toDate) {
+      this.toDate = toDate;
+    }    
+  }
+  
+  public enum DATE_RANGE_SELECTED {CREATED, MODIFIDED, START_PUBLICATION, END_PUBLICATION}
+
+  public DATE_RANGE_SELECTED getDateRangeSelected() {
+    return dateRangeSelected;
+  }
+
+  public void setDateRangeSelected(DATE_RANGE_SELECTED dateRangeSelected) {
+    this.dateRangeSelected = dateRangeSelected;
+  }
+
+  public String[] getCategoryUUIDs() {
+    return categoryUUIDs;
+  }
+
+  public void setCategoryUUIDs(String[] categoryUUIDs) {
+    this.categoryUUIDs = categoryUUIDs;
+  }
+
+  public String[] getTagUUIDs() {
+    return tagUUIDs;
+  }
+
+  public void setTagUUIDs(String[] tagUUIDs) {
+    this.tagUUIDs = tagUUIDs;
+  };
 }
