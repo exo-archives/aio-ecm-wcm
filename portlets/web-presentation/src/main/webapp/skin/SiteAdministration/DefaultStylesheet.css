@@ -10,13 +10,20 @@
 	line-height: 32px;	
 	padding-left: 35px;
 	padding-right: 5px;		
-	float: right;		
+	float: right;
+}
+
+.UISiteAdministrationPortlet .UISiteAdminToolBar .Magic {
+	display: none;
+}
+
+.UISiteAdministrationPortlet .UISiteAdminToolBar .TopToolbarMenuItem {
+	
 }
 
 .UISiteAdministrationPortlet .UISiteAdminToolBar .VerIcon {	
 	line-height: 32px;	
-	padding-left: 35px;		
-	display: block;	
+	padding-left: 35px;			
 }
 
 .UISiteAdministrationPortlet .UISiteAdminToolBar a.HozIcon:hover {	
