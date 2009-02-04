@@ -149,23 +149,24 @@ function search(comId) {
 }	
 
 function keepKeywordOnBoxSearch() {
+	var queryRegex = /^portal=\w+&keyword=\w+/;
 	var searchBox = document.getElementById("siteSearchBox");
-  var keyWordInput = eXo.core.DOMUtil.findFirstDescendantByClass(searchBox, "input", "keyword");
-  var queryString = location.search;  
-  var portalParam = queryString.split('&')[0];
-  var keyword = queryString.substring((portalParam + "keyword=").length +1);
-  if (keyword != undefined && keyword.length != 0) {
-  	keyWordInput.value = unescape(keyword); 
-  }
+	var keyWordInput = eXo.core.DOMUtil.findFirstDescendantByClass(searchBox, "input", "keyword");
+	var queryString = location.search.substring(1);  
+	if (!queryString.match(queryRegex)) { return; }
+	var portalParam = queryString.split('&')[0];
+	var keyword = queryString.substring((portalParam + "keyword=").length +1);
+	if (keyword != undefined && keyword.length != 0) {
+		keyWordInput.value = unescape(keyword); 
+	}
 }
+
 eXo.core.Browser.addOnLoadCallback("keepKeywordOnBoxSearch", keepKeywordOnBoxSearch);
-
-
 /*------------------the top toolbar---------------*/
 function viewMoreActions(viewMoreObj) {	
 	var moreActionsMenu = eXo.core.DOMUtil.findNextElementByTagName(viewMoreObj, "div");
 	moreActionsMenu.style.display = "block";
-	moreActionsMenu.onmouseover = function(){
+  moreActionsMenu.onmouseover = function(){
 		if(window.hiddenmenu) clearTimeout(window.hiddenmenu);
 	}
 	moreActionsMenu.onmouseout = function(){
@@ -186,8 +187,217 @@ function hideElement(element) {
 
 function showToptoolbarNavs(exoLogo) {
 	var navs = eXo.core.DOMUtil.findAncestorByClass(exoLogo, "StartMenuContainer");
-	eXo.portal.UIExoStartMenu.buildMenu(navs);	
+	eXo.portal.UIExoStartMenu.buildMenu(navs);		
 }
+
+UIExoStartMenu.prototype.buildMenu = function(popupMenu) {
+	if(typeof(popupMenu) == "string") popupMenu = document.getElementById(popupMenu) ;
+	
+  var blockMenuItems = eXo.core.DOMUtil.findDescendantsByClass(popupMenu, "div", this.containerStyleClass) ;
+  for (var i = 0; i < blockMenuItems.length; i++) {
+    if (!blockMenuItems[i].id) blockMenuItems[i].id = Math.random().toString() ;
+		blockMenuItems[i].resized = false ;
+  }
+	
+  var menuItems = eXo.core.DOMUtil.findDescendantsByClass(popupMenu, "div", this.itemStyleClass) ;
+  for(var i = 0; i < menuItems.length; i++) {
+		var menuItemContainer = eXo.core.DOMUtil.findFirstChildByClass(menuItems[i], "div", "MenuItemContainer") ;
+		if (menuItemContainer) menuItems[i].menuItemContainer = menuItemContainer ;
+		
+		menuItems[i].onmouseover = this.onMenuItemOver ; 
+		menuItems[i].onmouseout = this.onMenuItemOut ;
+
+    var labelItem = eXo.core.DOMUtil.findFirstDescendantByClass(menuItems[i], "div", "LabelItem") ;
+    var link = eXo.core.DOMUtil.findDescendantsByTagName(labelItem, "a")[0] ;
+    this.superClass.createLink(menuItems[i], link) ;
+  }
+};
+
+UIExoStartMenu.prototype.onMenuItemOver = function(event) {
+	this.className = eXo.portal.UIExoStartMenu.itemOverStyleClass ;
+	this.style.position = "relative" ;
+	if (this.menuItemContainer) {
+		
+		var menuItemContainer = this.menuItemContainer ;
+		var x = this.offsetWidth + this.offsetLeft ;
+	  var rootX = eXo.core.Browser.findPosX(this) ;
+		if (x + menuItemContainer.offsetWidth + rootX > eXo.core.Browser.getBrowserWidth()) {
+	    	x -= (menuItemContainer.offsetWidth + this.offsetWidth) ;
+	  }
+	  if (eXo.core.Browser.isIE6()) x -= 10;
+	 	menuItemContainer.style.left = x + "px" ;
+		eXo.portal.UIExoStartMenu.createSlide(this);
+    eXo.portal.UIExoStartMenu.superClass.pushVisibleContainer(this.menuItemContainer.id) ;
+	
+	}
+};
+
+UIExoStartMenu.prototype.createSlide = function(menuItem) {
+
+		var menuItemContainer = menuItem.menuItemContainer ;
+		menuItemContainer.style.display = "block" ;
+		// fix width for menuContainer, only IE.
+		if (!menuItemContainer.resized) setContainerSize(menuItemContainer);
+		
+	 	var blockMenu = eXo.core.DOMUtil.findFirstDescendantByClass(menuItemContainer, "div", "BlockMenu") ;
+		var parentMenu = blockMenu.parentNode;
+		var topElement = eXo.core.DOMUtil.findFirstChildByClass(parentMenu, "div", "TopNavigator") ;
+	 	var bottomElement = eXo.core.DOMUtil.findFirstChildByClass(parentMenu, "div", "BottomNavigator") ;
+
+		var menuContainer = eXo.core.DOMUtil.findFirstDescendantByClass(blockMenu, "div", "MenuContainer") ;
+		
+		if (!menuContainer.id) menuContainer.id = "eXo" + new Date().getTime() + Math.random().toString().substring(2) ;
+		
+		var browserHeight = eXo.core.Browser.getBrowserHeight() ;
+		if (menuContainer.offsetHeight + 64 > browserHeight) {
+				var curentHeight = browserHeight - 64;
+				blockMenu.style.height = curentHeight + "px" ;
+				topElement.style.display = "block" ;
+				bottomElement.style.display = "block" ;
+
+				if(!menuContainer.curentHeight || (menuContainer.curentHeight != curentHeight)) {
+					eXo.portal.UIExoStartMenu.initSlide(menuContainer, curentHeight) ;
+				}
+				topElement.onmousedown = function() {
+					eXo.portal.UIExoStartMenu.scrollDown(menuContainer.id, curentHeight) ;
+				};
+				topElement.onmouseoup = function() {
+					if (menuContainer.repeat) {
+						clearTimeout(menuContainer.repeat) ;
+						menuContainer.repeat = null ;
+					}
+				};
+				topElement.onclick = function(event) {
+					clearTimeout(menuContainer.repeat) ;
+					menuContainer.repeat = null ;
+					event = event || window.event ;
+					event.cancelBubble = true ;
+				};
+				
+				bottomElement.onmousedown = function() {
+					eXo.portal.UIExoStartMenu.scrollUp(menuContainer.id, curentHeight) ;
+				};
+				bottomElement.onmouseoup = function() {
+					if (menuContainer.repeat) {
+						clearTimeout(menuContainer.repeat) ;
+						menuContainer.repeat = null ;
+					}
+				};			
+				bottomElement.onclick = function(event) {
+					clearTimeout(menuContainer.repeat) ;
+					menuContainer.repeat = null ;
+					event = event || window.event ;
+					event.cancelBubble = true ;
+				};
+	  } else {
+			blockMenu.style.height = menuContainer.offsetHeight + "px" ;
+			menuContainer.style.clip = "rect(0px 1280px auto auto)" ;
+			menuContainer.curentHeight = null;
+			menuContainer.style.position = "static";
+			topElement.style.display = "none" ;
+			bottomElement.style.display = "none" ;
+	  }
+		var Y = eXo.portal.UIExoStartMenu.getDimension(menuItem) ;
+		if (Y != undefined)	menuItemContainer.style.top = Y + "px" ;
+};
+
+function setContainerSize(menuItemContainer) {
+  var menuCenter = eXo.core.DOMUtil.findFirstDescendantByClass(menuItemContainer, "div", "StartMenuML") ;
+  var menuTop = eXo.core.DOMUtil.findFirstDescendantByClass(menuItemContainer, "div", "StartMenuTL") ;
+  var decorator = eXo.core.DOMUtil.findFirstDescendantByClass(menuTop, "div", "StartMenuTR") ;
+  var menuBottom = menuTop.nextSibling ;
+  while (menuBottom.className != "StartMenuBL") menuBottom = menuBottom.nextSibling ;
+  var w = menuCenter.offsetWidth - decorator.offsetLeft ;
+  menuTop.style.width = w + "px" ;
+  menuBottom.style.width = w + "px" ;
+  menuCenter.style.width = w + "px" ;
+  menuItemContainer.resized = true ; 
+};
+
+/*--------------------scroll toptoolbar----------------------*/
+function ScrollTopToolbar() { }
+
+function getChildrenByClass(root, clazz) {
+	var list = [];
+	var children = root.childNodes;
+	var len = children.length;
+	for(var i = 0; i < len; i++){
+		if(eXo.core.DOMUtil.hasClass(children[i],clazz))	list.push(children[i]);
+	}
+	return list.reverse();
+}
+
+ScrollManager.prototype.loadItems = function(root, clazz) {
+	this.elements.clear();
+	this.elements.pushAll(getChildrenByClass(root, clazz));
+};
+
+ScrollManager.prototype.checkAvailableArea = function(maxSpace) {
+	if (!maxSpace) maxSpace = this.mainContainer.offsetWidth - 200;
+	var elementsSpace = 0;
+	var margin = 0;
+	var length =  this.elements.length;
+	for (var i = 0; i < length; i++) {
+		elementsSpace += this.getElementSpace(this.elements[i]);
+		if (i+1 < length) margin = this.getElementSpace(this.elements[i+1]) / 3;
+		else margin = this.margin;
+		if (elementsSpace + margin < maxSpace) {
+			this.elements[i].isVisible = true;
+			this.lastVisibleIndex = i;
+		} else {
+			this.elements[i].isVisible = false;
+		}
+	}
+} 
+
+ScrollTopToolbar.prototype.execute = function() {
+	var obj = eXo.wcm.ScrollTopToolbar;
+	obj.manager.checkAvailableArea();	
+	obj.manager.renderItems();
+}
+
+ScrollManager.prototype.renderItems = function() {
+	var obj = eXo.wcm.ScrollTopToolbar;
+	for (var i = 0; i < this.elements.length; i++) {
+		if (this.elements[i].isVisible) {
+			this.elements[i].style.display = "block";
+			if (this.elements[i].style.display == "block" && !eXo.core.DOMUtil.hasClass(this.elements[i], "SeparationIcon")) {
+				var mockClazz = this.elements[i].className.replace('HozIcon', '').replace('TopToolbarMenuItem', '').replace(/\s*/g,'');		
+				for (var j = 0; j < obj.manager.moreActionsContainer.childNodes.length; j++) {					
+					if (obj.manager.moreActionsContainer.childNodes[j] && eXo.core.DOMUtil.hasClass(obj.manager.moreActionsContainer.childNodes[j], mockClazz)) {
+						obj.manager.moreActionsContainer.childNodes[j].style.display = "none";
+					}
+				}
+			}
+		} else {
+			this.elements[i].style.display = "none";
+			if (this.elements[i].style.display == "none" && !eXo.core.DOMUtil.hasClass(this.elements[i], "SeparationIcon")) {
+				var mockClazz = this.elements[i].className.replace('HozIcon', '').replace('TopToolbarMenuItem', '').replace(/\s*/g,'');
+				for (var j = 0; j < obj.manager.moreActionsContainer.childNodes.length; j++) {
+					if (obj.manager.moreActionsContainer.childNodes[j] && eXo.core.DOMUtil.hasClass(obj.manager.moreActionsContainer.childNodes[j], mockClazz)) {
+						obj.manager.moreActionsContainer.childNodes[j].style.display = "block";
+					}
+				}
+			}
+		}
+	}
+}
+
+ScrollTopToolbar.prototype.init = function() {
+	var obj = eXo.wcm.ScrollTopToolbar;
+	obj.manager = eXo.portal.UIPortalControl.newScrollManager("UISiteAdministrationPortlet");
+	var topToolbarObj = document.getElementById("UISiteAdministrationPortlet");
+	obj.manager.mainContainer = eXo.core.DOMUtil.findFirstDescendantByClass(topToolbarObj, "div", "UISiteAdminToolBar");
+	obj.manager.moreActionsContainer = eXo.core.DOMUtil.findDescendantById(obj.manager.mainContainer, "MoreActionsMenu");
+
+	obj.manager.loadItems(obj.manager.mainContainer, "TopToolbarMenuItem");	
+	obj.manager.initFunction = obj.execute;
+
+}
+
+eXo.wcm.ScrollTopToolbar = new ScrollTopToolbar();
+eXo.core.Browser.addOnLoadCallback("resizeTopToolbar", eXo.wcm.ScrollTopToolbar.init);
+
 /*------------------end the top toolbar--------------------*/
 
 //TODO this code need be removed after portal support this 
@@ -290,4 +500,4 @@ UIPopupWindow.prototype.show = function(popup, isShowMask, middleBrowser) {
 	}
 	if (eXo.core.Browser.findPosY(popup) < 0) popup.style.top = scrollY + "px" ;
   popup.style.visibility = "visible" ;
-} ;
+};
