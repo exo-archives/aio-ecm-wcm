@@ -162,11 +162,32 @@ function keepKeywordOnBoxSearch() {
 }
 
 eXo.core.Browser.addOnLoadCallback("keepKeywordOnBoxSearch", keepKeywordOnBoxSearch);
+
+
 /*------------------the top toolbar---------------*/
-function viewMoreActions(viewMoreObj) {	
+function viewMoreActions(viewMoreObj) {		
 	var moreActionsMenu = eXo.core.DOMUtil.findNextElementByTagName(viewMoreObj, "div");
-	moreActionsMenu.style.display = "block";
-  moreActionsMenu.onmouseover = function(){
+	var objToolbarPortlet = eXo.core.DOMUtil.findAncestorByClass(moreActionsMenu, "UISiteAdministrationPortlet");
+	if (document.all) {
+		if(document.getElementById(moreActionsMenu.id + "1")) eXo.core.DOMUtil.removeElement(document.getElementById(moreActionsMenu.id + "1").parentNode.parentNode);
+		var tmp = document.createElement("div");
+		tmp.className = "UISiteAdminToolBar";
+		var id = moreActionsMenu.id + 1;
+		moreActionsMenu = moreActionsMenu.cloneNode(true);
+		moreActionsMenu.id = id;
+		tmp.appendChild(moreActionsMenu);
+		var tmp1 = document.createElement("div");
+		tmp1.className = "UISiteAdministrationPortlet";
+		tmp1.appendChild(tmp);
+		tmp1.style["position"] = "static";
+		document.body.appendChild(tmp1);
+		
+		moreActionsMenu.style.top = viewMoreObj.offsetHeight + "px";
+		moreActionsMenu.style.display = "block";
+	} else {
+		moreActionsMenu.style.display = "block";
+	}
+	moreActionsMenu.onmouseover = function(){
 		if(window.hiddenmenu) clearTimeout(window.hiddenmenu);
 	}
 	moreActionsMenu.onmouseout = function(){
@@ -175,9 +196,12 @@ function viewMoreActions(viewMoreObj) {
 	if(window.hiddenmenu) clearTimeout(window.hiddenmenu);
 }
 
+
 function hideMoreActions(viewMoreObj) {
 	var moreActionsMenu = eXo.core.DOMUtil.findNextElementByTagName(viewMoreObj, "div");
-	window.hiddenmenu = setTimeout("hideElement('" + moreActionsMenu.id + "');",100);
+	var id = moreActionsMenu.id;
+	if(document.all) id += 1;
+	window.hiddenmenu = setTimeout("hideElement('" + id + "');",100);
 }
 
 function hideElement(element) {
@@ -187,6 +211,8 @@ function hideElement(element) {
 
 function showToptoolbarNavs(exoLogo) {
 	var navs = eXo.core.DOMUtil.findAncestorByClass(exoLogo, "StartMenuContainer");
+	var virtualNavs = eXo.core.DOMUtil.findNextElementByTagName(exoLogo, "div");
+	
 	eXo.portal.UIExoStartMenu.buildMenu(navs);		
 }
 

@@ -13,7 +13,7 @@
 	float: right;
 }
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar .Magic {
+.UISiteAdministrationPortlet .UISiteAdminToolBar .MoreActionsMenu .Magic {
 	display: none;
 }
 
@@ -23,7 +23,8 @@
 
 .UISiteAdministrationPortlet .UISiteAdminToolBar .VerIcon {	
 	line-height: 32px;	
-	padding-left: 35px;			
+	padding-left: 35px;	
+	display: block;		
 }
 
 .UISiteAdministrationPortlet .UISiteAdminToolBar a.HozIcon:hover {	
