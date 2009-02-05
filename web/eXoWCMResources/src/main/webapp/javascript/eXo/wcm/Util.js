@@ -212,10 +212,6 @@ function hideElement(element) {
 
 function showToptoolbarNavs(exoLogo) {
 	var navs = eXo.core.DOMUtil.findAncestorByClass(exoLogo, "StartMenuContainer");
-	var virtualNavs = eXo.core.DOMUtil.findNextElementByTagName(exoLogo, "div");
-//	virtualNavs.style.left = "100px";
-	console.log("left: " + virtualNavs.style.left);
-
 	eXo.portal.UIExoStartMenu.buildMenu(navs);		
 }
 
