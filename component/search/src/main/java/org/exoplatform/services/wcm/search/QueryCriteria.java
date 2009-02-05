@@ -30,7 +30,8 @@ import java.util.Calendar;
  * can easy create query statement to search.
  * */
 public class QueryCriteria {  
-
+  
+  public static final String ALL_PROPERTY_SCOPE = ".";
   /** The site name. */
   private String siteName;
 
@@ -80,6 +81,8 @@ public class QueryCriteria {
   private boolean fulltextSearch = true;  
   
   private QueryProperty[] queryMetadatas = null;
+  
+  private String fulltextSearchProperty = ALL_PROPERTY_SCOPE;
   
   private DATE_RANGE_SELECTED dateRangeSelected = null;
   /**
@@ -422,6 +425,14 @@ public class QueryCriteria {
 
   public void setQueryMetadatas(QueryProperty[] queryMetadatas) {
     this.queryMetadatas = queryMetadatas;
+  }
+
+  public String getFulltextSearchProperty() {
+    return fulltextSearchProperty;
+  }
+
+  public void setFulltextSearchProperty(String fulltextSearchProperty) {
+    this.fulltextSearchProperty = fulltextSearchProperty;
   }
     
 }

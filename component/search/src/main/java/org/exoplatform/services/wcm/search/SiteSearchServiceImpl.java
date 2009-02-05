@@ -232,8 +232,13 @@ public class SiteSearchServiceImpl implements SiteSearchService {
         queryTerm = queryTermHelper.contains(keyword).buildTerm();
       } else {
         queryTerm = queryTermHelper.contains(keyword).allowFuzzySearch().buildTerm();
-      }
-      queryBuilder.contains(null, queryTerm, LOGICAL.NULL);
+      }      
+      String scope = queryCriteria.getFulltextSearchProperty();
+      if(QueryCriteria.ALL_PROPERTY_SCOPE.equals(scope) || scope == null) {
+        queryBuilder.contains(null, queryTerm, LOGICAL.NULL);
+      }else {
+        queryBuilder.contains(scope, queryTerm, LOGICAL.NULL);
+      }      
       return;        
   }
   
