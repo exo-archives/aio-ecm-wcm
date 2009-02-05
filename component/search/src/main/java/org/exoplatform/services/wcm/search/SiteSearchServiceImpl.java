@@ -223,8 +223,10 @@ public class SiteSearchServiceImpl implements SiteSearchService {
    * @param queryBuilder the query builder
    */
   private void mapFulltextQueryTearm(final QueryCriteria queryCriteria,
-      final SQLQueryBuilder queryBuilder) {
+      final SQLQueryBuilder queryBuilder) {    
     String keyword = queryCriteria.getKeyword();
+    if(keyword == null || keyword.length() == 0)
+      return;
     QueryTermHelper queryTermHelper = new QueryTermHelper();    
       String queryTerm = null;
       keyword = keyword.replaceAll("'","''");
