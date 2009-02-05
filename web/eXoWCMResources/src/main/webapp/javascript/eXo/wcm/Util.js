@@ -165,6 +165,7 @@ eXo.core.Browser.addOnLoadCallback("keepKeywordOnBoxSearch", keepKeywordOnBoxSea
 
 
 /*------------------the top toolbar---------------*/
+
 function viewMoreActions(viewMoreObj) {		
 	var moreActionsMenu = eXo.core.DOMUtil.findNextElementByTagName(viewMoreObj, "div");
 	var objToolbarPortlet = eXo.core.DOMUtil.findAncestorByClass(moreActionsMenu, "UISiteAdministrationPortlet");
@@ -212,10 +213,13 @@ function hideElement(element) {
 function showToptoolbarNavs(exoLogo) {
 	var navs = eXo.core.DOMUtil.findAncestorByClass(exoLogo, "StartMenuContainer");
 	var virtualNavs = eXo.core.DOMUtil.findNextElementByTagName(exoLogo, "div");
-	
+//	virtualNavs.style.left = "100px";
+	console.log("left: " + virtualNavs.style.left);
+
 	eXo.portal.UIExoStartMenu.buildMenu(navs);		
 }
 
+/*---------------------- => will remmove when WCM use Portal 2.5.2 ---------------------------*/
 UIExoStartMenu.prototype.buildMenu = function(popupMenu) {
 	if(typeof(popupMenu) == "string") popupMenu = document.getElementById(popupMenu) ;
 	
@@ -339,6 +343,7 @@ function setContainerSize(menuItemContainer) {
   menuCenter.style.width = w + "px" ;
   menuItemContainer.resized = true ; 
 };
+/*---------------------- => will remmove when WCM use Portal 2.5.2 ---------------------------*/
 
 /*--------------------scroll toptoolbar----------------------*/
 function ScrollTopToolbar() { }
@@ -417,8 +422,8 @@ ScrollTopToolbar.prototype.init = function() {
 	obj.manager.moreActionsContainer = eXo.core.DOMUtil.findDescendantById(obj.manager.mainContainer, "MoreActionsMenu");
 
 	obj.manager.loadItems(obj.manager.mainContainer, "TopToolbarMenuItem");	
+	obj.execute();
 	obj.manager.initFunction = obj.execute;
-
 }
 
 eXo.wcm.ScrollTopToolbar = new ScrollTopToolbar();
