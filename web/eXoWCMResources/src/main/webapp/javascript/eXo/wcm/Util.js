@@ -528,3 +528,18 @@ UIPopupWindow.prototype.show = function(popup, isShowMask, middleBrowser) {
 	if (eXo.core.Browser.findPosY(popup) < 0) popup.style.top = scrollY + "px" ;
   popup.style.visibility = "visible" ;
 };
+
+function initCheckedRadio(id) {
+	eXo.core.Browser.chkRadioId = id;
+};
+
+function setHiddenValue() {
+	var inputHidden = document.getElementById("checkedRadioId");
+	if(eXo.core.Browser.chkRadioId == "null") {
+		inputHidden.value = "name";
+		document.getElementById("name").checked = true;
+	} else {
+		inputHidden.value = eXo.core.Browser.chkRadioId; 
+		document.getElementById(eXo.core.Browser.chkRadioId).checked = true;
+	}
+}

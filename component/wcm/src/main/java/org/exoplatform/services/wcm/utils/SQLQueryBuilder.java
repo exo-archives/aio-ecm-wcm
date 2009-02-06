@@ -177,22 +177,22 @@ public class SQLQueryBuilder extends AbstractQueryBuilder {
     String startTime = ISO8601.parse(startDate).getTime().toString();
     String endTime = ISO8601.parse(endDate).getTime().toString();
     if(condition == LOGICAL.AND)
-      propertiesClause.append("AND ").append(propName).append(" between '").append(startTime).append("' and '").append(endTime).append("' ");
+      propertiesClause.append("AND ").append(propName).append(" between TIMESTAMP '").append(startTime).append("' and TIMESTAMP '").append(endTime).append("' ");
     else if(condition == LOGICAL.OR)
-      propertiesClause.append("OR ").append(propName).append(" between '").append(startTime).append("' and '").append(endTime).append("' ");
+      propertiesClause.append("OR ").append(propName).append(" between TIMESTAMP '").append(startTime).append("' and  TIMESTAMP '").append(endTime).append("' ");
     else
-      propertiesClause.append(propName).append(" between '").append(startTime).append("' and '").append(endTime).append("' ");
+      propertiesClause.append(propName).append(" between TIMESTAMP '").append(startTime).append("' and TIMESTAMP '").append(endTime).append("' ");
   }
   
   public void betweenDates(String propName, Calendar startDate, Calendar endDate, LOGICAL condition) {    
     String startTime = ISO8601.format(startDate);
     String endTime = ISO8601.format(endDate);
     if(condition == LOGICAL.AND)
-      propertiesClause.append("AND ").append(propName).append(" between '").append(startTime).append("' and '").append(endTime).append("' ");
+      propertiesClause.append("AND ").append(propName).append(" between TIMESTAMP '").append(startTime).append("' and TIMESTAMP '").append(endTime).append("' ");
     else if(condition == LOGICAL.OR)
-      propertiesClause.append("OR ").append(propName).append(" between '").append(startTime).append("' and '").append(endTime).append("' ");
+      propertiesClause.append("OR ").append(propName).append(" between TIMESTAMP '").append(startTime).append("' and TIMESTAMP '").append(endTime).append("' ");
     else
-      propertiesClause.append(propName).append(" between '").append(startTime).append("' and '").append(endTime).append("' ");
+      propertiesClause.append(propName).append(" between TIMESTAMP '").append(startTime).append("' and TIMESTAMP '").append(endTime).append("' ");
   }
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.search.AbstractQueryBuilder#setQueryPath(java.lang.String, org.exoplatform.services.wcm.search.AbstractQueryBuilder.PATH_TYPE)
@@ -358,7 +358,7 @@ public class SQLQueryBuilder extends AbstractQueryBuilder {
   }
   
   public void queryByNodeName(String rootPath, String nodeName) {    
-    pathClause = new StringBuilder().append(" AND jcr:path LIKE '")
+    pathClause = new StringBuilder().append(" jcr:path LIKE '")
     .append(rootPath).append("/%/").append(nodeName).append("' ")
     .append(" or jcr:path like '").append(rootPath).append("/").append(nodeName).append("' ");
   }

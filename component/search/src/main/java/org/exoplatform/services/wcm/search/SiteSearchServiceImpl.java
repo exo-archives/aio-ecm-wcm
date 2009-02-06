@@ -119,6 +119,7 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     //TODO use for test
     try {
       queryResult = searchSiteContent(queryCriteria, queryManager); 
+      System.out.println("====ResultSet=======>"+queryResult.getNodes().getSize() + "");
     } catch (Exception e) {     
       e.printStackTrace();
     }    

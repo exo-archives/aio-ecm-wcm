@@ -89,6 +89,7 @@ public class UIWCMSelectPropertyForm extends UIForm{
     addUIFormInput(new UIFormRadioBoxInput(PROPERTY_SELECT, null, properties).
         setAlign(UIFormRadioBoxInput.VERTICAL_ALIGN));
     session.logout();
+    sessionProvider.close();
   }
 
   public void setFieldName(String fieldName) { this.fieldName = fieldName ; }
@@ -119,7 +120,6 @@ public class UIWCMSelectPropertyForm extends UIForm{
       UIWebContentSearchForm uiWCSearchForm = 
         uiWCTabSelector.getChild(UIWebContentSearchForm.class);
       uiWCTabSelector.setSelectedTab(uiWCSearchForm.getId());
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiWCTabSelector);
     }
   }
 

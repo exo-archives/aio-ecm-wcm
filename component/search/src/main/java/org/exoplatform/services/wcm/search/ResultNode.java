@@ -688,4 +688,15 @@ public class ResultNode implements Node{
   public Session getSession() throws RepositoryException {
     return node.getSession();
   }
+  
+  
+  public boolean equals(Object obj) {    
+    try {
+      ResultNode resNode = (ResultNode)obj;
+      if(node.getPath().equals(resNode.getNode().getPath())) return true;
+    } catch(Exception e) {
+      return false;
+    }
+    return false;
+  }
 }

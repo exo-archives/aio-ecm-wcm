@@ -107,6 +107,7 @@ public class WCMPaginatedQueryResult extends PaginatedQueryResult {
    */
   protected Node filterNodeToDisplay(Node node) throws Exception {
     Node displayNode = node;
+    System.out.println("=================> NodePath: " + node.getPath());
     if (displayNode.isNodeType("nt:resource")) {
       displayNode = node.getParent();
     }
@@ -140,6 +141,7 @@ public class WCMPaginatedQueryResult extends PaginatedQueryResult {
       if(!ArrayUtils.contains(contentTypes,primaryNodeType))
         return null;
     }
+    System.out.println("==========> displayNode (WCMPaginatedQueryResult): " + displayNode.getPath()+"\n\n");
     return displayNode;
   }
 

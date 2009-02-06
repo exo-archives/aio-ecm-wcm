@@ -17,17 +17,28 @@
 package org.exoplatform.wcm.webui.selector.webcontent;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
-import org.exoplatform.commons.utils.PageList;
-import org.exoplatform.portal.config.DataStorage;
-import org.exoplatform.portal.config.UserACL;
-import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.services.wcm.publication.defaultlifecycle.Util;
-import org.exoplatform.web.application.RequestContext;
-import org.exoplatform.webui.application.WebuiRequestContext;
+import javax.jcr.Node;
+import javax.jcr.NodeIterator;
+
+import org.exoplatform.ecm.webui.selector.UISelectable;
+import org.exoplatform.ecm.webui.tree.selectone.UISelectPathPanel;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.wcm.core.WCMConfigurationService;
+import org.exoplatform.services.wcm.search.PaginatedQueryResult;
+import org.exoplatform.services.wcm.search.QueryCriteria;
+import org.exoplatform.services.wcm.search.SiteSearchService;
+import org.exoplatform.services.wcm.search.WCMPaginatedQueryResult;
+import org.exoplatform.services.wcm.search.QueryCriteria.DATE_RANGE_SELECTED;
+import org.exoplatform.services.wcm.search.QueryCriteria.DatetimeRange;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
+import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -49,44 +60,50 @@ import org.exoplatform.webui.form.UIFormStringInput;
     template = "classpath:groovy/wcm/webui/UIWebContentSearchForm.gtmpl",
     events = {
       @EventConfig(listeners = UIWebContentSearchForm.SearchWebContentActionListener.class),
-      @EventConfig(listeners = UIWebContentSearchForm.AddMetadataTypeActionListener.class)
+      @EventConfig(listeners = UIWebContentSearchForm.AddMetadataTypeActionListener.class),
+      @EventConfig(listeners = UIWebContentSearchForm.AddNodeTypeActionListener.class),
+      @EventConfig(listeners = UIWebContentSearchForm.AddCategoryActionListener.class)
     }
 )
 
-public class UIWebContentSearchForm extends UIForm {
+public class UIWebContentSearchForm extends UIForm implements UISelectable {
 
   public static final String LOCATION = "location".intern();
   public static final String SEARCH_BY_NAME = "name".intern();
   public static final String SEARCH_BY_CONTENT = "content".intern();
-  public static final String RADIO_SEARCH = "WcmRadio".intern();
-  final static public String TIME_OPTION = "timeOpt" ;
-  final static public String PROPERTY = "property" ;  
-  final static public String CONTAIN = "contain" ;
-  final static public String START_TIME = "startTime" ;
-  final static public String END_TIME = "endTime" ;
-  final static public String DOC_TYPE = "docType" ;
-  final static public String CATEGORY_TYPE = "categoryType" ;
-  final static public String CREATED_DATE = "CREATED" ;
-  final static public String MODIFIED_DATE = "MODIFIED" ;
-  final static public String EXACTLY_PROPERTY = "exactlyPro" ;
-  final static public String CONTAIN_PROPERTY = "containPro" ;
-  final static public String NOT_CONTAIN_PROPERTY = "notContainPro" ;
-  final static public String DATE_PROPERTY = "datePro" ;
-  final static public String NODETYPE_PROPERTY = "nodetypePro" ;
-  final static public String CATEGORY_PROPERTY = "categoryPro" ;
-  final static private String SPLIT_REGEX = "/|\\s+|:" ;
+  public static final String RADIO_NAME = "WcmRadio".intern();
+  final static public String TIME_OPTION = "timeOpt";
+  final static public String PROPERTY = "property";  
+  final static public String CONTAIN = "contain";
+  final static public String START_TIME = "startTime";
+  final static public String END_TIME = "endTime";
+  final static public String DOC_TYPE = "docType";
+  final static public String CATEGORY_TYPE = "categoryType";
+  final static public String CREATED_DATE = "CREATED";
+  final static public String MODIFIED_DATE = "MODIFIED";
+  final static public String EXACTLY_PROPERTY = "exactlyPro";
+  final static public String CONTAIN_PROPERTY = "containPro";
+  final static public String NOT_CONTAIN_PROPERTY = "notContainPro";
+  final static public String DATE_PROPERTY = "datePro";
+  final static public String NODETYPE_PROPERTY = "nodetypePro";
+  final static public String CHECKED_RADIO_ID = "checkedRadioId".intern();
+  final static private String SPLIT_REGEX = "/|\\s+|:";
   final static private String DATETIME_REGEX = 
-    "^(\\d{1,2}\\/\\d{1,2}\\/\\d{1,4})\\s*(\\s+\\d{1,2}:\\d{1,2}:\\d{1,2})?$" ;
+    "^(\\d{1,2}\\/\\d{1,2}\\/\\d{1,4})\\s*(\\s+\\d{1,2}:\\d{1,2}:\\d{1,2})?$";
+
+  private String checkedRadioId;
 
   public UIWebContentSearchForm() throws Exception {
   }
 
   public void init() throws Exception {
     List<SelectItemOption<String>> portalNameOptions = new ArrayList<SelectItemOption<String>>();
-    for(String portalName: getPortalNames()) {
+    List<String> portalNames = getPortalNames();
+    for(String portalName: portalNames) {
       portalNameOptions.add(new SelectItemOption<String>(portalName, portalName));
     }
     UIFormSelectBox portalNameSelectBox = new UIFormSelectBox(LOCATION, LOCATION, portalNameOptions);
+    portalNameSelectBox.setDefaultValue(portalNames.get(0));
     addChild(portalNameSelectBox);
 
     addUIFormInput(new UIFormStringInput(SEARCH_BY_NAME,SEARCH_BY_NAME,null));
@@ -113,92 +130,185 @@ public class UIWebContentSearchForm extends UIForm {
     setActions(new String[] {"SearchWebContent"} );
   }
 
+  private List<String> getPortalNames() throws Exception {
+    List<String> portalNames = new ArrayList<String>();
+    String currentPortalName = org.exoplatform.portal.webui.util.Util.getUIPortal().getName();
+    RepositoryService repoService = getApplicationComponent(RepositoryService.class);
+    String repository = repoService.getCurrentRepository().getConfiguration().getName();
+    WCMConfigurationService configService = getApplicationComponent(WCMConfigurationService.class);
+    String sharedPortalName = configService.getSharedPortalName(repository);
+    portalNames.add(currentPortalName);
+    portalNames.add(sharedPortalName);
+    return portalNames;
+  }
+
   public static class AddMetadataTypeActionListener extends EventListener<UIWebContentSearchForm> {
     public void execute(Event<UIWebContentSearchForm> event) throws Exception {
       UIWebContentSearchForm uiWCSearchForm = event.getSource();
       UIWebContentTabSelector uiWCTabSelector = uiWCSearchForm.getParent();
+      uiWCSearchForm.setCheckedRadioId(event.getRequestContext().getRequestParameter(CHECKED_RADIO_ID));
       uiWCTabSelector.initMetadataPopup();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiWCTabSelector);
     }
   }
 
-//private WCMPaginatedQueryResult searchFullText(Node currentNode,String keyword) throws Exception {   
-//QueryCriteria qCriteria = new QueryCriteria();
-//qCriteria.setSearchDocument(false);
-//qCriteria.setSearchWebpage(false);
-//qCriteria.setSearchWebContent(true);
-//qCriteria.setQueryPath(currentNode.getPath());
-//qCriteria.setKeyword(keyword);
-//SiteSearchService siteSearchService = getApplicationComponent(SiteSearchService.class);
-//int pageSize = 10;
-//return siteSearchService.searchSiteContents(qCriteria, SessionProviderFactory.createSessionProvider(), pageSize);
-//}
+  public static class AddNodeTypeActionListener extends EventListener<UIWebContentSearchForm> {
+    public void execute(Event<UIWebContentSearchForm> event) throws Exception {
+      UIWebContentSearchForm uiWCSearchForm = event.getSource();
+      UIWebContentTabSelector uiWCTabSelector = uiWCSearchForm.getParent();
+      uiWCSearchForm.setCheckedRadioId(event.getRequestContext().getRequestParameter(CHECKED_RADIO_ID));
+      uiWCTabSelector.initNodeTypePopup();
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiWCTabSelector);
+    }    
+  }
 
-//private PaginatedQueryResult searchWebContentByName(Node currentNode, String keyword, String workspace, ManageableRepository maRepository) throws Exception {
-//Session session = SessionProviderFactory.createSessionProvider().getSession(workspace, maRepository);
-//List<String> webContentTypes = getWebContentTypes(session);
-//String sqlQuery = "SELECT * FROM nt:base " 
-//+ "WHERE (";
-//String tempQuery = "";
-//int count = 0;
-//int size = webContentTypes.size();
-//for(String contentType : webContentTypes) {
-//if(count == size -1 ) {
-//tempQuery += "jcr:primaryType like '" + contentType +"') ";
-//} else { 
-//tempQuery += "jcr:primaryType like '" + contentType +"' OR ";
-//}
-//count++;
-//}
-//sqlQuery += tempQuery
-//+ "AND jcr:path like '"
-//+ currentNode.getPath()
-//+ "/"
-//+ keyword
-//+ "' "
-//+ "OR jcr:path like '" + currentNode.getPath() + "/%/" + keyword + "' "
-//+ "ORDER BY jcr:score DESC";
-//QueryManager queManager = session.getWorkspace().getQueryManager();
-//Query query = queManager.createQuery(sqlQuery, Query.SQL);
-//QueryResult queryResult = query.execute();
-//PaginatedQueryResult paginatedQueryResult = null;
-//int pageSize = 10;
-//paginatedQueryResult = new PaginatedQueryResult(queryResult, pageSize); 
-//return paginatedQueryResult;
-//}
+  public static class AddCategoryActionListener extends EventListener<UIWebContentSearchForm> {
+    public void execute(Event<UIWebContentSearchForm> event) throws Exception {
+      UIWebContentSearchForm uiWCSearchForm = event.getSource();
+      UIWebContentTabSelector uiWCTabSelector = uiWCSearchForm.getParent();
+      uiWCSearchForm.setCheckedRadioId(event.getRequestContext().getRequestParameter(CHECKED_RADIO_ID));
+      uiWCTabSelector.initCategoryPopup();
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiWCTabSelector);
+    }    
+  } 
 
-//private List<String> getWebContentTypes(Session session) throws Exception {
-//List<String> list = new ArrayList<String>(10);
-//NodeTypeManager nodeTypeManager = session.getWorkspace().getNodeTypeManager();
-//for(NodeTypeIterator nodeTypeIterator = nodeTypeManager.getAllNodeTypes(); nodeTypeIterator.hasNext();) {
-//NodeType nodeType = nodeTypeIterator.nextNodeType();
-//if(nodeType.isNodeType("exo:webContent")) list.add(nodeType.getName());
-//}
-//return list;
-//}
+  private void searchWebContentByName(String keyword, 
+      String siteName, UISelectPathPanel uiSelectPathPanel) throws Exception {
+    QueryCriteria qCriteria = new QueryCriteria();
+    qCriteria.setSearchDocument(false);
+    qCriteria.setSearchWebContent(true);
+    qCriteria.setFulltextSearch(false);
+    qCriteria.setSearchWebpage(false);
+    qCriteria.setSiteName(siteName);
+    qCriteria.setKeyword(keyword);
+    SiteSearchService siteSearch = getApplicationComponent(SiteSearchService.class);
+    int pageSize = 10;
+    PaginatedQueryResult pagResult = siteSearch.searchSiteContents(qCriteria, SessionProviderFactory.createSessionProvider(), pageSize);
+    uiSelectPathPanel.getUIPageIterator().setPageList(pagResult);
+  }
 
-  private List<String> getPortalNames() throws Exception {
-    List<String> portalNames = new ArrayList<String>();
-    DataStorage service = Util.getServices(DataStorage.class);
-    org.exoplatform.portal.config.Query<PortalConfig> query = 
-      new org.exoplatform.portal.config.Query<PortalConfig>(null,null,null,null,PortalConfig.class);
-    PageList pageList = service.find(query);
-    UserACL userACL = Util.getServices(UserACL.class);
-    org.exoplatform.web.application.RequestContext context = WebuiRequestContext.getCurrentInstance();
-    String userId = context.getRemoteUser();
-    for(Object object: pageList.getAll()) {
-      PortalConfig portalConfig = (PortalConfig) object;
-      if(userACL.hasPermission(portalConfig, userId)) {
-        portalNames.add(portalConfig.getName()) ;
+  private void searchWebContentByFulltext(String keyword, 
+      String siteName, UISelectPathPanel uiSelectPathPanel) throws Exception {
+    QueryCriteria qCriteria = new QueryCriteria();
+    qCriteria.setSearchDocument(false);
+    qCriteria.setSearchWebpage(false);
+    qCriteria.setSearchWebContent(true);
+    qCriteria.setFulltextSearch(true);
+    qCriteria.setFulltextSearchProperty(QueryCriteria.ALL_PROPERTY_SCOPE);
+    qCriteria.setSiteName(siteName);
+    qCriteria.setKeyword(keyword);
+    SiteSearchService siteSearch = getApplicationComponent(SiteSearchService.class);
+    int pageSize = 10;
+    PaginatedQueryResult pagResult = siteSearch.searchSiteContents(qCriteria, 
+        SessionProviderFactory.createSessionProvider(), pageSize);
+    uiSelectPathPanel.getUIPageIterator().setPageList(pagResult);
+  }
+
+  private void searchWebContentByProperty(String property, String keyword, 
+      String siteName, UISelectPathPanel uiSelectPathPanel) throws Exception {
+//  QueryCriteria qCriteria = new QueryCriteria();
+//  qCriteria.setSearchDocument(false);
+//  qCriteria.setSearchWebpage(false);
+//  qCriteria.setSearchWebContent(true)
+//  qCriteria.setQueryMetadatas(queryMetadatas)
+  }
+
+  private void searchWebContentByDate(DATE_RANGE_SELECTED dateRangeSelected, 
+      Calendar fromDate, Calendar endDate, String siteName, UISelectPathPanel uiSelectPathPanel) throws Exception {
+    QueryCriteria qCriteria = new QueryCriteria();
+    qCriteria.setDateRangeSelected(dateRangeSelected);
+    DatetimeRange dateTimeRange = new QueryCriteria.DatetimeRange(fromDate, endDate);
+    if(DATE_RANGE_SELECTED.CREATED.equals(dateRangeSelected)) {
+      qCriteria.setCreatedDateRange(dateTimeRange);
+    } else if(DATE_RANGE_SELECTED.MODIFIDED.equals(dateRangeSelected)) {
+      qCriteria.setLastModifiedDateRange(dateTimeRange);
+    }
+    qCriteria.setSearchDocument(false);
+    qCriteria.setSearchWebpage(false);
+    qCriteria.setSearchWebContent(true);
+    qCriteria.setFulltextSearch(true);
+    qCriteria.setFulltextSearchProperty(null);
+    qCriteria.setSiteName(siteName);
+    SiteSearchService siteSearch = getApplicationComponent(SiteSearchService.class);
+    int pageSize = 10;
+    WCMPaginatedQueryResult pagResult = siteSearch.searchSiteContents(qCriteria, 
+        SessionProviderFactory.createSessionProvider(), pageSize);
+    uiSelectPathPanel.getUIPageIterator().setPageList(pagResult);
+  }
+
+
+  private boolean haveEmptyField(UIApplication uiApp, Event<UIWebContentSearchForm> event, String... fields) throws Exception {
+    for(String field : fields) {
+      if(field == null) {
+        uiApp.addMessage(new ApplicationMessage(
+            "UIWebContentSearchForm.empty-field", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return true;
       }
     }
-    return portalNames;
+    return false;
   }
 
   static public class SearchWebContentActionListener extends EventListener<UIWebContentSearchForm> {
     public void execute(Event<UIWebContentSearchForm> event) throws Exception {
       UIWebContentSearchForm uiWCSearch = event.getSource();
-      RequestContext reqContext = event.getRequestContext();
+      String radioValue = event.getRequestContext().getRequestParameter(RADIO_NAME);
+      String siteName = uiWCSearch.getUIStringInput(UIWebContentSearchForm.LOCATION).getValue();
+      UIWebContentTabSelector uiWCTabSelector = uiWCSearch.getParent();
+      UISelectPathPanel uiSelectPathPanel = uiWCTabSelector.getChild(UISelectPathPanel.class);
+      UIApplication uiApp = uiWCSearch.getAncestorOfType(UIApplication.class);
+      if(UIWebContentSearchForm.SEARCH_BY_NAME.equals(radioValue)) {
+        String keyword = uiWCSearch.getUIStringInput(radioValue).getValue();
+        if(uiWCSearch.haveEmptyField(uiApp, event, keyword)) return;
+        uiWCSearch.searchWebContentByName(keyword, siteName, uiSelectPathPanel);
+      } else if(UIWebContentSearchForm.SEARCH_BY_CONTENT.equals(radioValue)) {
+        String keyword = uiWCSearch.getUIStringInput(radioValue).getValue();
+        if(uiWCSearch.haveEmptyField(uiApp, event, keyword)) return;
+        uiWCSearch.searchWebContentByFulltext(keyword, siteName, uiSelectPathPanel);
+      } else if(UIWebContentSearchForm.PROPERTY.equals(radioValue)) {
+        String property = uiWCSearch.getUIStringInput(UIWebContentSearchForm.PROPERTY).getValue();
+        String keyword = uiWCSearch.getUIStringInput(UIWebContentSearchForm.CONTAIN).getValue();
+        if(uiWCSearch.haveEmptyField(uiApp, event, property, keyword)) return;
+
+      } else if(UIWebContentSearchForm.TIME_OPTION.equals(radioValue)) {
+        String dateRangeSelected = uiWCSearch.getUIStringInput(UIWebContentSearchForm.TIME_OPTION).getValue();
+        String fromDateStr = uiWCSearch.getUIFormDateTimeInput(UIWebContentSearchForm.START_TIME).getValue();
+        String endDateStr = uiWCSearch.getUIFormDateTimeInput(UIWebContentSearchForm.END_TIME).getValue();
+        if(uiWCSearch.haveEmptyField(uiApp, event, fromDateStr, endDateStr)) return;
+        Calendar fromDate = uiWCSearch.getUIFormDateTimeInput(UIWebContentSearchForm.START_TIME).getCalendar();
+        Calendar endDate = uiWCSearch.getUIFormDateTimeInput(UIWebContentSearchForm.END_TIME).getCalendar();
+        System.out.println("=========> dateRangeSelected: " + dateRangeSelected);
+        System.out.println("=========> formDate: " + fromDate);
+        System.out.println("=========> endDate: " + endDate);
+        if(UIWebContentSearchForm.CREATED_DATE.equals(dateRangeSelected)) {
+          uiWCSearch.searchWebContentByDate(DATE_RANGE_SELECTED.CREATED, 
+              fromDate, endDate, siteName, uiSelectPathPanel);
+        } else {
+          uiWCSearch.searchWebContentByDate(DATE_RANGE_SELECTED.MODIFIDED, 
+              fromDate, endDate, siteName, uiSelectPathPanel);
+        }
+      }
+      uiWCTabSelector.setSelectedTab(uiSelectPathPanel.getId());
     }
+  }
+
+  public void doSelect(String selectField, Object value) throws Exception {
+    getUIStringInput(selectField).setValue(value.toString());
+    UIWebContentTabSelector uiWCTabSelector = 
+      getAncestorOfType(UIWebContentTabSelector.class);
+    uiWCTabSelector.removeChild(UIPopupWindow.class);
+    UIWebContentSearchForm uiWCSearchForm = uiWCTabSelector.getChild(UIWebContentSearchForm.class);
+    uiWCTabSelector.setSelectedTab(uiWCSearchForm.getId());
+    String checkedRadioId = uiWCSearchForm.getCheckedRadioId();
+    org.exoplatform.portal.webui.util.Util.getPortalRequestContext()
+    .getJavascriptManager().addJavascript("document.getElementById('"+checkedRadioId+"').checked = true;");
+  }
+
+  public String getCheckedRadioId() {
+    return checkedRadioId;
+  }
+
+  public void setCheckedRadioId(String checkedRadioId) {
+    this.checkedRadioId = checkedRadioId;
   }
 }
