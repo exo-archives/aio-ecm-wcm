@@ -1,3 +1,7 @@
+// set thumbnail size;
+FCKConfig.thumbnailWidth = 80;
+FCKConfig.thumbnailHeight = 80;
+
 // set eXo plugin path;
 FCKConfig.eXoPath = FCKConfig.BasePath.substr(0, FCKConfig.BasePath.length - 7) + "exo/" ;
 FCKConfig.Plugins.Add( 'urani', null, FCKConfig.eXoPath + "plugins/") ;
@@ -122,6 +126,129 @@ window.eXoPlugin = {
 		eHead.appendChild(eScript);
 	}
 };
+
+/**
+	FCKCommentsProcessor
+	---------------------------
+	It's run after a document has been loaded, it detects all the protected source elements
+
+	In order to use it, you add your comment parser with 
+	FCKCommentsProcessor.AddParser( function )
+*/
+if (typeof FCKCommentsProcessor === 'undefined')
+{
+	FCKCommentsProcessor = FCKDocumentProcessor.AppendNew() ;
+	FCKCommentsProcessor.ProcessDocument = function( oDoc )
+	{
+		if ( FCK.EditMode != FCK_EDITMODE_WYSIWYG )
+			return ;
+
+		if ( !oDoc )
+			return ;
+
+	//Find all the comments: <!--{PS..0}-->
+	//try to choose the best approach according to the browser:
+		if ( oDoc.evaluate )
+			this.findCommentsXPath( oDoc );
+		else
+		{
+			if (oDoc.all)
+				this.findCommentsIE( oDoc.body ) ;
+			else
+				this.findComments( oDoc.body ) ;
+		}
+
+	}
+
+	FCKCommentsProcessor.findCommentsXPath = function(oDoc) {
+		var nodesSnapshot = oDoc.evaluate('//body//comment()', oDoc.body, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null );
+
+		for ( var i=0 ; i < nodesSnapshot.snapshotLength; i++ )
+		{
+			this.parseComment( nodesSnapshot.snapshotItem(i) ) ;
+		}
+	}
+
+	FCKCommentsProcessor.findCommentsIE = function(oNode) {
+		var aComments = oNode.getElementsByTagName( '!' );
+		for(var i=aComments.length-1; i >=0 ; i--)
+		{
+			var comment = aComments[i] ;
+			if (comment.nodeType == 8 ) // oNode.COMMENT_NODE) 
+				this.parseComment( comment ) ;
+		}
+	}
+
+	// Fallback function, iterate all the nodes and its children searching for comments.
+	FCKCommentsProcessor.findComments = function( oNode ) 
+	{
+		if (oNode.nodeType == 8 ) // oNode.COMMENT_NODE) 
+		{
+			this.parseComment( oNode ) ;
+		}
+		else 
+		{
+			if (oNode.hasChildNodes()) 
+			{
+				var children = oNode.childNodes ;
+				for (var i = children.length-1; i >=0 ; i--) 
+					this.findComments( children[ i ] );
+			}
+		}
+	}
+
+	// We get a comment node
+	// Check that it's one that we are interested on:
+	FCKCommentsProcessor.parseComment = function( oNode )
+	{
+		var value = oNode.nodeValue ;
+
+		// Difference between 2.4.3 and 2.5
+		var prefix = ( FCKConfig.ProtectedSource._CodeTag || 'PS\\.\\.' ) ;
+
+		var regex = new RegExp( "\\{" + prefix + "(\\d+)\\}", "g" ) ;
+
+		if ( regex.test( value ) ) 
+		{
+			var index = RegExp.$1 ;
+			var content = FCKTempBin.Elements[ index ] ;
+
+			// Now call the registered parser handlers.
+			var oCalls = this.ParserHandlers ;
+			if ( oCalls )
+			{
+				for ( var i = 0 ; i < oCalls.length ; i++ )
+					oCalls[ i ]( oNode, content, index ) ;
+
+			}
+
+		}
+	}
+
+	/**
+		The users of the object will add a parser here, the callback function gets two parameters:
+			oNode: it's the node in the editorDocument that holds the position of our content
+			oContent: it's the node (removed from the document) that holds the original contents
+			index: the reference in the FCKTempBin of our content
+	*/
+	FCKCommentsProcessor.AddParser = function( handlerFunction )
+	{
+		if ( !this.ParserHandlers )
+			this.ParserHandlers = [ handlerFunction ] ;
+		else
+		{
+			// Check that the event handler isn't already registered with the same listener
+			// It doesn't detect function pointers belonging to an object (at least in Gecko)
+			if ( this.ParserHandlers.IndexOf( handlerFunction ) == -1 )
+				this.ParserHandlers.push( handlerFunction ) ;
+		}
+	}
+}
+/**
+	END of FCKCommentsProcessor
+	---------------------------
+*/
+
 FCK["eXoPlugin"] = eXoPlugin;
 
 eXoPlugin.init();

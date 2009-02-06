@@ -122,7 +122,11 @@ function getElementsByClassPath(root, path) {
 	function sort(sCondition) {
 		var oExplorer = K('explorer');
 		var oDocument = getElementsByClassPath(oExplorer, 'Workspace/DisplayArea')[0];
-		var oThumbnailView = document.getElementsByName("View")[0].checked;
+		var oThumbnailView;
+		if (location.search.indexOf('Thumbnail') >= 0)
+			oThumbnailView = true;
+		else 
+			oThumbnailView = document.getElementsByName("View")[0].checked;
 		var oHide = K('hideContainer');
 		
 		oDocument.innerHTML = '';
@@ -142,8 +146,9 @@ function getElementsByClassPath(root, path) {
 			sThumbnail = aResult[i].thumbnail;
 			if (!sThumbnail.length) sThumbnail = 'images/no-image.jpg';
 			HideTreeItem = HideTreeItem.replace(/\$%7BsThumbnail%7D/g, sThumbnail);
-			console.log(aResult[i].local)
-			HideTreeItem = HideTreeItem.replace(/\$%7BsLocal%7D/g, aResult[i].local);
+			HideTreeItem = HideTreeItem.replace(/\${sThumbnailWidth}/g, FCKConfig.thumbnailWidth);
+			HideTreeItem = HideTreeItem.replace(/\${sThumbnailHeight}/g, FCKConfig.thumbnailHeight);
+			HideTreeItem = HideTreeItem.replace(/\${sLocal}/g, aResult[i].local);
 			HideTreeItem = HideTreeItem.replace(/\$%7BsURL%7D/g, aResult[i].url);
 			HideTreeItem = HideTreeItem.replace(/\${sDateCreated}/g, aResult[i].date.getDate() + '/' + aResult[i].date.getMonth() + '/' + aResult[i].date.getFullYear() + ' ' + aResult[i].date.getHours() + ':' + aResult[i].date.getMinutes());
 			HideTreeItem = HideTreeItem.replace(/\${sURL}/g, aResult[i].url);

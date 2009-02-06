@@ -54,11 +54,11 @@
 									<td userLanguage="KLang.SetSort">Sorting: </td>
 								</tr>
 								<tr>
-									<td><input type="radio" checked="checked" name="View" onclick="sort()"/><span userLanguage="KLang.ViewThumbnail">Thumbnails</span></td>
+									<td><input type="radio" name="View" onclick="sort()"/><span userLanguage="KLang.ViewThumbnail">Thumbnails</span></td>
 									<td><input type="radio" onclick="sort('lowerName')" name="Sort"/><span userLanguage="KLang.SortName">By File Name</span></td>
 								</tr>
 								<tr>
-									<td><input type="radio" name="View" onclick="sort()"/><span userLanguage="KLang.ViewList">List</span></td>
+									<td><input type="radio" checked="checked" name="View" onclick="sort()"/><span userLanguage="KLang.ViewList">List</span></td>
 									<td><input type="radio" onclick="sort('date')" name="Sort"/><span userLanguage="KLang.SortDate">By Date</span></td>
 								</tr>
 								<tr>
@@ -122,7 +122,7 @@
 					<table class="ThumbnailTable" style="float: left; margin-right: 20px;">
 						<tr>
 							<td>
-								<img lang="${sLocal}|${sURL}" width="80" height="80" onclick="insertLink(this)" src="${sThumbnail}"/>
+								<img lang="${sLocal}|${sURL}" width="${sThumbnailWidth}" height="${sThumbnailHeight}" onclick="insertLink(this)" src="${sThumbnail}"/>
 								<div>${sName}</div>
 							</td>
 						</tr>
@@ -553,9 +553,11 @@
 					var sURL = eXp.getNodeValue(oFiles[i], "url").replace(/\s/g, "%20");
 					var sSize = parseInt(eXp.getNodeValue(oFiles[i], "size") || "0");
 					sHideTreeItem = sHideTreeItem.replace(/\${sName}/g, sName);
-					sHideTreeItem = sHideTreeItem.replace(/\$%7BsLocal%7D/g, sLocal);
+					sHideTreeItem = sHideTreeItem.replace(/\${sLocal}/g, sLocal);
 					sHideTreeItem = sHideTreeItem.replace(/\$%7BsURL%7D/g, sURL);
 					sHideTreeItem = sHideTreeItem.replace(/\$%7BsThumbnail%7D/g, sThumbnail);
+					sHideTreeItem = sHideTreeItem.replace(/\${sThumbnailWidth}/g, FCKConfig.thumbnailWidth);
+					sHideTreeItem = sHideTreeItem.replace(/\${sThumbnailHeight}/g, FCKConfig.thumbnailHeight);
 					sHideTreeItem = sHideTreeItem.replace(/\${sDateCreated}/g,
 															sDateCreated.getDate() + "/" +
 															sDateCreated.getMonth() + "/" + 
@@ -566,7 +568,7 @@
 					sHideTreeItem = sHideTreeItem.replace(/\${sSize}/g, sSize);
 					sHTML += "<input type='hidden' id='checkgen'>";
 					sHTML += sHideTreeItem;
-					eXp.store.data.Insert([sName, sName.toLowerCase(), sDateCreated, sSize, sType, sURL, sThumbnail, local]);
+					eXp.store.data.Insert([sName, sName.toLowerCase(), sDateCreated, sSize, sType, sURL, sThumbnail, sLocal]);
 				}
 				oDocument.innerHTML += sHTML;
 			} else {
@@ -615,9 +617,27 @@
 		} else if (eXp.resourceType == "Gadget") {
 			var random = new Date().getTime();
 			var newTag = FCK.CreateElement("div");
-			newTag.innerHTML = "<img src=" + element.src + " /><div id=" + random + "><span></span></div>";
+			newTag.setAttribute("id", random);
+			newTag.innerHTML = "<span></span>";
 			var newScript = FCK.CreateElement("script");
-			newScript.innerHTML = "eXo.core.Browser.addOnLoadCallback('" + random + "', function() {eXo.gadget.UIGadget.createGadget('" + eXoPlugin.hostName + "/rest/" + element.lang + "','" + random + "', null, null, 'home', 1, 0, 0)});";
+			var isLocal = element.lang.split('|')[0];
+			var url = element.lang.split('|')[1];
+			if (isLocal == 'true') {
+				newScript.innerHTML = "\n//WCM gadgets " + element.src + "\n eXo.core.Browser.addOnLoadCallback('" + random + "', function() {eXo.gadget.UIGadget.createGadget('" + eXoPlugin.hostName + "/rest/" + url + "','" + random + "', null, null, 'home', 1, 0, 0)});";
+			} else {
+				newScript.innerHTML = "\n//WCM gadgets " + element.src + "\n eXo.core.Browser.addOnLoadCallback('" + random + "', function() {eXo.gadget.UIGadget.createGadget('" + url + "','" + random + "', null, null, 'home', 1, 0, 0)});";
+			}
+			var oFakeNode = FCK.EditorDocument.createElement( 'IMG' ) ;
+			if ( !newTag ) {
+				FCK.InsertElement(newTag);
+			}
+			oFakeNode.className = 'FCK__Flash' ; 
+			oFakeNode.src = element.src;
+			oFakeNode.setAttribute( '_fckfakelement', 'true', 0 ) ;
+			oFakeNode.setAttribute( '_fckrealelement', window.opener.FCKTempBin.AddElement( newTag ), 0 ) ;
+			oFakeNode.setAttribute( '_fckgadgetthumbnail', element.src, 0 ) ;
+			newTag.parentNode.insertBefore( oFakeNode, newTag ) ;
+			newTag.parentNode.removeChild( newTag ) ;
 		}
 		window.close();
 	}
