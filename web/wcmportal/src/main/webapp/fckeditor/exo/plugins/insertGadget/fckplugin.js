@@ -15,7 +15,6 @@
 		}
 	oGadget.GetState = function() {};
 	FCKCommands.RegisterCommand( "Insert Gadget", oGadget ) ;
-	console.log(FCKPlugins.Items["insertGadget"].Path + "dialog/gadgets.htm");
 	FCKCommands.RegisterCommand( "Edit Gadget", new FCKDialogCommand("Edit Gadget", "Edit Gadget", FCKPlugins.Items["insertGadget"].Path + "dialog/gadgets.htm", 450, 428 ) ) ;
 	var oElement = new FCKToolbarButton( "Insert Gadget" ) ;
 	oElement.IconPath = FCKConfig.eXoPath + "plugins/insertGadget/insertGadget.gif" ;
