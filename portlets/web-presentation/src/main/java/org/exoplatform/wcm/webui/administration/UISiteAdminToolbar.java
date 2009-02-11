@@ -96,11 +96,16 @@ import org.exoplatform.webui.event.EventListener;
     @EventConfig(listeners = UISiteAdminToolbar.BrowsePortalActionListener.class),
     @EventConfig(listeners = UISiteAdminToolbar.BrowsePageActionListener.class),
     @EventConfig(listeners = UISiteAdminToolbar.EditPageAndNavigationActionListener.class),
-    @EventConfig(listeners = UISiteAdminToolbar.ChangePageActionListener.class) })
+    @EventConfig(listeners = UISiteAdminToolbar.ChangePageActionListener.class),
+    @EventConfig(listeners = UISiteAdminToolbar.TurnOnQuickEditActionListener.class),
+    @EventConfig(listeners = UISiteAdminToolbar.TurnOffQuickEditActionListener.class)
+})
 public class UISiteAdminToolbar extends UIContainer {
 
   /** The Constant MESSAGE. */
   public static final String MESSAGE = "UISiteAdminToolbar.msg.not-permission";
+  
+  public static final String TURN_ON_QUICK_EDIT = "isTurnOn";
 
   /**
    * Instantiates a new uI site admin toolbar.
@@ -689,4 +694,21 @@ public class UISiteAdminToolbar extends UIContainer {
       Utils.refreshBrowser((PortletRequestContext) event.getRequestContext());
     }
   }
+  
+  public static class TurnOnQuickEditActionListener extends EventListener<UISiteAdminToolbar> {
+    public void execute(Event<UISiteAdminToolbar> event) throws Exception {
+      PortalRequestContext context = Util.getPortalRequestContext();      
+      context.getRequest().getSession().setAttribute(Utils.TURN_ON_QUICK_EDIT, true);
+      Utils.refreshBrowser((PortletRequestContext)event.getRequestContext());
+    }    
+  }
+  
+  public static class TurnOffQuickEditActionListener extends EventListener<UISiteAdminToolbar> {
+    public void execute(Event<UISiteAdminToolbar> event) throws Exception {
+      PortalRequestContext context = Util.getPortalRequestContext();
+      context.getRequest().getSession().setAttribute(Utils.TURN_ON_QUICK_EDIT, false);
+      Utils.refreshBrowser((PortletRequestContext)event.getRequestContext());
+    }    
+  }
+  
 }

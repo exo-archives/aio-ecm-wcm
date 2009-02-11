@@ -19,6 +19,7 @@ package org.exoplatform.wcm.webui.scv;
 import javax.portlet.PortletPreferences;
 
 import org.exoplatform.portal.webui.container.UIContainer;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.WebUIPropertiesConfigService;
 import org.exoplatform.wcm.webui.WebUIPropertiesConfigService.PopupWindowProperties;
 import org.exoplatform.wcm.webui.scv.config.UIPortletConfig;
@@ -66,10 +67,8 @@ public class UIPresentationContainer extends UIContainer{
   public boolean isQuickEditable() throws Exception {
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     PortletPreferences prefs = portletRequestContext.getRequest().getPreferences();
-    boolean isQuickEdit = Boolean.parseBoolean(prefs.getValue("ShowQuickEdit", null));
-    UISingleContentViewerPortlet uiPresentationPortlet = getAncestorOfType(UISingleContentViewerPortlet.class);
-    if (isQuickEdit) return uiPresentationPortlet.canEditPortlet();
-    return false;
+    boolean isQuickEdit = Boolean.parseBoolean(prefs.getValue("ShowQuickEdit", null));    
+    return Utils.turnOnQuickEditable(portletRequestContext, isQuickEdit);
   }
 
   /**

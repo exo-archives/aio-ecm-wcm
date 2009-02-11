@@ -259,7 +259,9 @@
 	String addContentLink = uicomponent.event("AddContent");
 	String browsePortalLink = uicomponent.event("BrowsePortal");
 	String browsePageLink = uicomponent.event("BrowsePage");
-	String editPageAndNavLink = uicomponent.event("EditPageAndNavigation");		
+	String editPageAndNavLink = uicomponent.event("EditPageAndNavigation");
+	String turnOnQuickEditLink = uicomponent.event("TurnOnQuickEdit");
+	String turnOffQuickEditLink = uicomponent.event("TurnOffQuickEdit");		
 	
 	String addPageActionLabel = _ctx.appRes("UISiteAdminToolbar.action.AddPage");	
 	String editPageActionLabel = _ctx.appRes("UISiteAdminToolbar.action.EditPage");
@@ -275,6 +277,8 @@
 	String browsePageActionLabel = _ctx.appRes("UISiteAdminToolbar.action.BrowsePage");
 	String logoutActionLabel = _ctx.appRes("UISiteAdminToolbar.action.Logout");
 	String editPageAndNaviActionLabel = _ctx.appRes("UISiteAdminToolbar.action.EditPageAndNavigation");
+	String turnOnQuickEditLable = _ctx.appRes("UISiteAdminToolbar.action.TurnOnQuickEdit");
+	String turnOffQuickEditLable = _ctx.appRes("UISiteAdminToolbar.action.TurnOffQuickEdit");
 		 					 			
 	boolean showable  = uicomponent.isShowWorkspaceArea();	 			
 	%>
@@ -296,7 +300,12 @@
 		<a class="VerIcon LogoutIcon" onclick="eXo.portal.logout();" >$logoutActionLabel</a>		
 	</div>
 	<div class="SeparationIcon TopToolbarMenuItem"><span></span></div>
-	<a class="HozIcon AddContentIcon TopToolbarMenuItem" href="$addContentLink" >$addContentActionLabel</a>
+	<div style="float:right; line-height:32px; width: 70px; text; margin-left: 10px;">
+		<a style="float: left;" href="$turnOnQuickEditLink">$turnOnQuickEditLable | </a>
+		<a  href="$turnOffQuickEditLink">$turnOffQuickEditLable</a>
+	</div>	
+	<div class="SeparationIcon TopToolbarMenuItem"><span></span></div>
+	<a class="HozIcon AddContentIcon TopToolbarMenuItem" href="$addContentLink" >$addContentActionLabel</a>		
 	<div class="SeparationIcon TopToolbarMenuItem"><span></span></div>
 	<a class="HozIcon EditPageIcon TopToolbarMenuItem" href="$editPageLink" onclick="showWorkspaceArea($showable);">$editPageActionLabel</a>
 	<div class="SeparationIcon TopToolbarMenuItem"><span></span></div>
@@ -309,7 +318,8 @@
 	<a class="HozIcon CreatePortalIcon TopToolbarMenuItem" href="$createPortalLink" >$createPortalActionLabel</a>
 	<div class="SeparationIcon TopToolbarMenuItem"><span></span></div>
 	<a class="HozIcon ChangePortalIcon TopToolbarMenuItem" href="$changePortalLink">$changePortalActionLabel</a>
-	<div class="SeparationIcon TopToolbarMenuItem"><span></span></div>	
+	<div class="SeparationIcon TopToolbarMenuItem"><span></span></div>
+			
 	<div class="StartMenuContainer" style="display: block;  position: absolute; top: 0px;">
 		<div class="StartMenuDecorator">						     
 			<div class="MenuItemContainer" style="top: -1000px;">						

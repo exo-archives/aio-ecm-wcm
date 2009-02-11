@@ -18,10 +18,6 @@ package org.exoplatform.wcm.webui.clv;
 
 import javax.portlet.PortletMode;
 
-import org.exoplatform.portal.config.DataStorage;
-import org.exoplatform.portal.config.UserACL;
-import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.clv.config.UIPortletConfig;
 import org.exoplatform.wcm.webui.clv.config.UIStartEditionInPageWizard;

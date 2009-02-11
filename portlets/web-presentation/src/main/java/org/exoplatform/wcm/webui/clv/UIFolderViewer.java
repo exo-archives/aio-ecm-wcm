@@ -36,6 +36,8 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.utils.PaginatedNodeIterator;
+import org.exoplatform.wcm.webui.Utils;
+import org.exoplatform.wcm.webui.administration.UISiteAdminToolbar;
 import org.exoplatform.wcm.webui.clv.config.UIPortletConfig;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -96,7 +98,7 @@ public class UIFolderViewer extends UIContainer implements RefreshDelegateAction
       return;
     }
     if (nodeIterator.getSize() == 0) {
-      messageKey = "UIMessageBoard.msg.folder-empty";      
+      messageKey = "UIMessageBoard.msg.folder-empty";
     }
     PortletPreferences portletPreferences = getPortletPreference();
     int itemsPerPage = Integer.parseInt(portletPreferences.getValue(UIContentListViewerPortlet.ITEMS_PER_PAGE,
@@ -121,11 +123,10 @@ public class UIFolderViewer extends UIContainer implements RefreshDelegateAction
    * Gets the message.
    * 
    * @return the message
-   * 
    * @throws Exception the exception
    */
   public String getMessage() throws Exception {
-    WebuiRequestContext requestContext = WebuiRequestContext.getCurrentInstance();    
+    WebuiRequestContext requestContext = WebuiRequestContext.getCurrentInstance();
     return requestContext.getApplicationResourceBundle().getString(messageKey);
   }
 
@@ -170,7 +171,6 @@ public class UIFolderViewer extends UIContainer implements RefreshDelegateAction
    * Gets the rendered content nodes.
    * 
    * @return the rendered content nodes
-   * 
    * @throws Exception the exception
    */
   public NodeIterator getRenderedContentNodes() throws Exception {
@@ -214,7 +214,6 @@ public class UIFolderViewer extends UIContainer implements RefreshDelegateAction
    * Gets the template resource resolver.
    * 
    * @return the template resource resolver
-   * 
    * @throws Exception the exception
    */
   private ResourceResolver getTemplateResourceResolver() throws Exception {
@@ -239,35 +238,34 @@ public class UIFolderViewer extends UIContainer implements RefreshDelegateAction
    * Checks if is quick editable.
    * 
    * @return true, if is quick editable
-   * 
    * @throws Exception the exception
    */
   public boolean isQuickEditable() throws Exception {
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     PortletPreferences prefs = portletRequestContext.getRequest().getPreferences();
     boolean isQuickEdit = Boolean.parseBoolean(prefs.getValue(UIContentListViewerPortlet.SHOW_QUICK_EDIT_BUTTON,
-                                                              null));
-    UIContentListViewerPortlet uiPresentationPortlet = getAncestorOfType(UIContentListViewerPortlet.class);
-    if (isQuickEdit)
-      return uiPresentationPortlet.canEditPortlet();
-    return false;
+                                                              null));       
+    return Utils.turnOnQuickEditable(portletRequestContext, isQuickEdit);
   }
 
   /**
-   * The listener interface for receiving quickEditAction events.
-   * The class that is interested in processing a quickEditAction
-   * event implements this interface, and the object created
-   * with that class is registered with a component using the
-   * component's <code>addQuickEditActionListener<code> method. When
+   * The listener interface for receiving quickEditAction events. The class that
+   * is interested in processing a quickEditAction event implements this
+   * interface, and the object created with that class is registered with a
+   * component using the component's
+   * <code>addQuickEditActionListener<code> method. When
    * the quickEditAction event occurs, that object's appropriate
    * method is invoked.
    * 
    * @see QuickEditActionEvent
    */
   public static class QuickEditActionListener extends EventListener<UIFolderViewer> {
-    
-    /* (non-Javadoc)
-     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+
+    /*
+     * (non-Javadoc)
+     * @see
+     * org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui
+     * .event.Event)
      */
     public void execute(Event<UIFolderViewer> event) throws Exception {
       UIFolderViewer uiFolderViewer = event.getSource();
@@ -284,8 +282,11 @@ public class UIFolderViewer extends UIContainer implements RefreshDelegateAction
     }
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.wcm.webui.clv.RefreshDelegateActionListener#onRefresh(org.exoplatform.webui.event.Event)
+  /*
+   * (non-Javadoc)
+   * @see
+   * org.exoplatform.wcm.webui.clv.RefreshDelegateActionListener#onRefresh(org
+   * .exoplatform.webui.event.Event)
    */
   public void onRefresh(Event<UIContentListPresentation> event) throws Exception {
     UIContentListPresentation contentListPresentation = event.getSource();

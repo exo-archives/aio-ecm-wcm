@@ -14,7 +14,9 @@
       <BrowsePortal>Quản lý portals</BrowsePortal>
       <BrowsePage>Quản lý trang</BrowsePage>
       <Logout>Đăng xuất</Logout>
-      <AddContent>Tạo mới nội dung</AddContent>
+      <TurnOnQuickEdit>Bật</TurnOnQuickEdit>
+      <TurnOffQuickEdit>Tắt</TurnOffQuickEdit>
+      <AddContent>Tạo mới nội dung</AddContent>      
       <EditPageAndNavigation>Chỉnh sửa navigation</EditPageAndNavigation>   
     </action>
   </UISiteAdminToolbar>

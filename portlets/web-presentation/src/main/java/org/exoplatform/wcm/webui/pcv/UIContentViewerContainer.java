@@ -59,9 +59,8 @@ public class UIContentViewerContainer extends UIContainer {
    * @throws Exception the exception
    */
   public boolean isQuickEditAble() throws Exception {
-    PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();    
-    String userId = context.getRemoteUser();
-    return Utils.canEditCurrentPortal(userId);
+    PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();        
+    return Utils.turnOnQuickEditable(context, true);
   }
 
   /**

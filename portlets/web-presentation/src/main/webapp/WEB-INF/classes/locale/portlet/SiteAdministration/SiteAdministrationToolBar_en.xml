@@ -13,8 +13,10 @@
       <LanguageSettings>Language Settings</LanguageSettings>
       <AccountSettings>Account Settings</AccountSettings>
       <ViewMore>More Actions</ViewMore>
-      <AddContent>Add Content</AddContent>
       <Logout>Logout</Logout>
+      <TurnOnQuickEdit>ON</TurnOnQuickEdit>
+      <TurnOffQuickEdit>OFF</TurnOffQuickEdit>
+      <AddContent>Add Content</AddContent>            
       <EditPageAndNavigation>Edit Navigation</EditPageAndNavigation>
     </action>
     <msg>
