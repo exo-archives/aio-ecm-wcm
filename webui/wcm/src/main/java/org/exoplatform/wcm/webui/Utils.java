@@ -16,23 +16,23 @@
  */
 package org.exoplatform.wcm.webui;
 
-import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.services.security.Identity;
 import org.exoplatform.services.security.IdentityRegistry;
+import org.exoplatform.services.security.MembershipEntry;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 
 /**
- * Created by The eXo Platform SAS
- * Author : Hoa Pham
- * hoa.phamvu@exoplatform.com
+ * Created by The eXo Platform SAS Author : Hoa Pham hoa.phamvu@exoplatform.com
  * Oct 23, 2008
  */
 public class Utils {
   
+  public static final String TURN_ON_QUICK_EDIT = "turnOnQuickEdit";
+
   /**
    * Checks if is edits the portlet in create page wizard.
    * 
@@ -42,11 +42,12 @@ public class Utils {
     UIPortal uiPortal = Util.getUIPortal();
     UIPortalApplication uiApp = uiPortal.getAncestorOfType(UIPortalApplication.class);
     UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
-    // show maskworkpace is being in Portal page edit mode    
-    if(uiMaskWS.getWindowWidth() > 0 && uiMaskWS.getWindowHeight() < 0) return true;
+    // show maskworkpace is being in Portal page edit mode
+    if (uiMaskWS.getWindowWidth() > 0 && uiMaskWS.getWindowHeight() < 0)
+      return true;
     return false;
   }
-  
+
   /**
    * Refresh browser.
    * 
@@ -55,24 +56,40 @@ public class Utils {
   public static void refreshBrowser(PortletRequestContext context) {
     context.getJavascriptManager().addJavascript("location.reload();");
   }
-  
+
   /**
    * Can edit current portal.
    * 
    * @param remoteUser the remote user
-   * 
    * @return true, if successful
-   * 
    * @throws Exception the exception
    */
   public static boolean canEditCurrentPortal(String remoteUser) throws Exception {
-    if(remoteUser == null) return false;
-    IdentityRegistry identityRegistry = Util.getUIPortalApplication().getApplicationComponent(IdentityRegistry.class);        
+    if (remoteUser == null)
+      return false;
+    IdentityRegistry identityRegistry = Util.getUIPortalApplication()
+    .getApplicationComponent(IdentityRegistry.class);
     Identity identity = identityRegistry.getIdentity(remoteUser);
-    if(identity == null) return false;
+    if (identity == null)
+      return false;
     UIPortal uiPortal = Util.getUIPortal();
+    //TODO this code only work for single edit permission
     String editPermission = uiPortal.getEditPermission();
-    UserACL userACL = Util.getUIPortalApplication().getApplicationComponent(UserACL.class);
-    return userACL.hasPermission(editPermission);
+    MembershipEntry membershipEntry = MembershipEntry.parse(editPermission);
+    return identity.isMemberOf(membershipEntry);
   }
+  
+  public static boolean turnOnQuickEditable(PortletRequestContext context, boolean showAblePref) throws Exception {
+    Object obj = Util.getPortalRequestContext().getRequest().getSession().getAttribute(Utils.TURN_ON_QUICK_EDIT);    
+    boolean turnOnFlag = false;
+    if (obj != null) {      
+      turnOnFlag = Boolean.parseBoolean(obj.toString()); 
+    }
+    String remoteUser = context.getRemoteUser();
+    if (showAblePref && turnOnFlag && Utils.canEditCurrentPortal(remoteUser)) {
+      return true;
+    } 
+    return false;
+  }
+  
 }
