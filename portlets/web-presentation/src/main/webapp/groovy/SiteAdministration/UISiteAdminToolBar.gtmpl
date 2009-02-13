@@ -9,6 +9,7 @@
   import org.exoplatform.web.application.JavascriptManager;
   import org.exoplatform.portal.config.model.PageNavigation ;
   import org.exoplatform.portal.webui.util.Util;	 
+	import org.exoplatform.wcm.webui.Utils;
   
 	def rcontext = _ctx.getRequestContext() ;
  	rcontext.getJavascriptManager().importJavascript('eXo.SiteAdministration.ShowAdminToolbar','/web-presentation/javascript'); 	
@@ -285,9 +286,15 @@
 	%>
 		<div class="OnOffAction">
 			<div>$editLable &nbsp;:&nbsp;&nbsp;</div>
-			<a href="$turnOnQuickEditLink"><u>$turnOnQuickEditLable</u></a>
+			<% if (Utils.turnOnQuickEditable(rcontext, true)) { %>
+			<div style="float: left; color: green;">$turnOnQuickEditLable</div>
 			<div>&nbsp;|&nbsp;</div>
 			<a  href="$turnOffQuickEditLink"><u>$turnOffQuickEditLable</u></a>
+			<% } else { %>
+			<a href="$turnOnQuickEditLink"><u>$turnOnQuickEditLable</u></a>
+			<div>&nbsp;|&nbsp;</div>
+			<div style="float: left; color: red;">$turnOffQuickEditLable</div>
+			<% } %>
 		</div>	
 		<div class="SeparationIcon TopToolbarMenuItem"><span></span></div>
 		<a class="HozIcon ViewMoreIcon" onmouseover="viewMoreActions(this)" onmouseout="hideMoreActions(this)">$viewMoreActionLabel</a>	
