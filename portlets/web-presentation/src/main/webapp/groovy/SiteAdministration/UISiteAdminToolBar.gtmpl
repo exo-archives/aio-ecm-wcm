@@ -279,9 +279,17 @@
 	String editPageAndNaviActionLabel = _ctx.appRes("UISiteAdminToolbar.action.EditPageAndNavigation");
 	String turnOnQuickEditLable = _ctx.appRes("UISiteAdminToolbar.action.TurnOnQuickEdit");
 	String turnOffQuickEditLable = _ctx.appRes("UISiteAdminToolbar.action.TurnOffQuickEdit");
+	String editLable = _ctx.appRes("UISiteAdminToolbar.action.OnOffEditting");
 		 					 			
 	boolean showable  = uicomponent.isShowWorkspaceArea();	 			
 	%>
+		<div class="OnOffAction">
+			<div>$editLable &nbsp;:&nbsp;&nbsp;</div>
+			<a href="$turnOnQuickEditLink"><u>$turnOnQuickEditLable</u></a>
+			<div>&nbsp;|&nbsp;</div>
+			<a  href="$turnOffQuickEditLink"><u>$turnOffQuickEditLable</u></a>
+		</div>	
+		<div class="SeparationIcon TopToolbarMenuItem"><span></span></div>
 		<a class="HozIcon ViewMoreIcon" onmouseover="viewMoreActions(this)" onmouseout="hideMoreActions(this)">$viewMoreActionLabel</a>	
 		<div class="MoreActionsMenu" id="MoreActionsMenu">		
 		<a class="VerIcon AddContentIcon Magic" href="$addContentLink" >$addContentActionLabel</a>		
@@ -299,11 +307,6 @@
 		<a class="VerIcon AccountSettingsIcon" href="$accountSettingsLink">$accountSettingsActionLabel</a>		
 		<a class="VerIcon LogoutIcon" onclick="eXo.portal.logout();" >$logoutActionLabel</a>		
 	</div>
-	<div class="SeparationIcon TopToolbarMenuItem"><span></span></div>
-	<div style="float:right; line-height:32px; width: 70px; text; margin-left: 10px;">
-		<a style="float: left;" href="$turnOnQuickEditLink">$turnOnQuickEditLable | </a>
-		<a  href="$turnOffQuickEditLink">$turnOffQuickEditLable</a>
-	</div>	
 	<div class="SeparationIcon TopToolbarMenuItem"><span></span></div>
 	<a class="HozIcon AddContentIcon TopToolbarMenuItem" href="$addContentLink" >$addContentActionLabel</a>		
 	<div class="SeparationIcon TopToolbarMenuItem"><span></span></div>

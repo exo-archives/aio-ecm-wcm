@@ -16,6 +16,7 @@
       <Logout>Logout</Logout>
       <TurnOnQuickEdit>ON</TurnOnQuickEdit>
       <TurnOffQuickEdit>OFF</TurnOffQuickEdit>
+      <OnOffEditting>Edit</OnOffEditting>
       <AddContent>Add Content</AddContent>            
       <EditPageAndNavigation>Edit Navigation</EditPageAndNavigation>
     </action>

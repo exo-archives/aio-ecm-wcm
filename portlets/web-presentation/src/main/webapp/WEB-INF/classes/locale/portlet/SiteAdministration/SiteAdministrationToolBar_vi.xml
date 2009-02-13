@@ -14,6 +14,7 @@
       <BrowsePortal>Quản lý portals</BrowsePortal>
       <BrowsePage>Quản lý trang</BrowsePage>
       <Logout>Đăng xuất</Logout>
+	    <OnOffEditting>Chỉnh sửa</OnOffEditting>
       <TurnOnQuickEdit>Bật</TurnOnQuickEdit>
       <TurnOffQuickEdit>Tắt</TurnOffQuickEdit>
       <AddContent>Tạo mới nội dung</AddContent>      

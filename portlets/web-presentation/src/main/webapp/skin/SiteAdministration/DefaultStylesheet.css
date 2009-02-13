@@ -13,6 +13,24 @@
 	float: right;
 }
 
+.UISiteAdministrationPortlet .UISiteAdminToolBar .OnOffAction {
+	background: url('DefaultSkin/icons/BackgroundOnOff.gif') repeat-x scroll 0 0;	
+	float:right; 
+	line-height:32px; 
+	white-space: nowrap;
+	padding: 0px 10px;
+	font-weight:bold;
+}
+
+.UISiteAdministrationPortlet .UISiteAdminToolBar .OnOffAction a{
+	float: left;
+}
+
+
+.UISiteAdministrationPortlet .UISiteAdminToolBar .OnOffAction div {
+	float: left;
+}
+
 .UISiteAdministrationPortlet .UISiteAdminToolBar .MoreActionsMenu .Magic {
 	display: none;
 }
@@ -124,7 +142,6 @@
 	padding: 10px;		
 	position: absolute;
 	top: 32px;
-	right: 0px;	
 	z-index: 1;
 	display: none;
 }
