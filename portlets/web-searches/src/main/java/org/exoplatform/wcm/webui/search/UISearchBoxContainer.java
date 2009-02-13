@@ -78,12 +78,8 @@ public class UISearchBoxContainer extends UIContainer {
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     PortletPreferences prefs = portletRequestContext.getRequest().getPreferences();
     boolean ableEdit = Boolean.parseBoolean(prefs.getValue(
-        UIWCMSearchPortlet.SHOW_QUICK_EDIT_BUTTON, null));    
-    String remoteUser = portletRequestContext.getRemoteUser();
-    if (ableEdit) {
-      return Utils.canEditCurrentPortal(remoteUser);
-    }
-    return false;
+        UIWCMSearchPortlet.SHOW_QUICK_EDIT_BUTTON, null));        
+    return Utils.turnOnQuickEditable(portletRequestContext, ableEdit);
   }
   
   /**
