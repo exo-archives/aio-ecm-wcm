@@ -166,8 +166,19 @@ eXo.core.Browser.addOnLoadCallback("keepKeywordOnBoxSearch", keepKeywordOnBoxSea
 
 /*------------------the top toolbar---------------*/
 
+function findPreviousElementByClass(element, clazz) {
+	var previousElement = element.previousSibling ;
+	while (previousElement != null) {
+		if (eXo.core.DOMUtil.hasClass(previousElement, clazz)) return previousElement;
+		previousElement = previousElement.previousSibling ;
+	}
+	return null ;
+}
+
 function viewMoreActions(viewMoreObj) {		
 	var moreActionsMenu = eXo.core.DOMUtil.findNextElementByTagName(viewMoreObj, "div");
+	var onOffAction = findPreviousElementByClass(viewMoreObj, "OnOffAction");
+	moreActionsMenu.style.right = onOffAction.offsetWidth + "px";
 	var objToolbarPortlet = eXo.core.DOMUtil.findAncestorByClass(moreActionsMenu, "UISiteAdministrationPortlet");
 	if (document.all) {
 		if(document.getElementById(moreActionsMenu.id + "1")) eXo.core.DOMUtil.removeElement(document.getElementById(moreActionsMenu.id + "1").parentNode.parentNode);
