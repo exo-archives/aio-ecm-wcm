@@ -90,6 +90,15 @@ function getElementsByClassPath(root, path) {
 	} 
 
 	function treeInit(sXML) {
+	 	try {
+	 		var oError = eXp.getSingleNode(sXML, "Message");
+			if (oError) {
+				var sErrorText = eXp.getNodeValue(oError, "text");
+				alert(sErrorText);
+				return;
+			}
+	 	} catch(e) {}
+	
 		var oExplorer = K('explorer');
 		var oStatus = K('statusBar');
 		var oStatusFolder = getElementsByClassPath(oStatus, 'Folder')[0];
@@ -118,7 +127,9 @@ function getElementsByClassPath(root, path) {
 		oNodeGroup.style.display = "block";
 		oNodeGroup.innerHTML = sHTML;
 		
-		getDir(document.getElementsByName('/' + eXp.getNodeValue(eXp.getNodes(sXML, "CurrentFolder")[0], "name") + '/')[0]);
+		if (eXp.resourceType == 'Gadget') {
+			getDir(document.getElementsByName('/' + eXp.getNodeValue(eXp.getNodes(sXML, "CurrentFolder")[0], "name") + '/')[0]);
+		}
 	}
 	
 	function sort(sCondition) {

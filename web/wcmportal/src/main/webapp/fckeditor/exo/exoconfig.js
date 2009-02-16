@@ -61,11 +61,6 @@ window.eXoPlugin = {
 			ResourceType : "File"
 		};
 		
-		this.ExoImageBrowserURL = FCKConfig.eXoPath + 'filemanager/browser/default/browser.html?Type=Image&Connector=/portal/rest/fckconnector/jcr/getFiles' ;
-		this.ExoFileBrowserURL = FCKConfig.eXoPath + 'filemanager/browser/default/browser.html?Type=File&Connector=/portal/rest/fckconnector/jcr/getFiles' ;
-		this.ExoGadgetBrowserURL = FCKConfig.eXoPath + 'filemanager/browser/default/browser.html?Type=Gadget&Connector=/portal/rest/wcmGadget/' ;
-		this.ExoPortalLinkBrowserURL = FCKConfig.eXoPath + 'explorer/explorer.html?Type=PortalLink&Connector=/portal/rest/portalLinks/&disableUploading=true&disableCreatingFolder=true' ;
-		FCKConfig.LinkBrowserURL = FCKConfig.eXoPath + 'explorer/explorer.html?Type=Link&Connector=/portal/rest/wcmLink/';
 		//detect user language
 		this.userLanguage = FCK.Language.GetActiveLanguage() || "en";
 	},

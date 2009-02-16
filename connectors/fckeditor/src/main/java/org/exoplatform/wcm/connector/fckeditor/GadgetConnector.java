@@ -21,6 +21,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -57,6 +59,8 @@ import org.w3c.dom.Element;
 @URITemplate("/wcmGadget/")
 public class GadgetConnector implements ResourceContainer {
   
+  public static final String FCK_RESOURCE_BUNDLE_FILE   = "locale.services.fckeditor.FCKConnector".intern();
+  
   private ApplicationRegistryService applicationRegistryService;
   private GadgetRegistryService gadgetRegistryService;
   private String internalServerPath;
@@ -80,44 +84,60 @@ public class GadgetConnector implements ResourceContainer {
   @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/getFoldersAndFiles/")
   @OutputTransformer(XMLOutputTransformer.class)
-  public Response getFoldersAndFiles(@QueryParam("currentFolder") String currentFolder) throws Exception {
-    Response response = buildXMLResponse(currentFolder);
+  public Response getFoldersAndFiles(@QueryParam("currentFolder") String currentFolder, @QueryParam("currentFolder") String language) throws Exception {
+    Response response = buildXMLResponse(currentFolder, language);
     if (response == null)
       return Response.Builder.ok().build();
     else
       return response;
   }
   
-  public Response buildXMLResponse(String currentFolder) throws Exception {
+  public Response buildXMLResponse(String currentFolder, String language) throws Exception {
     List<ApplicationCategory> applicationCategories = getGadgetCategories();
-    Element rootElement = createRootElement(currentFolder, applicationCategories);
+    Element rootElement = createRootElement(currentFolder, applicationCategories, language);
     Document document = rootElement.getOwnerDocument();
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
     return Response.Builder.ok(document).mediaType("text/xml").cacheControl(cacheControl).build();
   }
   
-  private Element createRootElement(String currentFolder, List<ApplicationCategory> applicationCategories) throws Exception {
+  private Element createRootElement(String currentFolder, List<ApplicationCategory> applicationCategories, String language) throws Exception {
     Document document = null;
     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
     DocumentBuilder builder = factory.newDocumentBuilder();
     document = builder.newDocument();
-    Element rootElement = document.createElement("Connector");
-    document.appendChild(rootElement);
-    rootElement.setAttribute("resourceType", "Gadget");    
-    Element currentFolderElement = document.createElement("CurrentFolder");
-    if (currentFolder == null || currentFolder.equals("/")){
-      currentFolderElement.setAttribute("name", applicationCategories.get(0).getName());
-      Element foldersElement = createFolderElement(document, applicationCategories);
-      rootElement.appendChild(foldersElement);
+    if (applicationCategories.isEmpty()) {
+      Locale locale = null;
+      if (language == null) {
+        locale = Locale.ENGLISH;
+      } else {
+        locale = new Locale(language);
+      }
+      ResourceBundle resourceBundle = ResourceBundle.getBundle(FCK_RESOURCE_BUNDLE_FILE, locale);
+      Element rootElement = document.createElement("Message");
+      document.appendChild(rootElement);
+      rootElement.setAttribute("number", "555");
+      rootElement.setAttribute("text", resourceBundle.getString("fckeditor.no-gadget"));
+      rootElement.setAttribute("type", "Error");
+      return rootElement;
     } else {
-      ApplicationCategory applicationCategory = applicationRegistryService.getApplicationCategory(currentFolder.substring(1, currentFolder.length() - 1));
-      currentFolderElement.setAttribute("name", applicationCategory.getDisplayName());
-      Element filesElement = createFileElement(document, applicationCategory);
-      rootElement.appendChild(filesElement);
+      Element rootElement = document.createElement("Connector");
+      document.appendChild(rootElement);
+      rootElement.setAttribute("resourceType", "Gadget");    
+      Element currentFolderElement = document.createElement("CurrentFolder");
+      if (currentFolder == null || currentFolder.equals("/")){
+        currentFolderElement.setAttribute("name", applicationCategories.get(0).getName());
+        Element foldersElement = createFolderElement(document, applicationCategories);
+        rootElement.appendChild(foldersElement);
+      } else {
+        ApplicationCategory applicationCategory = applicationRegistryService.getApplicationCategory(currentFolder.substring(1, currentFolder.length() - 1));
+        currentFolderElement.setAttribute("name", applicationCategory.getDisplayName());
+        Element filesElement = createFileElement(document, applicationCategory);
+        rootElement.appendChild(filesElement);
+      }
+      rootElement.appendChild(currentFolderElement);
+      return rootElement;
     }
-    rootElement.appendChild(currentFolderElement);
-    return rootElement;
   }
   
   private Element createFolderElement(Document document, List<ApplicationCategory> applicationCategories) throws Exception {
