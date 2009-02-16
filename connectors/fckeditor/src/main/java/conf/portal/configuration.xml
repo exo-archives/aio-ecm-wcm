@@ -13,10 +13,18 @@
   <component>    
     <type>org.exoplatform.wcm.connector.fckeditor.PortalLinkConnector</type>    
   </component>     
-  <component>    
-    <type>org.exoplatform.wcm.connector.fckeditor.GadgetConnector</type>    
+  <component>
+    <type>org.exoplatform.wcm.connector.fckeditor.GadgetConnector</type>
+    <init-params>
+    	<properties-param>
+	      <name>server.config</name>
+	      <description>server.address</description>
+	      <property name="scheme" value="http"/>
+	      <property name="hostName" value="localhost"/>		          
+	      <property name="port" value="8080"/>	      
+		  </properties-param>      
+	  </init-params>        
   </component>
-  
   <external-component-plugins>
     <target-component>org.exoplatform.services.ecm.fckconfig.FCKConfigService</target-component>
     <component-plugin>

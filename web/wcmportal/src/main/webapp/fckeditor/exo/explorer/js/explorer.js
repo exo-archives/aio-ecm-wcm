@@ -117,6 +117,8 @@ function getElementsByClassPath(root, path) {
 		var oNodeGroup = getElementsByClassPath(oExplorer, 'Navigation/Tree/NodeGroup')[0];
 		oNodeGroup.style.display = "block";
 		oNodeGroup.innerHTML = sHTML;
+		
+		getDir(document.getElementsByName('/' + eXp.getNodeValue(eXp.getNodes(sXML, "CurrentFolder")[0], "name") + '/')[0]);
 	}
 	
 	function sort(sCondition) {
@@ -146,9 +148,9 @@ function getElementsByClassPath(root, path) {
 			sThumbnail = aResult[i].thumbnail;
 			if (!sThumbnail.length) sThumbnail = 'images/no-image.jpg';
 			HideTreeItem = HideTreeItem.replace(/\$%7BsThumbnail%7D/g, sThumbnail);
+			HideTreeItem = HideTreeItem.replace(/\${sMetadata}/g, aResult[i].metadata.replace(/"/g, '${quote}'));
 			HideTreeItem = HideTreeItem.replace(/\${sThumbnailWidth}/g, FCKConfig.thumbnailWidth);
 			HideTreeItem = HideTreeItem.replace(/\${sThumbnailHeight}/g, FCKConfig.thumbnailHeight);
-			HideTreeItem = HideTreeItem.replace(/\${sLocal}/g, aResult[i].local);
 			HideTreeItem = HideTreeItem.replace(/\$%7BsURL%7D/g, aResult[i].url);
 			HideTreeItem = HideTreeItem.replace(/\${sDateCreated}/g, aResult[i].date.getDate() + '/' + aResult[i].date.getMonth() + '/' + aResult[i].date.getFullYear() + ' ' + aResult[i].date.getHours() + ':' + aResult[i].date.getMinutes());
 			HideTreeItem = HideTreeItem.replace(/\${sURL}/g, aResult[i].url);

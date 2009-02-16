@@ -122,7 +122,7 @@
 					<table class="ThumbnailTable" style="float: left; margin-right: 20px;">
 						<tr>
 							<td>
-								<img lang="${sLocal}|${sURL}" width="${sThumbnailWidth}" height="${sThumbnailHeight}" onclick="insertLink(this)" src="${sThumbnail}"/>
+								<img lang="${sURL}" width="${sThumbnailWidth}" height="${sThumbnailHeight}" onclick="insertLink(this)" src="${sThumbnail}" metadata="${sMetadata}"/>
 								<div>${sName}</div>
 							</td>
 						</tr>
@@ -536,7 +536,7 @@
 		
 		var oFiles = eXp.getNodes(iXML, "File");
 		
-		eXp.store.data = K.create.database({fieldName: ["name", "lowerName", "date", "size", "type", "url", "thumbnail", "local"]});
+		eXp.store.data = K.create.database({fieldName: ["name", "lowerName", "date", "size", "type", "url", "thumbnail", "metadata"]});
 		if (oFiles != null) {
 			var oItemGroup = K('checkgen');
 			var iLength = oFiles.length;
@@ -544,16 +544,15 @@
 				for (var i = 0 ; i < iLength; ++i) {
 					var sHideTreeItem;
 					oThumbnailView ? sHideTreeItem = getElementsByClassPath(oHide, 'ThumbnailViewItem')[0].innerHTML : sHideTreeItem = getElementsByClassPath(oHide, 'ListViewItem')[0].innerHTML;
+					var sMetadata = eXp.getNodeValue(oFiles[i], "metadata");
 					var sName = eXp.getNodeValue(oFiles[i], "name");
 					var sType = eXp.getNodeValue(oFiles[i], "fileType").replace(":", "_") + "16x16Icon";
 					var sThumbnail = eXp.getNodeValue(oFiles[i], "thumbnail");
 					if (!sThumbnail.length) sThumbnail = 'images/no-image.jpg';
 					var sDateCreated = dateFormat(eXp.getNodeValue(oFiles[i], "dateCreated"));
-					var sLocal = eXp.getNodeValue(oFiles[i], "local");
 					var sURL = eXp.getNodeValue(oFiles[i], "url").replace(/\s/g, "%20");
 					var sSize = parseInt(eXp.getNodeValue(oFiles[i], "size") || "0");
 					sHideTreeItem = sHideTreeItem.replace(/\${sName}/g, sName);
-					sHideTreeItem = sHideTreeItem.replace(/\${sLocal}/g, sLocal);
 					sHideTreeItem = sHideTreeItem.replace(/\$%7BsURL%7D/g, sURL);
 					sHideTreeItem = sHideTreeItem.replace(/\$%7BsThumbnail%7D/g, sThumbnail);
 					sHideTreeItem = sHideTreeItem.replace(/\${sThumbnailWidth}/g, FCKConfig.thumbnailWidth);
@@ -568,22 +567,22 @@
 					sHideTreeItem = sHideTreeItem.replace(/\${sSize}/g, sSize);
 					sHTML += "<input type='hidden' id='checkgen'>";
 					sHTML += sHideTreeItem;
-					eXp.store.data.Insert([sName, sName.toLowerCase(), sDateCreated, sSize, sType, sURL, sThumbnail, sLocal]);
+					eXp.store.data.Insert([sName, sName.toLowerCase(), sDateCreated, sSize, sType, sURL, sThumbnail, sMetadata]);
 				}
 				oDocument.innerHTML += sHTML;
 			} else {
 				eXp.store.data.Drop();
-					for (var i = 0 ; i < iLength; ++i) {
-						var sName = eXp.getNodeValue(oFiles[i], "name");
-						var sType = eXp.getNodeValue(oFiles[i], "fileType").replace(":", "_") + "16x16Icon";
-						var sThumbnail = eXp.getNodeValue(oFiles[i], "thumbnail");
-						if (!sThumbnail.length) sThumbnail = 'images/no-image.jpg';
-						var sDateCreated = dateFormat(eXp.getNodeValue(oFiles[i], "dateCreated"));
-						var sSize = parseInt(eXp.getNodeValue(oFiles[i], "size") || "0");
-						var sLocal = eXp.getNodeValue(oFiles[i], "local");
-						var sURL = eXp.getNodeValue(oFiles[i], "url").replace(/\s/g, "%20");
-						eXp.store.data.Insert([sName, sName.toLowerCase(), sDateCreated, sSize, sType, sURL, sThumbnail, sLocal]);
-					} 
+				for (var i = 0 ; i < iLength; ++i) {
+					var sMetadata = eXp.getNodeValue(oFiles[i], "metadata");
+					var sName = eXp.getNodeValue(oFiles[i], "name");
+					var sType = eXp.getNodeValue(oFiles[i], "fileType").replace(":", "_") + "16x16Icon";
+					var sThumbnail = eXp.getNodeValue(oFiles[i], "thumbnail");
+					if (!sThumbnail.length) sThumbnail = 'images/no-image.jpg';
+					var sDateCreated = dateFormat(eXp.getNodeValue(oFiles[i], "dateCreated"));
+					var sSize = parseInt(eXp.getNodeValue(oFiles[i], "size") || "0");
+					var sURL = eXp.getNodeValue(oFiles[i], "url").replace(/\s/g, "%20");
+					eXp.store.data.Insert([sName, sName.toLowerCase(), sDateCreated, sSize, sType, sURL, sThumbnail, sMetadata]);
+				} 
 				sort();
 			}
 			oStatusFile.innerHTML = iLength + ' files(s)';
@@ -620,21 +619,19 @@
 			newTag.setAttribute("id", random);
 			newTag.innerHTML = "<span></span>";
 			var newScript = FCK.CreateElement("script");
-			var isLocal = element.lang.split('|')[0];
-			var url = element.lang.split('|')[1];
-			if (isLocal == 'true') {
-				newScript.innerHTML = "\n//WCM gadgets " + element.src + "\n eXo.core.Browser.addOnLoadCallback('" + random + "', function() {eXo.gadget.UIGadget.createGadget('" + eXoPlugin.hostName + "/rest/" + url + "','" + random + "', null, null, 'home', 1, 0, 0)});";
-			} else {
-				newScript.innerHTML = "\n//WCM gadgets " + element.src + "\n eXo.core.Browser.addOnLoadCallback('" + random + "', function() {eXo.gadget.UIGadget.createGadget('" + url + "','" + random + "', null, null, 'home', 1, 0, 0)});";
-			}
-			var oFakeNode = FCK.EditorDocument.createElement( 'IMG' ) ;
+			newScript.innerHTML = "/*WCM gadgets random\"" + random + "\" metadata\"" + element.getAttribute('metadata') + "\" thumbnail\"" + element.src + "\" userprefs=\"{}\" url\"" + element.lang + "\"*/eXo.core.Browser.addOnLoadCallback('" + random + "', function() {eXo.gadget.UIGadget.createGadget('" + element.lang + "','" + random + "', " + element.getAttribute('metadata').replace(/\${quote}/g, '"') + ", {}, 'home', 1, 0, 0)});";
 			if ( !newTag ) {
 				FCK.InsertElement(newTag);
 			}
+			var oFakeNode = FCK.EditorDocument.createElement( 'IMG' ) ;
 			oFakeNode.className = 'FCK__Flash' ; 
 			oFakeNode.src = element.src;
 			oFakeNode.setAttribute( '_fckfakelement', 'true', 0 ) ;
 			oFakeNode.setAttribute( '_fckrealelement', window.opener.FCKTempBin.AddElement( newTag ), 0 ) ;
+			oFakeNode.setAttribute( '_fckgadgetnumber', random, 0 ) ;
+			oFakeNode.setAttribute( '_fckgadgeturl', element.lang, 0 ) ;
+			oFakeNode.setAttribute( '_fckgadgetmetadata', element.getAttribute('metadata'), 0 ) ;
+			oFakeNode.setAttribute( '_fckgadgetuserprefs', '{}', 0 ) ;
 			oFakeNode.setAttribute( '_fckgadgetthumbnail', element.src, 0 ) ;
 			newTag.parentNode.insertBefore( oFakeNode, newTag ) ;
 			newTag.parentNode.removeChild( newTag ) ;
@@ -648,10 +645,6 @@
 		sOptions += ", width=" +  FCKConfig.ScreenWidth;
 		sOptions += ", height=" + FCKConfig.ScreenHeight;
 		if (sLink) window.open(sLink, "", sOptions);
-	}
-	
-	function view(type) {
-		
 	}
 	</script>
 </html>
