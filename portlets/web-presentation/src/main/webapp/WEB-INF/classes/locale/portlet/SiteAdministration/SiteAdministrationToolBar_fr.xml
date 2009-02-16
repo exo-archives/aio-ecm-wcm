@@ -12,8 +12,9 @@
       <LanguageSettings>Langues</LanguageSettings>
       <AccountSettings>Paramètres du compte</AccountSettings>
       <BrowsePage>Gérer les pages</BrowsePage>
-      <TurnOnQuickEdit></TurnOnQuickEdit>
-      <TurnOffQuickEdit></TurnOffQuickEdit>
+      <OnOffEditting>Edition</OnOffEditting>
+      <TurnOnQuickEdit>Activer</TurnOnQuickEdit>
+      <TurnOffQuickEdit>Désactiver</TurnOffQuickEdit>
       <AddContent>Ajouter un contenu</AddContent>
       <ViewMore>Plus d'actions</ViewMore>      
       <Logout>Déconnexion</Logout>
