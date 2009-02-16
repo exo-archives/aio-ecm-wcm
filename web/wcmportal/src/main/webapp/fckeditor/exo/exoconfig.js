@@ -61,6 +61,7 @@ window.eXoPlugin = {
 			ResourceType : "File"
 		};
 		
+		FCKConfig.LinkBrowserURL = FCKConfig.eXoPath + 'explorer/explorer.html?Type=Link&Connector=/portal/rest/wcmLink/';
 		//detect user language
 		this.userLanguage = FCK.Language.GetActiveLanguage() || "en";
 	},
