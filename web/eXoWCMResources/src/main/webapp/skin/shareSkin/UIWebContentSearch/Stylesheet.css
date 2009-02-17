@@ -29,10 +29,7 @@
 }
 
 /******************************************************/
-.UIWCMSearchContainer {
-	background: #f7f7f7;
-	border: 1px solid #b7b7b7;
-}	
+.UIWCMSearchContainer {}	
 	
 .UIWCMSearchContainer .UIBreadcumbs .LeftBreadcumbsBar {
 	background: white;
@@ -45,7 +42,7 @@
 	width: 300px;
 }	
 	
-.UIWCMSearchContainer .UITreeBuilder .Explorer {
+.UIWCMSearchContainer .UITreeBuilder .ExplorerTree {
 	float: none;
 	width: auto;
 }
@@ -87,4 +84,34 @@
 
 .IconConstraint {
 	cursor: pointer;
+}
+
+/* ############################### WebContentSearchForm ########################*/
+.UIWebContentSearchForm {
+	padding: 10px 20px;
+}
+
+.ContentSearchForm {
+	padding: 4px 0px;
+}
+
+/********************  UIDocumentPathSelector  ***************************/
+.UIDocumentPathSelector {}	
+	
+.UIDocumentPathSelector .UIBreadcumbs .LeftBreadcumbsBar {
+	background: white;
+	border: 1px solid #b7b7b7;
+}
+
+.UIDocumentPathSelector .ExplorerTree .UITrees {
+	background: white;
+}
+
+.UIDocumentPathSelector .UIBreadcumbs {
+	margin: 5px 0px;
+}
+
+/*********************** UIWebContentSelector *********************************/
+.UIWebContentPathSelector .UIBreadcumbs {
+	margin: 5px 0px;
 }

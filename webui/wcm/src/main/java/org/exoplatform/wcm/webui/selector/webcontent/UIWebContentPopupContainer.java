@@ -32,11 +32,6 @@ public class UIWebContentPopupContainer extends UIContainer implements UIPopupCo
   public void initMetadataPopup() throws Exception {
     UIPopupContainer uiPopupContainer = getAncestorOfType(UIPopupContainer.class);
     if(!uiPopupContainer.getId().equals(METADATA_POPUP)) uiPopupContainer.setId(METADATA_POPUP);
-    
-//    UIPopupContainer popupContainer = getChildById(METADATA_POPUP);
-//    if(popupContainer == null) {
-//      popupContainer = addChild(UIPopupContainer.class, null, METADATA_POPUP);
-//    }
     UIWCMSelectPropertyForm uiWCMSelectPropertyForm = 
       createUIComponent(UIWCMSelectPropertyForm.class, null, null);
     uiWCMSelectPropertyForm.setFieldName(UIWebContentSearchForm.PROPERTY);

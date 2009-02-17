@@ -69,10 +69,7 @@ public class QueryCriteria {
   private boolean searchDocument = true;
 
   /** The keyword. */
-  private String keyword = null;  
-
-  /** The query path. */
-  private String queryPath = null;
+  private String keyword = null;
 
   /** The search web content. */
   private boolean searchWebContent = true;  
@@ -277,24 +274,6 @@ public class QueryCriteria {
    */
   public void setSearchDocument(boolean searchDocument) {
     this.searchDocument = searchDocument;
-  }
-
-  /**
-   * Gets the query path.
-   * 
-   * @return the query path
-   */
-  public String getQueryPath() {
-    return queryPath;
-  }
-
-  /**
-   * Sets the query path.
-   * 
-   * @param queryPath the new query path
-   */
-  public void setQueryPath(String queryPath) {
-    this.queryPath = queryPath;
   }
 
   /**

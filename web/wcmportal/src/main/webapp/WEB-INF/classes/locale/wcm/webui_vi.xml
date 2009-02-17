@@ -79,5 +79,81 @@
       <Freelayoutwebcontent>Bố cục tuỳ biến</Freelayoutwebcontent>
     </lable>
   </ContentType>
+  
+  <!--  
+  ##########################################################################################
+  # exo.ecm.wcm.webui.wcm.groovy.wcm.webui                                                 # 
+  ##########################################################################################
+  -->
+  <PopupWebContentSelector>
+  	<title>
+  		<UIWebContentTabSelector>Bộ tìm kiếm nội dung trang web</UIWebContentTabSelector>
+  	</title>
+  </PopupWebContentSelector>
+  <PopupDMSSelector>
+  	<title>
+  		<UIDocumentTabSelector>Bộ tìm kiếm tài liệu</UIDocumentTabSelector>
+  	</title>
+  </PopupDMSSelector>
+  <UITabPane>
+  	<title>
+  		<UIWebContentPathSelector>Cây tìm kiếm nội dung web</UIWebContentPathSelector>
+  		<UIWebContentSearchForm>Bảng tìm kiếm nội dung web</UIWebContentSearchForm>
+  		<UISelectPathPanel>Bảng kết quả</UISelectPathPanel>
+  		<UIDocumentPathSelector>Cây tìm kiếm tài liệu</UIDocumentPathSelector>
+  		<UIDocumentSearchForm>Bảng tìm kiếm tài liệu</UIDocumentSearchForm>
+  		<UIWCMSearchResult>Bảng kết quả</UIWCMSearchResult>
+  		<UIResultView>Hiển thị nội dung kết quả tìm kiếm</UIResultView>
+  	</title>
+  </UITabPane>
+  <UIWebContentSearchForm>
+  	<action>
+  		<SearchWebContent>Tìm kiếm</SearchWebContent>
+  	</action>
+  </UIWebContentSearchForm>
+  <UIDocumentSearchForm>
+  	<action>
+  		<SearchWebContent>Tìm kiếm</SearchWebContent>
+  	</action>
+  </UIDocumentSearchForm>
+  <UIDocumentTabSelector>
+  	<header>
+  		<NameFile>Tên</NameFile>
+  		<NodeExpect>Mong chờ</NodeExpect>
+  		<Score>Điểm</Score>
+  		<CreateDate>Ngày Tạo</CreateDate>
+  		<action>Hoạt động</action>
+  		<Select>Chọn</Select>
+  		<View>Hiển thị</View>
+  	</header>
+  </UIDocumentTabSelector>
+  <UIWebContentTabSelector>
+  	<header>
+  		<NameFile>Tên</NameFile>
+  		<NodeExpect>Mong chờ</NodeExpect>
+  		<Score>Điểm</Score>
+  		<CreateDate>Ngày Tạo</CreateDate>
+  		<action>Hoạt động</action>
+  		<Select>Chọn</Select>
+  		<View>Hiển thị</View>
+  	</header>
+  </UIWebContentTabSelector>
+  <UIResultView>
+  	<action>
+  		<Select>Chọn</Select>
+  	</action>
+  </UIResultView>
+  <UIWebContentSearchForm>
+  	<title>
+  		<Location>Tên trang</Location>
+  		<SearchByName>Tìm kiếm theo tên</SearchByName>
+  		<Fulltext>Một từ hoặc một ngữ của nội dung</Fulltext>
+  		<Property>Thuộc tính</Property>
+  		<Contain>Chứa</Contain>
+  		<FromDate>từ ngày</FromDate>
+  		<ToDate>đến ngày</ToDate>
+  		<DocumentType>Kiểu tài liệu</DocumentType>
+  	</title>
+  </UIWebContentSearchForm>
 </bundle>
 

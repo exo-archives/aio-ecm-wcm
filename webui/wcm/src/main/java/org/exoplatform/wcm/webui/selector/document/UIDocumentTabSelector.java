@@ -1,11 +1,9 @@
-package org.exoplatform.wcm.webui.selector.webcontent;
+package org.exoplatform.wcm.webui.selector.document;
 
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.services.cms.BasePath;
-import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+import org.exoplatform.wcm.webui.selector.webcontent.UIWCMNodeTypeSelectForm;
+import org.exoplatform.wcm.webui.selector.webcontent.UIWCMSearchResult;
+import org.exoplatform.wcm.webui.selector.webcontent.UIWCMSelectPropertyForm;
+import org.exoplatform.wcm.webui.selector.webcontent.UIWebContentSearchForm;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -17,7 +15,7 @@ import org.exoplatform.webui.event.EventListener;
 /**
  * Author : TAN DUNG DANG
  *          dzungdev@gmail.com
- * Jan 20, 2009  
+ * Feb 14, 2009  
  */
 
 @ComponentConfigs ({
@@ -26,34 +24,34 @@ import org.exoplatform.webui.event.EventListener;
   ),
   @ComponentConfig(
       type = UIPopupWindow.class,
-      id = "UIWebContentSearchPopup",
+      id = "UIDocumentSearchPopup",
       template = "system:/groovy/webui/core/UIPopupWindow.gtmpl",
       events = {
-        @EventConfig(listeners = UIWebContentTabSelector.CloseActionListener.class, name = "ClosePopup")
+        @EventConfig(listeners = UIDocumentTabSelector.CloseActionListener.class, name = "ClosePopup")
       }
   )
 })
 
-public class UIWebContentTabSelector extends UITabPane {
+public class UIDocumentTabSelector extends UITabPane {
 
-  final static public String WEB_CONTENT_METADATA_POPUP = "WebContentMetadataPopup";
-  final static public String WEB_CONTENT_NODETYPE_POPUP = "WebContentNodeTypePopup";
+  final static public String DOCUMENT_METADATA_POPUP = "DocumentMetadataPopup";
+  final static public String DOCUMENT_NODETYPE_POPUP = "DocumentNodeTypePopup";
 
-  public UIWebContentTabSelector() throws Exception {
-    addChild(UIWebContentPathSelector.class, null, null);
-    addChild(UIWebContentSearchForm.class,null,null);
-    addChild(UIWCMSearchResult.class,null,null);
+  public UIDocumentTabSelector() throws Exception {
+    addChild(UIDocumentPathSelector.class, null, null);
+    addChild(UIDocumentSearchForm.class, null, null);
+    addChild(UIWCMSearchResult.class, null, null);
     setSelectedTab(1);
   }
 
   public void init() throws Exception {
-    getChild(UIWebContentPathSelector.class).init();
-    getChild(UIWebContentSearchForm.class).init();
+    getChild(UIDocumentPathSelector.class).init();
+    getChild(UIDocumentSearchForm.class).init();
   }
 
   public void initMetadataPopup() throws Exception {
     UIPopupWindow uiPopupWindow = 
-      addChild(UIPopupWindow.class, "UIWebContentSearchPopup", WEB_CONTENT_METADATA_POPUP);
+      addChild(UIPopupWindow.class, "UIDocumentSearchPopup", DOCUMENT_METADATA_POPUP);
     UIWCMSelectPropertyForm uiSelectProperty = 
       createUIComponent(UIWCMSelectPropertyForm.class, null, null);
     uiSelectProperty.setFieldName(UIWebContentSearchForm.PROPERTY);
@@ -67,7 +65,7 @@ public class UIWebContentTabSelector extends UITabPane {
 
   public void initNodeTypePopup() throws Exception {
     UIPopupWindow uiPopupWindow = 
-      addChild(UIPopupWindow.class, "UIWebContentSearchPopup", WEB_CONTENT_NODETYPE_POPUP);
+      addChild(UIPopupWindow.class, "UIDocumentSearchPopup", DOCUMENT_NODETYPE_POPUP);
     UIWCMNodeTypeSelectForm uiNTSelectForm = 
       createUIComponent(UIWCMNodeTypeSelectForm.class, null, null);
     uiPopupWindow.setUIComponent(uiNTSelectForm);
@@ -80,13 +78,13 @@ public class UIWebContentTabSelector extends UITabPane {
 
   public static class CloseActionListener extends EventListener<UIPopupWindow> {
     public void execute(Event<UIPopupWindow> event) throws Exception {
-      UIWebContentTabSelector uiWCTabSelector = 
-        event.getSource().getAncestorOfType(UIWebContentTabSelector.class);
-      UIWebContentSearchForm uiWCSearchForm = 
-        uiWCTabSelector.getChild(UIWebContentSearchForm.class);
-      uiWCTabSelector.removeChild(UIPopupWindow.class);
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiWCTabSelector);
-      uiWCTabSelector.setSelectedTab(uiWCSearchForm.getId());
-    }    
+      UIDocumentTabSelector uiDocTabSelector = 
+        event.getSource().getAncestorOfType(UIDocumentTabSelector.class);
+      UIDocumentSearchForm uiDocSearchForm = 
+        uiDocTabSelector.getChild(UIDocumentSearchForm.class);
+      uiDocTabSelector.removeChild(UIPopupWindow.class);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiDocTabSelector);
+      uiDocTabSelector.setSelectedTab(uiDocSearchForm.getId());
+    }
   }
 }

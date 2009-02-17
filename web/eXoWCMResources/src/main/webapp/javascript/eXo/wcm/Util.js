@@ -543,6 +543,75 @@ UIPopupWindow.prototype.show = function(popup, isShowMask, middleBrowser) {
 function initCheckedRadio(id) {
 	eXo.core.Browser.chkRadioId = id;
 };
+function initCondition(formid){
+	var formElement = document.getElementById(formid);
+	var radioboxes = [];
+	for(var i=0; i < formElement.elements.length;i++){
+		if(formElement.elements[i].type=="radio") radioboxes.push(formElement.elements[i]);
+	}
+	var i = radioboxes.length;
+	while(i--){
+		radioboxes[i].onclick = chooseCondition;
+	}
+	if(eXo.core.Browser.chkRadioId && eXo.core.Browser.chkRadioId != "null"){
+		var selectedRadio = document.getElementById(eXo.core.Browser.chkRadioId);
+	} else{		
+		var selectedRadio = radioboxes[0];
+	}
+	var itemSelectedContainer = eXo.core.DOMUtil.findAncestorByClass(selectedRadio,"ContentSearchForm");
+	var itemContainers = eXo.core.DOMUtil.findDescendantsByClass(selectedRadio.form,"div","ContentSearchForm");
+	for(var i=1;i<itemContainers.length;i++){
+		setCondition(itemContainers[i],true);
+	}
+	enableCondition(itemSelectedContainer);
+}
+
+function chooseCondition() {
+	var me = this;
+	var hiddenField = eXo.core.DOMUtil.findFirstDescendantByClass(me.form,"input","hidden");
+	hiddenField.value = me.id;
+	var itemSelectedContainer = eXo.core.DOMUtil.findAncestorByClass(me,"ContentSearchForm");
+	var itemContainers = eXo.core.DOMUtil.findDescendantsByClass(me.form,"div","ContentSearchForm");
+	for(var i=1;i<itemContainers.length;i++){
+		setCondition(itemContainers[i],true);
+	}
+	enableCondition(itemSelectedContainer);
+	window.wcm.lastCondition = itemSelectedContainer; 
+};
+
+function enableCondition(itemContainer) {
+	if(window.wcm.lastCondition) setCondition(window.wcm.lastCondition,true);
+	setCondition(itemContainer,false);
+};
+
+function setCondition(itemContainer,state) {
+	var domUtil = eXo.core.DOMUtil;
+	var action = domUtil.findDescendantsByTagName(itemContainer,"img");
+	if(action && (action.length > 0)){
+		for(var i = 0; i < action.length; i++){
+			if(state) {
+				action[i].style.visibility = "hidden";
+			}	else {
+				action[i].style.visibility = "";	
+			}	
+		}
+	}
+	var action = domUtil.findDescendantsByTagName(itemContainer,"input");
+	if(action && (action.length > 0)){
+		for(i = 0; i < action.length; i++){
+			if(action[i].type != "radio") action[i].disabled = state;
+		}
+	}
+	var action = domUtil.findDescendantsByTagName(itemContainer,"select");
+	if(action && (action.length > 0)){
+		for(i = 0; i < action.length; i++){
+			action[i].disabled = state;
+		}
+	}
+};
+function removeCondition() {
+	
+};
 
 function setHiddenValue() {
 	var inputHidden = document.getElementById("checkedRadioId");

@@ -30,8 +30,8 @@ import org.exoplatform.wcm.webui.WebUIPropertiesConfigService.PopupWindowPropert
 import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
 import org.exoplatform.wcm.webui.scv.config.quickedition.UIQuickEditContainer;
 import org.exoplatform.wcm.webui.selector.document.UIDocumentPathSelector;
+import org.exoplatform.wcm.webui.selector.document.UIDocumentTabSelector;
 import org.exoplatform.wcm.webui.selector.webcontent.UIWebContentPathSelector;
-import org.exoplatform.wcm.webui.selector.webcontent.UIWebContentPopupContainer;
 import org.exoplatform.wcm.webui.selector.webcontent.UIWebContentTabSelector;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -41,7 +41,6 @@ import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIPopupComponent;
 import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.UIPopupWindow;
-import org.exoplatform.webui.core.UITabPane;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 
 /**
@@ -277,10 +276,12 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent{
     if(uiPopup == null) {
       uiPopup = addChild(UIPopupWindow.class, null, POPUP_DMS_SELECTOR);
     }
-    UIDocumentPathSelector dmsSelector = this.createUIComponent(UIDocumentPathSelector.class, null, null);
+    UIDocumentTabSelector uiDocTabSelector = createUIComponent(UIDocumentTabSelector.class, null, null);
+    uiDocTabSelector.init();
+    UIDocumentPathSelector dmsSelector = uiDocTabSelector.getChild(UIDocumentPathSelector.class);
     UIDMSSelectorForm dmsSelectorForm = this.getChild(UIDMSSelectorForm.class);
     dmsSelector.setSourceComponent(dmsSelectorForm, new String[] {UIDMSSelectorForm.PATH});
-    uiPopup.setUIComponent(dmsSelector);
+    uiPopup.setUIComponent(uiDocTabSelector);
     dmsSelector.init();
     uiPopup.setWindowSize(750,450);
     uiPopup.setShow(true);

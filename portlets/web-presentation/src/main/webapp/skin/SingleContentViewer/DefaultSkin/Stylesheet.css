@@ -222,31 +222,12 @@
 	width:16px;
 }
 
-.UISingleContentViewerPortlet .Select16x16Icon {
+.UISingleContentViewerPortlet .SelectIcon {
 	background-image:url('icons/16x16/SelectPage.gif');
 	cursor:pointer;
 	height:16px;
 	width:16px;
 	margin: auto;
-}
-
-.UISingleContentViewerPortlet .UIWebContentPathSelector {
-	margin: 8px;
-	padding: 8px;
-}
-
-.UISingleContentViewerPortlet .Explorer {
-	float: left;
-	width: 230px;
-}
-
-.UISingleContentViewerPortlet .UITreeList {
-	margin-left: 240px;
-}
-
-.UISingleContentViewerPortlet .UIDocumentPathSelector {
-	margin: 8px;
-	padding: 8px;
 }
 
 .UISingleContentViewerPortlet .UIDMSPathSelector {

@@ -75,7 +75,6 @@ public class UIDocumentPathSelector extends UIBaseNodeTreeSelector implements UI
 
   public UIDocumentPathSelector() throws Exception {
     addChild(UIBreadcumbs.class, "UIBreadcrumbDocumentPathSelector", "UIBreadcrumbDocumentPathSelector");
-    addChild(UIDocumentSearch.class, null, null);
     addChild(UIDocumentTreeBuilder.class, null, UIDocumentTreeBuilder.class.getSimpleName() + hashCode());
     addChild(UISelectPathPanel.class, null, UISelectPathPanel.class.getSimpleName() + hashCode());
   }

@@ -6,7 +6,6 @@
 %>
 <div id="$uicomponent.id" class="UIWCMSearchContainer $uicomponent.id">
 	<div> <% uicomponent.renderChild(UIBreadcumbs.class); %> </div>
-	<div> <% uicomponent.renderChild(UIDocumentSearch.class); %> </div>
 	<div class="SelectContent"> 
 		<div class="UITreeBuilder">
 			<div class="Title"><%= _ctx.appRes("UISinglePortletContentViewer.SelectContent.leftcolumn.title") %></div>

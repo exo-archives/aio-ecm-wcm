@@ -17,6 +17,8 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+import org.exoplatform.wcm.webui.selector.document.UIDocumentSearchForm;
+import org.exoplatform.wcm.webui.selector.document.UIDocumentTabSelector;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIPopupWindow;
@@ -115,11 +117,25 @@ public class UIWCMSelectPropertyForm extends UIForm{
 
   static  public class CancelActionListener extends EventListener<UIWCMSelectPropertyForm> {
     public void execute(Event<UIWCMSelectPropertyForm> event) throws Exception {
-      UIWebContentTabSelector uiWCTabSelector = event.getSource().getAncestorOfType(UIWebContentTabSelector.class) ;
-      uiWCTabSelector.removeChild(UIPopupWindow.class);
-      UIWebContentSearchForm uiWCSearchForm = 
-        uiWCTabSelector.getChild(UIWebContentSearchForm.class);
-      uiWCTabSelector.setSelectedTab(uiWCSearchForm.getId());
+      UIWCMSelectPropertyForm uiForm = event.getSource();
+      UIPopupWindow uiPopupWindow = uiForm.getAncestorOfType(UIPopupWindow.class);
+      UIWebContentTabSelector uiWCTabSelector = 
+        uiPopupWindow.getAncestorOfType(UIWebContentTabSelector.class);
+      if(uiWCTabSelector == null) {
+        UIDocumentTabSelector uiDocTabSelector = 
+          uiPopupWindow.getAncestorOfType(UIDocumentTabSelector.class);
+        UIDocumentSearchForm uiDocSearchForm = 
+          uiDocTabSelector.findFirstComponentOfType(UIDocumentSearchForm.class);
+        uiDocTabSelector.removeChild(UIPopupWindow.class);
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiDocTabSelector);
+        uiDocTabSelector.setSelectedTab(uiDocSearchForm.getId());
+      } else {
+        uiWCTabSelector.removeChild(UIPopupWindow.class);
+        UIWebContentSearchForm uiWCSearchForm = 
+          uiWCTabSelector.getChild(UIWebContentSearchForm.class);
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiWCTabSelector);
+        uiWCTabSelector.setSelectedTab(uiWCSearchForm.getId());
+      }
     }
   }
 
@@ -130,12 +146,23 @@ public class UIWCMSelectPropertyForm extends UIForm{
       UIPopupWindow uiPopupWindow = uiForm.getAncestorOfType(UIPopupWindow.class);
       UIWebContentTabSelector uiWCTabSelector = 
         uiPopupWindow.getAncestorOfType(UIWebContentTabSelector.class);
-      UIWebContentSearchForm uiWCSearchForm =
-        uiWCTabSelector.findFirstComponentOfType(UIWebContentSearchForm.class);
-      uiWCSearchForm.getUIStringInput(uiForm.getFieldName()).setValue(property);
-      uiPopupWindow.setShow(false);
-      uiWCTabSelector.removeChild(UIPopupWindow.class);
-      uiWCTabSelector.setSelectedTab(uiWCSearchForm.getId());
+      if(uiWCTabSelector == null) {
+        UIDocumentTabSelector uiDocTabSelector = 
+          uiPopupWindow.getAncestorOfType(UIDocumentTabSelector.class);
+        UIDocumentSearchForm uiDocSearchForm = 
+          uiDocTabSelector.findFirstComponentOfType(UIDocumentSearchForm.class);
+        uiDocSearchForm.getUIStringInput(uiForm.getFieldName()).setValue(property);
+        uiDocTabSelector.removeChild(UIPopupWindow.class);
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiDocTabSelector);
+        uiDocTabSelector.setSelectedTab(uiDocSearchForm.getId());
+      } else {
+        UIWebContentSearchForm uiWCSearchForm =
+          uiWCTabSelector.findFirstComponentOfType(UIWebContentSearchForm.class);
+        uiWCSearchForm.getUIStringInput(uiForm.getFieldName()).setValue(property);
+        uiWCTabSelector.removeChild(UIPopupWindow.class);
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiWCTabSelector);
+        uiWCTabSelector.setSelectedTab(uiWCSearchForm.getId());
+      }
     }
   }
 

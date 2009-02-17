@@ -85,7 +85,7 @@ public class UIDocumentSearch extends UIForm {
     qCriteria.setSearchDocument(true);
     qCriteria.setSearchWebContent(false);
     qCriteria.setSearchWebpage(false);
-    qCriteria.setQueryPath(currentNode.getPath());
+//    qCriteria.setQueryPath(currentNode.getPath());
     qCriteria.setKeyword(keyword);
     SiteSearchService siteSearchService = getApplicationComponent(SiteSearchService.class);
     int pageSize = 10;

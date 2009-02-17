@@ -109,5 +109,83 @@
   <UIWebContentSearch>
   	<msg-choose-portal>You don't choose any portal. Please choosing a portal to search!</msg-choose-portal>
   </UIWebContentSearch>
+  
+  <!--  
+  ##########################################################################################
+  # exo.ecm.wcm.webui.wcm.groovy.wcm.webui                                                 # 
+  ##########################################################################################
+  -->
+  <PopupWebContentSelector>
+  	<title>
+  		<UIWebContentTabSelector>Web Content Selector</UIWebContentTabSelector>
+  	</title>
+  </PopupWebContentSelector>
+  <PopupDMSSelector>
+  	<title>
+  		<UIDocumentTabSelector>Document Selector</UIDocumentTabSelector>
+  	</title>
+  </PopupDMSSelector>
+  <UITabPane>
+  	<title>
+  		<UIWebContentPathSelector>Web Content Tree Selector</UIWebContentPathSelector>
+  		<UIWebContentSearchForm>Web content search form</UIWebContentSearchForm>
+  		<UISelectPathPanel>Result form</UISelectPathPanel>
+  		<UIDocumentPathSelector>Document Tree Selector</UIDocumentPathSelector>
+  		<UIDocumentSearchForm>Document Search Form</UIDocumentSearchForm>
+  		<UIWCMSearchResult>Search Results</UIWCMSearchResult>
+  		<UIResultView>Result Viewer</UIResultView>
+  	</title>
+  </UITabPane>
+  <UIWebContentSearchForm>
+  	<action>
+  		<SearchWebContent>Search</SearchWebContent>
+  	</action>
+  </UIWebContentSearchForm>
+  <UIWebContentSearchForm>
+  	<empty-field>You don't choose value to search!Please choose term</empty-field>
+  </UIWebContentSearchForm>
+  <UIDocumentSearchForm>
+  	<action>
+  		<SearchWebContent>Search</SearchWebContent>
+  	</action>
+  </UIDocumentSearchForm>
+  <UIDocumentTabSelector>
+  	<header>
+  		<NameFile>Name</NameFile>
+  		<NodeExpect>Expect</NodeExpect>
+  		<Score>Score</Score>
+  		<CreateDate>Created Date</CreateDate>
+  		<action>Action</action>
+  		<Select>Select</Select>
+  		<View>View</View>
+  	</header>
+  </UIDocumentTabSelector>
+  <UIWebContentTabSelector>
+  	<header>
+  		<NameFile>Name</NameFile>
+  		<NodeExpect>Expect</NodeExpect>
+  		<Score>Score</Score>
+  		<CreateDate>Created Date</CreateDate>
+  		<action>Action</action>
+  		<Select>Select</Select>
+  		<View>View</View>
+  	</header>
+  </UIWebContentTabSelector>
+  <UIResultView>
+  	<action>
+  		<Select>Select</Select>
+  	</action>
+  </UIResultView>
+  <UIWebContentSearchForm>
+  	<title>
+  		<Location>Site Name</Location>
+  		<SearchByName>Search by name</SearchByName>
+  		<Fulltext>A word or phrase in context</Fulltext>
+  		<Property>Property</Property>
+  		<Contain>Contain</Contain>
+  		<FromDate>from date</FromDate>
+  		<ToDate>to date</ToDate>
+  		<DocumentType>Document Type</DocumentType>
+  	</title>
+  </UIWebContentSearchForm>
 </bundle>
-

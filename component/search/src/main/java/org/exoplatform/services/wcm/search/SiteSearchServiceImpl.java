@@ -206,6 +206,10 @@ public class SiteSearchServiceImpl implements SiteSearchService {
    * @throws Exception the exception
    */
   private void mapQueryPath(final QueryCriteria queryCriteria,final SQLQueryBuilder queryBuilder) throws Exception {
+    queryBuilder.setQueryPath(getSitePath(queryCriteria), PATH_TYPE.DECENDANTS);
+  }
+  
+  private String getSitePath(final QueryCriteria queryCriteria) throws Exception {
     String siteName = queryCriteria.getSiteName();
     String sitePath = null;
     if (siteName != null) {
@@ -213,8 +217,8 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     } else {
       String repository = repositoryService.getCurrentRepository().getConfiguration().getName();
       sitePath = configurationService.getLivePortalsLocation(repository).getPath();
-    }        
-    queryBuilder.setQueryPath(sitePath, PATH_TYPE.DECENDANTS);
+    }
+    return sitePath;
   }
 
   /**
@@ -245,8 +249,8 @@ public class SiteSearchServiceImpl implements SiteSearchService {
       return;        
   }
   
-  private void searchByNodeName(final QueryCriteria queryCriteria, final SQLQueryBuilder queryBuilder) {    
-    queryBuilder.queryByNodeName(queryCriteria.getQueryPath(),queryCriteria.getKeyword());
+  private void searchByNodeName(final QueryCriteria queryCriteria, final SQLQueryBuilder queryBuilder) throws Exception {    
+    queryBuilder.queryByNodeName(getSitePath(queryCriteria),queryCriteria.getKeyword());
   }      
   
   private void mapDatetimeRangeSelected(final QueryCriteria queryCriteria, final SQLQueryBuilder queryBuilder) {

@@ -19,6 +19,7 @@ import org.exoplatform.webui.core.UIBreadcumbs;
 import org.exoplatform.webui.core.UIBreadcumbs.LocalPath;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 
 /**
  * Author : TAN DUNG DANG
@@ -34,7 +35,7 @@ import org.exoplatform.webui.event.EventListener;
       @ComponentConfig(
           type = UIBreadcumbs.class, id = "WCMBreadcumbCategoriesOne",
           template = "system:/groovy/webui/core/UIBreadcumbs.gtmpl",
-          events = @EventConfig(listeners = UIWCMCategorySelectForm.SelectPathActionListener.class)
+          events = @EventConfig(listeners = UIWCMCategorySelectForm.SelectPathActionListener.class,phase = Phase.DECODE)
       )
     }
 )
@@ -53,8 +54,8 @@ public class UIWCMCategorySelectForm extends UIBaseNodeTreeSelector {
   public UIWCMCategorySelectForm() throws Exception {
     addChild(UIBreadcumbs.class, "WCMBreadcumbCategoriesOne", "WCMBreadcumbCategoriesOne");
 //  addChild(UIWorkspaceList.class, null, null);
-    addChild(UINodeTreeBuilder.class, null, UINodeTreeBuilder.class.getSimpleName()+hashCode());
-    addChild(UISelectPathPanel.class, null, null);
+    addChild(UINodeTreeBuilder.class, null, UINodeTreeBuilder.class.getName()+hashCode());
+    addChild(UISelectPathPanel.class, null, UISelectPathPanel.class.getName()+hashCode());
   }
 
   public void init(SessionProvider sessionProvider) throws Exception {
