@@ -22,7 +22,8 @@
 		<module>portlets/web-searches</module>
 		<module>connectors/fckeditor</module>    
 		<module>web/eXoWCMResources</module>	
-  	<module>web/wcmportal</module>	
+	  	<module>web/wcmportal</module>	
+	  	<module>packaging</module>	
   </modules>
 
   <build>
