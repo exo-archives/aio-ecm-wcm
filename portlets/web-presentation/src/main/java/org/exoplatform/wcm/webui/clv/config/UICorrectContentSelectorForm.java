@@ -43,15 +43,14 @@ import org.exoplatform.webui.event.EventListener;
   events = @EventConfig(listeners = UIFolderPathSelectorForm.CloseActionListener.class), 
   template = "app:/groovy/ContentListViewer/config/UIMultiContentSlection.gtmpl"
 )
-public class UICorrectContentSelectorForm extends UIBaseNodeTreeSelector implements
-    UIPopupComponent {
+public class UICorrectContentSelectorForm extends UIBaseNodeTreeSelector implements UIPopupComponent {
 
   private List<String> existedCategoryList = new ArrayList<String>();
 
   public UICorrectContentSelectorForm() throws Exception {
     addChild(UIContentsSelectionTreeBuilder.class, null, null);
     addChild(UIMultiSelectionPanel.class, null, null);
-    addChild(UISelectedContentGrid.class, null, null).setRendered(false);
+    addChild(UISelectedContentGrid.class, null, null).setRendered(false);        
   }
 
   public void init() throws Exception {

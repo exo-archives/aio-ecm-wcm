@@ -9,9 +9,15 @@
 }
 
 
-.UIContentListViewerPortlet .UIFolderPathSelectorForm .FolderExplorer {
+.UIContentListViewerPortlet .FolderExplorer {
 	float:left;
 	width:230px;
+	margin-right: 10px;
+}
+
+
+.UIContentListViewerPortlet .FolderExplorer .FolderExplorerTree {
+	background:#F3F3F3 none repeat scroll 0 0;
 }
 
 .UIContentListViewerPortlet .UIFolderPathSelectorForm .UITreeList {
@@ -24,16 +30,13 @@
 	height: 16px;
 }
 
-.UIContentListViewerPortlet .UIFolderPathSelectorForm .TitleBox {
+.UIContentListViewerPortlet .TitleBox {
 	border: 1px solid #B1B0B0; 
 	background-color: #F3F3F3; 
 	margin-bottom: 10px;
 	padding-left: 10px;
 }
 
-.UIContentListViewerPortlet .UIFolderPathSelectorForm .FolderExplorer .FolderExplorerTree {
-	background:#F3F3F3 none repeat scroll 0 0;
-}
 
 .UIContentListViewerPortlet .UIFolderPathSelectorForm .FolderExplorer .FolderExplorerTree .FolderInnerExplorerTree {
 	border:1px solid #B1B0B0;
@@ -126,4 +129,13 @@
 	cursor:pointer;
 	height:16px;
 	width:16px;
+}
+
+
+.UIContentListViewerPortlet .UICorrectContentSelectorForm {
+	margin: 10px;
+}
+
+.UIContentListViewerPortlet .UISelectedContentGrid {
+
 }

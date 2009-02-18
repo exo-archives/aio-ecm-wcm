@@ -138,19 +138,20 @@ public class UIFolderViewer extends UIContainer implements RefreshDelegateAction
     List<String> contents = Arrays.asList(portletPreferences.getValues(UIContentListViewerPortlet.CONTENT_LIST, null));
 	
 		List<Node> nodes = new ArrayList<Node>();
+    List<String> tempContents = new ArrayList<String>(contents);
 		if (contents != null && contents.size() != 0) {
 			for (int i = 0; i < contents.size(); i++) {        
 				Node node = null;
 				String path = contents.get(i);        
 				try {					
 					node = root.getNode(path.substring(1, path.length()));					
-				} catch (Exception e) {
-					contents.remove(i);
+				} catch (Exception e) {          
+					tempContents.remove(i);
 				}
 				if (node != null) nodes.add(node);	
 			}
 		}
-		portletPreferences.setValues(UIContentListViewerPortlet.CONTENT_LIST, contents.toArray(new String[0]));
+		portletPreferences.setValues(UIContentListViewerPortlet.CONTENT_LIST, tempContents.toArray(new String[0]));
 		portletPreferences.store();
 		ObjectPageList pageList = new ObjectPageList(nodes, itemsPerPage);
 		contentListPresentation.init(templatePath, resourceResolver, pageList);
