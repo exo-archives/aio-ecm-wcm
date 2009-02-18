@@ -24,6 +24,14 @@
       <ViewerSummary>Montrer le résumé</ViewerSummary>
       <Header>Entête</Header>
       <ViewerHeader>Montrer l'entête</ViewerHeader>
+      <ViewerMode></ViewerMode>
+      <ManualViewerMode></ManualViewerMode>
+      <AutoViewerMode></AutoViewerMode>
+      <OrderBy></OrderBy>
+      <OrderByTitle></OrderByTitle>
+      <OrderByDateCreated></OrderByDateCreated>
+      <OrderByDateModified></OrderByDateModified>
+      <OrderByDatePublished></OrderByDatePublished>            
     </label>
     <title>Sélectionner un dossier pour montrer ses contenus web ou ses documents</title>
   </UIViewerManagementForm>

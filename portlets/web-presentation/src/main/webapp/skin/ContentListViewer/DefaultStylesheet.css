@@ -90,3 +90,40 @@
 	color: #058EE6	
 }
 
+.UIContentListViewerPortlet .UIViewerManagementForm .UIContentGrid {
+	border:1px solid #B7B7B7;
+	border-collapse:collapse;
+	margin:auto;
+	padding-left:1px;
+}
+
+.UIContentListViewerPortlet .UIViewerManagementForm .UIContentGrid .OddRow {
+	background:#F0F0F0 none repeat scroll 0 0;
+}
+
+.UIContentListViewerPortlet .UIViewerManagementForm .UIContentGrid .EvenRow {
+	background:#F5F5F5 none repeat scroll 0 0;
+}
+
+.UIContentListViewerPortlet .UIViewerManagementForm .UIContentGrid td {
+	border-left:1px solid #CCCCCC;
+	border-right:1px solid #CCCCCC;
+	border-top:1px solid white;
+	height:20px;
+	line-height:20px;
+	padding:4px;
+}
+
+.UIContentListViewerPortlet .UIViewerManagementForm .UIContentGrid .DownRowIcon {
+	background-image:url('DefaultSkin/icons/BlueDownArrow.gif');
+	cursor:pointer;
+	height:16px;
+	width:16px;
+}
+
+.UIContentListViewerPortlet .UIViewerManagementForm .UIContentGrid .UpRowIcon {
+	background-image:url('DefaultSkin/icons/BlueUpArrow.gif');
+	cursor:pointer;
+	height:16px;
+	width:16px;
+}

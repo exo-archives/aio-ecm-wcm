@@ -23,6 +23,14 @@
       <ViewerSummary>Show summary</ViewerSummary>
       <Header>Header</Header>
       <ViewerHeader>Show header</ViewerHeader>
+      <ViewerMode>Mode</ViewerMode>
+      <ManualViewerMode>Manual</ManualViewerMode>
+      <AutoViewerMode>Automatic</AutoViewerMode>
+      <OrderBy>Order by</OrderBy>
+      <OrderByTitle>Title</OrderByTitle>
+      <OrderByDateCreated>Date created</OrderByDateCreated>
+      <OrderByDateModified>Date modified</OrderByDateModified>
+      <OrderByDatePublished>Date published</OrderByDatePublished>      
     </label>
     <title>Select folder to display its children documents or webcontent</title>
   </UIViewerManagementForm>
@@ -38,6 +46,7 @@
       <error-nodetype>Unknown error.</error-nodetype>
       <saving-success>Successful. You can see the effect when changing to view mode.</saving-success>
       <empty-folder-path>You must select a folder.</empty-folder-path>
+      <not-valid-action>Viewer mode is not suitable with contents selected. You should change viewer mode.</not-valid-action>
       <none-action-excuted>No action will be executed.</none-action-excuted>
     </msg>
   </UIMessageBoard>

@@ -23,6 +23,14 @@
       <ViewerSummary>Hiển thị sơ lược nội dung tài liệu</ViewerSummary>
       <Header>Tiêu đề form trình bày kết quả</Header>
       <ViewerHeader>Hiển thị tiêu đề form trình bày kết quả</ViewerHeader>
+      <ViewerMode>Chế độ hiển thị</ViewerMode>
+      <ManualViewerMode>Thủ công</ManualViewerMode>
+      <AutoViewerMode>Tự động</AutoViewerMode>
+      <OrderBy>Xắp xếp theo</OrderBy>
+      <OrderByTitle>Tiêu đề tài liệu</OrderByTitle>
+      <OrderByDateCreated>Ngày tạo tài liệu</OrderByDateCreated>
+      <OrderByDateModified>Ngày thay đổi tài liệu</OrderByDateModified>
+      <OrderByDatePublished>Ngày xuất bản tài liệu</OrderByDatePublished>            
     </label>
     <title>Lựa chọn thư mục chứa tài liệu hoăc nội dung được hiển thị</title>
   </UIViewerManagementForm>

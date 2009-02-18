@@ -1,13 +1,13 @@
 <%
 	import org.exoplatform.webui.application.WebuiRequestContext;
 	import org.exoplatform.webui.application.portlet.PortletRequestContext;
+	import org.exoplatform.wcm.webui.clv.config.UIViewerManagementForm;
 	
 	PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
 	def portletId = pContext.getWindowId();
 	def quickEditingBlockId = portletId + "-QuickEditingBlock";
 	def rcontext = _ctx.getRequestContext() ;
- 	rcontext.getJavascriptManager().importJavascript('eXo.webpresentation.Utils','/web-presentation/javascript');	
-	String fieldName;
+ 	rcontext.getJavascriptManager().importJavascript('eXo.webpresentation.Utils','/web-presentation/javascript');		
 %>
 <div class="UIForm $uicomponent.id">
 	<div class="TitleBar">
@@ -16,32 +16,127 @@
   <%uiform.begin()%>
   <div class="HorizontalLayout">
     <div class="FormContainer">
-      <table class="UIFormGrid">
-	      <% 
-	        for(field in uiform.getChildren()) {	        		        		     
-	          if(field.isRendered()) {
-	      %>
-              <tr>
-	              <%fieldName = uicomponent.getLabel(field.getName());%>
-	              <%//TODO: Tung.Pham modified
-	              	//if(!fieldName.equals(uicomponent.getId())) {
-	              	if(fieldName != null && fieldName.length() > 0 && !fieldName.equals(uicomponent.getId())) {
-	              %>                        
-  	              <td class="FieldLabel">
-                    <%/*if(fieldName != null && fieldName.length() > 0) {*/%> 
-                      <%=uicomponent.getLabel(field.getName()) %>
-                    <%/*}*/%>
-                  </td>
-  	              <td class="FieldComponent"><% uiform.renderField(field) %></td>
-	              <%} else {%>
-	                <td class="FieldComponent" colspan="2"><% uiform.renderField(field) %></td>
-	              <%}%>
-	            </tr>
-	      <%
-	          }
-	        }
-	      %>
-      </table>
+      <fieldset style=" margin-bottom: 10px; overflow: hidden: height: 100%; border: 1px solid #b7b7b7;" maxHeight="350">
+				<legend class="StyleLegend">Select contents from folder</legend>
+	      <table class="UIFormGrid">
+	      	<tr>
+			      <td class="FieldLabel">
+				      <%=uicomponent.getLabel(uiform.getChildById(UIViewerManagementForm.VIEWER_MODES).getName()) %>
+			      </td>
+						<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(UIViewerManagementForm.VIEWER_MODES)) %></td>
+					</tr>
+					<tr>
+						<td class="FieldComponent" colspan="2"><% uiform.renderField(uiform.getChildById(UIViewerManagementForm.FOLDER_PATH_INPUTSET)) %></td>				
+					</tr>
+					<% if (uiform.getChildById(UIViewerManagementForm.ORDER_BY).isRendered()) { %>
+					<tr>
+			      <td class="FieldLabel">
+				      <%=uicomponent.getLabel(uiform.getChildById(UIViewerManagementForm.ORDER_BY).getName()) %>
+			      </td>
+						<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(UIViewerManagementForm.ORDER_BY)) %></td>								
+					</tr>
+					<% } else {
+								List<String> contents = uiform.getViewAbleContentList();							
+								if (contents != null && contents.size() != 0) {
+				  %>
+				  			<table class="UIContentGrid">
+				  <% 
+				  				String rowClass = "";
+									for (int i = 0; i < contents.size(); i++) {
+										if ((i % 2) == 0) {
+											rowClass = "EvenRow";											
+										} else {
+											rowClass = "OddRow";										
+										}
+										String content = contents.get(i)									
+										String upLink = uicomponent.event("Increase", Integer.toString(i));
+										String downLink = uicomponent.event("Decrease", Integer.toString(i));	
+					%>
+										<tr class="$rowClass">
+											<td>$content</td>
+											<td><div class="DownRowIcon" onclick="$downLink"><span></span></div></td>
+											<td><div class="UpRowIcon" onclick="$upLink"><span></span></div></td>
+										</tr>
+					<%				
+									}//end for
+					%>
+								</table>
+					<%				
+								}//end if
+						}//edn else
+					%>
+	      </table>                 
+      </fieldset>   
+      
+			<fieldset style=" margin-bottom: 10px; overflow: hidden: height: 100%; border: 1px solid #b7b7b7;" maxHeight="350">
+				<legend class="StyleLegend">Display setting</legend>        
+	      <table class="UIFormGrid">
+	      	<tr>
+			      <td class="FieldLabel">
+				      <%=uicomponent.getLabel(uiform.getChildById(UIViewerManagementForm.HEADER).getName()) %>
+			      </td>
+						<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(UIViewerManagementForm.HEADER)) %></td>
+					</tr>
+					<tr>
+			      <td class="FieldLabel">
+				      <%=uicomponent.getLabel(uiform.getChildById(UIViewerManagementForm.FORM_VIEW_TEMPLATES_SELECTOR).getName()) %>
+			      </td>
+						<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(UIViewerManagementForm.FORM_VIEW_TEMPLATES_SELECTOR)) %></td>				
+					</tr>
+					<tr>
+			      <td class="FieldLabel">
+				      <%=uicomponent.getLabel(uiform.getChildById(UIViewerManagementForm.PAGINATOR_TEMPLATES_SELECTOR).getName()) %>
+			      </td>
+						<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(UIViewerManagementForm.PAGINATOR_TEMPLATES_SELECTOR)) %></td>								
+					</tr>
+					<tr>
+			      <td class="FieldLabel">
+				      <%=uicomponent.getLabel(uiform.getChildById(UIViewerManagementForm.ITEMS_PER_PAGE_INPUT).getName()) %>
+			      </td>
+						<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(UIViewerManagementForm.ITEMS_PER_PAGE_INPUT)) %></td>								
+					</tr>									
+	      </table>   					      
+				<table class="UIFormGrid">
+					<tr>
+			      <td class="FieldLabel">
+				      <%=uicomponent.getLabel(uiform.getChildById(UIViewerManagementForm.VIEWER_BUTTON_QUICK_EDIT).getName()) %>
+			      </td>
+						<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(UIViewerManagementForm.VIEWER_BUTTON_QUICK_EDIT)) %></td>								
+									      <td class="FieldLabel">
+				      <%=uicomponent.getLabel(uiform.getChildById(UIViewerManagementForm.VIEWER_BUTTON_REFRESH).getName()) %>
+			      </td>
+						<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(UIViewerManagementForm.VIEWER_BUTTON_REFRESH)) %></td>								
+					</tr>
+
+					<tr>
+			      <td class="FieldLabel">
+				      <%=uicomponent.getLabel(uiform.getChildById(UIViewerManagementForm.VIEWER_THUMBNAILS_IMAGE).getName()) %>
+			      </td>
+						<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(UIViewerManagementForm.VIEWER_THUMBNAILS_IMAGE)) %></td>								
+			      <td class="FieldLabel">
+				      <%=uicomponent.getLabel(uiform.getChildById(UIViewerManagementForm.VIEWER_TITLE).getName()) %>
+			      </td>
+						<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(UIViewerManagementForm.VIEWER_TITLE)) %></td>														
+					</tr>								
+					<tr>
+			      <td class="FieldLabel">
+				      <%=uicomponent.getLabel(uiform.getChildById(UIViewerManagementForm.VIEWER_SUMMARY).getName()) %>
+			      </td>
+						<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(UIViewerManagementForm.VIEWER_SUMMARY)) %></td>								
+			      <td class="FieldLabel">
+				      <%=uicomponent.getLabel(uiform.getChildById(UIViewerManagementForm.VIEWER_DATE_CREATED).getName()) %>
+			      </td>
+						<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(UIViewerManagementForm.VIEWER_DATE_CREATED)) %></td>														
+					</tr>																
+					<tr>
+			      <td class="FieldLabel">
+				      <%=uicomponent.getLabel(uiform.getChildById(UIViewerManagementForm.VIEWER_HEADER).getName()) %>
+			      </td>
+						<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(UIViewerManagementForm.VIEWER_HEADER)) %></td>								
+						<td colspan="2"><span></span></td>
+					</tr>																												
+	      </table>   					      	      
+      </fieldset>       
       <div class="UIAction"> 
         <table class="ActionContainer">
         	<tr>
