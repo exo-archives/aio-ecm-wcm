@@ -33,25 +33,28 @@ import org.exoplatform.webui.event.EventListener;
 @ComponentConfig(
   lifecycle = Lifecycle.class, 
   template = "app:/groovy/ContentListViewer/config/UIStartEditionInPageWizard.gtmpl", 
-  events = { @EventConfig(name = "Edit", listeners = UIStartEditionInPageWizard.EditPortletActionListener.class)
+  events = { 
+    @EventConfig(name = "Edit", listeners = UIStartEditionInPageWizard.EditPortletActionListener.class) 
   }
 )
 public class UIStartEditionInPageWizard extends UIContainer {
 
   /**
-   * The listener interface for receiving editPortletAction events.
-   * The class that is interested in processing a editPortletAction
-   * event implements this interface, and the object created
-   * with that class is registered with a component using the
-   * component's <code>addEditPortletActionListener<code> method. When
+   * The listener interface for receiving editPortletAction events. The class
+   * that is interested in processing a editPortletAction event implements this
+   * interface, and the object created with that class is registered with a
+   * component using the component's
+   * <code>addEditPortletActionListener<code> method. When
    * the editPortletAction event occurs, that object's appropriate
    * method is invoked.
    * 
    * @see EditPortletActionEvent
    */
   public static class EditPortletActionListener extends EventListener<UIStartEditionInPageWizard> {
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
     public void execute(Event<UIStartEditionInPageWizard> event) throws Exception {

@@ -36,9 +36,7 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 
 // TODO: Auto-generated Javadoc
 /*
- * Created by The eXo Platform SAS 
- * Author : Anh Do Ngoc 
- * anh.do@exoplatform.com
+ * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Oct 16, 2008
  */
 
@@ -46,9 +44,9 @@ import org.exoplatform.webui.config.annotation.EventConfig;
  * The Class UIFolderPathTreeBuilder.
  */
 @ComponentConfig(
-    events = @EventConfig(listeners = UINodeTreeBuilder.ChangeNodeActionListener.class)
+  events = @EventConfig(listeners = UINodeTreeBuilder.ChangeNodeActionListener.class)
 )
-public class UIFolderPathTreeBuilder extends UINodeTreeBuilder {
+public class UIContentsSelectionTreeBuilder extends UINodeTreeBuilder {
 
   /** The current portal. */
   private Node currentPortal;
@@ -61,17 +59,19 @@ public class UIFolderPathTreeBuilder extends UINodeTreeBuilder {
    * 
    * @throws Exception the exception
    */
-  public UIFolderPathTreeBuilder() throws Exception {
+  public UIContentsSelectionTreeBuilder() throws Exception {
     super();
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see org.exoplatform.ecm.webui.tree.UINodeTreeBuilder#processRender(org.exoplatform.webui.application.WebuiRequestContext)
    */
   public void processRender(WebuiRequestContext context) throws Exception {
     Writer writer = context.getWriter();
-    String folderExplorerTitle = context.getApplicationResourceBundle().getString(
-        "UIFolderExplorer.title");
+    String folderExplorerTitle = context.getApplicationResourceBundle()
+                                        .getString("UIFolderExplorer.title");
     writer.write("<div class=\"FolderExplorer\">");
     writer.write("<div class=\"TitleBox\">");
     writer.write("<p>" + folderExplorerTitle + "</p>");
@@ -121,7 +121,9 @@ public class UIFolderPathTreeBuilder extends UINodeTreeBuilder {
     this.sharedPortal = sharedPortal;
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see org.exoplatform.ecm.webui.tree.UINodeTreeBuilder#buildTree()
    */
   public void buildTree() throws Exception {
@@ -202,8 +204,7 @@ public class UIFolderPathTreeBuilder extends UINodeTreeBuilder {
    */
   public Node getWebContentsFolder(Node portal) throws Exception {
     WebSchemaConfigService configService = getApplicationComponent(WebSchemaConfigService.class);
-    PortalFolderSchemaHandler portalFolderSchemaHandler = configService
-        .getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
+    PortalFolderSchemaHandler portalFolderSchemaHandler = configService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
     return portalFolderSchemaHandler.getWebContentStorage(portal);
   }
 
@@ -218,8 +219,7 @@ public class UIFolderPathTreeBuilder extends UINodeTreeBuilder {
    */
   public Node getDocumentsFolder(Node portal) throws Exception {
     WebSchemaConfigService configService = getApplicationComponent(WebSchemaConfigService.class);
-    PortalFolderSchemaHandler portalFolderSchemaHandler = configService
-        .getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
+    PortalFolderSchemaHandler portalFolderSchemaHandler = configService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
     return portalFolderSchemaHandler.getDocumentStorage(portal);
   }
 }

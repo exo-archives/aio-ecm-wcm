@@ -16,16 +16,20 @@
  */
 package org.exoplatform.wcm.webui.clv;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.jcr.AccessDeniedException;
 import javax.jcr.ItemNotFoundException;
+import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Session;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.portlet.PortletPreferences;
 
+import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
@@ -37,8 +41,8 @@ import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.utils.PaginatedNodeIterator;
 import org.exoplatform.wcm.webui.Utils;
-import org.exoplatform.wcm.webui.administration.UISiteAdminToolbar;
 import org.exoplatform.wcm.webui.clv.config.UIPortletConfig;
+import org.exoplatform.wcm.webui.clv.config.UIViewerManagementForm;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -56,7 +60,13 @@ import org.exoplatform.webui.event.EventListener;
 /**
  * The Class UIFolderViewer.
  */
-@ComponentConfig(lifecycle = Lifecycle.class, template = "app:/groovy/ContentListViewer/UIFolderListViewer.gtmpl", events = { @EventConfig(listeners = UIFolderViewer.QuickEditActionListener.class) })
+@ComponentConfig(
+  lifecycle = Lifecycle.class, 
+  template = "app:/groovy/ContentListViewer/UIFolderListViewer.gtmpl", 
+  events = { 
+    @EventConfig(listeners = UIFolderViewer.QuickEditActionListener.class) 
+  }
+)
 public class UIFolderViewer extends UIContainer implements RefreshDelegateActionListener {
 
   /** The can view list content. */
@@ -79,6 +89,8 @@ public class UIFolderViewer extends UIContainer implements RefreshDelegateAction
    * @throws Exception the exception
    */
   public void init() throws Exception {
+	PortletPreferences portletPreferences = getPortletPreference();
+	String mode = portletPreferences.getValue(UIContentListViewerPortlet.VIEWER_MODE, null);	
     NodeIterator nodeIterator = null;
     canViewListContent = true;
     messageKey = null;
@@ -100,23 +112,52 @@ public class UIFolderViewer extends UIContainer implements RefreshDelegateAction
     if (nodeIterator.getSize() == 0) {
       messageKey = "UIMessageBoard.msg.folder-empty";
     }
-    PortletPreferences portletPreferences = getPortletPreference();
-    int itemsPerPage = Integer.parseInt(portletPreferences.getValue(UIContentListViewerPortlet.ITEMS_PER_PAGE,
-                                                                    null));
-    PaginatedNodeIterator paginatedNodeIterator = new PaginatedNodeIterator(nodeIterator,
-                                                                            itemsPerPage);
-    UIContentListPresentation contentListPresentation = addChild(UIContentListPresentation.class,
-                                                                 null,
-                                                                 null);
+    
+    int itemsPerPage = Integer.parseInt(portletPreferences.getValue(UIContentListViewerPortlet.ITEMS_PER_PAGE, null));
+    PaginatedNodeIterator paginatedNodeIterator = new PaginatedNodeIterator(nodeIterator, itemsPerPage);
+    
+    UIContentListPresentation contentListPresentation = addChild(UIContentListPresentation.class, null, null);
     String templatePath = getFormViewTemplatePath();
-    ResourceResolver resourceResolver = getTemplateResourceResolver();
-    contentListPresentation.init(templatePath, resourceResolver, paginatedNodeIterator);
-    contentListPresentation.setContentColumn(portletPreferences.getValue(UIContentListViewerPortlet.HEADER,
-                                                                         null));
-    contentListPresentation.setShowHeader(Boolean.parseBoolean(portletPreferences.getValue(UIContentListViewerPortlet.SHOW_HEADER,
-                                                                                           null)));
-    contentListPresentation.setHeader(portletPreferences.getValue(UIContentListViewerPortlet.HEADER,
-                                                                  null));
+    ResourceResolver resourceResolver = getTemplateResourceResolver();       
+    if (mode == null || mode.equals(UIViewerManagementForm.VIEWER_AUTO_MODE)) {
+    	contentListPresentation.init(templatePath, resourceResolver, paginatedNodeIterator);	
+	} else {
+		String repository = portletPreferences.getValue(UIContentListViewerPortlet.REPOSITORY, null);
+    String worksapce = portletPreferences.getValue(UIContentListViewerPortlet.WORKSPACE, null);
+    RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
+    SessionProvider sessionProvider = null;
+    String userId = Util.getPortalRequestContext().getRemoteUser();
+    if (userId == null) {
+      sessionProvider = SessionProviderFactory.createAnonimProvider();
+    } else {
+      sessionProvider = SessionProviderFactory.createSessionProvider();
+    }    
+    ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+    Session session = sessionProvider.getSession(worksapce, manageableRepository);
+    Node root = session.getRootNode();	    
+    List<String> contents = Arrays.asList(portletPreferences.getValues(UIContentListViewerPortlet.CONTENT_LIST, null));
+	
+		List<Node> nodes = new ArrayList<Node>();
+		if (contents != null && contents.size() != 0) {
+			for (int i = 0; i < contents.size(); i++) {        
+				Node node = null;
+				String path = contents.get(i);        
+				try {					
+					node = root.getNode(path.substring(1, path.length()));					
+				} catch (Exception e) {
+					contents.remove(i);
+				}
+				if (node != null) nodes.add(node);	
+			}
+		}
+		portletPreferences.setValues(UIContentListViewerPortlet.CONTENT_LIST, contents.toArray(new String[0]));
+		portletPreferences.store();
+		ObjectPageList pageList = new ObjectPageList(nodes, itemsPerPage);
+		contentListPresentation.init(templatePath, resourceResolver, pageList);
+	}
+    contentListPresentation.setContentColumn(portletPreferences.getValue(UIContentListViewerPortlet.HEADER, null));
+    contentListPresentation.setShowHeader(Boolean.parseBoolean(portletPreferences.getValue(UIContentListViewerPortlet.SHOW_HEADER, null)));
+    contentListPresentation.setHeader(portletPreferences.getValue(UIContentListViewerPortlet.HEADER, null));
   }
 
   /**
@@ -190,7 +231,7 @@ public class UIFolderViewer extends UIContainer implements RefreshDelegateAction
       sessionProvider = SessionProviderFactory.createAnonimProvider();
     } else {
       sessionProvider = SessionProviderFactory.createSessionProvider();
-    }
+    }    
     Session session = sessionProvider.getSession(worksapce, manageableRepository);
     TemplateService templateService = getApplicationComponent(TemplateService.class);
     List<String> listDocumentTypes = templateService.getDocumentTemplates(repository);
@@ -206,7 +247,7 @@ public class UIFolderViewer extends UIContainer implements RefreshDelegateAction
     String statement = "select * from nt:base where jcr:path like '" + folderPath
         + "/%' AND NOT jcr:path like'" + folderPath + "/%/%'" + " AND( "
         + documentTypeClause.toString() + ")";
-    Query query = manager.createQuery(statement, Query.SQL);
+    Query query = manager.createQuery(statement, Query.SQL);    
     return query.execute().getNodes();
   }
 
@@ -271,9 +312,7 @@ public class UIFolderViewer extends UIContainer implements RefreshDelegateAction
       UIFolderViewer uiFolderViewer = event.getSource();
       UIContentListViewerPortlet uiListViewerPortlet = uiFolderViewer.getAncestorOfType(UIContentListViewerPortlet.class);
       UIPopupContainer uiMaskPopupContainer = uiListViewerPortlet.getChild(UIPopupContainer.class);
-      UIPortletConfig uiPortletConfig = uiMaskPopupContainer.createUIComponent(UIPortletConfig.class,
-                                                                               null,
-                                                                               null);
+      UIPortletConfig uiPortletConfig = uiMaskPopupContainer.createUIComponent(UIPortletConfig.class, null, null);
       uiFolderViewer.addChild(uiPortletConfig);
       uiPortletConfig.setRendered(true);
       uiMaskPopupContainer.activate(uiPortletConfig, 700, -1);

@@ -32,28 +32,28 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
 /*
- * Created by The eXo Platform SAS 
- * Author : Anh Do Ngoc 
- * anh.do@exoplatform.com
+ * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Oct 15, 2008
  */
 
 /**
  * The Class UIFolderPathSelectorForm.
  */
-@ComponentConfig(lifecycle = Lifecycle.class, events = @EventConfig(listeners = UIFolderPathSelectorForm.CloseActionListener.class), template = "app:/groovy/ContentListViewer/config/UIFolderPathSelectorForm.gtmpl")
+@ComponentConfig(
+  lifecycle = Lifecycle.class, 
+  events = @EventConfig(listeners = UIFolderPathSelectorForm.CloseActionListener.class), 
+  template = "app:/groovy/ContentListViewer/config/UIFolderPathSelectorForm.gtmpl"
+)
 public class UIFolderPathSelectorForm extends UIBaseNodeTreeSelector implements UIPopupComponent {
-  
+
   /**
    * Instantiates a new uI folder path selector form.
    * 
    * @throws Exception the exception
    */
   public UIFolderPathSelectorForm() throws Exception {
-    addChild(UIFolderPathTreeBuilder.class, null, UIFolderPathTreeBuilder.class.getSimpleName()
-        + hashCode());
-    addChild(UISelectFolderPathPanel.class, null, UISelectFolderPathPanel.class.getSimpleName()
-        + hashCode());
+    addChild(UIContentsSelectionTreeBuilder.class, null, UIContentsSelectionTreeBuilder.class.getSimpleName() + hashCode());
+    addChild(UIFolderPathSelectionPanel.class, null, UIFolderPathSelectionPanel.class.getSimpleName() + hashCode());
   }
 
   /**
@@ -62,8 +62,8 @@ public class UIFolderPathSelectorForm extends UIBaseNodeTreeSelector implements 
    * @throws Exception the exception
    */
   public void init() throws Exception {
-    UIFolderPathTreeBuilder treeBuilder = getChild(UIFolderPathTreeBuilder.class);
-    UISelectFolderPathPanel pathPanel = getChild(UISelectFolderPathPanel.class);
+    UIContentsSelectionTreeBuilder treeBuilder = getChild(UIContentsSelectionTreeBuilder.class);
+    UIFolderPathSelectionPanel pathPanel = getChild(UIFolderPathSelectionPanel.class);
     String[] acceptNodeTypes = new String[] { "nt:folder", "nt:unstructured" };
     pathPanel.setAcceptedNodeTypes(acceptNodeTypes);
     LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
@@ -77,19 +77,21 @@ public class UIFolderPathSelectorForm extends UIBaseNodeTreeSelector implements 
     provider.close();
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.ecm.webui.tree.UIBaseNodeTreeSelector#onChange(javax.jcr.Node, java.lang.Object)
+  /*
+   * (non-Javadoc)
+   * 
+   * @see org.exoplatform.ecm.webui.tree.UIBaseNodeTreeSelector#onChange(javax.jcr.Node,
+   *      java.lang.Object)
    */
   public void onChange(Node node, Object val) throws Exception {
-    UISelectFolderPathPanel selectPathPanel = getChild(UISelectFolderPathPanel.class);
+    UIFolderPathSelectionPanel selectPathPanel = getChild(UIFolderPathSelectionPanel.class);
     selectPathPanel.setParentNode(node);
   }
 
   /**
-   * The listener interface for receiving closeAction events.
-   * The class that is interested in processing a closeAction
-   * event implements this interface, and the object created
-   * with that class is registered with a component using the
+   * The listener interface for receiving closeAction events. The class that is
+   * interested in processing a closeAction event implements this interface, and
+   * the object created with that class is registered with a component using the
    * component's <code>addCloseActionListener<code> method. When
    * the closeAction event occurs, that object's appropriate
    * method is invoked.
@@ -97,8 +99,10 @@ public class UIFolderPathSelectorForm extends UIBaseNodeTreeSelector implements 
    * @see CloseActionEvent
    */
   public static class CloseActionListener extends EventListener<UIFolderPathSelectorForm> {
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
     public void execute(Event<UIFolderPathSelectorForm> event) throws Exception {
@@ -108,13 +112,17 @@ public class UIFolderPathSelectorForm extends UIBaseNodeTreeSelector implements 
     }
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see org.exoplatform.webui.core.UIPopupComponent#activate()
    */
   public void activate() throws Exception {
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see org.exoplatform.webui.core.UIPopupComponent#deActivate()
    */
   public void deActivate() throws Exception {

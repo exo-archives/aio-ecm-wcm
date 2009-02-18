@@ -85,6 +85,14 @@ public class UIContentListViewerPortlet extends UIPortletApplication {
 
   /** The Constant SHOW_HEADER. */
   public final static String SHOW_HEADER             = "showHeader";
+  
+  public static final String CONTENT_SOURCE = "source";
+  
+  public static final String VIEWER_MODE = "mode";
+  
+  public static final String ORDER_BY = "order";
+  
+  public static final String CONTENT_LIST = "contents";
 
   /**
    * Instantiates a new uI content list viewer portlet.
@@ -127,13 +135,9 @@ public class UIContentListViewerPortlet extends UIPortletApplication {
       folderViewer.init();
     } else if (PortletMode.EDIT.equals(mode)) {
       UIPopupContainer maskPopupContainer = getChild(UIPopupContainer.class);
-      UIStartEditionInPageWizard portletEditMode = createUIComponent(UIStartEditionInPageWizard.class,
-                                                                     null,
-                                                                     null);
+      UIStartEditionInPageWizard portletEditMode = createUIComponent(UIStartEditionInPageWizard.class, null, null);
       addChild(portletEditMode);
-      UIPortletConfig portletConfig = portletEditMode.createUIComponent(UIPortletConfig.class,
-                                                                        null,
-                                                                        null);
+      UIPortletConfig portletConfig = portletEditMode.createUIComponent(UIPortletConfig.class, null, null);
       portletEditMode.addChild(portletConfig);
       portletConfig.setRendered(true);
       maskPopupContainer.activate(portletConfig, 700, -1);
