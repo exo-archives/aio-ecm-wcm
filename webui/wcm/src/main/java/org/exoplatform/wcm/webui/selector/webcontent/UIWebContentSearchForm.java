@@ -105,11 +105,9 @@ public class UIWebContentSearchForm extends UIForm {
     dateOptions.add(new SelectItemOption<String>(CREATED_DATE,CREATED_DATE));
     dateOptions.add(new SelectItemOption<String>(MODIFIED_DATE,MODIFIED_DATE));
     addUIFormInput(new UIFormSelectBox(TIME_OPTION,TIME_OPTION, dateOptions));
-    UIFormDateTimeInput startTime = new UIFormDateTimeInput(START_TIME, START_TIME, null);
-    startTime.setDisplayTime(false);
+    UIFormDateTimeInput startTime = new UIFormDateTimeInput(START_TIME, START_TIME, null, true);
     addUIFormInput(startTime);
-    UIFormDateTimeInput endTime = new UIFormDateTimeInput(END_TIME, END_TIME, null);
-    endTime.setDisplayTime(false);
+    UIFormDateTimeInput endTime = new UIFormDateTimeInput(END_TIME, END_TIME, null, true);
     addUIFormInput(endTime);
 
     addUIFormInput(new UIFormStringInput(DOC_TYPE, DOC_TYPE, null));

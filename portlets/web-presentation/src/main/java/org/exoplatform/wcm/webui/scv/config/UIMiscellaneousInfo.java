@@ -55,12 +55,13 @@ public class UIMiscellaneousInfo extends UIForm {
     PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     PortletPreferences prefs = context.getRequest().getPreferences();
     boolean isShowTitle = Boolean.parseBoolean(prefs.getValue("ShowTitle", null));
-    boolean isShowTags = Boolean.parseBoolean(prefs.getValue("ShowTags", null));
-    boolean isShowCategories = Boolean.parseBoolean(prefs.getValue("ShowCategories", null));
+//    boolean isShowTags = Boolean.parseBoolean(prefs.getValue("ShowTags", null));
+//    boolean isShowCategories = Boolean.parseBoolean(prefs.getValue("ShowCategories", null));
     boolean isQuickEdit = Boolean.parseBoolean(prefs.getValue("ShowQuickEdit", null));
     addUIFormInput(new UIFormCheckBoxInput("ShowTitle", "ShowTitle", null).setChecked(isShowTitle));
-    addUIFormInput(new UIFormCheckBoxInput("ShowTags", "ShowTags", null).setChecked(isShowTags));
-    addUIFormInput(new UIFormCheckBoxInput("ShowCategories", "ShowCategories", null).setChecked(isShowCategories));
+    // because WCM remove UITagging, UICategorizing, we don't add UIFormInput for them
+//    addUIFormInput(new UIFormCheckBoxInput("ShowTags", "ShowTags", null).setChecked(isShowTags));
+//    addUIFormInput(new UIFormCheckBoxInput("ShowCategories", "ShowCategories", null).setChecked(isShowCategories));
     addUIFormInput(new UIFormCheckBoxInput("ShowQuickEdit", "ShowQuickEdit", null).setChecked(isQuickEdit));
   }
 
@@ -84,14 +85,14 @@ public class UIMiscellaneousInfo extends UIForm {
       UIMiscellaneousInfo uiMiscellaneousInfo = event.getSource();
       boolean isShowTitle = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowTitle").isChecked();
       boolean isQuickEdit = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowQuickEdit").isChecked();
-      boolean isShowTags = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowTags").isChecked();
-      boolean isShowCategories = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowCategories").isChecked();
+//      boolean isShowTags = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowTags").isChecked();
+//      boolean isShowCategories = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowCategories").isChecked();
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
       PortletPreferences prefs = context.getRequest().getPreferences();
       prefs.setValue("ShowTitle", Boolean.toString(isShowTitle));
       prefs.setValue("ShowQuickEdit", Boolean.toString(isQuickEdit));
-      prefs.setValue("ShowTags", Boolean.toString(isShowTags));
-      prefs.setValue("ShowCategories", Boolean.toString(isShowCategories));
+//      prefs.setValue("ShowTags", Boolean.toString(isShowTags));
+//      prefs.setValue("ShowCategories", Boolean.toString(isShowCategories));
       prefs.store();
       UIApplication uiApplication = uiMiscellaneousInfo.getAncestorOfType(UIApplication.class);
       uiApplication.addMessage(new ApplicationMessage("UIMiscellaneousInfo.msg-successfully", null, ApplicationMessage.INFO));

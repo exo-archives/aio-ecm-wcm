@@ -1,16 +1,17 @@
 <%
-  import org.exoplatform.webui.core.UIComponent ;
+  import org.exoplatform.webui.core.UIComponent;
   import org.exoplatform.webui.form.UIForm;
   import java.text.DateFormat;
   import java.text.SimpleDateFormat;
+  import org.exoplatform.wcm.webui.selector.webcontent.UIWCMSearchResult;
 
-  String[] beanFields =  uicomponent.getBeanFields() ;  
-  String[] beanActions =  uicomponent.getBeanActions() ;
+  String[] beanFields =  uicomponent.getBeanFields();  
+  String[] beanActions =  uicomponent.getBeanActions();
   UIComponent uiParent = uicomponent.getParent() ;
-  String name = uicomponent.getLabel() ;
-  UIForm uiForm = uicomponent.getAncestorOfType(UIForm.class); 
+  String name = uicomponent.getLabel();
+  UIForm uiForm = uicomponent.getAncestorOfType(UIForm.class);
   
-  DateFormat dateFormat = null;
+  DateFormat dateFormat = uicomponent.getDateFormat();
 %>
 <div id="$uicomponent.id">
   <table class="UIGrid" cellspacing="0">
@@ -51,24 +52,23 @@
     %>
           <tr class="$rowClass">
     <%
-          for(field in beanFields) { 
-            def fieldValue = uicomponent.getFieldValue(bean, field) ;
-            def cssClass = "" ;
-            if(fieldValue != null) {
-              def fieldClass = fieldValue.getClass() ;
-              if(fieldClass == Integer.class)  cssClass = "number" ;
-              else if(java.util.Date.class.isAssignableFrom(fieldClass)) {
-                if(dateFormat == null) dateFormat = new SimpleDateFormat("HH:mm:ss yyyy-MM-dd");
-                cssClass = "Datetime" ;
-                fieldValue = dateFormat.format(fieldValue);
-              } 
-              else cssClass = "Text" ;
-            } else {
-              fieldValue = "";
-            }
-            String value = fieldValue.toString();
-            println "<td><div class=\""+cssClass+"\" title='$fieldValue'>"+fieldValue+"</div></td>";
-          }  
+            String titleNode = bean.getTitle();
+            String expect = uicomponent.getExpect(bean.getNodeExpect());
+            String path = bean.getNodePath();
+            float score = bean.getScore();
+            String date = dateFormat.format(bean.getCreateDate());
+    %>        
+          <td>
+            <div class="Text">$titleNode</div>
+            <div class="Text">$expect</div>
+            <div class="Text">$path</div>
+            <div class="Text">$date</div>
+          </td>
+          
+          <td>
+            <div class="number">$score</div>
+          </td>
+    <%
           if(beanActions != null && beanActions.length > 0) { 
     %>
           <td>
@@ -87,7 +87,7 @@
           </td>
     <%
           }
-    %>  
+    %>
           </tr>
     <%
         }

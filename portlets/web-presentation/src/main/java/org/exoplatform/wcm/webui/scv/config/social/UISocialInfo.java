@@ -51,8 +51,10 @@ public class UISocialInfo extends UITabPane {
    */
   public UISocialInfo() throws Exception {
     UIPermissionManager uiPermission = addChild(UIPermissionManager.class, null, null);
-    addChild(UITagging.class, null, null);
-    addChild(UICategorizing.class, null, null);
+    // Comment adding UITagging and UICategorizing but don't delete.
+    // because WCM can use UITagging and UICategorizing later.
+//    addChild(UITagging.class, null, null);
+//    addChild(UICategorizing.class, null, null);
     addChild(UIMiscellaneousInfo.class, null, null);
     setSelectedTab(uiPermission.getId()) ;
   }
@@ -64,12 +66,12 @@ public class UISocialInfo extends UITabPane {
    * 
    * @throws Exception the exception
    */
-  public void initUICategorizing(Node webContentNode) throws Exception {
-    UICategorizing uiCategorizing = getChild(UICategorizing.class);
-    uiCategorizing.setWebContentNode(webContentNode);
-    uiCategorizing.setExistedCategories(getExistedCategory(webContentNode));
-    uiCategorizing.initUICategoriesSelector();
-  }
+//  public void initUICategorizing(Node webContentNode) throws Exception {
+//    UICategorizing uiCategorizing = getChild(UICategorizing.class);
+//    uiCategorizing.setWebContentNode(webContentNode);
+//    uiCategorizing.setExistedCategories(getExistedCategory(webContentNode));
+//    uiCategorizing.initUICategoriesSelector();
+//  }
 
   /**
    * Gets the existed category.

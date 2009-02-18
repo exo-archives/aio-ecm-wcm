@@ -76,11 +76,9 @@ public class UIDocumentSearchForm extends UIForm {
     dateOptions.add(new SelectItemOption<String>(UIWebContentSearchForm.CREATED_DATE,UIWebContentSearchForm.CREATED_DATE));
     dateOptions.add(new SelectItemOption<String>(UIWebContentSearchForm.MODIFIED_DATE,UIWebContentSearchForm.MODIFIED_DATE));
     addUIFormInput(new UIFormSelectBox(UIWebContentSearchForm.TIME_OPTION, UIWebContentSearchForm.TIME_OPTION, dateOptions));
-    UIFormDateTimeInput startTime = new UIFormDateTimeInput(UIWebContentSearchForm.START_TIME, UIWebContentSearchForm.START_TIME, null);
-    startTime.setDisplayTime(false);
+    UIFormDateTimeInput startTime = new UIFormDateTimeInput(UIWebContentSearchForm.START_TIME, UIWebContentSearchForm.START_TIME, null, true);
     addUIFormInput(startTime);
-    UIFormDateTimeInput endTime = new UIFormDateTimeInput(UIWebContentSearchForm.END_TIME, UIWebContentSearchForm.END_TIME, null);
-    endTime.setDisplayTime(false);
+    UIFormDateTimeInput endTime = new UIFormDateTimeInput(UIWebContentSearchForm.END_TIME, UIWebContentSearchForm.END_TIME, null, true);
     addUIFormInput(endTime);
 
     addUIFormInput(new UIFormStringInput(UIWebContentSearchForm.DOC_TYPE, UIWebContentSearchForm.DOC_TYPE, null));

@@ -1,8 +1,11 @@
 package org.exoplatform.wcm.webui.selector.webcontent;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.jcr.Node;
 import javax.jcr.Session;
@@ -11,6 +14,7 @@ import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.ecm.webui.selector.UISelectable;
 import org.exoplatform.ecm.webui.tree.UIBaseNodeTreeSelector;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.wcm.search.PaginatedQueryResult;
@@ -39,19 +43,26 @@ import org.exoplatform.webui.event.EventListener;
 
 public class UIWCMSearchResult extends UIGrid {
 
-  public static final String NAME_FILE = "NameFile".intern();
+  public static final String TITLE = "Title".intern();
   public static final String NODE_EXPECT = "NodeExpect".intern();
   public static final String SCORE = "Score".intern();
   public static final String CREATE_DATE = "CreateDate".intern();
   public static final String NODE_PATH = "NodePath".intern();
   public String[] Actions = {"Select", "View"};
-  public String[] BEAN_FIELDS = {NAME_FILE, NODE_EXPECT, SCORE, CREATE_DATE};
+  public String[] BEAN_FIELDS = {TITLE, SCORE};
 
   private PaginatedQueryResult pagResult;
+  private List<SearchResultBean> resBeanList;
 
   public UIWCMSearchResult() throws Exception {
     configure(NODE_PATH, BEAN_FIELDS, Actions);
     getUIPageIterator().setId("UIWCMSearchResultPaginator");
+  }
+  
+  public DateFormat getDateFormat() {
+    Locale locale = new Locale(Util.getUIPortal().getLocale());
+    DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, locale);
+    return dateFormat;
   }
 
   public void updateGrid(PaginatedQueryResult paginatedResult) throws Exception {
@@ -61,27 +72,28 @@ public class UIWCMSearchResult extends UIGrid {
     for(ResultNode resultNode : currentPageDate) {
       Node node= resultNode.getNode();
       SearchResultBean resultBean = new SearchResultBean();
-      resultBean.setCreateDate(getCreateDate(node).getTimeZone().toString());
-      resultBean.setNameFile(getTitle(node));
+      resultBean.setCreateDate(getCreateDate(node));
+      resultBean.setTitle(getTitleNode(node));
       resultBean.setNodeExpect(resultNode.getExcerpt());
       resultBean.setNodePath(node.getPath());
       resultBean.setScore(resultNode.getScore());
       resultBeanList.add(resultBean);
     }
+    setResBeanList(resultBeanList);
     ObjectPageList objectPageList = new ObjectPageList(resultBeanList, 10);
     getUIPageIterator().setPageList(objectPageList);
   }
 
 
-  public String getTitle(Node node) throws Exception {
+  public String getTitleNode(Node node) throws Exception {
     return node.hasProperty("exo:title") ? 
         node.getProperty("exo:title").getValue().getString() : node.getName();
   }
 
-  public Calendar getCreateDate(Node node) throws Exception {
+  public Date getCreateDate(Node node) throws Exception {
     if(node.hasProperty("exo:dateCreated")) {
-      Calendar date = node.getProperty("exo:dateCreated").getValue().getDate();
-      return date;
+      Calendar cal = node.getProperty("exo:dateCreated").getValue().getDate();
+      return cal.getTime();
     }
     return null;
   }
@@ -94,6 +106,11 @@ public class UIWCMSearchResult extends UIGrid {
       SessionProviderFactory.createSessionProvider().getSession(workspace, maRepository);
     Node resultNode = (Node) session.getItem(nodePath);
     return resultNode;
+  }
+  
+  public String getExpect(String expect) {
+    expect = expect.replaceAll("<[^>]*/?>", "");
+    return expect;
   }
 
   public static class SelectActionListener extends EventListener<UIWCMSearchResult> {
@@ -153,17 +170,11 @@ public class UIWCMSearchResult extends UIGrid {
   }
 
   public static class SearchResultBean {
-    public String NameFile;
+    public String Title;
     public String NodeExpect;
     public float Score;
-    public String CreateDate;
+    public Date CreateDate;
     public  String NodePath;
-    public String getNameFile() {
-      return this.NameFile;
-    }
-    public void setNameFile(String nameFile) {
-      this.NameFile = nameFile;
-    }
     public String getNodeExpect() {
       return NodeExpect;
     }
@@ -176,10 +187,10 @@ public class UIWCMSearchResult extends UIGrid {
     public void setScore(float score) {
       Score = score;
     }
-    public String getCreateDate() {
+    public Date getCreateDate() {
       return CreateDate;
     }
-    public void setCreateDate(String createDate) {
+    public void setCreateDate(Date createDate) {
       CreateDate = createDate;
     }
     public String getNodePath() {
@@ -188,5 +199,19 @@ public class UIWCMSearchResult extends UIGrid {
     public void setNodePath(String nodePath) {
       NodePath = nodePath;
     }
+    public String getTitle() {
+      return Title;
+    }
+    public void setTitle(String title) {
+      Title = title;
+    }
+  }
+
+  public List<SearchResultBean> getResBeanList() {
+    return resBeanList;
+  }
+
+  public void setResBeanList(List<SearchResultBean> resBeanList) {
+    this.resBeanList = resBeanList;
   }
 }
