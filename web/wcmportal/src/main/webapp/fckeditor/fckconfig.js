@@ -101,14 +101,14 @@ FCKConfig.TemplateReplaceCheckbox = true ;
 FCKConfig.ToolbarLocation = 'In' ;
 
 FCKConfig.ToolbarSets["Default"] = [
-	['Source','DocProps','-','NewPage','Preview','-','Templates'],
-	['Cut','Copy','Paste','PasteText','PasteWord','-','Print','SpellCheck'],
-	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
+	['Source','Templates'],
+	['Cut','Copy','PasteText','-','SpellCheck'],
+	['Undo','Redo','-','RemoveFormat'],
 	'/',
-	['Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'],
-	['OrderedList','UnorderedList','-','Outdent','Indent','Blockquote','CreateDiv'],
+	['Bold','Italic','Underline','StrikeThrough'],
+	['OrderedList','UnorderedList'],
 	['Link','Unlink','Anchor'],
-	['Image','Flash','Table','Rule','SpecialChar','PageBreak'],
+	['Image','Flash','Table','SpecialChar'],
 	['TextColor','BGColor'],
 	['FitWindow','ShowBlocks'],
 	['Style','FontFormat','FontName','FontSize']

@@ -16,15 +16,15 @@ FCKConfig.EditorAreaStyles = 'body{	background: none;	margin: 0px;}' ;
 FCKConfig.InsertedLinkColor = 'green';
 
 FCKConfig.ToolbarSets["CompleteWCM"] = [
-	['Source','DocProps','-','NewPage','Preview','-','Templates'],
-	['Cut','Copy','Paste','PasteText','PasteWord','-','Print','SpellCheck'],
-	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
+	['Source','Templates'],
+	['Cut','Copy','PasteText','-','SpellCheck'],
+	['Undo','Redo','-','RemoveFormat'],
 	'/',
-	['Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'],
-	['OrderedList','UnorderedList','-','Outdent','Indent','Blockquote','CreateDiv'],
+	['Bold','Italic','Underline','StrikeThrough'],
+	['OrderedList','UnorderedList'],
 	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
 	['Link','Insert link to a site page','Unlink','Anchor'],
-	['Insert Gadget', 'Insert Image','Insert DMS Document','Flash','Table','Rule','SpecialChar','PageBreak'],
+	['Insert Gadget', 'Insert Image','Insert DMS Document','Flash','Table','SpecialChar'],
 	['TextColor','BGColor'],
 	['FitWindow','ShowBlocks'],
 	['Style','FontFormat','FontName','FontSize']
