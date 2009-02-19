@@ -13,8 +13,8 @@
       <AccountSettings>Paramètres du compte</AccountSettings>
       <BrowsePage>Gérer les pages</BrowsePage>
       <OnOffEditting>Edition</OnOffEditting>
-      <TurnOnQuickEdit>Activer</TurnOnQuickEdit>
-      <TurnOffQuickEdit>Désactiver</TurnOffQuickEdit>
+      <TurnOnQuickEdit>ON</TurnOnQuickEdit>
+      <TurnOffQuickEdit>OFF</TurnOffQuickEdit>
       <AddContent>Ajouter un contenu</AddContent>
       <ViewMore>Plus d'actions</ViewMore>      
       <Logout>Déconnexion</Logout>
