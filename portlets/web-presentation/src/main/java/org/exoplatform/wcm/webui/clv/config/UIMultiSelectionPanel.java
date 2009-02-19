@@ -36,7 +36,7 @@ import org.exoplatform.webui.event.EventListener;
  */
 
 @ComponentConfig(
-  template = "classpath:groovy/ecm/webui/tree/selectmany/UISelectPathPanel.gtmpl", 
+  template = "app:/groovy/ContentListViewer/config/UIContentSelectionPanel.gtmpl", 
   events = { 
     @EventConfig(listeners = UIMultiSelectionPanel.SelectActionListener.class)
   }

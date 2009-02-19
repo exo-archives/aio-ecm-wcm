@@ -42,7 +42,7 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent {
   public UIPortletConfig() throws Exception {
     addChild(UIViewerManagementForm.class, null, null);
     UIPopupContainer uiPopup = addChild(UIPopupContainer.class, null, "UIFolderPathSelecctPopup");
-    uiPopup.getChild(UIPopupWindow.class).setId("UIFolderPathSelecctPopupWindow");
+    uiPopup.getChild(UIPopupWindow.class).setId("UIFolderPathSelectPopupWindow");
 
   }
 

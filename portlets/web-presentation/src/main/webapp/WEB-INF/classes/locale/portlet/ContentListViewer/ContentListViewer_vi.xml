@@ -10,8 +10,10 @@
       <Cancel>Huỷ bỏ</Cancel>
     </action>
     <label>
+    	<ContentSelectionBlock>Chọn nội dung muốn hiển thị</ContentSelectionBlock>
+    	<DisplaySettingBlock>Thiết lập cho bộ hiển thị</DisplaySettingBlock>    	    
       <FolderPathInputSet>UIViewerManagementForm</FolderPathInputSet>
-      <FolderPathInput>Thư mục</FolderPathInput>
+      <FolderPathInput>Thư mục</FolderPathInput>      
       <FormViewTemplate>Mẫu form trình bày kết quả</FormViewTemplate>
       <PaginatorTemplate>Mẫu form phân trang</PaginatorTemplate>
       <ItemsPerPage>Số kết quả mỗi trang</ItemsPerPage>
@@ -59,13 +61,6 @@
   </UIFolderExplorer>
   <!--/n  ###################################################################
   -->
-  <UIPopupWindow>
-    <title>
-      <UIFolderPathSelectorForm>Lựa chọn thư mục</UIFolderPathSelectorForm>
-    </title>
-  </UIPopupWindow>
-  <!--/n  ###################################################################
-  -->
   <UIStartEditionInPageWizard>
     <msg>
       <edit-portlet>Click ở đây để chỉnh sửa ứng dụng.</edit-portlet>
@@ -78,10 +73,27 @@
       <UIPortletConfig>Quản lý trình hiển thị nội dung theo danh sách.</UIPortletConfig>
     </title>
   </UIViewerManagementPopupWindow>
-  <UIFolderPathSelecctPopupWindow>
-    <title>
-      <UIFolderPathSelectorForm>Lựa chọn một thư mục để hiển thị các tài liệu và nội dung con.</UIFolderPathSelectorForm>
-    </title>
-  </UIFolderPathSelecctPopupWindow>
+  <!--/n  ###################################################################
+  -->  
+  <UISelectedContentGrid>
+		<action>
+			<SaveCategories>Lưu lại</SaveCategories>
+			<Cancel>Hủy bỏ</Cancel>
+		</action>
+  </UISelectedContentGrid>
+  <!--/n  ###################################################################
+  -->  
+  <UIFolderPathSelectPopupWindow>
+  	<title>
+  		<UICorrectContentSelectorForm>Chọn các nội dung muốn hiển thị</UICorrectContentSelectorForm>
+  		<UIFolderPathSelectorForm>Chọn thư mục muốn hiển thị các nội dung trong nó</UIFolderPathSelectorForm>
+  	</title>
+  </UIFolderPathSelectPopupWindow>
+  <!--/n  ###################################################################
+  -->    
+  <UIFolderPathSelectorForm>
+  	<action>
+  		<Close>Đóng</Close>
+  	</action>
+  </UIFolderPathSelectorForm>  
 </bundle>
-

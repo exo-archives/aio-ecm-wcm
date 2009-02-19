@@ -136,7 +136,6 @@ public class UIFolderViewer extends UIContainer implements RefreshDelegateAction
     Session session = sessionProvider.getSession(worksapce, manageableRepository);
     Node root = session.getRootNode();	    
     List<String> contents = Arrays.asList(portletPreferences.getValues(UIContentListViewerPortlet.CONTENT_LIST, null));
-	
 		List<Node> nodes = new ArrayList<Node>();
     List<String> tempContents = new ArrayList<String>(contents);
 		if (contents != null && contents.size() != 0) {

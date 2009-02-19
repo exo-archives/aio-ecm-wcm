@@ -23,8 +23,7 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
-import org.exoplatform.webui.core.UIComponent;
-import org.exoplatform.webui.core.UIPopupWindow;
+import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
@@ -84,16 +83,8 @@ public class UISelectedContentGrid extends UISelectedCategoriesGrid {
   public static class CancelActionListener extends EventListener<UISelectedContentGrid> {
     public void execute(Event<UISelectedContentGrid> event) throws Exception {
       UISelectedContentGrid uiSelectedContent = event.getSource();
-      UIComponent uiComponent = uiSelectedContent.getParent();
-      if (uiComponent != null) {
-        if (uiComponent instanceof UIPopupWindow) {
-          ((UIPopupWindow)uiComponent).setShow(false);
-          ((UIPopupWindow)uiComponent).setRendered(false);
-          event.getRequestContext().addUIComponentToUpdateByAjax(((UIPopupWindow)uiComponent).getParent());
-          return;
-        } 
-        uiSelectedContent.<UIComponent>getParent().broadcast(event, event.getExecutionPhase()) ;
-      }       
+      UIPopupContainer uiPopupContainer = (UIPopupContainer) uiSelectedContent.getAncestorOfType(UIPopupContainer.class);
+      uiPopupContainer.deActivate();    
     }
   }
 }

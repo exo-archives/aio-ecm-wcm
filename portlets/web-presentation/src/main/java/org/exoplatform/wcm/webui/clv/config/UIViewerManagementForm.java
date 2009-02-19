@@ -63,7 +63,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
  */
 @ComponentConfig(
   lifecycle = UIFormLifecycle.class, 
-  template = "app:/groovy/ContentListViewer/config/UIFolderListViewerConfigForm.gtmpl", 
+  template = "app:/groovy/ContentListViewer/config/UIViewerManagementForm.gtmpl", 
   events = {
     @EventConfig(listeners = UIViewerManagementForm.SaveActionListener.class),
     @EventConfig(listeners = UIViewerManagementForm.CancelActionListener.class),

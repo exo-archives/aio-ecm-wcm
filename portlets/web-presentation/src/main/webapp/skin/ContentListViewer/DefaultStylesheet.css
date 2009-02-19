@@ -136,6 +136,6 @@
 	margin: 10px;
 }
 
-.UIContentListViewerPortlet .UISelectedContentGrid {
-
+.UIContentListViewerPortlet .UIMultiSelectionPanel {
+	margin-bottom: 10px;
 }

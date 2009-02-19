@@ -11,6 +11,8 @@
       <Cancel>Annuler</Cancel>
     </action>
     <label>
+    	<ContentSelectionBlock></ContentSelectionBlock>
+    	<DisplaySettingBlock></DisplaySettingBlock>    	        
       <FolderPathInputSet>UIViewerManagementForm</FolderPathInputSet>
       <FolderPathInput>Chemin du dossier</FolderPathInput>
       <FormViewTemplate>Gabarit de visualisation</FormViewTemplate>
@@ -61,13 +63,6 @@
   </UIFolderExplorer>
   <!--/n  ###################################################################
   -->
-  <UIPopupWindow>
-    <title>
-      <UIFolderPathSelectorForm>Sélectionner un dossier</UIFolderPathSelectorForm>
-    </title>
-  </UIPopupWindow>
-  <!--/n  ###################################################################
-  -->
   <UIStartEditionInPageWizard>
     <msg>
       <edit-portlet>Cliquer ici pour éditer cette Portlet</edit-portlet>
@@ -80,10 +75,28 @@
       <UIPortletConfig>Gestion du Content List Viewer</UIPortletConfig>
     </title>
   </UIViewerManagementPopupWindow>
-  <UIFolderPathSelecctPopupWindow>
-    <title>
-      <UIFolderPathSelectorForm>Sélectionner un dossier à visualiser</UIFolderPathSelectorForm>
-    </title>
-  </UIFolderPathSelecctPopupWindow>
+  <!--/n  ###################################################################
+  -->  
+	<UISelectedContentGrid>
+		<action>
+			<SaveCategories></SaveCategories>
+			<Cancel></Cancel>
+		</action>
+  </UISelectedContentGrid>
+  <!--/n  ###################################################################
+  -->  
+  <UIFolderPathSelectPopupWindow>
+  	<title>
+  		<UICorrectContentSelectorForm></UICorrectContentSelectorForm>
+  		<UIFolderPathSelectorForm>Sélectionner un dossier à visualiser</UIFolderPathSelectorForm>
+  	</title>
+  </UIFolderPathSelectPopupWindow>
+  <!--/n  ###################################################################
+  -->    
+  <UIFolderPathSelectorForm>
+  	<action>
+  		<Close></Close>
+  	</action>
+  </UIFolderPathSelectorForm>  
 </bundle>
 

@@ -8,6 +8,8 @@
 	def quickEditingBlockId = portletId + "-QuickEditingBlock";
 	def rcontext = _ctx.getRequestContext() ;
  	rcontext.getJavascriptManager().importJavascript('eXo.webpresentation.Utils','/web-presentation/javascript');		
+ 	String contentSelectionBlockTitle = _ctx.appRes(uicomponent.id + ".label.ContentSelectionBlock");
+ 	String displaySettingBlockTitle = _ctx.appRes(uicomponent.id + ".label.DisplaySettingBlock");
 %>
 <div class="UIForm $uicomponent.id">
 	<div class="TitleBar">
@@ -17,7 +19,7 @@
   <div class="HorizontalLayout">
     <div class="FormContainer">
       <fieldset style=" margin-bottom: 10px; overflow: hidden: height: 100%; border: 1px solid #b7b7b7;" maxHeight="350">
-				<legend class="StyleLegend">Select contents from folder</legend>
+				<legend class="StyleLegend">$contentSelectionBlockTitle</legend>
 	      <table class="UIFormGrid">
 	      	<tr>
 			      <td class="FieldLabel">
@@ -69,7 +71,7 @@
       </fieldset>   
       
 			<fieldset style=" margin-bottom: 10px; overflow: hidden: height: 100%; border: 1px solid #b7b7b7;" maxHeight="350">
-				<legend class="StyleLegend">Display setting</legend>        
+				<legend class="StyleLegend">$displaySettingBlockTitle</legend>        
 	      <table class="UIFormGrid">
 	      	<tr>
 			      <td class="FieldLabel">
