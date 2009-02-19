@@ -294,6 +294,29 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     }
     queryBuilder.closeGroup();
   }
+  
+  private void mapQuerySpecificNodeTypes( final QueryCriteria queryCriteria, final SQLQueryBuilder queryBuilder, final NodeTypeManager nodeTypeManager) throws Exception {
+    String[] contentTypes = queryCriteria.getContentTypes();
+    NodeType fistType = nodeTypeManager.getNodeType(contentTypes[0]);    
+    queryBuilder.openGroup(LOGICAL.AND);
+    if (fistType.isMixin()) {
+      queryBuilder.like("jcr:mixinTypes", contentTypes[0], LOGICAL.NULL);
+    } else {
+      queryBuilder.equal("jcr:primaryType", contentTypes[0], LOGICAL.NULL);
+    }
+    if(contentTypes.length>1) {
+      for (int i=1; i<contentTypes.length; i++) {
+        String type = contentTypes[i];
+        NodeType nodetype = nodeTypeManager.getNodeType(type);
+        if (nodetype.isMixin()) {
+          queryBuilder.like("jcr:mixinTypes", type, LOGICAL.OR);
+        } else {
+          queryBuilder.equal("jcr:primaryType", type, LOGICAL.OR);
+        }
+      } 
+    }    
+    queryBuilder.closeGroup();    
+  }
   /**
    * Map query types.
    * 
@@ -307,10 +330,16 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     // Searh on nt:base
     queryBuilder.fromNodeTypes(null);
     ManageableRepository currentRepository = repositoryService.getCurrentRepository();
+    NodeTypeManager manager = currentRepository.getNodeTypeManager();
+    // Query all documents for specific content types
+    String[] contentTypes = queryCriteria.getContentTypes();
+    if(contentTypes != null && contentTypes.length>0 && queryCriteria.getKeyword() == null) {
+      mapQuerySpecificNodeTypes(queryCriteria,queryBuilder,manager);
+      return;
+    }    
     List<String> selectedNodeTypes = templateService.getDocumentTemplates(currentRepository.getConfiguration().getName());    
     selectedNodeTypes.remove("exo:cssFile");
-    selectedNodeTypes.remove("exo:jsFile");    
-    NodeTypeManager manager = currentRepository.getNodeTypeManager();    
+    selectedNodeTypes.remove("exo:jsFile");            
     queryBuilder.openGroup(LOGICAL.AND);
     queryBuilder.equal("jcr:primaryType", "nt:resource", LOGICAL.NULL);
     // query on exo:rss-enable nodetypes for title, summary field
