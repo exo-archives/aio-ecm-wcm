@@ -26,14 +26,14 @@
       <ViewerSummary>Montrer le résumé</ViewerSummary>
       <Header>Entête</Header>
       <ViewerHeader>Montrer l'entête</ViewerHeader>
-      <ViewerMode></ViewerMode>
-      <ManualViewerMode></ManualViewerMode>
-      <AutoViewerMode></AutoViewerMode>
-      <OrderBy></OrderBy>
-      <OrderByTitle></OrderByTitle>
-      <OrderByDateCreated></OrderByDateCreated>
-      <OrderByDateModified></OrderByDateModified>
-      <OrderByDatePublished></OrderByDatePublished>            
+      <ViewerMode>Mode</ViewerMode>
+      <ManualViewerMode>Manuel</ManualViewerMode>
+      <AutoViewerMode>Automatique</AutoViewerMode>
+      <OrderBy>Ordre de</OrderBy>
+      <OrderByTitle>Titre</OrderByTitle>
+      <OrderByDateCreated>Date de création</OrderByDateCreated>
+      <OrderByDateModified>Date de modification</OrderByDateModified>
+      <OrderByDatePublished>Date de publication</OrderByDatePublished>            
     </label>
     <title>Sélectionner un dossier pour montrer ses contenus web ou ses documents</title>
   </UIViewerManagementForm>
@@ -79,20 +79,20 @@
   -->  
 	<UISelectedContentGrid>
 		<action>
-			<SaveCategories></SaveCategories>
-			<Cancel></Cancel>
+			<SaveCategories>Sauver</SaveCategories>
+			<Cancel>Annuler</Cancel>
 		</action>
 		<label>
-			<header></header>
-			<name></name>
-			<delete></delete>
+			<header>Liste le contenu sélectionné</header>
+			<name>#{word.name}</name>
+			<delete>Supprimer</delete>
 		</label>		
   </UISelectedContentGrid>
   <!--/n  ###################################################################
   -->  
   <UIFolderPathSelectPopupWindow>
   	<title>
-  		<UICorrectContentSelectorForm></UICorrectContentSelectorForm>
+  		<UICorrectContentSelectorForm>Sélectionnez le contenu manuellement</UICorrectContentSelectorForm>
   		<UIFolderPathSelectorForm>Sélectionner un dossier à visualiser</UIFolderPathSelectorForm>
   	</title>
   </UIFolderPathSelectPopupWindow>
@@ -100,14 +100,14 @@
   -->    
   <UIFolderPathSelectorForm>
   	<action>
-  		<Close></Close>
+  		<Close>#{word.close}</Close>
   	</action>
   </UIFolderPathSelectorForm>  
   <UIContentSelectionPanel>
   	<label>
-  		<header></header>
-  		<name></name>
-  		<add></add>  		  		
+  		<header>Bellow est contenu peut être sélectionné</header>
+  		<name>#{word.name}</name>
+  		<add>#{word.add}</add>  		  		
   	</label>
   </UIContentSelectionPanel>  
 </bundle>
