@@ -82,6 +82,11 @@
 			<SaveCategories></SaveCategories>
 			<Cancel></Cancel>
 		</action>
+		<label>
+			<header></header>
+			<name></name>
+			<delete></delete>
+		</label>		
   </UISelectedContentGrid>
   <!--/n  ###################################################################
   -->  
@@ -98,5 +103,12 @@
   		<Close></Close>
   	</action>
   </UIFolderPathSelectorForm>  
+  <UIContentSelectionPanel>
+  	<label>
+  		<header></header>
+  		<name></name>
+  		<add></add>  		  		
+  	</label>
+  </UIContentSelectionPanel>  
 </bundle>
 

@@ -58,7 +58,7 @@
     <title>Select a folder to display its children as content</title>
   </UIFolderTreeList>
   <UIFolderExplorer>
-    <title>Below is the possible folder can be selected</title>
+    <title>Below is the possible folder can be browsed</title>
   </UIFolderExplorer>
   <!--/n  ###################################################################
   -->
@@ -79,8 +79,13 @@
   <UISelectedContentGrid>
 		<action>
 			<SaveCategories>Save</SaveCategories>
-			<Cancel>Cancel</Cancel>
+			<Cancel>Cancel</Cancel>			
 		</action>
+		<label>
+			<header>List selected content</header>
+			<name>Name</name>
+			<delete>Delete</delete>
+		</label>
   </UISelectedContentGrid>
   <!--/n  ###################################################################
   -->  
@@ -97,5 +102,11 @@
   		<Close>Close</Close>
   	</action>
   </UIFolderPathSelectorForm>
+  <UIContentSelectionPanel>
+  	<label>
+  		<header>Contents bellow can be selected</header>
+  		<name>Name</name>
+  		<add>Add</add>  		  		
+  	</label>
+  </UIContentSelectionPanel>
 </bundle>
-

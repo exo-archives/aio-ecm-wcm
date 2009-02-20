@@ -57,7 +57,7 @@
     <title>Lựa chọn một thư mục để hiển thị các tài liệu và nội dung con.</title>
   </UIFolderTreeList>
   <UIFolderExplorer>
-    <title>Bạn có thể lựa chọn một trong các thư mục dưới đây.</title>
+    <title>Duyệt cây thư mục</title>
   </UIFolderExplorer>
   <!--/n  ###################################################################
   -->
@@ -80,6 +80,11 @@
 			<SaveCategories>Lưu lại</SaveCategories>
 			<Cancel>Hủy bỏ</Cancel>
 		</action>
+		<label>
+			<header>Danh sách các tài liệu được chọn để hiển thị</header>
+			<name>Tài liệu</name>
+			<delete>Xóa</delete>
+		</label>		
   </UISelectedContentGrid>
   <!--/n  ###################################################################
   -->  
@@ -96,4 +101,11 @@
   		<Close>Đóng</Close>
   	</action>
   </UIFolderPathSelectorForm>  
+  <UIContentSelectionPanel>
+  	<label>
+  		<header>Các tài liệu dưới đây có thể được chọn</header>
+  		<name>Tài liệu</name>
+  		<add>Thêm</add>  		  		
+  	</label>
+  </UIContentSelectionPanel>  
 </bundle>
