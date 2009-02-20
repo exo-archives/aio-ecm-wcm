@@ -93,4 +93,97 @@
 	  <searchResult>Résultats de recherche</searchResult>
 	</template>
   </portal>
+    
+  <UISinglePortletContentViewer>
+    <SelectContent>
+      <leftcolumn>
+        <title>Ci-dessous sont les dossiers possibles où le contenu peut être affiché</title>
+      </leftcolumn>
+      <rightcolumn>
+        <title>Ci-dessous sont les content où le contenu est affiché</title>
+      </rightcolumn>
+      <searchbox>
+        <title>Recherche</title>
+      </searchbox>
+    </SelectContent>
+  </UISinglePortletContentViewer>  
+  
+  <!--  
+  ##########################################################################################
+  # exo.ecm.wcm.webui.wcm.groovy.wcm.webui                                                 # 
+  ##########################################################################################
+  -->
+  <PopupWebContentSelector>
+  	<title>
+  		<UIWebContentTabSelector>Sélectionner un contenu web</UIWebContentTabSelector>
+  	</title>
+  </PopupWebContentSelector>
+  <PopupDMSSelector>
+  	<title>
+  		<UIDocumentTabSelector>Sélectionner un contenu documentaire</UIDocumentTabSelector>
+  	</title>
+  </PopupDMSSelector>
+  <UITabPane>
+  	<title>
+  		<UIWebContentPathSelector>Sélectionner</UIWebContentPathSelector>
+  		<UIWebContentSearchForm>Recherche</UIWebContentSearchForm>
+  		<UISelectPathPanel>Résultat</UISelectPathPanel>
+  		<UIDocumentPathSelector>Sélectionner</UIDocumentPathSelector>
+  		<UIDocumentSearchForm>Recherche</UIDocumentSearchForm>
+  		<UIWCMSearchResult>Résultat</UIWCMSearchResult>
+  		<UIResultView>Formulaire de visualisation</UIResultView>
+  	</title>
+  </UITabPane>
+  <UIWebContentSearchForm>
+  	<action>
+  		<SearchWebContent>Recherche</SearchWebContent>
+  	</action>
+  </UIWebContentSearchForm>
+  <UIWebContentSearchForm>
+  	<empty-field>La valeur de ce champ est nulle ou vide! </empty-field>
+  </UIWebContentSearchForm>
+  <UIDocumentSearchForm>
+  	<action>
+  		<SearchWebContent>Recherche</SearchWebContent>
+  	</action>
+  </UIDocumentSearchForm>
+  <UIDocumentTabSelector>
+  	<header>
+  		<NameFile>Nom</NameFile>
+  		<NodeExpect>Expect</NodeExpect>
+  		<Score>Score</Score>
+  		<CreateDate>Date de création</CreateDate>
+  		<action>Action</action>
+  		<Select>Sélectionner</Select>
+  		<View>Voir</View>
+  	</header>
+  </UIDocumentTabSelector>
+  <UIWebContentTabSelector>
+  	<header>
+  		<NameFile>Nom</NameFile>
+  		<NodeExpect>Expect</NodeExpect>
+  		<Score>Score</Score>
+  		<CreateDate>Date de création</CreateDate>
+  		<action>Action</action>
+  		<Select>Sélectionner</Select>
+  		<View>Voir</View>
+  	</header>
+  </UIWebContentTabSelector>
+  <UIResultView>
+  	<action>
+  		<Select>Sélectionner</Select>
+  	</action>
+  </UIResultView>
+  <UIWebContentSearchForm>
+  	<title>
+  		<Location>Site nom</Location>
+  		<SearchByName>Recherche par nom</SearchByName>
+  		<Fulltext>Mots à rechercher </Fulltext>
+  		<Property>Propriété</Property>
+  		<Contain>Contain</Contain>
+  		<FromDate>De</FromDate>
+  		<ToDate>à</ToDate>
+  		<DocumentType>Type de document</DocumentType>
+  	</title>
+  </UIWebContentSearchForm>
 </bundle>
