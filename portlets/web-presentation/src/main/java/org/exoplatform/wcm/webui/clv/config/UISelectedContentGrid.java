@@ -33,7 +33,7 @@ import org.exoplatform.webui.event.EventListener;
  */
 
 @ComponentConfig(
-  template = "classpath:groovy/ecm/webui/UIGridWithButton.gtmpl", 
+  template = "app:/groovy/ContentListViewer/config/UISelectedContentGrid.gtmpl", 
   events = {
     @EventConfig(listeners = UISelectedContentGrid.DeleteActionListener.class, confirm = "UISelectedContentGrid.msg.confirm-delete"),
     @EventConfig(listeners = UISelectedContentGrid.SaveCategoriesActionListener.class),

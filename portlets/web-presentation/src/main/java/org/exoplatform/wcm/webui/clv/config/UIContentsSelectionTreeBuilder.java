@@ -73,9 +73,7 @@ public class UIContentsSelectionTreeBuilder extends UINodeTreeBuilder {
     String folderExplorerTitle = context.getApplicationResourceBundle()
                                         .getString("UIFolderExplorer.title");
     writer.write("<div class=\"FolderExplorer\">");
-    writer.write("<div class=\"TitleBox\">");
-    writer.write("<p>" + folderExplorerTitle + "</p>");
-    writer.write("</div>");
+    writer.write("<div class=\"TitleBox\">" + folderExplorerTitle + "</div>");    
     writer.write("<div class=\"FolderExplorerTree\">");
     writer.write("<div class=\"FolderInnerExplorerTree\">");
     buildTree();
