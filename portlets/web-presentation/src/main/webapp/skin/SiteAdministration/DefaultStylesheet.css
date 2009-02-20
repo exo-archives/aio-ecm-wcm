@@ -152,3 +152,55 @@
 	width: 51px;
 	float: left;	
 }
+
+
+.UISiteAdministrationPortlet .UISiteAdminToolBar .BoxOnOff {
+	background: url('DefaultSkin/icons/BGOnOff.gif') left top repeat-x;
+	height: 20px;
+	padding: 6px 8px;
+	float: right;
+}
+
+/****** Select On *******/
+.UISiteAdministrationPortlet .UISiteAdminToolBar .SelectOn .LeftSelect {
+	background: url('DefaultSkin/icons/onoff.gif') no-repeat left top;
+	padding-left: 27px;
+	width: 33px;
+}
+
+.UISiteAdministrationPortlet .UISiteAdminToolBar .SelectOn .RightSelect {
+	background: url('DefaultSkin/icons/onoff.gif') no-repeat right top;
+	padding-right: 3px;
+}
+
+.UISiteAdministrationPortlet .UISiteAdminToolBar .SelectOn .CenterSelect {
+	background: url('DefaultSkin/icons/onoff.gif') repeat-x left -17px;
+	text-align: center;
+	line-height: 17px;
+	font-size: 10px;
+	font-weight: bold;
+	color: #767676;
+	cursor: pointer;
+}
+
+/****** Select Off *******/
+.UISiteAdministrationPortlet .UISiteAdminToolBar .SelectOff .LeftSelect {
+	background: url('DefaultSkin/icons/onoff.gif') no-repeat left -34px;
+	padding-left: 3px;
+	width: 57px;
+}
+
+.UISiteAdministrationPortlet .UISiteAdminToolBar .SelectOff .RightSelect {
+	background: url('DefaultSkin/icons/onoff.gif') no-repeat right -34px;
+	padding-right: 27px;
+}
+
+.UISiteAdministrationPortlet .UISiteAdminToolBar .SelectOff .CenterSelect {
+	background: url('DefaultSkin/icons/onoff.gif') repeat-x left -51px;
+	line-height: 17px;
+	font-size: 10px;
+	font-weight: bold;
+	color: #fff;
+	cursor: pointer;
+	text-align: center;
+}
