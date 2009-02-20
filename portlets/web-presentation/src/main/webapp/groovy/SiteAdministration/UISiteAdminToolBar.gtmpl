@@ -283,19 +283,24 @@
 	String editLable = _ctx.appRes("UISiteAdminToolbar.action.OnOffEditting");
 		 					 			
 	boolean showable  = uicomponent.isShowWorkspaceArea();	 			
-	%>
-		<div class="OnOffAction">
-			<div>$editLable &nbsp;:&nbsp;&nbsp;</div>
-			<% if (Utils.turnOnQuickEditable(rcontext, true)) { %>
-			<div style="float: left; color: green;">$turnOnQuickEditLable</div>
-			<div>&nbsp;|&nbsp;</div>
-			<a  href="$turnOffQuickEditLink"><u>$turnOffQuickEditLable</u></a>
-			<% } else { %>
-			<a href="$turnOnQuickEditLink"><u>$turnOnQuickEditLable</u></a>
-			<div>&nbsp;|&nbsp;</div>
-			<div style="float: left; color: red;">$turnOffQuickEditLable</div>
-			<% } %>
-		</div>	
+	%>		
+		<% if (Utils.turnOnQuickEditable(rcontext, true)) { %> 
+		<div class="BoxOnOff SelectOn">
+    	<div class="LeftSelect">
+        	<div class="RightSelect">
+            	<div class="CenterSelect" onclick="$turnOffQuickEditLink">Off</div>
+            </div>
+        </div>
+    </div>		
+    <% } else { %>
+		<div class="BoxOnOff SelectOff">
+    	<div class="LeftSelect">
+        	<div class="RightSelect">
+            	<div class="CenterSelect" onclick="$turnOnQuickEditLink">On</div>
+            </div>
+        </div>
+    </div>		    
+    <% } %>
 		<div class="SeparationIcon TopToolbarMenuItem"><span></span></div>
 		<a class="HozIcon ViewMoreIcon" onmouseover="viewMoreActions(this)" onmouseout="hideMoreActions(this)">$viewMoreActionLabel</a>	
 		<div class="MoreActionsMenu" id="MoreActionsMenu">		

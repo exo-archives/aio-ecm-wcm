@@ -1,18 +1,12 @@
-<%
-/**
- * Created by The eXo Platform SARL
- * Author : Dang Van Minh
- *          minhdv@exoplatform.com
- * Oct 17, 2006
- * 9:32:56 AM 
- */
-%>
 <div id="$uicomponent.id" class="$uicomponent.id">
-  <table class="UIGrid">	  
+  <table class="UIContentGrid">	  
 	  <thead>
+	  	<tr>
+	  		<th colspan="2"><b><%=_ctx.appRes("UIContentSelectionPanel.label.header")%></b></th>
+			</tr>
 	    <tr>
-	      <th><%=_ctx.appRes("UITreeList.header.name")%></th>
-		    <th><%=_ctx.appRes("UITreeList.header.action")%></th>
+	      <th class="OddRow" width="85%"><%=_ctx.appRes("UIContentSelectionPanel.label.name")%></th>
+		    <th class="OddRow" width="15%"><%=_ctx.appRes("UIContentSelectionPanel.label.add")%></th>
 	    </tr>
 	  </thead>
 	  <tbody>

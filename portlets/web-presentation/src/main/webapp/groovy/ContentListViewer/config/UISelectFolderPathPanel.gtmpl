@@ -11,16 +11,14 @@
 	import org.exoplatform.ecm.webui.utils.Utils;
 %>
 <div class="UITreeList">
-  <div class="TitleBox">
-  <p><%= _ctx.appRes("UIFolderTreeList.title") %></p>
-  </div>		
-  <table class="UIGrid">
-	  <col></col>
-	  <col style="width:60px;"></col>
+  <table class="UIContentGrid">
 	  <thead>
+	  	<tr>
+	  		<th colspan="2"><b><%= _ctx.appRes("UIFolderTreeList.title") %></b></th>
+			</tr>	  
 	    <tr>
-	      <th><%=_ctx.appRes("UITreeList.header.name")%></th>
-		    <th><%=_ctx.appRes("UITreeList.header.action")%></th>
+	      <th class="OddRow"><%=_ctx.appRes("UITreeList.header.name")%></th>
+		    <th class="OddRow"><%=_ctx.appRes("UITreeList.header.action")%></th>
 	    </tr>
 	  </thead>
 	  <tbody>
