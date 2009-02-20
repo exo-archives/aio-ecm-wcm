@@ -242,7 +242,7 @@
     <title>Sélectionner un contenu web et le publier sur cette page</title>
     <label>
       <path />
-      <publication>publication</publication>
+      <publication>Publier par</publication>
       <PublicationPath />
     </label>
     <action>
@@ -322,7 +322,7 @@
   <UIDMSSelectorForm>
     <label>
       <path />
-      <publication>publication</publication>
+      <publication>Publier par</publication>
       <PublicationPath />
     </label>
     <action>

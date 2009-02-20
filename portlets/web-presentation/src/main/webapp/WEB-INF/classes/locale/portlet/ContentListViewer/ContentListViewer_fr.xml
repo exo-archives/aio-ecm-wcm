@@ -11,8 +11,8 @@
       <Cancel>Annuler</Cancel>
     </action>
     <label>
-    	<ContentSelectionBlock></ContentSelectionBlock>
-    	<DisplaySettingBlock></DisplaySettingBlock>    	        
+    	<ContentSelectionBlock>Contenu</ContentSelectionBlock>
+    	<DisplaySettingBlock>Présentation</DisplaySettingBlock>    	        
       <FolderPathInputSet>UIViewerManagementForm</FolderPathInputSet>
       <FolderPathInput>Chemin du dossier</FolderPathInput>
       <FormViewTemplate>Gabarit de visualisation</FormViewTemplate>
