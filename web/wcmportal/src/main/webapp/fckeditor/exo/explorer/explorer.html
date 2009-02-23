@@ -619,7 +619,7 @@
 			newTag.setAttribute("id", random);
 			newTag.innerHTML = "<span></span>";
 			var newScript = FCK.CreateElement("script");
-			newScript.innerHTML = "/*WCM gadgets random\"" + random + "\" metadata\"" + element.getAttribute('metadata') + "\" thumbnail\"" + element.src + "\" userprefs\"{}\" url\"" + element.lang + "\"*/eXo.core.Browser.addOnLoadCallback('" + random + "', function() {eXo.gadget.UIGadget.createGadget('" + element.lang + "','" + random + "', " + element.getAttribute('metadata').replace(/\${quote}/g, '"') + ", {}, 'home', 1, 0, 0)});";
+			newScript.innerHTML = "/*WCM gadgets random\"" + random + "\" metadata\"" + element.getAttribute('metadata') + "\" userprefs\"{}\" thumbnail\"" + element.src + "\" url\"" + element.lang + "\"*/eXo.core.Browser.addOnLoadCallback('" + random + "', function() {eXo.gadget.UIGadget.createGadget('" + element.lang + "','" + random + "', " + element.getAttribute('metadata').replace(/\${quote}/g, '"') + ", {}, 'home', 1, 0, 0)});";
 			if ( !newTag ) {
 				FCK.InsertElement(newTag);
 			}
