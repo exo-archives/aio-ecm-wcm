@@ -134,6 +134,10 @@
   		<UIDocumentSearchForm>Document Search Form</UIDocumentSearchForm>
   		<UIWCMSearchResult>Search Results</UIWCMSearchResult>
   		<UIResultView>Result Viewer</UIResultView>
+  		<WebContentNodeTypePopup>NodeType Selector</WebContentNodeTypePopup>
+  		<WebContentMetadataPopup>Metadata Selector</WebContentMetadataPopup>
+  		<DocumentMetadataPopup>Metadata Selector</DocumentMetadataPopup>
+  		<DocumentNodeTypePopup>NodeType Selector</DocumentNodeTypePopup>
   	</title>
   </UITabPane>
   <UIWebContentSearchForm>
@@ -151,7 +155,7 @@
   </UIDocumentSearchForm>
   <UIDocumentTabSelector>
   	<header>
-  		<NameFile>Name</NameFile>
+  		<Title>Name</Title>
   		<NodeExpect>Expect</NodeExpect>
   		<Score>Score</Score>
   		<CreateDate>Created Date</CreateDate>
@@ -159,10 +163,11 @@
   		<Select>Select</Select>
   		<View>View</View>
   	</header>
+  	
   </UIDocumentTabSelector>
   <UIWebContentTabSelector>
   	<header>
-  		<NameFile>Name</NameFile>
+  		<Title>Name</Title>
   		<NodeExpect>Expect</NodeExpect>
   		<Score>Score</Score>
   		<CreateDate>Created Date</CreateDate>
@@ -170,6 +175,12 @@
   		<Select>Select</Select>
   		<View>View</View>
   	</header>
+  	<action>
+  		<title>
+  			<Select>Select</Select>
+  			<View>View</View>
+  		</title>
+  	</action>
   </UIWebContentTabSelector>
   <UIResultView>
   	<action>
@@ -188,4 +199,36 @@
   		<DocumentType>Document Type</DocumentType>
   	</title>
   </UIWebContentSearchForm>
+  <WebContentNodeTypePopup>
+  	<title>
+  		<UIWCMNodeTypeSelectForm>NodeType Select Form</UIWCMNodeTypeSelectForm>
+  	</title>
+  </WebContentNodeTypePopup>
+  <UIWCMNodeTypeSelectForm>
+  	<action>
+  		<Save>Save</Save>
+  		<Cancel>Cancel</Cancel>
+  	</action>
+  </UIWCMNodeTypeSelectForm>
+  <WebContentMetadataPopup>
+  	<title>
+  		<UIWCMSelectPropertyForm>Property Select Form</UIWCMSelectPropertyForm>
+  	</title>
+  </WebContentMetadataPopup>
+  <UIWCMSelectPropertyForm>
+  	<action>
+  		<Add>Add</Add>
+  		<Cancel>Cancel</Cancel>
+  	</action>
+  </UIWCMSelectPropertyForm>
+  <DocumentMetadataPopup>
+  	<title>
+  		<UIWCMSelectPropertyForm>Property Select Form</UIWCMSelectPropertyForm>
+  	</title>
+  </DocumentMetadataPopup>
+  <DocumentNodeTypePopup>
+  	<title>
+  		<UIWCMNodeTypeSelectForm>NodeType Select Form</UIWCMNodeTypeSelectForm>
+  	</title>
+  </DocumentNodeTypePopup>
 </bundle>

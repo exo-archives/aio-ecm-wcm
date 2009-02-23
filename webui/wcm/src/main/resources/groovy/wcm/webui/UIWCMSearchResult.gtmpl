@@ -4,13 +4,16 @@
   import java.text.DateFormat;
   import java.text.SimpleDateFormat;
   import org.exoplatform.wcm.webui.selector.webcontent.UIWCMSearchResult;
+  import javax.jcr.Node;
+  import javax.jcr.Session;
+  import org.exoplatform.ecm.webui.utils.Utils;
 
   String[] beanFields =  uicomponent.getBeanFields();  
   String[] beanActions =  uicomponent.getBeanActions();
   UIComponent uiParent = uicomponent.getParent() ;
   String name = uicomponent.getLabel();
   UIForm uiForm = uicomponent.getAncestorOfType(UIForm.class);
-  
+  Session session = uicomponent.getSession();
   DateFormat dateFormat = uicomponent.getDateFormat();
 %>
 <div id="$uicomponent.id">
@@ -57,12 +60,15 @@
             String path = bean.getNodePath();
             float score = bean.getScore();
             String date = dateFormat.format(bean.getCreateDate());
+            Node node = (Node) session.getItem(path);
     %>        
           <td>
-            <div class="Text">$titleNode</div>
-            <div class="Text">$expect</div>
-            <div class="Text">$path</div>
-            <div class="Text">$date</div>
+            <div class="default16x16Icon ItemIcon <%=Utils.getNodeTypeIcon(node, "16x16Icon")%>" style="width: auto; height: auto; background-position: left top; padding-left: 20px">
+              <div class="Text">$titleNode</div>
+              <div class="Text">$expect</div>
+              <div class="Text">$path</div>
+              <div class="Text">$date</div>
+            </div>
           </td>
           
           <td>
