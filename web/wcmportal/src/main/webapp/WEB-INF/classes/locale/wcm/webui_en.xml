@@ -155,7 +155,7 @@
   </UIDocumentSearchForm>
   <UIDocumentTabSelector>
   	<header>
-  		<Title>Name</Title>
+  		<Title>Title</Title>
   		<NodeExpect>Expect</NodeExpect>
   		<Score>Score</Score>
   		<CreateDate>Created Date</CreateDate>
@@ -167,7 +167,7 @@
   </UIDocumentTabSelector>
   <UIWebContentTabSelector>
   	<header>
-  		<Title>Name</Title>
+  		<Title>Title</Title>
   		<NodeExpect>Expect</NodeExpect>
   		<Score>Score</Score>
   		<CreateDate>Created Date</CreateDate>

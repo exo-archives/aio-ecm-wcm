@@ -104,12 +104,17 @@
   		<UIDocumentSearchForm>Bảng tìm kiếm tài liệu</UIDocumentSearchForm>
   		<UIWCMSearchResult>Bảng kết quả</UIWCMSearchResult>
   		<UIResultView>Hiển thị nội dung kết quả tìm kiếm</UIResultView>
+  		<WebContentNodeTypePopup>Bộ chọn kiểu tài liệu</WebContentNodeTypePopup>
+  		<WebContentMetadataPopup>Bộ chọn thuộc tính</WebContentMetadataPopup>
+  		<DocumentMetadataPopup>Bộ chọn thuộc tính</DocumentMetadataPopup>
+  		<DocumentNodeTypePopup>Bộ chọn kiểu tài liệu</DocumentNodeTypePopup>
   	</title>
   </UITabPane>
   <UIWebContentSearchForm>
   	<action>
   		<SearchWebContent>Tìm kiếm</SearchWebContent>
   	</action>
+  	<empty-field>Bạn không nhập giá trị để tìm kiếm! Xin vui lòng nhập giá trị</empty-field>
   </UIWebContentSearchForm>
   <UIDocumentSearchForm>
   	<action>
@@ -118,7 +123,7 @@
   </UIDocumentSearchForm>
   <UIDocumentTabSelector>
   	<header>
-  		<NameFile>Tên</NameFile>
+  		<NameFile>Title</NameFile>
   		<NodeExpect>Mong chờ</NodeExpect>
   		<Score>Điểm</Score>
   		<CreateDate>Ngày Tạo</CreateDate>
@@ -137,6 +142,12 @@
   		<Select>Chọn</Select>
   		<View>Hiển thị</View>
   	</header>
+  	<action>
+  		<title>
+  			<Select>Chọn</Select>
+  			<View>Hiển thị</View>
+  		</title>
+  	</action>
   </UIWebContentTabSelector>
   <UIResultView>
   	<action>
@@ -155,5 +166,36 @@
   		<DocumentType>Kiểu tài liệu</DocumentType>
   	</title>
   </UIWebContentSearchForm>
+  <WebContentNodeTypePopup>
+  	<title>
+  		<UIWCMNodeTypeSelectForm>Form chọn kiểu tài liệu</UIWCMNodeTypeSelectForm>
+  	</title>
+  </WebContentNodeTypePopup>
+  <UIWCMNodeTypeSelectForm>
+  	<action>
+  		<Save>Lưu trữ</Save>
+  		<Cancel>Huỷ bỏ</Cancel>
+  	</action>
+  </UIWCMNodeTypeSelectForm>
+  <WebContentMetadataPopup>
+  	<title>
+  		<UIWCMSelectPropertyForm>Form chọn kiểu thuộc tính</UIWCMSelectPropertyForm>
+  	</title>
+  </WebContentMetadataPopup>
+  <UIWCMSelectPropertyForm>
+  	<action>
+  		<Add>Thêm</Add>
+  		<Cancel>Huỷ bỏ</Cancel>
+  	</action>
+  </UIWCMSelectPropertyForm>
+  <DocumentMetadataPopup>
+  	<title>
+  		<UIWCMSelectPropertyForm>Form chọn kiểu thuộc tính</UIWCMSelectPropertyForm>
+  	</title>
+  </DocumentMetadataPopup>
+  <DocumentNodeTypePopup>
+  	<title>
+  		<UIWCMNodeTypeSelectForm>Form chọn kiểu dữ liệu</UIWCMNodeTypeSelectForm>
+  	</title>
+  </DocumentNodeTypePopup>
 </bundle>
-
