@@ -15,8 +15,8 @@
       <BrowsePage>Quản lý trang</BrowsePage>
       <Logout>Đăng xuất</Logout>
 	    <OnOffEditting>Chỉnh sửa</OnOffEditting>
-      <TurnOnQuickEdit>Bật</TurnOnQuickEdit>
-      <TurnOffQuickEdit>Tắt</TurnOffQuickEdit>
+      <TurnOnQuickEdit>O</TurnOnQuickEdit>
+      <TurnOffQuickEdit>l</TurnOffQuickEdit>
       <AddContent>Tạo mới nội dung</AddContent>      
       <EditPageAndNavigation>Chỉnh sửa navigation</EditPageAndNavigation>   
     </action>

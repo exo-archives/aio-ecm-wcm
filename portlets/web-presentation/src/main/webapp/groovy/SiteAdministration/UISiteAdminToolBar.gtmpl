@@ -278,9 +278,9 @@
 	String browsePageActionLabel = _ctx.appRes("UISiteAdminToolbar.action.BrowsePage");
 	String logoutActionLabel = _ctx.appRes("UISiteAdminToolbar.action.Logout");
 	String editPageAndNaviActionLabel = _ctx.appRes("UISiteAdminToolbar.action.EditPageAndNavigation");
-	String turnOnQuickEditLable = _ctx.appRes("UISiteAdminToolbar.action.TurnOnQuickEdit");
-	String turnOffQuickEditLable = _ctx.appRes("UISiteAdminToolbar.action.TurnOffQuickEdit");
-	String editLable = _ctx.appRes("UISiteAdminToolbar.action.OnOffEditting");
+	String turnOnQuickEditLabel = _ctx.appRes("UISiteAdminToolbar.action.TurnOnQuickEdit");
+	String turnOffQuickEditLabel = _ctx.appRes("UISiteAdminToolbar.action.TurnOffQuickEdit");
+	String editLabel = _ctx.appRes("UISiteAdminToolbar.action.OnOffEditting");
 		 					 			
 	boolean showable  = uicomponent.isShowWorkspaceArea();	 			
 	%>		
@@ -288,7 +288,7 @@
 		<div class="BoxOnOff SelectOn">
     	<div class="LeftSelect">
         	<div class="RightSelect">
-            	<div class="CenterSelect" onclick="$turnOffQuickEditLink">Off</div>
+            	<div class="CenterSelect" onclick="$turnOffQuickEditLink">$turnOffQuickEditLabel</div>
             </div>
         </div>
     </div>		
@@ -296,7 +296,7 @@
 		<div class="BoxOnOff SelectOff">
     	<div class="LeftSelect">
         	<div class="RightSelect">
-            	<div class="CenterSelect" onclick="$turnOnQuickEditLink">On</div>
+            	<div class="CenterSelect" onclick="$turnOnQuickEditLink">$turnOffQuickEditLabel</div>
             </div>
         </div>
     </div>		    

@@ -14,8 +14,8 @@
       <AccountSettings>Account Settings</AccountSettings>
       <ViewMore>More Actions</ViewMore>
       <Logout>Logout</Logout>
-      <TurnOnQuickEdit>ON</TurnOnQuickEdit>
-      <TurnOffQuickEdit>OFF</TurnOffQuickEdit>
+      <TurnOnQuickEdit>O</TurnOnQuickEdit>
+      <TurnOffQuickEdit>l</TurnOffQuickEdit>
       <OnOffEditting>Edit</OnOffEditting>
       <AddContent>Add Content</AddContent>            
       <EditPageAndNavigation>Edit Navigation</EditPageAndNavigation>
