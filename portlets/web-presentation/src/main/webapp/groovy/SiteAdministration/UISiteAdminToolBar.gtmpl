@@ -285,7 +285,7 @@
 	boolean showable  = uicomponent.isShowWorkspaceArea();	 			
 	%>		
 		<% if (Utils.turnOnQuickEditable(rcontext, true)) { %> 
-		<div class="BoxOnOff SelectOn">
+		<div class="BoxOnOff SelectOff">
     	<div class="LeftSelect">
         	<div class="RightSelect">
             	<div class="CenterSelect" onclick="$turnOffQuickEditLink">$turnOffQuickEditLabel</div>
@@ -293,10 +293,10 @@
         </div>
     </div>		
     <% } else { %>
-		<div class="BoxOnOff SelectOff">
+		<div class="BoxOnOff SelectOn">
     	<div class="LeftSelect">
         	<div class="RightSelect">
-            	<div class="CenterSelect" onclick="$turnOnQuickEditLink">$turnOffQuickEditLabel</div>
+            	<div class="CenterSelect" onclick="$turnOnQuickEditLink">$turnOnQuickEditLabel</div>
             </div>
         </div>
     </div>		    
