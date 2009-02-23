@@ -107,8 +107,8 @@
       </searchbox>
     </SelectContent>
   </UISinglePortletContentViewer>  
-  
-  <!--  
+       
+   <!--  
   ##########################################################################################
   # exo.ecm.wcm.webui.wcm.groovy.wcm.webui                                                 # 
   ##########################################################################################
@@ -127,11 +127,15 @@
   	<title>
   		<UIWebContentPathSelector>Sélectionner</UIWebContentPathSelector>
   		<UIWebContentSearchForm>Recherche</UIWebContentSearchForm>
-  		<UISelectPathPanel>Résultat</UISelectPathPanel>
+  		<UISelectPathPanel>Résultats</UISelectPathPanel>
   		<UIDocumentPathSelector>Sélectionner</UIDocumentPathSelector>
   		<UIDocumentSearchForm>Recherche</UIDocumentSearchForm>
-  		<UIWCMSearchResult>Résultat</UIWCMSearchResult>
+  		<UIWCMSearchResult>Résultats</UIWCMSearchResult>
   		<UIResultView>Formulaire de visualisation</UIResultView>
+  		<WebContentNodeTypePopup>Veuillez sélectionner un type de noeud</WebContentNodeTypePopup>
+  		<WebContentMetadataPopup>Sélectionner un medata </WebContentMetadataPopup>
+  		<DocumentMetadataPopup>Veuillez sélectionner un type de noeud</DocumentMetadataPopup>
+  		<DocumentNodeTypePopup>Type de Document</DocumentNodeTypePopup>
   	</title>
   </UITabPane>
   <UIWebContentSearchForm>
@@ -140,45 +144,51 @@
   	</action>
   </UIWebContentSearchForm>
   <UIWebContentSearchForm>
-  	<empty-field>La valeur de ce champ est nulle ou vide! </empty-field>
+  	<empty-field>La valeur de ce champ est nulle ou vide!</empty-field>
   </UIWebContentSearchForm>
   <UIDocumentSearchForm>
   	<action>
   		<SearchWebContent>Recherche</SearchWebContent>
   	</action>
-  </UIDocumentSearchForm>
+  </UIDocumentSearchForm>  
   <UIDocumentTabSelector>
   	<header>
-  		<NameFile>Nom</NameFile>
-  		<NodeExpect>Expect</NodeExpect>
+  		<Title>Nom</Title>
+  		<NodeExpect>Excerpt</NodeExpect>
   		<Score>Score</Score>
   		<CreateDate>Date de création</CreateDate>
   		<action>Action</action>
   		<Select>Sélectionner</Select>
   		<View>Voir</View>
-  	</header>
+  	</header>  	
   </UIDocumentTabSelector>
   <UIWebContentTabSelector>
   	<header>
-  		<NameFile>Nom</NameFile>
-  		<NodeExpect>Expect</NodeExpect>
+  		<Title>Nom</Title>
+  		<NodeExpect>Excerpt</NodeExpect>
   		<Score>Score</Score>
   		<CreateDate>Date de création</CreateDate>
   		<action>Action</action>
   		<Select>Sélectionner</Select>
   		<View>Voir</View>
   	</header>
+  	<action>
+  		<title>
+  			<Select>Sélectionner</Select>
+  			<View>Voir</View>
+  		</title>
+  	</action>
   </UIWebContentTabSelector>
   <UIResultView>
   	<action>
   		<Select>Sélectionner</Select>
   	</action>
-  </UIResultView>
+  </UIResultView>  
   <UIWebContentSearchForm>
   	<title>
   		<Location>Site nom</Location>
   		<SearchByName>Recherche par nom</SearchByName>
-  		<Fulltext>Mots à rechercher </Fulltext>
+  		<Fulltext>Mots à rechercher</Fulltext>
   		<Property>Propriété</Property>
   		<Contain>Contain</Contain>
   		<FromDate>De</FromDate>
@@ -186,126 +196,36 @@
   		<DocumentType>Type de document</DocumentType>
   	</title>
   </UIWebContentSearchForm>
-  
-   <!--  
-  ##########################################################################################
-  # exo.ecm.wcm.webui.wcm.groovy.wcm.webui                                                 # 
-  ##########################################################################################
-  -->
-  <PopupWebContentSelector>
-  	<title>
-  		<UIWebContentTabSelector></UIWebContentTabSelector>
-  	</title>
-  </PopupWebContentSelector>
-  <PopupDMSSelector>
-  	<title>
-  		<UIDocumentTabSelector></UIDocumentTabSelector>
-  	</title>
-  </PopupDMSSelector>
-  <UITabPane>
-  	<title>
-  		<UIWebContentPathSelector></UIWebContentPathSelector>
-  		<UIWebContentSearchForm></UIWebContentSearchForm>
-  		<UISelectPathPanel></UISelectPathPanel>
-  		<UIDocumentPathSelector></UIDocumentPathSelector>
-  		<UIDocumentSearchForm></UIDocumentSearchForm>
-  		<UIWCMSearchResult></UIWCMSearchResult>
-  		<UIResultView></UIResultView>
-  		<WebContentNodeTypePopup></WebContentNodeTypePopup>
-  		<WebContentMetadataPopup></WebContentMetadataPopup>
-  		<DocumentMetadataPopup></DocumentMetadataPopup>
-  		<DocumentNodeTypePopup></DocumentNodeTypePopup>
-  	</title>
-  </UITabPane>
-  <UIWebContentSearchForm>
-  	<action>
-  		<SearchWebContent></SearchWebContent>
-  	</action>
-  </UIWebContentSearchForm>
-  <UIWebContentSearchForm>
-  	<empty-field></empty-field>
-  </UIWebContentSearchForm>
-  <UIDocumentSearchForm>
-  	<action>
-  		<SearchWebContent></SearchWebContent>
-  	</action>
-  </UIDocumentSearchForm>
-  <UIDocumentTabSelector>
-  	<header>
-  		<Title></Title>
-  		<NodeExpect></NodeExpect>
-  		<Score></Score>
-  		<CreateDate></CreateDate>
-  		<action></action>
-  		<Select></Select>
-  		<View></View>
-  	</header>
-  	
-  </UIDocumentTabSelector>
-  <UIWebContentTabSelector>
-  	<header>
-  		<Title></Title>
-  		<NodeExpect></NodeExpect>
-  		<Score></Score>
-  		<CreateDate></CreateDate>
-  		<action></action>
-  		<Select></Select>
-  		<View></View>
-  	</header>
-  	<action>
-  		<title>
-  			<Select></Select>
-  			<View></View>
-  		</title>
-  	</action>
-  </UIWebContentTabSelector>
-  <UIResultView>
-  	<action>
-  		<Select></Select>
-  	</action>
-  </UIResultView>
-  <UIWebContentSearchForm>
-  	<title>
-  		<Location></Location>
-  		<SearchByName></SearchByName>
-  		<Fulltext></Fulltext>
-  		<Property></Property>
-  		<Contain></Contain>
-  		<FromDate></FromDate>
-  		<ToDate></ToDate>
-  		<DocumentType></DocumentType>
-  	</title>
-  </UIWebContentSearchForm>
   <WebContentNodeTypePopup>
   	<title>
-  		<UIWCMNodeTypeSelectForm></UIWCMNodeTypeSelectForm>
+  		<UIWCMNodeTypeSelectForm>Veuillez sélectionner un type de noeud</UIWCMNodeTypeSelectForm>
   	</title>
   </WebContentNodeTypePopup>
   <UIWCMNodeTypeSelectForm>
   	<action>
-  		<Save></Save>
-  		<Cancel></Cancel>
+  		<Save>#{word.save}</Save>
+  		<Cancel>#{word.cancel}</Cancel>
   	</action>
   </UIWCMNodeTypeSelectForm>
   <WebContentMetadataPopup>
   	<title>
-  		<UIWCMSelectPropertyForm></UIWCMSelectPropertyForm>
+  		<UIWCMSelectPropertyForm>Veuillez sélectionner propriété</UIWCMSelectPropertyForm>
   	</title>
   </WebContentMetadataPopup>
   <UIWCMSelectPropertyForm>
   	<action>
-  		<Add></Add>
-  		<Cancel></Cancel>
+  		<Add>#{word.add}</Add>
+  		<Cancel>#{word.cancel}</Cancel>
   	</action>
   </UIWCMSelectPropertyForm>
   <DocumentMetadataPopup>
   	<title>
-  		<UIWCMSelectPropertyForm></UIWCMSelectPropertyForm>
+  		<UIWCMSelectPropertyForm>Veuillez sélectionner propriété</UIWCMSelectPropertyForm>
   	</title>
   </DocumentMetadataPopup>
   <DocumentNodeTypePopup>
   	<title>
-  		<UIWCMNodeTypeSelectForm></UIWCMNodeTypeSelectForm>
+  		<UIWCMNodeTypeSelectForm>Veuillez sélectionner un type de noeud</UIWCMNodeTypeSelectForm>
   	</title>
   </DocumentNodeTypePopup>
 </bundle>
