@@ -177,7 +177,7 @@ function findPreviousElementByClass(element, clazz) {
 
 function viewMoreActions(viewMoreObj) {		
 	var moreActionsMenu = eXo.core.DOMUtil.findNextElementByTagName(viewMoreObj, "div");
-	var onOffAction = findPreviousElementByClass(viewMoreObj, "OnOffAction");
+	var onOffAction = findPreviousElementByClass(viewMoreObj, "BoxOnOff");
 	moreActionsMenu.style.right = onOffAction.offsetWidth + "px";
 	var objToolbarPortlet = eXo.core.DOMUtil.findAncestorByClass(moreActionsMenu, "UISiteAdministrationPortlet");
 	if (document.all) {
