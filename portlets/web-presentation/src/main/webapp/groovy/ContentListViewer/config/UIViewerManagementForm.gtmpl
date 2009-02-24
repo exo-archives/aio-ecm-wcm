@@ -7,7 +7,8 @@
 	def portletId = pContext.getWindowId();
 	def quickEditingBlockId = portletId + "-QuickEditingBlock";
 	def rcontext = _ctx.getRequestContext() ;
- 	rcontext.getJavascriptManager().importJavascript('eXo.webpresentation.Utils','/web-presentation/javascript');		
+ 	rcontext.getJavascriptManager().importJavascript('eXo.webpresentation.Utils','/web-presentation/javascript');		 	
+ 	rcontext.getJavascriptManager().addOnLoadJavascript("showHideOrderBy");
  	String contentSelectionBlockTitle = _ctx.appRes(uicomponent.id + ".label.ContentSelectionBlock");
  	String displaySettingBlockTitle = _ctx.appRes(uicomponent.id + ".label.DisplaySettingBlock");
 %>
@@ -31,12 +32,15 @@
 						<td class="FieldComponent" colspan="2"><% uiform.renderField(uiform.getChildById(UIViewerManagementForm.FOLDER_PATH_INPUTSET)) %></td>				
 					</tr>
 					<% if (uiform.getChildById(UIViewerManagementForm.ORDER_BY).isRendered()) { %>
-					<tr>
+					<tr class="OrderBlock">
 			      <td class="FieldLabel">
 				      <%=uicomponent.getLabel(uiform.getChildById(UIViewerManagementForm.ORDER_BY).getName()) %>
 			      </td>
-						<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(UIViewerManagementForm.ORDER_BY)) %></td>								
-												<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(UIViewerManagementForm.ORDER_TYPES)) %></td>								
+						<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(UIViewerManagementForm.ORDER_BY)) %></td>														
+					</tr>
+					<tr class="OrderBlock">	
+						<td><span></span></td>
+						<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(UIViewerManagementForm.ORDER_TYPES)) %></td>													
 					</tr>
 
 					<% } else {
