@@ -1,14 +1,17 @@
 package org.exoplatform.wcm.webui.selector.webcontent;
 
 import javax.jcr.Node;
+import javax.portlet.PortletPreferences;
 
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
 import org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.wcm.core.NodeLocation;
+import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 
@@ -90,10 +93,17 @@ public class UIWCResultSearchPresentation extends UIBaseNodePresentation {
   public ResourceResolver getTemplateResourceResolver(WebuiRequestContext context, String template) {
     try{
       if(resourceResolver == null) {
-        RepositoryService repoService = getApplicationComponent(RepositoryService.class);
         String repository = getRepositoryName();
-        ManageableRepository maRepository = repoService.getRepository(repository);
-        String workspace = maRepository.getConfiguration().getDefaultWorkspaceName();
+        PortletRequestContext pContext = 
+          (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+        PortletPreferences prefs = pContext.getRequest().getPreferences();
+        String workspace = prefs.getValue("workspace", null);
+        if(workspace == null) {
+          WCMConfigurationService wcmConfService = 
+            getApplicationComponent(WCMConfigurationService.class);
+          NodeLocation nodeLocation = wcmConfService.getLivePortalsLocation(repository);
+          workspace = nodeLocation.getWorkspace();
+        }
         resourceResolver = new JCRResourceResolver(repository, workspace, "exo:templateFile");
       }
     }catch(Exception ex) {

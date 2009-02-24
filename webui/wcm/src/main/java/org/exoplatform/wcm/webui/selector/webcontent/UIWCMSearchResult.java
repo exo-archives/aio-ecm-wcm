@@ -9,6 +9,7 @@ import java.util.Locale;
 
 import javax.jcr.Node;
 import javax.jcr.Session;
+import javax.portlet.PortletPreferences;
 
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.ecm.webui.selector.UISelectable;
@@ -17,10 +18,14 @@ import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.wcm.core.NodeLocation;
+import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.search.PaginatedQueryResult;
 import org.exoplatform.services.wcm.search.ResultNode;
 import org.exoplatform.wcm.webui.selector.document.UIDocumentPathSelector;
 import org.exoplatform.wcm.webui.selector.document.UIDocumentTabSelector;
+import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIGrid;
@@ -58,7 +63,7 @@ public class UIWCMSearchResult extends UIGrid {
     configure(NODE_PATH, BEAN_FIELDS, Actions);
     getUIPageIterator().setId("UIWCMSearchResultPaginator");
   }
-  
+
   public DateFormat getDateFormat() {
     Locale locale = new Locale(Util.getUIPortal().getLocale());
     DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, locale);
@@ -103,16 +108,25 @@ public class UIWCMSearchResult extends UIGrid {
     Node resultNode = (Node) session.getItem(nodePath);
     return resultNode;
   }
-  
+
   public String getExpect(String expect) {
     expect = expect.replaceAll("<[^>]*/?>", "");
     return expect;
   }
-  
+
   public Session getSession() throws Exception {
     RepositoryService repoService = getApplicationComponent(RepositoryService.class);
     ManageableRepository maRepository = repoService.getCurrentRepository();
-    String workspace = maRepository.getConfiguration().getDefaultWorkspaceName();
+    String repository = maRepository.getConfiguration().getName();
+    PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+    PortletPreferences prefs = pContext.getRequest().getPreferences();
+    String workspace = prefs.getValue("workspace", null);
+    if(workspace == null) {
+      WCMConfigurationService wcmConfService = 
+        getApplicationComponent(WCMConfigurationService.class);
+      NodeLocation nodeLocation = wcmConfService.getLivePortalsLocation(repository);
+      workspace = nodeLocation.getWorkspace();
+    }
     Session session = 
       SessionProviderFactory.createSessionProvider().getSession(workspace, maRepository);
     return session;
