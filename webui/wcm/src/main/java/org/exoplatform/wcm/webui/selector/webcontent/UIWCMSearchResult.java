@@ -99,11 +99,7 @@ public class UIWCMSearchResult extends UIGrid {
   }
 
   private Node getResultNode(String nodePath) throws Exception {
-    RepositoryService repoService = getApplicationComponent(RepositoryService.class);
-    ManageableRepository maRepository = repoService.getCurrentRepository();
-    String workspace = maRepository.getConfiguration().getDefaultWorkspaceName();
-    Session session = 
-      SessionProviderFactory.createSessionProvider().getSession(workspace, maRepository);
+    Session session = getSession();
     Node resultNode = (Node) session.getItem(nodePath);
     return resultNode;
   }
@@ -111,6 +107,15 @@ public class UIWCMSearchResult extends UIGrid {
   public String getExpect(String expect) {
     expect = expect.replaceAll("<[^>]*/?>", "");
     return expect;
+  }
+  
+  public Session getSession() throws Exception {
+    RepositoryService repoService = getApplicationComponent(RepositoryService.class);
+    ManageableRepository maRepository = repoService.getCurrentRepository();
+    String workspace = maRepository.getConfiguration().getDefaultWorkspaceName();
+    Session session = 
+      SessionProviderFactory.createSessionProvider().getSession(workspace, maRepository);
+    return session;
   }
 
   public static class SelectActionListener extends EventListener<UIWCMSearchResult> {

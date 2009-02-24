@@ -187,6 +187,10 @@
   		<Add>Thêm</Add>
   		<Cancel>Huỷ bỏ</Cancel>
   	</action>
+  	<label>
+			<metadataType>Kiểu dữ liệu</metadataType>
+			<property_select>Chọn thuộc tính</property_select>
+		</label>
   </UIWCMSelectPropertyForm>
   <DocumentMetadataPopup>
   	<title>

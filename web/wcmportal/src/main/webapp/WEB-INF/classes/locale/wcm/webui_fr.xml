@@ -217,6 +217,10 @@
   		<Add>#{word.add}</Add>
   		<Cancel>#{word.cancel}</Cancel>
   	</action>
+  	<label>
+			<metadataType></metadataType>
+			<property_select></property_select>
+		</label>
   </UIWCMSelectPropertyForm>
   <DocumentMetadataPopup>
   	<title>

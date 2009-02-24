@@ -48,7 +48,7 @@ import org.exoplatform.webui.form.UIFormSelectBox;
 )
 public class UIWCMSelectPropertyForm extends UIForm{
 
-  final static public String METADATA_TYPE= "metadataType" ;
+  final static public String METADATA_TYPE = "metadataType" ;
   final static public String PROPERTY_SELECT = "property_select" ;
 
   private String fieldName = null ;
@@ -68,11 +68,12 @@ public class UIWCMSelectPropertyForm extends UIForm{
   }
 
   public void init() throws Exception {
-    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    NodeHierarchyCreator nodeHierarchyCreator = getApplicationComponent(NodeHierarchyCreator.class) ;
-    UIFormSelectBox uiSelect = new UIFormSelectBox(METADATA_TYPE, METADATA_TYPE, options) ;
-    uiSelect.setOnChange("ChangeMetadataType") ;
-    addUIFormInput(uiSelect) ;
+    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>();
+    NodeHierarchyCreator nodeHierarchyCreator = getApplicationComponent(NodeHierarchyCreator.class);
+
+    UIFormSelectBox uiSelect = new UIFormSelectBox(METADATA_TYPE, METADATA_TYPE, options);
+    uiSelect.setOnChange("ChangeMetadataType");
+    addUIFormInput(uiSelect);
     SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
     RepositoryService repoService = getApplicationComponent(RepositoryService.class);
     ManageableRepository manRepository = repoService.getCurrentRepository();

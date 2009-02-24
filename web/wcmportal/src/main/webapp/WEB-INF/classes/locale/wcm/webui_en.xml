@@ -220,6 +220,10 @@
   		<Add>Add</Add>
   		<Cancel>Cancel</Cancel>
   	</action>
+  	<label>
+			<metadataType>Metadata type</metadataType>
+			<property_select>Property select</property_select>
+		</label>
   </UIWCMSelectPropertyForm>
   <DocumentMetadataPopup>
   	<title>
