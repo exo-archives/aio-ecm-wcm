@@ -115,7 +115,7 @@
   	<label>
   		<header>Bellow est contenu peut être sélectionné</header>
   		<name>#{word.name}</name>
-  		<add>#{word.add}</add>  		  		
+  		<add>Ajouter</add>  		  		
   	</label>
   </UIContentSelectionPanel>  
 </bundle>
