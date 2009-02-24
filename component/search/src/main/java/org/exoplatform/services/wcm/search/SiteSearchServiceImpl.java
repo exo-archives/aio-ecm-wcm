@@ -115,14 +115,7 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     Session session = sessionProvider.getSession(location.getWorkspace(),currentRepository);
     QueryManager queryManager = session.getWorkspace().getQueryManager();
     long startTime = System.currentTimeMillis();
-    QueryResult queryResult = null;
-    //TODO use for test
-    try {
-      queryResult = searchSiteContent(queryCriteria, queryManager); 
-      System.out.println("====ResultSet=======>"+queryResult.getNodes().getSize() + "");
-    } catch (Exception e) {     
-      e.printStackTrace();
-    }    
+    QueryResult queryResult = searchSiteContent(queryCriteria, queryManager);        
     String suggestion = getSpellSuggestion(queryCriteria.getKeyword(),currentRepository);
     long queryTime = System.currentTimeMillis() - startTime;
     WCMPaginatedQueryResult paginatedQueryResult = null;
@@ -190,9 +183,7 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     mapDatetimeRangeSelected(queryCriteria,queryBuilder);
     mapMetadataProperties(queryCriteria,queryBuilder);
     orderBy(queryCriteria, queryBuilder);
-    String queryStatement = queryBuilder.createQueryStatement();
-    //TODO use for test when develope
-    System.out.println("=============>"+queryStatement);
+    String queryStatement = queryBuilder.createQueryStatement();    
     Query query = queryManager.createQuery(queryStatement, Query.SQL);
     return query.execute();
   }
@@ -245,8 +236,7 @@ public class SiteSearchServiceImpl implements SiteSearchService {
         queryBuilder.contains(null, queryTerm, LOGICAL.NULL);
       }else {
         queryBuilder.contains(scope, queryTerm, LOGICAL.NULL);
-      }      
-      return;        
+      }                   
   }
   
   private void searchByNodeName(final QueryCriteria queryCriteria, final SQLQueryBuilder queryBuilder) throws Exception {    
@@ -375,7 +365,7 @@ public class SiteSearchServiceImpl implements SiteSearchService {
       }
     }
     queryBuilder.closeGroup();    
-    //unwanted document document types: exo:cssFile, exo:jsFile
+    //unwanted document types: exo:cssFile, exo:jsFile
     if(excludeMimeTypes.size()<1) return;
     queryBuilder.openGroup(LOGICAL.AND_NOT);
     String[] mimetypes = excludeMimeTypes.toArray(new String[]{});      
@@ -383,7 +373,12 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     for(int i=1; i<mimetypes.length; i++) {
       queryBuilder.equal("jcr:mimeType",mimetypes[i],LOGICAL.OR);
     }       
-    queryBuilder.closeGroup();    
+    queryBuilder.closeGroup();
+    //Unwanted document by mixin nodetypes
+    queryBuilder.openGroup(LOGICAL.AND_NOT);
+    queryBuilder.like("jcr:mixinTypes", "exo:cssFile", LOGICAL.NULL);
+    queryBuilder.like("jcr:mixinTypes","exo:jsFile",LOGICAL.OR);
+    queryBuilder.closeGroup();
   }
 
   /**
