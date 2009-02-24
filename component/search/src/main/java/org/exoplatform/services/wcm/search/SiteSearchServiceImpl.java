@@ -315,7 +315,12 @@ public class SiteSearchServiceImpl implements SiteSearchService {
         }
       } 
     }    
-    queryBuilder.closeGroup();    
+    queryBuilder.closeGroup();
+    //Remove some specific mimtype    
+    queryBuilder.openGroup(LOGICAL.AND_NOT);
+    queryBuilder.like("jcr:mixinTypes", "exo:cssFile", LOGICAL.NULL);
+    queryBuilder.like("jcr:mixinTypes","exo:jsFile",LOGICAL.OR);
+    queryBuilder.closeGroup();
   }
   /**
    * Map query types.
