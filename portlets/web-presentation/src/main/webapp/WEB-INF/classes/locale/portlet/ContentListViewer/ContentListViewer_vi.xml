@@ -8,6 +8,8 @@
     <action>
       <Save>Lưu lại</Save>
       <Cancel>Huỷ bỏ</Cancel>
+      <Down>Lên</Down>
+      <Up>Xuống</Up>            
     </action>
     <label>
     	<ContentSelectionBlock>Chọn nội dung muốn hiển thị</ContentSelectionBlock>
@@ -32,7 +34,10 @@
       <OrderByTitle>Tiêu đề tài liệu</OrderByTitle>
       <OrderByDateCreated>Ngày tạo tài liệu</OrderByDateCreated>
       <OrderByDateModified>Ngày thay đổi tài liệu</OrderByDateModified>
-      <OrderByDatePublished>Ngày xuất bản tài liệu</OrderByDatePublished>            
+      <OrderByDatePublished>Ngày xuất bản tài liệu</OrderByDatePublished>    
+      <OrderDesc>Xếp tăng dần</OrderDesc>
+      <OrderAsc>Xếp giảm dần</OrderAsc>   
+      <ContentPath>Tài liệu</ContentPath>                     
     </label>
     <title>Lựa chọn thư mục chứa tài liệu hoăc nội dung được hiển thị</title>
   </UIViewerManagementForm>
@@ -85,6 +90,9 @@
 			<name>Tài liệu</name>
 			<delete>Xóa</delete>
 		</label>		
+		<msg>
+			<confirm-delete>Bạn chắc chắn muốn xóa tài liệu này khỏi danh sách được chọn?</confirm-delete>
+		</msg>		
   </UISelectedContentGrid>
   <!--/n  ###################################################################
   -->  

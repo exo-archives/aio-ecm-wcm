@@ -108,8 +108,8 @@ public class UIContentListPresentation extends UIContainer {
    * 
    * @throws Exception the exception
    */
-  public void init(String templatePath, ResourceResolver resourceResolver, PageList dataPageList) throws Exception {
-    PortletPreferences portletPreferences = ((UIFolderViewer) getParent()).getPortletPreference();
+  public void init(String templatePath, ResourceResolver resourceResolver, PageList dataPageList) throws Exception {       
+    PortletPreferences portletPreferences = getPortletPreferences();
     String paginatorTemplatePath = portletPreferences.getValue(UIContentListViewerPortlet.PAGINATOR_TEMPlATE_PATH, null);
     this.templatePath = templatePath;
     this.resourceResolver = resourceResolver;    
@@ -118,14 +118,20 @@ public class UIContentListPresentation extends UIContainer {
     uiPaginator.setResourceResolver(resourceResolver);    
     uiPaginator.setPageList(dataPageList);
   }
+  
+  private PortletPreferences getPortletPreferences() {
+    PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();    
+    PortletPreferences portletPreferences = context.getRequest().getPreferences();
+    return portletPreferences;
+  }
 
   /**
    * Show refresh button.
    * 
    * @return true, if successful
    */
-  public boolean showRefreshButton() {
-    PortletPreferences portletPreferences = ((UIFolderViewer) getParent()).getPortletPreference();
+  public boolean showRefreshButton() {    
+    PortletPreferences portletPreferences = getPortletPreferences();
     String isShow = portletPreferences.getValue(UIContentListViewerPortlet.SHOW_REFRESH_BUTTON, null);
     return (isShow != null) ? Boolean.parseBoolean(isShow) : false;
   }
@@ -138,7 +144,7 @@ public class UIContentListPresentation extends UIContainer {
    * @return true, if is show field
    */
   public boolean isShowField(String field) {
-    PortletPreferences portletPreferences = ((UIFolderViewer) getParent()).getPortletPreference();
+    PortletPreferences portletPreferences = getPortletPreferences();
     String showAble = portletPreferences.getValue(field, null);
     return (showAble != null) ? Boolean.parseBoolean(showAble) : false;
   }
@@ -151,7 +157,7 @@ public class UIContentListPresentation extends UIContainer {
    * @throws Exception the exception
    */
   public boolean showPaginator() throws Exception {
-    PortletPreferences portletPreferences = ((UIFolderViewer) getParent()).getPortletPreference();
+    PortletPreferences portletPreferences = getPortletPreferences();
     String itemsPerPage = portletPreferences.getValue(UIContentListViewerPortlet.ITEMS_PER_PAGE, null);
     int totalItems = uiPaginator.getTotalItems();
     if (totalItems > Integer.parseInt(itemsPerPage)) {
@@ -271,7 +277,7 @@ public class UIContentListPresentation extends UIContainer {
     WCMConfigurationService wcmConfigurationService = getApplicationComponent(WCMConfigurationService.class);
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     String portalURI = portalRequestContext.getPortalURI();
-    PortletPreferences portletPreferences = ((UIFolderViewer) getParent()).getPortletPreference();
+    PortletPreferences portletPreferences = getPortletPreferences();
     String repository = portletPreferences.getValue(UIContentListViewerPortlet.REPOSITORY, null);
     String workspace = portletPreferences.getValue(UIContentListViewerPortlet.WORKSPACE, null);
     String baseURI = portletRequestContext.getRequest().getScheme() + "://"
@@ -398,10 +404,9 @@ public class UIContentListPresentation extends UIContainer {
             + illustrativeImage.getPath();
       }
       return imagePath;
-    }
-    PortletRequestContext requestContext = WebuiRequestContext.getCurrentInstance();
-    String showThumbnailPref = requestContext.getRequest().getPreferences()
-                                             .getValue(UIContentListViewerPortlet.SHOW_THUMBNAILS_VIEW, "false");
+    }    
+    PortletPreferences preferences = getPortletPreferences();
+    String showThumbnailPref = preferences.getValue(UIContentListViewerPortlet.SHOW_THUMBNAILS_VIEW, "false");
     boolean isShowThumbnail = Boolean.parseBoolean(showThumbnailPref);
     if (isShowThumbnail) {
       return Utils.getThumbnailImage(node, ThumbnailService.MEDIUM_SIZE);

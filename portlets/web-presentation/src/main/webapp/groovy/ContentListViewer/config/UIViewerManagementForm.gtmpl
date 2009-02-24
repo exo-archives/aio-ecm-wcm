@@ -36,12 +36,21 @@
 				      <%=uicomponent.getLabel(uiform.getChildById(UIViewerManagementForm.ORDER_BY).getName()) %>
 			      </td>
 						<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(UIViewerManagementForm.ORDER_BY)) %></td>								
+												<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(UIViewerManagementForm.ORDER_TYPES)) %></td>								
 					</tr>
+
 					<% } else {
 								List<String> contents = uiform.getViewAbleContentList();							
 								if (contents != null && contents.size() != 0) {
 				  %>
 				  			<table class="UIContentGrid">
+									<thead>
+										<tr>
+											<th><%=_ctx.appRes("UIViewerManagementForm.label.ContentPath")%></th>
+											<th><%=_ctx.appRes("UISelectedContentGrid.action.Down")%></th>											
+											<th><%=_ctx.appRes("UISelectedContentGrid.action.Up")%></th>
+										</tr>
+									</thead>
 				  <% 
 				  				String rowClass = "";
 									for (int i = 0; i < contents.size(); i++) {
@@ -95,21 +104,12 @@
 			      <td class="FieldLabel">
 				      <%=uicomponent.getLabel(uiform.getChildById(UIViewerManagementForm.ITEMS_PER_PAGE_INPUT).getName()) %>
 			      </td>
-						<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(UIViewerManagementForm.ITEMS_PER_PAGE_INPUT)) %></td>								
-					</tr>									
+						<td class="FieldComponent ItemsPerPage">
+							<% uiform.renderField(uiform.getChildById(UIViewerManagementForm.ITEMS_PER_PAGE_INPUT)) %>
+						</td>								
+					</tr>					
 	      </table>   					      
 				<table class="UIFormGrid">
-					<tr>
-			      <td class="FieldLabel">
-				      <%=uicomponent.getLabel(uiform.getChildById(UIViewerManagementForm.VIEWER_BUTTON_QUICK_EDIT).getName()) %>
-			      </td>
-						<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(UIViewerManagementForm.VIEWER_BUTTON_QUICK_EDIT)) %></td>								
-									      <td class="FieldLabel">
-				      <%=uicomponent.getLabel(uiform.getChildById(UIViewerManagementForm.VIEWER_BUTTON_REFRESH).getName()) %>
-			      </td>
-						<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(UIViewerManagementForm.VIEWER_BUTTON_REFRESH)) %></td>								
-					</tr>
-
 					<tr>
 			      <td class="FieldLabel">
 				      <%=uicomponent.getLabel(uiform.getChildById(UIViewerManagementForm.VIEWER_THUMBNAILS_IMAGE).getName()) %>
@@ -134,8 +134,15 @@
 			      <td class="FieldLabel">
 				      <%=uicomponent.getLabel(uiform.getChildById(UIViewerManagementForm.VIEWER_HEADER).getName()) %>
 			      </td>
-						<td class="FieldComponent"><% uiform.renderField(uiform.getChildById(UIViewerManagementForm.VIEWER_HEADER)) %></td>								
-						<td colspan="2"><span></span></td>
+						<td class="FieldComponent">
+							<% uiform.renderField(uiform.getChildById(UIViewerManagementForm.VIEWER_HEADER)) %>
+						</td>								
+			      <td class="FieldLabel">
+				      <%=uicomponent.getLabel(uiform.getChildById(UIViewerManagementForm.VIEWER_BUTTON_REFRESH).getName()) %>
+			      </td>
+						<td class="FieldComponent">
+							<% uiform.renderField(uiform.getChildById(UIViewerManagementForm.VIEWER_BUTTON_REFRESH)) %>
+						</td>								
 					</tr>																												
 	      </table>   					      	      
       </fieldset>       

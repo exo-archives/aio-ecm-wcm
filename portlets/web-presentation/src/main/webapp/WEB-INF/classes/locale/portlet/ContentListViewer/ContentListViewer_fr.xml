@@ -9,6 +9,8 @@
     <action>
       <Save>Sauver</Save>
       <Cancel>Annuler</Cancel>
+      <Down></Down>
+      <Up></Up>            
     </action>
     <label>
     	<ContentSelectionBlock>Contenu</ContentSelectionBlock>
@@ -34,6 +36,9 @@
       <OrderByDateCreated>Date de création</OrderByDateCreated>
       <OrderByDateModified>Date de modification</OrderByDateModified>
       <OrderByDatePublished>Date de publication</OrderByDatePublished>            
+      <OrderDesc></OrderDesc>
+      <OrderAsc></OrderAsc>   
+      <ContentPath></ContentPath>                     
     </label>
     <title>Sélectionner un dossier pour montrer ses contenus web ou ses documents</title>
   </UIViewerManagementForm>
@@ -87,6 +92,9 @@
 			<name>#{word.name}</name>
 			<delete>Supprimer</delete>
 		</label>		
+		<msg>
+			<confirm-delete></confirm-delete>
+		</msg>		
   </UISelectedContentGrid>
   <!--/n  ###################################################################
   -->  

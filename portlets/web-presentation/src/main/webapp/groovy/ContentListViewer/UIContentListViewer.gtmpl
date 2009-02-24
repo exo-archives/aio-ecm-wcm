@@ -2,13 +2,14 @@
 	<%
 		import org.exoplatform.wcm.webui.clv.UIContentListPresentation;
 		import org.exoplatform.webui.core.UIPopupContainer;
+		import	org.exoplatform.wcm.webui.Utils;
 	
 		def portletId = uicomponent.getPortletId();
 		def quickEditingBlockId = uicomponent.getPortletId() + "-QuickEditingBlock";
 		def rcontext = _ctx.getRequestContext() ;
 		rcontext.getJavascriptManager().importJavascript('eXo.wcm.Util','/eXoWCMResources/javascript');
 		rcontext.getJavascriptManager().addOnLoadJavascript('eXo.wcm.insertQuickeditingBlock("' + portletId + '","' + quickEditingBlockId + '")');
-		if(uicomponent.isQuickEditable()) {					
+		if (Utils.turnOnQuickEditable(rcontext, true)) {					
 	%>
 			<div style="position: relative; height: 0px;" id="<%=quickEditingBlockId%>">
 				<div style="position: absolute; right: 0px; top: 0px">
@@ -18,7 +19,7 @@
 	<% } %>		
 
 	<% 			
-	if (uicomponent.canViewListContent()) {			
+	if (uicomponent.isViewAbleContent()) {			
 		uicomponent.renderChild(UIContentListPresentation.class);
 	} else {
 	%>

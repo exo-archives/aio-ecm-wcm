@@ -16,22 +16,16 @@
  */
 package org.exoplatform.wcm.webui.clv;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.jcr.AccessDeniedException;
 import javax.jcr.ItemNotFoundException;
-import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Session;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.portlet.PortletPreferences;
 
-import org.exoplatform.commons.utils.ObjectPageList;
-import org.exoplatform.ecm.resolver.JCRResourceResolver;
-import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
@@ -40,17 +34,11 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.utils.PaginatedNodeIterator;
-import org.exoplatform.wcm.webui.Utils;
-import org.exoplatform.wcm.webui.clv.config.UIPortletConfig;
-import org.exoplatform.wcm.webui.clv.config.UIViewerManagementForm;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
-import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 
 /*
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
@@ -60,160 +48,52 @@ import org.exoplatform.webui.event.EventListener;
 /**
  * The Class UIFolderViewer.
  */
-@ComponentConfig(
-  lifecycle = Lifecycle.class, 
-  template = "app:/groovy/ContentListViewer/UIFolderListViewer.gtmpl", 
-  events = { 
-    @EventConfig(listeners = UIFolderViewer.QuickEditActionListener.class) 
-  }
+
+@ComponentConfig(      
+  lifecycle = Lifecycle.class,                 
+   template = "app:/groovy/ContentListViewer/UIContentListViewer.gtmpl",
+   events = { 
+     @EventConfig(listeners = UIFolderViewer.QuickEditActionListener.class) 
+   }
 )
-public class UIFolderViewer extends UIContainer implements RefreshDelegateActionListener {
+public class UIFolderViewer extends UIListViewerBase {
 
-  /** The can view list content. */
-  private boolean canViewListContent;
-
-  /** The message key. */
-  private String  messageKey;
-
-  /**
-   * Instantiates a new uI folder viewer.
-   * 
-   * @throws Exception the exception
-   */
-  public UIFolderViewer() throws Exception {
-  }
-
-  /**
-   * Inits the.
-   * 
-   * @throws Exception the exception
-   */
   public void init() throws Exception {
-	PortletPreferences portletPreferences = getPortletPreference();
-	String mode = portletPreferences.getValue(UIContentListViewerPortlet.VIEWER_MODE, null);	
+    PortletPreferences portletPreferences = getPortletPreference();    
     NodeIterator nodeIterator = null;
-    canViewListContent = true;
+    setViewAbleContent(true);
     messageKey = null;
     try {
       nodeIterator = getRenderedContentNodes();
     } catch (ItemNotFoundException e) {
       messageKey = "UIMessageBoard.msg.folder-not-found";
-      canViewListContent = false;
+      setViewAbleContent(false);
       return;
     } catch (AccessDeniedException e) {
       messageKey = "UIMessageBoard.msg.no-permission";
-      canViewListContent = false;
+      setViewAbleContent(false);
       return;
     } catch (Exception e) {
       messageKey = "UIMessageBoard.msg.error-nodetype";
-      canViewListContent = false;
+      setViewAbleContent(false);
       return;
     }
     if (nodeIterator.getSize() == 0) {
       messageKey = "UIMessageBoard.msg.folder-empty";
+      setViewAbleContent(false);
+      return;
     }
-    
     int itemsPerPage = Integer.parseInt(portletPreferences.getValue(UIContentListViewerPortlet.ITEMS_PER_PAGE, null));
     PaginatedNodeIterator paginatedNodeIterator = new PaginatedNodeIterator(nodeIterator, itemsPerPage);
-    
     UIContentListPresentation contentListPresentation = addChild(UIContentListPresentation.class, null, null);
     String templatePath = getFormViewTemplatePath();
-    ResourceResolver resourceResolver = getTemplateResourceResolver();       
-    if (mode == null || mode.equals(UIViewerManagementForm.VIEWER_AUTO_MODE)) {
-    	contentListPresentation.init(templatePath, resourceResolver, paginatedNodeIterator);	
-	} else {
-		String repository = portletPreferences.getValue(UIContentListViewerPortlet.REPOSITORY, null);
-    String worksapce = portletPreferences.getValue(UIContentListViewerPortlet.WORKSPACE, null);
-    RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
-    SessionProvider sessionProvider = null;
-    String userId = Util.getPortalRequestContext().getRemoteUser();
-    if (userId == null) {
-      sessionProvider = SessionProviderFactory.createAnonimProvider();
-    } else {
-      sessionProvider = SessionProviderFactory.createSessionProvider();
-    }    
-    ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-    Session session = sessionProvider.getSession(worksapce, manageableRepository);
-    Node root = session.getRootNode();	    
-    List<String> contents = Arrays.asList(portletPreferences.getValues(UIContentListViewerPortlet.CONTENT_LIST, null));
-		List<Node> nodes = new ArrayList<Node>();
-    List<String> tempContents = new ArrayList<String>(contents);
-		if (contents != null && contents.size() != 0) {
-			for (int i = 0; i < contents.size(); i++) {        
-				Node node = null;
-				String path = contents.get(i);        
-				try {					
-					node = root.getNode(path.substring(1, path.length()));					
-				} catch (Exception e) {          
-					tempContents.remove(i);
-				}
-				if (node != null) nodes.add(node);	
-			}
-		}
-		portletPreferences.setValues(UIContentListViewerPortlet.CONTENT_LIST, tempContents.toArray(new String[0]));
-		portletPreferences.store();
-		ObjectPageList pageList = new ObjectPageList(nodes, itemsPerPage);
-		contentListPresentation.init(templatePath, resourceResolver, pageList);
-	}
+    ResourceResolver resourceResolver = getTemplateResourceResolver();    
+    contentListPresentation.init(templatePath, resourceResolver, paginatedNodeIterator);    
     contentListPresentation.setContentColumn(portletPreferences.getValue(UIContentListViewerPortlet.HEADER, null));
     contentListPresentation.setShowHeader(Boolean.parseBoolean(portletPreferences.getValue(UIContentListViewerPortlet.SHOW_HEADER, null)));
     contentListPresentation.setHeader(portletPreferences.getValue(UIContentListViewerPortlet.HEADER, null));
   }
 
-  /**
-   * Gets the message.
-   * 
-   * @return the message
-   * @throws Exception the exception
-   */
-  public String getMessage() throws Exception {
-    WebuiRequestContext requestContext = WebuiRequestContext.getCurrentInstance();
-    return requestContext.getApplicationResourceBundle().getString(messageKey);
-  }
-
-  /**
-   * Can view list content.
-   * 
-   * @return true, if successful
-   */
-  public boolean canViewListContent() {
-    return canViewListContent;
-  }
-
-  /**
-   * Gets the portlet preference.
-   * 
-   * @return the portlet preference
-   */
-  protected PortletPreferences getPortletPreference() {
-    PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
-    return portletRequestContext.getRequest().getPreferences();
-  }
-
-  /**
-   * Gets the repository.
-   * 
-   * @return the repository
-   */
-  protected String getRepository() {
-    return getPortletPreference().getValue(UIContentListViewerPortlet.REPOSITORY, null);
-  }
-
-  /**
-   * Gets the form view template path.
-   * 
-   * @return the form view template path
-   */
-  protected String getFormViewTemplatePath() {
-    return getPortletPreference().getValue(UIContentListViewerPortlet.FORM_VIEW_TEMPLATE_PATH, null);
-  }
-
-  /**
-   * Gets the rendered content nodes.
-   * 
-   * @return the rendered content nodes
-   * @throws Exception the exception
-   */
   public NodeIterator getRenderedContentNodes() throws Exception {
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     PortletPreferences preferences = portletRequestContext.getRequest().getPreferences();
@@ -231,7 +111,7 @@ public class UIFolderViewer extends UIContainer implements RefreshDelegateAction
       sessionProvider = SessionProviderFactory.createAnonimProvider();
     } else {
       sessionProvider = SessionProviderFactory.createSessionProvider();
-    }    
+    }
     Session session = sessionProvider.getSession(worksapce, manageableRepository);
     TemplateService templateService = getApplicationComponent(TemplateService.class);
     List<String> listDocumentTypes = templateService.getDocumentTemplates(repository);
@@ -244,94 +124,18 @@ public class UIFolderViewer extends UIContainer implements RefreshDelegateAction
       }
     }
     QueryManager manager = session.getWorkspace().getQueryManager();
+    String orderQuery = " ORDER BY ";
+    String orderBy = preferences.getValue(UIContentListViewerPortlet.ORDER_BY, null);
+    String orderType = preferences.getValue(UIContentListViewerPortlet.ORDER_TYPE, null);
+    if (orderType == null) orderType = "DESC";
+    if (orderBy == null) orderBy = "exo:title";
+    orderQuery += orderBy + " " + orderType;
+    
     String statement = "select * from nt:base where jcr:path like '" + folderPath
-        + "/%' AND NOT jcr:path like'" + folderPath + "/%/%'" + " AND( "
-        + documentTypeClause.toString() + ")";
-    Query query = manager.createQuery(statement, Query.SQL);    
+    + "/%' AND NOT jcr:path like'" + folderPath + "/%/%'" + " AND( "
+    + documentTypeClause.toString() + ")" + orderQuery;
+    Query query = manager.createQuery(statement, Query.SQL);
     return query.execute().getNodes();
   }
-
-  /**
-   * Gets the template resource resolver.
-   * 
-   * @return the template resource resolver
-   * @throws Exception the exception
-   */
-  private ResourceResolver getTemplateResourceResolver() throws Exception {
-    RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
-    String repository = getRepository();
-    ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-    String workspace = manageableRepository.getConfiguration().getSystemWorkspaceName();
-    return new JCRResourceResolver(repository, workspace, "exo:templateFile");
-  }
-
-  /**
-   * Gets the portlet id.
-   * 
-   * @return the portlet id
-   */
-  public String getPortletId() {
-    PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
-    return pContext.getWindowId();
-  }
-
-  /**
-   * Checks if is quick editable.
-   * 
-   * @return true, if is quick editable
-   * @throws Exception the exception
-   */
-  public boolean isQuickEditable() throws Exception {
-    PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
-    PortletPreferences prefs = portletRequestContext.getRequest().getPreferences();
-    boolean isQuickEdit = Boolean.parseBoolean(prefs.getValue(UIContentListViewerPortlet.SHOW_QUICK_EDIT_BUTTON,
-                                                              null));       
-    return Utils.turnOnQuickEditable(portletRequestContext, isQuickEdit);
-  }
-
-  /**
-   * The listener interface for receiving quickEditAction events. The class that
-   * is interested in processing a quickEditAction event implements this
-   * interface, and the object created with that class is registered with a
-   * component using the component's
-   * <code>addQuickEditActionListener<code> method. When
-   * the quickEditAction event occurs, that object's appropriate
-   * method is invoked.
-   * 
-   * @see QuickEditActionEvent
-   */
-  public static class QuickEditActionListener extends EventListener<UIFolderViewer> {
-
-    /*
-     * (non-Javadoc)
-     * @see
-     * org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui
-     * .event.Event)
-     */
-    public void execute(Event<UIFolderViewer> event) throws Exception {
-      UIFolderViewer uiFolderViewer = event.getSource();
-      UIContentListViewerPortlet uiListViewerPortlet = uiFolderViewer.getAncestorOfType(UIContentListViewerPortlet.class);
-      UIPopupContainer uiMaskPopupContainer = uiListViewerPortlet.getChild(UIPopupContainer.class);
-      UIPortletConfig uiPortletConfig = uiMaskPopupContainer.createUIComponent(UIPortletConfig.class, null, null);
-      uiFolderViewer.addChild(uiPortletConfig);
-      uiPortletConfig.setRendered(true);
-      uiMaskPopupContainer.activate(uiPortletConfig, 700, -1);
-      PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
-      context.addUIComponentToUpdateByAjax(uiMaskPopupContainer);
-    }
-  }
-
-  /*
-   * (non-Javadoc)
-   * @see
-   * org.exoplatform.wcm.webui.clv.RefreshDelegateActionListener#onRefresh(org
-   * .exoplatform.webui.event.Event)
-   */
-  public void onRefresh(Event<UIContentListPresentation> event) throws Exception {
-    UIContentListPresentation contentListPresentation = event.getSource();
-    UIFolderViewer uiFolderViewer = contentListPresentation.getParent();
-    uiFolderViewer.getChildren().clear();
-    uiFolderViewer.init();
-  }
-
+    
 }

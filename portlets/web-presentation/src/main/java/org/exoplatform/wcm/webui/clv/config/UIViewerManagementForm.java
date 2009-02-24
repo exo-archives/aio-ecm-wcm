@@ -34,7 +34,9 @@ import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.clv.UIContentListViewerPortlet;
+import org.exoplatform.wcm.webui.clv.UICorrectContentsViewer;
 import org.exoplatform.wcm.webui.clv.UIFolderViewer;
+import org.exoplatform.wcm.webui.clv.UIListViewerBase;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -103,9 +105,6 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
   /** The Constant ITEMS_PER_PAGE_SELECTOR. */
   public final static String ITEMS_PER_PAGE_INPUT         = "ItemsPerPage";
 
-  /** The Constant VIEWER_BUTTON_QUICK_EDIT. */
-  public final static String VIEWER_BUTTON_QUICK_EDIT     = "ViewerButtonQuickEdit";
-
   /** The Constant VIEWER_BUTTON_REFRESH. */
   public final static String VIEWER_BUTTON_REFRESH        = "ViewerButtonRefresh";
 
@@ -139,6 +138,14 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
   public static final String ORDER_BY_DATE_MODIFIED       = "OrderByDateModified";
 
   public static final String ORDER_BY_DATE_PUBLISHED      = "OrderByDatePublished";
+  
+  public static final String ORDER_TYPES = "OrderTypes";
+  
+  public static final String ORDER_DESC = "OrderDesc";
+  
+  public static final String ORDER_ASC = "OrderAsc";
+  
+  public static final int popupWidth = 700;
 
   /**
    * Instantiates a new uI viewer management form.
@@ -160,11 +167,23 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
     List<SelectItemOption<String>> viewerModeOptions = new ArrayList<SelectItemOption<String>>();
     viewerModeOptions.add(new SelectItemOption<String>(bundle.getString(rootBundleKey + VIEWER_AUTO_MODE), VIEWER_AUTO_MODE));
     viewerModeOptions.add(new SelectItemOption<String>(bundle.getString(rootBundleKey + VIEWER_MANUAL_MODE), VIEWER_MANUAL_MODE));
+    
+    List<SelectItemOption<String>> orderTypeOptions = new ArrayList<SelectItemOption<String>>();
+    orderTypeOptions.add(new SelectItemOption<String>(bundle.getString(rootBundleKey + ORDER_DESC), "DESC"));
+    orderTypeOptions.add(new SelectItemOption<String>(bundle.getString(rootBundleKey + ORDER_ASC), "ASC"));
+    UIFormRadioBoxInput orderTypeRadioBoxInput = new UIFormRadioBoxInput(ORDER_TYPES, ORDER_TYPES, orderTypeOptions);
+    String orderTypePref = portletPreferences.getValue(UIContentListViewerPortlet.ORDER_TYPE, null);
+    if (orderTypePref == null) {
+      orderTypeRadioBoxInput.setValue("DESC");
+    } else {
+      orderTypeRadioBoxInput.setValue(orderTypePref);
+    }
+    
     List<SelectItemOption<String>> orderByOptions = new ArrayList<SelectItemOption<String>>();
-    orderByOptions.add(new SelectItemOption<String>(bundle.getString(rootBundleKey + ORDER_BY_TITLE), ORDER_BY_TITLE));
-    orderByOptions.add(new SelectItemOption<String>(bundle.getString(rootBundleKey + ORDER_BY_DATE_CREATED), ORDER_BY_DATE_CREATED));
-    orderByOptions.add(new SelectItemOption<String>(bundle.getString(rootBundleKey + ORDER_BY_DATE_MODIFIED), ORDER_BY_DATE_MODIFIED));
-    orderByOptions.add(new SelectItemOption<String>(bundle.getString(rootBundleKey + ORDER_BY_DATE_PUBLISHED), ORDER_BY_DATE_PUBLISHED));
+    orderByOptions.add(new SelectItemOption<String>(bundle.getString(rootBundleKey + ORDER_BY_TITLE), "exo:title"));
+    orderByOptions.add(new SelectItemOption<String>(bundle.getString(rootBundleKey + ORDER_BY_DATE_CREATED), "exo:dateCreated"));
+    orderByOptions.add(new SelectItemOption<String>(bundle.getString(rootBundleKey + ORDER_BY_DATE_MODIFIED), "exo:dateModified"));
+    //orderByOptions.add(new SelectItemOption<String>(bundle.getString(rootBundleKey + ORDER_BY_DATE_PUBLISHED), ORDER_BY_DATE_PUBLISHED));
     UIFormRadioBoxInput viewerModeRadioBoxInput = new UIFormRadioBoxInput(VIEWER_MODES, VIEWER_MODES, viewerModeOptions);
     UIFormSelectBox orderBySelectBox = new UIFormSelectBox(ORDER_BY, ORDER_BY, orderByOptions);
     UIFormInputSetWithAction folderPathInputSet = new UIFormInputSetWithAction(FOLDER_PATH_INPUTSET);
@@ -177,9 +196,7 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
     folderPathInputSet.setActionInfo(FOLDER_PATH_INPUT, new String[] { "SelectFolderPath" });
     UIFormStringInput itemsPerPageStringInput = new UIFormStringInput(ITEMS_PER_PAGE_INPUT, ITEMS_PER_PAGE_INPUT, null);
     UIFormSelectBox formViewTemplateSelector = new UIFormSelectBox(FORM_VIEW_TEMPLATES_SELECTOR, FORM_VIEW_TEMPLATES_SELECTOR, formViewerTemplateList);
-    UIFormSelectBox paginatorTemplateSelector = new UIFormSelectBox(PAGINATOR_TEMPLATES_SELECTOR, PAGINATOR_TEMPLATES_SELECTOR, paginatorTemplateList);
-    UIFormCheckBoxInput viewerButtonQuickEditCheckbox = new UIFormCheckBoxInput(VIEWER_BUTTON_QUICK_EDIT, VIEWER_BUTTON_QUICK_EDIT, null);
-    viewerButtonQuickEditCheckbox.setChecked(true);
+    UIFormSelectBox paginatorTemplateSelector = new UIFormSelectBox(PAGINATOR_TEMPLATES_SELECTOR, PAGINATOR_TEMPLATES_SELECTOR, paginatorTemplateList);    
     UIFormCheckBoxInput viewerButtonRefreshCheckbox = new UIFormCheckBoxInput(VIEWER_BUTTON_REFRESH, VIEWER_BUTTON_REFRESH, null);
     viewerButtonRefreshCheckbox.setChecked(true);
     UIFormCheckBoxInput thumbnailsViewCheckbox = new UIFormCheckBoxInput(VIEWER_THUMBNAILS_IMAGE, VIEWER_THUMBNAILS_IMAGE, null);
@@ -191,9 +208,7 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
     UIFormCheckBoxInput dateCreatedViewerCheckbox = new UIFormCheckBoxInput(VIEWER_DATE_CREATED, VIEWER_DATE_CREATED, null);
     dateCreatedViewerCheckbox.setChecked(true);
     UIFormCheckBoxInput viewerHeader = new UIFormCheckBoxInput(VIEWER_HEADER, VIEWER_HEADER, null);
-    viewerHeader.setChecked(Boolean.parseBoolean(portletPreferences.getValue(UIContentListViewerPortlet.SHOW_HEADER, null)));
-    String quickEditAble = portletPreferences.getValue(UIContentListViewerPortlet.SHOW_QUICK_EDIT_BUTTON, null);
-    viewerButtonQuickEditCheckbox.setChecked(Boolean.parseBoolean(quickEditAble));
+    viewerHeader.setChecked(Boolean.parseBoolean(portletPreferences.getValue(UIContentListViewerPortlet.SHOW_HEADER, null)));    
     String refreshAble = portletPreferences.getValue(UIContentListViewerPortlet.SHOW_REFRESH_BUTTON, null);
     viewerButtonRefreshCheckbox.setChecked(Boolean.parseBoolean(refreshAble));
     String imageShowAble = portletPreferences.getValue(UIContentListViewerPortlet.SHOW_THUMBNAILS_VIEW, null);
@@ -210,6 +225,7 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
     paginatorTemplateSelector.setValue(paginatorTemplate);
     String itemsPerPageVal = portletPreferences.getValue(UIContentListViewerPortlet.ITEMS_PER_PAGE, null);
     itemsPerPageStringInput.setValue(itemsPerPageVal);
+    itemsPerPageStringInput.setMaxLength(3);    
     if (isManualMode()) {
       orderBySelectBox.setRendered(false);
       viewerModeRadioBoxInput.setValue(VIEWER_MANUAL_MODE);
@@ -225,11 +241,11 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
     addChild(viewerModeRadioBoxInput);
     addChild(folderPathInputSet);
     addChild(orderBySelectBox);
+    addChild(orderTypeRadioBoxInput);
     addChild(headerInput);
     addChild(formViewTemplateSelector);
     addChild(paginatorTemplateSelector);
-    addChild(itemsPerPageStringInput);
-    addChild(viewerButtonQuickEditCheckbox);
+    addChild(itemsPerPageStringInput);    
     addChild(viewerButtonRefreshCheckbox);
     addChild(thumbnailsViewCheckbox);
     addChild(titleViewerCheckbox);
@@ -274,7 +290,7 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
       return;
     }
     uiComponent.setRendered(true);
-    uiPopupContainer.activate(uiComponent, 600, 300);
+    uiPopupContainer.activate(uiComponent, popupWidth, -1);
     WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
     context.addUIComponentToUpdateByAjax(uiPopupContainer);
   }
@@ -313,6 +329,18 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
     }
     return templateOptionList;
   }
+  
+  public void activeNewViewerMode(UIListViewerBase uiNewViewer) throws Exception {
+    UIContentListViewerPortlet uiListViewerPortlet = getAncestorOfType(UIContentListViewerPortlet.class);
+    uiListViewerPortlet.removeChild(UIListViewerBase.class);
+    uiListViewerPortlet.addChild(uiNewViewer);
+    uiNewViewer.init();
+  }
+  
+  public void resetViewerMode(UIListViewerBase uiViewer) throws Exception {
+    uiViewer.getChildren().clear();
+    uiViewer.init();
+  }
 
   /**
    * The listener interface for receiving saveAction events. The class that is
@@ -333,6 +361,10 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
      */
     public void execute(Event<UIViewerManagementForm> event) throws Exception {
       UIViewerManagementForm uiViewerManagementForm = event.getSource();
+      PortletRequestContext portletRequestContext = (PortletRequestContext) event.getRequestContext();
+      PortletPreferences portletPreferences = portletRequestContext.getRequest().getPreferences();
+      String currentViewerMode = portletPreferences.getValue(UIContentListViewerPortlet.VIEWER_MODE, null);
+      if (currentViewerMode == null) currentViewerMode = UIViewerManagementForm.VIEWER_AUTO_MODE;
       UIApplication uiApp = uiViewerManagementForm.getAncestorOfType(UIApplication.class);
       RepositoryService repositoryService = uiViewerManagementForm.getApplicationComponent(RepositoryService.class);
       ManageableRepository manageableRepository = repositoryService.getCurrentRepository();
@@ -342,8 +374,7 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
       String header = uiViewerManagementForm.getUIStringInput(UIViewerManagementForm.HEADER).getValue();
       String formViewTemplatePath = uiViewerManagementForm.getUIFormSelectBox(UIViewerManagementForm.FORM_VIEW_TEMPLATES_SELECTOR).getValue();
       String paginatorTemplatePath = uiViewerManagementForm.getUIFormSelectBox(UIViewerManagementForm.PAGINATOR_TEMPLATES_SELECTOR).getValue();
-      String itemsPerPage = uiViewerManagementForm.getUIStringInput(UIViewerManagementForm.ITEMS_PER_PAGE_INPUT).getValue();
-      String showQuickEdit = uiViewerManagementForm.getUIFormCheckBoxInput(UIViewerManagementForm.VIEWER_BUTTON_QUICK_EDIT).isChecked() ? "true" : "false";
+      String itemsPerPage = uiViewerManagementForm.getUIStringInput(UIViewerManagementForm.ITEMS_PER_PAGE_INPUT).getValue();      
       String showRefreshButton = uiViewerManagementForm.getUIFormCheckBoxInput(UIViewerManagementForm.VIEWER_BUTTON_REFRESH).isChecked() ? "true" : "false";
       String viewThumbnails = uiViewerManagementForm.getUIFormCheckBoxInput(UIViewerManagementForm.VIEWER_THUMBNAILS_IMAGE).isChecked() ? "true" : "false";
       String viewTitle = uiViewerManagementForm.getUIFormCheckBoxInput(UIViewerManagementForm.VIEWER_TITLE).isChecked() ? "true" : "false";
@@ -351,27 +382,25 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
       String viewDateCreated = uiViewerManagementForm.getUIFormCheckBoxInput(UIViewerManagementForm.VIEWER_DATE_CREATED).isChecked() ? "true" : "false";
       String viewerHeader = uiViewerManagementForm.getUIFormCheckBoxInput(UIViewerManagementForm.VIEWER_HEADER).isChecked() ? "true" : "false";
       UIFormRadioBoxInput modeBoxInput = (UIFormRadioBoxInput) uiViewerManagementForm.getChildById(UIViewerManagementForm.VIEWER_MODES);
-      String viewerMode = modeBoxInput.getValue();
+      String newViewerMode = modeBoxInput.getValue();
+      UIFormRadioBoxInput orderTypeBoxInput = (UIFormRadioBoxInput) uiViewerManagementForm.getChildById(UIViewerManagementForm.ORDER_TYPES);
+      String orderType = orderTypeBoxInput.getValue();
       String orderBy = uiViewerManagementForm.getUIFormSelectBox(ORDER_BY).getValue();
       if (folderPath == null || folderPath.length() == 0) {
         uiApp.addMessage(new ApplicationMessage("UIMessageBoard.msg.empty-folder-path", null, ApplicationMessage.WARNING));
         return;
       }
-      if ((folderPath.endsWith(";") && viewerMode.equals(VIEWER_AUTO_MODE))
-          || (!folderPath.endsWith(";") && viewerMode.equals(VIEWER_MANUAL_MODE))) {
+      if ((folderPath.endsWith(";") && newViewerMode.equals(VIEWER_AUTO_MODE))
+          || (!folderPath.endsWith(";") && newViewerMode.equals(VIEWER_MANUAL_MODE))) {
         uiApp.addMessage(new ApplicationMessage("UIMessageBoard.msg.not-valid-action", null, ApplicationMessage.WARNING));
         return;
-      }
-
-      PortletRequestContext portletRequestContext = (PortletRequestContext) event.getRequestContext();
-      PortletPreferences portletPreferences = portletRequestContext.getRequest().getPreferences();
+      }      
       portletPreferences.setValue(UIContentListViewerPortlet.REPOSITORY, repository);
       portletPreferences.setValue(UIContentListViewerPortlet.WORKSPACE, workspace);
       portletPreferences.setValue(UIContentListViewerPortlet.FOLDER_PATH, folderPath);
       portletPreferences.setValue(UIContentListViewerPortlet.FORM_VIEW_TEMPLATE_PATH, formViewTemplatePath);
       portletPreferences.setValue(UIContentListViewerPortlet.PAGINATOR_TEMPlATE_PATH, paginatorTemplatePath);
-      portletPreferences.setValue(UIContentListViewerPortlet.ITEMS_PER_PAGE, itemsPerPage);
-      portletPreferences.setValue(UIContentListViewerPortlet.SHOW_QUICK_EDIT_BUTTON, showQuickEdit);
+      portletPreferences.setValue(UIContentListViewerPortlet.ITEMS_PER_PAGE, itemsPerPage);      
       portletPreferences.setValue(UIContentListViewerPortlet.SHOW_REFRESH_BUTTON, showRefreshButton);
       portletPreferences.setValue(UIContentListViewerPortlet.SHOW_THUMBNAILS_VIEW, viewThumbnails);
       portletPreferences.setValue(UIContentListViewerPortlet.SHOW_TITLE, viewTitle);
@@ -379,7 +408,8 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
       portletPreferences.setValue(UIContentListViewerPortlet.SHOW_SUMMARY, viewSummary);
       portletPreferences.setValue(UIContentListViewerPortlet.HEADER, header);
       portletPreferences.setValue(UIContentListViewerPortlet.SHOW_HEADER, viewerHeader);
-      portletPreferences.setValue(UIContentListViewerPortlet.VIEWER_MODE, viewerMode);
+      portletPreferences.setValue(UIContentListViewerPortlet.VIEWER_MODE, newViewerMode);
+      portletPreferences.setValue(UIContentListViewerPortlet.ORDER_TYPE, orderType);
       if (uiViewerManagementForm.isManualMode()) {
         String[] sl = (String[]) uiViewerManagementForm.getViewAbleContentList().toArray(new String[0]);
         portletPreferences.setValues(UIContentListViewerPortlet.CONTENT_LIST, sl);
@@ -392,9 +422,29 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
       } else {
         portletRequestContext.setApplicationMode(PortletMode.VIEW);
         UIContentListViewerPortlet uiContentListViewerPortlet = uiViewerManagementForm.getAncestorOfType(UIContentListViewerPortlet.class);
-        UIFolderViewer uiFolderViewer = uiContentListViewerPortlet.getChild(UIFolderViewer.class);
-        uiFolderViewer.getChildren().clear();
-        uiFolderViewer.init();
+        UIFolderViewer uiFolderViewer = null;
+        UICorrectContentsViewer uiCorrectContentsViewer = null;
+        if (currentViewerMode.equals(UIViewerManagementForm.VIEWER_AUTO_MODE)) {
+          if (newViewerMode.equals(UIViewerManagementForm.VIEWER_AUTO_MODE)) {
+            uiFolderViewer = uiContentListViewerPortlet.getChild(UIFolderViewer.class);            
+            uiFolderViewer.getChildren().clear();
+            uiFolderViewer.init();
+          } else if (newViewerMode.equals(UIViewerManagementForm.VIEWER_MANUAL_MODE)) {                       
+            uiContentListViewerPortlet.removeChild(UIFolderViewer.class);
+            uiCorrectContentsViewer = uiContentListViewerPortlet.addChild(UICorrectContentsViewer.class, null, null);            
+            uiCorrectContentsViewer.init();            
+          }
+        } else if (currentViewerMode.equals(UIViewerManagementForm.VIEWER_MANUAL_MODE)) {
+          if (newViewerMode.equals(UIViewerManagementForm.VIEWER_MANUAL_MODE)) {
+            uiCorrectContentsViewer = uiContentListViewerPortlet.getChild(UICorrectContentsViewer.class);            
+            uiCorrectContentsViewer.getChildren().clear();
+            uiCorrectContentsViewer.init();
+          } else if (newViewerMode.equals(UIViewerManagementForm.VIEWER_AUTO_MODE)) {            
+            uiContentListViewerPortlet.removeChild(UICorrectContentsViewer.class);
+            uiFolderViewer = uiContentListViewerPortlet.addChild(UIFolderViewer.class, null, null);
+            uiFolderViewer.init();
+          }
+        }
       }
       UIPopupContainer uiPopupContainer = (UIPopupContainer) uiViewerManagementForm.getAncestorOfType(UIPopupContainer.class);
       uiPopupContainer.deActivate();

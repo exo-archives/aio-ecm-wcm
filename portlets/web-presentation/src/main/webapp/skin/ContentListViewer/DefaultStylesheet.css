@@ -15,6 +15,10 @@
 	margin-right: 10px;
 }
 
+.UIContentListViewerPortlet .FolderExplorer .FolderExplorerTree {
+	width: 230px;
+}
+
 .UIContentListViewerPortlet .UIFolderPathSelectorForm .UITreeList {
 	margin-left:240px;
 }
@@ -143,4 +147,13 @@
 
 .UIContentListViewerPortlet .UIMultiSelectionPanel {
 	margin-bottom: 10px;
+	width: 93%;
+}
+
+.UIContentListViewerPortlet .UISelectedContentGrid {
+	width: 93%;
+}
+
+.UIContentListViewerPortlet .UIViewerManagementForm .ItemsPerPage input {
+	width: 20px;
 }

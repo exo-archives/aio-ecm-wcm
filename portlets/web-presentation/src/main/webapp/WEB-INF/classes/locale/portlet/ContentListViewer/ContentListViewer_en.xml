@@ -8,6 +8,8 @@
     <action>
       <Save>Save</Save>
       <Cancel>Cancel</Cancel>
+      <Down>Down</Down>
+      <Up>Up</Up>      
     </action>
     <label>
     	<ContentSelectionBlock>Contents selection</ContentSelectionBlock>
@@ -33,6 +35,9 @@
       <OrderByDateCreated>Date created</OrderByDateCreated>
       <OrderByDateModified>Date modified</OrderByDateModified>
       <OrderByDatePublished>Date published</OrderByDatePublished>      
+      <OrderDesc>Descendant</OrderDesc>
+      <OrderAsc>Ascendant</OrderAsc>   
+      <ContentPath>Content</ContentPath>   
     </label>
     <title>Select folder to display its children documents or webcontent</title>
   </UIViewerManagementForm>
@@ -86,6 +91,9 @@
 			<name>Name</name>
 			<delete>Delete</delete>
 		</label>
+		<msg>
+			<confirm-delete>Are you sure to delete this content from selected list?</confirm-delete>
+		</msg>
   </UISelectedContentGrid>
   <!--/n  ###################################################################
   -->  

@@ -48,6 +48,15 @@ public class UISelectedContentGrid extends UISelectedCategoriesGrid {
 
   public static class DeleteActionListener extends EventListener<UISelectedContentGrid> {
     public void execute(Event<UISelectedContentGrid> event) throws Exception {
+      UISelectedContentGrid uiSelectedContentGrid = event.getSource();
+      String value = event.getRequestContext().getRequestParameter(OBJECTID);
+      uiSelectedContentGrid.removeCategory(value);
+      if (uiSelectedContentGrid.getSelectedCategories().size() == 0) uiSelectedContentGrid.setDeleteAllCategory(true);
+      uiSelectedContentGrid.updateGrid();
+      if (uiSelectedContentGrid.getSelectedCategories().size() == 0) {
+        uiSelectedContentGrid.setRendered(false);
+      }
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiSelectedContentGrid.getParent());      
     }
   }
 

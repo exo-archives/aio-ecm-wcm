@@ -147,7 +147,7 @@
 	    </preference>
 	    <preference>
 	    	<name>showRefreshButton</name>
-	    	<value>true</value>	    	
+	    	<value>false</value>	    	
 	    	<read-only>false</read-only>
 	    </preference>	    
 	    <preference>
@@ -186,10 +186,15 @@
 	    	<read-only>false</read-only>
 	    </preference>	 	    
 			<preference>
-				<name>order</name>
+				<name>orderBy</name>
 				<value></value>
 				<read-only>false</read-only>
 			</preference>
+			<preference>
+				<name>orderType</name>
+				<value></value>
+				<read-only>false</read-only>
+			</preference>			
 			<preference>
 				<name>contents</name>
 				<value></value>

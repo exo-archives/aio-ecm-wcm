@@ -74,11 +74,9 @@ public class UIContentsSelectionTreeBuilder extends UINodeTreeBuilder {
                                         .getString("UIFolderExplorer.title");
     writer.write("<div class=\"FolderExplorer\">");
     writer.write("<div class=\"TitleBox\">" + folderExplorerTitle + "</div>");    
-    writer.write("<div class=\"FolderExplorerTree\">");
-    writer.write("<div class=\"FolderInnerExplorerTree\">");
+    writer.write("<div class=\"FolderExplorerTree\">");    
     buildTree();
-    super.renderChildren();
-    writer.write("</div>");
+    super.renderChildren();    
     writer.write("</div>");
     writer.write("</div>");
   }

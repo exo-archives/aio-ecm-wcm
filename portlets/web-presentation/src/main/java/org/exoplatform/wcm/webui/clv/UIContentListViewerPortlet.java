@@ -17,10 +17,12 @@
 package org.exoplatform.wcm.webui.clv;
 
 import javax.portlet.PortletMode;
+import javax.portlet.PortletPreferences;
 
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.clv.config.UIPortletConfig;
 import org.exoplatform.wcm.webui.clv.config.UIStartEditionInPageWizard;
+import org.exoplatform.wcm.webui.clv.config.UIViewerManagementForm;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -65,9 +67,6 @@ public class UIContentListViewerPortlet extends UIPortletApplication {
   /** The Constant PAGINATOR_TEMPlATE_PATH. */
   public final static String PAGINATOR_TEMPlATE_PATH = "paginatorTemplatePath";
 
-  /** The Constant SHOW_QUICK_EDIT_BUTTON. */
-  public final static String SHOW_QUICK_EDIT_BUTTON  = "showQuickEditButton";
-
   /** The Constant SHOW_REFRESH_BUTTON. */
   public final static String SHOW_REFRESH_BUTTON     = "showRefreshButton";
 
@@ -90,9 +89,13 @@ public class UIContentListViewerPortlet extends UIPortletApplication {
   
   public static final String VIEWER_MODE = "mode";
   
-  public static final String ORDER_BY = "order";
+  public static final String ORDER_BY = "orderBy";
+  
+  public static final String ORDER_TYPE = "orderType";
   
   public static final String CONTENT_LIST = "contents";
+  
+  public static final int portletConfigFormWidth = 800;
 
   /**
    * Instantiates a new uI content list viewer portlet.
@@ -127,12 +130,18 @@ public class UIContentListViewerPortlet extends UIPortletApplication {
     getChildren().clear();
     UIPopupContainer uiPopup = addChild(UIPopupContainer.class, null, "UIViewerManagementPopup");
     uiPopup.getChild(UIPopupWindow.class).setId("UIViewerManagementPopupWindow");
-
+    PortletRequestContext context = WebuiRequestContext.getCurrentInstance();
+    PortletPreferences preferences = context.getRequest().getPreferences();
+    String viewerMode = preferences.getValue(VIEWER_MODE, null);        
     if (PortletMode.VIEW.equals(mode)) {
-      UIFolderViewer folderViewer = addChild(UIFolderViewer.class,
-                                             null,
-                                             UIPortletApplication.VIEW_MODE);
-      folderViewer.init();
+      if (viewerMode == null) viewerMode = UIViewerManagementForm.VIEWER_AUTO_MODE;
+      if (viewerMode.equals(UIViewerManagementForm.VIEWER_AUTO_MODE)) {        
+        UIFolderViewer uiFolderViewer = addChild(UIFolderViewer.class, null, UIPortletApplication.VIEW_MODE);
+        uiFolderViewer.init(); 
+      } else if (viewerMode.equals(UIViewerManagementForm.VIEWER_MANUAL_MODE)) {        
+        UICorrectContentsViewer uiCorrectContentsViewer = addChild(UICorrectContentsViewer.class, null, UIPortletApplication.VIEW_MODE);
+        uiCorrectContentsViewer.init();
+      }
     } else if (PortletMode.EDIT.equals(mode)) {
       UIPopupContainer maskPopupContainer = getChild(UIPopupContainer.class);
       UIStartEditionInPageWizard portletEditMode = createUIComponent(UIStartEditionInPageWizard.class, null, null);
@@ -140,7 +149,7 @@ public class UIContentListViewerPortlet extends UIPortletApplication {
       UIPortletConfig portletConfig = portletEditMode.createUIComponent(UIPortletConfig.class, null, null);
       portletEditMode.addChild(portletConfig);
       portletConfig.setRendered(true);
-      maskPopupContainer.activate(portletConfig, 700, -1);
+      maskPopupContainer.activate(portletConfig, portletConfigFormWidth, -1);
       PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
       portletRequestContext.addUIComponentToUpdateByAjax(maskPopupContainer);
     }
