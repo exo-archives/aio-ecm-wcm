@@ -214,12 +214,12 @@
   </WebContentMetadataPopup>
   <UIWCMSelectPropertyForm>
   	<action>
-  		<Add>#{word.add}</Add>
+  		<Add>Ajouter</Add>
   		<Cancel>#{word.cancel}</Cancel>
   	</action>
   	<label>
-			<metadataType></metadataType>
-			<property_select></property_select>
+			<metadataType>Type de metadata</metadataType>
+			<property_select>Propriété</property_select>
 		</label>
   </UIWCMSelectPropertyForm>
   <DocumentMetadataPopup>
