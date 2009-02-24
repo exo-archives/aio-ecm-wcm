@@ -52,6 +52,16 @@
 										</tr>
 									</thead>
 				  <% 
+			  				if (contents.size() == 1) {
+  				%>
+  								<tr class="EvenRow">
+  									<td><%= contents.get(0) %></td>
+  									<td><span></span></td>
+  									<td><span></span></td>  									
+  								</tr>
+  				<%
+			  				} else {
+				  				
 				  				String rowClass = "";
 									for (int i = 0; i < contents.size(); i++) {
 										if ((i % 2) == 0) {
@@ -59,7 +69,7 @@
 										} else {
 											rowClass = "OddRow";										
 										}
-										String content = contents.get(i)									
+										String content = contents.get(i);									
 										String upLink = uicomponent.event("Increase", Integer.toString(i));
 										String downLink = uicomponent.event("Decrease", Integer.toString(i));	
 					%>
@@ -70,6 +80,7 @@
 										</tr>
 					<%				
 									}//end for
+								}
 					%>
 								</table>
 					<%				
