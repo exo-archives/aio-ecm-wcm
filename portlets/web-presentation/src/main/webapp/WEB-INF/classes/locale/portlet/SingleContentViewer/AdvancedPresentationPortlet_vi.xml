@@ -311,6 +311,11 @@
   -->
   <UIPresentationContainer>
     <title>Sửa nhanh</title>
+    <quickPrint>
+    	<title>In ấn</title>
+    	<print>In tài liệu</print>
+    	<close>Đóng cửa sổ</close>
+    </quickPrint>
   </UIPresentationContainer>
   <!--/n  #############################################################
   # org.exoplatform.wcm.webui.scv.config.UIDMSSelectorForm    #

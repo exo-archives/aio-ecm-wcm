@@ -313,6 +313,11 @@
   -->
   <UIPresentationContainer>
     <title>Edition rapide</title>
+    <quickPrint>
+    	<title>Imprimer</title>
+    	<print>Print</print>
+    	<close>Fermer</close>
+    </quickPrint>
   </UIPresentationContainer>
   <!--/n  #############################################################
         

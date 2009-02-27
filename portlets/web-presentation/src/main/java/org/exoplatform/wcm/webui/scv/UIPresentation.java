@@ -26,6 +26,9 @@ import javax.portlet.PortletPreferences;
 
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
 import org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation;
+import org.exoplatform.portal.webui.page.UIPage;
+import org.exoplatform.portal.webui.portal.UIPortal;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -33,6 +36,7 @@ import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 
@@ -150,6 +154,16 @@ public class UIPresentation extends UIBaseNodePresentation {
     if(popupContainer!= null) {
       popupContainer.deActivate();
     }
+    
+    UIPortal uiPortal = Util.getUIPortal();
+    UIPage uiPage = uiPortal.findFirstComponentOfType(UIPage.class);
+    PortletRequestContext porletRequestContext = (PortletRequestContext) context;
+    UIComponent uiComponent = uiPage.getChildById(porletRequestContext.getWindowId());
+    if (uiComponent != null) {
+      UIPresentationContainer uiPresentationContainer = viewerPortlet.getChild(UIPresentationContainer.class);
+      uiPresentationContainer.setQuickPrint(true);
+    }
+    
     super.processRender(context) ;
   }
 

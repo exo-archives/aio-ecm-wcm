@@ -316,6 +316,11 @@
   -->
   <UIPresentationContainer>
     <title>Quick Edit</title>
+    <quickPrint>
+    	<title>Print</title>
+    	<print>Print</print>
+    	<close>Close</close>
+    </quickPrint>
   </UIPresentationContainer>
   <!--/n  #############################################################
   # org.exoplatform.wcm.webui.scv.config.UIDMSSelectorForm    #
