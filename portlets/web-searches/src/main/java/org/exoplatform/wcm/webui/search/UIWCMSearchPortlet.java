@@ -71,9 +71,6 @@ public class UIWCMSearchPortlet extends UIPortletApplication {
   /** The Constant ITEMS_PER_PAGE. */
   public final static String ITEMS_PER_PAGE                   = "itemsPerPage";
 
-  /** The Constant SHOW_QUICK_EDIT_BUTTON. */
-  public final static String SHOW_QUICK_EDIT_BUTTON           = "showQuickEditButton";
-
   /**
    * Instantiates a new uIWCM search portlet.
    * 

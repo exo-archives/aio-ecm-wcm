@@ -97,9 +97,7 @@ public class UISearchForm extends UIForm {
 	 * @throws Exception the exception
 	 */
 	@SuppressWarnings("unchecked")
-	public UISearchForm() throws Exception {
-	  PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
-	  PortletPreferences preferences = context.getRequest().getPreferences();	  
+	public UISearchForm() throws Exception {	  	  	
 		UIFormStringInput uiKeywordInput = new UIFormStringInput(KEYWORD_INPUT,
 				KEYWORD_INPUT, null);
 		UIFormSelectBox uiPortalSelectBox = new UIFormSelectBox(PORTALS_SELECTOR,

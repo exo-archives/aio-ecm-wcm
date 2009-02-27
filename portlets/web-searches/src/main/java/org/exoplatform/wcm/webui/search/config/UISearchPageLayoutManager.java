@@ -41,7 +41,6 @@ import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 
 /*
@@ -114,9 +113,6 @@ public class UISearchPageLayoutManager extends UIForm {
 	/** The Constant ITEMS_PER_PAGE_SELECTOR. */
 	public final static String ITEMS_PER_PAGE_SELECTOR = "itemsPerPageSelector";
 
-	/** The Constant VIEWER_BUTTON_QUICK_EDIT. */
-	public final static String VIEWER_BUTTON_QUICK_EDIT = "viewerButtonQuickEdit";
-
 	/**
 	 * Instantiates a new uI search page layout manager.
 	 * 
@@ -128,9 +124,7 @@ public class UISearchPageLayoutManager extends UIForm {
 				.getCurrentInstance();
 		PortletPreferences portletPreferences = portletRequestContext.getRequest()
 				.getPreferences();
-
-		String quickEditAble = portletPreferences.getValue(
-				UIWCMSearchPortlet.SHOW_QUICK_EDIT_BUTTON, null);
+		
 		String itemsPerpage = portletPreferences.getValue(
 				UIWCMSearchPortlet.ITEMS_PER_PAGE, null);
 		String searchFormTemplate = portletPreferences.getValue(
@@ -180,9 +174,7 @@ public class UISearchPageLayoutManager extends UIForm {
 				searchPageLayoutTemplateList).setRendered(false);
 		UIFormSelectBox searchBoxTemplateSelector = new UIFormSelectBox(
 				SEARCH_BOX_TEMPLATE_SELECTOR, SEARCH_BOX_TEMPLATE_SELECTOR,
-				searchBoxTemplateList).setRendered(false);
-		UIFormCheckBoxInput viewerButtonQuickEditCheckbox = new UIFormCheckBoxInput(
-				VIEWER_BUTTON_QUICK_EDIT, VIEWER_BUTTON_QUICK_EDIT, null);
+				searchBoxTemplateList).setRendered(false);		
 
 		searchModeSelector.setOnChange("SelectSearchMode");
 
@@ -191,9 +183,7 @@ public class UISearchPageLayoutManager extends UIForm {
 		searchFormTemplateSelector.setValue(searchFormTemplate);
 		searchResultTemplateSelector.setValue(searchResultTemplate);
 		searchPaginatorTemplateSelector.setValue(searchPaginatorTemplate);
-		searchPageLayoutTemplateSelector.setValue(searchPageLayoutTemplate);
-		viewerButtonQuickEditCheckbox.setChecked(Boolean
-				.parseBoolean(quickEditAble));
+		searchPageLayoutTemplateSelector.setValue(searchPageLayoutTemplate);		
 		searchModeSelector.setValue(searchMode);
 
 		addUIFormInput(searchModeSelector);
@@ -203,7 +193,6 @@ public class UISearchPageLayoutManager extends UIForm {
 		addUIFormInput(searchResultTemplateSelector);
 		addUIFormInput(searchPaginatorTemplateSelector);
 		addUIFormInput(searchPageLayoutTemplateSelector);
-		addChild(viewerButtonQuickEditCheckbox);
 
 		if (UISearchPageLayoutManager.SEARCH_BOX_MODE_OPTION.equals(searchMode)) {
 			searchBoxTemplateSelector.setRendered(true);
@@ -339,10 +328,7 @@ public class UISearchPageLayoutManager extends UIForm {
 					.getUIFormSelectBox(
 							UISearchPageLayoutManager.SEARCH_PAGE_LAYOUT_SELECTOR).getValue();
 			String itemsPerPage = uiSearchLayoutManager.getUIFormSelectBox(
-					UISearchPageLayoutManager.ITEMS_PER_PAGE_SELECTOR).getValue();
-			String showQuickEditable = uiSearchLayoutManager.getUIFormCheckBoxInput(
-					UISearchPageLayoutManager.VIEWER_BUTTON_QUICK_EDIT).isChecked() ? "true"
-					: "false";
+					UISearchPageLayoutManager.ITEMS_PER_PAGE_SELECTOR).getValue();			
 
 			portletPreferences.setValue(UIWCMSearchPortlet.REPOSITORY, repository);
 			portletPreferences.setValue(UIWCMSearchPortlet.WORKSPACE, workspace);
@@ -361,9 +347,7 @@ public class UISearchPageLayoutManager extends UIForm {
 					UIWCMSearchPortlet.SEARCH_PAGE_LAYOUT_TEMPLATE_PATH,
 					searchPageLayoutTemplatePath);
 			portletPreferences.setValue(UIWCMSearchPortlet.ITEMS_PER_PAGE,
-					itemsPerPage);
-			portletPreferences.setValue(UIWCMSearchPortlet.SHOW_QUICK_EDIT_BUTTON,
-					showQuickEditable);
+					itemsPerPage);			
 			portletPreferences.store();
 			if (Utils.isEditPortletInCreatePageWizard()) {
 				uiApp

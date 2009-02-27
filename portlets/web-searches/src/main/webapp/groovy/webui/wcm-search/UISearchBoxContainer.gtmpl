@@ -1,3 +1,6 @@
+<% 
+	import org.exoplatform.wcm.webui.Utils;
+%>
 <div id="$uicomponent.id">
 	<%
 		def portletId = uicomponent.getPortletId();
@@ -5,7 +8,7 @@
 		def rcontext = _ctx.getRequestContext() ;
 		rcontext.getJavascriptManager().importJavascript('eXo.wcm.Util','/eXoWCMResources/javascript');
 		rcontext.getJavascriptManager().addOnLoadJavascript('eXo.wcm.insertQuickeditingBlock("' + portletId + '","' + quickEditingBlockId + '")');
-		if(uicomponent.isQuickEditable()) {		
+		if(Utils.turnOnQuickEditable(rcontext, true)) {		
 	%>
 		<div style="position: relative; height: 0px;" id="<%=quickEditingBlockId%>">
 			<div style="position: absolute; right: 0px; top: 0px; height: 0px;">

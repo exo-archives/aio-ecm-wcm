@@ -24,7 +24,6 @@ import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -123,21 +122,6 @@ public class UISearchPageLayout extends UIContainer {
     } catch (Exception e) {
       return null;
     }
-  }
-
-  /**
-   * Checks if is quick editable.
-   * 
-   * @return true, if is quick editable
-   * 
-   * @throws Exception the exception
-   */
-  public boolean isQuickEditable() throws Exception {
-    PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
-    PortletPreferences prefs = portletRequestContext.getRequest().getPreferences();
-    boolean isQuickEdit = Boolean.parseBoolean(prefs.getValue(
-        UIWCMSearchPortlet.SHOW_QUICK_EDIT_BUTTON, null));        
-    return Utils.turnOnQuickEditable(portletRequestContext, isQuickEdit);
   }
 
   /**
