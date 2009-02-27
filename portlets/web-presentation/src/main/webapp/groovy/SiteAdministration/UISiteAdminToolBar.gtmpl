@@ -337,7 +337,7 @@
 			
 	<div class="StartMenuContainer" style="display: block;  position: absolute; top: 0px;">
 		<div class="StartMenuDecorator">						     
-			<div class="MenuItemContainer" style="top: -1000px;">						
+			<div class="MenuItemContainer BlockMenu" style="top: -1000px;">						
 			<% renderTopToolbarNavs(); %>
 			</div>			
 		</div>

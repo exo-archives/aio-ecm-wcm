@@ -136,15 +136,13 @@ function quickSearchOnEnter(event, resultPageURI) {
 function search(comId) {
 	var searchForm = document.getElementById(comId);
 	var inputKey = eXo.core.DOMUtil.findDescendantById(searchForm, "keywordInput");
-
 	searchForm.onsubmit = function() {return false;};
-
 	inputKey.onkeypress = function(event) {
-	  var keyNum = getKeynum(event);
-	  if (keyNum == 13) {
+		var keyNum = getKeynum(event);
+		if (keyNum == 13) {
 			var searchButton = eXo.core.DOMUtil.findFirstDescendantByClass(this.form, "div", "SearchButton");
 			searchButton.onclick();
-  	}		
+  	  	}		
 	}
 }	
 
@@ -163,9 +161,54 @@ function keepKeywordOnBoxSearch() {
 
 eXo.core.Browser.addOnLoadCallback("keepKeywordOnBoxSearch", keepKeywordOnBoxSearch);
 
+/*------------------Overrite method eXo.webui.UIPopup.init to show popup display center-------------------------------*/
+UIPopupWindow.prototype.init = function(popupId, isShow, isResizable, showCloseButton, isShowMask) {
+	var DOMUtil = eXo.core.DOMUtil ;
+	this.superClass = eXo.webui.UIPopup ;
+	var popup = document.getElementById(popupId) ;
+	var portalApp = document.getElementById("UIPortalApplication") ;
+	if(popup == null) return;
+	popup.style.visibility = "hidden" ;
+	
+	//TODO Lambkin: this statement create a bug in select box component in Firefox
+	//this.superClass.init(popup) ;
+	var contentBlock = DOMUtil.findFirstDescendantByClass(popup, 'div' ,'PopupContent');
+	if((eXo.core.Browser.getBrowserHeight() - 100 ) < contentBlock.offsetHeight) {
+		contentBlock.style.height = (eXo.core.Browser.getBrowserHeight() - 100) + "px";
+	}
+	var popupBar = DOMUtil.findFirstDescendantByClass(popup, 'div' ,'PopupTitle') ;
+
+	popupBar.onmousedown = this.initDND ;
+	
+	if(isShow == false) {
+		this.superClass.hide(popup) ;
+		if(isShowMask) eXo.webui.UIPopupWindow.showMask(popup, false) ;
+	} 
+	
+	if(isResizable) {
+		var resizeBtn = DOMUtil.findFirstDescendantByClass(popup, "div", "ResizeButton");
+		resizeBtn.style.display = 'block' ;
+		resizeBtn.onmousedown = this.startResizeEvt ;
+		portalApp.onmouseup = this.endResizeEvt ;
+	}
+	
+	popup.style.visibility = "hidden" ;
+	if(isShow == true) {
+		var iframes = DOMUtil.findDescendantsByTagName(popup, "iframe") ;
+		if(iframes.length > 0) {
+			setTimeout("eXo.webui.UIPopupWindow.show('" + popupId + "'," + isShowMask + ")", 500) ;
+		} else {
+      if(popup.offsetHeight == 0){
+        setTimeout("eXo.webui.UIPopupWindow.show('" + popupId + "'," + isShowMask + ")", 500) ;
+        return ;
+      }
+			this.show(popup, isShowMask) ;
+		}
+	}
+} ;
+/*----------------------------------------------End of overrite-------------------------------------------------------*/
 
 /*------------------the top toolbar---------------*/
-
 function findPreviousElementByClass(element, clazz) {
 	var previousElement = element.previousSibling ;
 	while (previousElement != null) {
@@ -208,7 +251,6 @@ function viewMoreActions(viewMoreObj) {
 	if(window.hiddenmenu) clearTimeout(window.hiddenmenu);
 }
 
-
 function hideMoreActions(viewMoreObj) {
 	var moreActionsMenu = eXo.core.DOMUtil.findNextElementByTagName(viewMoreObj, "div");
 	var id = moreActionsMenu.id;
@@ -227,9 +269,10 @@ function showToptoolbarNavs(exoLogo) {
 }
 
 /*--------------------scroll toptoolbar----------------------*/
-function ScrollTopToolbar() { }
+function ScrollTopToolbar() {
+};
 
-function getChildrenByClass(root, clazz) {
+ScrollTopToolbar.prototype.getChildrenByClass = function(root, clazz) {
 	var list = [];
 	var children = root.childNodes;
 	var len = children.length;
@@ -237,11 +280,11 @@ function getChildrenByClass(root, clazz) {
 		if(eXo.core.DOMUtil.hasClass(children[i],clazz))	list.push(children[i]);
 	}
 	return list.reverse();
-}
+};
 
 ScrollManager.prototype.loadItems = function(root, clazz) {
 	this.elements.clear();
-	this.elements.pushAll(getChildrenByClass(root, clazz));
+	this.elements.pushAll(eXo.wcm.ScrollTopToolbar.getChildrenByClass(root, clazz));
 };
 
 ScrollManager.prototype.checkAvailableArea = function(maxSpace) {
@@ -260,13 +303,13 @@ ScrollManager.prototype.checkAvailableArea = function(maxSpace) {
 			this.elements[i].isVisible = false;
 		}
 	}
-} 
+} ;
 
 ScrollTopToolbar.prototype.execute = function() {
 	var obj = eXo.wcm.ScrollTopToolbar;
 	obj.manager.checkAvailableArea();	
 	obj.manager.renderItems();
-}
+};
 
 ScrollManager.prototype.renderItems = function() {
 	var obj = eXo.wcm.ScrollTopToolbar;
@@ -293,7 +336,7 @@ ScrollManager.prototype.renderItems = function() {
 			}
 		}
 	}
-}
+};
 
 ScrollTopToolbar.prototype.init = function() {
 	var obj = eXo.wcm.ScrollTopToolbar;
@@ -305,118 +348,17 @@ ScrollTopToolbar.prototype.init = function() {
 	obj.manager.loadItems(obj.manager.mainContainer, "TopToolbarMenuItem");	
 	obj.execute();
 	obj.manager.initFunction = obj.execute;
-}
+};
 
 eXo.wcm.ScrollTopToolbar = new ScrollTopToolbar();
 eXo.core.Browser.addOnLoadCallback("resizeTopToolbar", eXo.wcm.ScrollTopToolbar.init);
 
 /*------------------end the top toolbar--------------------*/
 
-//TODO this code need be removed after portal support this 
-UIPopupWindow.prototype.init = function(popupId, isShow, isResizable, showCloseButton, isShowMask) {
-	var DOMUtil = eXo.core.DOMUtil ;
-	this.superClass = eXo.webui.UIPopup ;
-	var popup = document.getElementById(popupId) ;
-	var portalApp = document.getElementById("UIPortalApplication") ;
-	if(popup == null) return;
-	popup.style.visibility = "hidden" ;
-	
-	//TODO Lambkin: this statement create a bug in select box component in Firefox
-	//this.superClass.init(popup) ;
-	var contentBlock = DOMUtil.findFirstDescendantByClass(popup, 'div' ,'PopupContent');
-	if((eXo.core.Browser.getBrowserHeight() - 100 ) < contentBlock.offsetHeight) {
-		contentBlock.style.height = (eXo.core.Browser.getBrowserHeight() - 100) + "px";
-	}
-	var popupBar = DOMUtil.findFirstDescendantByClass(popup, 'div' ,'PopupTitle') ;
-
-	popupBar.onmousedown = this.initDND ;
-	
-	if(isShow == false) {
-		this.superClass.hide(popup) ;
-		if(isShowMask) eXo.webui.UIPopupWindow.showMask(popup, false) ;
-	} 
-	
-	if(isResizable) {
-		var resizeBtn = DOMUtil.findFirstDescendantByClass(popup, "div", "ResizeButton");
-		resizeBtn.style.display = 'block' ;
-		resizeBtn.onmousedown = this.startResizeEvt ;
-		portalApp.onmouseup = this.endResizeEvt ;
-	}
-	
-	popup.style.visibility = "hidden" ;
-	if(isShow == true) {
-		var iframes = DOMUtil.findDescendantsByTagName(popup, "iframe") ;						
-		if(iframes.length > 0) {
-			setTimeout("eXo.webui.UIPopupWindow.show('" + popupId + "'," + isShowMask + ")", 500) ;
-		} else if(eXo.core.Browser.browserType == 'ie' ) {		
-		  var pageWinzard = DOMUtil.findDescendantById(portalApp, "UIPageCreationWizard") ;				  
-		  if(pageWinzard) {
-			setTimeout("eXo.webui.UIPopupWindow.show('" + popupId + "'," + isShowMask + ")", 1) ;
-		  } else {
-			this.show(popup, isShowMask) ;
-		  }
-		} else {			
-			this.show(popup, isShowMask) ;
-		}
-	}
-} ;
-
-UIPopupWindow.prototype.show = function(popup, isShowMask, middleBrowser) {
-	var DOMUtil = eXo.core.DOMUtil ;
-	if(typeof(popup) == "string") popup = document.getElementById(popup) ;
-	var portalApp = document.getElementById("UIPortalApplication") ;
-
-	var maskLayer = DOMUtil.findFirstDescendantByClass(portalApp, "div", "UIMaskWorkspace") ;
-	var zIndex = 0 ;
-	var currZIndex = 0 ;
-	if (maskLayer != null) {
-		currZIndex = DOMUtil.getStyle(maskLayer, "zIndex") ;
-		if (!isNaN(currZIndex) && currZIndex > zIndex) zIndex = currZIndex ;
-	}
-	var popupWindows = DOMUtil.findDescendantsByClass(portalApp, "div", "UIPopupWindow") ;
-	var len = popupWindows.length ;
-	for (var i = 0 ; i < len ; i++) {
-		currZIndex = DOMUtil.getStyle(popupWindows[i], "zIndex") ;
-		if (!isNaN(currZIndex) && currZIndex > zIndex) zIndex = currZIndex ;
-	}
-	if (zIndex == 0) zIndex = 2000 ;
-	// We don't increment zIndex here because it is done in the superClass.show function
-	if(isShowMask) eXo.webui.UIPopupWindow.showMask(popup, true) ;
-	popup.style.visibility = "hidden" ;
-	this.superClass.show(popup) ;
- 	var offsetParent = popup.offsetParent ;
- 	var scrollY = 0;
-	if (window.pageYOffset != undefined) scrollY = window.pageYOffset;
-	else if (document.documentElement != undefined) scrollY = document.documentElement.scrollTop;
-	else	scrollY = document.body.scrollTop;
-	//reference	
-	if(offsetParent) {
-		var middleWindow = (eXo.core.DOMUtil.hasClass(offsetParent, "UIPopupWindow") || eXo.core.DOMUtil.hasClass(offsetParent, "UIWindow"));	
-		if (middleWindow) {			
-			popup.style.top = Math.ceil((offsetParent.offsetHeight - popup.offsetHeight) / 2) + "px" ;
-		} 
-		if (middleBrowser || !middleWindow) {
-			popup.style.top = Math.ceil((eXo.core.Browser.getBrowserHeight() - popup.offsetHeight ) / 2) + scrollY + "px";
-		}		
-		if(eXo.core.DOMUtil.hasClass(offsetParent, "UIMaskWorkspace")) {			
-			if(eXo.core.Browser.browerType=='ie') 	offsetParent.style.position = "relative";
-			popup.style.top = Math.ceil((offsetParent.offsetHeight - popup.offsetHeight) / 2) + scrollY + "px" ;
-		}		
-		// hack for position popup alway top in IE6.
-		var checkHeight = popup.offsetHeight > 300; 
-
-		if (document.getElementById("UIDockBar") && checkHeight) {
-			popup.style.top = "6px";
-		}
-		popup.style.left = Math.ceil((offsetParent.offsetWidth - popup.offsetWidth) / 2) + "px" ;
-	}
-	if (eXo.core.Browser.findPosY(popup) < 0) popup.style.top = scrollY + "px" ;
-  popup.style.visibility = "visible" ;
-};
-
 function initCheckedRadio(id) {
 	eXo.core.Browser.chkRadioId = id;
 };
+
 function initCondition(formid){
 	var formElement = document.getElementById(formid);
 	var radioboxes = [];
