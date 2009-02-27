@@ -56,7 +56,7 @@ public class UIMultiSelectionPanel extends UICategoriesSelectPanel {
       Node child = iterator.nextNode();
       if (child.isNodeType("exo:hiddenable"))
         continue;
-      if (child.isNodeType("exo:webContent")) {
+      if (isDocType(child)) {
         list.add(child);
       }
     }
