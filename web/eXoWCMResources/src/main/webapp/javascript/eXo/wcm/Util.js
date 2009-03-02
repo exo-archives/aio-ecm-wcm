@@ -268,6 +268,68 @@ function showToptoolbarNavs(exoLogo) {
 	eXo.portal.UIExoStartMenu.buildMenu(navs);		
 }
 
+UIExoStartMenu.prototype.onMenuItemOut = function(event) {
+	var portalNav = document.getElementById("PortalNavigationTopContainer");
+	if(eXo.core.Browser.browserType == "ie") portalNav.style.position = "relative";
+	this.className = eXo.portal.UIExoStartMenu.itemStyleClass ;
+	if (this.menuItemContainer) {
+    eXo.portal.UIExoStartMenu.superClass.pushHiddenContainer(this.menuItemContainer.id) ;
+    eXo.portal.UIExoStartMenu.superClass.popVisibleContainer() ;
+    eXo.portal.UIExoStartMenu.superClass.setCloseTimeout() ;
+	}
+};
+
+UIExoStartMenu.prototype.onMenuItemOver = function(event) {
+	this.className = eXo.portal.UIExoStartMenu.itemOverStyleClass ;
+	if (this.menuItemContainer) {
+		var menuItemContainer = this.menuItemContainer ;
+		menuItemContainer.style.display = "block" ;
+		menuItemContainer.style.visibility = "" ;
+		var x = this.offsetWidth ;
+		var posRight = eXo.core.Browser.getBrowserWidth() - eXo.core.Browser.findPosX(this) - this.offsetWidth ; 
+	  var rootX = (eXo.core.I18n.isLT() ? eXo.core.Browser.findPosX(this) : posRight) ;
+		if (x + menuItemContainer.offsetWidth + rootX > eXo.core.Browser.getBrowserWidth()) {
+    	x -= (menuItemContainer.offsetWidth + this.offsetWidth) ;
+	  }
+	 	if(eXo.core.I18n.isLT()) {
+	 		if(eXo.core.Browser.isIE6()) x -= 10 ;
+	 		menuItemContainer.style.left = x + "px" ;
+	 	}	else menuItemContainer.style.right =  x + "px" ;
+		eXo.portal.UIExoStartMenu.createSlide(this);
+    eXo.portal.UIExoStartMenu.superClass.pushVisibleContainer(this.menuItemContainer.id) ;
+    
+    var y ;
+	 	var browserHeight = eXo.core.Browser.getBrowserHeight() ;
+	 	var hline = eXo.core.DOMUtil.findFirstChildByClass(this.parentNode, "div", "HLineSeparator") ;
+	 	
+    if(hline) {
+		 	var posParent = eXo.portal.UIExoStartMenu.findPositionParent(this) ;
+		 	var objTop = eXo.core.Browser.findPosY(this) ;
+		 	y = objTop - eXo.core.Browser.findPosY(posParent) ;
+		 	if(objTop + menuItemContainer.offsetHeight >= browserHeight) {
+				y += (this.offsetHeight - menuItemContainer.offsetHeight) ;
+			 	if(y + (eXo.core.Browser.findPosY(posParent) - document.documentElement.scrollTop) < 0) {
+				 	var objBottom = objTop + this.offsetHeight ;
+			 		y += (browserHeight - objBottom) - (browserHeight - menuItemContainer.offsetHeight)/2 + document.documentElement.scrollTop ;
+			 	}
+		 	}
+	 	} else {
+			var parentMenu = eXo.core.DOMUtil.findAncestorByClass(this, "MenuItemContainer") ;
+			var blockMenu = eXo.core.DOMUtil.findAncestorByClass(this, "BlockMenu") ;
+	 		var objTop = eXo.core.Browser.findPosY(this) ;
+	 		y = objTop - eXo.core.Browser.findPosY(parentMenu) - blockMenu.scrollTop ;
+	 		if(y + menuItemContainer.offsetHeight + 15 > browserHeight) {
+	 			y += (this.offsetHeight - menuItemContainer.offsetHeight) ;
+	 			if(y <= 0) y = 1 ;
+	 		}
+	 	}
+		menuItemContainer.style.top = y + "px" ;
+	}
+
+  var portalNav = document.getElementById("PortalNavigationTopContainer");
+  if(eXo.core.Browser.browserType == "ie") portalNav.style.position = "static";
+};
+
 /*--------------------scroll toptoolbar----------------------*/
 function ScrollTopToolbar() {
 };

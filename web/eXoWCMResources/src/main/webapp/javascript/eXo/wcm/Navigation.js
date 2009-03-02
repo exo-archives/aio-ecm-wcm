@@ -48,6 +48,7 @@ function getBreadcrumbArr(navigations, previousURI, wcmContentTitle) {
 	}
 	
 	function getChild(previousNodeUris, children, index) {
+		var breadcrumbForNavigations = new Array();
 		for (var i in children) {
 			if(previousNodeUris[index] == children[i].name) {
 				JsonObj = {
@@ -59,7 +60,7 @@ function getBreadcrumbArr(navigations, previousURI, wcmContentTitle) {
 				break;
 			}
 		}
-		if (breadcrumbForNavigations[index].children != null) {
+		if (breadcrumbForNavigations[index].length > 0) {
 			getChild(previousNodeUris, breadcrumbForNavigations[index].children, ++index); 
 		}
 	}
