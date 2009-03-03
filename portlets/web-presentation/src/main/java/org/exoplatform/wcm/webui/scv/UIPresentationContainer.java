@@ -72,10 +72,8 @@ public class UIPresentationContainer extends UIContainer{
    * @throws Exception the exception
    */
   public boolean isQuickEditable() throws Exception {
-    PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
-    PortletPreferences prefs = portletRequestContext.getRequest().getPreferences();
-    boolean isQuickEdit = Boolean.parseBoolean(prefs.getValue("ShowQuickEdit", null));    
-    return Utils.turnOnQuickEditable(portletRequestContext, isQuickEdit);
+    PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();           
+    return Utils.turnOnQuickEditable(portletRequestContext, true);
   }
 
   /**

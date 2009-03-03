@@ -22,7 +22,7 @@
 			<label>#{portal.acme.products}</label>
 			<page-reference>portal::acme::product</page-reference>	    
 		</node>	         	  	  	  	 	     	  	   
-	  <node>
+	  	<node>
 			<uri>services</uri>
 			<name>services</name>
 			<label>#{portal.acme.services}</label>
