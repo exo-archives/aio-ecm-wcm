@@ -63,15 +63,15 @@
     </dependency>  
         
     <dependency>
-      <groupId>org.exoplatform.ecm.dms</groupId>
-      <artifactId>exo.ecm.dms.component.cms</artifactId>
+      <groupId>org.exoplatform.ecm.dms.core</groupId>
+      <artifactId>exo.ecm.dms.core.component.cms</artifactId>
       <version>${org.exoplatform.ecm.dms.version}</version>
       <scope>provided</scope>
     </dependency>    
     
      <dependency>
-      <groupId>org.exoplatform.ecm.dms</groupId>
-      <artifactId>exo.ecm.dms.connector.fckeditor</artifactId>
+      <groupId>org.exoplatform.ecm.dms.core</groupId>
+      <artifactId>exo.ecm.dms.core.connector.fckeditor</artifactId>
       <version>${org.exoplatform.ecm.dms.version}</version>
       <scope>provided</scope>
     </dependency>        

@@ -71,15 +71,15 @@
     </dependency>
     
     <dependency>
-      <groupId>org.exoplatform.ecm.dms</groupId>
-      <artifactId>exo.ecm.dms.component.deployment</artifactId>
+      <groupId>org.exoplatform.ecm.dms.core</groupId>
+      <artifactId>exo.ecm.dms.core.component.deployment</artifactId>
       <version>${org.exoplatform.ecm.dms.version}</version>
       <scope>compile</scope>
     </dependency>
 	
 		<dependency>
-      <groupId>org.exoplatform.ecm.dms</groupId>
-      <artifactId>exo.ecm.dms.component.publication</artifactId>
+      <groupId>org.exoplatform.ecm.dms.core</groupId>
+      <artifactId>exo.ecm.dms.core.component.publication</artifactId>
       <version>${org.exoplatform.ecm.dms.version}</version>
       <scope>compile</scope>
     </dependency>
