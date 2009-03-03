@@ -233,8 +233,8 @@ public class UIWebContentSearchForm extends UIForm {
       UIWebContentTabSelector uiWCTabSelector = uiWCSearch.getParent();
       UIApplication uiApp = uiWCSearch.getAncestorOfType(UIApplication.class);
       QueryCriteria qCriteria = uiWCSearch.getInitialQueryCriteria(siteName);
-      int pageSize = 10;
-      PaginatedQueryResult pagResult = new PaginatedQueryResult(pageSize); 
+      int pageSize = 5;
+      PaginatedQueryResult pagResult = null; 
       if(UIWebContentSearchForm.SEARCH_BY_NAME.equals(radioValue)) {
         String keyword = uiWCSearch.getUIStringInput(radioValue).getValue();
         if(uiWCSearch.haveEmptyField(uiApp, event, keyword)) return;

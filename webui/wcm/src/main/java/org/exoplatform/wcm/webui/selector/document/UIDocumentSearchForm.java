@@ -184,8 +184,8 @@ public class UIDocumentSearchForm extends UIForm {
       UIDocumentTabSelector uiDocTabSelector = uiDocSearchForm.getParent();
       UIApplication uiApp = uiDocSearchForm.getAncestorOfType(UIApplication.class);
       QueryCriteria qCriteria = uiDocSearchForm.getInitialQueryCriteria(siteName);
-      int pageSize = 10;
-      PaginatedQueryResult pagResult = new PaginatedQueryResult(pageSize); 
+      int pageSize = 5;
+      PaginatedQueryResult pagResult = null; 
       if(UIWebContentSearchForm.SEARCH_BY_NAME.equals(radioValue)) {
         String keyword = uiDocSearchForm.getUIStringInput(radioValue).getValue();
         if(uiDocSearchForm.haveEmptyField(uiApp, event, keyword)) return;

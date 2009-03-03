@@ -1,17 +1,14 @@
 package org.exoplatform.wcm.webui.selector.webcontent;
 
 import java.text.DateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 import javax.jcr.Node;
 import javax.jcr.Session;
 import javax.portlet.PortletPreferences;
 
-import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.ecm.webui.selector.UISelectable;
 import org.exoplatform.ecm.webui.tree.UIBaseNodeTreeSelector;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
@@ -21,7 +18,6 @@ import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.search.PaginatedQueryResult;
-import org.exoplatform.services.wcm.search.ResultNode;
 import org.exoplatform.wcm.webui.selector.document.UIDocumentPathSelector;
 import org.exoplatform.wcm.webui.selector.document.UIDocumentTabSelector;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -29,6 +25,7 @@ import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIGrid;
+import org.exoplatform.webui.core.UIPageIterator;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
@@ -48,17 +45,15 @@ import org.exoplatform.webui.event.EventListener;
 
 public class UIWCMSearchResult extends UIGrid {
 
-  public static final String TITLE = "Title".intern();
-  public static final String NODE_EXPECT = "NodeExpect".intern();
-  public static final String SCORE = "Score".intern();
+  public static final String TITLE = "title".intern();
+  public static final String NODE_EXPECT = "excerpt".intern();
+  public static final String SCORE = "score".intern();
   public static final String CREATE_DATE = "CreateDate".intern();
-  public static final String NODE_PATH = "NodePath".intern();
+  public static final String NODE_PATH = "path".intern();
   public String[] Actions = {"Select", "View"};
   public String[] BEAN_FIELDS = {TITLE, SCORE};
-
-  private PaginatedQueryResult pagResult;
-  private List<SearchResultBean> resBeanList;
-
+  
+  
   public UIWCMSearchResult() throws Exception {
     configure(NODE_PATH, BEAN_FIELDS, Actions);
     getUIPageIterator().setId("UIWCMSearchResultPaginator");
@@ -70,23 +65,10 @@ public class UIWCMSearchResult extends UIGrid {
     return dateFormat;
   }
 
-  public void updateGrid(PaginatedQueryResult paginatedResult) throws Exception {
-    this.pagResult = paginatedResult;
-    List<SearchResultBean> resultBeanList = new ArrayList<SearchResultBean>();
-    List<ResultNode> currentPageDate = pagResult.getCurrentPageData();
-    for(ResultNode resultNode : currentPageDate) {
-      Node node= resultNode.getNode();
-      SearchResultBean resultBean = new SearchResultBean();
-      resultBean.setCreateDate(getCreateDate(node));
-      resultBean.setTitle(getTitleNode(node));
-      resultBean.setNodeExpect(resultNode.getExcerpt());
-      resultBean.setNodePath(node.getPath());
-      resultBean.setScore(resultNode.getScore());
-      resultBeanList.add(resultBean);
-    }
-    setResBeanList(resultBeanList);
-    ObjectPageList objectPageList = new ObjectPageList(resultBeanList, 10);
-    getUIPageIterator().setPageList(objectPageList);
+  public void updateGrid(PaginatedQueryResult paginatedResult) throws Exception {           
+    getUIPageIterator().setPageList(paginatedResult); 
+    UIPageIterator iterator = getUIPageIterator();
+    System.out.println("list size:"+iterator.getPageList().getPageSize());
   }
 
 
@@ -186,51 +168,5 @@ public class UIWCMSearchResult extends UIGrid {
         uiWCTabSelector.setSelectedTab(uiResultView.getId());
       }
     }
-  }
-
-  public static class SearchResultBean {
-    public String Title;
-    public String NodeExpect;
-    public float Score;
-    public Date CreateDate;
-    public  String NodePath;
-    public String getNodeExpect() {
-      return NodeExpect;
-    }
-    public void setNodeExpect(String nodeExpect) {
-      NodeExpect = nodeExpect;
-    }
-    public float getScore() {
-      return Score;
-    }
-    public void setScore(float score) {
-      Score = score;
-    }
-    public Date getCreateDate() {
-      return CreateDate;
-    }
-    public void setCreateDate(Date createDate) {
-      CreateDate = createDate;
-    }
-    public String getNodePath() {
-      return NodePath;
-    }
-    public void setNodePath(String nodePath) {
-      NodePath = nodePath;
-    }
-    public String getTitle() {
-      return Title;
-    }
-    public void setTitle(String title) {
-      Title = title;
-    }
-  }
-
-  public List<SearchResultBean> getResBeanList() {
-    return resBeanList;
-  }
-
-  public void setResBeanList(List<SearchResultBean> resBeanList) {
-    this.resBeanList = resBeanList;
-  }
+  }  
 }
