@@ -1,11 +1,5 @@
 package org.exoplatform.wcm.webui.selector.webcontent;
 
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.services.cms.BasePath;
-import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
