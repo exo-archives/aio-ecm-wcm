@@ -67,8 +67,6 @@ public class UIWCMSearchResult extends UIGrid {
 
   public void updateGrid(PaginatedQueryResult paginatedResult) throws Exception {           
     getUIPageIterator().setPageList(paginatedResult); 
-    UIPageIterator iterator = getUIPageIterator();
-    System.out.println("list size:"+iterator.getPageList().getPageSize());
   }
 
 
