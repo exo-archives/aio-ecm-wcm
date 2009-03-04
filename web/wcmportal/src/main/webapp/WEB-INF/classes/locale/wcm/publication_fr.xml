@@ -43,6 +43,9 @@
     </label>
   </UIPublishedPages>
   <UIPublicationPanel>
+  	<button>
+  		<close>Close</close>
+  	</button>
   	<revisions>
   		<version>Revisions</version>
   		<date>Date</date>
@@ -52,6 +55,19 @@
   		<label>Version</label>
   		<none>No revisions</none>
   	</revisions>
+  	<status>
+  		<version>Version</version>
+  		<title>Status</title>
+  		<enrolled>Enrolled</enrolled>
+  		<draft>Draft</draft>
+  		<awaiting>Awaiting</awaiting>
+  		<live>Live</live>
+  		<obsolete>Obsolete</obsolete>
+  	</status>
+  	<scheduled>
+  		<title>Scheduled</title>
+  		<from>from</from>
+  		<to>to</to>
+  	</scheduled>
   </UIPublicationPanel>
 </bundle>
-

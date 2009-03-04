@@ -19,7 +19,6 @@ package org.exoplatform.services.wcm.publication.defaultlifecycle;
 import java.util.List;
 
 import javax.jcr.Node;
-import javax.jcr.version.Version;
 
 import org.exoplatform.services.wcm.publication.defaultlifecycle.UIPublicationTree.TreeNode;
 import org.exoplatform.webui.config.annotation.ComponentConfig;

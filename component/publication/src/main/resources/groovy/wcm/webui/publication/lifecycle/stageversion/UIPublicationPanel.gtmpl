@@ -1,8 +1,33 @@
 <%
+  import java.util.List;
   import javax.jcr.version.Version;
+  import org.exoplatform.services.wcm.publication.lifecycle.stageversion.UIPublicationPanel;
 %>
 
+<% uicomponent.begin(); %>
 <div class="UIPublicationPanel" id="$uicomponent.id">
+  <fieldset class="StatusTable">
+    <legend class="Legend"> <%=_ctx.appRes("UIPublicationPanel.status.version")%> 3 </legend>
+    <div class="StatusAction">
+      <div class="StatusTitle"><%=_ctx.appRes("UIPublicationPanel.status.title")%>: </div>
+      <div class="StatusLink">
+        <a href="<%= uicomponent.event("Enrolled")%>"><%=_ctx.appRes("UIPublicationPanel.status.enrolled")%></a>
+        <a href="<%= uicomponent.event("Draft")%>"><%=_ctx.appRes("UIPublicationPanel.status.draft")%></a>
+        <a href="<%= uicomponent.event("Awaiting")%>"><%=_ctx.appRes("UIPublicationPanel.status.awaiting")%></a>
+        <a href="<%= uicomponent.event("Live")%>"><%=_ctx.appRes("UIPublicationPanel.status.live")%></a>
+        <a href="<%= uicomponent.event("Obsolete")%>"><%=_ctx.appRes("UIPublicationPanel.status.obsolete")%></a>
+      </div>
+    </div>
+    <div class="StatusScheduled">
+      <div class="ScheduledTitle"><%=_ctx.appRes("UIPublicationPanel.scheduled.title")%>: </div>
+      <div class="ScheduledTime">
+        <span><%=_ctx.appRes("UIPublicationPanel.scheduled.from")%></span>
+        <%uicomponent.renderChild(UIPublicationPanel.START_TIME);%>
+        <span><%=_ctx.appRes("UIPublicationPanel.scheduled.to")%></span>
+        <%uicomponent.renderChild(UIPublicationPanel.END_TIME);%>
+      </div>
+    </div>
+  </fieldset>
   <table class="RevisionsTable" border="1">
     <tr>
       <td class="Version"><%=_ctx.appRes("UIPublicationPanel.revisions.version")%></td>
@@ -24,7 +49,9 @@
       for (Version version : versions) {
         %>
           <tr>
-            <td class="Name"><%=_ctx.appRes("UIPublicationPanel.revisions.label")%>: <%=version.getName()%></td>
+            <td class="Name">
+              <a href="<%= uicomponent.event("ChangeVersion", version.getUUID()) %>"><%=_ctx.appRes("UIPublicationPanel.revisions.label")%>: <%=version.getName()%></a>
+            </td>
             <td><%=version.getProperty("jcr:created").getString()%></td>
             <td>root</td>
             <td>Draft</td>
@@ -38,4 +65,23 @@
       }
     %>  
   </table>
+  
+  <div class="UIAction"> 
+    <table align="center" class="ActionContainer">
+      <tr>
+        <td align="center">
+            <a href="<%= uicomponent.event("Close") %>" class="ActionButton LightBlueStyle">
+              <div class="ButtonLeft">
+                <div class="ButtonRight">
+                  <div class="ButtonMiddle">
+                    <%=_ctx.appRes("UIPublicationPanel.button.close")%>
+                  </div>
+                </div>
+              </div>
+            </a>
+        </td>
+      </tr>
+    </table>
+  </div>
 </div>
+<% uicomponent.end(); %>

@@ -138,13 +138,39 @@
 
 
 
+
+
+
+.UIPublicationPanel .StatusTable {
+	margin: 0 0 20px;
+}
+
+.UIPublicationPanel .StatusTable .StatusAction {}
+
+.UIPublicationPanel .StatusTable .StatusTitle {
+	font-size: 12px;
+	font-weight: bold;
+}
+
+.UIPublicationPanel .StatusTable .ScheduledTitle {
+	font-size: 12px;
+	font-weight: bold;
+}
+
+.UIPublicationPanel .StatusTable .StatusLink {
+	text-align: center;
+}
+
+.UIPublicationPanel .StatusTable .ScheduledTime {
+	text-align: center;
+}
+
 .UIPublicationPanel .RevisionsTable {
-	border: 1px solid CadetBlue;
+	border: 1px solid #828177;
 }
 
 .UIPublicationPanel .RevisionsTable tr {
-	line-height: 16px;
-	padding
+	line-height: 20px;
 }
 
 .UIPublicationPanel .RevisionsTable td {
@@ -154,29 +180,29 @@
 .UIPublicationPanel .RevisionsTable .Version {
 	background: none;
 	font-weight: bold;
-	padding: 4px 0;
+	padding: 0 4px;
 }
 
 .UIPublicationPanel .RevisionsTable .Date {
 	background: none;
 	font-weight: bold;
-	padding: 4px 0;
+	padding: 0 4px;
 }
 
 .UIPublicationPanel .RevisionsTable .Author {
 	font-weight: bold;
-	padding: 4px 0;
+	padding: 0 4px;
 }
 
 .UIPublicationPanel .RevisionsTable .Status {
 	font-weight: bold;
-	padding: 4px 0;
+	padding: 0 4px;
 }
 
 .UIPublicationPanel .RevisionsTable .Action {
 	font-weight: bold;
 	width: 55px;
-	padding: 4px 0;
+	padding: 0 4px;
 }
 
 .UIPublicationPanel .RevisionsTable .None {
@@ -192,7 +218,7 @@
 	height: 16px;
 	cursor: pointer;
 	float: left;
-	margin: 4px 5px 0;
+	margin: 2px 5px 0;
 }
 
 .UIPublicationPanel .RevisionsTable .Restore {
@@ -201,5 +227,5 @@
 	height: 16px;
 	cursor: pointer;
 	float: left;
-	margin: 4px 5px 0;
+	margin: 2px 5px 0;
 }

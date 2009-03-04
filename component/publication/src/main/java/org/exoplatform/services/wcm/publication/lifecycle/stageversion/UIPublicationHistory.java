@@ -16,11 +16,16 @@
  */
 package org.exoplatform.services.wcm.publication.lifecycle.stageversion;
 
+import java.util.List;
+
 import javax.jcr.Node;
 
+import org.exoplatform.services.wcm.publication.defaultlifecycle.UIPublicationTree.TreeNode;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
+import org.exoplatform.webui.form.UIForm;
 
 /**
  * Created by The eXo Platform SAS
@@ -28,13 +33,79 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
  *          chuong_phan@exoplatform.com
  * Mar 4, 2009  
  */
-@ComponentConfig(
-  lifecycle = UIFormLifecycle.class,
-  template = "classpath:groovy/wcm/webui/publication/lifecycle/stageversion/UIPublicationHistory.gtmpl"
+@ComponentConfig (
+                  lifecycle = UIApplicationLifecycle.class,
+                  template = "classpath:groovy/wcm/webui/publication/UIPublishingPanel.gtmpl"
 )
-public class UIPublicationHistory extends UIComponent {
-  
-  public void init(Node node) {
-    
+public class UIPublicationHistory extends UIForm {
+
+  /** The current node. */
+  private Node currentNode;
+
+  /**
+   * Gets the node.
+   * 
+   * @return the node
+   */
+  public Node getNode() {return this.currentNode;}
+
+  /**
+   * Sets the node.
+   * 
+   * @param node the new node
+   */
+  public void setNode(Node node) {this.currentNode = node; }  
+
+  /**
+   * Instantiates a new uI publishing panel.
+   * 
+   * @throws Exception the exception
+   */
+  public UIPublicationHistory() throws Exception {
+    addChild(UIPortalNavigationExplorer.class,null,"UIPortalNavigationExplorer");
+    addChild(UIPublicationAction.class,null,"UIPublicationAction");
+    addChild(UIPublishedPages.class,null,"UIPublishedPages");
   }
+
+  /**
+   * Inits the panel.
+   * 
+   * @param node the node
+   * @param portalName the portal name
+   * @param runningPortals the running portals
+   * 
+   * @throws Exception the exception
+   */
+  public void init(Node node,String portalName,List<String> runningPortals) throws Exception {
+    this.currentNode = node;    
+    UIPortalNavigationExplorer poExplorer = getChild(UIPortalNavigationExplorer.class);
+    poExplorer.init(portalName,runningPortals);
+    UIPublishedPages publishedPages = getChild(UIPublishedPages.class);
+    publishedPages.init();
+  }
+
+  /**
+   * Gets the current portal.
+   * 
+   * @return the current portal
+   */
+  public String getCurrentPortal() {
+    UIPortalNavigationExplorer portalNavigationExplorer = getChild(UIPortalNavigationExplorer.class);
+    TreeNode selectedNode = portalNavigationExplorer.getSelectedNode();
+    if (selectedNode != null) return selectedNode.getPortalName();
+    return null;
+  }
+
+  /**
+   * Gets the current tree node.
+   * 
+   * @return the current tree node
+   */
+  public String getCurrentTreeNode() {
+    UIPortalNavigationExplorer portalNavigationExplorer = getChild(UIPortalNavigationExplorer.class);
+    TreeNode selectedNode = portalNavigationExplorer.getSelectedNode();
+    if (selectedNode != null) return selectedNode.getName();
+    return null;
+  }
+
 }

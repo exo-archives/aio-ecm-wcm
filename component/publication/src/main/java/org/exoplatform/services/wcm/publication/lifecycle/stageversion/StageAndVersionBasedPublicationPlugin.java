@@ -18,16 +18,25 @@ package org.exoplatform.services.wcm.publication.lifecycle.stageversion;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import javax.jcr.Node;
 
+import org.exoplatform.commons.utils.PageList;
+import org.exoplatform.portal.config.DataStorage;
+import org.exoplatform.portal.config.Query;
+import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
+import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.services.ecm.publication.IncorrectStateUpdateLifecycleException;
+import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.services.wcm.publication.WebpagePublicationPlugin;
+import org.exoplatform.services.wcm.publication.defaultlifecycle.Util;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.form.UIForm;
 
