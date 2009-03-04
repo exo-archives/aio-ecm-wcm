@@ -16,6 +16,8 @@
  */
 package org.exoplatform.services.wcm.publication.lifecycle.stageversion;
 
+import javax.jcr.Node;
+
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.form.UIForm;
@@ -31,5 +33,8 @@ import org.exoplatform.webui.form.UIForm;
   template = "classpath:groovy/wcm/webui/publication/lifecycle/stageversion/UIPublicationPages.gtmpl"
 )
 public class UIPublicationPages extends UIForm {
-
+  
+  public void init(Node node) {
+    
+  }
 }

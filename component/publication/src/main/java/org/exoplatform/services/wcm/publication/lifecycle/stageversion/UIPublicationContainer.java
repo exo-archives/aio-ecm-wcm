@@ -22,7 +22,6 @@ import javax.jcr.Node;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIPopupComponent;
-import org.exoplatform.webui.core.UITabPane;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.form.UIForm;
 
@@ -48,9 +47,11 @@ public class UIPublicationContainer extends UIForm implements UIPopupComponent {
     UIPublicationPanel publicationPanel = addChild(UIPublicationPanel.class, null, null);
     publicationPanel.initPanel(node);
     UIPublicationPages publicationPages = addChild(UIPublicationPages.class, null, null);
+    publicationPages.init(node);
     publicationPages.setRendered(false);
     UIPublicationHistory publicationHistory = addChild(UIPublicationHistory.class, null, null);
-    publicationHistory.setRendered(false);
+    publicationHistory.init(node);
+    publicationHistory.setRendered(false);    
     setSelectedTab(1);
   }
   
