@@ -27,10 +27,20 @@
     </supertypes>    
   </nodeType>
   
-  <nodeType name="publication:stageAndVersionBasedPublication" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
+  <nodeType name="publication:stateAndVersionBasedPublication" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
 		<supertypes>      
       <supertype>publication:publication</supertype>
-    </supertypes>    
+    </supertypes>
+    <propertyDefinitions>
+    	<propertyDefinition name="publication:startPublicationDate" requiredType="Date" autoCreated="false" mandatory="false"
+        onParentVersion="IGNORE" protected="false" multiple="true">
+        <valueConstraints/>
+      </propertyDefinition>    	
+      <propertyDefinition name="publication:endPublicationDate" requiredType="Date" autoCreated="false" mandatory="false"
+        onParentVersion="IGNORE" protected="false" multiple="true">
+        <valueConstraints/>
+      </propertyDefinition>            
+    </propertyDefinitions>    
   </nodeType>
           
 </nodeTypes>

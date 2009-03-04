@@ -21,7 +21,7 @@
         <%
       }
     
-      for (Version version : ) {
+      for (Version version : versions) {
         %>
           <tr>
             <td class="Name"><%=_ctx.appRes("UIPublicationPanel.revisions.label")%>: <%=version.getName()%></td>

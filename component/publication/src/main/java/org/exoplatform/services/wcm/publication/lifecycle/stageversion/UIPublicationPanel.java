@@ -34,19 +34,17 @@ import org.exoplatform.webui.form.UIForm;
  * Mar 2, 2009  
  */
 @ComponentConfig(
-  lifecycle = UIFormLifecycle.class,
-  template = "classpath:groovy/wcm/webui/publication/lifecycle/stageversion/UIPublicationPanel.gtmpl"
+    lifecycle = UIFormLifecycle.class,
+    template = "classpath:groovy/wcm/webui/publication/lifecycle/stageversion/UIPublicationPanel.gtmpl"
 )
 public class UIPublicationPanel extends UIForm {
-  
+
   private List<Version> versions = new ArrayList<Version>();
-  
-  public void initPanel(Node node) throws Exception {
-    if(node.isNodeType("mix:versionable")) {      
-      VersionIterator versionIterator = node.getVersionHistory().getAllVersions();
-      for (;versionIterator.hasNext();) {
-        versions.add(versionIterator.nextVersion());
-      }
+
+  public void initPanel(Node node) throws Exception {         
+    VersionIterator versionIterator = node.getVersionHistory().getAllVersions();
+    for (;versionIterator.hasNext();) {
+      versions.add(versionIterator.nextVersion());
     }    
   }
 

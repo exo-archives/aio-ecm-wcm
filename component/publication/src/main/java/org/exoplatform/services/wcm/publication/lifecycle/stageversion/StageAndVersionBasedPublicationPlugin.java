@@ -38,45 +38,26 @@ import org.exoplatform.webui.form.UIForm;
  * Mar 2, 2009  
  */
 public class StageAndVersionBasedPublicationPlugin extends WebpagePublicationPlugin{
-  public static final String CURRENT_STATE = "publication:currentState".intern();
-  
+  public static final String CURRENT_STATE = "publication:currentState".intern();  
   public static final String ENROLLED = "enrolled".intern(); 
   public static final String DRAFT = "draft".intern();
   public static final String AWAITING = "awaiting".intern();
   public static final String LIVE = "live".intern();
-  public static final String OBSOLETE = "obsolete".intern();
+  public static final String OBSOLETE = "obsolete".intern();  
+  public static final String LIFECYCLE_NAME = "States and versions based publication".intern();
   
-  public void publishContentToPage(Node content, Page page) throws Exception {
-  }
-
-  public void suspendPublishedContentFromPage(Node content, Page page) throws Exception {
-  }
-
-  public void updateLifecycleOnChangeNavigation(PageNavigation navigation) throws Exception {
-  }
-
-  public void updateLifecycleOnRemovePage(Page page) throws Exception {
-  }
-
-  public void updateLifecyleOnChangePage(Page page) throws Exception {
-  }
-
-  public void updateLifecyleOnCreateNavigation(PageNavigation navigation) throws Exception {
-  }
-
-  public void updateLifecyleOnCreatePage(Page page) throws Exception {
-  }
-
-  public void updateLifecyleOnRemoveNavigation(PageNavigation navigation) throws Exception {
-  }
-
   public void addMixin(Node node) throws Exception {
-//    node.addMixin("mix:versionable");
-    node.addMixin("publication:stageAndVersionBasedPublication");
+    node.addMixin("publication:stateAndVersionBasedPublication");
+    if(!node.isNodeType("mix:versionable")) {
+      node.addMixin("mix:versionable");
+    }
+    node.setProperty("publication:lifecycleName", LIFECYCLE_NAME);
+    node.setProperty(CURRENT_STATE,ENROLLED);
+    node.getSession().save();    
   }
 
   public boolean canAddMixin(Node node) throws Exception {
-    return node.canAddMixin("publication:stageAndVersionBasedPublication");    
+    return node.canAddMixin("publication:stateAndVersionBasedPublication");   
   }    
   
   public void changeState(Node node, String newState, HashMap<String, String> context) throws IncorrectStateUpdateLifecycleException,                                                                               Exception {   
@@ -109,5 +90,28 @@ public class StageAndVersionBasedPublicationPlugin extends WebpagePublicationPlu
   public String getUserInfo(Node arg0, Locale arg1) throws Exception {
     return null;
   }
+  
+  public void publishContentToPage(Node content, Page page) throws Exception {
+  }
 
+  public void suspendPublishedContentFromPage(Node content, Page page) throws Exception {
+  }
+
+  public void updateLifecycleOnChangeNavigation(PageNavigation navigation) throws Exception {
+  }
+
+  public void updateLifecycleOnRemovePage(Page page) throws Exception {
+  }
+
+  public void updateLifecyleOnChangePage(Page page) throws Exception {
+  }
+
+  public void updateLifecyleOnCreateNavigation(PageNavigation navigation) throws Exception {
+  }
+
+  public void updateLifecyleOnCreatePage(Page page) throws Exception {
+  }
+
+  public void updateLifecyleOnRemoveNavigation(PageNavigation navigation) throws Exception {
+  }
 }
