@@ -29,3 +29,7 @@
 #UIContainer-DefaultPortalContainer .UIContainer {
 	padding: 0;
 }
+
+.UIWorkingWorkspace {
+	zoom: 100%;
+}
