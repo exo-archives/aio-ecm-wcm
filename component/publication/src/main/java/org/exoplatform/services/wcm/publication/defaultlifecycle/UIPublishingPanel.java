@@ -19,6 +19,7 @@ package org.exoplatform.services.wcm.publication.defaultlifecycle;
 import java.util.List;
 
 import javax.jcr.Node;
+import javax.jcr.version.Version;
 
 import org.exoplatform.services.wcm.publication.defaultlifecycle.UIPublicationTree.TreeNode;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -76,7 +77,7 @@ public class UIPublishingPanel extends UIForm {
    * @throws Exception the exception
    */
   public void initPanel(Node node,String portalName,List<String> runningPortals) throws Exception {
-    this.currentNode = node;
+    this.currentNode = node;    
     UIPortalNavigationExplorer poExplorer = getChild(UIPortalNavigationExplorer.class);
     poExplorer.init(portalName,runningPortals);
     UIPublishedPages publishedPages = getChild(UIPublishedPages.class);

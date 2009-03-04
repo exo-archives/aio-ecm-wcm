@@ -135,3 +135,71 @@
 .UIPublicationLogList .UIGrid .Text {
 	white-space: normal;
 }
+
+
+
+.UIPublicationPanel .RevisionsTable {
+	border: 1px solid CadetBlue;
+}
+
+.UIPublicationPanel .RevisionsTable tr {
+	line-height: 16px;
+	padding
+}
+
+.UIPublicationPanel .RevisionsTable td {
+	padding-left: 3px;
+}
+
+.UIPublicationPanel .RevisionsTable .Version {
+	background: none;
+	font-weight: bold;
+	padding: 4px 0;
+}
+
+.UIPublicationPanel .RevisionsTable .Date {
+	background: none;
+	font-weight: bold;
+	padding: 4px 0;
+}
+
+.UIPublicationPanel .RevisionsTable .Author {
+	font-weight: bold;
+	padding: 4px 0;
+}
+
+.UIPublicationPanel .RevisionsTable .Status {
+	font-weight: bold;
+	padding: 4px 0;
+}
+
+.UIPublicationPanel .RevisionsTable .Action {
+	font-weight: bold;
+	width: 55px;
+	padding: 4px 0;
+}
+
+.UIPublicationPanel .RevisionsTable .None {
+	font-style: italic;
+	text-align: center;
+}
+
+.UIPublicationPanel .RevisionsTable .Name {}
+
+.UIPublicationPanel .RevisionsTable .Preview {
+	background: url('icons/16x16/VersionPreview.gif') no-repeat;
+	width: 16px;
+	height: 16px;
+	cursor: pointer;
+	float: left;
+	margin: 4px 5px 0;
+}
+
+.UIPublicationPanel .RevisionsTable .Restore {
+	background: url('icons/16x16/VersionRestore.gif') no-repeat;
+	width: 16px;
+	height: 16px;
+	cursor: pointer;
+	float: left;
+	margin: 4px 5px 0;
+}

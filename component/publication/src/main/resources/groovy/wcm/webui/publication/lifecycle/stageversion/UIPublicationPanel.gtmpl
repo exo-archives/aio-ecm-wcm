@@ -1,0 +1,41 @@
+<%
+  import javax.jcr.version.Version;
+%>
+
+<div class="UIPublicationPanel" id="$uicomponent.id">
+  <table class="RevisionsTable" border="1">
+    <tr>
+      <td class="Version"><%=_ctx.appRes("UIPublicationPanel.revisions.version")%></td>
+      <td class="Date"><%=_ctx.appRes("UIPublicationPanel.revisions.date")%></td>
+      <td class="Author"><%=_ctx.appRes("UIPublicationPanel.revisions.author")%></td>
+      <td class="Status"><%=_ctx.appRes("UIPublicationPanel.revisions.status")%></td>
+      <td class="Action"><%=_ctx.appRes("UIPublicationPanel.revisions.action")%></td>
+    </tr>
+    <%
+      List<Version> versions = uicomponent.getVersions();
+      if (versions.isEmpty()) {
+        %>
+          <tr>
+            <td colspan="5" class="None"><%=_ctx.appRes("UIPublicationPanel.revisions.none")%></td>
+          </tr>
+        <%
+      }
+    
+      for (Version version : ) {
+        %>
+          <tr>
+            <td class="Name"><%=_ctx.appRes("UIPublicationPanel.revisions.label")%>: <%=version.getName()%></td>
+            <td><%=version.getProperty("jcr:created").getString()%></td>
+            <td>root</td>
+            <td>Draft</td>
+            <td>
+              <div class="Preview"><span></span></div>
+              <div class="Restore"><span></span></div>
+              <div style="clear: left"><span></span></div>
+            </td>
+          </tr>
+        <%
+      }
+    %>  
+  </table>
+</div>

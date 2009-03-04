@@ -42,5 +42,16 @@
       <noitem>Ce contenu n'a été publié dans aucune page pour le moment</noitem>
     </label>
   </UIPublishedPages>
+  <UIPublicationPanel>
+  	<revisions>
+  		<version>Revisions</version>
+  		<date>Date</date>
+  		<author>Author</author>
+  		<status>Status</status>
+  		<action>Action</action>
+  		<label>Version</label>
+  		<none>No revisions</none>
+  	</revisions>
+  </UIPublicationPanel>
 </bundle>
 

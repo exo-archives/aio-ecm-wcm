@@ -26,5 +26,11 @@
       <supertype>publication:webpagesPublication</supertype>
     </supertypes>    
   </nodeType>
+  
+  <nodeType name="publication:stageAndVersionBasedPublication" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
+		<supertypes>      
+      <supertype>publication:publication</supertype>
+    </supertypes>    
+  </nodeType>
           
 </nodeTypes>
