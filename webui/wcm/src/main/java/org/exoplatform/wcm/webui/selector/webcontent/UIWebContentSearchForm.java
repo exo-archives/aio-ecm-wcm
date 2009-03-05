@@ -70,7 +70,7 @@ public class UIWebContentSearchForm extends UIForm {
   final static public String START_TIME = "startTime";
   final static public String END_TIME = "endTime";
   final static public String DOC_TYPE = "docType";
-  final static public String CATEGORY_TYPE = "categoryType";
+  final static public String CATEGORY = "category";
   final static public String CREATED_DATE = "CREATED";
   final static public String MODIFIED_DATE = "MODIFIED";
   final static public String EXACTLY_PROPERTY = "exactlyPro";
@@ -109,10 +109,8 @@ public class UIWebContentSearchForm extends UIForm {
     addUIFormInput(startTime);
     UIFormDateTimeInput endTime = new UIFormDateTimeInput(END_TIME, END_TIME, null, true);
     addUIFormInput(endTime);
-
     addUIFormInput(new UIFormStringInput(DOC_TYPE, DOC_TYPE, null));
-
-    addUIFormInput(new UIFormStringInput(CATEGORY_TYPE, CATEGORY_TYPE, null));
+//    addUIFormInput(new UIFormStringInput(CATEGORY, CATEGORY, null));
 
     setActions(new String[] {"SearchWebContent"} );
   }

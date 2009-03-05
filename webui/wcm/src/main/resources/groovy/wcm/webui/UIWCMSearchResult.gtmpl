@@ -19,33 +19,49 @@
 <div id="$uicomponent.id">
   <table class="UIGrid" cellspacing="0">
     <thead>
-      <tr>
-        <%if(name != null) {%>
-          <%for(field in beanFields) { %>
-              <th><%=_ctx.appRes(name+".header."+field)%></th>
-          <%}%>
-          <%if(beanActions != null) { %>
-              <th><%=_ctx.appRes(name+".header.action")%></th>
-          <%}%>
-        <%}%>
-        <%if(name == null) {%>
-          <%for(field in beanFields) { %>
-              <th><%=_ctx.appRes(uiParent.getName()+".header."+field)%></th>
-          <%}%>
-          <%if(beanActions != null && beanActions.length > 0) { %>
-              <th><%=_ctx.appRes(uiParent.getName()+".header.action")%></th>
-          <%}%>
-        <%}%>
+      <tr class="UIWCMSearchContent">
+        <%
+	        int count = 0;
+	        String klass = "";
+        	if(name != null) {
+        		for(field in beanFields) {
+        			klass = count++ == 0 ? "title" : "score";
+       	%>
+              		<th class="$klass"><%=_ctx.appRes(name + ".header." + field)%></th>
+        <%		}
+        		if(beanActions != null) { 
+        %>
+        			<th class="action"><%=_ctx.appRes(name + ".header.action")%></th>
+        <%		
+        		}
+        	}	
+        %>
+        <%
+        	if(name == null) {
+          		for(field in beanFields) { 
+          			klass = count++ == 0 ? "title" : "score";
+        %>
+          			<th class="$klass"><%=_ctx.appRes(uiParent.getName() + ".header." + field)%></th>
+        <%		}	
+          		if(beanActions != null && beanActions.length > 0) { 
+        %>
+              		<th class="action"><%=_ctx.appRes(uiParent.getName() + ".header.action")%></th>
+        <%		
+          		}		
+          	}	
+        %>
       </tr>
     </thead>
     <tbody>
-    <%if(uicomponent.getUIPageIterator().getAvailable() < 1) {%>
+    <%	
+    	if(uicomponent.getUIPageIterator().getAvailable() < 1) {
+    %>
       <tr>
         <td style="font-style:italic; color: #FF5604; text-align: center;" colspan="<%=beanFields.length+1%>">
           <%=_ctx.appRes("UIGrid.msg.empty")%>
         </td>
       </tr>  
-    <%} else { 
+    <%	} else { 
         def rowClass = null ;
         boolean even = true ;
         for (bean in uicomponent.getBeans())  {
@@ -53,7 +69,7 @@
           else rowClass =  "OddRow" ; 
           even = !even ;
     %>
-          <tr class="$rowClass">
+          <tr>
     <%
             String titleNode = bean.getTitle();
             String expect = uicomponent.getExpect(bean.getExcerpt());
@@ -72,12 +88,12 @@
           </td>
           
           <td>
-            <div class="number">$score</div>
+            <div class="Number">$score</div>
           </td>
     <%
-          if(beanActions != null && beanActions.length > 0) { 
+    	if(beanActions != null && beanActions.length > 0) { 
     %>
-          <td>
+          <td class="action">
             <div class="ActionContainer">
               <%
                 def beanIdField = uicomponent.getBeanIdField() ;           
@@ -92,7 +108,7 @@
             </div>
           </td>
     <%
-          }
+    	}
     %>
           </tr>
     <%

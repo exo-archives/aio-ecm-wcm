@@ -28,6 +28,18 @@
 	margin: 6px;
 }
 
+.UIWCMSearchContent .title {
+	width: 60%;
+}
+
+.UIWCMSearchContent .score {
+	width: 20%;
+}
+
+.UIWebSearchResult .action {
+	width: 20%;
+}
+
 /******************************************************/
 .UIWCMSearchContainer {}	
 	

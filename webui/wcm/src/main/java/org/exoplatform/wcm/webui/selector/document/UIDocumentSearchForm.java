@@ -83,7 +83,7 @@ public class UIDocumentSearchForm extends UIForm {
 
     addUIFormInput(new UIFormStringInput(UIWebContentSearchForm.DOC_TYPE, UIWebContentSearchForm.DOC_TYPE, null));
 
-    addUIFormInput(new UIFormStringInput(UIWebContentSearchForm.CATEGORY_TYPE, UIWebContentSearchForm.CATEGORY_TYPE, null));
+    addUIFormInput(new UIFormStringInput(UIWebContentSearchForm.CATEGORY, UIWebContentSearchForm.CATEGORY, null));
 
     setActions(new String[] {"SearchWebContent"} );
   }

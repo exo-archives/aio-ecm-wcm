@@ -49,7 +49,7 @@
       <%uicomponent.renderChild(UIWebContentSearchForm.DOC_TYPE);%>
       <img class="IconConstraint AddMetadataTypeIcon" onclick="<%=uicomponent.event("AddNodeType")%>" src="/eXoResources/skin/DefaultSkin/background/Blank.gif" alt="" title="Add document type" />
     </div>
- 
+     
       <div class="UIAction"> 
       <table class="ActionContainer">
         <tr>
