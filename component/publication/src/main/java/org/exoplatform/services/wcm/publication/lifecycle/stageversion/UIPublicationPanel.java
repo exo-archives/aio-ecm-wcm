@@ -21,6 +21,7 @@ import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.version.Version;
+import javax.jcr.version.VersionIterator;
 
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -38,9 +39,9 @@ import org.exoplatform.webui.form.UIFormDateTimeInput;
  * Mar 2, 2009  
  */
 @ComponentConfig(
-  lifecycle = UIFormLifecycle.class,
-  template = "classpath:groovy/wcm/webui/publication/lifecycle/stageversion/UIPublicationPanel.gtmpl",
-  events = {
+    lifecycle = UIFormLifecycle.class,
+    template = "classpath:groovy/wcm/webui/publication/lifecycle/stageversion/UIPublicationPanel.gtmpl",
+    events = {
       @EventConfig(listeners=UIPublicationPanel.EnrolledActionListener.class),
       @EventConfig(listeners=UIPublicationPanel.DraftActionListener.class),
       @EventConfig(listeners=UIPublicationPanel.AwaitingActionListener.class),
@@ -54,66 +55,78 @@ public class UIPublicationPanel extends UIForm {
 
   public static final String START_TIME = "startTime".intern();
   public static final String END_TIME = "endTime".intern();
-  
+
   private Version currentVersion;
-  private List<Version> viewedVersions = new ArrayList<Version>(3);    
-  
+  private List<Version> viewedVersions = new ArrayList<Version>(3);  
+  private Node currentNode;
+
   public UIPublicationPanel()  {
     addUIFormInput(new UIFormDateTimeInput(START_TIME, START_TIME, null, true));
     addUIFormInput(new UIFormDateTimeInput(END_TIME, END_TIME, null, true));
   }
-  
+
   public void init(Node node) throws Exception {
-    
+    this.currentNode = node;    
+    VersionIterator iterator = node.getVersionHistory().getAllVersions();
+    List<Version> allversions = new ArrayList<Version>();
+    for(;iterator.hasNext();) {
+      allversions.add(iterator.nextVersion());
+    }
+    if(allversions.size()>3) {
+      viewedVersions = allversions.subList(allversions.size()-3, allversions.size());
+    }else {
+      viewedVersions = allversions;
+    }
   }
-  
+
   public List<Version> getVersions() {
-    return viewedVersions;
+    return viewedVersions;    
   }
 
   public void setVersions(List<Version> versions) {
     this.viewedVersions = versions;
   }
-  
+
   public Version getCurrentVerion() { return currentVersion; }
   public void setCurrentVersion(Version version) { this.currentVersion = version; }
-  
+  public Node getCurrentNode() { return currentNode; }
+
   public static class EnrolledActionListener extends EventListener<UIPublicationPanel> {
     public void execute(Event<UIPublicationPanel> event) throws Exception {
       System.out.println("------------------------------------------------> EnrolledActionListener");
     }
   } 
-  
+
   public static class DraftActionListener extends EventListener<UIPublicationPanel> {
     public void execute(Event<UIPublicationPanel> event) throws Exception {
       System.out.println("------------------------------------------------> DraftActionListener");
     }
   } 
-  
+
   public static class AwaitingActionListener extends EventListener<UIPublicationPanel> {
     public void execute(Event<UIPublicationPanel> event) throws Exception {
       System.out.println("------------------------------------------------> AwaitingActionListener");
     }
   } 
-  
+
   public static class LiveActionListener extends EventListener<UIPublicationPanel> {
     public void execute(Event<UIPublicationPanel> event) throws Exception {
       System.out.println("------------------------------------------------> LiveActionListener");
     }
   } 
-  
+
   public static class ObsoleteActionListener extends EventListener<UIPublicationPanel> {
     public void execute(Event<UIPublicationPanel> event) throws Exception {
       System.out.println("------------------------------------------------> ObsoleteActionListener");
     }
   } 
-  
+
   public static class ChangeVersionActionListener extends EventListener<UIPublicationPanel> {
     public void execute(Event<UIPublicationPanel> event) throws Exception {
       System.out.println("------------------------------------------------> ChangeVersionActionListener");
     }
   } 
-  
+
   public static class CloseActionListener extends EventListener<UIPublicationPanel> {
     public void execute(Event<UIPublicationPanel> event) throws Exception {
       UIPublicationPanel publicationPanel = event.getSource();

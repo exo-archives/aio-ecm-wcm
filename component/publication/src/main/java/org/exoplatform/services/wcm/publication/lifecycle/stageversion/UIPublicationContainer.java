@@ -19,7 +19,6 @@ package org.exoplatform.services.wcm.publication.lifecycle.stageversion;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import javax.jcr.Node;
 
