@@ -5,6 +5,7 @@
   import org.exoplatform.services.cms.categories.CategoriesService;
 	import org.exoplatform.webui.application.portlet.PortletRequestContext;
 	import org.exoplatform.services.cms.folksonomy.FolksonomyService;
+	import org.exoplatform.wcm.webui.XWikiPasser;
 	
 	public boolean getPortletPreference(String name) {
     PortletRequestContext portletRequestContext = _ctx.getRequestContext() ;
@@ -90,12 +91,18 @@
 							}
 						%>
 					</div>
-					<%=htmlFile.getNode("jcr:content").getProperty("jcr:data").getString()%>
+					<% 
+					String html = htmlFile.getNode("jcr:content").getProperty("jcr:data").getString();
+					XWikiPasser passer = new XWikiPasser(html);
+					%>
+					<%=passer.paseHTML()%>
 				</div>
 		<%
 	} else {
+			String html = htmlFile.getNode("jcr:content").getProperty("jcr:data").getString();
+			XWikiPasser passer = new XWikiPasser(html);
 		%>
-			<%=htmlFile.getNode("jcr:content").getProperty("jcr:data").getString()%>
+		<%=passer.paseHTML()%>
 		<%
 	}
 %>
