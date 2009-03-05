@@ -18,25 +18,16 @@ package org.exoplatform.services.wcm.publication.lifecycle.stageversion;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import javax.jcr.Node;
 
-import org.exoplatform.commons.utils.PageList;
-import org.exoplatform.portal.config.DataStorage;
-import org.exoplatform.portal.config.Query;
-import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.services.ecm.publication.IncorrectStateUpdateLifecycleException;
-import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.services.wcm.publication.WebpagePublicationPlugin;
-import org.exoplatform.services.wcm.publication.defaultlifecycle.Util;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.form.UIForm;
 
@@ -47,26 +38,19 @@ import org.exoplatform.webui.form.UIForm;
  * Mar 2, 2009  
  */
 public class StageAndVersionBasedPublicationPlugin extends WebpagePublicationPlugin{
-  public static final String CURRENT_STATE = "publication:currentState".intern();  
-  public static final String ENROLLED = "enrolled".intern(); 
-  public static final String DRAFT = "draft".intern();
-  public static final String AWAITING = "awaiting".intern();
-  public static final String LIVE = "live".intern();
-  public static final String OBSOLETE = "obsolete".intern();  
-  public static final String LIFECYCLE_NAME = "States and versions based publication".intern();
   
   public void addMixin(Node node) throws Exception {
-    node.addMixin("publication:stateAndVersionBasedPublication");
-    if(!node.isNodeType("mix:versionable")) {
-      node.addMixin("mix:versionable");
+    node.addMixin(Constant.PUBLICATION_LIFECYCLE_TYPE);
+    if(!node.isNodeType(Constant.MIX_VERSIONABLE)) {
+      node.addMixin(Constant.MIX_VERSIONABLE);
     }
-    node.setProperty("publication:lifecycleName", LIFECYCLE_NAME);
-    node.setProperty(CURRENT_STATE,ENROLLED);
-    node.getSession().save();    
+    node.setProperty(Constant.PUBLICATION_LIFECYCLE_NAME, Constant.LIFECYCLE_NAME);
+    node.setProperty(Constant.CURRENT_STATE,Constant.ENROLLED);
+    node.getSession().save();
   }
 
   public boolean canAddMixin(Node node) throws Exception {
-    return node.canAddMixin("publication:stateAndVersionBasedPublication");   
+    return node.canAddMixin(Constant.PUBLICATION_LIFECYCLE_TYPE);   
   }    
   
   public void changeState(Node node, String newState, HashMap<String, String> context) throws IncorrectStateUpdateLifecycleException,                                                                               Exception {   
@@ -81,7 +65,7 @@ public class StageAndVersionBasedPublicationPlugin extends WebpagePublicationPlu
   }
 
   public String[] getPossibleStates() {    
-    return new String[] { ENROLLED, DRAFT, AWAITING, LIVE, OBSOLETE};
+    return new String[] { Constant.ENROLLED, Constant.DRAFT, Constant.AWAITING, Constant.LIVE, Constant.OBSOLETE};
   }
 
   public byte[] getStateImage(Node arg0, Locale arg1) throws IOException,
@@ -90,7 +74,7 @@ public class StageAndVersionBasedPublicationPlugin extends WebpagePublicationPlu
     return null;
   }
 
-  public UIForm getStateUI(Node node, UIComponent component) throws Exception {
+  public UIForm getStateUI(Node node, UIComponent component) throws Exception {   
     UIPublicationContainer publicationContainer = component.createUIComponent(UIPublicationContainer.class, null, null);
     publicationContainer.initContainer(node);
     return publicationContainer;

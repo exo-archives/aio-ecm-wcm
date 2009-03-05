@@ -21,7 +21,6 @@ import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.version.Version;
-import javax.jcr.version.VersionIterator;
 
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -55,24 +54,29 @@ public class UIPublicationPanel extends UIForm {
 
   public static final String START_TIME = "startTime".intern();
   public static final String END_TIME = "endTime".intern();
-  private List<Version> versions = new ArrayList<Version>();
-
-  public void init(Node node) throws Exception {
-    VersionIterator versionIterator = node.getVersionHistory().getAllVersions();
-    for (;versionIterator.hasNext();) {
-      versions.add(versionIterator.nextVersion());
-    }
+  
+  private Version currentVersion;
+  private List<Version> viewedVersions = new ArrayList<Version>(3);    
+  
+  public UIPublicationPanel()  {
     addUIFormInput(new UIFormDateTimeInput(START_TIME, START_TIME, null, true));
     addUIFormInput(new UIFormDateTimeInput(END_TIME, END_TIME, null, true));
   }
-
+  
+  public void init(Node node) throws Exception {
+    
+  }
+  
   public List<Version> getVersions() {
-    return versions;
+    return viewedVersions;
   }
 
   public void setVersions(List<Version> versions) {
-    this.versions = versions;
+    this.viewedVersions = versions;
   }
+  
+  public Version getCurrentVerion() { return currentVersion; }
+  public void setCurrentVersion(Version version) { this.currentVersion = version; }
   
   public static class EnrolledActionListener extends EventListener<UIPublicationPanel> {
     public void execute(Event<UIPublicationPanel> event) throws Exception {

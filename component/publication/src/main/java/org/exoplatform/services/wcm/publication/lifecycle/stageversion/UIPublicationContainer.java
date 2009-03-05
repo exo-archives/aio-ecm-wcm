@@ -19,6 +19,7 @@ package org.exoplatform.services.wcm.publication.lifecycle.stageversion;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.jcr.Node;
 
@@ -47,12 +48,10 @@ import org.exoplatform.webui.form.UIForm;
   template = "system:/groovy/webui/core/UITabPane.gtmpl"              
 )
                
-public class UIPublicationContainer extends UIForm implements UIPopupComponent {
-  
+public class UIPublicationContainer extends UIForm implements UIPopupComponent {  
   private static String selectedTabId = "";
   
-  public UIPublicationContainer() {}
-
+  public UIPublicationContainer() { }  
   public void initContainer(Node node) throws Exception {
     UIPublicationPanel publicationPanel = addChild(UIPublicationPanel.class, null, null);
     publicationPanel.init(node);
@@ -87,6 +86,7 @@ public class UIPublicationContainer extends UIForm implements UIPopupComponent {
 
     return null;
   }
+  
   private List<String> getRunningPortals(String userId) throws Exception {
     List<String> listPortalName = new ArrayList<String>();
     DataStorage service = Util.getServices(DataStorage.class);
