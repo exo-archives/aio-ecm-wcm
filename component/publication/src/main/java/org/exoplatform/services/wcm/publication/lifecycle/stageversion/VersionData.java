@@ -16,6 +16,10 @@
  */
 package org.exoplatform.services.wcm.publication.lifecycle.stageversion;
 
+import java.util.Calendar;
+
+import org.exoplatform.commons.utils.ISO8601;
+
 
 /**
  * Created by The eXo Platform SAS
@@ -27,12 +31,22 @@ public class VersionData {
   protected String UUID;
   protected String state;
   protected String author;
-  protected String startPublicationDate;
-  protected String endPublicationDate;
-  
+  protected Calendar startPublicationDate;
+  protected Calendar endPublicationDate;
+
+
+  public VersionData(String uuid, String state, String author, Calendar startPublicationDate, Calendar endPublicationDate) {
+    this.UUID = uuid;
+    this.state = state;
+    this.author = author;
+    this.startPublicationDate = startPublicationDate;
+    this.endPublicationDate = endPublicationDate;
+  }
+
   public String getUUID() {
     return UUID;
   }
+
   public void setUUID(String uuid) {
     this.UUID = uuid;
   }
@@ -41,40 +55,33 @@ public class VersionData {
   }
   public void setState(String state) {
     this.state = state;
-  }
-  
-  public String getStartPublicationDate() {
-    return startPublicationDate;
-  }
-  public void setStartPublicationDate(String startPublicationDate) {
-    this.startPublicationDate = startPublicationDate;
-  }
-  public String getEndPublicationDate() {
-    return endPublicationDate;
-  }
-  public void setEndPublicationDate(String endPublicationDate) {
-    this.endPublicationDate = endPublicationDate;
-  }
-  
-  public String[] toStringArray() {
-    return new String[] { UUID, state, author, startPublicationDate, endPublicationDate} ;
-  }
-  
+  }        
+
   public String getAuthor() {
     return author;
   }
   public void setAuthor(String author) {
     this.author = author;
+  }    
+
+  public Calendar getStartPublicationDate() {
+    return startPublicationDate;
   }
-  
-  public static VersionData parse(String[] versionDataString) {
-    VersionData versionData = new VersionData();
-    versionData.setUUID(versionDataString[0]);
-    versionData.setState(versionDataString[1]);
-    versionData.setAuthor(versionDataString[2]);
-    versionData.setStartPublicationDate(versionDataString[3]);
-    versionData.setEndPublicationDate(versionDataString[4]);
-    return versionData;
+  public void setStartPublicationDate(Calendar startPublicationDate) {
+    this.startPublicationDate = startPublicationDate;
   }
-  
+  public Calendar getEndPublicationDate() {
+    return endPublicationDate;
+  }
+  public void setEndPublicationDate(Calendar endPublicationDate) {
+    this.endPublicationDate = endPublicationDate;
+  }
+
+  public String[] toStringValues() {
+    return new String[] { UUID, state, author, ISO8601.format(startPublicationDate), ISO8601.format(endPublicationDate)} ;
+  }
+
+  public static VersionData toVersionData(String[] info) {
+    return new VersionData(info[0],info[1],info[2], ISO8601.parse(info[3]),ISO8601.parse(info[4]));        
+  }
 }

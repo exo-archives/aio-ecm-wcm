@@ -16,6 +16,10 @@
  */
 package org.exoplatform.services.wcm.publication.lifecycle.stageversion;
 
+import java.util.Calendar;
+
+import org.exoplatform.commons.utils.ISO8601;
+
 /**
  * Created by The eXo Platform SAS
  * Author : Hoa Pham	
@@ -23,14 +27,19 @@ package org.exoplatform.services.wcm.publication.lifecycle.stageversion;
  * Mar 5, 2009  
  */
 public class VersionLog extends VersionData {
-  
-  private String logDate;
+  private Calendar logDate;
   private String description;
   
-  public String getLogDate() {
+  public VersionLog(String uuid, String state, String author, Calendar logDate, String description) {
+    super(uuid, state, author, null,null);
+    this.logDate = logDate;
+    this.description = description;
+  }    
+  
+  public Calendar getLogDate() {
     return logDate;
   }
-  public void setLogDate(String logDate) {
+  public void setLogDate(Calendar logDate) {
     this.logDate = logDate;
   }
   public String getDescription() {
@@ -41,18 +50,11 @@ public class VersionLog extends VersionData {
   }
   
   public String[] toStringValues() {
-    return new String[]{logDate, UUID, state, author, description, startPublicationDate, endPublicationDate };
+    return new String[]{UUID, state, author, ISO8601.format(logDate), description};
   }
   
   public static VersionLog toVersionLog(String[] logs) {
-    VersionLog versionLog = new VersionLog();
-    versionLog.setLogDate(logs[0]);
-    versionLog.setUUID(logs[1]);
-    versionLog.setState(logs[2]);
-    versionLog.setAuthor(logs[3]);
-    versionLog.setDescription(logs[4]);
-    versionLog.setStartPublicationDate(logs[5]);
-    versionLog.setEndPublicationDate(logs[6]);
-    return versionLog;
+    return new VersionLog(logs[0],logs[1],logs[2],ISO8601.parse(logs[3]),logs[4]);
   }
+  
 }
