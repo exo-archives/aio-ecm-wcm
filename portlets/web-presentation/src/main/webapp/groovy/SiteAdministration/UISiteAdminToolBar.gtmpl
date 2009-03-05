@@ -209,9 +209,10 @@
 					      	<div class="MenuContainer">					      	
 					      	""" ;
 					      	for (Node portal : portals) {	
-					      		String portalName = portal.getName();					      
+					      		String portalName = portal.getName();
+                    String link = uicomponent.getBaseURI(portalName);
 								    print """
-								      <div class="MenuItem">
+								      <div class="MenuItem" onclick="naviMenu('${link}');">
 								        <div class="LabelItem">
 								          <div class="NavigationBackground">
 								            <div class="NavigationArrowIcon">

@@ -268,6 +268,10 @@ function showToptoolbarNavs(exoLogo) {
 	eXo.portal.UIExoStartMenu.buildMenu(navs);		
 }
 
+function naviMenu(link) {
+	if(link) location.href = link;
+}
+
 UIExoStartMenu.prototype.onMenuItemOut = function(event) {
 	var portalNav = document.getElementById("PortalNavigationTopContainer");
 	if(eXo.core.Browser.browserType == "ie") portalNav.style.position = "relative";
