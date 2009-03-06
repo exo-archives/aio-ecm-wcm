@@ -70,7 +70,7 @@ public class UICorrectContentSelectorForm extends UIBaseNodeTreeSelector impleme
     if (existedCategoryList.size() > 0) {
       contentsGrid.setRendered(true);
     }
-    contentsGrid.updateGrid();
+    contentsGrid.updateGrid(contentsGrid.getUIPageIterator().getCurrentPage());
     provider.close();
   }
 

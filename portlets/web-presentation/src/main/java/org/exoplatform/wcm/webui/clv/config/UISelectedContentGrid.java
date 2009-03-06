@@ -52,7 +52,7 @@ public class UISelectedContentGrid extends UISelectedCategoriesGrid {
       String value = event.getRequestContext().getRequestParameter(OBJECTID);
       uiSelectedContentGrid.removeCategory(value);
       if (uiSelectedContentGrid.getSelectedCategories().size() == 0) uiSelectedContentGrid.setDeleteAllCategory(true);
-      uiSelectedContentGrid.updateGrid();
+      uiSelectedContentGrid.updateGrid(uiSelectedContentGrid.getUIPageIterator().getCurrentPage());
       if (uiSelectedContentGrid.getSelectedCategories().size() == 0) {
         uiSelectedContentGrid.setRendered(false);
       }

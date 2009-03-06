@@ -82,7 +82,7 @@ public class UIMultiSelectionPanel extends UICategoriesSelectPanel {
       if (!uiSelectedContentGrid.getSelectedCategories().contains(value)) {
         uiSelectedContentGrid.addCategory(value);
       }
-      uiSelectedContentGrid.updateGrid();
+      uiSelectedContentGrid.updateGrid(uiSelectedContentGrid.getUIPageIterator().getCurrentPage());
       uiSelectedContentGrid.setRendered(true);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiOneContentSelectorForm);
     }
