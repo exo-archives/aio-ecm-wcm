@@ -110,14 +110,14 @@
 					</div>
 					<% 
 					String html = htmlFile.getNode("jcr:content").getProperty("jcr:data").getString();
-					XWikiPasser passer = new WikiLinkParser(html);
+					WikiLinkParser passer = new WikiLinkParser(html);
 					%>
 					<%=passer.paseHTML()%>
 				</div>
 		<%
 	} else {
 			String html = htmlFile.getNode("jcr:content").getProperty("jcr:data").getString();
-			XWikiPasser passer = new WikiLinkParser(html);
+			WikiLinkParser passer = new WikiLinkParser(html);
 		%>
 		<%=passer.paseHTML()%>
 		<%
