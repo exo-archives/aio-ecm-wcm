@@ -21,9 +21,17 @@
       <Close>Đóng</Close>
     </action>
   </UIPublicationComponentStatus>
+  <UIPopupWindow>
+  	<title>
+  		<UIPublicationContainer>Quản lý xuất bản</UIPublicationContainer>
+  	</title>
+  </UIPopupWindow>
   <UITabPane>
     <title>
       <UIPublishingPanel>Form xuất bản</UIPublishingPanel>
+      <UIPublicationPanel>Trạng thái xuất bản</UIPublicationPanel>
+      <UIPublicationPages>Xuất bản vào trang</UIPublicationPages>
+      <UIPublicationHistory>Nhật ký xuất bản</UIPublicationHistory>
     </title>
   </UITabPane>
   <UIPublicationAction>
@@ -44,30 +52,31 @@
   </UIPublishedPages>
   <UIPublicationPanel>
   	<button>
-  		<close>Close</close>
+  		<close>Đóng</close>
   	</button>
   	<revisions>
-  		<version>Revisions</version>
-  		<date>Date</date>
-  		<author>Author</author>
-  		<status>Status</status>
-  		<action>Action</action>
-  		<label>Version</label>
-  		<none>No revisions</none>
+  		<version>Phiên bản</version>
+  		<date>Ngày tháng</date>
+  		<author>Tác giả</author>
+  		<status>Trạng thái</status>
+  		<action>Hành động</action>
+  		<label>Phiên bản</label>
+  		<none>Không có phiên bản nào</none>
+  		<seeall>Xem tất cả các phiên bản</seeall>
   	</revisions>
   	<status>
-  		<version>Version</version>
-  		<title>Status</title>
-  		<enrolled>Enrolled</enrolled>
-  		<draft>Draft</draft>
-  		<awaiting>Awaiting</awaiting>
-  		<live>Live</live>
-  		<obsolete>Obsolete</obsolete>
+  		<version>Phiên bản</version>
+  		<title>Trạng thái</title>
+  		<enrolled>Đã được biên soạn</enrolled>
+  		<draft>Nháp</draft>
+  		<awaiting>Đang chờ</awaiting>
+  		<live>Sống</live>
+  		<obsolete>Hết hạn</obsolete>
   	</status>
   	<scheduled>
-  		<title>Scheduled</title>
-  		<from>from</from>
-  		<to>to</to>
+  		<title>Lịch</title>
+  		<from>từ</from>
+  		<to>đến</to>
   	</scheduled>
   </UIPublicationPanel>
 </bundle>

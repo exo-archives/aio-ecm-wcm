@@ -17,9 +17,11 @@
 package org.exoplatform.services.wcm.publication.lifecycle.stageversion;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.jcr.Node;
+import javax.jcr.Session;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionIterator;
 
@@ -30,7 +32,6 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.UIFormDateTimeInput;
 
 /**
  * Created by The eXo Platform SAS
@@ -48,6 +49,9 @@ import org.exoplatform.webui.form.UIFormDateTimeInput;
       @EventConfig(listeners=UIPublicationPanel.LiveActionListener.class),
       @EventConfig(listeners=UIPublicationPanel.ObsoleteActionListener.class),
       @EventConfig(listeners=UIPublicationPanel.ChangeVersionActionListener.class),
+      @EventConfig(listeners=UIPublicationPanel.PreviewVersionActionListener.class),
+      @EventConfig(listeners=UIPublicationPanel.RestoreVersionActionListener.class),
+      @EventConfig(listeners=UIPublicationPanel.SeeAllVersionActionListener.class),
       @EventConfig(listeners=UIPublicationPanel.CloseActionListener.class)
     } 
 )
@@ -60,25 +64,40 @@ public class UIPublicationPanel extends UIForm {
   private List<Version> viewedVersions = new ArrayList<Version>(3);  
   private Node currentNode;
 
-  public UIPublicationPanel()  {
-    addUIFormInput(new UIFormDateTimeInput(START_TIME, START_TIME, null, true));
-    addUIFormInput(new UIFormDateTimeInput(END_TIME, END_TIME, null, true));
+  public UIPublicationPanel() throws Exception {
+    addChild(UIVersionViewer.class, null, null).setRendered(false);
   }
 
   public void init(Node node) throws Exception {
-    this.currentNode = node;    
-    VersionIterator iterator = node.getVersionHistory().getAllVersions();
-    List<Version> allversions = new ArrayList<Version>();
-    for(;iterator.hasNext();) {
-      allversions.add(iterator.nextVersion());
-    }
-    if(allversions.size()>3) {
-      viewedVersions = allversions.subList(allversions.size()-3, allversions.size());
-    }else {
-      viewedVersions = allversions;
+    this.currentNode = node;
+    List<Version> allversions = getAllVersion(node);
+    if (!allversions.isEmpty()) {
+      this.currentVersion = allversions.get(0);
+      if(allversions.size()>3) {
+        viewedVersions = allversions.subList(0, 3);
+      } else {
+        viewedVersions = allversions;
+      }
     }
   }
 
+  private List<Version> getAllVersion(Node node) throws Exception {
+    List<Version> allversions = new ArrayList<Version>();
+    VersionIterator iterator = node.getVersionHistory().getAllVersions();
+    for(;iterator.hasNext();) {
+      Version version = iterator.nextVersion();
+      if (version.getName().equals("jcr:rootVersion")) continue;
+      allversions.add(version);
+    }
+    Collections.reverse(allversions);
+    return allversions;
+  }
+  
+  private Version getVersionByUUID(String versionUUID) throws Exception {
+    Session session = currentNode.getSession();
+    return (Version) session.getNodeByUUID(versionUUID);
+  }
+  
   public List<Version> getVersions() {
     return viewedVersions;    
   }
@@ -90,7 +109,17 @@ public class UIPublicationPanel extends UIForm {
   public Version getCurrentVerion() { return currentVersion; }
   public void setCurrentVersion(Version version) { this.currentVersion = version; }
   public Node getCurrentNode() { return currentNode; }
-
+ 
+  public String getVersionState(Version version) {
+    // TODO: Should get state from version
+    return Constant.LIVE;
+  }
+  
+  public String getVersionAuthor(Version version) {
+    // TODO: Should get author from version
+    return "Root";
+  }
+  
   public static class EnrolledActionListener extends EventListener<UIPublicationPanel> {
     public void execute(Event<UIPublicationPanel> event) throws Exception {
       System.out.println("------------------------------------------------> EnrolledActionListener");
@@ -123,15 +152,54 @@ public class UIPublicationPanel extends UIForm {
 
   public static class ChangeVersionActionListener extends EventListener<UIPublicationPanel> {
     public void execute(Event<UIPublicationPanel> event) throws Exception {
-      System.out.println("------------------------------------------------> ChangeVersionActionListener");
+      UIPublicationPanel publicationPanel = event.getSource();
+      String versionUUID = event.getRequestContext().getRequestParameter(OBJECTID);
+      Version version = publicationPanel.getVersionByUUID(versionUUID);
+      publicationPanel.setCurrentVersion(version);
     }
   } 
 
+  public static class PreviewVersionActionListener extends EventListener<UIPublicationPanel> {
+    public void execute(Event<UIPublicationPanel> event) throws Exception {
+      UIPublicationPanel publicationPanel = event.getSource();
+      String versionUUID = event.getRequestContext().getRequestParameter(OBJECTID);
+      Version version = publicationPanel.getVersionByUUID(versionUUID);
+      Node frozenNode = version.getNode("jcr:frozenNode") ;
+      UIVersionViewer versionViewer = publicationPanel.getChild(UIVersionViewer.class);
+      versionViewer.setNode(frozenNode);
+//      if(versionViewer.getTemplate() == null || versionViewer.getTemplate().trim().length() == 0) {
+//        UIApplication uiApp = publicationPanel.getAncestorOfType(UIApplication.class) ;
+//        uiApp.addMessage(new ApplicationMessage("UIVersionInfo.msg.have-no-view-template", null)) ;
+//        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+//        return ;
+//      }  
+      versionViewer.setRendered(true) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(publicationPanel) ;
+    }
+  }
+  
+  public static class RestoreVersionActionListener extends EventListener<UIPublicationPanel> {
+    public void execute(Event<UIPublicationPanel> event) throws Exception {
+      UIPublicationPanel publicationPanel = event.getSource();
+      String versionUUID = event.getRequestContext().getRequestParameter(OBJECTID);
+      System.out.println("------------------------------------------------> PreviewActionListener");
+    }
+  }
+  
+  public static class SeeAllVersionActionListener extends EventListener<UIPublicationPanel> {
+    public void execute(Event<UIPublicationPanel> event) throws Exception {
+      UIPublicationPanel publicationPanel = event.getSource();
+      publicationPanel.setVersions(publicationPanel.getAllVersion(publicationPanel.getCurrentNode()));
+      event.getRequestContext().addUIComponentToUpdateByAjax(publicationPanel);
+    }
+  } 
+  
   public static class CloseActionListener extends EventListener<UIPublicationPanel> {
     public void execute(Event<UIPublicationPanel> event) throws Exception {
       UIPublicationPanel publicationPanel = event.getSource();
       UIPopupContainer uiPopupContainer = (UIPopupContainer) publicationPanel.getAncestorOfType(UIPopupContainer.class);
       uiPopupContainer.deActivate();
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupContainer);
     }
   } 
 }

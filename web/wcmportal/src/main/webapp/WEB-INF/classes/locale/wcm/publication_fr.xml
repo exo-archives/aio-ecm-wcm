@@ -21,9 +21,17 @@
       <Close>Fermer</Close>
     </action>
   </UIPublicationComponentStatus>
+  <UIPopupWindow>
+  	<title>
+  		<UIPublicationContainer>Gérer le publication</UIPublicationContainer>
+  	</title>
+  </UIPopupWindow>
   <UITabPane>
     <title>
       <UIPublishingPanel>Panneau de publication</UIPublishingPanel>
+      <UIPublicationPanel>Publication de l'état</UIPublicationPanel>
+      <UIPublicationPages>Publication des pages</UIPublicationPages>
+      <UIPublicationHistory>Publication de l'histoire</UIPublicationHistory>
     </title>
   </UITabPane>
   <UIPublicationAction>
@@ -44,30 +52,31 @@
   </UIPublishedPages>
   <UIPublicationPanel>
   	<button>
-  		<close>Close</close>
+  		<close>Fermer</close>
   	</button>
   	<revisions>
-  		<version>Revisions</version>
+  		<version>Révisions</version>
   		<date>Date</date>
-  		<author>Author</author>
-  		<status>Status</status>
-  		<action>Action</action>
+  		<author>Auteur</author>
+  		<status>L'état</status>
+  		<action>L'action</action>
   		<label>Version</label>
-  		<none>No revisions</none>
+  		<none>Non révision</none>
+  		<seeall>Voir toute les versions</seeall>
   	</revisions>
   	<status>
   		<version>Version</version>
-  		<title>Status</title>
-  		<enrolled>Enrolled</enrolled>
+  		<title>L'état</title>
+  		<enrolled>Enrôler</enrolled>
   		<draft>Draft</draft>
   		<awaiting>Awaiting</awaiting>
   		<live>Live</live>
   		<obsolete>Obsolete</obsolete>
   	</status>
   	<scheduled>
-  		<title>Scheduled</title>
-  		<from>from</from>
-  		<to>to</to>
+  		<title>Planifier</title>
+  		<from>de</from>
+  		<to>à</to>
   	</scheduled>
   </UIPublicationPanel>
 </bundle>

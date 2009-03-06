@@ -21,9 +21,17 @@
       <Close>Close</Close>
     </action>
   </UIPublicationComponentStatus>
+  <UIPopupWindow>
+  	<title>
+  		<UIPublicationContainer>Manage publication</UIPublicationContainer>
+  	</title>
+  </UIPopupWindow>
   <UITabPane>
     <title>
       <UIPublishingPanel>Publication Panel</UIPublishingPanel>
+      <UIPublicationPanel>Publication status</UIPublicationPanel>
+      <UIPublicationPages>Publication pages</UIPublicationPages>
+      <UIPublicationHistory>Publication history</UIPublicationHistory>
     </title>
   </UITabPane>
   <UIPublicationAction>
@@ -54,6 +62,7 @@
   		<action>Action</action>
   		<label>Version</label>
   		<none>No revisions</none>
+  		<seeall>See all versions</seeall>
   	</revisions>
   	<status>
   		<version>Version</version>

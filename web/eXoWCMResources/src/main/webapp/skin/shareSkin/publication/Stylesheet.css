@@ -140,12 +140,18 @@
 
 
 
+.UIPublicationPanel .SeeAllVersion {
+	text-align: right;
+	cursor: pointer;
+}
 
 .UIPublicationPanel .StatusTable {
 	margin: 0 0 20px;
 }
 
-.UIPublicationPanel .StatusTable .StatusAction {}
+.UIPublicationPanel .StatusTable .StatusAction {
+	margin-bottom: 10px;
+}
 
 .UIPublicationPanel .StatusTable .StatusTitle {
 	font-size: 12px;
@@ -158,11 +164,36 @@
 }
 
 .UIPublicationPanel .StatusTable .StatusLink {
-	text-align: center;
+	margin-left: 80px;
+}
+
+.UIPublicationPanel .StatusTable .DefaultStatus {
+	background: url(icons/16x16/StateDefault.png) no-repeat top center;
+	width: 30px;
+	float: left;
+	display: block;
+	padding-top: 32px;
+}
+
+.UIPublicationPanel .StatusTable .CurrentStatus {
+	background: url(icons/16x16/StateCurrent.png) no-repeat top center;
+	width: 30px;
+	float: left;
+	display: block;
+	padding-top: 32px;
+}
+
+.UIPublicationPanel .StatusTable .StatusArrow {
+	background: url(icons/16x16/StateArrow.png) no-repeat top center;
+	width: 50px;
+	float: left;
+	display: block;
+	padding-top: 32px;
+	margin: 0 7px;
 }
 
 .UIPublicationPanel .StatusTable .ScheduledTime {
-	text-align: center;
+	margin-left: 80px;
 }
 
 .UIPublicationPanel .RevisionsTable {
