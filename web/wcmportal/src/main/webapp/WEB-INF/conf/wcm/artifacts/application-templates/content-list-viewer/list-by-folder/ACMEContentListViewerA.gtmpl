@@ -51,9 +51,9 @@ import org.exoplatform.wcm.webui.clv.UIContentListViewerPortlet;
 					<p><%=itemSummary%></p>
 				</div>			
 				<% } %>
-				<div class="LeftButtonContent">
+				<div class="LeftButtonContent" onclick="itemLink">
             <div class="RightButtonContent">
-                <div class="CenterButtonContent"><a href="$itemLink"><%=labelReadMore%>&raquo;</a></div>
+                <div class="CenterButtonContent">&raquo;</div>
             </div>
         </div>
         <div style="clear:left"><span></span></div>
