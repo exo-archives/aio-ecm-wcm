@@ -34,10 +34,7 @@
         			<th class="action"><%=_ctx.appRes(name + ".header.action")%></th>
         <%		
         		}
-        	}	
-        %>
-        <%
-        	if(name == null) {
+        	} else 	{
           		for(field in beanFields) { 
           			klass = count++ == 0 ? "title" : "score";
         %>

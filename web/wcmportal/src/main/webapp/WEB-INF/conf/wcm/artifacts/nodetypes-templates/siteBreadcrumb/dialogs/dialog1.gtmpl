@@ -145,7 +145,7 @@
 									if(htmlContent == null || htmlContent.equals("")) {
 										htmlContent = "<div id=\"breadcrumb-generator\"><div class=\"UIWCMBreadcrumbsPortlet\"><div class=\"BCHome16x16Icon\"><span></span></div></div></div>";
 									}
-									String[] htmlArguments = ["jcrPath=/node/default.html/jcr:content/jcr:data", "options=toolbar:CompleteWCM,width:400", htmlContent];
+									String[] htmlArguments = ["jcrPath=/node/default.html/jcr:content/jcr:data", "options=toolbar:CompleteWCM,width:100%", htmlContent];
 			    				uicomponent.addWYSIWYGField(htmlWYSIWYGFormId, htmlArguments) ;
 			      		%>
 								</td>

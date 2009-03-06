@@ -203,7 +203,7 @@
 									if(htmlContent == null || htmlContent.equals("")) {
 										htmlContent = "<div class=\"DropCap\">T</div>ype the text here <div style=\"clear: left; height: 20px;\"><span></span></div>";
 									}
-									String[] htmlArguments = ["jcrPath=/node/default.html/jcr:content/jcr:data", "options=toolbar:CompleteWCM,width:400", htmlContent];
+									String[] htmlArguments = ["jcrPath=/node/default.html/jcr:content/jcr:data", "options=toolbar:CompleteWCM,width:100%", htmlContent];
 			    					uicomponent.addWYSIWYGField(htmlWYSIWYGFormId, htmlArguments) ;
 			      				%>
 								</td>

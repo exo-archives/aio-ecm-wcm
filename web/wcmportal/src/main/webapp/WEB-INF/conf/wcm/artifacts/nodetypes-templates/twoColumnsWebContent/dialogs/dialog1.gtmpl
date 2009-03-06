@@ -148,7 +148,7 @@
 																		"</tr>" +
 																	 "</table>";
 									}
-									String[] htmlArguments = ["jcrPath=/node/default.html/jcr:content/jcr:data", "options=toolbar:CompleteWCM,width:400", htmlContent];
+									String[] htmlArguments = ["jcrPath=/node/default.html/jcr:content/jcr:data", "options=toolbar:CompleteWCM,width:100%", htmlContent];
 			    					uicomponent.addWYSIWYGField(htmlWYSIWYGFormId, htmlArguments) ;
 			      				%>
 								</td>
