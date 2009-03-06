@@ -15,19 +15,16 @@ FCKConfig.EditorAreaCSS = '';
 FCKConfig.EditorAreaStyles = 'body{	background: none;	margin: 0px;}' ;
 FCKConfig.InsertedLinkColor = 'green';
 
+FCKConfig.SkinPath = FCKConfig.BasePath + 'skins/office2003/' ;
+
 FCKConfig.ToolbarSets["CompleteWCM"] = [
-	['Source','Templates'],
-	['Cut','Copy','PasteText','-','SpellCheck'],
-	['Undo','Redo','-','RemoveFormat'],
-	['Link','Insert link to a site page','Unlink','Anchor'],
-	['Insert Gadget', 'Insert Image','Insert DMS Document','Flash'],
+	['Source','Templates','-','FitWindow','ShowBlocks'],
+	['Cut','Copy','PasteText','-','SpellCheck','-','Undo','Redo'],
+	['Insert Gadget', 'Insert Image','Insert DMS Document','Flash','Table','SpecialChar'],
 	'/',
-	['Bold','Italic','Underline','StrikeThrough'],
-	['OrderedList','UnorderedList'],
-	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
-	['Table','SpecialChar'],
-	['TextColor','BGColor'],
-	['FitWindow','ShowBlocks'],
+	['Bold','Italic','Underline','StrikeThrough','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','-','OrderedList','UnorderedList','-','TextColor','BGColor','-','RemoveFormat'],
+	['Link','Insert link to a site page','Unlink','Anchor'],
+	'/',
 	['Style','FontFormat','FontName','FontSize']
 ] ;
 
