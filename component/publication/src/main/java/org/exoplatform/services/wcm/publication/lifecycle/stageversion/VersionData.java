@@ -34,7 +34,6 @@ public class VersionData {
   protected Calendar startPublicationDate;
   protected Calendar endPublicationDate;
 
-
   public VersionData(String uuid, String state, String author, Calendar startPublicationDate, Calendar endPublicationDate) {
     this.UUID = uuid;
     this.state = state;

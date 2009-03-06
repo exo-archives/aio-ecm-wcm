@@ -18,6 +18,7 @@ package org.exoplatform.services.wcm.publication.lifecycle.stageversion;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -43,17 +44,22 @@ public class StageAndVersionBasedPublicationPlugin extends WebpagePublicationPlu
     node.addMixin(Constant.PUBLICATION_LIFECYCLE_TYPE);
     if(!node.isNodeType(Constant.MIX_VERSIONABLE)) {
       node.addMixin(Constant.MIX_VERSIONABLE);
-    }
-    node.setProperty(Constant.PUBLICATION_LIFECYCLE_NAME, Constant.LIFECYCLE_NAME);
-    node.setProperty(Constant.CURRENT_STATE,Constant.ENROLLED);
-    node.getSession().save();
+    }            
   }
 
   public boolean canAddMixin(Node node) throws Exception {
     return node.canAddMixin(Constant.PUBLICATION_LIFECYCLE_TYPE);   
   }    
   
-  public void changeState(Node node, String newState, HashMap<String, String> context) throws IncorrectStateUpdateLifecycleException,                                                                               Exception {   
+  public void changeState(Node node, String newState, HashMap<String, String> context) throws IncorrectStateUpdateLifecycleException,                                                                               Exception {
+    node.setProperty(Constant.CURRENT_STATE,newState);
+    VersionLog versionLog = null;
+    if(Constant.ENROLLED.endsWith(newState)) {
+      versionLog = new VersionLog(node.getUUID(),newState,node.getSession().getUserID(),GregorianCalendar.getInstance(),Constant.ENROLLED);
+    }
+    node.setProperty(Constant.HISTORY,versionLog.toStringValues());  
+    if(!node.isNew()) 
+      node.save();
   }
 
   public String getLocalizedAndSubstituteMessage(Locale arg0, String arg1, String[] arg2) throws Exception {

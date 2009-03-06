@@ -33,4 +33,5 @@ public interface Constant {
   public static final String LIFECYCLE_NAME = "States and versions based publication".intern();
   public static final String PUBLICATION_LIFECYCLE_NAME = "publication:lifecycleName".intern();
   public static final String MIX_VERSIONABLE = "mix:versionable".intern();
+  public static final String HISTORY = "publication:history".intern();
 }
