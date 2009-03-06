@@ -72,10 +72,9 @@ public class WebSchemaConfigServiceImpl implements WebSchemaConfigService, Start
   }
 
   public void createSchema(Node node, SessionProvider sessionProvider) throws Exception {
-    for (WebSchemaHandler handler: getAllWebSchemaHandler()) {
-      if (handler.matchHandler(node, sessionProvider)) {
-        handler.onCreateNode(node,sessionProvider);
-        return;
+    for (WebSchemaHandler handler: getAllWebSchemaHandler()) {      
+      if (handler.matchHandler(node, sessionProvider)) {               
+        handler.onCreateNode(node,sessionProvider);        
       }
     }    
   }
