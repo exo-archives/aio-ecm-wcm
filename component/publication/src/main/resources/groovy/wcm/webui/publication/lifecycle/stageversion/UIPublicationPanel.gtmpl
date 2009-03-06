@@ -6,8 +6,9 @@
   
   Version cVersion = uicomponent.getCurrentVerion();
   Node cNode = uicomponent.getCurrentNode();
-  public String getCurrentVersionState(String inputStatus) throws Exception {
-    if (cVersion == null) 
+  
+  public String getCurrentVersionState(String inputStatus, Version cVersion, Node cNode) throws Exception {
+    if (cVersion == null)
       return inputStatus.equals(cNode.getProperty("publication:currentState").getString()) ? "CurrentStatus" : "";
     else
       return inputStatus.equals(uicomponent.getVersionState(cVersion)) ? "CurrentStatus" : "";
@@ -29,15 +30,15 @@
     <div class="StatusAction">
       <div class="StatusTitle"><%=_ctx.appRes("UIPublicationPanel.status.title")%>: </div>
       <div class="StatusLink">
-        <a class="DefaultStatus <%= getCurrentVersionState("enrolled") %>" href="<%= uicomponent.event("Enrolled")%>"><%=_ctx.appRes("UIPublicationPanel.status.enrolled")%></a>
+        <a class="DefaultStatus <%= getCurrentVersionState("enrolled", cVersion, cNode) %>" href="<%= uicomponent.event("Enrolled")%>"><%=_ctx.appRes("UIPublicationPanel.status.enrolled")%></a>
         <span class="StatusArrow"></span>
-        <a class="DefaultStatus <%= getCurrentVersionState("draft") %>" href="<%= uicomponent.event("Draft")%>"><%=_ctx.appRes("UIPublicationPanel.status.draft")%></a>
+        <a class="DefaultStatus <%= getCurrentVersionState("draft", cVersion, cNode) %>" href="<%= uicomponent.event("Draft")%>"><%=_ctx.appRes("UIPublicationPanel.status.draft")%></a>
         <span class="StatusArrow"></span>
-        <a class="DefaultStatus <%= getCurrentVersionState("awaiting") %>" href="<%= uicomponent.event("Awaiting")%>"><%=_ctx.appRes("UIPublicationPanel.status.awaiting")%></a>
+        <a class="DefaultStatus <%= getCurrentVersionState("awaiting", cVersion, cNode) %>" href="<%= uicomponent.event("Awaiting")%>"><%=_ctx.appRes("UIPublicationPanel.status.awaiting")%></a>
         <span class="StatusArrow"></span>
-        <a class="DefaultStatus <%= getCurrentVersionState("live") %>" href="<%= uicomponent.event("Live")%>"><%=_ctx.appRes("UIPublicationPanel.status.live")%></a>
+        <a class="DefaultStatus <%= getCurrentVersionState("live", cVersion, cNode) %>" href="<%= uicomponent.event("Live")%>"><%=_ctx.appRes("UIPublicationPanel.status.live")%></a>
         <span class="StatusArrow"></span>
-        <a class="DefaultStatus <%= getCurrentVersionState("obsolete") %>" href="<%= uicomponent.event("Obsolete")%>"><%=_ctx.appRes("UIPublicationPanel.status.obsolete")%></a>
+        <a class="DefaultStatus <%= getCurrentVersionState("obsolete", cVersion, cNode) %>" href="<%= uicomponent.event("Obsolete")%>"><%=_ctx.appRes("UIPublicationPanel.status.obsolete")%></a>
         <div style="clear: left;"><span></span></div>
       </div>
     </div>
