@@ -17,5 +17,24 @@
 		    <description>This publication lifecycle publish a web content or DMS document to a portal page with more state and version.</description>	    	    	   
 		  </component-plugin>
 	  </component-plugins>
-  </component>		
+  </component>
+    
+  <external-component-plugins>
+  	<target-component>org.exoplatform.services.wcm.core.WebSchemaConfigService</target-component>		
+	  <component-plugin>
+	    <name>StateAndVersionPublicationHandler</name>
+	    <set-method>addWebSchemaHandler</set-method>
+	    <type>org.exoplatform.services.wcm.publication.lifecycle.stageversion.StateAndVersionPublicationHandler</type>	    
+	  </component-plugin>
+	</external-component-plugins>
+	
+	<external-component-plugins>
+		<target-component>org.exoplatform.services.listener.ListenerService</target-component>
+		<component-plugin>
+      <name>CmsService.event.postCreate</name>
+      <set-method>addListener</set-method>
+      <type>org.exoplatform.services.wcm.publication.lifecycle.stageversion.PostCreateContentEventListener</type>
+      <description>this listener create new live portal content storage</description>
+    </component-plugin>    
+  </external-component-plugins>   			  	
 </configuration>
