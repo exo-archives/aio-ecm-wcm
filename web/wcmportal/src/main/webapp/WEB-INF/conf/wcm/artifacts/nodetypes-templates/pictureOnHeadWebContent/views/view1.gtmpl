@@ -9,7 +9,7 @@
 	import org.exoplatform.download.DownloadService;
 	import org.exoplatform.download.InputStreamDownloadResource;
 	import java.io.InputStream;
-	import org.exoplatform.wcm.webui.XWikiPasser;	
+	import org.exoplatform.wcm.webui.WikiLinkParser;	
 	
 	public boolean getPortletPreference(String name) {
     PortletRequestContext portletRequestContext = _ctx.getRequestContext() ;
@@ -110,14 +110,14 @@
 					</div>
 					<% 
 					String html = htmlFile.getNode("jcr:content").getProperty("jcr:data").getString();
-					XWikiPasser passer = new XWikiPasser(html);
+					XWikiPasser passer = new WikiLinkParser(html);
 					%>
 					<%=passer.paseHTML()%>
 				</div>
 		<%
 	} else {
 			String html = htmlFile.getNode("jcr:content").getProperty("jcr:data").getString();
-			XWikiPasser passer = new XWikiPasser(html);
+			XWikiPasser passer = new WikiLinkParser(html);
 		%>
 		<%=passer.paseHTML()%>
 		<%

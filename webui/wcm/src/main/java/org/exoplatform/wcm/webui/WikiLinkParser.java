@@ -38,7 +38,7 @@ import org.exoplatform.portal.webui.util.Util;
  *          anh.do@exoplatform.com, anhdn86@gmail.com		
  * Mar 2, 2009  
  */
-public class XWikiPasser {
+public class WikiLinkParser {
 
   private String dataSource; 
   
@@ -46,7 +46,7 @@ public class XWikiPasser {
   
   Map<String, String> links = new HashMap<String, String>();
   
-  public XWikiPasser(String source) {
+  public WikiLinkParser(String source) {
     this.dataSource = source;
   }
   
