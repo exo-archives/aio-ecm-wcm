@@ -51,7 +51,7 @@ import org.exoplatform.wcm.webui.clv.UIContentListViewerPortlet;
 					<p><%=itemSummary%></p>
 				</div>			
 				<% } %>
-				<div class="LeftButtonContent" onclick="itemLink">
+				<div class="LeftButtonContent" onclick="javascript: location.href= '$itemLink'">
             <div class="RightButtonContent">
                 <div class="CenterButtonContent">&raquo;</div>
             </div>

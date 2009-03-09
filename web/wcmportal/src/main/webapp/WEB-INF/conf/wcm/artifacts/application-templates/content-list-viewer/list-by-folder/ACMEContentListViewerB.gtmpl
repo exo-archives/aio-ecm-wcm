@@ -29,6 +29,7 @@ import org.exoplatform.wcm.webui.clv.UIContentListViewerPortlet;
 				for (Node node : currentPageData) {				
 					String itemName = node.getName();
 					String itemLink = uicomponent.getURL(node);		
+					System.out.println("MY LINK: " + itemLink);
 					String itemSummary = uicomponent.getSummary(node);
 				    String itemTitle = uicomponent.getTitle(node);
 					String itemDateCreated = uicomponent.getCreatedDate(node);
@@ -53,7 +54,7 @@ import org.exoplatform.wcm.webui.clv.UIContentListViewerPortlet;
 							<p><%=itemSummary%></p>
 						</div>			
 						<% } %>
-						<div class="LeftButtonContent" onclick="$itemLink">
+						<div class="LeftButtonContent" onclick="javascript: location.href='$itemLink'">
 		            <div class="RightButtonContent">
 		                <div class="CenterButtonContent"><%=labelReadMore%>&raquo;</div>
 		            </div>
