@@ -16,6 +16,8 @@
  */
 package org.exoplatform.services.wcm.publication.lifecycle.stageversion;
 
+import java.util.HashMap;
+
 import javax.jcr.Node;
 
 import org.exoplatform.services.cms.templates.TemplateService;
@@ -34,10 +36,11 @@ import org.exoplatform.services.wcm.publication.WCMPublicationService;
 public class StateAndVersionPublicationHandler extends BaseWebSchemaHandler {
   private TemplateService templateService;  
   private WCMPublicationService wcmPublicationService;
-
-  public StateAndVersionPublicationHandler(TemplateService templateService, WCMPublicationService wcmpublicationService) {    
+  private PublicationService publicationService;
+  public StateAndVersionPublicationHandler(TemplateService templateService, WCMPublicationService wcmpublicationService, PublicationService publicationService) {    
     this.templateService = templateService;
     this.wcmPublicationService = wcmpublicationService;
+    this.publicationService = publicationService;
   }
 
   protected String getHandlerNodeType() {
@@ -67,4 +70,22 @@ public class StateAndVersionPublicationHandler extends BaseWebSchemaHandler {
     wcmPublicationService.enrollNodeInLifecycle(checkNode,Constant.LIFECYCLE_NAME);    
   }   
 
+  public void onModifyNode(Node node, SessionProvider sessionProvider) throws Exception {
+    if(node.isNew())
+      return;
+    Node checkNode = node;
+    if(node.isNodeType("nt:file")) {      
+      Node parentNode = node.getParent();
+      if(parentNode.isNodeType("exo:webContent")) {
+        checkNode = parentNode;        
+      }                 
+    }   
+    String lifecycle = publicationService.getNodeLifecycleName(checkNode);
+    if(!Constant.LIFECYCLE_NAME.equalsIgnoreCase(lifecycle))   
+      return;
+    String currentState = publicationService.getCurrentState(checkNode);
+    if(!Constant.ENROLLED.equalsIgnoreCase(currentState))
+      return;
+    publicationService.changeState(checkNode,Constant.DRAFT,new HashMap<String,String>());
+  }
 }

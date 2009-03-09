@@ -18,12 +18,16 @@ package org.exoplatform.services.wcm.publication.lifecycle.stageversion;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import javax.jcr.Node;
+import javax.jcr.Value;
+import javax.jcr.ValueFactory;
 
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
@@ -52,12 +56,17 @@ public class StageAndVersionBasedPublicationPlugin extends WebpagePublicationPlu
   }    
   
   public void changeState(Node node, String newState, HashMap<String, String> context) throws IncorrectStateUpdateLifecycleException,                                                                               Exception {
-    node.setProperty(Constant.CURRENT_STATE,newState);
-    VersionLog versionLog = null;
-    if(Constant.ENROLLED.endsWith(newState)) {
-      versionLog = new VersionLog(node.getUUID(),newState,node.getSession().getUserID(),GregorianCalendar.getInstance(),Constant.ENROLLED);
+    node.setProperty(Constant.CURRENT_STATE,newState);   
+    List<Value> logs = new ArrayList<Value>();
+    ValueFactory valueFactory = node.getSession().getValueFactory();
+    VersionLog versionLog = null;    
+    if(Constant.ENROLLED.equalsIgnoreCase(newState)) {
+      versionLog = new VersionLog(node.getUUID(),newState,node.getSession().getUserID(),GregorianCalendar.getInstance(),Constant.ENROLLED_TO_LIFECYCLE);      
+    }    
+    if(Constant.DRAFT.equalsIgnoreCase(newState)) {
+      versionLog = new VersionLog(node.getUUID(),newState,node.getSession().getUserID(),GregorianCalendar.getInstance(),Constant.CHANGE_TO_DRAFT);
     }
-    node.setProperty(Constant.HISTORY,versionLog.toStringValues());  
+    node.setProperty(Constant.HISTORY,logs.toArray(new Value[]{}));  
     if(!node.isNew()) 
       node.save();
   }

@@ -23,13 +23,11 @@ import java.util.Map;
 import javax.jcr.Node;
 import javax.jcr.Value;
 
-import org.apache.commons.logging.Log;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleException;
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
-import org.exoplatform.services.log.ExoLogger;
 import org.picocontainer.Startable;
 
 /**
