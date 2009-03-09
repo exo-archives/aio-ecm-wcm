@@ -25,9 +25,12 @@ import javax.jcr.Session;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionIterator;
 
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIPopupContainer;
+import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -43,9 +46,7 @@ import org.exoplatform.webui.form.UIForm;
     lifecycle = UIFormLifecycle.class,
     template = "classpath:groovy/wcm/webui/publication/lifecycle/stageversion/UIPublicationPanel.gtmpl",
     events = {
-      @EventConfig(listeners=UIPublicationPanel.EnrolledActionListener.class),
       @EventConfig(listeners=UIPublicationPanel.DraftActionListener.class),
-      @EventConfig(listeners=UIPublicationPanel.AwaitingActionListener.class),
       @EventConfig(listeners=UIPublicationPanel.LiveActionListener.class),
       @EventConfig(listeners=UIPublicationPanel.ObsoleteActionListener.class),
       @EventConfig(listeners=UIPublicationPanel.ChangeVersionActionListener.class),
@@ -64,9 +65,7 @@ public class UIPublicationPanel extends UIForm {
   private List<Version> viewedVersions = new ArrayList<Version>(3);  
   private Node currentNode;
 
-  public UIPublicationPanel() throws Exception {
-    addChild(UIVersionViewer.class, null, null).setRendered(false);
-  }
+  public UIPublicationPanel() throws Exception {}
 
   public void init(Node node) throws Exception {
     this.currentNode = node;
@@ -120,21 +119,9 @@ public class UIPublicationPanel extends UIForm {
     return "Root";
   }
   
-  public static class EnrolledActionListener extends EventListener<UIPublicationPanel> {
-    public void execute(Event<UIPublicationPanel> event) throws Exception {
-      System.out.println("------------------------------------------------> EnrolledActionListener");
-    }
-  } 
-
   public static class DraftActionListener extends EventListener<UIPublicationPanel> {
     public void execute(Event<UIPublicationPanel> event) throws Exception {
       System.out.println("------------------------------------------------> DraftActionListener");
-    }
-  } 
-
-  public static class AwaitingActionListener extends EventListener<UIPublicationPanel> {
-    public void execute(Event<UIPublicationPanel> event) throws Exception {
-      System.out.println("------------------------------------------------> AwaitingActionListener");
     }
   } 
 
@@ -162,19 +149,26 @@ public class UIPublicationPanel extends UIForm {
   public static class PreviewVersionActionListener extends EventListener<UIPublicationPanel> {
     public void execute(Event<UIPublicationPanel> event) throws Exception {
       UIPublicationPanel publicationPanel = event.getSource();
+      UIPublicationContainer publicationContainer = publicationPanel.getAncestorOfType(UIPublicationContainer.class);
+      UIVersionViewer versionViewer = publicationContainer.createUIComponent(UIVersionViewer.class, null, null);
       String versionUUID = event.getRequestContext().getRequestParameter(OBJECTID);
       Version version = publicationPanel.getVersionByUUID(versionUUID);
       Node frozenNode = version.getNode("jcr:frozenNode") ;
-      UIVersionViewer versionViewer = publicationPanel.getChild(UIVersionViewer.class);
+      versionViewer.setOriginalNode(publicationPanel.getCurrentNode());
       versionViewer.setNode(frozenNode);
-//      if(versionViewer.getTemplate() == null || versionViewer.getTemplate().trim().length() == 0) {
-//        UIApplication uiApp = publicationPanel.getAncestorOfType(UIApplication.class) ;
-//        uiApp.addMessage(new ApplicationMessage("UIVersionInfo.msg.have-no-view-template", null)) ;
-//        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-//        return ;
-//      }  
-      versionViewer.setRendered(true) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(publicationPanel) ;
+      if(versionViewer.getTemplate() == null || versionViewer.getTemplate().trim().length() == 0) {
+        UIApplication uiApp = publicationPanel.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIVersionInfo.msg.have-no-view-template", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }  
+      
+      UIPopupWindow popupWindow = publicationPanel.addChild(UIPopupWindow.class, null, null);
+      popupWindow.setUIComponent(versionViewer);      
+      popupWindow.setWindowSize(400, 400);
+      popupWindow.setShow(true);
+//      publicationContainer.setSelectedTab(popupWindow.getId());
+      event.getRequestContext().addUIComponentToUpdateByAjax(publicationPanel);
     }
   }
   

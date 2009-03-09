@@ -181,6 +181,16 @@
 	float: left;
 	display: block;
 	padding-top: 32px;
+	cursor: default;
+}
+
+.UIPublicationPanel .StatusTable .DisableStatus {
+	background: red url(icons/16x16/StateDisable.png) no-repeat top center;
+	width: 30px;
+	float: left;
+	display: block;
+	padding-top: 32px;
+	cursor: no-drop;
 }
 
 .UIPublicationPanel .StatusTable .StatusArrow {

@@ -7,11 +7,11 @@
   Version cVersion = uicomponent.getCurrentVerion();
   Node cNode = uicomponent.getCurrentNode();
   
-  public String getCurrentVersionState(String inputStatus, Version cVersion, Node cNode) throws Exception {
+  public boolean isCurrentVersion(String inputStatus, Version cVersion, Node cNode) throws Exception {
     if (cVersion == null)
-      return inputStatus.equals(cNode.getProperty("publication:currentState").getString()) ? "CurrentStatus" : "";
+      return inputStatus.equals(cNode.getProperty("publication:currentState").getString()) ? true : false;
     else
-      return inputStatus.equals(uicomponent.getVersionState(cVersion)) ? "CurrentStatus" : "";
+      return inputStatus.equals(uicomponent.getVersionState(cVersion)) ? true : false;
   }
 %>
 
@@ -30,16 +30,53 @@
     <div class="StatusAction">
       <div class="StatusTitle"><%=_ctx.appRes("UIPublicationPanel.status.title")%>: </div>
       <div class="StatusLink">
-        <a class="DefaultStatus <%= getCurrentVersionState("enrolled", cVersion, cNode) %>" href="<%= uicomponent.event("Enrolled")%>"><%=_ctx.appRes("UIPublicationPanel.status.enrolled")%></a>
-        <span class="StatusArrow"></span>
-        <a class="DefaultStatus <%= getCurrentVersionState("draft", cVersion, cNode) %>" href="<%= uicomponent.event("Draft")%>"><%=_ctx.appRes("UIPublicationPanel.status.draft")%></a>
-        <span class="StatusArrow"></span>
-        <a class="DefaultStatus <%= getCurrentVersionState("awaiting", cVersion, cNode) %>" href="<%= uicomponent.event("Awaiting")%>"><%=_ctx.appRes("UIPublicationPanel.status.awaiting")%></a>
-        <span class="StatusArrow"></span>
-        <a class="DefaultStatus <%= getCurrentVersionState("live", cVersion, cNode) %>" href="<%= uicomponent.event("Live")%>"><%=_ctx.appRes("UIPublicationPanel.status.live")%></a>
-        <span class="StatusArrow"></span>
-        <a class="DefaultStatus <%= getCurrentVersionState("obsolete", cVersion, cNode) %>" href="<%= uicomponent.event("Obsolete")%>"><%=_ctx.appRes("UIPublicationPanel.status.obsolete")%></a>
-        <div style="clear: left;"><span></span></div>
+        <%
+          if (isCurrentVersion("enrolled", cVersion, cNode)) {
+            %>
+              <a class="DefaultStatus CurrentStatus"><%=_ctx.appRes("UIPublicationPanel.status.enrolled")%></a>
+              <span class="StatusArrow"></span>
+              <a class="DefaultStatus" href="<%= uicomponent.event("Draft")%>"><%=_ctx.appRes("UIPublicationPanel.status.draft")%></a>
+              <span class="StatusArrow"></span>
+              <a class="DefaultStatus DisableStatus"><%=_ctx.appRes("UIPublicationPanel.status.live")%></a>
+              <span class="StatusArrow"></span>
+              <a class="DefaultStatus DisableStatus"><%=_ctx.appRes("UIPublicationPanel.status.obsolete")%></a>
+              <div style="clear: left;"><span></span></div>
+            <%
+          } else if (isCurrentVersion("draft", cVersion, cNode)) {
+            %>
+              <a class="DefaultStatus DisableStatus"><%=_ctx.appRes("UIPublicationPanel.status.enrolled")%></a>
+              <span class="StatusArrow"></span>
+              <a class="DefaultStatus CurrentStatus"><%=_ctx.appRes("UIPublicationPanel.status.draft")%></a>
+              <span class="StatusArrow"></span>
+              <a class="DefaultStatus" href="<%= uicomponent.event("Live")%>"><%=_ctx.appRes("UIPublicationPanel.status.live")%></a>
+              <span class="StatusArrow"></span>
+              <a class="DefaultStatus DisableStatus"><%=_ctx.appRes("UIPublicationPanel.status.obsolete")%></a>
+              <div style="clear: left;"><span></span></div>              
+            <%
+          } else if (isCurrentVersion("live", cVersion, cNode)) {
+            %>
+              <a class="DefaultStatus DisableStatus"><%=_ctx.appRes("UIPublicationPanel.status.enrolled")%></a>
+              <span class="StatusArrow"></span>
+              <a class="DefaultStatus DisableStatus"><%=_ctx.appRes("UIPublicationPanel.status.draft")%></a>
+              <span class="StatusArrow"></span>
+              <a class="DefaultStatus CurrentStatus"><%=_ctx.appRes("UIPublicationPanel.status.live")%></a>
+              <span class="StatusArrow"></span>
+              <a class="DefaultStatus" href="<%= uicomponent.event("obsolete")%>"><%=_ctx.appRes("UIPublicationPanel.status.obsolete")%></a>
+              <div style="clear: left;"><span></span></div>
+            <%
+          } else if (isCurrentVersion("obsolete", cVersion, cNode)) {
+            %>
+              <a class="DefaultStatus DisableStatus"><%=_ctx.appRes("UIPublicationPanel.status.enrolled")%></a>
+              <span class="StatusArrow"></span>
+              <a class="DefaultStatus DisableStatus"><%=_ctx.appRes("UIPublicationPanel.status.draft")%></a>
+              <span class="StatusArrow"></span>
+              <a class="DefaultStatus DisableStatus"><%=_ctx.appRes("UIPublicationPanel.status.live")%></a>
+              <span class="StatusArrow"></span>
+              <a class="DefaultStatus CurrentStatus"><%=_ctx.appRes("UIPublicationPanel.status.obsolete")%></a>
+              <div style="clear: left;"><span></span></div>
+            <%
+          }
+        %>
       </div>
     </div>
   </fieldset>

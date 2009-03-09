@@ -21,6 +21,7 @@ import javax.jcr.Node;
 import org.apache.commons.logging.Log;
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
 import org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -41,26 +42,36 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 )
 public class UIVersionViewer extends UIBaseNodePresentation {
 
+  private Node originalNode;
+  private Node node;
   private JCRResourceResolver resourceResolver ;
   public static final Log log = ExoLogger.getLogger("wcm:StageAndVersionPubliciation");
   
-  public Node getNode() throws Exception {
-    return getAncestorOfType(UIPublicationPanel.class).getCurrentNode() ;
-  }
-  
-  public void setNode(Node node) {}
-  
-  public Node getOriginalNode() throws Exception {
-    return getNode();
-  }
+  public Node getNode() throws Exception {return node ;}
+  public void setNode(Node node) {this.node = node;}
+  public Node getOriginalNode() throws Exception {return originalNode;}
+  public void setOriginalNode(Node originalNode) {this.originalNode = originalNode;}
 
   public String getRepositoryName() throws Exception {
     return null;
   }
 
-  public String getTemplatePath() throws Exception {
+  public String getTemplate() {
     TemplateService templateService = getApplicationComponent(TemplateService.class);
-    return templateService.getTemplatePath(getNode(), false) ;
+    String userName = Util.getPortalRequestContext().getRemoteUser() ;
+    try {
+      String nodeType = originalNode.getPrimaryNodeType().getName();
+      String repositoryName = getRepository();
+      if(templateService.isManagedNodeType(nodeType, repositoryName)) 
+        return templateService.getTemplatePathByUser(false, nodeType, userName, repositoryName) ;
+    } catch (Exception e) {
+       e.printStackTrace();
+    }
+    return null ;
+  }
+  
+  public String getTemplatePath() throws Exception {
+    return null;
   }
 
   public ResourceResolver getTemplateResourceResolver(WebuiRequestContext context, String template) {
@@ -71,9 +82,7 @@ public class UIVersionViewer extends UIBaseNodePresentation {
       String workspace = manageableRepository.getConfiguration().getSystemWorkspaceName();
       resourceResolver = new JCRResourceResolver(repository, workspace, "exo:templateFile");
     }catch (Exception e) {
-      if(log.isDebugEnabled()) {
-        log.debug(e);
-      }
+      e.printStackTrace();
     }    
     return resourceResolver ;   
   }
