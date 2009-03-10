@@ -16,12 +16,9 @@
  */
 package org.exoplatform.services.wcm.search;
 
-import java.util.Arrays;
-
 import javax.jcr.Node;
 import javax.jcr.query.QueryResult;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
 
 /**
@@ -125,15 +122,15 @@ public class WCMPaginatedQueryResult extends PaginatedQueryResult {
         if (!displayNode.isNodeType("publication:webpagesPublication"))
           return null;
       }
-    }else {
+    } else {
       if(queryCriteria.isSearchDocument()) {
         if(displayNode.isNodeType("exo:webContent")) 
           return null;
       }
-      if(queryCriteria.isSearchWebpage()) {
-        if (!displayNode.isNodeType("publication:webpagesPublication"))
+      if(queryCriteria.isSearchWebpage()) {        
+        if (!displayNode.isNodeType("publication:webpagesPublication") && !queryCriteria.isSearchDocument())
           return null;
-      }
+      }      
     }            
     String[] contentTypes = queryCriteria.getContentTypes();
     if(contentTypes != null && contentTypes.length>0) {

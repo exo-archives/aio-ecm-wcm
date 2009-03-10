@@ -115,7 +115,8 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     Session session = sessionProvider.getSession(location.getWorkspace(),currentRepository);
     QueryManager queryManager = session.getWorkspace().getQueryManager();
     long startTime = System.currentTimeMillis();
-    QueryResult queryResult = searchSiteContent(queryCriteria, queryManager);        
+    QueryResult queryResult = searchSiteContent(queryCriteria, queryManager);
+    System.out.println(queryResult.getRows().getSize());
     String suggestion = getSpellSuggestion(queryCriteria.getKeyword(),currentRepository);
     long queryTime = System.currentTimeMillis() - startTime;
     WCMPaginatedQueryResult paginatedQueryResult = null;
