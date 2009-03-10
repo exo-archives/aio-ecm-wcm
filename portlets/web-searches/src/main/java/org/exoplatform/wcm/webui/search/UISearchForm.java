@@ -253,6 +253,7 @@ public class UISearchForm extends UIForm {
 			} else if (!uiPageCheckbox.isChecked() && uiDocumentCheckbox.isChecked()) {
 			  resultType = bundle.getString("UISearchForm.documentCheckBox.label");
       }
+      keyword = keyword.replace('-', ' ');
 			uiSearchResult.setKeyword(keyword);
 			uiSearchResult.setResultType(resultType);
 			String selectedPortal = (uiPortalSelectBox.getValue()
@@ -263,6 +264,7 @@ public class UISearchForm extends UIForm {
 			queryCriteria.setKeyword(keyword);
 			queryCriteria.setSearchDocument(Boolean.parseBoolean(documentChecked));
 			queryCriteria.setSearchWebpage(Boolean.parseBoolean(pageChecked));
+      queryCriteria.setSearchWebContent(false);
 			int itemsPerPage = Integer.parseInt(portletPreferences.getValue(
 					UIWCMSearchPortlet.ITEMS_PER_PAGE, null));
 			try {
