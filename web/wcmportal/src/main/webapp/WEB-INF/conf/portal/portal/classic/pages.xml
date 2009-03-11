@@ -140,5 +140,22 @@
       <show-application-mode>false</show-application-mode>
     </application>
   </page>
+  
+  <page>
+  	<page-id>portal::classic::wikipresentation</page-id>
+    <owner-type>portal</owner-type>
+    <owner-id>classic</owner-id>
+    <name>wikipresentation</name>
+    <title>wikipresentation</title>
+    <access-permissions>Everyone</access-permissions> 
+    <edit-permission>*:/platform/administrators</edit-permission>
+    <application>
+      <instance-id>portal#classic:/web-presentation/wikipresentation/classic-wikipresentation</instance-id>
+      <title>wikipresentation</title>
+      <show-info-bar>false</show-info-bar>      
+      <show-application-state>false</show-application-state>
+      <show-application-mode>false</show-application-mode>
+    </application>
+  </page>
 
 </page-set>

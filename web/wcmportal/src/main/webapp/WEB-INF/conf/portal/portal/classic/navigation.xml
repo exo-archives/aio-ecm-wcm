@@ -62,6 +62,13 @@
 			<name>sitemap</name>
 			<label>#{portal.classic.sitemap}</label>
 			<page-reference>portal::classic::sitemap</page-reference>	    
+		</node>
+		<node>
+			<uri>wikipresentation</uri>
+			<name>wikipresentation</name>
+			<label>#{portal.classic.wikipresentation}</label>
+			<visible>false</visible>
+			<page-reference>portal::classic::wikipresentation</page-reference>
 		</node>	  	  
 	</page-nodes>
 </node-navigation>
