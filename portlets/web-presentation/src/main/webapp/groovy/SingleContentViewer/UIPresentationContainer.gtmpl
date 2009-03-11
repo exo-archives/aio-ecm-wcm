@@ -15,7 +15,9 @@
 	
 	<%
 		if (uicomponent.isQuickPrint()) {
-			%><div class="QuickPrint" onclick="<%=uicomponent.event("QuickPrint")%>" title="<%= _ctx.appRes("UIPresentationContainer.quickPrint.title");%>"><span></span></div><%
+	%>
+			<div class="QuickPrint" onclick="<%=uicomponent.event("QuickPrint")%>" title="<%= _ctx.appRes("UIPresentationContainer.quickPrint.title");%>"><span></span></div>
+	<%
 		}
 	%>
 	<% uicomponent.renderChildren() %>

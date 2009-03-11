@@ -75,9 +75,6 @@
 	<supports>
 		<mime-type>text/html</mime-type>
 		<portlet-mode>help</portlet-mode>
-		<!-- remarked on March 03, 2009 for WCM-1102
-		<portlet-mode>edit</portlet-mode> 
-		-->
 	</supports>
 	<supported-locale>en</supported-locale>
 	<resource-bundle>locale.portlet.SiteAdministration.SiteAdministrationToolBar</resource-bundle>
