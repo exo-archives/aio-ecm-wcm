@@ -36,7 +36,6 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
@@ -157,15 +156,13 @@ public class UIPresentationContainer extends UIContainer{
 		PortletPreferences prefs = porletRequestContext.getRequest().getPreferences();
 		UIPortal uiPortal = Util.getUIPortal();
 		UIPage uiPage = uiPortal.findFirstComponentOfType(UIPage.class);
-//		UIComponent uiComponent = uiPage.getChildById(porletRequestContext.getWindowId());
 
 		List<String> ids = org.exoplatform.services.wcm.publication.defaultlifecycle.Util.getListApplicationIdByPage(PortalDataMapper.toPageModel(uiPage));
 		List<String> newIds = new ArrayList<String>();
 		int length = ids.size();
 		for(int i = 0; i < length; i++) {
 			String temp = ids.get(i);
-			int j = temp.lastIndexOf("/") + 1;
-			String id = temp.substring(j, temp.length());
+			String id = temp.substring(temp.lastIndexOf("/") + 1, temp.length());
 			newIds.add(id);
 		}
 		
