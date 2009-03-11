@@ -34,7 +34,7 @@ public interface Constant {
   public static final String PUBLICATION_LIFECYCLE_NAME = "publication:lifecycleName".intern();
   public static final String MIX_VERSIONABLE = "mix:versionable".intern();
   public static final String HISTORY = "publication:history".intern();
-  
+  public static final String LOCALIZATION = "artifacts.lifecycle.StageAndVersionPublication".intern();
   public static final String ENROLLED_TO_LIFECYCLE = "Publication.log.enrolled".intern();
   public static final String CHANGE_TO_DRAFT = "Publication.log.change-to-draft-state".intern();
   public static final String CHANGE_TO_AWAITNG = "Publication.log.change-to-awaiting-state".intern();

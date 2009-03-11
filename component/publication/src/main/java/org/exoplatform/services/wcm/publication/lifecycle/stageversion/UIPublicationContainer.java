@@ -28,13 +28,9 @@ import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
-import org.exoplatform.services.wcm.publication.defaultlifecycle.Util;
-import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIPopupComponent;
-import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.form.UIForm;
 
@@ -79,7 +75,7 @@ public class UIPublicationContainer extends UIForm implements UIPopupComponent {
   public void setSelectedTab(int index) { selectedTabId = ((UIComponent)getChild(index-1)).getId();}
   
   private String getPortalForContent(Node contentNode) throws Exception {
-    LivePortalManagerService livePortalManagerService = org.exoplatform.services.wcm.publication.defaultlifecycle.Util.getServices(LivePortalManagerService.class);
+    LivePortalManagerService livePortalManagerService = Util.getServices(LivePortalManagerService.class);
     for(String portalPath:livePortalManagerService.getLivePortalsPath()) {
       if(contentNode.getPath().startsWith(portalPath)) {
         return livePortalManagerService.getPortalNameByPath(portalPath);

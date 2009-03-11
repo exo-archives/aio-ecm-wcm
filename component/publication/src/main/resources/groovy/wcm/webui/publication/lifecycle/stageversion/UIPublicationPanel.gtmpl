@@ -3,18 +3,20 @@
   import javax.jcr.Node;
   import javax.jcr.version.Version;
   import org.exoplatform.services.wcm.publication.lifecycle.stageversion.UIPublicationPanel;
-  
+  import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant;
   Version cVersion = uicomponent.getCurrentVerion();
   Node cNode = uicomponent.getCurrentNode();
-  
+  String cState;
   public boolean isCurrentVersion(String inputStatus, Version cVersion, Node cNode) throws Exception {
-    if (cVersion == null)
-      return inputStatus.equals(cNode.getProperty("publication:currentState").getString()) ? true : false;
-    else
-      return inputStatus.equals(uicomponent.getVersionState(cVersion)) ? true : false;
+    if (cVersion == null) {
+      cState = cNode.getProperty("publication:currentState").getString();
+      return inputStatus.equals(cState) ? true : false;
+    } else {
+      cState = uicomponent.getVersionState(cVersion);
+      return inputStatus.equals(cState) ? true : false;
+    }
   }
 %>
-
 <% uicomponent.begin(); %>
 <div class="UIPublicationPanel" id="$uicomponent.id">
   <fieldset class="StatusTable">
@@ -99,21 +101,44 @@
       }
     
       for (Version version : versions) {
-        %>
-          <tr>
-            <td class="Name">
-              <a href="<%= uicomponent.event("ChangeVersion", version.getUUID()) %>"><%=_ctx.appRes("UIPublicationPanel.revisions.label")%>: <%= version.getName() %></a>
-            </td>
-            <td><%=version.getProperty("jcr:created").getString()%></td>
-            <td><%= uicomponent.getVersionAuthor(version) %></td>
-            <td><%= uicomponent.getVersionState(version) %></td>
-            <td>
-              <div class="Preview" onclick="<%= uicomponent.event("PreviewVersion", version.getUUID()) %>"><span></span></div>
-              <div class="Restore" onclick="<%= uicomponent.event("RestoreVersion", version.getUUID()) %>"><span></span></div>
-              <div style="clear: left"><span></span></div>
-            </td>
-          </tr>
-        <%
+        if (versions.indexOf(version) == 0) {
+          %>
+            <tr>
+              <td class="Name">
+                <a href="<%= uicomponent.event("ChangeVersion", version.getUUID()) %>"><%=_ctx.appRes("UIPublicationPanel.revisions.label")%>: <%= version.getName() %></a>
+              </td>
+              <td><%=version.getProperty("jcr:created").getString()%></td>
+              <td><%= uicomponent.getVersionAuthor(version) %></td>
+              <td><%=_ctx.appRes("UIPublicationPanel.status." + uicomponent.getVersionState(version))%> [<%=_ctx.appRes("UIPublicationPanel.revisions.currentVersion")%>]</td>
+              <td>
+                <div class="Preview" onclick="<%= uicomponent.event("PreviewVersion", version.getUUID()) %>"><span></span></div>
+                <div style="clear: left"><span></span></div>
+              </td>
+            </tr>
+          <%
+        } else {
+          %>
+            <tr>
+              <td class="Name">
+                <a href="<%= uicomponent.event("ChangeVersion", version.getUUID()) %>"><%=_ctx.appRes("UIPublicationPanel.revisions.label")%>: <%= version.getName() %></a>
+              </td>
+              <td><%=version.getProperty("jcr:created").getString()%></td>
+              <td><%= uicomponent.getVersionAuthor(version) %></td>
+              <td><%=_ctx.appRes("UIPublicationPanel.status." + uicomponent.getVersionState(version))%></td>
+              <td>
+                <div class="Preview" onclick="<%= uicomponent.event("PreviewVersion", version.getUUID()) %>"><span></span></div>
+                <%
+                  if (Constant.DRAFT.equals(cState)) {
+                    %><div class="Restore" onclick="if (confirm('<%=_ctx.appRes("UIPublicationPanel.revisions.confirm")%>')) <%= uicomponent.event("RestoreVersion", version.getUUID()) %>"><span></span></div><%
+                  } else {
+                    %><div class="Restore" onclick="<%= uicomponent.event("RestoreVersion", version.getUUID()) %>"><span></span></div><%
+                  }
+                %>
+                <div style="clear: left"><span></span></div>
+              </td>
+            </tr>
+          <%
+        }
       }
     %>  
   </table>

@@ -20,7 +20,7 @@ import java.util.List;
 
 import javax.jcr.Node;
 
-import org.exoplatform.services.wcm.publication.defaultlifecycle.UIPublicationTree.TreeNode;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.UIPublicationTree.TreeNode;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 import org.exoplatform.webui.form.UIForm;

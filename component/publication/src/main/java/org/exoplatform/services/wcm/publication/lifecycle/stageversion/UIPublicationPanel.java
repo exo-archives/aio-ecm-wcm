@@ -29,8 +29,8 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
+import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIPopupContainer;
-import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -43,19 +43,20 @@ import org.exoplatform.webui.form.UIForm;
  * Mar 2, 2009  
  */
 @ComponentConfig(
-    lifecycle = UIFormLifecycle.class,
-    template = "classpath:groovy/wcm/webui/publication/lifecycle/stageversion/UIPublicationPanel.gtmpl",
-    events = {
-      @EventConfig(listeners=UIPublicationPanel.DraftActionListener.class),
-      @EventConfig(listeners=UIPublicationPanel.LiveActionListener.class),
-      @EventConfig(listeners=UIPublicationPanel.ObsoleteActionListener.class),
-      @EventConfig(listeners=UIPublicationPanel.ChangeVersionActionListener.class),
-      @EventConfig(listeners=UIPublicationPanel.PreviewVersionActionListener.class),
-      @EventConfig(listeners=UIPublicationPanel.RestoreVersionActionListener.class),
-      @EventConfig(listeners=UIPublicationPanel.SeeAllVersionActionListener.class),
-      @EventConfig(listeners=UIPublicationPanel.CloseActionListener.class)
-    } 
-)
+   lifecycle = UIFormLifecycle.class,
+   template = "classpath:groovy/wcm/webui/publication/lifecycle/stageversion/UIPublicationPanel.gtmpl",
+     events = {
+       @EventConfig(listeners=UIPublicationPanel.DraftActionListener.class),
+       @EventConfig(listeners=UIPublicationPanel.LiveActionListener.class),
+       @EventConfig(listeners=UIPublicationPanel.ObsoleteActionListener.class),
+       @EventConfig(listeners=UIPublicationPanel.ChangeVersionActionListener.class),
+       @EventConfig(listeners=UIPublicationPanel.PreviewVersionActionListener.class),
+       @EventConfig(listeners=UIPublicationPanel.RestoreVersionActionListener.class),
+       @EventConfig(listeners=UIPublicationPanel.SeeAllVersionActionListener.class),
+       @EventConfig(listeners=UIPublicationPanel.CloseActionListener.class)
+     } 
+ )
+
 public class UIPublicationPanel extends UIForm {
 
   public static final String START_TIME = "startTime".intern();
@@ -150,7 +151,7 @@ public class UIPublicationPanel extends UIForm {
     public void execute(Event<UIPublicationPanel> event) throws Exception {
       UIPublicationPanel publicationPanel = event.getSource();
       UIPublicationContainer publicationContainer = publicationPanel.getAncestorOfType(UIPublicationContainer.class);
-      UIVersionViewer versionViewer = publicationContainer.createUIComponent(UIVersionViewer.class, null, null);
+      UIVersionViewer versionViewer = publicationContainer.createUIComponent(UIVersionViewer.class, null, "UIVersionViewer"); 
       String versionUUID = event.getRequestContext().getRequestParameter(OBJECTID);
       Version version = publicationPanel.getVersionByUUID(versionUUID);
       Node frozenNode = version.getNode("jcr:frozenNode") ;
@@ -161,22 +162,35 @@ public class UIPublicationPanel extends UIForm {
         uiApp.addMessage(new ApplicationMessage("UIVersionInfo.msg.have-no-view-template", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
-      }  
-      
-      UIPopupWindow popupWindow = publicationPanel.addChild(UIPopupWindow.class, null, null);
-      popupWindow.setUIComponent(versionViewer);      
-      popupWindow.setWindowSize(400, 400);
-      popupWindow.setShow(true);
-//      publicationContainer.setSelectedTab(popupWindow.getId());
-      event.getRequestContext().addUIComponentToUpdateByAjax(publicationPanel);
+      }
+      if (publicationContainer.getChildById("UIVersionViewer") == null) publicationContainer.addChild(versionViewer);
+      else publicationContainer.replaceChild("UIVersionViewer", versionViewer);
+      for (UIComponent component : publicationContainer.getChildren()) {
+        component.setRendered(false);
+      }
+      versionViewer.setRendered(true);
+      publicationContainer.setSelectedTab("UIVersionViewer");
+      event.getRequestContext().addUIComponentToUpdateByAjax(publicationContainer);
     }
   }
   
   public static class RestoreVersionActionListener extends EventListener<UIPublicationPanel> {
     public void execute(Event<UIPublicationPanel> event) throws Exception {
-      UIPublicationPanel publicationPanel = event.getSource();
-      String versionUUID = event.getRequestContext().getRequestParameter(OBJECTID);
-      System.out.println("------------------------------------------------> PreviewActionListener");
+      System.out.println("------------------------------------------------> RestoreVersionActionListener");
+//      UIPublicationPanel publicationPanel = event.getSource();
+//      
+//      Node currentNode = publicationPanel.getCurrentNode();
+//      if(currentNode.isLocked()) {
+//        String lockToken = LockUtil.getLockToken(currentNode);
+//        currentNode.getSession().addLockToken(lockToken) ;
+//      }
+//      
+//      String versionUUID = event.getRequestContext().getRequestParameter(OBJECTID);
+//      Version version = publicationPanel.getVersionByUUID(versionUUID);
+//      publicationPanel.getCurrentNode().restore(version, true);
+//      
+//      if(!currentNode.isCheckedOut()) currentNode.checkout() ;
+//      currentNode.getSession().save() ;
     }
   }
   

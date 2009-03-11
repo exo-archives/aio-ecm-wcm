@@ -35,7 +35,7 @@ import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.services.resources.LocaleConfig;
 import org.exoplatform.services.resources.LocaleConfigService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
-import org.exoplatform.services.wcm.publication.defaultlifecycle.UIPublicationTree.TreeNode;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.UIPublicationTree.TreeNode;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;

@@ -32,6 +32,7 @@
       <UIPublicationPanel>Publication de l'état</UIPublicationPanel>
       <UIPublicationPages>Publication des pages</UIPublicationPages>
       <UIPublicationHistory>Publication de l'histoire</UIPublicationHistory>
+      <UIVersionViewer>Visualiseur de version</UIVersionViewer>
     </title>
   </UITabPane>
   <UIPublicationAction>
@@ -63,6 +64,8 @@
   		<label>Version</label>
   		<none>Non révision</none>
   		<seeall>Voir toute les versions</seeall>
+  		<currentVersion>version courant</currentVersion>
+  		<confirm>You will lost your draft work, do you really want to restore this revision and replace the current revision ?</confirm>
   	</revisions>
   	<status>
   		<version>Version</version>

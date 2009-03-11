@@ -32,6 +32,7 @@
       <UIPublicationPanel>Trạng thái xuất bản</UIPublicationPanel>
       <UIPublicationPages>Xuất bản vào trang</UIPublicationPages>
       <UIPublicationHistory>Nhật ký xuất bản</UIPublicationHistory>
+      <UIVersionViewer>Xem lại phiên bản</UIVersionViewer>
     </title>
   </UITabPane>
   <UIPublicationAction>
@@ -63,6 +64,8 @@
   		<label>Phiên bản</label>
   		<none>Không có phiên bản nào</none>
   		<seeall>Xem tất cả các phiên bản</seeall>
+  		<currentVersion>phiên bản hiện tại</currentVersion>
+  		<confirm>Bạn sẽ mất những gì đã thay đổi trong phiên bản nháp, bạn có thực sự muốn khôi phục lại phiên bản này và thay thế cho phiên bản hiện tại ?</confirm>
   	</revisions>
   	<status>
   		<version>Phiên bản</version>

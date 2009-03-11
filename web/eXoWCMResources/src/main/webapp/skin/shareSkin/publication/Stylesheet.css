@@ -143,6 +143,7 @@
 .UIPublicationPanel .SeeAllVersion {
 	text-align: right;
 	cursor: pointer;
+	padding-top: 5px; 
 }
 
 .UIPublicationPanel .StatusTable {
@@ -185,7 +186,7 @@
 }
 
 .UIPublicationPanel .StatusTable .DisableStatus {
-	background: red url(icons/16x16/StateDisable.png) no-repeat top center;
+	background: url(icons/16x16/StateDisable.png) no-repeat top center;
 	width: 30px;
 	float: left;
 	display: block;
