@@ -36,7 +36,7 @@ public class UIWebConentNameTabForm extends UIContainer {
    * @throws Exception the exception
    */
   public UIWebConentNameTabForm() throws Exception {
-    addChild(UINameWebContentForm.class, null, null);
+    addChild(UINameWebContentForm.class, null, null); 
   }
 
   /**

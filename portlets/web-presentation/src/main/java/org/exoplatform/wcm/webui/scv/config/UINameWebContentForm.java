@@ -181,7 +181,7 @@ public class UINameWebContentForm extends UIForm {
    */
   public boolean isNewConfig() {
     UIPortletConfig uiPortletConfig = getAncestorOfType(UIPortletConfig.class);
-    return uiPortletConfig.isNewConfig();
+    return uiPortletConfig.isNewConfig(); 
   }
 
 
