@@ -16,7 +16,6 @@
  */
 package org.exoplatform.wcm.webui.scv.config;
 
-import org.exoplatform.wcm.webui.scv.config.publication.UIWCMPublicationGrid;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
 
@@ -38,7 +37,6 @@ public class UIWebConentNameTabForm extends UIContainer {
    */
   public UIWebConentNameTabForm() throws Exception {
     addChild(UINameWebContentForm.class, null, null);
-    addChild(UIWCMPublicationGrid.class, null, null).setRendered(false);
   }
 
   /**
@@ -48,6 +46,5 @@ public class UIWebConentNameTabForm extends UIContainer {
    */
   public void init() throws Exception {
     getChild(UINameWebContentForm.class).init();
-    getChild(UIWCMPublicationGrid.class).updateGrid();
   }
 }

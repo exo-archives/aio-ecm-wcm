@@ -44,7 +44,6 @@ import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
 import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
-import org.exoplatform.wcm.webui.scv.config.publication.UIWCMPublicationGrid;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -204,15 +203,7 @@ public class UINameWebContentForm extends UIForm {
      */
     public void execute(Event<UINameWebContentForm> event) throws Exception {
       UINameWebContentForm uiNameWebContentForm = event.getSource();
-      UIWebConentNameTabForm webConentNameTabForm = uiNameWebContentForm.getAncestorOfType(UIWebConentNameTabForm.class);
-      UIWCMPublicationGrid wcPublicationGrid = webConentNameTabForm.getChild(UIWCMPublicationGrid.class);
-      String lifecycleNameSelected = wcPublicationGrid.getLifecycleNameSelected();
       UIApplication uiApplication = uiNameWebContentForm.getAncestorOfType(UIApplication.class);
-      if (lifecycleNameSelected == null) {
-        uiApplication.addMessage(new ApplicationMessage("UINameWebContentForm.msg.non-lifecyclename", null, ApplicationMessage.WARNING));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
-        return;
-      }
       String portalName = Util.getUIPortal().getName();
       LivePortalManagerService livePortalManagerService = uiNameWebContentForm
       .getApplicationComponent(LivePortalManagerService.class);
@@ -267,8 +258,7 @@ public class UINameWebContentForm extends UIForm {
       prefs.setValue(UISingleContentViewerPortlet.WORKSPACE, workspaceName);
       prefs.setValue(UISingleContentViewerPortlet.IDENTIFIER, webContentNode.getUUID());
       prefs.store();
-      WCMPublicationService wcmPublicationService = uiNameWebContentForm.getApplicationComponent(WCMPublicationService.class);
-      wcmPublicationService.enrollNodeInLifecycle(webContentNode, lifecycleNameSelected);
+      WCMPublicationService wcmPublicationService = uiNameWebContentForm.getApplicationComponent(WCMPublicationService.class);      
       UIPortletConfig portletConfig = uiQuickCreationWizard.getAncestorOfType(UIPortletConfig.class);
       if (!portletConfig.isEditPortletInCreatePageWizard()) {
         String pageId = Util.getUIPortal().getSelectedNode().getPageReference();
