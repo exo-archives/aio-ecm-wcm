@@ -16,9 +16,6 @@
  */
 package org.exoplatform.wcm.webui.scv.config;
 
-import java.util.Map;
-import java.util.Set;
-
 import javax.jcr.Node;
 import javax.jcr.Session;
 import javax.portlet.PortletPreferences;
@@ -35,9 +32,7 @@ import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.publication.NotInWCMPublicationException;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
-import org.exoplatform.services.wcm.publication.WebpagePublicationPlugin;
 import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
-import org.exoplatform.wcm.webui.scv.config.publication.UIWCMPublicationGrid;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -65,8 +60,7 @@ import org.exoplatform.webui.form.ext.UIFormInputSetWithAction;
     events = {
       @EventConfig(listeners = UIWebContentSelectorForm.SaveActionListener.class),
       @EventConfig(listeners = UIWebContentSelectorForm.BackActionListener.class),
-      @EventConfig(listeners = UIWebContentSelectorForm.BrowseActionListener.class),
-      @EventConfig(listeners = UIWebContentSelectorForm.BrowsePublicationActionListener.class)
+      @EventConfig(listeners = UIWebContentSelectorForm.BrowseActionListener.class)
     }
 )
 
@@ -123,21 +117,6 @@ public class UIWebContentSelectorForm extends UIForm implements UISelectable{
    * @throws Exception the exception
    */
   public void init() throws Exception {
-    WCMPublicationService wcmService = getApplicationComponent(WCMPublicationService.class);
-    Map<String,WebpagePublicationPlugin> publicationPluginMap = wcmService.getWebpagePublicationPlugins();
-    Set<String> keySet = publicationPluginMap.keySet();
-    if (keySet.size() > 1) {
-      UIFormInputSetWithAction uiPublicationSelector = new UIFormInputSetWithAction(PUBLICATION);
-      uiPublicationSelector.addUIFormInput(new UIFormStringInput(PUBLICATION, PUBLICATION, null).setEditable(false));
-      uiPublicationSelector.setActionInfo(PUBLICATION, new String [] {"BrowsePublication"});
-      addChild(uiPublicationSelector);
-    } else {
-      for (String str: keySet) {
-        WebpagePublicationPlugin publicationPlugin = publicationPluginMap.get(str);
-        String lifecycleName = publicationPlugin.getLifecycleName();
-        addChild(new UIFormStringInput(PUBLICATION, PUBLICATION, lifecycleName).setEditable(false));
-      }
-    }
   }
 
   /* (non-Javadoc)
@@ -219,31 +198,6 @@ public class UIWebContentSelectorForm extends UIForm implements UISelectable{
       ((UIPortletConfig) uiWebContentSelector.getParent()).initPopupWebContentSelector();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiWebContentSelector.getParent());
     }
-  }
-
-  /**
-   * The listener interface for receiving browsePublicationAction events.
-   * The class that is interested in processing a browsePublicationAction
-   * event implements this interface, and the object created
-   * with that class is registered with a component using the
-   * component's <code>addBrowsePublicationActionListener<code> method. When
-   * the browsePublicationAction event occurs, that object's appropriate
-   * method is invoked.
-   * 
-   * @see BrowsePublicationActionEvent
-   */
-  public static class BrowsePublicationActionListener extends EventListener<UIWebContentSelectorForm> {
-
-    /* (non-Javadoc)
-     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
-     */
-    public void execute(Event<UIWebContentSelectorForm> event) throws Exception {
-      UIWebContentSelectorForm uiWebContentSelector = event.getSource();
-      UIWCMPublicationGrid publicationGrid = uiWebContentSelector.createUIComponent(UIWCMPublicationGrid.class, null, null);
-      publicationGrid.setSourceComponent(uiWebContentSelector);
-      publicationGrid.updateGrid();
-      uiWebContentSelector.showPopupComponent(publicationGrid);
-    }    
   }
 
   /**

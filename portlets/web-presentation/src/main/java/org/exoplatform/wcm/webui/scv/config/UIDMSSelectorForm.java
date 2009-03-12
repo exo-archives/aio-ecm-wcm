@@ -37,7 +37,6 @@ import org.exoplatform.services.wcm.publication.NotInWCMPublicationException;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.publication.WebpagePublicationPlugin;
 import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
-import org.exoplatform.wcm.webui.scv.config.publication.UIWCMPublicationGrid;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -65,8 +64,7 @@ import org.exoplatform.webui.form.ext.UIFormInputSetWithAction;
     events = {
       @EventConfig(listeners = UIDMSSelectorForm.SaveActionListener.class),
       @EventConfig(listeners = UIDMSSelectorForm.BackActionListener.class),
-      @EventConfig(listeners = UIDMSSelectorForm.BrowseActionListener.class),
-      @EventConfig(listeners = UIDMSSelectorForm.BrowsePublicationActionListener.class)
+      @EventConfig(listeners = UIDMSSelectorForm.BrowseActionListener.class)
     }
 )
 public class UIDMSSelectorForm extends UIForm implements UISelectable{
@@ -122,21 +120,6 @@ public class UIDMSSelectorForm extends UIForm implements UISelectable{
    * @throws Exception the exception
    */
   public void init() throws Exception {
-    WCMPublicationService wcmService = getApplicationComponent(WCMPublicationService.class);
-    Map<String,WebpagePublicationPlugin> publicationPluginMap = wcmService.getWebpagePublicationPlugins();
-    Set<String> keySet = publicationPluginMap.keySet();
-    if (keySet.size() > 1) {
-      UIFormInputSetWithAction uiPublicationSelector = new UIFormInputSetWithAction(PUBLICATION);
-      uiPublicationSelector.addUIFormInput(new UIFormStringInput(PUBLICATION, PUBLICATION, null).setEditable(false));
-      uiPublicationSelector.setActionInfo(PUBLICATION, new String [] {"BrowsePublication"});
-      addChild(uiPublicationSelector);
-    } else {
-      for (String str: keySet) {
-        WebpagePublicationPlugin publicationPlugin = publicationPluginMap.get(str);
-        String lifecycleName = publicationPlugin.getLifecycleName();
-        addChild(new UIFormStringInput(PUBLICATION, PUBLICATION, lifecycleName).setEditable(false));
-      }
-    }
   }
 
   /**
@@ -209,31 +192,6 @@ public class UIDMSSelectorForm extends UIForm implements UISelectable{
     uiPopup.setWindowSize(610, 300);
     uiPopup.setResizable(true);
     uiPopup.setShow(true);
-  }
-
-  /**
-   * The listener interface for receiving browsePublicationAction events.
-   * The class that is interested in processing a browsePublicationAction
-   * event implements this interface, and the object created
-   * with that class is registered with a component using the
-   * component's <code>addBrowsePublicationActionListener<code> method. When
-   * the browsePublicationAction event occurs, that object's appropriate
-   * method is invoked.
-   * 
-   * @see BrowsePublicationActionEvent
-   */
-  public static class BrowsePublicationActionListener extends EventListener<UIDMSSelectorForm> {
-
-    /* (non-Javadoc)
-     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
-     */
-    public void execute(Event<UIDMSSelectorForm> event) throws Exception {
-      UIDMSSelectorForm uiDSelectorForm = event.getSource();
-      UIWCMPublicationGrid publicationGrid = uiDSelectorForm.createUIComponent(UIWCMPublicationGrid.class, null, null);
-      publicationGrid.setSourceComponent(uiDSelectorForm);
-      publicationGrid.updateGrid();
-      uiDSelectorForm.showPopupComponent(publicationGrid);
-    }
   }
 
   /**

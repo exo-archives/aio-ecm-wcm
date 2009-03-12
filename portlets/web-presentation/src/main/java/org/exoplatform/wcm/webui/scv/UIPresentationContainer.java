@@ -156,17 +156,19 @@ public class UIPresentationContainer extends UIContainer{
 		PortletPreferences prefs = porletRequestContext.getRequest().getPreferences();
 		UIPortal uiPortal = Util.getUIPortal();
 		UIPage uiPage = uiPortal.findFirstComponentOfType(UIPage.class);
-
-		List<String> ids = org.exoplatform.services.wcm.publication.defaultlifecycle.Util.getListApplicationIdByPage(PortalDataMapper.toPageModel(uiPage));
+		List<String> ids = org.exoplatform.services.wcm.publication.defaultlifecycle
+					.Util.getListApplicationIdByPage(PortalDataMapper.toPageModel(uiPage));
 		List<String> newIds = new ArrayList<String>();
 		int length = ids.size();
+		
 		for(int i = 0; i < length; i++) {
 			String temp = ids.get(i);
 			String id = temp.substring(temp.lastIndexOf("/") + 1, temp.length());
 			newIds.add(id);
 		}
 		
-		if(newIds.contains(porletRequestContext.getWindowId()) && "true".equals(prefs.getValue("ShowPrintAction", null))) {
+		if(newIds.contains(porletRequestContext.getWindowId()) 
+				&& "true".equals(prefs.getValue("ShowPrintAction", null))) {
 			return true;
 		}
 		return false;
