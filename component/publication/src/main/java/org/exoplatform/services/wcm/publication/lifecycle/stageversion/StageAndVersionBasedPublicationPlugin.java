@@ -19,6 +19,7 @@ package org.exoplatform.services.wcm.publication.lifecycle.stageversion;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +30,7 @@ import java.util.ResourceBundle;
 import javax.jcr.Node;
 import javax.jcr.Value;
 import javax.jcr.ValueFactory;
+import javax.jcr.version.Version;
 
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.container.ExoContainerContext;
@@ -64,12 +66,12 @@ public class StageAndVersionBasedPublicationPlugin extends WebpagePublicationPlu
 
   private PageEventListenerDelegate pageEventListenerDelegate;  
   private NavigationEventListenerDelegate navigationEventListenerDelegate;  
-  
+
   public StageAndVersionBasedPublicationPlugin() {
     pageEventListenerDelegate = new PageEventListenerDelegate(Constant.LIFECYCLE_NAME, ExoContainerContext.getCurrentContainer());
     navigationEventListenerDelegate = new NavigationEventListenerDelegate(Constant.LIFECYCLE_NAME, ExoContainerContext.getCurrentContainer());
   }
-  
+
   public void addMixin(Node node) throws Exception {
     node.addMixin(Constant.PUBLICATION_LIFECYCLE_TYPE);
     if(!node.isNodeType(Constant.MIX_VERSIONABLE)) {
@@ -80,21 +82,73 @@ public class StageAndVersionBasedPublicationPlugin extends WebpagePublicationPlu
   public boolean canAddMixin(Node node) throws Exception {
     return node.canAddMixin(Constant.PUBLICATION_LIFECYCLE_TYPE);   
   }    
-  
-  public void changeState(Node node, String newState, HashMap<String, String> context) throws IncorrectStateUpdateLifecycleException,                                                                               Exception {
-    node.setProperty(Constant.CURRENT_STATE,newState);   
-//    List<Value> logs = new ArrayList<Value>();
-//    ValueFactory valueFactory = node.getSession().getValueFactory();
-//    VersionLog versionLog = null;    
-//    if(Constant.ENROLLED.equalsIgnoreCase(newState)) {
-//      versionLog = new VersionLog(node.getUUID(),newState,node.getSession().getUserID(),GregorianCalendar.getInstance(),Constant.ENROLLED_TO_LIFECYCLE);      
-//    }    
-//    if(Constant.DRAFT.equalsIgnoreCase(newState)) {
-//      versionLog = new VersionLog(node.getUUID(),newState,node.getSession().getUserID(),GregorianCalendar.getInstance(),Constant.CHANGE_TO_DRAFT);
-//    }
-//    node.setProperty(Constant.HISTORY,logs.toArray(new Value[]{}));  
-    if(!node.isNew()) 
+
+  public void changeState(Node node, String newState, HashMap<String, String> context) throws IncorrectStateUpdateLifecycleException,Exception {
+    String versionName = context.get(Constant.CURRENT_VERSION_NAME);
+    Version baseVersion = node.getBaseVersion();
+    boolean changeSpecificVersion = (versionName != null)? true: false;
+    String logItemName = node.getName();
+    String userId = node.getSession().getUserID();
+    Version version = null;
+    if(changeSpecificVersion) {
+      version = node.getVersionHistory().getVersion(versionName);      
+      logItemName = versionName;
+    }                      
+    VersionLog versionLog = null;    
+    if(Constant.ENROLLED.equalsIgnoreCase(newState)) {
+      versionLog = new VersionLog(logItemName,newState,node.getSession().getUserID(),GregorianCalendar.getInstance(),Constant.ENROLLED_TO_LIFECYCLE);            
+      node.setProperty(Constant.CURRENT_STATE,newState);
+      node.setProperty(Constant.REVISION_STATE,newState);      
+    } else if(Constant.DRAFT.equalsIgnoreCase(newState)) {
+      if(changeSpecificVersion) {        
+        if(baseVersion.getName().equals(version.getName())) {                   
+          node.setProperty(Constant.REVISION_STATE,newState);          
+        }else {                              
+          node.restore(version,false);          
+          node.setProperty(Constant.REVISION_STATE,newState);          
+          node.restore(baseVersion,false);
+        }
+      }else {
+        node.setProperty(Constant.REVISION_STATE,newState);        
+        node.setProperty(Constant.CURRENT_STATE,newState);
+      }
+      versionLog = new VersionLog(logItemName,newState,node.getSession().getUserID(),GregorianCalendar.getInstance(),Constant.CHANGE_TO_DRAFT);
+      addLog(node,versionLog);
+    }else if(Constant.LIVE.equals(newState)) {
+      if(changeSpecificVersion) {
+        
+      }else {        
+        node.setProperty(Constant.REVISION_STATE,newState);        
+        //create live version
+        node.save();
+        Version liveVersion = node.checkin();
+        node.checkout();        
+        versionLog = new VersionLog(liveVersion.getName(),newState,userId,new GregorianCalendar(),Constant.CHANGE_TO_LIVE);
+        addLog(node,versionLog);
+        //change base version to draft state 
+        node.setProperty(Constant.REVISION_STATE,Constant.DRAFT);
+        node.save();
+        node.checkin();
+        node.checkout();
+        versionLog = new VersionLog(node.getBaseVersion().getName(),Constant.DRAFT,userId, new GregorianCalendar(),Constant.CHANGE_TO_DRAFT);                        
+      }
+    }else if(Constant.OBSOLETE.equalsIgnoreCase(newState)) {
+      if(changeSpecificVersion) {
+      }else {        
+        node.setProperty(Constant.REVISION_STATE,newState);
+        versionLog = new VersionLog(node.getBaseVersion().getName(),newState,userId,new GregorianCalendar(),Constant.CHANGE_TO_OBSOLETE);
+      }
+    }
+    if(!node.isNew())
       node.save();
+  }
+
+  private void addLog(Node node, VersionLog versionLog) throws Exception{
+    Value[] values = node.getProperty(Constant.HISTORY).getValues();
+    ValueFactory valueFactory = node.getSession().getValueFactory();
+    List<Value> list = new ArrayList<Value>(Arrays.asList(values));
+    list.add(valueFactory.createValue(versionLog.toString()));    
+    node.setProperty(Constant.HISTORY,list.toArray(new Value[]{})); 
   }
 
   public String getLocalizedAndSubstituteMessage(Locale locale, String key, String[] values) throws Exception {
@@ -116,8 +170,8 @@ public class StageAndVersionBasedPublicationPlugin extends WebpagePublicationPlu
   }
 
   public byte[] getStateImage(Node arg0, Locale arg1) throws IOException,
-                                                     FileNotFoundException,
-                                                     Exception {
+  FileNotFoundException,
+  Exception {
     return null;
   }
 
@@ -130,7 +184,7 @@ public class StageAndVersionBasedPublicationPlugin extends WebpagePublicationPlu
   public String getUserInfo(Node arg0, Locale arg1) throws Exception {
     return null;
   }
-  
+
   public void publishContentToPage(Node content, Page page) throws Exception {
     UserPortalConfigService userPortalConfigService = Util.getServices(UserPortalConfigService.class);
     Application portlet = new Application();
@@ -141,12 +195,12 @@ public class StageAndVersionBasedPublicationPlugin extends WebpagePublicationPlu
     WCMConfigurationService configurationService = Util.getServices(WCMConfigurationService.class);
     StringBuilder windowId = new StringBuilder();
     windowId.append(PortalConfig.PORTAL_TYPE)
-            .append("#")
-            .append(org.exoplatform.portal.webui.util.Util.getUIPortal().getOwner())
-            .append(":")
-            .append(configurationService.getPublishingPortletName())
-            .append("/")
-            .append(IdGenerator.generate());
+    .append("#")
+    .append(org.exoplatform.portal.webui.util.Util.getUIPortal().getOwner())
+    .append(":")
+    .append(configurationService.getPublishingPortletName())
+    .append("/")
+    .append(IdGenerator.generate());
     portlet.setInstanceId(windowId.toString());
 
     // Add preferences to portlet
@@ -176,14 +230,14 @@ public class StageAndVersionBasedPublicationPlugin extends WebpagePublicationPlu
     preferenceN.setName("nodeIdentifier");
     preferenceN.setValues(listValue);
     listPreference.add(preferenceN);
-    
+
     Preference preferenceQ = new Preference();
     listValue = new ArrayList<String>();
     listValue.add("true");
     preferenceQ.setName("ShowQuickEdit");
     preferenceQ.setValues(listValue);
     listPreference.add(preferenceQ);
-    
+
     portletPreferences.setPreferences(listPreference);
 
     DataStorage dataStorage = Util.getServices(DataStorage.class);
@@ -235,7 +289,7 @@ public class StageAndVersionBasedPublicationPlugin extends WebpagePublicationPlu
   public void updateLifecyleOnRemoveNavigation(PageNavigation pageNavigation) throws Exception {
     navigationEventListenerDelegate.updateLifecyleOnRemoveNavigation(pageNavigation);
   }
-  
+
   private List<String> getRunningPortals(String userId) throws Exception {
     List<String> listPortalName = new ArrayList<String>();
     DataStorage service = Util.getServices(DataStorage.class);
@@ -250,7 +304,7 @@ public class StageAndVersionBasedPublicationPlugin extends WebpagePublicationPlu
     }
     return listPortalName;
   }
-  
+
   public List<String> getListPageNavigationUri(Page page) throws Exception {
     List<String> listPageNavigationUri = new ArrayList<String>();
     DataStorage dataStorage = Util.getServices(DataStorage.class);    

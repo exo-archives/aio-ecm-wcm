@@ -28,27 +28,36 @@ import org.exoplatform.commons.utils.ISO8601;
  * Mar 4, 2009  
  */
 public class VersionData {
-  protected String UUID;
+  protected String versionName;
   protected String state;
   protected String author;
   protected Calendar startPublicationDate;
   protected Calendar endPublicationDate;
 
-  public VersionData(String uuid, String state, String author, Calendar startPublicationDate, Calendar endPublicationDate) {
-    this.UUID = uuid;
+  public VersionData(String versionName, String state, String author, Calendar startPublicationDate, Calendar endPublicationDate) {
+    this.versionName = versionName;
     this.state = state;
     this.author = author;
     this.startPublicationDate = startPublicationDate;
     this.endPublicationDate = endPublicationDate;
   }
-
-  public String getUUID() {
-    return UUID;
+  
+  public VersionData(String versionName, String state, String author) {
+    this.versionName = versionName;
+    this.state = state;
+    this.author = author;
+    this.startPublicationDate = null;
+    this.endPublicationDate = null;
+  }
+  
+  public String getVersionName() {
+    return versionName;
   }
 
-  public void setUUID(String uuid) {
-    this.UUID = uuid;
+  public void setVersionName(String versionName) {
+    this.versionName = versionName;
   }
+
   public String getState() {
     return state;
   }
@@ -77,7 +86,7 @@ public class VersionData {
   }
 
   public String[] toStringValues() {
-    return new String[] { UUID, state, author, ISO8601.format(startPublicationDate), ISO8601.format(endPublicationDate)} ;
+    return new String[] { versionName, state, author, ISO8601.format(startPublicationDate), ISO8601.format(endPublicationDate)} ;
   }
 
   public static VersionData toVersionData(String[] info) {

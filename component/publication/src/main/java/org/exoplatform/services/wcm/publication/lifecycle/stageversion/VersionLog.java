@@ -28,14 +28,15 @@ import org.exoplatform.commons.utils.ISO8601;
  */
 public class VersionLog extends VersionData {
   private Calendar logDate;
-  private String description;
+  private String description;  
   
-  public VersionLog(String uuid, String state, String author, Calendar logDate, String description) {
-    super(uuid, state, author, null,null);
+  public VersionLog(String versionName, String state, String author, Calendar logDate, String description) {
+    super(versionName, state, author, null,null);
     this.logDate = logDate;
     this.description = description;
+    this.versionName = versionName;
   }    
-  
+
   public Calendar getLogDate() {
     return logDate;
   }
@@ -47,14 +48,15 @@ public class VersionLog extends VersionData {
   }
   public void setDescription(String description) {
     this.description = description;
+  }  
+  
+  public String toString() {
+    return new StringBuilder().append(versionName).append(";").append(state).append(";")
+    .append(author).append(";").append(ISO8601.format(logDate)).append(";").append(description).toString();                              
   }
   
-  public String[] toStringValues() {
-    return new String[]{UUID, state, author, ISO8601.format(logDate), description};
-  }
-  
-  public static VersionLog toVersionLog(String[] logs) {
+  public static VersionLog toVersionLog(String log) {
+    String[] logs = log.split(";");
     return new VersionLog(logs[0],logs[1],logs[2],ISO8601.parse(logs[3]),logs[4]);
   }
-  
 }

@@ -18,6 +18,7 @@ package org.exoplatform.services.wcm.publication.lifecycle.stageversion;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.jcr.Node;
@@ -25,6 +26,9 @@ import javax.jcr.Session;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionIterator;
 
+import org.exoplatform.ecm.webui.utils.JCRExceptionManager;
+import org.exoplatform.services.ecm.publication.PublicationPlugin;
+import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -87,8 +91,8 @@ public class UIPublicationPanel extends UIForm {
     for(;iterator.hasNext();) {
       Version version = iterator.nextVersion();
       if (version.getName().equals("jcr:rootVersion")) continue;
-      allversions.add(version);
-    }
+      allversions.add(version);      
+    }    
     Collections.reverse(allversions);
     return allversions;
   }
@@ -111,30 +115,78 @@ public class UIPublicationPanel extends UIForm {
   public Node getCurrentNode() { return currentNode; }
  
   public String getVersionState(Version version) {
-    // TODO: Should get state from version
-    return Constant.LIVE;
+    try {            
+      Node frozenNode = version.getNode("jcr:frozenNode");
+       return frozenNode.getProperty(Constant.REVISION_STATE).getString();      
+    } catch (Exception e) {      
+      return null;
+    }
   }
   
   public String getVersionAuthor(Version version) {
-    // TODO: Should get author from version
+    
     return "Root";
   }
   
   public static class DraftActionListener extends EventListener<UIPublicationPanel> {
     public void execute(Event<UIPublicationPanel> event) throws Exception {
-      System.out.println("------------------------------------------------> DraftActionListener");
+      UIPublicationPanel publicationPanel = event.getSource();      
+      Node currentNode = publicationPanel.getCurrentNode();
+      PublicationService publicationService = publicationPanel.getApplicationComponent(PublicationService.class);
+      PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(Constant.LIFECYCLE_NAME);
+      HashMap<String,String> context = new HashMap<String,String>();
+      Version version = publicationPanel.getCurrentVerion();
+      if(version != null) {
+        context.put(Constant.CURRENT_VERSION_NAME,version.getName()); 
+      }      
+      try {
+        publicationPlugin.changeState(currentNode,Constant.DRAFT,context);        
+      } catch (Exception e) {
+        e.printStackTrace();
+        UIApplication uiApp = publicationPanel.getAncestorOfType(UIApplication.class);
+        JCRExceptionManager.process(uiApp,e);
+      }
     }
   } 
 
   public static class LiveActionListener extends EventListener<UIPublicationPanel> {
     public void execute(Event<UIPublicationPanel> event) throws Exception {
-      System.out.println("------------------------------------------------> LiveActionListener");
+      UIPublicationPanel publicationPanel = event.getSource();
+      Version version = publicationPanel.getCurrentVerion();
+      Node currentNode = publicationPanel.getCurrentNode();
+      PublicationService publicationService = publicationPanel.getApplicationComponent(PublicationService.class);
+      PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(Constant.LIFECYCLE_NAME);
+      HashMap<String,String> context = new HashMap<String,String>();      
+      if(version != null) {
+        context.put(Constant.CURRENT_VERSION_NAME,version.getName()); 
+      }
+      try {
+        publicationPlugin.changeState(currentNode,Constant.LIVE,context); 
+      } catch (Exception e) {
+        e.printStackTrace();
+        UIApplication uiApp = publicationPanel.getAncestorOfType(UIApplication.class);
+        JCRExceptionManager.process(uiApp,e);
+      }      
     }
   } 
 
   public static class ObsoleteActionListener extends EventListener<UIPublicationPanel> {
     public void execute(Event<UIPublicationPanel> event) throws Exception {
-      System.out.println("------------------------------------------------> ObsoleteActionListener");
+      UIPublicationPanel publicationPanel = event.getSource();
+      Version version = publicationPanel.getCurrentVerion();
+      Node currentNode = publicationPanel.getCurrentNode();
+      PublicationService publicationService = publicationPanel.getApplicationComponent(PublicationService.class);
+      PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(Constant.LIFECYCLE_NAME);
+      HashMap<String,String> context = new HashMap<String,String>();
+      if(version != null) {
+        context.put(Constant.CURRENT_VERSION_NAME,version.getName()); 
+      }
+      try {
+        publicationPlugin.changeState(currentNode,Constant.OBSOLETE,context); 
+      } catch (Exception e) {
+        UIApplication uiApp = publicationPanel.getAncestorOfType(UIApplication.class);
+        JCRExceptionManager.process(uiApp,e);
+      }
     }
   } 
 
