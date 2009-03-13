@@ -82,8 +82,7 @@ public class WebSchemaConfigServiceImpl implements WebSchemaConfigService, Start
   public void updateSchemaOnModify(Node node, SessionProvider sessionProvider) throws Exception {
     for (WebSchemaHandler handler: getAllWebSchemaHandler()) {
       if (handler.matchHandler(node, sessionProvider)) {
-        handler.onModifyNode(node, sessionProvider);
-        return;
+        handler.onModifyNode(node, sessionProvider);        
       }
     }
   }

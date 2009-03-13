@@ -21,11 +21,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import org.apache.commons.logging.Log;
+import org.exoplatform.commons.utils.ExoProperties;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ObjectParameter;
 import org.exoplatform.container.xml.PropertiesParam;
 import org.exoplatform.services.cms.drives.DriveData;
 import org.exoplatform.services.log.ExoLogger;
+
+import com.lowagie.text.pdf.PRAcroForm;
 
 /*
  * Created by The eXo Platform SAS
@@ -34,19 +37,20 @@ import org.exoplatform.services.log.ExoLogger;
  * Jun 20, 2008  
  */
 public class WCMConfigurationService {
-  
+
   private static Log log = ExoLogger.getLogger("wcm:WCMConfiguarationService");
   private HashMap<String, NodeLocation> livePortalsLocations = new HashMap<String, NodeLocation>();
   private HashMap<String, String> sharedPortals = new HashMap<String, String>();
   private String parameterizedPageURI;
   private String publishingPortletName;
+  private ExoProperties runtimeContextParams;  
   private DriveData siteDriveConfig;
-  
-  public WCMConfigurationService(InitParams initParams) throws Exception{
+
+  public WCMConfigurationService(InitParams initParams) throws Exception {    
     parameterizedPageURI = initParams.getValueParam("parameterizedPageURI").getValue();
     log.info("Page URI is used for view DMS Document as a web page: " + parameterizedPageURI);
     publishingPortletName = initParams.getValueParam("publishingPortletName").getValue();
-    log.info("The portlet is used to publish content in a web page: " + publishingPortletName);    
+    log.info("The portlet is used to publish content in a web page: " + publishingPortletName);           
     Iterator<PropertiesParam> iterator = initParams.getPropertiesParamIterator();
     for (; iterator.hasNext(); ) {
       PropertiesParam param = iterator.next();
@@ -55,6 +59,8 @@ public class WCMConfigurationService {
         String portalName = param.getProperty("portalName");
         sharedPortals.put(repository, portalName);
         log.info("Name of shared portal to share resources for all portals in repository: "+ repository + " is: "+ portalName);
+      }else if("RuntimeContextParams".equalsIgnoreCase(param.getName())) {
+        runtimeContextParams = param.getProperties();
       }
     }
     Iterator<ObjectParameter> locations = initParams.getObjectParamIterator();
@@ -65,25 +71,39 @@ public class WCMConfigurationService {
         livePortalsLocations.put(objectParam.getRepository(), objectParam);
         log.info("Location that resources for all live portal is stored in repository:" + objectParam.getRepository() 
             + " is in workspace: "+ objectParam.getWorkspace() + " and with path: "+objectParam.getPath());
-         
+
       }
       if("site.drive.config".equals(objectParameter.getName())) {
         siteDriveConfig = (DriveData)objectParameter.getObject();
       }
     }
   }
-  
+
+
   public String getParameterizedPageURI() { return this.parameterizedPageURI; }
   public String getPublishingPortletName() { return this.publishingPortletName; }
   public DriveData getSiteDriveConfig() {return this.siteDriveConfig; }
   public NodeLocation getLivePortalsLocation(final String repository) {
     return livePortalsLocations.get(repository);
   }
+
+  public String getRuntimeContextParam(String paramName) {
+    if(runtimeContextParams != null)
+      return runtimeContextParams.get(paramName);
+    return null;
+  }
+
+  public Collection<String> getRuntimeContextParams() {
+    if(runtimeContextParams != null)
+      return runtimeContextParams.values();
+    return null;
+  }
+
 //TODO
   public String getSharedPortalName(final String repository) {
     return sharedPortals.get(repository);
   }
-  
+
   public Collection<NodeLocation> getAllLivePortalsLocation() {
     return livePortalsLocations.values();
   }  
