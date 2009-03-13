@@ -105,5 +105,4 @@ public class UIPublicationPages extends UIForm {
     if (selectedNode != null) return selectedNode.getName();
     return null;
   }
-
 }

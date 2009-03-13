@@ -3,13 +3,7 @@
 	<component>
     <key>org.exoplatform.services.wcm.publication.WCMPublicationService</key>
     <type>org.exoplatform.services.wcm.publication.WCMPublicationServiceImpl</type>
-    <component-plugins>
-	    <component-plugin>
-		    <name>Web Content Publishing</name>
-		    <set-method>addPublicationPlugin</set-method>
-		    <type>org.exoplatform.services.wcm.publication.defaultlifecycle.WCMPublicationPlugin</type>
-		    <description>This publication lifecycle publish a web content or DMS document to a portal page.</description>	    	    	   
-		  </component-plugin>
+    <component-plugins>	    
 		  <component-plugin>
 		    <name>States and versions based publication</name>
 		    <set-method>addPublicationPlugin</set-method>
@@ -18,7 +12,6 @@
 		  </component-plugin>
 	  </component-plugins>
   </component>
-    
   <external-component-plugins>
   	<target-component>org.exoplatform.services.wcm.core.WebSchemaConfigService</target-component>		
 	  <component-plugin>

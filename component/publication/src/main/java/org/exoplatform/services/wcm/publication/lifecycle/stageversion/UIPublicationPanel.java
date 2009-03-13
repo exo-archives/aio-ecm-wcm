@@ -124,8 +124,13 @@ public class UIPublicationPanel extends UIForm {
   }
   
   public String getVersionAuthor(Version version) {
-    
     return "Root";
+  }
+  
+  private void updateHistoryLog() throws Exception {
+    UIPublicationContainer publicationContainer = getAncestorOfType(UIPublicationContainer.class);
+    UIPublicationHistory publicationHistory = publicationContainer.getChild(UIPublicationHistory.class);
+    publicationHistory.updateGrid();
   }
   
   public static class DraftActionListener extends EventListener<UIPublicationPanel> {
@@ -140,7 +145,8 @@ public class UIPublicationPanel extends UIForm {
         context.put(Constant.CURRENT_VERSION_NAME,version.getName()); 
       }      
       try {
-        publicationPlugin.changeState(currentNode,Constant.DRAFT,context);        
+        publicationPlugin.changeState(currentNode,Constant.DRAFT,context);
+        publicationPanel.updateHistoryLog();
       } catch (Exception e) {
         e.printStackTrace();
         UIApplication uiApp = publicationPanel.getAncestorOfType(UIApplication.class);
@@ -162,6 +168,7 @@ public class UIPublicationPanel extends UIForm {
       }
       try {
         publicationPlugin.changeState(currentNode,Constant.LIVE,context); 
+        publicationPanel.updateHistoryLog();
       } catch (Exception e) {
         e.printStackTrace();
         UIApplication uiApp = publicationPanel.getAncestorOfType(UIApplication.class);
@@ -183,6 +190,7 @@ public class UIPublicationPanel extends UIForm {
       }
       try {
         publicationPlugin.changeState(currentNode,Constant.OBSOLETE,context); 
+        publicationPanel.updateHistoryLog();
       } catch (Exception e) {
         UIApplication uiApp = publicationPanel.getAncestorOfType(UIApplication.class);
         JCRExceptionManager.process(uiApp,e);

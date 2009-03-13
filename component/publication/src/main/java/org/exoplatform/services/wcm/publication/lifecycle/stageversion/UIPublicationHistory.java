@@ -20,12 +20,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.jcr.Node;
+import javax.jcr.Value;
 
 import org.exoplatform.commons.utils.ObjectPageList;
-import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleException;
-import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponentDecorator;
@@ -56,27 +54,20 @@ public class UIPublicationHistory extends UIComponentDecorator {
     setUIComponent(uiPageIterator_) ;
   }
   
-  public void setNode(Node node) throws Exception { currentNode_ = node ; }
+  public void init(Node node) {
+   currentNode_ = node;
+  }
   
-  public List<HistoryBean> getLog() throws NotInPublicationLifecycleException, Exception {
-    PublicationService publicationService = getApplicationComponent(PublicationService.class);
-    String[][] array = publicationService.getLog(currentNode_);
-    List<HistoryBean> list = new ArrayList<HistoryBean>();    
-    for (int i = 0; i < array.length; i++) {
-      HistoryBean bean = new HistoryBean();
-      String[] currentLog=array[i];
-      bean.setDate(bean.formatStringByDateTime(currentLog[0]));
-      bean.setNewState(currentLog[1]);
-      bean.setUser(currentLog[2]);
-      String[] values=new String[currentLog.length-4];
-      for (int j=4;j<currentLog.length;j++) {
-        values[j-4]=currentLog[j];
-      }
-      String description=publicationService.getLocalizedAndSubstituteLog(currentNode_, Util.getUIPortal().getAncestorOfType(UIPortalApplication.class).getLocale(), currentLog[3], values);
-      bean.setDescription(description);
-      list.add(bean); 
+  public List<VersionLog> getLog() throws NotInPublicationLifecycleException, Exception {
+    if (currentNode_ == null) return new ArrayList<VersionLog>();
+    List<VersionLog> logs = new ArrayList<VersionLog>();
+    Value[] values = currentNode_.getProperty(Constant.HISTORY).getValues();
+    for (Value value : values) {
+      String logString = value.getString();
+      VersionLog bean = VersionLog.toVersionLog(logString);
+      logs.add(bean); 
     }
-    return list;
+    return logs;
   }
   
   @SuppressWarnings("unchecked")

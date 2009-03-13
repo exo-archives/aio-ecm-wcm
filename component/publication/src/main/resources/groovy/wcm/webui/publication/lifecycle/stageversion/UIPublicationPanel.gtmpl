@@ -105,7 +105,7 @@
           %>
             <tr>
               <td class="Name">
-                <a href="<%= uicomponent.event("ChangeVersion", version.getUUID()) %>"><%=_ctx.appRes("UIPublicationPanel.revisions.label")%>: <%= version.getName() %></a>
+                <a><%=_ctx.appRes("UIPublicationPanel.revisions.label")%>: <%= version.getName() %></a>
               </td>
               <td><%=version.getProperty("jcr:created").getString()%></td>
               <td><%= uicomponent.getVersionAuthor(version) %></td>
@@ -142,9 +142,15 @@
       }
     %>  
   </table>
-  
-  <div class="SeeAllVersion" onclick="<%= uicomponent.event("SeeAllVersion") %>"><%=_ctx.appRes("UIPublicationPanel.revisions.seeall")%></div>
-  
+  <%
+    if (versions.size() > 3) {
+      %>
+        <tr>
+          <div class="SeeAllVersion" onclick="<%= uicomponent.event("SeeAllVersion") %>"><%=_ctx.appRes("UIPublicationPanel.revisions.seeall")%></div>
+        </tr>
+      <%
+    }
+  %>
   <div class="UIAction"> 
     <table align="center" class="ActionContainer">
       <tr>

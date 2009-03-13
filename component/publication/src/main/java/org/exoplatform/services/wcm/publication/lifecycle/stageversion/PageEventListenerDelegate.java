@@ -17,7 +17,6 @@
 package org.exoplatform.services.wcm.publication.lifecycle.stageversion;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.jcr.Node;
@@ -198,7 +197,6 @@ public class PageEventListenerDelegate {
       return;
 
     List<String> listExistedNavigationNodeUri = Util.getValuesAsString(content, "publication:navigationNodeURIs");    
-    String nodeURILogs = "";
     List<String> listPageNavigationUri = publicationPlugin.getListPageNavigationUri(page);
     if (listPageNavigationUri.isEmpty())  {
       return ;
@@ -207,7 +205,6 @@ public class PageEventListenerDelegate {
       if(!listExistedNavigationNodeUri.contains(uri)) {
         listExistedNavigationNodeUri.add(uri);                           
       }            
-      nodeURILogs += uri + Util.HISTORY_SEPARATOR;
     }                   
     content.setProperty("publication:navigationNodeURIs", Util.toValues(valueFactory, listExistedNavigationNodeUri));
 
@@ -216,11 +213,9 @@ public class PageEventListenerDelegate {
     nodeAppIds.add(mixedAppId);
     content.setProperty("publication:applicationIDs", Util.toValues(valueFactory, nodeAppIds));
     content.setProperty("publication:webPageIDs", Util.toValues(valueFactory, nodeWebPageIds));
-
-    publicationPlugin.changeState(content, Constant.LIVE, null);
-
-    String[] logs = new String[] {new Date().toString(), Constant.LIVE, session.getUserID(), "PublicationService.WCMPublicationPlugin.nodePublished", nodeURILogs};
-    publicationService.addLog(content, logs);    
+//    HashMap<String,String> context = new HashMap<String,String>();
+//    context.put(Constant.CURRENT_VERSION_NAME,content.getName()); 
+//    publicationPlugin.changeState(content, Constant.LIVE, context);
     session.save();
   } 
 
@@ -235,7 +230,6 @@ public class PageEventListenerDelegate {
    */
   private void saveRemovedApplication(Page page, String applicationId, Node content) throws Exception {
     WCMPublicationService presentationService = Util.getServices(WCMPublicationService.class);
-    PublicationService publicationService = Util.getServices(PublicationService.class);
     StageAndVersionBasedPublicationPlugin publicationPlugin = (StageAndVersionBasedPublicationPlugin) presentationService.getWebpagePublicationPlugins().get(Constant.LIFECYCLE_NAME);
 
     Session session = content.getSession();
@@ -260,17 +254,11 @@ public class PageEventListenerDelegate {
     }
     content.setProperty("publication:navigationNodeURIs", Util.toValues(valueFactory, listExistedNavigationNodeUri));
 
-    String uris = "";
-    for (String uri : listPageNavigationUri) {
-      uris += uri + Util.HISTORY_SEPARATOR;
-    }
-
-    String[] logs = new String[] {new Date().toString(), Constant.LIVE, session.getUserID(), "PublicationService.WCMPublicationPlugin.nodeRemoved", uris};
-    publicationService.addLog(content, logs);
-
-    if (listExistedPageId.isEmpty()) { 
-      publicationPlugin.changeState(content, Constant.DRAFT, null);
-    }
+//    if (listExistedPageId.isEmpty()) { 
+//      HashMap<String,String> context = new HashMap<String,String>();
+//      context.put(Constant.CURRENT_VERSION_NAME,content.getName()); 
+//      publicationPlugin.changeState(content, Constant.DRAFT, context);
+//    }
 
     session.save();
   }

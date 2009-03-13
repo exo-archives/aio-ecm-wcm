@@ -60,6 +60,8 @@ public class UIPublicationContainer extends UIForm implements UIPopupComponent {
     publicationPages.init(node, portalName, runningPortals);
     publicationPages.setRendered(false);
     UIPublicationHistory publicationHistory = addChild(UIPublicationHistory.class, null, null);
+    publicationHistory.init(node);
+    publicationHistory.updateGrid();
     publicationHistory.setRendered(false);
     setSelectedTab(1);
   }

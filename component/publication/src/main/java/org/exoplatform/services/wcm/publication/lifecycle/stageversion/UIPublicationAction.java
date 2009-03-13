@@ -65,10 +65,10 @@ public class UIPublicationAction extends UIForm {
    * @throws Exception the exception
    */
   private void updateUI() throws Exception {
-    UIPublicationPages publishingPanel = getAncestorOfType(UIPublicationPages.class);
-    UIPublishedPages publishedPages = publishingPanel.getChild(UIPublishedPages.class);
+    UIPublicationPages publicationPages = getAncestorOfType(UIPublicationPages.class);
+    UIPublishedPages publishedPages = publicationPages.getChild(UIPublishedPages.class);
     
-    Node node = publishingPanel.getNode();
+    Node node = publicationPages.getNode();
     List<String> listPublishedPage = new ArrayList<String>();
     if (node.hasProperty("publication:navigationNodeURIs")) {
       Value[] navigationNodeURIs = node.getProperty("publication:navigationNodeURIs").getValues();
@@ -76,10 +76,11 @@ public class UIPublicationAction extends UIForm {
         listPublishedPage.add(navigationNodeURI.getString());
       }
       publishedPages.setListNavigationNodeURI(listPublishedPage);    
-      
-//      UIComponent parent = publishingPanel.getParent();
-//      UIPublicationLogList publicationLogList = parent.findFirstComponentOfType(UIPublicationLogList.class);
-//      publicationLogList.updateGrid();
+      UIPublicationContainer publicationContainer = getAncestorOfType(UIPublicationContainer.class);
+      UIPublicationHistory publicationHistory = publicationContainer.getChild(UIPublicationHistory.class);
+      UIPublicationPanel publicationPanel = publicationContainer.getChild(UIPublicationPanel.class);
+      publicationHistory.init(publicationPanel.getCurrentNode());
+      publicationHistory.updateGrid();
     }
   }
   

@@ -17,7 +17,6 @@
 package org.exoplatform.services.wcm.publication.lifecycle.stageversion;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.jcr.Node;
@@ -42,7 +41,6 @@ import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
-import org.exoplatform.services.wcm.publication.WCMPublicationService;
 
 /**
  * Created by The eXo Platform SAS
@@ -221,19 +219,18 @@ public class NavigationEventListenerDelegate {
     List<String> listExistedNavigationNodeUri = Util.getValuesAsString(content, "publication:navigationNodeURIs");    
     String mixedNavigationNodeUri = Util.setMixedNavigationUri(portalName, pageNode.getUri());
     listExistedNavigationNodeUri.add(mixedNavigationNodeUri);    
-    String nodeURILogs = mixedNavigationNodeUri + Util.HISTORY_SEPARATOR;
     content.setProperty("publication:navigationNodeURIs", Util.toValues(valueFactory, listExistedNavigationNodeUri));
 
     List<String> listExistedWebPageId = Util.getValuesAsString(content, "publication:webPageIDs");
     listExistedWebPageId.add(pageNode.getPageReference());
     content.setProperty("publication:webPageIDs", Util.toValues(valueFactory, listExistedWebPageId));
 
-    WCMPublicationService presentationService = Util.getServices(WCMPublicationService.class);
-    StageAndVersionBasedPublicationPlugin publicationPlugin = (StageAndVersionBasedPublicationPlugin) presentationService.getWebpagePublicationPlugins().get(Constant.LIFECYCLE_NAME);
-    publicationPlugin.changeState(content, "published", null);
+//    WCMPublicationService presentationService = Util.getServices(WCMPublicationService.class);
+//    StageAndVersionBasedPublicationPlugin publicationPlugin = (StageAndVersionBasedPublicationPlugin) presentationService.getWebpagePublicationPlugins().get(Constant.LIFECYCLE_NAME);
+//    HashMap<String,String> context = new HashMap<String,String>();
+//    context.put(Constant.CURRENT_VERSION_NAME,content.getName()); 
+//    publicationPlugin.changeState(content, Constant.LIVE, context);
 
-    String[] logs = new String[] {new Date().toString(), Constant.LIVE, session.getUserID(), "PublicationService.WCMPublicationPlugin.nodePublished", nodeURILogs};
-    publicationService.addLog(content, logs);
     session.save();
   }
 
@@ -272,19 +269,13 @@ public class NavigationEventListenerDelegate {
     }
     content.setProperty("publication:applicationIDs", Util.toValues(valueFactory, listExistedApplicationIdTmp));
 
-    String nodeURILogs = "";
-    if (!navigationNodeUri.equals("")) {
-      nodeURILogs = navigationNodeUri + Util.HISTORY_SEPARATOR;
-      String[] logs = new String[] {new Date().toString(), Constant.LIVE, session.getUserID(), "PublicationService.WCMPublicationPlugin.nodeRemoved", nodeURILogs};
-      PublicationService publicationService = Util.getServices(PublicationService.class);
-      publicationService.addLog(content, logs);
-    }
-
-    if (listExistedNavigationNodeUriTmp.isEmpty()) {
-      WCMPublicationService presentationService = Util.getServices(WCMPublicationService.class);
-      StageAndVersionBasedPublicationPlugin publicationPlugin = (StageAndVersionBasedPublicationPlugin) presentationService.getWebpagePublicationPlugins().get(Constant.LIFECYCLE_NAME);
-      publicationPlugin.changeState(content, "unpublished", null);
-    }
+//    if (listExistedNavigationNodeUriTmp.isEmpty()) {
+//      WCMPublicationService presentationService = Util.getServices(WCMPublicationService.class);
+//      StageAndVersionBasedPublicationPlugin publicationPlugin = (StageAndVersionBasedPublicationPlugin) presentationService.getWebpagePublicationPlugins().get(Constant.LIFECYCLE_NAME);
+//      HashMap<String,String> context = new HashMap<String,String>();
+//      context.put(Constant.CURRENT_VERSION_NAME,content.getName());
+//      publicationPlugin.changeState(content, Constant.DRAFT, context);
+//    }
 
     session.save();
   }
