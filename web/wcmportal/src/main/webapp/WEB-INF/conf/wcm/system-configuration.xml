@@ -12,6 +12,12 @@
 	      <name>publishingPortletName</name>
 	      <value>/web-presentation/SingleContentViewer</value>
 	    </value-param>
+	    <properties-param>
+	      <name>RuntimeContextParams</name>
+	      <description>some params for runtime</description>
+	      <property name="printPageURI" value=""/>
+	      <property name="createWikiPageURI" value=""/>	      
+	    </properties-param>
 	   <properties-param>
 	      <name>share.portal.config</name>
 	      <description>share portal name for each repository</description>
