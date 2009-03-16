@@ -11,7 +11,6 @@
       <about>About us</about>
       <contentviewer>Content Viewer</contentviewer>
       <parameterizedviewer>Parameterized Viewer</parameterizedviewer>
-      <printviewer>Print</printviewer>
       <searchResult>Search Result</searchResult>
       <printviewer>Print Viewer</printviewer>
     </acme>

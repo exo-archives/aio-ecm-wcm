@@ -5,32 +5,24 @@
 	String lblClose = _ctx.appRes("UIContentViewerContainer.action.close");
 %>
 <div id="$uicomponent.id" class="$uicomponent.id">
-  <div class="ContentViewerBar">
 <%
 	if(!uicomponent.getIsPrint()) {
 %>
+  <div class="ContentViewerBar">
 		<div class="BackButton" title="$lblBack" onclick="history.go(-1)"><span></span></div>
+  </div>
 <%
 	}
  	if (uicomponent.isQuickEditAble()) {
 %>
 	  <a class="DocumentQuickEdit" href="$link"></a>
-  	<div style="clear: both;"><span></span></div>
 <%
 	}
-%>
-  </div>
-<%
   uicomponent.renderChildren();
-%>
-  <div style="clear: both;"><span></span></div>
-<%
 	if(uicomponent.getIsPrint()) {
 %>
-	<div>
-		<div style="float: left; cursor: pointer" onclick="window.print();">$lblPrint</div>
-		<div style="cursor: pointer" onclick="window.close();">$lblClose</div>
-		<div style="clear: both;"><span></span></div>
+	<div style="text-align: center;">
+		<a href="javascript: window.print();">$lblPrint</a> <a href="javascript: window.close();">$lblClose</a>
 	</div>
 <%
 	}

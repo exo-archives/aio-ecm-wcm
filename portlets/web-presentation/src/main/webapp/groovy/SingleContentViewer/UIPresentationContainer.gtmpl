@@ -7,21 +7,24 @@
 %>
 <div class="$uicomponent.id">
 <%
-		def portletId = uicomponent.getPortletId();
-		def quickEditingBlockId = uicomponent.getPortletId() + "-QuickEditingBlock";
-		def rcontext = _ctx.getRequestContext() ;
- 		rcontext.getJavascriptManager().importJavascript('eXo.wcm.Util','/eXoWCMResources/javascript');
-		rcontext.getJavascriptManager().addOnLoadJavascript('eXo.wcm.insertQuickeditingBlock("' + portletId + '","' + quickEditingBlockId + '")');
-		PortletPreferences preferences = rcontext.getRequest().getPreferences();
-		String repository = preferences.getValue(UISingleContentViewerPortlet.REPOSITORY, null);    
-		String workspace = preferences.getValue(UISingleContentViewerPortlet.WORKSPACE, null);
-		String nodeIdentifier = preferences.getValue(UISingleContentViewerPortlet.IDENTIFIER, null) ;
-		PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
-		String portalURI = portalRequestContext.getPortalURI();
-		WCMConfigurationService wcmConfigurationService = uicomponent.getApplicationComponent(WCMConfigurationService.class);
-		String isPrint = "/?isPrint=true";
-		String url = portalURI + wcmConfigurationService.getRuntimeContextParam("printViewer") + "/" + repository + "/" + workspace + nodeIdentifier + isPrint;
-		if(uicomponent.isQuickEditable()) {
+	def portletId = uicomponent.getPortletId();
+	def quickEditingBlockId = uicomponent.getPortletId() + "-QuickEditingBlock";
+	def rcontext = _ctx.getRequestContext() ;
+ 	rcontext.getJavascriptManager().importJavascript('eXo.wcm.Util','/eXoWCMResources/javascript');
+	rcontext.getJavascriptManager().addOnLoadJavascript('eXo.wcm.insertQuickeditingBlock("' + portletId + '","' + quickEditingBlockId + '")');
+	PortletPreferences preferences = rcontext.getRequest().getPreferences();
+	String repository = preferences.getValue(UISingleContentViewerPortlet.REPOSITORY, null);    
+	String workspace = preferences.getValue(UISingleContentViewerPortlet.WORKSPACE, null);
+	String nodeIdentifier = preferences.getValue(UISingleContentViewerPortlet.IDENTIFIER, null) ;
+	PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
+	String portalURI = portalRequestContext.getPortalURI();
+	WCMConfigurationService wcmConfigurationService = uicomponent.getApplicationComponent(WCMConfigurationService.class);
+	String isPrint = "/?isPrint=true";
+	if(nodeIdentifier != null) {
+		nodeIdentifier = nodeIdentifier.indexOf("/") == -1 ? "/" + nodeIdentifier : nodeIdentifier;
+	}
+	String url = portalURI + wcmConfigurationService.getRuntimeContextParam("printViewer") + "/" + repository + "/" + workspace + nodeIdentifier + isPrint;
+	if(uicomponent.isQuickEditable()) {
 %>
 		<div style="position: relative; height: 0px;" id="<%=quickEditingBlockId%>">
 			<div style="position: absolute; width: 65px; right: 0px; top: 0px">
@@ -29,12 +32,12 @@
 			</div>
 		</div>
 <% 
-		} 
-		if (uicomponent.isQuickPrint()) {
+	} 
+	if (uicomponent.isQuickPrint()) {
 %>
-			<div class="QuickPrint" onclick="window.open('$url')" title="<%= _ctx.appRes("UIPresentationContainer.quickPrint.title");%>"><span></span></div>
+		<div class="QuickPrint" onclick="window.open('$url')" title="<%= _ctx.appRes("UIPresentationContainer.quickPrint.title");%>"><span></span></div>
 <%
-		}
+	}
 	uicomponent.renderChildren() 
 %>
 </div>
