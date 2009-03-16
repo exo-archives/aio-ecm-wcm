@@ -82,4 +82,22 @@
   		<to>to</to>
   	</scheduled>
   </UIPublicationPanel>
+  <UIPublicationHistory>
+  	<header>
+  		<date>Date</date>
+  		<versionName>Version name</versionName>
+  		<currentState>Current state</currentState>
+  		<user>Author</user>
+  		<description>Description</description>
+  	</header>
+  </UIPublicationHistory>
+  <Publication>
+  	<log>
+	  	<description>
+	  		<change-to-draft-state>Content created</change-to-draft-state>
+	  		<change-to-live-state>from Draft to Live</change-to-live-state>
+	  		<change-to-obsolete-state>from Live to Obsolete</change-to-obsolete-state>
+	  	</description>
+  	</log>
+  </Publication>
 </bundle>

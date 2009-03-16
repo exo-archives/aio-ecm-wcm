@@ -63,9 +63,6 @@ import org.exoplatform.webui.form.UIForm;
 
 public class UIPublicationPanel extends UIForm {
 
-  public static final String START_TIME = "startTime".intern();
-  public static final String END_TIME = "endTime".intern();
-
   private Version currentVersion;
   private List<Version> viewedVersions = new ArrayList<Version>(3);  
   private Node currentNode;
@@ -74,18 +71,24 @@ public class UIPublicationPanel extends UIForm {
 
   public void init(Node node) throws Exception {
     this.currentNode = node;
-    List<Version> allversions = getAllVersion(node);
-    if (!allversions.isEmpty()) {
-      this.currentVersion = allversions.get(0);
-      if(allversions.size()>3) {
-        viewedVersions = allversions.subList(0, 3);
-      } else {
-        viewedVersions = allversions;
-      }
+    List<Version> versions = getLatestVersions(3, node);
+    if (!versions.isEmpty()) {
+      this.currentVersion = versions.get(0);
     }
   }
 
-  private List<Version> getAllVersion(Node node) throws Exception {
+  public List<Version> getLatestVersions(int limit, Node node) throws Exception {
+    List<Version> allversions = getAllVersions(node);
+    List<Version> latestVersions = new ArrayList<Version>();
+    if(allversions.size() > limit) {
+      latestVersions = allversions.subList(0, limit);
+    } else {
+      latestVersions = allversions;
+    }
+    return latestVersions;
+  }
+  
+  public List<Version> getAllVersions(Node node) throws Exception {
     List<Version> allversions = new ArrayList<Version>();
     VersionIterator iterator = node.getVersionHistory().getAllVersions();
     for(;iterator.hasNext();) {
@@ -135,7 +138,7 @@ public class UIPublicationPanel extends UIForm {
   
   public static class DraftActionListener extends EventListener<UIPublicationPanel> {
     public void execute(Event<UIPublicationPanel> event) throws Exception {
-      UIPublicationPanel publicationPanel = event.getSource();      
+      UIPublicationPanel publicationPanel = event.getSource();
       Node currentNode = publicationPanel.getCurrentNode();
       PublicationService publicationService = publicationPanel.getApplicationComponent(PublicationService.class);
       PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(Constant.LIFECYCLE_NAME);
@@ -173,7 +176,10 @@ public class UIPublicationPanel extends UIForm {
         e.printStackTrace();
         UIApplication uiApp = publicationPanel.getAncestorOfType(UIApplication.class);
         JCRExceptionManager.process(uiApp,e);
-      }      
+      }
+      UIPublicationContainer publicationContainer = publicationPanel.getAncestorOfType(UIPublicationContainer.class);
+      publicationPanel.setVersions(publicationPanel.getLatestVersions(3, currentNode));
+      event.getRequestContext().addUIComponentToUpdateByAjax(publicationContainer);
     }
   } 
 
@@ -257,7 +263,7 @@ public class UIPublicationPanel extends UIForm {
   public static class SeeAllVersionActionListener extends EventListener<UIPublicationPanel> {
     public void execute(Event<UIPublicationPanel> event) throws Exception {
       UIPublicationPanel publicationPanel = event.getSource();
-      publicationPanel.setVersions(publicationPanel.getAllVersion(publicationPanel.getCurrentNode()));
+      publicationPanel.setVersions(publicationPanel.getAllVersions(publicationPanel.getCurrentNode()));
       event.getRequestContext().addUIComponentToUpdateByAjax(publicationPanel);
     }
   } 

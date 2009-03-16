@@ -56,8 +56,7 @@ public class UIPublicationHistory extends UIComponentDecorator {
   
   public void init(Node node) {
    currentNode_ = node;
-  }
-  
+  }  
   public List<VersionLog> getLog() throws NotInPublicationLifecycleException, Exception {
     if (currentNode_ == null) return new ArrayList<VersionLog>();
     List<VersionLog> logs = new ArrayList<VersionLog>();

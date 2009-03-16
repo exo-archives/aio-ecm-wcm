@@ -73,7 +73,7 @@
   		<enrolled>Đã được biên soạn</enrolled>
   		<draft>Nháp</draft>
   		<awaiting>Đang chờ</awaiting>
-  		<live>Sống</live>
+  		<live>Live</live>
   		<obsolete>Hết hạn</obsolete>
   	</status>
   	<scheduled>
@@ -82,4 +82,22 @@
   		<to>đến</to>
   	</scheduled>
   </UIPublicationPanel>
+  <UIPublicationHistory>
+  	<header>
+  		<date>Ngày tháng</date>
+  		<versionName>Tên phiên bản</versionName>
+  		<currentState>Trạng thái hiện tại</currentState>
+  		<user>Người tạo</user>
+  		<description>Mô tả</description>
+  	</header>
+  </UIPublicationHistory>
+  <Publication>
+  	<log>
+	  	<description>
+	  		<change-to-draft-state>Nội dung đã được tạo</change-to-draft-state>
+	  		<change-to-live-state>từ bản Nháp sang bản Live</change-to-live-state>
+	  		<change-to-obsolete-state>từ bản Live sang Hết hạn</change-to-obsolete-state>
+	  	</description>
+  	</log>
+  </Publication>
 </bundle>
