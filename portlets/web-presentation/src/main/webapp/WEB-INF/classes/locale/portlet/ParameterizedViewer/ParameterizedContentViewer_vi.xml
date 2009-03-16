@@ -14,6 +14,8 @@
   <UIContentViewerContainer>
     <action>
       <back>Quay lại</back>
+      <print>In</print>
+      <close>Đóng</close>
     </action>
   </UIContentViewerContainer>
 </bundle>

@@ -17,7 +17,9 @@
 package org.exoplatform.wcm.webui.pcv;
 
 import javax.jcr.Node;
+import javax.servlet.http.HttpServletRequest;
 
+import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.wcm.webui.Utils;
@@ -39,67 +41,102 @@ import org.exoplatform.webui.event.EventListener;
 @ComponentConfig(lifecycle = Lifecycle.class, template = "app:/groovy/ParameterizedContentViewer/UIContentViewerContainer.gtmpl", events = { @EventConfig(listeners = UIContentViewerContainer.QuickEditActionListener.class) })
 public class UIContentViewerContainer extends UIContainer {
 
-  /** The Constant WEB_CONTENT_sDIALOG. */
-  public static final String WEB_CONTENT_sDIALOG = "webContentDialog";
+	/** The Constant WEB_CONTENT_sDIALOG. */
+	public static final String WEB_CONTENT_sDIALOG = "webContentDialog";
 
-  /**
-   * Instantiates a new uI content viewer container.
-   * 
-   * @throws Exception the exception
-   */
-  public UIContentViewerContainer() throws Exception {
-    addChild(UIContentViewer.class, null, null);
-  }
+	/**
+	 * A flag used to display Print/Close buttons and hide Back one if its' value
+	 * is <code>true</code>. In <code>false</code> case, the Back button will be
+	 * shown only 
+	 */
+	private boolean isPrint;
 
-  /**
-   * Checks if is quick edit able.
-   * 
-   * @return true, if is quick edit able
-   * 
-   * @throws Exception the exception
-   */
-  public boolean isQuickEditAble() throws Exception {
-    PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();        
-    return Utils.turnOnQuickEditable(context, true);
-  }
+	/**
+	 * Instantiates a new uI content viewer container.
+	 * 
+	 * @throws Exception the exception
+	 */
+	public UIContentViewerContainer() throws Exception {
+		addChild(UIContentViewer.class, null, null);
+	}
 
-  /**
-   * The listener interface for receiving quickEditAction events.
-   * The class that is interested in processing a quickEditAction
-   * event implements this interface, and the object created
-   * with that class is registered with a component using the
-   * component's <code>addQuickEditActionListener<code> method. When
-   * the quickEditAction event occurs, that object's appropriate
-   * method is invoked.
-   * 
-   * @see QuickEditActionEvent
-   */
-  public static class QuickEditActionListener extends EventListener<UIContentViewerContainer> {
-    
-    /* (non-Javadoc)
-     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
-     */
-    public void execute(Event<UIContentViewerContainer> event) throws Exception {
-      UIContentViewerContainer uiContentViewerContainer = event.getSource();
-      UIContentViewer uiContentViewer = uiContentViewerContainer.getChild(UIContentViewer.class);
-      Node contentNode = uiContentViewer.getNode();
-      ManageableRepository manageableRepository = (ManageableRepository) contentNode.getSession()
-                                                                                    .getRepository();
-      String repository = manageableRepository.getConfiguration().getName();
-      String workspace = manageableRepository.getConfiguration().getDefaultWorkspaceName();
-      uiContentViewerContainer.removeChild(UIContentViewer.class);
-      UIDocumentDialogForm uiDocumentForm = uiContentViewerContainer.createUIComponent(UIDocumentDialogForm.class,
-                                                                                       null,
-                                                                                       null);
-      uiDocumentForm.setRepositoryName(repository);
-      uiDocumentForm.setWorkspace(workspace);
-      uiDocumentForm.setContentType(contentNode.getPrimaryNodeType().getName());
-      uiDocumentForm.setNodePath(contentNode.getPath());
-      uiDocumentForm.setStoredPath(contentNode.getPath());
-      uiDocumentForm.addNew(false);
-      uiContentViewerContainer.addChild(uiDocumentForm);
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContentViewerContainer);
-    }
-  }
+	@Override
+	public void processRender(WebuiRequestContext requestContext) throws Exception {
+		PortletRequestContext portletRequestContext = (PortletRequestContext)requestContext;
+		PortalRequestContext context = (PortalRequestContext)portletRequestContext.getParentAppRequestContext();
+	  	HttpServletRequest request = context.getRequest();
+	  	isPrint = "true".equals(request.getParameter("isPrint")) ? true : false;
+	  	super.processRender(requestContext);
+	}
+	
+	/**
+	 * Checks if is quick edit able.
+	 * 
+	 * @return true, if is quick edit able
+	 * 
+	 * @throws Exception the exception
+	 */
+	public boolean isQuickEditAble() throws Exception {
+		PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();        
+		return Utils.turnOnQuickEditable(context, true);
+	}
 
+	/**
+	 * The listener interface for receiving quickEditAction events.
+	 * The class that is interested in processing a quickEditAction
+	 * event implements this interface, and the object created
+	 * with that class is registered with a component using the
+	 * component's <code>addQuickEditActionListener<code> method. When
+	 * the quickEditAction event occurs, that object's appropriate
+	 * method is invoked.
+	 * 
+	 * @see QuickEditActionEvent
+	 */
+	public static class QuickEditActionListener extends EventListener<UIContentViewerContainer> {
+
+		/* (non-Javadoc)
+		 * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+		 */
+		public void execute(Event<UIContentViewerContainer> event) throws Exception {
+			UIContentViewerContainer uiContentViewerContainer = event.getSource();
+			UIContentViewer uiContentViewer = uiContentViewerContainer.getChild(UIContentViewer.class);
+			Node contentNode = uiContentViewer.getNode();
+			ManageableRepository manageableRepository = (ManageableRepository) contentNode.getSession()
+			.getRepository();
+			String repository = manageableRepository.getConfiguration().getName();
+			String workspace = manageableRepository.getConfiguration().getDefaultWorkspaceName();
+			uiContentViewerContainer.removeChild(UIContentViewer.class);
+			UIDocumentDialogForm uiDocumentForm = uiContentViewerContainer.createUIComponent(UIDocumentDialogForm.class,
+					null,
+					null);
+			uiDocumentForm.setRepositoryName(repository);
+			uiDocumentForm.setWorkspace(workspace);
+			uiDocumentForm.setContentType(contentNode.getPrimaryNodeType().getName());
+			uiDocumentForm.setNodePath(contentNode.getPath());
+			uiDocumentForm.setStoredPath(contentNode.getPath());
+			uiDocumentForm.addNew(false);
+			uiContentViewerContainer.addChild(uiDocumentForm);
+			event.getRequestContext().addUIComponentToUpdateByAjax(uiContentViewerContainer);
+		}
+	}
+
+	/**
+	 * Gets <code>isPrint</code> value that is used to display Print/Close 
+	 * buttons and hide Back one if its' value is <code>True</code>. In 
+	 * <code>False</code> case, the Back button will be shown only.
+	 *  
+	 * @return <code>isPrint</code> 
+	 */
+	public boolean getIsPrint() {
+		return isPrint;
+	}
+
+	/**
+	 * Sets <code>isPrint</code> value that is used to display Print/Close 
+	 * buttons and hide Back one if its' value is <code>True</code>. In 
+	 * <code>False</code> case, the Back button will be shown only.
+	 */
+	public void setIsPrint(boolean isPrint) {
+		this.isPrint = isPrint;
+	}
 }

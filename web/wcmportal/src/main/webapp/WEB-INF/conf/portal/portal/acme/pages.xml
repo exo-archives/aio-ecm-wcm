@@ -241,4 +241,21 @@
       <show-application-mode>false</show-application-mode>
     </application>
   </page>
+  <page>
+  	<page-id>portal::acme::printviewer</page-id>
+    <owner-type>portal</owner-type>
+    <owner-id>acme</owner-id>
+    <name>printviewer</name>
+    <title>printviwer</title>
+    <access-permissions>Everyone</access-permissions> 
+    <edit-permission>*:/platform/administrators</edit-permission>
+    <show-max-window>true</show-max-window>
+    <application>
+      <instance-id>portal#acme:/web-presentation/ParameterizedContentViewerPortlet/acme-printviewer</instance-id>
+      <title>printviewer</title>
+      <show-info-bar>false</show-info-bar>      
+      <show-application-state>false</show-application-state>
+      <show-application-mode>false</show-application-mode>
+    </application>
+  </page>
 </page-set>

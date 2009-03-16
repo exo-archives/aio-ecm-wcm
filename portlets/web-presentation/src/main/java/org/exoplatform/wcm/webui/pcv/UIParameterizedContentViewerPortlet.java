@@ -47,7 +47,7 @@ public class UIParameterizedContentViewerPortlet extends UIPortletApplication {
   public UIParameterizedContentViewerPortlet() throws Exception {
     addChild(UIContentViewerContainer.class, null, null);
   }
-
+  
   /**
    * Can edit portlet.
    * 
@@ -60,5 +60,4 @@ public class UIParameterizedContentViewerPortlet extends UIPortletApplication {
     String userId = context.getRemoteUser();
     return Utils.canEditCurrentPortal(userId);
   }
-
 }

@@ -1,24 +1,38 @@
 <%
-String link = uicomponent.event("QuickEdit");
-String backActionLable = _ctx.appRes("UIContentViewerContainer.action.back");
+	String link = uicomponent.event("QuickEdit");
+	String lblBack = _ctx.appRes("UIContentViewerContainer.action.back");
+	String lblPrint = _ctx.appRes("UIContentViewerContainer.action.print");
+	String lblClose = _ctx.appRes("UIContentViewerContainer.action.close");
 %>
 <div id="$uicomponent.id" class="$uicomponent.id">
   <div class="ContentViewerBar">
-		<div class="BackButton" title="$backActionLable" onclick="history.go(-1)"><span></span></div>
-  	<%
-  	if (uicomponent.isQuickEditAble()) {
-      %>
-    	  <a class="DocumentQuickEdit" href="$link"></a>
-      	<div style="clear: both;"><span></span></div>
-      <%
-      }
-   	%>
+<%
+	if(!uicomponent.getIsPrint()) {
+%>
+		<div class="BackButton" title="$lblBack" onclick="history.go(-1)"><span></span></div>
+<%
+	}
+ 	if (uicomponent.isQuickEditAble()) {
+%>
+	  <a class="DocumentQuickEdit" href="$link"></a>
+  	<div style="clear: both;"><span></span></div>
+<%
+	}
+%>
   </div>
-  <%
+<%
   uicomponent.renderChildren();
-  %>
-  <div style="clear: both;">
-    <span>
-    </span>
-  </div>
+%>
+  <div style="clear: both;"><span></span></div>
+<%
+	if(uicomponent.getIsPrint()) {
+%>
+	<div>
+		<div style="float: left; cursor: pointer" onclick="window.print();">$lblPrint</div>
+		<div style="cursor: pointer" onclick="window.close();">$lblClose</div>
+		<div style="clear: both;"><span></span></div>
+	</div>
+<%
+	}
+%>
 </div>

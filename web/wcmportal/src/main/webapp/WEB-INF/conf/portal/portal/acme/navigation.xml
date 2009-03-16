@@ -66,6 +66,13 @@
 			<label>#{portal.acme.contentviewer}</label>
 			<visible>false</visible>
 			<page-reference>portal::acme::contentviewer</page-reference>
-		</node> 	        	    
+		</node> 	   
+		<node>
+			<uri>printviewer</uri>
+			<name>printviewer</name>
+			<label>#{portal.acme.printviewer}</label>
+			<visible>false</visible>
+			<page-reference>portal::acme::printviewer</page-reference>
+		</node>	     	    
 	</page-nodes>
 </node-navigation>

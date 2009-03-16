@@ -21,13 +21,11 @@ import java.util.List;
 
 import javax.portlet.PortletPreferences;
 
-import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.page.UIPage;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.WebUIPropertiesConfigService;
 import org.exoplatform.wcm.webui.WebUIPropertiesConfigService.PopupWindowProperties;
@@ -36,7 +34,6 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -51,8 +48,7 @@ import org.exoplatform.webui.event.EventListener;
 		lifecycle=Lifecycle.class,
 		template="app:/groovy/SingleContentViewer/UIPresentationContainer.gtmpl",
 		events = {
-			@EventConfig(listeners=UIPresentationContainer.QuickEditActionListener.class),
-			@EventConfig(listeners=UIPresentationContainer.QuickPrintActionListener.class)
+			@EventConfig(listeners=UIPresentationContainer.QuickEditActionListener.class)
 		}
 )
 
@@ -104,7 +100,6 @@ public class UIPresentationContainer extends UIContainer{
 	 * @see QuickEditActionEvent
 	 */
 	public static class QuickEditActionListener extends EventListener<UIPresentationContainer>{   
-
 		/* (non-Javadoc)
 		 * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
 		 */
@@ -121,43 +116,22 @@ public class UIPresentationContainer extends UIContainer{
 			PopupWindowProperties popupProperties = (PopupWindowProperties)propertiesConfigService.getProperties(WebUIPropertiesConfigService.SCV_POPUP_SIZE_QUICK_EDIT);
 			maskPopupContainer.activate(portletConfig,popupProperties.getWidth(),popupProperties.getHeight());            
 			context.addUIComponentToUpdateByAjax(maskPopupContainer);
-
 		}
 	}
 
-	public static class QuickPrintActionListener extends EventListener<UIPresentationContainer>{   
-		public void execute(Event<UIPresentationContainer> event) throws Exception {
-			PortletRequestContext portletRequestContext = (PortletRequestContext)event.getRequestContext();
-			PortletPreferences preferences = portletRequestContext.getRequest().getPreferences();
-			String repository = preferences.getValue(UISingleContentViewerPortlet.REPOSITORY, null);    
-			String workspace = preferences.getValue(UISingleContentViewerPortlet.WORKSPACE, null);
-			String nodeIdentifier = preferences.getValue(UISingleContentViewerPortlet.IDENTIFIER, null) ;
-			PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
-			String portalURI = portalRequestContext.getPortalURI();
-			String baseURI = portletRequestContext.getRequest().getScheme() + "://" + portletRequestContext.getRequest().getServerName() + ":" + String.format("%s", portletRequestContext.getRequest().getServerPort());
-			UIPresentationContainer uicomp = event.getSource();
-			WCMConfigurationService wcmConfigurationService = uicomp.getApplicationComponent(WCMConfigurationService.class);
-			String parameterizedPageURI = wcmConfigurationService.getParameterizedPageURI();
-			String url = baseURI + portalURI + parameterizedPageURI.substring(1, parameterizedPageURI.length()) + "/" + repository + "/" + workspace + nodeIdentifier;
-
-			UISingleContentViewerPortlet uiportlet = uicomp.getAncestorOfType(UISingleContentViewerPortlet.class);
-			UIPopupContainer maskPopupContainer = uiportlet.getChild(UIPopupContainer.class);     
-			UIPrintFrame printFrame = maskPopupContainer.createUIComponent(UIPrintFrame.class,null,null);
-			printFrame.setWebContentId(uicomp.getPortletId());
-			printFrame.setIframeUrl(url);
-			maskPopupContainer.activate(printFrame, 800, 500);            
-			portletRequestContext.addUIComponentToUpdateByAjax(maskPopupContainer);
-		}
-	}
-
+	/**
+	 * Checks if the Portlet shows the Quick Print icon.
+	 * 
+	 * @return <code>true</code> if the Quick Print is shown. Otherwise, <code>false</code>
+	 */
 	public boolean isQuickPrint() {
 		WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
 		PortletRequestContext porletRequestContext = (PortletRequestContext) context;
 		PortletPreferences prefs = porletRequestContext.getRequest().getPreferences();
 		UIPortal uiPortal = Util.getUIPortal();
 		UIPage uiPage = uiPortal.findFirstComponentOfType(UIPage.class);
-		List<String> ids = org.exoplatform.services.wcm.publication.defaultlifecycle
-					.Util.getListApplicationIdByPage(PortalDataMapper.toPageModel(uiPage));
+		List<String> ids = org.exoplatform.services.wcm.publication.lifecycle.stageversion
+						.Util.getListApplicationIdByPage(PortalDataMapper.toPageModel(uiPage));
 		List<String> newIds = new ArrayList<String>();
 		int length = ids.size();
 		

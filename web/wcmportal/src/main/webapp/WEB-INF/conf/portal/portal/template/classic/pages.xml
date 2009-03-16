@@ -108,4 +108,21 @@
       <show-application-mode>false</show-application-mode>
     </application>
   </page>  
+  <page>
+  	<page-id>portal::classic::printviewer</page-id>
+    <owner-type>portal</owner-type>
+    <owner-id>classic</owner-id>
+    <name>printviewer</name>
+    <title>printviewer</title>
+    <access-permissions>Everyone</access-permissions> 
+    <edit-permission>*:/platform/administrators</edit-permission>
+    <show-max-window>true</show-max-window>
+    <application>
+      <instance-id>portal#classic:/web-presentation/ParameterizedContentViewerPortlet/classic-printviewer</instance-id>
+      <title>printviewer</title>
+      <show-info-bar>false</show-info-bar>      
+      <show-application-state>false</show-application-state>
+      <show-application-mode>false</show-application-mode>
+    </application>
+  </page>
 </page-set>

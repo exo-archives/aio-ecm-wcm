@@ -14,6 +14,8 @@
   <UIContentViewerContainer>
     <action>
       <back>Back</back>
+      <print>Print</print>
+      <close>Close</close>
     </action>
   </UIContentViewerContainer>
 </bundle>

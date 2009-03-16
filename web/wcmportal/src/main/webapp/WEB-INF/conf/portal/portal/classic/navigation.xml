@@ -69,6 +69,13 @@
 			<label>#{portal.classic.wikipresentation}</label>
 			<visible>false</visible>
 			<page-reference>portal::classic::wikipresentation</page-reference>
-		</node>	  	  
+		</node>	
+		<node>
+			<uri>printviewer</uri>
+			<name>printviewer</name>
+			<label>#{portal.classic.printviewer}</label>
+			<visible>false</visible>
+			<page-reference>portal::classic::printviewer</page-reference>
+		</node>	
 	</page-nodes>
 </node-navigation>
