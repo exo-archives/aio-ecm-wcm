@@ -84,63 +84,78 @@ public class StageAndVersionBasedPublicationPlugin extends WebpagePublicationPlu
   }    
 
   public void changeState(Node node, String newState, HashMap<String, String> context) throws IncorrectStateUpdateLifecycleException,Exception {
-    String versionName = context.get(Constant.CURRENT_VERSION_NAME);
-    Version baseVersion = node.getBaseVersion();
-    boolean changeSpecificVersion = (versionName != null)? true: false;
-    String logItemName = node.getName();
+    String versionName = context.get(Constant.CURRENT_REVISION_NAME);        
+    String logItemName = versionName;
     String userId = node.getSession().getUserID();
-    Version version = null;
-    if(changeSpecificVersion) {
-      version = node.getVersionHistory().getVersion(versionName);      
-      logItemName = versionName;
-    }                      
-    VersionLog versionLog = null;    
+    Node selectedRevision = null;
+    if(node.getName().equals(versionName) || versionName == null) {
+      selectedRevision = node;
+      logItemName = node.getName();
+    }else {
+      selectedRevision = node.getVersionHistory().getVersion(versionName);
+    }     
+    VersionLog versionLog = null;
+    ValueFactory valueFactory = node.getSession().getValueFactory();
     if(Constant.ENROLLED.equalsIgnoreCase(newState)) {
       versionLog = new VersionLog(logItemName,newState,node.getSession().getUserID(),GregorianCalendar.getInstance(),Constant.ENROLLED_TO_LIFECYCLE);            
-      node.setProperty(Constant.CURRENT_STATE,newState);
-      node.setProperty(Constant.REVISION_STATE,newState);      
+      node.setProperty(Constant.CURRENT_STATE,newState);       
+      addLog(node,versionLog);
     } else if(Constant.DRAFT.equalsIgnoreCase(newState)) {
-      if(changeSpecificVersion) {        
-        if(baseVersion.getName().equals(version.getName())) {                   
-          node.setProperty(Constant.REVISION_STATE,newState);          
-        }else {                              
-          node.restore(version,false);          
-          node.setProperty(Constant.REVISION_STATE,newState);          
-          node.restore(baseVersion,false);
-        }
-      }else {
-        node.setProperty(Constant.REVISION_STATE,newState);        
-        node.setProperty(Constant.CURRENT_STATE,newState);
-      }
+      node.setProperty(Constant.CURRENT_STATE,newState);
       versionLog = new VersionLog(logItemName,newState,node.getSession().getUserID(),GregorianCalendar.getInstance(),Constant.CHANGE_TO_DRAFT);
       addLog(node,versionLog);
     }else if(Constant.LIVE.equals(newState)) {
-      if(changeSpecificVersion) {
-        
-      }else {        
-        node.setProperty(Constant.REVISION_STATE,newState);        
-        //create live version
-        node.save();
-        Version liveVersion = node.checkin();
-        node.checkout();        
-        versionLog = new VersionLog(liveVersion.getName(),newState,userId,new GregorianCalendar(),Constant.CHANGE_TO_LIVE);
-        addLog(node,versionLog);
-        //change base version to draft state 
-        node.setProperty(Constant.REVISION_STATE,Constant.DRAFT);
-        node.save();
-        node.checkin();
-        node.checkout();
-        versionLog = new VersionLog(node.getBaseVersion().getName(),Constant.DRAFT,userId, new GregorianCalendar(),Constant.CHANGE_TO_DRAFT);                        
+      if(node.hasProperty(Constant.LIVE_REVISION_PROP)) {
+        Value currentliveRevision = node.getProperty(Constant.LIVE_REVISION_PROP).getValue();
+        //put the live revision to obsolete
+        Value[] currentObsoletes = getObsoleteRevisions(node);
+        List<Value> obsoletes = new ArrayList<Value>();
+        obsoletes.add(currentliveRevision);
+        obsoletes.addAll(Arrays.asList(currentObsoletes));
+        node.setProperty(Constant.OBSOLETE_REVISIONS_PROP,obsoletes.toArray(new Value[] {}));        
       }
+      Version liveVersion = node.checkin();
+      node.checkout();           
+      versionLog = new VersionLog(liveVersion.getName(),newState,userId,new GregorianCalendar(),Constant.CHANGE_TO_LIVE);
+      addLog(node,versionLog);      
+      //change base version to draft state
+      node.setProperty(Constant.CURRENT_STATE,Constant.ENROLLED);
+      versionLog = new VersionLog(node.getBaseVersion().getName(),Constant.DRAFT,userId, new GregorianCalendar(),Constant.ENROLLED_TO_LIFECYCLE);
+      //Change all awaiting, live revision to obsolete
+      Value  liveVersionValue = valueFactory.createValue(liveVersion);
+      node.setProperty(Constant.LIVE_REVISION_PROP,liveVersionValue);
+      node.setProperty(Constant.LIVE_DATE_PROP,new GregorianCalendar());
     }else if(Constant.OBSOLETE.equalsIgnoreCase(newState)) {
-      if(changeSpecificVersion) {
-      }else {        
-        node.setProperty(Constant.REVISION_STATE,newState);
-        versionLog = new VersionLog(node.getBaseVersion().getName(),newState,userId,new GregorianCalendar(),Constant.CHANGE_TO_OBSOLETE);
-      }
+      Value value = valueFactory.createValue(selectedRevision);
+      Value liveRevision = getValue(node,Constant.LIVE_REVISION_PROP);
+      if(value.equals(liveRevision)) {
+        node.setProperty(Constant.LIVE_REVISION_PROP,valueFactory.createValue(""));
+      }      
+      Value[] currentObsoletes = getObsoleteRevisions(node);
+      List<Value> obsoletes = new ArrayList<Value>();
+      obsoletes.add(value);
+      obsoletes.addAll(Arrays.asList(currentObsoletes));
+      node.setProperty(Constant.OBSOLETE_REVISIONS_PROP,obsoletes.toArray(new Value[] {}));
+      versionLog = new VersionLog(selectedRevision.getName(),newState,userId,new GregorianCalendar(),Constant.CHANGE_TO_OBSOLETE);      
     }
     if(!node.isNew())
       node.save();
+  }
+
+  private Value[] getObsoleteRevisions(Node node) {
+    try {     
+      return node.getProperty(Constant.OBSOLETE_REVISIONS_PROP).getValues();
+    } catch (Exception e) {
+      return new Value[] { };
+    }
+  }
+
+  private Value getValue(Node node, String prop) {
+    try {     
+      return node.getProperty(prop).getValue();
+    } catch (Exception e) {      
+      return null;
+    }
   }
 
   private void addLog(Node node, VersionLog versionLog) throws Exception{
@@ -159,6 +174,7 @@ public class StageAndVersionBasedPublicationPlugin extends WebpagePublicationPlu
       return String.format(result, values); 
     }        
     return result;
+
   }
 
   public Node getNodeView(Node node, Map<String, Object> arg1) throws Exception {

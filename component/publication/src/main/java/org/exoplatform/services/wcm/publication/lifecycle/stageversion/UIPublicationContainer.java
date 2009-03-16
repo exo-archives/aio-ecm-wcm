@@ -17,8 +17,11 @@
 package org.exoplatform.services.wcm.publication.lifecycle.stageversion;
 
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.jcr.Node;
 
@@ -47,10 +50,10 @@ import org.exoplatform.webui.form.UIForm;
 )
                
 public class UIPublicationContainer extends UIForm implements UIPopupComponent {  
-  private static String selectedTabId = "";
-  
+  private static String selectedTabId = "";  
   public UIPublicationContainer() { }
   
+  private DateFormat dateTimeFormater;
   public void initContainer(Node node) throws Exception {
     UIPublicationPanel publicationPanel = addChild(UIPublicationPanel.class, null, null);
     publicationPanel.init(node);
@@ -64,7 +67,11 @@ public class UIPublicationContainer extends UIForm implements UIPopupComponent {
     publicationHistory.updateGrid();
     publicationHistory.setRendered(false);
     setSelectedTab(1);
+    Locale locale = org.exoplatform.portal.webui.util.Util.getPortalRequestContext().getLocale();
+    dateTimeFormater = SimpleDateFormat.getDateTimeInstance(SimpleDateFormat.MEDIUM,SimpleDateFormat.MEDIUM,locale);
   }
+  
+  public DateFormat getDateTimeFormater() { return dateTimeFormater; }
   
   public void activate() throws Exception {
   }

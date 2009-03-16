@@ -40,7 +40,8 @@ public interface Constant {
   public static final String CHANGE_TO_AWAITNG = "Publication.log.change-to-awaiting-state".intern();
   public static final String CHANGE_TO_LIVE = "Publication.log.change-to-live-state".intern();
   public static final String CHANGE_TO_OBSOLETE = "Publication.log.change-to-obsolete-state".intern();
-  public static final String CURRENT_VERSION_NAME = "Publication.context.currentVersion".intern();
-  public static final String REVISION_STATE = "publication:revisionState".intern();
-  
+  public static final String CURRENT_REVISION_NAME = "Publication.context.currentVersion".intern();  
+  public static final String LIVE_REVISION_PROP = "publication:liveRevision".intern();
+  public static final String LIVE_DATE_PROP = "publication:liveDate".intern();
+  public static final String OBSOLETE_REVISIONS_PROP = "publication:obsoleteRevisions".intern();  
 }

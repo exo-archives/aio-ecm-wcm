@@ -4,36 +4,23 @@
   import javax.jcr.version.Version;
   import org.exoplatform.services.wcm.publication.lifecycle.stageversion.UIPublicationPanel;
   import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant;
-  Version cVersion = uicomponent.getCurrentVerion();
-  Node cNode = uicomponent.getCurrentNode();
-  String cState;
-  public boolean isCurrentVersion(String inputStatus, Version cVersion, Node cNode) throws Exception {
-    if (cVersion == null) {
-      cState = cNode.getProperty("publication:currentState").getString();
-      return inputStatus.equals(cState) ? true : false;
-    } else {
-      cState = uicomponent.getVersionState(cVersion);
-      return inputStatus.equals(cState) ? true : false;
-    }
-  }
+  Node currentRevision = uicomponent.getCurrentRevision();
+  Node cNode = uicomponent.getCurrentNode();  
+  public boolean isCurrentRevision(String inputStatus, Node revision) throws Exception {    
+  	String state = uicomponent.getRevisionState(revision);
+    return inputStatus.equals(state) ? true : false;
+ }  
 %>
 <% uicomponent.begin(); %>
 <div class="UIPublicationPanel" id="$uicomponent.id">
   <fieldset class="StatusTable">
-    <%
-      String versionName = "";
-      if (cVersion == null) {
-        versionName = cNode.getName();
-      } else {
-        versionName = cVersion.getName();
-      }
-    %>
+    <% String versionName = currentRevision.getName();  %>
     <legend class="Legend"> <%=_ctx.appRes("UIPublicationPanel.status.version")%> $versionName </legend>
     <div class="StatusAction">
       <div class="StatusTitle"><%=_ctx.appRes("UIPublicationPanel.status.title")%>: </div>
       <div class="StatusLink">
         <%
-          if (isCurrentVersion("enrolled", cVersion, cNode)) {
+          if (isCurrentRevision("enrolled", currentRevision)) {
             %>
               <a class="DefaultStatus CurrentStatus"><%=_ctx.appRes("UIPublicationPanel.status.enrolled")%></a>
               <span class="StatusArrow"></span>
@@ -44,7 +31,7 @@
               <a class="DefaultStatus DisableStatus"><%=_ctx.appRes("UIPublicationPanel.status.obsolete")%></a>
               <div style="clear: left;"><span></span></div>
             <%
-          } else if (isCurrentVersion("draft", cVersion, cNode)) {
+          } else if (isCurrentRevision("draft",currentRevision)) {
             %>
               <a class="DefaultStatus DisableStatus"><%=_ctx.appRes("UIPublicationPanel.status.enrolled")%></a>
               <span class="StatusArrow"></span>
@@ -55,7 +42,7 @@
               <a class="DefaultStatus DisableStatus"><%=_ctx.appRes("UIPublicationPanel.status.obsolete")%></a>
               <div style="clear: left;"><span></span></div>              
             <%
-          } else if (isCurrentVersion("live", cVersion, cNode)) {
+          } else if (isCurrentRevision("live",currentRevision)) {
             %>
               <a class="DefaultStatus DisableStatus"><%=_ctx.appRes("UIPublicationPanel.status.enrolled")%></a>
               <span class="StatusArrow"></span>
@@ -66,7 +53,7 @@
               <a class="DefaultStatus" href="<%= uicomponent.event("obsolete")%>"><%=_ctx.appRes("UIPublicationPanel.status.obsolete")%></a>
               <div style="clear: left;"><span></span></div>
             <%
-          } else if (isCurrentVersion("obsolete", cVersion, cNode)) {
+          } else if (isCurrentRevision("obsolete", currentRevision)) {
             %>
               <a class="DefaultStatus DisableStatus"><%=_ctx.appRes("UIPublicationPanel.status.enrolled")%></a>
               <span class="StatusArrow"></span>
@@ -91,27 +78,28 @@
       <td class="Action"><%=_ctx.appRes("UIPublicationPanel.revisions.action")%></td>
     </tr>
     <%
-      List<Version> versions = uicomponent.getVersions();
-      if (versions.isEmpty()) {
+      List<Node> revisions = uicomponent.getRevisions();
+      if (revisions.isEmpty()) {
         %>
           <tr>
             <td colspan="5" class="None"><%=_ctx.appRes("UIPublicationPanel.revisions.none")%></td>
           </tr>
         <%
       }
-    
-      for (Version version : versions) {
-        if (versions.indexOf(version) == 0) {
+         
+      for (Node revision : revisions) {
+      	def state = uicomponent.getRevisionState(revision);
+        if (revisions.indexOf(revision) == 0) {
           %>
             <tr>
               <td class="Name">
-                <a><%=_ctx.appRes("UIPublicationPanel.revisions.label")%>: <%= version.getName() %></a>
+                <a><%=_ctx.appRes("UIPublicationPanel.revisions.label")%>: <%= revision.getName() %></a>
               </td>
-              <td><%=version.getProperty("jcr:created").getString()%></td>
-              <td><%= uicomponent.getVersionAuthor(version) %></td>
-              <td><%=_ctx.appRes("UIPublicationPanel.status." + uicomponent.getVersionState(version))%> [<%=_ctx.appRes("UIPublicationPanel.revisions.currentVersion")%>]</td>
+              <td><%= uicomponent.getRevisionCreatedDate(revision)%></td>
+              <td><%= uicomponent.getRevisionAuthor(revision) %></td>
+              <td><%=_ctx.appRes("UIPublicationPanel.status." + uicomponent.getRevisionState(revision))%> [<%=_ctx.appRes("UIPublicationPanel.revisions.currentVersion")%>]</td>
               <td>
-                <div class="Preview" onclick="<%= uicomponent.event("PreviewVersion", version.getUUID()) %>"><span></span></div>
+                <div class="Preview" onclick="<%= uicomponent.event("PreviewVersion", revision.getUUID()) %>"><span></span></div>
                 <div style="clear: left"><span></span></div>
               </td>
             </tr>
@@ -120,18 +108,18 @@
           %>
             <tr>
               <td class="Name">
-                <a href="<%= uicomponent.event("ChangeVersion", version.getUUID()) %>"><%=_ctx.appRes("UIPublicationPanel.revisions.label")%>: <%= version.getName() %></a>
+                <a href="<%= uicomponent.event("ChangeVersion", revision.getUUID()) %>"><%=_ctx.appRes("UIPublicationPanel.revisions.label")%>: <%= revision.getName() %></a>
               </td>
-              <td><%=version.getProperty("jcr:created").getString()%></td>
-              <td><%= uicomponent.getVersionAuthor(version) %></td>
-              <td><%=_ctx.appRes("UIPublicationPanel.status." + uicomponent.getVersionState(version))%></td>
+              <td><%= uicomponent.getRevisionCreatedDate(revision)%></td>
+              <td><%= uicomponent.getRevisionAuthor(revision) %></td>
+              <td><%=_ctx.appRes("UIPublicationPanel.status." + uicomponent.getRevisionState(revision))%></td>
               <td>
-                <div class="Preview" onclick="<%= uicomponent.event("PreviewVersion", version.getUUID()) %>"><span></span></div>
+                <div class="Preview" onclick="<%= uicomponent.event("PreviewVersion", revision.getUUID()) %>"><span></span></div>
                 <%
-                  if (Constant.DRAFT.equals(cState)) {
-                    %><div class="Restore" onclick="if (confirm('<%=_ctx.appRes("UIPublicationPanel.revisions.confirm")%>')) <%= uicomponent.event("RestoreVersion", version.getUUID()) %>"><span></span></div><%
+                  if (Constant.DRAFT.equals(state)) {
+                    %><div class="Restore" onclick="if (confirm('<%=_ctx.appRes("UIPublicationPanel.revisions.confirm")%>')) <%= uicomponent.event("RestoreVersion", revision.getUUID()) %>"><span></span></div><%
                   } else {
-                    %><div class="Restore" onclick="<%= uicomponent.event("RestoreVersion", version.getUUID()) %>"><span></span></div><%
+                    %><div class="Restore" onclick="<%= uicomponent.event("RestoreVersion", revision.getUUID()) %>"><span></span></div><%
                   }
                 %>
                 <div style="clear: left"><span></span></div>
@@ -143,8 +131,8 @@
     %>  
   </table>
   <%
-    List<Version> allVersions = uicomponent.getAllVersions(cNode);
-    if (allVersions.size() > 3) {
+    List<Node> allRevisions = uicomponent.getAllRevisions(cNode);
+    if (allRevisions.size() > 3) {
       %>
         <tr>
           <div class="SeeAllVersion" onclick="<%= uicomponent.event("SeeAllVersion") %>"><%=_ctx.appRes("UIPublicationPanel.revisions.seeall")%></div>
