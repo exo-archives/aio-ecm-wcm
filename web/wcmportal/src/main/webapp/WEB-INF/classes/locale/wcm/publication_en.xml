@@ -61,14 +61,14 @@
   		<author>Author</author>
   		<status>Status</status>
   		<action>Action</action>
-  		<label>Version</label>
+  		<label>Revision</label>
   		<none>No revisions</none>
   		<seeall>See all versions</seeall>
-  		<currentVersion>current version</currentVersion>
+  		<currentVersion>current revision</currentVersion>
   		<confirm>You will lost your draft work, do you really want to restore this revision and replace the current revision ?</confirm>
   	</revisions>
   	<status>
-  		<version>Version</version>
+  		<version>Revision</version>
   		<title>Status</title>
   		<enrolled>Enrolled</enrolled>
   		<draft>Draft</draft>
@@ -85,7 +85,7 @@
   <UIPublicationHistory>
   	<header>
   		<date>Date</date>
-  		<versionName>Version name</versionName>
+  		<versionName>Revision name</versionName>
   		<currentState>Current state</currentState>
   		<user>Author</user>
   		<description>Description</description>

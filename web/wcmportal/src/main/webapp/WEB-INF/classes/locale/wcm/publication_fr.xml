@@ -61,14 +61,14 @@
   		<author>Auteur</author>
   		<status>L'état</status>
   		<action>L'action</action>
-  		<label>Version</label>
+  		<label>Révision</label>
   		<none>Non révision</none>
-  		<seeall>Voir toute les versions</seeall>
-  		<currentVersion>version courant</currentVersion>
+  		<seeall>Voir toute les révisions</seeall>
+  		<currentVersion>Révision courant</currentVersion>
   		<confirm>You will lost your draft work, do you really want to restore this revision and replace the current revision ?</confirm>
   	</revisions>
   	<status>
-  		<version>Version</version>
+  		<version>Révision</version>
   		<title>L'état</title>
   		<enrolled>Enrôler</enrolled>
   		<draft>Draft</draft>
@@ -85,7 +85,7 @@
   <UIPublicationHistory>
   	<header>
   		<date>La date</date>
-  		<versionName>Le nom de version</versionName>
+  		<versionName>Le nom de révision</versionName>
   		<currentState>L'état courant</currentState>
   		<user>L'auteur</user>
   		<description>La description</description>
