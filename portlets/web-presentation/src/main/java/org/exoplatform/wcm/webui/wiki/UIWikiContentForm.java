@@ -79,6 +79,7 @@ public class UIWikiContentForm extends UIForm {
     addUIFormInput(new UIFormStringInput(TITLE, TITLE, null).addValidator(
         MandatoryValidator.class).addValidator(ECMNameValidator.class));
     UIFormWYSIWYGInput uiWYSWYGInput = new UIFormWYSIWYGInput(CONTENT, CONTENT, "");
+    uiWYSWYGInput.setWidth(String.valueOf(750));
     addChild(uiWYSWYGInput);
   }
 
@@ -251,7 +252,7 @@ public class UIWikiContentForm extends UIForm {
       HttpServletResponseWrapper resWrapper = (HttpServletResponseWrapper) pContext.getResponse();
       pContext.setResponseComplete(true);
       String newNodeURL = uiWikiForm.getNewNodeURL(reqWrapper, newNodeUri);
-//    resWrapper.sendRedirect(newNodeURL);
+      resWrapper.sendRedirect(newNodeURL);
       Utils.refreshBrowser((PortletRequestContext) event.getRequestContext());
     }
   }
@@ -273,7 +274,6 @@ public class UIWikiContentForm extends UIForm {
     PortletRequestContext porletRequestContext = (PortletRequestContext) context;
     HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) porletRequestContext.getRequest();
     String queryString = requestWrapper.getQueryString();
-    System.out.println("==============>   queryString: " + queryString);
     String[] parameterArr = queryString.split("&");
     String parentUri = parameterArr[0].split("=")[1];
     String pageUri = parameterArr[1].split("=")[1];
