@@ -130,6 +130,10 @@ public class UIPresentationContainer extends UIContainer{
 		PortletPreferences prefs = porletRequestContext.getRequest().getPreferences();
 		UIPortal uiPortal = Util.getUIPortal();
 		UIPage uiPage = uiPortal.findFirstComponentOfType(UIPage.class);
+		
+		if(uiPage == null) {
+			return false;
+		}
 		List<String> ids = org.exoplatform.services.wcm.publication.lifecycle.stageversion
 						.Util.getListApplicationIdByPage(PortalDataMapper.toPageModel(uiPage));
 		List<String> newIds = new ArrayList<String>();
