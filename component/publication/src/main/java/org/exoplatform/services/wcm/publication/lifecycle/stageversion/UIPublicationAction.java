@@ -102,10 +102,10 @@ public class UIPublicationAction extends UIForm {
      */
     public void execute(Event<UIPublicationAction> event) throws Exception {
       UIPublicationAction publicationAction = event.getSource();
-      UIPublicationPages publishingPanel = publicationAction.getAncestorOfType(UIPublicationPages.class);
+      UIPublicationPages publicationPages = publicationAction.getAncestorOfType(UIPublicationPages.class);
       UIApplication application = publicationAction.getAncestorOfType(UIApplication.class);
       
-      UIPortalNavigationExplorer portalNavigationExplorer = publishingPanel.getChild(UIPortalNavigationExplorer.class);
+      UIPortalNavigationExplorer portalNavigationExplorer = publicationPages.getChild(UIPortalNavigationExplorer.class);
       TreeNode selectedNode = portalNavigationExplorer.getSelectedNode();
       
       if (selectedNode == null) {
@@ -115,7 +115,7 @@ public class UIPublicationAction extends UIForm {
       }
       
       String selectedNavigationNodeURI = selectedNode.getUri();
-      Node node = publishingPanel.getNode();
+      Node node = publicationPages.getNode();
       if (node.hasProperty("publication:navigationNodeURIs")) {
         Value[] navigationNodeURIs = node.getProperty("publication:navigationNodeURIs").getValues();
         for (Value navigationNodeURI : navigationNodeURIs) {
@@ -141,6 +141,9 @@ public class UIPublicationAction extends UIForm {
       publicationPlugin.publishContentToPage(node, page);
       
       publicationAction.updateUI();
+      
+      UIPublicationContainer publicationContainer = publicationAction.getAncestorOfType(UIPublicationContainer.class);
+      publicationContainer.setActiveTab(publicationPages, event.getRequestContext());
     }
   }
 
@@ -162,10 +165,10 @@ public class UIPublicationAction extends UIForm {
      */
     public void execute(Event<UIPublicationAction> event) throws Exception {
       UIPublicationAction publicationAction = event.getSource();
-      UIPublicationPages publishingPanel = publicationAction.getAncestorOfType(UIPublicationPages.class);
+      UIPublicationPages publicationPages = publicationAction.getAncestorOfType(UIPublicationPages.class);
       UserPortalConfigService userPortalConfigService = publicationAction.getApplicationComponent(UserPortalConfigService.class);
       
-      UIPublishedPages publishedPages = publishingPanel.getChild(UIPublishedPages.class);
+      UIPublishedPages publishedPages = publicationPages.getChild(UIPublishedPages.class);
       DataStorage dataStorage = publicationAction.getApplicationComponent(DataStorage.class);
       String selectedNavigationNodeURI = publishedPages.getSelectedNavigationNodeURI();
       
@@ -186,7 +189,7 @@ public class UIPublicationAction extends UIForm {
         pageNavigation = PageNavigation.class.cast(object);
       }
       if (pageNavigation != null) {
-        Node contentNode = publishingPanel.getNode();
+        Node contentNode = publicationPages.getNode();
         if (contentNode.hasProperty("publication:applicationIDs")) {
           PageNode pageNode = pageNavigation.getNode(pageNodeUri);
           page = userPortalConfigService.getPage(pageNode.getPageReference(), event.getRequestContext().getRemoteUser());
@@ -195,9 +198,12 @@ public class UIPublicationAction extends UIForm {
       
       WCMPublicationService presentationService = publicationAction.getApplicationComponent(WCMPublicationService.class);
       StageAndVersionBasedPublicationPlugin publicationPlugin = (StageAndVersionBasedPublicationPlugin) presentationService.getWebpagePublicationPlugins().get(Constant.LIFECYCLE_NAME);
-      publicationPlugin.suspendPublishedContentFromPage(publishingPanel.getNode(), page);
+      publicationPlugin.suspendPublishedContentFromPage(publicationPages.getNode(), page);
       
       publicationAction.updateUI();
+      
+      UIPublicationContainer publicationContainer = publicationAction.getAncestorOfType(UIPublicationContainer.class);
+      publicationContainer.setActiveTab(publicationPages, event.getRequestContext());
     }
   }
 }

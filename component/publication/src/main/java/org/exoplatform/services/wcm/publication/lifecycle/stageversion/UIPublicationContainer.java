@@ -31,6 +31,7 @@ import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIPopupComponent;
@@ -92,6 +93,15 @@ public class UIPublicationContainer extends UIForm implements UIPopupComponent {
     }
 
     return null;
+  }
+  
+  public void setActiveTab(UIComponent component, WebuiRequestContext context) {
+    for (UIComponent child : getChildren()) {
+      child.setRendered(false);
+    }
+    component.setRendered(true);
+    setSelectedTab(component.getId());
+    context.addUIComponentToUpdateByAjax(this);
   }
   
   private List<String> getRunningPortals(String userId) throws Exception {

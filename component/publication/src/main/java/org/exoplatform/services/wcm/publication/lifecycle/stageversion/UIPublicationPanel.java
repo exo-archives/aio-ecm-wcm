@@ -37,7 +37,6 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
-import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
@@ -191,6 +190,8 @@ public class UIPublicationPanel extends UIForm {
         UIApplication uiApp = publicationPanel.getAncestorOfType(UIApplication.class);
         JCRExceptionManager.process(uiApp,e);
       }
+      UIPublicationContainer publicationContainer = publicationPanel.getAncestorOfType(UIPublicationContainer.class);
+      publicationContainer.setActiveTab(publicationPanel, event.getRequestContext());
     }
   } 
 
@@ -215,7 +216,7 @@ public class UIPublicationPanel extends UIForm {
       }
       UIPublicationContainer publicationContainer = publicationPanel.getAncestorOfType(UIPublicationContainer.class);
       publicationPanel.setRevisions(publicationPanel.getLatestRevisions(3, currentNode));
-      event.getRequestContext().addUIComponentToUpdateByAjax(publicationContainer);
+      publicationContainer.setActiveTab(publicationPanel, event.getRequestContext());
     }
   } 
 
@@ -237,6 +238,8 @@ public class UIPublicationPanel extends UIForm {
         UIApplication uiApp = publicationPanel.getAncestorOfType(UIApplication.class);
         JCRExceptionManager.process(uiApp,e);
       }
+      UIPublicationContainer publicationContainer = publicationPanel.getAncestorOfType(UIPublicationContainer.class);
+      publicationContainer.setActiveTab(publicationPanel, event.getRequestContext());
     }
   } 
 
@@ -246,6 +249,8 @@ public class UIPublicationPanel extends UIForm {
       String versionUUID = event.getRequestContext().getRequestParameter(OBJECTID);
       Node revision = publicationPanel.getRevisionByUUID(versionUUID);
       publicationPanel.setCurrentRevision(revision);
+      UIPublicationContainer publicationContainer = publicationPanel.getAncestorOfType(UIPublicationContainer.class);
+      publicationContainer.setActiveTab(publicationPanel, event.getRequestContext());
     }
   } 
 
@@ -270,19 +275,14 @@ public class UIPublicationPanel extends UIForm {
       }
       if (publicationContainer.getChildById("UIVersionViewer") == null) publicationContainer.addChild(versionViewer);
       else publicationContainer.replaceChild("UIVersionViewer", versionViewer);
-      for (UIComponent component : publicationContainer.getChildren()) {
-        component.setRendered(false);
-      }
-      versionViewer.setRendered(true);
-      publicationContainer.setSelectedTab("UIVersionViewer");
-      event.getRequestContext().addUIComponentToUpdateByAjax(publicationContainer);
+      publicationContainer.setActiveTab(versionViewer, event.getRequestContext());
     }
   }
 
   public static class RestoreVersionActionListener extends EventListener<UIPublicationPanel> {
     public void execute(Event<UIPublicationPanel> event) throws Exception {
       System.out.println("------------------------------------------------> RestoreVersionActionListener");
-//    UIPublicationPanel publicationPanel = event.getSource();
+    UIPublicationPanel publicationPanel = event.getSource();
 
 //    Node currentNode = publicationPanel.getCurrentNode();
 //    if(currentNode.isLocked()) {
@@ -296,6 +296,8 @@ public class UIPublicationPanel extends UIForm {
 
 //    if(!currentNode.isCheckedOut()) currentNode.checkout() ;
 //    currentNode.getSession().save() ;
+      UIPublicationContainer publicationContainer = publicationPanel.getAncestorOfType(UIPublicationContainer.class);
+      publicationContainer.setActiveTab(publicationPanel, event.getRequestContext());
     }
   }
 
@@ -303,7 +305,8 @@ public class UIPublicationPanel extends UIForm {
     public void execute(Event<UIPublicationPanel> event) throws Exception {
       UIPublicationPanel publicationPanel = event.getSource();
       publicationPanel.setRevisions(publicationPanel.getAllRevisions(publicationPanel.getCurrentNode()));
-      event.getRequestContext().addUIComponentToUpdateByAjax(publicationPanel);
+      UIPublicationContainer publicationContainer = publicationPanel.getAncestorOfType(UIPublicationContainer.class);
+      publicationContainer.setActiveTab(publicationPanel, event.getRequestContext());
     }
   } 
 

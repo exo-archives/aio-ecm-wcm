@@ -259,6 +259,10 @@ public class UIPortalNavigationExplorer extends UIContainer{
       String uri = event.getRequestContext().getRequestParameter(OBJECTID);
       UIPortalNavigationExplorer portalNavigationExplorer = event.getSource();
       portalNavigationExplorer.selectTreeNodeByUri(uri);
+      
+      UIPublicationContainer publicationContainer = portalNavigationExplorer.getAncestorOfType(UIPublicationContainer.class);
+      UIPublicationPages publicationPages = portalNavigationExplorer.getAncestorOfType(UIPublicationPages.class);
+      publicationContainer.setActiveTab(publicationPages, event.getRequestContext());
     }
   }
 
