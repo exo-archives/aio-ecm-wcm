@@ -44,9 +44,9 @@ public class PostEditContentEventListener extends Listener<CmsService,Node> {
     if(!Constant.LIFECYCLE_NAME.equalsIgnoreCase(lifecycle))
       return;    
     String state = pservice.getCurrentState(currentNode);
-    if(!Constant.ENROLLED.equalsIgnoreCase(state))
+    if(!Constant.ENROLLED_STATE.equalsIgnoreCase(state))
       return;
-    pservice.changeState(currentNode,Constant.DRAFT,new HashMap<String,String>());
+    pservice.changeState(currentNode,Constant.DRAFT_STATE,new HashMap<String,String>());
   }
 
 }

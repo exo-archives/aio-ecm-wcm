@@ -84,8 +84,8 @@ public class StateAndVersionPublicationHandler extends BaseWebSchemaHandler {
     if(!Constant.LIFECYCLE_NAME.equalsIgnoreCase(lifecycle))   
       return;
     String currentState = publicationService.getCurrentState(checkNode);
-    if(!Constant.ENROLLED.equalsIgnoreCase(currentState))
+    if(!Constant.ENROLLED_STATE.equalsIgnoreCase(currentState))
       return;
-    publicationService.changeState(checkNode,Constant.DRAFT,new HashMap<String,String>());
+    publicationService.changeState(checkNode,Constant.DRAFT_STATE,new HashMap<String,String>());
   }
 }

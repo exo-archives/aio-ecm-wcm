@@ -22,29 +22,35 @@ package org.exoplatform.services.wcm.publication.lifecycle.stageversion;
  *          hoa.phamvu@exoplatform.com
  * Mar 4, 2009  
  */
-public interface Constant {  
-  public static final String CURRENT_STATE = "publication:currentState".intern();  
-  public static final String ENROLLED = "enrolled".intern(); 
-  public static final String DRAFT = "draft".intern();
+public interface Constant {
+  //Publication lifecycle
+  public static final String ENROLLED_STATE = "enrolled".intern(); 
+  public static final String DRAFT_STATE = "draft".intern();
   public static final String AWAITING = "awaiting".intern();
-  public static final String LIVE = "live".intern();
-  public static final String OBSOLETE = "obsolete".intern();  
+  public static final String LIVE_STATE = "live".intern();
+  public static final String OBSOLETE_STATE = "obsolete".intern();
+  //publication lifecycle definition
   public static final String PUBLICATION_LIFECYCLE_TYPE = "publication:stateAndVersionBasedPublication".intern();
-  public static final String LIFECYCLE_NAME = "States and versions based publication".intern();
-  public static final String PUBLICATION_LIFECYCLE_NAME = "publication:lifecycleName".intern();
-  public static final String MIX_VERSIONABLE = "mix:versionable".intern();
-  public static final String HISTORY = "publication:history".intern();
+  public static final String LIFECYCLE_NAME = "States and versions based publication".intern();   
   public static final String LOCALIZATION = "artifacts.lifecycle.StageAndVersionPublication".intern();
+  //history log description
   public static final String ENROLLED_TO_LIFECYCLE = "Publication.log.enrolled".intern();
   public static final String CHANGE_TO_DRAFT = "Publication.log.change-to-draft-state".intern();
   public static final String CHANGE_TO_AWAITNG = "Publication.log.change-to-awaiting-state".intern();
   public static final String CHANGE_TO_LIVE = "Publication.log.change-to-live-state".intern();
   public static final String CHANGE_TO_OBSOLETE = "Publication.log.change-to-obsolete-state".intern();
-  public static final String CURRENT_REVISION_NAME = "Publication.context.currentVersion".intern();  
+  //properties, nodetype
+  public static final String PUBLICATION_LIFECYCLE_NAME = "publication:lifecycleName".intern();
+  public static final String CURRENT_STATE = "publication:currentState".intern();
+  public static final String MIX_VERSIONABLE = "mix:versionable".intern();
+  public static final String HISTORY = "publication:history".intern();
   public static final String LIVE_REVISION_PROP = "publication:liveRevision".intern();
   public static final String LIVE_DATE_PROP = "publication:liveDate".intern();  
   public static final String REVISION_DATA_PROP = "publication:revisionData".intern();
+  //context parameter name
   public static final String RUNTIME_MODE = "wcm.runtime.mode".intern();
-  public static enum MODE {LIVE_MODE, EDIT_MODE};
+  public static final String CURRENT_REVISION_NAME = "Publication.context.currentVersion".intern();
+  //runtime site mode
+  public static enum SITE_MODE {LIVE, EDITING};
   
 }

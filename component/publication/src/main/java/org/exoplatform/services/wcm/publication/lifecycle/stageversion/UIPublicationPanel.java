@@ -202,7 +202,7 @@ public class UIPublicationPanel extends UIForm {
         context.put(Constant.CURRENT_REVISION_NAME,currentRevision.getName()); 
       }      
       try {
-        publicationPlugin.changeState(currentNode,Constant.DRAFT,context);
+        publicationPlugin.changeState(currentNode,Constant.DRAFT_STATE,context);
         publicationPanel.updatePanel();
       } catch (Exception e) {
         e.printStackTrace();
@@ -226,7 +226,7 @@ public class UIPublicationPanel extends UIForm {
         context.put(Constant.CURRENT_REVISION_NAME,currentRevision.getName()); 
       }
       try {
-        publicationPlugin.changeState(currentNode,Constant.LIVE,context); 
+        publicationPlugin.changeState(currentNode,Constant.LIVE_STATE,context); 
         publicationPanel.updatePanel();
       } catch (Exception e) {
         e.printStackTrace();
@@ -250,7 +250,7 @@ public class UIPublicationPanel extends UIForm {
         context.put(Constant.CURRENT_REVISION_NAME,currentRevision.getName()); 
       }
       try {
-        publicationPlugin.changeState(currentNode,Constant.OBSOLETE,context); 
+        publicationPlugin.changeState(currentNode,Constant.OBSOLETE_STATE,context); 
         publicationPanel.updatePanel();
       } catch (Exception e) {
         UIApplication uiApp = publicationPanel.getAncestorOfType(UIApplication.class);
