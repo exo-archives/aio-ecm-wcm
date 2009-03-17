@@ -32,9 +32,10 @@ public class VersionLog extends VersionData {
   private String description;  
   
   public VersionLog(String versionName, String state, String author, Calendar logDate, String description) {
-    super(versionName, state, author, null,null);
+    super(null, state, author, null,null);
     this.logDate = logDate;
-    this.description = description;    
+    this.description = description;
+    this.versionName = versionName;
   }    
 
   public Calendar getLogDate() {

@@ -22,6 +22,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.Session;
@@ -55,7 +56,7 @@ import org.exoplatform.webui.form.UIForm;
     events = {
       @EventConfig(listeners=UIPublicationPanel.DraftActionListener.class),
       @EventConfig(listeners=UIPublicationPanel.LiveActionListener.class),
-      @EventConfig(listeners=UIPublicationPanel.ObsoleteActionListener.class),
+      @EventConfig(name= "obsolete", listeners= UIPublicationPanel.ObsoleteActionListener.class),
       @EventConfig(listeners=UIPublicationPanel.ChangeVersionActionListener.class),
       @EventConfig(listeners=UIPublicationPanel.PreviewVersionActionListener.class),
       @EventConfig(listeners=UIPublicationPanel.RestoreVersionActionListener.class),
@@ -66,29 +67,19 @@ import org.exoplatform.webui.form.UIForm;
 
 public class UIPublicationPanel extends UIForm {
 
-  private Node currentRevision;
-  private List<Node> viewedRevisions = new ArrayList<Node>(3);  
   private Node currentNode;
-
+  private Node currentRevision;  
+  private Map<String,VersionData> revisionsDataMap = new HashMap<String,VersionData>();
+  private List<Node> viewedRevisions = new ArrayList<Node>(3);
   public UIPublicationPanel() throws Exception {}
-
+  
   public void init(Node node) throws Exception {
     this.currentNode = node;    
     this.currentRevision = node;
-    this.viewedRevisions = getLatestRevisions(3,node);
+    this.viewedRevisions = getLatestRevisions(3,node);    
+    this.revisionsDataMap = getRevisionData(node);
   }
-
-  public List<Node> getLatestRevisions(int limit, Node node) throws Exception {
-    List<Node> allversions = getAllRevisions(node);
-    List<Node> latestVersions = new ArrayList<Node>();
-    if(allversions.size() > limit) {
-      latestVersions = allversions.subList(0, limit);
-    } else {
-      latestVersions = allversions;
-    }
-    return latestVersions;
-  }
-
+  
   public List<Node> getAllRevisions(Node node) throws Exception {
     List<Node> allversions = new ArrayList<Node>();
     VersionIterator iterator = node.getVersionHistory().getAllVersions();
@@ -101,56 +92,22 @@ public class UIPublicationPanel extends UIForm {
     allversions.add(node);
     Collections.reverse(allversions);
     return allversions;
+  }  
+
+  public Node getCurrentNode() { return currentNode; }
+
+  public Node getCurrentRevision() { return currentRevision; }
+
+  public String getRevisionAuthor(Node revision) throws Exception{
+    VersionData revisionData = revisionsDataMap.get(revision.getUUID());
+    if(revisionData!= null)
+      return revisionData.getAuthor();
+    return null;
   }
 
   public Node getRevisionByUUID(String revisionUUID) throws Exception {
     Session session = currentNode.getSession();
     return session.getNodeByUUID(revisionUUID);
-  }
-
-  public List<Node> getRevisions() {
-    return viewedRevisions;    
-  }
-
-  public void setRevisions(List<Node> revisions) {
-    this.viewedRevisions = revisions;
-  }
-
-  public Node getCurrentRevision() { return currentRevision; }
-  public void setCurrentRevision(Node revision) { this.currentRevision = revision; }
-  public Node getCurrentNode() { return currentNode; }
-
-  public String getRevisionState(Node revision) throws Exception{
-    if(revision instanceof Version) {
-      Value referenceValue = revision.getSession().getValueFactory().createValue(revision);
-      Value liveRevision = getLiveRevision();
-      if(referenceValue.equals(liveRevision))
-        return Constant.LIVE;
-      Value[] obsoleteRevisions = getObsoleteRevisions();
-      if(ArrayUtils.contains(obsoleteRevisions,referenceValue))
-        return Constant.OBSOLETE;
-    }
-    return revision.getProperty(Constant.CURRENT_STATE).getString();    
-  }
-
-  private Value getLiveRevision() {
-    try {
-      return currentNode.getProperty(Constant.LIVE_REVISION_PROP).getValue();
-    } catch (Exception e) {
-      return null;
-    }
-  }
-
-  private Value[] getObsoleteRevisions() {
-    try {
-      return currentNode.getProperty(Constant.OBSOLETE_REVISIONS_PROP).getValues();
-    } catch (Exception e) {
-      return new Value[] {} ;
-    }
-  }
-
-  public String getRevisionAuthor(Node revision) {
-    return "Root";
   }
 
   public String getRevisionCreatedDate(Node revision) throws Exception {
@@ -165,11 +122,73 @@ public class UIPublicationPanel extends UIForm {
     return dateFormater.format(calendar.getTime());
   }
 
-  private void updateHistoryLog() throws Exception {
+  public List<Node> getRevisions() {
+    return viewedRevisions;    
+  }
+  public String getRevisionState(Node revision) throws Exception{
+    VersionData revisionData = revisionsDataMap.get(revision.getUUID());
+    if(revisionData!= null)
+      return revisionData.getState();
+    return null;
+  }    
+
+  public void setCurrentRevision(Node revision) { this.currentRevision = revision; }
+
+  public void setRevisions(List<Node> revisions) {
+    this.viewedRevisions = revisions;
+  }
+
+  public void updatePanel() throws Exception{     
     UIPublicationContainer publicationContainer = getAncestorOfType(UIPublicationContainer.class);
     UIPublicationHistory publicationHistory = publicationContainer.getChild(UIPublicationHistory.class);
     publicationHistory.updateGrid();
+    this.revisionsDataMap = getRevisionData(currentNode);
+    this.viewedRevisions = getLatestRevisions(3,currentNode);
   }
+
+  private List<Node> getLatestRevisions(int limit, Node node) throws Exception {
+    List<Node> allversions = getAllRevisions(node);
+    List<Node> latestVersions = new ArrayList<Node>();
+    if(allversions.size() > limit) {
+      latestVersions = allversions.subList(0, limit);
+    } else {
+      latestVersions = allversions;
+    }
+    return latestVersions;
+  }
+
+  private Map<String, VersionData> getRevisionData(Node node) throws Exception{
+    Map<String,VersionData> map = new HashMap<String,VersionData>();    
+    try {
+      for(Value v: node.getProperty(Constant.REVISION_DATA_PROP).getValues()) {
+        VersionData versionData = VersionData.toVersionData(v.getString());        
+        map.put(versionData.getUUID(),versionData);;
+      }
+    } catch (Exception e) {
+      return map;
+    }
+    return map;
+  }   
+  
+  public static class ChangeVersionActionListener extends EventListener<UIPublicationPanel> {
+    public void execute(Event<UIPublicationPanel> event) throws Exception {
+      UIPublicationPanel publicationPanel = event.getSource();
+      String versionUUID = event.getRequestContext().getRequestParameter(OBJECTID);
+      Node revision = publicationPanel.getRevisionByUUID(versionUUID);
+      publicationPanel.setCurrentRevision(revision);
+      UIPublicationContainer publicationContainer = publicationPanel.getAncestorOfType(UIPublicationContainer.class);
+      publicationContainer.setActiveTab(publicationPanel, event.getRequestContext());
+    }
+  } 
+
+  public static class CloseActionListener extends EventListener<UIPublicationPanel> {
+    public void execute(Event<UIPublicationPanel> event) throws Exception {
+      UIPublicationPanel publicationPanel = event.getSource();
+      UIPopupContainer uiPopupContainer = (UIPopupContainer) publicationPanel.getAncestorOfType(UIPopupContainer.class);
+      uiPopupContainer.deActivate();
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupContainer);
+    }
+  } 
 
   public static class DraftActionListener extends EventListener<UIPublicationPanel> {
     public void execute(Event<UIPublicationPanel> event) throws Exception {
@@ -184,7 +203,7 @@ public class UIPublicationPanel extends UIForm {
       }      
       try {
         publicationPlugin.changeState(currentNode,Constant.DRAFT,context);
-        publicationPanel.updateHistoryLog();
+        publicationPanel.updatePanel();
       } catch (Exception e) {
         e.printStackTrace();
         UIApplication uiApp = publicationPanel.getAncestorOfType(UIApplication.class);
@@ -208,14 +227,13 @@ public class UIPublicationPanel extends UIForm {
       }
       try {
         publicationPlugin.changeState(currentNode,Constant.LIVE,context); 
-        publicationPanel.updateHistoryLog();
+        publicationPanel.updatePanel();
       } catch (Exception e) {
         e.printStackTrace();
         UIApplication uiApp = publicationPanel.getAncestorOfType(UIApplication.class);
         JCRExceptionManager.process(uiApp,e);
       }
-      UIPublicationContainer publicationContainer = publicationPanel.getAncestorOfType(UIPublicationContainer.class);
-      publicationPanel.setRevisions(publicationPanel.getLatestRevisions(3, currentNode));
+      UIPublicationContainer publicationContainer = publicationPanel.getAncestorOfType(UIPublicationContainer.class);      
       publicationContainer.setActiveTab(publicationPanel, event.getRequestContext());
     }
   } 
@@ -233,7 +251,7 @@ public class UIPublicationPanel extends UIForm {
       }
       try {
         publicationPlugin.changeState(currentNode,Constant.OBSOLETE,context); 
-        publicationPanel.updateHistoryLog();
+        publicationPanel.updatePanel();
       } catch (Exception e) {
         UIApplication uiApp = publicationPanel.getAncestorOfType(UIApplication.class);
         JCRExceptionManager.process(uiApp,e);
@@ -241,19 +259,8 @@ public class UIPublicationPanel extends UIForm {
       UIPublicationContainer publicationContainer = publicationPanel.getAncestorOfType(UIPublicationContainer.class);
       publicationContainer.setActiveTab(publicationPanel, event.getRequestContext());
     }
-  } 
-
-  public static class ChangeVersionActionListener extends EventListener<UIPublicationPanel> {
-    public void execute(Event<UIPublicationPanel> event) throws Exception {
-      UIPublicationPanel publicationPanel = event.getSource();
-      String versionUUID = event.getRequestContext().getRequestParameter(OBJECTID);
-      Node revision = publicationPanel.getRevisionByUUID(versionUUID);
-      publicationPanel.setCurrentRevision(revision);
-      UIPublicationContainer publicationContainer = publicationPanel.getAncestorOfType(UIPublicationContainer.class);
-      publicationContainer.setActiveTab(publicationPanel, event.getRequestContext());
-    }
-  } 
-
+  }  
+  
   public static class PreviewVersionActionListener extends EventListener<UIPublicationPanel> {
     public void execute(Event<UIPublicationPanel> event) throws Exception {
       UIPublicationPanel publicationPanel = event.getSource();
@@ -299,7 +306,7 @@ public class UIPublicationPanel extends UIForm {
       UIPublicationContainer publicationContainer = publicationPanel.getAncestorOfType(UIPublicationContainer.class);
       publicationContainer.setActiveTab(publicationPanel, event.getRequestContext());
     }
-  }
+  } 
 
   public static class SeeAllVersionActionListener extends EventListener<UIPublicationPanel> {
     public void execute(Event<UIPublicationPanel> event) throws Exception {
@@ -307,15 +314,6 @@ public class UIPublicationPanel extends UIForm {
       publicationPanel.setRevisions(publicationPanel.getAllRevisions(publicationPanel.getCurrentNode()));
       UIPublicationContainer publicationContainer = publicationPanel.getAncestorOfType(UIPublicationContainer.class);
       publicationContainer.setActiveTab(publicationPanel, event.getRequestContext());
-    }
-  } 
-
-  public static class CloseActionListener extends EventListener<UIPublicationPanel> {
-    public void execute(Event<UIPublicationPanel> event) throws Exception {
-      UIPublicationPanel publicationPanel = event.getSource();
-      UIPopupContainer uiPopupContainer = (UIPopupContainer) publicationPanel.getAncestorOfType(UIPopupContainer.class);
-      uiPopupContainer.deActivate();
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupContainer);
     }
   } 
 }

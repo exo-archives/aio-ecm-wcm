@@ -28,22 +28,23 @@ import org.exoplatform.commons.utils.ISO8601;
  * Mar 4, 2009  
  */
 public class VersionData {
+  protected String UUID;  
   protected String versionName;
   protected String state;
   protected String author;
   protected Calendar startPublicationDate;
   protected Calendar endPublicationDate;
 
-  public VersionData(String versionName, String state, String author, Calendar startPublicationDate, Calendar endPublicationDate) {
-    this.versionName = versionName;
+  public VersionData(String uuid, String state, String author, Calendar startPublicationDate, Calendar endPublicationDate) {
+    this.UUID = uuid;
     this.state = state;
     this.author = author;
     this.startPublicationDate = startPublicationDate;
     this.endPublicationDate = endPublicationDate;
   }
   
-  public VersionData(String versionName, String state, String author) {
-    this.versionName = versionName;
+  public VersionData(String uuid, String state, String author) {
+    this.UUID = uuid;
     this.state = state;
     this.author = author;
     this.startPublicationDate = null;
@@ -86,10 +87,25 @@ public class VersionData {
   }
 
   public String[] toStringValues() {
-    return new String[] { versionName, state, author, ISO8601.format(startPublicationDate), ISO8601.format(endPublicationDate)} ;
+    return new String[] { versionName, state, author} ;
+  }
+  
+  public String toStringValue() {
+    StringBuilder builder = new StringBuilder();
+    builder.append(UUID).append(",").append(state).append(",").append(author);           
+    return builder.toString();
+  }
+  public static VersionData toVersionData(String s) {
+    String[] info = s.split(",");
+    return new VersionData(info[0],info[1],info[2]);
   }
 
-  public static VersionData toVersionData(String[] info) {
-    return new VersionData(info[0],info[1],info[2], ISO8601.parse(info[3]),ISO8601.parse(info[4]));        
+  public String getUUID() {
+    return UUID;
   }
+
+  public void setUUID(String uuid) {
+    UUID = uuid;
+  }  
+  
 }

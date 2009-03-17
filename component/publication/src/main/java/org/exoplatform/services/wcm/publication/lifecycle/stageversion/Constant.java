@@ -42,6 +42,9 @@ public interface Constant {
   public static final String CHANGE_TO_OBSOLETE = "Publication.log.change-to-obsolete-state".intern();
   public static final String CURRENT_REVISION_NAME = "Publication.context.currentVersion".intern();  
   public static final String LIVE_REVISION_PROP = "publication:liveRevision".intern();
-  public static final String LIVE_DATE_PROP = "publication:liveDate".intern();
-  public static final String OBSOLETE_REVISIONS_PROP = "publication:obsoleteRevisions".intern();  
+  public static final String LIVE_DATE_PROP = "publication:liveDate".intern();  
+  public static final String REVISION_DATA_PROP = "publication:revisionData".intern();
+  public static final String RUNTIME_MODE = "wcm.runtime.mode".intern();
+  public static enum MODE {LIVE_MODE, EDIT_MODE};
+  
 }
