@@ -7,6 +7,20 @@
 	def String jsFormId = "ContentJS[" + uicomponent.hashCode() + "]";
 	rcontext.getJavascriptManager().importJavascript('eXo.wcm.Util' , "/eXoWCMResources/javascript");
 	rcontext.getJavascriptManager().addOnLoadJavascript("wcm.insertCSSFromTextArea2FCK('" + htmlWYSIWYGFormId + "', '" + cssFormId + "')");
+	private void setUploadFields() {
+			String[] illustrationHiddenField1 = ["jcrPath=/node/medias/images/illustration", "nodetype=nt:file", "defaultValues=illustration"];
+			String[] illustrationHiddenField2 = ["jcrPath=/node/medias/images/illustration/jcr:content", "nodetype=nt:resource", "mixintype=dc:elementSet", "visible=false"]; 
+			String[] illustrationHiddenField3 = ["jcrPath=/node/medias/images/illustration/jcr:content/jcr:encoding", "visible=false", "UTF-8"];  
+			String[] illustrationHiddenField4 = ["jcrPath=/node/medias/images/illustration/jcr:content/jcr:lastModified", "visible=false"];
+			String[] illustrationHiddenField5 = ["jcrPath=/node/medias/images/illustration/jcr:content/dc:date", "visible=false"];									
+			uicomponent.addHiddenField("illustrationHiddenField1", illustrationHiddenField1);
+			uicomponent.addHiddenField("illustrationHiddenField2", illustrationHiddenField2);
+			uicomponent.addHiddenField("illustrationHiddenField3", illustrationHiddenField3);
+			uicomponent.addCalendarField("illustrationHiddenField4", illustrationHiddenField4);
+			uicomponent.addCalendarField("illustrationHiddenField5", illustrationHiddenField5);			
+   		String[] fieldImage = ["jcrPath=/node/medias/images/illustration/jcr:content/jcr:data"] ;
+      uicomponent.addUploadField("illustration", fieldImage) ;	
+	}	
 %>
 <style>
 	.UIForm .HorizontalLayout .textarea { 
@@ -165,16 +179,6 @@
 								<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.illustrationImage")%></td>
 								<td class="FieldComponent">
 								<%
-									String[] illustrationHiddenField1 = ["jcrPath=/node/medias/images/illustration", "nodetype=nt:file", "defaultValues=illustration"];
-									String[] illustrationHiddenField2 = ["jcrPath=/node/medias/images/illustration/jcr:content", "nodetype=nt:resource", "mixintype=dc:elementSet", "visible=false"]; 
-									String[] illustrationHiddenField3 = ["jcrPath=/node/medias/images/illustration/jcr:content/jcr:encoding", "visible=false", "UTF-8"];  
-									String[] illustrationHiddenField4 = ["jcrPath=/node/medias/images/illustration/jcr:content/jcr:lastModified", "visible=false"];
-									String[] illustrationHiddenField5 = ["jcrPath=/node/medias/images/illustration/jcr:content/dc:date", "visible=false"];									
-									uicomponent.addHiddenField("illustrationHiddenField1", illustrationHiddenField1);
-									uicomponent.addHiddenField("illustrationHiddenField2", illustrationHiddenField2);
-									uicomponent.addHiddenField("illustrationHiddenField3", illustrationHiddenField3);
-									uicomponent.addCalendarField("illustrationHiddenField4", illustrationHiddenField4);
-									uicomponent.addCalendarField("illustrationHiddenField5", illustrationHiddenField5);									
 									if(uicomponent.isEditing()) { 
 										def curNode = uicomponent.getNode() ;
 										if(curNode.hasNode("medias/images/illustration")) {
@@ -192,16 +196,11 @@
 										</div>
 										<%
 											} else {
-									   		String[] fieldImage = ["jcrPath=/node/medias/images/illustration/jcr:content/jcr:data"] ;
-									      uicomponent.addUploadField("illustration", fieldImage) ;								
+													setUploadFields();
 												}
 											}
-										} else if(uicomponent.dataRemoved()) {
-							        String[] fieldImage = ["jcrPath=/node/medias/images/illustration/jcr:content/jcr:data"] ;
-							        uicomponent.addUploadField("image", fieldImage) ;						
-										}	else {
-							        String[] fieldImage = ["jcrPath=/node/medias/images/illustration/jcr:content/jcr:data"] ;
-							        uicomponent.addUploadField("image", fieldImage) ;
+										} else {										
+											setUploadFields();
 										}																											 						
 									%>
 								</td>
