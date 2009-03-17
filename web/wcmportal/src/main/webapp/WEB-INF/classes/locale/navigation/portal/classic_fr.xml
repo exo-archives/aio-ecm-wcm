@@ -12,6 +12,7 @@
       <sitemap>Plan du site</sitemap>
       <parameterizedviewer>Visualiseur de contenu paramétré</parameterizedviewer>
       <viewer>Visualiseurs</viewer>
+      <printviewer></printviewer>
     </classic>
   </portal>
 </bundle>

@@ -12,6 +12,7 @@
       <contentviewer>Visualiseur de contenu simple</contentviewer>
       <parameterizedviewer>Visualiseur de contenus multiple</parameterizedviewer>
       <searchResult>Résultats de recherche</searchResult>
+      <printviewer></printviewer>
     </acme>
   </portal>
 </bundle>
