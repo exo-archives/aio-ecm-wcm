@@ -686,13 +686,6 @@ public class UISiteAdminToolbar extends UIContainer {
       ArrayList<Object> listPortlet = page.getChildren();
       listPortlet.add(PortalDataMapper.toPortletModel(uiPortlet));
       page.setChildren(listPortlet);
-      for (String permission: page.getAccessPermissions()) {
-        System.out.println("======> permission: " + permission);
-      }
-      System.out.println("============> uiPage.getOwnerId(): " + page.getOwnerId());
-      System.out.println("============> uiPage.getOwnerType(): " + page.getOwnerType());
-      System.out.println("=============> uiPage.getName(): "+ page.getName());
-      System.out.println("=============> uiPage.getEditPermission(): "+ page.getEditPermission());
       userPortalConfigService.update(page);
       UIPage uiPage = uiPortal.findFirstComponentOfType(UIPage.class);
       uiPage.setChildren(null);
