@@ -30,7 +30,7 @@ import org.exoplatform.webui.application.portlet.PortletRequestContext;
  * Oct 23, 2008
  */
 public class Utils {
-  
+
   public static final String TURN_ON_QUICK_EDIT = "turnOnQuickEdit";
 
   /**
@@ -78,7 +78,7 @@ public class Utils {
     MembershipEntry membershipEntry = MembershipEntry.parse(editPermission);
     return identity.isMemberOf(membershipEntry);
   }
-  
+
   public static boolean turnOnQuickEditable(PortletRequestContext context, boolean showAblePref) throws Exception {
     Object obj = Util.getPortalRequestContext().getRequest().getSession().getAttribute(Utils.TURN_ON_QUICK_EDIT);    
     boolean turnOnFlag = false;
@@ -90,6 +90,13 @@ public class Utils {
       return true;
     } 
     return false;
+  }
+
+  public static boolean isLiveMode() {
+    Object obj = Util.getPortalRequestContext().getRequest().getSession().getAttribute(Utils.TURN_ON_QUICK_EDIT);
+    if(obj == null)
+      return true;          
+    return Boolean.parseBoolean(obj.toString());     
   }
   
 }
