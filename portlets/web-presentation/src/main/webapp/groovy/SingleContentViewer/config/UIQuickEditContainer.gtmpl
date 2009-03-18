@@ -7,8 +7,15 @@
 	def rcontext = _ctx.getRequestContext() ; 		
 %>
 <div class="QuickEditContainer" id="$uicomponent.id">
-		<div class="QuickEditBackButton">
-	  	<a href="<%=uicomponent.event("BackToNormalWizard")%>"><%= _ctx.appRes("UIQuickEditContainer.back") %></a>
-		</div>
+		
+		<% String stepInfoTitle =  _ctx.appRes(uicomponent.getId() + ".label.stepInfo"); %>
+    <div title="$stepInfoTitle" class="LeftShowStepInfo" onclick="<%=uicomponent.event("BackToNormalWizard")%>">
+      <div class="RightShowStepInfo">
+        <div class="MiddleShowStepInfo">
+          <%= _ctx.appRes("UIQuickEditContainer.back") %>
+        </div>
+      </div>
+    </div>
+		<div style="clear: right"><span></span></div>
 		<% uicomponent.renderChildren() %>
 </div>
