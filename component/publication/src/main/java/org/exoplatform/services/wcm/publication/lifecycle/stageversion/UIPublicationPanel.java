@@ -312,6 +312,12 @@ public class UIPublicationPanel extends UIForm {
     Version version = (Version)publicationPanel.getRevisionByUUID(versionUUID);
     try {
       currentNode.restore(version,true);
+      if(!currentNode.isCheckedOut())
+        currentNode.checkout();
+      PublicationService publicationService = publicationPanel.getApplicationComponent(PublicationService.class);
+      PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(Constant.LIFECYCLE_NAME);
+      HashMap<String,String> context = new HashMap<String,String>();
+      publicationPlugin.changeState(currentNode,Constant.ENROLLED_STATE,context);
       publicationPanel.updatePanel();
     } catch (Exception e) {
       UIApplication uiApp = publicationPanel.getAncestorOfType(UIApplication.class);
