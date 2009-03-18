@@ -116,7 +116,7 @@
               <td>
                 <div class="Preview" onclick="<%= uicomponent.event("PreviewVersion", revision.getUUID()) %>"><span></span></div>
                 <%
-                  if (Constant.DRAFT.equals(state)) {
+                  if (Constant.DRAFT_STATE.equals(state)) {
                     %><div class="Restore" onclick="if (confirm('<%=_ctx.appRes("UIPublicationPanel.revisions.confirm")%>')) <%= uicomponent.event("RestoreVersion", revision.getUUID()) %>"><span></span></div><%
                   } else {
                     %><div class="Restore" onclick="<%= uicomponent.event("RestoreVersion", revision.getUUID()) %>"><span></span></div><%

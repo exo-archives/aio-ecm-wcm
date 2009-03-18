@@ -78,6 +78,19 @@ public class UIPublicationPanel extends UIForm {
     this.currentRevision = node;
     this.viewedRevisions = getLatestRevisions(3,node);    
     this.revisionsDataMap = getRevisionData(node);
+    //In somecases as copy a a node, we will lost all version of the node
+    //So we will clean all publication data
+    cleanPublicationData(node);
+  }
+  
+  private void cleanPublicationData(Node node) throws Exception {
+    if(viewedRevisions.size() == 1 && revisionsDataMap.size()>1) {
+      node.setProperty(Constant.REVISION_DATA_PROP,new Value[] {});
+      node.setProperty(Constant.HISTORY,new Value[] {});
+      node.setProperty(Constant.LIVE_REVISION_PROP,"");      
+      node.save();
+      this.revisionsDataMap = getRevisionData(node);
+    }
   }
   
   public List<Node> getAllRevisions(Node node) throws Exception {
@@ -102,6 +115,9 @@ public class UIPublicationPanel extends UIForm {
     VersionData revisionData = revisionsDataMap.get(revision.getUUID());
     if(revisionData!= null)
       return revisionData.getAuthor();
+    if(revision.getUUID().equalsIgnoreCase(currentNode.getUUID())) {
+      return currentNode.getProperty("exo:owner").getString();
+    }
     return null;
   }
 
@@ -129,6 +145,9 @@ public class UIPublicationPanel extends UIForm {
     VersionData revisionData = revisionsDataMap.get(revision.getUUID());
     if(revisionData!= null)
       return revisionData.getState();
+    if(revision.getUUID().equalsIgnoreCase(currentNode.getUUID())) {
+      return currentNode.getProperty(Constant.CURRENT_STATE).getString();
+    }
     return null;
   }    
 
@@ -228,8 +247,7 @@ public class UIPublicationPanel extends UIForm {
       try {
         publicationPlugin.changeState(currentNode,Constant.LIVE_STATE,context); 
         publicationPanel.updatePanel();
-      } catch (Exception e) {
-        e.printStackTrace();
+      } catch (Exception e) {        
         UIApplication uiApp = publicationPanel.getAncestorOfType(UIApplication.class);
         JCRExceptionManager.process(uiApp,e);
       }
@@ -287,22 +305,18 @@ public class UIPublicationPanel extends UIForm {
   }
 
   public static class RestoreVersionActionListener extends EventListener<UIPublicationPanel> {
-    public void execute(Event<UIPublicationPanel> event) throws Exception {
-      System.out.println("------------------------------------------------> RestoreVersionActionListener");
+    public void execute(Event<UIPublicationPanel> event) throws Exception {      
     UIPublicationPanel publicationPanel = event.getSource();
-
-//    Node currentNode = publicationPanel.getCurrentNode();
-//    if(currentNode.isLocked()) {
-//    String lockToken = LockUtil.getLockToken(currentNode);
-//    currentNode.getSession().addLockToken(lockToken) ;
-//    }
-
-//    String versionUUID = event.getRequestContext().getRequestParameter(OBJECTID);
-//    Version version = publicationPanel.getVersionByUUID(versionUUID);
-//    publicationPanel.getCurrentNode().restore(version, true);
-
-//    if(!currentNode.isCheckedOut()) currentNode.checkout() ;
-//    currentNode.getSession().save() ;
+    Node currentNode = publicationPanel.getCurrentNode();        
+    String versionUUID = event.getRequestContext().getRequestParameter(OBJECTID);
+    Version version = (Version)publicationPanel.getRevisionByUUID(versionUUID);
+    try {
+      currentNode.restore(version,true);
+      publicationPanel.updatePanel();
+    } catch (Exception e) {
+      UIApplication uiApp = publicationPanel.getAncestorOfType(UIApplication.class);
+      JCRExceptionManager.process(uiApp,e);
+    }        
       UIPublicationContainer publicationContainer = publicationPanel.getAncestorOfType(UIPublicationContainer.class);
       publicationContainer.setActiveTab(publicationPanel, event.getRequestContext());
     }

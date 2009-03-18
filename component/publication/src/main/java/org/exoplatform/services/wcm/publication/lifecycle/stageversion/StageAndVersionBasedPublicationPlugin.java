@@ -122,9 +122,9 @@ public class StageAndVersionBasedPublicationPlugin extends WebpagePublicationPlu
     } else if(Constant.LIVE_STATE.equals(newState)) {      
       Version liveVersion = node.checkin();
       node.checkout();
-      //Change current live revision to obsolete
-      if(node.hasProperty(Constant.LIVE_REVISION_PROP)) {
-        Node oldLiveRevision = node.getProperty(Constant.LIVE_REVISION_PROP).getNode();        
+      //Change current live revision to obsolete      
+      Node oldLiveRevision = getLiveRevision(node);
+      if(oldLiveRevision != null) {                
         VersionData versionData = revisionsMap.get(oldLiveRevision.getUUID());
         if(versionData != null) {
           versionData.setAuthor(userId);
@@ -184,8 +184,15 @@ public class StageAndVersionBasedPublicationPlugin extends WebpagePublicationPlu
     } catch (Exception e) {      
       return null;
     }
+  }    
+  
+  private Node getLiveRevision(Node  node) {
+    try {     
+      return node.getProperty(Constant.LIVE_REVISION_PROP).getNode();
+    } catch (Exception e) {      
+      return null;
+    }
   }
-
   private void addLog(Node node, VersionLog versionLog) throws Exception{
     Value[] values = node.getProperty(Constant.HISTORY).getValues();
     ValueFactory valueFactory = node.getSession().getValueFactory();
@@ -236,10 +243,9 @@ public class StageAndVersionBasedPublicationPlugin extends WebpagePublicationPlu
       runtimeMode = (SITE_MODE)mode;
     }
     Node viewNode = null;
-    try {
-      Node liveRevision = node.getProperty(Constant.LIVE_REVISION_PROP).getNode();
+    Node liveRevision = getLiveRevision(node);
+    if(liveRevision != null) {
       viewNode = liveRevision.getNode("jcr:frozenNode");
-    } catch (Exception e) {      
     }    
     if(runtimeMode == SITE_MODE.EDITING) {
       return viewNode;
