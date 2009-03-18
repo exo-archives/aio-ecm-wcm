@@ -18,6 +18,7 @@ package org.exoplatform.wcm.webui.clv;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.jcr.Node;
@@ -28,9 +29,14 @@ import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
+import org.exoplatform.services.ecm.publication.PublicationPlugin;
+import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant.SITE_MODE;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
@@ -51,7 +57,15 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 )
 public class UICorrectContentsViewer extends UIListViewerBase {
 
-  public void init() throws Exception {    
+  public void init() throws Exception {        
+    System.out.println("\n\n=========> GO INIT MANUAL\n");    
+    PublicationService publicationService = getApplicationComponent(PublicationService.class);    
+    HashMap<String, Object> context = new HashMap<String, Object>();
+    if(Utils.isLiveMode()) {
+      context.put(Constant.RUNTIME_MODE, SITE_MODE.LIVE);
+    } else {
+      context.put(Constant.RUNTIME_MODE, SITE_MODE.EDITING);
+    }    
     PortletPreferences portletPreferences = getPortletPreference();
     setViewAbleContent(true);
     String repository = portletPreferences.getValue(UIContentListViewerPortlet.REPOSITORY, null);
@@ -80,8 +94,12 @@ public class UICorrectContentsViewer extends UIListViewerBase {
         } catch (Exception e) {
           tempContents.remove(i);
         }
-        if (node != null)
-          nodes.add(node);
+        if (node != null) {          
+          String lifecyleName = publicationService.getNodeLifecycleName(node);
+          PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(lifecyleName);
+          Node viewNode = publicationPlugin.getNodeView(node, context);
+          if (viewNode != null) nodes.add(viewNode);       
+        }          
       }
     }
     if (nodes.size() == 0) {
@@ -92,7 +110,7 @@ public class UICorrectContentsViewer extends UIListViewerBase {
     if (tempContents.size() != contents.size()) {
       portletPreferences.setValues(UIContentListViewerPortlet.CONTENT_LIST, tempContents.toArray(new String[0]));      
       portletPreferences.store();
-    }    
+    }        
     ObjectPageList pageList = new ObjectPageList(nodes, itemsPerPage);
     UIContentListPresentation contentListPresentation = addChild(UIContentListPresentation.class, null, null);
     String templatePath = getFormViewTemplatePath();
@@ -101,6 +119,6 @@ public class UICorrectContentsViewer extends UIListViewerBase {
     contentListPresentation.setContentColumn(portletPreferences.getValue(UIContentListViewerPortlet.HEADER, null));
     contentListPresentation.setShowHeader(Boolean.parseBoolean(portletPreferences.getValue(UIContentListViewerPortlet.SHOW_HEADER, null)));
     contentListPresentation.setHeader(portletPreferences.getValue(UIContentListViewerPortlet.HEADER, null));    
-  }
+  }  
     
 }
