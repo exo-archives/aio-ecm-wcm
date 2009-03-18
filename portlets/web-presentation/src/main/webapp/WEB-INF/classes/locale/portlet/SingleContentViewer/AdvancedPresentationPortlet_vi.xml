@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bundle>
-  <!--/n  ####################################################################
+  <!--/n  ############################################################
   # org.exoplatform.wcm.webui.scv.config.UIWelcomeScreen             #
   ####################################################################
   -->
@@ -52,7 +52,7 @@
   -->
   <UIQuickCreationWizard>
     <label>
-      <stepInfo>Hiển thị nội dung bước</stepInfo>
+      <stepInfo>Hiển thị giúp đỡ</stepInfo>
       <contentCreateWizard>Tạo trang nhanh:</contentCreateWizard>
       <step1>
         <title>Chọn bố cục trình bày cho nội dung trang web và quy trình xuất bản để xuất bản</title>
@@ -363,7 +363,7 @@
     <action>
       <BackToNormalWizard>Quay lại</BackToNormalWizard>
     </action>
-    <back>Nhấn vào đây để truy cập vào lựa chọn nâng cao cho cấu hình nội dung trang web</back>
+    <back>Lựa chọn nâng cao</back>
   </UIQuickEditContainer>
   <UIPopupMenu>
     <msg>

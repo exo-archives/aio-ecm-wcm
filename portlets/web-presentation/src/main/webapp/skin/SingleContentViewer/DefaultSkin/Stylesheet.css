@@ -84,32 +84,33 @@
 	width: 140px;
 }
 
-.UISingleContentViewerPortlet .LeftShowStepInfo {
-	float: right;
-	padding-left: 28px;
-	cursor: pointer;
-	margin: 2px 5px;
-	background: url('background/ShowStepInfo.gif') no-repeat left top;
+.UISingleContentViewerPortlet .QuickEditToolBar {
+	background: url('background/QuickEditToolBar.gif') repeat-x left top;
+	height: 25px; line-height: 25px;
 }
 
-.UISingleContentViewerPortlet .QuickEditContainer .LeftShowStepInfo {
-	padding-left: 8px;
-}
-
-.UISingleContentViewerPortlet .RightShowStepInfo {
-	background: url('background/ShowStepInfo.gif') no-repeat right top;
-	padding-right: 7px;
-}
-
-.UISingleContentViewerPortlet .MiddleShowStepInfo {
-	background: url('background/ShowStepInfo.gif') repeat-x center -25px;
+.UISingleContentViewerPortlet .AdvancedOptions {
+	background: url('background/AdvancedOptionIcon.gif') no-repeat left center;
 	color: #275377;
 	font-weight: bold;
-	height: 25px; line-height: 25px;
+	padding-left: 20px;
+	margin-right: 5px;
+	cursor: pointer;
+	float: right;
 }
 
 .UISingleContentViewerPortlet .UIWizard .UIWizardPageSetInfo .PageNodeContainer {
 	display: none;
+}
+
+.UISingleContentViewerPortlet .ShowHelp {
+	background: url('background/ShowHelp.gif') no-repeat left center;
+	color: #275377;
+	font-weight: bold;
+	padding-left: 20px;
+	margin: 8px 5px 0px 0px;
+	cursor: pointer;
+	float: right;
 }
 
 .UISingleContentViewerPortlet .UIWizard .UIWizardPageSetInfo .PageInfoContainer {

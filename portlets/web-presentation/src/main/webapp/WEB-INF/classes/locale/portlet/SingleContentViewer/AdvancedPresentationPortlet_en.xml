@@ -55,7 +55,7 @@
   -->
   <UIQuickCreationWizard>
     <label>
-      <stepInfo>Show step info</stepInfo>
+      <stepInfo>Show help</stepInfo>
       <contentCreateWizard>Create Content Wizard:</contentCreateWizard>
       <step1>
         <title>Select webcontent layout and publication lifecycle to publish</title>
@@ -368,7 +368,7 @@
     <action>
       <BackToNormalWizard>Back</BackToNormalWizard>
     </action>
-    <back>Click on this to access advanced options for configuring the content</back>
+    <back>Advanced options</back>
   </UIQuickEditContainer>
   <UIPopupMenu>
     <msg>
