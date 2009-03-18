@@ -58,6 +58,7 @@
 	float: right;	
 	width: 3px;
 	height: 30px;
+	margin: 0px 10px;
 	background: url('DefaultSkin/icons/IconTopToolBar.gif') no-repeat left -320px;
 	background: url('DefaultSkin/icons/IconTopToolBar.gif') no-repeat right -320px;	
 }
@@ -122,6 +123,8 @@
 	background: url('DefaultSkin/icons/IconTopToolBar.gif') no-repeat left -288px; /* orientation=lt */
 	background: url('DefaultSkin/icons/IconTopToolBar.gif') no-repeat right -288px; /* orientation=rt */	
 	cursor: pointer;
+	padding-left: 25px; /* orientation=lt */
+	padding-right: 25px; /* orientation=rt */
 }
 
 .UISiteAdministrationPortlet .UISiteAdminToolBar .LogoutIcon {
@@ -149,18 +152,17 @@
 .UISiteAdministrationPortlet .UISiteAdminToolBar .ExoLogo {
 	background: url('DefaultSkin/icons/eXoLogo.gif') no-repeat left center;
 	height: 32px;
-	width: 51px;
+	width: 54px;
 	float: left;	
 }
 
-
 .UISiteAdministrationPortlet .UISiteAdminToolBar .BoxOnOff {
-	background: url('DefaultSkin/icons/BGOnOff.gif') left top repeat-x;
+	background: url('DefaultSkin/icons/BGOnOff.gif') no-repeat left top;
 	height: 20px;
-	padding: 6px 8px;
+	padding: 6px 8px 6px 19px;
 	float: right;
-	/*float: left;
-	margin-left: 50px;*/
+	/*float: left;*/
+	margin-left: 20px;
 }
 
 /****** Select On *******/
@@ -205,4 +207,121 @@
 	color: #fff;
 	cursor: pointer;
 	text-align: center;
+}
+
+/************************ UIExoStart *********************/
+.UISiteAdminToolBar .StartMenuDecorator .MenuContainer {
+	border: 1px solid white;
+	border-bottom: none;
+	padding: 0px;
+}
+
+.UISiteAdminToolBar .StartMenuContainer .DecoratorBlock {
+	border: none;
+}
+
+.UISiteAdminToolBar .StartMenuContainer .DecoratorBlock .PageOwnerContainer {
+	background: none;
+	padding: 0px;
+}
+
+.UISiteAdminToolBar .StartMenuContainer .PageNavigationBlock {
+	padding: 0px;
+}
+
+.UISiteAdminToolBar .StartMenuDecorator .StartMenuBG {
+	border: 1px solid #d5d6d6;
+}
+
+.UISiteAdminToolBar .StartMenuDecorator .NavigationContainer .LeftToolbar {
+	background: #f3f2f2 url('DefaultSkin/background/LeftToolbar.gif') repeat-y left;
+	padding-left: 24px;
+}
+
+.UISiteAdminToolBar .StartMenuContainer .MenuItemContainer .EvenItem {
+	background: #e5e4e4;
+}
+
+.UISiteAdminToolBar .StartMenuContainer .OddItem {
+  background: #f0f0f0;
+}
+
+.UISiteAdminToolBar .StartMenuContainer .LabelItem {
+	border-bottom: 1px solid white;
+}
+
+.UISiteAdminToolBar .StartMenuContainer .DecoratorBlock .TitleBar {
+	background: url('DefaultSkin/background/BgTitleBar.gif') repeat-x left;
+	line-height: 23px;
+	font-size: 12px;
+	font-weight: bold;
+	padding: 0px 3px;
+	color: black;
+	border-top: 1px solid #d5d6d6;
+	border-bottom: 1px solid white;
+}
+
+.UISiteAdminToolBar .StartMenuDecorator .NavigationContainer .IconSite {
+	background: url('DefaultSkin/icons/IconSite.gif') no-repeat 5px center;
+	padding-left: 30px;
+	text-align: left;
+	font-size: 12px;
+	line-height: 25px;
+}
+
+.UISiteAdminToolBar .StartMenuContainer .BlackArrowIcon {
+	background-position: right -188px;
+}
+
+.UISiteAdminToolBar .StartMenuContainer .MenuItemContainer .MenuItemOver {
+	background: #ff9f09;
+	color: white;
+}
+
+.UISiteAdminToolBar .StartMenuContainer .LabelText {
+	line-height: 25px;
+}
+
+.UISiteAdminToolBar .StartMenuContainer .Icon {
+	height: 25px;
+}
+
+.UISiteAdminToolBar a:hover {
+	color: white;
+}
+
+.UISiteAdminToolBar .StartMenuDecorator .StartMenuTL {
+	background: none;
+}
+
+.UISiteAdminToolBar .StartMenuDecorator .StartMenuTC {
+	background: none;
+}
+
+.UISiteAdminToolBar .StartMenuDecorator .StartMenuTR {
+	background: none;
+}
+
+.UISiteAdminToolBar .StartMenuDecorator .StartMenuML {
+	background: none;
+}
+
+.UISiteAdminToolBar .StartMenuDecorator .StartMenuMR {
+	background: none;
+}
+
+.UISiteAdminToolBar .StartMenuDecorator .StartMenuBG {
+	background: #f3f2f2;
+}
+
+.UISiteAdminToolBar .StartMenuDecorator .StartMenuBL {
+	background: none;
+}
+
+.UISiteAdminToolBar .StartMenuDecorator .StartMenuBR {
+	background: none;
+}
+
+.UISiteAdminToolBar .StartMenuDecorator .StartMenuBC {
+	background: none;
 }
