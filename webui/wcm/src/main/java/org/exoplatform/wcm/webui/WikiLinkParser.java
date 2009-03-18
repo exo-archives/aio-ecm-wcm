@@ -25,11 +25,13 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.webui.navigation.PageNavigationUtils;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.wcm.core.WCMConfigurationService;
 
 
 /**
@@ -72,8 +74,10 @@ public class WikiLinkParser {
     PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
     HttpServletRequest servletRequest = portalRequestContext.getRequest();
     String baseURI = servletRequest.getScheme() + "://" + servletRequest.getServerName() + ":"
-        + servletRequest.getServerPort() + portalRequestContext.getPortalURI();     
-    return baseURI;
+        + servletRequest.getServerPort() + portalRequestContext.getPortalURI();   
+    WCMConfigurationService configurationService = (WCMConfigurationService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(WCMConfigurationService.class);
+    String wikiContext = configurationService.getRuntimeContextParam("createWikiPageURI");    
+    return baseURI.concat(wikiContext);
   }
   
   private String generateLink(String uri, String label) throws Exception {
@@ -99,7 +103,7 @@ public class WikiLinkParser {
     if (uri.length() != temp.length()) {
       parent = uri;
       newURI = temp.substring(uri.length() + 1);
-      correctLink = getBaseURI() + "command?type=createWikiPage&parent=" + parent + "&pageName=" + newURI;
+      correctLink = getBaseURI() + "?parentUri=" + parent + "&pageUri=" + newURI;
       return label  + " <a href=\"" + correctLink + "\">?</a>";
     } else {
       correctLink = getBaseURI() + temp;
