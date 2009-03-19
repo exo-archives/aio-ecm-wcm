@@ -114,8 +114,9 @@
   -->
   <UIContentDialogForm>
     <action>
-      <Save>Save</Save>
+      <SaveDraft>Save Draft</SaveDraft>
       <Cancel>Cancel</Cancel>
+      <FastPublish>Fast Publish</FastPublish>
     </action>
   </UIContentDialogForm>
   <!--/n  ###################################################################
@@ -388,8 +389,9 @@
   </UIWCMPublicationGrid>
   <UIQuickEditWebContentForm>
     <action>
-      <Save>Save</Save>
+      <SaveDraft>Save Draft</SaveDraft>
       <Cancel>Cancel</Cancel>
+      <FastPublish>Fast Publish</FastPublish>
     </action>
   </UIQuickEditWebContentForm>
   <UIStartEditionInPageWizard>
