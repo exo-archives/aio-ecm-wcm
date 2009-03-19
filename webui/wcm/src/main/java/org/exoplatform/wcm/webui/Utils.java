@@ -96,7 +96,7 @@ public class Utils {
     Object obj = Util.getPortalRequestContext().getRequest().getSession().getAttribute(Utils.TURN_ON_QUICK_EDIT);
     if(obj == null)
       return true;          
-    return Boolean.parseBoolean(obj.toString());     
+    return !Boolean.parseBoolean(obj.toString());     
   }
   
 }
