@@ -111,8 +111,9 @@
   -->
   <UIContentDialogForm>
     <action>
-      <Save>Lưu lại</Save>
-      <Cancel>Huỷ bỏ</Cancel>
+      <SaveDraft>Lưu nháp</SaveDraft>
+      <Cancel>Hủy bỏ</Cancel>
+      <FastPublish>Xuất bản nhanh</FastPublish>
     </action>
   </UIContentDialogForm>
   <!--/n  ###################################################################
@@ -383,8 +384,9 @@
   </UIWCMPublicationGrid>
   <UIQuickEditWebContentForm>
     <action>
-      <Save>Lưu lại</Save>
-      <Cancel>Huỷ bỏ</Cancel>
+      <SaveDraft>Lưu nháp</SaveDraft>
+      <Cancel>Hủy bỏ</Cancel>
+      <FastPublish>Xuất bản nhanh</FastPublish>
     </action>
   </UIQuickEditWebContentForm>
   <UIStartEditionInPageWizard>
