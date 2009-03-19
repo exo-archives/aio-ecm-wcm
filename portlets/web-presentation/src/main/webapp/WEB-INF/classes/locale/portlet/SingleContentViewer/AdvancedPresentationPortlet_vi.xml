@@ -15,7 +15,7 @@
     </label>
     <action>
       <StartProcess>Đồng ý</StartProcess>
-      <Back>Quay lại</Back>
+      <Back>Hủy bỏ</Back>
     </action>
     <WelcomeLable>Chào mừng bạn đến với ứng dụng trình bày đơn nội dung!</WelcomeLable>
     <Text>Xin vui lòng chọn Sửa nội dung hoặc Chọn nội dung khác và nhấn vào nút Đồng ý</Text>

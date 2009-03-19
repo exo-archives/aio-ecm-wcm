@@ -16,7 +16,7 @@
     </label>
     <action>
       <StartProcess>OK</StartProcess>
-      <Back>Retour</Back>
+      <Back></Back>
     </action>
     <WelcomeLable>Bienvenue au visualiseur de contenu simples!</WelcomeLable>
     <Text>Veuillez sélectionner l'une des options et cliquer sur OK.</Text>

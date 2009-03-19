@@ -15,7 +15,7 @@
     </label>
     <action>
       <StartProcess>Ok</StartProcess>
-      <Back>Back</Back>
+      <Back>Cancel</Back>
     </action>
     <WelcomeLable>Welcome you to Single Content Viewer!</WelcomeLable>
     <Text>Please you check Edit this content or Select other content and click Ok button</Text>
