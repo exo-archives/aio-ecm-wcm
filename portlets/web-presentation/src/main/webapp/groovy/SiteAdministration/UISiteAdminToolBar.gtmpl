@@ -20,13 +20,15 @@
 %>
 
 <%
-  void renderSinglePageNode(String portalName, PageNode node) {    
+  void renderSinglePageNode(String portalName, PageNode node, int index) {    
     String  href = uicomponent.getBaseURI(portalName) + "/" + node.getUri();   
     String icon = node.getIcon();    
     if(icon == null) icon = "DefaultPageIcon";
     String label = (node.resolvedLabel.length() > 60 ? node.resolvedLabel.substring(0, 57) + "..." : node.resolvedLabel); 
+    String itemCssClazz = "OddItem";
+    if ((index % 2) == 0) itemCssClazz = "EvenItem";
     print """
-    <div class="EvenItem"> <!--EvenItem or OddItem-->
+    <div class="$itemCssClazz"> <!--EvenItem or OddItem-->
       <div class="MenuItem">
         <div class="LabelItem">
           <div class="Icon $icon"  style="padding-left: 18px">
@@ -46,7 +48,9 @@
     """ ;
   }
   
-  void renderPageNode(String portalName, PageNode node) {    
+  void renderPageNode(String portalName, PageNode node, int index) {    
+    String itemCssClazz = "OddItem";
+    if ((index % 2) == 0) itemCssClazz = "EvenItem";
     String  href = uicomponent.getBaseURI(portalName) + "/" + node.getUri(); 
     String icon = node.getIcon();
     String scrollUpTitle = _ctx.appRes("UIExoStart.tooltip.scrollUp") ;
@@ -55,7 +59,7 @@
     String label = node.resolvedLabel;
     if(label.length() > 60) label = label.substring(0, 57) + "..." ;
     print """
-    <div class="EvenItem"> <!--EvenItem or OddItem-->
+    <div class="$itemCssClazz"> <!--EvenItem or OddItem-->
       <div class="MenuItem">
         <div class="LabelItem">
           <div class="Icon $icon" style="padding-left: 18px"> 
@@ -88,12 +92,14 @@
 									<div class="BlockMenu" style="position: relative;">
 						      <div class="MenuContainer">          
 						      """ ;
+						      int subIndex = 0;
 						      for(child in node.getChildren()) {
 						        if(child.getChildren() != null && child.getChildren().size() > 0) {
-						        	renderPageNode(portalName, child);
+						        	renderPageNode(portalName, child, subIndex);
 						        } else {
-						        	renderSinglePageNode(portalName, child);
+						        	renderSinglePageNode(portalName, child, subIndex);
 						        }
+						        subIndex ++;
 						      }
 						      print """
 						      </div>
@@ -127,13 +133,15 @@
 	      	<div class="PageOwnerContainer">
 	        	<div class="TitleBar">$navTitle</div>
 				    """ ;
+				    int index = 0;
 				    for(node in nodes) {
 				    	if (node.isDisplay()) {				    	
 					      if(node.getChildren() != null && node.getChildren().size() > 0) {
-					        renderPageNode(portalName, node);
+					        renderPageNode(portalName, node, index);
 					      } else {
-					      	renderSinglePageNode(portalName, node) ;
+					      	renderSinglePageNode(portalName, node, index) ;
 				      	}
+				      	index++;
 			      	}
 				    }
 				    print """
@@ -212,11 +220,18 @@
 									<div class="BlockMenu">
 					      	<div class="MenuContainer">					      	
 					      	""" ;
+					      	int index = 0;
+					      	String cssClazz = "OddItem";					      	
 					      	for (Node portal : portals) {	
+					      		if ((index % 2) == 0) {
+					      			cssClazz = "EvenItem";
+					      		} else {
+					      			cssClazz = "OddItem";					      		
+					      		}
 					      		String portalName = portal.getName();
                     String link = uicomponent.getBaseURI(portalName);
 								    print """
-								    <div class="EvenItem"> <!--EvenItem or OddItem-->
+								    <div class="$cssClazz"> <!--EvenItem or OddItem-->
 								      <div class="MenuItem" onclick="naviMenu('${link}');">
 								        <div class="LabelItem">
 								          <div class="NavigationBackground">
@@ -230,7 +245,8 @@
 								    print """
 								      </div>
 								    </div>
-								    """ ;					 
+								    """ ;				
+								    index ++;	 
 							    }     	
 					      	print """
 					      	</div>
