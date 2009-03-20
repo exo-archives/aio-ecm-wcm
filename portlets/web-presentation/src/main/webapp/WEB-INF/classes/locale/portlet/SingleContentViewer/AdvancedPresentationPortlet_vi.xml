@@ -40,6 +40,7 @@
       <ShowTags>Hiển thị tag</ShowTags>
       <ShowCategories>Hiển thị mục phân loại</ShowCategories>
       <ShowQuickEdit>Hiển thị chỉnh sửa nhanh</ShowQuickEdit>
+      <ShowPrintAction>Hiện thị in ấn</ShowPrintAction>
     </label>
     <action>
       <SaveToPortletPreference>Lưu lại</SaveToPortletPreference>

@@ -41,6 +41,7 @@
       <ShowTags>Affichage des tags</ShowTags>
       <ShowCategories>Affichage des catégories</ShowCategories>
       <ShowQuickEdit>Affichage de l'icône d'édition rapide</ShowQuickEdit>
+      <ShowPrintAction></ShowPrintAction>
     </label>
     <action>
       <SaveToPortletPreference>Sauver</SaveToPortletPreference>

@@ -43,6 +43,7 @@
       <AllowVoting>Show votes</AllowVoting>
       <AllowComment>Show comments</AllowComment>
       <ShowQuickEdit>Show quick edit</ShowQuickEdit>
+      <ShowPrintAction>Show print</ShowPrintAction>
     </label>
     <action>
       <SaveToPortletPreference>Save</SaveToPortletPreference>

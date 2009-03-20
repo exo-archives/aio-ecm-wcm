@@ -673,6 +673,13 @@ public class UISiteAdminToolbar extends UIContainer {
       preferenceQ.setName("ShowQuickEdit");
       preferenceQ.setValues(listValue);
       listPreference.add(preferenceQ);
+      
+      Preference preferenceP = new Preference();
+      listValue = new ArrayList<String>();
+      listValue.add("true");
+      preferenceP.setName("ShowPrintAction");
+      preferenceP.setValues(listValue);
+      listPreference.add(preferenceP);
 
       portletPreferences.setPreferences(listPreference);
 

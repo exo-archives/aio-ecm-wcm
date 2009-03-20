@@ -38,7 +38,11 @@ import org.exoplatform.webui.event.EventListener;
  * phan.le.thanh.chuong@gmail.com Nov 4, 2008
  */
 
-@ComponentConfig(lifecycle = Lifecycle.class, template = "app:/groovy/ParameterizedContentViewer/UIContentViewerContainer.gtmpl", events = { @EventConfig(listeners = UIContentViewerContainer.QuickEditActionListener.class) })
+@ComponentConfig(
+		lifecycle = Lifecycle.class, 
+		template = "app:/groovy/ParameterizedContentViewer/UIContentViewerContainer.gtmpl", 
+		events = { 
+			@EventConfig(listeners = UIContentViewerContainer.QuickEditActionListener.class) })
 public class UIContentViewerContainer extends UIContainer {
 
 	/** The Constant WEB_CONTENT_sDIALOG. */

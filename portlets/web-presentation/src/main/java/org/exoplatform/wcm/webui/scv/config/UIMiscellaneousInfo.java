@@ -55,10 +55,12 @@ public class UIMiscellaneousInfo extends UIForm {
     PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     PortletPreferences prefs = context.getRequest().getPreferences();
     boolean isShowTitle = Boolean.parseBoolean(prefs.getValue("ShowTitle", null));
+    boolean isShowPrint = Boolean.parseBoolean(prefs.getValue("ShowPrintAction", null));
 //    boolean isShowTags = Boolean.parseBoolean(prefs.getValue("ShowTags", null));
 //    boolean isShowCategories = Boolean.parseBoolean(prefs.getValue("ShowCategories", null));
 //    boolean isQuickEdit = Boolean.parseBoolean(prefs.getValue("ShowQuickEdit", null));
     addUIFormInput(new UIFormCheckBoxInput("ShowTitle", "ShowTitle", null).setChecked(isShowTitle));
+    addUIFormInput(new UIFormCheckBoxInput("ShowPrintAction", "ShowPrintAction", null).setChecked(isShowPrint));
     // because WCM remove UITagging, UICategorizing, we don't add UIFormInput for them
 //    addUIFormInput(new UIFormCheckBoxInput("ShowTags", "ShowTags", null).setChecked(isShowTags));
 //    addUIFormInput(new UIFormCheckBoxInput("ShowCategories", "ShowCategories", null).setChecked(isShowCategories));
