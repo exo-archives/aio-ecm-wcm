@@ -51,7 +51,6 @@ import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.publication.WebpagePublicationPlugin;
-import org.exoplatform.services.wcm.publication.defaultlifecycle.Util;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant.SITE_MODE;
 import org.exoplatform.web.application.RequestContext;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -276,70 +275,125 @@ public class StageAndVersionBasedPublicationPlugin extends WebpagePublicationPlu
   }
 
   public void publishContentToPage(Node content, Page page) throws Exception {
-    UserPortalConfigService userPortalConfigService = Util.getServices(UserPortalConfigService.class);
+    // Create portlet
     Application portlet = new Application();
     portlet.setApplicationType(org.exoplatform.web.application.Application.EXO_PORTLET_TYPE);
     portlet.setShowInfoBar(false);
-
-    // Create portlet
+    
+    //// generate new portlet's id
     WCMConfigurationService configurationService = Util.getServices(WCMConfigurationService.class);
     StringBuilder windowId = new StringBuilder();
     windowId.append(PortalConfig.PORTAL_TYPE)
-    .append("#")
-    .append(org.exoplatform.portal.webui.util.Util.getUIPortal().getOwner())
-    .append(":")
-    .append(configurationService.getPublishingPortletName())
-    .append("/")
-    .append(IdGenerator.generate());
+            .append("#")
+            .append(org.exoplatform.portal.webui.util.Util.getUIPortal().getOwner())
+            .append(":")
+            .append(configurationService.getPublishingPortletName())
+            .append("/")
+            .append(IdGenerator.generate());
     portlet.setInstanceId(windowId.toString());
 
-    // Add preferences to portlet
-    PortletPreferences portletPreferences = new PortletPreferences();
-    portletPreferences.setWindowId(windowId.toString());
-    portletPreferences.setOwnerType(PortalConfig.PORTAL_TYPE);
-    portletPreferences.setOwnerId(org.exoplatform.portal.webui.util.Util.getUIPortal().getOwner());
-    ArrayList<Preference> listPreference = new ArrayList<Preference>();
-
-    Preference preferenceR = new Preference();
-    ArrayList<String> listValue = new ArrayList<String>();
-    listValue.add(((ManageableRepository) content.getSession().getRepository()).getConfiguration().getName());
-    preferenceR.setName("repository");
-    preferenceR.setValues(listValue);
-    listPreference.add(preferenceR);
-
-    Preference preferenceW = new Preference();
-    listValue = new ArrayList<String>();
-    listValue.add(content.getSession().getWorkspace().getName());
-    preferenceW.setName("workspace");
-    preferenceW.setValues(listValue);
-    listPreference.add(preferenceW);
-
-    Preference preferenceN = new Preference();
-    listValue = new ArrayList<String>();
-    listValue.add(content.getUUID());
-    preferenceN.setName("nodeIdentifier");
-    preferenceN.setValues(listValue);
-    listPreference.add(preferenceN);
-
-    Preference preferenceQ = new Preference();
-    listValue = new ArrayList<String>();
-    listValue.add("true");
-    preferenceQ.setName("ShowQuickEdit");
-    preferenceQ.setValues(listValue);
-    listPreference.add(preferenceQ);
-
-    portletPreferences.setPreferences(listPreference);
-
-    DataStorage dataStorage = Util.getServices(DataStorage.class);
-    dataStorage.save(portletPreferences);
-
+    //// Add preferences to portlet
+    ArrayList<Preference> preferences = new ArrayList<Preference>();
+    preferences.add(addPreference("repository", ((ManageableRepository) content.getSession().getRepository()).getConfiguration().getName()));
+    preferences.add(addPreference("workspace", content.getSession().getWorkspace().getName()));
+    preferences.add(addPreference("nodeIdentifier", content.getUUID()));
+    savePortletPreferences(windowId.toString(), preferences);
+    
     // Add portlet to page
     ArrayList<Object> listPortlet = page.getChildren();
     listPortlet.add(portlet);
     page.setChildren(listPortlet);
+    UserPortalConfigService userPortalConfigService = Util.getServices(UserPortalConfigService.class);
     userPortalConfigService.update(page);
   }
 
+  @SuppressWarnings("unchecked")
+  public void publishContentToCLV(Node content, Page page, String clvPortletId, PortletPreferences portletPreferences) throws Exception {
+    WCMConfigurationService wcmConfigurationService = Util.getServices(WCMConfigurationService.class);
+    ArrayList<Preference> preferences = new ArrayList<Preference>();
+    if (portletPreferences == null) {
+      preferences.add(addPreference("repository", ((ManageableRepository) content.getSession().getRepository()).getConfiguration().getName()));
+      preferences.add(addPreference("workspace", content.getSession().getWorkspace().getName()));
+      preferences.add(addPreference("folderPath", content.getPath() + ";"));
+      preferences.add(addPreference("formViewTemplatePath", wcmConfigurationService.getRuntimeContextParam("formViewTemplatePath")));
+      preferences.add(addPreference("paginatorTemplatePath", wcmConfigurationService.getRuntimeContextParam("paginatorTemplatePath")));
+      preferences.add(addPreference("itemsPerPage", "10"));
+      preferences.add(addPreference("showQuickEditButton", "true"));
+      preferences.add(addPreference("showRefreshButton", "false"));
+      preferences.add(addPreference("showThumbnailsView", "true"));
+      preferences.add(addPreference("showTitle", "true"));
+      preferences.add(addPreference("showDateCreated", "true"));
+      preferences.add(addPreference("showSummary", "true"));
+      preferences.add(addPreference("showHeader", "true"));
+      preferences.add(addPreference("source", "folder"));
+      preferences.add(addPreference("mode", "ManualViewerMode"));
+      preferences.add(addPreference("orderBy", "exo:title"));
+      preferences.add(addPreference("orderType", "DESC"));
+
+      Preference preference = new Preference();
+      preference.setName("contents");
+      ArrayList<String> contentValues = new ArrayList<String>();
+      contentValues.add(content.getPath());
+      preference.setValues(contentValues);
+      preferences.add(preference);
+      
+      savePortletPreferences(clvPortletId, preferences);
+    } else {
+      String clvMode = "";
+      Preference folderPreference = new Preference();
+      Preference contentPreference = new Preference();
+      int folderPrefIndex = 0;
+      int contentPrefIndex = 0;
+      List<?> listPrefs = portletPreferences.getPreferences();
+      for (Object object: listPrefs) {
+        Preference preference = (Preference) object;
+        if ("mode".equals(preference.getName())) {
+          clvMode = preference.getValues().get(0).toString();
+        } else if ("contents".equals(preference.getName())) {
+          contentPreference = preference;
+          contentPrefIndex = listPrefs.indexOf(object);
+        } else if ("folderPath".equals(preference.getName())) {
+          folderPreference = preference;
+          folderPrefIndex = listPrefs.indexOf(object);
+        }
+        preferences.add(preference);
+      }
+      if ("ManualViewerMode".equals(clvMode)) {
+        ArrayList folderValues = new ArrayList(folderPreference.getValues());
+        String folderValue = folderValues.get(0).toString();
+        folderValues.set(0, content.getPath() + ";" + folderValue);
+        folderPreference.setValues(folderValues);
+        preferences.set(folderPrefIndex, folderPreference);
+        
+        ArrayList contentValues = new ArrayList(contentPreference.getValues());
+        contentValues.add(0, content.getPath()); 
+        contentPreference.setValues(contentValues);    
+        preferences.set(contentPrefIndex, contentPreference);
+        
+        savePortletPreferences(clvPortletId, preferences);
+      }
+    }
+  }
+  
+  private Preference addPreference(String name, String value) {
+    Preference preference = new Preference();
+    ArrayList<String> listValue = new ArrayList<String>();
+    listValue.add(value);
+    preference.setName(name);
+    preference.setValues(listValue);
+    return preference;
+  }
+  
+  private void savePortletPreferences(String portletId, ArrayList<Preference> listPreference) throws Exception {
+    PortletPreferences portletPreferences = new PortletPreferences();
+    portletPreferences.setWindowId(portletId);
+    portletPreferences.setOwnerType(PortalConfig.PORTAL_TYPE);
+    portletPreferences.setOwnerId(org.exoplatform.portal.webui.util.Util.getUIPortal().getOwner());
+    portletPreferences.setPreferences(listPreference);
+    DataStorage dataStorage = Util.getServices(DataStorage.class);
+    dataStorage.save(portletPreferences);
+  }
+  
   public void suspendPublishedContentFromPage(Node content, Page page) throws Exception {
     String pageId = page.getPageId();
     List<String> mixedApplicationIDs = Util.getValuesAsString(content, "publication:applicationIDs");

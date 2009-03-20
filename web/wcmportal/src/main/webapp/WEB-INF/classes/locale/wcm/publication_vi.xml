@@ -30,11 +30,20 @@
     <title>
       <UIPublishingPanel>Form xuất bản</UIPublishingPanel>
       <UIPublicationPanel>Trạng thái xuất bản</UIPublicationPanel>
-      <UIPublicationPages>Xuất bản vào trang</UIPublicationPages>
+      <UIPublicationPagesContainer>Xuất bản vào trang</UIPublicationPagesContainer>
       <UIPublicationHistory>Nhật ký xuất bản</UIPublicationHistory>
       <UIVersionViewer>Xem lại phiên bản</UIVersionViewer>
     </title>
   </UITabPane>
+  <UIClvPopupContainer>
+  	<title>
+  		<UIClvPopupContainer>Content list viewer popup container</UIClvPopupContainer>
+  		<UIPublishClvChooser>Chọn CLV portlet</UIPublishClvChooser>
+  	</title>
+  	<action>
+ 			<close>Đóng</close>
+ 		</action>
+  </UIClvPopupContainer>
   <UIPublicationAction>
     <msg>
       <none>Trang nội dung này đã được lựa chọn</none>
@@ -94,6 +103,7 @@
   <Publication>
   	<log>
 	  	<description>
+	  		<enrolled>Nội dung đã được tham gia</enrolled>
 	  		<change-to-draft-state>Nội dung đã được tạo</change-to-draft-state>
 	  		<change-to-live-state>từ bản Nháp sang bản Live</change-to-live-state>
 	  		<change-to-obsolete-state>từ bản Live sang Hết hạn</change-to-obsolete-state>

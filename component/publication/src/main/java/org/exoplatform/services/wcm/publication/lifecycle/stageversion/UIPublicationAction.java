@@ -18,10 +18,12 @@ package org.exoplatform.services.wcm.publication.lifecycle.stageversion;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.jcr.Node;
 import javax.jcr.Value;
 
 import org.exoplatform.commons.utils.PageList;
+import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.UserPortalConfigService;
@@ -29,14 +31,15 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
-//import org.exoplatform.services.ecm.publication.plugins.webui.UIPublicationLogList;
+import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
+import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.UIPublicationTree.TreeNode;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
-//import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -138,12 +141,36 @@ public class UIPublicationAction extends UIForm {
       Page page = userPortalConfigService.getPage(pageNode.getPageReference(), event.getRequestContext().getRemoteUser());
       WCMPublicationService presentationService = publicationAction.getApplicationComponent(WCMPublicationService.class);
       StageAndVersionBasedPublicationPlugin publicationPlugin = (StageAndVersionBasedPublicationPlugin) presentationService.getWebpagePublicationPlugins().get(Constant.LIFECYCLE_NAME);
-      publicationPlugin.publishContentToPage(node, page);
+      
+      UIPublicationPagesContainer publicationPagesContainer = publicationPages.getAncestorOfType(UIPublicationPagesContainer.class);
+      WCMConfigurationService wcmConfigurationService = Util.getServices(WCMConfigurationService.class);
+      List<String> clvPortletIds = Util.findAppInstancesByName(page, wcmConfigurationService.getRuntimeContextParam("CLVPortlet"));
+      if (clvPortletIds.isEmpty()) {
+        publicationPlugin.publishContentToPage(node, page);
+      } else {
+        if (clvPortletIds.size() > 1) {
+          UIPublishClvChooser clvChooser = publicationAction.createUIComponent(UIPublishClvChooser.class, null, "UIPublishClvChooser");
+          clvChooser.setPage(page);
+          clvChooser.setNode(node);
+          UIPopupWindow popupWindow = publicationPagesContainer.getChildById("UIClvPopupContainer");
+          clvChooser.setRendered(true);
+          popupWindow.setUIComponent(clvChooser);
+          popupWindow.setWindowSize(400, -1);
+          popupWindow.setShow(true);
+          popupWindow.setShowMask(true);
+          event.getRequestContext().addUIComponentToUpdateByAjax(publicationPagesContainer);
+        } else {
+          String clvPortletId = clvPortletIds.get(0);
+          DataStorage dataStorage = Util.getServices(DataStorage.class);
+          PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(clvPortletId));
+          publicationPlugin.publishContentToCLV(node, page, clvPortletId, portletPreferences);
+        }
+      }
       
       publicationAction.updateUI();
       
       UIPublicationContainer publicationContainer = publicationAction.getAncestorOfType(UIPublicationContainer.class);
-      publicationContainer.setActiveTab(publicationPages, event.getRequestContext());
+      publicationContainer.setActiveTab(publicationPagesContainer, event.getRequestContext());
     }
   }
 
@@ -191,7 +218,7 @@ public class UIPublicationAction extends UIForm {
       if (pageNavigation != null) {
         Node contentNode = publicationPages.getNode();
         if (contentNode.hasProperty("publication:applicationIDs")) {
-          PageNode pageNode = pageNavigation.getNode(pageNodeUri);
+          PageNode pageNode = getPageNodeByUri(pageNavigation, pageNodeUri);
           page = userPortalConfigService.getPage(pageNode.getPageReference(), event.getRequestContext().getRemoteUser());
         }
       }
@@ -201,9 +228,33 @@ public class UIPublicationAction extends UIForm {
       publicationPlugin.suspendPublishedContentFromPage(publicationPages.getNode(), page);
       
       publicationAction.updateUI();
-      
+
+      UIPublicationPagesContainer publicationPagesContainer = publicationPages.getAncestorOfType(UIPublicationPagesContainer.class);
       UIPublicationContainer publicationContainer = publicationAction.getAncestorOfType(UIPublicationContainer.class);
-      publicationContainer.setActiveTab(publicationPages, event.getRequestContext());
+      publicationContainer.setActiveTab(publicationPagesContainer, event.getRequestContext());
+    }
+    
+    private PageNode getPageNodeByUri(PageNavigation pageNav, String uri) {
+      if(pageNav == null || uri == null) return null;
+      List<PageNode> pageNodes = pageNav.getNodes();
+      for(PageNode pageNode : pageNodes){
+        PageNode returnPageNode = getPageNodeByUri(pageNode, uri);
+        if(returnPageNode == null) continue;
+        return returnPageNode;
+      }
+      return null; 
+    }  
+    
+    private PageNode getPageNodeByUri(PageNode pageNode, String uri){
+      if(pageNode.getUri().equals(uri)) return pageNode;
+      List<PageNode> children = pageNode.getChildren();
+      if(children == null) return null;
+      for(PageNode ele : children){
+        PageNode returnPageNode = getPageNodeByUri(ele, uri);
+        if(returnPageNode == null) continue;
+        return returnPageNode;
+      }
+      return null;
     }
   }
 }

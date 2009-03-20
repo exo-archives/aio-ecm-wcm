@@ -40,7 +40,6 @@ import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
-import org.exoplatform.services.wcm.core.WCMConfigurationService;
 
 /**
  * Created by The eXo Platform SAS
@@ -137,6 +136,24 @@ public class Util {
       }
     }
   }   
+  
+  public static Application findAppInstancesById(Container container, String applicationId) {
+    ArrayList<Object> chidren = container.getChildren();
+    if(chidren == null) return null;
+    for(Object object: chidren) {
+      if(object instanceof Application) {
+        Application application = Application.class.cast(object);
+        if(application.getInstanceId().equals(applicationId)) {
+          return application;
+        }
+      } else if(object instanceof Container) {
+        Container child = Container.class.cast(object);
+        findAppInstancesById(child, applicationId);
+      }
+    }
+    return null;
+  }
+  
   
   /**
    * Removed app instances in container by names.
@@ -256,9 +273,8 @@ public class Util {
    * 
    * @return the list application id by page
    */
-  public static List<String> getListApplicationIdByPage(Page page) {
-    WCMConfigurationService configurationService = getServices(WCMConfigurationService.class);
-    return Util.findAppInstancesByName(page, configurationService.getPublishingPortletName());
+  public static List<String> getListApplicationIdByPage(Page page, String portletName) {
+    return Util.findAppInstancesByName(page, portletName);
   }
   
   /**

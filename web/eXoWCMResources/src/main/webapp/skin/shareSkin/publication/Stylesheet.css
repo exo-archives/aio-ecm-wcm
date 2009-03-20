@@ -152,6 +152,7 @@
 
 .UIPublicationPanel .StatusTable .StatusAction {
 	margin-bottom: 10px;
+	font-weight: bold;
 }
 
 .UIPublicationPanel .StatusTable .StatusTitle {
@@ -168,39 +169,43 @@
 	margin-left: 80px;
 }
 
-.UIPublicationPanel .StatusTable .DefaultStatus {
-	background: url(icons/16x16/StateDefault.png) no-repeat top center;
+.UIPublicationPanel .StatusTable .ActiveStatus {
+	background: url(icons/16x16/StateActive.gif) no-repeat top center;
 	width: 30px;
 	float: left;
 	display: block;
 	padding-top: 32px;
+	color: #464646;
+	text-decoration: underline;
 }
 
 .UIPublicationPanel .StatusTable .CurrentStatus {
-	background: url(icons/16x16/StateCurrent.png) no-repeat top center;
+	background: url(icons/16x16/StateCurrent.gif) no-repeat top center;
 	width: 30px;
 	float: left;
 	display: block;
 	padding-top: 32px;
 	cursor: default;
+	color: #0127EA;
 }
 
 .UIPublicationPanel .StatusTable .DisableStatus {
-	background: url(icons/16x16/StateDisable.png) no-repeat top center;
+	background: url(icons/16x16/StateActive.gif) no-repeat top center;
 	width: 30px;
 	float: left;
 	display: block;
 	padding-top: 32px;
 	cursor: no-drop;
+	color: #999999;
 }
 
 .UIPublicationPanel .StatusTable .StatusArrow {
-	background: url(icons/16x16/StateArrow.png) no-repeat top center;
+	background: url(icons/16x16/StateArrow.gif) no-repeat top center;
 	width: 50px;
 	float: left;
 	display: block;
 	padding-top: 32px;
-	margin: 0 7px;
+	margin: 10px 7px 0;
 }
 
 .UIPublicationPanel .StatusTable .ScheduledTime {
@@ -270,4 +275,34 @@
 	cursor: pointer;
 	float: left;
 	margin: 2px 5px 0;
+}
+
+.UIPublishClvChooser {
+	padding: 20px 20px 0;
+}
+
+.UIPublishClvChooser .ListCLVChooserLink {
+	padding: 10px;
+	border: 1px #B7B7B7 solid;
+	background: #f7f7f7;
+}
+
+.UIPublishClvChooser .ListCLVChooserLink tr {
+	line-height: 20px;
+}
+
+.UIPublishClvChooser .CLVChooserAction {
+	width: 50px;
+}
+
+.UIPublishClvChooser .CLVChooserLink {
+	background: url('icons/16x16/SelectAction.gif') no-repeat;
+	cursor: pointer;
+	height: 16px;
+	width: 16px;
+	margin: 2px auto;
+}
+
+.UIPublishClvChooser .CLVChooserTitle {
+	margin-left: 15px;
 }

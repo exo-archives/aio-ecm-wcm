@@ -19,18 +19,10 @@ package org.exoplatform.services.wcm.publication.lifecycle.stageversion;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import javax.jcr.Node;
 
-import org.exoplatform.commons.utils.PageList;
-import org.exoplatform.portal.config.DataStorage;
-import org.exoplatform.portal.config.Query;
-import org.exoplatform.portal.config.UserACL;
-import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIComponent;
@@ -58,11 +50,9 @@ public class UIPublicationContainer extends UIForm implements UIPopupComponent {
   public void initContainer(Node node) throws Exception {
     UIPublicationPanel publicationPanel = addChild(UIPublicationPanel.class, null, null);
     publicationPanel.init(node);
-    UIPublicationPages publicationPages = addChild(UIPublicationPages.class, null, null);
-    List<String> runningPortals = getRunningPortals(node.getSession().getUserID());
-    String portalName = getPortalForContent(node);
-    publicationPages.init(node, portalName, runningPortals);
-    publicationPages.setRendered(false);
+    UIPublicationPagesContainer publicationPagesContainer = addChild(UIPublicationPagesContainer.class, null, null);
+    publicationPagesContainer.init(node);
+    publicationPagesContainer.setRendered(false);
     UIPublicationHistory publicationHistory = addChild(UIPublicationHistory.class, null, null);
     publicationHistory.init(node);
     publicationHistory.updateGrid();
@@ -84,17 +74,6 @@ public class UIPublicationContainer extends UIForm implements UIPopupComponent {
   public void setSelectedTab(String renderTabId) { selectedTabId = renderTabId; }
   public void setSelectedTab(int index) { selectedTabId = ((UIComponent)getChild(index-1)).getId();}
   
-  private String getPortalForContent(Node contentNode) throws Exception {
-    LivePortalManagerService livePortalManagerService = Util.getServices(LivePortalManagerService.class);
-    for(String portalPath:livePortalManagerService.getLivePortalsPath()) {
-      if(contentNode.getPath().startsWith(portalPath)) {
-        return livePortalManagerService.getPortalNameByPath(portalPath);
-      }
-    }
-
-    return null;
-  }
-  
   public void setActiveTab(UIComponent component, WebuiRequestContext context) {
     for (UIComponent child : getChildren()) {
       child.setRendered(false);
@@ -102,20 +81,5 @@ public class UIPublicationContainer extends UIForm implements UIPopupComponent {
     component.setRendered(true);
     setSelectedTab(component.getId());
     context.addUIComponentToUpdateByAjax(this);
-  }
-  
-  private List<String> getRunningPortals(String userId) throws Exception {
-    List<String> listPortalName = new ArrayList<String>();
-    DataStorage service = Util.getServices(DataStorage.class);
-    Query<PortalConfig> query = new Query<PortalConfig>(null, null, null, null, PortalConfig.class) ;
-    PageList pageList = service.find(query) ;
-    UserACL userACL = Util.getServices(UserACL.class);
-    for(Object object:pageList.getAll()) {
-      PortalConfig portalConfig = (PortalConfig)object;
-      if(userACL.hasPermission(portalConfig, userId)) {
-        listPortalName.add(portalConfig.getName());
-      }
-    }
-    return listPortalName;
   }
 }

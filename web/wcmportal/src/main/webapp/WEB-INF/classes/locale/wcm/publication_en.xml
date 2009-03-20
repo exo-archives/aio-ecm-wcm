@@ -30,11 +30,20 @@
     <title>
       <UIPublishingPanel>Publication Panel</UIPublishingPanel>
       <UIPublicationPanel>Publication status</UIPublicationPanel>
-      <UIPublicationPages>Publication pages</UIPublicationPages>
+      <UIPublicationPagesContainer>Publication pages</UIPublicationPagesContainer>
       <UIPublicationHistory>Publication history</UIPublicationHistory>
       <UIVersionViewer>Version viewer</UIVersionViewer>
     </title>
   </UITabPane>
+  <UIClvPopupContainer>
+  	<title>
+  		<UIClvPopupContainer>Content list viewer popup container</UIClvPopupContainer>
+  		<UIPublishClvChooser>Choose Content List Viewer portlet</UIPublishClvChooser>
+  	</title>
+  	<action>
+ 			<close>Close</close>
+ 		</action>
+  </UIClvPopupContainer>
   <UIPublicationAction>
     <msg>
       <none>No page node is selected</none>
@@ -94,6 +103,7 @@
   <Publication>
   	<log>
 	  	<description>
+	  		<enrolled>Content is enrolled</enrolled>
 	  		<change-to-draft-state>Content created</change-to-draft-state>
 	  		<change-to-live-state>from Draft to Live</change-to-live-state>
 	  		<change-to-obsolete-state>from Live to Obsolete</change-to-obsolete-state>

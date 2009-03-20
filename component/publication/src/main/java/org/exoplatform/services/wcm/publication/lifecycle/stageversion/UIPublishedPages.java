@@ -121,8 +121,8 @@ public class UIPublishedPages extends UIContainer {
       publishedPages.setSelectedNavigationNodeURI(selectedTreeNode);
       
       UIPublicationContainer publicationContainer = publishedPages.getAncestorOfType(UIPublicationContainer.class);
-      UIPublicationPages publicationPages = publishedPages.getAncestorOfType(UIPublicationPages.class);
-      publicationContainer.setActiveTab(publicationPages, event.getRequestContext());
+      UIPublicationPagesContainer publicationPagesContainer = publishedPages.getAncestorOfType(UIPublicationPagesContainer.class);
+      publicationContainer.setActiveTab(publicationPagesContainer, event.getRequestContext());
     }
   }
   

@@ -92,7 +92,8 @@ public class PageEventListenerDelegate {
    * @throws Exception the exception
    */
   public void updateLifecycleOnRemovePage(Page page) throws Exception {
-    List<String> listPageApplicationId = Util.getListApplicationIdByPage(page);
+    WCMConfigurationService wcmConfigurationService = Util.getServices(WCMConfigurationService.class);
+    List<String> listPageApplicationId = Util.getListApplicationIdByPage(page, wcmConfigurationService.getPublishingPortletName());
     for (String applicationId : listPageApplicationId) {
       Node content = Util.getNodeByApplicationId(applicationId);
       if (content != null) {
@@ -109,7 +110,8 @@ public class PageEventListenerDelegate {
    * @throws Exception the exception
    */
   private void updateAddedApplication(Page page) throws Exception {
-    List<String> listPageApplicationId = Util.getListApplicationIdByPage(page);
+    WCMConfigurationService wcmConfigurationService = Util.getServices(WCMConfigurationService.class);
+    List<String> listPageApplicationId = Util.getListApplicationIdByPage(page, wcmConfigurationService.getPublishingPortletName());
     for (String applicationtId : listPageApplicationId) {
       Node content = Util.getNodeByApplicationId(applicationtId);
       if (content != null) saveAddedApplication(page, applicationtId, content, lifecycleName);
@@ -125,7 +127,8 @@ public class PageEventListenerDelegate {
    */
   private void updateRemovedApplication(Page page) throws Exception {
     List<Node> listNode = getListNodeByApplicationId(page);
-    List<String> listApplicationId = Util.getListApplicationIdByPage(page);
+    WCMConfigurationService wcmConfigurationService = Util.getServices(WCMConfigurationService.class);
+    List<String> listApplicationId = Util.getListApplicationIdByPage(page, wcmConfigurationService.getPublishingPortletName());
     for (Node content : listNode) {
       for (Value value : content.getProperty("publication:applicationIDs").getValues()) {
         String[] tmp = Util.parseMixedApplicationId(value.getString());

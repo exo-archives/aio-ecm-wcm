@@ -30,11 +30,20 @@
     <title>
       <UIPublishingPanel>Panneau de publication</UIPublishingPanel>
       <UIPublicationPanel>Publication de l'état</UIPublicationPanel>
-      <UIPublicationPages>Publication des pages</UIPublicationPages>
+      <UIPublicationPagesContainer>Publication des pages</UIPublicationPagesContainer>
       <UIPublicationHistory>Publication de l'histoire</UIPublicationHistory>
       <UIVersionViewer>Visualiseur de version</UIVersionViewer>
     </title>
   </UITabPane>
+  <UIClvPopupContainer>
+  	<title>
+  		<UIClvPopupContainer>Content list viewer popup container</UIClvPopupContainer>
+  		<UIPublishClvChooser>Choisir un CLV portlet</UIPublishClvChooser>
+  	</title>
+  	<action>
+ 			<close>Fermer</close>
+ 		</action>
+  </UIClvPopupContainer>
   <UIPublicationAction>
     <msg>
       <none>Aucun noeud de navigation sélectionné</none>
@@ -94,6 +103,7 @@
   <Publication>
   	<log>
 	  	<description>
+	  		<enrolled>Le contenu a enrôlé</enrolled>
 	  		<change-to-draft-state>Le contenu a créé</change-to-draft-state>
 	  		<change-to-live-state>de Draft à Live</change-to-live-state>
 	  		<change-to-obsolete-state>de Live à Obsolete</change-to-obsolete-state>

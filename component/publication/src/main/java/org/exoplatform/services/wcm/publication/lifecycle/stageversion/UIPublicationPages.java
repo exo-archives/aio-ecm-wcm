@@ -22,7 +22,8 @@ import javax.jcr.Node;
 
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.UIPublicationTree.TreeNode;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
+import org.exoplatform.webui.core.UIPopupWindow;
+import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.form.UIForm;
 
 /**
@@ -32,7 +33,7 @@ import org.exoplatform.webui.form.UIForm;
  * Mar 4, 2009  
  */
 @ComponentConfig (
-                  lifecycle = UIApplicationLifecycle.class,
+                  lifecycle = Lifecycle.class,
                   template = "classpath:groovy/wcm/webui/publication/lifecycle/stageversion/UIPublicationPages.gtmpl"
 )
 public class UIPublicationPages extends UIForm {
@@ -63,6 +64,7 @@ public class UIPublicationPages extends UIForm {
     addChild(UIPortalNavigationExplorer.class,null,"UIPortalNavigationExplorer");
     addChild(UIPublicationAction.class,null,"UIPublicationAction");
     addChild(UIPublishedPages.class,null,"UIPublishedPages");
+    addChild(UIPopupWindow.class, null, "UIClvPopupWindowr");
   }
 
   /**

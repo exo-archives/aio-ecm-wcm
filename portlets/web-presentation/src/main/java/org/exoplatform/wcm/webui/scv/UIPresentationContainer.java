@@ -26,6 +26,7 @@ import org.exoplatform.portal.webui.page.UIPage;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.WebUIPropertiesConfigService;
 import org.exoplatform.wcm.webui.WebUIPropertiesConfigService.PopupWindowProperties;
@@ -134,8 +135,9 @@ public class UIPresentationContainer extends UIContainer{
 		if(uiPage == null) {
 			return false;
 		}
+		WCMConfigurationService wcmConfigurationService = getApplicationComponent(WCMConfigurationService.class);
 		List<String> ids = org.exoplatform.services.wcm.publication.lifecycle.stageversion
-						.Util.getListApplicationIdByPage(PortalDataMapper.toPageModel(uiPage));
+						.Util.getListApplicationIdByPage(PortalDataMapper.toPageModel(uiPage), wcmConfigurationService.getPublishingPortletName());
 		List<String> newIds = new ArrayList<String>();
 		int length = ids.size();
 		

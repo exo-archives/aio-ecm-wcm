@@ -108,10 +108,11 @@ public class NavigationEventListenerDelegate {
    */
   private void updateAddedPageNode(PageNavigation pageNavigation) throws Exception {
     UserPortalConfigService userPortalConfigService = Util.getServices(UserPortalConfigService.class);
+    WCMConfigurationService wcmConfigurationService = Util.getServices(WCMConfigurationService.class);
     for (PageNode pageNode : pageNavigation.getNodes()) {
       Page page = userPortalConfigService.getPage(pageNode.getPageReference(), org.exoplatform.portal.webui.util.Util.getPortalRequestContext().getRemoteUser());
       if (page != null) {
-        for (String applicationId : Util.getListApplicationIdByPage(page)) {
+        for (String applicationId : Util.getListApplicationIdByPage(page, wcmConfigurationService.getPublishingPortletName())) {
           Node content = Util.getNodeByApplicationId(applicationId);
           if (content != null) {
             List<String> listExistedApplicationId = Util.getValuesAsString(content, "publication:applicationIDs"); 
@@ -143,9 +144,9 @@ public class NavigationEventListenerDelegate {
     }
 
     RepositoryService repositoryService = Util.getServices(RepositoryService.class);
-    WCMConfigurationService configurationService = Util.getServices(WCMConfigurationService.class);
+    WCMConfigurationService wcmConfigurationService = Util.getServices(WCMConfigurationService.class);
     ManageableRepository repository = repositoryService.getCurrentRepository();
-    NodeLocation nodeLocation = configurationService.getLivePortalsLocation(repository.getConfiguration().getName());
+    NodeLocation nodeLocation = wcmConfigurationService.getLivePortalsLocation(repository.getConfiguration().getName());
 
     String repositoryName = nodeLocation.getRepository();
     String workspaceName = nodeLocation.getWorkspace();
@@ -176,7 +177,7 @@ public class NavigationEventListenerDelegate {
         String applicationId = "";
         UserPortalConfigService userPortalConfigService = Util.getServices(UserPortalConfigService.class);
         Page page = userPortalConfigService.getPage(pageId, org.exoplatform.portal.webui.util.Util.getPortalRequestContext().getRemoteUser());
-        for (String applicationIdTmp : Util.getListApplicationIdByPage(page)) {
+        for (String applicationIdTmp : Util.getListApplicationIdByPage(page, wcmConfigurationService.getPublishingPortletName())) {
           applicationIdTmp = Util.setMixedApplicationId(pageId, applicationIdTmp);
           List<String> listExistedApplicationId = Util.getValuesAsString(content, "publication:applicationIDs");
           if (listExistedApplicationId.contains(applicationIdTmp)) {

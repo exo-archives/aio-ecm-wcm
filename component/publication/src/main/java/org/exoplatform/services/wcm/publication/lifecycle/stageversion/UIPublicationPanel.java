@@ -30,7 +30,6 @@ import javax.jcr.Value;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionIterator;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.exoplatform.ecm.webui.utils.JCRExceptionManager;
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
