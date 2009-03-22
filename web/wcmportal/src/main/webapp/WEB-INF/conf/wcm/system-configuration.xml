@@ -82,12 +82,12 @@
 	    	<values-param>
 	    		<name>access.control.workspace.roles</name>
 	    		<value>*:/platform/administrators</value>
-	    		<value>*:/organization/management/executive-board</value>	    		
+	    		<value>*:/platform/web-contributors</value>	    		
 	    	</values-param>
 	    	<values-param>
 	    		<name>portal.creation.roles</name>
 	    		<value>*:/platform/administrators</value>
-	    		<value>*:/organization/management/executive-board</value>	    	
+	    		<value>manager:/platform/web-contributors</value>	    		
 	    	</values-param>
 	    </init-params>
 	  </component-plugin>
@@ -212,14 +212,23 @@
 	              	</object>
               	</value>
               	<value>              	
-		             	<object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$JcrPath">              	 	
-		             		<field  name="alias"><string>liveSiteContent</string></field>
+		             <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$JcrPath">              	 	
+		             	<field  name="alias"><string>liveSiteContent</string></field>
 		                <field  name="path"><string>/sites content/live</string></field>		                				            	
 		                <field name="permissions">
 				              <collection type="java.util.ArrayList">               
 				                <value>                            
 				                  <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">             
 				                      <field name="identity"><string>*:/platform/administrators</string></field>
+				                      <field name="read"><string>true</string></field>                
+				                      <field name="addNode"><string>true</string></field>                
+				                      <field name="setProperty"><string>true</string></field>                
+				                      <field name="remove"><string>true</string></field>                
+				                    </object>  
+				                </value>
+				                <value>                            
+				                  <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig$Permission">             
+				                      <field name="identity"><string>*:/platform/web-contributors</string></field>
 				                      <field name="read"><string>true</string></field>                
 				                      <field name="addNode"><string>true</string></field>                
 				                      <field name="setProperty"><string>true</string></field>                

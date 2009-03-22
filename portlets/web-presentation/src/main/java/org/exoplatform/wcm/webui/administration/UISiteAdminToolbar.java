@@ -232,6 +232,8 @@ public class UISiteAdminToolbar extends UIContainer {
       portalContext.addUIComponentToUpdateByAjax(uiWorkingWS);
       uiToolPanel.setWorkingComponent(UIPageCreationWizard.class, null);
       UIPageCreationWizard uiWizard = (UIPageCreationWizard) uiToolPanel.getUIComponent();
+      uiWizard.setDescriptionWizard(2);
+      uiWizard.viewStep(2);
       UIWizardPageSetInfo uiPageSetInfo = uiWizard.getChild(UIWizardPageSetInfo.class);
       uiPageSetInfo.setShowPublicationDate(false);
       uiWorking.setUIComponent(uiWorking.createUIComponent(UIWelcomeComponent.class, null, null));
@@ -281,7 +283,8 @@ public class UISiteAdminToolbar extends UIContainer {
       portalContext.addUIComponentToUpdateByAjax(uiWorkingWS);
       uiToolPanel.setWorkingComponent(UIPageEditWizard.class, null);
       UIPageEditWizard uiWizard = (UIPageEditWizard) uiToolPanel.getUIComponent();
-      uiWizard.setDescriptionWizard(1);
+      uiWizard.setDescriptionWizard(2);
+      uiWizard.viewStep(3);
       UIWizardPageSetInfo uiPageSetInfo = uiWizard.getChild(UIWizardPageSetInfo.class);
       uiPageSetInfo.setEditMode();
       uiPageSetInfo.createEvent("ChangeNode", Event.Phase.DECODE, event.getRequestContext())

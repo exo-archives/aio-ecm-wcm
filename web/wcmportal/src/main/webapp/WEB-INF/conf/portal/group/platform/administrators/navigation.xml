@@ -39,25 +39,5 @@
 		    <page-reference>group::platform/administrators::i18n</page-reference>
 	    </node>	    	    	    	   	    	   	   
     </node>
-    <node>
-      <uri>wcm</uri>
-      <name>wcm</name>
-      <label>#{administration.wcm}</label>     
-      <page-reference>group::platform/administrators::wcm</page-reference>
-      
-      <node>
-	      <uri>wcm/siteExplorer</uri>
-	      <name>siteExplorer</name>
-	      <label>#{administration.siteExplorer}</label>     
-	      <page-reference>group::platform/administrators::SiteExplorer</page-reference>            
-    	</node>
-    	    		    
-	    <node>
-	      <uri>wcm/wcmAdmin</uri>
-	      <name>wcmAdmin</name>
-	      <label>#{administration.wcmAdmin}</label>     
-	      <page-reference>group::platform/administrators::WcmAdmin</page-reference>            
-	    </node>                
-    </node>                                                    
   </page-nodes>
 </node-navigation>

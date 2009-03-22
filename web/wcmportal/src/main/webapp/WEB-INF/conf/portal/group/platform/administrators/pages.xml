@@ -69,49 +69,5 @@
       <show-info-bar>false</show-info-bar>
     </application>  
   </page>
-  
-  <page>
-  	<page-id>group::platform/administrators::wcm</page-id>
-  	<owner-type>group</owner-type>
-    <owner-id>platform/administrators</owner-id>
-    <name>wcm</name>
-    <access-permissions>*:/platform/administrators</access-permissions>
-    <edit-permission>*/platform/administrators</edit-permission>
-    
-    <application>
-      <instance-id>group#platform/users:/ecm/FileExplorerPortlet/siteExplorer</instance-id>
-      <title>Sites Explorer</title>
-      <show-info-bar>false</show-info-bar>
-    </application>  
-  </page>
-  
-  <page>
-  	<page-id>group::platform/administrators::SiteExplorer</page-id>
-  	<owner-type>group</owner-type>
-    <owner-id>platform/administrators</owner-id>
-    <name>SiteExplorer</name>
-    <access-permissions>*:/platform/administrators</access-permissions>
-    <edit-permission>manager:/platform/administrators</edit-permission>
-    
-    <application>
-      <instance-id>group#platform/users:/ecm/FileExplorerPortlet/siteExplorer</instance-id>
-      <title>Sites Explorer</title>
-      <show-info-bar>false</show-info-bar>
-    </application>  
-  </page>
-    
-  <page>
-  	<page-id>group::platform/administrators::WcmAdmin</page-id>
-  	<owner-type>group</owner-type>
-    <owner-id>platform/administrators</owner-id>
-    <name>WcmAdmin</name>
-    <access-permissions>manager:/platform/administrators</access-permissions>
-    <edit-permission>manager:/platform/administrators</edit-permission>
-    <application>
-      <instance-id>group#platform/administrators:/ecm/ECMAdminPortlet/ecmadmin</instance-id>
-      <title>Web Content Administration</title>
-      <show-info-bar>false</show-info-bar>      
-    </application>
-  </page>
-         
+           
 </page-set>

@@ -21,6 +21,7 @@ import java.util.HashMap;
 import javax.jcr.Node;
 
 import org.exoplatform.services.cms.templates.TemplateService;
+import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleException;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -79,8 +80,14 @@ public class StateAndVersionPublicationHandler extends BaseWebSchemaHandler {
       if(parentNode.isNodeType("exo:webContent")) {
         checkNode = parentNode;        
       }                 
-    }   
-    String lifecycle = publicationService.getNodeLifecycleName(checkNode);
+    }
+    String lifecycle = null;
+    try {
+    lifecycle = publicationService.getNodeLifecycleName(checkNode);
+    } catch (NotInPublicationLifecycleException e) {
+    	return;
+    }
+    
     if(!Constant.LIFECYCLE_NAME.equalsIgnoreCase(lifecycle))   
       return;
     String currentState = publicationService.getCurrentState(checkNode);

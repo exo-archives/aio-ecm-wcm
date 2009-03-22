@@ -221,7 +221,7 @@ function findPreviousElementByClass(element, clazz) {
 function viewMoreActions(viewMoreObj) {		
 	var moreActionsMenu = eXo.core.DOMUtil.findNextElementByTagName(viewMoreObj, "div");
 	var onOffAction = findPreviousElementByClass(viewMoreObj, "BoxOnOff");
-	moreActionsMenu.style.right = onOffAction.offsetWidth + "px";
+	//moreActionsMenu.style.left = onOffAction.offsetWidth + "px";
 	var objToolbarPortlet = eXo.core.DOMUtil.findAncestorByClass(moreActionsMenu, "UISiteAdministrationPortlet");
 	if (document.all) {
 		if(document.getElementById(moreActionsMenu.id + "1")) eXo.core.DOMUtil.removeElement(document.getElementById(moreActionsMenu.id + "1").parentNode.parentNode);
@@ -237,7 +237,7 @@ function viewMoreActions(viewMoreObj) {
 		tmp1.style["position"] = "static";
 		document.body.appendChild(tmp1);
 		
-		moreActionsMenu.style.top = viewMoreObj.offsetHeight + "px";
+		//moreActionsMenu.style.top = viewMoreObj.offsetHeight + "px";
 		moreActionsMenu.style.display = "block";
 	} else {
 		moreActionsMenu.style.display = "block";
@@ -291,7 +291,7 @@ UIExoStartMenu.prototype.onMenuItemOver = function(event) {
 		menuItemContainer.style.visibility = "" ;
 		var x = this.offsetWidth ;
 		var posRight = eXo.core.Browser.getBrowserWidth() - eXo.core.Browser.findPosX(this) - this.offsetWidth ; 
-	  var rootX = (eXo.core.I18n.isLT() ? eXo.core.Browser.findPosX(this) : posRight) ;
+		var rootX = (eXo.core.I18n.isLT() ? eXo.core.Browser.findPosX(this) : posRight) ;
 		if (x + menuItemContainer.offsetWidth + rootX > eXo.core.Browser.getBrowserWidth()) {
     	x -= (menuItemContainer.offsetWidth + this.offsetWidth) ;
 	  }

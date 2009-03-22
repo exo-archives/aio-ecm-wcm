@@ -219,7 +219,8 @@ public class UIWebContentSelectorForm extends UIForm implements UISelectable{
     public void execute(Event<UIWebContentSelectorForm> event) throws Exception {
       UIWebContentSelectorForm uiWebContentSelector = event.getSource();
       String webContentPath = uiWebContentSelector.getUIStringInput(UIWebContentSelectorForm.PATH).getValue();
-      String lifecycleName =  uiWebContentSelector.getUIStringInput(UIWebContentSelectorForm.PUBLICATION).getValue();
+      String lifecycleName =  "States and versions based publication";
+      //uiWebContentSelector.getUIStringInput(UIWebContentSelectorForm.PUBLICATION).getValue();
       if(webContentPath == null) {
         UIApplication uiApplication = uiWebContentSelector.getAncestorOfType(UIApplication.class);
         uiApplication.addMessage(new ApplicationMessage("UIWebContentSelector.msg.require-choose", null, ApplicationMessage.WARNING));

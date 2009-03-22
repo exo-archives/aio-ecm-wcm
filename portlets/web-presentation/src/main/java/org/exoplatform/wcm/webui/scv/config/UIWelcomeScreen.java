@@ -47,8 +47,8 @@ import org.exoplatform.webui.form.UIFormRadioBoxInput;
     lifecycle = UIFormLifecycle.class, 
     template = "app:/groovy/SingleContentViewer/config/UIWelcomeScreen.gtmpl",
     events = {
-      @EventConfig(listeners = UIWelcomeScreen.StartProcessActionListener.class),
-      @EventConfig(listeners = UIWelcomeScreen.BackActionListener.class)
+      @EventConfig(listeners = UIWelcomeScreen.NextActionListener.class),
+      @EventConfig(listeners = UIWelcomeScreen.AbortActionListener.class)
     }
 )
 public class UIWelcomeScreen extends UIForm implements UISelectable {
@@ -142,7 +142,7 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
    * 
    * @see StartProcessActionEvent
    */
-  public static class StartProcessActionListener extends EventListener<UIWelcomeScreen> {
+  public static class NextActionListener extends EventListener<UIWelcomeScreen> {
 
     /* (non-Javadoc)
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
@@ -199,7 +199,7 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
    * 
    * @see BackActionEvent
    */
-  public static class BackActionListener extends EventListener<UIWelcomeScreen> {
+  public static class AbortActionListener extends EventListener<UIWelcomeScreen> {
 
     /* (non-Javadoc)
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)

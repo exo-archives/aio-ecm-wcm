@@ -36,7 +36,7 @@
               <field  name="name"><string>shared</string></field>
               <field  name="repository"><string>repository</string></field>
               <field  name="workspace"><string>collaboration</string></field>
-              <field  name="permissions"><string>*:/platform/administrators</string></field>
+              <field  name="permissions"><string>*:/platform/web-contributors</string></field>
               <field  name="homePath"><string>/sites content/live/shared</string></field>
               <field  name="icon"><string></string></field>
               <field  name="views"><string>wcm-view</string></field>

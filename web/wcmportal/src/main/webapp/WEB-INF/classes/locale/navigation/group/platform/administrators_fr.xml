@@ -6,9 +6,6 @@
     <newAccount>Création de compte</newAccount>
     <comunity-management>Gestion des communautés</comunity-management>
     <i18n>Internationalisation</i18n>
-    <wcm>Gestion des sites</wcm>
-    <siteExplorer>Explorateur de sites</siteExplorer>
-    <wcmAdmin>Administration des sites</wcmAdmin>
   </administration>
 </bundle>
 

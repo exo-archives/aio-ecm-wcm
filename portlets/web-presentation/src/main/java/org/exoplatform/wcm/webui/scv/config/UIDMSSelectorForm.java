@@ -213,7 +213,9 @@ public class UIDMSSelectorForm extends UIForm implements UISelectable{
     public void execute(Event<UIDMSSelectorForm> event) throws Exception {
       UIDMSSelectorForm uiDMSSelectorForm = event.getSource();
       String dmsPath = uiDMSSelectorForm.getUIStringInput(UIDMSSelectorForm.PATH).getValue();
-      String lifecycleName =  uiDMSSelectorForm.getUIStringInput(UIWebContentSelectorForm.PUBLICATION).getValue();
+      String lifecycleName =  "States and versions based publication";
+
+      //String lifecycleName =  uiDMSSelectorForm.getUIStringInput(UIWebContentSelectorForm.PUBLICATION).getValue();
       if(dmsPath == null) {
         UIApplication uiApplication = uiDMSSelectorForm.getAncestorOfType(UIApplication.class);
         uiApplication.addMessage(new ApplicationMessage("UIDMSSelectorForm.msg.require-choose", null, ApplicationMessage.WARNING));

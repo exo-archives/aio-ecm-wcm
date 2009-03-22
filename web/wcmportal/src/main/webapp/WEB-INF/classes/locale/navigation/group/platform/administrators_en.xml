@@ -6,9 +6,6 @@
     <newAccount>New Account</newAccount>
     <comunity-management>Community Management</comunity-management>
     <i18n>Internationalization</i18n>
-    <wcm>Sites Management</wcm>
-    <siteExplorer>Sites Explorer</siteExplorer>
-    <wcmAdmin>Sites Administration</wcmAdmin>
   </administration>
 </bundle>
 
