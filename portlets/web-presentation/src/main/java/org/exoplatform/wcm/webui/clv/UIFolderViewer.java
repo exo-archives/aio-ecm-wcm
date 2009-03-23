@@ -34,6 +34,7 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.utils.PaginatedNodeIterator;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -130,10 +131,14 @@ public class UIFolderViewer extends UIListViewerBase {
     if (orderType == null) orderType = "DESC";
     if (orderBy == null) orderBy = "exo:title";
     orderQuery += orderBy + " " + orderType;
-    
     String statement = "select * from nt:base where jcr:path like '" + folderPath
     + "/%' AND NOT jcr:path like'" + folderPath + "/%/%'" + " AND( "
     + documentTypeClause.toString() + ")" + orderQuery;
+    if (Utils.isLiveMode()) {
+      statement = "select * from nt:base where jcr:path like '" + folderPath
+      + "/%' AND NOT jcr:path like'" + folderPath + "/%/%'" + " AND( "
+      + documentTypeClause.toString() + ") AND publication:liveRevision IS NOT NULL AND publication:liveRevision <> '' " + orderQuery;
+    }  
     Query query = manager.createQuery(statement, Query.SQL);
     return query.execute().getNodes();
   }

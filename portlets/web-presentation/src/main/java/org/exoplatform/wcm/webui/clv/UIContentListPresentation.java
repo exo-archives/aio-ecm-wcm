@@ -16,9 +16,11 @@
  */
 package org.exoplatform.wcm.webui.clv;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import javax.jcr.Node;
 import javax.jcr.Session;
@@ -91,7 +93,7 @@ public class UIContentListPresentation extends UIContainer {
   private String                   header;
 
   /** The date formatter. */
-  private SimpleDateFormat         dateFormatter = new SimpleDateFormat(ISO8601.SIMPLE_DATETIME_FORMAT);
+  private DateFormat         dateFormatter = null;
 
   /**
    * Instantiates a new uI content list presentation.
@@ -117,6 +119,8 @@ public class UIContentListPresentation extends UIContainer {
     uiPaginator.setTemplatePath(paginatorTemplatePath);
     uiPaginator.setResourceResolver(resourceResolver);    
     uiPaginator.setPageList(dataPageList);
+    Locale locale = Util.getPortalRequestContext().getLocale();
+    dateFormatter = SimpleDateFormat.getDateTimeInstance(SimpleDateFormat.MEDIUM, SimpleDateFormat.MEDIUM,locale);
   }
   
   private PortletPreferences getPortletPreferences() {
@@ -148,6 +152,18 @@ public class UIContentListPresentation extends UIContainer {
     String showAble = portletPreferences.getValue(field, null);
     return (showAble != null) ? Boolean.parseBoolean(showAble) : false;
   }
+  
+  public Node getNodeView(Node node) throws Exception{
+    return null;
+  } 
+  
+  public boolean showDraftButton(Node node) throws Exception {
+    boolean bool = false;
+    if (node != null && !node.hasProperty("publication:liveRevision")) {
+      bool = true;
+    }    
+    return bool;
+  }
 
   /**
    * Show paginator.
@@ -178,7 +194,7 @@ public class UIContentListPresentation extends UIContainer {
    * 
    * @return the datetime fommatter
    */
-  public SimpleDateFormat getDatetimeFommatter() {
+  public DateFormat getDatetimeFommatter() {
     return dateFormatter;
   }
 
@@ -188,7 +204,7 @@ public class UIContentListPresentation extends UIContainer {
    * @param format the new date time format
    */
   public void setDateTimeFormat(String format) {
-    dateFormatter.applyPattern(format);
+    ((SimpleDateFormat)dateFormatter).applyPattern(format);
   }
 
   /**
@@ -364,7 +380,7 @@ public class UIContentListPresentation extends UIContainer {
   public String getContentIcon(Node node) {
     return null;
   }
-
+  
   /**
    * Gets the content size.
    * 

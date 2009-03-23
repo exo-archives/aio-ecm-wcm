@@ -410,6 +410,7 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
       portletPreferences.setValue(UIContentListViewerPortlet.SHOW_HEADER, viewerHeader);
       portletPreferences.setValue(UIContentListViewerPortlet.VIEWER_MODE, newViewerMode);
       portletPreferences.setValue(UIContentListViewerPortlet.ORDER_TYPE, orderType);
+      
       if (uiViewerManagementForm.isManualMode()) {
         String[] sl = (String[]) uiViewerManagementForm.getViewAbleContentList().toArray(new String[0]);
         portletPreferences.setValues(UIContentListViewerPortlet.CONTENT_LIST, sl);

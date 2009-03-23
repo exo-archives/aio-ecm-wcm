@@ -57,8 +57,7 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 )
 public class UICorrectContentsViewer extends UIListViewerBase {
 
-  public void init() throws Exception {        
-    System.out.println("\n\n=========> GO INIT MANUAL\n");    
+  public void init() throws Exception {            
     PublicationService publicationService = getApplicationComponent(PublicationService.class);    
     HashMap<String, Object> context = new HashMap<String, Object>();
     if(Utils.isLiveMode()) {
@@ -97,8 +96,8 @@ public class UICorrectContentsViewer extends UIListViewerBase {
         if (node != null) {          
           String lifecyleName = publicationService.getNodeLifecycleName(node);
           PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(lifecyleName);
-          Node viewNode = publicationPlugin.getNodeView(node, context);
-          if (viewNode != null) nodes.add(viewNode);       
+          Node viewNode = publicationPlugin.getNodeView(node, context);          
+          if (viewNode != null) nodes.add(node);       
         }          
       }
     }
