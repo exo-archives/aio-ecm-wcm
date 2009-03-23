@@ -115,8 +115,7 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     Session session = sessionProvider.getSession(location.getWorkspace(),currentRepository);
     QueryManager queryManager = session.getWorkspace().getQueryManager();
     long startTime = System.currentTimeMillis();
-    QueryResult queryResult = searchSiteContent(queryCriteria, queryManager);
-    System.out.println(queryResult.getRows().getSize());
+    QueryResult queryResult = searchSiteContent(queryCriteria, queryManager);    
     String suggestion = getSpellSuggestion(queryCriteria.getKeyword(),currentRepository);
     long queryTime = System.currentTimeMillis() - startTime;
     WCMPaginatedQueryResult paginatedQueryResult = null;
@@ -183,8 +182,9 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     mapCategoriesCondition(queryCriteria,queryBuilder);
     mapDatetimeRangeSelected(queryCriteria,queryBuilder);
     mapMetadataProperties(queryCriteria,queryBuilder);
+    mapSiteMode(queryCriteria,queryBuilder);    
     orderBy(queryCriteria, queryBuilder);
-    String queryStatement = queryBuilder.createQueryStatement();    
+    String queryStatement = queryBuilder.createQueryStatement();
     Query query = queryManager.createQuery(queryStatement, Query.SQL);
     return query.execute();
   }
@@ -200,7 +200,7 @@ public class SiteSearchServiceImpl implements SiteSearchService {
   private void mapQueryPath(final QueryCriteria queryCriteria,final SQLQueryBuilder queryBuilder) throws Exception {
     queryBuilder.setQueryPath(getSitePath(queryCriteria), PATH_TYPE.DECENDANTS);
   }
-  
+
   private String getSitePath(final QueryCriteria queryCriteria) throws Exception {
     String siteName = queryCriteria.getSiteName();
     String sitePath = null;
@@ -225,25 +225,25 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     if(keyword == null || keyword.length() == 0)
       return;
     QueryTermHelper queryTermHelper = new QueryTermHelper();    
-      String queryTerm = null;
-      keyword = keyword.replaceAll("'","''");
-      if (keyword.contains("*") || keyword.contains("?") || keyword.contains("~")) {
-        queryTerm = queryTermHelper.contains(keyword).buildTerm();
-      } else {
-        queryTerm = queryTermHelper.contains(keyword).allowFuzzySearch().buildTerm();
-      }      
-      String scope = queryCriteria.getFulltextSearchProperty();
-      if(QueryCriteria.ALL_PROPERTY_SCOPE.equals(scope) || scope == null) {
-        queryBuilder.contains(null, queryTerm, LOGICAL.NULL);
-      }else {
-        queryBuilder.contains(scope, queryTerm, LOGICAL.NULL);
-      }                   
+    String queryTerm = null;
+    keyword = keyword.replaceAll("'","''");
+    if (keyword.contains("*") || keyword.contains("?") || keyword.contains("~")) {
+      queryTerm = queryTermHelper.contains(keyword).buildTerm();
+    } else {
+      queryTerm = queryTermHelper.contains(keyword).allowFuzzySearch().buildTerm();
+    }      
+    String scope = queryCriteria.getFulltextSearchProperty();
+    if(QueryCriteria.ALL_PROPERTY_SCOPE.equals(scope) || scope == null) {
+      queryBuilder.contains(null, queryTerm, LOGICAL.NULL);
+    }else {
+      queryBuilder.contains(scope, queryTerm, LOGICAL.NULL);
+    }                   
   }
-  
+
   private void searchByNodeName(final QueryCriteria queryCriteria, final SQLQueryBuilder queryBuilder) throws Exception {    
     queryBuilder.queryByNodeName(getSitePath(queryCriteria),queryCriteria.getKeyword());
   }      
-  
+
   private void mapDatetimeRangeSelected(final QueryCriteria queryCriteria, final SQLQueryBuilder queryBuilder) {
     DATE_RANGE_SELECTED selectedDateRange = queryCriteria.getDateRangeSelected();
     if(selectedDateRange == null) return;
@@ -259,7 +259,7 @@ public class SiteSearchServiceImpl implements SiteSearchService {
       throw new UnsupportedOperationException();
     }    
   }  
-  
+
   private void mapCategoriesCondition(QueryCriteria queryCriteria, SQLQueryBuilder queryBuilder) {
     String[] categoryUUIDs = queryCriteria.getCategoryUUIDs();
     if(categoryUUIDs == null) return;
@@ -272,7 +272,7 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     }
     queryBuilder.closeGroup();
   }
-  
+
   private void mapMetadataProperties(final QueryCriteria queryCriteria, SQLQueryBuilder queryBuilder) {
     QueryProperty[] queryProperty = queryCriteria.getQueryMetadatas();
     if(queryProperty == null) return;
@@ -285,7 +285,13 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     }
     queryBuilder.closeGroup();
   }
-  
+
+  private void mapSiteMode(QueryCriteria queryCriteria, SQLQueryBuilder queryBuilder) {
+    if(queryCriteria.isLiveMode()) {      
+      queryBuilder.isNotNull("publication:liveRevision",LOGICAL.AND);
+      queryBuilder.notEqual("publication:liveRevision","",LOGICAL.AND);
+    }
+  }
   private void mapQuerySpecificNodeTypes( final QueryCriteria queryCriteria, final SQLQueryBuilder queryBuilder, final NodeTypeManager nodeTypeManager) throws Exception {
     String[] contentTypes = queryCriteria.getContentTypes();
     NodeType fistType = nodeTypeManager.getNodeType(contentTypes[0]);    

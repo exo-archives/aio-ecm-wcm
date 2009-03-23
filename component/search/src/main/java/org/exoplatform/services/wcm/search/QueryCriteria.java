@@ -75,8 +75,17 @@ public class QueryCriteria {
   private boolean searchWebContent = true;  
 
   /** The fulltext search. */
-  private boolean fulltextSearch = true;  
+  private boolean fulltextSearch = true;
+  private boolean isLiveMode = true;
   
+  public boolean isLiveMode() {
+    return isLiveMode;
+  }
+
+  public void setLiveMode(boolean isLiveMode) {
+    this.isLiveMode = isLiveMode;
+  }
+
   private QueryProperty[] queryMetadatas = null;
   
   private String fulltextSearchProperty = ALL_PROPERTY_SCOPE;

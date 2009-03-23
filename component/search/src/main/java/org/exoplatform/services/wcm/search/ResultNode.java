@@ -148,7 +148,7 @@ public class ResultNode implements Node{
    */
   public void addMixin(String name) throws NoSuchNodeTypeException, VersionException,
   ConstraintViolationException, LockException, RepositoryException {
-    node.addMixin(name);
+    throw new  ConstraintViolationException("Unsupported this method");    
   }
 
   /* (non-Javadoc)
@@ -156,7 +156,7 @@ public class ResultNode implements Node{
    */
   public Node addNode(String name) throws ItemExistsException, PathNotFoundException,
   VersionException, ConstraintViolationException, LockException, RepositoryException {
-    return node.addNode(name);
+    throw new  ConstraintViolationException("Unsupported this method");
   }
 
   /* (non-Javadoc)
@@ -165,14 +165,14 @@ public class ResultNode implements Node{
   public Node addNode(String name, String type) throws ItemExistsException,
   PathNotFoundException, NoSuchNodeTypeException, LockException, VersionException,
   ConstraintViolationException, RepositoryException {
-    return node.addNode(name,type);
+    throw new  ConstraintViolationException("Unsupported this method");
   }
 
   /* (non-Javadoc)
    * @see javax.jcr.Node#canAddMixin(java.lang.String)
    */
   public boolean canAddMixin(String name) throws NoSuchNodeTypeException, RepositoryException {
-    return node.canAddMixin(name);
+    throw new  ConstraintViolationException("Unsupported this method");
   }
 
   /* (non-Javadoc)
@@ -180,7 +180,7 @@ public class ResultNode implements Node{
    */
   public void cancelMerge(Version version) throws VersionException, InvalidItemStateException,
   UnsupportedRepositoryOperationException, RepositoryException {
-    node.cancelMerge(version);
+    throw new  ConstraintViolationException("Unsupported this method");
   }
 
   /* (non-Javadoc)
@@ -188,7 +188,7 @@ public class ResultNode implements Node{
    */
   public Version checkin() throws VersionException, UnsupportedRepositoryOperationException,
   InvalidItemStateException, LockException, RepositoryException {
-    return node.checkin();
+    throw new  ConstraintViolationException("Unsupported this method");
   }
 
   /* (non-Javadoc)
@@ -196,7 +196,7 @@ public class ResultNode implements Node{
    */
   public void checkout() throws UnsupportedRepositoryOperationException, LockException,
   RepositoryException {
-    node.checkout();
+    throw new  ConstraintViolationException("Unsupported this method");
   }
 
   /* (non-Javadoc)
@@ -204,7 +204,7 @@ public class ResultNode implements Node{
    */
   public void doneMerge(Version version) throws VersionException, InvalidItemStateException,
   UnsupportedRepositoryOperationException, RepositoryException {
-    node.doneMerge(version);
+    throw new  ConstraintViolationException("Unsupported this method");
   }
 
   /* (non-Javadoc)
@@ -384,7 +384,7 @@ public class ResultNode implements Node{
    */
   public Lock lock(boolean arg0, boolean arg1) throws UnsupportedRepositoryOperationException,
   LockException, AccessDeniedException, InvalidItemStateException, RepositoryException {
-    return node.lock(arg0, arg1);
+    throw new UnsupportedRepositoryOperationException("Unsupported this method");
   }
 
   /* (non-Javadoc)
@@ -393,7 +393,7 @@ public class ResultNode implements Node{
   public NodeIterator merge(String arg0, boolean arg1) throws NoSuchWorkspaceException,
   AccessDeniedException, MergeException, LockException, InvalidItemStateException,
   RepositoryException {
-    return node.merge(arg0, arg1);
+    throw new RepositoryException("Unsupported this method");    
   }
 
   /* (non-Javadoc)
@@ -410,7 +410,7 @@ public class ResultNode implements Node{
    */
   public void removeMixin(String arg0) throws NoSuchNodeTypeException, VersionException,
   ConstraintViolationException, LockException, RepositoryException {
-    node.removeMixin(arg0);
+    throw new RepositoryException("Unsupported this method");
   }
 
   /* (non-Javadoc)
@@ -419,7 +419,7 @@ public class ResultNode implements Node{
   public void restore(String arg0, boolean arg1) throws VersionException, ItemExistsException,
   UnsupportedRepositoryOperationException, LockException, InvalidItemStateException,
   RepositoryException {
-    node.restore(arg0, arg1);
+    throw new RepositoryException("Unsupported this method");
   }
 
   /* (non-Javadoc)
@@ -427,8 +427,7 @@ public class ResultNode implements Node{
    */
   public void restore(Version arg0, boolean arg1) throws VersionException, ItemExistsException,
   UnsupportedRepositoryOperationException, LockException, RepositoryException {
-
-    node.restore(arg0, arg1) ;
+    throw new RepositoryException("Unsupported this method");
   }
 
   /* (non-Javadoc)
@@ -437,9 +436,8 @@ public class ResultNode implements Node{
   public void restore(Version arg0, String arg1, boolean arg2) throws PathNotFoundException,
   ItemExistsException, VersionException, ConstraintViolationException,
   UnsupportedRepositoryOperationException, LockException, InvalidItemStateException,
-  RepositoryException {
-    node.restore(arg0, arg1, arg2);
-
+  RepositoryException {    
+    throw new RepositoryException("Unsupported this method");
   }
 
   /* (non-Javadoc)
@@ -448,7 +446,7 @@ public class ResultNode implements Node{
   public void restoreByLabel(String arg0, boolean arg1) throws VersionException,
   ItemExistsException, UnsupportedRepositoryOperationException, LockException,
   InvalidItemStateException, RepositoryException {
-    node.restoreByLabel(arg0, arg1);
+    throw new RepositoryException("Unsupported this method");
   }
 
   /* (non-Javadoc)
@@ -456,7 +454,7 @@ public class ResultNode implements Node{
    */
   public Property setProperty(String arg0, Value arg1) throws ValueFormatException,
   VersionException, LockException, ConstraintViolationException, RepositoryException {
-    return node.setProperty(arg0, arg1);
+    throw new RepositoryException("Unsupported this method");
   }
 
   /* (non-Javadoc)
@@ -464,7 +462,7 @@ public class ResultNode implements Node{
    */
   public Property setProperty(String arg0, Value[] arg1) throws ValueFormatException,
   VersionException, LockException, ConstraintViolationException, RepositoryException {
-    return node.setProperty(arg0, arg1);
+    throw new RepositoryException("Unsupported this method");
   }
 
   /* (non-Javadoc)
@@ -472,7 +470,7 @@ public class ResultNode implements Node{
    */
   public Property setProperty(String arg0, String[] arg1) throws ValueFormatException,
   VersionException, LockException, ConstraintViolationException, RepositoryException {
-    return node.setProperty(arg0, arg1);
+    throw new RepositoryException("Unsupported this method");
   }
 
   /* (non-Javadoc)
@@ -480,7 +478,7 @@ public class ResultNode implements Node{
    */
   public Property setProperty(String arg0, String arg1) throws ValueFormatException,
   VersionException, LockException, ConstraintViolationException, RepositoryException {
-    return node.setProperty(arg0, arg1);
+    throw new RepositoryException("Unsupported this method");
   }
 
   /* (non-Javadoc)
@@ -488,7 +486,7 @@ public class ResultNode implements Node{
    */
   public Property setProperty(String arg0, InputStream arg1) throws ValueFormatException,
   VersionException, LockException, ConstraintViolationException, RepositoryException {
-    return node.setProperty(arg0, arg1);
+    throw new RepositoryException("Unsupported this method");
   }
 
   /* (non-Javadoc)
@@ -496,7 +494,7 @@ public class ResultNode implements Node{
    */
   public Property setProperty(String arg0, boolean arg1) throws ValueFormatException,
   VersionException, LockException, ConstraintViolationException, RepositoryException {
-    return node.setProperty(arg0, arg1);
+    throw new RepositoryException("Unsupported this method");
   }
 
   /* (non-Javadoc)
@@ -504,7 +502,7 @@ public class ResultNode implements Node{
    */
   public Property setProperty(String arg0, double arg1) throws ValueFormatException,
   VersionException, LockException, ConstraintViolationException, RepositoryException {
-    return node.setProperty(arg0, arg1);
+    throw new RepositoryException("Unsupported this method");
   }
 
   /* (non-Javadoc)
@@ -512,7 +510,7 @@ public class ResultNode implements Node{
    */
   public Property setProperty(String arg0, long arg1) throws ValueFormatException,
   VersionException, LockException, ConstraintViolationException, RepositoryException {
-    return node.setProperty(arg0, arg1);
+    throw new RepositoryException("Unsupported this method");
   }
 
   /* (non-Javadoc)
@@ -520,7 +518,7 @@ public class ResultNode implements Node{
    */
   public Property setProperty(String arg0, Calendar arg1) throws ValueFormatException,
   VersionException, LockException, ConstraintViolationException, RepositoryException {
-    return node.setProperty(arg0, arg1);
+    throw new RepositoryException("Unsupported this method");
   }
 
   /* (non-Javadoc)
@@ -528,7 +526,7 @@ public class ResultNode implements Node{
    */
   public Property setProperty(String arg0, Node arg1) throws ValueFormatException,
   VersionException, LockException, ConstraintViolationException, RepositoryException {
-    return node.setProperty(arg0, arg1);
+    throw new RepositoryException("Unsupported this method");
   }
 
   /* (non-Javadoc)
@@ -536,7 +534,7 @@ public class ResultNode implements Node{
    */
   public Property setProperty(String arg0, Value arg1, int arg2) throws ValueFormatException,
   VersionException, LockException, ConstraintViolationException, RepositoryException {
-    return node.setProperty(arg0, arg1, arg2);
+    throw new RepositoryException("Unsupported this method");
   }
 
   /* (non-Javadoc)
@@ -544,7 +542,7 @@ public class ResultNode implements Node{
    */
   public Property setProperty(String arg0, Value[] arg1, int arg2) throws ValueFormatException,
   VersionException, LockException, ConstraintViolationException, RepositoryException {
-    return node.setProperty(arg0, arg1, arg2);
+    throw new RepositoryException("Unsupported this method");
   }
 
   /* (non-Javadoc)
@@ -552,7 +550,7 @@ public class ResultNode implements Node{
    */
   public Property setProperty(String arg0, String[] arg1, int arg2) throws ValueFormatException,
   VersionException, LockException, ConstraintViolationException, RepositoryException {
-    return node.setProperty(arg0, arg1, arg2);
+    throw new RepositoryException("Unsupported this method");
   }
 
   /* (non-Javadoc)
@@ -560,7 +558,7 @@ public class ResultNode implements Node{
    */
   public Property setProperty(String arg0, String arg1, int arg2) throws ValueFormatException,
   VersionException, LockException, ConstraintViolationException, RepositoryException {
-    return node.setProperty(arg0, arg1, arg2);
+    throw new RepositoryException("Unsupported this method");
   }
 
   /* (non-Javadoc)
@@ -568,7 +566,7 @@ public class ResultNode implements Node{
    */
   public void unlock() throws UnsupportedRepositoryOperationException, LockException,
   AccessDeniedException, InvalidItemStateException, RepositoryException {
-    node.unlock();
+    throw new RepositoryException("Unsupported this method");
   }
 
   /* (non-Javadoc)
@@ -576,7 +574,7 @@ public class ResultNode implements Node{
    */
   public void update(String arg0) throws NoSuchWorkspaceException, AccessDeniedException,
   LockException, InvalidItemStateException, RepositoryException {
-    node.update(arg0);
+    throw new RepositoryException("Unsupported this method");
   }
 
   /* (non-Javadoc)
@@ -648,7 +646,7 @@ public class ResultNode implements Node{
    */
   public void remove() throws VersionException, LockException, ConstraintViolationException,
   RepositoryException {
-    node.remove();
+    throw new RepositoryException("Unsupported this method");
   }
 
   /* (non-Javadoc)
@@ -657,7 +655,7 @@ public class ResultNode implements Node{
   public void save() throws AccessDeniedException, ItemExistsException,
   ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException,
   VersionException, LockException, NoSuchNodeTypeException, RepositoryException {
-    node.save();
+    throw new RepositoryException("Unsupported this method");
   }
 
   /* (non-Javadoc)
@@ -689,7 +687,7 @@ public class ResultNode implements Node{
     return node.getSession();
   }
   
-  
+  @Override
   public boolean equals(Object obj) {    
     try {
       ResultNode resNode = (ResultNode)obj;
