@@ -322,7 +322,7 @@
     <title>Quick Edit</title>
     <quickPrint>
     	<title>Print</title>
-    	<print>Print</print>
+    	<print>Print this page</print>
     	<close>Close</close>
     </quickPrint>
   </UIPresentationContainer>

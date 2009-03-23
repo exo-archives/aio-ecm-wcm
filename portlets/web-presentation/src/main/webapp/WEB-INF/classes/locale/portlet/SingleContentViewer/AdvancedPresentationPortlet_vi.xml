@@ -315,7 +315,7 @@
     <title>Sửa nhanh</title>
     <quickPrint>
     	<title>In ấn</title>
-    	<print>In tài liệu</print>
+    	<print>In nội dung</print>
     	<close>Đóng cửa sổ</close>
     </quickPrint>
   </UIPresentationContainer>
