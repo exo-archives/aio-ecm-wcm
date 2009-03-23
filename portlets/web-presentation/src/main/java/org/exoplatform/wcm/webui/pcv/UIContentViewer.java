@@ -20,6 +20,7 @@ import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.URLDecoder;
 import java.security.AccessControlException;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.jcr.ItemNotFoundException;
@@ -36,9 +37,14 @@ import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.templates.TemplateService;
+import org.exoplatform.services.ecm.publication.PublicationPlugin;
+import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant.SITE_MODE;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -59,7 +65,7 @@ public class UIContentViewer extends UIBaseNodePresentation {
 
   /** The content node. */
   private Node                contentNode;
-
+  private Node  orginalNode;
   /** The resource resolver. */
   private JCRResourceResolver resourceResolver;
 
@@ -94,7 +100,7 @@ public class UIContentViewer extends UIBaseNodePresentation {
    */
   @Override
   public Node getOriginalNode() throws Exception {
-    return getNode();
+	  return orginalNode;
   }
 
   /* (non-Javadoc)
@@ -118,7 +124,7 @@ public class UIContentViewer extends UIBaseNodePresentation {
   @Override
   public String getTemplatePath() throws Exception {
     TemplateService templateService = getApplicationComponent(TemplateService.class);
-    return templateService.getTemplatePath(getNode(), false);
+    return templateService.getTemplatePath(orginalNode, false);
   }
 
   /* (non-Javadoc)
@@ -274,9 +280,29 @@ public class UIContentViewer extends UIBaseNodePresentation {
       if (hasChildren()) {
         removeChild(UIContentViewerContainer.class);
       }
-      setNode(currentNode);
+      PublicationService publicationService = uiPortal.getApplicationComponent(PublicationService.class);
+      HashMap<String, Object> hmContext = new HashMap<String, Object>();
+      if(Utils.isLiveMode()) {
+    	  hmContext.put(Constant.RUNTIME_MODE, SITE_MODE.LIVE);
+      } else {
+          hmContext.put(Constant.RUNTIME_MODE, SITE_MODE.EDITING);
+      }   
+      String lifeCycleName = publicationService.getNodeLifecycleName(currentNode);
+      PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(lifeCycleName);
+//      if(publicationPlugin == null) {
+//    	  
+//      } else {
+//    	  
+//      }
+      Node nodeView = publicationPlugin.getNodeView(currentNode, hmContext);
       setRepository(repository);
-      setWorkspace(workspace);
+	  setWorkspace(workspace);
+	  this.orginalNode = currentNode;
+      if(nodeView != null) {
+    	  this.contentNode = nodeView;
+      }else {
+    	  this.contentNode = currentNode;
+      }         
       super.processRender(context);
     } else { // content is folders
       renderErrorMessage(context, CONTENT_UNSUPPORT_EXC);
