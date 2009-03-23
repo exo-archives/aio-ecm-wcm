@@ -36,8 +36,10 @@
 	if (uicomponent.isQuickPrint()) {
 %>
 		<div class="UISimpleBar">
+		<!--
 			<a class="ActionIcon EmailIcon" href="javascript: void(0);" onclick="window.open('$url')" title="<%= _ctx.appRes("UIPresentationContainer.quickPrint.title");%>">Email this page</a>
 			<a class="ActionIcon CommentIcon" href="javascript: void(0);" onclick="window.open('$url')" title="<%= _ctx.appRes("UIPresentationContainer.quickPrint.title");%>">Comments</a>
+		-->	
 			<a class="ActionIcon PrintIcon" href="javascript: void(0);" onclick="window.open('$url')" title="<%= _ctx.appRes("UIPresentationContainer.quickPrint.title");%>">Print this page</a>
 		</div>
 <%
