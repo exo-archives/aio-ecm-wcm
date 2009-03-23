@@ -257,7 +257,11 @@
 	text-align: center;
 }
 
-.UIPublicationPanel .RevisionsTable .Name {}
+.UIPublicationPanel .RevisionsTable .ActiveLink {
+	color: #0127EA;
+	font-weight: bold;
+	text-decoration: underline;
+}
 
 .UIPublicationPanel .RevisionsTable .Preview {
 	background: url('icons/16x16/VersionPreview.gif') no-repeat;

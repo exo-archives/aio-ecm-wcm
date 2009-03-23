@@ -89,44 +89,48 @@
          
       for (Node revision : revisions) {
       	def state = uicomponent.getRevisionState(revision);
-        if (revisions.indexOf(revision) == 0) {
-          %>
-            <tr>
-              <td class="Name">
-                <a><%=_ctx.appRes("UIPublicationPanel.revisions.label")%>: <%= revision.getName() %></a>
-              </td>
-              <td><%= uicomponent.getRevisionCreatedDate(revision)%></td>
-              <td><%= uicomponent.getRevisionAuthor(revision) %></td>
-              <td><%=_ctx.appRes("UIPublicationPanel.status." + uicomponent.getRevisionState(revision))%> [<%=_ctx.appRes("UIPublicationPanel.revisions.currentVersion")%>]</td>
-              <td>
-                <div class="Preview" onclick="<%= uicomponent.event("PreviewVersion", revision.getUUID()) %>"><span></span></div>
-                <div style="clear: left"><span></span></div>
-              </td>
-            </tr>
-          <%
-        } else {
-          %>
-            <tr>
-              <td class="Name">
-                <a href="<%= uicomponent.event("ChangeVersion", revision.getUUID()) %>"><%=_ctx.appRes("UIPublicationPanel.revisions.label")%>: <%= revision.getName() %></a>
-              </td>
-              <td><%= uicomponent.getRevisionCreatedDate(revision)%></td>
-              <td><%= uicomponent.getRevisionAuthor(revision) %></td>
-              <td><%=_ctx.appRes("UIPublicationPanel.status." + uicomponent.getRevisionState(revision))%></td>
-              <td>
-                <div class="Preview" onclick="<%= uicomponent.event("PreviewVersion", revision.getUUID()) %>"><span></span></div>
-                <%
-                  if (Constant.DRAFT_STATE.equals(state)) {
+      	%>
+          <tr>
+            <td class="Name">
+              <%
+                if (versionName.equals(revision.getName())) {
+                  %>
+                    <a><%=_ctx.appRes("UIPublicationPanel.revisions.label")%>: <%= revision.getName() %></a>
+                  <%
+                } else {
+                  %>
+                    <a class="ActiveLink" href="<%= uicomponent.event("ChangeVersion", revision.getUUID()) %>"><%=_ctx.appRes("UIPublicationPanel.revisions.label")%>: <%= revision.getName() %></a>
+                  <%
+                }
+              %>
+            </td>
+            <td><%= uicomponent.getRevisionCreatedDate(revision)%></td>
+            <td><%= uicomponent.getRevisionAuthor(revision) %></td>
+            <td>
+              <%
+                if (revisions.indexOf(revision) == 0) {
+                  out.print(_ctx.appRes("UIPublicationPanel.status." + uicomponent.getRevisionState(revision)));
+                  out.print("[" + _ctx.appRes("UIPublicationPanel.revisions.currentVersion") + "]");
+                } else {
+                  out.print(_ctx.appRes("UIPublicationPanel.status." + uicomponent.getRevisionState(revision)));
+                }
+              %>
+            </td>
+            <td>
+              <div class="Preview" onclick="<%= uicomponent.event("PreviewVersion", revision.getUUID()) %>"><span></span></div>
+              <%
+                if (revisions.indexOf(revision) != 0) {
+                  if (Constant.DRAFT_STATE.equals(uicomponent.getRevisionState(revisions.get(0)))) {
                     %><div class="Restore" onclick="if (confirm('<%=_ctx.appRes("UIPublicationPanel.revisions.confirm")%>')) <%= uicomponent.event("RestoreVersion", revision.getUUID()) %>"><span></span></div><%
                   } else {
                     %><div class="Restore" onclick="<%= uicomponent.event("RestoreVersion", revision.getUUID()) %>"><span></span></div><%
                   }
-                %>
-                <div style="clear: left"><span></span></div>
-              </td>
-            </tr>
-          <%
-        }
+                }
+              %>
+              <div style="clear: left"><span></span></div>
+            </td>
+          </tr>
+        <%
       }
     %>  
   </table>
