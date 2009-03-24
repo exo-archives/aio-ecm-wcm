@@ -79,10 +79,8 @@ public class UIPublishClvChooser extends UIForm implements UIPopupComponent {
       if (portletPreferences != null) {
         for (Object object : portletPreferences.getPreferences()) {
           Preference preference = (Preference) object;
-          if ("header".equals(preference.getName())) {
-            if (preference.getValues().size() > 0) {
-              application.setTitle(preference.getValues().get(0).toString());
-            }
+          if ("header".equals(preference.getName()) && preference.getValues().size() > 0) {
+            application.setTitle(preference.getValues().get(0).toString());
           }
         }
       }
@@ -99,15 +97,8 @@ public class UIPublishClvChooser extends UIForm implements UIPopupComponent {
       DataStorage dataStorage = Util.getServices(DataStorage.class);
       PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(clvPortletId));
       if (portletPreferences != null) {
-        System.out.println("___________________________ChooseActionListener");
         for (Object object : portletPreferences.getPreferences()) {
           Preference preference = (Preference) object;
-          for (Object obj : preference.getValues()) {
-            System.out.print(preference.getName());
-            System.out.println(" -> \t" + obj.toString());
-          }
-          
-          
           if ("contents".equals(preference.getName())) {
             String contentValues = preference.getValues().get(0).toString();
             if (contentValues.indexOf(clvChooser.node.getPath()) >= 0) {

@@ -18,6 +18,7 @@
 	      <property name="printViewerPage" value="printviewer"/>
 	      <property name="createWikiPageURI" value="wikipresentation"/>
 	      <property name="CLVPortlet" value="/web-presentation/ContentListViewerPortlet"/>
+	      <property name="SCVPortlet" value="/web-presentation/SingleContentViewer"/>
 	      <property name="formViewTemplatePath" value="/jcr:system/exo:ecm/views/templates/Content List Viewer/list-by-folder/UIContentListPresentationDefault.gtmpl"/>
 	      <property name="paginatorTemplatePath" value="/jcr:system/exo:ecm/views/templates/Content List Viewer/paginators/UIPaginatorDefault.gtmpl"/>	      
 	    </properties-param>

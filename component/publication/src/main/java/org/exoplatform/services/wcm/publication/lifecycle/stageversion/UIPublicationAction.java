@@ -137,13 +137,13 @@ public class UIPublicationAction extends UIForm {
         return;
       }
       
-      UserPortalConfigService userPortalConfigService = publicationAction.getApplicationComponent(UserPortalConfigService.class);
-      Page page = userPortalConfigService.getPage(pageNode.getPageReference(), event.getRequestContext().getRemoteUser());
       WCMPublicationService presentationService = publicationAction.getApplicationComponent(WCMPublicationService.class);
       StageAndVersionBasedPublicationPlugin publicationPlugin = (StageAndVersionBasedPublicationPlugin) presentationService.getWebpagePublicationPlugins().get(Constant.LIFECYCLE_NAME);
       
       UIPublicationPagesContainer publicationPagesContainer = publicationPages.getAncestorOfType(UIPublicationPagesContainer.class);
       WCMConfigurationService wcmConfigurationService = Util.getServices(WCMConfigurationService.class);
+      UserPortalConfigService userPortalConfigService = publicationAction.getApplicationComponent(UserPortalConfigService.class);
+      Page page = userPortalConfigService.getPage(pageNode.getPageReference(), event.getRequestContext().getRemoteUser());
       List<String> clvPortletIds = Util.findAppInstancesByName(page, wcmConfigurationService.getRuntimeContextParam("CLVPortlet"));
       if (clvPortletIds.isEmpty()) {
         publicationPlugin.publishContentToPage(node, page);
@@ -215,8 +215,9 @@ public class UIPublicationAction extends UIForm {
       for(Object object: list.getAll()) {
         pageNavigation = PageNavigation.class.cast(object);
       }
+      Node contentNode = null;
       if (pageNavigation != null) {
-        Node contentNode = publicationPages.getNode();
+        contentNode = publicationPages.getNode();
         if (contentNode.hasProperty("publication:applicationIDs")) {
           PageNode pageNode = getPageNodeByUri(pageNavigation, pageNodeUri);
           page = userPortalConfigService.getPage(pageNode.getPageReference(), event.getRequestContext().getRemoteUser());

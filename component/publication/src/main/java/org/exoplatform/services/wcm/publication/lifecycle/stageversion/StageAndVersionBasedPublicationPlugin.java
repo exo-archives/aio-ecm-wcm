@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.jcr.Node;
+import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.ValueFactory;
 import javax.jcr.version.Version;
@@ -49,6 +50,7 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.services.ecm.publication.IncorrectStateUpdateLifecycleException;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.util.IdGenerator;
+import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.publication.WebpagePublicationPlugin;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant.SITE_MODE;
@@ -338,6 +340,7 @@ public class StageAndVersionBasedPublicationPlugin extends WebpagePublicationPlu
       preferences.add(preference);
       
       savePortletPreferences(clvPortletId, preferences);
+      updateOnAddNodeProperties(page, content, clvPortletId);
     } else {
       String clvMode = "";
       Preference folderPreference = new Preference();
@@ -371,8 +374,60 @@ public class StageAndVersionBasedPublicationPlugin extends WebpagePublicationPlu
         preferences.set(contentPrefIndex, contentPreference);
         
         savePortletPreferences(clvPortletId, preferences);
+        updateOnAddNodeProperties(page, content, clvPortletId);
       }
     }
+  }
+  
+  private void updateOnAddNodeProperties(Page page, Node content, String clvPortletId) throws Exception {
+    List<String> listExistedNavigationNodeUri = Util.getValuesAsString(content, "publication:navigationNodeURIs");
+    List<String> listPageNavigationUri = getListPageNavigationUri(page);
+    if (listPageNavigationUri.isEmpty()) return ;
+    for (String uri : listPageNavigationUri) {
+      if(!listExistedNavigationNodeUri.contains(uri)) {
+        listExistedNavigationNodeUri.add(uri);                           
+      }            
+    }   
+    
+    List<String> nodeAppIds = Util.getValuesAsString(content, "publication:applicationIDs");
+    String mixedAppId = Util.setMixedApplicationId(page.getPageId(), clvPortletId);
+    if(nodeAppIds.contains(mixedAppId)) return;
+    nodeAppIds.add(mixedAppId);
+    
+    List<String> nodeWebPageIds = Util.getValuesAsString(content, "publication:webPageIDs");
+    nodeWebPageIds.add(page.getPageId());
+    
+    Session session = content.getSession();
+    ValueFactory valueFactory = session.getValueFactory();    
+    content.setProperty("publication:navigationNodeURIs", Util.toValues(valueFactory, listExistedNavigationNodeUri));
+    content.setProperty("publication:applicationIDs", Util.toValues(valueFactory, nodeAppIds));
+    content.setProperty("publication:webPageIDs", Util.toValues(valueFactory, nodeWebPageIds));
+    session.save();
+  }
+  
+  private void updateOnRemoveNodeProperties(Page page, Node content, String clvPortletId) throws Exception {
+    List<String> listExistedApplicationId = Util.getValuesAsString(content, "publication:applicationIDs");
+    listExistedApplicationId.remove(Util.setMixedApplicationId(page.getPageId(), clvPortletId));
+    
+    List<String> listExistedPageId = Util.getValuesAsString(content, "publication:webPageIDs");
+    listExistedPageId.remove(0);
+    
+    List<String> listPageNavigationUri = getListPageNavigationUri(page);
+    List<String> listExistedNavigationNodeUri = Util.getValuesAsString(content, "publication:navigationNodeURIs");
+    List<String> listExistedNavigationNodeUriTmp = new ArrayList<String>();
+    listExistedNavigationNodeUriTmp.addAll(listExistedNavigationNodeUri);    
+    for (String existedNavigationNodeUri : listExistedNavigationNodeUriTmp) {
+      if (listPageNavigationUri.contains(existedNavigationNodeUri)) {
+        listExistedNavigationNodeUri.remove(existedNavigationNodeUri);        
+      }
+    }
+    
+    Session session = content.getSession();
+    ValueFactory valueFactory = session.getValueFactory();    
+    content.setProperty("publication:applicationIDs", Util.toValues(valueFactory, listExistedApplicationId));
+    content.setProperty("publication:webPageIDs", Util.toValues(valueFactory, listExistedPageId));
+    content.setProperty("publication:navigationNodeURIs", Util.toValues(valueFactory, listExistedNavigationNodeUri));
+    session.save();
   }
   
   private Preference addPreference(String name, String value) {
@@ -394,12 +449,42 @@ public class StageAndVersionBasedPublicationPlugin extends WebpagePublicationPlu
     dataStorage.save(portletPreferences);
   }
   
+  @SuppressWarnings("unchecked")
   public void suspendPublishedContentFromPage(Node content, Page page) throws Exception {
+    // Remove content from CLV portlet
+    DataStorage dataStorage = Util.getServices(DataStorage.class);
+    WCMConfigurationService wcmConfigurationService = Util.getServices(WCMConfigurationService.class);
+    List<String> clvPortletsId = Util.findAppInstancesByName(page, wcmConfigurationService.getRuntimeContextParam("CLVPortlet"));
+    if (content != null && !clvPortletsId.isEmpty()) {
+      for (String clvPortletId : clvPortletsId) {
+        PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(clvPortletId));
+        if (portletPreferences != null) {
+          ArrayList<Preference> preferences = new ArrayList<Preference>();
+          for (Object preferenceTmp : portletPreferences.getPreferences()) {
+            Preference preference = (Preference) preferenceTmp;
+            if ("folderPath".equals(preference.getName()) && preference.getValues().size() > 0) {
+              ArrayList<String> values = new ArrayList<String>();
+              values.add(preference.getValues().get(0).toString().replaceAll(content.getPath() + ";", ""));
+              preference.setValues(values);
+            } else if ("contents".equals(preference.getName()) && preference.getValues().size() > 0) {
+              List<String> values = preference.getValues();
+              values.remove(content.getPath());
+              preference.setValues(new ArrayList<String>(values));
+            }
+            preferences.add(preference);
+          }
+          dataStorage.save(portletPreferences);
+          updateOnRemoveNodeProperties(page, content, clvPortletId);
+        }
+      }
+    }
+    
+    // Remove content from SCV portlet
     String pageId = page.getPageId();
     List<String> mixedApplicationIDs = Util.getValuesAsString(content, "publication:applicationIDs");
     ArrayList<String> removedApplicationIDs = new ArrayList<String>();
     for(String mixedID: mixedApplicationIDs) {
-      if(mixedID.startsWith(pageId)) {
+      if(mixedID.startsWith(pageId) && mixedID.contains(wcmConfigurationService.getRuntimeContextParam("SCVPortlet"))) {
         String realAppID = Util.parseMixedApplicationId(mixedID)[1];
         removedApplicationIDs.add(realAppID);
       }
