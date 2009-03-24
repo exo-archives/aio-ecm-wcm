@@ -29,10 +29,19 @@ import org.exoplatform.wcm.webui.clv.UIContentListViewerPortlet;
 		} else {			
 			def currentPageData = uicomponent.getCurrentPageData();							
 			String labelReadMore = _ctx.appRes("UIContentListPresentationDefault.label.readmore");
+			Node viewNode = null;
+			Node tempNode = null;
+			
 			for (Node node : currentPageData) {
-												
+				tempNode = node;
+				viewNode = uicomponent.getNodeView(node);				
+				if (viewNode == null) {	
+					continue;				
+				} else {
+					node = viewNode;
+				}
+				String itemLink = uicomponent.getURL(tempNode);			
 				String itemName = node.getName();
-				String itemLink = uicomponent.getURL(node);		
 				String itemSummary = uicomponent.getSummary(node);
 		    String itemTitle = uicomponent.getTitle(node);
 				String itemDateCreated = uicomponent.getCreatedDate(node);
@@ -43,12 +52,13 @@ import org.exoplatform.wcm.webui.clv.UIContentListViewerPortlet;
 				}		
 			%>	
 				<div class="CaptionItem">
-					<% if(uicomponent.showDraftButton(node)) { %>
-					<div><a href="#">Draft</a></div>
-					<% } %>
 					<% if (uicomponent.isShowField(UIContentListViewerPortlet.SHOW_TITLE)) {%>
-					<div class="CaptionTitle"><a href="$itemLink">$itemName</a></div>		
+					<div class="CaptionTitle" ><a href="$itemLink">$itemName</a>
 					<% } %>	
+					<% if(uicomponent.showDraftButton(tempNode)) { %>
+					<span>[ Draft, </span><a href="#" class="CaptionDraft">Edit</a> <span>]</span>
+					<% } %>					
+					</div>							
 					<% if (itemDateCreated != null && uicomponent.isShowField(UIContentListViewerPortlet.SHOW_DATE_CREATED)) { %>
 					<div class="CaptionDate"><%=itemDateCreated%></div>		
 					<% } %>											
