@@ -19,6 +19,7 @@ package org.exoplatform.wcm.webui.clv;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -26,7 +27,6 @@ import javax.jcr.Node;
 import javax.jcr.Session;
 import javax.portlet.PortletPreferences;
 
-import org.exoplatform.commons.utils.ISO8601;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.ecm.webui.utils.Utils;
 import org.exoplatform.portal.application.PortalRequestContext;
@@ -34,12 +34,16 @@ import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.thumbnail.ThumbnailService;
+import org.exoplatform.services.ecm.publication.PublicationPlugin;
+import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.services.organization.UserProfileHandler;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant.SITE_MODE;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
 import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -60,20 +64,11 @@ import org.exoplatform.webui.event.EventListener;
 /**
  * The Class UIContentListPresentation.
  */
-@ComponentConfigs( 
-  {
-    @ComponentConfig(
-      lifecycle = Lifecycle.class, 
-      events = @EventConfig(listeners = UIContentListPresentation.RefreshActionListener.class)
-    ),
-    @ComponentConfig(
-      type = UICustomizeablePaginator.class, 
-      events = @EventConfig(listeners = UICustomizeablePaginator.ShowPageActionListener.class)
-    )
-  }
-)
+@ComponentConfigs( {
+    @ComponentConfig(lifecycle = Lifecycle.class, events = @EventConfig(listeners = UIContentListPresentation.RefreshActionListener.class)),
+    @ComponentConfig(type = UICustomizeablePaginator.class, events = @EventConfig(listeners = UICustomizeablePaginator.ShowPageActionListener.class)) })
 public class UIContentListPresentation extends UIContainer {
-  
+
   /** The template path. */
   private String                   templatePath;
 
@@ -93,7 +88,7 @@ public class UIContentListPresentation extends UIContainer {
   private String                   header;
 
   /** The date formatter. */
-  private DateFormat         dateFormatter = null;
+  private DateFormat               dateFormatter = null;
 
   /**
    * Instantiates a new uI content list presentation.
@@ -110,21 +105,24 @@ public class UIContentListPresentation extends UIContainer {
    * 
    * @throws Exception the exception
    */
-  public void init(String templatePath, ResourceResolver resourceResolver, PageList dataPageList) throws Exception {       
+  public void init(String templatePath, ResourceResolver resourceResolver, PageList dataPageList) throws Exception {
     PortletPreferences portletPreferences = getPortletPreferences();
-    String paginatorTemplatePath = portletPreferences.getValue(UIContentListViewerPortlet.PAGINATOR_TEMPlATE_PATH, null);
+    String paginatorTemplatePath = portletPreferences.getValue(UIContentListViewerPortlet.PAGINATOR_TEMPlATE_PATH,
+                                                               null);
     this.templatePath = templatePath;
-    this.resourceResolver = resourceResolver;    
+    this.resourceResolver = resourceResolver;
     uiPaginator = addChild(UICustomizeablePaginator.class, null, null);
     uiPaginator.setTemplatePath(paginatorTemplatePath);
-    uiPaginator.setResourceResolver(resourceResolver);    
+    uiPaginator.setResourceResolver(resourceResolver);
     uiPaginator.setPageList(dataPageList);
     Locale locale = Util.getPortalRequestContext().getLocale();
-    dateFormatter = SimpleDateFormat.getDateTimeInstance(SimpleDateFormat.MEDIUM, SimpleDateFormat.MEDIUM,locale);
+    dateFormatter = SimpleDateFormat.getDateTimeInstance(SimpleDateFormat.MEDIUM,
+                                                         SimpleDateFormat.MEDIUM,
+                                                         locale);
   }
-  
+
   private PortletPreferences getPortletPreferences() {
-    PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();    
+    PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     PortletPreferences portletPreferences = context.getRequest().getPreferences();
     return portletPreferences;
   }
@@ -134,9 +132,10 @@ public class UIContentListPresentation extends UIContainer {
    * 
    * @return true, if successful
    */
-  public boolean showRefreshButton() {    
+  public boolean showRefreshButton() {
     PortletPreferences portletPreferences = getPortletPreferences();
-    String isShow = portletPreferences.getValue(UIContentListViewerPortlet.SHOW_REFRESH_BUTTON, null);
+    String isShow = portletPreferences.getValue(UIContentListViewerPortlet.SHOW_REFRESH_BUTTON,
+                                                null);
     return (isShow != null) ? Boolean.parseBoolean(isShow) : false;
   }
 
@@ -152,16 +151,27 @@ public class UIContentListPresentation extends UIContainer {
     String showAble = portletPreferences.getValue(field, null);
     return (showAble != null) ? Boolean.parseBoolean(showAble) : false;
   }
-  
-  public Node getNodeView(Node node) throws Exception{
-    return null;
-  } 
-  
+
+  public Node getNodeView(Node node) throws Exception {
+    PublicationService publicationService = getApplicationComponent(PublicationService.class);
+    HashMap<String, Object> context = new HashMap<String, Object>();
+    if (org.exoplatform.wcm.webui.Utils.isLiveMode()) {
+      context.put(Constant.RUNTIME_MODE, SITE_MODE.LIVE);
+    } else {
+      context.put(Constant.RUNTIME_MODE, SITE_MODE.EDITING);
+    }
+    String lifecyleName = publicationService.getNodeLifecycleName(node);
+    PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins()
+                                                            .get(lifecyleName);
+    Node viewNode = publicationPlugin.getNodeView(node, context);
+    return viewNode;
+  }
+
   public boolean showDraftButton(Node node) throws Exception {
     boolean bool = false;
     if (node != null && !node.hasProperty("publication:liveRevision")) {
       bool = true;
-    }    
+    }
     return bool;
   }
 
@@ -174,7 +184,8 @@ public class UIContentListPresentation extends UIContainer {
    */
   public boolean showPaginator() throws Exception {
     PortletPreferences portletPreferences = getPortletPreferences();
-    String itemsPerPage = portletPreferences.getValue(UIContentListViewerPortlet.ITEMS_PER_PAGE, null);
+    String itemsPerPage = portletPreferences.getValue(UIContentListViewerPortlet.ITEMS_PER_PAGE,
+                                                      null);
     int totalItems = uiPaginator.getTotalItems();
     if (totalItems > Integer.parseInt(itemsPerPage)) {
       return true;
@@ -182,7 +193,9 @@ public class UIContentListPresentation extends UIContainer {
     return false;
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see org.exoplatform.portal.webui.portal.UIPortalComponent#getTemplate()
    */
   public String getTemplate() {
@@ -204,7 +217,7 @@ public class UIContentListPresentation extends UIContainer {
    * @param format the new date time format
    */
   public void setDateTimeFormat(String format) {
-    ((SimpleDateFormat)dateFormatter).applyPattern(format);
+    ((SimpleDateFormat) dateFormatter).applyPattern(format);
   }
 
   /**
@@ -230,12 +243,15 @@ public class UIContentListPresentation extends UIContainer {
    * 
    * @return the uI page iterator
    */
-  public UIPageIterator getUIPageIterator() {    
+  public UIPageIterator getUIPageIterator() {
     return uiPaginator;
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.webui.core.UIComponent#getTemplateResourceResolver(org.exoplatform.webui.application.WebuiRequestContext, java.lang.String)
+  /*
+   * (non-Javadoc)
+   * 
+   * @see org.exoplatform.webui.core.UIComponent#getTemplateResourceResolver(org.exoplatform.webui.application.WebuiRequestContext,
+   *      java.lang.String)
    */
   public ResourceResolver getTemplateResourceResolver(WebuiRequestContext context, String template) {
     return resourceResolver;
@@ -248,7 +264,7 @@ public class UIContentListPresentation extends UIContainer {
    * 
    * @throws Exception the exception
    */
-  public List getCurrentPageData() throws Exception { 
+  public List getCurrentPageData() throws Exception {
     return uiPaginator.getCurrentPageData();
   }
 
@@ -262,7 +278,8 @@ public class UIContentListPresentation extends UIContainer {
    * @throws Exception the exception
    */
   public String getTitle(Node node) throws Exception {
-    return node.hasProperty("exo:title") ? node.getProperty("exo:title").getValue().getString() : node.getName();
+    return node.hasProperty("exo:title") ? node.getProperty("exo:title").getValue().getString()
+                                        : node.getName();
   }
 
   /**
@@ -275,7 +292,8 @@ public class UIContentListPresentation extends UIContainer {
    * @throws Exception the exception
    */
   public String getSummary(Node node) throws Exception {
-    return node.hasProperty("exo:summary") ? node.getProperty("exo:summary").getValue().getString() : null;
+    return node.hasProperty("exo:summary") ? node.getProperty("exo:summary").getValue().getString()
+                                          : null;
   }
 
   /**
@@ -380,7 +398,7 @@ public class UIContentListPresentation extends UIContainer {
   public String getContentIcon(Node node) {
     return null;
   }
-  
+
   /**
    * Gets the content size.
    * 
@@ -414,15 +432,17 @@ public class UIContentListPresentation extends UIContainer {
       }
       if (imagePath == null && illustrativeImage != null) {
         Session session = illustrativeImage.getSession();
-        String repository = ((ManageableRepository) session.getRepository()).getConfiguration().getName();
+        String repository = ((ManageableRepository) session.getRepository()).getConfiguration()
+                                                                            .getName();
         String workspace = session.getWorkspace().getName();
         imagePath = "/portal/rest/jcr/" + repository + "/" + workspace
             + illustrativeImage.getPath();
       }
       return imagePath;
-    }    
+    }
     PortletPreferences preferences = getPortletPreferences();
-    String showThumbnailPref = preferences.getValue(UIContentListViewerPortlet.SHOW_THUMBNAILS_VIEW, "false");
+    String showThumbnailPref = preferences.getValue(UIContentListViewerPortlet.SHOW_THUMBNAILS_VIEW,
+                                                    "false");
     boolean isShowThumbnail = Boolean.parseBoolean(showThumbnailPref);
     if (isShowThumbnail) {
       return Utils.getThumbnailImage(node, ThumbnailService.MEDIUM_SIZE);
@@ -486,19 +506,21 @@ public class UIContentListPresentation extends UIContainer {
   }
 
   /**
-   * The listener interface for receiving refreshAction events.
-   * The class that is interested in processing a refreshAction
-   * event implements this interface, and the object created
-   * with that class is registered with a component using the
-   * component's <code>addRefreshActionListener<code> method. When
+   * The listener interface for receiving refreshAction events. The class that
+   * is interested in processing a refreshAction event implements this
+   * interface, and the object created with that class is registered with a
+   * component using the component's
+   * <code>addRefreshActionListener<code> method. When
    * the refreshAction event occurs, that object's appropriate
    * method is invoked.
    * 
    * @see RefreshActionEvent
    */
   public static class RefreshActionListener extends EventListener<UIContentListPresentation> {
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
     public void execute(Event<UIContentListPresentation> event) throws Exception {
@@ -525,7 +547,7 @@ public class UIContentListPresentation extends UIContainer {
   public void setShowHeader(boolean showHeader) {
     this.showHeader = showHeader;
   }
-  
+
   /**
    * Sets the header.
    * 
@@ -534,7 +556,7 @@ public class UIContentListPresentation extends UIContainer {
   public void setHeader(String header) {
     this.header = header;
   }
-  
+
   /**
    * Gets the header.
    * 

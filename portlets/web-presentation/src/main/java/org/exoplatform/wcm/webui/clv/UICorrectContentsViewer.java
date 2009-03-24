@@ -18,7 +18,6 @@ package org.exoplatform.wcm.webui.clv;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.jcr.Node;
@@ -29,14 +28,9 @@ import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
-import org.exoplatform.services.ecm.publication.PublicationPlugin;
-import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant.SITE_MODE;
-import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
@@ -57,14 +51,7 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 )
 public class UICorrectContentsViewer extends UIListViewerBase {
 
-  public void init() throws Exception {            
-    PublicationService publicationService = getApplicationComponent(PublicationService.class);    
-    HashMap<String, Object> context = new HashMap<String, Object>();
-    if(Utils.isLiveMode()) {
-      context.put(Constant.RUNTIME_MODE, SITE_MODE.LIVE);
-    } else {
-      context.put(Constant.RUNTIME_MODE, SITE_MODE.EDITING);
-    }    
+  public void init() throws Exception {                       
     PortletPreferences portletPreferences = getPortletPreference();
     setViewAbleContent(true);
     String repository = portletPreferences.getValue(UIContentListViewerPortlet.REPOSITORY, null);
@@ -94,10 +81,7 @@ public class UICorrectContentsViewer extends UIListViewerBase {
           tempContents.remove(i);
         }
         if (node != null) {          
-          String lifecyleName = publicationService.getNodeLifecycleName(node);
-          PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(lifecyleName);
-          Node viewNode = publicationPlugin.getNodeView(node, context);          
-          if (viewNode != null) nodes.add(node);       
+          nodes.add(node);       
         }          
       }
     }
