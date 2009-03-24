@@ -33,6 +33,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.application.PortalRequestContext;
@@ -49,7 +50,7 @@ import org.exoplatform.services.wcm.metadata.PageMetadataService;
  * Nov 3, 2008
  */
 public class PageMetadataRequestFilter implements Filter {  
-  
+
   /** The Constant PCV_PARAMETER_REGX. */
   public final static String PCV_PARAMETER_REGX           = "(.*)/(.*)/(.*)";
 
@@ -72,7 +73,7 @@ public class PageMetadataRequestFilter implements Filter {
    * @throws IOException, ServletException
    * 
    */
-  
+
   public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain)
   throws IOException, ServletException {
     HttpServletRequest req = (HttpServletRequest) servletRequest;
@@ -114,13 +115,24 @@ public class PageMetadataRequestFilter implements Filter {
     if(pathInfo == null) return false;    
     WCMConfigurationService configurationService = getService(WCMConfigurationService.class);
     String parameterizedPageURI = configurationService.getParameterizedPageURI();
-    int index = pathInfo.indexOf(parameterizedPageURI);
-    if(index<1) return false;
-    String parameter = pathInfo.substring(index);
+    String printPreviewPageURI = configurationService.getRuntimeContextParam("printViewerPage");    
+    int index = pathInfo.indexOf(parameterizedPageURI);    
+    String parameter = null;
+    if(index<1 && printPreviewPageURI != null) {      
+      index = pathInfo.indexOf(printPreviewPageURI);
+      if(index<1) return false;
+      parameter = pathInfo.substring(index + printPreviewPageURI.length() + 1);
+    }else {
+      parameter = pathInfo.substring(index + parameterizedPageURI.length() + 1);
+    }  
+    if(parameter == null )
+      return false;
     if(!parameter.matches(PCV_PARAMETER_REGX)) return false;
-    String repository = parameter.split("/", 4)[2];
-    String workspace = parameter.split("/", 5)[3];
-    String nodeIdentifier = "/"+parameter.split("/",5)[4];
+    int firstSlash = parameter.indexOf("/");
+    String repository = parameter.substring(0,firstSlash);
+    int secondSlash = parameter.indexOf("/",firstSlash +1);    
+    String workspace = parameter.substring(firstSlash + 1, secondSlash);
+    String nodeIdentifier = parameter.substring(secondSlash + 1);
     RepositoryService repositoryService = getService(RepositoryService.class);
     ThreadLocalSessionProviderService localSessionProviderService = getService(ThreadLocalSessionProviderService.class);
     SessionProvider sessionProvider = localSessionProviderService.getSessionProvider(null);
@@ -128,9 +140,12 @@ public class PageMetadataRequestFilter implements Filter {
     Session session = null;
     try {
       session = sessionProvider.getSession(workspace,repositoryService.getRepository(repository));
-      node = session.getNodeByUUID(nodeIdentifier);            
-    } catch (ItemNotFoundException e) {      
-      node = (Node)session.getItem(nodeIdentifier);
+      if(nodeIdentifier.indexOf("/")<0) {
+        node = session.getNodeByUUID(nodeIdentifier);
+      }else {         
+        node = (Node)session.getItem("/" + nodeIdentifier);
+      }                 
+    } catch (ItemNotFoundException e) {            
     }catch (PathNotFoundException e) {
       req.setAttribute("ParameterizedContentViewerPortlet.data.object",new ItemNotFoundException());      
     }catch (AccessControlException e) {

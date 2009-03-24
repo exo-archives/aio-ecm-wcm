@@ -26,7 +26,6 @@ import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.BaseWebSchemaHandler;
-import org.exoplatform.services.wcm.publication.WCMPublicationService;
 
 /**
  * Created by The eXo Platform SAS
@@ -35,12 +34,10 @@ import org.exoplatform.services.wcm.publication.WCMPublicationService;
  * Mar 5, 2009  
  */
 public class StateAndVersionPublicationHandler extends BaseWebSchemaHandler {
-  private TemplateService templateService;  
-  private WCMPublicationService wcmPublicationService;
+  private TemplateService templateService;   
   private PublicationService publicationService;
-  public StateAndVersionPublicationHandler(TemplateService templateService, WCMPublicationService wcmpublicationService, PublicationService publicationService) {    
-    this.templateService = templateService;
-    this.wcmPublicationService = wcmpublicationService;
+  public StateAndVersionPublicationHandler(TemplateService templateService, PublicationService publicationService) {    
+    this.templateService = templateService;   
     this.publicationService = publicationService;
   }
 
@@ -67,10 +64,10 @@ public class StateAndVersionPublicationHandler extends BaseWebSchemaHandler {
         checkNode = parentNode;        
       }                 
     }    
-    if(wcmPublicationService.isEnrolledInWCMLifecycle(checkNode)) return;
-    wcmPublicationService.enrollNodeInLifecycle(checkNode,Constant.LIFECYCLE_NAME);    
+    if(publicationService.isNodeEnrolledInLifecycle(checkNode)) return;
+    publicationService.enrollNodeInLifecycle(checkNode,Constant.LIFECYCLE_NAME);
+    publicationService.changeState(checkNode,Constant.DRAFT_STATE,new HashMap<String,String>());
   }   
-
   public void onModifyNode(Node node, SessionProvider sessionProvider) throws Exception {
     if(node.isNew())
       return;

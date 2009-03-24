@@ -16,9 +16,12 @@
  */
 package org.exoplatform.services.wcm.publication.lifecycle.stageversion;
 
+import java.util.HashMap;
+
 import javax.jcr.Node;
 
 import org.exoplatform.services.cms.CmsService;
+import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
@@ -33,9 +36,9 @@ import org.exoplatform.services.wcm.publication.WCMPublicationService;
  * Mar 5, 2009  
  */
 public class PostCreateContentEventListener extends Listener<CmsService, Node>{
-  private WCMPublicationService publicationService;
+  private PublicationService publicationService;
   private WCMConfigurationService configurationService;
-  public PostCreateContentEventListener(WCMPublicationService publicationService,WCMConfigurationService configurationService) {
+  public PostCreateContentEventListener(PublicationService publicationService,WCMConfigurationService configurationService) {
     this.publicationService = publicationService;
     this.configurationService = configurationService;
   }
@@ -49,9 +52,10 @@ public class PostCreateContentEventListener extends Listener<CmsService, Node>{
       return;
     if(!currentNode.getPath().startsWith(nodeLocation.getPath()))
       return;
-    if(publicationService.isEnrolledInWCMLifecycle(currentNode))
+    if(publicationService.isNodeEnrolledInLifecycle(currentNode))
       return;
     publicationService.enrollNodeInLifecycle(currentNode,Constant.LIFECYCLE_NAME);
+    publicationService.changeState(currentNode,Constant.DRAFT_STATE,new HashMap<String,String>());
   }
 
 }
