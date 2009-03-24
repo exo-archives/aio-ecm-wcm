@@ -31,7 +31,7 @@
           <initializer class="org.exoplatform.services.jcr.impl.core.ScratchWorkspaceInitializer">
             <properties>
               <property name="root-nodetype" value="nt:unstructured" />
-              <property name="root-permissions" value="*:/platform/administrators read;*:/platform/administrators add_node;*:/platform/administrators set_property;*:/platform/administrators remove" />
+              <property name="root-permissions" value="any read;*:/platform/administrators read;*:/platform/administrators add_node;*:/platform/administrators set_property;*:/platform/administrators remove; *:/platform/web-contributors read; *:/platform/web-contributors add_node; *:/platform/web-contributors set_property; *:/platform/web-contributors remove" />
             </properties>
           </initializer>
          <cache enabled="true" class="org.exoplatform.services.jcr.impl.dataflow.persistent.LinkedWorkspaceStorageCacheImpl">
@@ -85,7 +85,7 @@
          <initializer class="org.exoplatform.services.jcr.impl.core.ScratchWorkspaceInitializer">
             <properties>
               <property name="root-nodetype" value="nt:unstructured" />
-              <property name="root-permissions" value="*:/platform/administrators read;*:/platform/administrators add_node;*:/platform/administrators set_property;*:/platform/administrators remove" />
+              <property name="root-permissions" value="any read;*:/platform/administrators read;*:/platform/administrators add_node;*:/platform/administrators set_property;*:/platform/administrators remove; *:/platform/web-contributors read; *:/platform/web-contributors add_node; *:/platform/web-contributors set_property; *:/platform/web-contributors remove" />
             </properties>
           </initializer>
          <cache enabled="true" class="org.exoplatform.services.jcr.impl.dataflow.persistent.LinkedWorkspaceStorageCacheImpl">
@@ -149,7 +149,7 @@
          <initializer class="org.exoplatform.services.jcr.impl.core.ScratchWorkspaceInitializer">
             <properties>
               <property name="root-nodetype" value="nt:unstructured" />
-              <property name="root-permissions" value="*:/platform/administrators read;*:/platform/administrators add_node;*:/platform/administrators set_property;*:/platform/administrators remove" />
+              <property name="root-permissions" value="any read;*:/platform/administrators read;*:/platform/administrators add_node;*:/platform/administrators set_property;*:/platform/administrators remove; *:/platform/web-contributors read; *:/platform/web-contributors add_node; *:/platform/web-contributors set_property; *:/platform/web-contributors remove" />
             </properties>
           </initializer>
          <cache enabled="true" class="org.exoplatform.services.jcr.impl.dataflow.persistent.LinkedWorkspaceStorageCacheImpl">
