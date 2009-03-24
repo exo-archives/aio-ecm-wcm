@@ -104,7 +104,14 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
       addChild(UIPopupContainer.class, null, null);
     }
     if(PortletMode.VIEW.equals(mode)) {
-      Node orginialNode = getReferencedContent();
+      Node orginialNode = null;
+      try {
+        orginialNode = getReferencedContent();
+      } catch(ItemNotFoundException ex) {
+        orginialNode = null;
+      } catch(RepositoryException rx) {
+        orginialNode =  null;
+      }
       Node viewNode = getViewNode(orginialNode);
       UIPresentationContainer container = addChild(UIPresentationContainer.class, null, UIPortletApplication.VIEW_MODE);
       UIPresentation livePresentation = container.getChildById("UIPresentation");
@@ -163,9 +170,9 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
   public Node getReferencedContent() throws Exception {
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     PortletPreferences preferences = portletRequestContext.getRequest().getPreferences();
-    String repository = preferences.getValue(UISingleContentViewerPortlet.REPOSITORY, "repository");    
-    String worksapce = preferences.getValue(UISingleContentViewerPortlet.WORKSPACE, "collaboration");
-    String nodeIdentifier = preferences.getValue(UISingleContentViewerPortlet.IDENTIFIER, "") ;
+    String repository = preferences.getValue(UISingleContentViewerPortlet.REPOSITORY, null);    
+    String worksapce = preferences.getValue(UISingleContentViewerPortlet.WORKSPACE, null);
+    String nodeIdentifier = preferences.getValue(UISingleContentViewerPortlet.IDENTIFIER, null) ;
     if(repository == null || worksapce == null || nodeIdentifier == null) 
       throw new ItemNotFoundException();
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
@@ -182,11 +189,7 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
     try {
       content = session.getNodeByUUID(nodeIdentifier);
     } catch (Exception e) {
-      try {
-        content = (Node) session.getItem(nodeIdentifier);
-      } catch (RepositoryException re) {
-        return null;
-      }
+      content = (Node) session.getItem(nodeIdentifier);
     }
     return content;
   }
