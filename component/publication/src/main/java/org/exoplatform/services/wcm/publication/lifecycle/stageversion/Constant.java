@@ -34,11 +34,11 @@ public interface Constant {
   public static final String LIFECYCLE_NAME = "States and versions based publication".intern();   
   public static final String LOCALIZATION = "artifacts.lifecycle.StageAndVersionPublication".intern();
   //history log description
-  public static final String ENROLLED_TO_LIFECYCLE = "Publication.log.enrolled".intern();
-  public static final String CHANGE_TO_DRAFT = "Publication.log.change-to-draft-state".intern();
-  public static final String CHANGE_TO_AWAITNG = "Publication.log.change-to-awaiting-state".intern();
-  public static final String CHANGE_TO_LIVE = "Publication.log.change-to-live-state".intern();
-  public static final String CHANGE_TO_OBSOLETE = "Publication.log.change-to-obsolete-state".intern();
+  public static final String ENROLLED_TO_LIFECYCLE = "Publication.log.description.enrolled".intern();
+  public static final String CHANGE_TO_DRAFT = "Publication.log.description.change-to-draft-state".intern();
+  public static final String CHANGE_TO_AWAITNG = "Publication.log.description.change-to-awaiting-state".intern();
+  public static final String CHANGE_TO_LIVE = "Publication.log.description.change-to-live-state".intern();
+  public static final String CHANGE_TO_OBSOLETE = "Publication.log.description.change-to-obsolete-state".intern();
   //properties, nodetype
   public static final String PUBLICATION_LIFECYCLE_NAME = "publication:lifecycleName".intern();
   public static final String CURRENT_STATE = "publication:currentState".intern();
