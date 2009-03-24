@@ -248,7 +248,7 @@ public class StageAndVersionBasedPublicationPlugin extends WebpagePublicationPlu
     if(liveRevision != null) {
       viewNode = liveRevision.getNode("jcr:frozenNode");
     }    
-    if(runtimeMode == SITE_MODE.EDITING) {
+    if(runtimeMode == SITE_MODE.LIVE) {
       return viewNode;
     }
     if(viewNode == null)
