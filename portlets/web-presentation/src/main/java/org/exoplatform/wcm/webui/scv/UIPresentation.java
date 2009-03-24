@@ -56,16 +56,21 @@ public class UIPresentation extends UIBaseNodePresentation {
    * 
    * @throws Exception the exception
    */
+  private Node orginalNode = null;
+  private Node viewNode = null;
+
   public UIPresentation() throws Exception {}
 
   /* (non-Javadoc)
    * @see org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation#getNode()
    */
   public Node getNode() throws Exception {
-    UISingleContentViewerPortlet uiportlet = getAncestorOfType(UISingleContentViewerPortlet.class);
-    return uiportlet.getReferencedContent();
+    return viewNode;
   }
 
+  public void setViewNode(Node node) throws Exception {
+    this.viewNode = node;
+  }
   /* (non-Javadoc)
    * @see org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation#getRepositoryName()
    */
@@ -87,14 +92,17 @@ public class UIPresentation extends UIBaseNodePresentation {
   public String getRepository() {
     return getPortletPreference().getValue(UISingleContentViewerPortlet.REPOSITORY, "repository");    
   }    
-  
+
   /* (non-Javadoc)
    * @see org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation#getOriginalNode()
    */
   public Node getOriginalNode() throws Exception {
-    return getNode();
+    return orginalNode;
   }  
 
+  public void setOriginalNode(Node node) throws Exception{
+    this.orginalNode = node;
+  }
   /* (non-Javadoc)
    * @see org.exoplatform.portal.webui.portal.UIPortalComponent#getTemplate()
    */
@@ -111,7 +119,7 @@ public class UIPresentation extends UIBaseNodePresentation {
    */
   public void processRender(WebuiRequestContext context) throws Exception {
     try {
-      getTemplatePath();
+      if (getTemplatePath() == null) throw new NullPointerException();
     } catch (ItemNotFoundException e) {
       Writer writer = context.getWriter() ;
       writer.write("<div style=\"padding-bottom: 20px; font-size: 13px; text-align: center; padding-top: 10px;\">") ;
@@ -150,7 +158,7 @@ public class UIPresentation extends UIBaseNodePresentation {
     if(popupContainer!= null) {
       popupContainer.deActivate();
     }
-    
+
     super.processRender(context) ;
   }
 
@@ -160,7 +168,10 @@ public class UIPresentation extends UIBaseNodePresentation {
   @Override
   public String getTemplatePath() throws Exception {
     TemplateService templateService = getApplicationComponent(TemplateService.class);
-    return templateService.getTemplatePath(getNode(), false) ;
+    if (viewNode != null) {
+      return templateService.getTemplatePath(orginalNode, false) ; 
+    }
+    return null;
   }
 
   /* (non-Javadoc)
@@ -198,6 +209,6 @@ public class UIPresentation extends UIBaseNodePresentation {
   }
 
   public void setNode(Node node) {
-    
+
   }
 }

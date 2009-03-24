@@ -4,6 +4,9 @@
 	import javax.portlet.PortletPreferences;
 	import org.exoplatform.services.wcm.core.WCMConfigurationService;
 	import org.exoplatform.portal.webui.util.Util;
+	import org.exoplatform.wcm.webui.scv.UIPresentation;
+	import org.exoplatform.wcm.webui.scv.UIDraftContentPresentation;
+	import javax.jcr.Node;
 %>
 <div class="$uicomponent.id">
 <%
@@ -24,6 +27,18 @@
 		nodeIdentifier = nodeIdentifier.indexOf("/") == -1 ? "/" + nodeIdentifier : nodeIdentifier;
 	}
 	String url = portalURI + wcmConfigurationService.getRuntimeContextParam("printViewerPage") + "/" + repository + "/" + workspace + nodeIdentifier + isPrint;
+	if (uicomponent.isQuickPrint()) {
+%>
+    <div class="UISimpleBar">
+    <!--
+      <a class="ActionIcon EmailIcon" href="javascript: void(0);" onclick="window.open('$url')" title="<%= _ctx.appRes("UIPresentationContainer.quickPrint.title");%>">Email this page</a>
+      <a class="ActionIcon CommentIcon" href="javascript: void(0);" onclick="window.open('$url')" title="<%= _ctx.appRes("UIPresentationContainer.quickPrint.title");%>">Comments</a>
+    --> 
+      <a class="ActionIcon PrintIcon" href="javascript: void(0);" onclick="window.open('$url')" title="<%= _ctx.appRes("UIPresentationContainer.quickPrint.title");%>"><%= _ctx.appRes("UIPresentationContainer.quickPrint.print");%></a>
+    </div>
+<%
+	}
+	
 	if(uicomponent.isQuickEditable()) {
 %>
 		<div style="position: relative; height: 0px;" id="<%=quickEditingBlockId%>">
@@ -31,19 +46,17 @@
 				<a class="QuickEdit" href="<%=uicomponent.event("QuickEdit")%>" title="<%= _ctx.appRes("UIPresentationContainer.title");%>"></a>
 			</div>
 		</div>
-<% 
-	} 
-	if (uicomponent.isQuickPrint()) {
-%>
-		<div class="UISimpleBar">
-		<!--
-			<a class="ActionIcon EmailIcon" href="javascript: void(0);" onclick="window.open('$url')" title="<%= _ctx.appRes("UIPresentationContainer.quickPrint.title");%>">Email this page</a>
-			<a class="ActionIcon CommentIcon" href="javascript: void(0);" onclick="window.open('$url')" title="<%= _ctx.appRes("UIPresentationContainer.quickPrint.title");%>">Comments</a>
-		-->	
-			<a class="ActionIcon PrintIcon" href="javascript: void(0);" onclick="window.open('$url')" title="<%= _ctx.appRes("UIPresentationContainer.quickPrint.title");%>"><%= _ctx.appRes("UIPresentationContainer.quickPrint.print");%></a>
-		</div>
 <%
+    UIPresentation uiPresentation = uicomponent.getChildById("UIPresentation");
+    Node originalNode = uiPresentation.getOriginalNode();
+    Node viewNode = uiPresentation.getNode();
+    if ((viewNode == null) || (viewNode.getPath().equals(originalNode.getPath()))) {
+      uicomponent.renderChild("UIDraftContentPresentation");
+    } else {
+      uicomponent.renderChildren();
+    }
+	} else {
+	  uicomponent.renderChild("UIPresentation");
 	}
-	uicomponent.renderChildren() 
 %>
 </div>

@@ -61,8 +61,9 @@ public class UIPresentationContainer extends UIContainer{
 	 * 
 	 * @throws Exception the exception
 	 */
-	public UIPresentationContainer() throws Exception{                
-		addChild(UIPresentation.class,null,null);
+	public UIPresentationContainer() throws Exception{   
+	  addChild(UIDraftContentPresentation.class, null, "UIDraftContentPresentation");
+		addChild(UIPresentation.class,null,"UIPresentation");
 	}
 
 	/**
@@ -86,8 +87,6 @@ public class UIPresentationContainer extends UIContainer{
 		PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
 		return pContext.getWindowId();
 	}
-
-
 
 	/**
 	 * The listener interface for receiving quickEditAction events.
