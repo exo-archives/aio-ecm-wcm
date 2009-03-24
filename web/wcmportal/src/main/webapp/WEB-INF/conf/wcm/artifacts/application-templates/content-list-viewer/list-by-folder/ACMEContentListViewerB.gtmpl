@@ -27,6 +27,13 @@ import org.exoplatform.wcm.webui.clv.UIContentListViewerPortlet;
 				String labelRefreshAction = _ctx.appRes("UIContentListPresentationDefault.label.action.refresh");
 				String labelReadMore = _ctx.appRes("UIContentListPresentationDefault.label.readmore");
 				for (Node node : currentPageData) {				
+					tempNode = node;
+					viewNode = uicomponent.getNodeView(node);				
+					if (viewNode == null) {	
+						continue;				
+					} else {
+						node = viewNode;
+					}				
 					String itemName = node.getName();
 					String itemLink = uicomponent.getURL(node);		
 					System.out.println("MY LINK: " + itemLink);
@@ -41,7 +48,10 @@ import org.exoplatform.wcm.webui.clv.UIContentListViewerPortlet;
 				%>	
 					<div class="CaptionItem">
 						<% if (uicomponent.isShowField(UIContentListViewerPortlet.SHOW_TITLE)) {%>
-						<div class="CaptionTitle"><a href="$itemLink">$itemName</a></div>		
+							<div class="CaptionTitle"><a href="$itemLink">$itemName</a>
+							<% if(uicomponent.showDraftButton(tempNode)) { %>
+								<span>[ Draft, </span><a href="#" class="CaptionDraft">Edit</a> <span>]</span>
+							<% } %>	
 						<% } %>	
 						<% if (itemDateCreated != null && uicomponent.isShowField(UIContentListViewerPortlet.SHOW_DATE_CREATED)) { %>
 						<div class="CaptionDate"><%=itemDateCreated%></div>		
