@@ -617,6 +617,7 @@
 			var random = new Date().getTime();
 			var newTag = FCK.CreateElement("div");
 			newTag.setAttribute("id", random);
+			newTag.setAttribute("style", "float: left;");
 			newTag.innerHTML = "<span></span>";
 			var newScript = FCK.CreateElement("script");
 			newScript.innerHTML = "/*WCM gadgets random\"" + random + "\" metadata\"" + element.getAttribute('metadata') + "\" userprefs\"{}\" thumbnail\"" + element.src + "\" url\"" + element.lang + "\"*/eXo.core.Browser.addOnLoadCallback('" + random + "', function() {eXo.gadget.UIGadget.createGadget('" + element.lang + "','" + random + "', " + element.getAttribute('metadata').replace(/\${quote}/g, '"') + ", {}, 'home', 1, 0, 0)});";
