@@ -9,6 +9,7 @@
       <content-not-found>Contenu non trouvé ou supprimé.</content-not-found>
       <content-unsupport-exc>Contenu non supporté à la visualisation.</content-unsupport-exc>
       <access-control-exc>Accès au contenu supprimé.</access-control-exc>
+      <content-not-printed></content-not-printed>
     </msg>
   </UIMessageBoard>
   <UIContentViewerContainer>

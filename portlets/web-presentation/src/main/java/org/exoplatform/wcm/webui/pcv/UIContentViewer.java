@@ -83,6 +83,9 @@ public class UIContentViewer extends UIBaseNodePresentation {
 
   /** The Constant CONTENT_UNSUPPORT_EXC. */
   public final static String  CONTENT_UNSUPPORT_EXC = "UIMessageBoard.msg.content-unsupport-exc";
+  
+  /** Content can't be printed*/
+  public final static String  CONTENT_NOT_PRINTED = "UIMessageBoard.msg.content-not-printed";
 
   /** The Constant PARAMETER_REGX. */
   public final static String  PARAMETER_REGX        = "(.*)/(.*)";
@@ -289,11 +292,10 @@ public class UIContentViewer extends UIBaseNodePresentation {
       }   
       String lifeCycleName = publicationService.getNodeLifecycleName(currentNode);
       PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(lifeCycleName);
-//      if(publicationPlugin == null) {
-//    	  
-//      } else {
-//    	  
-//      }
+      if(publicationPlugin == null) {
+    	  renderErrorMessage(context, CONTENT_NOT_PRINTED);
+    	  return;  
+      } 
       Node nodeView = publicationPlugin.getNodeView(currentNode, hmContext);
       setRepository(repository);
 	  setWorkspace(workspace);

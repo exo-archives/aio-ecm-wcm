@@ -85,12 +85,14 @@ public class UIMiscellaneousInfo extends UIForm {
     public void execute(Event<UIMiscellaneousInfo> event) throws Exception {
       UIMiscellaneousInfo uiMiscellaneousInfo = event.getSource();
       boolean isShowTitle = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowTitle").isChecked();
+      boolean isShowPrint = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowPrintAction").isChecked();
 //      boolean isQuickEdit = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowQuickEdit").isChecked();
 //      boolean isShowTags = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowTags").isChecked();
 //      boolean isShowCategories = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowCategories").isChecked();
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
       PortletPreferences prefs = context.getRequest().getPreferences();
       prefs.setValue("ShowTitle", Boolean.toString(isShowTitle));
+      prefs.setValue("ShowPrintAction", Boolean.toString(isShowPrint));
 //      prefs.setValue("ShowQuickEdit", Boolean.toString(isQuickEdit));
 //      prefs.setValue("ShowTags", Boolean.toString(isShowTags));
 //      prefs.setValue("ShowCategories", Boolean.toString(isShowCategories));
