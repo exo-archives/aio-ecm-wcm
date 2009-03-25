@@ -228,4 +228,16 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
     }
     return true;
   }
+
+  //TODO: the overridden method will not render UIPopupMessgae in live move to save render time
+  //In future, this should be supported in portal framework
+  @Override
+  public void renderChildren() throws Exception {
+    if(Utils.isLiveMode()) {
+      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+      renderChildren(context) ; 
+    }else {
+      super.renderChildren();
+    }    
+  }
 }
