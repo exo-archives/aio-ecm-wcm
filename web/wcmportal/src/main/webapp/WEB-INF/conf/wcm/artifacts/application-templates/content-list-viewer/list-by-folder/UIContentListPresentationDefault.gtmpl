@@ -56,7 +56,7 @@ import org.exoplatform.wcm.webui.clv.UIContentListViewerPortlet;
 					<div class="CaptionTitle" ><a href="$itemLink">$itemName</a>
 					<% } %>	
 					<% if(uicomponent.showDraftButton(tempNode)) { %>
-					<span>[ Draft, </span><a href="#" class="CaptionDraft">Edit</a> <span>]</span>
+					<span>[ Draft, </span><a href="$itemLink" class="CaptionDraft">Edit</a> <span>]</span>
 					<% } %>					
 					</div>							
 					<% if (itemDateCreated != null && uicomponent.isShowField(UIContentListViewerPortlet.SHOW_DATE_CREATED)) { %>

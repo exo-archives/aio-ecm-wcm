@@ -24,6 +24,9 @@ import org.exoplatform.wcm.webui.clv.UIContentListViewerPortlet;
 		def currentPageData = uicomponent.getCurrentPageData();			
 		String labelRefreshAction = _ctx.appRes("UIContentListPresentationDefault.label.action.refresh");
 		String labelReadMore = _ctx.appRes("UIContentListPresentationDefault.label.readmore");
+		Node viewNode = null;
+		Node tempNode = null;
+			
 		for (Node node : currentPageData) {				
 			tempNode = node;
 			viewNode = uicomponent.getNodeView(node);				
@@ -47,7 +50,7 @@ import org.exoplatform.wcm.webui.clv.UIContentListViewerPortlet;
 				<% if (uicomponent.isShowField(UIContentListViewerPortlet.SHOW_TITLE)) {%>
 					<div class="CaptionTitle"><a href="$itemLink">$itemName</a>
 					<% if(uicomponent.showDraftButton(tempNode)) { %>
-						<span>[ Draft, </span><a href="#" class="CaptionDraft">Edit</a> <span>]</span>
+						<span>[ Draft, </span><a href="$itemLink" class="CaptionDraft">Edit</a> <span>]</span>
 					<% } %>	
 				</div>		
 				<% } %>	
