@@ -202,4 +202,12 @@
   		<UIWCMNodeTypeSelectForm>Form chọn kiểu dữ liệu</UIWCMNodeTypeSelectForm>
   	</title>
   </DocumentNodeTypePopup>
+  <WCMContentView>
+  	<header>
+	  	<title></title>
+	  	<author></author>
+	  	<date></date>
+	  	<status></status>
+  	</header>
+  </WCMContentView>
 </bundle>

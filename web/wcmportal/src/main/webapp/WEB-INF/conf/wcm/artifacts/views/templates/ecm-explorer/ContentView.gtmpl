@@ -8,9 +8,14 @@
    */
 %>
 <%
+	import java.util.Calendar;
+	import java.util.Date;
+  import javax.jcr.Node;
   import org.exoplatform.ecm.webui.utils.Utils ;
   import org.exoplatform.web.application.Parameter ;
-  import org.exoplatform.webui.core.UIRightClickPopupMenu ;
+  import org.exoplatform.services.ecm.publication.PublicationService;
+  import org.exoplatform.webui.core.UIRightClickPopupMenu;
+  import org.exoplatform.services.ecm.publication.IncorrectStateUpdateLifecycleException;
   
   UIRightClickPopupMenu contextMenu = uicomponent.getContextMenu() ;
   String componentId = uicomponent.getId();
@@ -20,6 +25,77 @@
   def rcontext = _ctx.getRequestContext() ;
   rcontext.getJavascriptManager().importJavascript('eXo.ecm.UIListView','/ecm/javascript/'); 
   rcontext.getJavascriptManager().addOnLoadJavascript("function(){eXo.ecm.UIListView.initAllEvent('${componentId}-$viewComponentId');}");
+  
+  /**
+  * Finds and returns <code>Node</code> title. If the given node has no title
+  * value, the name of the node is returned instead.
+  *
+  * @return a string of a <code>Node</code> title or name.
+  */
+  public String getNodeTitle(Node node){
+  	String title = null;
+  	try {
+			title = node.getProperty("exo:title").getValue().getString()
+  	} catch (Exception e) {
+			title = node.getName();  	
+  	}
+		if(title != null && title.length() > 50) {
+			title = title.substring(0, 50) + "...";
+		}
+  	return title;
+  }
+  
+  /**
+  * Finds and returns the date information of the given node.
+  *
+  * @return DateFormat Live date if the current state is live. Otherwise, the
+  * lastest modified date.
+  */
+  public Date getDate(Node node, String status) {
+  	Date date = null;
+  	try {
+	  	if("live".equals(status)) {
+	  		date = node.getProperty("publication:liveDate").getDate().getTime();
+	  	} else if ("draft".equals(status) || "obsolete".equals(status)) {
+	  		date = uicomponent.getDateModified(node);	
+	  	} else {
+		  	date = uicomponent.getDateCreated(node);
+	  	}
+  	} catch (Exception e) {
+  		date = uicomponent.getDateCreated(node);
+  	}
+  	return date;
+  }
+  
+  /**
+  * Finds and returns <code>Node</code> status.
+  *
+  * @return String <code>Node</code> status.
+  */
+  public String getNodeState(Node node){
+  	String state = null;  	
+  	try {
+	  	PublicationService publicationService = uicomponent
+			  								.getApplicationComponent(PublicationService.class);
+			state = publicationService.getCurrentState(node);  
+  	} catch (Exception e) {
+  		return "";
+  	} 
+  	if("draft".equals(state)) 
+  		return state;
+  	String liveRevision = null;
+  	try{
+	  	liveRevision = node.getProperty("publication:liveRevision").getValue().getString();
+  	}catch(Exception e) {}  	
+		if(liveRevision != null && liveRevision.length() != 0) {
+			state = "live";
+		} else if("enrolled".equals(state)){
+			state = "obsolete";
+		}else {
+			state = "";
+		}
+  	return state;
+  }
 %>
 <div id="$componentId">
 	<div id="${componentId}-$viewComponentId" class="UIListView" style="">	
@@ -100,7 +176,6 @@
 		          typeActionLink = "Ascending;";
 		        }
 			    %>
-			    
 				    <div class="LeftColumn" onclick="<%= uicomponent.event("Sort", typeActionLink + "Type")%>" style="cursor:pointer;" >
 			        <%
 			          if (selectedSortType.equals("Type")) {
@@ -110,56 +185,52 @@
 				        </div>
 				      <%}%>
 				    </div>
-			    
-				    <div class="RightColumn" style="border: none" onclick="<%=uicomponent.event("Sort", typeActionLink + "Auditing")%>">
+<!-- Status -->				    
+				    <div class="RightColumn" onclick="<%=uicomponent.event("Sort", typeActionLink + "Status")%>">
 			        <%
-			          if (selectedSortType.equals("Auditing")) {
+			          if (selectedSortType.equals("Status")) {
 			        %>
 				        <div class="SortButton ${sortOrder}16x16Icon" style="width: auto; padding-left: 20px;">
-				        	<%=_ctx.appRes("ListView.view.label.auditing")%>
+				        	<%=_ctx.appRes("WCMContentView.header.status")%>
 				        </div>
 				      <%} else { %>
-				        <%=_ctx.appRes("ListView.view.label.auditing")%>
+				        <%=_ctx.appRes("WCMContentView.header.status")%>
 				      <%} %>
 				    </div>
-				    <div class="RightColumn" onclick="<%=uicomponent.event("Sort", typeActionLink + "Versionable")%>">
-			        <%
-			          if (selectedSortType.equals("Versionable")) {
-			        %>
-				        <div class="SortButton ${sortOrder}16x16Icon" style="width: auto; padding-left: 20px;">
-				        	<%=_ctx.appRes("ListView.view.label.versionable")%>
-				        </div>
-				      <%} else { %>
-				        <%=_ctx.appRes("ListView.view.label.versionable")%>
-				      <%} %>
-				    </div>
-			    <%
-			      String[] arrSortType = ["exo:owner","exo:dateModified","exo:dateCreated"];  
-			      for(String sortType: arrSortType) {
-			    %>
-             <div class="RightColumn" onclick="<%= uicomponent.event("Sort", typeActionLink + sortType)%>">
-			       <%  
-			       if (sortType.equals(selectedSortType)) {
-             %>
-				        <div class="SortButton ${sortOrder}16x16Icon" style="width: auto; padding-left: 20px;">
-				        	<%=_ctx.appRes("ListView.view.label." + sortType..replace(":","_"))%>
-				        </div>
-			       <%} else { %>
-			         <%=_ctx.appRes("ListView.view.label." + sortType.replace(":","_"))%>
-			       <%} %>
-				    </div>
-			    <%
-		  	    }
-			    %>
+<!-- Author -->			    
+	         	<div class="RightColumn" onclick="<%= uicomponent.event("Sort", typeActionLink + "Author")%>">
+		       	<%  
+			      	if (selectedSortType.equals("Author")) {
+	    	   	%>
+			      	<div class="SortButton ${sortOrder}16x16Icon" style="width: auto; padding-left: 20px;">
+			        	<%=_ctx.appRes("WCMContentView.header.author")%>
+			        </div>
+		       	<%	} else { %>
+							<%=_ctx.appRes("WCMContentView.header.author")%>
+		      	<%} %>
+			    	</div>
+<!-- Date -->			    	
+			    	<div class="RightColumn" onclick="<%= uicomponent.event("Sort", typeActionLink + "Date")%>">
+		       	<%  
+			       if (selectedSortType.equals("Date")) {
+    	   	 	%>
+			        <div class="SortButton ${sortOrder}16x16Icon" style="width: auto; padding-left: 20px;">
+			        	<%=_ctx.appRes("WCMContentView.header.date")%>
+			        </div>
+		       	<%	} else { %>
+							<%=_ctx.appRes("WCMContentView.header.date")%>
+		       	<%} %>
+			    	</div>
+<!-- Title-->			    
 				    <div class="ResizeColumn" onclick="<%=uicomponent.event("Sort", typeActionLink + "Alphabetic")%>">
 			        <%
 			          if (selectedSortType.equals("Alphabetic")) {
 			        %>
 				        <div class="SortButton ${sortOrder}16x16Icon" style="width: auto; padding-left: 20px;">
-				        	<%=_ctx.appRes("ListView.view.label.name")%>
+				        	<%=_ctx.appRes("WCMContentView.header.title")%>
 				        </div>
 				      <%} else { %>
-				        <%=_ctx.appRes("ListView.view.label.name")%>
+				      	<%=_ctx.appRes("WCMContentView.header.title")%>
 				      <%} %>
 				    </div>
 		      </a>
@@ -169,7 +240,9 @@
 	      	String serverUrl = uicomponent.getWebDAVServerPrefix();
 	      	String portalName = uicomponent.getPortalName() ;
 	      	String repository = uicomponent.getRepository();
-	        for (data in uicomponent.getChildrenList()) {
+	        for (data in uicomponent.getChildrenList()) {	
+	        	def status = getNodeState(data);
+	        	Date date = getDate(data, status); 	        	        
 	          def isPreferenceNode = uicomponent.isPreferenceNode(data) ;
 	          def preferenceWS = data.getSession().getWorkspace().getName() ;
 	          String nodePath = data.getPath() ;
@@ -221,39 +294,27 @@
 	        <div class="LeftColumn" style="padding: 2px 0px; 	border-right: none;">
 					  <div title="$name" class="Icon16x16 default16x16Icon <%=Utils.getNodeTypeIcon(data, "16x16Icon")%>"><span></span></div>
 	        </div>
-	        <%
-	  	        if (name.length() < 50) subName = name ;
-			        else subName = name.substring(0,50) + "..." ;
-		        %>
-	        <div class="RightColumn" style="border: none"><!--added CPop Bull SA -->
-	           <%= Utils.isAuditable(data)%>
-	           <% if (Utils.isAuditable(data)&& uicomponent.hasAuditHistory(data)) 
-	                println "("+ uicomponent.getNumAuditHistory(data)+")";
-	              else
-	                println ""; 
-	            %>
-	        </div>
+<!-- Status -->			      
 	        <div class="RightColumn">
-		         	<%=Utils.isVersionable(data)%>
-		          <%
-		            if(Utils.isVersionable(data) && !uicomponent.getVersionName(data).equals("jcr:rootVersion")) {
-		              println "(" + uicomponent.getVersionName(data) + ")" ;
-		            }
-		          %>
+		      	<%
+	  	        println(status);
+		        %>
 	        </div>
+<!-- Author -->			      	        
 	        <div class="RightColumn" style="width: 90px">
 		        <%=uicomponent.getNodeOwner(data)%>
 	        </div>
+<!-- Date -->	        
 	        <div class="RightColumn" style="width: 125px">
-	    			<%=dateFormat.format(uicomponent.getDateModified(data))%>
+	    			<%=dateFormat.format(date);%>
 	 				</div>
-	       
-	        <div class="RightColumn" style="width: 105px;">
-	        	<%=dateFormat.format(uicomponent.getDateCreated(data))%>
-	        </div>
+<!-- Title -->	        	 				
 	        <div class="ResizeColumn">
 							<div class="NodeLabel">
-								<div style="cursor: pointer; -moz-outline: none; -moz-user-select: none;" title="$name">$subName</div>
+									<%
+										String title = getNodeTitle(data);
+									%>
+									<div style="cursor: pointer; -moz-outline: none; -moz-user-select: none;" title="$title">$title</div>
 		 					</div>
 	        </div>
 	        <div style="clear: both"><span></span></div>
@@ -266,4 +327,4 @@
 			<%_ctx.renderUIComponent(uicomponent.getContentPageIterator())%>
 		</div>
 	<% } %>
-</div>	
+</div>

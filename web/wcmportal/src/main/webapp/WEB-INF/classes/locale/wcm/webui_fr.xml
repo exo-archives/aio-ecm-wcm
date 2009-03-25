@@ -232,4 +232,12 @@
   		<UIWCMNodeTypeSelectForm>Veuillez sélectionner un type de noeud</UIWCMNodeTypeSelectForm>
   	</title>
   </DocumentNodeTypePopup>
+  <WCMContentView>
+  	<header>
+	  	<title></title>
+	  	<author></author>
+	  	<date></date>
+	  	<status></status>
+  	</header>
+  </WCMContentView>
 </bundle>

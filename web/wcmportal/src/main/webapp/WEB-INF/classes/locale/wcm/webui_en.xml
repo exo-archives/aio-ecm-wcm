@@ -235,4 +235,12 @@
   		<UIWCMNodeTypeSelectForm>NodeType Select Form</UIWCMNodeTypeSelectForm>
   	</title>
   </DocumentNodeTypePopup>
+  <WCMContentView>
+  	<header>
+	  	<title>Title</title>
+	  	<author>Author</author>
+	  	<date>Date</date>
+	  	<status>Status</status>
+  	</header>
+  </WCMContentView>
 </bundle>
