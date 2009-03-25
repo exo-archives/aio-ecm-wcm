@@ -28,11 +28,15 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.webui.skin.SkinService;
+import org.exoplatform.services.cache.CacheService;
+import org.exoplatform.services.cache.ExoCache;
 import org.exoplatform.services.deployment.ContentInitializerService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -41,6 +45,7 @@ import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.picocontainer.Startable;
 
 /**
@@ -57,6 +62,7 @@ public class XSkinService implements Startable {
   private WCMConfigurationService configurationService;
   private SkinService skinService ;
   private ServletContext servletContext;
+  private ExoCache cssCache;
 
   /**
    * Instantiates a new extended skin service to manage skin for web content.
@@ -68,12 +74,13 @@ public class XSkinService implements Startable {
    * @param servletContext the servlet context
    */
   @SuppressWarnings("unused")
-  public XSkinService(SkinService skinService,WebSchemaConfigService schemaConfigService, WCMConfigurationService configurationService, ContentInitializerService initializerService, ServletContext servletContext) {
+  public XSkinService(SkinService skinService,WebSchemaConfigService schemaConfigService, WCMConfigurationService configurationService, ContentInitializerService initializerService, ServletContext servletContext, CacheService cacheService) throws Exception {
     this.skinService = skinService ;
     this.skinService.addResourceResolver(new WCMSkinResourceResolver(this.skinService));
     this.configurationService = configurationService;
     this.schemaConfigService = schemaConfigService;
     this.servletContext = servletContext;
+    this.cssCache = cacheService.getCacheInstance(this.getClass().getName());
   }
 
   /**
@@ -83,9 +90,35 @@ public class XSkinService implements Startable {
    * @return the active stylesheet
    * @throws Exception the exception
    */
-  public String getActiveStylesheet(Node home) throws Exception {    
+  public String getActiveStylesheet(Node home) throws Exception {
+    /** TODO
+     * 
+     * This is quick code to improve performance when rendering the web content.
+     * In future version, we should find a way use cache data in live mode. In edit mode, we will use raw data 
+     * 
+     * */
+    WebuiRequestContext requestContext = WebuiRequestContext.getCurrentInstance();
+    boolean useCachedData = false;    
+    if(requestContext != null) {
+      HttpServletRequest request = requestContext.getRequest();
+      HttpSession httpSession = request.getSession();
+      Object onEditMode = httpSession.getAttribute("turnOnQuickEdit");
+      if(onEditMode == null) {
+        useCachedData = true; 
+      } else {
+        useCachedData = !Boolean.parseBoolean((String)onEditMode);
+      }     
+    }
+    String cacheKey = home.getSession().getWorkspace().getName() + home.getPath();
+    if(useCachedData) {
+      String cachedCSS = (String)cssCache.get(cacheKey);
+      if(cachedCSS != null && cachedCSS.length()>0)
+        return cachedCSS;
+    }
     String cssQuery = "select * from exo:cssFile where jcr:path like '" +home.getPath()+ "/%' and exo:active='true'order by exo:priority DESC " ;
-    return getCSSDataBySQLQuery(home.getSession(),cssQuery,null);
+    String css = getCSSDataBySQLQuery(home.getSession(),cssQuery,null);
+    cssCache.put(cacheKey,css);
+    return css;
   }  
 
   public void updatePortalSkinOnModify(final Node cssFile, final Node portal) throws Exception {            

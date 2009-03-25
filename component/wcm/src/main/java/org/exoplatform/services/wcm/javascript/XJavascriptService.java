@@ -26,9 +26,13 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
+import org.exoplatform.services.cache.CacheService;
+import org.exoplatform.services.cache.ExoCache;
 import org.exoplatform.services.deployment.ContentInitializerService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
@@ -37,6 +41,7 @@ import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.web.application.javascript.JavascriptConfigService;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.picocontainer.Startable;
 
 /**
@@ -56,11 +61,12 @@ public class XJavascriptService implements Startable {
   private WCMConfigurationService configurationService;
   private ServletContext sContext ;    
   private CopyOnWriteArrayList<String> javascriptMimeTypes = new CopyOnWriteArrayList<String>();
+  private ExoCache jsCache;
   
   private Log log = ExoLogger.getLogger("wcm:XJavascriptService");  
   @SuppressWarnings("unused")
   public XJavascriptService(RepositoryService repositoryService,JavascriptConfigService jsConfigService,ServletContext servletContext, 
-      WCMConfigurationService configurationService, ContentInitializerService contentInitializerService) {    
+      WCMConfigurationService configurationService, ContentInitializerService contentInitializerService, CacheService cacheService) throws Exception{    
     this.repositoryService = repositoryService ;
     this.jsConfigService = jsConfigService ;
     sContext = servletContext ;
@@ -68,11 +74,38 @@ public class XJavascriptService implements Startable {
     javascriptMimeTypes.addIfAbsent("text/javascript");
     javascriptMimeTypes.addIfAbsent("application/x-javascript");
     javascriptMimeTypes.addIfAbsent("text/ecmascript");
+    jsCache = cacheService.getCacheInstance(this.getClass().getName());
   }
 
-  public String getActiveJavaScript(Node home) throws Exception {    
+  public String getActiveJavaScript(Node home) throws Exception {
+    /** TODO
+     * 
+     * This is quick code to improve performance when rendering the web content.
+     * In future version, we should find a way use cache data in live mode. In edit mode, we will use raw data 
+     * 
+     * */
+    WebuiRequestContext requestContext = WebuiRequestContext.getCurrentInstance();
+    boolean useCachedData = false;    
+    if(requestContext != null) {
+      HttpServletRequest request = requestContext.getRequest();
+      HttpSession httpSession = request.getSession();
+      Object onEditMode = httpSession.getAttribute("turnOnQuickEdit");
+      if(onEditMode == null) {
+        useCachedData = true; 
+      } else {
+        useCachedData = !Boolean.parseBoolean((String)onEditMode);
+      }     
+    }
+    String cacheKey = home.getSession().getWorkspace().getName() + home.getPath();
+    if(useCachedData) {
+      String cachedJs = (String)jsCache.get(cacheKey);
+      if(cachedJs != null && cachedJs.length()>0)
+        return cachedJs;
+    }
     String jsQuery = "select * from exo:jsFile where jcr:path like '" + home.getPath()+ "/%' and exo:active='true'order by exo:priority DESC " ;
-    return getJSDataBySQLQuery(home.getSession(),jsQuery,null);        
+    String jsData = getJSDataBySQLQuery(home.getSession(),jsQuery,null);
+    jsCache.put(cacheKey,jsData);
+    return jsData;
   }   
 
   public void updatePortalJSOnModify(Node jsFile, SessionProvider sessionProvider) throws Exception {    
