@@ -21,9 +21,7 @@ import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
-import javax.jcr.Repository;
 import javax.jcr.Session;
-import javax.jcr.SimpleCredentials;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
@@ -116,9 +114,31 @@ public class XSkinService implements Startable {
         return cachedCSS;
     }
     String cssQuery = "select * from exo:cssFile where jcr:path like '" +home.getPath()+ "/%' and exo:active='true'order by exo:priority DESC " ;
-    String css = getCSSDataBySQLQuery(home.getSession(),cssQuery,null);
-    cssCache.put(cacheKey,css);
-    return css;
+    //TODO the jcr can not search on jcr:system for normal workspace. Seem that this is the portal bug
+    Session querySession = null;
+    String cssData = null;
+    try {  
+      Session currentSession = home.getSession();
+      ManageableRepository manageableRepository = (ManageableRepository)currentSession.getRepository();
+      String currentWorkspaceName = currentSession.getWorkspace().getName();
+      String systemWorkspaceName = manageableRepository.getConfiguration().getSystemWorkspaceName();
+      if(home.getPath().startsWith("jcr:system") && !currentWorkspaceName.equals(systemWorkspaceName)) {
+        querySession = manageableRepository.login(systemWorkspaceName);
+        cssData = getCSSDataBySQLQuery(querySession,cssQuery,null);
+      }else {
+        if(currentSession.isLive()) {
+          cssData = getCSSDataBySQLQuery(currentSession,cssQuery,null);
+        }else {
+          querySession = manageableRepository.login(currentWorkspaceName);
+          cssData = getCSSDataBySQLQuery(querySession,cssQuery,null);
+        }
+      }
+    }finally {
+      if(querySession != null)
+        querySession.logout();
+    }        
+    cssCache.put(cacheKey,cssData);
+    return cssData;
   }  
 
   public void updatePortalSkinOnModify(final Node cssFile, final Node portal) throws Exception {            
@@ -182,35 +202,21 @@ public class XSkinService implements Startable {
     }         
   }
 
-  private String getCSSDataBySQLQuery(Session session, String statement, String exceptedPath) throws Exception {
-    Session querySession = null;
-    QueryManager queryManager = null;
-    try {
-      if(session.isLive()) {
-        queryManager = session.getWorkspace().getQueryManager();
-      }else {
-        Repository repository = session.getRepository();
-        querySession = repository.login(session.getWorkspace().getName());
-        queryManager = querySession.getWorkspace().getQueryManager();
-      }
-      Query query = queryManager.createQuery(statement,Query.SQL);
-      QueryResult queryResult = query.execute();    
-      StringBuffer buffer = new StringBuffer();
-      for(NodeIterator iterator = queryResult.getNodes();iterator.hasNext();) {
-        Node cssFile = iterator.nextNode();
-        if(cssFile.getPath().equals(exceptedPath)) continue;
-        Node jcrContent = cssFile.getNode("jcr:content");
-        String mimeType = jcrContent.getProperty("jcr:mimeType").getString();
-        if(!"text/css".equals(mimeType)) continue;
-        String css = jcrContent.getProperty("jcr:data").getString();      
-        buffer.append(css) ;
-      }    
-      return buffer.toString(); 
-    }
-    finally{
-      if(querySession != null)
-        querySession.logout();
-    }
+  private String getCSSDataBySQLQuery(Session session, String statement, String exceptedPath) throws Exception {    
+    QueryManager queryManager = session.getWorkspace().getQueryManager();      
+    Query query = queryManager.createQuery(statement,Query.SQL);
+    QueryResult queryResult = query.execute();    
+    StringBuffer buffer = new StringBuffer();
+    for(NodeIterator iterator = queryResult.getNodes();iterator.hasNext();) {
+      Node cssFile = iterator.nextNode();
+      if(cssFile.getPath().equals(exceptedPath)) continue;
+      Node jcrContent = cssFile.getNode("jcr:content");
+      String mimeType = jcrContent.getProperty("jcr:mimeType").getString();
+      if(!"text/css".equals(mimeType)) continue;
+      String css = jcrContent.getProperty("jcr:data").getString();      
+      buffer.append(css) ;
+    }    
+    return buffer.toString();     
   }  
 
   private Node getPortalCSSFolder(Node portal) throws Exception{

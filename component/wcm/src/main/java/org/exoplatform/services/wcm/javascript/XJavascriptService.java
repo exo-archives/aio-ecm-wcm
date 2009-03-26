@@ -62,7 +62,7 @@ public class XJavascriptService implements Startable {
   private ServletContext sContext ;    
   private CopyOnWriteArrayList<String> javascriptMimeTypes = new CopyOnWriteArrayList<String>();
   private ExoCache jsCache;
-  
+
   private Log log = ExoLogger.getLogger("wcm:XJavascriptService");  
   @SuppressWarnings("unused")
   public XJavascriptService(RepositoryService repositoryService,JavascriptConfigService jsConfigService,ServletContext servletContext, 
@@ -103,7 +103,29 @@ public class XJavascriptService implements Startable {
         return cachedJs;
     }
     String jsQuery = "select * from exo:jsFile where jcr:path like '" + home.getPath()+ "/%' and exo:active='true'order by exo:priority DESC " ;
-    String jsData = getJSDataBySQLQuery(home.getSession(),jsQuery,null);
+    //TODO the jcr can not search on jcr:system for normal workspace. Seem that this is the portal bug
+    Session querySession = null;
+    String jsData = null;
+    try {  
+      Session currentSession = home.getSession();
+      ManageableRepository manageableRepository = (ManageableRepository)currentSession.getRepository();
+      String currentWorkspaceName = currentSession.getWorkspace().getName();
+      String systemWorkspaceName = manageableRepository.getConfiguration().getSystemWorkspaceName();
+      if(home.getPath().startsWith("jcr:system") && !currentWorkspaceName.equals(systemWorkspaceName)) {
+        querySession = manageableRepository.login(systemWorkspaceName);
+        jsData = getJSDataBySQLQuery(querySession,jsQuery,null);
+      }else {
+        if(currentSession.isLive()) {
+          jsData = getJSDataBySQLQuery(currentSession,jsQuery,null);
+        }else {
+          querySession = manageableRepository.login(currentWorkspaceName);
+          jsData = getJSDataBySQLQuery(querySession,jsQuery,null);
+        }
+      }
+    }finally {
+      if(querySession != null)
+        querySession.logout();
+    }       
     jsCache.put(cacheKey,jsData);
     return jsData;
   }   
@@ -135,34 +157,21 @@ public class XJavascriptService implements Startable {
     return getJSDataBySQLQuery(session,statement,exceptPath);        
   }
 
-  private String getJSDataBySQLQuery(Session session, String queryStatement, String exceptPath) throws Exception {
-    Session querySession = null;
-    QueryManager queryManager = null;
-    try {
-      if(session.isLive()) {
-        queryManager = session.getWorkspace().getQueryManager();
-      }else {
-        Repository repository = session.getRepository();
-        querySession = repository.login(session.getWorkspace().getName());
-        queryManager = querySession.getWorkspace().getQueryManager();
-      }
-      Query query = queryManager.createQuery(queryStatement, Query.SQL) ;
-      QueryResult queryResult = query.execute() ;
-      StringBuffer buffer = new StringBuffer();
-      for(NodeIterator iterator = queryResult.getNodes();iterator.hasNext();) {
-        Node jsFile = iterator.nextNode();
-        Node jcrContent = jsFile.getNode("jcr:content");
-        String mimeType = jcrContent.getProperty("jcr:mimeType").getString();
-        if(!javascriptMimeTypes.contains(mimeType)) continue;
-        if(jsFile.getPath().equalsIgnoreCase(exceptPath)) continue;
-        buffer.append(jcrContent.getProperty("jcr:data").getString()) ;
-      }
-      return buffer.toString(); 
+  private String getJSDataBySQLQuery(Session session, String queryStatement, String exceptPath) throws Exception {    
+    QueryManager queryManager = null;    
+    queryManager = session.getWorkspace().getQueryManager();      
+    Query query = queryManager.createQuery(queryStatement, Query.SQL) ;
+    QueryResult queryResult = query.execute() ;
+    StringBuffer buffer = new StringBuffer();
+    for(NodeIterator iterator = queryResult.getNodes();iterator.hasNext();) {
+      Node jsFile = iterator.nextNode();
+      Node jcrContent = jsFile.getNode("jcr:content");
+      String mimeType = jcrContent.getProperty("jcr:mimeType").getString();
+      if(!javascriptMimeTypes.contains(mimeType)) continue;
+      if(jsFile.getPath().equalsIgnoreCase(exceptPath)) continue;
+      buffer.append(jcrContent.getProperty("jcr:data").getString()) ;
     }
-    finally{
-      if(querySession != null)
-        querySession.logout();
-    }
+    return buffer.toString();    
   }
 
   public void start() {    
