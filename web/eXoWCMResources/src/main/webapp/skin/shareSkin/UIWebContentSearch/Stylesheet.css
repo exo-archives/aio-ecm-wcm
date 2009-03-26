@@ -29,15 +29,19 @@
 }
 
 .UIWCMSearchContent .title {
-	width: 60%;
+	width: 55%;
 }
 
 .UIWCMSearchContent .score {
-	width: 20%;
+	width: 15%;
+}
+
+.UIWCMSearchContent .publicationstate {
+	width: 15%;
 }
 
 .UIWebSearchResult .action {
-	width: 20%;
+	width: 15%;
 }
 
 /******************************************************/

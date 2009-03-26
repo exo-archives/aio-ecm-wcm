@@ -22,12 +22,10 @@
       <tr class="UIWCMSearchContent">
         <%
 	        int count = 0;
-	        String klass = "";
         	if(name != null) {
         		for(field in beanFields) {
-        			klass = count++ == 0 ? "title" : "score";
        	%>
-              		<th class="$klass"><%=_ctx.appRes(name + ".header." + field)%></th>
+              		<th class="$field"><%=_ctx.appRes(name + ".header." + field)%></th>
         <%		}
         		if(beanActions != null) { 
         %>
@@ -36,9 +34,8 @@
         		}
         	} else 	{
           		for(field in beanFields) { 
-          			klass = count++ == 0 ? "title" : "score";
         %>
-          			<th class="$klass"><%=_ctx.appRes(uiParent.getName() + ".header." + field)%></th>
+          			<th class="$field"><%=_ctx.appRes(uiParent.getName() + ".header." + field)%></th>
         <%		}	
           		if(beanActions != null && beanActions.length > 0) { 
         %>
@@ -74,6 +71,7 @@
             float score = bean.getScore();
             Node node = bean.getNode();
             String date = dateFormat.format(uicomponent.getCreateDate(node));
+            String publicationState = uicomponent.getCurrentState(node);
     %>        
           <td>
             <div class="default16x16Icon ItemIcon <%=Utils.getNodeTypeIcon(node, "16x16Icon")%>" style="width: auto; height: auto; background-position: left top; padding-left: 20px">
@@ -86,6 +84,10 @@
           
           <td>
             <div class="Number">$score</div>
+          </td>
+          
+          <td>
+            <div class="Text">$publicationState</div>
           </td>
     <%
     	if(beanActions != null && beanActions.length > 0) { 

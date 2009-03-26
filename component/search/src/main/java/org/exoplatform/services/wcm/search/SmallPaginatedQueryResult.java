@@ -33,10 +33,10 @@ import org.exoplatform.commons.exception.ExoMessageException;
  * Dec 10, 2008
  */
 public class SmallPaginatedQueryResult extends WCMPaginatedQueryResult{
-  
+
   /** The array list. */
   private CopyOnWriteArrayList<ResultNode> arrayList = new CopyOnWriteArrayList<ResultNode>();
-  
+
   /**
    * Instantiates a new small paginated query result.
    * 
@@ -74,7 +74,7 @@ public class SmallPaginatedQueryResult extends WCMPaginatedQueryResult{
     setPageSize(pageSize);
     setAvailablePage(arrayList.size());    
   }
-  
+
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.utils.PaginatedNodeIterator#getPage(int)
    */
@@ -83,14 +83,14 @@ public class SmallPaginatedQueryResult extends WCMPaginatedQueryResult{
     populateCurrentPage(page);
     return currentListPage_;
   }
-  
+
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.search.PaginatedQueryResult#populateCurrentPage(int)
    */
   protected void populateCurrentPage(int page) throws Exception {    
     currentListPage_ = arrayList.subList(getFrom(), getTo());
   }
-  
+
   /* (non-Javadoc)
    * @see org.exoplatform.commons.utils.PageList#checkAndSetPage(int)
    */

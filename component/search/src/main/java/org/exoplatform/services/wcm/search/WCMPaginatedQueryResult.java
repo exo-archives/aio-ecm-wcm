@@ -29,13 +29,13 @@ public class WCMPaginatedQueryResult extends PaginatedQueryResult {
 
   /** The query time. */
   private long queryTime;  
-  
+
   /** The spell suggestion. */
   private String spellSuggestion;
-  
+
   /** The query criteria. */
   private QueryCriteria queryCriteria;  
-  
+
   /**
    * Instantiates a new wCM paginated query result.
    * 

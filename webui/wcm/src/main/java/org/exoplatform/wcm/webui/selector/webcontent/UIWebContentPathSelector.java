@@ -55,6 +55,12 @@ import org.exoplatform.webui.event.EventListener;
       id = "UIBreadcrumbWebContentPathSelector",
       template = "system:/groovy/webui/core/UIBreadcumbs.gtmpl",
       events = @EventConfig(listeners = UIBreadcumbs.SelectPathActionListener.class)
+  ),
+  @ComponentConfig(
+      type = UISelectPathPanel.class,      
+      id = "UIWCMSelectPathPanel",
+      template = "classpath:groovy/wcm/webui/UIWCMSelectPathPanel.gtmpl",
+      events = @EventConfig(listeners = UISelectPathPanel.SelectActionListener.class)
   )
 }
 )
@@ -71,7 +77,7 @@ public class UIWebContentPathSelector extends UIBaseNodeTreeSelector implements 
   public UIWebContentPathSelector() throws Exception {
     addChild(UIBreadcumbs.class, "UIBreadcrumbWebContentPathSelector", "UIBreadcrumbWebContentPathSelector");
     addChild(UIWebContentTreeBuilder.class,null, UIWebContentTreeBuilder.class.getName()+hashCode());
-    addChild(UISelectPathPanel.class,null, UISelectPathPanel.class.getName()+hashCode());
+    addChild(UISelectPathPanel.class, "UIWCMSelectPathPanel", "UIWCMSelectPathPanel");
   }
 
   /**

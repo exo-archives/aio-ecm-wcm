@@ -110,7 +110,7 @@ public class UIWebContentSearchForm extends UIForm {
     UIFormDateTimeInput endTime = new UIFormDateTimeInput(END_TIME, END_TIME, null, true);
     addUIFormInput(endTime);
     addUIFormInput(new UIFormStringInput(DOC_TYPE, DOC_TYPE, null));
-//    addUIFormInput(new UIFormStringInput(CATEGORY, CATEGORY, null));
+//  addUIFormInput(new UIFormStringInput(CATEGORY, CATEGORY, null));
 
     setActions(new String[] {"SearchWebContent"} );
   }
@@ -208,6 +208,7 @@ public class UIWebContentSearchForm extends UIForm {
     qCriteria.setSearchWebpage(false);
     qCriteria.setSearchWebContent(true);
     qCriteria.setSiteName(siteName);
+    qCriteria.setLiveMode(false);
     return qCriteria;
   }
 

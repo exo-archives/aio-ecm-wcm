@@ -13,6 +13,7 @@ import org.exoplatform.ecm.webui.selector.UISelectable;
 import org.exoplatform.ecm.webui.tree.UIBaseNodeTreeSelector;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.wcm.core.NodeLocation;
@@ -48,9 +49,10 @@ public class UIWCMSearchResult extends UIGrid {
   public static final String NODE_EXPECT = "excerpt".intern();
   public static final String SCORE = "score".intern();
   public static final String CREATE_DATE = "CreateDate".intern();
+  public static final String PUBLICATION_STATE = "publicationstate".intern();
   public static final String NODE_PATH = "path".intern();
   public String[] Actions = {"Select", "View"};
-  public String[] BEAN_FIELDS = {TITLE, SCORE};
+  public String[] BEAN_FIELDS = {TITLE, SCORE, PUBLICATION_STATE};
   
   
   public UIWCMSearchResult() throws Exception {
@@ -91,6 +93,11 @@ public class UIWCMSearchResult extends UIGrid {
   public String getExpect(String expect) {
     expect = expect.replaceAll("<[^>]*/?>", "");
     return expect;
+  }
+  
+  public String getCurrentState(Node node) throws Exception {
+    PublicationService pubService = getApplicationComponent(PublicationService.class);
+    return pubService.getCurrentState(node);
   }
 
   public Session getSession() throws Exception {

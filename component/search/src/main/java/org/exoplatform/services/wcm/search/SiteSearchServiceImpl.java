@@ -185,6 +185,7 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     mapSiteMode(queryCriteria,queryBuilder);    
     orderBy(queryCriteria, queryBuilder);
     String queryStatement = queryBuilder.createQueryStatement();
+    System.out.println("===========================> queryStatement: " + queryStatement);
     Query query = queryManager.createQuery(queryStatement, Query.SQL);
     return query.execute();
   }
