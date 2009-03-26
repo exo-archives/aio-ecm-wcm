@@ -111,7 +111,7 @@ public class XJavascriptService implements Startable {
       ManageableRepository manageableRepository = (ManageableRepository)currentSession.getRepository();
       String currentWorkspaceName = currentSession.getWorkspace().getName();
       String systemWorkspaceName = manageableRepository.getConfiguration().getSystemWorkspaceName();
-      if(home.getPath().startsWith("jcr:system") && !currentWorkspaceName.equals(systemWorkspaceName)) {
+      if(home.getPath().startsWith("/jcr:system") && !currentWorkspaceName.equals(systemWorkspaceName)) {
         querySession = manageableRepository.login(systemWorkspaceName);
         jsData = getJSDataBySQLQuery(querySession,jsQuery,null);
       }else {
