@@ -218,8 +218,8 @@ function findPreviousElementByClass(element, clazz) {
 	return null ;
 }
 
-function viewMoreActions(viewMoreObj) {		
-	var moreActionsMenu = eXo.core.DOMUtil.findNextElementByTagName(viewMoreObj, "div");
+function viewMoreActions(viewMoreObj) {		  
+	var moreActionsMenu = eXo.core.DOMUtil.findFirstDescendantByClass(viewMoreObj, "div", "MoreActionsMenu");
 	var onOffAction = findPreviousElementByClass(viewMoreObj, "BoxOnOff");
 	//moreActionsMenu.style.left = onOffAction.offsetWidth + "px";
 	var objToolbarPortlet = eXo.core.DOMUtil.findAncestorByClass(moreActionsMenu, "UISiteAdministrationPortlet");
@@ -239,8 +239,15 @@ function viewMoreActions(viewMoreObj) {
 		
 		//moreActionsMenu.style.top = viewMoreObj.offsetHeight + "px";
 		moreActionsMenu.style.display = "block";
+    var uiWorkSpace = document.getElementById('UIWorkspaceContainer');
+    if(uiWorkSpace && uiWorkSpace.style.display == "block") {
+		  moreActionsMenu.style.left = viewMoreObj.offsetLeft + uiWorkSpace.offsetWidth + 'px';	
+    } else {
+      moreActionsMenu.style.left = viewMoreObj.offsetLeft + 'px';	
+    }
 	} else {
 		moreActionsMenu.style.display = "block";
+		moreActionsMenu.style.left = viewMoreObj.offsetLeft + 'px';
 	}
 	moreActionsMenu.onmouseover = function(){
 		if(window.hiddenmenu) clearTimeout(window.hiddenmenu);
@@ -252,7 +259,7 @@ function viewMoreActions(viewMoreObj) {
 }
 
 function hideMoreActions(viewMoreObj) {
-	var moreActionsMenu = eXo.core.DOMUtil.findNextElementByTagName(viewMoreObj, "div");
+	var moreActionsMenu = eXo.core.DOMUtil.findFirstDescendantByClass(viewMoreObj, "div", "MoreActionsMenu");
 	var id = moreActionsMenu.id;
 	if(document.all) id += 1;
 	window.hiddenmenu = setTimeout("hideElement('" + id + "');",100);
@@ -340,7 +347,7 @@ function ScrollTopToolbar() {
 
 ScrollTopToolbar.prototype.getChildrenByClass = function(root, clazz) {
 	var list = [];
-	var children = root.childNodes;
+	var children = root.getElementsByTagName("*");
 	var len = children.length;
 	for(var i = 0; i < len; i++){
 		if(eXo.core.DOMUtil.hasClass(children[i],clazz))	list.push(children[i]);
@@ -354,7 +361,7 @@ ScrollManager.prototype.loadItems = function(root, clazz) {
 };
 
 ScrollManager.prototype.checkAvailableArea = function(maxSpace) {
-	if (!maxSpace) maxSpace = this.mainContainer.offsetWidth - 200;
+	if (!maxSpace) maxSpace = this.mainContainer.offsetWidth - 250;
 	var elementsSpace = 0;
 	var margin = 0;
 	var length =  this.elements.length;

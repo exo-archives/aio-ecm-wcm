@@ -125,8 +125,8 @@
 	cursor: pointer;
 	padding-left: 25px; /* orientation=lt */
 	padding-right: 25px; /* orientation=rt */
-	margin-left: 52px; /* orientation=lt */
-	margin-right: 52px; /* orientation=rt */
+	/*margin-left: 52px; /* orientation=lt */
+	/*margin-right: 52px; /* orientation=rt */
 }
 
 .UISiteAdministrationPortlet .UISiteAdminToolBar .LogoutIcon {

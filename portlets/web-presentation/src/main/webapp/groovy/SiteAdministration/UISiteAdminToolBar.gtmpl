@@ -201,7 +201,7 @@
     List<Node> portals = uicomponent.getAllPortals();
     print """      
       <div class="MenuItem">        
-      	<div class="ExoLogo" onmouseover="showToptoolbarNavs(this);"><span></span></div>
+      	<div class="ExoLogo" onmouseover="showToptoolbarNavs(this);" style="float:left;"><span></span></div>
     """ ;    
     print """ 
         <div class="MenuItemContainer NavigationContainer" style="top: -1000px;">
@@ -324,40 +324,43 @@
         </div>
     </div>		    
     <% } %>
-		<a class="HozIcon ViewMoreIcon" onmouseover="viewMoreActions(this)" onmouseout="hideMoreActions(this)">$viewMoreActionLabel</a>	
-		<div class="MoreActionsMenu" id="MoreActionsMenu">		
-		<a class="VerIcon LogoutIcon" onclick="eXo.portal.logout();" >$logoutActionLabel</a>		
-		<a class="VerIcon AccountSettingsIcon" href="$accountSettingsLink">$accountSettingsActionLabel</a>		
-		<a class="VerIcon LanguageSettingsIcon" href="$languageSettingsLink">$languageSettingsActionLabel</a>		
-		<a class="VerIcon SkinSettingsIcon" href="$skinSettingsLink">$skinSettingsActionLabel</a>		
-		<a class="VerIcon BrowsePageIcon" href="$browsePageLink" onclick="showWorkspaceArea($showable);">$browsePageActionLabel</a>		
-		<a class="VerIcon BrowsePortalIcon" href="$browsePortalLink" onclick="showWorkspaceArea($showable);">$browsePortalActionLabel</a>		
-		<a class="VerIcon ChangePortalIcon Magic" href="$changePortalLink">$changePortalActionLabel</a>
-		<a class="VerIcon CreatePortalIcon Magic" href="$createPortalLink" >$createPortalActionLabel</a>		
-		<a class="VerIcon EditPortalIcon Magic" href="$editPortalLink" onclick="showWorkspaceArea($showable);">$editPortalActionLabel</a>		
-		<a class="VerIcon EditPageAndNavIcon Magic" href="$editPageAndNavLink" onclick="showWorkspaceArea($showable);">$editPageAndNaviActionLabel</a>		
-		<a class="VerIcon AddPageIcon Magic" href="$addPageLink" onclick="showWorkspaceArea($showable);">$addPageActionLabel</a>			
-		<a class="VerIcon EditPageIcon Magic" href="$editPageLink" onclick="showWorkspaceArea($showable);">$editPageActionLabel</a>		
-		<a class="VerIcon AddContentIcon Magic" href="$addContentLink" >$addContentActionLabel</a>		
-			
-	</div>
-	<div class="SeparationIcon TopToolbarMenuItem"><span></span></div>
-	<a class="HozIcon ChangePortalIcon TopToolbarMenuItem" href="$changePortalLink">$changePortalActionLabel</a>
-	<div class="SeparationIcon TopToolbarMenuItem"><span></span></div>
-	<a class="HozIcon CreatePortalIcon TopToolbarMenuItem" href="$createPortalLink" >$createPortalActionLabel</a>
-	<div class="SeparationIcon TopToolbarMenuItem"><span></span></div>
-	<a class="HozIcon EditPortalIcon TopToolbarMenuItem" href="$editPortalLink" onclick="showWorkspaceArea($showable);">$editPortalActionLabel</a>
-	<div class="SeparationIcon TopToolbarMenuItem"><span></span></div>	
-	<a class="HozIcon EditPageAndNavIcon TopToolbarMenuItem" href="$editPageAndNavLink" onclick="showWorkspaceArea($showable);">$editPageAndNaviActionLabel</a>
-	<div class="SeparationIcon TopToolbarMenuItem"><span></span></div>
-	<a class="HozIcon AddPageIcon TopToolbarMenuItem" href="$addPageLink" onclick="showWorkspaceArea($showable);">$addPageActionLabel</a>
-	<div class="SeparationIcon TopToolbarMenuItem"><span></span></div>
-	<a class="HozIcon EditPageIcon TopToolbarMenuItem" href="$editPageLink" onclick="showWorkspaceArea($showable);">$editPageActionLabel</a>
-	<div class="SeparationIcon TopToolbarMenuItem"><span></span></div>
-	<a class="HozIcon AddContentIcon TopToolbarMenuItem" href="$addContentLink" >$addContentActionLabel</a>		
-	<div class="SeparationIcon TopToolbarMenuItem"><span></span></div>
-			
-	<div class="StartMenuContainer" style="display: block;  position: absolute; top: 0px;">
+		<div class="TopToolBarMenuContainer" id="TopToolBarMenuContainer" style="margin-left:50px;">	
+			<a class="HozIcon ChangePortalIcon TopToolbarMenuItem" href="$changePortalLink">$changePortalActionLabel</a>
+			<div class="SeparationIcon TopToolbarMenuItem"><span></span></div>
+			<a class="HozIcon CreatePortalIcon TopToolbarMenuItem" href="$createPortalLink" >$createPortalActionLabel</a>
+			<div class="SeparationIcon TopToolbarMenuItem"><span></span></div>
+			<a class="HozIcon EditPortalIcon TopToolbarMenuItem" href="$editPortalLink" onclick="showWorkspaceArea($showable);">$editPortalActionLabel</a>
+			<div class="SeparationIcon TopToolbarMenuItem"><span></span></div>	
+			<a class="HozIcon EditPageAndNavIcon TopToolbarMenuItem" href="$editPageAndNavLink" onclick="showWorkspaceArea($showable);">$editPageAndNaviActionLabel</a>
+			<div class="SeparationIcon TopToolbarMenuItem"><span></span></div>
+			<a class="HozIcon AddPageIcon TopToolbarMenuItem" href="$addPageLink" onclick="showWorkspaceArea($showable);">$addPageActionLabel</a>
+			<div class="SeparationIcon TopToolbarMenuItem"><span></span></div>
+			<a class="HozIcon EditPageIcon TopToolbarMenuItem" href="$editPageLink" onclick="showWorkspaceArea($showable);">$editPageActionLabel</a>
+			<div class="SeparationIcon TopToolbarMenuItem"><span></span></div>
+			<a class="HozIcon AddContentIcon TopToolbarMenuItem" href="$addContentLink" >$addContentActionLabel</a>		
+			<div class="SeparationIcon TopToolbarMenuItem"><span></span></div>
+		</div>		
+
+  	<div class="HozIcon ViewMoreIcon" onmouseover="viewMoreActions(this)" onmouseout="hideMoreActions(this)" style="width:80px;">
+			<span>$viewMoreActionLabel</span>
+			<div class="MoreActionsMenu" id="MoreActionsMenu">		
+				<a class="VerIcon LogoutIcon" onclick="eXo.portal.logout();" >$logoutActionLabel</a>		
+				<a class="VerIcon AccountSettingsIcon" href="$accountSettingsLink">$accountSettingsActionLabel</a>		
+				<a class="VerIcon LanguageSettingsIcon" href="$languageSettingsLink">$languageSettingsActionLabel</a>		
+				<a class="VerIcon SkinSettingsIcon" href="$skinSettingsLink">$skinSettingsActionLabel</a>		
+				<a class="VerIcon BrowsePageIcon" href="$browsePageLink" onclick="showWorkspaceArea($showable);">$browsePageActionLabel</a>		
+				<a class="VerIcon BrowsePortalIcon" href="$browsePortalLink" onclick="showWorkspaceArea($showable);">$browsePortalActionLabel</a>		
+				<a class="VerIcon ChangePortalIcon Magic" href="$changePortalLink">$changePortalActionLabel</a>
+				<a class="VerIcon CreatePortalIcon Magic" href="$createPortalLink" >$createPortalActionLabel</a>		
+				<a class="VerIcon EditPortalIcon Magic" href="$editPortalLink" onclick="showWorkspaceArea($showable);">$editPortalActionLabel</a>		
+				<a class="VerIcon EditPageAndNavIcon Magic" href="$editPageAndNavLink" onclick="showWorkspaceArea($showable);">$editPageAndNaviActionLabel</a>		
+				<a class="VerIcon AddPageIcon Magic" href="$addPageLink" onclick="showWorkspaceArea($showable);">$addPageActionLabel</a>			
+				<a class="VerIcon EditPageIcon Magic" href="$editPageLink" onclick="showWorkspaceArea($showable);">$editPageActionLabel</a>		
+				<a class="VerIcon AddContentIcon Magic" href="$addContentLink" >$addContentActionLabel</a>		
+			</div>
+		</div>
+	<div class="SeparationIcon TopToolbarMenuItem"><span></span></div>		
+	<div class="StartMenuContainer" style="display: block;  position: absolute; top: 0px;left:0;">
 		<div class="StartMenuDecorator">						     
 			<div class="MenuItemContainer BlockMenu" style="top: -1000px;">						
 			<% renderTopToolbarNavs(); %>
