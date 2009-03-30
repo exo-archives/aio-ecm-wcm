@@ -20,7 +20,7 @@ FCKConfig.SkinPath = FCKConfig.BasePath + 'skins/office2003/' ;
 FCKConfig.ToolbarSets["CompleteWCM"] = [
 	['Source','Templates','-','FitWindow','ShowBlocks'],
 	['Cut','Copy','PasteText','-','SpellCheck','-','Undo','Redo'],
-	['Insert Gadget', 'Insert Image','Insert DMS Document','Flash','Table','SpecialChar'],
+	['Insert Gadget', 'Insert Image','Insert/Link to DMS Document','Flash','Table','SpecialChar'],
 	'/',
 	['Bold','Italic','Underline','StrikeThrough','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','-','OrderedList','UnorderedList','-','TextColor','BGColor','-','RemoveFormat'],
 	['Link','Insert link to a site page','Unlink','Anchor'],
@@ -31,7 +31,7 @@ FCKConfig.ToolbarSets["CompleteWCM"] = [
 FCKConfig.ToolbarSets["BasicWCM"] = [
 	['Source','-','Bold','Italic','Underline','StrikeThrough','-','OrderedList','UnorderedList','Outdent','Indent'],
 	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
-	['Blockquote','-','Link','Unlink','Insert link to a site page','Insert Image','Insert DMS Document','-','FitWindow','ShowBlocks'],	
+	['Blockquote','-','Link','Unlink','Insert link to a site page','Insert Image','Insert/Link to DMS Document','-','FitWindow','ShowBlocks'],	
 	['Style','FontFormat','FontName','FontSize']
 ] ;
 
