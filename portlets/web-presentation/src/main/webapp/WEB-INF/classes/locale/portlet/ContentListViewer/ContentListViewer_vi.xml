@@ -116,4 +116,11 @@
   		<add>Thêm</add>  		  		
   	</label>
   </UIContentSelectionPanel>  
+  <UIDocumentDialogForm>
+  	<action>
+  		<Cancel>Hủy bỏ</Cancel>
+  		<FastPublish>Xuất bản nhanh</FastPublish>
+  		<SaveAsDraft>Lưu lại</SaveAsDraft>  		  		
+  	</action>
+  </UIDocumentDialogForm>  
 </bundle>

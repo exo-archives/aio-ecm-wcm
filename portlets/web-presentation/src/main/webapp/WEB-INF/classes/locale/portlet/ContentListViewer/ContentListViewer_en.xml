@@ -117,4 +117,11 @@
   		<add>Add</add>  		  		
   	</label>
   </UIContentSelectionPanel>
+  <UIDocumentDialogForm>
+  	<action>
+  		<Cancel>Cancel</Cancel>
+  		<FastPublish>Fast Publish</FastPublish>
+  		<SaveAsDraft>Save as Draft</SaveAsDraft>  		  		
+  	</action>
+  </UIDocumentDialogForm>
 </bundle>

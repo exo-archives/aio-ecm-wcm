@@ -209,9 +209,7 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent{
     UISingleContentViewerPortlet uiPresentationPortlet = getAncestorOfType(UISingleContentViewerPortlet.class);    
     UIPopupContainer popupAction = uiPresentationPortlet.getChild(UIPopupContainer.class);
     popupAction.deActivate();                
-    requestContext.addUIComponentToUpdateByAjax(popupAction);
-    PortletRequestContext portletContext = (PortletRequestContext) requestContext;
-    PortletMode portletMode = portletContext.getApplicationMode();
+    requestContext.addUIComponentToUpdateByAjax(popupAction);       
     if(!isEditPortletInCreatePageWizard()) {
       uiPresentationPortlet.activateMode(PortletMode.VIEW);
     }

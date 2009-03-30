@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
 import javax.jcr.Session;
 import javax.portlet.PortletPreferences;
@@ -31,12 +32,15 @@ import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.ecm.webui.utils.Utils;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.container.UIContainer;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.thumbnail.ThumbnailService;
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
+import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.services.organization.UserProfileHandler;
@@ -52,6 +56,7 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIPageIterator;
+import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -65,7 +70,13 @@ import org.exoplatform.webui.event.EventListener;
  * The Class UIContentListPresentation.
  */
 @ComponentConfigs( {
-    @ComponentConfig(lifecycle = Lifecycle.class, events = @EventConfig(listeners = UIContentListPresentation.RefreshActionListener.class)),
+    @ComponentConfig(
+       lifecycle = Lifecycle.class, 
+       events = {
+         @EventConfig(listeners = UIContentListPresentation.RefreshActionListener.class),
+         @EventConfig(listeners = UIContentListPresentation.EditContentActionListener.class)
+       }
+    ),
     @ComponentConfig(type = UICustomizeablePaginator.class, events = @EventConfig(listeners = UICustomizeablePaginator.ShowPageActionListener.class)) })
 public class UIContentListPresentation extends UIContainer {
 
@@ -527,6 +538,40 @@ public class UIContentListPresentation extends UIContainer {
       UIContentListPresentation contentListPresentation = event.getSource();
       RefreshDelegateActionListener refreshListener = (RefreshDelegateActionListener) contentListPresentation.getParent();
       refreshListener.onRefresh(event);
+    }
+  }
+  
+  public static class EditContentActionListener extends EventListener<UIContentListPresentation> {
+    public void execute(Event<UIContentListPresentation> event) throws Exception {
+      UIContentListPresentation contentListPresentation = event.getSource();
+      PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
+      PortletPreferences preferences = context.getRequest().getPreferences();
+      String path = event.getRequestContext().getRequestParameter(OBJECTID);      
+      String repository = preferences.getValue(UIContentListViewerPortlet.REPOSITORY, null);
+      String worksapce = preferences.getValue(UIContentListViewerPortlet.WORKSPACE, null);      
+      if (repository == null || worksapce == null)
+        throw new ItemNotFoundException();
+      RepositoryService repositoryService = contentListPresentation.getApplicationComponent(RepositoryService.class);      
+      ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+      SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
+      Session session = sessionProvider.getSession(worksapce, manageableRepository);
+      Node node = (Node) session.getItem(path);
+      UIListViewerBase uiListViewerBase = contentListPresentation.getAncestorOfType(UIListViewerBase.class);
+      UIContentListViewerPortlet uiListViewerPortlet = uiListViewerBase.getAncestorOfType(UIContentListViewerPortlet.class);
+      UIPopupContainer uiMaskPopupContainer = uiListViewerPortlet.getChild(UIPopupContainer.class);
+      UIContentEdittingPopup uiContentEdittingForm = uiMaskPopupContainer.createUIComponent(UIContentEdittingPopup.class, null, null);
+      UIDocumentDialogForm uiDocumentDialogForm = uiContentEdittingForm.getChild(UIDocumentDialogForm.class);
+      
+      uiDocumentDialogForm.setRepositoryName(repository);
+      uiDocumentDialogForm.setWorkspace(worksapce);
+      uiDocumentDialogForm.setContentType(node.getPrimaryNodeType().getName());
+      uiDocumentDialogForm.setNodePath(node.getPath());
+      uiDocumentDialogForm.setStoredPath(node.getPath());
+      
+      uiListViewerBase.addChild(uiContentEdittingForm);
+      uiContentEdittingForm.setRendered(true);
+      uiMaskPopupContainer.activate(uiContentEdittingForm, UIContentListViewerPortlet.portletConfigFormWidth, -1);      
+      context.addUIComponentToUpdateByAjax(uiMaskPopupContainer);      
     }
   }
 

@@ -118,5 +118,12 @@
   		<add>Ajouter</add>  		  		
   	</label>
   </UIContentSelectionPanel>  
+  <UIDocumentDialogForm>
+  	<action>
+  		<Cancel></Cancel>
+  		<FastPublish></FastPublish>
+  		<SaveAsDraft></SaveAsDraft>  		  		
+  	</action>
+  </UIDocumentDialogForm>  
 </bundle>
 

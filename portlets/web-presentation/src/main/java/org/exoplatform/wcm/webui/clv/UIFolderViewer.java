@@ -104,8 +104,7 @@ public class UIFolderViewer extends UIListViewerBase {
     if (repository == null || worksapce == null || folderPath == null)
       throw new ItemNotFoundException();
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
-    ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-    repositoryService.getCurrentRepository();
+    ManageableRepository manageableRepository = repositoryService.getRepository(repository);    
     String userId = Util.getPortalRequestContext().getRemoteUser();
     SessionProvider sessionProvider = null;
     if (userId == null) {
