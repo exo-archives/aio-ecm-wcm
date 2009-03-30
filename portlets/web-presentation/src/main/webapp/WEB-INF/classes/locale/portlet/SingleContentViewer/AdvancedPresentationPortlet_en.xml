@@ -166,6 +166,7 @@
     <header>
       <name>Name</name>
       <action>Add</action>
+      <publicationstate>Publication State</publicationstate>
     </header>
     <info>
       <child-not-found>Child not found!</child-not-found>

@@ -58,6 +58,12 @@ import org.exoplatform.webui.event.EventListener;
       id = "UIBreadcrumbDocumentPathSelector",
       template = "system:/groovy/webui/core/UIBreadcumbs.gtmpl",
       events = @EventConfig(listeners = UIBreadcumbs.SelectPathActionListener.class)
+  ),
+  @ComponentConfig(
+      type = UISelectPathPanel.class,      
+      id = "UIDocumentSelectPathPanel",
+      template = "classpath:groovy/wcm/webui/UIWCMSelectPathPanel.gtmpl",
+      events = @EventConfig(listeners = UISelectPathPanel.SelectActionListener.class)
   )
 }
 )
@@ -76,7 +82,7 @@ public class UIDocumentPathSelector extends UIBaseNodeTreeSelector implements UI
   public UIDocumentPathSelector() throws Exception {
     addChild(UIBreadcumbs.class, "UIBreadcrumbDocumentPathSelector", "UIBreadcrumbDocumentPathSelector");
     addChild(UIDocumentTreeBuilder.class, null, UIDocumentTreeBuilder.class.getSimpleName() + hashCode());
-    addChild(UISelectPathPanel.class, null, UISelectPathPanel.class.getSimpleName() + hashCode());
+    addChild(UISelectPathPanel.class, "UIDocumentSelectPathPanel", "UIDocumentSelectPathPanel");
   }
 
   /**

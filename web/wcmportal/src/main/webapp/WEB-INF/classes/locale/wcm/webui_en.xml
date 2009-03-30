@@ -155,25 +155,23 @@
   </UIDocumentSearchForm>
   <UIDocumentTabSelector>
   	<header>
-  		<Title>Title</Title>
-  		<NodeExpect>Expect</NodeExpect>
-  		<Score>Score</Score>
-  		<CreateDate>Created Date</CreateDate>
+  		<title>Title</title>
+  		<score>Score</score>
   		<action>Action</action>
   		<Select>Select</Select>
   		<View>View</View>
+  		<publicationstate>Publication State</publicationstate>
   	</header>
   	
   </UIDocumentTabSelector>
   <UIWebContentTabSelector>
   	<header>
-  		<Title>Title</Title>
-  		<NodeExpect>Expect</NodeExpect>
-  		<Score>Score</Score>
-  		<CreateDate>Created Date</CreateDate>
+  		<title>Title</title>
+  		<score>Score</score>
   		<action>Action</action>
   		<Select>Select</Select>
   		<View>View</View>
+  		<publicationstate>Publication State</publicationstate>
   	</header>
   	<action>
   		<title>

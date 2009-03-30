@@ -105,6 +105,7 @@ public class UIDocumentSearchForm extends UIForm {
     qCriteria.setSearchDocument(true);
     qCriteria.setSearchWebpage(false);
     qCriteria.setSearchWebContent(false);
+    qCriteria.setLiveMode(false);
     qCriteria.setSiteName(siteName);
     return qCriteria;
   }

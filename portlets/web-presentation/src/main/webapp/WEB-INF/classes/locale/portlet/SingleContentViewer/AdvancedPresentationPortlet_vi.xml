@@ -161,6 +161,7 @@
     <header>
       <name>Tên</name>
       <action>Thêm vào</action>
+      <publicationstate>Trạng thái xuất bản</publicationstate>
     </header>
     <info>
       <child-not-found>Không tìm thấy thành phần con</child-not-found>
