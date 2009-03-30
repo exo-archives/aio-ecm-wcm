@@ -22,8 +22,8 @@
 	if(uicomponent.getIsPrint()) {
 %>
 	<div class="ActionContainer">
-		<a class="PrintFrameIcon PrintIcon" href="javascript: window.print();">$lblPrint</a> 
-		<a class="PrintFrameIcon CloseIcon" href="javascript: window.close();">$lblClose</a>
+		<a class="PrintFrameIcon PrintIcon" href="javascript: void(0)" onclick="var parent = this.parentNode; for(var i = 0; i < 2; i++) {parent.removeChild(parent.getElementsByClassName('PrintFrameIcon')[0])}; window.print();">$lblPrint</a> 
+		<a class="PrintFrameIcon CloseIcon" href="javascript: void(0)" onclick="window.close();">$lblClose</a>
 	</div>
 <%
 	}
