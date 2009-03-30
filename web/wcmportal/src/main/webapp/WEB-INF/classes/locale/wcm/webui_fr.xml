@@ -52,14 +52,16 @@
           # /content-list-viewer/list-by-folder/UIContentListPresentationDefault.gtmpl       #
           ####################################################################################
   -->
-  <UIContentListPresentationDefault>
-    <label>
+	<UIContentListPresentationDefault>
       <action>
         <refresh>Rafraîchir</refresh>
+        <edit></edit>
       </action>
-      <readmore>En savoir plus</readmore>
-    </label>
-  </UIContentListPresentationDefault>
+      <label>
+	      <readmore>En savoir plus</readmore>
+	      <draft></draft>      
+      </label>
+  </UIContentListPresentationDefault>  
   <!--/n  ####################################################################################
   -->
   <UITabPane>

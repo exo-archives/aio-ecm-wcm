@@ -53,12 +53,14 @@
   ####################################################################################
   -->
   <UIContentListPresentationDefault>
-    <label>
       <action>
         <refresh>Refresh</refresh>
+        <edit>Edit</edit>
       </action>
-      <readmore>Read more</readmore>
-    </label>
+      <label>
+	      <readmore>Read more</readmore>
+	      <draft>Draft</draft>      
+      </label>
   </UIContentListPresentationDefault>
   <!--/n  ####################################################################################
   -->
