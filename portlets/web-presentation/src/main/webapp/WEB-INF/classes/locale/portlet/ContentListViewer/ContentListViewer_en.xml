@@ -124,4 +124,12 @@
   		<SaveAsDraft>Save as Draft</SaveAsDraft>  		  		
   	</action>
   </UIDocumentDialogForm>
+  <UIMessageBoard>
+  	<msg>  	
+  		<contents-not-found>Contents not found</contents-not-found>
+  		<no-permission>Permission access denied</no-permission>
+  		<error-nodetype>Node type not match</error-nodetype>
+  		<folder-empty>Folder is empty</folder-empty>
+  	</msg>
+  </UIMessageBoard>
 </bundle>

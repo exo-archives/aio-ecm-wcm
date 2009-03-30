@@ -125,5 +125,13 @@
   		<SaveAsDraft></SaveAsDraft>  		  		
   	</action>
   </UIDocumentDialogForm>  
+  <UIMessageBoard>
+  	<msg>  		
+  		<contents-not-found></contents-not-found>
+  		<no-permission></no-permission>
+  		<error-nodetype></error-nodetype>
+  		<folder-empty></folder-empty>
+  	</msg>
+  </UIMessageBoard>  
 </bundle>
 

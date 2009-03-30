@@ -67,7 +67,13 @@ public class UICorrectContentsViewer extends UIListViewerBase {
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
     Session session = sessionProvider.getSession(worksapce, manageableRepository);
     Node root = session.getRootNode();
-    List<String> contents = Arrays.asList(portletPreferences.getValues(UIContentListViewerPortlet.CONTENT_LIST, null));
+    String [] listContent = portletPreferences.getValues(UIContentListViewerPortlet.CONTENT_LIST, null);
+    if (listContent == null || listContent.length == 0) {
+      messageKey = "UIMessageBoard.msg.contents-not-found";
+      setViewAbleContent(false);
+      return;
+    }
+    List<String> contents = Arrays.asList(listContent);
     int itemsPerPage = Integer.parseInt(portletPreferences.getValue(UIContentListViewerPortlet.ITEMS_PER_PAGE, null));
     List<Node> nodes = new ArrayList<Node>();
     List<String> tempContents = new ArrayList<String>(contents);

@@ -123,4 +123,12 @@
   		<SaveAsDraft>Lưu lại</SaveAsDraft>  		  		
   	</action>
   </UIDocumentDialogForm>  
+  <UIMessageBoard>
+  	<msg>
+  	  <contents-not-found>Không tìm thấy nội dung</contents-not-found>
+  		<no-permission>Không có quyền truy cập</no-permission>
+  		<error-nodetype>Kiểu nội dung không phù hợp</error-nodetype>
+  		<folder-empty>Thư mục rỗng</folder-empty>
+  	</msg>
+  </UIMessageBoard>  
 </bundle>

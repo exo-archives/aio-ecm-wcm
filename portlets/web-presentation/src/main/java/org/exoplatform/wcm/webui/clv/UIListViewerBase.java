@@ -38,7 +38,7 @@ import org.exoplatform.webui.event.EventListener;
  */
 public abstract class UIListViewerBase extends UIContainer implements RefreshDelegateActionListener {
   
-  private boolean viewAbleContent;
+  protected boolean viewAbleContent = false;
 
   protected String  messageKey;
   
