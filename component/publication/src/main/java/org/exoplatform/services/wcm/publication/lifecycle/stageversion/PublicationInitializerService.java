@@ -48,33 +48,7 @@ public class PublicationInitializerService implements Startable{
     this.publicationService = publicationService;
   }
   
-  public void initializePublication(Node portalNode, boolean isStartup) throws Exception{
-    if (!isStartup) {
-      publish(portalNode);
-      return;
-    }
-    Session session = portalNode.getSession();
-    Node serviceFolder = session.getRootNode().getNode("exo:services");
-    Node publicationInitializerService = null;
-    if (serviceFolder.hasNode("PublicationInitializerService")) {
-      publicationInitializerService = serviceFolder.getNode("PublicationInitializerService");
-    } else {
-      publicationInitializerService = serviceFolder.addNode("PublicationInitializerService", "nt:unstructured");
-    }
-    if (!publicationInitializerService.hasNode("PublicationInitializerServiceLog")) {
-      publish(portalNode);
-      
-      Node publicationInitializerServiceLog = publicationInitializerService.addNode("ContentInitializerServiceLog", "nt:file");
-      Node publicationInitializerServiceLogContent = publicationInitializerServiceLog.addNode("jcr:content", "nt:resource");
-      publicationInitializerServiceLogContent.setProperty("jcr:encoding", "UTF-8");
-      publicationInitializerServiceLogContent.setProperty("jcr:mimeType", "text/plain");
-      publicationInitializerServiceLogContent.setProperty("jcr:data", "All node in site artifacts is published\n");
-      publicationInitializerServiceLogContent.setProperty("jcr:lastModified", new Date().getTime());
-      session.save();
-    }
-  }
-  
-  private void publish(Node portalNode) throws Exception {
+  public void initializePublication(Node portalNode) throws Exception{
     String sqlQuery = "select * from exo:webContent where jcr:path like '" + portalNode.getPath() + "/%' and not jcr:mixinTypes like '%" + Constant.PUBLICATION_LIFECYCLE_TYPE + "%' order by exo:dateCreated";
     QueryManager queryManager = portalNode.getSession().getWorkspace().getQueryManager();
     Query query = queryManager.createQuery(sqlQuery, Query.SQL);
@@ -90,8 +64,28 @@ public class PublicationInitializerService implements Startable{
     SessionProvider sessionProvider = SessionProvider.createSystemProvider();
     try {
       List<Node> livePortals = livePortalManagerService.getLivePortals(sessionProvider);
-      for(Node portal: livePortals) {
-        initializePublication(portal, true);
+      if (livePortals.isEmpty()) return;
+      Node dummyNode = livePortals.get(0);
+      Session session = dummyNode.getSession();
+      Node serviceFolder = session.getRootNode().getNode("exo:services");
+      Node publicationInitializerService = null;
+      if (serviceFolder.hasNode("PublicationInitializerService")) {
+        publicationInitializerService = serviceFolder.getNode("PublicationInitializerService");
+      } else {
+        publicationInitializerService = serviceFolder.addNode("PublicationInitializerService", "nt:unstructured");
+      }
+      if (!publicationInitializerService.hasNode("PublicationInitializerServiceLog")) {
+        for(Node portalNode: livePortals) {
+          initializePublication(portalNode);
+        }
+        
+        Node publicationInitializerServiceLog = publicationInitializerService.addNode("ContentInitializerServiceLog", "nt:file");
+        Node publicationInitializerServiceLogContent = publicationInitializerServiceLog.addNode("jcr:content", "nt:resource");
+        publicationInitializerServiceLogContent.setProperty("jcr:encoding", "UTF-8");
+        publicationInitializerServiceLogContent.setProperty("jcr:mimeType", "text/plain");
+        publicationInitializerServiceLogContent.setProperty("jcr:data", "All node in site artifacts is published");
+        publicationInitializerServiceLogContent.setProperty("jcr:lastModified", new Date().getTime());
+        session.save();
       }
     } catch (Exception e) {
     } finally {

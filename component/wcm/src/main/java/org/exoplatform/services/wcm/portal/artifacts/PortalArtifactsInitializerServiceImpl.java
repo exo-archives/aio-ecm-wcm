@@ -22,6 +22,7 @@ import java.util.HashMap;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ValuesParam;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.listener.ListenerService;
 
 /**
  * Created by The eXo Platform SAS
@@ -31,14 +32,18 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
  */
 public class PortalArtifactsInitializerServiceImpl implements PortalArtifactsInitializerService {
 
+  public static final String CREATE_PORTAL_EVENT = "PortalArtifactsInitializerServiceImpl.portal.onCreate";
   private HashMap<String,BasePortalArtifactsPlugin> artifactPlugins = new HashMap<String,BasePortalArtifactsPlugin>();
   private ArrayList<String> initialPortals = new ArrayList<String>();
+  private ListenerService listenerService;
 
-  public PortalArtifactsInitializerServiceImpl(InitParams initParams) {     
+  @SuppressWarnings("unchecked")
+  public PortalArtifactsInitializerServiceImpl(InitParams initParams, ListenerService listenerService) {     
     ValuesParam valuesParam = initParams.getValuesParam("ignored.portals");
     if(valuesParam != null) {
       initialPortals = valuesParam.getValues();
     }
+    this.listenerService = listenerService;
   }
   public void addPlugin(BasePortalArtifactsPlugin artifactsPlugin) throws Exception {
     artifactPlugins.put(artifactsPlugin.getName(),artifactsPlugin);
@@ -52,6 +57,8 @@ public class PortalArtifactsInitializerServiceImpl implements PortalArtifactsIni
     for(BasePortalArtifactsPlugin plugin: artifactPlugins.values()) {
       plugin.deployToPortal(portalName,sessionProvider);
     }
+    
+    listenerService.broadcast(CREATE_PORTAL_EVENT, portalName, sessionProvider);
   }
 
 }
