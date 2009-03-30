@@ -65,12 +65,6 @@
       <type>org.exoplatform.services.wcm.publication.listener.navigation.RemoveNavigationEventListener</type>
       <description>this listener update publication state of content when navigation is removed</description>
     </component-plugin>
-    <component-plugin>
-      <name>PortalArtifactsInitializerServiceImpl.portal.onCreate</name>
-      <set-method>addListener</set-method>
-      <type>org.exoplatform.services.wcm.publication.lifecycle.stageversion.PublicationArtifactsInitializationListener</type>
-      <description>this listener update publication state of content when portal is created</description>
-    </component-plugin>
   </external-component-plugins>
   
 </configuration>

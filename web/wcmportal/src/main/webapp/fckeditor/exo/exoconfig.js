@@ -12,7 +12,7 @@ FCKConfig.Plugins.Add( 'insertGadget', null, FCKConfig.eXoPath + "plugins/") ;
 
 //config style
 FCKConfig.EditorAreaCSS = '';
-FCKConfig.EditorAreaStyles = 'body{	background: none;	margin: 0px;}' ;
+FCKConfig.EditorAreaStyles = 'body{	background: none;	margin: 0px;} a{color: #0000CC; text-decoration: underline;}' ;
 FCKConfig.InsertedLinkColor = 'green';
 
 FCKConfig.SkinPath = FCKConfig.BasePath + 'skins/office2003/' ;
