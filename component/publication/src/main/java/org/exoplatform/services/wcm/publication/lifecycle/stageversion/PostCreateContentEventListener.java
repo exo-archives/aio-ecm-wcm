@@ -44,6 +44,8 @@ public class PostCreateContentEventListener extends Listener<CmsService, Node>{
 
   public void onEvent(Event<CmsService, Node> event) throws Exception {
     Node currentNode = event.getData();
+    if(currentNode.isNodeType("exo:cssFile") || currentNode.isNodeType("exo:jsFile"))
+      return;
     String repository = ((ManageableRepository)currentNode.getSession().getRepository()).getConfiguration().getName();
     String workspace = currentNode.getSession().getWorkspace().getName();
     NodeLocation nodeLocation = configurationService.getLivePortalsLocation(repository);

@@ -57,19 +57,23 @@ public class StateAndVersionPublicationHandler extends BaseWebSchemaHandler {
   }
 
   public void onCreateNode(Node node, SessionProvider sessionProvider) throws Exception {
+    if(node.isNodeType("exo:cssFile") || node.isNodeType("exo:jsFile"))
+      return;
     Node checkNode = node;
     if(node.isNodeType("nt:file")) {      
       Node parentNode = node.getParent();
       if(parentNode.isNodeType("exo:webContent")) {
         checkNode = parentNode;        
       }                 
-    }    
+    }         
     if(publicationService.isNodeEnrolledInLifecycle(checkNode)) return;
     publicationService.enrollNodeInLifecycle(checkNode,Constant.LIFECYCLE_NAME);
     publicationService.changeState(checkNode,Constant.DRAFT_STATE,new HashMap<String,String>());
   }   
   public void onModifyNode(Node node, SessionProvider sessionProvider) throws Exception {
     if(node.isNew())
+      return;
+    if(node.isNodeType("exo:cssFile") || node.isNodeType("exo:jsFile"))
       return;
     Node checkNode = node;
     if(node.isNodeType("nt:file")) {      
