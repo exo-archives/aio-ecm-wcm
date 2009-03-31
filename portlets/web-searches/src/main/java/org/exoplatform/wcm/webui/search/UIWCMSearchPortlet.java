@@ -25,6 +25,8 @@ import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.core.UIPopupContainer;
+import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 
@@ -78,6 +80,7 @@ public class UIWCMSearchPortlet extends UIPortletApplication {
    */
   public UIWCMSearchPortlet() throws Exception {
     activateMode(mode);
+    
   }
 
   /* (non-Javadoc)
@@ -102,6 +105,8 @@ public class UIWCMSearchPortlet extends UIPortletApplication {
    */
   private void activateMode(PortletMode mode) throws Exception {
     getChildren().clear();
+    UIPopupContainer uiPopup = addChild(UIPopupContainer.class, null, "UISearchedContentEdittingPopup");
+    uiPopup.getChild(UIPopupWindow.class).setId("UISearchedContentEdittingPopupWindow");
     if (PortletMode.VIEW.equals(mode)) {
       PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
       PortletPreferences portletPreferences = context.getRequest().getPreferences();

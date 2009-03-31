@@ -33,6 +33,7 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.search.QueryCriteria;
 import org.exoplatform.services.wcm.search.SiteSearchService;
 import org.exoplatform.services.wcm.search.WCMPaginatedQueryResult;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -264,7 +265,12 @@ public class UISearchForm extends UIForm {
 			queryCriteria.setKeyword(keyword);
 			queryCriteria.setSearchDocument(Boolean.parseBoolean(documentChecked));
 			queryCriteria.setSearchWebpage(Boolean.parseBoolean(pageChecked));
-      queryCriteria.setSearchWebContent(false);
+      queryCriteria.setSearchWebContent(false);      
+      if (Utils.isLiveMode()) {
+        queryCriteria.setLiveMode(true);
+      } else {
+        queryCriteria.setLiveMode(false);
+      }
 			int itemsPerPage = Integer.parseInt(portletPreferences.getValue(
 					UIWCMSearchPortlet.ITEMS_PER_PAGE, null));
 			try {

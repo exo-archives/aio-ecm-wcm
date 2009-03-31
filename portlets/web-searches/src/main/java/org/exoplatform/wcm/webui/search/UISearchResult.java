@@ -21,10 +21,13 @@ import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
+import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.portlet.PortletPreferences;
 import javax.servlet.http.HttpServletRequestWrapper;
@@ -36,8 +39,14 @@ import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
+import org.exoplatform.services.ecm.publication.PublicationPlugin;
+import org.exoplatform.services.ecm.publication.PublicationService;
+import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant.SITE_MODE;
 import org.exoplatform.services.wcm.search.QueryCriteria;
 import org.exoplatform.services.wcm.search.SiteSearchService;
 import org.exoplatform.services.wcm.search.WCMPaginatedQueryResult;
@@ -49,7 +58,10 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
+import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
+import org.exoplatform.webui.event.Event;
+import org.exoplatform.webui.event.EventListener;
 
 /*
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
@@ -59,8 +71,15 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
  * The Class UISearchResult.
  */
 @ComponentConfigs( {
-    @ComponentConfig(lifecycle = Lifecycle.class),
-    @ComponentConfig(type = UICustomizeablePaginator.class, events = @EventConfig(listeners = UICustomizeablePaginator.ShowPageActionListener.class)) })
+    @ComponentConfig(
+      lifecycle = Lifecycle.class,
+      events = @EventConfig(listeners = UISearchResult.EditContentActionListener.class)
+    ),
+    @ComponentConfig(
+      type = UICustomizeablePaginator.class, 
+      events = @EventConfig(listeners = UICustomizeablePaginator.ShowPageActionListener.class)
+    ) 
+})
 public class UISearchResult extends UIContainer {
 
   /** The template path. */
@@ -209,7 +228,7 @@ public class UISearchResult extends UIContainer {
     }
     super.processRender(context);
   }
-
+  
   /**
    * Sets the page list.
    * 
@@ -303,6 +322,30 @@ public class UISearchResult extends UIContainer {
       }
     }
     return urls;
+  }
+  
+
+  public boolean showDraftButton(Node node) throws Exception {
+    boolean bool = false;
+    if (node != null && !node.hasProperty("publication:liveRevision")) {
+      bool = true;
+    }
+    return bool;
+  }
+  
+  public Node getNodeView(Node node) throws Exception {
+    PublicationService publicationService = getApplicationComponent(PublicationService.class);
+    HashMap<String, Object> context = new HashMap<String, Object>();
+    if (org.exoplatform.wcm.webui.Utils.isLiveMode()) {
+      context.put(Constant.RUNTIME_MODE, SITE_MODE.LIVE);
+    } else {
+      context.put(Constant.RUNTIME_MODE, SITE_MODE.EDITING);
+    }
+    String lifecyleName = publicationService.getNodeLifecycleName(node);
+    PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins()
+                                                            .get(lifecyleName);
+    Node viewNode = publicationPlugin.getNodeView(node, context);
+    return viewNode;
   }
 
   public String getPublishedNodeURI(String navNodeURI) {
@@ -447,6 +490,39 @@ public class UISearchResult extends UIContainer {
 
   public int getNumberOfPage() {
     return uiPaginator.getPageList().getAvailablePage();
+  }
+  
+  public static class EditContentActionListener extends EventListener<UISearchResult> {
+    public void execute(Event<UISearchResult> event) throws Exception {
+      UISearchResult uiSearchResult = event.getSource();
+      PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
+      PortletPreferences preferences = context.getRequest().getPreferences();
+      String path = event.getRequestContext().getRequestParameter(OBJECTID);      
+      String repository = preferences.getValue(UIWCMSearchPortlet.REPOSITORY, null);
+      String worksapce = preferences.getValue(UIWCMSearchPortlet.WORKSPACE, null);      
+      if (repository == null || worksapce == null)
+        throw new ItemNotFoundException();
+      RepositoryService repositoryService = uiSearchResult.getApplicationComponent(RepositoryService.class);      
+      ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+      SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
+      Session session = sessionProvider.getSession(worksapce, manageableRepository);
+      Node node = (Node) session.getItem(path);      
+      UIWCMSearchPortlet uiWCMSearchPortlet = uiSearchResult.getAncestorOfType(UIWCMSearchPortlet.class);
+      UIPopupContainer uiMaskPopupContainer = uiWCMSearchPortlet.getChild(UIPopupContainer.class);
+      UIContentEdittingPopup uiContentEdittingForm = uiMaskPopupContainer.createUIComponent(UIContentEdittingPopup.class, null, null);
+      UIDocumentDialogForm uiDocumentDialogForm = uiContentEdittingForm.getChild(UIDocumentDialogForm.class);
+      
+      uiDocumentDialogForm.setRepositoryName(repository);
+      uiDocumentDialogForm.setWorkspace(worksapce);
+      uiDocumentDialogForm.setContentType(node.getPrimaryNodeType().getName());
+      uiDocumentDialogForm.setNodePath(node.getPath());
+      uiDocumentDialogForm.setStoredPath(node.getPath());
+      
+      uiWCMSearchPortlet.addChild(uiContentEdittingForm);
+      uiContentEdittingForm.setRendered(true);
+      uiMaskPopupContainer.activate(uiContentEdittingForm, 700, -1);      
+      context.addUIComponentToUpdateByAjax(uiMaskPopupContainer);  
+    }    
   }
 
 }
