@@ -40,7 +40,12 @@ public class PostEditContentEventListener extends Listener<CmsService,Node> {
 
   public void onEvent(Event<CmsService, Node> event) throws Exception {
     Node currentNode = event.getData();
-    String lifecycle = pservice.getNodeLifecycleName(currentNode);
+    String lifecycle = null;
+    try {
+      lifecycle = pservice.getNodeLifecycleName(currentNode); 
+    } catch (Exception e) {
+      return;
+    }    
     if(!Constant.LIFECYCLE_NAME.equalsIgnoreCase(lifecycle))
       return;    
     String state = pservice.getCurrentState(currentNode);
