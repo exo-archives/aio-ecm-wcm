@@ -337,7 +337,7 @@
 			<div class="SeparationIcon TopToolbarMenuItem"><span></span></div>
 			<a class="HozIcon EditPageIcon TopToolbarMenuItem" href="$editPageLink" onclick="showWorkspaceArea($showable);">$editPageActionLabel</a>
 			<div class="SeparationIcon TopToolbarMenuItem"><span></span></div>
-			<a class="HozIcon AddContentIcon TopToolbarMenuItem" href="$addContentLink" >$addContentActionLabel</a>		
+			<a class="HozIcon AddContentIcon TopToolbarMenuItem" href="$addContentLink" onclick="showWorkspaceArea($showable);" >$addContentActionLabel</a>		
 			<div class="SeparationIcon TopToolbarMenuItem"><span></span></div>
 		</div>		
 
