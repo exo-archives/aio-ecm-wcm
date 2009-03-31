@@ -174,7 +174,7 @@
 								<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.imageWidth")%></td>
 							  	<td class="FieldComponent">
 									<%
-							        String[] imageWidth = ["jcrPath=/node/exo:imageWidth", "validate=number", "defaultValues=150"];
+							        String[] imageWidth = ["jcrPath=/node/exo:imageWidth", "validate=org.exoplatform.wcm.webui.ImageSizeValidator", "defaultValues=150"];
 							        uicomponent.addTextField("imageWidth", imageWidth) ;
 							    %>
 								</td>
@@ -183,7 +183,7 @@
 								<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.imageHeight")%></td>
 							  	<td class="FieldComponent">
 									<%
-							        String[] imageHeight = ["jcrPath=/node/exo:imageHeight", "validate=number", "defaultValues=150"];
+							        String[] imageHeight = ["jcrPath=/node/exo:imageHeight", "validate=org.exoplatform.wcm.webui.ImageSizeValidator", "defaultValues=150"];
 							        uicomponent.addTextField("imageHeight", imageHeight) ;
 							    %>
 								</td>
