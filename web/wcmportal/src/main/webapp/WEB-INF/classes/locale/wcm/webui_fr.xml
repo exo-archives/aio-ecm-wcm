@@ -45,7 +45,11 @@
       <kb>kB</kb>
       <noresult>Pas de résultat</noresult>
       <similar>Pages où le même contenu apparait</similar>
+	    <draft></draft>
     </label>
+    <action>
+    	<edit></edit>
+    </action>
   </UIDefaultSearchResult>
   <!--/n  ####################################################################################
           # ../src/main/webapp/WEB-INF/conf/wcm/artifacts/application-templates              #

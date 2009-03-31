@@ -82,8 +82,10 @@ import org.exoplatform.services.wcm.publication.defaultlifecycle.Util;
     %>
     <%
 		Node viewNode = null;
-		Node tempNode = null;
-			
+		Node tempNode = null;	
+		String draftLabel = _ctx.appRes("UIDefaultSearchResult.label.draft");
+		String editActionLabel = _ctx.appRes("UIDefaultSearchResult.action.edit");
+		
     for (ResultNode resultNode : currentPageData) {
       Node node = resultNode.getNode();    
 			tempNode = node;
@@ -106,6 +108,7 @@ import org.exoplatform.services.wcm.publication.defaultlifecycle.Util;
       }
       String itemExcerpt = resultNode.getExcerpt();
       String itemScore = resultNode.getScore();
+			String contentkEdittingLink = uicomponent.event("EditContent", tempNode.getPath());				      
       %>
       <div class="SearchItem">
         <div class="$itemNodeType ItemTitle">
@@ -113,7 +116,7 @@ import org.exoplatform.services.wcm.publication.defaultlifecycle.Util;
             $itemName
           </a>
 					<% if(uicomponent.showDraftButton(tempNode)) { %>
-					<span>[ Draft, </span><a href="#" class="CaptionDraft">Edit</a> <span>]</span>
+					<span>[ Draft, </span><a href="$contentkEdittingLink" class="CaptionDraft">Edit</a> <span>]</span>
 					<% } %>	          
         </div>
         <div class="ItemExcerpt">

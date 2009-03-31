@@ -45,7 +45,11 @@
       <kb>kB</kb>
       <noresult>Không có kết quả</noresult>
       <similar>Tương tự</similar>
+      <draft>Dự thảo</draft>
     </label>
+    <action>
+    	<edit>Chỉnh sửa</edit>
+    </action>
   </UIDefaultSearchResult>
   <!--/n  ####################################################################################
   #		../src/main/webapp/WEB-INF/conf/wcm/artifacts/application-templates            #
