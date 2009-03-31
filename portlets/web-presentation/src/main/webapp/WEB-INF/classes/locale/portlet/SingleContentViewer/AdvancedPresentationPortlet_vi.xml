@@ -314,6 +314,7 @@
   -->
   <UIPresentationContainer>
     <title>Sửa nhanh</title>
+    <obsolete></obsolete>>
     <quickPrint>
     	<title>In ấn</title>
     	<print>In nội dung</print>

@@ -321,6 +321,8 @@
   -->
   <UIPresentationContainer>
     <title>Quick Edit</title>
+    <draft>Draft</draft>
+    <obsolete>The content is obsoleted from the system. Please contact with the administrator if you want to see the content</obsolete>>
     <quickPrint>
     	<title>Print</title>
     	<print>Print this page</print>

@@ -97,6 +97,7 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
    * @throws Exception the exception
    */
   public void activateMode(PortletMode mode) throws Exception {
+    boolean isLiveMode = Utils.isLiveMode();    
     getChildren().clear() ;        
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     //only add popup container in private mode to pass w3c validator
@@ -112,13 +113,31 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
       } catch(RepositoryException rx) {
         orginialNode =  null;
       }
-      Node viewNode = getViewNode(orginialNode);
       UIPresentationContainer container = addChild(UIPresentationContainer.class, null, UIPortletApplication.VIEW_MODE);
-      UIPresentation livePresentation = container.getChildById("UIPresentation");
-      livePresentation.setViewNode(viewNode);
-      livePresentation.setOriginalNode(orginialNode);
-      UIDraftContentPresentation drafPresentation = container.getChildById("UIDraftContentPresentation");
-      drafPresentation.setNode(orginialNode);
+      String currentState = getRevisionState(orginialNode);
+      if(Constant.OBSOLETE_STATE.equals(currentState)) {
+        container.setObsoletedContent(true);
+      }else {
+        container.setObsoletedContent(false);
+        UIPresentation livePresentation = container.getChild(UIPresentation.class);
+        if(isLiveMode) {
+          Node liveRevision = getLiveRevision(orginialNode);
+          livePresentation.setOriginalNode(orginialNode);
+          livePresentation.setViewNode(liveRevision);      
+          container.setDraftRevision(false);       
+        }else {        
+          if(Constant.DRAFT_STATE.equals(currentState)) {
+            livePresentation.setViewNode(orginialNode);          
+            livePresentation.setOriginalNode(orginialNode);
+            container.setDraftRevision(true);          
+          } else if(Constant.LIVE_STATE.equals(currentState)) {
+            Node liveRevision = getLiveRevision(orginialNode);
+            livePresentation.setOriginalNode(orginialNode);
+            livePresentation.setViewNode(liveRevision);
+            container.setDraftRevision(false);             
+          }
+        }  
+      }         
     } else if (PortletMode.EDIT.equals(mode)) {
       UIPopupContainer maskPopupContainer = getChild(UIPopupContainer.class);
       UIStartEditionInPageWizard portletEditMode = createUIComponent(UIStartEditionInPageWizard.class,null,null);
@@ -192,20 +211,37 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
       content = (Node) session.getItem(nodeIdentifier);
     }
     return content;
-  }
-
-  public Node getViewNode(Node content) throws Exception {
+  } 
+  
+  private Node getLiveRevision(Node content) throws Exception {
     if (content == null) return null;
-    HashMap<String,Object> context = new HashMap<String, Object>();
-    if (Utils.isLiveMode()) {
-      context.put(Constant.RUNTIME_MODE, SITE_MODE.LIVE);
-    } else {
-      context.put(Constant.RUNTIME_MODE, SITE_MODE.EDITING);
-    }
+    HashMap<String,Object> context = new HashMap<String, Object>();    
+    context.put(Constant.RUNTIME_MODE, SITE_MODE.LIVE);    
     PublicationService pubService = getApplicationComponent(PublicationService.class);
     String lifecycleName = pubService.getNodeLifecycleName(content);
     PublicationPlugin pubPlugin = pubService.getPublicationPlugins().get(lifecycleName);
     return pubPlugin.getNodeView(content, context);
+  }    
+
+  private String getRevisionState(Node content) throws Exception {
+    String currentState = null;
+    try {
+      currentState = content.getProperty("publication:currentState").getString();
+    } catch (Exception e) {
+    } 
+    if(Constant.DRAFT_STATE.equals(currentState))
+      return Constant.DRAFT_STATE;
+    if(Constant.ENROLLED_STATE.equals(currentState)) {
+      String liveRevision = null;
+      try {
+        liveRevision = content.getProperty("publication:liveRevision").getString();
+      } catch (Exception e) {       
+      }
+      if(liveRevision != null && liveRevision.length()>0) 
+        return Constant.LIVE_STATE;
+      return Constant.OBSOLETE_STATE;
+    }
+    return null;
   }
 
   /**

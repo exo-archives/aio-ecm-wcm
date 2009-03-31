@@ -362,3 +362,8 @@
 	font-size: 12px;
 	color: #058EE6;	
 }
+
+.UISingleContentViewerPortlet .DraftIcon {
+	padding-left: 20px; 
+	background: url('icons/16x16/DraftIcon.gif') no-repeat left center;
+}

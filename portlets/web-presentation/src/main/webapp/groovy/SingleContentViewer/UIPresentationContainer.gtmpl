@@ -4,8 +4,7 @@
 	import javax.portlet.PortletPreferences;
 	import org.exoplatform.services.wcm.core.WCMConfigurationService;
 	import org.exoplatform.portal.webui.util.Util;
-	import org.exoplatform.wcm.webui.scv.UIPresentation;
-	import org.exoplatform.wcm.webui.scv.UIDraftContentPresentation;
+	import org.exoplatform.wcm.webui.scv.UIPresentation;	
 	import javax.jcr.Node;
 %>
 <div class="$uicomponent.id">
@@ -22,41 +21,43 @@
 	PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
 	String portalURI = portalRequestContext.getPortalURI();
 	WCMConfigurationService wcmConfigurationService = uicomponent.getApplicationComponent(WCMConfigurationService.class);
-	String isPrint = "/?isPrint=true";
+	def isDrafRevision = uicomponent.isDraftRevision();
+	def isObsoletedContent = uicomponent.isObsoletedContent();
+	String isPrint = "?isPrint=true";
 	if(nodeIdentifier != null) {
 		nodeIdentifier = nodeIdentifier.indexOf("/") == -1 ? "/" + nodeIdentifier : nodeIdentifier;
 	}
 	String url = portalURI + wcmConfigurationService.getRuntimeContextParam("printViewerPage") + "/" + repository + "/" + workspace + nodeIdentifier + isPrint;
 	if (uicomponent.isQuickPrint()) {
 %>
-    <div class="UISimpleBar">
-    <!--
-      <a class="ActionIcon EmailIcon" href="javascript: void(0);" onclick="window.open('$url')" title="<%= _ctx.appRes("UIPresentationContainer.quickPrint.title");%>">Email this page</a>
-      <a class="ActionIcon CommentIcon" href="javascript: void(0);" onclick="window.open('$url')" title="<%= _ctx.appRes("UIPresentationContainer.quickPrint.title");%>">Comments</a>
-    --> 
+    <div class="UISimpleBar">     
       <a class="ActionIcon PrintIcon" href="javascript: void(0);" onclick="window.open('$url')" title="<%= _ctx.appRes("UIPresentationContainer.quickPrint.title");%>"><%= _ctx.appRes("UIPresentationContainer.quickPrint.print");%></a>
     </div>
 <%
 	}
 	
-	if(uicomponent.isQuickEditable()) {
+	if(uicomponent.isQuickEditable() && !isObsoletedContent) {
 %>
 		<div style="position: relative; height: 0px;" id="<%=quickEditingBlockId%>">
 			<div style="position: absolute; width: 65px; right: 0px; top: 0px">
-				<a class="QuickEdit" href="<%=uicomponent.event("QuickEdit")%>" title="<%= _ctx.appRes("UIPresentationContainer.title");%>"></a>
+				<a class="QuickEdit" href="<%=uicomponent.event("QuickEdit")%>" title="<%= _ctx.appRes("UIPresentationContainer.title");%>"></a>				
 			</div>
 		</div>
+<% } 
+if(isObsoletedContent) { %>
+    <div style="padding-bottom: 20px; font-size: 13px; text-align: center;">
+      <div class="Message">
+        <span><%= _ctx.appRes("UIPresentationContainer.obsolete");%></span>
+      </div>
+    </div>
+<%} else {
+   if(isDrafRevision) { %>
+   <div style="padding: 5px 10px; line-height: 16px; ">
+    [ <span class="DraftIcon" style="padding-left: 20px"><%= _ctx.appRes("UIPresentationContainer.draft");%></span> ]
+    </div>  
+  <% } %>
 <%
-    UIPresentation uiPresentation = uicomponent.getChildById("UIPresentation");
-    Node originalNode = uiPresentation.getOriginalNode();
-    Node viewNode = uiPresentation.getNode();
-    if ((viewNode == null) || (viewNode.getPath().equals(originalNode.getPath()))) {
-      uicomponent.renderChild("UIDraftContentPresentation");
-    } else {
-      uicomponent.renderChildren();
-    }
-	} else {
-	  uicomponent.renderChild("UIPresentation");
-	}
+ uicomponent.renderChildren();
+}
 %>
 </div>

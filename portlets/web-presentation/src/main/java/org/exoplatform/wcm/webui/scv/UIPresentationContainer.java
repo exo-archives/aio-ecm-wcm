@@ -46,110 +46,133 @@ import org.exoplatform.webui.event.EventListener;
  */
 
 @ComponentConfig(
-		lifecycle=Lifecycle.class,
-		template="app:/groovy/SingleContentViewer/UIPresentationContainer.gtmpl",
-		events = {
-			@EventConfig(listeners=UIPresentationContainer.QuickEditActionListener.class)
-		}
+    lifecycle=Lifecycle.class,
+    template="app:/groovy/SingleContentViewer/UIPresentationContainer.gtmpl",
+    events = {
+      @EventConfig(listeners=UIPresentationContainer.QuickEditActionListener.class)
+    }
 )
 
 
 public class UIPresentationContainer extends UIContainer{
-	
-	/**
-	 * Instantiates a new uI presentation container.
-	 * 
-	 * @throws Exception the exception
-	 */
-	public UIPresentationContainer() throws Exception{   
-	  addChild(UIDraftContentPresentation.class, null, "UIDraftContentPresentation");
-		addChild(UIPresentation.class,null,"UIPresentation");
-	}
 
-	/**
-	 * Checks if is quick editable.
-	 * 
-	 * @return true, if is quick editable
-	 * 
-	 * @throws Exception the exception
-	 */
-	public boolean isQuickEditable() throws Exception {
-		PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();           
-		return Utils.turnOnQuickEditable(portletRequestContext, true);
-	}
+  private boolean isDraftRevision = false;
+  private boolean isObsoletedContent = false;
 
-	/**
-	 * Gets the portlet id.
-	 * 
-	 * @return the portlet id
-	 */
-	public String getPortletId() {
-		PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
-		return pContext.getWindowId();
-	}
 
-	/**
-	 * The listener interface for receiving quickEditAction events.
-	 * The class that is interested in processing a quickEditAction
-	 * event implements this interface, and the object created
-	 * with that class is registered with a component using the
-	 * component's <code>addQuickEditActionListener<code> method. When
-	 * the quickEditAction event occurs, that object's appropriate
-	 * method is invoked.
-	 * 
-	 * @see QuickEditActionEvent
-	 */
-	public static class QuickEditActionListener extends EventListener<UIPresentationContainer>{   
-		/* (non-Javadoc)
-		 * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
-		 */
-		public void execute(Event<UIPresentationContainer> event) throws Exception {
-			UIPresentationContainer uicomp = event.getSource();
-			UISingleContentViewerPortlet uiportlet = uicomp.getAncestorOfType(UISingleContentViewerPortlet.class);
-			PortletRequestContext context = (PortletRequestContext)event.getRequestContext();      
-			org.exoplatform.webui.core.UIPopupContainer maskPopupContainer = uiportlet.getChild(org.exoplatform.webui.core.UIPopupContainer.class);     
-			UIPortletConfig portletConfig = maskPopupContainer.createUIComponent(UIPortletConfig.class,null,null);
-			uicomp.addChild(portletConfig);
-			portletConfig.init();
-			portletConfig.setRendered(true);
-			WebUIPropertiesConfigService propertiesConfigService = uicomp.getApplicationComponent(WebUIPropertiesConfigService.class);
-			PopupWindowProperties popupProperties = (PopupWindowProperties)propertiesConfigService.getProperties(WebUIPropertiesConfigService.SCV_POPUP_SIZE_QUICK_EDIT);
-			maskPopupContainer.activate(portletConfig,popupProperties.getWidth(),popupProperties.getHeight());            
-			context.addUIComponentToUpdateByAjax(maskPopupContainer);
-		}
-	}
+  /**
+   * Instantiates a new uI presentation container.
+   * 
+   * @throws Exception the exception
+   */
+  public UIPresentationContainer() throws Exception{   	  
+    addChild(UIPresentation.class,null,"UIPresentation");
+  }
 
-	/**
-	 * Checks if the Portlet shows the Quick Print icon.
-	 * 
-	 * @return <code>true</code> if the Quick Print is shown. Otherwise, <code>false</code>
-	 */
-	public boolean isQuickPrint() {
-		WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
-		PortletRequestContext porletRequestContext = (PortletRequestContext) context;
-		PortletPreferences prefs = porletRequestContext.getRequest().getPreferences();
-		UIPortal uiPortal = Util.getUIPortal();
-		UIPage uiPage = uiPortal.findFirstComponentOfType(UIPage.class);
-		
-		if(uiPage == null) {
-			return false;
-		}
-		WCMConfigurationService wcmConfigurationService = getApplicationComponent(WCMConfigurationService.class);
-		List<String> ids = org.exoplatform.services.wcm.publication.lifecycle.stageversion
-						.Util.getListApplicationIdByPage(PortalDataMapper.toPageModel(uiPage), wcmConfigurationService.getPublishingPortletName());
-		List<String> newIds = new ArrayList<String>();
-		int length = ids.size();
-		
-		for(int i = 0; i < length; i++) {
-			String temp = ids.get(i);
-			String id = temp.substring(temp.lastIndexOf("/") + 1, temp.length());
-			newIds.add(id);
-		}
-		
-		if(newIds.contains(porletRequestContext.getWindowId()) 
-				&& "true".equals(prefs.getValue("ShowPrintAction", null))) {
-			return true;
-		}
-		return false;
-	}
+  /**
+   * Checks if is quick editable.
+   * 
+   * @return true, if is quick editable
+   * 
+   * @throws Exception the exception
+   */
+  public boolean isQuickEditable() throws Exception {
+    PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();           
+    return Utils.turnOnQuickEditable(portletRequestContext, true);
+  }
+
+  public boolean isObsoletedContent() {
+    return isObsoletedContent;
+  }
+
+
+  public void setObsoletedContent(boolean isObsoletedContent) {
+    this.isObsoletedContent = isObsoletedContent;
+  }
+
+
+  public boolean isDraftRevision() {
+    return isDraftRevision;
+  }
+
+
+  public void setDraftRevision(boolean isDraftRevision) {
+    this.isDraftRevision = isDraftRevision;
+  }
+
+
+  /**
+   * Gets the portlet id.
+   * 
+   * @return the portlet id
+   */
+  public String getPortletId() {
+    PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();    
+    return pContext.getWindowId();
+  }
+
+  /**
+   * The listener interface for receiving quickEditAction events.
+   * The class that is interested in processing a quickEditAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addQuickEditActionListener<code> method. When
+   * the quickEditAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see QuickEditActionEvent
+   */
+  public static class QuickEditActionListener extends EventListener<UIPresentationContainer>{   
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
+    public void execute(Event<UIPresentationContainer> event) throws Exception {
+      UIPresentationContainer uicomp = event.getSource();
+      UISingleContentViewerPortlet uiportlet = uicomp.getAncestorOfType(UISingleContentViewerPortlet.class);
+      PortletRequestContext context = (PortletRequestContext)event.getRequestContext();      
+      org.exoplatform.webui.core.UIPopupContainer maskPopupContainer = uiportlet.getChild(org.exoplatform.webui.core.UIPopupContainer.class);     
+      UIPortletConfig portletConfig = maskPopupContainer.createUIComponent(UIPortletConfig.class,null,null);
+      uicomp.addChild(portletConfig);
+      portletConfig.init();
+      portletConfig.setRendered(true);
+      WebUIPropertiesConfigService propertiesConfigService = uicomp.getApplicationComponent(WebUIPropertiesConfigService.class);
+      PopupWindowProperties popupProperties = (PopupWindowProperties)propertiesConfigService.getProperties(WebUIPropertiesConfigService.SCV_POPUP_SIZE_QUICK_EDIT);
+      maskPopupContainer.activate(portletConfig,popupProperties.getWidth(),popupProperties.getHeight());            
+      context.addUIComponentToUpdateByAjax(maskPopupContainer);
+    }
+  }
+
+  /**
+   * Checks if the Portlet shows the Quick Print icon.
+   * 
+   * @return <code>true</code> if the Quick Print is shown. Otherwise, <code>false</code>
+   */
+  public boolean isQuickPrint() {
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
+    PortletRequestContext porletRequestContext = (PortletRequestContext) context;
+    PortletPreferences prefs = porletRequestContext.getRequest().getPreferences();
+    UIPortal uiPortal = Util.getUIPortal();
+    UIPage uiPage = uiPortal.findFirstComponentOfType(UIPage.class);
+
+    if(uiPage == null) {
+      return false;
+    }
+    WCMConfigurationService wcmConfigurationService = getApplicationComponent(WCMConfigurationService.class);
+    List<String> ids = org.exoplatform.services.wcm.publication.lifecycle.stageversion
+    .Util.getListApplicationIdByPage(PortalDataMapper.toPageModel(uiPage), wcmConfigurationService.getPublishingPortletName());
+    List<String> newIds = new ArrayList<String>();
+    int length = ids.size();
+
+    for(int i = 0; i < length; i++) {
+      String temp = ids.get(i);
+      String id = temp.substring(temp.lastIndexOf("/") + 1, temp.length());
+      newIds.add(id);
+    }
+
+    if(newIds.contains(porletRequestContext.getWindowId()) 
+        && "true".equals(prefs.getValue("ShowPrintAction", null))) {
+      return true;
+    }
+    return false;
+  }
 }

@@ -313,8 +313,9 @@
   </UIDocumentForm>
   <!--/n  #############################################################
   -->
-  <UIPresentationContainer>
+  <UIPresentationContainer>     
     <title>Edition rapide</title>
+    <obsolete></obsolete>
     <quickPrint>
     	<title>Imprimer</title>
     	<print></print>
