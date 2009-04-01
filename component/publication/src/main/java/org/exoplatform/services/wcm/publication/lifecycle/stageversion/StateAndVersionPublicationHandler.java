@@ -50,15 +50,18 @@ public class StateAndVersionPublicationHandler extends BaseWebSchemaHandler {
     return null;
   }
 
-  public boolean matchHandler(Node node, SessionProvider sessionProvider) throws Exception {    
+  public boolean matchHandler(Node node, SessionProvider sessionProvider) throws Exception {
+    if(node.isNodeType("exo:cssFile") || node.isNodeType("exo:jsFile"))
+      return false;
+    Node parent = node.getParent();
+    if(parent.isNodeType("exo:cssFolder") || parent.isNodeType("exo:jsFolder"))
+      return false;    
     String primaryNodeType = node.getPrimaryNodeType().getName();
     String repository = ((ManageableRepository)node.getSession().getRepository()).getConfiguration().getName();
     return templateService.isManagedNodeType(primaryNodeType,repository);    
   }
 
-  public void onCreateNode(Node node, SessionProvider sessionProvider) throws Exception {
-    if(node.isNodeType("exo:cssFile") || node.isNodeType("exo:jsFile"))
-      return;
+  public void onCreateNode(Node node, SessionProvider sessionProvider) throws Exception {    
     Node checkNode = node;
     if(node.isNodeType("nt:file")) {      
       Node parentNode = node.getParent();
@@ -72,9 +75,7 @@ public class StateAndVersionPublicationHandler extends BaseWebSchemaHandler {
   }   
   public void onModifyNode(Node node, SessionProvider sessionProvider) throws Exception {
     if(node.isNew())
-      return;
-    if(node.isNodeType("exo:cssFile") || node.isNodeType("exo:jsFile"))
-      return;
+      return;   
     Node checkNode = node;
     if(node.isNodeType("nt:file")) {      
       Node parentNode = node.getParent();
