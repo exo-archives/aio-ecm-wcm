@@ -224,7 +224,7 @@ public class SQLQueryBuilder extends AbstractQueryBuilder {
       scope = "."; 
     if(LOGICAL.AND == condition) 
       containsClause.append("AND CONTAINS(").append(scope).append(",'").append(term).append("') ");
-    else if(LOGICAL.AND == condition)
+    else if(LOGICAL.OR == condition)
       containsClause.append("OR CONTAINS(").append(scope).append(",'").append(term).append("') ");
     else
       containsClause.append("CONTAINS(").append(scope).append(",'").append(term).append("') ");

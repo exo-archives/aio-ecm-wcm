@@ -42,9 +42,10 @@ public class CSSFileHandler extends BaseWebSchemaHandler {
     if(!matchMimeType(node))
       return false;
     isInPortalCSSFolder = matchPortalCSSFolder(node,sessionProvider);
+    if(isInPortalCSSFolder)
+      return true;
     if(!matchParentNodeType(node)) {      
-      if(isInPortalCSSFolder)
-        return true;
+      return false;
     }
     return true;        
   }
@@ -74,7 +75,7 @@ public class CSSFileHandler extends BaseWebSchemaHandler {
     Node cssFolder = schemaHandler.getCSSFolder(portal);
     return file.getPath().startsWith(cssFolder.getPath());     
   }
-  
+
   @SuppressWarnings("unused")
   public void onCreateNode(Node file, SessionProvider sessionProvider) throws Exception {  
     addMixin(file, "exo:cssFile");
