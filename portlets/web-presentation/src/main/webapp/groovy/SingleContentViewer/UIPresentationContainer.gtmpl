@@ -30,7 +30,7 @@
 	String url = portalURI + wcmConfigurationService.getRuntimeContextParam("printViewerPage") + "/" + repository + "/" + workspace + nodeIdentifier + isPrint;
 	if (uicomponent.isQuickPrint()) {
 %>
-    <div class="UISimpleBar">     
+    <div class="UIOptionBar">     
       <a class="ActionIcon PrintIcon" href="javascript: void(0);" onclick="window.open('$url')" title="<%= _ctx.appRes("UIPresentationContainer.quickPrint.title");%>"><%= _ctx.appRes("UIPresentationContainer.quickPrint.print");%></a>
     </div>
 <%

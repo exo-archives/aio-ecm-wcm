@@ -25,6 +25,10 @@
       <print>Print</print>
       <close>Close</close>
     </action>
+    <quickPrint>
+    	<title>Print this page</title>
+    	<print>Print this page</print>
+    </quickPrint>
   </UIContentViewerContainer>
 </bundle>
 

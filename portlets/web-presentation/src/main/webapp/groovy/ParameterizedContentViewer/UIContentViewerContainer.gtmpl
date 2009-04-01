@@ -1,16 +1,24 @@
+<div id="$uicomponent.id" class="$uicomponent.id">
 <%
+	import org.exoplatform.portal.application.PortalRequestContext;
+	import javax.portlet.PortletPreferences;
+	import org.exoplatform.services.wcm.core.WCMConfigurationService;
+	import org.exoplatform.portal.webui.util.Util;
+	
 	String link = uicomponent.event("QuickEdit");
 	String lblBack = _ctx.appRes("UIContentViewerContainer.action.back");
 	String lblPrint = _ctx.appRes("UIContentViewerContainer.action.print");
 	String lblClose = _ctx.appRes("UIContentViewerContainer.action.close");
-%>
-<div id="$uicomponent.id" class="$uicomponent.id">
-<%
+	
+	WCMConfigurationService wcmConfigurationService = uicomponent.getApplicationComponent(WCMConfigurationService.class);
+	String parameterizedPageURI = wcmConfigurationService.getRuntimeContextParam("parameterizedPageURI");
+    String printPreviewPageURI = wcmConfigurationService.getRuntimeContextParam("printPageURI");
 	if(!uicomponent.getIsPrint()) {
 %>
-  <div class="ContentViewerBar">
-		<div class="BackButton" title="$lblBack" onclick="history.go(-1)"><span></span></div>
-  </div>
+		<div class="UIOptionBar">
+			<div class="BackButton" title="$lblBack" onclick="history.go(-1)"><span></span></div>     
+			<a class="ActionIcon PrintIcon" href="javascript: void(0);" onclick="window.open(location.href.replace('<%=parameterizedPageURI%>','<%=printPreviewPageURI%>') + '?isPrint=true')" title="<%= _ctx.appRes("UIContentViewerContainer.quickPrint.title");%>"><%= _ctx.appRes("UIContentViewerContainer.quickPrint.print");%></a>
+    	</div>
 <%
 	}
  	if (uicomponent.isQuickEditAble()) {

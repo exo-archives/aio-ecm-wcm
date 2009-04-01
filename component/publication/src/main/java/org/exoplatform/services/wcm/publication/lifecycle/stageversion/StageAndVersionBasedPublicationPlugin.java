@@ -380,6 +380,7 @@ public class StageAndVersionBasedPublicationPlugin extends WebpagePublicationPlu
   }
   
   private void updateOnAddNodeProperties(Page page, Node content, String clvPortletId) throws Exception {
+    if (content.canAddMixin("publication:webpagesPublication")) content.addMixin("publication:webpagesPublication");
     List<String> listExistedNavigationNodeUri = Util.getValuesAsString(content, "publication:navigationNodeURIs");
     List<String> listPageNavigationUri = getListPageNavigationUri(page);
     if (listPageNavigationUri.isEmpty()) return ;

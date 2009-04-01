@@ -25,6 +25,10 @@
       <print>In</print>
       <close>Đóng</close>
     </action>
+    <quickPrint>
+    	<title>In trang này</title>
+    	<print>In trang này</print>
+    </quickPrint>
   </UIContentViewerContainer>
 </bundle>
 

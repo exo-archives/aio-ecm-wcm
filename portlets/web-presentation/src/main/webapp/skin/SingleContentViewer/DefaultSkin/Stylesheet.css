@@ -2,43 +2,6 @@
 	overflow: auto;
 }
 
-.UISingleContentViewerPortlet .UISimpleBar {
-	border: 1px solid #b7b7b7;
-	border-bottom: none;
-	margin: 0px 5px;
-	background: #59a3cc;
-	height: 21px; line-height: 21px;
-	overflow: hidden;
-}
-
-.UISingleContentViewerPortlet .UISimpleBar .ActionIcon {
-	float: left;
-	margin: 0px 5px;
-	height: 21px;
-	color: white;
-	cursor: pointer;
-	display: block;
-}
-
-.UISingleContentViewerPortlet .UISimpleBar .ActionIcon:hover {
-	color: black;
-}
-
-.UISingleContentViewerPortlet .UISimpleBar .EmailIcon {
-	background: url('icons/16x16/ActionIcon.gif') no-repeat top left;
-	padding-left: 20px;
-}
-
-.UISingleContentViewerPortlet .UISimpleBar .CommentIcon {
-	background: url('icons/16x16/ActionIcon.gif') no-repeat left -21px;
-	padding-left: 20px;
-}
-
-.UISingleContentViewerPortlet .UISimpleBar .PrintIcon {
-	background: url('icons/16x16/ActionIcon.gif') no-repeat bottom left;
-	padding-left: 25px;
-}
-
 .UISingleContentViewerPortlet .WebContentContainer {
 	/*background: white;*/
 }
@@ -324,7 +287,7 @@
 }
 
 .UISingleContentViewerPortlet .UIWizard .UIWCMUserContainer .Icon {
-	background: url(/eXoResources/skin/DefaultSkin/webui/component/UIPageIterator/background/ArrowPageIterator.gif) no-repeat scroll left top;;
+	background: url(/eXoResources/skin/DefaultSkin/webui/component/UIPageIterator/background/ArrowPageIterator.gif) no-repeat scroll left top;
 	float:left;
 	height:16px;
 	width:16px;

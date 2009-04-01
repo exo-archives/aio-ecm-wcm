@@ -2,18 +2,13 @@
 
 }
 
-.UIParameterizedContentViewerPortlet .ContentViewerBar {
-	background: url(DefaultSkin/images/BgViewerBar.png) repeat-x top center;
-	padding: 0px 0px 5px 15px;
-	height: 30px;
-}
-
-.UIParameterizedContentViewerPortlet .ContentViewerBar .BackButton {
+.UIParameterizedContentViewerPortlet .BackButton {
 	background: url(DefaultSkin/images/BackIcon.gif) no-repeat center;
-	width: 20px; height: 20px;
+	width: 20px; 
+	height: 20px;
 	cursor: pointer;
 	float: left;
-	margin-top: 5px;
+	padding-left: 20px;
 }
 
 .UIParameterizedContentViewerPortlet .UIContentViewerContainer .DocumentQuickEdit {

@@ -95,7 +95,7 @@
               		<field  name="nodePath"><string>/sites content/live/acme/medias/images</string></field>
               	</object>
               </field>
-              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme/contents/Images.xml</string></field>
+              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme/Images.xml</string></field>
             </object>
           </object-param>
           <object-param>        
@@ -109,7 +109,7 @@
               		<field  name="nodePath"><string>/sites content/live/acme/css</string></field>
               	</object>
               </field>
-              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme/contents/Stylesheet.xml</string></field>
+              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme/Stylesheet.xml</string></field>
             </object>
           </object-param>
           <object-param>        
@@ -335,6 +335,20 @@
               	</object>
               </field>
               <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/classic/Footer.xml</string></field>
+            </object>
+          </object-param>
+          <object-param>        
+            <name>Classic Option bar stylesheet</name>
+            <description>Deployment Descriptor</description>
+            <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
+              <field  name="target">
+              	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
+              		<field  name="repository"><string>repository</string></field>
+              		<field  name="workspace"><string>collaboration</string></field>
+              		<field  name="nodePath"><string>/sites content/live/classic/css</string></field>
+              	</object>
+              </field>
+              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/classic/Stylesheet.xml</string></field>
             </object>
           </object-param>
         </init-params>  

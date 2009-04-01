@@ -318,7 +318,7 @@
     <obsolete></obsolete>
     <quickPrint>
     	<title>Imprimer</title>
-    	<print></print>
+    	<print>Imprimer ce contenu</print>
     	<close>Fermer</close>
     </quickPrint>
   </UIPresentationContainer>

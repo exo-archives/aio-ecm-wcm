@@ -15,6 +15,8 @@
 	    <properties-param>
 	      <name>RuntimeContextParams</name>
 	      <description>some params for runtime</description>
+	      <property name="parameterizedPageURI" value="/parameterizedviewer"/>
+	      <property name="printPageURI" value="/printviewer"/>
 	      <property name="printViewerPage" value="printviewer"/>
 	      <property name="createWikiPageURI" value="wikipresentation"/>
 	      <property name="CLVPortlet" value="/web-presentation/ContentListViewerPortlet"/>
