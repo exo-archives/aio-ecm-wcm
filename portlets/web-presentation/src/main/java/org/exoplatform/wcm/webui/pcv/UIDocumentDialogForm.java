@@ -56,8 +56,9 @@ import org.exoplatform.webui.event.EventListener;
 
 @ComponentConfig(
   lifecycle = UIFormLifecycle.class, events = {
-    @EventConfig(listeners = UIDocumentDialogForm.SaveActionListener.class),
-    @EventConfig(listeners = UIDocumentDialogForm.CancelActionListener.class)   
+    @EventConfig(listeners = UIDocumentDialogForm.SaveDraftActionListener.class),
+    @EventConfig(listeners = UIDocumentDialogForm.CancelActionListener.class),
+    @EventConfig(listeners = UIDocumentDialogForm.FastPublishActionListener.class)
   }  
 )
 public class UIDocumentDialogForm extends UIDialogForm {
@@ -130,7 +131,7 @@ public class UIDocumentDialogForm extends UIDialogForm {
    * 
    * @see SaveActionEvent
    */
-  public static class SaveActionListener extends EventListener<UIDocumentDialogForm> {
+  public static class SaveDraftActionListener extends EventListener<UIDocumentDialogForm> {
 
     /* (non-Javadoc)
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
@@ -243,6 +244,13 @@ public class UIDocumentDialogForm extends UIDialogForm {
       uiContentViewer.setRepository(repository);
       uiContentViewer.setWorkspace(workspace);
     }
+  }
+  
+  public static class FastPublishActionListener extends EventListener<UIDocumentDialogForm> {
+	  @Override
+	public void execute(Event<UIDocumentDialogForm> arg0) throws Exception {
+		
+	}
   }
 
 }

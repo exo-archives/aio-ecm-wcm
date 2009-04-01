@@ -12,6 +12,13 @@
       <content-not-printed>Content cannot be printed</content-not-printed>
     </msg>
   </UIMessageBoard>
+  <UIDocumentDialogForm>
+  	<action>
+  		<SaveDraft>Save Draft</SaveDraft>
+  		<Cancel>Cancel</Cancel>
+  		<FastPublish>Fast Publish</FastPublish>
+  	</action>
+  </UIDocumentDialogForm>
   <UIContentViewerContainer>
     <action>
       <back>Back</back>

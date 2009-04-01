@@ -16,7 +16,7 @@
 	margin-top: 5px;
 }
 
-.UIParameterizedContentViewerPortlet .UIContentViewerContainer .ContentViewerBar .DocumentQuickEdit {
+.UIParameterizedContentViewerPortlet .UIContentViewerContainer .DocumentQuickEdit {
 	background: url('DefaultSkin/images/quickEdit.png') no-repeat right top;
 	height: 30px;
 	width: 65px;	

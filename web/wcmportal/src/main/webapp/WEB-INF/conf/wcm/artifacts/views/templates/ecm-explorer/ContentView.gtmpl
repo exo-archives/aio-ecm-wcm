@@ -35,7 +35,7 @@
   public String getNodeTitle(Node node){
   	String title = null;
   	try {
-			title = node.getProperty("exo:title").getValue().getString()
+			title = node.getProperty("exo:title").getValue().getString();
   	} catch (Exception e) {
 			title = node.getName();  	
   	}
