@@ -74,27 +74,33 @@
   */
   public String getNodeState(Node node){
   	String state = null;  	
+  	String stateLabel = "";
   	try {
 	  	PublicationService publicationService = uicomponent
 			  								.getApplicationComponent(PublicationService.class);
 			state = publicationService.getCurrentState(node);  
   	} catch (Exception e) {
-  		return "";
+  		return stateLabel;
   	} 
   	if("draft".equals(state)) 
-  		return state;
+  		stateLabel = "Draft";
   	String liveRevision = null;
   	try{
 	  	liveRevision = node.getProperty("publication:liveRevision").getValue().getString();
   	}catch(Exception e) {}  	
 		if(liveRevision != null && liveRevision.length() != 0) {
-			state = "live";
-		} else if("enrolled".equals(state)){
-			state = "obsolete";
-		}else {
-			state = "";
+		  	if("draft".equals(state))
+		  		stateLabel = "Live + Draft";
+		  	else 
+		  		stateLabel = "Live";
+		} else {
+			if("enrolled".equals(state)){
+				stateLabel = "Obsolete";
+			}else {
+				stateLabel = "Draft";
+			}
 		}
-  	return state;
+  	return stateLabel;
   }
 %>
 <div id="$componentId">
@@ -313,8 +319,13 @@
 							<div class="NodeLabel">
 									<%
 										String title = getNodeTitle(data);
+										String nodeName = data.getName();
 									%>
-									<div style="cursor: pointer; -moz-outline: none; -moz-user-select: none;" title="$title">$title</div>
+									<div style="cursor: pointer; -moz-outline: none; -moz-user-select: none;" title="$title">$title
+									<% if (!title.equals(nodeName)) { %> 
+										<span style="font-size:10px;color:#CCC;">&nbsp;(<%=nodeName%>)</span>
+									<% } %>
+									</div>
 		 					</div>
 	        </div>
 	        <div style="clear: both"><span></span></div>

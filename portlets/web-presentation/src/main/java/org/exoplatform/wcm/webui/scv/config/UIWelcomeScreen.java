@@ -154,7 +154,7 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
       if("QuickCreateWebContent".equals(radioValue)) {
         uiWelcomeScreen.setRendered(false);
         UIQuickCreationWizard uiQuickCreationWizard = uiPortletConfig.addChild(UIQuickCreationWizard.class, null, null);
-        uiQuickCreationWizard.getChild(UIWebConentNameTabForm.class).init();
+        uiQuickCreationWizard.getChild(UIWebContentNameTabForm.class).init();
       } else if ("EditCurrentWebContent".equals(radioValue)) {
         uiWelcomeScreen.setRendered(false);
         UIQuickCreationWizard uiQuickCreationWizard = uiPortletConfig.addChild(UIQuickCreationWizard.class, null, null);

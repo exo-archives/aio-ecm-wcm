@@ -1,11 +1,11 @@
 <nodeTypes xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0"
   xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:exo="http://www.exoplatform.com/jcr/exo/1.0" >
     
-  <nodeType name="exo:twoColumnsWebcontent" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+  <!-- nodeType name="exo:twoColumnsWebcontent" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
   	<supertypes>
       <supertype>exo:webContent</supertype>      
     </supertypes>
-  </nodeType>
+  </nodeType -->
   
   <nodeType name="exo:pictureOnHeadWebcontent" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
   	<supertypes>

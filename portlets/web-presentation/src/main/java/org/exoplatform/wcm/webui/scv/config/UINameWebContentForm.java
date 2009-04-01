@@ -43,6 +43,7 @@ import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -214,8 +215,10 @@ public class UINameWebContentForm extends UIForm {
       PortalFolderSchemaHandler handler = webSchemaConfigService
       .getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
       Node webContentStorage = handler.getWebContentStorage(portalNode);
-      String webContentName = ((UIFormStringInput) uiNameWebContentForm
+      String webContentTitle = ((UIFormStringInput) uiNameWebContentForm
           .getChildById(NAME_WEBCONTENT)).getValue();
+      String webContentName = Utils.cleanString(webContentTitle);
+
       Node webContentNode = null;
       UIQuickCreationWizard uiQuickCreationWizard = uiNameWebContentForm
       .getAncestorOfType(UIQuickCreationWizard.class);
@@ -234,6 +237,10 @@ public class UINameWebContentForm extends UIForm {
         webContentSchemaHandler.createDefaultSchema(webContentNode);
       } else {
         webContentNode = uiNameWebContentForm.getNode();
+      }
+      if (webContentNode.hasProperty("exo:title")) {
+    	  webContentNode.setProperty("exo:title", webContentTitle);
+    	  webContentNode.save();
       }
       if (webContentNode.canAddMixin("mix:votable"))
         webContentNode.addMixin("mix:votable");
@@ -267,6 +274,7 @@ public class UINameWebContentForm extends UIForm {
       }
       uiQuickCreationWizard.viewStep(2);
     }
+    
   }
 
   /**

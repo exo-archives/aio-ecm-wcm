@@ -114,7 +114,7 @@
 	                	<field  name="workspace"><string>collaboration</string></field>
 	                	<field  name="path"><string>/sites content</string></field>
 	                	<field  name="isDeep"><boolean>true</boolean></field>
-	                	<field  name="nodeTypes"><string>nt:unstructured,nt:folder,nt:file,exo:portalFolder,exo:webContent,exo:webFolder,exo:pictureOnHeadWebcontent,exo:twoColumnsWebcontent,exo:siteSearchBox,exo:siteNavigationWebContent,exo:siteBreadcrumb</string></field>
+	                	<field  name="nodeTypes"><string>nt:unstructured,nt:folder,nt:file,exo:portalFolder,exo:webContent,exo:webFolder,exo:pictureOnHeadWebcontent,exo:siteSearchBox,exo:siteNavigationWebContent,exo:siteBreadcrumb</string></field>
 	                  <field  name="eventTypes"><string>addNode</string></field>	                  	                 
 	                  <field  name="actionClassName"><string>org.exoplatform.services.wcm.core.impl.WebSchemaCreationAction</string></field>
 	                </object>

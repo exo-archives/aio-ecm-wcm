@@ -28,14 +28,14 @@ import org.exoplatform.webui.core.UIContainer;
 @ComponentConfig (
     template = "app:/groovy/SingleContentViewer/config/UITabPane.gtmpl"
 )
-public class UIWebConentNameTabForm extends UIContainer {
+public class UIWebContentNameTabForm extends UIContainer {
 
   /**
    * Instantiates a new uI web conent name tab form.
    * 
    * @throws Exception the exception
    */
-  public UIWebConentNameTabForm() throws Exception {
+  public UIWebContentNameTabForm() throws Exception {
     addChild(UINameWebContentForm.class, null, null); 
   }
 

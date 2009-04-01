@@ -346,7 +346,7 @@
   -->
   <UINameWebContentForm>
     <label>
-      <name>Nom</name>
+      <name>Titre</name>
       <selectTemplate>Disposition</selectTemplate>
     </label>
     <action>

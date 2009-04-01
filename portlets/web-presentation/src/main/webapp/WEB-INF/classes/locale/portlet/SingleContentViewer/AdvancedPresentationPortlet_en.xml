@@ -352,7 +352,7 @@
   -->
   <UINameWebContentForm>
     <label>
-      <name>name</name>
+      <name>Title</name>
       <selectTemplate>Web content layout</selectTemplate>
     </label>
     <action>
