@@ -17,6 +17,7 @@
 package org.exoplatform.wcm.webui.pcv;
 
 import java.security.AccessControlException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,13 +37,17 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.CmsService;
 import org.exoplatform.services.cms.templates.TemplateService;
+import org.exoplatform.services.ecm.publication.PublicationPlugin;
+import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
+import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -246,10 +251,98 @@ public class UIDocumentDialogForm extends UIDialogForm {
     }
   }
   
+  /**
+  * The listener interface for receiving fastPublishAction events.
+  * The class that is interested in processing a fastPublishAction
+  * event implements this interface, and the object created
+  * with that class is registered with a component using the
+  * component's <code>addFastPublishActionListener<code> method. When
+  * the cancelAction event occurs, that object's appropriate
+  * method is invoked.
+  * 
+  * @see FastPublishActionEvent
+  */
   public static class FastPublishActionListener extends EventListener<UIDocumentDialogForm> {
 	  @Override
-	public void execute(Event<UIDocumentDialogForm> arg0) throws Exception {
-		
+	public void execute(Event<UIDocumentDialogForm> event) throws Exception {
+	  UIDocumentDialogForm uiDocumentDialogForm = event.getSource();
+      UIApplication uiApp = uiDocumentDialogForm.getAncestorOfType(UIApplication.class);
+      Node documentNode = uiDocumentDialogForm.getNode();
+      Session session = documentNode.getSession();
+      ManageableRepository manageableRepository = (ManageableRepository) session.getRepository();
+      String repository = manageableRepository.getConfiguration().getName();
+      String workspace = manageableRepository.getConfiguration().getSystemWorkspaceName();
+      List inputs = uiDocumentDialogForm.getChildren();
+      Map inputProperties = DialogFormUtil.prepareMap(inputs,
+                                                      uiDocumentDialogForm.getInputProperties());
+      String nodeTypeName = documentNode.getPrimaryNodeType().getName();
+      Node homeNode = documentNode.getParent();
+      Node newNode = null;
+      if (documentNode.isLocked())
+        session.addLockToken(LockUtil.getLockToken(documentNode));
+      try {
+        CmsService cmsService = uiDocumentDialogForm.getApplicationComponent(CmsService.class);
+        String addedPath = cmsService.storeNode(nodeTypeName,
+                                                homeNode,
+                                                inputProperties,
+                                                uiDocumentDialogForm.isAddNew,
+                                                uiDocumentDialogForm.repositoryName);
+        try {
+          homeNode.save();
+          newNode = (Node) homeNode.getSession().getItem(addedPath);
+          event.getRequestContext().setAttribute("nodePath", newNode.getPath());
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      } catch (AccessControlException ace) {
+        throw new AccessDeniedException(ace.getMessage());
+      } catch (VersionException ve) {
+        uiApp.addMessage(new ApplicationMessage("UIDocumentForm.msg.in-versioning",
+                                                null,
+                                                ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
+      } catch (ItemNotFoundException item) {
+        uiApp.addMessage(new ApplicationMessage("UIDocumentForm.msg.item-not-found",
+                                                null,
+                                                ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
+      } catch (RepositoryException repo) {
+        repo.printStackTrace();
+        String key = "UIDocumentForm.msg.repository-exception";
+        if (ItemExistsException.class.isInstance(repo))
+          key = "UIDocumentForm.msg.not-allowed-same-name-sibling";
+        uiApp.addMessage(new ApplicationMessage(key, null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
+      } catch (NumberFormatException nume) {
+        String key = "UIDocumentForm.msg.numberformat-exception";
+        uiApp.addMessage(new ApplicationMessage(key, null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
+      } catch (Exception e) {
+        e.printStackTrace();
+        String key = "UIDocumentForm.msg.cannot-save";
+        uiApp.addMessage(new ApplicationMessage(key, null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
+      }
+      UIContentViewerContainer uiContentViewerContainer = uiDocumentDialogForm.getParent();
+      uiContentViewerContainer.removeChild(UIDocumentDialogForm.class);
+      UIContentViewer uiContentViewer = uiContentViewerContainer.addChild(UIContentViewer.class,
+                                                                          null,
+                                                                          null);
+      PublicationService publicationService = uiDocumentDialogForm.getApplicationComponent(PublicationService.class);
+      PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(Constant.LIFECYCLE_NAME);
+      HashMap<String, String> context = new HashMap<String, String>();
+      if(newNode != null) {
+    	  context.put(Constant.CURRENT_REVISION_NAME, newNode.getName());
+      }
+      publicationPlugin.changeState(newNode, Constant.LIVE_STATE, context);
+      uiContentViewer.setNode(newNode);
+      uiContentViewer.setRepository(repository);
+      uiContentViewer.setWorkspace(workspace);
 	}
   }
 

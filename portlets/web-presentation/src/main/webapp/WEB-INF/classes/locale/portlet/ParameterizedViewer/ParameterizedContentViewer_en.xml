@@ -10,6 +10,7 @@
       <content-unsupport-exc>Content not support to view.</content-unsupport-exc>
       <access-control-exc>Content access denied.</access-control-exc>
       <content-not-printed>Content cannot be printed</content-not-printed>
+      <content-obsolete>Content is obsolete</content-obsolete>
     </msg>
   </UIMessageBoard>
   <UIDocumentDialogForm>

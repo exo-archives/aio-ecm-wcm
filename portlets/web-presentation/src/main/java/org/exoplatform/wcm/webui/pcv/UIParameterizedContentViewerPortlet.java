@@ -16,10 +16,19 @@
  */
 package org.exoplatform.wcm.webui.pcv;
 
+import javax.jcr.ItemNotFoundException;
+import javax.jcr.Node;
+import javax.jcr.RepositoryException;
+import javax.portlet.PortletMode;
+
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant;
 import org.exoplatform.wcm.webui.Utils;
+import org.exoplatform.wcm.webui.scv.UIPresentation;
+import org.exoplatform.wcm.webui.scv.UIPresentationContainer;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 
@@ -46,6 +55,7 @@ public class UIParameterizedContentViewerPortlet extends UIPortletApplication {
    */
   public UIParameterizedContentViewerPortlet() throws Exception {
     addChild(UIContentViewerContainer.class, null, null);
+    
   }
   
   /**

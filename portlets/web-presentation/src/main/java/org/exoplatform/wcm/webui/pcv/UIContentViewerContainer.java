@@ -16,12 +16,35 @@
  */
 package org.exoplatform.wcm.webui.pcv;
 
-import javax.jcr.Node;
-import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
+import java.net.URLDecoder;
+import java.security.AccessControlException;
+import java.util.HashMap;
+import java.util.List;
 
+import javax.jcr.ItemNotFoundException;
+import javax.jcr.Node;
+import javax.jcr.Session;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
+
+import org.apache.commons.lang.StringUtils;
+import org.exoplatform.ecm.resolver.JCRResourceResolver;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.container.UIContainer;
+import org.exoplatform.portal.webui.portal.UIPortal;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.cms.templates.TemplateService;
+import org.exoplatform.services.ecm.publication.PublicationPlugin;
+import org.exoplatform.services.ecm.publication.PublicationService;
+import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.wcm.publication.PublicationState;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant.SITE_MODE;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -32,115 +55,344 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
 /**
- * Created by The eXo Platform
- * SAS Author : Phan Le Thanh Chuong
- * chuong.phan@exoplatform.com,
- * phan.le.thanh.chuong@gmail.com Nov 4, 2008
+ * Created by The eXo Platform SAS Author : Phan Le Thanh Chuong
+ * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com Nov 4, 2008
  */
 
-@ComponentConfig(
-		lifecycle = Lifecycle.class, 
-		template = "app:/groovy/ParameterizedContentViewer/UIContentViewerContainer.gtmpl", 
-		events = { 
-			@EventConfig(listeners = UIContentViewerContainer.QuickEditActionListener.class) })
+@ComponentConfig(lifecycle = Lifecycle.class, template = "app:/groovy/ParameterizedContentViewer/UIContentViewerContainer.gtmpl", events = { @EventConfig(listeners = UIContentViewerContainer.QuickEditActionListener.class) })
 public class UIContentViewerContainer extends UIContainer {
 
-	/** The Constant WEB_CONTENT_sDIALOG. */
-	public static final String WEB_CONTENT_sDIALOG = "webContentDialog";
+	/** Flag indicating the draft revision. */
+	private boolean isDraftRevision = false;
+
+	/** Flag indicating the obsolete revision. */
+	private boolean isObsoletedContent = false;
+
+	/** Content child of this content. */
+	private UIContentViewer uiContentViewer;
 
 	/**
-	 * A flag used to display Print/Close buttons and hide Back one if its' value
-	 * is <code>true</code>. In <code>false</code> case, the Back button will be
-	 * shown only 
+	 * A flag used to display Print/Close buttons and hide Back one if its'
+	 * value is <code>true</code>. In <code>false</code> case, the Back
+	 * button will be shown only
 	 */
 	private boolean isPrint;
 
 	/**
 	 * Instantiates a new uI content viewer container.
 	 * 
-	 * @throws Exception the exception
+	 * @throws Exception
+	 *             the exception
 	 */
 	public UIContentViewerContainer() throws Exception {
 		addChild(UIContentViewer.class, null, null);
+		uiContentViewer = getChild(UIContentViewer.class);
 	}
 
 	@Override
-	public void processRender(WebuiRequestContext requestContext) throws Exception {
-		PortletRequestContext portletRequestContext = (PortletRequestContext)requestContext;
-		PortalRequestContext context = (PortalRequestContext)portletRequestContext.getParentAppRequestContext();
-	  	HttpServletRequest request = context.getRequest();
-	  	isPrint = "true".equals(request.getParameter("isPrint")) ? true : false;
-	  	super.processRender(requestContext);
+	public void processRender(WebuiRequestContext context) throws Exception {
+		// PortletRequestContext portletRequestContext = (PortletRequestContext)
+		// requestContext;
+		// PortalRequestContext context = (PortalRequestContext)
+		// portletRequestContext
+		// .getParentAppRequestContext();
+
+		PortletRequestContext porletRequestContext = (PortletRequestContext) context;
+		HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) porletRequestContext
+				.getRequest();
+		PortalRequestContext portalRequestContext = Util
+				.getPortalRequestContext();
+		UIPortal uiPortal = Util.getUIPortal();
+		String portalURI = portalRequestContext.getPortalURI();
+		String requestURI = requestWrapper.getRequestURI();
+		String pageNodeSelected = uiPortal.getSelectedNode().getName();
+		String parameters = null;
+		Object object = requestWrapper
+				.getAttribute("ParameterizedContentViewerPortlet.data.object");
+
+		try {
+			parameters = URLDecoder.decode(StringUtils.substringAfter(
+					requestURI, portalURI.concat(pageNodeSelected + "/")),
+					"UTF-8");
+		} catch (UnsupportedEncodingException e) {
+		}
+		if (!parameters.matches(UIContentViewer.PARAMETER_REGX)) {
+			renderErrorMessage(context,
+					UIContentViewer.CONTENT_NOT_FOUND_EXC);
+			return;
+		}
+		String nodeIdentifier = null;
+		String[] params = parameters.split("/");
+		String repository = params[0];
+		String workspace = params[1];
+		Node currentNode = null;
+		SessionProvider sessionProvider = null;
+		Session session = null;
+		String userId = Util.getPortalRequestContext().getRemoteUser();
+		if (userId == null) {
+			sessionProvider = SessionProviderFactory.createAnonimProvider();
+		} else {
+			sessionProvider = SessionProviderFactory.createSessionProvider();
+		}
+		if (object instanceof ItemNotFoundException
+				|| object instanceof AccessControlException
+				|| object instanceof ItemNotFoundException || object == null) {
+			try {
+				RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
+				ManageableRepository manageableRepository = repositoryService
+						.getRepository(repository);
+				session = sessionProvider.getSession(workspace,
+						manageableRepository);
+			} catch (AccessControlException ace) {
+				renderErrorMessage(context,
+						UIContentViewer.ACCESS_CONTROL_EXC);
+				return;
+			} catch (Exception e) {
+				renderErrorMessage(context,
+						UIContentViewer.CONTENT_NOT_FOUND_EXC);
+				return;
+			}
+			if (params.length > 2) {
+				StringBuffer identifier = new StringBuffer();
+				for (int i = 2; i < params.length; i++) {
+					identifier.append("/").append(params[i]);
+				}
+				nodeIdentifier = identifier.toString();
+				boolean isUUID = false;
+				try {
+					currentNode = (Node) session.getItem(nodeIdentifier);
+				} catch (Exception e) {
+					isUUID = true;
+				}
+				if (isUUID) {
+					try {
+						String uuid = params[params.length - 1];
+						currentNode = session.getNodeByUUID(uuid);
+					} catch (ItemNotFoundException exc) {
+						renderErrorMessage(context,
+								UIContentViewer.CONTENT_NOT_FOUND_EXC);
+						return;
+					}
+				}
+			} else if (params.length == 2) {
+				currentNode = session.getRootNode();
+			}
+		} else {
+			currentNode = (Node) object;
+		}
+
+		TemplateService templateService = getApplicationComponent(TemplateService.class);
+		List<String> documentTypes = templateService
+				.getDocumentTemplates(repository);
+		Boolean isDocumentType = false;
+		for (String docType : documentTypes) {
+			if (currentNode.isNodeType(docType)) {
+				isDocumentType = true;
+				break;
+			}
+		}
+		if (currentNode.isNodeType("exo:hiddenable")) {
+			renderErrorMessage(context,
+					UIContentViewer.ACCESS_CONTROL_EXC);
+			return;
+		} else if (isDocumentType) { // content is document
+			if (hasChildren()) {
+				removeChild(UIContentViewerContainer.class);
+			}
+			PublicationService publicationService = uiPortal
+					.getApplicationComponent(PublicationService.class);
+			HashMap<String, Object> hmContext = new HashMap<String, Object>();
+			if (Utils.isLiveMode()) {
+				hmContext.put(Constant.RUNTIME_MODE, SITE_MODE.LIVE);
+			} else {
+				hmContext.put(Constant.RUNTIME_MODE, SITE_MODE.EDITING);
+			}
+			String lifeCycleName = publicationService
+					.getNodeLifecycleName(currentNode);
+			PublicationPlugin publicationPlugin = publicationService
+					.getPublicationPlugins().get(lifeCycleName);
+			if (publicationPlugin == null) {
+				renderErrorMessage(context,
+						UIContentViewer.CONTENT_NOT_PRINTED);
+				return;
+			}
+			Node nodeView = publicationPlugin.getNodeView(currentNode,
+					hmContext);
+			uiContentViewer.setRepository(repository);
+			uiContentViewer.setWorkspace(workspace);
+			uiContentViewer.setOrginalNode(currentNode);
+			if (nodeView != null) {
+				uiContentViewer.setNode(nodeView);
+			} else {
+				uiContentViewer.setNode(currentNode);
+			}
+			String state = PublicationState.getRevisionState(uiContentViewer
+					.getNode());
+			if (Constant.OBSOLETE_STATE.equals(state)) {
+				setObsoletedContent(true);
+				renderErrorMessage(context,
+						UIContentViewer.OBSOLETE_CONTENT);
+				return;
+			} else {
+				setObsoletedContent(false);
+				if (Constant.DRAFT_STATE.equals(state)) {
+					setDraftRevision(true);
+				} else {
+					setDraftRevision(false);
+				}
+			}
+			 HttpServletRequest request = context.getRequest();
+			 isPrint = "true".equals(request.getParameter("isPrint")) ? true :false;
+			 super.processRender(context);
+		} else { // content is folders
+			renderErrorMessage(context, UIContentViewer.CONTENT_UNSUPPORT_EXC);
+		}
 	}
-	
+
 	/**
 	 * Checks if is quick edit able.
 	 * 
 	 * @return true, if is quick edit able
 	 * 
-	 * @throws Exception the exception
+	 * @throws Exception
+	 *             the exception
 	 */
 	public boolean isQuickEditAble() throws Exception {
-		PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();        
+		PortletRequestContext context = (PortletRequestContext) WebuiRequestContext
+				.getCurrentInstance();
 		return Utils.turnOnQuickEditable(context, true);
 	}
 
 	/**
-	 * The listener interface for receiving quickEditAction events.
-	 * The class that is interested in processing a quickEditAction
-	 * event implements this interface, and the object created
-	 * with that class is registered with a component using the
-	 * component's <code>addQuickEditActionListener<code> method. When
+	 * The listener interface for receiving quickEditAction events. The class
+	 * that is interested in processing a quickEditAction event implements this
+	 * interface, and the object created with that class is registered with a
+	 * component using the component's
+	 * <code>addQuickEditActionListener<code> method. When
 	 * the quickEditAction event occurs, that object's appropriate
 	 * method is invoked.
 	 * 
 	 * @see QuickEditActionEvent
 	 */
-	public static class QuickEditActionListener extends EventListener<UIContentViewerContainer> {
+	public static class QuickEditActionListener extends
+			EventListener<UIContentViewerContainer> {
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
 		 */
-		public void execute(Event<UIContentViewerContainer> event) throws Exception {
-			UIContentViewerContainer uiContentViewerContainer = event.getSource();
-			UIContentViewer uiContentViewer = uiContentViewerContainer.getChild(UIContentViewer.class);
+		public void execute(Event<UIContentViewerContainer> event)
+				throws Exception {
+			UIContentViewerContainer uiContentViewerContainer = event
+					.getSource();
+			UIContentViewer uiContentViewer = uiContentViewerContainer
+					.getChild(UIContentViewer.class);
 			Node contentNode = uiContentViewer.getNode();
-			ManageableRepository manageableRepository = (ManageableRepository) contentNode.getSession()
-			.getRepository();
-			String repository = manageableRepository.getConfiguration().getName();
-			String workspace = manageableRepository.getConfiguration().getDefaultWorkspaceName();
+			ManageableRepository manageableRepository = (ManageableRepository) contentNode
+					.getSession().getRepository();
+			String repository = manageableRepository.getConfiguration()
+					.getName();
+			String workspace = manageableRepository.getConfiguration()
+					.getDefaultWorkspaceName();
 			uiContentViewerContainer.removeChild(UIContentViewer.class);
-			UIDocumentDialogForm uiDocumentForm = uiContentViewerContainer.createUIComponent(UIDocumentDialogForm.class,
-					null,
-					null);
+			UIDocumentDialogForm uiDocumentForm = uiContentViewerContainer
+					.createUIComponent(UIDocumentDialogForm.class, null, null);
 			uiDocumentForm.setRepositoryName(repository);
 			uiDocumentForm.setWorkspace(workspace);
-			uiDocumentForm.setContentType(contentNode.getPrimaryNodeType().getName());
+			uiDocumentForm.setContentType(contentNode.getPrimaryNodeType()
+					.getName());
 			uiDocumentForm.setNodePath(contentNode.getPath());
 			uiDocumentForm.setStoredPath(contentNode.getPath());
 			uiDocumentForm.addNew(false);
 			uiContentViewerContainer.addChild(uiDocumentForm);
-			event.getRequestContext().addUIComponentToUpdateByAjax(uiContentViewerContainer);
+			event.getRequestContext().addUIComponentToUpdateByAjax(
+					uiContentViewerContainer);
 		}
 	}
 
 	/**
-	 * Gets <code>isPrint</code> value that is used to display Print/Close 
-	 * buttons and hide Back one if its' value is <code>True</code>. In 
+	 * Render error message.
+	 * 
+	 * @param context
+	 *            the context
+	 * @param keyBundle
+	 *            the key bundle
+	 * 
+	 * @throws Exception
+	 *             the exception
+	 */
+	public void renderErrorMessage(WebuiRequestContext context, String keyBundle)
+			throws Exception {
+		Writer writer = context.getWriter();
+		String message = context.getApplicationResourceBundle().getString(
+				keyBundle);
+		writer
+				.write("<div style=\"height: 55px; font-size: 13px; text-align: center; padding-top: 10px;\">");
+		writer.write("<span>");
+		writer.write(message);
+		writer.write("</span>");
+		writer.write("</div>");
+		writer.close();
+	}
+
+	/**
+	 * Gets <code>isPrint</code> value that is used to display Print/Close
+	 * buttons and hide Back one if its' value is <code>True</code>. In
 	 * <code>False</code> case, the Back button will be shown only.
-	 *  
-	 * @return <code>isPrint</code> 
+	 * 
+	 * @return <code>isPrint</code>
 	 */
 	public boolean getIsPrint() {
 		return isPrint;
 	}
 
 	/**
-	 * Sets <code>isPrint</code> value that is used to display Print/Close 
-	 * buttons and hide Back one if its' value is <code>True</code>. In 
+	 * Sets <code>isPrint</code> value that is used to display Print/Close
+	 * buttons and hide Back one if its' value is <code>True</code>. In
 	 * <code>False</code> case, the Back button will be shown only.
 	 */
 	public void setIsPrint(boolean isPrint) {
 		this.isPrint = isPrint;
+	}
+
+	/**
+	 * Gets the draft revision value. If the revision is draft, an icon and one
+	 * text is shown. Otherwise, false.
+	 * 
+	 * @return <code>isDraftRevision</code>
+	 */
+	public boolean isDraftRevision() {
+		return isDraftRevision;
+	}
+
+	/**
+	 * Sets the draft revision value. If the revision is draft, an icon and one
+	 * text is shown. Otherwise, false.
+	 * 
+	 * @param <code>isDraftRevision</code>
+	 */
+	public void setDraftRevision(boolean isDraftRevision) {
+		this.isDraftRevision = isDraftRevision;
+	}
+
+	/**
+	 * Gets the draft obsolete value. If the revision is draft, the message is
+	 * shown to inform users of this state. Otherwise, false.
+	 * 
+	 * @return <code>isDraftRevision</code>
+	 */
+	public boolean isObsoletedContent() {
+		return isObsoletedContent;
+	}
+
+	/**
+	 * Sets the draft obsolete value. If the revision is draft, the message is
+	 * shown to inform users of this state. Otherwise, false.
+	 * 
+	 * @param <code>isObsoletedContent</code>
+	 */
+	public void setObsoletedContent(boolean isObsoletedContent) {
+		this.isObsoletedContent = isObsoletedContent;
 	}
 }

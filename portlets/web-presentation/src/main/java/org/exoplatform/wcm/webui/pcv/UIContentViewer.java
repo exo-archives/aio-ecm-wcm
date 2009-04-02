@@ -42,6 +42,7 @@ import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.wcm.publication.PublicationState;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant.SITE_MODE;
 import org.exoplatform.wcm.webui.Utils;
@@ -84,12 +85,15 @@ public class UIContentViewer extends UIBaseNodePresentation {
   /** The Constant CONTENT_UNSUPPORT_EXC. */
   public final static String  CONTENT_UNSUPPORT_EXC = "UIMessageBoard.msg.content-unsupport-exc";
   
-  /** Content can't be printed*/
+  /** Content can't be printed.*/
   public final static String  CONTENT_NOT_PRINTED = "UIMessageBoard.msg.content-not-printed";
+  
+  /** Content is obsolete.*/
+  public final static String OBSOLETE_CONTENT = "UIMessageBoard.msg.content-obsolete";
 
   /** The Constant PARAMETER_REGX. */
   public final static String  PARAMETER_REGX        = "(.*)/(.*)";
-
+  
   /* (non-Javadoc)
    * @see org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation#getNode()
    */
@@ -105,6 +109,10 @@ public class UIContentViewer extends UIBaseNodePresentation {
   public Node getOriginalNode() throws Exception {
 	  return orginalNode;
   }
+  
+  public void setOrginalNode(Node orginalNode) {
+	this.orginalNode = orginalNode;
+}
 
   /* (non-Javadoc)
    * @see org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation#getRepositoryName()
@@ -196,138 +204,6 @@ public class UIContentViewer extends UIBaseNodePresentation {
    * @see org.exoplatform.webui.core.UIComponent#processRender(org.exoplatform.webui.application.WebuiRequestContext)
    */
   public void processRender(WebuiRequestContext context) throws Exception {
-    PortletRequestContext porletRequestContext = (PortletRequestContext) context;
-    HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) porletRequestContext.getRequest();
-    PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
-    UIPortal uiPortal = Util.getUIPortal();
-    String portalURI = portalRequestContext.getPortalURI();
-    String requestURI = requestWrapper.getRequestURI();
-    String pageNodeSelected = uiPortal.getSelectedNode().getName();
-    String parameters = null;
-    Object object = requestWrapper.getAttribute("ParameterizedContentViewerPortlet.data.object");
-
-    try {
-      parameters = URLDecoder.decode(StringUtils.substringAfter(requestURI,portalURI.concat(pageNodeSelected + "/")), "UTF-8");      
-    } catch (UnsupportedEncodingException e) { }
-    if (!parameters.matches(PARAMETER_REGX)) {
-      renderErrorMessage(context, CONTENT_NOT_FOUND_EXC);
-      return;
-    }
-    String nodeIdentifier = null;
-    String[] params = parameters.split("/");
-    String repository = params[0];
-    String workspace = params[1];
-    Node currentNode = null;
-    SessionProvider sessionProvider = null;
-    Session session = null;
-    String userId = Util.getPortalRequestContext().getRemoteUser();
-    if (userId == null) {
-      sessionProvider = SessionProviderFactory.createAnonimProvider();
-    } else {
-      sessionProvider = SessionProviderFactory.createSessionProvider();
-    }
-    if (object instanceof ItemNotFoundException || object instanceof AccessControlException
-        || object instanceof ItemNotFoundException || object == null) {
-      try {
-        RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
-        ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-        session = sessionProvider.getSession(workspace, manageableRepository);
-      } catch (AccessControlException ace) {
-        renderErrorMessage(context, ACCESS_CONTROL_EXC);
-        return;
-      } catch (Exception e) {
-        renderErrorMessage(context, CONTENT_NOT_FOUND_EXC);
-        return;
-      }
-      if (params.length > 2) {
-        StringBuffer identifier = new StringBuffer();
-        for (int i = 2; i < params.length; i++) {
-          identifier.append("/").append(params[i]);
-        }
-        nodeIdentifier = identifier.toString();
-        boolean isUUID = false;
-        try {
-          currentNode = (Node) session.getItem(nodeIdentifier);
-        } catch (Exception e) {
-          isUUID = true;
-        }
-        if (isUUID) {
-          try {
-            String uuid = params[params.length - 1];
-            currentNode = session.getNodeByUUID(uuid);
-          } catch (ItemNotFoundException exc) {
-            renderErrorMessage(context, CONTENT_NOT_FOUND_EXC);
-            return;
-          }
-        }
-      } else if (params.length == 2) {
-        currentNode = session.getRootNode();
-      }
-    } else {
-      currentNode = (Node) object;
-    }
-
-    TemplateService templateService = getApplicationComponent(TemplateService.class);
-    List<String> documentTypes = templateService.getDocumentTemplates(repository);
-    Boolean isDocumentType = false;
-    for (String docType : documentTypes) {
-      if (currentNode.isNodeType(docType)) {
-        isDocumentType = true;
-        break;
-      }
-    }
-    if (currentNode.isNodeType("exo:hiddenable")) {
-      renderErrorMessage(context, ACCESS_CONTROL_EXC);
-      return;
-    } else if (isDocumentType) { // content is document
-      if (hasChildren()) {
-        removeChild(UIContentViewerContainer.class);
-      }
-      PublicationService publicationService = uiPortal.getApplicationComponent(PublicationService.class);
-      HashMap<String, Object> hmContext = new HashMap<String, Object>();
-      if(Utils.isLiveMode()) {
-    	  hmContext.put(Constant.RUNTIME_MODE, SITE_MODE.LIVE);
-      } else {
-          hmContext.put(Constant.RUNTIME_MODE, SITE_MODE.EDITING);
-      }   
-      String lifeCycleName = publicationService.getNodeLifecycleName(currentNode);
-      PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(lifeCycleName);
-      if(publicationPlugin == null) {
-    	  renderErrorMessage(context, CONTENT_NOT_PRINTED);
-    	  return;  
-      } 
-      Node nodeView = publicationPlugin.getNodeView(currentNode, hmContext);
-      setRepository(repository);
-	  setWorkspace(workspace);
-	  this.orginalNode = currentNode;
-      if(nodeView != null) {
-    	  this.contentNode = nodeView;
-      }else {
-    	  this.contentNode = currentNode;
-      }         
-      super.processRender(context);
-    } else { // content is folders
-      renderErrorMessage(context, CONTENT_UNSUPPORT_EXC);
-    }
+	  super.processRender(context);
   }
-
-  /**
-   * Render error message.
-   * 
-   * @param context the context
-   * @param keyBundle the key bundle
-   * 
-   * @throws Exception the exception
-   */
-  private void renderErrorMessage(WebuiRequestContext context, String keyBundle) throws Exception {
-    Writer writer = context.getWriter();
-    String message = context.getApplicationResourceBundle().getString(keyBundle);
-    writer.write("<div style=\"height: 55px; font-size: 13px; text-align: center; padding-top: 10px;\">");
-    writer.write("<span>");
-    writer.write(message);
-    writer.write("</span>");
-    writer.write("</div>");
-    writer.close();
-  }
-
 }

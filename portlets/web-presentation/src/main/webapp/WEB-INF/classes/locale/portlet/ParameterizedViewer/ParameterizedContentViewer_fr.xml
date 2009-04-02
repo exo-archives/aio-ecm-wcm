@@ -10,6 +10,7 @@
       <content-unsupport-exc>Contenu non supporté à la visualisation.</content-unsupport-exc>
       <access-control-exc>Accès au contenu supprimé.</access-control-exc>
       <content-not-printed></content-not-printed>
+      <content-obsolete></content-obsolete>
     </msg>
   </UIMessageBoard>
   <UIDocumentDialogForm>

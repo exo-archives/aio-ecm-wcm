@@ -4,6 +4,7 @@
 	import javax.portlet.PortletPreferences;
 	import org.exoplatform.services.wcm.core.WCMConfigurationService;
 	import org.exoplatform.portal.webui.util.Util;
+	import org.exoplatform.wcm.webui.pcv.UIContentViewer;
 	
 	String link = uicomponent.event("QuickEdit");
 	String lblBack = _ctx.appRes("UIContentViewerContainer.action.back");
@@ -12,7 +13,9 @@
 	
 	WCMConfigurationService wcmConfigurationService = uicomponent.getApplicationComponent(WCMConfigurationService.class);
 	String parameterizedPageURI = wcmConfigurationService.getRuntimeContextParam("parameterizedPageURI");
-    String printPreviewPageURI = wcmConfigurationService.getRuntimeContextParam("printPageURI");
+	String printPreviewPageURI = wcmConfigurationService.getRuntimeContextParam("printPageURI");
+  UIContentViewer uiContentViewer = uicomponent.getChild(UIContentViewer.class);
+
 	if(!uicomponent.getIsPrint()) {
 %>
 		<div class="UIOptionBar">
@@ -24,7 +27,23 @@
  	if (uicomponent.isQuickEditAble()) {
 %>
 	  <a class="DocumentQuickEdit" href="$link"></a>
+<% } 
+	if(uicomponent.isObsoletedContent) { 
+%>
+    <div style="padding-bottom: 20px; font-size: 13px; text-align: center;">
+      <div class="Message">
+        <span><%= _ctx.appRes("UIPresentationContainer.obsolete");%></span>
+      </div>
+    </div>
 <%
+	} else {
+   		if(uicomponent.isDraftRevision) { 
+%>
+   <div style="padding: 5px 10px; line-height: 16px; ">
+    [<span class="DraftIcon" style="padding-left: 20px"><%= _ctx.appRes("UIPresentationContainer.draft");%></span>]
+    </div>  
+<% 		
+			} 
 	}
   uicomponent.renderChildren();
 	if(uicomponent.getIsPrint()) {

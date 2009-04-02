@@ -10,6 +10,7 @@
       <content-unsupport-exc>Xin lỗi, trình hiển thị không hỗ nội dung mà bạn lựa chọn.</content-unsupport-exc>
       <access-control-exc>Xin lỗi, bạn không có quyền truy cập nội dung này.</access-control-exc>
       <content-not-printed></content-not-printed>
+      <content-obsolete></content-obsolete>
     </msg>
   </UIMessageBoard>
   <UIDocumentDialogForm>
