@@ -1,3 +1,119 @@
+
+<div class="UISiteAdminToolBar">
+	<div class="TBItem">
+		<div class="ExoLogo"><span></span></div>
+		<div class="MenuItemContainer" style="display: none; width: 130px;">
+      <div class="MenuItem OddItem">
+        <a href="#" title="" class="ItemIcon AccountSettingsIcon">
+				  Account Setting
+				</a>
+      </div>
+      <div class="MenuItem EvenItem">
+        <a href="#" title="" class="ItemIcon LanguageSettingsIcon">
+				  Language Setting
+				</a>
+      </div>
+      <div class="MenuItem OddItem">
+        <a href="#" title="" class="ItemIcon SkinSettingsIcon">
+				  Skin Setting
+				</a>
+      </div>
+      <div class="MenuItem EvenItem">
+        <a href="#" title="" class="ItemIcon LogoutIcon">
+				  Logout
+				</a>
+      </div>
+		</div>
+	</div>	
+	<div class="TBItem">
+		<a href="#" class="DashboardIcon TBIcon">Dashboard</a>
+	</div>
+	
+	<div class="TBItem">
+		<a href="#" class="SitesIcon TBIcon">Site</a>
+		<div class="MenuItemContainer" style="display: none; width: 80px;">
+		
+      <div class="MenuItem OddItem">
+        <a href="#" title="" class="ItemIcon SiteIcon">
+				  Classic
+				</a>
+      </div>
+      
+      <div class="MenuItem EvenItem">
+        <a href="#" title="" class="ItemIcon SiteIcon">
+				  Acme
+				</a>
+      </div>
+	    
+		</div>
+	</div>
+	
+	<div class="TBItem">
+		<a href="#" class="GroupsIcon TBIcon">Groups</a>
+		
+		<div class="MenuItemContainer" style="display: none; width: 100px;">
+			<div class="TitleBar">Administrator</div>
+      <div class="MenuItem OddItem">
+        <a href="#" title="" class="ItemIcon DefaultPageIcon">
+				  Classic
+				</a>
+      </div>
+      
+      <div class="MenuItem EvenItem">
+        <a href="#" title="" class="ItemIcon DefaultPageIcon">
+				  Acme
+				</a>
+      </div>
+	    
+		</div>
+		
+	</div>
+	<div class="TBItem">
+		<a href="#" class="EditorIcon TBIcon">Editor</a>
+	</div>
+	<div class="TBItem">
+		<a href="#" class="AdministratorIcon TBIcon">Administrator</a>
+	</div>
+	
+	<% if (Utils.turnOnQuickEditable(rcontext, true)) { %> 
+		<div class="BoxOnOff SelectOff">
+			<div class="LeftSelect">
+	    	<div class="RightSelect">
+		    	<div class="CenterSelect" onclick="$turnOffQuickEditLink">$turnOffQuickEditLabel</div>
+		    </div>
+	    </div>
+		</div>		
+	<% } else { %>
+		<div class="BoxOnOff SelectOn">
+			<div class="LeftSelect">
+	    	<div class="RightSelect">
+	    		<div class="CenterSelect" onclick="$turnOnQuickEditLink">$turnOnQuickEditLabel</div>
+	    	</div>
+	    </div>
+		</div>		    
+	<% } %>
+	<div style="clear:both"><span></span></div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+
 <% 
 	import java.util.List;
 	import javax.jcr.Node;
@@ -28,7 +144,7 @@
     String itemCssClazz = "OddItem";
     if ((index % 2) == 0) itemCssClazz = "EvenItem";
     print """
-    <div class="$itemCssClazz"> <!--EvenItem or OddItem-->
+    <div class="$itemCssClazz">
       <div class="MenuItem">
         <div class="LabelItem">
           <div class="Icon $icon"  style="padding-left: 18px">
@@ -59,7 +175,7 @@
     String label = node.resolvedLabel;
     if(label.length() > 60) label = label.substring(0, 57) + "..." ;
     print """
-    <div class="$itemCssClazz"> <!--EvenItem or OddItem-->
+    <div class="$itemCssClazz">
       <div class="MenuItem">
         <div class="LabelItem">
           <div class="Icon $icon" style="padding-left: 18px"> 
@@ -231,7 +347,7 @@
 					      		String portalName = portal.getName();
                     String link = uicomponent.getBaseURI(portalName);
 								    print """
-								    <div class="$cssClazz"> <!--EvenItem or OddItem-->
+								    <div class="$cssClazz">
 								      <div class="MenuItem" onclick="naviMenu('${link}');">
 								        <div class="LabelItem">
 								          <div class="NavigationBackground">
@@ -301,8 +417,7 @@
 	String browsePageActionLabel = _ctx.appRes("UISiteAdminToolbar.action.BrowsePage");
 	String logoutActionLabel = _ctx.appRes("UISiteAdminToolbar.action.Logout");
 	String editPageAndNaviActionLabel = _ctx.appRes("UISiteAdminToolbar.action.EditPageAndNavigation");
-	String turnOnQuickEditLabel = _ctx.appRes("UISiteAdminToolbar.action.TurnOnQuickEdit");
-	String turnOffQuickEditLabel = _ctx.appRes("UISiteAdminToolbar.action.TurnOffQuickEdit");
+	
 	String editLabel = _ctx.appRes("UISiteAdminToolbar.action.OnOffEditting");
 		 					 			
 	boolean showable  = uicomponent.isShowWorkspaceArea();	 			
@@ -369,3 +484,4 @@
 	</div>									
 	<div style="clear:right"><span></span></div>
 </div>
+-->
