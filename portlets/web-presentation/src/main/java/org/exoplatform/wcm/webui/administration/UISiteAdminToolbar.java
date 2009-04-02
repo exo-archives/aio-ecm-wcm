@@ -684,6 +684,13 @@ public class UISiteAdminToolbar extends UIContainer {
       preferenceP.setValues(listValue);
       listPreference.add(preferenceP);
 
+      Preference preferenceT = new Preference();
+      listValue = new ArrayList<String>();
+      listValue.add("true");
+      preferenceT.setName("ShowTitle");
+      preferenceT.setValues(listValue);
+      listPreference.add(preferenceT);
+      
       portletPreferences.setPreferences(listPreference);
 
       DataStorage dataStorage = siteAdminToolbar.getApplicationComponent(DataStorage.class);

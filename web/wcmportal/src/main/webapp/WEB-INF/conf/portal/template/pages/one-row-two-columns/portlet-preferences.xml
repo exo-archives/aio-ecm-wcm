@@ -24,5 +24,10 @@
 	    	<value>true</value>
 	    	<read-only>false</read-only>
 		  </preference>
+		  <preference>
+	    	<name>ShowTitle</name>
+	    	<value>true</value>
+	    	<read-only>false</read-only>
+		  </preference>
     </portlet-preferences>
 </portlet-preferences-set>
