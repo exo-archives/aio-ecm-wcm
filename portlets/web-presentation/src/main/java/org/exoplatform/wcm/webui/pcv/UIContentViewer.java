@@ -165,7 +165,7 @@ public class UIContentViewer extends UIBaseNodePresentation {
    * @see org.exoplatform.ecm.webui.presentation.NodePresentation#getNodeType()
    */
   public String getNodeType() throws Exception {
-    return contentNode.getPrimaryNodeType().getName();
+    return orginalNode.getPrimaryNodeType().getName();
   }
 
   /* (non-Javadoc)

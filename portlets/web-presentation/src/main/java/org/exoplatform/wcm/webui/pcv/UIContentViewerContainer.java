@@ -26,6 +26,7 @@ import java.util.List;
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
 import javax.jcr.Session;
+import javax.portlet.PortletMode;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
@@ -46,10 +47,16 @@ import org.exoplatform.services.wcm.publication.PublicationState;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant.SITE_MODE;
 import org.exoplatform.wcm.webui.Utils;
+import org.exoplatform.wcm.webui.WebUIPropertiesConfigService;
+import org.exoplatform.wcm.webui.WebUIPropertiesConfigService.PopupWindowProperties;
+import org.exoplatform.wcm.webui.scv.UIPresentationContainer;
+import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
+import org.exoplatform.wcm.webui.scv.config.UIPortletConfig;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -59,7 +66,13 @@ import org.exoplatform.webui.event.EventListener;
  * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com Nov 4, 2008
  */
 
-@ComponentConfig(lifecycle = Lifecycle.class, template = "app:/groovy/ParameterizedContentViewer/UIContentViewerContainer.gtmpl", events = { @EventConfig(listeners = UIContentViewerContainer.QuickEditActionListener.class) })
+@ComponentConfig(
+  lifecycle = Lifecycle.class, 
+  template = "app:/groovy/ParameterizedContentViewer/UIContentViewerContainer.gtmpl", 
+  events = { 
+    @EventConfig(listeners = UIContentViewerContainer.QuickEditActionListener.class) 
+  }
+)
 public class UIContentViewerContainer extends UIContainer {
 
 	/** Flag indicating the draft revision. */
@@ -282,32 +295,29 @@ public class UIContentViewerContainer extends UIContainer {
 		 * 
 		 * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
 		 */
-		public void execute(Event<UIContentViewerContainer> event)
-				throws Exception {
-			UIContentViewerContainer uiContentViewerContainer = event
-					.getSource();
-			UIContentViewer uiContentViewer = uiContentViewerContainer
-					.getChild(UIContentViewer.class);
-			Node contentNode = uiContentViewer.getNode();
-			ManageableRepository manageableRepository = (ManageableRepository) contentNode
-					.getSession().getRepository();
-			String repository = manageableRepository.getConfiguration()
-					.getName();
-			String workspace = manageableRepository.getConfiguration()
-					.getDefaultWorkspaceName();
-			uiContentViewerContainer.removeChild(UIContentViewer.class);
-			UIDocumentDialogForm uiDocumentForm = uiContentViewerContainer
-					.createUIComponent(UIDocumentDialogForm.class, null, null);
+		public void execute(Event<UIContentViewerContainer> event) throws Exception {
+			UIContentViewerContainer uiContentViewerContainer = event.getSource();
+			UIContentViewer uiContentViewer = uiContentViewerContainer.getChild(UIContentViewer.class);
+			Node orginialNode = uiContentViewer.getOriginalNode();
+			ManageableRepository manageableRepository = (ManageableRepository) orginialNode.getSession().getRepository();
+			String repository = manageableRepository.getConfiguration().getName();
+			String workspace = orginialNode.getSession().getWorkspace().getName();
+			UIDocumentDialogForm uiDocumentForm = uiContentViewerContainer.createUIComponent(UIDocumentDialogForm.class, null, null);
 			uiDocumentForm.setRepositoryName(repository);
 			uiDocumentForm.setWorkspace(workspace);
-			uiDocumentForm.setContentType(contentNode.getPrimaryNodeType()
-					.getName());
-			uiDocumentForm.setNodePath(contentNode.getPath());
-			uiDocumentForm.setStoredPath(contentNode.getPath());
+			uiDocumentForm.setContentType(orginialNode.getPrimaryNodeType().getName());
+			uiDocumentForm.setNodePath(orginialNode.getPath());
+			uiDocumentForm.setStoredPath(orginialNode.getParent().getPath());
 			uiDocumentForm.addNew(false);
 			uiContentViewerContainer.addChild(uiDocumentForm);
-			event.getRequestContext().addUIComponentToUpdateByAjax(
-					uiContentViewerContainer);
+			
+		  UIParameterizedContentViewerPortlet uiportlet = uiContentViewerContainer.getAncestorOfType(UIParameterizedContentViewerPortlet.class);
+		  uiportlet.activateMode(PortletMode.EDIT);
+		  UIPopupContainer maskPopupContainer = uiportlet.getChild(UIPopupContainer.class);
+		  WebUIPropertiesConfigService propertiesConfigService = uiContentViewerContainer.getApplicationComponent(WebUIPropertiesConfigService.class);
+      PopupWindowProperties popupProperties = (PopupWindowProperties)propertiesConfigService.getProperties(WebUIPropertiesConfigService.SCV_POPUP_SIZE_QUICK_EDIT);
+      maskPopupContainer.activate(uiDocumentForm, popupProperties.getWidth(), popupProperties.getHeight());
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiportlet);
 		}
 	}
 

@@ -28,6 +28,7 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.version.VersionException;
+import javax.portlet.PortletMode;
 
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
 import org.exoplatform.ecm.webui.form.UIDialogForm;
@@ -47,7 +48,9 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
+import org.exoplatform.webui.core.UIPopupComponent;
 import org.exoplatform.webui.core.UIPopupContainer;
+import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -66,7 +69,7 @@ import org.exoplatform.webui.event.EventListener;
     @EventConfig(listeners = UIDocumentDialogForm.FastPublishActionListener.class)
   }  
 )
-public class UIDocumentDialogForm extends UIDialogForm {
+public class UIDocumentDialogForm extends UIDialogForm implements UIPopupComponent{
 
   /** The document node. */
   private Node documentNode;
@@ -125,6 +128,12 @@ public class UIDocumentDialogForm extends UIDialogForm {
     return resourceResolver;
   }
 
+  private void closePopupAndUpdateUI(WebuiRequestContext requestContext) throws Exception {
+    UIPopupWindow uiPopupWindow = getAncestorOfType(UIPopupWindow.class);
+    uiPopupWindow.setShow(false);
+    requestContext.addUIComponentToUpdateByAjax(uiPopupWindow);
+  }
+  
   /**
    * The listener interface for receiving saveAction events.
    * The class that is interested in processing a saveAction
@@ -148,7 +157,7 @@ public class UIDocumentDialogForm extends UIDialogForm {
       Session session = documentNode.getSession();
       ManageableRepository manageableRepository = (ManageableRepository) session.getRepository();
       String repository = manageableRepository.getConfiguration().getName();
-      String workspace = manageableRepository.getConfiguration().getSystemWorkspaceName();
+      String workspace = session.getWorkspace().getName();
       List inputs = uiDocumentDialogForm.getChildren();
       Map inputProperties = DialogFormUtil.prepareMap(inputs,
                                                       uiDocumentDialogForm.getInputProperties());
@@ -205,14 +214,14 @@ public class UIDocumentDialogForm extends UIDialogForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       }
-      UIContentViewerContainer uiContentViewerContainer = uiDocumentDialogForm.getParent();
-      uiContentViewerContainer.removeChild(UIDocumentDialogForm.class);
-      UIContentViewer uiContentViewer = uiContentViewerContainer.addChild(UIContentViewer.class,
-                                                                          null,
-                                                                          null);
+      UIParameterizedContentViewerPortlet uiportlet = uiDocumentDialogForm.getAncestorOfType(UIParameterizedContentViewerPortlet.class);
+      UIContentViewerContainer uiContentViewerContainer = uiportlet.getChild(UIContentViewerContainer.class);
+      UIContentViewer uiContentViewer = uiContentViewerContainer.getChild(UIContentViewer.class);
       uiContentViewer.setNode(newNode);
       uiContentViewer.setRepository(repository);
       uiContentViewer.setWorkspace(workspace);
+      
+      uiDocumentDialogForm.closePopupAndUpdateUI(event.getRequestContext());
     }
 
   }
@@ -239,15 +248,15 @@ public class UIDocumentDialogForm extends UIDialogForm {
       Session session = documentNode.getSession();
       ManageableRepository manageableRepository = (ManageableRepository) session.getRepository();
       String repository = manageableRepository.getConfiguration().getName();
-      String workspace = manageableRepository.getConfiguration().getSystemWorkspaceName();
-      UIContentViewerContainer uiContentViewerContainer = uiDocumentDialogForm.getParent();
-      uiContentViewerContainer.removeChild(UIDocumentDialogForm.class);
-      UIContentViewer uiContentViewer = uiContentViewerContainer.addChild(UIContentViewer.class,
-                                                                          null,
-                                                                          null);
+      String workspace = session.getWorkspace().getName();
+      UIParameterizedContentViewerPortlet uiportlet = uiDocumentDialogForm.getAncestorOfType(UIParameterizedContentViewerPortlet.class);
+      UIContentViewerContainer uiContentViewerContainer = uiportlet.getChild(UIContentViewerContainer.class);
+      UIContentViewer uiContentViewer = uiContentViewerContainer.getChild(UIContentViewer.class);
       uiContentViewer.setNode(documentNode);
       uiContentViewer.setRepository(repository);
       uiContentViewer.setWorkspace(workspace);
+      
+      uiDocumentDialogForm.closePopupAndUpdateUI(event.getRequestContext());
     }
   }
   
@@ -263,15 +272,14 @@ public class UIDocumentDialogForm extends UIDialogForm {
   * @see FastPublishActionEvent
   */
   public static class FastPublishActionListener extends EventListener<UIDocumentDialogForm> {
-	  @Override
-	public void execute(Event<UIDocumentDialogForm> event) throws Exception {
-	  UIDocumentDialogForm uiDocumentDialogForm = event.getSource();
+    public void execute(Event<UIDocumentDialogForm> event) throws Exception {
+      UIDocumentDialogForm uiDocumentDialogForm = event.getSource();
       UIApplication uiApp = uiDocumentDialogForm.getAncestorOfType(UIApplication.class);
       Node documentNode = uiDocumentDialogForm.getNode();
       Session session = documentNode.getSession();
       ManageableRepository manageableRepository = (ManageableRepository) session.getRepository();
       String repository = manageableRepository.getConfiguration().getName();
-      String workspace = manageableRepository.getConfiguration().getSystemWorkspaceName();
+      String workspace = session.getWorkspace().getName();
       List inputs = uiDocumentDialogForm.getChildren();
       Map inputProperties = DialogFormUtil.prepareMap(inputs,
                                                       uiDocumentDialogForm.getInputProperties());
@@ -328,11 +336,9 @@ public class UIDocumentDialogForm extends UIDialogForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       }
-      UIContentViewerContainer uiContentViewerContainer = uiDocumentDialogForm.getParent();
-      uiContentViewerContainer.removeChild(UIDocumentDialogForm.class);
-      UIContentViewer uiContentViewer = uiContentViewerContainer.addChild(UIContentViewer.class,
-                                                                          null,
-                                                                          null);
+      UIParameterizedContentViewerPortlet uiportlet = uiDocumentDialogForm.getAncestorOfType(UIParameterizedContentViewerPortlet.class);
+      UIContentViewerContainer uiContentViewerContainer = uiportlet.getChild(UIContentViewerContainer.class);
+      UIContentViewer uiContentViewer = uiContentViewerContainer.getChild(UIContentViewer.class);
       PublicationService publicationService = uiDocumentDialogForm.getApplicationComponent(PublicationService.class);
       PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(Constant.LIFECYCLE_NAME);
       HashMap<String, String> context = new HashMap<String, String>();
@@ -343,7 +349,11 @@ public class UIDocumentDialogForm extends UIDialogForm {
       uiContentViewer.setNode(newNode);
       uiContentViewer.setRepository(repository);
       uiContentViewer.setWorkspace(workspace);
-	}
+      
+      uiDocumentDialogForm.closePopupAndUpdateUI(event.getRequestContext());
+    }
   }
 
+  public void activate() throws Exception {}
+  public void deActivate() throws Exception {}
 }

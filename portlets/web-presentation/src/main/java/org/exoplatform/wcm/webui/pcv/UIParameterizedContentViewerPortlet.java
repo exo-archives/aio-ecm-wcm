@@ -16,15 +16,10 @@
  */
 package org.exoplatform.wcm.webui.pcv;
 
-import javax.jcr.ItemNotFoundException;
-import javax.jcr.Node;
-import javax.jcr.RepositoryException;
 import javax.portlet.PortletMode;
 
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant;
 import org.exoplatform.wcm.webui.Utils;
-import org.exoplatform.wcm.webui.scv.UIPresentation;
-import org.exoplatform.wcm.webui.scv.UIPresentationContainer;
+import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -47,15 +42,40 @@ public class UIParameterizedContentViewerPortlet extends UIPortletApplication {
 
   /** The Constant QUICK_EDIT_ABLE. */
   public final static String QUICK_EDIT_ABLE = "quickEditable";
-
+  
+  /** The mode_. */
+  private PortletMode mode = PortletMode.VIEW ;
+  
   /**
    * Instantiates a new uI parameterized content viewer portlet.
    * 
    * @throws Exception the exception
    */
   public UIParameterizedContentViewerPortlet() throws Exception {
-    addChild(UIContentViewerContainer.class, null, null);
-    
+    activateMode(mode) ;    
+  }
+  
+  public void activateMode(PortletMode mode) throws Exception {
+    getChildren().clear() ;
+    UIContentViewerContainer contentViewerContainer = getChild(UIContentViewerContainer.class);
+    if (contentViewerContainer == null) contentViewerContainer = addChild(UIContentViewerContainer.class, null, null);
+    if(PortletMode.EDIT.equals(mode)) {
+      UIPopupContainer maskPopupContainer = getChild(UIPopupContainer.class);
+      if (maskPopupContainer == null ) maskPopupContainer = addChild(UIPopupContainer.class, null, null);
+    }
+  }
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.core.UIPortletApplication#processRender(org.exoplatform.webui.application.WebuiApplication, org.exoplatform.webui.application.WebuiRequestContext)
+   */
+  
+  public void processRender(WebuiApplication app, WebuiRequestContext context) throws Exception {
+    PortletRequestContext pContext = (PortletRequestContext) context ;
+    PortletMode newMode = pContext.getApplicationMode() ;
+    if(!mode.equals(newMode)) {
+      activateMode(newMode) ;
+      mode = newMode ;
+    }
+    super.processRender(app, context) ;
   }
   
   /**
