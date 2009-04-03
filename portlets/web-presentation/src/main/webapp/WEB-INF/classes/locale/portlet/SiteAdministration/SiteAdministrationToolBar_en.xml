@@ -12,13 +12,17 @@
       <SkinSettings>Skin Settings</SkinSettings>
       <LanguageSettings>Language Settings</LanguageSettings>
       <AccountSettings>Account Settings</AccountSettings>
-      <ViewMore>More Actions</ViewMore>
       <Logout>Logout</Logout>
       <TurnOnQuickEdit>O</TurnOnQuickEdit>
       <TurnOffQuickEdit>l</TurnOffQuickEdit>
       <OnOffEditting>Edit</OnOffEditting>
       <AddContent>Add Content</AddContent>            
       <EditPageAndNavigation>Edit Navigation</EditPageAndNavigation>
+      <Dashboard>Dashboard</Dashboard>
+      <Sites>Sites</Sites>      
+			<Groups>Groups</Groups>      
+			<Editor>Editor</Editor>
+			<Administrator>Administrator</Administrator>
     </action>
     <msg>
       <not-permission>You don't have permission to do this action.</not-permission>

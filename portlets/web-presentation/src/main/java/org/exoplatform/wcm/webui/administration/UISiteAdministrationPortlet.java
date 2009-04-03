@@ -17,7 +17,6 @@
 package org.exoplatform.wcm.webui.administration;
 
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -42,10 +41,10 @@ public class UISiteAdministrationPortlet extends UIPortletApplication {
    * @throws Exception the exception
    */
   public UISiteAdministrationPortlet() throws Exception {
-    String userId = Util.getPortalRequestContext().getRemoteUser();       
-    if (Utils.canEditCurrentPortal(userId)) {
-      addChild(UISiteAdminToolbar.class, null, UIPortletApplication.VIEW_MODE);
-    }
+    String userId = Util.getPortalRequestContext().getRemoteUser();
+    if (userId != null) {
+      addChild(UISiteAdminToolbar.class, null, UIPortletApplication.VIEW_MODE);  
+    }    
   }
 
   /* (non-Javadoc)

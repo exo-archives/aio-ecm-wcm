@@ -2,7 +2,6 @@
 <bundle>
   <UISiteAdminToolbar>
     <action>
-    	<ViewMore>Chức năng khác</ViewMore>
     	<AccountSettings>Thiết lập tài khoản</AccountSettings>
     	<LanguageSettings>Thiết lập ngôn ngữ</LanguageSettings>
     	<SkinSettings>Thiết lập giao diện</SkinSettings>>
@@ -19,6 +18,11 @@
       <TurnOffQuickEdit>l</TurnOffQuickEdit>
       <AddContent>Tạo mới nội dung</AddContent>      
       <EditPageAndNavigation>Chỉnh sửa navigation</EditPageAndNavigation>   
+      <Dashboard></Dashboard>      
+      <Sites></Sites>      
+			<Groups></Groups>      
+			<Editor></Editor>
+			<Administrator></Administrator>      
     </action>
   </UISiteAdminToolbar>
 </bundle>

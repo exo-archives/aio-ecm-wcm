@@ -1,22 +1,22 @@
 package org.exoplatform.wcm.webui.administration;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-import java.util.ResourceBundle;
 
-import javax.jcr.Node;
 import javax.portlet.PortletMode;
 import javax.servlet.http.HttpServletRequest;
 
+import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.application.Preference;
 import org.exoplatform.portal.config.DataStorage;
+import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.UIWelcomeComponent;
 import org.exoplatform.portal.webui.application.UIPortlet;
@@ -31,7 +31,6 @@ import org.exoplatform.portal.webui.portal.PageNodeEvent;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.portal.UIPortalForm;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIControlWorkspace;
 import org.exoplatform.portal.webui.workspace.UIExoStart;
@@ -40,12 +39,11 @@ import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIPortalToolPanel;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
 import org.exoplatform.portal.webui.workspace.UIControlWorkspace.UIControlWSWorkingArea;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.util.IdGenerator;
-import org.exoplatform.services.resources.LocaleConfig;
-import org.exoplatform.services.resources.LocaleConfigService;
+import org.exoplatform.services.security.Identity;
+import org.exoplatform.services.security.IdentityRegistry;
+import org.exoplatform.services.security.MembershipEntry;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
-import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -55,7 +53,6 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
-// TODO: Auto-generated Javadoc
 /*
  * Copyright (C) 2003-2008 eXo Platform SAS.
  *
@@ -98,19 +95,63 @@ import org.exoplatform.webui.event.EventListener;
     @EventConfig(listeners = UISiteAdminToolbar.EditPageAndNavigationActionListener.class),
     @EventConfig(listeners = UISiteAdminToolbar.ChangePageActionListener.class),
     @EventConfig(listeners = UISiteAdminToolbar.TurnOnQuickEditActionListener.class),
-    @EventConfig(listeners = UISiteAdminToolbar.TurnOffQuickEditActionListener.class)
-})
+    @EventConfig(listeners = UISiteAdminToolbar.TurnOffQuickEditActionListener.class) })
 public class UISiteAdminToolbar extends UIContainer {
 
   /** The Constant MESSAGE. */
-  public static final String MESSAGE = "UISiteAdminToolbar.msg.not-permission";
-  
+  public static final String MESSAGE            = "UISiteAdminToolbar.msg.not-permission";
+
   public static final String TURN_ON_QUICK_EDIT = "isTurnOn";
+
+  public static final int ADMIN              = 2;
+
+  public static final int EDITOR             = 1;
+
+  public static final int REDACTOR           = 0;
 
   /**
    * Instantiates a new uI site admin toolbar.
    */
   public UISiteAdminToolbar() {
+  }
+
+  public int getRole() throws Exception {
+    String userId = Util.getPortalRequestContext().getRemoteUser();
+    UserACL userACL = getApplicationComponent(UserACL.class);
+    IdentityRegistry identityRegistry = getApplicationComponent(IdentityRegistry.class);
+    WCMConfigurationService wcmConfigurationService = getApplicationComponent(WCMConfigurationService.class);
+    Identity identity = identityRegistry.getIdentity(userId);
+    String editorMembershiptType = userACL.getMakableMT();
+    List<String> accessControlWorkspaceGroups = userACL.getAccessControlWorkspaceGroups();
+    String editSitePermission = Util.getUIPortal().getEditPermission();
+    String redactorMembershipType = wcmConfigurationService.getRedactorMembershipType();   
+    // admin
+    if (userACL.getSuperUser().equals(userId)) {
+      return UISiteAdminToolbar.ADMIN;
+    }
+    if (userACL.hasAccessControlWorkspacePermission(userId)
+        && userACL.hasCreatePortalPermission(userId)) {
+      return UISiteAdminToolbar.ADMIN;
+    }
+    // editor
+    MembershipEntry editorEnry = null;
+    for (String membership : accessControlWorkspaceGroups) {
+      editorEnry = MembershipEntry.parse(membership);
+      if (editorEnry.getMembershipType().equals(editorMembershiptType)
+          || editorEnry.getMembershipType().equals(MembershipEntry.ANY_TYPE)) {
+        if (identity.isMemberOf(editorEnry))
+          return UISiteAdminToolbar.EDITOR;
+      }
+    }
+    // redactor
+    MembershipEntry redactorEnry = MembershipEntry.parse(editSitePermission);
+    if (redactorEnry.getMembershipType().equals(redactorMembershipType)
+        || redactorEnry.getMembershipType().equals(MembershipEntry.ANY_TYPE)) {
+      if (identity.isMemberOf(redactorEnry))
+        return UISiteAdminToolbar.REDACTOR;
+    }
+
+    return -1;
   }
 
   /**
@@ -128,65 +169,42 @@ public class UISiteAdminToolbar extends UIContainer {
     return false;
   }
 
-  public List<PageNavigation> getNavigations() throws Exception {
-    List<PageNavigation> allNav = Util.getUIPortal().getNavigations();
-    String remoteUser = Util.getPortalRequestContext().getRemoteUser();
-    List<PageNavigation> result = new ArrayList<PageNavigation>();
-    for (PageNavigation nav : allNav) {
-      result.add(PageNavigationUtils.filter(nav, remoteUser));
-    }
-    return result;
-  }
-
-  public List<PageNavigation> getNavigationsOfPortal(String portalName) throws Exception {
-    UserPortalConfigService portalConfigService = getApplicationComponent(UserPortalConfigService.class);
-    UIPortalApplication uiApp = Util.getUIPortalApplication();
-    LocaleConfig localeConfig = getApplicationComponent(LocaleConfigService.class).getLocaleConfig(uiApp.getLocale()
-                                                                                                        .getLanguage());
-    String remoteUser = Util.getPortalRequestContext().getRemoteUser();
-    List<PageNavigation> navs = portalConfigService.getUserPortalConfig(portalName, remoteUser)
-                                                   .getNavigations();
-    for (PageNavigation nav : navs) {
-      if (nav.getOwnerType().equals(PortalConfig.USER_TYPE))
-        continue;
-      ResourceBundle res = localeConfig.getNavigationResourceBundle(nav.getOwnerType(),
-                                                                    nav.getOwnerId());
-      for (PageNode node : nav.getNodes()) {
-        resolveLabel(res, node);        
-      }
-    }    
-    return navs;
-  }
-
   public String getBaseURI(String portalName) {
-    PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
+    PortalRequestContext portalRequestContext = Util.getPortalRequestContext();    
     HttpServletRequest servletRequest = portalRequestContext.getRequest();
     String baseURI = servletRequest.getScheme() + "://" + servletRequest.getServerName() + ":"
-        + servletRequest.getServerPort() + servletRequest.getContextPath() + "/private/" + portalName;     
+        + servletRequest.getServerPort() + servletRequest.getContextPath() + "/private/"
+        + portalName;
     return baseURI;
   }
 
-  private void resolveLabel(ResourceBundle res, PageNode node) {
-    node.setResolvedLabel(res);
-    if (node.getChildren() == null)
-      return;
-    for (PageNode childNode : node.getChildren()) {
-      resolveLabel(res, childNode);
-    }
+  public List<String> getAllPortals() throws Exception {
+    List<String> portals = new ArrayList<String>();
+    DataStorage dataStorage = getApplicationComponent(DataStorage.class);
+    Query<PortalConfig> query = new Query<PortalConfig>(null, null, null, null, PortalConfig.class) ;
+    PageList pageList = dataStorage.find(query) ;
+    String userId = Util.getPortalRequestContext().getRemoteUser();
+    UserACL userACL = getApplicationComponent(UserACL.class) ;
+    Iterator<?> itr = pageList.getAll().iterator();
+    while(itr.hasNext()) {
+      PortalConfig pConfig = (PortalConfig)itr.next() ;
+      if(userACL.hasPermission(pConfig, userId)) {
+        portals.add(pConfig.getName());
+      }
+    }     
+    return portals;
   }
 
-  public List<Node> getAllPortals() throws Exception {
-    LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
-    SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
-    List<Node> portalList = livePortalManagerService.getLivePortals(sessionProvider);
-    Node sharedPortal = livePortalManagerService.getLiveSharedPortal(sessionProvider);
-    for (Node portal : portalList) {
-      if (portal.getPath().equals(sharedPortal.getPath())) {
-        portalList.remove(portal);
-        break;
+  public List<PageNavigation> getGroupNavigations() throws Exception {
+    String removeUser = Util.getPortalRequestContext().getRemoteUser();
+    List<PageNavigation> allNavigations = Util.getUIPortal().getNavigations();
+    List<PageNavigation> groupNavigations = new ArrayList<PageNavigation>();
+    for (PageNavigation navigation : allNavigations) {      
+      if (navigation.getOwnerType().equals(PortalConfig.GROUP_TYPE)) {
+        groupNavigations.add(PageNavigationUtils.filter(navigation, removeUser));
       }
     }
-    return portalList;
+    return groupNavigations;
   }
 
   /**
@@ -201,13 +219,6 @@ public class UISiteAdminToolbar extends UIContainer {
    * @see AddPageActionEvent
    */
   public static class AddPageActionListener extends EventListener<UISiteAdminToolbar> {
-
-    /*
-     * (non-Javadoc)
-     * @see
-     * org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui
-     * .event.Event)
-     */
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       UIPortalApplication uiApp = Util.getUIPortalApplication();
       PortalRequestContext portalContext = Util.getPortalRequestContext();
@@ -252,13 +263,6 @@ public class UISiteAdminToolbar extends UIContainer {
    * @see EditPageActionEvent
    */
   public static class EditPageActionListener extends EventListener<UISiteAdminToolbar> {
-
-    /*
-     * (non-Javadoc)
-     * @see
-     * org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui
-     * .event.Event)
-     */
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       PortalRequestContext portalContext = Util.getPortalRequestContext();
       event.setRequestContext(Util.getPortalRequestContext());
@@ -304,13 +308,6 @@ public class UISiteAdminToolbar extends UIContainer {
    * @see CreatePortalActionEvent
    */
   public static class CreatePortalActionListener extends EventListener<UISiteAdminToolbar> {
-
-    /*
-     * (non-Javadoc)
-     * @see
-     * org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui
-     * .event.Event)
-     */
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       event.setRequestContext(Util.getPortalRequestContext());
       PortalRequestContext portalContext = Util.getPortalRequestContext();
@@ -343,13 +340,6 @@ public class UISiteAdminToolbar extends UIContainer {
    * @see EditPortalActionEvent
    */
   public static class EditPortalActionListener extends EventListener<UISiteAdminToolbar> {
-
-    /*
-     * (non-Javadoc)
-     * @see
-     * org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui
-     * .event.Event)
-     */
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       event.setRequestContext(Util.getPortalRequestContext());
       PortalRequestContext portalContext = Util.getPortalRequestContext();
@@ -383,13 +373,6 @@ public class UISiteAdminToolbar extends UIContainer {
    * @see BrowsePortalActionEvent
    */
   public static class BrowsePortalActionListener extends EventListener<UISiteAdminToolbar> {
-
-    /*
-     * (non-Javadoc)
-     * @see
-     * org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui
-     * .event.Event)
-     */
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       event.setRequestContext(Util.getPortalRequestContext());
       PortalRequestContext portalContext = Util.getPortalRequestContext();
@@ -423,13 +406,6 @@ public class UISiteAdminToolbar extends UIContainer {
    * @see BrowsePageActionEvent
    */
   public static class BrowsePageActionListener extends EventListener<UISiteAdminToolbar> {
-
-    /*
-     * (non-Javadoc)
-     * @see
-     * org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui
-     * .event.Event)
-     */
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       event.setRequestContext(Util.getPortalRequestContext());
       PortalRequestContext portalContext = Util.getPortalRequestContext();
@@ -463,13 +439,6 @@ public class UISiteAdminToolbar extends UIContainer {
    * @see ChangePortalActionEvent
    */
   public static class ChangePortalActionListener extends EventListener<UISiteAdminToolbar> {
-
-    /*
-     * (non-Javadoc)
-     * @see
-     * org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui
-     * .event.Event)
-     */
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       event.setRequestContext(Util.getPortalRequestContext());
       UIPortalApplication uiApp = Util.getUIPortalApplication();
@@ -492,13 +461,6 @@ public class UISiteAdminToolbar extends UIContainer {
    * @see SkinSettingsActionEvent
    */
   public static class SkinSettingsActionListener extends EventListener<UISiteAdminToolbar> {
-
-    /*
-     * (non-Javadoc)
-     * @see
-     * org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui
-     * .event.Event)
-     */
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       event.setRequestContext(Util.getPortalRequestContext());
       UIPortalApplication uiApp = Util.getUIPortalApplication();
@@ -521,13 +483,6 @@ public class UISiteAdminToolbar extends UIContainer {
    * @see LanguageSettingsActionEvent
    */
   public static class LanguageSettingsActionListener extends EventListener<UISiteAdminToolbar> {
-
-    /*
-     * (non-Javadoc)
-     * @see
-     * org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui
-     * .event.Event)
-     */
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       event.setRequestContext(Util.getPortalRequestContext());
       UIPortalApplication uiApp = Util.getUIPortalApplication();
@@ -550,13 +505,6 @@ public class UISiteAdminToolbar extends UIContainer {
    * @see AccountSettingsActionEvent
    */
   public static class AccountSettingsActionListener extends EventListener<UISiteAdminToolbar> {
-
-    /*
-     * (non-Javadoc)
-     * @see
-     * org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui
-     * .event.Event)
-     */
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       event.setRequestContext(Util.getPortalRequestContext());
       UIPortalApplication uiApp = Util.getUIPortalApplication();
@@ -579,13 +527,6 @@ public class UISiteAdminToolbar extends UIContainer {
    * @see EditPageAndNavigationActionEvent
    */
   public static class EditPageAndNavigationActionListener extends EventListener<UISiteAdminToolbar> {
-
-    /*
-     * (non-Javadoc)
-     * @see
-     * org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui
-     * .event.Event)
-     */
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       event.setRequestContext(Util.getPortalRequestContext());
       UIPortalApplication uiApp = Util.getUIPortalApplication();
@@ -621,13 +562,6 @@ public class UISiteAdminToolbar extends UIContainer {
    * @see AddContentActionEvent
    */
   public static class AddContentActionListener extends EventListener<UISiteAdminToolbar> {
-
-    /*
-     * (non-Javadoc)
-     * @see
-     * org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui
-     * .event.Event)
-     */
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       UISiteAdminToolbar siteAdminToolbar = event.getSource();
       UIPortal uiPortal = Util.getUIPortal();
@@ -676,7 +610,7 @@ public class UISiteAdminToolbar extends UIContainer {
       preferenceQ.setName("ShowQuickEdit");
       preferenceQ.setValues(listValue);
       listPreference.add(preferenceQ);
-      
+
       Preference preferenceP = new Preference();
       listValue = new ArrayList<String>();
       listValue.add("true");
@@ -684,13 +618,6 @@ public class UISiteAdminToolbar extends UIContainer {
       preferenceP.setValues(listValue);
       listPreference.add(preferenceP);
 
-      Preference preferenceT = new Preference();
-      listValue = new ArrayList<String>();
-      listValue.add("true");
-      preferenceT.setName("ShowTitle");
-      preferenceT.setValues(listValue);
-      listPreference.add(preferenceT);
-      
       portletPreferences.setPreferences(listPreference);
 
       DataStorage dataStorage = siteAdminToolbar.getApplicationComponent(DataStorage.class);
@@ -711,21 +638,21 @@ public class UISiteAdminToolbar extends UIContainer {
       Utils.refreshBrowser((PortletRequestContext) event.getRequestContext());
     }
   }
-  
+
   public static class TurnOnQuickEditActionListener extends EventListener<UISiteAdminToolbar> {
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
-      PortalRequestContext context = Util.getPortalRequestContext();      
+      PortalRequestContext context = Util.getPortalRequestContext();
       context.getRequest().getSession().setAttribute(Utils.TURN_ON_QUICK_EDIT, true);
-      Utils.refreshBrowser((PortletRequestContext)event.getRequestContext());
-    }    
+      Utils.refreshBrowser((PortletRequestContext) event.getRequestContext());
+    }
   }
-  
+
   public static class TurnOffQuickEditActionListener extends EventListener<UISiteAdminToolbar> {
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       PortalRequestContext context = Util.getPortalRequestContext();
       context.getRequest().getSession().setAttribute(Utils.TURN_ON_QUICK_EDIT, false);
-      Utils.refreshBrowser((PortletRequestContext)event.getRequestContext());
-    }    
+      Utils.refreshBrowser((PortletRequestContext) event.getRequestContext());
+    }
   }
-  
+
 }

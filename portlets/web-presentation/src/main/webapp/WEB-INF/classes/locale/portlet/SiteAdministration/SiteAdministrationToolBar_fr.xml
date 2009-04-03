@@ -16,9 +16,13 @@
       <TurnOnQuickEdit>O</TurnOnQuickEdit>
       <TurnOffQuickEdit>l</TurnOffQuickEdit>
       <AddContent>Ajouter un contenu</AddContent>
-      <ViewMore>Plus d'actions</ViewMore>      
       <Logout>Déconnexion</Logout>
       <EditPageAndNavigation>Editer la navigation</EditPageAndNavigation>
+      <Dashboard></Dashboard>
+      <Sites></Sites>      
+			<Groups></Groups>      
+			<Editor></Editor>
+			<Administrator></Administrator>      
     </action>
 	<msg>
 	  <not-permission>Vous n'avez pas les droits nécessaires pour effectuer cette action.</not-permission>
