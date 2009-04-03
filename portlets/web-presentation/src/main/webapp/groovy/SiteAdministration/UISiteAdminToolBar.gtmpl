@@ -1,7 +1,8 @@
 <% 
+	import org.exoplatform.web.application.JavascriptManager;
 	import org.exoplatform.wcm.webui.Utils;
-  
-	def rcontext = _ctx.getRequestContext();
+	def rcontext = _ctx.getRequestContext() ;
+	JavascriptManager jsmanager = rcontext.getJavascriptManager();
 	
 	String addPageLink = uicomponent.event("AddPage");
 	String editPageLink = uicomponent.event("EditPage");
@@ -35,8 +36,8 @@
 <div class="UISiteAdminToolBar">
 	<!-- Exo Logo -->
 	<div class="TBItem">
-		<div class="ExoLogo"><span></span></div>
-		<div class="MenuItemContainer" style="display: none; width: 130px;">
+		<a class="ExoLogo" onmouseover="showPopupMenu(this)"></a>
+		<div class="MenuItemContainer" style="display: none;">
       <div class="MenuItem OddItem">
         <a href="#" title="" class="ItemIcon AccountSettingsIcon">Account Setting</a>
       </div>
@@ -59,8 +60,8 @@
 	
 	<!-- Sites -->
 	<div class="TBItem">
-		<a href="#" class="SitesIcon TBIcon">Sites</a>
-		<div class="MenuItemContainer" style="display: none; width: 80px;">		
+		<a href="#" class="SitesIcon TBIcon" onmouseover="showPopupMenu(this)">Sites</a>
+		<div class="MenuItemContainer" style="display: none;">		
       <div class="MenuItem OddItem">
         <a href="#" title="" class="ItemIcon SiteIcon">Classic</a>
       </div>      
@@ -72,8 +73,8 @@
 	
 	<!-- Groups -->	
 	<div class="TBItem">
-		<a href="#" class="GroupsIcon TBIcon">Groups</a>		
-		<div class="MenuItemContainer" style="display: none; width: 100px;">
+		<a href="#" class="GroupsIcon TBIcon" onmouseover="showPopupMenu(this)">Groups</a>		
+		<div class="MenuItemContainer" style="display: none;">
 			<div class="TitleBar">Administrators</div>
       <div class="MenuItem OddItem">
         <a href="#" title="" class="ItemIcon DefaultPageIcon">Application Registry</a>
@@ -81,13 +82,12 @@
       <div class="MenuItem EvenItem">
         <a href="#" title="" class="ItemIcon DefaultPageIcon">New Account</a>
       </div>	    
-      <div class="MenuItem EvenItem">
+      <div class="MenuItem OddItem">
         <a href="#" title="" class="ItemIcon DefaultPageIcon">Community Management</a>
       </div>
       <div class="MenuItem EvenItem">
         <a href="#" title="" class="ItemIcon DefaultPageIcon">Internationalization</a>
       </div>  
-                
       <div class="TitleBar">Contributors</div>
       <div class="MenuItem OddItem">
         <a href="#" title="" class="ItemIcon DefaultPageIcon">Site Explorer</a>
@@ -100,13 +100,21 @@
 	
 	<!-- Editor -->		
 	<div class="TBItem">
-		<a href="#" class="EditorIcon TBIcon">Editor</a>
-		<div class="MenuItemContainer" style="display: none; width: 130px;">
+		<a href="#" class="EditorIcon TBIcon" onmouseover="showPopupMenu(this)">Editor</a>
+		<div class="MenuItemContainer" style="display: none;">
       <div class="MenuItem OddItem">
         <a href="#" title="" class="ItemIcon AccountSettingsIcon">Add Content</a>
-        <a href="#" title="" class="ItemIcon AccountSettingsIcon">Edit Navigation</a>       
+      </div>  
+      <div class="MenuItem EvenItem">
+        <a href="#" title="" class="ItemIcon AccountSettingsIcon">Edit Navigation</a>
+      </div>         
+      <div class="MenuItem OddItem">
         <a href="#" title="" class="ItemIcon AccountSettingsIcon">Edit Page Wizard</a>
+      </div>
+      <div class="MenuItem EvenItem">  
         <a href="#" title="" class="ItemIcon AccountSettingsIcon">Add Page Wizard</a>
+      </div>  
+			<div class="MenuItem OddItem">
 				<a href="#" title="" class="ItemIcon AccountSettingsIcon">Edit Site</a>        
       </div>		
 		</div>		
@@ -114,11 +122,15 @@
 		
 	<!-- Administrator -->			
 	<div class="TBItem">
-		<a href="#" class="AdministratorIcon TBIcon">Administrator</a>
-		<div class="MenuItemContainer" style="display: none; width: 130px;">
+		<a href="#" class="AdministratorIcon TBIcon" onmouseover="showPopupMenu(this)">Administrator</a>
+		<div class="MenuItemContainer" style="display: none;">
       <div class="MenuItem OddItem">
         <a href="#" title="" class="ItemIcon AccountSettingsIcon">Create Site</a>
-        <a href="#" title="" class="ItemIcon AccountSettingsIcon">Manage Site</a>       
+      </div>
+      <div class="MenuItem EvenItem">  
+        <a href="#" title="" class="ItemIcon AccountSettingsIcon">Manage Site</a>
+      </div>
+      <div class="MenuItem OddItem">         
         <a href="#" title="" class="ItemIcon AccountSettingsIcon">Manage Pages</a>
       </div>		
 		</div>				

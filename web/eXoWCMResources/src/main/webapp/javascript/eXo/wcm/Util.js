@@ -96,7 +96,7 @@ function getHostName() {
 function getRuntimeContextPath() {
 	return getHostName() + eXo.env.portal.context + '/' + eXo.env.portal.accessMode + '/' + eXo.env.portal.portalName + '/';
 }
-
+/*--------------------------------------SEARCH------------------------------------*/
 function getKeynum(event) {
   var keynum = false ;
   if(window.event) { /* IE */
@@ -198,236 +198,15 @@ UIPopupWindow.prototype.init = function(popupId, isShow, isResizable, showCloseB
 		if(iframes.length > 0) {
 			setTimeout("eXo.webui.UIPopupWindow.show('" + popupId + "'," + isShowMask + ")", 500) ;
 		} else {
-      if(popup.offsetHeight == 0){
-        setTimeout("eXo.webui.UIPopupWindow.show('" + popupId + "'," + isShowMask + ")", 500) ;
-        return ;
-      }
+		if(popup.offsetHeight == 0){
+			setTimeout("eXo.webui.UIPopupWindow.show('" + popupId + "'," + isShowMask + ")", 500) ;
+			return ;
+		}
 			this.show(popup, isShowMask) ;
 		}
 	}
 } ;
 /*----------------------------------------------End of overrite-------------------------------------------------------*/
-
-/*------------------the top toolbar---------------*/
-function findPreviousElementByClass(element, clazz) {
-	var previousElement = element.previousSibling ;
-	while (previousElement != null) {
-		if (eXo.core.DOMUtil.hasClass(previousElement, clazz)) return previousElement;
-		previousElement = previousElement.previousSibling ;
-	}
-	return null ;
-}
-
-function viewMoreActions(viewMoreObj) {		  
-	var moreActionsMenu = eXo.core.DOMUtil.findFirstDescendantByClass(viewMoreObj, "div", "MoreActionsMenu");
-	var onOffAction = findPreviousElementByClass(viewMoreObj, "BoxOnOff");
-	//moreActionsMenu.style.left = onOffAction.offsetWidth + "px";
-	var objToolbarPortlet = eXo.core.DOMUtil.findAncestorByClass(moreActionsMenu, "UISiteAdministrationPortlet");
-	if (document.all) {
-		if(document.getElementById(moreActionsMenu.id + "1")) eXo.core.DOMUtil.removeElement(document.getElementById(moreActionsMenu.id + "1").parentNode.parentNode);
-		var tmp = document.createElement("div");
-		tmp.className = "UISiteAdminToolBar";
-		var id = moreActionsMenu.id + 1;
-		moreActionsMenu = moreActionsMenu.cloneNode(true);
-		moreActionsMenu.id = id;
-		tmp.appendChild(moreActionsMenu);
-		var tmp1 = document.createElement("div");
-		tmp1.className = "UISiteAdministrationPortlet";
-		tmp1.appendChild(tmp);
-		tmp1.style["position"] = "static";
-		document.body.appendChild(tmp1);
-		
-		//moreActionsMenu.style.top = viewMoreObj.offsetHeight + "px";
-		moreActionsMenu.style.display = "block";
-    var uiWorkSpace = document.getElementById('UIWorkspaceContainer');
-    if(uiWorkSpace && uiWorkSpace.style.display == "block") {
-		  moreActionsMenu.style.left = viewMoreObj.offsetLeft + uiWorkSpace.offsetWidth + 'px';	
-    } else {
-      moreActionsMenu.style.left = viewMoreObj.offsetLeft + 'px';	
-    }
-	} else {
-		moreActionsMenu.style.display = "block";
-		moreActionsMenu.style.left = viewMoreObj.offsetLeft + 'px';
-	}
-	moreActionsMenu.onmouseover = function(){
-		if(window.hiddenmenu) clearTimeout(window.hiddenmenu);
-	}
-	moreActionsMenu.onmouseout = function(){
-		window.hiddenmenu = setTimeout("hideElement('" + this.id + "');",100);
-	}
-	if(window.hiddenmenu) clearTimeout(window.hiddenmenu);
-}
-
-function hideMoreActions(viewMoreObj) {
-	var moreActionsMenu = eXo.core.DOMUtil.findFirstDescendantByClass(viewMoreObj, "div", "MoreActionsMenu");
-	var id = moreActionsMenu.id;
-	if(document.all) id += 1;
-	window.hiddenmenu = setTimeout("hideElement('" + id + "');",100);
-}
-
-function hideElement(element) {
-	var element = (typeof(element) == "string")?document.getElementById(element):element;
-	element.style.display = "none";
-}
-
-function showToptoolbarNavs(exoLogo) {
-	var navs = eXo.core.DOMUtil.findAncestorByClass(exoLogo, "StartMenuContainer");
-	eXo.portal.UIExoStartMenu.buildMenu(navs);		
-}
-
-function naviMenu(link) {
-	if(link) location.href = link;
-}
-
-UIExoStartMenu.prototype.onMenuItemOut = function(event) {
-	var portalNav = document.getElementById("PortalNavigationTopContainer");
-	if(eXo.core.Browser.browserType == "ie") portalNav.style.position = "relative";
-	this.className = eXo.portal.UIExoStartMenu.itemStyleClass ;
-	if (this.menuItemContainer) {
-    eXo.portal.UIExoStartMenu.superClass.pushHiddenContainer(this.menuItemContainer.id) ;
-    eXo.portal.UIExoStartMenu.superClass.popVisibleContainer() ;
-    eXo.portal.UIExoStartMenu.superClass.setCloseTimeout() ;
-	}
-};
-
-UIExoStartMenu.prototype.onMenuItemOver = function(event) {
-	this.className = eXo.portal.UIExoStartMenu.itemOverStyleClass ;
-	if (this.menuItemContainer) {
-		var menuItemContainer = this.menuItemContainer ;
-		menuItemContainer.style.display = "block" ;
-		menuItemContainer.style.visibility = "" ;
-		var x = this.offsetWidth ;
-		var posRight = eXo.core.Browser.getBrowserWidth() - eXo.core.Browser.findPosX(this) - this.offsetWidth ; 
-		var rootX = (eXo.core.I18n.isLT() ? eXo.core.Browser.findPosX(this) : posRight) ;
-		if (x + menuItemContainer.offsetWidth + rootX > eXo.core.Browser.getBrowserWidth()) {
-    	x -= (menuItemContainer.offsetWidth + this.offsetWidth) ;
-	  }
-	 	if(eXo.core.I18n.isLT()) {
-	 		if(eXo.core.Browser.isIE6()) x -= 10 ;
-	 		menuItemContainer.style.left = x + "px" ;
-	 	}	else menuItemContainer.style.right =  x + "px" ;
-		eXo.portal.UIExoStartMenu.createSlide(this);
-    eXo.portal.UIExoStartMenu.superClass.pushVisibleContainer(this.menuItemContainer.id) ;
-    
-    var y ;
-	 	var browserHeight = eXo.core.Browser.getBrowserHeight() ;
-	 	var hline = eXo.core.DOMUtil.findFirstChildByClass(this.parentNode, "div", "HLineSeparator") ;
-	 	
-    if(hline) {
-		 	var posParent = eXo.portal.UIExoStartMenu.findPositionParent(this) ;
-		 	var objTop = eXo.core.Browser.findPosY(this) ;
-		 	y = objTop - eXo.core.Browser.findPosY(posParent) ;
-		 	if(objTop + menuItemContainer.offsetHeight >= browserHeight) {
-				y += (this.offsetHeight - menuItemContainer.offsetHeight) ;
-			 	if(y + (eXo.core.Browser.findPosY(posParent) - document.documentElement.scrollTop) < 0) {
-				 	var objBottom = objTop + this.offsetHeight ;
-			 		y += (browserHeight - objBottom) - (browserHeight - menuItemContainer.offsetHeight)/2 + document.documentElement.scrollTop ;
-			 	}
-		 	}
-	 	} else {
-			var parentMenu = eXo.core.DOMUtil.findAncestorByClass(this, "MenuItemContainer") ;
-			var blockMenu = eXo.core.DOMUtil.findAncestorByClass(this, "BlockMenu") ;
-	 		var objTop = eXo.core.Browser.findPosY(this) ;
-	 		y = objTop - eXo.core.Browser.findPosY(parentMenu) - blockMenu.scrollTop ;
-	 		if(y + menuItemContainer.offsetHeight + 15 > browserHeight) {
-	 			y += (this.offsetHeight - menuItemContainer.offsetHeight) ;
-	 			if(y <= 0) y = 1 ;
-	 		}
-	 	}
-		menuItemContainer.style.top = y + "px" ;
-	}
-
-  var portalNav = document.getElementById("PortalNavigationTopContainer");
-  if(eXo.core.Browser.browserType == "ie") portalNav.style.position = "static";
-};
-
-/*--------------------scroll toptoolbar----------------------*/
-function ScrollTopToolbar() {
-};
-
-ScrollTopToolbar.prototype.getChildrenByClass = function(root, clazz) {
-	var list = [];
-	var children = root.getElementsByTagName("*");
-	var len = children.length;
-	for(var i = 0; i < len; i++){
-		if(eXo.core.DOMUtil.hasClass(children[i],clazz))	list.push(children[i]);
-	}
-	return list.reverse();
-};
-
-ScrollManager.prototype.loadItems = function(root, clazz) {
-	this.elements.clear();
-	this.elements.pushAll(eXo.wcm.ScrollTopToolbar.getChildrenByClass(root, clazz));
-};
-
-ScrollManager.prototype.checkAvailableArea = function(maxSpace) {
-	if (!maxSpace) maxSpace = this.mainContainer.offsetWidth - 250;
-	var elementsSpace = 0;
-	var margin = 0;
-	var length =  this.elements.length;
-	for (var i = 0; i < length; i++) {
-		elementsSpace += this.getElementSpace(this.elements[i]);
-		if (i+1 < length) margin = this.getElementSpace(this.elements[i+1]) / 3;
-		else margin = this.margin;
-		if (elementsSpace + margin < maxSpace) {
-			this.elements[i].isVisible = true;
-			this.lastVisibleIndex = i;
-		} else {
-			this.elements[i].isVisible = false;
-		}
-	}
-} ;
-
-ScrollTopToolbar.prototype.execute = function() {
-	var obj = eXo.wcm.ScrollTopToolbar;
-	obj.manager.checkAvailableArea();	
-	obj.manager.renderItems();
-};
-
-ScrollManager.prototype.renderItems = function() {
-	var obj = eXo.wcm.ScrollTopToolbar;
-	for (var i = 0; i < this.elements.length; i++) {
-		if (this.elements[i].isVisible) {
-			this.elements[i].style.display = "block";
-			if (this.elements[i].style.display == "block" && !eXo.core.DOMUtil.hasClass(this.elements[i], "SeparationIcon")) {
-				var mockClazz = this.elements[i].className.replace('HozIcon', '').replace('TopToolbarMenuItem', '').replace(/\s*/g,'');		
-				for (var j = 0; j < obj.manager.moreActionsContainer.childNodes.length; j++) {					
-					if (obj.manager.moreActionsContainer.childNodes[j] && eXo.core.DOMUtil.hasClass(obj.manager.moreActionsContainer.childNodes[j], mockClazz)) {
-						obj.manager.moreActionsContainer.childNodes[j].style.display = "none";
-					}
-				}
-			}
-		} else {
-			this.elements[i].style.display = "none";
-			if (this.elements[i].style.display == "none" && !eXo.core.DOMUtil.hasClass(this.elements[i], "SeparationIcon")) {
-				var mockClazz = this.elements[i].className.replace('HozIcon', '').replace('TopToolbarMenuItem', '').replace(/\s*/g,'');
-				for (var j = 0; j < obj.manager.moreActionsContainer.childNodes.length; j++) {
-					if (obj.manager.moreActionsContainer.childNodes[j] && eXo.core.DOMUtil.hasClass(obj.manager.moreActionsContainer.childNodes[j], mockClazz)) {
-						obj.manager.moreActionsContainer.childNodes[j].style.display = "block";
-					}
-				}
-			}
-		}
-	}
-};
-
-ScrollTopToolbar.prototype.init = function() {
-	var obj = eXo.wcm.ScrollTopToolbar;
-	obj.manager = eXo.portal.UIPortalControl.newScrollManager("UISiteAdministrationPortlet");
-	var topToolbarObj = document.getElementById("UISiteAdministrationPortlet");
-	obj.manager.mainContainer = eXo.core.DOMUtil.findFirstDescendantByClass(topToolbarObj, "div", "UISiteAdminToolBar");
-	obj.manager.moreActionsContainer = eXo.core.DOMUtil.findDescendantById(obj.manager.mainContainer, "MoreActionsMenu");
-
-	obj.manager.loadItems(obj.manager.mainContainer, "TopToolbarMenuItem");	
-	obj.execute();
-	obj.manager.initFunction = obj.execute;
-};
-
-eXo.wcm.ScrollTopToolbar = new ScrollTopToolbar();
-eXo.core.Browser.addOnLoadCallback("resizeTopToolbar", eXo.wcm.ScrollTopToolbar.init);
-
-/*------------------end the top toolbar--------------------*/
-
 function initCheckedRadio(id) {
 	eXo.core.Browser.chkRadioId = id;
 };
@@ -528,3 +307,25 @@ function showHideOrderBy() {
 		}
 	}
 }  
+
+function showPopupMenu(obj) {
+	if(!obj) return; 
+	var mnuItemContainer = eXo.core.DOMUtil.findNextElementByTagName(obj, "div");
+	if(mnuItemContainer && mnuItemContainer.style.display != "block") {
+		mnuItemContainer.style.display = 'block';
+		mnuItemContainer.onmouseout = function(){
+			obj.Timeout = setTimeout(function() {
+				mnuItemContainer.style.display = 'none';
+				mnuItemContainer.onmouseover = null;
+				mnuItemContainer.onmouseout = null;
+			},1*1000);
+		}
+
+		mnuItemContainer.onmouseover = function() {
+			if(obj.Timeout) clearTimeout(obj.Timeout);
+			obj.Timeout = null;
+		}
+
+		mnuItemContainer.style.width = mnuItemContainer.offsetWidth - eXo.core.DOMUtil.getStyle(mnuItemContainer, 'borderLeftWidth') - eXo.core.DOMUtil.getStyle(mnuItemContainer, 'borderRightWidth') + 'px';
+	}
+}	
