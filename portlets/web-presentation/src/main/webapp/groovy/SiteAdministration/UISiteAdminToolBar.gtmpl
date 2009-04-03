@@ -1,4 +1,10 @@
-
+<% 
+	import org.exoplatform.wcm.webui.Utils;
+  
+	def rcontext = _ctx.getRequestContext();
+	String turnOnQuickEditLink = uicomponent.event("TurnOnQuickEdit");	
+	String turnOffQuickEditLink = uicomponent.event("TurnOffQuickEdit");	
+%>
 <div class="UISiteAdminToolBar">
 	<div class="TBItem">
 		<div class="ExoLogo"><span></span></div>
@@ -30,7 +36,7 @@
 	</div>
 	
 	<div class="TBItem">
-		<a href="#" class="SitesIcon TBIcon">Site</a>
+		<a href="#" class="SitesIcon TBIcon">Sites</a>
 		<div class="MenuItemContainer" style="display: none; width: 80px;">
 		
       <div class="MenuItem OddItem">
@@ -49,28 +55,48 @@
 	</div>
 	
 	<div class="TBItem">
-		<a href="#" class="GroupsIcon TBIcon">Groups</a>
-		
+		<a href="#" class="GroupsIcon TBIcon">Groups</a>		
 		<div class="MenuItemContainer" style="display: none; width: 100px;">
-			<div class="TitleBar">Administrator</div>
+			<div class="TitleBar">Administrators</div>
       <div class="MenuItem OddItem">
         <a href="#" title="" class="ItemIcon DefaultPageIcon">
-				  Classic
+				  Application Registry
 				</a>
-      </div>
-      
+      </div>      
       <div class="MenuItem EvenItem">
         <a href="#" title="" class="ItemIcon DefaultPageIcon">
-				  Acme
+				  New Account
+				</a>
+      </div>	    
+      <div class="MenuItem EvenItem">
+        <a href="#" title="" class="ItemIcon DefaultPageIcon">
+				  Community Management
 				</a>
       </div>
-	    
-		</div>
-		
+      <div class="MenuItem EvenItem">
+        <a href="#" title="" class="ItemIcon DefaultPageIcon">
+				  Internationalization
+				</a>
+      </div>  
+                
+      <div class="TitleBar">Contributors</div>
+      <div class="MenuItem OddItem">
+        <a href="#" title="" class="ItemIcon DefaultPageIcon">
+				  Site Explorer
+				</a>
+      </div>
+      <div class="MenuItem OddItem">
+        <a href="#" title="" class="ItemIcon DefaultPageIcon">
+				  Site Administration
+				</a>
+      </div>                      
+		</div>		
 	</div>
+	
 	<div class="TBItem">
 		<a href="#" class="EditorIcon TBIcon">Editor</a>
 	</div>
+		
 	<div class="TBItem">
 		<a href="#" class="AdministratorIcon TBIcon">Administrator</a>
 	</div>
@@ -79,7 +105,7 @@
 		<div class="BoxOnOff SelectOff">
 			<div class="LeftSelect">
 	    	<div class="RightSelect">
-		    	<div class="CenterSelect" onclick="$turnOffQuickEditLink">$turnOffQuickEditLabel</div>
+		    	<div class="CenterSelect" onclick="$turnOffQuickEditLink">Off</div>
 		    </div>
 	    </div>
 		</div>		
@@ -87,401 +113,10 @@
 		<div class="BoxOnOff SelectOn">
 			<div class="LeftSelect">
 	    	<div class="RightSelect">
-	    		<div class="CenterSelect" onclick="$turnOnQuickEditLink">$turnOnQuickEditLabel</div>
+	    		<div class="CenterSelect" onclick="$turnOnQuickEditLink">On</div>
 	    	</div>
 	    </div>
 		</div>		    
 	<% } %>
 	<div style="clear:both"><span></span></div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!--
-
-<% 
-	import java.util.List;
-	import javax.jcr.Node;
-	import org.exoplatform.webui.config.Event;
-	import org.exoplatform.webui.application.WebuiRequestContext;
-	import org.exoplatform.webui.application.portlet.PortletRequestContext;
-	import org.exoplatform.portal.webui.workspace.UIExoStart ;
-  import org.exoplatform.portal.config.model.PageNode ;
-  import org.exoplatform.web.application.JavascriptManager;
-  import org.exoplatform.portal.config.model.PageNavigation ;
-  import org.exoplatform.portal.webui.util.Util;	 
-	import org.exoplatform.wcm.webui.Utils;
-  
-	def rcontext = _ctx.getRequestContext() ;
- 	rcontext.getJavascriptManager().importJavascript('eXo.SiteAdministration.ShowAdminToolbar','/web-presentation/javascript'); 	
-  JavascriptManager jsmanager = rcontext.getJavascriptManager();
-  
-  jsmanager.importJavascript('eXo.portal.UIExoStartMenu');
-  jsmanager.addOnLoadJavascript('eXo.portal.UIExoStartMenu.onLoad');  
-%>
-
-<%
-  void renderSinglePageNode(String portalName, PageNode node, int index) {    
-    String  href = uicomponent.getBaseURI(portalName) + "/" + node.getUri();   
-    String icon = node.getIcon();    
-    if(icon == null) icon = "DefaultPageIcon";
-    String label = (node.resolvedLabel.length() > 60 ? node.resolvedLabel.substring(0, 57) + "..." : node.resolvedLabel); 
-    String itemCssClazz = "OddItem";
-    if ((index % 2) == 0) itemCssClazz = "EvenItem";
-    print """
-    <div class="$itemCssClazz">
-      <div class="MenuItem">
-        <div class="LabelItem">
-          <div class="Icon $icon"  style="padding-left: 18px">
-          	<div class="LabelText">
-		""";
-						if(node.pageReference != null) {
-				        print """<a href="$href" title="$node.resolvedLabel">$label</a>""";
-						} else {
-								print """<a href="#" title="$node.resolvedLabel">$label</a>""";
-						}
-		print """
-						</div>
-          </div>
-        </div>
-      </div>
-    </div>
-    """ ;
-  }
-  
-  void renderPageNode(String portalName, PageNode node, int index) {    
-    String itemCssClazz = "OddItem";
-    if ((index % 2) == 0) itemCssClazz = "EvenItem";
-    String  href = uicomponent.getBaseURI(portalName) + "/" + node.getUri(); 
-    String icon = node.getIcon();
-    String scrollUpTitle = _ctx.appRes("UIExoStart.tooltip.scrollUp") ;
-  	String scrollDownTitle = _ctx.appRes("UIExoStart.tooltip.scrollDown") ;
-    if(icon == null) icon = "DefaultPageIcon";
-    String label = node.resolvedLabel;
-    if(label.length() > 60) label = label.substring(0, 57) + "..." ;
-    print """
-    <div class="$itemCssClazz">
-      <div class="MenuItem">
-        <div class="LabelItem">
-          <div class="Icon $icon" style="padding-left: 18px"> 
-            <div class="BlackArrowIcon">
-              <div class="LabelText ">
-		""";
-					if(node.pageReference != null ){
-            	print """<a href="$href" title="$node.resolvedLabel">$label</a>""";
-          } else {
-          		print """<a href="#" title="$node.resolvedLabel">$label</a>""";
-          }
-    print """
-    					</div>
-            </div>
-          </div>
-        </div>
-        <div class="MenuItemContainer" style="top: -1000px;">
-          <div class="StartMenuDecorator">
-            <div class="StartMenuTL">
-              <div class="StartMenuTR">
-                <div class="StartMenuTC"><span></span></div>
-              </div>
-            </div>
-            <div class="StartMenuML">
-              <div class="StartMenuMR">
-                <div class="StartMenuBG" style="">
-						      <div class="TopNavigator" style="display: none;" title="$scrollUpTitle">
-						      		<div class="UpNavigatorIcon"><span></span></div>
-						      </div>
-									<div class="BlockMenu" style="position: relative;">
-						      <div class="MenuContainer">          
-						      """ ;
-						      int subIndex = 0;
-						      for(child in node.getChildren()) {
-						        if(child.getChildren() != null && child.getChildren().size() > 0) {
-						        	renderPageNode(portalName, child, subIndex);
-						        } else {
-						        	renderSinglePageNode(portalName, child, subIndex);
-						        }
-						        subIndex ++;
-						      }
-						      print """
-						      </div>
-						      </div>
-						      <div class="BottomNavigator" style="display: none;" title="$scrollDownTitle">
-						      		<div class="DownNavigatorIcon"><span></span></div>
-						      </div>
-                </div>
-              </div>
-            </div>
-            <div class="StartMenuBL">
-              <div class="StartMenuBR">
-              <div class="StartMenuBC"><span></span></div>
-              </div>
-            </div>             
-          </div>  
-        </div>
-      </div>
-    </div>
-    """ ;
-  }
-  
-  void renderPageNavigation(PageNavigation navigation, String portalName) {
-  	nodes = navigation.getNodes() ;
-  	if(nodes.size() < 1) return ;
-  	String navTitle = _ctx.appRes("UIPageNavigation.label.titleBar") ;
-		navTitle = navTitle.replace("{0}", navigation.ownerId);
-    print """
-    	<div class="PageNavigationBlock">
-	      <div class="DecoratorBlock">
-	      	<div class="PageOwnerContainer">
-	        	<div class="TitleBar">$navTitle</div>
-				    """ ;
-				    int index = 0;
-				    for(node in nodes) {
-				    	if (node.isDisplay()) {				    	
-					      if(node.getChildren() != null && node.getChildren().size() > 0) {
-					        renderPageNode(portalName, node, index);
-					      } else {
-					      	renderSinglePageNode(portalName, node, index) ;
-				      	}
-				      	index++;
-			      	}
-				    }
-				    print """
-    			</div>
-    		</div>
-      </div>
-    """ ;    
-  }
-  
-  
-  void renderNavigations(String portalName) {
-  	String scrollUpTitle = _ctx.appRes("UIExoStart.tooltip.scrollUp") ;
-  	String scrollDownTitle = _ctx.appRes("UIExoStart.tooltip.scrollDown") ;
-		navigations = uicomponent.getNavigationsOfPortal(portalName);       	
-   	if (navigations != null && navigations.size() > 0) {
-       	print """ 
-        <div class="MenuItemContainer NavigationContainer" style="top: -1000px;">
-          <div class="StartMenuDecorator">
-            <div class="StartMenuTL">
-              <div class="StartMenuTR">
-                <div class="StartMenuTC"><span></span></div>
-              </div>
-            </div>
-            <div class="StartMenuML">
-              <div class="StartMenuMR">
-                <div class="StartMenuBG" style="">
-					        <div class="TopNavigator" style="display: none;" title="$scrollUpTitle">
-					        	<div class="UpNavigatorIcon"><span></span></div>
-					        </div>
-									<div class="BlockMenu" style="position: relative;">
-					      	<div class="MenuContainer"> 
-					      	""" ;
-						      for(navigation in navigations) {
-						        renderPageNavigation(navigation, portalName) ;
-						      }
-					      	print """
-					      	</div>
-					      	</div>
-					      	<div class="BottomNavigator" style="display: none;" title="$scrollDownTitle">
-					      		<div class="DownNavigatorIcon"><span></span></div>
-					      	</div>
-                </div>
-              </div>
-            </div>
-            <div class="StartMenuBL">
-              <div class="StartMenuBR">
-              <div class="StartMenuBC"><span></span></div>
-              </div>
-            </div>
-          </div>  
-        </div>
-    		""" ;
-    }  
-  }  
-  
-  void renderTopToolbarNavs() {    
-    List<Node> portals = uicomponent.getAllPortals();
-    print """      
-      <div class="MenuItem">        
-      	<div class="ExoLogo" onmouseover="showToptoolbarNavs(this);" style="float:left;"><span></span></div>
-    """ ;    
-    print """ 
-        <div class="MenuItemContainer NavigationContainer" style="top: -1000px;">
-          <div class="StartMenuDecorator">
-            <div class="StartMenuTL">
-              <div class="StartMenuTR">
-                <div class="StartMenuTC"><span></span></div>
-              </div>
-            </div>
-            <div class="StartMenuML">
-              <div class="StartMenuMR">
-                <div class="StartMenuBG LeftToolbar" style="">
-					        <div class="TopNavigator" style="display: none;">
-					        	<div class="UpNavigatorIcon"><span></span></div>
-					        </div>
-									<div class="BlockMenu">
-					      	<div class="MenuContainer">					      	
-					      	""" ;
-					      	int index = 0;
-					      	String cssClazz = "OddItem";					      	
-					      	for (Node portal : portals) {	
-					      		if ((index % 2) == 0) {
-					      			cssClazz = "EvenItem";
-					      		} else {
-					      			cssClazz = "OddItem";					      		
-					      		}
-					      		String portalName = portal.getName();
-                    String link = uicomponent.getBaseURI(portalName);
-								    print """
-								    <div class="$cssClazz">
-								      <div class="MenuItem" onclick="naviMenu('${link}');">
-								        <div class="LabelItem">
-								          <div class="NavigationBackground">
-								            <div class="BlackArrowIcon">
-								              <div class="LabelText IconSite" title="$portalName">${portalName}</div>
-								            </div>
-								          </div>
-								        </div>
-								    """ ; 
-								    renderNavigations(portalName);
-								    print """
-								      </div>
-								    </div>
-								    """ ;				
-								    index ++;	 
-							    }     	
-					      	print """
-					      	</div>
-					      	</div>
-					      	<div class="BottomNavigator" style="display: none;">
-					      		<div class="DownNavigatorIcon"><span></span></div>
-					      	</div>
-                </div>
-              </div>
-            </div>
-            <div class="StartMenuBL">
-              <div class="StartMenuBR">
-              <div class="StartMenuBC"><span></span></div>
-              </div>
-            </div>
-          </div>  
-        </div>
-    		""" ;
-    print """
-      </div>
-    """ ;
-  }  
-%>
-<div class="UISiteAdminToolBar UIExoStart" id="$uicomponent.id">
-	<% 	
-	String addPageLink = uicomponent.event("AddPage");
-	String editPageLink = uicomponent.event("EditPage");
-	String createPortalLink = uicomponent.event("CreatePortal");
-	String editPortalLink = uicomponent.event("EditPortal");
-	String changePortalLink = uicomponent.event("ChangePortal");
-	String skinSettingsLink = uicomponent.event("SkinSettings");
-	String languageSettingsLink = uicomponent.event("LanguageSettings");
-	String accountSettingsLink = uicomponent.event("AccountSettings");
-	String addContentLink = uicomponent.event("AddContent");
-	String browsePortalLink = uicomponent.event("BrowsePortal");
-	String browsePageLink = uicomponent.event("BrowsePage");
-	String editPageAndNavLink = uicomponent.event("EditPageAndNavigation");
-	String turnOnQuickEditLink = uicomponent.event("TurnOnQuickEdit");
-	String turnOffQuickEditLink = uicomponent.event("TurnOffQuickEdit");		
-	
-	String addPageActionLabel = _ctx.appRes("UISiteAdminToolbar.action.AddPage");	
-	String editPageActionLabel = _ctx.appRes("UISiteAdminToolbar.action.EditPage");
-	String createPortalActionLabel = _ctx.appRes("UISiteAdminToolbar.action.CreatePortal");
-	String changePortalActionLabel = _ctx.appRes("UISiteAdminToolbar.action.ChangePortal");
-	String editPortalActionLabel = _ctx.appRes("UISiteAdminToolbar.action.EditPortal");
-	String skinSettingsActionLabel = _ctx.appRes("UISiteAdminToolbar.action.SkinSettings");
-	String languageSettingsActionLabel = _ctx.appRes("UISiteAdminToolbar.action.LanguageSettings");
-	String accountSettingsActionLabel = _ctx.appRes("UISiteAdminToolbar.action.AccountSettings");
-	String viewMoreActionLabel = _ctx.appRes("UISiteAdminToolbar.action.ViewMore");
-	String addContentActionLabel = _ctx.appRes("UISiteAdminToolbar.action.AddContent");
-	String browsePortalActionLabel = _ctx.appRes("UISiteAdminToolbar.action.BrowsePortal");
-	String browsePageActionLabel = _ctx.appRes("UISiteAdminToolbar.action.BrowsePage");
-	String logoutActionLabel = _ctx.appRes("UISiteAdminToolbar.action.Logout");
-	String editPageAndNaviActionLabel = _ctx.appRes("UISiteAdminToolbar.action.EditPageAndNavigation");
-	
-	String editLabel = _ctx.appRes("UISiteAdminToolbar.action.OnOffEditting");
-		 					 			
-	boolean showable  = uicomponent.isShowWorkspaceArea();	 			
-	%>		
-		<% if (Utils.turnOnQuickEditable(rcontext, true)) { %> 
-		<div class="BoxOnOff SelectOff">
-    	<div class="LeftSelect">
-        	<div class="RightSelect">
-            	<div class="CenterSelect" onclick="$turnOffQuickEditLink">$turnOffQuickEditLabel</div>
-            </div>
-        </div>
-    </div>		
-    <% } else { %>
-		<div class="BoxOnOff SelectOn">
-    	<div class="LeftSelect">
-        	<div class="RightSelect">
-            	<div class="CenterSelect" onclick="$turnOnQuickEditLink">$turnOnQuickEditLabel</div>
-            </div>
-        </div>
-    </div>		    
-    <% } %>
-		<div class="TopToolBarMenuContainer" id="TopToolBarMenuContainer" style="margin-left:50px;">	
-			<a class="HozIcon ChangePortalIcon TopToolbarMenuItem" href="$changePortalLink">$changePortalActionLabel</a>
-			<div class="SeparationIcon TopToolbarMenuItem"><span></span></div>
-			<a class="HozIcon CreatePortalIcon TopToolbarMenuItem" href="$createPortalLink" >$createPortalActionLabel</a>
-			<div class="SeparationIcon TopToolbarMenuItem"><span></span></div>
-			<a class="HozIcon EditPortalIcon TopToolbarMenuItem" href="$editPortalLink" onclick="showWorkspaceArea($showable);">$editPortalActionLabel</a>
-			<div class="SeparationIcon TopToolbarMenuItem"><span></span></div>	
-			<a class="HozIcon EditPageAndNavIcon TopToolbarMenuItem" href="$editPageAndNavLink" onclick="showWorkspaceArea($showable);">$editPageAndNaviActionLabel</a>
-			<div class="SeparationIcon TopToolbarMenuItem"><span></span></div>
-			<a class="HozIcon AddPageIcon TopToolbarMenuItem" href="$addPageLink" onclick="showWorkspaceArea($showable);">$addPageActionLabel</a>
-			<div class="SeparationIcon TopToolbarMenuItem"><span></span></div>
-			<a class="HozIcon EditPageIcon TopToolbarMenuItem" href="$editPageLink" onclick="showWorkspaceArea($showable);">$editPageActionLabel</a>
-			<div class="SeparationIcon TopToolbarMenuItem"><span></span></div>
-			<a class="HozIcon AddContentIcon TopToolbarMenuItem" href="$addContentLink" onclick="showWorkspaceArea($showable);" >$addContentActionLabel</a>		
-			<div class="SeparationIcon TopToolbarMenuItem"><span></span></div>
-		</div>		
-
-  	<div class="HozIcon ViewMoreIcon" onmouseover="viewMoreActions(this)" onmouseout="hideMoreActions(this)" style="width:80px;">
-			<span>$viewMoreActionLabel</span>
-			<div class="MoreActionsMenu" id="MoreActionsMenu">		
-				<a class="VerIcon LogoutIcon" onclick="eXo.portal.logout();" >$logoutActionLabel</a>		
-				<a class="VerIcon AccountSettingsIcon" href="$accountSettingsLink">$accountSettingsActionLabel</a>		
-				<a class="VerIcon LanguageSettingsIcon" href="$languageSettingsLink">$languageSettingsActionLabel</a>		
-				<a class="VerIcon SkinSettingsIcon" href="$skinSettingsLink">$skinSettingsActionLabel</a>		
-				<a class="VerIcon BrowsePageIcon" href="$browsePageLink" onclick="showWorkspaceArea($showable);">$browsePageActionLabel</a>		
-				<a class="VerIcon BrowsePortalIcon" href="$browsePortalLink" onclick="showWorkspaceArea($showable);">$browsePortalActionLabel</a>		
-				<a class="VerIcon ChangePortalIcon Magic" href="$changePortalLink">$changePortalActionLabel</a>
-				<a class="VerIcon CreatePortalIcon Magic" href="$createPortalLink" >$createPortalActionLabel</a>		
-				<a class="VerIcon EditPortalIcon Magic" href="$editPortalLink" onclick="showWorkspaceArea($showable);">$editPortalActionLabel</a>		
-				<a class="VerIcon EditPageAndNavIcon Magic" href="$editPageAndNavLink" onclick="showWorkspaceArea($showable);">$editPageAndNaviActionLabel</a>		
-				<a class="VerIcon AddPageIcon Magic" href="$addPageLink" onclick="showWorkspaceArea($showable);">$addPageActionLabel</a>			
-				<a class="VerIcon EditPageIcon Magic" href="$editPageLink" onclick="showWorkspaceArea($showable);">$editPageActionLabel</a>		
-				<a class="VerIcon AddContentIcon Magic" href="$addContentLink" >$addContentActionLabel</a>		
-			</div>
-		</div>
-	<div class="SeparationIcon TopToolbarMenuItem"><span></span></div>		
-	<div class="StartMenuContainer" style="display: block;  position: absolute; top: 0px;left:0;">
-		<div class="StartMenuDecorator">						     
-			<div class="MenuItemContainer BlockMenu" style="top: -1000px;">						
-			<% renderTopToolbarNavs(); %>
-			</div>			
-		</div>
-	</div>									
-	<div style="clear:right"><span></span></div>
-</div>
--->
