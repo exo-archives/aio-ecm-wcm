@@ -17,8 +17,12 @@
 package org.exoplatform.wcm.webui.scv;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import javax.jcr.ItemNotFoundException;
+import javax.jcr.Node;
+import javax.jcr.RepositoryException;
 import javax.portlet.PortletPreferences;
 
 import org.exoplatform.portal.webui.container.UIContainer;
@@ -26,7 +30,12 @@ import org.exoplatform.portal.webui.page.UIPage;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.ecm.publication.PublicationPlugin;
+import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
+import org.exoplatform.services.wcm.publication.PublicationState;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant.SITE_MODE;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.WebUIPropertiesConfigService;
 import org.exoplatform.wcm.webui.WebUIPropertiesConfigService.PopupWindowProperties;
@@ -100,6 +109,53 @@ public class UIPresentationContainer extends UIContainer{
     this.isDraftRevision = isDraftRevision;
   }
 
+  @Override
+  public void processRender(WebuiRequestContext context) throws Exception {
+    UISingleContentViewerPortlet uiportlet = getAncestorOfType(UISingleContentViewerPortlet.class);
+    Node orginialNode = null;
+    try {
+      orginialNode = uiportlet.getReferencedContent();
+    } catch(ItemNotFoundException ex) {
+      orginialNode = null;
+    } catch(RepositoryException rx) {
+      orginialNode =  null;
+    }    
+    String currentState = PublicationState.getRevisionState(orginialNode);
+    if(Constant.OBSOLETE_STATE.equals(currentState)) {
+      setObsoletedContent(true);
+    }else {
+      setObsoletedContent(false);
+      UIPresentation livePresentation = getChild(UIPresentation.class);
+      if(Utils.isLiveMode()) {
+        Node liveRevision = getLiveRevision(orginialNode);
+        livePresentation.setOriginalNode(orginialNode);
+        livePresentation.setViewNode(liveRevision);      
+        setDraftRevision(false);       
+      }else {        
+        if(Constant.DRAFT_STATE.equals(currentState)) {
+          livePresentation.setViewNode(orginialNode);          
+          livePresentation.setOriginalNode(orginialNode);
+          setDraftRevision(true);          
+        } else if(Constant.LIVE_STATE.equals(currentState)) {
+          Node liveRevision = getLiveRevision(orginialNode);
+          livePresentation.setOriginalNode(orginialNode);
+          livePresentation.setViewNode(liveRevision);
+          setDraftRevision(false);             
+        }
+      }  
+    }
+    super.processRender(context);
+  }
+
+  private Node getLiveRevision(Node content) throws Exception {
+    if (content == null) return null;
+    HashMap<String,Object> context = new HashMap<String, Object>();    
+    context.put(Constant.RUNTIME_MODE, SITE_MODE.LIVE);    
+    PublicationService pubService = getApplicationComponent(PublicationService.class);
+    String lifecycleName = pubService.getNodeLifecycleName(content);
+    PublicationPlugin pubPlugin = pubService.getPublicationPlugins().get(lifecycleName);
+    return pubPlugin.getNodeView(content, context);
+  }
 
   /**
    * Gets the portlet id.

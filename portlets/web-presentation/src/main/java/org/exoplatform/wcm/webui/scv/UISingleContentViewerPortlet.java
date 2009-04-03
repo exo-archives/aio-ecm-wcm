@@ -96,48 +96,15 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
    * 
    * @throws Exception the exception
    */
-  public void activateMode(PortletMode mode) throws Exception {
-    boolean isLiveMode = Utils.isLiveMode();    
+  public void activateMode(PortletMode mode) throws Exception {       
     getChildren().clear() ;        
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     //only add popup container in private mode to pass w3c validator
     if(portletRequestContext.getRemoteUser() != null) {
       addChild(UIPopupContainer.class, null, null);
     }
-    if(PortletMode.VIEW.equals(mode)) {
-      Node orginialNode = null;
-      try {
-        orginialNode = getReferencedContent();
-      } catch(ItemNotFoundException ex) {
-        orginialNode = null;
-      } catch(RepositoryException rx) {
-        orginialNode =  null;
-      }
-      UIPresentationContainer container = addChild(UIPresentationContainer.class, null, UIPortletApplication.VIEW_MODE);
-      String currentState = getRevisionState(orginialNode);
-      if(Constant.OBSOLETE_STATE.equals(currentState)) {
-        container.setObsoletedContent(true);
-      }else {
-        container.setObsoletedContent(false);
-        UIPresentation livePresentation = container.getChild(UIPresentation.class);
-        if(isLiveMode) {
-          Node liveRevision = getLiveRevision(orginialNode);
-          livePresentation.setOriginalNode(orginialNode);
-          livePresentation.setViewNode(liveRevision);      
-          container.setDraftRevision(false);       
-        }else {        
-          if(Constant.DRAFT_STATE.equals(currentState)) {
-            livePresentation.setViewNode(orginialNode);          
-            livePresentation.setOriginalNode(orginialNode);
-            container.setDraftRevision(true);          
-          } else if(Constant.LIVE_STATE.equals(currentState)) {
-            Node liveRevision = getLiveRevision(orginialNode);
-            livePresentation.setOriginalNode(orginialNode);
-            livePresentation.setViewNode(liveRevision);
-            container.setDraftRevision(false);             
-          }
-        }  
-      }         
+    if(PortletMode.VIEW.equals(mode)) {      
+      addChild(UIPresentationContainer.class, null, UIPortletApplication.VIEW_MODE);                   
     } else if (PortletMode.EDIT.equals(mode)) {
       UIPopupContainer maskPopupContainer = getChild(UIPopupContainer.class);
       UIStartEditionInPageWizard portletEditMode = createUIComponent(UIStartEditionInPageWizard.class,null,null);
@@ -212,7 +179,7 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
     }
     return content;
   } 
-  
+
   private Node getLiveRevision(Node content) throws Exception {
     if (content == null) return null;
     HashMap<String,Object> context = new HashMap<String, Object>();    
