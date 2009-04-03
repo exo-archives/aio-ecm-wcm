@@ -61,7 +61,7 @@
       <stepInfo>Show help</stepInfo>
       <contentCreateWizard>Create Content Wizard:</contentCreateWizard>
       <step1>
-        <title>Select webcontent layout and publication lifecycle to publish</title>
+        <title>Select webcontent layout</title>
         <describe>Create your web content by filling name, summary data into web content form.</describe>
       </step1>
       <step2>
