@@ -130,8 +130,9 @@ public class UINameWebContentForm extends UIForm {
       }
     }
     UIFormSelectBox templateSelect = new UIFormSelectBox(FIELD_SELECT, FIELD_SELECT, options) ;
+    templateSelect.setSelectedValues(new String[] {"exo:webContent"});
     templateSelect.setOnChange("ChangeTemplateType");
-    templateSelect.setDefaultValue("exo:webContent");
+    templateSelect.setDefaultValue("exo:webContent");    
     setPictureDescribe("exo_webContent");
     addUIFormInput(templateSelect) ;
   }
@@ -151,6 +152,7 @@ public class UINameWebContentForm extends UIForm {
     }
     UIFormSelectBox templateSelect = getChild(UIFormSelectBox.class);
     templateSelect.setOnChange("ChangeTemplateType");
+    templateSelect.setSelectedValues(new String[] {"exo:webContent"});       
     templateSelect.setDefaultValue("exo:webContent");
     setPictureDescribe("exo_webContent");
   }

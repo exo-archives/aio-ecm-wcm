@@ -55,7 +55,7 @@ public class UIQuickCreationWizard extends UIBaseWizard {
    * @throws Exception the exception
    */
   public UIQuickCreationWizard() throws Exception {
-    addChild(UIWebContentNameTabForm.class,null,null).setRendered(true);
+    addChild(UINameWebContentForm.class,null,null).setRendered(true);
     addChild(UIContentDialogForm.class,null,null).setRendered(false);
     addChild(UISocialInfo.class, null, null).setRendered(false);
     setNumberSteps(3);

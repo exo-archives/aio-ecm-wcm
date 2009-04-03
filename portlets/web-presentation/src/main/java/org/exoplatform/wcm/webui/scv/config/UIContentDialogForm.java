@@ -287,9 +287,8 @@ public class UIContentDialogForm extends UIDialogForm {
         uiPortletConfig.addUIWelcomeScreen();
         return;
       }
-      UIPortletConfig uiPortletConfig = uiContentDialogForm.getAncestorOfType(UIPortletConfig.class);
-      UIWebContentNameTabForm uiWebConentNameTabForm = uiQuickCreationWizard.getChild(UIWebContentNameTabForm.class);
-      UINameWebContentForm uiNameWebContentForm = uiWebConentNameTabForm.getChild(UINameWebContentForm.class);
+      UIPortletConfig uiPortletConfig = uiContentDialogForm.getAncestorOfType(UIPortletConfig.class);      
+      UINameWebContentForm uiNameWebContentForm = uiQuickCreationWizard.getChild(UINameWebContentForm.class);
       if(uiPortletConfig.isNewConfig()) {
         String portalName = Util.getUIPortal().getName();
         LivePortalManagerService livePortalManagerService = uiContentDialogForm.getApplicationComponent(LivePortalManagerService.class);
