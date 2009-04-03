@@ -7,6 +7,10 @@
     <type>org.exoplatform.services.wcm.core.WCMConfigurationService</type>
     <init-params>
     	<value-param>
+	      <name>redactorMembershipType</name>
+	      <value>redactor</value>
+	    </value-param>    	    
+    	<value-param>
 	      <name>parameterizedPageURI</name>
 	      <value>/contentviewer</value>
 	    </value-param>

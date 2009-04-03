@@ -28,8 +28,6 @@ import org.exoplatform.container.xml.PropertiesParam;
 import org.exoplatform.services.cms.drives.DriveData;
 import org.exoplatform.services.log.ExoLogger;
 
-import com.lowagie.text.pdf.PRAcroForm;
-
 /*
  * Created by The eXo Platform SAS
  * @author : Hoa.Pham
@@ -42,12 +40,14 @@ public class WCMConfigurationService {
   private HashMap<String, NodeLocation> livePortalsLocations = new HashMap<String, NodeLocation>();
   private HashMap<String, String> sharedPortals = new HashMap<String, String>();
   private String parameterizedPageURI;
+  private String redactorMembershipType;
   private String publishingPortletName;
   private ExoProperties runtimeContextParams;  
   private DriveData siteDriveConfig;
 
   public WCMConfigurationService(InitParams initParams) throws Exception {    
     parameterizedPageURI = initParams.getValueParam("parameterizedPageURI").getValue();
+    redactorMembershipType = initParams.getValueParam("redactorMembershipType").getValue();
     log.info("Page URI is used for view DMS Document as a web page: " + parameterizedPageURI);
     publishingPortletName = initParams.getValueParam("publishingPortletName").getValue();
     log.info("The portlet is used to publish content in a web page: " + publishingPortletName);           
@@ -79,7 +79,7 @@ public class WCMConfigurationService {
     }
   }
 
-
+  public String getRedactorMembershipType() { return this.redactorMembershipType; }
   public String getParameterizedPageURI() { return this.parameterizedPageURI; }
   public String getPublishingPortletName() { return this.publishingPortletName; }
   public DriveData getSiteDriveConfig() {return this.siteDriveConfig; }

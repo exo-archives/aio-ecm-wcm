@@ -5,6 +5,10 @@
     <type>org.exoplatform.services.wcm.core.WCMConfigurationService</type>
     <init-params>
     	<value-param>
+	      <name>redactorMembershipType</name>
+	      <value>redactor</value>
+	    </value-param>    	
+    	<value-param>
 	      <name>parameterizedPageURI</name>
 	      <value>/parameterizedviewer</value>
 	    </value-param>
@@ -85,7 +89,7 @@
 	    	<values-param>
 	    		<name>access.control.workspace.roles</name>
 	    		<value>*:/platform/administrators</value>
-	    		<value>*:/platform/web-contributors</value>	    		
+	    		<value>editor:/platform/web-contributors</value>	    		
 	    	</values-param>
 	    	<values-param>
 	    		<name>portal.creation.roles</name>

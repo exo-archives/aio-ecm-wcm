@@ -74,5 +74,12 @@
       <new-suggestion>Có phải bạn muốn tìm</new-suggestion>
     </msg>
   </UISearchResult>
+  <UIDocumentDialogForm>
+  	<action>
+  		<Cancel>Hủy bỏ</Cancel>
+  		<FastPublish>Xuất bản nhanh</FastPublish>
+  		<SaveAsDraft>Lưu lại</SaveAsDraft>  		  		
+  	</action>
+  </UIDocumentDialogForm>    
 </bundle>
 

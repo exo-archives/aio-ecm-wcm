@@ -77,5 +77,12 @@
       <new-suggestion>Voulez-vous dire</new-suggestion>
     </msg>
   </UISearchResult>
+  <UIDocumentDialogForm>
+  	<action>
+  		<Cancel></Cancel>
+  		<FastPublish></FastPublish>
+  		<SaveAsDraft></SaveAsDraft>  		  		
+  	</action>
+  </UIDocumentDialogForm>    
 </bundle>
 

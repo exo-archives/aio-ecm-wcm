@@ -31,7 +31,7 @@
       <value-param>
         <name>navigation.creator.membership.type</name>
         <description>specific membership type have full permission with group navigation</description>
-        <value>manager</value>	    
+        <value>editor</value>	    
       </value-param>  
         
       <value-param>
