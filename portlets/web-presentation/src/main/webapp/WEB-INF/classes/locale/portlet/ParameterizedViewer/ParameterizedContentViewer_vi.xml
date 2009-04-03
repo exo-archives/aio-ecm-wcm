@@ -31,5 +31,10 @@
     	<print>In trang này</print>
     </quickPrint>
   </UIContentViewerContainer>
+  <UIPopupWindow>
+  	<title>
+	  	<UIDocumentDialogForm>Form chỉnh sửa nội dung</UIDocumentDialogForm>
+  	</title>
+  </UIPopupWindow>
 </bundle>
 

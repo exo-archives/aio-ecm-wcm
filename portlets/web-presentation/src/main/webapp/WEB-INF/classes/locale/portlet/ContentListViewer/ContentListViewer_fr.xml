@@ -78,6 +78,7 @@
   <UIViewerManagementPopupWindow>
     <title>
       <UIPortletConfig>Gestion du Content List Viewer</UIPortletConfig>
+      <UIContentEdittingPopup>Modifier le contenu</UIContentEdittingPopup>
     </title>
   </UIViewerManagementPopupWindow>
   <!--/n  ###################################################################

@@ -76,6 +76,7 @@
   <UIViewerManagementPopupWindow>
     <title>
       <UIPortletConfig>Quản lý trình hiển thị nội dung theo danh sách.</UIPortletConfig>
+      <UIContentEdittingPopup>Chỉnh sửa nội dung</UIContentEdittingPopup>
     </title>
   </UIViewerManagementPopupWindow>
   <!--/n  ###################################################################

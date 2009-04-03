@@ -31,5 +31,10 @@
     	<print>Imprimer ce page</print>
     </quickPrint>
   </UIContentViewerContainer>
+  <UIPopupWindow>
+  	<title>
+	  	<UIDocumentDialogForm>Document dialog form</UIDocumentDialogForm>
+  	</title>
+  </UIPopupWindow>
 </bundle>
 
