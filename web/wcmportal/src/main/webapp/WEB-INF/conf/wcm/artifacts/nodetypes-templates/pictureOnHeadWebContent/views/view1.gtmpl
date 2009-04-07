@@ -10,7 +10,8 @@
 	import org.exoplatform.download.DownloadService;
 	import org.exoplatform.download.InputStreamDownloadResource;
 	import java.io.InputStream;
-	import org.exoplatform.wcm.webui.WikiLinkParser;	
+	import org.exoplatform.wcm.webui.WikiLinkParser;
+	import org.exoplatform.services.wcm.images.RESTImagesRendererService;	
 	
 	public String getRimOfImage(String property, Node currentNode) throws Exception {
     String rim = "";
@@ -46,16 +47,12 @@
 	boolean isShowTags = getPortletPreference("ShowTags");
 
 	if (currentNode.hasProperty("exo:image")) {
-		DownloadService dservice = uicomponent.getApplicationComponent(DownloadService.class);
-		InputStream input = currentNode.getProperty("exo:image").getStream();
-		InputStreamDownloadResource dresource = new InputStreamDownloadResource(input, "image");
-		dresource.setDownloadName(currentNode.getName());
-		
-		def image = dservice.getDownloadLink(dservice.addDownloadResource(dresource));
+		RESTImagesRendererService imagesRenderer = uicomponent.getApplicationComponent(RESTImagesRendererService.class);								
+		def imageURI = imagesRenderer.generateURI(currentNode,"exo:image")
 		String imageWidth = getRimOfImage("exo:imageWidth", currentNode);
 		String imageHeight = getRimOfImage("exo:imageHeight", currentNode);
 		%>
-			<div style="float:left; padding-right: 10px;"><img src="$image" width="<%=imageWidth%>" height="<%=imageHeight%>"/></div>
+			<div style="float:left; padding-right: 10px;"><img src="$imageURI" width="<%=imageWidth%>" height="<%=imageHeight%>"/></div>
 		<%
 	}
 	if((css != null) && (css.length() > 0)) {
