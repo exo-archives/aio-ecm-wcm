@@ -22,6 +22,7 @@
 	height: 30px;
 	width: 54px;
 	display: block;
+	padding: 0;
 }
 
 .UISiteAdministrationPortlet .UISiteAdminToolBar .TBItem {
@@ -29,6 +30,10 @@
 	float: left;
 	background: url('DefaultSkin/icons/IconToolBar.gif') no-repeat right -320px;
 	padding-right: 2px;
+}
+
+.UISiteAdministrationPortlet .UISiteAdminToolBar .TBExoLogo {
+	background:none;
 }
 
 .UISiteAdministrationPortlet .UISiteAdminToolBar .TBIcon {

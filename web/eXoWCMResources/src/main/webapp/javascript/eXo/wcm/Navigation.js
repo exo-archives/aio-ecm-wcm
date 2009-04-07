@@ -332,7 +332,7 @@ UIWCMNavigation.prototype.toggleSubMenu = function(e, tab, menuItemContainer) {
       eXo.portal.UIWCMNavigation.superClass.setPosition(menuItemContainer, x, y);
       eXo.portal.UIWCMNavigation.superClass.show(menuItemContainer);
       
-      menuItemContainer.style.width = menuItemContainer.offsetWidth + 2 + "px";
+      menuItemContainer.style.width = menuItemContainer.offsetWidth - parseInt(DOMUtil.getStyle(menuItemContainer, 'borderLeftWidth')) - parseInt(DOMUtil.getStyle(menuItemContainer, 'borderRightWidth')) + "px";
       eXo.portal.UIWCMNavigation.currentOpenedMenu = menuItemContainer.id;
       
       /*Hide eXoStartMenu whenever click on the UIApplication*/

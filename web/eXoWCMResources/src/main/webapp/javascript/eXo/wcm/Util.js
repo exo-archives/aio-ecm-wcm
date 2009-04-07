@@ -310,26 +310,27 @@ function showHideOrderBy() {
 
 function showPopupMenu(obj) {
 	if(!obj) return; 
-	var mnuItemContainer = eXo.core.DOMUtil.findNextElementByTagName(obj, "div");
-	var uiNavi = document.getElementById('PortalNavigationTopContainer');
+	var DOMUtil = eXo.core.DOMUtil;
+	var mnuItemContainer = DOMUtil.findNextElementByTagName(obj, "div");
+	var uiNavi = document.getElementById('PortalNavigationTopContainer');      
 	if(mnuItemContainer && mnuItemContainer.style.display != "block") {
+	  if(eXo.core.Browser.browserType == 'ie')   uiNavi.style.position = "static";
 		mnuItemContainer.style.display = 'block';
-		if(eXo.core.Browser.browserType == 'ie')   uiNavi.style.position = "static";
 		mnuItemContainer.onmouseout = function(){
+			if(eXo.core.Browser.browserType == 'ie')   uiNavi.style.position = "relative";
 			obj.Timeout = setTimeout(function() {
 				mnuItemContainer.style.display = 'none';
 				mnuItemContainer.onmouseover = null;
 				mnuItemContainer.onmouseout = null;
-				if(eXo.core.Browser.browserType == 'ie') uiNavi.style.position = "relative";
-			},1*200);
+			},1*10);
 		}
 
 		mnuItemContainer.onmouseover = function() {
+			if(eXo.core.Browser.browserType == 'ie')   uiNavi.style.position = "static";
 			if(obj.Timeout) clearTimeout(obj.Timeout);
 			obj.Timeout = null;
 		}
 		obj.onmouseout = mnuItemContainer.onmouseout;	
-		mnuItemContainer.style.width = mnuItemContainer.offsetWidth + 'px';
-		//mnuItemContainer.style.width = mnuItemContainer.offsetWidth - parseInt(DOMUtil.getStyle(mnuItemContainer, "borderLeft")) - parseInt(DOMUtil.getStyle(mnuItemContainer, "borderRight")) + 'px';
+		mnuItemContainer.style.width = mnuItemContainer.offsetWidth - parseInt(DOMUtil.getStyle(mnuItemContainer, "borderLeftWidth")) - parseInt(DOMUtil.getStyle(mnuItemContainer, "borderRightWidth")) + 'px';
 	}
 }	

@@ -142,7 +142,7 @@
 %>
 <div class="UISiteAdminToolBar">
 	<!-- Exo Logo -->
-	<div class="TBItem">
+	<div class="TBItem TBExoLogo">
 		<a class="ExoLogo" onmouseover="showPopupMenu(this)"></a>
 		<div class="MenuItemContainer" style="display: none; width: 130px;">
 	      <div class="MenuItem OddItem">
