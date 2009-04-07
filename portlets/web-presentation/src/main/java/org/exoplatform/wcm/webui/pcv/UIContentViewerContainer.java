@@ -255,7 +255,7 @@ public class UIContentViewerContainer extends UIContainer {
 				}
 			}
 			 HttpServletRequest request = context.getRequest();
-			 isPrint = "true".equals(request.getParameter("isPrint")) ? true :false;
+			 isPrint = "isPrint=true".equals(request.getQueryString()) ? true :false;
 			 super.processRender(context);
 		} else { // content is folders
 			renderErrorMessage(context, UIContentViewer.CONTENT_UNSUPPORT_EXC);
