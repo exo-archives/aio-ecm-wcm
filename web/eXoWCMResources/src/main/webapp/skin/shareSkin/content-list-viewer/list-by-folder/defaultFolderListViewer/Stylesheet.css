@@ -41,6 +41,11 @@
 	color: #8f8f8f;
 }
 
+
+.UIContentListViewerPortlet .UIContentListPresentationDefault .Caption .CaptionContent {
+	overflow:auto;	
+}
+
 .UIContentListViewerPortlet .UIContentListPresentationDefault .Caption .CaptionContent p {
   padding: 5px 0;
 }

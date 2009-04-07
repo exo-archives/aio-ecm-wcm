@@ -67,14 +67,14 @@ import org.exoplatform.wcm.webui.clv.UIContentListViewerPortlet;
 					<% if (itemDateCreated != null && uicomponent.isShowField(UIContentListViewerPortlet.SHOW_DATE_CREATED)) { %>
 					<div class="CaptionDate"><%=itemDateCreated%></div>		
 					<% } %>											
-					<% if (itemSummary != null && itemSummary.trim().length() != 0 && uicomponent.isShowField(UIContentListViewerPortlet.SHOW_SUMMARY)) { %>
 					<div class="CaptionContent">				
 						<% if(imgSrc != null && uicomponent.isShowField(UIContentListViewerPortlet.SHOW_THUMBNAILS_VIEW)) { %>
 							<img src="$imgSrc" width="91" height="53 /">				
 						<% } %>
+						<% if (itemSummary != null && itemSummary.trim().length() != 0 && uicomponent.isShowField(UIContentListViewerPortlet.SHOW_SUMMARY)) { %>
 						<p><%=itemSummary%></p>
+						<% } %>															
 					</div>			
-					<% } %>			
 					<div class="CaptionViewMore"><a href="$itemLink"><%=labelReadMore%>&raquo;</a></div>			
 				</div>			
 		<%							
