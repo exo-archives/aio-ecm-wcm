@@ -39,6 +39,7 @@ import org.exoplatform.services.cms.thumbnail.ThumbnailService;
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.access.SystemIdentity;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.OrganizationService;
@@ -70,15 +71,15 @@ import org.exoplatform.webui.event.EventListener;
  * The Class UIContentListPresentation.
  */
 @ComponentConfigs( {
-    @ComponentConfig(
-       lifecycle = Lifecycle.class, 
-       events = {
-         @EventConfig(listeners = UIContentListPresentation.RefreshActionListener.class),
-         @EventConfig(listeners = UIContentListPresentation.EditContentActionListener.class)
-       }
-    ),
-    @ComponentConfig(type = UICustomizeablePaginator.class, events = @EventConfig(listeners = UICustomizeablePaginator.ShowPageActionListener.class)) })
-public class UIContentListPresentation extends UIContainer {
+  @ComponentConfig(
+      lifecycle = Lifecycle.class, 
+      events = {
+        @EventConfig(listeners = UIContentListPresentation.RefreshActionListener.class),
+        @EventConfig(listeners = UIContentListPresentation.EditContentActionListener.class)
+      }
+  ),
+  @ComponentConfig(type = UICustomizeablePaginator.class, events = @EventConfig(listeners = UICustomizeablePaginator.ShowPageActionListener.class)) })
+  public class UIContentListPresentation extends UIContainer {
 
   /** The template path. */
   private String                   templatePath;
@@ -119,7 +120,7 @@ public class UIContentListPresentation extends UIContainer {
   public void init(String templatePath, ResourceResolver resourceResolver, PageList dataPageList) throws Exception {
     PortletPreferences portletPreferences = getPortletPreferences();
     String paginatorTemplatePath = portletPreferences.getValue(UIContentListViewerPortlet.PAGINATOR_TEMPlATE_PATH,
-                                                               null);
+        null);
     this.templatePath = templatePath;
     this.resourceResolver = resourceResolver;
     uiPaginator = addChild(UICustomizeablePaginator.class, null, null);
@@ -128,8 +129,8 @@ public class UIContentListPresentation extends UIContainer {
     uiPaginator.setPageList(dataPageList);
     Locale locale = Util.getPortalRequestContext().getLocale();
     dateFormatter = SimpleDateFormat.getDateTimeInstance(SimpleDateFormat.MEDIUM,
-                                                         SimpleDateFormat.MEDIUM,
-                                                         locale);
+        SimpleDateFormat.MEDIUM,
+        locale);
   }
 
   private PortletPreferences getPortletPreferences() {
@@ -146,7 +147,7 @@ public class UIContentListPresentation extends UIContainer {
   public boolean showRefreshButton() {
     PortletPreferences portletPreferences = getPortletPreferences();
     String isShow = portletPreferences.getValue(UIContentListViewerPortlet.SHOW_REFRESH_BUTTON,
-                                                null);
+        null);
     return (isShow != null) ? Boolean.parseBoolean(isShow) : false;
   }
 
@@ -173,7 +174,7 @@ public class UIContentListPresentation extends UIContainer {
     }
     String lifecyleName = publicationService.getNodeLifecycleName(node);
     PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins()
-                                                            .get(lifecyleName);
+    .get(lifecyleName);
     Node viewNode = publicationPlugin.getNodeView(node, context);
     return viewNode;
   }
@@ -196,7 +197,7 @@ public class UIContentListPresentation extends UIContainer {
   public boolean showPaginator() throws Exception {
     PortletPreferences portletPreferences = getPortletPreferences();
     String itemsPerPage = portletPreferences.getValue(UIContentListViewerPortlet.ITEMS_PER_PAGE,
-                                                      null);
+        null);
     int totalItems = uiPaginator.getTotalItems();
     if (totalItems > Integer.parseInt(itemsPerPage)) {
       return true;
@@ -290,7 +291,7 @@ public class UIContentListPresentation extends UIContainer {
    */
   public String getTitle(Node node) throws Exception {
     return node.hasProperty("exo:title") ? node.getProperty("exo:title").getValue().getString()
-                                        : node.getName();
+        : node.getName();
   }
 
   /**
@@ -304,7 +305,7 @@ public class UIContentListPresentation extends UIContainer {
    */
   public String getSummary(Node node) throws Exception {
     return node.hasProperty("exo:summary") ? node.getProperty("exo:summary").getValue().getString()
-                                          : null;
+        : null;
   }
 
   /**
@@ -326,11 +327,11 @@ public class UIContentListPresentation extends UIContainer {
     String repository = portletPreferences.getValue(UIContentListViewerPortlet.REPOSITORY, null);
     String workspace = portletPreferences.getValue(UIContentListViewerPortlet.WORKSPACE, null);
     String baseURI = portletRequestContext.getRequest().getScheme() + "://"
-        + portletRequestContext.getRequest().getServerName() + ":"
-        + String.format("%s", portletRequestContext.getRequest().getServerPort());
+    + portletRequestContext.getRequest().getServerName() + ":"
+    + String.format("%s", portletRequestContext.getRequest().getServerPort());
     String parameterizedPageURI = wcmConfigurationService.getParameterizedPageURI();
     link = baseURI + portalURI + parameterizedPageURI.substring(1, parameterizedPageURI.length())
-        + "/" + repository + "/" + workspace + node.getPath();
+    + "/" + repository + "/" + workspace + node.getPath();
     return link;
   }
 
@@ -431,34 +432,27 @@ public class UIContentListPresentation extends UIContainer {
    * @throws Exception the exception
    */
   public String getIllustrativeImage(Node node) throws Exception {
+    //portal/rest/thumbnailImage/repository/collaboration/test.gif/?size=medium
+    WebSchemaConfigService schemaConfigService = getApplicationComponent(WebSchemaConfigService.class);
+    WebContentSchemaHandler contentSchemaHandler = schemaConfigService.getWebSchemaHandlerByType(WebContentSchemaHandler.class);
+    Node illustrativeImage = null;
+    String repository = ((ManageableRepository)node.getSession().getRepository()).getConfiguration().getName();
+    String workspaceName = node.getSession().getWorkspace().getName();
+    StringBuilder uriBuilder = new StringBuilder();
+    String userId =  node.getSession().getUserID();
+    String baseRESTURI = "/portal/rest/";
+    if(!SystemIdentity.ANONIM.equals(userId)) {
+      baseRESTURI = "/portal/rest/private/";
+    }    
     String imagePath = null;
-    if (node.isNodeType("exo:webContent")) {
-      WebSchemaConfigService schemaConfigService = getApplicationComponent(WebSchemaConfigService.class);
-      WebContentSchemaHandler contentSchemaHandler = schemaConfigService.getWebSchemaHandlerByType(WebContentSchemaHandler.class);
-      Node illustrativeImage = null;
-      try {
-        illustrativeImage = contentSchemaHandler.getIllustrationImage(node);
-        imagePath = Utils.getThumbnailImage(illustrativeImage, ThumbnailService.MEDIUM_SIZE);
-      } catch (Exception e) {
-      }
-      if (imagePath == null && illustrativeImage != null) {
-        Session session = illustrativeImage.getSession();
-        String repository = ((ManageableRepository) session.getRepository()).getConfiguration()
-                                                                            .getName();
-        String workspace = session.getWorkspace().getName();
-        imagePath = "/portal/rest/jcr/" + repository + "/" + workspace
-            + illustrativeImage.getPath();
-      }
-      return imagePath;
-    }
-    PortletPreferences preferences = getPortletPreferences();
-    String showThumbnailPref = preferences.getValue(UIContentListViewerPortlet.SHOW_THUMBNAILS_VIEW,
-                                                    "false");
-    boolean isShowThumbnail = Boolean.parseBoolean(showThumbnailPref);
-    if (isShowThumbnail) {
-      return Utils.getThumbnailImage(node, ThumbnailService.MEDIUM_SIZE);
-    }
-    return null;
+    try {
+      illustrativeImage = contentSchemaHandler.getIllustrationImage(node);
+      imagePath = illustrativeImage.getPath();
+    } catch (Exception e) {      
+      imagePath = node.getPath();
+    }                  
+    return uriBuilder.append(baseRESTURI).append("thumbnailImage/").append(repository).append("/").append(workspaceName)
+                                                                   .append(imagePath).append("?size=medium").toString();    
   }
 
   /**
@@ -540,7 +534,7 @@ public class UIContentListPresentation extends UIContainer {
       refreshListener.onRefresh(event);
     }
   }
-  
+
   public static class EditContentActionListener extends EventListener<UIContentListPresentation> {
     public void execute(Event<UIContentListPresentation> event) throws Exception {
       UIContentListPresentation contentListPresentation = event.getSource();
@@ -561,13 +555,13 @@ public class UIContentListPresentation extends UIContainer {
       UIPopupContainer uiMaskPopupContainer = uiListViewerPortlet.getChild(UIPopupContainer.class);
       UIContentEdittingPopup uiContentEdittingForm = uiMaskPopupContainer.createUIComponent(UIContentEdittingPopup.class, null, null);
       UIDocumentDialogForm uiDocumentDialogForm = uiContentEdittingForm.getChild(UIDocumentDialogForm.class);
-      
+
       uiDocumentDialogForm.setRepositoryName(repository);
       uiDocumentDialogForm.setWorkspace(worksapce);
       uiDocumentDialogForm.setContentType(node.getPrimaryNodeType().getName());
       uiDocumentDialogForm.setNodePath(node.getPath());
       uiDocumentDialogForm.setStoredPath(node.getPath());
-      
+
       uiListViewerBase.addChild(uiContentEdittingForm);
       uiContentEdittingForm.setRendered(true);
       uiMaskPopupContainer.activate(uiContentEdittingForm, UIContentListViewerPortlet.portletConfigFormWidth, -1);      
