@@ -112,8 +112,7 @@ public class UISiteAdminToolbar extends UIContainer {
   /**
    * Instantiates a new uI site admin toolbar.
    */
-  public UISiteAdminToolbar() {
-  }
+  public UISiteAdminToolbar() { }
 
   public int getRole() throws Exception {
     String userId = Util.getPortalRequestContext().getRemoteUser();
@@ -169,12 +168,12 @@ public class UISiteAdminToolbar extends UIContainer {
     return false;
   }
 
-  public String getBaseURI(String portalName) {
-    PortalRequestContext portalRequestContext = Util.getPortalRequestContext();    
-    HttpServletRequest servletRequest = portalRequestContext.getRequest();
+  public String geCurrentPortalURI() {
+    PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
+    String portalContextURI = portalRequestContext.getPortalURI();
+    HttpServletRequest servletRequest = portalRequestContext.getRequest();    
     String baseURI = servletRequest.getScheme() + "://" + servletRequest.getServerName() + ":"
-        + servletRequest.getServerPort() + servletRequest.getContextPath() + "/private/"
-        + portalName;
+        + servletRequest.getServerPort() + portalContextURI.substring(0, portalContextURI.length() - 1);    
     return baseURI;
   }
 
