@@ -321,22 +321,15 @@ function showPopupMenu(obj) {
 				mnuItemContainer.onmouseover = null;
 				mnuItemContainer.onmouseout = null;
 				if(eXo.core.Browser.browserType == 'ie') uiNavi.style.position = "relative";
-			},1*1000);
+			},1*200);
 		}
 
 		mnuItemContainer.onmouseover = function() {
 			if(obj.Timeout) clearTimeout(obj.Timeout);
 			obj.Timeout = null;
 		}
-
+		obj.onmouseout = mnuItemContainer.onmouseout;	
 		mnuItemContainer.style.width = mnuItemContainer.offsetWidth + 'px';
+		//mnuItemContainer.style.width = mnuItemContainer.offsetWidth - parseInt(DOMUtil.getStyle(mnuItemContainer, "borderLeft")) - parseInt(DOMUtil.getStyle(mnuItemContainer, "borderRight")) + 'px';
 	}
 }	
-
-function hidePopupMenu(obj) {
-	if(!obj) return; 
-	var mnuItemContainer = eXo.core.DOMUtil.findNextElementByTagName(obj, "div");
-	if(mnuItemContainer && mnuItemContainer.style.display != "block") {
-		mnuItemContainer.style.display = "none";
-	}
-}
