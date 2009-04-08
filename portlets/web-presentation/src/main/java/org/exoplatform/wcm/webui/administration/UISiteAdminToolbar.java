@@ -112,7 +112,9 @@ public class UISiteAdminToolbar extends UIContainer {
   /**
    * Instantiates a new uI site admin toolbar.
    */
-  public UISiteAdminToolbar() { }
+  public UISiteAdminToolbar() throws Exception {
+	  setGroupNavigations();
+  }
 
   public int getRole() throws Exception {
     String userId = Util.getPortalRequestContext().getRemoteUser();
@@ -120,7 +122,7 @@ public class UISiteAdminToolbar extends UIContainer {
     IdentityRegistry identityRegistry = getApplicationComponent(IdentityRegistry.class);
     WCMConfigurationService wcmConfigurationService = getApplicationComponent(WCMConfigurationService.class);
     Identity identity = identityRegistry.getIdentity(userId);
-    String editorMembershiptType = userACL.getMakableMT();
+    String editorMembershipType = userACL.getMakableMT();
     List<String> accessControlWorkspaceGroups = userACL.getAccessControlWorkspaceGroups();
     String editSitePermission = Util.getUIPortal().getEditPermission();
     String redactorMembershipType = wcmConfigurationService.getRedactorMembershipType();   
@@ -132,22 +134,31 @@ public class UISiteAdminToolbar extends UIContainer {
         && userACL.hasCreatePortalPermission(userId)) {
       return UISiteAdminToolbar.ADMIN;
     }
+    
     // editor
-    MembershipEntry editorEnry = null;
+    MembershipEntry editorEntry = null;
     for (String membership : accessControlWorkspaceGroups) {
-      editorEnry = MembershipEntry.parse(membership);
-      if (editorEnry.getMembershipType().equals(editorMembershiptType)
-          || editorEnry.getMembershipType().equals(MembershipEntry.ANY_TYPE)) {
-        if (identity.isMemberOf(editorEnry))
-          return UISiteAdminToolbar.EDITOR;
-      }
+    	editorEntry = MembershipEntry.parse(membership);
+    	if (editorEntry.getMembershipType().equals(editorMembershipType)
+    			|| editorEntry.getMembershipType().equals(MembershipEntry.ANY_TYPE)) {
+    		if (identity.isMemberOf(editorEntry)) {
+
+    			MembershipEntry editEntry = MembershipEntry.parse(editSitePermission);
+    			if (MembershipEntry.ANY_TYPE.equals(editEntry.getMembershipType())) {
+    				editEntry = MembershipEntry.parse(editorMembershipType+":"+editEntry.getGroup());
+    			}
+    			if (identity.isMemberOf(editEntry))
+    				return UISiteAdminToolbar.EDITOR;
+    		}
+    	}
     }
-    // redactor
-    MembershipEntry redactorEnry = MembershipEntry.parse(editSitePermission);
-    if (redactorEnry.getMembershipType().equals(redactorMembershipType)
-        || redactorEnry.getMembershipType().equals(MembershipEntry.ANY_TYPE)) {
-      if (identity.isMemberOf(redactorEnry))
-        return UISiteAdminToolbar.REDACTOR;
+
+    // editor
+    MembershipEntry redactorEntry = MembershipEntry.parse(editSitePermission);
+    if (redactorEntry.getMembershipType().equals(redactorMembershipType)
+    		|| redactorEntry.getMembershipType().equals(MembershipEntry.ANY_TYPE)) {
+    	if (identity.isMemberOf(redactorEntry))
+    		return UISiteAdminToolbar.REDACTOR;
     }
 
     return -1;
@@ -168,7 +179,7 @@ public class UISiteAdminToolbar extends UIContainer {
     return false;
   }
 
-  public String geCurrentPortalURI() {
+  public String getCurrentPortalURI() {
     PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
     String portalContextURI = portalRequestContext.getPortalURI();
     HttpServletRequest servletRequest = portalRequestContext.getRequest();    
@@ -194,15 +205,26 @@ public class UISiteAdminToolbar extends UIContainer {
     return portals;
   }
 
-  public List<PageNavigation> getGroupNavigations() throws Exception {
+  private boolean hasGroupNavigations = false;
+  private List<PageNavigation> groupNavigations = null;
+  
+  public boolean hasGroupNavigations() {
+	  return hasGroupNavigations;
+  }
+  
+  private void setGroupNavigations() throws Exception {
     String removeUser = Util.getPortalRequestContext().getRemoteUser();
     List<PageNavigation> allNavigations = Util.getUIPortal().getNavigations();
-    List<PageNavigation> groupNavigations = new ArrayList<PageNavigation>();
+    groupNavigations = new ArrayList<PageNavigation>();
     for (PageNavigation navigation : allNavigations) {      
       if (navigation.getOwnerType().equals(PortalConfig.GROUP_TYPE)) {
         groupNavigations.add(PageNavigationUtils.filter(navigation, removeUser));
+        hasGroupNavigations = true;
       }
     }
+  }
+  
+  public List<PageNavigation> getGroupNavigations() throws Exception {
     return groupNavigations;
   }
 

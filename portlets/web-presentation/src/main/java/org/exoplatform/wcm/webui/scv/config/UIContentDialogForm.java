@@ -78,6 +78,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
       @EventConfig(listeners = UIContentDialogForm.SaveDraftActionListener.class),
       @EventConfig(listeners = UIContentDialogForm.FastPublishActionListener.class),
       @EventConfig(listeners = UIContentDialogForm.PreferencesActionListener.class),
+      @EventConfig(listeners = UIContentDialogForm.CloseActionListener.class),
       @EventConfig(listeners = DialogFormActionListeners.RemoveDataActionListener.class)
     }
 )
@@ -100,7 +101,7 @@ public class UIContentDialogForm extends UIDialogForm {
   private boolean isEditNotIntegrity;
   
   /** List of actions in this form.*/
-  private static final String [] ACTIONS = {"SaveDraft", "FastPublish", "Preferences"};
+  private static final String [] ACTIONS = {"SaveDraft", "FastPublish", "Preferences", "Close"};
 
   /**
    * Instantiates a new uI content dialog form.
@@ -264,17 +265,17 @@ public class UIContentDialogForm extends UIDialogForm {
   }
 
   /**
-   * The listener interface for receiving cancelAction events.
+   * The listener interface for receiving closeAction events.
    * The class that is interested in processing a cancelAction
    * event implements this interface, and the object created
    * with that class is registered with a component using the
-   * component's <code>addCancelActionListener<code> method. When
+   * component's <code>addCloseActionListener<code> method. When
    * the cancelAction event occurs, that object's appropriate
    * method is invoked.
    * 
-   * @see CancelActionEvent
+   * @see CloseActionEvent
    */
-  static public class CancelActionListener extends EventListener<UIContentDialogForm> {
+  static public class CloseActionListener extends EventListener<UIContentDialogForm> {
 
     /* (non-Javadoc)
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
@@ -305,11 +306,15 @@ public class UIContentDialogForm extends UIDialogForm {
         session.save();
         uiNameWebContentForm.reset();
       }
-      uiNameWebContentForm.back();
+      
+//      uiNameWebContentForm.back();
       uiContentDialogForm.reset();
-      uiQuickCreationWizard.viewStep(1);
+//      uiQuickCreationWizard.viewStep(1);
+//      UIPortletConfig portletConfig = uiQuickCreationWizard.getAncestorOfType(UIPortletConfig.class);
+//      portletConfig.showPopup(event.getRequestContext());
       UIPortletConfig portletConfig = uiQuickCreationWizard.getAncestorOfType(UIPortletConfig.class);
-      portletConfig.showPopup(event.getRequestContext());
+      uiPortletConfig.closePopupAndUpdateUI(event.getRequestContext(),true);
+
     }
   }
 

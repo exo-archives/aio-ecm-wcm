@@ -117,6 +117,7 @@
       <Cancel>Annuler</Cancel>
       <FastPublish>Publication rapide</FastPublish>
       <Preferences>Préférences</Preferences>
+      <Close>Fermer</Close>
     </action>
   </UIContentDialogForm>
   <!--/n  ###################################################################

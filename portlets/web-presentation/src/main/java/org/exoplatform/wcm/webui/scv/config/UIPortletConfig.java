@@ -97,7 +97,7 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent{
         
         UIQuickCreationWizard uiQuickCreationWizard = addChild(UIQuickCreationWizard.class, null, null);
         UIContentDialogForm contentDialogForm  = uiQuickCreationWizard.getChild(UIContentDialogForm.class);
-        contentDialogForm.setEditNotIntegrity(true);
+        contentDialogForm.setEditNotIntegrity(false);
         contentDialogForm.init();
         uiQuickCreationWizard.viewStep(2);
 

@@ -113,7 +113,7 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
       this.setRendered(false);
       UIQuickCreationWizard uiQuickCreationWizard = uiPortletConfig.addChild(UIQuickCreationWizard.class, null, null);
       UIContentDialogForm contentDialogForm  = uiQuickCreationWizard.getChild(UIContentDialogForm.class);
-      contentDialogForm.setEditNotIntegrity(true);
+      contentDialogForm.setEditNotIntegrity(false);
       contentDialogForm.init();
       uiQuickCreationWizard.viewStep(step);
   }

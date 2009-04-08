@@ -116,6 +116,7 @@
       <Cancel>Hủy bỏ</Cancel>
       <FastPublish>Xuất bản nhanh</FastPublish>
       <Preferences></Preferences>
+      <Close></Close>
     </action>
   </UIContentDialogForm>
   <!--/n  ###################################################################

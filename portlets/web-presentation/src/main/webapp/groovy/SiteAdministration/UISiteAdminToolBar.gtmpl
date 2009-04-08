@@ -54,7 +54,7 @@
 
 <% 
   void renderSinglePageNode(PageNavigation nav, PageNode node, int index) {
-    String  href = uicomponent.geCurrentPortalURI() + "/" + node.getUri(); 
+    String  href = uicomponent.getCurrentPortalURI() + "/" + node.getUri(); 
     String label = node.resolvedLabel;    
     String itemClazz;
 		if (index % 2 == 0) itemClazz	= "EvenItem";
@@ -74,7 +74,7 @@
   }
   
 	void renderPageNode(PageNavigation nav, PageNode node, boolean topLevel, int index) {
-    String  href = uicomponent.geCurrentPortalURI() + "/" + node.getUri(); 
+    String  href = uicomponent.getCurrentPortalURI() + "/" + node.getUri(); 
     String label = node.resolvedLabel;    
     if(label.length() > 60) label = label.substring(0, 57) + "..." ;        
     if (topLevel) {
@@ -184,7 +184,7 @@
 		<% for (String portal : portals) { 
 					if (portalNum % 2 == 0)  portalClazz = "EvenItem";
 					else portalClazz = "OddItem";
-					String currentPortalURI = uicomponent.geCurrentPortalURI();					
+					String currentPortalURI = uicomponent.getCurrentPortalURI();					
 					String portalLink = currentPortalURI.substring(0, currentPortalURI.lastIndexOf("/")) + "/" + portal;
 		%>
       <div class="MenuItem $portalClazz">
@@ -196,6 +196,8 @@
 		</div>
 	</div>
 	
+	<% if (uicomponent.hasGroupNavigations()) { %>
+	
 	<!-- Groups -->	
 	<div class="TBItem">
 		<a href="#" class="GroupsIcon TBIcon" onmouseover="showPopupMenu(this)">$groupsLabel</a>		
@@ -203,6 +205,8 @@
 		<% renderGroupNavigations(); %>
 		</div>		
 	</div>
+	
+	<% } %>
 	
 	<!-- Editor -->		
 	<% if (currentRole >= UISiteAdminToolbar.EDITOR) { %>		
@@ -246,25 +250,28 @@
 	</div>
 	<% } %>
 	
-	<!-- on/off -->				
-	<% if (Utils.turnOnQuickEditable(rcontext, true)) { %> 
-		<div class="BoxOnOff SelectOff">
-			<div class="LeftSelect">
-	    	<div class="RightSelect">
-		    	<div class="CenterSelect" onclick="$turnOffQuickEditLink" title="$liveModeTitle">$turnOffQuickEditLabel</div>
-		    </div>
-	    </div>
-		</div>		
-	<% } else { %>
-		<div class="BoxOnOff SelectOn">
-			<div class="LeftSelect">
-	    	<div class="RightSelect">
-	    		<div class="CenterSelect" onclick="$turnOnQuickEditLink" title="$editModeTitle">$turnOnQuickEditLabel</div>
-	    	</div>
-	    </div>
-		</div>		    
-	<% } %>
+	<% if (currentRole >= UISiteAdminToolbar.REDACTOR) { %>		
 	
+		<!-- on/off -->				
+		<% if (Utils.turnOnQuickEditable(rcontext, true)) { %> 
+			<div class="BoxOnOff SelectOff">
+				<div class="LeftSelect">
+		    	<div class="RightSelect">
+			    	<div class="CenterSelect" onclick="$turnOffQuickEditLink" title="$liveModeTitle">$turnOffQuickEditLabel</div>
+			    </div>
+		    </div>
+			</div>		
+		<% } else { %>
+			<div class="BoxOnOff SelectOn">
+				<div class="LeftSelect">
+		    	<div class="RightSelect">
+		    		<div class="CenterSelect" onclick="$turnOnQuickEditLink" title="$editModeTitle">$turnOnQuickEditLabel</div>
+		    	</div>
+		    </div>
+			</div>		    
+		<% } %>
+	
+	<% } %>		
 	
 	<div style="clear:both"><span></span></div>
 </div>

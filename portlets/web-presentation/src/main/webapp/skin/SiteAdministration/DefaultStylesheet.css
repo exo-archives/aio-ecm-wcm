@@ -137,6 +137,7 @@
 	color: #5e5e5e;
 	font-weight: bold;
 	padding: 0px 5px;
+	white-space: nowrap;
 }
 
 .UISiteAdminToolBar .MenuItem {	
