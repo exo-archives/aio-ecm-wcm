@@ -48,7 +48,7 @@ public class PostCreateContentEventListener extends Listener<CmsService, Node>{
 
   public void onEvent(Event<CmsService, Node> event) throws Exception {
     Node currentNode = event.getData();
-    if(!currentNode.canAddMixin("exo:rss-enable")) {
+    if(currentNode.canAddMixin("exo:rss-enable")) {
       currentNode.addMixin("exo:rss-enable");
       currentNode.setProperty("exo:title",currentNode.getName());
     }
