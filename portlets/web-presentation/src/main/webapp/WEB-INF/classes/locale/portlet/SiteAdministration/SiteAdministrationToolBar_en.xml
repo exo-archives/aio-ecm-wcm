@@ -24,6 +24,10 @@
 			<Editor>Editor</Editor>
 			<Administrator>Administrator</Administrator>
     </action>
+    <label>
+    	<LiveModeTitle>Live mode</LiveModeTitle>
+    	<EditModeTitle>Edit mode</EditModeTitle>
+    </label>
     <msg>
       <not-permission>You don't have permission to do this action.</not-permission>
     </msg>

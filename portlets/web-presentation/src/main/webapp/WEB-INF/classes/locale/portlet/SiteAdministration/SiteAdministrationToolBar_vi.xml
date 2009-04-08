@@ -24,6 +24,13 @@
 			<Editor></Editor>
 			<Administrator></Administrator>      
     </action>
+    <label>
+    	<LiveModeTitle>Chế độ hiển thị</LiveModeTitle>
+    	<EditModeTitle>Chế độ chỉnh sửa</EditModeTitle>
+    </label>
+    <msg>
+      <not-permission>Bạn không có quyền thực hiện hành động này.</not-permission>
+    </msg>        
   </UISiteAdminToolbar>
 </bundle>
 

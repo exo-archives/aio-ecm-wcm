@@ -24,9 +24,13 @@
 			<Editor></Editor>
 			<Administrator></Administrator>      
     </action>
-	<msg>
-	  <not-permission>Vous n'avez pas les droits nécessaires pour effectuer cette action.</not-permission>
-	</msg>
+    <label>
+    	<LiveModeTitle></LiveModeTitle>
+    	<EditModeTitle></EditModeTitle>
+    </label>    
+		<msg>
+		  <not-permission>Vous n'avez pas les droits nécessaires pour effectuer cette action.</not-permission>
+		</msg>
   </UISiteAdminToolbar>
 </bundle>
 

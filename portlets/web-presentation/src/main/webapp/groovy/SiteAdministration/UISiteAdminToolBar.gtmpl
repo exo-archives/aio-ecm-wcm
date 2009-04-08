@@ -47,6 +47,9 @@
 	String administratorLabel = _ctx.appRes("UISiteAdminToolbar.action.Administrator");							
 	String turnOnQuickEditLabel = _ctx.appRes("UISiteAdminToolbar.action.TurnOnQuickEdit");
 	String turnOffQuickEditLabel = _ctx.appRes("UISiteAdminToolbar.action.TurnOffQuickEdit");			
+	
+	String liveModeTitle = _ctx.appRes("UISiteAdminToolbar.label.LiveModeTitle");
+	String editModeTitle = _ctx.appRes("UISiteAdminToolbar.label.EditModeTitle");	
 %>
 
 <% 
@@ -248,7 +251,7 @@
 		<div class="BoxOnOff SelectOff">
 			<div class="LeftSelect">
 	    	<div class="RightSelect">
-		    	<div class="CenterSelect" onclick="$turnOffQuickEditLink">$turnOffQuickEditLabel</div>
+		    	<div class="CenterSelect" onclick="$turnOffQuickEditLink" title="$liveModeTitle">$turnOffQuickEditLabel</div>
 		    </div>
 	    </div>
 		</div>		
@@ -256,7 +259,7 @@
 		<div class="BoxOnOff SelectOn">
 			<div class="LeftSelect">
 	    	<div class="RightSelect">
-	    		<div class="CenterSelect" onclick="$turnOnQuickEditLink">$turnOnQuickEditLabel</div>
+	    		<div class="CenterSelect" onclick="$turnOnQuickEditLink" title="$editModeTitle">$turnOnQuickEditLabel</div>
 	    	</div>
 	    </div>
 		</div>		    
