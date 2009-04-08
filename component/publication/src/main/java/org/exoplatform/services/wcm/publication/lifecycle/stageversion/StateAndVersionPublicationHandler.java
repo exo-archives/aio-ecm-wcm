@@ -20,12 +20,16 @@ import java.util.HashMap;
 
 import javax.jcr.Node;
 
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleException;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.BaseWebSchemaHandler;
+import org.exoplatform.services.wcm.core.WebSchemaConfigService;
+import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
 
 /**
  * Created by The eXo Platform SAS
@@ -51,10 +55,12 @@ public class StateAndVersionPublicationHandler extends BaseWebSchemaHandler {
   }
 
   public boolean matchHandler(Node node, SessionProvider sessionProvider) throws Exception {
-    if(node.isNodeType("exo:cssFile") || node.isNodeType("exo:jsFile"))
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    WebSchemaConfigService schemaConfigService = (WebSchemaConfigService)container.getComponentInstanceOfType(WebSchemaConfigService.class);
+    WebContentSchemaHandler webContentSchemaHandler = schemaConfigService.getWebSchemaHandlerByType(WebContentSchemaHandler.class);
+    if(webContentSchemaHandler.isWebcontentChildNode(node))
       return false;
-    Node parent = node.getParent();
-    if(parent.isNodeType("exo:cssFolder") || parent.isNodeType("exo:jsFolder"))
+    if(node.isNodeType("exo:cssFile") || node.isNodeType("exo:jsFile"))
       return false;    
     String primaryNodeType = node.getPrimaryNodeType().getName();
     String repository = ((ManageableRepository)node.getSession().getRepository()).getConfiguration().getName();
@@ -63,12 +69,16 @@ public class StateAndVersionPublicationHandler extends BaseWebSchemaHandler {
 
   public void onCreateNode(Node node, SessionProvider sessionProvider) throws Exception {    
     Node checkNode = node;
-    if(node.isNodeType("nt:file")) {      
+    if(node.isNodeType("nt:file")) {
+      if(node.canAddMixin("exo:rss-enable")) {
+        node.addMixin("exo:rss-enable");
+        node.setProperty("exo:title",node.getName());
+      }
       Node parentNode = node.getParent();
       if(parentNode.isNodeType("exo:webContent")) {
         checkNode = parentNode;        
-      }                 
-    }         
+      }      
+    }             
     if(publicationService.isNodeEnrolledInLifecycle(checkNode)) return;
     publicationService.enrollNodeInLifecycle(checkNode,Constant.LIFECYCLE_NAME);
     publicationService.changeState(checkNode,Constant.DRAFT_STATE,new HashMap<String,String>());
@@ -85,11 +95,11 @@ public class StateAndVersionPublicationHandler extends BaseWebSchemaHandler {
     }
     String lifecycle = null;
     try {
-    lifecycle = publicationService.getNodeLifecycleName(checkNode);
+      lifecycle = publicationService.getNodeLifecycleName(checkNode);
     } catch (NotInPublicationLifecycleException e) {
-    	return;
+      return;
     }
-    
+
     if(!Constant.LIFECYCLE_NAME.equalsIgnoreCase(lifecycle))   
       return;
     String currentState = publicationService.getCurrentState(checkNode);

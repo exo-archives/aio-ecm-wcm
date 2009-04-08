@@ -27,6 +27,8 @@ import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
+import org.exoplatform.services.wcm.core.WebSchemaConfigService;
+import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
 
 /**
  * Created by The eXo Platform SAS
@@ -37,15 +39,23 @@ import org.exoplatform.services.wcm.core.WCMConfigurationService;
 public class PostCreateContentEventListener extends Listener<CmsService, Node>{
   private PublicationService publicationService;
   private WCMConfigurationService configurationService;
-  public PostCreateContentEventListener(PublicationService publicationService,WCMConfigurationService configurationService) {
+  private WebContentSchemaHandler webContentSchemaHandler;
+  public PostCreateContentEventListener(PublicationService publicationService,WCMConfigurationService configurationService, WebSchemaConfigService schemaConfigService) {
     this.publicationService = publicationService;
     this.configurationService = configurationService;
+    webContentSchemaHandler = schemaConfigService.getWebSchemaHandlerByType(WebContentSchemaHandler.class);
   }
 
   public void onEvent(Event<CmsService, Node> event) throws Exception {
     Node currentNode = event.getData();
-    if(currentNode.isNodeType("exo:cssFile") || currentNode.isNodeType("exo:jsFile"))
+    if(!currentNode.canAddMixin("exo:rss-enable")) {
+      currentNode.addMixin("exo:rss-enable");
+      currentNode.setProperty("exo:title",currentNode.getName());
+    }
+    if(webContentSchemaHandler.isWebcontentChildNode(currentNode))
       return;
+    if(currentNode.isNodeType("exo:cssFile") || currentNode.isNodeType("exo:jsFile"))
+      return;    
     String repository = ((ManageableRepository)currentNode.getSession().getRepository()).getConfiguration().getName();
     String workspace = currentNode.getSession().getWorkspace().getName();
     NodeLocation nodeLocation = configurationService.getLivePortalsLocation(repository);
@@ -54,7 +64,7 @@ public class PostCreateContentEventListener extends Listener<CmsService, Node>{
     if(!currentNode.getPath().startsWith(nodeLocation.getPath()))
       return;
     if(publicationService.isNodeEnrolledInLifecycle(currentNode))
-      return;
+      return;    
     publicationService.enrollNodeInLifecycle(currentNode,Constant.LIFECYCLE_NAME);
     publicationService.changeState(currentNode,Constant.DRAFT_STATE,new HashMap<String,String>());
   }
