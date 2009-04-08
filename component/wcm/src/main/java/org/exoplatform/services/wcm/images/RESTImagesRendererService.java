@@ -22,6 +22,7 @@ import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.Session;
+import javax.jcr.version.VersionHistory;
 
 import org.apache.commons.logging.Log;
 import org.exoplatform.common.http.HTTPStatus;
@@ -35,6 +36,7 @@ import org.exoplatform.services.rest.HTTPMethod;
 import org.exoplatform.services.rest.InputTransformer;
 import org.exoplatform.services.rest.OutputTransformer;
 import org.exoplatform.services.rest.QueryParam;
+import org.exoplatform.services.rest.QueryTemplate;
 import org.exoplatform.services.rest.Response;
 import org.exoplatform.services.rest.URIParam;
 import org.exoplatform.services.rest.URITemplate;
@@ -61,14 +63,47 @@ public class RESTImagesRendererService implements ResourceContainer{
   }
 
   @HTTPMethod("GET")
+  @QueryTemplate("type=file")
   @InputTransformer(PassthroughInputTransformer.class)
   @OutputTransformer(PassthroughOutputTransformer.class)
   public Response serveImage(@URIParam("repositoryName") String repository, @URIParam("workspaceName") String workspace,
       @URIParam("nodeIdentifier") String nodeIdentifier) { 
-    return serveImage(repository,workspace,nodeIdentifier,"jcr:content/jcr:data");
+    Node node = null;
+    try {            
+      SessionProvider sessionProvider = sessionProviderService.getSessionProvider(null);
+      Session session = sessionProvider.getSession(workspace,repositoryService.getRepository(repository));
+      if(nodeIdentifier.contains("/"))
+        node = session.getRootNode().getNode(nodeIdentifier);
+      else
+        node = session.getNodeByUUID(nodeIdentifier);
+      if(node == null) {
+        return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).build();
+      }
+      Node dataNode = null; 
+      InputStream jcrData = null;
+      if(node.isNodeType("nt:file")) {
+        dataNode = node;
+      }else if(node.isNodeType("nt:versionedChild")) {
+        VersionHistory versionHistory = (VersionHistory)node.getProperty("jcr:childVersionHistory").getNode();
+        String versionableUUID = versionHistory.getVersionableUUID();
+        dataNode = session.getNodeByUUID(versionableUUID);
+        System.out.println("===========>"+dataNode.getPath());
+      }else {
+        return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).build();
+      }     
+      jcrData = dataNode.getNode("jcr:content").getProperty("jcr:data").getStream();
+      return Response.Builder.ok().entity(jcrData, "image").build();
+    } catch (PathNotFoundException e) {
+      return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).build();
+    }catch (ItemNotFoundException e) {
+      return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).build();
+    }catch (Exception e) {
+      log.error(e.getMessage(),e);
+      return Response.Builder.serverError().build(); 
+    }
   }
   
-  @HTTPMethod("GET")
+  @HTTPMethod("GET")  
   @InputTransformer(PassthroughInputTransformer.class)
   @OutputTransformer(PassthroughOutputTransformer.class)
   public Response serveImage(@URIParam("repositoryName") String repository, @URIParam("workspaceName") String workspace,
@@ -78,7 +113,7 @@ public class RESTImagesRendererService implements ResourceContainer{
       SessionProvider sessionProvider = sessionProviderService.getSessionProvider(null);
       Session session = sessionProvider.getSession(workspace,repositoryService.getRepository(repository));
       if(nodeIdentifier.contains("/"))
-        node = (Node)session.getItem(nodeIdentifier);
+        node = session.getRootNode().getNode(nodeIdentifier);
       else
         node = session.getNodeByUUID(nodeIdentifier);
       if(node == null) {
@@ -98,6 +133,7 @@ public class RESTImagesRendererService implements ResourceContainer{
   
   
   public String generateURI(Node file) throws Exception {
+    if(!file.isNodeType("nt:file")) throw new UnsupportedOperationException("The node isn't nt:file");
     StringBuilder builder = new StringBuilder();    
     String repository = ((ManageableRepository)file.getSession().getRepository()).getConfiguration().getName();
     String workspaceName = file.getSession().getWorkspace().getName();
@@ -112,7 +148,8 @@ public class RESTImagesRendererService implements ResourceContainer{
     if(!SystemIdentity.ANONIM.equals(userId) && SystemIdentity.SYSTEM.equalsIgnoreCase(userId)) {
       accessURI = baseRestURI.concat("private/");
     }
-    return builder.append(accessURI).append("images/").append(repository).append("/").append(workspaceName).append("/").append(nodeIdentifiler).toString();
+    return builder.append(accessURI).append("images/").append(repository).append("/")
+                  .append(workspaceName).append("/").append(nodeIdentifiler).append("?type=file").toString();
   }
   
   public String generateURI(Node file, String propertyName) throws Exception {

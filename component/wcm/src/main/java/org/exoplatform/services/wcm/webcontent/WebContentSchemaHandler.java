@@ -34,7 +34,7 @@ public class WebContentSchemaHandler extends BaseWebSchemaHandler {
 
   protected String getHandlerNodeType() { return "exo:webContent"; }  
   protected String getParentNodeType() { return "nt:unstructured"; }
-  
+
   @SuppressWarnings("unused")
   public boolean matchHandler(Node node, SessionProvider sessionProvider) throws Exception {    
     String handlerNodeType = getHandlerNodeType();    
@@ -45,7 +45,7 @@ public class WebContentSchemaHandler extends BaseWebSchemaHandler {
       return false;    
     return true;    
   }
-  
+
   @SuppressWarnings("unused")
   public void onCreateNode(final Node webContent, SessionProvider sessionProvider) throws Exception {
     Session session = webContent.getSession();
@@ -64,19 +64,19 @@ public class WebContentSchemaHandler extends BaseWebSchemaHandler {
   public Node getImagesFolders(final Node webContent) throws Exception {
     return webContent.getNode("medias/images");
   }
-  
+
   public Node getIllustrationImage(final Node webContent) throws Exception {
     return webContent.getNode("medias/images/illustration");
   }
-  
+
   public Node getVideoFolder(final Node webContent) throws Exception {
     return webContent.getNode("medias/videos");
   }
-  
+
   public Node getDocumentFolder (final Node webContent) throws Exception {
     return webContent.getNode("documents");
   }
-  
+
   public void createDefaultSchema(Node webContent) throws Exception{
     addMixin(webContent,"exo:owneable");
     createSchema(webContent);
@@ -84,15 +84,15 @@ public class WebContentSchemaHandler extends BaseWebSchemaHandler {
     Node defaultCSS = addNodeAsNTFile(webContent.getNode("css"), "default.css", "text/css", "");
     addMixin(defaultCSS, "exo:cssFile");
     addMixin(defaultCSS,"exo:owneable");
-    
+
     Node defaultJS = addNodeAsNTFile(webContent.getNode("js"), "default.js", "application/x-javascript", "");
     addMixin(defaultJS, "exo:jsFile");
     addMixin(defaultJS,"exo:owneable");
-    
+
     Node defaultHTML = addNodeAsNTFile(webContent, "default.html", "text/html", "");
     addMixin(defaultHTML, "exo:htmlFile");
     addMixin(defaultHTML,"exo:owneable");
-    
+
     Node illustration = addNodeAsNTFile(webContent.getNode("medias/images"), "illustration", "", "");
     addMixin(illustration, "exo:owneable");
   }     
@@ -127,7 +127,7 @@ public class WebContentSchemaHandler extends BaseWebSchemaHandler {
     //by default, value of exo:title is webcontent name
     webContent.setProperty("exo:title", webContent.getName());
   }
-  
+
   private Node addNodeAsNTFile(Node home, String fileName,String mimeType,String data) throws Exception{
     Node file = home.addNode(fileName,"nt:file");
     Node jcrContent = file.addNode("jcr:content","nt:resource");    
@@ -137,5 +137,25 @@ public class WebContentSchemaHandler extends BaseWebSchemaHandler {
     jcrContent.setProperty("jcr:mimeType", mimeType);
     jcrContent.setProperty("jcr:data", data);    
     return file;
+  }
+
+  public boolean isWebcontentChildNode(Node file) throws Exception{    
+    Node parent = file.getParent();
+    //for sub nodes of the webcontent node
+    if(parent.isNodeType("exo:webContent"))
+      return true;    
+    //for subnodes in some folders like css, js, documents, medias
+    if(parent.getPath().equals("/"))
+      return false;    
+    Node grantParent = parent.getParent();
+    if(grantParent.isNodeType("exo:webContent"))
+      return true;
+    //for subnodes in some folders like images, videos, audio
+    if(grantParent.getPath().equals("/"))
+      return false;
+    Node ansestor = grantParent.getParent();
+    if(ansestor.isNodeType("exo:webContent")) 
+      return true;
+    return false;
   }
 }
