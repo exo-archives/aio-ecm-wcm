@@ -120,6 +120,7 @@
       <SaveDraft>Save Draft</SaveDraft>
       <Cancel>Cancel</Cancel>
       <FastPublish>Fast Publish</FastPublish>
+      <Preferences>Preferences</Preferences>
     </action>
   </UIContentDialogForm>
   <!--/n  ###################################################################

@@ -76,8 +76,8 @@ import org.exoplatform.webui.form.UIFormStringInput;
     lifecycle = UIFormLifecycle.class,
     events = {
       @EventConfig(listeners = UIContentDialogForm.SaveDraftActionListener.class),
-      @EventConfig(listeners = UIContentDialogForm.CancelActionListener.class),
       @EventConfig(listeners = UIContentDialogForm.FastPublishActionListener.class),
+      @EventConfig(listeners = UIContentDialogForm.PreferencesActionListener.class),
       @EventConfig(listeners = DialogFormActionListeners.RemoveDataActionListener.class)
     }
 )
@@ -100,7 +100,7 @@ public class UIContentDialogForm extends UIDialogForm {
   private boolean isEditNotIntegrity;
   
   /** List of actions in this form.*/
-  private static final String [] ACTIONS = {"SaveDraft", "Cancel", "FastPublish"};
+  private static final String [] ACTIONS = {"SaveDraft", "FastPublish", "Preferences"};
 
   /**
    * Instantiates a new uI content dialog form.
@@ -131,6 +131,7 @@ public class UIContentDialogForm extends UIDialogForm {
     } catch (Exception e) {
       webContentNode = (Node) session.getItem(identifier);
     }
+    setWebContent(webContentNode);
     NodeLocation nodeLocation = new NodeLocation();
     nodeLocation.setRepository(repositoryName);
     nodeLocation.setWorkspace(workspace);
@@ -313,6 +314,33 @@ public class UIContentDialogForm extends UIDialogForm {
   }
 
   /**
+   * The listener interface for receiving preferencesAction events.
+   * The class that is interested in processing a preferencesAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addPreferencesActionListener<code> method. When
+   * the PreferencesAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see CancelActionEvent
+   */
+  static public class PreferencesActionListener extends EventListener<UIContentDialogForm> {
+	  
+	  /* (non-Javadoc)
+	   * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+	   */
+	  public void execute(Event<UIContentDialogForm> event) throws Exception {
+	      UIContentDialogForm dialogForm = event.getSource();
+	      UIQuickCreationWizard uiQuickWizard = dialogForm.getAncestorOfType(UIQuickCreationWizard.class);
+	      UISocialInfo uiSocialInfo = uiQuickWizard.getChild(UISocialInfo.class);
+	      uiSocialInfo.update();
+	      uiQuickWizard.viewStep(3);
+	      UIPortletConfig portletConfig = uiQuickWizard.getAncestorOfType(UIPortletConfig.class);
+	      portletConfig.showPopup(event.getRequestContext());
+	  }
+  }
+  
+  /**
    * The listener interface for receiving saveAction events.
    * The class that is interested in processing a saveAction
    * event implements this interface, and the object created
@@ -410,13 +438,17 @@ public class UIContentDialogForm extends UIDialogForm {
       if (!isCheckOut) {
         newNode.checkin();
       }
-      UIQuickCreationWizard uiQuickWizard = dialogForm.getAncestorOfType(UIQuickCreationWizard.class);
-      UISocialInfo uiSocialInfo = uiQuickWizard.getChild(UISocialInfo.class);
-      UIPermissionManager uiPermissionManager = uiSocialInfo.getChild(UIPermissionManager.class);
-      uiPermissionManager.getChild(UIPermissionInfo.class).updateGrid();
-      uiQuickWizard.viewStep(3);
-      UIPortletConfig portletConfig = uiQuickWizard.getAncestorOfType(UIPortletConfig.class);
-      portletConfig.showPopup(event.getRequestContext());
+//      UIQuickCreationWizard uiQuickWizard = dialogForm.getAncestorOfType(UIQuickCreationWizard.class);
+//      UISocialInfo uiSocialInfo = uiQuickWizard.getChild(UISocialInfo.class);
+//      UIPermissionManager uiPermissionManager = uiSocialInfo.getChild(UIPermissionManager.class);
+//      uiPermissionManager.getChild(UIPermissionInfo.class).updateGrid();
+//      uiQuickWizard.viewStep(3);
+//      UIPortletConfig portletConfig = uiQuickWizard.getAncestorOfType(UIPortletConfig.class);
+//      portletConfig.showPopup(event.getRequestContext());
+      
+      UIPortletConfig uiPortletConfig = dialogForm.getAncestorOfType(UIPortletConfig.class);
+      uiPortletConfig.closePopupAndUpdateUI(event.getRequestContext(),true);
+
     }
   }
   
@@ -523,13 +555,17 @@ public class UIContentDialogForm extends UIDialogForm {
 	    	  context.put(Constant.CURRENT_REVISION_NAME, newNode.getName());
 	      }
 	      publicationPlugin.changeState(newNode, Constant.LIVE_STATE, context);
-	      UIQuickCreationWizard uiQuickWizard = dialogForm.getAncestorOfType(UIQuickCreationWizard.class);
-	      UISocialInfo uiSocialInfo = uiQuickWizard.getChild(UISocialInfo.class);
-	      UIPermissionManager uiPermissionManager = uiSocialInfo.getChild(UIPermissionManager.class);
-	      uiPermissionManager.getChild(UIPermissionInfo.class).updateGrid();
-	      uiQuickWizard.viewStep(3);
-	      UIPortletConfig portletConfig = uiQuickWizard.getAncestorOfType(UIPortletConfig.class);
-	      portletConfig.showPopup(event.getRequestContext());
+//	      UIQuickCreationWizard uiQuickWizard = dialogForm.getAncestorOfType(UIQuickCreationWizard.class);
+//	      UISocialInfo uiSocialInfo = uiQuickWizard.getChild(UISocialInfo.class);
+//	      UIPermissionManager uiPermissionManager = uiSocialInfo.getChild(UIPermissionManager.class);
+//	      uiPermissionManager.getChild(UIPermissionInfo.class).updateGrid();
+//	      uiQuickWizard.viewStep(3);
+//	      UIPortletConfig portletConfig = uiQuickWizard.getAncestorOfType(UIPortletConfig.class);
+//	      portletConfig.showPopup(event.getRequestContext());
+	      
+	      UIPortletConfig uiPortletConfig = dialogForm.getAncestorOfType(UIPortletConfig.class);
+	      uiPortletConfig.closePopupAndUpdateUI(event.getRequestContext(),true);
+
 	}
   }
 

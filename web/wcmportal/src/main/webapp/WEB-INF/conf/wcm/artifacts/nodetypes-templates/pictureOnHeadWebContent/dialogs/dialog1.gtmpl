@@ -72,21 +72,11 @@
 									<div class="NormalTab">
 										<div class="LeftTab">
 											<div class="RightTab">                
-												<div class="MiddleTab" onClick="eXo.webui.UIHorizontalTabs.displayTabContent(this);"><%=_ctx.appRes("WebContent.dialog.label.cssFile")%></div>
+												<div class="MiddleTab" onClick="eXo.webui.UIHorizontalTabs.displayTabContent(this);"><%=_ctx.appRes("WebContent.dialog.label.Advanced")%></div>
 											</div>
 										</div>
 									</div>
 								</div>
-								
-								<div class="UITab NormalTabStyle">
-									<div class="NormalTab">
-										<div class="LeftTab">
-											<div class="RightTab">                
-												<div class="MiddleTab" onClick="eXo.webui.UIHorizontalTabs.displayTabContent(this);"><%=_ctx.appRes("WebContent.dialog.label.jsFile")%></div>
-											</div>
-										</div>
-									</div>
-								</div>																
 								
 							</div> <!-- End of TabsContainer-->
 						</div>	<!-- End of CenterHorizontalTabs -->
@@ -174,7 +164,7 @@
 								<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.imageWidth")%></td>
 							  	<td class="FieldComponent">
 									<%
-							        String[] imageWidth = ["jcrPath=/node/exo:imageWidth", "validate=org.exoplatform.wcm.webui.ImageSizeValidator", "defaultValues=150"];
+							        String[] imageWidth = ["jcrPath=/node/exo:imageWidth", "validate=org.exoplatform.wcm.webui.ImageSizeValidator"];
 							        uicomponent.addTextField("imageWidth", imageWidth) ;
 							    %>
 								</td>
@@ -183,7 +173,7 @@
 								<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.imageHeight")%></td>
 							  	<td class="FieldComponent">
 									<%
-							        String[] imageHeight = ["jcrPath=/node/exo:imageHeight", "validate=org.exoplatform.wcm.webui.ImageSizeValidator", "defaultValues=150"];
+							        String[] imageHeight = ["jcrPath=/node/exo:imageHeight", "validate=org.exoplatform.wcm.webui.ImageSizeValidator"];
 							        uicomponent.addTextField("imageHeight", imageHeight) ;
 							    %>
 								</td>
@@ -218,7 +208,7 @@
 									if(htmlContent == null || htmlContent.equals("")) {
 										htmlContent = "<div class=\"DropCap\">T</div>ype the text here <div style=\"clear: left; height: 20px;\"><span></span></div>";
 									}
-									String[] htmlArguments = ["jcrPath=/node/default.html/jcr:content/jcr:data", "options=toolbar:CompleteWCM,width:100%", htmlContent];
+									String[] htmlArguments = ["jcrPath=/node/default.html/jcr:content/jcr:data", "options=toolbar:CompleteWCM,width:100%,height:410px", htmlContent];
 			    					uicomponent.addWYSIWYGField(htmlWYSIWYGFormId, htmlArguments) ;
 			      				%>
 								</td>
@@ -291,13 +281,10 @@
 					<!-- End of Illustration tab -->		
 								
 					<div class="UITabContent" style="display: none;">
-						<div class="FormHint">
-							<%=_ctx.appRes("WebContent.dialog.label.hintCSS")%>
-						</div>
 						<table class="UIFormGrid">
 							<tr>
 								<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.ContentCSS")%></td>
-								<td class="FieldComponent">
+								<td class="FieldComponent" style="width:520px">
 								<%
 									String[] cssHiddenField1 = ["jcrPath=/node/css/default.css", "nodetype=nt:file", "defaultValues=default.css"] ;
 									String[] cssHiddenField2 = ["jcrPath=/node/css/default.css/jcr:content", "nodetype=nt:resource", "mixintype=dc:elementSet", "visible=false"] ; 
@@ -311,7 +298,7 @@
 									uicomponent.addCalendarField("cssHiddenField4", cssHiddenField4) ;
 									uicomponent.addCalendarField("cssHiddenField5", cssHiddenField5) ;
 									uicomponent.addHiddenField("cssHiddenField6", cssHiddenField6) ;
-									String cssContent = null;
+									String cssContent = "";
 									if(uicomponent.isEditing()) {
 										Node webContentNode = uicomponent.getNode();
 										if(webContentNode.hasNode("css/default.css")) {
@@ -319,25 +306,19 @@
 											cssContent = cssNode.getNode("jcr:content").getProperty("jcr:data").getValue().getString();
 										}
 									}
-									if(cssContent == null || cssContent.equals("")) {
-										cssContent = ".DropCap {\n\tfont-size: 100px;\n\tline-height:66px;\n\tmargin: 0 5px;\n\tfloat: left\n}";
-									}
 									String[] fieldContentCSS = ["jcrPath=/node/css/default.css/jcr:content/jcr:data", cssContent] ;
 									uicomponent.addTextAreaField(cssFormId, fieldContentCSS) ;
 								%>
 								</td>
+								<td width="260px">
+									<div class="FormHint" style="margin-top:5px">
+										<%=_ctx.appRes("WebContent.dialog.label.hintCSS")%>
+									</div>
+								</td>
 							</tr>
-						</table>
-					</div>
-					
-					<div class="UITabContent" style="display: none;">
-						<div class="FormHint">
-							<%=_ctx.appRes("WebContent.dialog.label.hintJS")%>
-						</div>
-						<table class="UIFormGrid">
 							<tr>
 								<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.ContentJS")%></td>
-								<td class="FieldComponent">
+								<td class="FieldComponent" style="width:520px">
 								<%
 									String[] jsHiddenField1 = ["jcrPath=/node/js/default.js", "nodetype=nt:file", "defaultValues=default.js"];
 									String[] jsHiddenField2 = ["jcrPath=/node/js/default.js/jcr:content", "nodetype=nt:resource", "mixintype=dc:elementSet", "visible=false"]; 
@@ -362,6 +343,11 @@
 									String[] fieldContentJS = ["jcrPath=/node/js/default.js/jcr:content/jcr:data", jsContent];
 									uicomponent.addTextAreaField(jsFormId, fieldContentJS); 								
 								%>
+								</td>
+								<td width="260px">
+									<div class="FormHint" style="margin-top:5px">
+										<%=_ctx.appRes("WebContent.dialog.label.hintJS")%>
+									</div>
 								</td>
 							</tr>
 						</table>

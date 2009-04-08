@@ -107,6 +107,16 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
     }
     return this ;
   }
+  
+  public void GotoEditWizard(int step) throws Exception {
+      UIPortletConfig uiPortletConfig = this.getAncestorOfType(UIPortletConfig.class);      
+      this.setRendered(false);
+      UIQuickCreationWizard uiQuickCreationWizard = uiPortletConfig.addChild(UIQuickCreationWizard.class, null, null);
+      UIContentDialogForm contentDialogForm  = uiQuickCreationWizard.getChild(UIContentDialogForm.class);
+      contentDialogForm.setEditNotIntegrity(true);
+      contentDialogForm.init();
+      uiQuickCreationWizard.viewStep(step);
+  }
 
   /**
    * Sets the component.
@@ -131,6 +141,8 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
 
   }
 
+  
+  
   /**
    * The listener interface for receiving startProcessAction events.
    * The class that is interested in processing a startProcessAction

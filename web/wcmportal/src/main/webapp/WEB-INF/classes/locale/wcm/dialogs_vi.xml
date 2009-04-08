@@ -8,6 +8,7 @@
         <MainContent>Nội dung chính</MainContent>
         <cssFile>default.css</cssFile>
         <jsFile>default.js</jsFile>
+        <advanced>Advanced</advanced>
         <Summary>Tóm tắt</Summary>
         <name>Tên</name>
         <title>Tiêu đề</title>

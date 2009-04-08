@@ -67,6 +67,7 @@ public class UIPresentationContainer extends UIContainer{
 
   private boolean isDraftRevision = false;
   private boolean isObsoletedContent = false;
+  private boolean hasLiveRevision = false;
 
 
   /**
@@ -100,45 +101,56 @@ public class UIPresentationContainer extends UIContainer{
   }
 
 
-  public boolean isDraftRevision() {
+  private boolean isDraftRevision() {
     return isDraftRevision;
   }
 
 
-  public void setDraftRevision(boolean isDraftRevision) {
+  private void setDraftRevision(boolean isDraftRevision) {
     this.isDraftRevision = isDraftRevision;
   }
 
+  public boolean hasLiveRevision() {
+	  return hasLiveRevision;
+  }
+  
+  private void setHasLiveRevision(boolean hasLiveRevision) {
+	  this.hasLiveRevision = hasLiveRevision;
+  }
+  
   @Override
   public void processRender(WebuiRequestContext context) throws Exception {
     UISingleContentViewerPortlet uiportlet = getAncestorOfType(UISingleContentViewerPortlet.class);
-    Node orginialNode = null;
+    Node originalNode = null;
+    setHasLiveRevision(false);
     try {
-      orginialNode = uiportlet.getReferencedContent();
+      originalNode = uiportlet.getReferencedContent();
     } catch(ItemNotFoundException ex) {
-      orginialNode = null;
+      originalNode = null;
     } catch(RepositoryException rx) {
-      orginialNode =  null;
+      originalNode =  null;
     }    
-    String currentState = PublicationState.getRevisionState(orginialNode);
+    String currentState = PublicationState.getRevisionState(originalNode);
     if(Constant.OBSOLETE_STATE.equals(currentState)) {
       setObsoletedContent(true);
     }else {
       setObsoletedContent(false);
       UIPresentation livePresentation = getChild(UIPresentation.class);
       if(Utils.isLiveMode()) {
-        Node liveRevision = getLiveRevision(orginialNode);
-        livePresentation.setOriginalNode(orginialNode);
+        Node liveRevision = getLiveRevision(originalNode);
+        if (liveRevision!=null) setHasLiveRevision(true);
+        livePresentation.setOriginalNode(originalNode);
         livePresentation.setViewNode(liveRevision);      
         setDraftRevision(false);       
       }else {        
         if(Constant.DRAFT_STATE.equals(currentState)) {
-          livePresentation.setViewNode(orginialNode);          
-          livePresentation.setOriginalNode(orginialNode);
+          livePresentation.setViewNode(originalNode);          
+          livePresentation.setOriginalNode(originalNode);
           setDraftRevision(true);          
         } else if(Constant.LIVE_STATE.equals(currentState)) {
-          Node liveRevision = getLiveRevision(orginialNode);
-          livePresentation.setOriginalNode(orginialNode);
+          Node liveRevision = getLiveRevision(originalNode);
+          if (liveRevision!=null) setHasLiveRevision(true);
+          livePresentation.setOriginalNode(originalNode);
           livePresentation.setViewNode(liveRevision);
           setDraftRevision(false);             
         }

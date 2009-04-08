@@ -8,6 +8,7 @@
         <MainContent>Main Content</MainContent>
         <cssFile>default.css</cssFile>
         <jsFile>default.js</jsFile>
+        <advanced>Advanced</advanced>
         <Summary>summary</Summary>
         <name>Name</name>
         <title>Title</title>

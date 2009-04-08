@@ -115,6 +115,7 @@
       <SaveDraft>Lưu nháp</SaveDraft>
       <Cancel>Hủy bỏ</Cancel>
       <FastPublish>Xuất bản nhanh</FastPublish>
+      <Preferences></Preferences>
     </action>
   </UIContentDialogForm>
   <!--/n  ###################################################################

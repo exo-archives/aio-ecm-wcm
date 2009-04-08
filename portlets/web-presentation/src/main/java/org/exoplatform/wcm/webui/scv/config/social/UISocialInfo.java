@@ -25,6 +25,7 @@ import javax.jcr.Session;
 import org.exoplatform.services.cms.categories.CategoriesService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.wcm.webui.scv.config.UIMiscellaneousInfo;
+import org.exoplatform.wcm.webui.scv.config.access.UIPermissionInfo;
 import org.exoplatform.wcm.webui.scv.config.access.UIPermissionManager;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UITabPane;
@@ -50,13 +51,18 @@ public class UISocialInfo extends UITabPane {
    * @throws Exception the exception
    */
   public UISocialInfo() throws Exception {
-    UIPermissionManager uiPermission = addChild(UIPermissionManager.class, null, null);
+	  UIMiscellaneousInfo uiMiscellaneousInfo = addChild(UIMiscellaneousInfo.class, null, null);
+	  UIPermissionManager uiPermission = addChild(UIPermissionManager.class, null, null);
     // Comment adding UITagging and UICategorizing but don't delete.
     // because WCM can use UITagging and UICategorizing later.
 //    addChild(UITagging.class, null, null);
 //    addChild(UICategorizing.class, null, null);
-    addChild(UIMiscellaneousInfo.class, null, null);
-    setSelectedTab(uiPermission.getId()) ;
+	  setSelectedTab(uiMiscellaneousInfo.getId()) ;
+  }
+  
+  public void update() throws Exception {
+	  UIPermissionManager uiPermissionManager = getChild(UIPermissionManager.class);
+	  uiPermissionManager.getChild(UIPermissionInfo.class).updateGrid();
   }
 
   /**

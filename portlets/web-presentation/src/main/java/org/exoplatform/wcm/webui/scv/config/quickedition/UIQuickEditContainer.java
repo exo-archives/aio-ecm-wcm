@@ -20,6 +20,7 @@ import org.exoplatform.wcm.webui.WebUIPropertiesConfigService;
 import org.exoplatform.wcm.webui.WebUIPropertiesConfigService.PopupWindowProperties;
 import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
 import org.exoplatform.wcm.webui.scv.config.UIPortletConfig;
+import org.exoplatform.wcm.webui.scv.config.UIQuickCreationWizard;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
@@ -76,7 +77,12 @@ public class UIQuickEditContainer extends UIContainer {
       UIPopupContainer popupContainer = viewerPortlet.getChild(UIPopupContainer.class);
       UIPortletConfig uiPortletConfig = uiQuickEditContainer.getAncestorOfType(UIPortletConfig.class);
       uiPortletConfig.getChildren().clear();
-      uiPortletConfig.addUIWelcomeScreen();      
+//      uiPortletConfig.addUIWelcomeScreen(); 
+      
+      UIQuickCreationWizard uiQuickCreationWizard = uiPortletConfig.addChild(UIQuickCreationWizard.class, null, null);
+      uiQuickCreationWizard.viewStep(3);
+      
+      
       WebUIPropertiesConfigService propertiesConfigService = uiQuickEditContainer.getApplicationComponent(WebUIPropertiesConfigService.class);
       PopupWindowProperties popupProperties = (PopupWindowProperties)propertiesConfigService.getProperties(WebUIPropertiesConfigService.SCV_POPUP_SIZE_EDIT_PORTLET_MODE);
       popupContainer.activate(uiPortletConfig,popupProperties.getWidth(),popupProperties.getHeight());

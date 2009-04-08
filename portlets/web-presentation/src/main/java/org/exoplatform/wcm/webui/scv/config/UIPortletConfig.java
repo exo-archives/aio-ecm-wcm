@@ -93,7 +93,15 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent{
     try{
       Node node = uiPresentationPortlet.getReferencedContent();
       if(uiPresentationPortlet.canEditContent(node)) {
-        addChild(UIQuickEditContainer.class, null, null);
+//        addChild(UIQuickEditContainer.class, null, null);
+        
+        UIQuickCreationWizard uiQuickCreationWizard = addChild(UIQuickCreationWizard.class, null, null);
+        UIContentDialogForm contentDialogForm  = uiQuickCreationWizard.getChild(UIContentDialogForm.class);
+        contentDialogForm.setEditNotIntegrity(true);
+        contentDialogForm.init();
+        uiQuickCreationWizard.viewStep(2);
+
+        
         return;
       }      
     }catch(Exception e) {
@@ -110,9 +118,9 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent{
    * @throws Exception the exception
    */
   public void addUIWelcomeScreen() throws Exception {
-    UIWelcomeScreen uiWellcomeScreen = addChild(UIWelcomeScreen.class, null, null);
-    uiWellcomeScreen.setCreateMode(checkNewConfig());
-    uiBackComponent = uiWellcomeScreen ;
+    UIWelcomeScreen uiWelcomeScreen = addChild(UIWelcomeScreen.class, null, null);
+    uiWelcomeScreen.setCreateMode(checkNewConfig());
+    uiBackComponent = uiWelcomeScreen ;
   }
 
 

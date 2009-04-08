@@ -42,8 +42,7 @@ import org.exoplatform.webui.event.EventListener;
         @EventConfig(listeners = UIQuickCreationWizard.ViewStep1ActionListener.class),
         @EventConfig(listeners = UIQuickCreationWizard.ViewStep2ActionListener.class),
         @EventConfig(listeners = UIQuickCreationWizard.ViewStep3ActionListener.class),
-        @EventConfig(listeners = UIQuickCreationWizard.BackActionListener.class),
-        @EventConfig(listeners = UIQuickCreationWizard.CompleteActionListener.class)
+        @EventConfig(listeners = UIQuickCreationWizard.BackActionListener.class)
     }
 )
 
@@ -80,7 +79,7 @@ public class UIQuickCreationWizard extends UIBaseWizard {
       actions = new String[] {};
       break;
     case STEP3:
-      actions = new String[] {"Back", "Complete"};
+      actions = new String[] {"Back"};
       break;
     default:
       break;
@@ -172,34 +171,4 @@ public class UIQuickCreationWizard extends UIBaseWizard {
     }
   }
 
-  /**
-   * The listener interface for receiving completeAction events.
-   * The class that is interested in processing a completeAction
-   * event implements this interface, and the object created
-   * with that class is registered with a component using the
-   * component's <code>addCompleteActionListener<code> method. When
-   * the completeAction event occurs, that object's appropriate
-   * method is invoked.
-   * 
-   * @see CompleteActionEvent
-   */
-  public static class CompleteActionListener extends EventListener<UIQuickCreationWizard> {
-
-    /* (non-Javadoc)
-     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
-     */
-    public void execute(Event<UIQuickCreationWizard> event) throws Exception {
-      UIQuickCreationWizard uiQuickCreationWizard = event.getSource();            
-      PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
-      PortletPreferences prefs = context.getRequest().getPreferences();
-      UIContentDialogForm uiContentDialogForm = uiQuickCreationWizard.getChild(UIContentDialogForm.class);
-      NodeIdentifier identifier = uiContentDialogForm.getSavedNodeIdentifier();
-      prefs.setValue(UISingleContentViewerPortlet.REPOSITORY, identifier.getRepository());
-      prefs.setValue(UISingleContentViewerPortlet.WORKSPACE, identifier.getWorkspace());
-      prefs.setValue(UISingleContentViewerPortlet.IDENTIFIER, identifier.getUUID());
-      prefs.store();      
-      UIPortletConfig uiPortletConfig = uiQuickCreationWizard.getAncestorOfType(UIPortletConfig.class);     
-      uiPortletConfig.closePopupAndUpdateUI(context,true);
-    }
-  }
 }

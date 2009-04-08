@@ -113,9 +113,10 @@
   -->
   <UIContentDialogForm>
     <action>
-      <SaveDraft></SaveDraft>
+      <SaveDraft>Sauver le brouillon</SaveDraft>
       <Cancel>Annuler</Cancel>
-      <FastPublish></FastPublish>
+      <FastPublish>Publication rapide</FastPublish>
+      <Preferences>Préférences</Preferences>
     </action>
   </UIContentDialogForm>
   <!--/n  ###################################################################
