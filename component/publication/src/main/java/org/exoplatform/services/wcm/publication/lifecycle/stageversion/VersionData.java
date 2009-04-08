@@ -18,8 +18,6 @@ package org.exoplatform.services.wcm.publication.lifecycle.stageversion;
 
 import java.util.Calendar;
 
-import org.exoplatform.commons.utils.ISO8601;
-
 
 /**
  * Created by The eXo Platform SAS
