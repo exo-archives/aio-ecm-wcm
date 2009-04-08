@@ -2,6 +2,59 @@
   background: white url('/portal/rest/jcr/repository/collaboration/sites content/live/classic/web contents/site artifacts/banner/Default/medias/images/BgBanner.png') repeat-x;
 }
 
+.UIPopupWindow .MiddleLeftSideDecorator {
+	background: url('background/MiddlePopupWindow.gif') repeat-y left;
+}
+
+.UIPopupWindow .MiddleRightSideDecorator {
+	background: url('background/MiddlePopupWindow.gif') repeat-y right;
+}
+
+.UIPopupWindow .PopupTitle {
+	background: transparent url(background/PopupWindow.gif) repeat-x scroll center -30px;
+}
+
+.UIPopupWindow .PopupTitleIcon {
+	background: url('background/PopupWindow.gif') no-repeat left bottom;
+}
+
+.UIPopupWindow .PopupTitleIconRight {
+	background: url('background/PopupWindow.gif') no-repeat left bottom; 
+}
+
+.UIPopupWindow .PopupTitle {
+	background: url('background/PopupWindow.gif') repeat-x center -30px;
+}
+
+.UIPopupWindow .CloseButton {
+	background: url('background/PopupWindow.gif') no-repeat right bottom;
+}
+
+.UIPopupWindow .TopLeftCornerDecorator {
+	background: url('background/PopupWindow.gif') no-repeat left -69px;
+}
+
+.UIPopupWindow .TopCenterDecorator {
+	background: url('background/PopupWindow.gif') repeat-x center -46px;
+}
+
+.UIPopupWindow .TopRightCornerDecorator {
+	background: url('background/PopupWindow.gif') no-repeat right -69px;
+}
+
+.UIPopupWindow .BottomLeftCornerDecorator {
+	background: url('background/PopupWindow.gif') no-repeat left -26px;
+}
+
+.UIPopupWindow .BottomCenterDecorator {
+	background: url('background/PopupWindow.gif') repeat-x right -11px;
+}
+
+.UIPopupWindow .BottomRightCornerDecorator {
+	background: url('background/PopupWindow.gif') no-repeat right -26px;
+}
+
+
 .UIWCMColumnContainer {
   margin: auto;
   overflow: hidden;
