@@ -3,10 +3,14 @@
   import org.exoplatform.portal.config.model.PageNavigation;
 	import org.exoplatform.portal.config.model.PageNode;
 	import org.exoplatform.wcm.webui.administration.UISiteAdminToolbar;
+	import org.exoplatform.web.application.JavascriptManager;
   
 	def rcontext = _ctx.getRequestContext();
+	JavascriptManager jsmanager = rcontext.getJavascriptManager();
+	jsmanager.importJavascript('eXo.SiteAdministration.ShowAdminToolbar','/web-presentation/javascript');
 	
 	int currentRole = uicomponent.getRole();
+	boolean showable  = uicomponent.isShowWorkspaceArea();
 	
 	String addPageLink = uicomponent.event("AddPage");
 	String editPageLink = uicomponent.event("EditPage");
@@ -203,19 +207,19 @@
 		<a href="#" class="EditorIcon TBIcon" onmouseover="showPopupMenu(this)">$editorLabel</a>
 		<div class="MenuItemContainer" style="display: none;">
       <div class="MenuItem OddItem">
-        <a href="$addContentLink" title="" class="ItemIcon AccountSettingsIcon">$addContentLabel</a>
+        <a href="$addContentLink" title="" class="ItemIcon AddContentIcon" onclick="showWorkspaceArea($showable);">$addContentLabel</a>
       </div>  
       <div class="MenuItem EvenItem">
-				<a href="editPageAndNaviLink" title="" class="ItemIcon AccountSettingsIcon">$editPageAndNaviLabel</a>       
+				<a href="$editPageAndNavLink" title="" class="ItemIcon AccountSettingsIcon" onclick="showWorkspaceArea($showable);">$editPageAndNaviLabel</a>       
       </div>         
       <div class="MenuItem OddItem">
-        <a href="$editPageLink" title="" class="ItemIcon AccountSettingsIcon">$editPageLabel</a>
+        <a href="$editPageLink" title="" class="ItemIcon EditPageIcon" onclick="showWorkspaceArea($showable);">$editPageLabel</a>
       </div>
       <div class="MenuItem EvenItem">  
-				<a href="$addPageLink" title="" class="ItemIcon AccountSettingsIcon">$addPageLabel</a>
+				<a href="$addPageLink" title="" class="ItemIcon AddPageIcon" onclick="showWorkspaceArea($showable);">$addPageLabel</a>
       </div>  
 			<div class="MenuItem OddItem">
-				<a href="$editPortalLink" title="" class="ItemIcon AccountSettingsIcon">$editPortalLabel</a>        
+				<a href="$editPortalLink" title="" class="ItemIcon EditPortalIcon" onclick="showWorkspaceArea($showable);">$editPortalLabel</a>        
       </div>		
 		</div>		
 	</div>
@@ -227,13 +231,13 @@
 		<a href="#" class="AdministratorIcon TBIcon" onmouseover="showPopupMenu(this)">$administratorLabel</a>
 		<div class="MenuItemContainer" style="display: none;">
       <div class="MenuItem OddItem">
-				<a href="$createPortalLink" title="" class="ItemIcon AccountSettingsIcon">$createPortalLabel</a>
+				<a href="$createPortalLink" title="" class="ItemIcon CreatePortalIcon">$createPortalLabel</a>
       </div>
       <div class="MenuItem EvenItem">  
-				<a href="$browsePortalLink" title="" class="ItemIcon AccountSettingsIcon">$browsePortalLabel</a>       
+				<a href="$browsePortalLink" title="" class="ItemIcon BrowsePageIcon" onclick="showWorkspaceArea($showable);">$browsePortalLabel</a>       
       </div>
       <div class="MenuItem OddItem">         
-				<a href="$browsePortalLink" title="" class="ItemIcon AccountSettingsIcon">$browsePageLabel</a>
+				<a href="$browsePageLink" title="" class="ItemIcon BrowsePageIcon" onclick="showWorkspaceArea($showable);">$browsePageLabel</a>
       </div>		
 		</div>				
 	</div>
