@@ -47,6 +47,7 @@ import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.services.organization.UserProfileHandler;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
+import org.exoplatform.services.wcm.images.RESTImagesRendererService;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant.SITE_MODE;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
@@ -432,27 +433,16 @@ import org.exoplatform.webui.event.EventListener;
    * @throws Exception the exception
    */
   public String getIllustrativeImage(Node node) throws Exception {
-    //portal/rest/thumbnailImage/repository/collaboration/test.gif/?size=medium
     WebSchemaConfigService schemaConfigService = getApplicationComponent(WebSchemaConfigService.class);
     WebContentSchemaHandler contentSchemaHandler = schemaConfigService.getWebSchemaHandlerByType(WebContentSchemaHandler.class);
     Node illustrativeImage = null;
-    String repository = ((ManageableRepository)node.getSession().getRepository()).getConfiguration().getName();
-    String workspaceName = node.getSession().getWorkspace().getName();
-    StringBuilder uriBuilder = new StringBuilder();
-    String userId =  node.getSession().getUserID();
-    String baseRESTURI = "/portal/rest/";
-    if(!SystemIdentity.ANONIM.equals(userId)) {
-      baseRESTURI = "/portal/rest/private/";
-    }    
-    String imagePath = null;
+    RESTImagesRendererService imagesRendererService = getApplicationComponent(RESTImagesRendererService.class);
     try {
       illustrativeImage = contentSchemaHandler.getIllustrationImage(node);
-      imagePath = illustrativeImage.getPath();
-    } catch (Exception e) {      
-      imagePath = node.getPath();
-    }                  
-    return uriBuilder.append(baseRESTURI).append("thumbnailImage/").append(repository).append("/").append(workspaceName)
-                                                                   .append(imagePath).append("?size=medium").toString();    
+      return imagesRendererService.generateURI(illustrativeImage);
+    } catch (Exception e) {            
+    }
+    return null;
   }
 
   /**
