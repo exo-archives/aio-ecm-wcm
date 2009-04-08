@@ -240,10 +240,10 @@
   </DocumentNodeTypePopup>
   <WCMContentView>
   	<header>
-	  	<title></title>
-	  	<author></author>
-	  	<date></date>
-	  	<status></status>
+	  	<title>Titre</title>
+	  	<author>Auteur</author>
+	  	<date>Date</date>
+	  	<status>État</status>
   	</header>
   </WCMContentView>
 </bundle>

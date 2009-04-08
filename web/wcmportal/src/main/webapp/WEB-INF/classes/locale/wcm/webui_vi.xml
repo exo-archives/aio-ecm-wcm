@@ -210,10 +210,10 @@
   </DocumentNodeTypePopup>
   <WCMContentView>
   	<header>
-	  	<title></title>
-	  	<author></author>
-	  	<date></date>
-	  	<status></status>
+	  	<title>Tiêu đề</title>
+	  	<author>Tác giả</author>
+	  	<date>Ngày</date>
+	  	<status>Trạng thái</status>
   	</header>
   </WCMContentView>
 </bundle>
