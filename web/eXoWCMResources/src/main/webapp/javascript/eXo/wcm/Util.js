@@ -312,20 +312,25 @@ function showPopupMenu(obj) {
 	if(!obj) return; 
 	var DOMUtil = eXo.core.DOMUtil;
 	var mnuItemContainer = DOMUtil.findNextElementByTagName(obj, "div");
-	var uiNavi = document.getElementById('PortalNavigationTopContainer');      
+	var objParent = DOMUtil.findAncestorByClass(obj, "TBItem");
+	if(!objParent) return;
+	var uiNavi = document.getElementById('PortalNavigationTopContainer');
 	if(mnuItemContainer && mnuItemContainer.style.display != "block") {
 	  if(eXo.core.Browser.browserType == 'ie')   uiNavi.style.position = "static";
 		mnuItemContainer.style.display = 'block';
+		objParent.className = 'TBItemHover';
 		mnuItemContainer.onmouseout = function(){
 			if(eXo.core.Browser.browserType == 'ie')   uiNavi.style.position = "relative";
 			obj.Timeout = setTimeout(function() {
 				mnuItemContainer.style.display = 'none';
+				objParent.className = 'TBItem';
 				mnuItemContainer.onmouseover = null;
 				mnuItemContainer.onmouseout = null;
 			},1*10);
 		}
 
 		mnuItemContainer.onmouseover = function() {
+			objParent.className = 'TBItemHover';
 			if(eXo.core.Browser.browserType == 'ie')   uiNavi.style.position = "static";
 			if(obj.Timeout) clearTimeout(obj.Timeout);
 			obj.Timeout = null;
