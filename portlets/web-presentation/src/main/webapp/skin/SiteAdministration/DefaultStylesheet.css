@@ -133,6 +133,10 @@
 	border: 1px solid white;
 }
 
+.UISiteAdministrationPortlet .UISiteAdminToolBar .MenuItem a {	
+	padding-right: 10px;
+}
+
 .UISiteAdministrationPortlet .UISiteAdminToolBar .OddItem {	
 	background: #f3f2f2;
 }
