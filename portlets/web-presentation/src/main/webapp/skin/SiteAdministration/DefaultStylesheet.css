@@ -2,22 +2,23 @@
 	position: relative;
 }
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar {	
+.UISiteAdminToolBar {	
 	background: url('DefaultSkin/icons/IconToolBar.gif') repeat-x scroll 0 0;	
 	height: 32px;
 }
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar a {
+.UISiteAdminToolBar a {
 	display: block;
 	padding-left: 30px;
 	white-space: nowrap;
 }
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar a:hover {
+.UISiteAdminToolBar a:hover {
 	background-color: #a4a4a4;
+	color: white;
 }
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar .ExoLogo {
+.UISiteAdminToolBar .ExoLogo {
 	background: url('DefaultSkin/icons/eXoLogo.gif') no-repeat left top;
 	height: 30px;
 	width: 54px;
@@ -25,41 +26,52 @@
 	padding: 0;
 }
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar .TBItem {
+.UISiteAdminToolBar .TBItem {
 	line-height: 30px;	
 	float: left;
 	background: url('DefaultSkin/icons/IconToolBar.gif') no-repeat right -320px;
 	padding-right: 2px;
 }
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar .TBExoLogo {
+.UISiteAdminToolBar .TBItemHover {
+	line-height: 30px;	
+	float: left;
+	background: #a4a4a4 url('DefaultSkin/icons/IconToolBar.gif') no-repeat right -320px;
+	padding-right: 2px;
+}
+
+.UISiteAdminToolBar .TBItemHover a.TBIcon {
+	color: white;
+}
+
+.UISiteAdminToolBar .TBExoLogo {
 	background:none;
 }
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar .TBIcon {
+.UISiteAdminToolBar .TBIcon {
 	padding: 0px 13px 0px 35px;
 	line-height: 30px;	
 }
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar .OnOffAction {
+.UISiteAdminToolBar .OnOffAction {
 	background: url('DefaultSkin/icons/BackgroundOnOff.gif') repeat-x scroll 0 0;	
-	float:right; 
+	float: right; 
 	line-height:32px; 
 	white-space: nowrap;
 	padding: 0px 10px;
 	font-weight:bold;
 }
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar .OnOffAction a {
+.UISiteAdminToolBar .OnOffAction a {
 	float: left;
 }
 
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar .OnOffAction div {
+.UISiteAdminToolBar .OnOffAction div {
 	float: left;
 }
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar .BoxOnOff {
+.UISiteAdminToolBar .BoxOnOff {
 	height: 20px;
 	padding: 6px 8px 6px 19px;
 	float: right;
@@ -68,18 +80,18 @@
 }
 
 /****** Select On *******/
-.UISiteAdministrationPortlet .UISiteAdminToolBar .SelectOn .LeftSelect {
+.UISiteAdminToolBar .SelectOn .LeftSelect {
 	background: url('DefaultSkin/icons/onoff.gif') no-repeat left top;
 	padding-left: 27px;
 	width: 33px;
 }
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar .SelectOn .RightSelect {
+.UISiteAdminToolBar .SelectOn .RightSelect {
 	background: url('DefaultSkin/icons/onoff.gif') no-repeat right top;
 	padding-right: 3px;
 }
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar .SelectOn .CenterSelect {
+.UISiteAdminToolBar .SelectOn .CenterSelect {
 	background: url('DefaultSkin/icons/onoff.gif') repeat-x left -17px;
 	text-align: center;
 	line-height: 17px;
@@ -90,18 +102,18 @@
 }
 
 /****** Select Off *******/
-.UISiteAdministrationPortlet .UISiteAdminToolBar .SelectOff .LeftSelect {
+.UISiteAdminToolBar .SelectOff .LeftSelect {
 	background: url('DefaultSkin/icons/onoff.gif') no-repeat left -34px;
 	padding-left: 3px;
 	width: 57px;
 }
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar .SelectOff .RightSelect {
+.UISiteAdminToolBar .SelectOff .RightSelect {
 	background: url('DefaultSkin/icons/onoff.gif') no-repeat right -34px;
 	padding-right: 27px;
 }
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar .SelectOff .CenterSelect {
+.UISiteAdminToolBar .SelectOff .CenterSelect {
 	background: url('DefaultSkin/icons/onoff.gif') repeat-x left -51px;
 	line-height: 17px;
 	font-size: 10px;
@@ -112,13 +124,13 @@
 }
 
 /****************************/
-.UISiteAdministrationPortlet .UISiteAdminToolBar .MenuItemContainer {	
+.UISiteAdminToolBar .MenuItemContainer {	
 	position: absolute;
 	border: 1px solid #9d9d9d;
 	z-index: 100;
 }
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar .TitleBar {
+.UISiteAdminToolBar .TitleBar {
 	background: url('DefaultSkin/icons/IconToolBar.gif') repeat-x left -664px;
 	height: 23px;
 	line-height: 23px;
@@ -127,117 +139,119 @@
 	padding: 0px 5px;
 }
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar .MenuItem {	
+.UISiteAdminToolBar .MenuItem {	
 	height: 28px;
 	line-height: 28px;
 	border: 1px solid white;
 }
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar .MenuItem a {	
+.UISiteAdminToolBar .MenuItem a {	
 	padding-right: 10px;
 }
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar .OddItem {	
+.UISiteAdminToolBar .OddItem {	
 	background: #f3f2f2;
 }
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar .EvenItem {	
+.UISiteAdminToolBar .EvenItem {	
 	background: #e5e4e4;
 }
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar .MenuItem .DefaultPageIcon {	
+.UISiteAdminToolBar .MenuItem .DefaultPageIcon {	
 	background-position: 5px center;
 }
 
 
 /**********************************/
-.UISiteAdministrationPortlet .UISiteAdminToolBar .DashboardIcon {
+.UISiteAdminToolBar .DashboardIcon {
 	background: url('DefaultSkin/icons/IconToolBar.gif') no-repeat left -544px;
 }
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar .SitesIcon {
+.UISiteAdminToolBar .SitesIcon {
 	background: url('DefaultSkin/icons/IconToolBar.gif') no-repeat left -574px;
 }
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar .GroupsIcon {
+.UISiteAdminToolBar .GroupsIcon {
 	background: url('DefaultSkin/icons/IconToolBar.gif') no-repeat left -604px;
 }
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar .EditorIcon {
+.UISiteAdminToolBar .EditorIcon {
 	background: url('DefaultSkin/icons/IconToolBar.gif') no-repeat left -160px;
 }
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar .AdministratorIcon {
+.UISiteAdminToolBar .AdministratorIcon {
 	background: url('DefaultSkin/icons/IconToolBar.gif') no-repeat left -634px;
 }
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar .SiteIcon {
+.UISiteAdminToolBar .SiteIcon {
 	background: url('DefaultSkin/icons/IconSite.gif') no-repeat 5px center;
+	padding-left: 25px;
+	text-transform: capitalize;
 }
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar .EditPageAndNavIcon {	
+.UISiteAdminToolBar .EditPageAndNavIcon {	
 	background: url('DefaultSkin/icons/IconToolBar.gif') no-repeat left -512px; /* orientation=lt */
 	background: url('DefaultSkin/icons/IconToolBar.gif') no-repeat right -512px; /* orientation=rt */
 }
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar .AddContentIcon {
+.UISiteAdminToolBar .AddContentIcon {
 	background: url('DefaultSkin/icons/IconToolBar.gif') no-repeat left -256px; /* orientation=lt */
 	background: url('DefaultSkin/icons/IconToolBar.gif') no-repeat right -256px; /* orientation=rt */
 }
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar .SkinSettingsIcon {
+.UISiteAdminToolBar .SkinSettingsIcon {
 	background: url('DefaultSkin/icons/IconToolBar.gif') no-repeat left -352px; /* orientation=lt */
 	background: url('DefaultSkin/icons/IconToolBar.gif') no-repeat right -352px; /* orientation=rt */
 }
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar .BrowsePortalIcon {
+.UISiteAdminToolBar .BrowsePortalIcon {
 	background: url('DefaultSkin/icons/IconToolBar.gif') no-repeat left -448px; /* orientation=lt */
 	background: url('DefaultSkin/icons/IconToolBar.gif') no-repeat right -448px; /* orientation=rt */
 }
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar .BrowsePageIcon {
+.UISiteAdminToolBar .BrowsePageIcon {
 	background: url('DefaultSkin/icons/IconToolBar.gif') no-repeat left -480px; /* orientation=lt */
 	background: url('DefaultSkin/icons/IconToolBar.gif') no-repeat right -480px; /* orientation=rt */
 }
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar .AddPageIcon {
+.UISiteAdminToolBar .AddPageIcon {
 	background: url('DefaultSkin/icons/IconToolBar.gif') no-repeat left -128px; /* orientation=lt */
 	background: url('DefaultSkin/icons/IconToolBar.gif') no-repeat right -128px; /* orientation=rt */  
 }
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar .EditPageIcon {
+.UISiteAdminToolBar .EditPageIcon {
 	background: url('DefaultSkin/icons/IconToolBar.gif') no-repeat left -160px; /* orientation=lt */
 	background: url('DefaultSkin/icons/IconToolBar.gif') no-repeat right -160px; /* orientation=rt */
 }
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar .EditPortalIcon {	
+.UISiteAdminToolBar .EditPortalIcon {	
 	background: url('DefaultSkin/icons/IconToolBar.gif') no-repeat left -192px; /* orientation=lt */
 	background: url('DefaultSkin/icons/IconToolBar.gif') no-repeat right -192px; /* orientation=rt */
 }
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar .CreatePortalIcon{
+.UISiteAdminToolBar .CreatePortalIcon{
 	background: url('DefaultSkin/icons/IconToolBar.gif') no-repeat left -224px; /* orientation=lt */
 	background: url('DefaultSkin/icons/IconToolBar.gif') no-repeat right -224px; /* orientation=rt */
 }
 
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar .LanguageSettingsIcon {
+.UISiteAdminToolBar .LanguageSettingsIcon {
 	background: url('DefaultSkin/icons/IconToolBar.gif') no-repeat left -384px; /* orientation=lt */
 	background: url('DefaultSkin/icons/IconToolBar.gif') no-repeat right -384px; /* orientation=rt */
 }
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar .AccountSettingsIcon {
+.UISiteAdminToolBar .AccountSettingsIcon {
 	background: url('DefaultSkin/icons/IconToolBar.gif') no-repeat left -416px; /* orientation=lt */
 	background: url('DefaultSkin/icons/IconToolBar.gif') no-repeat right -416px; /* orientation=rt */
 }
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar .LogoutIcon {
+.UISiteAdminToolBar .LogoutIcon {
 	background: url('DefaultSkin/icons/IconToolBar.gif') no-repeat left -64px; /* orientation=lt */
 	background: url('DefaultSkin/icons/IconToolBar.gif') no-repeat right -64px; /* orientation=rt */	
 	cursor: pointer;
 }
 
-.UISiteAdministrationPortlet .UISiteAdminToolBar .ChangePortalIcon {
+.UISiteAdminToolBar .ChangePortalIcon {
 	background: url('DefaultSkin/icons/IconToolBar.gif') no-repeat left -96px; /* orientation=lt */
 	background: url('DefaultSkin/icons/IconToolBar.gif') no-repeat right -96px; /* orientation=rt */	
 	cursor: pointer;

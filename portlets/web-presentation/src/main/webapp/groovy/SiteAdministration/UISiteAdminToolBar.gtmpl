@@ -178,7 +178,7 @@
 	int portalNum = 1;
 	String portalClazz;
 	%>	
-	<div class="TBItem">
+	<div class="TBItemHover">
 		<a href="#" class="SitesIcon TBIcon" onmouseover="showPopupMenu(this)">$sitesLabel</a>
 		<div class="MenuItemContainer" style="display: none;">		
 		<% for (String portal : portals) { 
