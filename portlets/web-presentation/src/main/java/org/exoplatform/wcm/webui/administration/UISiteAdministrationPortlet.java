@@ -69,6 +69,7 @@ public class UISiteAdministrationPortlet extends UIPortletApplication {
       Locale currentLocale = portalRequestContext.getLocale();
       if(!currentLocale.getLanguage().equalsIgnoreCase(lastLocale.getLanguage())) {
         adminToolbar.changeNavigationsLanguage(currentLocale.getLanguage());
+        lastLocale = currentLocale;
       }
     }        
     super.processRender(app, context);
