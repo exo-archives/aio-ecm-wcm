@@ -108,12 +108,19 @@ public class UISiteAdminToolbar extends UIContainer {
   public static final int EDITOR             = 1;
 
   public static final int REDACTOR           = 0;
+  
+  private boolean hasGroupNavigations = false;
+  
+  private List<PageNavigation> groupNavigations = null;
+  
+  private List<PageNavigation> currentSiteNavigations = null;
+  
 
   /**
    * Instantiates a new uI site admin toolbar.
    */
   public UISiteAdminToolbar() throws Exception {
-	  setGroupNavigations();
+	  buildNavigations();
   }
 
   public int getRole() throws Exception {
@@ -205,23 +212,29 @@ public class UISiteAdminToolbar extends UIContainer {
     return portals;
   }
 
-  private boolean hasGroupNavigations = false;
-  private List<PageNavigation> groupNavigations = null;
-  
   public boolean hasGroupNavigations() {
 	  return hasGroupNavigations;
   }
   
-  private void setGroupNavigations() throws Exception {
+  private void buildNavigations() throws Exception {
     String removeUser = Util.getPortalRequestContext().getRemoteUser();
     List<PageNavigation> allNavigations = Util.getUIPortal().getNavigations();
     groupNavigations = new ArrayList<PageNavigation>();
+    currentSiteNavigations = new ArrayList<PageNavigation>();
     for (PageNavigation navigation : allNavigations) {      
       if (navigation.getOwnerType().equals(PortalConfig.GROUP_TYPE)) {
         groupNavigations.add(PageNavigationUtils.filter(navigation, removeUser));
         hasGroupNavigations = true;
       }
+      if (navigation.getOwnerType().equals(PortalConfig.PORTAL_TYPE)) {
+       currentSiteNavigations.add(PageNavigationUtils.filter(navigation, removeUser));       
+      }
     }
+  }
+  
+
+  public List<PageNavigation> getCurrentSiteNavigations() throws Exception {
+    return currentSiteNavigations;
   }
   
   public List<PageNavigation> getGroupNavigations() throws Exception {

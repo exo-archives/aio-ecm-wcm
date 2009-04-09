@@ -146,6 +146,25 @@
    	}
 	}
 	
+	void renderCurrentSiteNavigations() {
+    navigations = uicomponent.getCurrentSiteNavigations();	    
+   	if (navigations != null && navigations.size() > 0) {
+	   	for(navigation in navigations) {
+		  	nodes = navigation.getNodes();
+		  	if (nodes.size() < 1) return;			  	
+		  	int index = 1;
+		    for(node in nodes) {    			
+		      if(node.getChildren() != null && node.getChildren().size() > 0) {
+		      	renderPageNode(navigation, node, false, index);
+	      	} else {
+	      		renderSinglePageNode(navigation, node, index);
+      		}
+      		index++ ;
+		    }			  	
+  		}
+   	}
+	}	
+	
 %>
 <div class="UISiteAdminToolBar">
 	<!-- Exo Logo -->
@@ -185,10 +204,17 @@
 					if (portalNum % 2 == 0)  portalClazz = "EvenItem";
 					else portalClazz = "OddItem";
 					String currentPortalURI = uicomponent.getCurrentPortalURI();					
+					String currentPortal = currentPortalURI.substring(currentPortalURI.lastIndexOf("/") + 1);
+					System.out.println("\n\n=================> currentPortal: " + currentPortal + "\n");
 					String portalLink = currentPortalURI.substring(0, currentPortalURI.lastIndexOf("/")) + "/" + portal;
 		%>
-      <div class="MenuItem $portalClazz">
+      <div class="MenuItem $portalClazz">      
         <a href="$portalLink" title="" class="ItemIcon SiteIcon">$portal</a>
+    		<% if (portal.equals(currentPortal)) { %>
+					<div class="MenuItemContainer" style="display: none;">
+						<% renderCurrentSiteNavigations(); %>
+					</div>
+    		<% } %>
       </div>      
     <% 
     	portalNum++ ;
@@ -214,7 +240,7 @@
 		<a href="#" class="EditorIcon TBIcon" onmouseover="showPopupMenu(this)">$editorLabel</a>
 		<div class="MenuItemContainer" style="display: none;">
       <div class="MenuItem OddItem">
-        <a href="$addContentLink" title="" class="ItemIcon AddContentIcon" onclick="showWorkspaceArea($showable);">$addContentLabel</a>
+        <a href="$addContentLink" title="" class="ItemIcon AddContentIcon">$addContentLabel</a>
       </div>  
       <div class="MenuItem EvenItem">
 				<a href="$editPageAndNavLink" title="" class="ItemIcon AccountSettingsIcon" onclick="showWorkspaceArea($showable);">$editPageAndNaviLabel</a>       
