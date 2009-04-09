@@ -26,6 +26,9 @@
       <print>In</print>
       <close>Đóng</close>
     </action>
+    <label>
+    	<quickEditTitle>Chỉnh sửa nhanh</quickEditTitle>
+    </label>        
     <quickPrint>
     	<title>In trang này</title>
     	<print>In trang này</print>

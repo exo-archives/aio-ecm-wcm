@@ -26,6 +26,9 @@
       <print>Print</print>
       <close>Close</close>
     </action>
+    <label>
+    	<quickEditTitle>Quick Edit</quickEditTitle>
+    </label>    
     <quickPrint>
     	<title>Print this page</title>
     	<print>Print this page</print>

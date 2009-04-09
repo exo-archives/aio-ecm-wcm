@@ -26,7 +26,7 @@
 	}
  	if (uicomponent.isQuickEditAble()) {
 %>
-	  <a class="DocumentQuickEdit" href="$link"></a>
+	  <a class="DocumentQuickEdit" href="$link" title="<%= _ctx.appRes("UIContentViewerContainer.label.quickEditTitle");%>"></a>
 <% } 
 	if(uicomponent.isObsoletedContent) { 
 %>
