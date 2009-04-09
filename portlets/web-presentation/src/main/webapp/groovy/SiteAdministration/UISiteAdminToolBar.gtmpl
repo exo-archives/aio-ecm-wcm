@@ -214,11 +214,17 @@
 					String portalLink = baseURI + "/" + portal;
 		%>
       <div class="MenuItem $portalClazz">      
-        <a href="$portalLink" title="" class="ItemIcon SiteIcon">$portal</a>
     		<% if (portal.equals(currentPortal)) { %>
+	    		<div class="ArrowIcon">
+		        <a href="$portalLink" title="" class="ItemIcon SiteIcon">$portal</a>
+	        </div>
 					<div class="MenuItemContainer" style="display: none;">
 						<% renderCurrentSiteNavigations(); %>
 					</div>
+    		<% } else { %>
+	    		<div>
+		    		<a href="$portalLink" title="" class="ItemIcon SiteIcon">$portal</a>
+	    		</div>
     		<% } %>
       </div>      
     <% 
