@@ -105,13 +105,13 @@
 	      	<div class="ArrowIcon">
 			""";
 					if (node.pageReference != null) {
-			        print """<a href="$href" class="ItemIcon DefaultPageIcon" title="$node.resolvedLabel" onmouseover="showPopupMenu(this)">$label</a>""";
+			        print """<a href="$href" class="ItemIcon DefaultPageIcon" title="$node.resolvedLabel" onmouseover="showPopupSubMenu(this)">$label</a>""";
 					} else {
 							print """<a href="#" class="ItemIcon DefaultPageIcon" title="$node.resolvedLabel">$label</a>""";
 					}
 			print """				
 						</div>
-					<div class="MenuItemContainer" style="display: none; width: 100px;">		
+					<div class="MenuItemContainer" style="display: none;">		
 			""";		
 						int subNodeIndex = 1;
 			      for (child in node.getChildren()) {
@@ -174,7 +174,7 @@
 	<!-- Exo Logo -->
 	<div class="TBItem TBExoLogo">
 		<a class="ExoLogo" onmouseover="showPopupMenu(this)"></a>
-		<div class="MenuItemContainer" style="display: none; width: 130px;">
+		<div class="MenuItemContainer" style="display: none;">
 	      <div class="MenuItem OddItem">
 	        <a href="$accountSettingsLink" title="" class="ItemIcon AccountSettingsIcon">$accountSettingsLabel</a>
 	      </div>
@@ -216,7 +216,7 @@
       <div class="MenuItem $portalClazz">      
     		<% if (portal.equals(currentPortal)) { %>
 	    		<div class="ArrowIcon">
-		        <a href="$portalLink" title="" class="ItemIcon SiteIcon">$portal</a>
+		        <a href="$portalLink" title="" class="ItemIcon SiteIcon" onmouseover="showPopupSubMenu(this);">$portal</a>
 	        </div>
 					<div class="MenuItemContainer" style="display: none;">
 						<% renderCurrentSiteNavigations(); %>
