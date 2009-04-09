@@ -49,16 +49,16 @@ import org.exoplatform.services.wcm.core.WCMConfigurationService;
  * Oct 2, 2008
  */
 public class Util {
- 
+
   /** The Constant HISTORY_SEPARATOR. */
   public static final String HISTORY_SEPARATOR = "; ";
-  
+
   /** The Constant APPLICATION_SEPARATOR. */
   public static final String APPLICATION_SEPARATOR = "@";
-  
+
   /** The Constant URI_SEPARATOR. */
   public static final String URI_SEPARATOR = "/";
-  
+
   /**
    * Find page node by page id.
    * 
@@ -89,7 +89,7 @@ public class Util {
    * @throws Exception the exception
    */
   public static void findPageNodeByPageId(PageNode node, String pageId, List<PageNode> allPageNode)
-      throws Exception {
+  throws Exception {
     if (pageId.equals(node.getPageReference())) {
       allPageNode.add(node.clone());
     }
@@ -100,7 +100,7 @@ public class Util {
       findPageNodeByPageId(child, pageId, allPageNode);
     }
   }
-   
+
   /**
    * Find app instances by name.
    * 
@@ -114,7 +114,7 @@ public class Util {
     findAppInstancesByContainerAndName(page, applicationName, results);
     return results;
   }
-  
+
   /**
    * Find app instances by container and name.
    * 
@@ -137,7 +137,7 @@ public class Util {
       }
     }
   }   
-  
+
   /**
    * Removed app instances in container by names.
    * 
@@ -161,7 +161,7 @@ public class Util {
     }
     container.setChildren(chidrenTmp);
   }
-  
+
   /**
    * Gets the values as string.
    * 
@@ -180,7 +180,7 @@ public class Util {
     }
     return results;
   }
-  
+
   /**
    * To values.
    * 
@@ -196,8 +196,8 @@ public class Util {
     }
     return list.toArray(new Value[list.size()]);
   }
-  
-  
+
+
   /**
    * Gets the node by application id.
    * 
@@ -230,15 +230,18 @@ public class Util {
       Session session = sessionProvider.getSession(workspaceName, repositoryService.getRepository(repositoryName));        
       Node content = null;
       try {
-        content = session.getNodeByUUID(nodeIdentifier);
-      } catch (ItemNotFoundException e) {
-        content = (Node)session.getItem(nodeIdentifier);
+        if(nodeIdentifier.indexOf("/")>0) {
+          content = (Node)session.getItem(nodeIdentifier);
+        }else {
+          content = session.getNodeByUUID(nodeIdentifier); 
+        }        
+      } catch (Exception e) {        
       }
       return content;
     }
     return null;
   }
-  
+
   /**
    * Removes the application from page.
    * 
@@ -248,7 +251,7 @@ public class Util {
   public static void removeApplicationFromPage(Page page, List<String> removedApplicationIds) {
     removedAppInstancesInContainerByNames(page, removedApplicationIds);
   }
-  
+
   /**
    * Gets the list application id by page.
    * 
@@ -260,7 +263,7 @@ public class Util {
     WCMConfigurationService configurationService = getServices(WCMConfigurationService.class);
     return Util.findAppInstancesByName(page, configurationService.getPublishingPortletName());
   }
-  
+
   /**
    * Sets the mixed navigation uri.
    * 
@@ -288,7 +291,7 @@ public class Util {
     mixedNavigationUris[1] = mixedNavigationUri.substring(second + URI_SEPARATOR.length(), mixedNavigationUri.length()); 
     return mixedNavigationUris;
   }
-  
+
   /**
    * Sets the mixed application id.
    * 
@@ -300,7 +303,7 @@ public class Util {
   public static String setMixedApplicationId(String pageId, String applicationId) {
     return pageId + APPLICATION_SEPARATOR + applicationId;
   }
-  
+
   /**
    * Parses the mixed application id.
    * 
@@ -311,7 +314,7 @@ public class Util {
   public static String[] parseMixedApplicationId(String mixedApplicationId) {
     return mixedApplicationId.split(APPLICATION_SEPARATOR);
   }
-  
+
   /**
    * Gets the services.
    * 
