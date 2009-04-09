@@ -216,4 +216,9 @@
 	  	<status>Trạng thái</status>
   	</header>
   </WCMContentView>
+	<UISearchPageLayoutDefault>
+		<label>
+			<quickEditTitle>Chỉnh sửa nhanh</quickEditTitle>
+		</label>
+	</UISearchPageLayoutDefault>  
 </bundle>

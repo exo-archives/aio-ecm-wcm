@@ -247,4 +247,9 @@
 	  	<status>Status</status>
   	</header>
   </WCMContentView>
+	<UISearchPageLayoutDefault>
+		<label>
+			<quickEditTitle>Quick Edit</quickEditTitle>
+		</label>
+	</UISearchPageLayoutDefault>
 </bundle>
