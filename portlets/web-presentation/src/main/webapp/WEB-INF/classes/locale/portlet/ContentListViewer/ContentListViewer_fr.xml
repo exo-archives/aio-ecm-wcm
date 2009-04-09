@@ -134,5 +134,10 @@
   		<folder-empty></folder-empty>
   	</msg>
   </UIMessageBoard>  
+  <UIPresentationContainer>
+  	<label>
+  		<quickEditTitle></quickEditTitle>
+  	</label>
+  </UIPresentationContainer>  
 </bundle>
 

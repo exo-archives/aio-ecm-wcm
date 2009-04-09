@@ -132,4 +132,9 @@
   		<folder-empty>Thư mục rỗng</folder-empty>
   	</msg>
   </UIMessageBoard>  
+  <UIPresentationContainer>
+  	<label>
+  		<quickEditTitle>Chỉnh sửa nhanh</quickEditTitle>
+  	</label>
+  </UIPresentationContainer>  
 </bundle>
