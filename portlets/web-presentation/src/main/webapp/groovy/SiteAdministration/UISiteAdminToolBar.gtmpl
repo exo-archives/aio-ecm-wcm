@@ -192,7 +192,7 @@
 	
 	<!-- Dashboard -->	
 	<div class="TBItem">
-		<a href="#" class="DashboardIcon TBIcon">$dashboardLabel</a>
+		<a href="/portal/private/backoffice/dashboard" class="DashboardIcon TBIcon">$dashboardLabel</a>
 	</div>
 	
 	<!-- Sites -->

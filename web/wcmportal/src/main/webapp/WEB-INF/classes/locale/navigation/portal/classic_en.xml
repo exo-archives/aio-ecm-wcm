@@ -3,6 +3,7 @@
   <portal>
     <classic>
       <home>Home</home>
+      <dashboard>Dashboard</dashboard>
       <presentation>Single Content Viewer</presentation>
       <listViewer>Content List Viewer</listViewer>
       <search>Search</search>

@@ -6,47 +6,14 @@
     <owner-id>backoffice</owner-id>
     <name>dashboard</name>
     <title>Dashboard</title>
-	  <access-permissions>Everyone</access-permissions>
-	  <edit-permission>manager:/platform/web-contributors</edit-permission>
-	  <container id="emptyHomepage" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-	  	<application>
-	      <instance-id>portal#backoffice:/web-presentation/SingleContentViewer/backoffice-homepage</instance-id>
+	  <access-permissions>*:/platform/users</access-permissions>
+	  <edit-permission>*:/platform/administrators</edit-permission>
+	    <application>
+	      <instance-id>portal#classic:/dashboard/DashboardPortlet/classic-dashboard</instance-id>
 	      <title>Dashboard</title>
+	      <show-info-bar>false</show-info-bar>      
+	      <show-application-state>false</show-application-state>
+	      <show-application-mode>false</show-application-mode>
 	    </application>
-	  </container>
-  </page>
-  
-  <page>
-  	<page-id>portal::backoffice::parameterizedviewer</page-id>
-    <owner-type>portal</owner-type>
-    <owner-id>backoffice</owner-id>
-    <name>parameterizedviewer</name>
-    <title>ParameterizedViewer</title>
-    <access-permissions>Everyone</access-permissions> 
-    <edit-permission>manager:/platform/web-contributors</edit-permission>
-    <application>
-      <instance-id>portal#backoffice:/web-presentation/ParameterizedContentViewerPortlet/backoffice-parameterizedviewer</instance-id>
-      <title>parameterizedviewer</title>
-      <show-info-bar>false</show-info-bar>      
-      <show-application-state>false</show-application-state>
-      <show-application-mode>false</show-application-mode>
-    </application>
-  </page>
-  <page>
-  	<page-id>portal::backoffice::printviewer</page-id>
-    <owner-type>portal</owner-type>
-    <owner-id>backoffice</owner-id>
-    <name>printviewer</name>
-    <title>printviewer</title>
-    <access-permissions>Everyone</access-permissions> 
-    <edit-permission>manager:/platform/web-contributors</edit-permission>
-    <show-max-window>true</show-max-window>
-    <application>
-      <instance-id>portal#backoffice:/web-presentation/ParameterizedContentViewerPortlet/backoffice-printviewer</instance-id>
-      <title>printviewer</title>
-      <show-info-bar>false</show-info-bar>      
-      <show-application-state>false</show-application-state>
-      <show-application-mode>false</show-application-mode>
-    </application>
   </page>
 </page-set>

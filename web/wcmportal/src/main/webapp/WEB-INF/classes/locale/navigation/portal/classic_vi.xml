@@ -3,6 +3,7 @@
   <portal>
     <classic>
       <home>Trang chủ</home>
+      <dashboard>Dashboard</dashboard>
       <presentation>Trình bày đơn nội dung</presentation>
       <listViewer>Trình bày đa nội dung</listViewer>
       <search>Tìm kiếm</search>

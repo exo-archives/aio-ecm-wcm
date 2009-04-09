@@ -18,6 +18,14 @@
 		</node>   
 		
 		<node>
+			<uri>dashboard</uri>
+			<name>dashboard</name>
+			<label>#{portal.classic.dashboard}</label>
+			<visible>false</visible>
+			<page-reference>portal::classic::dashboard</page-reference>
+		</node>   
+		
+		<node>
       <uri>viewer</uri>
       <name>viewer</name>
       <label>#{portal.classic.viewer}</label>     

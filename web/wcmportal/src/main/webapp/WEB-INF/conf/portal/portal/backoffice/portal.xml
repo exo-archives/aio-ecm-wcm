@@ -12,20 +12,10 @@
 	    <show-info-bar>false</show-info-bar>
   	</application>	  
   	
-  	<container id="BannerContainer" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
-  		<container id="Breadcrumb" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-		  	<application>
-					<instance-id>portal#backoffice:/web-presentation/SingleContentViewer/backoffice-breadcrumb</instance-id>
-			  	<show-info-bar>false</show-info-bar>
-			  </application>
-  		</container>
-  		<container id="WCMSearchBox" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-	  		<application>
-			    <instance-id>portal#backoffice:/web-presentation/SingleContentViewer/backoffice-searchbox</instance-id>
-			    <show-info-bar>false</show-info-bar>
-			  </application>
-  		</container>
-  	</container>
+  	<application>
+			<instance-id>portal#backoffice:/web-presentation/SingleContentViewer/backoffice-breadcrumb</instance-id>
+	  	<show-info-bar>false</show-info-bar>
+	  </application>
 		
 	  <page-body> </page-body>
 	  

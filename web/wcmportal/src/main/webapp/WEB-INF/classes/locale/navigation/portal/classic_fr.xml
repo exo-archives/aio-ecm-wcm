@@ -3,6 +3,7 @@
   <portal>
     <classic>
       <home>Accueil</home>
+      <dashboard>Dashboard</dashboard>
       <presentation>Contenu simple</presentation>
       <listViewer>Contenus multiples</listViewer>
       <search>Recherche</search>
