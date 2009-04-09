@@ -81,5 +81,9 @@
   		<SaveAsDraft>Lưu lại</SaveAsDraft>  		  		
   	</action>
   </UIDocumentDialogForm>    
+  <UISearchedContentEdittingPopupWindow>
+  	<title>
+  		<UIContentEdittingPopup>Chỉnh sửa nội dung</UIContentEdittingPopup>
+  	</title>
+  </UISearchedContentEdittingPopupWindow>  
 </bundle>
-
