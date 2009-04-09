@@ -45,12 +45,21 @@
 }
 
 .UIWCMSearchPortlet .UIAdvanceSearchResultDefault  .ItemTitle .CaptionDraft {
+	color:gray;
+	font-size:11px;
+	height:16px;
+	padding:0 3px 3px 20px;
+	width:50px;
+	background: url(icons/DraftIcon.gif) no-repeat;
+}
+
+.UIWCMSearchPortlet .UIAdvanceSearchResultDefault  .ItemTitle .CaptionEdit {
 	width: 16px;
 	height: 16px;
 	font-size: 11px;
 	font-weight: normal;	
-	padding: 0 3px 3px 25px;
-	background: url(icons/Edit.gif) no-repeat;
+	padding: 0 3px 3px 20px;
+	background: url(icons/EditIcon.gif) no-repeat;
 }
 
 .UIWCMSearchPortlet .UIAdvanceSearchResultDefault .ItemExcerpt {
