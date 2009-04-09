@@ -3,6 +3,7 @@ package org.exoplatform.wcm.webui.administration;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.portlet.PortletMode;
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +18,7 @@ import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
+import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.UIWelcomeComponent;
 import org.exoplatform.portal.webui.application.UIPortlet;
@@ -40,6 +42,8 @@ import org.exoplatform.portal.webui.workspace.UIPortalToolPanel;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
 import org.exoplatform.portal.webui.workspace.UIControlWorkspace.UIControlWSWorkingArea;
 import org.exoplatform.services.jcr.util.IdGenerator;
+import org.exoplatform.services.resources.LocaleConfig;
+import org.exoplatform.services.resources.LocaleConfigService;
 import org.exoplatform.services.security.Identity;
 import org.exoplatform.services.security.IdentityRegistry;
 import org.exoplatform.services.security.MembershipEntry;
@@ -96,7 +100,7 @@ import org.exoplatform.webui.event.EventListener;
     @EventConfig(listeners = UISiteAdminToolbar.ChangePageActionListener.class),
     @EventConfig(listeners = UISiteAdminToolbar.TurnOnQuickEditActionListener.class),
     @EventConfig(listeners = UISiteAdminToolbar.TurnOffQuickEditActionListener.class) })
-public class UISiteAdminToolbar extends UIContainer {
+    public class UISiteAdminToolbar extends UIContainer {
 
   /** The Constant MESSAGE. */
   public static final String MESSAGE            = "UISiteAdminToolbar.msg.not-permission";
@@ -110,28 +114,25 @@ public class UISiteAdminToolbar extends UIContainer {
   public static final int REDACTOR           = 0;
 
   public static final int VISITOR           = -1;
-  
+
   /** Does the current user have group navigations ? */
   private boolean hasGroupNavigations = false;
 
   /** Group navigations nodes list */
   private List<PageNavigation> groupNavigations = null;
-  
+
   /** Current site navigation list */
   private List<PageNavigation> currentSiteNavigations = null;
-  
-  
+
+
   /** The role of the current user. it can be VISITOR, REDACTOR, EDITOR or ADMINISTRATOR */
-  private int role = VISITOR;
-  
-  /** the last current site name used to set the role */
-  private String lastPortalURI = null;
+  private int role = VISITOR;  
 
   /**
    * Instantiates a new uI site admin toolbar.
    */
   public UISiteAdminToolbar() throws Exception {
-	  refresh();
+    refresh();
   }
 
   /**
@@ -139,86 +140,101 @@ public class UISiteAdminToolbar extends UIContainer {
    * @throws Exception
    */
   protected void setRole() throws Exception {
-	    String userId = Util.getPortalRequestContext().getRemoteUser();
-	    UserACL userACL = getApplicationComponent(UserACL.class);
-	    IdentityRegistry identityRegistry = getApplicationComponent(IdentityRegistry.class);
-	    WCMConfigurationService wcmConfigurationService = getApplicationComponent(WCMConfigurationService.class);
-	    Identity identity = identityRegistry.getIdentity(userId);
-	    String editorMembershipType = userACL.getMakableMT();
-	    List<String> accessControlWorkspaceGroups = userACL.getAccessControlWorkspaceGroups();
-	    String editSitePermission = Util.getUIPortal().getEditPermission();
-	    String redactorMembershipType = wcmConfigurationService.getRedactorMembershipType();   
-	    // admin
-	    if (userACL.getSuperUser().equals(userId)) {
-	      role = UISiteAdminToolbar.ADMIN;
-	      return;
-	    }
-	    if (userACL.hasAccessControlWorkspacePermission(userId)
-	        && userACL.hasCreatePortalPermission(userId)) {
-	      role = UISiteAdminToolbar.ADMIN;
-	      return;
-	    }
-	    
-	    // editor
-	    MembershipEntry editorEntry = null;
-	    for (String membership : accessControlWorkspaceGroups) {
-	    	editorEntry = MembershipEntry.parse(membership);
-	    	if (editorEntry.getMembershipType().equals(editorMembershipType)
-	    			|| editorEntry.getMembershipType().equals(MembershipEntry.ANY_TYPE)) {
-	    		if (identity.isMemberOf(editorEntry)) {
+    String userId = Util.getPortalRequestContext().getRemoteUser();
+    UserACL userACL = getApplicationComponent(UserACL.class);
+    IdentityRegistry identityRegistry = getApplicationComponent(IdentityRegistry.class);
+    WCMConfigurationService wcmConfigurationService = getApplicationComponent(WCMConfigurationService.class);
+    Identity identity = identityRegistry.getIdentity(userId);
+    String editorMembershipType = userACL.getMakableMT();
+    List<String> accessControlWorkspaceGroups = userACL.getAccessControlWorkspaceGroups();
+    String editSitePermission = Util.getUIPortal().getEditPermission();
+    String redactorMembershipType = wcmConfigurationService.getRedactorMembershipType();   
+    // admin
+    if (userACL.getSuperUser().equals(userId)) {
+      role = UISiteAdminToolbar.ADMIN;
+      return;
+    }
+    if (userACL.hasAccessControlWorkspacePermission(userId)
+        && userACL.hasCreatePortalPermission(userId)) {
+      role = UISiteAdminToolbar.ADMIN;
+      return;
+    }
 
-	    			MembershipEntry editEntry = MembershipEntry.parse(editSitePermission);
-	    			if (MembershipEntry.ANY_TYPE.equals(editEntry.getMembershipType())) {
-	    				editEntry = MembershipEntry.parse(editorMembershipType+":"+editEntry.getGroup());
-	    			}
-	    			if (identity.isMemberOf(editEntry)) {
-	    				role = UISiteAdminToolbar.EDITOR;
-	    				return;
-	    			}
-	    		}
-	    	}
-	    }
+    // editor
+    MembershipEntry editorEntry = null;
+    for (String membership : accessControlWorkspaceGroups) {
+      editorEntry = MembershipEntry.parse(membership);
+      if (editorEntry.getMembershipType().equals(editorMembershipType)
+          || editorEntry.getMembershipType().equals(MembershipEntry.ANY_TYPE)) {
+        if (identity.isMemberOf(editorEntry)) {
 
-	    // editor
-	    MembershipEntry redactorEntry = MembershipEntry.parse(editSitePermission);
-	    if (redactorEntry.getMembershipType().equals(redactorMembershipType)
-	    		|| redactorEntry.getMembershipType().equals(MembershipEntry.ANY_TYPE)) {
-	    	if (identity.isMemberOf(redactorEntry)) {
-	    		role = UISiteAdminToolbar.REDACTOR;
-	    		return;
-	    	}
-	    }
+          MembershipEntry editEntry = MembershipEntry.parse(editSitePermission);
+          if (MembershipEntry.ANY_TYPE.equals(editEntry.getMembershipType())) {
+            editEntry = MembershipEntry.parse(editorMembershipType+":"+editEntry.getGroup());
+          }
+          if (identity.isMemberOf(editEntry)) {
+            role = UISiteAdminToolbar.EDITOR;
+            return;
+          }
+        }
+      }
+    }
 
-	    role = UISiteAdminToolbar.VISITOR;
+    // editor
+    MembershipEntry redactorEntry = MembershipEntry.parse(editSitePermission);
+    if (redactorEntry.getMembershipType().equals(redactorMembershipType)
+        || redactorEntry.getMembershipType().equals(MembershipEntry.ANY_TYPE)) {
+      if (identity.isMemberOf(redactorEntry)) {
+        role = UISiteAdminToolbar.REDACTOR;
+        return;
+      }
+    }
+
+    role = UISiteAdminToolbar.VISITOR;
   }
-  
+
   /**
    * gets the current user role based on the current site context.
    * 
    * @return user role
    */
-  public int getRole() throws Exception {
-	  refresh();
-	  return role;
+  public int getRole() throws Exception {    
+    return role;
   }
-  
+
   /**
    * Checks if we changed portal in order to refresh the user role and the navigation if needed
    * @return
    */
-  private boolean refresh() throws Exception {
-	  String portalURI = Util.getPortalRequestContext().getPortalURI();
-
-	  if (!portalURI.equals(lastPortalURI)) {
-		  lastPortalURI = portalURI;
-		  setRole();
-		  buildNavigations();
-		  return true;
-	  }
-	  
-	  return false;
+  public void refresh() throws Exception {	  
+    setRole();
+    buildNavigations();    
   }
-
+  
+  public void changeNavigationsLanguage(String language) {
+    LocaleConfig localeConfig = getApplicationComponent(LocaleConfigService.class).getLocaleConfig(language) ;
+    for(PageNavigation nav : groupNavigations) {      
+      ResourceBundle res = localeConfig.getNavigationResourceBundle(nav.getOwnerType(), nav.getOwnerId()) ;
+      for(PageNode node : nav.getNodes()) {
+        resolveLabel(res, node) ;
+      }
+    }
+    for(PageNavigation nav: currentSiteNavigations) {
+      ResourceBundle res = localeConfig.getNavigationResourceBundle(nav.getOwnerType(), nav.getOwnerId()) ;
+      for(PageNode node : nav.getNodes()) {
+        resolveLabel(res, node) ;
+      }
+    }
+  }    
+  
+  private void resolveLabel(ResourceBundle res, PageNode node) {
+    node.setResolvedLabel(res) ;
+    if(node.getChildren() == null) return;
+    for(PageNode childNode : node.getChildren()) {
+      resolveLabel(res, childNode) ;
+    }
+  }
+  
   /**
    * Checks if is show workspace area.
    * 
@@ -239,7 +255,7 @@ public class UISiteAdminToolbar extends UIContainer {
     String portalContextURI = portalRequestContext.getPortalURI();
     HttpServletRequest servletRequest = portalRequestContext.getRequest();    
     String baseURI = servletRequest.getScheme() + "://" + servletRequest.getServerName() + ":"
-        + servletRequest.getServerPort() + portalContextURI.substring(0, portalContextURI.length() - 1);    
+    + servletRequest.getServerPort() + portalContextURI.substring(0, portalContextURI.length() - 1);    
     return baseURI;
   }
 
@@ -266,57 +282,48 @@ public class UISiteAdminToolbar extends UIContainer {
    * @return
    */
   public boolean hasGroupNavigations() {
-	  return hasGroupNavigations;
+    return hasGroupNavigations;
   }
-  
+
   /**
    * Allows to set a list of the user group navigation.
    * 
    * @throws Exception
    */
-  /* TODO : We should refresh the list with a navigation listener when the group navigation changes */ 
   
-  /**
-   * Allows to set a list of the user group navigation.
-   * 
-   * @throws Exception
-   */
-  /* TODO : We should refresh the list with a navigation listener when the group navigation changes */ 
   private void buildNavigations() throws Exception {
-	  hasGroupNavigations = false;
-	  String removeUser = Util.getPortalRequestContext().getRemoteUser();
-	  List<PageNavigation> allNavigations = Util.getUIPortal().getNavigations();
-	  groupNavigations = new ArrayList<PageNavigation>();
-	  currentSiteNavigations = new ArrayList<PageNavigation>();
-	  for (PageNavigation navigation : allNavigations) {      
-		  if (navigation.getOwnerType().equals(PortalConfig.GROUP_TYPE)) {
-			  groupNavigations.add(PageNavigationUtils.filter(navigation, removeUser));
-			  hasGroupNavigations = true;
-		  }
-		  if (navigation.getOwnerType().equals(PortalConfig.PORTAL_TYPE)) {
-			  currentSiteNavigations.add(PageNavigationUtils.filter(navigation, removeUser));       
-		  }
-	  }
+    hasGroupNavigations = false;
+    String remoteUser = Util.getPortalRequestContext().getRemoteUser();
+    List<PageNavigation> allNavigations = Util.getUIPortal().getNavigations();
+    groupNavigations = new ArrayList<PageNavigation>();
+    currentSiteNavigations = new ArrayList<PageNavigation>();
+    for (PageNavigation navigation : allNavigations) {      
+      if (navigation.getOwnerType().equals(PortalConfig.GROUP_TYPE)) {
+        groupNavigations.add(PageNavigationUtils.filter(navigation, remoteUser));
+        hasGroupNavigations = true;
+      }
+      if (navigation.getOwnerType().equals(PortalConfig.PORTAL_TYPE)) {
+        currentSiteNavigations.add(PageNavigationUtils.filter(navigation, remoteUser));       
+      }
+    }
   }
 
 
-    public List<PageNavigation> getCurrentSiteNavigations() throws Exception {
-    	refresh();
-    	return currentSiteNavigations;
-    }
-  
-  
+  public List<PageNavigation> getCurrentSiteNavigations() throws Exception {   
+    return currentSiteNavigations;
+  }
 
-    /**
-     * Get the list of group navigation nodes
-     * 
-     * @return A list of navigation nodes
-     * @throws Exception
-     */
-    public List<PageNavigation> getGroupNavigations() throws Exception {
-    	refresh();
-    	return groupNavigations;
-    }
+
+
+  /**
+   * Get the list of group navigation nodes
+   * 
+   * @return A list of navigation nodes
+   * @throws Exception
+   */
+  public List<PageNavigation> getGroupNavigations() throws Exception {    
+    return groupNavigations;
+  }
 
   /**
    * The listener interface for receiving addPageAction events. The class that
@@ -344,8 +351,8 @@ public class UISiteAdminToolbar extends UIContainer {
       UIControlWorkspace uiControl = uiApp.getChild(UIControlWorkspace.class);
       UIControlWSWorkingArea uiWorking = uiControl.getChildById(UIControlWorkspace.WORKING_AREA_ID);
       uiWorking.setUIComponent(uiWorking.createUIComponent(UIWizardPageCreationBar.class,
-                                                           null,
-                                                           null));
+          null,
+          null));
       uiApp.setEditting(true);
       UIWorkingWorkspace uiWorkingWS = uiApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
       uiWorkingWS.setRenderedChild(UIPortalToolPanel.class);
@@ -403,7 +410,7 @@ public class UISiteAdminToolbar extends UIContainer {
       UIWizardPageSetInfo uiPageSetInfo = uiWizard.getChild(UIWizardPageSetInfo.class);
       uiPageSetInfo.setEditMode();
       uiPageSetInfo.createEvent("ChangeNode", Event.Phase.DECODE, event.getRequestContext())
-                   .broadcast();
+      .broadcast();
     }
   }
 
@@ -431,8 +438,8 @@ public class UISiteAdminToolbar extends UIContainer {
       }
       UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
       UIPortalForm uiNewPortal = uiMaskWS.createUIComponent(UIPortalForm.class,
-                                                            "CreatePortal",
-                                                            "UIPortalForm");
+          "CreatePortal",
+      "UIPortalForm");
       uiMaskWS.setUIComponent(uiNewPortal);
       uiMaskWS.setShow(true);
       portalContext.addUIComponentToUpdateByAjax(uiMaskWS);
@@ -461,14 +468,14 @@ public class UISiteAdminToolbar extends UIContainer {
       if (!uiPortal.isModifiable() || !userACL.hasCreatePortalPermission(remoteUser)
           || !Utils.canEditCurrentPortal(remoteUser)) {
         uiApp.addMessage(new ApplicationMessage(UISiteAdminToolbar.MESSAGE,
-                                                new String[] { uiPortal.getName() }));
+            new String[] { uiPortal.getName() }));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       }
       UIControlWorkspace uiControlWorkspace = uiApp.getChild(UIControlWorkspace.class);
       uiControlWorkspace.getChild(UIExoStart.class)
-                        .createEvent("EditPortal", Event.Phase.PROCESS, event.getRequestContext())
-                        .broadcast();
+      .createEvent("EditPortal", Event.Phase.PROCESS, event.getRequestContext())
+      .broadcast();
     }
   }
 
@@ -494,14 +501,14 @@ public class UISiteAdminToolbar extends UIContainer {
       if (!uiPortal.isModifiable() || !userACL.hasCreatePortalPermission(remoteUser)
           || !Utils.canEditCurrentPortal(remoteUser)) {
         uiApp.addMessage(new ApplicationMessage(UISiteAdminToolbar.MESSAGE,
-                                                new String[] { uiPortal.getName() }));
+            new String[] { uiPortal.getName() }));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       }
       UIControlWorkspace uiControlWorkspace = uiApp.getChild(UIControlWorkspace.class);
       UIExoStart uiExoStart = uiControlWorkspace.getChild(UIExoStart.class);
       uiExoStart.createEvent("BrowsePortal", Event.Phase.PROCESS, event.getRequestContext())
-                .broadcast();
+      .broadcast();
     }
   }
 
@@ -527,14 +534,14 @@ public class UISiteAdminToolbar extends UIContainer {
       if (!uiPortal.isModifiable() || !userACL.hasCreatePortalPermission(remoteUser)
           || !Utils.canEditCurrentPortal(remoteUser)) {
         uiApp.addMessage(new ApplicationMessage(UISiteAdminToolbar.MESSAGE,
-                                                new String[] { uiPortal.getName() }));
+            new String[] { uiPortal.getName() }));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       }
       UIControlWorkspace uiControlWorkspace = uiApp.getChild(UIControlWorkspace.class);
       UIExoStart uiExoStart = uiControlWorkspace.getChild(UIExoStart.class);
       uiExoStart.createEvent("BrowsePage", Event.Phase.PROCESS, event.getRequestContext())
-                .broadcast();
+      .broadcast();
     }
   }
 
@@ -556,7 +563,7 @@ public class UISiteAdminToolbar extends UIContainer {
       UIControlWorkspace uiControlWorkspace = uiApp.getChild(UIControlWorkspace.class);
       UIExoStart uiExoStart = uiControlWorkspace.getChild(UIExoStart.class);
       uiExoStart.createEvent("ChangePortal", Event.Phase.PROCESS, event.getRequestContext())
-                .broadcast();
+      .broadcast();
     }
   }
 
@@ -578,7 +585,7 @@ public class UISiteAdminToolbar extends UIContainer {
       UIControlWorkspace uiControlWorkspace = uiApp.getChild(UIControlWorkspace.class);
       UIExoStart uiExoStart = uiControlWorkspace.getChild(UIExoStart.class);
       uiExoStart.createEvent("SkinSettings", Event.Phase.PROCESS, event.getRequestContext())
-                .broadcast();
+      .broadcast();
     }
   }
 
@@ -600,7 +607,7 @@ public class UISiteAdminToolbar extends UIContainer {
       UIControlWorkspace uiControlWorkspace = uiApp.getChild(UIControlWorkspace.class);
       UIExoStart uiExoStart = uiControlWorkspace.getChild(UIExoStart.class);
       uiExoStart.createEvent("LanguageSettings", Event.Phase.PROCESS, event.getRequestContext())
-                .broadcast();
+      .broadcast();
     }
   }
 
@@ -622,7 +629,7 @@ public class UISiteAdminToolbar extends UIContainer {
       UIControlWorkspace uiControlWorkspace = uiApp.getChild(UIControlWorkspace.class);
       UIExoStart uiExoStart = uiControlWorkspace.getChild(UIExoStart.class);
       uiExoStart.createEvent("AccountSettings", Event.Phase.PROCESS, event.getRequestContext())
-                .broadcast();
+      .broadcast();
     }
   }
 
@@ -644,7 +651,7 @@ public class UISiteAdminToolbar extends UIContainer {
       UIControlWorkspace uiControlWorkspace = uiApp.getChild(UIControlWorkspace.class);
       UIExoStart uiExoStart = uiControlWorkspace.getChild(UIExoStart.class);
       uiExoStart.createEvent("EditPage", Event.Phase.PROCESS, event.getRequestContext())
-                .broadcast();
+      .broadcast();
     }
   }
 
@@ -655,8 +662,8 @@ public class UISiteAdminToolbar extends UIContainer {
       UIPortal uiPortal = Util.getUIPortal();
       uiPortal.setMode(UIPortal.COMPONENT_VIEW_MODE);
       PageNodeEvent<UIPortal> pnevent = new PageNodeEvent<UIPortal>(uiPortal,
-                                                                    PageNodeEvent.CHANGE_PAGE_NODE,
-                                                                    uri);
+          PageNodeEvent.CHANGE_PAGE_NODE,
+          uri);
       uiPortal.broadcast(pnevent, Event.Phase.PROCESS);
     }
   }
@@ -686,12 +693,12 @@ public class UISiteAdminToolbar extends UIContainer {
       StringBuilder windowId = new StringBuilder();
       String random = IdGenerator.generate();
       windowId.append(PortalConfig.PORTAL_TYPE)
-              .append("#")
-              .append(uiPortal.getOwner())
-              .append(":")
-              .append(configurationService.getPublishingPortletName())
-              .append("/")
-              .append(random);
+      .append("#")
+      .append(uiPortal.getOwner())
+      .append(":")
+      .append(configurationService.getPublishingPortletName())
+      .append("/")
+      .append(random);
       uiPortlet.setWindowId(windowId.toString());
 
       // Add preferences to portlet
@@ -737,7 +744,7 @@ public class UISiteAdminToolbar extends UIContainer {
       // Add portlet to page
       UserPortalConfigService userPortalConfigService = siteAdminToolbar.getApplicationComponent(UserPortalConfigService.class);
       Page page = userPortalConfigService.getPage(uiPortal.getSelectedNode().getPageReference(),
-                                                  Util.getPortalRequestContext().getRemoteUser());
+          Util.getPortalRequestContext().getRemoteUser());
       ArrayList<Object> listPortlet = page.getChildren();
       listPortlet.add(PortalDataMapper.toPortletModel(uiPortlet));
       page.setChildren(listPortlet);
