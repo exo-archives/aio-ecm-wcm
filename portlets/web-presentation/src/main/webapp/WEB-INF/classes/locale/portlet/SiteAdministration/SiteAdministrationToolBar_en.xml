@@ -21,8 +21,8 @@
       <Dashboard>Dashboard</Dashboard>
       <Sites>Sites</Sites>      
 			<Groups>Groups</Groups>      
-			<Editor>Editor</Editor>
-			<Administrator>Administrator</Administrator>
+			<Editor>Site Editor</Editor>
+			<Administrator>Site Administrator</Administrator>
     </action>
     <label>
     	<LiveModeTitle>Live mode</LiveModeTitle>
