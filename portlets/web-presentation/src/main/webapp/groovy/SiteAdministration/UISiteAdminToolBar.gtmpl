@@ -62,13 +62,15 @@
     if(label.length() > 60) label = label.substring(0, 57) + "..." ;    
     print """
       <div class="MenuItem $itemClazz">
+      	<div>
 		""";
 				if (node.pageReference != null) {
-		        print """<a href="$href" class="ItemIcon DefaultPageIcon" title="$node.resolvedLabel">$label</a>""";
+		        print """<a href="$href" class="ItemIcon DefaultPageIcon" title="$node.resolvedLabel">$label</a>""";	        
 				} else {
 						print """<a href="#" class="ItemIcon DefaultPageIcon" title="$node.resolvedLabel">$label</a>""";
 				}
 		print """
+				</div>
       </div>
     """ ;
   }
@@ -100,6 +102,7 @@
 			else itemClazz	= "OddItem";    			
 	    print """
 	      <div class="MenuItem $itemClazz">
+	      	<div class="ArrowIcon">
 			""";
 					if (node.pageReference != null) {
 			        print """<a href="$href" class="ItemIcon DefaultPageIcon" title="$node.resolvedLabel" onmouseover="showPopupMenu(this)">$label</a>""";
@@ -107,6 +110,7 @@
 							print """<a href="#" class="ItemIcon DefaultPageIcon" title="$node.resolvedLabel">$label</a>""";
 					}
 			print """				
+						</div>
 					<div class="MenuItemContainer" style="display: none; width: 100px;">		
 			""";		
 						int subNodeIndex = 1;
@@ -195,7 +199,11 @@
 	<% 
 	List<String> portals = uicomponent.getAllPortals(); 
 	int portalNum = 1;
-	String portalClazz;
+	String portalClazz;	
+	String currentPortalURI = uicomponent.getCurrentPortalURI();						
+	int index = currentPortalURI.lastIndexOf("/");
+	String currentPortal = currentPortalURI.substring(index + 1);
+	String baseURI = currentPortalURI.substring(0, index);
 	%>	
 	<div class="TBItem">
 		<a href="#" class="SitesIcon TBIcon" onmouseover="showPopupMenu(this)">$sitesLabel</a>
@@ -203,10 +211,7 @@
 		<% for (String portal : portals) { 
 					if (portalNum % 2 == 0)  portalClazz = "EvenItem";
 					else portalClazz = "OddItem";
-					String currentPortalURI = uicomponent.getCurrentPortalURI();					
-					String currentPortal = currentPortalURI.substring(currentPortalURI.lastIndexOf("/") + 1);
-					System.out.println("\n\n=================> currentPortal: " + currentPortal + "\n");
-					String portalLink = currentPortalURI.substring(0, currentPortalURI.lastIndexOf("/")) + "/" + portal;
+					String portalLink = baseURI + "/" + portal;
 		%>
       <div class="MenuItem $portalClazz">      
         <a href="$portalLink" title="" class="ItemIcon SiteIcon">$portal</a>

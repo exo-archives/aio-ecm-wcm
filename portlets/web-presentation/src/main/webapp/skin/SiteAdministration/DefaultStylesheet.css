@@ -14,7 +14,6 @@
 }
 
 .UISiteAdminToolBar a:hover {
-	background-color: #a4a4a4;
 	color: white;
 }
 
@@ -146,8 +145,18 @@
 	border: 1px solid white;
 }
 
+.UISiteAdminToolBar .MenuItem .MenuItemHover {
+	background-color: #a4a4a4;
+}
+
+.UISiteAdminToolBar .MenuItem .ArrowIcon {
+	background-image: url('DefaultSkin/icons/IconToolBar.gif');
+	background-position: right -290px;
+	background-repeat: no-repeat;
+}
+
 .UISiteAdminToolBar .MenuItem a {	
-	padding-right: 10px;
+	padding-right: 15px;
 }
 
 .UISiteAdminToolBar .OddItem {	
