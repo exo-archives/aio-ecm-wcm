@@ -2,6 +2,27 @@
   background: white url('/portal/rest/jcr/repository/collaboration/sites content/live/classic/web contents/site artifacts/banner/Default/medias/images/BgBanner.png') repeat-x;
 }
 
+.UIExoStart .ExoHomeButton {
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
+	width: 94px; 
+	height: 38px;
+	margin: 0px 0px 0px 70px;
+	cursor: pointer;
+}
+
+.UIExoStart .ButtonNormal {
+	background: url('background/ExoHome.gif') no-repeat -4px -45px;
+}
+
+.UIExoStart .ButtonOver {
+	background: url('background/ExoHome.gif') -98px -45px;
+}
+
+.UIExoStart .ButtonClicked {
+	background: url('background/ExoHome.gif') no-repeat -4px -84px;
+}
+
 .UIPopupWindow .MiddleLeftSideDecorator {
 	background: url('background/MiddlePopupWindow.gif') repeat-y left;
 }
