@@ -108,67 +108,115 @@ public class UISiteAdminToolbar extends UIContainer {
   public static final int EDITOR             = 1;
 
   public static final int REDACTOR           = 0;
+
+  public static final int VISITOR           = -1;
   
+  /** Does the current user have group navigations ? */
   private boolean hasGroupNavigations = false;
-  
+
+  /** Group navigations nodes list */
   private List<PageNavigation> groupNavigations = null;
   
+  /** Current site navigation list */
   private List<PageNavigation> currentSiteNavigations = null;
   
+  
+  /** The role of the current user. it can be VISITOR, REDACTOR, EDITOR or ADMINISTRATOR */
+  private int role = VISITOR;
+  
+  /** the last current site name used to set the role */
+  private String lastPortalURI = null;
 
   /**
    * Instantiates a new uI site admin toolbar.
    */
   public UISiteAdminToolbar() throws Exception {
-	  buildNavigations();
+	  refresh();
   }
 
+  /**
+   * Sets the role of the current user. Needs to be refreshed each time we change site
+   * @throws Exception
+   */
+  protected void setRole() throws Exception {
+	    String userId = Util.getPortalRequestContext().getRemoteUser();
+	    UserACL userACL = getApplicationComponent(UserACL.class);
+	    IdentityRegistry identityRegistry = getApplicationComponent(IdentityRegistry.class);
+	    WCMConfigurationService wcmConfigurationService = getApplicationComponent(WCMConfigurationService.class);
+	    Identity identity = identityRegistry.getIdentity(userId);
+	    String editorMembershipType = userACL.getMakableMT();
+	    List<String> accessControlWorkspaceGroups = userACL.getAccessControlWorkspaceGroups();
+	    String editSitePermission = Util.getUIPortal().getEditPermission();
+	    String redactorMembershipType = wcmConfigurationService.getRedactorMembershipType();   
+	    // admin
+	    if (userACL.getSuperUser().equals(userId)) {
+	      role = UISiteAdminToolbar.ADMIN;
+	      return;
+	    }
+	    if (userACL.hasAccessControlWorkspacePermission(userId)
+	        && userACL.hasCreatePortalPermission(userId)) {
+	      role = UISiteAdminToolbar.ADMIN;
+	      return;
+	    }
+	    
+	    // editor
+	    MembershipEntry editorEntry = null;
+	    for (String membership : accessControlWorkspaceGroups) {
+	    	editorEntry = MembershipEntry.parse(membership);
+	    	if (editorEntry.getMembershipType().equals(editorMembershipType)
+	    			|| editorEntry.getMembershipType().equals(MembershipEntry.ANY_TYPE)) {
+	    		if (identity.isMemberOf(editorEntry)) {
+
+	    			MembershipEntry editEntry = MembershipEntry.parse(editSitePermission);
+	    			if (MembershipEntry.ANY_TYPE.equals(editEntry.getMembershipType())) {
+	    				editEntry = MembershipEntry.parse(editorMembershipType+":"+editEntry.getGroup());
+	    			}
+	    			if (identity.isMemberOf(editEntry)) {
+	    				role = UISiteAdminToolbar.EDITOR;
+	    				return;
+	    			}
+	    		}
+	    	}
+	    }
+
+	    // editor
+	    MembershipEntry redactorEntry = MembershipEntry.parse(editSitePermission);
+	    if (redactorEntry.getMembershipType().equals(redactorMembershipType)
+	    		|| redactorEntry.getMembershipType().equals(MembershipEntry.ANY_TYPE)) {
+	    	if (identity.isMemberOf(redactorEntry)) {
+	    		role = UISiteAdminToolbar.REDACTOR;
+	    		return;
+	    	}
+	    }
+
+	    role = UISiteAdminToolbar.VISITOR;
+  }
+  
+  /**
+   * gets the current user role based on the current site context.
+   * 
+   * @return user role
+   */
   public int getRole() throws Exception {
-    String userId = Util.getPortalRequestContext().getRemoteUser();
-    UserACL userACL = getApplicationComponent(UserACL.class);
-    IdentityRegistry identityRegistry = getApplicationComponent(IdentityRegistry.class);
-    WCMConfigurationService wcmConfigurationService = getApplicationComponent(WCMConfigurationService.class);
-    Identity identity = identityRegistry.getIdentity(userId);
-    String editorMembershipType = userACL.getMakableMT();
-    List<String> accessControlWorkspaceGroups = userACL.getAccessControlWorkspaceGroups();
-    String editSitePermission = Util.getUIPortal().getEditPermission();
-    String redactorMembershipType = wcmConfigurationService.getRedactorMembershipType();   
-    // admin
-    if (userACL.getSuperUser().equals(userId)) {
-      return UISiteAdminToolbar.ADMIN;
-    }
-    if (userACL.hasAccessControlWorkspacePermission(userId)
-        && userACL.hasCreatePortalPermission(userId)) {
-      return UISiteAdminToolbar.ADMIN;
-    }
-    
-    // editor
-    MembershipEntry editorEntry = null;
-    for (String membership : accessControlWorkspaceGroups) {
-    	editorEntry = MembershipEntry.parse(membership);
-    	if (editorEntry.getMembershipType().equals(editorMembershipType)
-    			|| editorEntry.getMembershipType().equals(MembershipEntry.ANY_TYPE)) {
-    		if (identity.isMemberOf(editorEntry)) {
+	  refresh();
+	  return role;
+  }
+  
+  /**
+   * Checks if we changed portal in order to refresh the user role and the navigation if needed
+   * @return
+   */
+  private boolean refresh() throws Exception {
+	  String portalURI = Util.getPortalRequestContext().getPortalURI();
 
-    			MembershipEntry editEntry = MembershipEntry.parse(editSitePermission);
-    			if (MembershipEntry.ANY_TYPE.equals(editEntry.getMembershipType())) {
-    				editEntry = MembershipEntry.parse(editorMembershipType+":"+editEntry.getGroup());
-    			}
-    			if (identity.isMemberOf(editEntry))
-    				return UISiteAdminToolbar.EDITOR;
-    		}
-    	}
-    }
-
-    // editor
-    MembershipEntry redactorEntry = MembershipEntry.parse(editSitePermission);
-    if (redactorEntry.getMembershipType().equals(redactorMembershipType)
-    		|| redactorEntry.getMembershipType().equals(MembershipEntry.ANY_TYPE)) {
-    	if (identity.isMemberOf(redactorEntry))
-    		return UISiteAdminToolbar.REDACTOR;
-    }
-
-    return -1;
+	  if (!portalURI.equals(lastPortalURI)) {
+		  lastPortalURI = portalURI;
+		  setRole();
+		  buildNavigations();
+		  return true;
+	  }
+	  
+	  return false;
   }
 
   /**
@@ -212,34 +260,63 @@ public class UISiteAdminToolbar extends UIContainer {
     return portals;
   }
 
+  /**
+   * Return true if the user has at least one group navigation node
+   * 
+   * @return
+   */
   public boolean hasGroupNavigations() {
 	  return hasGroupNavigations;
   }
   
+  /**
+   * Allows to set a list of the user group navigation.
+   * 
+   * @throws Exception
+   */
+  /* TODO : We should refresh the list with a navigation listener when the group navigation changes */ 
+  
+  /**
+   * Allows to set a list of the user group navigation.
+   * 
+   * @throws Exception
+   */
+  /* TODO : We should refresh the list with a navigation listener when the group navigation changes */ 
   private void buildNavigations() throws Exception {
-    String removeUser = Util.getPortalRequestContext().getRemoteUser();
-    List<PageNavigation> allNavigations = Util.getUIPortal().getNavigations();
-    groupNavigations = new ArrayList<PageNavigation>();
-    currentSiteNavigations = new ArrayList<PageNavigation>();
-    for (PageNavigation navigation : allNavigations) {      
-      if (navigation.getOwnerType().equals(PortalConfig.GROUP_TYPE)) {
-        groupNavigations.add(PageNavigationUtils.filter(navigation, removeUser));
-        hasGroupNavigations = true;
-      }
-      if (navigation.getOwnerType().equals(PortalConfig.PORTAL_TYPE)) {
-       currentSiteNavigations.add(PageNavigationUtils.filter(navigation, removeUser));       
-      }
-    }
+	  hasGroupNavigations = false;
+	  String removeUser = Util.getPortalRequestContext().getRemoteUser();
+	  List<PageNavigation> allNavigations = Util.getUIPortal().getNavigations();
+	  groupNavigations = new ArrayList<PageNavigation>();
+	  currentSiteNavigations = new ArrayList<PageNavigation>();
+	  for (PageNavigation navigation : allNavigations) {      
+		  if (navigation.getOwnerType().equals(PortalConfig.GROUP_TYPE)) {
+			  groupNavigations.add(PageNavigationUtils.filter(navigation, removeUser));
+			  hasGroupNavigations = true;
+		  }
+		  if (navigation.getOwnerType().equals(PortalConfig.PORTAL_TYPE)) {
+			  currentSiteNavigations.add(PageNavigationUtils.filter(navigation, removeUser));       
+		  }
+	  }
   }
+
+
+    public List<PageNavigation> getCurrentSiteNavigations() throws Exception {
+    	refresh();
+    	return currentSiteNavigations;
+    }
+  
   
 
-  public List<PageNavigation> getCurrentSiteNavigations() throws Exception {
-    return currentSiteNavigations;
-  }
-  
-  public List<PageNavigation> getGroupNavigations() throws Exception {
-    return groupNavigations;
-  }
+    /**
+     * Get the list of group navigation nodes
+     * 
+     * @return A list of navigation nodes
+     * @throws Exception
+     */
+    public List<PageNavigation> getGroupNavigations() throws Exception {
+    	refresh();
+    	return groupNavigations;
+    }
 
   /**
    * The listener interface for receiving addPageAction events. The class that
