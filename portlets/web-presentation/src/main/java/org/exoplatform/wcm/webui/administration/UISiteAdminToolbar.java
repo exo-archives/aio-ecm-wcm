@@ -1,6 +1,8 @@
 package org.exoplatform.wcm.webui.administration;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -266,14 +268,22 @@ import org.exoplatform.webui.event.EventListener;
     PageList pageList = dataStorage.find(query) ;
     String userId = Util.getPortalRequestContext().getRemoteUser();
     UserACL userACL = getApplicationComponent(UserACL.class) ;
-    Iterator<?> itr = pageList.getAll().iterator();
+    Iterator<?> itr = pageList.getAll().iterator();    
     while(itr.hasNext()) {
       PortalConfig pConfig = (PortalConfig)itr.next() ;
       if(userACL.hasPermission(pConfig, userId)) {
-        portals.add(pConfig.getName());
+        portals.add(pConfig.getName());                
       }
     }     
-    return portals;
+    String currentPortal = Util.getUIPortal().getName();
+    portals.remove(currentPortal);
+    Collections.sort(portals, new Comparator<String>() {
+      public int compare(String o1, String o2) {
+        return o1.compareToIgnoreCase(o2);
+      }      
+    });        
+    portals.add(currentPortal);
+    return portals; 
   }
 
   /**
