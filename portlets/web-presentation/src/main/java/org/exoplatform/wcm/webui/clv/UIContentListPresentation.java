@@ -29,17 +29,14 @@ import javax.jcr.Session;
 import javax.portlet.PortletPreferences;
 
 import org.exoplatform.commons.utils.PageList;
-import org.exoplatform.ecm.webui.utils.Utils;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
-import org.exoplatform.services.cms.thumbnail.ThumbnailService;
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.access.SystemIdentity;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.OrganizationService;
@@ -102,6 +99,8 @@ import org.exoplatform.webui.event.EventListener;
 
   /** The date formatter. */
   private DateFormat               dateFormatter = null;
+  
+  public static final String DRAFT = "draft".intern();
 
   /**
    * Instantiates a new uI content list presentation.
@@ -181,11 +180,14 @@ import org.exoplatform.webui.event.EventListener;
   }
 
   public boolean showDraftButton(Node node) throws Exception {
-    boolean bool = false;
-    if (node != null && !node.hasProperty("publication:liveRevision")) {
-      bool = true;
-    }
-    return bool;
+    String currentState = null;
+    try {
+      currentState = node.getProperty("publication:currentState").getString();
+    } catch (Exception e) {
+    } 
+    if(DRAFT.equals(currentState))
+      return true;
+    return false;
   }
 
   /**
