@@ -368,8 +368,16 @@ function getElementsByClassPath(root, path) {
 	};
 
 	uploadFile.Save = function() {
-		var connector = eXp.connector + eXp.command.controlUpload;
+		var popupContainer = K("PopupContainer");
 		var nodeName = K("PopupContainer").select({where: "nodeName == 'INPUT' && name == 'fileName'"})[0];
+		var iFrameUpload = popupContainer.select({where: "className == 'iFrameUpload'"})[0];
+		var formUpload = iFrameUpload.contentWindow.document.getElementsByTagName("form")[0];
+		if ((formUpload.file.value.match('[/,:,[,*,\',",|]') != null || formUpload.file.value.indexOf(']') >= 0) && nodeName.value == '') {
+			alert('Invalid file name! Please rename you file and try to upload again, or enter new name in the input above.');
+			return;
+		}
+		
+		var connector = eXp.connector + eXp.command.controlUpload;
 		var param = eXp.buildParam("action=save", "uploadId=" + uploadFile.id, "fileName=" + nodeName.value, "currentFolder=" + eXp.store.currentFolder, "currentPortal=" + eXoPlugin.portalName, buildXParam());
 		eXp.sendRequest(
 			connector,
