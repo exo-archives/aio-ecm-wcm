@@ -261,6 +261,7 @@ public class UINameWebContentForm extends UIForm {
       uiCDForm.setContentType(contentType);
       uiCDForm.addNew(false);
       uiCDForm.resetProperties();
+      uiCDForm.setWebContent(webContentNode);
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
       PortletPreferences prefs = context.getRequest().getPreferences();
       prefs.setValue(UISingleContentViewerPortlet.REPOSITORY, repositoryName);
