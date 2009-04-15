@@ -18,11 +18,8 @@ package org.exoplatform.services.wcm.navigation;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.ws.frameworks.json.impl.JsonGeneratorImpl;
 import org.exoplatform.ws.frameworks.json.value.JsonValue;
 
@@ -33,56 +30,6 @@ import org.exoplatform.ws.frameworks.json.value.JsonValue;
  * Nov 21, 2008  
  */
 public class NavigationService {
-  private UserPortalConfigService portalConfigService;
-
-  public NavigationService(UserPortalConfigService userPortalConfigService) {
-    this.portalConfigService = userPortalConfigService;
-  }
-
-  //TODO this method need be removed when use portal 2.5.1
-  public String getNavigationsAsJSON(List<PageNavigation> navigations,String userId) throws Exception {
-    List<PageNavigation>  copyList = new CopyOnWriteArrayList<PageNavigation>();
-    for(PageNavigation nav: navigations) {
-      copyList.add(filter(nav,userId));
-    }    
-    PortalNavigation portalNavigation = new PortalNavigation(copyList);
-    JsonValue jsonValue = new JsonGeneratorImpl().createJsonObject(portalNavigation);
-    String JSONnavigation = jsonValue.toString();
-    JSONnavigation = JSONnavigation.substring(1, JSONnavigation.length() - 1);
-    JSONnavigation = JSONnavigation.replaceFirst("\"navigations\":", "");
-    return JSONnavigation;    
-  }
-
-  //TODO this method need be removed when use portal 2.5.1
-  private PageNavigation filter(PageNavigation nav, String userName) throws Exception {
-    PageNavigation filter = nav.clone();
-    filter.setNodes(new ArrayList<PageNode>());
-    for(PageNode node: nav.getNodes()){
-      PageNode newNode = filter(node, userName);
-      if(newNode != null ) filter.addNode(newNode);
-    }
-    return filter;
-  }
-
-  //TODO this method need be removed when use portal 2.5.1
-  private PageNode filter(PageNode node, String userName) throws Exception {
-    if(!node.isDisplay())
-      return null;
-    if(node.getPageReference() == null)
-      return null;
-    if(portalConfigService.getPage(node.getPageReference(),userName) == null)
-      return null;       
-    PageNode copyNode = node.clone();
-    copyNode.setChildren(new ArrayList<PageNode>());
-    List<PageNode> children = node.getChildren();
-    if(children == null || children.size() == 0) return copyNode;
-    for(PageNode child: children){
-      PageNode newNode = filter(child, userName);
-      if(newNode != null ) copyNode.getChildren().add(newNode);
-    }
-    if((copyNode.getChildren().size() == 0) && (copyNode.getPageReference() == null)) return null;
-    return copyNode;
-  }
 
   public String getNavigationsAsJSON(List<PageNavigation> navigations) throws Exception {
     PortalNavigation portalNavigation = new PortalNavigation(navigations);

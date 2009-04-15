@@ -16,7 +16,7 @@
   def language = rcontext.getLocale().getLanguage();  
   List<PageNavigation> navigations = Util.getUIPortal().getNavigations();
   NavigationService navigationService = uicomponent.getApplicationComponent(NavigationService.class);
-  def JSONnavigation = navigationService.getNavigationsAsJSON(navigations, userName);
+  def JSONnavigation = navigationService.getNavigationsAsJSON(navigations);
   def selectedNodeUri = Util.getUIPortal().getSelectedNode().getUri();
   def wcmContentTitle = _ctx.getRequestContext().getRequest().getAttribute("WCM.Content.Title");
   HttpSession session = _ctx.getRequestContext().getRequest().getSession();
