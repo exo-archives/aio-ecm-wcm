@@ -422,18 +422,18 @@ function showHideOrderBy() {
 
 function showPopupMenu(obj) {
 	if(!obj) return;
+	var uiNavi = document.getElementById('PortalNavigationTopContainer');
+	if(eXo.core.Browser.browserType == 'ie' && uiNavi)   uiNavi.style.position = "static";
 	if(obj.Timeout) clearTimeout(obj.Timeout);
 	var DOMUtil = eXo.core.DOMUtil;
 	var mnuItemContainer = DOMUtil.findNextElementByTagName(obj, "div");
 	var objParent = DOMUtil.findAncestorByClass(obj, "TBItem");
-	if(!objParent) return;
-	var uiNavi = document.getElementById('PortalNavigationTopContainer');
 	if(mnuItemContainer && mnuItemContainer.style.display != "block") {
-	  if(eXo.core.Browser.browserType == 'ie' && uiNavi)   uiNavi.style.position = "static";
 		mnuItemContainer.style.display = 'block';
+		mnuItemContainer.style.width = mnuItemContainer.offsetWidth - parseInt(DOMUtil.getStyle(mnuItemContainer, "borderLeftWidth")) - parseInt(DOMUtil.getStyle(mnuItemContainer, "borderRightWidth")) + 'px';
 		objParent.className = 'TBItemHover';
 		mnuItemContainer.onmouseout = function(){
-			if(eXo.core.Browser.browserType == 'ie' && uiNavi)   uiNavi.style.position = "relative";
+			if(eXo.core.Browser.browserType == 'ie')   uiNavi.style.position = "relative";
 			obj.Timeout = setTimeout(function() {
 				mnuItemContainer.style.display = 'none';
 				objParent.className = 'TBItem';
@@ -444,14 +444,13 @@ function showPopupMenu(obj) {
 
 		mnuItemContainer.onmouseover = function() {
 			objParent.className = 'TBItemHover';
-			if(eXo.core.Browser.browserType == 'ie' && uiNavi)   uiNavi.style.position = "static";
+			if(eXo.core.Browser.browserType == 'ie')  uiNavi.style.position = "static";
 			if(obj.Timeout) clearTimeout(obj.Timeout);
 			obj.Timeout = null;
 		}
 		obj.onmouseout = mnuItemContainer.onmouseout;	
-		mnuItemContainer.style.width = mnuItemContainer.offsetWidth - parseInt(DOMUtil.getStyle(mnuItemContainer, "borderLeftWidth")) - parseInt(DOMUtil.getStyle(mnuItemContainer, "borderRightWidth")) + 'px';
 	}
-}	
+}		
 
 function showPopupSubMenu(obj) {
 	if(!obj) return;
