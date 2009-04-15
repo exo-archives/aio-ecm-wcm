@@ -75,15 +75,24 @@ public class DocumentLinkHandler extends FCKFileHandler {
         break;
       }
     }
-    WCMConfigurationService configurationService = (WCMConfigurationService) ExoContainerContext
-        .getCurrentContainer().getComponentInstanceOfType(WCMConfigurationService.class);
-    String parameterizedPageViewerURI = configurationService.getParameterizedPageURI();
     String repository = ((ManageableRepository) node.getSession().getRepository())
-        .getConfiguration().getName();
+    .getConfiguration().getName();
     String workspace = node.getSession().getWorkspace().getName();
     String nodePath = node.getPath();
+    StringBuilder builder = new StringBuilder();
+    if(node.isNodeType("nt:file")) {
+      if("public".equals(accessMode)) {
+        return builder.append(baseURI).append("/jcr/").append(repository).append("/")
+        .append(workspace).append(nodePath).toString();
+      }     
+      return builder.append(baseURI).append("/private/jcr/").append(repository).append("/")
+      .append(workspace).append(nodePath).toString();
+    }    
+    WCMConfigurationService configurationService = (WCMConfigurationService) ExoContainerContext
+    .getCurrentContainer().getComponentInstanceOfType(WCMConfigurationService.class);
+    String parameterizedPageViewerURI = configurationService.getParameterizedPageURI();    
     return baseURI.replace("/rest", "") + "/" + accessMode + "/" + currentPortal + parameterizedPageViewerURI + "/"
-        + repository + "/" + workspace + nodePath;
+    + repository + "/" + workspace + nodePath;
   }
 
   /**

@@ -86,17 +86,15 @@ public class LinkConnector extends BaseConnector implements ResourceContainer {
                                      @QueryParam("currentFolder") String currentFolder,
                                      @QueryParam("currentPortal") String currentPortal,
                                      @QueryParam("command") String command,
-                                     @QueryParam("type") String type) throws Exception {
-    Response response = buildXMLResponseOnExpand(currentFolder,
-                                                 currentPortal,
-                                                 workspaceName,
-                                                 repositoryName,
-                                                 jcrPath,
-                                                 command);
-    if (response == null)
-      return Response.Builder.ok().build();
-    else
-      return response;
+                                     @QueryParam("type") String type) throws Exception {   
+    try {
+      Response response = buildXMLResponseOnExpand(currentFolder, currentPortal, workspaceName,
+                                                   repositoryName, jcrPath, command);
+      if (response != null)              
+        return response; 
+    } catch (Exception e) {
+    }    
+    return Response.Builder.ok().build();
   }
 
   /*

@@ -85,11 +85,13 @@ public class GadgetConnector implements ResourceContainer {
   @URITemplate("/getFoldersAndFiles/")
   @OutputTransformer(XMLOutputTransformer.class)
   public Response getFoldersAndFiles(@QueryParam("currentFolder") String currentFolder, @QueryParam("currentFolder") String language) throws Exception {
-    Response response = buildXMLResponse(currentFolder, language);
-    if (response == null)
-      return Response.Builder.ok().build();
-    else
-      return response;
+    try {
+      Response response = buildXMLResponse(currentFolder, language);
+      if (response != null)
+        return response; 
+    } catch (Exception e) {
+    }    
+    return Response.Builder.ok().build();
   }
   
   public Response buildXMLResponse(String currentFolder, String language) throws Exception {

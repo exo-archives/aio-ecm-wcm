@@ -117,8 +117,12 @@ public class PortalLinkConnector implements ResourceContainer {
   public Response getPageURI(@QueryParam("currentFolder") String currentFolder,
                              @QueryParam("command") String command,
                              @QueryParam("type") String type) throws Exception {
-    String userId = getCurrentUser();
-    return buildReponse(currentFolder, command, userId);
+    try {
+      String userId = getCurrentUser();
+      return buildReponse(currentFolder, command, userId); 
+    } catch (Exception e) {
+    }    
+    return Response.Builder.ok().build();
   }
 
   /**

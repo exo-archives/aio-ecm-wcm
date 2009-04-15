@@ -82,38 +82,39 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
   @URITemplate("/getFoldersAndFiles/")
   @OutputTransformer(XMLOutputTransformer.class)
   public Response getFoldersAndFiles(@QueryParam("repositoryName") String repositoryName,
-                                     @QueryParam("workspaceName") String workspaceName,
-                                     @QueryParam("jcrPath") String jcrPath,
-                                     @QueryParam("currentFolder") String currentFolder,
-                                     @QueryParam("currentPortal") String currentPortal,
-                                     @QueryParam("command") String command,
-                                     @QueryParam("type") String type,
-                                     @ContextParam(ResourceDispatcher.CONTEXT_PARAM_BASE_URI) String baseURI) throws Exception {
-    Node sharedPortal = livePortalManagerService.getLiveSharedPortal(repositoryName,
-                                                                     localSessionProvider.getSessionProvider(null));
-    Node activePortal = getCurrentPortalNode(repositoryName, jcrPath, currentPortal, null);
-    if (sharedPortal.getPath().equals(activePortal.getPath())) {
-      documentLinkHandler.setCurrentPortal(currentPortal);
-    } else {
-      documentLinkHandler.setCurrentPortal(activePortal.getName());
-    }
-    documentLinkHandler.setBaseURI(baseURI);
-    Response response = buildXMLResponseOnExpand(currentFolder,
-                                                 currentPortal,
-                                                 workspaceName,
-                                                 repositoryName,
-                                                 jcrPath,
-                                                 command);
-    if (response == null)
-      return Response.Builder.ok().build();
-    else
-      return response;
+      @QueryParam("workspaceName") String workspaceName,
+      @QueryParam("jcrPath") String jcrPath,
+      @QueryParam("currentFolder") String currentFolder,
+      @QueryParam("currentPortal") String currentPortal,
+      @QueryParam("command") String command,
+      @QueryParam("type") String type,
+      @ContextParam(ResourceDispatcher.CONTEXT_PARAM_BASE_URI) String baseURI) throws Exception {
+    try {
+      Node sharedPortal = livePortalManagerService.getLiveSharedPortal(repositoryName,                                                                     localSessionProvider.getSessionProvider(null));
+      Node activePortal = getCurrentPortalNode(repositoryName, jcrPath, currentPortal, null);
+      if (sharedPortal.getPath().equals(activePortal.getPath())) {
+        documentLinkHandler.setCurrentPortal(currentPortal);
+      } else {
+        documentLinkHandler.setCurrentPortal(activePortal.getName());
+      }
+      documentLinkHandler.setBaseURI(baseURI);
+      Response response = buildXMLResponseOnExpand(currentFolder,
+          currentPortal,
+          workspaceName,
+          repositoryName,
+          jcrPath,
+          command);
+      if(response != null)
+        return response;
+    } catch (Exception e) {         
+    }    
+    return Response.Builder.ok().build();
   }
 
   protected Response buildXMLResponseForContentStorage(Node node, String command) throws Exception {
     Element rootElement = FCKUtils.createRootElement(command,
-                                                     node,
-                                                     folderHandler.getFolderType(node));
+        node,
+        folderHandler.getFolderType(node));
     Document document = rootElement.getOwnerDocument();
     Element folders = document.createElement("Foders");
     Element files = document.createElement("Files");
@@ -156,25 +157,27 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
   @URITemplate("/createFolder/")
   @OutputTransformer(XMLOutputTransformer.class)
   public Response createFolder(@QueryParam("repositoryName") String repositoryName,
-                               @QueryParam("workspaceName") String workspaceName,
-                               @QueryParam("jcrPath") String jcrPath,
-                               @QueryParam("currentFolder") String currentFolder,
-                               @QueryParam("currentPortal") String currentPortal,
-                               @QueryParam("newFolderName") String newFolderName,
-                               @QueryParam("command") String command,
-                               @QueryParam("language") String language) throws Exception {
-    Response response = buildXMLDocumentOnCreateFolder(newFolderName,
-                                                       currentFolder,
-                                                       currentPortal,
-                                                       jcrPath,
-                                                       repositoryName,
-                                                       workspaceName,
-                                                       command,
-                                                       language);
-    if (response == null)
-      return Response.Builder.ok().build();
-    else
-      return response;
+      @QueryParam("workspaceName") String workspaceName,
+      @QueryParam("jcrPath") String jcrPath,
+      @QueryParam("currentFolder") String currentFolder,
+      @QueryParam("currentPortal") String currentPortal,
+      @QueryParam("newFolderName") String newFolderName,
+      @QueryParam("command") String command,
+      @QueryParam("language") String language) throws Exception {
+    try {
+      Response response = buildXMLDocumentOnCreateFolder(newFolderName,
+          currentFolder,
+          currentPortal,
+          jcrPath,
+          repositoryName,
+          workspaceName,
+          command,
+          language);
+      if (response != null)        
+        return response; 
+    } catch (Exception e) {
+    }    
+    return Response.Builder.ok().build();
   }
 
   /**
@@ -198,25 +201,29 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
   @InputTransformer(PassthroughInputTransformer.class)
   @OutputTransformer(XMLOutputTransformer.class)
   public Response uploadFile(InputStream inputStream,
-                             @QueryParam("repositoryName") String repositoryName,
-                             @QueryParam("workspaceName") String workspaceName,
-                             @QueryParam("currentFolder") String currentFolder,
-                             @QueryParam("currentPortal") String currentPortal,
-                             @QueryParam("jcrPath") String jcrPath,
-                             @QueryParam("uploadId") String uploadId,
-                             @QueryParam("language") String language,
-                             @HeaderParam("content-type") String contentType,
-                             @HeaderParam("content-length") String contentLength) throws Exception {
-    return createUploadFileResponse(inputStream,
-                                    repositoryName,
-                                    workspaceName,
-                                    currentFolder,
-                                    currentPortal,
-                                    jcrPath,
-                                    uploadId,
-                                    language,
-                                    contentType,
-                                    contentLength);
+      @QueryParam("repositoryName") String repositoryName,
+      @QueryParam("workspaceName") String workspaceName,
+      @QueryParam("currentFolder") String currentFolder,
+      @QueryParam("currentPortal") String currentPortal,
+      @QueryParam("jcrPath") String jcrPath,
+      @QueryParam("uploadId") String uploadId,
+      @QueryParam("language") String language,
+      @HeaderParam("content-type") String contentType,
+      @HeaderParam("content-length") String contentLength) throws Exception {
+    try {
+      return createUploadFileResponse(inputStream,
+          repositoryName,
+          workspaceName,
+          currentFolder,
+          currentPortal,
+          jcrPath,
+          uploadId,
+          language,
+          contentType,
+          contentLength); 
+    } catch (Exception e) {
+    }    
+    return Response.Builder.serverError().build();
   }
 
   /**
@@ -238,23 +245,20 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
   @URITemplate("/uploadFile/control/")
   @OutputTransformer(XMLOutputTransformer.class)
   public Response processUpload(@QueryParam("repositoryName") String repositoryName,
-                                @QueryParam("workspaceName") String workspaceName,
-                                @QueryParam("currentFolder") String currentFolder,
-                                @QueryParam("currentPortal") String currentPortal,
-                                @QueryParam("jcrPath") String jcrPath,
-                                @QueryParam("action") String action,
-                                @QueryParam("language") String language,
-                                @QueryParam("fileName") String fileName,
-                                @QueryParam("uploadId") String uploadId) throws Exception {
-    return createProcessUploadResponse(repositoryName,
-                                       workspaceName,
-                                       currentFolder,
-                                       currentPortal,
-                                       jcrPath,
-                                       action,
-                                       language,
-                                       fileName,
-                                       uploadId);
+      @QueryParam("workspaceName") String workspaceName,
+      @QueryParam("currentFolder") String currentFolder,
+      @QueryParam("currentPortal") String currentPortal,
+      @QueryParam("jcrPath") String jcrPath,
+      @QueryParam("action") String action,
+      @QueryParam("language") String language,
+      @QueryParam("fileName") String fileName,
+      @QueryParam("uploadId") String uploadId) throws Exception {
+    try {
+      return createProcessUploadResponse(repositoryName, workspaceName,currentFolder, currentPortal,
+          jcrPath, action,language,fileName,uploadId);  
+    } catch (Exception e) {
+    }
+    return Response.Builder.serverError().build();
   }
 
   /*
