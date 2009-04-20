@@ -158,11 +158,13 @@ function getElementsByClassPath(root, path) {
 			HideTreeItem = HideTreeItem.replace(/\${sType}/g, aResult[i].type);
 			sThumbnail = aResult[i].thumbnail;
 			if (!sThumbnail.length) sThumbnail = 'images/no-image.jpg';
-			HideTreeItem = HideTreeItem.replace(/\$%7BsThumbnail%7D/g, sThumbnail);
+			HideTreeItem = HideTreeItem.replace(/\$%7BsThumbnail%7D/g, sThumbnail);	// for FF
+			HideTreeItem = HideTreeItem.replace(/\${sThumbnail}/g, sThumbnail);			// for IE
 			HideTreeItem = HideTreeItem.replace(/\${sMetadata}/g, aResult[i].metadata.replace(/"/g, '${quote}'));
 			HideTreeItem = HideTreeItem.replace(/\${sThumbnailWidth}/g, FCKConfig.thumbnailWidth);
 			HideTreeItem = HideTreeItem.replace(/\${sThumbnailHeight}/g, FCKConfig.thumbnailHeight);
-			HideTreeItem = HideTreeItem.replace(/\$%7BsURL%7D/g, aResult[i].url);
+			HideTreeItem = HideTreeItem.replace(/\$%7BsURL%7D/g, aResult[i].url);		// for FF
+			HideTreeItem = HideTreeItem.replace(/\${sURL}/g, aResult[i].url);				// for IE
 			HideTreeItem = HideTreeItem.replace(/\${sDateCreated}/g, aResult[i].date.getDate() + '/' + aResult[i].date.getMonth() + '/' + aResult[i].date.getFullYear() + ' ' + aResult[i].date.getHours() + ':' + aResult[i].date.getMinutes());
 			HideTreeItem = HideTreeItem.replace(/\${sURL}/g, aResult[i].url);
 			HideTreeItem = HideTreeItem.replace(/\${sSize}/g,  aResult[i].size);
@@ -372,7 +374,7 @@ function getElementsByClassPath(root, path) {
 		var nodeName = K("PopupContainer").select({where: "nodeName == 'INPUT' && name == 'fileName'"})[0];
 		var iFrameUpload = popupContainer.select({where: "className == 'iFrameUpload'"})[0];
 		var formUpload = iFrameUpload.contentWindow.document.getElementsByTagName("form")[0];
-		if ((formUpload.file.value.match('[/,:,[,*,\',",|]') != null || formUpload.file.value.indexOf(']') >= 0) && nodeName.value == '') {
+		if ((formUpload.file.value.match('[/,[,*,\',",|]') != null || formUpload.file.value.indexOf(']') >= 0) && nodeName.value == '') {
 			alert('Invalid file name! Please rename you file and try to upload again, or enter new name in the input above.');
 			return;
 		}

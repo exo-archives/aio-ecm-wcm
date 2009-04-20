@@ -553,8 +553,10 @@
 					var sURL = eXp.getNodeValue(oFiles[i], "url").replace(/\s/g, "%20");
 					var sSize = parseInt(eXp.getNodeValue(oFiles[i], "size") || "0");
 					sHideTreeItem = sHideTreeItem.replace(/\${sName}/g, sName);
-					sHideTreeItem = sHideTreeItem.replace(/\$%7BsURL%7D/g, sURL);
-					sHideTreeItem = sHideTreeItem.replace(/\$%7BsThumbnail%7D/g, sThumbnail);
+					sHideTreeItem = sHideTreeItem.replace(/\$%7BsURL%7D/g, sURL);				// for FF
+					sHideTreeItem = sHideTreeItem.replace(/\${sURL}/g, sURL);					// for IE
+					sHideTreeItem = sHideTreeItem.replace(/\$%7BsThumbnail%7D/g, sThumbnail);	// for FF
+					sHideTreeItem = sHideTreeItem.replace(/\${sThumbnail}/g, sThumbnail);		// for IE
 					sHideTreeItem = sHideTreeItem.replace(/\${sThumbnailWidth}/g, FCKConfig.thumbnailWidth);
 					sHideTreeItem = sHideTreeItem.replace(/\${sThumbnailHeight}/g, FCKConfig.thumbnailHeight);
 					sHideTreeItem = sHideTreeItem.replace(/\${sDateCreated}/g,
@@ -563,7 +565,6 @@
 															sDateCreated.getFullYear() + "" + 
 															sDateCreated.getHours() + ":" +
 															sDateCreated.getMinutes());
-					sHideTreeItem = sHideTreeItem.replace(/\${sURL}/g, sURL);
 					sHideTreeItem = sHideTreeItem.replace(/\${sSize}/g, sSize);
 					sHTML += "<input type='hidden' id='checkgen'>";
 					sHTML += sHideTreeItem;

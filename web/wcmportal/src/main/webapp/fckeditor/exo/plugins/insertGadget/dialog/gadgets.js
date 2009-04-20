@@ -5,20 +5,27 @@ eval('var metadata = ' + oFakeImage.getAttribute('_fckgadgetmetadata').replace(/
 eval('var userPrefs = ' + oFakeImage.getAttribute('_fckgadgetuserprefs').replace(/\${quote}/g, '"'));
 var gadgetId = oFakeImage.getAttribute('_fckgadgetnumber');
 var gadgetUrl = oFakeImage.getAttribute('_fckgadgeturl');
-window.parent.AddTab( 'UserPreference', 'User Preference' ) ;
+var prefs = metadata.userPrefs;
+var tmp = '';
+for (var i in prefs) {
+	var type = prefs[i].type;
+	if (type == "list" || type == "hidden") tmp += 'x';
+	else tmp += 'o';
+}
 window.parent.AddTab( 'Preview', 'Preview' ) ;
+if (tmp.indexOf('o') >= 0) window.parent.AddTab( 'UserPreference', 'User Preference' ) ;
 
 function OnDialogTabChange( tabCode ) {
 	ShowE('UserPreference', ( tabCode == 'UserPreference' ) ) ;
 	ShowE('Preview', ( tabCode == 'Preview' ) ) ;
 	top.eXo.gadget.UIGadget
-	if (tabCode == 'Preview') {
-		ShowGadget(gadgetUrl);
+	if (tabCode == 'UserPreference') {
+		generateForm(metadata, userPrefs);	
 	}
 }
 
 window.onload = function() {
-	generateForm(metadata, userPrefs);
+	ShowGadget(gadgetUrl);
 	window.parent.SetOkButton( true );
 }
 
@@ -156,6 +163,7 @@ function getMainContent() {
 
 function getUserPrefs() {
 	var prefs = {};
+	if (!document.getElementById('m_' + gadgetId + '_numfields')) return prefs;
 	var numFields = document.getElementById('m_' + gadgetId + '_numfields').value;
 	for (var i = 0; i < numFields; i++) {
 		var input = document.getElementById('m_' + gadgetId + '_' + i);

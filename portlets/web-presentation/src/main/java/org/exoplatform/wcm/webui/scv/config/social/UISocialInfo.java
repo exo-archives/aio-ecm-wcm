@@ -51,13 +51,13 @@ public class UISocialInfo extends UITabPane {
    * @throws Exception the exception
    */
   public UISocialInfo() throws Exception {
+    UIPermissionManager uiPermission = addChild(UIPermissionManager.class, null, null);
 	  UIMiscellaneousInfo uiMiscellaneousInfo = addChild(UIMiscellaneousInfo.class, null, null);
-	  UIPermissionManager uiPermission = addChild(UIPermissionManager.class, null, null);
     // Comment adding UITagging and UICategorizing but don't delete.
     // because WCM can use UITagging and UICategorizing later.
 //    addChild(UITagging.class, null, null);
 //    addChild(UICategorizing.class, null, null);
-	  setSelectedTab(uiMiscellaneousInfo.getId()) ;
+	  setSelectedTab(uiPermission.getId()) ;
   }
   
   public void update() throws Exception {
