@@ -293,7 +293,7 @@ public class UIPublicationPanel extends UIForm {
       versionViewer.setNode(frozenNode);
       if(versionViewer.getTemplate() == null || versionViewer.getTemplate().trim().length() == 0) {
         UIApplication uiApp = publicationPanel.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIVersionInfo.msg.have-no-view-template", null)) ;
+        uiApp.addMessage(new ApplicationMessage("UIPublicationPanel.msg.have-no-view-template", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
@@ -305,23 +305,28 @@ public class UIPublicationPanel extends UIForm {
 
   public static class RestoreVersionActionListener extends EventListener<UIPublicationPanel> {
     public void execute(Event<UIPublicationPanel> event) throws Exception {      
-    UIPublicationPanel publicationPanel = event.getSource();
-    Node currentNode = publicationPanel.getCurrentNode();        
-    String versionUUID = event.getRequestContext().getRequestParameter(OBJECTID);
-    Version version = (Version)publicationPanel.getRevisionByUUID(versionUUID);
-    try {
-      currentNode.restore(version,true);
-      if(!currentNode.isCheckedOut())
-        currentNode.checkout();
-      PublicationService publicationService = publicationPanel.getApplicationComponent(PublicationService.class);
-      PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(Constant.LIFECYCLE_NAME);
-      HashMap<String,String> context = new HashMap<String,String>();
-      publicationPlugin.changeState(currentNode,Constant.ENROLLED_STATE,context);
-      publicationPanel.updatePanel();
-    } catch (Exception e) {
-      UIApplication uiApp = publicationPanel.getAncestorOfType(UIApplication.class);
-      JCRExceptionManager.process(uiApp,e);
-    }        
+      UIPublicationPanel publicationPanel = event.getSource();
+      Node currentNode = publicationPanel.getCurrentNode();        
+      String versionUUID = event.getRequestContext().getRequestParameter(OBJECTID);
+      Version version = (Version)publicationPanel.getRevisionByUUID(versionUUID);
+      try {
+        currentNode.restore(version,true);
+        if(!currentNode.isCheckedOut())
+          currentNode.checkout();
+        PublicationService publicationService = publicationPanel.getApplicationComponent(PublicationService.class);
+        PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(Constant.LIFECYCLE_NAME);
+        HashMap<String,String> context = new HashMap<String,String>();
+        publicationPlugin.changeState(currentNode,Constant.ENROLLED_STATE,context);
+        publicationPanel.updatePanel();
+      } catch (Exception e) {
+        UIApplication uiApp = publicationPanel.getAncestorOfType(UIApplication.class);
+        JCRExceptionManager.process(uiApp,e);
+      }        
+      
+      UIApplication uiApp = publicationPanel.getAncestorOfType(UIApplication.class) ;
+      uiApp.addMessage(new ApplicationMessage("UIPublicationPanel.msg.restore-complete", null)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+      
       UIPublicationContainer publicationContainer = publicationPanel.getAncestorOfType(UIPublicationContainer.class);
       publicationContainer.setActiveTab(publicationPanel, event.getRequestContext());
     }

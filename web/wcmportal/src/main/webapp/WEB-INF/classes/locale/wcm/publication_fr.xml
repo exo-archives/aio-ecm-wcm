@@ -90,6 +90,14 @@
   		<from>de</from>
   		<to>à</to>
   	</scheduled>
+  	<title>
+  		<preview>Prévoir</preview>
+  		<restore>Restorer</restore>
+  	</title>
+  	<msg>
+    	<have-no-view-template>Le formulaire de consultation n'est pas supporté</have-no-view-template>
+    	<restore-complete>Restore completed</restore-complete>
+    </msg>
   </UIPublicationPanel>
   <UIPublicationHistory>
   	<header>

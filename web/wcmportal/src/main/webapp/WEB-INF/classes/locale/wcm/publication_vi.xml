@@ -90,6 +90,14 @@
   		<from>từ</from>
   		<to>đến</to>
   	</scheduled>
+  	<title>
+  		<preview>Xem lại</preview>
+  		<restore>Khôi phục</restore>
+  	</title>
+  	<msg>
+    	<have-no-view-template>Mẫu view của node này không được hỗ trợ</have-no-view-template>
+    	<restore-complete>Khôi phục thành công</restore-complete>
+    </msg>
   </UIPublicationPanel>
   <UIPublicationHistory>
   	<header>

@@ -117,13 +117,13 @@
               %>
             </td>
             <td>
-              <div class="Preview" onclick="<%= uicomponent.event("PreviewVersion", revision.getUUID()) %>"><span></span></div>
+              <div title="<%=_ctx.appRes("UIPublicationPanel.title.preview")%>" class="Preview" onclick="<%= uicomponent.event("PreviewVersion", revision.getUUID()) %>"><span></span></div>
               <%
                 if (revisions.indexOf(revision) != 0) {
                   if (Constant.DRAFT_STATE.equals(uicomponent.getRevisionState(revisions.get(0)))) {
-                    %><div class="Restore" onclick="if (confirm('<%=_ctx.appRes("UIPublicationPanel.revisions.confirm")%>')) <%= uicomponent.event("RestoreVersion", revision.getUUID()) %>"><span></span></div><%
+                    %><div title="<%=_ctx.appRes("UIPublicationPanel.title.restore")%>" class="Restore" onclick="if (confirm('<%=_ctx.appRes("UIPublicationPanel.revisions.confirm")%>')) <%= uicomponent.event("RestoreVersion", revision.getUUID()) %>"><span></span></div><%
                   } else {
-                    %><div class="Restore" onclick="<%= uicomponent.event("RestoreVersion", revision.getUUID()) %>"><span></span></div><%
+                    %><div title="<%=_ctx.appRes("UIPublicationPanel.title.restore")%>" class="Restore" onclick="<%= uicomponent.event("RestoreVersion", revision.getUUID()) %>"><span></span></div><%
                   }
                 }
               %>

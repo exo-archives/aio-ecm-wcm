@@ -90,6 +90,14 @@
   		<from>from</from>
   		<to>to</to>
   	</scheduled>
+  	<title>
+  		<preview>Preview</preview>
+  		<restore>Restore</restore>
+  	</title>
+  	<msg>
+    	<have-no-view-template>View template of this is not supported</have-no-view-template>
+    	<restore-complete>Restore completed</restore-complete>
+    </msg>
   </UIPublicationPanel>
   <UIPublicationHistory>
   	<header>
