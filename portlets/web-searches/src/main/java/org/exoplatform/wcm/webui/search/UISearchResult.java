@@ -76,12 +76,14 @@ import org.exoplatform.webui.event.EventListener;
       events = @EventConfig(listeners = UISearchResult.EditContentActionListener.class)
     ),
     @ComponentConfig(
-      type = UICustomizeablePaginator.class, 
+      type = UICustomizeablePaginator.class,
       events = @EventConfig(listeners = UICustomizeablePaginator.ShowPageActionListener.class)
     ) 
 })
 public class UISearchResult extends UIContainer {
-
+  
+  public static final String DRAFT = "draft".intern();
+  
   /** The template path. */
   private String                   templatePath;
 
@@ -326,11 +328,19 @@ public class UISearchResult extends UIContainer {
   
 
   public boolean showDraftButton(Node node) throws Exception {
-    boolean bool = false;
-    if (node != null && !node.hasProperty("publication:liveRevision")) {
-      bool = true;
-    }
-    return bool;
+//    boolean bool = false;
+//    if (node != null && !node.hasProperty("publication:liveRevision")) {
+//      bool = true;
+//    }
+//    return bool;
+    String currentState = null;
+    try {
+      currentState = node.getProperty("publication:currentState").getString();
+    } catch (Exception e) {
+    } 
+    if(DRAFT.equals(currentState))
+      return true;
+    return false;
   }
   
   public Node getNodeView(Node node) throws Exception {

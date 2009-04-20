@@ -79,6 +79,11 @@ public class UIDocumentDialogForm extends UIDialogForm {
    * 
    * @param node the new document node
    */
+  
+  public UIDocumentDialogForm() {
+    setActions(new String [] {"SaveAsDraft", "FastPublish", "Cancel"});
+  }
+  
   public void setDocumentNode(Node node) {
     documentNode = node;
   }

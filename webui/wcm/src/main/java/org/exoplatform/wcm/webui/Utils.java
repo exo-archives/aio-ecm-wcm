@@ -86,9 +86,8 @@ public class Utils {
     boolean turnOnFlag = false;
     if (obj != null) {      
       turnOnFlag = Boolean.parseBoolean(obj.toString()); 
-    }
-    String remoteUser = context.getRemoteUser();
-    if (showAblePref && turnOnFlag && Utils.canEditCurrentPortal(remoteUser)) {
+    }    
+    if (showAblePref && turnOnFlag) {
       return true;
     } 
     return false;

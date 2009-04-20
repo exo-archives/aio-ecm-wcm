@@ -17,11 +17,15 @@
 package org.exoplatform.wcm.webui.clv;
 
 import javax.portlet.PortletPreferences;
+import javax.swing.text.StyledEditorKit.BoldAction;
 
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
+import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.clv.config.UIPortletConfig;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -62,6 +66,10 @@ public abstract class UIListViewerBase extends UIContainer implements RefreshDel
     return pContext.getWindowId();
   }
   
+  public void processRender(WebuiRequestContext context) throws Exception {
+    init();    
+    super.processRender(context);
+  }
   protected PortletPreferences getPortletPreference() {
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     return portletRequestContext.getRequest().getPreferences();

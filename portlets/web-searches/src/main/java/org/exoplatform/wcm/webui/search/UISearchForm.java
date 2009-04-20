@@ -253,8 +253,8 @@ public class UISearchForm extends UIForm {
 			  resultType = bundle.getString("UISearchForm.pageCheckBox.label");
 			} else if (!uiPageCheckbox.isChecked() && uiDocumentCheckbox.isChecked()) {
 			  resultType = bundle.getString("UISearchForm.documentCheckBox.label");
-      }
-      keyword = keyword.replace('-', ' ');
+      }      
+      keyword = keyword.replace('-', ' ').toLowerCase(portletRequestContext.getLocale());
 			uiSearchResult.setKeyword(keyword);
 			uiSearchResult.setResultType(resultType);
 			String selectedPortal = (uiPortalSelectBox.getValue()

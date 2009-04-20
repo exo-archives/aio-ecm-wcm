@@ -138,14 +138,17 @@ public class RESTImagesRendererService implements ResourceContainer{
     String repository = ((ManageableRepository)file.getSession().getRepository()).getConfiguration().getName();
     String workspaceName = file.getSession().getWorkspace().getName();
     String nodeIdentifiler = null;
-    if(file.isNodeType("mix:referenceable")) {
+    InputStream stream = file.getNode("jcr:content").getProperty("jcr:data").getStream();
+    if (stream.available() == 0) return null;
+    stream.close();
+    if (file.isNodeType("mix:referenceable")) {
       nodeIdentifiler = file.getUUID();
-    }else {
+    } else {
      nodeIdentifiler = file.getPath().replaceFirst("/","");
     }  
     String accessURI = baseRestURI;
     String userId = file.getSession().getUserID();    
-    if(!SystemIdentity.ANONIM.equals(userId) && SystemIdentity.SYSTEM.equalsIgnoreCase(userId)) {
+    if (!SystemIdentity.ANONIM.equals(userId) && SystemIdentity.SYSTEM.equalsIgnoreCase(userId)) {
       accessURI = baseRestURI.concat("private/");
     }
     return builder.append(accessURI).append("images/").append(repository).append("/")

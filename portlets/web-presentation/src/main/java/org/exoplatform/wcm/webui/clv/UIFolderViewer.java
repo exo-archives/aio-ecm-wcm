@@ -33,6 +33,7 @@ import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.wcm.publication.PublicationState;
 import org.exoplatform.services.wcm.utils.PaginatedNodeIterator;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -94,7 +95,12 @@ public class UIFolderViewer extends UIListViewerBase {
     contentListPresentation.setShowHeader(Boolean.parseBoolean(portletPreferences.getValue(UIContentListViewerPortlet.SHOW_HEADER, null)));
     contentListPresentation.setHeader(portletPreferences.getValue(UIContentListViewerPortlet.HEADER, null));
   }
-
+  
+  @Override
+  public void processRender(WebuiRequestContext context) throws Exception {   
+    super.processRender(context);
+  }
+  
   public NodeIterator getRenderedContentNodes() throws Exception {
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     PortletPreferences preferences = portletRequestContext.getRequest().getPreferences();
@@ -136,7 +142,7 @@ public class UIFolderViewer extends UIListViewerBase {
     if (Utils.isLiveMode()) {
       statement = "select * from nt:base where jcr:path like '" + folderPath
       + "/%' AND NOT jcr:path like'" + folderPath + "/%/%'" + " AND( "
-      + documentTypeClause.toString() + ") AND publication:liveRevision IS NOT NULL AND publication:liveRevision <> '' " + orderQuery;
+      + documentTypeClause.toString() + ") AND publication:currentState = '" + PublicationState.LIVE + "' " + orderQuery;
     }  
     Query query = manager.createQuery(statement, Query.SQL);
     return query.execute().getNodes();

@@ -45,6 +45,7 @@ import org.exoplatform.services.organization.UserProfileHandler;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
 import org.exoplatform.services.wcm.images.RESTImagesRendererService;
+import org.exoplatform.services.wcm.publication.PublicationState;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant.SITE_MODE;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
@@ -100,8 +101,6 @@ import org.exoplatform.webui.event.EventListener;
   /** The date formatter. */
   private DateFormat               dateFormatter = null;
   
-  public static final String DRAFT = "draft".intern();
-
   /**
    * Instantiates a new uI content list presentation.
    */
@@ -185,7 +184,7 @@ import org.exoplatform.webui.event.EventListener;
       currentState = node.getProperty("publication:currentState").getString();
     } catch (Exception e) {
     } 
-    if(DRAFT.equals(currentState))
+    if(PublicationState.DRAFT.equals(currentState))
       return true;
     return false;
   }
@@ -439,12 +438,13 @@ import org.exoplatform.webui.event.EventListener;
     WebContentSchemaHandler contentSchemaHandler = schemaConfigService.getWebSchemaHandlerByType(WebContentSchemaHandler.class);
     Node illustrativeImage = null;
     RESTImagesRendererService imagesRendererService = getApplicationComponent(RESTImagesRendererService.class);
+    String uri = null;
     try {
       illustrativeImage = contentSchemaHandler.getIllustrationImage(node);
-      return imagesRendererService.generateURI(illustrativeImage);
+      uri = imagesRendererService.generateURI(illustrativeImage);      
     } catch (Exception e) {            
     }
-    return null;
+    return uri;
   }
 
   /**

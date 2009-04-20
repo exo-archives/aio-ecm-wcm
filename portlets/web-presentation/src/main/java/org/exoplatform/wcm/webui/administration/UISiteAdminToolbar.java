@@ -469,14 +469,10 @@ import org.exoplatform.webui.event.EventListener;
    */
   public static class EditPortalActionListener extends EventListener<UISiteAdminToolbar> {
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
-      event.setRequestContext(Util.getPortalRequestContext());
-      PortalRequestContext portalContext = Util.getPortalRequestContext();
+      event.setRequestContext(Util.getPortalRequestContext());      
       UIPortal uiPortal = Util.getUIPortal();
-      UIPortalApplication uiApp = Util.getUIPortalApplication();
-      UserACL userACL = uiApp.getApplicationComponent(UserACL.class);
-      String remoteUser = portalContext.getRemoteUser();
-      if (!uiPortal.isModifiable() || !userACL.hasCreatePortalPermission(remoteUser)
-          || !Utils.canEditCurrentPortal(remoteUser)) {
+      UIPortalApplication uiApp = Util.getUIPortalApplication();      
+      if (!uiPortal.isModifiable()) {
         uiApp.addMessage(new ApplicationMessage(UISiteAdminToolbar.MESSAGE,
             new String[] { uiPortal.getName() }));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
@@ -502,19 +498,8 @@ import org.exoplatform.webui.event.EventListener;
    */
   public static class BrowsePortalActionListener extends EventListener<UISiteAdminToolbar> {
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
-      event.setRequestContext(Util.getPortalRequestContext());
-      PortalRequestContext portalContext = Util.getPortalRequestContext();
-      UIPortal uiPortal = Util.getUIPortal();
-      UIPortalApplication uiApp = Util.getUIPortalApplication();
-      UserACL userACL = uiApp.getApplicationComponent(UserACL.class);
-      String remoteUser = portalContext.getRemoteUser();
-      if (!uiPortal.isModifiable() || !userACL.hasCreatePortalPermission(remoteUser)
-          || !Utils.canEditCurrentPortal(remoteUser)) {
-        uiApp.addMessage(new ApplicationMessage(UISiteAdminToolbar.MESSAGE,
-            new String[] { uiPortal.getName() }));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-        return;
-      }
+      event.setRequestContext(Util.getPortalRequestContext());            
+      UIPortalApplication uiApp = Util.getUIPortalApplication();           
       UIControlWorkspace uiControlWorkspace = uiApp.getChild(UIControlWorkspace.class);
       UIExoStart uiExoStart = uiControlWorkspace.getChild(UIExoStart.class);
       uiExoStart.createEvent("BrowsePortal", Event.Phase.PROCESS, event.getRequestContext())
@@ -535,23 +520,11 @@ import org.exoplatform.webui.event.EventListener;
    */
   public static class BrowsePageActionListener extends EventListener<UISiteAdminToolbar> {
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
-      event.setRequestContext(Util.getPortalRequestContext());
-      PortalRequestContext portalContext = Util.getPortalRequestContext();
-      UIPortal uiPortal = Util.getUIPortal();
-      UIPortalApplication uiApp = Util.getUIPortalApplication();
-      UserACL userACL = uiApp.getApplicationComponent(UserACL.class);
-      String remoteUser = portalContext.getRemoteUser();
-      if (!uiPortal.isModifiable() || !userACL.hasCreatePortalPermission(remoteUser)
-          || !Utils.canEditCurrentPortal(remoteUser)) {
-        uiApp.addMessage(new ApplicationMessage(UISiteAdminToolbar.MESSAGE,
-            new String[] { uiPortal.getName() }));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-        return;
-      }
+      event.setRequestContext(Util.getPortalRequestContext());            
+      UIPortalApplication uiApp = Util.getUIPortalApplication();            
       UIControlWorkspace uiControlWorkspace = uiApp.getChild(UIControlWorkspace.class);
       UIExoStart uiExoStart = uiControlWorkspace.getChild(UIExoStart.class);
-      uiExoStart.createEvent("BrowsePage", Event.Phase.PROCESS, event.getRequestContext())
-      .broadcast();
+      uiExoStart.createEvent("BrowsePage", Event.Phase.PROCESS, event.getRequestContext()).broadcast();
     }
   }
 
@@ -771,7 +744,7 @@ import org.exoplatform.webui.event.EventListener;
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       PortalRequestContext context = Util.getPortalRequestContext();
       context.getRequest().getSession().setAttribute(Utils.TURN_ON_QUICK_EDIT, true);
-      Utils.refreshBrowser((PortletRequestContext) event.getRequestContext());
+      Utils.refreshBrowser((PortletRequestContext) event.getRequestContext());      
     }
   }
 
@@ -780,6 +753,7 @@ import org.exoplatform.webui.event.EventListener;
       PortalRequestContext context = Util.getPortalRequestContext();
       context.getRequest().getSession().setAttribute(Utils.TURN_ON_QUICK_EDIT, false);
       Utils.refreshBrowser((PortletRequestContext) event.getRequestContext());
+      //context.getRequest().getSession().removeAttribute(Utils.TURN_ON_QUICK_EDIT);
     }
   }
 

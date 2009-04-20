@@ -70,7 +70,7 @@ import org.exoplatform.webui.event.Event.Phase;
   }  
 )
 public class UIDocumentDialogForm extends UIDialogForm {
-
+  
   /** The document node. */
   private Node documentNode;
 
@@ -79,6 +79,11 @@ public class UIDocumentDialogForm extends UIDialogForm {
    * 
    * @param node the new document node
    */
+  
+  public UIDocumentDialogForm() {
+    setActions(new String [] {"SaveAsDraft", "FastPublish", "Cancel"});
+  }
+  
   public void setDocumentNode(Node node) {
     documentNode = node;
   }
