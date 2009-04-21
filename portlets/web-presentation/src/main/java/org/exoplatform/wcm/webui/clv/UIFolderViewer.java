@@ -142,7 +142,7 @@ public class UIFolderViewer extends UIListViewerBase {
     if (Utils.isLiveMode()) {
       statement = "select * from nt:base where jcr:path like '" + folderPath
       + "/%' AND NOT jcr:path like'" + folderPath + "/%/%'" + " AND( "
-      + documentTypeClause.toString() + ") AND publication:currentState = '" + PublicationState.LIVE + "' " + orderQuery;
+      + documentTypeClause.toString() + ") AND publication:liveRevision IS NOT NULL AND publication:liveRevision <> '' " + orderQuery;
     }  
     Query query = manager.createQuery(statement, Query.SQL);
     return query.execute().getNodes();

@@ -129,9 +129,7 @@ public class WCMPaginatedQueryResult extends PaginatedQueryResult {
         }
       }*/
       if(queryCriteria.isSearchWebpage()) {        
-//        if (!displayNode.isNodeType("publication:webpagesPublication") && !queryCriteria.isSearchDocument())
-//          return null;
-        if (!displayNode.isNodeType("publication:stateAndVersionBasedPublication"))
+        if (!displayNode.isNodeType("publication:webpagesPublication"))
           return null;        
       }      
     }            

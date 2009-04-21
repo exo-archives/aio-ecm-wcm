@@ -49,6 +49,7 @@ import org.exoplatform.services.wcm.publication.PublicationState;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant.SITE_MODE;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -180,6 +181,7 @@ import org.exoplatform.webui.event.EventListener;
 
   public boolean showDraftButton(Node node) throws Exception {
     String currentState = null;
+    if (Utils.isLiveMode()) return false;
     try {
       currentState = node.getProperty("publication:currentState").getString();
     } catch (Exception e) {
