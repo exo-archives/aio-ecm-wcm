@@ -119,7 +119,7 @@ public class UIPublicationAction extends UIForm {
       
       String selectedNavigationNodeURI = selectedNode.getUri();
       Node node = publicationPages.getNode();
-      if (node.canAddMixin("publication:webpagesPublication")) node.addMixin("publication:webpagesPublication");
+      
       if (node.hasProperty("publication:navigationNodeURIs")) {
         Value[] navigationNodeURIs = node.getProperty("publication:navigationNodeURIs").getValues();
         for (Value navigationNodeURI : navigationNodeURIs) {

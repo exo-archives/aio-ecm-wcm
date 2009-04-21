@@ -194,6 +194,8 @@ public class PageEventListenerDelegate {
     Session session = content.getSession();
     ValueFactory valueFactory = session.getValueFactory();
 
+    if (content.canAddMixin("publication:webpagesPublication")) content.addMixin("publication:webpagesPublication");
+    
     List<String> nodeAppIds = Util.getValuesAsString(content, "publication:applicationIDs");
     String mixedAppId = Util.setMixedApplicationId(page.getPageId(), applicationId);
     if(nodeAppIds.contains(mixedAppId))
