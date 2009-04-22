@@ -18,8 +18,12 @@ package org.exoplatform.wcm.webui.clv.config;
 
 import java.util.List;
 
+import javax.portlet.PortletPreferences;
+
 import org.exoplatform.ecm.webui.tree.selectmany.UISelectedCategoriesGrid;
+import org.exoplatform.wcm.webui.clv.UIContentListViewerPortlet;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -63,6 +67,7 @@ public class UISelectedContentGrid extends UISelectedCategoriesGrid {
   public static class SaveCategoriesActionListener extends EventListener<UISelectedContentGrid> {
     public void execute(Event<UISelectedContentGrid> event) throws Exception {
       UISelectedContentGrid uiSelectedContentGrid = event.getSource();
+      PortletRequestContext context = (PortletRequestContext) event.getRequestContext();           
       UICorrectContentSelectorForm uiCorrectContentSelectorForm = uiSelectedContentGrid.getAncestorOfType(UICorrectContentSelectorForm.class);
       String returnField = uiCorrectContentSelectorForm.getReturnFieldName();
       List<String> selectedCategories = uiSelectedContentGrid.getSelectedCategories();
@@ -76,14 +81,21 @@ public class UISelectedContentGrid extends UISelectedCategoriesGrid {
         StringBuilder contents = new StringBuilder();
         for (String item : selectedCategories) {
           contents.append(item).append(";");
-        }
+        }        
         UIViewerManagementForm uiViewerManagementForm = (UIViewerManagementForm) uiCorrectContentSelectorForm.getSourceComponent();
-        uiViewerManagementForm.doSelect(returnField, contents.toString());
+        List<String> currContents = uiViewerManagementForm.getViewAbleContentList();
+        if (currContents != null && currContents.size() != 0) {
+          for (String content : currContents) {
+            contents.append(content).append(";");
+            selectedCategories.add(content);
+          } 
+        }        
+        uiViewerManagementForm.doSelect(returnField, contents.toString());        
         uiViewerManagementForm.setViewAbleContentList(selectedCategories);
       } catch (Exception e) {
         e.printStackTrace();
         uiApplication.addMessage(new ApplicationMessage("UISelectedCategoriesGrid.msg.cannot-save", null, ApplicationMessage.WARNING));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
+        context.addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
       }
       uiCorrectContentSelectorForm.deActivate();
     }

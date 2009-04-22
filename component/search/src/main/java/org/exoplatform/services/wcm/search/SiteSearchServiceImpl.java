@@ -119,7 +119,7 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     String suggestion = getSpellSuggestion(queryCriteria.getKeyword(),currentRepository);
     long queryTime = System.currentTimeMillis() - startTime;
     WCMPaginatedQueryResult paginatedQueryResult = null;
-    if(queryResult.getNodes().getSize()>50) {
+    if(queryResult.getNodes().getSize()>250) {
       paginatedQueryResult = new WCMPaginatedQueryResult( queryResult, queryCriteria, pageSize); 
     }else {      
       paginatedQueryResult = new SmallPaginatedQueryResult(queryResult, queryCriteria, pageSize);
