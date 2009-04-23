@@ -28,7 +28,6 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.version.VersionException;
-import javax.portlet.PortletMode;
 
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
 import org.exoplatform.ecm.webui.form.UIDialogForm;
@@ -43,13 +42,14 @@ import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIPopupComponent;
-import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
@@ -65,8 +65,8 @@ import org.exoplatform.webui.event.EventListener;
 @ComponentConfig(
   lifecycle = UIFormLifecycle.class, events = {
     @EventConfig(listeners = UIDocumentDialogForm.SaveDraftActionListener.class),
-    @EventConfig(listeners = UIDocumentDialogForm.CancelActionListener.class),
-    @EventConfig(listeners = UIDocumentDialogForm.FastPublishActionListener.class)
+    @EventConfig(listeners = UIDocumentDialogForm.FastPublishActionListener.class),
+    @EventConfig(listeners = UIDocumentDialogForm.CancelActionListener.class)  
   }  
 )
 public class UIDocumentDialogForm extends UIDialogForm implements UIPopupComponent{
@@ -151,6 +151,7 @@ public class UIDocumentDialogForm extends UIDialogForm implements UIPopupCompone
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
     public void execute(Event<UIDocumentDialogForm> event) throws Exception {
+      PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
       UIDocumentDialogForm uiDocumentDialogForm = event.getSource();
       UIApplication uiApp = uiDocumentDialogForm.getAncestorOfType(UIApplication.class);
       Node documentNode = uiDocumentDialogForm.getNode();
@@ -219,9 +220,9 @@ public class UIDocumentDialogForm extends UIDialogForm implements UIPopupCompone
       UIContentViewer uiContentViewer = uiContentViewerContainer.getChild(UIContentViewer.class);
       uiContentViewer.setNode(newNode);
       uiContentViewer.setRepository(repository);
-      uiContentViewer.setWorkspace(workspace);
-      
-      uiDocumentDialogForm.closePopupAndUpdateUI(event.getRequestContext());
+      uiContentViewer.setWorkspace(workspace);      
+      uiDocumentDialogForm.closePopupAndUpdateUI(event.getRequestContext());      
+      Utils.refreshBrowser(context);
     }
 
   }
@@ -351,6 +352,8 @@ public class UIDocumentDialogForm extends UIDialogForm implements UIPopupCompone
       uiContentViewer.setWorkspace(workspace);
       
       uiDocumentDialogForm.closePopupAndUpdateUI(event.getRequestContext());
+      PortletRequestContext pContext = (PortletRequestContext) event.getRequestContext();
+      Utils.refreshBrowser(pContext);
     }
   }
 

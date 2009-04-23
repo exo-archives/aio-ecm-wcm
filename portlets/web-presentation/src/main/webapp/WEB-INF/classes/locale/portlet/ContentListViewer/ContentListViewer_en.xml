@@ -120,7 +120,7 @@
   </UIContentSelectionPanel>
   <UIDocumentDialogForm>
   	<action>
-  		<Cancel>Cancel</Cancel>
+  		<Cancel>Close</Cancel>
   		<FastPublish>Fast Publish</FastPublish>
   		<SaveAsDraft>Save as Draft</SaveAsDraft>  		  		
   	</action>
