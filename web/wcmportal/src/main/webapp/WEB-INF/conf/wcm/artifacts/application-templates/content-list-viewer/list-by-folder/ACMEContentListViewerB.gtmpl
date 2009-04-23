@@ -37,7 +37,7 @@ import org.exoplatform.wcm.webui.clv.UIContentListViewerPortlet;
 					viewNode = uicomponent.getNodeView(node);				
 					if (viewNode == null) {	
 						continue;				
-					} else {
+					} else if (node.getProperty("publication:currentState").getString() != PublicationState.DRAFT) {
 						node = viewNode;
 					}				
 					String itemName = node.getName();

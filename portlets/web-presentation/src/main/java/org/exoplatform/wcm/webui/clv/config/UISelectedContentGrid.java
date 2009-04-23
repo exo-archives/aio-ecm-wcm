@@ -18,10 +18,7 @@ package org.exoplatform.wcm.webui.clv.config;
 
 import java.util.List;
 
-import javax.portlet.PortletPreferences;
-
 import org.exoplatform.ecm.webui.tree.selectmany.UISelectedCategoriesGrid;
-import org.exoplatform.wcm.webui.clv.UIContentListViewerPortlet;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;

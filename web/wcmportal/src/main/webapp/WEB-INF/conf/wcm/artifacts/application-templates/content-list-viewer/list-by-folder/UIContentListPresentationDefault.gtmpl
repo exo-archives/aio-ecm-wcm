@@ -42,7 +42,7 @@ import org.exoplatform.services.wcm.publication.PublicationState;
 				String currState = PublicationState.getRevisionState(node);
 				if (viewNode == null) {	
 					continue;				
-				} else {
+				} else if (node.getProperty("publication:currentState").getString() != PublicationState.DRAFT) {
 					node = viewNode;
 				}
 				String itemLink = uicomponent.getURL(tempNode);			
