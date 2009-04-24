@@ -50,6 +50,7 @@ import org.exoplatform.services.wcm.core.WebSchemaConfigService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
 import org.exoplatform.wcm.webui.scv.config.access.UIPermissionInfo;
 import org.exoplatform.wcm.webui.scv.config.access.UIPermissionManager;
@@ -452,8 +453,7 @@ public class UIContentDialogForm extends UIDialogForm {
 //      portletConfig.showPopup(event.getRequestContext());
       
       UIPortletConfig uiPortletConfig = dialogForm.getAncestorOfType(UIPortletConfig.class);
-      uiPortletConfig.closePopupAndUpdateUI(event.getRequestContext(),true);
-
+      uiPortletConfig.closePopupAndUpdateUI(event.getRequestContext(),true);      
     }
   }
   

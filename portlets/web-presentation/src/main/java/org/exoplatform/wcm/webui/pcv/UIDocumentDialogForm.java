@@ -222,7 +222,7 @@ public class UIDocumentDialogForm extends UIDialogForm implements UIPopupCompone
       uiContentViewer.setRepository(repository);
       uiContentViewer.setWorkspace(workspace);      
       uiDocumentDialogForm.closePopupAndUpdateUI(event.getRequestContext());      
-      Utils.refreshBrowser(context);
+      Utils.updatePortal(context);
     }
 
   }
@@ -353,7 +353,7 @@ public class UIDocumentDialogForm extends UIDialogForm implements UIPopupCompone
       
       uiDocumentDialogForm.closePopupAndUpdateUI(event.getRequestContext());
       PortletRequestContext pContext = (PortletRequestContext) event.getRequestContext();
-      Utils.refreshBrowser(pContext);
+      Utils.updatePortal(pContext);
     }
   }
 

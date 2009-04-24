@@ -28,7 +28,6 @@ import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.WebUIPropertiesConfigService;
 import org.exoplatform.wcm.webui.WebUIPropertiesConfigService.PopupWindowProperties;
 import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
-import org.exoplatform.wcm.webui.scv.config.quickedition.UIQuickEditContainer;
 import org.exoplatform.wcm.webui.selector.document.UIDocumentPathSelector;
 import org.exoplatform.wcm.webui.selector.document.UIDocumentTabSelector;
 import org.exoplatform.wcm.webui.selector.webcontent.UIWebContentPathSelector;
@@ -222,9 +221,9 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent{
       uiPresentationPortlet.activateMode(PortletMode.VIEW);
     }
     if(isUpdate && !isEditPortletInCreatePageWizard()) {
-      getChildren().clear();
-      Utils.refreshBrowser((PortletRequestContext)requestContext);
+      getChildren().clear();      
     }
+    Utils.updatePortal((PortletRequestContext)requestContext);
   }
 
   public void showPopup(WebuiRequestContext requestContext) throws Exception{

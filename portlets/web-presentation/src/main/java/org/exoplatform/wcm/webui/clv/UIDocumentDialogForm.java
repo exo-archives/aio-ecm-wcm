@@ -223,7 +223,7 @@ public class UIDocumentDialogForm extends UIDialogForm {
       UIPopupContainer uiContentEdittingPopup = uiDocumentDialogForm.getAncestorOfType(UIPopupContainer.class);
       uiContentEdittingPopup.deActivate();
       PortletRequestContext pContext = (PortletRequestContext) event.getRequestContext();
-      Utils.refreshBrowser(pContext);
+      Utils.updatePortal(pContext);
     }
 
   }
@@ -309,7 +309,7 @@ public class UIDocumentDialogForm extends UIDialogForm {
       UIPopupContainer uiContentEdittingPopup = uiDocumentDialogForm.getAncestorOfType(UIPopupContainer.class);
       uiContentEdittingPopup.deActivate();
       PortletRequestContext pContext = (PortletRequestContext) event.getRequestContext();
-      Utils.refreshBrowser(pContext);
+      Utils.updatePortal(pContext);
     }    
   }
 
