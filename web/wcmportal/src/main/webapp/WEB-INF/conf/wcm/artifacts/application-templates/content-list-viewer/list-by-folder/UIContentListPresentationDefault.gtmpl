@@ -38,11 +38,12 @@ import org.exoplatform.services.wcm.publication.PublicationState;
 			Node tempNode = null;
 			for (Node node : currentPageData) {
 				tempNode = node;
-				viewNode = uicomponent.getNodeView(node);				
-				String currState = PublicationState.getRevisionState(node);
+				viewNode = uicomponent.getNodeView(node);
 				if (viewNode == null) {	
 					continue;				
-				} else if (node.getProperty("publication:currentState").getString() != PublicationState.DRAFT) {
+				} 
+				boolean isShowDraft = uicomponent.showDraftButton(tempNode);
+				if (!isShowDraft) {
 					node = viewNode;
 				}
 				String itemLink = uicomponent.getURL(tempNode);			
@@ -62,7 +63,7 @@ import org.exoplatform.services.wcm.publication.PublicationState;
 					<% if (uicomponent.isShowField(UIContentListViewerPortlet.SHOW_TITLE)) {%>
 					<div class="CaptionTitle" ><a href="$itemLink">$itemName</a>
 					<% } %>	
-					<% if(uicomponent.showDraftButton(tempNode)) { %>
+					<% if(isShowDraft) { %>
 					<span>[ </span>
 					<a class="CaptionDraft"><%=draftLabel%></a>, <a class="CaptionEdit" href="$contentkEdittingLink"><%=editActionLabel%></a>
 					<span> ]</span>

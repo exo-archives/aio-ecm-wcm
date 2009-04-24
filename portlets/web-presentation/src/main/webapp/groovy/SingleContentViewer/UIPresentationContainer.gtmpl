@@ -14,7 +14,7 @@
 	def quickEditingBlockId = uicomponent.getPortletId() + "-QuickEditingBlock";
 	def rcontext = _ctx.getRequestContext() ;
  	rcontext.getJavascriptManager().importJavascript('eXo.wcm.Util','/eXoWCMResources/javascript');
-	rcontext.getJavascriptManager().addOnLoadJavascript('eXo.wcm.insertQuickeditingBlock("' + portletId + '","' + quickEditingBlockId + '")');
+	rcontext.getJavascriptManager().addJavascript('eXo.wcm.insertQuickeditingBlock("' + portletId + '","' + quickEditingBlockId + '");');
 	PortletPreferences preferences = rcontext.getRequest().getPreferences();
 	String repository = preferences.getValue(UISingleContentViewerPortlet.REPOSITORY, null);    
 	String workspace = preferences.getValue(UISingleContentViewerPortlet.WORKSPACE, null);

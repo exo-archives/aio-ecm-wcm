@@ -43,8 +43,10 @@ import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -220,6 +222,8 @@ public class UIDocumentDialogForm extends UIDialogForm {
       }
       UIPopupContainer uiContentEdittingPopup = uiDocumentDialogForm.getAncestorOfType(UIPopupContainer.class);
       uiContentEdittingPopup.deActivate();
+      PortletRequestContext pContext = (PortletRequestContext) event.getRequestContext();
+      Utils.updatePortal(pContext);
     }
 
   }
@@ -304,6 +308,8 @@ public class UIDocumentDialogForm extends UIDialogForm {
       
       UIPopupContainer uiContentEdittingPopup = uiDocumentDialogForm.getAncestorOfType(UIPopupContainer.class);
       uiContentEdittingPopup.deActivate();
+      PortletRequestContext pContext = (PortletRequestContext) event.getRequestContext();
+      Utils.updatePortal(pContext);
     }    
   }
 

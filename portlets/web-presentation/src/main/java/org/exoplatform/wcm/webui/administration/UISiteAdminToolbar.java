@@ -736,7 +736,7 @@ import org.exoplatform.webui.event.EventListener;
       uiPage.setChildren(null);
       PortalDataMapper.toUIPage(uiPage, page);
       ((UIPortlet) uiPage.findComponentById(random)).setCurrentPortletMode(PortletMode.EDIT);
-      Utils.refreshBrowser((PortletRequestContext) event.getRequestContext());
+      Utils.updatePortal((PortletRequestContext) event.getRequestContext());
     }
   }
 
@@ -744,7 +744,7 @@ import org.exoplatform.webui.event.EventListener;
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       PortalRequestContext context = Util.getPortalRequestContext();
       context.getRequest().getSession().setAttribute(Utils.TURN_ON_QUICK_EDIT, true);
-      Utils.refreshBrowser((PortletRequestContext) event.getRequestContext());      
+      Utils.updatePortal((PortletRequestContext) event.getRequestContext());      
     }
   }
 
@@ -752,8 +752,7 @@ import org.exoplatform.webui.event.EventListener;
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       PortalRequestContext context = Util.getPortalRequestContext();
       context.getRequest().getSession().setAttribute(Utils.TURN_ON_QUICK_EDIT, false);
-      Utils.refreshBrowser((PortletRequestContext) event.getRequestContext());
-      //context.getRequest().getSession().removeAttribute(Utils.TURN_ON_QUICK_EDIT);
+      Utils.updatePortal((PortletRequestContext) event.getRequestContext());
     }
   }
 

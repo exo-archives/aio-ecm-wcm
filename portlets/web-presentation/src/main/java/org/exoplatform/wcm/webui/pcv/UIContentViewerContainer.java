@@ -31,7 +31,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.apache.commons.lang.StringUtils;
-import org.exoplatform.ecm.resolver.JCRResourceResolver;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.portal.UIPortal;
@@ -49,9 +48,6 @@ import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant.
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.WebUIPropertiesConfigService;
 import org.exoplatform.wcm.webui.WebUIPropertiesConfigService.PopupWindowProperties;
-import org.exoplatform.wcm.webui.scv.UIPresentationContainer;
-import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
-import org.exoplatform.wcm.webui.scv.config.UIPortletConfig;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -229,18 +225,21 @@ public class UIContentViewerContainer extends UIContainer {
 						UIContentViewer.CONTENT_NOT_PRINTED);
 				return;
 			}
-			Node nodeView = publicationPlugin.getNodeView(currentNode,
-					hmContext);
+			Node nodeView = publicationPlugin.getNodeView(currentNode,hmContext);
+      boolean isLiveMode = Utils.isLiveMode();
+      if(isLiveMode) {
+        if(nodeView == null) {
+          renderErrorMessage(context,UIContentViewer.CONTENT_NOT_PRINTED);
+          return;
+        }
+        uiContentViewer.setNode(nodeView);
+      }else {
+        uiContentViewer.setNode(currentNode);
+      }
 			uiContentViewer.setRepository(repository);
 			uiContentViewer.setWorkspace(workspace);
-			uiContentViewer.setOrginalNode(currentNode);
-			if (nodeView != null) {
-				uiContentViewer.setNode(nodeView);
-			} else {
-				uiContentViewer.setNode(currentNode);
-			}
-			String state = PublicationState.getRevisionState(uiContentViewer
-					.getNode());
+			uiContentViewer.setOrginalNode(currentNode);     			
+			String state = PublicationState.getRevisionState(currentNode);
 			if (Constant.OBSOLETE_STATE.equals(state)) {
 				setObsoletedContent(true);
 				renderErrorMessage(context,
@@ -248,7 +247,7 @@ public class UIContentViewerContainer extends UIContainer {
 				return;
 			} else {
 				setObsoletedContent(false);
-				if (Constant.DRAFT_STATE.equals(state)) {
+				if (Constant.DRAFT_STATE.equals(state) && !isLiveMode) {
 					setDraftRevision(true);
 				} else {
 					setDraftRevision(false);

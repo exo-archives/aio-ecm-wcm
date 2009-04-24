@@ -16,38 +16,13 @@
  */
 package org.exoplatform.wcm.webui.pcv;
 
-import java.io.UnsupportedEncodingException;
-import java.io.Writer;
-import java.net.URLDecoder;
-import java.security.AccessControlException;
-import java.util.HashMap;
-import java.util.List;
-
-import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
-import javax.jcr.Session;
-import javax.servlet.http.HttpServletRequestWrapper;
 
-import org.apache.commons.lang.StringUtils;
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
 import org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation;
-import org.exoplatform.portal.application.PortalRequestContext;
-import org.exoplatform.portal.webui.portal.UIPortal;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.templates.TemplateService;
-import org.exoplatform.services.ecm.publication.PublicationPlugin;
-import org.exoplatform.services.ecm.publication.PublicationService;
-import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.wcm.publication.PublicationState;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant.SITE_MODE;
-import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 
@@ -86,7 +61,7 @@ public class UIContentViewer extends UIBaseNodePresentation {
   public final static String  CONTENT_UNSUPPORT_EXC = "UIMessageBoard.msg.content-unsupport-exc";
   
   /** Content can't be printed.*/
-  public final static String  CONTENT_NOT_PRINTED = "UIMessageBoard.msg.content-not-printed";
+  public final static String  CONTENT_NOT_PRINTED = "UIMessageBoard.msg.content-invisible";
   
   /** Content is obsolete.*/
   public final static String OBSOLETE_CONTENT = "UIMessageBoard.msg.content-obsolete";
@@ -135,6 +110,7 @@ public class UIContentViewer extends UIBaseNodePresentation {
   @Override
   public String getTemplatePath() throws Exception {
     TemplateService templateService = getApplicationComponent(TemplateService.class);
+    
     return templateService.getTemplatePath(orginalNode, false);
   }
 

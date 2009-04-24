@@ -253,7 +253,7 @@ public class UIWikiContentForm extends UIForm {
       pContext.setResponseComplete(true);
       String newNodeURL = uiWikiForm.getNewNodeURL(reqWrapper, newNodeUri);
       resWrapper.sendRedirect(newNodeURL);
-      Utils.refreshBrowser((PortletRequestContext) event.getRequestContext());
+      Utils.updatePortal((PortletRequestContext) event.getRequestContext());
     }
   }
 

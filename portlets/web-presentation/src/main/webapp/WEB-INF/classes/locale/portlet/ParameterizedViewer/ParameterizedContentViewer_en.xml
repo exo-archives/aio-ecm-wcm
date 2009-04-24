@@ -8,6 +8,7 @@
     <msg>
       <content-not-found>Content not found or deleted.</content-not-found>
       <content-unsupport-exc>Content not support to view.</content-unsupport-exc>
+      <content-invisible>Content is invisible</content-invisible>
       <access-control-exc>Content access denied.</access-control-exc>
       <content-not-printed>Content cannot be printed</content-not-printed>
       <content-obsolete>Content is obsolete</content-obsolete>
@@ -16,7 +17,7 @@
   <UIDocumentDialogForm>
   	<action>
   		<SaveDraft>Save Draft</SaveDraft>
-  		<Cancel>Cancel</Cancel>
+  		<Cancel>Close</Cancel>
   		<FastPublish>Fast Publish</FastPublish>
   	</action>
   </UIDocumentDialogForm>

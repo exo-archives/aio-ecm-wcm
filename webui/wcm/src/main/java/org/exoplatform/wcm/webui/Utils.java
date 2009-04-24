@@ -16,14 +16,20 @@
  */
 package org.exoplatform.wcm.webui;
 
+import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.portal.webui.workspace.UIControlWorkspace;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
+import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
 import org.exoplatform.services.security.Identity;
 import org.exoplatform.services.security.IdentityRegistry;
 import org.exoplatform.services.security.MembershipEntry;
+import org.exoplatform.web.application.javascript.JavascriptConfigService;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
+import org.exoplatform.webui.core.UIComponent;
 
 import com.ibm.icu.text.Transliterator;
 
@@ -55,8 +61,14 @@ public class Utils {
    * 
    * @param context the context
    */
-  public static void refreshBrowser(PortletRequestContext context) {
-    context.getJavascriptManager().addJavascript("location.reload();");
+  public static void updatePortal(PortletRequestContext context) {
+    UIPortalApplication portalApplication = Util.getUIPortalApplication();   
+    PortalRequestContext portalRequestContext = (PortalRequestContext)context.getParentAppRequestContext();
+//    UIControlWorkspace uiControl = portalApplication.getChildById(UIPortalApplication.UI_CONTROL_WS_ID);
+//    portalRequestContext.addUIComponentToUpdateByAjax(uiControl);    
+    UIWorkingWorkspace uiWorkingWS = portalApplication.getChildById(UIPortalApplication.UI_WORKING_WS_ID);    
+    portalRequestContext.addUIComponentToUpdateByAjax(uiWorkingWS) ;    
+    portalRequestContext.setFullRender(true);
   }
 
   /**
