@@ -1,0 +1,18 @@
+.UIDocumentPathSelector {
+	background: #f7f7f7;
+	border: 1px solid #b7b7b7;
+}	
+	
+.UIDocumentPathSelector .UIBreadcumbs .LeftBreadcumbsBar {
+	background: white;
+	border: 1px solid #b7b7b7;
+}
+
+.UIDocumentPathSelector .ExplorerTree .InnerExplorerTree {
+	border: 1px solid #B1B0B0;
+	padding: 10px;
+}
+
+.UIDocumentPathSelector .ExplorerTree .UITrees {
+	background: white;
+}

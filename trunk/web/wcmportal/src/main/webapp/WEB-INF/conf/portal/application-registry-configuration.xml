@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<configuration>    
+  <component>
+    <key>org.exoplatform.application.registry.ApplicationRegistryService</key>
+    <type>org.exoplatform.application.registry.jcr.ApplicationRegistryServiceImpl</type>
+  	<component-plugins>      
+	    <component-plugin>
+	      <name>new.portal.portlets.registry</name>
+	      <set-method>initListener</set-method>
+	      <type>org.exoplatform.application.registry.ApplicationCategoriesPlugins</type>
+	      <description>this listener init the portlets are registered in PortletRegister</description>
+	      <init-params>			
+			    <object-param>
+	          <name>WCM</name>
+	          <description>description</description>
+	          <object type="org.exoplatform.application.registry.ApplicationCategory">
+	            <field  name="name"><string>WCM</string></field>
+	            <field  name="displayName"><string>WCM</string></field> 
+	            <field  name="description"><string>BasicPortlets</string></field>
+	            <field name="accessPermissions">
+				        <collection type="java.util.ArrayList" item-type="java.lang.String">													
+									<value><string>*:/platform/users</string></value>													
+				        </collection>
+						  </field> 
+	            <field  name="applications">
+		            <collection type="java.util.ArrayList">
+	                <value>                 
+		                <object type="org.exoplatform.application.registry.Application">                     
+		                  <field  name="categoryName"><string>WCM</string></field>
+		                  <field name="applicationName"><string>IFramePortlet</string></field>
+						          <field name="displayName"><string>IFrame</string></field>
+		                  <field name="applicationType"><string>portlet</string></field>
+		                  <field name="applicationGroup"><string>web</string></field>
+		                  <field name="accessPermissions">
+								        <collection type="java.util.ArrayList" item-type="java.lang.String">													
+													<value><string>*:/platform/users</string></value>													
+								        </collection>
+						          </field>                 
+		                </object>
+	                </value>
+					        <value>                 
+		                <object type="org.exoplatform.application.registry.Application">                     
+		                  <field  name="categoryName"><string>WCM</string></field>
+		                  <field name="applicationName"><string>SiteMapPortlet</string></field>
+						          <field name="displayName"><string>SiteMap</string></field>
+		                  <field name="applicationType"><string>portlet</string></field>
+		                  <field name="applicationGroup"><string>web</string></field>
+		                  <field name="accessPermissions">
+								        <collection type="java.util.ArrayList" item-type="java.lang.String">													
+													<value><string>*:/platform/users</string></value>													
+								        </collection>
+						          </field>                                 
+		                </object>
+	                </value>	                     
+	                <value>                 
+		                <object type="org.exoplatform.application.registry.Application">                     
+		                  <field  name="categoryName"><string>WCM</string></field>
+		                  <field name="applicationName"><string>SingleContentViewer</string></field>
+						          <field name="displayName"><string>Single Content Viewer</string></field>
+		                  <field name="applicationType"><string>portlet</string></field>
+		                  <field name="applicationGroup"><string>web-presentation</string></field>
+		                  <field name="accessPermissions">
+								        <collection type="java.util.ArrayList" item-type="java.lang.String">													
+													<value><string>*:/platform/users</string></value>													
+								        </collection>
+						          </field>                                 
+		                </object>
+	                </value>
+	                <value>                 
+		                <object type="org.exoplatform.application.registry.Application">                     
+		                  <field  name="categoryName"><string>WCM Presentation</string></field>
+		                  <field name="applicationName"><string>ContentListViewerPortlet</string></field>
+						          <field name="displayName"><string>Content List Viewer</string></field>
+		                  <field name="applicationType"><string>portlet</string></field>
+		                  <field name="applicationGroup"><string>web-presentation</string></field>
+		                  <field name="accessPermissions">
+								        <collection type="java.util.ArrayList" item-type="java.lang.String">													
+													<value><string>*:/platform/users</string></value>													
+								        </collection>
+						          </field>                                 
+		                </object>
+	                </value>	                     	                
+		            </collection>                               
+	            </field> 
+	          </object>        
+	        </object-param>	        	         	        	        
+	      </init-params>
+	    </component-plugin>
+	  </component-plugins>      
+ </component>       
+</configuration>

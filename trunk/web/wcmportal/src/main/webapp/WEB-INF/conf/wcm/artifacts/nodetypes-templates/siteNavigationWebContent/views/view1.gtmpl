@@ -1,0 +1,42 @@
+<%
+	import org.exoplatform.webui.application.portlet.PortletRequestContext;
+	
+	public boolean getPortletPreference(String name) {
+    PortletRequestContext portletRequestContext = _ctx.getRequestContext() ;
+    String value = portletRequestContext.getRequest().getPreferences().getValue(name, null);
+    if(value != null) 
+      return Boolean.parseBoolean(value);
+    return false;
+  }
+  
+  def currentNode = uicomponent.getNode() ; 
+  def htmlFile = currentNode.getNode("default.html") ;
+  
+  def jsNode = currentNode.getNode("js");
+  def cssNode = currentNode.getNode("css");
+  
+  def exSkinService = uicomponent.getComponentInstanceOfType("org.exoplatform.services.wcm.skin.XSkinService") ;
+  def exJSService = uicomponent.getComponentInstanceOfType("org.exoplatform.services.wcm.javascript.XJavascriptService") ;
+  def css= exSkinService.getActiveStylesheet(cssNode);
+  def js=  exJSService.getActiveJavaScript(jsNode) ;
+  
+	if((css != null) && (css.length() > 0)) {
+%>
+		<style type="text/css">
+		/* <![CDATA[ */			
+			<%=css%>
+		/* ]]> */
+		</style>
+<%
+	}
+%>
+
+<% if((js != null) && (js.length() > 0)) {%>
+	<script type="text/javascript">
+	/* <![CDATA[ */	
+		<%=js%>
+	/* ]]> */		
+	</script>
+<% } %>
+
+<%=htmlFile.getNode("jcr:content").getProperty("jcr:data").getString()%>

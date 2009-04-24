@@ -1,0 +1,109 @@
+#DefaultPortalContainer .UIWCMColumnContainer {
+  background: white url('/portal/rest/jcr/repository/collaboration/sites content/live/classic/web contents/site artifacts/banner/Default/medias/images/BgBanner.png') repeat-x;
+}
+
+.UIExoStart .ExoHomeButton {
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
+	width: 94px; 
+	height: 38px;
+	margin: 0px 0px 0px 70px;
+	cursor: pointer;
+}
+
+.UIExoStart .ButtonNormal {
+	background: url('background/ExoHome.gif') no-repeat -4px -45px;
+}
+
+.UIExoStart .ButtonOver {
+	background: url('background/ExoHome.gif') -98px -45px;
+}
+
+.UIExoStart .ButtonClicked {
+	background: url('background/ExoHome.gif') no-repeat -4px -84px;
+}
+
+.UIPopupWindow .MiddleLeftSideDecorator {
+	background: url('background/MiddlePopupWindow.gif') repeat-y left;
+}
+
+.UIPopupWindow .MiddleRightSideDecorator {
+	background: url('background/MiddlePopupWindow.gif') repeat-y right;
+}
+
+.UIPopupWindow .PopupTitle {
+	background: transparent url(background/PopupWindow.gif) repeat-x scroll center -30px;
+}
+
+.UIPopupWindow .PopupTitleIcon {
+	background: url('background/PopupWindow.gif') no-repeat left bottom;
+}
+
+.UIPopupWindow .PopupTitleIconRight {
+	background: url('background/PopupWindow.gif') no-repeat left bottom; 
+}
+
+.UIPopupWindow .PopupTitle {
+	background: url('background/PopupWindow.gif') repeat-x center -30px;
+}
+
+.UIPopupWindow .CloseButton {
+	background: url('background/PopupWindow.gif') no-repeat right bottom;
+}
+
+.UIPopupWindow .TopLeftCornerDecorator {
+	background: url('background/PopupWindow.gif') no-repeat left -69px;
+}
+
+.UIPopupWindow .TopCenterDecorator {
+	background: url('background/PopupWindow.gif') repeat-x center -46px;
+}
+
+.UIPopupWindow .TopRightCornerDecorator {
+	background: url('background/PopupWindow.gif') no-repeat right -69px;
+}
+
+.UIPopupWindow .BottomLeftCornerDecorator {
+	background: url('background/PopupWindow.gif') no-repeat left -26px;
+}
+
+.UIPopupWindow .BottomCenterDecorator {
+	background: url('background/PopupWindow.gif') repeat-x right -11px;
+}
+
+.UIPopupWindow .BottomRightCornerDecorator {
+	background: url('background/PopupWindow.gif') no-repeat right -26px;
+}
+
+
+.UIWCMColumnContainer {
+  margin: auto;
+  overflow: hidden;
+}
+
+.UIWCMColumnContainer .BannerTDContainer {
+  float: left;
+  width: 50%;
+  overflow: hidden; 
+}
+
+.UIWCMColumnContainer .AccessContainerTDContainer {
+	float: right;
+}
+
+#UIContainer-DefaultPortalContainer {
+	padding: 0;
+} 
+
+#UIContainer-DefaultPortalContainer .UITableColumnContainer {
+	_width: 99%;
+	_position: relative;
+}
+
+#UIContainer-DefaultPortalContainer .UIContainer {
+	padding: 0;
+}
+
+.UIWorkingWorkspace {
+	zoom: 100%;
+}

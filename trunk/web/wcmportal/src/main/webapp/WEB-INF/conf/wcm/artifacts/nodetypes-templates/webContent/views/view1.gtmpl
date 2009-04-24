@@ -1,0 +1,108 @@
+<%
+  import javax.jcr.Node;
+	import java.util.List;
+  import org.exoplatform.services.jcr.core.ManageableRepository;
+  import org.exoplatform.services.cms.categories.CategoriesService;
+	import org.exoplatform.webui.application.portlet.PortletRequestContext;
+	import org.exoplatform.services.cms.folksonomy.FolksonomyService;
+	import org.exoplatform.wcm.webui.WikiLinkParser;
+	
+	public boolean getPortletPreference(String name) {
+    PortletRequestContext portletRequestContext = _ctx.getRequestContext() ;
+    String value = portletRequestContext.getRequest().getPreferences().getValue(name, null);
+    if(value != null) 
+      return Boolean.parseBoolean(value);
+    return false;
+  }
+  
+  def currentNode = uicomponent.getNode() ; 
+  def htmlFile = currentNode.getNode("default.html") ;
+  
+  def exSkinService = uicomponent.getComponentInstanceOfType("org.exoplatform.services.wcm.skin.XSkinService") ;
+  def exJSService = uicomponent.getComponentInstanceOfType("org.exoplatform.services.wcm.javascript.XJavascriptService") ;
+  def css= exSkinService.getActiveStylesheet(currentNode);
+  def js=  exJSService.getActiveJavaScript(currentNode) ;
+  
+	ManageableRepository mRepository = (ManageableRepository)currentNode.getSession().getRepository();
+  String repositoryName = mRepository.getConfiguration().getName();
+  boolean isShowTitle = getPortletPreference("ShowTitle");
+	boolean isShowCategories = getPortletPreference("ShowCategories");
+	boolean isShowTags = getPortletPreference("ShowTags");
+
+	if((css != null) && (css.length() > 0)) {
+%>
+		<style type="text/css">
+		/* <![CDATA[ */			
+			<%=css%>
+		/* ]]> */
+		</style>
+<%
+	}
+%>
+
+<% if((js != null) && (js.length() > 0)) {%>
+	<script type="text/javascript">
+	/* <![CDATA[ */	
+		<%=js%>
+	/* ]]> */		
+	</script>
+<% } %>
+
+<% 
+	if (isShowTitle || isShowCategories || isShowTags) {
+		%>
+				<div class="WebContentContainer">
+					<div class="WebContentInformation">
+						<% 
+							if (isShowTitle && currentNode.hasProperty("exo:title")) {
+								%>
+									<h1 class="WebContentTitle"><%= currentNode.getProperty("exo:title").getString(); %></h1>
+								<%
+							}
+							if(isShowCategories) {
+								StringBuffer categories = new StringBuffer();
+								CategoriesService categoriesService = uicomponent.getApplicationComponent(CategoriesService.class);
+								if(categoriesService.hasCategories(currentNode)) {
+									if (currentNode.getProperty("exo:category").getValues().length > 0) {
+						      	List<Node> categoryNodeList = categoriesService.getCategories(currentNode, repositoryName);
+						       	for (Node category: categoryNodeList) {
+						        	categories.append(category.getName()).append(", ");
+						       	}
+						    	 	categories.replace(categories.lastIndexOf(", "), categories.size(), "");
+										%>
+								  		<span class="Categories"><strong><%=_ctx.appRes("Category.view.label")%>:</strong> <%= categories.toString(); %></span>
+										<%		
+									}
+						    }
+							}
+							if(isShowTags) {
+								FolksonomyService folkService = uicomponent.getApplicationComponent(FolksonomyService.class);
+								List<Node> tagList = folkService.getLinkedTagsOfDocument(currentNode, repositoryName);
+								if(tagList.size() > 0) {
+									StringBuffer tagBuff = new StringBuffer("[");
+									for(Node tag: tagList) {
+										tagBuff.append(tag.getName()).append(", ");
+									}
+									tagBuff.replace(tagBuff.lastIndexOf(", "), tagBuff.size(), "]");
+									%>
+										<span class="Tags"><strong><%=_ctx.appRes("Tag.view.label")%>:</strong> <%= tagBuff.toString(); %></span>
+									<%	
+								}	
+							}
+						%>
+					</div>
+					<% 
+					String html = htmlFile.getNode("jcr:content").getProperty("jcr:data").getString();
+					WikiLinkParser passer = new WikiLinkParser(html);
+					%>
+					<%=passer.paseHTML()%>
+				</div>
+		<%
+	} else {
+			String html = htmlFile.getNode("jcr:content").getProperty("jcr:data").getString();
+			WikiLinkParser passer = new WikiLinkParser(html);
+		%>
+		<%=passer.paseHTML()%>
+		<%
+	}
+%>

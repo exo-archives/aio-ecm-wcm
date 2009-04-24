@@ -1,0 +1,44 @@
+<project>
+  <parent>
+    <groupId>org.exoplatform.ecm.wcm</groupId>
+    <artifactId>config</artifactId>
+    <version>1.1-SNAPSHOT</version>
+  </parent> 
+
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>exo.ecm.wcm.web.portal</artifactId>
+  <packaging>war</packaging> 
+  <version>${org.exoplatform.wcm.version}</version>
+  <name>eXo WCM Portal web module</name>
+  <dependencies>    
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.web.portal</artifactId>
+      <version>${org.exoplatform.portal.version}</version>
+      <type>war</type>
+      <scope>runtime</scope>      
+    </dependency>
+	<dependency>
+      <groupId>org.exoplatform.ecm.dms.core</groupId>
+      <artifactId>exo.ecm.dms.core.web.portal</artifactId>
+      <version>${org.exoplatform.ecm.dms.version}</version>
+      <type>war</type>
+      <scope>runtime</scope>      
+    </dependency>
+  </dependencies>
+  <build>
+  	<plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>2.0</version>
+        <configuration>                    
+          <dependentWarExcludes>
+            templates/,WEB-INF/conf/mail/,WEB-INF/conf/*.xml,WEB-INF/conf/**/*.xml, WEB-INF/conf/portal/,
+            index.jsp,WEB-INF/web.xml,WEB-INF/webui-configuration.xml,WEB-INF/locale/navigation/**/*.properties,WEB-INF/locale/navigation/**/*.xml,                                           
+            WEB-INF/conf/script/groovy/SkinConfigScript.groovy,groovy/portal/webui/workspace/UIWorkingWorkspace.gtmpl</dependentWarExcludes>                       
+        </configuration>
+       </plugin>
+    </plugins>
+   </build>     
+</project>

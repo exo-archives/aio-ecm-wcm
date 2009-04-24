@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+  <!--/n  #########################################################################################
+  #			org.exoplatform.wcm.webui.search.UIWCMSearchForm							#
+  #########################################################################################
+  -->
+  <UISearchForm>
+    <keywordInput>
+      <label>Từ khoá</label>
+    </keywordInput>
+    <portalSelector>
+      <label>Portal</label>
+    </portalSelector>
+    <documentCheckBox>
+      <label>Tài liệu</label>
+    </documentCheckBox>
+    <pageCheckBox>
+      <label>Trang</label>
+    </pageCheckBox>
+    <action>
+      <Search>Tìm kiếm</Search>
+    </action>
+    <message>
+      <keyword-not-empty>Xin vui lòng nhập vào từ khoá mà bạn muốn tìm kiếm!</keyword-not-empty>
+      <not-checked>Xin vui lòng tích chọn kiểu kết quả mà bạn muốn tìm kiếm. (Tài liệu/Trang)</not-checked>
+      <keyword-not-support>Chức năng tìm kiếm hiện thời chưa hỗ trợ từ khoá mà bạn đã nhập.\nXin vui lòng nhập vào từ khoá khác!</keyword-not-support>
+    </message>
+  </UISearchForm>
+  <!--/n  #########################################################################################
+  #			org.exoplatform.wcm.webui.search.config.UISearchPageLayoutManager			#
+  #########################################################################################
+  -->
+  <UISearchPageLayoutManager>
+    <mode>
+      <selectOption>
+        <label>---Lựa chọn chế độ tìm kiếm ---</label>
+      </selectOption>
+      <box-search>
+        <label>Hộp tìm kiếm</label>
+      </box-search>
+      <page-search>
+        <label>Trang tìm kiếm</label>
+      </page-search>
+    </mode>
+    <action>
+      <Save>Lưu lại</Save>
+      <Cancel>Huỷ bỏ</Cancel>
+    </action>
+    <label>
+      <searchFormSelector>Mẫu form tìm kiếm</searchFormSelector>
+      <searchPaginatorSelector>Mẫu form phân trang</searchPaginatorSelector>
+      <searchResultSelector>Mẫu form kết quả</searchResultSelector>
+      <searchBoxSelector>Mẫu hộp tìm kiếm</searchBoxSelector>
+      <searchModeSelector>Chế độ tìm kiếm</searchModeSelector>
+      <itemsPerPageSelector>Số kết quả mỗi trang</itemsPerPageSelector>
+      <searchPageLayoutSelector>Mẫu bố cục trang tìm kiếm</searchPageLayoutSelector>
+      <viewerButtonQuickEdit>Cho phép chỉnh sửa nhanh.</viewerButtonQuickEdit>
+    </label>
+    <message>
+      <search-mode-selecting>Xin vui lòng lựa chọn chế độ tìm kiếm!</search-mode-selecting>
+    </message>
+  </UISearchPageLayoutManager>
+  <!--/n  #########################################################################################
+  #			org.exoplatform.wcm.webui.search.UISearchResult								#
+  #########################################################################################
+  -->
+  <UISearchResult>
+    <msg>
+      <your-search>Không tìm thấy</your-search>
+      <did-not-match>trong </did-not-match>
+      <suggestions>Đề xuất:</suggestions>
+      <try-different-key>Hãy thử những từ khoá khác.</try-different-key>
+      <keyword_entered>Xin vui lòng nhập vào từ khoá tìm kiếm!</keyword_entered>
+      <new-suggestion>Có phải bạn muốn tìm</new-suggestion>
+    </msg>
+  </UISearchResult>
+  <UIDocumentDialogForm>
+  	<action>
+  		<Cancel>Hủy bỏ</Cancel>
+  		<FastPublish>Xuất bản nhanh</FastPublish>
+  		<SaveAsDraft>Lưu lại</SaveAsDraft>  		  		
+  	</action>
+  </UIDocumentDialogForm>    
+  <UISearchedContentEdittingPopupWindow>
+  	<title>
+  		<UIContentEdittingPopup>Chỉnh sửa nội dung</UIContentEdittingPopup>
+  	</title>
+  </UISearchedContentEdittingPopupWindow>  
+</bundle>

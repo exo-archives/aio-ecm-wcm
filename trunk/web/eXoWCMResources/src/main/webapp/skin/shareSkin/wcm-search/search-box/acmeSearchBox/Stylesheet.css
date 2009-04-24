@@ -1,0 +1,31 @@
+.UIWCMSearchPortlet .UIACMESearchBox .Search {
+	background: url(background/SearchBackground.gif) left -30px repeat-x;
+	height: 30px;
+	float: right;
+}
+
+.UIWCMSearchPortlet .UIACMESearchBox .KeywordInput {
+	background: url(background/SearchBackground.gif) left top no-repeat;
+	padding: 4px 0 0 14px;
+	height: 26px;
+	float: left;
+}
+
+.UIWCMSearchPortlet .UIACMESearchBox .KeywordInput input {
+	background: none;
+	border: none;
+	width: 200px;
+	padding: 0 5px;
+	color: #727272;
+	font-style: italic;
+	font-size: 11px;
+	margin-top: 4px;
+}
+
+.UIWCMSearchPortlet .UIACMESearchBox .SearchBoxIcon {
+	background:url(background/SearchIcon.gif) top left no-repeat;
+	width: 98px;
+	height: 30px;
+	float: left;
+	cursor: pointer;
+}

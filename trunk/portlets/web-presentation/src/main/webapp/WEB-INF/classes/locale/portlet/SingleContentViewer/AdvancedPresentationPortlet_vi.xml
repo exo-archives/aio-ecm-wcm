@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+  <!--/n  ############################################################
+  # org.exoplatform.wcm.webui.scv.config.UIWelcomeScreen             #
+  ####################################################################
+  -->
+  <UIWelcomeScreen>
+    <label>
+      <QuickCreateWebContent>Tạo nhanh nội dung trang web</QuickCreateWebContent>
+      <SelectExistedWebContent>Chọn nội dung đã có sẵn</SelectExistedWebContent>
+      <SelectExistedDMS>Chọn một tài liệu đã có sẵn</SelectExistedDMS>
+      <EditWebContent>Chỉnh sửa nội dung hiện thời</EditWebContent>
+      <ExistedContent>Chọn một tài liệu đã có sẵn</ExistedContent>
+      <radio />
+    </label>
+    <action>
+      <StartProcess>Đồng ý</StartProcess>
+      <Back>Hủy bỏ</Back>
+    </action>
+    <WelcomeLable>Chào mừng bạn đến với ứng dụng trình bày đơn nội dung!</WelcomeLable>
+    <Text>Xin vui lòng chọn Sửa nội dung hoặc Chọn nội dung khác và nhấn vào nút Đồng ý</Text>
+  </UIWelcomeScreen>
+  <UITabPane>
+    <title>
+      <UITagging>Tagging</UITagging>
+      <UICategorizing>Phân loại</UICategorizing>
+      <UIMiscellaneousInfo>Thiết lập bổ sung</UIMiscellaneousInfo>
+      <UIPermissionManager>Thiết lập phân quyền</UIPermissionManager>
+      <UINameWebContentForm>Bố cục trình bày nội dung trang web</UINameWebContentForm>
+      <UIWCMPublicationGrid>Quy trình xuất bản</UIWCMPublicationGrid>
+    </title>
+  </UITabPane>
+  <!--/n  ###################################################################
+  # org.exoplatform.wcm.webui.scv.config.UIMiscellaneousInfo        #
+  ###################################################################
+  -->
+  <UIMiscellaneousInfo>
+    <label>
+      <ShowTitle>Hiển thị tiêu đề</ShowTitle>
+      <ShowTags>Hiển thị tag</ShowTags>
+      <ShowCategories>Hiển thị mục phân loại</ShowCategories>
+      <ShowQuickEdit>Hiển thị chỉnh sửa nhanh</ShowQuickEdit>
+      <ShowPrintAction>Hiện thị in ấn</ShowPrintAction>
+    </label>
+    <action>
+      <SaveToPortletPreference>Lưu lại</SaveToPortletPreference>
+    </action>
+    <msg-successfully>Bạn đã lưu thành công!</msg-successfully>
+  </UIMiscellaneousInfo>
+  <!--/n  ###################################################################
+  # org.exoplatform.wcm.webui.scv.config.UIQuickCreationWizard      #
+  ###################################################################
+  -->
+  <UIQuickCreationWizard>
+    <label>
+      <stepInfo>Hiển thị giúp đỡ</stepInfo>
+      <contentCreateWizard>Tạo trang nhanh:</contentCreateWizard>
+      <step1>
+        <title>Chọn bố cục trình bày cho nội dung trang web và quy trình xuất bản để xuất bản</title>
+        <describe>Tạo nội dung trang web của bạn bằng cách điền tên vào form</describe>
+      </step1>
+      <step2>
+        <title>Tạo nội dung trang web</title>
+        <describe>Tạo nội dung trang web của bạn bằng cách nhập dữ liệu html, css, javascript vào trang</describe>
+      </step2>
+      <step3>
+        <title>Thiết lập</title>
+        <describe>Thiết lập nội dung trang của bạn bởi việc tạo tag, phân loại nội dung.</describe>
+      </step3>
+      <wizardSteps>Bước</wizardSteps>
+      <wizardStep>Bước</wizardStep>
+    </label>
+    <action>
+      <Abort>Bỏ qua</Abort>
+      <Back>Quay lại</Back>
+      <ViewStep2>Tiếp tục</ViewStep2>
+      <ViewStep3>Tiếp tục</ViewStep3>
+      <Complete>Hoàn thành</Complete>
+    </action>
+    <msg>
+      <StepbyStep>Lần đầu tiên tạo nội dung, bạn phải đi từng bước</StepbyStep>
+    </msg>
+  </UIQuickCreationWizard>
+  <!--/n  ###################################################################
+  # org.exoplatform.wcm.webui.scv.config.UIWebContentSelector       #
+  ###################################################################
+  -->
+  <UIWebContentSelector>
+    <label>
+      <repository>Kho chứa</repository>
+      <workspace>workspace</workspace>
+      <location>Vị trí</location>
+      <Describe>Mô tả</Describe>
+      <path />
+    </label>
+    <action>
+      <Save>Lưu lại</Save>
+      <Back>Quay lại</Back>
+    </action>
+    <msg>
+      <require-choose>Xin vui lòng chọn một nội dung đã có sẵn!</require-choose>
+    </msg>
+  </UIWebContentSelector>
+  <UIFormInputSetWithAction>
+    <msg>
+      <confirm-delete>Bạn có chắc muốn xoá phân loại này khỏi danh sách?</confirm-delete>
+    </msg>
+  </UIFormInputSetWithAction>
+  <!--/n  ###################################################################
+  # org.exoplatform.wcm.webui.scv.config.UIContentDialogForm        #
+  ###################################################################
+  -->
+  <UIContentDialogForm>
+    <action>
+      <SaveDraft>Lưu nháp</SaveDraft>
+      <Cancel>Hủy bỏ</Cancel>
+      <FastPublish>Xuất bản nhanh</FastPublish>
+      <Preferences></Preferences>
+      <Close></Close>
+    </action>
+  </UIContentDialogForm>
+  <!--/n  ###################################################################
+  #  org.exoplatform.wcm.presentation.scp.UIMessageBoard						#
+  ###################################################################
+  -->
+  <UIMessageBoard>
+    <msg>
+      <content-not-found>Nội dung không tìm thấy hoặc là ứng dụng hiển thị này chưa được cấu hình!</content-not-found>
+      <no-permission>Bạn không có quyền truy cập vào nội dung này!</no-permission>
+      <error-nodetype>Trang hiển thị này chưa được cấu hình</error-nodetype>
+    </msg>
+  </UIMessageBoard>
+  <!--/n  ###################################################################
+  #  org.exoplatform.dms.webui.component.UICategoriesAddedList			#
+  ###################################################################
+  -->
+  <UICategoriesAddedList>
+    <msg>
+      <confirm-delete>Bạn có chắc muốn xoá phân loại này khỏi danh sách?</confirm-delete>
+    </msg>
+    <header>
+      <path>Đường dẫn</path>
+      <action>Xoá</action>
+    </header>
+  </UICategoriesAddedList>
+  <!--/n  ###################################################################
+  #  org.exoplatform.dms.webui.component.UICategoryManager					#
+  ###################################################################
+  -->
+  <UICategoryManager>
+    <tab>
+      <label>
+        <UICategoriesAddedList>Danh sách phân loại</UICategoriesAddedList>
+        <UINodesExplorer>Categories Explorer</UINodesExplorer>
+      </label>
+    </tab>
+  </UICategoryManager>
+  <!--/n  ###################################################################
+  #  org.exoplatform.ecm.webui.component.UITreeList									#
+  ###################################################################
+  -->
+  <UITreeList>
+    <header>
+      <name>Tên</name>
+      <action>Thêm vào</action>
+      <publicationstate>Trạng thái xuất bản</publicationstate>
+    </header>
+    <info>
+      <child-not-found>Không tìm thấy thành phần con</child-not-found>
+    </info>
+  </UITreeList>
+  <!--/n  ###################################################################
+  -->
+  <UIViewModeContainer>
+    <action>
+      <QuickEdit>Chỉnh sửa</QuickEdit>
+    </action>
+  </UIViewModeContainer>
+  <PopupWebContentSelector>
+    <title>
+      <UIWebContentPathSelector>Chọn một nội dung trang web</UIWebContentPathSelector>
+    </title>
+  </PopupWebContentSelector>
+  <PopupDMSSelector>
+    <title>
+      <UIDocumentPathSelector>Chọn một tài liệu</UIDocumentPathSelector>
+    </title>
+  </PopupDMSSelector>
+  <UIPopupWindow>
+    <title>
+      <UIPortletConfig>Ứng dụng hiển thị đơn nội dung</UIPortletConfig>
+    </title>
+  </UIPopupWindow>
+  <SelectUserOrGroup>
+    <title>
+      <UIGroupMemberSelector>Chọn quyền</UIGroupMemberSelector>
+      <UIWCMUserContainer>Chọn người sử dụng</UIWCMUserContainer>
+    </title>
+  </SelectUserOrGroup>
+  <UIGroupMemberSelector>
+    <label>
+      <selectGroup>Chọn nhóm sử dụng</selectGroup>
+      <selectMembership>Chọn quyền</selectMembership>
+    </label>
+  </UIGroupMemberSelector>
+  <usersInputSet>
+    <title>
+      <AddAny>Thêm quyền đầy đủ</AddAny>
+    </title>
+  </usersInputSet>
+  <UIPermissionInfo>
+    <action>
+      <title>
+        <Edit>Sửa</Edit>
+        <Delete>Xoá</Delete>
+      </title>
+    </action>
+    <header>
+      <usersOrGroups>User Or Group</usersOrGroups>
+      <accessible>Truy cập</accessible>
+      <editable>Chỉnh sửa</editable>
+      <action>Hành động</action>
+    </header>
+    <msg>
+      <confirm-delete-permission>Bạn có chắc để xoá</confirm-delete-permission>
+      <no-permission-remove>Không có quyền</no-permission-remove>
+      <access-denied>Truy cập bị từ chối</access-denied>
+    </msg>
+  </UIPermissionInfo>
+  <location>
+    <title>
+      <Browse />
+    </title>
+  </location>
+  <publication>
+    <title>
+      <BrowsePublication />
+    </title>
+  </publication>
+  <!--/n  ##################################################################################
+  #  org.exoplatform.wcm.presentation.acp.config.selector.UIWebContentPathSelector #
+  ##################################################################################
+  -->
+  <UIWebContentSelectorForm>
+    <title>Chọn một nội dung và xuất bản đến trang này</title>
+    <label>
+      <path />
+      <publication>Xuất bản</publication>
+      <PublicationPath />
+    </label>
+    <action>
+      <Save>Lưu lại</Save>
+      <Back>Quay lại</Back>
+    </action>
+  </UIWebContentSelectorForm>
+  <!--/n  ##################################################################################
+  -->
+  <UIWizardWelcome>
+    <WelcomeLabel>Chào mừng bạn đến với trình tạo nội dung nhanh của eXo</WelcomeLabel>
+    <WelcomeText>Ứng dụng tạo nội dung này cho phép bạn tạo nhanh một nội dung trang web mới. Nó hướng dẫn bạn qua việc điền những thông tin cần thiết cho việc tạo một nội dung trang web mới. Khi bạn đã điền những thông tin được yêu cầu, bạn sẽ được nhắc để lưu lại nội dung trang web mới của bạn. Và đây là một cách dễ dàng bởi việc nhấn nút Tiếp tục hay Quay lại hoặc chọn số bước để đến bước khác.</WelcomeText>
+  </UIWizardWelcome>
+  <!--/n  ######################################################################
+  # 		org.exoplatform.wcm.presentation.acp.config.UITagging		 #
+  ######################################################################
+  -->
+  <UITagging>
+    <label>
+      <TagNames>Tên tag</TagNames>
+      <LinkedTags>Những tag đã kết nối</LinkedTags>
+    </label>
+    <action>
+      <AddTags>Thêm tag</AddTags>
+    </action>
+    <msg>
+      <tag-name-empty>Tên tag của bạn là rỗng</tag-name-empty>
+      <name-exist>Tên tag đã tồn tại</name-exist>
+      <tagName-invalid>Có những ký tự không hợp lệ trong tên tag</tagName-invalid>
+      <tagName-too-long>Tags must be less than 20 characters long Một trong những tag đã có tên quá dài. Tên tag phải ít hơn 20 ký tự.</tagName-too-long>
+    </msg>
+    <introduction>
+      <tagName>(Sử dụng "," để thêm nhiều tag)</tagName>
+    </introduction>
+  </UITagging>
+  <!--/n  ##############################################################################
+  # 		org.exoplatform.wcm.presentation.acp.config.UIPermissionSetting		 #
+  ##############################################################################
+  -->
+  <UIPermissionSetting>
+    <label>
+      <usersInputSet>UIPermissionSetting</usersInputSet>
+      <usersStringInput>User Or Group</usersStringInput>
+      <editable>Quyền chỉnh sửa</editable>
+      <accessible>Quyền truy cập</accessible>
+    </label>
+    <action>
+      <Save>Lưu lại</Save>
+      <Reset>Làm lại</Reset>
+    </action>
+    <msg>
+      <userOrGroup-required>Yêu cầu chọn nhóm hoặc người dùng</userOrGroup-required>
+      <checkbox-require>Bạn nên thiết lập quyền</checkbox-require>
+    </msg>
+  </UIPermissionSetting>
+  <!--/n  ##############################################################################
+  # 		org.exoplatform.wcm.presentation.acp.config.UIPermissionInfo		 #
+  ##############################################################################
+  -->
+  <!--/n  #############################################################
+  -->
+  <UIDocumentForm>
+    <msg>
+      <not-support>Không hỗ trợ</not-support>
+    </msg>
+  </UIDocumentForm>
+  <!--/n  #############################################################
+  -->
+  <UIPresentationContainer>
+    <title>Sửa nhanh</title>
+    <obsolete></obsolete>>
+    <quickPrint>
+    	<title>In ấn</title>
+    	<print>In nội dung</print>
+    	<close>Đóng cửa sổ</close>
+    </quickPrint>
+  </UIPresentationContainer>
+  <!--/n  #############################################################
+  # org.exoplatform.wcm.webui.scv.config.UIDMSSelectorForm    #
+  #############################################################
+  -->
+  <UIDMSSelectorForm>
+    <label>
+      <path />
+      <publication>Xuất bản</publication>
+      <PublicationPath />
+    </label>
+    <action>
+      <Save>Lưu lại</Save>
+      <Back>Quay lại</Back>
+    </action>
+    <msg>
+      <require-choose>Xin vui lòng chọn một tài liệu đã có sẵn</require-choose>
+    </msg>
+    <title>Chọn một tài liệu và xuất bản nó đến trang này</title>
+  </UIDMSSelectorForm>
+  <!--/n  ##############################################################
+  -->
+  <UINameWebContentForm>
+    <label>
+      <name>Tên</name>
+      <selectTemplate>Bố cục trình bày nội dung trang web</selectTemplate>
+    </label>
+    <action>
+      <Save>Lưu lại</Save>
+      <Abort>Bỏ qua</Abort>
+    </action>
+    <msg>
+      <non-lifecyclename>Xin vui lòng chọn tên quy trình</non-lifecyclename>
+      <non-firstwhiteletter>Không thể sử dụng ký tự trắng là ký tự đầu tiên của tên!</non-firstwhiteletter>
+    </msg>
+  </UINameWebContentForm>
+  <!--/n  ##########################################################################
+  -->
+  <UINonEditable>
+    <action>
+      <BackToView>Quay lại chế độ hiển thị</BackToView>
+    </action>
+  </UINonEditable>
+  <UIQuickEditContainer>
+    <action>
+      <BackToNormalWizard>Quay lại</BackToNormalWizard>
+    </action>
+    <back>Lựa chọn nâng cao</back>
+  </UIQuickEditContainer>
+  <UIPopupMenu>
+    <msg>
+      <node-locked>Nội dung tại đường dẫn {0} hoặc cấp độ cao hơn bị khoá</node-locked>
+    </msg>
+  </UIPopupMenu>
+  <!--/n  ###########################################################################
+  -->
+  <UIWCMPublicationGrid>
+    <header>
+      <LifecycleName>Tên quy trình</LifecycleName>
+      <LifecycleDesc>Định nghĩa quy trình</LifecycleDesc>
+      <action>Chọn</action>
+    </header>
+    <non-lifecyclename>Không có quy trình nào được chọn</non-lifecyclename>
+    <lifecyclename-selected>Nội dung này sẽ được xuất bản bởi quy trình xuất bản sau:</lifecyclename-selected>
+  </UIWCMPublicationGrid>
+  <UIQuickEditWebContentForm>
+    <action>
+      <SaveDraft>Lưu nháp</SaveDraft>
+      <Cancel>Hủy bỏ</Cancel>
+      <FastPublish>Xuất bản nhanh</FastPublish>
+    </action>
+  </UIQuickEditWebContentForm>
+  <UIStartEditionInPageWizard>
+    <link>Nhấn vào đây để chuyển đến giao diện chỉnh sửa nội dung</link>
+  </UIStartEditionInPageWizard>
+</bundle>
+

@@ -1,0 +1,178 @@
+<project>
+  <parent>
+    <groupId>org.exoplatform.ecm.wcm</groupId>
+    <artifactId>config</artifactId>
+    <version>1.1-SNAPSHOT</version>
+  </parent> 
+
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>exo.ecm.wcm.benchmark</artifactId>
+  <version>${org.exoplatform.wcm.version}</version>
+  <packaging>jar</packaging>
+  <name>eXo WCM Benchmark</name>
+  <url>http://www.exoplatform.org</url>
+  <description>eXo WCM Service</description>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.exoplatform.kernel</groupId>
+      <artifactId>exo.kernel.container</artifactId>
+      <version>${org.exoplatform.kernel.version}</version>
+      <scope>compile</scope>
+    </dependency>    
+	<dependency>
+      <groupId>org.exoplatform.core</groupId>
+      <artifactId>exo.core.component.ldap</artifactId>
+      <version>${org.exoplatform.core.version}</version>
+    </dependency>
+		
+    <dependency>
+      <groupId>org.exoplatform.core</groupId>
+      <artifactId>exo.core.component.organization.api</artifactId>
+      <version>${org.exoplatform.core.version}</version>
+    </dependency>
+	
+    <dependency>
+      <groupId>org.exoplatform.core</groupId>
+      <artifactId>exo.core.component.organization.jdbc</artifactId>
+      <version>${org.exoplatform.core.version}</version>
+    </dependency>
+	
+	<dependency>
+      <groupId>org.exoplatform.core</groupId>
+      <artifactId>exo.core.component.security.core</artifactId>
+      <version>${org.exoplatform.core.version}</version>
+    </dependency>
+	
+	<dependency>
+      <groupId>org.exoplatform.core</groupId>
+      <artifactId>exo.core.component.resources.api</artifactId>
+      <version>${org.exoplatform.core.version}</version>
+    </dependency>	
+	
+    <dependency>
+      <groupId>org.exoplatform.ws</groupId>
+      <artifactId>exo.ws.frameworks.json</artifactId>
+      <version>${org.exoplatform.ws.version}</version>
+      <scope>compile</scope>
+    </dependency>    
+    
+    <dependency>
+      <groupId>org.exoplatform.jcr</groupId>
+      <artifactId>exo.jcr.component.core</artifactId>
+      <version>${org.exoplatform.jcr.version}</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.exoplatform.jcr</groupId>
+      <artifactId>exo.jcr.component.ext</artifactId>
+      <version>${org.exoplatform.jcr.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.component.xml-parser</artifactId>
+      <version>${org.exoplatform.portal.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.component.web</artifactId>
+      <version>${org.exoplatform.portal.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.component.portal</artifactId>
+      <version>${org.exoplatform.portal.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.webui.portal</artifactId>
+      <version>${org.exoplatform.portal.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.exoplatform.ecm</groupId>
+      <artifactId>exo.ecm.component.cms</artifactId>
+      <version>${org.exoplatform.ecm.version}</version>      
+      <scope>compile</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.exoplatform.ecm</groupId>
+      <artifactId>exo.ecm.component.deployment</artifactId>
+      <version>${org.exoplatform.ecm.version}</version>
+      <scope>compile</scope>
+    </dependency>	
+  </dependencies>
+  
+  <build>
+    <sourceDirectory>src/main/java</sourceDirectory>
+    <outputDirectory>target/classes</outputDirectory>
+    <testSourceDirectory>src/test/java</testSourceDirectory>
+    <testOutputDirectory>target/test-classes</testOutputDirectory>
+
+    <resources>
+      <resource>
+        <directory>src/main/java</directory>
+        <includes>
+          <include>**/*.xml</include>          
+        </includes>
+      </resource>
+    </resources>
+
+    <testResources>
+      <testResource>
+        <directory>src/test/resources</directory>
+        <includes>
+          <include>**/*.properties</include>
+          <include>**/*.xml</include>
+          <include>**/*.drl</include>
+          <include>**/*.vm</include>
+          <include>**/*.doc</include>
+          <include>**/*.xls</include>
+          <include>**/*.ppt</include>
+          <include>**/*.txt</include>
+          <include>**/*.jar</include>
+          <include>**/*.pom</include>
+          <include>**/*.sha1</include>
+          <include>**/*.conf</include>
+          <include>**/*.gtmpl</include>
+        </includes>
+      </testResource>
+      <testResource>
+        <directory>src/test/java</directory>
+        <includes>
+          <include>**/*.xml</include>
+        </includes>
+      </testResource>
+    </testResources>
+
+    <plugins>      
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <testFailureIgnore>${exo.test.failure.ignore}</testFailureIgnore>
+          <forkMode>${exo.test.forkmode}</forkMode>
+          <includes>
+            <include>**/NavigationServiceTest.java</include>    						
+          </includes>
+          <excludes>
+            <exclude>**/*$*</exclude><!--nested classes prb, http://jira.codehaus.org/browse/SUREFIRE-288-->
+            <exclude>**/BaseTestCase</exclude>            
+          </excludes>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+    
+</project>

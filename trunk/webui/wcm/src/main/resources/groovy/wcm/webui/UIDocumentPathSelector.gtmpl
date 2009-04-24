@@ -1,0 +1,19 @@
+<%
+	import org.exoplatform.webui.core.UIBreadcumbs;
+	import org.exoplatform.wcm.webui.selector.document.UIDocumentSearch;
+	import org.exoplatform.wcm.webui.selector.document.UIDocumentTreeBuilder;
+	import org.exoplatform.ecm.webui.tree.selectone.UISelectPathPanel; 
+%>
+<div id="$uicomponent.id" class="UIWCMSearchContainer $uicomponent.id">
+	<div> <% uicomponent.renderChild(UIBreadcumbs.class); %> </div>
+	<div class="SelectContent"> 
+		<div class="UITreeBuilder">
+			<div class="Title"><%= _ctx.appRes("UISinglePortletContentViewer.SelectContent.leftcolumn.title") %></div>
+			<% uicomponent.renderChild(UIDocumentTreeBuilder.class); %>
+		</div>
+		<div class="UISelectPathPanel">
+			<div class="Title"><%= _ctx.appRes("UISinglePortletContentViewer.SelectContent.rightcolumn.title") %></div>
+			<% uicomponent.renderChild(UISelectPathPanel.class); %>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,76 @@
+<%
+	import org.exoplatform.wcm.webui.selector.webcontent.UIWebContentSearchForm;
+  import org.exoplatform.web.application.JavascriptManager;
+%>
+
+<%
+  def rcontext = _ctx.getRequestContext();
+  def checkedRadioId = uicomponent.getCheckedRadioId();
+  rcontext.getJavascriptManager().addJavascript("initCheckedRadio('$checkedRadioId');");
+  rcontext.getJavascriptManager().addOnLoadJavascript("setHiddenValue");
+  rcontext.getJavascriptManager().addJavascript("initCondition('$uiform.id');");
+%>
+
+<div class="$uicomponent.id">
+  <%uiform.begin();%>
+    <div class="ContentSearchForm">
+    <span><%= _ctx.appRes("UIWebContentSearchForm.title.Location")%>: </span> <%uicomponent.renderChild(UIWebContentSearchForm.LOCATION);%>
+    </div>
+    <input type="hidden" class="hidden" id="<%=UIWebContentSearchForm.CHECKED_RADIO_ID%>" name="<%=UIWebContentSearchForm.CHECKED_RADIO_ID%>" />
+    <div class="ContentSearchForm"> 
+      <input type="radio" class="radioboxes" id="<%=UIWebContentSearchForm.SEARCH_BY_NAME%>" name="<%=UIWebContentSearchForm.RADIO_NAME%>" value="<%=UIWebContentSearchForm.SEARCH_BY_NAME%>"/>
+      <span><%= _ctx.appRes("UIWebContentSearchForm.title.SearchByName")%></span> <%uicomponent.renderChild(UIWebContentSearchForm.SEARCH_BY_NAME);%>
+    </div>
+
+    <div class="ContentSearchForm">		 
+      <input type="radio" class="radioboxes" id="<%=UIWebContentSearchForm.SEARCH_BY_CONTENT%>" name="<%=UIWebContentSearchForm.RADIO_NAME%>" value="<%=UIWebContentSearchForm.SEARCH_BY_CONTENT%>"/>
+      <span><%= _ctx.appRes("UIWebContentSearchForm.title.Fulltext")%>:</span> <%uicomponent.renderChild(UIWebContentSearchForm.SEARCH_BY_CONTENT);%>
+    </div>
+
+    <div class="ContentSearchForm">
+      <input type="radio" class="radioboxes" id="<%=UIWebContentSearchForm.PROPERTY%>" name="<%=UIWebContentSearchForm.RADIO_NAME%>" value="<%=UIWebContentSearchForm.PROPERTY%>"/>
+      <label class="Label"><span><%= _ctx.appRes("UIWebContentSearchForm.title.Property")%>:</span></label> <%uicomponent.renderChild(UIWebContentSearchForm.PROPERTY);%>
+      <img class="IconConstraint AddMetadataTypeIcon" onclick="<%=uicomponent.event("AddMetadataType")%>" src="/eXoResources/skin/DefaultSkin/background/Blank.gif" alt="" title="Add metadata" />
+      <label calss="Label"><span><%= _ctx.appRes("UIWebContentSearchForm.title.Contain")%> :</span> </label> <%uicomponent.renderChild(UIWebContentSearchForm.CONTAIN)%>
+    </div>
+ 
+    <div class="ContentSearchForm">
+      <input type="radio" class="radioboxes" id="<%=UIWebContentSearchForm.TIME_OPTION%>" name="<%=UIWebContentSearchForm.RADIO_NAME%>" value="<%=UIWebContentSearchForm.TIME_OPTION%>"/>
+      <%uicomponent.renderChild(UIWebContentSearchForm.TIME_OPTION);%> 
+      <span><%= _ctx.appRes("UIWebContentSearchForm.title.FromDate")%></span>
+      <%uicomponent.renderChild(UIWebContentSearchForm.START_TIME);%>
+      <span><%= _ctx.appRes("UIWebContentSearchForm.title.ToDate")%></span>
+      <%uicomponent.renderChild(UIWebContentSearchForm.END_TIME);%>
+    </div>
+ 
+    <div class="ContentSearchForm">
+      <input type="radio" class="radioboxes" id="<%=UIWebContentSearchForm.DOC_TYPE%>" name="<%=UIWebContentSearchForm.RADIO_NAME%>" value="<%=UIWebContentSearchForm.DOC_TYPE%>"/>
+      <span><%= _ctx.appRes("UIWebContentSearchForm.title.DocumentType")%>:</span>
+      <%uicomponent.renderChild(UIWebContentSearchForm.DOC_TYPE);%>
+      <img class="IconConstraint AddMetadataTypeIcon" onclick="<%=uicomponent.event("AddNodeType")%>" src="/eXoResources/skin/DefaultSkin/background/Blank.gif" alt="" title="Add document type" />
+    </div>
+     
+      <div class="UIAction"> 
+      <table class="ActionContainer">
+        <tr>
+          <td>
+            <% for(action in uicomponent.getActions()) { 
+              String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) 
+              String link = uicomponent.event(action) ;
+            %>
+                <div onclick="$link" class="ActionButton LightBlueStyle" >
+                  <div class="ButtonLeft">
+                   <div class="ButtonRight">
+                     <div class="ButtonMiddle">
+                       <a href="javascript:void(0);">$actionLabel</a>
+                     </div>
+                   </div>
+                 </div>
+               </div>
+             <%}%>
+            </td>
+         </tr>          
+       </table>
+       </div> 
+   <%uiform.end();%>
+</div>

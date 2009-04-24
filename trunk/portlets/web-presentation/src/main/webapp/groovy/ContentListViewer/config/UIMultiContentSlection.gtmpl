@@ -1,0 +1,12 @@
+<% 
+	import org.exoplatform.wcm.webui.clv.config.UIContentsSelectionTreeBuilder;
+	import org.exoplatform.wcm.webui.clv.config.UIMultiSelectionPanel;
+	import org.exoplatform.wcm.webui.clv.config.UISelectedContentGrid;
+%>
+<div class="$uicomponent.id" id="$uicomponent.id">
+	<% uicomponent.renderChild(UIContentsSelectionTreeBuilder.class); %>
+  <div style="margin-left: 240px;">    
+  	<% uicomponent.renderChild(UIMultiSelectionPanel.class); %>
+  	<% uicomponent.renderChild(UISelectedContentGrid.class); %>  	
+  </div>
+</div>

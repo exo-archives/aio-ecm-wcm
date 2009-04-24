@@ -1,0 +1,194 @@
+<%
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.jcr.Node;
+import javax.jcr.Value;
+
+import org.exoplatform.ecm.webui.utils.Utils;
+import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
+import org.exoplatform.services.wcm.search.ResultNode;
+import org.exoplatform.services.wcm.publication.defaultlifecycle.Util;
+%>
+
+<div id="$uicomponent.id" class="UIAdvanceSearchResultDefault">
+  <%
+  def currentPageData = uicomponent.getCurrentPageData();
+  if (currentPageData != null && !currentPageData.isEmpty()) {
+    String suggestion = uicomponent.getSuggetions();
+    float searchTime = uicomponent.getSearchTime();
+    String resutlsCaption = _ctx.appRes("UIDefaultSearchResult.label.resutlsCaption");
+    String ofAboutCaption = _ctx.appRes("UIDefaultSearchResult.label.ofAboutCaption");
+    String forCaption = _ctx.appRes("UIDefaultSearchResult.label.forCaption");
+    String timeUnitCaption = _ctx.appRes("UIDefaultSearchResult.label.timeUnitCaption");
+    String newSuggestion = _ctx.appRes("UISearchResult.msg.new-suggestion");
+    String keyword = uicomponent.getKeyword();
+    int totalItem = uicomponent.getTotalItem();
+    int currentPage = uicomponent.getCurrentPage();
+    int itemsPerPage = uicomponent.getItemsPerPage();
+    int startItemIndex = (currentPage - 1) * itemsPerPage + 1;
+    int endItemIndex = currentPage* itemsPerPage;
+    if (endItemIndex > totalItem) {
+      endItemIndex = totalItem;
+    }
+    %>
+    <div class="ResultHeader">
+      <div class="CaptionSearchType">
+        <b>
+          <%= uicomponent.getResultType() %>
+        </b>
+      </div>
+      <div class="SearchSummary">
+        <%= resutlsCaption %>
+        &nbsp;
+        <b>
+          <%= startItemIndex %>
+        </b>
+        &nbsp;-&nbsp;
+        <b>
+          <%= endItemIndex %>
+        </b>
+        &nbsp;
+        <%= ofAboutCaption %>
+        &nbsp;
+        <b>
+          <%= totalItem %>
+        </b>
+        &nbsp;
+        <%= forCaption %>
+        &nbsp;
+        <b>
+          <%= keyword %>
+        </b>
+        .&nbsp;(
+        <b>
+          <%= searchTime %>
+        </b>
+        &nbsp;
+        <%= timeUnitCaption %>
+        )
+      </div>
+    </div>
+    <%
+    if (suggestion != null) {
+      %>
+      <div style="padding: 10px 0px 0px; font-size: 15px; font-style: italic;">
+        <%= newSuggestion %>
+        :
+        <strong><%= suggestion %></strong>
+      </div>
+      <%
+    }
+    %>
+    <%
+		Node viewNode = null;
+		Node tempNode = null;	
+		String draftLabel = _ctx.appRes("UIDefaultSearchResult.label.draft");
+		String editActionLabel = _ctx.appRes("UIDefaultSearchResult.action.edit");
+		
+    for (ResultNode resultNode : currentPageData) {
+      Node node = resultNode.getNode();    
+			tempNode = node;
+			viewNode = uicomponent.getNodeView(node);				
+			if (viewNode == null) {	
+				continue;				
+			} else {
+				node = viewNode;
+			}    
+      String itemNodeType = Utils.getNodeTypeIcon(node, "16x16Icon");
+      String itemName = node.getName();
+      String itemTitle = uicomponent.getTitle(node);
+      if (itemTitle != null && itemTitle.trim().length() != 0) {
+        itemName = itemTitle;
+      }
+      String itemUrl = uicomponent.getURL(tempNode);
+      List<String> listNavigationNodeUris = uicomponent.getURLs(tempNode);
+      if (!listNavigationNodeUris.isEmpty()) {
+        itemUrl = uicomponent.getPublishedNodeURI(listNavigationNodeUris.get(0));        
+      }
+      String itemExcerpt = resultNode.getExcerpt();
+      String itemScore = resultNode.getScore();
+			String contentkEdittingLink = uicomponent.event("EditContent", tempNode.getPath());				      
+      %>
+      <div class="SearchItem">
+        <div class="$itemNodeType ItemTitle">
+          <a href="$itemUrl">
+            $itemName
+          </a>
+					<% if(uicomponent.showDraftButton(tempNode)) { %>
+					<span>[ </span>
+					<a class="CaptionDraft"><%=draftLabel%></a>, <a class="CaptionEdit" href="$contentkEdittingLink"><%=editActionLabel%></a>
+					<span> ]</span>					
+					<% } %>	          
+        </div>
+        <div class="ItemExcerpt">
+          <%=itemExcerpt%>
+        </div>
+        <div class="ItemInfo">
+          <span class="ItemUrl">
+            <%=itemUrl%>
+          </span>                   
+          &nbsp;-&nbsp;
+          <span class="ItemScore">
+            <%=itemScore%>
+          </span>
+          <%
+          if (!listNavigationNodeUris.isEmpty()) {
+            if (listNavigationNodeUris.size() != 1) {
+              %>
+              &nbsp;-&nbsp;
+              <span class="ItemSame" onclick="showObject(this)">
+                <a href="javascript:void(0)">
+                  <%= _ctx.appRes("UIDefaultSearchResult.label.similar") %>
+                </a>
+              </span>
+              <%
+            }
+            %>
+            <div class="ItemDetails" id="ItemDetails">
+              <%
+              for (int i = 1; i < listNavigationNodeUris.size(); i ++) {
+                itemUrl = uicomponent.getPublishedNodeURI(listNavigationNodeUris.get(i));                
+                %>
+                <div class="SearchItem">
+                  <div class="$itemNodeType ItemTitle">
+                    <a href="$itemUrl">
+                      $itemName
+                    </a>
+                  </div>
+                  <div class="ItemExcerpt">
+                    <%=itemExcerpt%>
+                  </div>
+                  <div class="ItemInfo">
+                    <span class="ItemUrl">
+                      <%=itemUrl%>
+                    </span>
+                    &nbsp;-&nbsp;
+                    <span class="ItemScore">
+                      <%=itemScore%>
+                    </span>
+                  </div>
+                </div>
+                <%
+              }
+              %>
+            </div>
+            <%
+          }
+          %>
+        </div>
+      </div>
+      <%
+    }
+    %>
+    <div class="ItemFunc">
+      <%      
+      if (uicomponent.getNumberOfPage() > 1) {
+        uicomponent.renderChild(UICustomizeablePaginator.class);
+      }
+      %>
+    </div>
+    <%
+  }
+  %>
+</div>

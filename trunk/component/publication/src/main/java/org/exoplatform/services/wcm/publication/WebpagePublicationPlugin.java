@@ -1,0 +1,117 @@
+/*
+ * Copyright (C) 2003-2008 eXo Platform SAS.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation; either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see<http://www.gnu.org/licenses/>.
+ */
+package org.exoplatform.services.wcm.publication;
+
+import javax.jcr.Node;
+
+import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.config.model.PageNavigation;
+import org.exoplatform.services.ecm.publication.PublicationPlugin;
+
+/**
+ * Created by The eXo Platform SAS
+ * Author : Hoa Pham
+ * hoa.pham@exoplatform.com
+ * Sep 29, 2008
+ */
+
+/**
+ * Base class of Webpage Publication plugins.
+ * Webpage publication plugins implement a publication lifecycle. Each time a new
+ * custom lifecycle needs to be defined, a new plugin has to be implemented
+ * and registered with the Publication Service.
+ */
+public abstract class WebpagePublicationPlugin extends PublicationPlugin { 
+  
+  /**
+   * Publish content node to a portal page.
+   * Base of each publication lifecycle implementation,a new portlet can be added to the page
+   * and the lifecyle state will be created
+   * 
+   * @param content the jcr content node
+   * @param page the portal page
+   * 
+   * @throws Exception the exception
+   */
+  public abstract void publishContentToPage(Node content, Page page) throws Exception;  
+  
+  /**
+   * Suspend published content from a portal page.
+   * Base of each publication lifecycle implementation, a portlet that is used to publish the content
+   * can be removed to the page and the lifecyle state will be created
+   * 
+   * @param content the content
+   * @param page the page
+   * 
+   * @throws Exception the exception
+   */
+  public abstract void suspendPublishedContentFromPage(Node content, Page page) throws Exception;
+      
+  /**
+   * Update lifecyle state of the any content relates to the page when page is created
+   * 
+   * @param page the page
+   * 
+   * @throws Exception the exception
+   */
+  public abstract void updateLifecyleOnCreatePage(Page page) throws Exception;
+  
+  /**
+   * Update lifecyle state of the any content relates to the page when page is changed
+   * 
+   * @param page the page
+   * 
+   * @throws Exception the exception
+   */
+  public abstract void updateLifecyleOnChangePage(Page page) throws Exception;
+  
+  /**
+   * Update lifecyle state of the any content relates to the page when page is removed
+   * 
+   * @param page the page
+   * 
+   * @throws Exception the exception
+   */
+  public abstract void updateLifecycleOnRemovePage(Page page) throws Exception;
+  
+  /**
+   * Update lifecyle state of the any content relates to a navigation when the navigation is created
+   * 
+   * @param navigation the navigation
+   * 
+   * @throws Exception the exception
+   */
+  public abstract void updateLifecyleOnCreateNavigation(PageNavigation navigation) throws Exception;
+  
+  /**
+   * Update lifecyle state of the any content relates to a navigation when the navigation is changed
+   * 
+   * @param navigation the navigation
+   * 
+   * @throws Exception the exception
+   */
+  public abstract void updateLifecycleOnChangeNavigation(PageNavigation navigation) throws Exception;
+  
+  /**
+   * Update lifecyle state of the any content relates to a navigation when the navigation is removed
+   * 
+   * @param navigation the navigation
+   * 
+   * @throws Exception the exception
+   */
+  public abstract void updateLifecyleOnRemoveNavigation(PageNavigation navigation) throws Exception;
+}

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+  <!--/n  ######################################################################################
+  #    org.exoplatform.ecm.webui.contentviewer.UIParameterizedContentViewerPortlet     #
+  ######################################################################################
+  -->
+  <UIMessageBoard>
+    <msg>
+      <content-not-found>Content not found or deleted.</content-not-found>
+      <content-unsupport-exc>Content not support to view.</content-unsupport-exc>
+      <content-invisible>Content is invisible</content-invisible>
+      <access-control-exc>Content access denied.</access-control-exc>
+      <content-not-printed>Content cannot be printed</content-not-printed>
+      <content-obsolete>Content is obsolete</content-obsolete>
+    </msg>
+  </UIMessageBoard>
+  <UIDocumentDialogForm>
+  	<action>
+  		<SaveDraft>Save Draft</SaveDraft>
+  		<Cancel>Close</Cancel>
+  		<FastPublish>Fast Publish</FastPublish>
+  	</action>
+  </UIDocumentDialogForm>
+  <UIContentViewerContainer>
+    <action>
+      <back>Back</back>
+      <print>Print</print>
+      <close>Close</close>
+    </action>
+    <label>
+    	<quickEditTitle>Quick Edit</quickEditTitle>
+    </label>    
+    <quickPrint>
+    	<title>Print this page</title>
+    	<print>Print this page</print>
+    </quickPrint>
+  </UIContentViewerContainer>
+  <UIPopupWindow>
+  	<title>
+	  	<UIDocumentDialogForm>Document dialog form</UIDocumentDialogForm>
+  	</title>
+  </UIPopupWindow>
+</bundle>
+

@@ -1,0 +1,79 @@
+<project>
+
+  <parent>
+    <groupId>org.exoplatform</groupId>
+    <artifactId>parent</artifactId>
+    <version>1.1.0</version>
+  </parent>
+
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.exoplatform.ecm.wcm</groupId>
+  <artifactId>config</artifactId>
+  <name>eXo WCM Config</name>
+  <version>1.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <modules>        
+  	<module>component/wcm</module>
+		<module>component/publication</module>
+		<module>component/search</module>
+		<module>webui/wcm</module>
+		<module>portlets/web-presentation</module>    
+		<module>portlets/web-searches</module>
+		<module>connectors/fckeditor</module>    
+		<module>web/eXoWCMResources</module>	
+	  	<module>web/wcmportal</module>	
+	  	<module>packaging</module>	
+  </modules>
+
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/java</directory>
+        <includes>
+          <include>**/*.properties</include>
+          <include>**/*.xml</include>
+        </includes>
+      </resource>
+    </resources>
+    <testResources>
+      <testResource>
+        <directory>src/test/java</directory>
+        <includes>
+          <include>**/*.properties</include>
+          <include>**/*.xml</include>
+        </includes>
+      </testResource>
+    </testResources>    
+  </build>  
+  <profiles>
+    <profile>
+      <id>default</id>  
+      <activation>
+        <property><name>default</name></property>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <org.exoplatform.kernel.version>2.0.6</org.exoplatform.kernel.version>
+        <org.exoplatform.core.version>2.1.4</org.exoplatform.core.version>
+        <org.exoplatform.ws.version>1.3.2</org.exoplatform.ws.version>
+        <org.exoplatform.jcr.version>1.10.2</org.exoplatform.jcr.version>
+        <org.exoplatform.pc.version>2.0.5</org.exoplatform.pc.version>
+        <org.exoplatform.portal.version>2.5.2</org.exoplatform.portal.version>
+        <org.exoplatform.ecm.dms.version>2.3</org.exoplatform.ecm.dms.version>
+        <org.exoplatform.wcm.version>1.1-SNAPSHOT</org.exoplatform.wcm.version>
+        <exo.test.classes>Test</exo.test.classes>
+        <exo.test.skip>true</exo.test.skip>
+      </properties>
+    </profile>	
+  </profiles>
+  <properties>
+     <exo.product.name>exo-wcm</exo.product.name>
+     <exo.product.specification>1.1</exo.product.specification>
+  </properties>
+  <scm>
+    <connection>scm:svn:http://svn.exoplatform.org/projects/ecm/wcm/trunk</connection>
+    <developerConnection>scm:svn:http://svn.exoplatform.org/projects/ecm/wcm/trunk</developerConnection>
+    <url>http://fisheye.exoplatform.org/browse/projects/ecm/wcm/trunk</url>
+  </scm>
+</project>

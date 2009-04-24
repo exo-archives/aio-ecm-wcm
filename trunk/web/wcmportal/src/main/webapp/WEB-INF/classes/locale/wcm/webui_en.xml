@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+  <UIWizardPageSelectLayoutForm>
+    <label>
+      <appPages>
+        <Presentation>Simple Content Viewer</Presentation>
+        <ContentListViewer>Content List Viewer</ContentListViewer>
+        <Search>Search</Search>
+        <Sitemap>Sitemap</Sitemap>
+      </appPages>
+    </label>
+  </UIWizardPageSelectLayoutForm>
+  <ClassicSite>
+    <label>Classic Site</label>
+  </ClassicSite>
+  <ACMESite>
+    <label>ACME Site</label>
+  </ACMESite>
+  <Views>
+    <label>
+      <wcm-view>WCM View</wcm-view>
+      <admin-view>Admin View</admin-view>
+      <icon-view>Icon View</icon-view>
+      <thumbails-view>Thumbnails View</thumbails-view>
+      <cover-flow>Cover Flow View</cover-flow>
+    </label>
+  </Views>
+  <!--/n  ####################################################################################
+  #		../src/main/webapp/WEB-INF/conf/wcm/artifacts/application-templates        		 #
+  #		/content-list-viewer/paginators/UIDefaultPaginator.gtmpl		   		   					 #													
+  ####################################################################################
+  -->
+  <UIPaginatorDefault>
+    <label>
+      <previous>Prev</previous>
+      <next>Next</next>
+    </label>
+  </UIPaginatorDefault>
+  <UIDefaultSearchResult>
+    <label>
+      <resutlsCaption>Results</resutlsCaption>
+      <ofAboutCaption>of about</ofAboutCaption>
+      <forCaption>for</forCaption>
+      <timeUnitCaption>seconds</timeUnitCaption>
+      <kb>kB</kb>
+      <noresult>No result</noresult>
+      <similar>Pages where the same content appears</similar>
+      <draft>Draft</draft>
+    </label>
+    <action>
+    	<edit>Edit</edit>
+    </action>
+  </UIDefaultSearchResult>
+  <!--/n  ####################################################################################
+  #		../src/main/webapp/WEB-INF/conf/wcm/artifacts/application-templates            #
+  #		/content-list-viewer/list-by-folder/UIContentListPresentationDefault.gtmpl     #													
+  ####################################################################################
+  -->
+  <UIContentListPresentationDefault>
+      <action>
+        <refresh>Refresh</refresh>
+        <edit>Edit</edit>
+      </action>
+      <label>
+	      <readmore>Read more</readmore>
+	      <draft>Draft</draft>      
+      </label>
+  </UIContentListPresentationDefault>
+  <!--/n  ####################################################################################
+  -->
+  <UITabPane>
+    <title>
+      <metadata>
+        <siteMetadata>Site Metadata</siteMetadata>
+      </metadata>
+    </title>
+  </UITabPane>
+  <ContentType>
+    <lable>
+      <SiteBreadcrum>Site Breadcrum</SiteBreadcrum>
+      <SiteNavigation>Site Navigation</SiteNavigation>
+      <Twocolumnslayoutwebcontent>Two columns layout webcontent</Twocolumnslayoutwebcontent>
+      <Pictureonheadlayoutwebcontent>Picture on head layout webcontent</Pictureonheadlayoutwebcontent>
+      <Sitesearchboxwebcontent>Site search box webcontent</Sitesearchboxwebcontent>
+      <Freelayoutwebcontent>Free layout webcontent</Freelayoutwebcontent>
+    </lable>
+  </ContentType>
+  <portal>
+    <template>
+      <home>Home</home>
+      <news>News</news>
+      <products>Products</products>
+      <services>Services</services>
+      <search>Search</search>
+      <contact>Contact us</contact>
+      <about>About us</about>
+      <contentviewer>Content Viewer</contentviewer>
+      <parameterizedviewer>Parameterized Viewer</parameterizedviewer>
+      <searchResult>Search Result</searchResult>
+    </template>
+  </portal>
+  <UISinglePortletContentViewer>
+    <SelectContent>
+      <leftcolumn>
+        <title>Select a folder to display its children as content</title>
+      </leftcolumn>
+      <rightcolumn>
+        <title>Below is the possible can be selected</title>
+      </rightcolumn>
+      <searchbox>
+        <title>Search</title>
+      </searchbox>
+    </SelectContent>
+  </UISinglePortletContentViewer>
+  <UIWebContentSearch>
+  	<msg-choose-portal>You don't choose any portal. Please choosing a portal to search!</msg-choose-portal>
+  </UIWebContentSearch>
+  
+  <!--  
+  ##########################################################################################
+  # exo.ecm.wcm.webui.wcm.groovy.wcm.webui                                                 # 
+  ##########################################################################################
+  -->
+  <PopupWebContentSelector>
+  	<title>
+  		<UIWebContentTabSelector>Web Content Selector</UIWebContentTabSelector>
+  	</title>
+  </PopupWebContentSelector>
+  <PopupDMSSelector>
+  	<title>
+  		<UIDocumentTabSelector>Document Selector</UIDocumentTabSelector>
+  	</title>
+  </PopupDMSSelector>
+  <UITabPane>
+  	<title>
+  		<UIWebContentPathSelector>Web Content Tree Selector</UIWebContentPathSelector>
+  		<UIWebContentSearchForm>Web content search form</UIWebContentSearchForm>
+  		<UISelectPathPanel>Result form</UISelectPathPanel>
+  		<UIDocumentPathSelector>Document Tree Selector</UIDocumentPathSelector>
+  		<UIDocumentSearchForm>Document Search Form</UIDocumentSearchForm>
+  		<UIWCMSearchResult>Search Results</UIWCMSearchResult>
+  		<UIResultView>Result Viewer</UIResultView>
+  		<WebContentNodeTypePopup>NodeType Selector</WebContentNodeTypePopup>
+  		<WebContentMetadataPopup>Metadata Selector</WebContentMetadataPopup>
+  		<DocumentMetadataPopup>Metadata Selector</DocumentMetadataPopup>
+  		<DocumentNodeTypePopup>NodeType Selector</DocumentNodeTypePopup>
+  	</title>
+  </UITabPane>
+  <UIWebContentSearchForm>
+  	<action>
+  		<SearchWebContent>Search</SearchWebContent>
+  	</action>
+  </UIWebContentSearchForm>
+  <UIWebContentSearchForm>
+  	<empty-field>You don't choose value to search!Please choose term</empty-field>
+  </UIWebContentSearchForm>
+  <UIDocumentSearchForm>
+  	<action>
+  		<SearchWebContent>Search</SearchWebContent>
+  	</action>
+  </UIDocumentSearchForm>
+  <UIDocumentTabSelector>
+  	<header>
+  		<title>Title</title>
+  		<score>Score</score>
+  		<action>Action</action>
+  		<Select>Select</Select>
+  		<View>View</View>
+  		<publicationstate>Publication State</publicationstate>
+  	</header>
+  	
+  </UIDocumentTabSelector>
+  <UIWebContentTabSelector>
+  	<header>
+  		<title>Title</title>
+  		<score>Score</score>
+  		<action>Action</action>
+  		<Select>Select</Select>
+  		<View>View</View>
+  		<publicationstate>Publication State</publicationstate>
+  	</header>
+  	<action>
+  		<title>
+  			<Select>Select</Select>
+  			<View>View</View>
+  		</title>
+  	</action>
+  </UIWebContentTabSelector>
+  <UIResultView>
+  	<action>
+  		<Select>Select</Select>
+  	</action>
+  </UIResultView>
+  <UIWebContentSearchForm>
+  	<title>
+  		<Location>Site Name</Location>
+  		<SearchByName>Search by name</SearchByName>
+  		<Fulltext>A word or phrase in context</Fulltext>
+  		<Property>Property</Property>
+  		<Contain>Contain</Contain>
+  		<FromDate>from date</FromDate>
+  		<ToDate>to date</ToDate>
+  		<DocumentType>Document Type</DocumentType>
+  	</title>
+  </UIWebContentSearchForm>
+  <WebContentNodeTypePopup>
+  	<title>
+  		<UIWCMNodeTypeSelectForm>NodeType Select Form</UIWCMNodeTypeSelectForm>
+  	</title>
+  </WebContentNodeTypePopup>
+  <UIWCMNodeTypeSelectForm>
+  	<action>
+  		<Save>Save</Save>
+  		<Cancel>Cancel</Cancel>
+  	</action>
+  </UIWCMNodeTypeSelectForm>
+  <WebContentMetadataPopup>
+  	<title>
+  		<UIWCMSelectPropertyForm>Property Select Form</UIWCMSelectPropertyForm>
+  	</title>
+  </WebContentMetadataPopup>
+  <UIWCMSelectPropertyForm>
+  	<action>
+  		<Add>Add</Add>
+  		<Cancel>Cancel</Cancel>
+  	</action>
+  	<label>
+			<metadataType>Metadata type</metadataType>
+			<property_select>Property select</property_select>
+		</label>
+  </UIWCMSelectPropertyForm>
+  <DocumentMetadataPopup>
+  	<title>
+  		<UIWCMSelectPropertyForm>Property Select Form</UIWCMSelectPropertyForm>
+  	</title>
+  </DocumentMetadataPopup>
+  <DocumentNodeTypePopup>
+  	<title>
+  		<UIWCMNodeTypeSelectForm>NodeType Select Form</UIWCMNodeTypeSelectForm>
+  	</title>
+  </DocumentNodeTypePopup>
+  <WCMContentView>
+  	<header>
+	  	<title>Title</title>
+	  	<author>Author</author>
+	  	<date>Date</date>
+	  	<status>Status</status>
+  	</header>
+  </WCMContentView>
+	<UISearchPageLayoutDefault>
+		<label>
+			<quickEditTitle>Quick Edit</quickEditTitle>
+		</label>
+	</UISearchPageLayoutDefault>
+</bundle>
