@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.jcr.Node;
+import javax.portlet.PortletPreferences;
 
 import org.exoplatform.ecm.webui.tree.UIBaseNodeTreeSelector;
 import org.exoplatform.ecm.webui.tree.selectmany.UICategoriesSelectPanel;
@@ -27,6 +28,8 @@ import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
+import org.exoplatform.wcm.webui.clv.UIContentListViewerPortlet;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIPopupComponent;
@@ -53,7 +56,7 @@ public class UICorrectContentSelectorForm extends UIBaseNodeTreeSelector impleme
     addChild(UISelectedContentGrid.class, null, null).setRendered(false);        
   }
 
-  public void init() throws Exception {
+  public void init(PortletRequestContext context) throws Exception {
     UIContentsSelectionTreeBuilder treeBuilder = getChild(UIContentsSelectionTreeBuilder.class);
     LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
     String currentPortalName = Util.getUIPortal().getName();
@@ -66,7 +69,14 @@ public class UICorrectContentSelectorForm extends UIBaseNodeTreeSelector impleme
     UIMultiSelectionPanel uiMultiSelectionPanel = getChild(UIMultiSelectionPanel.class);
     uiMultiSelectionPanel.updateGrid();
     UISelectedContentGrid contentsGrid = getChild(UISelectedContentGrid.class);
-    contentsGrid.setSelectedCategories(existedCategoryList);
+    PortletPreferences preferences = context.getRequest().getPreferences();
+    String [] contents = preferences.getValues(UIContentListViewerPortlet.CONTENT_LIST, null);
+    if (contents != null && contents.length > 0) {
+      for (int i = 0; i < contents.length; i++) {
+        if (contents[i] != null) existedCategoryList.add(contents[i]);
+      }
+    }
+    contentsGrid.setSelectedCategories(existedCategoryList);    
     if (existedCategoryList.size() > 0) {
       contentsGrid.setRendered(true);
     }

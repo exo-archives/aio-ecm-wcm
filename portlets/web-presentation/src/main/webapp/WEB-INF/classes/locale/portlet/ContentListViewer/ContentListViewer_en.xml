@@ -10,6 +10,7 @@
       <Cancel>Cancel</Cancel>
       <Down>Down</Down>
       <Up>Up</Up>      
+      <Delete>Delete</Delete>            
     </action>
     <label>
     	<ContentSelectionBlock>Contents selection</ContentSelectionBlock>

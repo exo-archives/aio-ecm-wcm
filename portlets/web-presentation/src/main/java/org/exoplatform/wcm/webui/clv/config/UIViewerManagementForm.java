@@ -71,7 +71,8 @@ import org.exoplatform.webui.form.UIFormStringInput;
     @EventConfig(listeners = UIViewerManagementForm.CancelActionListener.class),
     @EventConfig(listeners = UIViewerManagementForm.SelectFolderPathActionListener.class),
     @EventConfig(listeners = UIViewerManagementForm.IncreaseActionListener.class),
-    @EventConfig(listeners = UIViewerManagementForm.DecreaseActionListener.class)     
+    @EventConfig(listeners = UIViewerManagementForm.DecreaseActionListener.class),
+    @EventConfig(listeners = UIViewerManagementForm.DeleteActionListener.class)
   }
 )
 public class UIViewerManagementForm extends UIForm implements UISelectable {
@@ -233,7 +234,9 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
       viewerModeRadioBoxInput.setValue(VIEWER_MANUAL_MODE);
       String[] arr = portletPreferences.getValues(UIContentListViewerPortlet.CONTENT_LIST, null);
       if (arr != null && arr.length != 0) {
-        this.contentList = Arrays.asList(arr);
+        for (int i = 0; i < arr.length; i++) {
+          this.contentList.add(arr[i]);
+        }        
       }
     } else {
       viewerModeRadioBoxInput.setValue(VIEWER_AUTO_MODE);
@@ -265,7 +268,7 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
   public List<String> getViewAbleContentList() {
     return this.contentList;
   }
-
+  
   /*
    * (non-Javadoc)
    * 
@@ -418,6 +421,7 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
         portletPreferences.setValues(UIContentListViewerPortlet.CONTENT_LIST, sl);
       } else {
         portletPreferences.setValue(UIContentListViewerPortlet.ORDER_BY, orderBy);
+        portletPreferences.setValues(UIContentListViewerPortlet.CONTENT_LIST, new String [] {});
       }
       portletPreferences.store();
       if (Utils.isEditPortletInCreatePageWizard()) {
@@ -499,6 +503,7 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
   public static class SelectFolderPathActionListener extends EventListener<UIViewerManagementForm> {
     public void execute(Event<UIViewerManagementForm> event) throws Exception {
       UIViewerManagementForm uiViewerManagementForm = event.getSource();
+      PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
       UIFormRadioBoxInput modeBoxInput = (UIFormRadioBoxInput) uiViewerManagementForm.getChildById(UIViewerManagementForm.VIEWER_MODES);
       UIFormSelectBox orderBySelector = uiViewerManagementForm.getUIFormSelectBox(ORDER_BY);
       String mode = modeBoxInput.getValue();
@@ -512,7 +517,7 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
         orderBySelector.setRendered(false);
         UICorrectContentSelectorForm uiCorrectContentSelectorForm = uiViewerManagementForm.createUIComponent(UICorrectContentSelectorForm.class, null, null);
         uiCorrectContentSelectorForm.setSourceComponent(uiViewerManagementForm, new String[] { UIViewerManagementForm.FOLDER_PATH_INPUT });
-        uiCorrectContentSelectorForm.init();
+        uiCorrectContentSelectorForm.init(context);
         uiViewerManagementForm.showPopupComponent(uiCorrectContentSelectorForm);
       }
     }
@@ -541,6 +546,15 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
         contentList.set(currIndex + 1, contentList.get(currIndex));
         contentList.set(currIndex, temp);
       }
+    }
+  }
+  
+  public static class DeleteActionListener extends EventListener<UIViewerManagementForm> {
+    public void execute(Event<UIViewerManagementForm> event) throws Exception {
+      UIViewerManagementForm uiForm = event.getSource();      
+      int currIndex = Integer.parseInt(event.getRequestContext().getRequestParameter(OBJECTID));
+      List<String> contentList = uiForm.getViewAbleContentList();
+      contentList.remove(currIndex);
     }
   }
 
