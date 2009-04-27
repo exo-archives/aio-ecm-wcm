@@ -99,9 +99,12 @@ public class UISearchResult extends UIContainer {
   /** The result type. */
   private String                   resultType;
 
-  /** The suggetions. */
-  private String                   suggetions;
+  /** The suggestion. */
+  private String                   suggestion;
 
+  /** The suggestion. */
+  private String                   suggestionURL;
+  
   /** The date formatter. */
   private SimpleDateFormat         dateFormatter    = new SimpleDateFormat(ISO8601.SIMPLE_DATETIME_FORMAT);
 
@@ -186,7 +189,10 @@ public class UISearchResult extends UIContainer {
                                                                                             provider,
                                                                                             itemsPerPage);
         setSearchTime(paginatedQueryResult.getQueryTimeInSecond());
-        setSuggetions(paginatedQueryResult.getSpellSuggestion());
+        setSuggestion(paginatedQueryResult.getSpellSuggestion());
+        String suggestionURL = Util.getPortalRequestContext().getRequestURI();
+        suggestionURL += "?portal="+currentPortal+"&keyword="+getSuggestion();
+        setSuggestionURL(suggestionURL);
         setPageList(paginatedQueryResult);
       } catch (Exception e) {
         UIApplication uiApp = getAncestorOfType(UIApplication.class);
@@ -214,7 +220,7 @@ public class UISearchResult extends UIContainer {
         writer.write(message1 + " - <b style=\"font-size: 15px; font-style: italic;\">" + keyword
             + "</b> - " + message2 + "&nbsp;" + getResultType().toLowerCase() + "&nbsp;" + "<br><br>");
         writer.write(suggestions + "<br>");
-        String keySuggestion = getSuggetions();
+        String keySuggestion = getSuggestion();
         if (keySuggestion == null || keySuggestion.equals("null")) {
           String newKeyword = bundle.getString("UISearchResult.msg.try-different-key");
           writer.write("<ul><li>" + newKeyword + "</li></ul>");
@@ -445,23 +451,41 @@ public class UISearchResult extends UIContainer {
   }
 
   /**
-   * Gets the suggetions.
+   * Gets the suggestion.
    * 
-   * @return the suggetions
+   * @return the suggestion
    */
-  public String getSuggetions() {
-    return suggetions;
+  public String getSuggestion() {
+    return suggestion;
   }
 
   /**
-   * Sets the suggetions.
+   * Sets the suggestion.
    * 
-   * @param suggetions the new suggetions
+   * @param suggestions the new suggestion
    */
-  public void setSuggetions(String suggetions) {
-    this.suggetions = suggetions;
+  public void setSuggestion(String suggestion) {
+	  this.suggestion = suggestion;
   }
 
+  /**
+   * Gets the suggestion URL.
+   * 
+   * @return the suggestion URL
+   */
+  public String getSuggestionURL() {
+	  return suggestionURL;
+  }
+  
+  /**
+   * Sets the suggestion URL.
+   * 
+   * @param suggestions the new suggestion URL
+   */
+  public void setSuggestionURL(String suggestionURL) {
+	  this.suggestionURL = suggestionURL;
+  }
+  
   /**
    * Gets the keyword.
    * 

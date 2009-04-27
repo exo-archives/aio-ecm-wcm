@@ -42,11 +42,13 @@
 
 <% } else { %>
 	<% if(uicomponent.isQuickEditable()) { %>
+		<% if(uicomponent.isEditable()) { %>
 			<div style="position: relative; height: 0px;" id="<%=quickEditingBlockId%>">
 				<div style="position: absolute; width: 65px; right: 0px; top: 0px">
 					<a class="QuickEdit" href="<%=uicomponent.event("QuickEdit")%>" title="<%= _ctx.appRes("UIPresentationContainer.title");%>"></a>				
 				</div>
 			</div>
+		<% } %> 
 	<% } %> 
 	<% if(isDraftRevision) { %>
 	   <div style="padding: 5px 10px; line-height: 16px; ">
