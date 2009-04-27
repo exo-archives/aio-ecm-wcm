@@ -72,7 +72,9 @@ public class StateAndVersionPublicationHandler extends BaseWebSchemaHandler {
     if(node.isNodeType("nt:file")) {
       if(node.canAddMixin("exo:rss-enable")) {
         node.addMixin("exo:rss-enable");
-        node.setProperty("exo:title",node.getName());
+        if(!node.hasProperty("exo:title")) {
+          node.setProperty("exo:title",node.getName());
+        }        
       }
       Node parentNode = node.getParent();
       if(parentNode.isNodeType("exo:webContent")) {

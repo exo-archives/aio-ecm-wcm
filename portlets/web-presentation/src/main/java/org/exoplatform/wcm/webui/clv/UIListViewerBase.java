@@ -17,11 +17,8 @@
 package org.exoplatform.wcm.webui.clv;
 
 import javax.portlet.PortletPreferences;
-import javax.swing.text.StyledEditorKit.BoldAction;
 
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
-import org.exoplatform.portal.application.PortalRequestContext;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
@@ -41,44 +38,47 @@ import org.exoplatform.webui.event.EventListener;
  * Feb 23, 2009  
  */
 public abstract class UIListViewerBase extends UIContainer implements RefreshDelegateActionListener {
-  
+
   protected boolean viewAbleContent = false;
 
   protected String  messageKey;
-  
+
   public abstract void init() throws Exception;
-  
+
   public String getMessage() throws Exception {
     WebuiRequestContext requestContext = WebuiRequestContext.getCurrentInstance();
     return requestContext.getApplicationResourceBundle().getString(messageKey);
   }
-  
+
   public boolean isViewAbleContent() {
     return viewAbleContent;
   }
-  
+
   public void setViewAbleContent(boolean bool) {
     viewAbleContent = bool;
   }
-  
+
   public String getPortletId() {
     PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     return pContext.getWindowId();
   }
-  
+
   public void processRender(WebuiRequestContext context) throws Exception {
-    init();    
+    if(!Utils.isLiveMode() || context.getFullRender()) {
+      init(); 
+    }    
     super.processRender(context);
   }
+  
   protected PortletPreferences getPortletPreference() {
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     return portletRequestContext.getRequest().getPreferences();
   }
-  
+
   protected String getFormViewTemplatePath() {
     return getPortletPreference().getValue(UIContentListViewerPortlet.FORM_VIEW_TEMPLATE_PATH, null);
   }
-  
+
   public ResourceResolver getTemplateResourceResolver() throws Exception {
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     String repository = getPortletPreference().getValue(UIContentListViewerPortlet.REPOSITORY, null);
@@ -100,12 +100,12 @@ public abstract class UIListViewerBase extends UIContainer implements RefreshDel
       context.addUIComponentToUpdateByAjax(uiMaskPopupContainer);      
     }    
   }
-  
+
   public void onRefresh(Event<UIContentListPresentation> event) throws Exception {
     UIContentListPresentation contentListPresentation = event.getSource();
     UIListViewerBase uiListViewerBase = contentListPresentation.getParent();
     uiListViewerBase.getChildren().clear();
     uiListViewerBase.init();
   }
-  
+
 }

@@ -121,7 +121,7 @@ public class WikiLinkParser {
     }
   }
   
-  public String paseHTML() throws Exception {
+  public String parseHTML() throws Exception {
     dataSource = dataSource.replace("&gt;", ">");    
     Matcher matcher = XWIKI_LINK.matcher(dataSource);
     List<String> list = new ArrayList<String>();

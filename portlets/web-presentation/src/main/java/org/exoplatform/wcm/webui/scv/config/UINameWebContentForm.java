@@ -119,10 +119,10 @@ public class UINameWebContentForm extends UIForm {
       NodeType nodeType = nodeTypeManager.getNodeType(documentTemplate);
       if (nodeType.isNodeType("exo:webContent")) {
         String contentType = nodeType.getName();
-        String templateLabel = StringUtils.deleteWhitespace(templateService.getTemplateLabel(contentType, repositoryName));
+        String templateLabel = templateService.getTemplateLabel(contentType, repositoryName);
         String resolveLabel = templateLabel;
         try {
-          resolveLabel = resourceBundle.getString("ContentType.lable."+ templateLabel);
+          resolveLabel = resourceBundle.getString("ContentType.lable."+ StringUtils.deleteWhitespace(templateLabel));
         } catch(Exception e) {
 
         }

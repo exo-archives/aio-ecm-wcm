@@ -77,12 +77,13 @@
   </UITabPane>
   <ContentType>
     <lable>
-      <SiteBreadcrum>Site Breadcrum</SiteBreadcrum>
+      <SiteBreadcrum>Site Breadcrumb</SiteBreadcrum>
       <SiteNavigation>Site Navigation</SiteNavigation>
       <Twocolumnslayoutwebcontent>Two columns layout webcontent</Twocolumnslayoutwebcontent>
       <Pictureonheadlayoutwebcontent>Picture on head layout webcontent</Pictureonheadlayoutwebcontent>
       <Sitesearchboxwebcontent>Site search box webcontent</Sitesearchboxwebcontent>
       <Freelayoutwebcontent>Free layout webcontent</Freelayoutwebcontent>
+      <Tablelayoutwebcontent>Table Layout</Tablelayoutwebcontent>
     </lable>
   </ContentType>
   <portal>

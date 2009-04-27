@@ -16,6 +16,7 @@
  */
 package org.exoplatform.wcm.webui.scv;
 
+import java.security.AccessControlException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +33,8 @@ import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
+import org.exoplatform.services.jcr.access.PermissionType;
+import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.publication.PublicationState;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant;
@@ -118,6 +121,36 @@ public class UIPresentationContainer extends UIContainer{
 	  this.hasLiveRevision = hasLiveRevision;
   }
   
+  public boolean isEditable() {
+	  //	  boolean isEditable = false;
+	  UISingleContentViewerPortlet uiportlet = getAncestorOfType(UISingleContentViewerPortlet.class);
+	  Node originalNode = null;
+	  try {
+		  originalNode = uiportlet.getReferencedContent();
+	  } catch(ItemNotFoundException ex) {
+		  originalNode =  null;
+	  } catch(RepositoryException rx) {
+		  originalNode =  null;
+	  } catch(Exception rx) {
+		  originalNode =  null;
+	  }
+
+	  try {
+		  ((ExtendedNode)originalNode).checkPermission(PermissionType.SET_PROPERTY);
+		  //content exists, we can edit it
+		  return true;
+	  } catch(AccessControlException e) {
+		  //content exists but no rights, we can't edit it
+		  return false;
+	  } catch(RepositoryException e) {
+		  // no access on the repository, we can't edit it
+		  return false;
+	  } catch(NullPointerException e) {
+		  // content is null, we can edit it to select a content or create one.
+		  return true;
+	  }
+  }
+  
   @Override
   public void processRender(WebuiRequestContext context) throws Exception {
     UISingleContentViewerPortlet uiportlet = getAncestorOfType(UISingleContentViewerPortlet.class);
@@ -129,7 +162,8 @@ public class UIPresentationContainer extends UIContainer{
       originalNode = null;
     } catch(RepositoryException rx) {
       originalNode =  null;
-    }    
+    }
+    ExtendedNode curnode = (ExtendedNode) originalNode;
     String currentState = PublicationState.getRevisionState(originalNode);
     if(Constant.OBSOLETE_STATE.equals(currentState)) {
       setObsoletedContent(true);

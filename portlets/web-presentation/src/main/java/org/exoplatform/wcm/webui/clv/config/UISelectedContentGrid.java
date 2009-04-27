@@ -81,12 +81,12 @@ public class UISelectedContentGrid extends UISelectedCategoriesGrid {
         }        
         UIViewerManagementForm uiViewerManagementForm = (UIViewerManagementForm) uiCorrectContentSelectorForm.getSourceComponent();
         List<String> currContents = uiViewerManagementForm.getViewAbleContentList();
-        if (currContents != null && currContents.size() != 0) {
-          for (String content : currContents) {
-            contents.append(content).append(";");
-            selectedCategories.add(content);
-          } 
-        }        
+//        if (currContents != null && currContents.size() != 0) {
+//          for (String content : currContents) {
+//            contents.append(content).append(";");
+//            selectedCategories.add(content);
+//          } 
+//        }        
         uiViewerManagementForm.doSelect(returnField, contents.toString());        
         uiViewerManagementForm.setViewAbleContentList(selectedCategories);
       } catch (Exception e) {

@@ -54,6 +54,7 @@ public class PaginatedNodeIterator  extends PageList {
     super(pageSize);
     this.nodeIterator = nodeIterator;
     this.setAvailablePage((int)nodeIterator.getSize());
+    this.currentListPage_ = null;
   }   
 
   /* (non-Javadoc)
@@ -119,6 +120,7 @@ public class PaginatedNodeIterator  extends PageList {
    * 
    * @throws Exception the exception
    */
+  
   public List getCurrentPageData() throws Exception {
     return currentPage();
   }

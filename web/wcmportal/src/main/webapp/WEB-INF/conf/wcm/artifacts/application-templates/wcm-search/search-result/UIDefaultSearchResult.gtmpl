@@ -15,7 +15,8 @@ import org.exoplatform.services.wcm.publication.defaultlifecycle.Util;
   <%
   def currentPageData = uicomponent.getCurrentPageData();
   if (currentPageData != null && !currentPageData.isEmpty()) {
-    String suggestion = uicomponent.getSuggetions();
+    String suggestion = uicomponent.getSuggestion();
+    String suggestionURL = uicomponent.getSuggestionURL();
     float searchTime = uicomponent.getSearchTime();
     String resutlsCaption = _ctx.appRes("UIDefaultSearchResult.label.resutlsCaption");
     String ofAboutCaption = _ctx.appRes("UIDefaultSearchResult.label.ofAboutCaption");
@@ -75,7 +76,7 @@ import org.exoplatform.services.wcm.publication.defaultlifecycle.Util;
       <div style="padding: 10px 0px 0px; font-size: 15px; font-style: italic;">
         <%= newSuggestion %>
         :
-        <strong><%= suggestion %></strong>
+        <strong><a href="<%= suggestionURL %>"><%= suggestion %></a></strong>
       </div>
       <%
     }

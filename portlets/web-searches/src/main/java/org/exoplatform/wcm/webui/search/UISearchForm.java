@@ -28,6 +28,7 @@ import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.search.QueryCriteria;
@@ -126,19 +127,23 @@ public class UISearchForm extends UIForm {
 		String queryString = requestWrapper.getQueryString();
 		UIFormStringInput keywordInput = getUIStringInput(KEYWORD_INPUT);
 		if (queryString != null && queryString.matches(UISearchResult.PARAMETER_REGX)) {
+			keywordInput.setValue(null);			
 			queryString = URLDecoder.decode(queryString, "UTF-8");
 			String[] params = queryString.split("&");
-			String portalParam = params[0];
-			String currentPortal = portalParam.split("=")[1];
-			String keywordParam = queryString.substring(portalParam.length() + 1);
-			String keyword = keywordParam.substring("keyword=".length());
-			if (keyword == null || keyword.length() == 0) {
-				keywordInput.setValue(null);
-			} else {
-				keywordInput.setValue(keyword);
+			for (String param:params) {
+				String[] pair = param.split("=");
+				if (pair.length==2) {
+					String key = pair[0];
+					String val = pair[1];
+					if ("portal".equals(key)) {
+						getUIFormSelectBox(PORTALS_SELECTOR).setValue(val);
+					} else if ("keyword".equals(key)) {
+						keywordInput.setValue(val);
+					}
+				}
 			}
-			getUIFormSelectBox(PORTALS_SELECTOR).setValue(currentPortal);
 		}
+
 		super.processRender(context);
 	}
 
@@ -247,8 +252,8 @@ public class UISearchForm extends UIForm {
 			}
 			String resultType = null;			
 			if (uiPageCheckbox.isChecked() && uiDocumentCheckbox.isChecked()) {
-			  resultType = bundle.getString("UISearchForm.documentCheckBox.label")
-	      + " & " + bundle.getString("UISearchForm.pageCheckBox.label");
+			  resultType = bundle.getString("UISearchForm.pageCheckBox.label")
+			  + " & " + bundle.getString("UISearchForm.documentCheckBox.label");
 			} else if (uiPageCheckbox.isChecked() && !uiDocumentCheckbox.isChecked()) {
 			  resultType = bundle.getString("UISearchForm.pageCheckBox.label");
 			} else if (!uiPageCheckbox.isChecked() && uiDocumentCheckbox.isChecked()) {
@@ -279,7 +284,7 @@ public class UISearchForm extends UIForm {
 				uiSearchResult.setPageList(paginatedQueryResult);
 				float timeSearch = paginatedQueryResult.getQueryTimeInSecond();
 				uiSearchResult.setSearchTime(timeSearch);
-				uiSearchResult.setSuggetions(paginatedQueryResult.getSpellSuggestion());
+				uiSearchResult.setSuggestion(paginatedQueryResult.getSpellSuggestion());
 			} catch (Exception e) {
 				uiApp.addMessage(new ApplicationMessage(MESSAGE_NOT_SUPPORT_KEYWORD,
 						null, ApplicationMessage.WARNING));

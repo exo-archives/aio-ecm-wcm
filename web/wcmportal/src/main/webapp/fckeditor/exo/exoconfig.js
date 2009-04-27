@@ -35,6 +35,12 @@ FCKConfig.ToolbarSets["BasicWCM"] = [
 	['Style','FontFormat','FontName','FontSize']
 ] ;
 
+FCKConfig.ToolbarSets["SuperBasicWCM"] = [
+     ['Source','-','Bold','Italic','Underline'],
+     ['-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
+     ['-','Link','Unlink','Insert link to a site page','Insert Gadget','Insert Image','Insert/Link to DMS Document'],	
+] ;
+
 FCKConfig.ToolbarSets["CSSToolBar"] = [
 	['Insert Image']
 ];

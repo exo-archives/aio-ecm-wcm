@@ -119,16 +119,16 @@
 					</div>
 					<% 
 					String html = htmlFile.getNode("jcr:content").getProperty("jcr:data").getString();
-					WikiLinkParser passer = new WikiLinkParser(html);
+					WikiLinkParser parser = new WikiLinkParser(html);
 					%>
-					<%=passer.paseHTML()%>
+					<%=parser.parseHTML()%>
 				</div>
 		<%
 	} else {
 			String html = htmlFile.getNode("jcr:content").getProperty("jcr:data").getString();
-			WikiLinkParser passer = new WikiLinkParser(html);
+			WikiLinkParser parser = new WikiLinkParser(html);
 		%>
-		<%=passer.paseHTML()%>
+		<%=parser.parseHTML()%>
 		<%
 	}
 %>

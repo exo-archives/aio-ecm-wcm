@@ -100,7 +100,8 @@ public class UICorrectContentsViewer extends UIListViewerBase {
       portletPreferences.setValues(UIContentListViewerPortlet.CONTENT_LIST, tempContents.toArray(new String[0]));      
       portletPreferences.store();
     }        
-    ObjectPageList pageList = new ObjectPageList(nodes, itemsPerPage);
+    getChildren().clear();
+    ObjectPageList pageList = new ObjectPageList(nodes, itemsPerPage);    
     UIContentListPresentation contentListPresentation = addChild(UIContentListPresentation.class, null, null);
     String templatePath = getFormViewTemplatePath();
     ResourceResolver resourceResolver = getTemplateResourceResolver();       

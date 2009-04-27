@@ -33,7 +33,6 @@ import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.wcm.publication.PublicationState;
 import org.exoplatform.services.wcm.utils.PaginatedNodeIterator;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -87,7 +86,8 @@ public class UIFolderViewer extends UIListViewerBase {
     }
     int itemsPerPage = Integer.parseInt(portletPreferences.getValue(UIContentListViewerPortlet.ITEMS_PER_PAGE, null));
     PaginatedNodeIterator paginatedNodeIterator = new PaginatedNodeIterator(nodeIterator, itemsPerPage);
-    UIContentListPresentation contentListPresentation = addChild(UIContentListPresentation.class, null, null);
+    getChildren().clear();
+    UIContentListPresentation contentListPresentation = addChild(UIContentListPresentation.class, null, null);    
     String templatePath = getFormViewTemplatePath();
     ResourceResolver resourceResolver = getTemplateResourceResolver();    
     contentListPresentation.init(templatePath, resourceResolver, paginatedNodeIterator);    
