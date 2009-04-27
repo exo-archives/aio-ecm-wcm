@@ -50,7 +50,9 @@ public class PostCreateContentEventListener extends Listener<CmsService, Node>{
     Node currentNode = event.getData();
     if(currentNode.canAddMixin("exo:rss-enable")) {
       currentNode.addMixin("exo:rss-enable");
-      currentNode.setProperty("exo:title",currentNode.getName());
+      if(!currentNode.hasProperty("exo:title")) {
+        currentNode.setProperty("exo:title",currentNode.getName()); 
+      }      
     }
     if(webContentSchemaHandler.isWebcontentChildNode(currentNode))
       return;
