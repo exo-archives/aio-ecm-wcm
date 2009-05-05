@@ -30,6 +30,7 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -56,14 +57,9 @@ public class UICorrectContentsViewer extends UIListViewerBase {
     setViewAbleContent(true);
     String repository = portletPreferences.getValue(UIContentListViewerPortlet.REPOSITORY, null);
     String worksapce = portletPreferences.getValue(UIContentListViewerPortlet.WORKSPACE, null);
-    RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
-    SessionProvider sessionProvider = null;
-    String userId = Util.getPortalRequestContext().getRemoteUser();
-    if (userId == null) {
-      sessionProvider = SessionProviderFactory.createAnonimProvider();
-    } else {
-      sessionProvider = SessionProviderFactory.createSessionProvider();
-    }
+    RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);    
+    ThreadLocalSessionProviderService providerService = getApplicationComponent(ThreadLocalSessionProviderService.class);
+    SessionProvider sessionProvider = providerService.getSessionProvider(null);
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
     Session session = sessionProvider.getSession(worksapce, manageableRepository);
     Node root = session.getRootNode();

@@ -17,28 +17,21 @@
 package org.exoplatform.wcm.webui.scv;
 
 import java.security.AccessControlException;
-import java.util.HashMap;
 
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
-import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
 import org.apache.commons.logging.Log;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.services.ecm.publication.PublicationPlugin;
-import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant.SITE_MODE;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.WebUIPropertiesConfigService;
 import org.exoplatform.wcm.webui.WebUIPropertiesConfigService.PopupWindowProperties;
@@ -162,14 +155,9 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
     if(repository == null || worksapce == null || nodeIdentifier == null) 
       throw new ItemNotFoundException();
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
-    ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-    String userId = Util.getPortalRequestContext().getRemoteUser();
-    SessionProvider sessionProvider = null;
-    if(userId == null) {
-      sessionProvider = SessionProviderFactory.createAnonimProvider();
-    }else {
-      sessionProvider = SessionProviderFactory.createSessionProvider();
-    }
+    ManageableRepository manageableRepository = repositoryService.getRepository(repository);    
+    ThreadLocalSessionProviderService localSessionProviderService = getApplicationComponent(ThreadLocalSessionProviderService.class);
+    SessionProvider sessionProvider = localSessionProviderService.getSessionProvider(null);    
     Session session = sessionProvider.getSession(worksapce, manageableRepository);
     Node content = null;
     try {
@@ -179,37 +167,6 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
     }
     return content;
   } 
-
-  private Node getLiveRevision(Node content) throws Exception {
-    if (content == null) return null;
-    HashMap<String,Object> context = new HashMap<String, Object>();    
-    context.put(Constant.RUNTIME_MODE, SITE_MODE.LIVE);    
-    PublicationService pubService = getApplicationComponent(PublicationService.class);
-    String lifecycleName = pubService.getNodeLifecycleName(content);
-    PublicationPlugin pubPlugin = pubService.getPublicationPlugins().get(lifecycleName);
-    return pubPlugin.getNodeView(content, context);
-  }    
-
-  private String getRevisionState(Node content) throws Exception {
-    String currentState = null;
-    try {
-      currentState = content.getProperty("publication:currentState").getString();
-    } catch (Exception e) {
-    } 
-    if(Constant.DRAFT_STATE.equals(currentState))
-      return Constant.DRAFT_STATE;
-    if(Constant.ENROLLED_STATE.equals(currentState)) {
-      String liveRevision = null;
-      try {
-        liveRevision = content.getProperty("publication:liveRevision").getString();
-      } catch (Exception e) {       
-      }
-      if(liveRevision != null && liveRevision.length()>0) 
-        return Constant.LIVE_STATE;
-      return Constant.OBSOLETE_STATE;
-    }
-    return null;
-  }
 
   /**
    * Can edit content.

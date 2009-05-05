@@ -32,6 +32,7 @@ import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.utils.PaginatedNodeIterator;
 import org.exoplatform.wcm.webui.Utils;
@@ -112,12 +113,8 @@ public class UIFolderViewer extends UIListViewerBase {
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);    
     String userId = Util.getPortalRequestContext().getRemoteUser();
-    SessionProvider sessionProvider = null;
-    if (userId == null) {
-      sessionProvider = SessionProviderFactory.createAnonimProvider();
-    } else {
-      sessionProvider = SessionProviderFactory.createSessionProvider();
-    }
+    ThreadLocalSessionProviderService providerService = getApplicationComponent(ThreadLocalSessionProviderService.class);
+    SessionProvider sessionProvider = providerService.getSessionProvider(null);
     Session session = sessionProvider.getSession(worksapce, manageableRepository);
     TemplateService templateService = getApplicationComponent(TemplateService.class);
     List<String> listDocumentTypes = templateService.getDocumentTemplates(repository);

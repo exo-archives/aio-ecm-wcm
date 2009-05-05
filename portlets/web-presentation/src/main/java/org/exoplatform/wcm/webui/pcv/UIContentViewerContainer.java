@@ -41,6 +41,7 @@ import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.publication.PublicationState;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant;
@@ -135,14 +136,9 @@ public class UIContentViewerContainer extends UIContainer {
 		String repository = params[0];
 		String workspace = params[1];
 		Node currentNode = null;
-		SessionProvider sessionProvider = null;
-		Session session = null;
-		String userId = Util.getPortalRequestContext().getRemoteUser();
-		if (userId == null) {
-			sessionProvider = SessionProviderFactory.createAnonimProvider();
-		} else {
-			sessionProvider = SessionProviderFactory.createSessionProvider();
-		}
+		ThreadLocalSessionProviderService providerService = getApplicationComponent(ThreadLocalSessionProviderService.class);
+		SessionProvider sessionProvider = providerService.getSessionProvider(null);
+		Session session = null;		
 		if (object instanceof ItemNotFoundException
 				|| object instanceof AccessControlException
 				|| object instanceof ItemNotFoundException || object == null) {
