@@ -155,7 +155,14 @@
 										}
 									}
 									if(htmlContent == null || htmlContent.equals("")) {
-										htmlContent = "<div id=\"navigation-generator\"><div class=\"UIWCMNavigationPortlet\"><div class=\"UINavigationBar\"><div class=\"UIHorizontalTabs\"><span></span></div></div></div></div>";
+										htmlContent = 	"<div id=\"navigation-generator\">\n" + 
+														"\t<div class=\"UIWCMNavigationPortlet\">\n" + 
+														"\t\t<div class=\"UINavigationBar\">\n" + 
+														"\t\t\t<div class=\"UIHorizontalTabs\"><span></span></div>\n" +
+														"\t\t</div>\n" + 
+														"\t</div>\n" + 
+														"</div>" + 
+														"<script type=\"text/javascript\">/* <![CDATA[ */ renderNavigations(); /* ]]> */</script>";
 									}
 									String[] htmlArguments = ["jcrPath=/node/default.html/jcr:content/jcr:data", "options=toolbar:CompleteWCM,width:100%", htmlContent];
 			    				uicomponent.addWYSIWYGField(htmlWYSIWYGFormId, htmlArguments) ;
@@ -288,25 +295,26 @@
 																 ".UIWCMNavigationPortlet .TabsContainer {\n\theight: 41px;\n}\n\n" +
 																 ".UIWCMNavigationPortlet .UITab {\n\tfloat: left;\n\ttext-align: center;\n\twidth: auto;\n}\n\n" +
 																 ".UIWCMNavigationPortlet .UITab  a{\n\tfont-size: 14px;\n\tfont-family: Arial;\n\tfont-weight: normal;\n}\n\n" +
-																 ".UIWCMNavigationPortlet .UITab .NormalNavigationTab {\n\tmargin-left: 0px;\n}\n\n" +
+																 ".UIWCMNavigationPortlet .UITab .NormalNavigationTab {\n\tmargin: 0px;\n}\n\n" +
+																 ".UIWCMNavigationPortlet .UITab .NormalNavigationTab .LeftTab {\n\tbackground: none;\n}\n\n" +
 																 ".UIWCMNavigationPortlet .UITab .NormalNavigationTab .RightTab {\n\tbackground: url('/portal/rest/jcr/repository/collaboration/sites%20content/live/acme/web%20contents/site%20artifacts/navigation/Default/medias/images/NavigationTab.gif') right -82px no-repeat;\n\tpadding-right: 2px;\n}\n\n" +
-																 ".UIWCMNavigationPortlet .UITab .NormalNavigationTab .MiddleTab {\n\tline-height: 20px;\n\tpadding: 13px 20px 6px 20px;\n}\n\n" +
+																 ".UIWCMNavigationPortlet .UITab .NormalNavigationTab .MiddleTab {\n\tline-height: 20px;\n\tpadding: 13px 20px 6px 20px;\n\tbackground: none;\n}\n\n" +
 																 ".UIWCMNavigationPortlet .UITab .NormalNavigationTab .TabIcon {\n\tcolor: #fff;\n\tline-height: 21px;\n}" +
 																 ".UIWCMNavigationPortlet .UITab .NormalNavigationTab a {\n\tcolor: #FFFFFF;\n\tfont-size: 13px;\n}\n\n" +
 																 ".UIWCMNavigationPortlet .UITab .NormalNavigationTab .DefaultPageIcon {\n\tpadding: 2px 0 1px 20px;\n}\n\n" +
-																 ".UIWCMNavigationPortlet .UITab .HighlightNavigationTab {\n\tmargin-left: 0px;\n}\n\n" +
+																 ".UIWCMNavigationPortlet .UITab .HighlightNavigationTab {\n\tmargin: 0px;\n}\n\n" +
 																 ".UIWCMNavigationPortlet .UITab .HighlightNavigationTab .LeftTab  {\n\tbackground: none;\n}\n\n" +
 																 ".UIWCMNavigationPortlet .UITab .HighlightNavigationTab .RightTab {\n\tbackground: url('/portal/rest/jcr/repository/collaboration/sites%20content/live/acme/web%20contents/site%20artifacts/navigation/Default/medias/images/NavigationTab.gif') right -82px no-repeat;\n\tpadding-right: 2px;\n}\n\n" +
 																 ".UIWCMNavigationPortlet .UITab .HighlightNavigationTab .MiddleTab {\n\tbackground: url('/portal/rest/jcr/repository/collaboration/sites%20content/live/acme/web%20contents/site%20artifacts/navigation/Default/medias/images/NavigationTab.gif') left -123px repeat-x;\n\tline-height: 20px;\n\tpadding: 13px 20px 6px 20px;\n}\n\n" +
 																 ".UIWCMNavigationPortlet .UITab .HighlightNavigationTab .TabIcon {\n\tcolor: #fff;\n\tline-height: 21px;\n}\n\n" +
 																 ".UIWCMNavigationPortlet .UITab .HighlightNavigationTab a {\n\tcolor: #FFFFFF;\n\tfont-size:13px;\n}\n\n" +																	
 																 ".UIWCMNavigationPortlet .UITab .HighlightNavigationTab .DefaultPageIcon {\n\tpadding: 2px 0 1px 20px;\n}\n\n" +
-																 ".UIWCMNavigationPortlet .UITab .SelectedNavigationTab {\n\tmargin-left: 0px;\n}\n\n" +																	
+																 ".UIWCMNavigationPortlet .UITab .SelectedNavigationTab {\n\tmargin: 0px;\n}\n\n" +
 																 ".UIWCMNavigationPortlet .UITab .SelectedNavigationTab .LeftTab {\n\tbackground: url('/portal/rest/jcr/repository/collaboration/sites%20content/live/acme/web%20contents/site%20artifacts/navigation/Default/medias/images/NavigationTab.gif') no-repeat left top;\n\tpadding-left: 4px;\n}\n\n" +
 																 ".UIWCMNavigationPortlet .UITab .SelectedNavigationTab .RightTab {\n\tbackground: url('/portal/rest/jcr/repository/collaboration/sites%20content/live/acme/web%20contents/site%20artifacts/navigation/Default/medias/images/NavigationTab.gif') no-repeat right top;\n\tpadding-right: 4px;}\n\n" +
 																 ".UIWCMNavigationPortlet .UITab .SelectedNavigationTab .MiddleTab {\n\tline-height: 18px;\n\tbackground: url('/portal/rest/jcr/repository/collaboration/sites%20content/live/acme/web%20contents/site%20artifacts/navigation/Default/medias/images/NavigationTab.gif') repeat-x left -41px;\n\tpadding: 13px 20px 6px 20px;\n}\n\n" +
 																 ".UIWCMNavigationPortlet .UITab .SelectedNavigationTab .TabIcon {\n\tcolor: #f57a00;\n\tline-height: 16px;\n}\n\n" +
-																 ".UIWCMNavigationPortlet .UITab .SelectedNavigationTab a {\n\tcolor:#000000;\n\tfont-size:18px;\n\tline-height: 22px;\n}\n\n" +
+																 ".UIWCMNavigationPortlet .UITab .SelectedNavigationTab a {\n\tcolor:#000000;\n\tfont-size:18px;\n\tline-height: 22px;\n\tmargin: 0;\n}\n\n" +
 																 ".UIWCMNavigationPortlet .UITab .SelectedNavigationTab .DefaultPageIcon {\n\tpadding: 2px 0 1px 20px;\n}";
 									}
 									String[] fieldContentCSS = ["jcrPath=/node/css/default.css/jcr:content/jcr:data", cssContent] ;
@@ -347,7 +355,7 @@
 										} 
 									} 
 									if(jsContent == null || jsContent.equals("")) {
-										jsContent = 	"eXo.core.Browser.addOnLoadCallback('renderNavigations', function() {
+										jsContent = 	"eXo.core.Browser.addOnLoadCallback('renderNavigations', function() {\n" +
 																	"\trenderNavigations();\n"  +
 																	"\teXo.portal.UIWCMNavigation.onLoad('UIWCMNavigationPortlet');n"  +
 																	"\teXo.portal.UIWCMNavigation.loadScroll();n"  +
