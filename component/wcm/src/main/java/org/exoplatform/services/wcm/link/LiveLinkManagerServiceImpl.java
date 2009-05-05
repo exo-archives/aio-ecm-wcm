@@ -16,7 +16,6 @@
  */
 package org.exoplatform.services.wcm.link;
 
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -114,8 +113,9 @@ public class LiveLinkManagerServiceImpl implements LiveLinkManagerService {
       for (String brokenUrl : listBrokenUrls) {
         LinkBean linkBean = new LinkBean(brokenUrl, LinkBean.STATUS_BROKEN);
         listBrokenLinks.add(linkBean);
-      }
+      }      
     }
+    sessionProvider.close();
     return listBrokenLinks;
   }
 
@@ -145,22 +145,33 @@ public class LiveLinkManagerServiceImpl implements LiveLinkManagerService {
 
   public void validateLink() throws Exception {
     Collection<NodeLocation> nodeLocationCollection = configurationService.getAllLivePortalsLocation();
-    for (NodeLocation nodeLocation : nodeLocationCollection) {
-      String repository = nodeLocation.getRepository();
-      String workspace = nodeLocation.getWorkspace();
-      String path = nodeLocation.getPath();
-      ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      Session session = SessionProvider.createSystemProvider().getSession(workspace, manageableRepository);
-      updateLinkStatus(session, "select * from exo:linkable where jcr:path like '" + path + "/%'");
-    }
+    SessionProvider sessionProvider = SessionProvider.createSystemProvider();
+    try {
+      for (NodeLocation nodeLocation : nodeLocationCollection) {
+        String repository = nodeLocation.getRepository();
+        String workspace = nodeLocation.getWorkspace();
+        String path = nodeLocation.getPath();
+        ManageableRepository manageableRepository = repositoryService.getRepository(repository);      
+        Session session = sessionProvider.getSession(workspace, manageableRepository);
+        updateLinkStatus(session, "select * from exo:linkable where jcr:path like '" + path + "/%'");      
+      } 
+    } catch (Exception e) {
+    }finally {
+      sessionProvider.close();
+    }        
   }
 
   public void validateLink(String portalName) throws Exception {
     SessionProvider sessionProvider = SessionProvider.createSystemProvider();
-    Node portal = livePortalManagerService.getLivePortal(portalName, sessionProvider);
-    String path = portal.getPath();
-    Session session = portal.getSession();
-    updateLinkStatus(session, "select * from exo:linkable where jcr:path like '" + path + "/%'");
+    try {
+      Node portal = livePortalManagerService.getLivePortal(portalName, sessionProvider);
+      String path = portal.getPath();
+      Session session = portal.getSession();
+      updateLinkStatus(session, "select * from exo:linkable where jcr:path like '" + path + "/%'"); 
+    } catch (Exception e) {
+    }finally {
+      sessionProvider.close();
+    }        
   }
 
   protected void updateLinkStatus(Session session, String queryCommand) throws Exception{
