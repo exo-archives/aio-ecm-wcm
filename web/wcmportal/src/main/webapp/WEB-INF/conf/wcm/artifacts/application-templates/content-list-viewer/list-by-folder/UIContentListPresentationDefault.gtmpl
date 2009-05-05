@@ -50,10 +50,10 @@ import org.exoplatform.wcm.webui.clv.UIContentListViewerPortlet;
 		    String itemTitle = uicomponent.getTitle(node);
 				String itemDateCreated = uicomponent.getCreatedDate(node);
 				String itemOwner = uicomponent.getAuthor(node);			
-				String imgSrc = uicomponent.getIllustrativeImage(node);
+				String imgSrc = uicomponent.getIllustrativeImage(node);								
 				if (itemTitle != null && itemTitle.trim().length() != 0) {
 					itemName = itemTitle;
-				}		
+				}						
 				String contentkEdittingLink = uicomponent.event("EditContent", tempNode.getPath());		
 				
 			%>	
