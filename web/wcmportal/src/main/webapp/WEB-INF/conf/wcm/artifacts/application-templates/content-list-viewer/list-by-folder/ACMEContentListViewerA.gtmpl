@@ -60,11 +60,16 @@ import org.exoplatform.services.wcm.publication.PublicationState;
 						<% 
 							if (uicomponent.isShowField(UIContentListViewerPortlet.SHOW_TITLE)) {
 								%>
-									<div class="CaptionTitle"><a href="$itemLink">$itemName</a>
+									<div class="CaptionTitle" >
+										<% if (uicomponent.isShowField(UIContentListViewerPortlet.SHOW_LINK)) {%>
+											<a href="$itemLink">$itemName</a>
+										<% } else { %>	
+											$itemName
+										<% } %>	
 										<% 
 											if(uicomponent.showDraftButton(tempNode)) { 
 												%>
-													<span>[ <%=draftLabel%>, </span><a href="$itemLink" class="CaptionDraft"><%=editActionLabel%></a> <span>]</span>
+													<span>[ <%=draftLabel%>, </span><a href="$contentkEdittingLink" class="CaptionDraft"><%=editActionLabel%></a> <span>]</span>
 												<% 
 											} 
 										%>	

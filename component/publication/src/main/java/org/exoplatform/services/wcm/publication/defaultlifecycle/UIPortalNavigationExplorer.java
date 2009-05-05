@@ -24,6 +24,8 @@ import javax.jcr.Node;
 
 import org.apache.commons.lang.StringUtils;
 import org.exoplatform.commons.utils.PageList;
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.model.PageNavigation;
@@ -32,8 +34,10 @@ import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.resources.LocaleConfig;
 import org.exoplatform.services.resources.LocaleConfigService;
+import org.exoplatform.services.wcm.core.WCMService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.services.wcm.publication.defaultlifecycle.UIPublicationTree.TreeNode;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -91,7 +95,9 @@ public class UIPortalNavigationExplorer extends UIContainer{
     UIPortalApplication portalApplication = Util.getUIPortalApplication();
     LocaleConfig localeConfig = getApplicationComponent(LocaleConfigService.class).getLocaleConfig(portalApplication.getLocale().getLanguage());
 
-    if(isSharedPortalContent()) {
+	ExoContainer container = ExoContainerContext.getCurrentContainer();
+	WCMService wcmService = (WCMService)container.getComponentInstanceOfType(WCMService.class);
+    if(wcmService.isSharedPortal(portalName)) {
       UIPublicationTree tree = addChild(UIPublicationTree.class, null, "UIPortalTree");      
       for(String portal : this.runningPortals) {
         PageNavigation pageNavigation = getPortalNavigation(portal);
@@ -138,19 +144,6 @@ public class UIPortalNavigationExplorer extends UIContainer{
       return PageNavigation.class.cast(object);
     }
     return null;
-  }
-
-  /**
-   * Checks if is shared portal content.
-   * 
-   * @return true, if is shared portal content
-   * 
-   * @throws Exception the exception
-   */
-  private boolean isSharedPortalContent() throws Exception{
-    LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
-    Node sharedPortal = livePortalManagerService.getLiveSharedPortal(SessionProviderFactory.createSessionProvider());
-    return sharedPortal.getName().equals(portalName);    
   }
 
   /**

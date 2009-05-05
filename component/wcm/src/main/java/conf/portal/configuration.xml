@@ -129,6 +129,11 @@
    </component>
    
   <component>
+    <key>org.exoplatform.services.wcm.core.WCMService</key>
+    <type>org.exoplatform.services.wcm.core.impl.WCMServiceImpl</type>    
+  </component>
+    
+  <component>
     <key>org.exoplatform.services.wcm.skin.XSkinService</key>
     <type>org.exoplatform.services.wcm.skin.XSkinService</type>    
   </component>

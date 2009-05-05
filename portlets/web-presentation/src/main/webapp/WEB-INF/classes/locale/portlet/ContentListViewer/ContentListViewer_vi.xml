@@ -26,6 +26,7 @@
       <ViewerDateCreated>Hiển thị ngày tạo tài liệu</ViewerDateCreated>
       <ViewerSummary>Hiển thị sơ lược nội dung tài liệu</ViewerSummary>
       <Header>Tiêu đề form trình bày kết quả</Header>
+      <ViewerLink>Show link</ViewerLink>
       <ViewerHeader>Hiển thị tiêu đề form trình bày kết quả</ViewerHeader>
       <ViewerMode>Chế độ hiển thị</ViewerMode>
       <ManualViewerMode>Thủ công</ManualViewerMode>

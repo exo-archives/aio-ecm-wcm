@@ -61,27 +61,30 @@ public class UICorrectContentSelectorForm extends UIBaseNodeTreeSelector impleme
     LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
     String currentPortalName = Util.getUIPortal().getName();
     SessionProvider provider = SessionProviderFactory.createSessionProvider();
-    Node currentPortal = livePortalManagerService.getLivePortal(currentPortalName, provider);
-    Node sharedPortal = livePortalManagerService.getLiveSharedPortal(provider);
-    treeBuilder.setCurrentPortal(currentPortal);
-    treeBuilder.setSharedPortal(sharedPortal);
-    treeBuilder.setRootTreeNode(currentPortal.getParent());
-    UIMultiSelectionPanel uiMultiSelectionPanel = getChild(UIMultiSelectionPanel.class);
-    uiMultiSelectionPanel.updateGrid();
-    UISelectedContentGrid contentsGrid = getChild(UISelectedContentGrid.class);
-    PortletPreferences preferences = context.getRequest().getPreferences();
-    String [] contents = preferences.getValues(UIContentListViewerPortlet.CONTENT_LIST, null);
-    if (contents != null && contents.length > 0) {
-      for (int i = 0; i < contents.length; i++) {
-        if (contents[i] != null) existedCategoryList.add(contents[i]);
-      }
+    try {
+	    Node currentPortal = livePortalManagerService.getLivePortal(currentPortalName, provider);
+	    Node sharedPortal = livePortalManagerService.getLiveSharedPortal(provider);
+	    treeBuilder.setCurrentPortal(currentPortal);
+	    treeBuilder.setSharedPortal(sharedPortal);
+	    treeBuilder.setRootTreeNode(currentPortal.getParent());
+	    UIMultiSelectionPanel uiMultiSelectionPanel = getChild(UIMultiSelectionPanel.class);
+	    uiMultiSelectionPanel.updateGrid();
+	    UISelectedContentGrid contentsGrid = getChild(UISelectedContentGrid.class);
+	    PortletPreferences preferences = context.getRequest().getPreferences();
+	    String [] contents = preferences.getValues(UIContentListViewerPortlet.CONTENT_LIST, null);
+	    if (contents != null && contents.length > 0) {
+	      for (int i = 0; i < contents.length; i++) {
+	        if (contents[i] != null) existedCategoryList.add(contents[i]);
+	      }
+	    }
+	    contentsGrid.setSelectedCategories(existedCategoryList);    
+	    if (existedCategoryList.size() > 0) {
+	      contentsGrid.setRendered(true);
+	    }
+	    contentsGrid.updateGrid(contentsGrid.getUIPageIterator().getCurrentPage());
+    } finally {
+    	provider.close();
     }
-    contentsGrid.setSelectedCategories(existedCategoryList);    
-    if (existedCategoryList.size() > 0) {
-      contentsGrid.setRendered(true);
-    }
-    contentsGrid.updateGrid(contentsGrid.getUIPageIterator().getCurrentPage());
-    provider.close();
   }
 
   @Override

@@ -27,6 +27,7 @@
       <ViewerDateCreated>Show date created</ViewerDateCreated>
       <ViewerSummary>Show summary</ViewerSummary>
       <Header>Header</Header>
+      <ViewerLink>Show link</ViewerLink>
       <ViewerHeader>Show header</ViewerHeader>
       <ViewerMode>Mode</ViewerMode>
       <ManualViewerMode>Manual</ManualViewerMode>

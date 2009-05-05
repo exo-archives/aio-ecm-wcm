@@ -17,7 +17,6 @@
 package org.exoplatform.wcm.webui.clv.config;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -124,6 +123,9 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
   /** The Constant VIEWER_HEADER. */
   public static final String VIEWER_HEADER                = "ViewerHeader";
 
+  /** The Constant VIEWER_LINK. */
+  public static final String VIEWER_LINK                = "ViewerLink";
+  
   public static final String VIEWER_MODES                 = "ViewerMode";
 
   public static final String VIEWER_MANUAL_MODE           = "ManualViewerMode";
@@ -212,6 +214,8 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
     dateCreatedViewerCheckbox.setChecked(true);
     UIFormCheckBoxInput viewerHeader = new UIFormCheckBoxInput(VIEWER_HEADER, VIEWER_HEADER, null);
     viewerHeader.setChecked(Boolean.parseBoolean(portletPreferences.getValue(UIContentListViewerPortlet.SHOW_HEADER, null)));    
+    UIFormCheckBoxInput viewerLink = new UIFormCheckBoxInput(VIEWER_LINK, VIEWER_LINK, null);
+    viewerLink.setChecked(Boolean.parseBoolean(portletPreferences.getValue(UIContentListViewerPortlet.SHOW_LINK, null)));    
     String refreshAble = portletPreferences.getValue(UIContentListViewerPortlet.SHOW_REFRESH_BUTTON, null);
     viewerButtonRefreshCheckbox.setChecked(Boolean.parseBoolean(refreshAble));
     String imageShowAble = portletPreferences.getValue(UIContentListViewerPortlet.SHOW_THUMBNAILS_VIEW, null);
@@ -257,6 +261,7 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
     addChild(dateCreatedViewerCheckbox);
     addChild(summaryViewerCheckbox);
     addChild(viewerHeader);
+    addChild(viewerLink);
 
     setActions(new String[] { "Save", "Cancel" });
   }
@@ -326,11 +331,15 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     ManageableRepository manageableRepository = repositoryService.getCurrentRepository();
     String repository = manageableRepository.getConfiguration().getName();
-    List<Node> templateNodeList = templateManagerService.getTemplatesByCategory(repository, portletName, category, provider);
-    for (Node templateNode : templateNodeList) {
-      String templateName = templateNode.getName();
-      String templatePath = templateNode.getPath();
-      templateOptionList.add(new SelectItemOption<String>(templateName, templatePath));
+    try {
+	    List<Node> templateNodeList = templateManagerService.getTemplatesByCategory(repository, portletName, category, provider);
+	    for (Node templateNode : templateNodeList) {
+	      String templateName = templateNode.getName();
+	      String templatePath = templateNode.getPath();
+	      templateOptionList.add(new SelectItemOption<String>(templateName, templatePath));
+	    }
+    } finally {
+    	provider.close();
     }
     return templateOptionList;
   }
@@ -386,6 +395,7 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
       String viewSummary = uiViewerManagementForm.getUIFormCheckBoxInput(UIViewerManagementForm.VIEWER_SUMMARY).isChecked() ? "true" : "false";
       String viewDateCreated = uiViewerManagementForm.getUIFormCheckBoxInput(UIViewerManagementForm.VIEWER_DATE_CREATED).isChecked() ? "true" : "false";
       String viewerHeader = uiViewerManagementForm.getUIFormCheckBoxInput(UIViewerManagementForm.VIEWER_HEADER).isChecked() ? "true" : "false";
+      String viewerLink = uiViewerManagementForm.getUIFormCheckBoxInput(UIViewerManagementForm.VIEWER_LINK).isChecked() ? "true" : "false";
       UIFormRadioBoxInput modeBoxInput = (UIFormRadioBoxInput) uiViewerManagementForm.getChildById(UIViewerManagementForm.VIEWER_MODES);
       String newViewerMode = modeBoxInput.getValue();
       UIFormRadioBoxInput orderTypeBoxInput = (UIFormRadioBoxInput) uiViewerManagementForm.getChildById(UIViewerManagementForm.ORDER_TYPES);
@@ -413,6 +423,7 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
       portletPreferences.setValue(UIContentListViewerPortlet.SHOW_SUMMARY, viewSummary);
       portletPreferences.setValue(UIContentListViewerPortlet.HEADER, header);
       portletPreferences.setValue(UIContentListViewerPortlet.SHOW_HEADER, viewerHeader);
+      portletPreferences.setValue(UIContentListViewerPortlet.SHOW_LINK, viewerLink);
       portletPreferences.setValue(UIContentListViewerPortlet.VIEWER_MODE, newViewerMode);
       portletPreferences.setValue(UIContentListViewerPortlet.ORDER_TYPE, orderType);
       

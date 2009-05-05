@@ -27,6 +27,7 @@
       <ViewerDateCreated>Montrer la date de création</ViewerDateCreated>
       <ViewerSummary>Montrer le résumé</ViewerSummary>
       <Header>Entête</Header>
+      <ViewerLink>Montrer le lien</ViewerLink>
       <ViewerHeader>Montrer l'entête</ViewerHeader>
       <ViewerMode>Mode</ViewerMode>
       <ManualViewerMode>Manuel</ManualViewerMode>

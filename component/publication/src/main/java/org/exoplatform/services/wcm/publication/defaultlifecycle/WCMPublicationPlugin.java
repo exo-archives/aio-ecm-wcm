@@ -52,8 +52,10 @@ import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.ecm.publication.IncorrectStateUpdateLifecycleException;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
+import org.exoplatform.services.wcm.core.WCMService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.services.wcm.publication.WebpagePublicationPlugin;
 import org.exoplatform.web.application.RequestContext;
@@ -140,8 +142,9 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin{
     String portalName = getPortalForContent(node);
     if(portalName == null) {
       throw new PortalNotFoundException("This content doen't belong to any portal");
-    }   
-    if(!isSharedPortal(portalName) && !runningPortals.contains(portalName)) {
+    }
+    WCMService wcmService = (WCMService)Util.getServices(WCMService.class);
+    if(!wcmService.isSharedPortal(portalName) && !runningPortals.contains(portalName)) {
       throw new PortalNotFoundException("The portal can be dead.");
     }
 
@@ -417,20 +420,6 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin{
     return null;
   }
 
-  /**
-   * Checks if is shared portal.
-   * 
-   * @param portalName the portal name
-   * 
-   * @return true, if is shared portal
-   * 
-   * @throws Exception the exception
-   */
-  private boolean isSharedPortal(String portalName) throws Exception{
-    LivePortalManagerService livePortalManagerService = Util.getServices(LivePortalManagerService.class);
-    Node sharedPortal = livePortalManagerService.getLiveSharedPortal(SessionProviderFactory.createSessionProvider());
-    return sharedPortal.getName().equals(portalName);    
-  }
 
   /* (non-Javadoc)
    * @see org.exoplatform.services.ecm.publication.PublicationPlugin#getNodeView(javax.jcr.Node, java.util.Map)

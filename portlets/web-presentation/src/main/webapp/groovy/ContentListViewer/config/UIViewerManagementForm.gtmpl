@@ -158,10 +158,24 @@
 							<% uiform.renderField(uiform.getChildById(UIViewerManagementForm.VIEWER_HEADER)) %>
 						</td>								
 			      <td class="FieldLabel">
+				      <%=uicomponent.getLabel(uiform.getChildById(UIViewerManagementForm.VIEWER_LINK).getName()) %>
+			      </td>
+						<td class="FieldComponent">
+							<% uiform.renderField(uiform.getChildById(UIViewerManagementForm.VIEWER_LINK)) %>
+						</td>								
+					</tr>																												
+					<tr>
+			      <td class="FieldLabel">
 				      <%=uicomponent.getLabel(uiform.getChildById(UIViewerManagementForm.VIEWER_BUTTON_REFRESH).getName()) %>
 			      </td>
 						<td class="FieldComponent">
 							<% uiform.renderField(uiform.getChildById(UIViewerManagementForm.VIEWER_BUTTON_REFRESH)) %>
+						</td>								
+			      <td class="FieldLabel">
+				      &nbsp;
+			      </td>
+						<td class="FieldComponent">
+							&nbsp;
 						</td>								
 					</tr>																												
 	      </table>   					      	      

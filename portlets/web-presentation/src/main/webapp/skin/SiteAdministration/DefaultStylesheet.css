@@ -76,6 +76,7 @@
 	float: right;
 	/*float: left;*/
 	margin-left: 20px;
+	width: 120px;
 }
 
 /****** Select On *******/
@@ -83,6 +84,7 @@
 	background: url('DefaultSkin/icons/onoff.gif') no-repeat left top;
 	padding-left: 27px;
 	width: 33px;
+	float:right;
 }
 
 .UISiteAdminToolBar .SelectOn .RightSelect {
@@ -105,6 +107,7 @@
 	background: url('DefaultSkin/icons/onoff.gif') no-repeat left -34px;
 	padding-left: 3px;
 	width: 57px;
+	float:right;
 }
 
 .UISiteAdminToolBar .SelectOff .RightSelect {

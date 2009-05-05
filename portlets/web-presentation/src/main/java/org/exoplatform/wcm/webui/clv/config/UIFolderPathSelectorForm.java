@@ -69,12 +69,15 @@ public class UIFolderPathSelectorForm extends UIBaseNodeTreeSelector implements 
     LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
     String currentPortalName = Util.getUIPortal().getName();
     SessionProvider provider = SessionProviderFactory.createSessionProvider();
-    Node currentPortal = livePortalManagerService.getLivePortal(currentPortalName, provider);
-    Node sharedPortal = livePortalManagerService.getLiveSharedPortal(provider);
-    treeBuilder.setCurrentPortal(currentPortal);
-    treeBuilder.setSharedPortal(sharedPortal);
-    treeBuilder.setRootTreeNode(currentPortal.getParent());
-    provider.close();
+    try {
+    	Node currentPortal = livePortalManagerService.getLivePortal(currentPortalName, provider);
+    	Node sharedPortal = livePortalManagerService.getLiveSharedPortal(provider);
+    	treeBuilder.setCurrentPortal(currentPortal);
+    	treeBuilder.setSharedPortal(sharedPortal);
+    	treeBuilder.setRootTreeNode(currentPortal.getParent());
+    } finally {
+    	provider.close();
+    }
   }
 
   /*

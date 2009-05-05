@@ -30,8 +30,8 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.wcm.core.WCMService;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
@@ -56,13 +56,10 @@ public class UICorrectContentsViewer extends UIListViewerBase {
     PortletPreferences portletPreferences = getPortletPreference();
     setViewAbleContent(true);
     String repository = portletPreferences.getValue(UIContentListViewerPortlet.REPOSITORY, null);
-    String worksapce = portletPreferences.getValue(UIContentListViewerPortlet.WORKSPACE, null);
-    RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);    
-    ThreadLocalSessionProviderService providerService = getApplicationComponent(ThreadLocalSessionProviderService.class);
-    SessionProvider sessionProvider = providerService.getSessionProvider(null);
-    ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-    Session session = sessionProvider.getSession(worksapce, manageableRepository);
-    Node root = session.getRootNode();
+    String workspace = portletPreferences.getValue(UIContentListViewerPortlet.WORKSPACE, null);
+    WCMService wcmService = getApplicationComponent(WCMService.class);
+    Node root = wcmService.getRootNode(repository, workspace);
+
     String [] listContent = portletPreferences.getValues(UIContentListViewerPortlet.CONTENT_LIST, null);
     if (listContent == null || listContent.length == 0) {
       messageKey = "UIMessageBoard.msg.contents-not-found";
@@ -103,6 +100,7 @@ public class UICorrectContentsViewer extends UIListViewerBase {
     ResourceResolver resourceResolver = getTemplateResourceResolver();       
     contentListPresentation.init(templatePath, resourceResolver, pageList);    
     contentListPresentation.setContentColumn(portletPreferences.getValue(UIContentListViewerPortlet.HEADER, null));
+    contentListPresentation.setShowLink(Boolean.parseBoolean(portletPreferences.getValue(UIContentListViewerPortlet.SHOW_LINK, null)));
     contentListPresentation.setShowHeader(Boolean.parseBoolean(portletPreferences.getValue(UIContentListViewerPortlet.SHOW_HEADER, null)));
     contentListPresentation.setHeader(portletPreferences.getValue(UIContentListViewerPortlet.HEADER, null));    
   }  

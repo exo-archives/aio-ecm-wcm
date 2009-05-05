@@ -93,9 +93,12 @@ import org.exoplatform.webui.event.EventListener;
   /** The content column. */
   private String                   contentColumn;
 
+  /** The show link. */
+  private boolean                  showLink;
+
   /** The show header. */
   private boolean                  showHeader;
-
+  
   /** The header. */
   private String                   header;
 
@@ -543,7 +546,14 @@ import org.exoplatform.webui.event.EventListener;
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
       SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
       Session session = sessionProvider.getSession(worksapce, manageableRepository);
-      Node node = (Node) session.getItem(path);
+      String contentType=null, nodePath=null;
+      try {
+    	  Node node = (Node) session.getItem(path);
+    	  contentType = node.getPrimaryNodeType().getName();
+    	  nodePath = node.getPath();
+      } finally {
+    	  sessionProvider.close();
+      }
       UIListViewerBase uiListViewerBase = contentListPresentation.getAncestorOfType(UIListViewerBase.class);
       UIContentListViewerPortlet uiListViewerPortlet = uiListViewerBase.getAncestorOfType(UIContentListViewerPortlet.class);
       UIPopupContainer uiMaskPopupContainer = uiListViewerPortlet.getChild(UIPopupContainer.class);
@@ -552,9 +562,9 @@ import org.exoplatform.webui.event.EventListener;
 
       uiDocumentDialogForm.setRepositoryName(repository);
       uiDocumentDialogForm.setWorkspace(worksapce);
-      uiDocumentDialogForm.setContentType(node.getPrimaryNodeType().getName());
-      uiDocumentDialogForm.setNodePath(node.getPath());
-      uiDocumentDialogForm.setStoredPath(node.getPath());
+      uiDocumentDialogForm.setContentType(contentType);
+      uiDocumentDialogForm.setNodePath(nodePath);
+      uiDocumentDialogForm.setStoredPath(nodePath);
 
       uiListViewerBase.addChild(uiContentEdittingForm);
       uiContentEdittingForm.setRendered(true);
@@ -564,21 +574,39 @@ import org.exoplatform.webui.event.EventListener;
   }
 
   /**
+   * Checks if is show link.
+   * 
+   * @return true, if is show link
+   */
+  public boolean isShowLink() {
+    return showLink;
+  }
+
+  /**
+   * Sets the show link.
+   * 
+   * @param showLink the new show link
+   */
+  public void setShowLink(boolean showLink) {
+    this.showLink = showLink;
+  }
+  
+  /**
    * Checks if is show header.
    * 
    * @return true, if is show header
    */
   public boolean isShowHeader() {
-    return showHeader;
+	  return showHeader;
   }
-
+  
   /**
    * Sets the show header.
    * 
    * @param showHeader the new show header
    */
   public void setShowHeader(boolean showHeader) {
-    this.showHeader = showHeader;
+	  this.showHeader = showHeader;
   }
 
   /**

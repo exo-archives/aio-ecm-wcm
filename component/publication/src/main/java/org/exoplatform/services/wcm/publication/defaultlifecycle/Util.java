@@ -235,7 +235,9 @@ public class Util {
         }else {
           content = session.getNodeByUUID(nodeIdentifier); 
         }        
-      } catch (Exception e) {        
+      } catch (Exception e) {    
+      } finally {
+    	  sessionProvider.close();
       }
       return content;
     }

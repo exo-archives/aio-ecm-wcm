@@ -294,18 +294,20 @@
 		<% if (Utils.turnOnQuickEditable(rcontext, true)) { %> 
 			<div class="BoxOnOff SelectOff">
 				<div class="LeftSelect">
-		    	<div class="RightSelect">
-			    	<div class="CenterSelect" onclick="$turnOffQuickEditLink" title="$liveModeTitle">$turnOffQuickEditLabel</div>
+			    	<div class="RightSelect">
+				    	<div class="CenterSelect" onclick="$turnOffQuickEditLink" title="$liveModeTitle">$turnOffQuickEditLabel</div>
+				    </div>
 			    </div>
-		    </div>
+			    <div>$liveModeTitle : </div>
 			</div>		
 		<% } else { %>
 			<div class="BoxOnOff SelectOn">
 				<div class="LeftSelect">
-		    	<div class="RightSelect">
-		    		<div class="CenterSelect" onclick="$turnOnQuickEditLink" title="$editModeTitle">$turnOnQuickEditLabel</div>
-		    	</div>
-		    </div>
+			    	<div class="RightSelect">
+		    			<div class="CenterSelect" onclick="$turnOnQuickEditLink" title="$editModeTitle">$turnOnQuickEditLabel</div>
+			    	</div>
+			    </div>
+		    	<div>$liveModeTitle : </div>
 			</div>		    
 		<% } %>
 	
