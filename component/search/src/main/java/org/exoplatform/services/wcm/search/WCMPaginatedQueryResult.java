@@ -103,7 +103,10 @@ public class WCMPaginatedQueryResult extends PaginatedQueryResult {
    * (javax.jcr.Node)
    */
   protected Node filterNodeToDisplay(Node node) throws Exception {
-    Node displayNode = node;    
+    Node displayNode = node;
+    if (node.getPath().contains("web contents/site artifacts")) {
+    	return null;
+    }
     if (displayNode.isNodeType("nt:resource")) {
       displayNode = node.getParent();
     }
