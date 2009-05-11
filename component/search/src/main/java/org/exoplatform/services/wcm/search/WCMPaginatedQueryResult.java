@@ -111,9 +111,14 @@ public class WCMPaginatedQueryResult extends PaginatedQueryResult {
       displayNode = node.getParent();
     }
     if (displayNode.isNodeType("exo:htmlFile")) {
-      Node parent = displayNode.getParent();
-      if (parent.isNodeType("exo:webContent"))
-        displayNode = parent;
+      Node parent = displayNode.getParent();      
+      if (queryCriteria.isSearchWebContent()) {
+        if (parent.isNodeType("exo:webContent")) return parent;
+        else return null;
+      } else {
+        if (parent.isNodeType("exo:webContent")) return null;
+        else return displayNode;
+      }             
     }
     if(queryCriteria.isSearchWebContent()) {
       if(!queryCriteria.isSearchDocument()) {
