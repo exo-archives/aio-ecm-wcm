@@ -102,7 +102,7 @@ import org.exoplatform.services.wcm.publication.PublicationState;
 						%>
 						<div class="LeftButtonContent" onclick="javascript: location.href= '$itemLink'">
 	            			<div class="RightButtonContent">
-	                			<div class="CenterButtonContent">&raquo;</div>
+	                			<div class="CenterButtonContent"><%=labelReadMore%> &raquo;</div>
 	            			</div>
 	        			</div>
 	        			<div style="clear:left"><span></span></div>
