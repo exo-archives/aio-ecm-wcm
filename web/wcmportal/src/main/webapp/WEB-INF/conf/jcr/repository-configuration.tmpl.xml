@@ -10,7 +10,7 @@
           <!-- for system storage -->
           <container class="org.exoplatform.services.jcr.impl.storage.jdbc.JDBCWorkspaceDataContainer">
             <properties>
-              <property name="sourceName" value="jdbcexo"/>
+              <property name="source-name" value="jdbcexo"/>
               <property name="dialect" value="${dialect}"/>              
               <property name="multi-db" value="false"/>
               <property name="update-storage" value="true"/>
@@ -36,13 +36,13 @@
           </initializer>
          <cache enabled="true" class="org.exoplatform.services.jcr.impl.dataflow.persistent.LinkedWorkspaceStorageCacheImpl">
           <properties>
-            <property name="maxSize" value="500k"/>
-            <property name="liveTime" value="1h"/>
+            <property name="max-size" value="500k"/>
+            <property name="live-time" value="1h"/>
           </properties>
          </cache>
          <query-handler class="org.exoplatform.services.jcr.impl.core.query.lucene.SearchIndex">
           <properties>
-            <property name="indexDir" value="../temp/jcrlucenedb/index/system"/>            
+            <property name="index-dir" value="../temp/jcrlucenedb/index/system"/>            
             <property name="support-highlighting" value="true"/>
 			      <property name="excerptprovider-class" value="org.exoplatform.services.jcr.impl.core.query.lucene.DefaultHTMLExcerpt"/>			      
 			      <property name="synonymprovider-class" value="org.exoplatform.services.jcr.impl.core.query.lucene.PropertiesSynonymProvider" />
@@ -64,7 +64,7 @@
        <workspace name="collaboration">          
           <container class="org.exoplatform.services.jcr.impl.storage.jdbc.JDBCWorkspaceDataContainer">
             <properties>
-              <property name="sourceName" value="jdbcexo"/>
+              <property name="source-name" value="jdbcexo"/>
               <property name="dialect" value="${dialect}"/>              
               <property name="multi-db" value="false"/>
               <property name="update-storage" value="true"/>
@@ -90,13 +90,13 @@
           </initializer>
          <cache enabled="true" class="org.exoplatform.services.jcr.impl.dataflow.persistent.LinkedWorkspaceStorageCacheImpl">
           <properties>
-            <property name="maxSize" value="500k"/>
-            <property name="liveTime" value="1h"/>
+            <property name="max-size" value="500k"/>
+            <property name="live-time" value="1h"/>
           </properties>
          </cache>
          <query-handler class="org.exoplatform.services.jcr.impl.core.query.lucene.SearchIndex">
           <properties>
-            <property name="indexDir" value="../temp/jcrlucenedb/index/collaboration"/>
+            <property name="index-dir" value="../temp/jcrlucenedb/index/collaboration"/>
             <property name="support-highlighting" value="true"/>
 			      <property name="excerptprovider-class" value="org.exoplatform.services.jcr.impl.core.query.lucene.DefaultHTMLExcerpt"/>			      
 			      <property name="synonymprovider-class" value="org.exoplatform.services.jcr.impl.core.query.lucene.PropertiesSynonymProvider" />
@@ -128,7 +128,7 @@
        <workspace name="backup">          
           <container class="org.exoplatform.services.jcr.impl.storage.jdbc.JDBCWorkspaceDataContainer">
             <properties>
-              <property name="sourceName" value="jdbcexo"/>
+              <property name="source-name" value="jdbcexo"/>
               <property name="dialect" value="${dialect}"/>              
               <property name="multi-db" value="false"/>
               <property name="update-storage" value="true"/>
@@ -154,13 +154,13 @@
           </initializer>
          <cache enabled="true" class="org.exoplatform.services.jcr.impl.dataflow.persistent.LinkedWorkspaceStorageCacheImpl">
           <properties>
-            <property name="maxSize" value="500k"/>
-            <property name="liveTime" value="1h"/>
+            <property name="max-size" value="500k"/>
+            <property name="live-time" value="1h"/>
           </properties>
          </cache>
          <query-handler class="org.exoplatform.services.jcr.impl.core.query.lucene.SearchIndex">
           <properties>
-            <property name="indexDir" value="../temp/jcrlucenedb/index/backup"/>
+            <property name="index-dir" value="../temp/jcrlucenedb/index/backup"/>
             <property name="support-highlighting" value="true"/>
 			      <property name="excerptprovider-class" value="org.exoplatform.services.jcr.impl.core.query.lucene.DefaultHTMLExcerpt"/>
 			      <!--
