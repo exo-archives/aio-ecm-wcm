@@ -94,7 +94,6 @@
 	    	<values-param>
 	    		<name>portal.creation.roles</name>
 	    		<value>*:/platform/administrators</value>
-	    		<value>manager:/platform/web-contributors</value>	    		
 	    	</values-param>
 	    </init-params>
 	  </component-plugin>

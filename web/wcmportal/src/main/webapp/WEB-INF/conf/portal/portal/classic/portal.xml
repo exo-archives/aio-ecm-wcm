@@ -3,7 +3,7 @@
   <portal-name>classic</portal-name>
   <locale>en</locale>
   <access-permissions>Everyone</access-permissions>
-  <edit-permission>*:/platform/administrators</edit-permission>
+  <edit-permission>*:/platform/web-contributors</edit-permission>
   <creator>root</creator>
     
   <portal-layout> 		
