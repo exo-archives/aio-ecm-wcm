@@ -50,6 +50,7 @@
 	height: 16px;
 	margin-left: 10px;
 	cursor: pointer;
+	vertical-align: -2px;
 }
 
 .UIContentListViewerPortlet .UIViewerManagementForm .FolderPathInputSet .UIFormInputSet .FormContainer {
