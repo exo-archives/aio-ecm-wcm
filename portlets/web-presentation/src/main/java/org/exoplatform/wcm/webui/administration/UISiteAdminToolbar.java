@@ -27,8 +27,10 @@ import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.navigation.PageNavigationUtils;
 import org.exoplatform.portal.webui.page.UIPage;
+import org.exoplatform.portal.webui.page.UIPageBrowser;
 import org.exoplatform.portal.webui.page.UIPageCreationWizard;
 import org.exoplatform.portal.webui.page.UIPageEditWizard;
+import org.exoplatform.portal.webui.page.UIPageForm;
 import org.exoplatform.portal.webui.page.UIWizardPageCreationBar;
 import org.exoplatform.portal.webui.page.UIWizardPageSetInfo;
 import org.exoplatform.portal.webui.portal.PageNodeEvent;
@@ -52,10 +54,12 @@ import org.exoplatform.services.security.MembershipEntry;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIBreadcumbs;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
@@ -523,8 +527,12 @@ import org.exoplatform.webui.event.EventListener;
       event.setRequestContext(Util.getPortalRequestContext());            
       UIPortalApplication uiApp = Util.getUIPortalApplication();            
       UIControlWorkspace uiControlWorkspace = uiApp.getChild(UIControlWorkspace.class);
-      UIExoStart uiExoStart = uiControlWorkspace.getChild(UIExoStart.class);
-      uiExoStart.createEvent("BrowsePage", Event.Phase.PROCESS, event.getRequestContext()).broadcast();
+      UIExoStart uiExoStart = uiControlWorkspace.getChild(UIExoStart.class);      
+      WebuiApplication webuiApplication = (WebuiApplication)Util.getPortalRequestContext().getApplication();
+      //TODO put UIBrowserPageForm component config into ConfigurationManager to avoid exception when add new page
+      //this is strange bug in WCM
+      webuiApplication.getConfigurationManager().getComponentConfig(UIPageBrowser.class,"UIBrowserPageForm");
+      uiExoStart.createEvent("BrowsePage", Event.Phase.PROCESS,Util.getPortalRequestContext()).broadcast();
     }
   }
 
