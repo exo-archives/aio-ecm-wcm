@@ -73,7 +73,7 @@ import org.exoplatform.webui.event.EventListener;
 @ComponentConfigs( {
     @ComponentConfig(
       lifecycle = Lifecycle.class,
-      events = @EventConfig(listeners = UISearchResult.EditContentActionListener.class)
+      events = @EventConfig(listeners = UISearchResult.EditContentActionListener.class)      
     ),
     @ComponentConfig(
       type = UICustomizeablePaginator.class,
@@ -133,7 +133,7 @@ public class UISearchResult extends UIContainer {
     this.resourceResolver = resourceResolver;
     uiPaginator = addChild(UICustomizeablePaginator.class, null, null);
     uiPaginator.setTemplatePath(paginatorTemplatePath);
-    uiPaginator.setResourceResolver(resourceResolver);
+    uiPaginator.setResourceResolver(resourceResolver);    
   }
 
   /*
@@ -556,7 +556,6 @@ public class UISearchResult extends UIContainer {
       uiContentEdittingForm.setRendered(true);
       uiMaskPopupContainer.activate(uiContentEdittingForm, 700, -1);      
       context.addUIComponentToUpdateByAjax(uiMaskPopupContainer);  
-    }    
+    }        
   }
-
 }

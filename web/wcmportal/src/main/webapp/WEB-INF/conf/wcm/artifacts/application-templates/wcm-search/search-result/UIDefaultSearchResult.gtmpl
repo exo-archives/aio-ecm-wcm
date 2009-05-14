@@ -5,10 +5,16 @@ import java.util.List;
 import javax.jcr.Node;
 import javax.jcr.Value;
 
+import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.ecm.webui.utils.Utils;
 import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
 import org.exoplatform.services.wcm.search.ResultNode;
-import org.exoplatform.services.wcm.publication.defaultlifecycle.Util;
+import org.exoplatform.portal.webui.portal.UIPortal;
+import org.exoplatform.portal.webui.util.Util;
+import java.net.URLEncoder;
+import javax.servlet.http.HttpServletRequest;
+import org.exoplatform.wcm.webui.search.UISearchForm;
+import org.exoplatform.wcm.webui.search.UISearchPageLayout;
 %>
 
 <div id="$uicomponent.id" class="UIAdvanceSearchResultDefault">
@@ -16,7 +22,6 @@ import org.exoplatform.services.wcm.publication.defaultlifecycle.Util;
   def currentPageData = uicomponent.getCurrentPageData();
   if (currentPageData != null && !currentPageData.isEmpty()) {
     String suggestion = uicomponent.getSuggestion();
-    String suggestionURL = uicomponent.getSuggestionURL();
     float searchTime = uicomponent.getSearchTime();
     String resutlsCaption = _ctx.appRes("UIDefaultSearchResult.label.resutlsCaption");
     String ofAboutCaption = _ctx.appRes("UIDefaultSearchResult.label.ofAboutCaption");
@@ -72,11 +77,14 @@ import org.exoplatform.services.wcm.publication.defaultlifecycle.Util;
     </div>
     <%
     if (suggestion != null) {
-      %>
+			UISearchPageLayout uiSearchPageLayout = uicomponent.getParent();
+	    UISearchForm uiSearchForm = uiSearchPageLayout.getChild(UISearchForm.class);
+    	String suggesstionURL = uiSearchForm.event("Search", suggestion);
+  	%>
       <div style="padding: 10px 0px 0px; font-size: 15px; font-style: italic;">
         <%= newSuggestion %>
         :
-        <strong><a href="<%= suggestionURL %>"><%= suggestion %></a></strong>
+        <strong><a href="<%= suggesstionURL %>"><%= suggestion %></a></strong>
       </div>
       <%
     }

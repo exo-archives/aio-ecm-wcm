@@ -28,7 +28,6 @@ import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.search.QueryCriteria;
@@ -259,6 +258,8 @@ public class UISearchForm extends UIForm {
 			} else if (!uiPageCheckbox.isChecked() && uiDocumentCheckbox.isChecked()) {
 			  resultType = bundle.getString("UISearchForm.documentCheckBox.label");
       }      
+      String newKey = event.getRequestContext().getRequestParameter(OBJECTID);
+      if (newKey != null) keyword = newKey;      
       keyword = keyword.replace('-', ' ').toLowerCase(portletRequestContext.getLocale());
 			uiSearchResult.setKeyword(keyword);
 			uiSearchResult.setResultType(resultType);
