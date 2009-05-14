@@ -268,9 +268,14 @@ public class UISearchForm extends UIForm {
 			QueryCriteria queryCriteria = new QueryCriteria();
 			queryCriteria.setSiteName(selectedPortal);
 			queryCriteria.setKeyword(keyword);
-			queryCriteria.setSearchDocument(Boolean.parseBoolean(documentChecked));
+			if (Boolean.parseBoolean(documentChecked)) {
+			  queryCriteria.setSearchDocument(true);
+			  queryCriteria.setSearchWebContent(true);
+			} else  {
+			  queryCriteria.setSearchDocument(false);
+        queryCriteria.setSearchWebContent(false);
+			}
 			queryCriteria.setSearchWebpage(Boolean.parseBoolean(pageChecked));
-      queryCriteria.setSearchWebContent(false);      
       if (Utils.isLiveMode()) {
         queryCriteria.setLiveMode(true);
       } else {
