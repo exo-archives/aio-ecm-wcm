@@ -294,6 +294,26 @@ public class PortalFolderSchemaHandler extends BaseWebSchemaHandler {
     addMixin(links,"exo:datetime");
     links.setProperty("exo:dateCreated",calendar);    
     
+    Node applicationDataFolder = portalFolder.addNode("ApplicationData", NT_FOLDER);
+    addMixin(applicationDataFolder, "exo:owneable");
+    addMixin(applicationDataFolder,"exo:datetime");
+    applicationDataFolder.setProperty("exo:dateCreated", calendar);    
+    
+    Node newsletterApplicationFolder = applicationDataFolder.addNode("NewsletterApplication", NT_FOLDER);
+    addMixin(newsletterApplicationFolder, "exo:owneable");
+    addMixin(newsletterApplicationFolder,"exo:datetime");
+    newsletterApplicationFolder.setProperty("exo:dateCreated", calendar);
+    
+    Node categoriesFolder = newsletterApplicationFolder.addNode("Categories", NT_FOLDER);
+    addMixin(categoriesFolder, "exo:owneable");
+    addMixin(categoriesFolder,"exo:datetime");
+    categoriesFolder.setProperty("exo:dateCreated", calendar);
+    
+    Node userFolder = newsletterApplicationFolder.addNode("Users", NT_FOLDER);
+    addMixin(userFolder, "exo:owneable");
+    addMixin(userFolder,"exo:datetime");
+    userFolder.setProperty("exo:dateCreated", calendar);
+    
     portalFolder.getSession().save();       
   }  
 }
