@@ -17,6 +17,7 @@
   	<module>component/wcm</module>
 		<module>component/publication</module>
 		<module>component/search</module>
+		<module>component/newsletter</module>
 		<module>webui/wcm</module>
 		<module>portlets/web-presentation</module>    
 		<module>portlets/web-searches</module>

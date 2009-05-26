@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<configuration>
+	<component>
+		<type>org.exoplatform.services.wcm.newsletter.NewsletterInitializationService</type>
+		<init-params>
+			<object-param>
+				<name>category1</name>
+				<description>category1</description>
+				<object type="org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig">
+					<field name="name">
+						<string>category1</string>
+					</field>
+					<field name="description">
+						<string>category1's description</string>
+					</field>
+					<field name="moderator">
+						<string>root</string>
+					</field>
+					<field name="subscriptions">
+						<collection type="java.util.ArrayList">
+							<value>
+								<object type="org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig$NewsletterSubscriptionConfig">
+									<field name="name">
+										<string>subscription1</string>
+									</field>
+									<field name="description">
+										<string>subscription1's description</string>
+									</field>
+								</object>
+							</value>
+							<value>
+								<object type="org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig$NewsletterSubscriptionConfig">
+									<field name="name">
+										<string>subscription2</string>
+									</field>
+									<field name="description">
+										<string>subscription2's description</string>
+									</field>
+								</object>
+							</value>
+							<value>
+								<object type="org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig$NewsletterSubscriptionConfig">
+									<field name="name">
+										<string>subscription3</string>
+									</field>
+									<field name="description">
+										<string>subscription3's description</string>
+									</field>
+								</object>
+							</value>
+						</collection>
+					</field>
+				</object>
+			</object-param>
+			<object-param>
+				<name>category2</name>
+				<description>category2</description>
+				<object type="org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig">
+					<field name="name">
+						<string>category2</string>
+					</field>
+					<field name="description">
+						<string>category2's description</string>
+					</field>
+					<field name="moderator">
+						<string>root</string>
+					</field>					
+					<field name="subscriptions">
+						<collection type="java.util.ArrayList">
+							<value>
+								<object type="org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig$NewsletterSubscriptionConfig">
+									<field name="name">
+										<string>subscriptionx</string>
+									</field>
+									<field name="description">
+										<string>subscriptionx's description</string>
+									</field>
+								</object>
+							</value>
+							<value>
+								<object type="org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig$NewsletterSubscriptionConfig">
+									<field name="name">
+										<string>subscriptiony</string>
+									</field>
+									<field name="description">
+										<string>subscriptiony's description</string>
+									</field>
+								</object>
+							</value>
+							<value>
+								<object type="org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig$NewsletterSubscriptionConfig">
+									<field name="name">
+										<string>subscriptionz</string>
+									</field>
+									<field name="description">
+										<string>subscriptionz's description</string>
+									</field>
+								</object>
+							</value>
+						</collection>
+					</field>
+				</object>
+			</object-param>
+		</init-params>
+	</component>
+</configuration>

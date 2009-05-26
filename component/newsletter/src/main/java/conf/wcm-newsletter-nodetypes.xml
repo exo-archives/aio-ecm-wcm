@@ -1,0 +1,67 @@
+<nodeTypes xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0">
+	
+	<nodeType name="exo:newsletterCategory" isMixin="false" hasOrderableChildNodes="true" primaryItemName="">
+		<supertypes>
+			<supertype>nt:unstructured</supertype>
+		</supertypes>
+		<propertyDefinition name="exo:newsletterCategoryTitle" requiredType="String" autoCreated="true" mandatory="true" onParentVersion="COPY" protected="false" multiple="false">
+			<valueConstraints/>
+		</propertyDefinition>
+		<propertyDefinition name="exo:newsletterCategoryDescription" requiredType="String" autoCreated="true" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+			<valueConstraints/>
+		</propertyDefinition>
+		<childNodeDefinitions>
+			<childNodeDefinition name="*" defaultPrimaryType="" autoCreated="false" mandatory="false" onParentVersion="VERSION" protected="false" sameNameSiblings="true">
+				<requiredPrimaryTypes>
+					<requiredPrimaryType>exo:newsletterSubscription</requiredPrimaryType>
+				</requiredPrimaryTypes>
+			</childNodeDefinition>
+		</childNodeDefinitions>
+	</nodeType>
+	
+	<nodeType name="exo:newsletterSubscription" isMixin="false" hasOrderableChildNodes="true" primaryItemName="">
+		<supertypes>
+			<supertype>nt:unstructured</supertype>
+			<supertype>mix:referenceable</supertype>
+		</supertypes>
+		<childNodeDefinitions>
+			<childNodeDefinition name="*" defaultPrimaryType="" autoCreated="false" mandatory="false" onParentVersion="VERSION" protected="false" sameNameSiblings="true">
+				<requiredPrimaryTypes>
+					<requiredPrimaryType>exo:newsletterEntry</requiredPrimaryType>
+				</requiredPrimaryTypes>
+			</childNodeDefinition>
+		</childNodeDefinitions>
+		<propertyDefinition name="exo:newsletterSubscribedUser" requiredType="Reference" autoCreated="true" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
+			<valueConstraints/>
+		</propertyDefinition>
+	</nodeType>
+	
+	<nodeType name="exo:newsletterEntry" isMixin="true" hasOrderableChildNodes="true" primaryItemName="">
+		<propertyDefinitions>
+			<propertyDefinition name="exo:newsletterEntryType" requiredType="String" autoCreated="true" mandatory="true" onParentVersion="COPY" protected="false" multiple="false">
+				<valueConstraints/>
+			</propertyDefinition>
+			<propertyDefinition name="exo:newsletterEntryDate" requiredType="String" autoCreated="true" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+				<valueConstraints/>
+			</propertyDefinition>
+			<propertyDefinition name="exo:newsletterEntryStatus" requiredType="String" autoCreated="true" mandatory="true" onParentVersion="COPY" protected="false" multiple="false">
+				<valueConstraints/>
+			</propertyDefinition>
+		</propertyDefinitions>
+	</nodeType>
+	
+	<nodeType name="exo:newsletterUser" isMixin="false" hasOrderableChildNodes="true" primaryItemName="">
+		<supertypes>
+			<supertype>mix:referenceable</supertype>
+		</supertypes>
+		<propertyDefinitions>
+			<propertyDefinition name="exo:newsletterUserMail" requiredType="String" autoCreated="true" mandatory="true" onParentVersion="COPY" protected="false" multiple="false">
+				<valueConstraints/>
+			</propertyDefinition>
+			<propertyDefinition name="exo:newsletterUserBanned" requiredType="Boolean" autoCreated="true" mandatory="true" onParentVersion="COPY" protected="false" multiple="false">
+				<valueConstraints/>
+			</propertyDefinition>
+		</propertyDefinitions>
+	</nodeType>
+	
+</nodeTypes>
