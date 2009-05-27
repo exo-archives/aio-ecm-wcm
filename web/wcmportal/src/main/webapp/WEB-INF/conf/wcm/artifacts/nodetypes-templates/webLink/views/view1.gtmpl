@@ -48,23 +48,24 @@
 	def contentNode = uicomponent.getNode();
 %>
 <div class="FileContent">	
-  <div class="NavigationContainer">       
+<div class="NavigationContainer">       
     <div class="TopTitle"><%= contentNode.getName() %></div>
     <div class="Content">
     	<div class="TextContent">
-    		<% 
-	    		if (contentNode.hasProperty("exo:linkURL") && contentNode.hasProperty("exo:linkDescription")) {
+    		<%
+    			def content = "<pre>";
+	    		if (contentNode.hasProperty("exo:linkURL")) {
 	    			def url = uicomponent.encodeHTML(contentNode.getProperty("exo:linkURL").getString());
+	    			content += "	<b>" + _ctx.appRes("WebLink.view.label.url") + ": </b><a href='" + url + "' target='_blank'>" + url + "</a><br/>";
+	    		}
+	    		if (contentNode.hasProperty("exo:linkDescription")) {
 	    			def description = uicomponent.encodeHTML(contentNode.getProperty("exo:linkDescription").getString());
-	   		
-	    			def content = "<pre>" + 
-				    							"  <b>" + _ctx.appRes("WebLink.view.label.url") + ": </b><a href='" + url + "' target='_blank'>" + url + "</a><br/>" +
-				    							"  <b>" + _ctx.appRes("WebLink.view.label.description") + ": </b>" + description +
-				    							"</pre>";
-	    			println content;
-    			}
+	    			content += "	<b>" + _ctx.appRes("WebLink.view.label.description") + ": </b>" + description +
+	    		}
+				content += "</pre>";
+    			println content;
     		%>
 	     </div>
     </div>  
-  </div> 
+</div> 
 </div>
