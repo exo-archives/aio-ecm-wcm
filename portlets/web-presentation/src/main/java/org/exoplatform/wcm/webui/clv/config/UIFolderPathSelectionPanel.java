@@ -22,12 +22,19 @@ import java.util.List;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 
+import org.exoplatform.ecm.webui.selector.UISelectable;
+import org.exoplatform.ecm.webui.tree.UIBaseNodeTreeSelector;
+import org.exoplatform.ecm.webui.tree.selectone.UIOneNodePathSelector;
 import org.exoplatform.ecm.webui.tree.selectone.UISelectPathPanel;
+import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.webui.core.UIPopupWindow;
+import org.exoplatform.webui.event.Event;
+import org.exoplatform.webui.event.EventListener;
 
 // TODO: Auto-generated Javadoc
 /*
@@ -41,7 +48,7 @@ import org.exoplatform.webui.core.UIComponent;
 @ComponentConfig(
    template = "app:/groovy/ContentListViewer/config/UISelectFolderPathPanel.gtmpl", 
    events = { 
-     @EventConfig(listeners = UISelectPathPanel.SelectActionListener.class) 
+     @EventConfig(listeners = UIFolderPathSelectionPanel.SelectActionListener.class) 
    }
 )
 public class UIFolderPathSelectionPanel extends UISelectPathPanel {
@@ -105,5 +112,34 @@ public class UIFolderPathSelectionPanel extends UISelectPathPanel {
     if (listDocumentTypes.contains(node.getPrimaryNodeType().getName()))
       return true;
     return false;
+  }
+  
+  public static class SelectActionListener extends EventListener<UIFolderPathSelectionPanel> {
+    public void execute(Event<UIFolderPathSelectionPanel> event) throws Exception {
+      UIFolderPathSelectionPanel folderPathSelectionPanel = event.getSource() ;
+      String value = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      UIContainer uiTreeSelector = folderPathSelectionPanel.getParent();
+      if(uiTreeSelector instanceof UIOneNodePathSelector) {
+        if(!((UIOneNodePathSelector)uiTreeSelector).isDisable()) {
+          value = ((UIOneNodePathSelector)uiTreeSelector).getWorkspaceName() + ":" + value ;
+        }
+      } 
+      String returnField = ((UIBaseNodeTreeSelector)uiTreeSelector).getReturnFieldName();
+      ((UISelectable)((UIBaseNodeTreeSelector)uiTreeSelector).getSourceComponent()).doSelect(returnField, value) ;
+      
+      UIComponent uiOneNodePathSelector = folderPathSelectionPanel.getParent();
+      if (uiOneNodePathSelector instanceof UIOneNodePathSelector) {
+        UIComponent uiComponent = uiOneNodePathSelector.getParent();
+        if (uiComponent instanceof UIPopupWindow) {
+          ((UIPopupWindow)uiComponent).setShow(false);
+          ((UIPopupWindow)uiComponent).setRendered(false);
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent);
+        }
+        UIComponent component = ((UIOneNodePathSelector)uiOneNodePathSelector).getSourceComponent().getParent();
+        if (component != null) {
+          event.getRequestContext().addUIComponentToUpdateByAjax(component);
+        }
+      }
+    }
   }
 }
