@@ -70,7 +70,7 @@
   </profiles>
   <properties>
      <exo.product.name>exo-wcm</exo.product.name>
-     <exo.product.specification>1.1</exo.product.specification>
+     <exo.product.specification>1.2</exo.product.specification>
   </properties>
   <scm>
     <connection>scm:svn:http://svn.exoplatform.org/projects/ecm/wcm/trunk</connection>
