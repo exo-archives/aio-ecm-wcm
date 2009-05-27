@@ -95,7 +95,7 @@ import org.exoplatform.services.wcm.publication.PublicationState;
 												<% 
 											} 
 										%>
-										<p><%=itemSummary%></p>
+										<pre><%=itemSummary%></pre>
 									</div>			
 								<% 
 							} 

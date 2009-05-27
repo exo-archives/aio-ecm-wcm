@@ -80,7 +80,7 @@ import org.exoplatform.wcm.webui.clv.UIContentListViewerPortlet;
 							<img src="$imgSrc" width="91" height="53 /">				
 						<% } %>
 						<% if (itemSummary != null && itemSummary.trim().length() != 0 && uicomponent.isShowField(UIContentListViewerPortlet.SHOW_SUMMARY)) { %>
-						<p><%=itemSummary%></p>
+						<pre><%=itemSummary%></pre>
 						<% } %>															
 					</div>			
 					<div class="CaptionViewMore"><a href="$itemLink"><%=labelReadMore%>&raquo;</a></div>			
