@@ -46,7 +46,6 @@
 	font-size:12px;
 	font-weight:bold;
 	margin-bottom:5px;
-	overflow: hidden;
 }
 
 .UIContentListViewerPortlet .ACMEContentListViewerB .Caption .CaptionTitle a {
@@ -67,4 +66,9 @@
   font-size:11px;
 	line-height:16px;
 	margin:0;
+}
+
+.UIContentListViewerPortlet .ACMEContentListViewerB .Caption .CaptionContent pre {
+	font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+	white-space: normal;
 }
