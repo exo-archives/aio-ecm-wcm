@@ -20,7 +20,7 @@
 					<field name="subscriptions">
 						<collection type="java.util.ArrayList">
 							<value>
-								<object type="org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig$NewsletterSubscriptionConfig">
+								<object type="org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig">
 									<field name="name">
 										<string>subscription1</string>
 									</field>
@@ -30,7 +30,7 @@
 								</object>
 							</value>
 							<value>
-								<object type="org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig$NewsletterSubscriptionConfig">
+								<object type="org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig">
 									<field name="name">
 										<string>subscription2</string>
 									</field>
@@ -40,7 +40,7 @@
 								</object>
 							</value>
 							<value>
-								<object type="org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig$NewsletterSubscriptionConfig">
+								<object type="org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig">
 									<field name="name">
 										<string>subscription3</string>
 									</field>
@@ -69,7 +69,7 @@
 					<field name="subscriptions">
 						<collection type="java.util.ArrayList">
 							<value>
-								<object type="org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig$NewsletterSubscriptionConfig">
+								<object type="org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig">
 									<field name="name">
 										<string>subscriptionx</string>
 									</field>
@@ -79,7 +79,7 @@
 								</object>
 							</value>
 							<value>
-								<object type="org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig$NewsletterSubscriptionConfig">
+								<object type="org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig">
 									<field name="name">
 										<string>subscriptiony</string>
 									</field>
@@ -89,7 +89,7 @@
 								</object>
 							</value>
 							<value>
-								<object type="org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig$NewsletterSubscriptionConfig">
+								<object type="org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig">
 									<field name="name">
 										<string>subscriptionz</string>
 									</field>
