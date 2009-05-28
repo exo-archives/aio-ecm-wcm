@@ -74,7 +74,8 @@ import org.exoplatform.services.wcm.publication.PublicationState;
 															<span>[ <%=draftLabel%>, </span><a href="$contentkEdittingLink" class="CaptionDraft"><%=editActionLabel%></a> <span>]</span>
 														<% 
 													} 
-												%>	
+												%>
+											</div>
 										<% 
 									} 
 								%>	

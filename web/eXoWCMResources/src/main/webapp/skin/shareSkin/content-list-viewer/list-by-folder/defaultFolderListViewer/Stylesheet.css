@@ -59,6 +59,11 @@
   padding: 5px 0;
 }
 
+.UIContentListViewerPortlet .UIContentListPresentationDefault .Caption .CaptionContent pre {
+	font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+	white-space: normal;
+}
+
 .UIContentListViewerPortlet .UIContentListPresentationDefault .Caption .CaptionContent img {
 	float: left;
 	margin: 5px 10px 0 0;
