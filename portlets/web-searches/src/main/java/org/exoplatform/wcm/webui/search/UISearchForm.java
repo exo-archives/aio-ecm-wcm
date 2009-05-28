@@ -261,7 +261,6 @@ public class UISearchForm extends UIForm {
       String newKey = event.getRequestContext().getRequestParameter(OBJECTID);
       if (newKey != null) keyword = newKey;      
       keyword = keyword.replace('-', ' ').toLowerCase(portletRequestContext.getLocale());
-			uiSearchResult.setKeyword(keyword);
 			uiSearchResult.setResultType(resultType);
 			String selectedPortal = (uiPortalSelectBox.getValue()
 					.equals(UISearchForm.ALL_OPTION)) ? null : uiPortalSelectBox
@@ -287,6 +286,7 @@ public class UISearchForm extends UIForm {
 			try {        
 				WCMPaginatedQueryResult paginatedQueryResult = siteSearchService
 						.searchSiteContents(queryCriteria, provider, itemsPerPage);
+				uiSearchResult.setKeyword(keyword);
 				uiSearchResult.setPageList(paginatedQueryResult);
 				float timeSearch = paginatedQueryResult.getQueryTimeInSecond();
 				uiSearchResult.setSearchTime(timeSearch);
