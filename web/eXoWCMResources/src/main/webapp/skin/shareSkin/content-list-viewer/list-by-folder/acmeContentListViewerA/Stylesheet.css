@@ -61,3 +61,8 @@
 	line-height:16px;
 	margin:0;
 }
+
+.UIContentListViewerPortlet .ACMEContentListViewerA .Caption .CaptionContent pre {
+	font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+	white-space: normal;
+}

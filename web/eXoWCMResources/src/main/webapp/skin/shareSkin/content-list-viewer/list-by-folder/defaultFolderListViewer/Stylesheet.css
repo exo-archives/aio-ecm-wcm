@@ -55,6 +55,11 @@
 	overflow:auto;	
 }
 
+.UIContentListViewerPortlet .UIContentListPresentationDefault .Caption .CaptionContent pre {
+	font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+	white-space: normal;
+}
+
 .UIContentListViewerPortlet .UIContentListPresentationDefault .Caption .CaptionContent p {
   padding: 5px 0;
 }
