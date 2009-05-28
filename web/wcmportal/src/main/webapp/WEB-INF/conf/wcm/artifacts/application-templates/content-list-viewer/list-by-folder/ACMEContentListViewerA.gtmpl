@@ -35,15 +35,13 @@ import org.exoplatform.services.wcm.publication.PublicationState;
 			Node viewNode = null;
 			Node tempNode = null;
 			for (Node node : currentPageData) {
-				tempNode = node;
-				viewNode = uicomponent.getNodeView(node);
+				tempNode = node;			wNode = uicomponent.getNodeView(node);
 				if (viewNode == null) {	
 					continue;				
 				} 
 				boolean isShowDraft = uicomponent.showDraftButton(tempNode);
 				if (!isShowDraft) {
 					node = viewNode;
-				}
 				String itemLink = uicomponent.getURL(tempNode);			
 				String itemName = node.getName();
 				String itemSummary = uicomponent.getSummary(node);
@@ -54,6 +52,7 @@ import org.exoplatform.services.wcm.publication.PublicationState;
 				if (itemTitle != null && itemTitle.trim().length() != 0) {
 					itemName = itemTitle;
 				}		
+				
 				String contentkEdittingLink = uicomponent.event("EditContent", tempNode.getPath());		
 				%>	
 					<div class="CaptionItem">
