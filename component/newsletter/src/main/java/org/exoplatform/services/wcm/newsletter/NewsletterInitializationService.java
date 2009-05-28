@@ -20,10 +20,8 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.exoplatform.container.xml.InitParams;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
-import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig.NewsletterSubscriptionConfig;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterCategoryHandler;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterSubscriptionHandler;
 import org.picocontainer.Startable;

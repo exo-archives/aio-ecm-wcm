@@ -26,6 +26,7 @@ import java.util.List;
  * May 22, 2009  
  */
 public class NewsletterCategoryConfig {
+
   private String name;
   private String description;
   private String moderator;
@@ -42,16 +43,4 @@ public class NewsletterCategoryConfig {
   
   public List<NewsletterSubscriptionConfig> getSubscriptions() { return subscriptions; }
   public void setSubscriptions(List<NewsletterSubscriptionConfig> subscriptions) { this.subscriptions = subscriptions; }    
-
-  public static class NewsletterSubscriptionConfig {
-    private String name;
-    private String description;
-    
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-    
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
-  }
-
 }
