@@ -90,6 +90,16 @@
       <version>${org.exoplatform.wcm.version}</version>
       <scope>provided</scope>
     </dependency>
+    
+    <dependency>
+      <groupId>org.exoplatform.ecm.wcm</groupId>
+      <artifactId>exo.ecm.wcm.component.newsletter</artifactId>
+      <version>${org.exoplatform.wcm.version}</version>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
-
+  
+	<build>
+    <finalName>newsletter</finalName>
+  </build>
 </project>

@@ -21,7 +21,7 @@
 			<portlet-mode>edit</portlet-mode>
 		</supports>
 		<supported-locale>en</supported-locale>
-		<resource-bundle>locale.portlet.SingleContentViewer.AdvancedPresentationPortlet</resource-bundle>
+		<resource-bundle>locale.portlet.newsletter</resource-bundle>
 		
 		<portlet-info>
 			<title>Newsletter Viewer Portlet</title>
@@ -38,7 +38,7 @@
   <portlet>
 		<description xml:lang="EN">Newsletter Management Portlet</description>
 		<portlet-name>NewsletterManagementPortlet</portlet-name>
-		<display-name>Newsletter Management Portlet</display-name>
+		<display-name>Newsletter Management</display-name>
 		<portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>
 		
 		<init-param>
@@ -53,7 +53,7 @@
 			<portlet-mode>edit</portlet-mode>
 		</supports>
 		<supported-locale>en</supported-locale>
-		<resource-bundle>locale.portlet.SingleContentViewer.AdvancedPresentationPortlet</resource-bundle>
+		<resource-bundle>locale.portlet.newsletter</resource-bundle>
 		
 		<portlet-info>
 			<title>Newsletter Management Portlet</title>
