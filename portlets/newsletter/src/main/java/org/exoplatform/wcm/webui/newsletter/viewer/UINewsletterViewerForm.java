@@ -40,7 +40,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
  */
 @ComponentConfig(
    lifecycle = UIFormLifecycle.class,
-   template = "app:/groovy/webui/NewsletterViewer/UINewsletterListViewer.gtmpl",
+   template = "app:/groovy/webui/newsletter/NewsletterViewer/UINewsletterListViewer.gtmpl",
    events = { 
        @EventConfig(listeners = UINewsletterViewerForm.UpdateActionListener.class),
        @EventConfig(listeners = UINewsletterViewerForm.CancelActionListener.class)
