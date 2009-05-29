@@ -26,26 +26,12 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
  *          ngoc.tran@exoplatform.com
  * May 22, 2009  
  */
-<<<<<<< .mine
+
 @ComponentConfig(
   lifecycle = UIApplicationLifecycle.class
 )
 public class UINewsletterViewerPortlet extends UIPortletApplication {
-=======
-@ComponentConfig (
-		lifecycle = UIApplicationLifecycle.class
-)
-public class UINewsletterViewerPortlet extends UIPortletApplication {
->>>>>>> .r32133
-
-<<<<<<< .mine
   public UINewsletterViewerPortlet() throws Exception {
     addChild(UINewsletterViewerForm.class, null, null);
   }
-}=======
-	public UINewsletterViewerPortlet() throws Exception {
-		System.out.println("\n\n\n\n-------------------------> run ui newsletter viewer portlte");
-	}
-
 }
->>>>>>> .r32133
