@@ -16,12 +16,23 @@
  */
 package org.exoplatform.wcm.webui.newsletter.viewer;
 
+import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.core.UIPortletApplication;
+import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
+
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
  *          ngoc.tran@exoplatform.com
  * May 22, 2009  
  */
-public class UINewsletterViewerPortlet {
+@ComponentConfig (
+		lifecycle = UIApplicationLifecycle.class
+)
+public class UINewsletterViewerPortlet extends UIPortletApplication {
+
+	public UINewsletterViewerPortlet() throws Exception {
+		System.out.println("\n\n\n\n-------------------------> run ui newsletter viewer portlte");
+	}
 
 }

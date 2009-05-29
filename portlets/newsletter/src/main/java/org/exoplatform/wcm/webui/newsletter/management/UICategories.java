@@ -17,25 +17,13 @@
 package org.exoplatform.wcm.webui.newsletter.management;
 
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.core.UIPortletApplication;
-import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
+import org.exoplatform.webui.core.UIContainer;
 
-/**
- * Created by The eXo Platform SAS
- * Author : eXoPlatform
- *          ngoc.tran@exoplatform.com
- * May 22, 2009  
- */
-@ComponentConfig (
-		lifecycle = UIApplicationLifecycle.class
+@ComponentConfig(
+		template = "app:/groovy/webui/newsletter/newsletterManager/UICategories.gtmpl"
 )
-public class UINewsletterManagementPortlet extends UIPortletApplication {
-	private boolean isRenderUICategories = true;
-	private boolean isRenderUICategory = true;
-	private boolean isRenderUISubscription = true;
-	
-	public UINewsletterManagementPortlet() throws Exception {
-		System.out.println("\n\n\n\n-------------->run new letter manager portlet");
-		this.addChild(UICategories.class, null, null).setRendered(isRenderUICategories);
+public class UICategories extends UIContainer {
+	public UICategories(){
+		System.out.println("~~~~~~~~~~~~~~~>UICategories container");
 	}
 }
