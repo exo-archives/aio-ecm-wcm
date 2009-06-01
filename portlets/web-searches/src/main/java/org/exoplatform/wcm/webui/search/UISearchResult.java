@@ -50,6 +50,7 @@ import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant.
 import org.exoplatform.services.wcm.search.QueryCriteria;
 import org.exoplatform.services.wcm.search.SiteSearchService;
 import org.exoplatform.services.wcm.search.WCMPaginatedQueryResult;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -339,12 +340,16 @@ public class UISearchResult extends UIContainer {
 //      bool = true;
 //    }
 //    return bool;
+    // If live mode is activated
+    Object obj = Util.getPortalRequestContext().getRequest().getSession().getAttribute(Utils.TURN_ON_QUICK_EDIT);
+    if(obj == null) 
+      return false;
     String currentState = null;
     try {
       currentState = node.getProperty("publication:currentState").getString();
     } catch (Exception e) {
     } 
-    if(DRAFT.equals(currentState))
+    if(Boolean.parseBoolean(obj.toString()) && DRAFT.equals(currentState))
       return true;
     return false;
   }
