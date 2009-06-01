@@ -22,8 +22,12 @@ import javax.jcr.Node;
 
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.UIPublicationTree.TreeNode;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.UIPopupWindow;
-import org.exoplatform.webui.core.lifecycle.Lifecycle;
+import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
+import org.exoplatform.webui.event.Event;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 
 /**
@@ -33,8 +37,9 @@ import org.exoplatform.webui.form.UIForm;
  * Mar 4, 2009  
  */
 @ComponentConfig (
-                  lifecycle = Lifecycle.class,
-                  template = "classpath:groovy/wcm/webui/publication/lifecycle/stageversion/UIPublicationPages.gtmpl"
+                  lifecycle = UIFormLifecycle.class,
+                  template = "classpath:groovy/wcm/webui/publication/lifecycle/stageversion/UIPublicationPages.gtmpl",
+                  events = @EventConfig(listeners = UIPublicationPages.CloseActionListener.class)
 )
 public class UIPublicationPages extends UIForm {
 
@@ -106,5 +111,14 @@ public class UIPublicationPages extends UIForm {
     TreeNode selectedNode = portalNavigationExplorer.getSelectedNode();
     if (selectedNode != null) return selectedNode.getName();
     return null;
+  }
+  
+  public static class CloseActionListener extends EventListener<UIPublicationPages> {
+    public void execute(Event<UIPublicationPages> event) throws Exception {
+      UIPublicationPages publicationPages = event.getSource();
+      UIPopupContainer uiPopupContainer = (UIPopupContainer) publicationPages.getAncestorOfType(UIPopupContainer.class);
+      uiPopupContainer.deActivate();
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupContainer);
+    }
   }
 }
