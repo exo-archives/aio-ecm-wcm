@@ -151,6 +151,7 @@
   </UIWebContentSearchForm>
   <UIWebContentSearchForm>
   	<empty-field>La valeur de ce champ est nulle ou vide!</empty-field>
+		<invalid-date>"To Date" have to greater than "From Date"</invalid-date>
   </UIWebContentSearchForm>
   <UIDocumentSearchForm>
   	<action>

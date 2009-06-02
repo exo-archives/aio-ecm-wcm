@@ -153,7 +153,8 @@
   	</action>
   </UIWebContentSearchForm>
   <UIWebContentSearchForm>
-  	<empty-field>You don't choose value to search!Please choose term</empty-field>
+  	<empty-field>You don't choose value to search! Please choose term</empty-field>
+		<invalid-date>"To Date" have to greater than "From Date"</invalid-date>
   </UIWebContentSearchForm>
   <UIDocumentSearchForm>
   	<action>

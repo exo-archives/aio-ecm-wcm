@@ -205,6 +205,11 @@ public class UIDocumentSearchForm extends UIForm {
         if(uiDocSearchForm.haveEmptyField(uiApp, event, fromDate)) return;
         Calendar endDate = uiDocSearchForm.getUIFormDateTimeInput(UIWebContentSearchForm.END_TIME).getCalendar();
         if(endDate == null) endDate = Calendar.getInstance();
+        if (fromDate.getTimeInMillis() > endDate.getTimeInMillis()) {
+          uiApp.addMessage(new ApplicationMessage("UIWebContentSearchForm.invalid-date", null, ApplicationMessage.WARNING));
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          return;
+        }
         String dateRangeSelected = uiDocSearchForm.getUIStringInput(UIWebContentSearchForm.TIME_OPTION).getValue();
         if(UIWebContentSearchForm.CREATED_DATE.equals(dateRangeSelected)) {
           pagResult =  uiDocSearchForm.searchDocumentByDate(DATE_RANGE_SELECTED.CREATED, 
