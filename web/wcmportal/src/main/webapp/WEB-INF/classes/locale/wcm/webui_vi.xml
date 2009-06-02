@@ -121,6 +121,7 @@
   		<SearchWebContent>Tìm kiếm</SearchWebContent>
   	</action>
   	<empty-field>Bạn không nhập giá trị để tìm kiếm! Xin vui lòng nhập giá trị</empty-field>
+		<invalid-date>Giá trị "Đến ngày" phải lớn hơn giá trị "Từ ngày"</invalid-date>
   </UIWebContentSearchForm>
   <UIDocumentSearchForm>
   	<action>
