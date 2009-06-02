@@ -1,4 +1,0 @@
-<div class="$uicomponent.id" id ="$uicomponent.id" >  
-	<% String link = uicomponent.event("Edit");%>
-	<a href="$link"><%= _ctx.appRes("UIStartEditionInPageWizard.link") %></a>  		  
-</div>
