@@ -1,0 +1,109 @@
+<%
+import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
+import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
+
+System.out.println("\n\n\n\n----------------------->run");
+%>
+<div class="NewsletterStyle">
+	<%uiform.begin()%>
+	<div class="UserName">
+		<div class="LeftUserName">
+			<span class="textUserName">User:</span>
+		</div>
+		<div class="RightUserName">
+			<span>
+				<%
+					uicomponent.renderChild("inputID");
+				%>
+			</span>
+		<div>
+			<a href = "#" class="TextTest">
+				<%
+					System.out.println("\n\n\n\n--------: " + uicomponent.userMail);
+				%>
+				<%=uicomponent.userMail%>
+			</a>
+		</div>
+		</div>
+		<div class="ClearLeft">
+			<span></span>
+		</div>
+	</div>
+	<div class="ListCategory">
+		<%
+		for(des in uicomponent.listNewsletterCategories){%>
+		
+			<div class="TextCategoryName">
+				<%=des.getName()%>
+			</div>
+			<div>
+				--------------------------------------------
+			</div>
+			<div class="TextAboutCategory">
+				<%=des.getDescription()%>
+			</div>
+			<div>
+				--------------------------------------------
+			</div>
+		
+			<div class="ListSubcription">
+				<table cellpadding="1" cellspacing="1">
+					<tr bgcolor="#dfe4e5">
+						<td width="25%" height="30" class="Line">
+							<span class="TitleSubcription">Subcription</span>
+						</td>
+						<td width="25%" height="30" class="Line">
+							<span class="TitleSubcription">Your status</span>
+						</td>
+					</tr>
+					<%int count = 0;
+						String classTr = "";
+						for (item in des.getSubscriptions()) {
+							count++;
+						  if (count % 2 != 0)
+						  	classTr = "TrGrey";
+						  else 
+						  	classTr = "TrWhite";
+						  %>
+							<tr class=$classTr>
+								<td width="25%" height="30" class="Line">
+									<a href="#"><%=item.getName()%></a>
+								</td>
+								<td width="25%" height="30" class="Line">
+									<span class="SubcriptionContent">
+										<%
+											uicomponent.renderChild(item.getName());
+										%>
+									</span>
+								</td>
+							</tr>
+					<%}%>
+				</table>
+			</div>
+		<%
+		}
+		%>
+	</div>
+	<div class="UIAction"> 
+	    <table class="ActionContainer">
+	    	<tr>
+	    		<td>
+	          <% for(action in uicomponent.getActions()) { 
+	              String link = uicomponent.event(action) ;
+	          %>
+	          <div onclick="$link" class="ActionButton LightBlueStyle" >
+	            <div class="ButtonLeft">
+	              <div class="ButtonRight">
+	                <div class="ButtonMiddle">
+	                  <a href="javascript:void(0);">Change your subcription</a>
+	                </div>
+	              </div>
+	            </div>
+	          </div>
+	      		<%}%>
+	      	</td>
+	      </tr>          
+	    </table>
+	  </div>
+	<%uiform.end()%>
+</div>
