@@ -214,6 +214,10 @@ function getElementsByClassPath(root, path) {
 	function doAddForm() {
 		var popupContainer = K("PopupContainer");
 		var sFolderName = popupContainer.select({where: "tagName == 'INPUT' && name == 'fileName'"})[0].value;
+		if (isInvalidName(sFolderName)) {
+			alert('Invalid folder name!');
+			return;
+		}
 		var sCurrentFolder = popupContainer.select({where: "tagName == 'INPUT' && name == 'hidden'"})[0].value;
 		var connector = eXoPlugin.hostName + eXp.connector + 'createFolder';
 		var param = eXp.buildParam(
@@ -374,8 +378,8 @@ function getElementsByClassPath(root, path) {
 		var nodeName = K("PopupContainer").select({where: "nodeName == 'INPUT' && name == 'fileName'"})[0];
 		var iFrameUpload = popupContainer.select({where: "className == 'iFrameUpload'"})[0];
 		var formUpload = iFrameUpload.contentWindow.document.getElementsByTagName("form")[0];
-		if ((formUpload.file.value.match('[/,[,*,\',",|]') != null || formUpload.file.value.indexOf(']') >= 0) && nodeName.value == '') {
-			alert('Invalid file name! Please rename you file and try to upload again, or enter new name in the input above.');
+		if (isInvalidName(formUpload.file.value) || isInvalidName(nodeName.value)) {
+			alert('Invalid file name!');
 			return;
 		}
 		
@@ -402,3 +406,8 @@ function getElementsByClassPath(root, path) {
 		removeMask();
 		setTimeout(function(){getDir(eXp.store.currentNode)}, 1000);
 	};
+
+function isInvalidName(name) {
+	if (name && name.match('[/,[,*,\',",|]') == null && name.indexOf(']') < 0) return false;
+	return true;
+}
