@@ -1,0 +1,91 @@
+.NewsletterStyle {
+	padding: 10px 10px 10px 10px;
+}
+
+.TextTest {
+	font-size: 30px;
+	color: Red;
+}
+
+.UserName {
+	margin: auto;
+}
+
+.UserName .LeftUserName {
+	float: left;
+	height: 30px;
+}
+
+.UserName .RightUserName {
+	margin-left: 310px;
+}
+
+.LeftUserName .textUserName {
+	font-weight: boil;
+	font-size: 12px;
+}
+
+.RightUserName input {
+	width: 200px;
+}
+
+. ClearLeft {
+	clear: left;
+}
+
+.ListCategory {
+	margin-top: 20px;
+	
+}
+
+.TextCategoryName {
+	font-weight: boil;
+	font-size: 16px;
+}
+
+.TextAboutCategory {
+	font-size: 12px;
+}
+
+.ListSubcription {
+	margin: auto;
+}
+.ListSubcription table {
+	border: 1px solid #c8c8c8;
+	width: 50%;
+	padding: 4px 4px;
+}
+
+.ListSubcription .TrWhite{
+	height: 30px;
+}
+
+.ListSubcription .TrGrey{
+	height: 30px;
+	background: #f4f4f4;
+}
+
+.ListSubcription .Line {
+	line-height: 30px;
+	border-right: 1px solid #c8c8c8;
+}
+
+.ListSubcription .TitleSubcription {
+	padding-left: 20px;
+	font-weight: boil;
+	font-size: 14px;
+}
+
+.ListSubcription .SubcriptionContent {
+	padding-left: 20px;
+}
+
+.ListSubcription a{
+	padding-left: 20px;
+	color: #000;
+}
+
+.ListSubcription a:hover{
+	color: #5ba1d8;
+	cursor: pointer;
+}
