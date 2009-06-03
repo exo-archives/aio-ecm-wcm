@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+  <!--/n  ######################################################################################
+  #    org.exoplatform.ecm.webui.contentviewer.UIParameterizedContentViewerPortlet     #
+  ######################################################################################
+  -->
+  <UIMessageBoard>
+    <msg>
+      <content-not-found>Contenu non trouvé ou supprimé.</content-not-found>
+      <content-unsupport-exc>Contenu non supporté à la visualisation.</content-unsupport-exc>
+      <access-control-exc>Accès au contenu supprimé.</access-control-exc>
+      <content-not-printed></content-not-printed>
+      <content-obsolete></content-obsolete>
+    </msg>
+  </UIMessageBoard>
+  <UIDocumentDialogForm>
+  	<action>
+  		<SaveDraft>Sauver le brouillon</SaveDraft>
+  		<Cancel>Annuler</Cancel>
+  		<FastPublish>Publication rapide</FastPublish>
+  	</action>
+  </UIDocumentDialogForm>
+  <UIContentViewerContainer>
+    <action>
+      <back>Retour</back>
+      <print>Imprimer</print>
+      <close>Fermer</close>
+    </action>
+    <label>
+    	<quickEditTitle></quickEditTitle>
+    </label>        
+    <quickPrint>
+    	<title>Imprimer cette page</title>
+    	<print>Imprimer cette page</print>
+    </quickPrint>
+  </UIContentViewerContainer>
+  <UIPopupWindow>
+  	<title>
+	  	<UIDocumentDialogForm>Document dialog form</UIDocumentDialogForm>
+  	</title>
+  </UIPopupWindow>
+</bundle>
+

@@ -8,39 +8,39 @@
     
  	<portal-layout> 		
  	  <application>
-	    <instance-id>portal#acme:/web-presentation/SiteAdministrationPortlet/acme-admintoolbar</instance-id>
+	    <instance-id>portal#acme:/presentation/SiteAdministrationPortlet/acme-admintoolbar</instance-id>
 	    <show-info-bar>false</show-info-bar>
   	</application>	  
   	
   	<container id="BannerContainer" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
   		<container id="Banner" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
   			<application>
-			    <instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-banner</instance-id>
+			    <instance-id>portal#acme:/presentation/SingleContentViewer/acme-banner</instance-id>
 			    <show-info-bar>false</show-info-bar>
 			  </application>
   		</container>
   		<container id="WCMSearchBox" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
 	  		<application>
-			    <instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-searchbox</instance-id>
+			    <instance-id>portal#acme:/presentation/SingleContentViewer/acme-searchbox</instance-id>
 			    <show-info-bar>false</show-info-bar>
 			  </application>
   		</container>
   	</container>
   		
   	<application>
-		 	<instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-navigation</instance-id>
+		 	<instance-id>portal#acme:/presentation/SingleContentViewer/acme-navigation</instance-id>
   	  <show-info-bar>false</show-info-bar>
 		</application>
   	
   	<application>
-			<instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-breadcrumb</instance-id>
+			<instance-id>portal#acme:/presentation/SingleContentViewer/acme-breadcrumb</instance-id>
 	  	<show-info-bar>false</show-info-bar>
 	  </application>
 		
 	  <page-body> </page-body>
 	  
 	  <application>
-	    <instance-id>portal#acme:/web-presentation/SingleContentViewer/acme-footer</instance-id>
+	    <instance-id>portal#acme:/presentation/SingleContentViewer/acme-footer</instance-id>
 	    <show-info-bar>false</show-info-bar>
 	  </application>
   </portal-layout>

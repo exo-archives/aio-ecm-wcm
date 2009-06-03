@@ -9,7 +9,7 @@
 	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>*:/platform/administrators</edit-permission>
     <application>
-      <instance-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-homepage</instance-id>
+      <instance-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-homepage</instance-id>
       <title>Homepage</title>
       <show-info-bar>false</show-info-bar>
       <show-application-state>false</show-application-state>
@@ -25,7 +25,7 @@
 	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>*:/platform/administrators</edit-permission>
     <application>
-      <instance-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-presentation</instance-id>
+      <instance-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-presentation</instance-id>
       <title>Single Content Viewer</title>
       <show-info-bar>false</show-info-bar>      
       <show-application-state>false</show-application-state>
@@ -41,7 +41,7 @@
 	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>*:/platform/administrators</edit-permission>
     <application>
-      <instance-id>portal#@owner@:/web-presentation/SiteAdministrationPortlet/@owner@-admintoolbar</instance-id>
+      <instance-id>portal#@owner@:/presentation/SiteAdministrationPortlet/@owner@-admintoolbar</instance-id>
       <title>Toolbar</title>
       <show-info-bar>false</show-info-bar>      
       <show-application-state>false</show-application-state>
@@ -57,7 +57,7 @@
 	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>*:/platform/administrators</edit-permission>
     <application>
-      <instance-id>portal#@owner@:/web-searches/SimpleSearchPortlet/@owner@-search</instance-id>
+      <instance-id>portal#@owner@:/searches/SimpleSearchPortlet/@owner@-search</instance-id>
       <title>Search</title>
       <show-info-bar>true</show-info-bar>      
       <show-application-state>true</show-application-state>
@@ -118,7 +118,7 @@
     <edit-permission>*:/platform/administrators</edit-permission>
     <show-max-window>true</show-max-window>
     <application>
-      <instance-id>portal#classic:/web-presentation/ParameterizedContentViewerPortlet/classic-printviewer</instance-id>
+      <instance-id>portal#classic:/presentation/ParameterizedContentViewerPortlet/classic-printviewer</instance-id>
       <title>printviewer</title>
       <show-info-bar>false</show-info-bar>      
       <show-application-state>false</show-application-state>

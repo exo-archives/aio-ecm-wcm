@@ -3,7 +3,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>classic</owner-id>
-    <window-id>portal#classic:/web-presentation/SingleContentViewer/classic-banner</window-id>
+    <window-id>portal#classic:/presentation/SingleContentViewer/classic-banner</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -34,7 +34,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>classic</owner-id>
-    <window-id>portal#classic:/web-presentation/SingleContentViewer/classic-access</window-id>
+    <window-id>portal#classic:/presentation/SingleContentViewer/classic-access</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -65,7 +65,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>classic</owner-id>
-    <window-id>portal#classic:/web-presentation/SingleContentViewer/classic-searchbox</window-id>
+    <window-id>portal#classic:/presentation/SingleContentViewer/classic-searchbox</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -96,7 +96,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>classic</owner-id>
-    <window-id>portal#classic:/web-presentation/SingleContentViewer/classic-navigation</window-id>
+    <window-id>portal#classic:/presentation/SingleContentViewer/classic-navigation</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -127,7 +127,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>classic</owner-id>
-    <window-id>portal#classic:/web-presentation/SingleContentViewer/classic-breadcrumb</window-id>
+    <window-id>portal#classic:/presentation/SingleContentViewer/classic-breadcrumb</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -158,7 +158,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>classic</owner-id>
-    <window-id>portal#classic:/web-presentation/SingleContentViewer/classic-footer</window-id>
+    <window-id>portal#classic:/presentation/SingleContentViewer/classic-footer</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -189,7 +189,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>classic</owner-id>
-    <window-id>portal#classic:/web-presentation/SingleContentViewer/classic-homepage</window-id>
+    <window-id>portal#classic:/presentation/SingleContentViewer/classic-homepage</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -220,7 +220,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>classic</owner-id>
-    <window-id>portal#classic:/web-presentation/SingleContentViewer/classic-sitemap</window-id>
+    <window-id>portal#classic:/presentation/SingleContentViewer/classic-sitemap</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -262,7 +262,7 @@
   <portlet-preferences>
 		<owner-type>portal</owner-type>
 		<owner-id>classic</owner-id>
-		<window-id>portal#classic:/web-presentation/SingleContentViewer/classic-presentation</window-id>
+		<window-id>portal#classic:/presentation/SingleContentViewer/classic-presentation</window-id>
       <preference>
         <name>ShowTOC</name>
         <value>true</value>
@@ -297,7 +297,7 @@
   <portlet-preferences>
 	<owner-type>portal</owner-type>
 	<owner-id>classic</owner-id>
-	<window-id>portal#classic:/web-searches/WCMAdvanceSearchPortlet/searchResult</window-id>
+	<window-id>portal#classic:/searches/WCMAdvanceSearchPortlet/searchResult</window-id>
 	<preference>
     	<name>repository</name>
     	<value>repository</value>

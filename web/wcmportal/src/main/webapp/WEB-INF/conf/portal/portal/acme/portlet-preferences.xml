@@ -3,7 +3,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>acme</owner-id>
-    <window-id>portal#acme:/web-presentation/SingleContentViewer/acme-banner</window-id>
+    <window-id>portal#acme:/presentation/SingleContentViewer/acme-banner</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -29,7 +29,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>acme</owner-id>
-    <window-id>portal#acme:/web-presentation/SingleContentViewer/acme-navigation</window-id>
+    <window-id>portal#acme:/presentation/SingleContentViewer/acme-navigation</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -60,7 +60,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>acme</owner-id>
-    <window-id>portal#acme:/web-presentation/SingleContentViewer/acme-breadcrumb</window-id>
+    <window-id>portal#acme:/presentation/SingleContentViewer/acme-breadcrumb</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -91,7 +91,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>acme</owner-id>
-    <window-id>portal#acme:/web-presentation/SingleContentViewer/acme-footer</window-id>
+    <window-id>portal#acme:/presentation/SingleContentViewer/acme-footer</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -122,7 +122,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>acme</owner-id>
-    <window-id>portal#acme:/web-presentation/SingleContentViewer/acme-homepage</window-id>
+    <window-id>portal#acme:/presentation/SingleContentViewer/acme-homepage</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -153,7 +153,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>acme</owner-id>
-    <window-id>portal#acme:/web-presentation/SingleContentViewer/acme-about-noheader</window-id>
+    <window-id>portal#acme:/presentation/SingleContentViewer/acme-about-noheader</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -184,7 +184,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>acme</owner-id>
-    <window-id>portal#acme:/web-presentation/SingleContentViewer/acme-about-header</window-id>
+    <window-id>portal#acme:/presentation/SingleContentViewer/acme-about-header</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -215,7 +215,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>acme</owner-id>
-    <window-id>portal#acme:/web-presentation/SingleContentViewer/acme-serpro</window-id>
+    <window-id>portal#acme:/presentation/SingleContentViewer/acme-serpro</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -246,7 +246,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>acme</owner-id>
-    <window-id>portal#acme:/web-presentation/ContentListViewerPortlet/acme-news-header</window-id>
+    <window-id>portal#acme:/presentation/ContentListViewerPortlet/acme-news-header</window-id>
     <preference>
     	<name>repository</name>
     	<value>repository</value>
@@ -322,7 +322,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>acme</owner-id>
-    <window-id>portal#acme:/web-presentation/ContentListViewerPortlet/acme-news-noheader</window-id>
+    <window-id>portal#acme:/presentation/ContentListViewerPortlet/acme-news-noheader</window-id>
     <preference>
     	<name>repository</name>
     	<value>repository</value>
@@ -398,7 +398,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>acme</owner-id>
-    <window-id>portal#acme:/web-presentation/SingleContentViewer/acme-product</window-id>
+    <window-id>portal#acme:/presentation/SingleContentViewer/acme-product</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -429,7 +429,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>acme</owner-id>
-    <window-id>portal#acme:/web-presentation/ContentListViewerPortlet/acme-services-header</window-id>
+    <window-id>portal#acme:/presentation/ContentListViewerPortlet/acme-services-header</window-id>
     <preference>
     	<name>repository</name>
     	<value>repository</value>
@@ -505,7 +505,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>acme</owner-id>
-    <window-id>portal#acme:/web-presentation/ContentListViewerPortlet/acme-services-noheader</window-id>
+    <window-id>portal#acme:/presentation/ContentListViewerPortlet/acme-services-noheader</window-id>
     <preference>
     	<name>repository</name>
     	<value>repository</value>
@@ -581,7 +581,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>acme</owner-id>
-    <window-id>portal#acme:/web-presentation/ContentListViewerPortlet/acme-products-header</window-id>
+    <window-id>portal#acme:/presentation/ContentListViewerPortlet/acme-products-header</window-id>
     <preference>
     	<name>repository</name>
     	<value>repository</value>
@@ -657,7 +657,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>acme</owner-id>
-    <window-id>portal#acme:/web-presentation/ContentListViewerPortlet/acme-products-noheader</window-id>
+    <window-id>portal#acme:/presentation/ContentListViewerPortlet/acme-products-noheader</window-id>
     <preference>
     	<name>repository</name>
     	<value>repository</value>
@@ -733,7 +733,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>acme</owner-id>
-    <window-id>portal#acme:/web-presentation/SingleContentViewer/acme-contact</window-id>
+    <window-id>portal#acme:/presentation/SingleContentViewer/acme-contact</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -764,7 +764,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>acme</owner-id>
-    <window-id>portal#acme:/web-presentation/SingleContentViewer/acme-searchbox</window-id>
+    <window-id>portal#acme:/presentation/SingleContentViewer/acme-searchbox</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -795,7 +795,7 @@
   <portlet-preferences>
 	  <owner-type>portal</owner-type>
 	  <owner-id>acme</owner-id>
-	  <window-id>portal#acme:/web-searches/WCMAdvanceSearchPortlet/acme-search</window-id>
+	  <window-id>portal#acme:/searches/WCMAdvanceSearchPortlet/acme-search</window-id>
 	  <preference>
 	    <name>searchPageLayoutTemplatePath</name>
 	    <value>/jcr:system/exo:ecm/views/templates/WCM Advance Search/search-page-layout/UISearchPageLayoutDefault.gtmpl</value>

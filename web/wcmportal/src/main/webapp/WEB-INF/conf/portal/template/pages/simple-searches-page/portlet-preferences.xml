@@ -3,7 +3,7 @@
 	<portlet-preferences>
 		<owner-type></owner-type>
 		<owner-id></owner-id>
-		<window-id>/web-searches/WCMAdvanceSearchPortlet</window-id>
+		<window-id>/searches/WCMAdvanceSearchPortlet</window-id>
 		<preference>
     	<name>repository</name>
     	<value>repository</value>

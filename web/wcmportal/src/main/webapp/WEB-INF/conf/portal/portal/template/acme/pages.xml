@@ -10,25 +10,25 @@
 	  <edit-permission>*:/platform/administrators</edit-permission>
 	  <container id="@owner@Homepage" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
 	  	<application>
-	      <instance-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-homepage</instance-id>
+	      <instance-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-homepage</instance-id>
 	      <title>Homepage</title>
 	    </application>
 			<container id="@owner@Container" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
 	  		<container id="@owner@SerProContainer" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
 	  			<application>
-				    <instance-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-serpro</instance-id>
+				    <instance-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-serpro</instance-id>
 				    <title>Services and Products</title>
 				  </application>
 	  		</container>
 	  		<container id="@owner@About" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
 	  			<application>
-			    	<instance-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-about-header</instance-id>
+			    	<instance-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-about-header</instance-id>
 			    	<title>About</title>
 			  	</application>
 			  </container>
 	  		<container id="@owner@Features" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
 	  			<application>
-				    <instance-id>portal#@owner@:/web-presentation/ContentListViewerPortlet/@owner@-news-header</instance-id>
+				    <instance-id>portal#@owner@:/presentation/ContentListViewerPortlet/@owner@-news-header</instance-id>
 				    <title>Features</title>
 				  </application>
 	  		</container>
@@ -48,13 +48,13 @@
 	  	<container id="@owner@Container" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
 	  		<container id="@owner@SerProContainer" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
 	  			<application>
-				    <instance-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-serpro</instance-id>
+				    <instance-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-serpro</instance-id>
 				    <title>Services and Products</title>
 				  </application>
 	  		</container>
 	  		<container id="@owner@News" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
 	  			<application>
-				    <instance-id>portal#@owner@:/web-presentation/ContentListViewerPortlet/@owner@-news-noheader</instance-id>
+				    <instance-id>portal#@owner@:/presentation/ContentListViewerPortlet/@owner@-news-noheader</instance-id>
 				    <title>News</title>
 				  </application>
 	  		</container>
@@ -74,13 +74,13 @@
 	  	<container id="@owner@Container" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
 	  		<container id="@owner@SerProContainer" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
 	  			<application>
-				    <instance-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-serpro</instance-id>
+				    <instance-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-serpro</instance-id>
 				    <title>Services and Products</title>
 				  </application>
 	  		</container>
 	  		<container id="@owner@About" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
 	  			<application>
-				    <instance-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-about-noheader</instance-id>
+				    <instance-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-about-noheader</instance-id>
 				    <title>About</title>
 				  </application>
 	  		</container>
@@ -100,13 +100,13 @@
 	  	<container id="@owner@Container" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
 	  		<container id="@owner@About" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
 	  			<application>
-				    <instance-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-about-header</instance-id>
+				    <instance-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-about-header</instance-id>
 				    <title>About</title>
 				  </application>
 	  		</container>
 	  		<container id="@owner@Contact" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
 	  			<application>
-				    <instance-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-contact</instance-id>
+				    <instance-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-contact</instance-id>
 				    <title>Contact</title>
 				  </application>
 	  		</container>
@@ -126,13 +126,13 @@
 	  	<container id="@owner@Container" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
 	  		<container id="@owner@Services" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
 	  			<application>
-				    <instance-id>portal#@owner@:/web-presentation/ContentListViewerPortlet/@owner@-services-header</instance-id>
+				    <instance-id>portal#@owner@:/presentation/ContentListViewerPortlet/@owner@-services-header</instance-id>
 				    <title>Services</title>
 				  </application>
 	  		</container>
 	  		<container id="@owner@Product" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
 	  			<application>
-				    <instance-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-product</instance-id>
+				    <instance-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-product</instance-id>
 				    <title>Product</title>
 				  </application>
 	  		</container>
@@ -152,13 +152,13 @@
 	  	<container id="@owner@Container" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
 	  		<container id="@owner@Products" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
 	  			<application>
-				    <instance-id>portal#@owner@:/web-presentation/ContentListViewerPortlet/@owner@-products-header</instance-id>
+				    <instance-id>portal#@owner@:/presentation/ContentListViewerPortlet/@owner@-products-header</instance-id>
 				    <title>Products</title>
 				  </application>
 	  		</container>
 	  		<container id="@owner@Services" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
 	  			<application>
-				    <instance-id>portal#@owner@:/web-presentation/ContentListViewerPortlet/@owner@-services-noheader</instance-id>
+				    <instance-id>portal#@owner@:/presentation/ContentListViewerPortlet/@owner@-services-noheader</instance-id>
 				    <title>Services</title>
 				  </application>
 	  		</container>
@@ -175,7 +175,7 @@
 	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>*:/platform/administrators</edit-permission>
     <application>
-      <instance-id>portal#@owner@:/web-searches/WCMAdvanceSearchPortlet/@owner@-search</instance-id>
+      <instance-id>portal#@owner@:/searches/WCMAdvanceSearchPortlet/@owner@-search</instance-id>
       <title>Search</title>
     </application>
   </page>
@@ -189,7 +189,7 @@
 	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>*:/platform/administrators</edit-permission>
     <application>
-      <instance-id>portal#@owner@:/web-presentation/SiteAdministrationPortlet/@owner@-admintoolbar</instance-id>
+      <instance-id>portal#@owner@:/presentation/SiteAdministrationPortlet/@owner@-admintoolbar</instance-id>
       <title>AdminToolbar</title>
     </application>
   </page> 
@@ -217,7 +217,7 @@
 	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>*:/platform/administrators</edit-permission>
     <application>
-      <instance-id>portal#@owner@:/web-searches/WCMAdvanceSearchPortlet/@owner@-searchResult</instance-id>
+      <instance-id>portal#@owner@:/searches/WCMAdvanceSearchPortlet/@owner@-searchResult</instance-id>
       <title>SearchResult</title>
       <show-info-bar>false</show-info-bar>      
       <show-application-state>false</show-application-state>
@@ -234,7 +234,7 @@
     <access-permissions>Everyone</access-permissions> 
     <edit-permission>*:/platform/administrators</edit-permission>
     <application>
-      <instance-id>portal#@owner@:/web-presentation/ParameterizedContentViewerPortlet/@owner@-parameterizedviewer</instance-id>
+      <instance-id>portal#@owner@:/presentation/ParameterizedContentViewerPortlet/@owner@-parameterizedviewer</instance-id>
       <title>parameterizedviewer</title>
       <show-info-bar>false</show-info-bar>      
       <show-application-state>false</show-application-state>
@@ -251,7 +251,7 @@
     <edit-permission>*:/platform/administrators</edit-permission>
     <show-max-window>true</show-max-window>
     <application>
-      <instance-id>portal#@owner@:/web-presentation/ParameterizedContentViewerPortlet/@owner@-printviewer</instance-id>
+      <instance-id>portal#@owner@:/presentation/ParameterizedContentViewerPortlet/@owner@-printviewer</instance-id>
       <title>printviewer</title>
       <show-info-bar>false</show-info-bar>      
       <show-application-state>false</show-application-state>

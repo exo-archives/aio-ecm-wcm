@@ -3,7 +3,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>empty</owner-id>
-    <window-id>portal#empty:/web-presentation/SingleContentViewer/empty-banner</window-id>
+    <window-id>portal#empty:/presentation/SingleContentViewer/empty-banner</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -29,7 +29,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>empty</owner-id>
-    <window-id>portal#empty:/web-presentation/SingleContentViewer/empty-navigation</window-id>
+    <window-id>portal#empty:/presentation/SingleContentViewer/empty-navigation</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -60,7 +60,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>empty</owner-id>
-    <window-id>portal#empty:/web-presentation/SingleContentViewer/empty-breadcrumb</window-id>
+    <window-id>portal#empty:/presentation/SingleContentViewer/empty-breadcrumb</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -91,7 +91,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>empty</owner-id>
-    <window-id>portal#empty:/web-presentation/SingleContentViewer/empty-footer</window-id>
+    <window-id>portal#empty:/presentation/SingleContentViewer/empty-footer</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -122,7 +122,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>empty</owner-id>
-    <window-id>portal#empty:/web-presentation/SingleContentViewer/empty-homepage</window-id>
+    <window-id>portal#empty:/presentation/SingleContentViewer/empty-homepage</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -154,7 +154,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>empty</owner-id>
-    <window-id>portal#empty:/web-presentation/SingleContentViewer/empty-searchbox</window-id>
+    <window-id>portal#empty:/presentation/SingleContentViewer/empty-searchbox</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -185,7 +185,7 @@
   <portlet-preferences>
 	  <owner-type>portal</owner-type>
 	  <owner-id>empty</owner-id>
-	  <window-id>portal#empty:/web-searches/WCMAdvanceSearchPortlet/empty-search</window-id>
+	  <window-id>portal#empty:/searches/WCMAdvanceSearchPortlet/empty-search</window-id>
 	  <preference>
 	    <name>searchPageLayoutTemplatePath</name>
 	    <value>/jcr:system/exo:ecm/views/templates/WCM Advance Search/search-page-layout/UISearchPageLayoutDefault.gtmpl</value>

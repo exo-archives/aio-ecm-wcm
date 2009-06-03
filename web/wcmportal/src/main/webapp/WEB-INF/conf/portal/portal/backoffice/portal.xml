@@ -8,19 +8,19 @@
     
  	<portal-layout> 		
  	  <application>
-	    <instance-id>portal#backoffice:/web-presentation/SiteAdministrationPortlet/backoffice-admintoolbar</instance-id>
+	    <instance-id>portal#backoffice:/presentation/SiteAdministrationPortlet/backoffice-admintoolbar</instance-id>
 	    <show-info-bar>false</show-info-bar>
   	</application>	  
   	
   	<application>
-			<instance-id>portal#backoffice:/web-presentation/SingleContentViewer/backoffice-breadcrumb</instance-id>
+			<instance-id>portal#backoffice:/presentation/SingleContentViewer/backoffice-breadcrumb</instance-id>
 	  	<show-info-bar>false</show-info-bar>
 	  </application>
 		
 	  <page-body> </page-body>
 	  
 	  <application>
-	    <instance-id>portal#backoffice:/web-presentation/SingleContentViewer/backoffice-footer</instance-id>
+	    <instance-id>portal#backoffice:/presentation/SingleContentViewer/backoffice-footer</instance-id>
 	    <show-info-bar>false</show-info-bar>
 	  </application>
 

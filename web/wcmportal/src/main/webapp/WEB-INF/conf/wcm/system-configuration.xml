@@ -14,7 +14,7 @@
 	    </value-param>
 	    <value-param>
 	      <name>publishingPortletName</name>
-	      <value>/web-presentation/SingleContentViewer</value>
+	      <value>/presentation/SingleContentViewer</value>
 	    </value-param>
 	    <properties-param>
 	      <name>RuntimeContextParams</name>
@@ -23,8 +23,8 @@
 	      <property name="printPageURI" value="/printviewer"/>
 	      <property name="printViewerPage" value="printviewer"/>
 	      <property name="createWikiPageURI" value="wikipresentation"/>
-	      <property name="CLVPortlet" value="/web-presentation/ContentListViewerPortlet"/>
-	      <property name="SCVPortlet" value="/web-presentation/SingleContentViewer"/>
+	      <property name="CLVPortlet" value="/presentation/ContentListViewerPortlet"/>
+	      <property name="SCVPortlet" value="/presentation/SingleContentViewer"/>
 	      <property name="formViewTemplatePath" value="/jcr:system/exo:ecm/views/templates/Content List Viewer/list-by-folder/UIContentListPresentationDefault.gtmpl"/>
 	      <property name="paginatorTemplatePath" value="/jcr:system/exo:ecm/views/templates/Content List Viewer/paginators/UIPaginatorDefault.gtmpl"/>	      
 	    </properties-param>

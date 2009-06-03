@@ -3,7 +3,7 @@
 	<portlet-preferences>
 		<owner-type></owner-type>
 		<owner-id></owner-id>
-		<window-id>/web-presentation/SingleContentViewer</window-id>
+		<window-id>/presentation/SingleContentViewer</window-id>
       <preference>
         <name>ShowTOC</name>
         <value>true</value>

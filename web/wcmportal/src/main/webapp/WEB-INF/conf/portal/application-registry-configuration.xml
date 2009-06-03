@@ -58,7 +58,7 @@
 		                  <field name="applicationName"><string>SingleContentViewer</string></field>
 						          <field name="displayName"><string>Single Content Viewer</string></field>
 		                  <field name="applicationType"><string>portlet</string></field>
-		                  <field name="applicationGroup"><string>web-presentation</string></field>
+		                  <field name="applicationGroup"><string>presentation</string></field>
 		                  <field name="accessPermissions">
 								        <collection type="java.util.ArrayList" item-type="java.lang.String">													
 													<value><string>*:/platform/users</string></value>													
@@ -72,7 +72,7 @@
 		                  <field name="applicationName"><string>ContentListViewerPortlet</string></field>
 						          <field name="displayName"><string>Content List Viewer</string></field>
 		                  <field name="applicationType"><string>portlet</string></field>
-		                  <field name="applicationGroup"><string>web-presentation</string></field>
+		                  <field name="applicationGroup"><string>presentation</string></field>
 		                  <field name="accessPermissions">
 								        <collection type="java.util.ArrayList" item-type="java.lang.String">													
 													<value><string>*:/platform/users</string></value>													

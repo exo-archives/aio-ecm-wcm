@@ -1,0 +1,57 @@
+<div id="$uicomponent.id" class="$uicomponent.id">
+	<%
+		import org.exoplatform.portal.application.PortalRequestContext;
+		import javax.portlet.PortletPreferences;
+		import org.exoplatform.services.wcm.core.WCMConfigurationService;
+		import org.exoplatform.portal.webui.util.Util;
+		import org.exoplatform.wcm.webui.pcv.UIContentViewer;
+		
+		String link = uicomponent.event("QuickEdit");
+		String lblBack = _ctx.appRes("UIContentViewerContainer.action.back");
+		String lblPrint = _ctx.appRes("UIContentViewerContainer.action.print");
+		String lblClose = _ctx.appRes("UIContentViewerContainer.action.close");
+		
+		WCMConfigurationService wcmConfigurationService = uicomponent.getApplicationComponent(WCMConfigurationService.class);
+		String parameterizedPageURI = wcmConfigurationService.getRuntimeContextParam("parameterizedPageURI");
+		String printPreviewPageURI = wcmConfigurationService.getRuntimeContextParam("printPageURI");
+	  	UIContentViewer uiContentViewer = uicomponent.getChild(UIContentViewer.class);
+	
+		String obsoleteMessage = "";
+		if(uicomponent.isObsoletedContent) { 
+			obsoleteMessage += "<div style=\"padding-bottom: 20px; font-size: 13px; text-align: center;\">";
+			obsoleteMessage += "	<div class=\"Message\">";
+			obsoleteMessage += "		<span>" + _ctx.appRes("UIPresentationContainer.obsolete") + "</span>";
+			obsoleteMessage += "	</div>";
+			obsoleteMessage += "</div>";
+		} else {
+	   		if(uicomponent.isDraftRevision) { 
+	   			obsoleteMessage += "<div style=\"padding: 5px 10px; line-height: 16px; \">";
+	   			obsoleteMessage += "	[<span class=\"DraftIcon\" style=\"padding-left: 20px\">" + _ctx.appRes("UIPresentationContainer.draft") + "</span>]";
+	   			obsoleteMessage += "</div>";
+			} 
+		}
+		
+		if(uicomponent.getIsPrint()) {
+			out.println(obsoleteMessage);
+			uicomponent.renderChildren();
+			%>
+				<div class="ActionContainer">
+					<a class="PrintFrameIcon PrintIcon" href="javascript: void(0)" onclick="var parent = this.parentNode; parent.removeChild(document.getElementById('CloseIcon')); parent.removeChild(this); window.print();">$lblPrint</a> 
+					<a class="PrintFrameIcon CloseIcon" id="CloseIcon" href="javascript: void(0)" onclick="window.close();">$lblClose</a>
+				</div>
+			<%
+		} else {
+			%>
+				<div class="UIOptionBar">
+					<div class="BackButton" title="$lblBack" onclick="history.go(-1)"><span></span></div>     
+					<a class="ActionIcon PrintIcon" href="javascript: void(0);" onclick="window.open(location.href.replace('<%=parameterizedPageURI%>','<%=printPreviewPageURI%>') + '?isPrint=true')" title="<%= _ctx.appRes("UIContentViewerContainer.quickPrint.title");%>"><%= _ctx.appRes("UIContentViewerContainer.quickPrint.print");%></a>
+		    	</div>
+			<%
+			if (uicomponent.isQuickEditAble()) {
+				%><a class="DocumentQuickEdit" href="$link" title="<%= _ctx.appRes("UIContentViewerContainer.label.quickEditTitle");%>"></a><% 	
+			} 
+			out.println(obsoleteMessage);
+			uicomponent.renderChildren();
+		}
+	%>
+</div>

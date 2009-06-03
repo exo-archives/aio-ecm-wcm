@@ -6,7 +6,7 @@
   <container template='system:/groovy/portal/webui/container/UITableColumnContainer.gtmpl'>
   	<container template='system:/groovy/portal/webui/container/UIContainer.gtmpl'>
   		<application>
-     		<instance-id>/web-presentation/SingleContentViewer</instance-id>
+     		<instance-id>/presentation/SingleContentViewer</instance-id>
       	<title>Single Content Presentation</title>
       	<show-info-bar>false</show-info-bar>
       	<show-application-state>false</show-application-state>    
@@ -15,7 +15,7 @@
   	</container>
     <container template='system:/groovy/portal/webui/container/UIContainer.gtmpl'>
     	<application>
-     		<instance-id>/web-presentation/SingleContentViewer</instance-id>
+     		<instance-id>/presentation/SingleContentViewer</instance-id>
       	<title>Single Content Presentation</title>
       	<show-info-bar>false</show-info-bar>
       	<show-application-state>false</show-application-state>    
@@ -25,7 +25,7 @@
   </container>
   <container template='system:/groovy/portal/webui/container/UIContainer.gtmpl'>
   	<application>
-     		<instance-id>/web-presentation/SingleContentViewer</instance-id>
+     		<instance-id>/presentation/SingleContentViewer</instance-id>
       	<title>Single Content Presentation</title>
       	<show-info-bar>false</show-info-bar>
       	<show-application-state>false</show-application-state>    

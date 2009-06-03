@@ -10,7 +10,7 @@
 	  <edit-permission>manager:/platform/web-contributors</edit-permission>
 	  <container id="emptyHomepage" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
 	  	<application>
-	      <instance-id>portal#empty:/web-presentation/SingleContentViewer/empty-homepage</instance-id>
+	      <instance-id>portal#empty:/presentation/SingleContentViewer/empty-homepage</instance-id>
 	      <title>Homepage</title>
 	    </application>
 	  </container>
@@ -25,7 +25,7 @@
 	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>manager:/platform/web-contributors</edit-permission>
     <application>
-      <instance-id>portal#empty:/web-searches/WCMAdvanceSearchPortlet/empty-search</instance-id>
+      <instance-id>portal#empty:/searches/WCMAdvanceSearchPortlet/empty-search</instance-id>
       <title>Search</title>
     </application>
   </page>
@@ -39,7 +39,7 @@
 	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>manager:/platform/web-contributors</edit-permission>
     <application>
-      <instance-id>portal#empty:/web-presentation/SiteAdministrationPortlet/empty-admintoolbar</instance-id>
+      <instance-id>portal#empty:/presentation/SiteAdministrationPortlet/empty-admintoolbar</instance-id>
       <title>AdminToolbar</title>
     </application>
   </page> 
@@ -67,7 +67,7 @@
 	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>manager:/platform/web-contributors</edit-permission>
     <application>
-      <instance-id>portal#empty:/web-searches/WCMAdvanceSearchPortlet/empty-searchResult</instance-id>
+      <instance-id>portal#empty:/searches/WCMAdvanceSearchPortlet/empty-searchResult</instance-id>
       <title>SearchResult</title>
       <show-info-bar>false</show-info-bar>      
       <show-application-state>false</show-application-state>
@@ -84,7 +84,7 @@
     <access-permissions>Everyone</access-permissions> 
     <edit-permission>manager:/platform/web-contributors</edit-permission>
     <application>
-      <instance-id>portal#empty:/web-presentation/ParameterizedContentViewerPortlet/empty-parameterizedviewer</instance-id>
+      <instance-id>portal#empty:/presentation/ParameterizedContentViewerPortlet/empty-parameterizedviewer</instance-id>
       <title>parameterizedviewer</title>
       <show-info-bar>false</show-info-bar>      
       <show-application-state>false</show-application-state>
@@ -101,7 +101,7 @@
     <edit-permission>manager:/platform/web-contributors</edit-permission>
     <show-max-window>true</show-max-window>
     <application>
-      <instance-id>portal#empty:/web-presentation/ParameterizedContentViewerPortlet/empty-printviewer</instance-id>
+      <instance-id>portal#empty:/presentation/ParameterizedContentViewerPortlet/empty-printviewer</instance-id>
       <title>printviewer</title>
       <show-info-bar>false</show-info-bar>      
       <show-application-state>false</show-application-state>

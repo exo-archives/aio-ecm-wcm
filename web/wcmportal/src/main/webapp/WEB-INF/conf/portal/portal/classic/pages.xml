@@ -9,7 +9,7 @@
 	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>*:/platform/administrators</edit-permission>
     <application>
-      <instance-id>portal#classic:/web-presentation/SingleContentViewer/classic-homepage</instance-id>
+      <instance-id>portal#classic:/presentation/SingleContentViewer/classic-homepage</instance-id>
       <title>Homepage</title>
       <show-info-bar>false</show-info-bar>      
       <show-application-state>false</show-application-state>
@@ -41,7 +41,7 @@
 	<access-permissions>Everyone</access-permissions>
 	<edit-permission>*:/platform/administrators</edit-permission>
     <application>
-      <instance-id>portal#classic:/web-presentation/SingleContentViewer/classic-presentation</instance-id>
+      <instance-id>portal#classic:/presentation/SingleContentViewer/classic-presentation</instance-id>
       <title>Presentation</title>
       <show-info-bar>false</show-info-bar>      
       <show-application-state>false</show-application-state>
@@ -57,7 +57,7 @@
 	<access-permissions>Everyone</access-permissions>
 	<edit-permission>*:/platform/administrators</edit-permission>
     <application>
-      <instance-id>portal#classic:/web-presentation/ContentListViewerPortlet/classic-contentlistviewer</instance-id>
+      <instance-id>portal#classic:/presentation/ContentListViewerPortlet/classic-contentlistviewer</instance-id>
       <title>Content List Viewer</title>
       <show-info-bar>false</show-info-bar>      
       <show-application-state>false</show-application-state>
@@ -73,7 +73,7 @@
 	<access-permissions>Everyone</access-permissions>
 	<edit-permission>*:/platform/administrators</edit-permission>
     <application>
-      <instance-id>portal#classic:/web-presentation/SiteAdministrationPortlet/classic-admintoolbar</instance-id>
+      <instance-id>portal#classic:/presentation/SiteAdministrationPortlet/classic-admintoolbar</instance-id>
       <title>Toolbar</title>
       <show-info-bar>false</show-info-bar>      
       <show-application-state>false</show-application-state>
@@ -89,7 +89,7 @@
 	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>*:/platform/administrators</edit-permission>
     <application>
-      <instance-id>portal#classic:/web-searches/WCMAdvanceSearchPortlet/search</instance-id>
+      <instance-id>portal#classic:/searches/WCMAdvanceSearchPortlet/search</instance-id>
       <title>Search</title>
       <show-info-bar>false</show-info-bar>      
       <show-application-state>false</show-application-state>
@@ -105,7 +105,7 @@
 	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>*:/platform/administrators</edit-permission>
     <application>
-      <instance-id>portal#classic:/web-searches/WCMAdvanceSearchPortlet/classic-searchResult</instance-id>
+      <instance-id>portal#classic:/searches/WCMAdvanceSearchPortlet/classic-searchResult</instance-id>
       <title>SearchResult</title>
       <show-info-bar>false</show-info-bar>      
       <show-application-state>false</show-application-state>
@@ -135,7 +135,7 @@
 	  <access-permissions>Everyone</access-permissions>	  
 	  <edit-permission>*:/platform/administrators</edit-permission>
 	  <application>
-      <instance-id>portal#classic:/web-presentation/SingleContentViewer/classic-sitemap</instance-id>
+      <instance-id>portal#classic:/presentation/SingleContentViewer/classic-sitemap</instance-id>
       <title>Site Map</title>
       <show-info-bar>false</show-info-bar>      
     </application>          
@@ -149,7 +149,7 @@
     <access-permissions>Everyone</access-permissions> 
     <edit-permission>*:/platform/administrators</edit-permission>
     <application>
-      <instance-id>portal#classic:/web-presentation/ParameterizedContentViewerPortlet/classic-parameterizedviewer</instance-id>
+      <instance-id>portal#classic:/presentation/ParameterizedContentViewerPortlet/classic-parameterizedviewer</instance-id>
       <title>parameterizedviewer</title>
       <show-info-bar>false</show-info-bar>      
       <show-application-state>false</show-application-state>
@@ -166,7 +166,7 @@
     <edit-permission>*:/platform/administrators</edit-permission>
     <show-max-window>true</show-max-window>
     <application>
-      <instance-id>portal#classic:/web-presentation/ParameterizedContentViewerPortlet/classic-printviewer</instance-id>
+      <instance-id>portal#classic:/presentation/ParameterizedContentViewerPortlet/classic-printviewer</instance-id>
       <title>printviewer</title>
       <show-info-bar>false</show-info-bar>      
       <show-application-state>false</show-application-state>
@@ -182,7 +182,7 @@
     <access-permissions>Everyone</access-permissions>
     <edit-permission>*:/platform/administrators</edit-permission>
     <application>
-      <instance-id>portal#classic:/web-presentation/wikipresentation/classic-wikipresentation</instance-id>
+      <instance-id>portal#classic:/presentation/wikipresentation/classic-wikipresentation</instance-id>
       <title>wikipresentation</title>
       <show-info-bar>false</show-info-bar>      
       <show-application-state>false</show-application-state>

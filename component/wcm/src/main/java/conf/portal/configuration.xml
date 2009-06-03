@@ -16,7 +16,7 @@
 	    </value-param>
 	    <value-param>
 	      <name>publishingPortletName</name>
-	      <value>/web-presentation/SingleContentViewer</value>
+	      <value>/presentation/SingleContentViewer</value>
 	    </value-param>
 	   <properties-param>
 	      <name>share.portal.config</name>

@@ -3,7 +3,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>@owner@</owner-id>
-    <window-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-banner</window-id>
+    <window-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-banner</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -34,7 +34,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>@owner@</owner-id>
-    <window-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-navigation</window-id>
+    <window-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-navigation</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -65,7 +65,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>@owner@</owner-id>
-    <window-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-breadcrumb</window-id>
+    <window-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-breadcrumb</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -96,7 +96,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>@owner@</owner-id>
-    <window-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-footer</window-id>
+    <window-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-footer</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -127,7 +127,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>@owner@</owner-id>
-    <window-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-homepage</window-id>
+    <window-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-homepage</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -158,7 +158,7 @@
   <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>@owner@</owner-id>
-    <window-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-searchbox</window-id>
+    <window-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-searchbox</window-id>
     <preference>
       <name>repository</name>
       <value>repository</value>
@@ -189,7 +189,7 @@
   <portlet-preferences>
 	  <owner-type>portal</owner-type>
 	  <owner-id>@owner@</owner-id>
-	  <window-id>portal#@owner@:/web-searches/WCMAdvanceSearchPortlet/@owner@-search</window-id>
+	  <window-id>portal#@owner@:/searches/WCMAdvanceSearchPortlet/@owner@-search</window-id>
 	  <preference>
 	    <name>searchPageLayoutTemplatePath</name>
 	    <value>/jcr:system/exo:ecm/views/templates/WCM Advance Search/search-page-layout/UISearchPageLayoutDefault.gtmpl</value>

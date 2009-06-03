@@ -8,12 +8,12 @@
   
  	<portal-layout> 		
       <application>
-	    <instance-id>portal#@owner@:/web-presentation/SiteAdministrationPortlet/@owner@-admintoolbar</instance-id>
+	    <instance-id>portal#@owner@:/presentation/SiteAdministrationPortlet/@owner@-admintoolbar</instance-id>
 	    <show-info-bar>false</show-info-bar>
       </application>
       
  	  <application>
-	    <instance-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-banner</instance-id>
+	    <instance-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-banner</instance-id>
 	    <show-info-bar>false</show-info-bar>
 	  </application>
 
@@ -31,7 +31,7 @@
 	  <page-body> </page-body>
 	  
 	  <application>
-	    <instance-id>portal#@owner@:/web-presentation/SingleContentViewer/@owner@-banner</instance-id>
+	    <instance-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-banner</instance-id>
 	    <show-info-bar>false</show-info-bar>
 	  </application>
   </portal-layout>
