@@ -141,6 +141,38 @@
     </application>          
   </page>  
   <page>
+  	<page-id>portal::classic::newsletter</page-id>
+    <owner-type>portal</owner-type>
+    <owner-id>classic</owner-id>
+    <name>newsletter</name>
+    <title>Newsletter</title>
+	<access-permissions>Everyone</access-permissions>
+	<edit-permission>*:/platform/administrators</edit-permission>
+    <application>
+      <instance-id>portal#classic:/newsletter/NewsletterViewerPortlet/classic-newsletterviewer</instance-id>
+      <title>Newsletter viewer</title>
+      <show-info-bar>false</show-info-bar>      
+      <show-application-state>false</show-application-state>
+      <show-application-mode>false</show-application-mode>
+    </application>
+  </page>          
+  <page>
+  	<page-id>portal::classic::newslettermanager</page-id>
+    <owner-type>portal</owner-type>
+    <owner-id>classic</owner-id>
+    <name>newslettermanager</name>
+    <title>Newsletter Manager</title>
+	<access-permissions>*:/platform/administrators</access-permissions>
+	<edit-permission>*:/platform/administrators</edit-permission>
+    <application>
+      <instance-id>portal#classic:/newsletter/NewsletterManagerPortlet/classic-newslettermanager</instance-id>
+      <title>Newsletter Manager</title>
+      <show-info-bar>false</show-info-bar>      
+      <show-application-state>false</show-application-state>
+      <show-application-mode>false</show-application-mode>
+    </application>
+  </page>
+  <page>
   	<page-id>portal::classic::parameterizedviewer</page-id>
     <owner-type>portal</owner-type>
     <owner-id>classic</owner-id>

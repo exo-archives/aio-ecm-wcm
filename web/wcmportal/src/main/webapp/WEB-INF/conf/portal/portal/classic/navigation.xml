@@ -72,6 +72,25 @@
 			<page-reference>portal::classic::sitemap</page-reference>	    
 		</node>
 		<node>
+      <uri>newsletter</uri>
+      <name>newsletter</name>
+      <label>#{portal.classic.newsletter}</label>     
+      <page-reference>portal::classic::newsletter</page-reference>      
+      
+      <node>
+				<uri>newsletter/newsletterviewer</uri>
+				<name>presentation</name>
+				<label>#{portal.classic.newsletterviewer}</label>
+				<page-reference>portal::classic::newsletterviewer</page-reference>	    
+			</node>	 
+			<node>
+				<uri>newsletter/newslettermanager</uri>
+				<name>newslettermanager</name>
+				<label>#{portal.classic.newslettermanager}</label>
+				<page-reference>portal::classic::newslettermanager</page-reference>	    
+			</node>  	   	    	   	   
+    </node>
+		<node>
 			<uri>wikipresentation</uri>
 			<name>wikipresentation</name>
 			<label>#{portal.classic.wikipresentation}</label>

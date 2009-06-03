@@ -13,6 +13,9 @@
       <sitemap>Sitemap</sitemap>
       <parameterizedviewer>Parameterized Content Viewer</parameterizedviewer>
       <viewer>Viewers</viewer>
+      <newsletter>Newsletter</newsletter>
+      <newsletterviewer>Newsletter Viewer</newsletterviewer>
+      <newslettermanager>Newsletter Manager</newslettermanager>
       <printviewer>Print Viewer</printviewer>
     </classic>
   </portal>
