@@ -45,9 +45,9 @@ import org.exoplatform.services.organization.UserProfileHandler;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
 import org.exoplatform.services.wcm.images.RESTImagesRendererService;
-import org.exoplatform.services.wcm.publication.PublicationState;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant.SITE_MODE;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationState;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant.SITE_MODE;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
@@ -171,9 +171,9 @@ import org.exoplatform.webui.event.EventListener;
     PublicationService publicationService = getApplicationComponent(PublicationService.class);
     HashMap<String, Object> context = new HashMap<String, Object>();
     if (org.exoplatform.wcm.webui.Utils.isLiveMode()) {
-      context.put(Constant.RUNTIME_MODE, SITE_MODE.LIVE);
+      context.put(StageAndVersionPublicationConstant.RUNTIME_MODE, SITE_MODE.LIVE);
     } else {
-      context.put(Constant.RUNTIME_MODE, SITE_MODE.EDITING);
+      context.put(StageAndVersionPublicationConstant.RUNTIME_MODE, SITE_MODE.EDITING);
     }
     String lifecyleName = publicationService.getNodeLifecycleName(node);
     PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins()
@@ -189,7 +189,7 @@ import org.exoplatform.webui.event.EventListener;
       currentState = node.getProperty("publication:currentState").getString();
     } catch (Exception e) {
     } 
-    if(PublicationState.DRAFT.equals(currentState))
+    if(StageAndVersionPublicationState.DRAFT.equals(currentState))
       return true;
     return false;
   }

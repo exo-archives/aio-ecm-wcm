@@ -47,7 +47,7 @@ import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
  * hoa.pham@exoplatform.com
  * Oct 2, 2008
  */
-public class Util {
+public class StageAndVersionPublicationUtil {
  
   /** The Constant HISTORY_SEPARATOR. */
   public static final String HISTORY_SEPARATOR = "; ";
@@ -274,7 +274,7 @@ public class Util {
    * @return the list application id by page
    */
   public static List<String> getListApplicationIdByPage(Page page, String portletName) {
-    return Util.findAppInstancesByName(page, portletName);
+    return StageAndVersionPublicationUtil.findAppInstancesByName(page, portletName);
   }
   
   /**

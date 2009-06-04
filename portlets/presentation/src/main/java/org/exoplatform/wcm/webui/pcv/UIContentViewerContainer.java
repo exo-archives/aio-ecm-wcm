@@ -43,9 +43,9 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.wcm.publication.PublicationState;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant.SITE_MODE;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationState;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant.SITE_MODE;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.WebUIPropertiesConfigService;
 import org.exoplatform.wcm.webui.WebUIPropertiesConfigService.PopupWindowProperties;
@@ -208,9 +208,9 @@ public class UIContentViewerContainer extends UIContainer {
 					.getApplicationComponent(PublicationService.class);
 			HashMap<String, Object> hmContext = new HashMap<String, Object>();
 			if (Utils.isLiveMode()) {
-				hmContext.put(Constant.RUNTIME_MODE, SITE_MODE.LIVE);
+				hmContext.put(StageAndVersionPublicationConstant.RUNTIME_MODE, SITE_MODE.LIVE);
 			} else {
-				hmContext.put(Constant.RUNTIME_MODE, SITE_MODE.EDITING);
+				hmContext.put(StageAndVersionPublicationConstant.RUNTIME_MODE, SITE_MODE.EDITING);
 			}
 			String lifeCycleName = publicationService
 					.getNodeLifecycleName(currentNode);
@@ -235,15 +235,15 @@ public class UIContentViewerContainer extends UIContainer {
 			uiContentViewer.setRepository(repository);
 			uiContentViewer.setWorkspace(workspace);
 			uiContentViewer.setOrginalNode(currentNode);     			
-			String state = PublicationState.getRevisionState(currentNode);
-			if (Constant.OBSOLETE_STATE.equals(state)) {
+			String state = StageAndVersionPublicationState.getRevisionState(currentNode);
+			if (StageAndVersionPublicationConstant.OBSOLETE_STATE.equals(state)) {
 				setObsoletedContent(true);
 				renderErrorMessage(context,
 						UIContentViewer.OBSOLETE_CONTENT);
 				return;
 			} else {
 				setObsoletedContent(false);
-				if (Constant.DRAFT_STATE.equals(state) && !isLiveMode) {
+				if (StageAndVersionPublicationConstant.DRAFT_STATE.equals(state) && !isLiveMode) {
 					setDraftRevision(true);
 				} else {
 					setDraftRevision(false);

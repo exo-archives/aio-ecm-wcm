@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.services.wcm.publication.lifecycle.stageversion;
+package org.exoplatform.services.wcm.publication.listener.post;
 
 import java.util.HashMap;
 
@@ -28,6 +28,7 @@ import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
 
 /**
@@ -67,8 +68,8 @@ public class PostCreateContentEventListener extends Listener<CmsService, Node>{
       return;
     if(publicationService.isNodeEnrolledInLifecycle(currentNode))
       return;    
-    publicationService.enrollNodeInLifecycle(currentNode,Constant.LIFECYCLE_NAME);
-    publicationService.changeState(currentNode,Constant.DRAFT_STATE,new HashMap<String,String>());
+    publicationService.enrollNodeInLifecycle(currentNode,StageAndVersionPublicationConstant.LIFECYCLE_NAME);
+    publicationService.changeState(currentNode,StageAndVersionPublicationConstant.DRAFT_STATE,new HashMap<String,String>());
   }
 
 }

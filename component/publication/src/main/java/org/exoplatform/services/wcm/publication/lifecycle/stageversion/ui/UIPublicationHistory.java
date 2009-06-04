@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.services.wcm.publication.lifecycle.stageversion;
+package org.exoplatform.services.wcm.publication.lifecycle.stageversion.ui;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +24,8 @@ import javax.jcr.Value;
 
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleException;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.config.VersionLog;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponentDecorator;
@@ -36,10 +38,12 @@ import org.exoplatform.webui.event.EventListener;
  * Created by The eXo Platform SARL
  * Author : Dang Van Minh
  *          minh.dang@exoplatform.com
- * Jun 26, 2008 1:16:08 AM
+ * Edited : Phan Le Thanh Chuong
+ *          chuong.phan@exoplatform.com
+ * June 4, 2009 13:42:23 AM
  */
 @ComponentConfig(
-    template = "classpath:groovy/wcm/webui/publication/lifecycle/stageversion/UIPublicationHistory.gtmpl",
+    template = "classpath:groovy/wcm/webui/publication/lifecycle/stageversion/ui/UIPublicationHistory.gtmpl",
     events = {
         @EventConfig(listeners = UIPublicationHistory.CloseActionListener.class)
     }
@@ -60,7 +64,7 @@ public class UIPublicationHistory extends UIComponentDecorator {
   public List<VersionLog> getLog() throws NotInPublicationLifecycleException, Exception {
     if (currentNode_ == null) return new ArrayList<VersionLog>();
     List<VersionLog> logs = new ArrayList<VersionLog>();
-    Value[] values = currentNode_.getProperty(Constant.HISTORY).getValues();
+    Value[] values = currentNode_.getProperty(StageAndVersionPublicationConstant.HISTORY).getValues();
     for (Value value : values) {
       String logString = value.getString();
       VersionLog bean = VersionLog.toVersionLog(logString);

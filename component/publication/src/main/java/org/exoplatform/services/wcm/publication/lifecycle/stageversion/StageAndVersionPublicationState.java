@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.services.wcm.publication;
+package org.exoplatform.services.wcm.publication.lifecycle.stageversion;
 
 import javax.jcr.Node;
 
@@ -24,7 +24,7 @@ import javax.jcr.Node;
  *          hoa.phamvu@exoplatform.com
  * Apr 1, 2009  
  */
-public class PublicationState {
+public class StageAndVersionPublicationState {
   public static final String ENROLLED = "enrolled".intern(); 
   public static final String DRAFT = "draft".intern();
   public static final String AWAITING = "awaiting".intern();

@@ -14,13 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.services.wcm.publication.lifecycle.stageversion;
+package org.exoplatform.services.wcm.publication.lifecycle.stageversion.ui;
 
 import java.util.List;
 
 import javax.jcr.Node;
 
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.UIPublicationTree.TreeNode;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.ui.UIPublicationTree.TreeNode;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIPopupContainer;
@@ -38,7 +38,7 @@ import org.exoplatform.webui.form.UIForm;
  */
 @ComponentConfig (
                   lifecycle = UIFormLifecycle.class,
-                  template = "classpath:groovy/wcm/webui/publication/lifecycle/stageversion/UIPublicationPages.gtmpl",
+                  template = "classpath:groovy/wcm/webui/publication/lifecycle/stageversion/ui/UIPublicationPages.gtmpl",
                   events = @EventConfig(listeners = UIPublicationPages.CloseActionListener.class)
 )
 public class UIPublicationPages extends UIForm {

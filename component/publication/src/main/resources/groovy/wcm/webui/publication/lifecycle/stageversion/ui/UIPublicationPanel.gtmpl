@@ -2,8 +2,8 @@
   import java.util.List;
   import javax.jcr.Node;
   import javax.jcr.version.Version;
-  import org.exoplatform.services.wcm.publication.lifecycle.stageversion.UIPublicationPanel;
-  import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant;
+  import org.exoplatform.services.wcm.publication.lifecycle.stageversion.ui.UIPublicationPanel;
+  import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
   Node currentRevision = uicomponent.getCurrentRevision();
   Node cNode = uicomponent.getCurrentNode();  
   public boolean isCurrentRevision(String inputStatus, Node revision) throws Exception {    
@@ -120,7 +120,7 @@
               <div title="<%=_ctx.appRes("UIPublicationPanel.title.preview")%>" class="Preview" onclick="<%= uicomponent.event("PreviewVersion", revision.getUUID()) %>"><span></span></div>
               <%
                 if (revisions.indexOf(revision) != 0) {
-                  if (Constant.DRAFT_STATE.equals(uicomponent.getRevisionState(revisions.get(0)))) {
+                  if (StageAndVersionPublicationConstant.DRAFT_STATE.equals(uicomponent.getRevisionState(revisions.get(0)))) {
                     %><div title="<%=_ctx.appRes("UIPublicationPanel.title.restore")%>" class="Restore" onclick="if (confirm('<%=_ctx.appRes("UIPublicationPanel.revisions.confirm")%>')) <%= uicomponent.event("RestoreVersion", revision.getUUID()) %>"><span></span></div><%
                   } else {
                     %><div title="<%=_ctx.appRes("UIPublicationPanel.title.restore")%>" class="Restore" onclick="<%= uicomponent.event("RestoreVersion", revision.getUUID()) %>"><span></span></div><%

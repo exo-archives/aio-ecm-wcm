@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.services.wcm.publication.lifecycle.stageversion;
+package org.exoplatform.services.wcm.publication.lifecycle.stageversion.ui;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +34,10 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.UIPublicationTree.TreeNode;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationPlugin;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationUtil;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.ui.UIPublicationTree.TreeNode;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -54,7 +57,7 @@ import org.exoplatform.webui.form.UIForm;
 
 @ComponentConfig (
     lifecycle = UIFormLifecycle.class,
-    template = "classpath:groovy/wcm/webui/publication/lifecycle/stageversion/UIPublicationAction.gtmpl",
+    template = "classpath:groovy/wcm/webui/publication/lifecycle/stageversion/ui/UIPublicationAction.gtmpl",
     events = {
       @EventConfig(listeners = UIPublicationAction.AddActionListener.class),
       @EventConfig(listeners = UIPublicationAction.RemoveActionListener.class)
@@ -139,13 +142,13 @@ public class UIPublicationAction extends UIForm {
       }
       
       WCMPublicationService presentationService = publicationAction.getApplicationComponent(WCMPublicationService.class);
-      StageAndVersionBasedPublicationPlugin publicationPlugin = (StageAndVersionBasedPublicationPlugin) presentationService.getWebpagePublicationPlugins().get(Constant.LIFECYCLE_NAME);
+      StageAndVersionPublicationPlugin publicationPlugin = (StageAndVersionPublicationPlugin) presentationService.getWebpagePublicationPlugins().get(StageAndVersionPublicationConstant.LIFECYCLE_NAME);
       
       UIPublicationPagesContainer publicationPagesContainer = publicationPages.getAncestorOfType(UIPublicationPagesContainer.class);
-      WCMConfigurationService wcmConfigurationService = Util.getServices(WCMConfigurationService.class);
+      WCMConfigurationService wcmConfigurationService = StageAndVersionPublicationUtil.getServices(WCMConfigurationService.class);
       UserPortalConfigService userPortalConfigService = publicationAction.getApplicationComponent(UserPortalConfigService.class);
       Page page = userPortalConfigService.getPage(pageNode.getPageReference(), event.getRequestContext().getRemoteUser());
-      List<String> clvPortletIds = Util.findAppInstancesByName(page, wcmConfigurationService.getRuntimeContextParam("CLVPortlet"));
+      List<String> clvPortletIds = StageAndVersionPublicationUtil.findAppInstancesByName(page, wcmConfigurationService.getRuntimeContextParam("CLVPortlet"));
       if (clvPortletIds.isEmpty()) {
         publicationPlugin.publishContentToPage(node, page);
       } else {
@@ -162,7 +165,7 @@ public class UIPublicationAction extends UIForm {
           event.getRequestContext().addUIComponentToUpdateByAjax(publicationPagesContainer);
         } else {
           String clvPortletId = clvPortletIds.get(0);
-          DataStorage dataStorage = Util.getServices(DataStorage.class);
+          DataStorage dataStorage = StageAndVersionPublicationUtil.getServices(DataStorage.class);
           PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(clvPortletId));
           publicationPlugin.publishContentToCLV(node, page, clvPortletId, portletPreferences);
         }
@@ -226,7 +229,7 @@ public class UIPublicationAction extends UIForm {
       }
       
       WCMPublicationService presentationService = publicationAction.getApplicationComponent(WCMPublicationService.class);
-      StageAndVersionBasedPublicationPlugin publicationPlugin = (StageAndVersionBasedPublicationPlugin) presentationService.getWebpagePublicationPlugins().get(Constant.LIFECYCLE_NAME);
+      StageAndVersionPublicationPlugin publicationPlugin = (StageAndVersionPublicationPlugin) presentationService.getWebpagePublicationPlugins().get(StageAndVersionPublicationConstant.LIFECYCLE_NAME);
       publicationPlugin.suspendPublishedContentFromPage(publicationPages.getNode(), page);
       
       publicationAction.updateUI();

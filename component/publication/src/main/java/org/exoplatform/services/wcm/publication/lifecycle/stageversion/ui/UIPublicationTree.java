@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.services.wcm.publication.lifecycle.stageversion;
+package org.exoplatform.services.wcm.publication.lifecycle.stageversion.ui;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +26,7 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.webui.navigation.PageNavigationUtils;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationUtil;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UITree;
@@ -226,7 +227,7 @@ public class UIPublicationTree extends UITree {
     public void setChildrenByPageNodes(List<PageNode> pagesNodes) throws Exception {
       if(pagesNodes == null) return;
       List<TreeNode> list = new ArrayList<TreeNode>();
-      UserPortalConfigService userPortalConfigService = Util.getServices(UserPortalConfigService.class);
+      UserPortalConfigService userPortalConfigService = StageAndVersionPublicationUtil.getServices(UserPortalConfigService.class);
       for(PageNode pNode: pagesNodes) {
         Page page = userPortalConfigService.getPage(pNode.getPageReference(), org.exoplatform.portal.webui.util.Util.getPortalRequestContext().getRemoteUser());
         if (page == null) continue;

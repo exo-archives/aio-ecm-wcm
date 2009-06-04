@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.services.wcm.publication.lifecycle.stageversion;
+package org.exoplatform.services.wcm.publication.lifecycle.stageversion.ui;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +27,7 @@ import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationUtil;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIPopupWindow;
@@ -54,7 +55,7 @@ public class UIPublicationPagesContainer extends UIContainer {
   }
   
   private String getPortalForContent(Node contentNode) throws Exception {
-    LivePortalManagerService livePortalManagerService = Util.getServices(LivePortalManagerService.class);
+    LivePortalManagerService livePortalManagerService = StageAndVersionPublicationUtil.getServices(LivePortalManagerService.class);
     for(String portalPath:livePortalManagerService.getLivePortalsPath()) {
       if(contentNode.getPath().startsWith(portalPath)) {
         return livePortalManagerService.getPortalNameByPath(portalPath);
@@ -65,10 +66,10 @@ public class UIPublicationPagesContainer extends UIContainer {
   
   private List<String> getRunningPortals(String userId) throws Exception {
     List<String> listPortalName = new ArrayList<String>();
-    DataStorage service = Util.getServices(DataStorage.class);
+    DataStorage service = StageAndVersionPublicationUtil.getServices(DataStorage.class);
     Query<PortalConfig> query = new Query<PortalConfig>(null, null, null, null, PortalConfig.class) ;
     PageList pageList = service.find(query) ;
-    UserACL userACL = Util.getServices(UserACL.class);
+    UserACL userACL = StageAndVersionPublicationUtil.getServices(UserACL.class);
     for(Object object:pageList.getAll()) {
       PortalConfig portalConfig = (PortalConfig)object;
       if(userACL.hasPermission(portalConfig, userId)) {

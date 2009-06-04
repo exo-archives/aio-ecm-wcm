@@ -41,8 +41,8 @@ import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.NodeIdentifier;
 import org.exoplatform.services.wcm.core.NodeLocation;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.UIPublicationPanel;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.ui.UIPublicationPanel;
 import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
 import org.exoplatform.wcm.webui.scv.config.UIContentDialogForm;
 import org.exoplatform.wcm.webui.scv.config.UIPortletConfig;
@@ -377,12 +377,12 @@ public class UIQuickEditWebContentForm extends UIContentDialogForm{
 	        newNode.checkin();
 	      }
 	      PublicationService publicationService = uiQuickEditForm.getApplicationComponent(PublicationService.class);
-	      PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(Constant.LIFECYCLE_NAME);
+	      PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(StageAndVersionPublicationConstant.LIFECYCLE_NAME);
 	      HashMap<String, String> context = new HashMap<String, String>();
 	      if(newNode != null) {
-	    	  context.put(Constant.CURRENT_REVISION_NAME, newNode.getName());
+	    	  context.put(StageAndVersionPublicationConstant.CURRENT_REVISION_NAME, newNode.getName());
 	      }
-	      publicationPlugin.changeState(newNode, Constant.LIVE_STATE, context);
+	      publicationPlugin.changeState(newNode, StageAndVersionPublicationConstant.LIVE_STATE, context);
 	      
 	      UIPortletConfig uiPortletConfig = uiQuickEditForm.getAncestorOfType(UIPortletConfig.class);
 	      uiPortletConfig.closePopupAndUpdateUI(event.getRequestContext(),true);

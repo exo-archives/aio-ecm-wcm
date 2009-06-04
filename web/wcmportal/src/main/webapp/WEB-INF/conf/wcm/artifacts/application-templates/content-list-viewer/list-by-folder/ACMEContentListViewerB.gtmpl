@@ -7,7 +7,7 @@ import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
 import javax.jcr.Node;
 import org.exoplatform.wcm.webui.clv.UIContentListViewerPortlet;
 import org.exoplatform.wcm.webui.Utils;
-import org.exoplatform.services.wcm.publication.PublicationState;
+import org.exoplatform.services.wcm.publication.StageAndVersionPublicationState;
 %>
 <div id="$uicomponent.id" class="ACMEContentListViewerB">
 	<% 

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.services.wcm.publication.lifecycle.stageversion;
+package org.exoplatform.services.wcm.publication.lifecycle.stageversion.ui;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +38,7 @@ import org.exoplatform.services.resources.LocaleConfig;
 import org.exoplatform.services.resources.LocaleConfigService;
 import org.exoplatform.services.wcm.core.WCMService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.UIPublicationTree.TreeNode;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.ui.UIPublicationTree.TreeNode;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
@@ -54,7 +54,7 @@ import org.exoplatform.webui.event.EventListener;
 
 @ComponentConfig(
     lifecycle = Lifecycle.class,
-    template = "classpath:groovy/wcm/webui/publication/lifecycle/stageversion/UIPortalNavigationExplorer.gtmpl",
+    template = "classpath:groovy/wcm/webui/publication/lifecycle/stageversion/ui/UIPortalNavigationExplorer.gtmpl",
     events = {
       @EventConfig(listeners = UIPortalNavigationExplorer.ChangeNodeActionListener.class)
     }

@@ -37,10 +37,10 @@ import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
  *          hoa.phamvu@exoplatform.com
  * Mar 5, 2009  
  */
-public class StateAndVersionPublicationHandler extends BaseWebSchemaHandler {
+public class StageAndVersionPublicationHandler extends BaseWebSchemaHandler {
   private TemplateService templateService;   
   private PublicationService publicationService;
-  public StateAndVersionPublicationHandler(TemplateService templateService, PublicationService publicationService) {    
+  public StageAndVersionPublicationHandler(TemplateService templateService, PublicationService publicationService) {    
     this.templateService = templateService;   
     this.publicationService = publicationService;
   }
@@ -82,8 +82,8 @@ public class StateAndVersionPublicationHandler extends BaseWebSchemaHandler {
       }      
     }             
     if(publicationService.isNodeEnrolledInLifecycle(checkNode)) return;
-    publicationService.enrollNodeInLifecycle(checkNode,Constant.LIFECYCLE_NAME);
-    publicationService.changeState(checkNode,Constant.DRAFT_STATE,new HashMap<String,String>());
+    publicationService.enrollNodeInLifecycle(checkNode,StageAndVersionPublicationConstant.LIFECYCLE_NAME);
+    publicationService.changeState(checkNode,StageAndVersionPublicationConstant.DRAFT_STATE,new HashMap<String,String>());
   }   
   public void onModifyNode(Node node, SessionProvider sessionProvider) throws Exception {
     if(node.isNew())
@@ -102,11 +102,11 @@ public class StateAndVersionPublicationHandler extends BaseWebSchemaHandler {
       return;
     }
 
-    if(!Constant.LIFECYCLE_NAME.equalsIgnoreCase(lifecycle))   
+    if(!StageAndVersionPublicationConstant.LIFECYCLE_NAME.equalsIgnoreCase(lifecycle))   
       return;
     String currentState = publicationService.getCurrentState(checkNode);
-    if(!Constant.ENROLLED_STATE.equalsIgnoreCase(currentState))
+    if(!StageAndVersionPublicationConstant.ENROLLED_STATE.equalsIgnoreCase(currentState))
       return;
-    publicationService.changeState(checkNode,Constant.DRAFT_STATE,new HashMap<String,String>());
+    publicationService.changeState(checkNode,StageAndVersionPublicationConstant.DRAFT_STATE,new HashMap<String,String>());
   }
 }

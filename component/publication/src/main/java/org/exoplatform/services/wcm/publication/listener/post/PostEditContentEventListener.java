@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.services.wcm.publication.lifecycle.stageversion;
+package org.exoplatform.services.wcm.publication.listener.post;
 
 import java.util.HashMap;
 
@@ -24,6 +24,7 @@ import org.exoplatform.services.cms.CmsService;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
 
 /**
  * Created by The eXo Platform SAS
@@ -46,12 +47,12 @@ public class PostEditContentEventListener extends Listener<CmsService,Node> {
     } catch (Exception e) {
       return;
     }    
-    if(!Constant.LIFECYCLE_NAME.equalsIgnoreCase(lifecycle))
+    if(!StageAndVersionPublicationConstant.LIFECYCLE_NAME.equalsIgnoreCase(lifecycle))
       return;    
     String state = pservice.getCurrentState(currentNode);
-    if(!Constant.ENROLLED_STATE.equalsIgnoreCase(state))
+    if(!StageAndVersionPublicationConstant.ENROLLED_STATE.equalsIgnoreCase(state))
       return;
-    pservice.changeState(currentNode,Constant.DRAFT_STATE,new HashMap<String,String>());
+    pservice.changeState(currentNode,StageAndVersionPublicationConstant.DRAFT_STATE,new HashMap<String,String>());
   }
 
 }

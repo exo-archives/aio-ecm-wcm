@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.services.wcm.publication.lifecycle.stageversion;
+package org.exoplatform.services.wcm.publication.lifecycle.stageversion.ui;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +38,7 @@ import org.exoplatform.webui.event.EventListener;
 
 @ComponentConfig(
     lifecycle = Lifecycle.class,
-    template = "classpath:groovy/wcm/webui/publication/lifecycle/stageversion/UIPublishedPages.gtmpl",
+    template = "classpath:groovy/wcm/webui/publication/lifecycle/stageversion/ui/UIPublishedPages.gtmpl",
     events = {
       @EventConfig(listeners=UIPublishedPages.SelectNavigationNodeURIActionListener.class)
     }

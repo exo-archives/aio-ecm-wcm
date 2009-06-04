@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.services.wcm.publication.lifecycle.stageversion;
+package org.exoplatform.services.wcm.publication.listener;
 
 import javax.jcr.Node;
 
@@ -24,6 +24,7 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationInitializerService;
 
 /**
  * Created by The eXo Platform SAS
@@ -31,7 +32,7 @@ import org.exoplatform.services.wcm.portal.LivePortalManagerService;
  *          phan.le.thanh.chuong@gmail.com, chuong_phan@exoplatform.com
  * Mar 25, 2009  
  */
-public class PublicationArtifactsInitializationListener extends Listener<String, SessionProvider>{
+public class PortalInitializationEventListener extends Listener<String, SessionProvider>{
 
   public void onEvent(Event<String, SessionProvider> event) throws Exception {
     ExoContainer exoContainer = ExoContainerContext.getCurrentContainer();
@@ -39,7 +40,7 @@ public class PublicationArtifactsInitializationListener extends Listener<String,
     String portalName = event.getSource();    
     SessionProvider sessionProvider = event.getData();
     Node portal = livePortalManagerService.getLivePortal(portalName, sessionProvider);
-    PublicationInitializerService publicationInitializerService = (PublicationInitializerService)exoContainer.getComponentInstanceOfType(PublicationInitializerService.class);
+    StageAndVersionPublicationInitializerService publicationInitializerService = (StageAndVersionPublicationInitializerService)exoContainer.getComponentInstanceOfType(StageAndVersionPublicationInitializerService.class);
     publicationInitializerService.initializePublication(portal);    
   }
   

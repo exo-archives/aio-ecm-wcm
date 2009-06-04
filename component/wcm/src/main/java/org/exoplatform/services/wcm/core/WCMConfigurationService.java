@@ -45,12 +45,12 @@ public class WCMConfigurationService {
   private ExoProperties runtimeContextParams;  
   private DriveData siteDriveConfig;
 
-  public WCMConfigurationService(InitParams initParams) throws Exception {    
+  public WCMConfigurationService(InitParams initParams) throws Exception {
     parameterizedPageURI = initParams.getValueParam("parameterizedPageURI").getValue();
     redactorMembershipType = initParams.getValueParam("redactorMembershipType").getValue();
     log.info("Page URI is used for view DMS Document as a web page: " + parameterizedPageURI);
     publishingPortletName = initParams.getValueParam("publishingPortletName").getValue();
-    log.info("The portlet is used to publish content in a web page: " + publishingPortletName);           
+    log.info("The portlet is used to publish content in a web page: " + publishingPortletName);
     Iterator<PropertiesParam> iterator = initParams.getPropertiesParamIterator();
     for (; iterator.hasNext(); ) {
       PropertiesParam param = iterator.next();

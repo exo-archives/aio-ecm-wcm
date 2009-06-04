@@ -8,7 +8,7 @@
  */
   import java.text.SimpleDateFormat;
   import org.exoplatform.commons.utils.ISO8601;
-  import org.exoplatform.services.wcm.publication.lifecycle.stageversion.UIPublicationContainer;
+  import org.exoplatform.services.wcm.publication.lifecycle.stageversion.ui.UIPublicationContainer;
 %>
 
 <div class="$uicomponent.id" id="$uicomponent.id">

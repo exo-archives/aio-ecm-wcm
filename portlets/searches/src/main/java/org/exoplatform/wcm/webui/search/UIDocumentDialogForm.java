@@ -42,7 +42,7 @@ import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -295,12 +295,12 @@ public class UIDocumentDialogForm extends UIDialogForm {
         newNode.checkin();
       }
       PublicationService publicationService = uiDocumentDialogForm.getApplicationComponent(PublicationService.class);
-      PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(Constant.LIFECYCLE_NAME);
+      PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(StageAndVersionPublicationConstant.LIFECYCLE_NAME);
       HashMap<String, String> context = new HashMap<String, String>();
       if(newNode != null) {
-        context.put(Constant.CURRENT_REVISION_NAME, newNode.getName());
+        context.put(StageAndVersionPublicationConstant.CURRENT_REVISION_NAME, newNode.getName());
       }
-      publicationPlugin.changeState(newNode, Constant.LIVE_STATE, context);
+      publicationPlugin.changeState(newNode, StageAndVersionPublicationConstant.LIVE_STATE, context);
       
       UIPopupContainer uiContentEdittingPopup = uiDocumentDialogForm.getAncestorOfType(UIPopupContainer.class);
       uiContentEdittingPopup.deActivate();

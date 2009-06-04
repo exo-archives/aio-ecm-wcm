@@ -22,7 +22,7 @@ package org.exoplatform.services.wcm.publication.lifecycle.stageversion;
  *          hoa.phamvu@exoplatform.com
  * Mar 4, 2009  
  */
-public interface Constant {
+public interface StageAndVersionPublicationConstant {
   //Publication lifecycle
   public static final String ENROLLED_STATE = "enrolled".intern(); 
   public static final String DRAFT_STATE = "draft".intern();

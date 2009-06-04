@@ -41,7 +41,7 @@ import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -341,12 +341,12 @@ public class UIDocumentDialogForm extends UIDialogForm implements UIPopupCompone
       UIContentViewerContainer uiContentViewerContainer = uiportlet.getChild(UIContentViewerContainer.class);
       UIContentViewer uiContentViewer = uiContentViewerContainer.getChild(UIContentViewer.class);
       PublicationService publicationService = uiDocumentDialogForm.getApplicationComponent(PublicationService.class);
-      PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(Constant.LIFECYCLE_NAME);
+      PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(StageAndVersionPublicationConstant.LIFECYCLE_NAME);
       HashMap<String, String> context = new HashMap<String, String>();
       if(newNode != null) {
-    	  context.put(Constant.CURRENT_REVISION_NAME, newNode.getName());
+    	  context.put(StageAndVersionPublicationConstant.CURRENT_REVISION_NAME, newNode.getName());
       }
-      publicationPlugin.changeState(newNode, Constant.LIVE_STATE, context);
+      publicationPlugin.changeState(newNode, StageAndVersionPublicationConstant.LIVE_STATE, context);
       uiContentViewer.setNode(newNode);
       uiContentViewer.setRepository(repository);
       uiContentViewer.setWorkspace(workspace);

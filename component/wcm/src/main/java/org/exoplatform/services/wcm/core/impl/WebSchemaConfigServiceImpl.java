@@ -50,7 +50,7 @@ public class WebSchemaConfigServiceImpl implements WebSchemaConfigService, Start
 
   private Log log = ExoLogger.getLogger("wcm:WebSchemaConfigService");
 
-  public WebSchemaConfigServiceImpl(WCMConfigurationService configurationService, NodeHierarchyCreator hierarchyCreator) { 
+  public WebSchemaConfigServiceImpl(WCMConfigurationService configurationService, NodeHierarchyCreator hierarchyCreator) {
     this.wcmConfigService = configurationService;
   }     
 

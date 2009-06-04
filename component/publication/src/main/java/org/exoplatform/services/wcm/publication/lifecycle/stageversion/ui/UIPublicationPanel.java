@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.services.wcm.publication.lifecycle.stageversion;
+package org.exoplatform.services.wcm.publication.lifecycle.stageversion.ui;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -33,6 +33,8 @@ import javax.jcr.version.VersionIterator;
 import org.exoplatform.ecm.webui.utils.JCRExceptionManager;
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.config.VersionData;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -51,7 +53,7 @@ import org.exoplatform.webui.form.UIForm;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template = "classpath:groovy/wcm/webui/publication/lifecycle/stageversion/UIPublicationPanel.gtmpl",
+    template = "classpath:groovy/wcm/webui/publication/lifecycle/stageversion/ui/UIPublicationPanel.gtmpl",
     events = {
       @EventConfig(listeners=UIPublicationPanel.DraftActionListener.class),
       @EventConfig(listeners=UIPublicationPanel.LiveActionListener.class),
@@ -84,9 +86,9 @@ public class UIPublicationPanel extends UIForm {
   
   private void cleanPublicationData(Node node) throws Exception {
     if(viewedRevisions.size() == 1 && revisionsDataMap.size()>1) {
-      node.setProperty(Constant.REVISION_DATA_PROP,new Value[] {});
-      node.setProperty(Constant.HISTORY,new Value[] {});
-      node.setProperty(Constant.LIVE_REVISION_PROP,"");      
+      node.setProperty(StageAndVersionPublicationConstant.REVISION_DATA_PROP,new Value[] {});
+      node.setProperty(StageAndVersionPublicationConstant.HISTORY,new Value[] {});
+      node.setProperty(StageAndVersionPublicationConstant.LIVE_REVISION_PROP,"");      
       node.save();
       this.revisionsDataMap = getRevisionData(node);
     }
@@ -145,7 +147,7 @@ public class UIPublicationPanel extends UIForm {
     if(revisionData!= null)
       return revisionData.getState();
     if(revision.getUUID().equalsIgnoreCase(currentNode.getUUID())) {
-      return currentNode.getProperty(Constant.CURRENT_STATE).getString();
+      return currentNode.getProperty(StageAndVersionPublicationConstant.CURRENT_STATE).getString();
     }
     return null;
   }    
@@ -178,7 +180,7 @@ public class UIPublicationPanel extends UIForm {
   private Map<String, VersionData> getRevisionData(Node node) throws Exception{
     Map<String,VersionData> map = new HashMap<String,VersionData>();    
     try {
-      for(Value v: node.getProperty(Constant.REVISION_DATA_PROP).getValues()) {
+      for(Value v: node.getProperty(StageAndVersionPublicationConstant.REVISION_DATA_PROP).getValues()) {
         VersionData versionData = VersionData.toVersionData(v.getString());        
         map.put(versionData.getUUID(),versionData);;
       }
@@ -213,14 +215,14 @@ public class UIPublicationPanel extends UIForm {
       UIPublicationPanel publicationPanel = event.getSource();
       Node currentNode = publicationPanel.getCurrentNode();
       PublicationService publicationService = publicationPanel.getApplicationComponent(PublicationService.class);
-      PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(Constant.LIFECYCLE_NAME);
+      PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(StageAndVersionPublicationConstant.LIFECYCLE_NAME);
       HashMap<String,String> context = new HashMap<String,String>();
       Node currentRevision = publicationPanel.getCurrentRevision();
       if(currentRevision != null) {
-        context.put(Constant.CURRENT_REVISION_NAME,currentRevision.getName()); 
+        context.put(StageAndVersionPublicationConstant.CURRENT_REVISION_NAME,currentRevision.getName()); 
       }      
       try {
-        publicationPlugin.changeState(currentNode,Constant.DRAFT_STATE,context);
+        publicationPlugin.changeState(currentNode,StageAndVersionPublicationConstant.DRAFT_STATE,context);
         publicationPanel.updatePanel();
       } catch (Exception e) {
         e.printStackTrace();
@@ -237,14 +239,14 @@ public class UIPublicationPanel extends UIForm {
       UIPublicationPanel publicationPanel = event.getSource();      
       Node currentNode = publicationPanel.getCurrentNode();
       PublicationService publicationService = publicationPanel.getApplicationComponent(PublicationService.class);
-      PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(Constant.LIFECYCLE_NAME);
+      PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(StageAndVersionPublicationConstant.LIFECYCLE_NAME);
       HashMap<String,String> context = new HashMap<String,String>();      
       Node currentRevision = publicationPanel.getCurrentRevision();
       if(currentRevision != null) {
-        context.put(Constant.CURRENT_REVISION_NAME,currentRevision.getName()); 
+        context.put(StageAndVersionPublicationConstant.CURRENT_REVISION_NAME,currentRevision.getName()); 
       }
       try {
-        publicationPlugin.changeState(currentNode,Constant.LIVE_STATE,context); 
+        publicationPlugin.changeState(currentNode,StageAndVersionPublicationConstant.LIVE_STATE,context); 
         publicationPanel.updatePanel();
       } catch (Exception e) {        
         UIApplication uiApp = publicationPanel.getAncestorOfType(UIApplication.class);
@@ -260,14 +262,14 @@ public class UIPublicationPanel extends UIForm {
       UIPublicationPanel publicationPanel = event.getSource();     
       Node currentNode = publicationPanel.getCurrentNode();
       PublicationService publicationService = publicationPanel.getApplicationComponent(PublicationService.class);
-      PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(Constant.LIFECYCLE_NAME);
+      PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(StageAndVersionPublicationConstant.LIFECYCLE_NAME);
       HashMap<String,String> context = new HashMap<String,String>();
       Node currentRevision = publicationPanel.getCurrentRevision();
       if(currentRevision != null) {
-        context.put(Constant.CURRENT_REVISION_NAME,currentRevision.getName()); 
+        context.put(StageAndVersionPublicationConstant.CURRENT_REVISION_NAME,currentRevision.getName()); 
       }
       try {
-        publicationPlugin.changeState(currentNode,Constant.OBSOLETE_STATE,context); 
+        publicationPlugin.changeState(currentNode,StageAndVersionPublicationConstant.OBSOLETE_STATE,context); 
         publicationPanel.updatePanel();
       } catch (Exception e) {
         UIApplication uiApp = publicationPanel.getAncestorOfType(UIApplication.class);
@@ -314,9 +316,9 @@ public class UIPublicationPanel extends UIForm {
         if(!currentNode.isCheckedOut())
           currentNode.checkout();
         PublicationService publicationService = publicationPanel.getApplicationComponent(PublicationService.class);
-        PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(Constant.LIFECYCLE_NAME);
+        PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(StageAndVersionPublicationConstant.LIFECYCLE_NAME);
         HashMap<String,String> context = new HashMap<String,String>();
-        publicationPlugin.changeState(currentNode,Constant.ENROLLED_STATE,context);
+        publicationPlugin.changeState(currentNode,StageAndVersionPublicationConstant.ENROLLED_STATE,context);
         publicationPanel.updatePanel();
       } catch (Exception e) {
         UIApplication uiApp = publicationPanel.getAncestorOfType(UIApplication.class);

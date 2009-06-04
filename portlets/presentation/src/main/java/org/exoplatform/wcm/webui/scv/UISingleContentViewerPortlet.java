@@ -38,8 +38,8 @@ import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.core.WCMService;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant.SITE_MODE;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant.SITE_MODE;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.WebUIPropertiesConfigService;
 import org.exoplatform.wcm.webui.WebUIPropertiesConfigService.PopupWindowProperties;
@@ -167,7 +167,7 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
   private Node getLiveRevision(Node content) throws Exception {
     if (content == null) return null;
     HashMap<String,Object> context = new HashMap<String, Object>();    
-    context.put(Constant.RUNTIME_MODE, SITE_MODE.LIVE);    
+    context.put(StageAndVersionPublicationConstant.RUNTIME_MODE, SITE_MODE.LIVE);    
     PublicationService pubService = getApplicationComponent(PublicationService.class);
     String lifecycleName = pubService.getNodeLifecycleName(content);
     PublicationPlugin pubPlugin = pubService.getPublicationPlugins().get(lifecycleName);
@@ -180,17 +180,17 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
       currentState = content.getProperty("publication:currentState").getString();
     } catch (Exception e) {
     } 
-    if(Constant.DRAFT_STATE.equals(currentState))
-      return Constant.DRAFT_STATE;
-    if(Constant.ENROLLED_STATE.equals(currentState)) {
+    if(StageAndVersionPublicationConstant.DRAFT_STATE.equals(currentState))
+      return StageAndVersionPublicationConstant.DRAFT_STATE;
+    if(StageAndVersionPublicationConstant.ENROLLED_STATE.equals(currentState)) {
       String liveRevision = null;
       try {
         liveRevision = content.getProperty("publication:liveRevision").getString();
       } catch (Exception e) {       
       }
       if(liveRevision != null && liveRevision.length()>0) 
-        return Constant.LIVE_STATE;
-      return Constant.OBSOLETE_STATE;
+        return StageAndVersionPublicationConstant.LIVE_STATE;
+      return StageAndVersionPublicationConstant.OBSOLETE_STATE;
     }
     return null;
   }

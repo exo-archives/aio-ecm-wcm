@@ -36,9 +36,9 @@ import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
-import org.exoplatform.services.wcm.publication.PublicationState;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant.SITE_MODE;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationState;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant.SITE_MODE;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.WebUIPropertiesConfigService;
 import org.exoplatform.wcm.webui.WebUIPropertiesConfigService.PopupWindowProperties;
@@ -164,8 +164,8 @@ public class UIPresentationContainer extends UIContainer{
       originalNode =  null;
     }
     ExtendedNode curnode = (ExtendedNode) originalNode;
-    String currentState = PublicationState.getRevisionState(originalNode);
-    if(Constant.OBSOLETE_STATE.equals(currentState)) {
+    String currentState = StageAndVersionPublicationState.getRevisionState(originalNode);
+    if(StageAndVersionPublicationConstant.OBSOLETE_STATE.equals(currentState)) {
       setObsoletedContent(true);
     }else {
       setObsoletedContent(false);
@@ -177,11 +177,11 @@ public class UIPresentationContainer extends UIContainer{
         livePresentation.setViewNode(liveRevision);      
         setDraftRevision(false);       
       }else {        
-        if(Constant.DRAFT_STATE.equals(currentState)) {
+        if(StageAndVersionPublicationConstant.DRAFT_STATE.equals(currentState)) {
           livePresentation.setViewNode(originalNode);          
           livePresentation.setOriginalNode(originalNode);
           setDraftRevision(true);          
-        } else if(Constant.LIVE_STATE.equals(currentState)) {
+        } else if(StageAndVersionPublicationConstant.LIVE_STATE.equals(currentState)) {
           Node liveRevision = getLiveRevision(originalNode);
           if (liveRevision!=null) setHasLiveRevision(true);
           livePresentation.setOriginalNode(originalNode);
@@ -196,7 +196,7 @@ public class UIPresentationContainer extends UIContainer{
   private Node getLiveRevision(Node content) throws Exception {
     if (content == null) return null;
     HashMap<String,Object> context = new HashMap<String, Object>();    
-    context.put(Constant.RUNTIME_MODE, SITE_MODE.LIVE);    
+    context.put(StageAndVersionPublicationConstant.RUNTIME_MODE, SITE_MODE.LIVE);    
     PublicationService pubService = getApplicationComponent(PublicationService.class);
     String lifecycleName = pubService.getNodeLifecycleName(content);
     PublicationPlugin pubPlugin = pubService.getPublicationPlugins().get(lifecycleName);
@@ -261,7 +261,7 @@ public class UIPresentationContainer extends UIContainer{
     }
     WCMConfigurationService wcmConfigurationService = getApplicationComponent(WCMConfigurationService.class);
     List<String> ids = org.exoplatform.services.wcm.publication.lifecycle.stageversion
-    .Util.getListApplicationIdByPage(PortalDataMapper.toPageModel(uiPage), wcmConfigurationService.getPublishingPortletName());
+    .StageAndVersionPublicationUtil.getListApplicationIdByPage(PortalDataMapper.toPageModel(uiPage), wcmConfigurationService.getPublishingPortletName());
     List<String> newIds = new ArrayList<String>();
     int length = ids.size();
 

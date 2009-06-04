@@ -27,8 +27,11 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
+import org.apache.commons.logging.Log;
+import org.exoplatform.services.deployment.ContentInitializerService;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.picocontainer.Startable;
 
@@ -38,29 +41,32 @@ import org.picocontainer.Startable;
  *          phan.le.thanh.chuong@gmail.com, chuong_phan@exoplatform.com
  * Mar 25, 2009  
  */
-public class PublicationInitializerService implements Startable{      
+public class StageAndVersionPublicationInitializerService implements Startable{      
   
   private LivePortalManagerService livePortalManagerService;
   private PublicationService publicationService;
-  
-  public PublicationInitializerService(LivePortalManagerService livePortalManagerService, PublicationService publicationService) {
+  private Log log = ExoLogger.getLogger(StageAndVersionPublicationInitializerService.class);
+
+  // TODO: chuong.phan: DO NOT REMOVE ContentInitializerService, THIS IS DEPENDENCY FOR DEPLOYMENT
+  public StageAndVersionPublicationInitializerService(LivePortalManagerService livePortalManagerService, PublicationService publicationService, ContentInitializerService contentInitializerService) {
     this.livePortalManagerService = livePortalManagerService;
     this.publicationService = publicationService;
   }
   
   public void initializePublication(Node portalNode) throws Exception{
-    String sqlQuery = "select * from exo:webContent where jcr:path like '" + portalNode.getPath() + "/%' and not jcr:mixinTypes like '%" + Constant.PUBLICATION_LIFECYCLE_TYPE + "%' order by exo:dateCreated";
+    String sqlQuery = "select * from exo:webContent where jcr:path like '" + portalNode.getPath() + "/%' and not jcr:mixinTypes like '%" + StageAndVersionPublicationConstant.PUBLICATION_LIFECYCLE_TYPE + "%' order by exo:dateCreated";
     QueryManager queryManager = portalNode.getSession().getWorkspace().getQueryManager();
     Query query = queryManager.createQuery(sqlQuery, Query.SQL);
     QueryResult results = query.execute();
     for (NodeIterator nodeIterator = results.getNodes(); nodeIterator.hasNext();) {
       Node content = nodeIterator.nextNode();
-      publicationService.enrollNodeInLifecycle(content, Constant.LIFECYCLE_NAME);
-      publicationService.changeState(content, Constant.LIVE_STATE, new HashMap<String, String>());
+      publicationService.enrollNodeInLifecycle(content, StageAndVersionPublicationConstant.LIFECYCLE_NAME);
+      publicationService.changeState(content, StageAndVersionPublicationConstant.LIVE_STATE, new HashMap<String, String>());
     }
   }
   
   public void start() {
+    log.info("Starting StageAndVersionPublicationInitializerService ...");
     SessionProvider sessionProvider = SessionProvider.createSystemProvider();
     try {
       List<Node> livePortals = livePortalManagerService.getLivePortals(sessionProvider);
@@ -94,5 +100,6 @@ public class PublicationInitializerService implements Startable{
   }
   
   public void stop() {   
+    log.info("Stopping StageAndVersionPublicationInitializerService ...");
   }
 }
