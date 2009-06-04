@@ -20,6 +20,7 @@ import javax.jcr.Node;
 import javax.jcr.query.QueryResult;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.exoplatform.services.wcm.publication.PublicationState;
 
 /**
  * Created by The eXo Platform SAS Author : Hoa Pham hoa.phamvu@exoplatform.com
@@ -104,6 +105,10 @@ public class WCMPaginatedQueryResult extends PaginatedQueryResult {
    */
   protected Node filterNodeToDisplay(Node node) throws Exception {
     Node displayNode = node;
+    String revisionState = PublicationState.getRevisionState(node);
+    if (revisionState == null || PublicationState.OBSOLETE.equals(revisionState)) {
+      return null;
+    }
     if (node.getPath().contains("web contents/site artifacts")) {
     	return null;
     }
