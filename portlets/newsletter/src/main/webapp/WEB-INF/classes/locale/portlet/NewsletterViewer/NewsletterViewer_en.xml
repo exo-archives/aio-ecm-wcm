@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+  <UINewsletterViewerForm>
+    <action>
+      <Save>Update</Save>
+      <Cancel>Cancel</Cancel>
+      <Down>Down</Down>
+      <Up>Up</Up>      
+      <Delete>Delete</Delete>            
+    </action>
+  </UINewsletterViewerForm>
+  <UINewsletterViewerForm>
+    <msg>
+      <updatesuccess>Your subcription has been updated.</updatesuccess>
+      <email-not-empty>Email cannot be empty!!!</email-not-empty>
+    </msg>
+  </UINewsletterViewerForm>
+</bundle>

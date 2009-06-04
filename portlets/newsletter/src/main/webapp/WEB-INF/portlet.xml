@@ -20,7 +20,7 @@
 			<portlet-mode>help</portlet-mode>
 		</supports>
 		<supported-locale>en</supported-locale>
-		<resource-bundle>locale.portlet.SingleContentViewer.AdvancedPresentationPortlet</resource-bundle>
+		<resource-bundle>locale.portlet.NewsletterViewer.NewsletterViewer</resource-bundle>
 		
 		<portlet-info>
 			<title>Newsletter Viewer Portlet</title>
@@ -46,7 +46,7 @@
 			<portlet-mode>help</portlet-mode>
 		</supports>
 		<supported-locale>en</supported-locale>
-		<resource-bundle>locale.portlet.SingleContentViewer.AdvancedPresentationPortlet</resource-bundle>
+		<resource-bundle>locale.portlet.NewsletterManager.NewsletterManager</resource-bundle>
 		
 		<portlet-info>
 			<title>Newsletter Manager Portlet</title>
