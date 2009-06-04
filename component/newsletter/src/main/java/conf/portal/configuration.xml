@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-
 <configuration>
 	
 	<component>
@@ -15,5 +14,22 @@
 			</value-param>
 		</init-params>
   </component>
+  
+  <external-component-plugins>
+  	<target-component>org.exoplatform.services.jcr.RepositoryService</target-component>		
+	  <component-plugin>
+	    <name>add.nodeType</name>
+	    <set-method>addPlugin</set-method>
+	    <type>org.exoplatform.services.jcr.impl.AddNodeTypePlugin</type>
+	    <priority>98</priority>
+	    <init-params>
+	      <values-param>
+	        <name>autoCreatedInNewRepository</name>
+	        <description>Node types configuration file</description>
+	        <value>jar:/conf/wcm-newsletter-nodetypes.xml</value>	        
+	      </values-param>
+	    </init-params>
+	  </component-plugin>
+	</external-component-plugins>
 	
 </configuration>

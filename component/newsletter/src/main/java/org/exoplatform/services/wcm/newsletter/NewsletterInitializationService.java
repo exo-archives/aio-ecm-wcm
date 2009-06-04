@@ -48,15 +48,15 @@ public class NewsletterInitializationService implements Startable {
     log.info("Starting NewsletterInitializationService ... ");
     SessionProvider sessionProvider = SessionProvider.createSystemProvider();
     try {
-      NewsletterCategoryHandler categoryHandler = managerService.getCategoryHandler();
+      /*NewsletterCategoryHandler categoryHandler = managerService.getCategoryHandler();
       NewsletterSubscriptionHandler subscriptionHandler = managerService.getSubscriptionHandler();
       for (NewsletterCategoryConfig categoryConfig : categoryConfigs) {
         // TODO: Needs to change
-        categoryHandler.add("", "", categoryConfig, sessionProvider);
+        categoryHandler.add("", categoryConfig, sessionProvider);
         for (NewsletterSubscriptionConfig subscriptionConfig : categoryConfig.getSubscriptions()) {
           subscriptionHandler.add(sessionProvider);
         }
-      }      
+      }*/
     } catch (Throwable e) {
       
     } finally {

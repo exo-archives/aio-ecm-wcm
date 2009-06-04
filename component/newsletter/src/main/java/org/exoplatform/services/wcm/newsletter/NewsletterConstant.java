@@ -23,7 +23,6 @@ package org.exoplatform.services.wcm.newsletter;
  * May 21, 2009  
  */
 public class NewsletterConstant {
-
   // Category nodetype
   public static final String CATEGORY_NODETYPE              = "exo:newsletterCategory";
   public static final String CATEGORY_PROPERTY_TITLE        = "exo:newsletterCategoryTitle";
@@ -50,11 +49,9 @@ public class NewsletterConstant {
   public static final String STATUS_SENT                    = "sent";
 
   // Newsletter application configuration
-  public static final String BASE_PATH                      = "/collaboration/sites content/live/{portalName}/ApplicationData/NewsletterApplication";
+  public static String CATEGORY_BASE_PATH           = "/sites content/live/portalName/ApplicationData/NewsletterApplication/Categories";
  
-  public static String generateCategoryPath(String portalName, String categoryParentPath, String categoryName) {
-    if (categoryParentPath == null) categoryParentPath = "";
-    if (categoryName == null) categoryName = "";
-    return BASE_PATH.replaceAll("{portalName}", portalName) + categoryParentPath + categoryName;
+  public static String generateCategoryPath(String portalName) {
+    return CATEGORY_BASE_PATH.replaceAll("portalName", portalName);
   }
 }

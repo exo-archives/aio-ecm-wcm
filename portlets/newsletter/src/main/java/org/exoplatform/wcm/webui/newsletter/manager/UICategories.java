@@ -16,14 +16,55 @@
  */
 package org.exoplatform.wcm.webui.newsletter.manager;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
+import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
+import org.exoplatform.services.wcm.newsletter.handler.NewsletterCategoryHandler;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
+import org.exoplatform.webui.event.Event;
+import org.exoplatform.webui.event.EventListener;
 
 @ComponentConfig(
-		template = "app:/groovy/webui/newsletter/NewsletterManager/UICategories.gtmpl"
+		template = "app:/groovy/webui/newsletter/NewsletterManager/UICategories.gtmpl",
+		events = {
+				@EventConfig(listeners = UICategories.AddCategoryActionListener.class)
+		}
 )
 public class UICategories extends UIContainer {
-	public UICategories(){
-		System.out.println("~~~~~~~~~~~~~~~>UICategories container");
+	NewsletterCategoryHandler categoryHandler = null;
+	
+	public UICategories()throws Exception{
+		NewsletterManagerService newsletterManagerService = 
+			(NewsletterManagerService)PortalContainer.getInstance().getComponentInstanceOfType(NewsletterManagerService.class) ;
+		categoryHandler = newsletterManagerService.getCategoryHandler();
+	}
+	
+	@SuppressWarnings("unused")
+	private List<NewsletterCategoryConfig> getListCategories(){
+		try{
+			return categoryHandler.getListCategories(NewsLetterUtil.getPortalName(), NewsLetterUtil.getSystemProvider());
+		}catch(Exception e){
+			e.printStackTrace();
+			return new ArrayList<NewsletterCategoryConfig>();
+		}
+	}
+	
+
+	static  public class AddCategoryActionListener extends EventListener<UICategories> {
+		public void execute(Event<UICategories> event) throws Exception {
+			UICategories uiCategories = event.getSource();
+			UIPopupAction popupAction = uiCategories.getAncestorOfType(UINewsletterManagerPortlet.class)
+																							.getChild(UIPopupAction.class) ;
+			UIPopupContainer popupContainer = popupAction.createUIComponent(UIPopupContainer.class, null, null) ;
+			UICategoryForm categoryForm = popupContainer.addChild(UICategoryForm.class, null, null) ;
+			popupContainer.setId("NewsletterCategoryForm") ;
+			popupAction.activate(popupContainer, 500, 300) ;
+			event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+		}
 	}
 }

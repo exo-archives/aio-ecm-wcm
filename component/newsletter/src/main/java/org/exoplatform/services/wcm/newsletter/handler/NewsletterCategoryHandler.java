@@ -16,7 +16,11 @@
  */
 package org.exoplatform.services.wcm.newsletter.handler;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
 import javax.jcr.Session;
 
 import org.apache.commons.logging.Log;
@@ -49,33 +53,35 @@ public class NewsletterCategoryHandler {
     this.workspace = workspace;
   }
   
-  public void add(String portalName, String categoryParentPath, NewsletterCategoryConfig categoryConfig, SessionProvider sessionProvider) {
+  public void add(String portalName, NewsletterCategoryConfig categoryConfig, SessionProvider sessionProvider) {
     log.info("Trying to add category " + categoryConfig.getName());
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
       Session session = sessionProvider.getSession(workspace, manageableRepository);
-      categoryParentPath = NewsletterConstant.generateCategoryPath(portalName, categoryParentPath, null);
-      Node categoryParentNode = Node.class.cast(session.getItem(categoryParentPath));
-      Node categoryNode = categoryParentNode.addNode(categoryConfig.getName());
+      String categoryPath = NewsletterConstant.generateCategoryPath(portalName);
+      Node categoriesNode = (Node)session.getItem(categoryPath);
+      Node categoryNode = categoriesNode.addNode(categoryConfig.getName(), NewsletterConstant.CATEGORY_NODETYPE);
       ExtendedNode extendedCategoryNode = ExtendedNode.class.cast(categoryNode);
+      extendedCategoryNode.setProperty(NewsletterConstant.CATEGORY_PROPERTY_TITLE, categoryConfig.getName());
       extendedCategoryNode.setProperty(NewsletterConstant.CATEGORY_PROPERTY_DESCRIPTION, categoryConfig.getDescription());
       if (extendedCategoryNode.canAddMixin("exo:privilegeable")) {
         extendedCategoryNode.addMixin("exo:privilegeable");
         extendedCategoryNode.setPermission(categoryConfig.getModerator(), PermissionType.ALL);
       }
       session.save();
+      session.logout();
     } catch(Exception e) {
       log.error("Add category " + categoryConfig.getName() + " failed because of " + e.getMessage());
     } 
   }
   
-  public void edit(String portalName, String categoryParentPath, NewsletterCategoryConfig categoryConfig, SessionProvider sessionProvider) {
+  public void edit(String portalName, NewsletterCategoryConfig categoryConfig, SessionProvider sessionProvider) {
     log.info("Trying to edit category " + categoryConfig.getName());
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
       Session session = sessionProvider.getSession(workspace, manageableRepository);
-      String categoryPath = NewsletterConstant.generateCategoryPath(portalName, categoryParentPath, categoryConfig.getName());
-      Node categoryNode = Node.class.cast(session.getItem(categoryPath));
+      String categoryPath = NewsletterConstant.generateCategoryPath(portalName);
+      Node categoryNode = ((Node)session.getItem(categoryPath)).getNode(categoryConfig.getName());
       categoryNode.setProperty(NewsletterConstant.CATEGORY_PROPERTY_DESCRIPTION, categoryConfig.getDescription());
       session.save();
     } catch (Exception e) {
@@ -83,18 +89,39 @@ public class NewsletterCategoryHandler {
     }
   }
   
-  public void delete(String portalName, String categoryPath, SessionProvider sessionProvider) {
-    log.info("Trying to delete category " + categoryPath);
+  public void delete(String portalName, String categoryName, SessionProvider sessionProvider) {
+    log.info("Trying to delete category " + categoryName);
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
       Session session = sessionProvider.getSession(workspace, manageableRepository);
-      categoryPath = NewsletterConstant.generateCategoryPath(portalName, null, categoryPath);
-      Node categoryNode = Node.class.cast(session.getItem(categoryPath));
+      String categoryPath = NewsletterConstant.generateCategoryPath(portalName);
+      Node categoryNode = ((Node)session.getItem(categoryPath)).getNode((categoryName));
       categoryNode.remove();
       session.save();
     } catch (Exception e) {
-      log.error("Delete category " + categoryPath + " failed because of " + e.getMessage());
+      log.error("Delete category " + categoryName + " failed because of " + e.getMessage());
     }
+  }
+  
+  protected NewsletterCategoryConfig getCategoryFromNode(Node categoryNode) throws Exception{
+  	NewsletterCategoryConfig categoryConfig = null;
+  	categoryConfig = new NewsletterCategoryConfig();
+  	categoryConfig.setName(categoryNode.getName());
+  	categoryConfig.setDescription(categoryNode.getProperty(NewsletterConstant.CATEGORY_PROPERTY_DESCRIPTION).getString());
+  	return categoryConfig;
+  }
+  
+  public List<NewsletterCategoryConfig> getListCategories(String portalName, SessionProvider sessionProvider) throws Exception{
+  	List<NewsletterCategoryConfig> listCategories = new ArrayList<NewsletterCategoryConfig>();
+  	ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+    Session session = sessionProvider.getSession(workspace, manageableRepository);
+    String categoryPath = NewsletterConstant.generateCategoryPath(portalName);
+    Node categoriesNode = (Node)session.getItem(categoryPath);
+    NodeIterator nodeIterator = categoriesNode.getNodes();
+    while(nodeIterator.hasNext()){
+    	listCategories.add(getCategoryFromNode(nodeIterator.nextNode()));
+    }
+    return listCategories;
   }
 
 }
