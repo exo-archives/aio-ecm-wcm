@@ -9,9 +9,9 @@
   <artifactId>exo.ecm.wcm.component.search</artifactId>
   <version>${org.exoplatform.wcm.version}</version>
   <packaging>jar</packaging>
-  <name>eXo WCM Seach Service</name>
+  <name>eXo WCM Search Service</name>
   <url>http://www.exoplatform.org</url>
-  <description>eXo WCM Seach Service</description>
+  <description>eXo WCM Search Service</description>
 
   <dependencies>
     <dependency>
@@ -69,5 +69,12 @@
       <version>${org.exoplatform.wcm.version}</version>
       <scope>compile</scope>
     </dependency>	
+		
+		<dependency>
+      <groupId>org.exoplatform.ecm.wcm</groupId>
+      <artifactId>exo.ecm.wcm.component.publication</artifactId>
+      <version>${org.exoplatform.wcm.version}</version>
+      <scope>compile</scope>
+    </dependency>
   </dependencies>
 </project>
