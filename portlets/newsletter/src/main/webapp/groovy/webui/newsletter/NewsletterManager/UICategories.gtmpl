@@ -4,47 +4,47 @@ import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 
 <div class="UINewsletterPortlet">
 	
-	<div style="padding:5px; color:#9797FF;font-weight:bold;">
-		<a style="cursor:pointer;">eXo Newsletter</a>
+	<div class="BreadCumbs">
+		<a class="ItemContent">eXo Newsletter</a>
 	</div>
 	
-	<div style="padding:5px 10px;">
-		<a style="color:#9797FF;font-weight:bold;cursor:pointer;">News Letter</a> |
-		<a style="color:#9797FF;font-weight:bold;cursor:pointer;">News Subscription</a> |
-		<a href="<%=uicomponent.event("AddCategory")%>" style="color:#9797FF;font-weight:bold;cursor:pointer;">News Category</a> |
-		<a style="color:#9797FF;font-weight:bold;cursor:pointer;">Administration</a> |
+	<div class="ActionManager">
+		<a class="ActionTitle">News Letter</a> |
+		<a class="ActionTitle">News Subscription</a> |
+		<a href="<%=uicomponent.event("AddCategory")%>" class="ActionTitle">News Category</a> |
+		<a class="ActionTitle">Administration</a> |
 	</div>
 	
-	<div style="border:2px solid gray;padding:10px;margin:5px 10px;height:auto;">
+	<div class="UICategories">
 	<%for(NewsletterCategoryConfig category in uicomponent.getListCategories()){%>
 			<div style="width:100%;">
 				<!-- Category infor -->
-				<div style="font-weight:bold;">
+				<div class="ViewCategoryName">
 					<%=category.getName()%>
 				</div>
 				<!-- All subscriptions -->
-				<div style="border:1px solid gray;margin:5px 10px;">
+				<div class="Subscriptions">
 					<table cellpadding="5" cellspacing="0" border="0">
-						<tr style="background:#CCCCCC;padding:5px">
-							<th style="border-left:1px solid black;">
+						<tr class="Header">
+							<th class="ContentView" style="border-left:0px;">
 								<%=_ctx.appRes("UICategories.title.SubScription")%>
 							</th>
-							<th style="border-left:1px solid black;">
+							<th class="ContentView">
 								<%=_ctx.appRes("UICategories.title.NumberOfUser")%>
 							</th>
-							<th style="border-left:1px solid black;border-right:1px solid black;">
+							<th class="ContentView" style="border-left:1px solid black">
 								<%=_ctx.appRes("UICategories.title.AWaitingLetter")%>
 							</th>
 						</tr>
-						<tr style="background:#EDF3EE;padding:5px">
-							<td style="border-left:1px solid black;">Subscription 1</td>
-							<td style="border-left:1px solid black;">400</td>
-							<td style="border-left:1px solid black;border-right:1px solid black;">1</td>
+						<tr class="SubcriptionInfor">
+							<td class="Infor" style="border-left:0px;">Subscription 1</td>
+							<td class="Infor">400</td>
+							<td class="Infor" style="border-right:1px solid black;">1</td>
 						</tr>
-						<tr style="background:white;padding:5px">
-							<td style="border-left:1px solid black;">Subscription 1</td>
-							<td style="border-left:1px solid black;">400</td>
-							<td style="border-left:1px solid black;border-right:1px solid black;">1</td>
+						<tr class="SubcriptionInfor" style="background:white;">
+							<td class="Infor" style="border-left:0px;">Subscription 1</td>
+							<td class="Infor">400</td>
+							<td class="Infor" style="border-right:1px solid black;">1</td>
 						</tr>
 					</table>
 				</div>
