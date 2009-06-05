@@ -52,6 +52,14 @@ public class NewsletterCategoryHandler {
     this.repository = repository;
     this.workspace = workspace;
   }
+
+  protected NewsletterCategoryConfig getCategoryFromNode(Node categoryNode) throws Exception{
+  	NewsletterCategoryConfig categoryConfig = null;
+  	categoryConfig = new NewsletterCategoryConfig();
+  	categoryConfig.setName(categoryNode.getName());
+  	categoryConfig.setDescription(categoryNode.getProperty(NewsletterConstant.CATEGORY_PROPERTY_DESCRIPTION).getString());
+  	return categoryConfig;
+  }
   
   public void add(String portalName, NewsletterCategoryConfig categoryConfig, SessionProvider sessionProvider) {
     log.info("Trying to add category " + categoryConfig.getName());
@@ -83,6 +91,7 @@ public class NewsletterCategoryHandler {
       String categoryPath = NewsletterConstant.generateCategoryPath(portalName);
       Node categoryNode = ((Node)session.getItem(categoryPath)).getNode(categoryConfig.getName());
       categoryNode.setProperty(NewsletterConstant.CATEGORY_PROPERTY_DESCRIPTION, categoryConfig.getDescription());
+      categoryNode.setProperty(NewsletterConstant.CATEGORY_PROPERTY_TITLE, categoryConfig.getTitle());
       session.save();
     } catch (Exception e) {
       log.info("Edit category " + categoryConfig.getName() + " failed because of " + e.getMessage());
@@ -103,12 +112,12 @@ public class NewsletterCategoryHandler {
     }
   }
   
-  protected NewsletterCategoryConfig getCategoryFromNode(Node categoryNode) throws Exception{
-  	NewsletterCategoryConfig categoryConfig = null;
-  	categoryConfig = new NewsletterCategoryConfig();
-  	categoryConfig.setName(categoryNode.getName());
-  	categoryConfig.setDescription(categoryNode.getProperty(NewsletterConstant.CATEGORY_PROPERTY_DESCRIPTION).getString());
-  	return categoryConfig;
+  public NewsletterCategoryConfig getCategoryByName(String portalName, String categoryName, SessionProvider sessionProvider) throws Exception{
+  	ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+    Session session = sessionProvider.getSession(workspace, manageableRepository);
+    String categoryPath = NewsletterConstant.generateCategoryPath(portalName);
+    Node categoriesNode = (Node)session.getItem(categoryPath);
+    return getCategoryFromNode(categoriesNode.getNode(categoryName));
   }
   
   public List<NewsletterCategoryConfig> getListCategories(String portalName, SessionProvider sessionProvider) throws Exception{

@@ -9,8 +9,7 @@
 						%>
 						  <tr>
 						    <td class="FieldLabel" style="width:100px; text-align:right">
-						      <!--%=uicomponent.getLabel(field.getName()) %> : -->
-						      <%=field.getName()%> :
+						      <%=_ctx.appRes("UICategoryForm.title." + field.getName())%> :
 						    </td>
 						    <td class="FieldComponent" style="padding-left:4px; white-space:nowrap;">
 									<% uiform.renderField(field) %>
@@ -27,8 +26,7 @@
 				<tr>
 					<td>
 	        <% for(action in uicomponent.getActions()) { 
-//	        	 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action); 
-	        	 String actionLabel = action; 
+	        	 String actionLabel = _ctx.appRes("NewsletterPortletAction.action." + action); 
 	           String link = uicomponent.event(action) ;
 	        %>
 	        		<div onclick="$link" class="ActionButton LightBlueStyle">

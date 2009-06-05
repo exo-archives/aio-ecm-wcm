@@ -28,11 +28,19 @@ import java.util.List;
 public class NewsletterCategoryConfig {
 
   private String name;
+  private String title;
   private String description;
   private String moderator;
   private List<NewsletterSubscriptionConfig> subscriptions = new ArrayList<NewsletterSubscriptionConfig>();
   
-  public String getName() { return name; }
+  public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	
+	public String getName() { return name; }
   public void setName(String name) { this.name = name; }
   
   public String getDescription() { return description; }

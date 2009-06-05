@@ -15,36 +15,39 @@ import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 		<a style="color:#9797FF;font-weight:bold;cursor:pointer;">Administration</a> |
 	</div>
 	
-	<div style="border:2px solid gray;padding:5px;margin:5px 10px;height:auto;">
+	<div style="border:2px solid gray;padding:10px;margin:5px 10px;height:auto;">
 	<%for(NewsletterCategoryConfig category in uicomponent.getListCategories()){%>
-			<!-- Category infor -->
-			<div style="float:left;width:100%">
-				<div style="float:left"><%=category.getName()%>: <%=category.getDescription()%></div>
-				<div style="float:right;">
-					<input type="button" value="Moderation"/>
+			<div style="width:100%;">
+				<!-- Category infor -->
+				<div style="font-weight:bold;">
+					<%=category.getName()%>
 				</div>
-			</div>
-			<div style="clear:both;"><span></span></div>
-			
-			<!-- All subscriptions -->
-			<div style="border:1px solid gray;margin:5px 10px;">
-				<table cellpadding="5" cellspacing="0" border="0">
-					<tr style="background:#CCCCCC;padding:5px">
-						<th style="border-left:1px solid black;">Subscription</th>
-						<th style="border-left:1px solid black;">Number of users</th>
-						<th style="border-left:1px solid black;border-right:1px solid black;">Awaiting Letters</th>
-					</tr>
-					<tr style="background:#EDF3EE;padding:5px">
-						<td style="border-left:1px solid black;">Subscription 1</td>
-						<td style="border-left:1px solid black;">400</td>
-						<td style="border-left:1px solid black;border-right:1px solid black;">1</td>
-					</tr>
-					<tr style="background:white;padding:5px">
-						<td style="border-left:1px solid black;">Subscription 1</td>
-						<td style="border-left:1px solid black;">400</td>
-						<td style="border-left:1px solid black;border-right:1px solid black;">1</td>
-					</tr>
-				</table>
+				<!-- All subscriptions -->
+				<div style="border:1px solid gray;margin:5px 10px;">
+					<table cellpadding="5" cellspacing="0" border="0">
+						<tr style="background:#CCCCCC;padding:5px">
+							<th style="border-left:1px solid black;">
+								<%=_ctx.appRes("UICategories.title.SubScription")%>
+							</th>
+							<th style="border-left:1px solid black;">
+								<%=_ctx.appRes("UICategories.title.NumberOfUser")%>
+							</th>
+							<th style="border-left:1px solid black;border-right:1px solid black;">
+								<%=_ctx.appRes("UICategories.title.AWaitingLetter")%>
+							</th>
+						</tr>
+						<tr style="background:#EDF3EE;padding:5px">
+							<td style="border-left:1px solid black;">Subscription 1</td>
+							<td style="border-left:1px solid black;">400</td>
+							<td style="border-left:1px solid black;border-right:1px solid black;">1</td>
+						</tr>
+						<tr style="background:white;padding:5px">
+							<td style="border-left:1px solid black;">Subscription 1</td>
+							<td style="border-left:1px solid black;">400</td>
+							<td style="border-left:1px solid black;border-right:1px solid black;">1</td>
+						</tr>
+					</table>
+				</div>
 			</div>
 	<%}%>
 	</div>

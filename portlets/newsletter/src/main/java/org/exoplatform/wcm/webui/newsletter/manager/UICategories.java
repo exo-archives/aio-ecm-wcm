@@ -26,6 +26,7 @@ import org.exoplatform.services.wcm.newsletter.handler.NewsletterCategoryHandler
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
+import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
@@ -39,8 +40,7 @@ public class UICategories extends UIContainer {
 	NewsletterCategoryHandler categoryHandler = null;
 	
 	public UICategories()throws Exception{
-		NewsletterManagerService newsletterManagerService = 
-			(NewsletterManagerService)PortalContainer.getInstance().getComponentInstanceOfType(NewsletterManagerService.class) ;
+		NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
 		categoryHandler = newsletterManagerService.getCategoryHandler();
 	}
 	
@@ -58,13 +58,11 @@ public class UICategories extends UIContainer {
 	static  public class AddCategoryActionListener extends EventListener<UICategories> {
 		public void execute(Event<UICategories> event) throws Exception {
 			UICategories uiCategories = event.getSource();
-			UIPopupAction popupAction = uiCategories.getAncestorOfType(UINewsletterManagerPortlet.class)
-																							.getChild(UIPopupAction.class) ;
-			UIPopupContainer popupContainer = popupAction.createUIComponent(UIPopupContainer.class, null, null) ;
-			UICategoryForm categoryForm = popupContainer.addChild(UICategoryForm.class, null, null) ;
-			popupContainer.setId("NewsletterCategoryForm") ;
-			popupAction.activate(popupContainer, 500, 300) ;
-			event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+			UIPopupContainer popupContainer = uiCategories.getAncestorOfType(UINewsletterManagerPortlet.class).getChild(UIPopupContainer.class);
+			UICategoryForm categoryForm = popupContainer.createUIComponent(UICategoryForm.class, null, null);
+			popupContainer.setRendered(true);
+			popupContainer.activate(categoryForm, 400, 300);
+			event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
 		}
 	}
 }
