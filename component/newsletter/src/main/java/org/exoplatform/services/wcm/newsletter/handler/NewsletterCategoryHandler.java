@@ -77,7 +77,6 @@ public class NewsletterCategoryHandler {
         extendedCategoryNode.setPermission(categoryConfig.getModerator(), PermissionType.ALL);
       }
       session.save();
-      session.logout();
     } catch(Exception e) {
       log.error("Add category " + categoryConfig.getName() + " failed because of " + e.getMessage());
     } 

@@ -16,8 +16,11 @@
  */
 package org.exoplatform.services.wcm.newsletter.handler;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.jcr.Node;
+import javax.jcr.NodeIterator;
 import javax.jcr.Session;
 
 import org.apache.commons.logging.Log;
@@ -26,6 +29,8 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
+import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 
 /**
  * Created by The eXo Platform SAS
@@ -41,51 +46,109 @@ public class NewsletterSubscriptionHandler {
   private String workspace;
   
   public NewsletterSubscriptionHandler(String repository, String workspace) {
-    repositoryService = (RepositoryService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(RepositoryService.class);
+    repositoryService = (RepositoryService)ExoContainerContext.getCurrentContainer()
+    .getComponentInstanceOfType(RepositoryService.class);
     this.repository = repository;
     this.workspace = workspace;
   }
   
-  public void add(SessionProvider sessionProvider) {
+  public void add(SessionProvider sessionProvider, String portalName,
+                  String categoryName, NewsletterSubscriptionConfig subscription) throws Exception {
+   
+    log.info("Trying to add subcription " + subscription.getName());
     try {
+
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
       Session session = sessionProvider.getSession(workspace, manageableRepository);
-      // TODO: Needs to implement
+      String path = NewsletterConstant.generateCategoryPath(portalName);
+      Node categoryNode = ((Node)session.getItem(path)).getNode(categoryName);
+      Node subscriptionNode = categoryNode.addNode(subscription.getName(), NewsletterConstant.SUBSCRIPTION_NODETYPE);
+      subscriptionNode.setProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_TITLE, subscription.getTitle());
+      session.save();
     } catch (Exception e) {
-      // TODO: handle exception
+      log.error("Add subcription " + subscription.getName() + " failed because of " + e.getMessage());
     }
   }
   
-  public void edit(SessionProvider sessionProvider) {
+  public void edit(SessionProvider sessionProvider, String portalName,
+                   String categoryName, NewsletterSubscriptionConfig subscription) {
+    
+    log.info("Trying to edit subcription " + subscription.getName());
+    try {
+
+      ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+      Session session = sessionProvider.getSession(workspace, manageableRepository);
+      String path = NewsletterConstant.generateCategoryPath(portalName);
+      Node categoryNode = ((Node)session.getItem(path)).getNode(categoryName);
+      Node subscriptionNode = categoryNode.getNode(subscription.getName());
+      subscriptionNode.setProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_TITLE, subscription.getTitle());
+      categoryNode.save();
+    } catch (Exception e) {
+      log.error("Edit subcription " + subscription.getName() + " failed because of " + e.getMessage());
+    }
+  }
+
+  public void delete(SessionProvider sessionProvider, String portalName,
+                     String categoryName, NewsletterSubscriptionConfig subscription) {
+    
+    log.info("Trying to delete subcription " + subscription.getName());
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
       Session session = sessionProvider.getSession(workspace, manageableRepository);
-      // TODO: Needs to implement
+      String path = NewsletterConstant.generateCategoryPath(portalName);
+      Node categoryNode = ((Node)session.getItem(path)).getNode(categoryName);
+      Node subscriptionNode = categoryNode.getNode(subscription.getName());
+      subscriptionNode.remove();
+      session.save();
     } catch (Exception e) {
-      // TODO: handle exception
+      log.error("Delete subcription " + subscription.getName() + " failed because of " + e.getMessage());
     }
   }
   
-  public void delete(SessionProvider sessionProvider) {
-    try {
-      ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      Session session = sessionProvider.getSession(workspace, manageableRepository);
-      // TODO: Needs to implement
-    } catch (Exception e) {
-      // TODO: handle exception
+  public List<NewsletterSubscriptionConfig> getSubscriptionsByCategory(SessionProvider sessionProvider,
+                                                                       String portalName, String categoryName)throws Exception{
+    
+    List<NewsletterSubscriptionConfig> listSubscriptions = new ArrayList<NewsletterSubscriptionConfig>();
+
+    ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+    Session session = sessionProvider.getSession(workspace, manageableRepository);
+    String path = NewsletterConstant.generateCategoryPath(portalName);
+    Node categoryNode = ((Node)session.getItem(path)).getNode(categoryName);
+    NodeIterator nodeIterator = categoryNode.getNodes();
+    Node subscriptionNode = null;
+    NewsletterSubscriptionConfig subscriptionConfig = null;
+    while(nodeIterator.hasNext()){
+      subscriptionNode = nodeIterator.nextNode();
+      subscriptionConfig = new NewsletterSubscriptionConfig();
+      subscriptionConfig.setName(subscriptionNode.getName());
+      subscriptionConfig.setTitle(subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_TITLE).getString());
+      
+      listSubscriptions.add(subscriptionConfig);
     }
+
+    return listSubscriptions;
   }
   
-  public List<String> getSubscriptionsByCategory(SessionProvider sessionProvider) {
-    try {
-      ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      Session session = sessionProvider.getSession(workspace, manageableRepository);
-      // TODO: Needs to implement
-      // Get all subscriptions of the category
-    } catch (Exception e) {
-      // TODO: handle exception
+  public NewsletterSubscriptionConfig getSubscriptionsByName(SessionProvider sessionProvider,
+                                                             String portalName, String categoryName, String subCriptionName) throws Exception{
+    NewsletterSubscriptionConfig subscription = new NewsletterSubscriptionConfig();
+
+    ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+    Session session = sessionProvider.getSession(workspace, manageableRepository);
+    String path = NewsletterConstant.generateCategoryPath(portalName);
+    Node categoryNode = ((Node)session.getItem(path)).getNode(categoryName);
+    NodeIterator nodeIterator = categoryNode.getNodes();
+    Node subscriptionNode = null;
+    while(nodeIterator.hasNext()){
+      
+      subscriptionNode = nodeIterator.nextNode();
+      if (subCriptionName.equals(subscriptionNode.getName())) {
+        
+        subscription.setName(subscriptionNode.getName());
+        subscription.setTitle(subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_TITLE).getString());
+      }   
     }
-    return null;
+
+    return subscription;
   }
-  
 }

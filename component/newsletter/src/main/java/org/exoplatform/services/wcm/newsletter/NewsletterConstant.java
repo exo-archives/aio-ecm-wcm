@@ -31,6 +31,7 @@ public class NewsletterConstant {
   // Subscription nodetype
   public static final String SUBSCRIPTION_NODETYPE          = "exo:newsletterSubscription";
   public static final String SUBSCRIPTION_PROPERTY_USER     = "exo:newsletterSubscribedUser";
+  public static final String SUBSCRIPTION_PROPERTY_TITLE    = "exo:newsletterSubscriptionTitle";
   
   // Entry nodetype
   public static final String ENTRY_NODETYPE                 = "exo:newsletterEntry";
