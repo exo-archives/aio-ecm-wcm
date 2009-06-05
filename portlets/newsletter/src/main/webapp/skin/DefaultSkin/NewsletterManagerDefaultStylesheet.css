@@ -1,0 +1,63 @@
+.UINewsletterPortlet {
+	padding:10px;
+	min-height: 500px;
+	width: 100%;
+}
+
+.UINewsletterPortlet .BreadCumbs{
+	padding:5px;
+	color:#9797FF;
+	font-weight:bold;
+}
+
+.UINewsletterPortlet .BreadCumbs .ItemContent{
+	cursor:pointer;
+}
+
+.UINewsletterPortlet .ActionManager{
+	padding:5px 10px;
+}
+
+.UINewsletterPortlet .ActionManager .ActionTitle{
+	color:#9797FF;
+	font-weight:bold;
+	cursor:pointer;
+}
+
+.UINewsletterPortlet .UICategories{
+	border:2px solid gray;
+	padding:10px;
+	margin:5px 10px;
+	height:auto;
+}
+
+.UINewsletterPortlet .UICategories .ViewCategoryName{
+	font-weight:bold;
+}
+
+.UINewsletterPortlet .UICategories .Subscriptions{
+	border:1px solid gray;
+	margin:5px 10px;
+}
+
+.UINewsletterPortlet .UICategories .Subscriptions .Header{
+	background:#CCCCCC;
+	heigth:20px;
+}
+
+.UINewsletterPortlet .UICategories .Subscriptions .Header .ContentView{
+	border-left:1px solid black;
+	height:20px;
+}
+
+.UINewsletterPortlet .UICategories .Subscriptions .SubcriptionInfor{
+	background:#EDF3EE;
+	padding:5px
+}
+
+.UINewsletterPortlet .UICategories .Subscriptions .SubcriptionInfor .Infor{
+	border-left:1px solid black; 
+	heigth:20px;
+	border-bottom: 1px solid white;
+	padding-left:5px;
+}

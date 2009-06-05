@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+  <NewsletterPortletAction>
+    <action>
+      <Save>Save</Save>
+      <Cancel>Cancel</Cancel>
+      <Down>Down</Down>
+      <Up>Up</Up>      
+      <Delete>Delete</Delete>            
+    </action>
+  </NewsletterPortletAction>
+  <UICategoryForm>
+    <msg>
+      <saveSuccess>Category has been saved.</saveSuccess>
+      <categoryNameIsNotEmpty>Category name cannot be empty!</categoryNameIsNotEmpty>
+      <categoryTitleIsNotEmpty>Category title cannot be empty!</categoryTitleIsNotEmpty>
+      <categoryNameIsAlreadyExist>This category's name is already exist!</categoryNameIsAlreadyExist>
+    </msg>
+    <title>
+    	<CategoryName>Category Name</CategoryName>
+    	<CategoryTitle>Category Title</CategoryTitle>
+    	<CategoryDescription>Description</CategoryDescription>
+    	<CategoryModerator>Moderator </CategoryModerator>
+    </title>
+  </UICategoryForm>
+  <UICategories>
+    <title>
+    	<SubScription>Subscription</SubScription>
+    	<NumberOfUser>Number of User</NumberOfUser>
+    	<AWaitingLetter>Awaiting Letter</AWaitingLetter>
+    </title>
+  </UICategories>
+</bundle>
