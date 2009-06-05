@@ -46,14 +46,8 @@ import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.NodeIdentifier;
 import org.exoplatform.services.wcm.core.NodeLocation;
-import org.exoplatform.services.wcm.core.WebSchemaConfigService;
-import org.exoplatform.services.wcm.portal.LivePortalManagerService;
-import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
-import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
-import org.exoplatform.wcm.webui.scv.config.access.UIPermissionInfo;
-import org.exoplatform.wcm.webui.scv.config.access.UIPermissionManager;
 import org.exoplatform.wcm.webui.scv.config.social.UISocialInfo;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -64,7 +58,6 @@ import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-import org.exoplatform.webui.form.UIFormStringInput;
 
 /**
  * Created by The eXo Platform SAS
@@ -278,44 +271,10 @@ public class UIContentDialogForm extends UIDialogForm {
    */
   static public class CloseActionListener extends EventListener<UIContentDialogForm> {
 
-    /* (non-Javadoc)
-     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
-     */
     public void execute(Event<UIContentDialogForm> event) throws Exception {
       UIContentDialogForm uiContentDialogForm = event.getSource();
-      UIQuickCreationWizard uiQuickCreationWizard = uiContentDialogForm.getAncestorOfType(UIQuickCreationWizard.class);      
-      if (uiContentDialogForm.isEditNotIntegrity()) {
-        UIPortletConfig uiPortletConfig = uiQuickCreationWizard.getAncestorOfType(UIPortletConfig.class);
-        uiPortletConfig.getChildren().clear();
-        uiPortletConfig.addUIWelcomeScreen();
-        return;
-      }
       UIPortletConfig uiPortletConfig = uiContentDialogForm.getAncestorOfType(UIPortletConfig.class);      
-      UINameWebContentForm uiNameWebContentForm = uiQuickCreationWizard.getChild(UINameWebContentForm.class);
-      if(uiPortletConfig.isNewConfig()) {
-        String portalName = Util.getUIPortal().getName();
-        LivePortalManagerService livePortalManagerService = uiContentDialogForm.getApplicationComponent(LivePortalManagerService.class);
-        SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
-        Node portalNode = livePortalManagerService.getLivePortal(portalName, sessionProvider);
-        WebSchemaConfigService webSchemaConfigService = uiNameWebContentForm.getApplicationComponent(WebSchemaConfigService.class);
-        PortalFolderSchemaHandler handler = webSchemaConfigService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
-        Node webContentStorage = handler.getWebContentStorage(portalNode);
-        String webContentName = ((UIFormStringInput)uiNameWebContentForm.getChildById(UINameWebContentForm.NAME_WEBCONTENT)).getValue();
-        Node webContentNode = webContentStorage.getNode(webContentName);
-        Session session = webContentNode.getSession();
-        webContentNode.remove();
-        session.save();
-        uiNameWebContentForm.reset();
-      }
-      
-//      uiNameWebContentForm.back();
-      uiContentDialogForm.reset();
-//      uiQuickCreationWizard.viewStep(1);
-//      UIPortletConfig portletConfig = uiQuickCreationWizard.getAncestorOfType(UIPortletConfig.class);
-//      portletConfig.showPopup(event.getRequestContext());
-      UIPortletConfig portletConfig = uiQuickCreationWizard.getAncestorOfType(UIPortletConfig.class);
       uiPortletConfig.closePopupAndUpdateUI(event.getRequestContext(),true);
-
     }
   }
 
