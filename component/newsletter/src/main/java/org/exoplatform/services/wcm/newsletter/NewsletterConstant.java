@@ -49,9 +49,14 @@ public class NewsletterConstant {
   public static final String STATUS_SENT                    = "sent";
 
   // Newsletter application configuration
-  public static String CATEGORY_BASE_PATH           = "/sites content/live/portalName/ApplicationData/NewsletterApplication/Categories";
- 
+  public static String CATEGORY_BASE_PATH                   = "/sites content/live/portalName/ApplicationData/NewsletterApplication/Categories";
+  public static String USER_BASE_PATH                       = "/sites content/live/portalName/ApplicationData/NewsletterApplication/Users";
+  
   public static String generateCategoryPath(String portalName) {
     return CATEGORY_BASE_PATH.replaceAll("portalName", portalName);
+  }
+  
+  public static String generateUserPath(String portalName) {
+    return USER_BASE_PATH.replaceAll("portalName", portalName);
   }
 }

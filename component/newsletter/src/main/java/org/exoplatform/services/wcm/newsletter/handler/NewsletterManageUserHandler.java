@@ -18,15 +18,20 @@ package org.exoplatform.services.wcm.newsletter.handler;
 
 import java.util.List;
 
+import javax.jcr.Node;
 import javax.jcr.Session;
 
 import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.access.PermissionType;
+import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
+import org.exoplatform.services.wcm.newsletter.config.NewsletterUserConfig;
 
 /**
  * Created by The eXo Platform SAS
@@ -49,17 +54,19 @@ public class NewsletterManageUserHandler {
     this.workspace = workspace;
   }
   
-  public void add(SessionProvider sessionProvider) {
+  public void add(String portalName, NewsletterUserConfig userConfig, SessionProvider sessionProvider) {
+    log.info("Trying to add user " + userConfig.getMail());
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
       Session session = sessionProvider.getSession(workspace, manageableRepository);
-      // TODO: Needs to implement
-      // Create new user node with the node name is the email
-      // Set the property "exo:newsletterUserMail" is the email
-      // Set the property "exo:newsletterUserBanned" is false
-      // Add the uuid of this user's node to the subscription to reference
+      String userPath = NewsletterConstant.generateUserPath(portalName);
+      Node userFolderNode = (Node)session.getItem(userPath);
+      Node userNode = userFolderNode.addNode(userConfig.getMail(), NewsletterConstant.USER_NODETYPE);
+      userNode.setProperty(NewsletterConstant.USER_PROPERTY_MAIL, userConfig.getMail());
+      userNode.setProperty(NewsletterConstant.USER_PROPERTY_BANNED, false);
+      session.save();
     } catch (Exception e) {
-      // TODO: handle exception
+      log.error("Add user " + userConfig.getMail() + " failed because of " + e.getMessage());
     }
   }
   

@@ -18,13 +18,20 @@ package org.exoplatform.services.wcm.newsletter;
 
 import java.util.List;
 
+import javax.jcr.Node;
+
 import org.apache.commons.logging.Log;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.wcm.newsletter.config.NewsletterUserConfig;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterCategoryHandler;
+import org.exoplatform.services.wcm.newsletter.handler.NewsletterManageUserHandler;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterSubscriptionHandler;
+import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.picocontainer.Startable;
+
+import sun.rmi.transport.LiveRef;
 
 /**
  * Created by The eXo Platform SAS
@@ -35,28 +42,46 @@ import org.picocontainer.Startable;
 public class NewsletterInitializationService implements Startable {
   
   private List<NewsletterCategoryConfig> categoryConfigs;
+//  private List<NewsletterSubscriptionConfig> subscriptionConfigs;
+  private List<NewsletterUserConfig> userConfigs;
   private NewsletterManagerService managerService;
+  private LivePortalManagerService livePortalManagerService;
   private static Log log = ExoLogger.getLogger(NewsletterInitializationService.class);
   
   @SuppressWarnings("unchecked")
-  public NewsletterInitializationService(InitParams initParams, NewsletterManagerService managerService) {
+  public NewsletterInitializationService(InitParams initParams, NewsletterManagerService managerService, LivePortalManagerService livePortalManagerService) {
     categoryConfigs = initParams.getObjectParamValues(NewsletterCategoryConfig.class);
+//    subscriptionConfigs = initParams.getObjectParamValues(NewsletterSubscriptionConfig.class);
+    userConfigs = initParams.getObjectParamValues(NewsletterUserConfig.class);
     this.managerService = managerService;
+    this.livePortalManagerService = livePortalManagerService;
   }
 
   public void start() {
     log.info("Starting NewsletterInitializationService ... ");
     SessionProvider sessionProvider = SessionProvider.createSystemProvider();
     try {
-      /*NewsletterCategoryHandler categoryHandler = managerService.getCategoryHandler();
-      NewsletterSubscriptionHandler subscriptionHandler = managerService.getSubscriptionHandler();
-      for (NewsletterCategoryConfig categoryConfig : categoryConfigs) {
-        // TODO: Needs to change
-        categoryHandler.add("", categoryConfig, sessionProvider);
-        for (NewsletterSubscriptionConfig subscriptionConfig : categoryConfig.getSubscriptions()) {
-          subscriptionHandler.add(sessionProvider);
+      List<Node> portalNodes = livePortalManagerService.getLivePortals(sessionProvider);
+      for (Node portalNode : portalNodes) {
+        String portalName = portalNode.getName();
+        NewsletterCategoryHandler categoryHandler = managerService.getCategoryHandler();
+        for (NewsletterCategoryConfig categoryConfig : categoryConfigs) {
+          categoryHandler.add(portalName, categoryConfig, sessionProvider);
         }
-      }*/
+        
+//      NewsletterSubscriptionHandler subscriptionHandler = managerService.getSubscriptionHandler();
+//      for (NewsletterSubscriptionConfig subscriptionConfig : subscriptionConfigs) {
+//        subscriptionHandler.add(sessionProvider);
+//      }
+//      
+        NewsletterManageUserHandler manageUserHandler = managerService.getManageUserHandler();
+        for (NewsletterUserConfig userConfig : userConfigs) {
+          manageUserHandler.add(portalName, userConfig, sessionProvider);
+        }
+        
+      }
+      
+      
     } catch (Throwable e) {
       
     } finally {
