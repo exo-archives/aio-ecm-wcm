@@ -50,6 +50,9 @@
 					<field name="description">
 						<string>subscription1's description</string>
 					</field>
+					<field name="categoryName">
+						<string>category1</string>
+					</field>
 				</object>
 			</object-param>
 			<object-param>
@@ -61,6 +64,9 @@
 					</field>
 					<field name="description">
 						<string>subscription2's description</string>
+					</field>
+					<field name="categoryName">
+						<string>category2</string>
 					</field>
 				</object>
 			</object-param>

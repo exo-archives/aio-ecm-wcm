@@ -42,7 +42,7 @@ import sun.rmi.transport.LiveRef;
 public class NewsletterInitializationService implements Startable {
   
   private List<NewsletterCategoryConfig> categoryConfigs;
-//  private List<NewsletterSubscriptionConfig> subscriptionConfigs;
+  private List<NewsletterSubscriptionConfig> subscriptionConfigs;
   private List<NewsletterUserConfig> userConfigs;
   private NewsletterManagerService managerService;
   private LivePortalManagerService livePortalManagerService;
@@ -51,7 +51,7 @@ public class NewsletterInitializationService implements Startable {
   @SuppressWarnings("unchecked")
   public NewsletterInitializationService(InitParams initParams, NewsletterManagerService managerService, LivePortalManagerService livePortalManagerService) {
     categoryConfigs = initParams.getObjectParamValues(NewsletterCategoryConfig.class);
-//    subscriptionConfigs = initParams.getObjectParamValues(NewsletterSubscriptionConfig.class);
+    subscriptionConfigs = initParams.getObjectParamValues(NewsletterSubscriptionConfig.class);
     userConfigs = initParams.getObjectParamValues(NewsletterUserConfig.class);
     this.managerService = managerService;
     this.livePortalManagerService = livePortalManagerService;
@@ -69,21 +69,18 @@ public class NewsletterInitializationService implements Startable {
           categoryHandler.add(portalName, categoryConfig, sessionProvider);
         }
         
-//      NewsletterSubscriptionHandler subscriptionHandler = managerService.getSubscriptionHandler();
-//      for (NewsletterSubscriptionConfig subscriptionConfig : subscriptionConfigs) {
-//        subscriptionHandler.add(sessionProvider);
-//      }
-//      
+        NewsletterSubscriptionHandler subscriptionHandler = managerService.getSubscriptionHandler();
+        for (NewsletterSubscriptionConfig subscriptionConfig : subscriptionConfigs) {
+          subscriptionHandler.add(sessionProvider, portalName, subscriptionConfig.getCategoryName(), subscriptionConfig);
+        }
+
         NewsletterManageUserHandler manageUserHandler = managerService.getManageUserHandler();
         for (NewsletterUserConfig userConfig : userConfigs) {
-          manageUserHandler.add(portalName, userConfig, sessionProvider);
+          manageUserHandler.add(portalName, userConfig.getMail(), sessionProvider);
         }
-        
       }
-      
-      
     } catch (Throwable e) {
-      
+      log.info("Starting NewsletterInitializationService fail because of " + e.getMessage());
     } finally {
       sessionProvider.close();
     }
