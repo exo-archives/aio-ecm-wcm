@@ -137,21 +137,22 @@ public class Util {
     }
   }   
   
+  private static Application application = null;
   public static Application findAppInstancesById(Container container, String applicationId) {
     ArrayList<Object> chidren = container.getChildren();
     if(chidren == null) return null;
     for(Object object: chidren) {
       if(object instanceof Application) {
-        Application application = Application.class.cast(object);
-        if(application.getInstanceId().equals(applicationId)) {
-          return application;
+        Application app = Application.class.cast(object);
+        if(app.getInstanceId().equals(applicationId)) {
+          application = app;
         }
       } else if(object instanceof Container) {
         Container child = Container.class.cast(object);
         findAppInstancesById(child, applicationId);
       }
     }
-    return null;
+    return application;
   }
   
   
