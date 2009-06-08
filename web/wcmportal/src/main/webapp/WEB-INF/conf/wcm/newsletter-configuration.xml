@@ -11,6 +11,9 @@
 					<field name="name">
 						<string>category1</string>
 					</field>
+					<field name="title">
+						<string>category1</string>
+					</field>
 					<field name="description">
 						<string>category1's description</string>
 					</field>
@@ -24,6 +27,9 @@
 				<description>category2</description>
 				<object type="org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig">
 					<field name="name">
+						<string>category2</string>
+					</field>
+					<field name="title">
 						<string>category2</string>
 					</field>
 					<field name="description">

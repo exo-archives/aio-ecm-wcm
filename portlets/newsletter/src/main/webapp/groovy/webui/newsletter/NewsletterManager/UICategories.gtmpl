@@ -1,5 +1,6 @@
 <%
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
+import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 %>
 
 <div class="UINewsletterPortlet">
@@ -20,7 +21,7 @@ import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 			<div style="width:100%;">
 				<!-- Category infor -->
 				<div class="ViewCategoryName">
-					<%=category.getName()%>
+					<a href="<%=uicomponent.event("OpenCateogry", category.getName())%>"><%=category.getTitle()%></a>
 				</div>
 				<!-- All subscriptions -->
 				<div class="Subscriptions">
@@ -36,16 +37,20 @@ import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 								<%=_ctx.appRes("UICategories.title.AWaitingLetter")%>
 							</th>
 						</tr>
-						<tr class="SubcriptionInfor">
-							<td class="Infor" style="border-left:0px;">Subscription 1</td>
-							<td class="Infor">400</td>
-							<td class="Infor" style="border-right:1px solid black;">1</td>
-						</tr>
-						<tr class="SubcriptionInfor" style="background:white;">
-							<td class="Infor" style="border-left:0px;">Subscription 1</td>
-							<td class="Infor">400</td>
-							<td class="Infor" style="border-right:1px solid black;">1</td>
-						</tr>
+						<%List<NewsletterSubscriptionConfig> listSubscriptions = uicomponent.getListSubscription(category.getName());
+							if(listSubscriptions.size() > 0){
+								for(NewsletterSubscriptionConfig subScription in listSubscriptions){%>
+								<tr class="SubcriptionInfor">
+									<td class="Infor" style="border-left:0px;"><%=subScription.getName()%></td>
+									<td class="Infor">400</td>
+									<td class="Infor" style="border-right:1px solid black;">1</td>
+								</tr>
+						<%	}
+							}else{%>
+								<tr>
+									<td colspan="3"><span></span></td>
+								</tr>
+						<%}%>
 					</table>
 				</div>
 			</div>

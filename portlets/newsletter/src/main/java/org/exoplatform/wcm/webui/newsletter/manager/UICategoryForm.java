@@ -87,7 +87,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
 			}
 			try{
 				NewsletterCategoryHandler categoryHandler = newsletterManagerService.getCategoryHandler();
-				categoryHandler.add(NewsLetterUtil.getPortalName(), categoryConfig, NewsLetterUtil.getSystemProvider());
+				categoryHandler.add(NewsLetterUtil.getPortalName(), categoryConfig, NewsLetterUtil.getSesssionProvider());
 				UIPopupContainer popupContainer = uiCategoryForm.getAncestorOfType(UIPopupContainer.class);
 	      popupContainer.deActivate();
 				event.getRequestContext().addUIComponentToUpdateByAjax(newsletterPortlet) ;

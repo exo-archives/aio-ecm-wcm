@@ -12,6 +12,7 @@
 
 .UINewsletterPortlet .BreadCumbs .ItemContent{
 	cursor:pointer;
+	font-size:12px;
 }
 
 .UINewsletterPortlet .ActionManager{

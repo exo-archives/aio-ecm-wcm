@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bundle>
+	<UINesletterPopupWindow>
+		<title>
+			<UICategoryForm>
+				Category Form
+			</UICategoryForm>
+		</title>
+	</UINesletterPopupWindow>
   <NewsletterPortletAction>
     <action>
       <Save>Save</Save>
       <Cancel>Cancel</Cancel>
       <Down>Down</Down>
       <Up>Up</Up>      
-      <Delete>Delete</Delete>            
+      <Delete>Delete</Delete>
+      <Moderation>Moderation</Moderation>  
     </action>
   </NewsletterPortletAction>
   <UICategoryForm>

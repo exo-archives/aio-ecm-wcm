@@ -22,8 +22,8 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
 public class NewsLetterUtil {
-	public static SessionProvider getSystemProvider() {
-		return SessionProviderFactory.createSystemProvider();
+	public static SessionProvider getSesssionProvider() {
+		return SessionProviderFactory.createSessionProvider();
 	}
 	
 	public static String getPortalName() {

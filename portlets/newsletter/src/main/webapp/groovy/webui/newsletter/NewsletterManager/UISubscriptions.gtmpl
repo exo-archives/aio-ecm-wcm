@@ -1,0 +1,86 @@
+<%
+import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
+%>
+<%
+if(uicomponent.categoryConfig != null){
+%>
+	<div class="UINewsletterPortlet">
+		
+		<div class="BreadCumbs">
+			<a class="ItemContent" style="color:blue;" href="<%=uicomponent.event("BackToCategories")%>">eXo Newsletter</a>
+			>
+			<a class="ItemContent"><%=uicomponent.categoryConfig.getTitle()%></a>
+		</div>
+		
+		<div class="ActionManager">
+			<a class="ActionTitle">News Letter</a> |
+			<a class="ActionTitle">News Subscription</a> |
+			<a href="<%=uicomponent.event("AddCategory")%>" class="ActionTitle">News Category</a> |
+			<a class="ActionTitle">Administration</a> |
+		</div>
+		
+		<div class="UICategories">
+			<div style="width:100%;">
+				<!-- Category infor -->
+				<div style="width:100%;height:30px;line-height:30px;">
+					<div style="float:left;">
+						<b><%=uicomponent.categoryConfig.getTitle()%></b>:
+						<%=uicomponent.categoryConfig.getDescription()%>
+					</div>
+					<div class="UIAction" style="float:right;"> 
+						<table class="ActionContainer" style="text-align:center">
+							<tr>
+								<td>
+			        		<div onclick="javaScript:void(0);" class="ActionButton LightBlueStyle">
+				      	  	<div class="ButtonLeft">
+				        	  	<div class="ButtonRight">
+				          	  	<div class="ButtonMiddle">
+				          	  		<a href="javascript:void(0);">
+				          	  			<%=_ctx.appRes("NewsletterPortletAction.action.Moderation")%>
+				          	  		</a>
+				          	  	</div>
+				            	</div>
+				          	</div>
+				        	</div>
+				      	</td>
+							</tr>
+					  </table> 
+					</div>
+					<div style="clear:both;"><span></span></div>
+				</div>
+				
+				<!-- All subscriptions -->
+				<div class="Subscriptions">
+					<table cellpadding="5" cellspacing="0" border="0">
+						<tr class="Header">
+							<th class="ContentView" style="border-left:0px;">
+								<%=_ctx.appRes("UICategories.title.SubScription")%>
+							</th>
+							<th class="ContentView">
+								<%=_ctx.appRes("UICategories.title.NumberOfUser")%>
+							</th>
+							<th class="ContentView" style="border-left:1px solid black">
+								<%=_ctx.appRes("UICategories.title.AWaitingLetter")%>
+							</th>
+						</tr>
+						<%int count = 0;
+							String color = "";
+							for(NewsletterSubscriptionConfig subScription in uicomponent.getListSubscription()){
+								if(count % 2 == 0) color = "";
+								else color="background:white;";
+							%>
+								<tr class="SubcriptionInfor" style="$color">
+									<td class="Infor" style="border-left:0px;"><%=subScription.getName()%></td>
+									<td class="Infor">400</td>
+									<td class="Infor" style="border-right:1px solid black;">1</td>
+								</tr>
+						<%	count ++;
+							}%>
+					</table>
+				</div>
+			</div>
+		</div>
+			
+	</div>
+<%
+}%>

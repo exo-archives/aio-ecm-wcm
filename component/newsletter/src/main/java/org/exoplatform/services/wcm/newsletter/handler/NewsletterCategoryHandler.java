@@ -57,6 +57,7 @@ public class NewsletterCategoryHandler {
   	NewsletterCategoryConfig categoryConfig = null;
   	categoryConfig = new NewsletterCategoryConfig();
   	categoryConfig.setName(categoryNode.getName());
+  	categoryConfig.setTitle(categoryNode.getProperty(NewsletterConstant.CATEGORY_PROPERTY_TITLE).getString());
   	categoryConfig.setDescription(categoryNode.getProperty(NewsletterConstant.CATEGORY_PROPERTY_DESCRIPTION).getString());
   	return categoryConfig;
   }
@@ -70,7 +71,7 @@ public class NewsletterCategoryHandler {
       Node categoriesNode = (Node)session.getItem(categoryPath);
       Node categoryNode = categoriesNode.addNode(categoryConfig.getName(), NewsletterConstant.CATEGORY_NODETYPE);
       ExtendedNode extendedCategoryNode = ExtendedNode.class.cast(categoryNode);
-      extendedCategoryNode.setProperty(NewsletterConstant.CATEGORY_PROPERTY_TITLE, categoryConfig.getName());
+      extendedCategoryNode.setProperty(NewsletterConstant.CATEGORY_PROPERTY_TITLE, categoryConfig.getTitle());
       extendedCategoryNode.setProperty(NewsletterConstant.CATEGORY_PROPERTY_DESCRIPTION, categoryConfig.getDescription());
       if (extendedCategoryNode.canAddMixin("exo:privilegeable")) {
         extendedCategoryNode.addMixin("exo:privilegeable");
