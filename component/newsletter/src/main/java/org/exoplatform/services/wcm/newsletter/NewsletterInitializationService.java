@@ -16,9 +16,11 @@
  */
 package org.exoplatform.services.wcm.newsletter;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.jcr.Node;
+import javax.jcr.Session;
 
 import org.apache.commons.logging.Log;
 import org.exoplatform.container.xml.InitParams;
@@ -30,8 +32,6 @@ import org.exoplatform.services.wcm.newsletter.handler.NewsletterManageUserHandl
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterSubscriptionHandler;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.picocontainer.Startable;
-
-import sun.rmi.transport.LiveRef;
 
 /**
  * Created by The eXo Platform SAS
@@ -62,21 +62,41 @@ public class NewsletterInitializationService implements Startable {
     SessionProvider sessionProvider = SessionProvider.createSystemProvider();
     try {
       List<Node> portalNodes = livePortalManagerService.getLivePortals(sessionProvider);
-      for (Node portalNode : portalNodes) {
-        String portalName = portalNode.getName();
-        NewsletterCategoryHandler categoryHandler = managerService.getCategoryHandler();
-        for (NewsletterCategoryConfig categoryConfig : categoryConfigs) {
-          categoryHandler.add(portalName, categoryConfig, sessionProvider);
-        }
+      if (portalNodes.isEmpty()) return;
+      Node dummyNode = portalNodes.get(0);
+      Session session = dummyNode.getSession();
+      Node serviceFolder = session.getRootNode().getNode("exo:services");
+      Node newsletterInitializationService = null;
+      if (serviceFolder.hasNode("NewsletterInitializationService")) {
+        newsletterInitializationService = serviceFolder.getNode("NewsletterInitializationService");
+      } else {
+        newsletterInitializationService = serviceFolder.addNode("NewsletterInitializationService", "nt:unstructured");
+      }
+      if (!newsletterInitializationService.hasNode("NewsletterInitializationService")) {
+        for (Node portalNode : portalNodes) {
+          String portalName = portalNode.getName();
+          NewsletterCategoryHandler categoryHandler = managerService.getCategoryHandler();
+          for (NewsletterCategoryConfig categoryConfig : categoryConfigs) {
+            categoryHandler.add(portalName, categoryConfig, sessionProvider);
+          }
+          
+          NewsletterSubscriptionHandler subscriptionHandler = managerService.getSubscriptionHandler();
+          for (NewsletterSubscriptionConfig subscriptionConfig : subscriptionConfigs) {
+            subscriptionHandler.add(sessionProvider, portalName, subscriptionConfig.getCategoryName(), subscriptionConfig);
+          }
+          
+          NewsletterManageUserHandler manageUserHandler = managerService.getManageUserHandler();
+          for (NewsletterUserConfig userConfig : userConfigs) {
+            manageUserHandler.add(portalName, userConfig.getMail(), sessionProvider);
+          }
         
-        NewsletterSubscriptionHandler subscriptionHandler = managerService.getSubscriptionHandler();
-        for (NewsletterSubscriptionConfig subscriptionConfig : subscriptionConfigs) {
-          subscriptionHandler.add(sessionProvider, portalName, subscriptionConfig.getCategoryName(), subscriptionConfig);
-        }
-
-        NewsletterManageUserHandler manageUserHandler = managerService.getManageUserHandler();
-        for (NewsletterUserConfig userConfig : userConfigs) {
-          manageUserHandler.add(portalName, userConfig.getMail(), sessionProvider);
+          Node newsletterInitializationServiceLog = newsletterInitializationService.addNode("NewsletterInitializationServiceLog", "nt:file");
+          Node newsletterInitializationServiceLogContent = newsletterInitializationServiceLog.addNode("jcr:content", "nt:resource");
+          newsletterInitializationServiceLogContent.setProperty("jcr:encoding", "UTF-8");
+          newsletterInitializationServiceLogContent.setProperty("jcr:mimeType", "text/plain");
+          newsletterInitializationServiceLogContent.setProperty("jcr:data", "Newsletter was created successfully");
+          newsletterInitializationServiceLogContent.setProperty("jcr:lastModified", new Date().getTime());
+          session.save();
         }
       }
     } catch (Throwable e) {

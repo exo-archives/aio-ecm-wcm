@@ -75,17 +75,17 @@ public class StageAndVersionPublicationInitializerService implements Startable{
       Session session = dummyNode.getSession();
       Node serviceFolder = session.getRootNode().getNode("exo:services");
       Node publicationInitializerService = null;
-      if (serviceFolder.hasNode("PublicationInitializerService")) {
-        publicationInitializerService = serviceFolder.getNode("PublicationInitializerService");
+      if (serviceFolder.hasNode("StageAndVersionPublicationInitializerService")) {
+        publicationInitializerService = serviceFolder.getNode("StageAndVersionPublicationInitializerService");
       } else {
-        publicationInitializerService = serviceFolder.addNode("PublicationInitializerService", "nt:unstructured");
+        publicationInitializerService = serviceFolder.addNode("StageAndVersionPublicationInitializerService", "nt:unstructured");
       }
-      if (!publicationInitializerService.hasNode("PublicationInitializerServiceLog")) {
+      if (!publicationInitializerService.hasNode("StageAndVersionPublicationInitializerServiceLog")) {
         for(Node portalNode: livePortals) {
           initializePublication(portalNode);
         }
         
-        Node publicationInitializerServiceLog = publicationInitializerService.addNode("ContentInitializerServiceLog", "nt:file");
+        Node publicationInitializerServiceLog = publicationInitializerService.addNode("StageAndVersionPublicationInitializerServiceLog", "nt:file");
         Node publicationInitializerServiceLogContent = publicationInitializerServiceLog.addNode("jcr:content", "nt:resource");
         publicationInitializerServiceLogContent.setProperty("jcr:encoding", "UTF-8");
         publicationInitializerServiceLogContent.setProperty("jcr:mimeType", "text/plain");
