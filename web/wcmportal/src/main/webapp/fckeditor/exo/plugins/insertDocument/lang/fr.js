@@ -1,0 +1,1 @@
+FCKLang.WCMInsertDocumentPlugins = "FR Insert/Link to DMS Document";

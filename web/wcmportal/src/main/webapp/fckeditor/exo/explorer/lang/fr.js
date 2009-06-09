@@ -1,34 +1,33 @@
-
 var KLang = {
-	TreeTitle	 								: "Folders",
-	SettingTitle							: "Setting",
-	SetView										: "View",
-	SetSort										: "Sort",
+	TreeTitle	 								: "Dossiers",
+	SettingTitle							: "Paramètre",
+	SetView										: "Affichage",
+	SetSort										: "Trier",
 	
-	SortName									: "File name",
+	SortName									: "Nom du fichier",
 	SortDate									: "Date",
-	SortSize									: "Size",
+	SortSize									: "Taille",
 	
 	ViewThumbnail							: "Thumbnail",
-	ViewList									: "List",
+	ViewList									: "Liste",
 	
-	CtxNewDoc									: "Add new",
-	CtxViewItem								: "View",
-	CtxSelectItem							: "Select",
+	CtxNewDoc									: "Ajouter de nouvelles",
+	CtxViewItem								: "Affichage",
+	CtxSelectItem							: "Sélectionnez",
 	
-	BtnCreate									: "Create",
-	BtnCancel									: "Cancel",
-	BtnUpload									: "Upload",
+	BtnCreate									: "Créer",
+	BtnCancel									: "Annuler",
+	BtnUpload									: "Envoyer",
 	BtnRefresh								: "Refresh",
-	BtnSetting								: "Setting",
-	BtnHelp										: "Help",
-	BtnClose									: "Close",
-	BtnSave										: "Save",
+	BtnSetting								: "Paramètre",
+	BtnHelp										: "Aider",
+	BtnClose									: "Fermer",
+	BtnSave										: "Sauver",
 	BtnAbort									: "Abort",
-	BtnDelete									: "Delete",
+	BtnDelete									: "Supprimer",
 	
-	LabelFolder								: "Folder",
-	LabelAlert								: "Please choose a file before upload",
-	LabelName									: "Name",
-	LNewFolder								: "New Folder"
+	LabelFolder								: "Dossier",
+	LabelAlert								: "Veuillez choisir un fichier avant l'upload",
+	LabelName									: "Nom",
+	LNewFolder								: "Nouveau dossier"
 }

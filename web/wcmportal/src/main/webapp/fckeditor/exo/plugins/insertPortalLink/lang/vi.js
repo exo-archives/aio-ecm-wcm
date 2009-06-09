@@ -1,7 +1,7 @@
-var KLang = {
-	title			:		"Tiêu đề",
-	url				:		"Địa chỉ :",
-	getPortalLink	:		"Sử dụng địa chỉ Portal",
-	preview			:		"Xem thử",
-	save			:		"Lưu"
-}
+FCKLang.WCMInsertPortalLinkPlugins = "VI Insert link to a site page";
+FCKLang.WCMInsertPortalLinkDialogTitle = "VI Insert link to a site page";
+FCKLang.WCMInsertPortalLinkInputTitle = "VI Title: ";
+FCKLang.WCMInsertPortalLinkInputUrl = "VI URL: ";
+FCKLang.WCMInsertPortalLinkButtonGet = "VI Get portal link";
+FCKLang.WCMInsertPortalLinkButtonPreview = "VI Preview";
+FCKLang.WCMInsertPortalLinkButtonSave = "VI Save";
