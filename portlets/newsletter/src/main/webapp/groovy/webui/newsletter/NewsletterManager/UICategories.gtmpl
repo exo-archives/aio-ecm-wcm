@@ -35,7 +35,7 @@ JavascriptManager jsmanager = rcontext.getJavascriptManager();
 										<!-- Detail action -->
 										<div class="MenuItem" onclick="javaScript:void(0)">
 											<div class="ItemIcon IconsView" style="padding-left:24px;">
-												<a href="<%=uicomponent.event("AddCategory")%>">Preferences</a>
+												<a href="javaScript:void(0);">Preferences</a>
 											</div>
 										</div>
 										<hr style="width:90%;"/>

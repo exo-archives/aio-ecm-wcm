@@ -49,6 +49,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
 	private String INPUT_CATEGORY_MODERATOR = "CategoryModerator"; 
 	private NewsletterCategoryConfig categoryConfig;
 	public UICategoryForm() throws Exception{
+	  this.getChildren().clear();
 		UIFormStringInput inputCateName = new UIFormStringInput(INPUT_CATEGORY_NAME, null);
 		UIFormStringInput inputCateTitle = new UIFormStringInput(INPUT_CATEGORY_TITLE, null);
 		UIFormTextAreaInput inputCateDescription = new UIFormTextAreaInput(INPUT_CATEGORY_DESCRIPTION, null, null);

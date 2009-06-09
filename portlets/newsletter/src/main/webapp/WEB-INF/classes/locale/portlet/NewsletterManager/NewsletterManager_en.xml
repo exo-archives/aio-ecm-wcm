@@ -41,6 +41,9 @@
   <UISubscription>
     <msg>
     	<confirmDeleteCategory>Are you sure you want to delete this category?</confirmDeleteCategory>
+    	<confirmDeleteSubscription>Are you sure you want to delete this subscription</confirmDeleteSubscription>
+    	<checkOnlyOneSubScriptionToEdit>Please check only one subscription to edit!</checkOnlyOneSubScriptionToEdit>
+    	<checkOnlyOneSubScriptionToDelete>Please check only one subscription to delete!</checkOnlyOneSubScriptionToDelete>
     </msg>
   </UISubscription>
 </bundle>

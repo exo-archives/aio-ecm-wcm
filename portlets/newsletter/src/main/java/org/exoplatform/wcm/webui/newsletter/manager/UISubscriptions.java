@@ -25,14 +25,18 @@ import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterCategoryHandler;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterSubscriptionHandler;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
+import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
-import org.exoplatform.webui.form.UIFormStringInput;
+
+import com.sun.imageio.plugins.common.SubImageInputStream;
 
 /**
  * Created by The eXo Platform SAS
@@ -45,6 +49,9 @@ import org.exoplatform.webui.form.UIFormStringInput;
     template = "app:/groovy/webui/newsletter/NewsletterManager/UISubscriptions.gtmpl",
     events = {
         @EventConfig(listeners = UISubscriptions.BackToCategoriesActionListener.class),
+        @EventConfig(listeners = UISubscriptions.AddSubcriptionActionListener.class),
+        @EventConfig(listeners = UISubscriptions.EditSubscriptionActionListener.class),
+        @EventConfig(listeners = UISubscriptions.DeleteSubscriptionActionListener.class, confirm= "UISubscription.msg.confirmDeleteSubscription"),
         @EventConfig(listeners = UISubscriptions.DeleteCategoryActionListener.class, confirm= "UISubscription.msg.confirmDeleteCategory"),
         @EventConfig(listeners = UISubscriptions.EditCategoryActionListener.class)
     }
@@ -86,6 +93,23 @@ public class UISubscriptions extends UIContainer {
     return listSubs;
   }
   
+  public String getChecked(){
+    String subscriptionId = null;
+    UIFormCheckBoxInput<Boolean> checkbox = null;
+    for(UIComponent component : this.getChildren()){
+      try{
+        checkbox = (UIFormCheckBoxInput<Boolean>)component;
+        System.out.println("~~~~~~~~~~>id:" + checkbox.getId());
+        if(checkbox.isChecked()){
+          if(subscriptionId == null)subscriptionId = checkbox.getName(); 
+          else return null;
+        }
+      }catch(Exception e){}
+    }
+    System.out.println("\n\n\n\n------------------>subscription name:" + subscriptionId);
+    return subscriptionId;
+  }
+  
   static  public class BackToCategoriesActionListener extends EventListener<UISubscriptions> {
     public void execute(Event<UISubscriptions> event) throws Exception {
       UISubscriptions subsriptions = event.getSource();
@@ -124,6 +148,59 @@ public class UISubscriptions extends UIContainer {
       categories.setRendered(true);
       subsriptions.setRendered(false);
       event.getRequestContext().addUIComponentToUpdateByAjax(newsletterManagerPortlet);
+    }
+  }
+  
+  static  public class AddSubcriptionActionListener extends EventListener<UISubscriptions> {
+    public void execute(Event<UISubscriptions> event) throws Exception {
+      UISubscriptions subsriptions = event.getSource();
+      UIPopupContainer popupContainer = subsriptions.getAncestorOfType(UINewsletterManagerPortlet.class).getChild(UIPopupContainer.class);
+      UISubcriptionForm subcriptionForm = popupContainer.createUIComponent(UISubcriptionForm.class, null, null);
+      popupContainer.setRendered(true);
+      popupContainer.activate(subcriptionForm, 450, 300);
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
+    }
+  }
+  
+  static  public class EditSubscriptionActionListener extends EventListener<UISubscriptions> {
+    public void execute(Event<UISubscriptions> event) throws Exception {
+      UISubscriptions subsriptions = event.getSource();
+      String subId = subsriptions.getChecked();
+      if(subId == null){
+        UIApplication uiApp = subsriptions.getAncestorOfType(UIApplication.class);
+        uiApp.addMessage(new ApplicationMessage("UISubscription.msg.checkOnlyOneSubScriptionToEdit", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
+      }
+      UIPopupContainer popupContainer = subsriptions.getAncestorOfType(UINewsletterManagerPortlet.class).getChild(UIPopupContainer.class);
+      UISubcriptionForm subcriptionForm = popupContainer.createUIComponent(UISubcriptionForm.class, null, null);
+      SessionProvider sessionProvider = NewsLetterUtil.getSesssionProvider();
+      NewsletterSubscriptionConfig subscriptionConfig =
+        subsriptions.subscriptionHandler.getSubscriptionsByName(sessionProvider, NewsLetterUtil.getPortalName(), subsriptions.categoryConfig.getName(), subId);
+      subcriptionForm.setSubscriptionInfor(subscriptionConfig);
+      popupContainer.setRendered(true);
+      popupContainer.activate(subcriptionForm, 450, 300);
+      sessionProvider.close();
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
+    }
+  }
+  
+  static  public class DeleteSubscriptionActionListener extends EventListener<UISubscriptions> {
+    public void execute(Event<UISubscriptions> event) throws Exception {
+      UISubscriptions subsriptions = event.getSource();
+      String subId = subsriptions.getChecked();
+      if(subId == null){
+        UIApplication uiApp = subsriptions.getAncestorOfType(UIApplication.class);
+        uiApp.addMessage(new ApplicationMessage("UISubscription.msg.checkOnlyOneSubScriptionToDelete", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
+      }
+      SessionProvider sessionProvider = NewsLetterUtil.getSesssionProvider();
+      String portalName = NewsLetterUtil.getPortalName();
+      NewsletterSubscriptionConfig subscriptionConfig = 
+        subsriptions.subscriptionHandler.getSubscriptionsByName(sessionProvider, portalName, subsriptions.categoryConfig.getName(), subId);
+      subsriptions.subscriptionHandler.delete(sessionProvider, NewsLetterUtil.getPortalName(), subsriptions.categoryConfig.getName(),subscriptionConfig);
+      event.getRequestContext().addUIComponentToUpdateByAjax(subsriptions);
     }
   }
 }

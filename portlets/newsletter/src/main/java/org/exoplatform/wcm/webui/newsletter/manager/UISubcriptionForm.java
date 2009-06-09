@@ -19,6 +19,7 @@ package org.exoplatform.wcm.webui.newsletter.manager;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
@@ -65,6 +66,8 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent {
   
   private NewsletterCategoryHandler categoryHandler = null;
   
+  private NewsletterSubscriptionConfig subscriptionConfig = null;
+  
   public UISubcriptionForm() throws Exception{
 
     List<NewsletterCategoryConfig> categories = getListCategories();
@@ -94,6 +97,16 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent {
 
   public void deActivate() throws Exception {
   }
+  
+  public void setSubscriptionInfor(NewsletterSubscriptionConfig subscriptionConfig){
+    this.subscriptionConfig = subscriptionConfig;
+    UIFormStringInput inputName = this.getChildById(INPUT_SUBCRIPTION_NAME);
+    inputName.setValue(subscriptionConfig.getName());
+    inputName.setEditable(false);
+    ((UIFormStringInput)this.getChildById(INPUT_SUBCRIPTION_TITLE)).setValue(subscriptionConfig.getTitle());
+    ((UIFormTextAreaInput)this.getChildById(INPUT_SUBCRIPTION_DESCRIPTION)).setValue(subscriptionConfig.getDescription());
+    ((UIFormSelectBox)this.getChildById(SELECT_CATEGORIES_NAME)).setValue(subscriptionConfig.getCategoryName()).setEditable(false);
+  }
 
   private List<NewsletterCategoryConfig> getListCategories(){
     NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
@@ -112,7 +125,6 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent {
       
       UINewsletterManagerPortlet newsletterPortlet = uiSubcriptionForm.getAncestorOfType(UINewsletterManagerPortlet.class);
       NewsletterManagerService newsletterManagerService = (NewsletterManagerService)newsletterPortlet.getApplicationComponent(NewsletterManagerService.class) ;
-      NewsletterSubscriptionConfig subscriptionConfig = new NewsletterSubscriptionConfig();
       
       UIFormSelectBox formSelectBox = uiSubcriptionForm.getChildById(SELECT_CATEGORIES_NAME);
       String categoryName = formSelectBox.getSelectedValues()[0].toString();
@@ -126,20 +138,28 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       } else if ((subcriptionTitle == null) || (subcriptionTitle.trim().length() < 1)) {
-        
         uiApp.addMessage(new ApplicationMessage("UISubcriptionForm.msg.subcriptionTitleIsNotEmpty", null, ApplicationMessage.WARNING));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       }  else {
-        
-        try {
+        NewsletterSubscriptionConfig subscriptionConfig = null;
+        if(uiSubcriptionForm.subscriptionConfig == null){
+          subscriptionConfig = new NewsletterSubscriptionConfig();
           subscriptionConfig.setName(subcriptionName);
-          subscriptionConfig.setDescription(subcriptionDecription);
-          subscriptionConfig.setTitle(subcriptionTitle);
           subscriptionConfig.setCategoryName(categoryName);
+        }else{
+          subscriptionConfig = uiSubcriptionForm.subscriptionConfig;
+        }
+        subscriptionConfig.setDescription(subcriptionDecription);
+        subscriptionConfig.setTitle(subcriptionTitle);
+        SessionProvider sessionProvider = NewsLetterUtil.getSesssionProvider();
+        try {
         
           NewsletterSubscriptionHandler subscriptionHandler = newsletterManagerService.getSubscriptionHandler();
-          subscriptionHandler.add(NewsLetterUtil.getSesssionProvider(), NewsLetterUtil.getPortalName(), subscriptionConfig);
+          if(uiSubcriptionForm.subscriptionConfig == null)
+            subscriptionHandler.add(sessionProvider, NewsLetterUtil.getPortalName(), subscriptionConfig);
+          else
+            subscriptionHandler.edit(sessionProvider, NewsLetterUtil.getPortalName(), subscriptionConfig);
           
           UIPopupContainer popupContainer = uiSubcriptionForm.getAncestorOfType(UIPopupContainer.class);
           popupContainer.deActivate();
