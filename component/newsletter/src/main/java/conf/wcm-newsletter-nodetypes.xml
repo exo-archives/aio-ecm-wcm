@@ -25,7 +25,7 @@
 			</propertyDefinition>
 		</propertyDefinitions>
 		<childNodeDefinitions>
-			<childNodeDefinition name="*" defaultPrimaryType="exo:newsletterEntry" autoCreated="false" mandatory="false" onParentVersion="VERSION" protected="false" sameNameSiblings="true">
+			<childNodeDefinition name="*" defaultPrimaryType="exo:newsletterEntry" autoCreated="false" mandatory="false" onParentVersion="VERSION" protected="false" sameNameSiblings="false">
 				<requiredPrimaryTypes>
 					<requiredPrimaryType>exo:newsletterEntry</requiredPrimaryType>
 				</requiredPrimaryTypes>
@@ -46,7 +46,7 @@
 			</propertyDefinition>
 		</propertyDefinitions>
 		<childNodeDefinitions>
-			<childNodeDefinition name="*" defaultPrimaryType="exo:newsletterSubscription" autoCreated="false" mandatory="false" onParentVersion="VERSION" protected="false" sameNameSiblings="true">
+			<childNodeDefinition name="*" defaultPrimaryType="exo:newsletterSubscription" autoCreated="false" mandatory="false" onParentVersion="VERSION" protected="false" sameNameSiblings="false">
 				<requiredPrimaryTypes>
 					<requiredPrimaryType>exo:newsletterSubscription</requiredPrimaryType>
 				</requiredPrimaryTypes>

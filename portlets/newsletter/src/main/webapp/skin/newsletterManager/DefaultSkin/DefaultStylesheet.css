@@ -17,12 +17,16 @@
 
 .UINewsletterPortlet .ActionManager{
 	padding:5px 10px;
+	height:30px;
+	line-height:30px;
 }
 
 .UINewsletterPortlet .ActionManager .ActionTitle{
-	color:#9797FF;
+	float:left;
+	color:blue;
 	font-weight:bold;
 	cursor:pointer;
+	width:auto;
 }
 
 .UINewsletterPortlet .UICategories{
@@ -38,7 +42,7 @@
 
 .UINewsletterPortlet .UICategories .Subscriptions{
 	border:1px solid gray;
-	margin:5px 10px;
+	margin:5px 10px 10px 5px;
 }
 
 .UINewsletterPortlet .UICategories .Subscriptions .Header{
@@ -48,7 +52,8 @@
 
 .UINewsletterPortlet .UICategories .Subscriptions .Header .ContentView{
 	border-left:1px solid black;
-	height:20px;
+	height:30px;
+	line-height:30px;
 }
 
 .UINewsletterPortlet .UICategories .Subscriptions .SubcriptionInfor{

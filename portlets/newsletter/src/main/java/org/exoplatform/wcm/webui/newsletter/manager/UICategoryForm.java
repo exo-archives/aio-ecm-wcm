@@ -17,6 +17,7 @@
 package org.exoplatform.wcm.webui.newsletter.manager;
 
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterCategoryHandler;
@@ -46,6 +47,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
 	private String INPUT_CATEGORY_TITLE = "CategoryTitle"; 
 	private String INPUT_CATEGORY_DESCRIPTION = "CategoryDescription"; 
 	private String INPUT_CATEGORY_MODERATOR = "CategoryModerator"; 
+	private NewsletterCategoryConfig categoryConfig;
 	public UICategoryForm() throws Exception{
 		UIFormStringInput inputCateName = new UIFormStringInput(INPUT_CATEGORY_NAME, null);
 		UIFormStringInput inputCateTitle = new UIFormStringInput(INPUT_CATEGORY_TITLE, null);
@@ -63,14 +65,32 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
 
 	public void deActivate() throws Exception {	}
 	
+	public void setCategoryInfo(NewsletterCategoryConfig categoryConfig){
+	  this.categoryConfig = categoryConfig;
+	  UIFormStringInput inputCateName = this.getChildById(INPUT_CATEGORY_NAME);
+	  inputCateName.setValue(categoryConfig.getName());
+	  inputCateName.setEditable(false);
+    UIFormStringInput inputCateTitle = this.getChildById(INPUT_CATEGORY_TITLE);
+    inputCateTitle.setValue(categoryConfig.getTitle());
+    UIFormTextAreaInput inputCateDescription = this.getChildById(INPUT_CATEGORY_DESCRIPTION);
+    inputCateDescription.setValue(categoryConfig.getDescription());
+    UIFormStringInput inputModerator = this.getChildById(INPUT_CATEGORY_MODERATOR);
+    inputModerator.setValue(categoryConfig.getModerator());
+	}
+	
 	static  public class SaveActionListener extends EventListener<UICategoryForm> {
 		public void execute(Event<UICategoryForm> event) throws Exception {
 			UICategoryForm uiCategoryForm = event.getSource();
 			UINewsletterManagerPortlet newsletterPortlet = uiCategoryForm.getAncestorOfType(UINewsletterManagerPortlet.class);
 			NewsletterManagerService newsletterManagerService = 
 				(NewsletterManagerService)PortalContainer.getInstance().getComponentInstanceOfType(NewsletterManagerService.class) ;
-			NewsletterCategoryConfig categoryConfig = new NewsletterCategoryConfig();
-			categoryConfig.setName(((UIFormStringInput)uiCategoryForm.getChildById(uiCategoryForm.INPUT_CATEGORY_NAME)).getValue());
+			NewsletterCategoryConfig categoryConfig = null;
+			if(uiCategoryForm.categoryConfig == null) {
+			  categoryConfig = new NewsletterCategoryConfig();
+			  categoryConfig.setName(((UIFormStringInput)uiCategoryForm.getChildById(uiCategoryForm.INPUT_CATEGORY_NAME)).getValue());
+			}else{
+			  categoryConfig = uiCategoryForm.categoryConfig;
+			}
 			categoryConfig.setTitle(((UIFormStringInput)uiCategoryForm.getChildById(uiCategoryForm.INPUT_CATEGORY_TITLE)).getValue());
 			categoryConfig.setDescription(((UIFormTextAreaInput)uiCategoryForm.getChildById(uiCategoryForm.INPUT_CATEGORY_DESCRIPTION)).getValue());
 			categoryConfig.setModerator(((UIFormStringInput)uiCategoryForm.getChildById(uiCategoryForm.INPUT_CATEGORY_MODERATOR)).getValue());
@@ -85,17 +105,27 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
 				event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
 				return;
 			}
+			NewsletterCategoryHandler categoryHandler = newsletterManagerService.getCategoryHandler();
+			SessionProvider sessionProvider = NewsLetterUtil.getSesssionProvider();
+			String portalName = NewsLetterUtil.getPortalName(); 
 			try{
-				NewsletterCategoryHandler categoryHandler = newsletterManagerService.getCategoryHandler();
-				categoryHandler.add(NewsLetterUtil.getPortalName(), categoryConfig, NewsLetterUtil.getSesssionProvider());
-				UIPopupContainer popupContainer = uiCategoryForm.getAncestorOfType(UIPopupContainer.class);
-	      popupContainer.deActivate();
-				event.getRequestContext().addUIComponentToUpdateByAjax(newsletterPortlet) ;
-			}catch(Exception e){
-				uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.categoryNameIsAlreadyExist", null, ApplicationMessage.WARNING));
-	      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-	      return;
+			  if(uiCategoryForm.categoryConfig == null){ // if add new category then check cateogry's name is already exist or not 
+  			  if(categoryHandler.getCategoryByName(portalName, categoryConfig.getName(), sessionProvider) != null){
+  			    uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.categoryNameIsAlreadyExist", null, ApplicationMessage.WARNING));
+  			    event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+  			    sessionProvider.close();
+  			    return;
+  			  }
+			  }else{ // Edit a category is already exist
+			    categoryHandler.edit(portalName, categoryConfig, sessionProvider);
+			  }
+			}catch(Exception ex){
+		    categoryHandler.add(portalName, categoryConfig, sessionProvider);
 			}
+			UIPopupContainer popupContainer = uiCategoryForm.getAncestorOfType(UIPopupContainer.class);
+			popupContainer.deActivate();
+			event.getRequestContext().addUIComponentToUpdateByAjax(newsletterPortlet) ;
+			sessionProvider.close();
 		}
 	}
 	

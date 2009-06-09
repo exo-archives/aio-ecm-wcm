@@ -19,6 +19,7 @@ package org.exoplatform.wcm.webui.newsletter.manager;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
@@ -35,8 +36,8 @@ import org.exoplatform.webui.event.EventListener;
 		template = "app:/groovy/webui/newsletter/NewsletterManager/UICategories.gtmpl",
 		events = {
 				@EventConfig(listeners = UICategories.AddCategoryActionListener.class),
+				@EventConfig(listeners = UICategories.OpenCategoryActionListener.class),
         @EventConfig(listeners = UICategories.AddSubcriptionActionListener.class),
-				@EventConfig(listeners = UICategories.OpenCateogryActionListener.class)
 		}
 )
 public class UICategories extends UIContainer {
@@ -51,22 +52,28 @@ public class UICategories extends UIContainer {
 	
 	@SuppressWarnings("unused")
 	private List<NewsletterCategoryConfig> getListCategories(){
+	  List<NewsletterCategoryConfig> listCategories = new ArrayList<NewsletterCategoryConfig>();
+	  SessionProvider sessionProvider = NewsLetterUtil.getSesssionProvider();
 		try{
-			return categoryHandler.getListCategories(NewsLetterUtil.getPortalName(), NewsLetterUtil.getSesssionProvider());
+			listCategories = categoryHandler.getListCategories(NewsLetterUtil.getPortalName(), sessionProvider);
 		}catch(Exception e){
 			e.printStackTrace();
-			return new ArrayList<NewsletterCategoryConfig>();
 		}
+		sessionProvider.close();
+		return listCategories;
 	}
 	
 	@SuppressWarnings("unused")
   private List<NewsletterSubscriptionConfig> getListSubscription(String categoryName){
+	  List<NewsletterSubscriptionConfig> listSubscription = new ArrayList<NewsletterSubscriptionConfig>();
+	  SessionProvider sessionProvider = NewsLetterUtil.getSesssionProvider();
     try{
-      return subscriptionHandler.getSubscriptionsByCategory(NewsLetterUtil.getSesssionProvider(), NewsLetterUtil.getPortalName(), categoryName);
+      listSubscription = subscriptionHandler.getSubscriptionsByCategory(sessionProvider, NewsLetterUtil.getPortalName(), categoryName);
     }catch(Exception e){
       e.printStackTrace();
-      return new ArrayList<NewsletterSubscriptionConfig>();
     }
+    sessionProvider.close();
+    return listSubscription;
   }
 	
 	static  public class AddCategoryActionListener extends EventListener<UICategories> {
@@ -91,12 +98,12 @@ public class UICategories extends UIContainer {
     }
   }
 	
-	static  public class OpenCateogryActionListener extends EventListener<UICategories> {
+	static  public class OpenCategoryActionListener extends EventListener<UICategories> {
 	  public void execute(Event<UICategories> event) throws Exception {
 	    UICategories uiCategories = event.getSource();
 	    String categoryName = event.getRequestContext().getRequestParameter(OBJECTID);
 	    UINewsletterManagerPortlet newsletterManagerPortlet = uiCategories.getAncestorOfType(UINewsletterManagerPortlet.class);
-	    UISubsriptions subsriptions = newsletterManagerPortlet.getChild(UISubsriptions.class);
+	    UISubscriptions subsriptions = newsletterManagerPortlet.getChild(UISubscriptions.class);
 	    subsriptions.setRendered(true);
 	    subsriptions.setCategory(uiCategories.categoryHandler.getCategoryByName(NewsLetterUtil.getPortalName(), categoryName, NewsLetterUtil.getSesssionProvider()));
 	    newsletterManagerPortlet.getChild(UICategories.class).setRendered(false);
