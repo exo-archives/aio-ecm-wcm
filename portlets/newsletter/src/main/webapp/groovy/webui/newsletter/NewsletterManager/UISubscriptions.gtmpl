@@ -5,6 +5,7 @@ import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 if(uicomponent.categoryConfig != null){
 %>
 	<div class="UINewsletterPortlet">
+	<% uiform.begin() %>
 		<div class="BreadCumbs">
 			<a class="ItemContent" style="color:blue;" href="<%=uicomponent.event("BackToCategories")%>">eXo Newsletter</a>
 			>
@@ -200,6 +201,7 @@ if(uicomponent.categoryConfig != null){
 				</div>
 			</div>
 		</div>
+	<%uiform.end()%>	
 	</div>
 <%
 }%>

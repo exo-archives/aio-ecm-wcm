@@ -30,13 +30,11 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
-import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
-
-import com.sun.imageio.plugins.common.SubImageInputStream;
 
 /**
  * Created by The eXo Platform SAS
@@ -56,7 +54,7 @@ import com.sun.imageio.plugins.common.SubImageInputStream;
         @EventConfig(listeners = UISubscriptions.EditCategoryActionListener.class)
     }
 )
-public class UISubscriptions extends UIContainer {
+public class UISubscriptions extends UIForm {
   NewsletterSubscriptionHandler subscriptionHandler;
   NewsletterCategoryConfig categoryConfig;
   
