@@ -1,1 +1,1 @@
-FCKLang.WCMInsertDocumentPlugins = "VI Insert/Link to DMS Document";
+FCKLang.WCMInsertDocumentPlugins = "Chèn/Liên kết tới tài liệu DMS";

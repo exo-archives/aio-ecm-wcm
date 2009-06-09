@@ -1,1 +1,1 @@
-FCKLang.WCMInsertImagePlugins = "VI Insert images";
+FCKLang.WCMInsertImagePlugins = "Chèn ảnh";
