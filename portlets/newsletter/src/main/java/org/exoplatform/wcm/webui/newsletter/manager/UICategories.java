@@ -35,6 +35,7 @@ import org.exoplatform.webui.event.EventListener;
 		template = "app:/groovy/webui/newsletter/NewsletterManager/UICategories.gtmpl",
 		events = {
 				@EventConfig(listeners = UICategories.AddCategoryActionListener.class),
+        @EventConfig(listeners = UICategories.AddSubcriptionActionListener.class),
 				@EventConfig(listeners = UICategories.OpenCateogryActionListener.class)
 		}
 )
@@ -68,7 +69,6 @@ public class UICategories extends UIContainer {
     }
   }
 	
-
 	static  public class AddCategoryActionListener extends EventListener<UICategories> {
 		public void execute(Event<UICategories> event) throws Exception {
 			UICategories uiCategories = event.getSource();
@@ -79,6 +79,17 @@ public class UICategories extends UIContainer {
 			event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
 		}
 	}
+  
+  static  public class AddSubcriptionActionListener extends EventListener<UICategories> {
+    public void execute(Event<UICategories> event) throws Exception {
+      UICategories uiCategories = event.getSource();
+      UIPopupContainer popupContainer = uiCategories.getAncestorOfType(UINewsletterManagerPortlet.class).getChild(UIPopupContainer.class);
+      UISubcriptionForm subcriptionForm = popupContainer.createUIComponent(UISubcriptionForm.class, null, null);
+      popupContainer.setRendered(true);
+      popupContainer.activate(subcriptionForm, 450, 300);
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
+    }
+  }
 	
 	static  public class OpenCateogryActionListener extends EventListener<UICategories> {
 	  public void execute(Event<UICategories> event) throws Exception {
