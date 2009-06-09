@@ -1,84 +1,98 @@
 <%
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
-
-System.out.println("\n\n\n\n----------------------->run");
 %>
-<div class="NewsletterStyle">
+<div class="UINewsletterPortlet">
 	<%uiform.begin()%>
 	<div class="UserName">
 		<div class="LeftUserName">
-			<span class="textUserName">User:</span>
+			User:
 		</div>
 		<div class="RightUserName">
-			<span>
+			<div class="Input">
 				<%
-					uicomponent.renderChild("inputID");
+					uicomponent.renderChild("inputEmail");
 				%>
-			</span>
-		<div>
-			<a href = "#" class="TextTest">
-				<%
-					System.out.println("\n\n\n\n--------: " + uicomponent.userMail);
-				%>
-				<%=uicomponent.userMail%>
-			</a>
+				<a href = "#">
+					<%=uicomponent.userMail%>
+				</a>
+			</div>
+			<div class="buttonForget">
+				<%if (uicomponent.isUpdated == true) {%>
+						<div class="UIAction"> 
+		          <%String forgetAction = uicomponent.event("ForgetEmail") ;%>
+		          <div class="ActionContainer">
+		          	<table class="ActionContainer">
+	    						<tr>
+	    							<td>
+						          <div onclick="$forgetAction" class="ActionButton LightBlueStyle" >
+						            <div class="ButtonLeft">
+						              <div class="ButtonRight">
+						                <div class="ButtonMiddle">
+						                  <a href="javascript:void(0);">
+						                  	<%=_ctx.appRes("UINewsletterViewerForm.action.ForgetEmail")%>
+						                  </a>
+						                </div>
+						              </div>
+						            </div>
+					            </div>
+	      						</td>
+	      					</tr>          
+	    					</table>
+		          </div>
+			  		</div>
+	  			<%}%>
+			</div>
 		</div>
-		</div>
+
 		<div class="ClearLeft">
 			<span></span>
 		</div>
 	</div>
 	<div class="ListCategory">
-		<%
-		for(des in uicomponent.listNewsletterCategories){%>
-		
-			<div class="TextCategoryName">
-				<%=des.getName()%>
-			</div>
-			<div>
-				--------------------------------------------
-			</div>
-			<div class="TextAboutCategory">
-				<%=des.getDescription()%>
-			</div>
-			<div>
-				--------------------------------------------
-			</div>
-		
-			<div class="ListSubcription">
-				<table cellpadding="1" cellspacing="1">
-					<tr bgcolor="#dfe4e5">
-						<td width="25%" height="30" class="Line">
-							<span class="TitleSubcription">Subcription</span>
-						</td>
-						<td width="25%" height="30" class="Line">
-							<span class="TitleSubcription">Your status</span>
-						</td>
-					</tr>
-					<%int count = 0;
-						String classTr = "";
-						for (item in des.getSubscriptions()) {
-							count++;
-						  if (count % 2 != 0)
-						  	classTr = "TrGrey";
-						  else 
-						  	classTr = "TrWhite";
-						  %>
-							<tr class=$classTr>
-								<td width="25%" height="30" class="Line">
-									<a href="#"><%=item.getName()%></a>
-								</td>
-								<td width="25%" height="30" class="Line">
-									<span class="SubcriptionContent">
-										<%
-											uicomponent.renderChild(item.getName());
-										%>
-									</span>
-								</td>
-							</tr>
-					<%}%>
-				</table>
+		<%for(NewsletterCategoryConfig category in uicomponent.getListCategories()){%>
+			<div class="ListCategoryDetail">
+				<div class="TextCategoryName">
+					<%=category.getName()%>
+				</div>
+				<div class="TextAboutCategory">
+					<%=category.getDescription()%>
+				</div>
+				<div class="ListSubcription">
+					<table cellpadding="1" cellspacing="1">
+						<tr class="TrTitleSubcription">
+							<td width="25%" height="30" class="Line">
+								<span class="TitleSubcription">Subcription</span>
+							</td>
+							<td width="25%" height="30" class="Line">
+								<span class="TitleSubcription">Your status</span>
+							</td>
+						</tr>
+						<%int count = 0;
+							String classTr = "";
+							List<NewsletterSubscriptionConfig>	listSubcription = uicomponent.getListSubscription(category.getName());	
+							for (NewsletterSubscriptionConfig subcription in listSubcription) {
+								count++;
+							  if (count % 2 != 0)
+							  	classTr = "TrGrey";
+							  else 
+							  	classTr = "TrWhite";
+							  %>
+								<tr class=$classTr>
+									<td width="25%" height="30" class="Line">
+										<a href="#"><%=subcription.getName()%></a>
+									</td>
+									<td width="25%" height="30" class="Line">
+										<span class="SubcriptionContent">
+											<%
+												uicomponent.renderChild(subcription.getName());
+											%>
+										</span>
+									</td>
+								</tr>
+						<%}%>
+					</table>
+				</div>
 			</div>
 		<%
 		}
@@ -88,18 +102,23 @@ System.out.println("\n\n\n\n----------------------->run");
 	    <table class="ActionContainer">
 	    	<tr>
 	    		<td>
-	          <% for(action in uicomponent.getActions()) { 
-	              String link = uicomponent.event(action) ;
+	          <%
+	          for(action in uicomponent.getActions()) { 
+	          	String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action); 
+		    			String link = uicomponent.event(action) ;
+	          		if ("ForgetEmail".equals(action)) continue;
 	          %>
-	          <div onclick="$link" class="ActionButton LightBlueStyle" >
-	            <div class="ButtonLeft">
-	              <div class="ButtonRight">
-	                <div class="ButtonMiddle">
-	                  <a href="javascript:void(0);">Change your subcription</a>
-	                </div>
-	              </div>
-	            </div>
-	          </div>
+			          <div onclick="$link" class="ActionButton LightBlueStyle" >
+			            <div class="ButtonLeft">
+			              <div class="ButtonRight">
+			                <div class="ButtonMiddle">
+			                  <a href="javascript:void(0);">
+													$actionLabel
+												</a>
+			                </div>
+			              </div>
+			            </div>
+			          </div>
 	      		<%}%>
 	      	</td>
 	      </tr>          

@@ -17,7 +17,6 @@
 package org.exoplatform.wcm.webui.newsletter.manager;
 
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.UIPortletApplication;
@@ -34,7 +33,7 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 )
 public class UINewsletterManagerPortlet extends UIPortletApplication {
 	private boolean isRenderUICategories = true;
-	private boolean isRenderUISubscription = true;
+	private boolean isRenderUISubscription = false;
 	private boolean isRenderUINewsLetters = true;
 	
 	public void setRenderUIcategories(){

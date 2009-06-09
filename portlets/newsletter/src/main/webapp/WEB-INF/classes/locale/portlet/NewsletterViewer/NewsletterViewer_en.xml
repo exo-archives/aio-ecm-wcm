@@ -15,4 +15,11 @@
       <email-not-empty>Email cannot be empty!!!</email-not-empty>
     </msg>
   </UINewsletterViewerForm>
+  <UINewsletterViewerForm>
+    <action>
+      <Subcribe>Subcribe</Subcribe>
+      <ForgetEmail>Forget this email</ForgetEmail>
+      <ChangeSubcribe>Change your subcriptions</ChangeSubcribe>
+    </action>
+  </UINewsletterViewerForm>
 </bundle>
