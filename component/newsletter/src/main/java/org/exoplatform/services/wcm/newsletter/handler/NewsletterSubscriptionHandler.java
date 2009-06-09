@@ -53,7 +53,7 @@ public class NewsletterSubscriptionHandler {
   }
   
   public void add(SessionProvider sessionProvider, String portalName,
-                  String categoryName, NewsletterSubscriptionConfig subscription) throws Exception {
+                  NewsletterSubscriptionConfig subscription) throws Exception {
    
     log.info("Trying to add subcription " + subscription.getName());
     try {
@@ -61,9 +61,12 @@ public class NewsletterSubscriptionHandler {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
       Session session = sessionProvider.getSession(workspace, manageableRepository);
       String path = NewsletterConstant.generateCategoryPath(portalName);
-      Node categoryNode = ((Node)session.getItem(path)).getNode(categoryName);
+      Node categoryNode = ((Node)session.getItem(path)).getNode(subscription.getCategoryName());
       Node subscriptionNode = categoryNode.addNode(subscription.getName(), NewsletterConstant.SUBSCRIPTION_NODETYPE);
       subscriptionNode.setProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_TITLE, subscription.getTitle());
+      subscriptionNode.setProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_DECRIPTION, subscription.getDescription());
+      subscriptionNode.setProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_CATEGORY_NAME, subscription.getCategoryName());
+      
       session.save();
     } catch (Exception e) {
       log.error("Add subcription " + subscription.getName() + " failed because of " + e.getMessage());
@@ -82,6 +85,9 @@ public class NewsletterSubscriptionHandler {
       Node categoryNode = ((Node)session.getItem(path)).getNode(categoryName);
       Node subscriptionNode = categoryNode.getNode(subscription.getName());
       subscriptionNode.setProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_TITLE, subscription.getTitle());
+      subscriptionNode.setProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_DECRIPTION, subscription.getDescription());
+      subscriptionNode.setProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_CATEGORY_NAME, subscription.getCategoryName());
+      
       categoryNode.save();
     } catch (Exception e) {
       log.error("Edit subcription " + subscription.getName() + " failed because of " + e.getMessage());
@@ -121,7 +127,9 @@ public class NewsletterSubscriptionHandler {
       subscriptionNode = nodeIterator.nextNode();
       subscriptionConfig = new NewsletterSubscriptionConfig();
       subscriptionConfig.setName(subscriptionNode.getName());
-      subscriptionConfig.setTitle(subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_TITLE).getString());
+      subscriptionConfig.setTitle(subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_TITLE).getString());      
+      subscriptionConfig.setDescription(subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_DECRIPTION).getString());
+      subscriptionConfig.setCategoryName(subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_CATEGORY_NAME).getString());
       
       listSubscriptions.add(subscriptionConfig);
     }
@@ -129,8 +137,7 @@ public class NewsletterSubscriptionHandler {
     return listSubscriptions;
   }
   
-  public NewsletterSubscriptionConfig getSubscriptionsByName(SessionProvider sessionProvider,
-                                                             String portalName, String categoryName, String subCriptionName) throws Exception{
+  public NewsletterSubscriptionConfig getSubscriptionsByName(SessionProvider sessionProvider,String portalName, String categoryName, String subCriptionName) throws Exception{
     NewsletterSubscriptionConfig subscription = new NewsletterSubscriptionConfig();
 
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
@@ -146,6 +153,8 @@ public class NewsletterSubscriptionHandler {
         
         subscription.setName(subscriptionNode.getName());
         subscription.setTitle(subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_TITLE).getString());
+        subscription.setDescription(subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_DECRIPTION).getString());
+        subscription.setCategoryName(subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_CATEGORY_NAME).getString());
       }   
     }
 
