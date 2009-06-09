@@ -31,6 +31,7 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIPopupContainer;
+import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
@@ -44,6 +45,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
  */
 
 @ComponentConfig(
+    lifecycle = UIFormLifecycle.class,
     template = "app:/groovy/webui/newsletter/NewsletterManager/UISubscriptions.gtmpl",
     events = {
         @EventConfig(listeners = UISubscriptions.BackToCategoriesActionListener.class),
@@ -162,6 +164,7 @@ public class UISubscriptions extends UIForm {
   
   static  public class EditSubscriptionActionListener extends EventListener<UISubscriptions> {
     public void execute(Event<UISubscriptions> event) throws Exception {
+      System.out.println("\n\n\n\n-------------->run edit subscriptioin");
       UISubscriptions subsriptions = event.getSource();
       String subId = subsriptions.getChecked();
       if(subId == null){

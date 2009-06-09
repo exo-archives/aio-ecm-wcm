@@ -1,13 +1,13 @@
 <%
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
-import org.exoplatform.web.application.JavascriptManager;
-def rcontext = _ctx.getRequestContext();
-JavascriptManager jsmanager = rcontext.getJavascriptManager();
+//import org.exoplatform.web.application.JavascriptManager;
+//def rcontext = _ctx.getRequestContext();
+//JavascriptManager jsmanager = rcontext.getJavascriptManager();
 //jsmanager.importJavascript('eXo.newsletterManager.UINewsletterManagerPortlet','/newsletter/javascript/');
 %>
 
-<div class="UINewsletterPortlet">
+<div class="UINewsletterPortlet" id="$uicomponent.id">
 	
 	<div class="BreadCumbs">
 		<a class="ItemContent">eXo Newsletter</a>
