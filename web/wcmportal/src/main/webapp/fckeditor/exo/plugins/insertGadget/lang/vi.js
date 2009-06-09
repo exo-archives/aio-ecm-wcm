@@ -1,2 +1,2 @@
-FCKLang.WCMInsertGadgetPlugins = "VI Insert gadgets";
-FCKLang.WCMInsertGadgetDialogTitle = "VI Insert gadgets";
+FCKLang.WCMInsertGadgetPlugins = "Chèn gadget";
+FCKLang.WCMInsertGadgetDialogTitle = "Chèn gadget";

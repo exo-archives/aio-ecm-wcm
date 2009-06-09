@@ -1,1 +1,1 @@
-FCKLang.WCMInsertImagePlugins = "FR Insert images";
+FCKLang.WCMInsertImagePlugins = "Insérer des images";
