@@ -73,8 +73,7 @@ public class NewsletterSubscriptionHandler {
     }
   }
   
-  public void edit(SessionProvider sessionProvider, String portalName,
-                   String categoryName, NewsletterSubscriptionConfig subscription) {
+  public void edit(SessionProvider sessionProvider, String portalName, NewsletterSubscriptionConfig subscription) {
     
     log.info("Trying to edit subcription " + subscription.getName());
     try {
@@ -82,7 +81,7 @@ public class NewsletterSubscriptionHandler {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
       Session session = sessionProvider.getSession(workspace, manageableRepository);
       String path = NewsletterConstant.generateCategoryPath(portalName);
-      Node categoryNode = ((Node)session.getItem(path)).getNode(categoryName);
+      Node categoryNode = ((Node)session.getItem(path)).getNode(subscription.getCategoryName());
       Node subscriptionNode = categoryNode.getNode(subscription.getName());
       subscriptionNode.setProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_TITLE, subscription.getTitle());
       subscriptionNode.setProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_DECRIPTION, subscription.getDescription());
