@@ -18,8 +18,6 @@ package org.exoplatform.services.wcm.newsletter.handler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import javax.jcr.Node;
@@ -27,7 +25,6 @@ import javax.jcr.NodeIterator;
 import javax.jcr.Property;
 import javax.jcr.Session;
 import javax.jcr.Value;
-import javax.jcr.ValueFactory;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
@@ -40,8 +37,6 @@ import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
-import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
-import org.exoplatform.services.wcm.newsletter.config.NewsletterUserConfig;
 
 /**
  * Created by The eXo Platform SAS
