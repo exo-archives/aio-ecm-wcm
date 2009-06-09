@@ -14,8 +14,8 @@
 			newWindow.focus();
 		}
 	oImage.GetState = function() {};
-	FCKCommands.RegisterCommand( "Insert Image", oImage ) ;
-	var oElement = new FCKToolbarButton( "Insert Image" ) ;
+	FCKCommands.RegisterCommand( "WCMInsertImage", oImage ) ;
+	var oElement = new FCKToolbarButton("WCMInsertImage", FCKLang.WCMInsertImagePlugins) ;
 	oElement.IconPath = FCKConfig.eXoPath + "plugins/insertImage/insertImage.gif" ;
-	FCKToolbarItems.RegisterItem( "Insert Image", oElement ) ;
+	FCKToolbarItems.RegisterItem( "WCMInsertImage", oElement ) ;
 	})();

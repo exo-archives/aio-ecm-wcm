@@ -15,7 +15,7 @@
 			var FCKConfig = window.opener.FCKConfig;
 			var FCK = window.opener.FCK;
 			var eXoPlugin = FCK.eXoPlugin;
-			var KLang = null;
+			eXoPlugin.userLanguage = FCK.Language.GetActiveLanguage() || "en";
 			eXoPlugin.loadScript(window, "lang/" + eXoPlugin.userLanguage + ".js");
 		</script>
 	</head>

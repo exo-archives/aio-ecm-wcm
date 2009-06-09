@@ -1,9 +1,9 @@
 // set eXo plugin path;
 FCKConfig.eXoPath = FCKConfig.BasePath.substr(0, FCKConfig.BasePath.length - 7) + "exo/" ;
-FCKConfig.Plugins.Add( 'urani', null, FCKConfig.eXoPath + "plugins/") ;
-FCKConfig.Plugins.Add( 'insertImage', null, FCKConfig.eXoPath + "plugins/") ;
-FCKConfig.Plugins.Add( 'insertDocument', null, FCKConfig.eXoPath + "plugins/") ;
-FCKConfig.Plugins.Add( 'insertPortalLink', null, FCKConfig.eXoPath + "plugins/") ;
+FCKConfig.Plugins.Add( 'urani', 'en,fr,vi', FCKConfig.eXoPath + "plugins/") ;
+FCKConfig.Plugins.Add( 'insertImage', 'en,fr,vi', FCKConfig.eXoPath + "plugins/") ;
+FCKConfig.Plugins.Add( 'insertDocument', 'en,fr,vi', FCKConfig.eXoPath + "plugins/") ;
+FCKConfig.Plugins.Add( 'insertPortalLink', 'en,fr,vi', FCKConfig.eXoPath + "plugins/") ;
 
 //config style
 FCKConfig.EditorAreaCSS = '';
@@ -18,8 +18,8 @@ FCKConfig.ToolbarSets["CompleteWCM"] = [
 	['Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'],
 	['OrderedList','UnorderedList','-','Outdent','Indent','Blockquote','CreateDiv'],
 	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
-	['Link','Insert link to a site page','Unlink','Anchor'],
-	['Insert Image','Insert DMS Document','Flash','Table','Rule','SpecialChar','PageBreak'],
+	['Link','WCMInsertPortalLink','Unlink','Anchor'],
+	['WCMInsertImage','WCMInsertDocument','Flash','Table','Rule','SpecialChar','PageBreak'],
 	['TextColor','BGColor'],
 	['FitWindow','ShowBlocks'],
 	['Style','FontFormat','FontName','FontSize']
@@ -28,17 +28,17 @@ FCKConfig.ToolbarSets["CompleteWCM"] = [
 FCKConfig.ToolbarSets["BasicWCM"] = [
 	['Source','-','Bold','Italic','Underline','StrikeThrough','-','OrderedList','UnorderedList','Outdent','Indent'],
 	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
-	['Blockquote','-','Link','Unlink','Insert link to a site page','Insert Image','Insert DMS Document','-','FitWindow','ShowBlocks'],	
+	['Blockquote','-','Link','Unlink','WCMInsertPortalLink','WCMInsertImage','WCMInsertDocument','-','FitWindow','ShowBlocks'],	
 	['Style','FontFormat','FontName','FontSize']
 ] ;
 
 FCKConfig.ToolbarSets["CSSToolBar"] = [
-	['Insert Image']
+	['WCMInsertImage']
 ];
 
 FCKConfig.ToolbarSets["JSToolBar"] = [ ];
 
-FCKConfig.SourceModeCommands = ['Insert Image'];
+FCKConfig.SourceModeCommands = ['WCMInsertImage'];
 //eXoPlugin config
 window.eXoPlugin = {
 	init: function() {

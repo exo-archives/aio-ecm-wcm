@@ -14,8 +14,8 @@
 			newWindow.focus();
 		}
 	oDocument.GetState = function() {};
-	FCKCommands.RegisterCommand( "Insert DMS Document", oDocument ) ;
-	var oElement = new FCKToolbarButton( "Insert DMS Document" ) ;
+	FCKCommands.RegisterCommand("WCMInsertDocument", oDocument ) ;
+	var oElement = new FCKToolbarButton("WCMInsertDocument", FCKLang.WCMInsertDocumentPlugins) ;
 	oElement.IconPath = FCKConfig.eXoPath + "plugins/insertDocument/insertDocument.gif" ;
-	FCKToolbarItems.RegisterItem( "Insert DMS Document", oElement ) ;	
+	FCKToolbarItems.RegisterItem("WCMInsertDocument", oElement ) ;	
 })();

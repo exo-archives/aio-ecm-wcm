@@ -10,7 +10,7 @@
   <groupId>org.exoplatform.wcm</groupId>
   <artifactId>config</artifactId>
   <name>eXo WCM Config</name>
-  <version>1.0</version>
+  <version>1.0.x</version>
   <packaging>pom</packaging>
 
   <modules>        
@@ -237,7 +237,7 @@
         <org.exoplatform.pc.version>2.0.4</org.exoplatform.pc.version>
         <org.exoplatform.portal.version>2.5</org.exoplatform.portal.version>
         <org.exoplatform.ecm.version>2.2</org.exoplatform.ecm.version>
-        <org.exoplatform.wcm.version>1.0</org.exoplatform.wcm.version>
+        <org.exoplatform.wcm.version>1.0.x</org.exoplatform.wcm.version>
         <exo.test.classes>Test</exo.test.classes>
         <exo.test.skip>true</exo.test.skip>
       </properties>
