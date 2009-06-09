@@ -37,7 +37,7 @@ import org.exoplatform.webui.event.EventListener;
 		events = {
 				@EventConfig(listeners = UICategories.AddCategoryActionListener.class),
 				@EventConfig(listeners = UICategories.OpenCategoryActionListener.class),
-        @EventConfig(listeners = UICategories.AddSubcriptionActionListener.class),
+        @EventConfig(listeners = UICategories.AddSubcriptionActionListener.class)
 		}
 )
 public class UICategories extends UIContainer {
