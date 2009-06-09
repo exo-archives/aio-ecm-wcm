@@ -4,11 +4,10 @@ FCKConfig.thumbnailHeight = 80;
 
 // set eXo plugin path;
 FCKConfig.eXoPath = FCKConfig.BasePath.substr(0, FCKConfig.BasePath.length - 7) + "exo/" ;
-FCKConfig.Plugins.Add( 'urani', null, FCKConfig.eXoPath + "plugins/") ;
-FCKConfig.Plugins.Add( 'insertImage', null, FCKConfig.eXoPath + "plugins/") ;
-FCKConfig.Plugins.Add( 'insertDocument', null, FCKConfig.eXoPath + "plugins/") ;
-FCKConfig.Plugins.Add( 'insertPortalLink', null, FCKConfig.eXoPath + "plugins/") ;
-FCKConfig.Plugins.Add( 'insertGadget', null, FCKConfig.eXoPath + "plugins/") ;
+FCKConfig.Plugins.Add('insertImage', 'en,fr,vi', FCKConfig.eXoPath + "plugins/") ;
+FCKConfig.Plugins.Add('insertDocument', 'en,fr,vi', FCKConfig.eXoPath + "plugins/") ;
+FCKConfig.Plugins.Add('insertPortalLink', 'en,fr,vi', FCKConfig.eXoPath + "plugins/") ;
+FCKConfig.Plugins.Add('insertGadget', 'en,fr,vi', FCKConfig.eXoPath + "plugins/") ;
 
 //config style
 FCKConfig.EditorAreaCSS = '';
@@ -20,10 +19,10 @@ FCKConfig.SkinPath = FCKConfig.BasePath + 'skins/office2003/' ;
 FCKConfig.ToolbarSets["CompleteWCM"] = [
 	['Source','Templates','-','FitWindow','ShowBlocks'],
 	['Cut','Copy','PasteText','-','SpellCheck','-','Undo','Redo'],
-	['Insert Gadget', 'Insert Image','Insert/Link to DMS Document','Flash','Table','SpecialChar'],
+	['WCMInsertGadget', 'WCMInsertImage','WCMInsertDocument','Flash','Table','SpecialChar'],
 	'/',
 	['Bold','Italic','Underline','StrikeThrough','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','-','OrderedList','UnorderedList','-','TextColor','BGColor','-','RemoveFormat'],
-	['Link','Insert link to a site page','Unlink','Anchor'],
+	['Link','WCMInsertPortalLink','Unlink','Anchor'],
 	'/',
 	['Style','FontFormat','FontName','FontSize']
 ] ;
@@ -31,18 +30,18 @@ FCKConfig.ToolbarSets["CompleteWCM"] = [
 FCKConfig.ToolbarSets["BasicWCM"] = [
 	['Source','-','Bold','Italic','Underline','StrikeThrough','-','OrderedList','UnorderedList','Outdent','Indent'],
 	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
-	['Blockquote','-','Link','Unlink','Insert link to a site page','Insert Image','Insert/Link to DMS Document','-','FitWindow','ShowBlocks'],	
+	['Blockquote','-','Link','Unlink','WCMInsertPortalLink','Insert Image','WCMInsertDocument','-','FitWindow','ShowBlocks'],	
 	['Style','FontFormat','FontName','FontSize']
 ] ;
 
 FCKConfig.ToolbarSets["SuperBasicWCM"] = [
      ['Source','-','Bold','Italic','Underline'],
      ['-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
-     ['-','Link','Unlink','Insert link to a site page','Insert Gadget','Insert Image','Insert/Link to DMS Document'],	
+     ['-','Link','Unlink','WCMInsertPortalLink','WCMInsertGadget','WCMInsertImage','WCMInsertDocument'],	
 ] ;
 
 FCKConfig.ToolbarSets["CSSToolBar"] = [
-	['Insert Image']
+	['WCMInsertImage']
 ];
 
 FCKConfig.ToolbarSets["JSToolBar"] = [ ];

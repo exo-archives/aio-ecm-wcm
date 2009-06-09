@@ -1,25 +1,25 @@
-(function(){
-		var oGadget = new Object() ;
-		oGadget.Execute = function() {
-			var width = 800;
-			var height = 600;
-			var iLeft = ( FCKConfig.ScreenWidth  - width ) / 2 ;
-			var iTop  = ( FCKConfig.ScreenHeight - height ) / 2 ;
-			var sOptions = "toolbar=no,status=no,resizable=yes,dependent=yes,scrollbars=yes" ;
-			sOptions += ",width=" + width ;
-			sOptions += ",height=" + height ;
-			sOptions += ",left=" + iLeft ;
-			sOptions += ",top=" + iTop ;
-			var newWindow = window.open( FCKConfig.eXoPath + "explorer/explorer.html?Type=Gadget&Thumbnail=true&Connector=/portal/rest/wcmGadget/&disableUploading=true&disableCreatingFolder=true", "eXoExplorer", sOptions );
-			newWindow.focus();
-		}
-	oGadget.GetState = function() {};
-	FCKCommands.RegisterCommand( "Insert Gadget", oGadget ) ;
-	FCKCommands.RegisterCommand( "Edit Gadget", new FCKDialogCommand("Edit Gadget", "Edit Gadget", FCKPlugins.Items["insertGadget"].Path + "dialog/gadgets.htm", 750, 500 ) ) ;
-	var oElement = new FCKToolbarButton( "Insert Gadget" ) ;
+//function(){
+//		var oGadget = new Object() ;
+//		oGadget.Execute = function() {
+//			var width = 800;
+//			var height = 600;
+//			var iLeft = ( FCKConfig.ScreenWidth  - width ) / 2 ;
+//			var iTop  = ( FCKConfig.ScreenHeight - height ) / 2 ;
+//			var sOptions = "toolbar=no,status=no,resizable=yes,dependent=yes,scrollbars=yes" ;
+//			sOptions += ",width=" + width ;
+//			sOptions += ",height=" + height ;
+//			sOptions += ",left=" + iLeft ;
+//			sOptions += ",top=" + iTop ;
+//			var newWindow = window.open( FCKConfig.eXoPath + "explorer/explorer.html?Type=Gadget&Thumbnail=true&Connector=/portal/rest/wcmGadget/&disableUploading=true&disableCreatingFolder=true", "eXoExplorer", sOptions );
+//			newWindow.focus();
+//		}
+//	};
+		
+	FCKCommands.RegisterCommand( "WCMInsertGadget", oGadget ) ;
+	FCKCommands.RegisterCommand( "WCMEditGadget", new FCKDialogCommand("WCMEditGadget", FCKLang.WCMInsertGadgetDialogTitle, FCKPlugins.Items["insertGadget"].Path + "dialog/gadgets.htm", 750, 500 ) ) ;
+	var oElement = new FCKToolbarButton( "WCMInsertGadget", FCKLang.WCMInsertGadgetPlugins) ;
 	oElement.IconPath = FCKConfig.eXoPath + "plugins/insertGadget/insertGadget.gif" ;
-	FCKToolbarItems.RegisterItem( "Insert Gadget", oElement ) ;
-	})();
+	FCKToolbarItems.RegisterItem( "WCMInsertGadget", oElement ) ;
 	
 
 	
