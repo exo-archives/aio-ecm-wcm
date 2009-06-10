@@ -14,7 +14,8 @@
       <Down>Down</Down>
       <Up>Up</Up>      
       <Delete>Delete</Delete>
-      <Moderation>Moderation</Moderation>  
+      <Moderation>Moderation</Moderation>
+      <CreateLetter>Create a new letter</CreateLetter>  
     </action>
   </NewsletterPortletAction>
   <UICategoryForm>
@@ -38,12 +39,27 @@
     	<AWaitingLetter>Awaiting Letter</AWaitingLetter>
     </title>
   </UICategories>
+  <UISubcriptionForm>
+    <msg>
+      <saveSuccess>Subcription has been saved.</saveSuccess>
+      <subcriptionNameIsNotEmpty>Subcription name cannot be empty!</subcriptionNameIsNotEmpty>
+      <subcriptionTitleIsNotEmpty>Subcription title cannot be empty!</subcriptionTitleIsNotEmpty>
+      <subcriptionNameIsAlreadyExist>This subcription's name is already exist!</subcriptionNameIsAlreadyExist>
+    </msg>
+    <title>
+    	<SubcriptionName>Subcription Name</SubcriptionName>
+    	<SubcriptionTitle>Subcription Title</SubcriptionTitle>
+    	<SubcriptionDescription>Description</SubcriptionDescription>
+    	<CategoryName>Category Name </CategoryName>
+    </title>
+  </UISubcriptionForm>
   <UISubscription>
     <msg>
     	<confirmDeleteCategory>Are you sure you want to delete this category?</confirmDeleteCategory>
     	<confirmDeleteSubscription>Are you sure you want to delete this subscription</confirmDeleteSubscription>
     	<checkOnlyOneSubScriptionToEdit>Please check only one subscription to edit!</checkOnlyOneSubScriptionToEdit>
     	<checkOnlyOneSubScriptionToDelete>Please check only one subscription to delete!</checkOnlyOneSubScriptionToDelete>
+    	<checkOnlyOneSubScriptionToOpen>Please check only one subscription to open!</checkOnlyOneSubScriptionToOpen>
     </msg>
   </UISubscription>
 </bundle>
