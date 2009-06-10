@@ -23,6 +23,7 @@ import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterCategoryHandler;
+import org.exoplatform.services.wcm.newsletter.handler.NewsletterPublicUserHandler;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterSubscriptionHandler;
 import org.exoplatform.wcm.webui.newsletter.manager.NewsLetterUtil;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -40,134 +41,191 @@ import org.exoplatform.webui.form.validator.EmailAddressValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 
 /**
- * Created by The eXo Platform SAS
- * Author : eXoPlatform
- *          ngoc.tran@exoplatform.com
- * May 25, 2009  
+ * Created by The eXo Platform SAS Author : eXoPlatform
+ * ngoc.tran@exoplatform.com May 25, 2009
  */
 @ComponentConfig(
-   lifecycle = UIFormLifecycle.class,
-   template = "app:/groovy/webui/newsletter/NewsletterViewer/UINewsletterListViewer.gtmpl",
-   events = { 
-       @EventConfig(listeners = UINewsletterViewerForm.SubcribeActionListener.class),
-       @EventConfig(listeners = UINewsletterViewerForm.ForgetEmailActionListener.class),
-       @EventConfig(listeners = UINewsletterViewerForm.ChangeSubcriptionsActionListener.class)
-     }
+                 lifecycle = UIFormLifecycle.class,
+                 template = "app:/groovy/webui/newsletter/NewsletterViewer/UINewsletterListViewer.gtmpl",
+                 events = {
+                            @EventConfig(listeners = UINewsletterViewerForm.SubcribeActionListener.class),
+                            @EventConfig(listeners = UINewsletterViewerForm.ForgetEmailActionListener.class),
+                            @EventConfig(listeners = UINewsletterViewerForm.ChangeSubcriptionsActionListener.class) }
 )
- public class UINewsletterViewerForm extends UIForm {
+public class UINewsletterViewerForm extends UIForm {
 
-  private UIFormCheckBoxInput<Boolean> checkBoxInput = null;
-  
-  private UIFormStringInput inputEmail = null;
-  
-  private String userMail = "";
-  
-  private boolean isUpdated = false;
-  
-  private NewsletterCategoryHandler categoryHandler = null;
-  
-  private NewsletterSubscriptionHandler subcriptionHandler = null;
-  
-  NewsletterManagerService newsletterManagerService = null;
-  
-  public UINewsletterViewerForm () throws Exception {
-    
+  /** UICheckBox Input*/
+  private UIFormCheckBoxInput<Boolean>  checkBoxInput            = null;
+
+  /** UITextBox Input*/
+  private UIFormStringInput             inputEmail               = null;
+
+  /** Email of user*/
+  private String                        userMail                 = "";
+
+  /** Check for subcription is updated*/
+  private boolean                       isUpdated                = false;
+
+  /** NewsletterCategoryHandler*/
+  private NewsletterCategoryHandler     categoryHandler          = null;
+
+  /** NewsletterSubscriptionHandler*/
+  private NewsletterSubscriptionHandler subcriptionHandler       = null;
+
+  /** NewsletterPublicUserHandler*/
+  private NewsletterPublicUserHandler   publicUserHandler        = null;
+
+  /** NewsletterManagerService*/
+  NewsletterManagerService              newsletterManagerService = null;
+
+  public UINewsletterViewerForm() throws Exception {
+
     newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
     categoryHandler = newsletterManagerService.getCategoryHandler();
     subcriptionHandler = newsletterManagerService.getSubscriptionHandler();
-    this.setActions(new String[] {"Subcribe"});
-    inputEmail = (UIFormStringInput) new UIFormStringInput("inputEmail", "Email", null).addValidator(MandatoryValidator.class).
-    addValidator(EmailAddressValidator.class);
+    publicUserHandler = newsletterManagerService.getPublicUserHandler();
+
+    this.setActions(new String[] { "Subcribe" });
+    inputEmail = (UIFormStringInput) new UIFormStringInput("inputEmail", "Email", null)
+                                           .addValidator(MandatoryValidator.class)
+                                           .addValidator(EmailAddressValidator.class);
     this.addChild(inputEmail);
   }
 
-  public void init(List<NewsletterSubscriptionConfig> listNewsletterSubcription) throws Exception {
-    
+  public void init(List<NewsletterSubscriptionConfig> listNewsletterSubcription, String categoryName) throws Exception {
+
+    String subcriptionPattern = null;
     for (NewsletterSubscriptionConfig newsletterSubcription : listNewsletterSubcription) {
-      
-      if(this.getChildById(newsletterSubcription.getName()) != null) continue;
-      checkBoxInput = new UIFormCheckBoxInput<Boolean>(newsletterSubcription.getName(), newsletterSubcription.getName(), false);
+
+      subcriptionPattern = categoryName + "#" + newsletterSubcription.getName();
+
+      if (this.getChildById(subcriptionPattern) != null)
+        continue;
+      checkBoxInput = new UIFormCheckBoxInput<Boolean>(subcriptionPattern,
+                                                       subcriptionPattern,
+                                                       false);
       this.addChild(checkBoxInput);
     }
   }
 
   @SuppressWarnings("unused")
-  private List<NewsletterCategoryConfig> getListCategories(){
-    try{
-      return categoryHandler.getListCategories(NewsLetterUtil.getPortalName(), NewsLetterUtil.getSesssionProvider());
-    }catch(Exception e){
+  private List<NewsletterCategoryConfig> getListCategories() {
+    try {
+      return categoryHandler.getListCategories(NewsLetterUtil.getPortalName(),
+                                               NewsLetterUtil.getSesssionProvider());
+    } catch (Exception e) {
 
       return new ArrayList<NewsletterCategoryConfig>();
     }
   }
 
   @SuppressWarnings("unused")
-  private List<NewsletterSubscriptionConfig> getListSubscription(String categoryName){
-    
-    try{
-      
+  private List<NewsletterSubscriptionConfig> getListSubscription(String categoryName) {
+
+    try {
+
       List<NewsletterSubscriptionConfig> listSubscription = new ArrayList<NewsletterSubscriptionConfig>();
-      listSubscription = 
-        subcriptionHandler.getSubscriptionsByCategory(NewsLetterUtil.getSesssionProvider(), NewsLetterUtil.getPortalName(), categoryName);
-      this.init(listSubscription);
-      
+      listSubscription = subcriptionHandler.getSubscriptionsByCategory(NewsLetterUtil.getSesssionProvider(),
+                                                                       NewsLetterUtil.getPortalName(),
+                                                                       categoryName);
+      this.init(listSubscription, categoryName);
+
       return listSubscription;
-    }catch(Exception e){
-      
+    } catch (Exception e) {
+      e.printStackTrace();
       return new ArrayList<NewsletterSubscriptionConfig>();
     }
   }
 
   public static class ForgetEmailActionListener extends EventListener<UINewsletterViewerForm> {
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
     @SuppressWarnings("unchecked")
     public void execute(Event<UINewsletterViewerForm> event) throws Exception {
-      
+
       UINewsletterViewerForm newsletterForm = event.getSource();
       newsletterForm.isUpdated = false;
       newsletterForm.userMail = "";
       newsletterForm.inputEmail.setRendered(true);
-      
+
       event.getRequestContext().addUIComponentToUpdateByAjax(newsletterForm);
     }
   }
-  
-  public static class ChangeSubcriptionsActionListener extends EventListener<UINewsletterViewerForm> {
 
-    /* (non-Javadoc)
+  public static class ChangeSubcriptionsActionListener extends
+                                                      EventListener<UINewsletterViewerForm> {
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
     @SuppressWarnings("unchecked")
     public void execute(Event<UINewsletterViewerForm> event) throws Exception {
-      
+
+      UINewsletterViewerForm newsletterForm = event.getSource();
+
+      List<NewsletterCategoryConfig> listNewsletterCategories = newsletterForm.getListCategories();
+      List<NewsletterSubscriptionConfig> listNewsletterSubcription = null;
+
+      List<String> listSubcriptionPattern = new ArrayList<String>();
+      String subcriptionPattern = null;
+      for (NewsletterCategoryConfig category : listNewsletterCategories) {
+        listNewsletterSubcription = newsletterForm.getListSubscription(category.getName());
+        for (NewsletterSubscriptionConfig subscriptionConfig : listNewsletterSubcription) {
+
+          subcriptionPattern = category.getName() + "#" + subscriptionConfig.getName();
+          UIFormCheckBoxInput checkboxInput = newsletterForm.getUIFormCheckBoxInput(subcriptionPattern);
+          if (checkboxInput.isChecked()) {
+            listSubcriptionPattern.add(checkboxInput.getName());
+          }
+        }
+      }
+
+      newsletterForm.publicUserHandler.updateSubscriptions(NewsLetterUtil.getPortalName(),
+                                                           newsletterForm.userMail,
+                                                           listSubcriptionPattern);
+
+      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
+      UIApplication uiApp = context.getUIApplication();
+      uiApp.addMessage(new ApplicationMessage("UINewsletterViewerForm.msg.updateSuccess",
+                                              null,
+                                              ApplicationMessage.INFO));
+
+      event.getRequestContext().addUIComponentToUpdateByAjax(newsletterForm);
     }
   }
 
   public static class SubcribeActionListener extends EventListener<UINewsletterViewerForm> {
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
     @SuppressWarnings("unchecked")
     public void execute(Event<UINewsletterViewerForm> event) throws Exception {
-      
+
       UINewsletterViewerForm newsletterForm = event.getSource();
 
       newsletterForm.inputEmail.setRendered(false);
-      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-      UIApplication uiApp = context.getUIApplication() ;
+      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
+      UIApplication uiApp = context.getUIApplication();
 
       newsletterForm.userMail = newsletterForm.getUIStringInput("inputEmail").getValue();
 
-      uiApp.addMessage(new ApplicationMessage("UINewsletterViewerForm.msg.updatesuccess", null, ApplicationMessage.INFO));
-      
+      uiApp.addMessage(new ApplicationMessage("UINewsletterViewerForm.msg.subcribed",
+                                              null,
+                                              ApplicationMessage.INFO));
+
       newsletterForm.isUpdated = true;
-      newsletterForm.setActions(new String[] {"ForgetEmail", "ChangeSubcriptions"});
-      
+      newsletterForm.setActions(new String[] { "ForgetEmail", "ChangeSubcriptions" });
+
       event.getRequestContext().addUIComponentToUpdateByAjax(newsletterForm);
     }
-   }
- }
+  }
+}
