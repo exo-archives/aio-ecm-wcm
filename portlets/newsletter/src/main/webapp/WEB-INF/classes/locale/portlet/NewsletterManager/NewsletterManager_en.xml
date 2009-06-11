@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bundle>
-	<UINesletterPopupWindow>
+	<UICategoryFormPopupWindow>
 		<title>
-			<UICategoryForm>
-				Category Form
-			</UICategoryForm>
+			<UICategoryForm>Category form</UICategoryForm>
 			<UIManagerUsers>
 				Manager Users
 			</UIManagerUsers>
 		</title>
-	</UINesletterPopupWindow>
+	</UICategoryFormPopupWindow>
+	<UISubscriptionFormPopupWindow>
+		<title>
+			<UISubcriptionForm>Subscription form</UISubcriptionForm>
+		</title>
+	</UISubscriptionFormPopupWindow>
   <NewsletterPortletAction>
     <action>
       <Save>Save</Save>
@@ -21,6 +24,7 @@
       <CreateLetter>Create a new letter</CreateLetter>  
     </action>
   </NewsletterPortletAction>
+	
   <UICategoryForm>
     <msg>
       <saveSuccess>Category has been saved.</saveSuccess>
@@ -28,12 +32,17 @@
       <categoryTitleIsNotEmpty>Category title cannot be empty!</categoryTitleIsNotEmpty>
       <categoryNameIsAlreadyExist>This category's name is already exist!</categoryNameIsAlreadyExist>
     </msg>
-    <title>
+		<label>
     	<CategoryName>Category Name</CategoryName>
     	<CategoryTitle>Category Title</CategoryTitle>
-    	<CategoryDescription>Description</CategoryDescription>
-    	<CategoryModerator>Moderator </CategoryModerator>
-    </title>
+    	<CategoryDescription>Category Description</CategoryDescription>
+			<FormCategoryModerator>Category moderator</FormCategoryModerator>
+			<CategoryModerator></CategoryModerator>
+		</label>
+		<action>
+			<Save>Save</Save>
+			<Cancel>Cancel</Cancel>
+		</action>
   </UICategoryForm>
   <UICategories>
     <title>
@@ -42,6 +51,35 @@
     	<AWaitingLetter>Awaiting Letter</AWaitingLetter>
     </title>
   </UICategories>
+	
+	<FormCategoryModerator>
+		<title>
+			<SelectUser>Select user</SelectUser>
+			<SelectMember>Select member</SelectMember>
+		</title>
+	</FormCategoryModerator>
+	<UIGroupMemberSelector>
+		<label>
+			<selectGroup>Select group</selectGroup>
+			<selectMembership>Select membership</selectMembership>
+		</label>
+	</UIGroupMemberSelector>
+	<UIFormInputSetWithAction>
+    <msg>
+      <confirm-delete>Are you sure to delete this category from list?</confirm-delete>
+    </msg>
+  </UIFormInputSetWithAction>
+	<UIUserMemberSelectorPopupWindow>
+		<title>
+			<UIUserMemberSelector>User selector</UIUserMemberSelector>
+		</title>
+	</UIUserMemberSelectorPopupWindow>
+	<UIGroupMemberSelectorPopupWindow>
+		<title>
+			<UIGroupMemberSelector>Group selector</UIGroupMemberSelector>
+		</title>
+	</UIGroupMemberSelectorPopupWindow>
+	
   <UISubcriptionForm>
     <msg>
       <saveSuccess>Subcription has been saved.</saveSuccess>

@@ -32,6 +32,7 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 		lifecycle = UIApplicationLifecycle.class
 )
 public class UINewsletterManagerPortlet extends UIPortletApplication {
+  
 	private boolean isRenderUICategories = true;
 	private boolean isRenderUISubscription = false;
 	private boolean isRenderUINewsLetters = false;
@@ -55,10 +56,9 @@ public class UINewsletterManagerPortlet extends UIPortletApplication {
 	}
 	
 	public UINewsletterManagerPortlet() throws Exception {
-		this.addChild(UICategories.class, null, null).setRendered(isRenderUICategories);
-		this.addChild(UISubscriptions.class, null, null).setRendered(isRenderUISubscription);
-    this.addChild(UINewsletterManager.class, null, null).setRendered(isRenderUINewsLetters);
-		UIPopupContainer uiPopup = addChild(UIPopupContainer.class, null, "UINesletterPopup");
-    uiPopup.getChild(UIPopupWindow.class).setId("UINesletterPopupWindow");
+		addChild(UICategories.class, null, null).setRendered(isRenderUICategories);
+		addChild(UISubscriptions.class, null, null).setRendered(isRenderUICategories);
+		addChild(UIPopupContainer.class, null, null);
+		addChild(UINewsletterManager.class, null, null).setRendered(isRenderUINewsLetters);
 	}
 }

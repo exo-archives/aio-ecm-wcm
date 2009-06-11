@@ -17,10 +17,8 @@
 package org.exoplatform.services.wcm.newsletter.handler;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -62,8 +60,9 @@ public class NewsletterCategoryHandler {
   	categoryConfig = new NewsletterCategoryConfig();
   	categoryConfig.setName(categoryNode.getName());
   	categoryConfig.setTitle(categoryNode.getProperty(NewsletterConstant.CATEGORY_PROPERTY_TITLE).getString());
-  	if(categoryNode.hasProperty(NewsletterConstant.CATEGORY_PROPERTY_DESCRIPTION))
+  	if (categoryNode.hasProperty(NewsletterConstant.CATEGORY_PROPERTY_DESCRIPTION)) {
   	  categoryConfig.setDescription(categoryNode.getProperty(NewsletterConstant.CATEGORY_PROPERTY_DESCRIPTION).getString());
+  	}
   	// get permission for this category
   	ExtendedNode webContent = (ExtendedNode)categoryNode;
     Iterator permissionIterator = webContent.getACL().getPermissionEntries().iterator();

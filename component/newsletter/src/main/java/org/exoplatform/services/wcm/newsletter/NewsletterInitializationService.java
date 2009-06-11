@@ -72,7 +72,7 @@ public class NewsletterInitializationService implements Startable {
       } else {
         newsletterInitializationService = serviceFolder.addNode("NewsletterInitializationService", "nt:unstructured");
       }
-      if (!newsletterInitializationService.hasNode("NewsletterInitializationService")) {
+      if (!newsletterInitializationService.hasNode("NewsletterInitializationServiceLog")) {
         for (Node portalNode : portalNodes) {
           String portalName = portalNode.getName();
           NewsletterCategoryHandler categoryHandler = managerService.getCategoryHandler();
@@ -89,15 +89,15 @@ public class NewsletterInitializationService implements Startable {
           for (NewsletterUserConfig userConfig : userConfigs) {
             manageUserHandler.add(portalName, userConfig.getMail(), sessionProvider);
           }
-        
-          Node newsletterInitializationServiceLog = newsletterInitializationService.addNode("NewsletterInitializationServiceLog", "nt:file");
-          Node newsletterInitializationServiceLogContent = newsletterInitializationServiceLog.addNode("jcr:content", "nt:resource");
-          newsletterInitializationServiceLogContent.setProperty("jcr:encoding", "UTF-8");
-          newsletterInitializationServiceLogContent.setProperty("jcr:mimeType", "text/plain");
-          newsletterInitializationServiceLogContent.setProperty("jcr:data", "Newsletter was created successfully");
-          newsletterInitializationServiceLogContent.setProperty("jcr:lastModified", new Date().getTime());
-          session.save();
         }
+        
+        Node newsletterInitializationServiceLog = newsletterInitializationService.addNode("NewsletterInitializationServiceLog", "nt:file");
+        Node newsletterInitializationServiceLogContent = newsletterInitializationServiceLog.addNode("jcr:content", "nt:resource");
+        newsletterInitializationServiceLogContent.setProperty("jcr:encoding", "UTF-8");
+        newsletterInitializationServiceLogContent.setProperty("jcr:mimeType", "text/plain");
+        newsletterInitializationServiceLogContent.setProperty("jcr:data", "Newsletter was created successfully");
+        newsletterInitializationServiceLogContent.setProperty("jcr:lastModified", new Date().getTime());
+        session.save();
       }
     } catch (Throwable e) {
       log.info("Starting NewsletterInitializationService fail because of " + e.getMessage());

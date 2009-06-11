@@ -16,20 +16,20 @@
  */
 package org.exoplatform.wcm.webui;
 
-import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.portal.webui.workspace.UIControlWorkspace;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
 import org.exoplatform.services.security.Identity;
 import org.exoplatform.services.security.IdentityRegistry;
 import org.exoplatform.services.security.MembershipEntry;
-import org.exoplatform.web.application.javascript.JavascriptConfigService;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.webui.core.UIPopupContainer;
+import org.exoplatform.webui.core.UIPopupWindow;
 
 import com.ibm.icu.text.Transliterator;
 
@@ -146,5 +146,18 @@ public class Utils {
       return cleanedStr.toString().toLowerCase();
   }
 
+  public static void createPopupWindow(UIPopupContainer popupContainer, UIComponent component, WebuiRequestContext requestContext, String id, int width, int height) throws Exception {
+    UIPopupWindow popupWindow = popupContainer.createUIComponent(UIPopupWindow.class, null, id);
+    popupWindow.setUIComponent(component);
+    popupWindow.setWindowSize(width, height);
+    popupWindow.setShow(true);
+    popupWindow.setResizable(true);
+    popupContainer.addChild(popupWindow);
+    requestContext.addUIComponentToUpdateByAjax(popupContainer);
+  }
+  
+  public static void closePopupWindow(UIPopupContainer popupContainer, String id) {
+    popupContainer.removeChildById(id);
+  }
   
 }

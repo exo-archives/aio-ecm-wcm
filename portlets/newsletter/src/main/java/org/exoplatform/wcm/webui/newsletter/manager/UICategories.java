@@ -26,10 +26,13 @@ import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterCategoryHandler;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterManageUserHandler;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterSubscriptionHandler;
+import org.exoplatform.wcm.webui.Utils;
+import org.exoplatform.wcm.webui.newsletter.UINewsletterConstant;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIPopupContainer;
+import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
@@ -91,10 +94,13 @@ public class UICategories extends UIContainer {
 		public void execute(Event<UICategories> event) throws Exception {
 			UICategories uiCategories = event.getSource();
 			UIPopupContainer popupContainer = uiCategories.getAncestorOfType(UINewsletterManagerPortlet.class).getChild(UIPopupContainer.class);
-			UICategoryForm categoryForm = popupContainer.createUIComponent(UICategoryForm.class, null, null);
-			popupContainer.setRendered(true);
-			popupContainer.activate(categoryForm, 400, 300);
-			event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
+			UIPopupWindow popupWindow = popupContainer.getChildById(UINewsletterConstant.CATEGORY_FORM_POPUP_WINDOW);
+      if (popupWindow == null) {
+        UICategoryForm categoryForm = popupContainer.createUIComponent(UICategoryForm.class, null, null);
+        Utils.createPopupWindow(popupContainer, categoryForm, event.getRequestContext(), UINewsletterConstant.CATEGORY_FORM_POPUP_WINDOW, 450, 298);
+      } else { 
+        popupWindow.setShow(true);
+      }
 		}
 	}
   
@@ -102,10 +108,13 @@ public class UICategories extends UIContainer {
     public void execute(Event<UICategories> event) throws Exception {
       UICategories uiCategories = event.getSource();
       UIPopupContainer popupContainer = uiCategories.getAncestorOfType(UINewsletterManagerPortlet.class).getChild(UIPopupContainer.class);
-      UISubcriptionForm subcriptionForm = popupContainer.createUIComponent(UISubcriptionForm.class, null, null);
-      popupContainer.setRendered(true);
-      popupContainer.activate(subcriptionForm, 450, 300);
-      event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
+      UIPopupWindow popupWindow = popupContainer.getChildById(UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW);
+      if (popupWindow == null) {
+        UISubcriptionForm subcriptionForm = popupContainer.createUIComponent(UISubcriptionForm.class, null, null);
+        Utils.createPopupWindow(popupContainer, subcriptionForm, event.getRequestContext(), UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW, 450, 300);
+      } else { 
+        popupWindow.setShow(true);
+      }
     }
   }
 	
@@ -133,4 +142,5 @@ public class UICategories extends UIContainer {
 	    event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
 	  }
 	}
+	
 }

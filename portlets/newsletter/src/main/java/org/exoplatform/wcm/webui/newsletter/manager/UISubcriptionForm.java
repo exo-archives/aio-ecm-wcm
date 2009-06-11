@@ -25,6 +25,8 @@ import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterCategoryHandler;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterSubscriptionHandler;
+import org.exoplatform.wcm.webui.Utils;
+import org.exoplatform.wcm.webui.newsletter.UINewsletterConstant;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -189,7 +191,7 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent {
       }
 
       UIPopupContainer popupContainer = uiSubcriptionForm.getAncestorOfType(UIPopupContainer.class);
-      popupContainer.deActivate();
+      Utils.closePopupWindow(popupContainer, UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW);
 
       event.getRequestContext().addUIComponentToUpdateByAjax(newsletterPortlet) ;
     }
@@ -199,7 +201,7 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent {
     public void execute(Event<UISubcriptionForm> event) throws Exception {
       UISubcriptionForm uiSubcriptionForm = event.getSource();
       UIPopupContainer popupContainer = uiSubcriptionForm.getAncestorOfType(UIPopupContainer.class);
-      popupContainer.deActivate();
+      Utils.closePopupWindow(popupContainer, UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW);
     }
   }
 }
