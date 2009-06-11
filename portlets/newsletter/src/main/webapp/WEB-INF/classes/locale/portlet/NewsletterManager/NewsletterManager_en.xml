@@ -3,16 +3,19 @@
 	<UICategoryFormPopupWindow>
 		<title>
 			<UICategoryForm>Category form</UICategoryForm>
-			<UIManagerUsers>
-				Manager Users
-			</UIManagerUsers>
 		</title>
 	</UICategoryFormPopupWindow>
 	<UISubscriptionFormPopupWindow>
 		<title>
 			<UISubcriptionForm>Subscription form</UISubcriptionForm>
+			<UIManagerUsers>Manager Users</UIManagerUsers>
 		</title>
 	</UISubscriptionFormPopupWindow>
+	<UIManagerUsersFormPopupWindow>
+		<title>
+			<UIManagerUsers>Manager Users</UIManagerUsers>
+		</title>
+	</UIManagerUsersFormPopupWindow>
   <NewsletterPortletAction>
     <action>
       <Save>Save</Save>

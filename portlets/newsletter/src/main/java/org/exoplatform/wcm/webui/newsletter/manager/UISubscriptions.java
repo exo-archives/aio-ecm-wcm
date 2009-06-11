@@ -268,12 +268,16 @@ public class UISubscriptions extends UIForm {
   
   static  public class ManagerUsersActionListener extends EventListener<UISubscriptions> {
     public void execute(Event<UISubscriptions> event) throws Exception {
-      UISubscriptions uiCategories = event.getSource();
-      UIPopupContainer popupContainer = uiCategories.getAncestorOfType(UINewsletterManagerPortlet.class).getChild(UIPopupContainer.class);
-      UIManagerUsers managerUsers = popupContainer.createUIComponent(UIManagerUsers.class, null, null);
-      popupContainer.activate(managerUsers, 500, 300);
-      popupContainer.setRendered(true);
-      managerUsers.setInfor(uiCategories.categoryConfig.getName(), null);
+      UISubscriptions uiSubscription = event.getSource();
+      UIPopupContainer popupContainer = uiSubscription.getAncestorOfType(UINewsletterManagerPortlet.class).getChild(UIPopupContainer.class);
+      UIPopupWindow popupWindow = popupContainer.getChildById(UINewsletterConstant.MANAGER_USERS_POPUP_WINDOW);
+      if (popupWindow == null) {
+        UIManagerUsers managerUsers = popupContainer.createUIComponent(UIManagerUsers.class, null, null);
+        managerUsers.setInfor(null, null);
+        Utils.createPopupWindow(popupContainer, managerUsers, event.getRequestContext(), UINewsletterConstant.MANAGER_USERS_POPUP_WINDOW, 500, 300);
+      } else { 
+        popupWindow.setShow(true);
+      }
       event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
     }
   }

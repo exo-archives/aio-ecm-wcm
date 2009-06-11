@@ -158,10 +158,12 @@ public class NewsletterManageUserHandler {
         Value subscribedUserValues[];
         while(nodeIterator.hasNext()){
           subscriptionNode = nodeIterator.nextNode();
-          Property subscribedUserProperty = subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_USER);
-          subscribedUserValues = subscribedUserProperty.getValues();
-          for (Value value : subscribedUserValues) {
-            if(!listEmail.contains(value.getString())) listEmail.add(value.getString());
+          if(subscriptionNode.hasProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_USER)){
+            Property subscribedUserProperty = subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_USER);
+            subscribedUserValues = subscribedUserProperty.getValues();
+            for (Value value : subscribedUserValues) {
+              if(!listEmail.contains(value.getString())) listEmail.add(value.getString());
+            }
           }
         }
       }else{ // get user of subscription
@@ -177,8 +179,8 @@ public class NewsletterManageUserHandler {
 
   public List<String> getUsersBySubscription(String portalName, String categoryName, String subscriptionName) {
     log.info("Trying to get list user by subscription " + portalName + "/" + categoryName + "/" + subscriptionName);
+    List<String> subscribedUsers = new ArrayList<String>();
     try {
-      List<String> subscribedUsers = new ArrayList<String>();
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
       Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspace, manageableRepository);
       String subscriptionPath = NewsletterConstant.generateCategoryPath(portalName) + "/" + categoryName + "/" + subscriptionName;
@@ -190,11 +192,10 @@ public class NewsletterManageUserHandler {
           subscribedUsers.add(value.getString());
         }
       }
-      return subscribedUsers;
     } catch (Exception e) {
       log.error("Get list user by subscription " + portalName + "/" + categoryName + "/" + subscriptionName + " failed because of " + e.getMessage());
     }
-    return null;
+    return subscribedUsers;
   }
   
   public int getQuantityUserBySubscription(String portalName, String categoryName, String subscriptionName) {

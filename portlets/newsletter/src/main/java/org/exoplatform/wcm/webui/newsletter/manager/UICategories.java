@@ -134,11 +134,15 @@ public class UICategories extends UIContainer {
 	static  public class ManagerUsersActionListener extends EventListener<UICategories> {
 	  public void execute(Event<UICategories> event) throws Exception {
 	    UICategories uiCategories = event.getSource();
-	    UIPopupContainer popupContainer = uiCategories.getAncestorOfType(UINewsletterManagerPortlet.class).getChild(UIPopupContainer.class);
-	    UIManagerUsers managerUsers = popupContainer.createUIComponent(UIManagerUsers.class, null, null);
-	    popupContainer.activate(managerUsers, 500, 300);
-	    popupContainer.setRendered(true);
-	    managerUsers.setInfor(null, null);
+      UIPopupContainer popupContainer = uiCategories.getAncestorOfType(UINewsletterManagerPortlet.class).getChild(UIPopupContainer.class);
+      UIPopupWindow popupWindow = popupContainer.getChildById(UINewsletterConstant.MANAGER_USERS_POPUP_WINDOW);
+      if (popupWindow == null) {
+        UIManagerUsers managerUsers = popupContainer.createUIComponent(UIManagerUsers.class, null, null);
+        managerUsers.setInfor(null, null);
+        Utils.createPopupWindow(popupContainer, managerUsers, event.getRequestContext(), UINewsletterConstant.MANAGER_USERS_POPUP_WINDOW, 500, 300);
+      } else { 
+        popupWindow.setShow(true);
+      }
 	    event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
 	  }
 	}

@@ -52,6 +52,16 @@ public class NewsletterSubscriptionHandler {
     this.workspace = workspace;
   }
   
+  private NewsletterSubscriptionConfig getSubscriptionFormNode(Node subscriptionNode) throws Exception{
+    NewsletterSubscriptionConfig subscriptionConfig = new NewsletterSubscriptionConfig();
+    subscriptionConfig.setName(subscriptionNode.getName());
+    subscriptionConfig.setTitle(subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_TITLE).getString());      
+    if(subscriptionNode.hasProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_DECRIPTION))
+      subscriptionConfig.setDescription(subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_DECRIPTION).getString());
+    subscriptionConfig.setCategoryName(subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_CATEGORY_NAME).getString());
+    return subscriptionConfig;
+  }
+  
   public void add(SessionProvider sessionProvider, String portalName,
                   NewsletterSubscriptionConfig subscription) throws Exception {
    
@@ -121,41 +131,25 @@ public class NewsletterSubscriptionHandler {
     String path = NewsletterConstant.generateCategoryPath(portalName);
     Node categoryNode = ((Node)session.getItem(path)).getNode(categoryName);
     NodeIterator nodeIterator = categoryNode.getNodes();
-    Node subscriptionNode = null;
-    NewsletterSubscriptionConfig subscriptionConfig = null;
     while(nodeIterator.hasNext()){
-      subscriptionNode = nodeIterator.nextNode();
-      subscriptionConfig = new NewsletterSubscriptionConfig();
-      subscriptionConfig.setName(subscriptionNode.getName());
-      subscriptionConfig.setTitle(subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_TITLE).getString());      
-      subscriptionConfig.setDescription(subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_DECRIPTION).getString());
-      subscriptionConfig.setCategoryName(subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_CATEGORY_NAME).getString());
-      listSubscriptions.add(subscriptionConfig);
+      try{
+        listSubscriptions.add(getSubscriptionFormNode(nodeIterator.nextNode()));
+      }catch(Exception ex){}
     }
 
     return listSubscriptions;
   }
   
   public NewsletterSubscriptionConfig getSubscriptionsByName(SessionProvider sessionProvider,String portalName, String categoryName, String subCriptionName) throws Exception{
-    ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-    Session session = sessionProvider.getSession(workspace, manageableRepository);
-    String path = NewsletterConstant.generateCategoryPath(portalName);
-    Node categoryNode = ((Node)session.getItem(path)).getNode(categoryName);
-    NodeIterator nodeIterator = categoryNode.getNodes();
-    Node subscriptionNode = null;
-    while(nodeIterator.hasNext()){
-      
-      subscriptionNode = nodeIterator.nextNode();
-      if (subCriptionName.equals(subscriptionNode.getName())) {
-        NewsletterSubscriptionConfig subscription = new NewsletterSubscriptionConfig();
-        subscription.setName(subscriptionNode.getName());
-        subscription.setTitle(subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_TITLE).getString());
-        subscription.setDescription(subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_DECRIPTION).getString());
-        subscription.setCategoryName(subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_CATEGORY_NAME).getString());
-        return subscription;
-      }   
+    try{
+      ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+      Session session = sessionProvider.getSession(workspace, manageableRepository);
+      String path = NewsletterConstant.generateCategoryPath(portalName);
+      Node categoryNode = ((Node)session.getItem(path)).getNode(categoryName);
+      return getSubscriptionFormNode(categoryNode.getNode(subCriptionName));
+    }catch(Exception ex){
+      ex.printStackTrace();
+      return null;
     }
-
-    return null;
   }
 }

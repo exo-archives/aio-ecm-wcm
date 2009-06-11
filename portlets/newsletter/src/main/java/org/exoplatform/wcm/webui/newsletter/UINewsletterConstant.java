@@ -23,6 +23,7 @@ package org.exoplatform.wcm.webui.newsletter;
  * Jun 10, 2009  
  */
 public class UINewsletterConstant {
+  public static final String MANAGER_USERS_POPUP_WINDOW = "UIManagerUsersFormPopupWindow";
   
   public static final String CATEGORY_FORM_POPUP_WINDOW = "UICategoryFormPopupWindow";
   
