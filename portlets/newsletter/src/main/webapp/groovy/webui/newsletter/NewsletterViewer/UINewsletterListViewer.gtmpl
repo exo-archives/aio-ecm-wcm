@@ -77,7 +77,7 @@ import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 							  	classTr = "TrGrey";
 							  else 
 							  	classTr = "TrWhite";
-							  %>
+					  %>
 								<tr class=$classTr>
 									<td width="25%" height="30" class="Line">
 										<a href="#"><%=subcription.getName()%></a>
@@ -85,7 +85,7 @@ import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 									<td width="25%" height="30" class="Line">
 										<span class="SubcriptionContent">
 											<%
-												uicomponent.renderChild(subcription.getName());
+												uicomponent.renderChild(category.getName() + "#" + subcription.getName());
 											%>
 										</span>
 									</td>

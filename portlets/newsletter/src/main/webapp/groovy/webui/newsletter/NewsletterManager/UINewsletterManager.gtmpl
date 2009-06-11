@@ -1,86 +1,54 @@
 <%
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
+import org.exoplatform.services.wcm.newsletter.config.NewsletterManagerConfig;
+import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 %>
-<%
-if(uicomponent.categoryConfig != null){
-%>
-<%uiform.begin()%>
-	<div class="UINewsletterPortlet" id="$uicomponent.id">
-		<div class="BreadCumbs">
-			<a class="ItemContent" style="color:blue;" href="<%=uicomponent.event("BackToCategories")%>">eXo Newsletter</a>
-			>
-			<a class="ItemContent"><%=uicomponent.categoryConfig.getTitle()%></a>
-		</div>
+
+	<div class="UINewsletterPortlet">
+	<% uiform.begin() %>
+			<div class="BreadCumbs">
+				<a class="ItemContent" style="color:blue;" href="<%=uicomponent.event("BackToCategories")%>">
+					eXo Newsletter
+				</a>
+				>
+				<a class="ItemContent" style="color:blue;" href="<%=uicomponent.event("BackToSubcriptions")%>">
+					<%=uicomponent.categoryConfig.getTitle()%>
+				</a>
+				>
+				<a class="ItemContent"><%=uicomponent.subscriptionConfig.getTitle()%></a>
+		 </div>
 		
-		<div class="ActionManager">
-			<div class="ActionTitle">News Letter |</div>
-			<div class="ActionTitle" onclick="<%=uicomponent.event("AddSubcription")%>">News Subscription |</div>
-			<!-- action of this category -->
-			<div class="ContentAction ActionTitle" style="float:left;" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
-				<div class="Name" style="float:none; cursor:pointer;">Manage Category</div>
-				<div style="position:relative;">
-					<div class="UIPopupCategory" style="display:none; left:2px; top:-2px; ">
-						<div class="UIRightClickPopupMenu" style="display:block;">
-							<div class="UIContextMenuContainer">											
-								<div class="TopLeftRightClickPopupMenu">
-									<div class="TopRightRightClickPopupMenu">
-										<div class="TopCenterRightClickPopupMenu"><span></span></div>
-									</div>
-								</div>
-								<div class="MiddleLeftRightClickPopupMenu">
-									<div class="MiddleRightRightClickPopupMenu">
-										<div class="UIRightPopupMenuContainer">
-											<!-- Detail action -->
-											<div class="MenuItem" onclick="javaScript:void(0)">
-												<div class="ItemIcon IconsView" style="padding-left:24px;">
-													<a href="<%=uicomponent.event("EditCategory")%>">Edit Category</a>
+		 <div class="UIAction" style="float:left; margin-left: 20px; height: 35px;"> 
+				<table class="ActionContainer" style="text-align:center">
+					<tr>
+						<td>
+	        		<div onclick="javaScript:void(0);" class="ActionButton LightBlueStyle">
+		      	  	<div class="ButtonLeft">
+		        	  	<div class="ButtonRight">
+		          	  	<div class="ButtonMiddle">
+											<div class="ContentAction ActionTitle" style="float:left;">
+												<div class="Name" style="float:none; cursor:pointer;">
+				          	  		<a href="javascript:void(0);">
+				          	  			<%=_ctx.appRes("NewsletterPortletAction.action.CreateLetter")%>
+				          	  		</a>
 												</div>
-											</div>
-											<div class="MenuItem" onclick="javaScript:void(0)">
-												<div class="ItemIcon IconsView" style="padding-left:24px;">
-													<a href="<%=uicomponent.event("DeleteCategory")%>">Delete Category</a>
-												</div>
-											</div>
-											<hr style="width:90%;"/>
-											<div class="MenuItem" onclick="javaScript:void(0)">
-												<div class="ItemIcon IconsView" style="padding-left:24px;">
-													<a href="<%=uicomponent.event("EditSubscription")%>">Edit</a>
-												</div>
-											</div>
-											<div class="MenuItem" onclick="javaScript:void(0)">
-												<div class="ItemIcon IconsView" style="padding-left:24px;">
-													<a href="<%=uicomponent.event("DeleteSubscription")%>">Delete</a>
-												</div>
-											</div>
-											<div class="MenuItem" onclick="javaScript:void(0)">
-												<div class="ItemIcon IconsView" style="padding-left:24px;">
-													<a href="<%=uicomponent.event("ManagerUsers")%>">Manager Uers</a>
-												</div>
-											</div>
-											<!-- Finish detail action -->
-										</div>
-									</div>
-								</div>
-								<div class="BottomLeftRightClickPopupMenu">
-									<div class="BottomRightRightClickPopupMenu">
-										<div class="BottomCenterRightClickPopupMenu"><span></span></div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- end action of this category -->
+		          	  		</div>
+		            		</div>
+		          		</div>
+		        		</div>
+		      		</div>
+		      	</td>
+					</tr>
+			  </table> 
 		</div>
-		
+		<div style="clear:left"><span></span></div>
 		<div class="UICategories">
 			<div style="width:100%;">
-				<!-- Category infor -->
+				<!-- Subscription infor -->
 				<div style="width:100%;height:30px;line-height:30px;">
 					<div style="float:left;">
-						<b><%=uicomponent.categoryConfig.getTitle()%></b>:
-						<%=uicomponent.categoryConfig.getDescription()%>
+						<b><%=uicomponent.subscriptionConfig.getTitle() %></b>:
+						<%=uicomponent.subscriptionConfig.getDescription() %>
 					</div>
 					
 					<!-- ----------------------------------- Button -------------------------------------------------- -->
@@ -115,7 +83,7 @@ if(uicomponent.categoryConfig != null){
 																					<!-- Detail action -->
 																					<div class="MenuItem" onclick="javaScript:void(0)">
 																						<div class="ItemIcon IconsView" style="padding-left:18px;">
-																							<a href="<%=uicomponent.event("OpenSubscription")%>">Open</a>
+																							<a href="<%=uicomponent.event("OpenNewsletter")%>">Open</a>
 																						</div>
 																					</div>
 																					<div class="MenuItem" onclick="javaScript:void(0)">
@@ -131,7 +99,7 @@ if(uicomponent.categoryConfig != null){
 																					<hr style="width:90%"/>
 																					<div class="MenuItem" onclick="javaScript:void(0)">
 																						<div class="ItemIcon IconsView" style="padding-left:18px;">
-																							<a href="<%=uicomponent.event("ManagerUsers")%>">Manager Uers</a>
+																							<a href="<%=uicomponent.event("AddCategory")%>">Manager Uers</a>
 																						</div>
 																					</div>
 																					<!-- Finish detail action -->
@@ -147,8 +115,7 @@ if(uicomponent.categoryConfig != null){
 																</div>
 															</div>
 														</div>
-														
-				          	  	</div>
+				          	  		</div>
 				            		</div>
 				          		</div>
 				        		</div>
@@ -169,13 +136,13 @@ if(uicomponent.categoryConfig != null){
 					<table cellpadding="5" cellspacing="0" border="0">
 						<tr class="Header">
 							<th class="ContentView" style="border-left:0px;">
-								<%=_ctx.appRes("UICategories.title.SubScription")%>
+								Letter
 							</th>
 							<th class="ContentView">
-								<%=_ctx.appRes("UICategories.title.NumberOfUser")%>
+								Date
 							</th>
 							<th class="ContentView">
-								<%=_ctx.appRes("UICategories.title.AWaitingLetter")%>
+								Status
 							</th>
 							<th class="ContentView" style="border-left:1px solid black;width:40px;">
 								<input type="checkbox">
@@ -183,20 +150,21 @@ if(uicomponent.categoryConfig != null){
 						</tr>
 						<%int count = 0;
 							String color = "";
-							for(NewsletterSubscriptionConfig subScription in uicomponent.getListSubscription()){
+							for(NewsletterManagerConfig newsletter in uicomponent.listNewsletterConfig){
 								if(count % 2 == 0) color = "";
 								else color="background:white;";
 							%>
 								<tr class="SubcriptionInfor" style="$color">
 									<td class="Infor" style="border-left:0px;">
-										<%=subScription.getTitle()%>
+										<a href="<%=uicomponent.event("OpenSubscription")%>">
+											<%=newsletter.getNewsletterTitle()%>
+										</a>
 									</td>
+									<td class="Infor"><%=newsletter.getNewsletterSentDate()%></td>
+									<td class="Infor"><%=newsletter.getStatus()%></td>
 									<td class="Infor">
-										<%=uicomponent.getNumberOfUser(subScription.getName())%>
-									</td>
-									<td class="Infor">1</td>
-									<td class="Infor">
-										<%uicomponent.renderChild(subScription.getName())%>
+										<%System.out.println(newsletter.getNewsletterName())%>
+										<%uicomponent.renderChild(newsletter.getNewsletterName())%>
 									</td>
 								</tr>
 						<%	count ++;
@@ -205,7 +173,5 @@ if(uicomponent.categoryConfig != null){
 				</div>
 			</div>
 		</div>
-	</div>
-<%uiform.end()%>	
-<%
-}%>
+	<%uiform.end()%>	
+</div>

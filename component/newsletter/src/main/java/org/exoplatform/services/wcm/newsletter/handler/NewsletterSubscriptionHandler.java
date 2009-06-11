@@ -70,6 +70,7 @@ public class NewsletterSubscriptionHandler {
       session.save();
     } catch (Exception e) {
       log.error("Add subcription " + subscription.getName() + " failed because of " + e.getMessage());
+      throw e;
     }
   }
   
@@ -136,8 +137,6 @@ public class NewsletterSubscriptionHandler {
   }
   
   public NewsletterSubscriptionConfig getSubscriptionsByName(SessionProvider sessionProvider,String portalName, String categoryName, String subCriptionName) throws Exception{
-    NewsletterSubscriptionConfig subscription = new NewsletterSubscriptionConfig();
-
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
     Session session = sessionProvider.getSession(workspace, manageableRepository);
     String path = NewsletterConstant.generateCategoryPath(portalName);
@@ -148,14 +147,15 @@ public class NewsletterSubscriptionHandler {
       
       subscriptionNode = nodeIterator.nextNode();
       if (subCriptionName.equals(subscriptionNode.getName())) {
-        
+        NewsletterSubscriptionConfig subscription = new NewsletterSubscriptionConfig();
         subscription.setName(subscriptionNode.getName());
         subscription.setTitle(subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_TITLE).getString());
         subscription.setDescription(subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_DECRIPTION).getString());
         subscription.setCategoryName(subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_CATEGORY_NAME).getString());
+        return subscription;
       }   
     }
 
-    return subscription;
+    return null;
   }
 }

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+  <UINewsletterViewerForm>
+    <msg>
+      <updateSuccess>Votre abonnement a été mis à jour.</updateSuccess>
+      <subcribed>Vous êtes subcribed!</subcribed>
+      <email-not-empty>Courrier électronique ne peut pas être vide!</email-not-empty>
+    </msg>
+  </UINewsletterViewerForm>
+  <UINewsletterViewerForm>
+    <action>
+      <Subcribe>Inscrire</Subcribe>
+      <ForgetEmail>Oubliez ce message</ForgetEmail>
+      <ChangeSubcribe>Changez votre Abonnements</ChangeSubcribe>
+    </action>
+  </UINewsletterViewerForm>
+</bundle>

@@ -19,7 +19,6 @@ package org.exoplatform.wcm.webui.newsletter.manager;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.exoplatform.ecm.webui.form.validator.ECMNameValidator;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
@@ -59,17 +58,17 @@ import org.exoplatform.webui.form.validator.NameValidator;
 )
 public class UISubcriptionForm extends UIForm implements UIPopupComponent {
 
-  private static final String INPUT_SUBCRIPTION_NAME = "SubcriptionName";
-  
-  private static final String INPUT_SUBCRIPTION_DESCRIPTION = "SubcriptionDescription"; 
-  
-  private static final String INPUT_SUBCRIPTION_TITLE = "SubcriptionTitle";
-  
-  private static final String SELECT_CATEGORIES_NAME = "CategoryName";
-  
-  private NewsletterCategoryHandler categoryHandler = null;
-  
-  private NewsletterSubscriptionConfig subscriptionConfig = null;
+  private static final String          INPUT_SUBCRIPTION_NAME        = "SubcriptionName";
+
+  private static final String          INPUT_SUBCRIPTION_DESCRIPTION = "SubcriptionDescription";
+
+  private static final String          INPUT_SUBCRIPTION_TITLE       = "SubcriptionTitle";
+
+  private static final String          SELECT_CATEGORIES_NAME        = "CategoryName";
+
+  private NewsletterCategoryHandler    categoryHandler               = null;
+
+  private NewsletterSubscriptionConfig subscriptionConfig            = null;
   
   public UISubcriptionForm() throws Exception{
 
@@ -81,9 +80,12 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent {
       listCategoriesName.add(option);
     }
 
-    UIFormStringInput inputSubcriptionName = new UIFormStringInput(INPUT_SUBCRIPTION_NAME, null);
+    UIFormStringInput inputSubcriptionName = (UIFormStringInput) new UIFormStringInput(INPUT_SUBCRIPTION_NAME, null)
+                                                                      .addValidator(MandatoryValidator.class)
+                                                                      .addValidator(NameValidator.class);
     UIFormTextAreaInput inputSubcriptionDescription = new UIFormTextAreaInput(INPUT_SUBCRIPTION_DESCRIPTION, null, null);
-    UIFormStringInput inputSubcriptionTitle = new UIFormStringInput(INPUT_SUBCRIPTION_TITLE, null);
+    UIFormStringInput inputSubcriptionTitle = (UIFormStringInput) new UIFormStringInput(INPUT_SUBCRIPTION_TITLE, null)
+                                                                        .addValidator(MandatoryValidator.class);
     UIFormSelectBox categoryName = new UIFormSelectBox(SELECT_CATEGORIES_NAME, SELECT_CATEGORIES_NAME, listCategoriesName);
 
     inputSubcriptionName.addValidator(MandatoryValidator.class).addValidator(NameValidator.class);
@@ -104,10 +106,14 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent {
   }
   
   public void setSubscriptionInfor(NewsletterSubscriptionConfig subscriptionConfig){
+    
     this.subscriptionConfig = subscriptionConfig;
+    
     UIFormStringInput inputName = this.getChildById(INPUT_SUBCRIPTION_NAME);
+    
     inputName.setValue(subscriptionConfig.getName());
     inputName.setEditable(false);
+
     ((UIFormStringInput)this.getChildById(INPUT_SUBCRIPTION_TITLE)).setValue(subscriptionConfig.getTitle());
     ((UIFormTextAreaInput)this.getChildById(INPUT_SUBCRIPTION_DESCRIPTION)).setValue(subscriptionConfig.getDescription());
     UIFormSelectBox formSelectBox = this.getChildById(SELECT_CATEGORIES_NAME);
@@ -117,18 +123,23 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent {
   }
 
   private List<NewsletterCategoryConfig> getListCategories(){
+    
     NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
+    
     categoryHandler = newsletterManagerService.getCategoryHandler();
+    
     try{
+      
       return categoryHandler.getListCategories(NewsLetterUtil.getPortalName(), NewsLetterUtil.getSesssionProvider());
     }catch(Exception e){
-      e.printStackTrace();
+
       return new ArrayList<NewsletterCategoryConfig>();
     }
   }
   
   static  public class SaveActionListener extends EventListener<UISubcriptionForm> {
     public void execute(Event<UISubcriptionForm> event) throws Exception {
+      
       UISubcriptionForm uiSubcriptionForm = event.getSource();
       
       UINewsletterManagerPortlet newsletterPortlet = uiSubcriptionForm.getAncestorOfType(UINewsletterManagerPortlet.class);
@@ -141,45 +152,46 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent {
       String subcriptionDecription = ((UIFormTextAreaInput)uiSubcriptionForm.getChildById(INPUT_SUBCRIPTION_DESCRIPTION)).getValue();
 
       UIApplication uiApp = uiSubcriptionForm.getAncestorOfType(UIApplication.class);
-      if((subcriptionName == null) || (subcriptionName.trim().length() < 1)){
-        uiApp.addMessage(new ApplicationMessage("UISubcriptionForm.msg.subcriptionNameIsNotEmpty", null, ApplicationMessage.WARNING));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-        return;
-      } else if ((subcriptionTitle == null) || (subcriptionTitle.trim().length() < 1)) {
-        uiApp.addMessage(new ApplicationMessage("UISubcriptionForm.msg.subcriptionTitleIsNotEmpty", null, ApplicationMessage.WARNING));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-        return;
-      }  else {
-        NewsletterSubscriptionConfig subscriptionConfig = null;
-        if(uiSubcriptionForm.subscriptionConfig == null){
-          subscriptionConfig = new NewsletterSubscriptionConfig();
-          subscriptionConfig.setName(subcriptionName);
-          subscriptionConfig.setCategoryName(categoryName);
-        }else{
-          subscriptionConfig = uiSubcriptionForm.subscriptionConfig;
-        }
-        subscriptionConfig.setDescription(subcriptionDecription);
-        subscriptionConfig.setTitle(subcriptionTitle);
-        SessionProvider sessionProvider = NewsLetterUtil.getSesssionProvider();
-        try {
-        
-          NewsletterSubscriptionHandler subscriptionHandler = newsletterManagerService.getSubscriptionHandler();
-          if(uiSubcriptionForm.subscriptionConfig == null)
-            subscriptionHandler.add(sessionProvider, NewsLetterUtil.getPortalName(), subscriptionConfig);
-          else
-            subscriptionHandler.edit(sessionProvider, NewsLetterUtil.getPortalName(), subscriptionConfig);
-          
-          UIPopupContainer popupContainer = uiSubcriptionForm.getAncestorOfType(UIPopupContainer.class);
-          popupContainer.deActivate();
-  
-          event.getRequestContext().addUIComponentToUpdateByAjax(newsletterPortlet) ;
-        } catch (Exception e) {
-          
+
+      SessionProvider sessionProvider = NewsLetterUtil.getSesssionProvider();
+
+      NewsletterSubscriptionHandler subscriptionHandler = newsletterManagerService.getSubscriptionHandler();
+      NewsletterSubscriptionConfig newsletterSubscriptionConfig = null;
+      if(uiSubcriptionForm.subscriptionConfig == null) {
+
+        newsletterSubscriptionConfig = subscriptionHandler
+          .getSubscriptionsByName(sessionProvider, NewsLetterUtil.getPortalName(), categoryName, subcriptionName);
+        if (newsletterSubscriptionConfig != null) {
+
           uiApp.addMessage(new ApplicationMessage("UISubcriptionForm.msg.subcriptionNameIsAlreadyExist", null, ApplicationMessage.WARNING));
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
           return;
+        } else {
+
+          newsletterSubscriptionConfig = new NewsletterSubscriptionConfig();
+
+          newsletterSubscriptionConfig.setName(subcriptionName);
+          newsletterSubscriptionConfig.setCategoryName(categoryName);
+          newsletterSubscriptionConfig.setDescription(subcriptionDecription);
+          newsletterSubscriptionConfig.setTitle(subcriptionTitle);
+
+          subscriptionHandler.add(sessionProvider, NewsLetterUtil.getPortalName(), newsletterSubscriptionConfig);
         }
+      } else {
+
+        newsletterSubscriptionConfig = uiSubcriptionForm.subscriptionConfig;
+
+        newsletterSubscriptionConfig.setCategoryName(categoryName);
+        newsletterSubscriptionConfig.setDescription(subcriptionDecription);
+        newsletterSubscriptionConfig.setTitle(subcriptionTitle);
+
+        subscriptionHandler.edit(sessionProvider, NewsLetterUtil.getPortalName(), newsletterSubscriptionConfig);
       }
+
+      UIPopupContainer popupContainer = uiSubcriptionForm.getAncestorOfType(UIPopupContainer.class);
+      popupContainer.deActivate();
+
+      event.getRequestContext().addUIComponentToUpdateByAjax(newsletterPortlet) ;
     }
   }
 

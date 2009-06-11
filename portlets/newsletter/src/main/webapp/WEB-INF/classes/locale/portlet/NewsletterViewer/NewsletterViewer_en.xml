@@ -1,17 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bundle>
   <UINewsletterViewerForm>
-    <action>
-      <Save>Update</Save>
-      <Cancel>Cancel</Cancel>
-      <Down>Down</Down>
-      <Up>Up</Up>      
-      <Delete>Delete</Delete>            
-    </action>
-  </UINewsletterViewerForm>
-  <UINewsletterViewerForm>
     <msg>
-      <updatesuccess>Your subcription has been updated.</updatesuccess>
+      <updateSuccess>Your subcription has been updated.</updateSuccess>
+      <subcribed>You are subcribed!!!</subcribed>
       <email-not-empty>Email cannot be empty!!!</email-not-empty>
     </msg>
   </UINewsletterViewerForm>
@@ -19,7 +11,7 @@
     <action>
       <Subcribe>Subcribe</Subcribe>
       <ForgetEmail>Forget this email</ForgetEmail>
-      <ChangeSubcribe>Change your subcriptions</ChangeSubcribe>
+      <ChangeSubcriptions>Change your subcriptions</ChangeSubcriptions>
     </action>
   </UINewsletterViewerForm>
 </bundle>

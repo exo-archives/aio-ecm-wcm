@@ -54,12 +54,14 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
         @EventConfig(listeners = UISubscriptions.EditSubscriptionActionListener.class),
         @EventConfig(listeners = UISubscriptions.DeleteSubscriptionActionListener.class, confirm= "UISubscription.msg.confirmDeleteSubscription"),
         @EventConfig(listeners = UISubscriptions.DeleteCategoryActionListener.class, confirm= "UISubscription.msg.confirmDeleteCategory"),
+        @EventConfig(listeners = UISubscriptions.OpenSubscriptionActionListener.class),
         @EventConfig(listeners = UISubscriptions.EditCategoryActionListener.class),
         @EventConfig(listeners = UISubscriptions.ManagerUsersActionListener.class)
     }
 )
 public class UISubscriptions extends UIForm {
   NewsletterSubscriptionHandler subscriptionHandler;
+  NewsletterCategoryHandler categoryHandler;
   NewsletterCategoryConfig categoryConfig;
   NewsletterManageUserHandler userHandler = null;
   String portalName;
@@ -67,6 +69,7 @@ public class UISubscriptions extends UIForm {
   public UISubscriptions()throws Exception{
     NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
     subscriptionHandler = newsletterManagerService.getSubscriptionHandler();
+    categoryHandler = newsletterManagerService.getCategoryHandler();
     userHandler = newsletterManagerService.getManageUserHandler();
     portalName = NewsLetterUtil.getPortalName();
   }
@@ -209,9 +212,46 @@ public class UISubscriptions extends UIForm {
       SessionProvider sessionProvider = NewsLetterUtil.getSesssionProvider();
       String portalName = NewsLetterUtil.getPortalName();
       NewsletterSubscriptionConfig subscriptionConfig = 
-        subsriptions.subscriptionHandler.getSubscriptionsByName(sessionProvider, portalName, subsriptions.categoryConfig.getName(), subId);
+      subsriptions.subscriptionHandler.getSubscriptionsByName(sessionProvider, portalName, subsriptions.categoryConfig.getName(), subId);
       subsriptions.subscriptionHandler.delete(sessionProvider, NewsLetterUtil.getPortalName(), subsriptions.categoryConfig.getName(),subscriptionConfig);
       event.getRequestContext().addUIComponentToUpdateByAjax(subsriptions);
+    }
+  }
+  
+  static  public class OpenSubscriptionActionListener extends EventListener<UISubscriptions> {
+    public void execute(Event<UISubscriptions> event) throws Exception {
+      UISubscriptions uiSubscription = event.getSource();
+      String subId = uiSubscription.getChecked();
+      if(subId == null){
+        UIApplication uiApp = uiSubscription.getAncestorOfType(UIApplication.class);
+        uiApp.addMessage(new ApplicationMessage("UISubscription.msg.checkOnlyOneSubScriptionToOpen", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
+      }
+ 
+      SessionProvider sessionProvider = NewsLetterUtil.getSesssionProvider();
+      String portalName = NewsLetterUtil.getPortalName();
+
+      UINewsletterManagerPortlet newsletterManagerPortlet = uiSubscription.getAncestorOfType(UINewsletterManagerPortlet.class);
+      UINewsletterManager newsletterManager = newsletterManagerPortlet.getChild(UINewsletterManager.class);
+      
+      newsletterManager.setRendered(true);
+      
+      newsletterManager.setCategoryConfig(
+                        uiSubscription.categoryHandler.getCategoryByName(
+                                                                         portalName,
+                                                                         uiSubscription.categoryConfig.getName(),
+                                                                         sessionProvider));
+      
+      newsletterManager.setSubscriptionConfig(
+                        uiSubscription.subscriptionHandler.getSubscriptionsByName(
+                                                                                  sessionProvider,
+                                                                                  portalName,
+                                                                                  uiSubscription.categoryConfig.getName(),
+                                                                                  subId));
+      newsletterManagerPortlet.getChild(UICategories.class).setRendered(false);
+      newsletterManagerPortlet.getChild(UISubscriptions.class).setRendered(false);
+      event.getRequestContext().addUIComponentToUpdateByAjax(newsletterManagerPortlet);
     }
   }
   

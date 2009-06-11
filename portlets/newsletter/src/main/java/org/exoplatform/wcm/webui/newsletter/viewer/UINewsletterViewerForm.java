@@ -48,9 +48,9 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
                  lifecycle = UIFormLifecycle.class,
                  template = "app:/groovy/webui/newsletter/NewsletterViewer/UINewsletterListViewer.gtmpl",
                  events = {
-                            @EventConfig(listeners = UINewsletterViewerForm.SubcribeActionListener.class),
-                            @EventConfig(listeners = UINewsletterViewerForm.ForgetEmailActionListener.class),
-                            @EventConfig(listeners = UINewsletterViewerForm.ChangeSubcriptionsActionListener.class) }
+                      @EventConfig(listeners = UINewsletterViewerForm.SubcribeActionListener.class),
+                      @EventConfig(listeners = UINewsletterViewerForm.ForgetEmailActionListener.class),
+                      @EventConfig(listeners = UINewsletterViewerForm.ChangeSubcriptionsActionListener.class) }
 )
 public class UINewsletterViewerForm extends UIForm {
 
@@ -138,13 +138,6 @@ public class UINewsletterViewerForm extends UIForm {
   }
 
   public static class ForgetEmailActionListener extends EventListener<UINewsletterViewerForm> {
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
-     */
-    @SuppressWarnings("unchecked")
     public void execute(Event<UINewsletterViewerForm> event) throws Exception {
 
       UINewsletterViewerForm newsletterForm = event.getSource();
@@ -158,13 +151,6 @@ public class UINewsletterViewerForm extends UIForm {
 
   public static class ChangeSubcriptionsActionListener extends
                                                       EventListener<UINewsletterViewerForm> {
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
-     */
-    @SuppressWarnings("unchecked")
     public void execute(Event<UINewsletterViewerForm> event) throws Exception {
 
       UINewsletterViewerForm newsletterForm = event.getSource();
@@ -201,13 +187,6 @@ public class UINewsletterViewerForm extends UIForm {
   }
 
   public static class SubcribeActionListener extends EventListener<UINewsletterViewerForm> {
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
-     */
-    @SuppressWarnings("unchecked")
     public void execute(Event<UINewsletterViewerForm> event) throws Exception {
 
       UINewsletterViewerForm newsletterForm = event.getSource();
