@@ -19,6 +19,7 @@ package org.exoplatform.wcm.webui.newsletter.manager;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.exoplatform.ecm.webui.form.validator.ECMNameValidator;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
@@ -39,6 +40,8 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
+import org.exoplatform.webui.form.validator.MandatoryValidator;
+import org.exoplatform.webui.form.validator.NameValidator;
 
 /**
  * Created by The eXo Platform SAS
@@ -81,9 +84,11 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent {
     UIFormStringInput inputSubcriptionName = new UIFormStringInput(INPUT_SUBCRIPTION_NAME, null);
     UIFormTextAreaInput inputSubcriptionDescription = new UIFormTextAreaInput(INPUT_SUBCRIPTION_DESCRIPTION, null, null);
     UIFormStringInput inputSubcriptionTitle = new UIFormStringInput(INPUT_SUBCRIPTION_TITLE, null);
-    
     UIFormSelectBox categoryName = new UIFormSelectBox(SELECT_CATEGORIES_NAME, SELECT_CATEGORIES_NAME, listCategoriesName);
 
+    inputSubcriptionName.addValidator(MandatoryValidator.class).addValidator(NameValidator.class);
+    inputSubcriptionTitle.addValidator(MandatoryValidator.class);
+    
     addChild(categoryName);
     addChild(inputSubcriptionName);
     addChild(inputSubcriptionTitle);
@@ -105,7 +110,10 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent {
     inputName.setEditable(false);
     ((UIFormStringInput)this.getChildById(INPUT_SUBCRIPTION_TITLE)).setValue(subscriptionConfig.getTitle());
     ((UIFormTextAreaInput)this.getChildById(INPUT_SUBCRIPTION_DESCRIPTION)).setValue(subscriptionConfig.getDescription());
-    ((UIFormSelectBox)this.getChildById(SELECT_CATEGORIES_NAME)).setValue(subscriptionConfig.getCategoryName()).setEditable(false);
+    UIFormSelectBox formSelectBox = this.getChildById(SELECT_CATEGORIES_NAME);
+    formSelectBox.setValue(subscriptionConfig.getCategoryName());
+    formSelectBox.setEditable(false);
+    formSelectBox.setDisabled(false);
   }
 
   private List<NewsletterCategoryConfig> getListCategories(){

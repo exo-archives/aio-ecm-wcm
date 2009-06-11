@@ -25,6 +25,7 @@ package org.exoplatform.services.wcm.newsletter.config;
 public class NewsletterUserConfig {
 
   private String mail;
+  private boolean isBanned;
 
   public String getMail() {
     return mail;
@@ -32,6 +33,14 @@ public class NewsletterUserConfig {
 
   public void setMail(String mail) {
     this.mail = mail;
+  }
+
+  public boolean isBanned() {
+    return isBanned;
+  }
+
+  public void setBanned(boolean isBanned) {
+    this.isBanned = isBanned;
   }
   
 }

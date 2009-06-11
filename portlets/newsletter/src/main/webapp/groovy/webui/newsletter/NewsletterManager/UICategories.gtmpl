@@ -51,7 +51,7 @@ import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 										</div>
 										<div class="MenuItem" onclick="javaScript:void(0)">
 											<div class="ItemIcon IconsView" style="padding-left:24px;">
-												<a href="<%=uicomponent.event("AddCategory")%>">Manager Uers</a>
+												<a href="<%=uicomponent.event("ManagerUsers")%>">Manager Uers</a>
 											</div>
 										</div>
 										<!-- Finish detail action -->
@@ -95,8 +95,10 @@ import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 							if(listSubscriptions.size() > 0){
 								for(NewsletterSubscriptionConfig subScription in listSubscriptions){%>
 								<tr class="SubcriptionInfor">
-									<td class="Infor" style="border-left:0px;"><%=subScription.getName()%></td>
-									<td class="Infor">400</td>
+									<td class="Infor" style="border-left:0px;"><%=subScription.getTitle()%></td>
+									<td class="Infor">
+										<%=uicomponent.getNumberOfUser(category.getName(), subScription.getName())%>
+									</td>
 									<td class="Infor">1</td>
 								</tr>
 						<%	}

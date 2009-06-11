@@ -24,6 +24,7 @@ import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterCategoryHandler;
+import org.exoplatform.services.wcm.newsletter.handler.NewsletterManageUserHandler;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterSubscriptionHandler;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -53,16 +54,21 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
         @EventConfig(listeners = UISubscriptions.EditSubscriptionActionListener.class),
         @EventConfig(listeners = UISubscriptions.DeleteSubscriptionActionListener.class, confirm= "UISubscription.msg.confirmDeleteSubscription"),
         @EventConfig(listeners = UISubscriptions.DeleteCategoryActionListener.class, confirm= "UISubscription.msg.confirmDeleteCategory"),
-        @EventConfig(listeners = UISubscriptions.EditCategoryActionListener.class)
+        @EventConfig(listeners = UISubscriptions.EditCategoryActionListener.class),
+        @EventConfig(listeners = UISubscriptions.ManagerUsersActionListener.class)
     }
 )
 public class UISubscriptions extends UIForm {
   NewsletterSubscriptionHandler subscriptionHandler;
   NewsletterCategoryConfig categoryConfig;
+  NewsletterManageUserHandler userHandler = null;
+  String portalName;
   
   public UISubscriptions()throws Exception{
     NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
     subscriptionHandler = newsletterManagerService.getSubscriptionHandler();
+    userHandler = newsletterManagerService.getManageUserHandler();
+    portalName = NewsLetterUtil.getPortalName();
   }
   
   public void setCategory(NewsletterCategoryConfig categoryConfig){
@@ -76,6 +82,11 @@ public class UISubscriptions extends UIForm {
       checkBoxInput = new UIFormCheckBoxInput<Boolean>(subscription.getName(), subscription.getName(), false);
       this.addChild(checkBoxInput);
     }
+  }
+  
+  @SuppressWarnings("unused")
+  private int getNumberOfUser(String subscriptionName){
+    return userHandler.getQuantityUserBySubscription(portalName, this.categoryConfig.getName(), subscriptionName);
   }
   
   @SuppressWarnings("unused")
@@ -93,20 +104,19 @@ public class UISubscriptions extends UIForm {
     return listSubs;
   }
   
+  @SuppressWarnings("unchecked")
   public String getChecked(){
     String subscriptionId = null;
     UIFormCheckBoxInput<Boolean> checkbox = null;
     for(UIComponent component : this.getChildren()){
       try{
         checkbox = (UIFormCheckBoxInput<Boolean>)component;
-        System.out.println("~~~~~~~~~~>id:" + checkbox.getId());
         if(checkbox.isChecked()){
           if(subscriptionId == null)subscriptionId = checkbox.getName(); 
           else return null;
         }
       }catch(Exception e){}
     }
-    System.out.println("\n\n\n\n------------------>subscription name:" + subscriptionId);
     return subscriptionId;
   }
   
@@ -202,6 +212,18 @@ public class UISubscriptions extends UIForm {
         subsriptions.subscriptionHandler.getSubscriptionsByName(sessionProvider, portalName, subsriptions.categoryConfig.getName(), subId);
       subsriptions.subscriptionHandler.delete(sessionProvider, NewsLetterUtil.getPortalName(), subsriptions.categoryConfig.getName(),subscriptionConfig);
       event.getRequestContext().addUIComponentToUpdateByAjax(subsriptions);
+    }
+  }
+  
+  static  public class ManagerUsersActionListener extends EventListener<UISubscriptions> {
+    public void execute(Event<UISubscriptions> event) throws Exception {
+      UISubscriptions uiCategories = event.getSource();
+      UIPopupContainer popupContainer = uiCategories.getAncestorOfType(UINewsletterManagerPortlet.class).getChild(UIPopupContainer.class);
+      UIManagerUsers managerUsers = popupContainer.createUIComponent(UIManagerUsers.class, null, null);
+      popupContainer.activate(managerUsers, 500, 300);
+      popupContainer.setRendered(true);
+      managerUsers.setInfor(uiCategories.categoryConfig.getName(), null);
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
     }
   }
 }

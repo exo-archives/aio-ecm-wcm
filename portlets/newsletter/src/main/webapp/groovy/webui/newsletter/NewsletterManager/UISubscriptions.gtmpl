@@ -131,7 +131,7 @@ if(uicomponent.categoryConfig != null){
 																					<hr style="width:90%"/>
 																					<div class="MenuItem" onclick="javaScript:void(0)">
 																						<div class="ItemIcon IconsView" style="padding-left:18px;">
-																							<a href="<%=uicomponent.event("AddCategory")%>">Manager Uers</a>
+																							<a href="<%=uicomponent.event("ManagerUsers")%>">Manager Uers</a>
 																						</div>
 																					</div>
 																					<!-- Finish detail action -->
@@ -189,7 +189,9 @@ if(uicomponent.categoryConfig != null){
 							%>
 								<tr class="SubcriptionInfor" style="$color">
 									<td class="Infor" style="border-left:0px;"><%=subScription.getTitle()%></td>
-									<td class="Infor">400</td>
+									<td class="Infor">
+										<%=uicomponent.getNumberOfUser(subScription.getName())%>
+									</td>
 									<td class="Infor">1</td>
 									<td class="Infor">
 										<%uicomponent.renderChild(subScription.getName())%>

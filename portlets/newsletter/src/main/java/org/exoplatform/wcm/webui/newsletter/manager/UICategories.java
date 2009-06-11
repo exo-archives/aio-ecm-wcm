@@ -24,6 +24,7 @@ import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterCategoryHandler;
+import org.exoplatform.services.wcm.newsletter.handler.NewsletterManageUserHandler;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterSubscriptionHandler;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -37,17 +38,27 @@ import org.exoplatform.webui.event.EventListener;
 		events = {
 				@EventConfig(listeners = UICategories.AddCategoryActionListener.class),
 				@EventConfig(listeners = UICategories.OpenCategoryActionListener.class),
-        @EventConfig(listeners = UICategories.AddSubcriptionActionListener.class)
+        @EventConfig(listeners = UICategories.AddSubcriptionActionListener.class),
+        @EventConfig(listeners = UICategories.ManagerUsersActionListener.class)
 		}
 )
 public class UICategories extends UIContainer {
 	NewsletterCategoryHandler categoryHandler = null;
 	NewsletterSubscriptionHandler subscriptionHandler = null;
+	NewsletterManageUserHandler userHandler = null;
+	String portalName;
 	
 	public UICategories()throws Exception{
 		NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
 		categoryHandler = newsletterManagerService.getCategoryHandler();
 		subscriptionHandler = newsletterManagerService.getSubscriptionHandler();
+		userHandler = newsletterManagerService.getManageUserHandler();
+		portalName = NewsLetterUtil.getPortalName();
+	}
+	
+	@SuppressWarnings("unused")
+  private int getNumberOfUser(String categoryName, String subscriptionName){
+	  return userHandler.getQuantityUserBySubscription(portalName, categoryName, subscriptionName);
 	}
 	
 	@SuppressWarnings("unused")
@@ -108,6 +119,18 @@ public class UICategories extends UIContainer {
 	    subsriptions.setCategory(uiCategories.categoryHandler.getCategoryByName(NewsLetterUtil.getPortalName(), categoryName, NewsLetterUtil.getSesssionProvider()));
 	    newsletterManagerPortlet.getChild(UICategories.class).setRendered(false);
 	    event.getRequestContext().addUIComponentToUpdateByAjax(newsletterManagerPortlet);
+	  }
+	}
+	
+	static  public class ManagerUsersActionListener extends EventListener<UICategories> {
+	  public void execute(Event<UICategories> event) throws Exception {
+	    UICategories uiCategories = event.getSource();
+	    UIPopupContainer popupContainer = uiCategories.getAncestorOfType(UINewsletterManagerPortlet.class).getChild(UIPopupContainer.class);
+	    UIManagerUsers managerUsers = popupContainer.createUIComponent(UIManagerUsers.class, null, null);
+	    popupContainer.activate(managerUsers, 500, 300);
+	    popupContainer.setRendered(true);
+	    managerUsers.setInfor(null, null);
+	    event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
 	  }
 	}
 }

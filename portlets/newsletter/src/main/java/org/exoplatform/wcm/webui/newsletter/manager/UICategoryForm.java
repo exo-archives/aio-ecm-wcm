@@ -17,6 +17,7 @@
 package org.exoplatform.wcm.webui.newsletter.manager;
 
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.ecm.webui.form.validator.ECMNameValidator;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
@@ -33,6 +34,8 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
+import org.exoplatform.webui.form.validator.MandatoryValidator;
+import org.exoplatform.webui.form.validator.NameValidator;
 
 @ComponentConfig(
 		lifecycle = UIFormLifecycle.class ,
@@ -54,6 +57,11 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
 		UIFormStringInput inputCateTitle = new UIFormStringInput(INPUT_CATEGORY_TITLE, null);
 		UIFormTextAreaInput inputCateDescription = new UIFormTextAreaInput(INPUT_CATEGORY_DESCRIPTION, null, null);
 		UIFormStringInput inputModerator = new UIFormStringInput(INPUT_CATEGORY_MODERATOR, null);
+		
+		inputCateName.addValidator(MandatoryValidator.class).addValidator(NameValidator.class);
+		inputCateTitle.addValidator(MandatoryValidator.class);
+		inputModerator.addValidator(MandatoryValidator.class);
+		
 		addChild(inputCateName);
 		addChild(inputCateTitle);
 		addChild(inputCateDescription);
@@ -97,15 +105,6 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
 			categoryConfig.setModerator(((UIFormStringInput)uiCategoryForm.getChildById(uiCategoryForm.INPUT_CATEGORY_MODERATOR)).getValue());
 			
 			UIApplication uiApp = uiCategoryForm.getAncestorOfType(UIApplication.class);
-			if(categoryConfig.getName() == null || categoryConfig.getName().trim().length() < 1){
-	      uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.categoryNameIsNotEmpty", null, ApplicationMessage.WARNING));
-	      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-	      return;
-			} else if(categoryConfig.getTitle() == null || categoryConfig.getTitle().trim().length() < 1) {
-				uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.categoryTitleIsNotEmpty", null, ApplicationMessage.WARNING));
-				event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-				return;
-			}
 			NewsletterCategoryHandler categoryHandler = newsletterManagerService.getCategoryHandler();
 			SessionProvider sessionProvider = NewsLetterUtil.getSesssionProvider();
 			String portalName = NewsLetterUtil.getPortalName(); 
@@ -116,12 +115,14 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
   			    event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
   			    sessionProvider.close();
   			    return;
+  			  }else{
+  			    categoryHandler.add(portalName, categoryConfig, sessionProvider);
   			  }
 			  }else{ // Edit a category is already exist
 			    categoryHandler.edit(portalName, categoryConfig, sessionProvider);
 			  }
 			}catch(Exception ex){
-		    categoryHandler.add(portalName, categoryConfig, sessionProvider);
+			  ex.printStackTrace();
 			}
 			UIPopupContainer popupContainer = uiCategoryForm.getAncestorOfType(UIPopupContainer.class);
 			popupContainer.deActivate();

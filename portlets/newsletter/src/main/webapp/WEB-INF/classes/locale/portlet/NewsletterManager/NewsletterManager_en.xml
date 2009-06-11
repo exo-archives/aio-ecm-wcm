@@ -5,6 +5,9 @@
 			<UICategoryForm>
 				Category Form
 			</UICategoryForm>
+			<UIManagerUsers>
+				Manager Users
+			</UIManagerUsers>
 		</title>
 	</UINesletterPopupWindow>
   <NewsletterPortletAction>

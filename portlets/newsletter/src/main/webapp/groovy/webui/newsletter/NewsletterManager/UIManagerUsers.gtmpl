@@ -1,0 +1,28 @@
+<%
+import org.exoplatform.services.wcm.newsletter.config.NewsletterUserConfig;
+%>
+<div class="UIManagerUsers $uicomponent.id" style="border: 1px solid gray;margin:10px;padding:5px;">
+<%uiform.begin()%>
+	<table align="center" class="UIGrid">
+		<tr class="Header">
+			<th>Email</th>
+			<th>Banned</th>
+			<th>Action</th>
+		</tr>
+		<%
+		for(NewsletterUserConfig user in uicomponent.getListUser()){%>
+			<tr class="SubcriptionInfor">
+				<td class="text"><%=user.getMail();%></td>
+				<td class="text"><%=user.isBanned();%></td>
+				<td class="text">
+					<a href="javaScript:void(0);">Edit</a>
+					<a href="<%=uicomponent.event("BanOrUnBanUser", user.getMail())%>">Ban/UnBan</a>
+					<a href="<%=uicomponent.event("DeleteUser", user.getMail())%>">Delete</a>
+				</td>
+			</tr>
+		<%
+		}
+		%>
+	</table>
+<%uiform.end()%>
+</div>

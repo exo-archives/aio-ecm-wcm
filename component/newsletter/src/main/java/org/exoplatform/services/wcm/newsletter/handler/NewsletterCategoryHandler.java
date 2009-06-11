@@ -17,7 +17,10 @@
 package org.exoplatform.services.wcm.newsletter.handler;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -26,6 +29,7 @@ import javax.jcr.Session;
 import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.access.AccessControlEntry;
 import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.core.ManageableRepository;
@@ -58,7 +62,23 @@ public class NewsletterCategoryHandler {
   	categoryConfig = new NewsletterCategoryConfig();
   	categoryConfig.setName(categoryNode.getName());
   	categoryConfig.setTitle(categoryNode.getProperty(NewsletterConstant.CATEGORY_PROPERTY_TITLE).getString());
-  	categoryConfig.setDescription(categoryNode.getProperty(NewsletterConstant.CATEGORY_PROPERTY_DESCRIPTION).getString());
+  	if(categoryNode.hasProperty(NewsletterConstant.CATEGORY_PROPERTY_DESCRIPTION))
+  	  categoryConfig.setDescription(categoryNode.getProperty(NewsletterConstant.CATEGORY_PROPERTY_DESCRIPTION).getString());
+  	// get permission for this category
+  	ExtendedNode webContent = (ExtendedNode)categoryNode;
+    Iterator permissionIterator = webContent.getACL().getPermissionEntries().iterator();
+    List<String> listPermission = new ArrayList<String>();
+    String permission = "";
+    while (permissionIterator.hasNext()) {
+      AccessControlEntry accessControlEntry = (AccessControlEntry) permissionIterator.next();
+      String currentIdentity = accessControlEntry.getIdentity();
+      if(!listPermission.contains(currentIdentity)){
+        listPermission.add(currentIdentity);
+        if(permission.length() > 0) permission += ",";
+        permission += currentIdentity;
+      }
+    }
+    categoryConfig.setModerator(permission);
   	return categoryConfig;
   }
   
@@ -92,6 +112,13 @@ public class NewsletterCategoryHandler {
       Node categoryNode = ((Node)session.getItem(categoryPath)).getNode(categoryConfig.getName());
       categoryNode.setProperty(NewsletterConstant.CATEGORY_PROPERTY_DESCRIPTION, categoryConfig.getDescription());
       categoryNode.setProperty(NewsletterConstant.CATEGORY_PROPERTY_TITLE, categoryConfig.getTitle());
+      
+      ExtendedNode extendedCategoryNode = ExtendedNode.class.cast(categoryNode);
+      if (extendedCategoryNode.canAddMixin("exo:privilegeable")) {
+        extendedCategoryNode.addMixin("exo:privilegeable");
+        extendedCategoryNode.setPermission(categoryConfig.getModerator(), PermissionType.ALL);
+      }
+      
       session.save();
     } catch (Exception e) {
       log.info("Edit category " + categoryConfig.getName() + " failed because of " + e.getMessage());
@@ -113,23 +140,34 @@ public class NewsletterCategoryHandler {
   }
   
   public NewsletterCategoryConfig getCategoryByName(String portalName, String categoryName, SessionProvider sessionProvider) throws Exception{
-  	ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-    Session session = sessionProvider.getSession(workspace, manageableRepository);
-    String categoryPath = NewsletterConstant.generateCategoryPath(portalName);
-    Node categoriesNode = (Node)session.getItem(categoryPath);
-    return getCategoryFromNode(categoriesNode.getNode(categoryName));
+  	try{ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+      Session session = sessionProvider.getSession(workspace, manageableRepository);
+      String categoryPath = NewsletterConstant.generateCategoryPath(portalName);
+      Node categoriesNode = (Node)session.getItem(categoryPath);
+      return getCategoryFromNode(categoriesNode.getNode(categoryName));
+  	}catch(Exception ex){
+  	  return null;
+  	}
   }
   
   public List<NewsletterCategoryConfig> getListCategories(String portalName, SessionProvider sessionProvider) throws Exception{
-  	List<NewsletterCategoryConfig> listCategories = new ArrayList<NewsletterCategoryConfig>();
-  	ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-    Session session = sessionProvider.getSession(workspace, manageableRepository);
-    String categoryPath = NewsletterConstant.generateCategoryPath(portalName);
-    Node categoriesNode = (Node)session.getItem(categoryPath);
-    NodeIterator nodeIterator = categoriesNode.getNodes();
-    while(nodeIterator.hasNext()){
-    	listCategories.add(getCategoryFromNode(nodeIterator.nextNode()));
-    }
+    List<NewsletterCategoryConfig> listCategories = new ArrayList<NewsletterCategoryConfig>();
+  	try{
+    	ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+      Session session = sessionProvider.getSession(workspace, manageableRepository);
+      String categoryPath = NewsletterConstant.generateCategoryPath(portalName);
+      Node categoriesNode = (Node)session.getItem(categoryPath);
+      NodeIterator nodeIterator = categoriesNode.getNodes();
+      while(nodeIterator.hasNext()){
+        try{
+          listCategories.add(getCategoryFromNode(nodeIterator.nextNode()));
+        }catch(Exception ex){
+          ex.printStackTrace();
+        }
+      }
+  	}catch(Exception e){
+	    e.printStackTrace();
+	  }
     return listCategories;
   }
 
