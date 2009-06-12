@@ -378,7 +378,7 @@ function getElementsByClassPath(root, path) {
 		var nodeName = K("PopupContainer").select({where: "nodeName == 'INPUT' && name == 'fileName'"})[0];
 		var iFrameUpload = popupContainer.select({where: "className == 'iFrameUpload'"})[0];
 		var formUpload = iFrameUpload.contentWindow.document.getElementsByTagName("form")[0];
-		if (isInvalidName(formUpload.file.value) || isInvalidName(nodeName.value)) {
+		if (isInvalidName(formUpload.file.value) && isInvalidName(nodeName.value)) {
 			alert('Invalid file name!');
 			return;
 		}

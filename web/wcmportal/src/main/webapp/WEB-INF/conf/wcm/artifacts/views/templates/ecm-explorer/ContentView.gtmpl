@@ -176,7 +176,7 @@
 		       		%>
 			    </div>
 <!-- Title-->
-				<div class="ResizeColumn" onclick="<%=uicomponent.event("Sort", typeActionLink + "Alphabetic")%>">
+				<div class="ResizeColumn" onclick="<%=uicomponent.event("Sort", typeActionLink + "Alphabetic")%>" style="margin: 0 327px 0 30px">
 					<%
 						if (selectedSortType.equals("Alphabetic")) {
 							%>
@@ -343,7 +343,7 @@
 			    				<%=dateFormat.format(date);%>
 			 				</div>
 <!-- Title -->
-							<div class="ResizeColumn" style="margin: 0 330px 0 30px">
+							<div class="ResizeColumn" style="margin: 0 327px 0 30px">
 								<div class="NodeLabel">
 									<%
 										String title = getNodeTitle(data);
