@@ -13,7 +13,6 @@
 			var newWindow = window.open( FCKConfig.eXoPath + "explorer/explorer.html?Type=Image&Connector=/portal/rest/wcmImage/", "eXoExplorer", sOptions );
 			newWindow.focus();
 		}
-	oImage.GetState = function() {};
 	FCKCommands.RegisterCommand( "WCMInsertImage", oImage ) ;
 	var oElement = new FCKToolbarButton("WCMInsertImage", FCKLang.WCMInsertImagePlugins) ;
 	oElement.IconPath = FCKConfig.eXoPath + "plugins/insertImage/insertImage.gif" ;

@@ -13,7 +13,6 @@
 			var newWindow = window.open( FCKConfig.eXoPath + "explorer/explorer.html?Type=Gadget&Thumbnail=true&Connector=/portal/rest/wcmGadget/&disableUploading=true&disableCreatingFolder=true", "eXoExplorer", sOptions );
 			newWindow.focus();
 		}
-	oGadget.GetState = function() {};
 	FCKCommands.RegisterCommand( "WCMInsertGadget", oGadget ) ;
 	FCKCommands.RegisterCommand( "WCMEditGadget", new FCKDialogCommand("WCMEditGadget", FCKLang.WCMInsertGadgetDialogTitle, FCKPlugins.Items["insertGadget"].Path + "dialog/gadgets.htm", 750, 500 ) ) ;
 	var oElement = new FCKToolbarButton( "WCMInsertGadget", FCKLang.WCMInsertGadgetPlugins) ;

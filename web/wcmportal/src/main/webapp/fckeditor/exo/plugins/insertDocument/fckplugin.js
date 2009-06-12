@@ -13,7 +13,6 @@
 			var newWindow = window.open( FCKConfig.eXoPath + "explorer/explorer.html?Type=File&Connector=/portal/rest/wcmDocument/", "eXoExplorer", sOptions );
 			newWindow.focus();
 		}
-	oDocument.GetState = function() {};
 	FCKCommands.RegisterCommand("WCMInsertDocument", oDocument ) ;
 	var oElement = new FCKToolbarButton("WCMInsertDocument", FCKLang.WCMInsertDocumentPlugins) ;
 	oElement.IconPath = FCKConfig.eXoPath + "plugins/insertDocument/insertDocument.gif" ;

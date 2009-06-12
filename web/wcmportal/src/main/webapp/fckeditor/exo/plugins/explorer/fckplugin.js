@@ -13,7 +13,6 @@
 			var newWindow = window.open( FCKConfig.eXoPath + "explorer/explorer.html?Type=File&Connector=/portal/rest/fckconnector/jcr/", "eXoExplorer", sOptions );
 			newWindow.focus();
 		}
-		oExplorer.GetState = function() {};
 		FCKCommands.RegisterCommand( "Explorer", oExplorer );
 		var oElement = new FCKToolbarButton( "Explorer" );
 		oElement.IconPath = FCKConfig.eXoPath + "plugins/explorer/explorer.jpg";
