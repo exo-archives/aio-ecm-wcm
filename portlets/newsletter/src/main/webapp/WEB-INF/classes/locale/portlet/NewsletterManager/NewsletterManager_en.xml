@@ -20,6 +20,7 @@
     <action>
       <Save>Save</Save>
       <Cancel>Cancel</Cancel>
+      <Close>Close</Close>
       <Down>Down</Down>
       <Up>Up</Up>      
       <Delete>Delete</Delete>

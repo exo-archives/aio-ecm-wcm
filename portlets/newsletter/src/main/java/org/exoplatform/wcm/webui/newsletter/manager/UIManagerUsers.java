@@ -23,8 +23,11 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.config.NewsletterUserConfig;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterManageUserHandler;
+import org.exoplatform.wcm.webui.Utils;
+import org.exoplatform.wcm.webui.newsletter.UINewsletterConstant;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPopupComponent;
+import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -43,7 +46,8 @@ import org.exoplatform.webui.config.annotation.EventConfig;
     template = "app:/groovy/webui/newsletter/NewsletterManager/UIManagerUsers.gtmpl",
     events = {
       @EventConfig(listeners = UIManagerUsers.BanOrUnBanUserActionListener.class),
-      @EventConfig(listeners = UIManagerUsers.DeleteUserActionListener.class)
+      @EventConfig(listeners = UIManagerUsers.DeleteUserActionListener.class),
+      @EventConfig(listeners = UIManagerUsers.CloseActionListener.class)
     }
 )
 public class UIManagerUsers extends UIForm implements UIPopupComponent{
@@ -58,6 +62,7 @@ public class UIManagerUsers extends UIForm implements UIPopupComponent{
   public UIManagerUsers() throws Exception{
     NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
     managerUserHandler = newsletterManagerService.getManageUserHandler();
+    this.setActions(new String[]{"Close"});
   }
   
   public void setInfor(String categoryName, String subscriptionName){
@@ -94,6 +99,14 @@ public class UIManagerUsers extends UIForm implements UIPopupComponent{
       System.out.println("\n\n\n\n------------>Email:" + email);
       managerUsers.managerUserHandler.delete(NewsLetterUtil.getPortalName(), email);
       event.getRequestContext().addUIComponentToUpdateByAjax(managerUsers) ;
+    }
+  }
+  
+  static  public class CloseActionListener extends EventListener<UIManagerUsers> {
+    public void execute(Event<UIManagerUsers> event) throws Exception {
+      UIManagerUsers managerUsers = event.getSource();
+      UIPopupContainer popupContainer = managerUsers.getAncestorOfType(UIPopupContainer.class);
+      Utils.closePopupWindow(popupContainer, UINewsletterConstant.MANAGER_USERS_POPUP_WINDOW);
     }
   }
 }
