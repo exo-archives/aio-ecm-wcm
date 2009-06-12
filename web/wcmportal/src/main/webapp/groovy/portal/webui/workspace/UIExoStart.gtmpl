@@ -24,7 +24,7 @@
   	}
   }
 %>
-<div class="UIExoStart" id="UIExoStart">
+<div class="UIExoStart" id="UIExoStart" title="<%= _ctx.appRes("UIExoStart.tooltip.homepage") %>">
   <div class="StartBarContainer">
     <div class="ExoHomeButton ButtonNormal" onclick="$onclickhome" title=""><span></span></div>
     <div class="ClearBoth"><span></span></div>

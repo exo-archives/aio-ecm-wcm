@@ -221,5 +221,10 @@
 		<label>
 			<quickEditTitle>Chỉnh sửa nhanh</quickEditTitle>
 		</label>
-	</UISearchPageLayoutDefault>  
+	</UISearchPageLayoutDefault>
+	<UIExoStart>
+		<tooltip>
+			<homepage>Trang chủ</homepage>
+		</tooltip>
+	</UIExoStart>  
 </bundle>

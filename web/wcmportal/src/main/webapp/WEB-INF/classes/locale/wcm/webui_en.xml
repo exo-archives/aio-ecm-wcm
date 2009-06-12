@@ -254,4 +254,9 @@
 			<quickEditTitle>Quick Edit</quickEditTitle>
 		</label>
 	</UISearchPageLayoutDefault>
+	<UIExoStart>
+		<tooltip>
+			<homepage>Home page</homepage>
+		</tooltip>
+	</UIExoStart>
 </bundle>
