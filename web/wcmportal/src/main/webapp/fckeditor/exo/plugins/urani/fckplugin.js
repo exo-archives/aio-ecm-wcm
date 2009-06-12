@@ -12,7 +12,6 @@
 				alert(range.getRangeAt(0))
 			}
 		}
-	eUranium.GetState = function() {};
 	FCKCommands.RegisterCommand( "Urani", eUranium );
 	var oElement = new FCKToolbarButton( "Urani" );
 	oElement.IconPath =  FCKConfig.eXoPath + "plugins/urani/urani.gif";
