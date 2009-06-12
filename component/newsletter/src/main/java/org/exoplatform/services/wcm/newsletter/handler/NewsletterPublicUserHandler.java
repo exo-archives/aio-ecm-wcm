@@ -35,6 +35,7 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
 
@@ -59,27 +60,61 @@ public class NewsletterPublicUserHandler {
     this.workspace = workspace;
   }
   
-  public void subscribe(String portalName, String userMail) {
+  protected void updateSubscriptions(Session session, List<String> listCategorySubscription, String portalName, String userMail) throws Exception{
+    ValueFactory valueFactory = session.getValueFactory();
+    String categoryName ;
+    String subscriptionName ;
+    Node subscriptionNode ;
+    Property subscribedUserProperty ;
+    List<Value> subscribedUsers = new ArrayList<Value>() ;
+    String categryHomePath = NewsletterConstant.generateCategoryPath(portalName);
+    for (String categoryAndSubscription : listCategorySubscription) {
+      categoryName = categoryAndSubscription.split("#")[0];
+      subscriptionName = categoryAndSubscription.split("#")[1];
+      try{
+        subscriptionNode = Node.class.cast(session.getItem(categryHomePath + "/" + categoryName + "/" + subscriptionName));
+        if(subscriptionNode.hasProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_USER)){
+          subscribedUsers = new ArrayList<Value>() ;
+          subscribedUserProperty = subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_USER);
+          subscribedUsers.addAll(Arrays.asList(subscribedUserProperty.getValues()));
+          subscribedUsers.add(valueFactory.createValue(userMail));
+          subscribedUserProperty.setValue(subscribedUsers.toArray(new Value[]{}));
+        }else{
+          subscriptionNode.setProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_USER, new String[]{userMail});
+        }
+      }catch(Exception ex){
+        ex.printStackTrace();
+      }
+    }
+    session.save();
+  }
+  
+  public void subscribe(String portalName, String userMail, List<String> listCategorySubscription, SessionProvider sessionProvider) {
     log.info("Trying to subscribe user " + userMail);
     try {
-//      NewsletterManageUserHandler manageUserHandler = newsletterManagerService.getManageUserHandler();
-//      manageUserHandler.add(portalName, userMail, threadLocalSessionProviderService.getSessionProvider(null));
+      ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+      Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspace, manageableRepository);
+      // add new user email into users node
+      NewsletterManageUserHandler manageUserHandler = new NewsletterManageUserHandler(repository, workspace);
+      manageUserHandler.add(portalName, userMail, sessionProvider);
       
-      // Send a verification code to user's email to validate and to get link
+      // update email into subscription
+      updateSubscriptions(session, listCategorySubscription, portalName, userMail);
+      //Send a verification code to user's email to validate and to get link
     } catch (Exception e) {
       log.error("Subscribe user " + userMail + " failed because of " + e.getMessage());
     }
   }
 
   // Pattern for categoryAndSubscriptions: categoryAAA#subscriptionBBB
-  public void updateSubscriptions(String portalName, String userMail, List<String> categoryAndSubscriptions) {
-    log.info("Trying to update user's subscriptions for user " + userMail);
+  public void updateSubscriptions(String portalName, String oldEmail, String newMail, List<String> categoryAndSubscriptions, SessionProvider sessionProvider) {
+    log.info("Trying to update user's subscriptions for user " + newMail);
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
       Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspace, manageableRepository);
       
       QueryManager queryManager = session.getWorkspace().getQueryManager();
-      String sqlQuery = "select * from " + NewsletterConstant.SUBSCRIPTION_NODETYPE + " where " + NewsletterConstant.SUBSCRIPTION_PROPERTY_USER + " like '%" + userMail + "%'";
+      String sqlQuery = "select * from " + NewsletterConstant.SUBSCRIPTION_NODETYPE + " where " + NewsletterConstant.SUBSCRIPTION_PROPERTY_USER + " like '%" + oldEmail + "%'";
       Query query = queryManager.createQuery(sqlQuery, Query.SQL);
       QueryResult queryResult = query.execute();
       NodeIterator nodeIterator = queryResult.getNodes();
@@ -92,32 +127,27 @@ public class NewsletterPublicUserHandler {
         List<Value> newSubscribedUsers = new ArrayList<Value>();
         for (Value value: oldSubscribedUsers) {
           String subscribedUserMail = value.getString();
-          if (userMail.equals(subscribedUserMail)) {
+          if (oldEmail.equals(subscribedUserMail)) {
             continue;
           }
           newSubscribedUsers.add(value);
         }
         subscribedUserProperty.setValue(newSubscribedUsers.toArray(new Value[newSubscribedUsers.size()]));
       }
+      session.save();
+      
+      // update for users node
+      NewsletterManageUserHandler manageUserHandler = new NewsletterManageUserHandler(repository, workspace);
+      manageUserHandler.add(portalName, newMail, sessionProvider);
+      manageUserHandler.delete(portalName, oldEmail);
       
       // Update new data
-      ValueFactory valueFactory = session.getValueFactory();
-      for (String categoryAndSubscription : categoryAndSubscriptions) {
-        String categoryName = categoryAndSubscription.split("#")[0];
-        String subscriptionName = categoryAndSubscription.split("#")[1];
-        String subscriptionPath = NewsletterConstant.generateCategoryPath(portalName) + "/" + categoryName + "/" + subscriptionName;
-        Node subscriptionNode = Node.class.cast(session.getItem(subscriptionPath));
-        Property subscribedUserProperty = subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_USER);
-        List<Value> subscribedUsers = Arrays.asList(subscribedUserProperty.getValues());
-        subscribedUsers.add(valueFactory.createValue(userMail));
-        subscribedUserProperty.setValue(subscribedUsers.toArray(new Value[subscribedUsers.size()]));
-      }
+      this.updateSubscriptions(session, categoryAndSubscriptions, portalName, newMail);
       
-      session.save();
       // Get current subscriptions which user subscribed (by query), compare with input subscriptions
       // to get which subscription user remove, which subscription user add, then update reference
     } catch (Exception e) {
-      log.error("Update user's subscription for user " + userMail + " failed because of " + e.getMessage());
+      log.error("Update user's subscription for user " + newMail + " failed because of " + e.getMessage());
     }
   }
 

@@ -5,6 +5,7 @@
       <updateSuccess>Your subcription has been updated.</updateSuccess>
       <subcribed>You are subcribed!!!</subcribed>
       <email-not-empty>Email cannot be empty!!!</email-not-empty>
+      <checkSubscriptionToProcess>Please check one or more subscriptions before submit!</checkSubscriptionToProcess>
     </msg>
   </UINewsletterViewerForm>
   <UINewsletterViewerForm>

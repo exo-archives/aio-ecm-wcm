@@ -19,6 +19,7 @@ package org.exoplatform.wcm.webui.newsletter.viewer;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
@@ -31,6 +32,7 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
+import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -79,131 +81,112 @@ public class UINewsletterViewerForm extends UIForm {
   NewsletterManagerService              newsletterManagerService = null;
 
   public UINewsletterViewerForm() throws Exception {
-
     newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
     categoryHandler = newsletterManagerService.getCategoryHandler();
     subcriptionHandler = newsletterManagerService.getSubscriptionHandler();
     publicUserHandler = newsletterManagerService.getPublicUserHandler();
 
     this.setActions(new String[] { "Subcribe" });
-    inputEmail = (UIFormStringInput) new UIFormStringInput("inputEmail", "Email", null)
-                                           .addValidator(MandatoryValidator.class)
-                                           .addValidator(EmailAddressValidator.class);
+    inputEmail = (UIFormStringInput) new UIFormStringInput("inputEmail", "Email", null).addValidator(MandatoryValidator.class)
+                                                                                     .addValidator(EmailAddressValidator.class);
     this.addChild(inputEmail);
   }
 
   public void init(List<NewsletterSubscriptionConfig> listNewsletterSubcription, String categoryName) throws Exception {
-
     String subcriptionPattern = null;
     for (NewsletterSubscriptionConfig newsletterSubcription : listNewsletterSubcription) {
-
       subcriptionPattern = categoryName + "#" + newsletterSubcription.getName();
-
-      if (this.getChildById(subcriptionPattern) != null)
-        continue;
-      checkBoxInput = new UIFormCheckBoxInput<Boolean>(subcriptionPattern,
-                                                       subcriptionPattern,
-                                                       false);
+      if (this.getChildById(subcriptionPattern) != null) continue;
+      checkBoxInput = new UIFormCheckBoxInput<Boolean>(subcriptionPattern, subcriptionPattern, false);
       this.addChild(checkBoxInput);
     }
+  }
+  
+  @SuppressWarnings({ "unused", "unchecked" })
+  private List<String> listSubscriptionChecked(){
+    List<String> listSubscription = new ArrayList<String>();
+    for(UIComponent component : this.getChildren()){
+      try{
+        if(((UIFormCheckBoxInput<Boolean>) component).isChecked())
+          listSubscription.add(component.getName());
+      }catch(ClassCastException ex){};
+    }
+    return listSubscription;
   }
 
   @SuppressWarnings("unused")
   private List<NewsletterCategoryConfig> getListCategories() {
+    SessionProvider sessionProvider = NewsLetterUtil.getSesssionProvider();
+    List<NewsletterCategoryConfig> listCategories = new ArrayList<NewsletterCategoryConfig>();
     try {
-      return categoryHandler.getListCategories(NewsLetterUtil.getPortalName(),
-                                               NewsLetterUtil.getSesssionProvider());
+      listCategories =  categoryHandler.getListCategories(NewsLetterUtil.getPortalName(), sessionProvider);
     } catch (Exception e) {
-
-      return new ArrayList<NewsletterCategoryConfig>();
+      e.printStackTrace();
     }
+    sessionProvider.close();
+    return listCategories;
   }
 
   @SuppressWarnings("unused")
   private List<NewsletterSubscriptionConfig> getListSubscription(String categoryName) {
-
+    SessionProvider sessionProvider = NewsLetterUtil.getSesssionProvider();
+    List<NewsletterSubscriptionConfig> listSubscription = new ArrayList<NewsletterSubscriptionConfig>();
     try {
-
-      List<NewsletterSubscriptionConfig> listSubscription = new ArrayList<NewsletterSubscriptionConfig>();
-      listSubscription = subcriptionHandler.getSubscriptionsByCategory(NewsLetterUtil.getSesssionProvider(),
-                                                                       NewsLetterUtil.getPortalName(),
-                                                                       categoryName);
+      listSubscription = subcriptionHandler.getSubscriptionsByCategory(sessionProvider, NewsLetterUtil.getPortalName(), categoryName);
       this.init(listSubscription, categoryName);
-
-      return listSubscription;
     } catch (Exception e) {
       e.printStackTrace();
-      return new ArrayList<NewsletterSubscriptionConfig>();
     }
+    sessionProvider.close();
+    return listSubscription;
   }
 
   public static class ForgetEmailActionListener extends EventListener<UINewsletterViewerForm> {
     public void execute(Event<UINewsletterViewerForm> event) throws Exception {
-
       UINewsletterViewerForm newsletterForm = event.getSource();
       newsletterForm.isUpdated = false;
-      newsletterForm.userMail = "";
+      //newsletterForm.userMail = "";
       newsletterForm.inputEmail.setRendered(true);
-
       event.getRequestContext().addUIComponentToUpdateByAjax(newsletterForm);
     }
   }
 
-  public static class ChangeSubcriptionsActionListener extends
-                                                      EventListener<UINewsletterViewerForm> {
+  public static class ChangeSubcriptionsActionListener extends EventListener<UINewsletterViewerForm> {
     public void execute(Event<UINewsletterViewerForm> event) throws Exception {
-
       UINewsletterViewerForm newsletterForm = event.getSource();
-
-      List<NewsletterCategoryConfig> listNewsletterCategories = newsletterForm.getListCategories();
-      List<NewsletterSubscriptionConfig> listNewsletterSubcription = null;
-
       List<String> listSubcriptionPattern = new ArrayList<String>();
-      String subcriptionPattern = null;
-      for (NewsletterCategoryConfig category : listNewsletterCategories) {
-        listNewsletterSubcription = newsletterForm.getListSubscription(category.getName());
-        for (NewsletterSubscriptionConfig subscriptionConfig : listNewsletterSubcription) {
-
-          subcriptionPattern = category.getName() + "#" + subscriptionConfig.getName();
-          UIFormCheckBoxInput checkboxInput = newsletterForm.getUIFormCheckBoxInput(subcriptionPattern);
-          if (checkboxInput.isChecked()) {
-            listSubcriptionPattern.add(checkboxInput.getName());
-          }
-        }
-      }
-
-      newsletterForm.publicUserHandler.updateSubscriptions(NewsLetterUtil.getPortalName(),
-                                                           newsletterForm.userMail,
-                                                           listSubcriptionPattern);
-
+      listSubcriptionPattern = newsletterForm.listSubscriptionChecked();
+      SessionProvider sessionProvider = NewsLetterUtil.getSesssionProvider();
+      newsletterForm.publicUserHandler.updateSubscriptions(NewsLetterUtil.getPortalName(), newsletterForm.userMail, 
+                                                           newsletterForm.inputEmail.getValue(), listSubcriptionPattern, sessionProvider);
+      sessionProvider.close();
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
       UIApplication uiApp = context.getUIApplication();
-      uiApp.addMessage(new ApplicationMessage("UINewsletterViewerForm.msg.updateSuccess",
-                                              null,
-                                              ApplicationMessage.INFO));
-
+      uiApp.addMessage(new ApplicationMessage("UINewsletterViewerForm.msg.updateSuccess", null, ApplicationMessage.INFO));
       event.getRequestContext().addUIComponentToUpdateByAjax(newsletterForm);
     }
   }
 
   public static class SubcribeActionListener extends EventListener<UINewsletterViewerForm> {
     public void execute(Event<UINewsletterViewerForm> event) throws Exception {
-
       UINewsletterViewerForm newsletterForm = event.getSource();
-
-      newsletterForm.inputEmail.setRendered(false);
+      SessionProvider sessionProvider = NewsLetterUtil.getSesssionProvider();
+      String userEmail = newsletterForm.inputEmail.getValue();
+      List<String> listCategorySubscription = newsletterForm.listSubscriptionChecked();
+      String contentOfMessage;
+      if(listCategorySubscription.size() < 1){
+        contentOfMessage = "UINewsletterViewerForm.msg.checkSubscriptionToProcess";
+      }else{
+        newsletterForm.publicUserHandler.subscribe(NewsLetterUtil.getPortalName(), userEmail, listCategorySubscription, sessionProvider);
+        newsletterForm.inputEmail.setRendered(false);
+        newsletterForm.userMail = userEmail;
+        newsletterForm.isUpdated = true;
+        newsletterForm.setActions(new String[] { "ForgetEmail", "ChangeSubcriptions" });
+        contentOfMessage = "UINewsletterViewerForm.msg.subcribed";
+      }
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
       UIApplication uiApp = context.getUIApplication();
-
-      newsletterForm.userMail = newsletterForm.getUIStringInput("inputEmail").getValue();
-
-      uiApp.addMessage(new ApplicationMessage("UINewsletterViewerForm.msg.subcribed",
-                                              null,
-                                              ApplicationMessage.INFO));
-
-      newsletterForm.isUpdated = true;
-      newsletterForm.setActions(new String[] { "ForgetEmail", "ChangeSubcriptions" });
-
+      uiApp.addMessage(new ApplicationMessage(contentOfMessage, null, ApplicationMessage.INFO));
       event.getRequestContext().addUIComponentToUpdateByAjax(newsletterForm);
     }
   }
