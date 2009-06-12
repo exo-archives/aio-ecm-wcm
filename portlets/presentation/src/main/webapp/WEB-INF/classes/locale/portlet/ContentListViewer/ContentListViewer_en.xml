@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bundle>
-  <!--/n  ##################################################################
-  # org.exoplatform.wcm.webui.clv.config.UIViewerManagementForm    #
-  ##################################################################
-  -->
+	<UIFormInputSetWithAction>
+		<msg>
+			<confirm-delete>Are you sure to delete this category from list?</confirm-delete>
+		</msg>
+	</UIFormInputSetWithAction>
+	<FolderPathInputSet>
+		<title>
+			<SelectFolderPath>Select folder path</SelectFolderPath>
+		</title>
+	</FolderPathInputSet>
   <UIViewerManagementForm>
     <action>
       <Save>Save</Save>
@@ -43,10 +49,6 @@
     </label>
     <title>Select folder to display its children documents or webcontent</title>
   </UIViewerManagementForm>
-  <!--/n  ###################################################################
-  #			message when list content  							  #	
-  ###################################################################
-  -->
   <UIMessageBoard>
     <msg>
       <folder-not-found>This viewer has not been configured yet.</folder-not-found>
@@ -59,35 +61,30 @@
       <none-action-excuted>No action will be executed.</none-action-excuted>
     </msg>
   </UIMessageBoard>
-  <!--/n  ###################################################################
-  -->
   <UIFolderTreeList>
     <title>Select a folder to display its children as content</title>
   </UIFolderTreeList>
   <UIFolderExplorer>
     <title>Below is the possible folder can be browsed</title>
   </UIFolderExplorer>
-  <!--/n  ###################################################################
-  -->
   <UIStartEditionInPageWizard>
     <msg>
       <edit-portlet>Click here to edit this portlet</edit-portlet>
     </msg>
   </UIStartEditionInPageWizard>
-  <!--/n  ###################################################################
-  -->
   <UIViewerManagementPopupWindow>
     <title>
       <UIPortletConfig>Content list viewer management</UIPortletConfig>
       <UIContentEdittingPopup>Content editting</UIContentEdittingPopup>
     </title>
   </UIViewerManagementPopupWindow>
-  <!--/n  ###################################################################
-  -->  
   <UISelectedContentGrid>
 		<action>
 			<SaveCategories>Save</SaveCategories>
-			<Cancel>Cancel</Cancel>			
+			<Cancel>Cancel</Cancel>
+			<Down>Down</Down>
+			<Up>Up</Up>
+			<Delete>Delete</Delete>			
 		</action>
 		<label>
 			<header>List selected content</header>
@@ -98,16 +95,12 @@
 			<confirm-delete>Are you sure to delete this content from selected list?</confirm-delete>
 		</msg>
   </UISelectedContentGrid>
-  <!--/n  ###################################################################
-  -->  
   <UIFolderPathSelectPopupWindow>
   	<title>
   		<UICorrectContentSelectorForm>Contents manually selection</UICorrectContentSelectorForm>
   		<UIFolderPathSelectorForm>Select a folder to view it's content</UIFolderPathSelectorForm>
   	</title>
   </UIFolderPathSelectPopupWindow>
-  <!--/n  ###################################################################
-  -->    
   <UIFolderPathSelectorForm>
   	<action>
   		<Close>Close</Close>

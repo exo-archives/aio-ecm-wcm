@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bundle>
-  <!--/n  ##################################################################
-  # org.exoplatform.wcm.webui.clv.config.UIViewerManagementForm    #
-  ##################################################################
-  -->
+	<UIFormInputSetWithAction>
+		<msg>
+			<confirm-delete>Bạn có thực sự muốn xóa category này ?</confirm-delete>
+		</msg>
+	</UIFormInputSetWithAction>
+	<FolderPathInputSet>
+		<title>
+			<SelectFolderPath>Lựa chọn thư mục</SelectFolderPath>
+		</title>
+	</FolderPathInputSet>
   <UIViewerManagementForm>
     <action>
       <Save>Lưu lại</Save>
       <Cancel>Huỷ bỏ</Cancel>
       <Down>Lên</Down>
-      <Up>Xuống</Up>            
+      <Up>Xuống</Up>
+			<Delete>Xóa</Delete>
     </action>
     <label>
     	<ContentSelectionBlock>Chọn nội dung muốn hiển thị</ContentSelectionBlock>
@@ -42,10 +49,6 @@
     </label>
     <title>Lựa chọn thư mục chứa tài liệu hoăc nội dung được hiển thị</title>
   </UIViewerManagementForm>
-  <!--/n  ###################################################################
-  #			message when list content  							  #	
-  ###################################################################
-  -->
   <UIMessageBoard>
     <msg>
       <folder-not-found>Trang hiển thị này chưa được cấu hình.</folder-not-found>
@@ -54,38 +57,34 @@
       <error-nodetype>Lỗi hệ thống.</error-nodetype>
       <saving-success>Việc chỉnh sửa thành công!\nXin vui lòng chuyển sang chế độ hiển thị để thấy được sự thay đổi.</saving-success>
       <empty-folder-path>Xin vui lòng lựa chọn thư mục.</empty-folder-path>
+			<not-valid-action>Viewer mode is not suitable with contents selected. You should change viewer mode.</not-valid-action>
       <none-action-excuted>Sẽ không có hành động nào có hiệu lực.</none-action-excuted>
     </msg>
   </UIMessageBoard>
-  <!--/n  ###################################################################
-  -->
   <UIFolderTreeList>
     <title>Lựa chọn một thư mục để hiển thị các tài liệu và nội dung con.</title>
   </UIFolderTreeList>
   <UIFolderExplorer>
     <title>Duyệt cây thư mục</title>
   </UIFolderExplorer>
-  <!--/n  ###################################################################
-  -->
   <UIStartEditionInPageWizard>
     <msg>
       <edit-portlet>Click ở đây để chỉnh sửa ứng dụng.</edit-portlet>
     </msg>
   </UIStartEditionInPageWizard>
-  <!--/n  ###################################################################
-  -->
   <UIViewerManagementPopupWindow>
     <title>
       <UIPortletConfig>Quản lý trình hiển thị nội dung theo danh sách.</UIPortletConfig>
       <UIContentEdittingPopup>Chỉnh sửa nội dung</UIContentEdittingPopup>
     </title>
   </UIViewerManagementPopupWindow>
-  <!--/n  ###################################################################
-  -->  
   <UISelectedContentGrid>
 		<action>
 			<SaveCategories>Lưu lại</SaveCategories>
 			<Cancel>Hủy bỏ</Cancel>
+			<Down>Lên</Down>
+			<Up>Xuống</Up>
+			<Delete>Xóa</Delete>
 		</action>
 		<label>
 			<header>Danh sách các tài liệu được chọn để hiển thị</header>
@@ -96,16 +95,12 @@
 			<confirm-delete>Bạn chắc chắn muốn xóa tài liệu này khỏi danh sách được chọn?</confirm-delete>
 		</msg>		
   </UISelectedContentGrid>
-  <!--/n  ###################################################################
-  -->  
   <UIFolderPathSelectPopupWindow>
   	<title>
   		<UICorrectContentSelectorForm>Chọn các nội dung muốn hiển thị</UICorrectContentSelectorForm>
   		<UIFolderPathSelectorForm>Chọn thư mục muốn hiển thị các nội dung trong nó</UIFolderPathSelectorForm>
   	</title>
   </UIFolderPathSelectPopupWindow>
-  <!--/n  ###################################################################
-  -->    
   <UIFolderPathSelectorForm>
   	<action>
   		<Close>Đóng</Close>

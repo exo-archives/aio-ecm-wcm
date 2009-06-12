@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bundle>
-  <!--/n  ##################################################################
-        
-  # org.exoplatform.wcm.webui.clv.config.UIViewerManagementForm    #
-          ##################################################################
-  -->
+	<UIFormInputSetWithAction>
+		<msg>
+			<confirm-delete>Are you sure to delete this category from list?</confirm-delete>
+		</msg>
+	</UIFormInputSetWithAction>
+	<FolderPathInputSet>
+		<title>
+			<SelectFolderPath>Select folder path</SelectFolderPath>
+		</title>
+	</FolderPathInputSet>
   <UIViewerManagementForm>
     <action>
       <Save>Sauver</Save>
       <Cancel>Annuler</Cancel>
       <Down>Contrebas</Down>
-      <Up>Contrehaut</Up>            
+      <Up>Contrehaut</Up>
+			<Delete>Supprimer</Delete>            
     </action>
     <label>
     	<ContentSelectionBlock>Contenu</ContentSelectionBlock>
@@ -43,11 +49,6 @@
     </label>
     <title>Sélectionner un dossier pour montrer ses contenus web ou ses documents</title>
   </UIViewerManagementForm>
-  <!--/n  ###################################################################
-        
-  #			message when list content  							#
-          ###################################################################
-  -->
   <UIMessageBoard>
     <msg>
       <folder-not-found>Ce visualiseur n'a pas été configuré.</folder-not-found>
@@ -56,38 +57,34 @@
       <error-nodetype>Erreur inconnue.</error-nodetype>
       <saving-success>Succès. Vous pouvez voir les changements en passant en mode visualisation.</saving-success>
       <empty-folder-path>Vous devez sélectionner un dossier.</empty-folder-path>
+			<not-valid-action>Viewer mode is not suitable with contents selected. You should change viewer mode.</not-valid-action>
       <none-action-excuted>Aucune action ne sera effectuée</none-action-excuted>
     </msg>
   </UIMessageBoard>
-  <!--/n  ###################################################################
-  -->
   <UIFolderTreeList>
     <title>Sélectionner un dossier pour afficher son contenu</title>
   </UIFolderTreeList>
   <UIFolderExplorer>
     <title>Sélectionner un dossier</title>
   </UIFolderExplorer>
-  <!--/n  ###################################################################
-  -->
   <UIStartEditionInPageWizard>
     <msg>
       <edit-portlet>Cliquer ici pour éditer cette Portlet</edit-portlet>
     </msg>
   </UIStartEditionInPageWizard>
-  <!--/n  ###################################################################
-  -->
   <UIViewerManagementPopupWindow>
     <title>
       <UIPortletConfig>Gestion du Content List Viewer</UIPortletConfig>
       <UIContentEdittingPopup>Modifier le contenu</UIContentEdittingPopup>
     </title>
   </UIViewerManagementPopupWindow>
-  <!--/n  ###################################################################
-  -->  
 	<UISelectedContentGrid>
 		<action>
 			<SaveCategories>Sauver</SaveCategories>
 			<Cancel>Annuler</Cancel>
+			<Down>Contrebas</Down>
+      <Up>Contrehaut</Up>
+			<Delete>Supprimer</Delete>
 		</action>
 		<label>
 			<header>Liste le contenu sélectionné</header>
@@ -98,16 +95,12 @@
 			<confirm-delete>Confirmez-vous la suppression?</confirm-delete>
 		</msg>		
   </UISelectedContentGrid>
-  <!--/n  ###################################################################
-  -->  
   <UIFolderPathSelectPopupWindow>
   	<title>
   		<UICorrectContentSelectorForm>Sélectionnez le contenu manuellement</UICorrectContentSelectorForm>
   		<UIFolderPathSelectorForm>Sélectionner un dossier à visualiser</UIFolderPathSelectorForm>
   	</title>
   </UIFolderPathSelectPopupWindow>
-  <!--/n  ###################################################################
-  -->    
   <UIFolderPathSelectorForm>
   	<action>
   		<Close>#{word.close}</Close>
@@ -141,4 +134,3 @@
   	</label>
   </UIPresentationContainer>  
 </bundle>
-
