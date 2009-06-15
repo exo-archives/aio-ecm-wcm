@@ -39,6 +39,7 @@ import org.exoplatform.webui.event.EventListener;
 @ComponentConfig(
 		template = "app:/groovy/webui/newsletter/NewsletterManager/UICategories.gtmpl",
 		events = {
+		    @EventConfig(listeners = UICategories.AddEntryActionListener.class),
 				@EventConfig(listeners = UICategories.AddCategoryActionListener.class),
 				@EventConfig(listeners = UICategories.OpenCategoryActionListener.class),
         @EventConfig(listeners = UICategories.AddSubcriptionActionListener.class),
@@ -134,7 +135,7 @@ public class UICategories extends UIContainer {
 	static  public class ManagerUsersActionListener extends EventListener<UICategories> {
 	  public void execute(Event<UICategories> event) throws Exception {
 	    UICategories uiCategories = event.getSource();
-      UIPopupContainer popupContainer = uiCategories.getAncestorOfType(UINewsletterManagerPortlet.class).getChild(UIPopupContainer.class);
+	    UIPopupContainer popupContainer = uiCategories.getAncestorOfType(UINewsletterManagerPortlet.class).getChild(UIPopupContainer.class);
       UIPopupWindow popupWindow = popupContainer.getChildById(UINewsletterConstant.MANAGER_USERS_POPUP_WINDOW);
       if (popupWindow == null) {
         UIManagerUsers managerUsers = popupContainer.createUIComponent(UIManagerUsers.class, null, null);
@@ -143,8 +144,22 @@ public class UICategories extends UIContainer {
       } else { 
         popupWindow.setShow(true);
       }
-	    event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
+	    event.getRequestContext().addUIComponentToUpdateByAjax(uiCategories) ;
 	  }
 	}
+	
+	public static class AddEntryActionListener extends EventListener<UICategories> {
+    public void execute(Event<UICategories> event) throws Exception {
+      UICategories uiCategories = event.getSource();
+      UIPopupContainer popupContainer = uiCategories.getAncestorOfType(UINewsletterManagerPortlet.class).getChild(UIPopupContainer.class);
+      UIPopupWindow popupWindow = popupContainer.getChildById(UINewsletterConstant.ENTRY_FORM_POPUP_WINDOW);
+      if (popupWindow == null) {
+        UINewsletterEntryContainer entryContainer = popupContainer.createUIComponent(UINewsletterEntryContainer.class, null, null);
+        Utils.createPopupWindow(popupContainer, entryContainer, event.getRequestContext(), UINewsletterConstant.ENTRY_FORM_POPUP_WINDOW, 800, 600);
+      } else { 
+        popupWindow.setShow(true);
+      }
+    }
+  }
 	
 }

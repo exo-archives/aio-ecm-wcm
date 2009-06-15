@@ -34,5 +34,9 @@ public class UINewsletterConstant {
   public static final String USER_SELECTOR_POPUP_WINDOW    = "UIUserMemberSelectorPopupWindow";
   
   public static final String GROUP_SELECTOR_POPUP_WINDOW   = "UIGroupMemberSelectorPopupWindow";
+
+  public static final String WEBCONTENT_SELECTOR_POPUP_WINDOW   = "UIWebcontentSelectorPopupWindow";
+ 
+  public static final String WEBCONTENT_SELECTOR_FORM_POPUP_WINDOW = "UIWebcontentSelectorFormPopupWindow";
   
 }

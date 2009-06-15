@@ -83,3 +83,10 @@
 	background: url('icons/16x16/SmallMemberIcon.gif') no-repeat;  
 	cursor: pointer;
 }
+
+#UINewsletterEntryWebcontentSelectorForm .SelectWebcontentIcon {
+	width: 16px; 
+	height: 16px;
+	background: url('icons/16x16/MagnifierIconNews.png') no-repeat;  
+	cursor: pointer;
+}

@@ -28,6 +28,7 @@ import org.exoplatform.services.security.MembershipEntry;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.UIPopupWindow;
 
@@ -147,17 +148,17 @@ public class Utils {
   }
 
   public static void createPopupWindow(UIPopupContainer popupContainer, UIComponent component, WebuiRequestContext requestContext, String id, int width, int height) throws Exception {
-    UIPopupWindow popupWindow = popupContainer.createUIComponent(UIPopupWindow.class, null, id);
+    UIPopupWindow popupWindow = popupContainer.addChild(UIPopupWindow.class, null, id);
+    popupWindow.setShowMask(true);
     popupWindow.setUIComponent(component);
     popupWindow.setWindowSize(width, height);
     popupWindow.setShow(true);
     popupWindow.setResizable(true);
-    popupContainer.addChild(popupWindow);
     requestContext.addUIComponentToUpdateByAjax(popupContainer);
   }
   
-  public static void closePopupWindow(UIPopupContainer popupContainer, String id) {
-    popupContainer.removeChildById(id);
+  public static void closePopupWindow(UIContainer container, String id) {
+    container.removeChildById(id);
   }
   
 }

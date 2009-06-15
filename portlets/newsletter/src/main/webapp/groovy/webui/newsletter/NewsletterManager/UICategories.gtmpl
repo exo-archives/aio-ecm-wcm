@@ -14,7 +14,7 @@ import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 	</div>
 	
 	<div class="ActionManager">
-		<div class="ActionTitle">News Letter |</div>
+		<div onclick="<%=uicomponent.event("AddEntry")%>" class="ActionTitle">News Letter |</div>
 		<div onclick="<%=uicomponent.event("AddSubcription")%>" class="ActionTitle">News Subscription |</div>
 		<div onclick="<%=uicomponent.event("AddCategory")%>" class="ActionTitle">News Category |</div>
 		<!-- action of this category -->
