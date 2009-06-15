@@ -25,6 +25,7 @@ import javax.jcr.NodeIterator;
 import org.exoplatform.ecm.webui.tree.selectmany.UICategoriesSelectPanel;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.wcm.publication.PublicationState;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.event.Event;
@@ -56,6 +57,7 @@ public class UIMultiSelectionPanel extends UICategoriesSelectPanel {
       Node child = iterator.nextNode();
       if (child.isNodeType("exo:hiddenable"))
         continue;
+      if (PublicationState.OBSOLETE.equals(PublicationState.getRevisionState(child))) continue;
       if (isDocType(child)) {
         list.add(child);
       }
