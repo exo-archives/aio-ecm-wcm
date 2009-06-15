@@ -32,7 +32,9 @@ import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNode;
+import org.exoplatform.portal.webui.page.UIPage;
 import org.exoplatform.portal.webui.portal.UIPortal;
+import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
 import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
@@ -216,9 +218,6 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
    */
   public static class AbortActionListener extends EventListener<UIWelcomeScreen> {
 
-    /* (non-Javadoc)
-     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
-     */
     public void execute(Event<UIWelcomeScreen> event) throws Exception {
       UIWelcomeScreen uiWelcomeScreen = event.getSource();
       UserPortalConfigService userPortalConfigService = uiWelcomeScreen.getApplicationComponent(UserPortalConfigService.class);
@@ -235,6 +234,7 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
         Application application = Application.class.cast(applicationObject);
         String applicationId = application.getInstanceId();
         PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(applicationId));
+        if (portletPreferences == null) continue;
         for (Object preferenceObject : portletPreferences.getPreferences()) {
           Preference preference = Preference.class.cast(preferenceObject);
           if ("isQuickCreate".equals(preference.getName())) {
@@ -248,8 +248,9 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
       }
       currentPage.setChildren(applications);
       userPortalConfigService.update(currentPage);
-      // TODO: Need update UI from portal. This will be fixed in newer version, 
-      // when portal allow clean cached object to get new data
+      UIPage uiPage = uiPortal.findFirstComponentOfType(UIPage.class);
+      uiPage.setChildren(null);
+      PortalDataMapper.toUIPage(uiPage, currentPage);
       UIPortletConfig uiPortletConfig = uiWelcomeScreen.getAncestorOfType(UIPortletConfig.class);      
       uiPortletConfig.closePopupAndUpdateUI(event.getRequestContext(),true);
     }
