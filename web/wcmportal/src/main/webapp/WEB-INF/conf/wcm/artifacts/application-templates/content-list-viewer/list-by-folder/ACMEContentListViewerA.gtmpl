@@ -7,7 +7,7 @@ import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
 import javax.jcr.Node;
 import org.exoplatform.wcm.webui.clv.UIContentListViewerPortlet;
 import org.exoplatform.wcm.webui.Utils;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationState;
+import org.exoplatform.services.wcm.publication.PublicationState;
 %>
 <div id="$uicomponent.id" class="ACMEContentListViewerA">
 	<% 
@@ -35,8 +35,8 @@ import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndV
 			Node viewNode = null;
 			Node tempNode = null;
 			for (Node node : currentPageData) {
-				String revisionState = StageAndVersionPublicationState.getRevisionState(node);
-				if (StageAndVersionPublicationState.OBSOLETE.equals(revisionState)) {
+				String revisionState = PublicationState.getRevisionState(node);
+				if (PublicationState.OBSOLETE.equals(revisionState)) {
 					continue;
 				}
 				tempNode = node;
