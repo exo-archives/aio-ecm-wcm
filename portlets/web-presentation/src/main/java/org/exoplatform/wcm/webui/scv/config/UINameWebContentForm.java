@@ -17,6 +17,7 @@
 package org.exoplatform.wcm.webui.scv.config;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -30,13 +31,23 @@ import javax.portlet.PortletPreferences;
 import org.apache.commons.lang.StringUtils;
 import org.exoplatform.ecm.webui.form.validator.ECMNameValidator;
 import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.portal.application.Preference;
+import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfigService;
+import org.exoplatform.portal.config.model.Application;
+import org.exoplatform.portal.config.model.Container;
+import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.config.model.PageNode;
+import org.exoplatform.portal.webui.page.UIPage;
+import org.exoplatform.portal.webui.portal.UIPortal;
+import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
@@ -293,10 +304,39 @@ public class UINameWebContentForm extends UIForm {
    */
   public static class AbortActionListener extends EventListener<UINameWebContentForm> {
 
-    /* (non-Javadoc)
-     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
-     */
     public void execute(Event<UINameWebContentForm> event) throws Exception {      
+      UINameWebContentForm nameWebcontentForm = event.getSource();
+      UserPortalConfigService userPortalConfigService = nameWebcontentForm.getApplicationComponent(UserPortalConfigService.class);
+      UIPortal uiPortal = Util.getUIPortal();
+      PageNode currentPageNode = uiPortal.getSelectedNode();
+      Page currentPage = userPortalConfigService.getPage(currentPageNode.getPageReference());
+      ArrayList<Object> applications = new ArrayList<Object>();
+      applications.addAll(currentPage.getChildren());
+      ArrayList<Object> applicationsTmp = currentPage.getChildren(); 
+      Collections.reverse(applicationsTmp);
+      DataStorage dataStorage = nameWebcontentForm.getApplicationComponent(DataStorage.class);
+      for (Object applicationObject : applicationsTmp) {
+        if (applicationObject instanceof Container) continue;
+        Application application = Application.class.cast(applicationObject);
+        String applicationId = application.getInstanceId();
+        org.exoplatform.portal.application.PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(applicationId));
+        if (portletPreferences == null) continue;
+        for (Object preferenceObject : portletPreferences.getPreferences()) {
+          Preference preference = Preference.class.cast(preferenceObject);
+          if ("isQuickCreate".equals(preference.getName())) {
+            boolean isQuickCreate = Boolean.valueOf(preference.getValues().get(0).toString());
+            if (isQuickCreate) {
+              applications.remove(applicationObject);
+              break;
+            }
+          }
+        }
+      }
+      currentPage.setChildren(applications);
+      userPortalConfigService.update(currentPage);
+      UIPage uiPage = uiPortal.findFirstComponentOfType(UIPage.class);
+      uiPage.setChildren(null);
+      PortalDataMapper.toUIPage(uiPage, currentPage);
       UIPortletConfig uiPortletConfig = event.getSource().getAncestorOfType(UIPortletConfig.class);
       uiPortletConfig.closePopupAndUpdateUI(event.getRequestContext(),true);
     }
