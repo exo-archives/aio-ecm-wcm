@@ -19,7 +19,6 @@ package org.exoplatform.wcm.webui.newsletter.manager;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
@@ -37,6 +36,7 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
@@ -55,7 +55,7 @@ import org.exoplatform.webui.form.validator.NameValidator;
                 template = "app:/groovy/webui/newsletter/NewsletterManager/UISubcriptionForm.gtmpl",
                 events = {
                     @EventConfig(listeners = UISubcriptionForm.SaveActionListener.class),
-                    @EventConfig(listeners = UISubcriptionForm.CancelActionListener.class)
+                    @EventConfig(listeners = UISubcriptionForm.CancelActionListener.class, phase = Phase.DECODE)
                 }
 )
 public class UISubcriptionForm extends UIForm implements UIPopupComponent {
@@ -74,6 +74,7 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent {
   
   public UISubcriptionForm() throws Exception{
 
+    setActions(new String[]{"Save", "Cancel"});
     List<NewsletterCategoryConfig> categories = getListCategories();
     List<SelectItemOption<String>> listCategoriesName = new ArrayList<SelectItemOption<String>>();
     SelectItemOption<String> option = null;
@@ -82,15 +83,15 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent {
       listCategoriesName.add(option);
     }
 
-    UIFormStringInput inputSubcriptionName = (UIFormStringInput) new UIFormStringInput(INPUT_SUBCRIPTION_NAME, null)
-                                                                      .addValidator(MandatoryValidator.class)
-                                                                      .addValidator(NameValidator.class);
+    UIFormStringInput inputSubcriptionName = new UIFormStringInput(INPUT_SUBCRIPTION_NAME, null);
+                                                                      
     UIFormTextAreaInput inputSubcriptionDescription = new UIFormTextAreaInput(INPUT_SUBCRIPTION_DESCRIPTION, null, null);
-    UIFormStringInput inputSubcriptionTitle = (UIFormStringInput) new UIFormStringInput(INPUT_SUBCRIPTION_TITLE, null)
-                                                                        .addValidator(MandatoryValidator.class);
+    UIFormStringInput inputSubcriptionTitle = new UIFormStringInput(INPUT_SUBCRIPTION_TITLE, null);
+                                                                        
     UIFormSelectBox categoryName = new UIFormSelectBox(SELECT_CATEGORIES_NAME, SELECT_CATEGORIES_NAME, listCategoriesName);
-
+      
     inputSubcriptionName.addValidator(MandatoryValidator.class).addValidator(NameValidator.class);
+    
     inputSubcriptionTitle.addValidator(MandatoryValidator.class);
     
     addChild(categoryName);
@@ -98,13 +99,13 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent {
     addChild(inputSubcriptionTitle);
     addChild(inputSubcriptionDescription);
     
-    setActions(new String[]{"Save", "Cancel"});
+    
   }
 
   public void activate() throws Exception {    
   }
 
-  public void deActivate() throws Exception {
+  public void deActivate() throws Exception {   
   }
   
   public void setSubscriptionInfor(NewsletterSubscriptionConfig subscriptionConfig){
@@ -120,8 +121,7 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent {
     ((UIFormTextAreaInput)this.getChildById(INPUT_SUBCRIPTION_DESCRIPTION)).setValue(subscriptionConfig.getDescription());
     UIFormSelectBox formSelectBox = this.getChildById(SELECT_CATEGORIES_NAME);
     formSelectBox.setValue(subscriptionConfig.getCategoryName());
-    formSelectBox.setEditable(false);
-    formSelectBox.setDisabled(false);
+    formSelectBox.setDisabled(true);
   }
 
   private List<NewsletterCategoryConfig> getListCategories(){
@@ -132,7 +132,7 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent {
     
     try{
       
-      return categoryHandler.getListCategories(NewsLetterUtil.getPortalName(), NewsLetterUtil.getSesssionProvider());
+      return categoryHandler.getListCategories(NewsLetterUtil.getPortalName());
     }catch(Exception e){
 
       return new ArrayList<NewsletterCategoryConfig>();
@@ -155,30 +155,27 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent {
 
       UIApplication uiApp = uiSubcriptionForm.getAncestorOfType(UIApplication.class);
 
-      SessionProvider sessionProvider = NewsLetterUtil.getSesssionProvider();
-
       NewsletterSubscriptionHandler subscriptionHandler = newsletterManagerService.getSubscriptionHandler();
       NewsletterSubscriptionConfig newsletterSubscriptionConfig = null;
       if(uiSubcriptionForm.subscriptionConfig == null) {
 
         newsletterSubscriptionConfig = subscriptionHandler
-          .getSubscriptionsByName(sessionProvider, NewsLetterUtil.getPortalName(), categoryName, subcriptionName);
+          .getSubscriptionsByName(NewsLetterUtil.getPortalName(), categoryName, subcriptionName);
         if (newsletterSubscriptionConfig != null) {
 
           uiApp.addMessage(new ApplicationMessage("UISubcriptionForm.msg.subcriptionNameIsAlreadyExist", null, ApplicationMessage.WARNING));
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
           return;
-        } else {
-
-          newsletterSubscriptionConfig = new NewsletterSubscriptionConfig();
-
-          newsletterSubscriptionConfig.setName(subcriptionName);
-          newsletterSubscriptionConfig.setCategoryName(categoryName);
-          newsletterSubscriptionConfig.setDescription(subcriptionDecription);
-          newsletterSubscriptionConfig.setTitle(subcriptionTitle);
-
-          subscriptionHandler.add(sessionProvider, NewsLetterUtil.getPortalName(), newsletterSubscriptionConfig);
         }
+        
+        newsletterSubscriptionConfig = new NewsletterSubscriptionConfig();
+
+        newsletterSubscriptionConfig.setName(subcriptionName);
+        newsletterSubscriptionConfig.setCategoryName(categoryName);
+        newsletterSubscriptionConfig.setDescription(subcriptionDecription);
+        newsletterSubscriptionConfig.setTitle(subcriptionTitle);
+
+        subscriptionHandler.add(NewsLetterUtil.getSesssionProvider(), NewsLetterUtil.getPortalName(), newsletterSubscriptionConfig);
       } else {
 
         newsletterSubscriptionConfig = uiSubcriptionForm.subscriptionConfig;
@@ -187,7 +184,7 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent {
         newsletterSubscriptionConfig.setDescription(subcriptionDecription);
         newsletterSubscriptionConfig.setTitle(subcriptionTitle);
 
-        subscriptionHandler.edit(sessionProvider, NewsLetterUtil.getPortalName(), newsletterSubscriptionConfig);
+        subscriptionHandler.edit(NewsLetterUtil.getPortalName(), newsletterSubscriptionConfig);
       }
 
       UIPopupContainer popupContainer = uiSubcriptionForm.getAncestorOfType(UIPopupContainer.class);
@@ -201,6 +198,11 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent {
     public void execute(Event<UISubcriptionForm> event) throws Exception {
       UISubcriptionForm uiSubcriptionForm = event.getSource();
       UIPopupContainer popupContainer = uiSubcriptionForm.getAncestorOfType(UIPopupContainer.class);
+
+      if (uiSubcriptionForm.getSubmitAction().equals("Cancel")) {
+        uiSubcriptionForm.getComponentConfig().setValidators(null);
+        uiSubcriptionForm.getChildren().clear();
+      }
       Utils.closePopupWindow(popupContainer, UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW);
     }
   }

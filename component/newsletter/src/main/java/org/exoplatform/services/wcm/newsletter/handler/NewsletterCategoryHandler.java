@@ -31,6 +31,7 @@ import org.exoplatform.services.jcr.access.AccessControlEntry;
 import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
@@ -46,11 +47,16 @@ public class NewsletterCategoryHandler {
 
   private static Log log = ExoLogger.getLogger(NewsletterCategoryHandler.class);
   private RepositoryService repositoryService;
+  private ThreadLocalSessionProviderService threadLocalSessionProviderService;
   private String repository;
   private String workspace;
   
   public NewsletterCategoryHandler(String repository, String workspace) {
     repositoryService = (RepositoryService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(RepositoryService.class);
+    threadLocalSessionProviderService = ThreadLocalSessionProviderService.class.cast(
+                                                                                     ExoContainerContext.getCurrentContainer()
+                                                                                     .getComponentInstanceOfType(
+                                                                                                                 ThreadLocalSessionProviderService.class));
     this.repository = repository;
     this.workspace = workspace;
   }
@@ -102,11 +108,12 @@ public class NewsletterCategoryHandler {
     } 
   }
   
-  public void edit(String portalName, NewsletterCategoryConfig categoryConfig, SessionProvider sessionProvider) {
+  public void edit(String portalName, NewsletterCategoryConfig categoryConfig) {
     log.info("Trying to edit category " + categoryConfig.getName());
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      Session session = sessionProvider.getSession(workspace, manageableRepository);
+      Session session = threadLocalSessionProviderService.getSessionProvider(null)
+        .getSession(workspace, manageableRepository);
       String categoryPath = NewsletterConstant.generateCategoryPath(portalName);
       Node categoryNode = ((Node)session.getItem(categoryPath)).getNode(categoryConfig.getName());
       categoryNode.setProperty(NewsletterConstant.CATEGORY_PROPERTY_DESCRIPTION, categoryConfig.getDescription());
@@ -124,11 +131,12 @@ public class NewsletterCategoryHandler {
     }
   }
   
-  public void delete(String portalName, String categoryName, SessionProvider sessionProvider) {
+  public void delete(String portalName, String categoryName) {
     log.info("Trying to delete category " + categoryName);
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      Session session = sessionProvider.getSession(workspace, manageableRepository);
+      Session session = threadLocalSessionProviderService.getSessionProvider(null)
+        .getSession(workspace, manageableRepository);
       String categoryPath = NewsletterConstant.generateCategoryPath(portalName);
       Node categoryNode = ((Node)session.getItem(categoryPath)).getNode((categoryName));
       categoryNode.remove();
@@ -138,9 +146,10 @@ public class NewsletterCategoryHandler {
     }
   }
   
-  public NewsletterCategoryConfig getCategoryByName(String portalName, String categoryName, SessionProvider sessionProvider) throws Exception{
+  public NewsletterCategoryConfig getCategoryByName(String portalName, String categoryName) throws Exception{
   	try{ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      Session session = sessionProvider.getSession(workspace, manageableRepository);
+      Session session = threadLocalSessionProviderService
+        .getSessionProvider(null).getSession(workspace, manageableRepository);
       String categoryPath = NewsletterConstant.generateCategoryPath(portalName);
       Node categoriesNode = (Node)session.getItem(categoryPath);
       return getCategoryFromNode(categoriesNode.getNode(categoryName));
@@ -149,11 +158,12 @@ public class NewsletterCategoryHandler {
   	}
   }
   
-  public List<NewsletterCategoryConfig> getListCategories(String portalName, SessionProvider sessionProvider) throws Exception{
+  public List<NewsletterCategoryConfig> getListCategories(String portalName) throws Exception{
     List<NewsletterCategoryConfig> listCategories = new ArrayList<NewsletterCategoryConfig>();
   	try{
     	ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      Session session = sessionProvider.getSession(workspace, manageableRepository);
+      Session session = threadLocalSessionProviderService.getSessionProvider(null)
+        .getSession(workspace, manageableRepository);
       String categoryPath = NewsletterConstant.generateCategoryPath(portalName);
       Node categoriesNode = (Node)session.getItem(categoryPath);
       NodeIterator nodeIterator = categoriesNode.getNodes();

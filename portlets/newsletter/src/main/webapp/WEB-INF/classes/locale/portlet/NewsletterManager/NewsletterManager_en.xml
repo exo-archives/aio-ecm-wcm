@@ -129,6 +129,7 @@
     	<confirmDeleteSubscription>Are you sure you want to delete this subscription</confirmDeleteSubscription>
     	<checkOnlyOneSubScriptionToEdit>Please check only one subscription to edit!</checkOnlyOneSubScriptionToEdit>
     	<checkOnlyOneSubScriptionToDelete>Please check only one subscription to delete!</checkOnlyOneSubScriptionToDelete>
+    	<subscriptionNotfound>Subcription name is not exist!</subscriptionNotfound>
     	<checkOnlyOneSubScriptionToOpen>Please check only one subscription to open!</checkOnlyOneSubScriptionToOpen>
     </msg>
   </UISubscription>

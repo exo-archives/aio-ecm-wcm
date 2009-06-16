@@ -68,26 +68,23 @@ public class UICategories extends UIContainer {
 	@SuppressWarnings("unused")
 	private List<NewsletterCategoryConfig> getListCategories(){
 	  List<NewsletterCategoryConfig> listCategories = new ArrayList<NewsletterCategoryConfig>();
-	  SessionProvider sessionProvider = NewsLetterUtil.getSesssionProvider();
+
 		try{
-			listCategories = categoryHandler.getListCategories(NewsLetterUtil.getPortalName(), sessionProvider);
+			listCategories = categoryHandler.getListCategories(NewsLetterUtil.getPortalName());
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		sessionProvider.close();
 		return listCategories;
 	}
 	
 	@SuppressWarnings("unused")
   private List<NewsletterSubscriptionConfig> getListSubscription(String categoryName){
 	  List<NewsletterSubscriptionConfig> listSubscription = new ArrayList<NewsletterSubscriptionConfig>();
-	  SessionProvider sessionProvider = NewsLetterUtil.getSesssionProvider();
     try{
-      listSubscription = subscriptionHandler.getSubscriptionsByCategory(sessionProvider, NewsLetterUtil.getPortalName(), categoryName);
+      listSubscription = subscriptionHandler.getSubscriptionsByCategory(NewsLetterUtil.getPortalName(), categoryName);
     }catch(Exception e){
       e.printStackTrace();
     }
-    sessionProvider.close();
     return listSubscription;
   }
 	
@@ -126,7 +123,7 @@ public class UICategories extends UIContainer {
 	    UINewsletterManagerPortlet newsletterManagerPortlet = uiCategories.getAncestorOfType(UINewsletterManagerPortlet.class);
 	    UISubscriptions subsriptions = newsletterManagerPortlet.getChild(UISubscriptions.class);
 	    subsriptions.setRendered(true);
-	    subsriptions.setCategory(uiCategories.categoryHandler.getCategoryByName(NewsLetterUtil.getPortalName(), categoryName, NewsLetterUtil.getSesssionProvider()));
+	    subsriptions.setCategory(uiCategories.categoryHandler.getCategoryByName(NewsLetterUtil.getPortalName(), categoryName));
 	    newsletterManagerPortlet.getChild(UICategories.class).setRendered(false);
 	    event.getRequestContext().addUIComponentToUpdateByAjax(newsletterManagerPortlet);
 	  }

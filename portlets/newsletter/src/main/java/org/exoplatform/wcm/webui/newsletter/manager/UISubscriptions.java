@@ -40,6 +40,7 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
+import org.exoplatform.webui.form.UIFormSelectBox;
 
 /**
  * Created by The eXo Platform SAS
@@ -68,7 +69,7 @@ public class UISubscriptions extends UIForm {
   NewsletterCategoryConfig categoryConfig;
   NewsletterManageUserHandler userHandler = null;
   String portalName;
-  
+
   public UISubscriptions()throws Exception{
     NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
     subscriptionHandler = newsletterManagerService.getSubscriptionHandler();
@@ -89,27 +90,25 @@ public class UISubscriptions extends UIForm {
       this.addChild(checkBoxInput);
     }
   }
-  
+
   @SuppressWarnings("unused")
   private int getNumberOfUser(String subscriptionName){
     return userHandler.getQuantityUserBySubscription(portalName, this.categoryConfig.getName(), subscriptionName);
   }
-  
+
   @SuppressWarnings("unused")
   private List<NewsletterSubscriptionConfig> getListSubscription(){
     List<NewsletterSubscriptionConfig> listSubs = new ArrayList<NewsletterSubscriptionConfig>();
-    SessionProvider sessionProvider = NewsLetterUtil.getSesssionProvider();
     try{
       listSubs = 
-        subscriptionHandler.getSubscriptionsByCategory(sessionProvider, NewsLetterUtil.getPortalName(), this.categoryConfig.getName());
+        subscriptionHandler.getSubscriptionsByCategory(NewsLetterUtil.getPortalName(), this.categoryConfig.getName());
       init(listSubs);
     }catch(Exception e){
       e.printStackTrace();
     }
-    sessionProvider.close();
     return listSubs;
   }
-  
+
   @SuppressWarnings("unchecked")
   public String getChecked(){
     String subscriptionId = null;
@@ -125,7 +124,7 @@ public class UISubscriptions extends UIForm {
     }
     return subscriptionId;
   }
-  
+
   static  public class BackToCategoriesActionListener extends EventListener<UISubscriptions> {
     public void execute(Event<UISubscriptions> event) throws Exception {
       UISubscriptions subsriptions = event.getSource();
@@ -136,7 +135,7 @@ public class UISubscriptions extends UIForm {
       event.getRequestContext().addUIComponentToUpdateByAjax(newsletterManagerPortlet);
     }
   }
-  
+
   static  public class EditCategoryActionListener extends EventListener<UISubscriptions> {
     public void execute(Event<UISubscriptions> event) throws Exception {
       UISubscriptions subsriptions = event.getSource();
@@ -151,7 +150,7 @@ public class UISubscriptions extends UIForm {
       }
     }
   }
-  
+
   static  public class DeleteCategoryActionListener extends EventListener<UISubscriptions> {
     public void execute(Event<UISubscriptions> event) throws Exception {
       UISubscriptions subsriptions = event.getSource();
@@ -159,7 +158,7 @@ public class UISubscriptions extends UIForm {
       NewsletterCategoryHandler categoryHandler = newsletterManagerService.getCategoryHandler();
       SessionProvider sessionProvider = NewsLetterUtil.getSesssionProvider();
       try{
-        categoryHandler.delete(NewsLetterUtil.getPortalName(), subsriptions.categoryConfig.getName(), sessionProvider);
+        categoryHandler.delete(NewsLetterUtil.getPortalName(), subsriptions.categoryConfig.getName());
       }catch(Exception e){}
       sessionProvider.close();
       UINewsletterManagerPortlet newsletterManagerPortlet = subsriptions.getAncestorOfType(UINewsletterManagerPortlet.class);
@@ -169,7 +168,7 @@ public class UISubscriptions extends UIForm {
       event.getRequestContext().addUIComponentToUpdateByAjax(newsletterManagerPortlet);
     }
   }
-  
+
   static  public class AddSubcriptionActionListener extends EventListener<UISubscriptions> {
     public void execute(Event<UISubscriptions> event) throws Exception {
       UISubscriptions subsriptions = event.getSource();
@@ -177,16 +176,18 @@ public class UISubscriptions extends UIForm {
       UIPopupWindow popupWindow = popupContainer.getChildById(UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW);
       if (popupWindow == null) {
         UISubcriptionForm subcriptionForm = popupContainer.createUIComponent(UISubcriptionForm.class, null, null);
+        UIFormSelectBox selectedCategoryName = subcriptionForm.getChildById("CategoryName");
+        selectedCategoryName.setDisabled(true);
+
         Utils.createPopupWindow(popupContainer, subcriptionForm, event.getRequestContext(), UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW, 450, 300);
       } else { 
         popupWindow.setShow(true);
       }
     }
   }
-  
+
   static  public class EditSubscriptionActionListener extends EventListener<UISubscriptions> {
     public void execute(Event<UISubscriptions> event) throws Exception {
-      System.out.println("\n\n\n\n-------------->run edit subscriptioin");
       UISubscriptions subsriptions = event.getSource();
       String subId = subsriptions.getChecked();
       if(subId == null){
@@ -199,36 +200,49 @@ public class UISubscriptions extends UIForm {
       UIPopupWindow popupWindow = popupContainer.getChildById(UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW);
       if (popupWindow == null) {
         UISubcriptionForm subcriptionForm = popupContainer.createUIComponent(UISubcriptionForm.class, null, null);
-        SessionProvider sessionProvider = NewsLetterUtil.getSesssionProvider();
-        NewsletterSubscriptionConfig subscriptionConfig = subsriptions.subscriptionHandler.getSubscriptionsByName(sessionProvider, NewsLetterUtil.getPortalName(), subsriptions.categoryConfig.getName(), subId);
+        NewsletterSubscriptionConfig subscriptionConfig = subsriptions.subscriptionHandler.getSubscriptionsByName(NewsLetterUtil.getPortalName(), subsriptions.categoryConfig.getName(), subId);
         subcriptionForm.setSubscriptionInfor(subscriptionConfig);
-        sessionProvider.close();
         Utils.createPopupWindow(popupContainer, subcriptionForm, event.getRequestContext(), UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW, 450, 280);
       } else { 
         popupWindow.setShow(true);
       }
     }
   }
-  
+
   static  public class DeleteSubscriptionActionListener extends EventListener<UISubscriptions> {
     public void execute(Event<UISubscriptions> event) throws Exception {
       UISubscriptions subsriptions = event.getSource();
-      String subId = subsriptions.getChecked();
-      if(subId == null){
+      boolean isChecked = false;
+      UIFormCheckBoxInput<Boolean> checkbox = null;
+      String portalName = NewsLetterUtil.getPortalName();
+      for(UIComponent component : subsriptions.getChildren()){
+        checkbox = (UIFormCheckBoxInput<Boolean>)component;
+        if(checkbox.isChecked()){
+
+          isChecked = true;
+          
+          NewsletterSubscriptionConfig subscriptionConfig = 
+            subsriptions.subscriptionHandler.getSubscriptionsByName( portalName, subsriptions.categoryConfig.getName(), checkbox.getName());
+          if (subscriptionConfig != null) {
+            subsriptions.subscriptionHandler.delete( NewsLetterUtil.getPortalName(), subsriptions.categoryConfig.getName(),subscriptionConfig);
+          } else {
+            UIApplication uiApp = subsriptions.getAncestorOfType(UIApplication.class);
+            uiApp.addMessage(new ApplicationMessage("UISubscription.msg.subscriptionNotfound", null, ApplicationMessage.WARNING));
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+            return;
+          }
+        }
+      }
+      event.getRequestContext().addUIComponentToUpdateByAjax(subsriptions);
+      if(isChecked == false){
         UIApplication uiApp = subsriptions.getAncestorOfType(UIApplication.class);
         uiApp.addMessage(new ApplicationMessage("UISubscription.msg.checkOnlyOneSubScriptionToDelete", null, ApplicationMessage.WARNING));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       }
-      SessionProvider sessionProvider = NewsLetterUtil.getSesssionProvider();
-      String portalName = NewsLetterUtil.getPortalName();
-      NewsletterSubscriptionConfig subscriptionConfig = 
-      subsriptions.subscriptionHandler.getSubscriptionsByName(sessionProvider, portalName, subsriptions.categoryConfig.getName(), subId);
-      subsriptions.subscriptionHandler.delete(sessionProvider, NewsLetterUtil.getPortalName(), subsriptions.categoryConfig.getName(),subscriptionConfig);
-      event.getRequestContext().addUIComponentToUpdateByAjax(subsriptions);
     }
   }
-  
+
   static  public class OpenSubscriptionActionListener extends EventListener<UISubscriptions> {
     public void execute(Event<UISubscriptions> event) throws Exception {
       UISubscriptions uiSubscription = event.getSource();
@@ -251,13 +265,10 @@ public class UISubscriptions extends UIForm {
       newsletterManager.setCategoryConfig(
                         uiSubscription.categoryHandler.getCategoryByName(
                                                                          portalName,
-                                                                         uiSubscription.categoryConfig.getName(),
-                                                                         sessionProvider));
+                                                                         uiSubscription.categoryConfig.getName()));
       
       newsletterManager.setSubscriptionConfig(
-                        uiSubscription.subscriptionHandler.getSubscriptionsByName(
-                                                                                  sessionProvider,
-                                                                                  portalName,
+                        uiSubscription.subscriptionHandler.getSubscriptionsByName(portalName,
                                                                                   uiSubscription.categoryConfig.getName(),
                                                                                   subId));
       newsletterManagerPortlet.getChild(UICategories.class).setRendered(false);

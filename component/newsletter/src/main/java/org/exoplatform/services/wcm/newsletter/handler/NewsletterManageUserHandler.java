@@ -55,9 +55,12 @@ public class NewsletterManageUserHandler {
   private String workspace;
   
   public NewsletterManageUserHandler(String repository, String workspace) {
-    repositoryService = (RepositoryService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(RepositoryService.class);
+    repositoryService = (RepositoryService) ExoContainerContext
+      .getCurrentContainer().getComponentInstanceOfType(RepositoryService.class);
     
-    threadLocalSessionProviderService = ThreadLocalSessionProviderService.class.cast(ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(ThreadLocalSessionProviderService.class));
+    threadLocalSessionProviderService = ThreadLocalSessionProviderService.class
+      .cast(ExoContainerContext.getCurrentContainer()
+            .getComponentInstanceOfType(ThreadLocalSessionProviderService.class));
     this.repository = repository;
     this.workspace = workspace;
   }
@@ -110,7 +113,7 @@ public class NewsletterManageUserHandler {
       Node userFolderNode = (Node)session.getItem(userPath);
       Node userNode = userFolderNode.getNode(userMail);
       userNode.remove();
-      
+
       QueryManager queryManager = session.getWorkspace().getQueryManager();
       String sqlQuery = "select * from " + NewsletterConstant.SUBSCRIPTION_NODETYPE + " where " + NewsletterConstant.SUBSCRIPTION_PROPERTY_USER + " like '%" + userMail + "%'";
       Query query = queryManager.createQuery(sqlQuery, Query.SQL);
@@ -137,7 +140,7 @@ public class NewsletterManageUserHandler {
       log.error("Delete user " + userMail + " failed because of " + e.getMessage());
     }
   }
-  
+
   public List<NewsletterUserConfig> getUsers(String portalName, String categoryName, String subscriptionName, SessionProvider sessionProvider) throws Exception{
     List<NewsletterUserConfig> listUsers = new ArrayList<NewsletterUserConfig>();
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);

@@ -36,6 +36,7 @@ import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
@@ -48,7 +49,7 @@ import org.exoplatform.webui.form.validator.NameValidator;
 		template = "system:/groovy/webui/form/UIForm.gtmpl",
 		events = {
 			@EventConfig(listeners = UICategoryForm.SaveActionListener.class),
-			@EventConfig(listeners = UICategoryForm.CancelActionListener.class),
+			@EventConfig(listeners = UICategoryForm.CancelActionListener.class, phase = Phase.DECODE),
 			@EventConfig(listeners = UICategoryForm.SelectUserActionListener.class),
 			@EventConfig(listeners = UICategoryForm.SelectMemberActionListener.class)
 		}
@@ -144,20 +145,19 @@ public class UICategoryForm extends UIForm implements UIPopupComponent, UISelect
 			
 			UIApplication uiApp = uiCategoryForm.getAncestorOfType(UIApplication.class);
 			NewsletterCategoryHandler categoryHandler = newsletterManagerService.getCategoryHandler();
-			SessionProvider sessionProvider = NewsLetterUtil.getSesssionProvider();
+
 			String portalName = NewsLetterUtil.getPortalName(); 
 			try{
 			  if(uiCategoryForm.categoryConfig == null){ // if add new category then check cateogry's name is already exist or not 
-  			  if(categoryHandler.getCategoryByName(portalName, categoryConfig.getName(), sessionProvider) != null){
+  			  if(categoryHandler.getCategoryByName(portalName, categoryConfig.getName()) != null){
   			    uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.categoryNameIsAlreadyExist", null, ApplicationMessage.WARNING));
   			    event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-  			    sessionProvider.close();
   			    return;
   			  }else{
-  			    categoryHandler.add(portalName, categoryConfig, sessionProvider);
+  			    categoryHandler.add(portalName, categoryConfig, NewsLetterUtil.getSesssionProvider());
   			  }
 			  }else{ // Edit a category is already exist
-			    categoryHandler.edit(portalName, categoryConfig, sessionProvider);
+			    categoryHandler.edit(portalName, categoryConfig);
 			  }
 			}catch(Exception ex){
 			  ex.printStackTrace();
@@ -165,7 +165,6 @@ public class UICategoryForm extends UIForm implements UIPopupComponent, UISelect
 			UIPopupContainer popupContainer = uiCategoryForm.getAncestorOfType(UIPopupContainer.class);
 			Utils.closePopupWindow(popupContainer, UINewsletterConstant.CATEGORY_FORM_POPUP_WINDOW);
 			event.getRequestContext().addUIComponentToUpdateByAjax(newsletterPortlet) ;
-			sessionProvider.close();
 		}
 	}
 	

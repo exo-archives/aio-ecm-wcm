@@ -89,6 +89,38 @@ public class NewsletterPublicUserHandler {
     session.save();
   }
   
+  protected void clearEmailInSubscription(String email){
+    try {
+      ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+      Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspace, manageableRepository);
+      
+      QueryManager queryManager = session.getWorkspace().getQueryManager();
+      String sqlQuery = "select * from " + NewsletterConstant.SUBSCRIPTION_NODETYPE + " where " + NewsletterConstant.SUBSCRIPTION_PROPERTY_USER + " like '%" + email + "%'";
+      Query query = queryManager.createQuery(sqlQuery, Query.SQL);
+      QueryResult queryResult = query.execute();
+      NodeIterator nodeIterator = queryResult.getNodes();
+      
+      // Clean user's node
+      for (;nodeIterator.hasNext();) {
+        Node subscriptionNode = nodeIterator.nextNode();
+        Property subscribedUserProperty = subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_USER);
+        List<Value> oldSubscribedUsers = Arrays.asList(subscribedUserProperty.getValues());
+        List<Value> newSubscribedUsers = new ArrayList<Value>();
+        for (Value value: oldSubscribedUsers) {
+          String subscribedUserMail = value.getString();
+          if (email.equals(subscribedUserMail)) {
+            continue;
+          }
+          newSubscribedUsers.add(value);
+        }
+        subscribedUserProperty.setValue(newSubscribedUsers.toArray(new Value[newSubscribedUsers.size()]));
+      }
+      session.save();
+    } catch (Exception e) {
+      log.error("Update user's subscription for user " + email + " failed because of " + e.getMessage());
+    }
+  }
+
   public void subscribe(String portalName, String userMail, List<String> listCategorySubscription, SessionProvider sessionProvider) {
     log.info("Trying to subscribe user " + userMail);
     try {
@@ -105,49 +137,35 @@ public class NewsletterPublicUserHandler {
       log.error("Subscribe user " + userMail + " failed because of " + e.getMessage());
     }
   }
+  
+  public void forgetEmail(String portalName, String email){
+    log.info("Trying to update user's subscriptions for user " + email);
+    try {
+      clearEmailInSubscription(email);
+      //  update for users node
+      NewsletterManageUserHandler manageUserHandler = new NewsletterManageUserHandler(repository, workspace);
+      manageUserHandler.delete(portalName, email);
+    } catch (Exception e) {
+      log.error("Update user's subscription for user " + email + " failed because of " + e.getMessage());
+    }
+  }
 
   // Pattern for categoryAndSubscriptions: categoryAAA#subscriptionBBB
-  public void updateSubscriptions(String portalName, String oldEmail, String newMail, List<String> categoryAndSubscriptions, SessionProvider sessionProvider) {
-    log.info("Trying to update user's subscriptions for user " + newMail);
+  public void updateSubscriptions(String portalName, String email, List<String> categoryAndSubscriptions) {
+    log.info("Trying to update user's subscriptions for user " + email);
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
       Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspace, manageableRepository);
       
-      QueryManager queryManager = session.getWorkspace().getQueryManager();
-      String sqlQuery = "select * from " + NewsletterConstant.SUBSCRIPTION_NODETYPE + " where " + NewsletterConstant.SUBSCRIPTION_PROPERTY_USER + " like '%" + oldEmail + "%'";
-      Query query = queryManager.createQuery(sqlQuery, Query.SQL);
-      QueryResult queryResult = query.execute();
-      NodeIterator nodeIterator = queryResult.getNodes();
-      
-      // Clean user's node
-      for (;nodeIterator.hasNext();) {
-        Node subscriptionNode = nodeIterator.nextNode();
-        Property subscribedUserProperty = subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_USER);
-        List<Value> oldSubscribedUsers = Arrays.asList(subscribedUserProperty.getValues());
-        List<Value> newSubscribedUsers = new ArrayList<Value>();
-        for (Value value: oldSubscribedUsers) {
-          String subscribedUserMail = value.getString();
-          if (oldEmail.equals(subscribedUserMail)) {
-            continue;
-          }
-          newSubscribedUsers.add(value);
-        }
-        subscribedUserProperty.setValue(newSubscribedUsers.toArray(new Value[newSubscribedUsers.size()]));
-      }
-      session.save();
-      
-      // update for users node
-      NewsletterManageUserHandler manageUserHandler = new NewsletterManageUserHandler(repository, workspace);
-      manageUserHandler.add(portalName, newMail, sessionProvider);
-      manageUserHandler.delete(portalName, oldEmail);
+      clearEmailInSubscription(email);
       
       // Update new data
-      this.updateSubscriptions(session, categoryAndSubscriptions, portalName, newMail);
+      this.updateSubscriptions(session, categoryAndSubscriptions, portalName, email);
       
       // Get current subscriptions which user subscribed (by query), compare with input subscriptions
       // to get which subscription user remove, which subscription user add, then update reference
     } catch (Exception e) {
-      log.error("Update user's subscription for user " + newMail + " failed because of " + e.getMessage());
+      log.error("Update user's subscription for user " + email + " failed because of " + e.getMessage());
     }
   }
 

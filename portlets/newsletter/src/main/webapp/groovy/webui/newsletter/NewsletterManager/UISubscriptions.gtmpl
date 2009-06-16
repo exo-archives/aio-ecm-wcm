@@ -38,7 +38,7 @@ if(uicomponent.categoryConfig != null){
 											</div>
 											<div class="MenuItem" onclick="javaScript:void(0)">
 												<div class="ItemIcon IconsView" style="padding-left:24px;">
-													<a href="<%=uicomponent.event("DeleteCategory")%>">Delete Category</a>
+													<a href="javascript:if (confirm('<%=_ctx.appRes("UISubscription.msg.confirmDeleteCategory")%>')) <%=uicomponent.event("DeleteCategory")%>">Delete Category</a>
 												</div>
 											</div>
 											<hr style="width:90%;"/>
@@ -49,7 +49,7 @@ if(uicomponent.categoryConfig != null){
 											</div>
 											<div class="MenuItem" onclick="javaScript:void(0)">
 												<div class="ItemIcon IconsView" style="padding-left:24px;">
-													<a href="<%=uicomponent.event("DeleteSubscription")%>">Delete</a>
+													<a href="javascript:if (confirm('<%=_ctx.appRes("UISubscription.msg.confirmDeleteSubscription")%>')) <%=uicomponent.event("DeleteSubscription")%>">Delete</a>
 												</div>
 											</div>
 											<div class="MenuItem" onclick="javaScript:void(0)">
@@ -125,7 +125,7 @@ if(uicomponent.categoryConfig != null){
 																					</div>
 																					<div class="MenuItem" onclick="javaScript:void(0)">
 																						<div class="ItemIcon IconsView" style="padding-left:18px;">
-																							<a href="<%=uicomponent.event("DeleteSubscription")%>">Delete</a>
+																							<a href="javascript:if (confirm('<%=_ctx.appRes("UISubscription.msg.confirmDeleteSubscription")%>')) <%=uicomponent.event("DeleteSubscription")%>">Delete</a>
 																						</div>
 																					</div>
 																					<hr style="width:90%"/>
