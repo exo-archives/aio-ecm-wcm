@@ -173,7 +173,6 @@ public class UINewsletterViewerForm extends UIForm {
       newsletterForm.isUpdated = false;
       newsletterForm.userMail = "";
       newsletterForm.inputEmail.setRendered(true);
-      newsletterForm.listSubscriptionChecked().clear();
       newsletterForm.setActions(new String[] {"Subcribe"});
       
       event.getRequestContext().addUIComponentToUpdateByAjax(newsletterForm);
@@ -184,19 +183,28 @@ public class UINewsletterViewerForm extends UIForm {
     public void execute(Event<UINewsletterViewerForm> event) throws Exception {
       UINewsletterViewerForm newsletterForm = event.getSource();
       SessionProvider sessionProvider = NewsLetterUtil.getSesssionProvider();
+      String portalName = NewsLetterUtil.getPortalName();
       String userEmail = newsletterForm.inputEmail.getValue();
       List<String> listCategorySubscription = newsletterForm.listSubscriptionChecked();
       String contentOfMessage;
-      if(listCategorySubscription.size() < 1){
-        contentOfMessage = "UINewsletterViewerForm.msg.checkSubscriptionToProcess";
-      }else{
-        newsletterForm.publicUserHandler.subscribe(NewsLetterUtil.getPortalName(), userEmail, listCategorySubscription, sessionProvider);
-        newsletterForm.inputEmail.setRendered(false);
-        newsletterForm.userMail = userEmail;
-        newsletterForm.isUpdated = true;
-        newsletterForm.setActions(new String[] { "ForgetEmail", "ChangeSubcriptions" });
-        contentOfMessage = "UINewsletterViewerForm.msg.subcribed";
+      boolean isExistedEmail = newsletterForm.managerUserHandler.checkExistedEmail(portalName, userEmail);
+      
+      if (!isExistedEmail) {
+        if(listCategorySubscription.size() < 1){
+          contentOfMessage = "UINewsletterViewerForm.msg.checkSubscriptionToProcess";
+        }else{
+          newsletterForm.publicUserHandler.subscribe(portalName, userEmail, listCategorySubscription, sessionProvider);
+          newsletterForm.inputEmail.setRendered(false);
+          newsletterForm.userMail = userEmail;
+          newsletterForm.isUpdated = true;
+          newsletterForm.setActions(new String[] { "ForgetEmail", "ChangeSubcriptions" });
+          contentOfMessage = "UINewsletterViewerForm.msg.subcribed";
+        }
+      } else {
+        
+        contentOfMessage = "UINewsletterViewerForm.msg.alreadyExistedEmail";
       }
+
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
       UIApplication uiApp = context.getUIApplication();
       uiApp.addMessage(new ApplicationMessage(contentOfMessage, null, ApplicationMessage.INFO));

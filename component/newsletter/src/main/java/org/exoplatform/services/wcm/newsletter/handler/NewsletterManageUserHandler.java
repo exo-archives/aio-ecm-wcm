@@ -37,7 +37,6 @@ import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
-import org.exoplatform.services.wcm.newsletter.NewsletterInitializationService;
 import org.exoplatform.services.wcm.newsletter.config.NewsletterUserConfig;
 
 /**
@@ -88,14 +87,22 @@ public class NewsletterManageUserHandler {
     }
   }
   
+  private Node getUserNodeByEmail(String portalName, String userMail, Session session) throws Exception{
+    String userPath = NewsletterConstant.generateUserPath(portalName);
+    Node userFolderNode = (Node)session.getItem(userPath);
+    try{
+      return userFolderNode.getNode(userMail);
+    }catch(Exception ex){
+      return null;
+    }
+  }
+  
   public void changeBanStatus(String portalName, String userMail) {
     log.info("Trying to ban/unban user " + userMail);
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
       Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspace, manageableRepository);
-      String userPath = NewsletterConstant.generateUserPath(portalName);
-      Node userFolderNode = (Node)session.getItem(userPath);
-      Node userNode = userFolderNode.getNode(userMail);
+      Node userNode = getUserNodeByEmail(portalName, userMail, session);
       userNode.setProperty(NewsletterConstant.USER_PROPERTY_BANNED, 
                            !userNode.getProperty(NewsletterConstant.USER_PROPERTY_BANNED).getBoolean());
       session.save();
@@ -170,7 +177,7 @@ public class NewsletterManageUserHandler {
           }
         }
       }else{ // get user of subscription
-        listEmail = getUsersBySubscription(portalName, categoryName, subscriptionName);
+        listEmail = getUsersBySubscription(portalName, categoryName, subscriptionName, session);
       }
       // convert form email to userConfig
       for(String email : listEmail){
@@ -180,12 +187,10 @@ public class NewsletterManageUserHandler {
     return listUsers;
   }
 
-  public List<String> getUsersBySubscription(String portalName, String categoryName, String subscriptionName) {
+  private List<String> getUsersBySubscription(String portalName, String categoryName, String subscriptionName, Session session) {
     log.info("Trying to get list user by subscription " + portalName + "/" + categoryName + "/" + subscriptionName);
     List<String> subscribedUsers = new ArrayList<String>();
     try {
-      ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspace, manageableRepository);
       String subscriptionPath = NewsletterConstant.generateCategoryPath(portalName) + "/" + categoryName + "/" + subscriptionName;
       Node subscriptionNode = Node.class.cast(session.getItem(subscriptionPath));
       if (subscriptionNode.hasProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_USER)) {
@@ -217,6 +222,21 @@ public class NewsletterManageUserHandler {
       log.error("Get user's quantity by subscription " + portalName + "/" + categoryName + "/" + subscriptionName + " failed because of " + e.getMessage());
     }
     return countUser;
+  }
+  
+  public boolean checkExistedEmail(String portalName, String email) {
+    try {
+      ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+      Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspace, manageableRepository);
+      Node userNode = getUserNodeByEmail(portalName, email, session);
+      if(userNode != null){
+        return true;
+      }
+      return false;
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return false;
   }
   
 }

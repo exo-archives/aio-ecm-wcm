@@ -84,22 +84,15 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent {
     }
 
     UIFormStringInput inputSubcriptionName = new UIFormStringInput(INPUT_SUBCRIPTION_NAME, null);
-                                                                      
-    UIFormTextAreaInput inputSubcriptionDescription = new UIFormTextAreaInput(INPUT_SUBCRIPTION_DESCRIPTION, null, null);
-    UIFormStringInput inputSubcriptionTitle = new UIFormStringInput(INPUT_SUBCRIPTION_TITLE, null);
-                                                                        
-    UIFormSelectBox categoryName = new UIFormSelectBox(SELECT_CATEGORIES_NAME, SELECT_CATEGORIES_NAME, listCategoriesName);
-      
     inputSubcriptionName.addValidator(MandatoryValidator.class).addValidator(NameValidator.class);
-    
+                                                                      
+    UIFormStringInput inputSubcriptionTitle = new UIFormStringInput(INPUT_SUBCRIPTION_TITLE, null);
     inputSubcriptionTitle.addValidator(MandatoryValidator.class);
-    
-    addChild(categoryName);
+                                                                        
+    addChild(new UIFormSelectBox(SELECT_CATEGORIES_NAME, SELECT_CATEGORIES_NAME, listCategoriesName));
     addChild(inputSubcriptionName);
     addChild(inputSubcriptionTitle);
-    addChild(inputSubcriptionDescription);
-    
-    
+    addChild(new UIFormTextAreaInput(INPUT_SUBCRIPTION_DESCRIPTION, null, null));
   }
 
   public void activate() throws Exception {    

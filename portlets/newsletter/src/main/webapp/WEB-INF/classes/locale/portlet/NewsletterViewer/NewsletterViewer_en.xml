@@ -6,6 +6,7 @@
       <subcribed>You are subcribed!!!</subcribed>
       <email-not-empty>Email cannot be empty!!!</email-not-empty>
       <checkSubscriptionToProcess>Please check one or more subscriptions before submit!</checkSubscriptionToProcess>
+      <alreadyExistedEmail>Email is already exist. Please input other email!</alreadyExistedEmail>
     </msg>
   </UINewsletterViewerForm>
   <UINewsletterViewerForm>

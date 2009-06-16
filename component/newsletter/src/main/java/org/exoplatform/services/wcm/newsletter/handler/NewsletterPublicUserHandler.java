@@ -25,7 +25,6 @@ import javax.jcr.NodeIterator;
 import javax.jcr.Property;
 import javax.jcr.Session;
 import javax.jcr.Value;
-import javax.jcr.ValueFactory;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
@@ -60,13 +59,24 @@ public class NewsletterPublicUserHandler {
     this.workspace = workspace;
   }
   
+  private List<String> convertValuesToArray(Value[] values){
+    List<String> listString = new ArrayList<String>();
+    for(Value value : values){
+      try {
+        listString.add(value.getString());
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+    return listString;
+  }
+  
   protected void updateSubscriptions(Session session, List<String> listCategorySubscription, String portalName, String userMail) throws Exception{
-    ValueFactory valueFactory = session.getValueFactory();
     String categoryName ;
     String subscriptionName ;
     Node subscriptionNode ;
     Property subscribedUserProperty ;
-    List<Value> subscribedUsers = new ArrayList<Value>() ;
+    List<String> subscribedUsers = new ArrayList<String>() ;
     String categryHomePath = NewsletterConstant.generateCategoryPath(portalName);
     for (String categoryAndSubscription : listCategorySubscription) {
       categoryName = categoryAndSubscription.split("#")[0];
@@ -74,11 +84,11 @@ public class NewsletterPublicUserHandler {
       try{
         subscriptionNode = Node.class.cast(session.getItem(categryHomePath + "/" + categoryName + "/" + subscriptionName));
         if(subscriptionNode.hasProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_USER)){
-          subscribedUsers = new ArrayList<Value>() ;
+          subscribedUsers = new ArrayList<String>() ;
           subscribedUserProperty = subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_USER);
-          subscribedUsers.addAll(Arrays.asList(subscribedUserProperty.getValues()));
-          subscribedUsers.add(valueFactory.createValue(userMail));
-          subscribedUserProperty.setValue(subscribedUsers.toArray(new Value[]{}));
+          subscribedUsers.addAll(convertValuesToArray(subscribedUserProperty.getValues()));
+          subscribedUsers.add(userMail);
+          subscribedUserProperty.setValue(subscribedUsers.toArray(new String[]{}));
         }else{
           subscriptionNode.setProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_USER, new String[]{userMail});
         }
