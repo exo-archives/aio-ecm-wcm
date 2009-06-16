@@ -254,7 +254,6 @@ public class UISubscriptions extends UIForm {
         return;
       }
  
-      SessionProvider sessionProvider = NewsLetterUtil.getSesssionProvider();
       String portalName = NewsLetterUtil.getPortalName();
 
       UINewsletterManagerPortlet newsletterManagerPortlet = uiSubscription.getAncestorOfType(UINewsletterManagerPortlet.class);
