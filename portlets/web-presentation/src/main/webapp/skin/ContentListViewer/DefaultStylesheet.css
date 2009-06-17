@@ -29,6 +29,13 @@
 	height: 16px;
 }
 
+.UIContentListViewerPortlet .UIFolderPathSelectorForm .Select16x16Icon {
+	background: url('DefaultSkin/icons/SelectPage.gif') no-repeat;
+ 	cursor: pointer;
+	height: 16px;
+	width: 16px;
+}
+
 .UIContentListViewerPortlet .TitleBox {
 	background:#D2DDF1 url(/eXoResources/skin/DefaultSkin/webui/component/UIGrid/background/ThGridRepeatBg1x19.jpg) repeat-x scroll 0 0;
 	border:1px solid #B7B7B7;
