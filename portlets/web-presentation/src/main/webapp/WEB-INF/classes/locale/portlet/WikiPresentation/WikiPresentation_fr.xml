@@ -45,6 +45,7 @@
     <action>
       <SaveToPortletPreference>Sauver</SaveToPortletPreference>
     </action>
+    <msg-successfully>Mise à jour effectuée</msg-successfully>
   </UIMiscellaneousInfo>
   <!--/n  ###################################################################
           # org.exoplatform.wcm.webui.scv.config.UIQuickCreationWizard      #

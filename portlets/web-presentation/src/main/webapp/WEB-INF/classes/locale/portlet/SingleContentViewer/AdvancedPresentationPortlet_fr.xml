@@ -16,7 +16,7 @@
     </label>
     <action>
       <StartProcess>OK</StartProcess>
-      <Back></Back>
+      <Back>Retour</Back>
     </action>
     <WelcomeLable>Bienvenue au visualiseur de contenu simples!</WelcomeLable>
     <Text>Veuillez sélectionner l'une des options et cliquer sur OK.</Text>
@@ -46,6 +46,7 @@
     <action>
       <SaveToPortletPreference>Sauver</SaveToPortletPreference>
     </action>
+    <msg-successfully>Mise à jour effectuée</msg-successfully>
   </UIMiscellaneousInfo>
   <!--/n  ###################################################################
           # org.exoplatform.wcm.webui.scv.config.UIQuickCreationWizard      #
@@ -317,7 +318,7 @@
   -->
   <UIPresentationContainer>     
     <title>Edition rapide</title>
-    <obsolete></obsolete>
+    <obsolete>Obsolète</obsolete>
     <quickPrint>
     	<title>Imprimer</title>
     	<print>Imprimer ce contenu</print>
@@ -391,9 +392,9 @@
   </UIWCMPublicationGrid>
   <UIQuickEditWebContentForm>
     <action>
-      <SaveDraft></SaveDraft>
+      <SaveDraft>Sauver le brouillon</SaveDraft>
       <Cancel>Annuler</Cancel>
-      <FastPublish></FastPublish>
+      <FastPublish>Publication rapide</FastPublish>
     </action>
   </UIQuickEditWebContentForm>
   <UIStartEditionInPageWizard>
