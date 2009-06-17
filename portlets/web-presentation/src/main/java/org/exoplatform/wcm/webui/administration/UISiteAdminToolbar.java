@@ -727,6 +727,13 @@ import org.exoplatform.webui.event.EventListener;
       preferenceP.setValues(listValue);
       listPreference.add(preferenceP);
 
+      Preference preferenceC = new Preference();
+      listValue = new ArrayList<String>();
+      listValue.add("true");
+      preferenceC.setName("isQuickCreate");
+      preferenceC.setValues(listValue);
+      listPreference.add(preferenceC);
+      
       portletPreferences.setPreferences(listPreference);
 
       DataStorage dataStorage = siteAdminToolbar.getApplicationComponent(DataStorage.class);
