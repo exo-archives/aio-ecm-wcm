@@ -78,6 +78,26 @@
 	  </init-params>        
   </component>
     
+  <component>
+    <key>org.exoplatform.services.mail.MailService</key>
+    <type>org.exoplatform.services.mail.impl.MailServiceImpl</type>
+      <init-params>
+        <properties-param>
+          <name>config</name>
+          <property name="mail.smtp.auth.username" value="exoservice@gmail.com" />
+          <property name="mail.smtp.auth.password" value="exoadmin" />
+          <property name="mail.smtp.host" value="smtp.gmail.com" />
+          <property name="mail.smtp.port" value="465" />
+					<property name="mail.smtp.starttls.enable" value="true" />
+          <property name="mail.smtp.auth" value="true" />
+          <property name="mail.smtp.debug" value="false" />
+          <property name="mail.smtp.socketFactory.port" value="465" />
+          <property name="mail.smtp.socketFactory.class" value="javax.net.ssl.SSLSocketFactory" />
+          <property name="mail.smtp.socketFactory.fallback" value="false" />
+        </properties-param>
+      </init-params>
+  </component>
+    
   <external-component-plugins>
     <target-component>org.exoplatform.portal.config.UserACL</target-component>
     <component-plugin>
@@ -166,8 +186,17 @@
           <property name="job" value="org.exoplatform.services.wcm.link.LinkValidatorJob"/>
           <property name="expression" value="0 0/60 * * * ?"/>
         </properties-param>
+        <properties-param>
+          <name>cronjob.info</name>
+          <description>Link validate job</description>
+          <property name="jobName" value="job"/>
+          <property name="groupName" value="group"/>
+          <property name="job" value="org.exoplatform.services.wcm.newsletter.NewsletterEmailJob"/>
+          <property name="expression" value="0 0/1 * * * ?"/>
+        </properties-param>
       </init-params>          
     </component-plugin>
+    
   </external-component-plugins>
   
   <external-component-plugins>

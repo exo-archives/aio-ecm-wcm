@@ -16,9 +16,20 @@
  */
 package org.exoplatform.services.wcm.newsletter;
 
+import java.util.List;
+
+import javax.jcr.Node;
+
 import org.apache.commons.logging.Log;
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.services.cms.watch.WatchDocumentService;
+import org.exoplatform.services.cms.watch.impl.MessageConfig;
+import org.exoplatform.services.cms.watch.impl.WatchDocumentServiceImpl;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.mail.MailService;
+import org.exoplatform.services.mail.Message;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterCategoryHandler;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterEntryHandler;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterManageUserHandler;
@@ -78,6 +89,37 @@ public class NewsletterManagerService {
   
   public NewsletterPublicUserHandler getPublicUserHandler() {
     return publicUserHandler;
+  }
+  
+  public void sendNewsletter() {
+    ExoContainer container = ExoContainerContext.getCurrentContainer() ;
+    MailService mailService = 
+      (MailService)container.getComponentInstanceOfType(MailService.class) ;
+
+    MessageConfig messageConfig = new MessageConfig();
+    String receiver = "ngoc.aptech@gmail.com";
+    Message message = createMessage(receiver,messageConfig) ;  
+    try {
+        mailService.sendMessage(message) ; 
+      }catch (Exception e) {
+        System.out.println("===> Exeption when send message to: " + message.getTo());
+        e.printStackTrace() ;
+        
+      }      
+  }
+
+  private Message createMessage(String receiver, MessageConfig messageConfig) {
+    Message message = new Message() ;
+    message.setFrom("root@exoplatform.com") ;
+    message.setTo(receiver) ;
+    message.setSubject("Test phat!!!") ;
+    message.setBody("Hi Ngoc, you receive this email because i'm testing") ;
+    message.setMimeType(messageConfig.getMimeType()) ;
+    return message ;
+  }
+  
+  public void sendVerificationMail(String email) {
+    
   }
   
 }
