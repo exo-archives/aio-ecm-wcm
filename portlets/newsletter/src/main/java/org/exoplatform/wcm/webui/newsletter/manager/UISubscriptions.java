@@ -283,8 +283,9 @@ public class UISubscriptions extends UIForm {
       UIPopupWindow popupWindow = popupContainer.getChildById(UINewsletterConstant.MANAGER_USERS_POPUP_WINDOW);
       if (popupWindow == null) {
         UIManagerUsers managerUsers = popupContainer.createUIComponent(UIManagerUsers.class, null, null);
-        managerUsers.setInfor(null, null);
-        Utils.createPopupWindow(popupContainer, managerUsers, event.getRequestContext(), UINewsletterConstant.MANAGER_USERS_POPUP_WINDOW, 500, 300);
+        managerUsers.setInfor(uiSubscription.categoryConfig.getName(), null);
+        Utils.createPopupWindow(popupContainer, managerUsers, event.getRequestContext(), 
+                                UINewsletterConstant.MANAGER_USERS_POPUP_WINDOW, 550, 350);
       } else { 
         popupWindow.setShow(true);
       }

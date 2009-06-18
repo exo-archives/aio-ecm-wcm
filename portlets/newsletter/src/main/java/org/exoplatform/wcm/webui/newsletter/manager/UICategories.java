@@ -137,7 +137,8 @@ public class UICategories extends UIContainer {
       if (popupWindow == null) {
         UIManagerUsers managerUsers = popupContainer.createUIComponent(UIManagerUsers.class, null, null);
         managerUsers.setInfor(null, null);
-        Utils.createPopupWindow(popupContainer, managerUsers, event.getRequestContext(), UINewsletterConstant.MANAGER_USERS_POPUP_WINDOW, 500, 300);
+        Utils.createPopupWindow(popupContainer, managerUsers, event.getRequestContext(), 
+                                UINewsletterConstant.MANAGER_USERS_POPUP_WINDOW, 600, 350);
       } else { 
         popupWindow.setShow(true);
       }

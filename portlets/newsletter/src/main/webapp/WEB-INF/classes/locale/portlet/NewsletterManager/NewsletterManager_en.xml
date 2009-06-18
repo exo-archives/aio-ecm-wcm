@@ -1,46 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bundle>
+	<UITabPane>
+		<title>
+			<UIManagerUsers>Public Users</UIManagerUsers>
+			<UIManagerModerator>Users Manager</UIManagerModerator>
+		</title>
+	</UITabPane>
+	
 	<UIWebcontentSelectorFormPopupWindow>
 		<title>
 			<UINewsletterEntryWebcontentSelectorForm>Webcontent selector form</UINewsletterEntryWebcontentSelectorForm>
 		</title>
 	</UIWebcontentSelectorFormPopupWindow>
+	
 	<UIWebcontentSelectorPopupWindow>
 		<title>
 			<UIWebContentTabSelector>Webcontent selector</UIWebContentTabSelector>
 		</title>
 	</UIWebcontentSelectorPopupWindow>
+	
 	<UINewsletterEntryWebcontentSelectorForm>
 		<label>
 			<WebcontentSelector></WebcontentSelector>
 		</label>
 	</UINewsletterEntryWebcontentSelectorForm>
+	
 	<FormWebcontentSelector>
 		<title>
 			<SelectWebcontent>Select webcontent</SelectWebcontent>
 		</title>
 	</FormWebcontentSelector>
+	
 	<UICategoryFormPopupWindow>
 		<title>
 			<UICategoryForm>Category form</UICategoryForm>
 		</title>
 	</UICategoryFormPopupWindow>
+	
 	<UISubscriptionFormPopupWindow>
 		<title>
 			<UISubcriptionForm>Subscription form</UISubcriptionForm>
 			<UIManagerUsers>Manager Users</UIManagerUsers>
 		</title>
 	</UISubscriptionFormPopupWindow>
+	
 	<UINewsletterEntryFormPopupWindow>
 		<title>
 			<UINewsletterEntryContainer>Newsletter entry form</UINewsletterEntryContainer>
 		</title>
 	</UINewsletterEntryFormPopupWindow>
+	
 	<UIManagerUsersFormPopupWindow>
 		<title>
 			<UIManagerUsers>Manager Users</UIManagerUsers>
 		</title>
 	</UIManagerUsersFormPopupWindow>
+	
   <NewsletterPortletAction>
     <action>
       <Save>Save</Save>
@@ -73,6 +88,7 @@
 			<Cancel>Cancel</Cancel>
 		</action>
   </UICategoryForm>
+  
   <UICategories>
     <title>
     	<SubScription>Subscription</SubScription>
@@ -87,22 +103,26 @@
 			<SelectMember>Select member</SelectMember>
 		</title>
 	</FormCategoryModerator>
+	
 	<UIGroupMemberSelector>
 		<label>
 			<selectGroup>Select group</selectGroup>
 			<selectMembership>Select membership</selectMembership>
 		</label>
 	</UIGroupMemberSelector>
+	
 	<UIFormInputSetWithAction>
     <msg>
       <confirm-delete>Are you sure to delete this category from list?</confirm-delete>
     </msg>
   </UIFormInputSetWithAction>
+  
 	<UIUserMemberSelectorPopupWindow>
 		<title>
 			<UIUserMemberSelector>User selector</UIUserMemberSelector>
 		</title>
 	</UIUserMemberSelectorPopupWindow>
+	
 	<UIGroupMemberSelectorPopupWindow>
 		<title>
 			<UIGroupMemberSelector>Group selector</UIGroupMemberSelector>
@@ -123,6 +143,7 @@
     	<CategoryName>Category Name </CategoryName>
     </title>
   </UISubcriptionForm>
+  
   <UISubscription>
     <msg>
     	<confirmDeleteCategory>Are you sure you want to delete this category?</confirmDeleteCategory>
@@ -152,5 +173,33 @@
 			<UINewsletterEntrySendDate>Send date</UINewsletterEntrySendDate>
 		</title>
 	</UINewsletterEntryDialogSelector>
+	
+	<UIManagerUsers>
+		<header>
+			<Mail>Email</Mail>
+			<isBanned>Banned</isBanned>
+			<action> </action>
+			<UserName>User Name</UserName>
+			<FirstName>First Name</FirstName>
+			<LastName>Last Name</LastName>
+			<Email>Email</Email>
+			<Role>Role</Role>
+		</header>
+		<action>
+			<title>
+				<Edit>Edit</Edit>
+				<BanOrUnBanUser>Ban/Unban User</BanOrUnBanUser>
+				<DeleteUser>Delete User</DeleteUser>
+				<Addministrator>Administrator</Addministrator>
+				<AddAdministrator>Set is Administrator of Newsletter</AddAdministrator>
+				<DeleteAdministrator>Delete Administrator</DeleteAdministrator>
+			</title>
+		</action>
+		<role>
+			<Administrator>Administrator</Administrator>
+			<Moderator>Moderator</Moderator>
+			<Redactor>Redactor</Redactor>
+		</role>
+	</UIManagerUsers>
 	
 </bundle>

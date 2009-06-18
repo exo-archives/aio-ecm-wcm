@@ -163,7 +163,7 @@ public class NewsletterCategoryHandler {
   	try{
     	ManageableRepository manageableRepository = repositoryService.getRepository(repository);
       Session session = threadLocalSessionProviderService.getSessionProvider(null)
-        .getSession(workspace, manageableRepository);
+                        .getSession(workspace, manageableRepository);
       String categoryPath = NewsletterConstant.generateCategoryPath(portalName);
       Node categoriesNode = (Node)session.getItem(categoryPath);
       NodeIterator nodeIterator = categoriesNode.getNodes();

@@ -35,7 +35,7 @@ public class NewsletterUserConfig {
     this.mail = mail;
   }
 
-  public boolean isBanned() {
+  public boolean getIsBanned() {
     return isBanned;
   }
 

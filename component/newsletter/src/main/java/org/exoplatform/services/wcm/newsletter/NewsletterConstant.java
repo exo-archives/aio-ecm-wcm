@@ -23,6 +23,8 @@ package org.exoplatform.services.wcm.newsletter;
  * May 21, 2009  
  */
 public class NewsletterConstant {
+  // Categories property
+  public static final String  CATEGORIES_PROPERTY_ADDMINISTRATOR = "exo:newsletteraddministrator";
   // Category nodetype
   public static final String CATEGORY_NODETYPE              = "exo:newsletterCategory";
   public static final String CATEGORY_PROPERTY_TITLE        = "exo:newsletterCategoryTitle";
