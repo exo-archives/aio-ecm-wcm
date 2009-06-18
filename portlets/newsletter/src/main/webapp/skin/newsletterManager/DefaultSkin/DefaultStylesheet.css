@@ -1,92 +1,192 @@
+
 .UINewsletterPortlet {
-	padding:10px;
-	min-height: 500px;
-	width: 100%;
+	background: #fff;	
+	padding: 3px;
 }
 
-.UINewsletterPortlet .BreadCumbs{
-	padding:5px;
-	color:#9797FF;
-	font-weight:bold;
+.UINewsletterPortlet .NewsletterBoxContent {
+	padding: 10px;
+	background: #ebedf2;
 }
 
-.UINewsletterPortlet .BreadCumbs .ItemContent{
-	cursor:pointer;
-	font-size:12px;
+.UINewLetterPopup .TopRightRightClickPopupMenu {
+	background: url('background/PopupBg.gif') no-repeat top right;
+	height: 5px;
+	padding-right: 5px;
 }
 
-.UINewsletterPortlet .ActionManager{
-	padding:5px 10px;
-	height:30px;
-	line-height:30px;
+.UINewLetterPopup .MiddleRightRightClickPopupMenu {
+	background: url('background/RightBg.gif') repeat-y right;
+	padding-right: 5px;
+	
 }
 
-.UINewsletterPortlet .ActionManager .ActionTitle{
-	float:left;
-	color:blue;
-	font-weight:bold;
-	cursor:pointer;
-	width:auto;
+.UINewLetterPopup .BottomLeftRightClickPopupMenu {
+	background: url('background/PopupBg.gif') no-repeat left -5px;
+	padding-left: 5px;
 }
 
-.UINewsletterPortlet .UICategories{
-	border:2px solid gray;
-	padding:10px;
-	margin:5px 10px;
-	height:auto;
+.UINewLetterPopup .BottomRightRightClickPopupMenu {
+	background: url('background/PopupBg.gif') no-repeat right -5px;
+	padding-right: 5px;
 }
 
-.UINewsletterPortlet .UICategories .ViewCategoryName{
-	font-weight:bold;
+.UINewLetterPopup .BottomCenterRightClickPopupMenu {
+	background: url('background/PopupBg.gif') repeat-x left -10px;
+	height: 5px;
 }
 
-.UINewsletterPortlet .UICategories .Subscriptions{
-	border:1px solid gray;
-	margin:5px 10px 10px 5px;
+.UINewLetterPopup .MenuItem .ItemIcon {
+	background-repeat: no-repeat;
 }
 
-.UINewsletterPortlet .UICategories .Subscriptions .Header{
-	background:#CCCCCC;
-	heigth:20px;
+.UINewsletterPortlet .BreadCumbs {
+	border-bottom: 2px solid #2665a0;
 }
 
-.UINewsletterPortlet .UICategories .Subscriptions .Header .ContentView{
-	border-left:1px solid black;
-	height:30px;
-	line-height:30px;
+.UINewsletterPortlet .BreadCumbs a {
+	font-size: 11px;
+	line-height: 28px;
+	padding-left: 5px;
+	font-weight: normal;
 }
 
-.UINewsletterPortlet .UICategories .Subscriptions .SubcriptionInfor{
-	background:#EDF3EE;
-	padding:5px
+.UINewsletterPortlet .BreadCumbs .Selected {
+	font-weight: bold;
+	color: #2665a0;
 }
 
-.UINewsletterPortlet .UICategories .Subscriptions .SubcriptionInfor .Infor{
-	border-left:1px solid black; 
-	heigth:24px;
-	line-height:24px;
-	border-bottom: 1px solid white;
-	padding-left:5px;
+.BorderOutline {
+	border: 1px solid #e8e8e8;
+	background: #F6F6F6;
 }
 
 
-.UICategoryForm .SelectUserIcon {
-	width: 16px; 
-	height: 16px;
-	background: url('icons/16x16/SmallUserIcon.gif') no-repeat;  
-	cursor: pointer;
+.UINewsletterPortlet .LeftActionBar {
+	background: url('background/MenuBg.gif') no-repeat top left;
+	padding-left: 5px;
 }
 
-.UICategoryForm .SelectMemberIcon {
-	width: 16px; 
-	height: 16px;
-	background: url('icons/16x16/SmallMemberIcon.gif') no-repeat;  
-	cursor: pointer;
+.UINewsletterPortlet .RightActionBar {
+	background: url('background/MenuBg.gif') no-repeat top right;
+	padding-right: 5px;
 }
 
-#UINewsletterEntryWebcontentSelectorForm .SelectWebcontentIcon {
-	width: 16px; 
-	height: 16px;
-	background: url('icons/16x16/MagnifierIconNews.png') no-repeat;  
-	cursor: pointer;
+.UINewsletterPortlet .CenterActionBar {
+	background: url('background/MenuBg.gif') repeat-x left -68px;
+	height: 68px;
+	padding: 0px 10px;
+}
+
+.UINewsletterPortlet .CenterActionBar .NewsletterActionBar {
+	height: 30px;
+	padding-top: 17px;
+}
+
+.UINewsletterPortlet  .NewsletterActionBar .Newsletter {
+	background: url('background/NewIcon.gif') no-repeat top left;
+	line-height: 24px;
+	display: block;
+	color: #114474;
+	padding: 0px 10px 0px 35px;
+}
+
+.UINewsletterPortlet  .NewsletterActionBar .NewsSubcript {
+	background: url('background/NewIcon.gif') no-repeat left -24px;
+	line-height: 24px;
+	display: block;
+	color: #114474;
+	padding: 0px 10px 0px 35px;
+}
+
+.UINewsletterPortlet  .NewsletterActionBar .NewsCategory {
+	background: url('background/NewIcon.gif') no-repeat left -48px;
+	line-height: 24px;
+	display: block;
+	color: #114474;
+	padding: 0px 10px 0px 35px;
+}
+
+
+.UINewsletterPortlet  .NewsletterActionBar .NewsAdmin {
+	background: url('background/NewIcon.gif') no-repeat left -72px;
+	line-height: 24px;
+	display: block;
+	color: #114474;
+	padding: 0px 10px 0px 35px;
+}
+
+.UINewsletterPortlet  .NewsletterActionBar .Line {
+	background: url('background/LineIco.gif') no-repeat right 5px;
+	height: 30px;
+	padding: 0px 5px;	
+}
+	
+.UINewsletterPortlet .UICategories {
+	background: #fefef9;
+	padding: 8px;
+	margin-bottom: 10px;
+}
+
+.UICategories .CategoryTittle {
+	overflow: hidden;
+}
+
+.UICategories .CategoryTittle .LeftTitle { 
+	background: url('background/TabBg.gif') no-repeat top left;
+	padding-left: 7px;
+	float: left;
+}
+
+.UICategories .CategoryTittle .RightTitle { 
+	background: url('background/TabBg.gif') no-repeat right -26px;
+	padding-right: 19px;
+}
+
+.UICategories .CategoryTittle .CenterTitle { 
+	background: url('background/TabBg.gif') repeat-x left -52px;
+	height: 26px;
+	padding: 0px 10px;
+}
+
+.UICategories .CategoryTittle  .IconCategory {
+	background: url('background/CategoryIco.gif') no-repeat left center;
+	padding-left: 35px;
+	line-height: 26px;
+	color: #114474;
+	font-weight: bold;
+	display: block;
+}
+
+.UICategories .Subscriptions table {
+	border: 1px solid #aeaeaf;
+	margin-left: 2px;
+}
+
+.UICategories .Subscriptions .Title {
+	line-height: 26px;
+	color: #114474;
+	font-weight: bold;
+	text-align: center;
+	background: #e7e7e7;
+	border-right: 1px solid #fff;
+	border-bottom: 1px solid #b7b7b7;
+	width: 33%;
+}
+
+.UICategories .Subscriptions .OddRow {
+	background: #f9f9f9;
+}
+
+.UICategories .Subscriptions .EvenRow {
+	background: #eeeeee;
+}
+
+.UICategories .Subscriptions td {
+	border-right: 1px solid white;
+	border-top: 1px solid white;
+	line-height: 26px;
+	color: #000;
+	padding: 0px 5px;
+	text-align: left;
 }

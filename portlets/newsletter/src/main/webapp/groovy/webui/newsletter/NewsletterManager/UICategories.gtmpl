@@ -8,109 +8,135 @@ import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 %>
 
 <div class="UINewsletterPortlet" id="$uicomponent.id">
-	
-	<div class="BreadCumbs">
-		<a class="ItemContent">eXo Newsletter</a>
-	</div>
-	
-	<div class="ActionManager">
-		<div onclick="<%=uicomponent.event("AddEntry")%>" class="ActionTitle">News Letter |</div>
-		<div onclick="<%=uicomponent.event("AddSubcription")%>" class="ActionTitle">News Subscription |</div>
-		<div onclick="<%=uicomponent.event("AddCategory")%>" class="ActionTitle">News Category |</div>
-		<!-- action of this category -->
-		<div class="ContentAction ActionTitle" style="float:left;" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
-			<div class="Name" style="float:none; cursor:pointer;">Administration</div>
-			<div style="position:relative;">
-				<div class="UIPopupCategory" style="display:none; left:2px; top:-2px; ">
-					<div class="UIRightClickPopupMenu" style="display:block;">
-						<div class="UIContextMenuContainer">											
-							<div class="TopLeftRightClickPopupMenu">
-								<div class="TopRightRightClickPopupMenu">
-									<div class="TopCenterRightClickPopupMenu"><span></span></div>
-								</div>
-							</div>
-							<div class="MiddleLeftRightClickPopupMenu">
-								<div class="MiddleRightRightClickPopupMenu">
-									<div class="UIRightPopupMenuContainer">
-										<!-- Detail action -->
-										<div class="MenuItem" onclick="javaScript:void(0)">
-											<div class="ItemIcon IconsView" style="padding-left:24px;">
-												<a href="javaScript:void(0);">Preferences</a>
+	<div class="NewsletterBoxContent">
+		<div class="BreadCumbs">
+			<a href="#" class="Selected">eXo Newsletter</a>
+		</div>
+		
+		<div class="LeftActionBar">
+			<div class="RightActionBar">
+				<div class="CenterActionBar">
+					<div class="NewsletterActionBar">			
+						<div class="Line FloatLeft">
+							<a href="#" class="Newsletter">News Letter </a>
+						</div>
+						
+						<div class="Line FloatLeft">
+							<a href="#" class="NewsSubcript">News Subscription </a>
+						</div>
+						
+						<div class="Line FloatLeft">
+							<a href="<%=uicomponent.event("AddCategory")%>" class="NewsCategory">News Category </a>
+						</div>
+						<!-- action of this category -->
+						<div class="Line FloatLeft" style="background: none;" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+							<a href="#" class="NewsAdmin">Administration</a>
+							<div style="position:relative;">
+								<div class="UIPopupCategory" style="display:none; left:2px; top:-2px; ">
+									<div class="UIRightClickPopupMenu UINewLetterPopup" style="display:block;">
+										<div class="UIContextMenuContainer BorderOutline">											
+											<div class="TopLeftRightClickPopupMenu">
+												<div class="TopRightRightClickPopupMenu ">
+													<div class="TopCenterRightClickPopupMenu"><span></span></div>
+												</div>
+											</div>
+											<div class="MiddleLeftRightClickPopupMenu">
+												<div class="MiddleRightRightClickPopupMenu">
+													<div class="UIRightPopupMenuContainer" style="background: none;margin: 0px; padding-left: 8px; padding-right: 8px;">
+														<!-- Detail action -->
+														<div class="MenuItem" onclick="javaScript:void(0)">
+															<div class="ItemIcon BlueActionWheel" style="padding-left:30px;">
+																<a href="javaScript:void(0);">Preferences</a>
+															</div>
+														</div>
+														
+														<div class="MenuItem" onclick="javaScript:void(0)">
+															<div class="ItemIcon Pencil" style="padding-left:30px;">
+																<a href="<%=uicomponent.event("AddCategory")%>">Edit</a>
+															</div>
+														</div>
+														<div class="MenuItem" onclick="javaScript:void(0)">
+															<div class="ItemIcon Remove16x16Icon" style="padding-left:30px;">
+																<a href="<%=uicomponent.event("AddCategory")%>">Delete</a>
+															</div>
+														</div>
+														<div class="MenuItem" onclick="javaScript:void(0)">
+															<div class="ItemIcon SmallGroup16x16Icon" style="padding-left:30px;">
+																<a href="<%=uicomponent.event("AddCategory")%>">Manager Uers</a>
+															</div>
+														</div>
+														<!-- Finish detail action -->
+													</div>
+												</div>
+											</div>
+											<div class="BottomLeftRightClickPopupMenu PopupRightBg">
+												<div class="BottomRightRightClickPopupMenu ">
+													<div class="BottomCenterRightClickPopupMenu"><span></span></div>
+												</div>
 											</div>
 										</div>
-										<hr style="width:90%;"/>
-										<div class="MenuItem" onclick="javaScript:void(0)">
-											<div class="ItemIcon IconsView" style="padding-left:24px;">
-												<a href="<%=uicomponent.event("AddCategory")%>">Edit</a>
-											</div>
-										</div>
-										<div class="MenuItem" onclick="javaScript:void(0)">
-											<div class="ItemIcon IconsView" style="padding-left:24px;">
-												<a href="<%=uicomponent.event("AddCategory")%>">Delete</a>
-											</div>
-										</div>
-										<div class="MenuItem" onclick="javaScript:void(0)">
-											<div class="ItemIcon IconsView" style="padding-left:24px;">
-												<a href="<%=uicomponent.event("ManagerUsers")%>">Manager Uers</a>
-											</div>
-										</div>
-										<!-- Finish detail action -->
 									</div>
 								</div>
 							</div>
-							<div class="BottomLeftRightClickPopupMenu">
-								<div class="BottomRightRightClickPopupMenu">
-									<div class="BottomCenterRightClickPopupMenu"><span></span></div>
-								</div>
-							</div>
+						</div>
+						<!-- end action of this category -->
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-		<!-- end action of this category -->
-	</div>
-	<div class="UICategories">
+				
 	<%for(NewsletterCategoryConfig category in uicomponent.getListCategories()){%>
+		<div class="UICategories">
 			<div style="width:100%;">
 				<!-- Category infor -->
-				<div class="ViewCategoryName">
-					<a href="<%=uicomponent.event("OpenCategory", category.getName())%>"><%=category.getTitle()%></a>
+				<div class="CategoryTittle">
+					<div class="LeftTitle">
+						<div class="RightTitle">
+							<div class="CenterTitle">
+								<a class="IconCategory" href="<%=uicomponent.event("OpenCategory", category.getName())%>"><%=category.getTitle()%></a>
+							</div>
+						</div>
+					</div>
+					<div class="ClearLeft"><span></span></div>
 				</div>
 				<!-- All subscriptions -->
 				<div class="Subscriptions">
 					<table cellpadding="5" cellspacing="0" border="0">
-						<tr class="Header">
-							<th class="ContentView" style="border-left:0px;">
+						<tr>
+							<th class="Title">
 								<%=_ctx.appRes("UICategories.title.SubScription")%>
 							</th>
-							<th class="ContentView">
+							<th class="Title">
 								<%=_ctx.appRes("UICategories.title.NumberOfUser")%>
 							</th>
-							<th class="ContentView" style="border-left:1px solid black">
+							<th class="Title" style="border-right: none">
 								<%=_ctx.appRes("UICategories.title.AWaitingLetter")%>
 							</th>
 						</tr>
 						<%List<NewsletterSubscriptionConfig> listSubscriptions = uicomponent.getListSubscription(category.getName());
 							if(listSubscriptions.size() > 0){
 								for(NewsletterSubscriptionConfig subScription in listSubscriptions){%>
-								<tr class="SubcriptionInfor">
-									<td class="Infor" style="border-left:0px;"><%=subScription.getTitle()%></td>
-									<td class="Infor">
-										<%=uicomponent.getNumberOfUser(category.getName(), subScription.getName())%>
-									</td>
-									<td class="Infor">1</td>
+								<tr class="OddRow">
+									<td><%=subScription.getName()%></td>
+									<td>400</td>
+									<td style="border: none">1</td>
+								</tr>
+								<tr class="EvenRow">
+									<td><%=subScription.getName()%></td>
+									<td>400</td>
+									<td style="border-right: none">1</td>
 								</tr>
 						<%	}
 							}else{%>
-								<tr>
+								<tr class="OddRow">
 									<td colspan="3"><span></span></td>
 								</tr>
 						<%}%>
 					</table>
 				</div>
 			</div>
+		</div>
 	<%}%>
-	</div>
-		
+	
+	</div>	
 </div>

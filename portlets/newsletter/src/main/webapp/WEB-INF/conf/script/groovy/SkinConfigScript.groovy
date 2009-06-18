@@ -1,21 +1,21 @@
 SkinService.addSkin(
     "newsletter/NewsletterViewerPortlet",
     "Default",
-    "/newsletter/skin/newsletterViewer/DefaultSkin/DefaultStylesheet.css",
+    "/newsletter/skin/newsletterManager/DefaultSkin/DefaultStylesheet.css",
     ServletContext
 ) ;
 
 SkinService.addSkin(
     "newsletter/NewsletterViewerPortlet",
     "Vista",
-    "/newsletter/skin/newsletterViewer/DefaultSkin/DefaultStylesheet.css",
+    "/newsletter/skin/newsletterManager/DefaultSkin/DefaultStylesheet.css",
     ServletContext
 ) ;
 
 SkinService.addSkin(
     "newsletter/NewsletterViewerPortlet",
     "Mac",
-    "/newsletter/skin/newsletterViewer/DefaultSkin/DefaultStylesheet.css",
+    "/newsletter/skin/newsletterManager/DefaultSkin/DefaultStylesheet.css",
     ServletContext
 ) ;
 
