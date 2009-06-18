@@ -74,6 +74,8 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
    */
   public UIWelcomeScreen() throws Exception {}
 
+  private boolean isNewContent = false;
+  
   /**
    * Sets the create mode.
    * 
@@ -94,6 +96,7 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
     String labelEditContent = res.getString(getId() + ".label.EditWebContent");
     String labelSelectExistedContent = res.getString(getId() + ".label.ExistedContent");
     if(isNewConfig) {
+      isNewConfig = true;
       option.add(new SelectItemOption<String>(labelQuickCreate, "QuickCreateWebContent"));
       option.add(new SelectItemOption<String>(labelSelectExistedContent, "SelectExistedContent"));
       UIFormRadioBoxInput radioInput = new UIFormRadioBoxInput("radio", "radio", option);
@@ -149,8 +152,6 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
 
   public void doSelect(String arg0, Object arg1) throws Exception {}
 
-  
-  
   /**
    * The listener interface for receiving startProcessAction events.
    * The class that is interested in processing a startProcessAction
@@ -220,40 +221,50 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
 
     public void execute(Event<UIWelcomeScreen> event) throws Exception {
       UIWelcomeScreen uiWelcomeScreen = event.getSource();
-      UserPortalConfigService userPortalConfigService = uiWelcomeScreen.getApplicationComponent(UserPortalConfigService.class);
-      UIPortal uiPortal = Util.getUIPortal();
-      PageNode currentPageNode = uiPortal.getSelectedNode();
-      Page currentPage = userPortalConfigService.getPage(currentPageNode.getPageReference());
-      ArrayList<Object> applications = new ArrayList<Object>();
-      applications.addAll(currentPage.getChildren());
-      ArrayList<Object> applicationsTmp = currentPage.getChildren(); 
-      Collections.reverse(applicationsTmp);
-      DataStorage dataStorage = uiWelcomeScreen.getApplicationComponent(DataStorage.class);
-      for (Object applicationObject : applicationsTmp) {
-        if (applicationObject instanceof Container) continue;
-        Application application = Application.class.cast(applicationObject);
-        String applicationId = application.getInstanceId();
-        PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(applicationId));
-        if (portletPreferences == null) continue;
-        for (Object preferenceObject : portletPreferences.getPreferences()) {
-          Preference preference = Preference.class.cast(preferenceObject);
-          if ("isQuickCreate".equals(preference.getName())) {
-            boolean isQuickCreate = Boolean.valueOf(preference.getValues().get(0).toString());
-            if (isQuickCreate) {
-              applications.remove(applicationObject);
-              break;
+      if (uiWelcomeScreen.isNewContent) {
+        UserPortalConfigService userPortalConfigService = uiWelcomeScreen.getApplicationComponent(UserPortalConfigService.class);
+        UIPortal uiPortal = Util.getUIPortal();
+        PageNode currentPageNode = uiPortal.getSelectedNode();
+        Page currentPage = userPortalConfigService.getPage(currentPageNode.getPageReference());
+        ArrayList<Object> applications = new ArrayList<Object>();
+        applications.addAll(currentPage.getChildren());
+        ArrayList<Object> applicationsTmp = currentPage.getChildren(); 
+        Collections.reverse(applicationsTmp);
+        DataStorage dataStorage = uiWelcomeScreen.getApplicationComponent(DataStorage.class);
+        for (Object applicationObject : applicationsTmp) {
+          if (applicationObject instanceof Container) continue;
+          Application application = Application.class.cast(applicationObject);
+          String applicationId = application.getInstanceId();
+          PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(applicationId));
+          if (portletPreferences == null) continue;
+          for (Object preferenceObject : portletPreferences.getPreferences()) {
+            Preference preference = Preference.class.cast(preferenceObject);
+            if ("isQuickCreate".equals(preference.getName())) {
+              boolean isQuickCreate = Boolean.valueOf(preference.getValues().get(0).toString());
+              if (isQuickCreate) {
+                applications.remove(applicationObject);
+                break;
+              }
             }
           }
         }
+        currentPage.setChildren(applications);
+        userPortalConfigService.update(currentPage);
+        UIPage uiPage = uiPortal.findFirstComponentOfType(UIPage.class);
+        uiPage.setChildren(null);
+        PortalDataMapper.toUIPage(uiPage, currentPage);
       }
-      currentPage.setChildren(applications);
-      userPortalConfigService.update(currentPage);
-      UIPage uiPage = uiPortal.findFirstComponentOfType(UIPage.class);
-      uiPage.setChildren(null);
-      PortalDataMapper.toUIPage(uiPage, currentPage);
       UIPortletConfig uiPortletConfig = uiWelcomeScreen.getAncestorOfType(UIPortletConfig.class);      
       uiPortletConfig.closePopupAndUpdateUI(event.getRequestContext(),true);
     }
+  }
+
+  public boolean isNewContent() {
+    return isNewContent;
+  }
+
+  public void setNewContent(boolean isNewContent) {
+    this.isNewContent = isNewContent;
   }
 
 }
