@@ -24,7 +24,6 @@ import org.exoplatform.wcm.webui.selector.webcontent.UIWebContentPathSelector;
 import org.exoplatform.wcm.webui.selector.webcontent.UIWebContentTabSelector;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIPopupComponent;
 import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -45,7 +44,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
       @EventConfig (listeners = UINewsletterEntryWebcontentSelectorForm.SelectWebcontentActionListener.class)
     }
 )
-public class UINewsletterEntryWebcontentSelectorForm extends UIForm implements UIPopupComponent, UISelectable {
+public class UINewsletterEntryWebcontentSelectorForm extends UIForm implements UISelectable {
   
   private String popupId;
   
@@ -78,9 +77,6 @@ public class UINewsletterEntryWebcontentSelectorForm extends UIForm implements U
     UIPopupContainer popupContainer = getAncestorOfType(UIPopupContainer.class);
     Utils.closePopupWindow(popupContainer, popupId);
   }
-  
-  public void activate() throws Exception {}
-  public void deActivate() throws Exception {}
   
   public static class SelectWebcontentActionListener extends EventListener<UINewsletterEntryWebcontentSelectorForm> {
     public void execute(Event<UINewsletterEntryWebcontentSelectorForm> event) throws Exception {

@@ -16,24 +16,36 @@
  */
 package org.exoplatform.wcm.webui.newsletter.manager;
 
+import java.util.Map;
+
 import javax.jcr.Node;
+import javax.jcr.Session;
 
 import org.apache.commons.logging.Log;
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
 import org.exoplatform.ecm.webui.form.UIDialogForm;
+import org.exoplatform.ecm.webui.utils.DialogFormUtil;
 import org.exoplatform.resolver.ResourceResolver;
+import org.exoplatform.services.cms.CmsService;
+import org.exoplatform.services.cms.JcrInputProperty;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterTemplateHandler;
+import org.exoplatform.wcm.webui.Utils;
+import org.exoplatform.wcm.webui.newsletter.UINewsletterConstant;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 
 /**
  * Created by The eXo Platform SAS
@@ -46,7 +58,8 @@ import org.exoplatform.webui.event.EventListener;
     events = {
       @EventConfig (listeners = UINewsletterEntryForm.PreviewActionListener.class),
       @EventConfig (listeners = UINewsletterEntryForm.SaveActionListener.class),
-      @EventConfig (listeners = UINewsletterEntryForm.SendActionListener.class)
+      @EventConfig (listeners = UINewsletterEntryForm.SendActionListener.class),
+      @EventConfig (listeners = UINewsletterEntryForm.CancelActionListener.class, phase = Phase.DECODE)
     }
 )
 public class UINewsletterEntryForm extends UIDialogForm {
@@ -88,18 +101,42 @@ public class UINewsletterEntryForm extends UIDialogForm {
     return resourceResolver;
   }
   
-  public static class PreviewActionListener extends EventListener<UINewsletterEntryContainer> {
-    public void execute(Event<UINewsletterEntryContainer> event) throws Exception {
+  public static class PreviewActionListener extends EventListener<UINewsletterEntryForm> {
+    public void execute(Event<UINewsletterEntryForm> event) throws Exception {
     }
   }
   
-  public static class SaveActionListener extends EventListener<UINewsletterEntryContainer> {
-    public void execute(Event<UINewsletterEntryContainer> event) throws Exception {
+  public static class SaveActionListener extends EventListener<UINewsletterEntryForm> {
+    public void execute(Event<UINewsletterEntryForm> event) throws Exception {
+      UINewsletterEntryForm newsletterEntryForm = event.getSource();
+      String storedPath = newsletterEntryForm.getStoredPath();
+      String repositoryName = newsletterEntryForm.repositoryName;
+      ThreadLocalSessionProviderService threadLocalSessionProviderService = newsletterEntryForm.getApplicationComponent(ThreadLocalSessionProviderService.class);
+      SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
+      RepositoryService repositoryService = newsletterEntryForm.getApplicationComponent(RepositoryService.class);
+      ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
+      Session session = sessionProvider.getSession(newsletterEntryForm.workspaceName, manageableRepository);
+      Node storedNode = (Node)session.getItem(storedPath);
+      Map<String, JcrInputProperty> inputProperties = DialogFormUtil.prepareMap(newsletterEntryForm.getChildren(), newsletterEntryForm.getInputProperties());
+      CmsService cmsService = newsletterEntryForm.getApplicationComponent(CmsService.class);
+      cmsService.storeNode("exo:webContent", storedNode, inputProperties, newsletterEntryForm.isAddNew(), repositoryName);
+      session.save();
+      
+      UIPopupContainer popupContainer = newsletterEntryForm.getAncestorOfType(UIPopupContainer.class);
+      Utils.closePopupWindow(popupContainer, UINewsletterConstant.ENTRY_FORM_POPUP_WINDOW);
     }
   }
   
-  public static class SendActionListener extends EventListener<UINewsletterEntryContainer> {
-    public void execute(Event<UINewsletterEntryContainer> event) throws Exception {
+  public static class SendActionListener extends EventListener<UINewsletterEntryForm> {
+    public void execute(Event<UINewsletterEntryForm> event) throws Exception {
+    }
+  }
+  
+  public static class CancelActionListener extends EventListener<UINewsletterEntryForm> {
+    public void execute(Event<UINewsletterEntryForm> event) throws Exception {
+      UINewsletterEntryForm newsletterEntryForm = event.getSource();
+      UIPopupContainer popupContainer = newsletterEntryForm.getAncestorOfType(UIPopupContainer.class);
+      Utils.closePopupWindow(popupContainer, UINewsletterConstant.ENTRY_FORM_POPUP_WINDOW);
     }
   }
   

@@ -30,7 +30,6 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
-import org.exoplatform.webui.core.UIPopupComponent;
 import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
@@ -58,7 +57,7 @@ import org.exoplatform.webui.form.validator.NameValidator;
                     @EventConfig(listeners = UISubcriptionForm.CancelActionListener.class, phase = Phase.DECODE)
                 }
 )
-public class UISubcriptionForm extends UIForm implements UIPopupComponent {
+public class UISubcriptionForm extends UIForm {
 
   private static final String          INPUT_SUBCRIPTION_NAME        = "SubcriptionName";
 
@@ -95,12 +94,6 @@ public class UISubcriptionForm extends UIForm implements UIPopupComponent {
     addChild(new UIFormTextAreaInput(INPUT_SUBCRIPTION_DESCRIPTION, null, null));
   }
 
-  public void activate() throws Exception {    
-  }
-
-  public void deActivate() throws Exception {   
-  }
-  
   public void setSubscriptionInfor(NewsletterSubscriptionConfig subscriptionConfig){
     
     this.subscriptionConfig = subscriptionConfig;

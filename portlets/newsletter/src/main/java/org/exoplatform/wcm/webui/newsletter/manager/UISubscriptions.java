@@ -53,6 +53,7 @@ import org.exoplatform.webui.form.UIFormSelectBox;
     lifecycle = UIFormLifecycle.class,
     template = "app:/groovy/webui/newsletter/NewsletterManager/UISubscriptions.gtmpl",
     events = {
+        @EventConfig(listeners = UISubscriptions.AddEntryActionListener.class),
         @EventConfig(listeners = UISubscriptions.BackToCategoriesActionListener.class),
         @EventConfig(listeners = UISubscriptions.AddSubcriptionActionListener.class),
         @EventConfig(listeners = UISubscriptions.EditSubscriptionActionListener.class),
@@ -257,7 +258,7 @@ public class UISubscriptions extends UIForm {
       String portalName = NewsLetterUtil.getPortalName();
 
       UINewsletterManagerPortlet newsletterManagerPortlet = uiSubscription.getAncestorOfType(UINewsletterManagerPortlet.class);
-      UINewsletterManager newsletterManager = newsletterManagerPortlet.getChild(UINewsletterManager.class);
+      UINewsletterEntryManager newsletterManager = newsletterManagerPortlet.getChild(UINewsletterEntryManager.class);
       
       newsletterManager.setRendered(true);
       
@@ -290,6 +291,24 @@ public class UISubscriptions extends UIForm {
         popupWindow.setShow(true);
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
+    }
+  }
+  
+  public static class AddEntryActionListener extends EventListener<UISubscriptions> {
+    public void execute(Event<UISubscriptions> event) throws Exception {
+      UISubscriptions uiSubscriptions = event.getSource();
+      UIPopupContainer popupContainer = uiSubscriptions.getAncestorOfType(UINewsletterManagerPortlet.class).getChild(UIPopupContainer.class);
+      UIPopupWindow popupWindow = popupContainer.getChildById(UINewsletterConstant.ENTRY_FORM_POPUP_WINDOW);
+      if (popupWindow == null) {
+        UINewsletterEntryContainer entryContainer = popupContainer.createUIComponent(UINewsletterEntryContainer.class, null, null);
+        UINewsletterEntryDialogSelector newsletterEntryDialogSelector = entryContainer.getChild(UINewsletterEntryDialogSelector.class);
+        UIFormSelectBox categorySelectBox = newsletterEntryDialogSelector.getChildById(UINewsletterConstant.ENTRY_CATEGORY_SELECTBOX);
+        categorySelectBox.setValue(uiSubscriptions.categoryConfig.getName());
+        categorySelectBox.setDisabled(true);
+        Utils.createPopupWindow(popupContainer, entryContainer, event.getRequestContext(), UINewsletterConstant.ENTRY_FORM_POPUP_WINDOW, 800, 600);
+      } else { 
+        popupWindow.setShow(true);
+      }
     }
   }
 }

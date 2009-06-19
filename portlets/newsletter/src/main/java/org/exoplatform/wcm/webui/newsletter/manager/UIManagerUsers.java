@@ -21,32 +21,25 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import org.exoplatform.commons.utils.ObjectPageList;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.Query;
+import org.exoplatform.services.organization.User;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
-import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.NewsletterUserInfor;
-import org.exoplatform.services.wcm.newsletter.config.NewsletterUserConfig;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterCategoryHandler;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterManageUserHandler;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.newsletter.UINewsletterConstant;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIGrid;
 import org.exoplatform.webui.core.UIPageIterator;
-import org.exoplatform.webui.core.UIPopupComponent;
 import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.UITabPane;
-import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-import org.exoplatform.webui.event.Event.Phase;
-import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.services.organization.User;
 
 /**
  * Created by The eXo Platform SAS
@@ -66,7 +59,7 @@ import org.exoplatform.services.organization.User;
       @EventConfig(listeners = UIManagerUsers.CloseActionListener.class)
     }
 )
-public class UIManagerUsers extends UITabPane implements UIPopupComponent{
+public class UIManagerUsers extends UITabPane {
   private String[] TITLE_  = {"Mail", "isBanned"};
   private String[] ACTIONS_ = {"Edit", "BanOrUnBanUser", "DeleteUser"};
   private String[] MEMBER_TITLE_ = {"UserName", "FirstName", "LastName", "Email", "Role"};
@@ -123,10 +116,6 @@ public class UIManagerUsers extends UITabPane implements UIPopupComponent{
     this.setSelectedTab(UIGRID_MANAGER_USERS);
   }
 
-  public void activate() throws Exception { }
-
-  public void deActivate() throws Exception { }
-  
   public UIManagerUsers() throws Exception{
     NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
     managerUserHandler = newsletterManagerService.getManageUserHandler();

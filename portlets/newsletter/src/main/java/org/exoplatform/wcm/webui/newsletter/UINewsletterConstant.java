@@ -23,6 +23,7 @@ package org.exoplatform.wcm.webui.newsletter;
  * Jun 10, 2009  
  */
 public class UINewsletterConstant {
+  
   public static final String MANAGER_USERS_POPUP_WINDOW = "UIManagerUsersFormPopupWindow";
   
   public static final String CATEGORY_FORM_POPUP_WINDOW = "UICategoryFormPopupWindow";
@@ -38,5 +39,9 @@ public class UINewsletterConstant {
   public static final String WEBCONTENT_SELECTOR_POPUP_WINDOW   = "UIWebcontentSelectorPopupWindow";
  
   public static final String WEBCONTENT_SELECTOR_FORM_POPUP_WINDOW = "UIWebcontentSelectorFormPopupWindow";
+ 
+  public static final String ENTRY_CATEGORY_SELECTBOX = "UINewsletterEntryCategorySelectBox";
+
+  public static final String ENTRY_SUBSCRIPTION_SELECTBOX = "UINewsletterEntrySubscriptionSelectBox";
   
 }

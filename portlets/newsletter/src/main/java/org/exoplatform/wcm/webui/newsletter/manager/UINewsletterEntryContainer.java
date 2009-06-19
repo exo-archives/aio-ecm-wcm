@@ -18,7 +18,6 @@ package org.exoplatform.wcm.webui.newsletter.manager;
 
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
-import org.exoplatform.webui.core.UIPopupComponent;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 
 /**
@@ -30,17 +29,25 @@ import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 @ComponentConfig (
     lifecycle = UIContainerLifecycle.class
 )
-public class UINewsletterEntryContainer extends UIContainer implements UIPopupComponent {
+public class UINewsletterEntryContainer extends UIContainer {
 
+  private boolean isAddNew = true;
+  
+  public boolean isAddNew() {
+    return isAddNew;
+  }
+  
+  public void setAddNew(boolean isAddNew) {
+    this.isAddNew = isAddNew;
+  }
+  
   public UINewsletterEntryContainer() throws Exception {
     addChild(UINewsletterEntryDialogSelector.class, null, null);
     UINewsletterEntryForm newsletterEntryForm = createUIComponent(UINewsletterEntryForm.class, null, null);
     newsletterEntryForm.setStoredLocation("repository", "collaboration", "/sites content/live/classic");
+    newsletterEntryForm.addNew(isAddNew);
     addChild(newsletterEntryForm);
   }
-  
-  public void activate() throws Exception {}
 
-  public void deActivate() throws Exception {}
   
 }

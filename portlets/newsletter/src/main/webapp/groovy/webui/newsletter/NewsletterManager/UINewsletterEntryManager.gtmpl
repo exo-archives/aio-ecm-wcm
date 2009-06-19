@@ -28,7 +28,7 @@ import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 		          	  	<div class="ButtonMiddle">
 											<div class="ContentAction ActionTitle" style="float:left;">
 												<div class="Name" style="float:none; cursor:pointer;">
-				          	  		<a href="javascript:void(0);">
+				          	  		<a onclick="<%=uicomponent.event("AddEntry")%>" href="javascript:void(0);">
 				          	  			<%=_ctx.appRes("NewsletterPortletAction.action.CreateLetter")%>
 				          	  		</a>
 												</div>

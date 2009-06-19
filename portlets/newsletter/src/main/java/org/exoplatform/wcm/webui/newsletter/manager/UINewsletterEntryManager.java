@@ -24,17 +24,21 @@ import java.util.List;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 import org.exoplatform.services.wcm.newsletter.config.NewsletterManagerConfig;
+import org.exoplatform.wcm.webui.Utils;
+import org.exoplatform.wcm.webui.newsletter.UINewsletterConstant;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIPopupContainer;
+import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
+import org.exoplatform.webui.form.UIFormSelectBox;
 
 /**
  * Created by The eXo Platform SAS
@@ -44,14 +48,15 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
  */
 @ComponentConfig(
                  lifecycle = UIFormLifecycle.class,
-                 template = "app:/groovy/webui/newsletter/NewsletterManager/UINewsletterManager.gtmpl",
+                 template = "app:/groovy/webui/newsletter/NewsletterManager/UINewsletterEntryManager.gtmpl",
                  events = {
-                     @EventConfig(listeners = UINewsletterManager.BackToSubcriptionsActionListener.class),
-                     @EventConfig(listeners = UINewsletterManager.BackToCategoriesActionListener.class),
-                     @EventConfig(listeners = UINewsletterManager.OpenNewsletterActionListener.class)
+                     @EventConfig(listeners = UINewsletterEntryManager.AddEntryActionListener.class),
+                     @EventConfig(listeners = UINewsletterEntryManager.BackToSubcriptionsActionListener.class),
+                     @EventConfig(listeners = UINewsletterEntryManager.BackToCategoriesActionListener.class),
+                     @EventConfig(listeners = UINewsletterEntryManager.OpenNewsletterActionListener.class)
                  }
              )
-public class UINewsletterManager extends UIForm {
+public class UINewsletterEntryManager extends UIForm {
 
   private UIFormCheckBoxInput<Boolean>  checkBoxInput            = null;
   
@@ -61,7 +66,7 @@ public class UINewsletterManager extends UIForm {
   
   private List<NewsletterManagerConfig> listNewsletterConfig = new ArrayList<NewsletterManagerConfig>();
 
-  public UINewsletterManager () {
+  public UINewsletterEntryManager () {
       
       NewsletterManagerConfig newletter = null;
       
@@ -115,9 +120,9 @@ public class UINewsletterManager extends UIForm {
     this.categoryConfig = categoryConfig;
   }
   
-  static  public class BackToSubcriptionsActionListener extends EventListener<UINewsletterManager> {
-    public void execute(Event<UINewsletterManager> event) throws Exception {
-      UINewsletterManager newsletter = event.getSource();
+  static  public class BackToSubcriptionsActionListener extends EventListener<UINewsletterEntryManager> {
+    public void execute(Event<UINewsletterEntryManager> event) throws Exception {
+      UINewsletterEntryManager newsletter = event.getSource();
       UINewsletterManagerPortlet newsletterManagerPortlet = newsletter.getAncestorOfType(UINewsletterManagerPortlet.class);
       UISubscriptions subcription = newsletterManagerPortlet.getChild(UISubscriptions.class);
       subcription.setRendered(true);
@@ -126,9 +131,9 @@ public class UINewsletterManager extends UIForm {
     }
   }
 
-  static  public class BackToCategoriesActionListener extends EventListener<UINewsletterManager> {
-    public void execute(Event<UINewsletterManager> event) throws Exception {
-      UINewsletterManager newsletter = event.getSource();
+  static  public class BackToCategoriesActionListener extends EventListener<UINewsletterEntryManager> {
+    public void execute(Event<UINewsletterEntryManager> event) throws Exception {
+      UINewsletterEntryManager newsletter = event.getSource();
       UINewsletterManagerPortlet newsletterManagerPortlet = newsletter.getAncestorOfType(UINewsletterManagerPortlet.class);
       UICategories categories = newsletterManagerPortlet.getChild(UICategories.class);
       UISubscriptions subcription = newsletterManagerPortlet.getChild(UISubscriptions.class);
@@ -138,9 +143,9 @@ public class UINewsletterManager extends UIForm {
     }
   }
 
-  static  public class OpenNewsletterActionListener extends EventListener<UINewsletterManager> {
-    public void execute(Event<UINewsletterManager> event) throws Exception {
-      UINewsletterManager newsletter = event.getSource();
+  static  public class OpenNewsletterActionListener extends EventListener<UINewsletterEntryManager> {
+    public void execute(Event<UINewsletterEntryManager> event) throws Exception {
+      UINewsletterEntryManager newsletter = event.getSource();
 
       String subId = newsletter.getChecked();
       if(subId == null){
@@ -155,6 +160,27 @@ public class UINewsletterManager extends UIForm {
       popupContainer.setRendered(true);
       popupContainer.activate(newsletterManagerPopup, 800, 600);
       event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
+    }
+  }
+  
+  public static class AddEntryActionListener extends EventListener<UINewsletterEntryManager> {
+    public void execute(Event<UINewsletterEntryManager> event) throws Exception {
+      UINewsletterEntryManager uiNewsletterEntryManager = event.getSource();
+      UIPopupContainer popupContainer = uiNewsletterEntryManager.getAncestorOfType(UINewsletterManagerPortlet.class).getChild(UIPopupContainer.class);
+      UIPopupWindow popupWindow = popupContainer.getChildById(UINewsletterConstant.ENTRY_FORM_POPUP_WINDOW);
+      if (popupWindow == null) {
+        UINewsletterEntryContainer entryContainer = popupContainer.createUIComponent(UINewsletterEntryContainer.class, null, null);
+        UINewsletterEntryDialogSelector newsletterEntryDialogSelector = entryContainer.getChild(UINewsletterEntryDialogSelector.class);
+        UIFormSelectBox categorySelectBox = newsletterEntryDialogSelector.getChildById(UINewsletterConstant.ENTRY_CATEGORY_SELECTBOX);
+        categorySelectBox.setValue(uiNewsletterEntryManager.categoryConfig.getName());
+        categorySelectBox.setDisabled(true);
+        UIFormSelectBox subscriptionSelectBox = newsletterEntryDialogSelector.getChildById(UINewsletterConstant.ENTRY_SUBSCRIPTION_SELECTBOX);
+        subscriptionSelectBox.setValue(uiNewsletterEntryManager.subscriptionConfig.getName());
+        subscriptionSelectBox.setDisabled(true);
+        Utils.createPopupWindow(popupContainer, entryContainer, event.getRequestContext(), UINewsletterConstant.ENTRY_FORM_POPUP_WINDOW, 800, 600);
+      } else { 
+        popupWindow.setShow(true);
+      }
     }
   }
 }
