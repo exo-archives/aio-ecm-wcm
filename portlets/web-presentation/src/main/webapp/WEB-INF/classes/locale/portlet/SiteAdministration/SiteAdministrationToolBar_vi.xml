@@ -19,7 +19,7 @@
       <AddContent>Tạo mới nội dung</AddContent>      
       <EditPageAndNavigation>Chỉnh sửa navigation</EditPageAndNavigation>   
       <Dashboard>Dashboard</Dashboard>      
-      <Sites>Portals</Sites>      
+      <Sites>Sites</Sites>      
 			<Groups>Nhóm</Groups>      
 			<Editor>Chỉnh sửa</Editor>
 			<Administrator>Quản trị</Administrator>      
@@ -33,4 +33,3 @@
     </msg>        
   </UISiteAdminToolbar>
 </bundle>
-

@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bundle>
-  <!--/n  ######################################################################################
-  #    org.exoplatform.ecm.webui.contentviewer.UIParameterizedContentViewerPortlet     #
-  ######################################################################################
-  -->
   <UIMessageBoard>
     <msg>
       <content-not-found>Content not found or deleted.</content-not-found>
@@ -41,4 +37,3 @@
   	</title>
   </UIPopupWindow>
 </bundle>
-

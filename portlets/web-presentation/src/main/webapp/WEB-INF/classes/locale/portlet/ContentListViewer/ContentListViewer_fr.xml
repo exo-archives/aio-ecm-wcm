@@ -2,135 +2,135 @@
 <bundle>
 	<UIFormInputSetWithAction>
 		<msg>
-			<confirm-delete>Are you sure to delete this category from list?</confirm-delete>
+			<confirm-delete>Êtes-vous sûr de vouloir supprimer cette catégorie de la liste ?</confirm-delete>
 		</msg>
 	</UIFormInputSetWithAction>
 	<FolderPathInputSet>
 		<title>
-			<SelectFolderPath>Select folder path</SelectFolderPath>
+			<SelectFolderPath>Sélectionner le dossier chemin</SelectFolderPath>
 		</title>
 	</FolderPathInputSet>
-  <UIViewerManagementForm>
-    <action>
-      <Save>Sauver</Save>
-      <Cancel>Annuler</Cancel>
-      <Down>Contrebas</Down>
-      <Up>Contrehaut</Up>
-			<Delete>Supprimer</Delete>            
-    </action>
-    <label>
-    	<ContentSelectionBlock>Contenu</ContentSelectionBlock>
-    	<DisplaySettingBlock>Présentation</DisplaySettingBlock>    	        
-      <FolderPathInputSet>UIViewerManagementForm</FolderPathInputSet>
-      <FolderPathInput>Chemin du dossier</FolderPathInput>
-      <FormViewTemplate>Gabarit de visualisation</FormViewTemplate>
-      <PaginatorTemplate>Gabarit de pagination</PaginatorTemplate>
-      <ItemsPerPage>Eléments par page</ItemsPerPage>
-      <ViewerButtonQuickEdit>Montrer le bouton d'édition rapide</ViewerButtonQuickEdit>
-      <ViewerButtonRefresh>Montrer le bouton de rafraichissement</ViewerButtonRefresh>
-      <ViewerThumbnailsView>Montrer les vignettes</ViewerThumbnailsView>
-      <ViewerTitle>Montrer le titre</ViewerTitle>
-      <ViewerDateCreated>Montrer la date de création</ViewerDateCreated>
-      <ViewerSummary>Montrer le résumé</ViewerSummary>
-      <Header>Entête</Header>
-      <ViewerLink>Montrer le lien</ViewerLink>
-      <ViewerHeader>Montrer l'entête</ViewerHeader>
-      <ViewerMode>Mode</ViewerMode>
-      <ManualViewerMode>Manuel</ManualViewerMode>
-      <AutoViewerMode>Automatique</AutoViewerMode>
-      <OrderBy>Ordre de</OrderBy>
-      <OrderByTitle>Titre</OrderByTitle>
-      <OrderByDateCreated>Date de création</OrderByDateCreated>
-      <OrderByDateModified>Date de modification</OrderByDateModified>
-      <OrderByDatePublished>Date de publication</OrderByDatePublished>            
-      <OrderDesc>Descendant</OrderDesc>
-      <OrderAsc>Ascendant</OrderAsc>   
-      <ContentPath>Répertoire</ContentPath>                     
-    </label>
-    <title>Sélectionner un dossier pour montrer ses contenus web ou ses documents</title>
-  </UIViewerManagementForm>
-  <UIMessageBoard>
-    <msg>
-      <folder-not-found>Ce visualiseur n'a pas été configuré.</folder-not-found>
-      <no-permission>Accès au répertoire refusé</no-permission>
-      <folder-empty>Aucun contenu à montrer</folder-empty>
-      <error-nodetype>Erreur inconnue.</error-nodetype>
-      <saving-success>Succès. Vous pouvez voir les changements en passant en mode visualisation.</saving-success>
-      <empty-folder-path>Vous devez sélectionner un dossier.</empty-folder-path>
+	<UIViewerManagementForm>
+		<action>
+			<Save>Sauver</Save>
+			<Cancel>Annuler</Cancel>
+			<Down>Contrebas</Down>
+			<Up>Contrehaut</Up>
+			<Delete>Supprimer</Delete>
+		</action>
+		<label>
+			<ContentSelectionBlock>Contenu</ContentSelectionBlock>
+			<DisplaySettingBlock>Présentation</DisplaySettingBlock>
+			<FolderPathInputSet>UIViewerManagementForm</FolderPathInputSet>
+			<FolderPathInput>Chemin du dossier</FolderPathInput>
+			<FormViewTemplate>Gabarit de visualisation</FormViewTemplate>
+			<PaginatorTemplate>Gabarit de pagination</PaginatorTemplate>
+			<ItemsPerPage>Eléments par page</ItemsPerPage>
+			<ViewerButtonQuickEdit>Montrer le bouton d'édition rapide</ViewerButtonQuickEdit>
+			<ViewerButtonRefresh>Montrer le bouton de rafraichissement</ViewerButtonRefresh>
+			<ViewerThumbnailsView>Montrer les vignettes</ViewerThumbnailsView>
+			<ViewerTitle>Montrer le titre</ViewerTitle>
+			<ViewerDateCreated>Montrer la date de création</ViewerDateCreated>
+			<ViewerSummary>Montrer le résumé</ViewerSummary>
+			<Header>Entête</Header>
+			<ViewerLink>Montrer le lien</ViewerLink>
+			<ViewerHeader>Montrer l'entête</ViewerHeader>
+			<ViewerMode>Mode</ViewerMode>
+			<ManualViewerMode>Manuel</ManualViewerMode>
+			<AutoViewerMode>Automatique</AutoViewerMode>
+			<OrderBy>Ordre de</OrderBy>
+			<OrderByTitle>Titre</OrderByTitle>
+			<OrderByDateCreated>Date de création</OrderByDateCreated>
+			<OrderByDateModified>Date de modification</OrderByDateModified>
+			<OrderByDatePublished>Date de publication</OrderByDatePublished>
+			<OrderDesc>Descendant</OrderDesc>
+			<OrderAsc>Ascendant</OrderAsc>
+			<ContentPath>Répertoire</ContentPath>
+		</label>
+		<title>Sélectionner un dossier pour montrer ses contenus web ou ses documents</title>
+	</UIViewerManagementForm>
+	<UIMessageBoard>
+		<msg>
+			<folder-not-found>Ce visualiseur n'a pas été configuré.</folder-not-found>
+			<no-permission>Accès au répertoire refusé</no-permission>
+			<folder-empty>Aucun contenu à montrer</folder-empty>
+			<error-nodetype>Erreur inconnue.</error-nodetype>
+			<saving-success>Succès. Vous pouvez voir les changements en passant en mode visualisation.</saving-success>
+			<empty-folder-path>Vous devez sélectionner un dossier.</empty-folder-path>
 			<not-valid-action>Viewer mode is not suitable with contents selected. You should change viewer mode.</not-valid-action>
-      <none-action-excuted>Aucune action ne sera effectuée</none-action-excuted>
-    </msg>
-  </UIMessageBoard>
-  <UIFolderTreeList>
-    <title>Sélectionner un dossier pour afficher son contenu</title>
-  </UIFolderTreeList>
-  <UIFolderExplorer>
-    <title>Sélectionner un dossier</title>
-  </UIFolderExplorer>
-  <UIStartEditionInPageWizard>
-    <msg>
-      <edit-portlet>Cliquer ici pour éditer cette Portlet</edit-portlet>
-    </msg>
-  </UIStartEditionInPageWizard>
-  <UIViewerManagementPopupWindow>
-    <title>
-      <UIPortletConfig>Gestion du Content List Viewer</UIPortletConfig>
-      <UIContentEdittingPopup>Modifier le contenu</UIContentEdittingPopup>
-    </title>
-  </UIViewerManagementPopupWindow>
+			<none-action-excuted>Aucune action ne sera effectuée</none-action-excuted>
+		</msg>
+	</UIMessageBoard>
+	<UIFolderTreeList>
+		<title>Sélectionner un dossier pour afficher son contenu</title>
+	</UIFolderTreeList>
+	<UIFolderExplorer>
+		<title>Sélectionner un dossier</title>
+	</UIFolderExplorer>
+	<UIStartEditionInPageWizard>
+		<msg>
+			<edit-portlet>Cliquer ici pour éditer cette Portlet</edit-portlet>
+		</msg>
+	</UIStartEditionInPageWizard>
+	<UIViewerManagementPopupWindow>
+		<title>
+			<UIPortletConfig>Gestion du Content List Viewer</UIPortletConfig>
+			<UIContentEdittingPopup>Modifier le contenu</UIContentEdittingPopup>
+		</title>
+	</UIViewerManagementPopupWindow>
 	<UISelectedContentGrid>
 		<action>
 			<SaveCategories>Sauver</SaveCategories>
 			<Cancel>Annuler</Cancel>
 			<Down>Contrebas</Down>
-      <Up>Contrehaut</Up>
+			<Up>Contrehaut</Up>
 			<Delete>Supprimer</Delete>
 		</action>
 		<label>
 			<header>Liste le contenu sélectionné</header>
-			<name>#{word.name}</name>
+			<name>Nom</name>
 			<delete>Supprimer</delete>
-		</label>		
+		</label>
 		<msg>
 			<confirm-delete>Confirmez-vous la suppression?</confirm-delete>
-		</msg>		
-  </UISelectedContentGrid>
-  <UIFolderPathSelectPopupWindow>
-  	<title>
-  		<UICorrectContentSelectorForm>Sélectionnez le contenu manuellement</UICorrectContentSelectorForm>
-  		<UIFolderPathSelectorForm>Sélectionner un dossier à visualiser</UIFolderPathSelectorForm>
-  	</title>
-  </UIFolderPathSelectPopupWindow>
-  <UIFolderPathSelectorForm>
-  	<action>
-  		<Close>#{word.close}</Close>
-  	</action>
-  </UIFolderPathSelectorForm>  
-  <UIContentSelectionPanel>
-  	<label>
-  		<header>Bellow est contenu peut être sélectionné</header>
-  		<name>#{word.name}</name>
-  		<add>Ajouter</add>  		  		
-  	</label>
-  </UIContentSelectionPanel>  
-  <UIDocumentDialogForm>
-  	<action>
-  		<Cancel></Cancel>
-  		<FastPublish></FastPublish>
-  		<SaveAsDraft></SaveAsDraft>  		  		
-  	</action>
-  </UIDocumentDialogForm>  
-  <UIMessageBoard>
-  	<msg>  		
-  		<contents-not-found></contents-not-found>
-  		<no-permission></no-permission>
-  		<error-nodetype></error-nodetype>
-  		<folder-empty></folder-empty>
-  	</msg>
-  </UIMessageBoard>  
-  <UIPresentationContainer>
-  	<label>
-  		<quickEditTitle></quickEditTitle>
-  	</label>
-  </UIPresentationContainer>  
+		</msg>
+	</UISelectedContentGrid>
+	<UIFolderPathSelectPopupWindow>
+		<title>
+			<UICorrectContentSelectorForm>Sélectionnez le contenu manuellement</UICorrectContentSelectorForm>
+			<UIFolderPathSelectorForm>Sélectionner un dossier à visualiser</UIFolderPathSelectorForm>
+		</title>
+	</UIFolderPathSelectPopupWindow>
+	<UIFolderPathSelectorForm>
+		<action>
+			<Close>Fermer</Close>
+		</action>
+	</UIFolderPathSelectorForm>
+	<UIContentSelectionPanel>
+		<label>
+			<header>Bellow est contenu peut être sélectionné</header>
+			<name>Nom</name>
+			<add>Ajouter</add>
+		</label>
+	</UIContentSelectionPanel>
+	<UIDocumentDialogForm>
+		<action>
+			<Cancel>Annuler</Cancel>
+			<FastPublish>Publier Rapidement</FastPublish>
+			<SaveAsDraft>Enregistrer en tant que projet de</SaveAsDraft>
+		</action>
+	</UIDocumentDialogForm>
+	<UIMessageBoard>
+		<msg>
+			<contents-not-found>Contenu introuvable</contents-not-found>
+			<no-permission>Permission d'accès refusée</no-permission>
+			<error-nodetype>Type de noeud ne correspond</error-nodetype>
+			<folder-empty>Le dossier est vide</folder-empty>
+		</msg>
+	</UIMessageBoard>
+	<UIPresentationContainer>
+		<label>
+			<quickEditTitle>Quick Edit</quickEditTitle>
+		</label>
+	</UIPresentationContainer>
 </bundle>

@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bundle>
-  <!--/n  ######################################################################################
-  #    org.exoplatform.ecm.webui.contentviewer.UIParameterizedContentViewerPortlet     #
-  ######################################################################################
-  -->
   <UIMessageBoard>
     <msg>
       <content-not-found>Contenu non trouvé ou supprimé.</content-not-found>
       <content-unsupport-exc>Contenu non supporté à la visualisation.</content-unsupport-exc>
+			<content-invisible>Le contenu est invisible</content-invisible>
       <access-control-exc>Accès au contenu supprimé.</access-control-exc>
-      <content-not-printed></content-not-printed>
-      <content-obsolete></content-obsolete>
+      <content-not-printed>Le contenu ne peut pas être imprimé</content-not-printed>
+      <content-obsolete>Le contenu est obsolète</content-obsolete>
     </msg>
   </UIMessageBoard>
   <UIDocumentDialogForm>
@@ -36,8 +33,7 @@
   </UIContentViewerContainer>
   <UIPopupWindow>
   	<title>
-	  	<UIDocumentDialogForm>Document dialog form</UIDocumentDialogForm>
+	  	<UIDocumentDialogForm>Document sous forme de dialogue</UIDocumentDialogForm>
   	</title>
   </UIPopupWindow>
 </bundle>
-

@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bundle>
-  <!--/n  #########################################################################################
-  #			org.exoplatform.wcm.webui.search.UIWCMSearchForm							#
-  #########################################################################################
-  -->
   <UISearchForm>
     <keywordInput>
       <label>Từ khoá</label>
@@ -26,10 +22,6 @@
       <keyword-not-support>Chức năng tìm kiếm hiện thời chưa hỗ trợ từ khoá mà bạn đã nhập.\nXin vui lòng nhập vào từ khoá khác!</keyword-not-support>
     </message>
   </UISearchForm>
-  <!--/n  #########################################################################################
-  #			org.exoplatform.wcm.webui.search.config.UISearchPageLayoutManager			#
-  #########################################################################################
-  -->
   <UISearchPageLayoutManager>
     <mode>
       <selectOption>
@@ -60,10 +52,6 @@
       <search-mode-selecting>Xin vui lòng lựa chọn chế độ tìm kiếm!</search-mode-selecting>
     </message>
   </UISearchPageLayoutManager>
-  <!--/n  #########################################################################################
-  #			org.exoplatform.wcm.webui.search.UISearchResult								#
-  #########################################################################################
-  -->
   <UISearchResult>
     <msg>
       <your-search>Không tìm thấy</your-search>

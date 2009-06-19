@@ -10,81 +10,81 @@
 			<SelectFolderPath>Select folder path</SelectFolderPath>
 		</title>
 	</FolderPathInputSet>
-  <UIViewerManagementForm>
-    <action>
-      <Save>Save</Save>
-      <Cancel>Cancel</Cancel>
-      <Down>Down</Down>
-      <Up>Up</Up>      
-      <Delete>Delete</Delete>            
-    </action>
-    <label>
-    	<ContentSelectionBlock>Contents selection</ContentSelectionBlock>
-    	<DisplaySettingBlock>Display setting</DisplaySettingBlock>    	
-      <FolderPathInputSet>UIViewerManagementForm</FolderPathInputSet>
-      <FolderPathInput>Folder path</FolderPathInput>
-      <FormViewTemplate>Viewer template</FormViewTemplate>
-      <PaginatorTemplate>Paginator template</PaginatorTemplate>
-      <ItemsPerPage>Items per page</ItemsPerPage>
-      <ViewerButtonQuickEdit>Show quick edit button</ViewerButtonQuickEdit>
-      <ViewerButtonRefresh>Show refresh button</ViewerButtonRefresh>
-      <ViewerThumbnailsView>Show image</ViewerThumbnailsView>
-      <ViewerTitle>Show title</ViewerTitle>
-      <ViewerDateCreated>Show date created</ViewerDateCreated>
-      <ViewerSummary>Show summary</ViewerSummary>
-      <Header>Header</Header>
-      <ViewerLink>Show link</ViewerLink>
-      <ViewerHeader>Show header</ViewerHeader>
-      <ViewerMode>Mode</ViewerMode>
-      <ManualViewerMode>Manual</ManualViewerMode>
-      <AutoViewerMode>Automatic</AutoViewerMode>
-      <OrderBy>Order by</OrderBy>
-      <OrderByTitle>Title</OrderByTitle>
-      <OrderByDateCreated>Date created</OrderByDateCreated>
-      <OrderByDateModified>Date modified</OrderByDateModified>
-      <OrderByDatePublished>Date published</OrderByDatePublished>      
-      <OrderDesc>Descendant</OrderDesc>
-      <OrderAsc>Ascendant</OrderAsc>   
-      <ContentPath>Content</ContentPath>   
-    </label>
-    <title>Select folder to display its children documents or webcontent</title>
-  </UIViewerManagementForm>
-  <UIMessageBoard>
-    <msg>
-      <folder-not-found>This viewer has not been configured yet.</folder-not-found>
-      <no-permission>Folder access denied.</no-permission>
-      <folder-empty>There is no content to show.</folder-empty>
-      <error-nodetype>Unknown error.</error-nodetype>
-      <saving-success>Successful. You can see the effect when changing to view mode.</saving-success>
-      <empty-folder-path>You must select a folder.</empty-folder-path>
-      <not-valid-action>Viewer mode is not suitable with contents selected. You should change viewer mode.</not-valid-action>
-      <none-action-excuted>No action will be executed.</none-action-excuted>
-    </msg>
-  </UIMessageBoard>
-  <UIFolderTreeList>
-    <title>Select a folder to display its children as content</title>
-  </UIFolderTreeList>
-  <UIFolderExplorer>
-    <title>Below is the possible folder can be browsed</title>
-  </UIFolderExplorer>
-  <UIStartEditionInPageWizard>
-    <msg>
-      <edit-portlet>Click here to edit this portlet</edit-portlet>
-    </msg>
-  </UIStartEditionInPageWizard>
-  <UIViewerManagementPopupWindow>
-    <title>
-      <UIPortletConfig>Content list viewer management</UIPortletConfig>
-      <UIContentEdittingPopup>Content editting</UIContentEdittingPopup>
-    </title>
-  </UIViewerManagementPopupWindow>
-  <UISelectedContentGrid>
+	<UIViewerManagementForm>
+		<action>
+			<Save>Save</Save>
+			<Cancel>Cancel</Cancel>
+			<Down>Down</Down>
+			<Up>Up</Up>
+			<Delete>Delete</Delete>
+		</action>
+		<label>
+			<ContentSelectionBlock>Contents selection</ContentSelectionBlock>
+			<DisplaySettingBlock>Display setting</DisplaySettingBlock>
+			<FolderPathInputSet>UIViewerManagementForm</FolderPathInputSet>
+			<FolderPathInput>Folder path</FolderPathInput>
+			<FormViewTemplate>Viewer template</FormViewTemplate>
+			<PaginatorTemplate>Paginator template</PaginatorTemplate>
+			<ItemsPerPage>Items per page</ItemsPerPage>
+			<ViewerButtonQuickEdit>Show quick edit button</ViewerButtonQuickEdit>
+			<ViewerButtonRefresh>Show refresh button</ViewerButtonRefresh>
+			<ViewerThumbnailsView>Show image</ViewerThumbnailsView>
+			<ViewerTitle>Show title</ViewerTitle>
+			<ViewerDateCreated>Show date created</ViewerDateCreated>
+			<ViewerSummary>Show summary</ViewerSummary>
+			<Header>Header</Header>
+			<ViewerLink>Show link</ViewerLink>
+			<ViewerHeader>Show header</ViewerHeader>
+			<ViewerMode>Mode</ViewerMode>
+			<ManualViewerMode>Manual</ManualViewerMode>
+			<AutoViewerMode>Automatic</AutoViewerMode>
+			<OrderBy>Order by</OrderBy>
+			<OrderByTitle>Title</OrderByTitle>
+			<OrderByDateCreated>Date created</OrderByDateCreated>
+			<OrderByDateModified>Date modified</OrderByDateModified>
+			<OrderByDatePublished>Date published</OrderByDatePublished>
+			<OrderDesc>Descendant</OrderDesc>
+			<OrderAsc>Ascendant</OrderAsc>
+			<ContentPath>Content</ContentPath>
+		</label>
+		<title>Select folder to display its children documents or webcontent</title>
+	</UIViewerManagementForm>
+	<UIMessageBoard>
+		<msg>
+			<folder-not-found>This viewer has not been configured yet.</folder-not-found>
+			<no-permission>Folder access denied.</no-permission>
+			<folder-empty>There is no content to show.</folder-empty>
+			<error-nodetype>Unknown error.</error-nodetype>
+			<saving-success>Successful. You can see the effect when changing to view mode.</saving-success>
+			<empty-folder-path>You must select a folder.</empty-folder-path>
+			<not-valid-action>Viewer mode is not suitable with contents selected. You should change viewer mode.</not-valid-action>
+			<none-action-excuted>No action will be executed.</none-action-excuted>
+		</msg>
+	</UIMessageBoard>
+	<UIFolderTreeList>
+		<title>Select a folder to display its children as content</title>
+	</UIFolderTreeList>
+	<UIFolderExplorer>
+		<title>Below is the possible folder can be browsed</title>
+	</UIFolderExplorer>
+	<UIStartEditionInPageWizard>
+		<msg>
+			<edit-portlet>Click here to edit this portlet</edit-portlet>
+		</msg>
+	</UIStartEditionInPageWizard>
+	<UIViewerManagementPopupWindow>
+		<title>
+			<UIPortletConfig>Content list viewer management</UIPortletConfig>
+			<UIContentEdittingPopup>Content editting</UIContentEdittingPopup>
+		</title>
+	</UIViewerManagementPopupWindow>
+	<UISelectedContentGrid>
 		<action>
 			<SaveCategories>Save</SaveCategories>
 			<Cancel>Cancel</Cancel>
 			<Down>Down</Down>
 			<Up>Up</Up>
-			<Delete>Delete</Delete>			
+			<Delete>Delete</Delete>
 		</action>
 		<label>
 			<header>List selected content</header>
@@ -94,43 +94,43 @@
 		<msg>
 			<confirm-delete>Are you sure to delete this content from selected list?</confirm-delete>
 		</msg>
-  </UISelectedContentGrid>
-  <UIFolderPathSelectPopupWindow>
-  	<title>
-  		<UICorrectContentSelectorForm>Contents manually selection</UICorrectContentSelectorForm>
-  		<UIFolderPathSelectorForm>Select a folder to view it's content</UIFolderPathSelectorForm>
-  	</title>
-  </UIFolderPathSelectPopupWindow>
-  <UIFolderPathSelectorForm>
-  	<action>
-  		<Close>Close</Close>
-  	</action>
-  </UIFolderPathSelectorForm>
-  <UIContentSelectionPanel>
-  	<label>
-  		<header>Contents bellow can be selected</header>
-  		<name>Name</name>
-  		<add>Add</add>  		  		
-  	</label>
-  </UIContentSelectionPanel>
-  <UIDocumentDialogForm>
-  	<action>
-  		<Cancel>Close</Cancel>
-  		<FastPublish>Fast Publish</FastPublish>
-  		<SaveAsDraft>Save as Draft</SaveAsDraft>  		  		
-  	</action>
-  </UIDocumentDialogForm>
-  <UIMessageBoard>
-  	<msg>  	
-  		<contents-not-found>Contents not found</contents-not-found>
-  		<no-permission>Permission access denied</no-permission>
-  		<error-nodetype>Node type not match</error-nodetype>
-  		<folder-empty>Folder is empty</folder-empty>
-  	</msg>
-  </UIMessageBoard>
-  <UIPresentationContainer>
-  	<label>
-  		<quickEditTitle>Quick Edit</quickEditTitle>
-  	</label>
-  </UIPresentationContainer>
+	</UISelectedContentGrid>
+	<UIFolderPathSelectPopupWindow>
+		<title>
+			<UICorrectContentSelectorForm>Contents manually selection</UICorrectContentSelectorForm>
+			<UIFolderPathSelectorForm>Select a folder to view it's content</UIFolderPathSelectorForm>
+		</title>
+	</UIFolderPathSelectPopupWindow>
+	<UIFolderPathSelectorForm>
+		<action>
+			<Close>Close</Close>
+		</action>
+	</UIFolderPathSelectorForm>
+	<UIContentSelectionPanel>
+		<label>
+			<header>Contents bellow can be selected</header>
+			<name>Name</name>
+			<add>Add</add>
+		</label>
+	</UIContentSelectionPanel>
+	<UIDocumentDialogForm>
+		<action>
+			<Cancel>Close</Cancel>
+			<FastPublish>Publier Rapidement</FastPublish>
+			<SaveAsDraft>Enregistrer en tant que projet de</SaveAsDraft>
+		</action>
+	</UIDocumentDialogForm>
+	<UIMessageBoard>
+		<msg>
+			<contents-not-found>Contents not found</contents-not-found>
+			<no-permission>Permission access denied</no-permission>
+			<error-nodetype>Node type not match</error-nodetype>
+			<folder-empty>Folder is empty</folder-empty>
+		</msg>
+	</UIMessageBoard>
+	<UIPresentationContainer>
+		<label>
+			<quickEditTitle>Quick Edit</quickEditTitle>
+		</label>
+	</UIPresentationContainer>
 </bundle>
