@@ -24,6 +24,7 @@ import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -116,8 +117,8 @@ public class UISearchPageLayout extends UIContainer {
     try {
       RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
       String repository = getRepository();
-      ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      String workspace = manageableRepository.getConfiguration().getSystemWorkspaceName();
+        DMSConfiguration dmsConfiguration = getApplicationComponent(DMSConfiguration.class);
+        String workspace = dmsConfiguration.getConfig(repository).getSystemWorkspace();
       return new JCRResourceResolver(repository, workspace, "exo:templateFile");
     } catch (Exception e) {
       return null;

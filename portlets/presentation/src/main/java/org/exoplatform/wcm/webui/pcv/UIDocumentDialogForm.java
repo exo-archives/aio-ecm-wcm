@@ -36,6 +36,7 @@ import org.exoplatform.ecm.webui.utils.LockUtil;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.CmsService;
+import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
@@ -118,8 +119,8 @@ public class UIDocumentDialogForm extends UIDialogForm implements UIPopupCompone
     try {
       if (resourceResolver == null) {
         RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
-        ManageableRepository manageableRepository = repositoryService.getRepository(this.repositoryName);
-        String workspace = manageableRepository.getConfiguration().getSystemWorkspaceName();
+          DMSConfiguration dmsConfiguration = getApplicationComponent(DMSConfiguration.class);
+          String workspace = dmsConfiguration.getConfig(this.repositoryName).getSystemWorkspace();
         resourceResolver = new JCRResourceResolver(this.repositoryName,
                                                    workspace,
                                                    TemplateService.EXO_TEMPLATE_FILE_PROP);

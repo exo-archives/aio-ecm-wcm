@@ -7,6 +7,11 @@
   </component>
   
   <component>
+    <key>org.exoplatform.portal.application.UserGadgetStorage</key>
+    <type>org.exoplatform.portal.application.jcr.UserGadgetStorageImpl</type>
+  </component>    
+    
+  <component>
     <key>org.exoplatform.portal.layout.PortalLayoutService</key>
     <type>org.exoplatform.portal.layout.jcr.PortalLayoutServiceImpl</type>
     <init-params>

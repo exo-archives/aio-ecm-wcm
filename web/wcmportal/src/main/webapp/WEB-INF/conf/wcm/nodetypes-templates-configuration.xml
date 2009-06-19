@@ -2,6 +2,11 @@
 
 <configuration>
   
+	<component>
+    <key>org.exoplatform.services.cms.templates.TemplateService</key>
+    <type>org.exoplatform.services.cms.templates.impl.TemplateServiceImpl</type>    
+  </component>
+
    <external-component-plugins>
     <target-component>org.exoplatform.services.cms.templates.TemplateService</target-component>
     	<component-plugin>

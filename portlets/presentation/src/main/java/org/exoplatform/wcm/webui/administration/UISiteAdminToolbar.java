@@ -186,7 +186,7 @@ import org.exoplatform.webui.event.EventListener;
       }
     }
 
-    // editor
+    // redactor
     MembershipEntry redactorEntry = MembershipEntry.parse(editSitePermission);
     if (redactorEntry.getMembershipType().equals(redactorMembershipType)
         || redactorEntry.getMembershipType().equals(MembershipEntry.ANY_TYPE)) {

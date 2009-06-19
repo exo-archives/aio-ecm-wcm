@@ -25,8 +25,8 @@
 	      <property name="createWikiPageURI" value="wikipresentation"/>
 	      <property name="CLVPortlet" value="/presentation/ContentListViewerPortlet"/>
 	      <property name="SCVPortlet" value="/presentation/SingleContentViewer"/>
-	      <property name="formViewTemplatePath" value="/jcr:system/exo:ecm/views/templates/Content List Viewer/list-by-folder/UIContentListPresentationDefault.gtmpl"/>
-	      <property name="paginatorTemplatePath" value="/jcr:system/exo:ecm/views/templates/Content List Viewer/paginators/UIPaginatorDefault.gtmpl"/>	      
+	      <property name="formViewTemplatePath" value="/exo:ecm/views/templates/Content List Viewer/list-by-folder/UIContentListPresentationDefault.gtmpl"/>
+	      <property name="paginatorTemplatePath" value="/exo:ecm/views/templates/Content List Viewer/paginators/UIPaginatorDefault.gtmpl"/>	      
 	    </properties-param>
 	   <properties-param>
 	      <name>share.portal.config</name>

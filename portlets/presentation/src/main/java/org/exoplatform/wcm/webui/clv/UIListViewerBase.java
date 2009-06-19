@@ -22,6 +22,7 @@ import org.exoplatform.ecm.resolver.JCRResourceResolver;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.clv.config.UIPortletConfig;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -82,9 +83,9 @@ public abstract class UIListViewerBase extends UIContainer implements RefreshDel
   public ResourceResolver getTemplateResourceResolver() throws Exception {
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     String repository = getPortletPreference().getValue(UIContentListViewerPortlet.REPOSITORY, null);
-    ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-    String workspace = manageableRepository.getConfiguration().getSystemWorkspaceName();
-    return new JCRResourceResolver(repository, workspace, "exo:templateFile");
+      DMSConfiguration dmsConfiguration = getApplicationComponent(DMSConfiguration.class);
+      String workspace = dmsConfiguration.getConfig(repository).getSystemWorkspace();
+      return new JCRResourceResolver(repository, workspace, "exo:templateFile");
   }
 
   public static class QuickEditActionListener extends EventListener<UIFolderViewer> {

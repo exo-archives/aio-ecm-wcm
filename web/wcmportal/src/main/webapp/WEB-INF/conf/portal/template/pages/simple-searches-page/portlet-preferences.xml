@@ -21,27 +21,27 @@
 	</preference>		    
 	<preference>
 		<name>searchFormTemplatePath</name>
-		<value>/jcr:system/exo:ecm/views/templates/WCM Advance Search/search-form/UIDefaultSearchForm.gtmpl</value>
+		<value>/exo:ecm/views/templates/WCM Advance Search/search-form/UIDefaultSearchForm.gtmpl</value>
 		<read-only>false</read-only>
 	</preference>
 	<preference>
 		<name>searchResultTemplatePath</name>
-		<value>/jcr:system/exo:ecm/views/templates/WCM Advance Search/search-result/UIDefaultSearchResult.gtmpl</value>
+		<value>/exo:ecm/views/templates/WCM Advance Search/search-result/UIDefaultSearchResult.gtmpl</value>
 		<read-only>false</read-only>
 	</preference>	
 	<preference>
 		<name>searchBoxTemplatePath</name>
-		<value>/jcr:system/exo:ecm/views/templates/WCM Advance Search/search-box/UIDefaultSearchBox.gtmpl</value>
+		<value>/exo:ecm/views/templates/WCM Advance Search/search-box/UIDefaultSearchBox.gtmpl</value>
 		<read-only>false</read-only>
 	</preference>
 	<preference>
 		<name>searchPaginatorTemplatePath</name>
-		<value>/jcr:system/exo:ecm/views/templates/WCM Advance Search/search-paginator/UIDefaultSearchPaginator.gtmpl</value>
+		<value>/exo:ecm/views/templates/WCM Advance Search/search-paginator/UIDefaultSearchPaginator.gtmpl</value>
 		<read-only>false</read-only>
 	</preference>	
 	<preference>
 		<name>searchPageLayoutTemplatePath</name>
-		<value>/jcr:system/exo:ecm/views/templates/WCM Advance Search/search-page-layout/UIResultPageLayoutDefault.gtmpl</value>
+		<value>/exo:ecm/views/templates/WCM Advance Search/search-page-layout/UIResultPageLayoutDefault.gtmpl</value>
 		<read-only>false</read-only>
 	</preference>		
 	<preference>

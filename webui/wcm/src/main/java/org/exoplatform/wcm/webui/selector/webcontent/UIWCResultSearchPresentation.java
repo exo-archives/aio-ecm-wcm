@@ -7,6 +7,7 @@ import org.exoplatform.ecm.resolver.JCRResourceResolver;
 import org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.templates.TemplateService;
+import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
@@ -99,10 +100,12 @@ public class UIWCResultSearchPresentation extends UIBaseNodePresentation {
         PortletPreferences prefs = pContext.getRequest().getPreferences();
         String workspace = prefs.getValue("workspace", null);
         if(workspace == null) {
-          WCMConfigurationService wcmConfService = 
-            getApplicationComponent(WCMConfigurationService.class);
-          NodeLocation nodeLocation = wcmConfService.getLivePortalsLocation(repository);
-          workspace = nodeLocation.getWorkspace();
+          //WCMConfigurationService wcmConfService =
+            //getApplicationComponent(WCMConfigurationService.class);
+          //NodeLocation nodeLocation = wcmConfService.getLivePortalsLocation(repository);
+          //workspace = nodeLocation.getWorkspace();
+            DMSConfiguration dmsConfiguration = getApplicationComponent(DMSConfiguration.class);
+            workspace = dmsConfiguration.getConfig(repository).getSystemWorkspace();
         }
         resourceResolver = new JCRResourceResolver(repository, workspace, "exo:templateFile");
       }

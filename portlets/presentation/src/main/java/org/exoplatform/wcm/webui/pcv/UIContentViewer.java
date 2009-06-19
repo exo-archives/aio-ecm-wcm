@@ -22,6 +22,7 @@ import org.exoplatform.ecm.resolver.JCRResourceResolver;
 import org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.templates.TemplateService;
+import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
@@ -130,7 +131,9 @@ public class UIContentViewer extends UIBaseNodePresentation {
    */
   public ResourceResolver getTemplateResourceResolver(WebuiRequestContext context, String template) {
     try {
-      resourceResolver = new JCRResourceResolver(repository, workspace, "exo:templateFile");
+        DMSConfiguration dmsConfiguration = getApplicationComponent(DMSConfiguration.class);
+        String workspace = dmsConfiguration.getConfig(repository).getSystemWorkspace();
+        resourceResolver = new JCRResourceResolver(repository, workspace, "exo:templateFile");
     } catch (Exception e) {
       e.printStackTrace();
     }

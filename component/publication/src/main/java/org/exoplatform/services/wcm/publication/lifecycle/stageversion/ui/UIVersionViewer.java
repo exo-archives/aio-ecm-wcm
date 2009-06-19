@@ -24,6 +24,7 @@ import org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.templates.TemplateService;
+import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.log.ExoLogger;
@@ -76,11 +77,10 @@ public class UIVersionViewer extends UIBaseNodePresentation {
 
   public ResourceResolver getTemplateResourceResolver(WebuiRequestContext context, String template) {
     try{
-      RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
-      String repository = getRepository();
-      ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      String workspace = manageableRepository.getConfiguration().getSystemWorkspaceName();
-      resourceResolver = new JCRResourceResolver(repository, workspace, "exo:templateFile");
+        String repository = getRepository();
+        DMSConfiguration dmsConfiguration = getApplicationComponent(DMSConfiguration.class);
+        String workspace = dmsConfiguration.getConfig(repository).getSystemWorkspace();
+        resourceResolver = new JCRResourceResolver(repository, workspace, "exo:templateFile");
     }catch (Exception e) {
       e.printStackTrace();
     }    

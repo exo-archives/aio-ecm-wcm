@@ -298,7 +298,7 @@
 				    	<div class="CenterSelect" onclick="$turnOffQuickEditLink" title="$liveModeTitle">$turnOffQuickEditLabel</div>
 				    </div>
 			    </div>
-			    <div>$liveModeTitle : </div>
+			    <div>$editModeTitle : </div>
 			</div>		
 		<% } else { %>
 			<div class="BoxOnOff SelectOn">

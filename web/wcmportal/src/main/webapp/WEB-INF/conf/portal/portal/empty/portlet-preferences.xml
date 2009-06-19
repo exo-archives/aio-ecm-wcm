@@ -188,19 +188,19 @@
 	  <window-id>portal#empty:/searches/WCMAdvanceSearchPortlet/empty-search</window-id>
 	  <preference>
 	    <name>searchPageLayoutTemplatePath</name>
-	    <value>/jcr:system/exo:ecm/views/templates/WCM Advance Search/search-page-layout/UISearchPageLayoutDefault.gtmpl</value>
+	    <value>/exo:ecm/views/templates/WCM Advance Search/search-page-layout/UISearchPageLayoutDefault.gtmpl</value>
 	  </preference>
 	  <preference>
 	    <name>searchFormTemplatePath</name>
-	    <value>/jcr:system/exo:ecm/views/templates/WCM Advance Search/search-form/UIDefaultSearchForm.gtmpl</value>
+	    <value>/exo:ecm/views/templates/WCM Advance Search/search-form/UIDefaultSearchForm.gtmpl</value>
 	  </preference>
 	  <preference>
 	    <name>searchBoxTemplatePath</name>
-	    <value>/jcr:system/exo:ecm/views/templates/WCM Advance Search/search-box/UIemptySearchBox.gtmpl</value>
+	    <value>/exo:ecm/views/templates/WCM Advance Search/search-box/UIemptySearchBox.gtmpl</value>
 	  </preference>
 	  <preference>
 	    <name>searchPaginatorTemplatePath</name>
-	    <value>/jcr:system/exo:ecm/views/templates/WCM Advance Search/search-paginator/UIDefaultSearchPaginator.gtmpl</value>
+	    <value>/exo:ecm/views/templates/WCM Advance Search/search-paginator/UIDefaultSearchPaginator.gtmpl</value>
 	  </preference>
 	  <preference>
 	    <name>searchMode</name>
@@ -224,7 +224,7 @@
 	  </preference>
 	  <preference>
 	    <name>searchResultTemplatePath</name>
-	    <value>/jcr:system/exo:ecm/views/templates/WCM Advance Search/search-result/UIDefaultSearchResult.gtmpl</value>
+	    <value>/exo:ecm/views/templates/WCM Advance Search/search-result/UIDefaultSearchResult.gtmpl</value>
 	  </preference>
 	</portlet-preferences>
   
