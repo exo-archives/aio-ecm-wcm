@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bundle>
-  <!--/n  ####################################################################
-  # org.exoplatform.wcm.webui.scv.config.UIWelcomeScreen             #
-  ####################################################################
-  -->
   <UIWelcomeScreen>
     <label>
       <QuickCreateWebContent>Create a new content</QuickCreateWebContent>
@@ -32,10 +28,6 @@
       <UIWCMPublicationGrid>Publication lifecycle</UIWCMPublicationGrid>
     </title>
   </UITabPane>
-  <!--/n  ###################################################################
-  # org.exoplatform.wcm.webui.scv.config.UIMiscellaneousInfo        #
-  ###################################################################
-  -->
   <UIMiscellaneousInfo>
     <label>
       <ShowTOC>Show table of content</ShowTOC>
@@ -52,10 +44,6 @@
     </action>
     <msg-successfully>You saved successfully!</msg-successfully>
   </UIMiscellaneousInfo>
-  <!--/n  ###################################################################
-  # org.exoplatform.wcm.webui.scv.config.UIQuickCreationWizard      #
-  ###################################################################
-  -->
   <UIQuickCreationWizard>
     <label>
       <stepInfo>Show help</stepInfo>
@@ -86,10 +74,6 @@
       <StepbyStep>In the first time, you must go through step by step</StepbyStep>
     </msg>
   </UIQuickCreationWizard>
-  <!--/n  ###################################################################
-  # org.exoplatform.wcm.webui.scv.config.UIWebContentSelector       #
-  ###################################################################
-  -->
   <UIWebContentSelector>
     <label>
       <repository>repository</repository>
@@ -111,10 +95,6 @@
       <confirm-delete>Are you sure to delete this category from list?</confirm-delete>
     </msg>
   </UIFormInputSetWithAction>
-  <!--/n  ###################################################################
-  # org.exoplatform.wcm.webui.scv.config.UIContentDialogForm        #
-  ###################################################################
-  -->
   <UIContentDialogForm>
     <action>
       <SaveDraft>Save Draft</SaveDraft>
@@ -124,10 +104,6 @@
       <Close>Close</Close>
     </action>
   </UIContentDialogForm>
-  <!--/n  ###################################################################
-  #  org.exoplatform.wcm.presentation.scp.UIMessageBoard						#
-  ###################################################################
-  -->
   <UIMessageBoard>
     <msg>
       <content-not-found>Content not found or this portlet has not been configured yet!</content-not-found>
@@ -135,10 +111,6 @@
       <error-nodetype>This viewer has not been configured yet.</error-nodetype>
     </msg>
   </UIMessageBoard>
-  <!--/n  ###################################################################
-  #  org.exoplatform.dms.webui.component.UICategoriesAddedList			#
-  ###################################################################
-  -->
   <UICategoriesAddedList>
     <msg>
       <confirm-delete>Are you sure to delete this category from list?</confirm-delete>
@@ -148,10 +120,6 @@
       <action>Delete</action>
     </header>
   </UICategoriesAddedList>
-  <!--/n  ###################################################################
-  #  org.exoplatform.dms.webui.component.UICategoryManager					#
-  ###################################################################
-  -->
   <UICategoryManager>
     <tab>
       <label>
@@ -160,10 +128,6 @@
       </label>
     </tab>
   </UICategoryManager>
-  <!--/n  ###################################################################
-  #  org.exoplatform.ecm.webui.component.UITreeList									#
-  ###################################################################
-  -->
   <UITreeList>
     <header>
       <name>Name</name>
@@ -174,8 +138,6 @@
       <child-not-found>Child not found!</child-not-found>
     </info>
   </UITreeList>
-  <!--/n  ###################################################################
-  -->
   <UIViewModeContainer>
     <action>
       <QuickEdit>Edit</QuickEdit>
@@ -237,10 +199,6 @@
       <BrowsePublication />
     </title>
   </publication>
-  <!--/n  ##################################################################################
-  #  org.exoplatform.wcm.presentation.acp.config.selector.UIWebContentPathSelector #
-  ##################################################################################
-  -->
   <UIWebContentSelectorForm>
     <title>Select a webcontent and publish to this page</title>
     <label>
@@ -253,16 +211,10 @@
       <Back>Back</Back>
     </action>
   </UIWebContentSelectorForm>
-  <!--/n  ##################################################################################
-  -->
   <UIWizardWelcome>
     <WelcomeLabel>Welcome you to eXo Web Content Creation Wizard !</WelcomeLabel>
     <WelcomeText>This Wizard will walk you through the creation of a new web content. It guides you through entering the information necessary for creating a new web content. When you are done entering the required information, you will be prompted to save your new web content. And, it is the easy way by click on the "Back" and "Next" buttons or select the step number to navigate the steps.</WelcomeText>
   </UIWizardWelcome>
-  <!--/n  ######################################################################
-  # 		org.exoplatform.wcm.presentation.acp.config.UITagging		 #
-  ######################################################################
-  -->
   <UITagging>
     <label>
       <TagNames>Tag names</TagNames>
@@ -281,10 +233,6 @@
       <tagName>(Use "," separator to add multiple tag)</tagName>
     </introduction>
   </UITagging>
-  <!--/n  ##############################################################################
-  # 		org.exoplatform.wcm.presentation.acp.config.UIPermissionSetting		 #
-  ##############################################################################
-  -->
   <UIPermissionSetting>
     <label>
       <usersInputSet>UIPermissionSetting</usersInputSet>
@@ -308,19 +256,11 @@
       <AddAny>Add any permission</AddAny>
     </title>
   </usersInputSet>
-  <!--/n  ##############################################################################
-  # 		org.exoplatform.wcm.presentation.acp.config.UIPermissionInfo		 #
-  ##############################################################################
-  -->
-  <!--/n  #############################################################
-  -->
   <UIDocumentForm>
     <msg>
       <not-support>Not-support</not-support>
     </msg>
   </UIDocumentForm>
-  <!--/n  #############################################################
-  -->
   <UIPresentationContainer>
     <title>Quick Edit</title>
     <draft>Draft</draft>
@@ -331,10 +271,6 @@
     	<close>Close</close>
     </quickPrint>
   </UIPresentationContainer>
-  <!--/n  #############################################################
-  # org.exoplatform.wcm.webui.scv.config.UIDMSSelectorForm    #
-  #############################################################
-  -->
   <UIDMSSelectorForm>
     <label>
       <path />
@@ -350,8 +286,6 @@
     </msg>
     <title>Select a document and publish to this page</title>
   </UIDMSSelectorForm>
-  <!--/n  ##############################################################
-  -->
   <UINameWebContentForm>
     <label>
       <name>Title</name>
@@ -366,8 +300,6 @@
       <non-firstwhiteletter>can not use space letter in the first letter of name field!</non-firstwhiteletter>
     </msg>
   </UINameWebContentForm>
-  <!--/n  ##########################################################################
-  -->
   <UINonEditable>
     <action>
       <BackToView>Back to view mode</BackToView>
@@ -384,8 +316,6 @@
       <node-locked>The item with path {0} or upper level is locked.</node-locked>
     </msg>
   </UIPopupMenu>
-  <!--/n  ###########################################################################
-  -->
   <UIWCMPublicationGrid>
     <header>
       <LifecycleName>Lifecycle name</LifecycleName>
@@ -406,4 +336,3 @@
     <link>Click here to change into edit content interface!</link>
   </UIStartEditionInPageWizard>
 </bundle>
-

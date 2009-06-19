@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bundle>
-  <!--/n  #########################################################################################
-  #			org.exoplatform.wcm.webui.search.UIWCMSearchForm							#
-  #########################################################################################
-  -->
   <UISearchForm>
     <keywordInput>
       <label>Keyword</label>
@@ -26,10 +22,6 @@
       <keyword-not-support>The search engine can not currently work with the keywords you supplied.</keyword-not-support>
     </message>
   </UISearchForm>
-  <!--/n  #########################################################################################
-  #			org.exoplatform.wcm.webui.search.config.UISearchPageLayoutManager			#
-  #########################################################################################
-  -->
   <UISearchPageLayoutManager>
     <mode>
       <selectOption>
@@ -60,10 +52,6 @@
       <search-mode-selecting>You should select the search mode.</search-mode-selecting>
     </message>
   </UISearchPageLayoutManager>
-  <!--/n  #########################################################################################
-  #			org.exoplatform.wcm.webui.search.UISearchResult								#
-  #########################################################################################
-  -->
   <UISearchResult>
     <msg>
       <your-search>Your search</your-search>

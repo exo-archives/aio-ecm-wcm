@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bundle>
-  <!--/n  ##################### resourcebundle for exo:link ############################
-  -->
   <WebLink>
     <view>
       <label>
@@ -10,8 +8,6 @@
       </label>
     </view>
   </WebLink>
-  <!--/n  ##################### resourcebundle for metadata:siteMetadata ############################
-  -->
   <SiteMetadata>
     <view>
       <label>
@@ -30,17 +26,14 @@
       </action>
     </view>
   </SiteMetadata>
-  
   <Category>
   	<view>
   		<label>Phân loại</label>
   	</view>
   </Category>
-  
   <Tag>
   	<view>
   		<label>Thẻ</label>
   	</view>
   </Tag>
 </bundle>
-

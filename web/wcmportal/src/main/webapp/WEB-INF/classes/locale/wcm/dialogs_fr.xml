@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bundle>
-  <!--/n  ###################### resourcebundle for exo:webContent #######################
-  -->
   <WebContent>
     <dialog>
       <label>
@@ -28,8 +26,6 @@
       </label>
     </dialog>
   </WebContent>
-  <!--/n  ##################### resourcebundle for exo:cssFile ###########################
-  -->
   <CSSFile>
     <dialog>
       <label>
@@ -40,8 +36,6 @@
       </label>
     </dialog>
   </CSSFile>
-  <!--/n  ##################### resourcebundle for exo:jsFile ############################
-  -->
   <JSFile>
     <dialog>
       <label>
@@ -52,8 +46,6 @@
       </label>
     </dialog>
   </JSFile>
-  <!--/n  ##################### resourcebundle for exo:link ############################
-  -->
   <WebLink>
     <dialog>
       <label>
@@ -63,8 +55,6 @@
       </label>
     </dialog>
   </WebLink>
-  <!--/n  ##################### resourcebundle for exo:multipageable #####################
-  -->
   <MultiPage>
     <dialog>
       <label>
@@ -73,8 +63,6 @@
       </label>
     </dialog>
   </MultiPage>
-  <!--/n  ##################### resourcebundle for metadata:siteMetadata #####################
-  -->
   <SiteMetadata>
     <dialog>
       <label>
@@ -86,4 +74,3 @@
     </dialog>
   </SiteMetadata>
 </bundle>
-

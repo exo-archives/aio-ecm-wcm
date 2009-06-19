@@ -74,7 +74,7 @@
   		<none>Non révision</none>
   		<seeall>Voir toute les révisions</seeall>
   		<currentVersion>Révision courant</currentVersion>
-  		<confirm>You will lost your draft work, do you really want to restore this revision and replace the current revision ?</confirm>
+  		<confirm>Vous aurez perdu votre projet de travail, vous voulez vraiment rétablir cette révision et de remplacer l'actuelle révision?</confirm>
   	</revisions>
   	<status>
   		<version>Révision</version>

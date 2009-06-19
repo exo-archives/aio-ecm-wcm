@@ -1,23 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bundle>
-  <!--/n  ######################################################################################
-  #    org.exoplatform.ecm.webui.contentviewer.UIParameterizedContentViewerPortlet     #
-  ######################################################################################
-  -->
   <UIMessageBoard>
     <msg>
       <content-not-found>Xin lỗi, nội dung đã bị xoá hoặc không tìm thấy.</content-not-found>
       <content-unsupport-exc>Xin lỗi, trình hiển thị không hỗ nội dung mà bạn lựa chọn.</content-unsupport-exc>
+			<content-invisible>Xin lỗi, nội dung này đã bị ẩn</content-invisible>
       <access-control-exc>Xin lỗi, bạn không có quyền truy cập nội dung này.</access-control-exc>
-      <content-not-printed></content-not-printed>
-      <content-obsolete></content-obsolete>
+      <content-not-printed>Xin lỗi, nội dung này không thể in được</content-not-printed>
+      <content-obsolete>Xin lỗi, nội dung này đã bị quá hạn</content-obsolete>
     </msg>
   </UIMessageBoard>
   <UIDocumentDialogForm>
   	<action>
-  		<SaveDraft>Save Draft</SaveDraft>
-  		<Cancel>Cancel</Cancel>
-  		<FastPublish>Fast Publish</FastPublish>
+  		<SaveDraft>Lưu bản nháp</SaveDraft>
+  		<Cancel>Hủy bỏ</Cancel>
+  		<FastPublish>Xuất bản nhanh</FastPublish>
   	</action>
   </UIDocumentDialogForm>
   <UIContentViewerContainer>
@@ -40,4 +37,3 @@
   	</title>
   </UIPopupWindow>
 </bundle>
-
