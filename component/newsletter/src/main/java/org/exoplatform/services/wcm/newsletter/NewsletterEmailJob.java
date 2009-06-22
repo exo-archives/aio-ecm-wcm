@@ -41,7 +41,7 @@ public class NewsletterEmailJob extends BaseJob {
     try {
       newsletterManagerService.sendNewsletter();
     } catch (Exception e) {
-      log.error("Error when execute sen email by scheduler", e);
+      log.error("Error when execute send email by scheduler", e);
     }
   }
 }

@@ -88,7 +88,7 @@
           <property name="mail.smtp.auth.password" value="exoadmin" />
           <property name="mail.smtp.host" value="smtp.gmail.com" />
           <property name="mail.smtp.port" value="465" />
-					<property name="mail.smtp.starttls.enable" value="true" />
+		  <property name="mail.smtp.starttls.enable" value="true" />
           <property name="mail.smtp.auth" value="true" />
           <property name="mail.smtp.debug" value="false" />
           <property name="mail.smtp.socketFactory.port" value="465" />
@@ -192,7 +192,7 @@
           <property name="jobName" value="job"/>
           <property name="groupName" value="group"/>
           <property name="job" value="org.exoplatform.services.wcm.newsletter.NewsletterEmailJob"/>
-          <property name="expression" value="0 0/1 * * * ?"/>
+          <property name="expression" value="0 0/60 * * * ?"/>
         </properties-param>
       </init-params>          
     </component-plugin>

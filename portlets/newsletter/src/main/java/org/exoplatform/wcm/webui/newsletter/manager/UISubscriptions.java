@@ -178,6 +178,7 @@ public class UISubscriptions extends UIForm {
       if (popupWindow == null) {
         UISubcriptionForm subcriptionForm = popupContainer.createUIComponent(UISubcriptionForm.class, null, null);
         UIFormSelectBox selectedCategoryName = subcriptionForm.getChildById("CategoryName");
+        selectedCategoryName.setValue(subsriptions.categoryConfig.getName());
         selectedCategoryName.setDisabled(true);
 
         Utils.createPopupWindow(popupContainer, subcriptionForm, event.getRequestContext(), UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW, 450, 300);
@@ -221,7 +222,7 @@ public class UISubscriptions extends UIForm {
         if(checkbox.isChecked()){
 
           isChecked = true;
-          
+
           NewsletterSubscriptionConfig subscriptionConfig = 
             subsriptions.subscriptionHandler.getSubscriptionsByName( portalName, subsriptions.categoryConfig.getName(), checkbox.getName());
           if (subscriptionConfig != null) {
@@ -254,7 +255,7 @@ public class UISubscriptions extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       }
- 
+
       String portalName = NewsLetterUtil.getPortalName();
 
       UINewsletterManagerPortlet newsletterManagerPortlet = uiSubscription.getAncestorOfType(UINewsletterManagerPortlet.class);

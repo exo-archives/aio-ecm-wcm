@@ -81,7 +81,7 @@ public class NewsletterSubscriptionHandler {
       subscriptionNode.setProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_TITLE, subscription.getTitle());
       subscriptionNode.setProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_DECRIPTION, subscription.getDescription());
       subscriptionNode.setProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_CATEGORY_NAME, subscription.getCategoryName());
-      
+
       session.save();
     } catch (Exception e) {
       log.error("Add subcription " + subscription.getName() + " failed because of " + e.getMessage());

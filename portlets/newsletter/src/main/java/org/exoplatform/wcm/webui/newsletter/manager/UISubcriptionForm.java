@@ -78,7 +78,7 @@ public class UISubcriptionForm extends UIForm {
     List<SelectItemOption<String>> listCategoriesName = new ArrayList<SelectItemOption<String>>();
     SelectItemOption<String> option = null;
     for (NewsletterCategoryConfig category: categories) {
-      option = new SelectItemOption<String>(category.getName());
+      option = new SelectItemOption<String>(category.getTitle(), category.getName());
       listCategoriesName.add(option);
     }
 

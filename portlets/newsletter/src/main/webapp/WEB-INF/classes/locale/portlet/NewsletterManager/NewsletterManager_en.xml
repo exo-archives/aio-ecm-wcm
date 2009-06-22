@@ -75,6 +75,7 @@
       <categoryNameIsNotEmpty>Category name cannot be empty!</categoryNameIsNotEmpty>
       <categoryTitleIsNotEmpty>Category title cannot be empty!</categoryTitleIsNotEmpty>
       <categoryNameIsAlreadyExist>This category's name is already exist!</categoryNameIsAlreadyExist>
+      <inputModeratorEmpty>You must select user or member moderator!</inputModeratorEmpty>
     </msg>
 		<label>
     	<CategoryName>Category Name</CategoryName>
@@ -140,7 +141,7 @@
     	<SubcriptionName>Subcription Name</SubcriptionName>
     	<SubcriptionTitle>Subcription Title</SubcriptionTitle>
     	<SubcriptionDescription>Description</SubcriptionDescription>
-    	<CategoryName>Category Name </CategoryName>
+    	<CategoryName>Category</CategoryName>
     </title>
   </UISubcriptionForm>
   

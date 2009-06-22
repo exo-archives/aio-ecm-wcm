@@ -70,7 +70,7 @@ public class UINewsletterEntryManager extends UIForm {
       
       NewsletterManagerConfig newletter = null;
       
-      SimpleDateFormat simpleDate = new SimpleDateFormat("dd/MM/yyyy - hh:mm");
+      SimpleDateFormat simpleDate = new SimpleDateFormat("dd/MM/yyyy - hh:mm:ss");
       Date date = new Date();
       for (int i = 1; i< 10; i++) {
         
@@ -100,7 +100,6 @@ public class UINewsletterEntryManager extends UIForm {
         }
       }catch(Exception e){}
     }
-    System.out.println("\n\n\n\n------------------>subscription name:" + newsletterId);
     return newsletterId;
   }
 

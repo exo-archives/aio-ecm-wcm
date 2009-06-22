@@ -20,7 +20,6 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.ecm.webui.form.UIFormInputSetWithAction;
 import org.exoplatform.ecm.webui.selector.UIGroupMemberSelector;
 import org.exoplatform.ecm.webui.selector.UISelectable;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterCategoryHandler;
@@ -36,8 +35,8 @@ import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
@@ -50,8 +49,8 @@ import org.exoplatform.webui.form.validator.NameValidator;
 		events = {
 			@EventConfig(listeners = UICategoryForm.SaveActionListener.class),
 			@EventConfig(listeners = UICategoryForm.CancelActionListener.class, phase = Phase.DECODE),
-			@EventConfig(listeners = UICategoryForm.SelectUserActionListener.class),
-			@EventConfig(listeners = UICategoryForm.SelectMemberActionListener.class)
+			@EventConfig(listeners = UICategoryForm.SelectUserActionListener.class, phase = Phase.DECODE),
+			@EventConfig(listeners = UICategoryForm.SelectMemberActionListener.class, phase = Phase.DECODE)
 		}
 )
 public class UICategoryForm extends UIForm implements UIPopupComponent, UISelectable {
@@ -93,7 +92,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent, UISelect
 		setActions(new String[]{"Save", "Cancel"});
 	}
 
- public void doSelect(String selectField, Object value) throws Exception {
+  public void doSelect(String selectField, Object value) throws Exception {
     getUIStringInput(selectField).setValue((String) value);
     UIPopupContainer popupContainer = getAncestorOfType(UIPopupContainer.class);
     Utils.closePopupWindow(popupContainer, popupId);
@@ -140,7 +139,20 @@ public class UICategoryForm extends UIForm implements UIPopupComponent, UISelect
 			}
 			categoryConfig.setTitle(((UIFormStringInput)uiCategoryForm.getChildById(INPUT_CATEGORY_TITLE)).getValue());
 			categoryConfig.setDescription(((UIFormTextAreaInput)uiCategoryForm.getChildById(INPUT_CATEGORY_DESCRIPTION)).getValue());
+			
 			UIFormInputSetWithAction inputSetWithAction = uiCategoryForm.getChildById(FORM_CATEGORY_MODERATOR);
+      UIFormStringInput inputModerator = inputSetWithAction.getChildById(INPUT_CATEGORY_MODERATOR);
+      
+      String inputMderatorValue = inputModerator.getValue();
+      if (("".equals(inputMderatorValue)) || (inputMderatorValue == null)) {
+        
+        UIApplication uiApp = uiCategoryForm.getAncestorOfType(UIApplication.class);
+
+        uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.inputModeratorEmpty", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
+      }
+
 			categoryConfig.setModerator(((UIFormStringInput)inputSetWithAction.getChildById(INPUT_CATEGORY_MODERATOR)).getValue());
 			
 			UIApplication uiApp = uiCategoryForm.getAncestorOfType(UIApplication.class);
@@ -181,20 +193,21 @@ public class UICategoryForm extends UIForm implements UIPopupComponent, UISelect
 	    UICategoryForm categoryForm = event.getSource();
 	    UIPopupContainer popupContainer = categoryForm.getAncestorOfType(UIPopupContainer.class);
 	    UIPopupWindow popupWindow = popupContainer.getChildById(UINewsletterConstant.USER_SELECTOR_POPUP_WINDOW);
+	    
 	    if (popupWindow == null) {
-	      UIUserMemberSelector userMemberSelector = categoryForm.createUIComponent(UIUserMemberSelector.class, null, null);
-	      userMemberSelector.setMulti(false);
-	      userMemberSelector.setShowSearch(true);
-	      userMemberSelector.setSourceComponent(categoryForm, new String[] {INPUT_CATEGORY_MODERATOR});
-	      userMemberSelector.init();
-	      Utils.createPopupWindow(popupContainer, userMemberSelector, event.getRequestContext(), UINewsletterConstant.USER_SELECTOR_POPUP_WINDOW, 700, 315);
-	    } else { 
-	      popupWindow.setShow(true);
-	    }
-	    categoryForm.setPopupId(UINewsletterConstant.USER_SELECTOR_POPUP_WINDOW);
+        UIUserMemberSelector userMemberSelector = categoryForm.createUIComponent(UIUserMemberSelector.class, null, null);
+        userMemberSelector.setMulti(false);
+        userMemberSelector.setShowSearch(true);
+        userMemberSelector.setSourceComponent(categoryForm, new String[] {INPUT_CATEGORY_MODERATOR});
+        userMemberSelector.init();
+        Utils.createPopupWindow(popupContainer, userMemberSelector, event.getRequestContext(), UINewsletterConstant.USER_SELECTOR_POPUP_WINDOW, 700, 315);
+      } else { 
+        popupWindow.setShow(true);
+      }
+      categoryForm.setPopupId(UINewsletterConstant.USER_SELECTOR_POPUP_WINDOW);
 	  }
 	}
-	
+
 	public static class SelectMemberActionListener extends EventListener<UICategoryForm> {
 	  public void execute(Event<UICategoryForm> event) throws Exception {
 	    UICategoryForm categoryForm = event.getSource();

@@ -44,7 +44,8 @@ public class UINewsletterEntryContainer extends UIContainer {
   public UINewsletterEntryContainer() throws Exception {
     addChild(UINewsletterEntryDialogSelector.class, null, null);
     UINewsletterEntryForm newsletterEntryForm = createUIComponent(UINewsletterEntryForm.class, null, null);
-    newsletterEntryForm.setStoredLocation("repository", "collaboration", "/sites content/live/classic");
+    newsletterEntryForm.setStoredLocation("repository", "collaboration",
+      "/sites content/live/portalName/ApplicationData/NewsletterApplication/Categories/category1/subscription1");
     newsletterEntryForm.addNew(isAddNew);
     addChild(newsletterEntryForm);
   }

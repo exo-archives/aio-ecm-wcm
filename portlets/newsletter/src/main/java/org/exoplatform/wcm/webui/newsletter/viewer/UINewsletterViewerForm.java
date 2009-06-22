@@ -152,6 +152,7 @@ public class UINewsletterViewerForm extends UIForm {
       newsletterForm.publicUserHandler.forgetEmail(NewsLetterUtil.getPortalName(), newsletterForm.userMail);
       
       newsletterForm.isUpdated = false;
+      newsletterForm.inputEmail.setValue("");
       newsletterForm.inputEmail.setRendered(true);
       newsletterForm.userMail = "";
       newsletterForm.setActions(new String[] {"Subcribe"});
@@ -172,6 +173,7 @@ public class UINewsletterViewerForm extends UIForm {
 
       newsletterForm.isUpdated = false;
       newsletterForm.userMail = "";
+      newsletterForm.inputEmail.setValue("");
       newsletterForm.inputEmail.setRendered(true);
       newsletterForm.setActions(new String[] {"Subcribe"});
       
