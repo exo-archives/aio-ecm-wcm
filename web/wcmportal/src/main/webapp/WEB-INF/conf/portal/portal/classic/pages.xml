@@ -94,16 +94,16 @@
 	  </container>
 	</page>
 	<page>
-		<page-id>portal::classic::admintoolbar</page-id>
+		<page-id>portal::classic::formgenerator</page-id>
 		<owner-type>portal</owner-type>
 		<owner-id>classic</owner-id>
-		<name>admintoolbar</name>
-		<title>Toolbar</title>
+		<name>formgenerator</name>
+		<title>Form Generator</title>
 		<access-permissions>Everyone</access-permissions>
 		<edit-permission>*:/platform/administrators</edit-permission>
 		<application>
-			<instance-id>portal#classic:/presentation/SiteAdministrationPortlet/classic-admintoolbar</instance-id>
-			<title>Toolbar</title>
+			<instance-id>portal#classic:/formgenerator/FormGeneratorPortlet/classic-formgenerator</instance-id>
+			<title>Form generator Portlet</title>
 			<show-info-bar>false</show-info-bar>
 			<show-application-state>false</show-application-state>
 			<show-application-mode>false</show-application-mode>

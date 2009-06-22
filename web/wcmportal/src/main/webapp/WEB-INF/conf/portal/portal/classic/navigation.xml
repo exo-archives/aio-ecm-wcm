@@ -55,6 +55,12 @@
 			<page-reference>portal::classic::categories</page-reference>
 		</node>
 		<node>
+			<uri>formgenerator</uri>
+			<name>formgenerator</name>
+			<label>#{portal.classic.formgenerator}</label>
+			<page-reference>portal::classic::formgenerator</page-reference>
+		</node>
+		<node>
 			<uri>search</uri>
 			<name>search</name>
 			<label>#{portal.classic.search}</label>

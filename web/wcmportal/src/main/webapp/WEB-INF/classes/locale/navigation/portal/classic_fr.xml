@@ -14,6 +14,7 @@
       <parameterizedviewer>Visualiseur de contenu paramétré</parameterizedviewer>
       <viewer>Visualiseurs</viewer>
 			<categories>Catégories</categories>
+			<formgenerator>Form Generator</formgenerator>
       <newsletter>Newsletter</newsletter>
       <newsletterviewer>Newsletter Viewer</newsletterviewer>
       <newslettermanager>Newsletter Gestionnaire</newslettermanager>

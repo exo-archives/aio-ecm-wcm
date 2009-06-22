@@ -23,6 +23,7 @@
 		<module>portlets/presentation</module>    
 		<module>portlets/searches</module>
 		<module>portlets/newsletter</module>
+		<module>portlets/formgenerator</module>
 		<module>connectors/fckeditor</module>    
 		<module>web/eXoWCMResources</module>	
 	  	<module>web/wcmportal</module>	
