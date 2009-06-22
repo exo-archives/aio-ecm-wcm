@@ -59,4 +59,5 @@
   <import>war:/conf/wcm/metadata-templates-configuration.xml</import>
   <import>war:/conf/wcm/webui-properties-configuration.xml</import>
 	<import>war:/conf/wcm/newsletter-configuration.xml</import>    		    		
+	<import>war:/conf/wcm/wcm-taxonomies-configuration.xml</import>
 </configuration>

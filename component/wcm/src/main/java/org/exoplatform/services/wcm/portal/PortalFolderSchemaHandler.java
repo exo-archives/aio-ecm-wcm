@@ -293,26 +293,31 @@ public class PortalFolderSchemaHandler extends BaseWebSchemaHandler {
     addMixin(links,"exo:owneable");
     addMixin(links,"exo:datetime");
     links.setProperty("exo:dateCreated",calendar);    
+
+    Node categoryFolder = portalFolder.addNode("categories", NT_UNSTRUCTURED);
+    addMixin(categoryFolder, "exo:owneable");
+    addMixin(categoryFolder,"exo:datetime");
+    categoryFolder.setProperty("exo:dateCreated", calendar);    
     
     Node applicationDataFolder = portalFolder.addNode("ApplicationData", NT_UNSTRUCTURED);
     addMixin(applicationDataFolder, "exo:owneable");
     addMixin(applicationDataFolder,"exo:datetime");
-    applicationDataFolder.setProperty("exo:dateCreated", calendar);    
+    applicationDataFolder.setProperty("exo:dateCreated", calendar);
     
     Node newsletterApplicationFolder = applicationDataFolder.addNode("NewsletterApplication", NT_UNSTRUCTURED);
     addMixin(newsletterApplicationFolder, "exo:owneable");
     addMixin(newsletterApplicationFolder,"exo:datetime");
     newsletterApplicationFolder.setProperty("exo:dateCreated", calendar);
     
-    Node categoriesFolder = newsletterApplicationFolder.addNode("Categories", NT_UNSTRUCTURED);
-    addMixin(categoriesFolder, "exo:owneable");
-    addMixin(categoriesFolder,"exo:datetime");
-    categoriesFolder.setProperty("exo:dateCreated", calendar);
+    Node newsletterCategoriesFolder = newsletterApplicationFolder.addNode("Categories", NT_UNSTRUCTURED);
+    addMixin(newsletterCategoriesFolder, "exo:owneable");
+    addMixin(newsletterCategoriesFolder,"exo:datetime");
+    newsletterCategoriesFolder.setProperty("exo:dateCreated", calendar);
     
-    Node userFolder = newsletterApplicationFolder.addNode("Users", NT_UNSTRUCTURED);
-    addMixin(userFolder, "exo:owneable");
-    addMixin(userFolder,"exo:datetime");
-    userFolder.setProperty("exo:dateCreated", calendar);
+    Node newsletterUserFolder = newsletterApplicationFolder.addNode("Users", NT_UNSTRUCTURED);
+    addMixin(newsletterUserFolder, "exo:owneable");
+    addMixin(newsletterUserFolder,"exo:datetime");
+    newsletterUserFolder.setProperty("exo:dateCreated", calendar);
     
     portalFolder.getSession().save();       
   }  

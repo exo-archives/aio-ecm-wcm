@@ -13,6 +13,7 @@
       <sitemap>Sơ đồ trang</sitemap>
       <parameterizedviewer>Ứng dụng trình bày nội dung theo tham số</parameterizedviewer>
       <viewer>Những bộ hiển thị</viewer>
+			<categories>Hệ thống phân loại</categories>
       <newsletter>Thư báo</newsletter>
       <newsletterviewer>Hiển thị thư báo</newsletterviewer>
       <newslettermanager>Quản lý thư báo</newslettermanager>

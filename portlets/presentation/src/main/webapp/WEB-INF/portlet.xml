@@ -270,4 +270,52 @@
 		</portlet-info>
 	</portlet>
 	
+	<portlet>
+		<description xml:lang="EN">Category Navigation Portlet</description>
+		<portlet-name>CategoryNavigationPortlet</portlet-name>
+		<display-name xml:lang="EN">Category Navigation Portlet</display-name>
+		<portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>
+		<init-param>
+			<name>webui.configuration</name>
+			<value>/WEB-INF/conf/portlet/CategoryNavigation/webui/configuration.xml</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>help</portlet-mode>
+			<portlet-mode>edit</portlet-mode>
+		</supports>
+		<supported-locale>en</supported-locale>
+		<resource-bundle>locale.portlet.CategoryNavigation.CategoryNavigationPortlet</resource-bundle>
+		<portlet-info>
+			<title>Category Navigation Portlet</title>
+			<short-title>Category Navigation Portlet</short-title>
+			<keywords>Category Navigation Portlet</keywords>
+		</portlet-info>
+	</portlet>
+	
+	<portlet>
+		<description xml:lang="EN">Parameterized Content List Viewer Portlet</description>
+		<portlet-name>ParameterizedContentListViewerPortlet</portlet-name>
+		<display-name xml:lang="EN">Parameterized Content List Viewer Portlet</display-name>
+		<portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>
+		<init-param>
+			<name>webui.configuration</name>
+			<value>/WEB-INF/conf/portlet/ParameterizedContentListViewer/webui/configuration.xml</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>help</portlet-mode>
+			<portlet-mode>edit</portlet-mode>
+		</supports>
+		<supported-locale>en</supported-locale>
+		<resource-bundle>locale.portlet.ParameterizedContentListViewer.ParameterizedContentListViewerPortlet</resource-bundle>
+		<portlet-info>
+			<title>Parameterized Content List Viewer Portlet</title>
+			<short-title>Parameterized Content List Viewer Portlet</short-title>
+			<keywords>Parameterized Content List Viewer Portlet</keywords>
+		</portlet-info>
+	</portlet>
+	
 </portlet-app>

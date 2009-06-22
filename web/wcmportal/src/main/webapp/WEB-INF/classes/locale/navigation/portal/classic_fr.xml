@@ -13,6 +13,7 @@
       <sitemap>Plan du site</sitemap>
       <parameterizedviewer>Visualiseur de contenu paramétré</parameterizedviewer>
       <viewer>Visualiseurs</viewer>
+			<categories>Catégories</categories>
       <newsletter>Newsletter</newsletter>
       <newsletterviewer>Newsletter Viewer</newsletterviewer>
       <newslettermanager>Newsletter Gestionnaire</newslettermanager>
