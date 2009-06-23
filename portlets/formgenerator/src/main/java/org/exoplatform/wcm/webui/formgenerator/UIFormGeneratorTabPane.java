@@ -44,7 +44,7 @@ import org.exoplatform.webui.form.wysiwyg.UIFormWYSIWYGInput;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template = "system:/groovy/webui/form/UIFormTabPane.gtmpl",
+    template = "app:/groovy/webui/FormGeneratorPortlet/UIFormGeneratorTabPane.gtmpl",
     events = {
       @EventConfig(listeners = UIFormGeneratorTabPane.SaveActionListener.class),
       @EventConfig(listeners = UIFormGeneratorTabPane.CancelActionListener.class, phase = Phase.DECODE)
