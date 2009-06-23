@@ -17,22 +17,21 @@
 package org.exoplatform.wcm.webui.formgenerator;
 
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.core.UIPortletApplication;
-import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
+import org.exoplatform.webui.core.UIContainer;
+import org.exoplatform.webui.core.lifecycle.Lifecycle;
 
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
  *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * Jun 22, 2009  
+ * Jun 23, 2009  
  */
 @ComponentConfig(
-    lifecycle = UIApplicationLifecycle.class
+    lifecycle = Lifecycle.class,
+    template = "app:/groovy/webui/FormGeneratorPortlet/UIFormGeneratorDnDTab.gtmpl"
 )
-public class UIFormGeneratorPortlet extends UIPortletApplication {
+public class UIFormGeneratorDnDTab extends UIContainer {
 
-  public UIFormGeneratorPortlet() throws Exception {
-    addChild(UIFormGeneratorTabPane.class, null, null);
-  }
+  public UIFormGeneratorDnDTab() {}
   
 }
