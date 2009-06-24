@@ -17,27 +17,43 @@
 	        	<name>portlet.template.path</name>
 	        	<value>war:/conf/wcm/artifacts/application-templates/content-list-viewer</value>
 	        </value-param>	    
-          <object-param>        
+          <object-param>
             <name>default.folder.list.viewer</name>
             <description>Default folder list viewer groovy template</description>
             <object type="org.exoplatform.services.cms.views.PortletTemplatePlugin$PortletTemplateConfig">
-              <field  name="templateName"><string>UIContentListPresentationDefault.gtmpl</string></field>                            
+              <field  name="templateName"><string>UIContentListPresentationDefault.gtmpl</string></field>
               <field  name="category"><string>list-by-folder</string></field>
               <!--
               <field  name="accessPermissions">
               	<collection type="java.util.ArrayList">
-	          			<value><string>*</string></value>	          		               
+	          			<value><string>*</string></value>
 	          		</collection>
-              </field>                            
+              </field>
               <field  name="editPermissions">
               	<collection type="java.util.ArrayList">
-	          			<value><string>*</string></value>	          		               
+	          			<value><string>*</string></value>
 	          		</collection>
-              </field>               
-              -->                     
+              </field>
+              -->
             </object>
           </object-param>
-          <object-param>        
+            <object-param>
+              <name>small.folder.list.viewer</name>
+              <description>Small folder list viewer groovy template</description>
+              <object type="org.exoplatform.services.cms.views.PortletTemplatePlugin$PortletTemplateConfig">
+                <field  name="templateName"><string>UIContentListPresentationSmall.gtmpl</string></field>
+                <field  name="category"><string>list-by-folder</string></field>
+              </object>
+            </object-param>
+            <object-param>
+              <name>big.folder.list.viewer</name>
+              <description>Big folder list viewer groovy template</description>
+              <object type="org.exoplatform.services.cms.views.PortletTemplatePlugin$PortletTemplateConfig">
+                <field  name="templateName"><string>UIContentListPresentationBigImage.gtmpl</string></field>
+                <field  name="category"><string>list-by-folder</string></field>
+              </object>
+            </object-param>
+          <object-param>
             <name>acme.folder.list.viewer.with.title</name>
             <description>ACME folder list viewer style A groovy template</description>
             <object type="org.exoplatform.services.cms.views.PortletTemplatePlugin$PortletTemplateConfig">
@@ -73,7 +89,15 @@
               -->                     
             </object>
           </object-param>	
-        </init-params>  
+          <object-param>
+            <name>no.paginator</name>
+            <description>No paginator groovy template</description>
+            <object type="org.exoplatform.services.cms.views.PortletTemplatePlugin$PortletTemplateConfig">
+              <field  name="templateName"><string>UIPaginatorEmpty.gtmpl</string></field>
+              <field  name="category"><string>paginators</string></field>
+            </object>
+          </object-param>
+        </init-params>
       </component-plugin> 
    </external-component-plugins>       	
 </configuration>

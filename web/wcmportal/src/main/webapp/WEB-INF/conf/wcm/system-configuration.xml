@@ -108,7 +108,6 @@
 	    <init-params>	    
 	    	<values-param>
 	    		<name>access.control.workspace.roles</name>
-	    		<value>*:/platform/users</value>
 	    		<value>editor:/platform/web-contributors</value>	    		
 	    	</values-param>
 	    	<values-param>

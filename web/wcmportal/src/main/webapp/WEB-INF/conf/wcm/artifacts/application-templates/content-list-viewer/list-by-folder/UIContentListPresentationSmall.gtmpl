@@ -1,0 +1,126 @@
+<% 
+	/* 
+	 * Go to "WCMResources/src/main/webapp/shareskin/content-list-viewer/list-by-folder/defaultFolderListViewer"
+	 * to edit stylesheet if you want.
+	 */
+	import javax.jcr.Node;
+	import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
+	import org.exoplatform.wcm.webui.clv.UIContentListViewerPortlet;
+	import org.exoplatform.services.wcm.publication.PublicationState;
+%>
+
+<div id="$uicomponent.id" class="UIContentListPresentationDefault">
+	<%	
+		String header = uicomponent.getHeader();
+		if (uicomponent.isShowHeader() && header != null && header.trim().length() != 0 ) {
+			%><div class="Header"><%= header %></div>		<%
+		}
+	%>
+	<div class="Caption">
+		<% 	
+			String labelRefreshAction = _ctx.appRes("UIContentListPresentationDefault.action.refresh");		
+			if (uicomponent.getUIPageIterator().getAvailable() == 0) {
+				%>
+					<div style="height: 20px; text-align: center; font-size: 13px; background: white; padding: 10px; margin: 5px;">
+						<%= uicomponent.getParent().getMessage() %>
+					</div>
+				<%
+			} else {			
+				def currentPageData = uicomponent.getCurrentPageData();							
+				String labelReadMore = _ctx.appRes("UIContentListPresentationDefault.label.readmore");
+				String draftLabel = _ctx.appRes("UIContentListPresentationDefault.label.draft");
+				String editActionLabel = _ctx.appRes("UIContentListPresentationDefault.action.edit");
+				
+				Node viewNode = null;
+				Node tempNode = null;
+				for (Node node : currentPageData) {
+					String revisionState = PublicationState.getRevisionState(node);
+					if (PublicationState.OBSOLETE.equals(revisionState)) {
+						continue;
+					}
+					tempNode = node;
+					viewNode = uicomponent.getNodeView(node);
+					if (viewNode == null) {	
+						continue;				
+					} 
+					boolean isShowDraft = uicomponent.showDraftButton(tempNode);
+					if (!isShowDraft) {
+						node = viewNode;
+					}
+					String itemLink = uicomponent.getURL(tempNode);			
+					String itemName = node.getName();
+					String itemSummary = uicomponent.getSummary(node);
+			    	String itemTitle = uicomponent.getTitle(node);
+					String itemDateCreated = uicomponent.getCreatedDate(node);
+					String itemOwner = uicomponent.getAuthor(node);			
+					String imgSrc = uicomponent.getIllustrativeImage(node);								
+					if (itemTitle != null && itemTitle.trim().length() != 0) {
+						itemName = itemTitle;
+					}						
+					String contentkEdittingLink = uicomponent.event("EditContent", tempNode.getPath());		
+					%>	
+						<div class="CaptionItem" style="border-bottom: 0px;">
+							<% 
+                                if(imgSrc != null && uicomponent.isShowField(UIContentListViewerPortlet.SHOW_THUMBNAILS_VIEW)) {
+                                    %><img src="$imgSrc" width="30" style="float:left; padding-right:5px;" /><%
+                                }
+								if (uicomponent.isShowField(UIContentListViewerPortlet.SHOW_TITLE)) {
+									%>
+										<div class="CaptionTitle" >
+											<% 
+												if (uicomponent.isShowField(UIContentListViewerPortlet.SHOW_LINK)) {
+													%><a href="$itemLink">$itemName</a><% 
+												} else { 
+													%>$itemName<% 
+												} 
+												if(isShowDraft) { 
+													%>
+														<span>[ </span>
+														<a class="CaptionDraft"><%=draftLabel%></a>, <a class="CaptionEdit" href="$contentkEdittingLink"><%=editActionLabel%></a>
+														<span> ]</span>
+													<% 
+												}
+											%> 
+										</div>
+									<%							
+								} 
+								if (itemDateCreated != null && uicomponent.isShowField(UIContentListViewerPortlet.SHOW_DATE_CREATED)) { 
+									%><div class="CaptionDate"><%=itemDateCreated%></div><% 
+								} 
+							%>											
+							<div class="CaptionContent">				
+								<% 
+									if (itemSummary != null && itemSummary.trim().length() != 0 && uicomponent.isShowField(UIContentListViewerPortlet.SHOW_SUMMARY)) {
+										%><pre><%=itemSummary%></pre><% 
+									} 
+								%>															
+							</div>			
+                            <%
+                            if (uicomponent.isShowField(UIContentListViewerPortlet.SHOW_READMORE)) {
+                            %>
+                            <div class="CaptionViewMore"><a href="$itemLink"><%=labelReadMore%>&raquo;</a></div>
+                            <%
+                            }
+                            %>
+						</div>
+					<%							
+				} //end for
+			} //end else	
+		%>
+		<div class="CaptionFunc">
+			<% 
+				if (uicomponent.showRefreshButton()) { 
+					String link = uicomponent.event("Refresh");
+					%>				
+						<div class="CaptionRefresh">
+							<a href="$link">$labelRefreshAction</a>
+						</div>
+					<% 
+				}
+				if (uicomponent.showPaginator()) { 
+						uicomponent.renderChild(UICustomizeablePaginator.class)
+				} 
+			%>
+		</div>
+	</div>
+</div>

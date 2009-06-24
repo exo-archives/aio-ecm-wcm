@@ -87,15 +87,21 @@
 							<div class="CaptionContent">				
 								<% 
 									if(imgSrc != null && uicomponent.isShowField(UIContentListViewerPortlet.SHOW_THUMBNAILS_VIEW)) {
-										%><img src="$imgSrc" width="91" height="53 /"><% 
+										%><img src="$imgSrc" width="91" /><% 
 									}
 									if (itemSummary != null && itemSummary.trim().length() != 0 && uicomponent.isShowField(UIContentListViewerPortlet.SHOW_SUMMARY)) { 
 										%><pre><%=itemSummary%></pre><% 
 									} 
 								%>															
-							</div>			
-							<div class="CaptionViewMore"><a href="$itemLink"><%=labelReadMore%>&raquo;</a></div>			
-						</div>			
+							</div>
+                            <%
+                            if (uicomponent.isShowField(UIContentListViewerPortlet.SHOW_READMORE)) {
+                            %>
+							<div class="CaptionViewMore"><a href="$itemLink"><%=labelReadMore%>&raquo;</a></div>
+                            <%
+                            }
+                            %>
+						</div>
 					<%							
 				} //end for
 			} //end else	

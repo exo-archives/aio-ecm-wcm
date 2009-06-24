@@ -7,7 +7,7 @@
 	def portletId = pContext.getWindowId();
 	def quickEditingBlockId = portletId + "-QuickEditingBlock";
 	def rcontext = _ctx.getRequestContext() ;
- 	rcontext.getJavascriptManager().importJavascript('eXo.webpresentation.Utils','/presentation/javascript');		 	
+ 	rcontext.getJavascriptManager().importJavascript('eXo.webpresentation.Utils','/presentation/javascript');
  	rcontext.getJavascriptManager().addOnLoadJavascript("showHideOrderBy");
  	String contentSelectionBlockTitle = _ctx.appRes(uicomponent.id + ".label.ContentSelectionBlock");
  	String displaySettingBlockTitle = _ctx.appRes(uicomponent.id + ".label.DisplaySettingBlock");
@@ -172,11 +172,11 @@
 							<% uiform.renderField(uiform.getChildById(UIViewerManagementForm.VIEWER_BUTTON_REFRESH)) %>
 						</td>								
 			      <td class="FieldLabel">
-				      &nbsp;
+                      <%=uicomponent.getLabel(uiform.getChildById(UIViewerManagementForm.VIEWER_READMORE).getName()) %>
 			      </td>
 						<td class="FieldComponent">
-							&nbsp;
-						</td>								
+                            <% uiform.renderField(uiform.getChildById(UIViewerManagementForm.VIEWER_READMORE)) %>
+						</td>
 					</tr>																												
 	      </table>   					      	      
       </fieldset>       

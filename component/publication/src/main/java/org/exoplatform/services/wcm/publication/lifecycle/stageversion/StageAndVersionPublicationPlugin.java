@@ -241,7 +241,8 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
   }
 
   public Node getNodeView(Node node, Map<String, Object> context) throws Exception {
-    Object mode = context.get(StageAndVersionPublicationConstant.RUNTIME_MODE);   
+    Object mode = null;
+    if (context!=null) context.get(StageAndVersionPublicationConstant.RUNTIME_MODE);   
     SITE_MODE runtimeMode = null;
     if(mode == null) {
       runtimeMode = SITE_MODE.LIVE; 

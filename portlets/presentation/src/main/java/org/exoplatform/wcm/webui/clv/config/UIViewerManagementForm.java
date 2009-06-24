@@ -108,6 +108,9 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
   /** The Constant VIEWER_BUTTON_REFRESH. */
   public final static String VIEWER_BUTTON_REFRESH        = "ViewerButtonRefresh";
 
+  /** The Constant VIEWER_READMORE. */
+  public final static String VIEWER_READMORE        = "ViewerReadmore";
+
   /** The Constant VIEWER_THUMBNAILS_IMAGE. */
   public static final String VIEWER_THUMBNAILS_IMAGE      = "ViewerThumbnailsView";
 
@@ -204,6 +207,8 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
     UIFormSelectBox paginatorTemplateSelector = new UIFormSelectBox(PAGINATOR_TEMPLATES_SELECTOR, PAGINATOR_TEMPLATES_SELECTOR, paginatorTemplateList);    
     UIFormCheckBoxInput viewerButtonRefreshCheckbox = new UIFormCheckBoxInput(VIEWER_BUTTON_REFRESH, VIEWER_BUTTON_REFRESH, null);
     viewerButtonRefreshCheckbox.setChecked(true);
+      UIFormCheckBoxInput viewerReadmoreCheckbox = new UIFormCheckBoxInput(VIEWER_READMORE, VIEWER_READMORE, null);
+      viewerReadmoreCheckbox.setChecked(true);
     UIFormCheckBoxInput thumbnailsViewCheckbox = new UIFormCheckBoxInput(VIEWER_THUMBNAILS_IMAGE, VIEWER_THUMBNAILS_IMAGE, null);
     thumbnailsViewCheckbox.setChecked(true);
     UIFormCheckBoxInput titleViewerCheckbox = new UIFormCheckBoxInput(VIEWER_TITLE, VIEWER_TITLE, null);
@@ -218,6 +223,8 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
     viewerLink.setChecked(Boolean.parseBoolean(portletPreferences.getValue(UIContentListViewerPortlet.SHOW_LINK, null)));    
     String refreshAble = portletPreferences.getValue(UIContentListViewerPortlet.SHOW_REFRESH_BUTTON, null);
     viewerButtonRefreshCheckbox.setChecked(Boolean.parseBoolean(refreshAble));
+    String refreshAbleRM = portletPreferences.getValue(UIContentListViewerPortlet.SHOW_READMORE, null);
+    viewerReadmoreCheckbox.setChecked(Boolean.parseBoolean(refreshAbleRM));
     String imageShowAble = portletPreferences.getValue(UIContentListViewerPortlet.SHOW_THUMBNAILS_VIEW, null);
     thumbnailsViewCheckbox.setChecked(Boolean.parseBoolean(imageShowAble));
     String titleShowAble = portletPreferences.getValue(UIContentListViewerPortlet.SHOW_TITLE, null);
@@ -262,6 +269,7 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
     addChild(summaryViewerCheckbox);
     addChild(viewerHeader);
     addChild(viewerLink);
+    addChild(viewerReadmoreCheckbox);
 
     setActions(new String[] { "Save", "Cancel" });
   }
@@ -390,6 +398,7 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
       String paginatorTemplatePath = uiViewerManagementForm.getUIFormSelectBox(UIViewerManagementForm.PAGINATOR_TEMPLATES_SELECTOR).getValue();
       String itemsPerPage = uiViewerManagementForm.getUIStringInput(UIViewerManagementForm.ITEMS_PER_PAGE_INPUT).getValue();      
       String showRefreshButton = uiViewerManagementForm.getUIFormCheckBoxInput(UIViewerManagementForm.VIEWER_BUTTON_REFRESH).isChecked() ? "true" : "false";
+      String showReadmore = uiViewerManagementForm.getUIFormCheckBoxInput(UIViewerManagementForm.VIEWER_READMORE).isChecked() ? "true" : "false";
       String viewThumbnails = uiViewerManagementForm.getUIFormCheckBoxInput(UIViewerManagementForm.VIEWER_THUMBNAILS_IMAGE).isChecked() ? "true" : "false";
       String viewTitle = uiViewerManagementForm.getUIFormCheckBoxInput(UIViewerManagementForm.VIEWER_TITLE).isChecked() ? "true" : "false";
       String viewSummary = uiViewerManagementForm.getUIFormCheckBoxInput(UIViewerManagementForm.VIEWER_SUMMARY).isChecked() ? "true" : "false";
@@ -417,6 +426,7 @@ public class UIViewerManagementForm extends UIForm implements UISelectable {
       portletPreferences.setValue(UIContentListViewerPortlet.PAGINATOR_TEMPlATE_PATH, paginatorTemplatePath);
       portletPreferences.setValue(UIContentListViewerPortlet.ITEMS_PER_PAGE, itemsPerPage);      
       portletPreferences.setValue(UIContentListViewerPortlet.SHOW_REFRESH_BUTTON, showRefreshButton);
+      portletPreferences.setValue(UIContentListViewerPortlet.SHOW_READMORE, showReadmore);
       portletPreferences.setValue(UIContentListViewerPortlet.SHOW_THUMBNAILS_VIEW, viewThumbnails);
       portletPreferences.setValue(UIContentListViewerPortlet.SHOW_TITLE, viewTitle);
       portletPreferences.setValue(UIContentListViewerPortlet.SHOW_DATE_CREATED, viewDateCreated);

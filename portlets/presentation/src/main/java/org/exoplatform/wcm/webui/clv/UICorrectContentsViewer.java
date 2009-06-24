@@ -102,7 +102,8 @@ public class UICorrectContentsViewer extends UIListViewerBase {
     contentListPresentation.setContentColumn(portletPreferences.getValue(UIContentListViewerPortlet.HEADER, null));
     contentListPresentation.setShowLink(Boolean.parseBoolean(portletPreferences.getValue(UIContentListViewerPortlet.SHOW_LINK, null)));
     contentListPresentation.setShowHeader(Boolean.parseBoolean(portletPreferences.getValue(UIContentListViewerPortlet.SHOW_HEADER, null)));
-    contentListPresentation.setHeader(portletPreferences.getValue(UIContentListViewerPortlet.HEADER, null));    
+    contentListPresentation.setShowReadmore(Boolean.parseBoolean(portletPreferences.getValue(UIContentListViewerPortlet.SHOW_READMORE, null)));
+    contentListPresentation.setHeader(portletPreferences.getValue(UIContentListViewerPortlet.HEADER, null));
   }  
     
 }

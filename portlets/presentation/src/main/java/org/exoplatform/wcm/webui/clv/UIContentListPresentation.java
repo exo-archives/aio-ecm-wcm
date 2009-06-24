@@ -99,6 +99,9 @@ import org.exoplatform.webui.event.EventListener;
   /** The show header. */
   private boolean                  showHeader;
   
+  /** The show readmore. */
+  private boolean                  showReadmore;
+
   /** The header. */
   private String                   header;
 
@@ -601,12 +604,30 @@ import org.exoplatform.webui.event.EventListener;
   }
   
   /**
+   * Checks if is show readmore.
+   *
+   * @return true, if is show readmore
+   */
+  public boolean isShowReadmore() {
+	  return showReadmore;
+  }
+
+  /**
    * Sets the show header.
    * 
    * @param showHeader the new show header
    */
   public void setShowHeader(boolean showHeader) {
 	  this.showHeader = showHeader;
+  }
+
+  /**
+   * Sets the show readmore.
+   *
+   * @param showReadmore the new show readmore
+   */
+  public void setShowReadmore(boolean showReadmore) {
+	  this.showReadmore = showReadmore;
   }
 
   /**

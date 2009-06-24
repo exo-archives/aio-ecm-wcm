@@ -85,6 +85,9 @@ public class UIContentListViewerPortlet extends UIPortletApplication {
   /** The Constant SHOW_HEADER. */
   public final static String SHOW_HEADER             = "showHeader";
   
+  /** The Constant SHOW_HEADER. */
+  public final static String SHOW_READMORE             = "showReadmore";
+
   /** The Constant SHOW_LINK. */
   public final static String SHOW_LINK             = "showLink";
   
