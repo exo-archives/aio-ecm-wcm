@@ -40,7 +40,6 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormStringInput;
-import org.exoplatform.webui.form.validator.EmailAddressValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 
 /**
@@ -93,7 +92,7 @@ public class UINewsletterViewerForm extends UIForm {
 
     this.setActions(new String[] { "Subcribe" });
     inputEmail = new UIFormStringInput("inputEmail", "Email", null);
-    inputEmail.addValidator(MandatoryValidator.class).addValidator(EmailAddressValidator.class);
+    inputEmail.addValidator(MandatoryValidator.class).addValidator(UINewsletterViewerEmailAddressValidator.class);
     this.addChild(inputEmail);
   }
 
