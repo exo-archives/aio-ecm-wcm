@@ -24,6 +24,24 @@ package org.exoplatform.wcm.webui.formgenerator;
  */
 public class UIFormGeneratorConstant {
 
+  public static final String LABEL                          = "Label";
+
+  public static final String INPUT                          = "Input";
+  
+  public static final String TEXTAREA                       = "Textarea";
+  
+  public static final String UPLOAD                         = "Upload";
+  
+  public static final String RADIO                          = "Radio";
+  
+  public static final String CHECKBOX                       = "Checkbox";
+  
+  public static final String SELECT                         = "Select";
+  
+  public static final String DATE                           = "Date";
+  
+  public static final String WYSIWYG                        = "WYSIWYG";
+  
   public static final String FORM_GENERATOR_TABPANE         = "UIFormGeneratorTabPane";
   
   public static final String FORM_GENERATOR_GENERAL_TAB     = "UIFormGeneratorGeneralTab";

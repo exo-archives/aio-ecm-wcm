@@ -25,8 +25,10 @@ import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
 import org.exoplatform.services.security.Identity;
 import org.exoplatform.services.security.IdentityRegistry;
 import org.exoplatform.services.security.MembershipEntry;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIPopupContainer;
@@ -159,6 +161,13 @@ public class Utils {
   
   public static void closePopupWindow(UIContainer container, String id) {
     container.removeChildById(id);
+  }
+  
+  public static void createPopupMessage(UIContainer container, WebuiRequestContext requestContext, String message, int type) {
+    UIApplication application = container.getAncestorOfType(UIApplication.class);
+    application.addMessage(new ApplicationMessage(message, null, type)) ;
+    requestContext.addUIComponentToUpdateByAjax(application.getUIPopupMessages()) ;
+    return;
   }
   
 }
