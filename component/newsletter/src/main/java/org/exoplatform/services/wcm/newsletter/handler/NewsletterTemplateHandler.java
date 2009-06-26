@@ -72,6 +72,7 @@ public class NewsletterTemplateHandler {
       this.dialogs = dialogs;
       return dialogs;
     } catch (Exception e) {
+      e.printStackTrace();
       log.error("Get dialog's template for exo:webContent failed because of " + e.getMessage());
     }
     return null;

@@ -26,7 +26,7 @@
 				<tr>
 					<td>
 	        <% for(action in uicomponent.getActions()) { 
-	        	 String actionLabel = _ctx.appRes("NewsletterPortletAction.action." + action); 
+	        	 String actionLabel = _ctx.appRes("NewsletterPortlet.action." + action); 
 	           String link = uicomponent.event(action) ;
 	        %>
 	        		<div onclick="$link" class="ActionButton LightBlueStyle">

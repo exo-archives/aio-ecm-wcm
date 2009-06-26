@@ -22,6 +22,9 @@ import java.util.List;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Session;
+import javax.jcr.query.Query;
+import javax.jcr.query.QueryManager;
+import javax.jcr.query.QueryResult;
 
 import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainerContext;
@@ -31,6 +34,7 @@ import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
+import org.exoplatform.services.wcm.newsletter.NewsletterPublicUser;
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 
 /**
@@ -146,6 +150,26 @@ public class NewsletterSubscriptionHandler {
       }
     }
 
+    return listSubscriptions;
+  }
+  
+  public List<NewsletterSubscriptionConfig> getSubscriptionIdsByPublicUser(String portalName, String userEmail) throws Exception{
+    List<NewsletterSubscriptionConfig> listSubscriptions = new ArrayList<NewsletterSubscriptionConfig>();
+    ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+    Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspace, manageableRepository);
+    QueryManager queryManager = session.getWorkspace().getQueryManager();
+    String sqlQuery = "select * from " + NewsletterConstant.SUBSCRIPTION_NODETYPE + 
+                      " where " + NewsletterConstant.SUBSCRIPTION_PROPERTY_USER + " = '" + userEmail + "'";
+    Query query = queryManager.createQuery(sqlQuery, Query.SQL);
+    QueryResult queryResult = query.execute();
+    NodeIterator nodeIterator = queryResult.getNodes();
+    while(nodeIterator.hasNext()){
+      try{
+        listSubscriptions.add(getSubscriptionFormNode(nodeIterator.nextNode()));
+      } catch(Exception ex) {
+        ex.printStackTrace();
+      }
+    }
     return listSubscriptions;
   }
 

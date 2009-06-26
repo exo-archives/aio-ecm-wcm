@@ -8,12 +8,15 @@
       <checkSubscriptionToProcess>Please check one or more subscriptions before submit!</checkSubscriptionToProcess>
       <alreadyExistedEmail>Email is already exist. Please input other email!</alreadyExistedEmail>
     </msg>
-  </UINewsletterViewerForm>
-  <UINewsletterViewerForm>
     <action>
       <Subcribe>Subcribe</Subcribe>
       <ForgetEmail>Forget this email</ForgetEmail>
       <ChangeSubcriptions>Change your subcriptions</ChangeSubcriptions>
     </action>
+    <title>
+    	<userEmail>User Email</userEmail>
+    	<subscription>Subscription</subscription>
+    	<yourStatus>Your status</yourStatus>
+    </title>
   </UINewsletterViewerForm>
 </bundle>

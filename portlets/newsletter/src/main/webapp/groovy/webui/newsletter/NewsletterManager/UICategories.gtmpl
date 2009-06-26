@@ -10,24 +10,30 @@ import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 <div class="UINewsletterPortlet" id="$uicomponent.id">
 	<div class="NewsletterBoxContent">
 		<div class="BreadCumbs">
-			<a href="#" class="Selected">eXo Newsletter</a>
+			<a href="#" class="Selected"><%=_ctx.appRes("NewsletterPortlet.title.eXoNewsletter")%></a>
 		</div>
 		<div class="LeftActionBar">
 			<div class="RightActionBar">
 				<div class="CenterActionBar">
 					<div class="NewsletterActionBar">			
 						<div class="Line FloatLeft">
-							<a href="<%=uicomponent.event("AddEntry")%>" class="Newsletter">News Letter </a>
+							<a href="javaScript:void(0);" onclick="<%=uicomponent.event("AddEntry")%>" class="Newsletter">
+								<%=_ctx.appRes("UICategories.title.NewsLetter")%>
+							</a>
 						</div>
 						<div class="Line FloatLeft">
-							<a href="<%=uicomponent.event("AddSubcription")%>" class="NewsSubcript">News Subscription </a>
+							<a href="javaScript:void(0);" onclick="<%=uicomponent.event("AddSubcription")%>" class="NewsSubcript">
+								<%=_ctx.appRes("UICategories.title.NewsSubscription")%>
+							</a>
 						</div>
 						<div class="Line FloatLeft">
-							<a href="<%=uicomponent.event("AddCategory")%>" class="NewsCategory">News Category </a>
+							<a href="javaScript:void(0);" onclick="<%=uicomponent.event("AddCategory")%>" class="NewsCategory">
+								<%=_ctx.appRes("UICategories.title.NewsCategory")%>
+							</a>
 						</div>
 						<!-- action of this category -->
 						<div class="Line FloatLeft" style="background: none;" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
-							<a href="#" class="NewsAdmin">Administration</a>
+							<a href="#" class="NewsAdmin"><%=_ctx.appRes("UICategories.title.Administration")%></a>
 							<div style="position:relative;">
 								<div class="UIPopupCategory" style="display:none; left:2px; top:-2px; ">
 									<div class="UIRightClickPopupMenu UINewLetterPopup" style="display:block;">
@@ -48,17 +54,17 @@ import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 														</div>
 														<div class="MenuItem" onclick="javaScript:void(0)">
 															<div class="ItemIcon Pencil" style="padding-left:30px;">
-																<a href="<%=uicomponent.event("AddCategory")%>">Edit</a>
+																<a href="<%=uicomponent.event("AddCategory")%>"><%=_ctx.appRes("UISubscription.title.Edit")%></a>
 															</div>
 														</div>
 														<div class="MenuItem" onclick="javaScript:void(0)">
 															<div class="ItemIcon Remove16x16Icon" style="padding-left:30px;">
-																<a href="<%=uicomponent.event("AddCategory")%>">Delete</a>
+																<a href="<%=uicomponent.event("AddCategory")%>"><%=_ctx.appRes("UISubscription.title.Delete")%></a>
 															</div>
 														</div>
 														<div class="MenuItem" onclick="javaScript:void(0)">
 															<div class="ItemIcon SmallGroup16x16Icon" style="padding-left:30px;">
-																<a href="<%=uicomponent.event("AddCategory")%>">Manager Uers</a>
+																<a href="<%=uicomponent.event("ManagerUsers")%>"><%=_ctx.appRes("UISubscription.title.ManagerUers")%></a>
 															</div>
 														</div>
 														<!-- Finish detail action -->
@@ -110,17 +116,18 @@ import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 						</tr>
 						<%List<NewsletterSubscriptionConfig> listSubscriptions = uicomponent.getListSubscription(category.getName());
 							if(listSubscriptions.size() > 0){
-								for(NewsletterSubscriptionConfig subScription in listSubscriptions){%>
-								<tr class="OddRow">
-									<td><%=subScription.getName()%></td>
-									<td>400</td>
-									<td style="border: none">1</td>
-								</tr>
-								<tr class="EvenRow">
-									<td><%=subScription.getName()%></td>
-									<td>400</td>
-									<td style="border-right: none">1</td>
-								</tr>
+								int i = 0;
+								String classTr = "";
+								for(NewsletterSubscriptionConfig subScription in listSubscriptions){
+									if(i % 2 == 0) classTr = "OddRow";
+									else classTr = "EvenRow";
+									i ++;
+								%>
+									<tr class="$classTr">
+										<td><%=subScription.getName()%></td>
+										<td><%=uicomponent.getNumberOfUser(category.getName(), subScription.getName())%></td>
+										<td style="border: none">1</td>
+									</tr>
 						<%	}
 							}else{%>
 								<tr class="OddRow">

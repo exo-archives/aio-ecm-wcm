@@ -35,6 +35,7 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
 import org.exoplatform.services.wcm.newsletter.config.NewsletterUserConfig;
@@ -134,20 +135,23 @@ public class NewsletterManageUserHandler {
     session.save();
   }
   
-  public void add(String portalName, String userMail, SessionProvider sessionProvider) {
+  public Node add(String portalName, String userMail) {
     log.info("Trying to add user " + userMail);
+    Node userNode = null;
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      Session session = sessionProvider.getSession(workspace, manageableRepository);
+      Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspace, manageableRepository);
       String userPath = NewsletterConstant.generateUserPath(portalName);
       Node userFolderNode = (Node)session.getItem(userPath);
-      Node userNode = userFolderNode.addNode(userMail, NewsletterConstant.USER_NODETYPE);
+      userNode = userFolderNode.addNode(userMail, NewsletterConstant.USER_NODETYPE);
       userNode.setProperty(NewsletterConstant.USER_PROPERTY_MAIL, userMail);
       userNode.setProperty(NewsletterConstant.USER_PROPERTY_BANNED, false);
+      userNode.setProperty(NewsletterConstant.USER_PROPERTY_VALIDATION_CODE, "PublicUser" + IdGenerator.generate() );
       session.save();
     } catch (Exception e) {
       log.error("Add user " + userMail + " failed because of " + e.getMessage());
     }
+    return userNode;
   }
   
   private Node getUserNodeByEmail(String portalName, String userMail, Session session) throws Exception{

@@ -68,6 +68,7 @@ public class NewsletterManagerService {
   private NewsletterPublicUserHandler publicUserHandler;
   private String repository;
   private String workspace;
+  private String templateWorkspace;
   private RepositoryService repositoryService;
   private static Log log = ExoLogger.getLogger(NewsletterManagerService.class);
 
@@ -75,11 +76,11 @@ public class NewsletterManagerService {
     log.info("Starting NewsletterManagerService ... ");
     repository = initParams.getValueParam("repository").getValue();
     workspace = initParams.getValueParam("workspace").getValue();
-    
+    templateWorkspace = initParams.getValueParam("templateWorkspace").getValue();
     categoryHandler = new NewsletterCategoryHandler(repository, workspace);
     subscriptionHandler = new NewsletterSubscriptionHandler(repository, workspace);
     entryHandler = new NewsletterEntryHandler(repository, workspace);
-    templateHandler = new NewsletterTemplateHandler(repository, workspace);
+    templateHandler = new NewsletterTemplateHandler(repository, templateWorkspace);
     manageUserHandler = new NewsletterManageUserHandler(repository, workspace);
     publicUserHandler = new NewsletterPublicUserHandler(repository, workspace);
     
@@ -120,12 +121,11 @@ public class NewsletterManagerService {
     String receiver = "ngoc.aptech@gmail.com";
     Message message = createMessage(receiver,messageConfig) ;  
     try {
-        mailService.sendMessage(message) ; 
-      }catch (Exception e) {
-        System.out.println("===> Exeption when send message to: " + message.getTo());
-        e.printStackTrace() ;
-        
-      }      
+      mailService.sendMessage(message) ; 
+    }catch (Exception e) {
+      System.out.println("===> Exeption when send message to: " + message.getTo());
+      e.printStackTrace() ;
+    }      
   }*/
   
   public void sendNewsletter() throws Exception {

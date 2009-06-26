@@ -4,6 +4,16 @@
 	padding: 3px;
 }
 
+.UINewsletterPortlet .MenuTitle{
+	text-align:left;
+}
+
+/*.UINewsletterPortlet .BreadCumbs{
+	padding:5px;
+	color:#9797FF;
+	font-weight:bold;
+}*/
+
 .UINewsletterPortlet .NewsletterBoxContent {
 	padding: 10px;
 	background: #ebedf2;
@@ -53,6 +63,11 @@
 
 .UINewsletterPortlet .BreadCumbs .Selected {
 	font-weight: bold;
+	color: #2665a0;
+}
+
+.UINewsletterPortlet .BreadCumbs .UnSelected {
+	font-weight: normal;
 	color: #2665a0;
 }
 

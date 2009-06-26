@@ -1,112 +1,122 @@
 <%
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
-%>
-<div class="UINewsletterPortlet">
-	<%uiform.begin()%>
-	<div class="UserName">
-		<div class="LeftUserName">
-			User:
-		</div>
-		<div class="RightUserName">
-			<div class="Input">
-				<%
-					uicomponent.renderChild("inputEmail");
-				%>
-				<a href = "#">
-					<%=uicomponent.userMail%>
-				</a>
-			</div>
-			<div class="buttonForget">
-				<%if (uicomponent.isUpdated == true) {%>
-						<div class="UIAction"> 
-		          <%String forgetAction = uicomponent.event("ForgetEmail") ;%>
-		          <div class="ActionContainer">
-		          	<table class="ActionContainer">
-	    						<tr>
-	    							<td>
-						          <div onclick="$forgetAction" class="ActionButton LightBlueStyle" >
-						            <div class="ButtonLeft">
-						              <div class="ButtonRight">
-						                <div class="ButtonMiddle">
-						                  <a href="javascript:void(0);">
-						                  	<%=_ctx.appRes("UINewsletterViewerForm.action.ForgetEmail")%>
-						                  </a>
-						                </div>
-						              </div>
-						            </div>
-					            </div>
-	      						</td>
-	      					</tr>          
-	    					</table>
-		          </div>
-			  		</div>
-	  			<%}%>
-			</div>
-		</div>
 
-		<div class="ClearLeft">
-			<span></span>
-		</div>
-	</div>
-	<div class="ListCategory">
+// set link to subcripe
+String url = uicomponent.url("Subcribe", "OBJECTID");
+uicomponent.setLink(url);
+if(uicomponent.userCode != null){
+	uicomponent.setActionAgain();
+}
+%>
+<div class="UINewsletterPortlet $uicomponent.id">
+	<%uiform.begin()%>
+		<div class="NewsletterBoxContent">
+			<div class="UserName" style="height:32px;width:auto;line-height:32px;width:auto;">
+				<div class="LeftUserName" style="float:left;">
+					<%=_ctx.appRes("UINewsletterViewerForm.title.userEmail")%>
+				</div>
+				<div class="RightUserName" style="float:left;">
+					<div class="Input" style="float:left;padding:0px 5px 0px 10px;">
+						<%uicomponent.renderChild("inputEmail");%> 
+						<%=uicomponent.userMail%>
+					</div>
+					<div class="buttonForget" style="float:left; margin-left:50px;">
+						<%if (uicomponent.isUpdated == true) {%>
+								<div class="UIAction"> 
+				          <%String forgetAction = uicomponent.event("ForgetEmail") ;%>
+				          <div class="ActionContainer">
+				          	<table class="ActionContainer">
+			    						<tr>
+			    							<td>
+								          <div onclick="$forgetAction" class="ActionButton LightBlueStyle" >
+								            <div class="ButtonLeft">
+								              <div class="ButtonRight">
+								                <div class="ButtonMiddle">
+								                  <a href="javascript:void(0);">
+								                  	<%=_ctx.appRes("UINewsletterViewerForm.action.ForgetEmail")%>
+								                  </a>
+								                </div>
+								              </div>
+								            </div>
+							            </div>
+			      						</td>
+			      					</tr>          
+			    					</table>
+				          </div>
+					  		</div>
+			  			<%}%>
+					</div>
+					<div style="clear:both;"><span></span></div>
+				</div>
+				<div class="ClearLeft"><span></span></div>
+			</div>
+		
 		<%for(NewsletterCategoryConfig category in uicomponent.getListCategories()){%>
-			<div class="ListCategoryDetail">
-				<div class="TextCategoryName">
-					<%=category.getName()%>
-				</div>
-				<div class="TextAboutCategory">
-					<%=category.getDescription()%>
-				</div>
-				<div class="ListSubcription">
-					<table cellpadding="1" cellspacing="1">
-						<tr class="TrTitleSubcription">
-							<td width="25%" height="30" class="Line">
-								<span class="TitleSubcription">Subcription</span>
-							</td>
-							<td width="25%" height="30" class="Line">
-								<span class="TitleSubcription">Your status</span>
-							</td>
-						</tr>
-						<%int count = 0;
-							String classTr = "";
-							List<NewsletterSubscriptionConfig>	listSubcription = uicomponent.getListSubscription(category.getName());	
-							for (NewsletterSubscriptionConfig subcription in listSubcription) {
-								count++;
-							  if (count % 2 != 0)
-							  	classTr = "TrGrey";
-							  else 
-							  	classTr = "TrWhite";
-					  %>
-								<tr class=$classTr>
-									<td width="25%" height="30" class="Line">
-										<a href="#"><%=subcription.getName()%></a>
-									</td>
-									<td width="25%" height="30" class="Line">
-										<span class="SubcriptionContent">
-											<%
-												uicomponent.renderChild(category.getName() + "#" + subcription.getName());
-											%>
-										</span>
-									</td>
-								</tr>
-						<%}%>
-					</table>
+			<div class="UICategories" style="width:auto;">
+				<div style="width:auto;">
+					<!-- Category infor -->
+					<div class="CategoryTittle">
+						<div class="LeftTitle">
+							<div class="RightTitle">
+								<div class="CenterTitle">
+									<a class="IconCategory" href="javaScript:void(0);"><%=category.getTitle()%></a>
+								</div>
+							</div>
+						</div>
+						<div style="float:left;line-height:26px;padding-left:10px"><%=category.getDescription()%></div>
+						<div class="ClearLeft"><span></span></div>
+					</div>
+					<!-- All subscriptions -->
+					<div class="Subscriptions">
+						<table cellpadding="5" cellspacing="0" border="0">
+							<tr>
+								<th class="Title">
+									<%=_ctx.appRes("UINewsletterViewerForm.title.subscription")%>
+								</th>
+								<th class="Title" style="border-right:none;width:50px;">
+									<%=_ctx.appRes("UINewsletterViewerForm.title.yourStatus")%>
+								</th>
+							</tr>
+							<%List<NewsletterSubscriptionConfig> listSubscriptions = uicomponent.getListSubscription(category.getName());
+								if(listSubscriptions.size() > 0){
+									int i = 0;
+									String classTr = "";
+									for(NewsletterSubscriptionConfig subScription in listSubscriptions){
+										if(i % 2 == 0) classTr = "OddRow";
+										else classTr = "EvenRow";
+										i ++;
+									%>
+										<tr class="$classTr">
+											<td><%=subScription.getTitle()%></td>
+											<td style="border:none;width:50px">
+												<%
+													uicomponent.renderChild(category.getName() + "#" + subScription.getName());
+												%>
+											</td>
+										</tr>
+							<%	}
+								}else{%>
+									<tr class="OddRow">
+										<td colspan="2"><span></span></td>
+									</tr>
+							<%}%>
+						</table>
+					</div>
 				</div>
 			</div>
-		<%
-		}
-		%>
-	</div>
-	<div class="UIAction"> 
+		<%}%>
+		</div>
+		
+		<div class="UIAction"> 
 	    <table class="ActionContainer">
 	    	<tr>
 	    		<td>
 	          <%
 	          for(action in uicomponent.getActions()) { 
+	      			if ("ForgetEmail".equals(action)) continue;
 	          	String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action); 
 		    			String link = uicomponent.event(action) ;
-	          		if ("ForgetEmail".equals(action)) continue;
 	          %>
 			          <div onclick="$link" class="ActionButton LightBlueStyle" >
 			            <div class="ButtonLeft">
@@ -121,8 +131,9 @@ import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 			          </div>
 	      		<%}%>
 	      	</td>
-	      </tr>          
+	      </tr>
 	    </table>
 	  </div>
+	  <%uicomponent.userCode = null;%>
 	<%uiform.end()%>
 </div>

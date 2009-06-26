@@ -16,6 +16,7 @@
  */
 package org.exoplatform.wcm.webui.newsletter.manager;
 
+import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
@@ -29,5 +30,24 @@ public class NewsLetterUtil {
 	public static String getPortalName() {
 		UIPortal portal = Util.getUIPortal();
 		return portal.getName();  
+	}
+	
+	public static String generateLink(String url){
+    String link = url.replaceFirst("Subcribe", "ConfirmUserCode")
+                      .replaceFirst("UINewsletterViewerForm", "UINewsletterViewerPortlet")
+                      .replaceAll("&amp;", "&");
+    String selectedNode = Util.getUIPortal().getSelectedNode().getUri() ;
+    String portalName = "/" + Util.getUIPortal().getName() ;
+    if(link.indexOf(portalName) > 0) {
+      if(link.indexOf(portalName + "/" + selectedNode) < 0){
+        link = link.replaceFirst(portalName, portalName + "/" + selectedNode) ;
+      }                 
+    } 
+    PortalRequestContext portalContext = Util.getPortalRequestContext();
+    url = portalContext.getRequest().getRequestURL().toString();
+    url = url.replaceFirst("http://", "") ;
+    url = url.substring(0, url.indexOf("/")) ;
+    link = "http://" + url + link;
+    return link.replaceFirst("private", "public");
 	}
 }

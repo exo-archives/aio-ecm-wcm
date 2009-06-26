@@ -23,6 +23,9 @@ package org.exoplatform.services.wcm.newsletter;
  * May 21, 2009  
  */
 public class NewsletterConstant {
+  
+  public static final String PORTAL_NAME = "portalName";
+  
   // Categories property
   public static final String  CATEGORIES_PROPERTY_ADDMINISTRATOR = "exo:newsletteraddministrator";
   // Category nodetype
@@ -62,11 +65,10 @@ public class NewsletterConstant {
 
   // User nodetype
   public static final String USER_NODETYPE                       = "exo:newsletterUser";
-
   public static final String USER_PROPERTY_MAIL                  = "exo:newsletterUserMail";
-
   public static final String USER_PROPERTY_BANNED                = "exo:newsletterUserBanned";
-
+  public static final String USER_PROPERTY_VALIDATION_CODE       = "exo:newsletterUserValidationCode";
+  
   // Entry status
   public static final String STATUS_DRAFT                        = "draft";
 
@@ -80,10 +82,10 @@ public class NewsletterConstant {
   public static String       USER_BASE_PATH                      = "/sites content/live/portalName/ApplicationData/NewsletterApplication/Users";
   
   public static String generateCategoryPath(String portalName) {
-    return CATEGORY_BASE_PATH.replaceAll("portalName", portalName);
+    return CATEGORY_BASE_PATH.replaceAll(PORTAL_NAME, portalName);
   }
   
   public static String generateUserPath(String portalName) {
-    return USER_BASE_PATH.replaceAll("portalName", portalName);
+    return USER_BASE_PATH.replaceAll(PORTAL_NAME, portalName);
   }
 }

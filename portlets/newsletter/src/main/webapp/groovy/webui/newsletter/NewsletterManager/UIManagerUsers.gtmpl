@@ -67,7 +67,7 @@ import org.exoplatform.services.wcm.newsletter.config.NewsletterUserConfig;
 		<table class="ActionContainer" style="text-align:center">
 			<tr>
 				<td>
-	    <% String actionLabel = _ctx.appRes("NewsletterPortletAction.action.Close"); 
+	    <% String actionLabel = _ctx.appRes("NewsletterPortlet.action.Close"); 
 	       String link = uicomponent.event("Close") ;
 	    %>
 	    		<div onclick="$link" class="ActionButton LightBlueStyle">

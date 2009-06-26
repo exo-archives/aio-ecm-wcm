@@ -31,12 +31,19 @@ import javax.jcr.query.QueryResult;
 
 import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.container.StandaloneContainer;
+import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.mail.MailService;
+import org.exoplatform.services.mail.Message;
 import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
+import org.exoplatform.services.wcm.newsletter.NewsletterPublicUser;
 
 /**
  * Created by The eXo Platform SAS
@@ -130,23 +137,58 @@ public class NewsletterPublicUserHandler {
       log.error("Update user's subscription for user " + email + " failed because of " + e.getMessage());
     }
   }
-
-  public void subscribe(String portalName, String userMail, List<String> listCategorySubscription, SessionProvider sessionProvider) {
+  
+  public void subscribe(String portalName, String userMail, List<String> listCategorySubscription, String link) {
     log.info("Trying to subscribe user " + userMail);
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
       Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspace, manageableRepository);
       // add new user email into users node
       NewsletterManageUserHandler manageUserHandler = new NewsletterManageUserHandler(repository, workspace);
-      manageUserHandler.add(portalName, userMail, sessionProvider);
+      Node userNode = manageUserHandler.add(portalName, userMail);
       
       // update email into subscription
       updateSubscriptions(session, listCategorySubscription, portalName, userMail);
       //Send a verification code to user's email to validate and to get link
+      String mailContent = "send mail, click hear <a href=\"" + 
+                            link.replaceFirst("OBJECTID",
+                                              userMail + "/" + userNode.getProperty(NewsletterConstant.USER_PROPERTY_VALIDATION_CODE).getString())+
+                            "\">confirm your email</a> to view your newsletter";
+      Message  message = new Message(); 
+      message.setMimeType("text/html") ;
+      message.setFrom("maivanha1610@gmail.com") ;
+      message.setTo(userMail) ;
+      message.setSubject("Test send mail") ;
+      message.setBody(mailContent) ;
+      try{
+        MailService mService = (MailService)PortalContainer.getComponent(MailService.class) ;
+        mService.sendMessage(message) ;   
+      }catch(Exception e) {
+        MailService mService = (MailService)StandaloneContainer.getInstance().getComponentInstanceOfType(MailService.class) ;
+        mService.sendMessage(message) ;   
+      }
     } catch (Exception e) {
       log.error("Subscribe user " + userMail + " failed because of " + e.getMessage());
+      e.printStackTrace();
     }
   }
+  
+  public boolean confirmPublicUser(String Email, String userCode, String portalName) throws Exception{
+    ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+    Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspace, manageableRepository);
+    QueryManager queryManager = session.getWorkspace().getQueryManager();
+    String sqlQuery = "select * from " + NewsletterConstant.USER_NODETYPE + " where " + 
+                        NewsletterConstant.USER_PROPERTY_VALIDATION_CODE + " = '" + userCode + "' and " + 
+                        NewsletterConstant.USER_PROPERTY_MAIL + " = '" + Email + "'";
+    Query query = queryManager.createQuery(sqlQuery, Query.SQL);
+    QueryResult queryResult = query.execute();
+    NodeIterator nodeIterator = queryResult.getNodes();
+    while(nodeIterator.hasNext()){
+      return true;
+    }
+    return false;
+  }
+
   
   public void forgetEmail(String portalName, String email){
     log.info("Trying to update user's subscriptions for user " + email);
@@ -178,5 +220,4 @@ public class NewsletterPublicUserHandler {
       log.error("Update user's subscription for user " + email + " failed because of " + e.getMessage());
     }
   }
-
 }

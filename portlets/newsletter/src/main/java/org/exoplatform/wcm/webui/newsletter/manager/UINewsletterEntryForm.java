@@ -19,6 +19,9 @@ package org.exoplatform.wcm.webui.newsletter.manager;
 import java.util.Map;
 
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
+import javax.jcr.Property;
+import javax.jcr.PropertyIterator;
 import javax.jcr.Session;
 
 import org.apache.commons.logging.Log;
@@ -28,12 +31,14 @@ import org.exoplatform.ecm.webui.utils.DialogFormUtil;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.CmsService;
 import org.exoplatform.services.cms.JcrInputProperty;
+import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterTemplateHandler;
 import org.exoplatform.wcm.webui.Utils;
@@ -82,6 +87,7 @@ public class UINewsletterEntryForm extends UIDialogForm {
       Node dialogNode = newsletterTemplateHandler.getDialog(newsletterEntryDialogSelector.getDialog());
       return dialogNode.getPath();  
     } catch (Exception e) {
+      e.printStackTrace();
       log.error("Get template failed because of " + e.getMessage(), e);
     }
     return null;
@@ -90,12 +96,12 @@ public class UINewsletterEntryForm extends UIDialogForm {
   public ResourceResolver getTemplateResourceResolver(WebuiRequestContext context, String template) {
     try{
       if (resourceResolver == null) {
-        RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
-        ManageableRepository manageableRepository = repositoryService.getRepository("repository");
-        String workspace = manageableRepository.getConfiguration().getSystemWorkspaceName();
+        DMSConfiguration dmsConfiguration = getApplicationComponent(DMSConfiguration.class);
+        String workspace = dmsConfiguration.getConfig("repository").getSystemWorkspace();
         resourceResolver = new JCRResourceResolver("repository", workspace, TemplateService.EXO_TEMPLATE_FILE_PROP);
       }
     }catch(Exception e) {
+      e.printStackTrace();
       log.error("Get template resource resolver failed because of " + e.getMessage(), e);
     }
     return resourceResolver;
@@ -109,7 +115,7 @@ public class UINewsletterEntryForm extends UIDialogForm {
   public static class SaveActionListener extends EventListener<UINewsletterEntryForm> {
     public void execute(Event<UINewsletterEntryForm> event) throws Exception {
       UINewsletterEntryForm newsletterEntryForm = event.getSource();
-      String storedPath = newsletterEntryForm.getStoredPath();
+      String storedPath = newsletterEntryForm.getStoredPath().replace(NewsletterConstant.PORTAL_NAME, NewsLetterUtil.getPortalName());
       String repositoryName = newsletterEntryForm.repositoryName;
       ThreadLocalSessionProviderService threadLocalSessionProviderService = newsletterEntryForm.getApplicationComponent(ThreadLocalSessionProviderService.class);
       SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
@@ -117,10 +123,25 @@ public class UINewsletterEntryForm extends UIDialogForm {
       ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
       Session session = sessionProvider.getSession(newsletterEntryForm.workspaceName, manageableRepository);
       Node storedNode = (Node)session.getItem(storedPath);
+      
+      System.out.println("\n\n\n\n------------------->storePath:" + storedPath);
+      
       Map<String, JcrInputProperty> inputProperties = DialogFormUtil.prepareMap(newsletterEntryForm.getChildren(), newsletterEntryForm.getInputProperties());
       CmsService cmsService = newsletterEntryForm.getApplicationComponent(CmsService.class);
-      cmsService.storeNode("exo:webContent", storedNode, inputProperties, newsletterEntryForm.isAddNew(), repositoryName);
+      String newsletterNodePath = 
+                        cmsService.storeNode("exo:webContent", storedNode, inputProperties, newsletterEntryForm.isAddNew(), repositoryName);
       session.save();
+      
+      NodeIterator iterator = storedNode.getNodes();
+      while(iterator.hasNext()){
+        Node node = iterator.nextNode();
+        PropertyIterator propertyIterator = node.getProperties();
+        System.out.println("\n\n\n\n--------------->node name: " + node.getName());
+        while(propertyIterator.hasNext()){
+          Property property = propertyIterator.nextProperty();
+          System.out.println("~~~~~~~~~~~~~~~~~>" + property.getName() + ": " + property.getType());
+        }
+      }
       
       UIPopupContainer popupContainer = newsletterEntryForm.getAncestorOfType(UIPopupContainer.class);
       Utils.closePopupWindow(popupContainer, UINewsletterConstant.ENTRY_FORM_POPUP_WINDOW);

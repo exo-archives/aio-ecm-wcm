@@ -19,7 +19,6 @@ package org.exoplatform.wcm.webui.newsletter.viewer;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
@@ -47,41 +46,26 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
  * ngoc.tran@exoplatform.com May 25, 2009
  */
 @ComponentConfig(
-                 lifecycle = UIFormLifecycle.class,
-                 template = "app:/groovy/webui/newsletter/NewsletterViewer/UINewsletterListViewer.gtmpl",
-                 events = {
-                      @EventConfig(listeners = UINewsletterViewerForm.SubcribeActionListener.class),
-                      @EventConfig(listeners = UINewsletterViewerForm.ForgetEmailActionListener.class),
-                      @EventConfig(listeners = UINewsletterViewerForm.ChangeSubcriptionsActionListener.class) }
+   lifecycle = UIFormLifecycle.class,
+   template = "app:/groovy/webui/newsletter/NewsletterViewer/UINewsletterListViewer.gtmpl",
+   events = {
+        @EventConfig(listeners = UINewsletterViewerForm.SubcribeActionListener.class),
+        @EventConfig(listeners = UINewsletterViewerForm.ForgetEmailActionListener.class),
+        @EventConfig(listeners = UINewsletterViewerForm.ChangeSubcriptionsActionListener.class) }
 )
 public class UINewsletterViewerForm extends UIForm {
-
-  /** UICheckBox Input*/
-  private UIFormCheckBoxInput<Boolean>  checkBoxInput            = null;
-
-  /** UITextBox Input*/
-  private UIFormStringInput             inputEmail               = null;
-
-  /** Email of user*/
-  private String                        userMail                 = "";
-
-  /** Check for subcription is updated*/
-  private boolean                       isUpdated                = false;
-
-  /** NewsletterCategoryHandler*/
-  private NewsletterCategoryHandler     categoryHandler          = null;
-
-  /** NewsletterSubscriptionHandler*/
-  private NewsletterSubscriptionHandler subcriptionHandler       = null;
-
-  /** NewsletterPublicUserHandler*/
-  private NewsletterPublicUserHandler   publicUserHandler        = null;
-  
-  /** NewsletterManageUserHandler*/
-  private NewsletterManageUserHandler managerUserHandler         = null;
-
-  /** NewsletterManagerService*/
-  NewsletterManagerService              newsletterManagerService = null;
+  public String userCode;
+  public UIFormStringInput inputEmail;
+  public String userMail = "";
+  public boolean isUpdated = false;
+  public NewsletterSubscriptionHandler subcriptionHandler ;
+  public NewsletterPublicUserHandler publicUserHandler ;
+  private UIFormCheckBoxInput<Boolean> checkBoxInput;
+  private NewsletterCategoryHandler categoryHandler ;
+  private NewsletterManageUserHandler managerUserHandler ;
+  private NewsletterManagerService newsletterManagerService;
+  private String linkToSendMail;
+  private List<String> listIds;
 
   public UINewsletterViewerForm() throws Exception {
     newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
@@ -95,15 +79,44 @@ public class UINewsletterViewerForm extends UIForm {
     inputEmail.addValidator(MandatoryValidator.class).addValidator(UINewsletterViewerEmailAddressValidator.class);
     this.addChild(inputEmail);
   }
-
+  
+  public void setListIds(List<String> listIds){
+    this.listIds = listIds;
+  }
+  
   public void init(List<NewsletterSubscriptionConfig> listNewsletterSubcription, String categoryName) throws Exception {
-    String subcriptionPattern = null;
-    for (NewsletterSubscriptionConfig newsletterSubcription : listNewsletterSubcription) {
-      subcriptionPattern = categoryName + "#" + newsletterSubcription.getName();
-      if (this.getChildById(subcriptionPattern) != null) continue;
-      checkBoxInput = new UIFormCheckBoxInput<Boolean>(subcriptionPattern, subcriptionPattern, false);
-      this.addChild(checkBoxInput);
+    if(userCode != null && userCode.trim().length() > 0){ // run when confirm user code
+      String subcriptionPattern;
+      for (NewsletterSubscriptionConfig newsletterSubcription : listNewsletterSubcription) {
+        subcriptionPattern = categoryName + "#" + newsletterSubcription.getName();
+        if (this.getChildById(subcriptionPattern) != null) this.removeChildById(subcriptionPattern);
+        checkBoxInput = new UIFormCheckBoxInput<Boolean>(subcriptionPattern, subcriptionPattern, false);
+        if(listIds.contains(subcriptionPattern)) checkBoxInput.setChecked(true);
+        else checkBoxInput.setChecked(false);
+        this.addChild(checkBoxInput);
+      }
+    } else {
+      String subcriptionPattern;
+      for (NewsletterSubscriptionConfig newsletterSubcription : listNewsletterSubcription) {
+        subcriptionPattern = categoryName + "#" + newsletterSubcription.getName();
+        if (this.getChildById(subcriptionPattern) != null) continue;
+        else{
+          checkBoxInput = new UIFormCheckBoxInput<Boolean>(subcriptionPattern, subcriptionPattern, false);
+          this.addChild(checkBoxInput);
+        }
+      }
     }
+  }
+  
+  public void setInforConfirm(String userEmail, String userCode){
+    this.userMail = userEmail;
+    this.userCode = userCode;
+  }
+  
+  @SuppressWarnings("unused")
+  private void setActionAgain(){
+    this.setActions(new String[] { "ForgetEmail", "ChangeSubcriptions" });
+    this.isUpdated = true;
   }
   
   @SuppressWarnings({ "unused", "unchecked" })
@@ -130,11 +143,10 @@ public class UINewsletterViewerForm extends UIForm {
 
   @SuppressWarnings("unused")
   private List<NewsletterSubscriptionConfig> getListSubscription(String categoryName) {
-
     try {
 
-      List<NewsletterSubscriptionConfig> listSubscription = new ArrayList<NewsletterSubscriptionConfig>();
-      listSubscription = subcriptionHandler.getSubscriptionsByCategory(NewsLetterUtil.getPortalName(), categoryName);
+      List<NewsletterSubscriptionConfig> listSubscription = 
+                                          subcriptionHandler.getSubscriptionsByCategory(NewsLetterUtil.getPortalName(), categoryName);
       this.init(listSubscription, categoryName);
 
       return listSubscription;
@@ -142,6 +154,11 @@ public class UINewsletterViewerForm extends UIForm {
       e.printStackTrace();
       return new ArrayList<NewsletterSubscriptionConfig>();
     }
+  }
+  
+  @SuppressWarnings("unused")
+  private void setLink(String url){
+    this.linkToSendMail = NewsLetterUtil.generateLink(url);
   }
 
   public static class ForgetEmailActionListener extends EventListener<UINewsletterViewerForm> {
@@ -183,7 +200,6 @@ public class UINewsletterViewerForm extends UIForm {
   public static class SubcribeActionListener extends EventListener<UINewsletterViewerForm> {
     public void execute(Event<UINewsletterViewerForm> event) throws Exception {
       UINewsletterViewerForm newsletterForm = event.getSource();
-      SessionProvider sessionProvider = NewsLetterUtil.getSesssionProvider();
       String portalName = NewsLetterUtil.getPortalName();
       String userEmail = newsletterForm.inputEmail.getValue();
       List<String> listCategorySubscription = newsletterForm.listSubscriptionChecked();
@@ -194,7 +210,7 @@ public class UINewsletterViewerForm extends UIForm {
         if(listCategorySubscription.size() < 1){
           contentOfMessage = "UINewsletterViewerForm.msg.checkSubscriptionToProcess";
         }else{
-          newsletterForm.publicUserHandler.subscribe(portalName, userEmail, listCategorySubscription, sessionProvider);
+          newsletterForm.publicUserHandler.subscribe(portalName, userEmail, listCategorySubscription, newsletterForm.linkToSendMail);
           newsletterForm.inputEmail.setRendered(false);
           newsletterForm.userMail = userEmail;
           newsletterForm.isUpdated = true;
@@ -202,7 +218,6 @@ public class UINewsletterViewerForm extends UIForm {
           contentOfMessage = "UINewsletterViewerForm.msg.subcribed";
         }
       } else {
-        
         contentOfMessage = "UINewsletterViewerForm.msg.alreadyExistedEmail";
       }
 

@@ -56,7 +56,7 @@
 		</title>
 	</UIManagerUsersFormPopupWindow>
 	
-  <NewsletterPortletAction>
+  <NewsletterPortlet>
     <action>
       <Save>Save</Save>
       <Cancel>Cancel</Cancel>
@@ -67,7 +67,10 @@
       <Moderation>Moderation</Moderation>
       <CreateLetter>Create a new letter</CreateLetter>  
     </action>
-  </NewsletterPortletAction>
+    <title>
+    	<eXoNewsletter>eXo Newsletter</eXoNewsletter>
+    </title>
+  </NewsletterPortlet>
 	
   <UICategoryForm>
     <msg>
@@ -95,8 +98,32 @@
     	<SubScription>Subscription</SubScription>
     	<NumberOfUser>Number of User</NumberOfUser>
     	<AWaitingLetter>Awaiting Letter</AWaitingLetter>
+    	<NewsLetter>News Letter</NewsLetter>
+    	<NewsSubscription>News Subscription</NewsSubscription>
+    	<NewsCategory>News Category</NewsCategory>
+    	<Administration>Administration</Administration>
     </title>
   </UICategories>
+  
+  <UISubscription>
+    <msg>
+    	<confirmDeleteCategory>Are you sure you want to delete this category?</confirmDeleteCategory>
+    	<confirmDeleteSubscription>Are you sure you want to delete this subscription</confirmDeleteSubscription>
+    	<checkOnlyOneSubScriptionToEdit>Please check only one subscription to edit!</checkOnlyOneSubScriptionToEdit>
+    	<checkOnlyOneSubScriptionToDelete>Please check only one subscription to delete!</checkOnlyOneSubScriptionToDelete>
+    	<subscriptionNotfound>Subcription name is not exist!</subscriptionNotfound>
+    	<checkOnlyOneSubScriptionToOpen>Please check only one subscription to open!</checkOnlyOneSubScriptionToOpen>
+    </msg>
+    <title>
+    	<ManageCategory>Manage Category</ManageCategory>
+    	<EditCategory>Edit Category</EditCategory>
+    	<DeleteCategory>Delete Category</DeleteCategory>
+    	<Edit>Edit</Edit>
+    	<Delete>Delete</Delete>
+    	<ManagerUers>Manager Uers</ManagerUers>
+    	<Open>Open</Open>
+    </title>
+  </UISubscription>
 	
 	<FormCategoryModerator>
 		<title>
@@ -144,17 +171,6 @@
     	<CategoryName>Category</CategoryName>
     </title>
   </UISubcriptionForm>
-  
-  <UISubscription>
-    <msg>
-    	<confirmDeleteCategory>Are you sure you want to delete this category?</confirmDeleteCategory>
-    	<confirmDeleteSubscription>Are you sure you want to delete this subscription</confirmDeleteSubscription>
-    	<checkOnlyOneSubScriptionToEdit>Please check only one subscription to edit!</checkOnlyOneSubScriptionToEdit>
-    	<checkOnlyOneSubScriptionToDelete>Please check only one subscription to delete!</checkOnlyOneSubScriptionToDelete>
-    	<subscriptionNotfound>Subcription name is not exist!</subscriptionNotfound>
-    	<checkOnlyOneSubScriptionToOpen>Please check only one subscription to open!</checkOnlyOneSubScriptionToOpen>
-    </msg>
-  </UISubscription>
 	
 	<UINewsletterEntryForm>
 		<action>
