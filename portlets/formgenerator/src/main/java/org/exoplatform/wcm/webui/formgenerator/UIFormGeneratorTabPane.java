@@ -21,15 +21,24 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.jcr.Node;
+import javax.jcr.NodeIterator;
 import javax.jcr.PropertyType;
+import javax.jcr.Session;
 import javax.jcr.version.OnParentVersionAction;
 
+import org.exoplatform.services.cms.BasePath;
+import org.exoplatform.services.cms.impl.DMSConfiguration;
+import org.exoplatform.services.cms.impl.DMSRepositoryConfiguration;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.core.nodetype.ExtendedNodeTypeManager;
 import org.exoplatform.services.jcr.core.nodetype.NodeDefinitionValue;
 import org.exoplatform.services.jcr.core.nodetype.NodeTypeValue;
 import org.exoplatform.services.jcr.core.nodetype.PropertyDefinitionValue;
+import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
+import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -77,9 +86,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
     UIFormStringInput nameFormStringInput = new UIFormStringInput(UIFormGeneratorConstant.NAME_FORM_STRING_INPUT, UIFormGeneratorConstant.NAME_FORM_STRING_INPUT, null); 
     nameFormStringInput.addValidator(MandatoryValidator.class);
     formGeneratorGeneralTab.addUIFormInput(nameFormStringInput);
-    List<SelectItemOption<String>> listNodetype = new ArrayList<SelectItemOption<String>>();
-    listNodetype.add(new SelectItemOption<String>("exo:article"));
-    listNodetype.add(new SelectItemOption<String>("exo:webContent"));
+    List<SelectItemOption<String>> listNodetype = getAllDocumentNodetypes();
     formGeneratorGeneralTab.addUIFormInput(new UIFormSelectBox(UIFormGeneratorConstant.NODETYPE_FORM_SELECTBOX, UIFormGeneratorConstant.NODETYPE_FORM_SELECTBOX, listNodetype));
     formGeneratorGeneralTab.addUIFormInput(new UIFormWYSIWYGInput(UIFormGeneratorConstant.DESCRIPTION_FORM_WYSIWYG_INPUT, UIFormGeneratorConstant.DESCRIPTION_FORM_WYSIWYG_INPUT, null));
     formGeneratorGeneralTab.addUIFormInput(new UIFormUploadInput(UIFormGeneratorConstant.ICON_FORM_UPLOAD_INPUT, UIFormGeneratorConstant.ICON_FORM_UPLOAD_INPUT));
@@ -93,6 +100,28 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
     addUIFormInput(formGeneratorOptionsTab);
 
     setSelectedTab(formGeneratorGeneralTab.getId());
+  }
+  
+  private List<SelectItemOption<String>> getAllDocumentNodetypes() throws Exception {
+    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>();
+    String repositoryName = "repository";
+    RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
+    ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
+    DMSConfiguration dmsConfiguration = getApplicationComponent(DMSConfiguration.class);
+    DMSRepositoryConfiguration dmsRepoConfig = dmsConfiguration.getConfig(repositoryName);
+    ThreadLocalSessionProviderService threadLocalSessionProviderService = getApplicationComponent(ThreadLocalSessionProviderService.class);
+    Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(dmsRepoConfig.getSystemWorkspace(), manageableRepository);
+    NodeHierarchyCreator nodeHierarchyCreator = getApplicationComponent(NodeHierarchyCreator.class);
+    String templateBasePath = nodeHierarchyCreator.getJcrPath(BasePath.CMS_TEMPLATES_PATH);
+    Node templateBaseNode = (Node)session.getItem(templateBasePath);
+    NodeIterator templateIter = templateBaseNode.getNodes();
+    while(templateIter.hasNext()) {
+      Node template = templateIter.nextNode();
+      if (template.getProperty(TemplateService.DOCUMENT_TEMPLATE_PROP).getBoolean()) {
+        options.add(new SelectItemOption<String>(template.getName()));
+      }
+    }
+    return options;
   }
   
   private int getNumberRequireType(String formType, int size) {
@@ -202,6 +231,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
       }
       if (validate.startsWith(","))
         validate = validate.substring(1);
+      String propertyName = getPropertyName(inputName);
       dialogTemplate.append("      <tr>");
       dialogTemplate.append("        <td class=\"FieldLabel\"><%=_ctx.appRes(\"FormGenerator.dialog.label." + inputName + "\")%></td>");
       dialogTemplate.append("        <td class=\"FieldComponent\">");
@@ -209,11 +239,11 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
       if (UIFormGeneratorConstant.UPLOAD.equals(inputType)) {
         dialogTemplate.append("           if(uicomponent.isEditing()) {");
         dialogTemplate.append("             def curNode = uicomponent.getNode() ;");
-        dialogTemplate.append("             if(curNode.hasNode(\"exo:image\")) {");
-        dialogTemplate.append("               def imageNode = curNode.getNode(\"exo:image\") ;");
+        dialogTemplate.append("             if(curNode.hasNode(\"" + propertyName + "\")) {");
+        dialogTemplate.append("               def imageNode = curNode.getNode(\"" + propertyName + "\") ;");
         dialogTemplate.append("               if(imageNode.getProperty(\"jcr:data\").getStream().available() > 0) {");
-        dialogTemplate.append("                 def imgSrc = uicomponent.getImage(curNode, \"exo:image\");");
-        dialogTemplate.append("                 def actionLink = uicomponent.event(\"RemoveData\", \"/exo:image\");");
+        dialogTemplate.append("                 def imgSrc = uicomponent.getImage(curNode, \"" + propertyName + "\");");
+        dialogTemplate.append("                 def actionLink = uicomponent.event(\"RemoveData\", \"/" + propertyName + "\");");
         dialogTemplate.append("                 %>");
         dialogTemplate.append("                   <div>");
         dialogTemplate.append("                     <image src=\"$imgSrc\" width=\"100px\" height=\"80px\"/>");
@@ -223,19 +253,19 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
         dialogTemplate.append("                   </div>");
         dialogTemplate.append("                 <%");
         dialogTemplate.append("               } else {");
-        dialogTemplate.append("                 String[] fieldImage = [\"jcrPath=/node/exo:image/jcr:data\"] ;");
+        dialogTemplate.append("                 String[] fieldImage = [\"jcrPath=/node/" + propertyName + "/jcr:data\"] ;");
         dialogTemplate.append("                 uicomponent.addUploadField(\"image\", fieldImage) ;");
         dialogTemplate.append("               }");
         dialogTemplate.append("             }");
         dialogTemplate.append("           } else if(uicomponent.dataRemoved()) {");
-        dialogTemplate.append("             String[] fieldImage = [\"jcrPath=/node/exo:image/jcr:data\"] ;");
+        dialogTemplate.append("             String[] fieldImage = [\"jcrPath=/node/" + propertyName + "/jcr:data\"] ;");
         dialogTemplate.append("             uicomponent.addUploadField(\"image\", fieldImage) ;");
         dialogTemplate.append("           } else {");
-        dialogTemplate.append("             String[] fieldImage = [\"jcrPath=/node/exo:image/jcr:data\"] ;");
+        dialogTemplate.append("             String[] fieldImage = [\"jcrPath=/node/" + propertyName + "/jcr:data\"] ;");
         dialogTemplate.append("             uicomponent.addUploadField(\"image\", fieldImage) ;");
         dialogTemplate.append("           }");
       } else {
-        dialogTemplate.append("           String[] " + inputFieldName + " = [\"jcrPath=/node/" + getPropertyName(inputName) + "\", \"defaultValues=" + form.getValue() + "\", \"validate=" + validate + "\", \"options=" + form.getAdvanced() + "\"];");
+        dialogTemplate.append("           String[] " + inputFieldName + " = [\"jcrPath=/node/" + propertyName + "\", \"defaultValues=" + form.getValue() + "\", \"validate=" + validate + "\", \"options=" + form.getAdvanced() + "\"];");
         dialogTemplate.append("           uicomponent.add" + inputField + "(\"" + inputFieldName + "\", " + inputFieldName + ");");
       }
       dialogTemplate.append("          %>");
@@ -276,27 +306,13 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
   
   private String generateViewTemplate(List<UIFormGeneratorInputBean> forms) {
     StringBuilder viewTemplate = new StringBuilder();
+    viewTemplate.append(" <% def currentNode = uicomponent.getNode() ; %>");
     viewTemplate.append(" <div>");
     viewTemplate.append("   <table>");
-    viewTemplate.append("     <tr>");
-    viewTemplate.append("       <th>Type</th>");
-    viewTemplate.append("       <th>Name</th>");
-    viewTemplate.append("       <th>Value</th>");
-    viewTemplate.append("       <th>Guild line</th>");
-    viewTemplate.append("     </tr>");
     for (UIFormGeneratorInputBean form : forms) {
       viewTemplate.append("   <tr>");
       viewTemplate.append("     <td>");
-      viewTemplate.append(form.getType());
-      viewTemplate.append("     </td>");
-      viewTemplate.append("     <td>");
-      viewTemplate.append(form.getName());
-      viewTemplate.append("     </td>");
-      viewTemplate.append("     <td>");
-      viewTemplate.append(form.getValue());
-      viewTemplate.append("     </td>");
-      viewTemplate.append("     <td>");
-      viewTemplate.append(form.getGuildLine());
+      viewTemplate.append("       <%= currentNode.getProperty(\"" + getPropertyName(form.getName()) + "\")%>");
       viewTemplate.append("     </td>");
       viewTemplate.append("   </tr>");
     }

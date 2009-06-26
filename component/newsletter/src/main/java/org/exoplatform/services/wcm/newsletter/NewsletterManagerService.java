@@ -66,26 +66,23 @@ public class NewsletterManagerService {
   private NewsletterTemplateHandler templateHandler;
   private NewsletterManageUserHandler manageUserHandler;
   private NewsletterPublicUserHandler publicUserHandler;
-  private String repository;
-  private String workspace;
+  private String repositoryName;
+  private String workspaceName;
   private String templateWorkspace;
-  private RepositoryService repositoryService;
   private static Log log = ExoLogger.getLogger(NewsletterManagerService.class);
 
   public NewsletterManagerService(InitParams initParams) {
     log.info("Starting NewsletterManagerService ... ");
-    repository = initParams.getValueParam("repository").getValue();
-    workspace = initParams.getValueParam("workspace").getValue();
+    repositoryName = initParams.getValueParam("repository").getValue();
+    workspaceName = initParams.getValueParam("workspace").getValue();
     templateWorkspace = initParams.getValueParam("templateWorkspace").getValue();
-    categoryHandler = new NewsletterCategoryHandler(repository, workspace);
-    subscriptionHandler = new NewsletterSubscriptionHandler(repository, workspace);
-    entryHandler = new NewsletterEntryHandler(repository, workspace);
-    templateHandler = new NewsletterTemplateHandler(repository, templateWorkspace);
-    manageUserHandler = new NewsletterManageUserHandler(repository, workspace);
-    publicUserHandler = new NewsletterPublicUserHandler(repository, workspace);
+    categoryHandler = new NewsletterCategoryHandler(repositoryName, workspaceName);
+    subscriptionHandler = new NewsletterSubscriptionHandler(repositoryName, workspaceName);
+    entryHandler = new NewsletterEntryHandler(repositoryName, workspaceName);
+    templateHandler = new NewsletterTemplateHandler(repositoryName, templateWorkspace);
+    manageUserHandler = new NewsletterManageUserHandler(repositoryName, workspaceName);
+    publicUserHandler = new NewsletterPublicUserHandler(repositoryName, workspaceName);
     
-    repositoryService = (RepositoryService) ExoContainerContext
-    .getCurrentContainer().getComponentInstanceOfType(RepositoryService.class);
   }          
   
   public NewsletterCategoryHandler getCategoryHandler() {
@@ -112,25 +109,10 @@ public class NewsletterManagerService {
     return publicUserHandler;
   }
   
-  /*public void sendNewsletter() {
-    ExoContainer container = ExoContainerContext.getCurrentContainer() ;
-    MailService mailService = 
-      (MailService)container.getComponentInstanceOfType(MailService.class) ;
-
-    MessageConfig messageConfig = new MessageConfig();
-    String receiver = "ngoc.aptech@gmail.com";
-    Message message = createMessage(receiver,messageConfig) ;  
-    try {
-      mailService.sendMessage(message) ; 
-    }catch (Exception e) {
-      System.out.println("===> Exeption when send message to: " + message.getTo());
-      e.printStackTrace() ;
-    }      
-  }*/
-  
   public void sendNewsletter() throws Exception {
-    ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-    Session session = SessionProviderFactory.createSystemProvider().getSession(workspace, manageableRepository);
+    RepositoryService repositoryService = (RepositoryService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(RepositoryService.class);
+    ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
+    Session session = SessionProviderFactory.createSystemProvider().getSession(workspaceName, manageableRepository);
     Property subscribedUserProperty ;
 
     Calendar toDate = Calendar.getInstance();
@@ -205,7 +187,6 @@ public class NewsletterManagerService {
     message.setSubject("Test phat!!!") ;
     message.setBody("Hi Ngoc, you receive this email because i'm testing") ;
     message.setMimeType(messageConfig.getMimeType()) ;
-
     return message ;
   }
   
@@ -219,6 +200,22 @@ public class NewsletterManagerService {
       }
     }
     return listString;
+  }
+
+  public String getRepositoryName() {
+    return repositoryName;
+  }
+
+  public void setRepositoryName(String repositoryName) {
+    this.repositoryName = repositoryName;
+  }
+
+  public String getWorkspaceName() {
+    return workspaceName;
+  }
+
+  public void setWorkspaceName(String workspaceName) {
+    this.workspaceName = workspaceName;
   }
   
 }

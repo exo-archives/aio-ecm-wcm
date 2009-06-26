@@ -68,12 +68,11 @@
 .UIFormGenerator .UITabPane .UITabContentContainer {
   background: #efefef;
   border: none;
-  padding: 6px;
+  padding: 1px;
 }
 
 .UIFormGenerator .UITabPane .UITabContentContainer .UITabContent {
-  background: #fff;
-  border: 1px solid #cccaca;
+  background: #efefef;
   padding: 8px;
 }
 
@@ -82,6 +81,7 @@
   padding: 5px 3px;
   width: 192px;
   float: left;
+	background: #fff;
 	background: #fff;
 }
 

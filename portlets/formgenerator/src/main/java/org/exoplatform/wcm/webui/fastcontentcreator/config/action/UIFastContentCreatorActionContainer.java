@@ -14,9 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.wcm.webui.newsletter.manager;
+package org.exoplatform.wcm.webui.fastcontentcreator.config.action;
 
-import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
@@ -25,32 +24,17 @@ import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
  *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * Jun 10, 2009  
+ * Jun 25, 2009  
  */
-@ComponentConfig (
+@ComponentConfig(
     lifecycle = UIContainerLifecycle.class
 )
-public class UINewsletterEntryContainer extends UIContainer {
+public class UIFastContentCreatorActionContainer extends UIContainer {
 
-  private boolean isAddNew = true;
-  
-  public boolean isAddNew() {
-    return isAddNew;
+  public UIFastContentCreatorActionContainer() throws Exception {
+    UIFastContentCreatorActionTypeForm fastContentCreatorActionTypeForm = addChild(UIFastContentCreatorActionTypeForm.class, null, null);
+    fastContentCreatorActionTypeForm.update();
+    addChild(UIFastContentCreatorActionForm.class, null, null);
   }
-  
-  public void setAddNew(boolean isAddNew) {
-    this.isAddNew = isAddNew;
-  }
-  
-  public UINewsletterEntryContainer() throws Exception {
-    NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
-    addChild(UINewsletterEntryDialogSelector.class, null, null);
-    UINewsletterEntryForm newsletterEntryForm = createUIComponent(UINewsletterEntryForm.class, null, null);
-    newsletterEntryForm.setStoredLocation(newsletterManagerService.getRepositoryName(), newsletterManagerService.getWorkspaceName(), 
-      "/sites content/live/portalName/ApplicationData/NewsletterApplication/Categories/category1/subscription1");
-    newsletterEntryForm.addNew(isAddNew);
-    addChild(newsletterEntryForm);
-  }
-
   
 }

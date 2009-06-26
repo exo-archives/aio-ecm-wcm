@@ -96,9 +96,11 @@ public class UINewsletterEntryForm extends UIDialogForm {
   public ResourceResolver getTemplateResourceResolver(WebuiRequestContext context, String template) {
     try{
       if (resourceResolver == null) {
+        NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
+        String repositoryName = newsletterManagerService.getRepositoryName();
         DMSConfiguration dmsConfiguration = getApplicationComponent(DMSConfiguration.class);
-        String workspace = dmsConfiguration.getConfig("repository").getSystemWorkspace();
-        resourceResolver = new JCRResourceResolver("repository", workspace, TemplateService.EXO_TEMPLATE_FILE_PROP);
+        String workspace = dmsConfiguration.getConfig(repositoryName).getSystemWorkspace();
+        resourceResolver = new JCRResourceResolver(repositoryName, workspace, TemplateService.EXO_TEMPLATE_FILE_PROP);
       }
     }catch(Exception e) {
       e.printStackTrace();

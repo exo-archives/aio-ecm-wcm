@@ -1,0 +1,95 @@
+<%
+	/**
+	 * Created by The eXo Platform SAS
+	 * Author : eXoPlatform
+	 *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+	 * Jun 25, 2009  
+	 */
+	 
+	import org.exoplatform.webui.core.UIPageIterator;
+	UIPageIterator uiIterator = uicomponent.getChild(UIPageIterator.class) ;
+	int totalPages = uiIterator.getAvailablePage();
+%>
+<div class="UIFastContentCreatorActionList" id="$uicomponent.id">
+	<table class="UIGrid">
+		<thead>
+	    	<tr>
+	      		<th><%=_ctx.appRes("UIFastContentCreatorActionList.header.name")%></th>
+			    <th><%=_ctx.appRes("UIFastContentCreatorActionList.header.description")%></th>
+	 		    <th><%=_ctx.appRes("UIFastContentCreatorActionList.header.instanceOf")%></th>
+	 		    <th><%=_ctx.appRes("UIFastContentCreatorActionList.header.action")%></th>
+	    	</tr>
+	  	</thead>
+	  	<tbody>
+      		<%
+        		def rowClass = "OddRow" ;
+		    	boolean even = true ;
+		    	if(uicomponent.hasActions()) {
+			    	for(action in uicomponent.getListActions()) {
+			      		if(even) rowClass = "EvenRow" ;  
+			      		else rowClass =  "OddRow" ; 
+			      		even = !even ;
+      					%>
+		      				<tr class="$rowClass">
+		        				<td>
+		          					<div class="Text">
+		          						<%
+		          							if(action.hasProperty("exo:name")){
+		          								%><%=action.getProperty("exo:name").getString()%><%
+		          							}
+		          						%>
+		          					</div>
+		        				</td>
+		        				<td>
+		          					<div class="Text">
+		          						<%
+		          							if(action.hasProperty("exo:description")){
+		          								%><%=action.getProperty("exo:description").getString()%><%
+		          							}
+		          						%>
+		          					</div>
+		          				</td>
+		        				<td>
+		          					<div class="Text">[<%=action.getPrimaryNodeType().getName()%>]</div>
+		        				</td>
+		        				<td>
+		        					<div class="ActionContainer">
+			        					<%
+			          						for(act in uicomponent.getActions()) { 
+			        							%>
+	            									<img class="${act}16x16Icon" src="/eXoResources/skin/sharedImages/Blank.gif" alt="" onclick="<%=uicomponent.event(act, action.getName())%>"  title="$act"/>
+	            								<%
+	            							} 
+	            						%>
+	            					</div>
+	            				</td>
+	            			</tr>
+	            		<%
+	        		}
+	      		}
+	    	%>
+    	</tbody>
+  	</table>
+	<% 
+		if(totalPages > 1) {
+			uicomponent.renderChild(UIPageIterator.class);
+		} 
+	%>
+  	<div class="UIAction"> 
+    	<table class="ActionContainer">
+    		<tr>
+    			<td>
+		      		<div onclick="<%=uicomponent.event("Add")%>" class="ActionButton LightBlueStyle" >
+						<div class="ButtonLeft">
+						  	<div class="ButtonRight">
+							  	<div class="ButtonMiddle">
+									<a href="javascript:void(0);"><%=_ctx.appRes("UIFastContentCreatorActionList.action.Add")%></a>
+					      		</div>
+					    	</div>
+				    	</div>
+					</div>
+    			</td>
+    		</tr>
+    	</table>
+  	</div>
+</div>
