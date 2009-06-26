@@ -1,68 +1,115 @@
+<%
+	import org.exoplatform.web.application.JavascriptManager;
+	
+	def rcontext = _ctx.getRequestContext() ;
+	JavascriptManager jsmanager = rcontext.getJavascriptManager();
+	jsmanager.addOnLoadJavascript('eXo.ecm.UIFormGeneratorPortlet.init()');
+%>
 <div class="LeftContent">
 	<div class="UITabPane">
-		<div class="TabsContainer">
-			<div class="UITab">
-				<div class="SelectedTab">
-					<div class="Left">
-						<div class="Right">
-							<div class="Center">Components</div>
+		<div class="UIHorizontalTabs">
+			<div class="TabsContainer">
+				<div class="UITab GrayTabStyle">
+					<div class="SelectedTab">
+						<div class="LeftTab">
+							<div class="RightTab">
+								<div class="MiddleTab">Components</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="UITab GrayTabStyle">
+					<div class="NormalTab">
+						<div class="LeftTab">
+							<div class="RightTab">
+								<div class="MiddleTab">Containers</div>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div class="UITab">
-				<div class="NormalTab">
-					<div class="Left">
-						<div class="Right">
-							<div class="Center">Containers</div>
+			<div class="UITabContentContainer" id="UITabContentContainer">
+				<div class="UITabContent">
+					<div class="LeftMenu" elementType='input'>
+						<div class="RightMenu">
+							<div class="CenterMenu">
+								<a class="IconMenu IconInput"><span></span></a>
+								<div class="ContentMenu">Input Text</div>
+								<div class="ClearLeft"><span></span></div>
+							</div>
 						</div>
 					</div>
-				</div>
-			</div>
-		</div>
-		<div class="UITabContentContainer">
-			<div class="LeftMenuLeft">
-				<div class="RightMenuLeft">
-					<div class="CenterMenuLeft">
-						<a class="IconMenu IconInput"><span></span></a>
-						<div class="ContentMenu">Imput Text</div>
-						<div class="ClearLeft"><span></span></div>
+					<div class="LeftMenu" elementType='label'>
+						<div class="RightMenu">
+							<div class="CenterMenu">
+								<a class="IconMenu IconLabel"><span></span></a>
+								<div class="ContentMenu">Label</div>
+								<div class="ClearLeft"><span></span></div>
+							</div>
+						</div>
 					</div>
-				</div>
-			</div>
-			<div class="LeftMenuLeft">
-				<div class="RightMenuLeft">
-					<div class="CenterMenuLeft">
-						<a class="IconMenu IconLabel"><span></span></a>
-						<div class="ContentMenu">Label</div>
-						<div class="ClearLeft"><span></span></div>
+					<div class="LeftMenu" elementType='textarea'>
+						<div class="RightMenu">
+							<div class="CenterMenu">
+								<a class="IconMenu IconContent"><span></span></a>
+								<div class="ContentMenu">Text Area</div>
+								<div class="ClearLeft"><span></span></div>
+							</div>
+						</div>
 					</div>
-				</div>
-			</div>
-			<div class="LeftMenuLeft">
-				<div class="RightMenuLeft">
-					<div class="CenterMenuLeft">
-						<a class="IconMenu IconContent"><span></span></a>
-						<div class="ContentMenu">Content</div>
-						<div class="ClearLeft"><span></span></div>
+					<div class="LeftMenu" elementType='WYSWYG'>
+						<div class="RightMenu">
+							<div class="CenterMenu">
+								<a class="IconMenu IconContent"><span></span></a>
+								<div class="ContentMenu">Editor</div>
+								<div class="ClearLeft"><span></span></div>
+							</div>
+						</div>
 					</div>
-				</div>
-			</div>
-			<div class="LeftMenuLeft">
-				<div class="RightMenuLeft">
-					<div class="CenterMenuLeft">
-						<a class="IconMenu IconSelect"><span></span></a>
-						<div class="ContentMenu">Select Box</div>
-						<div class="ClearLeft"><span></span></div>
+					<div class="LeftMenu" elementType='select'>
+						<div class="RightMenu">
+							<div class="CenterMenu">
+								<a class="IconMenu IconSelect"><span></span></a>
+								<div class="ContentMenu">Select Box</div>
+								<div class="ClearLeft"><span></span></div>
+							</div>
+						</div>
 					</div>
-				</div>
-			</div>
-			<div class="LeftMenuLeft">
-				<div class="RightMenuLeft">
-					<div class="CenterMenuLeft">
-						<a class="IconMenu IconTimeDate"><span></span></a>
-						<div class="ContentMenu">Time/ Date</div>
-						<div class="ClearLeft"><span></span></div>
+					<div class="LeftMenu" elementType='radio'>
+						<div class="RightMenu">
+							<div class="CenterMenu">
+								<a class="IconMenu IconRadio"><span></span></a>
+								<div class="ContentMenu">Radio</div>
+								<div class="ClearLeft"><span></span></div>
+							</div>
+						</div>
+					</div>
+					<div class="LeftMenu" elementType='upload'>
+						<div class="RightMenu">
+							<div class="CenterMenu">
+								<a class="IconMenu IconUpload"><span></span></a>
+								<div class="ContentMenu">Upload</div>
+								<div class="ClearLeft"><span></span></div>
+							</div>
+						</div>
+					</div>
+					<div class="LeftMenu" elementType='radio'>
+						<div class="RightMenu">
+							<div class="CenterMenu">
+								<a class="IconMenu IconRadio"><span></span></a>
+								<div class="ContentMenu">Radio</div>
+								<div class="ClearLeft"><span></span></div>
+							</div>
+						</div>
+					</div>
+					<div class="LeftMenu" elementType='checkbox'>
+						<div class="RightMenu">
+							<div class="CenterMenu">
+								<a class="IconMenu CheckBox"><span></span></a>
+								<div class="ContentMenu">CheckBox</div>
+								<div class="ClearLeft"><span></span></div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -71,169 +118,159 @@
 </div>
 <div class="RightContent">
 	<div class="DecoratorBox">
-		<div class="ViewBoxStyle">
-			<div class="TopLeftViewBoxStyle">
-				<div class="TopRightViewBoxStyle">
-					<div class="TopCenterViewBoxStyle"><span></span></div>
+		<div class="ContentDecoratorBox">
+			<div class="ViewBoxStyle">
+				<div class="TopLeftViewBoxStyle">
+					<div class="TopRightViewBoxStyle">
+						<div class="TopCenterViewBoxStyle"><span></span></div>
+					</div>
 				</div>
-			</div>
-			<div class="MiddleLeftViewBoxStyle">
-				<div class="MiddleRightViewBoxStyle">
-					<div class="MiddleCenterViewBoxStyle">
-						<div class="TopContentBoxStyle">
-							<div class="UIForm UIFormEditBox">
-								<div class="HorizontalLayout">
-									<div class="FormContainer">
-										<table class="UIFormGrid">
-											<tr>
-												<td class="FieldLabel">Property Name</td>
-												<td class="FieldComponent"><input type="text" value="Title" /></td>
-												<td class="FieldIcon">
-  													<div class="EditBox">
-														<a class="ControlIcon DeleteIcon"><span></span></a>
-														<a class="ControlIcon EditIcon"><span></span></a>
-													</div>
-													<div class="ClearRight"><span></span></div>
-												</td>
-											</tr>
-										</table>
+				<div class="MiddleLeftViewBoxStyle" style='display:none;'>
+					<div class="MiddleRightViewBoxStyle">
+						<div class="MiddleCenterViewBoxStyle">
+							<div class="TopContentBoxStyle">
+								<div class="UIForm UIFormEditBox">
+									<div class="HorizontalLayout">
+										<div class="FormContainer">
+											<table class="UIFormGrid">
+												<tr>
+													<td class="FieldLabel">Property Name</td>
+													<td class="FieldComponent"><input type="text" value="Title" /></td>
+													<td class="FieldIcon">
+	  													<div class="EditBox">
+															<a class="ControlIcon DeleteIcon"><span></span></a>
+															<a class="ControlIcon EditIcon"><span></span></a>
+														</div>
+														<div class="ClearRight"><span></span></div>
+													</td>
+												</tr>
+											</table>
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-						<div class="MiddleContentBoxStyle">
-							<div class="UIForm UIFormEditBox">
-								<div class="HorizontalLayout">
-									<div class="FormContainer">
-										<table class="UIFormGrid">
-											<tr>
-												<td class="FieldLabel">Field Size</td>
-												<td class="FieldComponent">
-  	                								<select></select>	
-													<div class="BoxRules">
-  	                  									Rules: <input class="Requied" id="abc" type="checkbox" checked="checked" value="0">Requied</input>
-  	                								</div>
-  	              								</td>
-												<td class="FieldIcon"><span></span></td>
-											</tr>
-  											<tr>              
-  	              								<td class="FieldLabel">Default Value</td>
-  	              								<td class="FieldComponent"><input /></td>
-												<td class="FieldIcon">
-													<a class="AddIcon"><span></span></a>
-													<a class="RemoveIcon"><span></span></a>
-													<div class="ClearRight"><span></span></div>
-												</td>
-											</tr>
-											<tr>
-												<td class="FieldLabel">Guidelines for User</td>
-												<td class="FieldComponent"><textarea></textarea></td>
-												<td class="FieldIcon"><span></span></td>
-											</tr>
-										</table>
+							<div class="MiddleContentBoxStyle" style='display:none;'>
+								<div class="UIForm UIFormEditBox">
+									<div class="HorizontalLayout">
+										<div class="FormContainer">
+											<table class="UIFormGrid">
+												<tr>
+													<td class="FieldLabel">Field Size</td>
+													<td class="FieldComponent">
+	  	                								<select></select>	
+														<div class="BoxRules">
+	  	                  									Rules: <input class="Requied" id="abc" type="checkbox" checked="checked" value="0">Requied</input>
+	  	                								</div>
+	  	              								</td>
+													<td class="FieldIcon"><span></span></td>
+												</tr>
+	  											<tr>              
+	  	              								<td class="FieldLabel">Default Value</td>
+	  	              								<td class="FieldComponent"><input /></td>
+													<td class="FieldIcon">
+														<a class="AddIcon"><span></span></a>
+														<a class="RemoveIcon"><span></span></a>
+														<div class="ClearRight"><span></span></div>
+													</td>
+												</tr>
+												<tr>
+													<td class="FieldLabel">Guidelines for User</td>
+													<td class="FieldComponent"><textarea></textarea></td>
+													<td class="FieldIcon"><span></span></td>
+												</tr>
+											</table>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="BottomLeftViewBoxStyle">
-				<div class="BottomRightViewBoxStyle">
-					<div class="BottomCenterViewBoxStyle"><span></span></div>										
+				<div class="BottomLeftViewBoxStyle">
+					<div class="BottomRightViewBoxStyle">
+						<div class="BottomCenterViewBoxStyle"><span></span></div>										
+					</div>
 				</div>
 			</div>
-		</div>
-		<div class="ViewBoxStyle">
-			<div class="TopLeftViewBoxStyle">
-				<div class="TopRightViewBoxStyle">
-					<div class="TopCenterViewBoxStyle"><span></span></div>										
+			<div class="ViewBoxStyle">
+				<div class="TopLeftViewBoxStyle">
+					<div class="TopRightViewBoxStyle">
+						<div class="TopCenterViewBoxStyle"><span></span></div>										
+					</div>
 				</div>
-			</div>
-			<div class="MiddleLeftViewBoxStyle">
-				<div class="MiddleRightViewBoxStyle">
-					<div class="MiddleCenterViewBoxStyle">
-						<div class="TopContentBoxStyle">
-							<div class="UIForm UIFormEditBox">
-								<div class="HorizontalLayout">
-									<div class="FormContainer">
-										<table class="UIFormGrid">
-											<tr>              
-												<td class="FieldLabel">Property Name</td>
-												<td class="FieldComponent"><input type="text" value="Title" /></td>
-												<td class="FieldIcon">
-													<div class="EditBox">
-														<a class="ControlIcon DeleteIcon"><span></span></a>
-														<a class="ControlIcon EditIcon"><span></span></a>
-													</div>
-													<div class="ClearRight"><span></span></div>
-												</td>
-											</tr>
-										</table>
+				<div class="MiddleLeftViewBoxStyle">
+					<div class="MiddleRightViewBoxStyle">
+						<div class="MiddleCenterViewBoxStyle">
+							<div class="TopContentBoxStyle">
+								<div class="UIForm UIFormEditBox">
+									<div class="HorizontalLayout">
+										<div class="FormContainer">
+											<table class="UIFormGrid">
+												<tr>              
+													<td class="FieldLabel">Property Name</td>
+													<td class="FieldComponent"><input type="text" value="Title" /></td>
+													<td class="FieldIcon">
+														<div class="EditBox">
+															<a class="ControlIcon DeleteIcon"><span></span></a>
+															<a class="ControlIcon EditIcon"><span></span></a>
+														</div>
+														<div class="ClearRight"><span></span></div>
+													</td>
+												</tr>
+											</table>
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-						<div class="MiddleContentBoxStyle">
-  							<div class="UIForm UIFormEditBox">
-								<div class="HorizontalLayout">
-									<div class="FormContainer">
-										<table class="UIFormGrid">
-											<tr>              
-												<td class="FieldLabel">Field Size</td>
-												<td class="FieldComponent">
-													<select></select>
-													<div class="BoxRules">
-														Rules: <input class="Requied" id="abc" type="checkbox" checked="checked" value="0">Requied</input>
-													</div>
-												</td>
-												<td class="FieldIcon"><span></span></td>
-											</tr>
-											<tr>
-												<td class="FieldLabel">Default Value</td>
-												<td class="FieldComponent"><input /></td>
-												<td class="FieldIcon">
-													<a class="AddIcon"><span></span></a>
-													<a class="RemoveIcon"><span></span></a>
-													<div class="ClearRight"><span></span></div>
-												</td>
-											</tr>
-											<tr>
-												<td class="FieldLabel">Guidelines for User</td>
-												<td class="FieldComponent"><textarea></textarea></td>
-												<td class="FieldIcon"><span></span></td>
-											</tr>
-										</table>
+							<div class="MiddleContentBoxStyle">
+	  							<div class="UIForm UIFormEditBox">
+									<div class="HorizontalLayout">
+										<div class="FormContainer">
+											<table class="UIFormGrid">
+												<tr>              
+													<td class="FieldLabel">Field Size</td>
+													<td class="FieldComponent">
+														<select></select>
+														<div class="BoxRules">
+															Rules: <input class="Requied" id="abc" type="checkbox" checked="checked" value="0">Requied</input>
+														</div>
+													</td>
+													<td class="FieldIcon"><span></span></td>
+												</tr>
+												<tr>
+													<td class="FieldLabel">Default Value</td>
+													<td class="FieldComponent"><input /></td>
+													<td class="FieldIcon">
+														<a class="AddIcon"><span></span></a>
+														<a class="RemoveIcon"><span></span></a>
+														<div class="ClearRight"><span></span></div>
+													</td>
+												</tr>
+												<tr>
+													<td class="FieldLabel">Guidelines for User</td>
+													<td class="FieldComponent"><textarea></textarea></td>
+													<td class="FieldIcon"><span></span></td>
+												</tr>
+											</table>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="BottomLeftViewBoxStyle">
-				<div class="BottomRightViewBoxStyle">
-					<div class="BottomCenterViewBoxStyle"><span></span></div>										
+				<div class="BottomLeftViewBoxStyle">
+					<div class="BottomRightViewBoxStyle">
+						<div class="BottomCenterViewBoxStyle"><span></span></div>										
+					</div>
 				</div>
 			</div>
-		</div>
-	</div>
-	<div class="UIAction">
-		<table class="ActionContainer">
-			<tr>
-				<td>
-					<div class="ActionButton ButtonGray" onclick="#">
-						<div class="Left">
-							<div class="Right">
-								<div class="Middle">
-  									<a href="#demo" class="IconAddNew">Add new</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</td>
-			</tr>
-		</table>
+	  </div>
+    <div class="BoxAddNew">
+      <div class="AddNewProperty">
+      <b>Add new</b>
+      <br/>Drop a component here to add a new property</div>
+    </div>
 	</div>
 </div>
 <div class="ClearLeft"><span></span></div>

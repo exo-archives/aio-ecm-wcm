@@ -14,7 +14,7 @@
 		<div class="TitleUIFormTitle">Form Generator</div>
 			<div class="ContentUIFormTitle">
 				<div class="UITabPane">
-					<div class="UIHorizontalTabs" >
+					<div class="UIHorizontalTabs">
 						<div class="TabsContainer">
 							<%
 	            				String selTabId = uicomponent.getSelectedTabId() ;
@@ -24,11 +24,11 @@
 			        				if(inputSet.getId().equals(selTabId)) className="SelectedTab" ;
 	                				tabName = _ctx.appRes(uicomponent.getName() + ".tab.label." + inputSet.name) ;
 									%>
-		              					<div class="UITab">
+		              					<div class="UITab GrayTabStyle">
 		                					<div class="$className">
-		                  						<div class="Left">
-		                    						<div class="Right">
-				                  						<div class="Center" onclick="eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, '$uiform.id', '$inputSet.id');">$tabName</div>
+		                  						<div class="LeftTab">
+		                    						<div class="RightTab">
+				                  						<div class="MiddleTab" onclick="eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, '$uiform.id', '$inputSet.id');">$tabName</div>
 				                					</div>
 		                  						</div>
 		                					</div>
@@ -40,19 +40,19 @@
 					    </div>
 				    </div>
 				    <% uiform.begin() %>
-					    <div class="UITabContentContainer">
+					    <div class="UITabContentContainer GrayTabStyleContainer">
 					    	<%
-	              				for(formInput in uicomponent.getChildren()) {
-	                				if(!formInput.isRendered()) continue ;
-	                				String display = "none" ;
-	                				if(formInput.getId().equals(selTabId)) display="block" ;
-	            					%>
-	            						<div class="UITabContent" style="display: $display;">
-	            							<% uicomponent.renderUIComponent(formInput) ; %>
-	                					</div>
-	            					<%
-	            				}
-	            			%>
+            				for(formInput in uicomponent.getChildren()) {
+              				if(!formInput.isRendered()) continue ;
+              				String display = "none" ;
+              				if(formInput.getId().equals(selTabId)) display="block" ;
+          					%>
+          						<div class="UITabContent" style="display: $display;">
+          							<% uicomponent.renderUIComponent(formInput) ; %>
+              					</div>
+          					<%
+          				}
+          			%>
 						</div>
 						<div class="UIAction">
 				      		<table class="ActionContainer">

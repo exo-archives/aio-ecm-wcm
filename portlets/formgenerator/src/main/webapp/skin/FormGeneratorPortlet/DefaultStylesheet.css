@@ -26,39 +26,39 @@
   height: 30px;
 }
 
-.UIFormGenerator .TabsContainer .UITab {
+.UIFormGenerator .TabsContainer .GrayTabStyle {
   float: left;
   text-align: center;
   cursor: pointer;
 }
 
-.UIFormGenerator .TabsContainer .NormalTab .Left {
+.UIFormGenerator .GrayTabStyle .NormalTab .LeftTab {
   background: url('DefaultSkin/background/TabGray.gif') no-repeat left top;
   padding-left: 5px;
 }
 
-.UIFormGenerator .TabsContainer .NormalTab .Right {
+.UIFormGenerator .GrayTabStyle .NormalTab .RightTab {
   background: url('DefaultSkin/background/TabGray.gif') no-repeat right top;
   padding-right: 5px;
 }
 
-.UIFormGenerator .TabsContainer .NormalTab .Center {
+.UIFormGenerator .GrayTabStyle .NormalTab .MiddleTab {
   background: url('DefaultSkin/background/TabGray.gif') repeat-x left -30px;
   line-height: 30px;
   padding: 0px 8px;
 }
 
-.UIFormGenerator .TabsContainer .SelectedTab .Left {
+.UIFormGenerator .GrayTabStyle .SelectedTab .LeftTab {
   background: url('DefaultSkin/background/TabGray.gif') no-repeat left -60px;
   padding-left: 5px;
 }
 
-.UIFormGenerator .TabsContainer .SelectedTab .Right {
+.UIFormGenerator .GrayTabStyle .SelectedTab .RightTab {
   background: url('DefaultSkin/background/TabGray.gif') no-repeat right -60px;
   padding-right: 5px;
 }
 
-.UIFormGenerator .TabsContainer .SelectedTab .Center {
+.UIFormGenerator .GrayTabStyle .SelectedTab .MiddleTab {
   background: url('DefaultSkin/background/TabGray.gif') repeat-x left -90px;
   line-height: 30px;
   padding: 0px 8px;
@@ -82,25 +82,26 @@
   padding: 5px 3px;
   width: 192px;
   float: left;
+	background: #fff;
 }
 
 .UIFormGenerator .UITabPane .UITabContentContainer .LeftContent .UITabContentContainer {
   padding: 25px 0px;
-  height: 560px;
+  height: 503px;
 }
 
-.UIFormGenerator .UITabPane .UITabContentContainer .LeftContent .LeftMenuLeft {
+.UIFormGenerator .UITabPane .UITabContentContainer .LeftContent .LeftMenu {
   background: url('DefaultSkin/background/MenuLeftContent.gif') no-repeat left top;
   padding-left: 6px;
   margin-bottom: 5px;
 }
 
-.UIFormGenerator .UITabPane .UITabContentContainer .LeftContent .RightMenuLeft {
+.UIFormGenerator .UITabPane .UITabContentContainer .LeftContent .RightMenu {
   background: url('DefaultSkin/background/MenuLeftContent.gif') no-repeat right top;
   padding-right: 6px;
 }
 
-.UIFormGenerator .UITabPane .UITabContentContainer .LeftContent .CenterMenuLeft {
+.UIFormGenerator .UITabPane .UITabContentContainer .LeftContent .CenterMenu {
   background: url('DefaultSkin/background/MenuLeftContent.gif') repeat-x left -37px;
   line-height: 23px;
   padding: 7px 0px 7px 25px;
@@ -139,6 +140,12 @@
   margin-left: 35px;
   border-left: 1px solid #fff;
   padding-left: 25px;
+}
+
+.UIFormGenerator .UITabPane .UITabContentContainer .LeftContent .UITabContent {
+  padding: 0px;
+  background: none;
+  border: none;
 }
 
 
@@ -263,29 +270,20 @@
   padding: 15px 0px;
 }
 
-.UIFormGenerator .UIAction .ButtonGray .Left {
-  background: url('DefaultSkin/background/ButtonGray.gif') no-repeat left top;
-  padding-left: 3px;
+
+.UIFormGenerator .BoxAddNew {
+  background: #fafafa;
+  text-align: center;
+  padding: 10px;
+  margin: 5px 0px 0px 0px;
 }
 
-.UIFormGenerator .UIAction .ButtonGray .Right {
-  background: url('DefaultSkin/background/ButtonGray.gif') no-repeat right top;
-  padding-right: 3px;
+.UIFormGenerator .BoxAddNew .AddNewProperty {
+  background: #F3F7FB;
+  border: 1px solid #fff;
+  padding: 15px 5px;
+  line-height: 16px;
+  margin: 0px auto;
+  width: 250px;
+  color: #8a8a8c;
 }
-
-.UIFormGenerator .UIAction .ButtonGray .Middle {
-  background: url('DefaultSkin/background/ButtonGray.gif') repeat-x left -27px;
-	display: table-cell;
-	line-height: 27px;
-	padding: 0 12px;
-	text-align: center;
-	white-space: nowrap;
-	color: #565659;
-}
-
-.UIFormGenerator .UIAction .ButtonGray .Middle .IconAddNew {
-  background: url('DefaultSkin/background/IconAddNew.gif') no-repeat left center;
-	display: block;
-	padding-left: 20px;
-}
-
