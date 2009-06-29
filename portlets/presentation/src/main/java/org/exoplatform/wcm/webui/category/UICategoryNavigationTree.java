@@ -21,14 +21,21 @@ import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.nodetype.NodeType;
+import javax.portlet.PortletPreferences;
+import javax.portlet.PortletRequest;
 
-import org.exoplatform.ecm.webui.tree.UIBaseNodeTreeSelector;
 import org.exoplatform.ecm.webui.tree.UINodeTree;
-import org.exoplatform.ecm.webui.tree.UINodeTreeBuilder;
 import org.exoplatform.ecm.webui.utils.Utils;
+import org.exoplatform.portal.webui.container.UIContainer;
+import org.exoplatform.services.cms.link.NodeFinder;
+import org.exoplatform.services.ecm.publication.PublicationService;
+import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UITree;
+import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
@@ -39,26 +46,146 @@ import org.exoplatform.webui.event.EventListener;
  * Jun 19, 2009  
  */
 @ComponentConfig(
+    lifecycle = Lifecycle.class,
+    template = "app:/groovy/CategoryNavigation/UICategoryNavigationTree.gtmpl",
     events = {
-        @EventConfig(listeners = UICategoryNavigationTree.ChangeNodeActionListener.class)
+      @EventConfig(listeners = UICategoryNavigationTree.ChangeNodeActionListener.class)
     }
 )
-public class UICategoryNavigationTree extends UINodeTreeBuilder {
+public class UICategoryNavigationTree extends UIContainer {
+  
+  private static final String PREFERENCE_REPOSITORY         = "repository";
+  
+  private static final String PREFERENCE_WORKSPACE          = "workspace";
+  
+  private static final String PREFERENCE_TREE_PATH          = "treePath";
+  
+  private static final String PREFERENCE_TREE_TITLE         = "treeTitle";
+  
+  private boolean            allowPublish        = false;
 
-  public UICategoryNavigationTree() throws Exception {}
+  private PublicationService publicationService_ = null;
+
+  private List<String>       templates_          = null;
+
+  private String[]           acceptedNodeTypes   = {};
+
+  /** The root tree node. */
+  protected Node             rootTreeNode;
+
+  /** The current node. */
+  protected Node             currentNode;
+
+  public boolean isAllowPublish() {
+    return allowPublish;
+  }
+
+  public void setAllowPublish(boolean allowPublish, PublicationService publicationService, List<String> templates) {
+    this.allowPublish = allowPublish;
+    publicationService_ = publicationService;
+    templates_ = templates;
+  }
+
+  private PortletPreferences getPortletPreferences() {
+    PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
+    PortletRequest request = portletRequestContext.getRequest();
+    return request.getPreferences();
+  }
+  
+  public String getTreeTitle() {
+    return getPortletPreferences().getValue(PREFERENCE_TREE_TITLE, "");
+  }
+  
+  /**
+   * Instantiates a new uI node tree builder.
+   * 
+   * @throws Exception the exception
+   */
+  public UICategoryNavigationTree() throws Exception {
+    
+    PortletPreferences portletPreferences = getPortletPreferences();
+    String preferenceRepository = portletPreferences.getValue(PREFERENCE_REPOSITORY, "");
+    String preferenceWorkspace = portletPreferences.getValue(PREFERENCE_WORKSPACE, "");
+    String preferenceTreePath = portletPreferences.getValue(PREFERENCE_TREE_PATH, "");
+    NodeFinder nodeFinder = getApplicationComponent(NodeFinder.class);
+    Node rootTreeNode = (Node)nodeFinder.getItem(preferenceRepository, preferenceWorkspace, preferenceTreePath);
+    setRootTreeNode(rootTreeNode);
+    
+    UITree tree = addChild(UINodeTree.class, null, UINodeTree.class.getSimpleName() + hashCode());
+    tree.setBeanLabelField("name");
+    tree.setBeanIdField("path");
+  }
+
+  /**
+   * Gets the root tree node.
+   * 
+   * @return the root tree node
+   */
+  public Node getRootTreeNode() {
+    return rootTreeNode;
+  }
+
+  /**
+   * Sets the root tree node.
+   * 
+   * @param node the new root tree node
+   * @throws Exception the exception
+   */
+  public final void setRootTreeNode(Node node) throws Exception {
+    this.rootTreeNode = node;
+    this.currentNode = node;
+//    broadcastOnChange(node, null);
+  }
+
+  /**
+   * Gets the current node.
+   * 
+   * @return the current node
+   */
+  public Node getCurrentNode() {
+    return currentNode;
+  }
+
+  /**
+   * Sets the current node.
+   * 
+   * @param currentNode the new current node
+   */
+  public void setCurrentNode(Node currentNode) {
+    this.currentNode = currentNode;
+  }
+
+  /**
+   * Gets the accepted node types.
+   * 
+   * @return the accepted node types
+   */
+  public String[] getAcceptedNodeTypes() {
+    return acceptedNodeTypes;
+  }
+
+  /**
+   * Sets the accepted node types.
+   * 
+   * @param acceptedNodeTypes the new accepted node types
+   */
+  public void setAcceptedNodeTypes(String[] acceptedNodeTypes) {
+    this.acceptedNodeTypes = acceptedNodeTypes;
+  }
 
   public void buildTree() throws Exception {
-    NodeIterator sibbling = null ;
-    NodeIterator children = null ;    
-    UINodeTree tree = getChild(UINodeTree.class) ;
-    tree.setSelected(currentNode);
-    if (Utils.getNodeSymLink(currentNode).getDepth() > 0) {
-      tree.setParentSelected(currentNode.getParent()) ;
-      sibbling = Utils.getNodeSymLink(currentNode).getNodes() ;
-      children = Utils.getNodeSymLink(currentNode).getNodes() ;
+    NodeIterator sibbling = null;
+    NodeIterator children = null;
+    UINodeTree tree = getChild(UINodeTree.class);
+    Node selectedNode = currentNode;
+    tree.setSelected(selectedNode);
+    if (Utils.getNodeSymLink(selectedNode).getDepth() > 0) {
+      tree.setParentSelected(selectedNode.getParent());
+      sibbling = Utils.getNodeSymLink(selectedNode).getNodes();
+      children = Utils.getNodeSymLink(selectedNode).getNodes();
     } else {
-      tree.setParentSelected(currentNode) ;
-      sibbling = Utils.getNodeSymLink(currentNode).getNodes() ;
+      tree.setParentSelected(selectedNode);
+      sibbling = Utils.getNodeSymLink(selectedNode).getNodes();
       children = null;
     }
     if (sibbling != null) {
@@ -68,26 +195,94 @@ public class UICategoryNavigationTree extends UINodeTreeBuilder {
       tree.setChildren(filter(children));
     }
   }
-  
-  private List<Node> filter(final NodeIterator iterator) throws Exception{
-    List<Node> list = new ArrayList<Node>();
-    for(;iterator.hasNext();) {
-      Node sibbling = iterator.nextNode();
-      if(sibbling.isNodeType("exo:hiddenable")) continue;
-      list.add(sibbling);                  
-    }            
-    return list;
+
+  private void addNodePublish(List<Node> listNode, Node node, PublicationService publicationService) throws Exception {
+    if (isAllowPublish()) {
+      NodeType nt = node.getPrimaryNodeType();
+      if (templates_.contains(nt.getName())) {
+        Node nodecheck = publicationService.getNodePublish(node, null);
+        if (nodecheck != null) {
+          listNode.add(nodecheck);
+        }
+      } else {
+        listNode.add(node);
+      }
+    } else {
+      listNode.add(node);
+    }
   }
-  
-  public static class ChangeNodeActionListener extends EventListener<UITree> {
+
+  private List<Node> filter(final NodeIterator iterator) throws Exception {
+    List<Node> list = new ArrayList<Node>();
+    if (acceptedNodeTypes.length > 0) {
+      for (; iterator.hasNext();) {
+        Node sibbling = iterator.nextNode();
+        if (sibbling.isNodeType("exo:hiddenable"))
+          continue;
+        for (String nodetype : acceptedNodeTypes) {
+          if (sibbling.isNodeType(nodetype)) {
+            list.add(sibbling);
+            break;
+          }
+        }
+      }
+      List<Node> listNodeCheck = new ArrayList<Node>();
+      for (Node node : list) {
+        addNodePublish(listNodeCheck, node, publicationService_);
+      }
+      return listNodeCheck;
+    }
+    for (; iterator.hasNext();) {
+      Node sibbling = iterator.nextNode();
+      if (sibbling.isNodeType("exo:hiddenable"))
+        continue;
+      list.add(sibbling);
+    }
+    List<Node> listNodeCheck = new ArrayList<Node>();
+    for (Node node : list)
+      addNodePublish(listNodeCheck, node, publicationService_);
+    return listNodeCheck;
+  }
+
+  /**
+   * When a node is change in tree. This method will be rerender the children & sibbling nodes of 
+   * current node and broadcast change node event to other uicomponent
+   * 
+   * @param path the path
+   * @param requestContext the request context
+   * @throws Exception the exception
+   */
+  public void changeNode(String path, Object context) throws Exception {
+    NodeFinder nodeFinder_ = getApplicationComponent(NodeFinder.class);
+    String rootPath = rootTreeNode.getPath();
+    if (rootPath.equals(path) || !path.startsWith(rootPath)) {
+      currentNode = rootTreeNode;
+    } else {
+      if (path.startsWith(rootPath))
+        path = path.substring(rootPath.length());
+      if (path.startsWith("/"))
+        path = path.substring(1);
+      currentNode = nodeFinder_.getNode(rootTreeNode, path);
+    }
+  }
+
+  /**
+   * The listener interface for receiving changeNodeAction events. The class
+   * that is interested in processing a changeNodeAction event implements this
+   * interface, and the object created with that class is registered with a
+   * component using the component's
+   * <code>addChangeNodeActionListener<code> method. When
+   * the changeNodeAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see ChangeNodeActionEvent
+   */
+  static public class ChangeNodeActionListener extends EventListener<UITree> {
     public void execute(Event<UITree> event) throws Exception {
-      UICategoryNavigationTree builder = event.getSource().getParent();
+      UICategoryNavigationTree categoryNavigationTree = event.getSource().getParent();
       String uri = event.getRequestContext().getRequestParameter(OBJECTID);
-      builder.changeNode(uri,event.getRequestContext());
-      UIBaseNodeTreeSelector nodeTreeSelector = builder.getAncestorOfType(UIBaseNodeTreeSelector.class);      
-      event.getRequestContext().addUIComponentToUpdateByAjax(nodeTreeSelector);
-      
-      // add attribute for session
+      categoryNavigationTree.changeNode(uri, event.getRequestContext());
+      event.getRequestContext().addUIComponentToUpdateByAjax(categoryNavigationTree.getParent());
     }
   }
 }

@@ -72,7 +72,7 @@
 		<title>Category Navigation</title>
 		<access-permissions>Everyone</access-permissions>
 		<edit-permission>*:/platform/administrators</edit-permission>
-		<container id="CategoriesPageContainer" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
+		<container id="CategoriesPageContainer" template="system:/groovy/portal/webui/container/UITableColumnContainer.gtmpl">
 	  	<container id="CategoryNavigationPortletContainer" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
 	  		<application>
 					<instance-id>portal#classic:/presentation/CategoryNavigationPortlet/classic-categories</instance-id>

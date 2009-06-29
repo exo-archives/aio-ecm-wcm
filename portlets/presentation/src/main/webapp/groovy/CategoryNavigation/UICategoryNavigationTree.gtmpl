@@ -1,0 +1,7 @@
+<div class="UICategoryNavigationTree">
+	<div class="UICategoryNavigationTreeTitle"><%= uicomponent.getTreeTitle() %></div>
+	<% 
+		uicomponent.buildTree();
+		uicomponent.renderChildren(); 
+	%>
+</div>

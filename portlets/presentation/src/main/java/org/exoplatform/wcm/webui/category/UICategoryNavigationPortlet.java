@@ -16,8 +16,12 @@
  */
 package org.exoplatform.wcm.webui.category;
 
+import javax.jcr.Node;
 import javax.portlet.PortletMode;
+import javax.portlet.PortletPreferences;
+import javax.portlet.PortletRequest;
 
+import org.exoplatform.services.cms.link.NodeFinder;
 import org.exoplatform.wcm.webui.category.config.UICategoryNavigationConfig;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -36,7 +40,13 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
     lifecycle = UIApplicationLifecycle.class
 )
 public class UICategoryNavigationPortlet extends UIPortletApplication {
-
+  
+  private static final String PREFERENCE_REPOSITORY         = "repository";
+  
+  private static final String PREFERENCE_WORKSPACE          = "workspace";
+  
+  private static final String PREFERENCE_TREE_PATH          = "treePath";
+  
   private PortletMode mode = PortletMode.VIEW;
   
   public UICategoryNavigationPortlet() throws Exception {
@@ -46,7 +56,17 @@ public class UICategoryNavigationPortlet extends UIPortletApplication {
   public void activateMode(PortletMode mode) throws Exception {
     getChildren().clear();
     if (PortletMode.VIEW.equals(mode)) {
-      addChild(UICategoryNavigationTree.class, null, null);
+      PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
+      PortletRequest request = portletRequestContext.getRequest();
+      PortletPreferences portletPreferences = request.getPreferences();
+      String preferenceRepository = portletPreferences.getValue(PREFERENCE_REPOSITORY, "");
+      String preferenceWorkspace = portletPreferences.getValue(PREFERENCE_WORKSPACE, "");
+      String preferenceTreePath = portletPreferences.getValue(PREFERENCE_TREE_PATH, "");
+      NodeFinder nodeFinder = getApplicationComponent(NodeFinder.class);
+      Node rootTreeNode = (Node)nodeFinder.getItem(preferenceRepository, preferenceWorkspace, preferenceTreePath);
+      UICategoryNavigationTree categoryNavigationTree = createUIComponent(UICategoryNavigationTree.class, null, null);
+      categoryNavigationTree.setRootTreeNode(rootTreeNode);
+      addChild(categoryNavigationTree);
     } else if (PortletMode.EDIT.equals(mode)) {
       addChild(UICategoryNavigationConfig.class, null, null);
     }
