@@ -1,2 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bundle></bundle>
+<bundle>
+<UIPresentationContainer>
+  	<label>
+  		<quickEditTitle>Quick Edit</quickEditTitle>
+  	</label>
+  </UIPresentationContainer>
+  <UIParameterizedManagerPopupWindow>
+  	<title>Select folder to display its children documents or webcontent</title>
+  </UIParameterizedManagerPopupWindow>
+  <UIParameterizedManagementForm>
+  	<title>PCLV Edit Mode</title>
+    <action>
+      <Save>Save</Save>
+      <Cancel>Cancel</Cancel>
+      <Down>Down</Down>
+      <Up>Up</Up>      
+      <Delete>Delete</Delete>            
+    </action>
+    <label>
+      <ContentSelectionBlock>Contents selection</ContentSelectionBlock>
+      <DisplaySettingBlock>Display setting</DisplaySettingBlock>    
+      <LinkFormatBlock>Link Format</LinkFormatBlock>	
+      <FolderPathInputSet>UIViewerManagementForm</FolderPathInputSet>
+      <FolderPathInput>Folder path</FolderPathInput>
+      <FormViewTemplate>Viewer template</FormViewTemplate>
+      <PaginatorTemplate>Paginator template</PaginatorTemplate>
+      <ItemsPerPage>Items per page</ItemsPerPage>
+      <AutoDetect>Automatic Detection</AutoDetect>
+      <ViewerButtonQuickEdit>Show quick edit button</ViewerButtonQuickEdit>
+      <ViewerButtonRefresh>Show refresh button</ViewerButtonRefresh>
+      <ViewerThumbnailsView>Show image</ViewerThumbnailsView>
+      <ViewerTitle>Show title</ViewerTitle>
+      <ViewerDateCreated>Show date created</ViewerDateCreated>
+      <ViewerSummary>Show summary</ViewerSummary>
+      <Header>Header</Header>
+      <ViewerLink>Show link</ViewerLink>
+      <ViewerHeader>Show header</ViewerHeader>
+      <ViewerMode>Mode</ViewerMode>
+      <ManualViewerMode>Manual</ManualViewerMode>
+      <AutoViewerMode>Automatic</AutoViewerMode>
+      <OrderBy>Order by</OrderBy>
+      <OrderByTitle>Title</OrderByTitle>
+      <OrderByDateCreated>Date created</OrderByDateCreated>
+      <OrderByDateModified>Date modified</OrderByDateModified>
+      <OrderByDatePublished>Date published</OrderByDatePublished>      
+      <OrderDesc>Descendant</OrderDesc>
+      <OrderAsc>Ascendant</OrderAsc>   
+      <ContentPath>Content</ContentPath>  
+      <TagetPageInput>Target page</TagetPageInput>
+      <AddDateToTheLink>Add date in the link</AddDateToTheLink>
+      <AutomaticDetection>Automatic Detection</AutomaticDetection>
+      <ShowMoreLink>Show more link</ShowMoreLink>
+      <ShowRSSLink>Show RSS link</ShowRSSLink>
+    </label>
+    
+  </UIParameterizedManagementForm>
+</bundle>

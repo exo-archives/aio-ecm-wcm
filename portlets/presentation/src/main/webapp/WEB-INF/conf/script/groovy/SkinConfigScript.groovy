@@ -82,3 +82,24 @@ SkinService.addSkin(
 	"/presentation/skin/PrameterizedContentViewer/DefaultStylesheet.css",
 	ServletContext
 );
+
+SkinService.addSkin(
+	"presentation/ParameterizedContentListViewerPortlet",
+	"Default",
+	"/presentation/skin/ParameterizedContentListViewer/DefaultStylesheet.css",
+	ServletContext
+);
+
+SkinService.addSkin(
+	"presentation/ParameterizedContentListViewerPortlet",
+	"Mac",
+	"/presentation/skin/ParameterizedContentListViewer/DefaultStylesheet.css",
+	ServletContext
+);
+
+SkinService.addSkin(
+	"presentation/ParameterizedContentListViewerPortlet",
+	"Vista",
+	"/presentation/skin/ParameterizedContentListViewer/DefaultStylesheet.css",
+	ServletContext
+);

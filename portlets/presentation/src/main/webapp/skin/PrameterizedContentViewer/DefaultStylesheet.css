@@ -41,3 +41,10 @@
 .UIParameterizedContentViewerPortlet .ActionContainer .CloseIcon {
 	background: url('DefaultSkin/images/PrintFrameIcon.gif') no-repeat left -19px;
 }
+
+.UIParameterizedManagementForm .quickSearchAction {
+	background: url('DefaultSkin/images/SearchIcon.png') no-repeat;
+	cursor:pointer;
+	height:16px;
+	width:16px;
+}
