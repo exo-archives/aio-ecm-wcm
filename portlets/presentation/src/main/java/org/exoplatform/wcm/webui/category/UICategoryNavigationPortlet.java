@@ -16,17 +16,12 @@
  */
 package org.exoplatform.wcm.webui.category;
 
-import javax.jcr.Node;
-import javax.jcr.NodeIterator;
-import javax.jcr.Session;
+import javax.portlet.PortletMode;
 
-import org.exoplatform.ecm.webui.tree.selectone.UIOneTaxonomySelector;
-import org.exoplatform.services.cms.BasePath;
-import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+import org.exoplatform.wcm.webui.category.config.UICategoryNavigationConfig;
+import org.exoplatform.webui.application.WebuiApplication;
+import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
@@ -42,31 +37,28 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 )
 public class UICategoryNavigationPortlet extends UIPortletApplication {
 
+  private PortletMode mode = PortletMode.VIEW;
+  
   public UICategoryNavigationPortlet() throws Exception {
-    addChild(UICategoryNavigationContainer.class, null, null); 
-    
-//    UIOneTaxonomySelector uiOneTaxonomySelector = createUIComponent(UIOneTaxonomySelector.class, null, null);
-//    String workspaceName = "dms-system";
-//    String repositoryName = "repository";
-//    uiOneTaxonomySelector.setIsDisable(workspaceName, false);
-//    NodeHierarchyCreator nodeHierarchyCreator = getApplicationComponent(NodeHierarchyCreator.class);
-//    String rootTreePath = nodeHierarchyCreator.getJcrPath(BasePath.TAXONOMIES_TREE_STORAGE_PATH);
-//    
-//    RepositoryService repositoryService  = getApplicationComponent(RepositoryService.class) ;
-//    ManageableRepository repository = repositoryService.getRepository(repositoryName);
-//    ThreadLocalSessionProviderService threadLocalSessionProviderService = getApplicationComponent(ThreadLocalSessionProviderService.class);
-//    SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
-//    Session session = sessionProvider.getSession(workspaceName, repository);
-//    Node rootTree = (Node) session.getItem(rootTreePath);      
-//    NodeIterator childrenIterator = rootTree.getNodes();
-//    while (childrenIterator.hasNext()) {
-//      Node childNode = childrenIterator.nextNode();
-//      rootTreePath = childNode.getPath();
-//      break;
-//    }
-//    uiOneTaxonomySelector.setRootNodeLocation(repositoryName, workspaceName, rootTreePath);
-//    uiOneTaxonomySelector.init(sessionProvider);
-//    addChild(uiOneTaxonomySelector);
+    activateMode(mode);
   }
   
+  public void activateMode(PortletMode mode) throws Exception {
+    getChildren().clear();
+    if (PortletMode.VIEW.equals(mode)) {
+      addChild(UICategoryNavigationTree.class, null, null);
+    } else if (PortletMode.EDIT.equals(mode)) {
+      addChild(UICategoryNavigationConfig.class, null, null);
+    }
+  }
+  
+  public void processRender(WebuiApplication app, WebuiRequestContext context) throws Exception {
+    PortletRequestContext pContext = (PortletRequestContext) context;
+    PortletMode newMode = pContext.getApplicationMode();
+    if (!mode.equals(newMode)) {
+      activateMode(newMode);
+      mode = newMode;
+    }
+    super.processRender(app, context);
+  }
 }

@@ -77,18 +77,18 @@
 	  		<application>
 					<instance-id>portal#classic:/presentation/CategoryNavigationPortlet/classic-categories</instance-id>
 					<title>Category Navigation</title>
-					<show-info-bar>false</show-info-bar>
-					<show-application-state>false</show-application-state>
-					<show-application-mode>false</show-application-mode>
+					<show-info-bar>true</show-info-bar>
+					<show-application-state>true</show-application-state>
+					<show-application-mode>true</show-application-mode>
 				</application>
 	  	</container>
 	  	<container id="ParameterizedContentListViewerPortletContainer" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
 	  		<application>
 					<instance-id>portal#classic:/presentation/ParameterizedContentListViewerPortlet/classic-parameterizedcontentlistviewer</instance-id>
 					<title>Parameterized Content List Viewer</title>
-					<show-info-bar>false</show-info-bar>
-					<show-application-state>false</show-application-state>
-					<show-application-mode>false</show-application-mode>
+					<show-info-bar>true</show-info-bar>
+					<show-application-state>true</show-application-state>
+					<show-application-mode>true</show-application-mode>
 				</application>
 		  </container>
 	  </container>
@@ -102,15 +102,15 @@
 		<access-permissions>Everyone</access-permissions>
 		<edit-permission>*:/platform/administrators</edit-permission>
 		<application>
-			<instance-id>portal#classic:/formgenerator/FormGeneratorPortlet/classic-formgenerator</instance-id>
-			<title>Form generator Portlet</title>
+			<instance-id>portal#classic:/formgenerator/FastContentCreatorPortlet/classic-fastcontentcreator</instance-id>
+			<title>Fast Content Creator Portlet</title>
 			<show-info-bar>true</show-info-bar>
 			<show-application-state>true</show-application-state>
 			<show-application-mode>true</show-application-mode>
 		</application>
 		<application>
-			<instance-id>portal#classic:/formgenerator/FastContentCreatorPortlet/classic-fastcontentcreator</instance-id>
-			<title>Fast Content Creator Portlet</title>
+			<instance-id>portal#classic:/formgenerator/FormGeneratorPortlet/classic-formgenerator</instance-id>
+			<title>Form generator Portlet</title>
 			<show-info-bar>true</show-info-bar>
 			<show-application-state>true</show-application-state>
 			<show-application-mode>true</show-application-mode>

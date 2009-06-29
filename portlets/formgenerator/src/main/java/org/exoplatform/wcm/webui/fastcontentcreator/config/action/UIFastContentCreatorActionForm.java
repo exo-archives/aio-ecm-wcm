@@ -29,14 +29,18 @@ import org.exoplatform.ecm.webui.tree.selectone.UIOneNodePathSelector;
 import org.exoplatform.ecm.webui.utils.DialogFormUtil;
 import org.exoplatform.ecm.webui.utils.LockUtil;
 import org.exoplatform.ecm.webui.utils.PermissionUtil;
-import org.exoplatform.ecm.webui.utils.Utils;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
-import org.exoplatform.services.cms.CmsService;
 import org.exoplatform.services.cms.JcrInputProperty;
 import org.exoplatform.services.cms.actions.ActionServiceContainer;
+import org.exoplatform.services.cms.impl.DMSConfiguration;
+import org.exoplatform.services.cms.impl.DMSRepositoryConfiguration;
 import org.exoplatform.services.cms.templates.TemplateService;
+import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.fastcontentcreator.UIFastContentCreatorConstant;
+import org.exoplatform.wcm.webui.fastcontentcreator.UIFastContentCreatorPortlet;
 import org.exoplatform.wcm.webui.fastcontentcreator.UIFastContentCreatorUtils;
 import org.exoplatform.wcm.webui.fastcontentcreator.config.UIFastContentCreatorConfig;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -46,9 +50,8 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
-import org.exoplatform.webui.core.UIPageIterator;
+import org.exoplatform.webui.core.UIGrid;
 import org.exoplatform.webui.core.UIPopupContainer;
-import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -66,7 +69,7 @@ import org.exoplatform.webui.form.UIFormInputBase;
     events = {
       @EventConfig(listeners = UIFastContentCreatorActionForm.SaveActionListener.class),
       @EventConfig(listeners = UIDialogForm.OnchangeActionListener.class, phase=Phase.DECODE),
-//      @EventConfig(listeners = UIFastContentCreatorActionForm.BackActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UIFastContentCreatorActionForm.CloseActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIFastContentCreatorActionForm.ShowComponentActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIFastContentCreatorActionForm.RemoveReferenceActionListener.class, confirm = "DialogFormField.msg.confirm-delete", phase = Phase.DECODE)
     }
@@ -75,20 +78,17 @@ public class UIFastContentCreatorActionForm extends UIDialogForm implements UISe
 
   private String parentPath_ ;
   private String nodeTypeName_ = null ;
-  private boolean isAddNew_ ;
   private String scriptPath_ = null ;
-  private boolean isEditInList_ = false ;
   private String rootPath_ = null;
   
   private static final String EXO_ACTIONS = "exo:actions".intern();
   
-  public UIFastContentCreatorActionForm() throws Exception {setActions(new String[]{"Save","Back"}) ;}
+  public UIFastContentCreatorActionForm() throws Exception {setActions(new String[]{"Save","Close"}) ;}
   
   public void createNewAction(Node parentNode, String actionType, boolean isAddNew) throws Exception {
     reset() ;
     parentPath_ = parentNode.getPath() ;
     nodeTypeName_ = actionType;
-    isAddNew_ = isAddNew ;
     componentSelectors.clear() ;
     properties.clear() ;
     getChildren().clear() ;
@@ -99,22 +99,18 @@ public class UIFastContentCreatorActionForm extends UIDialogForm implements UISe
   public void doSelect(String selectField, Object value) {
     isUpdateSelect = true ;
     getUIStringInput(selectField).setValue(value.toString()) ;
-    if(isEditInList_) {
-//      UIPopupContainer popupContainer = getAncestorOfType(UIPopupContainer.class) ;
-//      UIActionListContainer uiActionListContainer = popupContainer.getChild(UIActionListContainer.class) ;
-//      uiActionListContainer.removeChildById("PopupComponent") ;
-//    } else {
-//      UIActionContainer uiActionContainer = getParent() ;
-//      uiActionContainer.removeChildById("PopupComponent") ;
-    }
   }
   
   public String getCurrentPath() throws Exception { 
-    return getAncestorOfType(UIFastContentCreatorConfig.class).getSavedLocationNode().getPath();
+    UIFastContentCreatorPortlet fastContentCreatorPortlet = getAncestorOfType(UIFastContentCreatorPortlet.class);
+    UIFastContentCreatorConfig fastContentCreatorConfig = fastContentCreatorPortlet.getChild(UIFastContentCreatorConfig.class); 
+    return fastContentCreatorConfig.getSavedLocationNode().getPath();
   }
   
   public ResourceResolver getTemplateResourceResolver(WebuiRequestContext context, String template) {
-    return new JCRResourceResolver(repositoryName, "collaboration", "exo:templateFile") ;
+    DMSConfiguration dmsConfiguration = getApplicationComponent(DMSConfiguration.class);
+    DMSRepositoryConfiguration repositoryConfiguration = dmsConfiguration.getConfig(repositoryName);
+    return new JCRResourceResolver(repositoryName, repositoryConfiguration.getSystemWorkspace(), "exo:templateFile") ;
   }
 
   public String getTemplate() { return getDialogPath() ; }
@@ -138,74 +134,49 @@ public class UIFastContentCreatorActionForm extends UIDialogForm implements UISe
 
   public String getTemplateNodeType() { return nodeTypeName_ ; }
 
-  private void setPath(String scriptPath) {
-    if(scriptPath.indexOf(":") < 0) {
-      scriptPath = UIFastContentCreatorUtils.getPreferenceWorkspace() + ":" + scriptPath ;
-    }
-    scriptPath_ = scriptPath ; 
-  }
   public String getPath() { return scriptPath_ ; }  
+
   public void setRootPath(String rootPath){
    rootPath_ = rootPath;
   }
+  
   public String getRootPath(){return rootPath_;}
-  public void setIsEditInList(boolean isEditInList) { isEditInList_ = isEditInList; }
   
   public void onchange(Event<?> event) throws Exception {
-    if(isEditInList_ || !isAddNew_) {
-      event.getRequestContext().addUIComponentToUpdateByAjax(getParent()) ;
-      return ;
-    }
-    UIPopupContainer popupContainer = getAncestorOfType(UIPopupContainer.class) ;
-    popupContainer.setRenderedChild(UIFastContentCreatorActionContainer.class) ;
-    event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
+    event.getRequestContext().addUIComponentToUpdateByAjax(getParent()) ;
   }
   
   static public class SaveActionListener extends EventListener<UIFastContentCreatorActionForm> {
     public void execute(Event<UIFastContentCreatorActionForm> event) throws Exception {
-      UIFastContentCreatorActionForm actionForm = event.getSource();
-      UIApplication uiApp = actionForm.getAncestorOfType(UIApplication.class) ;
-      ActionServiceContainer actionServiceContainer = actionForm.getApplicationComponent(ActionServiceContainer.class) ;
-      UIFastContentCreatorConfig fastContentCreatorConfig = actionForm.getAncestorOfType(UIFastContentCreatorConfig.class) ;   
-      String repository = UIFastContentCreatorUtils.getPreferenceRepository() ;
-      Map<String, JcrInputProperty> sortedInputs = DialogFormUtil.prepareMap(actionForm.getChildren(), actionForm.getInputProperties());
+      UIFastContentCreatorActionForm fastContentCreatorActionForm = event.getSource();
+      UIApplication uiApp = fastContentCreatorActionForm.getAncestorOfType(UIApplication.class) ;
+      
+      // Get current node
+      UIFastContentCreatorPortlet fastContentCreatorPortlet = fastContentCreatorActionForm.getAncestorOfType(UIFastContentCreatorPortlet.class);
+      UIFastContentCreatorConfig fastContentCreatorConfig = fastContentCreatorPortlet.getChild(UIFastContentCreatorConfig.class) ;   
       Node currentNode = fastContentCreatorConfig.getSavedLocationNode();
+      
+      // Check permission for current node
       if(!PermissionUtil.canAddNode(currentNode) || !PermissionUtil.canSetProperty(currentNode)) {
-        uiApp.addMessage(new ApplicationMessage("UIActionForm.msg.no-permission-add", null)) ;
+        uiApp.addMessage(new ApplicationMessage("UIFastContentCreatorActionForm.msg.no-permission-add", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return;
       }
+      
+      // Add lock token if node is locked
       if (currentNode.isLocked()) {
         String lockToken = LockUtil.getLockToken(currentNode);
         if(lockToken != null) {
           currentNode.getSession().addLockToken(lockToken);
         }
       }
-      if(!actionForm.isAddNew_) {
-        CmsService cmsService = actionForm.getApplicationComponent(CmsService.class) ;      
-        Node storedHomeNode = actionForm.getNode().getParent() ;
-        cmsService.storeNode(actionForm.nodeTypeName_, storedHomeNode, sortedInputs, false,repository) ;
-//        if(!fastContentCreatorConfig.getPreference().isJcrEnable()) currentNode.getSession().save() ;
-        if(actionForm.isEditInList_) {
-          UIPopupContainer popupContainer = actionForm.getAncestorOfType(UIPopupContainer.class);
-          UIPopupWindow uiPopup = popupContainer.getChildById(UIFastContentCreatorConstant.ACTION_POPUP_WINDOW) ;
-          uiPopup.setShow(false) ;
-          uiPopup.setRendered(false) ;
-//          uiManager.setDefaultConfig() ;
-          actionForm.isEditInList_ = false ;
-          actionForm.isAddNew_ = true ;
-          actionForm.setIsOnchange(false) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(fastContentCreatorConfig) ;
-//          fastContentCreatorConfig.setIsHidePopup(true) ;
-//          fastContentCreatorConfig.updateAjax(event) ;
-        } else {
-//          fastContentCreatorConfig.setIsHidePopup(false) ;
-//          fastContentCreatorConfig.updateAjax(event) ;
-        }
-        actionForm.setPath(storedHomeNode.getPath()) ;
-        return;
-      }
+
+      // Close popup
+      UIPopupContainer popupContainer = fastContentCreatorActionForm.getAncestorOfType(UIPopupContainer.class);
+      Utils.closePopupWindow(popupContainer, UIFastContentCreatorConstant.ACTION_POPUP_WINDOW);
+      
       try{
+        Map<String, JcrInputProperty> sortedInputs = DialogFormUtil.prepareMap(fastContentCreatorActionForm.getChildren(), fastContentCreatorActionForm.getInputProperties());
         JcrInputProperty rootProp = sortedInputs.get("/node");
         if(rootProp == null) {
           rootProp = new JcrInputProperty();
@@ -216,85 +187,104 @@ public class UIFastContentCreatorActionForm extends UIDialogForm implements UISe
           rootProp.setValue((sortedInputs.get("/node/exo:name")).getValue());
         }
         String actionName = (String)(sortedInputs.get("/node/exo:name")).getValue() ;
-        Node parentNode = actionForm.getParentNode();
+        Node parentNode = fastContentCreatorActionForm.getParentNode();
+        
+        // Check if action existed
         if(parentNode.hasNode(EXO_ACTIONS)) {
           if(parentNode.getNode(EXO_ACTIONS).hasNode(actionName)) { 
             Object[] args = {actionName} ;
-            uiApp.addMessage(new ApplicationMessage("UIActionForm.msg.existed-action", args, 
-                ApplicationMessage.WARNING)) ;
+            uiApp.addMessage(new ApplicationMessage("UIFastContentCreatorActionForm.msg.existed-action", args, ApplicationMessage.WARNING)) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
             return;
           }
         }
+        
+        // Check parent node
         if(parentNode.isNew()) {
           String[] args = {parentNode.getPath()} ;
-          uiApp.addMessage(new ApplicationMessage("UIActionForm.msg.unable-add-action",args)) ;
+          uiApp.addMessage(new ApplicationMessage("UIFastContentCreatorActionForm.msg.unable-add-action",args)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return;
         }
-        actionServiceContainer.addAction(parentNode, repository, actionForm.nodeTypeName_, sortedInputs);
-        actionForm.setIsOnchange(false) ;
-//        if(!fastContentCreatorConfig.getPreference().isJcrEnable()) parentNode.getSession().save() ;
-        actionForm.createNewAction(fastContentCreatorConfig.getSavedLocationNode(), actionForm.nodeTypeName_, true) ;
+        
+        // Save to database
+        ActionServiceContainer actionServiceContainer = fastContentCreatorActionForm.getApplicationComponent(ActionServiceContainer.class) ;
+        String repository = UIFastContentCreatorUtils.getPreferenceRepository() ;
+        actionServiceContainer.addAction(parentNode, repository, fastContentCreatorActionForm.nodeTypeName_, sortedInputs);
+        fastContentCreatorActionForm.setIsOnchange(false) ;
+        parentNode.getSession().save() ;
+        
+        // Create action
+        fastContentCreatorActionForm.createNewAction(fastContentCreatorConfig.getSavedLocationNode(), fastContentCreatorActionForm.nodeTypeName_, true) ;
         UIFastContentCreatorActionList fastContentCreatorActionList = fastContentCreatorConfig.findFirstComponentOfType(UIFastContentCreatorActionList.class) ;  
-        fastContentCreatorActionList.updateGrid(parentNode, fastContentCreatorActionList.getChild(UIPageIterator.class).getCurrentPage());
-//        uiActionManager.setRenderedChild(UIActionListContainer.class) ;
-        actionForm.reset() ;
-        actionForm.isEditInList_ = false ;
+        fastContentCreatorActionList.updateGrid(parentNode, fastContentCreatorActionList.getChild(UIGrid.class).getUIPageIterator().getCurrentPage());
+        fastContentCreatorActionForm.reset() ;
       } catch(RepositoryException repo) {      
-        String key = "UIActionForm.msg.repository-exception" ;
+        String key = "UIFastContentCreatorActionForm.msg.repository-exception" ;
         uiApp.addMessage(new ApplicationMessage(key, null, ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return;
       } catch(NumberFormatException nume) {
-        String key = "UIActionForm.msg.numberformat-exception" ;
+        String key = "UIFastContentCreatorActionForm.msg.numberformat-exception" ;
         uiApp.addMessage(new ApplicationMessage(key, null, ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return;
       } catch (NullPointerException nullPointerException) {
-        uiApp.addMessage(new ApplicationMessage("UIActionForm.msg.unable-add", null, ApplicationMessage.WARNING));
+        uiApp.addMessage(new ApplicationMessage("UIFastContentCreatorActionForm.msg.unable-add", null, ApplicationMessage.WARNING));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return;
       } catch (Exception e) {           
-        uiApp.addMessage(new ApplicationMessage("UIActionForm.msg.unable-add", null, ApplicationMessage.WARNING));
+        uiApp.addMessage(new ApplicationMessage("UIFastContentCreatorActionForm.msg.unable-add", null, ApplicationMessage.WARNING));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return;
       }      
+      event.getRequestContext().addUIComponentToUpdateByAjax(fastContentCreatorPortlet) ;
+    }
+  }
+  
+  static public class CloseActionListener extends EventListener<UIFastContentCreatorActionForm> {
+    public void execute(Event<UIFastContentCreatorActionForm> event) throws Exception {
+      UIFastContentCreatorActionForm fastContentCreatorActionForm = event.getSource();
+      UIPopupContainer popupContainer = fastContentCreatorActionForm.getAncestorOfType(UIPopupContainer.class);
+      Utils.closePopupWindow(popupContainer, UIFastContentCreatorConstant.ACTION_POPUP_WINDOW);
+    }
+  }  
+  
+  static public class RemoveReferenceActionListener extends EventListener<UIFastContentCreatorActionForm> {
+    public void execute(Event<UIFastContentCreatorActionForm> event) throws Exception {
+      UIFastContentCreatorActionForm fastContentCreatorActionForm = event.getSource() ;
+      fastContentCreatorActionForm.isRemovePreference = true;
+      String fieldName = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      fastContentCreatorActionForm.getUIStringInput(fieldName).setValue(null) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(fastContentCreatorActionForm.getParent()) ;
     }
   }
   
   @SuppressWarnings("unchecked")
   static public class ShowComponentActionListener extends EventListener<UIFastContentCreatorActionForm> {
     public void execute(Event<UIFastContentCreatorActionForm> event) throws Exception {
-      UIFastContentCreatorActionForm uiForm = event.getSource() ;
-      UIContainer uiContainer = null;
-      uiForm.isShowingComponent = true;
-      if(uiForm.isEditInList_) {
-//        uiContainer = uiForm.getAncestorOfType(UIActionListContainer.class) ;
-      } else {
-        uiContainer = uiForm.getParent() ;
-      }
+      UIFastContentCreatorActionForm fastContentCreatorActionForm = event.getSource() ;
+      UIContainer uiContainer = fastContentCreatorActionForm.getParent() ;
+      fastContentCreatorActionForm.isShowingComponent = true;
       String fieldName = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      Map fieldPropertiesMap = uiForm.componentSelectors.get(fieldName) ;
+      Map fieldPropertiesMap = fastContentCreatorActionForm.componentSelectors.get(fieldName) ;
       String classPath = (String)fieldPropertiesMap.get("selectorClass") ;
       String rootPath = (String)fieldPropertiesMap.get("rootPath") ;
       ClassLoader cl = Thread.currentThread().getContextClassLoader() ;
       Class clazz = Class.forName(classPath, true, cl) ;
       UIComponent uiComp = uiContainer.createUIComponent(clazz, null, null);
       if(uiComp instanceof UIOneNodePathSelector) {
-        String repositoryName = UIFastContentCreatorUtils.getPreferenceRepository() ;
-//        SessionProvider provider = fastContentCreatorConfig.getSessionProvider() ;        
         String wsFieldName = (String)fieldPropertiesMap.get("workspaceField") ;
         String wsName = "";
         if(wsFieldName != null && wsFieldName.length() > 0) {
-          wsName = (String)uiForm.<UIFormInputBase>getUIInput(wsFieldName).getValue() ;          
+          wsName = (String)fastContentCreatorActionForm.<UIFormInputBase>getUIInput(wsFieldName).getValue() ;          
           ((UIOneNodePathSelector)uiComp).setIsDisable(wsName, true) ;           
         }
         String selectorParams = (String)fieldPropertiesMap.get("selectorParams") ;
         if(selectorParams != null) {
           String[] arrParams = selectorParams.split(",") ;
           if(arrParams.length == 4) {
-            ((UIOneNodePathSelector)uiComp).setAcceptedNodeTypesInPathPanel(new String[] {Utils.NT_FILE}) ;
+            ((UIOneNodePathSelector)uiComp).setAcceptedNodeTypesInPathPanel(new String[] {"nt:file"}) ;
             wsName = arrParams[1];
             rootPath = arrParams[2];
             ((UIOneNodePathSelector)uiComp).setIsDisable(wsName, true) ;
@@ -306,55 +296,18 @@ public class UIFastContentCreatorActionForm extends UIDialogForm implements UISe
           }
         }
         if(rootPath == null) rootPath = "/";
-        ((UIOneNodePathSelector)uiComp).setRootNodeLocation(repositoryName, wsName, rootPath) ;
+        ((UIOneNodePathSelector)uiComp).setRootNodeLocation(UIFastContentCreatorUtils.getPreferenceRepository(), wsName, rootPath) ;
         ((UIOneNodePathSelector)uiComp).setShowRootPathSelect(true);
-//        ((UIOneNodePathSelector)uiComp).init(provider);
+        ThreadLocalSessionProviderService threadLocalSessionProviderService = fastContentCreatorActionForm.getApplicationComponent(ThreadLocalSessionProviderService.class);
+        SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
+        ((UIOneNodePathSelector)uiComp).init(sessionProvider);
       }
-//      if(uiForm.isEditInList_) ((UIActionListContainer) uiContainer).initPopup(uiComp) ;
-//      else ((UIActionContainer)uiContainer).initPopup(uiComp) ;
+      UIPopupContainer popupContainer = fastContentCreatorActionForm.getAncestorOfType(UIPopupContainer.class);
+      popupContainer.removeChildById(UIFastContentCreatorConstant.SELECTOR_POPUP_WINDOW);
+      Utils.createPopupWindow(popupContainer, uiComp, event.getRequestContext(), UIFastContentCreatorConstant.SELECTOR_POPUP_WINDOW, 640, 300);
       String param = "returnField=" + fieldName ;
-      ((ComponentSelector)uiComp).setSourceComponent(uiForm, new String[]{param}) ;
-      if(uiForm.isAddNew_) {
-        UIContainer uiParent = uiContainer.getParent() ;
-        uiParent.setRenderedChild(uiContainer.getId()) ;
-      }
+      ((ComponentSelector)uiComp).setSourceComponent(fastContentCreatorActionForm, new String[]{param}) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
     }
   }
-
-  static public class RemoveReferenceActionListener extends EventListener<UIFastContentCreatorActionForm> {
-    public void execute(Event<UIFastContentCreatorActionForm> event) throws Exception {
-      UIFastContentCreatorActionForm fastContentCreatorActionForm = event.getSource() ;
-      fastContentCreatorActionForm.isRemovePreference = true;
-      String fieldName = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      fastContentCreatorActionForm.getUIStringInput(fieldName).setValue(null) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(fastContentCreatorActionForm.getParent()) ;
-    }
-  }
-  
-//  static public class BackActionListener extends EventListener<UIFastContentCreatorActionForm> {
-//    public void execute(Event<UIFastContentCreatorActionForm> event) throws Exception {
-//      UIFastContentCreatorActionForm fastContentCreatorActionForm = event.getSource() ;
-//      UIActionManager uiManager = fastContentCreatorActionForm.getAncestorOfType(UIActionManager.class) ;
-//      if(fastContentCreatorActionForm.isAddNew_) {
-//        uiManager.setRenderedChild(UIActionListContainer.class) ;
-//        event.getRequestContext().addUIComponentToUpdateByAjax(uiManager) ;
-//      } else {
-//        if(fastContentCreatorActionForm.isEditInList_) {
-//          uiManager.setRenderedChild(UIActionListContainer.class) ;
-//          uiManager.setDefaultConfig() ;
-//          UIActionListContainer uiActionListContainer = uiManager.getChild(UIActionListContainer.class) ;
-//          UIPopupWindow uiPopup = uiActionListContainer.findComponentById("editActionPopup") ;
-//          uiPopup.setShow(false) ;
-//          uiPopup.setRendered(false) ;
-//          fastContentCreatorActionForm.isEditInList_ = false ;
-//          event.getRequestContext().addUIComponentToUpdateByAjax(uiManager) ;
-//        } else {
-//          UIJCRExplorer uiExplorer = fastContentCreatorActionForm.getAncestorOfType(UIJCRExplorer.class) ;
-//          uiExplorer.cancelAction() ;
-//        }
-//      }
-//    }
-//  }  
-  
 }

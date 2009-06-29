@@ -74,7 +74,7 @@ import org.exoplatform.ws.frameworks.json.value.JsonValue;
     template = "app:/groovy/webui/FormGeneratorPortlet/UIFormGeneratorTabPane.gtmpl",
     events = {
       @EventConfig(listeners = UIFormGeneratorTabPane.SaveActionListener.class),
-      @EventConfig(listeners = UIFormGeneratorTabPane.CancelActionListener.class, phase = Phase.DECODE)
+      @EventConfig(listeners = UIFormGeneratorTabPane.ResetActionListener.class, phase = Phase.DECODE)
     }
 )
 public class UIFormGeneratorTabPane extends UIFormTabPane {
@@ -104,11 +104,11 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
   
   private List<SelectItemOption<String>> getAllDocumentNodetypes() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>();
-    String repositoryName = "repository";
+    String preferenceRepository = UIFormGeneratorUtils.getPreferenceRepository();
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
-    ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
+    ManageableRepository manageableRepository = repositoryService.getRepository(preferenceRepository);
     DMSConfiguration dmsConfiguration = getApplicationComponent(DMSConfiguration.class);
-    DMSRepositoryConfiguration dmsRepoConfig = dmsConfiguration.getConfig(repositoryName);
+    DMSRepositoryConfiguration dmsRepoConfig = dmsConfiguration.getConfig(preferenceRepository);
     ThreadLocalSessionProviderService threadLocalSessionProviderService = getApplicationComponent(ThreadLocalSessionProviderService.class);
     Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(dmsRepoConfig.getSystemWorkspace(), manageableRepository);
     NodeHierarchyCreator nodeHierarchyCreator = getApplicationComponent(NodeHierarchyCreator.class);
@@ -167,12 +167,12 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
       property.setMultiple(false) ;    
       property.setMandatory(form.isMandatory()) ;
       // TODO: Need update in 1.3
-      property.setAutoCreate(true) ;
+      property.setAutoCreate(false) ;
       // TODO: Need update in 1.3
       property.setReadOnly(false) ;
       // TODO: Need update in 1.3
       property.setOnVersion(OnParentVersionAction.COPY) ; 
-      property.setValueConstraints(new ArrayList<String>()) ;
+      property.setValueConstraints(null) ;
       properties.add(property) ;
     }
     newNodeType.setDeclaredPropertyDefinitionValues(properties) ;
@@ -421,9 +421,11 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
       String templateName = nameFormStringInput.getValue();
       String nodetypeName = formGeneratorTabPane.getNodetypeName(templateName);
       
+      String preferenceRepository = UIFormGeneratorUtils.getPreferenceRepository();
+      
       UIFormSelectBox nodetypeFormSelectBox = formGeneratorTabPane.getUIFormSelectBox(UIFormGeneratorConstant.NODETYPE_FORM_SELECTBOX);
       String supertypeName = nodetypeFormSelectBox.getValue();
-      formGeneratorTabPane.addNodetype(event.getRequestContext(), "repository", nodetypeName, supertypeName, forms);
+      formGeneratorTabPane.addNodetype(event.getRequestContext(), preferenceRepository, nodetypeName, supertypeName, forms);
 
       UIFormCheckBoxInput<String> voteFormCheckBoxInput = formGeneratorTabPane.getUIFormCheckBoxInput(UIFormGeneratorConstant.VOTE_FORM_CHECKBOX_INPUT);
       UIFormCheckBoxInput<String> commentFormCheckBoxInput = formGeneratorTabPane.getUIFormCheckBoxInput(UIFormGeneratorConstant.COMMENT_FORM_CHECKBOX_INPUT);
@@ -433,12 +435,12 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
       String newGTMPLTemplate = formGeneratorTabPane.generateDialogTemplate(forms, isVotable, isCommentable);
       String newViewTemplate = formGeneratorTabPane.generateViewTemplate(forms);
       TemplateService templateService = formGeneratorTabPane.getApplicationComponent(TemplateService.class) ;
-      templateService.addTemplate(true, nodetypeName, templateName, true, templateName, new String[] {"*"}, newGTMPLTemplate, "repository") ;
-      templateService.addTemplate(false, nodetypeName, templateName, true, templateName, new String[] {"*"}, newViewTemplate, "repository") ;
+      templateService.addTemplate(true, nodetypeName, templateName, true, templateName, new String[] {"*"}, newGTMPLTemplate, preferenceRepository) ;
+      templateService.addTemplate(false, nodetypeName, templateName, true, templateName, new String[] {"*"}, newViewTemplate, preferenceRepository) ;
     }
   }
   
-  public static class CancelActionListener extends EventListener<UIFormGeneratorTabPane> {
+  public static class ResetActionListener extends EventListener<UIFormGeneratorTabPane> {
     public void execute(Event<UIFormGeneratorTabPane> event) throws Exception {
       
     }

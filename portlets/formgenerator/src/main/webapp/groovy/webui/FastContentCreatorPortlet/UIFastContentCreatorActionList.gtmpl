@@ -7,8 +7,8 @@
 	 */
 	 
 	import org.exoplatform.webui.core.UIPageIterator;
-	UIPageIterator uiIterator = uicomponent.getChild(UIPageIterator.class) ;
-	int totalPages = uiIterator.getAvailablePage();
+	import org.exoplatform.webui.core.UIGrid;
+	UIPageIterator uiIterator = uicomponent.getChild(UIGrid.class).getUIPageIterator() ;
 %>
 <div class="UIFastContentCreatorActionList" id="$uicomponent.id">
 	<table class="UIGrid">
@@ -22,22 +22,31 @@
 	  	</thead>
 	  	<tbody>
       		<%
-        		def rowClass = "OddRow" ;
-		    	boolean even = true ;
-		    	if(uicomponent.hasActions()) {
-			    	for(action in uicomponent.getListActions()) {
-			      		if(even) rowClass = "EvenRow" ;  
-			      		else rowClass =  "OddRow" ; 
+      			if(uiIterator.getAvailable() < 1) {
+      				%>
+	    				<tr>
+	      					<td style="font-style:italic; color: #FF5604; text-align: center;" colspan="4">
+	        					<%=_ctx.appRes("UIFastContentCreatorActionList.msg.empty")%>
+	      					</td>
+	    				</tr>  
+	  				<%
+	  			} else { 
+	        		def rowClass = "OddRow" ;
+			    	boolean even = true ;
+// if(uicomponent.hasActions()) {
+				    	for(action in uicomponent.getListActions()) {
+		      			if(even) rowClass = "EvenRow" ;  
+		      			else rowClass =  "OddRow" ; 
 			      		even = !even ;
-      					%>
+	  					%>
 		      				<tr class="$rowClass">
-		        				<td>
-		          					<div class="Text">
-		          						<%
-		          							if(action.hasProperty("exo:name")){
-		          								%><%=action.getProperty("exo:name").getString()%><%
-		          							}
-		          						%>
+	    	    				<td>
+	        	  					<div class="Text">
+	          							<%
+	          								if(action.hasProperty("exo:name")){
+	          									%><%=action.getProperty("exo:name").getString()%><%
+	          								}
+	          							%>
 		          					</div>
 		        				</td>
 		        				<td>
@@ -66,12 +75,13 @@
 	            			</tr>
 	            		<%
 	        		}
-	      		}
-	    	%>
-    	</tbody>
+//}
+		      	}
+		    %>
+	    </tbody>
   	</table>
 	<% 
-		if(totalPages > 1) {
+		if(uiIterator.getAvailablePage() > 1) {
 			uicomponent.renderChild(UIPageIterator.class);
 		} 
 	%>

@@ -22,6 +22,13 @@
 			<short-title>Form Generator Portlet</short-title>
 			<keywords>Form Generator Portlet</keywords>
 		</portlet-info>
+		<portlet-preferences>
+			<preference>
+				<name>repository</name>
+				<value>repository</value>
+				<read-only>false</read-only>
+			</preference>
+		</portlet-preferences>
 	</portlet>
 	
 	<portlet>
@@ -69,6 +76,30 @@
 			<preference>
 				<name>type</name>
 				<value>exo:article</value>
+				<read-only>false</read-only>
+			</preference>
+			<!-- The custom button Save -->
+			<preference>
+				<name>saveButton</name>
+				<value>Hi there</value>
+				<read-only>false</read-only>
+			</preference>
+			<!-- The custom message when click Save button -->
+			<preference>
+				<name>saveMessage</name>
+				<value>This node has been saved at '{0}' successfully</value>
+				<read-only>false</read-only>
+			</preference>
+			<!-- Redirect to other page or not -->
+			<preference>
+				<name>isRedirect</name>
+				<value>true</value>
+				<read-only>false</read-only>
+			</preference>
+			<!-- The page will redirect to -->
+			<preference>
+				<name>redirectPath</name>
+				<value>http://www.google.com.vn</value>
 				<read-only>false</read-only>
 			</preference>
 		</portlet-preferences>

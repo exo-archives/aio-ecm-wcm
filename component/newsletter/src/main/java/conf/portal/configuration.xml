@@ -12,10 +12,6 @@
 				<name>workspace</name>
 				<value>collaboration</value>
 			</value-param>
-			<value-param>
-				<name>templateWorkspace</name>
-				<value>dms-system</value>
-			</value-param>
 		</init-params>
   </component>
   

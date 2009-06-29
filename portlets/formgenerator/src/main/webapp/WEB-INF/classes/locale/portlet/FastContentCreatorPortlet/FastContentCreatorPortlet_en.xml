@@ -1,35 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bundle>
-  <!--
-  ###################################################################################
-  #Edit mode																		  #
-  ###################################################################################
-  -->
-  <UIEditModeConfiguration>
-    <label>
-      <selectTemplate>Select template</selectTemplate>
-      <select-repository>Select repository</select-repository>
-      <actionInput>UIEditModeConfiguration</actionInput>
-      <workspaceName>Select workspace</workspaceName>
-      <savedPath>Location to save</savedPath>
-      <repositoryName>Select repository</repositoryName>
-    </label>
-    <msg>
-      <save-successfully>Saved to portlet preferences successfully</save-successfully>
-      <item-not-found>This path is invalid!</item-not-found>
-      <fileType-empty>You have to choose file type before save this configuration.</fileType-empty>
-      <ws-empty>You have to choose one workspace.</ws-empty>
-    </msg>
-    <action>
-      <Save>Save</Save>
-    </action>
-  </UIEditModeConfiguration>
-  <UIPopupWindow>
-    <title>
-      <UIOneNodePathSelector>Select location</UIOneNodePathSelector>
-    </title>
-  </UIPopupWindow>
-  <UIFastContentCreatortForm>
+	<!-- View mode -->
+	<UIFastContentCreatorForm>
     <msg>
       <name-not-allowed>This name is not allowed.</name-not-allowed>
       <in-versioning>Need to checkout current node before add new node</in-versioning>
@@ -46,12 +18,84 @@
       <Save>Save</Save>
       <Cancel>Cancel</Cancel>
     </action>
-  </UIFastContentCreatortForm>
-  <EmptyFieldValidator>
+  </UIFastContentCreatorForm>
+	
+	<!-- Edit mode -->
+  <UIFastContentCreatorConfig>
+    <label>
+			<select-repository>Select repository</select-repository>
+			<UIFastContentCreatorSaveLocationField>Save location</UIFastContentCreatorSaveLocationField>
+      <UIFastContentCreatorRepositoryFormSelectBox>Select repository</UIFastContentCreatorRepositoryFormSelectBox>
+      <UIFastContentCreatorWorkspaceFormSelectBox>Select workspace</UIFastContentCreatorWorkspaceFormSelectBox>
+			<UIFastContentCreatorTemplateField>Template options</UIFastContentCreatorTemplateField>
+      <UIFastContentCreatorLocationFormInputAction>Location to save</UIFastContentCreatorLocationFormInputAction>
+			<UIFastContentCreatorLocationFormStringInput></UIFastContentCreatorLocationFormStringInput>
+      <UIFastContentCreatorTemplateFormSelectBox>Select template</UIFastContentCreatorTemplateFormSelectBox>
+			<UIFastContentCreatorSaveFormStringInput>Custom save button</UIFastContentCreatorSaveFormStringInput>
+			<UIFastContentCreatorMessageFormTextareaInput>Custom save message</UIFastContentCreatorMessageFormTextareaInput>
+      <UIFastContentCreatorRedirectFormCheckboxInput>Redirect</UIFastContentCreatorRedirectFormCheckboxInput>
+			<UIFastContentCreatorRedirectPathFormStringInput>Redirect path</UIFastContentCreatorRedirectPathFormStringInput>
+			<UIFastContentCreatorActionField>Actions</UIFastContentCreatorActionField>
+			<UIFastContentCreatorActionList></UIFastContentCreatorActionList>
+    </label>
     <msg>
-      <empty-input>Type value into field '{0}' please</empty-input>
+      <save-successfully>Saved to portlet preferences successfully</save-successfully>
+      <item-not-found>This path is invalid!</item-not-found>
+      <fileType-empty>You have to choose file type before save this configuration.</fileType-empty>
+      <ws-empty>You have to choose one workspace.</ws-empty>
     </msg>
-  </EmptyFieldValidator>
+    <action>
+      <Save>Save</Save>
+    </action>
+  </UIFastContentCreatorConfig>
+  
+	<UIFastContentCreatorLocationFormInputAction>
+		<title>
+			<SelectPath>Select path</SelectPath>
+		</title>
+	</UIFastContentCreatorLocationFormInputAction>
+
+	<UIFastContentCreatorActionList>
+		<header>
+			<name>Name</name>
+			<description>Description</description>
+			<instanceOf>Instance of</instanceOf>
+			<action>Action</action>
+		</header>
+		<action>
+			<Add>Add</Add>
+		</action>
+		<msg>
+			<empty>No action</empty>
+      <remove-popup-first>You must close edit popup before delete this node.</remove-popup-first>
+      <confirm-delete-action>Do yo really want to delete this action?</confirm-delete-action>
+      <template-empty>Template of '{0}' is null or empty</template-empty>
+      <template-null>Template is null or you haven't got permission to access this template.</template-null>
+      <access-denied>Access denied! You haven't got enough permission to do this action.</access-denied>
+    </msg>
+	</UIFastContentCreatorActionList>
+	
+	<!-- Select path popup -->
+	<UIFastContentCreatorSelectorPopupWindow>
+    <title>
+      <UIOneNodePathSelector>Select location</UIOneNodePathSelector>
+    </title>
+  </UIFastContentCreatorSelectorPopupWindow>	
+	
+	<UIWorkspaceList>
+    <label>
+      <workspaceName>Workspace</workspaceName>
+      <rootNodePath>Root path</rootNodePath>
+			<rootNodeInfo></rootNodeInfo>
+    </label>
+  </UIWorkspaceList>
+	
+	<rootNodeInfo>
+		<title>
+			<AddRootNode>Add root node</AddRootNode>
+		</title>
+	</rootNodeInfo>
+	
   <UITreeList>
     <info>
       <child-not-found>This node hasn't got any child</child-not-found>
@@ -61,43 +105,81 @@
       <action>Action</action>
     </header>
   </UITreeList>
+	
+	<!-- Add action popup -->
+	<UIFastContentCreatorActionPopupWindow>
+		<title>
+			<UIFastContentCreatorActionContainer>Add action form</UIFastContentCreatorActionContainer>
+		</title>
+	</UIFastContentCreatorActionPopupWindow>
+	
+	<UIFastContentCreatorActionForm>
+		<title>Add/Edit an Action</title>
+		<action>
+			<Save>Save</Save>
+			<Close>Close</Close>
+		</action>
+		<msg>
+      <repository-exception>Can not save this action. The name provided must not have an index on its final element.</repository-exception>
+      <numberformat-exception>Can not save this action. The name provided must not have '[' or ']'.</numberformat-exception>
+      <existed-action>The action name '{0}' is existing so choose another name please!</existed-action>
+      <unable-add-action>Unable add this action</unable-add-action>
+      <unable-add>Unable add this action! This node is root or you don't have enough permision</unable-add>
+      <not-support>The dialog '{0}' is not supported</not-support>
+      <no-permission-add>Access denied ! You have no right to add action here</no-permission-add>
+      <access-denied>Access denied! You haven't got permission to access this template.</access-denied>
+    </msg>
+		<validator>
+      <validator>Validator</validator>
+      <destPath>With path</destPath>
+    </validator>
+	</UIFastContentCreatorActionForm>
+		
+	<UIFastContentCreatorActionTypeForm>
+		<label>
+			<actionType>Create an Action of Type</actionType>
+		</label>
+		<msg>
+  		<not-support>Cannot load template of '{0}'.</not-support>
+  		<do-not-permission>You don't have permission to load template of '{0}'.</do-not-permission>
+  	</msg>
+	</UIFastContentCreatorActionTypeForm>
+	
+  <EmptyFieldValidator>
+    <msg>
+      <empty-input>Type value into field '{0}' please</empty-input>
+    </msg>
+  </EmptyFieldValidator>
+	
+	
+
+
+	<!-- check -->
+  <PopupComponent>
+    <title>
+      <UIOneNodePathSelector>Select location</UIOneNodePathSelector>
+      <UIPermissionSelector>Permission Browser</UIPermissionSelector>
+      <UICategoriesSelector>Add Categories</UICategoriesSelector>
+    </title>
+  </PopupComponent>
+	
   <UIFormInputSetWithAction>
     <msg>
       <confirm-delete>Do you want to delete?</confirm-delete>
     </msg>
   </UIFormInputSetWithAction>
-  <UIFastContentCreatorPortlet>
-    <msg>
-      <re-config>Check with your configuration. Maybe have some problems with this config.</re-config>
-    </msg>
-  </UIFastContentCreatorPortlet>
   <DateTimeValidator>
     <msg>
       <Invalid-input>Field '{0}' with value '{1}' is invalid</Invalid-input>
     </msg>
   </DateTimeValidator>
-  <!--
-  ###################################################################################
-  # org.exoplatform.ecm.jcr.ECMNameValidator																			  #
-  ###################################################################################
-  -->
   <ECMNameValidator>
     <msg>
       <Invalid-char>There are some invalid characters in field '{0}'. Type another value, please!</Invalid-char>
       <empty-input>The value of field '{0}' is null or empty!</empty-input>
     </msg>
   </ECMNameValidator>
-  <!--
-  ###################################################################################
-  # JCR Browser																			  #
-  ###################################################################################
-  -->
-  <UIWorkspaceList>
-    <label>
-      <workspaceName>Workspace</workspaceName>
-      <rootNodeInfo>Root path</rootNodeInfo>
-    </label>
-  </UIWorkspaceList>
+  
   <UITabPane>
     <title>
       <UICategoriesSelectPanel>Select categories</UICategoriesSelectPanel>
@@ -127,11 +209,5 @@
     </label>
   </UITreeTaxonomyList>
   
-  <UIDocumentForm>
-  	<msg>
-  		<not-support>Cannot load template of '{0}'.</not-support>
-  		<do-not-permission>You don't have permission to load template of '{0}'.</do-not-permission>
-  	</msg>
-  </UIDocumentForm>
+  
 </bundle>
-

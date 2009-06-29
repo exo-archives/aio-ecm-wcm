@@ -23,7 +23,6 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.UIFormInputBase;
 
 /**
  * Created by The eXo Platform SAS
@@ -37,32 +36,44 @@ public class UIFormFieldSet extends UIContainer {
     setId(name) ;
   }
   
-  @SuppressWarnings("unchecked")
-  public void processRender(WebuiRequestContext context) throws Exception {
-    if(getComponentConfig() != null) {
-      super.processRender(context) ;
-      return ;
+  public void processDecode(WebuiRequestContext context) throws Exception {
+    for(UIComponent child : getChildren())  {
+      child.processDecode(context) ;
     }
-    ResourceBundle resourceBundle = context.getApplicationResourceBundle() ;
-    UIForm form = getAncestorOfType(UIForm.class);
+  }
+  
+  public void processRender(WebuiRequestContext context) throws Exception {
+    if (getComponentConfig() != null) {
+      super.processRender(context);
+      return;
+    }
+    ResourceBundle ressourceBundle = context.getApplicationResourceBundle() ;
+    UIForm uiForm = getAncestorOfType(UIForm.class);
     Writer writer = context.getWriter() ;
-    writer.write("<fieldset class=\"UIFormFieldSet\">") ;
-    writer.write("  <legend class=\"UIFormFieldSetLegend\">" + form.getLabel(resourceBundle, getId()) + "</legend>") ;
-    writer.write("  <table class=\"UIFormGrid\">") ;
-    for(UIComponent inputEntry :  getChildren()) {
-      if(inputEntry.isRendered()) {
-        String label = form.getLabel(resourceBundle, inputEntry.getId());
-        if(inputEntry instanceof UIFormInputBase) ((UIFormInputBase)inputEntry).setLabel(label);
-        writer.write("    <tr>") ;
-        writer.write("      <td class=\"FieldLabel\">" + label + "</td>");
-        writer.write("      <td class=\"FieldComponent\">") ; 
-        renderUIComponent(inputEntry); 
-        writer.write("      </td>") ;
-        writer.write("    </tr>") ;
+    writer.write("<div class=\"" + getId() + "\">") ;
+    writer.write("<fieldset>") ;
+    writer.write("<legend>" + uiForm.getLabel(getId()) + "</legend>") ;
+    writer.write("<table class=\"UIFormGrid\">") ;
+    for(UIComponent component : getChildren()) {
+      if(component.isRendered()) {
+        writer.write("<tr>") ;
+        String componentName = uiForm.getLabel(ressourceBundle, component.getId());
+        if(componentName != null && componentName.length() > 0 && !componentName.equals(getId())) {
+          writer.write("<td class=\"FieldLabel\">" + componentName + "</td>") ;
+          writer.write("<td class=\"FieldComponent\">") ; 
+          renderUIComponent(component) ; 
+          writer.write("</td>") ;
+        } else {
+          writer.write("<td class=\"FieldComponent\" colspans=\"2\">") ; 
+          renderUIComponent(component) ; 
+          writer.write("</td>") ;
+        }
+        writer.write("</tr>") ;
       }
     }
-    writer.write("  </table>") ;
+    writer.write("</table>") ;
     writer.write("</fieldset>") ;
+    writer.write("</div>") ;
   }
   
 }

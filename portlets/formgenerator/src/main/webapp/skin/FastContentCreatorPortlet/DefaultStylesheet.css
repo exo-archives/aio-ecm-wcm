@@ -1,24 +1,41 @@
 .UIFastContentCreatorPortlet {
 	background: white;
-	border: 1px solid #b7b7b7;
-	margin: 5px;
 	padding: 10px ;
 }
 
-.UIFastContentCreatorPortlet .UIFormInputSet {
-	/*margin: 5px;
-	padding: 5px;
-	border: 1px red solid;*/
-}
-
 .UIFastContentCreatorPortlet .SelectPathIcon {
-	background: url('DefaultSkin/SearchPage.gif') no-repeat;
+	background: url('DefaultSkin/SearchPath.gif') no-repeat;
 	width: 16px;
 	height: 16px;
+	cursor: pointer;
 }
 
-.UIFastContentCreatorPortlet .UIFormGrid {
-	width: 100%;
+.UIFastContentCreatorPortlet .SelectPath24x24Icon {
+	background: url('DefaultSkin/SearchPath.gif') no-repeat;
+	width: 16px;
+	height: 16px;
+	cursor: pointer;
+}
+
+.UIFastContentCreatorPortlet .AddRootNodeIcon {
+	background: url('DefaultSkin/SelectPath.gif') no-repeat;
+	width: 16px;
+	height: 16px;
+	cursor: pointer;
+}
+
+.UIFastContentCreatorPortlet .Edit16x16Icon {
+	background: url('DefaultSkin/EditAction.gif') no-repeat;
+	width: 16px;
+	height: 16px;
+	cursor: pointer;
+}
+
+.UIFastContentCreatorPortlet .Delete16x16Icon {
+	background: url('DefaultSkin/DeleteAction.gif') no-repeat;
+	width: 16px;
+	height: 16px;
+	cursor: pointer;
 }
 
 .UIFastContentCreatorPortlet .MsgLable {
@@ -33,13 +50,12 @@
   margin: auto;
 }
 
-.UIFastContentCreatorPortlet .UIFormGrid .FieldLabel {
-	width: 160px;
+.UIFastContentCreatorPortlet .UIFormGrid {
+	width: 100%;
 }
 
-.UIFastContentCreatorPortlet .UIEditModeConfiguration {
-  margin: 10px auto;
-  width: 600px;
+.UIFastContentCreatorPortlet .UIFormGrid .FieldLabel {
+	width: 120px;
 }
 
 .UIFastContentCreatorPortlet .MultiValueContainer a  {
@@ -62,33 +78,33 @@
 	width: auto;	
 }
 
-.UIFastContentCreatorPortlet .UIEditModeConfiguration .HorizontalLayout .UIFormInputSet .AddIcon16x16{
+.UIFastContentCreatorPortlet .UIFastContentCreatorConfig .HorizontalLayout .UIFormInputSet .AddIcon16x16{
 	margin-left: 5px;
 	float: none;
 }
 
-.UIFastContentCreatorPortlet .UIEditModeConfiguration .FieldComponent .actionInput .FieldComponent {
+.UIFastContentCreatorPortlet .UIFastContentCreatorConfig .FieldComponent .actionInput .FieldComponent {
 	padding: 4px 0px;
 }
 
-.UIFastContentCreatorPortlet .UIEditModeConfiguration .HorizontalLayout .FormContainer {
-	width: 555px;
+.UIFastContentCreatorPortlet .UIFastContentCreatorConfig .HorizontalLayout .FormContainer {
+	padding: 0;
 	margin: auto;
 }
 
-.UIFastContentCreatorPortlet .UIEditModeConfiguration .HorizontalLayout .UIFormInputSet {
+.UIFastContentCreatorPortlet .UIFastContentCreatorConfig .HorizontalLayout .UIFormInputSet {
 	margin: auto;
 	padding: 0px;
 	width: 100%;
 }
 
-.UIFastContentCreatorPortlet .UIEditModeConfiguration .FieldComponent .actionInput {
+.UIFastContentCreatorPortlet .UIFastContentCreatorConfig .FieldComponent .actionInput {
 	width: 100%;
 	padding: 0px;
 }
 
-.UIFastContentCreatorPortlet .UIEditModeConfiguration .UIForm .HorizontalLayout input {
-	width: 235px;
+.UIFastContentCreatorPortlet .UIFastContentCreatorConfig .UIForm .HorizontalLayout input {
+	width: 233px;
 }
 
 .UIFastContentCreatorPortlet .UIForm td.FieldComponent {
@@ -108,6 +124,22 @@
   vertical-align: middle;
 }
 
+.UIFastContentCreatorActionContainer .UIFormWithTitle {
+	width: auto;
+}
+
+.UIFastContentCreatorActionContainer .UIFormWithTitle input {
+	width: 220px;
+}
+
+.UIFastContentCreatorActionContainer .UIFormWithTitle select {
+	width: 226px;
+}
+
+.UIFastContentCreatorActionContainer .UIFormWithTitle textarea {
+	width: 224px;
+}
+
 .UITrees .Node .NodeIconLink {
 	background-position: left top;
 	font-weight: bold;
@@ -117,15 +149,6 @@
 }
 
 .UIOneNodePathSelector .LinkSmall {
-	background: url('MacSkin/background/LinkSmall.gif') no-repeat left bottom;
-  width: 20px;
-  height: 15px;
-  padding-left: 12px;
-  right: 0;
-  bottom: 0;
-}
-
-.UIOneTaxonomySelector .LinkSmall {
 	background: url('MacSkin/background/LinkSmall.gif') no-repeat left bottom;
   width: 20px;
   height: 15px;

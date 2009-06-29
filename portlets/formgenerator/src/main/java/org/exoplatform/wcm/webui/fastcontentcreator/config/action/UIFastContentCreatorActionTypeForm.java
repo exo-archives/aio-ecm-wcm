@@ -22,17 +22,12 @@ import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
-import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
-import javax.portlet.PortletPreferences;
 
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.cms.actions.ActionServiceContainer;
 import org.exoplatform.services.cms.templates.TemplateService;
-import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
-import org.exoplatform.wcm.webui.fastcontentcreator.UIFastContentCreatorConstant;
+import org.exoplatform.wcm.webui.fastcontentcreator.UIFastContentCreatorPortlet;
 import org.exoplatform.wcm.webui.fastcontentcreator.UIFastContentCreatorUtils;
 import org.exoplatform.wcm.webui.fastcontentcreator.config.UIFastContentCreatorConfig;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -83,15 +78,9 @@ public class UIFastContentCreatorActionTypeForm extends UIForm {
   public void setDefaultActionType() throws Exception{    
     if(defaultActionType_ == null) {
       defaultActionType_ = "exo:sendMailAction" ;
-      PortletPreferences preferences = UIFastContentCreatorUtils.getPortletPreferences();
-      String preferenceRepository = preferences.getValue(UIFastContentCreatorConstant.PREFERENCE_REPOSITORY, "");
-      String preferenceWorkspace = preferences.getValue(UIFastContentCreatorConstant.PREFERENCE_WORKSPACE, "");
-      String preferencePath = preferences.getValue(UIFastContentCreatorConstant.PREFERENCE_PATH, "");
-      RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
-      ManageableRepository repository = repositoryService.getRepository(preferenceRepository);
-      ThreadLocalSessionProviderService threadLocalSessionProviderService = getApplicationComponent(ThreadLocalSessionProviderService.class);
-      Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(preferenceWorkspace, repository);
-      Node savedLocationNode = (Node)session.getItem(preferencePath);
+      UIFastContentCreatorPortlet fastContentCreatorPortlet = getAncestorOfType(UIFastContentCreatorPortlet.class);
+      UIFastContentCreatorConfig fastContentCreatorConfig = fastContentCreatorPortlet.getChild(UIFastContentCreatorConfig.class);
+      Node savedLocationNode = fastContentCreatorConfig.getSavedLocationNode() ;
       UIFastContentCreatorActionContainer fastContentCreatorActionContainer = getParent() ;
       UIFastContentCreatorActionForm fastContentCreatorActionForm = fastContentCreatorActionContainer.getChild(UIFastContentCreatorActionForm.class) ;
       fastContentCreatorActionForm.createNewAction(savedLocationNode, defaultActionType_, true) ;
@@ -112,10 +101,15 @@ public class UIFastContentCreatorActionTypeForm extends UIForm {
     setDefaultActionType() ;
   }
 
+  public void init() {
+    
+  }
+  
   static public class ChangeActionTypeActionListener extends EventListener<UIFastContentCreatorActionTypeForm> {
     public void execute(Event<UIFastContentCreatorActionTypeForm> event) throws Exception {
       UIFastContentCreatorActionTypeForm fastContentCreatorActionTypeForm = event.getSource() ;
-      UIFastContentCreatorConfig fastContentCreatorConfig = fastContentCreatorActionTypeForm.getAncestorOfType(UIFastContentCreatorConfig.class) ;
+      UIFastContentCreatorPortlet fastContentCreatorPortlet = fastContentCreatorActionTypeForm.getAncestorOfType(UIFastContentCreatorPortlet.class);
+      UIFastContentCreatorConfig fastContentCreatorConfig = fastContentCreatorPortlet.getChild(UIFastContentCreatorConfig.class);
       Node currentNode = fastContentCreatorConfig.getSavedLocationNode() ;
       String actionType = fastContentCreatorActionTypeForm.getUIFormSelectBox(ACTION_TYPE).getValue() ;
       TemplateService templateService = fastContentCreatorActionTypeForm.getApplicationComponent(TemplateService.class) ;
@@ -126,33 +120,30 @@ public class UIFastContentCreatorActionTypeForm extends UIForm {
         String templatePath = templateService.getTemplatePathByUser(true, actionType, userName, repository) ;
         if(templatePath == null) {
           Object[] arg = { actionType } ;
-          uiApp.addMessage(new ApplicationMessage("UIActionForm.msg.access-denied", arg, ApplicationMessage.WARNING)) ;
+          uiApp.addMessage(new ApplicationMessage("UIFastContentCreatorActionTypeForm.msg.access-denied", arg, ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           actionType = "exo:sendMailAction" ;
           fastContentCreatorActionTypeForm.getUIFormSelectBox(UIFastContentCreatorActionTypeForm.ACTION_TYPE).setValue(actionType) ;
           UIFastContentCreatorActionContainer fastContentCreatorActionContainer = fastContentCreatorActionTypeForm.getAncestorOfType(UIFastContentCreatorActionContainer.class) ;
           UIFastContentCreatorActionForm fastContentCreatorActionForm = fastContentCreatorActionContainer.getChild(UIFastContentCreatorActionForm.class) ;
           fastContentCreatorActionForm.createNewAction(currentNode, actionType, true) ;
-          fastContentCreatorActionContainer.setRenderSibbling(UIFastContentCreatorActionContainer.class) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(fastContentCreatorActionContainer) ;
           return ;
         }
       } catch(PathNotFoundException path) {
         Object[] arg = { actionType } ;
-        uiApp.addMessage(new ApplicationMessage("UIActionForm.msg.not-support", arg, ApplicationMessage.WARNING)) ;
+        uiApp.addMessage(new ApplicationMessage("UIFastContentCreatorActionTypeForm.msg.not-support", arg, ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         actionType = "exo:sendMailAction" ;
         fastContentCreatorActionTypeForm.getUIFormSelectBox(UIFastContentCreatorActionTypeForm.ACTION_TYPE).setValue(actionType) ;
         UIFastContentCreatorActionContainer fastContentCreatorActionContainer = fastContentCreatorActionTypeForm.getAncestorOfType(UIFastContentCreatorActionContainer.class) ;
         UIFastContentCreatorActionForm fastContentCreatorActionForm = fastContentCreatorActionContainer.getChild(UIFastContentCreatorActionForm.class) ;
         fastContentCreatorActionForm.createNewAction(currentNode, actionType, true) ;
-        fastContentCreatorActionContainer.setRenderSibbling(UIFastContentCreatorActionForm.class) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(fastContentCreatorActionContainer) ;
       } 
       UIFastContentCreatorActionContainer fastContentCreatorActionContainer = fastContentCreatorActionTypeForm.getParent() ;
       UIFastContentCreatorActionForm uiActionForm = fastContentCreatorActionContainer.getChild(UIFastContentCreatorActionForm.class) ;
       uiActionForm.createNewAction(currentNode, actionType, true) ;
-      fastContentCreatorActionContainer.setRenderSibbling(UIFastContentCreatorActionForm.class) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(fastContentCreatorActionContainer) ;
     }
   }

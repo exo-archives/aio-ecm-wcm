@@ -34,9 +34,11 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIContainer;
+import org.exoplatform.webui.core.UIGrid;
 import org.exoplatform.webui.core.UIPageIterator;
 import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.UIPopupWindow;
+import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
@@ -47,6 +49,7 @@ import org.exoplatform.webui.event.EventListener;
  * Jun 25, 2009  
  */
 @ComponentConfig(
+    lifecycle = Lifecycle.class,
     template = "app:/groovy/webui/FastContentCreatorPortlet/UIFastContentCreatorActionList.gtmpl",
     events = {
         @EventConfig(listeners = UIFastContentCreatorActionList.AddActionListener.class),
@@ -56,14 +59,17 @@ import org.exoplatform.webui.event.EventListener;
 )
 public class UIFastContentCreatorActionList extends UIContainer {
 
-  final static public String[] ACTIONS = {"Edit", "Delete"} ;
-
+  private static final String[] HEADERS = {"name", "description", "instanceOf"};
+  
+  private static final String[] ACTIONS = {"Edit", "Delete"};
+  
   public UIFastContentCreatorActionList() throws Exception {
-    addChild(UIPageIterator.class, null, UIFastContentCreatorConstant.ACTION_PAGE_ITERATOR);
+    UIGrid grid = addChild(UIGrid.class, null, null);
+    grid.configure(UIFastContentCreatorConstant.ACTION_GRID, HEADERS , ACTIONS );
   }
   
   public void updateGrid(Node node, int currentPage) throws Exception {
-    UIPageIterator uiIterator = getChild(UIPageIterator.class) ;
+    UIPageIterator uiIterator = getChild(UIGrid.class).getUIPageIterator();
     ObjectPageList objPageList = new ObjectPageList(getAllActions(node), 10) ;
     uiIterator.setPageList(objPageList);
     if(currentPage > uiIterator.getAvailablePage())
@@ -95,7 +101,7 @@ public class UIFastContentCreatorActionList extends UIContainer {
 
   @SuppressWarnings("unchecked")
   public List getListActions() throws Exception {
-    UIPageIterator uiIterator = getChild(UIPageIterator.class) ;
+    UIPageIterator uiIterator = getChild(UIGrid.class).getUIPageIterator();
     return uiIterator.getCurrentPageData() ; 
   }
   
@@ -106,7 +112,8 @@ public class UIFastContentCreatorActionList extends UIContainer {
       UIPopupWindow popupWindow = popupContainer.getChildById(UIFastContentCreatorConstant.ACTION_POPUP_WINDOW);
       if (popupWindow == null) {
         UIFastContentCreatorActionContainer fastContentCreatorActionContainer = popupContainer.createUIComponent(UIFastContentCreatorActionContainer.class, null, null);
-        Utils.createPopupWindow(popupContainer, fastContentCreatorActionContainer, event.getRequestContext(), UIFastContentCreatorConstant.ACTION_POPUP_WINDOW, 200, 200);
+        Utils.createPopupWindow(popupContainer, fastContentCreatorActionContainer, event.getRequestContext(), UIFastContentCreatorConstant.ACTION_POPUP_WINDOW, 400, 350);
+        fastContentCreatorActionContainer.getChild(UIFastContentCreatorActionTypeForm.class).update();
       } else { 
         popupWindow.setShow(true);
       }
@@ -120,7 +127,10 @@ public class UIFastContentCreatorActionList extends UIContainer {
       UIPopupWindow popupWindow = popupContainer.getChildById(UIFastContentCreatorConstant.ACTION_POPUP_WINDOW);
       if (popupWindow == null) {
         UIFastContentCreatorActionContainer fastContentCreatorActionContainer = popupContainer.createUIComponent(UIFastContentCreatorActionContainer.class, null, null);
-        Utils.createPopupWindow(popupContainer, fastContentCreatorActionContainer, event.getRequestContext(), UIFastContentCreatorConstant.ACTION_POPUP_WINDOW, 200, 200);
+        Utils.createPopupWindow(popupContainer, fastContentCreatorActionContainer, event.getRequestContext(), UIFastContentCreatorConstant.ACTION_POPUP_WINDOW, 400, 350);
+        UIFastContentCreatorActionTypeForm fastContentCreatorActionTypeForm = fastContentCreatorActionContainer.getChild(UIFastContentCreatorActionTypeForm.class);
+        fastContentCreatorActionTypeForm.update();
+        fastContentCreatorActionTypeForm.init();
       } else { 
         popupWindow.setShow(true);
       }
@@ -149,7 +159,7 @@ public class UIFastContentCreatorActionList extends UIContainer {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      fastContentCreatorActionList.updateGrid(fastContentCreatorConfig.getSavedLocationNode(), fastContentCreatorActionList.getChild(UIPageIterator.class).getCurrentPage());
+      fastContentCreatorActionList.updateGrid(fastContentCreatorConfig.getSavedLocationNode(), fastContentCreatorActionList.getChild(UIGrid.class).getUIPageIterator().getCurrentPage());
       event.getRequestContext().addUIComponentToUpdateByAjax(fastContentCreatorConfig) ;
     }
   }

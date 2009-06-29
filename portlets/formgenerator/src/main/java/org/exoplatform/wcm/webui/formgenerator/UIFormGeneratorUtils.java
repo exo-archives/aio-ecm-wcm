@@ -14,26 +14,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.wcm.webui.fastcontentcreator.config.action;
+package org.exoplatform.wcm.webui.formgenerator;
 
-import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.core.UIContainer;
-import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
+import javax.portlet.PortletPreferences;
+import javax.portlet.PortletRequest;
+
+import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
  *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * Jun 25, 2009  
+ * Jun 28, 2009  
  */
-@ComponentConfig(
-    lifecycle = UIContainerLifecycle.class
-)
-public class UIFastContentCreatorActionContainer extends UIContainer {
+public class UIFormGeneratorUtils {
 
-  public UIFastContentCreatorActionContainer() throws Exception {
-    addChild(UIFastContentCreatorActionTypeForm.class, null, null);
-    addChild(UIFastContentCreatorActionForm.class, null, null);
+  public static String getPreferenceRepository() {
+    PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
+    PortletRequest request = portletRequestContext.getRequest();
+    PortletPreferences portletPreferences = request.getPreferences();
+    return portletPreferences.getValue(UIFormGeneratorConstant.PREFERENCE_REPOSITORY, "");
   }
   
 }

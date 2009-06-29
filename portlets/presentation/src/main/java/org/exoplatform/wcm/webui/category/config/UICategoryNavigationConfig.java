@@ -14,27 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.wcm.webui.category;
+package org.exoplatform.wcm.webui.category.config;
 
-import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.core.UIContainer;
-import org.exoplatform.webui.core.lifecycle.Lifecycle;
+import org.exoplatform.webui.form.UIForm;
 
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
  *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * Jun 20, 2009  
+ * Jun 28, 2009  
  */
-@ComponentConfig(
-    lifecycle = Lifecycle.class,
-    template="app:/groovy/CategoryNavigation/UICategoryNavigationContainer.gtmpl"
-)
-public class UICategoryNavigationContainer extends UIContainer {
+public class UICategoryNavigationConfig extends UIForm {
 
-  public UICategoryNavigationContainer() throws Exception {
-    addChild(UICategoryNavigationTreeSelector.class, null, null);
-    addChild(UICategoryNavigationTree.class, null, null);
-  }
-  
 }

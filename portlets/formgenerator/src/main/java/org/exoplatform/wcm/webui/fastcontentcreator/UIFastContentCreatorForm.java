@@ -41,6 +41,7 @@ import org.exoplatform.ecm.webui.tree.selectone.UIOneNodePathSelector;
 import org.exoplatform.ecm.webui.tree.selectone.UIOneTaxonomySelector;
 import org.exoplatform.ecm.webui.utils.DialogFormUtil;
 import org.exoplatform.ecm.webui.utils.LockUtil;
+import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
@@ -57,6 +58,7 @@ import org.exoplatform.upload.UploadService;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -102,7 +104,8 @@ public class UIFastContentCreatorForm extends UIDialogForm implements UISelectab
   private JCRResourceResolver jcrTemplateResourceResolver_ ;
 
   public UIFastContentCreatorForm() throws Exception {
-    setActions(new String[]{"Save"}) ;
+    PortletPreferences portletPreferences = UIFastContentCreatorUtils.getPortletPreferences();
+    setActions(new String[]{portletPreferences.getValue(UIFastContentCreatorConstant.PREFERENCE_SAVE_BUTTON, "")}) ;
   }
   
   public List<String> getListTaxonomy() {
@@ -133,11 +136,12 @@ public class UIFastContentCreatorForm extends UIDialogForm implements UISelectab
     } catch (Exception e) {
       UIApplication uiApp = getAncestorOfType(UIApplication.class) ;
       Object[] arg = { documentType_ } ;
-      uiApp.addMessage(new ApplicationMessage("UIFastContentCreatortForm.msg.not-support", arg, ApplicationMessage.ERROR)) ;
+      uiApp.addMessage(new ApplicationMessage("UIFastContentCreatorForm.msg.not-support", arg, ApplicationMessage.ERROR)) ;
       return null ;
     }
   }
   
+  @SuppressWarnings("unchecked")
   public void doSelect(String selectField, Object value) throws Exception {
     this.isUpdateSelect = true;
     UIFormInput formInput = getUIInput(selectField);
@@ -145,7 +149,6 @@ public class UIFastContentCreatorForm extends UIDialogForm implements UISelectab
       ((UIFormInputBase)formInput).setValue(value.toString());
     }else if(formInput instanceof UIFormMultiValueInputSet) {
       UIFormMultiValueInputSet  inputSet = (UIFormMultiValueInputSet) formInput;
-      UIFormInputBase input = inputSet.getChild(inputSet.getChildren().size()-1);      
       String valueTaxonomy = String.valueOf(value).trim();
       List taxonomylist = inputSet.getValue();
       if (!taxonomylist.contains(valueTaxonomy)) {
@@ -173,7 +176,6 @@ public class UIFastContentCreatorForm extends UIDialogForm implements UISelectab
 
   public boolean isEditing() { return false ; }
 
-  @SuppressWarnings("unused")
   public ResourceResolver getTemplateResourceResolver(WebuiRequestContext context, String template) {
     if(jcrTemplateResourceResolver_ == null) newJCRTemplateResourceResolver() ; 
     return jcrTemplateResourceResolver_; 
@@ -199,15 +201,16 @@ public class UIFastContentCreatorForm extends UIDialogForm implements UISelectab
   static public class SaveActionListener extends EventListener<UIFastContentCreatorForm> {
     public void execute(Event<UIFastContentCreatorForm> event) throws Exception {
       UIFastContentCreatorForm fastContentCreatorForm = event.getSource() ;
+      UIApplication uiApp = fastContentCreatorForm.getAncestorOfType(UIApplication.class);
       PortletPreferences preferences = UIFastContentCreatorUtils.getPortletPreferences();
       String preferenceRepository = preferences.getValue(UIFastContentCreatorConstant.PREFERENCE_REPOSITORY, "");
       String preferencePath = preferences.getValue(UIFastContentCreatorConstant.PREFERENCE_PATH, "") ;
       String preferenceType = preferences.getValue(UIFastContentCreatorConstant.PREFERENCE_TYPE, "") ;
       String preferenceWorkspace = preferences.getValue(UIFastContentCreatorConstant.PREFERENCE_WORKSPACE, "") ;
+      
       Session session = fastContentCreatorForm.getSession(preferenceRepository, preferenceWorkspace);
       CmsService cmsService = fastContentCreatorForm.getApplicationComponent(CmsService.class) ;
       TaxonomyService taxonomyService = fastContentCreatorForm.getApplicationComponent(TaxonomyService.class);      
-      UIApplication uiApp = fastContentCreatorForm.getAncestorOfType(UIApplication.class);
       boolean hasCategories = false;
       String categoriesPath = "";
       String[] categoriesPathList = null;
@@ -218,7 +221,7 @@ public class UIFastContentCreatorForm extends UIDialogForm implements UISelectab
           String[] arrFilterChar = {"&", "$", "@", ":", "]", "[", "*", "%", "!", "+", "(", ")", "'", "#", ";", "}", "{", "/", "|", "\""};          
           String valueName = input.getValue().toString().trim();          
           if (!org.exoplatform.ecm.webui.utils.Utils.isNameValid(valueName, arrFilterChar)) {
-            uiApp.addMessage(new ApplicationMessage("UIFastContentCreatortForm.msg.name-not-allowed", null, ApplicationMessage.WARNING));
+            uiApp.addMessage(new ApplicationMessage("UIFastContentCreatorForm.msg.name-not-allowed", null, ApplicationMessage.WARNING));
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
             return;
           }
@@ -264,13 +267,13 @@ public class UIFastContentCreatorForm extends UIDialogForm implements UISelectab
         homeNode = (Node) session.getItem(preferencePath);
       } catch (AccessDeniedException ade){
         Object[] args = { preferencePath } ;
-        uiApp.addMessage(new ApplicationMessage("UIFastContentCreatortForm.msg.access-denied", args, 
+        uiApp.addMessage(new ApplicationMessage("UIFastContentCreatorForm.msg.access-denied", args, 
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return;
       } catch(PathNotFoundException pnfe) {
         Object[] args = { preferencePath } ;
-        uiApp.addMessage(new ApplicationMessage("UIFastContentCreatortForm.msg.path-not-found", args, 
+        uiApp.addMessage(new ApplicationMessage("UIFastContentCreatorForm.msg.path-not-found", args, 
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return;
@@ -304,31 +307,42 @@ public class UIFastContentCreatorForm extends UIDialogForm implements UISelectab
         session.save() ;
         session.refresh(false) ;
         homeNode.getSession().refresh(false) ;
+        
         Object[] args = { preferencePath } ;
-        uiApp.addMessage(new ApplicationMessage("UIFastContentCreatortForm.msg.saved-successfully", args)) ;
+        String preferenceSaveMessage = preferences.getValue(UIFastContentCreatorConstant.PREFERENCE_SAVE_MESSAGE, "") ;
+        uiApp.addMessage(new ApplicationMessage("UIFastContentCreatorForm.msg." + preferenceSaveMessage, args)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        
+        boolean preferenceIsRedirect = Boolean.parseBoolean(preferences.getValue(UIFastContentCreatorConstant.PREFERENCE_IS_REDIRECT, "")) ;
+        if (preferenceIsRedirect) {
+          String preferenceRedirectPath = preferences.getValue(UIFastContentCreatorConstant.PREFERENCE_REDIRECT_PATH, "") ;
+          PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
+          portalRequestContext.getResponse().sendRedirect(preferenceRedirectPath);
+        }
+        
         event.getRequestContext().addUIComponentToUpdateByAjax(fastContentCreatorForm.getParent()) ;
       } catch (AccessControlException ace) {
         throw new AccessDeniedException(ace.getMessage());
       } catch(VersionException ve) {
-        uiApp.addMessage(new ApplicationMessage("UIFastContentCreatortForm.msg.in-versioning", null, 
+        uiApp.addMessage(new ApplicationMessage("UIFastContentCreatorForm.msg.in-versioning", null, 
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return;
       } catch(AccessDeniedException e) {
         Object[] args = { preferencePath } ;
-        String key = "UIFastContentCreatortForm.msg.access-denied" ;
+        String key = "UIFastContentCreatorForm.msg.access-denied" ;
         uiApp.addMessage(new ApplicationMessage(key, args, ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return;
       } catch(LockException lock) {
         Object[] args = { preferencePath } ;
-        String key = "UIFastContentCreatortForm.msg.node-locked" ;
+        String key = "UIFastContentCreatorForm.msg.node-locked" ;
         uiApp.addMessage(new ApplicationMessage(key, args, ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return;
       } catch(ItemExistsException item) {
         Object[] args = { preferencePath } ;
-        String key = "UIFastContentCreatortForm.msg.node-isExist" ;
+        String key = "UIFastContentCreatorForm.msg.node-isExist" ;
         uiApp.addMessage(new ApplicationMessage(key, args, ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
       } finally {
@@ -336,6 +350,7 @@ public class UIFastContentCreatorForm extends UIDialogForm implements UISelectab
           session.logout();
         }
       }
+      
     }
   }  
     
@@ -410,6 +425,7 @@ public class UIFastContentCreatorForm extends UIDialogForm implements UISelectab
         
       }
       UIPopupContainer popupContainer = fastContentCreatorPortlet.getChild(UIPopupContainer.class);
+      popupContainer.removeChildById(UIFastContentCreatorConstant.TAXONOMY_POPUP_WINDOW);
       Utils.createPopupWindow(popupContainer, component, event.getRequestContext(), UIFastContentCreatorConstant.TAXONOMY_POPUP_WINDOW, 640, 300);
       String param = "returnField=" + fieldName ;
       ((ComponentSelector)component).setSourceComponent(fastContentCreatorForm, new String[]{param}) ;

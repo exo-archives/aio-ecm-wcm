@@ -24,6 +24,8 @@ package org.exoplatform.wcm.webui.formgenerator;
  */
 public class UIFormGeneratorConstant {
 
+  public static final String PREFERENCE_REPOSITORY          = "repository";
+  
   public static final String LABEL                          = "Label";
 
   public static final String INPUT                          = "Input";

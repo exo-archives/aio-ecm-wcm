@@ -31,6 +31,14 @@ public class UIFastContentCreatorConstant {
   public static final String PREFERENCE_PATH                  = "path";
 
   public static final String PREFERENCE_TYPE                  = "type";
+
+  public static final String PREFERENCE_SAVE_BUTTON           = "saveButton";
+  
+  public static final String PREFERENCE_SAVE_MESSAGE           = "saveMessage";
+  
+  public static final String PREFERENCE_IS_REDIRECT           = "isRedirecr";
+
+  public static final String PREFERENCE_REDIRECT_PATH         = "redirectPath";
   
   
   
@@ -68,9 +76,9 @@ public class UIFastContentCreatorConstant {
   
   public static final String ACTION_FIELD                     = "UIFastContentCreatorActionField";
   
-  public static final String ACTION_POPUP_WINDOW              = "UIFastContentCreatorActionPopupWindow";
+  public static final String ACTION_GRID                      = "UIFastContentCreatorActionGrid";
   
-  public static final String ACTION_PAGE_ITERATOR             = "UIFastContentCreatorActionPageIterator";
+  public static final String ACTION_POPUP_WINDOW              = "UIFastContentCreatorActionPopupWindow";
   
   public static final String ACTION_TYPE_SELECTBOX            = "UIFastContentCreatorActionTypeSelectBox";
   

@@ -36,6 +36,7 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.services.cms.watch.impl.MessageConfig;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.config.RepositoryConfigurationException;
@@ -68,21 +69,20 @@ public class NewsletterManagerService {
   private NewsletterPublicUserHandler publicUserHandler;
   private String repositoryName;
   private String workspaceName;
-  private String templateWorkspace;
   private static Log log = ExoLogger.getLogger(NewsletterManagerService.class);
 
-  public NewsletterManagerService(InitParams initParams) {
+  public NewsletterManagerService(InitParams initParams, DMSConfiguration dmsConfiguration) {
     log.info("Starting NewsletterManagerService ... ");
     repositoryName = initParams.getValueParam("repository").getValue();
     workspaceName = initParams.getValueParam("workspace").getValue();
-    templateWorkspace = initParams.getValueParam("templateWorkspace").getValue();
     categoryHandler = new NewsletterCategoryHandler(repositoryName, workspaceName);
     subscriptionHandler = new NewsletterSubscriptionHandler(repositoryName, workspaceName);
     entryHandler = new NewsletterEntryHandler(repositoryName, workspaceName);
-    templateHandler = new NewsletterTemplateHandler(repositoryName, templateWorkspace);
     manageUserHandler = new NewsletterManageUserHandler(repositoryName, workspaceName);
     publicUserHandler = new NewsletterPublicUserHandler(repositoryName, workspaceName);
     
+    String templateWorkspace = dmsConfiguration.getConfig(repositoryName).getSystemWorkspace();
+    templateHandler = new NewsletterTemplateHandler(repositoryName, templateWorkspace);
   }          
   
   public NewsletterCategoryHandler getCategoryHandler() {
@@ -134,13 +134,10 @@ public class NewsletterManagerService {
     //Create queryBuilder.
     String sqlQuery = queryBuilder.createQueryStatement();
     
-    System.out.println("\n\n\n\n----------->sqlQuery:" + sqlQuery);
-    
     Query query = queryManager.createQuery(sqlQuery, Query.SQL);
     QueryResult queryResult = query.execute();
     NodeIterator nodeIterator = queryResult.getNodes();
 
-    System.out.println("Query rerult is : " + nodeIterator.getSize());
     List<String> listEmailAddress = null;
     String receiver = "";
     for (;nodeIterator.hasNext();) {
@@ -151,15 +148,12 @@ public class NewsletterManagerService {
       subscribedUserProperty = subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_USER);
       listEmailAddress = convertValuesToArray(subscribedUserProperty.getValues());
 
-      System.out.println("After convert : " + nodeIterator.getSize());
       if (listEmailAddress.size() > 0) {
         message = new Message() ;
         message.setTo(listEmailAddress.get(0));
         for (int i = 0; i < listEmailAddress.size(); i ++) {
-          
           receiver += listEmailAddress.get(i + 1) + ",";
         }
-  
         message.setCC(receiver);
         message.setSubject("Test phat!!!") ;
         message.setBody("Hi Ngoc, you receive this email because i'm testing") ;

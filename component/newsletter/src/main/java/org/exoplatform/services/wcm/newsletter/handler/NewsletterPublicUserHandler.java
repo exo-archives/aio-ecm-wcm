@@ -33,17 +33,13 @@ import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.StandaloneContainer;
-import org.exoplatform.portal.application.PortalRequestContext;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.mail.MailService;
 import org.exoplatform.services.mail.Message;
 import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
-import org.exoplatform.services.wcm.newsletter.NewsletterPublicUser;
 
 /**
  * Created by The eXo Platform SAS

@@ -3,19 +3,24 @@
   padding: 5px;
 }
 
-.UIFormGenerator .UIFormTitlePortlet {
-  border: 1px solid #dfdddd;
+.UIFormGenerator .UIFormGrid {
+	width: 100%;
 }
 
-.UIFormGenerator .TitleUIFormTitle {
-  background: url('DefaultSkin/background/TitleUIFormTitle.gif') repeat-x left top;
-  line-height: 32px;
-  padding-left: 10px;
-  font-weight: bold;
+.UIFormGenerator .UIFormGrid .FieldLabel {
+	width: 160px;
 }
 
-.UIFormGenerator .ContentUIFormTitle {
-  padding: 12px;
+.UIFormGenerator .UIFormGrid input {
+	width: 220px;
+}
+
+.UIFormGenerator .UIFormGrid select {
+	width: 226px;
+}
+
+.UIFormGenerator .UIFormGrid textarea {
+	width: 224px;
 }
 
 .UIFormGenerator .UITabPane {

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.portlet.PortletMode;
+import javax.portlet.PortletRequest;
 import javax.servlet.http.HttpServletRequest;
 
 import org.exoplatform.commons.utils.PageList;
@@ -699,16 +700,20 @@ import org.exoplatform.webui.event.EventListener;
       portletPreferences.setOwnerId(org.exoplatform.portal.webui.util.Util.getUIPortal().getOwner());
       ArrayList<Preference> listPreference = new ArrayList<Preference>();
 
+      PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
+      PortletRequest request = portletRequestContext.getRequest();
+      javax.portlet.PortletPreferences preferences = request.getPreferences();
+      
       Preference preferenceR = new Preference();
       ArrayList<String> listValue = new ArrayList<String>();
-      listValue.add("repository");
+      listValue.add(preferences.getValue("repository", ""));
       preferenceR.setName("repository");
       preferenceR.setValues(listValue);
       listPreference.add(preferenceR);
 
       Preference preferenceW = new Preference();
       listValue = new ArrayList<String>();
-      listValue.add("collaboration");
+      listValue.add(preferences.getValue("workspace", ""));
       preferenceW.setName("workspace");
       preferenceW.setValues(listValue);
       listPreference.add(preferenceW);

@@ -22,11 +22,15 @@ import java.util.List;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 
+import org.exoplatform.ecm.webui.tree.UIBaseNodeTreeSelector;
 import org.exoplatform.ecm.webui.tree.UINodeTree;
 import org.exoplatform.ecm.webui.tree.UINodeTreeBuilder;
 import org.exoplatform.ecm.webui.utils.Utils;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UITree;
+import org.exoplatform.webui.event.Event;
+import org.exoplatform.webui.event.EventListener;
 
 /**
  * Created by The eXo Platform SAS
@@ -36,7 +40,7 @@ import org.exoplatform.webui.config.annotation.EventConfig;
  */
 @ComponentConfig(
     events = {
-        @EventConfig(listeners = UINodeTreeBuilder.ChangeNodeActionListener.class)
+        @EventConfig(listeners = UICategoryNavigationTree.ChangeNodeActionListener.class)
     }
 )
 public class UICategoryNavigationTree extends UINodeTreeBuilder {
@@ -73,5 +77,17 @@ public class UICategoryNavigationTree extends UINodeTreeBuilder {
       list.add(sibbling);                  
     }            
     return list;
+  }
+  
+  public static class ChangeNodeActionListener extends EventListener<UITree> {
+    public void execute(Event<UITree> event) throws Exception {
+      UICategoryNavigationTree builder = event.getSource().getParent();
+      String uri = event.getRequestContext().getRequestParameter(OBJECTID);
+      builder.changeNode(uri,event.getRequestContext());
+      UIBaseNodeTreeSelector nodeTreeSelector = builder.getAncestorOfType(UIBaseNodeTreeSelector.class);      
+      event.getRequestContext().addUIComponentToUpdateByAjax(nodeTreeSelector);
+      
+      // add attribute for session
+    }
   }
 }
