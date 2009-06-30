@@ -187,11 +187,10 @@ public class UINewsletterViewerForm extends UIForm {
       UIApplication uiApp = context.getUIApplication();
       uiApp.addMessage(new ApplicationMessage("UINewsletterViewerForm.msg.updateSuccess", null, ApplicationMessage.INFO));
 
-      newsletterForm.isUpdated = false;
-      newsletterForm.userMail = "";
-      newsletterForm.inputEmail.setValue("");
-      newsletterForm.inputEmail.setRendered(true);
-      newsletterForm.setActions(new String[] {"Subcribe"});
+      newsletterForm.isUpdated = true;
+      newsletterForm.userMail = newsletterForm.userMail;
+      newsletterForm.inputEmail.setRendered(false);
+      newsletterForm.setActions(new String[] {"ForgetEmail", "ChangeSubcriptions" });
       
       event.getRequestContext().addUIComponentToUpdateByAjax(newsletterForm);
     }
