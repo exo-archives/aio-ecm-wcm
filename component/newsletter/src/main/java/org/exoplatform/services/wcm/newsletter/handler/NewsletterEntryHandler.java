@@ -34,7 +34,6 @@ import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
-import org.exoplatform.services.wcm.newsletter.NewsletterEntryConfig;
 import org.exoplatform.services.wcm.newsletter.config.NewsletterManagerConfig;
 
 /**
