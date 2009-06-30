@@ -219,3 +219,19 @@
 	height: 16px;
 	cursor: pointer;
 }
+
+.UINewsletterManagerPortlet .BanUserIcon {
+	background:transparent url('icons/16x16/ban-user.gif') repeat scroll 0 0;
+}
+
+.UINewsletterManagerPortlet .UnBanUserIcon {
+	background:transparent url('icons/16x16/unban-user.gif') repeat scroll 0 0;
+}
+
+.UINewsletterManagerPortlet .AddAdministratorIcon {
+	background:transparent url('icons/16x16/SetAdmin.gif') repeat scroll 0 0;
+}
+
+.UINewsletterManagerPortlet .DeleteAdministratorIcon {
+	background:transparent url('icons/16x16/DeleteAdmin.gif') repeat scroll 0 0;
+}

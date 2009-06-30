@@ -46,7 +46,7 @@ import org.exoplatform.services.wcm.newsletter.config.NewsletterUserConfig;
 	            if(uiChild.getId().equals(selTabId)) display="block" ;
 	        %>
 	            <div class="UITabContent" style="display: $display;overflow:auto;">
-	            	<%uicomponent.renderUIComponent(uiChild) ;%>
+	            	<%uicomponent.renderUIComponent(uiChild);%>
 	            </div>
 	        <%
 	          }

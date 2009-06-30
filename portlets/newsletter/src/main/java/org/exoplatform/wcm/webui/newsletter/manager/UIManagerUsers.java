@@ -52,7 +52,8 @@ import org.exoplatform.webui.event.EventListener;
     //lifecycle = UIFormLifecycle.class ,
     template = "app:/groovy/webui/newsletter/NewsletterManager/UIManagerUsers.gtmpl",
     events = {
-      @EventConfig(listeners = UIManagerUsers.BanOrUnBanUserActionListener.class),
+      @EventConfig(listeners = UIManagerUsers.UnBanUserActionListener.class),
+      @EventConfig(listeners = UIManagerUsers.BanUserActionListener.class),
       @EventConfig(listeners = UIManagerUsers.DeleteUserActionListener.class),
       @EventConfig(listeners = UIManagerUsers.AddAdministratorActionListener.class),
       @EventConfig(listeners = UIManagerUsers.DeleteAdministratorActionListener.class),
@@ -61,7 +62,7 @@ import org.exoplatform.webui.event.EventListener;
 )
 public class UIManagerUsers extends UITabPane {
   private String[] TITLE_  = {"Mail", "isBanned"};
-  private String[] ACTIONS_ = {"Edit", "BanOrUnBanUser", "DeleteUser"};
+  private String[] ACTIONS_ = {"Edit", "BanUser", "UnBanUser", "DeleteUser"};
   private String[] MEMBER_TITLE_ = {"UserName", "FirstName", "LastName", "Email", "Role"};
   private String[] MEMBER_ACTIONS_ = {"Edit", "AddAdministrator", "DeleteAdministrator"};
   private NewsletterManageUserHandler managerUserHandler = null;
@@ -161,13 +162,22 @@ public class UIManagerUsers extends UITabPane {
     }
   }
   
-  static  public class BanOrUnBanUserActionListener extends EventListener<UIManagerUsers> {
+  static  public class UnBanUserActionListener extends EventListener<UIManagerUsers> {
     public void execute(Event<UIManagerUsers> event) throws Exception {
       UIManagerUsers managerUsers = event.getSource();
       String email = event.getRequestContext().getRequestParameter(OBJECTID);
       managerUsers.managerUserHandler.changeBanStatus(NewsLetterUtil.getPortalName(), email);
       event.getRequestContext().addUIComponentToUpdateByAjax(managerUsers) ;
     }
+  }
+  
+  static  public class BanUserActionListener extends EventListener<UIManagerUsers> {
+	  public void execute(Event<UIManagerUsers> event) throws Exception {
+		  UIManagerUsers managerUsers = event.getSource();
+		  String email = event.getRequestContext().getRequestParameter(OBJECTID);
+		  managerUsers.managerUserHandler.changeBanStatus(NewsLetterUtil.getPortalName(), email);
+		  event.getRequestContext().addUIComponentToUpdateByAjax(managerUsers) ;
+	  }
   }
   
   static  public class DeleteUserActionListener extends EventListener<UIManagerUsers> {
