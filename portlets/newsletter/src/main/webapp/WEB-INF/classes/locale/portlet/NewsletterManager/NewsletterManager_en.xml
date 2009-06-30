@@ -120,7 +120,7 @@
     	<DeleteCategory>Delete Category</DeleteCategory>
     	<Edit>Edit</Edit>
     	<Delete>Delete</Delete>
-    	<ManagerUers>Manager Uers</ManagerUers>
+    	<ManageUsers>Manage Users</ManageUsers>
     	<Open>Open</Open>
     </title>
   </UISubscription>

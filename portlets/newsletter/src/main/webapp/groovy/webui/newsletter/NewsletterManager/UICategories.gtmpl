@@ -52,6 +52,7 @@ import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 																<a href="javaScript:void(0);">Preferences</a>
 															</div>
 														</div>
+														<div><hr></div>
 														<div class="MenuItem" onclick="javaScript:void(0)">
 															<div class="ItemIcon Pencil" style="padding-left:30px;">
 																<a href="<%=uicomponent.event("AddCategory")%>"><%=_ctx.appRes("UISubscription.title.Edit")%></a>
@@ -64,7 +65,7 @@ import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 														</div>
 														<div class="MenuItem" onclick="javaScript:void(0)">
 															<div class="ItemIcon SmallGroup16x16Icon" style="padding-left:30px;">
-																<a href="<%=uicomponent.event("ManagerUsers")%>"><%=_ctx.appRes("UISubscription.title.ManagerUers")%></a>
+																<a href="<%=uicomponent.event("ManagerUsers")%>"><%=_ctx.appRes("UISubscription.title.ManageUsers")%></a>
 															</div>
 														</div>
 														<!-- Finish detail action -->

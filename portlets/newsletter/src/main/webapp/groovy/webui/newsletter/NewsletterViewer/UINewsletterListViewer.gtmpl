@@ -12,14 +12,14 @@ if(uicomponent.userCode != null){
 <div class="UINewsletterPortlet $uicomponent.id">
 	<%uiform.begin()%>
 		<div class="NewsletterBoxContent">
-			<div class="UserName" style="height:32px;width:auto;line-height:32px;width:auto;">
-				<div class="LeftUserName" style="float:left;">
+			<div class="UserName" style="height:32px;width:auto;line-height:32px;width:auto;margin-bottom:7px;">
+				<div class="LeftUserName" style="float:left; margin-left:18px;">
 					<%=_ctx.appRes("UINewsletterViewerForm.title.userEmail")%>
 				</div>
 				<div class="RightUserName" style="float:left;">
 					<div class="Input" style="float:left;padding:0px 5px 0px 10px;">
 						<%uicomponent.renderChild("inputEmail");%> 
-						<%=uicomponent.userMail%>
+						<a href="#" style="color:#0101FF;text-decoration:underline;font-weight:bold;"><%=uicomponent.userMail%></a>
 					</div>
 					<div class="buttonForget" style="float:left; margin-left:50px;">
 						<%if (uicomponent.isUpdated == true) {%>
@@ -27,8 +27,8 @@ if(uicomponent.userCode != null){
 				          <%String forgetAction = uicomponent.event("ForgetEmail") ;%>
 				          <div class="ActionContainer">
 				          	<table class="ActionContainer">
-			    						<tr>
-			    							<td>
+		    						<tr>
+	    								<td>
 								          <div onclick="$forgetAction" class="ActionButton LightBlueStyle" >
 								            <div class="ButtonLeft">
 								              <div class="ButtonRight">
@@ -39,12 +39,12 @@ if(uicomponent.userCode != null){
 								                </div>
 								              </div>
 								            </div>
-							            </div>
+							              </div>
 			      						</td>
 			      					</tr>          
-			    					</table>
+	    					</table>
 				          </div>
-					  		</div>
+				  		</div>
 			  			<%}%>
 					</div>
 					<div style="clear:both;"><span></span></div>
@@ -74,7 +74,7 @@ if(uicomponent.userCode != null){
 								<th class="Title">
 									<%=_ctx.appRes("UINewsletterViewerForm.title.subscription")%>
 								</th>
-								<th class="Title" style="border-right:none;width:50px;">
+								<th class="Title" style="border-right:none;width:100px; white-space:nowrap; padding-left:5px; padding-right:5px;">
 									<%=_ctx.appRes("UINewsletterViewerForm.title.yourStatus")%>
 								</th>
 							</tr>
@@ -89,7 +89,7 @@ if(uicomponent.userCode != null){
 									%>
 										<tr class="$classTr">
 											<td><%=subScription.getTitle()%></td>
-											<td style="border:none;width:50px">
+											<td style="border:none;text-align:center;">
 												<%
 													uicomponent.renderChild(category.getName() + "#" + subScription.getName());
 												%>

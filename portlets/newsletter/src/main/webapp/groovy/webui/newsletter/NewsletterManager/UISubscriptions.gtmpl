@@ -66,7 +66,7 @@ if(uicomponent.categoryConfig != null){
 														<div class="Line FloatLeft" style="background: none;" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
 															<a href="#" class="NewsAdmin"><%=_ctx.appRes("UICategories.title.Administration")%></a>
 															<div style="position:absolute;">
-																<div class="UIPopupCategory" style="display:none; left:2px; top:-2px; ">
+																<div class="UIPopupCategory" style="display:none; left:-46px; top:-2px; ">
 																	<div class="UIRightClickPopupMenu UINewLetterPopup" style="display:block;">
 																		<div class="UIContextMenuContainer BorderOutline">											
 																			<div class="TopLeftRightClickPopupMenu">
@@ -79,47 +79,44 @@ if(uicomponent.categoryConfig != null){
 																					<div class="UIRightPopupMenuContainer" style="background: none;margin: 0px; padding-left: 8px; padding-right: 8px;">
 																						<!-- Detail action -->
 																						<div class="MenuItem" onclick="javaScript:void(0)">
-																							<div class="ItemIcon BlueActionWheel" style="padding-left:30px;">
-																								<a href="javaScript:void(0);">Preferences</a>
-																							</div>
-																						</div>
-																						<div class="MenuItem" onclick="javaScript:void(0)">
-																							<div class="ItemIcon Pencil" style="padding-left:30px;">
+																							<div class="ItemIcon Pencil" style="padding-left:30px;text-align:left;">
 																								<a href="<%=uicomponent.event("EditCategory")%>"><%=_ctx.appRes("UISubscription.title.EditCategory")%></a>
 																							</div>
 																						</div>
 																						<div class="MenuItem" onclick="javaScript:void(0)">
-																							<div class="ItemIcon Remove16x16Icon" style="padding-left:30px;">
+																							<div class="ItemIcon Remove16x16Icon" style="padding-left:30px;text-align:left;">
 																								<a href="javascript:if (confirm('<%=_ctx.appRes("UISubscription.msg.confirmDeleteCategory")%>')) <%=uicomponent.event("DeleteCategory")%>">
 																									<%=_ctx.appRes("UISubscription.title.DeleteCategory")%>
 																								</a>
 																							</div>
 																						</div>
+																						<div><hr></div>
 																						<div class="MenuItem" onclick="javaScript:void(0)">
-																							<div class="ItemIcon SmallGroup16x16Icon" style="padding-left:30px;">
-																								<a href="<%=uicomponent.event("OpenSubscription")%>">
+																							<div class="ItemIcon SmallGroup16x16Icon" style="padding-left:30px;text-align:left;">
+																								<a href="<%=uicomponent.event("OpenSubscription")%>" style="text-align:left;">
 																									<%=_ctx.appRes("UISubscription.title.Open")%>
 																								</a>
 																							</div>
 																						</div>
 																						<div class="MenuItem" onclick="javaScript:void(0)">
-																							<div class="ItemIcon SmallGroup16x16Icon" style="padding-left:30px;">
+																							<div class="ItemIcon SmallGroup16x16Icon" style="padding-left:30px;text-align:left;">
 																								<a href="<%=uicomponent.event("EditSubscription")%>">
 																									<%=_ctx.appRes("UISubscription.title.Edit")%>
 																								</a>
 																							</div>
 																						</div>
 																						<div class="MenuItem" onclick="javaScript:void(0)">
-																							<div class="ItemIcon SmallGroup16x16Icon" style="padding-left:30px;">
+																							<div class="ItemIcon SmallGroup16x16Icon" style="padding-left:30px;text-align:left;">
 																								<a href="javascript:if (confirm('<%=_ctx.appRes("UISubscription.msg.confirmDeleteSubscription")%>')) <%=uicomponent.event("DeleteSubscription")%>">
 																									<%=_ctx.appRes("UISubscription.title.Delete")%>
 																								</a>
 																							</div>
 																						</div>
+																						<div><hr></div>
 																						<div class="MenuItem" onclick="javaScript:void(0)">
-																							<div class="ItemIcon SmallGroup16x16Icon" style="padding-left:30px;">
+																							<div class="ItemIcon SmallGroup16x16Icon" style="padding-left:30px;text-align:left;">
 																								<a href="<%=uicomponent.event("ManagerUsers")%>">
-																									<%=_ctx.appRes("UISubscription.title.ManagerUers")%>
+																									<%=_ctx.appRes("UISubscription.title.ManageUsers")%>
 																								</a>
 																							</div>
 																						</div>
