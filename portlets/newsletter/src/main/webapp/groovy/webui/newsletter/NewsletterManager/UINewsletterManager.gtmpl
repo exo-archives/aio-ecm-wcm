@@ -131,7 +131,7 @@ import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 				</div>
 				
 				
-				<!-- All subscriptions -->
+				<!-- All newsletter entry -->
 				<div class="Subscriptions">
 					<table cellpadding="5" cellspacing="0" border="0">
 						<tr class="Header">

@@ -60,6 +60,16 @@ public class UICategories extends UIContainer {
 	}
 	
 	@SuppressWarnings("unused")
+  private long getNumberOfWaitingNewsletter(String categoryName, String subscriptionName){
+	  try{
+	    return subscriptionHandler.getNumberOfNewslettersWaiting(portalName, categoryName, subscriptionName);
+	  }catch(Exception ex){
+	    ex.printStackTrace();
+	    return 0;
+	  }
+	}
+	
+	@SuppressWarnings("unused")
   private int getNumberOfUser(String categoryName, String subscriptionName){
 	  return userHandler.getQuantityUserBySubscription(portalName, categoryName, subscriptionName);
 	}

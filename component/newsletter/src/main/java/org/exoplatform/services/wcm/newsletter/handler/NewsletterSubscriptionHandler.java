@@ -34,7 +34,6 @@ import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
-import org.exoplatform.services.wcm.newsletter.NewsletterPublicUser;
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 
 /**
@@ -174,7 +173,6 @@ public class NewsletterSubscriptionHandler {
   }
 
   public NewsletterSubscriptionConfig getSubscriptionsByName(String portalName, String categoryName, String subCriptionName) throws Exception{
-
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
       Session session = threadLocalSessionProviderService
                           .getSessionProvider(null).getSession(workspace, manageableRepository);
@@ -187,5 +185,20 @@ public class NewsletterSubscriptionHandler {
         log.info("Node name is not found: " + subCriptionName);
         return null;
       }
+  }
+  
+  public long getNumberOfNewslettersWaiting(String portalName, String categoryName, String subScriptionName)throws Exception{
+    ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+    Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspace, manageableRepository);
+    String path = NewsletterConstant.generateCategoryPath(portalName) + "/" + categoryName + "/" + subScriptionName;
+    QueryManager queryManager = session.getWorkspace().getQueryManager();
+    String sqlQuery = "select * from " + NewsletterConstant.ENTRY_NODETYPE + 
+                      " where jcr:path LIKE '" + path + "[%]/%' and " + NewsletterConstant.ENTRY_PROPERTY_STATUS + 
+                      " = '" + NewsletterConstant.STATUS_AWAITING + "'";
+    System.out.println("\n\n\n\n----------------->sqlQuery:" + sqlQuery);
+    Query query = queryManager.createQuery(sqlQuery, Query.SQL);
+    QueryResult queryResult = query.execute();
+    NodeIterator nodeIterator = queryResult.getNodes();
+    return nodeIterator.getSize();
   }
 }

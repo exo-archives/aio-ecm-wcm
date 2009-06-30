@@ -16,14 +16,26 @@
  */
 package org.exoplatform.services.wcm.newsletter.handler;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.jcr.Node;
+import javax.jcr.NodeIterator;
 import javax.jcr.Session;
+import javax.jcr.query.Query;
+import javax.jcr.query.QueryManager;
+import javax.jcr.query.QueryResult;
 
 import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
+import org.exoplatform.services.wcm.newsletter.NewsletterEntryConfig;
+import org.exoplatform.services.wcm.newsletter.config.NewsletterManagerConfig;
 
 /**
  * Created by The eXo Platform SAS
@@ -35,6 +47,7 @@ public class NewsletterEntryHandler {
 
   private static Log log = ExoLogger.getLogger(NewsletterEntryHandler.class);
   private RepositoryService repositoryService;
+  private ThreadLocalSessionProviderService threadLocalSessionProviderService;
   private String repository;
   private String workspace;
   
@@ -42,6 +55,18 @@ public class NewsletterEntryHandler {
     repositoryService = (RepositoryService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(RepositoryService.class);
     this.repository = repository;
     this.workspace = workspace;
+    threadLocalSessionProviderService = ThreadLocalSessionProviderService.class
+                                          .cast(ExoContainerContext.getCurrentContainer()
+                                          .getComponentInstanceOfType(ThreadLocalSessionProviderService.class));
+  }
+  
+  private NewsletterManagerConfig getEntryFromNode(Node entryNode) throws Exception{
+    NewsletterManagerConfig newsletterEntryConfig = new NewsletterManagerConfig();
+    newsletterEntryConfig.setNewsletterName(entryNode.getName());
+    if(entryNode.hasProperty("exo:title"))newsletterEntryConfig.setNewsletterTitle(entryNode.getProperty("exo:title").getString());
+    newsletterEntryConfig.setNewsletterSentDate(entryNode.getProperty(NewsletterConstant.ENTRY_PROPERTY_DATE).getDate().getTime());
+    newsletterEntryConfig.setStatus(entryNode.getProperty(NewsletterConstant.ENTRY_PROPERTY_STATUS).getString());
+    return newsletterEntryConfig;
   }
   
   public void add(SessionProvider sessionProvider) {
@@ -79,14 +104,41 @@ public class NewsletterEntryHandler {
     }
   }
   
-  public void delete(SessionProvider sessionProvider) {
+  public void delete(String portalName, String categoryName, String subscriptionName, List<String> listIds) {
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      Session session = sessionProvider.getSession(workspace, manageableRepository);
-      // TODO: Needs to implement
+      Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspace, manageableRepository);
+      String path = NewsletterConstant.generateCategoryPath(portalName) + "/" + categoryName + "/" + subscriptionName;
+      Node subscriptionNode = (Node)session.getItem(path);
+      Node newsletterNode = null;
+      for(String id : listIds){
+        newsletterNode = subscriptionNode.getNode(id);
+        newsletterNode.remove();
+      }
+      session.save();
     } catch (Exception e) {
-      // TODO: handle exception
+      e.printStackTrace();
     }
   }
   
+  public List<NewsletterManagerConfig> getNewsletterEntriesBySubscription(String portalName, String categoryName, String subscriptionName) throws Exception{
+    ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+    Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspace, manageableRepository);
+    String path = NewsletterConstant.generateCategoryPath(portalName) + "/" + categoryName + "/" + subscriptionName;
+    QueryManager queryManager = session.getWorkspace().getQueryManager();
+    String sqlQuery = "select * from " + NewsletterConstant.ENTRY_NODETYPE + " where jcr:path LIKE '" + path + "[%]/%'";
+    Query query = queryManager.createQuery(sqlQuery, Query.SQL);
+    QueryResult queryResult = query.execute();
+    NodeIterator nodeIterator = queryResult.getNodes();
+    List<NewsletterManagerConfig> listNewsletterEntry = new ArrayList<NewsletterManagerConfig>();
+    while(nodeIterator.hasNext()){
+      try{
+        listNewsletterEntry.add(getEntryFromNode(nodeIterator.nextNode()));
+      }catch(Exception ex){
+        ex.printStackTrace();
+        continue;
+      }
+    }
+    return listNewsletterEntry;
+  }
 }

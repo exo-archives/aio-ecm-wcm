@@ -127,7 +127,7 @@ import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 									<tr class="$classTr">
 										<td><%=subScription.getName()%></td>
 										<td><%=uicomponent.getNumberOfUser(category.getName(), subScription.getName())%></td>
-										<td style="border: none">1</td>
+										<td style="border: none"><%=uicomponent.getNumberOfWaitingNewsletter(category.getName(), subScription.getName())%></td>
 									</tr>
 						<%	}
 							}else{%>

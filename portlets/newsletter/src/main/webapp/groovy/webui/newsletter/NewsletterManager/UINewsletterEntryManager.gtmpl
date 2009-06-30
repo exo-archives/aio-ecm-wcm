@@ -83,23 +83,23 @@ import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 																					<!-- Detail action -->
 																					<div class="MenuItem" onclick="javaScript:void(0)">
 																						<div class="ItemIcon IconsView" style="padding-left:18px;">
-																							<a href="<%=uicomponent.event("OpenNewsletter")%>">Open</a>
+																							<a href="<%=uicomponent.event("OpenNewsletterEntry")%>">Open</a>
 																						</div>
 																					</div>
 																					<div class="MenuItem" onclick="javaScript:void(0)">
 																						<div class="ItemIcon IconsView" style="padding-left:18px;">
-																							<a href="<%=uicomponent.event("EditSubscription")%>">Edit</a>
+																							<a href="<%=uicomponent.event("EditNewsletterEntry")%>">Edit</a>
 																						</div>
 																					</div>
 																					<div class="MenuItem" onclick="javaScript:void(0)">
 																						<div class="ItemIcon IconsView" style="padding-left:18px;">
-																							<a href="<%=uicomponent.event("DeleteSubscription")%>">Delete</a>
+																							<a href="<%=uicomponent.event("DeleteNewsletterEntry")%>">Delete</a>
 																						</div>
 																					</div>
 																					<hr style="width:90%"/>
 																					<div class="MenuItem" onclick="javaScript:void(0)">
 																						<div class="ItemIcon IconsView" style="padding-left:18px;">
-																							<a href="<%=uicomponent.event("AddCategory")%>">Manager Uers</a>
+																							<a href="<%=uicomponent.event("ConvertAsTemplate")%>">Convert As Template</a>
 																						</div>
 																					</div>
 																					<!-- Finish detail action -->
@@ -150,7 +150,7 @@ import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 						</tr>
 						<%int count = 0;
 							String color = "";
-							for(NewsletterManagerConfig newsletter in uicomponent.listNewsletterConfig){
+							for(NewsletterManagerConfig newsletter in uicomponent.getListNewsletterEntries()){
 								if(count % 2 == 0) color = "";
 								else color="background:white;";
 							%>

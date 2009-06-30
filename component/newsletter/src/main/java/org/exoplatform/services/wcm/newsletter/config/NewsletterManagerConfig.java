@@ -16,6 +16,8 @@
  */
 package org.exoplatform.services.wcm.newsletter.config;
 
+import java.util.Date;
+
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
@@ -28,7 +30,7 @@ public class NewsletterManagerConfig {
   
   private String newsletterTitle;
   
-  private String newsletterSentDate;
+  private Date newsletterSentDate;
   
   private String status;
   
@@ -46,11 +48,11 @@ public class NewsletterManagerConfig {
     return newsletterName;
   }
 
-  public String getNewsletterSentDate() {
+  public Date getNewsletterSentDate() {
     return newsletterSentDate;
   }
 
-  public void setNewsletterSentDate(String newsletterSentDate) {
+  public void setNewsletterSentDate(Date newsletterSentDate) {
     this.newsletterSentDate = newsletterSentDate;
   }
 

@@ -62,6 +62,8 @@ public class NewsletterConstant {
   public static final String ENTRY_PROPERTY_CONTENT_MAIN         = "exo:newsletterEntryContentMain";
 
   public static final String ENTRY_PROPERTY_NAME                 = "exo:newsletterEntryName";
+  
+  public static final String ENTRY_PROPERTY_TITLE                = "exo:newsletterEntryTitle";
 
   // User nodetype
   public static final String USER_NODETYPE                       = "exo:newsletterUser";

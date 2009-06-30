@@ -110,6 +110,16 @@ public class UISubscriptions extends UIForm {
     return listSubs;
   }
 
+  @SuppressWarnings("unused")
+  private long getNumberOfWaitingNewsletter(String subscriptionName){
+    try{
+      return subscriptionHandler.getNumberOfNewslettersWaiting(portalName, this.categoryConfig.getName(), subscriptionName);
+    }catch(Exception ex){
+      ex.printStackTrace();
+      return 0;
+    }
+  }
+  
   @SuppressWarnings("unchecked")
   public String getChecked(){
     String subscriptionId = null;
@@ -256,20 +266,15 @@ public class UISubscriptions extends UIForm {
         return;
       }
 
-      String portalName = NewsLetterUtil.getPortalName();
-
       UINewsletterManagerPortlet newsletterManagerPortlet = uiSubscription.getAncestorOfType(UINewsletterManagerPortlet.class);
       UINewsletterEntryManager newsletterManager = newsletterManagerPortlet.getChild(UINewsletterEntryManager.class);
-      
       newsletterManager.setRendered(true);
-      
       newsletterManager.setCategoryConfig(
                         uiSubscription.categoryHandler.getCategoryByName(
-                                                                         portalName,
+                                                                         uiSubscription.portalName,
                                                                          uiSubscription.categoryConfig.getName()));
-      
       newsletterManager.setSubscriptionConfig(
-                        uiSubscription.subscriptionHandler.getSubscriptionsByName(portalName,
+                        uiSubscription.subscriptionHandler.getSubscriptionsByName(uiSubscription.portalName,
                                                                                   uiSubscription.categoryConfig.getName(),
                                                                                   subId));
       newsletterManagerPortlet.getChild(UICategories.class).setRendered(false);

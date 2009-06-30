@@ -51,6 +51,8 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.form.UIFormDateTimeInput;
+import org.exoplatform.webui.form.UIFormSelectBox;
 
 /**
  * Created by The eXo Platform SAS
@@ -125,24 +127,30 @@ public class UINewsletterEntryForm extends UIDialogForm {
       ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
       Session session = sessionProvider.getSession(newsletterEntryForm.workspaceName, manageableRepository);
       Node storedNode = (Node)session.getItem(storedPath);
-      
-      System.out.println("\n\n\n\n------------------->storePath:" + storedPath);
-      
       Map<String, JcrInputProperty> inputProperties = DialogFormUtil.prepareMap(newsletterEntryForm.getChildren(), newsletterEntryForm.getInputProperties());
       CmsService cmsService = newsletterEntryForm.getApplicationComponent(CmsService.class);
       String newsletterNodePath = 
                         cmsService.storeNode("exo:webContent", storedNode, inputProperties, newsletterEntryForm.isAddNew(), repositoryName);
       session.save();
-      
-      NodeIterator iterator = storedNode.getNodes();
-      while(iterator.hasNext()){
-        Node node = iterator.nextNode();
-        PropertyIterator propertyIterator = node.getProperties();
-        System.out.println("\n\n\n\n--------------->node name: " + node.getName());
-        while(propertyIterator.hasNext()){
-          Property property = propertyIterator.nextProperty();
-          System.out.println("~~~~~~~~~~~~~~~~~>" + property.getName() + ": " + property.getType());
-        }
+      // add mixin for newsletter entry node
+      UINewsletterEntryContainer newsletterEntryContainer = newsletterEntryForm.getAncestorOfType(UINewsletterEntryContainer.class);
+      UINewsletterEntryDialogSelector newsletterEntryDialogSelector = newsletterEntryContainer.getChild(UINewsletterEntryDialogSelector.class);
+      Node newsletterNode = (Node)session.getItem(newsletterNodePath);
+      if(!newsletterNode.isNodeType(NewsletterConstant.ENTRY_NODETYPE))
+        newsletterNode.addMixin(NewsletterConstant.ENTRY_NODETYPE);
+      newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_CATEGORY_NAME, 
+                                 ((UIFormSelectBox)newsletterEntryDialogSelector.getChildById(UINewsletterConstant.ENTRY_CATEGORY_SELECTBOX)).getValue());
+      newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_SUBSCRIPTION_NAME, 
+                                 ((UIFormSelectBox)newsletterEntryDialogSelector.getChildById(UINewsletterConstant.ENTRY_CATEGORY_SELECTBOX)).getValue());
+      newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_STATUS, NewsletterConstant.STATUS_AWAITING);
+      newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_TYPE, newsletterEntryDialogSelector.getDialog());
+      newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_DATE, 
+                                 ((UIFormDateTimeInput)newsletterEntryDialogSelector.getChildById(UINewsletterEntryDialogSelector.NEWSLETTER_ENTRY_SEND_DATE)).getCalendar().getInstance());
+      session.save();
+      PropertyIterator propertyIterator = newsletterNode.getProperties();
+      while(propertyIterator.hasNext()){
+        Property property = propertyIterator.nextProperty();
+        System.out.println("~~~~~~~~~~~~~~~~~>" + property.getName() + ": " + property.getType());
       }
       
       UIPopupContainer popupContainer = newsletterEntryForm.getAncestorOfType(UIPopupContainer.class);

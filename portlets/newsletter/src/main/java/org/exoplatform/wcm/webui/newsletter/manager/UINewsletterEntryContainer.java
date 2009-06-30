@@ -33,14 +33,7 @@ import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 public class UINewsletterEntryContainer extends UIContainer {
 
   private boolean isAddNew = true;
-  
-  public boolean isAddNew() {
-    return isAddNew;
-  }
-  
-  public void setAddNew(boolean isAddNew) {
-    this.isAddNew = isAddNew;
-  }
+  private String childPath;
   
   public UINewsletterEntryContainer() throws Exception {
     NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
@@ -49,8 +42,32 @@ public class UINewsletterEntryContainer extends UIContainer {
     newsletterEntryForm.setStoredLocation(newsletterManagerService.getRepositoryName(), newsletterManagerService.getWorkspaceName(), 
       "/sites content/live/portalName/ApplicationData/NewsletterApplication/Categories/category1/subscription1");
     newsletterEntryForm.addNew(isAddNew);
+    newsletterEntryForm.setNodePath(childPath);
+    newsletterEntryForm.resetProperties();
     addChild(newsletterEntryForm);
   }
 
+  public boolean isAddNew() {
+    return isAddNew;
+  }
+  
+  public void setAddNew(boolean isAddNew) {
+    this.isAddNew = isAddNew;
+  }
+  
+  public String getChildPath() {
+    return childPath;
+  }
+
+  public void setChildPath(String childPath) {
+    this.childPath = childPath;
+  }
+  
+  public void init(){
+    UINewsletterEntryForm newsletterEntryForm = this.getChild(UINewsletterEntryForm.class);
+    newsletterEntryForm.addNew(isAddNew);
+    newsletterEntryForm.setNodePath(childPath);
+    newsletterEntryForm.resetProperties();
+  }
   
 }

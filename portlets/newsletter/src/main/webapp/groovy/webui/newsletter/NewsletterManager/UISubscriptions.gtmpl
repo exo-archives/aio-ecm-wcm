@@ -178,7 +178,7 @@ if(uicomponent.categoryConfig != null){
 									<tr class="$classTr">
 										<td><%=subScription.getName()%></td>
 										<td><%=uicomponent.getNumberOfUser(subScription.getName())%></td>
-										<td>1</td>
+										<td><%=uicomponent.getNumberOfWaitingNewsletter(subScription.getName())%></td>
 										<td style="border: none">
 											<%uicomponent.renderChild(subScription.getName())%>
 										</td>
