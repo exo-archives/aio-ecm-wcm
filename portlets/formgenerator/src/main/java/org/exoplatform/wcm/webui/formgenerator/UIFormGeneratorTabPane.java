@@ -49,7 +49,6 @@ import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
-import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
@@ -94,10 +93,11 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
     
     addChild(UIFormGeneratorDnDTab.class, null, null);
     
-    UIFormInputSet formGeneratorOptionsTab = new UIFormInputSet(UIFormGeneratorConstant.FORM_GENERATOR_OPTIONS_TAB);
-    formGeneratorOptionsTab.addUIFormInput(new UIFormCheckBoxInput<String>(UIFormGeneratorConstant.VOTE_FORM_CHECKBOX_INPUT, UIFormGeneratorConstant.VOTE_FORM_CHECKBOX_INPUT, null));
-    formGeneratorOptionsTab.addUIFormInput(new UIFormCheckBoxInput<String>(UIFormGeneratorConstant.COMMENT_FORM_CHECKBOX_INPUT, UIFormGeneratorConstant.COMMENT_FORM_CHECKBOX_INPUT, null));
-    addUIFormInput(formGeneratorOptionsTab);
+    // Active this when working with 1.3 
+//    UIFormInputSet formGeneratorOptionsTab = new UIFormInputSet(UIFormGeneratorConstant.FORM_GENERATOR_OPTIONS_TAB);
+//    formGeneratorOptionsTab.addUIFormInput(new UIFormCheckBoxInput<String>(UIFormGeneratorConstant.VOTE_FORM_CHECKBOX_INPUT, UIFormGeneratorConstant.VOTE_FORM_CHECKBOX_INPUT, null));
+//    formGeneratorOptionsTab.addUIFormInput(new UIFormCheckBoxInput<String>(UIFormGeneratorConstant.COMMENT_FORM_CHECKBOX_INPUT, UIFormGeneratorConstant.COMMENT_FORM_CHECKBOX_INPUT, null));
+//    addUIFormInput(formGeneratorOptionsTab);
 
     setSelectedTab(formGeneratorGeneralTab.getId());
   }
@@ -187,7 +187,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
     }
   }
   
-  private String generateDialogTemplate(List<UIFormGeneratorInputBean> forms, boolean votable, boolean commentable) {
+  private String generateDialogTemplate(List<UIFormGeneratorInputBean> forms) {
     StringBuilder dialogTemplate = new StringBuilder();
     dialogTemplate.append("<div class=\"UIForm FormLayout\">");
     dialogTemplate.append("  <% uiform.begin() %>");
@@ -197,14 +197,16 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
     dialogTemplate.append("          <td class=\"FieldLabel\"><%=_ctx.appRes(\"Article.dialog.label.name\")%></td>");
     dialogTemplate.append("          <td class=\"FieldComponent\">");
     dialogTemplate.append("            <%");
-    String mixintype = "";
-    if (votable && commentable)
-      mixintype += ",mix:votable,mix:commentable";
-    else if (!votable && commentable) 
-      mixintype += ",mix:commentable";
-    else if (!votable && commentable) 
-      mixintype += ",mix:votable";
-    dialogTemplate.append("              String[] fieldName = [\"jcrPath=/node\", \"mixintype=mix:i18n" + mixintype + "\", \"editable=if-null\", \"validate=empty,name\"] ;");
+    // Active this when working with 1.3 
+//    String mixintype = "";
+//    if (isVotable && isCommentable)
+//      mixintype += ",mix:votable,mix:commentable";
+//    else if (!isVotable && isCommentable) 
+//      mixintype += ",mix:commentable";
+//    else if (!isVotable && isCommentable) 
+//      mixintype += ",mix:votable";
+//    dialogTemplate.append("              String[] fieldName = [\"jcrPath=/node\", \"mixintype=mix:i18n" + mixintype + "\", \"editable=if-null\", \"validate=empty,name\"] ;");
+    dialogTemplate.append("              String[] fieldName = [\"jcrPath=/node\", \"mixintype=mix:i18n\", \"editable=if-null\", \"validate=empty,name\"] ;");
     dialogTemplate.append("              uicomponent.addTextField(\"name\", fieldName) ;");
     dialogTemplate.append("            %>");
     dialogTemplate.append("          </td>");
@@ -427,12 +429,15 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
       String supertypeName = nodetypeFormSelectBox.getValue();
       formGeneratorTabPane.addNodetype(event.getRequestContext(), preferenceRepository, nodetypeName, supertypeName, forms);
 
-      UIFormCheckBoxInput<String> voteFormCheckBoxInput = formGeneratorTabPane.getUIFormCheckBoxInput(UIFormGeneratorConstant.VOTE_FORM_CHECKBOX_INPUT);
-      UIFormCheckBoxInput<String> commentFormCheckBoxInput = formGeneratorTabPane.getUIFormCheckBoxInput(UIFormGeneratorConstant.COMMENT_FORM_CHECKBOX_INPUT);
-      boolean isVotable = voteFormCheckBoxInput.isChecked();
-      boolean isCommentable = commentFormCheckBoxInput.isChecked();
+      // Active this when working with 1.3
+//      UIFormCheckBoxInput<String> voteFormCheckBoxInput = formGeneratorTabPane.getUIFormCheckBoxInput(UIFormGeneratorConstant.VOTE_FORM_CHECKBOX_INPUT);
+//      UIFormCheckBoxInput<String> commentFormCheckBoxInput = formGeneratorTabPane.getUIFormCheckBoxInput(UIFormGeneratorConstant.COMMENT_FORM_CHECKBOX_INPUT);
+//      boolean isVotable = voteFormCheckBoxInput.isChecked();
+//      boolean isCommentable = commentFormCheckBoxInput.isChecked();
       
-      String newGTMPLTemplate = formGeneratorTabPane.generateDialogTemplate(forms, isVotable, isCommentable);
+      // Active this when working with 1.3
+//      String newGTMPLTemplate = formGeneratorTabPane.generateDialogTemplate(forms, isVotable, isCommentable);
+      String newGTMPLTemplate = formGeneratorTabPane.generateDialogTemplate(forms);
       String newViewTemplate = formGeneratorTabPane.generateViewTemplate(forms);
       TemplateService templateService = formGeneratorTabPane.getApplicationComponent(TemplateService.class) ;
       templateService.addTemplate(true, nodetypeName, templateName, true, templateName, new String[] {"*"}, newGTMPLTemplate, preferenceRepository) ;

@@ -1,2 +1,14 @@
-.UICategoryNavigationPortlet {
+.UICategoryNavigationTargetPathFormInputSet .SelectTargetPathIcon {
+	background: url('DefaultSkin/SearchPath.gif') no-repeat;
+	width: 16px;
+	height: 16px;
+	cursor: pointer;
+}
+
+.UICategoryNavigationTargetPathFormInputSet .FormContainer, .UICategoryNavigationTargetPathFormInputSet .UIFormInputSet{
+	padding: 0;
+}
+
+.UICategoryNavigationTargetPathFormInputSet .UIFormGrid {
+	margin: 0;
 }

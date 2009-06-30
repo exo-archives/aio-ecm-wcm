@@ -1,2 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bundle></bundle>
+<bundle>
+	
+	<UIFormInputSetWithAction>
+		<msg>
+			<confirm-delete></confirm-delete>
+		</msg>
+	</UIFormInputSetWithAction>
+	
+	<UICategoryNavigationTargetPathFormInputSet>
+		<title>
+			<SelectTargetPath></SelectTargetPath>
+		</title>
+	</UICategoryNavigationTargetPathFormInputSet>
+	
+	<UICategoryNavigationConfig>
+		<label>
+			<UICategoryNavigationRepositoryFormSelectBox>Repository</UICategoryNavigationRepositoryFormSelectBox>
+			<UICategoryNavigationTreeNameSelectBox>Taxonomy tree</UICategoryNavigationTreeNameSelectBox>
+			<UICategoryNavigationTreeTitleFormStringInput>Title</UICategoryNavigationTreeTitleFormStringInput>
+			<UICategoryNavigationTargetPathFormInputSet>Target Path</UICategoryNavigationTargetPathFormInputSet>
+		</label>
+		<action>
+			<Save>Save</Save>
+		</action>
+	</UICategoryNavigationConfig>
+	
+</bundle>

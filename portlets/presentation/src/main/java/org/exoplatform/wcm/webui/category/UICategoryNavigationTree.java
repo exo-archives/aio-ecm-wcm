@@ -23,15 +23,12 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.nodetype.NodeType;
 import javax.portlet.PortletPreferences;
-import javax.portlet.PortletRequest;
 
-import org.exoplatform.ecm.webui.tree.UINodeTree;
 import org.exoplatform.ecm.webui.utils.Utils;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.services.cms.link.NodeFinder;
+import org.exoplatform.services.cms.taxonomy.TaxonomyService;
 import org.exoplatform.services.ecm.publication.PublicationService;
-import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UITree;
@@ -53,14 +50,6 @@ import org.exoplatform.webui.event.EventListener;
     }
 )
 public class UICategoryNavigationTree extends UIContainer {
-  
-  private static final String PREFERENCE_REPOSITORY         = "repository";
-  
-  private static final String PREFERENCE_WORKSPACE          = "workspace";
-  
-  private static final String PREFERENCE_TREE_PATH          = "treePath";
-  
-  private static final String PREFERENCE_TREE_TITLE         = "treeTitle";
   
   private boolean            allowPublish        = false;
 
@@ -86,16 +75,6 @@ public class UICategoryNavigationTree extends UIContainer {
     templates_ = templates;
   }
 
-  private PortletPreferences getPortletPreferences() {
-    PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
-    PortletRequest request = portletRequestContext.getRequest();
-    return request.getPreferences();
-  }
-  
-  public String getTreeTitle() {
-    return getPortletPreferences().getValue(PREFERENCE_TREE_TITLE, "");
-  }
-  
   /**
    * Instantiates a new uI node tree builder.
    * 
@@ -103,15 +82,15 @@ public class UICategoryNavigationTree extends UIContainer {
    */
   public UICategoryNavigationTree() throws Exception {
     
-    PortletPreferences portletPreferences = getPortletPreferences();
-    String preferenceRepository = portletPreferences.getValue(PREFERENCE_REPOSITORY, "");
-    String preferenceWorkspace = portletPreferences.getValue(PREFERENCE_WORKSPACE, "");
-    String preferenceTreePath = portletPreferences.getValue(PREFERENCE_TREE_PATH, "");
-    NodeFinder nodeFinder = getApplicationComponent(NodeFinder.class);
-    Node rootTreeNode = (Node)nodeFinder.getItem(preferenceRepository, preferenceWorkspace, preferenceTreePath);
+    PortletPreferences portletPreferences = UICategoryNavigationUtils.getPortletPreferences();
+    String preferenceRepository = portletPreferences.getValue(UICategoryNavigationConstant.PREFERENCE_REPOSITORY, "");
+    String preferenceTreeName = portletPreferences.getValue(UICategoryNavigationConstant.PREFERENCE_TREE_NAME, "");
+    TaxonomyService taxonomyService = getApplicationComponent(TaxonomyService.class);
+    Node rootTreeNode = taxonomyService.getTaxonomyTree(preferenceRepository, preferenceTreeName);
     setRootTreeNode(rootTreeNode);
+    setAcceptedNodeTypes(new String[] {"nt:folder", "nt:unstructured", "nt:file", "exo:taxonomy"});
     
-    UITree tree = addChild(UINodeTree.class, null, UINodeTree.class.getSimpleName() + hashCode());
+    UITree tree = addChild(UICategoryNavigationTreeBase.class, null, null);
     tree.setBeanLabelField("name");
     tree.setBeanIdField("path");
   }
@@ -134,7 +113,6 @@ public class UICategoryNavigationTree extends UIContainer {
   public final void setRootTreeNode(Node node) throws Exception {
     this.rootTreeNode = node;
     this.currentNode = node;
-//    broadcastOnChange(node, null);
   }
 
   /**
@@ -176,7 +154,7 @@ public class UICategoryNavigationTree extends UIContainer {
   public void buildTree() throws Exception {
     NodeIterator sibbling = null;
     NodeIterator children = null;
-    UINodeTree tree = getChild(UINodeTree.class);
+    UICategoryNavigationTreeBase tree = getChild(UICategoryNavigationTreeBase.class);
     Node selectedNode = currentNode;
     tree.setSelected(selectedNode);
     if (Utils.getNodeSymLink(selectedNode).getDepth() > 0) {

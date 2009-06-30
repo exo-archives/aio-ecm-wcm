@@ -316,13 +316,8 @@
 				<read-only>false</read-only>
 			</preference>
 			<preference>
-				<name>workspace</name>
-				<value>collaboration</value>
-				<read-only>false</read-only>
-			</preference>
-			<preference>
-				<name>treePath</name>
-				<value>/sites content/live/classic/categories/Classic</value>
+				<name>treeName</name>
+				<value>Classic</value>
 				<read-only>false</read-only>
 			</preference>
 			<preference>

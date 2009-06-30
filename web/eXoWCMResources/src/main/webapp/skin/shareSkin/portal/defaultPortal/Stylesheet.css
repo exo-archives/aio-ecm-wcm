@@ -169,3 +169,14 @@ td {
 .UIWorkingWorkspace {
 	zoom: 100%;
 }
+
+
+.WCMTRContainer .CategoryNavigationPortletContainerTDContainer {
+	float: left;
+	width: 30%; 
+}
+
+.WCMTRContainer .ParameterizedContentListViewerPortletContainerTDContainer {
+	float: right;
+	width: 70%; 
+}

@@ -41,6 +41,30 @@ SkinService.addSkin(
 ) ;
 
 
+
+SkinService.addSkin(
+    "presentation/CategoryNavigationPortlet",
+    "Default",
+    "/presentation/skin/CategoryNavigation/DefaultStylesheet.css",
+    ServletContext
+);
+
+SkinService.addSkin(
+    "presentation/CategoryNavigationPortlet",
+    "Mac",
+    "/presentation/skin/CategoryNavigation/DefaultStylesheet.css",
+    ServletContext
+);
+
+SkinService.addSkin(
+    "presentation/CategoryNavigationPortlet",
+    "Vista",
+    "/presentation/skin/CategoryNavigation/DefaultStylesheet.css",
+    ServletContext
+);
+
+
+
 SkinService.addSkin(
 	"presentation/ContentListViewerPortlet",
 	"Default",

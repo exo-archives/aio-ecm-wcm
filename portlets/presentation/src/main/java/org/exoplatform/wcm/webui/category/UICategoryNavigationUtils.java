@@ -16,25 +16,24 @@
  */
 package org.exoplatform.wcm.webui.category;
 
-import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.core.UIContainer;
-import org.exoplatform.webui.core.lifecycle.Lifecycle;
+import javax.portlet.PortletPreferences;
+import javax.portlet.PortletRequest;
+
+import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
  *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * Jun 20, 2009  
+ * Jun 29, 2009  
  */
-@ComponentConfig(
-    lifecycle = Lifecycle.class,
-    template="app:/groovy/CategoryNavigation/UICategoryNavigationContainer.gtmpl"
-)
-public class UICategoryNavigationContainer extends UIContainer {
+public class UICategoryNavigationUtils {
 
-  public UICategoryNavigationContainer() throws Exception {
-    //addChild(UICategoryNavigationTreeSelector.class, null, null);
-    //addChild(UICategoryNavigationTree.class, null, null);
+  public static PortletPreferences getPortletPreferences() {
+    PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
+    PortletRequest request = portletRequestContext.getRequest();
+    return request.getPreferences();
   }
   
 }

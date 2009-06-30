@@ -20,10 +20,32 @@ package org.exoplatform.wcm.webui.category;
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
  *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * Jun 20, 2009  
+ * Jun 29, 2009  
  */
 public class UICategoryNavigationConstant {
-
-  public static final String TREE_SELECTBOX = "UICategoryNavigationTreeSelectBox";
+  
+  public static final String PREFERENCE_REPOSITORY            = "repository";
+  
+  public static final String PREFERENCE_TREE_TITLE            = "treeTitle";
+  
+  public static final String PREFERENCE_TREE_NAME             = "treeName";
+  
+  public static final String PREFERENCE_TARGET_PATH           = "targetPath";
+  
+  
+  
+  public static final String REPOSITORY_FORM_SELECTBOX        = "UICategoryNavigationRepositoryFormSelectBox";
+  
+  public static final String WORKSPACE_FORM_SELECTBOX         = "UICategoryNavigationWorkspaceFormSelectBox";
+  
+  public static final String TREE_NAME_FORM_SELECTBOX         = "UICategoryNavigationTreeNameSelectBox";
+  
+  public static final String TREE_TITLE_FORM_STRING_INPUT     = "UICategoryNavigationTreeTitleFormStringInput";
+  
+  public static final String TARGET_PATH_FORM_INPUT_SET       = "UICategoryNavigationTargetPathFormInputSet";
+  
+  public static final String TARGET_PATH_FORM_STRING_INPUT    = "UICategoryNavigationTargetPathFormStringInput";
+  
+  public static final String TARGET_PATH_SELECTOR_POPUP_WINDOW= "UICategoryNavigationTargetPathPopupWindow";
   
 }

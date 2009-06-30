@@ -1,5 +1,19 @@
+<%
+	/**
+	 * Created by The eXo Platform SAS
+	 * Author : eXoPlatform
+	 *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+	 * Jun 29, 2009  
+	 */
+	 
+	import org.exoplatform.wcm.webui.category.UICategoryNavigationConstant;
+	import org.exoplatform.wcm.webui.category.UICategoryNavigationUtils;
+	
+	String treeTitle = UICategoryNavigationUtils.getPortletPreferences().getValue(UICategoryNavigationConstant.PREFERENCE_TREE_TITLE, "");
+%>
+
 <div class="UICategoryNavigationTree">
-	<div class="UICategoryNavigationTreeTitle"><%= uicomponent.getTreeTitle() %></div>
+	<div class="UICategoryNavigationTreeTitle">$treeTitle</div>
 	<% 
 		uicomponent.buildTree();
 		uicomponent.renderChildren(); 
