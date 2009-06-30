@@ -164,12 +164,13 @@ public class NewsletterManageUserHandler {
     }
   }
   
-  public void changeBanStatus(String portalName, String userMail) {
+  public void changeBanStatus(String portalName, String userMail, boolean isBanClicked) {
     log.info("Trying to ban/unban user " + userMail);
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
       Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspace, manageableRepository);
       Node userNode = getUserNodeByEmail(portalName, userMail, session);
+      if (userNode.getProperty(NewsletterConstant.USER_PROPERTY_BANNED).getBoolean() == isBanClicked) return;
       userNode.setProperty(NewsletterConstant.USER_PROPERTY_BANNED, 
                            !userNode.getProperty(NewsletterConstant.USER_PROPERTY_BANNED).getBoolean());
       session.save();

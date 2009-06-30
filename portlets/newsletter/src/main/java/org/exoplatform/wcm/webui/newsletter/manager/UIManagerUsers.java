@@ -166,7 +166,7 @@ public class UIManagerUsers extends UITabPane {
     public void execute(Event<UIManagerUsers> event) throws Exception {
       UIManagerUsers managerUsers = event.getSource();
       String email = event.getRequestContext().getRequestParameter(OBJECTID);
-      managerUsers.managerUserHandler.changeBanStatus(NewsLetterUtil.getPortalName(), email);
+      managerUsers.managerUserHandler.changeBanStatus(NewsLetterUtil.getPortalName(), email, false);
       event.getRequestContext().addUIComponentToUpdateByAjax(managerUsers) ;
     }
   }
@@ -175,7 +175,7 @@ public class UIManagerUsers extends UITabPane {
 	  public void execute(Event<UIManagerUsers> event) throws Exception {
 		  UIManagerUsers managerUsers = event.getSource();
 		  String email = event.getRequestContext().getRequestParameter(OBJECTID);
-		  managerUsers.managerUserHandler.changeBanStatus(NewsLetterUtil.getPortalName(), email);
+		  managerUsers.managerUserHandler.changeBanStatus(NewsLetterUtil.getPortalName(), email, true);
 		  event.getRequestContext().addUIComponentToUpdateByAjax(managerUsers) ;
 	  }
   }
