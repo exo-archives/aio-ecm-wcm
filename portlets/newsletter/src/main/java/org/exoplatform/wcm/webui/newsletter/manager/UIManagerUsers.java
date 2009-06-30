@@ -193,7 +193,6 @@ public class UIManagerUsers extends UITabPane {
     public void execute(Event<UIManagerUsers> event) throws Exception {
       UIManagerUsers managerUsers = event.getSource();
       String userId = event.getRequestContext().getRequestParameter(OBJECTID);
-      System.out.println("\n\n\n\n------------------------->userId:" + userId);
       managerUsers.managerUserHandler.addAdministrator(NewsLetterUtil.getPortalName(), userId);
       managerUsers.updateListUser();
       event.getRequestContext().addUIComponentToUpdateByAjax(managerUsers.getChildById(managerUsers.UIGRID_MANAGER_MODERATOR)) ;
@@ -205,7 +204,6 @@ public class UIManagerUsers extends UITabPane {
     public void execute(Event<UIManagerUsers> event) throws Exception {
       UIManagerUsers managerUsers = event.getSource();
       String userId = event.getRequestContext().getRequestParameter(OBJECTID);
-      System.out.println("\n\n\n\n------------------------->userId:" + userId);
       managerUsers.managerUserHandler.deleteUserAddministrator(NewsLetterUtil.getPortalName(), userId);
       managerUsers.updateListUser();
       event.getRequestContext().addUIComponentToUpdateByAjax(managerUsers.getChildById(managerUsers.UIGRID_MANAGER_MODERATOR)) ;
