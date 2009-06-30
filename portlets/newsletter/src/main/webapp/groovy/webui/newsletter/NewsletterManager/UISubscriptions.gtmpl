@@ -93,7 +93,7 @@ if(uicomponent.categoryConfig != null){
 																						<div><hr></div>
 																						<div class="MenuItem" onclick="javaScript:void(0)">
 																							<div class="ItemIcon SmallGroup16x16Icon" style="padding-left:30px;text-align:left;">
-																								<a href="<%=uicomponent.event("OpenSubscription")%>" style="text-align:left;">
+																								<a href="<%=uicomponent.event("OpenSubscription")%>">
 																									<%=_ctx.appRes("UISubscription.title.Open")%>
 																								</a>
 																							</div>
