@@ -35,6 +35,7 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
 import org.exoplatform.services.wcm.newsletter.config.NewsletterManagerConfig;
+import org.exoplatform.services.wcm.skin.XSkinService;
 
 /**
  * Created by The eXo Platform SAS
@@ -146,5 +147,34 @@ public class NewsletterEntryHandler {
     Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspace, manageableRepository);
     String path = NewsletterConstant.generateCategoryPath(portalName) + "/" + categoryName + "/" + subscriptionName + "/" + newsletterName;
     return getEntryFromNode((Node)session.getItem(path));
+  }
+  
+  public String getContent(Node webContent) throws Exception{
+		XSkinService xSkService = (XSkinService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(XSkinService.class);
+		try {
+		  StringBuilder sb = new StringBuilder();
+		  sb.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"  \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
+		  sb.append("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\" dir=\"ltr\">");
+		  sb.append("<head>");
+		  sb.append("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
+		  sb.append("<style type=\"text/css\">");
+		  sb.append(removeEncodedCharacter(xSkService.getActiveStylesheet(webContent)));
+		  sb.append("</style>");
+		  sb.append("</head>");
+		  sb.append("<body>");
+		  sb.append(webContent.getNode("default.html").getNode("jcr:content").getProperty("jcr:data").getString());
+		  sb.append("</body>");
+		  sb.append("</html>");
+		  
+		  return sb.toString();
+		  
+		} catch (Exception e) {
+		  e.printStackTrace();
+		}
+		return null;
+	  }
+	  
+  private String removeEncodedCharacter(String rawString){
+	  return  rawString.replaceAll("\t", " ").replaceAll("\n", " ");
   }
 }
