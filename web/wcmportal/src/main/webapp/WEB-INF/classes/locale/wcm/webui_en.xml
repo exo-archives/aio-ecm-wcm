@@ -259,4 +259,17 @@
 			<homepage>Home page</homepage>
 		</tooltip>
 	</UIExoStart>
+	
+	
+	
+	
+	<UIPageSelectorPanel>
+		<header>
+			<path>Path</path>
+			<action>Action</action>
+		</header>
+		<msg>
+			<child-not-found>No page found</child-not-found>
+		</msg>
+	</UIPageSelectorPanel>
 </bundle>

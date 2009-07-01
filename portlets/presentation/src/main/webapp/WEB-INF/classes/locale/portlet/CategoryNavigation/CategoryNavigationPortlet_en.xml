@@ -13,6 +13,12 @@
 		</title>
 	</UICategoryNavigationTargetPathFormInputSet>
 	
+	<UICategoryNavigationTargetPathPopupWindow>
+		<title>
+			<UIPageSelector>Page selector</UIPageSelector>
+		</title>
+	</UICategoryNavigationTargetPathPopupWindow>
+	
 	<UICategoryNavigationConfig>
 		<label>
 			<UICategoryNavigationRepositoryFormSelectBox>Repository</UICategoryNavigationRepositoryFormSelectBox>

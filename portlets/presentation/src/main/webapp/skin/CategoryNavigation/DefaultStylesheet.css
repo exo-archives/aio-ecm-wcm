@@ -5,10 +5,35 @@
 	cursor: pointer;
 }
 
-.UICategoryNavigationTargetPathFormInputSet .FormContainer, .UICategoryNavigationTargetPathFormInputSet .UIFormInputSet{
+.UICategoryNavigationTargetPathFormInputSet .UIFormGrid {
+	margin: 0;
+}
+
+.UICategoryNavigationPortlet .HorizontalLayout .UIFormInputSet{
 	padding: 0;
 }
 
-.UICategoryNavigationTargetPathFormInputSet .UIFormGrid {
+.UICategoryNavigationPortlet .HorizontalLayout .FormContainer{
+	padding: 0;
+}
+
+.UICategoryNavigationPortlet .UIPageSelector {
 	margin: 0;
+	width: auto;
+}
+.UICategoryNavigationPortlet #UIPageNodeSelector {
+	float: left;
+	width: 49%;
+}
+.UICategoryNavigationPortlet .MiddleRightContainerOptions {
+	width: 200%;
+}
+
+.UICategoryNavigationPortlet .UIPageNodeSelector {
+	width: 100%;
+}
+
+.UICategoryNavigationPortlet #UIPageSelectorPanel {
+	float: left;
+	width: 49%;
 }

@@ -25,6 +25,9 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.PropertyType;
 import javax.jcr.Session;
+import javax.jcr.nodetype.NodeDefinition;
+import javax.jcr.nodetype.NodeType;
+import javax.jcr.nodetype.NodeTypeManager;
 import javax.jcr.version.OnParentVersionAction;
 
 import org.exoplatform.services.cms.BasePath;
@@ -187,7 +190,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
     }
   }
   
-  private String generateDialogTemplate(List<UIFormGeneratorInputBean> forms) {
+  private String generateDialogTemplate(List<UIFormGeneratorInputBean> forms, String supertypeName) throws Exception {
     StringBuilder dialogTemplate = new StringBuilder();
     dialogTemplate.append("<div class=\"UIForm FormLayout\">");
     dialogTemplate.append("  <% uiform.begin() %>");
@@ -301,9 +304,37 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
     dialogTemplate.append("        </table>");
     dialogTemplate.append("      </div>");
     dialogTemplate.append("    </div>");
+    dialogTemplate.append(generateChildrenNodeTemplate(supertypeName));
     dialogTemplate.append("  <% uiform.end() %>");
     dialogTemplate.append("</div>");
     return dialogTemplate.toString();
+  }
+  
+  // TODO: Current version (1.2rc1) don't support child node definition. 
+  // So we have to ignore all mandatory child node by set an empty value for them.
+  // This will be extended in next version (1.3)
+  private String generateChildrenNodeTemplate(String supertypeName) throws Exception {
+    StringBuilder hiddenInputs = new StringBuilder();
+    NodeTypeManager nodeTypeManager = getApplicationComponent(NodeTypeManager.class);
+    NodeType supertype = nodeTypeManager.getNodeType(supertypeName);
+    NodeDefinition[] childNodes = supertype.getChildNodeDefinitions();
+    List<NodeDefinition> nodeDefinitions = new ArrayList<NodeDefinition>();
+//    getNodeDefinitions(nodeDefinitions, childNodes);
+    int count = 1;
+    for (NodeDefinition childNode : nodeDefinitions) {
+      hiddenInputs.append("String[] hiddenField" + count + " = [\"jcrPath=/node" + childNode.getName() + "\", \"nodetype=" + childNode.getDefaultPrimaryType() + "\", \"visible=false\"] ;");
+      count++;
+    }
+    return hiddenInputs.toString();
+  }
+
+  private List<String> getNodeDefinitions(List<String> nodeDefinitions, NodeDefinition[] childNodes) {
+    for (NodeDefinition childNode : childNodes) {
+      NodeType nodetype = childNode.getDeclaringNodeType();
+      if (nodetype != null) getNodeDefinitions(nodeDefinitions, nodetype.getChildNodeDefinitions());
+      else nodeDefinitions.add("/" + childNode.getName());
+    }
+    return nodeDefinitions;
   }
   
   private String generateViewTemplate(List<UIFormGeneratorInputBean> forms) {
@@ -311,13 +342,23 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
     viewTemplate.append(" <% def currentNode = uicomponent.getNode() ; %>");
     viewTemplate.append(" <div>");
     viewTemplate.append("   <table>");
+    viewTemplate.append("     <tr>");
+    viewTemplate.append("       <th>Name</th>");
+    viewTemplate.append("       <th>Value</th>");
+    viewTemplate.append("     </tr>");
     for (UIFormGeneratorInputBean form : forms) {
+      String propertyName = getPropertyName(form.getName());
       viewTemplate.append("   <tr>");
-      viewTemplate.append("     <td>");
-      viewTemplate.append("       <%= currentNode.getProperty(\"" + getPropertyName(form.getName()) + "\")%>");
-      viewTemplate.append("     </td>");
+      viewTemplate.append("     <%");
+      viewTemplate.append("       if (currentNode.hasProperty(\"" + propertyName + "\")) {");
+      viewTemplate.append("         %>");
+      viewTemplate.append("           <td><%= currentNode.getProperty(\"" + propertyName + "\").getName() %></td>");
+      viewTemplate.append("           <td><%= currentNode.getProperty(\"" + propertyName + "\").getString() %></td>");
+      viewTemplate.append("         <%");
+      viewTemplate.append("       }");
+      viewTemplate.append("     %>");
       viewTemplate.append("   </tr>");
-    }
+    }//
     viewTemplate.append("   </table>");
     viewTemplate.append(" </div>");
     return viewTemplate.toString();
@@ -336,7 +377,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
                                    "\"name\": \"label1\"," + 
                                    "\"value\": \"this is the label\"," +
                                    "\"advanced\": \"\"," +
-                                   "\"guildline\": \"This is the label\"," + 
+                                   "\"guideline\": \"This is the label\"," + 
                                    "\"size\": 20," + 
                                    "\"mandatory\": true" + 
                                  "}," + 
@@ -345,7 +386,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
                                    "\"name\": \"input2\"," + 
                                    "\"value\": \"this is the input\"," +
                                    "\"advanced\": \"\"," +
-                                   "\"guildline\": \"This is the input\"," + 
+                                   "\"guideline\": \"This is the input\"," + 
                                    "\"size\": 20," + 
                                    "\"mandatory\": true" + 
                                  "}," + 
@@ -354,7 +395,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
                                    "\"name\": \"select3\"," + 
                                    "\"value\": \"option2\"," +
                                    "\"advanced\": \"option1,option2,option3\"," +
-                                   "\"guildline\": \"This is the select\"," + 
+                                   "\"guideline\": \"This is the select\"," + 
                                    "\"size\": 20," + 
                                    "\"mandatory\": true" + 
                                  "}," + 
@@ -363,7 +404,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
                                    "\"name\": \"checkbox4\"," + 
                                    "\"value\": \"checkbox3\"," +
                                    "\"advanced\": \"checkbox1,checkbox2,checkbox3\"," +
-                                   "\"guildline\": \"This is the checkbox\"," + 
+                                   "\"guideline\": \"This is the checkbox\"," + 
                                    "\"size\": 20," + 
                                    "\"mandatory\": true" + 
                                  "}," + 
@@ -372,7 +413,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
                                    "\"name\": \"radio5\"," + 
                                    "\"value\": \"radio1\"," +
                                    "\"advanced\": \"radio1,radio2,radio3\"," +
-                                   "\"guildline\": \"This is teh radio\"," + 
+                                   "\"guideline\": \"This is teh radio\"," + 
                                    "\"size\": 20," + 
                                    "\"mandatory\": true" + 
                                  "}," + 
@@ -381,16 +422,16 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
                                    "\"name\": \"upload6\"," + 
                                    "\"value\": \"\"," +
                                    "\"advanced\": \"\"," +
-                                   "\"guildline\": \"This is the upload\"," + 
+                                   "\"guideline\": \"This is the upload\"," + 
                                    "\"size\": 20," + 
-                                   "\"mandatory\": true" + 
+                                   "\"mandatory\": false" + 
                                  "}," + 
                                  "{" + 
                                    "\"type\": \"Textarea\"," + 
                                    "\"name\": \"textarea7\"," + 
                                    "\"value\": \"this is the textarea\"," +
                                    "\"advanced\": \"row:10,column:20\"," +
-                                   "\"guildline\": \"This is the textarea\"," + 
+                                   "\"guideline\": \"This is the textarea\"," + 
                                    "\"size\": 20," + 
                                    "\"mandatory\": true" + 
                                  "}," +
@@ -399,7 +440,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
                                    "\"name\": \"wysiwyg8\"," + 
                                    "\"value\": \"this is the WYSIWYG\"," +
                                    "\"advanced\": \"toolbar:CompleteWCM,width:100%,height:410px\"," +
-                                   "\"guildline\": \"This is the WYSIWYG\"," + 
+                                   "\"guideline\": \"This is the WYSIWYG\"," + 
                                    "\"size\": 20," + 
                                    "\"mandatory\": true" + 
                                  "}," +
@@ -408,7 +449,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
                                    "\"name\": \"date9\"," + 
                                    "\"value\": \"\"," +
                                    "\"advanced\": \"format=dd/mm/yyyy,isShowTime=true\"," +
-                                   "\"guildline\": \"This is the date\"," + 
+                                   "\"guideline\": \"This is the date\"," + 
                                    "\"size\": 20," + 
                                    "\"mandatory\": true" + 
                                  "}" + 
@@ -437,7 +478,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
       
       // Active this when working with 1.3
 //      String newGTMPLTemplate = formGeneratorTabPane.generateDialogTemplate(forms, isVotable, isCommentable);
-      String newGTMPLTemplate = formGeneratorTabPane.generateDialogTemplate(forms);
+      String newGTMPLTemplate = formGeneratorTabPane.generateDialogTemplate(forms, supertypeName);
       String newViewTemplate = formGeneratorTabPane.generateViewTemplate(forms);
       TemplateService templateService = formGeneratorTabPane.getApplicationComponent(TemplateService.class) ;
       templateService.addTemplate(true, nodetypeName, templateName, true, templateName, new String[] {"*"}, newGTMPLTemplate, preferenceRepository) ;

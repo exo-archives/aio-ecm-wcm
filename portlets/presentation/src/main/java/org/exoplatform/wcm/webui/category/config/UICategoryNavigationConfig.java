@@ -31,11 +31,12 @@ import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.category.UICategoryNavigationConstant;
 import org.exoplatform.wcm.webui.category.UICategoryNavigationPortlet;
 import org.exoplatform.wcm.webui.category.UICategoryNavigationUtils;
-import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.wcm.webui.selector.page.UIPageSelector;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIPopupContainer;
+import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -138,7 +139,7 @@ public class UICategoryNavigationConfig extends UIForm implements UISelectable {
       portletPreferences.setValue(UICategoryNavigationConstant.PREFERENCE_TREE_TITLE, preferenceTreeTitle);
       portletPreferences.setValue(UICategoryNavigationConstant.PREFERENCE_TARGET_PATH, preferenceTargetPath);
       portletPreferences.store();
-      ((PortletRequestContext)WebuiRequestContext.getCurrentInstance()).setApplicationMode(PortletMode.VIEW);
+      ((PortletRequestContext)event.getRequestContext()).setApplicationMode(PortletMode.VIEW);
     }
   }
   
@@ -151,6 +152,16 @@ public class UICategoryNavigationConfig extends UIForm implements UISelectable {
   public static class SelectTargetPathActionListener extends EventListener<UICategoryNavigationConfig> {
     public void execute(Event<UICategoryNavigationConfig> event) throws Exception {
       UICategoryNavigationConfig categoryNavigationConfig = event.getSource();
+      UICategoryNavigationPortlet categoryNavigationPortlet = categoryNavigationConfig.getAncestorOfType(UICategoryNavigationPortlet.class);
+      UIPopupContainer popupContainer = categoryNavigationPortlet.getChild(UIPopupContainer.class);
+      UIPopupWindow popupWindow = popupContainer.getChildById(UICategoryNavigationConstant.TARGET_PATH_SELECTOR_POPUP_WINDOW);
+      if (popupWindow == null) {
+        UIPageSelector pageSelector = popupContainer.createUIComponent(UIPageSelector.class, null, null);
+        pageSelector.setSourceComponent(categoryNavigationConfig, new String[] {UICategoryNavigationConstant.TARGET_PATH_FORM_STRING_INPUT});
+        Utils.createPopupWindow(popupContainer, pageSelector, event.getRequestContext(), UICategoryNavigationConstant.TARGET_PATH_SELECTOR_POPUP_WINDOW, 700, 500);
+      } else {
+        popupWindow.setShow(true);
+      }
       categoryNavigationConfig.setPopupId(UICategoryNavigationConstant.TARGET_PATH_SELECTOR_POPUP_WINDOW);
     }
   }
