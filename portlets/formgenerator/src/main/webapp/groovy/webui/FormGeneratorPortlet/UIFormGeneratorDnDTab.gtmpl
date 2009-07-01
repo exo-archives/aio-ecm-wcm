@@ -8,26 +8,6 @@
 <div class="LeftContent">
 	<div class="UITabPane">
 		<div class="UIHorizontalTabs">
-			<div class="TabsContainer">
-				<div class="UITab GrayTabStyle">
-					<div class="SelectedTab">
-						<div class="LeftTab">
-							<div class="RightTab">
-								<div class="MiddleTab">Components</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="UITab GrayTabStyle">
-					<div class="NormalTab">
-						<div class="LeftTab">
-							<div class="RightTab">
-								<div class="MiddleTab">Containers</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
 			<div class="UITabContentContainer" id="UITabContentContainer">
 				<div class="UITabContent">
 					<div class="LeftMenu" elementType="input">
@@ -96,7 +76,7 @@
 					<div class="LeftMenu" elementType="checkbox">
 						<div class="RightMenu">
 							<div class="CenterMenu">
-								<a class="IconMenu CheckBox"><span></span></a>
+								<a class="IconMenu IconCheckBox"><span></span></a>
 								<div class="ContentMenu">CheckBox</div>
 								<div class="ClearLeft"><span></span></div>
 							</div>
@@ -119,57 +99,97 @@
 				<div class="MiddleLeftViewBoxStyle">
 					<div class="MiddleRightViewBoxStyle">
 						<div class="MiddleCenterViewBoxStyle">
-							<div class="TopContentBoxStyle">
-								<div class="UIForm UIFormEditBox">
-									<div class="HorizontalLayout">
-										<div class="FormContainer">
-											<table class="UIFormGrid">
-												<tr>              
-													<td class="FieldLabel">Property Name</td>
-													<td class="FieldComponent"><input type="text" value="Title" /></td>
-													<td class="FieldIcon">
-														<div class="EditBox">
-															<a class="ControlIcon DeleteIcon"><span></span></a>
-															<a class="ControlIcon EditIcon"><span></span></a>
-														</div>
-														<div class="ClearRight"><span></span></div>
-													</td>
-												</tr>
-											</table>
+							<div class="BoxContentBoxStyle">
+								<div class="TopContentBoxStyle">
+									<div class="UIForm UIFormEditBox">
+										<div class="HorizontalLayout">
+											<div class="FormContainer">
+												<table class="UIFormGrid">
+													<tr>              
+														<td class="FieldLabel">Property Name</td>
+														<td class="FieldComponent"><input type="text" value="Title" class="InputText"></input></td>
+														<td class="FieldIcon">
+															<div class="EditBox">
+																<a class="ControlIcon DeleteIcon"><span></span></a>
+																<a class="ControlIcon EditIcon"><span></span></a>
+															</div>
+															<a class="ControlIcon DownIcon"><span></span></a>
+															<a class="ControlIcon UpIcon"><span></span></a>
+															<div class="ClearRight"><span></span></div>
+														</td>
+													</tr>
+													<tr>              
+														<td class="FieldLabel">Label</td>
+														<td class="FieldComponent"><input type="text" class="Label"></input></td>
+														<td class="FieldIcon"><span></span></td>
+													</tr>
+													<tr>              
+														<td class="FieldLabel">Select Box</td>
+														<td class="FieldComponent">
+															<select type="text" class="SelectBox">
+																<option>select 1</option>
+																<option>select 2</option>
+																<option>select 3</option>
+															</select>
+														</td>
+														<td class="FieldIcon"><span></span></td>
+													</tr>
+													<tr>              
+														<td class="FieldLabel">Upload</td>
+														<td class="FieldComponent"><input type="file" class="Upload" /><img src="/eXoResources/skin/sharedImages/Blank.gif" alt="" onclick="eXo.webui.UIUpload.upload(this, 22684420)" class="UploadButton"/></td>
+														<td class="FieldIcon"><span></span></td>
+													</tr>
+													<tr>              
+														<td class="FieldLabel">Check box</td>
+														<td class="FieldComponent"><input type="checkbox" class="CheckBox" /></td>
+														<td class="FieldIcon"><span></span></td>
+													</tr>
+													<tr>              
+														<td class="FieldLabel">Radio</td>
+														<td class="FieldComponent"><input type="radio" class="Radio" /></td>
+														<td class="FieldIcon"><span></span></td>
+													</tr>
+													<tr>              
+														<td class="FieldLabel">Textarea</td>
+														<td class="FieldComponent"><textarea type="text" class="Textarea"></textarea></td>
+														<td class="FieldIcon"><span></span></td>
+													</tr>
+												</table>
+											</div>
 										</div>
 									</div>
 								</div>
-							</div>
-							<div class="MiddleContentBoxStyle" style='display:none'>
-	  							<div class="UIForm UIFormEditBox">
-									<div class="HorizontalLayout">
-										<div class="FormContainer">
-											<table class="UIFormGrid">
-												<tr>              
-													<td class="FieldLabel">Field Size</td>
-													<td class="FieldComponent">
-														<select></select>
-														<div class="BoxRules">
-															Rules: <input class="Requied" id="abc" type="checkbox" checked="checked" value="0">Requied</input>
-														</div>
-													</td>
-													<td class="FieldIcon"><span></span></td>
-												</tr>
-												<tr>
-													<td class="FieldLabel">Default Value</td>
-													<td class="FieldComponent"><input /></td>
-													<td class="FieldIcon">
-														<a class="AddIcon"><span></span></a>
-														<a class="RemoveIcon"><span></span></a>
-														<div class="ClearRight"><span></span></div>
-													</td>
-												</tr>
-												<tr>
-													<td class="FieldLabel">Guidelines for User</td>
-													<td class="FieldComponent"><textarea></textarea></td>
-													<td class="FieldIcon"><span></span></td>
-												</tr>
-											</table>
+								<div class="MiddleContentBoxStyle" style='display:none'>
+		  							<div class="UIForm UIFormEditBox">
+										<div class="HorizontalLayout">
+											<div class="FormContainer">
+												<table class="UIFormGrid">
+													<tr>              
+														<td class="FieldLabel">Field Size</td>
+														<td class="FieldComponent">
+															<select type="text" class="SelectBox"></select>
+															<div class="BoxRules">
+																Rules: <input class="Requied" id="abc" type="checkbox" checked="checked" value="0">Requied</input>
+															</div>
+														</td>
+														<td class="FieldIcon"><span></span></td>
+													</tr>
+													<tr>
+														<td class="FieldLabel">Default Value</td>
+														<td class="FieldComponent"><input type="text" class="InputText"></input></td>
+														<td class="FieldIcon">
+															<a class="AddIcon"><span></span></a>
+															<a class="RemoveIcon"><span></span></a>
+															<div class="ClearRight"><span></span></div>
+														</td>
+													</tr>
+													<tr>
+														<td class="FieldLabel">Guidelines for User</td>
+														<td class="FieldComponent"><textarea type="text" class="Texterea"></textarea></td>
+														<td class="FieldIcon"><span></span></td>
+													</tr>
+												</table>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -184,11 +204,6 @@
 				</div>
 			</div>
 	  </div>
-    <div class="BoxAddNew">
-      <div class="AddNewProperty">
-      <b>Add new</b>
-      <br/>Drop a component here to add a new property</div>
-    </div>
 	</div>
 </div>
 <div class="ClearLeft"><span></span></div>
