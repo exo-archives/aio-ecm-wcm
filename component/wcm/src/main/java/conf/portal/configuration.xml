@@ -21,7 +21,7 @@
     <init-params>
       <values-param>
         <name>ignored.portals</name>
-        <description>inital portals. the service will not deploy data to the inital portal</description>
+        <description>initial portals. the service will not deploy data to the initial portal</description>
         <value>classic</value>
         <value>acme</value>	        
       </values-param>

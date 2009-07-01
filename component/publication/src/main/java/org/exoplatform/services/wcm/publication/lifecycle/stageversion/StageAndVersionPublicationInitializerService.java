@@ -28,7 +28,6 @@ import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
 import org.apache.commons.logging.Log;
-import org.exoplatform.services.deployment.ContentInitializerService;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
@@ -47,8 +46,7 @@ public class StageAndVersionPublicationInitializerService implements Startable{
   private PublicationService publicationService;
   private Log log = ExoLogger.getLogger(StageAndVersionPublicationInitializerService.class);
 
-  // TODO: chuong.phan: DO NOT REMOVE ContentInitializerService, THIS IS DEPENDENCY FOR DEPLOYMENT
-  public StageAndVersionPublicationInitializerService(LivePortalManagerService livePortalManagerService, PublicationService publicationService, ContentInitializerService contentInitializerService) {
+  public StageAndVersionPublicationInitializerService(LivePortalManagerService livePortalManagerService, PublicationService publicationService) {
     this.livePortalManagerService = livePortalManagerService;
     this.publicationService = publicationService;
   }

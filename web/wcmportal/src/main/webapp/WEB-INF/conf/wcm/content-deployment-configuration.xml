@@ -3,15 +3,15 @@
 <configuration>
 
   <component>
-    <type>org.exoplatform.services.deployment.ContentInitializerService</type>
+    <type>org.exoplatform.services.wcm.deployment.WCMContentInitializerService</type>
   </component>  
   
 	<external-component-plugins>
-   		<target-component>org.exoplatform.services.deployment.ContentInitializerService</target-component>    
+   		<target-component>org.exoplatform.services.wcm.deployment.WCMContentInitializerService</target-component>    
       <component-plugin> 
         <name>Content Initializer Service</name>
         <set-method>addPlugin</set-method>
-        <type>org.exoplatform.services.deployment.plugins.XMLDeploymentPlugin</type>
+        <type>org.exoplatform.services.wcm.deployment.plugins.XMLDeploymentWithStagingPlugin</type>
         <description>XML Deployment Plugin</description>
         <init-params>
           <object-param>        
