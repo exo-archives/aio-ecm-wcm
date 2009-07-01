@@ -8,15 +8,15 @@ import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 <% uiform.begin() %>
 	<div class="NewsletterBoxContent">
 		<div class="BreadCumbs">
-			<a class="ItemContent" style="color:blue;" href="<%=uicomponent.event("BackToCategories")%>">
+			<a class="Selected" style="color:blue;" href="<%=uicomponent.event("BackToCategories")%>">
 				<%=_ctx.appRes("NewsletterPortlet.title.eXoNewsletter")%>
 			</a>
 			>
-			<a class="ItemContent" style="color:blue;" href="<%=uicomponent.event("BackToSubcriptions")%>">
+			<a class="Selected" style="color:blue;" href="<%=uicomponent.event("BackToSubcriptions")%>">
 				<%=uicomponent.categoryConfig.getTitle()%>
 			</a>
 			>
-			<a class="ItemContent"><%=uicomponent.subscriptionConfig.getTitle()%></a>
+			<a class="UnSelected"><%=uicomponent.subscriptionConfig.getTitle()%></a>
 		</div>
 		
 		<div class="LeftActionBar">
@@ -24,7 +24,7 @@ import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 				<div class="CenterActionBar">
 					<div class="NewsletterActionBar">			
 						<div class="Line FloatLeft">
-							<a onclick="<%=uicomponent.event("AddEntry")%>" href="javascript:void(0);">
+							<a class="Newsletter" onclick="<%=uicomponent.event("AddEntry")%>" href="javascript:void(0);">
 		  	  			<%=_ctx.appRes("NewsletterPortlet.action.CreateLetter")%>
 		  	  		</a>
 						</div>
@@ -63,7 +63,7 @@ import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 														
 														<!-- action of this category -->
 														<div class="Line FloatLeft" style="background: none;" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
-															<a href="#" class="NewsAdmin"><%=_ctx.appRes("NewsletterPortletAction.action.Moderation")%></a>
+															<a href="#" class="NewsAdmin"><%=_ctx.appRes("NewsletterPortlet.action.Moderation")%></a>
 															<div style="position:absolute;">
 																<div class="UIPopupCategory" style="display:none; top:-2px; ">
 																	<div class="UIRightClickPopupMenu UINewLetterPopup" style="display:block;">
@@ -175,6 +175,9 @@ import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 						<%	count ++;
 							}%>
 					</table>
+					<div style="margin:5px 10px">
+						<%uicomponent.renderChild(uicomponent.PAGEITERATOR_ID)%>
+					</div>
 				</div>
 				<!-- Finish view subscription's newsletters -->
 			</div>

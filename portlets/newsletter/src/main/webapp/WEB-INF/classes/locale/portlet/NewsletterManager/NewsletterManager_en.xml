@@ -12,7 +12,7 @@
       <Delete>Delete</Delete>
       <Edit>Edit</Edit>
       <Moderation>Moderation</Moderation>
-      <CreateLetter>Create a new letter</CreateLetter>  
+      <CreateLetter>New Letter</CreateLetter>  
     </action>
     <title>
     	<eXoNewsletter>eXo Newsletter</eXoNewsletter>
@@ -191,6 +191,8 @@
 		<title>
 			<UINewsletterEntryTemplate>Template</UINewsletterEntryTemplate>
 			<UINewsletterEntrySendDate>Send date</UINewsletterEntrySendDate>
+			<UINewsletterEntryCategorySelectBox>Category</UINewsletterEntryCategorySelectBox>
+			<UINetterEntrySubscriptionSelectBox>Subscription</UINetterEntrySubscriptionSelectBox>
 		</title>
 	</UINewsletterEntryDialogSelector>
 	

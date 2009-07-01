@@ -195,7 +195,6 @@ public class NewsletterSubscriptionHandler {
     String sqlQuery = "select * from " + NewsletterConstant.ENTRY_NODETYPE + 
                       " where jcr:path LIKE '" + path + "[%]/%' and " + NewsletterConstant.ENTRY_PROPERTY_STATUS + 
                       " = '" + NewsletterConstant.STATUS_AWAITING + "'";
-    System.out.println("\n\n\n\n----------------->sqlQuery:" + sqlQuery);
     Query query = queryManager.createQuery(sqlQuery, Query.SQL);
     QueryResult queryResult = query.execute();
     NodeIterator nodeIterator = queryResult.getNodes();

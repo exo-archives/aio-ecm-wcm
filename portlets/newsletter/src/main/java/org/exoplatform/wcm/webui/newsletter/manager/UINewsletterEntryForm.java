@@ -147,13 +147,11 @@ public class UINewsletterEntryForm extends UIDialogForm {
       newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_DATE, 
                                  ((UIFormDateTimeInput)newsletterEntryDialogSelector.getChildById(UINewsletterEntryDialogSelector.NEWSLETTER_ENTRY_SEND_DATE)).getCalendar().getInstance());
       session.save();
-      PropertyIterator propertyIterator = newsletterNode.getProperties();
-      while(propertyIterator.hasNext()){
-        Property property = propertyIterator.nextProperty();
-        System.out.println("~~~~~~~~~~~~~~~~~>" + property.getName() + ": " + property.getType());
-      }
-      
       UIPopupContainer popupContainer = newsletterEntryForm.getAncestorOfType(UIPopupContainer.class);
+      UINewsletterManagerPortlet managerPortlet = popupContainer.getAncestorOfType(UINewsletterManagerPortlet.class);
+      UINewsletterEntryManager entryManager = managerPortlet.getChild(UINewsletterEntryManager.class);
+      if(entryManager.isRendered())
+        entryManager.init();
       Utils.closePopupWindow(popupContainer, UINewsletterConstant.ENTRY_FORM_POPUP_WINDOW);
     }
   }

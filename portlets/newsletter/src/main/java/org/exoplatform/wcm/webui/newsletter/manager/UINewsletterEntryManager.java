@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
@@ -34,6 +35,7 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.webui.core.UIPageIterator;
 import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -66,15 +68,23 @@ public class UINewsletterEntryManager extends UIForm {
   private NewsletterSubscriptionConfig subscriptionConfig;
   private NewsletterCategoryConfig categoryConfig;
   private List<NewsletterManagerConfig> listNewsletterConfig;
-  NewsletterEntryHandler newsletterEntryHandler ;
+  private NewsletterEntryHandler newsletterEntryHandler ;
+  private String PAGEITERATOR_ID = "NewsletterEntryManagerPageIterator";
+  private UIPageIterator uiPageIterator_;
 
-  public UINewsletterEntryManager () {
+  public UINewsletterEntryManager () throws Exception {
     NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
     newsletterEntryHandler = newsletterManagerService.getEntryHandler();
   }
   
-  @SuppressWarnings("unused")
-  private List<NewsletterManagerConfig> getListNewsletterEntries(){
+  public void init() throws Exception{
+    ObjectPageList objPageList = new ObjectPageList(setListNewsletterEntries(), 10) ;
+    uiPageIterator_ = createUIComponent(UIPageIterator.class, null, PAGEITERATOR_ID);
+    addChild(uiPageIterator_);
+    uiPageIterator_.setPageList(objPageList) ;
+  }
+  
+  private List<NewsletterManagerConfig> setListNewsletterEntries(){
     this.getChildren().clear();
     listNewsletterConfig = new ArrayList<NewsletterManagerConfig>();
     try{
@@ -88,6 +98,12 @@ public class UINewsletterEntryManager extends UIForm {
       ex.printStackTrace();
     }
     return listNewsletterConfig;
+  }
+  
+  @SuppressWarnings("unchecked")
+  public List getListNewsletterEntries() throws Exception { 
+    if(uiPageIterator_ != null)return uiPageIterator_.getCurrentPageData() ;
+    else return new ArrayList<NewsletterManagerConfig>();
   }
 
   public List<String> getChecked(){
@@ -191,6 +207,7 @@ public class UINewsletterEntryManager extends UIForm {
       uiNewsletterEntryManager.newsletterEntryHandler.delete(NewsLetterUtil.getPortalName(), 
                                                              uiNewsletterEntryManager.categoryConfig.getName(), 
                                                              uiNewsletterEntryManager.subscriptionConfig.getName(), subIds);
+      uiNewsletterEntryManager.init();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiNewsletterEntryManager) ;
     }
   }
