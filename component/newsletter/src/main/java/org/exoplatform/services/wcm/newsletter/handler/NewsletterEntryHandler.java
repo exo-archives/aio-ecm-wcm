@@ -140,4 +140,11 @@ public class NewsletterEntryHandler {
     }
     return listNewsletterEntry;
   }
+  
+  public NewsletterManagerConfig getNewsletterEntry(String portalName, String categoryName, String subscriptionName, String newsletterName) throws Exception{
+    ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+    Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspace, manageableRepository);
+    String path = NewsletterConstant.generateCategoryPath(portalName) + "/" + categoryName + "/" + subscriptionName + "/" + newsletterName;
+    return getEntryFromNode((Node)session.getItem(path));
+  }
 }

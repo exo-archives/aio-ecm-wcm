@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bundle>
+	<NewsletterPortlet>
+    <action>
+    	<Preferences>Preferences</Preferences>
+      <Save>Save</Save>
+      <Open>Open</Open>
+      <Cancel>Cancel</Cancel>
+      <Close>Close</Close>
+      <Down>Down</Down>
+      <Up>Up</Up>      
+      <Delete>Delete</Delete>
+      <Edit>Edit</Edit>
+      <Moderation>Moderation</Moderation>
+      <CreateLetter>Create a new letter</CreateLetter>  
+    </action>
+    <title>
+    	<eXoNewsletter>eXo Newsletter</eXoNewsletter>
+    </title>
+  </NewsletterPortlet>
+  
 	<UITabPane>
 		<title>
 			<UIManagerUsers>Public Users</UIManagerUsers>
@@ -55,22 +74,6 @@
 			<UIManagerUsers>Manager Users</UIManagerUsers>
 		</title>
 	</UIManagerUsersFormPopupWindow>
-	
-  <NewsletterPortlet>
-    <action>
-      <Save>Save</Save>
-      <Cancel>Cancel</Cancel>
-      <Close>Close</Close>
-      <Down>Down</Down>
-      <Up>Up</Up>      
-      <Delete>Delete</Delete>
-      <Moderation>Moderation</Moderation>
-      <CreateLetter>Create a new letter</CreateLetter>  
-    </action>
-    <title>
-    	<eXoNewsletter>eXo Newsletter</eXoNewsletter>
-    </title>
-  </NewsletterPortlet>
 	
   <UICategoryForm>
     <msg>
@@ -218,5 +221,17 @@
 			<Redactor>Redactor</Redactor>
 		</role>
 	</UIManagerUsers>
+	
+	<UINewsletterEntryManager>
+		<msg>
+			<confirmDeleteNewsletter>Are you sure you want to delete this newsletter?</confirmDeleteNewsletter>
+		</msg>
+		<title>
+			<ConvertAsTemplate>Convert As Template</ConvertAsTemplate>
+			<Letter>Letter</Letter>
+			<Date>Date</Date>
+			<Status>Status</Status>
+		</title>
+	</UINewsletterEntryManager>
 	
 </bundle>

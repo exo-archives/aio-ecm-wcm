@@ -16,10 +16,17 @@
  */
 package org.exoplatform.wcm.webui.newsletter.manager;
 
+import java.util.GregorianCalendar;
+
+import javax.jcr.Session;
+
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
+import org.exoplatform.services.wcm.newsletter.config.NewsletterManagerConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
+import org.exoplatform.webui.form.UIFormDateTimeInput;
 
 /**
  * Created by The eXo Platform SAS
@@ -63,10 +70,20 @@ public class UINewsletterEntryContainer extends UIContainer {
     this.childPath = childPath;
   }
   
-  public void init(){
+  public void init(String categoryName, String subscriptionName, String newsletterName) throws Exception{
     UINewsletterEntryForm newsletterEntryForm = this.getChild(UINewsletterEntryForm.class);
     newsletterEntryForm.addNew(isAddNew);
     newsletterEntryForm.setNodePath(childPath);
+    NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
+    NewsletterManagerConfig newsletterManagerConfig = 
+                          newsletterManagerService.getEntryHandler()
+                          .getNewsletterEntry(NewsLetterUtil.getPortalName(), categoryName, subscriptionName, newsletterName);
+    UINewsletterEntryDialogSelector newsletterEntryDialogSelector = this.getChild(UINewsletterEntryDialogSelector.class);
+    UIFormDateTimeInput  dateTimeInput = newsletterEntryDialogSelector.
+                                              getChildById(UINewsletterEntryDialogSelector.NEWSLETTER_ENTRY_SEND_DATE);
+    GregorianCalendar cal = new GregorianCalendar() ;
+    cal.setTime(newsletterManagerConfig.getNewsletterSentDate()) ;
+    dateTimeInput.setCalendar(cal);
     newsletterEntryForm.resetProperties();
   }
   

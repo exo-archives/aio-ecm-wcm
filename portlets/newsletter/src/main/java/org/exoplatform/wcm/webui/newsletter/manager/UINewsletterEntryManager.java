@@ -221,7 +221,8 @@ public class UINewsletterEntryManager extends UIForm {
                     uiNewsletterEntryManager.categoryConfig.getName()+ "/" + 
                     uiNewsletterEntryManager.subscriptionConfig.getName() + "/" + subIds.get(0);
       entryContainer.setChildPath(path);
-      entryContainer.init();
+      entryContainer.init(uiNewsletterEntryManager.categoryConfig.getName(), 
+                          uiNewsletterEntryManager.subscriptionConfig.getName(), subIds.get(0));
       event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
     }
   }
