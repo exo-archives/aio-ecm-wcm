@@ -19,6 +19,7 @@ package org.exoplatform.services.wcm.newsletter.handler;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -40,6 +41,7 @@ import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.mail.MailService;
 import org.exoplatform.services.mail.Message;
 import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
+import org.exoplatform.webui.application.WebuiRequestContext;
 
 /**
  * Created by The eXo Platform SAS
@@ -134,7 +136,7 @@ public class NewsletterPublicUserHandler {
     }
   }
   
-  public void subscribe(String portalName, String userMail, List<String> listCategorySubscription, String link) {
+  public void subscribe(String portalName, String userMail, List<String> listCategorySubscription, String link, String[] emailContent) {
     log.info("Trying to subscribe user " + userMail);
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
@@ -146,15 +148,19 @@ public class NewsletterPublicUserHandler {
       // update email into subscription
       updateSubscriptions(session, listCategorySubscription, portalName, userMail);
       //Send a verification code to user's email to validate and to get link
-      String mailContent = "send mail, click hear <a href=\"" + 
-                            link.replaceFirst("OBJECTID",
-                                              userMail + "/" + userNode.getProperty(NewsletterConstant.USER_PROPERTY_VALIDATION_CODE).getString())+
-                            "\">confirm your email</a> to view your newsletter";
+      /*WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+      ResourceBundle res = context.getApplicationResourceBundle() ;
+      emailContent = new String[]{ res.getString("NewsletterPortlet.Email.ConfirmUser.Subject"),
+                                   res.getString("NewsletterPortlet.Email.ConfirmUser.Content")};*/
+      String openTag = "<a href=\"" + link.replaceFirst("OBJECTID",userMail + "/" + 
+                                                     userNode.getProperty(NewsletterConstant.USER_PROPERTY_VALIDATION_CODE).getString())+
+                       "\">";
+      String mailContent = (emailContent[1].replaceFirst("#", openTag)).replace("#", "</a>");
       Message  message = new Message(); 
       message.setMimeType("text/html") ;
       message.setFrom("maivanha1610@gmail.com") ;
       message.setTo(userMail) ;
-      message.setSubject("Test send mail") ;
+      message.setSubject(emailContent[0]) ;
       message.setBody(mailContent) ;
       try{
         MailService mService = (MailService)PortalContainer.getComponent(MailService.class) ;

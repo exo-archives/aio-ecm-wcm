@@ -17,7 +17,9 @@
 package org.exoplatform.wcm.webui.newsletter.viewer;
 
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
@@ -29,11 +31,13 @@ import org.exoplatform.services.wcm.newsletter.handler.NewsletterSubscriptionHan
 import org.exoplatform.wcm.webui.newsletter.manager.NewsLetterUtil;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
+import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
@@ -209,7 +213,14 @@ public class UINewsletterViewerForm extends UIForm {
         if(listCategorySubscription.size() < 1){
           contentOfMessage = "UINewsletterViewerForm.msg.checkSubscriptionToProcess";
         }else{
-          newsletterForm.publicUserHandler.subscribe(portalName, userEmail, listCategorySubscription, newsletterForm.linkToSendMail);
+          // get email's content to create mail confirm
+          WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+          ResourceBundle res = context.getApplicationResourceBundle() ;
+          String emailContent[] = new String[]{ res.getString("UINewsletterViewerForm.Email.ConfirmUser.Subject"),
+                                                res.getString("UINewsletterViewerForm.Email.ConfirmUser.Content")};
+          
+          
+          newsletterForm.publicUserHandler.subscribe(portalName, userEmail, listCategorySubscription, newsletterForm.linkToSendMail, emailContent);
           newsletterForm.inputEmail.setRendered(false);
           newsletterForm.userMail = userEmail;
           newsletterForm.isUpdated = true;
