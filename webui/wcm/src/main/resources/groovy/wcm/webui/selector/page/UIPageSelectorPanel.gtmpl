@@ -13,7 +13,7 @@
 		<thead>
 			<tr>
 	      		<th><%=_ctx.appRes("UIPageSelectorPanel.header.path")%></th>
-		    	<th style="width: 20px;"><%=_ctx.appRes("UIPageSelectorPanel.header.action")%></th>
+		    	<th style="width: 35px;"><%=_ctx.appRes("UIPageSelectorPanel.header.action")%></th>
 	    	</tr>
 	  	</thead>
 	  	<tbody>

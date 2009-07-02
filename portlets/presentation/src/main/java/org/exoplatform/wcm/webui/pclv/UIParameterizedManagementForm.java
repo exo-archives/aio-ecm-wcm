@@ -31,7 +31,6 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.wcm.webui.Utils;
-import org.exoplatform.wcm.webui.category.UICategoryNavigationConstant;
 import org.exoplatform.wcm.webui.selector.page.UIPageSelector;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -159,7 +158,7 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
     List<SelectItemOption<String>> orderTypeOptions = new ArrayList<SelectItemOption<String>>();
     orderTypeOptions.add(new SelectItemOption<String>(bundle.getString(rootBundleKey + ORDER_DESC), "DESC"));
     orderTypeOptions.add(new SelectItemOption<String>(bundle.getString(rootBundleKey + ORDER_ASC), "ASC"));
-    
+
     UIFormRadioBoxInput orderTypeRadioBoxInput = new UIFormRadioBoxInput(ORDER_TYPES, ORDER_TYPES, orderTypeOptions);
     String orderTypePref = portletPreferences.getValue(UIParameterizedContentListViewerPortlet.ORDER_TYPE, null);
     if (orderTypePref == null) {
@@ -177,9 +176,17 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
     String orderByPref = portletPreferences.getValue(UIParameterizedContentListViewerPortlet.ORDER_BY, null);
     orderBySelectBox.setValue(orderByPref); 
     
+    UIFormCheckBoxInput autoDetect = new UIFormCheckBoxInput(AUTO_DETECT, AUTO_DETECT, null);
+    autoDetect.setChecked(true);
+    String autoDetected = portletPreferences.getValue(UIParameterizedContentListViewerPortlet.SHOW_AUTO_DETECT, null);
+    autoDetect.setChecked(Boolean.parseBoolean(autoDetected));
+    
     UIFormStringInput headerInput = new UIFormStringInput(HEADER, HEADER, null);
     String headerValue = portletPreferences.getValue(UIParameterizedContentListViewerPortlet.HEADER, null);
-    headerInput.setValue(headerValue);
+    
+    if (Boolean.parseBoolean(autoDetected)) {
+      headerInput.setValue(headerValue);
+    }
     
     List<SelectItemOption<String>> formViewerTemplateList = getTemplateList(PORTLET_NAME, FORM_VIEW_TEMPLATE_CATEGORY);
     List<SelectItemOption<String>> paginatorTemplateList = getTemplateList(PORTLET_NAME, PAGINATOR_TEMPLATE_CATEGORY);
@@ -227,22 +234,13 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
     String viewHeader = portletPreferences.getValue(UIParameterizedContentListViewerPortlet.SHOW_HEADER, null);
     viewerHeader.setChecked(Boolean.parseBoolean(viewHeader));
     
-    UIFormCheckBoxInput autoDetect = new UIFormCheckBoxInput(AUTO_DETECT, AUTO_DETECT, null);
-    autoDetect.setChecked(true);
-    String autoDetected = portletPreferences.getValue(UIParameterizedContentListViewerPortlet.SHOW_AUTO_DETECT, null);
-    autoDetect.setChecked(Boolean.parseBoolean(autoDetected));
-    
-    String preferenceTargetPath = portletPreferences.getValue(PREFERENCE_TARGET_PATH, "");
+    String preferenceTargetPath = portletPreferences.getValue(UIParameterizedContentListViewerPortlet.TARGET_PAGE, null);
     UIFormInputSetWithAction targetPathFormInputSet = new UIFormInputSetWithAction(TARGET_PAGE_INPUT_SET_ACTION);
     UIFormStringInput targetPathFormStringInput = new UIFormStringInput(TARGET_PAGE_INPUT, TARGET_PAGE_INPUT, preferenceTargetPath);
+    targetPathFormStringInput.setValue(preferenceTargetPath);
     targetPathFormStringInput.setEditable(false);
     targetPathFormInputSet.setActionInfo(TARGET_PAGE_INPUT, new String[] {"SelectTargetPage"}) ;
     targetPathFormInputSet.addUIFormInput(targetPathFormStringInput);
-
-    UIFormCheckBoxInput addDateToLink = new UIFormCheckBoxInput(ADD_DATE_TO_LINK, ADD_DATE_TO_LINK, null);
-    addDateToLink.setChecked(true);
-    String addDate = portletPreferences.getValue(UIParameterizedContentListViewerPortlet.ADD_DATE_INTO_PAGE, null);
-    addDateToLink.setChecked(Boolean.parseBoolean(addDate));
     
     UIFormCheckBoxInput addMoreLink = new UIFormCheckBoxInput(SHOW_MORE_LINK, SHOW_MORE_LINK, null);
     addMoreLink.setChecked(true);
@@ -274,7 +272,6 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
     addChild(viewerHeader);
     addChild(showLink);
     addChild(targetPathFormInputSet);
-    addChild(addDateToLink);
     addChild(addMoreLink);
     addChild(showRssLink);
     

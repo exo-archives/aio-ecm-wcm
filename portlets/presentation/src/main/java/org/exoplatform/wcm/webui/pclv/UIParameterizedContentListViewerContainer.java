@@ -133,7 +133,7 @@ public class UIParameterizedContentListViewerContainer extends UIContainer {
                                 parameterizedForm,
                                 event.getRequestContext(),
                                 UIParameterizedContentListViewerConstant
-                                .PARAMETERIZED_MANAGEMENT_PORTLET_POPUP_WINDOW, 800, 600);
+                                .PARAMETERIZED_MANAGEMENT_PORTLET_POPUP_WINDOW, 850, 800);
       } else {
         popupWindow.setShow(true);
       }

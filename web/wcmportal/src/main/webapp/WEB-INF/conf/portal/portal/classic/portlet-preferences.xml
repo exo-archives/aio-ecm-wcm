@@ -368,7 +368,7 @@
     </preference>
     <preference>
     	<name>header</name>
-    	<value>Feature News</value>
+    	<value>Parameterize Content List Viewer</value>
     	<read-only>false</read-only>
     </preference>
     <preference>
@@ -428,7 +428,7 @@
     </preference>	
     <preference>
     	<name>targetPage</name>
-    	<value>Test</value>	    	
+    	<value>categories</value>	    	
     	<read-only>false</read-only>
     </preference>
     <preference>

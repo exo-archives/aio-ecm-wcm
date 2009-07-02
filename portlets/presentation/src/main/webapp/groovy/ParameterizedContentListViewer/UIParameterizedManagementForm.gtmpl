@@ -14,7 +14,6 @@
  	String linkFormat = _ctx.appRes(uicomponent.id + ".label.LinkFormatBlock");
 %>
 <div class="UIForm $uicomponent.id">
-		<%=System.out.println(uicomponent.id)%>	
 	<div class="TitleBar">
 		<b><%=_ctx.appRes(uicomponent.getName() + ".title")%></b>	
 	</div>
@@ -24,7 +23,6 @@
       <fieldset style=" margin-bottom: 10px; overflow: hidden: height: 100%; border: 1px solid #b7b7b7;" maxHeight="350">
 				<legend class="StyleLegend">$contentSelectionBlockTitle</legend>
 	      <table class="UIFormGrid">
-	      	
 				<tr class="OrderBlock">
 			      <td class="FieldLabel">
 				      <%=uicomponent.getLabel(uiform.getChildById(uicomponent.ORDER_BY).getName()) %>
@@ -144,13 +142,6 @@
 			      </td>
 				  <td class="FieldComponent"><% uiform.renderField(uiform.getChildById(uicomponent.TARGET_PAGE_INPUT_SET_ACTION)) %></td>
 				  <td class="quickSearchAction" onclick="<%=uicomponent.event("SelectTargetPage")%>"><span></span></td>													
-				</tr>
-				<tr>	
-					<td class="FieldLabel"><% uiform.renderField(uiform.getChildById(uicomponent.ADD_DATE_TO_LINK)) %></td>
-					<td class="FieldComponent"><%=uicomponent.getLabel(uiform.getChildById(uicomponent.ADD_DATE_TO_LINK).getName()) %></td>
-					<td class="FieldComponent">
-							&nbsp;
-						</td>														
 				</tr>
 	      </table>                 
       </fieldset>   

@@ -1,9 +1,39 @@
-
 .UIParameterizedManagementForm .quickSearchAction {
 	background: url('DefaultSkin/images/SearchIcon.png') no-repeat;
-	cursor:pointer;
-	height:16px;
-	width:16px;
-	display: block;
-	margin-top: 8px;
+	width: 16px;
+	height: 16px;
+	cursor: pointer;
+}
+
+.UIParameterizedContentListViewerPortlet .UIFormGrid {
+	margin: 0;
+}
+
+.UIParameterizedContentListViewerPortlet .HorizontalLayout .UIFormInputSet{
+	padding: 0;
+}
+
+.UIParameterizedContentListViewerPortlet .HorizontalLayout .FormContainer{
+	padding: 0;
+}
+
+.UIParameterizedContentListViewerPortlet .UIPageSelector {
+	margin: 0;
+	width: auto;
+}
+.UIParameterizedContentListViewerPortlet #UIPageNodeSelector {
+	float: left;
+	width: 49%;
+}
+.UIParameterizedContentListViewerPortlet .MiddleRightContainerOptions {
+	width: 200%;
+}
+
+.UIParameterizedContentListViewerPortlet .UIPageNodeSelector {
+	width: 100%;
+}
+
+.UIParameterizedContentListViewerPortlet #UIPageSelectorPanel {
+	float: left;
+	width: 49%;
 }
