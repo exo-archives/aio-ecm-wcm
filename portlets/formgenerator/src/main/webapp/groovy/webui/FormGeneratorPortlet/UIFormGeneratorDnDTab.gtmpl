@@ -55,7 +55,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="LeftMenu" elementType="radio">
+					<!-- <div class="LeftMenu" elementType="radio">
 						<div class="RightMenu">
 							<div class="CenterMenu">
 								<a class="IconMenu IconRadio"><span></span></a>
@@ -63,7 +63,7 @@
 								<div class="ClearLeft"><span></span></div>
 							</div>
 						</div>
-					</div>
+					</div> -->
 					<div class="LeftMenu" elementType="upload">
 						<div class="RightMenu">
 							<div class="CenterMenu">
@@ -73,7 +73,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="LeftMenu" elementType="checkbox">
+					<!-- <div class="LeftMenu" elementType="checkbox">
 						<div class="RightMenu">
 							<div class="CenterMenu">
 								<a class="IconMenu IconCheckBox"><span></span></a>
@@ -81,7 +81,7 @@
 								<div class="ClearLeft"><span></span></div>
 							</div>
 						</div>
-					</div>
+					</div> -->
 				</div>
 			</div>
 		</div>
@@ -152,40 +152,6 @@
 													<tr>              
 														<td class="FieldLabel">Textarea</td>
 														<td class="FieldComponent"><textarea type="text" class="Textarea"></textarea></td>
-														<td class="FieldIcon"><span></span></td>
-													</tr>
-												</table>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="MiddleContentBoxStyle" style='display:none'>
-		  							<div class="UIForm UIFormEditBox">
-										<div class="HorizontalLayout">
-											<div class="FormContainer">
-												<table class="UIFormGrid">
-													<tr>              
-														<td class="FieldLabel">Field Size</td>
-														<td class="FieldComponent">
-															<select type="text" class="SelectBox"></select>
-															<div class="BoxRules">
-																Rules: <input class="Requied" id="abc" type="checkbox" checked="checked" value="0">Requied</input>
-															</div>
-														</td>
-														<td class="FieldIcon"><span></span></td>
-													</tr>
-													<tr>
-														<td class="FieldLabel">Default Value</td>
-														<td class="FieldComponent"><input type="text" class="InputText"></input></td>
-														<td class="FieldIcon">
-															<a class="AddIcon"><span></span></a>
-															<a class="RemoveIcon"><span></span></a>
-															<div class="ClearRight"><span></span></div>
-														</td>
-													</tr>
-													<tr>
-														<td class="FieldLabel">Guidelines for User</td>
-														<td class="FieldComponent"><textarea type="text" class="Texterea"></textarea></td>
 														<td class="FieldIcon"><span></span></td>
 													</tr>
 												</table>

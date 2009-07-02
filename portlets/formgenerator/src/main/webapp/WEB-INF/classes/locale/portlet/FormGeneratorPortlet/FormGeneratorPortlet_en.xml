@@ -7,7 +7,7 @@
 			<UIFormGeneratorNodetypeFormSelectBox>Based nodetype</UIFormGeneratorNodetypeFormSelectBox>
 			<UIFormGeneratorDescriptionFormWYSIWYGInput>Description</UIFormGeneratorDescriptionFormWYSIWYGInput>
 			<UIFormGeneratorIconFormUploadInput>Icon</UIFormGeneratorIconFormUploadInput>
-			<UIFormGeneratorDnDTab>Drag and drop component</UIFormGeneratorDnDTab>
+			<UIFormGeneratorDnDTab>Form builder</UIFormGeneratorDnDTab>
 			<UIFormGeneratorOptionsTab>Options</UIFormGeneratorOptionsTab>
 			<UIFormGeneratorVoteFormCheckboxInput>Allow vote</UIFormGeneratorVoteFormCheckboxInput>
 			<UIFormGeneratorCommentFormCheckboxInput>Allow comment</UIFormGeneratorCommentFormCheckboxInput>
