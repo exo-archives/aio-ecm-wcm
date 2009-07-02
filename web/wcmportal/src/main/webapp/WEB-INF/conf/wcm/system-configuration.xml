@@ -51,13 +51,13 @@
               <field  name="repository"><string>{repository}</string></field>
               <field  name="workspace"><string>{workspace}</string></field>
               <field  name="permissions"><string>{accessPermission}</string></field>
-              <field  name="homePath"><string>{sitePath}</string></field>
+              <field  name="homePath"><string>{sitePath}/categories/{siteName}</string></field>
               <field  name="icon"><string></string></field>
-              <field  name="views"><string>wcm-view</string></field>
+              <field  name="views"><string>wcm-category-view</string></field>
               <field  name="viewPreferences"><boolean>false</boolean></field>
               <field  name="viewNonDocument"><boolean>true</boolean></field>
               <field  name="viewSideBar"><boolean>true</boolean></field>
-              <field  name="showHiddenNode"><boolean>true</boolean></field>
+              <field  name="showHiddenNode"><boolean>false</boolean></field>
               <field  name="allowCreateFolder"><string>Both</string></field>       
             </object>
           </object-param>                                                                                                   	    

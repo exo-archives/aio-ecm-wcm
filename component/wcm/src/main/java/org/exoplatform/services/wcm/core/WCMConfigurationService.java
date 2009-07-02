@@ -44,6 +44,9 @@ public class WCMConfigurationService {
   private String publishingPortletName;
   private ExoProperties runtimeContextParams;  
   private DriveData siteDriveConfig;
+  
+  public static final String SITE_PATH_EXP = "\\{sitePath\\}";
+  public static final String SITE_NAME_EXP = "\\{siteName\\}";
 
   public WCMConfigurationService(InitParams initParams) throws Exception {
     parameterizedPageURI = initParams.getValueParam("parameterizedPageURI").getValue();

@@ -89,9 +89,14 @@ public class CreateLivePortalEventListener extends Listener<DataStorageImpl, Por
     .getConfiguration().getName();
     String workspace = session.getWorkspace().getName();
     DriveData mainDriveData = wcmConfigService.getSiteDriveConfig();
-    String drive = portal.getName();
+    String drive = portal.getName().substring(0, 1).toUpperCase()+portal.getName().substring(1);
     String permission = portalConfig.getEditPermission();
-    String homePath = portal.getPath();
+    String portalPath = portal.getPath();
+    
+    String homePath = mainDriveData.getHomePath(); 
+    homePath = homePath.replaceAll(WCMConfigurationService.SITE_NAME_EXP, drive);
+    homePath = homePath.replaceAll(WCMConfigurationService.SITE_PATH_EXP, portalPath);
+    
     String views = mainDriveData.getViews();
     String icon = mainDriveData.getIcon();
     boolean viewReferences = mainDriveData.getViewPreferences();
