@@ -17,8 +17,17 @@
 package org.exoplatform.wcm.webui.category;
 
 import javax.jcr.Node;
+import javax.portlet.PortletPreferences;
+import javax.servlet.http.HttpServletRequestWrapper;
 
+import org.exoplatform.ecm.resolver.JCRResourceResolver;
 import org.exoplatform.ecm.webui.utils.Utils;
+import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.resolver.ResourceResolver;
+import org.exoplatform.services.cms.impl.DMSConfiguration;
+import org.exoplatform.services.cms.templates.TemplateService;
+import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIRightClickPopupMenu;
@@ -28,11 +37,10 @@ import org.exoplatform.webui.core.UITree;
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
  *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * Comment: Change event("ChangeNode", objId) by url("ChangeNode", objId) to display link for tree
+ * Comment: Change objId from node's path to category's path
  * Jun 30, 2009  
  */
 @ComponentConfig(
-    template = "system:/groovy/webui/core/UITree.gtmpl" , 
     events = @EventConfig(listeners = UITree.ChangeNodeActionListener.class)
 )  
 public class UICategoryNavigationTreeBase extends UITree {
@@ -53,11 +61,22 @@ public class UICategoryNavigationTreeBase extends UITree {
       if(getFieldValue(obj, beanIconField) != null)
         iconGroup = (String)getFieldValue(obj, beanIconField);
     }
-    String objId = String.valueOf(getId(obj)) ;
-    String actionLink = url("ChangeNode", objId);
+    PortletRequestContext porletRequestContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+    HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) porletRequestContext.getRequest();
+    String requestURI = requestWrapper.getRequestURI();
+    PortletPreferences portletPreferences = UICategoryNavigationUtils.getPortletPreferences();
+    String preferenceTreeName = portletPreferences.getValue(UICategoryNavigationConstant.PREFERENCE_TREE_NAME, "");
+    String categoryPath = String.valueOf(getId(obj));
+    String shortPath = "";
+    if (requestURI.indexOf(preferenceTreeName) < 0) {
+      shortPath = categoryPath.substring(categoryPath.indexOf(preferenceTreeName) - 1);  
+    } else {
+      shortPath = categoryPath.substring(categoryPath.lastIndexOf("/"));
+    }
+    String objId = requestURI + shortPath;
     StringBuilder builder = new StringBuilder();
     if(nodeIcon.equals(getExpandIcon())) {
-      builder.append(" <a class=\"").append(nodeIcon).append(" ").append(nodeTypeIcon).append("\" href=\"").append(actionLink).append("\">") ;
+      builder.append(" <a class=\"").append(nodeIcon).append(" ").append(nodeTypeIcon).append("\" href=\"").append(objId).append("\">") ;
     } else {
       builder.append(" <a class=\"").append(nodeIcon).append(" ").append(nodeTypeIcon).append("\" onclick=\"eXo.portal.UIPortalControl.collapseTree(this)").append("\">") ;
     }
@@ -98,6 +117,30 @@ public class UICategoryNavigationTreeBase extends UITree {
     return builder.toString();
   }
 
+  public String getTemplate() {
+    return UICategoryNavigationUtils.getPortletPreferences().getValue(UICategoryNavigationConstant.PREFERENCE_TEMPLATE_PATH, null);
+  }
+  
+  public ResourceResolver getTemplateResourceResolver(WebuiRequestContext context, String template) {
+    String repository = UICategoryNavigationUtils.getPortletPreferences().getValue(UICategoryNavigationConstant.PREFERENCE_REPOSITORY, null);
+    DMSConfiguration dmsConfiguration = getApplicationComponent(DMSConfiguration.class);
+    String workspace = dmsConfiguration.getConfig(repository).getSystemWorkspace();
+    return new JCRResourceResolver(repository, workspace, TemplateService.EXO_TEMPLATE_FILE_PROP);
+  }
+  
+  public String getActionLink() throws Exception {
+    PortletRequestContext porletRequestContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+    HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) porletRequestContext.getRequest();
+    String requestURI = requestWrapper.getRequestURI();
+    PortletPreferences portletPreferences = UICategoryNavigationUtils.getPortletPreferences();
+    String preferenceTreeName = portletPreferences.getValue(UICategoryNavigationConstant.PREFERENCE_TREE_NAME, "");
+    String preferenceTargetPage = portletPreferences.getValue(UICategoryNavigationConstant.PREFERENCE_TARGET_PAGE, "");
+    String backPath = requestURI.substring(0, requestURI.lastIndexOf("/"));
+    if (backPath.endsWith(preferenceTargetPage) || backPath.endsWith(Util.getUIPortal().getName())) backPath = "javascript:void(0)";
+    else if (backPath.endsWith(preferenceTreeName)) backPath = backPath.substring(0, backPath.lastIndexOf("/"));
+    return backPath;
+  }
+  
   public boolean isSelected(Object obj) throws Exception {
     Node selectedNode = this.getSelected();
     Node node = (Node) obj;

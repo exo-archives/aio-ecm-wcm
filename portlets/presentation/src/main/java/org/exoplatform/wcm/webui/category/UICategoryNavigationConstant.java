@@ -24,13 +24,19 @@ package org.exoplatform.wcm.webui.category;
  */
 public class UICategoryNavigationConstant {
   
+  public static final String PREFERENCE_PORTLET_NAME          = "portletName";
+  
   public static final String PREFERENCE_REPOSITORY            = "repository";
   
   public static final String PREFERENCE_TREE_TITLE            = "treeTitle";
   
   public static final String PREFERENCE_TREE_NAME             = "treeName";
   
-  public static final String PREFERENCE_TARGET_PATH           = "targetPath";
+  public static final String PREFERENCE_TEMPLATE_CATEGORY     = "templateCategory";
+  
+  public static final String PREFERENCE_TEMPLATE_PATH         = "templatePath";
+  
+  public static final String PREFERENCE_TARGET_PAGE           = "targetPath";
   
   
   
@@ -38,7 +44,9 @@ public class UICategoryNavigationConstant {
   
   public static final String WORKSPACE_FORM_SELECTBOX         = "UICategoryNavigationWorkspaceFormSelectBox";
   
-  public static final String TREE_NAME_FORM_SELECTBOX         = "UICategoryNavigationTreeNameSelectBox";
+  public static final String TREE_NAME_FORM_SELECTBOX         = "UICategoryNavigationTreeNameFormSelectBox";
+  
+  public static final String TEMPLATE_FORM_SELECTBOX          = "UICategoryNavigationTemplateFormSelectBox";
   
   public static final String TREE_TITLE_FORM_STRING_INPUT     = "UICategoryNavigationTreeTitleFormStringInput";
   

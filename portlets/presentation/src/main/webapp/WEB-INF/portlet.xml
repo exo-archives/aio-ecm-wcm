@@ -311,6 +311,11 @@
 		</portlet-info>
 		<portlet-preferences>
 			<preference>
+				<name>portletName</name>
+				<value>Category Navigation Portlet</value>
+				<read-only>false</read-only>
+			</preference>
+			<preference>
 				<name>repository</name>
 				<value>repository</value>
 				<read-only>false</read-only>
@@ -326,8 +331,18 @@
 				<read-only>false</read-only>
 			</preference>
 			<preference>
+				<name>templateCategory</name>
+				<value></value>
+				<read-only>false</read-only>
+			</preference>
+			<preference>
+				<name>templatePath</name>
+				<value></value>
+				<read-only>false</read-only>
+			</preference>
+			<preference>
 				<name>targetPath</name>
-				<value>categories</value>
+				<value></value>
 				<read-only>false</read-only>
 			</preference>
 		</portlet-preferences>
@@ -358,7 +373,7 @@
 		<portlet-preferences>
 			<preference>
 				<name>repository</name>
-				<value></value>
+				<value>repository</value>
 				<read-only>false</read-only>
 			</preference>
 			<preference>
@@ -367,10 +382,10 @@
 				<read-only>false</read-only>
 			</preference>
 			<preference>
-    			<name>header</name>
-    			<value>Parameterize Content List Viewer</value>
-    			<read-only>false</read-only>
-    		</preference>
+				<name>header</name>
+				<value>Parameterize Content List Viewer</value>
+				<read-only>false</read-only>
+			</preference>
 			<preference>
 				<name>formViewTemplatePath</name>
 				<value></value>

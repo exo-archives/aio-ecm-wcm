@@ -52,7 +52,6 @@
   <import>war:/conf/wcm/drives-configuration.xml</import>
   <import>war:/conf/wcm/nodetypes-templates-configuration.xml</import>  
   <import>war:/conf/wcm/templates-deployment-configuration.xml</import>
-  <import>war:/conf/wcm/search-templates-configuration.xml</import>
   <import>war:/conf/wcm/views-configuration.xml</import>
   <!-- import>war:/conf/wcm/deployment/acme-deployment-configuration.xml</import -->
   <import>war:/conf/wcm/deployment/classic-deployment-configuration.xml</import>

@@ -16,6 +16,8 @@
  */
 package org.exoplatform.wcm.webui.category;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,12 +25,19 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.nodetype.NodeType;
 import javax.portlet.PortletPreferences;
+import javax.servlet.http.HttpServletRequestWrapper;
 
+import org.apache.commons.lang.StringUtils;
 import org.exoplatform.ecm.webui.utils.Utils;
+import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.container.UIContainer;
+import org.exoplatform.portal.webui.portal.UIPortal;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.cms.link.NodeFinder;
 import org.exoplatform.services.cms.taxonomy.TaxonomyService;
 import org.exoplatform.services.ecm.publication.PublicationService;
+import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UITree;
@@ -151,6 +160,34 @@ public class UICategoryNavigationTree extends UIContainer {
     this.acceptedNodeTypes = acceptedNodeTypes;
   }
 
+  public void processRender(WebuiRequestContext context) throws Exception {
+    PortletRequestContext porletRequestContext = (PortletRequestContext) context;
+    HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) porletRequestContext.getRequest();
+    PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
+    UIPortal uiPortal = Util.getUIPortal();
+    String portalURI = portalRequestContext.getPortalURI();
+    String requestURI = requestWrapper.getRequestURI();
+    String pageNodeSelected = uiPortal.getSelectedNode().getName();
+    String parameters = null;
+    try {
+      parameters = URLDecoder.decode(StringUtils.substringAfter(requestURI, portalURI.concat(pageNodeSelected + "/")),"UTF-8");
+    } catch (UnsupportedEncodingException e) {
+      System.out.println("------------------------> UnsupportedEncodingException");
+    }
+    if (!parameters.matches("(.*)/(.*)")) {
+      System.out.println("------------------------> not match (.*)/(.*)");
+    }
+    PortletPreferences portletPreferences = UICategoryNavigationUtils.getPortletPreferences();
+    String preferenceRepository = portletPreferences.getValue(UICategoryNavigationConstant.PREFERENCE_REPOSITORY, "");
+    String preferenceTreeName = portletPreferences.getValue(UICategoryNavigationConstant.PREFERENCE_TREE_NAME, "");
+    TaxonomyService taxonomyService = getApplicationComponent(TaxonomyService.class);
+    Node treeNode = taxonomyService.getTaxonomyTree(preferenceRepository, preferenceTreeName);
+    String categoryPath = parameters.substring(parameters.indexOf("/") + 1);
+    if (preferenceTreeName.equals(categoryPath)) categoryPath = ""; 
+    currentNode = treeNode.getNode(categoryPath);
+    super.processRender(context);
+  }
+  
   public void buildTree() throws Exception {
     NodeIterator sibbling = null;
     NodeIterator children = null;

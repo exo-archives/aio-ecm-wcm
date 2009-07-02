@@ -25,8 +25,12 @@ import javax.portlet.PortletPreferences;
 
 import org.exoplatform.ecm.webui.selector.UISelectable;
 import org.exoplatform.services.cms.taxonomy.TaxonomyService;
+import org.exoplatform.services.cms.views.ApplicationTemplateManagerService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.config.RepositoryEntry;
+import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.category.UICategoryNavigationConstant;
 import org.exoplatform.wcm.webui.category.UICategoryNavigationPortlet;
@@ -79,16 +83,24 @@ public class UICategoryNavigationConfig extends UIForm implements UISelectable {
     repositoryFormSelectBox.setOnChange("ChangeRepository");
     addUIFormInput(repositoryFormSelectBox);
     
+    String preferenceTreeTitle = preferences.getValue(UICategoryNavigationConstant.PREFERENCE_TREE_TITLE, "");
+    addUIFormInput(new UIFormStringInput(UICategoryNavigationConstant.TREE_TITLE_FORM_STRING_INPUT, UICategoryNavigationConstant.TREE_TITLE_FORM_STRING_INPUT, preferenceTreeTitle));
+    
     String preferenceTreeName = preferences.getValue(UICategoryNavigationConstant.PREFERENCE_TREE_NAME, "");
     List<SelectItemOption<String>> trees = getTaxonomyTrees(preferenceRepository);
     UIFormSelectBox treeNameFormSelectBox = new UIFormSelectBox(UICategoryNavigationConstant.TREE_NAME_FORM_SELECTBOX, UICategoryNavigationConstant.TREE_NAME_FORM_SELECTBOX, trees);
     treeNameFormSelectBox.setValue(preferenceTreeName);
     addUIFormInput(treeNameFormSelectBox);
     
-    String preferenceTreeTitle = preferences.getValue(UICategoryNavigationConstant.PREFERENCE_TREE_TITLE, "");
-    addUIFormInput(new UIFormStringInput(UICategoryNavigationConstant.TREE_TITLE_FORM_STRING_INPUT, UICategoryNavigationConstant.TREE_TITLE_FORM_STRING_INPUT, preferenceTreeTitle));
+    String preferencePortletName = preferences.getValue(UICategoryNavigationConstant.PREFERENCE_PORTLET_NAME, "");
+    String preferenceTemplateCategory = preferences.getValue(UICategoryNavigationConstant.PREFERENCE_TEMPLATE_CATEGORY, "");
+    String preferenceTemplatePath = preferences.getValue(UICategoryNavigationConstant.PREFERENCE_TEMPLATE_PATH, "");
+    List<SelectItemOption<String>> templates = getTemplateList(preferencePortletName, preferenceTemplateCategory);
+    UIFormSelectBox templateFormSelectBox = new UIFormSelectBox(UICategoryNavigationConstant.TEMPLATE_FORM_SELECTBOX, UICategoryNavigationConstant.TEMPLATE_FORM_SELECTBOX, templates);
+    templateFormSelectBox.setValue(preferenceTemplatePath);
+    addUIFormInput(templateFormSelectBox);
     
-    String preferenceTargetPath = preferences.getValue(UICategoryNavigationConstant.PREFERENCE_TARGET_PATH, "");
+    String preferenceTargetPath = preferences.getValue(UICategoryNavigationConstant.PREFERENCE_TARGET_PAGE, "");
     UIFormInputSetWithAction targetPathFormInputSet = new UIFormInputSetWithAction(UICategoryNavigationConstant.TARGET_PATH_FORM_INPUT_SET);
     UIFormStringInput targetPathFormStringInput = new UIFormStringInput(UICategoryNavigationConstant.TARGET_PATH_FORM_STRING_INPUT, UICategoryNavigationConstant.TARGET_PATH_FORM_STRING_INPUT, preferenceTargetPath);
     targetPathFormStringInput.setEditable(false);
@@ -107,7 +119,24 @@ public class UICategoryNavigationConfig extends UIForm implements UISelectable {
     this.popupId = popupId;
   }
 
-  public List<SelectItemOption<String>> getTaxonomyTrees(String repository) throws Exception {
+  private List<SelectItemOption<String>> getTemplateList(String portletName, String templateCategory) throws Exception {
+    List<SelectItemOption<String>> templates = new ArrayList<SelectItemOption<String>>();
+    ThreadLocalSessionProviderService threadLocalSessionProviderService = getApplicationComponent(ThreadLocalSessionProviderService.class);
+    SessionProvider provider = threadLocalSessionProviderService.getSessionProvider(null);
+    RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
+    ManageableRepository manageableRepository = repositoryService.getCurrentRepository();
+    ApplicationTemplateManagerService applicationTemplateManagerService = getApplicationComponent(ApplicationTemplateManagerService.class);
+    String repository = manageableRepository.getConfiguration().getName();
+    List<Node> templateNodes = applicationTemplateManagerService.getTemplatesByCategory(repository, portletName, templateCategory, provider);
+    for (Node templateNode : templateNodes) {
+      String templateName = templateNode.getName();
+      String templatePath = templateNode.getPath();
+      templates.add(new SelectItemOption<String>(templateName, templatePath));
+    }
+    return templates;
+  }
+  
+  private List<SelectItemOption<String>> getTaxonomyTrees(String repository) throws Exception {
     TaxonomyService taxonomyService = getApplicationComponent(TaxonomyService.class);
     List<Node> taxonomyNodes = taxonomyService.getAllTaxonomyTrees(repository);
     List<SelectItemOption<String>> taxonomyTrees = new ArrayList<SelectItemOption<String>>();
@@ -137,7 +166,7 @@ public class UICategoryNavigationConfig extends UIForm implements UISelectable {
       portletPreferences.setValue(UICategoryNavigationConstant.PREFERENCE_REPOSITORY, preferenceRepository);
       portletPreferences.setValue(UICategoryNavigationConstant.PREFERENCE_TREE_NAME, preferenceTreeName);
       portletPreferences.setValue(UICategoryNavigationConstant.PREFERENCE_TREE_TITLE, preferenceTreeTitle);
-      portletPreferences.setValue(UICategoryNavigationConstant.PREFERENCE_TARGET_PATH, preferenceTargetPath);
+      portletPreferences.setValue(UICategoryNavigationConstant.PREFERENCE_TARGET_PAGE, preferenceTargetPath);
       portletPreferences.store();
       ((PortletRequestContext)event.getRequestContext()).setApplicationMode(PortletMode.VIEW);
     }
