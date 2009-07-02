@@ -24,5 +24,6 @@ package org.exoplatform.wcm.webui.pclv;
  */
 public class UIParameterizedContentListViewerConstant {
 
-  public static final String PARAMETERIZED_MANAGEMENT_POPUP_WINDOW    = "UIParameterizedManagerPopupWindow";
+  public static final String PARAMETERIZED_MANAGEMENT_PORTLET_POPUP_WINDOW    = "UIParameterizedManagerPopupWindow";
+  public static final String PARAMETERIZED_TARGET_PAGE_POPUP_WINDOW    = "TagetPageInputPopupWindowForm";
 }

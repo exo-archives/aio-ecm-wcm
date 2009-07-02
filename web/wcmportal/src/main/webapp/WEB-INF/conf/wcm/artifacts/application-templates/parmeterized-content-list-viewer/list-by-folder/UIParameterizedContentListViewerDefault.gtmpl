@@ -1,0 +1,182 @@
+<% 
+	import javax.jcr.Node;
+	import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
+	import org.exoplatform.wcm.webui.pclv.UIParameterizedContentListViewerPortlet;
+	import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationState;
+	import org.exoplatform.wcm.webui.pclv.UIParameterizedContentListViewerForm;
+	import org.exoplatform.wcm.webui.pclv.PCLVViewerConfig;
+%>
+<div id="$uicomponent.id" class="UIParameterizedContentListViewerDefault">
+ 	<%
+ 		uiform.begin();
+	
+		String labelRefreshAction = _ctx.appRes("UIContentListPresentationDefault.action.refresh");		
+					
+		String draftLabel = _ctx.appRes("UIContentListPresentationDefault.label.draft");
+		String editActionLabel = _ctx.appRes("UIContentListPresentationDefault.action.edit");
+		
+		String itemLink = uicomponent.getURL();
+		String itemSummary = uicomponent.getSummary();
+		String itemTitle = uicomponent.getTitle();
+		String itemDateCreated = uicomponent.getCreatedDate();
+		boolean isShowDraft = uicomponent.showDraftButton();
+			%>
+				<div style="height: 30px; backgroundcolor: #CEDDEE;">
+					<div style="float: left; margin-left: 20px; color: red;">
+						<%	
+							String header = uicomponent.getHeader();
+							if (uicomponent.isShowHeader() && header != null && header.trim().length() != 0 ) {
+								%><div class="Header"><%= header %></div><%
+							}
+						%>
+					</div>
+					<%
+						if (uicomponent.isShowField(UIParameterizedContentListViewerPortlet.SHOW_RSS_LINK)) {
+							%>
+				  				<div style="float: right; margin-right: 20px; color: red">
+			  						<a href="#">RSS Feed</a>
+			  					</div>
+							<%
+						} 
+					%>
+				</div>
+				<div class="CaptionItem">
+					<% 
+						if(uicomponent.listPCLVConfig.size() > 0) {
+							int count = 0;
+							boolean isShowTitle = uicomponent.isShowField(UIParameterizedContentListViewerPortlet.SHOW_TITLE);
+							boolean isShowSumary = uicomponent.isShowField(UIParameterizedContentListViewerPortlet.SHOW_SUMMARY);
+							boolean isShowIllustrationImg = uicomponent.isShowField(UIParameterizedContentListViewerPortlet.SHOW_SUMMARY);
+							boolean isShowLink = uicomponent.isShowField(UIParameterizedContentListViewerPortlet.SHOW_LINK);
+							boolean isShowCreatedDate = uicomponent.isShowField(UIParameterizedContentListViewerPortlet.SHOW_DATE_CREATED);
+							for(PCLVViewerConfig pclvConfig : uicomponent.listPCLVConfig) {
+								%>
+									<div style="padding: 10px 20px;">
+										<% 
+											if(count == 0) { 
+												%>
+													<div style="width: 100%; height: 200px; border: 1px solid #717171;">
+														<% 
+															if (isShowTitle) {
+																%>
+																	<div style="font-size: 12px; margin-left: 20px;">
+																		<%
+																			if (isShowLink) {
+																				%>
+																					<a href="#" style="color: blue; cursor: pointer;">
+																						<%=pclvConfig.getTitle() %>
+																					</a>
+																				<%
+																			} else {
+																				%><%=pclvConfig.getTitle() %><%
+																			} 
+																		%>
+																	</div>
+																<%
+															} 
+															if (isShowSumary) {
+																%>
+																	<div style="float: left; margin-left: 20px; width: 500px;">
+																		<%=pclvConfig.getIllustrationSumary() %>
+																	</div>
+																<%
+															} 
+															if (isShowIllustrationImg) {
+																%>
+																	<div style="float: right; margin-left: 520px; margin-right: 20px;">
+																		<%=pclvConfig.getIllustrationImage()%>
+																	</div>
+																<%
+															} 
+															if (isShowCreatedDate) {
+																%>
+																	<div style="float: left; margin-left: 20px; color: red;">
+																		<%=itemDateCreated%>
+																	</div>
+																<%
+															}
+															count = 1;
+														%>
+														<div style="clear:both;"><span></span></div>
+													</div>
+												<%
+											} else {
+												count++;
+												if (count==2) continue; 
+												%>
+													<div style="border: 1px solid red;">
+														<% 
+															if (isShowIllustrationImg) {
+																%>
+																	<div style="float: left; width: 100px; margin-top: 20px;">
+																		<%=pclvConfig.getIllustrationImage()%>
+																	</div>
+																<%
+															} 
+														%>
+														<div style="float: right; margin-top: 20px;">
+															<% 
+																if (isShowTitle) {
+																	%>
+																		<div style="font-size: 12px;">
+																			<%
+																				if (isShowLink) {
+																					%>
+																						<a href="#" style="color: blue; cursor: pointer;">
+																							<%=pclvConfig.getTitle() %>
+																						</a>
+																					<%
+																				} else {
+																					%><%=pclvConfig.getTitle() %><%
+																				} 
+																			%>
+																		</div>
+																	<%
+																}
+																if (isShowSumary) {
+																	%>
+																		<div style="font-size: 12px; margin-top: 20px;" >
+																			<%=pclvConfig.getIllustrationSumary() %>
+																		</div>
+																	<%
+																} 
+																if (isShowCreatedDate) {
+																	%>
+																		<div style="float: left; color: red; margin-top: 20px;">
+																			<%=itemDateCreated%>	
+																		</div>
+																	<%
+																} 
+															%>
+														</div>
+													</div>
+													<div style="clear:both;"><span></span></div>
+												<%
+											}
+										%>
+									</div>
+								<%
+							}
+						} 
+					%>
+				</div>
+				</div>
+				<div class="CaptionFunc">
+					<% 
+						if (uicomponent.showRefreshButton()) { 
+							String link = uicomponent.event("Refresh");
+							%>				
+								<div class="CaptionRefresh">
+									<a href="$link">$labelRefreshAction</a>
+								</div>
+							<% 
+						}
+						if (uicomponent.showPaginator()) { 
+							uicomponent.renderChild(UICustomizeablePaginator.class)
+						} 
+					%>
+				</div>
+			<%
+		uiform.end()
+	%>
+</div>

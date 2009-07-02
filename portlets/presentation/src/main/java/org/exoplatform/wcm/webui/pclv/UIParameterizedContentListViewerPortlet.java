@@ -45,49 +45,52 @@ public class UIParameterizedContentListViewerPortlet extends UIPortletApplicatio
 
   /** The Constant WORKSPACE. */
   public final static String WORKSPACE               = "workspace";
-  
-  public static final String VIEWER_MODE = "mode";
-  
+
+  public static final String VIEWER_MODE             = "mode";
+
   /** The Constant HEADER. */
   public final static String HEADER                  = "header";
-  
-  public static final String ORDER_TYPE = "orderType";
-  
-  public static final String ORDER_BY = "orderBy";
-  
+
+  public final static String SHOW_READMORE           = "header";
+
+  public static final String ORDER_TYPE              = "orderType";
+
+  public static final String ORDER_BY                = "orderBy";
+
   public final static String ITEMS_PER_PAGE          = "itemsPerPage";
-  
-  public final static String VIEW_LINK          = "showLink";
-  
+
+  public final static String SHOW_LINK               = "showLink";
+
   public final static String FORM_VIEW_TEMPLATE_PATH = "formViewTemplatePath";
-  
+
   public final static String PAGINATOR_TEMPlATE_PATH = "paginatorTemplatePath";
-  
+
   public final static String SHOW_HEADER             = "showHeader";
-  
+
   public final static String SHOW_REFRESH_BUTTON     = "showRefreshButton";
-  
+
   public final static String SHOW_SUMMARY            = "showSummary";
-  
+
   public final static String SHOW_THUMBNAILS_VIEW    = "showThumbnailsView";
-  
+
   public final static String SHOW_TITLE              = "showTitle";
-  
+
   public final static String SHOW_DATE_CREATED       = "showDateCreated";
-  
-  public final static String SHOW_MORE_LINK       = "showMoreLink";
-  
-  public final static String SHOW_RSS_LINK       = "showRssLink";
-  
-  public final static String SHOW_AUTO_DETECT       = "showAutoDetect";
-  
-  public final static String TARGET_PAGE       = "targetPage";
-  
-  public final static String ADD_DATE_INTO_PAGE       = "addDateIntoPage";
+
+  public final static String SHOW_MORE_LINK          = "showMoreLink";
+
+  public final static String SHOW_RSS_LINK           = "showRssLink";
+
+  public final static String SHOW_AUTO_DETECT        = "showAutoDetect";
+
+  public final static String TARGET_PAGE             = "targetPage";
+
+  public final static String ADD_DATE_INTO_PAGE      = "addDateIntoPage";
+
+  public final static String FOLDER_PATH             = "folderPath";
 
   public UIParameterizedContentListViewerPortlet() throws Exception {
     activateMode(mode);
-    this.addChild(UIPopupContainer.class, null, null);
   }
   
   public void processRender(WebuiApplication app, WebuiRequestContext context) throws Exception {
@@ -109,12 +112,13 @@ public class UIParameterizedContentListViewerPortlet extends UIPortletApplicatio
    */
   private void activateMode(PortletMode mode) throws Exception {
     getChildren().clear();
+    addChild(UIPopupContainer.class, null, null);
     if (PortletMode.VIEW.equals(mode)) {
-      addChild(UIParameterizedContentListViewerContainer.class, null, null);
+      UIParameterizedContentListViewerContainer container = addChild(UIParameterizedContentListViewerContainer.class, null, null);
+      container.init();
     } else if (PortletMode.EDIT.equals(mode)) {
-      
-      System.out.println("\n\n\n\n-----------------> view edit mode");
-      
+
+      //addChild(UIParameterizedManagementForm.class, null, null);
     }
   }
 }

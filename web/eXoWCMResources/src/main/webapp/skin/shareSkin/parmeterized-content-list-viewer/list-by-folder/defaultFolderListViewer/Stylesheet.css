@@ -1,0 +1,99 @@
+.UIParameterizedContentListViewerForm .UIParameterizedContentListViewerDefault {
+	border: 1px solid #b7b7b7;    
+	margin: 10px;
+	background: #fff;
+}
+
+.UIParameterizedContentListViewerForm .UIParameterizedContentListViewerDefault .Caption {    
+	padding: 10px;
+}
+
+.UIParameterizedContentListViewerForm .UIParameterizedContentListViewerDefault .Header {
+	background: url(icons/BgCategoryTitle1x25.gif) repeat-x;
+	border-bottom: 1px solid #B7B7B7;
+	line-height: 25px;	
+	padding-left: 10px;
+	font-weight: bold;
+	color: #424242;
+}
+
+.UIParameterizedContentListViewerForm .UIParameterizedContentListViewerDefault .Caption .CaptionItem {
+	border-bottom: 1px dotted #2f2f2f;
+	padding-top: 10px;
+}
+
+.UIParameterizedContentListViewerForm .UIParameterizedContentListViewerDefault .Caption .CaptionTitle a {
+	font-size: 14px;
+	color: #0385d9;
+	font-weight: bold;
+}
+
+.UIParameterizedContentListViewerForm .UIParameterizedContentListViewerDefault .Caption .CaptionTitle .CaptionDraft {
+	color:gray;
+	font-size:11px;
+	height:16px;
+	padding:0 3px 3px 20px;
+	width:50px;
+	background: url(icons/DraftIcon.gif) no-repeat;	
+}
+
+.UIParameterizedContentListViewerForm .UIParameterizedContentListViewerDefault .Caption .CaptionTitle .CaptionEdit {
+	width: 16px;
+	height: 16px;
+	font-size: 11px;
+	font-weight: normal;	
+	padding: 0 3px 3px 20px;
+	background: url(icons/Edit.gif) no-repeat;
+}
+
+.UIParameterizedContentListViewerForm .UIParameterizedContentListViewerDefault .Caption .CaptionDate {
+	color: #8f8f8f;
+}
+
+
+.UIParameterizedContentListViewerForm .UIParameterizedContentListViewerDefault .Caption .CaptionContent {
+	overflow:auto;	
+}
+
+.UIParameterizedContentListViewerForm .UIParameterizedContentListViewerDefault .Caption .CaptionContent p {
+  padding: 5px 0;
+}
+
+.UIParameterizedContentListViewerForm .UIParameterizedContentListViewerDefault .Caption .CaptionContent pre {
+	font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+	white-space: normal;
+}
+
+.UIParameterizedContentListViewerForm .UIParameterizedContentListViewerDefault .Caption .CaptionContent img {
+	float: left;
+	margin: 5px 10px 0 0;
+}
+
+.UIParameterizedContentListViewerForm .UIParameterizedContentListViewerDefault .Caption .CaptionViewMore {
+	text-align: right;
+}
+
+.UIParameterizedContentListViewerForm .UIParameterizedContentListViewerDefault .Caption .CaptionViewMore a {
+	color: #fd711c;
+	font-size: 10px;
+}
+
+.UIParameterizedContentListViewerForm .UIParameterizedContentListViewerDefault .Caption .CaptionFunc {
+    padding: 10px 0;
+    height: 1%;
+    overflow: hidden;
+}
+
+.UIParameterizedContentListViewerForm .UIParameterizedContentListViewerDefault .Caption .CaptionFunc .CaptionRefresh {
+    width: 200px;
+    float: left;
+}
+
+.UIParameterizedContentListViewerForm .UIParameterizedContentListViewerDefault .Caption .CaptionFunc .CaptionRefresh a {
+    display: block;
+    padding: 0 3px 3px 25px;
+    background: url(icons/RefreshIcon.gif) no-repeat;
+    color: #ff4200;
+    font-weight: bold;
+    font-size: 13px;
+}

@@ -91,7 +91,7 @@
         <name>pclv.templates.plugin</name>
         <set-method>addPlugin</set-method>
         <type>org.exoplatform.services.cms.views.PortletTemplatePlugin</type>
-        <description>This plugin is used to import parameterized content list views templates for Content List Viewer</description>
+        <description>This plugin is used to import parameterized content list views templates for Parameterized Content List Viewer</description>
         <init-params>
         	<value-param>
 	        	<name>portletName</name>
@@ -105,34 +105,10 @@
             <name>default.folder.list.viewer</name>
             <description>Default folder list viewer groovy template</description>
             <object type="org.exoplatform.services.cms.views.PortletTemplatePlugin$PortletTemplateConfig">
-              <field  name="templateName"><string>UIContentListPresentationDefault.gtmpl</string></field>                            
+              <field  name="templateName"><string>UIParameterizedContentListViewerDefault.gtmpl</string></field>                            
               <field  name="category"><string>list-by-folder</string></field>                 
             </object>
           </object-param>
-          <object-param>        
-            <name>acme.folder.list.viewer.with.title</name>
-            <description>ACME folder list viewer style A groovy template</description>
-            <object type="org.exoplatform.services.cms.views.PortletTemplatePlugin$PortletTemplateConfig">
-              <field  name="templateName"><string>ACMEContentListViewerA.gtmpl</string></field>                            
-              <field  name="category"><string>list-by-folder</string></field>
-            </object>
-          </object-param>
-          <object-param>        
-            <name>acme.folder.list.viewer.with.title</name>
-            <description>ACME folder list viewer style A groovy template</description>
-            <object type="org.exoplatform.services.cms.views.PortletTemplatePlugin$PortletTemplateConfig">
-              <field  name="templateName"><string>ACMEContentListViewerA.gtmpl</string></field>                            
-              <field  name="category"><string>list-by-folder</string></field>
-            </object>
-          </object-param>
-          <object-param>        
-            <name>acme.folder.list.viewer.without.title</name>
-            <description>ACME folder list viewer style B groovy template</description>
-            <object type="org.exoplatform.services.cms.views.PortletTemplatePlugin$PortletTemplateConfig">
-              <field  name="templateName"><string>ACMEContentListViewerB.gtmpl</string></field>                            
-              <field  name="category"><string>list-by-folder</string></field>
-            </object>
-          </object-param>		  	      		 
           <object-param>        
             <name>default.paginator</name>
             <description>Default paginator groovy template</description>

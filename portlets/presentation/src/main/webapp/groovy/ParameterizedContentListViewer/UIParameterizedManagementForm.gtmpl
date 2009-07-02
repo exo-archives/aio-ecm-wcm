@@ -14,6 +14,7 @@
  	String linkFormat = _ctx.appRes(uicomponent.id + ".label.LinkFormatBlock");
 %>
 <div class="UIForm $uicomponent.id">
+		<%=System.out.println(uicomponent.id)%>	
 	<div class="TitleBar">
 		<b><%=_ctx.appRes(uicomponent.getName() + ".title")%></b>	
 	</div>
@@ -104,10 +105,10 @@
 							<%=uicomponent.getLabel(uiform.getChildById(uicomponent.VIEWER_DATE_CREATED).getName()) %>
 						</td>
 			      		<td class="FieldLabel">
-			      			<% uiform.renderField(uiform.getChildById(uicomponent.VIEWER_LINK)) %>
+			      			<% uiform.renderField(uiform.getChildById(uicomponent.SHOW_LINK)) %>
 			      		</td>
 						<td class="FieldComponent">
-							<%=uicomponent.getLabel(uiform.getChildById(uicomponent.VIEWER_LINK).getName()) %>
+							<%=uicomponent.getLabel(uiform.getChildById(uicomponent.SHOW_LINK).getName()) %>
 						</td>		
 			  		</tr>																																												
 					<tr>
@@ -139,10 +140,10 @@
 	      	
 				<tr>
 			      <td class="FieldLabel">
-				      <%=uicomponent.getLabel(uiform.getChildById(uicomponent.TARGET_PAGE_INPUT).getName()) %>
+				      <%=uicomponent.getLabel(uiform.getChildById(uicomponent.TARGET_PAGE_INPUT_SET_ACTION).getName()) %>
 			      </td>
-				  <td class="FieldComponent"><% uiform.renderField(uiform.getChildById(uicomponent.TARGET_PAGE_INPUT)) %></td>
-				  <td class="quickSearchAction"><span></span></td>													
+				  <td class="FieldComponent"><% uiform.renderField(uiform.getChildById(uicomponent.TARGET_PAGE_INPUT_SET_ACTION)) %></td>
+				  <td class="quickSearchAction" onclick="<%=uicomponent.event("SelectTargetPage")%>"><span></span></td>													
 				</tr>
 				<tr>	
 					<td class="FieldLabel"><% uiform.renderField(uiform.getChildById(uicomponent.ADD_DATE_TO_LINK)) %></td>

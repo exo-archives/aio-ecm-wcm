@@ -15,7 +15,7 @@ rcontext.getJavascriptManager().addJavascript('eXo.wcm.insertQuickeditingBlock("
 	%>
 			<div style="position: relative; height: 0px;" id="<%=quickEditingBlockId%>">
 				<div style="position: absolute; right: 0px; top: 0px; z-index: 1">
-					<a href="<%=uicomponent.event("QuickEdit")%>" title="<%= _ctx.appRes("UIPresentationContainer.label.quickEditTitle");%>"><div class="QuickEdit"><span></span></div></a>					 
+					<a href="<%=uicomponent.event("QuickEdit")%>" title="<%= _ctx.appRes("UIParameterizedContentListViewerContainer.label.quickEditTitle");%>"><div class="QuickEdit"><span></span></div></a>					 
 				</div>
 			</div>
 	<% }

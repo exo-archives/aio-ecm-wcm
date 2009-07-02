@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bundle>
-<UIPresentationContainer>
+  <UIParameterizedContentListViewerContainer>
   	<label>
   		<quickEditTitle>Quick Edit</quickEditTitle>
   	</label>
-  </UIPresentationContainer>
+  </UIParameterizedContentListViewerContainer>
   <UIParameterizedManagerPopupWindow>
   	<title>Select folder to display its children documents or webcontent</title>
   </UIParameterizedManagerPopupWindow>
@@ -47,7 +47,7 @@
       <OrderDesc>Descendant</OrderDesc>
       <OrderAsc>Ascendant</OrderAsc>   
       <ContentPath>Content</ContentPath>  
-      <TagetPageInput>Target page</TagetPageInput>
+      <UIParameterizedTagetPageInputSetAction>Target page</UIParameterizedTagetPageInputSetAction>
       <AddDateToTheLink>Add date in the link</AddDateToTheLink>
       <AutomaticDetection>Automatic Detection</AutomaticDetection>
       <ShowMoreLink>Show more link</ShowMoreLink>
@@ -55,4 +55,9 @@
     </label>
     
   </UIParameterizedManagementForm>
+  <UICategoryNavigationTargetPathPopupWindow>
+		<title>
+			<UIPageSelector>Page selector</UIPageSelector>
+		</title>
+	</UICategoryNavigationTargetPathPopupWindow>
 </bundle>
