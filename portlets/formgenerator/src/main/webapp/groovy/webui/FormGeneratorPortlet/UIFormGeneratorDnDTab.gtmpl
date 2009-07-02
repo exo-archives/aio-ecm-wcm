@@ -89,7 +89,7 @@
 </div>
 <div class="RightContent">
 	<div class="DecoratorBox">
-		<div class="ContentDecoratorBox" id='ContentDecoratorBox'>
+		<div class="ContentDecoratorBox">
 			<div class="ViewBoxStyle">
 				<div class="TopLeftViewBoxStyle">
 					<div class="TopRightViewBoxStyle">
@@ -98,7 +98,7 @@
 				</div>
 				<div class="MiddleLeftViewBoxStyle">
 					<div class="MiddleRightViewBoxStyle">
-						<div class="MiddleCenterViewBoxStyle">
+						<div class="MiddleCenterViewBoxStyle" id='MiddleCenterViewBoxStyle'>
 							<div class="BoxContentBoxStyle">
 								<div class="TopContentBoxStyle">
 									<div class="UIForm UIFormEditBox">
