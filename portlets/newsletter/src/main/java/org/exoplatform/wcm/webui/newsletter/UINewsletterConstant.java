@@ -44,4 +44,6 @@ public class UINewsletterConstant {
 
   public static final String ENTRY_SUBSCRIPTION_SELECTBOX = "UINewsletterEntrySubscriptionSelectBox";
   
+  public static final String UIVIEW_ENTRY_PUPUP_WINDOW = "UINewsletterEntryViewForm";
+  
 }

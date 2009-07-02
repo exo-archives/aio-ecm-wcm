@@ -66,6 +66,8 @@ public class NewsletterEntryHandler {
     if(entryNode.hasProperty("exo:title"))newsletterEntryConfig.setNewsletterTitle(entryNode.getProperty("exo:title").getString());
     newsletterEntryConfig.setNewsletterSentDate(entryNode.getProperty(NewsletterConstant.ENTRY_PROPERTY_DATE).getDate().getTime());
     newsletterEntryConfig.setStatus(entryNode.getProperty(NewsletterConstant.ENTRY_PROPERTY_STATUS).getString());
+    newsletterEntryConfig.setSubcriptionName(entryNode.getParent().getName());
+    newsletterEntryConfig.setCategoryName(entryNode.getParent().getParent().getName());
     return newsletterEntryConfig;
   }
   
@@ -149,6 +151,25 @@ public class NewsletterEntryHandler {
     return getEntryFromNode((Node)session.getItem(path));
   }
   
+  public String getContent(String portalName, String categoryName, String subscriptionName, String newsletterName) throws Exception{
+    ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+    Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspace, manageableRepository);
+    String path = NewsletterConstant.generateCategoryPath(portalName) + "/" + categoryName + "/" + subscriptionName + "/" + newsletterName;
+    Node newsletterNode = (Node)session.getItem(path);
+    XSkinService xSkService = (XSkinService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(XSkinService.class);
+    try {
+      StringBuilder sb = new StringBuilder();
+      sb.append("<style type=\"text/css\">");
+      sb.append(removeEncodedCharacter(xSkService.getActiveStylesheet(newsletterNode)));
+      sb.append("</style>");
+      sb.append(newsletterNode.getNode("default.html").getNode("jcr:content").getProperty("jcr:data").getString());
+      return sb.toString();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+  
   public String getContent(Node webContent) throws Exception{
 		XSkinService xSkService = (XSkinService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(XSkinService.class);
 		try {
@@ -172,7 +193,7 @@ public class NewsletterEntryHandler {
 		  e.printStackTrace();
 		}
 		return null;
-	  }
+  }
 	  
   private String removeEncodedCharacter(String rawString){
 	  return  rawString.replaceAll("\t", " ").replaceAll("\n", " ");

@@ -109,7 +109,7 @@ public class NewsletterManagerService {
     return publicUserHandler;
   }
   
-  public void sendNewsletter() throws Exception {
+  public void sendNewsletter(Node newsletterNode) throws Exception {
     RepositoryService repositoryService = (RepositoryService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(RepositoryService.class);
     ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
     Session session = SessionProviderFactory.createSystemProvider().getSession(workspaceName, manageableRepository);

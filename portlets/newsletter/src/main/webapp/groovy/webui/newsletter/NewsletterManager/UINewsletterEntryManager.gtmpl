@@ -79,7 +79,7 @@ import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 																						<!-- Detail action -->
 																						<div class="MenuItem" onclick="javaScript:void(0)">
 																							<div class="ItemIcon Pencil" style="padding-left:30px;text-align:left;">
-																								<a href="<%=uicomponent.event("OpenNewsletterEntry")%>">
+																								<a href="<%=uicomponent.event("OpenNewsletter")%>">
 																									<%=_ctx.appRes("NewsletterPortlet.action.Open")%>
 																								</a>
 																							</div>

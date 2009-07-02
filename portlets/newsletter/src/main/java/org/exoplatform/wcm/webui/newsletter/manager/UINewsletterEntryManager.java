@@ -161,20 +161,28 @@ public class UINewsletterEntryManager extends UIForm {
 
   static  public class OpenNewsletterActionListener extends EventListener<UINewsletterEntryManager> {
     public void execute(Event<UINewsletterEntryManager> event) throws Exception {
-      UINewsletterEntryManager newsletter = event.getSource();
-
-      List<String> subIds = newsletter.getChecked();
+      UINewsletterEntryManager uiNewsletterEntryManager = event.getSource();
+      List<String> subIds = uiNewsletterEntryManager.getChecked();
       if(subIds == null || subIds.size() != 1){
-        UIApplication uiApp = newsletter.getAncestorOfType(UIApplication.class);
+        UIApplication uiApp = uiNewsletterEntryManager.getAncestorOfType(UIApplication.class);
         uiApp.addMessage(new ApplicationMessage("UISubscription.msg.checkOnlyOneSubScriptionToOpen", null, ApplicationMessage.WARNING));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       }
-
-      UIPopupContainer popupContainer = newsletter.getAncestorOfType(UINewsletterManagerPortlet.class).getChild(UIPopupContainer.class);
-      UINewsletterManagerPopup newsletterManagerPopup = popupContainer.createUIComponent(UINewsletterManagerPopup.class, null, null);
-      popupContainer.setRendered(true);
-      popupContainer.activate(newsletterManagerPopup, 800, 600);
+      UIPopupContainer popupContainer = uiNewsletterEntryManager.getAncestorOfType(UINewsletterManagerPortlet.class)
+                                                                .getChild(UIPopupContainer.class);
+      UIPopupWindow popupWindow = popupContainer.getChildById(UINewsletterConstant.UIVIEW_ENTRY_PUPUP_WINDOW);
+      UINewsletterManagerPopup newsletterManagerPopup = null;
+      if (popupWindow == null) {
+        newsletterManagerPopup = popupContainer.createUIComponent(UINewsletterManagerPopup.class, null, null);
+        Utils.createPopupWindow(popupContainer, newsletterManagerPopup, 
+                                event.getRequestContext(),UINewsletterConstant.UIVIEW_ENTRY_PUPUP_WINDOW, 800, 600);
+      } else { 
+        newsletterManagerPopup =  popupContainer.getChild(UINewsletterManagerPopup.class);
+        popupWindow.setShow(true);
+      }
+      newsletterManagerPopup.setNewsletterInfor(uiNewsletterEntryManager.categoryConfig.getName(), 
+                                                uiNewsletterEntryManager.subscriptionConfig.getName(), subIds.get(0));
       event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
     }
   }

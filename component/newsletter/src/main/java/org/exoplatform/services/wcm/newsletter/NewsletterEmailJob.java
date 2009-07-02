@@ -39,7 +39,7 @@ public class NewsletterEmailJob extends BaseJob {
       (NewsletterManagerService)container.getComponentInstanceOfType(NewsletterManagerService.class);
     if(newsletterManagerService == null) return;
     try {
-      newsletterManagerService.sendNewsletter();
+      newsletterManagerService.sendNewsletter(null);
     } catch (Exception e) {
       log.error("Error when execute send email by scheduler", e);
     }

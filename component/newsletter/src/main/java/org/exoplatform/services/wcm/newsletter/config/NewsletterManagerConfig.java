@@ -25,16 +25,20 @@ import java.util.Date;
  * Jun 9, 2009  
  */
 public class NewsletterManagerConfig {
-
   private String newsletterName;
-  
   private String newsletterTitle;
-  
   private Date newsletterSentDate;
-  
   private String status;
-  
   private String subcriptionName;
+  private String categoryName;
+  
+  public String getCategoryName() {
+    return categoryName;
+  }
+
+  public void setCategoryName(String categoryName) {
+    this.categoryName = categoryName;
+  }
 
   public String getSubcriptionName() {
     return subcriptionName;

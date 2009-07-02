@@ -16,9 +16,18 @@
  */
 package org.exoplatform.wcm.webui.newsletter.manager;
 
+import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
+import org.exoplatform.services.wcm.newsletter.handler.NewsletterEntryHandler;
+import org.exoplatform.wcm.webui.Utils;
+import org.exoplatform.wcm.webui.newsletter.UINewsletterConstant;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIPopupComponent;
+import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
+import org.exoplatform.webui.event.Event;
+import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormWYSIWYGInput;
 
@@ -29,20 +38,37 @@ import org.exoplatform.webui.form.UIFormWYSIWYGInput;
  * Jun 11, 2009  
  */
 @ComponentConfig(
-                 lifecycle = UIFormLifecycle.class ,
-                 template = "app:/groovy/webui/newsletter/NewsletterManager/UINewsletterMangerPopup.gtmpl"
+   lifecycle = UIFormLifecycle.class ,
+   template = "app:/groovy/webui/newsletter/NewsletterManager/UINewsletterMangerPopup.gtmpl",
+   events = {
+     @EventConfig(listeners = UINewsletterManagerPopup.CloseActionListener.class, phase = Phase.DECODE)
+   }
  )
 public class UINewsletterManagerPopup extends UIForm implements UIPopupComponent {
-
+  private String newsletterEntryContent_;
   public UINewsletterManagerPopup () {
-    
-    UIFormWYSIWYGInput formWYSIWYGInput = new UIFormWYSIWYGInput("TestFCKEditor", null, null, true);
-    this.addChild(formWYSIWYGInput);
+    this.setActions(new String[]{"Close"});
   }
   public void activate() throws Exception {
   }
 
   public void deActivate() throws Exception {
+  }
+  
+  public void setNewsletterInfor(String categoryName, String subscriptoinName, String newsletterName) throws Exception{
+    NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
+    NewsletterEntryHandler newsletterEntryHandler = newsletterManagerService.getEntryHandler();
+    newsletterEntryContent_ = 
+                      newsletterEntryHandler.getContent(NewsLetterUtil.getPortalName(), categoryName, subscriptoinName, newsletterName);
+  }
+  
+
+  static  public class CloseActionListener extends EventListener<UINewsletterManagerPopup> {
+    public void execute(Event<UINewsletterManagerPopup> event) throws Exception {
+      UINewsletterManagerPopup uiNewsletterManagerPopup = event.getSource();
+      UIPopupContainer popupContainer = uiNewsletterManagerPopup.getAncestorOfType(UIPopupContainer.class);
+      Utils.closePopupWindow(popupContainer, UINewsletterConstant.UIVIEW_ENTRY_PUPUP_WINDOW);
+    }
   }
 
 }
