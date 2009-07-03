@@ -16,6 +16,7 @@
  */
 package org.exoplatform.services.wcm.newsletter;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -54,162 +55,150 @@ import org.exoplatform.services.wcm.utils.SQLQueryBuilder;
 import org.exoplatform.services.wcm.utils.AbstractQueryBuilder.LOGICAL;
 
 /**
- * Created by The eXo Platform SAS
- * Author : eXoPlatform
- *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * May 21, 2009  
+ * Created by The eXo Platform SAS Author : eXoPlatform
+ * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com May 21, 2009
  */
 public class NewsletterManagerService {
-  
-  private NewsletterCategoryHandler categoryHandler;
-  private NewsletterSubscriptionHandler subscriptionHandler;
-  private NewsletterEntryHandler entryHandler;
-  private NewsletterTemplateHandler templateHandler;
-  private NewsletterManageUserHandler manageUserHandler;
-  private NewsletterPublicUserHandler publicUserHandler;
-  private String repositoryName;
-  private String workspaceName;
-  private static Log log = ExoLogger.getLogger(NewsletterManagerService.class);
+	private NewsletterCategoryHandler categoryHandler;
+	private NewsletterSubscriptionHandler subscriptionHandler;
+	private NewsletterEntryHandler entryHandler;
+	private NewsletterTemplateHandler templateHandler;
+	private NewsletterManageUserHandler manageUserHandler;
+	private NewsletterPublicUserHandler publicUserHandler;
+	private String repositoryName;
+	private String workspaceName;
+	private static Log log = ExoLogger.getLogger(NewsletterManagerService.class);
 
-  public NewsletterManagerService(InitParams initParams, DMSConfiguration dmsConfiguration) {
-    log.info("Starting NewsletterManagerService ... ");
-    repositoryName = initParams.getValueParam("repository").getValue();
-    workspaceName = initParams.getValueParam("workspace").getValue();
-    categoryHandler = new NewsletterCategoryHandler(repositoryName, workspaceName);
-    subscriptionHandler = new NewsletterSubscriptionHandler(repositoryName, workspaceName);
-    entryHandler = new NewsletterEntryHandler(repositoryName, workspaceName);
-    manageUserHandler = new NewsletterManageUserHandler(repositoryName, workspaceName);
-    publicUserHandler = new NewsletterPublicUserHandler(repositoryName, workspaceName);
-    
-    String templateWorkspace = dmsConfiguration.getConfig(repositoryName).getSystemWorkspace();
-    templateHandler = new NewsletterTemplateHandler(repositoryName, templateWorkspace);
-  }          
-  
-  public NewsletterCategoryHandler getCategoryHandler() {
-    return categoryHandler;
-  }
-  
-  public NewsletterSubscriptionHandler getSubscriptionHandler() {
-    return subscriptionHandler;
-  }
-  
-  public NewsletterEntryHandler getEntryHandler() {
-    return entryHandler;
-  }
-  
-  public NewsletterTemplateHandler getTemplateHandler() {
-    return templateHandler;
-  }
-  
-  public NewsletterManageUserHandler getManageUserHandler() {
-    return manageUserHandler;
-  }
-  
-  public NewsletterPublicUserHandler getPublicUserHandler() {
-    return publicUserHandler;
-  }
-  
-  public void sendNewsletter(Node newsletterNode) throws Exception {
-    RepositoryService repositoryService = (RepositoryService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(RepositoryService.class);
-    ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
-    Session session = SessionProviderFactory.createSystemProvider().getSession(workspaceName, manageableRepository);
-    Property subscribedUserProperty ;
+	public NewsletterManagerService(InitParams initParams, DMSConfiguration dmsConfiguration) {
+		log.info("Starting NewsletterManagerService ... ");
+		repositoryName = initParams.getValueParam("repository").getValue();
+		workspaceName = initParams.getValueParam("workspace").getValue();
+		categoryHandler = new NewsletterCategoryHandler(repositoryName, workspaceName);
+		subscriptionHandler = new NewsletterSubscriptionHandler(repositoryName, workspaceName);
+		entryHandler = new NewsletterEntryHandler(repositoryName, workspaceName);
+		manageUserHandler = new NewsletterManageUserHandler(repositoryName, workspaceName);
+		publicUserHandler = new NewsletterPublicUserHandler(repositoryName, workspaceName);
 
-    Calendar toDate = Calendar.getInstance();
+		String templateWorkspace = dmsConfiguration.getConfig(repositoryName).getSystemWorkspace();
+		templateHandler = new NewsletterTemplateHandler(repositoryName, templateWorkspace);
+	}
 
-    ExoContainer container = ExoContainerContext.getCurrentContainer() ;
-    MailService mailService = 
-      (MailService)container.getComponentInstanceOfType(MailService.class) ;
-    
-    Message message = null;
+	public NewsletterCategoryHandler getCategoryHandler() {
+		return categoryHandler;
+	}
 
-    QueryManager queryManager = session.getWorkspace().getQueryManager();
-    SQLQueryBuilder queryBuilder = new SQLQueryBuilder();
+	public NewsletterSubscriptionHandler getSubscriptionHandler() {
+		return subscriptionHandler;
+	}
 
-    queryBuilder.selectTypes(null);
-    queryBuilder.fromNodeTypes(new String [] {NewsletterConstant.ENTRY_NODETYPE});
-    queryBuilder.like(NewsletterConstant.ENTRY_PROPERTY_STATUS, "awaiting", null);
-    queryBuilder.beforeDate(NewsletterConstant.ENTRY_PROPERTY_DATE, ISO8601.format(toDate), LOGICAL.AND);
+	public NewsletterEntryHandler getEntryHandler() {
+		return entryHandler;
+	}
 
-    //Create queryBuilder.
-    String sqlQuery = queryBuilder.createQueryStatement();
-    
-    Query query = queryManager.createQuery(sqlQuery, Query.SQL);
-    QueryResult queryResult = query.execute();
-    NodeIterator nodeIterator = queryResult.getNodes();
+	public NewsletterTemplateHandler getTemplateHandler() {
+		return templateHandler;
+	}
 
-    List<String> listEmailAddress = null;
-    String receiver = "";
-    for (;nodeIterator.hasNext();) {
-      Node newsletterEntry = nodeIterator.nextNode();
-      
-      Node subscriptionNode = newsletterEntry.getParent();
+	public NewsletterManageUserHandler getManageUserHandler() {
+		return manageUserHandler;
+	}
 
-      subscribedUserProperty = subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_USER);
-      listEmailAddress = convertValuesToArray(subscribedUserProperty.getValues());
+	public NewsletterPublicUserHandler getPublicUserHandler() {
+		return publicUserHandler;
+	}
 
-      if (listEmailAddress.size() > 0) {
-        message = new Message() ;
-        message.setTo(listEmailAddress.get(0));
-        for (int i = 0; i < listEmailAddress.size(); i ++) {
-          receiver += listEmailAddress.get(i + 1) + ",";
-        }
-        message.setCC(receiver);
-        message.setSubject("Test phat!!!") ;
-        message.setBody("Hi Ngoc, you receive this email because i'm testing") ;
-        message.setMimeType("1") ;
-        
-        try {
-          
-          mailService.sendMessage(message);
-        }catch (Exception e) {
-          
-          e.printStackTrace();
-        }
-      }
-    }   
-  }
+	public void sendNewsletter() throws Exception {
+		RepositoryService repositoryService =
+			(RepositoryService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(RepositoryService.class);
+		ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
+		Session session = SessionProviderFactory.createSystemProvider().getSession(workspaceName, manageableRepository);
+		Property subscribedUserProperty;
 
-  public void sendVerificationMail(String email) throws RepositoryException, RepositoryConfigurationException {
-     
-  }
+		ExoContainer container = ExoContainerContext.getCurrentContainer();
+		MailService mailService = (MailService) container.getComponentInstanceOfType(MailService.class);
 
-  private Message createMessage(String receiver, MessageConfig messageConfig) {
-    Message message = new Message() ;
-    message.setFrom("root@exoplatform.com") ;
-    message.setTo(receiver) ;
-    message.setSubject("Test phat!!!") ;
-    message.setBody("Hi Ngoc, you receive this email because i'm testing") ;
-    message.setMimeType(messageConfig.getMimeType()) ;
-    return message ;
-  }
-  
-  private List<String> convertValuesToArray(Value[] values){
-    List<String> listString = new ArrayList<String>();
-    for(Value value : values){
-      try {
-        listString.add(value.getString());
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-    }
-    return listString;
-  }
+		Message message = null;
 
-  public String getRepositoryName() {
-    return repositoryName;
-  }
+		QueryManager queryManager = session.getWorkspace().getQueryManager();
+		SQLQueryBuilder queryBuilder = new SQLQueryBuilder();
 
-  public void setRepositoryName(String repositoryName) {
-    this.repositoryName = repositoryName;
-  }
+		queryBuilder.selectTypes(null);
+		queryBuilder.fromNodeTypes(new String[] { NewsletterConstant.ENTRY_NODETYPE });
+		queryBuilder.like(NewsletterConstant.ENTRY_PROPERTY_STATUS, NewsletterConstant.STATUS_AWAITING, null);
 
-  public String getWorkspaceName() {
-    return workspaceName;
-  }
+		Calendar toDate = Calendar.getInstance();
+		SimpleDateFormat formatter= new SimpleDateFormat(ISO8601.SIMPLE_DATETIME_FORMAT);
+		String dateNow = formatter.format(toDate.getTime());
 
-  public void setWorkspaceName(String workspaceName) {
-    this.workspaceName = workspaceName;
-  }
-  
+//		queryBuilder.beforeDate(NewsletterConstant.ENTRY_PROPERTY_DATE, dateNow, LOGICAL.AND);
+
+		String sqlQuery = queryBuilder.createQueryStatement();
+
+		Query query = queryManager.createQuery(sqlQuery, Query.SQL);
+		QueryResult queryResult = query.execute();
+		NodeIterator nodeIterator = queryResult.getNodes();
+
+		List<String> listEmailAddress = null;
+		String receiver = "";
+
+		while (nodeIterator.hasNext()) {
+			Node newsletterEntry = nodeIterator.nextNode();
+			Node subscriptionNode = newsletterEntry.getParent();
+
+			subscribedUserProperty = subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_USER);
+			listEmailAddress = convertValuesToArray(subscribedUserProperty.getValues());
+
+			if (listEmailAddress.size() > 0) {
+				message = new Message();
+				message.setTo(listEmailAddress.get(0));
+				for (int i = 1; i < listEmailAddress.size(); i++) {
+					receiver += listEmailAddress.get(i) + ",";
+				}
+				message.setBCC(receiver);
+				message.setSubject(newsletterEntry.getProperty("exo:title").getString());
+				message.setBody(entryHandler.getContent(newsletterEntry));
+				message.setMimeType("text/html");
+
+				try {
+					mailService.sendMessage(message);
+					newsletterEntry.setProperty(NewsletterConstant.ENTRY_PROPERTY_STATUS, NewsletterConstant.STATUS_SENT);
+					session.save();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	public void sendVerificationMail(String email) throws RepositoryException, RepositoryConfigurationException {
+	}
+
+	private List<String> convertValuesToArray(Value[] values) {
+		List<String> listString = new ArrayList<String>();
+		for (Value value : values) {
+			try {
+				listString.add(value.getString());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return listString;
+	}
+
+	public String getRepositoryName() {
+		return repositoryName;
+	}
+
+	public void setRepositoryName(String repositoryName) {
+		this.repositoryName = repositoryName;
+	}
+
+	public String getWorkspaceName() {
+		return workspaceName;
+	}
+
+	public void setWorkspaceName(String workspaceName) {
+		this.workspaceName = workspaceName;
+	}
+
 }
