@@ -90,15 +90,10 @@ public class NewsletterCategoryHandler {
   public void add(String portalName, NewsletterCategoryConfig categoryConfig, SessionProvider sessionProvider) {
     log.info("Trying to add category " + categoryConfig.getName());
     
-    System.out.println("\n\n\n\n----------------->repository:" + repository + "\tworkspace:" + workspace);
-    
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
       Session session = sessionProvider.getSession(workspace, manageableRepository);
       String categoryPath = NewsletterConstant.generateCategoryPath(portalName);
-      
-      System.out.println("---------------->categorypath:" + categoryPath);
-      
       Node categoriesNode = (Node)session.getItem(categoryPath);
       Node categoryNode = categoriesNode.addNode(categoryConfig.getName(), NewsletterConstant.CATEGORY_NODETYPE);
       ExtendedNode extendedCategoryNode = ExtendedNode.class.cast(categoryNode);

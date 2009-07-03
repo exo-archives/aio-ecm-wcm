@@ -171,12 +171,7 @@ public class UICategoryNavigationTree extends UIContainer {
     String parameters = null;
     try {
       parameters = URLDecoder.decode(StringUtils.substringAfter(requestURI, portalURI.concat(pageNodeSelected + "/")),"UTF-8");
-    } catch (UnsupportedEncodingException e) {
-      System.out.println("------------------------> UnsupportedEncodingException");
-    }
-    if (!parameters.matches("(.*)/(.*)")) {
-      System.out.println("------------------------> not match (.*)/(.*)");
-    }
+    } catch (UnsupportedEncodingException e) {}
     PortletPreferences portletPreferences = UICategoryNavigationUtils.getPortletPreferences();
     String preferenceRepository = portletPreferences.getValue(UICategoryNavigationConstant.PREFERENCE_REPOSITORY, "");
     String preferenceTreeName = portletPreferences.getValue(UICategoryNavigationConstant.PREFERENCE_TREE_NAME, "");

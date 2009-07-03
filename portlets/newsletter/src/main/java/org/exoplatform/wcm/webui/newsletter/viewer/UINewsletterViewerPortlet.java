@@ -66,9 +66,6 @@ public class UINewsletterViewerPortlet extends UIPortletApplication {
         newsletterForm.isUpdated = true;
         newsletterForm.setInforConfirm(confirms[0], confirms[1]);
         event.getRequestContext().addUIComponentToUpdateByAjax(newsletterForm);
-      } else {
-        System.out.println("\n\n\n\n--------------------> user is invalid");
-        return ;
       }
     }
   }

@@ -472,8 +472,8 @@
 				<read-only>false</read-only>
 			</preference>
 			<preference>
-				<name>addDateIntoPage</name>
-				<value>true</value>
+				<name>treeName</name>
+				<value>Classic</value>
 				<read-only>false</read-only>
 			</preference>
 		</portlet-preferences>

@@ -16,12 +16,23 @@
  */
 package org.exoplatform.wcm.webui.pclv;
 
-import javax.portlet.PortletPreferences;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 
+import javax.jcr.Node;
+import javax.portlet.PortletPreferences;
+import javax.portlet.PortletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
+
+import org.apache.commons.lang.StringUtils;
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
+import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.container.UIContainer;
+import org.exoplatform.portal.webui.portal.UIPortal;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.impl.DMSConfiguration;
+import org.exoplatform.services.cms.taxonomy.TaxonomyService;
 import org.exoplatform.services.wcm.utils.PaginatedNodeIterator;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.clv.UIContentListViewerPortlet;
@@ -57,17 +68,33 @@ public class UIParameterizedContentListViewerContainer extends UIContainer {
   }
   
   public void init() throws Exception {
-    PortletPreferences portletPreferences = getPortletPreference();    
-    setViewAbleContent(true);
+    PortletRequestContext porletRequestContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+    HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) porletRequestContext.getRequest();
+    PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
+    UIPortal uiPortal = Util.getUIPortal();
+    String portalURI = portalRequestContext.getPortalURI();
+    String requestURI = requestWrapper.getRequestURI();
+    String pageNodeSelected = uiPortal.getSelectedNode().getName();
+    String parameters = null;
+    try {
+      parameters = URLDecoder.decode(StringUtils.substringAfter(requestURI, portalURI.concat(pageNodeSelected + "/")),"UTF-8");
+    } catch (UnsupportedEncodingException e) {}
+    PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
+    PortletRequest portletRequest = portletRequestContext.getRequest();
+    PortletPreferences portletPreferences = portletRequest.getPreferences();
+    String preferenceRepository = portletPreferences.getValue(UIParameterizedContentListViewerPortlet.PREFERENCE_REPOSITORY, "");
+    String preferenceTreeName = portletPreferences.getValue(UIParameterizedContentListViewerPortlet.PREFERENCE_TREE_NAME, "");
+    TaxonomyService taxonomyService = getApplicationComponent(TaxonomyService.class);
+    Node treeNode = taxonomyService.getTaxonomyTree(preferenceRepository, preferenceTreeName);
+    String categoryPath = parameters.substring(parameters.indexOf("/") + 1);
+    if (preferenceTreeName.equals(categoryPath)) categoryPath = ""; 
+    Node categoryNode = treeNode.getNode(categoryPath);
     
     setViewAbleContent(true);
-
-    int itemsPerPage = Integer.parseInt(portletPreferences.getValue(UIContentListViewerPortlet.ITEMS_PER_PAGE, null));
-    PaginatedNodeIterator paginatedNodeIterator = new PaginatedNodeIterator(itemsPerPage);
-
-    UIParameterizedContentListViewerForm parameterizedContentListViewer = addChild(UIParameterizedContentListViewerForm.class,
-                                                                                   null,
-                                                                                   "UIParameterizedContentListViewerForm");    
+    setViewAbleContent(true);
+    int itemsPerPage = Integer.parseInt(portletPreferences.getValue(UIParameterizedContentListViewerPortlet.ITEMS_PER_PAGE, null));
+    PaginatedNodeIterator paginatedNodeIterator = new PaginatedNodeIterator(categoryNode.getNodes(), itemsPerPage);
+    UIParameterizedContentListViewerForm parameterizedContentListViewer = addChild(UIParameterizedContentListViewerForm.class, null, "UIParameterizedContentListViewerForm");    
     String templatePath = getFormViewTemplatePath();
     ResourceResolver resourceResolver = getTemplateResourceResolver();    
     parameterizedContentListViewer.init(templatePath, resourceResolver, paginatedNodeIterator); 
@@ -76,7 +103,6 @@ public class UIParameterizedContentListViewerContainer extends UIContainer {
     parameterizedContentListViewer.setShowHeader(Boolean.parseBoolean(portletPreferences.getValue(UIParameterizedContentListViewerPortlet.SHOW_HEADER, null)));
     parameterizedContentListViewer.setShowReadmore(Boolean.parseBoolean(portletPreferences.getValue(UIParameterizedContentListViewerPortlet.SHOW_READMORE, null)));
     parameterizedContentListViewer.setHeader(portletPreferences.getValue(UIParameterizedContentListViewerPortlet.HEADER, null));
-    parameterizedContentListViewer.setAddDateToLink(portletPreferences.getValue(UIParameterizedContentListViewerPortlet.ADD_DATE_INTO_PAGE, null));
     parameterizedContentListViewer.setAutoDetection(portletPreferences.getValue(UIParameterizedContentListViewerPortlet.SHOW_AUTO_DETECT, null));
     parameterizedContentListViewer.setShowMoreLink(portletPreferences.getValue(UIParameterizedContentListViewerPortlet.SHOW_MORE_LINK, null));
     parameterizedContentListViewer.setShowRSSLink(portletPreferences.getValue(UIParameterizedContentListViewerPortlet.SHOW_RSS_LINK, null));
@@ -96,7 +122,7 @@ public class UIParameterizedContentListViewerContainer extends UIContainer {
   public ResourceResolver getTemplateResourceResolver() throws Exception {
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     PortletPreferences references = portletRequestContext.getRequest().getPreferences();
-    String repository = references.getValue(UIParameterizedContentListViewerPortlet.REPOSITORY, null);
+    String repository = references.getValue(UIParameterizedContentListViewerPortlet.PREFERENCE_REPOSITORY, null);
     DMSConfiguration dmsConfiguration = getApplicationComponent(DMSConfiguration.class);
     String workspace = dmsConfiguration.getConfig(repository).getSystemWorkspace();
      
@@ -109,9 +135,9 @@ public class UIParameterizedContentListViewerContainer extends UIContainer {
   }
   
   public void processRender(WebuiRequestContext context) throws Exception {   
-    if(!Utils.isLiveMode() || context.getFullRender()) {
+//    if(!Utils.isLiveMode() || context.getFullRender()) {
       init(); 
-    }
+//    }
     super.processRender(context);
   }
 

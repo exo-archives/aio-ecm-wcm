@@ -119,8 +119,6 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
   /** The Constant AUTO_DETECT. */
   public static final String AUTO_DETECT                       = "AutomaticDetection";
 
-  public static final String ADD_DATE_TO_LINK                  = "AddDateToTheLink";
-
   public static final String SHOW_MORE_LINK                    = "ShowMoreLink";
 
   public static final String SHOW_RSS_LINK                     = "ShowRSSLink";
@@ -148,7 +146,6 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
   @SuppressWarnings("unchecked")
   public UIParameterizedManagementForm() throws Exception {
 
-    System.out.println("Name of UIComponent: " + this.getName());
     PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     PortletPreferences portletPreferences = context.getRequest().getPreferences();
     
@@ -406,13 +403,10 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
       String orderBy = uiParameterizedManagementForm.getUIFormSelectBox(ORDER_BY).getValue();
       String showMoreLink = uiParameterizedManagementForm.getUIFormCheckBoxInput(UIParameterizedManagementForm.SHOW_MORE_LINK).isChecked() ? "true" : "false";
       String showRssLink = uiParameterizedManagementForm.getUIFormCheckBoxInput(UIParameterizedManagementForm.SHOW_RSS_LINK).isChecked() ? "true" : "false";
-      String addDateToPage = uiParameterizedManagementForm.getUIFormCheckBoxInput(UIParameterizedManagementForm.ADD_DATE_TO_LINK).isChecked() ? "true" : "false";
       String autoDetect = uiParameterizedManagementForm.getUIFormCheckBoxInput(UIParameterizedManagementForm.AUTO_DETECT).isChecked() ? "true" : "false";
       String targetPage = uiParameterizedManagementForm.getUIStringInput(UIParameterizedManagementForm.TARGET_PAGE_INPUT).getValue();
       
-      System.out.println("+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+> " + targetPage);
-      
-      portletPreferences.setValue(UIParameterizedContentListViewerPortlet.REPOSITORY, repository);
+      portletPreferences.setValue(UIParameterizedContentListViewerPortlet.PREFERENCE_REPOSITORY, repository);
       portletPreferences.setValue(UIParameterizedContentListViewerPortlet.WORKSPACE, workspace);
       portletPreferences.setValue(UIParameterizedContentListViewerPortlet.FORM_VIEW_TEMPLATE_PATH, formViewTemplatePath);
       portletPreferences.setValue(UIParameterizedContentListViewerPortlet.PAGINATOR_TEMPlATE_PATH, paginatorTemplatePath);
@@ -427,7 +421,6 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
       portletPreferences.setValue(UIParameterizedContentListViewerPortlet.SHOW_LINK, viewerLink);
       portletPreferences.setValue(UIParameterizedContentListViewerPortlet.ORDER_TYPE, orderType);
       portletPreferences.setValue(UIParameterizedContentListViewerPortlet.ORDER_BY, orderBy);
-      portletPreferences.setValue(UIParameterizedContentListViewerPortlet.ADD_DATE_INTO_PAGE, addDateToPage);
       portletPreferences.setValue(UIParameterizedContentListViewerPortlet.SHOW_MORE_LINK, showMoreLink);
       portletPreferences.setValue(UIParameterizedContentListViewerPortlet.SHOW_RSS_LINK, showRssLink);
       portletPreferences.setValue(UIParameterizedContentListViewerPortlet.SHOW_AUTO_DETECT, autoDetect);

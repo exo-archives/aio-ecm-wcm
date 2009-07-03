@@ -41,7 +41,9 @@ public class UIParameterizedContentListViewerPortlet extends UIPortletApplicatio
   private PortletMode        mode                    = PortletMode.VIEW;
 
   /** The Constant REPOSITORY. */
-  public final static String REPOSITORY              = "repository";
+  public final static String PREFERENCE_REPOSITORY              = "repository";
+  
+  public final static String PREFERENCE_TREE_NAME             = "treeName";
 
   /** The Constant WORKSPACE. */
   public final static String WORKSPACE               = "workspace";
@@ -84,8 +86,6 @@ public class UIParameterizedContentListViewerPortlet extends UIPortletApplicatio
   public final static String SHOW_AUTO_DETECT        = "showAutoDetect";
 
   public final static String TARGET_PAGE             = "targetPage";
-
-  public final static String ADD_DATE_INTO_PAGE      = "addDateIntoPage";
 
   public final static String FOLDER_PATH             = "folderPath";
 

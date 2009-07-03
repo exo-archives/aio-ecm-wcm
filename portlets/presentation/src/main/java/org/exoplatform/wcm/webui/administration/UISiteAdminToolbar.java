@@ -650,7 +650,6 @@ import org.exoplatform.webui.event.EventListener;
   public static class ChangePageActionListener extends EventListener<UISiteAdminToolbar> {
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       String uri = event.getRequestContext().getRequestParameter(OBJECTID);
-      System.out.println("\n\nuri: " + uri);
       UIPortal uiPortal = Util.getUIPortal();
       uiPortal.setMode(UIPortal.COMPONENT_VIEW_MODE);
       PageNodeEvent<UIPortal> pnevent = new PageNodeEvent<UIPortal>(uiPortal,

@@ -42,6 +42,10 @@
 				</div>
 				<div class="CaptionItem">
 					<% 
+						def currentPageData = uicomponent.getCurrentPageData();
+						for (Node node : currentPageData) {
+							%><b><%= node.getName() %></b><br><br><br><%
+						}
 						if(uicomponent.listPCLVConfig.size() > 0) {
 							int count = 0;
 							boolean isShowTitle = uicomponent.isShowField(UIParameterizedContentListViewerPortlet.SHOW_TITLE);

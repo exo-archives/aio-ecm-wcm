@@ -87,8 +87,6 @@ public class UINewsletterEntryDialogSelector extends UIForm {
         SelectItemOption<String> selectItemOption = new SelectItemOption<String>(node.getName());
         dialogs.add(selectItemOption);
       }
-    } else {
-      System.out.println("\n\n\n\n---------------->false");
     }
     UIFormSelectBox newsletterEntryTemplate = new UIFormSelectBox(NEWSLETTER_ENTRY_TEMPLATE, NEWSLETTER_ENTRY_TEMPLATE, dialogs);
     newsletterEntryTemplate.setOnChange("ChangeTemplate");

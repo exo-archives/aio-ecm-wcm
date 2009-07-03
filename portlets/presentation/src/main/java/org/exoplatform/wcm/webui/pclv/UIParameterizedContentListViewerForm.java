@@ -103,9 +103,6 @@ public class UIParameterizedContentListViewerForm extends UIForm {
   /** The date formatter. */
   private DateFormat               dateFormatter = null;
 
-  /** Add date to the link. */
-  private String                   addDateToLink;
-
   /** Auto detection. */
   private String                   autoDetection;
 
@@ -575,14 +572,6 @@ public class UIParameterizedContentListViewerForm extends UIForm {
 
   public void setDateFormatter(DateFormat dateFormatter) {
     this.dateFormatter = dateFormatter;
-  }
-
-  public String getAddDateToLink() {
-    return addDateToLink;
-  }
-
-  public void setAddDateToLink(String addDateToLink) {
-    this.addDateToLink = addDateToLink;
   }
 
   public String getAutoDetection() {
