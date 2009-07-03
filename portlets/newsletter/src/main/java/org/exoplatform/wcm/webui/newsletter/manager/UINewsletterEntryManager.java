@@ -155,6 +155,7 @@ public class UINewsletterEntryManager extends UIForm {
       UISubscriptions subcription = newsletterManagerPortlet.getChild(UISubscriptions.class);
       categories.setRendered(true);
       subcription.setRendered(false);
+      newsletter.setRendered(false);
       event.getRequestContext().addUIComponentToUpdateByAjax(newsletterManagerPortlet);
     }
   }
