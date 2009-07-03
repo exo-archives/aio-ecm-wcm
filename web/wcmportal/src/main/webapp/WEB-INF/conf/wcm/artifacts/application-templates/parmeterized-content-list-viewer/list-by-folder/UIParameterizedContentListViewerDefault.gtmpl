@@ -21,8 +21,8 @@
 		String itemDateCreated = uicomponent.getCreatedDate();
 		boolean isShowDraft = uicomponent.showDraftButton();
 			%>
-				<div style="height: 30px; backgroundcolor: #CEDDEE;">
-					<div style="float: left; margin-left: 20px; color: red;">
+				<div class="TopBoxParameterized">
+					<div class="Title">
 						<%	
 							String header = uicomponent.getHeader();
 							if (uicomponent.isShowHeader() && header != null && header.trim().length() != 0 ) {
@@ -33,14 +33,38 @@
 					<%
 						if (uicomponent.isShowField(UIParameterizedContentListViewerPortlet.SHOW_RSS_LINK)) {
 							%>
-				  				<div style="float: right; margin-right: 20px; color: red">
-			  						<a href="#">RSS Feed</a>
-			  					</div>
+			  			<a class="RssIcon" href="#demo">RSS Feed</a>
 							<%
 						} 
 					%>
+					<div class="ClearBoth"><span></span></div>
 				</div>
 				<div class="CaptionItem">
+					<div class="HotNews">
+						<a class="ImageHotNews" href="#demo"><img width="248" alt="#" src="/presentation/skin/ParameterizedContentListViewer/DefaultSkin/images/IIlustrationImages.jpg" /></a>
+						<div class="ContentHotNews">
+							<a class="TitleContentHotNews" href="#demo">General manner, it's a beginning on a Restful XML oriented exposure. In a near future</a>
+							<div>In a general manner, it's a beginning on a Restful XML oriented exposure. In a near future, the CLV could access to contents not directly by java, but by a rest call. By doing that, we could open the wcm platform to other technology and front-end (gagdet, php platform by mashup, etc).In a general manner, it's a beginning on a Restful XML oriented exposure. In a near future, the CLV could access to contents not directly by java, but by a rest call.</div>
+						</div>
+						<div class="ClearRight"><span></span></div>
+					</div>
+					<div class="NormalNews">
+						<a class="ImageNormalNews" href="#demo"><img width="190" alt="#" src="/presentation/skin/ParameterizedContentListViewer/DefaultSkin/images/IIlustrationImages.jpg" /></a>
+						<div class="ContentNormalNews">
+							<a class="TitleContentNormalNews" href="#demo">General manner, it's a beginning on a Restful XML oriented exposure, but by a rest call.</a>
+							<div>In a general manner, it's a beginning on a Restful XML oriented exposure. In a near future, the CLV could access to contents not directly by java, but by a rest call. By doing that, we could open the wcm platform to other technology and front-end (gagdet, php platform by mashup, etc).In a general manner, it's a beginning on a Restful XML oriented exposure. In a near future, the CLV could access to contents not directly by java, but by a rest call.</div>
+						</div>
+						<div class="ClearLeft"><span></span></div>
+					</div>
+					<div class="LineNormalNews"><span></span></div>
+					<div class="NormalNews">
+						<a class="ImageNormalNews" href="#demo"><img width="190" alt="#" src="/presentation/skin/ParameterizedContentListViewer/DefaultSkin/images/IIlustrationImages.jpg" /></a>
+						<div class="ContentNormalNews">
+							<a class="TitleContentNormalNews" href="#demo">General manner, it's a beginning on a Restful XML oriented exposure, but by a rest call.</a>
+							<div>In a general manner, it's a beginning on a Restful XML oriented exposure. In a near future, the CLV could access to contents not directly by java, but by a rest call. By doing that, we could open the wcm platform to other technology and front-end (gagdet, php platform by mashup, etc).In a general manner, it's a beginning on a Restful XML oriented exposure. In a near future, the CLV could access to contents not directly by java, but by a rest call.</div>
+						</div>
+						<div class="ClearLeft"><span></span></div>
+					</div>
 					<% 
 						def currentPageData = uicomponent.getCurrentPageData();
 						for (Node node : currentPageData) {
