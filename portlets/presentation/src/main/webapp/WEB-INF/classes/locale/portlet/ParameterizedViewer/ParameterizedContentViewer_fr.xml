@@ -36,7 +36,7 @@
   </UIContentViewerContainer>
   <UIPopupWindow>
   	<title>
-	  	<UIDocumentDialogForm>Document dialog form</UIDocumentDialogForm>
+	  	<UIDocumentDialogForm>Document sous forme de dialogue</UIDocumentDialogForm>
   	</title>
   </UIPopupWindow>
 </bundle>

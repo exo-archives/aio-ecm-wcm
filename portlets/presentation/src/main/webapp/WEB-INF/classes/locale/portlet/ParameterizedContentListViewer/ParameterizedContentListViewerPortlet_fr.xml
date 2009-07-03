@@ -1,2 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bundle></bundle>
+<bundle>
+  <UIParameterizedContentListViewerContainer>
+  	<label>
+  		<quickEditTitle>Quick Edit</quickEditTitle>
+  	</label>
+  </UIParameterizedContentListViewerContainer>
+  <UIParameterizedManagerPopupWindow>
+  	<title>Sélectionner le dossier pour afficher les documents ou de ses enfants webContent</title>
+  </UIParameterizedManagerPopupWindow>
+  <UIParameterizedManagementForm>
+  	<title>PCLV Edit Mode</title>
+    <action>
+      <Save>Sauver</Save>
+      <Cancel>Annuler</Cancel>
+      <Down>Vers le bas</Down>
+      <Up>Vers le haut</Up>      
+      <Delete>Supprimer</Delete>            
+    </action>
+    <label>
+      <ContentSelectionBlock>Sommaire sélection</ContentSelectionBlock>
+      <DisplaySettingBlock>Réglage de l'affichage</DisplaySettingBlock>    
+      <LinkFormatBlock>Link Format</LinkFormatBlock>	
+      <FolderPathInputSet>UIViewerManagementForm</FolderPathInputSet>
+      <FolderPathInput>Chemin du dossier</FolderPathInput>
+      <FormViewTemplate>Viewer modèle</FormViewTemplate>
+      <PaginatorTemplate>Paginator modèle</PaginatorTemplate>
+      <ItemsPerPage>Articles par page</ItemsPerPage>
+      <AutoDetect>Détection automatique</AutoDetect>
+      <ViewerButtonQuickEdit>Voir l'édition rapide bouton</ViewerButtonQuickEdit>
+      <ViewerButtonRefresh>Afficher le bouton Actualiser</ViewerButtonRefresh>
+      <ViewerThumbnailsView>Voir l'image</ViewerThumbnailsView>
+      <ViewerTitle>Voir titre</ViewerTitle>
+      <ViewerDateCreated>Afficher la date de création</ViewerDateCreated>
+      <ViewerSummary>Voir résumé</ViewerSummary>
+      <Header>Header</Header>
+      <ViewerLink>Voir lien</ViewerLink>
+      <ViewerHeader>Voir la tête</ViewerHeader>
+      <ViewerMode>Mode</ViewerMode>
+      <ManualViewerMode>Manuel</ManualViewerMode>
+      <AutoViewerMode>Automatique</AutoViewerMode>
+      <OrderBy>Trier par</OrderBy>
+      <OrderByTitle>Titre</OrderByTitle>
+      <OrderByDateCreated>Date de création</OrderByDateCreated>
+      <OrderByDateModified>Date de modification</OrderByDateModified>
+      <OrderByDatePublished>Date de publication</OrderByDatePublished>      
+      <OrderDesc>Descendant</OrderDesc>
+      <OrderAsc>Ascendant</OrderAsc>   
+      <ContentPath>Contenu</ContentPath>  
+      <UIParameterizedTagetPageInputSetAction>Cible page</UIParameterizedTagetPageInputSetAction>
+      <AddDateToTheLink>Ajouter la date dans le lien</AddDateToTheLink>
+      <AutomaticDetection>Détection automatique</AutomaticDetection>
+      <ShowMoreLink>Voir plus de lien</ShowMoreLink>
+      <ShowRSSLink>Voir lien RSS</ShowRSSLink>
+    </label>
+    
+  </UIParameterizedManagementForm>
+  <UICategoryNavigationTargetPathPopupWindow>
+		<title>
+			<UIPageSelector>Page sélecteur</UIPageSelector>
+		</title>
+	</UICategoryNavigationTargetPathPopupWindow>
+</bundle>

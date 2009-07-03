@@ -4,6 +4,7 @@
     <action>
       <AddPage>Ajouter une page</AddPage>
       <EditPage>Editer la mise en page</EditPage>
+	  <BrowsePage>Gérer les pages</BrowsePage>
       <EditPortal>Editer le site</EditPortal>
       <CreatePortal>Créer un site</CreatePortal>
       <ChangePortal>Changer de site</ChangePortal>
@@ -11,10 +12,15 @@
       <SkinSettings>Habillage du site</SkinSettings>
       <LanguageSettings>Langues</LanguageSettings>
       <AccountSettings>Paramètres du compte</AccountSettings>
-      <BrowsePage>Gérer les pages</BrowsePage>
-      <OnOffEditting>Edition</OnOffEditting>
+      <Logout>Logout</Logout>
+
+	  
       <TurnOnQuickEdit>O</TurnOnQuickEdit>
       <TurnOffQuickEdit>l</TurnOffQuickEdit>
+      <OnOffEditting>Éditer</OnOffEditting>
+      <AddContent>Ajouter du contenu</AddContent> 
+
+
       <AddContent>Ajouter un contenu</AddContent>
       <Logout>Déconnexion</Logout>
       <EditPageAndNavigation>Editer la navigation</EditPageAndNavigation>

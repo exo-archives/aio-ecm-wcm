@@ -1,2 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bundle></bundle>
+<bundle>
+	
+	<UIFormInputSetWithAction>
+		<msg>
+			<confirm-delete></confirm-delete>
+		</msg>
+	</UIFormInputSetWithAction>
+	
+	<UICategoryNavigationTargetPathFormInputSet>
+		<title>
+			<SelectTargetPath></SelectTargetPath>
+		</title>
+	</UICategoryNavigationTargetPathFormInputSet>
+	
+	<UICategoryNavigationTargetPathPopupWindow>
+		<title>
+			<UIPageSelector>Page sélecteur</UIPageSelector>
+		</title>
+	</UICategoryNavigationTargetPathPopupWindow>
+	
+	<UICategoryNavigationConfig>
+		<label>
+			<UICategoryNavigationRepositoryFormSelectBox>Repository</UICategoryNavigationRepositoryFormSelectBox>
+			<UICategoryNavigationTreeNameSelectBox>Arbre taxonomique</UICategoryNavigationTreeNameSelectBox>
+			<UICategoryNavigationTreeTitleFormStringInput>Titre</UICategoryNavigationTreeTitleFormStringInput>
+			<UICategoryNavigationTargetPathFormInputSet>Target Path</UICategoryNavigationTargetPathFormInputSet>
+		</label>
+		<action>
+			<Save>Sauver</Save>
+		</action>
+	</UICategoryNavigationConfig>
+	
+</bundle>

@@ -2,12 +2,12 @@
 <bundle>
 	<UIFormInputSetWithAction>
 		<msg>
-			<confirm-delete>Are you sure to delete this category from list?</confirm-delete>
+			<confirm-delete>Êtes-vous sûr de vouloir supprimer cette catégorie de la liste?</confirm-delete>
 		</msg>
 	</UIFormInputSetWithAction>
 	<FolderPathInputSet>
 		<title>
-			<SelectFolderPath>Select folder path</SelectFolderPath>
+			<SelectFolderPath>Sélectionner le dossier chemin</SelectFolderPath>
 		</title>
 	</FolderPathInputSet>
   <UIViewerManagementForm>
@@ -88,7 +88,7 @@
 		</action>
 		<label>
 			<header>Liste le contenu sélectionné</header>
-			<name>#{word.name}</name>
+			<name>Nom</name>
 			<delete>Supprimer</delete>
 		</label>		
 		<msg>
@@ -103,34 +103,34 @@
   </UIFolderPathSelectPopupWindow>
   <UIFolderPathSelectorForm>
   	<action>
-  		<Close>#{word.close}</Close>
+  		<Close>Fermer</Close>
   	</action>
   </UIFolderPathSelectorForm>  
   <UIContentSelectionPanel>
   	<label>
   		<header>Bellow est contenu peut être sélectionné</header>
-  		<name>#{word.name}</name>
+  		<name>Nome</name>
   		<add>Ajouter</add>  		  		
   	</label>
-  </UIContentSelectionPanel>  
+  </UIContentSelectionPanel>
   <UIDocumentDialogForm>
   	<action>
-  		<Cancel></Cancel>
-  		<FastPublish></FastPublish>
-  		<SaveAsDraft></SaveAsDraft>  		  		
+  		<Cancel>Fermer</Cancel>
+  		<FastPublish>Fast Publier</FastPublish>
+  		<SaveAsDraft>Enregistrer en tant que projet de</SaveAsDraft>  		  		
   	</action>
-  </UIDocumentDialogForm>  
+  </UIDocumentDialogForm>
   <UIMessageBoard>
-  	<msg>  		
-  		<contents-not-found></contents-not-found>
-  		<no-permission></no-permission>
-  		<error-nodetype></error-nodetype>
-  		<folder-empty></folder-empty>
+  	<msg>  	
+  		<contents-not-found>Contenu introuvable</contents-not-found>
+  		<no-permission>Permission d'accès refusée</no-permission>
+  		<error-nodetype>Type de noeud ne correspond</error-nodetype>
+  		<folder-empty>Le dossier est vide</folder-empty>
   	</msg>
-  </UIMessageBoard>  
+  </UIMessageBoard>
   <UIPresentationContainer>
   	<label>
-  		<quickEditTitle></quickEditTitle>
+  		<quickEditTitle>Quick Edit</quickEditTitle>
   	</label>
-  </UIPresentationContainer>  
+  </UIPresentationContainer>
 </bundle>
