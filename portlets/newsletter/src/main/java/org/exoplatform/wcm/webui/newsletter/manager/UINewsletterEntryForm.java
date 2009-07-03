@@ -16,8 +16,12 @@
  */
 package org.exoplatform.wcm.webui.newsletter.manager;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 
@@ -196,12 +200,14 @@ public class UINewsletterEntryForm extends UIDialogForm {
       newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_SUBSCRIPTION_NAME, 
                                  ((UIFormSelectBox)newsletterEntryDialogSelector.getChildById(UINewsletterConstant.ENTRY_CATEGORY_SELECTBOX)).getValue());
       newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_TYPE, newsletterEntryDialogSelector.getDialog());
-      newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_DATE, 
-                                 ((UIFormDateTimeInput)newsletterEntryDialogSelector.getChildById(UINewsletterEntryDialogSelector.NEWSLETTER_ENTRY_SEND_DATE)).getCalendar().getInstance());
-      Date sendDate = ((UIFormDateTimeInput)newsletterEntryDialogSelector.
-          getChildById(UINewsletterEntryDialogSelector.NEWSLETTER_ENTRY_SEND_DATE)).getCalendar().getInstance().getTime();
+
       Date currentDate = new Date();
-      if(sendDate.getTime() > currentDate.getTime()){
+      //DateFormat dateFormat = new SimpleDateFormat(ISO8601.SIMPLE_DATETIME_FORMAT);
+      Calendar calendar = ((UIFormDateTimeInput)newsletterEntryDialogSelector
+                            .getChildById(UINewsletterEntryDialogSelector.NEWSLETTER_ENTRY_SEND_DATE)).getCalendar();
+      if(calendar==null) calendar = Calendar.getInstance();
+      newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_DATE, calendar);
+      if(calendar.getTimeInMillis() > currentDate.getTime()){
         newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_STATUS, NewsletterConstant.STATUS_AWAITING);
       }else{
         newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_STATUS, NewsletterConstant.STATUS_SENT);
@@ -212,12 +218,14 @@ public class UINewsletterEntryForm extends UIDialogForm {
         String receiver = "";
         Node subscriptionNode = newsletterNode.getParent();
 
-        Property subscribedUserProperty = subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_USER);
-        for(Value value : subscribedUserProperty.getValues()){
-          try {
-            listEmailAddress.add(value.getString());
-          } catch (Exception e) {
-            e.printStackTrace();
+        if(subscriptionNode.hasProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_USER)){
+          Property subscribedUserProperty = subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_USER);
+          for(Value value : subscribedUserProperty.getValues()){
+            try {
+              listEmailAddress.add(value.getString());
+            } catch (Exception e) {
+              e.printStackTrace();
+            }
           }
         }
         if (listEmailAddress.size() > 0) {
