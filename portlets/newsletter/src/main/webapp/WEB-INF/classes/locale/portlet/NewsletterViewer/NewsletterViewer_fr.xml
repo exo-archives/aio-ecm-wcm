@@ -5,13 +5,24 @@
       <updateSuccess>Votre abonnement a été mis à jour.</updateSuccess>
       <subcribed>Vous êtes subcribed!</subcribed>
       <email-not-empty>Courrier électronique ne peut pas être vide!</email-not-empty>
+      <checkSubscriptionToProcess>S'il vous plaît vérifier un ou plusieurs abonnements avant de soumettre!</checkSubscriptionToProcess>
+      <alreadyExistedEmail>Le courrier électronique est déjà en place. S'il vous plaît d'entrée d'autres email!</alreadyExistedEmail>
     </msg>
-  </UINewsletterViewerForm>
-  <UINewsletterViewerForm>
     <action>
       <Subcribe>Inscrire</Subcribe>
       <ForgetEmail>Oubliez ce message</ForgetEmail>
       <ChangeSubcribe>Changez votre Abonnements</ChangeSubcribe>
-    </action>
+	  </action>
+    <title>
+    	<userEmail>User Email</userEmail>
+    	<subscription>Abonnement</subscription>
+    	<yourStatus>Votre statut</yourStatus>
+    </title>
+    <Email>
+    	<ConfirmUser>
+    		<Subject>exo Newsletter Confirmer</Subject>
+    		<Content>Cliquez sur les points de vue #ici# vos bulletins</Content>
+    	</ConfirmUser>
+    </Email>
   </UINewsletterViewerForm>
 </bundle>

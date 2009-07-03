@@ -2,45 +2,39 @@
 <bundle>
 	<NewsletterPortlet>
     <action>
-    	<Preferences>Preferences</Preferences>
-      <Save>Save</Save>
-      <Open>Open</Open>
-      <Cancel>Cancel</Cancel>
-      <Close>Close</Close>
+    	<Preferences>Préférences</Preferences>
+      <Save>Sauver</Save>
+      <Open>Ouvrir</Open>
+      <Cancel>Annuler</Cancel>
+      <Close>Fermer</Close>
       <Down>Down</Down>
       <Up>Up</Up>      
-      <Delete>Delete</Delete>
-      <Edit>Edit</Edit>
-      <Moderation>Moderation</Moderation>
-      <CreateLetter>New Letter</CreateLetter>  
+      <Delete>Supprimer</Delete>
+      <Edit>Modifier</Edit>
+      <Moderation>Modération</Moderation>
+      <CreateLetter>Nouvelle Lettre</CreateLetter>  
     </action>
     <title>
     	<eXoNewsletter>eXo Newsletter</eXoNewsletter>
     </title>
-    <Email>
-    	<ConfirmUser>
-    		<Subject>eXo Newsletter Confirm</Subject>
-    		<Content>Click #here# to views your newsletters</Content>
-    	</ConfirmUser>
-    </Email>
   </NewsletterPortlet>
   
 	<UITabPane>
 		<title>
-			<UIManagerUsers>Public Users</UIManagerUsers>
-			<UIManagerModerator>Users Manager</UIManagerModerator>
+			<UIManagerUsers>Utilisateurs publics</UIManagerUsers>
+			<UIManagerModerator>Utilisateurs Manager</UIManagerModerator>
 		</title>
 	</UITabPane>
 	
 	<UIWebcontentSelectorFormPopupWindow>
 		<title>
-			<UINewsletterEntryWebcontentSelectorForm>Webcontent selector form</UINewsletterEntryWebcontentSelectorForm>
+			<UINewsletterEntryWebcontentSelectorForm>Webcontent sélecteur de la forme</UINewsletterEntryWebcontentSelectorForm>
 		</title>
 	</UIWebcontentSelectorFormPopupWindow>
 	
 	<UIWebcontentSelectorPopupWindow>
 		<title>
-			<UIWebContentTabSelector>Webcontent selector</UIWebContentTabSelector>
+			<UIWebContentTabSelector>Webcontent sélecteur</UIWebContentTabSelector>
 		</title>
 	</UIWebcontentSelectorPopupWindow>
 	
@@ -52,153 +46,153 @@
 	
 	<FormWebcontentSelector>
 		<title>
-			<SelectWebcontent>Select webcontent</SelectWebcontent>
+			<SelectWebcontent>Sélectionnez webContent</SelectWebcontent>
 		</title>
 	</FormWebcontentSelector>
 	
 	<UICategoryFormPopupWindow>
 		<title>
-			<UICategoryForm>Category form</UICategoryForm>
+			<UICategoryForm>Catégorie forme</UICategoryForm>
 		</title>
 	</UICategoryFormPopupWindow>
 	
 	<UISubscriptionFormPopupWindow>
 		<title>
-			<UISubcriptionForm>Subscription form</UISubcriptionForm>
-			<UIManagerUsers>Manager Users</UIManagerUsers>
+			<UISubcriptionForm>Formulaire d'inscription</UISubcriptionForm>
+			<UIManagerUsers>Gestionnaire des utilisateurs</UIManagerUsers>
 		</title>
 	</UISubscriptionFormPopupWindow>
 	
 	<UINewsletterEntryFormPopupWindow>
 		<title>
-			<UINewsletterEntryContainer>Newsletter entry form</UINewsletterEntryContainer>
+			<UINewsletterEntryContainer>Newsletter bulletin d'inscription</UINewsletterEntryContainer>
 		</title>
 	</UINewsletterEntryFormPopupWindow>
 	
 	<UIManagerUsersFormPopupWindow>
 		<title>
-			<UIManagerUsers>Manager Users</UIManagerUsers>
+			<UIManagerUsers>Gestionnaire des utilisateurs</UIManagerUsers>
 		</title>
 	</UIManagerUsersFormPopupWindow>
 	
   <UICategoryForm>
     <msg>
-      <saveSuccess>Category has been saved.</saveSuccess>
-      <categoryNameIsNotEmpty>Category name cannot be empty!</categoryNameIsNotEmpty>
-      <categoryTitleIsNotEmpty>Category title cannot be empty!</categoryTitleIsNotEmpty>
-      <categoryNameIsAlreadyExist>This category's name is already exist!</categoryNameIsAlreadyExist>
-      <inputModeratorEmpty>You must select user or member moderator!</inputModeratorEmpty>
+      <saveSuccess>Catégorie a été enregistré.</saveSuccess>
+      <categoryNameIsNotEmpty>Nom de la catégorie ne peut pas être vide!</categoryNameIsNotEmpty>
+      <categoryTitleIsNotEmpty>Catégorie de titre ne peut pas être vide!</categoryTitleIsNotEmpty>
+      <categoryNameIsAlreadyExist>Cette catégorie est le nom existe déjà!</categoryNameIsAlreadyExist>
+      <inputModeratorEmpty>Vous devez sélectionner l'utilisateur ou le membre de modérateur!</inputModeratorEmpty>
     </msg>
 		<label>
-    	<CategoryName>Category Name</CategoryName>
-    	<CategoryTitle>Category Title</CategoryTitle>
-    	<CategoryDescription>Category Description</CategoryDescription>
-			<FormCategoryModerator>Category moderator</FormCategoryModerator>
+    	<CategoryName>Nom de la Catégorie</CategoryName>
+    	<CategoryTitle>Catégorie Titre</CategoryTitle>
+    	<CategoryDescription>Catégorie Description</CategoryDescription>
+			<FormCategoryModerator>Catégorie modérateur</FormCategoryModerator>
 			<CategoryModerator></CategoryModerator>
 		</label>
 		<action>
-			<Save>Save</Save>
-			<Cancel>Cancel</Cancel>
+			<Save>Sauver</Save>
+			<Cancel>Annuler</Cancel>
 		</action>
   </UICategoryForm>
   
   <UICategories>
     <title>
-    	<SubScription>Subscription</SubScription>
-    	<NumberOfUser>Number of User</NumberOfUser>
-    	<AWaitingLetter>Awaiting Letter</AWaitingLetter>
-    	<NewsLetter>New Letter</NewsLetter>
-    	<NewsSubscription>New Subscription</NewsSubscription>
-    	<NewsCategory>New Category</NewsCategory>
+    	<SubScription>Abonnement</SubScription>
+    	<NumberOfUser>Nombre d'utilisateurs</NumberOfUser>
+    	<AWaitingLetter>En attente de la lettre</AWaitingLetter>
+    	<NewsLetter>Nouvelle lettre</NewsLetter>
+    	<NewsSubscription>Nouvelle inscription</NewsSubscription>
+    	<NewsCategory>Nouvelle catégorie</NewsCategory>
     	<Administration>Administration</Administration>
     </title>
   </UICategories>
   
   <UISubscription>
     <msg>
-    	<confirmDeleteCategory>Are you sure you want to delete this category ?</confirmDeleteCategory>
-    	<confirmDeleteSubscription>Are you sure you want to delete this subscription ?</confirmDeleteSubscription>
-    	<checkOnlyOneSubScriptionToEdit>Please check only one subscription to edit!</checkOnlyOneSubScriptionToEdit>
-    	<checkOnlyOneSubScriptionToDelete>Please check only one subscription to delete!</checkOnlyOneSubScriptionToDelete>
-    	<subscriptionNotfound>Subcription name doesn't exist!</subscriptionNotfound>
-    	<checkOnlyOneSubScriptionToOpen>Please check only one subscription to open!</checkOnlyOneSubScriptionToOpen>
+    	<confirmDeleteCategory>Êtes-vous sûr de vouloir supprimer cette catégorie?</confirmDeleteCategory>
+    	<confirmDeleteSubscription>Êtes-vous sûr de vouloir supprimer cet abonnement?</confirmDeleteSubscription>
+    	<checkOnlyOneSubScriptionToEdit>S'il vous plaît cocher une seule case d'abonnement à modifier!</checkOnlyOneSubScriptionToEdit>
+    	<checkOnlyOneSubScriptionToDelete>S'il vous plaît cocher une seule case pour supprimer l'abonnement!</checkOnlyOneSubScriptionToDelete>
+    	<subscriptionNotfound>Abonnement nom n'existe pas!</subscriptionNotfound>
+    	<checkOnlyOneSubScriptionToOpen>S'il vous plaît cocher une seule case d'abonnement à ouvrir!</checkOnlyOneSubScriptionToOpen>
     </msg>
     <title>
-    	<ManageCategory>Manage Category</ManageCategory>
-    	<EditCategory>Edit Category</EditCategory>
-    	<DeleteCategory>Delete Category</DeleteCategory>
-    	<Edit>Edit</Edit>
-    	<Delete>Delete</Delete>
-    	<ManageUsers>Manage Users</ManageUsers>
-    	<Open>Open</Open>
+    	<ManageCategory>Gérer la catégorie!</ManageCategory>
+    	<EditCategory>Éditer une catégorie</EditCategory>
+    	<DeleteCategory>Supprimer la catégorie</DeleteCategory>
+    	<Edit>Éditer</Edit>
+    	<Delete>Supprimer</Delete>
+    	<ManageUsers>Gérer les utilisateurs</ManageUsers>
+    	<Open>Ouvert</Open>
     </title>
   </UISubscription>
 	
 	<FormCategoryModerator>
 		<title>
-			<SelectUser>Select user</SelectUser>
-			<SelectMember>Select member</SelectMember>
+			<SelectUser>Sélectionnez l'utilisateur</SelectUser>
+			<SelectMember>Sélectionnez membre</SelectMember>
 		</title>
 	</FormCategoryModerator>
 	
 	<UIGroupMemberSelector>
 		<label>
-			<selectGroup>Select group</selectGroup>
-			<selectMembership>Select membership</selectMembership>
+			<selectGroup>Sélectionnez la groupe</selectGroup>
+			<selectMembership>Sélectionnez l'adhésion</selectMembership>
 		</label>
 	</UIGroupMemberSelector>
 	
 	<UIFormInputSetWithAction>
     <msg>
-      <confirm-delete>Are you sure to delete this category from list?</confirm-delete>
+      <confirm-delete>Êtes-vous sûr de vouloir supprimer cette catégorie de la liste?</confirm-delete>
     </msg>
   </UIFormInputSetWithAction>
   
 	<UIUserMemberSelectorPopupWindow>
 		<title>
-			<UIUserMemberSelector>User selector</UIUserMemberSelector>
+			<UIUserMemberSelector>User sélecteur</UIUserMemberSelector>
 		</title>
 	</UIUserMemberSelectorPopupWindow>
 	
 	<UIGroupMemberSelectorPopupWindow>
 		<title>
-			<UIGroupMemberSelector>Group selector</UIGroupMemberSelector>
+			<UIGroupMemberSelector>Groupe sélecteur</UIGroupMemberSelector>
 		</title>
 	</UIGroupMemberSelectorPopupWindow>
 	
   <UISubcriptionForm>
     <msg>
-      <saveSuccess>Subcription has been saved.</saveSuccess>
-      <subcriptionNameIsNotEmpty>Subcription name cannot be empty!</subcriptionNameIsNotEmpty>
-      <subcriptionTitleIsNotEmpty>Subcription title cannot be empty!</subcriptionTitleIsNotEmpty>
-      <subcriptionNameIsAlreadyExist>This subcription's name is already exist!</subcriptionNameIsAlreadyExist>
+      <saveSuccess>Abonnement a été enregistré.</saveSuccess>
+      <subcriptionNameIsNotEmpty>Abonnement nom ne peut pas être vide!</subcriptionNameIsNotEmpty>
+      <subcriptionTitleIsNotEmpty>Abonnement titre ne peut pas être vide!</subcriptionTitleIsNotEmpty>
+      <subcriptionNameIsAlreadyExist>Cet abonnement est le nom existe déjà!</subcriptionNameIsAlreadyExist>
     </msg>
     <title>
-    	<SubcriptionName>Subcription Name</SubcriptionName>
-    	<SubcriptionTitle>Subcription Title</SubcriptionTitle>
+    	<SubcriptionName>Nom abonnement</SubcriptionName>
+    	<SubcriptionTitle>Titre abonnement</SubcriptionTitle>
     	<SubcriptionDescription>Description</SubcriptionDescription>
-    	<CategoryName>Category</CategoryName>
+    	<CategoryName>Catégorie</CategoryName>
     </title>
   </UISubcriptionForm>
 	
 	<UINewsletterEntryForm>
 		<action>
-			<Select>Select</Select>
+			<Select>Sélectionnez</Select>
 			<Preview>Preview</Preview>
-			<Save>Save</Save>
-			<Send>Send</Send>
+			<Save>Sauver</Save>
+			<Send>Envoyer</Send>
 		</action>
 	</UINewsletterEntryForm>
 	
 	<UINewsletterEntryDialogSelector>
 		<action>
-			<OpenWebcontentSelectorForm>Open webcontent selector</OpenWebcontentSelectorForm>
+			<OpenWebcontentSelectorForm>Ouvert WebContent sélecteur</OpenWebcontentSelectorForm>
 		</action>
 		<title>
-			<UINewsletterEntryTemplate>Template</UINewsletterEntryTemplate>
+			<UINewsletterEntryTemplate>Modèle</UINewsletterEntryTemplate>
 			<UINewsletterEntrySendDate>Send date</UINewsletterEntrySendDate>
-			<UINewsletterEntryCategorySelectBox>Category</UINewsletterEntryCategorySelectBox>
-			<UINetterEntrySubscriptionSelectBox>Subscription</UINetterEntrySubscriptionSelectBox>
+			<UINewsletterEntryCategorySelectBox>Catégorie</UINewsletterEntryCategorySelectBox>
+			<UINetterEntrySubscriptionSelectBox>Abonnement</UINetterEntrySubscriptionSelectBox>
 		</title>
 	</UINewsletterEntryDialogSelector>
 	
@@ -207,38 +201,38 @@
 			<Mail>Email</Mail>
 			<isBanned>Banned</isBanned>
 			<action> </action>
-			<UserName>User Name</UserName>
-			<FirstName>First Name</FirstName>
-			<LastName>Last Name</LastName>
+			<UserName>Nom d'utilisateur</UserName>
+			<FirstName>Prénom</FirstName>
+			<LastName>Nom de famille</LastName>
 			<Email>Email</Email>
-			<Role>Role</Role>
+			<Role>Rôle</Role>
 		</header>
 		<action>
 			<title>
-				<Edit>Edit</Edit>
-				<BanOrUnBanUser>Ban/Unban User</BanOrUnBanUser>
-				<DeleteUser>Delete User</DeleteUser>
-				<Addministrator>Administrator</Addministrator>
-				<AddAdministrator>Set is Administrator of Newsletter</AddAdministrator>
-				<DeleteAdministrator>Delete Administrator</DeleteAdministrator>
+				<Edit>Éditer</Edit>
+				<BanOrUnBanUser>Ban / unban utilisateur</BanOrUnBanUser>
+				<DeleteUser>Supprimer l'utilisateur</DeleteUser>
+				<Addministrator>Administrateur</Addministrator>
+				<AddAdministrator>Set est administrateur de la Newsletter</AddAdministrator>
+				<DeleteAdministrator>Supprimer l'administrateur</DeleteAdministrator>
 			</title>
 		</action>
 		<role>
-			<Administrator>Administrator</Administrator>
-			<Moderator>Moderator</Moderator>
-			<Redactor>Redactor</Redactor>
+			<Administrator>Administrateur</Administrator>
+			<Moderator>Modérateur</Moderator>
+			<Redactor>Rédacteur</Redactor>
 		</role>
 	</UIManagerUsers>
 	
 	<UINewsletterEntryManager>
 		<msg>
-			<confirmDeleteNewsletter>Are you sure you want to delete this newsletter?</confirmDeleteNewsletter>
+			<confirmDeleteNewsletter>Êtes-vous sûr de vouloir supprimer cette newsletter?</confirmDeleteNewsletter>
 		</msg>
 		<title>
-			<ConvertAsTemplate>Convert As Template</ConvertAsTemplate>
-			<Letter>Letter</Letter>
+			<ConvertAsTemplate>Convertir en tant que modèle</ConvertAsTemplate>
+			<Letter>Lettre</Letter>
 			<Date>Date</Date>
-			<Status>Status</Status>
+			<Status>État</Status>
 		</title>
 	</UINewsletterEntryManager>
 	
