@@ -81,7 +81,7 @@
 			<!-- The custom button Save -->
 			<preference>
 				<name>saveButton</name>
-				<value>Hi there</value>
+				<value>Save</value>
 				<read-only>false</read-only>
 			</preference>
 			<!-- The custom message when click Save button -->
