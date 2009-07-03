@@ -99,67 +99,6 @@
 				<div class="MiddleLeftViewBoxStyle">
 					<div class="MiddleRightViewBoxStyle">
 						<div class="MiddleCenterViewBoxStyle" id='MiddleCenterViewBoxStyle'>
-							<div class="BoxContentBoxStyle">
-								<div class="TopContentBoxStyle">
-									<div class="UIForm UIFormEditBox">
-										<div class="HorizontalLayout">
-											<div class="FormContainer">
-												<table class="UIFormGrid">
-													<tr>              
-														<td class="FieldLabel">Property Name</td>
-														<td class="FieldComponent"><input type="text" value="Title" class="InputText"></input></td>
-														<td class="FieldIcon">
-															<div class="EditBox">
-																<a class="ControlIcon DeleteIcon"><span></span></a>
-																<a class="ControlIcon EditIcon"><span></span></a>
-															</div>
-															<a class="ControlIcon DownIcon"><span></span></a>
-															<a class="ControlIcon UpIcon"><span></span></a>
-															<div class="ClearRight"><span></span></div>
-														</td>
-													</tr>
-													<tr>              
-														<td class="FieldLabel">Label</td>
-														<td class="FieldComponent"><input type="text" class="Label"></input></td>
-														<td class="FieldIcon"><span></span></td>
-													</tr>
-													<tr>              
-														<td class="FieldLabel">Select Box</td>
-														<td class="FieldComponent">
-															<select type="text" class="SelectBox">
-																<option>select 1</option>
-																<option>select 2</option>
-																<option>select 3</option>
-															</select>
-														</td>
-														<td class="FieldIcon"><span></span></td>
-													</tr>
-													<tr>              
-														<td class="FieldLabel">Upload</td>
-														<td class="FieldComponent"><input type="file" class="Upload" /><img src="/eXoResources/skin/sharedImages/Blank.gif" alt="" onclick="eXo.webui.UIUpload.upload(this, 22684420)" class="UploadButton"/></td>
-														<td class="FieldIcon"><span></span></td>
-													</tr>
-													<tr>              
-														<td class="FieldLabel">Check box</td>
-														<td class="FieldComponent"><input type="checkbox" class="CheckBox" /></td>
-														<td class="FieldIcon"><span></span></td>
-													</tr>
-													<tr>              
-														<td class="FieldLabel">Radio</td>
-														<td class="FieldComponent"><input type="radio" class="Radio" /></td>
-														<td class="FieldIcon"><span></span></td>
-													</tr>
-													<tr>              
-														<td class="FieldLabel">Textarea</td>
-														<td class="FieldComponent"><textarea type="text" class="Textarea"></textarea></td>
-														<td class="FieldIcon"><span></span></td>
-													</tr>
-												</table>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
 						</div>
 					</div>
 				</div>
