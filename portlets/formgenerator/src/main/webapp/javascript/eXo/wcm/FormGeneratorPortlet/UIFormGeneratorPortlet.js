@@ -92,8 +92,8 @@ UIFormGeneratorPortlet.prototype.renderComponent = function(typeComp) {
 	formGenerator  +=										"<a class='ControlIcon DeleteIcon' onclick='eXo.ecm.UIFormGeneratorPortlet.removeComponent(this);' title='Click here to remove this component'><span></span></a>";
 	formGenerator  +=										"<a class='ControlIcon EditIcon' onclick='eXo.ecm.UIFormGeneratorPortlet.showEditBox(this);' title='Click here to edit property'><span></span></a>";
 	formGenerator  +=									"</div>";
-	formGenerator  +=									"<a class='ControlIcon DownIcon' title='Move down component'><span></span></a>";
-	formGenerator  +=									"<a class='ControlIcon UpIcon' title='Move up component'><span></span></a>";
+	formGenerator  +=									"<a class='ControlIcon DownIcon' onclick='eXo.ecm.UIFormGeneratorPortlet.moveDownElement(this);' title='Move down component'><span></span></a>";
+	formGenerator  +=									"<a class='ControlIcon UpIcon' onclick='eXo.ecm.UIFormGeneratorPortlet.moveUpElement(this);' title='Move up component'><span></span></a>";
 	formGenerator  +=									"<div class='ClearRight'><span></span></div>";
 	formGenerator  +=								"</td>";
 	formGenerator  +=							"</tr>";
@@ -132,7 +132,7 @@ UIFormGeneratorPortlet.prototype.renderComponent = function(typeComp) {
 	formGenerator  +=							"</tr>";
 	formGenerator  +=							"<tr>";
 	formGenerator  +=								"<td class='FieldLabel'>Default Value</td>";
-	formGenerator  +=								"<td class='FieldComponent'><input type='text' class='InputText' name='FieldComponent' value='' onkeyup='eXo.ecm.UIFormGeneratorPortlet.updateValue(this);'/></td>";
+	formGenerator  +=								"<td class='FieldComponent'><input type='text' class='InputText' onkeyup='eXo.ecm.UIFormGeneratorPortlet.updateValue(event);'/></td>";
 	formGenerator  +=								"<td class='FieldIcon'>";
 	if (multivalue) {
 		formGenerator  +=								"<a class='AddIcon' onclick='eXo.ecm.UIFormGeneratorPortlet.addOption(this);'><span></span></a>";
@@ -179,8 +179,39 @@ UIFormGeneratorPortlet.prototype.removeComponent = function(obj) {
 	var DOMUtil = eXo.core.DOMUtil;
 	var parentNode = DOMUtil.findAncestorByClass(obj, "BoxContentBoxStyle");
 	if(parentNode) {
-		document.getElementById('MiddleCenterViewBoxStyle').removeChild(parentNode);			
+		var confirmDelete = confirm("Are you sure to remove?");
+		if(confirmDelete == true) {
+				document.getElementById('MiddleCenterViewBoxStyle').removeChild(parentNode);			
+		} else {
+			return;
+		}
 	}
+};
+
+UIFormGeneratorPortlet.prototype.moveDownElement = function(obj) {
+	var DOMUtil = eXo.core.DOMUtil;
+	var parentNode = DOMUtil.findAncestorByClass(obj, "BoxContentBoxStyle");
+	var middContainer = document.getElementById('MiddleCenterViewBoxStyle');
+	if(!middContainer || !parentNode) return;
+	var tmpNode = '';
+	nextElt = DOMUtil.findNextElementByTagName(parentNode, 'div');
+	if(nextElt) {
+		tmpNode = nextElt.cloneNode(true);
+		middContainer.removeChild(nextElt);
+		middContainer.insertBefore(tmpNode, parentNode);
+	}
+};
+
+UIFormGeneratorPortlet.prototype.moveUpElement = function(obj) {
+	var DOMUtil = eXo.core.DOMUtil;
+	var parentNode = DOMUtil.findAncestorByClass(obj, "BoxContentBoxStyle");
+	var middContainer = document.getElementById('MiddleCenterViewBoxStyle');
+	if(!middContainer || !parentNode) return;
+	previousElt = DOMUtil.findPreviousElementByTagName(parentNode, 'div');
+	if(!previousElt) return;
+	var tmpNode = parentNode.cloneNode(true);
+	middContainer.removeChild(parentNode);
+	middContainer.insertBefore(parentNode, previousElt);
 };
 
 UIFormGeneratorPortlet.prototype.updateLabel = function(obj) {
@@ -245,24 +276,23 @@ UIFormGeneratorPortlet.prototype.updateRequired = function(obj) {
 	}
 };
 
-UIFormGeneratorPortlet.prototype.updateValue = function(obj) {
+UIFormGeneratorPortlet.prototype.updateValue = function(evt) {
 	var DOMUtil = eXo.core.DOMUtil;
-	var parentNode = DOMUtil.findAncestorByClass(obj, 'BoxContentBoxStyle');
-	var containerNode = DOMUtil.findFirstDescendantByClass(parentNode, 'div', 'TopContentBoxStyle');
-	var componentNode = DOMUtil.findFirstDescendantByClass(containerNode, 'td', 'FieldComponent');
-	if (!componentNode) return false;
-	var inputNode = componentNode.childNodes[0];
-	if (inputNode.type.indexOf('select') >= 0) {
-		var index = 0;
-		var brotherNode = DOMUtil.findAncestorByClass(obj, 'FieldComponent');
-		var brotherChildNodes = brotherNode.childNodes;
-		for (var i in brotherChildNodes) {
-			if (brotherChildNodes[i] == obj) index = i; 
-			break;
+	var options = '';
+	var inputNodes = '';
+  var srcEle = eXo.core.Browser.getEventSource(evt);
+  if(!srcEle) return;
+	var root = DOMUtil.findAncestorByClass(srcEle, 'BoxContentBoxStyle');
+	var componentNode = DOMUtil.findFirstDescendantByClass(root, 'div', 'TopContentBoxStyle');
+	var selectNode = DOMUtil.findFirstDescendantByClass(componentNode, 'select', 'SelectBox');
+	var fieldNode = DOMUtil.findAncestorByClass(srcEle, 'FieldComponent');
+	if(fieldNode) inputNodes = DOMUtil.getChildrenByTagName(fieldNode, 'input');
+	for(var i = 0 ; i < inputNodes.length; i++) {
+		if(inputNodes[i] == srcEle){
+			selectNode.options[i].value = srcEle.value;
+			selectNode.options[i].innerHTML = srcEle.value;
 		}
-		inputNode[i].innerHTML = obj.value;
 	}
-	inputNode.value = obj.value;
 };
 
 UIFormGeneratorPortlet.prototype.updateGuide = function(obj) {
@@ -277,19 +307,33 @@ UIFormGeneratorPortlet.prototype.addOption = function(obj) {
 	var inputNode = componentNode.childNodes[0];
 	var optionNode = document.createElement('option');
 	inputNode.appendChild(optionNode);
-	
 	var rowNode = DOMUtil.findAncestorByTagName(obj, 'tr');
 	var brotherNode = DOMUtil.findFirstDescendantByClass(rowNode, 'td', 'FieldComponent');
 	var optionInputNode = document.createElement('input');
 	optionInputNode.className = 'InputText';
 	optionInputNode.type = 'text';
-	optionInputNode.onkeyup = 'eXo.ecm.UIFormGeneratorPortlet.updateValue(this);';
-	
+	optionInputNode.onkeyup = this.updateValue;	
 	brotherNode.appendChild(optionInputNode);
 };
 
 UIFormGeneratorPortlet.prototype.removeOption = function(obj) {
-
+	var DOMUtil = eXo.core.DOMUtil;	
+	var parentNode = DOMUtil.findAncestorByTagName(obj, 'tr');
+	var componentNode = DOMUtil.findFirstDescendantByClass(parentNode, 'td', 'FieldComponent');
+	var inputNodes = DOMUtil.getChildrenByTagName(componentNode, 'input');
+	
+	var root = DOMUtil.findAncestorByClass(obj, 'BoxContentBoxStyle');
+	var topContainerNode = DOMUtil.findFirstDescendantByClass(root, 'div', 'TopContentBoxStyle');
+	var topFieldComponent = DOMUtil.findFirstDescendantByClass(topContainerNode, 'td', 'FieldComponent');
+	var selectNode = DOMUtil.findFirstDescendantByClass(topFieldComponent, 'select', 'SelectBox');
+	var options =	 DOMUtil.getChildrenByTagName(selectNode, 'options');
+	for(var i = 0 ; i < inputNodes.length; i++) {
+		var index = inputNodes.length -1;
+		if(i == index) {
+			componentNode.removeChild(inputNodes[i]);			
+			selectNode.remove(i);
+		}
+	}
 };
 
 eXo.ecm.UIFormGeneratorPortlet = new UIFormGeneratorPortlet();
