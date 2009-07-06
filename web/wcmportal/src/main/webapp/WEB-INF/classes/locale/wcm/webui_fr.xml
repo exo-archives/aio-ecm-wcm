@@ -83,6 +83,7 @@
       <Pictureonheadlayoutwebcontent>Image en entête</Pictureonheadlayoutwebcontent>
       <Sitesearchboxwebcontent>Recherche</Sitesearchboxwebcontent>
       <Freelayoutwebcontent>Disposition libre</Freelayoutwebcontent>
+      <Tablelayoutwebcontent>Table Layout</Tablelayoutwebcontent>
     </lable>
   </ContentType>
   <portal>
@@ -103,9 +104,11 @@
   <UISinglePortletContentViewer>
     <SelectContent>
       <leftcolumn>
+
         <title>Ci-dessous sont les dossiers possibles où le contenu peut être affiché</title>
       </leftcolumn>
       <rightcolumn>
+
         <title>Ci-dessous sont les content où le contenu est affiché</title>
       </rightcolumn>
       <searchbox>
@@ -113,6 +116,9 @@
       </searchbox>
     </SelectContent>
   </UISinglePortletContentViewer>  
+
+
+
        
    <!--  
   ##########################################################################################
@@ -150,6 +156,7 @@
   	</action>
   </UIWebContentSearchForm>
   <UIWebContentSearchForm>
+
   	<empty-field>La valeur de ce champ est nulle ou vide!</empty-field>
 		<invalid-date>"To Date" have to greater than "From Date"</invalid-date>
   </UIWebContentSearchForm>
@@ -160,24 +167,26 @@
   </UIDocumentSearchForm>  
   <UIDocumentTabSelector>
   	<header>
-  		<Title>Nom</Title>
+  		<title>Titre</title>
   		<NodeExpect>Excerpt</NodeExpect>
-  		<Score>Score</Score>
+  		<score>Score</score>
   		<CreateDate>Date de création</CreateDate>
   		<action>Action</action>
   		<Select>Sélectionner</Select>
   		<View>Voir</View>
+  		<publicationstate>État de publication</publicationstate>
   	</header>  	
+
   </UIDocumentTabSelector>
   <UIWebContentTabSelector>
   	<header>
-  		<Title>Nom</Title>
-  		<NodeExpect>Excerpt</NodeExpect>
-  		<Score>Score</Score>
+  		<title>Titre</title>
+  		<score>Score</score>
   		<CreateDate>Date de création</CreateDate>
   		<action>Action</action>
   		<Select>Sélectionner</Select>
   		<View>Voir</View>
+  		<publicationstate>État de publication</publicationstate>
   	</header>
   	<action>
   		<title>
@@ -257,4 +266,17 @@
 			<homepage>Page d'accueil</homepage>
 		</tooltip>
 	</UIExoStart>  
+
+
+
+
+	<UIPageSelectorPanel>
+		<header>
+			<path>Chemin</path>
+			<action>Action</action>
+		</header>
+		<msg>
+			<child-not-found>Aucune page trouvée</child-not-found>
+		</msg>
+	</UIPageSelectorPanel>
 </bundle>

@@ -8,16 +8,20 @@
         <MainContent>Contenu principal</MainContent>
         <cssFile>default.css</cssFile>
         <jsFile>default.js</jsFile>
-        <Advanced>Avancé</Advanced>
+
+        <advanced>Avancé</advanced>
         <Summary>Résumé</Summary>
         <name>Nom</name>
         <title>Titre</title>
         <ContentCSS>Style</ContentCSS>
+
         <hintCSS>Dans ce panneau, vous pouvez spécifier la feuille de style principale pour votre contenu web. Ce style surchargera celui défini au niveau du site et au niveau partagé.</hintCSS>
         <ContentJS>JavaScript</ContentJS>
+
         <hintJS>Dans ce panneau, vous pouvez spécifier du code JavaScript qui sera exécuté avant que votre contenu web est affiché sur la page.</hintJS>
         <WebContentHtml>Contenu principal</WebContentHtml>
         <Illustration>Illustration</Illustration>
+
         <hintIllustration>Dans ce panneau, vous pouvez spécifier une image qui sera affichée lorsque votre contenu web sera affiché dans les listes. En plus, vous pouvez spécifier un résumé accompagnant cette image.</hintIllustration>
         <illustrationImage>Illustration</illustrationImage>
         <imageMimeType>Type d'image</imageMimeType>
