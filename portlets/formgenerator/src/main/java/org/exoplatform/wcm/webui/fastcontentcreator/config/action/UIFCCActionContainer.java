@@ -29,11 +29,11 @@ import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 @ComponentConfig(
     lifecycle = UIContainerLifecycle.class
 )
-public class UIFastContentCreatorActionContainer extends UIContainer {
+public class UIFCCActionContainer extends UIContainer {
 
-  public UIFastContentCreatorActionContainer() throws Exception {
-    addChild(UIFastContentCreatorActionTypeForm.class, null, null);
-    addChild(UIFastContentCreatorActionForm.class, null, null);
+  public UIFCCActionContainer() throws Exception {
+    addChild(UIFCCActionTypeForm.class, null, null);
+    addChild(UIFCCActionForm.class, null, null);
   }
   
 }

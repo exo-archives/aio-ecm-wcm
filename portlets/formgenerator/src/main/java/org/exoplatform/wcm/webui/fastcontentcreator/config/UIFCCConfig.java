@@ -39,10 +39,10 @@ import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.container.UIFormFieldSet;
-import org.exoplatform.wcm.webui.fastcontentcreator.UIFastContentCreatorConstant;
-import org.exoplatform.wcm.webui.fastcontentcreator.UIFastContentCreatorPortlet;
-import org.exoplatform.wcm.webui.fastcontentcreator.UIFastContentCreatorUtils;
-import org.exoplatform.wcm.webui.fastcontentcreator.config.action.UIFastContentCreatorActionList;
+import org.exoplatform.wcm.webui.fastcontentcreator.UIFCCConstant;
+import org.exoplatform.wcm.webui.fastcontentcreator.UIFCCPortlet;
+import org.exoplatform.wcm.webui.fastcontentcreator.UIFCCUtils;
+import org.exoplatform.wcm.webui.fastcontentcreator.config.action.UIFCCActionList;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -74,51 +74,51 @@ import org.exoplatform.webui.form.ext.UIFormInputSetWithAction;
     lifecycle = UIFormLifecycle.class,
     template = "system:/groovy/webui/form/UIFormWithFieldSet.gtmpl",
     events = {
-      @EventConfig(listeners = UIFastContentCreatorConfig.SaveActionListener.class),
-      @EventConfig(listeners = UIFastContentCreatorConfig.SelectPathActionListener.class, phase=Phase.DECODE),
-      @EventConfig(listeners = UIFastContentCreatorConfig.ChangeWorkspaceActionListener.class, phase=Phase.DECODE),
-      @EventConfig(listeners = UIFastContentCreatorConfig.ChangeRepositoryActionListener.class, phase=Phase.DECODE)
+      @EventConfig(listeners = UIFCCConfig.SaveActionListener.class),
+      @EventConfig(listeners = UIFCCConfig.SelectPathActionListener.class, phase=Phase.DECODE),
+      @EventConfig(listeners = UIFCCConfig.ChangeWorkspaceActionListener.class, phase=Phase.DECODE),
+      @EventConfig(listeners = UIFCCConfig.ChangeRepositoryActionListener.class, phase=Phase.DECODE)
     }
 )
-public class UIFastContentCreatorConfig extends UIForm implements UISelectable {
+public class UIFCCConfig extends UIForm implements UISelectable {
 
   private Node savedLocationNode;
   
-  public UIFastContentCreatorConfig() throws Exception {
+  public UIFCCConfig() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
 
-    UIFormFieldSet saveLocationField = new UIFormFieldSet(UIFastContentCreatorConstant.SAVE_LOCATION_FIELD);
+    UIFormFieldSet saveLocationField = new UIFormFieldSet(UIFCCConstant.SAVE_LOCATION_FIELD);
     
-    UIFormSelectBox repositorySelectBox = new UIFormSelectBox(UIFastContentCreatorConstant.REPOSITORY_FORM_SELECTBOX, UIFastContentCreatorConstant.REPOSITORY_FORM_SELECTBOX, options) ; 
+    UIFormSelectBox repositorySelectBox = new UIFormSelectBox(UIFCCConstant.REPOSITORY_FORM_SELECTBOX, UIFCCConstant.REPOSITORY_FORM_SELECTBOX, options) ; 
     repositorySelectBox.setOnChange("ChangeRepository") ;
     saveLocationField.addChild(repositorySelectBox) ;
     
-    UIFormSelectBox workspaceSelectBox = new UIFormSelectBox(UIFastContentCreatorConstant.WORKSPACE_FORM_SELECTBOX, UIFastContentCreatorConstant.WORKSPACE_FORM_SELECTBOX, options) ; 
+    UIFormSelectBox workspaceSelectBox = new UIFormSelectBox(UIFCCConstant.WORKSPACE_FORM_SELECTBOX, UIFCCConstant.WORKSPACE_FORM_SELECTBOX, options) ; 
     workspaceSelectBox.setOnChange("ChangeWorkspace") ;
     saveLocationField.addChild(workspaceSelectBox) ;
     
-    UIFormInputSetWithAction folderSelectorInput = new UIFormInputSetWithAction(UIFastContentCreatorConstant.LOCATION_FORM_INPUT_ACTION) ;
-    folderSelectorInput.addUIFormInput(new UIFormStringInput(UIFastContentCreatorConstant.LOCATION_FORM_STRING_INPUT, UIFastContentCreatorConstant.LOCATION_FORM_STRING_INPUT, null).setEditable(false)) ;
-    folderSelectorInput.setActionInfo(UIFastContentCreatorConstant.LOCATION_FORM_STRING_INPUT, new String[] {"SelectPath"}) ;
+    UIFormInputSetWithAction folderSelectorInput = new UIFormInputSetWithAction(UIFCCConstant.LOCATION_FORM_INPUT_ACTION) ;
+    folderSelectorInput.addUIFormInput(new UIFormStringInput(UIFCCConstant.LOCATION_FORM_STRING_INPUT, UIFCCConstant.LOCATION_FORM_STRING_INPUT, null).setEditable(false)) ;
+    folderSelectorInput.setActionInfo(UIFCCConstant.LOCATION_FORM_STRING_INPUT, new String[] {"SelectPath"}) ;
     saveLocationField.addChild(folderSelectorInput) ;
     
     addChild(saveLocationField);
     
-    UIFormFieldSet templateField = new UIFormFieldSet(UIFastContentCreatorConstant.TEMPLATE_FIELD);
-    templateField.addChild(new UIFormSelectBox(UIFastContentCreatorConstant.TEMPLATE_FORM_SELECTBOX, UIFastContentCreatorConstant.TEMPLATE_FORM_SELECTBOX, options));
-    templateField.addChild(new UIFormStringInput(UIFastContentCreatorConstant.SAVE_FORM_STRING_INPUT, UIFastContentCreatorConstant.SAVE_FORM_STRING_INPUT, null));
-    templateField.addChild(new UIFormTextAreaInput(UIFastContentCreatorConstant.MESSAGE_FORM_TEXTAREA_INPUT, UIFastContentCreatorConstant.MESSAGE_FORM_TEXTAREA_INPUT, null));
-    templateField.addChild(new UIFormCheckBoxInput<Boolean>(UIFastContentCreatorConstant.REDIRECT_FORM_CHECKBOX_INPUT, UIFastContentCreatorConstant.REDIRECT_FORM_CHECKBOX_INPUT, false));
-    templateField.addChild(new UIFormStringInput(UIFastContentCreatorConstant.REDIRECT_PATH_FORM_STRING_INPUT, UIFastContentCreatorConstant.REDIRECT_PATH_FORM_STRING_INPUT, null));
+    UIFormFieldSet templateField = new UIFormFieldSet(UIFCCConstant.TEMPLATE_FIELD);
+    templateField.addChild(new UIFormSelectBox(UIFCCConstant.TEMPLATE_FORM_SELECTBOX, UIFCCConstant.TEMPLATE_FORM_SELECTBOX, options));
+    templateField.addChild(new UIFormStringInput(UIFCCConstant.SAVE_FORM_STRING_INPUT, UIFCCConstant.SAVE_FORM_STRING_INPUT, null));
+    templateField.addChild(new UIFormTextAreaInput(UIFCCConstant.MESSAGE_FORM_TEXTAREA_INPUT, UIFCCConstant.MESSAGE_FORM_TEXTAREA_INPUT, null));
+    templateField.addChild(new UIFormCheckBoxInput<Boolean>(UIFCCConstant.REDIRECT_FORM_CHECKBOX_INPUT, UIFCCConstant.REDIRECT_FORM_CHECKBOX_INPUT, false));
+    templateField.addChild(new UIFormStringInput(UIFCCConstant.REDIRECT_PATH_FORM_STRING_INPUT, UIFCCConstant.REDIRECT_PATH_FORM_STRING_INPUT, null));
 
     addChild(templateField);
     
-    UIFormFieldSet actionField = new UIFormFieldSet(UIFastContentCreatorConstant.ACTION_FIELD);
-    UIFastContentCreatorActionList fastContentCreatorActionList = actionField.addChild(UIFastContentCreatorActionList.class, null, null);
-    PortletPreferences portletPreferences = UIFastContentCreatorUtils.getPortletPreferences();
-    String preferenceWorkspace = portletPreferences.getValue(UIFastContentCreatorConstant.PREFERENCE_WORKSPACE, "");
-    String preferenceRepository = portletPreferences.getValue(UIFastContentCreatorConstant.PREFERENCE_REPOSITORY, "");
-    String preferencePath = portletPreferences.getValue(UIFastContentCreatorConstant.PREFERENCE_PATH, "");
+    UIFormFieldSet actionField = new UIFormFieldSet(UIFCCConstant.ACTION_FIELD);
+    UIFCCActionList fastContentCreatorActionList = actionField.addChild(UIFCCActionList.class, null, null);
+    PortletPreferences portletPreferences = UIFCCUtils.getPortletPreferences();
+    String preferenceWorkspace = portletPreferences.getValue(UIFCCConstant.PREFERENCE_WORKSPACE, "");
+    String preferenceRepository = portletPreferences.getValue(UIFCCConstant.PREFERENCE_REPOSITORY, "");
+    String preferencePath = portletPreferences.getValue(UIFCCConstant.PREFERENCE_PATH, "");
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     ManageableRepository repository = repositoryService.getRepository(preferenceRepository);
     ThreadLocalSessionProviderService threadLocalSessionProviderService = getApplicationComponent(ThreadLocalSessionProviderService.class);
@@ -131,17 +131,17 @@ public class UIFastContentCreatorConfig extends UIForm implements UISelectable {
   }
   
   public void initEditMode() throws Exception {
-    PortletPreferences preferences = UIFastContentCreatorUtils.getPortletPreferences();
-    String preferenceRepository = preferences.getValue(UIFastContentCreatorConstant.PREFERENCE_REPOSITORY, "") ;
-    String preferenceWorkspace = preferences.getValue(UIFastContentCreatorConstant.PREFERENCE_WORKSPACE, "") ;
-    String preferencePath = preferences.getValue(UIFastContentCreatorConstant.PREFERENCE_PATH, "") ;
+    PortletPreferences preferences = UIFCCUtils.getPortletPreferences();
+    String preferenceRepository = preferences.getValue(UIFCCConstant.PREFERENCE_REPOSITORY, "") ;
+    String preferenceWorkspace = preferences.getValue(UIFCCConstant.PREFERENCE_WORKSPACE, "") ;
+    String preferencePath = preferences.getValue(UIFCCConstant.PREFERENCE_PATH, "") ;
     boolean isDefaultWorkspace = false ;
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class) ;  
     List<SelectItemOption<String>> repositories = new ArrayList<SelectItemOption<String>>() ;
     for(RepositoryEntry repositoryEntry : repositoryService.getConfig().getRepositoryConfigurations()) {
       repositories.add(new SelectItemOption<String>(repositoryEntry.getName())) ;
     }
-    UIFormSelectBox uiRepositoryList = getUIFormSelectBox(UIFastContentCreatorConstant.REPOSITORY_FORM_SELECTBOX) ;
+    UIFormSelectBox uiRepositoryList = getUIFormSelectBox(UIFCCConstant.REPOSITORY_FORM_SELECTBOX) ;
     uiRepositoryList.setOptions(repositories) ;
     uiRepositoryList.setValue(preferenceRepository) ;
     try {
@@ -155,14 +155,14 @@ public class UIFastContentCreatorConfig extends UIForm implements UISelectable {
           workspace.add(new SelectItemOption<String>(workspaceName)) ;
         }
       }
-      UIFormSelectBox uiWorkspaceList = getUIFormSelectBox(UIFastContentCreatorConstant.WORKSPACE_FORM_SELECTBOX) ; 
+      UIFormSelectBox uiWorkspaceList = getUIFormSelectBox(UIFCCConstant.WORKSPACE_FORM_SELECTBOX) ; 
       uiWorkspaceList.setOptions(workspace) ;
       if(isDefaultWorkspace) {
         uiWorkspaceList.setValue(preferenceWorkspace);
       } else if(workspace.size() > 0) {
         uiWorkspaceList.setValue(workspace.get(0).getValue());
       }
-      getUIStringInput(UIFastContentCreatorConstant.LOCATION_FORM_STRING_INPUT).setValue(preferencePath) ;
+      getUIStringInput(UIFCCConstant.LOCATION_FORM_STRING_INPUT).setValue(preferencePath) ;
     } catch(RepositoryException repo) {
       PortletRequestContext portletRequestContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance() ;
       ResourceBundle resourceBundle = portletRequestContext.getApplicationResourceBundle() ;
@@ -172,10 +172,10 @@ public class UIFastContentCreatorConfig extends UIForm implements UISelectable {
     }
     
     setTemplateOptions(preferencePath, preferenceRepository, preferenceWorkspace) ;
-    getUIStringInput(UIFastContentCreatorConstant.SAVE_FORM_STRING_INPUT).setValue(preferences.getValue(UIFastContentCreatorConstant.PREFERENCE_SAVE_BUTTON, "")) ;
-    getUIFormTextAreaInput(UIFastContentCreatorConstant.MESSAGE_FORM_TEXTAREA_INPUT).setValue(preferences.getValue(UIFastContentCreatorConstant.PREFERENCE_SAVE_MESSAGE, "")) ;
-    getUIFormCheckBoxInput(UIFastContentCreatorConstant.REDIRECT_FORM_CHECKBOX_INPUT).setChecked(Boolean.parseBoolean(preferences.getValue(UIFastContentCreatorConstant.PREFERENCE_IS_REDIRECT, ""))) ;
-    getUIStringInput(UIFastContentCreatorConstant.REDIRECT_PATH_FORM_STRING_INPUT).setValue(preferences.getValue(UIFastContentCreatorConstant.PREFERENCE_REDIRECT_PATH, "")) ;
+    getUIStringInput(UIFCCConstant.SAVE_FORM_STRING_INPUT).setValue(preferences.getValue(UIFCCConstant.PREFERENCE_SAVE_BUTTON, "")) ;
+    getUIFormTextAreaInput(UIFCCConstant.MESSAGE_FORM_TEXTAREA_INPUT).setValue(preferences.getValue(UIFCCConstant.PREFERENCE_SAVE_MESSAGE, "")) ;
+    getUIFormCheckBoxInput(UIFCCConstant.REDIRECT_FORM_CHECKBOX_INPUT).setChecked(Boolean.parseBoolean(preferences.getValue(UIFCCConstant.PREFERENCE_IS_REDIRECT, ""))) ;
+    getUIStringInput(UIFCCConstant.REDIRECT_PATH_FORM_STRING_INPUT).setValue(preferences.getValue(UIFCCConstant.PREFERENCE_REDIRECT_PATH, "")) ;
   }
   
   private void setTemplateOptions(String nodePath, String repositoryName, String workspaceName) throws Exception {
@@ -185,10 +185,10 @@ public class UIFastContentCreatorConfig extends UIForm implements UISelectable {
       ThreadLocalSessionProviderService threadLocalSessionProviderService = getApplicationComponent(ThreadLocalSessionProviderService.class);
       Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspaceName, repository);
       Node currentNode = null ;
-      UIFormSelectBox uiSelectTemplate = getUIFormSelectBox(UIFastContentCreatorConstant.TEMPLATE_FORM_SELECTBOX) ;
+      UIFormSelectBox uiSelectTemplate = getUIFormSelectBox(UIFCCConstant.TEMPLATE_FORM_SELECTBOX) ;
       List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>();
       boolean hasDefaultDoc = false ;
-      String defaultValue = UIFastContentCreatorUtils.getPreferenceType();
+      String defaultValue = UIFCCUtils.getPreferenceType();
       try {
         currentNode = (Node)session.getItem(nodePath) ;
         setSavedLocationNode(currentNode);
@@ -269,17 +269,17 @@ public class UIFastContentCreatorConfig extends UIForm implements UISelectable {
   
   public void doSelect(String selectField, Object value) {
     getUIStringInput(selectField).setValue(value.toString()) ;
-    String repositoryName = getUIFormSelectBox(UIFastContentCreatorConstant.REPOSITORY_FORM_SELECTBOX).getValue() ;
-    String workspaceName = getUIFormSelectBox(UIFastContentCreatorConstant.WORKSPACE_FORM_SELECTBOX).getValue() ;
+    String repositoryName = getUIFormSelectBox(UIFCCConstant.REPOSITORY_FORM_SELECTBOX).getValue() ;
+    String workspaceName = getUIFormSelectBox(UIFCCConstant.WORKSPACE_FORM_SELECTBOX).getValue() ;
     String savedLocationPath = value.toString();
     try {
       setTemplateOptions(savedLocationPath, repositoryName, workspaceName) ;
     } catch(Exception ex) {
       ex.printStackTrace() ;
     }
-    UIFastContentCreatorPortlet fastContentCreatorPortlet = getAncestorOfType(UIFastContentCreatorPortlet.class);
+    UIFCCPortlet fastContentCreatorPortlet = getAncestorOfType(UIFCCPortlet.class);
     UIPopupContainer popupContainer = fastContentCreatorPortlet.getChild(UIPopupContainer.class);
-    Utils.closePopupWindow(popupContainer, UIFastContentCreatorConstant.SELECTOR_POPUP_WINDOW);
+    Utils.closePopupWindow(popupContainer, UIFCCConstant.SELECTOR_POPUP_WINDOW);
   }
 
   public Node getSavedLocationNode() {
@@ -290,12 +290,12 @@ public class UIFastContentCreatorConfig extends UIForm implements UISelectable {
     this.savedLocationNode = savedLocationNode;
   }
   
-  static public class SelectPathActionListener extends EventListener<UIFastContentCreatorConfig> {
-    public void execute(Event<UIFastContentCreatorConfig> event) throws Exception {
-      UIFastContentCreatorConfig fastContentCreatorConfig = event.getSource() ;
-      UIFastContentCreatorPortlet fastContentCreatorPortlet = fastContentCreatorConfig.getParent() ;
-      String repositoryName = fastContentCreatorConfig.getUIFormSelectBox(UIFastContentCreatorConstant.REPOSITORY_FORM_SELECTBOX).getValue() ;
-      String workspaceName = fastContentCreatorConfig.getUIFormSelectBox(UIFastContentCreatorConstant.WORKSPACE_FORM_SELECTBOX).getValue() ;
+  static public class SelectPathActionListener extends EventListener<UIFCCConfig> {
+    public void execute(Event<UIFCCConfig> event) throws Exception {
+      UIFCCConfig fastContentCreatorConfig = event.getSource() ;
+      UIFCCPortlet fastContentCreatorPortlet = fastContentCreatorConfig.getParent() ;
+      String repositoryName = fastContentCreatorConfig.getUIFormSelectBox(UIFCCConstant.REPOSITORY_FORM_SELECTBOX).getValue() ;
+      String workspaceName = fastContentCreatorConfig.getUIFormSelectBox(UIFCCConstant.WORKSPACE_FORM_SELECTBOX).getValue() ;
       
       RepositoryService repositoryService = fastContentCreatorConfig.getApplicationComponent(RepositoryService.class);
       ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
@@ -312,31 +312,31 @@ public class UIFastContentCreatorConfig extends UIForm implements UISelectable {
       } else {
         uiOneNodePathSelector.init(SessionProviderFactory.createSessionProvider()) ;
       }
-      uiOneNodePathSelector.setSourceComponent(fastContentCreatorConfig, new String[] {UIFastContentCreatorConstant.LOCATION_FORM_STRING_INPUT}) ;
+      uiOneNodePathSelector.setSourceComponent(fastContentCreatorConfig, new String[] {UIFCCConstant.LOCATION_FORM_STRING_INPUT}) ;
       
       UIPopupContainer popupContainer = fastContentCreatorPortlet.getChild(UIPopupContainer.class);
-      popupContainer.removeChildById(UIFastContentCreatorConstant.SELECTOR_POPUP_WINDOW);
-      Utils.createPopupWindow(popupContainer, uiOneNodePathSelector, event.getRequestContext(), UIFastContentCreatorConstant.SELECTOR_POPUP_WINDOW, 610, 300);
+      popupContainer.removeChildById(UIFCCConstant.SELECTOR_POPUP_WINDOW);
+      Utils.createPopupWindow(popupContainer, uiOneNodePathSelector, event.getRequestContext(), UIFCCConstant.SELECTOR_POPUP_WINDOW, 610, 300);
     }
   }
   
-  static public class ChangeWorkspaceActionListener extends EventListener<UIFastContentCreatorConfig> {
-    public void execute(Event<UIFastContentCreatorConfig> event) throws Exception {
-      UIFastContentCreatorConfig fastContentCreatorConfig = event.getSource() ;
-      fastContentCreatorConfig.getUIStringInput(UIFastContentCreatorConstant.LOCATION_FORM_STRING_INPUT).setValue("/") ;
-      String repoName = fastContentCreatorConfig.getUIFormSelectBox(UIFastContentCreatorConstant.REPOSITORY_FORM_SELECTBOX).getValue() ;
-      String wsName = fastContentCreatorConfig.getUIFormSelectBox(UIFastContentCreatorConstant.WORKSPACE_FORM_SELECTBOX).getValue() ;
-      fastContentCreatorConfig.setTemplateOptions(fastContentCreatorConfig.getUIStringInput(UIFastContentCreatorConstant.LOCATION_FORM_STRING_INPUT).getValue(), repoName, wsName) ;
+  static public class ChangeWorkspaceActionListener extends EventListener<UIFCCConfig> {
+    public void execute(Event<UIFCCConfig> event) throws Exception {
+      UIFCCConfig fastContentCreatorConfig = event.getSource() ;
+      fastContentCreatorConfig.getUIStringInput(UIFCCConstant.LOCATION_FORM_STRING_INPUT).setValue("/") ;
+      String repoName = fastContentCreatorConfig.getUIFormSelectBox(UIFCCConstant.REPOSITORY_FORM_SELECTBOX).getValue() ;
+      String wsName = fastContentCreatorConfig.getUIFormSelectBox(UIFCCConstant.WORKSPACE_FORM_SELECTBOX).getValue() ;
+      fastContentCreatorConfig.setTemplateOptions(fastContentCreatorConfig.getUIStringInput(UIFCCConstant.LOCATION_FORM_STRING_INPUT).getValue(), repoName, wsName) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(fastContentCreatorConfig) ;
     }
   }
   
-  static public class ChangeRepositoryActionListener extends EventListener<UIFastContentCreatorConfig> {
-    public void execute(Event<UIFastContentCreatorConfig> event) throws Exception {
-      UIFastContentCreatorConfig fastContentCreatorConfig = event.getSource() ;
+  static public class ChangeRepositoryActionListener extends EventListener<UIFCCConfig> {
+    public void execute(Event<UIFCCConfig> event) throws Exception {
+      UIFCCConfig fastContentCreatorConfig = event.getSource() ;
       RepositoryService repositoryService = fastContentCreatorConfig.getApplicationComponent(RepositoryService.class) ;
-      fastContentCreatorConfig.getUIStringInput(UIFastContentCreatorConstant.LOCATION_FORM_STRING_INPUT).setValue("/") ;
-      String repoName = fastContentCreatorConfig.getUIFormSelectBox(UIFastContentCreatorConstant.REPOSITORY_FORM_SELECTBOX).getValue() ;
+      fastContentCreatorConfig.getUIStringInput(UIFCCConstant.LOCATION_FORM_STRING_INPUT).setValue("/") ;
+      String repoName = fastContentCreatorConfig.getUIFormSelectBox(UIFCCConstant.REPOSITORY_FORM_SELECTBOX).getValue() ;
       String[] wsNames = repositoryService.getRepository(repoName).getWorkspaceNames();
       String systemWsName = repositoryService.getRepository(repoName).getConfiguration().getSystemWorkspaceName() ;
       List<SelectItemOption<String>> workspace = new ArrayList<SelectItemOption<String>>() ;
@@ -346,42 +346,42 @@ public class UIFastContentCreatorConfig extends UIForm implements UISelectable {
       if(workspace.size() > 0) {
         fastContentCreatorConfig.setTemplateOptions("/", repoName, workspace.get(0).getLabel()) ;
       }
-      fastContentCreatorConfig.getUIFormSelectBox(UIFastContentCreatorConstant.WORKSPACE_FORM_SELECTBOX).setOptions(workspace) ;
+      fastContentCreatorConfig.getUIFormSelectBox(UIFCCConstant.WORKSPACE_FORM_SELECTBOX).setOptions(workspace) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(fastContentCreatorConfig) ;
     }
   }
   
-  static public class SaveActionListener extends EventListener<UIFastContentCreatorConfig> {
-    public void execute(Event<UIFastContentCreatorConfig> event) throws Exception {
-      UIFastContentCreatorConfig fastContentCreatorConfig = event.getSource() ;
+  static public class SaveActionListener extends EventListener<UIFCCConfig> {
+    public void execute(Event<UIFCCConfig> event) throws Exception {
+      UIFCCConfig fastContentCreatorConfig = event.getSource() ;
       UIApplication uiApp = fastContentCreatorConfig.getAncestorOfType(UIApplication.class) ;
-      PortletPreferences portletPreferences = UIFastContentCreatorUtils.getPortletPreferences();
-      String type = fastContentCreatorConfig.getUIFormSelectBox(UIFastContentCreatorConstant.TEMPLATE_FORM_SELECTBOX).getValue() ;
-      String path = fastContentCreatorConfig.getUIStringInput(UIFastContentCreatorConstant.LOCATION_FORM_STRING_INPUT).getValue() ;
-      String saveButton = fastContentCreatorConfig.getUIStringInput(UIFastContentCreatorConstant.SAVE_FORM_STRING_INPUT).getValue() ;
-      String saveMessage = fastContentCreatorConfig.getUIStringInput(UIFastContentCreatorConstant.MESSAGE_FORM_TEXTAREA_INPUT).getValue() ;
-      String isRedirect = String.valueOf(fastContentCreatorConfig.getUIFormCheckBoxInput(UIFastContentCreatorConstant.REDIRECT_FORM_CHECKBOX_INPUT).isChecked());
-      String redirectPath = fastContentCreatorConfig.getUIStringInput(UIFastContentCreatorConstant.REDIRECT_PATH_FORM_STRING_INPUT).getValue() ;
-      String workspaceName = fastContentCreatorConfig.getUIFormSelectBox(UIFastContentCreatorConstant.WORKSPACE_FORM_SELECTBOX).getValue() ;
+      PortletPreferences portletPreferences = UIFCCUtils.getPortletPreferences();
+      String type = fastContentCreatorConfig.getUIFormSelectBox(UIFCCConstant.TEMPLATE_FORM_SELECTBOX).getValue() ;
+      String path = fastContentCreatorConfig.getUIStringInput(UIFCCConstant.LOCATION_FORM_STRING_INPUT).getValue() ;
+      String saveButton = fastContentCreatorConfig.getUIStringInput(UIFCCConstant.SAVE_FORM_STRING_INPUT).getValue() ;
+      String saveMessage = fastContentCreatorConfig.getUIStringInput(UIFCCConstant.MESSAGE_FORM_TEXTAREA_INPUT).getValue() ;
+      String isRedirect = String.valueOf(fastContentCreatorConfig.getUIFormCheckBoxInput(UIFCCConstant.REDIRECT_FORM_CHECKBOX_INPUT).isChecked());
+      String redirectPath = fastContentCreatorConfig.getUIStringInput(UIFCCConstant.REDIRECT_PATH_FORM_STRING_INPUT).getValue() ;
+      String workspaceName = fastContentCreatorConfig.getUIFormSelectBox(UIFCCConstant.WORKSPACE_FORM_SELECTBOX).getValue() ;
       if(workspaceName == null || workspaceName.trim().length() == 0) {
         uiApp.addMessage(new ApplicationMessage("UIFastContentCreatorConfig.msg.ws-empty", null, ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;        
       }
-      String repositoryName = fastContentCreatorConfig.getUIFormSelectBox(UIFastContentCreatorConstant.REPOSITORY_FORM_SELECTBOX).getValue() ;
+      String repositoryName = fastContentCreatorConfig.getUIFormSelectBox(UIFCCConstant.REPOSITORY_FORM_SELECTBOX).getValue() ;
       if(type == null || type.trim().length() == 0) {
         uiApp.addMessage(new ApplicationMessage("UIFastContentCreatorConfig.msg.fileType-empty", null, ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      portletPreferences.setValue(UIFastContentCreatorConstant.PREFERENCE_WORKSPACE, workspaceName) ;
-      portletPreferences.setValue(UIFastContentCreatorConstant.PREFERENCE_PATH, path) ;
-      portletPreferences.setValue(UIFastContentCreatorConstant.PREFERENCE_TYPE, type) ;
-      portletPreferences.setValue(UIFastContentCreatorConstant.PREFERENCE_REPOSITORY, repositoryName) ;
-      portletPreferences.setValue(UIFastContentCreatorConstant.PREFERENCE_SAVE_BUTTON, saveButton) ;
-      portletPreferences.setValue(UIFastContentCreatorConstant.PREFERENCE_SAVE_MESSAGE, saveMessage) ;
-      portletPreferences.setValue(UIFastContentCreatorConstant.PREFERENCE_IS_REDIRECT, isRedirect) ;
-      portletPreferences.setValue(UIFastContentCreatorConstant.PREFERENCE_REDIRECT_PATH, redirectPath) ;
+      portletPreferences.setValue(UIFCCConstant.PREFERENCE_WORKSPACE, workspaceName) ;
+      portletPreferences.setValue(UIFCCConstant.PREFERENCE_PATH, path) ;
+      portletPreferences.setValue(UIFCCConstant.PREFERENCE_TYPE, type) ;
+      portletPreferences.setValue(UIFCCConstant.PREFERENCE_REPOSITORY, repositoryName) ;
+      portletPreferences.setValue(UIFCCConstant.PREFERENCE_SAVE_BUTTON, saveButton) ;
+      portletPreferences.setValue(UIFCCConstant.PREFERENCE_SAVE_MESSAGE, saveMessage) ;
+      portletPreferences.setValue(UIFCCConstant.PREFERENCE_IS_REDIRECT, isRedirect) ;
+      portletPreferences.setValue(UIFCCConstant.PREFERENCE_REDIRECT_PATH, redirectPath) ;
       portletPreferences.store() ;
       uiApp.addMessage(new ApplicationMessage("UIFastContentCreatorConfig.msg.save-successfully", null)) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

@@ -39,10 +39,10 @@ import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.wcm.webui.Utils;
-import org.exoplatform.wcm.webui.fastcontentcreator.UIFastContentCreatorConstant;
-import org.exoplatform.wcm.webui.fastcontentcreator.UIFastContentCreatorPortlet;
-import org.exoplatform.wcm.webui.fastcontentcreator.UIFastContentCreatorUtils;
-import org.exoplatform.wcm.webui.fastcontentcreator.config.UIFastContentCreatorConfig;
+import org.exoplatform.wcm.webui.fastcontentcreator.UIFCCConstant;
+import org.exoplatform.wcm.webui.fastcontentcreator.UIFCCPortlet;
+import org.exoplatform.wcm.webui.fastcontentcreator.UIFCCUtils;
+import org.exoplatform.wcm.webui.fastcontentcreator.config.UIFCCConfig;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -67,14 +67,14 @@ import org.exoplatform.webui.form.UIFormInputBase;
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
     events = {
-      @EventConfig(listeners = UIFastContentCreatorActionForm.SaveActionListener.class),
+      @EventConfig(listeners = UIFCCActionForm.SaveActionListener.class),
       @EventConfig(listeners = UIDialogForm.OnchangeActionListener.class, phase=Phase.DECODE),
-      @EventConfig(listeners = UIFastContentCreatorActionForm.CloseActionListener.class, phase = Phase.DECODE),
-      @EventConfig(listeners = UIFastContentCreatorActionForm.ShowComponentActionListener.class, phase = Phase.DECODE),
-      @EventConfig(listeners = UIFastContentCreatorActionForm.RemoveReferenceActionListener.class, confirm = "DialogFormField.msg.confirm-delete", phase = Phase.DECODE)
+      @EventConfig(listeners = UIFCCActionForm.CloseActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UIFCCActionForm.ShowComponentActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UIFCCActionForm.RemoveReferenceActionListener.class, confirm = "DialogFormField.msg.confirm-delete", phase = Phase.DECODE)
     }
 )
-public class UIFastContentCreatorActionForm extends UIDialogForm implements UISelectable {
+public class UIFCCActionForm extends UIDialogForm implements UISelectable {
 
   private String parentPath_ ;
   private String nodeTypeName_ = null ;
@@ -83,7 +83,7 @@ public class UIFastContentCreatorActionForm extends UIDialogForm implements UISe
   
   private static final String EXO_ACTIONS = "exo:actions".intern();
   
-  public UIFastContentCreatorActionForm() throws Exception {setActions(new String[]{"Save","Close"}) ;}
+  public UIFCCActionForm() throws Exception {setActions(new String[]{"Save","Close"}) ;}
   
   public void createNewAction(Node parentNode, String actionType, boolean isAddNew) throws Exception {
     reset() ;
@@ -102,8 +102,8 @@ public class UIFastContentCreatorActionForm extends UIDialogForm implements UISe
   }
   
   public String getCurrentPath() throws Exception { 
-    UIFastContentCreatorPortlet fastContentCreatorPortlet = getAncestorOfType(UIFastContentCreatorPortlet.class);
-    UIFastContentCreatorConfig fastContentCreatorConfig = fastContentCreatorPortlet.getChild(UIFastContentCreatorConfig.class); 
+    UIFCCPortlet fastContentCreatorPortlet = getAncestorOfType(UIFCCPortlet.class);
+    UIFCCConfig fastContentCreatorConfig = fastContentCreatorPortlet.getChild(UIFCCConfig.class); 
     return fastContentCreatorConfig.getSavedLocationNode().getPath();
   }
   
@@ -116,7 +116,7 @@ public class UIFastContentCreatorActionForm extends UIDialogForm implements UISe
   public String getTemplate() { return getDialogPath() ; }
 
   public String getDialogPath() {
-    repositoryName = UIFastContentCreatorUtils.getPreferenceRepository() ;
+    repositoryName = UIFCCUtils.getPreferenceRepository() ;
     TemplateService templateService = getApplicationComponent(TemplateService.class) ;
     String userName = Util.getPortalRequestContext().getRemoteUser() ;
     String dialogPath = null ;
@@ -146,14 +146,14 @@ public class UIFastContentCreatorActionForm extends UIDialogForm implements UISe
     event.getRequestContext().addUIComponentToUpdateByAjax(getParent()) ;
   }
   
-  static public class SaveActionListener extends EventListener<UIFastContentCreatorActionForm> {
-    public void execute(Event<UIFastContentCreatorActionForm> event) throws Exception {
-      UIFastContentCreatorActionForm fastContentCreatorActionForm = event.getSource();
+  static public class SaveActionListener extends EventListener<UIFCCActionForm> {
+    public void execute(Event<UIFCCActionForm> event) throws Exception {
+      UIFCCActionForm fastContentCreatorActionForm = event.getSource();
       UIApplication uiApp = fastContentCreatorActionForm.getAncestorOfType(UIApplication.class) ;
       
       // Get current node
-      UIFastContentCreatorPortlet fastContentCreatorPortlet = fastContentCreatorActionForm.getAncestorOfType(UIFastContentCreatorPortlet.class);
-      UIFastContentCreatorConfig fastContentCreatorConfig = fastContentCreatorPortlet.getChild(UIFastContentCreatorConfig.class) ;   
+      UIFCCPortlet fastContentCreatorPortlet = fastContentCreatorActionForm.getAncestorOfType(UIFCCPortlet.class);
+      UIFCCConfig fastContentCreatorConfig = fastContentCreatorPortlet.getChild(UIFCCConfig.class) ;   
       Node currentNode = fastContentCreatorConfig.getSavedLocationNode();
       
       // Check permission for current node
@@ -173,7 +173,7 @@ public class UIFastContentCreatorActionForm extends UIDialogForm implements UISe
 
       // Close popup
       UIPopupContainer popupContainer = fastContentCreatorActionForm.getAncestorOfType(UIPopupContainer.class);
-      Utils.closePopupWindow(popupContainer, UIFastContentCreatorConstant.ACTION_POPUP_WINDOW);
+      Utils.closePopupWindow(popupContainer, UIFCCConstant.ACTION_POPUP_WINDOW);
       
       try{
         Map<String, JcrInputProperty> sortedInputs = DialogFormUtil.prepareMap(fastContentCreatorActionForm.getChildren(), fastContentCreatorActionForm.getInputProperties());
@@ -209,14 +209,14 @@ public class UIFastContentCreatorActionForm extends UIDialogForm implements UISe
         
         // Save to database
         ActionServiceContainer actionServiceContainer = fastContentCreatorActionForm.getApplicationComponent(ActionServiceContainer.class) ;
-        String repository = UIFastContentCreatorUtils.getPreferenceRepository() ;
+        String repository = UIFCCUtils.getPreferenceRepository() ;
         actionServiceContainer.addAction(parentNode, repository, fastContentCreatorActionForm.nodeTypeName_, sortedInputs);
         fastContentCreatorActionForm.setIsOnchange(false) ;
         parentNode.getSession().save() ;
         
         // Create action
         fastContentCreatorActionForm.createNewAction(fastContentCreatorConfig.getSavedLocationNode(), fastContentCreatorActionForm.nodeTypeName_, true) ;
-        UIFastContentCreatorActionList fastContentCreatorActionList = fastContentCreatorConfig.findFirstComponentOfType(UIFastContentCreatorActionList.class) ;  
+        UIFCCActionList fastContentCreatorActionList = fastContentCreatorConfig.findFirstComponentOfType(UIFCCActionList.class) ;  
         fastContentCreatorActionList.updateGrid(parentNode, fastContentCreatorActionList.getChild(UIGrid.class).getUIPageIterator().getCurrentPage());
         fastContentCreatorActionForm.reset() ;
       } catch(RepositoryException repo) {      
@@ -242,17 +242,17 @@ public class UIFastContentCreatorActionForm extends UIDialogForm implements UISe
     }
   }
   
-  static public class CloseActionListener extends EventListener<UIFastContentCreatorActionForm> {
-    public void execute(Event<UIFastContentCreatorActionForm> event) throws Exception {
-      UIFastContentCreatorActionForm fastContentCreatorActionForm = event.getSource();
+  static public class CloseActionListener extends EventListener<UIFCCActionForm> {
+    public void execute(Event<UIFCCActionForm> event) throws Exception {
+      UIFCCActionForm fastContentCreatorActionForm = event.getSource();
       UIPopupContainer popupContainer = fastContentCreatorActionForm.getAncestorOfType(UIPopupContainer.class);
-      Utils.closePopupWindow(popupContainer, UIFastContentCreatorConstant.ACTION_POPUP_WINDOW);
+      Utils.closePopupWindow(popupContainer, UIFCCConstant.ACTION_POPUP_WINDOW);
     }
   }  
   
-  static public class RemoveReferenceActionListener extends EventListener<UIFastContentCreatorActionForm> {
-    public void execute(Event<UIFastContentCreatorActionForm> event) throws Exception {
-      UIFastContentCreatorActionForm fastContentCreatorActionForm = event.getSource() ;
+  static public class RemoveReferenceActionListener extends EventListener<UIFCCActionForm> {
+    public void execute(Event<UIFCCActionForm> event) throws Exception {
+      UIFCCActionForm fastContentCreatorActionForm = event.getSource() ;
       fastContentCreatorActionForm.isRemovePreference = true;
       String fieldName = event.getRequestContext().getRequestParameter(OBJECTID) ;
       fastContentCreatorActionForm.getUIStringInput(fieldName).setValue(null) ;
@@ -261,9 +261,9 @@ public class UIFastContentCreatorActionForm extends UIDialogForm implements UISe
   }
   
   @SuppressWarnings("unchecked")
-  static public class ShowComponentActionListener extends EventListener<UIFastContentCreatorActionForm> {
-    public void execute(Event<UIFastContentCreatorActionForm> event) throws Exception {
-      UIFastContentCreatorActionForm fastContentCreatorActionForm = event.getSource() ;
+  static public class ShowComponentActionListener extends EventListener<UIFCCActionForm> {
+    public void execute(Event<UIFCCActionForm> event) throws Exception {
+      UIFCCActionForm fastContentCreatorActionForm = event.getSource() ;
       UIContainer uiContainer = fastContentCreatorActionForm.getParent() ;
       fastContentCreatorActionForm.isShowingComponent = true;
       String fieldName = event.getRequestContext().getRequestParameter(OBJECTID) ;
@@ -296,15 +296,15 @@ public class UIFastContentCreatorActionForm extends UIDialogForm implements UISe
           }
         }
         if(rootPath == null) rootPath = "/";
-        ((UIOneNodePathSelector)uiComp).setRootNodeLocation(UIFastContentCreatorUtils.getPreferenceRepository(), wsName, rootPath) ;
+        ((UIOneNodePathSelector)uiComp).setRootNodeLocation(UIFCCUtils.getPreferenceRepository(), wsName, rootPath) ;
         ((UIOneNodePathSelector)uiComp).setShowRootPathSelect(true);
         ThreadLocalSessionProviderService threadLocalSessionProviderService = fastContentCreatorActionForm.getApplicationComponent(ThreadLocalSessionProviderService.class);
         SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
         ((UIOneNodePathSelector)uiComp).init(sessionProvider);
       }
       UIPopupContainer popupContainer = fastContentCreatorActionForm.getAncestorOfType(UIPopupContainer.class);
-      popupContainer.removeChildById(UIFastContentCreatorConstant.SELECTOR_POPUP_WINDOW);
-      Utils.createPopupWindow(popupContainer, uiComp, event.getRequestContext(), UIFastContentCreatorConstant.SELECTOR_POPUP_WINDOW, 640, 300);
+      popupContainer.removeChildById(UIFCCConstant.SELECTOR_POPUP_WINDOW);
+      Utils.createPopupWindow(popupContainer, uiComp, event.getRequestContext(), UIFCCConstant.SELECTOR_POPUP_WINDOW, 640, 300);
       String param = "returnField=" + fieldName ;
       ((ComponentSelector)uiComp).setSourceComponent(fastContentCreatorActionForm, new String[]{param}) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;

@@ -28,7 +28,7 @@ import org.exoplatform.webui.application.portlet.PortletRequestContext;
  *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
  * Jun 25, 2009  
  */
-public class UIFastContentCreatorUtils {
+public class UIFCCUtils {
 
   public static PortletPreferences getPortletPreferences() {
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
@@ -37,19 +37,19 @@ public class UIFastContentCreatorUtils {
   }
   
   public static String getPreferenceRepository() {
-    return getPortletPreferences().getValue(UIFastContentCreatorConstant.PREFERENCE_REPOSITORY, "");
+    return getPortletPreferences().getValue(UIFCCConstant.PREFERENCE_REPOSITORY, "");
   }
 
   public static String getPreferenceWorkspace() {
-    return getPortletPreferences().getValue(UIFastContentCreatorConstant.PREFERENCE_WORKSPACE, "");
+    return getPortletPreferences().getValue(UIFCCConstant.PREFERENCE_WORKSPACE, "");
   }
   
   public static String getPreferenceType() {
-    return getPortletPreferences().getValue(UIFastContentCreatorConstant.PREFERENCE_TYPE, "");
+    return getPortletPreferences().getValue(UIFCCConstant.PREFERENCE_TYPE, "");
   }
   
   public static String getPreferencePath() {
-    return getPortletPreferences().getValue(UIFastContentCreatorConstant.PREFERENCE_PATH, "");
+    return getPortletPreferences().getValue(UIFCCConstant.PREFERENCE_PATH, "");
   }
   
 }

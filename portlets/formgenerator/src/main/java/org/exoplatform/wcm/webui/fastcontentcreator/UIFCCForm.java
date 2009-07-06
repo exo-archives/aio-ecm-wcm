@@ -84,15 +84,15 @@ import org.exoplatform.webui.form.UIFormUploadInput;
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
     events = {
-      @EventConfig(listeners = UIFastContentCreatorForm.SaveActionListener.class),
-      @EventConfig(listeners = UIFastContentCreatorForm.AddActionListener.class, phase = Phase.DECODE),
-      @EventConfig(listeners = UIFastContentCreatorForm.RemoveActionListener.class, phase = Phase.DECODE),
-      @EventConfig(listeners = UIFastContentCreatorForm.ShowComponentActionListener.class, phase = Phase.DECODE),
-      @EventConfig(listeners = UIFastContentCreatorForm.RemoveReferenceActionListener.class, confirm = "DialogFormField.msg.confirm-delete", phase = Phase.DECODE)
+      @EventConfig(listeners = UIFCCForm.SaveActionListener.class),
+      @EventConfig(listeners = UIFCCForm.AddActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UIFCCForm.RemoveActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UIFCCForm.ShowComponentActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UIFCCForm.RemoveReferenceActionListener.class, confirm = "DialogFormField.msg.confirm-delete", phase = Phase.DECODE)
     }
 )
 
-public class UIFastContentCreatorForm extends UIDialogForm implements UISelectable {
+public class UIFCCForm extends UIDialogForm implements UISelectable {
 
   final static public String FIELD_TAXONOMY = "categories";
   final static public String POPUP_TAXONOMY = "UIPopupTaxonomy";
@@ -103,9 +103,9 @@ public class UIFastContentCreatorForm extends UIDialogForm implements UISelectab
   private String documentType_ ;
   private JCRResourceResolver jcrTemplateResourceResolver_ ;
 
-  public UIFastContentCreatorForm() throws Exception {
-    PortletPreferences portletPreferences = UIFastContentCreatorUtils.getPortletPreferences();
-    setActions(new String[]{portletPreferences.getValue(UIFastContentCreatorConstant.PREFERENCE_SAVE_BUTTON, "")}) ;
+  public UIFCCForm() throws Exception {
+    PortletPreferences portletPreferences = UIFCCUtils.getPortletPreferences();
+    setActions(new String[]{portletPreferences.getValue(UIFCCConstant.PREFERENCE_SAVE_BUTTON, "")}) ;
   }
   
   public List<String> getListTaxonomy() {
@@ -127,7 +127,7 @@ public class UIFastContentCreatorForm extends UIDialogForm implements UISelectab
   public String getTemplate() {
     TemplateService templateService = getApplicationComponent(TemplateService.class) ;
     String userName = Util.getPortalRequestContext().getRemoteUser() ;
-    String repository = UIFastContentCreatorUtils.getPreferenceRepository() ;
+    String repository = UIFCCUtils.getPreferenceRepository() ;
     try {      
       if(SessionProviderFactory.isAnonim()) {
         return templateService.getTemplatePathByAnonymous(true, documentType_, repository);
@@ -158,17 +158,17 @@ public class UIFastContentCreatorForm extends UIDialogForm implements UISelectab
       }
       inputSet.setValue(taxonomylist);
     }
-    UIFastContentCreatorPortlet uiContainer = getParent();
+    UIFCCPortlet uiContainer = getParent();
     uiContainer.removeChildById("PopupComponent");    
   }
 
   public Node getCurrentNode() throws Exception {  
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class) ;
-    PortletPreferences preferences = UIFastContentCreatorUtils.getPortletPreferences() ;
+    PortletPreferences preferences = UIFCCUtils.getPortletPreferences() ;
     Session session = 
       SessionProviderFactory.createSystemProvider().getSession(
-        preferences.getValue(UIFastContentCreatorConstant.PREFERENCE_WORKSPACE, ""), 
-        repositoryService.getRepository(preferences.getValue(UIFastContentCreatorConstant.PREFERENCE_REPOSITORY, ""))) ;
+        preferences.getValue(UIFCCConstant.PREFERENCE_WORKSPACE, ""), 
+        repositoryService.getRepository(preferences.getValue(UIFCCConstant.PREFERENCE_REPOSITORY, ""))) ;
     return (Node) session.getItem(preferences.getValue("path", ""));
   }
 
@@ -198,15 +198,15 @@ public class UIFastContentCreatorForm extends UIDialogForm implements UISelectab
   }
   
   @SuppressWarnings("unchecked")
-  static public class SaveActionListener extends EventListener<UIFastContentCreatorForm> {
-    public void execute(Event<UIFastContentCreatorForm> event) throws Exception {
-      UIFastContentCreatorForm fastContentCreatorForm = event.getSource() ;
+  static public class SaveActionListener extends EventListener<UIFCCForm> {
+    public void execute(Event<UIFCCForm> event) throws Exception {
+      UIFCCForm fastContentCreatorForm = event.getSource() ;
       UIApplication uiApp = fastContentCreatorForm.getAncestorOfType(UIApplication.class);
-      PortletPreferences preferences = UIFastContentCreatorUtils.getPortletPreferences();
-      String preferenceRepository = preferences.getValue(UIFastContentCreatorConstant.PREFERENCE_REPOSITORY, "");
-      String preferencePath = preferences.getValue(UIFastContentCreatorConstant.PREFERENCE_PATH, "") ;
-      String preferenceType = preferences.getValue(UIFastContentCreatorConstant.PREFERENCE_TYPE, "") ;
-      String preferenceWorkspace = preferences.getValue(UIFastContentCreatorConstant.PREFERENCE_WORKSPACE, "") ;
+      PortletPreferences preferences = UIFCCUtils.getPortletPreferences();
+      String preferenceRepository = preferences.getValue(UIFCCConstant.PREFERENCE_REPOSITORY, "");
+      String preferencePath = preferences.getValue(UIFCCConstant.PREFERENCE_PATH, "") ;
+      String preferenceType = preferences.getValue(UIFCCConstant.PREFERENCE_TYPE, "") ;
+      String preferenceWorkspace = preferences.getValue(UIFCCConstant.PREFERENCE_WORKSPACE, "") ;
       
       Session session = fastContentCreatorForm.getSession(preferenceRepository, preferenceWorkspace);
       CmsService cmsService = fastContentCreatorForm.getApplicationComponent(CmsService.class) ;
@@ -309,13 +309,13 @@ public class UIFastContentCreatorForm extends UIDialogForm implements UISelectab
         homeNode.getSession().refresh(false) ;
         
         Object[] args = { preferencePath } ;
-        String preferenceSaveMessage = preferences.getValue(UIFastContentCreatorConstant.PREFERENCE_SAVE_MESSAGE, "") ;
+        String preferenceSaveMessage = preferences.getValue(UIFCCConstant.PREFERENCE_SAVE_MESSAGE, "") ;
         uiApp.addMessage(new ApplicationMessage("UIFastContentCreatorForm.msg." + preferenceSaveMessage, args)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         
-        boolean preferenceIsRedirect = Boolean.parseBoolean(preferences.getValue(UIFastContentCreatorConstant.PREFERENCE_IS_REDIRECT, "")) ;
+        boolean preferenceIsRedirect = Boolean.parseBoolean(preferences.getValue(UIFCCConstant.PREFERENCE_IS_REDIRECT, "")) ;
         if (preferenceIsRedirect) {
-          String preferenceRedirectPath = preferences.getValue(UIFastContentCreatorConstant.PREFERENCE_REDIRECT_PATH, "") ;
+          String preferenceRedirectPath = preferences.getValue(UIFCCConstant.PREFERENCE_REDIRECT_PATH, "") ;
           PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
           portalRequestContext.getResponse().sendRedirect(preferenceRedirectPath);
         }
@@ -355,10 +355,10 @@ public class UIFastContentCreatorForm extends UIDialogForm implements UISelectab
   }  
     
   @SuppressWarnings("unchecked")
-  static public class ShowComponentActionListener extends EventListener<UIFastContentCreatorForm> {
-    public void execute(Event<UIFastContentCreatorForm> event) throws Exception {
-      UIFastContentCreatorForm fastContentCreatorForm = event.getSource() ;
-      UIFastContentCreatorPortlet fastContentCreatorPortlet = fastContentCreatorForm.getParent() ;
+  static public class ShowComponentActionListener extends EventListener<UIFCCForm> {
+    public void execute(Event<UIFCCForm> event) throws Exception {
+      UIFCCForm fastContentCreatorForm = event.getSource() ;
+      UIFCCPortlet fastContentCreatorPortlet = fastContentCreatorForm.getParent() ;
       fastContentCreatorForm.isShowingComponent = true;
       String fieldName = event.getRequestContext().getRequestParameter(OBJECTID) ;
       Map fieldPropertiesMap = fastContentCreatorForm.componentSelectors.get(fieldName) ;
@@ -380,7 +380,7 @@ public class UIFastContentCreatorForm extends UIDialogForm implements UISelectab
         }
       }
       if(component instanceof UIOneNodePathSelector) {
-        String repositoryName = UIFastContentCreatorUtils.getPreferenceRepository() ;
+        String repositoryName = UIFCCUtils.getPreferenceRepository() ;
         SessionProvider provider = SessionProviderFactory.createSystemProvider() ;                
         String wsFieldName = (String)fieldPropertiesMap.get("workspaceField") ;
         String wsName = "";
@@ -425,17 +425,17 @@ public class UIFastContentCreatorForm extends UIDialogForm implements UISelectab
         
       }
       UIPopupContainer popupContainer = fastContentCreatorPortlet.getChild(UIPopupContainer.class);
-      popupContainer.removeChildById(UIFastContentCreatorConstant.TAXONOMY_POPUP_WINDOW);
-      Utils.createPopupWindow(popupContainer, component, event.getRequestContext(), UIFastContentCreatorConstant.TAXONOMY_POPUP_WINDOW, 640, 300);
+      popupContainer.removeChildById(UIFCCConstant.TAXONOMY_POPUP_WINDOW);
+      Utils.createPopupWindow(popupContainer, component, event.getRequestContext(), UIFCCConstant.TAXONOMY_POPUP_WINDOW, 640, 300);
       String param = "returnField=" + fieldName ;
       ((ComponentSelector)component).setSourceComponent(fastContentCreatorForm, new String[]{param}) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(fastContentCreatorPortlet) ;
     }
   }      
   
-  static public class RemoveReferenceActionListener extends EventListener<UIFastContentCreatorForm> {
-    public void execute(Event<UIFastContentCreatorForm> event) throws Exception {
-      UIFastContentCreatorForm fastContentCreatorForm = event.getSource() ;
+  static public class RemoveReferenceActionListener extends EventListener<UIFCCForm> {
+    public void execute(Event<UIFCCForm> event) throws Exception {
+      UIFCCForm fastContentCreatorForm = event.getSource() ;
       fastContentCreatorForm.isRemovePreference = true;
       String fieldName = event.getRequestContext().getRequestParameter(OBJECTID) ;
       fastContentCreatorForm.getUIStringInput(fieldName).setValue(null) ;
@@ -443,10 +443,10 @@ public class UIFastContentCreatorForm extends UIDialogForm implements UISelectab
     }
   }  
 
-  static public class AddActionListener extends EventListener<UIFastContentCreatorForm> {
-    public void execute(Event<UIFastContentCreatorForm> event) throws Exception {
-      UIFastContentCreatorForm fastContentCreatorForm = event.getSource();
-      UIFastContentCreatorPortlet fastContentCreatorPortlet = fastContentCreatorForm.getParent();
+  static public class AddActionListener extends EventListener<UIFCCForm> {
+    public void execute(Event<UIFCCForm> event) throws Exception {
+      UIFCCForm fastContentCreatorForm = event.getSource();
+      UIFCCPortlet fastContentCreatorPortlet = fastContentCreatorForm.getParent();
       String clickedField = event.getRequestContext().getRequestParameter(OBJECTID);
       if (fastContentCreatorForm.isReference) {
         UIFormMultiValueInputSet uiSet = fastContentCreatorForm.getChildById(FIELD_TAXONOMY);
@@ -471,9 +471,9 @@ public class UIFastContentCreatorForm extends UIDialogForm implements UISelectab
             String param = "returnField=" + FIELD_TAXONOMY;        
             uiOneTaxonomySelector.setSourceComponent(fastContentCreatorForm, new String[]{param});
             UIPopupContainer popupContainer = fastContentCreatorPortlet.getChild(UIPopupContainer.class);
-            UIPopupWindow popupWindow = popupContainer.getChildById(UIFastContentCreatorConstant.TAXONOMY_POPUP_WINDOW);
+            UIPopupWindow popupWindow = popupContainer.getChildById(UIFCCConstant.TAXONOMY_POPUP_WINDOW);
             if(popupWindow == null) {
-              Utils.createPopupWindow(popupContainer, uiOneTaxonomySelector, event.getRequestContext(), UIFastContentCreatorConstant.TAXONOMY_POPUP_WINDOW, 640, 300);
+              Utils.createPopupWindow(popupContainer, uiOneTaxonomySelector, event.getRequestContext(), UIFCCConstant.TAXONOMY_POPUP_WINDOW, 640, 300);
             } else {
               popupWindow.setShow(true);
             }
@@ -486,8 +486,8 @@ public class UIFastContentCreatorForm extends UIDialogForm implements UISelectab
     }
   }
 
-  static public class RemoveActionListener extends EventListener<UIFastContentCreatorForm> {
-    public void execute(Event<UIFastContentCreatorForm> event) throws Exception {
+  static public class RemoveActionListener extends EventListener<UIFCCForm> {
+    public void execute(Event<UIFCCForm> event) throws Exception {
       event.getRequestContext().addUIComponentToUpdateByAjax(event.getSource().getParent()) ;
     }
   }  
