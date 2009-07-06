@@ -19,6 +19,7 @@
       <Back>Retour</Back>
     </action>
     <WelcomeLable>Bienvenue au visualiseur de contenu simples!</WelcomeLable>
+
     <Text>Veuillez sélectionner l'une des options et cliquer sur OK.</Text>
   </UIWelcomeScreen>
   <UITabPane>
@@ -37,14 +38,18 @@
   -->
   <UIMiscellaneousInfo>
     <label>
+      <ShowTOC>Voir la table des matières</ShowTOC>
       <ShowTitle>Affichage du titre</ShowTitle>
       <ShowTags>Affichage des tags</ShowTags>
       <ShowCategories>Affichage des catégories</ShowCategories>
+      <AllowVoting>Voir les votes</AllowVoting>
+      <AllowComment>Voir les commentaires</AllowComment>
       <ShowQuickEdit>Affichage de l'icône d'édition rapide</ShowQuickEdit>
     </label>
     <action>
       <SaveToPortletPreference>Sauver</SaveToPortletPreference>
     </action>
+    <msg-successfully>Vous avez enregistré avec succès!</msg-successfully>
   </UIMiscellaneousInfo>
   <!--/n  ###################################################################
           # org.exoplatform.wcm.webui.scv.config.UIQuickCreationWizard      #
@@ -55,15 +60,19 @@
       <stepInfo>Affichage des informations d'étapes</stepInfo>
       <contentCreateWizard>Assitant de création de contenu:</contentCreateWizard>
       <step1>
+
+
         <title>Sélection d'une disposition de contenu web et d'un cycle de publication</title>
         <describe>Créer un contenu web en spécifiant un nom et un résumé.</describe>
       </step1>
       <step2>
         <title>Création du contenu web</title>
+
         <describe>Créer un contenu web en spécifiant le code HTML, le style CSS, le code JavaScript.</describe>
       </step2>
       <step3>
         <title>Paramètres</title>
+
         <describe>Spécifier les paramètres d'affichage optionnels</describe>
       </step3>
       <wizardSteps>Etapes</wizardSteps>
@@ -77,6 +86,7 @@
       <Complete>Fin</Complete>
     </action>
     <msg>
+
       <StepbyStep>Pour la première fois, il est nécessaire de parcourir chacune des étapes.</StepbyStep>
     </msg>
   </UIQuickCreationWizard>
@@ -239,6 +249,7 @@
           ##################################################################################
   -->
   <UIWebContentSelectorForm>
+
     <title>Sélectionner un contenu web et le publier sur cette page</title>
     <label>
       <path />
@@ -254,6 +265,7 @@
   -->
   <UIWizardWelcome>
     <WelcomeLabel>Bienvenue à l'assitant de création de contenu web !</WelcomeLabel>
+
     <WelcomeText>Cet assistant va vous accompagner durant la création de contenu web. Il va vous guider pour soumettre les informations nécessaire à la création du contenu. Quand vous aurez terminé d'entrer les informations requises, vous aurez l'occasion de sauver votre nouveau contenu web. Vous aurez aussi l'occasion de naviguer dans l'assistant en utilisant les boutons "Retour" et "Suivant".</WelcomeText>
   </UIWizardWelcome>
   <!--/n  ######################################################################
@@ -298,6 +310,13 @@
       <checkbox-require>Un droit est requis.</checkbox-require>
     </msg>
   </UIPermissionSetting>
+  <usersInputSet>
+    <title>
+      <SelectUser>Sélectionnez l'utilisateur</SelectUser>
+      <SelectMember>Sélectionnez membre</SelectMember>
+      <AddAny>Ajouter toute autorisation</AddAny>
+    </title>
+  </usersInputSet>
   <!--/n  ##############################################################################
           # org.exoplatform.wcm.presentation.acp.config.UIPermissionInfo               #
           ##############################################################################
@@ -366,6 +385,7 @@
     <action>
       <BackToNormalWizard>Retour</BackToNormalWizard>
     </action>
+
     <back>Cliquer ici pour accéder aux options avancées de configuration</back>
   </UIQuickEditContainer>
   <UIPopupMenu>
@@ -391,7 +411,7 @@
     </action>
   </UIQuickEditWebContentForm>
   <UIStartEditionInPageWizard>
+
     <link>Cliquer ici pour accéder au dialogue d'édition du contenu!</link>
   </UIStartEditionInPageWizard>
 </bundle>
-
