@@ -24,10 +24,12 @@
   def js=  exJSService.getActiveJavaScript(currentNode) ;
   
 	ManageableRepository mRepository = (ManageableRepository)currentNode.getSession().getRepository();
-  String repositoryName = mRepository.getConfiguration().getName();
-  boolean isShowTitle = getPortletPreference("ShowTitle");
+    String repositoryName = mRepository.getConfiguration().getName();
+    boolean isShowTitle = getPortletPreference("ShowTitle");
 	boolean isShowCategories = getPortletPreference("ShowCategories");
 	boolean isShowTags = getPortletPreference("ShowTags");
+	boolean isShowVote = getPortletPreference("ShowVote");
+	boolean isShowComments = getPortletPreference("ShowComments");
 
 	if((css != null) && (css.length() > 0)) {
 %>
@@ -106,3 +108,9 @@
 		<%
 	}
 %>
+<% if (isShowVote) { %>
+<% _ctx.include(uicomponent.getViewTemplate("mix:votable", "view1")); %>
+<% } %>
+<% if(isShowComments) { %>
+<% _ctx.include(uicomponent.getViewTemplate("exo:comments", "view1")); %>
+<% } %>

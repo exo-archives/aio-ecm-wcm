@@ -43,9 +43,9 @@
       <ShowTOC>Voir la table des matières</ShowTOC>
       <ShowTitle>Affichage du titre</ShowTitle>
       <ShowTags>Affichage des tags</ShowTags>
+      <ShowVote>Affichage des votes</ShowVote>
+      <ShowComments>Affichage des commentaires</ShowComments>
       <ShowCategories>Affichage des catégories</ShowCategories>
-      <AllowVoting>Voir les votes</AllowVoting>
-      <AllowComment>Voir les commentaires</AllowComment>
       <ShowQuickEdit>Affichage de l'icône d'édition rapide</ShowQuickEdit>
       <ShowPrintAction>Voir imprimer</ShowPrintAction>
     </label>
@@ -347,6 +347,20 @@
     	<print>Imprimer ce contenu</print>
     	<close>Fermer</close>
     </quickPrint>
+    <optionBar>
+    	<print>
+    		<label>Imprimez</label>
+    		<info>Imprimez ce contenu</info>
+    	</print>
+    	<vote>
+    		<label>Votez</label>
+    		<info>Votez ce contenu</info>
+    	</vote>
+    	<comment>
+    		<label>Commentez</label>
+    		<info>Commentez ce contenu</info>
+    	</comment>
+    </optionBar>
   </UIPresentationContainer>
   <!--/n  #############################################################
         

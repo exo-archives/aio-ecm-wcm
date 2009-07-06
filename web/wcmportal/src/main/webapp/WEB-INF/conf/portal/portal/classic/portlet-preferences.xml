@@ -26,7 +26,7 @@
 		</preference>
 		<preference>
 			<name>ShowPrintAction</name>
-			<value>true</value>
+			<value>false</value>
 			<read-only>false</read-only>
 		</preference>
 	</portlet-preferences>
@@ -57,7 +57,7 @@
 		</preference>
 		<preference>
 			<name>ShowPrintAction</name>
-			<value>true</value>
+			<value>false</value>
 			<read-only>false</read-only>
 		</preference>
 	</portlet-preferences>
@@ -88,7 +88,7 @@
 		</preference>
 		<preference>
 			<name>ShowPrintAction</name>
-			<value>true</value>
+			<value>false</value>
 			<read-only>false</read-only>
 		</preference>
 	</portlet-preferences>
@@ -114,7 +114,7 @@
 		</preference>
 		<preference>
 			<name>ShowPrintAction</name>
-			<value>true</value>
+			<value>false</value>
 			<read-only>false</read-only>
 		</preference>
 		<preference>
@@ -150,7 +150,7 @@
 		</preference>
 		<preference>
 			<name>ShowPrintAction</name>
-			<value>true</value>
+			<value>false</value>
 			<read-only>false</read-only>
 		</preference>
 	</portlet-preferences>
@@ -181,7 +181,7 @@
 		</preference>
 		<preference>
 			<name>ShowPrintAction</name>
-			<value>true</value>
+			<value>false</value>
 			<read-only>false</read-only>
 		</preference>
 	</portlet-preferences>
@@ -212,7 +212,17 @@
 		</preference>
 		<preference>
 			<name>ShowPrintAction</name>
-			<value>false</value>
+			<value>true</value>
+			<read-only>false</read-only>
+		</preference>
+		<preference>
+			<name>ShowVote</name>
+			<value>true</value>
+			<read-only>false</read-only>
+		</preference>
+		<preference>
+			<name>ShowComments</name>
+			<value>true</value>
 			<read-only>false</read-only>
 		</preference>
 	</portlet-preferences>
@@ -243,7 +253,7 @@
 		</preference>
 		<preference>
 			<name>ShowPrintAction</name>
-			<value>true</value>
+			<value>false</value>
 			<read-only>false</read-only>
 		</preference>
 	</portlet-preferences>
@@ -285,6 +295,16 @@
 		</preference>
 		<preference>
 			<name>ShowPrintAction</name>
+			<value>true</value>
+			<read-only>false</read-only>
+		</preference>
+		<preference>
+			<name>ShowVote</name>
+			<value>true</value>
+			<read-only>false</read-only>
+		</preference>
+		<preference>
+			<name>ShowComments</name>
 			<value>true</value>
 			<read-only>false</read-only>
 		</preference>

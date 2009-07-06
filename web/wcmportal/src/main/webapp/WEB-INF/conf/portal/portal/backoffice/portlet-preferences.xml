@@ -26,7 +26,7 @@
     </preference>
     <preference>
     	<name>ShowPrintAction</name>
-    	<value>true</value>
+    	<value>false</value>
     	<read-only>false</read-only>
     </preference>
   </portlet-preferences>
@@ -57,7 +57,7 @@
     </preference>
     <preference>
     	<name>ShowPrintAction</name>
-    	<value>true</value>
+    	<value>false</value>
     	<read-only>false</read-only>
     </preference>
   </portlet-preferences>

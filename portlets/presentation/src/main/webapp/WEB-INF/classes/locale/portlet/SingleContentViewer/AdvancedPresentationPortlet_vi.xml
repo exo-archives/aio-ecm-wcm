@@ -41,6 +41,8 @@
       <ShowCategories>Hiển thị mục phân loại</ShowCategories>
       <ShowQuickEdit>Hiển thị chỉnh sửa nhanh</ShowQuickEdit>
       <ShowPrintAction>Hiện thị in ấn</ShowPrintAction>
+      <ShowVote></ShowVote>
+      <ShowComments></ShowComments>
     </label>
     <action>
       <SaveToPortletPreference>Lưu lại</SaveToPortletPreference>
@@ -322,6 +324,20 @@
     	<print>In nội dung</print>
     	<close>Đóng cửa sổ</close>
     </quickPrint>
+    <optionBar>
+    	<print>
+    		<label></label>
+    		<info></info>
+    	</print>
+    	<vote>
+    		<label></label>
+    		<info></info>
+    	</vote>
+    	<comment>
+    		<label></label>
+    		<info></info>
+    	</comment>
+    </optionBar>
   </UIPresentationContainer>
   <!--/n  #############################################################
   # org.exoplatform.wcm.webui.scv.config.UIDMSSelectorForm    #

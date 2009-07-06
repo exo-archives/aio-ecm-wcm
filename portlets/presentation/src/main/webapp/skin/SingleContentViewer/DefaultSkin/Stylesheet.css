@@ -335,3 +335,29 @@
 	padding-left: 20px; 
 	background: url('icons/16x16/DraftIcon.gif') no-repeat left center;
 }
+
+.UIOptionBar .PrintIcon {
+	background: url('icons/16x16/ActionIcon.gif') no-repeat bottom left;
+	padding-left: 25px;
+}
+
+.UIOptionBar .EmailIcon {
+	background: url('icons/16x16/ActionIcon.gif') no-repeat top left;
+	padding-left: 20px;
+}
+
+.UIOptionBar .VoteIcon {
+	background: url('icons/16x16/ActionIcon.gif') no-repeat left -21px;
+	padding-left: 20px;
+}
+
+.UIOptionBar .CommentIcon {
+	background: url('icons/16x16/ActionIcon.gif') no-repeat left -42px;
+	padding-left: 20px;
+}
+
+.UIOptionBar .InfoIcon {
+	background: url('icons/16x16/ActionIcon.gif') no-repeat left -63px;
+	padding-left: 20px;
+}
+

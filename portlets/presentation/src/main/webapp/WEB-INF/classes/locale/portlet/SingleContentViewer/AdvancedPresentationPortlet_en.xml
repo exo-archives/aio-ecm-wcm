@@ -41,6 +41,8 @@
       <ShowTOC>Show table of content</ShowTOC>
       <ShowTitle>Show title</ShowTitle>
       <ShowTags>Show tags</ShowTags>
+      <ShowVote>Show vote</ShowVote>
+      <ShowComments>Show comments</ShowComments>
       <ShowCategories>Show related category</ShowCategories>
       <AllowVoting>Show votes</AllowVoting>
       <AllowComment>Show comments</AllowComment>
@@ -330,6 +332,20 @@
     	<print>Print this page</print>
     	<close>Close</close>
     </quickPrint>
+    <optionBar>
+    	<print>
+    		<label>Print</label>
+    		<info>Print this page</info>
+    	</print>
+    	<vote>
+    		<label>Vote</label>
+    		<info>Vote this content</info>
+    	</vote>
+    	<comment>
+    		<label>Comment</label>
+    		<info>Comment this content</info>
+    	</comment>
+    </optionBar>
   </UIPresentationContainer>
   <!--/n  #############################################################
   # org.exoplatform.wcm.webui.scv.config.UIDMSSelectorForm    #

@@ -25,11 +25,15 @@
 		def isDraftRevision = uicomponent.isDraftRevision();
 		def isObsoletedContent = uicomponent.isObsoletedContent();
 		def hasLiveRevision = uicomponent.hasLiveRevision();
-		def isQuickPrint = uicomponent.isQuickPrint();
+//		def isQuickPrint = uicomponent.isQuickPrint();
 		def isQuickEditable = uicomponent.isQuickEditable();
 		def isEditable = uicomponent.isEditable();
 		def isLiveMode = Utils.isLiveMode();
 		def renderable = false;
+		boolean isShowPrint = Boolean.parseBoolean(preferences.getValue("ShowPrintAction", null)); 
+		boolean isShowVote = Boolean.parseBoolean(preferences.getValue("ShowVote", null)); 
+		boolean isShowComments = Boolean.parseBoolean(preferences.getValue("ShowComments", null));
+		
 		
 		if (isLiveMode) {
 			if (hasLiveRevision && !isObsoletedContent) {
@@ -59,18 +63,39 @@
 			}
 		}
 		if (renderable) {
-			if (uicomponent.isQuickPrint()) { 
+			if (isShowPrint || isShowVote || isShowComments) {
+			%>	
+					<div class="UIOptionBar"> 
+			<%     
+			} 
+		
+			if (isShowPrint) { 
 				String isPrint = "?isPrint=true";
 				if(nodeIdentifier != null) {
 					nodeIdentifier = nodeIdentifier.indexOf("/") == -1 ? "/" + nodeIdentifier : nodeIdentifier;
 				}
 				String printUrl = portalURI + wcmConfigurationService.getRuntimeContextParam("printViewerPage") + "/" + repository + "/" + workspace + nodeIdentifier + isPrint;
 				%>
-	    			<div class="UIOptionBar">     
-	      				<a class="ActionIcon PrintIcon" href="javascript: void(0);" onclick="window.open('$printUrl')" title="<%= _ctx.appRes("UIPresentationContainer.quickPrint.title");%>"><%= _ctx.appRes("UIPresentationContainer.quickPrint.print");%></a>
-	    			</div>
+	      				<a class="ActionIcon PrintIcon" href="javascript: void(0);" onclick="window.open('$printUrl')" title="<%= _ctx.appRes("UIPresentationContainer.optionBar.print.info");%>"><%= _ctx.appRes("UIPresentationContainer.optionBar.print.label");%></a>
 				<% 
 			} 
+			if (isShowVote) { 
+				%>	
+	      				<a class="ActionIcon VoteIcon" href="javascript: void(0);" onclick="" title="<%= _ctx.appRes("UIPresentationContainer.optionBar.vote.info");%>"><%= _ctx.appRes("UIPresentationContainer.optionBar.vote.label");%></a>
+				<% 
+			} 
+			if (isShowComments) { 
+				%>	
+	      				<a class="ActionIcon CommentIcon" href="javascript: void(0);" onclick="" title="<%= _ctx.appRes("UIPresentationContainer.optionBar.comment.info");%>"><%= _ctx.appRes("UIPresentationContainer.optionBar.comment.label");%></a>
+				<% 
+			} 
+
+			if (isShowPrint || isShowVote || isShowComments) {
+			%>	
+					</div> 
+			<%     
+			} 
+
 			uicomponent.renderChildren();
 		}
 	%>
