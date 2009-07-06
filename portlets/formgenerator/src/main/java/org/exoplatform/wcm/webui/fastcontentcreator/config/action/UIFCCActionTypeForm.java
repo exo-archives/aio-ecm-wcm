@@ -27,9 +27,9 @@ import javax.jcr.nodetype.NodeType;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.cms.actions.ActionServiceContainer;
 import org.exoplatform.services.cms.templates.TemplateService;
-import org.exoplatform.wcm.webui.fastcontentcreator.UIFastContentCreatorPortlet;
-import org.exoplatform.wcm.webui.fastcontentcreator.UIFastContentCreatorUtils;
-import org.exoplatform.wcm.webui.fastcontentcreator.config.UIFastContentCreatorConfig;
+import org.exoplatform.wcm.webui.fastcontentcreator.UIFCCPortlet;
+import org.exoplatform.wcm.webui.fastcontentcreator.UIFCCUtils;
+import org.exoplatform.wcm.webui.fastcontentcreator.config.UIFCCConfig;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -49,12 +49,12 @@ import org.exoplatform.webui.form.UIFormSelectBox;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template = "app:/groovy/webui/FastContentCreatorPortlet/UIFastContentCreatorActionTypeForm.gtmpl",
+    template = "app:/groovy/webui/FastContentCreatorPortlet/UIFCCActionTypeForm.gtmpl",
     events = {
-      @EventConfig(listeners = UIFastContentCreatorActionTypeForm.ChangeActionTypeActionListener.class) 
+      @EventConfig(listeners = UIFCCActionTypeForm.ChangeActionTypeActionListener.class) 
     }
 )
-public class UIFastContentCreatorActionTypeForm extends UIForm {
+public class UIFCCActionTypeForm extends UIForm {
 
   final static public String ACTION_TYPE = "actionType" ;
   final static public String CHANGE_ACTION = "ChangeActionType" ;
@@ -63,7 +63,7 @@ public class UIFastContentCreatorActionTypeForm extends UIForm {
 
   public String defaultActionType_ ;
 
-  public UIFastContentCreatorActionTypeForm() throws Exception {
+  public UIFCCActionTypeForm() throws Exception {
     typeList_ = new ArrayList<SelectItemOption<String>>() ;
     UIFormSelectBox uiSelectBox = new UIFormSelectBox(ACTION_TYPE, ACTION_TYPE, new ArrayList<SelectItemOption<String>>()) ;
     uiSelectBox.setOnChange(CHANGE_ACTION) ;
@@ -72,17 +72,17 @@ public class UIFastContentCreatorActionTypeForm extends UIForm {
 
   private Iterator<NodeType> getCreatedActionTypes() throws Exception {
     ActionServiceContainer actionService = getApplicationComponent(ActionServiceContainer.class) ;
-    return actionService.getCreatedActionTypes(UIFastContentCreatorUtils.getPreferenceRepository()).iterator();
+    return actionService.getCreatedActionTypes(UIFCCUtils.getPreferenceRepository()).iterator();
   }
 
   public void setDefaultActionType() throws Exception{    
     if(defaultActionType_ == null) {
       defaultActionType_ = "exo:sendMailAction" ;
-      UIFastContentCreatorPortlet fastContentCreatorPortlet = getAncestorOfType(UIFastContentCreatorPortlet.class);
-      UIFastContentCreatorConfig fastContentCreatorConfig = fastContentCreatorPortlet.getChild(UIFastContentCreatorConfig.class);
+      UIFCCPortlet fastContentCreatorPortlet = getAncestorOfType(UIFCCPortlet.class);
+      UIFCCConfig fastContentCreatorConfig = fastContentCreatorPortlet.getChild(UIFCCConfig.class);
       Node savedLocationNode = fastContentCreatorConfig.getSavedLocationNode() ;
-      UIFastContentCreatorActionContainer fastContentCreatorActionContainer = getParent() ;
-      UIFastContentCreatorActionForm fastContentCreatorActionForm = fastContentCreatorActionContainer.getChild(UIFastContentCreatorActionForm.class) ;
+      UIFCCActionContainer fastContentCreatorActionContainer = getParent() ;
+      UIFCCActionForm fastContentCreatorActionForm = fastContentCreatorActionContainer.getChild(UIFCCActionForm.class) ;
       fastContentCreatorActionForm.createNewAction(savedLocationNode, defaultActionType_, true) ;
       fastContentCreatorActionForm.setNodePath(null) ;
       fastContentCreatorActionForm.setWorkspace(savedLocationNode.getSession().getWorkspace().getName()) ;
@@ -105,15 +105,15 @@ public class UIFastContentCreatorActionTypeForm extends UIForm {
     
   }
   
-  static public class ChangeActionTypeActionListener extends EventListener<UIFastContentCreatorActionTypeForm> {
-    public void execute(Event<UIFastContentCreatorActionTypeForm> event) throws Exception {
-      UIFastContentCreatorActionTypeForm fastContentCreatorActionTypeForm = event.getSource() ;
-      UIFastContentCreatorPortlet fastContentCreatorPortlet = fastContentCreatorActionTypeForm.getAncestorOfType(UIFastContentCreatorPortlet.class);
-      UIFastContentCreatorConfig fastContentCreatorConfig = fastContentCreatorPortlet.getChild(UIFastContentCreatorConfig.class);
+  static public class ChangeActionTypeActionListener extends EventListener<UIFCCActionTypeForm> {
+    public void execute(Event<UIFCCActionTypeForm> event) throws Exception {
+      UIFCCActionTypeForm fastContentCreatorActionTypeForm = event.getSource() ;
+      UIFCCPortlet fastContentCreatorPortlet = fastContentCreatorActionTypeForm.getAncestorOfType(UIFCCPortlet.class);
+      UIFCCConfig fastContentCreatorConfig = fastContentCreatorPortlet.getChild(UIFCCConfig.class);
       Node currentNode = fastContentCreatorConfig.getSavedLocationNode() ;
       String actionType = fastContentCreatorActionTypeForm.getUIFormSelectBox(ACTION_TYPE).getValue() ;
       TemplateService templateService = fastContentCreatorActionTypeForm.getApplicationComponent(TemplateService.class) ;
-      String repository = UIFastContentCreatorUtils.getPreferenceRepository() ;
+      String repository = UIFCCUtils.getPreferenceRepository() ;
       String userName = Util.getPortalRequestContext().getRemoteUser() ;
       UIApplication uiApp = fastContentCreatorActionTypeForm.getAncestorOfType(UIApplication.class) ;
       try {
@@ -123,9 +123,9 @@ public class UIFastContentCreatorActionTypeForm extends UIForm {
           uiApp.addMessage(new ApplicationMessage("UIFastContentCreatorActionTypeForm.msg.access-denied", arg, ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           actionType = "exo:sendMailAction" ;
-          fastContentCreatorActionTypeForm.getUIFormSelectBox(UIFastContentCreatorActionTypeForm.ACTION_TYPE).setValue(actionType) ;
-          UIFastContentCreatorActionContainer fastContentCreatorActionContainer = fastContentCreatorActionTypeForm.getAncestorOfType(UIFastContentCreatorActionContainer.class) ;
-          UIFastContentCreatorActionForm fastContentCreatorActionForm = fastContentCreatorActionContainer.getChild(UIFastContentCreatorActionForm.class) ;
+          fastContentCreatorActionTypeForm.getUIFormSelectBox(UIFCCActionTypeForm.ACTION_TYPE).setValue(actionType) ;
+          UIFCCActionContainer fastContentCreatorActionContainer = fastContentCreatorActionTypeForm.getAncestorOfType(UIFCCActionContainer.class) ;
+          UIFCCActionForm fastContentCreatorActionForm = fastContentCreatorActionContainer.getChild(UIFCCActionForm.class) ;
           fastContentCreatorActionForm.createNewAction(currentNode, actionType, true) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(fastContentCreatorActionContainer) ;
           return ;
@@ -135,14 +135,14 @@ public class UIFastContentCreatorActionTypeForm extends UIForm {
         uiApp.addMessage(new ApplicationMessage("UIFastContentCreatorActionTypeForm.msg.not-support", arg, ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         actionType = "exo:sendMailAction" ;
-        fastContentCreatorActionTypeForm.getUIFormSelectBox(UIFastContentCreatorActionTypeForm.ACTION_TYPE).setValue(actionType) ;
-        UIFastContentCreatorActionContainer fastContentCreatorActionContainer = fastContentCreatorActionTypeForm.getAncestorOfType(UIFastContentCreatorActionContainer.class) ;
-        UIFastContentCreatorActionForm fastContentCreatorActionForm = fastContentCreatorActionContainer.getChild(UIFastContentCreatorActionForm.class) ;
+        fastContentCreatorActionTypeForm.getUIFormSelectBox(UIFCCActionTypeForm.ACTION_TYPE).setValue(actionType) ;
+        UIFCCActionContainer fastContentCreatorActionContainer = fastContentCreatorActionTypeForm.getAncestorOfType(UIFCCActionContainer.class) ;
+        UIFCCActionForm fastContentCreatorActionForm = fastContentCreatorActionContainer.getChild(UIFCCActionForm.class) ;
         fastContentCreatorActionForm.createNewAction(currentNode, actionType, true) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(fastContentCreatorActionContainer) ;
       } 
-      UIFastContentCreatorActionContainer fastContentCreatorActionContainer = fastContentCreatorActionTypeForm.getParent() ;
-      UIFastContentCreatorActionForm uiActionForm = fastContentCreatorActionContainer.getChild(UIFastContentCreatorActionForm.class) ;
+      UIFCCActionContainer fastContentCreatorActionContainer = fastContentCreatorActionTypeForm.getParent() ;
+      UIFCCActionForm uiActionForm = fastContentCreatorActionContainer.getChild(UIFCCActionForm.class) ;
       uiActionForm.createNewAction(currentNode, actionType, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(fastContentCreatorActionContainer) ;
     }

@@ -25,10 +25,10 @@ import javax.jcr.Node;
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.services.cms.actions.ActionServiceContainer;
 import org.exoplatform.wcm.webui.Utils;
-import org.exoplatform.wcm.webui.fastcontentcreator.UIFastContentCreatorConstant;
-import org.exoplatform.wcm.webui.fastcontentcreator.UIFastContentCreatorPortlet;
-import org.exoplatform.wcm.webui.fastcontentcreator.UIFastContentCreatorUtils;
-import org.exoplatform.wcm.webui.fastcontentcreator.config.UIFastContentCreatorConfig;
+import org.exoplatform.wcm.webui.fastcontentcreator.UIFCCConstant;
+import org.exoplatform.wcm.webui.fastcontentcreator.UIFCCPortlet;
+import org.exoplatform.wcm.webui.fastcontentcreator.UIFCCUtils;
+import org.exoplatform.wcm.webui.fastcontentcreator.config.UIFCCConfig;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -50,22 +50,22 @@ import org.exoplatform.webui.event.EventListener;
  */
 @ComponentConfig(
     lifecycle = Lifecycle.class,
-    template = "app:/groovy/webui/FastContentCreatorPortlet/UIFastContentCreatorActionList.gtmpl",
+    template = "app:/groovy/webui/FastContentCreatorPortlet/UIFCCActionList.gtmpl",
     events = {
-        @EventConfig(listeners = UIFastContentCreatorActionList.AddActionListener.class),
-        @EventConfig(listeners = UIFastContentCreatorActionList.EditActionListener.class),
-        @EventConfig(listeners = UIFastContentCreatorActionList.DeleteActionListener.class, confirm = "UIActionList.msg.confirm-delete-action")
+        @EventConfig(listeners = UIFCCActionList.AddActionListener.class),
+        @EventConfig(listeners = UIFCCActionList.EditActionListener.class),
+        @EventConfig(listeners = UIFCCActionList.DeleteActionListener.class, confirm = "UIActionList.msg.confirm-delete-action")
     }
 )
-public class UIFastContentCreatorActionList extends UIContainer {
+public class UIFCCActionList extends UIContainer {
 
   private static final String[] HEADERS = {"name", "description", "instanceOf"};
   
   private static final String[] ACTIONS = {"Edit", "Delete"};
   
-  public UIFastContentCreatorActionList() throws Exception {
+  public UIFCCActionList() throws Exception {
     UIGrid grid = addChild(UIGrid.class, null, null);
-    grid.configure(UIFastContentCreatorConstant.ACTION_GRID, HEADERS , ACTIONS );
+    grid.configure(UIFCCConstant.ACTION_GRID, HEADERS , ACTIONS );
   }
   
   public void updateGrid(Node node, int currentPage) throws Exception {
@@ -81,7 +81,7 @@ public class UIFastContentCreatorActionList extends UIContainer {
   public String[] getActions() { return ACTIONS ; }
 
   public boolean hasActions() {
-    UIFastContentCreatorConfig fastContentCreatorConfig = getAncestorOfType(UIFastContentCreatorConfig.class) ;
+    UIFCCConfig fastContentCreatorConfig = getAncestorOfType(UIFCCConfig.class) ;
     ActionServiceContainer actionService = getApplicationComponent(ActionServiceContainer.class) ;
     try {
       return actionService.hasActions(fastContentCreatorConfig.getSavedLocationNode());
@@ -105,30 +105,30 @@ public class UIFastContentCreatorActionList extends UIContainer {
     return uiIterator.getCurrentPageData() ; 
   }
   
-  public static class AddActionListener extends EventListener<UIFastContentCreatorActionList> {
-    public void execute(Event<UIFastContentCreatorActionList> event) throws Exception {
-      UIFastContentCreatorActionList fastContentCreatorActionList = event.getSource();
-      UIPopupContainer popupContainer = fastContentCreatorActionList.getAncestorOfType(UIFastContentCreatorPortlet.class).getChild(UIPopupContainer.class);
-      UIPopupWindow popupWindow = popupContainer.getChildById(UIFastContentCreatorConstant.ACTION_POPUP_WINDOW);
+  public static class AddActionListener extends EventListener<UIFCCActionList> {
+    public void execute(Event<UIFCCActionList> event) throws Exception {
+      UIFCCActionList fastContentCreatorActionList = event.getSource();
+      UIPopupContainer popupContainer = fastContentCreatorActionList.getAncestorOfType(UIFCCPortlet.class).getChild(UIPopupContainer.class);
+      UIPopupWindow popupWindow = popupContainer.getChildById(UIFCCConstant.ACTION_POPUP_WINDOW);
       if (popupWindow == null) {
-        UIFastContentCreatorActionContainer fastContentCreatorActionContainer = popupContainer.createUIComponent(UIFastContentCreatorActionContainer.class, null, null);
-        Utils.createPopupWindow(popupContainer, fastContentCreatorActionContainer, event.getRequestContext(), UIFastContentCreatorConstant.ACTION_POPUP_WINDOW, 400, 350);
-        fastContentCreatorActionContainer.getChild(UIFastContentCreatorActionTypeForm.class).update();
+        UIFCCActionContainer fastContentCreatorActionContainer = popupContainer.createUIComponent(UIFCCActionContainer.class, null, null);
+        Utils.createPopupWindow(popupContainer, fastContentCreatorActionContainer, event.getRequestContext(), UIFCCConstant.ACTION_POPUP_WINDOW, 400, 350);
+        fastContentCreatorActionContainer.getChild(UIFCCActionTypeForm.class).update();
       } else { 
         popupWindow.setShow(true);
       }
     }
   }
   
-  public static class EditActionListener extends EventListener<UIFastContentCreatorActionList> {
-    public void execute(Event<UIFastContentCreatorActionList> event) throws Exception {
-      UIFastContentCreatorActionList fastContentCreatorActionList = event.getSource();
-      UIPopupContainer popupContainer = fastContentCreatorActionList.getAncestorOfType(UIFastContentCreatorPortlet.class).getChild(UIPopupContainer.class);
-      UIPopupWindow popupWindow = popupContainer.getChildById(UIFastContentCreatorConstant.ACTION_POPUP_WINDOW);
+  public static class EditActionListener extends EventListener<UIFCCActionList> {
+    public void execute(Event<UIFCCActionList> event) throws Exception {
+      UIFCCActionList fastContentCreatorActionList = event.getSource();
+      UIPopupContainer popupContainer = fastContentCreatorActionList.getAncestorOfType(UIFCCPortlet.class).getChild(UIPopupContainer.class);
+      UIPopupWindow popupWindow = popupContainer.getChildById(UIFCCConstant.ACTION_POPUP_WINDOW);
       if (popupWindow == null) {
-        UIFastContentCreatorActionContainer fastContentCreatorActionContainer = popupContainer.createUIComponent(UIFastContentCreatorActionContainer.class, null, null);
-        Utils.createPopupWindow(popupContainer, fastContentCreatorActionContainer, event.getRequestContext(), UIFastContentCreatorConstant.ACTION_POPUP_WINDOW, 400, 350);
-        UIFastContentCreatorActionTypeForm fastContentCreatorActionTypeForm = fastContentCreatorActionContainer.getChild(UIFastContentCreatorActionTypeForm.class);
+        UIFCCActionContainer fastContentCreatorActionContainer = popupContainer.createUIComponent(UIFCCActionContainer.class, null, null);
+        Utils.createPopupWindow(popupContainer, fastContentCreatorActionContainer, event.getRequestContext(), UIFCCConstant.ACTION_POPUP_WINDOW, 400, 350);
+        UIFCCActionTypeForm fastContentCreatorActionTypeForm = fastContentCreatorActionContainer.getChild(UIFCCActionTypeForm.class);
         fastContentCreatorActionTypeForm.update();
         fastContentCreatorActionTypeForm.init();
       } else { 
@@ -137,23 +137,23 @@ public class UIFastContentCreatorActionList extends UIContainer {
     }
   }
   
-  public static class DeleteActionListener extends EventListener<UIFastContentCreatorActionList> {
-    public void execute(Event<UIFastContentCreatorActionList> event) throws Exception {
-      UIFastContentCreatorActionList fastContentCreatorActionList = event.getSource() ;
-      UIFastContentCreatorConfig fastContentCreatorConfig = fastContentCreatorActionList.getAncestorOfType(UIFastContentCreatorConfig.class) ;
+  public static class DeleteActionListener extends EventListener<UIFCCActionList> {
+    public void execute(Event<UIFCCActionList> event) throws Exception {
+      UIFCCActionList fastContentCreatorActionList = event.getSource() ;
+      UIFCCConfig fastContentCreatorConfig = fastContentCreatorActionList.getAncestorOfType(UIFCCConfig.class) ;
       ActionServiceContainer actionService = fastContentCreatorActionList.getApplicationComponent(ActionServiceContainer.class) ;
       String actionName = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      UIPopupContainer popupContainer = fastContentCreatorActionList.getAncestorOfType(UIFastContentCreatorPortlet.class).getChild(UIPopupContainer.class);
-      UIPopupWindow uiPopup = popupContainer.getChildById(UIFastContentCreatorConstant.ACTION_POPUP_WINDOW) ;
+      UIPopupContainer popupContainer = fastContentCreatorActionList.getAncestorOfType(UIFCCPortlet.class).getChild(UIPopupContainer.class);
+      UIPopupWindow uiPopup = popupContainer.getChildById(UIFCCConstant.ACTION_POPUP_WINDOW) ;
       UIApplication uiApp = fastContentCreatorActionList.getAncestorOfType(UIApplication.class) ;
       if(uiPopup != null && uiPopup.isShow()) {
         uiApp.addMessage(new ApplicationMessage("UIActionList.msg.remove-popup-first", null, ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      if(uiPopup != null && uiPopup.isRendered()) popupContainer.removeChildById(UIFastContentCreatorConstant.ACTION_POPUP_WINDOW) ;
+      if(uiPopup != null && uiPopup.isRendered()) popupContainer.removeChildById(UIFCCConstant.ACTION_POPUP_WINDOW) ;
       try {
-        actionService.removeAction(fastContentCreatorConfig.getSavedLocationNode(), actionName, UIFastContentCreatorUtils.getPreferenceRepository()) ;
+        actionService.removeAction(fastContentCreatorConfig.getSavedLocationNode(), actionName, UIFCCUtils.getPreferenceRepository()) ;
       } catch(AccessDeniedException ace) {
         uiApp.addMessage(new ApplicationMessage("UIActionList.msg.access-denied", null, ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

@@ -22,7 +22,7 @@ package org.exoplatform.wcm.webui.fastcontentcreator;
  *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
  * Jun 25, 2009  
  */
-public class UIFastContentCreatorConstant {
+public class UIFCCConstant {
 
   public static final String PREFERENCE_REPOSITORY            = "repository";
   
