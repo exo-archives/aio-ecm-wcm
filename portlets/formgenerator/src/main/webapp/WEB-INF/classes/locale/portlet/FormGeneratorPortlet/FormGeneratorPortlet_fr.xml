@@ -1,3 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bundle>
+	<UIFormGeneratorTabPane>
+		<label>
+			<UIFormGeneratorGeneralTab>Général</UIFormGeneratorGeneralTab>
+			<UIFormGeneratorNameFormStringInput>Nom</UIFormGeneratorNameFormStringInput>
+			<UIFormGeneratorNodetypeFormSelectBox>Sur la base nodeType</UIFormGeneratorNodetypeFormSelectBox>
+			<UIFormGeneratorDescriptionFormWYSIWYGInput>Description</UIFormGeneratorDescriptionFormWYSIWYGInput>
+			<UIFormGeneratorIconFormUploadInput>Icon</UIFormGeneratorIconFormUploadInput>
+			<UIFormGeneratorDnDTab>Formulaire de constructeur</UIFormGeneratorDnDTab>
+			<UIFormGeneratorOptionsTab>Options</UIFormGeneratorOptionsTab>
+			<UIFormGeneratorVoteFormCheckboxInput>Permettez-vote</UIFormGeneratorVoteFormCheckboxInput>
+			<UIFormGeneratorCommentFormCheckboxInput>Laisser un commentaire</UIFormGeneratorCommentFormCheckboxInput>
+		</label>
+		<action>
+			<Save>Sauver</Save>
+			<Reset>Reset</Reset>
+		</action>
+	</UIFormGeneratorTabPane>
 </bundle>
