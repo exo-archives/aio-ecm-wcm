@@ -16,9 +16,7 @@
  */
 package org.exoplatform.wcm.webui.newsletter.manager;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.commons.utils.ObjectPageList;
@@ -239,7 +237,7 @@ public class UINewsletterEntryManager extends UIForm {
         entryContainer = popupContainer.createUIComponent(UINewsletterEntryContainer.class, null, null);
         Utils.createPopupWindow(popupContainer, entryContainer, event.getRequestContext(), UINewsletterConstant.ENTRY_FORM_POPUP_WINDOW, 800, 600);
       } else { 
-        entryContainer = popupContainer.getChildById(UINewsletterConstant.ENTRY_FORM_POPUP_WINDOW);
+        entryContainer = popupContainer.getChild(UINewsletterEntryContainer.class);
         popupWindow.setShow(true);
       }
       entryContainer.setAddNew(false);
@@ -252,5 +250,4 @@ public class UINewsletterEntryManager extends UIForm {
       event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
     }
   }
-  
 }
