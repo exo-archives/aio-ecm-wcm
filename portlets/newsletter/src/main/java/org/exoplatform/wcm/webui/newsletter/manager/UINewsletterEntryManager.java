@@ -19,12 +19,21 @@ package org.exoplatform.wcm.webui.newsletter.manager;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.jcr.Node;
+import javax.jcr.Session;
+
 import org.exoplatform.commons.utils.ObjectPageList;
+import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
+import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 import org.exoplatform.services.wcm.newsletter.config.NewsletterManagerConfig;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterEntryHandler;
+import org.exoplatform.services.wcm.newsletter.handler.NewsletterTemplateHandler;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.newsletter.UINewsletterConstant;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -56,6 +65,7 @@ import org.exoplatform.webui.form.UIFormSelectBox;
          @EventConfig(listeners = UINewsletterEntryManager.BackToSubcriptionsActionListener.class),
          @EventConfig(listeners = UINewsletterEntryManager.BackToCategoriesActionListener.class),
          @EventConfig(listeners = UINewsletterEntryManager.OpenNewsletterActionListener.class),
+         @EventConfig(listeners = UINewsletterEntryManager.ConvertTemplateActionListener.class),
          @EventConfig(listeners = UINewsletterEntryManager.EditNewsletterEntryActionListener.class),
          @EventConfig(listeners = UINewsletterEntryManager.DeleteNewsletterEntryActionListener.class)
      }
@@ -245,4 +255,30 @@ public class UINewsletterEntryManager extends UIForm {
       event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
     }
   }
+  
+  public static class ConvertTemplateActionListener extends EventListener<UINewsletterEntryManager> {
+    public void execute(Event<UINewsletterEntryManager> event) throws Exception {
+      UINewsletterEntryManager newsletterEntryManager = event.getSource();
+      String categoryName = newsletterEntryManager.categoryConfig.getName();
+      String subscriptionName = newsletterEntryManager.subscriptionConfig.getName();
+      List<String> subIds = newsletterEntryManager.getChecked();
+      if(subIds == null || subIds.size() != 1){
+        UIApplication uiApp = newsletterEntryManager.getAncestorOfType(UIApplication.class);
+        uiApp.addMessage(new ApplicationMessage("UISubscription.msg.checkOnlyOneSubScriptionToOpen", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
+      }
+      String newsletterName = subIds.get(0);
+      NewsletterManagerService newsletterManagerService = newsletterEntryManager.getApplicationComponent(NewsletterManagerService.class);
+      ThreadLocalSessionProviderService threadLocalSessionProviderService = newsletterEntryManager.getApplicationComponent(ThreadLocalSessionProviderService.class);
+      RepositoryService repositoryService = newsletterEntryManager.getApplicationComponent(RepositoryService.class);
+      ManageableRepository manageableRepository = repositoryService.getRepository(newsletterManagerService.getRepositoryName()); 
+      Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(newsletterManagerService.getWorkspaceName(), manageableRepository);
+      String newsletterPath = NewsletterConstant.generateNewsletterPath(Util.getUIPortal().getName(), categoryName, subscriptionName, newsletterName) ;
+      Node newsletterNode = (Node) session.getItem(newsletterPath);
+      NewsletterTemplateHandler newsletterTemplateHandler = newsletterManagerService.getTemplateHandler();
+      newsletterTemplateHandler.convertAsTemplate(newsletterNode.getPath(), Util.getUIPortal().getName(), categoryName);
+    }
+  }
+  
 }

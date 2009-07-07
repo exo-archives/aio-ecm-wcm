@@ -106,7 +106,7 @@ public class UINewsletterEntryDialogSelector extends UIForm {
     NewsletterTemplateHandler newsletterTemplateHandler = newsletterManagerService.getTemplateHandler();
     List<Node> templateNodes = newsletterTemplateHandler.getTemplates(Util.getUIPortal().getName(), newsletterEntryContainer.getCategoryConfig());
     for (Node template : templateNodes) {
-      templates.add(new SelectItemOption<String>(template.getName()));
+      templates.add(new SelectItemOption<String>(template.getProperty("exo:title").getString(), template.getName()));
     }
     getUIFormSelectBox(NEWSLETTER_ENTRY_TEMPLATE).setOptions(templates);
   }

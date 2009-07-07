@@ -95,7 +95,7 @@ public class NewsletterConstant {
   }
   
   public static String generateCategoryTemplateBasePath(String portalName, String categoryName) {
-    return generateCategoryPath(portalName).concat(categoryName).concat("Templates");
+    return generateCategoryPath(portalName).concat("/" + categoryName).concat("/Templates");
   }
   
   public static String generateCategoryPath(String portalName) {
@@ -108,6 +108,10 @@ public class NewsletterConstant {
 
   public static String generateSubscriptionPath(String portalName, String categoryName, String subscriptionName) {
     return generateCategoryPath(portalName).concat("/" + categoryName).concat("/" + subscriptionName);
+  }
+  
+  public static String generateNewsletterPath(String portalName, String categoryName, String subscriptionName, String newsletterName) {
+    return generateSubscriptionPath(portalName, categoryName, subscriptionName).concat("/" + newsletterName);
   }
   
 }
