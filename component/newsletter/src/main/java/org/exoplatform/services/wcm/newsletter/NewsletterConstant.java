@@ -24,11 +24,9 @@ package org.exoplatform.services.wcm.newsletter;
  */
 public class NewsletterConstant {
   
-  public static final String PORTAL_NAME = "portalName";
-  
   // Categories property
   public static final String  CATEGORIES_PROPERTY_ADDMINISTRATOR = "exo:newsletteraddministrator";
-  // Category nodetype
+
   public static final String CATEGORY_NODETYPE                   = "exo:newsletterCategory";
 
   public static final String CATEGORY_PROPERTY_TITLE             = "exo:newsletterCategoryTitle";
@@ -67,8 +65,11 @@ public class NewsletterConstant {
 
   // User nodetype
   public static final String USER_NODETYPE                       = "exo:newsletterUser";
+  
   public static final String USER_PROPERTY_MAIL                  = "exo:newsletterUserMail";
+  
   public static final String USER_PROPERTY_BANNED                = "exo:newsletterUserBanned";
+  
   public static final String USER_PROPERTY_VALIDATION_CODE       = "exo:newsletterUserValidationCode";
   
   // Entry status
@@ -79,9 +80,23 @@ public class NewsletterConstant {
   public static final String STATUS_SENT                         = "sent";
 
   // Newsletter application configuration
-  public static String       CATEGORY_BASE_PATH                  = "/sites content/live/portalName/ApplicationData/NewsletterApplication/Categories";
+  public static final String PORTAL_NAME                         = "portalName";
+  
+  public static String       TEMPLATE_BASE_PATH                  = "/sites content/live/" + PORTAL_NAME + "/ApplicationData/NewsletterApplication/DefaultTemplates";
+  
+  public static String       CATEGORY_BASE_PATH                  = "/sites content/live/" + PORTAL_NAME + "/ApplicationData/NewsletterApplication/Categories";
 
-  public static String       USER_BASE_PATH                      = "/sites content/live/portalName/ApplicationData/NewsletterApplication/Users";
+  public static String       USER_BASE_PATH                      = "/sites content/live/" + PORTAL_NAME + "/ApplicationData/NewsletterApplication/Users";
+  
+  
+  
+  public static String generateDefaultTemplatePath(String portalName) {
+    return TEMPLATE_BASE_PATH.replaceAll(PORTAL_NAME, portalName);
+  }
+  
+  public static String generateCategoryTemplateBasePath(String portalName, String categoryName) {
+    return generateCategoryPath(portalName).concat(categoryName).concat("Templates");
+  }
   
   public static String generateCategoryPath(String portalName) {
     return CATEGORY_BASE_PATH.replaceAll(PORTAL_NAME, portalName);
@@ -90,4 +105,9 @@ public class NewsletterConstant {
   public static String generateUserPath(String portalName) {
     return USER_BASE_PATH.replaceAll(PORTAL_NAME, portalName);
   }
+
+  public static String generateSubscriptionPath(String portalName, String categoryName, String subscriptionName) {
+    return generateCategoryPath(portalName).concat("/" + categoryName).concat("/" + subscriptionName);
+  }
+  
 }

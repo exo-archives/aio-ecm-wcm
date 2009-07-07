@@ -21,7 +21,6 @@ import java.util.List;
 
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
-import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 import org.exoplatform.services.wcm.newsletter.config.NewsletterManagerConfig;
@@ -193,6 +192,7 @@ public class UINewsletterEntryManager extends UIForm {
       UIPopupWindow popupWindow = popupContainer.getChildById(UINewsletterConstant.ENTRY_FORM_POPUP_WINDOW);
       if (popupWindow == null) {
         UINewsletterEntryContainer entryContainer = popupContainer.createUIComponent(UINewsletterEntryContainer.class, null, null);
+        entryContainer.setCategoryConfig(uiNewsletterEntryManager.categoryConfig);
         UINewsletterEntryDialogSelector newsletterEntryDialogSelector = entryContainer.getChild(UINewsletterEntryDialogSelector.class);
         UIFormSelectBox categorySelectBox = newsletterEntryDialogSelector.getChildById(UINewsletterConstant.ENTRY_CATEGORY_SELECTBOX);
         categorySelectBox.setValue(uiNewsletterEntryManager.categoryConfig.getName());
@@ -235,18 +235,13 @@ public class UINewsletterEntryManager extends UIForm {
       UINewsletterEntryContainer entryContainer ;
       if (popupWindow == null) {
         entryContainer = popupContainer.createUIComponent(UINewsletterEntryContainer.class, null, null);
+        UINewsletterEntryForm newsletterEntryForm = entryContainer.getChild(UINewsletterEntryForm.class);
+        newsletterEntryForm.addNew(false);
         Utils.createPopupWindow(popupContainer, entryContainer, event.getRequestContext(), UINewsletterConstant.ENTRY_FORM_POPUP_WINDOW, 800, 600);
       } else { 
         entryContainer = popupContainer.getChild(UINewsletterEntryContainer.class);
         popupWindow.setShow(true);
       }
-      entryContainer.setAddNew(false);
-      String path = NewsletterConstant.generateCategoryPath(NewsLetterUtil.getPortalName()) + "/" + 
-                    uiNewsletterEntryManager.categoryConfig.getName()+ "/" + 
-                    uiNewsletterEntryManager.subscriptionConfig.getName() + "/" + subIds.get(0);
-      entryContainer.setChildPath(path);
-      entryContainer.init(uiNewsletterEntryManager.categoryConfig.getName(), 
-                          uiNewsletterEntryManager.subscriptionConfig.getName(), subIds.get(0));
       event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
     }
   }

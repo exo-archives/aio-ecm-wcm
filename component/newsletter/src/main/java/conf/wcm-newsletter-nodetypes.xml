@@ -1,34 +1,5 @@
 <nodeTypes xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0">
 	
-	<!--<nodeType name="exo:webContent" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
-  	<supertypes>
-  	  <supertype>mix:referenceable</supertype>
-  	  <supertype>nt:unstructured</supertype>
-  	  <supertype>nt:hierarchyNode</supertype>
-  	  <supertype>exo:rss-enable</supertype>  	    	    	    	     
-    </supertypes>
-    <childNodeDefinitions>
-      <childNodeDefinition name="js" defaultPrimaryType="exo:jsFolder" autoCreated="false" mandatory="false"
-        onParentVersion="VERSION" protected="false" sameNameSiblings="false">
-        <requiredPrimaryTypes>
-          <requiredPrimaryType>nt:base</requiredPrimaryType>
-        </requiredPrimaryTypes>
-      </childNodeDefinition>
-      <childNodeDefinition name="css" defaultPrimaryType="exo:cssFolder" autoCreated="false" mandatory="false"
-        onParentVersion="VERSION" protected="false" sameNameSiblings="false">
-        <requiredPrimaryTypes>
-          <requiredPrimaryType>nt:base</requiredPrimaryType>
-        </requiredPrimaryTypes>
-      </childNodeDefinition>
-      <childNodeDefinition name="medias" defaultPrimaryType="exo:multimediaFolder" autoCreated="false" mandatory="false"
-        onParentVersion="VERSION" protected="false" sameNameSiblings="false">
-        <requiredPrimaryTypes>
-          <requiredPrimaryType>nt:base</requiredPrimaryType>
-        </requiredPrimaryTypes>
-      </childNodeDefinition>
-    </childNodeDefinitions>
-  </nodeType>-->
-	
 	<nodeType name="exo:newsletterEntry" isMixin="true" hasOrderableChildNodes="true" primaryItemName="">
 		<propertyDefinitions>
 			<propertyDefinition name="exo:newsletterEntryCategoryName" requiredType="String" autoCreated="true" mandatory="true" onParentVersion="COPY" protected="false" multiple="false">
@@ -37,12 +8,6 @@
 			<propertyDefinition name="exo:newsletterEntrySubscriptionName" requiredType="String" autoCreated="true" mandatory="true" onParentVersion="COPY" protected="false" multiple="false">
 				<valueConstraints/>
 			</propertyDefinition>
-			<!--<propertyDefinition name="exo:newsletterEntryName" requiredType="String" autoCreated="true" mandatory="true" onParentVersion="COPY" protected="false" multiple="false">
-				<valueConstraints/>
-			</propertyDefinition>
-			<propertyDefinition name="exo:newsletterEntryTitle" requiredType="String" autoCreated="true" mandatory="true" onParentVersion="COPY" protected="false" multiple="false">
-				<valueConstraints/>
-			</propertyDefinition>-->
 			<propertyDefinition name="exo:newsletterEntryType" requiredType="String" autoCreated="true" mandatory="true" onParentVersion="COPY" protected="false" multiple="false">
 				<valueConstraints/>
 			</propertyDefinition>
@@ -87,6 +52,11 @@
 			</propertyDefinition>
 		</propertyDefinitions>
 		<childNodeDefinitions>
+			<childNodeDefinition name="*" defaultPrimaryType="nt:unstructured" autoCreated="false" mandatory="false" onParentVersion="VERSION" protected="false" sameNameSiblings="false">
+				<requiredPrimaryTypes>
+					<requiredPrimaryType>nt:base</requiredPrimaryType>
+				</requiredPrimaryTypes>
+			</childNodeDefinition>
 			<childNodeDefinition name="*" defaultPrimaryType="exo:newsletterSubscription" autoCreated="false" mandatory="false" onParentVersion="VERSION" protected="false" sameNameSiblings="false">
 				<requiredPrimaryTypes>
 					<requiredPrimaryType>exo:newsletterSubscription</requiredPrimaryType>

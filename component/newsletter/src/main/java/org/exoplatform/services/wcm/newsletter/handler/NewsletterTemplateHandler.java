@@ -25,13 +25,12 @@ import javax.jcr.Session;
 
 import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.services.cms.BasePath;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
+import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
 
 /**
  * Created by The eXo Platform SAS
@@ -46,7 +45,7 @@ public class NewsletterTemplateHandler {
   private ThreadLocalSessionProviderService threadLocalSessionProviderService;
   private String repository;
   private String workspace;
-  private List<Node> dialogs;
+  private List<Node> templates;
   
   public NewsletterTemplateHandler(String repository, String workspace) {
     repositoryService = (RepositoryService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(RepositoryService.class);
@@ -55,52 +54,65 @@ public class NewsletterTemplateHandler {
     this.workspace = workspace;
   }
   
-  public List<Node> getDialogs() {
-    log.info("Trying to get dialog's template for exo:webContent");
+  public List<Node> getTemplates(String portalName, NewsletterCategoryConfig categoryConfig) {
+    log.info("Trying to get templates of category " + categoryConfig);
     try {
-      List<Node> dialogs = new ArrayList<Node>();
-      NodeHierarchyCreator nodeHierarchyCreator = (NodeHierarchyCreator) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(NodeHierarchyCreator.class);
-      String templateHomePath = nodeHierarchyCreator.getJcrPath(BasePath.CMS_TEMPLATES_PATH);
+      List<Node> templates = new ArrayList<Node>();
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
       Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspace, manageableRepository);
-      Node templateHomeNode = (Node) session.getItem(templateHomePath);
-      Node nodetypeNode = templateHomeNode.getNode("exo:webContent");
-      NodeIterator dialogNodeIterator = nodetypeNode.getNode("dialogs").getNodes();
-      while (dialogNodeIterator.hasNext()) {
-        dialogs.add(dialogNodeIterator.nextNode());
+      
+      Node defaultTemplateFolder = (Node)session.getItem(NewsletterConstant.generateDefaultTemplatePath(portalName));
+      NodeIterator defaultTemplates = defaultTemplateFolder.getNodes();
+      while(defaultTemplates.hasNext()) {
+        templates.add(defaultTemplates.nextNode());
       }
-      this.dialogs = dialogs;
-      return dialogs;
+      
+      if (categoryConfig != null) {
+        Node categoryTemplateFolder = (Node)session.getItem(NewsletterConstant.generateCategoryTemplateBasePath(portalName, categoryConfig.getName()));
+        NodeIterator categoryTemplates = categoryTemplateFolder.getNodes();
+        while(categoryTemplates.hasNext()) {
+          templates.add(categoryTemplates.nextNode());
+        }
+      }
+      
+      this.templates = templates;
+      return templates;
     } catch (Exception e) {
-      e.printStackTrace();
-      log.error("Get dialog's template for exo:webContent failed because of " + e.getMessage());
+      log.error("Get templates of category " + categoryConfig + " failed because of " + e.getMessage());
     }
     return null;
   }
   
-  public Node getDialog(String dialogName) {
-    log.info("Trying to get dialog " + dialogName);
+  public Node getTemplate(String portalName, NewsletterCategoryConfig categoryConfig, String templateName) {
+    log.info("Trying to get template " + templateName);
     try {
-      if (dialogs == null) dialogs = getDialogs();
-      for (Node dialog : dialogs) {
-        if (dialogName.equals(dialog.getName())) {
-          return dialog;
+      if (templates == null) templates = getTemplates(portalName, categoryConfig);
+      if (templateName == null) return templates.get(0);
+      for (Node template : templates) {
+        if (templateName.equals(template.getName())) {
+          return template;
         }
       }
     } catch (Exception e) {
-      log.error("Get dialog " + dialogName + " failed because of " + e.getMessage());
+      log.error("Get dialog " + templateName + " failed because of " + e.getMessage());
     }
     return null;
   }
   
-  public void convertAsTemplate(SessionProvider sessionProvider) {
+  public boolean convertAsTemplate(String webcontentPath, String portalName, String categoryName) {
+    log.info("Trying to convert node " + webcontentPath + " to template at category " + categoryName);
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      Session session = sessionProvider.getSession(workspace, manageableRepository);
-      // TODO: Needs to implement
+      Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspace, manageableRepository);
+      Node categoryTemplateFolder = (Node)session.getItem(NewsletterConstant.generateCategoryTemplateBasePath(portalName, categoryName));
+      session.getWorkspace().copy(webcontentPath, categoryTemplateFolder.getPath());
+      session.save();
+      session.logout();
+      return true;
     } catch (Exception e) {
-      // TODO: handle exception
+      log.error("Convert node " + webcontentPath + " to template at category " + categoryName + " failed because of " + e.getMessage());
     }
+    return false;
   }
   
 }

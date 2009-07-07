@@ -16,31 +16,24 @@
  */
 package org.exoplatform.wcm.webui.newsletter.manager;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 
 import javax.jcr.Node;
-import javax.jcr.NodeIterator;
 import javax.jcr.Property;
 import javax.jcr.Session;
 import javax.jcr.Value;
-import javax.jcr.query.Query;
-import javax.jcr.query.QueryManager;
-import javax.jcr.query.QueryResult;
 
 import org.apache.commons.logging.Log;
-import org.exoplatform.commons.utils.ISO8601;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
 import org.exoplatform.ecm.webui.form.UIDialogForm;
 import org.exoplatform.ecm.webui.utils.DialogFormUtil;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.CmsService;
 import org.exoplatform.services.cms.JcrInputProperty;
@@ -55,9 +48,6 @@ import org.exoplatform.services.mail.MailService;
 import org.exoplatform.services.mail.Message;
 import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
-import org.exoplatform.services.wcm.newsletter.handler.NewsletterTemplateHandler;
-import org.exoplatform.services.wcm.utils.SQLQueryBuilder;
-import org.exoplatform.services.wcm.utils.AbstractQueryBuilder.LOGICAL;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.newsletter.UINewsletterConstant;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -90,23 +80,17 @@ public class UINewsletterEntryForm extends UIDialogForm {
 
   private static final Log log  = ExoLogger.getLogger("wcm:UINewsletterEntryForm");
 
-  private NewsletterManagerService newsletterManagerService;
-
-  private NewsletterTemplateHandler newsletterTemplateHandler;
-
   public UINewsletterEntryForm() throws Exception {
-    newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
-    newsletterTemplateHandler = newsletterManagerService.getTemplateHandler();
   }
 
   public String getTemplate() {
-    try {
-      UINewsletterEntryContainer newsletterEntryContainer = getAncestorOfType(UINewsletterEntryContainer.class);
-      UINewsletterEntryDialogSelector newsletterEntryDialogSelector = newsletterEntryContainer.getChild(UINewsletterEntryDialogSelector.class);
-      Node dialogNode = newsletterTemplateHandler.getDialog(newsletterEntryDialogSelector.getDialog());
-      return dialogNode.getPath();  
-    } catch (Exception e) {
-      e.printStackTrace();
+    TemplateService templateService = getApplicationComponent(TemplateService.class) ;
+    String userName = Util.getPortalRequestContext().getRemoteUser();
+    try{
+      NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
+      String repositoryName = newsletterManagerService.getRepositoryName();
+      return templateService.getTemplatePathByUser(true, "exo:webContent", userName, repositoryName);
+    } catch(Exception e) {
       log.error("Get template failed because of " + e.getMessage(), e);
     }
     return null;
@@ -128,6 +112,52 @@ public class UINewsletterEntryForm extends UIDialogForm {
     return resourceResolver;
   }
 
+  private Node saveContent() throws Exception {
+    // Prepare node store location
+    UINewsletterEntryContainer newsletterEntryContainer = getAncestorOfType(UINewsletterEntryContainer.class);
+    UINewsletterEntryDialogSelector newsletterEntryDialogSelector = newsletterEntryContainer.getChild(UINewsletterEntryDialogSelector.class);
+    String selectedCategory = ((UIFormSelectBox)newsletterEntryDialogSelector.getChildById(UINewsletterConstant.ENTRY_CATEGORY_SELECTBOX)).getValue();
+    String selectedSubsctiption = ((UIFormSelectBox)newsletterEntryDialogSelector.getChildById(UINewsletterConstant.ENTRY_SUBSCRIPTION_SELECTBOX)).getValue();
+    setStoredPath(NewsletterConstant.generateSubscriptionPath(Util.getUIPortal().getName(), selectedCategory, selectedSubsctiption));
+    
+    // Prepare node: use title as a node name
+    Map<String, JcrInputProperty> inputProperties = DialogFormUtil.prepareMap(getChildren(), getInputProperties());
+    String nodeName = Utils.cleanString(getUIStringInput("title").getValue());
+    inputProperties.get("/node").setValue(nodeName);
+    
+    // Store node
+    String storedPath = getStoredPath().replace(NewsletterConstant.PORTAL_NAME, NewsLetterUtil.getPortalName());
+    ThreadLocalSessionProviderService threadLocalSessionProviderService = getApplicationComponent(ThreadLocalSessionProviderService.class);
+    SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
+    RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
+    ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
+    Session session = sessionProvider.getSession(workspaceName, manageableRepository);
+    Node storedNode = (Node)session.getItem(storedPath);
+    CmsService cmsService = getApplicationComponent(CmsService.class);
+    String newsletterNodePath = cmsService.storeNode("exo:webContent", storedNode, inputProperties, isAddNew(), repositoryName);
+
+    // Add newsletter mixin type
+    
+    
+    Node newsletterNode = (Node)session.getItem(newsletterNodePath);
+    if(newsletterNode.canAddMixin(NewsletterConstant.ENTRY_NODETYPE)) newsletterNode.addMixin(NewsletterConstant.ENTRY_NODETYPE);
+    newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_CATEGORY_NAME, selectedCategory);
+    newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_SUBSCRIPTION_NAME, selectedSubsctiption);
+    newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_STATUS, NewsletterConstant.STATUS_DRAFT);
+    newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_TYPE, newsletterEntryDialogSelector.getDialog());
+    newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_DATE, ((UIFormDateTimeInput)newsletterEntryDialogSelector.getChildById(UINewsletterEntryDialogSelector.NEWSLETTER_ENTRY_SEND_DATE)).getCalendar().getInstance());
+    session.save();
+    
+    // Close popup and update UI
+    UIPopupContainer popupContainer = getAncestorOfType(UIPopupContainer.class);
+    UINewsletterManagerPortlet managerPortlet = popupContainer.getAncestorOfType(UINewsletterManagerPortlet.class);
+    UINewsletterEntryManager entryManager = managerPortlet.getChild(UINewsletterEntryManager.class);
+    if(entryManager.isRendered()) entryManager.init();
+    Utils.closePopupWindow(popupContainer, UINewsletterConstant.ENTRY_FORM_POPUP_WINDOW);
+    
+    return storedNode;
+  }
+  
   public static class PreviewActionListener extends EventListener<UINewsletterEntryForm> {
     public void execute(Event<UINewsletterEntryForm> event) throws Exception {
     }
@@ -136,71 +166,17 @@ public class UINewsletterEntryForm extends UIDialogForm {
   public static class SaveActionListener extends EventListener<UINewsletterEntryForm> {
     public void execute(Event<UINewsletterEntryForm> event) throws Exception {
       UINewsletterEntryForm newsletterEntryForm = event.getSource();
-      String storedPath = newsletterEntryForm.getStoredPath().replace(NewsletterConstant.PORTAL_NAME, NewsLetterUtil.getPortalName());
-      String repositoryName = newsletterEntryForm.repositoryName;
-      ThreadLocalSessionProviderService threadLocalSessionProviderService = newsletterEntryForm.getApplicationComponent(ThreadLocalSessionProviderService.class);
-      SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
-      RepositoryService repositoryService = newsletterEntryForm.getApplicationComponent(RepositoryService.class);
-      ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
-      Session session = sessionProvider.getSession(newsletterEntryForm.workspaceName, manageableRepository);
-      Node storedNode = (Node)session.getItem(storedPath);
-      Map<String, JcrInputProperty> inputProperties = DialogFormUtil.prepareMap(newsletterEntryForm.getChildren(), newsletterEntryForm.getInputProperties());
-      CmsService cmsService = newsletterEntryForm.getApplicationComponent(CmsService.class);
-      String newsletterNodePath = 
-        cmsService.storeNode("exo:webContent", storedNode, inputProperties, newsletterEntryForm.isAddNew(), repositoryName);
-      session.save();
-      // add mixin for newsletter entry node
-      UINewsletterEntryContainer newsletterEntryContainer = newsletterEntryForm.getAncestorOfType(UINewsletterEntryContainer.class);
-      UINewsletterEntryDialogSelector newsletterEntryDialogSelector = newsletterEntryContainer.getChild(UINewsletterEntryDialogSelector.class);
-      Node newsletterNode = (Node)session.getItem(newsletterNodePath);
-      if(!newsletterNode.isNodeType(NewsletterConstant.ENTRY_NODETYPE))
-        newsletterNode.addMixin(NewsletterConstant.ENTRY_NODETYPE);
-      newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_CATEGORY_NAME, 
-                                 ((UIFormSelectBox)newsletterEntryDialogSelector.getChildById(UINewsletterConstant.ENTRY_CATEGORY_SELECTBOX)).getValue());
-      newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_SUBSCRIPTION_NAME, 
-                                 ((UIFormSelectBox)newsletterEntryDialogSelector.getChildById(UINewsletterConstant.ENTRY_CATEGORY_SELECTBOX)).getValue());
-      newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_STATUS, NewsletterConstant.STATUS_DRAFT);
-      newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_TYPE, newsletterEntryDialogSelector.getDialog());
-      newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_DATE, 
-                                 ((UIFormDateTimeInput)newsletterEntryDialogSelector.getChildById(UINewsletterEntryDialogSelector.NEWSLETTER_ENTRY_SEND_DATE)).getCalendar().getInstance());
-      session.save();
-      UIPopupContainer popupContainer = newsletterEntryForm.getAncestorOfType(UIPopupContainer.class);
-      UINewsletterManagerPortlet managerPortlet = popupContainer.getAncestorOfType(UINewsletterManagerPortlet.class);
-      UINewsletterEntryManager entryManager = managerPortlet.getChild(UINewsletterEntryManager.class);
-      if(entryManager.isRendered())
-        entryManager.init();
-      Utils.closePopupWindow(popupContainer, UINewsletterConstant.ENTRY_FORM_POPUP_WINDOW);
+      newsletterEntryForm.saveContent();
     }
   }
 
   public static class SendActionListener extends EventListener<UINewsletterEntryForm> {
     public void execute(Event<UINewsletterEntryForm> event) throws Exception {
       UINewsletterEntryForm newsletterEntryForm = event.getSource();
-      String storedPath = newsletterEntryForm.getStoredPath().replace(NewsletterConstant.PORTAL_NAME, NewsLetterUtil.getPortalName());
-      String repositoryName = newsletterEntryForm.repositoryName;
-      ThreadLocalSessionProviderService threadLocalSessionProviderService = newsletterEntryForm.getApplicationComponent(ThreadLocalSessionProviderService.class);
-      SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
-      RepositoryService repositoryService = newsletterEntryForm.getApplicationComponent(RepositoryService.class);
-      ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
-      Session session = sessionProvider.getSession(newsletterEntryForm.workspaceName, manageableRepository);
-      Node storedNode = (Node)session.getItem(storedPath);
-      Map<String, JcrInputProperty> inputProperties = DialogFormUtil.prepareMap(newsletterEntryForm.getChildren(), newsletterEntryForm.getInputProperties());
-      CmsService cmsService = newsletterEntryForm.getApplicationComponent(CmsService.class);
-      String newsletterNodePath = 
-        cmsService.storeNode("exo:webContent", storedNode, inputProperties, newsletterEntryForm.isAddNew(), repositoryName);
-      session.save();
-      // add mixin for newsletter entry node
+      Node newsletterNode = newsletterEntryForm.saveContent();
+      
       UINewsletterEntryContainer newsletterEntryContainer = newsletterEntryForm.getAncestorOfType(UINewsletterEntryContainer.class);
       UINewsletterEntryDialogSelector newsletterEntryDialogSelector = newsletterEntryContainer.getChild(UINewsletterEntryDialogSelector.class);
-      Node newsletterNode = (Node)session.getItem(newsletterNodePath);
-      if(!newsletterNode.isNodeType(NewsletterConstant.ENTRY_NODETYPE))
-        newsletterNode.addMixin(NewsletterConstant.ENTRY_NODETYPE);
-      newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_CATEGORY_NAME, 
-                                 ((UIFormSelectBox)newsletterEntryDialogSelector.getChildById(UINewsletterConstant.ENTRY_CATEGORY_SELECTBOX)).getValue());
-      newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_SUBSCRIPTION_NAME, 
-                                 ((UIFormSelectBox)newsletterEntryDialogSelector.getChildById(UINewsletterConstant.ENTRY_CATEGORY_SELECTBOX)).getValue());
-      newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_TYPE, newsletterEntryDialogSelector.getDialog());
-
       Date currentDate = new Date();
       //DateFormat dateFormat = new SimpleDateFormat(ISO8601.SIMPLE_DATETIME_FORMAT);
       Calendar calendar = ((UIFormDateTimeInput)newsletterEntryDialogSelector
@@ -236,7 +212,8 @@ public class UINewsletterEntryForm extends UIDialogForm {
           }
           message.setBCC(receiver);
           message.setSubject(newsletterNode.getName()) ;
-          message.setBody(newsletterEntryForm.newsletterManagerService.getEntryHandler().getContent(newsletterNode)) ;
+          NewsletterManagerService newsletterManagerService = newsletterEntryForm.getApplicationComponent(NewsletterManagerService.class); 
+          message.setBody(newsletterManagerService.getEntryHandler().getContent(newsletterNode)) ;
           message.setMimeType("text/html") ;
           try {
             mailService.sendMessage(message);
@@ -245,13 +222,6 @@ public class UINewsletterEntryForm extends UIDialogForm {
           }
         }
       }
-      session.save();
-      UIPopupContainer popupContainer = newsletterEntryForm.getAncestorOfType(UIPopupContainer.class);
-      UINewsletterManagerPortlet managerPortlet = popupContainer.getAncestorOfType(UINewsletterManagerPortlet.class);
-      UINewsletterEntryManager entryManager = managerPortlet.getChild(UINewsletterEntryManager.class);
-      if(entryManager.isRendered())
-        entryManager.init();
-      Utils.closePopupWindow(popupContainer, UINewsletterConstant.ENTRY_FORM_POPUP_WINDOW);
     }
   }
 

@@ -96,4 +96,60 @@
 			</object-param>
 		</init-params>
 	</component>
+	
+	<external-component-plugins>
+		<target-component>org.exoplatform.services.wcm.deployment.WCMContentInitializerService</target-component>
+		<component-plugin>
+			<name>Content Initializer Service</name>
+			<set-method>addPlugin</set-method>
+			<type>org.exoplatform.services.wcm.deployment.plugins.XMLDeploymentWithStagingPlugin</type>
+			<description>XML Deployment Plugin</description>
+			<init-params>
+				<object-param>
+					<name>Newsletter number one</name>
+					<description>Deployment Descriptor</description>
+					<object type="org.exoplatform.services.deployment.DeploymentDescriptor">
+						<field name="target">
+							<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
+								<field name="repository">
+									<string>repository</string>
+								</field>
+								<field name="workspace">
+									<string>collaboration</string>
+								</field>
+								<field name="nodePath">
+									<string>/sites content/live/classic/ApplicationData/NewsletterApplication/DefaultTemplates</string>
+								</field>
+							</object>
+						</field>
+						<field name="sourcePath">
+							<string>war:/conf/wcm/artifacts/site-resources/classic/Banner.xml</string>
+						</field>
+					</object>
+				</object-param>
+				<object-param>
+					<name>Newsletter number two</name>
+					<description>Deployment Descriptor</description>
+					<object type="org.exoplatform.services.deployment.DeploymentDescriptor">
+						<field name="target">
+							<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
+								<field name="repository">
+									<string>repository</string>
+								</field>
+								<field name="workspace">
+									<string>collaboration</string>
+								</field>
+								<field name="nodePath">
+									<string>/sites content/live/classic/ApplicationData/NewsletterApplication/DefaultTemplates</string>
+								</field>
+							</object>
+						</field>
+						<field name="sourcePath">
+							<string>war:/conf/wcm/artifacts/site-resources/classic/Homepage.xml</string>
+						</field>
+					</object>
+				</object-param>
+			</init-params>
+		</component-plugin>
+	</external-component-plugins>
 </configuration>

@@ -309,6 +309,11 @@ public class PortalFolderSchemaHandler extends BaseWebSchemaHandler {
     addMixin(newsletterApplicationFolder,"exo:datetime");
     newsletterApplicationFolder.setProperty("exo:dateCreated", calendar);
     
+    Node defaultTemplatesFolder = newsletterApplicationFolder.addNode("DefaultTemplates", NT_UNSTRUCTURED);
+    addMixin(defaultTemplatesFolder, "exo:owneable");
+    addMixin(defaultTemplatesFolder,"exo:datetime");
+    defaultTemplatesFolder.setProperty("exo:dateCreated", calendar);
+    
     Node newsletterCategoriesFolder = newsletterApplicationFolder.addNode("Categories", NT_UNSTRUCTURED);
     addMixin(newsletterCategoriesFolder, "exo:owneable");
     addMixin(newsletterCategoriesFolder,"exo:datetime");

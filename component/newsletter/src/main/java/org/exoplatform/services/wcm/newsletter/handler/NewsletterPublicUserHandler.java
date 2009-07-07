@@ -19,7 +19,6 @@ package org.exoplatform.services.wcm.newsletter.handler;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -37,11 +36,11 @@ import org.exoplatform.container.StandaloneContainer;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.mail.MailService;
 import org.exoplatform.services.mail.Message;
 import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
-import org.exoplatform.webui.application.WebuiRequestContext;
 
 /**
  * Created by The eXo Platform SAS
@@ -136,16 +135,16 @@ public class NewsletterPublicUserHandler {
     }
   }
   
-  public void subscribe(String portalName, String userMail, List<String> listCategorySubscription, String link, String[] emailContent) {
+  public void subscribe(String portalName, String userMail, List<String> listCategorySubscription, String link, String[] emailContent, SessionProvider sessionProvider) {
     log.info("Trying to subscribe user " + userMail);
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspace, manageableRepository);
       // add new user email into users node
       NewsletterManageUserHandler manageUserHandler = new NewsletterManageUserHandler(repository, workspace);
-      Node userNode = manageUserHandler.add(portalName, userMail);
+      Node userNode = manageUserHandler.add(portalName, userMail, sessionProvider);
       
       // update email into subscription
+      Session session = sessionProvider.getSession(workspace, manageableRepository);
       updateSubscriptions(session, listCategorySubscription, portalName, userMail);
       //Send a verification code to user's email to validate and to get link
       /*WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;

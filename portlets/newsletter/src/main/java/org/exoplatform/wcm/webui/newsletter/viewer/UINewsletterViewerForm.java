@@ -21,6 +21,7 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
@@ -219,8 +220,8 @@ public class UINewsletterViewerForm extends UIForm {
           String emailContent[] = new String[]{ res.getString("UINewsletterViewerForm.Email.ConfirmUser.Subject"),
                                                 res.getString("UINewsletterViewerForm.Email.ConfirmUser.Content")};
           
-          
-          newsletterForm.publicUserHandler.subscribe(portalName, userEmail, listCategorySubscription, newsletterForm.linkToSendMail, emailContent);
+          ThreadLocalSessionProviderService threadLocalSessionProviderService = newsletterForm.getApplicationComponent(ThreadLocalSessionProviderService.class);
+          newsletterForm.publicUserHandler.subscribe(portalName, userEmail, listCategorySubscription, newsletterForm.linkToSendMail, emailContent, threadLocalSessionProviderService.getSessionProvider(null));
           newsletterForm.inputEmail.setRendered(false);
           newsletterForm.userMail = userEmail;
           newsletterForm.isUpdated = true;

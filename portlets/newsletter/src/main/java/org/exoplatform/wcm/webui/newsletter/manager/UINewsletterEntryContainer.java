@@ -16,17 +16,13 @@
  */
 package org.exoplatform.wcm.webui.newsletter.manager;
 
-import java.util.GregorianCalendar;
-
-import javax.jcr.Session;
-
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
-import org.exoplatform.services.wcm.newsletter.config.NewsletterManagerConfig;
+import org.exoplatform.services.wcm.newsletter.handler.NewsletterTemplateHandler;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
-import org.exoplatform.webui.form.UIFormDateTimeInput;
 
 /**
  * Created by The eXo Platform SAS
@@ -39,52 +35,28 @@ import org.exoplatform.webui.form.UIFormDateTimeInput;
 )
 public class UINewsletterEntryContainer extends UIContainer {
 
-  private boolean isAddNew = true;
-  private String childPath;
+  private NewsletterCategoryConfig categoryConfig;
   
   public UINewsletterEntryContainer() throws Exception {
     NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
-    addChild(UINewsletterEntryDialogSelector.class, null, null);
+    UINewsletterEntryDialogSelector newsletterEntryDialogSelector = addChild(UINewsletterEntryDialogSelector.class, null, null);
+    newsletterEntryDialogSelector.updateTemplateSelectBox();
     UINewsletterEntryForm newsletterEntryForm = createUIComponent(UINewsletterEntryForm.class, null, null);
-    newsletterEntryForm.setStoredLocation(newsletterManagerService.getRepositoryName(), newsletterManagerService.getWorkspaceName(), 
-      "/sites content/live/portalName/ApplicationData/NewsletterApplication/Categories/category1/subscription1");
-    newsletterEntryForm.addNew(isAddNew);
-    newsletterEntryForm.setNodePath(childPath);
+    NewsletterTemplateHandler newsletterTemplateHandler = newsletterManagerService.getTemplateHandler();
+    newsletterEntryForm.setRepositoryName(newsletterManagerService.getRepositoryName());
+    newsletterEntryForm.setWorkspace(newsletterManagerService.getWorkspaceName());
+    newsletterEntryForm.addNew(true);
+    newsletterEntryForm.setNodePath(newsletterTemplateHandler.getTemplate(Util.getUIPortal().getName(), categoryConfig, null).getPath());
+    newsletterEntryForm.getChildren().clear();
     newsletterEntryForm.resetProperties();
     addChild(newsletterEntryForm);
   }
 
-  public boolean isAddNew() {
-    return isAddNew;
+  public NewsletterCategoryConfig getCategoryConfig() {
+    return categoryConfig;
   }
   
-  public void setAddNew(boolean isAddNew) {
-    this.isAddNew = isAddNew;
+  public void setCategoryConfig(NewsletterCategoryConfig categoryConfig) {
+    this.categoryConfig = categoryConfig;
   }
-  
-  public String getChildPath() {
-    return childPath;
-  }
-
-  public void setChildPath(String childPath) {
-    this.childPath = childPath;
-  }
-  
-  public void init(String categoryName, String subscriptionName, String newsletterName) throws Exception{
-    UINewsletterEntryForm newsletterEntryForm = this.getChild(UINewsletterEntryForm.class);
-    newsletterEntryForm.addNew(isAddNew);
-    newsletterEntryForm.setNodePath(childPath);
-    NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
-    NewsletterManagerConfig newsletterManagerConfig = 
-                          newsletterManagerService.getEntryHandler()
-                          .getNewsletterEntry(NewsLetterUtil.getPortalName(), categoryName, subscriptionName, newsletterName);
-    UINewsletterEntryDialogSelector newsletterEntryDialogSelector = this.getChild(UINewsletterEntryDialogSelector.class);
-    UIFormDateTimeInput  dateTimeInput = newsletterEntryDialogSelector.
-                                              getChildById(UINewsletterEntryDialogSelector.NEWSLETTER_ENTRY_SEND_DATE);
-    GregorianCalendar cal = new GregorianCalendar() ;
-    cal.setTime(newsletterManagerConfig.getNewsletterSentDate()) ;
-    dateTimeInput.setCalendar(cal);
-    newsletterEntryForm.resetProperties();
-  }
-  
 }

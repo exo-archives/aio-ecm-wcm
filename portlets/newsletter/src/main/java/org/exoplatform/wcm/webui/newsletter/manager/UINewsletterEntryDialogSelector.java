@@ -63,10 +63,6 @@ public class UINewsletterEntryDialogSelector extends UIForm {
   
   public static final String NEWSLETTER_ENTRY_SEND_DATE = "UINewsletterEntrySendDate";
   
-  private NewsletterManagerService newsletterManagerService;
-  
-  private NewsletterTemplateHandler newsletterTemplateHandler;
-  
   private String dialog = "dialog1";
 
   public String getDialog() {
@@ -78,17 +74,7 @@ public class UINewsletterEntryDialogSelector extends UIForm {
   }
   
   public UINewsletterEntryDialogSelector() throws Exception {
-    newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
-    newsletterTemplateHandler = newsletterManagerService.getTemplateHandler();
-    List<SelectItemOption<String>> dialogs = new ArrayList<SelectItemOption<String>>();
-    List<Node> dialogNodes = newsletterTemplateHandler.getDialogs();
-    if(dialogNodes != null){
-      for (Node node : dialogNodes) {
-        SelectItemOption<String> selectItemOption = new SelectItemOption<String>(node.getName());
-        dialogs.add(selectItemOption);
-      }
-    }
-    UIFormSelectBox newsletterEntryTemplate = new UIFormSelectBox(NEWSLETTER_ENTRY_TEMPLATE, NEWSLETTER_ENTRY_TEMPLATE, dialogs);
+    UIFormSelectBox newsletterEntryTemplate = new UIFormSelectBox(NEWSLETTER_ENTRY_TEMPLATE, NEWSLETTER_ENTRY_TEMPLATE, new ArrayList<SelectItemOption<String>>());
     newsletterEntryTemplate.setOnChange("ChangeTemplate");
     addChild(newsletterEntryTemplate);
     addChild(new UIFormDateTimeInput(NEWSLETTER_ENTRY_SEND_DATE, NEWSLETTER_ENTRY_SEND_DATE, null));
@@ -113,15 +99,31 @@ public class UINewsletterEntryDialogSelector extends UIForm {
     addChild(new UIFormSelectBox(UINewsletterConstant.ENTRY_SUBSCRIPTION_SELECTBOX, UINewsletterConstant.ENTRY_SUBSCRIPTION_SELECTBOX, subscriptions));
   }
   
+  public void updateTemplateSelectBox() throws Exception {
+    List<SelectItemOption<String>> templates = new ArrayList<SelectItemOption<String>>();
+    UINewsletterEntryContainer newsletterEntryContainer = getAncestorOfType(UINewsletterEntryContainer.class);
+    NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
+    NewsletterTemplateHandler newsletterTemplateHandler = newsletterManagerService.getTemplateHandler();
+    List<Node> templateNodes = newsletterTemplateHandler.getTemplates(Util.getUIPortal().getName(), newsletterEntryContainer.getCategoryConfig());
+    for (Node template : templateNodes) {
+      templates.add(new SelectItemOption<String>(template.getName()));
+    }
+    getUIFormSelectBox(NEWSLETTER_ENTRY_TEMPLATE).setOptions(templates);
+  }
+  
   public static class ChangeTemplateActionListener extends EventListener<UINewsletterEntryDialogSelector> {
     public void execute(Event<UINewsletterEntryDialogSelector> event) throws Exception {
       UINewsletterEntryDialogSelector newsletterEntryDialogSelector = event.getSource();
+      UIFormSelectBox newsletterEntryTemplate = newsletterEntryDialogSelector.getChildById(NEWSLETTER_ENTRY_TEMPLATE);
+      String templateName = newsletterEntryTemplate.getValue();
+      newsletterEntryDialogSelector.setDialog(templateName) ;
+      NewsletterManagerService newsletterManagerService = newsletterEntryDialogSelector.getApplicationComponent(NewsletterManagerService.class);
+      NewsletterTemplateHandler newsletterTemplateHandler = newsletterManagerService.getTemplateHandler();
       UINewsletterEntryContainer newsletterEntryContainer = newsletterEntryDialogSelector.getAncestorOfType(UINewsletterEntryContainer.class);
       UINewsletterEntryForm newsletterEntryForm = newsletterEntryContainer.getChild(UINewsletterEntryForm.class) ;
-      newsletterEntryForm.getChildren().clear() ;
-      newsletterEntryForm.resetProperties() ;
-      UIFormSelectBox newsletterEntryTemplate = newsletterEntryDialogSelector.getChildById(NEWSLETTER_ENTRY_TEMPLATE);
-      newsletterEntryDialogSelector.setDialog(newsletterEntryTemplate.getValue()) ;
+      newsletterEntryForm.setNodePath(newsletterTemplateHandler.getTemplate(Util.getUIPortal().getName(), newsletterEntryContainer.getCategoryConfig(), templateName).getPath());
+      newsletterEntryForm.getChildren().clear();
+      newsletterEntryForm.resetProperties();
       event.getRequestContext().addUIComponentToUpdateByAjax(newsletterEntryContainer) ;
     }
   }

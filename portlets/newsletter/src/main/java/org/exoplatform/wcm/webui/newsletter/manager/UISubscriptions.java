@@ -23,7 +23,6 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
-import org.exoplatform.services.wcm.newsletter.config.NewsletterManagerConfig;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterCategoryHandler;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterManageUserHandler;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterSubscriptionHandler;
@@ -313,6 +312,7 @@ public class UISubscriptions extends UIForm {
         UIFormSelectBox categorySelectBox = newsletterEntryDialogSelector.getChildById(UINewsletterConstant.ENTRY_CATEGORY_SELECTBOX);
         categorySelectBox.setValue(uiSubscriptions.categoryConfig.getName());
         categorySelectBox.setDisabled(true);
+        entryContainer.setCategoryConfig(uiSubscriptions.categoryConfig);
         Utils.createPopupWindow(popupContainer, entryContainer, event.getRequestContext(), UINewsletterConstant.ENTRY_FORM_POPUP_WINDOW, 800, 600);
       } else { 
         popupWindow.setShow(true);

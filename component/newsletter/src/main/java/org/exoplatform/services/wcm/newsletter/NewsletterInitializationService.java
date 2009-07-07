@@ -87,7 +87,7 @@ public class NewsletterInitializationService implements Startable {
           
           NewsletterManageUserHandler manageUserHandler = managerService.getManageUserHandler();
           for (NewsletterUserConfig userConfig : userConfigs) {
-            manageUserHandler.add(portalName, userConfig.getMail());
+            manageUserHandler.add(portalName, userConfig.getMail(), sessionProvider);
           }
         }
         

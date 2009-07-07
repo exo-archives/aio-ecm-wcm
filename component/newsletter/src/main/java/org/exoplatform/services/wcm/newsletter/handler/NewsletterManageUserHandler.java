@@ -135,12 +135,12 @@ public class NewsletterManageUserHandler {
     session.save();
   }
   
-  public Node add(String portalName, String userMail) {
+  public Node add(String portalName, String userMail, SessionProvider sessionProvider) {
     log.info("Trying to add user " + userMail);
     Node userNode = null;
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspace, manageableRepository);
+      Session session = sessionProvider.getSession(workspace, manageableRepository);
       String userPath = NewsletterConstant.generateUserPath(portalName);
       Node userFolderNode = (Node)session.getItem(userPath);
       userNode = userFolderNode.addNode(userMail, NewsletterConstant.USER_NODETYPE);

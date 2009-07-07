@@ -38,7 +38,6 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.cms.impl.DMSConfiguration;
-import org.exoplatform.services.cms.watch.impl.MessageConfig;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.config.RepositoryConfigurationException;
 import org.exoplatform.services.jcr.core.ManageableRepository;
@@ -52,7 +51,6 @@ import org.exoplatform.services.wcm.newsletter.handler.NewsletterPublicUserHandl
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterSubscriptionHandler;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterTemplateHandler;
 import org.exoplatform.services.wcm.utils.SQLQueryBuilder;
-import org.exoplatform.services.wcm.utils.AbstractQueryBuilder.LOGICAL;
 
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform
@@ -78,9 +76,7 @@ public class NewsletterManagerService {
 		entryHandler = new NewsletterEntryHandler(repositoryName, workspaceName);
 		manageUserHandler = new NewsletterManageUserHandler(repositoryName, workspaceName);
 		publicUserHandler = new NewsletterPublicUserHandler(repositoryName, workspaceName);
-
-		String templateWorkspace = dmsConfiguration.getConfig(repositoryName).getSystemWorkspace();
-		templateHandler = new NewsletterTemplateHandler(repositoryName, templateWorkspace);
+		templateHandler = new NewsletterTemplateHandler(repositoryName, workspaceName);
 	}
 
 	public NewsletterCategoryHandler getCategoryHandler() {

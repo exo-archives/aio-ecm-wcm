@@ -96,6 +96,7 @@ public class NewsletterCategoryHandler {
       String categoryPath = NewsletterConstant.generateCategoryPath(portalName);
       Node categoriesNode = (Node)session.getItem(categoryPath);
       Node categoryNode = categoriesNode.addNode(categoryConfig.getName(), NewsletterConstant.CATEGORY_NODETYPE);
+      categoryNode.addNode("Templates", "nt:unstructured");
       ExtendedNode extendedCategoryNode = ExtendedNode.class.cast(categoryNode);
       extendedCategoryNode.setProperty(NewsletterConstant.CATEGORY_PROPERTY_TITLE, categoryConfig.getTitle());
       extendedCategoryNode.setProperty(NewsletterConstant.CATEGORY_PROPERTY_DESCRIPTION, categoryConfig.getDescription());
