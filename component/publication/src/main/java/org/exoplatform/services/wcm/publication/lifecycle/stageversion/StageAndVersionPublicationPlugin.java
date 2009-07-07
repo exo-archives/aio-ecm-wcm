@@ -254,11 +254,11 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     if(liveRevision != null) {
       viewNode = liveRevision.getNode("jcr:frozenNode");
     }    
+    if(viewNode == null)
+      viewNode = node;
     if(runtimeMode == SITE_MODE.LIVE) {
       return viewNode;
     }
-    if(viewNode == null)
-      viewNode = node;
     return viewNode;
   }
 
