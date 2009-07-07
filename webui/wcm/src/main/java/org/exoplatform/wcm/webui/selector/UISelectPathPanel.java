@@ -190,15 +190,9 @@ public class UISelectPathPanel extends UIContainer {
     public void execute(Event<UISelectPathPanel> event) throws Exception {
       UISelectPathPanel uiSelectPathPanel = event.getSource();      
       UIContainer uiTreeSelector = uiSelectPathPanel.getParent();
-//      UIBreadcumbs uiBreadcumbs = uiTreeSelector.getChild(UIBreadcumbs.class);
-//      String breadcumbsPaths = "";
-//      for(LocalPath iterLocalPath: uiBreadcumbs.getPath()) {
-//        breadcumbsPaths += "/" + iterLocalPath.getId();
-//      }
+
       String value = event.getRequestContext().getRequestParameter(OBJECTID);
       
-//      value = breadcumbsPaths + value.substring(value.lastIndexOf("/"));
-//      value = breadcumbsPaths + value.substring(uiSelectPathPanel.getPathTaxonomy().length() + 1);
       if(uiTreeSelector instanceof UIOneNodePathSelector) {
         if(!((UIOneNodePathSelector)uiTreeSelector).isDisable()) {
           value = ((UIOneNodePathSelector)uiTreeSelector).getWorkspaceName() + ":" + value ;
