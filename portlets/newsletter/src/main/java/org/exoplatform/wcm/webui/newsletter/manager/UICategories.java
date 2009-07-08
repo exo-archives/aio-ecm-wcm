@@ -42,7 +42,8 @@ import org.exoplatform.webui.event.EventListener;
 				@EventConfig(listeners = UICategories.AddCategoryActionListener.class),
 				@EventConfig(listeners = UICategories.OpenCategoryActionListener.class),
         @EventConfig(listeners = UICategories.AddSubcriptionActionListener.class),
-        @EventConfig(listeners = UICategories.ManagerUsersActionListener.class)
+        @EventConfig(listeners = UICategories.ManagerUsersActionListener.class),
+        @EventConfig(listeners = UICategories.SelectSubscriptionActionListener.class)
 		}
 )
 public class UICategories extends UIContainer {
@@ -160,13 +161,40 @@ public class UICategories extends UIContainer {
       UICategories uiCategories = event.getSource();
       UIPopupContainer popupContainer = uiCategories.getAncestorOfType(UINewsletterManagerPortlet.class).getChild(UIPopupContainer.class);
       UIPopupWindow popupWindow = popupContainer.getChildById(UINewsletterConstant.ENTRY_FORM_POPUP_WINDOW);
+      UINewsletterEntryContainer entryContainer;
       if (popupWindow == null) {
-        UINewsletterEntryContainer entryContainer = popupContainer.createUIComponent(UINewsletterEntryContainer.class, null, null);
+        entryContainer = popupContainer.createUIComponent(UINewsletterEntryContainer.class, null, null);
         Utils.createPopupWindow(popupContainer, entryContainer, event.getRequestContext(), UINewsletterConstant.ENTRY_FORM_POPUP_WINDOW, 800, 600);
       } else { 
+        entryContainer = popupContainer.getChild(UINewsletterEntryContainer.class);
         popupWindow.setShow(true);
       }
+      entryContainer.setCategoryConfig(null);
     }
   }
 	
+	public static class SelectSubscriptionActionListener extends EventListener<UICategories> {
+    public void execute(Event<UICategories> event) throws Exception {
+      UICategories uiCategory = event.getSource();
+      String categoryAndSubscription = event.getRequestContext().getRequestParameter(OBJECTID);
+      UINewsletterManagerPortlet newsletterManagerPortlet = uiCategory.getAncestorOfType(UINewsletterManagerPortlet.class);
+      UINewsletterEntryManager newsletterManager = newsletterManagerPortlet.getChild(UINewsletterEntryManager.class);
+      newsletterManager.setRendered(true);
+      
+      String categoryName = categoryAndSubscription.split("/")[0];
+      String subscriptionName = categoryAndSubscription.split("/")[1];
+      
+      newsletterManager.setCategoryConfig(
+                        uiCategory.categoryHandler.getCategoryByName(
+                                                                     uiCategory.portalName,
+                                                                     categoryName));
+      newsletterManager.setSubscriptionConfig(
+                        uiCategory.subscriptionHandler.getSubscriptionsByName(uiCategory.portalName,
+                                                                              categoryName,
+                                                                              subscriptionName));
+      newsletterManager.init();
+      newsletterManagerPortlet.getChild(UICategories.class).setRendered(false);
+      event.getRequestContext().addUIComponentToUpdateByAjax(newsletterManagerPortlet);
+    }
+  }
 }

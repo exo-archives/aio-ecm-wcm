@@ -50,6 +50,7 @@ import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.newsletter.UINewsletterConstant;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -58,6 +59,7 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIFormDateTimeInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 
@@ -68,13 +70,13 @@ import org.exoplatform.webui.form.UIFormSelectBox;
  * Jun 11, 2009  
  */
 @ComponentConfig (
-                  lifecycle = UIFormLifecycle.class,
-                  events = {
-                    @EventConfig (listeners = UINewsletterEntryForm.PreviewActionListener.class),
-                    @EventConfig (listeners = UINewsletterEntryForm.SaveActionListener.class),
-                    @EventConfig (listeners = UINewsletterEntryForm.SendActionListener.class),
-                    @EventConfig (listeners = UINewsletterEntryForm.CancelActionListener.class, phase = Phase.DECODE)
-                  }
+    lifecycle = UIFormLifecycle.class,
+    events = {
+      @EventConfig (listeners = UINewsletterEntryForm.PreviewActionListener.class),
+      @EventConfig (listeners = UINewsletterEntryForm.SaveActionListener.class),
+      @EventConfig (listeners = UINewsletterEntryForm.SendActionListener.class),
+      @EventConfig (listeners = UINewsletterEntryForm.CancelActionListener.class, phase = Phase.DECODE)
+    }
 )
 public class UINewsletterEntryForm extends UIDialogForm {
 
@@ -122,8 +124,10 @@ public class UINewsletterEntryForm extends UIDialogForm {
     
     // Prepare node: use title as a node name
     Map<String, JcrInputProperty> inputProperties = DialogFormUtil.prepareMap(getChildren(), getInputProperties());
-    String nodeName = Utils.cleanString(getUIStringInput("title").getValue());
-    inputProperties.get("/node").setValue(nodeName);
+    if(isAddNew()){
+      String nodeName = Utils.cleanString(getUIStringInput("title").getValue());
+      inputProperties.get("/node").setValue(nodeName);
+    }
     
     // Store node
     String storedPath = getStoredPath().replace(NewsletterConstant.PORTAL_NAME, NewsLetterUtil.getPortalName());
@@ -137,8 +141,6 @@ public class UINewsletterEntryForm extends UIDialogForm {
     String newsletterNodePath = cmsService.storeNode("exo:webContent", storedNode, inputProperties, isAddNew(), repositoryName);
 
     // Add newsletter mixin type
-    
-    
     Node newsletterNode = (Node)session.getItem(newsletterNodePath);
     if(newsletterNode.canAddMixin(NewsletterConstant.ENTRY_NODETYPE)) newsletterNode.addMixin(NewsletterConstant.ENTRY_NODETYPE);
     newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_CATEGORY_NAME, selectedCategory);
@@ -155,7 +157,7 @@ public class UINewsletterEntryForm extends UIDialogForm {
     if(entryManager.isRendered()) entryManager.init();
     Utils.closePopupWindow(popupContainer, UINewsletterConstant.ENTRY_FORM_POPUP_WINDOW);
     
-    return storedNode;
+    return newsletterNode;
   }
   
   public static class PreviewActionListener extends EventListener<UINewsletterEntryForm> {
@@ -174,13 +176,15 @@ public class UINewsletterEntryForm extends UIDialogForm {
     public void execute(Event<UINewsletterEntryForm> event) throws Exception {
       UINewsletterEntryForm newsletterEntryForm = event.getSource();
       Node newsletterNode = newsletterEntryForm.saveContent();
+      Session session = newsletterNode.getSession();
       
       UINewsletterEntryContainer newsletterEntryContainer = newsletterEntryForm.getAncestorOfType(UINewsletterEntryContainer.class);
       UINewsletterEntryDialogSelector newsletterEntryDialogSelector = newsletterEntryContainer.getChild(UINewsletterEntryDialogSelector.class);
       Date currentDate = new Date();
       //DateFormat dateFormat = new SimpleDateFormat(ISO8601.SIMPLE_DATETIME_FORMAT);
-      Calendar calendar = ((UIFormDateTimeInput)newsletterEntryDialogSelector
-                            .getChildById(UINewsletterEntryDialogSelector.NEWSLETTER_ENTRY_SEND_DATE)).getCalendar();
+      UIFormDateTimeInput formDateTimeInput = newsletterEntryDialogSelector.getChild(UIFormDateTimeInput.class);
+      Calendar calendar = formDateTimeInput.getCalendar();
+      
       if(calendar==null) calendar = Calendar.getInstance();
       newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_DATE, calendar);
       if(calendar.getTimeInMillis() > currentDate.getTime()){
@@ -193,7 +197,7 @@ public class UINewsletterEntryForm extends UIDialogForm {
         List<String> listEmailAddress = new ArrayList<String>();
         String receiver = "";
         Node subscriptionNode = newsletterNode.getParent();
-
+        
         if(subscriptionNode.hasProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_USER)){
           Property subscribedUserProperty = subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_USER);
           for(Value value : subscribedUserProperty.getValues()){
@@ -222,6 +226,7 @@ public class UINewsletterEntryForm extends UIDialogForm {
           }
         }
       }
+      session.save();
     }
   }
 

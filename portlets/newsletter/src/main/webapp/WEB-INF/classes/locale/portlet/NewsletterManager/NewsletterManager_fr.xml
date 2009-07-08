@@ -16,6 +16,7 @@
     </action>
     <title>
     	<eXoNewsletter>eXo Newsletter</eXoNewsletter>
+    	<Preferences>Préférences</Preferences>
     </title>
   </NewsletterPortlet>
   
@@ -67,6 +68,9 @@
 		<title>
 			<UINewsletterEntryContainer>Newsletter bulletin d'inscription</UINewsletterEntryContainer>
 		</title>
+		<action>
+			<Cancel>Annuler</Cancel>
+		</action>
 	</UINewsletterEntryFormPopupWindow>
 	
 	<UIManagerUsersFormPopupWindow>
@@ -181,6 +185,7 @@
 			<Preview>Preview</Preview>
 			<Save>Sauver</Save>
 			<Send>Envoyer</Send>
+			<Cancel>Annuler</Cancel>
 		</action>
 	</UINewsletterEntryForm>
 	
@@ -193,6 +198,7 @@
 			<UINewsletterEntrySendDate>Send date</UINewsletterEntrySendDate>
 			<UINewsletterEntryCategorySelectBox>Catégorie</UINewsletterEntryCategorySelectBox>
 			<UINetterEntrySubscriptionSelectBox>Abonnement</UINetterEntrySubscriptionSelectBox>
+			<UINewsletterEntrySubscriptionSelectBox>Abonnement</UINewsletterEntrySubscriptionSelectBox>
 		</title>
 	</UINewsletterEntryDialogSelector>
 	
@@ -236,4 +242,17 @@
 		</title>
 	</UINewsletterEntryManager>
 	
+	<UINewsletterEntryViewForm>
+		<title>
+			<UINewsletterManagerPopup>Voir le contenu de la Newsletter</UINewsletterManagerPopup>
+		</title>
+	</UINewsletterEntryViewForm>	
+	
+	<WebContent>
+		<dialog>
+			<label>
+				<Advanced>Advanced</Advanced>
+			</label>
+		</dialog>
+	</WebContent>	
 </bundle>

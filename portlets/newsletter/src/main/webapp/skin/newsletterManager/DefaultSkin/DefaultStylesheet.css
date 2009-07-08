@@ -4,6 +4,17 @@
 	padding: 3px;
 }
 
+.UINewsletterPortlet .tdContent{
+	width:150px;
+	white-space:nowrap;
+	text-align:center;
+}
+
+.UINewsletterPortlet .thContent{
+	width:150px;
+	white-space:nowrap;
+}
+
 .UINewsletterPortlet .MenuTitle{
 	text-align:left;
 }
@@ -186,7 +197,7 @@
 	background: #e7e7e7;
 	border-right: 1px solid #fff;
 	border-bottom: 1px solid #b7b7b7;
-	width: 33%;
+	/*width: 33%;*/
 }
 
 .UICategories .Subscriptions .OddRow {
@@ -203,7 +214,7 @@
 	line-height: 26px;
 	color: #000;
 	padding: 0px 5px;
-	text-align: left;
+	/*text-align: left;*/
 }
 
 .FormCategoryModerator .SelectUserIcon {

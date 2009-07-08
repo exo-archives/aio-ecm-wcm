@@ -101,7 +101,7 @@ import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 																						<hr style="width:90%"/>
 																						<div class="MenuItem" onclick="javaScript:void(0)">
 																							<div class="ItemIcon Pencil" style="padding-left:30px;text-align:left;">
-																								<a href="<%=uicomponent.event("ConvertAsTemplate")%>">
+																								<a href="<%=uicomponent.event("ConvertTemplate")%>">
 																									<%=_ctx.appRes("UINewsletterEntryManager.title.ConvertAsTemplate")%>
 																								</a>
 																							</div>
@@ -140,16 +140,16 @@ import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 				<div class="Subscriptions">
 					<table cellpadding="5" cellspacing="0" border="0">
 						<tr>
-							<th class="Title">
+							<th class="Title" style="width:auto;">
 								<%=_ctx.appRes("UINewsletterEntryManager.title.Letter")%>
 							</th>
-							<th class="Title">
+							<th class="thContent Title">
 								<%=_ctx.appRes("UINewsletterEntryManager.title.Date")%>
 							</th>
-							<th class="Title">
+							<th class="thContent Title">
 								<%=_ctx.appRes("UINewsletterEntryManager.title.Status")%>
 							</th>
-							<th class="Title" style="border-right: none;text-align:center;" width="50">
+							<th class="thContent Title" style="border-right:none;width:50px">
 								<input type="checkbox">
 							</th>
 						</tr>
@@ -160,15 +160,14 @@ import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 								else color="background:white;";
 							%>
 								<tr style="$color">
-									<td>
-										<a href="<%=uicomponent.event("OpenSubscription")%>">
+									<td style="width:auto;">
+										<a href="<%=uicomponent.event("SelectNewsletter", newsletter.getNewsletterName())%>">
 											<%=newsletter.getNewsletterTitle()%>
 										</a>
 									</td>
-									<td><%=newsletter.getNewsletterSentDate()%></td>
-									<td><%=newsletter.getStatus()%></td>
-									<td style="border:none;text-align:center;">
-										<%System.out.println(newsletter.getNewsletterName())%>
+									<td class="tdContent" style="width:200px"><%=newsletter.getNewsletterSentDate()%></td>
+									<td class="tdContent"><%=newsletter.getStatus()%></td>
+									<td class="tdContent" style="border:none;width:50px">
 										<%uicomponent.renderChild(newsletter.getNewsletterName())%>
 									</td>
 								</tr>
@@ -183,5 +182,5 @@ import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 			</div>
 		</div>
 	</div>
-<%uiform.end()%>	
+<%uiform.end()%>
 </div>

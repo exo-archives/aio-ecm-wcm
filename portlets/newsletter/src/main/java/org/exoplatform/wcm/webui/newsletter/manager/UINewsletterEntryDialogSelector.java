@@ -77,7 +77,7 @@ public class UINewsletterEntryDialogSelector extends UIForm {
     UIFormSelectBox newsletterEntryTemplate = new UIFormSelectBox(NEWSLETTER_ENTRY_TEMPLATE, NEWSLETTER_ENTRY_TEMPLATE, new ArrayList<SelectItemOption<String>>());
     newsletterEntryTemplate.setOnChange("ChangeTemplate");
     addChild(newsletterEntryTemplate);
-    addChild(new UIFormDateTimeInput(NEWSLETTER_ENTRY_SEND_DATE, NEWSLETTER_ENTRY_SEND_DATE, null));
+    addUIFormInput(new UIFormDateTimeInput(NEWSLETTER_ENTRY_SEND_DATE, NEWSLETTER_ENTRY_SEND_DATE, null, true));
     
     List<SelectItemOption<String>> categories = new ArrayList<SelectItemOption<String>>();
     NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
@@ -92,11 +92,14 @@ public class UINewsletterEntryDialogSelector extends UIForm {
     
     List<SelectItemOption<String>> subscriptions = new ArrayList<SelectItemOption<String>>();
     NewsletterSubscriptionHandler newsletterSubscriptionHandler = newsletterManagerService.getSubscriptionHandler();
-    List<NewsletterSubscriptionConfig> newsletterSubscriptionConfigs = newsletterSubscriptionHandler.getSubscriptionsByCategory(Util.getUIPortal().getName(), categorySelectBox.getSelectedValues()[0]);
-    for (NewsletterSubscriptionConfig newsletterSubscriptionConfig : newsletterSubscriptionConfigs) {
+    List<NewsletterSubscriptionConfig> listSubscriptions = 
+                                          newsletterSubscriptionHandler.getSubscriptionsByCategory(Util.getUIPortal().getName(), 
+                                                                                                   categories.get(0).getValue());
+    for (NewsletterSubscriptionConfig newsletterSubscriptionConfig : listSubscriptions) {
       subscriptions.add(new SelectItemOption<String>(newsletterSubscriptionConfig.getTitle(), newsletterSubscriptionConfig.getName()));
     }
-    addChild(new UIFormSelectBox(UINewsletterConstant.ENTRY_SUBSCRIPTION_SELECTBOX, UINewsletterConstant.ENTRY_SUBSCRIPTION_SELECTBOX, subscriptions));
+    addChild(new UIFormSelectBox(UINewsletterConstant.ENTRY_SUBSCRIPTION_SELECTBOX, 
+                                 UINewsletterConstant.ENTRY_SUBSCRIPTION_SELECTBOX, subscriptions));
   }
   
   public void updateTemplateSelectBox() throws Exception {
@@ -121,7 +124,9 @@ public class UINewsletterEntryDialogSelector extends UIForm {
       NewsletterTemplateHandler newsletterTemplateHandler = newsletterManagerService.getTemplateHandler();
       UINewsletterEntryContainer newsletterEntryContainer = newsletterEntryDialogSelector.getAncestorOfType(UINewsletterEntryContainer.class);
       UINewsletterEntryForm newsletterEntryForm = newsletterEntryContainer.getChild(UINewsletterEntryForm.class) ;
-      newsletterEntryForm.setNodePath(newsletterTemplateHandler.getTemplate(Util.getUIPortal().getName(), newsletterEntryContainer.getCategoryConfig(), templateName).getPath());
+      newsletterEntryForm.setNodePath(newsletterTemplateHandler.getTemplate(Util.getUIPortal().getName(), 
+                                                                            newsletterEntryContainer.getCategoryConfig(), 
+                                                                            templateName).getPath());
       newsletterEntryForm.getChildren().clear();
       newsletterEntryForm.resetProperties();
       event.getRequestContext().addUIComponentToUpdateByAjax(newsletterEntryContainer) ;
@@ -145,7 +150,24 @@ public class UINewsletterEntryDialogSelector extends UIForm {
   public static class ChangeCategoryActionListener extends EventListener<UINewsletterEntryDialogSelector> {
     public void execute(Event<UINewsletterEntryDialogSelector> event) throws Exception {
       UINewsletterEntryDialogSelector newsletterEntryDialogSelector = event.getSource();
+      
       UINewsletterEntryContainer newsletterEntryContainer = newsletterEntryDialogSelector.getAncestorOfType(UINewsletterEntryContainer.class);
+      
+      UIFormSelectBox categorySelectBox = newsletterEntryDialogSelector.getChildById(UINewsletterConstant.ENTRY_CATEGORY_SELECTBOX);
+      List<SelectItemOption<String>> subscriptions = new ArrayList<SelectItemOption<String>>();
+      NewsletterManagerService newsletterManagerService = newsletterEntryDialogSelector.getApplicationComponent(NewsletterManagerService.class);
+      NewsletterSubscriptionHandler newsletterSubscriptionHandler = newsletterManagerService.getSubscriptionHandler();
+      List<NewsletterSubscriptionConfig> newsletterSubscriptionConfigs = 
+                                                newsletterSubscriptionHandler.getSubscriptionsByCategory(Util.getUIPortal().getName(), 
+                                                                                                         categorySelectBox.getValue());
+      for (NewsletterSubscriptionConfig newsletterSubscriptionConfig : newsletterSubscriptionConfigs) {
+        subscriptions.add(new SelectItemOption<String>(newsletterSubscriptionConfig.getTitle(), newsletterSubscriptionConfig.getName()));
+      }
+      
+      UIFormSelectBox subscriptionSelectBox = newsletterEntryDialogSelector.getChildById(UINewsletterConstant.ENTRY_SUBSCRIPTION_SELECTBOX);
+      
+      subscriptionSelectBox.setOptions(subscriptions);
+
       event.getRequestContext().addUIComponentToUpdateByAjax(newsletterEntryContainer) ;
     }
   }

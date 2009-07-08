@@ -36,27 +36,45 @@ import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 public class UINewsletterEntryContainer extends UIContainer {
 
   private NewsletterCategoryConfig categoryConfig;
+  private String newsletterPath = null;
   
   public UINewsletterEntryContainer() throws Exception {
+    //init();
+  }
+  
+  public void setNewsletterInfor(String newsletterPath) throws Exception{
+    this.newsletterPath = newsletterPath;
+    init();
+  }
+  
+  private void init() throws Exception{
+    this.getChildren().clear();
     NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
     UINewsletterEntryDialogSelector newsletterEntryDialogSelector = addChild(UINewsletterEntryDialogSelector.class, null, null);
     newsletterEntryDialogSelector.updateTemplateSelectBox();
     UINewsletterEntryForm newsletterEntryForm = createUIComponent(UINewsletterEntryForm.class, null, null);
-    NewsletterTemplateHandler newsletterTemplateHandler = newsletterManagerService.getTemplateHandler();
     newsletterEntryForm.setRepositoryName(newsletterManagerService.getRepositoryName());
     newsletterEntryForm.setWorkspace(newsletterManagerService.getWorkspaceName());
-    newsletterEntryForm.addNew(true);
-    newsletterEntryForm.setNodePath(newsletterTemplateHandler.getTemplate(Util.getUIPortal().getName(), categoryConfig, null).getPath());
+    if(this.newsletterPath == null){
+      NewsletterTemplateHandler newsletterTemplateHandler = newsletterManagerService.getTemplateHandler();
+      this.newsletterPath = newsletterTemplateHandler.getTemplate(NewsLetterUtil.getPortalName(), categoryConfig, null).getPath();
+      newsletterEntryForm.addNew(true);
+    }else{
+      newsletterEntryForm.addNew(false);
+    }
+    newsletterEntryForm.setNodePath(newsletterPath);
     newsletterEntryForm.getChildren().clear();
     newsletterEntryForm.resetProperties();
     addChild(newsletterEntryForm);
+    this.newsletterPath = null;
   }
 
   public NewsletterCategoryConfig getCategoryConfig() {
     return categoryConfig;
   }
   
-  public void setCategoryConfig(NewsletterCategoryConfig categoryConfig) {
+  public void setCategoryConfig(NewsletterCategoryConfig categoryConfig) throws Exception {
     this.categoryConfig = categoryConfig;
+    init();
   }
 }

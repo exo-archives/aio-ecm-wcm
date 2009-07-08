@@ -57,7 +57,7 @@ public class UINewsletterManagerPortlet extends UIPortletApplication {
 	public UINewsletterManagerPortlet() throws Exception {
 		addChild(UICategories.class, null, null).setRendered(isRenderUICategories);
 		addChild(UISubscriptions.class, null, null).setRendered(isRenderUICategories);
-		addChild(UIPopupContainer.class, null, null);
 		addChild(UINewsletterEntryManager.class, null, null).setRendered(isRenderUINewsLetters);
+		addChild(UIPopupContainer.class, null, null);
 	}
 }
