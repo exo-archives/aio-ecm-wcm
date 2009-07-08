@@ -157,7 +157,7 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
     orderTypeOptions.add(new SelectItemOption<String>(bundle.getString(rootBundleKey + ORDER_ASC), "ASC"));
 
     UIFormRadioBoxInput orderTypeRadioBoxInput = new UIFormRadioBoxInput(ORDER_TYPES, ORDER_TYPES, orderTypeOptions);
-    String orderTypePref = portletPreferences.getValue(UIParameterizedContentListViewerPortlet.ORDER_TYPE, null);
+    String orderTypePref = portletPreferences.getValue(UIParameterizedContentListViewerConstant.ORDER_TYPE, null);
     if (orderTypePref == null) {
       orderTypeRadioBoxInput.setValue("DESC");
     } else {
@@ -170,16 +170,16 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
     orderByOptions.add(new SelectItemOption<String>(bundle.getString(rootBundleKey + ORDER_BY_DATE_MODIFIED), "exo:dateModified"));
     orderByOptions.add(new SelectItemOption<String>(bundle.getString(rootBundleKey + ORDER_BY_DATE_PUBLISHED),"publication:liveDate"));    
     UIFormSelectBox orderBySelectBox = new UIFormSelectBox(ORDER_BY, ORDER_BY, orderByOptions);
-    String orderByPref = portletPreferences.getValue(UIParameterizedContentListViewerPortlet.ORDER_BY, null);
+    String orderByPref = portletPreferences.getValue(UIParameterizedContentListViewerConstant.ORDER_BY, null);
     orderBySelectBox.setValue(orderByPref); 
     
     UIFormCheckBoxInput autoDetect = new UIFormCheckBoxInput(AUTO_DETECT, AUTO_DETECT, null);
     autoDetect.setChecked(true);
-    String autoDetected = portletPreferences.getValue(UIParameterizedContentListViewerPortlet.SHOW_AUTO_DETECT, null);
+    String autoDetected = portletPreferences.getValue(UIParameterizedContentListViewerConstant.SHOW_AUTO_DETECT, null);
     autoDetect.setChecked(Boolean.parseBoolean(autoDetected));
     
     UIFormStringInput headerInput = new UIFormStringInput(HEADER, HEADER, null);
-    String headerValue = portletPreferences.getValue(UIParameterizedContentListViewerPortlet.HEADER, null);
+    String headerValue = portletPreferences.getValue(UIParameterizedContentListViewerConstant.HEADER, null);
     
     if (Boolean.parseBoolean(autoDetected)) {
       headerInput.setValue(headerValue);
@@ -189,49 +189,49 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
     List<SelectItemOption<String>> paginatorTemplateList = getTemplateList(PORTLET_NAME, PAGINATOR_TEMPLATE_CATEGORY);
     
     UIFormStringInput itemsPerPageStringInput = new UIFormStringInput(ITEMS_PER_PAGE_INPUT, ITEMS_PER_PAGE_INPUT, null);
-    String itemsPerPageVal = portletPreferences.getValue(UIParameterizedContentListViewerPortlet.ITEMS_PER_PAGE, null);
+    String itemsPerPageVal = portletPreferences.getValue(UIParameterizedContentListViewerConstant.ITEMS_PER_PAGE, null);
     itemsPerPageStringInput.setValue(itemsPerPageVal);
     itemsPerPageStringInput.setMaxLength(3);
     
     UIFormSelectBox formViewTemplateSelector = new UIFormSelectBox(FORM_VIEW_TEMPLATES_SELECTOR, FORM_VIEW_TEMPLATES_SELECTOR, formViewerTemplateList);
-    String formViewTemplate = portletPreferences.getValue(UIParameterizedContentListViewerPortlet.FORM_VIEW_TEMPLATE_PATH, null);
+    String formViewTemplate = portletPreferences.getValue(UIParameterizedContentListViewerConstant.FORM_VIEW_TEMPLATE_PATH, null);
     formViewTemplateSelector.setValue(formViewTemplate);
     
     UIFormSelectBox paginatorTemplateSelector = new UIFormSelectBox(PAGINATOR_TEMPLATES_SELECTOR, PAGINATOR_TEMPLATES_SELECTOR, paginatorTemplateList);
-    String paginatorTemplate = portletPreferences.getValue(UIParameterizedContentListViewerPortlet.PAGINATOR_TEMPlATE_PATH, null);
+    String paginatorTemplate = portletPreferences.getValue(UIParameterizedContentListViewerConstant.PAGINATOR_TEMPlATE_PATH, null);
     paginatorTemplateSelector.setValue(paginatorTemplate);
     
     UIFormCheckBoxInput viewerButtonRefreshCheckbox = new UIFormCheckBoxInput(VIEWER_BUTTON_REFRESH, VIEWER_BUTTON_REFRESH, null);
     viewerButtonRefreshCheckbox.setChecked(false);
-    String refreshAble = portletPreferences.getValue(UIParameterizedContentListViewerPortlet.SHOW_REFRESH_BUTTON, null);
+    String refreshAble = portletPreferences.getValue(UIParameterizedContentListViewerConstant.SHOW_REFRESH_BUTTON, null);
     viewerButtonRefreshCheckbox.setChecked(Boolean.parseBoolean(refreshAble));
     
     UIFormCheckBoxInput thumbnailsViewCheckbox = new UIFormCheckBoxInput(VIEWER_THUMBNAILS_IMAGE, VIEWER_THUMBNAILS_IMAGE, null);
     thumbnailsViewCheckbox.setChecked(true);
-    String imageShowAble = portletPreferences.getValue(UIParameterizedContentListViewerPortlet.SHOW_THUMBNAILS_VIEW, null);
+    String imageShowAble = portletPreferences.getValue(UIParameterizedContentListViewerConstant.SHOW_THUMBNAILS_VIEW, null);
     thumbnailsViewCheckbox.setChecked(Boolean.parseBoolean(imageShowAble));
     
     UIFormCheckBoxInput titleViewerCheckbox = new UIFormCheckBoxInput(VIEWER_TITLE, VIEWER_TITLE, null);
     titleViewerCheckbox.setChecked(true);
-    String titleShowAble = portletPreferences.getValue(UIParameterizedContentListViewerPortlet.SHOW_TITLE, null);
+    String titleShowAble = portletPreferences.getValue(UIParameterizedContentListViewerConstant.SHOW_TITLE, null);
     titleViewerCheckbox.setChecked(Boolean.parseBoolean(titleShowAble));
     
     UIFormCheckBoxInput summaryViewerCheckbox = new UIFormCheckBoxInput(VIEWER_SUMMARY, VIEWER_SUMMARY, null);
     summaryViewerCheckbox.setChecked(true);
-    String summaryShowAble = portletPreferences.getValue(UIParameterizedContentListViewerPortlet.SHOW_SUMMARY, null);
+    String summaryShowAble = portletPreferences.getValue(UIParameterizedContentListViewerConstant.SHOW_SUMMARY, null);
     summaryViewerCheckbox.setChecked(Boolean.parseBoolean(summaryShowAble));
     
     UIFormCheckBoxInput dateCreatedViewerCheckbox = new UIFormCheckBoxInput(VIEWER_DATE_CREATED, VIEWER_DATE_CREATED, null);
     dateCreatedViewerCheckbox.setChecked(true);
-    String dateShowAble = portletPreferences.getValue(UIParameterizedContentListViewerPortlet.SHOW_DATE_CREATED, null);
+    String dateShowAble = portletPreferences.getValue(UIParameterizedContentListViewerConstant.SHOW_DATE_CREATED, null);
     dateCreatedViewerCheckbox.setChecked(Boolean.parseBoolean(dateShowAble));
 
     UIFormCheckBoxInput viewerHeader = new UIFormCheckBoxInput(VIEWER_HEADER, VIEWER_HEADER, null);
     viewerHeader.setChecked(true);
-    String viewHeader = portletPreferences.getValue(UIParameterizedContentListViewerPortlet.SHOW_HEADER, null);
+    String viewHeader = portletPreferences.getValue(UIParameterizedContentListViewerConstant.SHOW_HEADER, null);
     viewerHeader.setChecked(Boolean.parseBoolean(viewHeader));
     
-    String preferenceTargetPath = portletPreferences.getValue(UIParameterizedContentListViewerPortlet.TARGET_PAGE, null);
+    String preferenceTargetPath = portletPreferences.getValue(UIParameterizedContentListViewerConstant.TARGET_PAGE, null);
     UIFormInputSetWithAction targetPathFormInputSet = new UIFormInputSetWithAction(TARGET_PAGE_INPUT_SET_ACTION);
     UIFormStringInput targetPathFormStringInput = new UIFormStringInput(TARGET_PAGE_INPUT, TARGET_PAGE_INPUT, preferenceTargetPath);
     targetPathFormStringInput.setValue(preferenceTargetPath);
@@ -241,17 +241,17 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
     
     UIFormCheckBoxInput addMoreLink = new UIFormCheckBoxInput(SHOW_MORE_LINK, SHOW_MORE_LINK, null);
     addMoreLink.setChecked(true);
-    String showMoreLink = portletPreferences.getValue(UIParameterizedContentListViewerPortlet.SHOW_MORE_LINK, null);
+    String showMoreLink = portletPreferences.getValue(UIParameterizedContentListViewerConstant.SHOW_MORE_LINK, null);
     addMoreLink.setChecked(Boolean.parseBoolean(showMoreLink));
     
     UIFormCheckBoxInput showRssLink = new UIFormCheckBoxInput(SHOW_RSS_LINK, SHOW_RSS_LINK, null);
     showRssLink.setChecked(true);
-    String rssLink = portletPreferences.getValue(UIParameterizedContentListViewerPortlet.SHOW_RSS_LINK, null);
+    String rssLink = portletPreferences.getValue(UIParameterizedContentListViewerConstant.SHOW_RSS_LINK, null);
     showRssLink.setChecked(Boolean.parseBoolean(rssLink));
     
     UIFormCheckBoxInput showLink = new UIFormCheckBoxInput(SHOW_LINK, SHOW_LINK, null);
     showLink.setChecked(true);
-    String link = portletPreferences.getValue(UIParameterizedContentListViewerPortlet.SHOW_LINK, null);
+    String link = portletPreferences.getValue(UIParameterizedContentListViewerConstant.SHOW_LINK, null);
     showLink.setChecked(Boolean.parseBoolean(link));
     
     addChild(orderBySelectBox);
@@ -406,25 +406,25 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
       String autoDetect = uiParameterizedManagementForm.getUIFormCheckBoxInput(UIParameterizedManagementForm.AUTO_DETECT).isChecked() ? "true" : "false";
       String targetPage = uiParameterizedManagementForm.getUIStringInput(UIParameterizedManagementForm.TARGET_PAGE_INPUT).getValue();
       
-      portletPreferences.setValue(UIParameterizedContentListViewerPortlet.PREFERENCE_REPOSITORY, repository);
-      portletPreferences.setValue(UIParameterizedContentListViewerPortlet.WORKSPACE, workspace);
-      portletPreferences.setValue(UIParameterizedContentListViewerPortlet.FORM_VIEW_TEMPLATE_PATH, formViewTemplatePath);
-      portletPreferences.setValue(UIParameterizedContentListViewerPortlet.PAGINATOR_TEMPlATE_PATH, paginatorTemplatePath);
-      portletPreferences.setValue(UIParameterizedContentListViewerPortlet.ITEMS_PER_PAGE, itemsPerPage);      
-      portletPreferences.setValue(UIParameterizedContentListViewerPortlet.SHOW_REFRESH_BUTTON, showRefreshButton);
-      portletPreferences.setValue(UIParameterizedContentListViewerPortlet.SHOW_THUMBNAILS_VIEW, viewThumbnails);
-      portletPreferences.setValue(UIParameterizedContentListViewerPortlet.SHOW_TITLE, viewTitle);
-      portletPreferences.setValue(UIParameterizedContentListViewerPortlet.SHOW_DATE_CREATED, viewDateCreated);
-      portletPreferences.setValue(UIParameterizedContentListViewerPortlet.SHOW_SUMMARY, viewSummary);
-      portletPreferences.setValue(UIParameterizedContentListViewerPortlet.HEADER, header);
-      portletPreferences.setValue(UIParameterizedContentListViewerPortlet.SHOW_HEADER, viewerHeader);
-      portletPreferences.setValue(UIParameterizedContentListViewerPortlet.SHOW_LINK, viewerLink);
-      portletPreferences.setValue(UIParameterizedContentListViewerPortlet.ORDER_TYPE, orderType);
-      portletPreferences.setValue(UIParameterizedContentListViewerPortlet.ORDER_BY, orderBy);
-      portletPreferences.setValue(UIParameterizedContentListViewerPortlet.SHOW_MORE_LINK, showMoreLink);
-      portletPreferences.setValue(UIParameterizedContentListViewerPortlet.SHOW_RSS_LINK, showRssLink);
-      portletPreferences.setValue(UIParameterizedContentListViewerPortlet.SHOW_AUTO_DETECT, autoDetect);
-      portletPreferences.setValue(UIParameterizedContentListViewerPortlet.TARGET_PAGE, targetPage);
+      portletPreferences.setValue(UIParameterizedContentListViewerConstant.PREFERENCE_REPOSITORY, repository);
+      portletPreferences.setValue(UIParameterizedContentListViewerConstant.WORKSPACE, workspace);
+      portletPreferences.setValue(UIParameterizedContentListViewerConstant.FORM_VIEW_TEMPLATE_PATH, formViewTemplatePath);
+      portletPreferences.setValue(UIParameterizedContentListViewerConstant.PAGINATOR_TEMPlATE_PATH, paginatorTemplatePath);
+      portletPreferences.setValue(UIParameterizedContentListViewerConstant.ITEMS_PER_PAGE, itemsPerPage);      
+      portletPreferences.setValue(UIParameterizedContentListViewerConstant.SHOW_REFRESH_BUTTON, showRefreshButton);
+      portletPreferences.setValue(UIParameterizedContentListViewerConstant.SHOW_THUMBNAILS_VIEW, viewThumbnails);
+      portletPreferences.setValue(UIParameterizedContentListViewerConstant.SHOW_TITLE, viewTitle);
+      portletPreferences.setValue(UIParameterizedContentListViewerConstant.SHOW_DATE_CREATED, viewDateCreated);
+      portletPreferences.setValue(UIParameterizedContentListViewerConstant.SHOW_SUMMARY, viewSummary);
+      portletPreferences.setValue(UIParameterizedContentListViewerConstant.HEADER, header);
+      portletPreferences.setValue(UIParameterizedContentListViewerConstant.SHOW_HEADER, viewerHeader);
+      portletPreferences.setValue(UIParameterizedContentListViewerConstant.SHOW_LINK, viewerLink);
+      portletPreferences.setValue(UIParameterizedContentListViewerConstant.ORDER_TYPE, orderType);
+      portletPreferences.setValue(UIParameterizedContentListViewerConstant.ORDER_BY, orderBy);
+      portletPreferences.setValue(UIParameterizedContentListViewerConstant.SHOW_MORE_LINK, showMoreLink);
+      portletPreferences.setValue(UIParameterizedContentListViewerConstant.SHOW_RSS_LINK, showRssLink);
+      portletPreferences.setValue(UIParameterizedContentListViewerConstant.SHOW_AUTO_DETECT, autoDetect);
+      portletPreferences.setValue(UIParameterizedContentListViewerConstant.TARGET_PAGE, targetPage);
       
       portletPreferences.store();
       if (Utils.isEditPortletInCreatePageWizard()) {

@@ -16,15 +16,21 @@
  */
 package org.exoplatform.wcm.webui.pclv;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
+import javax.jcr.query.Query;
+import javax.jcr.query.QueryManager;
+import javax.jcr.query.QueryResult;
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.apache.commons.lang.StringUtils;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.container.UIContainer;
@@ -33,9 +39,12 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.services.cms.taxonomy.TaxonomyService;
+import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.config.RepositoryConfigurationException;
+import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.wcm.utils.PaginatedNodeIterator;
 import org.exoplatform.wcm.webui.Utils;
-import org.exoplatform.wcm.webui.clv.UIContentListViewerPortlet;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -52,7 +61,6 @@ import org.exoplatform.webui.event.EventListener;
  * Jun 23, 2009  
  */
 @ComponentConfig(
-   //lifecycle = Lifecycle.class,
    template = "app:/groovy/ParameterizedContentListViewer/UIParameterizedContentListViewerContainer.gtmpl", 
    events = { 
      @EventConfig(listeners = UIParameterizedContentListViewerContainer.QuickEditActionListener.class) 
@@ -60,52 +68,51 @@ import org.exoplatform.webui.event.EventListener;
  )
 public class UIParameterizedContentListViewerContainer extends UIContainer {
 
-  public boolean viewAbleContent = false;
-  
-  public String  messageKey;
   public UIParameterizedContentListViewerContainer() throws Exception {
-    //this.addChild(UIParameterizedContentListViewerForm.class, null, "UIParameterizedContentListViewerForm");    
   }
   
   public void init() throws Exception {
-    PortletRequestContext porletRequestContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
-    HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) porletRequestContext.getRequest();
+    PortletRequestContext portletRequestContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+    HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) portletRequestContext.getRequest();
     PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
     UIPortal uiPortal = Util.getUIPortal();
     String portalURI = portalRequestContext.getPortalURI();
     String requestURI = requestWrapper.getRequestURI();
     String pageNodeSelected = uiPortal.getSelectedNode().getName();
+    
     String parameters = null;
     try {
       parameters = URLDecoder.decode(StringUtils.substringAfter(requestURI, portalURI.concat(pageNodeSelected + "/")),"UTF-8");
-    } catch (UnsupportedEncodingException e) {}
-    PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    
     PortletRequest portletRequest = portletRequestContext.getRequest();
     PortletPreferences portletPreferences = portletRequest.getPreferences();
-    String preferenceRepository = portletPreferences.getValue(UIParameterizedContentListViewerPortlet.PREFERENCE_REPOSITORY, "");
-    String preferenceTreeName = portletPreferences.getValue(UIParameterizedContentListViewerPortlet.PREFERENCE_TREE_NAME, "");
+    String preferenceRepository = portletPreferences.getValue(UIParameterizedContentListViewerConstant.PREFERENCE_REPOSITORY, "");
+    String preferenceTreeName = portletPreferences.getValue(UIParameterizedContentListViewerConstant.PREFERENCE_TREE_NAME, "");
     TaxonomyService taxonomyService = getApplicationComponent(TaxonomyService.class);
     Node treeNode = taxonomyService.getTaxonomyTree(preferenceRepository, preferenceTreeName);
     String categoryPath = parameters.substring(parameters.indexOf("/") + 1);
-    if (preferenceTreeName.equals(categoryPath)) categoryPath = ""; 
+    if (preferenceTreeName.equals(categoryPath)) categoryPath = "";
     Node categoryNode = treeNode.getNode(categoryPath);
-    
-    setViewAbleContent(true);
-    setViewAbleContent(true);
-    int itemsPerPage = Integer.parseInt(portletPreferences.getValue(UIParameterizedContentListViewerPortlet.ITEMS_PER_PAGE, null));
-    PaginatedNodeIterator paginatedNodeIterator = new PaginatedNodeIterator(categoryNode.getNodes(), itemsPerPage);
+    NodeIterator categoriesChildNode = this.getListSymlinkNode(portletPreferences, categoryNode.getPath());
+    int itemsPerPage = Integer.parseInt(portletPreferences.getValue(UIParameterizedContentListViewerConstant.ITEMS_PER_PAGE, null));
+    PaginatedNodeIterator paginatedNodeIterator = new PaginatedNodeIterator(categoriesChildNode, itemsPerPage);
+    getChildren().clear();
+
     UIParameterizedContentListViewerForm parameterizedContentListViewer = addChild(UIParameterizedContentListViewerForm.class, null, "UIParameterizedContentListViewerForm");    
     String templatePath = getFormViewTemplatePath();
     ResourceResolver resourceResolver = getTemplateResourceResolver();    
     parameterizedContentListViewer.init(templatePath, resourceResolver, paginatedNodeIterator); 
-    parameterizedContentListViewer.setContentColumn(portletPreferences.getValue(UIParameterizedContentListViewerPortlet.HEADER, null));
-    parameterizedContentListViewer.setShowLink(Boolean.parseBoolean(portletPreferences.getValue(UIParameterizedContentListViewerPortlet.SHOW_LINK, null)));
-    parameterizedContentListViewer.setShowHeader(Boolean.parseBoolean(portletPreferences.getValue(UIParameterizedContentListViewerPortlet.SHOW_HEADER, null)));
-    parameterizedContentListViewer.setShowReadmore(Boolean.parseBoolean(portletPreferences.getValue(UIParameterizedContentListViewerPortlet.SHOW_READMORE, null)));
-    parameterizedContentListViewer.setHeader(portletPreferences.getValue(UIParameterizedContentListViewerPortlet.HEADER, null));
-    parameterizedContentListViewer.setAutoDetection(portletPreferences.getValue(UIParameterizedContentListViewerPortlet.SHOW_AUTO_DETECT, null));
-    parameterizedContentListViewer.setShowMoreLink(portletPreferences.getValue(UIParameterizedContentListViewerPortlet.SHOW_MORE_LINK, null));
-    parameterizedContentListViewer.setShowRSSLink(portletPreferences.getValue(UIParameterizedContentListViewerPortlet.SHOW_RSS_LINK, null));
+    parameterizedContentListViewer.setContentColumn(portletPreferences.getValue(UIParameterizedContentListViewerConstant.HEADER, null));
+    parameterizedContentListViewer.setShowLink(Boolean.parseBoolean(portletPreferences.getValue(UIParameterizedContentListViewerConstant.SHOW_LINK, null)));
+    parameterizedContentListViewer.setShowHeader(Boolean.parseBoolean(portletPreferences.getValue(UIParameterizedContentListViewerConstant.SHOW_HEADER, null)));
+    parameterizedContentListViewer.setShowReadmore(Boolean.parseBoolean(portletPreferences.getValue(UIParameterizedContentListViewerConstant.SHOW_READMORE, null)));
+    parameterizedContentListViewer.setHeader(portletPreferences.getValue(UIParameterizedContentListViewerConstant.HEADER, null));
+    parameterizedContentListViewer.setAutoDetection(portletPreferences.getValue(UIParameterizedContentListViewerConstant.SHOW_AUTO_DETECT, null));
+    parameterizedContentListViewer.setShowMoreLink(portletPreferences.getValue(UIParameterizedContentListViewerConstant.SHOW_MORE_LINK, null));
+    parameterizedContentListViewer.setShowRSSLink(portletPreferences.getValue(UIParameterizedContentListViewerConstant.SHOW_RSS_LINK, null));
   }
 
   public PortletPreferences getPortletPreference() {
@@ -116,16 +123,16 @@ public class UIParameterizedContentListViewerContainer extends UIContainer {
   public String getFormViewTemplatePath() {
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     PortletPreferences references = portletRequestContext.getRequest().getPreferences();
-    return references.getValue(UIParameterizedContentListViewerPortlet.FORM_VIEW_TEMPLATE_PATH, null);
+    return references.getValue(UIParameterizedContentListViewerConstant.FORM_VIEW_TEMPLATE_PATH, null);
   }
 
   public ResourceResolver getTemplateResourceResolver() throws Exception {
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     PortletPreferences references = portletRequestContext.getRequest().getPreferences();
-    String repository = references.getValue(UIParameterizedContentListViewerPortlet.PREFERENCE_REPOSITORY, null);
+    String repository = references.getValue(UIParameterizedContentListViewerConstant.PREFERENCE_REPOSITORY, null);
     DMSConfiguration dmsConfiguration = getApplicationComponent(DMSConfiguration.class);
     String workspace = dmsConfiguration.getConfig(repository).getSystemWorkspace();
-     
+
     return new JCRResourceResolver(repository, workspace, "exo:templateFile");
   }
   
@@ -135,10 +142,10 @@ public class UIParameterizedContentListViewerContainer extends UIContainer {
   }
   
   public void processRender(WebuiRequestContext context) throws Exception {   
-//    if(!Utils.isLiveMode() || context.getFullRender()) {
+    try {
       init(); 
-//    }
-    super.processRender(context);
+      super.processRender(context);
+    } catch (Exception e) {}
   }
 
   public static class QuickEditActionListener extends EventListener<UIParameterizedContentListViewerContainer> {
@@ -159,7 +166,7 @@ public class UIParameterizedContentListViewerContainer extends UIContainer {
                                 parameterizedForm,
                                 event.getRequestContext(),
                                 UIParameterizedContentListViewerConstant
-                                .PARAMETERIZED_MANAGEMENT_PORTLET_POPUP_WINDOW, 850, 800);
+                                .PARAMETERIZED_MANAGEMENT_PORTLET_POPUP_WINDOW, 650, 800);
       } else {
         popupWindow.setShow(true);
       }
@@ -172,12 +179,24 @@ public class UIParameterizedContentListViewerContainer extends UIContainer {
     uiParameterizedContentListontainer.getChildren().clear();
     uiParameterizedContentListontainer.init();
   }
+  
+  private NodeIterator getListSymlinkNode(PortletPreferences portletPreferences, String categoryPath) throws RepositoryException, RepositoryConfigurationException {
 
-  public boolean isViewAbleContent() {
-    return viewAbleContent;
-  }
-
-  public void setViewAbleContent(boolean viewAbleContent) {
-    this.viewAbleContent = viewAbleContent;
+    String repository = portletPreferences.getValue(UIParameterizedContentListViewerConstant.REPOSITORY, null);
+    String worksapce = portletPreferences.getValue(UIParameterizedContentListViewerConstant.WORKSPACE, null);
+    ThreadLocalSessionProviderService threadLocalSessionProviderService = ThreadLocalSessionProviderService.class
+    .cast(ExoContainerContext.getCurrentContainer()
+    .getComponentInstanceOfType(ThreadLocalSessionProviderService.class));
+    
+    RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
+    ManageableRepository manageableRepository = repositoryService.getRepository(repository);    
+    Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(worksapce, manageableRepository);
+    QueryManager queryManager = session.getWorkspace().getQueryManager();
+    StringBuffer sqlQuery = new StringBuffer("select * from exo:taxonomyLink where jcr:path LIKE '").append(categoryPath).append("/%'")
+                                 .append(" AND NOT jcr:path LIKE '").append(categoryPath).append("/%/%'");
+    Query query = queryManager.createQuery(sqlQuery.toString(), Query.SQL);
+    QueryResult queryResult = query.execute();
+    NodeIterator iterator = queryResult.getNodes();
+    return iterator;
   }
 }

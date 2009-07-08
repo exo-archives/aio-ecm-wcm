@@ -25,5 +25,57 @@ package org.exoplatform.wcm.webui.pclv;
 public class UIParameterizedContentListViewerConstant {
 
   public static final String PARAMETERIZED_MANAGEMENT_PORTLET_POPUP_WINDOW    = "UIParameterizedManagerPopupWindow";
+  
   public static final String PARAMETERIZED_TARGET_PAGE_POPUP_WINDOW    = "TagetPageInputPopupWindowForm";
+  
+  /** The Constant REPOSITORY. */
+  public final static String PREFERENCE_REPOSITORY              = "repository";
+  
+  public final static String PREFERENCE_TREE_NAME             = "treeName";
+
+  /** The Constant WORKSPACE. */
+  public final static String WORKSPACE               = "workspace";
+
+  public static final String VIEWER_MODE             = "mode";
+
+  /** The Constant HEADER. */
+  public final static String HEADER                  = "header";
+
+  public final static String SHOW_READMORE           = "header";
+
+  public static final String ORDER_TYPE              = "orderType";
+
+  public static final String ORDER_BY                = "orderBy";
+
+  public final static String ITEMS_PER_PAGE          = "itemsPerPage";
+
+  public final static String SHOW_LINK               = "showLink";
+
+  public final static String FORM_VIEW_TEMPLATE_PATH = "formViewTemplatePath";
+
+  public final static String PAGINATOR_TEMPlATE_PATH = "paginatorTemplatePath";
+
+  public final static String SHOW_HEADER             = "showHeader";
+
+  public final static String SHOW_REFRESH_BUTTON     = "showRefreshButton";
+
+  public final static String SHOW_SUMMARY            = "showSummary";
+
+  public final static String SHOW_THUMBNAILS_VIEW    = "showThumbnailsView";
+
+  public final static String SHOW_TITLE              = "showTitle";
+
+  public final static String SHOW_DATE_CREATED       = "showDateCreated";
+
+  public final static String SHOW_MORE_LINK          = "showMoreLink";
+
+  public final static String SHOW_RSS_LINK           = "showRssLink";
+
+  public final static String SHOW_AUTO_DETECT        = "showAutoDetect";
+
+  public final static String TARGET_PAGE             = "targetPage";
+
+  public final static String FOLDER_PATH             = "folderPath";
+  
+  public final static String REPOSITORY             = "repository";
 }

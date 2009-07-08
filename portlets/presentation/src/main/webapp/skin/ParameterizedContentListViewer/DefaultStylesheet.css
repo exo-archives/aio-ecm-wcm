@@ -1,3 +1,4 @@
+
 .UIParameterizedContentListViewerPortlet {
 	padding: 20px;
 	background: #f2f2f2;
@@ -9,7 +10,7 @@
 	border: 1px solid #dbdbdb;
 }
 
-.UIParameterizedManagementForm .quickSearchAction {
+.UIParameterizedManagementForm .SelectTargetPageIcon {
 	background: url('DefaultSkin/images/SearchIcon.png') no-repeat;
 	width: 16px;
 	height: 16px;
@@ -150,4 +151,25 @@
 .UIParameterizedContentListViewerPortlet #UIPageSelectorPanel {
 	float: left;
 	width: 49%;
+}
+
+.UIParameterizedContentListViewerPortlet .CaptionFunc {
+    padding: 10px 0;
+    height: 1%;
+    overflow: hidden;
+}
+
+.UIParameterizedContentListViewerPortlet .CaptionFunc .CaptionRefresh {
+    width: 200px;
+    float: left;
+}
+
+.UIParameterizedContentListViewerPortlet .CaptionFunc .CaptionRefresh a {
+    display: block;
+    padding: 0 3px 3px 25px;
+    background: url('DefaultSkin/images/RefreshIcon.gif') no-repeat;
+    color: #ff4200;
+    font-weight: bold;
+    font-size: 13px;
+    margin-left: 25px;
 }

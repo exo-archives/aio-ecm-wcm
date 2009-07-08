@@ -1,0 +1,188 @@
+<% 
+	import javax.jcr.Node;
+	import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
+	import org.exoplatform.wcm.webui.pclv.UIParameterizedContentListViewerConstant;
+	import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationState;
+	import org.exoplatform.wcm.webui.pclv.UIParameterizedContentListViewerForm;
+	import org.exoplatform.wcm.webui.pclv.PCLVViewerConfig;
+%>
+<div id="$uicomponent.id" class="UIParameterizedContentListViewerDefault">
+ 	<%
+ 		uiform.begin();
+	
+		String labelRefreshAction = _ctx.appRes("UIContentListPresentationDefault.action.refresh");		
+					
+		String draftLabel = _ctx.appRes("UIContentListPresentationDefault.label.draft");
+		String editActionLabel = _ctx.appRes("UIContentListPresentationDefault.action.edit");
+			%>
+				<div class="TopBoxParameterized">
+					<div class="Title">
+						<%	
+							String header = uicomponent.getHeader();
+							if (uicomponent.isShowHeader() && header != null && header.trim().length() != 0 ) {
+								%><div class="Header"><%= header %></div><%
+							}
+						%>
+					</div>
+					<%
+						if (uicomponent.isShowField(UIParameterizedContentListViewerConstant.SHOW_RSS_LINK)) {
+							%>
+			  			<a class="RssIcon" href="#demo">RSS Feed</a>
+							<%
+						} 
+					%>
+					<div class="ClearBoth"><span></span></div>
+				</div>
+				<div class="CaptionItem">
+					<% if (uicomponent.getUIPageIterator().getAvailable() == 0) {
+						%>
+						<div style="height: 20px; text-align: center; font-size: 16px; font-weight: bold; background: white; padding: 10px; margin: 5px; color: red;">
+							The current folder is empty!!!
+						</div>
+					<%
+					}  else 
+					{
+						def currentPageData = uicomponent.getCurrentPageData();
+						boolean isShowTitle = uicomponent.isShowField(UIParameterizedContentListViewerConstant.SHOW_TITLE);
+						boolean isShowSumary = uicomponent.isShowField(UIParameterizedContentListViewerConstant.SHOW_SUMMARY);
+						boolean isShowIllustrationImg = uicomponent.isShowField(UIParameterizedContentListViewerConstant.SHOW_SUMMARY);
+						boolean isShowLink = uicomponent.isShowField(UIParameterizedContentListViewerConstant.SHOW_LINK);
+						boolean isShowCreatedDate = uicomponent.isShowField(UIParameterizedContentListViewerConstant.SHOW_DATE_CREATED);
+						
+						int count = 0;
+						for (Node node : currentPageData) 
+						{
+						  	String itemName = node.getName();
+						  	String itemLink = uicomponent.generateLink(node);
+							String itemSummary = uicomponent.getSummary(node);
+					    	String itemTitle = uicomponent.getTitle(node);
+							String itemDateCreated = uicomponent.getCreatedDate(node);
+							String imgSrc = uicomponent.getIllustrativeImage(node);								
+							if (itemTitle != null && itemTitle.trim().length() != 0) {
+								itemName = itemTitle;
+							}						
+							%>
+							<div style="padding: 10px 20px;">
+								<% 
+									if(count == 0) { 
+										%>
+											<div class="HotNews">
+												<%if (isShowIllustrationImg) {
+													%>
+													<a class="ImageHotNews" href="#demo"><img width="248" alt="#" src="/presentation/skin/ParameterizedContentListViewer/DefaultSkin/images/IIlustrationImages.jpg" /></a>
+												<%
+												} %>
+												<div class="ContentHotNews">
+												<% 
+													if (isShowTitle) {
+														%>
+																<%
+																	if (isShowLink) {
+																		%>
+																			<a class="TitleContentHotNews" href="$itemLink">
+																				$itemName
+																			</a>
+																		<%
+																	} else {
+																		%>$itemName<%
+																	} 
+																%>
+														<%
+													} 
+													if (isShowSumary) {
+														%>
+															<div>
+																<%=itemSummary %>
+															</div>
+														<%
+													} 
+													
+													if (itemDateCreated != null && isShowCreatedDate) {
+														%>
+															<div style="color: red;">
+																<%=itemDateCreated%>
+															</div>
+														<%
+													}
+													count = 1;
+												%>
+												</div>
+												<div class="ClearRight"><span></span></div>
+											</div>
+										<%
+									} else {
+										%>
+											<div class="NormalNews">
+												<% 
+													if (isShowIllustrationImg) {
+														%>
+															<a class="ImageNormalNews" href="#demo"><img width="190" alt="#" src="/presentation/skin/ParameterizedContentListViewer/DefaultSkin/images/IIlustrationImages.jpg" /></a>
+														<%
+													} 
+												%>
+												<div class="ContentNormalNews">
+													<% 
+														if (isShowTitle) {
+															%>
+																<div style="font-size: 12px;">
+																	<%
+																		if (isShowLink) {
+																			%>
+																				<a class="TitleContentNormalNews" href="$itemLink">$itemName</a>
+																			<%
+																		} else {
+																			%>$itemName<%
+																		} 
+																	%>
+																</div>
+															<%
+														}
+														if (isShowSumary) {
+															%>
+																<div>
+																	<%=itemSummary %>
+																</div>
+															<%
+														} 
+														if (itemDateCreated != null && isShowCreatedDate) {
+															%>
+																<div style="color: red;">
+																	<%=itemDateCreated%>
+																</div>
+															<%
+														} 
+													%>
+												</div>
+												<div class="ClearLeft"><span></span></div>
+											</div>
+											<div class="LineNormalNews"><span></span></div>
+										<%
+									} // End is else
+									count = 1;
+								%>
+							</div>
+						<%
+						} // End for loop
+					} // End if
+				%>
+				<!-- </div> -->
+				</div>
+				<div class="CaptionFunc">
+					<% 
+						if (uicomponent.showRefreshButton()) { 
+							String link = uicomponent.event("Refresh");
+							%>				
+								<div class="CaptionRefresh">
+									<a href="$link">$labelRefreshAction</a>
+								</div>
+							<% 
+						}
+						if (uicomponent.showPaginator()) { 
+							uicomponent.renderChild(UICustomizeablePaginator.class)
+						} 
+					%>
+				</div>
+			<%
+		uiform.end()
+	%>
+</div>
