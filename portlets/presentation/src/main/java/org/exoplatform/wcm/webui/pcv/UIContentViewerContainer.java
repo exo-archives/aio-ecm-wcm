@@ -25,6 +25,10 @@ import java.util.List;
 
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
+import javax.jcr.PathNotFoundException;
+import javax.jcr.Property;
+import javax.jcr.PropertyIterator;
+import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.portlet.PortletMode;
 import javax.servlet.http.HttpServletRequest;
@@ -34,8 +38,8 @@ import org.apache.commons.lang.StringUtils;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.portal.UIPortal;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.cms.taxonomy.TaxonomyService;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
@@ -101,24 +105,15 @@ public class UIContentViewerContainer extends UIContainer {
 
 	@Override
 	public void processRender(WebuiRequestContext context) throws Exception {
-		// PortletRequestContext portletRequestContext = (PortletRequestContext)
-		// requestContext;
-		// PortalRequestContext context = (PortalRequestContext)
-		// portletRequestContext
-		// .getParentAppRequestContext();
-
 		PortletRequestContext porletRequestContext = (PortletRequestContext) context;
-		HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) porletRequestContext
-				.getRequest();
-		PortalRequestContext portalRequestContext = Util
-				.getPortalRequestContext();
+		HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) porletRequestContext.getRequest();
+		PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
 		UIPortal uiPortal = Util.getUIPortal();
 		String portalURI = portalRequestContext.getPortalURI();
 		String requestURI = requestWrapper.getRequestURI();
 		String pageNodeSelected = uiPortal.getSelectedNode().getName();
 		String parameters = null;
-		Object object = requestWrapper
-				.getAttribute("ParameterizedContentViewerPortlet.data.object");
+		Object object = requestWrapper.getAttribute("ParameterizedContentViewerPortlet.data.object");
 
 		try {
 			parameters = URLDecoder.decode(StringUtils.substringAfter(
@@ -142,53 +137,64 @@ public class UIContentViewerContainer extends UIContainer {
 		if (object instanceof ItemNotFoundException
 				|| object instanceof AccessControlException
 				|| object instanceof ItemNotFoundException || object == null) {
+			RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
 			try {
-				RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
-				ManageableRepository manageableRepository = repositoryService
-						.getRepository(repository);
-				session = sessionProvider.getSession(workspace,
-						manageableRepository);
+				ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+				session = sessionProvider.getSession(workspace, manageableRepository);
+
+				if (params.length > 2) {
+					StringBuffer identifier = new StringBuffer();
+					for (int i = 2; i < params.length; i++) {
+						identifier.append("/").append(params[i]);
+					}
+					nodeIdentifier = identifier.toString();
+					boolean isUUID = false;
+					try {
+						currentNode = (Node) session.getItem(nodeIdentifier);
+					} catch (Exception e) {
+						isUUID = true;
+					}
+					if (isUUID) {
+						try {
+							String uuid = params[params.length - 1];
+							currentNode = session.getNodeByUUID(uuid);
+						} catch (ItemNotFoundException exc) {
+							renderErrorMessage(context, UIContentViewer.CONTENT_NOT_FOUND_EXC);
+							return;
+						}
+					}
+				} else if (params.length == 2) {
+					currentNode = session.getRootNode();
+				}
+			} catch (RepositoryException re) {
+				repository = porletRequestContext.getRequest().getPreferences().getValue("repository", "");
+				
+				TaxonomyService taxonomyService = getApplicationComponent(TaxonomyService.class);
+				Node taxonomyTree = taxonomyService.getTaxonomyTree(repository, params[0]);
+				
+	      String symLinkPath = parameters.substring(parameters.indexOf("/") + 1);
+	      Node symLink;
+				try {
+					symLink = taxonomyTree.getNode(symLinkPath);
+					currentNode = taxonomyTree.getSession().getNodeByUUID(symLink.getProperty("exo:uuid").getString());
+				} catch (PathNotFoundException e) {
+					renderErrorMessage(context,
+							UIContentViewer.CONTENT_NOT_FOUND_EXC);
+				}
 			} catch (AccessControlException ace) {
-				renderErrorMessage(context,
-						UIContentViewer.ACCESS_CONTROL_EXC);
+				renderErrorMessage(context, UIContentViewer.ACCESS_CONTROL_EXC);
 				return;
 			} catch (Exception e) {
-				renderErrorMessage(context,
-						UIContentViewer.CONTENT_NOT_FOUND_EXC);
+				renderErrorMessage(context, UIContentViewer.CONTENT_NOT_FOUND_EXC);
 				return;
 			}
-			if (params.length > 2) {
-				StringBuffer identifier = new StringBuffer();
-				for (int i = 2; i < params.length; i++) {
-					identifier.append("/").append(params[i]);
-				}
-				nodeIdentifier = identifier.toString();
-				boolean isUUID = false;
-				try {
-					currentNode = (Node) session.getItem(nodeIdentifier);
-				} catch (Exception e) {
-					isUUID = true;
-				}
-				if (isUUID) {
-					try {
-						String uuid = params[params.length - 1];
-						currentNode = session.getNodeByUUID(uuid);
-					} catch (ItemNotFoundException exc) {
-						renderErrorMessage(context,
-								UIContentViewer.CONTENT_NOT_FOUND_EXC);
-						return;
-					}
-				}
-			} else if (params.length == 2) {
-				currentNode = session.getRootNode();
-			}
+
 		} else {
 			currentNode = (Node) object;
 		}
 
 		TemplateService templateService = getApplicationComponent(TemplateService.class);
-		List<String> documentTypes = templateService
-				.getDocumentTemplates(repository);
+		List<String> documentTypes = templateService.getDocumentTemplates(repository);
 		Boolean isDocumentType = false;
 		for (String docType : documentTypes) {
 			if (currentNode.isNodeType(docType)) {
