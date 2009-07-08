@@ -78,6 +78,7 @@ public class NewsletterTemplateHandler {
       this.templates = templates;
       return templates;
     } catch (Exception e) {
+      e.printStackTrace();
       log.error("Get templates of category " + categoryConfig + " failed because of " + e.getMessage());
     }
     return null;
@@ -87,13 +88,14 @@ public class NewsletterTemplateHandler {
     log.info("Trying to get template " + templateName);
     try {
       if (templates == null) templates = getTemplates(portalName, categoryConfig);
-      if (templateName == null) return templates.get(0);
+      if (templateName == null && templates.size() > 0) return templates.get(0);
       for (Node template : templates) {
         if (templateName.equals(template.getName())) {
           return template;
         }
       }
     } catch (Exception e) {
+      e.printStackTrace();
       log.error("Get dialog " + templateName + " failed because of " + e.getMessage());
     }
     return null;
@@ -105,11 +107,12 @@ public class NewsletterTemplateHandler {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
       Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspace, manageableRepository);
       Node categoryTemplateFolder = (Node)session.getItem(NewsletterConstant.generateCategoryTemplateBasePath(portalName, categoryName));
-      session.getWorkspace().copy(webcontentPath, categoryTemplateFolder.getPath());
+      session.getWorkspace().copy(webcontentPath, categoryTemplateFolder.getPath() + "/" + webcontentPath.substring(webcontentPath.lastIndexOf("/") + 1));
       session.save();
       session.logout();
       return true;
     } catch (Exception e) {
+      e.printStackTrace();
       log.error("Convert node " + webcontentPath + " to template at category " + categoryName + " failed because of " + e.getMessage());
     }
     return false;

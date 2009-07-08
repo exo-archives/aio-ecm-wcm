@@ -143,7 +143,9 @@ public class NewsletterSubscriptionHandler {
     NodeIterator nodeIterator = categoryNode.getNodes();
     while(nodeIterator.hasNext()){
       try{
-        listSubscriptions.add(getSubscriptionFormNode(nodeIterator.nextNode()));
+        Node childNode = nodeIterator.nextNode();
+        if(!childNode.isNodeType(NewsletterConstant.SUBSCRIPTION_NODETYPE)) continue;
+        listSubscriptions.add(getSubscriptionFormNode(childNode));
       }catch(Exception ex){
         log.error("Error when get subcriptions by category " + categoryName + " failed because of " + ex.getMessage());
       }
