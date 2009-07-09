@@ -144,7 +144,7 @@ public class NewsletterManagerService {
   			listEmailAddress = convertValuesToArray(subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_USER).getValues());
 			}
 
-			if (listEmailAddress.size() > 0) {
+			if(listEmailAddress!= null && listEmailAddress.size() > 0) {
 				message = new Message();
 				message.setTo(listEmailAddress.get(0));
 				for (int i = 1; i < listEmailAddress.size(); i++) {
