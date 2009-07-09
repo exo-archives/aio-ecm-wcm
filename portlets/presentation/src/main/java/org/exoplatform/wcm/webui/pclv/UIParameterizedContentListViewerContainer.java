@@ -101,7 +101,7 @@ public class UIParameterizedContentListViewerContainer extends UIContainer {
     PaginatedNodeIterator paginatedNodeIterator = new PaginatedNodeIterator(categoriesChildNode, itemsPerPage);
     getChildren().clear();
 
-    UIParameterizedContentListViewerForm parameterizedContentListViewer = addChild(UIParameterizedContentListViewerForm.class, null, "UIParameterizedContentListViewerForm");    
+    UIParameterizedContentListViewerForm parameterizedContentListViewer = addChild(UIParameterizedContentListViewerForm.class, null, UIParameterizedContentListViewerConstant.PARAMETERIZED_CONTENT_LIST_VIEWER_FORM);    
     String templatePath = getFormViewTemplatePath();
     ResourceResolver resourceResolver = getTemplateResourceResolver();    
     parameterizedContentListViewer.init(templatePath, resourceResolver, paginatedNodeIterator); 

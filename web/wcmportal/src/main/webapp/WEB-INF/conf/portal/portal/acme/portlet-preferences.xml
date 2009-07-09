@@ -935,7 +935,7 @@
     </preference>
     <preference>
     	<name>showRssLink</name>
-    	<value>true</value>	    	
+    	<value>false</value>
     	<read-only>false</read-only>
     </preference>
   </portlet-preferences>

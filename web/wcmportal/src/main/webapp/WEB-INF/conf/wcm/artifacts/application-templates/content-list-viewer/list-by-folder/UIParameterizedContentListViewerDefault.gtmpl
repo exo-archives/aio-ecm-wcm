@@ -4,7 +4,6 @@
 	import org.exoplatform.wcm.webui.pclv.UIParameterizedContentListViewerConstant;
 	import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationState;
 	import org.exoplatform.wcm.webui.pclv.UIParameterizedContentListViewerForm;
-	import org.exoplatform.wcm.webui.pclv.PCLVViewerConfig;
 %>
 <div class="UIParameterizedContentListViewerDefault">
  	<%
@@ -14,25 +13,26 @@
 					
 		String draftLabel = _ctx.appRes("UIContentListPresentationDefault.label.draft");
 		String editActionLabel = _ctx.appRes("UIContentListPresentationDefault.action.edit");
-			%>
-				<div class="TopBoxParameterized">
-					<div class="Title">
-						<%	
-							String header = uicomponent.getHeader();
-							if (uicomponent.isShowHeader() && header != null && header.trim().length() != 0 ) {
-								%><div class="Header"><%= header %></div><%
-							}
-						%>
-					</div>
+			String header = uicomponent.getHeader();
+			if (uicomponent.isShowHeader() && header != null && header.trim().length() != 0 ) {
+					%>
+					<div class="TopBoxParameterized">
+
+						<div class="Title">
+							<div class="Header"><%= header %></div>
+						</div>
 					<%
 						if (uicomponent.isShowField(UIParameterizedContentListViewerConstant.SHOW_RSS_LINK)) {
 							%>
-			  			<a class="RssIcon" href="#demo">RSS Feed</a>
-							<%
-						} 
+			  				<a class="RssIcon" href="#demo">RSS Feed</a>
+						<%
+						}
 					%>
 					<div class="ClearBoth"><span></span></div>
 				</div>
+				<%
+					}
+				%>
 				<div class="CaptionItem">
 					<% if (uicomponent.getUIPageIterator().getAvailable() == 0) {
 						%>
@@ -45,7 +45,7 @@
 						def currentPageData = uicomponent.getCurrentPageData();
 						boolean isShowTitle = uicomponent.isShowField(UIParameterizedContentListViewerConstant.SHOW_TITLE);
 						boolean isShowSumary = uicomponent.isShowField(UIParameterizedContentListViewerConstant.SHOW_SUMMARY);
-						boolean isShowIllustrationImg = uicomponent.isShowField(UIParameterizedContentListViewerConstant.SHOW_SUMMARY);
+						boolean isShowIllustrationImg = uicomponent.isShowField(UIParameterizedContentListViewerConstant.SHOW_THUMBNAILS_VIEW);
 						boolean isShowLink = uicomponent.isShowField(UIParameterizedContentListViewerConstant.SHOW_LINK);
 						boolean isShowCreatedDate = uicomponent.isShowField(UIParameterizedContentListViewerConstant.SHOW_DATE_CREATED);
 						
@@ -79,7 +79,7 @@
 																<%
 																	if (isShowLink) {
 																		%>
-																			<a class="TitleContentHotNews" href="javascript:void(0);" onclick="$itemLink">
+																			<a class="TitleContentHotNews" href="$itemLink">
 																				$itemName
 																			</a>
 																		<%
@@ -128,7 +128,7 @@
 																	<%
 																		if (isShowLink) {
 																			%>
-																				<a class="TitleContentNormalNews" href="javascript:void(0);" onclick="$itemLink">$itemName</a>
+																				<a class="TitleContentNormalNews" href="$itemLink">$itemName</a>
 																			<%
 																		} else {
 																			%>$itemName<%

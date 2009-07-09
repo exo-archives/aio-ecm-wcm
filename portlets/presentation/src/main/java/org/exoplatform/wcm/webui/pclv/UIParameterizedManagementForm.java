@@ -23,6 +23,7 @@ import java.util.ResourceBundle;
 import javax.jcr.Node;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
+import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.exoplatform.ecm.webui.selector.UISelectable;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
@@ -168,10 +169,10 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
     orderByOptions.add(new SelectItemOption<String>(bundle.getString(rootBundleKey + ORDER_BY_TITLE), "exo:title"));
     orderByOptions.add(new SelectItemOption<String>(bundle.getString(rootBundleKey + ORDER_BY_DATE_CREATED), "exo:dateCreated"));
     orderByOptions.add(new SelectItemOption<String>(bundle.getString(rootBundleKey + ORDER_BY_DATE_MODIFIED), "exo:dateModified"));
-    orderByOptions.add(new SelectItemOption<String>(bundle.getString(rootBundleKey + ORDER_BY_DATE_PUBLISHED),"publication:liveDate"));    
+    orderByOptions.add(new SelectItemOption<String>(bundle.getString(rootBundleKey + ORDER_BY_DATE_PUBLISHED),"publication:liveDate"));  
     UIFormSelectBox orderBySelectBox = new UIFormSelectBox(ORDER_BY, ORDER_BY, orderByOptions);
     String orderByPref = portletPreferences.getValue(UIParameterizedContentListViewerConstant.ORDER_BY, null);
-    orderBySelectBox.setValue(orderByPref); 
+    orderBySelectBox.setValue(orderByPref);
     
     UIFormCheckBoxInput autoDetect = new UIFormCheckBoxInput(AUTO_DETECT, AUTO_DETECT, null);
     autoDetect.setChecked(true);
@@ -179,10 +180,12 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
     autoDetect.setChecked(Boolean.parseBoolean(autoDetected));
     
     UIFormStringInput headerInput = new UIFormStringInput(HEADER, HEADER, null);
-    String headerValue = portletPreferences.getValue(UIParameterizedContentListViewerConstant.HEADER, null);
     
-    if (Boolean.parseBoolean(autoDetected)) {
+    if (!Boolean.parseBoolean(autoDetected)) {
+      String headerValue = portletPreferences.getValue(UIParameterizedContentListViewerConstant.HEADER, null);
       headerInput.setValue(headerValue);
+    } else {
+      headerInput.setValue(this.getHeader());
     }
     
     List<SelectItemOption<String>> formViewerTemplateList = getTemplateList(PORTLET_NAME, FORM_VIEW_TEMPLATE_CATEGORY);
@@ -316,11 +319,6 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
   
   public static class CancelActionListener extends EventListener<UIParameterizedManagementForm> {
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
-     */
     public void execute(Event<UIParameterizedManagementForm> event) throws Exception {
       UIParameterizedManagementForm viewerManagementForm = event.getSource();
       UIApplication uiApp = viewerManagementForm.getAncestorOfType(UIApplication.class);
@@ -337,11 +335,6 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
   
   public static class SelectTargetPageActionListener extends EventListener<UIParameterizedManagementForm> {
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
-     */
     public void execute(Event<UIParameterizedManagementForm> event) throws Exception {
       UIParameterizedManagementForm viewerManagementForm = event.getSource();
       
@@ -368,13 +361,19 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
     this.popupId = popupId;
   }
 
+  private String getHeader(){
+    
+    PortletRequestContext portletRequestContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+    HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) portletRequestContext.getRequest();
+    
+    String requestURI = requestWrapper.getRequestURI();
+    
+    String[] param = requestURI.split("/");
+    String header = param[param.length - 1];
+    return header;
+  }
   public static class SaveActionListener extends EventListener<UIParameterizedManagementForm> {
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
-     */
     public void execute(Event<UIParameterizedManagementForm> event) throws Exception {
       UIParameterizedManagementForm uiParameterizedManagementForm = event.getSource();
 
@@ -431,7 +430,7 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
         uiApp.addMessage(new ApplicationMessage("UIMessageBoard.msg.saving-success", null, ApplicationMessage.INFO));
       }
       portletRequestContext.setApplicationMode(PortletMode.VIEW);
-      uiApp.addMessage(new ApplicationMessage("Saved!!!", null, ApplicationMessage.INFO));
+      uiApp.addMessage(new ApplicationMessage("UIMessageBoard.msg.saving-success", null, ApplicationMessage.INFO));
 
       UIParameterizedContentListViewerPortlet uiparameterContentListViewerPortlet = uiParameterizedManagementForm.getAncestorOfType(UIParameterizedContentListViewerPortlet.class);
       UIParameterizedContentListViewerContainer uiparameterContentListViewerContainer = uiparameterContentListViewerPortlet.getChild(UIParameterizedContentListViewerContainer.class);

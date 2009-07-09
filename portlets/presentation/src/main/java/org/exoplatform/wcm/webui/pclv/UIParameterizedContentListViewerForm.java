@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.jcr.Node;
-import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
@@ -38,10 +37,6 @@ import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.taxonomy.TaxonomyService;
-import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
 import org.exoplatform.services.wcm.images.RESTImagesRendererService;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
@@ -244,9 +239,12 @@ public class UIParameterizedContentListViewerForm extends UIForm {
    * @throws Exception the exception
    */
   public String getSummary(Node node) throws Exception {
-    if(node.hasProperty("exo:summary")) {
-      
-      return node.getProperty("exo:summary").getValue().getString();
+
+    Session session = node.getSession();
+    Node newNode = session.getNodeByUUID(node.getProperty("exo:uuid").getValue().getString());
+    if(newNode.hasProperty("exo:summary")) {
+
+      return newNode.getProperty("exo:summary").getValue().getString();
     }
     return "In a general manner, it's a beginning on a Restful XML oriented exposure. In a near future, the CLV could access to contents not directly by java, but by a rest call. By doing that, we could open the wcm platform to other technology and front-end (gagdet, php platform by mashup, etc).In a general manner, it's a beginning on a Restful XML oriented exposure. In a near future, the CLV could access to contents not directly by java, but by a rest call.";
   }
@@ -285,7 +283,7 @@ public class UIParameterizedContentListViewerForm extends UIForm {
     String uri = null;
     try {
       illustrativeImage = contentSchemaHandler.getIllustrationImage(node);
-      uri = imagesRendererService.generateURI(illustrativeImage);      
+      uri = imagesRendererService.generateURI(illustrativeImage);
     } catch (Exception e) {            
     }
     return uri;
@@ -308,47 +306,6 @@ public class UIParameterizedContentListViewerForm extends UIForm {
       parameters = URLDecoder.decode(StringUtils.substringAfter(requestURI, portalURI.concat(pageNodeSelected + "/")), "UTF-8");
     } catch (UnsupportedEncodingException e) {}
 
-    try {
-      
-      String[] params = parameters.split("/");
-      
-      Node currentNode = null;
-      String nodeIdentifier = null;
-      ThreadLocalSessionProviderService providerService = getApplicationComponent(ThreadLocalSessionProviderService.class);
-      SessionProvider sessionProvider = providerService.getSessionProvider(null);
-      Session session = null;   
-      RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
-      
-      if (params.length < 2) {
-        throw new RepositoryException();
-      }
-
-      String repository = params[0];
-      String workspace = params[1];
-
-      ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      session = sessionProvider.getSession(workspace, manageableRepository);
-
-      if (params.length > 2) {
-
-        StringBuffer identifier = new StringBuffer();
-        for (int i = 2; i < params.length; i++) {
-          identifier.append("/").append(params[i]);
-        }
-        nodeIdentifier = identifier.toString();
-        try {
-          currentNode = (Node) session.getItem(nodeIdentifier);
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
-      } else if (params.length == 2) {
-        currentNode = session.getRootNode();
-      }
-      link = portalURI + currentNode.getPath();
-      return link;
-
-    } catch (RepositoryException re) {
-
       PortletRequest portletRequest = portletRequestContext.getRequest();
       PortletPreferences portletPreferences = portletRequest.getPreferences();
       String preferenceRepository = portletPreferences.getValue(UIParameterizedContentListViewerConstant.PREFERENCE_REPOSITORY, "");
@@ -362,10 +319,10 @@ public class UIParameterizedContentListViewerForm extends UIForm {
       }
 
       Node categoryNode = treeNode.getNode(categoryPath);
-      
+
       Node newNode = categoryNode.getNode(node.getName());
       String path = newNode.getPath();
-      
+
       String portalName = getPortalName() + "/";
       String itemPath = path.substring(path.lastIndexOf(portalName) + portalName.length());
       String backToCategory = "";
@@ -376,15 +333,10 @@ public class UIParameterizedContentListViewerForm extends UIForm {
       
         backToCategory = itemPath.substring(0, itemPath.indexOf(newNode.getName()) - 1);
       }
-      
+
       link = portalURI + itemPath + "?back" + "=" + "/" + backToCategory;
 
       return link;
-    } catch (Exception e) {
-
-      e.printStackTrace();
-    }
-    return null;
   }
 
   private PortletPreferences getPortletPreferences() {
