@@ -108,7 +108,6 @@ public class NewsletterManagerService {
 			(RepositoryService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(RepositoryService.class);
 		ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
 		Session session = SessionProviderFactory.createSystemProvider().getSession(workspaceName, manageableRepository);
-		Property subscribedUserProperty;
 
 		ExoContainer container = ExoContainerContext.getCurrentContainer();
 		MailService mailService = (MailService) container.getComponentInstanceOfType(MailService.class);
@@ -141,8 +140,9 @@ public class NewsletterManagerService {
 			Node newsletterEntry = nodeIterator.nextNode();
 			Node subscriptionNode = newsletterEntry.getParent();
 
-			subscribedUserProperty = subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_USER);
-			listEmailAddress = convertValuesToArray(subscribedUserProperty.getValues());
+			if(subscriptionNode.hasProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_USER)){
+  			listEmailAddress = convertValuesToArray(subscriptionNode.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_USER).getValues());
+			}
 
 			if (listEmailAddress.size() > 0) {
 				message = new Message();
