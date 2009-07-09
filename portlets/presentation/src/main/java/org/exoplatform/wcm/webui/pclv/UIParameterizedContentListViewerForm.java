@@ -21,7 +21,6 @@ import java.net.URLDecoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -39,16 +38,12 @@ import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.taxonomy.TaxonomyService;
-import org.exoplatform.services.ecm.publication.PublicationPlugin;
-import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
 import org.exoplatform.services.wcm.images.RESTImagesRendererService;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant.SITE_MODE;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
 import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -165,21 +160,6 @@ public class UIParameterizedContentListViewerForm extends UIForm {
     return (showAble != null) ? Boolean.parseBoolean(showAble) : false;
   }
 
-  public Node getNodeView(Node node) throws Exception {
-    PublicationService publicationService = getApplicationComponent(PublicationService.class);
-    HashMap<String, Object> context = new HashMap<String, Object>();
-    if (org.exoplatform.wcm.webui.Utils.isLiveMode()) {
-      context.put(StageAndVersionPublicationConstant.RUNTIME_MODE, SITE_MODE.LIVE);
-    } else {
-      context.put(StageAndVersionPublicationConstant.RUNTIME_MODE, SITE_MODE.EDITING);
-    }
-    String lifecyleName = publicationService.getNodeLifecycleName(node);
-    PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins()
-    .get(lifecyleName);
-    Node viewNode = publicationPlugin.getNodeView(node, context);
-    return viewNode;
-  }
-
   /**
    * Show paginator.
    * 
@@ -225,12 +205,6 @@ public class UIParameterizedContentListViewerForm extends UIForm {
     return uiPaginator;
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see org.exoplatform.webui.core.UIComponent#getTemplateResourceResolver(org.exoplatform.webui.application.WebuiRequestContext,
-   *      java.lang.String)
-   */
   public ResourceResolver getTemplateResourceResolver(WebuiRequestContext context, String template) {
     return resourceResolver;
   }
@@ -317,32 +291,21 @@ public class UIParameterizedContentListViewerForm extends UIForm {
     return uri;
   }
 
-  /**
-   * Gets the uRL.
-   * 
-   * @param node the node
-   * 
-   * @return the uRL
-   * 
-   * @throws Exception the exception
-   */
   public String generateLink(Node node) throws Exception {
-    String link = null;
+    
     PortletRequestContext portletRequestContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) portletRequestContext.getRequest();
-    PortalRequestContext portalRequestContext = Util
-        .getPortalRequestContext();
+    PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
     UIPortal uiPortal = Util.getUIPortal();
+    
+    String link = null;
     String portalURI = portalRequestContext.getPortalURI();
     String requestURI = requestWrapper.getRequestURI();
     String pageNodeSelected = uiPortal.getSelectedNode().getName();
     String parameters = null;
     
     try {
-      parameters = URLDecoder.decode(StringUtils.substringAfter(
-                                         requestURI,
-                                         portalURI.concat(pageNodeSelected + "/")),
-                                         "UTF-8");
+      parameters = URLDecoder.decode(StringUtils.substringAfter(requestURI, portalURI.concat(pageNodeSelected + "/")), "UTF-8");
     } catch (UnsupportedEncodingException e) {}
 
     try {
@@ -537,11 +500,6 @@ public class UIParameterizedContentListViewerForm extends UIForm {
   
   public static class RefreshActionListener extends EventListener<UIParameterizedContentListViewerForm> {
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
-     */
     public void execute(Event<UIParameterizedContentListViewerForm> event) throws Exception {
       UIParameterizedContentListViewerForm contentListPresentation = event.getSource();
       UIParameterizedContentListViewerContainer container = contentListPresentation.getParent();
