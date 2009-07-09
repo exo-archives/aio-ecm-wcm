@@ -12,7 +12,8 @@
       <Delete>Supprimer</Delete>
       <Edit>Modifier</Edit>
       <Moderation>Modération</Moderation>
-      <CreateLetter>Nouvelle Lettre</CreateLetter>  
+      <CreateLetter>Nouvelle Lettre</CreateLetter> 
+      <UpdateNewsletter>Mise à jour de l'information</UpdateNewsletter> 
     </action>
     <title>
     	<eXoNewsletter>eXo Newsletter</eXoNewsletter>
@@ -187,6 +188,11 @@
 			<Send>Envoyer</Send>
 			<Cancel>Annuler</Cancel>
 		</action>
+		<msg>
+			<UpdateBeforeSave>
+				S'il vous plaît cliquer sur la mise à jour du bulletin d'information avant d'envoyer ou mettre! 
+			</UpdateBeforeSave>
+		</msg>
 	</UINewsletterEntryForm>
 	
 	<UINewsletterEntryDialogSelector>

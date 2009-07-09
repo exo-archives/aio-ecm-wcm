@@ -54,19 +54,12 @@ import org.exoplatform.webui.form.validator.NameValidator;
 		}
 )
 public class UICategoryForm extends UIForm implements UIPopupComponent, UISelectable {
-  
   private NewsletterCategoryConfig categoryConfig;
-  
   private String popupId;
-
   public static final String INPUT_CATEGORY_NAME           = "CategoryName"; 
-  
 	public static final String INPUT_CATEGORY_TITLE          = "CategoryTitle"; 
-	
 	public static final String INPUT_CATEGORY_DESCRIPTION    = "CategoryDescription";
-	
 	public static final String FORM_CATEGORY_MODERATOR       = "FormCategoryModerator";
-	
 	public static final String INPUT_CATEGORY_MODERATOR      = "CategoryModerator"; 
 	
 	public UICategoryForm() throws Exception{
@@ -145,9 +138,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent, UISelect
       
       String inputMderatorValue = inputModerator.getValue();
       if (("".equals(inputMderatorValue)) || (inputMderatorValue == null)) {
-        
         UIApplication uiApp = uiCategoryForm.getAncestorOfType(UIApplication.class);
-
         uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.inputModeratorEmpty", null, ApplicationMessage.WARNING));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;

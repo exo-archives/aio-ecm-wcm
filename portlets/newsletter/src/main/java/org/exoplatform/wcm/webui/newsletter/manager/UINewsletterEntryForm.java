@@ -54,12 +54,12 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
-import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIFormDateTimeInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 
@@ -168,6 +168,13 @@ public class UINewsletterEntryForm extends UIDialogForm {
   public static class SaveActionListener extends EventListener<UINewsletterEntryForm> {
     public void execute(Event<UINewsletterEntryForm> event) throws Exception {
       UINewsletterEntryForm newsletterEntryForm = event.getSource();
+      UINewsletterEntryContainer newsletterEntryContainer = newsletterEntryForm.getAncestorOfType(UINewsletterEntryContainer.class);
+      if(!newsletterEntryContainer.isUpdated()){
+        UIApplication uiApp = newsletterEntryContainer.getAncestorOfType(UIApplication.class);
+        uiApp.addMessage(new ApplicationMessage("UINewsletterEntryForm.msg.UpdateBeforeSave", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
+      }
       newsletterEntryForm.saveContent();
     }
   }
@@ -175,16 +182,20 @@ public class UINewsletterEntryForm extends UIDialogForm {
   public static class SendActionListener extends EventListener<UINewsletterEntryForm> {
     public void execute(Event<UINewsletterEntryForm> event) throws Exception {
       UINewsletterEntryForm newsletterEntryForm = event.getSource();
+      UINewsletterEntryContainer newsletterEntryContainer = newsletterEntryForm.getAncestorOfType(UINewsletterEntryContainer.class);
+      if(!newsletterEntryContainer.isUpdated()){
+        UIApplication uiApp = newsletterEntryContainer.getAncestorOfType(UIApplication.class);
+        uiApp.addMessage(new ApplicationMessage("UINewsletterEntryForm.msg.UpdateBeforeSave", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
+      }
       Node newsletterNode = newsletterEntryForm.saveContent();
       Session session = newsletterNode.getSession();
-      
-      UINewsletterEntryContainer newsletterEntryContainer = newsletterEntryForm.getAncestorOfType(UINewsletterEntryContainer.class);
       UINewsletterEntryDialogSelector newsletterEntryDialogSelector = newsletterEntryContainer.getChild(UINewsletterEntryDialogSelector.class);
       Date currentDate = new Date();
       //DateFormat dateFormat = new SimpleDateFormat(ISO8601.SIMPLE_DATETIME_FORMAT);
       UIFormDateTimeInput formDateTimeInput = newsletterEntryDialogSelector.getChild(UIFormDateTimeInput.class);
       Calendar calendar = formDateTimeInput.getCalendar();
-      
       if(calendar==null) calendar = Calendar.getInstance();
       newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_DATE, calendar);
       if(calendar.getTimeInMillis() > currentDate.getTime()){

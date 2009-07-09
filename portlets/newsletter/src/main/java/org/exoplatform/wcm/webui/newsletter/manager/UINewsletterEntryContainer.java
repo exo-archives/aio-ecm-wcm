@@ -16,13 +16,14 @@
  */
 package org.exoplatform.wcm.webui.newsletter.manager;
 
-import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.ecm.webui.form.field.UIFormCalendarField;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterTemplateHandler;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
+import org.exoplatform.webui.form.UIFormDateTimeInput;
 
 /**
  * Created by The eXo Platform SAS
@@ -37,9 +38,18 @@ public class UINewsletterEntryContainer extends UIContainer {
 
   private NewsletterCategoryConfig categoryConfig;
   private String newsletterPath = null;
+  private boolean isUpdated = false;
   
   public UINewsletterEntryContainer() throws Exception {
     //init();
+  }
+  
+  public void setUpdated(boolean isUpdated){
+    this.isUpdated = isUpdated;
+  }
+  
+  public boolean isUpdated(){
+    return this.isUpdated;
   }
   
   public void setNewsletterInfor(String newsletterPath) throws Exception{

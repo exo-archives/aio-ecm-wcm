@@ -13,6 +13,7 @@
       <Edit>Edit</Edit>
       <Moderation>Moderation</Moderation>
       <CreateLetter>New Letter</CreateLetter>  
+      <UpdateNewsletter>Update Newsletter's infor</UpdateNewsletter>
     </action>
     <title>
     	<eXoNewsletter>eXo Newsletter</eXoNewsletter>
@@ -187,6 +188,11 @@
 			<Send>Send</Send>
 			<Cancel>Cancel</Cancel>
 		</action>
+		<msg>
+			<UpdateBeforeSave>
+				Please click to update newsletter's infor before send or save! 
+			</UpdateBeforeSave>
+		</msg>
 	</UINewsletterEntryForm>
 	
 	<UINewsletterEntryDialogSelector>
