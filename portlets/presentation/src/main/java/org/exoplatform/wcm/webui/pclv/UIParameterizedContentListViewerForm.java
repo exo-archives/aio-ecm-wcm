@@ -402,7 +402,6 @@ public class UIParameterizedContentListViewerForm extends UIForm {
       
       Node newNode = categoryNode.getNode(node.getName());
       String path = newNode.getPath();
-      System.out.println("\n\n ==================>> item path: " + newNode.getPath());
       
       String portalName = getPortalName() + "/";
       String itemPath = path.substring(path.lastIndexOf(portalName) + portalName.length());
@@ -415,15 +414,11 @@ public class UIParameterizedContentListViewerForm extends UIForm {
         backToCategory = itemPath.substring(0, itemPath.indexOf(newNode.getName()) - 1);
       }
       
-      System.out.println("\n\n ==================>> Back to category: " + backToCategory);
-
       link = portalURI + itemPath + "?back" + "=" + "/" + backToCategory;
 
-      System.out.println("\n\n ==================>> link: " + link);
       return link;
     } catch (Exception e) {
 
-      System.out.println("\n\n====================>> Item not found: ");
       e.printStackTrace();
     }
     return null;
