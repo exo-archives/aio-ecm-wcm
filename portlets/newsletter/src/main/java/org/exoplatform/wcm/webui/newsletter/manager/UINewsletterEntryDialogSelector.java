@@ -31,8 +31,10 @@ import org.exoplatform.services.wcm.newsletter.handler.NewsletterSubscriptionHan
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterTemplateHandler;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.newsletter.UINewsletterConstant;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -179,7 +181,15 @@ public class UINewsletterEntryDialogSelector extends UIForm {
   public static class UpdateNewsletterActionListener extends EventListener<UINewsletterEntryDialogSelector> {
     public void execute(Event<UINewsletterEntryDialogSelector> event) throws Exception {
       UINewsletterEntryDialogSelector newsletterEntryDialogSelector = event.getSource();
+      UIFormDateTimeInput formDateTimeInput = newsletterEntryDialogSelector.getChild(UIFormDateTimeInput.class);
+      Calendar calendar = formDateTimeInput.getCalendar();
       UINewsletterEntryContainer entryContainer = newsletterEntryDialogSelector.getAncestorOfType(UINewsletterEntryContainer.class);
+      if(calendar == null || formDateTimeInput.getValue().trim().length() < 1){
+        UIApplication uiApp = entryContainer.getAncestorOfType(UIApplication.class);
+        uiApp.addMessage(new ApplicationMessage("UINewsletterEntryForm.msg.DateTimeIsNotNull", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
+      }
       entryContainer.setUpdated(true);
       event.getRequestContext().addUIComponentToUpdateByAjax(newsletterEntryDialogSelector) ;
     }

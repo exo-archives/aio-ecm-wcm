@@ -192,6 +192,9 @@
 			<UpdateBeforeSave>
 				S'il vous plaît cliquer sur la mise à jour du bulletin d'information avant d'envoyer ou mettre! 
 			</UpdateBeforeSave>
+			<DateTimeIsNotNull>
+				Envoyer la date est nulle. S'il vous plaît vérifier à nouveau!
+			</DateTimeIsNotNull>
 		</msg>
 	</UINewsletterEntryForm>
 	

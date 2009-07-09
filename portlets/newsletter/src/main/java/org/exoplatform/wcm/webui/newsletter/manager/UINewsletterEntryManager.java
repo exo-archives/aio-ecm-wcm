@@ -271,8 +271,6 @@ public class UINewsletterEntryManager extends UIForm {
       UINewsletterEntryContainer entryContainer ;
       if (popupWindow == null) {
         entryContainer = popupContainer.createUIComponent(UINewsletterEntryContainer.class, null, null);
-        UINewsletterEntryForm newsletterEntryForm = entryContainer.getChild(UINewsletterEntryForm.class);
-        newsletterEntryForm.addNew(false);
         Utils.createPopupWindow(popupContainer, entryContainer, event.getRequestContext(), UINewsletterConstant.ENTRY_FORM_POPUP_WINDOW, 800, 600);
       } else { 
         entryContainer = popupContainer.getChild(UINewsletterEntryContainer.class);
@@ -282,6 +280,8 @@ public class UINewsletterEntryManager extends UIForm {
                                         + uiNewsletterEntryManager.categoryConfig.getName() + "/" 
                                         + uiNewsletterEntryManager.getSubscriptionConfig().getName() + "/" 
                                         + subIds.get(0));
+      UINewsletterEntryForm newsletterEntryForm = entryContainer.getChild(UINewsletterEntryForm.class);
+      newsletterEntryForm.addNew(false);
       event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
     }
   }

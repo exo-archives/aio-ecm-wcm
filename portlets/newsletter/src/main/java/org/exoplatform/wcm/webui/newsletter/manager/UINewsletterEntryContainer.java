@@ -16,6 +16,8 @@
  */
 package org.exoplatform.wcm.webui.newsletter.manager;
 
+import java.util.GregorianCalendar;
+
 import org.exoplatform.ecm.webui.form.field.UIFormCalendarField;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
@@ -70,6 +72,10 @@ public class UINewsletterEntryContainer extends UIContainer {
       this.newsletterPath = newsletterTemplateHandler.getTemplate(NewsLetterUtil.getPortalName(), categoryConfig, null).getPath();
       newsletterEntryForm.addNew(true);
     }else{
+      UIFormDateTimeInput dateTimeInput = newsletterEntryDialogSelector.getChild(UIFormDateTimeInput.class);
+      GregorianCalendar cal = new GregorianCalendar() ;
+      cal.setTime(newsletterManagerService.getEntryHandler().getNewsletterEntryByPath(this.newsletterPath).getNewsletterSentDate()) ;
+      dateTimeInput.setCalendar(cal.getInstance());
       newsletterEntryForm.addNew(false);
     }
     newsletterEntryForm.setNodePath(newsletterPath);

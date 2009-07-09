@@ -192,6 +192,9 @@
 			<UpdateBeforeSave>
 				Please click to update newsletter's infor before send or save! 
 			</UpdateBeforeSave>
+			<DateTimeIsNotNull>
+				Send date is null. Please check again!
+			</DateTimeIsNotNull>
 		</msg>
 	</UINewsletterEntryForm>
 	
