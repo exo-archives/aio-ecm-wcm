@@ -57,7 +57,7 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIPageIterator;
-import org.exoplatform.webui.core.lifecycle.Lifecycle;
+import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
@@ -70,7 +70,7 @@ import org.exoplatform.webui.form.UIForm;
  */
 @ComponentConfigs( {
   @ComponentConfig(
-      lifecycle = Lifecycle.class, 
+      lifecycle = UIFormLifecycle.class, 
       events = {
         @EventConfig(listeners = UIParameterizedContentListViewerForm.RefreshActionListener.class)
       }
@@ -362,10 +362,10 @@ public class UIParameterizedContentListViewerForm extends UIForm {
 
       String repository = params[0];
       String workspace = params[1];
-      ManageableRepository manageableRepository = repositoryService
-      .getRepository(repository);
-      session = sessionProvider.getSession(workspace,
-      manageableRepository);
+
+      ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+      session = sessionProvider.getSession(workspace, manageableRepository);
+
       if (params.length > 2) {
 
         StringBuffer identifier = new StringBuffer();
@@ -394,7 +394,10 @@ public class UIParameterizedContentListViewerForm extends UIForm {
 
       Node treeNode = taxonomyService.getTaxonomyTree(preferenceRepository, preferenceTreeName);
       String categoryPath = parameters.substring(parameters.indexOf("/") + 1);
-      if (preferenceTreeName.equals(categoryPath)) categoryPath = ""; 
+      if (preferenceTreeName.equals(categoryPath)) {
+        categoryPath = "";
+      }
+
       Node categoryNode = treeNode.getNode(categoryPath);
       
       Node newNode = categoryNode.getNode(node.getName());
@@ -403,8 +406,19 @@ public class UIParameterizedContentListViewerForm extends UIForm {
       
       String portalName = getPortalName() + "/";
       String itemPath = path.substring(path.lastIndexOf(portalName) + portalName.length());
+      String backToCategory = "";
+      if (categoryPath.equals("")) {
+        
+        backToCategory = pageNodeSelected;
+      } else {
       
-      link = portalURI + itemPath;
+        backToCategory = itemPath.substring(0, itemPath.indexOf(newNode.getName()) - 1);
+      }
+      
+      System.out.println("\n\n ==================>> Back to category: " + backToCategory);
+
+      link = portalURI + itemPath + "?back" + "=" + "/" + backToCategory;
+
       System.out.println("\n\n ==================>> link: " + link);
       return link;
     } catch (Exception e) {
@@ -521,7 +535,7 @@ public class UIParameterizedContentListViewerForm extends UIForm {
   public void setShowRSSLink(String showRSSLink) {
     this.showRSSLink = showRSSLink;
   }
-  
+
   public String getTemplate() {
     return templatePath;
   }

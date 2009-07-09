@@ -6,7 +6,7 @@
 	import org.exoplatform.wcm.webui.pclv.UIParameterizedContentListViewerForm;
 	import org.exoplatform.wcm.webui.pclv.PCLVViewerConfig;
 %>
-<div id="$uicomponent.id" class="UIParameterizedContentListViewerDefault">
+<div class="UIParameterizedContentListViewerDefault">
  	<%
  		uiform.begin();
 	
@@ -69,7 +69,7 @@
 											<div class="HotNews">
 												<%if (isShowIllustrationImg) {
 													%>
-													<a class="ImageHotNews" href="#demo"><img width="248" alt="#" src="/presentation/skin/ParameterizedContentListViewer/DefaultSkin/images/IIlustrationImages.jpg" /></a>
+													<a class="ImageHotNews" href="javascript:void(0);" onclick="$itemLink"><img width="248" alt="#" src="/presentation/skin/ParameterizedContentListViewer/DefaultSkin/images/IIlustrationImages.jpg" /></a>
 												<%
 												} %>
 												<div class="ContentHotNews">
@@ -79,7 +79,7 @@
 																<%
 																	if (isShowLink) {
 																		%>
-																			<a class="TitleContentHotNews" href="$itemLink">
+																			<a class="TitleContentHotNews" href="javascript:void(0);" onclick="$itemLink">
 																				$itemName
 																			</a>
 																		<%
@@ -116,7 +116,7 @@
 												<% 
 													if (isShowIllustrationImg) {
 														%>
-															<a class="ImageNormalNews" href="#demo"><img width="190" alt="#" src="/presentation/skin/ParameterizedContentListViewer/DefaultSkin/images/IIlustrationImages.jpg" /></a>
+															<a class="ImageNormalNews" href="javascript:void(0);" onclick="$itemLink"><img width="190" alt="#" src="/presentation/skin/ParameterizedContentListViewer/DefaultSkin/images/IIlustrationImages.jpg" /></a>
 														<%
 													} 
 												%>
@@ -128,7 +128,7 @@
 																	<%
 																		if (isShowLink) {
 																			%>
-																				<a class="TitleContentNormalNews" href="$itemLink">$itemName</a>
+																				<a class="TitleContentNormalNews" href="javascript:void(0);" onclick="$itemLink">$itemName</a>
 																			<%
 																		} else {
 																			%>$itemName<%
@@ -169,11 +169,10 @@
 				</div>
 				<div class="CaptionFunc">
 					<% 
-						if (uicomponent.showRefreshButton()) { 
-							String link = uicomponent.event("Refresh");
+						if (uicomponent.showRefreshButton()) {
 							%>				
 								<div class="CaptionRefresh">
-									<a href="$link">$labelRefreshAction</a>
+									<a href="<%=uicomponent.event("Refresh")%>">$labelRefreshAction</a>
 								</div>
 							<% 
 						}
