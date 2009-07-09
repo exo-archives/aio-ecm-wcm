@@ -34,6 +34,7 @@ import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
+import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleException;
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -178,9 +179,14 @@ import org.exoplatform.webui.event.EventListener;
     } else {
       context.put(StageAndVersionPublicationConstant.RUNTIME_MODE, SITE_MODE.EDITING);
     }
-    String lifecyleName = publicationService.getNodeLifecycleName(node);
+    String lifecyleName = null;
+    	try {
+    		lifecyleName = publicationService.getNodeLifecycleName(node);
+			} catch (NotInPublicationLifecycleException e) {}
+		if (lifecyleName == null) return node;
+			
     PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins()
-    .get(lifecyleName);
+      .get(lifecyleName);
     Node viewNode = publicationPlugin.getNodeView(node, context);
     return viewNode;
   }

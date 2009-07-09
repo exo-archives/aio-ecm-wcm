@@ -41,6 +41,20 @@ public class PostEditContentEventListener extends Listener<CmsService,Node> {
 
   public void onEvent(Event<CmsService, Node> event) throws Exception {
     Node currentNode = event.getData();
+    
+    if(currentNode.canAddMixin("publication:webpagesPublication")) {
+    	currentNode.addMixin("publication:webpagesPublication");
+    }
+    if(currentNode.canAddMixin("publication:stateAndVersionBasedPublication")) {
+    	currentNode.addMixin("publication:stateAndVersionBasedPublication");
+    }
+    if(currentNode.canAddMixin("mix:versionable")) {
+    	currentNode.addMixin("mix:versionable");
+    }
+    if (!currentNode.hasProperty("publication:lifecycleName")) {
+    	pservice.enrollNodeInLifecycle(currentNode,StageAndVersionPublicationConstant.LIFECYCLE_NAME);
+    }
+    
     String lifecycle = null;
     try {
       lifecycle = pservice.getNodeLifecycleName(currentNode); 

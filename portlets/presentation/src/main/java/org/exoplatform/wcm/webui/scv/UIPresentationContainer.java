@@ -31,6 +31,7 @@ import org.exoplatform.portal.webui.page.UIPage;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleException;
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.access.PermissionType;
@@ -198,7 +199,11 @@ public class UIPresentationContainer extends UIContainer{
     HashMap<String,Object> context = new HashMap<String, Object>();    
     context.put(StageAndVersionPublicationConstant.RUNTIME_MODE, SITE_MODE.LIVE);    
     PublicationService pubService = getApplicationComponent(PublicationService.class);
-    String lifecycleName = pubService.getNodeLifecycleName(content);
+    String lifecycleName = null;
+    try {
+    	lifecycleName = pubService.getNodeLifecycleName(content);
+		} catch (NotInPublicationLifecycleException e) {}
+		if (lifecycleName == null) return content;
     PublicationPlugin pubPlugin = pubService.getPublicationPlugins().get(lifecycleName);
     return pubPlugin.getNodeView(content, context);
   }

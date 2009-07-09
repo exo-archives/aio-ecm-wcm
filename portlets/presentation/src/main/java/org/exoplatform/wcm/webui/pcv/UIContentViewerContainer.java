@@ -41,6 +41,7 @@ import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.cms.taxonomy.TaxonomyService;
 import org.exoplatform.services.cms.templates.TemplateService;
+import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleException;
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -218,16 +219,26 @@ public class UIContentViewerContainer extends UIContainer {
 			} else {
 				hmContext.put(StageAndVersionPublicationConstant.RUNTIME_MODE, SITE_MODE.EDITING);
 			}
-			String lifeCycleName = publicationService
-					.getNodeLifecycleName(currentNode);
-			PublicationPlugin publicationPlugin = publicationService
-					.getPublicationPlugins().get(lifeCycleName);
-			if (publicationPlugin == null) {
-				renderErrorMessage(context,
-						UIContentViewer.CONTENT_NOT_PRINTED);
-				return;
+			String lifeCycleName = null;
+			 try {
+				 lifeCycleName = publicationService.getNodeLifecycleName(currentNode);
+			} catch (NotInPublicationLifecycleException e) {}
+
+			Node nodeView;
+			if (lifeCycleName == null) 
+				{
+					nodeView = currentNode;
+				}
+			else
+			{
+				PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(lifeCycleName);
+				if (publicationPlugin == null) {
+					renderErrorMessage(context, UIContentViewer.CONTENT_NOT_PRINTED);
+					return;
+				}
+				nodeView = publicationPlugin.getNodeView(currentNode,hmContext);
 			}
-			Node nodeView = publicationPlugin.getNodeView(currentNode,hmContext);
+
       boolean isLiveMode = Utils.isLiveMode();
       if(isLiveMode) {
         if(nodeView == null) {

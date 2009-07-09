@@ -69,8 +69,8 @@ public class XMLDeploymentWithStagingPlugin extends DeploymentPlugin {
       Session session = sessionProvider.getSession(deploymentDescriptor.getTarget().getWorkspace(), repository);
       session.importXML(deploymentDescriptor.getTarget().getNodePath(), inputStream, ImportUUIDBehavior.IMPORT_UUID_CREATE_NEW );
       session.save();
-      Node rootNode = session.getRootNode().getNode(deploymentDescriptor.getTarget().getNodePath().substring(1));
-      publicationService.initializePublication(rootNode);
+//      Node rootNode = session.getRootNode().getNode(deploymentDescriptor.getTarget().getNodePath().substring(1));
+//      publicationService.initializePublication(rootNode);
       if(log.isInfoEnabled()) {
         log.info(this.getName() + " is deployed succesfully in "+deploymentDescriptor.getTarget().getNodePath()+" at " + new Date().toString());
       }
