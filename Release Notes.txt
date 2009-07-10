@@ -1,0 +1,31 @@
+==============================================
+	eXo WCM 1.2 release candidate
+==============================================
+
+- Introduction
+		eXo WCM (Web Content Management) - Keep your Websites under Control
+		With the web 2.0 and all the new technologies available to webmasters, creating and maintaining web sites is becoming 
+	more and more complex. Moreover, the Internet has evolved quickly over the years and websites now rely on many different people 
+	such as webmasters, web designers, content providers and others.
+		eXo WCM helps your company to keep its websites under control by providing a complete solution to build and maintain easily 
+	multiple web sites at a time.
+
+** New Feature
+    * [WCM-1002] - Navigation portlet by category
+    * [WCM-1594] - Parameterized Content List Viewer Portlet
+    * [WCM-1019] - Newsletter management
+    * [WCM-1455] - Form generator portlet
+    * [WCM-1599] - Category navigation portlet
+
+- System Requirements
+    + Web Browser: IE6, IE7, FF2, FF3, Safari, Google Chrome. Best for Frirefox.
+	+ JVM: version 1.5.0_xx only
+	+ Application Server : Tomcat, JBoss, Jonas, Websphere
+	+ Building Tools: Maven 2.0.6 and up
+
+- Other resources and links
+    + Company site        http://www.exoplatform.com
+    + Community JIRA      http://jira.exoplatform.org
+    + Comminity site      http://www.exoplatform.org
+    + Developers wiki     http://wiki.exoplatform.org
+    + Documentation       http://docs.exoplatform.org 
