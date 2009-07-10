@@ -194,6 +194,7 @@ public class UICategories extends UIContainer {
                                                                               subscriptionName));
       newsletterManager.init();
       newsletterManagerPortlet.getChild(UICategories.class).setRendered(false);
+      newsletterManagerPortlet.getChild(UISubscriptions.class).setRendered(false);
       event.getRequestContext().addUIComponentToUpdateByAjax(newsletterManagerPortlet);
     }
   }

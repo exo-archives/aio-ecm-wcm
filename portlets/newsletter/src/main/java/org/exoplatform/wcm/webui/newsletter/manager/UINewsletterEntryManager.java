@@ -32,7 +32,9 @@ import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 import org.exoplatform.services.wcm.newsletter.config.NewsletterManagerConfig;
+import org.exoplatform.services.wcm.newsletter.handler.NewsletterCategoryHandler;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterEntryHandler;
+import org.exoplatform.services.wcm.newsletter.handler.NewsletterSubscriptionHandler;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterTemplateHandler;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.newsletter.UINewsletterConstant;
@@ -149,7 +151,9 @@ public class UINewsletterEntryManager extends UIForm {
       UINewsletterEntryManager uiNewsletterEntryManager = event.getSource();
       UINewsletterManagerPortlet newsletterManagerPortlet = uiNewsletterEntryManager.getAncestorOfType(UINewsletterManagerPortlet.class);
       UISubscriptions uiSubscriptions = newsletterManagerPortlet.getChild(UISubscriptions.class);
+      newsletterManagerPortlet.getChild(UICategories.class).setRendered(false);
       uiSubscriptions.setRendered(true);
+      uiSubscriptions.setCategory(uiNewsletterEntryManager.categoryConfig);
       uiNewsletterEntryManager.setRendered(false);
       event.getRequestContext().addUIComponentToUpdateByAjax(newsletterManagerPortlet);
     }
