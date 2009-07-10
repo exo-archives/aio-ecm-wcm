@@ -40,20 +40,11 @@ public class PostEditContentEventListener extends Listener<CmsService,Node> {
   }
 
   public void onEvent(Event<CmsService, Node> event) throws Exception {
-    Node currentNode = event.getData();
-    
-    if(currentNode.canAddMixin("publication:webpagesPublication")) {
-    	currentNode.addMixin("publication:webpagesPublication");
-    }
-    if(currentNode.canAddMixin("publication:stateAndVersionBasedPublication")) {
-    	currentNode.addMixin("publication:stateAndVersionBasedPublication");
-    }
-    if(currentNode.canAddMixin("mix:versionable")) {
-    	currentNode.addMixin("mix:versionable");
-    }
-    if (!currentNode.hasProperty("publication:lifecycleName")) {
-    	pservice.enrollNodeInLifecycle(currentNode,StageAndVersionPublicationConstant.LIFECYCLE_NAME);
-    }
+  	Node currentNode = event.getData();
+
+  	if (!pservice.isNodeEnrolledInLifecycle(currentNode)) {
+  		pservice.enrollNodeInLifecycle(currentNode,StageAndVersionPublicationConstant.LIFECYCLE_NAME);
+  	}
     
     String lifecycle = null;
     try {
@@ -66,6 +57,7 @@ public class PostEditContentEventListener extends Listener<CmsService,Node> {
     String state = pservice.getCurrentState(currentNode);
     if(!StageAndVersionPublicationConstant.ENROLLED_STATE.equalsIgnoreCase(state))
       return;
+    
     pservice.changeState(currentNode,StageAndVersionPublicationConstant.DRAFT_STATE,new HashMap<String,String>());
   }
 
