@@ -184,6 +184,14 @@ public class UIParameterizedContentListViewerContainer extends UIContainer {
 
     String repository = portletPreferences.getValue(UIParameterizedContentListViewerConstant.REPOSITORY, null);
     String worksapce = portletPreferences.getValue(UIParameterizedContentListViewerConstant.WORKSPACE, null);
+    String orderType = portletPreferences.getValue(UIParameterizedContentListViewerConstant.ORDER_TYPE, null);
+    String orderBy = portletPreferences.getValue(UIParameterizedContentListViewerConstant.ORDER_BY, null);
+    if (orderType == null) orderType = "DESC";
+    if (orderBy == null) orderBy = "exo:dateCreated";
+    
+    String orderQuery = " ORDER BY ";
+    orderQuery += orderBy + " " + orderType;
+    
     ThreadLocalSessionProviderService threadLocalSessionProviderService = ThreadLocalSessionProviderService.class
     .cast(ExoContainerContext.getCurrentContainer()
     .getComponentInstanceOfType(ThreadLocalSessionProviderService.class));
@@ -193,7 +201,7 @@ public class UIParameterizedContentListViewerContainer extends UIContainer {
     Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(worksapce, manageableRepository);
     QueryManager queryManager = session.getWorkspace().getQueryManager();
     StringBuffer sqlQuery = new StringBuffer("select * from exo:taxonomyLink where jcr:path LIKE '").append(categoryPath).append("/%'")
-                                 .append(" AND NOT jcr:path LIKE '").append(categoryPath).append("/%/%'");
+                                 .append(" AND NOT jcr:path LIKE '").append(categoryPath).append("/%/%'").append(" " + orderQuery);
     Query query = queryManager.createQuery(sqlQuery.toString(), Query.SQL);
     QueryResult queryResult = query.execute();
     NodeIterator iterator = queryResult.getNodes();

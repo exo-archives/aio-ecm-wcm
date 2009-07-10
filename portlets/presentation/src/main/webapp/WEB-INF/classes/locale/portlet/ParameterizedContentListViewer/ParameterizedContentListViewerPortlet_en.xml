@@ -9,7 +9,7 @@
   	<title>Select folder to display its children documents or webcontent</title>
   </UIParameterizedManagerPopupWindow>
   <UIParameterizedManagementForm>
-  	<title>PCLV Edit Mode</title>
+  	<title>Parameterized Content List Viewer Edit Mode</title>
     <action>
       <Save>Save</Save>
       <Cancel>Cancel</Cancel>
@@ -17,6 +17,11 @@
       <Up>Up</Up>      
       <Delete>Delete</Delete>            
     </action>
+   	<msg>
+   		<saving-success>
+   			Parameterized Content List Viewer has been updated!!!
+   		</saving-success>
+   	</msg>
     <label>
       <ContentSelectionBlock>Contents selection</ContentSelectionBlock>
       <DisplaySettingBlock>Display setting</DisplaySettingBlock>    

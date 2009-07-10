@@ -128,13 +128,7 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
 
   public static final String ORDER_BY                          = "OrderBy";
 
-  public static final String ORDER_BY_TITLE                    = "OrderByTitle";
-
   public static final String ORDER_BY_DATE_CREATED             = "OrderByDateCreated";
-
-  public static final String ORDER_BY_DATE_MODIFIED            = "OrderByDateModified";
-
-  public static final String ORDER_BY_DATE_PUBLISHED           = "OrderByDatePublished";
 
   public static final String ORDER_TYPES                       = "OrderTypes";
 
@@ -166,10 +160,7 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
     }
 
     List<SelectItemOption<String>> orderByOptions = new ArrayList<SelectItemOption<String>>();
-    orderByOptions.add(new SelectItemOption<String>(bundle.getString(rootBundleKey + ORDER_BY_TITLE), "exo:title"));
     orderByOptions.add(new SelectItemOption<String>(bundle.getString(rootBundleKey + ORDER_BY_DATE_CREATED), "exo:dateCreated"));
-    orderByOptions.add(new SelectItemOption<String>(bundle.getString(rootBundleKey + ORDER_BY_DATE_MODIFIED), "exo:dateModified"));
-    orderByOptions.add(new SelectItemOption<String>(bundle.getString(rootBundleKey + ORDER_BY_DATE_PUBLISHED),"publication:liveDate"));  
     UIFormSelectBox orderBySelectBox = new UIFormSelectBox(ORDER_BY, ORDER_BY, orderByOptions);
     String orderByPref = portletPreferences.getValue(UIParameterizedContentListViewerConstant.ORDER_BY, null);
     orderBySelectBox.setValue(orderByPref);
@@ -182,6 +173,8 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
     UIFormStringInput headerInput = new UIFormStringInput(HEADER, HEADER, null);
     
     if (!Boolean.parseBoolean(autoDetected)) {
+      headerInput.setValue("");
+
       String headerValue = portletPreferences.getValue(UIParameterizedContentListViewerConstant.HEADER, null);
       headerInput.setValue(headerValue);
     } else {
@@ -386,7 +379,7 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
       
       String repository = manageableRepository.getConfiguration().getName();
       String workspace = manageableRepository.getConfiguration().getDefaultWorkspaceName();
-      String header = uiParameterizedManagementForm.getUIStringInput(UIParameterizedManagementForm.HEADER).getValue();
+      
       String formViewTemplatePath = uiParameterizedManagementForm.getUIFormSelectBox(UIParameterizedManagementForm.FORM_VIEW_TEMPLATES_SELECTOR).getValue();
       String paginatorTemplatePath = uiParameterizedManagementForm.getUIFormSelectBox(UIParameterizedManagementForm.PAGINATOR_TEMPLATES_SELECTOR).getValue();
       String itemsPerPage = uiParameterizedManagementForm.getUIStringInput(UIParameterizedManagementForm.ITEMS_PER_PAGE_INPUT).getValue();      
@@ -403,8 +396,14 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
       String showMoreLink = uiParameterizedManagementForm.getUIFormCheckBoxInput(UIParameterizedManagementForm.SHOW_MORE_LINK).isChecked() ? "true" : "false";
       String showRssLink = uiParameterizedManagementForm.getUIFormCheckBoxInput(UIParameterizedManagementForm.SHOW_RSS_LINK).isChecked() ? "true" : "false";
       String autoDetect = uiParameterizedManagementForm.getUIFormCheckBoxInput(UIParameterizedManagementForm.AUTO_DETECT).isChecked() ? "true" : "false";
+      String header = "";
+      if(!Boolean.parseBoolean(autoDetect)) {
+        header = uiParameterizedManagementForm.getUIStringInput(UIParameterizedManagementForm.HEADER).getValue();
+      } 
+
+      header = uiParameterizedManagementForm.getHeader();
       String targetPage = uiParameterizedManagementForm.getUIStringInput(UIParameterizedManagementForm.TARGET_PAGE_INPUT).getValue();
-      
+
       portletPreferences.setValue(UIParameterizedContentListViewerConstant.PREFERENCE_REPOSITORY, repository);
       portletPreferences.setValue(UIParameterizedContentListViewerConstant.WORKSPACE, workspace);
       portletPreferences.setValue(UIParameterizedContentListViewerConstant.FORM_VIEW_TEMPLATE_PATH, formViewTemplatePath);

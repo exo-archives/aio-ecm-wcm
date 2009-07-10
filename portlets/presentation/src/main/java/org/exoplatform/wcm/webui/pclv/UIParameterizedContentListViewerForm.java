@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.jcr.Node;
+import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
@@ -226,7 +227,9 @@ public class UIParameterizedContentListViewerForm extends UIForm {
    * @throws Exception the exception
    */
   public String getTitle(Node node) throws Exception {
-    return node.hasProperty("exo:title") ? node.getProperty("exo:title").getValue().getString() : node.getName();
+    
+    Node currentNode = this.getCurrentNode(node);
+    return currentNode.hasProperty("exo:title") ? currentNode.getProperty("exo:title").getValue().getString() : currentNode.getName();
   }
 
   /**
@@ -240,15 +243,21 @@ public class UIParameterizedContentListViewerForm extends UIForm {
    */
   public String getSummary(Node node) throws Exception {
 
-    Session session = node.getSession();
-    Node newNode = session.getNodeByUUID(node.getProperty("exo:uuid").getValue().getString());
-    if(newNode.hasProperty("exo:summary")) {
+    Node currentNode = this.getCurrentNode(node);
+    if(currentNode.hasProperty("exo:summary")) {
 
-      return newNode.getProperty("exo:summary").getValue().getString();
+      return currentNode.getProperty("exo:summary").getValue().getString();
     }
     return "In a general manner, it's a beginning on a Restful XML oriented exposure. In a near future, the CLV could access to contents not directly by java, but by a rest call. By doing that, we could open the wcm platform to other technology and front-end (gagdet, php platform by mashup, etc).In a general manner, it's a beginning on a Restful XML oriented exposure. In a near future, the CLV could access to contents not directly by java, but by a rest call.";
   }
 
+  private Node getCurrentNode(Node node) throws RepositoryException {
+    
+    Session session = node.getSession();
+    Node newNode = session.getNodeByUUID(node.getProperty("exo:uuid").getValue().getString());
+    
+    return newNode;
+  }
   /**
    * Gets the created date.
    * 
@@ -276,13 +285,15 @@ public class UIParameterizedContentListViewerForm extends UIForm {
    * @throws Exception the exception
    */
   public String getIllustrativeImage(Node node) throws Exception {
+    
+    Node currentNode = this.getCurrentNode(node);
     WebSchemaConfigService schemaConfigService = getApplicationComponent(WebSchemaConfigService.class);
     WebContentSchemaHandler contentSchemaHandler = schemaConfigService.getWebSchemaHandlerByType(WebContentSchemaHandler.class);
     Node illustrativeImage = null;
     RESTImagesRendererService imagesRendererService = getApplicationComponent(RESTImagesRendererService.class);
     String uri = null;
     try {
-      illustrativeImage = contentSchemaHandler.getIllustrationImage(node);
+      illustrativeImage = contentSchemaHandler.getIllustrationImage(currentNode);
       uri = imagesRendererService.generateURI(illustrativeImage);
     } catch (Exception e) {            
     }
