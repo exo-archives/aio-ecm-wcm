@@ -1,142 +1,142 @@
-.UIFastContentCreatorPortlet {
+.UIFCCPortlet {
 	background: white;
 	padding: 10px ;
 }
 
-.UIFastContentCreatorPortlet .SelectPathIcon {
+.UIFCCPortlet .SelectPathIcon {
 	background: url('DefaultSkin/SearchPath.gif') no-repeat;
 	width: 16px;
 	height: 16px;
 	cursor: pointer;
 }
 
-.UIFastContentCreatorPortlet .SelectPath24x24Icon {
+.UIFCCPortlet .SelectPath24x24Icon {
 	background: url('DefaultSkin/SearchPath.gif') no-repeat;
 	width: 16px;
 	height: 16px;
 	cursor: pointer;
 }
 
-.UIFastContentCreatorPortlet .AddRootNodeIcon {
+.UIFCCPortlet .AddRootNodeIcon {
 	background: url('DefaultSkin/SelectPath.gif') no-repeat;
 	width: 16px;
 	height: 16px;
 	cursor: pointer;
 }
 
-.UIFastContentCreatorPortlet .Edit16x16Icon {
+.UIFCCPortlet .Edit16x16Icon {
 	background: url('DefaultSkin/EditAction.gif') no-repeat;
 	width: 16px;
 	height: 16px;
 	cursor: pointer;
 }
 
-.UIFastContentCreatorPortlet .Delete16x16Icon {
+.UIFCCPortlet .Delete16x16Icon {
 	background: url('DefaultSkin/DeleteAction.gif') no-repeat;
 	width: 16px;
 	height: 16px;
 	cursor: pointer;
 }
 
-.UIFastContentCreatorPortlet .MsgLable {
+.UIFCCPortlet .MsgLable {
 	text-align: center;
 	line-height: 40px;
 	color: #E80C00;
 	border: 1px solid red;
 }
 
-.UIFastContentCreatorPortlet .UITabPane .TabPaneContent {
+.UIFCCPortlet .UITabPane .TabPaneContent {
   width: 350px;
   margin: auto;
 }
 
-.UIFastContentCreatorPortlet .UIFormGrid {
+.UIFCCPortlet .UIFormGrid {
 	width: 100%;
 }
 
-.UIFastContentCreatorPortlet .UIFormGrid .FieldLabel {
+.UIFCCPortlet .UIFormGrid .FieldLabel {
 	width: 120px;
 }
 
-.UIFastContentCreatorPortlet .MultiValueContainer a  {
+.UIFCCPortlet .MultiValueContainer a  {
   margin: 0px 5px;
 }
 
-.UIFastContentCreatorPortlet .UIFormUploadInput .ProgressBarFrame { 
+.UIFCCPortlet .UIFormUploadInput .ProgressBarFrame { 
 	width: 330px;
 	overflow: hidden;
 	margin: 0px;
 }
 
-.UIFastContentCreatorPortlet .UIFormUploadInput .SelectFileFrame { 
+.UIFCCPortlet .UIFormUploadInput .SelectFileFrame { 
 	width: 330px;
 	overflow: hidden;
 	margin: 0px;
 }
 
-.UIFastContentCreatorPortlet .UIFormUploadInput  .FileNameLabel {
+.UIFCCPortlet .UIFormUploadInput  .FileNameLabel {
 	width: auto;	
 }
 
-.UIFastContentCreatorPortlet .UIFastContentCreatorConfig .HorizontalLayout .UIFormInputSet .AddIcon16x16{
+.UIFCCPortlet .UIFCCConfig .HorizontalLayout .UIFormInputSet .AddIcon16x16{
 	margin-left: 5px;
 	float: none;
 }
 
-.UIFastContentCreatorPortlet .UIFastContentCreatorConfig .FieldComponent .actionInput .FieldComponent {
+.UIFCCPortlet .UIFCCConfig .FieldComponent .actionInput .FieldComponent {
 	padding: 4px 0px;
 }
 
-.UIFastContentCreatorPortlet .UIFastContentCreatorConfig .HorizontalLayout .FormContainer {
+.UIFCCPortlet .UIFCCConfig .HorizontalLayout .FormContainer {
 	padding: 0;
 	margin: auto;
 }
 
-.UIFastContentCreatorPortlet .UIFastContentCreatorConfig .HorizontalLayout .UIFormInputSet {
+.UIFCCPortlet .UIFCCConfig .HorizontalLayout .UIFormInputSet {
 	margin: auto;
 	padding: 0px;
 	width: 100%;
 }
 
-.UIFastContentCreatorPortlet .UIFastContentCreatorConfig .FieldComponent .actionInput {
+.UIFCCPortlet .UIFCCConfig .FieldComponent .actionInput {
 	width: 100%;
 	padding: 0px;
 }
 
-.UIFastContentCreatorPortlet .UIFastContentCreatorConfig .UIForm .HorizontalLayout input {
+.UIFCCPortlet .UIFCCConfig .UIForm .HorizontalLayout input {
 	width: 233px;
 }
 
-.UIFastContentCreatorPortlet .UIForm td.FieldComponent {
+.UIFCCPortlet .UIForm td.FieldComponent {
   padding: 4px 0px;
 }
 
-.UIFastContentCreatorPortlet .UIForm .rootNodeInfo td.FieldComponent {
+.UIFCCPortlet .UIForm .rootNodeInfo td.FieldComponent {
 	padding: 0px;
 }
 
-.UIFastContentCreatorPortlet .UIOneNodePathSelector .rootNodeInfo .UIFormInputSet {
+.UIFCCPortlet .UIOneNodePathSelector .rootNodeInfo .UIFormInputSet {
 	padding: 0px;
 }
 
-.UIFastContentCreatorPortlet .UIFormInputSet .UIFormInputSetWithAction .UIFormGrid td.FieldLabel {
+.UIFCCPortlet .UIFormInputSet .UIFormInputSetWithAction .UIFormGrid td.FieldLabel {
   padding: 0px 4px 0px 4px;
   vertical-align: middle;
 }
 
-.UIFastContentCreatorActionContainer .UIFormWithTitle {
+.UIFCCActionContainer .UIFormWithTitle {
 	width: auto;
 }
 
-.UIFastContentCreatorActionContainer .UIFormWithTitle input {
+.UIFCCActionContainer .UIFormWithTitle input {
 	width: 220px;
 }
 
-.UIFastContentCreatorActionContainer .UIFormWithTitle select {
+.UIFCCActionContainer .UIFormWithTitle select {
 	width: 226px;
 }
 
-.UIFastContentCreatorActionContainer .UIFormWithTitle textarea {
+.UIFCCActionContainer .UIFormWithTitle textarea {
 	width: 224px;
 }
 

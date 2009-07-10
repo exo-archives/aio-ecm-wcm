@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bundle>
 	<!-- View mode -->
-	<UIFastContentCreatorForm>
+	<UIFCCForm>
     <msg>
       <name-not-allowed>Ce nom n'est pas autorisée.</name-not-allowed>
       <in-versioning>Besoin de courant à la caisse avant d'ajouter un nouveau noeud noeud</in-versioning>
@@ -18,30 +18,30 @@
       <Save>Sauver</Save>
       <Cancel>Annuler</Cancel>
     </action>
-  </UIFastContentCreatorForm>
+  </UIFCCForm>
 	
 
 
 	<!-- Edit mode -->
-  <UIFastContentCreatorConfig>
+  <UIFCCConfig>
 
 
 
     <label>
 			<select-repository>Sélectionnez référentiel</select-repository>
-			<UIFastContentCreatorSaveLocationField>Enregistrer le lieu</UIFastContentCreatorSaveLocationField>
-      <UIFastContentCreatorRepositoryFormSelectBox>Sélectionnez référentiel</UIFastContentCreatorRepositoryFormSelectBox>
-      <UIFastContentCreatorWorkspaceFormSelectBox>Sélectionnez travail</UIFastContentCreatorWorkspaceFormSelectBox>
-			<UIFastContentCreatorTemplateField>Les options du modèle</UIFastContentCreatorTemplateField>
-      <UIFastContentCreatorLocationFormInputAction>Lieu à mettre</UIFastContentCreatorLocationFormInputAction>
-			<UIFastContentCreatorLocationFormStringInput></UIFastContentCreatorLocationFormStringInput>
-      <UIFastContentCreatorTemplateFormSelectBox>Sélectionner un modèle</UIFastContentCreatorTemplateFormSelectBox>
-			<UIFastContentCreatorSaveFormStringInput>Personnaliser le bouton Enregistrer</UIFastContentCreatorSaveFormStringInput>
-			<UIFastContentCreatorMessageFormTextareaInput>Custom mettre message</UIFastContentCreatorMessageFormTextareaInput>
-      <UIFastContentCreatorRedirectFormCheckboxInput>Redirect</UIFastContentCreatorRedirectFormCheckboxInput>
-			<UIFastContentCreatorRedirectPathFormStringInput>Redirect chemin</UIFastContentCreatorRedirectPathFormStringInput>
-			<UIFastContentCreatorActionField>Actions</UIFastContentCreatorActionField>
-			<UIFastContentCreatorActionList></UIFastContentCreatorActionList>
+			<UIFCCSaveLocationField>Enregistrer le lieu</UIFCCSaveLocationField>
+      <UIFCCRepositoryFormSelectBox>Sélectionnez référentiel</UIFCCRepositoryFormSelectBox>
+      <UIFCCWorkspaceFormSelectBox>Sélectionnez travail</UIFCCWorkspaceFormSelectBox>
+			<UIFCCTemplateField>Les options du modèle</UIFCCTemplateField>
+      <UIFCCLocationFormInputAction>Lieu à mettre</UIFCCLocationFormInputAction>
+			<UIFCCLocationFormStringInput></UIFCCLocationFormStringInput>
+      <UIFCCTemplateFormSelectBox>Sélectionner un modèle</UIFCCTemplateFormSelectBox>
+			<UIFCCSaveFormStringInput>Personnaliser le bouton Enregistrer</UIFCCSaveFormStringInput>
+			<UIFCCMessageFormTextareaInput>Custom mettre message</UIFCCMessageFormTextareaInput>
+      <UIFCCRedirectFormCheckboxInput>Redirect</UIFCCRedirectFormCheckboxInput>
+			<UIFCCRedirectPathFormStringInput>Redirect chemin</UIFCCRedirectPathFormStringInput>
+			<UIFCCActionField>Actions</UIFCCActionField>
+			<UIFCCActionList></UIFCCActionList>
 
 
 
@@ -58,18 +58,18 @@
     <action>
       <Save>Sauver</Save>
     </action>
-  </UIFastContentCreatorConfig>
+  </UIFCCConfig>
   
-	<UIFastContentCreatorLocationFormInputAction>
+	<UIFCCLocationFormInputAction>
 
 
 		<title>
 			<SelectPath>Sélectionnez chemin</SelectPath>
 
 		</title>
-	</UIFastContentCreatorLocationFormInputAction>
+	</UIFCCLocationFormInputAction>
 
-	<UIFastContentCreatorActionList>
+	<UIFCCActionList>
 		<header>
 
 
@@ -105,14 +105,14 @@
       <access-denied>Accès refusé! Vous n'avez pas la permission de le faire assez de cette action.</access-denied>
 
     </msg>
-	</UIFastContentCreatorActionList>
+	</UIFCCActionList>
 	
 	<!-- Select path popup -->
-	<UIFastContentCreatorSelectorPopupWindow>
+	<UIFCCSelectorPopupWindow>
     <title>
       <UIOneNodePathSelector>Sélectionnez l'emplacement</UIOneNodePathSelector>
     </title>
-  </UIFastContentCreatorSelectorPopupWindow>	
+  </UIFCCSelectorPopupWindow>	
 	
 	<UIWorkspaceList>
     <label>
@@ -140,13 +140,13 @@
   </UITreeList>
 	
 	<!-- Add action popup -->
-	<UIFastContentCreatorActionPopupWindow>
+	<UIFCCActionPopupWindow>
 		<title>
-			<UIFastContentCreatorActionContainer>Ajouter la forme d'action</UIFastContentCreatorActionContainer>
+			<UIFCCActionContainer>Ajouter la forme d'action</UIFCCActionContainer>
 		</title>
-	</UIFastContentCreatorActionPopupWindow>
+	</UIFCCActionPopupWindow>
 	
-	<UIFastContentCreatorActionForm>
+	<UIFCCActionForm>
 		<title>Ajouter / Éditer une action</title>
 		<action>
 			<Save>Sauver</Save>
@@ -166,9 +166,9 @@
       <validator>Validator</validator>
       <destPath>En chemin</destPath>
     </validator>
-	</UIFastContentCreatorActionForm>
+	</UIFCCActionForm>
 		
-	<UIFastContentCreatorActionTypeForm>
+	<UIFCCActionTypeForm>
 		<label>
 			<actionType>Créer une action de type</actionType>
 		</label>
@@ -176,7 +176,7 @@
   		<not-support>Impossible de charger le modèle de '{0}'.</not-support>
   		<do-not-permission>Vous n'avez pas la permission de charger modèle de '{0}'.</do-not-permission>
   	</msg>
-	</UIFastContentCreatorActionTypeForm>
+	</UIFCCActionTypeForm>
 	
   <EmptyFieldValidator>
     <msg>

@@ -10,14 +10,14 @@
 	import org.exoplatform.webui.core.UIGrid;
 	UIPageIterator uiIterator = uicomponent.getChild(UIGrid.class).getUIPageIterator() ;
 %>
-<div class="UIFastContentCreatorActionList" id="$uicomponent.id">
+<div class="$uicomponent.id" id="$uicomponent.id">
 	<table class="UIGrid">
 		<thead>
 	    	<tr>
-	      		<th><%=_ctx.appRes("UIFastContentCreatorActionList.header.name")%></th>
-			    <th><%=_ctx.appRes("UIFastContentCreatorActionList.header.description")%></th>
-	 		    <th><%=_ctx.appRes("UIFastContentCreatorActionList.header.instanceOf")%></th>
-	 		    <th><%=_ctx.appRes("UIFastContentCreatorActionList.header.action")%></th>
+	      		<th><%=_ctx.appRes("UIFCCActionList.header.name")%></th>
+			    <th><%=_ctx.appRes("UIFCCActionList.header.description")%></th>
+	 		    <th><%=_ctx.appRes("UIFCCActionList.header.instanceOf")%></th>
+	 		    <th><%=_ctx.appRes("UIFCCActionList.header.action")%></th>
 	    	</tr>
 	  	</thead>
 	  	<tbody>
@@ -26,7 +26,7 @@
       				%>
 	    				<tr>
 	      					<td style="font-style:italic; color: #FF5604; text-align: center;" colspan="4">
-	        					<%=_ctx.appRes("UIFastContentCreatorActionList.msg.empty")%>
+	        					<%=_ctx.appRes("UIFCCActionList.msg.empty")%>
 	      					</td>
 	    				</tr>  
 	  				<%
@@ -93,7 +93,7 @@
 						<div class="ButtonLeft">
 						  	<div class="ButtonRight">
 							  	<div class="ButtonMiddle">
-									<a href="javascript:void(0);"><%=_ctx.appRes("UIFastContentCreatorActionList.action.Add")%></a>
+									<a href="javascript:void(0);"><%=_ctx.appRes("UIFCCActionList.action.Add")%></a>
 					      		</div>
 					    	</div>
 				    	</div>

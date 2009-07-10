@@ -58,7 +58,6 @@ import org.exoplatform.upload.UploadService;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -104,8 +103,7 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
   private JCRResourceResolver jcrTemplateResourceResolver_ ;
 
   public UIFCCForm() throws Exception {
-    PortletPreferences portletPreferences = UIFCCUtils.getPortletPreferences();
-    setActions(new String[]{portletPreferences.getValue(UIFCCConstant.PREFERENCE_SAVE_BUTTON, "")}) ;
+    setActions(new String[]{"Save"}) ;
   }
   
   public List<String> getListTaxonomy() {

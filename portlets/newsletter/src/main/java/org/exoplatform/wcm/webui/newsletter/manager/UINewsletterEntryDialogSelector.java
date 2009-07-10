@@ -184,13 +184,14 @@ public class UINewsletterEntryDialogSelector extends UIForm {
       UIFormDateTimeInput formDateTimeInput = newsletterEntryDialogSelector.getChild(UIFormDateTimeInput.class);
       Calendar calendar = formDateTimeInput.getCalendar();
       UINewsletterEntryContainer entryContainer = newsletterEntryDialogSelector.getAncestorOfType(UINewsletterEntryContainer.class);
+      UIApplication uiApp = entryContainer.getAncestorOfType(UIApplication.class);
       if(calendar == null || formDateTimeInput.getValue().trim().length() < 1){
-        UIApplication uiApp = entryContainer.getAncestorOfType(UIApplication.class);
         uiApp.addMessage(new ApplicationMessage("UINewsletterEntryForm.msg.DateTimeIsNotNull", null, ApplicationMessage.WARNING));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       }
       entryContainer.setUpdated(true);
+      uiApp.addMessage(new ApplicationMessage("UINewsletterEntryForm.msg.UpdateInformationSuccessful", null, ApplicationMessage.INFO));
       event.getRequestContext().addUIComponentToUpdateByAjax(newsletterEntryDialogSelector) ;
     }
   }

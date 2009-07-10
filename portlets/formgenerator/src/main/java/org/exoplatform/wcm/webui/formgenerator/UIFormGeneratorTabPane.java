@@ -21,39 +21,25 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.jcr.Node;
-import javax.jcr.NodeIterator;
 import javax.jcr.PropertyType;
-import javax.jcr.Session;
-import javax.jcr.nodetype.NodeDefinition;
-import javax.jcr.nodetype.NodeType;
-import javax.jcr.nodetype.NodeTypeManager;
 import javax.jcr.version.OnParentVersionAction;
 
-import org.exoplatform.services.cms.BasePath;
-import org.exoplatform.services.cms.impl.DMSConfiguration;
-import org.exoplatform.services.cms.impl.DMSRepositoryConfiguration;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.core.nodetype.ExtendedNodeTypeManager;
 import org.exoplatform.services.jcr.core.nodetype.NodeDefinitionValue;
 import org.exoplatform.services.jcr.core.nodetype.NodeTypeValue;
 import org.exoplatform.services.jcr.core.nodetype.PropertyDefinitionValue;
-import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
-import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
-import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIFormInputSet;
-import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTabPane;
 import org.exoplatform.webui.form.UIFormUploadInput;
@@ -88,43 +74,13 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
     UIFormStringInput nameFormStringInput = new UIFormStringInput(UIFormGeneratorConstant.NAME_FORM_STRING_INPUT, UIFormGeneratorConstant.NAME_FORM_STRING_INPUT, null); 
     nameFormStringInput.addValidator(MandatoryValidator.class);
     formGeneratorGeneralTab.addUIFormInput(nameFormStringInput);
-    List<SelectItemOption<String>> listNodetype = getAllDocumentNodetypes();
-    formGeneratorGeneralTab.addUIFormInput(new UIFormSelectBox(UIFormGeneratorConstant.NODETYPE_FORM_SELECTBOX, UIFormGeneratorConstant.NODETYPE_FORM_SELECTBOX, listNodetype));
     formGeneratorGeneralTab.addUIFormInput(new UIFormWYSIWYGInput(UIFormGeneratorConstant.DESCRIPTION_FORM_WYSIWYG_INPUT, UIFormGeneratorConstant.DESCRIPTION_FORM_WYSIWYG_INPUT, null));
     formGeneratorGeneralTab.addUIFormInput(new UIFormUploadInput(UIFormGeneratorConstant.ICON_FORM_UPLOAD_INPUT, UIFormGeneratorConstant.ICON_FORM_UPLOAD_INPUT));
     addUIFormInput(formGeneratorGeneralTab);
     
     addChild(UIFormGeneratorDnDTab.class, null, null);
     
-    // Active this when working with 1.3 
-//    UIFormInputSet formGeneratorOptionsTab = new UIFormInputSet(UIFormGeneratorConstant.FORM_GENERATOR_OPTIONS_TAB);
-//    formGeneratorOptionsTab.addUIFormInput(new UIFormCheckBoxInput<String>(UIFormGeneratorConstant.VOTE_FORM_CHECKBOX_INPUT, UIFormGeneratorConstant.VOTE_FORM_CHECKBOX_INPUT, null));
-//    formGeneratorOptionsTab.addUIFormInput(new UIFormCheckBoxInput<String>(UIFormGeneratorConstant.COMMENT_FORM_CHECKBOX_INPUT, UIFormGeneratorConstant.COMMENT_FORM_CHECKBOX_INPUT, null));
-//    addUIFormInput(formGeneratorOptionsTab);
-
     setSelectedTab(formGeneratorGeneralTab.getId());
-  }
-  
-  private List<SelectItemOption<String>> getAllDocumentNodetypes() throws Exception {
-    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>();
-    String preferenceRepository = UIFormGeneratorUtils.getPreferenceRepository();
-    RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
-    ManageableRepository manageableRepository = repositoryService.getRepository(preferenceRepository);
-    DMSConfiguration dmsConfiguration = getApplicationComponent(DMSConfiguration.class);
-    DMSRepositoryConfiguration dmsRepoConfig = dmsConfiguration.getConfig(preferenceRepository);
-    ThreadLocalSessionProviderService threadLocalSessionProviderService = getApplicationComponent(ThreadLocalSessionProviderService.class);
-    Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(dmsRepoConfig.getSystemWorkspace(), manageableRepository);
-    NodeHierarchyCreator nodeHierarchyCreator = getApplicationComponent(NodeHierarchyCreator.class);
-    String templateBasePath = nodeHierarchyCreator.getJcrPath(BasePath.CMS_TEMPLATES_PATH);
-    Node templateBaseNode = (Node)session.getItem(templateBasePath);
-    NodeIterator templateIter = templateBaseNode.getNodes();
-    while(templateIter.hasNext()) {
-      Node template = templateIter.nextNode();
-      if (template.getProperty(TemplateService.DOCUMENT_TEMPLATE_PROP).getBoolean()) {
-        options.add(new SelectItemOption<String>(template.getName()));
-      }
-    }
-    return options;
   }
   
   private int getNumberRequireType(String formType, int size) {
@@ -146,7 +102,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
     return "exo:fg_p_" + inputName;
   }
   
-  private void addNodetype(WebuiRequestContext requestContext, String repository, String nodetypeName, String supertypeName, List<UIFormGeneratorInputBean> formBeans) throws Exception {
+  private void addNodetype(WebuiRequestContext requestContext, String repository, String nodetypeName, List<UIFormGeneratorInputBean> formBeans) throws Exception {
     NodeTypeValue newNodeType = new NodeTypeValue() ;                             
     newNodeType.setName(nodetypeName) ;
     // TODO: Need update in 1.3
@@ -155,11 +111,8 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
     newNodeType.setMixin(false) ;
     // TODO: Need update in 1.3
     newNodeType.setOrderableChild(false) ;
-
-    // TODO: Need update in 1.3, maybe support multi-supertypes
-    List<String> supertypes = new ArrayList<String>();
-    supertypes.add(supertypeName);
-    newNodeType.setDeclaredSupertypeNames(supertypes) ;      
+    // TODO: Need update in 1.3
+    newNodeType.setDeclaredSupertypeNames(new ArrayList<String>()) ;      
 
     List<PropertyDefinitionValue> properties = new ArrayList<PropertyDefinitionValue>();
     for (UIFormGeneratorInputBean form : formBeans) {
@@ -190,7 +143,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
     }
   }
   
-  private String generateDialogTemplate(List<UIFormGeneratorInputBean> forms, String supertypeName) throws Exception {
+  private String generateDialogTemplate(List<UIFormGeneratorInputBean> forms) throws Exception {
     StringBuilder dialogTemplate = new StringBuilder();
     dialogTemplate.append("<div class=\"UIForm FormLayout\">");
     dialogTemplate.append("  <% uiform.begin() %>");
@@ -304,37 +257,9 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
     dialogTemplate.append("        </table>");
     dialogTemplate.append("      </div>");
     dialogTemplate.append("    </div>");
-    dialogTemplate.append(generateChildrenNodeTemplate(supertypeName));
     dialogTemplate.append("  <% uiform.end() %>");
     dialogTemplate.append("</div>");
     return dialogTemplate.toString();
-  }
-  
-  // TODO: Current version (1.2rc1) don't support child node definition. 
-  // So we have to ignore all mandatory child node by set an empty value for them.
-  // This will be extended in next version (1.3)
-  private String generateChildrenNodeTemplate(String supertypeName) throws Exception {
-    StringBuilder hiddenInputs = new StringBuilder();
-    NodeTypeManager nodeTypeManager = getApplicationComponent(NodeTypeManager.class);
-    NodeType supertype = nodeTypeManager.getNodeType(supertypeName);
-    NodeDefinition[] childNodes = supertype.getChildNodeDefinitions();
-    List<NodeDefinition> nodeDefinitions = new ArrayList<NodeDefinition>();
-//    getNodeDefinitions(nodeDefinitions, childNodes);
-    int count = 1;
-    for (NodeDefinition childNode : nodeDefinitions) {
-      hiddenInputs.append("String[] hiddenField" + count + " = [\"jcrPath=/node" + childNode.getName() + "\", \"nodetype=" + childNode.getDefaultPrimaryType() + "\", \"visible=false\"] ;");
-      count++;
-    }
-    return hiddenInputs.toString();
-  }
-
-  private List<String> getNodeDefinitions(List<String> nodeDefinitions, NodeDefinition[] childNodes) {
-    for (NodeDefinition childNode : childNodes) {
-      NodeType nodetype = childNode.getDeclaringNodeType();
-      if (nodetype != null) getNodeDefinitions(nodeDefinitions, nodetype.getChildNodeDefinitions());
-      else nodeDefinitions.add("/" + childNode.getName());
-    }
-    return nodeDefinitions;
   }
   
   private String generateViewTemplate(List<UIFormGeneratorInputBean> forms) {
@@ -365,7 +290,6 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
   }
   
   public static class SaveActionListener extends EventListener<UIFormGeneratorTabPane> {
-    @SuppressWarnings("unchecked")
     public void execute(Event<UIFormGeneratorTabPane> event) throws Exception {
       UIFormGeneratorTabPane formGeneratorTabPane = event.getSource();
       String jsonObjectGenerated = event.getRequestContext().getRequestParameter(OBJECTID) ;
@@ -455,8 +379,44 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
                                  "}" + 
                                "]" + 
                              "}";
+      
+      String testString = "{" +
+                            "\"inputs\":" +
+                            "[" +
+                              "{" +
+                                "\"type\":\"input\"," +
+                                "\"name\":\"Test Input\"," +
+                                "\"value\":\"This is test input\"," +
+                                "\"width\":\"502\"," +
+                                "\"mandatory\":\"true\"," +
+                                "\"height\":\"34\"," +
+                                "\"guildline\":\"descript inpiut\"" +
+                              "}," +
+                              "{" +
+                                "\"type\":\"select\"," +
+                                "\"name\":\"Select List\"," +
+                                "\"value\":\"4\"," +
+                                "\"width\":\"500\"," +
+                                "\"mandatory\":\"null\"," +
+                                "\"height\":\"20\"," +
+                                "\"advanced\":\"1,2,3,4,5,6\"," +
+                                "\"guildline\":\"desc dropdown list\"" +
+                              "}," +
+                              "{" +
+                                "\"type\":\"textarea\"," +
+                                "\"name\":\"Text plain\"," +
+                                "\"value:\"\"," +
+                                "\"width\":\"452\"," +
+                                "\"mandatory\":\"true\"," +
+                                "\"height\":\"102\"," +
+                                "\"guildline\":\"desc text area\"" +
+                              "}" +
+                            "]" +
+      		                "}";
+      		
+      
       JsonHandler jsonHandler = new JsonDefaultHandler();
-      new JsonParserImpl().parse(new InputStreamReader(new ByteArrayInputStream(jsonObjectGenerated.getBytes())), jsonHandler);
+      new JsonParserImpl().parse(new InputStreamReader(new ByteArrayInputStream(testString.getBytes())), jsonHandler);
       JsonValue jsonValue = jsonHandler.getJsonObject();
       List<UIFormGeneratorInputBean> forms = ((UIFormGeneratorInputBean)new BeanBuilder().createObject(UIFormGeneratorInputBean.class, jsonValue)).getInputs();
 
@@ -466,20 +426,10 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
       
       String preferenceRepository = UIFormGeneratorUtils.getPreferenceRepository();
       
-      UIFormSelectBox nodetypeFormSelectBox = formGeneratorTabPane.getUIFormSelectBox(UIFormGeneratorConstant.NODETYPE_FORM_SELECTBOX);
-      String supertypeName = nodetypeFormSelectBox.getValue();
-      formGeneratorTabPane.addNodetype(event.getRequestContext(), preferenceRepository, nodetypeName, supertypeName, forms);
-
-      // Active this when working with 1.3
-//      UIFormCheckBoxInput<String> voteFormCheckBoxInput = formGeneratorTabPane.getUIFormCheckBoxInput(UIFormGeneratorConstant.VOTE_FORM_CHECKBOX_INPUT);
-//      UIFormCheckBoxInput<String> commentFormCheckBoxInput = formGeneratorTabPane.getUIFormCheckBoxInput(UIFormGeneratorConstant.COMMENT_FORM_CHECKBOX_INPUT);
-//      boolean isVotable = voteFormCheckBoxInput.isChecked();
-//      boolean isCommentable = commentFormCheckBoxInput.isChecked();
-      
-      // Active this when working with 1.3
-//      String newGTMPLTemplate = formGeneratorTabPane.generateDialogTemplate(forms, isVotable, isCommentable);
-      String newGTMPLTemplate = formGeneratorTabPane.generateDialogTemplate(forms, supertypeName);
+      formGeneratorTabPane.addNodetype(event.getRequestContext(), preferenceRepository, nodetypeName, forms);
+      String newGTMPLTemplate = formGeneratorTabPane.generateDialogTemplate(forms);
       String newViewTemplate = formGeneratorTabPane.generateViewTemplate(forms);
+      
       TemplateService templateService = formGeneratorTabPane.getApplicationComponent(TemplateService.class) ;
       templateService.addTemplate(true, nodetypeName, templateName, true, templateName, new String[] {"*"}, newGTMPLTemplate, preferenceRepository) ;
       templateService.addTemplate(false, nodetypeName, templateName, true, templateName, new String[] {"*"}, newViewTemplate, preferenceRepository) ;

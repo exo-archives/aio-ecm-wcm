@@ -42,44 +42,44 @@ public class UIFCCConstant {
   
   
   
-  public static final String TAXONOMY_POPUP_WINDOW            = "UIFastContentCreatorTaxonomyPopupWindow";
+  public static final String TAXONOMY_POPUP_WINDOW            = "UIFCCTaxonomyPopupWindow";
   
-  public static final String SELECTOR_POPUP_WINDOW            = "UIFastContentCreatorSelectorPopupWindow";
+  public static final String SELECTOR_POPUP_WINDOW            = "UIFCCSelectorPopupWindow";
   
   
   
-  public static final String SAVE_LOCATION_FIELD              = "UIFastContentCreatorSaveLocationField";
+  public static final String SAVE_LOCATION_FIELD              = "UIFCCSaveLocationField";
   
-  public static final String REPOSITORY_FORM_SELECTBOX        = "UIFastContentCreatorRepositoryFormSelectBox" ;
+  public static final String REPOSITORY_FORM_SELECTBOX        = "UIFCCRepositoryFormSelectBox" ;
   
-  public static final String WORKSPACE_FORM_SELECTBOX         = "UIFastContentCreatorWorkspaceFormSelectBox" ;
+  public static final String WORKSPACE_FORM_SELECTBOX         = "UIFCCWorkspaceFormSelectBox" ;
   
-  public static final String LOCATION_FORM_INPUT_ACTION       = "UIFastContentCreatorLocationFormInputAction" ;
+  public static final String LOCATION_FORM_INPUT_ACTION       = "UIFCCLocationFormInputAction" ;
   
-  public static final String LOCATION_FORM_STRING_INPUT       = "UIFastContentCreatorLocationFormStringInput" ;
+  public static final String LOCATION_FORM_STRING_INPUT       = "UIFCCLocationFormStringInput" ;
   
   
 
-  public static final String TEMPLATE_FIELD                   = "UIFastContentCreatorTemplateField";
+  public static final String TEMPLATE_FIELD                   = "UIFCCTemplateField";
 
-  public static final String TEMPLATE_FORM_SELECTBOX          = "UIFastContentCreatorTemplateFormSelectBox" ;
+  public static final String TEMPLATE_FORM_SELECTBOX          = "UIFCCTemplateFormSelectBox" ;
   
-  public static final String SAVE_FORM_STRING_INPUT           = "UIFastContentCreatorSaveFormStringInput";
+  public static final String SAVE_FORM_STRING_INPUT           = "UIFCCSaveFormStringInput";
   
-  public static final String MESSAGE_FORM_TEXTAREA_INPUT      = "UIFastContentCreatorMessageFormTextareaInput";
+  public static final String MESSAGE_FORM_TEXTAREA_INPUT      = "UIFCCMessageFormTextareaInput";
   
-  public static final String REDIRECT_FORM_CHECKBOX_INPUT     = "UIFastContentCreatorRedirectFormCheckboxInput";
+  public static final String REDIRECT_FORM_CHECKBOX_INPUT     = "UIFCCRedirectFormCheckboxInput";
   
-  public static final String REDIRECT_PATH_FORM_STRING_INPUT  = "UIFastContentCreatorRedirectPathFormStringInput";
+  public static final String REDIRECT_PATH_FORM_STRING_INPUT  = "UIFCCRedirectPathFormStringInput";
   
   
   
-  public static final String ACTION_FIELD                     = "UIFastContentCreatorActionField";
+  public static final String ACTION_FIELD                     = "UIFCCActionField";
   
-  public static final String ACTION_GRID                      = "UIFastContentCreatorActionGrid";
+  public static final String ACTION_GRID                      = "UIFCCActionGrid";
   
-  public static final String ACTION_POPUP_WINDOW              = "UIFastContentCreatorActionPopupWindow";
+  public static final String ACTION_POPUP_WINDOW              = "UIFCCActionPopupWindow";
   
-  public static final String ACTION_TYPE_SELECTBOX            = "UIFastContentCreatorActionTypeSelectBox";
+  public static final String ACTION_TYPE_SELECTBOX            = "UIFCCActionTypeSelectBox";
   
 }

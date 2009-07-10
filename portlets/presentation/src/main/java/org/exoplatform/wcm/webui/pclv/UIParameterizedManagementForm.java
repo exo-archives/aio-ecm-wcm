@@ -430,7 +430,6 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
         uiApp.addMessage(new ApplicationMessage("UIMessageBoard.msg.saving-success", null, ApplicationMessage.INFO));
       }
       portletRequestContext.setApplicationMode(PortletMode.VIEW);
-      uiApp.addMessage(new ApplicationMessage("UIMessageBoard.msg.saving-success", null, ApplicationMessage.INFO));
 
       UIParameterizedContentListViewerPortlet uiparameterContentListViewerPortlet = uiParameterizedManagementForm.getAncestorOfType(UIParameterizedContentListViewerPortlet.class);
       UIParameterizedContentListViewerContainer uiparameterContentListViewerContainer = uiparameterContentListViewerPortlet.getChild(UIParameterizedContentListViewerContainer.class);

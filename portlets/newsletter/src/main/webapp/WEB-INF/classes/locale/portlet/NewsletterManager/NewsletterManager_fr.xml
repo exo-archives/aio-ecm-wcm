@@ -195,6 +195,7 @@
 			<DateTimeIsNotNull>
 				Envoyer la date est nulle. S'il vous plaît vérifier à nouveau!
 			</DateTimeIsNotNull>
+			<UpdateInformationSuccessful>L'information est mise à jour réussie</UpdateInformationSuccessful>
 		</msg>
 	</UINewsletterEntryForm>
 	

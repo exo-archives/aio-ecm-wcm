@@ -66,17 +66,8 @@ public class PostCreateContentEventListener extends Listener<CmsService, Node>{
       return;
     if(!currentNode.getPath().startsWith(nodeLocation.getPath()))
       return;
-    
-    //	Because content can be enrolled or not. If not we need to add
-    if(currentNode.canAddMixin("publication:webpagesPublication")) {
-    	currentNode.addMixin("publication:webpagesPublication");
-    }
-    if(currentNode.canAddMixin("publication:stateAndVersionBasedPublication")) {
-    	currentNode.addMixin("publication:stateAndVersionBasedPublication");
-    }
-    if(currentNode.canAddMixin("mix:versionable")) {
-    	currentNode.addMixin("mix:versionable");
-    }
+    if(publicationService.isNodeEnrolledInLifecycle(currentNode))
+      return;
     
     publicationService.enrollNodeInLifecycle(currentNode,StageAndVersionPublicationConstant.LIFECYCLE_NAME);
     publicationService.changeState(currentNode,StageAndVersionPublicationConstant.DRAFT_STATE,new HashMap<String,String>());

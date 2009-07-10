@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bundle>
 	<!-- View mode -->
-	<UIFastContentCreatorForm>
+	<UIFCCForm>
     <msg>
       <name-not-allowed>This name is not allowed.</name-not-allowed>
       <in-versioning>Need to checkout current node before add new node</in-versioning>
@@ -18,25 +18,25 @@
       <Save>Save</Save>
       <Cancel>Cancel</Cancel>
     </action>
-  </UIFastContentCreatorForm>
+  </UIFCCForm>
 	
 	<!-- Edit mode -->
-  <UIFastContentCreatorConfig>
+  <UIFCCConfig>
     <label>
 			<select-repository>Select repository</select-repository>
-			<UIFastContentCreatorSaveLocationField>Save location</UIFastContentCreatorSaveLocationField>
-      <UIFastContentCreatorRepositoryFormSelectBox>Select repository</UIFastContentCreatorRepositoryFormSelectBox>
-      <UIFastContentCreatorWorkspaceFormSelectBox>Select workspace</UIFastContentCreatorWorkspaceFormSelectBox>
-			<UIFastContentCreatorTemplateField>Template options</UIFastContentCreatorTemplateField>
-      <UIFastContentCreatorLocationFormInputAction>Location to save</UIFastContentCreatorLocationFormInputAction>
-			<UIFastContentCreatorLocationFormStringInput></UIFastContentCreatorLocationFormStringInput>
-      <UIFastContentCreatorTemplateFormSelectBox>Select template</UIFastContentCreatorTemplateFormSelectBox>
-			<UIFastContentCreatorSaveFormStringInput>Custom save button</UIFastContentCreatorSaveFormStringInput>
-			<UIFastContentCreatorMessageFormTextareaInput>Custom save message</UIFastContentCreatorMessageFormTextareaInput>
-      <UIFastContentCreatorRedirectFormCheckboxInput>Redirect</UIFastContentCreatorRedirectFormCheckboxInput>
-			<UIFastContentCreatorRedirectPathFormStringInput>Redirect path</UIFastContentCreatorRedirectPathFormStringInput>
-			<UIFastContentCreatorActionField>Actions</UIFastContentCreatorActionField>
-			<UIFastContentCreatorActionList></UIFastContentCreatorActionList>
+			<UIFCCSaveLocationField>Save location</UIFCCSaveLocationField>
+      <UIFCCRepositoryFormSelectBox>Select repository</UIFCCRepositoryFormSelectBox>
+      <UIFCCWorkspaceFormSelectBox>Select workspace</UIFCCWorkspaceFormSelectBox>
+			<UIFCCTemplateField>Template options</UIFCCTemplateField>
+      <UIFCCLocationFormInputAction>Location to save</UIFCCLocationFormInputAction>
+			<UIFCCLocationFormStringInput></UIFCCLocationFormStringInput>
+      <UIFCCTemplateFormSelectBox>Select template</UIFCCTemplateFormSelectBox>
+			<UIFCCSaveFormStringInput>Custom save button</UIFCCSaveFormStringInput>
+			<UIFCCMessageFormTextareaInput>Custom save message</UIFCCMessageFormTextareaInput>
+      <UIFCCRedirectFormCheckboxInput>Redirect</UIFCCRedirectFormCheckboxInput>
+			<UIFCCRedirectPathFormStringInput>Redirect path</UIFCCRedirectPathFormStringInput>
+			<UIFCCActionField>Actions</UIFCCActionField>
+			<UIFCCActionList></UIFCCActionList>
     </label>
     <msg>
       <save-successfully>Saved to portlet preferences successfully</save-successfully>
@@ -47,15 +47,15 @@
     <action>
       <Save>Save</Save>
     </action>
-  </UIFastContentCreatorConfig>
+  </UIFCCConfig>
   
-	<UIFastContentCreatorLocationFormInputAction>
+	<UIFCCLocationFormInputAction>
 		<title>
 			<SelectPath>Select path</SelectPath>
 		</title>
-	</UIFastContentCreatorLocationFormInputAction>
+	</UIFCCLocationFormInputAction>
 
-	<UIFastContentCreatorActionList>
+	<UIFCCActionList>
 		<header>
 			<name>Name</name>
 			<description>Description</description>
@@ -68,19 +68,19 @@
 		<msg>
 			<empty>No action</empty>
       <remove-popup-first>You must close edit popup before delete this node.</remove-popup-first>
-      <confirm-delete-action>Do yo really want to delete this action?</confirm-delete-action>
+      <confirm-delete-action>Do you really want to delete this action?</confirm-delete-action>
       <template-empty>Template of '{0}' is null or empty</template-empty>
       <template-null>Template is null or you haven't got permission to access this template.</template-null>
       <access-denied>Access denied! You haven't got enough permission to do this action.</access-denied>
     </msg>
-	</UIFastContentCreatorActionList>
+	</UIFCCActionList>
 	
 	<!-- Select path popup -->
-	<UIFastContentCreatorSelectorPopupWindow>
+	<UIFCCSelectorPopupWindow>
     <title>
       <UIOneNodePathSelector>Select location</UIOneNodePathSelector>
     </title>
-  </UIFastContentCreatorSelectorPopupWindow>	
+  </UIFCCSelectorPopupWindow>	
 	
 	<UIWorkspaceList>
     <label>
@@ -107,13 +107,13 @@
   </UITreeList>
 	
 	<!-- Add action popup -->
-	<UIFastContentCreatorActionPopupWindow>
+	<UIFCCActionPopupWindow>
 		<title>
-			<UIFastContentCreatorActionContainer>Add action form</UIFastContentCreatorActionContainer>
+			<UIFCCActionContainer>Add action form</UIFCCActionContainer>
 		</title>
-	</UIFastContentCreatorActionPopupWindow>
+	</UIFCCActionPopupWindow>
 	
-	<UIFastContentCreatorActionForm>
+	<UIFCCActionForm>
 		<title>Add/Edit an Action</title>
 		<action>
 			<Save>Save</Save>
@@ -133,9 +133,9 @@
       <validator>Validator</validator>
       <destPath>With path</destPath>
     </validator>
-	</UIFastContentCreatorActionForm>
+	</UIFCCActionForm>
 		
-	<UIFastContentCreatorActionTypeForm>
+	<UIFCCActionTypeForm>
 		<label>
 			<actionType>Create an Action of Type</actionType>
 		</label>
@@ -143,7 +143,7 @@
   		<not-support>Cannot load template of '{0}'.</not-support>
   		<do-not-permission>You don't have permission to load template of '{0}'.</do-not-permission>
   	</msg>
-	</UIFastContentCreatorActionTypeForm>
+	</UIFCCActionTypeForm>
 	
   <EmptyFieldValidator>
     <msg>

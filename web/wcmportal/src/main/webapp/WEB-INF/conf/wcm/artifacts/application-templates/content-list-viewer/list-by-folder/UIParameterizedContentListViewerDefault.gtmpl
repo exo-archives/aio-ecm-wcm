@@ -57,7 +57,10 @@
 							String itemSummary = uicomponent.getSummary(node);
 					    	String itemTitle = uicomponent.getTitle(node);
 							String itemDateCreated = uicomponent.getCreatedDate(node);
-							String imgSrc = uicomponent.getIllustrativeImage(node);								
+							String imgSrc = uicomponent.getIllustrativeImage(node);
+							%>----$imgSrc----<%
+							if (imgSrc == null) 
+								imgSrc = "/presentation/skin/ParameterizedContentListViewer/DefaultSkin/images/IIlustrationImages.jpg";
 							if (itemTitle != null && itemTitle.trim().length() != 0) {
 								itemName = itemTitle;
 							}						
@@ -69,7 +72,7 @@
 											<div class="HotNews">
 												<%if (isShowIllustrationImg) {
 													%>
-													<a class="ImageHotNews" href="javascript:void(0);" onclick="$itemLink"><img width="248" alt="#" src="/presentation/skin/ParameterizedContentListViewer/DefaultSkin/images/IIlustrationImages.jpg" /></a>
+													<a class="ImageHotNews" href="$itemLink"><img width="248" alt="$itemName" src="$imgSrc" /></a>
 												<%
 												} %>
 												<div class="ContentHotNews">
@@ -116,7 +119,7 @@
 												<% 
 													if (isShowIllustrationImg) {
 														%>
-															<a class="ImageNormalNews" href="javascript:void(0);" onclick="$itemLink"><img width="190" alt="#" src="/presentation/skin/ParameterizedContentListViewer/DefaultSkin/images/IIlustrationImages.jpg" /></a>
+															<a class="ImageNormalNews" href="$itemLink"><img width="190" alt="$itemName" src="$imgSrc" /></a>
 														<%
 													} 
 												%>

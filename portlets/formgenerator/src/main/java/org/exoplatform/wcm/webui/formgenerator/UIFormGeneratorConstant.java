@@ -52,7 +52,7 @@ public class UIFormGeneratorConstant {
   
   public static final String NAME_FORM_STRING_INPUT         = "UIFormGeneratorNameFormStringInput";
   
-  public static final String NODETYPE_FORM_SELECTBOX        = "UIFormGeneratorNodetypeFormSelectBox";
+//  public static final String NODETYPE_FORM_SELECTBOX        = "UIFormGeneratorNodetypeFormSelectBox";
   
   public static final String DESCRIPTION_FORM_WYSIWYG_INPUT = "UIFormGeneratorDescriptionFormWYSIWYGInput";
   

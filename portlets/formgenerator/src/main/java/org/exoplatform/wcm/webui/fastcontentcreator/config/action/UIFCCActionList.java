@@ -54,7 +54,7 @@ import org.exoplatform.webui.event.EventListener;
     events = {
         @EventConfig(listeners = UIFCCActionList.AddActionListener.class),
         @EventConfig(listeners = UIFCCActionList.EditActionListener.class),
-        @EventConfig(listeners = UIFCCActionList.DeleteActionListener.class, confirm = "UIActionList.msg.confirm-delete-action")
+        @EventConfig(listeners = UIFCCActionList.DeleteActionListener.class, confirm = "UIFCCActionList.msg.confirm-delete-action")
     }
 )
 public class UIFCCActionList extends UIContainer {

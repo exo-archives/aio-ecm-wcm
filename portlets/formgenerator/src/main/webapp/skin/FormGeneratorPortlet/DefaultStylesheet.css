@@ -185,26 +185,26 @@
   padding: 5px 0px;
 } 
 
-.UIFormGenerator .UITabPane .UITabContentContainer .RightContent .UIFormEditBox .UIFormGrid  {
-  width: 100%;
-}
-
-.UIFormGenerator .UITabPane .UITabContentContainer .RightContent .UIFormEditBox .UIFormGrid .FieldLabel  {
-  width: 15%;
-}
-
-.UIFormGenerator .UITabPane .UITabContentContainer .RightContent .UIFormEditBox .UIFormGrid .FieldComponent  {
-  width: 70%;
-}
-
-.UIFormGenerator .UITabPane .UITabContentContainer .RightContent .UIFormEditBox .UIFormGrid .FieldIcon  {
-  padding: 4px;
-}
-
 .UIFormGenerator .UITabPane .UITabContentContainer .RightContent .MiddleContentBoxStyle {
   background: #f3f7fb;
   border: 1px solid #dfdddd;
   padding: 10px 0px;
+}
+
+.UIFormGenerator .UITabPane .UITabContentContainer .UIFormGrid  {
+  width: 100%;
+}
+
+.UIFormGenerator .UITabPane .UITabContentContainer .UIFormGrid .FieldLabel  {
+  width: 15%;
+}
+
+.UIFormGenerator .UITabPane .UITabContentContainer .UIFormGrid .FieldComponent  {
+  width: 70%;
+}
+
+.UIFormGenerator .UITabPane .UITabContentContainer .UIFormGrid .FieldIcon  {
+  padding: 4px;
 }
 
 .UIFormGenerator .UIFormEditBox input {
