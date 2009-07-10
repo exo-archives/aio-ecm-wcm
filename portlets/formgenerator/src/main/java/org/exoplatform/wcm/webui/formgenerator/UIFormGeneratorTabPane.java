@@ -95,11 +95,11 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
   }
   
   private String getNodetypeName(String nodetypeName) {
-    return "exo:fg_n_" + nodetypeName;
+    return "exo:fg_n_" + Utils.cleanString(nodetypeName);
   }
   
   private String getPropertyName(String inputName) {
-    return "exo:fg_p_" + inputName;
+    return "exo:fg_p_" + Utils.cleanString(inputName);
   }
   
   private void addNodetype(WebuiRequestContext requestContext, String repository, String nodetypeName, List<UIFormGeneratorInputBean> formBeans) throws Exception {
@@ -112,7 +112,9 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
     // TODO: Need update in 1.3
     newNodeType.setOrderableChild(false) ;
     // TODO: Need update in 1.3
-    newNodeType.setDeclaredSupertypeNames(new ArrayList<String>()) ;      
+    List<String> supertypes = new ArrayList<String>();
+    supertypes.add("nt:base");
+    newNodeType.setDeclaredSupertypeNames(supertypes) ;      
 
     List<PropertyDefinitionValue> properties = new ArrayList<PropertyDefinitionValue>();
     for (UIFormGeneratorInputBean form : formBeans) {
@@ -153,42 +155,32 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
     dialogTemplate.append("          <td class=\"FieldLabel\"><%=_ctx.appRes(\"Article.dialog.label.name\")%></td>");
     dialogTemplate.append("          <td class=\"FieldComponent\">");
     dialogTemplate.append("            <%");
-    // Active this when working with 1.3 
-//    String mixintype = "";
-//    if (isVotable && isCommentable)
-//      mixintype += ",mix:votable,mix:commentable";
-//    else if (!isVotable && isCommentable) 
-//      mixintype += ",mix:commentable";
-//    else if (!isVotable && isCommentable) 
-//      mixintype += ",mix:votable";
-//    dialogTemplate.append("              String[] fieldName = [\"jcrPath=/node\", \"mixintype=mix:i18n" + mixintype + "\", \"editable=if-null\", \"validate=empty,name\"] ;");
     dialogTemplate.append("              String[] fieldName = [\"jcrPath=/node\", \"mixintype=mix:i18n\", \"editable=if-null\", \"validate=empty,name\"] ;");
     dialogTemplate.append("              uicomponent.addTextField(\"name\", fieldName) ;");
     dialogTemplate.append("            %>");
     dialogTemplate.append("          </td>");
     dialogTemplate.append("        </tr>");
     for (UIFormGeneratorInputBean form : forms) {
-      String inputName = form.getName();
+      String inputName = Utils.cleanString(form.getName());
       String inputType = form.getType();
       String inputFieldName = inputName + "FieldName";
-      String validate = "";
+      String validate = "validate=";
       String inputField = "";
       if (form.isMandatory())
-        validate += ",empty";
+        validate += "empty,";
       if (UIFormGeneratorConstant.TEXTAREA.equals(inputType)) {
         inputField = "TextAreaField";
       } else if (UIFormGeneratorConstant.WYSIWYG.equals(inputType)) {
         inputField = "WYSIWYGField";
       } else if (UIFormGeneratorConstant.DATE.equals(inputType)) {
         inputField = "CalendarField";
-        validate += ",datetime";
+        validate += "datetime,";
       } else if (UIFormGeneratorConstant.SELECT.equals(inputType)) {
         inputField = "SelectBoxField";
       } else {
         inputField = "TextField";
       }
-      if (validate.startsWith(","))
-        validate = validate.substring(1);
+      if (validate.endsWith(",")) validate = validate.substring(0, validate.length() - 1);
       String propertyName = getPropertyName(inputName);
       dialogTemplate.append("      <tr>");
       dialogTemplate.append("        <td class=\"FieldLabel\"><%=_ctx.appRes(\"FormGenerator.dialog.label." + inputName + "\")%></td>");
@@ -223,7 +215,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
         dialogTemplate.append("             uicomponent.addUploadField(\"image\", fieldImage) ;");
         dialogTemplate.append("           }");
       } else {
-        dialogTemplate.append("           String[] " + inputFieldName + " = [\"jcrPath=/node/" + propertyName + "\", \"defaultValues=" + form.getValue() + "\", \"validate=" + validate + "\", \"options=" + form.getAdvanced() + "\"];");
+        dialogTemplate.append("           String[] " + inputFieldName + " = [\"jcrPath=/node/" + propertyName + "\", \"defaultValues=" + form.getValue() + "\", \"" + validate + "\", \"options=" + form.getAdvanced() + "\"];");
         dialogTemplate.append("           uicomponent.add" + inputField + "(\"" + inputFieldName + "\", " + inputFieldName + ");");
       }
       dialogTemplate.append("          %>");
@@ -283,7 +275,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
       viewTemplate.append("       }");
       viewTemplate.append("     %>");
       viewTemplate.append("   </tr>");
-    }//
+    }
     viewTemplate.append("   </table>");
     viewTemplate.append(" </div>");
     return viewTemplate.toString();
@@ -293,130 +285,43 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
     public void execute(Event<UIFormGeneratorTabPane> event) throws Exception {
       UIFormGeneratorTabPane formGeneratorTabPane = event.getSource();
       String jsonObjectGenerated = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      jsonObjectGenerated =  "{" +
-                                "\"inputs\":" + 
-                                "[" + 
-                                 "{" + 
-                                   "\"type\": \"Label\"," +
-                                   "\"name\": \"label1\"," + 
-                                   "\"value\": \"this is the label\"," +
-                                   "\"advanced\": \"\"," +
-                                   "\"guideline\": \"This is the label\"," + 
-                                   "\"size\": 20," + 
-                                   "\"mandatory\": true" + 
-                                 "}," + 
-                                 "{" + 
-                                   "\"type\": \"Input\"," + 
-                                   "\"name\": \"input2\"," + 
-                                   "\"value\": \"this is the input\"," +
-                                   "\"advanced\": \"\"," +
-                                   "\"guideline\": \"This is the input\"," + 
-                                   "\"size\": 20," + 
-                                   "\"mandatory\": true" + 
-                                 "}," + 
-                                 "{" + 
-                                   "\"type\": \"Select\"," + 
-                                   "\"name\": \"select3\"," + 
-                                   "\"value\": \"option2\"," +
-                                   "\"advanced\": \"option1,option2,option3\"," +
-                                   "\"guideline\": \"This is the select\"," + 
-                                   "\"size\": 20," + 
-                                   "\"mandatory\": true" + 
-                                 "}," + 
-                                 "{" + 
-                                   "\"type\": \"Checkbox\"," + 
-                                   "\"name\": \"checkbox4\"," + 
-                                   "\"value\": \"checkbox3\"," +
-                                   "\"advanced\": \"checkbox1,checkbox2,checkbox3\"," +
-                                   "\"guideline\": \"This is the checkbox\"," + 
-                                   "\"size\": 20," + 
-                                   "\"mandatory\": true" + 
-                                 "}," + 
-                                 "{" + 
-                                   "\"type\": \"Radio\"," + 
-                                   "\"name\": \"radio5\"," + 
-                                   "\"value\": \"radio1\"," +
-                                   "\"advanced\": \"radio1,radio2,radio3\"," +
-                                   "\"guideline\": \"This is teh radio\"," + 
-                                   "\"size\": 20," + 
-                                   "\"mandatory\": true" + 
-                                 "}," + 
-                                 "{" + 
-                                   "\"type\": \"Upload\"," + 
-                                   "\"name\": \"upload6\"," + 
-                                   "\"value\": \"\"," +
-                                   "\"advanced\": \"\"," +
-                                   "\"guideline\": \"This is the upload\"," + 
-                                   "\"size\": 20," + 
-                                   "\"mandatory\": false" + 
-                                 "}," + 
-                                 "{" + 
-                                   "\"type\": \"Textarea\"," + 
-                                   "\"name\": \"textarea7\"," + 
-                                   "\"value\": \"this is the textarea\"," +
-                                   "\"advanced\": \"row:10,column:20\"," +
-                                   "\"guideline\": \"This is the textarea\"," + 
-                                   "\"size\": 20," + 
-                                   "\"mandatory\": true" + 
-                                 "}," +
-                                 "{" + 
-                                   "\"type\": \"WYSIWYG\"," + 
-                                   "\"name\": \"wysiwyg8\"," + 
-                                   "\"value\": \"this is the WYSIWYG\"," +
-                                   "\"advanced\": \"toolbar:CompleteWCM,width:100%,height:410px\"," +
-                                   "\"guideline\": \"This is the WYSIWYG\"," + 
-                                   "\"size\": 20," + 
-                                   "\"mandatory\": true" + 
-                                 "}," +
-                                 "{" + 
-                                   "\"type\": \"Date\"," + 
-                                   "\"name\": \"date9\"," + 
-                                   "\"value\": \"\"," +
-                                   "\"advanced\": \"format=dd/mm/yyyy,isShowTime=true\"," +
-                                   "\"guideline\": \"This is the date\"," + 
-                                   "\"size\": 20," + 
-                                   "\"mandatory\": true" + 
-                                 "}" + 
-                               "]" + 
-                             "}";
-      
-      String testString = "{" +
-                            "\"inputs\":" +
-                            "[" +
-                              "{" +
-                                "\"type\":\"input\"," +
-                                "\"name\":\"Test Input\"," +
-                                "\"value\":\"This is test input\"," +
-                                "\"width\":\"502\"," +
-                                "\"mandatory\":\"true\"," +
-                                "\"height\":\"34\"," +
-                                "\"guildline\":\"descript inpiut\"" +
-                              "}," +
-                              "{" +
-                                "\"type\":\"select\"," +
-                                "\"name\":\"Select List\"," +
-                                "\"value\":\"4\"," +
-                                "\"width\":\"500\"," +
-                                "\"mandatory\":\"null\"," +
-                                "\"height\":\"20\"," +
-                                "\"advanced\":\"1,2,3,4,5,6\"," +
-                                "\"guildline\":\"desc dropdown list\"" +
-                              "}," +
-                              "{" +
-                                "\"type\":\"textarea\"," +
-                                "\"name\":\"Text plain\"," +
-                                "\"value:\"\"," +
-                                "\"width\":\"452\"," +
-                                "\"mandatory\":\"true\"," +
-                                "\"height\":\"102\"," +
-                                "\"guildline\":\"desc text area\"" +
-                              "}" +
-                            "]" +
-      		                "}";
+      jsonObjectGenerated = "{" +
+                              "\"inputs\":" +
+                              "[" +
+                                "{" +
+                                  "\"type\":\"input\"," +
+                                  "\"name\":\"Test Input\"," +
+                                  "\"value\":\"This is test input\"," +
+                                  "\"width\":\"502\"," +
+                                  "\"mandatory\":\"true\"," +
+                                  "\"height\":\"34\"," +
+                                  "\"guildline\":\"descript inpiut\"" +
+                                "}," +
+                                "{" +
+                                  "\"type\":\"select\"," +
+                                  "\"name\":\"Select List\"," +
+                                  "\"value\":\"4\"," +
+                                  "\"width\":\"500\"," +
+                                  "\"mandatory\":\"null\"," +
+                                  "\"height\":\"20\"," +
+                                  "\"advanced\":\"1,2,3,4,5,6\"," +
+                                  "\"guildline\":\"desc dropdown list\"" +
+                                "}," +
+                                "{" +
+                                  "\"type\":\"textarea\"," +
+                                  "\"name\":\"Text plain\"," +
+                                  "\"value\":\"\"," +
+                                  "\"width\":\"452\"," +
+                                  "\"mandatory\":\"true\"," +
+                                  "\"height\":\"102\"," +
+                                  "\"guildline\":\"desc text area\"" +
+                                "}" +
+                              "]" +
+        		                "}";
       		
       
       JsonHandler jsonHandler = new JsonDefaultHandler();
-      new JsonParserImpl().parse(new InputStreamReader(new ByteArrayInputStream(testString.getBytes())), jsonHandler);
+      new JsonParserImpl().parse(new InputStreamReader(new ByteArrayInputStream(jsonObjectGenerated.getBytes())), jsonHandler);
       JsonValue jsonValue = jsonHandler.getJsonObject();
       List<UIFormGeneratorInputBean> forms = ((UIFormGeneratorInputBean)new BeanBuilder().createObject(UIFormGeneratorInputBean.class, jsonValue)).getInputs();
 
