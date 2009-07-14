@@ -79,6 +79,13 @@
     
     <dependency>
       <groupId>org.exoplatform.ecm.dms.core</groupId>
+      <artifactId>exo.ecm.dms.core.webui.ext</artifactId>
+      <version>${org.exoplatform.ecm.dms.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    	
+    <dependency>
+      <groupId>org.exoplatform.ecm.dms.core</groupId>
       <artifactId>exo.ecm.dms.core.component.deployment</artifactId>
       <version>${org.exoplatform.ecm.dms.version}</version>
       <scope>compile</scope>
@@ -89,7 +96,8 @@
       <artifactId>exo.ecm.wcm.component.wcm</artifactId>
       <version>${org.exoplatform.wcm.version}</version>
       <scope>compile</scope>
-    </dependency>	
+    </dependency>
+    
   </dependencies>
   
   <build>
@@ -142,11 +150,11 @@
           <testFailureIgnore>${exo.test.failure.ignore}</testFailureIgnore>
           <forkMode>${exo.test.forkmode}</forkMode>
           <includes>
-            <include>**/NavigationServiceTest.java</include>    						
+            <include>**/TestNewsletterCategoryHandler.java</include>    						
           </includes>
           <excludes>
             <exclude>**/*$*</exclude><!--nested classes prb, http://jira.codehaus.org/browse/SUREFIRE-288-->
-            <exclude>**/BaseTestCase</exclude>            
+            <exclude>**/BaseDMSTestCase</exclude>            
           </excludes>
         </configuration>
       </plugin>
