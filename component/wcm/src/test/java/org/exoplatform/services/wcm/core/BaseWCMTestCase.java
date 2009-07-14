@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003-2008 eXo Platform SAS.
+ * Copyright (C) 2003-2009 eXo Platform SAS.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
@@ -14,14 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.services.wcm.newsletter;
+package org.exoplatform.services.wcm.core;
 
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
 import org.apache.commons.logging.Log;
 import org.exoplatform.container.StandaloneContainer;
-import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.CredentialsImpl;
 import org.exoplatform.services.jcr.impl.core.NodeImpl;
 import org.exoplatform.services.jcr.impl.core.RepositoryImpl;
@@ -29,19 +28,16 @@ import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.test.BasicTestCase;
 
 /**
- * Created by The eXo Platform SARL
- * Author : Dang Van Minh
- *          minh.dang@exoplatform.com
- * Mar 16, 2009  
- * 4:08:30 PM
+ * Created by The eXo Platform SAS
+ * Author : eXoPlatform
+ *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * Jul 14, 2009  
  */
-public abstract class BaseDMSTestCase extends BasicTestCase {
+public abstract class BaseWCMTestCase extends BasicTestCase {
 
   protected static Log          log = ExoLogger.getLogger("dms.services.test");  
 
   protected CredentialsImpl     credentials;  
-
-  protected RepositoryService   repositoryService;
 
   protected StandaloneContainer container;
   
@@ -63,12 +59,10 @@ public abstract class BaseDMSTestCase extends BasicTestCase {
 
     StandaloneContainer.addConfigurationURL(containerConf);
     container = StandaloneContainer.getInstance();
-    
+
     if (System.getProperty("java.security.auth.login.config") == null)
       System.setProperty("java.security.auth.login.config", loginConf);
-
-    credentials = new CredentialsImpl("root", "exo".toCharArray());
-    repositoryService = (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class);
+    
   }
 
   protected void checkMixins(String[] mixins, NodeImpl node) {
@@ -111,4 +105,8 @@ public abstract class BaseDMSTestCase extends BasicTestCase {
     + "min";
   }
 
+  protected <T> T getService(Class<T> clazz) {
+    return clazz.cast(container.getComponentInstanceOfType(clazz));
+  }
+  
 }

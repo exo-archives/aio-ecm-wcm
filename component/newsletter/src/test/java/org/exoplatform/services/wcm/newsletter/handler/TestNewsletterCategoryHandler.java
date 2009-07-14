@@ -19,24 +19,24 @@ package org.exoplatform.services.wcm.newsletter.handler;
 import javax.jcr.Node;
 import javax.jcr.Session;
 
-import org.exoplatform.services.wcm.newsletter.BaseDMSTestCase;
+import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.wcm.newsletter.BaseWCMTestCase;
 
 /**
- * Created by The eXo Platform SAS
- * Author : eXoPlatform
- *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * Jul 14, 2009  
+ * Created by The eXo Platform SAS Author : eXoPlatform
+ * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com Jul 14, 2009
  */
-public class TestNewsletterCategoryHandler extends BaseDMSTestCase {
-  
+public class TestNewsletterCategoryHandler extends BaseWCMTestCase {
+
   public void testAddNewsletter() throws Exception {
-   Session session = repositoryService.getRepository("repository").getSystemSession("collaboration");
-   Node node = session.getRootNode().addNode("node1", "exo:webContent");
-   String path =node.getPath();
-   session.save();
-   
-   Node test = (Node)session.getItem(path);
-   assertEquals("node1", test.getName());
+    RepositoryService repositoryService = getService(RepositoryService.class);
+    Session session = repositoryService.getRepository("repository").getSystemSession("collaboration");
+    Node node = session.getRootNode().addNode("node1", "exo:webContent");
+    String path = node.getPath();
+    session.save();
+
+    Node test = (Node) session.getItem(path);
+    assertEquals("node1", test.getName());
   }
-  
+
 }

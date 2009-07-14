@@ -23,10 +23,11 @@ import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.Session;
 
+import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.classify.impl.AlphabetClassifyPlugin;
 import org.exoplatform.services.jcr.ext.classify.impl.DateTimeClassifyPlugin;
 import org.exoplatform.services.jcr.ext.classify.impl.TypeClassifyPlugin;
-import org.exoplatform.services.wcm.BaseTestCase;
+import org.exoplatform.services.wcm.core.BaseWCMTestCase;
 
 /**
  * Created by The eXo Platform SAS
@@ -34,8 +35,15 @@ import org.exoplatform.services.wcm.BaseTestCase;
  *          anh.do@exoplatform.com
  * Jun 2, 2008  
  */
-public class TestNodeClassifyService extends BaseTestCase {
+public class TestNodeClassifyService extends BaseWCMTestCase {
 
+  private RepositoryService repositoryService;
+  
+  public void setUp() throws Exception {
+    super.setUp();
+    repositoryService = getService(RepositoryService.class);
+  }
+  
   public void testClassifyPluginManager() throws Exception {
     NodeClassifyService classifyService = 
       (NodeClassifyService)container.getComponentInstanceOfType(NodeClassifyService.class);
