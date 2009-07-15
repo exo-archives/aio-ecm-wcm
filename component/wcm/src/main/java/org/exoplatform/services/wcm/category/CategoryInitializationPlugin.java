@@ -182,6 +182,7 @@ public class CategoryInitializationPlugin extends TaxonomyPlugin {
     session.logout();
   }
   
+  @SuppressWarnings("unchecked")
   private void addAction(ActionConfig.TaxonomyAction action, Node srcNode, String repository) throws Exception {
     Map<String, JcrInputProperty> sortedInputs = new HashMap<String, JcrInputProperty>();
     JcrInputProperty jcrInputName = new JcrInputProperty();
@@ -231,13 +232,13 @@ public class CategoryInitializationPlugin extends TaxonomyPlugin {
     }
     
     Iterator mixins = action.getMixins().iterator();
-    while (mixins.hasNext()) {
+    while (mixins.hasNext()) { 
       ActionConfig.Mixin mixin = (ActionConfig.Mixin) mixins.next();
       actionNode.addMixin(mixin.getName());
       Map<String, String> props = mixin.getParsedProperties();
-      Set keys = props.keySet();
-      for (Iterator iterator = keys.iterator(); iterator.hasNext();) {
-        String key = (String) iterator.next();
+      Set<String> keys = props.keySet();
+      for (Iterator<String> iterator = keys.iterator(); iterator.hasNext();) {
+        String key = iterator.next();
         actionNode.setProperty(key, props.get(key));
       }
     }

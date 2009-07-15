@@ -25,13 +25,10 @@ import javax.jcr.Session;
 import javax.portlet.PortletPreferences;
 
 import org.exoplatform.commons.utils.ObjectPageList;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.wcm.core.WCMService;
+import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
@@ -55,10 +52,13 @@ public class UICorrectContentsViewer extends UIListViewerBase {
   public void init() throws Exception {                       
     PortletPreferences portletPreferences = getPortletPreference();
     setViewAbleContent(true);
-    String repository = portletPreferences.getValue(UIContentListViewerPortlet.REPOSITORY, null);
-    String workspace = portletPreferences.getValue(UIContentListViewerPortlet.WORKSPACE, null);
-    WCMService wcmService = getApplicationComponent(WCMService.class);
-    Node root = wcmService.getRootNode(repository, workspace);
+    String repositoryName = portletPreferences.getValue(UIContentListViewerPortlet.REPOSITORY, null);
+    String workspaceName = portletPreferences.getValue(UIContentListViewerPortlet.WORKSPACE, null);
+    RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
+    ManageableRepository repository = repositoryService.getRepository(repositoryName);
+    ThreadLocalSessionProviderService threadLocalSessionProviderService = getApplicationComponent(ThreadLocalSessionProviderService.class);
+    Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspaceName, repository);
+    Node root = session.getRootNode();
 
     String [] listContent = portletPreferences.getValues(UIContentListViewerPortlet.CONTENT_LIST, null);
     if (listContent == null || listContent.length == 0) {

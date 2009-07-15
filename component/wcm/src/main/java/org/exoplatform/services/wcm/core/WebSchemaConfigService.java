@@ -61,28 +61,30 @@ public interface WebSchemaConfigService {
   public <T extends WebSchemaHandler> T getWebSchemaHandlerByType(Class<T> clazz);  
   
   /**
-   * Call this method when a node is created in observed tree. 
-   * 
+   * Call this method when a node is created in observed tree.
    * 
    * @param node the node
+   * @param sessionProvider the session provider
    * 
    * @throws Exception the exception
    */
   public void createSchema(final Node node, SessionProvider sessionProvider) throws Exception;
   
   /**
-   * Update schema when a node is modified
+   * Update schema when a node is modified.
    * 
    * @param node the node
+   * @param sessionProvider the session provider
    * 
    * @throws Exception the exception
    */
   public void updateSchemaOnModify(final Node node, SessionProvider sessionProvider) throws Exception;
   
   /**
-   * Update schema on when a node is removed
+   * Update schema on when a node is removed.
    * 
    * @param node the node
+   * @param sessionProvider the session provider
    * 
    * @throws Exception the exception
    */

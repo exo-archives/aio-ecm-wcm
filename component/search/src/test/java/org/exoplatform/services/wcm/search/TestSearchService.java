@@ -16,6 +16,8 @@
  */
 package org.exoplatform.services.wcm.search;
 
+import org.exoplatform.services.wcm.BaseWCMTestCase;
+
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform

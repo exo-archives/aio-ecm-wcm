@@ -17,10 +17,8 @@
 package org.exoplatform.services.wcm.newsletter.handler;
 
 import javax.jcr.Node;
-import javax.jcr.Session;
 
-import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.wcm.newsletter.BaseWCMTestCase;
+import org.exoplatform.services.wcm.BaseWCMTestCase;
 
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform
@@ -29,9 +27,7 @@ import org.exoplatform.services.wcm.newsletter.BaseWCMTestCase;
 public class TestNewsletterCategoryHandler extends BaseWCMTestCase {
 
   public void testAddNewsletter() throws Exception {
-    RepositoryService repositoryService = getService(RepositoryService.class);
-    Session session = repositoryService.getRepository("repository").getSystemSession("collaboration");
-    Node node = session.getRootNode().addNode("node1", "exo:webContent");
+    Node node = createWebcontentNode(session.getRootNode(), "node1");
     String path = node.getPath();
     session.save();
 

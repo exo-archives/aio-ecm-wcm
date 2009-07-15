@@ -18,39 +18,44 @@ package org.exoplatform.services.wcm.core;
 
 import javax.jcr.Node;
 
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
+
 /**
- * Created by The eXo Platform SAS
+ * Created by The eXo Platform SAS.
+ * 
  * @author Benjamin Paillereau
  * benjamin.paillereau@exoplatform.com
  * Apr 30, 2009
  */
+
 public interface WCMService {
+  
 	/**
 	 * This method returns a jcr Node based on the given identifier.
 	 * 
+	 * @param repository the repository name
+	 * @param workspace the workspace name
+	 * @param nodeIdentifier the node identifier
+	 * @param sessionProvider the session provider
+	 * 
 	 * @return a jcr Node
-	 * @throws Exception
+	 * 
+	 * @throws Exception the exception
 	 * 
 	 * @see javax.jcr.Node
 	 */
-	public Node getReferencedContent(String repository, String workspace, String nodeIdentifier) throws Exception ;
+	public Node getReferencedContent(String repository, String workspace, String nodeIdentifier, SessionProvider sessionProvider) throws Exception ;
 
 	/**
-	 * This method returns the jcr root Node based on the given workspace
+	 * This method checks if the given portal is the default shared portal.
 	 * 
-	 * @return a jcr Node
-	 * @throws Exception
-	 * 
-	 * @see javax.jcr.Node
-	 */
-	public Node getRootNode(String repository, String workspace) throws Exception ;
-	
-	/**
-	 * This method checks if the given portal is the default shared portal
+	 * @param portalName the portal name
+	 * @param sessionProvider the session provider
 	 * 
 	 * @return true if portal is shared portal
-	 * @throws Exception
 	 * 
+	 * @throws Exception the exception
 	 */
-	public boolean isSharedPortal(String portalName) throws Exception ;
+	public boolean isSharedPortal(String portalName, SessionProvider sessionProvider) throws Exception ;
+	
 }

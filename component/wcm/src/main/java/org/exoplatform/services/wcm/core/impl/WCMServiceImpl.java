@@ -22,89 +22,53 @@ import javax.jcr.Session;
 
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.WCMService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 
 /**
- * Created by The eXo Platform SAS
+ * Created by The eXo Platform SAS.
+ * 
  * @author Benjamin Paillereau
  * benjamin.paillereau@exoplatform.com
  * Apr 30, 2009
  */
 public class WCMServiceImpl implements WCMService {
 
-	/**
-	 * Returns a jcr Node
-	 * 
-	 * @see org.exoplatform.services.wcm.core.WCMService#getReferencedContent(java.lang.String, java.lang.String, java.lang.String)
-	 */
-	public Node getReferencedContent(String repository, String workspace, String nodeIdentifier) throws Exception {
-		if(repository == null || workspace == null || nodeIdentifier == null) 
-			throw new ItemNotFoundException();
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.core.WCMService#getReferencedContent(java.lang.String, java.lang.String, java.lang.String, org.exoplatform.services.jcr.ext.common.SessionProvider)
+   */
+  public Node getReferencedContent(String repository, String workspace, String nodeIdentifier, SessionProvider sessionProvider) throws Exception {
+		if(repository == null || workspace == null || nodeIdentifier == null) throw new ItemNotFoundException();
 		ExoContainer container = ExoContainerContext.getCurrentContainer();
-		RepositoryService repositoryService = 
-			(RepositoryService)container.getComponentInstanceOfType(RepositoryService.class);
+		RepositoryService repositoryService = (RepositoryService)container.getComponentInstanceOfType(RepositoryService.class);
 		ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-		String userId = Util.getPortalRequestContext().getRemoteUser();
-		SessionProvider sessionProvider = null;
-		if(userId == null) {
-			sessionProvider = SessionProviderFactory.createAnonimProvider();
-		}else {
-			sessionProvider = SessionProviderFactory.createSessionProvider();
-		}
 		Session session = sessionProvider.getSession(workspace, manageableRepository);
 		Node content = null;
 		try {
 			content = session.getNodeByUUID(nodeIdentifier);
-		} catch (Exception e) {
-			content = (Node) session.getItem(nodeIdentifier);
+		} catch (ItemNotFoundException itemNotFoundException) {
+		  try {
+		    content = (Node) session.getItem(nodeIdentifier);
+		  } catch(Exception exception) {
+		    content = null;
+		  }
 		} finally {
+		  session.logout();
 			sessionProvider.close();
 		}
 		return content;
 	}
 
-	/**
-	 * Returns a jcr Node
-	 * 
-	 * @see org.exoplatform.services.wcm.core.WCMService#getRootNode(java.lang.String, java.lang.String)
+	/* (non-Javadoc)
+	 * @see org.exoplatform.services.wcm.core.WCMService#isSharedPortal(java.lang.String, org.exoplatform.services.jcr.ext.common.SessionProvider)
 	 */
-	public Node getRootNode(String repository, String workspace) throws Exception {
-		if(repository == null || workspace == null) 
-			throw new ItemNotFoundException();
-		ExoContainer container = ExoContainerContext.getCurrentContainer();
-		RepositoryService repositoryService = 
-			(RepositoryService)container.getComponentInstanceOfType(RepositoryService.class);
-		ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-		String userId = Util.getPortalRequestContext().getRemoteUser();
-		SessionProvider sessionProvider = null;
-		if(userId == null) {
-			sessionProvider = SessionProviderFactory.createAnonimProvider();
-		}else {
-			sessionProvider = SessionProviderFactory.createSessionProvider();
-		}
-		Session session = sessionProvider.getSession(workspace, manageableRepository);
-		Node content = null;
-		try {
-			content = session.getRootNode();
-		} finally {
-			sessionProvider.close();
-		}
-		return content;
-	}
-
-	public boolean isSharedPortal(String portalName) throws Exception {
+	public boolean isSharedPortal(String portalName, SessionProvider sessionProvider) throws Exception {
 		ExoContainer container = ExoContainerContext.getCurrentContainer();
 		LivePortalManagerService livePortalManagerService = (LivePortalManagerService)container.getComponentInstanceOfType(LivePortalManagerService.class);
 		boolean isShared = false;
-	    ThreadLocalSessionProviderService providerService = (ThreadLocalSessionProviderService)container.getComponentInstanceOfType(ThreadLocalSessionProviderService.class);
-	    SessionProvider sessionProvider = providerService.getSessionProvider(null);
 	    try {
 	    	Node sharedPortal = livePortalManagerService.getLiveSharedPortal(sessionProvider);
 	    	isShared = sharedPortal.getName().equals(portalName);

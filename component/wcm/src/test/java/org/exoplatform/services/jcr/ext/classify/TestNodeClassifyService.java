@@ -27,7 +27,7 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.classify.impl.AlphabetClassifyPlugin;
 import org.exoplatform.services.jcr.ext.classify.impl.DateTimeClassifyPlugin;
 import org.exoplatform.services.jcr.ext.classify.impl.TypeClassifyPlugin;
-import org.exoplatform.services.wcm.core.BaseWCMTestCase;
+import org.exoplatform.services.wcm.BaseWCMTestCase;
 
 /**
  * Created by The eXo Platform SAS

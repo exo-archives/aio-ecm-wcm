@@ -35,6 +35,7 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.core.WCMService;
@@ -161,7 +162,9 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
     String workspace = preferences.getValue(UISingleContentViewerPortlet.WORKSPACE, null);
     String nodeIdentifier = preferences.getValue(UISingleContentViewerPortlet.IDENTIFIER, null) ;
     WCMService wcmService = getApplicationComponent(WCMService.class);
-    return wcmService.getReferencedContent(repository, workspace, nodeIdentifier);
+    ThreadLocalSessionProviderService threadLocalSessionProviderService = getApplicationComponent(ThreadLocalSessionProviderService.class);
+    SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
+    return wcmService.getReferencedContent(repository, workspace, nodeIdentifier, sessionProvider);
   } 
 
   private Node getLiveRevision(Node content) throws Exception {

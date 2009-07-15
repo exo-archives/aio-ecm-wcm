@@ -14,17 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.services.wcm.core;
+package org.exoplatform.services.wcm;
 
+import java.util.Date;
+
+import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
-import org.apache.commons.logging.Log;
 import org.exoplatform.container.StandaloneContainer;
-import org.exoplatform.services.jcr.core.CredentialsImpl;
+import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.impl.core.NodeImpl;
-import org.exoplatform.services.jcr.impl.core.RepositoryImpl;
-import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.test.BasicTestCase;
 
 /**
@@ -35,23 +35,17 @@ import org.exoplatform.test.BasicTestCase;
  */
 public abstract class BaseWCMTestCase extends BasicTestCase {
 
-  protected static Log          log = ExoLogger.getLogger("dms.services.test");  
-
-  protected CredentialsImpl     credentials;  
-
-  protected StandaloneContainer container;
+  protected StandaloneContainer   container;
   
-  protected Session             session;
-
-  protected RepositoryImpl      repository;
+  protected Session               session;
   
-  protected final String         REPO_NAME        = "repository".intern();
+  protected final String          REPO_NAME        = "repository".intern();
 
-  protected final String         DMSSYSTEM_WS     = "dms-system".intern();
+  protected final String          DMSSYSTEM_WS     = "dms-system".intern();
   
-  protected final String         SYSTEM_WS        = "system".intern();
+  protected final String          SYSTEM_WS        = "system".intern();
 
-  protected final String         COLLABORATION_WS = "collaboration".intern();
+  protected final String          COLLABORATION_WS = "collaboration".intern();
 
   public void setUp() throws Exception {
     String containerConf = getClass().getResource("/conf/standalone/test-configuration.xml").toString();
@@ -63,6 +57,8 @@ public abstract class BaseWCMTestCase extends BasicTestCase {
     if (System.getProperty("java.security.auth.login.config") == null)
       System.setProperty("java.security.auth.login.config", loginConf);
     
+    RepositoryService repositoryService = getService(RepositoryService.class);
+    session = repositoryService.getRepository(REPO_NAME).getSystemSession(COLLABORATION_WS);
   }
 
   protected void checkMixins(String[] mixins, NodeImpl node) {
@@ -107,6 +103,54 @@ public abstract class BaseWCMTestCase extends BasicTestCase {
 
   protected <T> T getService(Class<T> clazz) {
     return clazz.cast(container.getComponentInstanceOfType(clazz));
+  }
+
+  protected Node createWebcontentNode(Node parentNode, String nodeName) throws Exception {
+    Node webcontent = parentNode.addNode(nodeName, "exo:webContent");
+    webcontent.setProperty("exo:title", nodeName);
+
+    Node htmlNode = webcontent.addNode("default.html", "nt:file");
+    htmlNode.addMixin("exo:htmlFile");
+    Node htmlContent = htmlNode.addNode("jcr:content", "nt:resource");
+    htmlContent.setProperty("jcr:encoding", "UTF-8");
+    htmlContent.setProperty("jcr:mimeType", "text/html");
+    htmlContent.setProperty("jcr:lastModified", new Date().getTime());
+    htmlContent.setProperty("jcr:data", "This is the default.html file.");
+    
+    Node jsFolder = webcontent.addNode("js", "exo:jsFolder");
+    Node jsNode = jsFolder.addNode("default.js", "nt:file");
+    jsNode.addMixin("exo:jsFile");
+    jsNode.setProperty("exo:active", true);
+    jsNode.setProperty("exo:priority", 1);
+    jsNode.setProperty("exo:sharedJS", true);
+    
+    Node jsContent = jsNode.addNode("jcr:content", "nt:resource");
+    jsContent.setProperty("jcr:encoding", "UTF-8");
+    jsContent.setProperty("jcr:mimeType", "text/javascript");
+    jsContent.setProperty("jcr:lastModified", new Date().getTime());
+    jsContent.setProperty("jcr:data", "This is the default.js file.");
+    
+    Node cssFolder = webcontent.addNode("css", "exo:cssFolder");
+    Node cssNode = cssFolder.addNode("default.css", "nt:file");
+    cssNode.addMixin("exo:cssFile");
+    cssNode.setProperty("exo:active", true);
+    cssNode.setProperty("exo:priority", 1);
+    cssNode.setProperty("exo:sharedCSS", true);
+    
+    Node cssContent = cssNode.addNode("jcr:content", "nt:resource");
+    cssContent.setProperty("jcr:encoding", "UTF-8");
+    cssContent.setProperty("jcr:mimeType", "text/css");
+    cssContent.setProperty("jcr:lastModified", new Date().getTime());
+    cssContent.setProperty("jcr:data", "This is the default.css file.");
+    
+    Node mediaFolder = webcontent.addNode("medias");
+    mediaFolder.addNode("images", "nt:folder");
+    mediaFolder.addNode("videos", "nt:folder");
+    mediaFolder.addNode("audio", "nt:folder");
+    
+    session.save();
+    
+    return webcontent;
   }
   
 }
