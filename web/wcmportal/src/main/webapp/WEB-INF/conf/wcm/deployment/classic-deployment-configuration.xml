@@ -11,7 +11,7 @@
       <component-plugin> 
         <name>Content Initializer Service</name>
         <set-method>addPlugin</set-method>
-        <type>org.exoplatform.services.wcm.deployment.plugins.XMLDeploymentWithStagingPlugin</type>
+        <type>org.exoplatform.services.wcm.deployment.plugins.XMLDeploymentPlugin</type>
         <description>XML Deployment Plugin</description>
         <init-params>
           <object-param>        

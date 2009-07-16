@@ -42,7 +42,7 @@ import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndV
  * hoa.pham@exoplatform.com
  * Sep 6, 2008
  */
-public class XMLDeploymentWithStagingPlugin extends DeploymentPlugin {
+public class XMLDeploymentPlugin extends DeploymentPlugin {
 
   private InitParams initParams;
   private ConfigurationManager configurationManager;
@@ -50,7 +50,7 @@ public class XMLDeploymentWithStagingPlugin extends DeploymentPlugin {
   private StageAndVersionPublicationInitializerService publicationService;
   private Log log = ExoLogger.getLogger(this.getClass());
 
-  public XMLDeploymentWithStagingPlugin(InitParams initParams, ConfigurationManager configurationManager, RepositoryService repositoryService, StageAndVersionPublicationInitializerService publicationService) {
+  public XMLDeploymentPlugin(InitParams initParams, ConfigurationManager configurationManager, RepositoryService repositoryService, StageAndVersionPublicationInitializerService publicationService) {
     this.initParams = initParams;
     this.configurationManager = configurationManager;
     this.repositoryService = repositoryService;
@@ -69,8 +69,8 @@ public class XMLDeploymentWithStagingPlugin extends DeploymentPlugin {
       Session session = sessionProvider.getSession(deploymentDescriptor.getTarget().getWorkspace(), repository);
       session.importXML(deploymentDescriptor.getTarget().getNodePath(), inputStream, ImportUUIDBehavior.IMPORT_UUID_CREATE_NEW );
       session.save();
-      Node rootNode = session.getRootNode().getNode(deploymentDescriptor.getTarget().getNodePath().substring(1));
-      publicationService.initializePublication(rootNode);
+//      Node rootNode = session.getRootNode().getNode(deploymentDescriptor.getTarget().getNodePath().substring(1));
+//      publicationService.initializePublication(rootNode);
       if(log.isInfoEnabled()) {
         log.info(this.getName() + " is deployed succesfully in "+deploymentDescriptor.getTarget().getNodePath()+" at " + new Date().toString());
       }
