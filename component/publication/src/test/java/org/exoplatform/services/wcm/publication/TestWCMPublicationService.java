@@ -1,7 +1,10 @@
 package org.exoplatform.services.wcm.publication;
 
 import javax.jcr.Node;
+import javax.jcr.Property;
+import javax.jcr.PropertyIterator;
 import javax.jcr.Session;
+import javax.jcr.Value;
 
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
@@ -64,5 +67,18 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
 //    publicationPlugin.addMixin(testNode);
     wcmPublicationService.enrollNodeInLifecycle(testNode, StageAndVersionPublicationConstant.LIFECYCLE_NAME);
     wcmPublicationService.publishContentToPage(testNode, page, "classic");
+    
+    PropertyIterator iterator = testNode.getProperties();
+    while(iterator.hasNext()) {
+      Property property = iterator.nextProperty();
+      try {
+        System.out.println(property.getName() + ": " + property.getString()); 
+      } catch (Exception e) {
+        for(Value value : property.getValues()) {
+          System.out.println(property.getName() + ": " + value.getString());
+        }
+      }
+    }
+    
   }
 }

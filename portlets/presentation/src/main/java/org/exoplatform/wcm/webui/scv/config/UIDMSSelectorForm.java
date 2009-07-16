@@ -38,7 +38,6 @@ import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.publication.WebpagePublicationPlugin;
 import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -248,12 +247,12 @@ public class UIDMSSelectorForm extends UIForm implements UISelectable{
         try {
           if (!wcmPublicationService.isEnrolledInWCMLifecycle(webContent)) {
             wcmPublicationService.enrollNodeInLifecycle(webContent, lifecycleName);
-            wcmPublicationService.updateLifecyleOnChangePage(page, WebuiRequestContext.getCurrentInstance().getRemoteUser());
+            wcmPublicationService.updateLifecyleOnChangePage(page, event.getRequestContext().getRemoteUser());
           }
         }catch (NotInWCMPublicationException e){
           wcmPublicationService.unsubcribeLifecycle(webContent);
           wcmPublicationService.enrollNodeInLifecycle(webContent, lifecycleName);
-          wcmPublicationService.updateLifecyleOnChangePage(page, WebuiRequestContext.getCurrentInstance().getRemoteUser());
+          wcmPublicationService.updateLifecyleOnChangePage(page, event.getRequestContext().getRemoteUser());
         }
       }
 

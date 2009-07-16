@@ -252,12 +252,12 @@ public class UIWebContentSelectorForm extends UIForm implements UISelectable{
         try {
           if (!wcmPublicationService.isEnrolledInWCMLifecycle(webContent)) {
             wcmPublicationService.enrollNodeInLifecycle(webContent, lifecycleName);
-            wcmPublicationService.updateLifecyleOnChangePage(page, WebuiRequestContext.getCurrentInstance().getRemoteUser());
+            wcmPublicationService.updateLifecyleOnChangePage(page, event.getRequestContext().getRemoteUser());
           }
         }catch (NotInWCMPublicationException e){
           wcmPublicationService.unsubcribeLifecycle(webContent);
           wcmPublicationService.enrollNodeInLifecycle(webContent, lifecycleName);
-          wcmPublicationService.updateLifecyleOnChangePage(page, WebuiRequestContext.getCurrentInstance().getRemoteUser());
+          wcmPublicationService.updateLifecyleOnChangePage(page, event.getRequestContext().getRemoteUser());
         }
       }
       UIPortletConfig uiPortletConfig = uiWebContentSelector.getAncestorOfType(UIPortletConfig.class);

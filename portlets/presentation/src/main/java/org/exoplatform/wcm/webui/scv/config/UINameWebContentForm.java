@@ -284,7 +284,7 @@ public class UINameWebContentForm extends UIForm {
       if (!portletConfig.isEditPortletInCreatePageWizard()) {
         String pageId = Util.getUIPortal().getSelectedNode().getPageReference();
         UserPortalConfigService upcService = uiNameWebContentForm.getApplicationComponent(UserPortalConfigService.class);
-        wcmPublicationService.updateLifecyleOnChangePage(upcService.getPage(pageId), WebuiRequestContext.getCurrentInstance().getRemoteUser());
+        wcmPublicationService.updateLifecyleOnChangePage(upcService.getPage(pageId), event.getRequestContext().getRemoteUser());
       }
       uiQuickCreationWizard.viewStep(2);
     }
