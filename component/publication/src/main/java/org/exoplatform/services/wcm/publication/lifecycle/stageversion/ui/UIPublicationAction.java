@@ -31,14 +31,16 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationPlugin;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationPlugin;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationUtil;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.ui.UIPublicationTree.TreeNode;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -150,7 +152,7 @@ public class UIPublicationAction extends UIForm {
       Page page = userPortalConfigService.getPage(pageNode.getPageReference(), event.getRequestContext().getRemoteUser());
       List<String> clvPortletIds = StageAndVersionPublicationUtil.findAppInstancesByName(page, wcmConfigurationService.getRuntimeContextParam("CLVPortlet"));
       if (clvPortletIds.isEmpty()) {
-        publicationPlugin.publishContentToPage(node, page);
+        publicationPlugin.publishContentToPage(node, page, Util.getUIPortal().getOwner());
       } else {
         if (clvPortletIds.size() > 1) {
           UIPublishClvChooser clvChooser = publicationAction.createUIComponent(UIPublishClvChooser.class, null, "UIPublishClvChooser");
@@ -167,7 +169,7 @@ public class UIPublicationAction extends UIForm {
           String clvPortletId = clvPortletIds.get(0);
           DataStorage dataStorage = StageAndVersionPublicationUtil.getServices(DataStorage.class);
           PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(clvPortletId));
-          publicationPlugin.publishContentToCLV(node, page, clvPortletId, portletPreferences);
+          publicationPlugin.publishContentToCLV(node, page, clvPortletId, portletPreferences, Util.getUIPortal().getOwner(), event.getRequestContext().getRemoteUser());
         }
       }
       
@@ -230,7 +232,7 @@ public class UIPublicationAction extends UIForm {
       
       WCMPublicationService presentationService = publicationAction.getApplicationComponent(WCMPublicationService.class);
       StageAndVersionPublicationPlugin publicationPlugin = (StageAndVersionPublicationPlugin) presentationService.getWebpagePublicationPlugins().get(StageAndVersionPublicationConstant.LIFECYCLE_NAME);
-      publicationPlugin.suspendPublishedContentFromPage(publicationPages.getNode(), page);
+      publicationPlugin.suspendPublishedContentFromPage(publicationPages.getNode(), page, event.getRequestContext().getRemoteUser());
       
       publicationAction.updateUI();
 

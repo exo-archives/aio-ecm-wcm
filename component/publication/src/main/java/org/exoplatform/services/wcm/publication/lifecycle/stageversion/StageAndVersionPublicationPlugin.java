@@ -282,7 +282,7 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     return null;
   }
 
-  public void publishContentToPage(Node content, Page page) throws Exception {
+  public void publishContentToPage(Node content, Page page, String portalOwnerName) throws Exception {
     // Create portlet
     Application portlet = new Application();
     portlet.setApplicationType(org.exoplatform.web.application.Application.EXO_PORTLET_TYPE);
@@ -293,7 +293,7 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     StringBuilder windowId = new StringBuilder();
     windowId.append(PortalConfig.PORTAL_TYPE)
             .append("#")
-            .append(org.exoplatform.portal.webui.util.Util.getUIPortal().getOwner())
+            .append(portalOwnerName)
             .append(":")
             .append(configurationService.getPublishingPortletName())
             .append("/")
@@ -305,7 +305,7 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     preferences.add(addPreference("repository", ((ManageableRepository) content.getSession().getRepository()).getConfiguration().getName()));
     preferences.add(addPreference("workspace", content.getSession().getWorkspace().getName()));
     preferences.add(addPreference("nodeIdentifier", content.getUUID()));
-    savePortletPreferences(windowId.toString(), preferences);
+    savePortletPreferences(windowId.toString(), preferences, portalOwnerName);
     
     // Add portlet to page
     ArrayList<Object> listPortlet = page.getChildren();
@@ -316,7 +316,7 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
   }
 
   @SuppressWarnings("unchecked")
-  public void publishContentToCLV(Node content, Page page, String clvPortletId, PortletPreferences portletPreferences) throws Exception {
+  public void publishContentToCLV(Node content, Page page, String clvPortletId, PortletPreferences portletPreferences, String portalOwnerName, String remoteUser) throws Exception {
     WCMConfigurationService wcmConfigurationService = StageAndVersionPublicationUtil.getServices(WCMConfigurationService.class);
     ArrayList<Preference> preferences = new ArrayList<Preference>();
     if (portletPreferences == null) {
@@ -345,8 +345,8 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
       preference.setValues(contentValues);
       preferences.add(preference);
       
-      savePortletPreferences(clvPortletId, preferences);
-      updateOnAddNodeProperties(page, content, clvPortletId);
+      savePortletPreferences(clvPortletId, preferences, portalOwnerName);
+      updateOnAddNodeProperties(page, content, clvPortletId, remoteUser);
     } else {
       String clvMode = "";
       Preference folderPreference = new Preference();
@@ -379,16 +379,16 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
         contentPreference.setValues(contentValues);    
         preferences.set(contentPrefIndex, contentPreference);
         
-        savePortletPreferences(clvPortletId, preferences);
-        updateOnAddNodeProperties(page, content, clvPortletId);
+        savePortletPreferences(clvPortletId, preferences, portalOwnerName);
+        updateOnAddNodeProperties(page, content, clvPortletId, remoteUser);
       }
     }
   }
   
-  private void updateOnAddNodeProperties(Page page, Node content, String clvPortletId) throws Exception {
+  private void updateOnAddNodeProperties(Page page, Node content, String clvPortletId, String remoteUser) throws Exception {
     if (content.canAddMixin("publication:webpagesPublication")) content.addMixin("publication:webpagesPublication");
     List<String> listExistedNavigationNodeUri = StageAndVersionPublicationUtil.getValuesAsString(content, "publication:navigationNodeURIs");
-    List<String> listPageNavigationUri = getListPageNavigationUri(page);
+    List<String> listPageNavigationUri = getListPageNavigationUri(page, remoteUser);
     if (listPageNavigationUri.isEmpty()) return ;
     for (String uri : listPageNavigationUri) {
       if(!listExistedNavigationNodeUri.contains(uri)) {
@@ -412,14 +412,14 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     session.save();
   }
   
-  private void updateOnRemoveNodeProperties(Page page, Node content, String clvPortletId) throws Exception {
+  private void updateOnRemoveNodeProperties(Page page, Node content, String clvPortletId, String remoteUser) throws Exception {
     List<String> listExistedApplicationId = StageAndVersionPublicationUtil.getValuesAsString(content, "publication:applicationIDs");
     listExistedApplicationId.remove(StageAndVersionPublicationUtil.setMixedApplicationId(page.getPageId(), clvPortletId));
     
     List<String> listExistedPageId = StageAndVersionPublicationUtil.getValuesAsString(content, "publication:webPageIDs");
     listExistedPageId.remove(0);
     
-    List<String> listPageNavigationUri = getListPageNavigationUri(page);
+    List<String> listPageNavigationUri = getListPageNavigationUri(page, remoteUser);
     List<String> listExistedNavigationNodeUri = StageAndVersionPublicationUtil.getValuesAsString(content, "publication:navigationNodeURIs");
     List<String> listExistedNavigationNodeUriTmp = new ArrayList<String>();
     listExistedNavigationNodeUriTmp.addAll(listExistedNavigationNodeUri);    
@@ -446,18 +446,18 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     return preference;
   }
   
-  private void savePortletPreferences(String portletId, ArrayList<Preference> listPreference) throws Exception {
+  private void savePortletPreferences(String portletId, ArrayList<Preference> listPreference, String portalOwnerName) throws Exception {
     PortletPreferences portletPreferences = new PortletPreferences();
     portletPreferences.setWindowId(portletId);
     portletPreferences.setOwnerType(PortalConfig.PORTAL_TYPE);
-    portletPreferences.setOwnerId(org.exoplatform.portal.webui.util.Util.getUIPortal().getOwner());
+    portletPreferences.setOwnerId(portalOwnerName);
     portletPreferences.setPreferences(listPreference);
     DataStorage dataStorage = StageAndVersionPublicationUtil.getServices(DataStorage.class);
     dataStorage.save(portletPreferences);
   }
   
   @SuppressWarnings("unchecked")
-  public void suspendPublishedContentFromPage(Node content, Page page) throws Exception {
+  public void suspendPublishedContentFromPage(Node content, Page page, String remoteUser) throws Exception {
     // Remove content from CLV portlet
     DataStorage dataStorage = StageAndVersionPublicationUtil.getServices(DataStorage.class);
     WCMConfigurationService wcmConfigurationService = StageAndVersionPublicationUtil.getServices(WCMConfigurationService.class);
@@ -481,7 +481,7 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
             preferences.add(preference);
           }
           dataStorage.save(portletPreferences);
-          updateOnRemoveNodeProperties(page, content, clvPortletId);
+          updateOnRemoveNodeProperties(page, content, clvPortletId, remoteUser);
         }
       }
     }
@@ -506,20 +506,20 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     navigationEventListenerDelegate.updateLifecycleOnChangeNavigation(pageNavigation);
   }
 
-  public void updateLifecycleOnRemovePage(Page page) throws Exception {
-    pageEventListenerDelegate.updateLifecycleOnRemovePage(page);
+  public void updateLifecycleOnRemovePage(Page page, String remoteUser) throws Exception {
+    pageEventListenerDelegate.updateLifecycleOnRemovePage(page, remoteUser);
   }
 
-  public void updateLifecyleOnChangePage(Page page) throws Exception {
-    pageEventListenerDelegate.updateLifecyleOnChangePage(page);
+  public void updateLifecyleOnChangePage(Page page, String remoteUser) throws Exception {
+    pageEventListenerDelegate.updateLifecyleOnChangePage(page, remoteUser);
   }
 
   public void updateLifecyleOnCreateNavigation(PageNavigation pageNavigation) throws Exception {
     navigationEventListenerDelegate.updateLifecyleOnCreateNavigation(pageNavigation);
   }
 
-  public void updateLifecyleOnCreatePage(Page page) throws Exception {
-    pageEventListenerDelegate.updateLifecyleOnCreatePage(page);
+  public void updateLifecyleOnCreatePage(Page page, String remoteUser) throws Exception {
+    pageEventListenerDelegate.updateLifecyleOnCreatePage(page, remoteUser);
   }
 
   public void updateLifecyleOnRemoveNavigation(PageNavigation pageNavigation) throws Exception {
@@ -541,11 +541,10 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     return listPortalName;
   }
 
-  public List<String> getListPageNavigationUri(Page page) throws Exception {
+  public List<String> getListPageNavigationUri(Page page, String remoteUser) throws Exception {
     List<String> listPageNavigationUri = new ArrayList<String>();
     DataStorage dataStorage = StageAndVersionPublicationUtil.getServices(DataStorage.class);    
-    RequestContext requestContext = WebuiRequestContext.getCurrentInstance();
-    for (String portalName : getRunningPortals(requestContext.getRemoteUser())) {
+    for (String portalName : getRunningPortals(remoteUser)) {
       Query<PageNavigation> query = new Query<PageNavigation>(PortalConfig.PORTAL_TYPE,portalName,PageNavigation.class);
       PageList list = dataStorage.find(query);
       for(Object object: list.getAll()) {

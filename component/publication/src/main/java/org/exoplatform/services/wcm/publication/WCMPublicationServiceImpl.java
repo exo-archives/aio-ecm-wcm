@@ -16,18 +16,17 @@
  */
 package org.exoplatform.services.wcm.publication;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.jcr.Node;
-import javax.jcr.Value;
 
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleException;
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.picocontainer.Startable;
 
 /**
@@ -64,37 +63,28 @@ public class WCMPublicationServiceImpl implements WCMPublicationService, Startab
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.publication.WCMPublicationPresentationService#suspendPublishedContentFromPage(javax.jcr.Node, org.exoplatform.portal.config.model.Page)
    */
-  public void suspendPublishedContentFromPage(Node content, Page page) throws NotInPublicationLifecycleException, Exception {
+  public void suspendPublishedContentFromPage(Node content, Page page, String remoteUser) throws NotInPublicationLifecycleException, Exception {
     if (!publicationService.isNodeEnrolledInLifecycle(content)) {
       throw new NotInPublicationLifecycleException();
     }
     String lifecycleName= publicationService.getNodeLifecycleName(content);
     WebpagePublicationPlugin publicationPlugin = publicationPlugins.get(lifecycleName);
-    publicationPlugin.suspendPublishedContentFromPage(content,page);
+    publicationPlugin.suspendPublishedContentFromPage(content, page, remoteUser);
   }
 
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.publication.WCMPublicationPresentationService#publishContentToPage(javax.jcr.Node, org.exoplatform.portal.config.model.Page)
    */
-  public void publishContentToPage(Node content, Page page)
+  public void publishContentToPage(Node content, Page page, String portalOwnerName)
   throws NotInPublicationLifecycleException, Exception {    
     if(!publicationService.isNodeEnrolledInLifecycle(content))
       throw new NotInPublicationLifecycleException("The node " +content.getPath() + " is not enrolled to any publication lifecyle");
     String lifecycleName = publicationService.getNodeLifecycleName(content);
     WebpagePublicationPlugin publicationPlugin = publicationPlugins.get(lifecycleName);
-    publicationPlugin.publishContentToPage(content,page);
+    System.err.println(publicationPlugins.get(lifecycleName));
+    publicationPlugin.publishContentToPage(content,page, portalOwnerName);
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.services.wcm.publication.WCMPublicationPresentationService#publishContentToPage(javax.jcr.Node, org.exoplatform.portal.config.model.Page, java.lang.String)
-   */
-  public void publishContentToPage(Node content, Page page, String lifecyleName) throws Exception {          
-    publicationService.enrollNodeInLifecycle(content,lifecyleName);  
-    String lifecycleName = publicationService.getNodeLifecycleName(content);
-    WebpagePublicationPlugin publicationPlugin = publicationPlugins.get(lifecycleName);
-    publicationPlugin.publishContentToPage(content,page);
-  }    
-  
   public void enrollNodeInLifecycle(Node node, String lifecycleName) throws Exception {
     publicationService.enrollNodeInLifecycle(node,lifecycleName);
   }
@@ -125,18 +115,18 @@ public class WCMPublicationServiceImpl implements WCMPublicationService, Startab
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.publication.WCMPublicationPresentationService#updateLifecycleOnRemovePage(org.exoplatform.portal.config.model.Page)
    */
-  public void updateLifecycleOnRemovePage(Page page) throws Exception {
+  public void updateLifecycleOnRemovePage(Page page, String remoteUser) throws Exception {
     for(WebpagePublicationPlugin publicationPlugin: publicationPlugins.values()) {
-      publicationPlugin.updateLifecycleOnRemovePage(page);
+      publicationPlugin.updateLifecycleOnRemovePage(page, remoteUser);
     }
   }
 
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.publication.WCMPublicationPresentationService#updateLifecyleOnChangePage(org.exoplatform.portal.config.model.Page)
    */
-  public void updateLifecyleOnChangePage(Page page) throws Exception {   
+  public void updateLifecyleOnChangePage(Page page, String remoteUser) throws Exception {   
     for(WebpagePublicationPlugin publicationPlugin: publicationPlugins.values()) {
-      publicationPlugin.updateLifecyleOnChangePage(page);
+      publicationPlugin.updateLifecyleOnChangePage(page, remoteUser);
     }
   }
 
@@ -152,9 +142,9 @@ public class WCMPublicationServiceImpl implements WCMPublicationService, Startab
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.publication.WCMPublicationPresentationService#updateLifecyleOnCreatePage(org.exoplatform.portal.config.model.Page)
    */
-  public void updateLifecyleOnCreatePage(Page page) throws Exception {
+  public void updateLifecyleOnCreatePage(Page page, String remoteUser) throws Exception {
     for(WebpagePublicationPlugin publicationPlugin: publicationPlugins.values()) {
-      publicationPlugin.updateLifecyleOnCreatePage(page);
+      publicationPlugin.updateLifecyleOnCreatePage(page, remoteUser);
     }
   }
 

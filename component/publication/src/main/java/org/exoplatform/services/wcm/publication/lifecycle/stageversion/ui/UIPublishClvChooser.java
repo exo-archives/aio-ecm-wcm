@@ -27,11 +27,12 @@ import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationPlugin;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationPlugin;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationUtil;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -115,7 +116,7 @@ public class UIPublishClvChooser extends UIForm implements UIPopupComponent {
       }
       WCMPublicationService presentationService = clvChooser.getApplicationComponent(WCMPublicationService.class);
       StageAndVersionPublicationPlugin publicationPlugin = (StageAndVersionPublicationPlugin) presentationService.getWebpagePublicationPlugins().get(StageAndVersionPublicationConstant.LIFECYCLE_NAME);
-      publicationPlugin.publishContentToCLV(clvChooser.node, clvChooser.page, clvPortletId, portletPreferences);
+      publicationPlugin.publishContentToCLV(clvChooser.node, clvChooser.page, clvPortletId, portletPreferences, Util.getUIPortal().getOwner(), event.getRequestContext().getRemoteUser());
       UIPopupWindow popupWindow = clvChooser.getAncestorOfType(UIPopupWindow.class);
       popupWindow.setShow(false);
     }

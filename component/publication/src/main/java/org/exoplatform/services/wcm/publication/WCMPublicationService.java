@@ -45,34 +45,23 @@ public interface WCMPublicationService {
   * Publish content to a portal page when the node is in a publication lifecyle.
   * 
   * @param content the content
-  * @param page the page
-  * 
+ * @param page the page
+ * @param portalOwnerName TODO
   * @throws NotInPublicationLifecycleException the not in publication lifecycle exception
   * @throws Exception the exception
   */
- public void publishContentToPage(Node content, Page page) throws NotInPublicationLifecycleException, Exception;
- 
- /**
-  * Publish a content node to a portal page when the node is not in any lifecyle.
-  * 
-  * @param content the content
-  * @param page the page
-  * @param lifecyleName the lifecyle name
-  * 
-  * @throws Exception the exception
-  */
- public void publishContentToPage(Node content, Page page, String lifecyleName) throws Exception;
+ public void publishContentToPage(Node content, Page page, String portalOwnerName) throws NotInPublicationLifecycleException, Exception;
  
  /**
   * Suspend a published content from a portal page.
   * 
   * @param content the jcr content node
-  * @param page the portal page
-  * 
+ * @param page the portal page
+ * @param remoteUser TODO
   * @throws NotInPublicationLifecycleException the not in publication lifecycle exception
   * @throws Exception the exception
   */
- public void suspendPublishedContentFromPage(Node content, Page page) throws NotInPublicationLifecycleException, Exception;
+ public void suspendPublishedContentFromPage(Node content, Page page, String remoteUser) throws NotInPublicationLifecycleException, Exception;
  
  /**
   * Retrieves all added web page publication plugins.
@@ -108,28 +97,31 @@ public interface WCMPublicationService {
   * Retrieves all web page lifecycles and update the publication lifecycle when a page is created
   * 
   * @param page the page
+ * @param remoteUser TODO
   * 
   * @throws Exception the exception
   */
- public void updateLifecyleOnCreatePage(Page page) throws Exception;
+ public void updateLifecyleOnCreatePage(Page page, String remoteUser) throws Exception;
  
  /**
   * Retrieves all web page lifecycles and update the publication lifecycle when a page is changed
   * 
   * @param page the page
+ * @param remoteUser TODO
   * 
   * @throws Exception the exception
   */
- public void updateLifecyleOnChangePage(Page page) throws Exception;
+ public void updateLifecyleOnChangePage(Page page, String remoteUser) throws Exception;
  
  /**
   * Retrieves all web page lifecycles and update the publication lifecycle when a page is removed
   * 
   * @param page the page
+ * @param remoteUser TODO
   * 
   * @throws Exception the exception
   */
- public void updateLifecycleOnRemovePage(Page page) throws Exception;
+ public void updateLifecycleOnRemovePage(Page page, String remoteUser) throws Exception;
  
  /**
   * Retrieves all web page lifecycles and update the publication lifecycle when a navigation is created

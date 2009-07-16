@@ -24,7 +24,9 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
+import org.exoplatform.webui.application.WebuiRequestContext;
 
 /**
  * Created by The eXo Platform SAS
@@ -41,11 +43,12 @@ public class CreatePageEventListener extends Listener<UserPortalConfigService, P
    * @see org.exoplatform.services.listener.Listener#onEvent(org.exoplatform.services.listener.Event)
    */
   public void onEvent(Event<UserPortalConfigService, Page> event) throws Exception {
+    System.out.println("\n\n\n\n\n ++++++++++++++++++++++++++++++++++++++++++= \n\n\n\n\n\n\n\n\n");
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     WCMPublicationService publicationService = 
       (WCMPublicationService)container.getComponentInstanceOfType(WCMPublicationService.class);
     try {
-      publicationService.updateLifecyleOnCreatePage(event.getData());
+      publicationService.updateLifecyleOnCreatePage(event.getData(), ConversationState.getCurrent().getIdentity().getUserId());
     } catch (Exception e) {
       log.error("Exception when update publication lifecyle", e);
     }    

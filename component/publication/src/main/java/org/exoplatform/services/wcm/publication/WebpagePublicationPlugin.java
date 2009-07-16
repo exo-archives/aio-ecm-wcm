@@ -44,10 +44,10 @@ public abstract class WebpagePublicationPlugin extends PublicationPlugin {
    * 
    * @param content the jcr content node
    * @param page the portal page
-   * 
+   * @param portalOwnerName TODO
    * @throws Exception the exception
    */
-  public abstract void publishContentToPage(Node content, Page page) throws Exception;  
+  public abstract void publishContentToPage(Node content, Page page, String portalOwnerName) throws Exception;  
   
   /**
    * Suspend published content from a portal page.
@@ -56,37 +56,40 @@ public abstract class WebpagePublicationPlugin extends PublicationPlugin {
    * 
    * @param content the content
    * @param page the page
-   * 
+   * @param remoteUser TODO
    * @throws Exception the exception
    */
-  public abstract void suspendPublishedContentFromPage(Node content, Page page) throws Exception;
+  public abstract void suspendPublishedContentFromPage(Node content, Page page, String remoteUser) throws Exception;
       
   /**
    * Update lifecyle state of the any content relates to the page when page is created
    * 
    * @param page the page
+   * @param remoteUser TODO
    * 
    * @throws Exception the exception
    */
-  public abstract void updateLifecyleOnCreatePage(Page page) throws Exception;
+  public abstract void updateLifecyleOnCreatePage(Page page, String remoteUser) throws Exception;
   
   /**
    * Update lifecyle state of the any content relates to the page when page is changed
    * 
    * @param page the page
+   * @param remoteUser TODO
    * 
    * @throws Exception the exception
    */
-  public abstract void updateLifecyleOnChangePage(Page page) throws Exception;
+  public abstract void updateLifecyleOnChangePage(Page page, String remoteUser) throws Exception;
   
   /**
    * Update lifecyle state of the any content relates to the page when page is removed
    * 
    * @param page the page
+   * @param remoteUser TODO
    * 
    * @throws Exception the exception
    */
-  public abstract void updateLifecycleOnRemovePage(Page page) throws Exception;
+  public abstract void updateLifecycleOnRemovePage(Page page, String remoteUser) throws Exception;
   
   /**
    * Update lifecyle state of the any content relates to a navigation when the navigation is created

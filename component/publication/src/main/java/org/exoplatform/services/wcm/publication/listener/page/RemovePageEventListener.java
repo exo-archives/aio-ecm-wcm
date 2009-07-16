@@ -24,8 +24,10 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.publication.listener.navigation.RemoveNavigationEventListener;
+import org.exoplatform.webui.application.WebuiRequestContext;
 
 /**
  * Created by The eXo Platform SAS
@@ -43,10 +45,9 @@ public class RemovePageEventListener extends Listener<UserPortalConfigService, P
    */
   public void onEvent(Event<UserPortalConfigService, Page> event) throws Exception { 
     ExoContainer container = ExoContainerContext.getCurrentContainer();
-    WCMPublicationService publicationService = 
-      (WCMPublicationService)container.getComponentInstanceOfType(WCMPublicationService.class);
+    WCMPublicationService publicationService = (WCMPublicationService)container.getComponentInstanceOfType(WCMPublicationService.class);
     try {
-      publicationService.updateLifecycleOnRemovePage(event.getData());
+      publicationService.updateLifecycleOnRemovePage(event.getData(), ConversationState.getCurrent().getIdentity().getUserId());
     } catch (Exception e) {
       log.error("Exception when update publication lifecyle", e);
     }    

@@ -226,7 +226,7 @@ public class StageAndVersionPublicationUtil {
    * @throws Exception the exception
    */
   public static Node getNodeByApplicationId(String applicationId) throws Exception {
-    SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
+    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
     DataStorage dataStorage = getServices(DataStorage.class);
     RepositoryService repositoryService = getServices(RepositoryService.class);
     PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(applicationId));
