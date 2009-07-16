@@ -32,6 +32,7 @@ import org.exoplatform.services.rest.URITemplate;
 import org.exoplatform.services.rest.container.ResourceContainer;
 import org.exoplatform.services.rest.transformer.XMLOutputTransformer;
 import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
+import org.exoplatform.wcm.connector.BaseConnector;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 

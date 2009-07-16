@@ -2,6 +2,9 @@
 
 <configuration>
   <component>    
+    <type>org.exoplatform.wcm.connector.collaboration.VoteConnector</type>    
+  </component>      
+  <component>    
     <type>org.exoplatform.wcm.connector.fckeditor.DocumentConnector</type>    
   </component>      
   <component>    

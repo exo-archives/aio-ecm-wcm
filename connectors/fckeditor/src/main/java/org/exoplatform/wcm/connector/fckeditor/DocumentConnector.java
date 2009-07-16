@@ -38,6 +38,7 @@ import org.exoplatform.services.rest.transformer.PassthroughInputTransformer;
 import org.exoplatform.services.rest.transformer.XMLOutputTransformer;
 import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
+import org.exoplatform.wcm.connector.BaseConnector;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
