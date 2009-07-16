@@ -16,7 +16,17 @@
  */
 package org.exoplatform.services.wcm.core;
 
+import javax.jcr.Node;
+
+import org.exoplatform.container.component.ComponentPlugin;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.BaseWCMTestCase;
+import org.exoplatform.services.wcm.javascript.JSFileHandler;
+import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
+import org.exoplatform.services.wcm.skin.CSSFileHandler;
+import org.exoplatform.services.wcm.webcontent.HTMLFileSchemaHandler;
+import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
 
 /**
  * Created by The eXo Platform SAS
@@ -26,11 +36,15 @@ import org.exoplatform.services.wcm.BaseWCMTestCase;
  */
 public class TestWebSchemaConfigService extends BaseWCMTestCase {
 
+  private WebSchemaConfigService webSchemaConfigService;
+  
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.core.BaseWCMTestCase#setUp()
    */
   public void setUp() throws Exception {
     super.setUp();
+    webSchemaConfigService = getService(WebSchemaConfigService.class);
+    webSchemaConfigService.getAllWebSchemaHandler().clear();
   }
   
   /**
@@ -38,22 +52,165 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
    * 
    * @throws Exception the exception
    */
-  public void testAddWebSchemaHandler() throws Exception {}
+  public void testAddCSSFileSchemaHandler() throws Exception {
+    ComponentPlugin componentPlugin = new CSSFileHandler();
+    webSchemaConfigService.addWebSchemaHandler(componentPlugin);
+    assertEquals(1, webSchemaConfigService.getAllWebSchemaHandler().size());  }
+  
+  /**
+   * Test add double css file schema handler.
+   * 
+   * @throws Exception the exception
+   */
+  public void testAddDoubleCSSFileSchemaHandler() throws Exception {
+    ComponentPlugin componentPlugin = new CSSFileHandler();
+    webSchemaConfigService.addWebSchemaHandler(componentPlugin);
+    ComponentPlugin componentPlugin2 = new CSSFileHandler();
+    webSchemaConfigService.addWebSchemaHandler(componentPlugin2);
+    assertEquals(1, webSchemaConfigService.getAllWebSchemaHandler().size());  }
+  
+  /**
+   * Test add js file schema handler.
+   * 
+   * @throws Exception the exception
+   */
+  public void testAddJSFileSchemaHandler() throws Exception {
+    ComponentPlugin componentPlugin = new JSFileHandler();
+    webSchemaConfigService.addWebSchemaHandler(componentPlugin);
+    assertEquals(1, webSchemaConfigService.getAllWebSchemaHandler().size());  }
+  
+  /**
+   * Test add double js file schema handler.
+   * 
+   * @throws Exception the exception
+   */
+  public void testAddDoubleJSFileSchemaHandler() throws Exception {
+    ComponentPlugin componentPlugin = new JSFileHandler();
+    webSchemaConfigService.addWebSchemaHandler(componentPlugin);
+    ComponentPlugin componentPlugin2 = new JSFileHandler();
+    webSchemaConfigService.addWebSchemaHandler(componentPlugin2);
+    assertEquals(1, webSchemaConfigService.getAllWebSchemaHandler().size());
+  }
+  
+  /**
+   * Test add html file schema handler.
+   * 
+   * @throws Exception the exception
+   */
+  public void testAddHTMLFileSchemaHandler() throws Exception {
+    ComponentPlugin componentPlugin = new HTMLFileSchemaHandler();
+    webSchemaConfigService.addWebSchemaHandler(componentPlugin);
+    assertEquals(1, webSchemaConfigService.getAllWebSchemaHandler().size());
+  }
+  
+  /**
+   * Test add double html file schema handler.
+   * 
+   * @throws Exception the exception
+   */
+  public void testAddDoubleHTMLFileSchemaHandler() throws Exception {
+    ComponentPlugin componentPlugin = new HTMLFileSchemaHandler();
+    webSchemaConfigService.addWebSchemaHandler(componentPlugin);
+    ComponentPlugin componentPlugin2 = new HTMLFileSchemaHandler();
+    webSchemaConfigService.addWebSchemaHandler(componentPlugin2);
+    assertEquals(1, webSchemaConfigService.getAllWebSchemaHandler().size());  
+  }
+
+  /**
+   * Test add portal folder schema handler.
+   * 
+   * @throws Exception the exception
+   */
+  public void testAddPortalFolderSchemaHandler() throws Exception {
+    ComponentPlugin componentPlugin = new PortalFolderSchemaHandler();
+    webSchemaConfigService.addWebSchemaHandler(componentPlugin);
+    assertEquals(1, webSchemaConfigService.getAllWebSchemaHandler().size());
+  }
+  
+  /**
+   * Test add double portal folder schema handler.
+   * 
+   * @throws Exception the exception
+   */
+  public void testAddDoublePortalFolderSchemaHandler() throws Exception {
+    ComponentPlugin componentPlugin = new PortalFolderSchemaHandler();
+    webSchemaConfigService.addWebSchemaHandler(componentPlugin);
+    ComponentPlugin componentPlugin2 = new PortalFolderSchemaHandler();
+    webSchemaConfigService.addWebSchemaHandler(componentPlugin2);
+    assertEquals(1, webSchemaConfigService.getAllWebSchemaHandler().size());  
+  }
+  
+  /**
+   * Test add web content schema handler.
+   * 
+   * @throws Exception the exception
+   */
+  public void testAddWebcontentSchemaHandler() throws Exception {
+    ComponentPlugin componentPlugin = new WebContentSchemaHandler();
+    webSchemaConfigService.addWebSchemaHandler(componentPlugin);
+    assertEquals(1, webSchemaConfigService.getAllWebSchemaHandler().size());
+  }
+  
+  /**
+   * Test add double web content schema handler.
+   * 
+   * @throws Exception the exception
+   */
+  public void testAddDoubleWebcontentSchemaHandler() throws Exception {
+    ComponentPlugin componentPlugin = new WebContentSchemaHandler();
+    webSchemaConfigService.addWebSchemaHandler(componentPlugin);
+    ComponentPlugin componentPlugin2 = new WebContentSchemaHandler();
+    webSchemaConfigService.addWebSchemaHandler(componentPlugin2);
+    assertEquals(1, webSchemaConfigService.getAllWebSchemaHandler().size());  
+  }
   
   /**
    * Test get all web schema handler.
    */
-  public void testGetAllWebSchemaHandler() {}
+  public void testGetAllWebSchemaHandler() throws Exception {
+    webSchemaConfigService.addWebSchemaHandler(new JSFileHandler());
+    webSchemaConfigService.addWebSchemaHandler(new CSSFileHandler());
+    webSchemaConfigService.addWebSchemaHandler(new HTMLFileSchemaHandler());
+    webSchemaConfigService.addWebSchemaHandler(new PortalFolderSchemaHandler());
+    webSchemaConfigService.addWebSchemaHandler(new WebContentSchemaHandler());
+    assertEquals(5, webSchemaConfigService.getAllWebSchemaHandler().size());
+  }
   
   /**
    * Test get web schema handler by type.
    */
-  public void testGetWebSchemaHandlerByType() {}
+  public void testGetWebSchemaHandlerByType() throws Exception {
+    webSchemaConfigService.addWebSchemaHandler(new JSFileHandler());
+    webSchemaConfigService.addWebSchemaHandler(new CSSFileHandler());
+    webSchemaConfigService.addWebSchemaHandler(new HTMLFileSchemaHandler());
+    webSchemaConfigService.addWebSchemaHandler(new PortalFolderSchemaHandler());
+    webSchemaConfigService.addWebSchemaHandler(new WebContentSchemaHandler());
+    
+    CSSFileHandler cssFileSchemaHandler = webSchemaConfigService.getWebSchemaHandlerByType(CSSFileHandler.class);
+    assertTrue(cssFileSchemaHandler instanceof CSSFileHandler);
+    
+    JSFileHandler jsFileSchemaHandler = webSchemaConfigService.getWebSchemaHandlerByType(JSFileHandler.class);
+    assertTrue(jsFileSchemaHandler instanceof JSFileHandler);
+    
+    HTMLFileSchemaHandler htmlFileSchemaHandler = webSchemaConfigService.getWebSchemaHandlerByType(HTMLFileSchemaHandler.class);
+    assertTrue(htmlFileSchemaHandler instanceof HTMLFileSchemaHandler);
+    
+    PortalFolderSchemaHandler portalFolderSchemaHandler= webSchemaConfigService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
+    assertTrue(portalFolderSchemaHandler instanceof PortalFolderSchemaHandler);
+    
+    WebContentSchemaHandler webContentSchemaHandler = webSchemaConfigService.getWebSchemaHandlerByType(WebContentSchemaHandler.class);
+    assertTrue(webContentSchemaHandler instanceof WebContentSchemaHandler);
+  }
   
   /**
-   * Test create schema.
+   * Test create css file schema handler
    */
-  public void testCreateSchema() {}
+  public void testCreateSchema() throws Exception {
+    webSchemaConfigService.addWebSchemaHandler(new CSSFileHandler());
+    Node cssNode = session.getRootNode().addNode("jsNode", "nt:file");
+    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
+    webSchemaConfigService.createSchema(cssNode, sessionProvider);
+  }
   
   /**
    * Test update schema on modify.

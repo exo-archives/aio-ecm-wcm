@@ -24,18 +24,30 @@ import org.exoplatform.services.wcm.core.WebSchemaConfigService;
 import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
 
 /**
- * Created by The eXo Platform SAS
+ * Created by The eXo Platform SAS.
+ * 
  * @author : Hoa.Pham
- *          hoa.pham@exoplatform.com
- * May 28, 2008  
+ * hoa.pham@exoplatform.com
+ * May 28, 2008
  */
 public class CSSFileHandler extends BaseWebSchemaHandler {  
+  
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.core.BaseWebSchemaHandler#getHandlerNodeType()
+   */
   protected String getHandlerNodeType() { return "nt:file"; }
+  
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.core.BaseWebSchemaHandler#getParentNodeType()
+   */
   protected String getParentNodeType() { return "exo:cssFolder" ; }
+  
+  /** The is in portal css folder. */
   private boolean isInPortalCSSFolder = false;
 
-  public CSSFileHandler() { }
-
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.core.BaseWebSchemaHandler#matchHandler(javax.jcr.Node, org.exoplatform.services.jcr.ext.common.SessionProvider)
+   */
   public boolean matchHandler(Node node, SessionProvider sessionProvider) throws Exception {
     if(!matchNodeType(node))
       return false;
@@ -50,10 +62,28 @@ public class CSSFileHandler extends BaseWebSchemaHandler {
     return true;        
   }
 
+  /**
+   * Match node type.
+   * 
+   * @param node the node
+   * 
+   * @return true, if successful
+   * 
+   * @throws Exception the exception
+   */
   private boolean matchNodeType(Node node) throws Exception{        
     return node.getPrimaryNodeType().getName().equals("nt:file");
   }
 
+  /**
+   * Match mime type.
+   * 
+   * @param node the node
+   * 
+   * @return true, if successful
+   * 
+   * @throws Exception the exception
+   */
   private boolean matchMimeType(Node node) throws Exception{
     String mimeType = getFileMimeType(node);
     if("text/css".equals(mimeType))
@@ -63,10 +93,29 @@ public class CSSFileHandler extends BaseWebSchemaHandler {
     return false;
   }
 
+  /**
+   * Match parent node type.
+   * 
+   * @param file the file
+   * 
+   * @return true, if successful
+   * 
+   * @throws Exception the exception
+   */
   private boolean matchParentNodeType(Node file) throws Exception{
     return file.getParent().isNodeType("exo:cssFolder");
   }
 
+  /**
+   * Match portal css folder.
+   * 
+   * @param file the file
+   * @param sessionProvider the session provider
+   * 
+   * @return true, if successful
+   * 
+   * @throws Exception the exception
+   */
   private boolean matchPortalCSSFolder(Node file, SessionProvider sessionProvider) throws Exception{
     Node portal = findPortalNode(file,sessionProvider);    
     if(portal == null) return false;
@@ -76,17 +125,21 @@ public class CSSFileHandler extends BaseWebSchemaHandler {
     return file.getPath().startsWith(cssFolder.getPath());     
   }
 
-  @SuppressWarnings("unused")
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.core.BaseWebSchemaHandler#onCreateNode(javax.jcr.Node, org.exoplatform.services.jcr.ext.common.SessionProvider)
+   */
   public void onCreateNode(Node file, SessionProvider sessionProvider) throws Exception {  
     addMixin(file, "exo:cssFile");
     addMixin(file,"exo:owneable");
     file.setProperty("exo:presentationType","exo:cssFile");
-    //If this cssFile belong to cssFolder of portal, the cssFile will be shared cssFile    
     if(isInPortalCSSFolder) {
       file.setProperty("exo:sharedCSS",true);
     }
   }  
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.core.BaseWebSchemaHandler#onModifyNode(javax.jcr.Node, org.exoplatform.services.jcr.ext.common.SessionProvider)
+   */
   public void onModifyNode(Node file, SessionProvider sessionProvider) throws Exception {
     if(isInPortalCSSFolder) {
       Node portal = findPortalNode(file,sessionProvider);
@@ -95,6 +148,9 @@ public class CSSFileHandler extends BaseWebSchemaHandler {
     }          
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.core.BaseWebSchemaHandler#onRemoveNode(javax.jcr.Node, org.exoplatform.services.jcr.ext.common.SessionProvider)
+   */
   public void onRemoveNode(Node file, SessionProvider sessionProvider) throws Exception {
     if(isInPortalCSSFolder){          
       XSkinService skinService = getService(XSkinService.class);
