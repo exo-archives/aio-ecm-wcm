@@ -114,7 +114,7 @@
                           <value>                    
                             <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">             
                               <field name="templateFile"><string>/htmlFile/dialogs/dialog1.gtmpl</string></field>
-                              <field name="roles"><string>*:/platform/web-contributors</string></field>                
+                              <field name="roles"><string>webdesigner:/platform/web-contributors</string></field>                
                             </object>                      
                           </value>                      
                         </collection>
@@ -142,7 +142,7 @@
                           <value>                    
                             <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">             
                               <field name="templateFile"><string>/cssFile/dialogs/dialog1.gtmpl</string></field>
-                              <field name="roles"><string>*:/platform/web-contributors</string></field>                
+                              <field name="roles"><string>webdesigner:/platform/web-contributors</string></field>                
                             </object>                      
                           </value>                      
                         </collection>
@@ -170,7 +170,7 @@
                           <value>                    
                             <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">             
                               <field name="templateFile"><string>/jsFile/dialogs/dialog1.gtmpl</string></field>
-                              <field name="roles"><string>*:/platform/web-contributors</string></field>                
+                              <field name="roles"><string>webdesigner:/platform/web-contributors</string></field>                
                             </object>                      
                           </value>                      
                         </collection>
@@ -283,13 +283,13 @@
                           <value>                    
                             <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">             
                               <field name="templateFile"><string>/webContent/dialogs/dialog1.gtmpl</string></field>
-                              <field name="roles"><string>*:/platform/web-contributors</string></field>                
+                              <field name="roles"><string>webdesigner:/platform/web-contributors</string></field>                
                             </object>                      
                           </value>                      
                           <value>                    
                             <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">             
                               <field name="templateFile"><string>/webContent/dialogs/dialog2.gtmpl</string></field>
-                              <field name="roles"><string>*:/platform/web-contributors</string></field>                
+                              <field name="roles"><string>redactor:/platform/web-contributors</string></field>                
                             </object>                      
                           </value>                      
                         </collection>
@@ -330,7 +330,7 @@
                     <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$NodeType">
                       <field  name="nodetypeName"><string>exo:siteBreadcrumb</string></field>
                       <field  name="documentTemplate"><boolean>true</boolean></field>
-                      <field  name="label"><string>Site Breadcrum</string></field>                      
+                      <field  name="label"><string>Site Breadcrumb</string></field>                      
                       <field  name="referencedView">
                         <collection type="java.util.ArrayList">
                           <value>                    
@@ -374,7 +374,35 @@
                           <value>                    
                             <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">             
                               <field name="templateFile"><string>/webLink/dialogs/dialog1.gtmpl</string></field>
-                              <field name="roles"><string>*:/platform/web-contributors</string></field>                
+                              <field name="roles"><string>webdesigner:/platform/web-contributors</string></field>                
+                            </object>                      
+                          </value>                      
+                        </collection>
+                      </field>                                    
+                    </object>
+                  </value>
+
+                  <value>
+                    <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$NodeType">
+                      <field  name="nodetypeName"><string>exo:template</string></field>
+                      <field  name="documentTemplate"><boolean>true</boolean></field>
+                      <field  name="label"><string>Template</string></field>                      
+                      <field  name="referencedView">
+                        <collection type="java.util.ArrayList">
+                          <value>                    
+                            <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">             
+                              <field name="templateFile"><string>/template/views/view1.gtmpl</string></field>
+                              <field name="roles"><string>*:/platform/administrators</string></field>                
+                            </object>                      
+                          </value>                          
+                        </collection>
+                      </field>                  
+                      <field  name="referencedDialog">
+                        <collection type="java.util.ArrayList">                          
+                          <value>                    
+                            <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">             
+                              <field name="templateFile"><string>/template/dialogs/dialog1.gtmpl</string></field>
+                              <field name="roles"><string>*:/platform/administrators</string></field>                
                             </object>                      
                           </value>                      
                         </collection>

@@ -44,11 +44,23 @@
 					</object>
 				</object-param>
 				<object-param>
-					<name>acme.folder.list.viewer.with.title</name>
-					<description>ACME folder list viewer style A groovy template</description>
+					<name>big.folder.list.viewer</name>
+					<description>Default folder list viewer groovy template with Big Image</description>
 					<object type="org.exoplatform.services.cms.views.PortletTemplatePlugin$PortletTemplateConfig">
 						<field name="templateName">
-							<string>ACMEContentListViewerA.gtmpl</string>
+							<string>UIContentListPresentationBigImage.gtmpl</string>
+						</field>
+						<field name="category">
+							<string>list-by-folder</string>
+						</field>
+					</object>
+				</object-param>
+				<object-param>
+					<name>small.folder.list.viewer</name>
+					<description>Default folder list viewer groovy template with Small Image</description>
+					<object type="org.exoplatform.services.cms.views.PortletTemplatePlugin$PortletTemplateConfig">
+						<field name="templateName">
+							<string>UIContentListPresentationSmall.gtmpl</string>
 						</field>
 						<field name="category">
 							<string>list-by-folder</string>
@@ -89,18 +101,18 @@
 						<field name="category">
 							<string>paginators</string>
 						</field>
-						<!--
-						<field  name="accessPermissions">
-						<collection type="java.util.ArrayList">
-						<value><string>*</string></value>	          		               
-						</collection>
-						</field>                            
-						<field  name="editPermissions">
-						<collection type="java.util.ArrayList">
-						<value><string>*</string></value>	          		               
-						</collection>
-						</field>               
-						-->
+					</object>
+				</object-param>
+				<object-param>
+					<name>empty.paginator</name>
+					<description>Empty paginator groovy template</description>
+					<object type="org.exoplatform.services.cms.views.PortletTemplatePlugin$PortletTemplateConfig">
+						<field name="templateName">
+							<string>UIPaginatorEmpty.gtmpl</string>
+						</field>
+						<field name="category">
+							<string>paginators</string>
+						</field>
 					</object>
 				</object-param>
 			</init-params>

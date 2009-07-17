@@ -62,4 +62,6 @@
 	<import>war:/conf/wcm/newsletter-configuration.xml</import>    		    		
 	<!--  import>war:/conf/wcm/taxonomy/acme-taxonomies-configuration.xml</import -->
 	<import>war:/conf/wcm/taxonomy/classic-taxonomies-configuration.xml</import>
+	<import>war:/conf/wcm/system/wcm-system-configuration.xml</import>
+	<import>war:/conf/wcm/system/wcm-drives-configuration.xml</import>
 </configuration>
