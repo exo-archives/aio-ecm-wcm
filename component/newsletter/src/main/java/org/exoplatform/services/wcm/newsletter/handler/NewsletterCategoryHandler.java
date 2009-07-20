@@ -110,12 +110,11 @@ public class NewsletterCategoryHandler {
     } 
   }
   
-  public void edit(String portalName, NewsletterCategoryConfig categoryConfig) {
+  public void edit(String portalName, NewsletterCategoryConfig categoryConfig, SessionProvider sessionProvider) {
     log.info("Trying to edit category " + categoryConfig.getName());
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      Session session = threadLocalSessionProviderService.getSessionProvider(null)
-        .getSession(workspace, manageableRepository);
+      Session session = sessionProvider.getSession(workspace, manageableRepository);
       String categoryPath = NewsletterConstant.generateCategoryPath(portalName);
       Node categoryNode = ((Node)session.getItem(categoryPath)).getNode(categoryConfig.getName());
       categoryNode.setProperty(NewsletterConstant.CATEGORY_PROPERTY_DESCRIPTION, categoryConfig.getDescription());
@@ -133,12 +132,11 @@ public class NewsletterCategoryHandler {
     }
   }
   
-  public void delete(String portalName, String categoryName) {
+  public void delete(String portalName, String categoryName, SessionProvider sessionProvider) {
     log.info("Trying to delete category " + categoryName);
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      Session session = threadLocalSessionProviderService.getSessionProvider(null)
-        .getSession(workspace, manageableRepository);
+      Session session = sessionProvider.getSession(workspace, manageableRepository);
       String categoryPath = NewsletterConstant.generateCategoryPath(portalName);
       Node categoryNode = ((Node)session.getItem(categoryPath)).getNode((categoryName));
       categoryNode.remove();
@@ -148,10 +146,9 @@ public class NewsletterCategoryHandler {
     }
   }
   
-  public NewsletterCategoryConfig getCategoryByName(String portalName, String categoryName) throws Exception{
+  public NewsletterCategoryConfig getCategoryByName(String portalName, String categoryName, SessionProvider sessionProvider) throws Exception{
   	try{ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      Session session = threadLocalSessionProviderService
-        .getSessionProvider(null).getSession(workspace, manageableRepository);
+      Session session = sessionProvider.getSession(workspace, manageableRepository);
       String categoryPath = NewsletterConstant.generateCategoryPath(portalName);
       Node categoriesNode = (Node)session.getItem(categoryPath);
       return getCategoryFromNode(categoriesNode.getNode(categoryName));
@@ -160,12 +157,11 @@ public class NewsletterCategoryHandler {
   	}
   }
   
-  public List<NewsletterCategoryConfig> getListCategories(String portalName) throws Exception{
+  public List<NewsletterCategoryConfig> getListCategories(String portalName, SessionProvider sessionProvider) throws Exception{
     List<NewsletterCategoryConfig> listCategories = new ArrayList<NewsletterCategoryConfig>();
   	try{
     	ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      Session session = threadLocalSessionProviderService.getSessionProvider(null)
-                        .getSession(workspace, manageableRepository);
+      Session session = sessionProvider.getSession(workspace, manageableRepository);
       String categoryPath = NewsletterConstant.generateCategoryPath(portalName);
       Node categoriesNode = (Node)session.getItem(categoryPath);
       NodeIterator nodeIterator = categoriesNode.getNodes();
