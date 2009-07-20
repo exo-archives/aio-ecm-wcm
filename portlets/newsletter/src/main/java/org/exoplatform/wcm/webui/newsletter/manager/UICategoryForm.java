@@ -20,6 +20,8 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.ecm.webui.form.UIFormInputSetWithAction;
 import org.exoplatform.ecm.webui.selector.UIGroupMemberSelector;
 import org.exoplatform.ecm.webui.selector.UISelectable;
+import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterCategoryHandler;
@@ -151,8 +153,10 @@ public class UICategoryForm extends UIForm implements UIPopupComponent, UISelect
 
 			String portalName = NewsLetterUtil.getPortalName(); 
 			try{
-			  if(uiCategoryForm.categoryConfig == null){ // if add new category then check cateogry's name is already exist or not 
-  			  if(categoryHandler.getCategoryByName(portalName, categoryConfig.getName()) != null){
+			  if(uiCategoryForm.categoryConfig == null){ // if add new category then check cateogry's name is already exist or not
+				 ThreadLocalSessionProviderService threadLocalSessionProviderService =  uiCategoryForm.getApplicationComponent(ThreadLocalSessionProviderService.class);
+				 SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
+  			  if(categoryHandler.getCategoryByName(portalName, categoryConfig.getName(), sessionProvider) != null){
   			    uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.categoryNameIsAlreadyExist", null, ApplicationMessage.WARNING));
   			    event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
   			    return;
@@ -160,7 +164,8 @@ public class UICategoryForm extends UIForm implements UIPopupComponent, UISelect
   			    categoryHandler.add(portalName, categoryConfig, NewsLetterUtil.getSesssionProvider());
   			  }
 			  }else{ // Edit a category is already exist
-			    categoryHandler.edit(portalName, categoryConfig);
+				  ThreadLocalSessionProviderService threadLocalSessionProviderService = uiCategoryForm.getApplicationComponent(ThreadLocalSessionProviderService.class);
+			    categoryHandler.edit(portalName, categoryConfig, threadLocalSessionProviderService.getSessionProvider(null));
 			  }
 			}catch(Exception ex){
 			  ex.printStackTrace();

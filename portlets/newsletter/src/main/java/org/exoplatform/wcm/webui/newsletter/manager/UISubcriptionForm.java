@@ -19,6 +19,8 @@ package org.exoplatform.wcm.webui.newsletter.manager;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
@@ -117,8 +119,9 @@ public class UISubcriptionForm extends UIForm {
     categoryHandler = newsletterManagerService.getCategoryHandler();
     
     try{
-      
-      return categoryHandler.getListCategories(NewsLetterUtil.getPortalName());
+      ThreadLocalSessionProviderService threadLocalSessionProviderService = getApplicationComponent(ThreadLocalSessionProviderService.class);
+      SessionProvider sessionProvider =  threadLocalSessionProviderService.getSessionProvider(null);
+      return categoryHandler.getListCategories(NewsLetterUtil.getPortalName(), sessionProvider);
     }catch(Exception e){
 
       return new ArrayList<NewsletterCategoryConfig>();

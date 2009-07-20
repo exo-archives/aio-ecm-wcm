@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import org.exoplatform.commons.utils.ObjectPageList;
+import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
@@ -121,8 +123,10 @@ public class UIManagerUsers extends UITabPane {
     NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
     managerUserHandler = newsletterManagerService.getManageUserHandler();
     NewsletterCategoryHandler categoryHandler = newsletterManagerService.getCategoryHandler();
+    ThreadLocalSessionProviderService threadLocalSessionProviderService = getApplicationComponent(ThreadLocalSessionProviderService.class);
+    SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
     // get list of moderator
-    for(NewsletterCategoryConfig categoryConfig : categoryHandler.getListCategories(NewsLetterUtil.getPortalName())){
+    for(NewsletterCategoryConfig categoryConfig : categoryHandler.getListCategories(NewsLetterUtil.getPortalName(), sessionProvider)){
       for(String str : categoryConfig.getModerator().split(",")){
         if(!listModerator.contains(str)) listModerator.add(str);
       }

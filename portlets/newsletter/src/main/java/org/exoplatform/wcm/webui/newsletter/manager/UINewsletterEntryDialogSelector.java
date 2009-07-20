@@ -23,6 +23,8 @@ import java.util.List;
 import javax.jcr.Node;
 
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
@@ -87,7 +89,9 @@ public class UINewsletterEntryDialogSelector extends UIForm {
     List<SelectItemOption<String>> categories = new ArrayList<SelectItemOption<String>>();
     NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
     NewsletterCategoryHandler newsletterCategoryHandler = newsletterManagerService.getCategoryHandler();
-    List<NewsletterCategoryConfig> newsletterCategoryConfigs = newsletterCategoryHandler.getListCategories(Util.getUIPortal().getName());
+    ThreadLocalSessionProviderService threadLocalSessionProviderService = getApplicationComponent(ThreadLocalSessionProviderService.class);
+    SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
+    List<NewsletterCategoryConfig> newsletterCategoryConfigs = newsletterCategoryHandler.getListCategories(Util.getUIPortal().getName(), sessionProvider);
     for (NewsletterCategoryConfig newsletterCategoryConfig : newsletterCategoryConfigs) {
       categories.add(new SelectItemOption<String>(newsletterCategoryConfig.getTitle(), newsletterCategoryConfig.getName()));
     }

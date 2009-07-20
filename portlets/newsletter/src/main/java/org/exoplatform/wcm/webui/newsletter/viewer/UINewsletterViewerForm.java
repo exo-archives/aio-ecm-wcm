@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
@@ -139,7 +140,9 @@ public class UINewsletterViewerForm extends UIForm {
   @SuppressWarnings("unused")
   private List<NewsletterCategoryConfig> getListCategories() {
     try {
-      return categoryHandler.getListCategories(NewsLetterUtil.getPortalName());
+    	ThreadLocalSessionProviderService threadLocalSessionProviderService = getApplicationComponent(ThreadLocalSessionProviderService.class);
+    	SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
+      return categoryHandler.getListCategories(NewsLetterUtil.getPortalName(), sessionProvider);
     } catch (Exception e) {
 
       return new ArrayList<NewsletterCategoryConfig>();
