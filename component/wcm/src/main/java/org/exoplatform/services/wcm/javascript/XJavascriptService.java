@@ -20,7 +20,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
-import javax.jcr.Repository;
 import javax.jcr.Session;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
@@ -139,13 +138,15 @@ public class XJavascriptService implements Startable {
 
   public void updatePortalJSOnRemove(Node jsFile, SessionProvider sessionProvider) throws Exception {    
     String javascript = getJavascriptOfAllPortals(sessionProvider,jsFile.getPath());
-    addJavascript(javascript);    
+    String modifiedJS = jsFile.getNode("jcr:content").getProperty("jcr:data").getString();
+    //String test = javascript.split(modifiedJS)[0];
+    addJavascript(modifiedJS);
   }
 
   private void addJavascript(String jsData) {
-    if(jsConfigService.isModuleLoaded(MODULE_NAME)) {      
+    /*if(jsConfigService.isModuleLoaded(MODULE_NAME)) {      
       jsConfigService.removeExtendedJavascript(MODULE_NAME,PATH,sContext) ;
-    }
+    }*/
     jsConfigService.addExtendedJavascript(MODULE_NAME, PATH, sContext, jsData) ;
   }
 
