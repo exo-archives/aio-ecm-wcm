@@ -176,6 +176,7 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
     sessionSystem.save();
   }
   
+  @SuppressWarnings("unchecked")
   public void testPublishContentCLV_02() throws Exception{
   	RepositoryService repositoryService = getService(RepositoryService.class);
 
@@ -253,6 +254,7 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
     return preference;
   }
   
+
   @SuppressWarnings("unchecked")
   private static boolean checkContentIdentifier(Page page, String contentUUID, String portletType) throws Exception {
     WCMConfigurationService wcmConfigurationService = StageAndVersionPublicationUtil.getServices(WCMConfigurationService.class);
