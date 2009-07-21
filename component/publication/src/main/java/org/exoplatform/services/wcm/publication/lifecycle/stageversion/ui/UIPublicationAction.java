@@ -144,7 +144,6 @@ public class UIPublicationAction extends UIForm {
       }
       
       WCMPublicationService presentationService = publicationAction.getApplicationComponent(WCMPublicationService.class);
-      StageAndVersionPublicationPlugin publicationPlugin = (StageAndVersionPublicationPlugin) presentationService.getWebpagePublicationPlugins().get(StageAndVersionPublicationConstant.LIFECYCLE_NAME);
       
       UIPublicationPagesContainer publicationPagesContainer = publicationPages.getAncestorOfType(UIPublicationPagesContainer.class);
       WCMConfigurationService wcmConfigurationService = StageAndVersionPublicationUtil.getServices(WCMConfigurationService.class);
@@ -152,7 +151,7 @@ public class UIPublicationAction extends UIForm {
       Page page = userPortalConfigService.getPage(pageNode.getPageReference(), event.getRequestContext().getRemoteUser());
       List<String> clvPortletIds = StageAndVersionPublicationUtil.findAppInstancesByName(page, wcmConfigurationService.getRuntimeContextParam("CLVPortlet"));
       if (clvPortletIds.isEmpty()) {
-        publicationPlugin.publishContentToPage(node, page, Util.getUIPortal().getOwner());
+      	presentationService.publishContentSCV(node, page, Util.getUIPortal().getOwner());
       } else {
         if (clvPortletIds.size() > 1) {
           UIPublishClvChooser clvChooser = publicationAction.createUIComponent(UIPublishClvChooser.class, null, "UIPublishClvChooser");
@@ -167,9 +166,7 @@ public class UIPublicationAction extends UIForm {
           event.getRequestContext().addUIComponentToUpdateByAjax(publicationPagesContainer);
         } else {
           String clvPortletId = clvPortletIds.get(0);
-          DataStorage dataStorage = StageAndVersionPublicationUtil.getServices(DataStorage.class);
-          PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(clvPortletId));
-          publicationPlugin.publishContentToCLV(node, page, clvPortletId, portletPreferences, Util.getUIPortal().getOwner(), event.getRequestContext().getRemoteUser());
+          presentationService.publishContentCLV(node, page, clvPortletId, Util.getUIPortal().getOwner(), event.getRequestContext().getRemoteUser());
         }
       }
       

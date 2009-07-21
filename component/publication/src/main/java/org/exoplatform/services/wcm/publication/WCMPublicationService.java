@@ -50,7 +50,17 @@ public interface WCMPublicationService {
   * @throws NotInPublicationLifecycleException the not in publication lifecycle exception
   * @throws Exception the exception
   */
- public void publishContentToPage(Node content, Page page, String portalOwnerName) throws NotInPublicationLifecycleException, Exception;
+ public void publishContentSCV(Node content, Page page, String portalOwnerName) throws NotInPublicationLifecycleException, Exception;
+ 
+ /**
+  * Publish content to a portal page when the node is in a publication lifecyle.
+  * @param content
+ * @param page
+ * @param clvPortletId
+ * @param portalOwnerName
+ * @param remoteUser
+  */
+ public void publishContentCLV(Node content, Page page, String clvPortletId, String portalOwnerName, String remoteUser) throws Exception;
  
  /**
   * Suspend a published content from a portal page.

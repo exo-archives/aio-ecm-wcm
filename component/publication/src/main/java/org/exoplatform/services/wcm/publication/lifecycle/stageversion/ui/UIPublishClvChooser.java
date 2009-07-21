@@ -116,7 +116,7 @@ public class UIPublishClvChooser extends UIForm implements UIPopupComponent {
       }
       WCMPublicationService presentationService = clvChooser.getApplicationComponent(WCMPublicationService.class);
       StageAndVersionPublicationPlugin publicationPlugin = (StageAndVersionPublicationPlugin) presentationService.getWebpagePublicationPlugins().get(StageAndVersionPublicationConstant.LIFECYCLE_NAME);
-      publicationPlugin.publishContentToCLV(clvChooser.node, clvChooser.page, clvPortletId, portletPreferences, Util.getUIPortal().getOwner(), event.getRequestContext().getRemoteUser());
+      publicationPlugin.publishContentToCLV(clvChooser.node, clvChooser.page, clvPortletId, Util.getUIPortal().getOwner(), event.getRequestContext().getRemoteUser());
       UIPopupWindow popupWindow = clvChooser.getAncestorOfType(UIPopupWindow.class);
       popupWindow.setShow(false);
     }

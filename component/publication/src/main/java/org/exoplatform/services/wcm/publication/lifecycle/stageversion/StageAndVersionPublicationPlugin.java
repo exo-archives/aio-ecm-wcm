@@ -199,6 +199,7 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
       return null;
     }
   }
+  
   private void addLog(Node node, VersionLog versionLog) throws Exception{
     Value[] values = node.getProperty(StageAndVersionPublicationConstant.HISTORY).getValues();
     ValueFactory valueFactory = node.getSession().getValueFactory();
@@ -282,7 +283,7 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     return null;
   }
 
-  public void publishContentToPage(Node content, Page page, String portalOwnerName) throws Exception {
+  public void publishContentToSCV(Node content, Page page, String portalOwnerName) throws Exception {
     // Create portlet
     Application portlet = new Application();
     portlet.setApplicationType(org.exoplatform.web.application.Application.EXO_PORTLET_TYPE);
@@ -295,7 +296,7 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
             .append("#")
             .append(portalOwnerName)
             .append(":")
-            .append(configurationService.getPublishingPortletName())
+            .append(configurationService.getRuntimeContextParam("SCVPortlet"))
             .append("/")
             .append(IdGenerator.generate());
     portlet.setInstanceId(windowId.toString());
@@ -316,9 +317,13 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
   }
 
   @SuppressWarnings("unchecked")
-  public void publishContentToCLV(Node content, Page page, String clvPortletId, PortletPreferences portletPreferences, String portalOwnerName, String remoteUser) throws Exception {
+  public void publishContentToCLV(Node content, Page page, String clvPortletId, String portalOwnerName, String remoteUser) throws Exception {
     WCMConfigurationService wcmConfigurationService = StageAndVersionPublicationUtil.getServices(WCMConfigurationService.class);
     ArrayList<Preference> preferences = new ArrayList<Preference>();
+    
+    DataStorage dataStorage = StageAndVersionPublicationUtil.getServices(DataStorage.class);
+    PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(clvPortletId));
+    
     if (portletPreferences == null) {
       preferences.add(addPreference("repository", ((ManageableRepository) content.getSession().getRepository()).getConfiguration().getName()));
       preferences.add(addPreference("workspace", content.getSession().getWorkspace().getName()));

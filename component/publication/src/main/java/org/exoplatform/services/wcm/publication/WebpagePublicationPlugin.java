@@ -47,7 +47,18 @@ public abstract class WebpagePublicationPlugin extends PublicationPlugin {
    * @param portalOwnerName TODO
    * @throws Exception the exception
    */
-  public abstract void publishContentToPage(Node content, Page page, String portalOwnerName) throws Exception;  
+  public abstract void publishContentToSCV(Node content, Page page, String portalOwnerName) throws Exception;  
+  
+  /**
+   * Publish content node to a portal page.
+   * @param content
+   * @param page
+   * @param clvPortletId
+   * @param portalOwnerName
+   * @param remoteUser
+   * @throws Exception
+   */
+  public abstract void publishContentToCLV(Node content, Page page, String clvPortletId, String portalOwnerName, String remoteUser) throws Exception;
   
   /**
    * Suspend published content from a portal page.

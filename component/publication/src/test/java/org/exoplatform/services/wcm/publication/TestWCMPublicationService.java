@@ -1,17 +1,28 @@
 package org.exoplatform.services.wcm.publication;
 
-import javax.jcr.Node;
-import javax.jcr.Property;
-import javax.jcr.PropertyIterator;
-import javax.jcr.Session;
-import javax.jcr.Value;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.jcr.Node;
+import javax.jcr.Session;
+
+import org.exoplatform.portal.application.PortletPreferences;
+import org.exoplatform.portal.application.Preference;
+import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfigService;
+import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.util.IdGenerator;
+import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
 import org.exoplatform.services.wcm.BaseWCMTestCase;
+import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationPlugin;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationUtil;
 
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform
@@ -36,7 +47,7 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
         wcmPublicationService.getWebpagePublicationPlugins().get(StageAndVersionPublicationConstant.LIFECYCLE_NAME));
   }
 
-  public void testPublishContentToPage() throws Exception {
+  public void testPublishContentSCV() throws Exception {
     RepositoryService repositoryService = getService(RepositoryService.class);
 
     Session session = repositoryService.getRepository(REPO_NAME).getSystemSession(COLLABORATION_WS);
@@ -44,7 +55,9 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
     session.save();
     
     Session sessionSystem = repositoryService.getRepository(REPO_NAME).getSystemSession(SYSTEM_WS);
-    ((Node)sessionSystem.getItem("/exo:registry/exo:applications")).addNode("MainPortalData").addNode("classic").addNode("pages");
+    ((Node)sessionSystem.getItem("/exo:registry/exo:applications")).addNode("MainPortalData", "exo:registryGroup").
+    	addNode("classic", "exo:registryGroup").addNode("pages", "exo:registryGroup");
+    sessionSystem.save();
     
     Page page = new Page();
     page.setPageId("portal::classic::testpage");
@@ -54,31 +67,202 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
     UserPortalConfigService userPortalConfigService = getService(UserPortalConfigService.class);
     userPortalConfigService.create(page);
     
-    javax.jcr.NodeIterator nodeIterator = ((Node)sessionSystem.getItem("/exo:registry/exo:applications/MainPortalData/classic/pages")).getNodes();
-    while (nodeIterator.hasNext()) {
-      System.out.println("666====================>" + nodeIterator.nextNode().getPath());
-    }
-    
+    int oldPorletsNumber = getNumberPortletsOfPage(page, "SCVPortlet");
 
     WebpagePublicationPlugin publicationPlugin = new StageAndVersionPublicationPlugin();
     publicationPlugin.setName(StageAndVersionPublicationConstant.LIFECYCLE_NAME);
     wcmPublicationService.addPublicationPlugin(publicationPlugin);
     
-//    publicationPlugin.addMixin(testNode);
     wcmPublicationService.enrollNodeInLifecycle(testNode, StageAndVersionPublicationConstant.LIFECYCLE_NAME);
-    wcmPublicationService.publishContentToPage(testNode, page, "classic");
+    wcmPublicationService.publishContentSCV(testNode, page, "classic");
     
-    PropertyIterator iterator = testNode.getProperties();
-    while(iterator.hasNext()) {
-      Property property = iterator.nextProperty();
-      try {
-        System.out.println(property.getName() + ": " + property.getString()); 
-      } catch (Exception e) {
-        for(Value value : property.getValues()) {
-          System.out.println(property.getName() + ": " + value.getString());
+    int newPorletsNumber = getNumberPortletsOfPage(page, "SCVPortlet");
+    
+    assertEquals("enrolled", testNode.getProperty("publication:currentState").getString());
+    assertEquals("test", testNode.getProperty("exo:title").getString());
+    assertTrue(checkContentIdentifier(page, testNode.getUUID(), "SCVPortlet"));
+    assertEquals(oldPorletsNumber + 1, newPorletsNumber);
+    
+    testNode.remove();
+    ((Node)sessionSystem.getItem("/exo:registry/exo:applications/MainPortalData")).remove();
+    session.save();
+    sessionSystem.save();
+  }
+  
+  public void testPublishContentCLV_01() throws Exception{
+  	RepositoryService repositoryService = getService(RepositoryService.class);
+
+    Session session = repositoryService.getRepository(REPO_NAME).getSystemSession(COLLABORATION_WS);
+    Node testNode = createWebcontentNode(session.getRootNode(), "test"); 
+    session.save();
+    
+    Session sessionSystem = repositoryService.getRepository(REPO_NAME).getSystemSession(SYSTEM_WS);
+    ((Node)sessionSystem.getItem("/exo:registry/exo:applications")).addNode("MainPortalData", "exo:registryGroup").
+    	addNode("classic", "exo:registryGroup").addNode("pages", "exo:registryGroup");
+    sessionSystem.save();
+    
+    Page page = new Page();
+    page.setPageId("portal::classic::testpage");
+    page.setName("testpage");
+    page.setOwnerType("portal");
+    page.setOwnerId("classic");
+    UserPortalConfigService userPortalConfigService = getService(UserPortalConfigService.class);
+    userPortalConfigService.create(page);
+    
+    WebpagePublicationPlugin publicationPlugin = new StageAndVersionPublicationPlugin();
+    publicationPlugin.setName(StageAndVersionPublicationConstant.LIFECYCLE_NAME);
+    wcmPublicationService.addPublicationPlugin(publicationPlugin);
+    
+    wcmPublicationService.enrollNodeInLifecycle(testNode, StageAndVersionPublicationConstant.LIFECYCLE_NAME);
+    
+    DataStorage dataStorage = StageAndVersionPublicationUtil.getServices(DataStorage.class);
+  	
+    WCMConfigurationService configurationService = StageAndVersionPublicationUtil.getServices(WCMConfigurationService.class);
+    StringBuilder windowId = new StringBuilder();
+    windowId.append(PortalConfig.PORTAL_TYPE)
+            .append("#")
+            .append("classic")
+            .append(":")
+            .append(configurationService.getRuntimeContextParam("CLVPortlet"))
+            .append("/")
+            .append(IdGenerator.generate());
+    
+    ArrayList<Preference> preferences = new ArrayList<Preference>();
+    preferences.add(addPreference("repository", ((ManageableRepository) testNode.getSession().getRepository()).getConfiguration().getName()));
+    preferences.add(addPreference("workspace", testNode.getSession().getWorkspace().getName()));
+    preferences.add(addPreference("nodeIdentifier", testNode.getUUID()));
+    preferences.add(addPreference("mode", "ManualViewerMode"));
+    preferences.add(addPreference("folderPath", 
+    		"/sites content/live/classic/web contents/site artifacts/banner/Default;/sites content/live/classic/web contents/site artifacts/searchbox/Default;"));
+
+    preferences.add(addPreference("contents",
+    		"/sites content/live/classic/web contents/site artifacts/banner/Default",
+    		"/sites content/live/classic/web contents/site artifacts/searchbox/Default"));
+    
+    PortletPreferences portletPreferences = new PortletPreferences();
+    portletPreferences.setWindowId(windowId.toString());
+    portletPreferences.setOwnerType(PortalConfig.PORTAL_TYPE);
+    portletPreferences.setOwnerId("classic");
+    portletPreferences.setPreferences(preferences);
+    dataStorage.save(portletPreferences);
+
+    Application portlet = new Application();
+    portlet.setApplicationType(org.exoplatform.web.application.Application.EXO_PORTLET_TYPE);
+    portlet.setShowInfoBar(false);
+    portlet.setInstanceId(windowId.toString());
+    
+    ArrayList<Object> listPortlet = page.getChildren();
+    listPortlet.add(portlet);
+    page.setChildren(listPortlet);
+    userPortalConfigService.update(page);
+ 
+    System.err.println("checkContentIdentifier========================>" + checkContentIdentifier(page, testNode.getUUID(), "CLVPortlet"));
+    wcmPublicationService.publishContentCLV(testNode, page, windowId.toString(), "classic", "root");
+    assertTrue(checkContentIdentifier(page, testNode.getUUID(), "CLVPortlet"));
+    System.err.println("checkContentIdentifier========================>" + checkContentIdentifier(page, testNode.getUUID(), "CLVPortlet"));
+    
+    
+    
+    testNode.remove();
+    ((Node)sessionSystem.getItem("/exo:registry/exo:applications/MainPortalData")).remove();
+    session.save();
+    sessionSystem.save();
+  }
+  
+  public void testPublishContentCLV_02() throws Exception{
+  	RepositoryService repositoryService = getService(RepositoryService.class);
+
+    Session session = repositoryService.getRepository(REPO_NAME).getSystemSession(COLLABORATION_WS);
+    Node testNode = createWebcontentNode(session.getRootNode(), "test"); 
+    session.save();
+    
+    Session sessionSystem = repositoryService.getRepository(REPO_NAME).getSystemSession(SYSTEM_WS);
+    ((Node)sessionSystem.getItem("/exo:registry/exo:applications")).addNode("MainPortalData", "exo:registryGroup").
+    	addNode("classic", "exo:registryGroup").addNode("pages", "exo:registryGroup");
+    sessionSystem.save();
+    
+    Page page = new Page();
+    page.setPageId("portal::classic::testpage");
+    page.setName("testpage");
+    page.setOwnerType("portal");
+    page.setOwnerId("classic");
+    UserPortalConfigService userPortalConfigService = getService(UserPortalConfigService.class);
+    userPortalConfigService.create(page);
+    
+    WebpagePublicationPlugin publicationPlugin = new StageAndVersionPublicationPlugin();
+    publicationPlugin.setName(StageAndVersionPublicationConstant.LIFECYCLE_NAME);
+    wcmPublicationService.addPublicationPlugin(publicationPlugin);
+    
+    wcmPublicationService.enrollNodeInLifecycle(testNode, StageAndVersionPublicationConstant.LIFECYCLE_NAME);
+    
+    WCMConfigurationService configurationService = StageAndVersionPublicationUtil.getServices(WCMConfigurationService.class);
+    StringBuilder windowId = new StringBuilder();
+    windowId.append(PortalConfig.PORTAL_TYPE)
+            .append("#")
+            .append("classic")
+            .append(":")
+            .append(configurationService.getRuntimeContextParam("CLVPortlet"))
+            .append("/")
+            .append(IdGenerator.generate());
+    
+    Application portlet = new Application();
+    portlet.setApplicationType(org.exoplatform.web.application.Application.EXO_PORTLET_TYPE);
+    portlet.setShowInfoBar(false);
+    portlet.setInstanceId(windowId.toString());
+    
+    ArrayList<Object> listPortlet = page.getChildren();
+    listPortlet.add(portlet);
+    page.setChildren(listPortlet);
+    userPortalConfigService.update(page);
+ 
+    wcmPublicationService.publishContentCLV(testNode, page, windowId.toString(), "classic", "root");
+    
+    testNode.remove();
+    ((Node)sessionSystem.getItem("/exo:registry/exo:applications/MainPortalData")).remove();
+    session.save();
+    sessionSystem.save();
+  }
+  
+  private Preference addPreference(String name, String... values ) {
+    Preference preference = new Preference();
+    ArrayList<String> listValue = new ArrayList<String>();
+    for (String value : values) {
+    	listValue.add(value);
+    }
+    preference.setName(name);
+    preference.setValues(listValue);
+    return preference;
+  }
+  
+  @SuppressWarnings("unchecked")
+  private static boolean checkContentIdentifier(Page page, String contentUUID, String porletType) throws Exception {
+    WCMConfigurationService wcmConfigurationService = StageAndVersionPublicationUtil.getServices(WCMConfigurationService.class);
+    DataStorage dataStorage = StageAndVersionPublicationUtil.getServices(DataStorage.class);
+    List<String> scvPortletsId = StageAndVersionPublicationUtil.findAppInstancesByName(page, wcmConfigurationService.getRuntimeContextParam(porletType));
+    for (String scvPortletId : scvPortletsId) {
+      PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(scvPortletId));      
+      if (portletPreferences != null) {
+        for (Preference preference : (List<Preference>)portletPreferences.getPreferences()) {
+        	if ("nodeIdentifier".equals(preference.getName())
+        			&& preference.getValues().size() > 0
+        			&& contentUUID.equals(preference.getValues().get(0).toString())) {
+            return true;
+          }
         }
       }
     }
     
+    return false;
+  }
+  
+  private static int getNumberPortletsOfPage(Page page, String porletType) {
+  	 WCMConfigurationService wcmConfigurationService = StageAndVersionPublicationUtil.getServices(WCMConfigurationService.class);
+     List<String> scvPortletsId = StageAndVersionPublicationUtil.findAppInstancesByName(page, wcmConfigurationService.getRuntimeContextParam(porletType));
+     
+      try {
+	      return scvPortletsId.size();
+      } catch (Exception e) {
+	      return 0;
+      }
   }
 }

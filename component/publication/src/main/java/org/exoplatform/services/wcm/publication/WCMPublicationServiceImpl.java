@@ -23,6 +23,7 @@ import javax.jcr.Node;
 
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleException;
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
@@ -75,16 +76,27 @@ public class WCMPublicationServiceImpl implements WCMPublicationService, Startab
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.publication.WCMPublicationPresentationService#publishContentToPage(javax.jcr.Node, org.exoplatform.portal.config.model.Page)
    */
-  public void publishContentToPage(Node content, Page page, String portalOwnerName)
+  public void publishContentSCV(Node content, Page page, String portalOwnerName)
   throws NotInPublicationLifecycleException, Exception {    
     if(!publicationService.isNodeEnrolledInLifecycle(content))
       throw new NotInPublicationLifecycleException("The node " +content.getPath() + " is not enrolled to any publication lifecyle");
     String lifecycleName = publicationService.getNodeLifecycleName(content);
     WebpagePublicationPlugin publicationPlugin = publicationPlugins.get(lifecycleName);
-    System.err.println(publicationPlugins.get(lifecycleName));
-    publicationPlugin.publishContentToPage(content,page, portalOwnerName);
+    publicationPlugin.publishContentToSCV(content,page, portalOwnerName);
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.publication.WCMPublicationPresentationService#publishContentCLV
+   */
+  public void publishContentCLV(Node content, Page page, String clvPortletId, String portalOwnerName,
+  		String remoteUser) throws Exception{    
+    if(!publicationService.isNodeEnrolledInLifecycle(content))
+      throw new NotInPublicationLifecycleException("The node " +content.getPath() + " is not enrolled to any publication lifecyle");
+    String lifecycleName = publicationService.getNodeLifecycleName(content);
+    WebpagePublicationPlugin publicationPlugin = publicationPlugins.get(lifecycleName);
+    publicationPlugin.publishContentToCLV(content, page, clvPortletId, portalOwnerName, remoteUser);
+  }
+  
   public void enrollNodeInLifecycle(Node node, String lifecycleName) throws Exception {
     publicationService.enrollNodeInLifecycle(node,lifecycleName);
   }
