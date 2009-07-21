@@ -138,15 +138,13 @@ public class XJavascriptService implements Startable {
 
   public void updatePortalJSOnRemove(Node jsFile, SessionProvider sessionProvider) throws Exception {    
     String javascript = getJavascriptOfAllPortals(sessionProvider,jsFile.getPath());
-    String modifiedJS = jsFile.getNode("jcr:content").getProperty("jcr:data").getString();
-    //String test = javascript.split(modifiedJS)[0];
-    addJavascript(modifiedJS);
+    addJavascript(javascript);
   }
 
   private void addJavascript(String jsData) {
-    /*if(jsConfigService.isModuleLoaded(MODULE_NAME)) {      
+    if(jsConfigService.isModuleLoaded(MODULE_NAME)) {      
       jsConfigService.removeExtendedJavascript(MODULE_NAME,PATH,sContext) ;
-    }*/
+    }
     jsConfigService.addExtendedJavascript(MODULE_NAME, PATH, sContext, jsData) ;
   }
 
