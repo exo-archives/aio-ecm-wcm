@@ -266,7 +266,7 @@ public class UIPresentationContainer extends UIContainer{
     }
     WCMConfigurationService wcmConfigurationService = getApplicationComponent(WCMConfigurationService.class);
     List<String> ids = org.exoplatform.services.wcm.publication.lifecycle.stageversion
-    .StageAndVersionPublicationUtil.getListApplicationIdByPage(PortalDataMapper.toPageModel(uiPage), wcmConfigurationService.getPublishingPortletName());
+    .StageAndVersionPublicationUtil.getListApplicationIdByPage(PortalDataMapper.toPageModel(uiPage), wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.SCV_PORTLET));
     List<String> newIds = new ArrayList<String>();
     int length = ids.size();
 

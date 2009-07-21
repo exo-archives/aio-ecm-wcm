@@ -23,7 +23,6 @@ import javax.jcr.Node;
 import javax.jcr.Value;
 
 import org.exoplatform.commons.utils.PageList;
-import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.UserPortalConfigService;
@@ -32,7 +31,6 @@ import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
@@ -40,7 +38,6 @@ import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndV
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationUtil;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.ui.UIPublicationTree.TreeNode;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -149,7 +146,7 @@ public class UIPublicationAction extends UIForm {
       WCMConfigurationService wcmConfigurationService = StageAndVersionPublicationUtil.getServices(WCMConfigurationService.class);
       UserPortalConfigService userPortalConfigService = publicationAction.getApplicationComponent(UserPortalConfigService.class);
       Page page = userPortalConfigService.getPage(pageNode.getPageReference(), event.getRequestContext().getRemoteUser());
-      List<String> clvPortletIds = StageAndVersionPublicationUtil.findAppInstancesByName(page, wcmConfigurationService.getRuntimeContextParam("CLVPortlet"));
+      List<String> clvPortletIds = StageAndVersionPublicationUtil.findAppInstancesByName(page, wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.CLV_PORTLET));
       if (clvPortletIds.isEmpty()) {
       	presentationService.publishContentSCV(node, page, Util.getUIPortal().getOwner());
       } else {

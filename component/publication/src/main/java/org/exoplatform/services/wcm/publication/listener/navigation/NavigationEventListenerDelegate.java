@@ -113,7 +113,7 @@ public class NavigationEventListenerDelegate {
     for (PageNode pageNode : pageNavigation.getNodes()) {
       Page page = userPortalConfigService.getPage(pageNode.getPageReference(), org.exoplatform.portal.webui.util.Util.getPortalRequestContext().getRemoteUser());
       if (page != null) {
-        for (String applicationId : StageAndVersionPublicationUtil.getListApplicationIdByPage(page, wcmConfigurationService.getPublishingPortletName())) {
+        for (String applicationId : StageAndVersionPublicationUtil.getListApplicationIdByPage(page, wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.SCV_PORTLET))) {
           Node content = StageAndVersionPublicationUtil.getNodeByApplicationId(applicationId);
           if (content != null) {
             List<String> listExistedApplicationId = StageAndVersionPublicationUtil.getValuesAsString(content, "publication:applicationIDs"); 
@@ -178,7 +178,7 @@ public class NavigationEventListenerDelegate {
         String applicationId = "";
         UserPortalConfigService userPortalConfigService = StageAndVersionPublicationUtil.getServices(UserPortalConfigService.class);
         Page page = userPortalConfigService.getPage(pageId, org.exoplatform.portal.webui.util.Util.getPortalRequestContext().getRemoteUser());
-        for (String applicationIdTmp : StageAndVersionPublicationUtil.getListApplicationIdByPage(page, wcmConfigurationService.getPublishingPortletName())) {
+        for (String applicationIdTmp : StageAndVersionPublicationUtil.getListApplicationIdByPage(page, wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.SCV_PORTLET))) {
           applicationIdTmp = StageAndVersionPublicationUtil.setMixedApplicationId(pageId, applicationIdTmp);
           List<String> listExistedApplicationId = StageAndVersionPublicationUtil.getValuesAsString(content, "publication:applicationIDs");
           if (listExistedApplicationId.contains(applicationIdTmp)) {

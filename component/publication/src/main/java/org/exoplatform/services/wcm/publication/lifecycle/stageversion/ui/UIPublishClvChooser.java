@@ -75,7 +75,7 @@ public class UIPublishClvChooser extends UIForm implements UIPopupComponent {
   public List<Application> getClvPortlets() throws Exception {
     WCMConfigurationService wcmConfigurationService = StageAndVersionPublicationUtil.getServices(WCMConfigurationService.class);
     DataStorage dataStorage = StageAndVersionPublicationUtil.getServices(DataStorage.class);
-    List<String> clvPortletsId = StageAndVersionPublicationUtil.findAppInstancesByName(page, wcmConfigurationService.getRuntimeContextParam("CLVPortlet"));
+    List<String> clvPortletsId = StageAndVersionPublicationUtil.findAppInstancesByName(page, wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.CLV_PORTLET));
     List<Application> applications = new ArrayList<Application>();
     for (String clvPortletId : clvPortletsId) {
       Application application = StageAndVersionPublicationUtil.findAppInstancesById(page, clvPortletId);

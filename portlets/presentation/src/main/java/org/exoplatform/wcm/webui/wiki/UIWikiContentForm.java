@@ -141,7 +141,7 @@ public class UIWikiContentForm extends UIForm {
     .append("#")
     .append(uiPortal.getOwner())
     .append(":")
-    .append(wcmCfgService.getPublishingPortletName())
+    .append(wcmCfgService.getRuntimeContextParam(WCMConfigurationService.SCV_PORTLET))
     .append("/")
     .append(random);
     scvPortlet.setWindowId(windowId.toString());

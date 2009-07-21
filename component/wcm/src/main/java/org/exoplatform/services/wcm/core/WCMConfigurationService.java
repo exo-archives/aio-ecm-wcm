@@ -39,35 +39,45 @@ public class WCMConfigurationService {
   private static Log log = ExoLogger.getLogger("wcm:WCMConfiguarationService");
   private HashMap<String, NodeLocation> livePortalsLocations = new HashMap<String, NodeLocation>();
   private HashMap<String, String> sharedPortals = new HashMap<String, String>();
-  private String parameterizedPageURI;
-  private String redactorMembershipType;
-  private String publishingPortletName;
   private ExoProperties runtimeContextParams;  
   private DriveData siteDriveConfig;
   
   public static final String SITE_PATH_EXP = "\\{sitePath\\}";
   public static final String SITE_NAME_EXP = "\\{siteName\\}";
+  
+  public static final String REDACTOR_MEMBERSHIP_TYPE       = "redactorMembershipType";
+  
+  public static final String PARAMETERIZED_PAGE_URI         = "parameterizedPageURI";
+  
+  public static final String PRINT_PAGE_URI                 = "printPageURI";
+  
+  public static final String PRINT_VIEWER_PAGE              = "printViewerPage";
+  
+  public static final String CREATE_WIKI_PAGE_URI           = "createWikiPageURI";
+  
+  public static final String CLV_PORTLET                    = "CLVPortlet";
+  
+  public static final String SCV_PORTLET                    = "SCVPortlet";
+  
+  public static final String FORM_VIEW_TEMPLATE_PATH        = "formViewTemplatePath";
+  
+  public static final String PAGINATOR_TEMPLAET_PATH        = "paginatorTemplatePath";
 
   public WCMConfigurationService(InitParams initParams) throws Exception {
-    parameterizedPageURI = initParams.getValueParam("parameterizedPageURI").getValue();
-    redactorMembershipType = initParams.getValueParam("redactorMembershipType").getValue();
-    log.info("Page URI is used for view DMS Document as a web page: " + parameterizedPageURI);
-    publishingPortletName = initParams.getValueParam("publishingPortletName").getValue();
-    log.info("The portlet is used to publish content in a web page: " + publishingPortletName);
     Iterator<PropertiesParam> iterator = initParams.getPropertiesParamIterator();
-    for (; iterator.hasNext(); ) {
+    while (iterator.hasNext()) {
       PropertiesParam param = iterator.next();
       if ("share.portal.config".endsWith(param.getName())) {
         String repository = param.getProperty("repository");
         String portalName = param.getProperty("portalName");
         sharedPortals.put(repository, portalName);
         log.info("Name of shared portal to share resources for all portals in repository: "+ repository + " is: "+ portalName);
-      }else if("RuntimeContextParams".equalsIgnoreCase(param.getName())) {
+      } else if("RuntimeContextParams".equalsIgnoreCase(param.getName())) {
         runtimeContextParams = param.getProperties();
       }
     }
     Iterator<ObjectParameter> locations = initParams.getObjectParamIterator();
-    for (; locations.hasNext(); ) {
+    while (locations.hasNext()) {
       ObjectParameter objectParameter = locations.next();
       if ("live.portals.location.config".equals(objectParameter.getName())) {
         NodeLocation objectParam = (NodeLocation)objectParameter.getObject();
@@ -82,9 +92,6 @@ public class WCMConfigurationService {
     }
   }
 
-  public String getRedactorMembershipType() { return this.redactorMembershipType; }
-  public String getParameterizedPageURI() { return this.parameterizedPageURI; }
-  public String getPublishingPortletName() { return this.publishingPortletName; }
   public DriveData getSiteDriveConfig() {return this.siteDriveConfig; }
   public NodeLocation getLivePortalsLocation(final String repository) {
     return livePortalsLocations.get(repository);
@@ -102,7 +109,6 @@ public class WCMConfigurationService {
     return null;
   }
 
-//TODO
   public String getSharedPortalName(final String repository) {
     return sharedPortals.get(repository);
   }

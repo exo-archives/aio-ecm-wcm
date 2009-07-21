@@ -28,6 +28,7 @@ import org.exoplatform.services.jcr.access.SystemIdentity;
 import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
+import org.exoplatform.services.wcm.core.NodetypeConstant;
 
 /*
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
@@ -80,7 +81,7 @@ public class DocumentLinkHandler extends FCKFileHandler {
     String workspace = node.getSession().getWorkspace().getName();
     String nodePath = node.getPath();
     StringBuilder builder = new StringBuilder();
-    if(node.isNodeType("nt:file")) {
+    if(node.isNodeType(NodetypeConstant.NT_FILE)) {
       if("public".equals(accessMode)) {
         return builder.append(baseURI).append("/jcr/").append(repository).append("/")
         .append(workspace).append(nodePath).toString();
@@ -90,7 +91,7 @@ public class DocumentLinkHandler extends FCKFileHandler {
     }    
     WCMConfigurationService configurationService = (WCMConfigurationService) ExoContainerContext
     .getCurrentContainer().getComponentInstanceOfType(WCMConfigurationService.class);
-    String parameterizedPageViewerURI = configurationService.getParameterizedPageURI();    
+    String parameterizedPageViewerURI = configurationService.getRuntimeContextParam(WCMConfigurationService.PARAMETERIZED_PAGE_URI);    
     return baseURI.replace("/rest", "") + "/" + accessMode + "/" + currentPortal + parameterizedPageViewerURI + "/"
     + repository + "/" + workspace + nodePath;
   }

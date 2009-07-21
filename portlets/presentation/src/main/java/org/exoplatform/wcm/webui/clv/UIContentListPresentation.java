@@ -345,7 +345,7 @@ import org.exoplatform.webui.event.EventListener;
     String baseURI = portletRequestContext.getRequest().getScheme() + "://"
     + portletRequestContext.getRequest().getServerName() + ":"
     + String.format("%s", portletRequestContext.getRequest().getServerPort());
-    String parameterizedPageURI = wcmConfigurationService.getParameterizedPageURI();
+    String parameterizedPageURI = wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.PARAMETERIZED_PAGE_URI);
     link = baseURI + portalURI + parameterizedPageURI.substring(1, parameterizedPageURI.length())
     + "/" + repository + "/" + workspace + node.getPath();
     return link;

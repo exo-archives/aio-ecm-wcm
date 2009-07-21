@@ -99,7 +99,7 @@ public class PageEventListenerDelegate {
    */
   public void updateLifecycleOnRemovePage(Page page, String remoteUser) throws Exception {
     WCMConfigurationService wcmConfigurationService = StageAndVersionPublicationUtil.getServices(WCMConfigurationService.class);
-    List<String> listPageApplicationId = StageAndVersionPublicationUtil.getListApplicationIdByPage(page, wcmConfigurationService.getPublishingPortletName());
+    List<String> listPageApplicationId = StageAndVersionPublicationUtil.getListApplicationIdByPage(page, wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.SCV_PORTLET));
     for (String applicationId : listPageApplicationId) {
       Node content = StageAndVersionPublicationUtil.getNodeByApplicationId(applicationId);
       if (content != null) {
@@ -118,7 +118,7 @@ public class PageEventListenerDelegate {
    */
   private void updateAddedApplication(Page page, String remoteUser) throws Exception {
     WCMConfigurationService wcmConfigurationService = StageAndVersionPublicationUtil.getServices(WCMConfigurationService.class);
-    List<String> listPageApplicationId = StageAndVersionPublicationUtil.getListApplicationIdByPage(page, wcmConfigurationService.getPublishingPortletName());
+    List<String> listPageApplicationId = StageAndVersionPublicationUtil.getListApplicationIdByPage(page, wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.SCV_PORTLET));
     for (String applicationtId : listPageApplicationId) {
       Node content = StageAndVersionPublicationUtil.getNodeByApplicationId(applicationtId);
       if (content != null) saveAddedApplication(page, applicationtId, content, lifecycleName, remoteUser);
@@ -136,7 +136,7 @@ public class PageEventListenerDelegate {
   private void updateRemovedApplication(Page page, String remoteUser) throws Exception {
     List<Node> listNode = getListNodeByApplicationId(page);
     WCMConfigurationService wcmConfigurationService = StageAndVersionPublicationUtil.getServices(WCMConfigurationService.class);
-    List<String> listApplicationId = StageAndVersionPublicationUtil.getListApplicationIdByPage(page, wcmConfigurationService.getPublishingPortletName());
+    List<String> listApplicationId = StageAndVersionPublicationUtil.getListApplicationIdByPage(page, wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.SCV_PORTLET));
     for (Node content : listNode) {
       for (Value value : content.getProperty("publication:applicationIDs").getValues()) {
         String[] tmp = StageAndVersionPublicationUtil.parseMixedApplicationId(value.getString());

@@ -31,7 +31,6 @@ import org.exoplatform.portal.webui.page.UIPage;
 import org.exoplatform.portal.webui.page.UIPageBrowser;
 import org.exoplatform.portal.webui.page.UIPageCreationWizard;
 import org.exoplatform.portal.webui.page.UIPageEditWizard;
-import org.exoplatform.portal.webui.page.UIPageForm;
 import org.exoplatform.portal.webui.page.UIWizardPageCreationBar;
 import org.exoplatform.portal.webui.page.UIWizardPageSetInfo;
 import org.exoplatform.portal.webui.portal.PageNodeEvent;
@@ -60,7 +59,6 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIBreadcumbs;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
@@ -155,7 +153,7 @@ import org.exoplatform.webui.event.EventListener;
     String editorMembershipType = userACL.getMakableMT();
     List<String> accessControlWorkspaceGroups = userACL.getAccessControlWorkspaceGroups();
     String editSitePermission = Util.getUIPortal().getEditPermission();
-    String redactorMembershipType = wcmConfigurationService.getRedactorMembershipType();   
+    String redactorMembershipType = wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.REDACTOR_MEMBERSHIP_TYPE);   
     // admin
     if (userACL.getSuperUser().equals(userId)) {
       role = UISiteAdminToolbar.ADMIN;
@@ -674,8 +672,6 @@ import org.exoplatform.webui.event.EventListener;
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       UISiteAdminToolbar siteAdminToolbar = event.getSource();
       UIPortal uiPortal = Util.getUIPortal();
-      // SessionProvider currentSessionProvider =
-      // SessionProviderFactory.createSessionProvider();
       UIPortlet uiPortlet = new UIPortlet();
       uiPortlet.setShowInfoBar(false);
 
@@ -687,7 +683,7 @@ import org.exoplatform.webui.event.EventListener;
       .append("#")
       .append(uiPortal.getOwner())
       .append(":")
-      .append(configurationService.getPublishingPortletName())
+      .append(configurationService.getRuntimeContextParam(WCMConfigurationService.SCV_PORTLET))
       .append("/")
       .append(random);
       uiPortlet.setWindowId(windowId.toString());

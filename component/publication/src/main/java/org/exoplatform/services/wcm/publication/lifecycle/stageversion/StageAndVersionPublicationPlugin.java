@@ -59,8 +59,6 @@ import org.exoplatform.services.wcm.publication.lifecycle.stageversion.config.Ve
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.ui.UIPublicationContainer;
 import org.exoplatform.services.wcm.publication.listener.navigation.NavigationEventListenerDelegate;
 import org.exoplatform.services.wcm.publication.listener.page.PageEventListenerDelegate;
-import org.exoplatform.web.application.RequestContext;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.form.UIForm;
 
@@ -296,7 +294,7 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
             .append("#")
             .append(portalOwnerName)
             .append(":")
-            .append(configurationService.getRuntimeContextParam("SCVPortlet"))
+            .append(configurationService.getRuntimeContextParam(WCMConfigurationService.SCV_PORTLET))
             .append("/")
             .append(IdGenerator.generate());
     portlet.setInstanceId(windowId.toString());
@@ -328,8 +326,8 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
       preferences.add(addPreference("repository", ((ManageableRepository) content.getSession().getRepository()).getConfiguration().getName()));
       preferences.add(addPreference("workspace", content.getSession().getWorkspace().getName()));
       preferences.add(addPreference("folderPath", content.getPath() + ";"));
-      preferences.add(addPreference("formViewTemplatePath", wcmConfigurationService.getRuntimeContextParam("formViewTemplatePath")));
-      preferences.add(addPreference("paginatorTemplatePath", wcmConfigurationService.getRuntimeContextParam("paginatorTemplatePath")));
+      preferences.add(addPreference("formViewTemplatePath", wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.FORM_VIEW_TEMPLATE_PATH)));
+      preferences.add(addPreference("paginatorTemplatePath", wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.PAGINATOR_TEMPLAET_PATH)));
       preferences.add(addPreference("itemsPerPage", "10"));
       preferences.add(addPreference("showQuickEditButton", "true"));
       preferences.add(addPreference("showRefreshButton", "false"));
@@ -466,7 +464,7 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     // Remove content from CLV portlet
     DataStorage dataStorage = StageAndVersionPublicationUtil.getServices(DataStorage.class);
     WCMConfigurationService wcmConfigurationService = StageAndVersionPublicationUtil.getServices(WCMConfigurationService.class);
-    List<String> clvPortletsId = StageAndVersionPublicationUtil.findAppInstancesByName(page, wcmConfigurationService.getRuntimeContextParam("CLVPortlet"));
+    List<String> clvPortletsId = StageAndVersionPublicationUtil.findAppInstancesByName(page, wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.CLV_PORTLET));
     if (content != null && !clvPortletsId.isEmpty()) {
       for (String clvPortletId : clvPortletsId) {
         PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(clvPortletId));
@@ -496,7 +494,7 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     List<String> mixedApplicationIDs = StageAndVersionPublicationUtil.getValuesAsString(content, "publication:applicationIDs");
     ArrayList<String> removedApplicationIDs = new ArrayList<String>();
     for(String mixedID: mixedApplicationIDs) {
-      if(mixedID.startsWith(pageId) && mixedID.contains(wcmConfigurationService.getRuntimeContextParam("SCVPortlet"))) {
+      if(mixedID.startsWith(pageId) && mixedID.contains(wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.SCV_PORTLET))) {
         String realAppID = StageAndVersionPublicationUtil.parseMixedApplicationId(mixedID)[1];
         removedApplicationIDs.add(realAppID);
       }

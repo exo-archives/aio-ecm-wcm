@@ -21,13 +21,12 @@ import java.util.GregorianCalendar;
 
 import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
-import javax.jcr.Session;
 
-import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.classify.impl.AlphabetClassifyPlugin;
 import org.exoplatform.services.jcr.ext.classify.impl.DateTimeClassifyPlugin;
 import org.exoplatform.services.jcr.ext.classify.impl.TypeClassifyPlugin;
 import org.exoplatform.services.wcm.BaseWCMTestCase;
+import org.exoplatform.services.wcm.core.NodetypeConstant;
 
 /**
  * Created by The eXo Platform SAS
@@ -37,11 +36,8 @@ import org.exoplatform.services.wcm.BaseWCMTestCase;
  */
 public class TestNodeClassifyService extends BaseWCMTestCase {
 
-  private RepositoryService repositoryService;
-  
   public void setUp() throws Exception {
     super.setUp();
-    repositoryService = getService(RepositoryService.class);
   }
   
   public void testClassifyPluginManager() throws Exception {
@@ -57,15 +53,14 @@ public class TestNodeClassifyService extends BaseWCMTestCase {
       (NodeClassifyService)container.getComponentInstanceOfType(NodeClassifyService.class);
     AlphabetClassifyPlugin alphabetClassifyPlugin = 
       (AlphabetClassifyPlugin)classifyService.getNodeClassifyPlugin(AlphabetClassifyPlugin.class.getName());
-    Session session = repositoryService.getRepository(REPO_NAME).getSystemSession(COLLABORATION_WS);    
     Node root = session.getRootNode();    
-    Node test = root.addNode("test", "nt:unstructured");
-    test.addNode("ebook", "nt:unstructured");
-    test.addNode("economy", "nt:unstructured");
-    test.addNode("emule", "nt:unstructured");
-    test.addNode("document", "nt:unstructured");
-    test.addNode("dot", "nt:unstructured");
-    test.addNode("temp", "nt:unstructured");   
+    Node test = root.addNode("test", NodetypeConstant.NT_UNSTRUCTURED);
+    test.addNode("ebook", NodetypeConstant.NT_UNSTRUCTURED);
+    test.addNode("economy", NodetypeConstant.NT_UNSTRUCTURED);
+    test.addNode("emule", NodetypeConstant.NT_UNSTRUCTURED);
+    test.addNode("document", NodetypeConstant.NT_UNSTRUCTURED);
+    test.addNode("dot", NodetypeConstant.NT_UNSTRUCTURED);
+    test.addNode("temp", NodetypeConstant.NT_UNSTRUCTURED);
     session.save();
 
     assertEquals(6, test.getNodes().getSize());
@@ -108,9 +103,8 @@ public class TestNodeClassifyService extends BaseWCMTestCase {
       (NodeClassifyService)container.getComponentInstanceOfType(NodeClassifyService.class) ;
     DateTimeClassifyPlugin dateClassifyPlugin = 
       (DateTimeClassifyPlugin)classifyService.getNodeClassifyPlugin(DateTimeClassifyPlugin.class.getName()) ;
-    Session session = repositoryService.getRepository(REPO_NAME).getSystemSession(COLLABORATION_WS);    
     Node root = session.getRootNode();    
-    Node test = root.addNode("test", "nt:unstructured");
+    Node test = root.addNode("test", NodetypeConstant.NT_UNSTRUCTURED);
 
     Calendar c1 = new GregorianCalendar();
     c1.set(Calendar.YEAR, 2013);
@@ -132,15 +126,15 @@ public class TestNodeClassifyService extends BaseWCMTestCase {
     c5.set(Calendar.YEAR, 2019);
     c5.set(Calendar.MONTH, 2);
 
-    Node n1 = test.addNode("node1", "nt:unstructured");
+    Node n1 = test.addNode("node1", NodetypeConstant.NT_UNSTRUCTURED);
     n1.setProperty("exo:dateCreated", c1);
-    Node n2 = test.addNode("node2", "nt:unstructured");
+    Node n2 = test.addNode("node2", NodetypeConstant.NT_UNSTRUCTURED);
     n2.setProperty("exo:dateCreated", c2);
-    Node n3 = test.addNode("node3", "nt:unstructured");
+    Node n3 = test.addNode("node3", NodetypeConstant.NT_UNSTRUCTURED);
     n3.setProperty("exo:dateCreated", c3);
-    Node n4 = test.addNode("node4", "nt:unstructured");
+    Node n4 = test.addNode("node4", NodetypeConstant.NT_UNSTRUCTURED);
     n4.setProperty("exo:dateCreated", c4);
-    Node n5 = test.addNode("node5", "nt:unstructured");
+    Node n5 = test.addNode("node5", NodetypeConstant.NT_UNSTRUCTURED);
     n5.setProperty("exo:dateCreated", c5);
 
     session.save();
@@ -207,14 +201,13 @@ public class TestNodeClassifyService extends BaseWCMTestCase {
       (NodeClassifyService)container.getComponentInstanceOfType(NodeClassifyService.class) ;
     TypeClassifyPlugin typeClassifyPlugin = 
       (TypeClassifyPlugin)classifyService.getNodeClassifyPlugin(TypeClassifyPlugin.class.getName()) ;
-    Session session = repositoryService.getRepository(REPO_NAME).getSystemSession(COLLABORATION_WS);    
     Node root = session.getRootNode();    
-    Node test = root.addNode("test", "nt:unstructured");
-    test.addNode("chicken", "nt:folder");
-    test.addNode("dog", "nt:folder");
-    test.addNode("bird", "nt:folder");
-    test.addNode("ball", "nt:unstructured");
-    test.addNode("hat", "nt:unstructured");
+    Node test = root.addNode("test", NodetypeConstant.NT_UNSTRUCTURED);
+    test.addNode("chicken", NodetypeConstant.NT_FOLDER);
+    test.addNode("dog", NodetypeConstant.NT_FOLDER);
+    test.addNode("bird", NodetypeConstant.NT_FOLDER);
+    test.addNode("ball", NodetypeConstant.NT_UNSTRUCTURED);
+    test.addNode("hat", NodetypeConstant.NT_UNSTRUCTURED);
     session.save();
 
     assertEquals(5, test.getNodes().getSize());

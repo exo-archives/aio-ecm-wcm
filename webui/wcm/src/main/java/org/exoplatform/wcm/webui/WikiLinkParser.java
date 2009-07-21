@@ -76,7 +76,7 @@ public class WikiLinkParser {
     String baseURI = servletRequest.getScheme() + "://" + servletRequest.getServerName() + ":"
         + servletRequest.getServerPort() + portalRequestContext.getPortalURI();   
     WCMConfigurationService configurationService = (WCMConfigurationService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(WCMConfigurationService.class);
-    String wikiContext = configurationService.getRuntimeContextParam("createWikiPageURI");    
+    String wikiContext = configurationService.getRuntimeContextParam(WCMConfigurationService.CREATE_WIKI_PAGE_URI);    
     return baseURI.concat(wikiContext);
   }
   

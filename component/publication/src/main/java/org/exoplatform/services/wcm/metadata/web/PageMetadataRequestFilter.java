@@ -113,8 +113,8 @@ public class PageMetadataRequestFilter implements Filter {
     String pathInfo = req.getPathInfo();
     if(pathInfo == null) return false;    
     WCMConfigurationService configurationService = getService(WCMConfigurationService.class);
-    String parameterizedPageURI = configurationService.getParameterizedPageURI();
-    String printPreviewPageURI = configurationService.getRuntimeContextParam("printViewerPage");    
+    String parameterizedPageURI = configurationService.getRuntimeContextParam(WCMConfigurationService.PARAMETERIZED_PAGE_URI);
+    String printPreviewPageURI = configurationService.getRuntimeContextParam(WCMConfigurationService.PRINT_VIEWER_PAGE);    
     int index = pathInfo.indexOf(parameterizedPageURI);    
     String parameter = null;
     if(index<1 && printPreviewPageURI != null) {      
