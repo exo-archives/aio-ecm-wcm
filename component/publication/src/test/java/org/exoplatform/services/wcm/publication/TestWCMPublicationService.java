@@ -89,6 +89,7 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
     sessionSystem.save();
   }
   
+  @SuppressWarnings("unchecked")
   public void testPublishContentCLV_01() throws Exception{
   	RepositoryService repositoryService = getService(RepositoryService.class);
 
@@ -156,13 +157,19 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
     page.setChildren(listPortlet);
     userPortalConfigService.update(page);
  
-    System.err.println("checkContentIdentifier========================>" + checkContentIdentifier(page, testNode.getUUID(), "CLVPortlet"));
     wcmPublicationService.publishContentCLV(testNode, page, windowId.toString(), "classic", "root");
-    assertTrue(checkContentIdentifier(page, testNode.getUUID(), "CLVPortlet"));
-    System.err.println("checkContentIdentifier========================>" + checkContentIdentifier(page, testNode.getUUID(), "CLVPortlet"));
     
-    
-    
+  	PortletPreferences  newPortletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(windowId.toString()));      
+  	if (newPortletPreferences != null) {
+  		for (Preference preference : (List<Preference>)newPortletPreferences.getPreferences()) {
+  			if ("contents".equals(preference.getName())){
+  				assertTrue(preference.getValues().indexOf(testNode.getPath()) == 0);
+  			} else if ("folderPath".equals(preference.getName())){
+  				assertTrue(preference.getValues().get(0).toString().indexOf(testNode.getPath()) == 0);
+  			}
+  		}
+  	}
+  	
     testNode.remove();
     ((Node)sessionSystem.getItem("/exo:registry/exo:applications/MainPortalData")).remove();
     session.save();
@@ -217,6 +224,18 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
  
     wcmPublicationService.publishContentCLV(testNode, page, windowId.toString(), "classic", "root");
     
+    DataStorage dataStorage = StageAndVersionPublicationUtil.getServices(DataStorage.class);
+  	PortletPreferences  newPortletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(windowId.toString()));      
+  	if (newPortletPreferences != null) {
+  		for (Preference preference : (List<Preference>)newPortletPreferences.getPreferences()) {
+  			if ("contents".equals(preference.getName())){
+  				assertTrue(preference.getValues().indexOf(testNode.getPath()) == 0);
+  			} else if ("folderPath".equals(preference.getName())){
+  				assertTrue(preference.getValues().get(0).toString().indexOf(testNode.getPath()) == 0);
+  			}
+  		}
+  	}
+    
     testNode.remove();
     ((Node)sessionSystem.getItem("/exo:registry/exo:applications/MainPortalData")).remove();
     session.save();
@@ -235,14 +254,15 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
   }
   
   @SuppressWarnings("unchecked")
-  private static boolean checkContentIdentifier(Page page, String contentUUID, String porletType) throws Exception {
+  private static boolean checkContentIdentifier(Page page, String contentUUID, String portletType) throws Exception {
     WCMConfigurationService wcmConfigurationService = StageAndVersionPublicationUtil.getServices(WCMConfigurationService.class);
     DataStorage dataStorage = StageAndVersionPublicationUtil.getServices(DataStorage.class);
-    List<String> scvPortletsId = StageAndVersionPublicationUtil.findAppInstancesByName(page, wcmConfigurationService.getRuntimeContextParam(porletType));
+    List<String> scvPortletsId = StageAndVersionPublicationUtil.findAppInstancesByName(page, wcmConfigurationService.getRuntimeContextParam(portletType));
     for (String scvPortletId : scvPortletsId) {
       PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(scvPortletId));      
       if (portletPreferences != null) {
         for (Preference preference : (List<Preference>)portletPreferences.getPreferences()) {
+        	
         	if ("nodeIdentifier".equals(preference.getName())
         			&& preference.getValues().size() > 0
         			&& contentUUID.equals(preference.getValues().get(0).toString())) {
@@ -255,9 +275,9 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
     return false;
   }
   
-  private static int getNumberPortletsOfPage(Page page, String porletType) {
+  private static int getNumberPortletsOfPage(Page page, String portletType) {
   	 WCMConfigurationService wcmConfigurationService = StageAndVersionPublicationUtil.getServices(WCMConfigurationService.class);
-     List<String> scvPortletsId = StageAndVersionPublicationUtil.findAppInstancesByName(page, wcmConfigurationService.getRuntimeContextParam(porletType));
+     List<String> scvPortletsId = StageAndVersionPublicationUtil.findAppInstancesByName(page, wcmConfigurationService.getRuntimeContextParam(portletType));
      
       try {
 	      return scvPortletsId.size();
