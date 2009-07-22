@@ -299,6 +299,8 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
 
   	wcmPublicationService.suspendPublishedContentFromPage(testNode, page, "root");
   	
+  	assertFalse(checkContentIdentifier(page, testNode.getUUID(), "SCVPortlet"));
+  	
   	userPortalConfigService.remove(page);
     testNode.remove();
     collaborationSession.save();
