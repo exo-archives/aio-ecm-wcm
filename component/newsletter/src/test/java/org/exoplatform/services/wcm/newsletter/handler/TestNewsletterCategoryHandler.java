@@ -17,11 +17,11 @@
 package org.exoplatform.services.wcm.newsletter.handler;
 
 import javax.jcr.Node;
-import javax.jcr.PathNotFoundException;
 
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.BaseWCMTestCase;
+import org.exoplatform.services.wcm.core.NodetypeUtils;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
@@ -39,7 +39,7 @@ public class TestNewsletterCategoryHandler extends BaseWCMTestCase {
 	private NewsletterCategoryHandler newsletterCategoryHandler;
 	public void setUp() throws Exception {
 		super.setUp();
-		categoriesNode = session.getRootNode().getNode("sites content/live").addNode("classic").addNode("ApplicationData").addNode("NewsletterApplication").addNode("Categories");
+		categoriesNode = session.getRootNode().getNode("sites content/live/classic/ApplicationData/NewsletterApplication/Categories");
 		session.save();	
 		
 		NewsletterManagerService  newsletterManagerService = getService(NewsletterManagerService.class);
@@ -108,8 +108,10 @@ public class TestNewsletterCategoryHandler extends BaseWCMTestCase {
 	
 	protected void tearDown() throws Exception {
 		super.tearDown();
-		session.getRootNode().getNode("sites content/live").getNode("classic").remove();
-		session.save();
+		try {
+		  session.getRootNode().getNode("sites content/live/classic/ApplicationData/NewsletterApplication/Categories/newsletter01").remove();
+		  session.save();
+    } catch (Exception e) {}
 	}
 	
 }

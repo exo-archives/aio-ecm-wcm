@@ -159,7 +159,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 		
 		try {
 			Node root = session.getRootNode();
-			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME);
+			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
 			Node jsNode = webContent.getNode("js").getNode("default.js");
 			
 			jsNode.setProperty("exo:active", false);
@@ -185,7 +185,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 		
 		try {
 			Node root = session.getRootNode();
-			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME);
+			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
 			Node jsNode = webContent.getNode("js").getNode("default.js");
 			Node jsContent = jsNode.getNode("jcr:content");
 			
@@ -212,7 +212,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 		
 		try {
 			Node root = session.getRootNode();
-			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME);
+			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
 			Node jsNode = webContent.getNode("js").getNode("default.js");
 			Node jsContent = jsNode.getNode("jcr:content");
 			
@@ -239,7 +239,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 		
 		try {
 			Node root = session.getRootNode();
-			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME);
+			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
 			Node jsNode = webContent.getNode("js").getNode("default.js");
 			Node jsContent = jsNode.getNode("jcr:content");
 			
@@ -266,7 +266,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 		
 		try {
 			Node root = session.getRootNode();
-			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME);
+			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
 			Node jsNode = webContent.getNode("js").getNode("default.js");
 			Node jsContent = jsNode.getNode("jcr:content");
 			
@@ -293,7 +293,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 		
 		try {
 			Node root = session.getRootNode();
-			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME);
+			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
 			Node jsNode = webContent.getNode("js").getNode("default.js");
 			Node jsContent = jsNode.getNode("jcr:content");
 			
@@ -320,7 +320,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 		
 		try {
 			Node root = session.getRootNode();
-			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME);
+			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
 			Node jsNode = webContent.getNode("js").getNode("default.js");
 			Node jsContent = jsNode.getNode("jcr:content");
 			
@@ -347,7 +347,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 		
 		try {
 			Node root = session.getRootNode();
-			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME);
+			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
 			Node jsNode = webContent.getNode("js").getNode("default.js");
 			Node jsContent = jsNode.getNode("jcr:content");
 			
@@ -373,7 +373,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 		
 		try {
 			Node root = session.getRootNode();
-			Node webContent = createWebcontentNode(root, "webContent");
+			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
 			
 			String jsData = javascriptService.getActiveJavaScript(webContent);
 			assertEquals("This is the default.js file.", jsData);
@@ -404,7 +404,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	public void testUpdatePortalJSOnModify_02() {
 		try {
 			Node root = session.getRootNode();
-			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME);
+			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
 			Node jsNode = webContent.getNode("js").getNode("default.js");
 			javascriptService.updatePortalJSOnModify(jsNode, null);
 			fail("");
@@ -421,7 +421,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 		try {
 			SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
 			Node root = session.getRootNode();
-			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME);
+			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
 			Node jsFolder = webContent.getNode("js");
 			javascriptService.updatePortalJSOnModify(jsFolder, sessionProvider);
 			fail();
@@ -438,7 +438,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 		try {
 			SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
 			Node root = session.getRootNode();
-			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME);
+			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
 			Node jsFolder = webContent.getNode("js");
 			
 			Node jsNode = jsFolder.addNode("testUpdatePortalJSOnModify.js", "nt:file");
@@ -473,7 +473,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 		try {
 			SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
 			Node root = session.getRootNode();
-			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME);
+			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
 			Node jsFolder = webContent.getNode("js");
 			
 			Node jsNode = jsFolder.addNode("testUpdatePortalJSOnModify.js", "nt:file");
@@ -508,7 +508,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 		try {
 			SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
 			Node root = session.getRootNode();
-			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME);
+			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
 			Node jsFolder = webContent.getNode("js");
 			
 			Node jsNode = jsFolder.addNode("testUpdatePortalJSOnModify.js", "nt:file");
@@ -543,7 +543,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 		try {
 			SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
 			Node root = session.getRootNode();
-			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME);
+			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
 			Node jsFolder = webContent.getNode("js");
 			
 			Node jsNode = jsFolder.addNode("testUpdatePortalJSOnModify.js", "nt:file");
@@ -584,7 +584,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	public void testUpdatePortalJSOnRemove_02() {
 		try {
 			Node root = session.getRootNode();
-			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME);
+			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
 			Node jsNode = webContent.getNode("js").getNode("default.js");
 			javascriptService.updatePortalJSOnRemove(jsNode, null);
 			fail("");
@@ -597,7 +597,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 		try {
 			SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
 			Node root = session.getRootNode();
-			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME);
+			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
 			Node jsFolder = webContent.getNode("js");
 			javascriptService.updatePortalJSOnRemove(jsFolder, sessionProvider);
 			session.save();
@@ -614,7 +614,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 		try {
 			SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
 			Node root = session.getRootNode();
-			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME);
+			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
 			Node jsFolder = webContent.getNode("js");
 
 			Node jsNode = jsFolder.addNode("testUpdatePortalJSOnRemove.js", "nt:file");

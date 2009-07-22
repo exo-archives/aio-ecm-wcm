@@ -84,6 +84,7 @@
 
 
 	<!-- Imports -->
+	<import>classpath:/conf/standalone/test-portal-configuration.xml</import>
 	<import>classpath:/conf/standalone/test-system-configuration.xml</import>
 	<import>classpath:/conf/standalone/test-jcr-configuration.xml</import>
 	<import>classpath:/conf/standalone/test-dms-system-configuration.xml</import>

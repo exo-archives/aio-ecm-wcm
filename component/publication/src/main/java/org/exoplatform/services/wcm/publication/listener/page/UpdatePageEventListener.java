@@ -25,9 +25,7 @@ import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.security.ConversationState;
-import org.exoplatform.services.security.Identity;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
-import org.exoplatform.webui.application.WebuiRequestContext;
 
 /**
  * Created by The eXo Platform SAS
@@ -48,9 +46,7 @@ public class UpdatePageEventListener extends Listener<UserPortalConfigService, P
     WCMPublicationService publicationService = 
       (WCMPublicationService)container.getComponentInstanceOfType(WCMPublicationService.class);
     try {
-      ConversationState conversationState = ConversationState.getCurrent();
-      Identity identity = conversationState.getIdentity();
-      publicationService.updateLifecyleOnChangePage(event.getData(), identity.getUserId());
+      publicationService.updateLifecyleOnChangePage(event.getData(), ConversationState.getCurrent().getIdentity().getUserId());
     } catch (Exception e) {
       log.error("Exception when update publication lifecyle", e);
     }       

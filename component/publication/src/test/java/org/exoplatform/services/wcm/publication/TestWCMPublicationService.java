@@ -51,13 +51,8 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
     RepositoryService repositoryService = getService(RepositoryService.class);
 
     Session session = repositoryService.getRepository(REPO_NAME).getSystemSession(COLLABORATION_WS);
-    Node testNode = createWebcontentNode(session.getRootNode(), "test"); 
+    Node testNode = createWebcontentNode(session.getRootNode(), "test", null, null, null); 
     session.save();
-    
-    Session sessionSystem = repositoryService.getRepository(REPO_NAME).getSystemSession(SYSTEM_WS);
-    ((Node)sessionSystem.getItem("/exo:registry/exo:applications")).addNode("MainPortalData", "exo:registryGroup").
-    	addNode("classic", "exo:registryGroup").addNode("pages", "exo:registryGroup");
-    sessionSystem.save();
     
     Page page = new Page();
     page.setPageId("portal::classic::testpage");
@@ -83,10 +78,9 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
     assertTrue(checkContentIdentifier(page, testNode.getUUID(), "SCVPortlet"));
     assertEquals(oldPorletsNumber + 1, newPorletsNumber);
     
+    userPortalConfigService.remove(page);
     testNode.remove();
-    ((Node)sessionSystem.getItem("/exo:registry/exo:applications/MainPortalData")).remove();
     session.save();
-    sessionSystem.save();
   }
   
   @SuppressWarnings("unchecked")
@@ -94,13 +88,8 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
   	RepositoryService repositoryService = getService(RepositoryService.class);
 
     Session session = repositoryService.getRepository(REPO_NAME).getSystemSession(COLLABORATION_WS);
-    Node testNode = createWebcontentNode(session.getRootNode(), "test"); 
+    Node testNode = createWebcontentNode(session.getRootNode(), "test", null, null, null); 
     session.save();
-    
-    Session sessionSystem = repositoryService.getRepository(REPO_NAME).getSystemSession(SYSTEM_WS);
-    ((Node)sessionSystem.getItem("/exo:registry/exo:applications")).addNode("MainPortalData", "exo:registryGroup").
-    	addNode("classic", "exo:registryGroup").addNode("pages", "exo:registryGroup");
-    sessionSystem.save();
     
     Page page = new Page();
     page.setPageId("portal::classic::testpage");
@@ -170,10 +159,9 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
   		}
   	}
   	
+  	userPortalConfigService.remove(page);
     testNode.remove();
-    ((Node)sessionSystem.getItem("/exo:registry/exo:applications/MainPortalData")).remove();
     session.save();
-    sessionSystem.save();
   }
   
   @SuppressWarnings("unchecked")
@@ -181,13 +169,8 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
   	RepositoryService repositoryService = getService(RepositoryService.class);
 
     Session session = repositoryService.getRepository(REPO_NAME).getSystemSession(COLLABORATION_WS);
-    Node testNode = createWebcontentNode(session.getRootNode(), "test"); 
+    Node testNode = createWebcontentNode(session.getRootNode(), "test", null, null, null); 
     session.save();
-    
-    Session sessionSystem = repositoryService.getRepository(REPO_NAME).getSystemSession(SYSTEM_WS);
-    ((Node)sessionSystem.getItem("/exo:registry/exo:applications")).addNode("MainPortalData", "exo:registryGroup").
-    	addNode("classic", "exo:registryGroup").addNode("pages", "exo:registryGroup");
-    sessionSystem.save();
     
     Page page = new Page();
     page.setPageId("portal::classic::testpage");
@@ -236,11 +219,10 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
   			}
   		}
   	}
-    
+
+  	userPortalConfigService.remove(page);
     testNode.remove();
-    ((Node)sessionSystem.getItem("/exo:registry/exo:applications/MainPortalData")).remove();
     session.save();
-    sessionSystem.save();
   }
   
   private Preference addPreference(String name, String... values ) {

@@ -105,7 +105,7 @@ public abstract class BaseWCMTestCase extends BasicTestCase {
     return clazz.cast(container.getComponentInstanceOfType(clazz));
   }
 
-  protected Node createWebcontentNode(Node parentNode, String nodeName) throws Exception {
+  protected Node createWebcontentNode(Node parentNode, String nodeName, String htmlData, String cssData, String jsData) throws Exception {
     Node webcontent = parentNode.addNode(nodeName, "exo:webContent");
     webcontent.setProperty("exo:title", nodeName);
 
@@ -115,7 +115,8 @@ public abstract class BaseWCMTestCase extends BasicTestCase {
     htmlContent.setProperty("jcr:encoding", "UTF-8");
     htmlContent.setProperty("jcr:mimeType", "text/html");
     htmlContent.setProperty("jcr:lastModified", new Date().getTime());
-    htmlContent.setProperty("jcr:data", "This is the default.html file.");
+    if (htmlData == null) htmlData = "This is the default.html file.";
+    htmlContent.setProperty("jcr:data", htmlData);
     
     Node jsFolder = webcontent.addNode("js", "exo:jsFolder");
     Node jsNode = jsFolder.addNode("default.js", "nt:file");
@@ -128,7 +129,8 @@ public abstract class BaseWCMTestCase extends BasicTestCase {
     jsContent.setProperty("jcr:encoding", "UTF-8");
     jsContent.setProperty("jcr:mimeType", "text/javascript");
     jsContent.setProperty("jcr:lastModified", new Date().getTime());
-    jsContent.setProperty("jcr:data", "This is the default.js file.");
+    if (jsData == null) jsData = "This is the default.js file.";
+    jsContent.setProperty("jcr:data", jsData);
     
     Node cssFolder = webcontent.addNode("css", "exo:cssFolder");
     Node cssNode = cssFolder.addNode("default.css", "nt:file");
@@ -141,7 +143,8 @@ public abstract class BaseWCMTestCase extends BasicTestCase {
     cssContent.setProperty("jcr:encoding", "UTF-8");
     cssContent.setProperty("jcr:mimeType", "text/css");
     cssContent.setProperty("jcr:lastModified", new Date().getTime());
-    cssContent.setProperty("jcr:data", "This is the default.css file.");
+    if (cssData == null) cssData = "This is the default.css file.";
+    cssContent.setProperty("jcr:data", cssData);
     
     Node mediaFolder = webcontent.addNode("medias");
     mediaFolder.addNode("images", "nt:folder");

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<portal-config>
+  <portal-name>classic</portal-name>
+  <locale>en</locale>
+  <access-permissions>Everyone</access-permissions>
+  <edit-permission>*:/platform/web-contributors</edit-permission>
+  <creator>root</creator>
+    
+  <portal-layout> 		
+ 	  <application>
+	    <instance-id>portal#classic:/presentation/SiteAdministrationPortlet/classic-admintoolbar</instance-id>
+	    <show-info-bar>false</show-info-bar>
+    </application>	  	
+      
+	  <container id="DefaultPortalContainer" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
+      <container id="Banner" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+        <application>
+          <instance-id>portal#classic:/presentation/SingleContentViewer/classic-banner</instance-id>
+          <show-info-bar>false</show-info-bar>
+        </application>
+      </container>
+      <container id="AccessContainer" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+				<application>
+				  <instance-id>portal#classic:/presentation/SingleContentViewer/classic-access</instance-id>
+				  <show-info-bar>false</show-info-bar>
+				</application>
+	  		<application>
+				  <instance-id>portal#classic:/presentation/SingleContentViewer/classic-searchbox</instance-id>
+				  <show-info-bar>false</show-info-bar>
+				</application>
+      </container>
+    </container>
+	  
+	  <application>
+	  	<instance-id>portal#classic:/presentation/SingleContentViewer/classic-navigation</instance-id>
+	    <show-info-bar>false</show-info-bar>
+	  </application>
+	  
+	  <application>
+		<instance-id>portal#classic:/presentation/SingleContentViewer/classic-breadcrumb</instance-id>
+	  	<show-info-bar>false</show-info-bar>
+	  </application>	 
+	  	  
+	  <page-body> </page-body>
+	  
+	  <application>
+	    <instance-id>portal#classic:/presentation/SingleContentViewer/classic-footer</instance-id>
+	    <show-info-bar>false</show-info-bar>
+	  </application>
+  </portal-layout>
+  
+</portal-config>
