@@ -14,17 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.services.wcm.publication.listener.page;
+package org.exoplatform.services.wcm.publication.listener.navigation;
 
 import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.config.UserPortalConfigService;
-import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.log.ExoLogger;
-import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
 
 /**
@@ -33,22 +32,23 @@ import org.exoplatform.services.wcm.publication.WCMPublicationService;
  * hoa.pham@exoplatform.com
  * Sep 24, 2008
  */
-public class RemovePageEventListener extends Listener<UserPortalConfigService, Page>{
+public class MockRemoveNavigationEventListener extends Listener<UserPortalConfigService, PageNavigation>{
   
   /** The log. */
-  private static Log log = ExoLogger.getLogger(RemovePageEventListener.class);
+  private static Log log = ExoLogger.getLogger(MockRemoveNavigationEventListener.class);
   
   /* (non-Javadoc)
    * @see org.exoplatform.services.listener.Listener#onEvent(org.exoplatform.services.listener.Event)
    */
-  public void onEvent(Event<UserPortalConfigService, Page> event) throws Exception { 
+  public void onEvent(Event<UserPortalConfigService, PageNavigation> event) throws Exception {
     ExoContainer container = ExoContainerContext.getCurrentContainer();
-    WCMPublicationService publicationService = (WCMPublicationService)container.getComponentInstanceOfType(WCMPublicationService.class);
+    WCMPublicationService publicationService = 
+      (WCMPublicationService)container.getComponentInstanceOfType(WCMPublicationService.class);
     try {
-      publicationService.updateLifecycleOnRemovePage(event.getData(), ConversationState.getCurrent().getIdentity().getUserId());
+      publicationService.updateLifecyleOnRemoveNavigation(event.getData());
     } catch (Exception e) {
       log.error("Exception when update publication lifecyle", e);
-    }    
+    }
   }
 
 }

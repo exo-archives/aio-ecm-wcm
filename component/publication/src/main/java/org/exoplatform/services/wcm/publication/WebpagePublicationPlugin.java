@@ -115,10 +115,11 @@ public abstract class WebpagePublicationPlugin extends PublicationPlugin {
    * Update lifecyle state of the any content relates to a navigation when the navigation is changed
    * 
    * @param navigation the navigation
+   * @param remoteUser TODO
    * 
    * @throws Exception the exception
    */
-  public abstract void updateLifecycleOnChangeNavigation(PageNavigation navigation) throws Exception;
+  public abstract void updateLifecycleOnChangeNavigation(PageNavigation navigation, String remoteUser) throws Exception;
   
   /**
    * Update lifecyle state of the any content relates to a navigation when the navigation is removed

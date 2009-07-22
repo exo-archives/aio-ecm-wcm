@@ -79,13 +79,14 @@ public class NavigationEventListenerDelegate {
    * Update lifecycle on change navigation.
    * 
    * @param pageNavigation the page navigation
+   * @param remoteUser TODO
    * 
    * @throws Exception the exception
    */
-  public void updateLifecycleOnChangeNavigation(PageNavigation pageNavigation) throws Exception {
+  public void updateLifecycleOnChangeNavigation(PageNavigation pageNavigation, String remoteUser) throws Exception {
     if (pageNavigation.getOwnerType().equals(PortalConfig.PORTAL_TYPE)) {
       updateRemovedPageNode(pageNavigation);
-      updateAddedPageNode(pageNavigation);
+      updateAddedPageNode(pageNavigation, remoteUser);
     }
   }
 
@@ -104,14 +105,15 @@ public class NavigationEventListenerDelegate {
    * Update added page node.
    * 
    * @param pageNavigation the page navigation
+   * @param remoteUser TODO
    * 
    * @throws Exception the exception
    */
-  private void updateAddedPageNode(PageNavigation pageNavigation) throws Exception {
+  private void updateAddedPageNode(PageNavigation pageNavigation, String remoteUser) throws Exception {
     UserPortalConfigService userPortalConfigService = StageAndVersionPublicationUtil.getServices(UserPortalConfigService.class);
     WCMConfigurationService wcmConfigurationService = StageAndVersionPublicationUtil.getServices(WCMConfigurationService.class);
     for (PageNode pageNode : pageNavigation.getNodes()) {
-      Page page = userPortalConfigService.getPage(pageNode.getPageReference(), org.exoplatform.portal.webui.util.Util.getPortalRequestContext().getRemoteUser());
+      Page page = userPortalConfigService.getPage(pageNode.getPageReference(), remoteUser);
       if (page != null) {
         for (String applicationId : StageAndVersionPublicationUtil.getListApplicationIdByPage(page, wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.SCV_PORTLET))) {
           Node content = StageAndVersionPublicationUtil.getNodeByApplicationId(applicationId);

@@ -505,8 +505,8 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     userPortalConfigService.update(page);
   }
 
-  public void updateLifecycleOnChangeNavigation(PageNavigation pageNavigation) throws Exception {
-    navigationEventListenerDelegate.updateLifecycleOnChangeNavigation(pageNavigation);
+  public void updateLifecycleOnChangeNavigation(PageNavigation pageNavigation, String remoteUser) throws Exception {
+    navigationEventListenerDelegate.updateLifecycleOnChangeNavigation(pageNavigation, remoteUser);
   }
 
   public void updateLifecycleOnRemovePage(Page page, String remoteUser) throws Exception {

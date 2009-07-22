@@ -118,9 +118,9 @@ public class WCMPublicationServiceImpl implements WCMPublicationService, Startab
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.publication.WCMPublicationPresentationService#updateLifecycleOnChangeNavigation(org.exoplatform.portal.config.model.PageNavigation)
    */
-  public void updateLifecycleOnChangeNavigation(PageNavigation navigation) throws Exception {
+  public void updateLifecycleOnChangeNavigation(PageNavigation navigation, String remoteUser) throws Exception {
     for(WebpagePublicationPlugin publicationPlugin: publicationPlugins.values()) {
-      publicationPlugin.updateLifecycleOnChangeNavigation(navigation);
+      publicationPlugin.updateLifecycleOnChangeNavigation(navigation, remoteUser);
     }    
   }
 

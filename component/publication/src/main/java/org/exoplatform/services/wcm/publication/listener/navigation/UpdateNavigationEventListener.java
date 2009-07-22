@@ -24,6 +24,7 @@ import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
 
 /**
@@ -45,7 +46,7 @@ public class UpdateNavigationEventListener extends Listener<UserPortalConfigServ
     WCMPublicationService publicationService = 
       (WCMPublicationService)container.getComponentInstanceOfType(WCMPublicationService.class);
     try {
-      publicationService.updateLifecycleOnChangeNavigation(event.getData());
+      publicationService.updateLifecycleOnChangeNavigation(event.getData(), ConversationState.getCurrent().getIdentity().getUserId());
     } catch (Exception e) {
       log.error("Exception when update publication lifecyle", e);
     }    

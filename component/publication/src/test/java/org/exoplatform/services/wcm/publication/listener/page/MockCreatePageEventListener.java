@@ -42,7 +42,6 @@ public class MockCreatePageEventListener extends Listener<UserPortalConfigServic
    */
   public void onEvent(Event<UserPortalConfigService, Page> event) throws Exception {
     
-    System.out.println("\n\n\n\n\n ------------------------ \n\n\n\n\n\n\n\n\n");
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     WCMPublicationService publicationService = 
       (WCMPublicationService)container.getComponentInstanceOfType(WCMPublicationService.class);

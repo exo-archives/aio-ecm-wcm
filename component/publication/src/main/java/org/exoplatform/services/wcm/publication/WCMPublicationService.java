@@ -146,10 +146,11 @@ public interface WCMPublicationService {
   * Retrieves all web page lifecycles and update the publication lifecycle when a navigation is changed
   * 
   * @param navigation the navigation
+ * @param remoteUser TODO
   * 
   * @throws Exception the exception
   */
- public void updateLifecycleOnChangeNavigation(PageNavigation navigation) throws Exception;
+ public void updateLifecycleOnChangeNavigation(PageNavigation navigation, String remoteUser) throws Exception;
  
  /**
   * Retrieves all web page lifecycles and update the publication lifecycle when a navigation is removed
