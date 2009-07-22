@@ -24,7 +24,6 @@ package org.exoplatform.services.wcm.core;
  */
 public class NodetypeConstant {
 
-  // JCR nodetype
   public static final String NT_BASE                        = "nt:base";
   
   public static final String NT_FILE                        = "nt:file";
@@ -37,7 +36,11 @@ public class NodetypeConstant {
   
   public static final String NT_VERSIONED_CHILD             = "nt:versionedChild";
   
+  
+  
   public static final String DC_ELEMENT_SET                 = "dc:elementSet";
+  
+  
   
   public static final String JCR_ROOT_VERSION               = "jcr:rootVersion";
   
@@ -63,11 +66,12 @@ public class NodetypeConstant {
   
   public static final String JCR_SCORE                      = "jcr:score";
   
+  
+  
   public static final String MIX_REFERENCEABLE              = "mix:referenceable";
   
   
   
-  // eXo nodetype
   public static final String EXO_OWNER                      = "exo:owner";
   
   public static final String EXO_OWNEABLE                   = "exo:owneable";
@@ -135,6 +139,12 @@ public class NodetypeConstant {
   public static final String EXO_CATEGORY                   = "exo:category";
   
   public static final String EXO_METADATA                   = "exo:metadata";
+  
+  public static final String EXO_LINKABLE                   = "exo:linkable";
+  
+  public static final String EXO_LINKS                      = "exo:links";
+  
+  
   
   public static final String PUBLICATION_LIVE_REVISION      = "publication:liveRevision";
   

@@ -39,7 +39,7 @@ public class LinkValidatorJob extends BaseJob {
       (LiveLinkManagerService)container.getComponentInstanceOfType(LiveLinkManagerService.class);
     if(linkManagerService == null) return;
     try {
-      linkManagerService.validateLink();
+      linkManagerService.updateLinks();
     } catch (Exception e) {
       log.error("Error when execute link validator job by scheduler", e);
     }

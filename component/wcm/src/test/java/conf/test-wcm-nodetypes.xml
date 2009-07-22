@@ -12,17 +12,8 @@
       </propertyDefinition>      
     </propertyDefinitions>
   </nodeType>
-  <!-- DO NOT REMOVE THIS DEFINITION -->
-
-  <nodeType name="exo:applicationLinkable" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
-    <propertyDefinitions>
-      <propertyDefinition name="exo:linkedApplications" requiredType="String" autoCreated="true" mandatory="false"
-        onParentVersion="COPY" protected="false" multiple="true">
-        <valueConstraints/>	      
-      </propertyDefinition>      
-    </propertyDefinitions>
-  </nodeType>            
-    
+  <!-- DO NOT REMOVE THIS DEFINITION -->          
+      
   <nodeType name="exo:portalFolder" isMixin="false" hasOrderableChildNodes="true" primaryItemName="">
     <supertypes>
       <supertype>nt:unstructured</supertype>
@@ -35,7 +26,42 @@
     </supertypes>    
   </nodeType>
   
-  <nodeType name="exo:multimediaFolder" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">  	    
+  <nodeType name="exo:themeFolder" isMixin="false" hasOrderableChildNodes="true" primaryItemName="">
+    <supertypes>
+      <supertype>nt:unstructured</supertype>
+    </supertypes>    
+  </nodeType>
+  
+  <nodeType name="exo:linkFolder" isMixin="false" hasOrderableChildNodes="true" primaryItemName="">
+    <supertypes>
+      <supertype>nt:unstructured</supertype>
+    </supertypes>    
+  </nodeType>
+  
+  <nodeType name="exo:multimediaFolder" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+  	<supertypes>
+      <supertype>nt:unstructured</supertype>
+    </supertypes>
+  	<childNodeDefinitions>
+      <childNodeDefinition name="images" defaultPrimaryType="nt:folder" autoCreated="false" mandatory="false"
+        onParentVersion="VERSION" protected="false" sameNameSiblings="false">
+        <requiredPrimaryTypes>
+          <requiredPrimaryType>nt:base</requiredPrimaryType>
+        </requiredPrimaryTypes>
+      </childNodeDefinition>
+      <childNodeDefinition name="videos" defaultPrimaryType="nt:folder" autoCreated="false" mandatory="false"
+        onParentVersion="VERSION" protected="false" sameNameSiblings="false">
+        <requiredPrimaryTypes>
+          <requiredPrimaryType>nt:base</requiredPrimaryType>
+        </requiredPrimaryTypes>
+      </childNodeDefinition>
+      <childNodeDefinition name="audio" defaultPrimaryType="nt:folder" autoCreated="false" mandatory="false"
+        onParentVersion="VERSION" protected="false" sameNameSiblings="false">
+        <requiredPrimaryTypes>
+          <requiredPrimaryType>nt:base</requiredPrimaryType>
+        </requiredPrimaryTypes>
+      </childNodeDefinition>
+    </childNodeDefinitions>    	    
   </nodeType>
     
   <nodeType name="exo:jsFolder" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
@@ -48,22 +74,8 @@
     <supertypes>
       <supertype>nt:folder</supertype>
     </supertypes>
-  </nodeType>
-      
-  <nodeType name="exo:webContent" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
-  	<supertypes>
-  	  <supertype>mix:referenceable</supertype>
-  	  <supertype>nt:unstructured</supertype>
-  	  <supertype>nt:hierarchyNode</supertype>  	        
-    </supertypes>
-    <propertyDefinitions>
-      <propertyDefinition name="exo:webSummary" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY"
-        protected="false" multiple="false">
-        <valueConstraints/>
-      </propertyDefinition>  	          	    
-    </propertyDefinitions>
     <childNodeDefinitions>
-      <childNodeDefinition name="js" defaultPrimaryType="exo:jsFolder" autoCreated="false" mandatory="false"
+      <childNodeDefinition name="*" defaultPrimaryType="nt:folder" autoCreated="false" mandatory="false"
         onParentVersion="VERSION" protected="false" sameNameSiblings="false">
         <requiredPrimaryTypes>
           <requiredPrimaryType>nt:base</requiredPrimaryType>
@@ -77,24 +89,53 @@
       </childNodeDefinition>
     </childNodeDefinitions>
   </nodeType>
+      
+  <nodeType name="exo:webContent" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+  	<supertypes>
+  	  <supertype>mix:referenceable</supertype>
+  	  <supertype>nt:unstructured</supertype>
+  	  <supertype>nt:hierarchyNode</supertype>
+  	  <supertype>exo:rss-enable</supertype>  	    	    	    	     
+    </supertypes>
+    <childNodeDefinitions>
+      <childNodeDefinition name="js" defaultPrimaryType="exo:jsFolder" autoCreated="false" mandatory="false"
+        onParentVersion="VERSION" protected="false" sameNameSiblings="false">
+        <requiredPrimaryTypes>
+          <requiredPrimaryType>nt:base</requiredPrimaryType>
+        </requiredPrimaryTypes>
+      </childNodeDefinition>
+      <childNodeDefinition name="css" defaultPrimaryType="exo:cssFolder" autoCreated="false" mandatory="false"
+        onParentVersion="VERSION" protected="false" sameNameSiblings="false">
+        <requiredPrimaryTypes>
+          <requiredPrimaryType>nt:base</requiredPrimaryType>
+        </requiredPrimaryTypes>
+      </childNodeDefinition>
+      <childNodeDefinition name="medias" defaultPrimaryType="exo:multimediaFolder" autoCreated="false" mandatory="false"
+        onParentVersion="VERSION" protected="false" sameNameSiblings="false">
+        <requiredPrimaryTypes>
+          <requiredPrimaryType>nt:base</requiredPrimaryType>
+        </requiredPrimaryTypes>
+      </childNodeDefinition>
+    </childNodeDefinitions>
+  </nodeType>
        
   <nodeType name="exo:htmlFile" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
   	<supertypes>
       <supertype>exo:presentationable</supertype>      
-      <supertype>mix:referenceable</supertype>
+      <supertype>mix:referenceable</supertype>      
     </supertypes>
   	<propertyDefinitions>
   	<propertyDefinition name="exo:htmlTOC" requiredType="String" autoCreated="true" mandatory="false"
         onParentVersion="COPY" protected="false" multiple="true">
         <valueConstraints/>	      
-      </propertyDefinition>    
+      </propertyDefinition>  
     </propertyDefinitions>    
   </nodeType>
   
   <nodeType name="exo:jsFile" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
   	<supertypes>
       <supertype>exo:presentationable</supertype>
-      <supertype>mix:referenceable</supertype>
+      <supertype>mix:referenceable</supertype>      
     </supertypes>  	    
     <propertyDefinitions>
       <propertyDefinition name="exo:active" requiredType="Boolean" autoCreated="true" mandatory="true"
@@ -121,7 +162,7 @@
   <nodeType name="exo:cssFile" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
   	<supertypes>
       <supertype>exo:presentationable</supertype>
-      <supertype>mix:referenceable</supertype>
+      <supertype>mix:referenceable</supertype>      
     </supertypes>  	    
     <propertyDefinitions>
       <propertyDefinition name="exo:active" requiredType="Boolean" autoCreated="true" mandatory="true"
@@ -151,12 +192,22 @@
     </supertypes>    
   </nodeType>
   
+  <nodeType name="exo:linkable" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
+    <propertyDefinitions>
+      <propertyDefinition name="exo:links" requiredType="String" autoCreated="true" mandatory="false"
+        onParentVersion="COPY" protected="false" multiple="true">
+        <valueConstraints/>	      
+      </propertyDefinition>      
+    </propertyDefinitions>
+  </nodeType>            
+    
   <nodeType name="exo:link" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
   	<supertypes>
-      <supertype>mix:referenceable</supertype>      
+      <supertype>mix:referenceable</supertype>     
+      <supertype>nt:unstructured</supertype> 
     </supertypes>
     <propertyDefinitions>
-      <propertyDefinition name="exo:linkURL" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY"
+      <propertyDefinition name="exo:linkURL" requiredType="String" autoCreated="false" mandatory="true" onParentVersion="COPY"
         protected="false" multiple="false">
         <valueConstraints/>
       </propertyDefinition>
@@ -168,10 +219,6 @@
         onParentVersion="COPY" protected="false" multiple="false">
         <valueConstraints/>	      
       </propertyDefinition>
-      <propertyDefinition name="exo:internalLink" requiredType="Boolean" autoCreated="false" mandatory="false"
-        onParentVersion="COPY" protected="false" multiple="false">
-        <valueConstraints/>	      
-      </propertyDefinition>      
     </propertyDefinitions>  	    
   </nodeType>
                
@@ -195,68 +242,7 @@
       </propertyDefinition>        	    
     </propertyDefinitions>          	    
   </nodeType>
-  
-          
-  <nodeType name="exo:addSharedCSSAction" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
-    <supertypes>
-      <supertype>exo:scriptAction</supertype>
-    </supertypes>
-    <propertyDefinitions>
-      <propertyDefinition name="exo:script" requiredType="String" autoCreated="true" mandatory="true"
-        onParentVersion="COPY" protected="true" multiple="false">
-        <valueConstraints/>
-        <defaultValues>
-          <defaultValue>ecm-explorer/action/AddSharedCSSScript.groovy</defaultValue>
-        </defaultValues>
-      </propertyDefinition>
-    </propertyDefinitions>
-  </nodeType>    
-     
-  <nodeType name="exo:updateSharedCSSAction" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
-    <supertypes>
-      <supertype>exo:scriptAction</supertype>
-    </supertypes>
-    <propertyDefinitions>
-      <propertyDefinition name="exo:script" requiredType="String" autoCreated="true" mandatory="true"
-        onParentVersion="COPY" protected="true" multiple="false">
-        <valueConstraints/>
-        <defaultValues>
-          <defaultValue>ecm-explorer/action/UpdateSharedCSSScript.groovy</defaultValue>
-        </defaultValues>
-      </propertyDefinition>
-    </propertyDefinitions>
-  </nodeType>
-  
-  <nodeType name="exo:addSharedJSAction" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
-    <supertypes>
-      <supertype>exo:scriptAction</supertype>
-    </supertypes>
-    <propertyDefinitions>
-      <propertyDefinition name="exo:script" requiredType="String" autoCreated="true" mandatory="true"
-        onParentVersion="COPY" protected="true" multiple="false">
-        <valueConstraints/>
-        <defaultValues>
-          <defaultValue>ecm-explorer/action/AddSharedJSScript.groovy</defaultValue>
-        </defaultValues>
-      </propertyDefinition>
-    </propertyDefinitions>
-  </nodeType>
-  
-  <nodeType name="exo:updateSharedJSAction" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
-    <supertypes>
-      <supertype>exo:scriptAction</supertype>
-    </supertypes>
-    <propertyDefinitions>
-      <propertyDefinition name="exo:script" requiredType="String" autoCreated="true" mandatory="true"
-        onParentVersion="COPY" protected="true" multiple="false">
-        <valueConstraints/>
-        <defaultValues>
-          <defaultValue>ecm-explorer/action/UpdateSharedJSScript.groovy</defaultValue>
-        </defaultValues>
-      </propertyDefinition>
-    </propertyDefinitions>
-  </nodeType>
-  
+                
   <nodeType name="exo:multiPageContent" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
   	<supertypes>
       <supertype>exo:presentationable</supertype>      
@@ -270,5 +256,6 @@
         </defaultValues>
       </propertyDefinition>      
     </propertyDefinitions>
-  </nodeType>                
+  </nodeType>             
+     
 </nodeTypes>

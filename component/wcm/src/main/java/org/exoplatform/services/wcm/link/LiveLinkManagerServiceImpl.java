@@ -18,6 +18,7 @@ package org.exoplatform.services.wcm.link;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.jcr.Node;
@@ -36,8 +37,12 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.logging.Log;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.PropertiesParam;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.cache.ExoCache;
+import org.exoplatform.services.html.HTMLDocument;
+import org.exoplatform.services.html.HTMLNode;
+import org.exoplatform.services.html.parser.HTMLParser;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -52,14 +57,35 @@ import org.exoplatform.services.wcm.portal.LivePortalManagerService;
  */
 public class LiveLinkManagerServiceImpl implements LiveLinkManagerService {
 
+  /** The broken links cache. */
   private ExoCache                 brokenLinksCache;
+  
+  /** The configuration service. */
   private WCMConfigurationService  configurationService;
+  
+  /** The repository service. */
   private RepositoryService        repositoryService;
+  
+  /** The live portal manager service. */
   private LivePortalManagerService livePortalManagerService;
+  
+  /** The internal server path. */
   private String internalServerPath;
 
+  /** The log. */
   private static Log log = ExoLogger.getLogger(LiveLinkManagerServiceImpl.class); 
 
+  /**
+   * Instantiates a new live link manager service impl.
+   * 
+   * @param configurationService the configuration service
+   * @param repositoryService the repository service
+   * @param livePortalManagerService the live portal manager service
+   * @param cacheService the cache service
+   * @param initParams the init params
+   * 
+   * @throws Exception the exception
+   */
   public LiveLinkManagerServiceImpl(
       WCMConfigurationService   configurationService, 
       RepositoryService         repositoryService, 
@@ -70,33 +96,19 @@ public class LiveLinkManagerServiceImpl implements LiveLinkManagerService {
     this.repositoryService = repositoryService;
     this.livePortalManagerService = livePortalManagerService;
     this.brokenLinksCache = cacheService.getCacheInstance(this.getClass().getName());
-    readServerConfig(initParams);
+
+    PropertiesParam propertiesParam = initParams.getPropertiesParam("server.config");
+    String scheme = propertiesParam.getProperty("scheme");
+    String hostName = propertiesParam.getProperty("hostName");
+    String port = propertiesParam.getProperty("port");
+    StringBuilder builder = new StringBuilder();
+    builder.append(scheme).append("://").append(hostName).append(":").append(port);
+    internalServerPath = builder.toString();
   }
 
-  public List<LinkBean> getActiveLinks(String portalName) throws Exception {
-    return null;
-  }
-
-  private void readServerConfig(InitParams initParams) {
-    try {
-      PropertiesParam propertiesParam = initParams.getPropertiesParam("server.config");
-      String scheme = propertiesParam.getProperty("scheme");
-      String hostName = propertiesParam.getProperty("hostName");
-      String port = propertiesParam.getProperty("port");
-      StringBuilder builder = new StringBuilder();
-      builder.append(scheme).append("://").append(hostName).append(":").append(port);
-      internalServerPath = builder.toString();
-      log.info("server path for internal link validation:" + internalServerPath);
-    } catch (Exception e) {
-      log.error("The internal server config: scheme, hostName, port need be configed as parameter");
-    }    
-  }
-
-  public List<String> getActiveLinks(Node webContent) throws Exception {
-    return null;
-  }
-
-  @SuppressWarnings("unchecked")
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.link.LiveLinkManagerService#getBrokenLinks(java.lang.String)
+   */
   public List<LinkBean> getBrokenLinks(String portalName) throws Exception {
     SessionProvider sessionProvider = SessionProvider.createSystemProvider();
     Node portal = livePortalManagerService.getLivePortal(portalName, sessionProvider);
@@ -119,10 +131,14 @@ public class LiveLinkManagerServiceImpl implements LiveLinkManagerService {
     return listBrokenLinks;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.link.LiveLinkManagerService#getBrokenLinks(javax.jcr.Node)
+   */
   @SuppressWarnings("unchecked")
   public List<String> getBrokenLinks(Node webContent) throws Exception {    
     List<String> listBrokenUrls = (List<String>)brokenLinksCache.get(webContent.getUUID());
-    if(listBrokenUrls == null) {      
+    if(listBrokenUrls == null) {
+      listBrokenUrls = new ArrayList<String>();
       for(Value value:webContent.getProperty("exo:links").getValues()) {
         String link = value.getString();
         LinkBean linkBean = LinkBean.parse(link);
@@ -135,17 +151,12 @@ public class LiveLinkManagerServiceImpl implements LiveLinkManagerService {
     return listBrokenUrls;
   }
 
-  public List<LinkBean> getUncheckedLinks(String portalName) throws Exception {
-    return null;
-  }
-
-  public List<String> getUncheckedLinks(Node webContent) throws Exception {
-    return null;
-  }
-
-  public void validateLink() throws Exception {
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.link.LiveLinkManagerService#validateLink()
+   */
+  public void updateLinks() throws Exception {
     Collection<NodeLocation> nodeLocationCollection = configurationService.getAllLivePortalsLocation();
-    SessionProvider sessionProvider = SessionProvider.createSystemProvider();
+    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
     try {
       for (NodeLocation nodeLocation : nodeLocationCollection) {
         String repository = nodeLocation.getRepository();
@@ -161,7 +172,10 @@ public class LiveLinkManagerServiceImpl implements LiveLinkManagerService {
     }        
   }
 
-  public void validateLink(String portalName) throws Exception {
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.link.LiveLinkManagerService#validateLink(java.lang.String)
+   */
+  public void updateLinks(String portalName) throws Exception {
     SessionProvider sessionProvider = SessionProvider.createSystemProvider();
     try {
       Node portal = livePortalManagerService.getLivePortal(portalName, sessionProvider);
@@ -174,7 +188,15 @@ public class LiveLinkManagerServiceImpl implements LiveLinkManagerService {
     }        
   }
 
-  protected void updateLinkStatus(Session session, String queryCommand) throws Exception{
+  /**
+   * Update link status.
+   * 
+   * @param session the session
+   * @param queryCommand the query command
+   * 
+   * @throws Exception the exception
+   */
+  private void updateLinkStatus(Session session, String queryCommand) throws Exception{
     List<String> listBrokenLinks = new ArrayList<String>();
     ValueFactory valueFactory = session.getValueFactory();
     QueryManager queryManager = session.getWorkspace().getQueryManager();
@@ -209,7 +231,14 @@ public class LiveLinkManagerServiceImpl implements LiveLinkManagerService {
     session.save();
   }
 
-  protected String getLinkStatus(String strUrl) {
+  /**
+   * Gets the link status.
+   * 
+   * @param strUrl the str url
+   * 
+   * @return the link status
+   */
+  private String getLinkStatus(String strUrl) {
     try {
       String fullUrl = strUrl;
       if(strUrl.startsWith("/")) {
@@ -222,11 +251,88 @@ public class LiveLinkManagerServiceImpl implements LiveLinkManagerService {
         return LinkBean.STATUS_ACTIVE;
       }
     } catch (Exception e) {
-      if(log.isDebugEnabled()) {
-        log.debug("Exception when validate link:" + strUrl , e);
-      }      
+      log.error("Exception when validate link:" + strUrl);
     }
     return LinkBean.STATUS_BROKEN;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.link.LiveLinkManagerService#extractLinks(org.exoplatform.services.html.HTMLDocument)
+   */
+  public List<String> extractLinks(Node htmlFile) throws Exception {
+    String htmlData = htmlFile.getNode("jcr:content").getProperty("jcr:data").getString();
+    HTMLDocument document = HTMLParser.createDocument(htmlData);
+    List<String> listHyperlink = new ArrayList<String>();        
+    HTMLNode htmlRootNode = document.getRoot();
+    HyperLinkUtilExtended linkUtil = new HyperLinkUtilExtended();
+    for (Iterator<String> iterLink = linkUtil.getSiteLink(htmlRootNode).iterator(); iterLink.hasNext();) {
+      String link = iterLink.next();
+      if (!listHyperlink.contains(link))
+        listHyperlink.add(link);
+    }
+    for (Iterator<String> iterImage = linkUtil.getImageLink(htmlRootNode).iterator(); iterImage.hasNext();){
+      String image = iterImage.next();
+      if (!listHyperlink.contains(image))
+        listHyperlink.add(image);
+    }   
+    return listHyperlink;
+  }
+
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.link.LiveLinkManagerService#updateLinks(javax.jcr.Node, java.util.List)
+   */
+  public void updateLinkDataForNode(Node webContent, List<String> newLinks) throws Exception {   
+    ValueFactory valueFactory = webContent.getSession().getValueFactory();    
+    if (webContent.canAddMixin("exo:linkable")) {
+      webContent.addMixin("exo:linkable");
+    }
+    // get old link from exo:links property
+    List<String> listExtractedLink = new ArrayList<String>();
+    if (webContent.hasProperty("exo:links")) {
+      Property property = webContent.getProperty("exo:links");
+      for (Value value : property.getValues()) {
+        listExtractedLink.add(value.getString());
+      }
+    }
+    // compare, remove old link, add new link, create new List
+    List<String> listResult = new ArrayList<String>();
+
+    for (String extractedLink : listExtractedLink) {
+      for (String newUrl : newLinks) {
+        if (LinkBean.parse(extractedLink).getUrl().equals(newUrl)) {
+          listResult.add(extractedLink);
+        }
+      }
+    }
+    List<String> listTemp = new ArrayList<String>();
+    listTemp.addAll(newLinks);
+
+    for (String newUrl : newLinks) {
+      for (String extractedLink : listExtractedLink) {
+        if (newUrl.equals(LinkBean.parse(extractedLink).getUrl())) {
+          listTemp.set(newLinks.indexOf(newUrl), "");
+        }
+      }
+    }
+    
+    for (String strTemp : listTemp) {
+      if (!strTemp.equals("")) {
+        listResult.add(strTemp);
+      }
+    }
+
+    // Create an array of value to add to exo:links property
+    Value[] values = new Value[listResult.size()];
+    for(String url: listResult) {
+      if (url.indexOf(LinkBean.STATUS) < 0) {
+        LinkBean linkBean = new LinkBean(url, LinkBean.STATUS_UNCHECKED);
+        values[listResult.indexOf(url)] = valueFactory.createValue(linkBean.toString());
+      } else {  
+        values[listResult.indexOf(url)] = valueFactory.createValue(url);
+      }
+    }
+    webContent.setProperty("exo:links", values);    
+  }
+  
 }

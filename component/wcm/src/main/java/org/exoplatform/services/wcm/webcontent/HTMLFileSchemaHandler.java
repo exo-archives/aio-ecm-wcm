@@ -26,7 +26,7 @@ import org.exoplatform.services.html.parser.HTMLParser;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.BaseWebSchemaHandler;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
-import org.exoplatform.services.wcm.webcontent.TOCGeneratorService.Heading;
+import org.exoplatform.services.wcm.link.LiveLinkManagerService;
 
 /**
  * Created by The eXo Platform SAS.
@@ -48,13 +48,9 @@ public class HTMLFileSchemaHandler extends BaseWebSchemaHandler {
    */
   protected String getParentNodeType() { return "exo:webFolder"; }  
   
-  /** The link extractor. */
-  private LinkExtractor linkExtractor = new LinkExtractor();  
-
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.core.BaseWebSchemaHandler#matchHandler(javax.jcr.Node, org.exoplatform.services.jcr.ext.common.SessionProvider)
    */
-  @SuppressWarnings("unused")
   public boolean matchHandler(Node node, SessionProvider sessionProvider) throws Exception {
     if(!matchNodeType(node))
       return false;
@@ -130,7 +126,6 @@ public class HTMLFileSchemaHandler extends BaseWebSchemaHandler {
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.core.BaseWebSchemaHandler#onCreateNode(javax.jcr.Node, org.exoplatform.services.jcr.ext.common.SessionProvider)
    */
-  @SuppressWarnings("unused")
   public void onCreateNode(final Node file, SessionProvider sessionProvider) throws Exception {
     Session session = file.getSession();    
     Node webFolder = file.getParent();
@@ -162,7 +157,6 @@ public class HTMLFileSchemaHandler extends BaseWebSchemaHandler {
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.core.BaseWebSchemaHandler#onModifyNode(javax.jcr.Node, org.exoplatform.services.jcr.ext.common.SessionProvider)
    */
-  @SuppressWarnings("unused")
   public void onModifyNode(final Node node, final SessionProvider sessionProvider) throws Exception {        
     Node parent = node.getParent();
     if(!parent.isNodeType("exo:webContent"))
@@ -170,10 +164,9 @@ public class HTMLFileSchemaHandler extends BaseWebSchemaHandler {
     if (!parent.isCheckedOut() || parent.isLocked() || !node.isCheckedOut() || node.isLocked()) {
       return;
     }
-    String htmlData = node.getNode("jcr:content").getProperty("jcr:data").getString();
-    HTMLDocument document = HTMLParser.createDocument(htmlData);
-    List<String> newLinks = linkExtractor.extractLink(document);
-    linkExtractor.updateLinks(parent,newLinks);
+    LiveLinkManagerService liveLinkManagerService = getService(LiveLinkManagerService.class);
+    List<String> newLinks = liveLinkManagerService.extractLinks(node);
+    liveLinkManagerService.updateLinkDataForNode(parent,newLinks);
 //    TOCGeneratorService tocGeneratorService = getService(TOCGeneratorService.class);
 //    List<Heading> headings = tocGeneratorService.extractHeadings(document);
 //    if(headings != null) {

@@ -40,6 +40,8 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
 
   private WebSchemaConfigService webSchemaConfigService;
   
+  private Node liveNode;
+  
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.core.BaseWCMTestCase#setUp()
    */
@@ -47,6 +49,7 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
     super.setUp();
     webSchemaConfigService = getService(WebSchemaConfigService.class);
     webSchemaConfigService.getAllWebSchemaHandler().clear();
+    liveNode = (Node) session.getItem("/sites content/live");
   }
   
   /**
@@ -209,7 +212,7 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
    */
   public void testCreateCSSFileSchemaHandler() throws Exception {
     webSchemaConfigService.addWebSchemaHandler(new CSSFileHandler());
-    Node cssFolder = testRoot.addNode("css", NodetypeConstant.EXO_CSS_FOLDER);
+    Node cssFolder = liveNode.addNode("css", NodetypeConstant.EXO_CSS_FOLDER);
     Node cssNode = cssFolder.addNode("default.css", NodetypeConstant.NT_FILE);
     cssNode.addMixin(NodetypeConstant.EXO_CSS_FILE);
     cssNode.setProperty(NodetypeConstant.EXO_ACTIVE, true);
@@ -235,7 +238,7 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
    */
   public void testCreateJSFileSchemaHandler() throws Exception {
     webSchemaConfigService.addWebSchemaHandler(new JSFileHandler());
-    Node jsFolder = testRoot.addNode("js", NodetypeConstant.EXO_JS_FOLDER);
+    Node jsFolder = liveNode.addNode("js", NodetypeConstant.EXO_JS_FOLDER);
     Node jsNode = jsFolder.addNode("default.js", NodetypeConstant.NT_FILE);
     jsNode.addMixin(NodetypeConstant.EXO_JS_FILE);
     jsNode.setProperty(NodetypeConstant.EXO_ACTIVE, true);
@@ -261,7 +264,7 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
    */
   public void testCreateWebcontentSchemaHandler_01() throws Exception {
     webSchemaConfigService.addWebSchemaHandler(new WebContentSchemaHandler());
-    Node webcontentNode = testRoot.addNode("webcontent", NodetypeConstant.EXO_WEBCONTENT);
+    Node webcontentNode = liveNode.addNode("webcontent", NodetypeConstant.EXO_WEBCONTENT);
     SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
     webSchemaConfigService.createSchema(webcontentNode, sessionProvider);
     
@@ -288,7 +291,7 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
    */
   public void testCreateWebcontentSchemaHandler_02() throws Exception {
     webSchemaConfigService.addWebSchemaHandler(new WebContentSchemaHandler());
-    Node webcontentNode = testRoot.addNode("webcontent", NodetypeConstant.EXO_WEBCONTENT);
+    Node webcontentNode = liveNode.addNode("webcontent", NodetypeConstant.EXO_WEBCONTENT);
     webcontentNode.addNode("css", NodetypeConstant.EXO_CSS_FOLDER);
     webcontentNode.addNode("js", NodetypeConstant.EXO_JS_FOLDER);
     webcontentNode.addNode("documents", NodetypeConstant.NT_UNSTRUCTURED);
@@ -323,7 +326,7 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
   public void testCreateHTMLFileSchemaHandler() throws Exception {
     webSchemaConfigService.addWebSchemaHandler(new HTMLFileSchemaHandler());
     webSchemaConfigService.addWebSchemaHandler(new WebContentSchemaHandler());
-    Node htmlFolder = testRoot.addNode("html", NodetypeConstant.EXO_WEB_FOLDER);
+    Node htmlFolder = liveNode.addNode("html", NodetypeConstant.EXO_WEB_FOLDER);
     Node htmlNode = htmlFolder.addNode("webcontent", NodetypeConstant.NT_FILE);
     htmlNode.addMixin(NodetypeConstant.EXO_HTML_FILE);
     Node htmlContent = htmlNode.addNode(NodetypeConstant.JCR_CONTENT, NodetypeConstant.NT_RESOURCE);

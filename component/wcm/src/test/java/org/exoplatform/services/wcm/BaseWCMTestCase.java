@@ -25,6 +25,7 @@ import javax.jcr.Session;
 import org.exoplatform.container.StandaloneContainer;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.impl.core.NodeImpl;
+import org.exoplatform.services.wcm.core.NodetypeConstant;
 import org.exoplatform.test.BasicTestCase;
 
 /**
@@ -38,8 +39,6 @@ public abstract class BaseWCMTestCase extends BasicTestCase {
   protected StandaloneContainer   container;
   
   protected Session               session;
-  
-  protected Node                  testRoot;
   
   protected final String          REPO_NAME        = "repository".intern();
 
@@ -61,9 +60,6 @@ public abstract class BaseWCMTestCase extends BasicTestCase {
     
     RepositoryService repositoryService = getService(RepositoryService.class);
     session = repositoryService.getRepository(REPO_NAME).getSystemSession(COLLABORATION_WS);
-    
-    testRoot = session.getRootNode().addNode("testRoot");
-    session.save();
   }
 
   protected void checkMixins(String[] mixins, NodeImpl node) {
@@ -111,50 +107,58 @@ public abstract class BaseWCMTestCase extends BasicTestCase {
   }
 
   protected Node createWebcontentNode(Node parentNode, String nodeName, String htmlData, String cssData, String jsData) throws Exception {
-    Node webcontent = parentNode.addNode(nodeName, "exo:webContent");
-    webcontent.setProperty("exo:title", nodeName);
+    boolean isInPortal = false;
+    if (parentNode.getPath().indexOf("/sites content/live") >= 0) isInPortal = true;
+    
+    Node webcontent = parentNode.addNode(nodeName, NodetypeConstant.EXO_WEBCONTENT);
+    webcontent.setProperty(NodetypeConstant.EXO_TITLE, nodeName);
 
-    Node htmlNode = webcontent.addNode("default.html", "nt:file");
-    htmlNode.addMixin("exo:htmlFile");
-    Node htmlContent = htmlNode.addNode("jcr:content", "nt:resource");
-    htmlContent.setProperty("jcr:encoding", "UTF-8");
-    htmlContent.setProperty("jcr:mimeType", "text/html");
-    htmlContent.setProperty("jcr:lastModified", new Date().getTime());
+    Node htmlNode = webcontent.addNode("default.html", NodetypeConstant.NT_FILE);
+    htmlNode.addMixin(NodetypeConstant.EXO_HTML_FILE);
+    Node htmlContent = htmlNode.addNode(NodetypeConstant.JCR_CONTENT, NodetypeConstant.NT_RESOURCE);
+    htmlContent.setProperty(NodetypeConstant.JCR_ENCODING, "UTF-8");
+    htmlContent.setProperty(NodetypeConstant.JCR_MIME_TYPE, "text/html");
+    htmlContent.setProperty(NodetypeConstant.JCR_LAST_MODIFIED, new Date().getTime());
     if (htmlData == null) htmlData = "This is the default.html file.";
-    htmlContent.setProperty("jcr:data", htmlData);
+    htmlContent.setProperty(NodetypeConstant.JCR_DATA, htmlData);
     
-    Node jsFolder = webcontent.addNode("js", "exo:jsFolder");
-    Node jsNode = jsFolder.addNode("default.js", "nt:file");
-    jsNode.addMixin("exo:jsFile");
-    jsNode.setProperty("exo:active", true);
-    jsNode.setProperty("exo:priority", 1);
-    jsNode.setProperty("exo:sharedJS", true);
-    
-    Node jsContent = jsNode.addNode("jcr:content", "nt:resource");
-    jsContent.setProperty("jcr:encoding", "UTF-8");
-    jsContent.setProperty("jcr:mimeType", "text/javascript");
-    jsContent.setProperty("jcr:lastModified", new Date().getTime());
     if (jsData == null) jsData = "This is the default.js file.";
-    jsContent.setProperty("jcr:data", jsData);
-    
-    Node cssFolder = webcontent.addNode("css", "exo:cssFolder");
-    Node cssNode = cssFolder.addNode("default.css", "nt:file");
-    cssNode.addMixin("exo:cssFile");
-    cssNode.setProperty("exo:active", true);
-    cssNode.setProperty("exo:priority", 1);
-    cssNode.setProperty("exo:sharedCSS", true);
-    
-    Node cssContent = cssNode.addNode("jcr:content", "nt:resource");
-    cssContent.setProperty("jcr:encoding", "UTF-8");
-    cssContent.setProperty("jcr:mimeType", "text/css");
-    cssContent.setProperty("jcr:lastModified", new Date().getTime());
     if (cssData == null) cssData = "This is the default.css file.";
-    cssContent.setProperty("jcr:data", cssData);
     
-    Node mediaFolder = webcontent.addNode("medias");
-    mediaFolder.addNode("images", "nt:folder");
-    mediaFolder.addNode("videos", "nt:folder");
-    mediaFolder.addNode("audio", "nt:folder");
+    Node jsFolder = null;
+    Node cssFolder = null;
+    if (isInPortal) {
+      jsFolder = webcontent.getNode("js");
+      cssFolder = webcontent.getNode("css");
+    } else {
+      jsFolder = webcontent.addNode("js", NodetypeConstant.EXO_JS_FOLDER);
+      cssFolder = webcontent.addNode("css", NodetypeConstant.EXO_CSS_FOLDER);
+      Node mediaFolder = webcontent.addNode("medias", NodetypeConstant.EXO_MULTIMEDIA_FOLDER);
+      mediaFolder.addNode("images", NodetypeConstant.NT_FOLDER).addMixin(NodetypeConstant.EXO_PICTURE_FOLDER);
+      mediaFolder.addNode("videos", NodetypeConstant.NT_FOLDER).addMixin(NodetypeConstant.EXO_VIDEO_FOLDER);
+      mediaFolder.addNode("audio", NodetypeConstant.NT_FOLDER).addMixin(NodetypeConstant.EXO_MUSIC_FOLDER);
+      webcontent.addNode("documents", NodetypeConstant.NT_UNSTRUCTURED).addMixin(NodetypeConstant.EXO_DOCUMENT_FOLDER);
+    }
+    
+    Node jsNode = jsFolder.addNode("default.js", NodetypeConstant.NT_FILE);
+    jsNode.setProperty(NodetypeConstant.EXO_ACTIVE, true);
+    jsNode.setProperty(NodetypeConstant.EXO_PRIORITY, 1);
+    jsNode.setProperty(NodetypeConstant.EXO_SHARED_JS, true);
+    Node jsContent = jsNode.addNode(NodetypeConstant.JCR_CONTENT, NodetypeConstant.NT_RESOURCE);
+    jsContent.setProperty(NodetypeConstant.JCR_ENCODING, "UTF-8");
+    jsContent.setProperty(NodetypeConstant.JCR_MIME_TYPE, "text/javascript");
+    jsContent.setProperty(NodetypeConstant.JCR_LAST_MODIFIED, new Date().getTime());
+    jsContent.setProperty(NodetypeConstant.JCR_DATA, jsData);
+    
+    Node cssNode = cssFolder.addNode("default.css", NodetypeConstant.NT_FILE);
+    cssNode.setProperty(NodetypeConstant.EXO_ACTIVE, true);
+    cssNode.setProperty(NodetypeConstant.EXO_PRIORITY, 1);
+    cssNode.setProperty(NodetypeConstant.EXO_SHARED_CSS, true);
+    Node cssContent = cssNode.addNode(NodetypeConstant.JCR_CONTENT, NodetypeConstant.NT_RESOURCE);
+    cssContent.setProperty(NodetypeConstant.JCR_ENCODING, "UTF-8");
+    cssContent.setProperty(NodetypeConstant.JCR_MIME_TYPE, "text/css");
+    cssContent.setProperty(NodetypeConstant.JCR_LAST_MODIFIED, new Date().getTime());
+    cssContent.setProperty(NodetypeConstant.JCR_DATA, cssData);
     
     session.save();
     
