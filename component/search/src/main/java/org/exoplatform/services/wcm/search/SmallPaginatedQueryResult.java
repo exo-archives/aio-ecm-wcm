@@ -59,9 +59,14 @@ public class SmallPaginatedQueryResult extends WCMPaginatedQueryResult{
     super(queryResult,queryCriteria,pageSize);    
     RowIterator rowIterator = queryResult.getRows();    
     for(;nodeIterator.hasNext();) {
-      Node node = nodeIterator.nextNode();      
-      Node viewNode = filterNodeToDisplay(node);
-      if(viewNode == null) continue;      
+      Node viewNode = filterNodeToDisplay(nodeIterator.nextNode());
+      if(viewNode == null || 
+          (queryCriteria.isLiveMode() && (!viewNode.hasProperty("publication:liveRevision") ||
+                                          viewNode.getProperty("publication:liveRevision").getString().trim().length() < 1)
+           )
+         ){
+        continue;  
+      }
       //Skip back 1 position to get current row mapping to the node
       long position = nodeIterator.getPosition();
       long rowPosition = rowIterator.getPosition();        
@@ -73,6 +78,8 @@ public class SmallPaginatedQueryResult extends WCMPaginatedQueryResult{
     }
     setPageSize(pageSize);
     setAvailablePage(arrayList.size());    
+    
+    getAvailablePage();
   }
 
   /* (non-Javadoc)

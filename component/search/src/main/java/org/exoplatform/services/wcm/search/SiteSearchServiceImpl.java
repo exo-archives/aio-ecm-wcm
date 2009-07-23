@@ -182,8 +182,8 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     mapCategoriesCondition(queryCriteria,queryBuilder);
     mapDatetimeRangeSelected(queryCriteria,queryBuilder);
     mapMetadataProperties(queryCriteria,queryBuilder);
-    mapSiteMode(queryCriteria,queryBuilder);    
     orderBy(queryCriteria, queryBuilder);
+    //mapSiteMode(queryCriteria,queryBuilder); 
     String queryStatement = queryBuilder.createQueryStatement();
     Query query = queryManager.createQuery(queryStatement, Query.SQL);
     return query.execute();

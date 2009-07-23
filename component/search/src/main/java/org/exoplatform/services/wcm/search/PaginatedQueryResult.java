@@ -32,6 +32,8 @@ import org.exoplatform.services.wcm.utils.PaginatedNodeIterator;
  * Oct 17, 2008
  */
 public class PaginatedQueryResult extends PaginatedNodeIterator {
+  /** The query criteria. */
+  protected QueryCriteria queryCriteria; 
 
   /** The row iterator. */  
   protected QueryResult queryResult;
@@ -72,7 +74,8 @@ public class PaginatedQueryResult extends PaginatedNodeIterator {
     RowIterator iterator = queryResult.getRows();    
     while (nodeIterator.hasNext()) {      
       Node node = nodeIterator.nextNode();      
-      Node viewNode = filterNodeToDisplay(node);            
+      Node viewNode = filterNodeToDisplay(node); 
+      
       if(viewNode != null) {
         //Skip back 1 position to get current row mapping to the node
         long position = nodeIterator.getPosition();
@@ -95,7 +98,6 @@ public class PaginatedQueryResult extends PaginatedNodeIterator {
    * Filter node to display.
    * 
    * @param node the node
-   * 
    * @return the node
    * 
    * @throws Exception the exception
@@ -104,6 +106,14 @@ public class PaginatedQueryResult extends PaginatedNodeIterator {
     Node displayNode = node;
     if(node.isNodeType("nt:resource")) {
       displayNode = node.getParent();
+    }
+    if(this.queryCriteria.isLiveMode()){
+      if(displayNode.hasProperty("publication:liveRevision") &&
+          displayNode.getProperty("publication:liveRevision").getString().trim().length() > 1){
+        return displayNode;
+      }else{
+        return null;
+      }
     }
     return displayNode;
   }

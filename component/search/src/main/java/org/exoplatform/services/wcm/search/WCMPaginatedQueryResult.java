@@ -27,15 +27,11 @@ import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndV
  * Oct 21, 2008
  */
 public class WCMPaginatedQueryResult extends PaginatedQueryResult {
-
   /** The query time. */
   private long queryTime;  
 
   /** The spell suggestion. */
   private String spellSuggestion;
-
-  /** The query criteria. */
-  private QueryCriteria queryCriteria;  
 
   /**
    * Instantiates a new wCM paginated query result.
@@ -104,13 +100,21 @@ public class WCMPaginatedQueryResult extends PaginatedQueryResult {
    * (javax.jcr.Node)
    */
   protected Node filterNodeToDisplay(Node node) throws Exception {
-    Node displayNode = node;
-    String revisionState = StageAndVersionPublicationState.getRevisionState(node);
+    //Node displayNode = node;
+    Node displayNode = getNodeToCheckState(node);
+    //String revisionState = StageAndVersionPublicationState.getRevisionState(node);
+    if(displayNode == null) return null;
+    String revisionState = StageAndVersionPublicationState.getRevisionState(displayNode);
     if (revisionState == null || StageAndVersionPublicationState.OBSOLETE.equals(revisionState)) {
       return null;
     }
+    return displayNode;
+  }
+  
+  protected Node getNodeToCheckState(Node node)throws Exception{
+    Node displayNode = node;
     if (node.getPath().contains("web contents/site artifacts")) {
-    	return null;
+      return null;
     }
     if (displayNode.isNodeType("nt:resource")) {
       displayNode = node.getParent();
@@ -153,7 +157,7 @@ public class WCMPaginatedQueryResult extends PaginatedQueryResult {
       String primaryNodeType = displayNode.getPrimaryNodeType().getName();
       if(!ArrayUtils.contains(contentTypes,primaryNodeType))
         return null;
-    }    
+    }
     return displayNode;
   }
 
@@ -174,4 +178,5 @@ public class WCMPaginatedQueryResult extends PaginatedQueryResult {
   public void setSpellSuggestion(String spellSuggestion) {
     this.spellSuggestion = spellSuggestion;
   }
+  
 }

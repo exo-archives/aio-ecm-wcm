@@ -108,51 +108,93 @@ public abstract class BaseWCMTestCase extends BasicTestCase {
   protected Node createWebcontentNode(Node parentNode, String nodeName, String htmlData, String cssData, String jsData) throws Exception {
     Node webcontent = parentNode.addNode(nodeName, "exo:webContent");
     webcontent.setProperty("exo:title", nodeName);
-
-    Node htmlNode = webcontent.addNode("default.html", "nt:file");
-    htmlNode.addMixin("exo:htmlFile");
-    Node htmlContent = htmlNode.addNode("jcr:content", "nt:resource");
+    Node htmlNode;
+    try{
+      htmlNode = webcontent.getNode("default.html");
+    }catch(Exception ex){
+      htmlNode = webcontent.addNode("default.html", "nt:file");
+    }
+    if(!htmlNode.isNodeType("exo:htmlFile"))htmlNode.addMixin("exo:htmlFile");
+    Node htmlContent;
+    try{
+      htmlContent = htmlNode.getNode("jcr:content");
+    }catch(Exception ex){
+      htmlContent = htmlNode.addNode("jcr:content", "nt:resource");
+    }
     htmlContent.setProperty("jcr:encoding", "UTF-8");
     htmlContent.setProperty("jcr:mimeType", "text/html");
     htmlContent.setProperty("jcr:lastModified", new Date().getTime());
     if (htmlData == null) htmlData = "This is the default.html file.";
     htmlContent.setProperty("jcr:data", htmlData);
     
-    Node jsFolder = webcontent.addNode("js", "exo:jsFolder");
-    Node jsNode = jsFolder.addNode("default.js", "nt:file");
-    jsNode.addMixin("exo:jsFile");
+    Node jsFolder;
+    try{
+      jsFolder = webcontent.getNode("js");
+    }catch(Exception ex){
+      jsFolder = webcontent.addNode("js", "exo:jsFolder");
+    }
+    Node jsNode;
+    try{
+      jsNode = jsFolder.getNode("default.js");
+    }catch(Exception ex){
+      jsNode = jsFolder.addNode("default.js", "nt:file");
+    }
+    if(!jsNode.isNodeType("exo:jsFile"))jsNode.addMixin("exo:jsFile");
     jsNode.setProperty("exo:active", true);
     jsNode.setProperty("exo:priority", 1);
     jsNode.setProperty("exo:sharedJS", true);
     
-    Node jsContent = jsNode.addNode("jcr:content", "nt:resource");
+    Node jsContent;
+    try{
+      jsContent = jsNode.getNode("jcr:content");
+    }catch(Exception ex){
+      jsContent= jsNode.addNode("jcr:content", "nt:resource");
+    }
     jsContent.setProperty("jcr:encoding", "UTF-8");
     jsContent.setProperty("jcr:mimeType", "text/javascript");
     jsContent.setProperty("jcr:lastModified", new Date().getTime());
     if (jsData == null) jsData = "This is the default.js file.";
     jsContent.setProperty("jcr:data", jsData);
     
-    Node cssFolder = webcontent.addNode("css", "exo:cssFolder");
-    Node cssNode = cssFolder.addNode("default.css", "nt:file");
-    cssNode.addMixin("exo:cssFile");
+    Node cssFolder;
+    try{
+      cssFolder = webcontent.getNode("css");
+    }catch(Exception ex){
+      cssFolder = webcontent.addNode("css", "exo:cssFolder");
+    }
+    Node cssNode;
+    try{
+      cssNode = cssFolder.getNode("default.css");
+    }catch(Exception ex){
+      cssNode = cssFolder.addNode("default.css", "nt:file");
+    }
+    if(!cssNode.isNodeType("exo:cssFile"))cssNode.addMixin("exo:cssFile");
     cssNode.setProperty("exo:active", true);
     cssNode.setProperty("exo:priority", 1);
     cssNode.setProperty("exo:sharedCSS", true);
     
-    Node cssContent = cssNode.addNode("jcr:content", "nt:resource");
+    Node cssContent;
+    try{
+      cssContent = cssNode.getNode("jcr:content");
+    }catch(Exception ex){
+      cssContent = cssNode.addNode("jcr:content", "nt:resource");
+    }
     cssContent.setProperty("jcr:encoding", "UTF-8");
     cssContent.setProperty("jcr:mimeType", "text/css");
     cssContent.setProperty("jcr:lastModified", new Date().getTime());
     if (cssData == null) cssData = "This is the default.css file.";
     cssContent.setProperty("jcr:data", cssData);
     
-    Node mediaFolder = webcontent.addNode("medias");
-    mediaFolder.addNode("images", "nt:folder");
-    mediaFolder.addNode("videos", "nt:folder");
-    mediaFolder.addNode("audio", "nt:folder");
-    
+    Node mediaFolder;
+    try{
+      mediaFolder= webcontent.getNode("medias");
+    }catch(Exception ex){
+      mediaFolder= webcontent.addNode("medias");
+    }
+    if(!mediaFolder.hasNode("images"))mediaFolder.addNode("images", "nt:folder");
+    if(!mediaFolder.hasNode("videos"))mediaFolder.addNode("videos", "nt:folder");
+    if(!mediaFolder.hasNode("audio"))mediaFolder.addNode("audio", "nt:folder");
     session.save();
-    
     return webcontent;
   }
 

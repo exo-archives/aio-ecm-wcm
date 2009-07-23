@@ -35,7 +35,15 @@ public interface SiteSearchService {
   public void addExcludeIncludeDataTypePlugin(ExcludeIncludeDataTypePlugin plugin);  
   
   /**
-   * Search site contents.
+   * Search site contents.<br/>
+   * Fill all child nodes of portal which have node type is document, nt:resource or nt:file and check content of them.
+   * If node'content have key word, it will be put into list result.<br/>
+   * This function have 3 parameters, but the most important is <b>QueryCriteria</b>. With this parameter you only set
+   * 5 property: <br/>
+   * 1. SiteName: name of portal which is searched. If site name is null then search in all portal of system.<br/>
+   * 2. Keyword: key work to search.<br/>
+   * 3. SearchDocument and SearchWebContent: two parameter must have save value <code>True</code> or <code>False</code><br/>
+   * 4. SearchWebpage: search content of nodes which are added into one or more pages.
    * 
    * @param queryCriteria the query criteria
    * @param sessionProvider the session provider
