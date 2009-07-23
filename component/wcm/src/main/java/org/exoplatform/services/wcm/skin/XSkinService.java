@@ -46,20 +46,38 @@ import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.picocontainer.Startable;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS Author : Hoa.Pham hoa.pham@exoplatform.com
  * Apr 9, 2008
  */
 public class XSkinService implements Startable {    
+  
+  /** The SHARE d_ cs s_ query. */
   private static String SHARED_CSS_QUERY = "select * from exo:cssFile where jcr:path like '{path}/%' and exo:active='true' and exo:sharedCSS='true' order by exo:priority DESC ".intern();  
+  
+  /** The Constant SKIN_PATH_REGEXP. */
   public final static String SKIN_PATH_REGEXP = "/(.*)/css/jcr/(.*)/(.*)/(.*).css".intern();  
+  
+  /** The Constant SKIN_PATH_PATTERN. */
   private final static String SKIN_PATH_PATTERN = "/{docBase}/css/jcr/(.*)/(.*)/Stylesheet.css".intern();
 
+  /** The log. */
   private static Log log = ExoLogger.getLogger("wcm:XSkinService");           
+  
+  /** The schema config service. */
   private WebSchemaConfigService schemaConfigService;
+  
+  /** The configuration service. */
   private WCMConfigurationService configurationService;
+  
+  /** The skin service. */
   private SkinService skinService ;
+  
+  /** The servlet context. */
   private ServletContext servletContext;
+  
+  /** The css cache. */
   private ExoCache cssCache;
 
   /**
@@ -70,8 +88,10 @@ public class XSkinService implements Startable {
    * @param schemaConfigService the schema config service
    * @param configurationService the configuration service
    * @param servletContext the servlet context
+   * @param cacheService the cache service
+   * 
+   * @throws Exception the exception
    */
-  @SuppressWarnings("unused")
   public XSkinService(SkinService skinService,WebSchemaConfigService schemaConfigService, WCMConfigurationService configurationService, ContentInitializerService initializerService, ServletContext servletContext, CacheService cacheService) throws Exception {
     this.skinService = skinService ;
     this.skinService.addResourceResolver(new WCMSkinResourceResolver(this.skinService));
@@ -85,7 +105,9 @@ public class XSkinService implements Startable {
    * Gets the active stylesheet.
    * 
    * @param home the home
+   * 
    * @return the active stylesheet
+   * 
    * @throws Exception the exception
    */
   public String getActiveStylesheet(Node home) throws Exception {
@@ -117,7 +139,7 @@ public class XSkinService implements Startable {
     //TODO the jcr can not search on jcr:system for normal workspace. Seem that this is the portal bug
     Session querySession = null;
     String cssData = null;
-    try {  
+    try {
       Session currentSession = home.getSession();
       ManageableRepository manageableRepository = (ManageableRepository)currentSession.getRepository();
       String currentWorkspaceName = currentSession.getWorkspace().getName();
@@ -141,6 +163,14 @@ public class XSkinService implements Startable {
     return cssData;
   }  
 
+  /**
+   * Update portal skin on modify.
+   * 
+   * @param cssFile the css file
+   * @param portal the portal
+   * 
+   * @throws Exception the exception
+   */
   public void updatePortalSkinOnModify(final Node cssFile, final Node portal) throws Exception {            
     String modifiedCSS = cssFile.getNode("jcr:content").getProperty("jcr:data").getString();
     String repository = ((ManageableRepository)portal.getSession().getRepository()).getConfiguration().getName();
@@ -152,6 +182,14 @@ public class XSkinService implements Startable {
     }                  
   }
 
+  /**
+   * Update portal skin on remove.
+   * 
+   * @param cssFile the css file
+   * @param portal the portal
+   * 
+   * @throws Exception the exception
+   */
   public void updatePortalSkinOnRemove(Node cssFile, final Node portal) throws Exception {
     String repository = ((ManageableRepository)portal.getSession().getRepository()).getConfiguration().getName();
     String sharedPortalName = configurationService.getSharedPortalName(repository);
@@ -162,6 +200,17 @@ public class XSkinService implements Startable {
     }    
   }
 
+  /**
+   * Adds the portal skin.
+   * 
+   * @param portal the portal
+   * @param preStatement the pre statement
+   * @param exceptedPath the excepted path
+   * @param appendedCSS the appended css
+   * @param allowEmptyCSS the allow empty css
+   * 
+   * @throws Exception the exception
+   */
   private void addPortalSkin(Node portal,String preStatement, String exceptedPath,String appendedCSS, boolean allowEmptyCSS) throws Exception {
     Node cssFolder = getPortalCSSFolder(portal);
     String statement = StringUtils.replaceOnce(preStatement,"{path}",cssFolder.getPath());
@@ -182,6 +231,17 @@ public class XSkinService implements Startable {
     }       
   }  
 
+  /**
+   * Adds the shared portal skin.
+   * 
+   * @param portal the portal
+   * @param preStatement the pre statement
+   * @param exceptedPath the excepted path
+   * @param appendedCSS the appended css
+   * @param allowEmptyCSS the allow empty css
+   * 
+   * @throws Exception the exception
+   */
   private void addSharedPortalSkin(Node portal,String preStatement, String exceptedPath, String appendedCSS, boolean allowEmptyCSS) throws Exception {
     Node cssFolder = getPortalCSSFolder(portal);
     String statement = StringUtils.replaceOnce(preStatement,"{path}",cssFolder.getPath());
@@ -202,6 +262,17 @@ public class XSkinService implements Startable {
     }         
   }
 
+  /**
+   * Gets the cSS data by sql query.
+   * 
+   * @param session the session
+   * @param statement the statement
+   * @param exceptedPath the excepted path
+   * 
+   * @return the cSS data by sql query
+   * 
+   * @throws Exception the exception
+   */
   private String getCSSDataBySQLQuery(Session session, String statement, String exceptedPath) throws Exception {    
     QueryManager queryManager = session.getWorkspace().getQueryManager();      
     Query query = queryManager.createQuery(statement,Query.SQL);
@@ -219,11 +290,23 @@ public class XSkinService implements Startable {
     return buffer.toString();     
   }  
 
+  /**
+   * Gets the portal css folder.
+   * 
+   * @param portal the portal
+   * 
+   * @return the portal css folder
+   * 
+   * @throws Exception the exception
+   */
   private Node getPortalCSSFolder(Node portal) throws Exception{
     PortalFolderSchemaHandler schemaHandler = schemaConfigService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);
     return schemaHandler.getCSSFolder(portal);
   }
 
+  /* (non-Javadoc)
+   * @see org.picocontainer.Startable#start()
+   */
   public void start() {  
     log.info("Start WCMSkinService...");
     SessionProvider sessionProvider = SessionProvider.createSystemProvider();    
@@ -245,6 +328,9 @@ public class XSkinService implements Startable {
     }
   }
 
+  /* (non-Javadoc)
+   * @see org.picocontainer.Startable#stop()
+   */
   public void stop() { }
 
 }

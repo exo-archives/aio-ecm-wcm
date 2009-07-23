@@ -43,27 +43,57 @@ import org.exoplatform.web.application.javascript.JavascriptConfigService;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.picocontainer.Startable;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : Hoa.Pham
- *          hoa.pham@exoplatform.com
- * Apr 9, 2008  
+ * hoa.pham@exoplatform.com
+ * Apr 9, 2008
  */
 public class XJavascriptService implements Startable {
 
+  /** The SHARE d_ j s_ query. */
   private static String SHARED_JS_QUERY = "select * from exo:jsFile where jcr:path like '{path}' and exo:active='true' and exo:sharedJS='true' order by exo:priority DESC " ;
+  
+  /** The MODUL e_ name. */
   final private String MODULE_NAME = "eXo.WCM.Live".intern();
+  
+  /** The PATH. */
   final private String PATH = "/javascript/eXo/wcm/live".intern();
 
+  /** The repository service. */
   private RepositoryService repositoryService ;
+  
+  /** The js config service. */
   private JavascriptConfigService jsConfigService ;
+  
+  /** The configuration service. */
   private WCMConfigurationService configurationService;
+  
+  /** The s context. */
   private ServletContext sContext ;    
+  
+  /** The javascript mime types. */
   private CopyOnWriteArrayList<String> javascriptMimeTypes = new CopyOnWriteArrayList<String>();
+  
+  /** The js cache. */
   private ExoCache jsCache;
 
+  /** The log. */
   private Log log = ExoLogger.getLogger("wcm:XJavascriptService");  
-  @SuppressWarnings("unused")
+
+  /**
+   * Instantiates a new x javascript service.
+   * 
+   * @param repositoryService the repository service
+   * @param jsConfigService the js config service
+   * @param servletContext the servlet context
+   * @param configurationService the configuration service
+   * @param contentInitializerService the content initializer service
+   * @param cacheService the cache service
+   * 
+   * @throws Exception the exception
+   */
   public XJavascriptService(RepositoryService repositoryService,JavascriptConfigService jsConfigService,ServletContext servletContext, 
       WCMConfigurationService configurationService, ContentInitializerService contentInitializerService, CacheService cacheService) throws Exception{    
     this.repositoryService = repositoryService ;
@@ -76,6 +106,15 @@ public class XJavascriptService implements Startable {
     jsCache = cacheService.getCacheInstance(this.getClass().getName());
   }
 
+  /**
+   * Get active java script.
+   * 
+   * @param home the home
+   * 
+   * @return 		Code of all js file in home node.
+   * 
+   * @throws Exception the exception
+   */
   public String getActiveJavaScript(Node home) throws Exception {
     /** TODO
      * 
@@ -129,6 +168,14 @@ public class XJavascriptService implements Startable {
     return jsData;
   }   
 
+  /**
+   * Update and merged all Java Script in all portal when content of js file is modified.
+   * 
+   * @param jsFile the js file
+   * @param sessionProvider the session provider
+   * 
+   * @throws Exception the exception
+   */
   public void updatePortalJSOnModify(Node jsFile, SessionProvider sessionProvider) throws Exception {    
     String javascript = getJavascriptOfAllPortals(sessionProvider,jsFile.getPath());
     String modifiedJS = jsFile.getNode("jcr:content").getProperty("jcr:data").getString();
@@ -136,32 +183,68 @@ public class XJavascriptService implements Startable {
     addJavascript(javascript);    
   }    
 
+  /**
+   * Update and merged all Java Script in all portal when content of js file is remove.
+   * 
+   * @param jsFile the js file
+   * @param sessionProvider the session provider
+   * 
+   * @throws Exception the exception
+   */
   public void updatePortalJSOnRemove(Node jsFile, SessionProvider sessionProvider) throws Exception {    
     String javascript = getJavascriptOfAllPortals(sessionProvider,jsFile.getPath());
     addJavascript(javascript);
   }
 
+  /**
+   * Adds the javascript.
+   * 
+   * @param jsData the js data
+   */
   private void addJavascript(String jsData) {
+	  
     if(jsConfigService.isModuleLoaded(MODULE_NAME)) {      
       jsConfigService.removeExtendedJavascript(MODULE_NAME,PATH,sContext) ;
     }
     jsConfigService.addExtendedJavascript(MODULE_NAME, PATH, sContext, jsData) ;
   }
 
+  /**
+   * Gets the javascript of all portals.
+   * 
+   * @param sessionProvider the session provider
+   * @param exceptPath the except path
+   * 
+   * @return the javascript of all portals
+   * 
+   * @throws Exception the exception
+   */
   private String getJavascriptOfAllPortals(SessionProvider sessionProvider, String exceptPath) throws Exception {
     ManageableRepository manageableRepository = repositoryService.getCurrentRepository();    
     NodeLocation livePortalsLocation = configurationService.getLivePortalsLocation(manageableRepository.getConfiguration().getName());
-    String statement = StringUtils.replaceOnce(SHARED_JS_QUERY,"{path}",livePortalsLocation.getPath());    
+    String statement = StringUtils.replaceOnce(SHARED_JS_QUERY,"{path}",livePortalsLocation.getPath() + "/%");    
     Session session = sessionProvider.getSession(livePortalsLocation.getWorkspace(),manageableRepository);
     return getJSDataBySQLQuery(session,statement,exceptPath);        
   }
 
+  /**
+   * Gets the jS data by sql query.
+   * 
+   * @param session the session
+   * @param queryStatement the query statement
+   * @param exceptPath the except path
+   * 
+   * @return the jS data by sql query
+   * 
+   * @throws Exception the exception
+   */
   private String getJSDataBySQLQuery(Session session, String queryStatement, String exceptPath) throws Exception {    
     QueryManager queryManager = null;    
     queryManager = session.getWorkspace().getQueryManager();      
     Query query = queryManager.createQuery(queryStatement, Query.SQL) ;
     QueryResult queryResult = query.execute() ;
     StringBuffer buffer = new StringBuffer();
+    
     for(NodeIterator iterator = queryResult.getNodes();iterator.hasNext();) {
       Node jsFile = iterator.nextNode();
       Node jcrContent = jsFile.getNode("jcr:content");
@@ -173,6 +256,9 @@ public class XJavascriptService implements Startable {
     return buffer.toString();    
   }
 
+  /* (non-Javadoc)
+   * @see org.picocontainer.Startable#start()
+   */
   public void start() {    
     log.info("Start WCM Javascript service...");
     SessionProvider sessionProvider = SessionProvider.createSystemProvider();
@@ -187,6 +273,9 @@ public class XJavascriptService implements Startable {
     sessionProvider.close();        
   }
 
+  /* (non-Javadoc)
+   * @see org.picocontainer.Startable#stop()
+   */
   public void stop() {     
   }    
 }

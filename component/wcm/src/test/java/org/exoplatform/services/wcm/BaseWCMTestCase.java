@@ -25,29 +25,38 @@ import javax.jcr.Session;
 import org.exoplatform.container.StandaloneContainer;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.impl.core.NodeImpl;
-import org.exoplatform.services.wcm.core.NodetypeConstant;
 import org.exoplatform.test.BasicTestCase;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * Jul 14, 2009  
+ * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * Jul 14, 2009
  */
 public abstract class BaseWCMTestCase extends BasicTestCase {
 
+  /** The container. */
   protected StandaloneContainer   container;
   
+  /** The session. */
   protected Session               session;
   
+  /** The REP o_ name. */
   protected final String          REPO_NAME        = "repository".intern();
 
+  /** The DMSSYSTE m_ ws. */
   protected final String          DMSSYSTEM_WS     = "dms-system".intern();
   
+  /** The SYSTE m_ ws. */
   protected final String          SYSTEM_WS        = "system".intern();
 
+  /** The COLLABORATIO n_ ws. */
   protected final String          COLLABORATION_WS = "collaboration".intern();
 
+  /* (non-Javadoc)
+   * @see junit.framework.TestCase#setUp()
+   */
   public void setUp() throws Exception {
     String containerConf = getClass().getResource("/conf/standalone/test-configuration.xml").toString();
     String loginConf = Thread.currentThread().getContextClassLoader().getResource("login.conf").toString();
@@ -62,6 +71,12 @@ public abstract class BaseWCMTestCase extends BasicTestCase {
     session = repositoryService.getRepository(REPO_NAME).getSystemSession(COLLABORATION_WS);
   }
 
+  /**
+   * Check mixins.
+   * 
+   * @param mixins the mixins
+   * @param node the node
+   */
   protected void checkMixins(String[] mixins, NodeImpl node) {
     try {
       String[] nodeMixins = node.getMixinTypeNames();
@@ -73,6 +88,12 @@ public abstract class BaseWCMTestCase extends BasicTestCase {
     }
   }
 
+  /**
+   * Compare mixins.
+   * 
+   * @param mixins the mixins
+   * @param nodeMixins the node mixins
+   */
   protected void compareMixins(String[] mixins, String[] nodeMixins) {
     nextMixin: for (String mixin : mixins) {
       for (String nodeMixin : nodeMixins) {
@@ -84,6 +105,11 @@ public abstract class BaseWCMTestCase extends BasicTestCase {
     }
   }
 
+  /**
+   * Memory info.
+   * 
+   * @return the string
+   */
   protected String memoryInfo() {
     String info = "";
     info = "free: " + mb(Runtime.getRuntime().freeMemory()) + "M of "
@@ -93,76 +119,156 @@ public abstract class BaseWCMTestCase extends BasicTestCase {
   }
 
   // bytes to Mbytes
+  /**
+   * Mb.
+   * 
+   * @param mem the mem
+   * 
+   * @return the string
+   */
   protected String mb(long mem) {
     return String.valueOf(Math.round(mem * 100d / (1024d * 1024d)) / 100d);
   }
 
+  /**
+   * Exec time.
+   * 
+   * @param from the from
+   * 
+   * @return the string
+   */
   protected String execTime(long from) {
     return Math.round(((System.currentTimeMillis() - from) * 100.00d / 60000.00d)) / 100.00d
     + "min";
   }
 
+  /**
+   * Gets the service.
+   * 
+   * @param clazz the clazz
+   * 
+   * @return the service
+   */
   protected <T> T getService(Class<T> clazz) {
     return clazz.cast(container.getComponentInstanceOfType(clazz));
   }
 
-  protected Node createWebcontentNode(Node parentNode, String nodeName, String htmlData, String cssData, String jsData) throws Exception {
-    boolean isInPortal = false;
-    if (parentNode.getPath().indexOf("/sites content/live") >= 0) isInPortal = true;
-    
-    Node webcontent = parentNode.addNode(nodeName, NodetypeConstant.EXO_WEBCONTENT);
-    webcontent.setProperty(NodetypeConstant.EXO_TITLE, nodeName);
-
-    Node htmlNode = webcontent.addNode("default.html", NodetypeConstant.NT_FILE);
-    htmlNode.addMixin(NodetypeConstant.EXO_HTML_FILE);
-    Node htmlContent = htmlNode.addNode(NodetypeConstant.JCR_CONTENT, NodetypeConstant.NT_RESOURCE);
-    htmlContent.setProperty(NodetypeConstant.JCR_ENCODING, "UTF-8");
-    htmlContent.setProperty(NodetypeConstant.JCR_MIME_TYPE, "text/html");
-    htmlContent.setProperty(NodetypeConstant.JCR_LAST_MODIFIED, new Date().getTime());
-    if (htmlData == null) htmlData = "This is the default.html file.";
-    htmlContent.setProperty(NodetypeConstant.JCR_DATA, htmlData);
-    
-    if (jsData == null) jsData = "This is the default.js file.";
-    if (cssData == null) cssData = "This is the default.css file.";
-    
-    Node jsFolder = null;
-    Node cssFolder = null;
-    if (isInPortal) {
-      jsFolder = webcontent.getNode("js");
-      cssFolder = webcontent.getNode("css");
-    } else {
-      jsFolder = webcontent.addNode("js", NodetypeConstant.EXO_JS_FOLDER);
-      cssFolder = webcontent.addNode("css", NodetypeConstant.EXO_CSS_FOLDER);
-      Node mediaFolder = webcontent.addNode("medias", NodetypeConstant.EXO_MULTIMEDIA_FOLDER);
-      mediaFolder.addNode("images", NodetypeConstant.NT_FOLDER).addMixin(NodetypeConstant.EXO_PICTURE_FOLDER);
-      mediaFolder.addNode("videos", NodetypeConstant.NT_FOLDER).addMixin(NodetypeConstant.EXO_VIDEO_FOLDER);
-      mediaFolder.addNode("audio", NodetypeConstant.NT_FOLDER).addMixin(NodetypeConstant.EXO_MUSIC_FOLDER);
-      webcontent.addNode("documents", NodetypeConstant.NT_UNSTRUCTURED).addMixin(NodetypeConstant.EXO_DOCUMENT_FOLDER);
+  /**
+   * Creates the webcontent node.
+   * 
+   * @param parentNode the parent node
+   * @param nodeName the node name
+   * @param htmlData the html data
+   * @param cssData the css data
+   * @param jsData the js data
+   * 
+   * @return the node
+   * 
+   * @throws Exception the exception
+   */
+  protected Node createWebcontentNode(Node parentNode,
+                                      String nodeName,
+                                      String htmlData,
+                                      String cssData,
+                                      String jsData) throws Exception {
+    Node webcontent = parentNode.addNode(nodeName, "exo:webContent");
+    webcontent.setProperty("exo:title", nodeName);
+    Node htmlNode;
+    try {
+      htmlNode = webcontent.getNode("default.html");
+    } catch (Exception ex) {
+      htmlNode = webcontent.addNode("default.html", "nt:file");
     }
-    
-    Node jsNode = jsFolder.addNode("default.js", NodetypeConstant.NT_FILE);
-    jsNode.setProperty(NodetypeConstant.EXO_ACTIVE, true);
-    jsNode.setProperty(NodetypeConstant.EXO_PRIORITY, 1);
-    jsNode.setProperty(NodetypeConstant.EXO_SHARED_JS, true);
-    Node jsContent = jsNode.addNode(NodetypeConstant.JCR_CONTENT, NodetypeConstant.NT_RESOURCE);
-    jsContent.setProperty(NodetypeConstant.JCR_ENCODING, "UTF-8");
-    jsContent.setProperty(NodetypeConstant.JCR_MIME_TYPE, "text/javascript");
-    jsContent.setProperty(NodetypeConstant.JCR_LAST_MODIFIED, new Date().getTime());
-    jsContent.setProperty(NodetypeConstant.JCR_DATA, jsData);
-    
-    Node cssNode = cssFolder.addNode("default.css", NodetypeConstant.NT_FILE);
-    cssNode.setProperty(NodetypeConstant.EXO_ACTIVE, true);
-    cssNode.setProperty(NodetypeConstant.EXO_PRIORITY, 1);
-    cssNode.setProperty(NodetypeConstant.EXO_SHARED_CSS, true);
-    Node cssContent = cssNode.addNode(NodetypeConstant.JCR_CONTENT, NodetypeConstant.NT_RESOURCE);
-    cssContent.setProperty(NodetypeConstant.JCR_ENCODING, "UTF-8");
-    cssContent.setProperty(NodetypeConstant.JCR_MIME_TYPE, "text/css");
-    cssContent.setProperty(NodetypeConstant.JCR_LAST_MODIFIED, new Date().getTime());
-    cssContent.setProperty(NodetypeConstant.JCR_DATA, cssData);
-    
+    if (!htmlNode.isNodeType("exo:htmlFile"))
+      htmlNode.addMixin("exo:htmlFile");
+    Node htmlContent;
+    try {
+      htmlContent = htmlNode.getNode("jcr:content");
+    } catch (Exception ex) {
+      htmlContent = htmlNode.addNode("jcr:content", "nt:resource");
+    }
+    htmlContent.setProperty("jcr:encoding", "UTF-8");
+    htmlContent.setProperty("jcr:mimeType", "text/html");
+    htmlContent.setProperty("jcr:lastModified", new Date().getTime());
+    if (htmlData == null)
+      htmlData = "This is the default.html file.";
+    htmlContent.setProperty("jcr:data", htmlData);
+
+    Node jsFolder;
+    try {
+      jsFolder = webcontent.getNode("js");
+    } catch (Exception ex) {
+      jsFolder = webcontent.addNode("js", "exo:jsFolder");
+    }
+    Node jsNode;
+    try {
+      jsNode = jsFolder.getNode("default.js");
+    } catch (Exception ex) {
+      jsNode = jsFolder.addNode("default.js", "nt:file");
+    }
+    if (!jsNode.isNodeType("exo:jsFile"))
+      jsNode.addMixin("exo:jsFile");
+    jsNode.setProperty("exo:active", true);
+    jsNode.setProperty("exo:priority", 1);
+    jsNode.setProperty("exo:sharedJS", true);
+
+    Node jsContent;
+    try {
+      jsContent = jsNode.getNode("jcr:content");
+    } catch (Exception ex) {
+      jsContent = jsNode.addNode("jcr:content", "nt:resource");
+    }
+    jsContent.setProperty("jcr:encoding", "UTF-8");
+    jsContent.setProperty("jcr:mimeType", "text/javascript");
+    jsContent.setProperty("jcr:lastModified", new Date().getTime());
+    if (jsData == null)
+      jsData = "This is the default.js file.";
+    jsContent.setProperty("jcr:data", jsData);
+
+    Node cssFolder;
+    try {
+      cssFolder = webcontent.getNode("css");
+    } catch (Exception ex) {
+      cssFolder = webcontent.addNode("css", "exo:cssFolder");
+    }
+    Node cssNode;
+    try {
+      cssNode = cssFolder.getNode("default.css");
+    } catch (Exception ex) {
+      cssNode = cssFolder.addNode("default.css", "nt:file");
+    }
+    if (!cssNode.isNodeType("exo:cssFile"))
+      cssNode.addMixin("exo:cssFile");
+    cssNode.setProperty("exo:active", true);
+    cssNode.setProperty("exo:priority", 1);
+    cssNode.setProperty("exo:sharedCSS", true);
+
+    Node cssContent;
+    try {
+      cssContent = cssNode.getNode("jcr:content");
+    } catch (Exception ex) {
+      cssContent = cssNode.addNode("jcr:content", "nt:resource");
+    }
+    cssContent.setProperty("jcr:encoding", "UTF-8");
+    cssContent.setProperty("jcr:mimeType", "text/css");
+    cssContent.setProperty("jcr:lastModified", new Date().getTime());
+    if (cssData == null)
+      cssData = "This is the default.css file.";
+    cssContent.setProperty("jcr:data", cssData);
+
+    Node mediaFolder;
+    try {
+      mediaFolder = webcontent.getNode("medias");
+    } catch (Exception ex) {
+      mediaFolder = webcontent.addNode("medias");
+    }
+    if (!mediaFolder.hasNode("images"))
+      mediaFolder.addNode("images", "nt:folder");
+    if (!mediaFolder.hasNode("videos"))
+      mediaFolder.addNode("videos", "nt:folder");
+    if (!mediaFolder.hasNode("audio"))
+      mediaFolder.addNode("audio", "nt:folder");
     session.save();
-    
     return webcontent;
   }
-  
 }
