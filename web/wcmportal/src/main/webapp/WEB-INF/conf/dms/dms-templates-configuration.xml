@@ -45,12 +45,6 @@
                               <field name="roles"><string>*</string></field>                
                             </object>                      
                           </value>
-                          <value>                    
-                            <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">             
-                              <field name="templateFile"><string>/file/views/admin_view.gtmpl</string></field>
-                              <field name="roles"><string>*:/platform/administrators</string></field>                
-                            </object>                      
-                          </value>
                         </collection>
                       </field>                  
                       <field  name="referencedDialog">
@@ -63,8 +57,8 @@
                           </value-->
                           <value>                    
                             <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">             
-                              <field name="templateFile"><string>/file/dialogs/admin_dialog.gtmpl</string></field>
-                              <field name="roles"><string>*:/platform/administrators</string></field>                
+                              <field name="templateFile"><string>/file/dialogs/dialog1.gtmpl</string></field>
+                              <field name="roles"><string>*</string></field>                
                             </object>                      
                           </value>                      
                         </collection>
