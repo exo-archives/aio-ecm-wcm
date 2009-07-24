@@ -65,7 +65,9 @@ public class UICategories extends UIContainer {
 	@SuppressWarnings("unused")
   private long getNumberOfWaitingNewsletter(String categoryName, String subscriptionName){
 	  try{
-	    return subscriptionHandler.getNumberOfNewslettersWaiting(portalName, categoryName, subscriptionName);
+		  ThreadLocalSessionProviderService threadLocalSessionProviderService = getApplicationComponent(ThreadLocalSessionProviderService.class);
+		  SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
+	    return subscriptionHandler.getNumberOfNewslettersWaiting(portalName, categoryName, subscriptionName, sessionProvider);
 	  }catch(Exception ex){
 	    ex.printStackTrace();
 	    return 0;
@@ -94,7 +96,9 @@ public class UICategories extends UIContainer {
   private List<NewsletterSubscriptionConfig> getListSubscription(String categoryName){
 	  List<NewsletterSubscriptionConfig> listSubscription = new ArrayList<NewsletterSubscriptionConfig>();
     try{
-      listSubscription = subscriptionHandler.getSubscriptionsByCategory(NewsLetterUtil.getPortalName(), categoryName);
+    	ThreadLocalSessionProviderService threadLocalSessionProviderService = getApplicationComponent(ThreadLocalSessionProviderService.class);
+    	SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
+      listSubscription = subscriptionHandler.getSubscriptionsByCategory(NewsLetterUtil.getPortalName(), categoryName, sessionProvider);
     }catch(Exception e){
       e.printStackTrace();
     }
@@ -197,7 +201,7 @@ public class UICategories extends UIContainer {
       newsletterManager.setSubscriptionConfig(
                         uiCategory.subscriptionHandler.getSubscriptionsByName(uiCategory.portalName,
                                                                               categoryName,
-                                                                              subscriptionName));
+                                                                              subscriptionName, sessionProvider));
       newsletterManager.init();
       newsletterManagerPortlet.getChild(UICategories.class).setRendered(false);
       newsletterManagerPortlet.getChild(UISubscriptions.class).setRendered(false);

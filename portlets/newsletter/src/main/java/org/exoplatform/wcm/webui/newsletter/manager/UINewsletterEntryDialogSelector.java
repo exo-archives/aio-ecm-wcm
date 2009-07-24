@@ -103,7 +103,7 @@ public class UINewsletterEntryDialogSelector extends UIForm {
     NewsletterSubscriptionHandler newsletterSubscriptionHandler = newsletterManagerService.getSubscriptionHandler();
     List<NewsletterSubscriptionConfig> listSubscriptions = 
                                           newsletterSubscriptionHandler.getSubscriptionsByCategory(Util.getUIPortal().getName(), 
-                                                                                                   categories.get(0).getValue());
+                                                                                                   categories.get(0).getValue(), sessionProvider);
     for (NewsletterSubscriptionConfig newsletterSubscriptionConfig : listSubscriptions) {
       subscriptions.add(new SelectItemOption<String>(newsletterSubscriptionConfig.getTitle(), newsletterSubscriptionConfig.getName()));
     }
@@ -167,9 +167,11 @@ public class UINewsletterEntryDialogSelector extends UIForm {
       List<SelectItemOption<String>> subscriptions = new ArrayList<SelectItemOption<String>>();
       NewsletterManagerService newsletterManagerService = newsletterEntryDialogSelector.getApplicationComponent(NewsletterManagerService.class);
       NewsletterSubscriptionHandler newsletterSubscriptionHandler = newsletterManagerService.getSubscriptionHandler();
+      ThreadLocalSessionProviderService threadLocalSessionProviderService = newsletterEntryDialogSelector.getApplicationComponent(ThreadLocalSessionProviderService.class);
+      SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
       List<NewsletterSubscriptionConfig> newsletterSubscriptionConfigs = 
                                                 newsletterSubscriptionHandler.getSubscriptionsByCategory(Util.getUIPortal().getName(),
-                                                                                                         categorySelectBox.getValue());
+                                                                                                         categorySelectBox.getValue(), sessionProvider);
       for (NewsletterSubscriptionConfig newsletterSubscriptionConfig : newsletterSubscriptionConfigs) {
         subscriptions.add(new SelectItemOption<String>(newsletterSubscriptionConfig.getTitle(), newsletterSubscriptionConfig.getName()));
       }

@@ -150,6 +150,7 @@ public class NewsletterManageUserHandler {
       session.save();
     } catch (Exception e) {
       log.error("Add user " + userMail + " failed because of " + e.getMessage());
+      e.printStackTrace();
     }
     return userNode;
   }
@@ -168,13 +169,16 @@ public class NewsletterManageUserHandler {
     log.info("Trying to ban/unban user " + userMail);
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspace, manageableRepository);
+      SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
+      if(sessionProvider == null) sessionProvider = SessionProvider.createSystemProvider();
+      Session session = sessionProvider.getSession(workspace, manageableRepository);
       Node userNode = getUserNodeByEmail(portalName, userMail, session);
       if (userNode.getProperty(NewsletterConstant.USER_PROPERTY_BANNED).getBoolean() == isBanClicked) return;
       userNode.setProperty(NewsletterConstant.USER_PROPERTY_BANNED, 
                            !userNode.getProperty(NewsletterConstant.USER_PROPERTY_BANNED).getBoolean());
       session.save();
     } catch (Exception e) {
+    	e.printStackTrace();
       log.error("Ban/UnBan user " + userMail + " failed because of " + e.getMessage());
     }
   }
@@ -183,7 +187,9 @@ public class NewsletterManageUserHandler {
     log.info("Trying to delete user " + userMail);
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspace, manageableRepository);
+      SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
+      if(sessionProvider == null) sessionProvider = SessionProvider.createSystemProvider();
+      Session session = sessionProvider.getSession(workspace, manageableRepository);
       String userPath = NewsletterConstant.generateUserPath(portalName);
       Node userFolderNode = (Node)session.getItem(userPath);
       Node userNode = userFolderNode.getNode(userMail);
@@ -219,7 +225,9 @@ public class NewsletterManageUserHandler {
   public List<NewsletterUserConfig> getUsers(String portalName, String categoryName, String subscriptionName) throws Exception{
     List<NewsletterUserConfig> listUsers = new ArrayList<NewsletterUserConfig>();
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-    Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspace, manageableRepository);
+    SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
+    if(sessionProvider == null) sessionProvider = SessionProvider.createSystemProvider();
+    Session session = sessionProvider.getSession(workspace, manageableRepository);
     String userPath = NewsletterConstant.generateUserPath(portalName);
     Node userHomeNode = (Node)session.getItem(userPath);
     if(categoryName == null && subscriptionName == null){ // get all user email
@@ -279,7 +287,9 @@ public class NewsletterManageUserHandler {
     int countUser = 0;
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspace, manageableRepository);
+      SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
+      if(sessionProvider == null) sessionProvider = SessionProvider.createSystemProvider();
+      Session session = sessionProvider.getSession(workspace, manageableRepository);
       String subscriptionPath = NewsletterConstant.generateCategoryPath(portalName) + "/" + categoryName + "/" + subscriptionName;
       Node subscriptionNode = Node.class.cast(session.getItem(subscriptionPath));
       if (subscriptionNode.hasProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_USER)) {
@@ -295,7 +305,9 @@ public class NewsletterManageUserHandler {
   public boolean checkExistedEmail(String portalName, String email) {
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspace, manageableRepository);
+      SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
+      if(sessionProvider == null) sessionProvider = SessionProvider.createSystemProvider();
+      Session session = sessionProvider.getSession(workspace, manageableRepository);
       Node userNode = getUserNodeByEmail(portalName, email, session);
       if(userNode != null){
         return true;

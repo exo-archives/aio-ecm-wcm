@@ -28,6 +28,7 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
@@ -59,7 +60,9 @@ public class NewsletterTemplateHandler {
     try {
       List<Node> templates = new ArrayList<Node>();
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspace, manageableRepository);
+      SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null); 
+      if(sessionProvider ==  null) sessionProvider = SessionProvider.createSystemProvider();
+      Session session = sessionProvider.getSession(workspace, manageableRepository);
       
       Node defaultTemplateFolder = (Node)session.getItem(NewsletterConstant.generateDefaultTemplatePath(portalName));
       NodeIterator defaultTemplates = defaultTemplateFolder.getNodes();
@@ -105,11 +108,13 @@ public class NewsletterTemplateHandler {
     log.info("Trying to convert node " + webcontentPath + " to template at category " + categoryName);
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspace, manageableRepository);
+      SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
+      if(sessionProvider == null) sessionProvider = SessionProvider.createSystemProvider();
+      Session session = sessionProvider.getSession(workspace, manageableRepository);
       Node categoryTemplateFolder = (Node)session.getItem(NewsletterConstant.generateCategoryTemplateBasePath(portalName, categoryName));
       session.getWorkspace().copy(webcontentPath, categoryTemplateFolder.getPath() + "/" + webcontentPath.substring(webcontentPath.lastIndexOf("/") + 1));
       session.save();
-      session.logout();
+      //session.logout();
       return true;
     } catch (Exception e) {
       e.printStackTrace();

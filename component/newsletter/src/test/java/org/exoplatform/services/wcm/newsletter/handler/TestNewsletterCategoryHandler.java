@@ -33,10 +33,9 @@ import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 public class TestNewsletterCategoryHandler extends BaseWCMTestCase {
 	
 	private NewsletterCategoryConfig newsletterCategoryConfig;
-	
-	
 	private Node categoriesNode;
 	private NewsletterCategoryHandler newsletterCategoryHandler;
+	
 	public void setUp() throws Exception {
 		super.setUp();
 		categoriesNode = session.getRootNode().getNode("sites content/live/classic/ApplicationData/NewsletterApplication/Categories");

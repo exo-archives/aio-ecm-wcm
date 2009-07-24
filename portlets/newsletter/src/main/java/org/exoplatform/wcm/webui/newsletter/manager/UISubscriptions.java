@@ -103,8 +103,10 @@ public class UISubscriptions extends UIForm {
   private List<NewsletterSubscriptionConfig> getListSubscription(){
     List<NewsletterSubscriptionConfig> listSubs = new ArrayList<NewsletterSubscriptionConfig>();
     try{
+    	ThreadLocalSessionProviderService threadLocalSessionProviderService = getApplicationComponent(ThreadLocalSessionProviderService.class);
+    	SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
       listSubs = 
-        subscriptionHandler.getSubscriptionsByCategory(NewsLetterUtil.getPortalName(), this.categoryConfig.getName());
+        subscriptionHandler.getSubscriptionsByCategory(NewsLetterUtil.getPortalName(), this.categoryConfig.getName(), sessionProvider);
       init(listSubs);
     }catch(Exception e){
       e.printStackTrace();
@@ -115,7 +117,9 @@ public class UISubscriptions extends UIForm {
   @SuppressWarnings("unused")
   private long getNumberOfWaitingNewsletter(String subscriptionName){
     try{
-      return subscriptionHandler.getNumberOfNewslettersWaiting(portalName, this.categoryConfig.getName(), subscriptionName);
+    	ThreadLocalSessionProviderService threadLocalSessionProviderService = getApplicationComponent(ThreadLocalSessionProviderService.class);
+    	SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
+      return subscriptionHandler.getNumberOfNewslettersWaiting(portalName, this.categoryConfig.getName(), subscriptionName, sessionProvider);
     }catch(Exception ex){
       ex.printStackTrace();
       return 0;
@@ -215,7 +219,9 @@ public class UISubscriptions extends UIForm {
       UIPopupWindow popupWindow = popupContainer.getChildById(UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW);
       if (popupWindow == null) {
         UISubcriptionForm subcriptionForm = popupContainer.createUIComponent(UISubcriptionForm.class, null, null);
-        NewsletterSubscriptionConfig subscriptionConfig = subsriptions.subscriptionHandler.getSubscriptionsByName(NewsLetterUtil.getPortalName(), subsriptions.categoryConfig.getName(), subId);
+        ThreadLocalSessionProviderService threadLocalSessionProviderService = subcriptionForm.getApplicationComponent(ThreadLocalSessionProviderService.class);
+        SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
+        NewsletterSubscriptionConfig subscriptionConfig = subsriptions.subscriptionHandler.getSubscriptionsByName(NewsLetterUtil.getPortalName(), subsriptions.categoryConfig.getName(), subId, sessionProvider);
         subcriptionForm.setSubscriptionInfor(subscriptionConfig);
         Utils.createPopupWindow(popupContainer, subcriptionForm, event.getRequestContext(), UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW, 450, 280);
       } else { 
@@ -235,11 +241,12 @@ public class UISubscriptions extends UIForm {
         if(checkbox.isChecked()){
 
           isChecked = true;
-
+          ThreadLocalSessionProviderService threadLocalSessionProviderService = subsriptions.getApplicationComponent(ThreadLocalSessionProviderService.class);
+          SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
           NewsletterSubscriptionConfig subscriptionConfig = 
-            subsriptions.subscriptionHandler.getSubscriptionsByName( portalName, subsriptions.categoryConfig.getName(), checkbox.getName());
+            subsriptions.subscriptionHandler.getSubscriptionsByName( portalName, subsriptions.categoryConfig.getName(), checkbox.getName(), sessionProvider);
           if (subscriptionConfig != null) {
-            subsriptions.subscriptionHandler.delete( NewsLetterUtil.getPortalName(), subsriptions.categoryConfig.getName(),subscriptionConfig);
+            subsriptions.subscriptionHandler.delete( NewsLetterUtil.getPortalName(), subsriptions.categoryConfig.getName(),subscriptionConfig, sessionProvider);
           } else {
             UIApplication uiApp = subsriptions.getAncestorOfType(UIApplication.class);
             uiApp.addMessage(new ApplicationMessage("UISubscription.msg.subscriptionNotfound", null, ApplicationMessage.WARNING));
@@ -281,7 +288,7 @@ public class UISubscriptions extends UIForm {
       newsletterManager.setSubscriptionConfig(
                         uiSubscription.subscriptionHandler.getSubscriptionsByName(uiSubscription.portalName,
                                                                                   uiSubscription.categoryConfig.getName(),
-                                                                                  subId));
+                                                                                  subId, sessionProvider));
       newsletterManager.init();
       newsletterManagerPortlet.getChild(UICategories.class).setRendered(false);
       newsletterManagerPortlet.getChild(UISubscriptions.class).setRendered(false);
@@ -305,7 +312,7 @@ public class UISubscriptions extends UIForm {
       newsletterManager.setSubscriptionConfig(
                         uiSubscriptions.subscriptionHandler.getSubscriptionsByName(uiSubscriptions.portalName,
                                                                                    uiSubscriptions.categoryConfig.getName(),
-                                                                                   subscriptionId));
+                                                                                   subscriptionId, sessionProvider));
       newsletterManager.init();
       newsletterManagerPortlet.getChild(UICategories.class).setRendered(false);
       newsletterManagerPortlet.getChild(UISubscriptions.class).setRendered(false);

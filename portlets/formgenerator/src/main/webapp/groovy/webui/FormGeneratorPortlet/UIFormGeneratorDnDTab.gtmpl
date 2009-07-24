@@ -105,7 +105,6 @@
 										<div class="HorizontalLayout">
 											<div class="FormContainer">
 												<table class="UIFormGrid">
-													<tbody>
 														<tr>
 															<td class="FieldLabel">Input field</td>
 															<td class="FieldComponent">
@@ -113,7 +112,6 @@
 															</td>
 															<td class="FieldIcon"><span><span/></td>
 														</tr>
-													</tbody>
 												</table>
 											</div>
 										</div>
@@ -124,7 +122,6 @@
 										<div class="HorizontalLayout">
 											<div class="FormContainer">
 												<table class="UIFormGrid">
-													<tbody>
 														<tr>
 															<td class="FieldLabel">Component Name</td>
 															<td class="FieldComponent"><input class="InputText" type="text" /></td>
@@ -162,7 +159,6 @@
 															</td>
 															<td class="FieldIcon"><span><span/></td>
 														</tr>
-													</tbody>
 												</table>
 											</div>
 										</div>

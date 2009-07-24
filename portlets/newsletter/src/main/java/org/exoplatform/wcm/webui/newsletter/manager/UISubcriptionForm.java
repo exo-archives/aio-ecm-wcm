@@ -147,9 +147,10 @@ public class UISubcriptionForm extends UIForm {
       NewsletterSubscriptionHandler subscriptionHandler = newsletterManagerService.getSubscriptionHandler();
       NewsletterSubscriptionConfig newsletterSubscriptionConfig = null;
       if(uiSubcriptionForm.subscriptionConfig == null) {
-
+    	  ThreadLocalSessionProviderService threadLocalSessionProviderService = uiSubcriptionForm.getApplicationComponent(ThreadLocalSessionProviderService.class);
+    	  SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
         newsletterSubscriptionConfig = subscriptionHandler
-          .getSubscriptionsByName(NewsLetterUtil.getPortalName(), categoryName, subcriptionName);
+          .getSubscriptionsByName(NewsLetterUtil.getPortalName(), categoryName, subcriptionName, sessionProvider);
         if (newsletterSubscriptionConfig != null) {
 
           uiApp.addMessage(new ApplicationMessage("UISubcriptionForm.msg.subcriptionNameIsAlreadyExist", null, ApplicationMessage.WARNING));
@@ -172,8 +173,9 @@ public class UISubcriptionForm extends UIForm {
         newsletterSubscriptionConfig.setCategoryName(categoryName);
         newsletterSubscriptionConfig.setDescription(subcriptionDecription);
         newsletterSubscriptionConfig.setTitle(subcriptionTitle);
-
-        subscriptionHandler.edit(NewsLetterUtil.getPortalName(), newsletterSubscriptionConfig);
+        ThreadLocalSessionProviderService threadLocalSessionProviderService = uiSubcriptionForm.getApplicationComponent(ThreadLocalSessionProviderService.class);
+        SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
+        subscriptionHandler.edit(NewsLetterUtil.getPortalName(), newsletterSubscriptionConfig, sessionProvider);
       }
 
       UIPopupContainer popupContainer = uiSubcriptionForm.getAncestorOfType(UIPopupContainer.class);

@@ -92,14 +92,13 @@ public class NewsletterSubscriptionHandler {
     }
   }
   
-  public void edit(String portalName, NewsletterSubscriptionConfig subscription) {
+  public void edit(String portalName, NewsletterSubscriptionConfig subscription, SessionProvider sessionProvider) {
     
     log.info("Trying to edit subcription " + subscription.getName());
     try {
 
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      Session session = threadLocalSessionProviderService
-                          .getSessionProvider(null).getSession(workspace, manageableRepository);
+      Session session = sessionProvider.getSession(workspace, manageableRepository);
       String path = NewsletterConstant.generateCategoryPath(portalName);
       Node categoryNode = ((Node)session.getItem(path)).getNode(subscription.getCategoryName());
       Node subscriptionNode = categoryNode.getNode(subscription.getName());
@@ -114,13 +113,12 @@ public class NewsletterSubscriptionHandler {
   }
 
   public void delete(String portalName,
-                     String categoryName, NewsletterSubscriptionConfig subscription) {
+                     String categoryName, NewsletterSubscriptionConfig subscription, SessionProvider sessionProvider) {
     
     log.info("Trying to delete subcription " + subscription.getName());
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      Session session = threadLocalSessionProviderService
-                          .getSessionProvider(null).getSession(workspace, manageableRepository);
+      Session session = sessionProvider.getSession(workspace, manageableRepository);
       String path = NewsletterConstant.generateCategoryPath(portalName);
       Node categoryNode = ((Node)session.getItem(path)).getNode(categoryName);
       Node subscriptionNode = categoryNode.getNode(subscription.getName());
@@ -131,13 +129,12 @@ public class NewsletterSubscriptionHandler {
     }
   }
   
-  public List<NewsletterSubscriptionConfig> getSubscriptionsByCategory(String portalName, String categoryName)throws Exception{
+  public List<NewsletterSubscriptionConfig> getSubscriptionsByCategory(String portalName, String categoryName, SessionProvider sessionProvider)throws Exception{
     
     List<NewsletterSubscriptionConfig> listSubscriptions = new ArrayList<NewsletterSubscriptionConfig>();
 
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-    Session session = threadLocalSessionProviderService
-                        .getSessionProvider(null).getSession(workspace, manageableRepository);
+    Session session = sessionProvider.getSession(workspace, manageableRepository);
     String path = NewsletterConstant.generateCategoryPath(portalName);
     Node categoryNode = ((Node)session.getItem(path)).getNode(categoryName);
     NodeIterator nodeIterator = categoryNode.getNodes();
@@ -154,10 +151,10 @@ public class NewsletterSubscriptionHandler {
     return listSubscriptions;
   }
   
-  public List<NewsletterSubscriptionConfig> getSubscriptionIdsByPublicUser(String portalName, String userEmail) throws Exception{
+  public List<NewsletterSubscriptionConfig> getSubscriptionIdsByPublicUser(String portalName, String userEmail, SessionProvider sessionProvider) throws Exception{
     List<NewsletterSubscriptionConfig> listSubscriptions = new ArrayList<NewsletterSubscriptionConfig>();
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-    Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspace, manageableRepository);
+    Session session = sessionProvider.getSession(workspace, manageableRepository);
     QueryManager queryManager = session.getWorkspace().getQueryManager();
     String sqlQuery = "select * from " + NewsletterConstant.SUBSCRIPTION_NODETYPE + 
                       " where " + NewsletterConstant.SUBSCRIPTION_PROPERTY_USER + " = '" + userEmail + "'";
@@ -174,10 +171,9 @@ public class NewsletterSubscriptionHandler {
     return listSubscriptions;
   }
 
-  public NewsletterSubscriptionConfig getSubscriptionsByName(String portalName, String categoryName, String subCriptionName) throws Exception{
+  public NewsletterSubscriptionConfig getSubscriptionsByName(String portalName, String categoryName, String subCriptionName, SessionProvider sessionProvider) throws Exception{
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      Session session = threadLocalSessionProviderService
-                          .getSessionProvider(null).getSession(workspace, manageableRepository);
+      Session session = sessionProvider.getSession(workspace, manageableRepository);
       String path = NewsletterConstant.generateCategoryPath(portalName);
       Node categoryNode = ((Node)session.getItem(path)).getNode(categoryName);
       try {
@@ -189,9 +185,9 @@ public class NewsletterSubscriptionHandler {
       }
   }
   
-  public long getNumberOfNewslettersWaiting(String portalName, String categoryName, String subScriptionName)throws Exception{
+  public long getNumberOfNewslettersWaiting(String portalName, String categoryName, String subScriptionName, SessionProvider sessionProvider)throws Exception{
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-    Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspace, manageableRepository);
+    Session session = sessionProvider.getSession(workspace, manageableRepository);
     String path = NewsletterConstant.generateCategoryPath(portalName) + "/" + categoryName + "/" + subScriptionName;
     QueryManager queryManager = session.getWorkspace().getQueryManager();
     String sqlQuery = "select * from " + NewsletterConstant.ENTRY_NODETYPE + 

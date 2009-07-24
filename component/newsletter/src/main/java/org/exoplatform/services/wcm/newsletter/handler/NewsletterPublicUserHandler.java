@@ -103,10 +103,10 @@ public class NewsletterPublicUserHandler {
     session.save();
   }
   
-  protected void clearEmailInSubscription(String email){
+  protected void clearEmailInSubscription(String email, SessionProvider sessionProvider){
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspace, manageableRepository);
+      Session session = sessionProvider.getSession(workspace, manageableRepository);
       
       QueryManager queryManager = session.getWorkspace().getQueryManager();
       String sqlQuery = "select * from " + NewsletterConstant.SUBSCRIPTION_NODETYPE + " where " + NewsletterConstant.SUBSCRIPTION_PROPERTY_USER + " like '%" + email + "%'";
@@ -131,9 +131,11 @@ public class NewsletterPublicUserHandler {
       }
       session.save();
     } catch (Exception e) {
+    	e.printStackTrace();
       log.error("Update user's subscription for user " + email + " failed because of " + e.getMessage());
     }
   }
+  
   
   public void subscribe(String portalName, String userMail, List<String> listCategorySubscription, String link, String[] emailContent, SessionProvider sessionProvider) {
     log.info("Trying to subscribe user " + userMail);
@@ -151,6 +153,7 @@ public class NewsletterPublicUserHandler {
       ResourceBundle res = context.getApplicationResourceBundle() ;
       emailContent = new String[]{ res.getString("NewsletterPortlet.Email.ConfirmUser.Subject"),
                                    res.getString("NewsletterPortlet.Email.ConfirmUser.Content")};*/
+      if(userNode == null) System.out.println("\n\n\n\n----------------------> user node is null");
       String openTag = "<a href=\"" + link.replaceFirst("OBJECTID",userMail + "/" + 
                                                      userNode.getProperty(NewsletterConstant.USER_PROPERTY_VALIDATION_CODE).getString())+
                        "\">";
@@ -174,9 +177,9 @@ public class NewsletterPublicUserHandler {
     }
   }
   
-  public boolean confirmPublicUser(String Email, String userCode, String portalName) throws Exception{
+  public boolean confirmPublicUser(String Email, String userCode, String portalName, SessionProvider sessionProvider) throws Exception{
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-    Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspace, manageableRepository);
+    Session session = sessionProvider.getSession(workspace, manageableRepository);
     QueryManager queryManager = session.getWorkspace().getQueryManager();
     String sqlQuery = "select * from " + NewsletterConstant.USER_NODETYPE + " where " + 
                         NewsletterConstant.USER_PROPERTY_VALIDATION_CODE + " = '" + userCode + "' and " + 
@@ -191,10 +194,10 @@ public class NewsletterPublicUserHandler {
   }
 
   
-  public void forgetEmail(String portalName, String email){
+  public void forgetEmail(String portalName, String email, SessionProvider sessionProvider){
     log.info("Trying to update user's subscriptions for user " + email);
     try {
-      clearEmailInSubscription(email);
+      clearEmailInSubscription(email, sessionProvider);
       //  update for users node
       NewsletterManageUserHandler manageUserHandler = new NewsletterManageUserHandler(repository, workspace);
       manageUserHandler.delete(portalName, email);
@@ -204,13 +207,13 @@ public class NewsletterPublicUserHandler {
   }
 
   // Pattern for categoryAndSubscriptions: categoryAAA#subscriptionBBB
-  public void updateSubscriptions(String portalName, String email, List<String> categoryAndSubscriptions) {
+  public void updateSubscriptions(String portalName, String email, List<String> categoryAndSubscriptions, SessionProvider sessionProvider) {
     log.info("Trying to update user's subscriptions for user " + email);
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspace, manageableRepository);
+      Session session = sessionProvider.getSession(workspace, manageableRepository);
       
-      clearEmailInSubscription(email);
+      clearEmailInSubscription(email, sessionProvider);
       
       // Update new data
       this.updateSubscriptions(session, categoryAndSubscriptions, portalName, email);
@@ -218,6 +221,8 @@ public class NewsletterPublicUserHandler {
       // Get current subscriptions which user subscribed (by query), compare with input subscriptions
       // to get which subscription user remove, which subscription user add, then update reference
     } catch (Exception e) {
+      System.out.println("\n\n\n\n-----------------> false");
+      e.printStackTrace();
       log.error("Update user's subscription for user " + email + " failed because of " + e.getMessage());
     }
   }

@@ -1,10 +1,10 @@
 function UIFormGeneratorPortlet() {
-
+	
 }
 
 UIFormGeneratorPortlet.prototype.init = function() {
   //alert('This is test Form generator portlet....');
-	var DOMUtil = eXo.core.DOMUtil;	
+	var DOMUtil = eXo.core.DOMUtil;
 	var uiTabContentContainer = document.getElementById('UITabContentContainer');
 	var uiTabContent = DOMUtil.findFirstDescendantByClass(uiTabContentContainer, 'div', 'UITabContent');
 	var menuitems = DOMUtil.findDescendantsByClass(uiTabContent, 'div', 'LeftMenu');
@@ -28,15 +28,15 @@ UIFormGeneratorPortlet.prototype.renderComponent = function(typeComp) {
 			fieldComponent  +=		"<td class='FieldLabel' colspan='2'>Label</td>";
 			break;
 		case "input"		: 
-			fieldComponent  +=		"<td class='FieldLabel'>Input field</td>";
+			fieldComponent  +=		"<td class='FieldLabel' value='Input Text'>Input field</td>";
 			fieldComponent  +=		"<td class='FieldComponent'><input type='text' class='InputText' value='Input value'/></td>";
 			break;
 		case "textarea"	:
-			fieldComponent  +=		"<td class='FieldLabel'>Textarea field</td>";
+			fieldComponent  +=		"<td class='FieldLabel' value='Textarea'>Textarea field</td>";
 			fieldComponent  +=		"<td class='FieldComponent'><textarea class='Textarea'>Textarea value</textarea></td>";
 			break;			
-		case "WYSWYG"		: 
-			fieldComponent  +=		"<td class='FieldLabel'>WYSIWYG field</td>";
+		case "WYSIWYG"		: 
+			fieldComponent  +=		"<td class='FieldLabel' value='WYSIWYG'>WYSIWYG field</td>";
 			fieldComponent  +=		"<td class='FieldComponent'><textarea class='Textarea'>WYSIWYG value</textarea></td>";
 			
 			advancedOption  +=	"<tr>";
@@ -48,22 +48,22 @@ UIFormGeneratorPortlet.prototype.renderComponent = function(typeComp) {
 
 			break;			
 		case "select"		: 
-			fieldComponent  +=		"<td class='FieldLabel'>Select field</td>";
+			fieldComponent  +=		"<td class='FieldLabel' value='Select'>Select field</td>";
 			fieldComponent  +=		"<td class='FieldComponent'><select class='SelectBox'><option></option></select></td>";
 			
 			multivalue		= true;
 			
 			break;			
 		case "checkbox"	: 
-			fieldComponent  +=		"<td class='FieldLabel'>Checkbox field</td>";
+			fieldComponent  +=		"<td class='FieldLabel' value='Checkbox'>Checkbox field</td>";
 			fieldComponent  +=		"<td class='FieldComponent'><input type='checkbox' class='CheckBox' value='checkbox1'/><input type='checkbox' class='CheckBox' value='checkbox2'/><input type='checkbox' class='CheckBox' value='checkbox3'/></td>";
 			break;						
 		case "radio"		: 
-			fieldComponent  +=		"<td class='FieldLabel'>Radio field</td>";
+			fieldComponent  +=		"<td class='FieldLabel' value='Radio'>Radio field</td>";
 			fieldComponent  +=		"<td class='FieldComponent'><input type='radio' class='Radio' value='radio1'/><input type='radio' class='Radio' value='radio2'/><input type='radio' class='Radio' value='radio3'/></td>";
 			break;			
 		case "datetime"	: 
-			fieldComponent  +=		"<td class='FieldLabel'>Datetime field</td>";
+			fieldComponent  +=		"<td class='FieldLabel' value='DateTime'>Datetime field</td>";
 			fieldComponent  +=		"<td class='FieldComponent'><input type='text' class='InputText' value='Datetime value'/></td>";
 			
 			advancedOption  +=	"<tr>";
@@ -75,7 +75,7 @@ UIFormGeneratorPortlet.prototype.renderComponent = function(typeComp) {
 
 			break;
 		case "upload"		: 
-			fieldComponent  +=		"<td class='FieldLabel'>Upload field</td>";
+			fieldComponent  +=		"<td class='FieldLabel' value='Upload'>Upload field</td>";
 			fieldComponent  +=		"<td class='FieldComponent'><input type='file' class='Upload'/><img src='/eXoResources/skin/sharedImages/Blank.gif' alt='' class='UploadButton'/></td>";
 			break;
 	}
@@ -160,6 +160,7 @@ UIFormGeneratorPortlet.prototype.renderComponent = function(typeComp) {
 	var node = document.createElement('div');
 	node.innerHTML = formGenerator;
 	node.className = 'BoxContentBoxStyle';
+	node.setAttribute('typeComponent', typeComp);
 	document.getElementById('MiddleCenterViewBoxStyle').appendChild(node);
 };
 
@@ -176,8 +177,7 @@ UIFormGeneratorPortlet.prototype.showEditBox = function(obj) {
 };
 
 UIFormGeneratorPortlet.prototype.removeComponent = function(obj) {
-	var DOMUtil = eXo.core.DOMUtil;
-	var parentNode = DOMUtil.findAncestorByClass(obj, "BoxContentBoxStyle");
+	var parentNode = eXo.core.DOMUtil.findAncestorByClass(obj, "BoxContentBoxStyle");
 	if(parentNode) {
 		var confirmDelete = confirm("Are you sure to remove?");
 		if(confirmDelete == true) {
@@ -222,6 +222,7 @@ UIFormGeneratorPortlet.prototype.updateLabel = function(obj) {
 };
 
 UIFormGeneratorPortlet.prototype.updateWidth = function(obj) {
+	var DOMUtil = eXo.core.DOMUtil;
 	var width = '';
 	if (obj.value == '') {
 		width = null;
@@ -232,7 +233,7 @@ UIFormGeneratorPortlet.prototype.updateWidth = function(obj) {
 	} else {
 		width = obj.value + 'px';
 	}
-	var DOMUtil = eXo.core.DOMUtil;
+
 	var parentNode = DOMUtil.findAncestorByClass(obj, 'BoxContentBoxStyle');
 	var containerNode = DOMUtil.findFirstDescendantByClass(parentNode, 'div', 'TopContentBoxStyle');
 	var componentNode = DOMUtil.findFirstDescendantByClass(containerNode, 'td', 'FieldComponent');
@@ -241,6 +242,7 @@ UIFormGeneratorPortlet.prototype.updateWidth = function(obj) {
 };
 
 UIFormGeneratorPortlet.prototype.updateHeight = function(obj) {
+	var DOMUtil = eXo.core.DOMUtil;
 	var height = '';
 	if (obj.value == '') {
 		height = null;
@@ -251,7 +253,7 @@ UIFormGeneratorPortlet.prototype.updateHeight = function(obj) {
 	} else {
 		height = obj.value + 'px';
 	}
-	var DOMUtil = eXo.core.DOMUtil;
+
 	var parentNode = DOMUtil.findAncestorByClass(obj, 'BoxContentBoxStyle');
 	var containerNode = DOMUtil.findFirstDescendantByClass(parentNode, 'div', 'TopContentBoxStyle');
 	var componentNode = DOMUtil.findFirstDescendantByClass(containerNode, 'td', 'FieldComponent');
@@ -264,7 +266,13 @@ UIFormGeneratorPortlet.prototype.updateRequired = function(obj) {
 	var parentNode = DOMUtil.findAncestorByClass(obj, 'BoxContentBoxStyle');
 	var containerNode = DOMUtil.findFirstDescendantByClass(parentNode, 'div', 'TopContentBoxStyle');
 	var componentNode = DOMUtil.findFirstDescendantByClass(containerNode, 'td', 'FieldComponent');
+	var labelNode = DOMUtil.findFirstDescendantByClass(containerNode, 'td', 'FieldLabel');	
 	if (!componentNode) return false;
+	if(obj.checked)	{
+		labelNode.setAttribute('mandatory', 'true');
+	} else {
+		labelNode.setAttribute('mandatory', 'false');
+	}
 	var requiredNode = DOMUtil.getChildrenByTagName(componentNode, 'span')[0];
 	if (!requiredNode) {
 		requiredNode = document.createElement('span');
@@ -278,25 +286,49 @@ UIFormGeneratorPortlet.prototype.updateRequired = function(obj) {
 
 UIFormGeneratorPortlet.prototype.updateValue = function(evt) {
 	var DOMUtil = eXo.core.DOMUtil;
-	var options = '';
-	var inputNodes = '';
-  var srcEle = eXo.core.Browser.getEventSource(evt);
-  if(!srcEle) return;
+	var srcEle = eXo.core.Browser.getEventSource(evt);
+	if(!srcEle) return;
 	var root = DOMUtil.findAncestorByClass(srcEle, 'BoxContentBoxStyle');
 	var componentNode = DOMUtil.findFirstDescendantByClass(root, 'div', 'TopContentBoxStyle');
-	var selectNode = DOMUtil.findFirstDescendantByClass(componentNode, 'select', 'SelectBox');
-	var fieldNode = DOMUtil.findAncestorByClass(srcEle, 'FieldComponent');
-	if(fieldNode) inputNodes = DOMUtil.getChildrenByTagName(fieldNode, 'input');
-	for(var i = 0 ; i < inputNodes.length; i++) {
-		if(inputNodes[i] == srcEle){
-			selectNode.options[i].value = srcEle.value;
-			selectNode.options[i].innerHTML = srcEle.value;
-		}
+	var eltName = DOMUtil.findFirstDescendantByClass(componentNode, 'td', 'FieldLabel').getAttribute('value');
+	if(!eltName) return;
+	switch(eltName) {
+		case "Label" :
+			break;
+		case "Input Text" :
+			var inputNode = DOMUtil.findFirstDescendantByClass(componentNode, 'input', 'InputText');
+			inputNode.value = srcEle.value;
+			break;
+		case "Select" :
+			var selectNode = DOMUtil.findFirstDescendantByClass(componentNode, 'select', 'SelectBox');
+			var fieldNode = DOMUtil.findAncestorByClass(srcEle, 'FieldComponent');
+			var inputNodes = DOMUtil.getChildrenByTagName(fieldNode, 'input');
+			for(var i = 0 ; i < inputNodes.length; i++) {
+				if(inputNodes[i] == srcEle){
+					selectNode.options[i].value = srcEle.value;
+					selectNode.options[i].innerHTML = srcEle.value;
+				}
+			}
+			break;
+		case "textarea" :	
+			var textarea = DOMUtil.findFirstDescendantByClass(componentNode, 'textarea', 'Textarea');
+			textarea.value = srcEle.value;
+			break
+		case "WYSIWYG" :
+			var rte = DOMUtil.findFirstDescendantByClass(componentNode, 'textarea', 'Textarea');
+			rte.value = srcEle.value;
+			break;
+		case "upload" : 
+			break;
 	}
 };
 
-UIFormGeneratorPortlet.prototype.updateGuide = function(obj) {
-	
+UIFormGeneratorPortlet.prototype.updateGuide = function(objGuide) {
+	var DOMUtil = eXo.core.DOMUtil;
+	var root = DOMUtil.findAncestorByClass(objGuide, 'BoxContentBoxStyle');
+	var componentNode = DOMUtil.findFirstDescendantByClass(root, 'div', 'TopContentBoxStyle');
+	var fieldLabel = DOMUtil.findFirstDescendantByClass(componentNode, 'td', 'FieldLabel');
+	fieldLabel.setAttribute("desc", objGuide.value);
 };
 
 UIFormGeneratorPortlet.prototype.addOption = function(obj) {
@@ -317,7 +349,7 @@ UIFormGeneratorPortlet.prototype.addOption = function(obj) {
 };
 
 UIFormGeneratorPortlet.prototype.removeOption = function(obj) {
-	var DOMUtil = eXo.core.DOMUtil;	
+	var DOMUtil = eXo.core.DOMUtil;
 	var parentNode = DOMUtil.findAncestorByTagName(obj, 'tr');
 	var componentNode = DOMUtil.findFirstDescendantByClass(parentNode, 'td', 'FieldComponent');
 	var inputNodes = DOMUtil.getChildrenByTagName(componentNode, 'input');
@@ -334,6 +366,81 @@ UIFormGeneratorPortlet.prototype.removeOption = function(obj) {
 			selectNode.remove(i);
 		}
 	}
+};
+
+UIFormGeneratorPortlet.prototype.getStringJsonObject = function() {
+	var DOMUtil = eXo.core.DOMUtil;
+	var root = document.getElementById('MiddleCenterViewBoxStyle');
+	var boxsContent = DOMUtil.findDescendantsByClass(root, 'div', 'BoxContentBoxStyle');
+	var strJsonObject = '{';	
+	for(var i = 0; i < boxsContent.length; i++) {
+		strJsonObject += eXo.ecm.UIFormGeneratorPortlet.getProperties(boxsContent[i]);
+		if(i != (boxsContent.length-1)) {
+			strJsonObject += ',';
+		}
+	}
+	alert(strJsonObject);
+};
+
+UIFormGeneratorPortlet.prototype.getProperties = function(comp) {
+	var DOMUtil = eXo.core.DOMUtil;
+	var strObject = '{';
+	strObject += '"nodeName":'	
+	strObject += '"type":"'+comp.getAttribute("typeComponent")+'",';
+	var topContent = DOMUtil.findFirstDescendantByClass(comp, 'div', 'TopContentBoxStyle');
+	var fieldLabel = DOMUtil.findFirstDescendantByClass(topContent, 'td', 'FieldLabel');
+	var defaultValue = fieldLabel.getAttribute('value'); 
+	var nameComp = '';		
+	if(fieldLabel && fieldLabel.textContent != '') {
+		nameComp = fieldLabel.textContent;
+	} else {
+		nameComp = defaultValue;
+	}
+	
+	strObject += 'name:"'+nameComp+'",';
+	switch(comp.getAttribute("typeComponent")) {
+		case "input" :
+			inputNode = DOMUtil.findFirstDescendantByClass(topContent, 'input', "InputText");
+			var width	= inputNode.offsetWidth;
+			var mandatory = fieldLabel.getAttribute('mandatory');
+			var height  = inputNode.offsetHeight;
+			strObject +=  'value:"'+inputNode.value+'",width:"'+width+'",mandatory:"'+mandatory+'",height:"'+height+'",';
+			break;
+		case "label" :
+			break;
+		case "textarea" :
+			var textareaNode = DOMUtil.findFirstDescendantByClass(topContent, 'textarea', "Textarea");
+			var width	= textareaNode.offsetWidth;
+			var mandatory = fieldLabel.getAttribute('mandatory');
+			var height  = textareaNode.offsetHeight;
+			strObject +=  'value:"'+textareaNode.value+'",width:"'+width+'",mandatory:"'+mandatory+'",height:"'+height+'",';	
+			break;
+		case "WYSIWYG" : 
+				break;
+		case "select" :
+			var selectNode = DOMUtil.findFirstDescendantByClass(topContent, 'select', "SelectBox");
+			var width	= selectNode.offsetWidth;
+			var mandatory = fieldLabel.getAttribute('mandatory');
+			var height  = selectNode.offsetHeight;
+			strObject +=  'value:"'+selectNode.value+'",width:"'+width+'",mandatory:"'+mandatory+'",height:"'+height+'",';		
+			var options = DOMUtil.getChildrenByTagName(selectNode, 'option');
+			var advOptions = '';
+			strObject += 	'advanced:"';
+			for(var i = 0; i < options.length; i++) {
+				strObject += options[i].value;
+				if(i != (options.length-1)) {
+					strObject += ",";				
+				}
+			}
+			strObject += '",';
+			break;
+		case "upload" :
+			break;
+	}
+
+	strObject += 'guildline:"'+fieldLabel.getAttribute('desc')+'"';
+	strObject += "}";
+	return strObject;
 };
 
 eXo.ecm.UIFormGeneratorPortlet = new UIFormGeneratorPortlet();

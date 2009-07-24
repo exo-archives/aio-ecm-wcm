@@ -106,6 +106,7 @@ public class NewsletterCategoryHandler {
       }
       session.save();
     } catch(Exception e) {
+    	e.printStackTrace();
       log.error("Add category " + categoryConfig.getName() + " failed because of " + e.getMessage());
     } 
   }

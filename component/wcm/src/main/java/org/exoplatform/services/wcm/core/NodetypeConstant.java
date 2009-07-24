@@ -140,11 +140,11 @@ public class NodetypeConstant {
   
   public static final String EXO_METADATA                   = "exo:metadata";
   
+  public static final String EXO_NEWSLETTER_ENTRY           = "exo:newsletterEntry";
+  
   public static final String EXO_LINKABLE                   = "exo:linkable";
   
   public static final String EXO_LINKS                      = "exo:links";
-  
-  
   
   public static final String PUBLICATION_LIVE_REVISION      = "publication:liveRevision";
   
