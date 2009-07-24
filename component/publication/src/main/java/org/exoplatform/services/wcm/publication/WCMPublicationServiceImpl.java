@@ -23,13 +23,12 @@ import javax.jcr.Node;
 
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleException;
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.picocontainer.Startable;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : Hoa Pham
@@ -38,9 +37,11 @@ import org.picocontainer.Startable;
  */
 public class WCMPublicationServiceImpl implements WCMPublicationService, Startable {
   
+  /** The publication plugins. */
   private HashMap<String, WebpagePublicationPlugin> publicationPlugins = 
     new HashMap<String, WebpagePublicationPlugin>();  
   
+  /** The publication service. */
   private PublicationService publicationService;
 
   /**
@@ -97,6 +98,9 @@ public class WCMPublicationServiceImpl implements WCMPublicationService, Startab
     publicationPlugin.publishContentToCLV(content, page, clvPortletId, portalOwnerName, remoteUser);
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.publication.WCMPublicationService#enrollNodeInLifecycle(javax.jcr.Node, java.lang.String)
+   */
   public void enrollNodeInLifecycle(Node node, String lifecycleName) throws Exception {
     publicationService.enrollNodeInLifecycle(node,lifecycleName);
   }
@@ -181,6 +185,9 @@ public class WCMPublicationServiceImpl implements WCMPublicationService, Startab
   public void stop() {   
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.publication.WCMPublicationService#isEnrolledInWCMLifecycle(javax.jcr.Node)
+   */
   public boolean isEnrolledInWCMLifecycle(Node node) throws NotInPublicationLifecycleException, Exception {
     if(!publicationService.isNodeEnrolledInLifecycle(node))
       return false;

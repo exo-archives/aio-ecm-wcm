@@ -15,6 +15,7 @@ import javax.jcr.ValueFormatException;
 import javax.jcr.lock.LockException;
 import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.nodetype.NoSuchNodeTypeException;
+import javax.jcr.nodetype.NodeType;
 import javax.jcr.version.VersionException;
 
 import org.exoplatform.portal.application.PortletPreferences;
@@ -37,7 +38,6 @@ import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndV
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationPlugin;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationUtil;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class TestWCMPublicationService.
  */
@@ -94,6 +94,56 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
         wcmPublicationService.getWebpagePublicationPlugins().get(StageAndVersionPublicationConstant.LIFECYCLE_NAME));
   }
 
+  /**
+   * Test enroll node in lifecycle.
+   * 
+   * @throws Exception the exception
+   */
+  public void testEnrollNodeInLifecycle() throws Exception{
+    Node testNode = createWebcontentNode(collaborationSession.getRootNode(), "testSCV", null, null, null); 
+    collaborationSession.save();
+    
+	  WebpagePublicationPlugin publicationPlugin = new StageAndVersionPublicationPlugin();
+    publicationPlugin.setName(StageAndVersionPublicationConstant.LIFECYCLE_NAME);
+    wcmPublicationService.addPublicationPlugin(publicationPlugin);
+
+    wcmPublicationService.enrollNodeInLifecycle(testNode, StageAndVersionPublicationConstant.LIFECYCLE_NAME);
+  	assertNotNull(testNode.getProperty("publication:history"));
+  	assertEquals("enrolled", testNode.getProperty("publication:currentState").getString());
+  	
+  	testNode.remove();
+  	collaborationSession.save();
+  }
+  
+  /**
+   * Test unsubcribe lifecycle.
+   * 
+   * @throws Exception the exception
+   */
+  public void testUnsubcribeLifecycle() throws Exception{
+    Node testNode = createWebcontentNode(collaborationSession.getRootNode(), "testSCV", null, null, null); 
+    collaborationSession.save();
+    
+	  WebpagePublicationPlugin publicationPlugin = new StageAndVersionPublicationPlugin();
+    publicationPlugin.setName(StageAndVersionPublicationConstant.LIFECYCLE_NAME);
+    wcmPublicationService.addPublicationPlugin(publicationPlugin);
+
+    wcmPublicationService.enrollNodeInLifecycle(testNode, StageAndVersionPublicationConstant.LIFECYCLE_NAME);
+    int oldMixinNum = testNode.getMixinNodeTypes().length;
+
+    assertNotNull(testNode.getProperty("publication:history"));
+  	assertEquals("enrolled", testNode.getProperty("publication:currentState").getString());
+  	assertTrue(isMixinExisted(testNode, "publication:publication"));
+  	
+  	wcmPublicationService.unsubcribeLifecycle(testNode);
+  	
+  	assertEquals(oldMixinNum, testNode.getMixinNodeTypes().length + 1);
+  	assertFalse(isMixinExisted(testNode, "publication:publication"));
+  	
+  	testNode.remove();
+  	collaborationSession.save();
+  }
+  
   /**
    * Test publish content scv.
    * 
@@ -253,11 +303,53 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
    * 
    * @throws Exception the exception
    */
-  public void testSuspendPublishedContentFromPage_01() throws Exception {
+  public void testSuspendPublishedContentFromPage() throws Exception {
   	suspendSCV();
   	suspendCLV();
   }
 
+  /**
+   * Test update lifecyle on create navigation.
+   */
+  public void testUpdateLifecyleOnCreateNavigation() {
+  	// TODO: Don't support function updateLifecyleOnCreateNavigation in this version
+  }
+
+  /**
+   * Test update lifecycle on change navigation.
+   */
+  public void testUpdateLifecycleOnChangeNavigation() {
+  	
+  }
+
+  /**
+   * Test update lifecyle on remove navigation.
+   */
+  public void testUpdateLifecyleOnRemoveNavigation() {
+  	// TODO: Don't support function updateLifecyleOnRemoveNavigation in this version
+  }
+
+  /**
+   * Test update lifecyle on create page.
+   */
+  public void testUpdateLifecyleOnCreatePage() {
+
+  }
+
+  /**
+   * Test update lifecyle on change page.
+   */
+  public void testUpdateLifecyleOnChangePage() {
+
+  }
+
+  /**
+   * Test update lifecycle on remove page.
+   */
+  public void testUpdateLifecycleOnRemovePage () {
+
+  }
+  
   /**
    * Suspend scv.
    * 
@@ -517,5 +609,26 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
       } catch (Exception e) {
 	      return 0;
       }
+  }
+  
+  /**
+   * Checks if is mixin existed.
+   * 
+   * @param node the node
+   * @param nodeTypeName the node type name
+   * 
+   * @return true, if is mixin existed
+   * 
+   * @throws Exception the exception
+   */
+  private boolean isMixinExisted(Node node, String nodeTypeName) throws Exception
+  {
+  	for (NodeType nodeType : node.getMixinNodeTypes()) {
+	    if (nodeType.isNodeType(nodeTypeName)) {
+	    	return true;
+	    }
+    }
+
+  	return false;
   }
 }
