@@ -105,7 +105,7 @@
       <Back>Back</Back>
     </action>
     <msg>
-      <require-choose>Please choose a existed web content!</require-choose>
+      <require-choose>Please choose an existing web content!</require-choose>
     </msg>
   </UIWebContentSelector>
   <UIFormInputSetWithAction>
@@ -362,7 +362,7 @@
       <Back>Back</Back>
     </action>
     <msg>
-      <require-choose>Please choose a existed DMS document!</require-choose>
+      <require-choose>Please choose an existing DMS document!</require-choose>
     </msg>
     <title>Select a document and publish to this page</title>
   </UIDMSSelectorForm>
