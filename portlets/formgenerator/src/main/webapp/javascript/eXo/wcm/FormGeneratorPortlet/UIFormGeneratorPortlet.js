@@ -108,7 +108,7 @@ UIFormGeneratorPortlet.prototype.renderComponent = function(typeComp) {
 	formGenerator  +=					"<div class='FormContainer'>";
 	formGenerator  +=						"<table class='UIFormGrid'>";
 	formGenerator  +=							"<tr>";
-	formGenerator  +=								"<td class='FieldLabel'>Component Name</td>";
+	formGenerator  +=								"<td class='FieldLabel'>Field Label</td>";
 	formGenerator  +=								"<td class='FieldComponent'>";
 	formGenerator  +=									"<input type='text' class='InputText' onkeyup='eXo.ecm.UIFormGeneratorPortlet.updateLabel(this);'/>";
 	formGenerator  +=								"</td>";
