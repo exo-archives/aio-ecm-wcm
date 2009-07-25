@@ -34,9 +34,21 @@
         <version>2.0</version>
         <configuration>                    
           <dependentWarExcludes>
-            templates/,WEB-INF/conf/mail/,WEB-INF/conf/*.xml,WEB-INF/conf/**/*.xml, WEB-INF/conf/portal/,
-            index.jsp,WEB-INF/web.xml,WEB-INF/webui-configuration.xml,WEB-INF/locale/navigation/**/*.properties,WEB-INF/locale/navigation/**/*.xml,                                           
-            WEB-INF/conf/script/groovy/SkinConfigScript.groovy,groovy/portal/webui/workspace/UIWorkingWorkspace.gtmpl,groovy/webui/form/ext/UIFormInputSetWithAction.gtmpl</dependentWarExcludes>                       
+            index.jsp,
+            templates/,
+            WEB-INF/conf/mail/,
+            WEB-INF/conf/*.xml,
+            WEB-INF/conf/**/*.xml, 
+            WEB-INF/conf/portal/,
+            WEB-INF/conf/script/groovy/SkinConfigScript.groovy,
+            WEB-INF/locale/navigation/**/*.properties,
+            WEB-INF/locale/navigation/**/*.xml,
+            WEB-INF/web.xml,
+            WEB-INF/webui-configuration.xml,
+            groovy/portal/webui/workspace/UIWorkingWorkspace.gtmpl,
+            groovy/webui/form/ext/UIFormInputSetWithAction.gtmpl,
+            groovy/webui/form/UIFormUploadInput.gtmpl
+          </dependentWarExcludes>                       
         </configuration>
        </plugin>
     </plugins>
