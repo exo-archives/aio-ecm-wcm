@@ -26,8 +26,6 @@ import java.util.List;
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
-import javax.jcr.Property;
-import javax.jcr.PropertyIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.portlet.PortletMode;
@@ -112,7 +110,7 @@ public class UIContentViewerContainer extends UIContainer {
 		UIPortal uiPortal = Util.getUIPortal();
 		String portalURI = portalRequestContext.getPortalURI();
 		String requestURI = requestWrapper.getRequestURI();
-		String pageNodeSelected = uiPortal.getSelectedNode().getName();
+		String pageNodeSelected = uiPortal.getSelectedNode().getUri();
 		String parameters = null;
 		Object object = requestWrapper.getAttribute("ParameterizedContentViewerPortlet.data.object");
 
