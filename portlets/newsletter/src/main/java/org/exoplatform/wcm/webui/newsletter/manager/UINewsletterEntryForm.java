@@ -72,7 +72,6 @@ import org.exoplatform.webui.form.UIFormSelectBox;
 @ComponentConfig (
     lifecycle = UIFormLifecycle.class,
     events = {
-      @EventConfig (listeners = UINewsletterEntryForm.PreviewActionListener.class),
       @EventConfig (listeners = UINewsletterEntryForm.SaveActionListener.class),
       @EventConfig (listeners = UINewsletterEntryForm.SendActionListener.class),
       @EventConfig (listeners = UINewsletterEntryForm.CancelActionListener.class, phase = Phase.DECODE)
@@ -160,11 +159,6 @@ public class UINewsletterEntryForm extends UIDialogForm {
     return newsletterNode;
   }
   
-  public static class PreviewActionListener extends EventListener<UINewsletterEntryForm> {
-    public void execute(Event<UINewsletterEntryForm> event) throws Exception {
-    }
-  }
-
   public static class SaveActionListener extends EventListener<UINewsletterEntryForm> {
     public void execute(Event<UINewsletterEntryForm> event) throws Exception {
       UINewsletterEntryForm newsletterEntryForm = event.getSource();
