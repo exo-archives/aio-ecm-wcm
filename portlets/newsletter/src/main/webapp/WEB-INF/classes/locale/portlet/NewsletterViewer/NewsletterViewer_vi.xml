@@ -3,8 +3,8 @@
   <UINewsletterViewerForm>
     <msg>
       <updateSuccess>Thư báo của bạn đã được thay đổi.</updateSuccess>
-      <subcribed>Bạn đã đăng ký nhận thư báo!!!</subcribed>
-      <email-not-empty>Email không được để trống!!!</email-not-empty>
+      <subcribed>Bạn đã đăng ký nhận thư báo</subcribed>
+      <email-not-empty>Email không được để trống</email-not-empty>
     </msg>
   </UINewsletterViewerForm>
   <UINewsletterViewerForm>
