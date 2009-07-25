@@ -37,7 +37,6 @@ import org.exoplatform.services.wcm.core.WebSchemaConfigService;
 import org.exoplatform.services.wcm.core.WebSchemaHandler;
 import org.picocontainer.Startable;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS.
  * 

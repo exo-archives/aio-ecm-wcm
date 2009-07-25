@@ -37,8 +37,7 @@ import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
 import org.exoplatform.wcm.connector.BaseConnector;
 
-// TODO: Auto-generated Javadoc
-/*
+/**
  * Created by The eXo Platform SAS 
  * Author : Anh Do Ngoc 
  * anh.do@exoplatform.com

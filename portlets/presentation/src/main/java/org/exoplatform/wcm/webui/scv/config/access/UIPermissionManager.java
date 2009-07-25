@@ -22,8 +22,7 @@ import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 
-// TODO: Auto-generated Javadoc
-/*
+/**
  * Created by The eXo Platform SAS
  * Author : Anh Do Ngoc
  *          anh.do@exoplatform.com

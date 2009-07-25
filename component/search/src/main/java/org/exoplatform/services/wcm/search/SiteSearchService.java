@@ -18,7 +18,6 @@ package org.exoplatform.services.wcm.search;
 
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : Hoa Pham

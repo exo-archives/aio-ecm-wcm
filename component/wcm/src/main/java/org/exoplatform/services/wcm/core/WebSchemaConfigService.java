@@ -23,7 +23,6 @@ import javax.jcr.Node;
 import org.exoplatform.container.component.ComponentPlugin;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS.
  * 
