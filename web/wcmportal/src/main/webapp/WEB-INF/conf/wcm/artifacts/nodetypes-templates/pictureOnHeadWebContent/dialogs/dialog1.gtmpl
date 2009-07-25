@@ -25,7 +25,9 @@
 			uicomponent.addCalendarField("illustrationHiddenField5", illustrationHiddenField5);			
    		String[] fieldImage = ["jcrPath=/node/medias/images/illustration/jcr:content/jcr:data"] ;
       uicomponent.addUploadField("illustration", fieldImage) ;	
-	}		
+	}
+	
+	Node webContentNode = uicomponent.getNode();		
 %>
 <style>
 	.UIForm .HorizontalLayout .textarea { 
@@ -127,13 +129,12 @@
 					      <td class="FieldComponent">
 						      <%
 						        if(uicomponent.isEditing()) { 
-											def curNode = uicomponent.getNode() ;
-											if (curNode.hasProperty("exo:image")) {
-												if(curNode.getProperty("exo:image").getStream().available() > 0) {
+											if (webContentNode.hasProperty("exo:image")) {
+												if(webContentNode.getProperty("exo:image").getStream().available() > 0) {
 													DownloadService dservice = uicomponent.getApplicationComponent(DownloadService.class);
-											    InputStream input = curNode.getProperty("exo:image").getStream();
+											    InputStream input = webContentNode.getProperty("exo:image").getStream();
 											    InputStreamDownloadResource dresource = new InputStreamDownloadResource(input, "image");
-											    dresource.setDownloadName(curNode.getName());
+											    dresource.setDownloadName(webContentNode.getName());
 											    
 											    def imgSrc = dservice.getDownloadLink(dservice.addDownloadResource(dresource));
 													def actionLink = uicomponent.event("RemoveData", "exo:image");
@@ -199,7 +200,6 @@
 									uicomponent.addHiddenField("htmlHiddenField6", htmlHiddenField6);
 									String htmlContent = null;
 									if(uicomponent.isEditing()) {
-										Node webContentNode = uicomponent.getNode();
 										if(webContentNode.hasNode("default.html")) {
 											Node htmlNode = webContentNode.getNode("default.html");
 											htmlContent = htmlNode.getNode("jcr:content").getProperty("jcr:data").getValue().getString();
@@ -224,30 +224,27 @@
 						<tr>
 								<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.illustrationImage")%></td>
 								<td class="FieldComponent">
-								<%
-									if(uicomponent.isEditing()) { 
-										def curNode = uicomponent.getNode() ;
-										if(curNode.hasNode("medias/images/illustration")) {
-											def imageNode = curNode.getNode("medias/images/illustration") ;
+									<%						
+										if(webContentNode != null && webContentNode.hasNode("medias/images/illustration")) {
+											def imageNode = webContentNode.getNode("medias/images/illustration") ;
 											def resourceNode = imageNode.getNode("jcr:content");
 											if(resourceNode.getProperty("jcr:data").getStream().available() > 0) {
-											def imgSrc = uicomponent.getImage(imageNode, "jcr:content");
-											def actionLink = uicomponent.event("RemoveData", "/medias/images/illustration/jcr:content");
-										%>		
-										<div>
-											<image src="$imgSrc" width="100px" height="80px"/>
-											<a href="$actionLink">
-												<img src="/eXoResources/skin/DefaultSkin/background/Blank.gif" class="ActionIcon Remove16x16Icon"/>
-											</a>
-										</div>
-										<%
+												def imgSrc = uicomponent.getImage(imageNode, "jcr:content");
+												def actionLink = uicomponent.event("RemoveData", "/medias/images/illustration/jcr:content");
+												%>		
+													<div>
+														<image src="$imgSrc" width="100px" height="80px"/>
+														<a href="$actionLink">
+															<img src="/eXoResources/skin/DefaultSkin/background/Blank.gif" class="ActionIcon Remove16x16Icon"/>
+														</a>
+													</div>
+												<%
 											} else {
-													setUploadFields();
-												}
+												setUploadFields();
 											}
 										} else {
 											setUploadFields();
-										}																											 						
+										}
 									%>
 								</td>
 							</tr>
@@ -266,7 +263,6 @@
 								<%
 									String summaryContent = "";
 									if(uicomponent.isEditing()) {
-										Node webContentNode = uicomponent.getNode();
 										if (webContentNode.hasProperty("exo:summary")) 
 											summaryContent = webContentNode.getProperty("exo:summary").getValue().getString();
 									}
@@ -300,7 +296,6 @@
 									uicomponent.addHiddenField("cssHiddenField6", cssHiddenField6) ;
 									String cssContent = "";
 									if(uicomponent.isEditing()) {
-										Node webContentNode = uicomponent.getNode();
 										if(webContentNode.hasNode("css/default.css")) {
 											Node cssNode = webContentNode.getNode("css/default.css");
 											cssContent = cssNode.getNode("jcr:content").getProperty("jcr:data").getValue().getString();
@@ -334,7 +329,6 @@
 									uicomponent.addHiddenField("jsHiddenField6", jsHiddenField6);
 									String jsContent = "";
 									if(uicomponent.isEditing()) {
-										Node webContentNode = uicomponent.getNode();
 										if(webContentNode.hasNode("js/default.js")) {
 											Node jsNode = webContentNode.getNode("js/default.js");
 											jsContent = jsNode.getNode("jcr:content").getProperty("jcr:data").getValue().getString();

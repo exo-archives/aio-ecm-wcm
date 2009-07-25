@@ -286,12 +286,6 @@
                               <field name="roles"><string>webdesigner:/platform/web-contributors</string></field>                
                             </object>                      
                           </value>                      
-                          <value>                    
-                            <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">             
-                              <field name="templateFile"><string>/webContent/dialogs/dialog2.gtmpl</string></field>
-                              <field name="roles"><string>redactor:/platform/web-contributors</string></field>                
-                            </object>                      
-                          </value>                      
                         </collection>
                       </field>                                    
                     </object>
