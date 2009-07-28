@@ -448,7 +448,7 @@
 		</preference>
 		<preference>
 			<name>targetPage</name>
-			<value>categories</value>
+			<value>parameterizedviewer</value>
 			<read-only>false</read-only>
 		</preference>
 		<preference>
