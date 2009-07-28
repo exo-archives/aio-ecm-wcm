@@ -272,4 +272,12 @@
 			<child-not-found>No page found</child-not-found>
 		</msg>
 	</UIPageSelectorPanel>
+	
+	
+	<ECMNameValidator>
+    <msg>
+      <Invalid-char>There are some invalid characters in field '{0}'. Type another value, please!</Invalid-char>
+      <empty-input>The value of field '{0}' is null or empty!</empty-input>
+    </msg>
+  </ECMNameValidator>
 </bundle>

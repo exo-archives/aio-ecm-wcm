@@ -78,17 +78,6 @@
   </DateTimeValidator>
   <!--
   ###################################################################################
-  # org.exoplatform.ecm.jcr.ECMNameValidator																			  #
-  ###################################################################################
-  -->
-  <ECMNameValidator>
-    <msg>
-      <Invalid-char>Có một vài ký tự không hợp lệ trong trường '{0}'. Xin hãy nhập giá trị khác!</Invalid-char>
-      <empty-input>Giá trị của trường '{0}' là trống rỗng!</empty-input>
-    </msg>
-  </ECMNameValidator>
-  <!--
-  ###################################################################################
   # JCR Browser																			  #
   ###################################################################################
   -->

@@ -226,5 +226,14 @@
 		<tooltip>
 			<homepage>Trang chủ</homepage>
 		</tooltip>
-	</UIExoStart>  
+	</UIExoStart>
+	
+	
+	
+	<ECMNameValidator>
+    <msg>
+      <Invalid-char>Có một vài kí tự không hợp lệ trong trường'{0}'. Hãy chọn giá trị khác!</Invalid-char>
+      <empty-input>Giá trị của trường '{0}' là rỗng!</empty-input>
+    </msg>
+  </ECMNameValidator>  
 </bundle>
