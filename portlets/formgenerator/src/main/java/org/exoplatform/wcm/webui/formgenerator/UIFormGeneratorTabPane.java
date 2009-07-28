@@ -183,6 +183,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
         inputField = "TextField";
       }
       if (validate.endsWith(",")) validate = validate.substring(0, validate.length() - 1);
+      if (validate.endsWith("=")) validate = "";
       String propertyName = getPropertyName(inputName);
       dialogTemplate.append("      <tr>");
       dialogTemplate.append("        <td class=\"FieldLabel\"><%=_ctx.appRes(\"FormGenerator.dialog.label." + inputName + "\")%></td>");
