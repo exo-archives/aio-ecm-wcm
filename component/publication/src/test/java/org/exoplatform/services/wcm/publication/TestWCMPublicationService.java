@@ -8,9 +8,12 @@ import javax.jcr.InvalidItemStateException;
 import javax.jcr.ItemExistsException;
 import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
+import javax.jcr.Property;
+import javax.jcr.PropertyIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.UnsupportedRepositoryOperationException;
+import javax.jcr.Value;
 import javax.jcr.ValueFormatException;
 import javax.jcr.lock.LockException;
 import javax.jcr.nodetype.ConstraintViolationException;
@@ -27,12 +30,14 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.webui.navigation.PageNavigationUtils;
 import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleException;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
 import org.exoplatform.services.wcm.BaseWCMTestCase;
+import org.exoplatform.services.wcm.core.NodetypeUtils;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationPlugin;
@@ -317,9 +322,71 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
 
   /**
    * Test update lifecycle on change navigation.
+   * 
+   * @throws Exception the exception
    */
-  public void testUpdateLifecycleOnChangeNavigation() {
+  public void testUpdateLifecycleOnChangeNavigation() throws Exception{
+    Node testNode = ((Node)collaborationSession.getItem("/sites content/live")).addNode("testSCV", "exo:webContent"); 
+    collaborationSession.save();
+
+    PageNavigation pageNavigation = createPageNavigation();
+    
+    // Create PageNode for test
+  	PageNode pageNode1 = new PageNode();
+  	pageNode1.setPageReference("portal::classic::testpage1");
+  	pageNode1.setName("testpage1");
+  	pageNode1.setUri("testpage1");
   	
+  	PageNode pageNode2 = new PageNode();
+  	pageNode2.setPageReference("portal::classic::testpage2");
+  	pageNode2.setName("testpage2");
+  	pageNode2.setUri("testpage2");
+  	
+  	// Create Page for test
+    Page page = createPage();
+    
+	  Page page1 = new Page();
+	  page1.setPageId("portal::classic::testpage1");
+	  page1.setName("testpage1");
+	  page1.setOwnerType("portal");
+	  page1.setOwnerId("classic");
+    userPortalConfigService.create(page1);
+
+    Page page2 = new Page();
+	  page2.setPageId("portal::classic::testpage2");
+	  page2.setName("testpage2");
+	  page2.setOwnerType("portal");
+	  page2.setOwnerId("classic");
+    userPortalConfigService.create(page2);
+    
+    // Add Page to Navigation
+    pageNavigation.addNode(pageNode1);
+    userPortalConfigService.update(pageNavigation);
+
+    prepareNodeStatus(testNode);
+    
+    wcmPublicationService.publishContentSCV(testNode, page, "classic");
+    wcmPublicationService.publishContentSCV(testNode, page1, "classic");
+    wcmPublicationService.publishContentSCV(testNode, page2, "classic");
+    
+    assertEquals("enrolled", testNode.getProperty("publication:currentState").getString());
+    assertEquals("testSCV", testNode.getProperty("exo:title").getString());
+    assertTrue(checkContentIdentifier(page, testNode.getUUID(), "SCVPortlet"));
+    assertTrue(hasNodeGotCorrectProperties(testNode, "testpage1", "testpage"));
+    
+  	pageNavigation.getNodes().remove(14);
+  	pageNavigation.setNodes(pageNavigation.getNodes());
+  	userPortalConfigService.update(pageNavigation);
+  	
+  	pageNavigation.addNode(pageNode2);
+  	userPortalConfigService.update(pageNavigation);
+  	
+  	assertTrue(hasNodeGotCorrectProperties(testNode, "testpage2", "testpage"));
+  	
+    userPortalConfigService.remove(page);
+    userPortalConfigService.remove(page2);
+    testNode.remove();
+    collaborationSession.save();
   }
 
   /**
@@ -488,6 +555,10 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
   			}
   		}
   	}
+  	
+  	userPortalConfigService.remove(page);
+    testNode.remove();
+    collaborationSession.save();
   }
 
 	/**
@@ -630,5 +701,44 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
     }
 
   	return false;
+  }
+
+	/**
+	 * Checks for node got correct properties.
+	 * 
+	 * @param testNode the test node
+	 * @param names the names
+	 * 
+	 * @return true, if successful
+	 * 
+	 * @throws RepositoryException the repository exception
+	 * @throws ValueFormatException the value format exception
+	 */
+	private boolean hasNodeGotCorrectProperties(Node testNode, String... names) throws RepositoryException, ValueFormatException {
+	  ArrayList<String> al = new ArrayList<String>();
+    al.add("publication:applicationIDs");
+    al.add("publication:navigationNodeURIs");
+    al.add("publication:webPageIDs");
+
+    PropertyIterator iter = testNode.getProperties();
+    while (iter.hasNext()) {
+    	Property property = (Property)iter.next();
+    	if (al.contains(property.getName())){
+    		for (String name : names) {
+    			for (int i = 0; i < property.getValues().length; i++) {
+    				if (property.getValues()[i].getString().indexOf(name) < 0 && i < property.getValues().length -1) {
+    					continue;
+    				} else if (property.getValues()[i].getString().indexOf(name) >= 0){
+    					break;
+    				} else {
+    					return false;
+    				}
+    			}
+    		}
+    		return true;
+    	}
+    }
+    
+    return false;
   }
 }

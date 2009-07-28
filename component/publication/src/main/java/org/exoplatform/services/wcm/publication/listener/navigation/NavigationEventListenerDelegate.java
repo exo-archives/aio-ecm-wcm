@@ -85,7 +85,7 @@ public class NavigationEventListenerDelegate {
    */
   public void updateLifecycleOnChangeNavigation(PageNavigation pageNavigation, String remoteUser) throws Exception {
     if (pageNavigation.getOwnerType().equals(PortalConfig.PORTAL_TYPE)) {
-      updateRemovedPageNode(pageNavigation);
+      updateRemovedPageNode(pageNavigation, remoteUser);
       updateAddedPageNode(pageNavigation, remoteUser);
     }
   }
@@ -132,10 +132,11 @@ public class NavigationEventListenerDelegate {
    * Update removed page node.
    * 
    * @param pageNavigation the page navigation
+   * @param remoteUser TODO
    * 
    * @throws Exception the exception
    */
-  private void updateRemovedPageNode(PageNavigation pageNavigation) throws Exception {
+  private void updateRemovedPageNode(PageNavigation pageNavigation, String remoteUser) throws Exception {
     String portalName = pageNavigation.getOwnerId();
     List<PageNode> listPortalPageNode = pageNavigation.getNodes();
     List<String> listPortalNavigationUri = new ArrayList<String>();
@@ -158,7 +159,7 @@ public class NavigationEventListenerDelegate {
     Session session = sessionProvider.getSession(workspaceName, repositoryService.getRepository(repositoryName));
 
     QueryManager queryManager = session.getWorkspace().getQueryManager();
-    Query query = queryManager.createQuery("select * from publication:wcmPublication where publication:lifecycleName='" + lifecycleName + "' and jcr:path like '" + path + "/%' order by jcr:score", Query.SQL);
+    Query query = queryManager.createQuery("select * from publication:webpagesPublication where publication:lifecycleName='" + lifecycleName + "' and jcr:path like '" + path + "/%' order by jcr:score", Query.SQL);
     QueryResult results = query.execute();
     for (NodeIterator nodeIterator = results.getNodes(); nodeIterator.hasNext();) {
       Node content = nodeIterator.nextNode();
@@ -179,7 +180,7 @@ public class NavigationEventListenerDelegate {
       if (!pageId.equals("")) {
         String applicationId = "";
         UserPortalConfigService userPortalConfigService = StageAndVersionPublicationUtil.getServices(UserPortalConfigService.class);
-        Page page = userPortalConfigService.getPage(pageId, org.exoplatform.portal.webui.util.Util.getPortalRequestContext().getRemoteUser());
+        Page page = userPortalConfigService.getPage(pageId, remoteUser);
         for (String applicationIdTmp : StageAndVersionPublicationUtil.getListApplicationIdByPage(page, wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.SCV_PORTLET))) {
           applicationIdTmp = StageAndVersionPublicationUtil.setMixedApplicationId(pageId, applicationIdTmp);
           List<String> listExistedApplicationId = StageAndVersionPublicationUtil.getValuesAsString(content, "publication:applicationIDs");
