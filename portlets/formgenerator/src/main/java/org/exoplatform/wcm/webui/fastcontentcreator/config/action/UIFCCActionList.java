@@ -112,7 +112,7 @@ public class UIFCCActionList extends UIContainer {
       UIPopupWindow popupWindow = popupContainer.getChildById(UIFCCConstant.ACTION_POPUP_WINDOW);
       if (popupWindow == null) {
         UIFCCActionContainer fastContentCreatorActionContainer = popupContainer.createUIComponent(UIFCCActionContainer.class, null, null);
-        Utils.createPopupWindow(popupContainer, fastContentCreatorActionContainer, event.getRequestContext(), UIFCCConstant.ACTION_POPUP_WINDOW, 400, 350);
+        Utils.createPopupWindow(popupContainer, fastContentCreatorActionContainer, event.getRequestContext(), UIFCCConstant.ACTION_POPUP_WINDOW, 500, 380);
         fastContentCreatorActionContainer.getChild(UIFCCActionTypeForm.class).update();
       } else { 
         popupWindow.setShow(true);
@@ -127,7 +127,7 @@ public class UIFCCActionList extends UIContainer {
       UIPopupWindow popupWindow = popupContainer.getChildById(UIFCCConstant.ACTION_POPUP_WINDOW);
       if (popupWindow == null) {
         UIFCCActionContainer fastContentCreatorActionContainer = popupContainer.createUIComponent(UIFCCActionContainer.class, null, null);
-        Utils.createPopupWindow(popupContainer, fastContentCreatorActionContainer, event.getRequestContext(), UIFCCConstant.ACTION_POPUP_WINDOW, 400, 350);
+        Utils.createPopupWindow(popupContainer, fastContentCreatorActionContainer, event.getRequestContext(), UIFCCConstant.ACTION_POPUP_WINDOW, 500, 380);
         UIFCCActionTypeForm fastContentCreatorActionTypeForm = fastContentCreatorActionContainer.getChild(UIFCCActionTypeForm.class);
         fastContentCreatorActionTypeForm.update();
         fastContentCreatorActionTypeForm.init();
