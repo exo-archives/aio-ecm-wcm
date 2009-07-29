@@ -395,7 +395,7 @@
 			</preference>
 			<preference>
 				<name>workspace</name>
-				<value></value>
+				<value>collaboration</value>
 				<read-only>false</read-only>
 			</preference>
 			<preference>

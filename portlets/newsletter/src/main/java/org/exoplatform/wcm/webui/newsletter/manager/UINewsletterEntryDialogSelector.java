@@ -37,8 +37,6 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
-import org.exoplatform.webui.core.UIPopupContainer;
-import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -146,14 +144,8 @@ public class UINewsletterEntryDialogSelector extends UIForm {
   public static class OpenWebcontentSelectorFormActionListener extends EventListener<UINewsletterEntryDialogSelector> {
     public void execute(Event<UINewsletterEntryDialogSelector> event) throws Exception {
       UINewsletterEntryDialogSelector newsletterEntryDialogSelector = event.getSource();
-      UIPopupContainer popupContainer = newsletterEntryDialogSelector.getAncestorOfType(UIPopupContainer.class);
-      UIPopupWindow popupWindow = popupContainer.getChildById(UINewsletterConstant.WEBCONTENT_SELECTOR_FORM_POPUP_WINDOW);
-      if (popupWindow == null) {
-        UINewsletterEntryWebcontentSelectorForm newsletterEntryWebcontentSelector = newsletterEntryDialogSelector.createUIComponent(UINewsletterEntryWebcontentSelectorForm.class, null, null);
-        Utils.createPopupWindow(popupContainer, newsletterEntryWebcontentSelector, event.getRequestContext(), UINewsletterConstant.WEBCONTENT_SELECTOR_FORM_POPUP_WINDOW, 300, 120);
-      } else { 
-        popupWindow.setShow(true);
-      }
+      UINewsletterEntryWebcontentSelectorForm newsletterEntryWebcontentSelector = newsletterEntryDialogSelector.createUIComponent(UINewsletterEntryWebcontentSelectorForm.class, null, null);
+      Utils.createPopupWindow(newsletterEntryDialogSelector, newsletterEntryWebcontentSelector, UINewsletterConstant.WEBCONTENT_SELECTOR_FORM_POPUP_WINDOW, 300, 120);
     }
   }
   

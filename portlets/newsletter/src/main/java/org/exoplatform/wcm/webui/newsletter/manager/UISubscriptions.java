@@ -34,8 +34,6 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
-import org.exoplatform.webui.core.UIPopupContainer;
-import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -156,15 +154,9 @@ public class UISubscriptions extends UIForm {
   static  public class EditCategoryActionListener extends EventListener<UISubscriptions> {
     public void execute(Event<UISubscriptions> event) throws Exception {
       UISubscriptions subsriptions = event.getSource();
-      UIPopupContainer popupContainer = subsriptions.getAncestorOfType(UINewsletterManagerPortlet.class).getChild(UIPopupContainer.class);
-      UIPopupWindow popupWindow = popupContainer.getChildById(UINewsletterConstant.CATEGORY_FORM_POPUP_WINDOW);
-      if (popupWindow == null) {
-        UICategoryForm categoryForm = popupContainer.createUIComponent(UICategoryForm.class, null, null);
-        categoryForm.setCategoryInfo(subsriptions.categoryConfig);
-        Utils.createPopupWindow(popupContainer, categoryForm, event.getRequestContext(), UINewsletterConstant.CATEGORY_FORM_POPUP_WINDOW, 450, 298);
-      } else { 
-        popupWindow.setShow(true);
-      }
+      UICategoryForm categoryForm = subsriptions.createUIComponent(UICategoryForm.class, null, null);
+      categoryForm.setCategoryInfo(subsriptions.categoryConfig);
+      Utils.createPopupWindow(subsriptions, categoryForm, UINewsletterConstant.CATEGORY_FORM_POPUP_WINDOW, 450, 298);
     }
   }
 
@@ -190,18 +182,11 @@ public class UISubscriptions extends UIForm {
   static  public class AddSubcriptionActionListener extends EventListener<UISubscriptions> {
     public void execute(Event<UISubscriptions> event) throws Exception {
       UISubscriptions subsriptions = event.getSource();
-      UIPopupContainer popupContainer = subsriptions.getAncestorOfType(UINewsletterManagerPortlet.class).getChild(UIPopupContainer.class);
-      UIPopupWindow popupWindow = popupContainer.getChildById(UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW);
-      if (popupWindow == null) {
-        UISubcriptionForm subcriptionForm = popupContainer.createUIComponent(UISubcriptionForm.class, null, null);
-        UIFormSelectBox selectedCategoryName = subcriptionForm.getChildById("CategoryName");
-        selectedCategoryName.setValue(subsriptions.categoryConfig.getName());
-        selectedCategoryName.setDisabled(true);
-
-        Utils.createPopupWindow(popupContainer, subcriptionForm, event.getRequestContext(), UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW, 450, 300);
-      } else { 
-        popupWindow.setShow(true);
-      }
+      UISubcriptionForm subcriptionForm = subsriptions.createUIComponent(UISubcriptionForm.class, null, null);
+      UIFormSelectBox selectedCategoryName = subcriptionForm.getChildById("CategoryName");
+      selectedCategoryName.setValue(subsriptions.categoryConfig.getName());
+      selectedCategoryName.setDisabled(true);
+      Utils.createPopupWindow(subsriptions, subcriptionForm, UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW, 450, 300);
     }
   }
 
@@ -215,18 +200,12 @@ public class UISubscriptions extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       }
-      UIPopupContainer popupContainer = subsriptions.getAncestorOfType(UINewsletterManagerPortlet.class).getChild(UIPopupContainer.class);
-      UIPopupWindow popupWindow = popupContainer.getChildById(UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW);
-      if (popupWindow == null) {
-        UISubcriptionForm subcriptionForm = popupContainer.createUIComponent(UISubcriptionForm.class, null, null);
-        ThreadLocalSessionProviderService threadLocalSessionProviderService = subcriptionForm.getApplicationComponent(ThreadLocalSessionProviderService.class);
-        SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
-        NewsletterSubscriptionConfig subscriptionConfig = subsriptions.subscriptionHandler.getSubscriptionsByName(NewsLetterUtil.getPortalName(), subsriptions.categoryConfig.getName(), subId, sessionProvider);
-        subcriptionForm.setSubscriptionInfor(subscriptionConfig);
-        Utils.createPopupWindow(popupContainer, subcriptionForm, event.getRequestContext(), UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW, 450, 280);
-      } else { 
-        popupWindow.setShow(true);
-      }
+      UISubcriptionForm subcriptionForm = subsriptions.createUIComponent(UISubcriptionForm.class, null, null);
+      ThreadLocalSessionProviderService threadLocalSessionProviderService = subcriptionForm.getApplicationComponent(ThreadLocalSessionProviderService.class);
+      SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
+      NewsletterSubscriptionConfig subscriptionConfig = subsriptions.subscriptionHandler.getSubscriptionsByName(NewsLetterUtil.getPortalName(), subsriptions.categoryConfig.getName(), subId, sessionProvider);
+      subcriptionForm.setSubscriptionInfor(subscriptionConfig);
+      Utils.createPopupWindow(subsriptions, subcriptionForm, UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW, 450, 280);
     }
   }
 
@@ -323,38 +302,22 @@ public class UISubscriptions extends UIForm {
   static  public class ManagerUsersActionListener extends EventListener<UISubscriptions> {
     public void execute(Event<UISubscriptions> event) throws Exception {
       UISubscriptions uiSubscription = event.getSource();
-      UIPopupContainer popupContainer = uiSubscription.getAncestorOfType(UINewsletterManagerPortlet.class).getChild(UIPopupContainer.class);
-      UIPopupWindow popupWindow = popupContainer.getChildById(UINewsletterConstant.MANAGER_USERS_POPUP_WINDOW);
-      if (popupWindow == null) {
-        UIManagerUsers managerUsers = popupContainer.createUIComponent(UIManagerUsers.class, null, null);
-        managerUsers.setInfor(uiSubscription.categoryConfig.getName(), null);
-        Utils.createPopupWindow(popupContainer, managerUsers, event.getRequestContext(), 
-                                UINewsletterConstant.MANAGER_USERS_POPUP_WINDOW, 550, 350);
-      } else { 
-        popupWindow.setShow(true);
-      }
-      event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
+      UIManagerUsers managerUsers = uiSubscription.createUIComponent(UIManagerUsers.class, null, null);
+      managerUsers.setInfor(uiSubscription.categoryConfig.getName(), null);
+      Utils.createPopupWindow(uiSubscription, managerUsers, UINewsletterConstant.MANAGER_USERS_POPUP_WINDOW, 550, 350);
     }
   }
   
   public static class AddEntryActionListener extends EventListener<UISubscriptions> {
     public void execute(Event<UISubscriptions> event) throws Exception {
       UISubscriptions uiSubscriptions = event.getSource();
-      UIPopupContainer popupContainer = uiSubscriptions.getAncestorOfType(UINewsletterManagerPortlet.class).getChild(UIPopupContainer.class);
-      UIPopupWindow popupWindow = popupContainer.getChildById(UINewsletterConstant.ENTRY_FORM_POPUP_WINDOW);
-      UINewsletterEntryContainer entryContainer ;
-      if (popupWindow == null) {
-        entryContainer = popupContainer.createUIComponent(UINewsletterEntryContainer.class, null, null);
-        Utils.createPopupWindow(popupContainer, entryContainer, event.getRequestContext(), UINewsletterConstant.ENTRY_FORM_POPUP_WINDOW, 800, 600);
-      } else { 
-        entryContainer = popupContainer.getChild(UINewsletterEntryContainer.class);
-        popupWindow.setShow(true);
-      }
+      UINewsletterEntryContainer entryContainer = uiSubscriptions.createUIComponent(UINewsletterEntryContainer.class, null, null);
       entryContainer.setCategoryConfig(uiSubscriptions.categoryConfig);
       UINewsletterEntryDialogSelector newsletterEntryDialogSelector = entryContainer.getChild(UINewsletterEntryDialogSelector.class);
       UIFormSelectBox categorySelectBox = newsletterEntryDialogSelector.getChildById(UINewsletterConstant.ENTRY_CATEGORY_SELECTBOX);
       categorySelectBox.setValue(uiSubscriptions.categoryConfig.getName());
       categorySelectBox.setDisabled(true);
+      Utils.createPopupWindow(uiSubscriptions, entryContainer, UINewsletterConstant.ENTRY_FORM_POPUP_WINDOW, 800, 600);
     }
   }
 }

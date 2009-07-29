@@ -37,12 +37,11 @@ import org.exoplatform.ecm.webui.utils.LockUtil;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.CmsService;
+import org.exoplatform.services.cms.JcrInputProperty;
 import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
-import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -50,8 +49,7 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
-import org.exoplatform.webui.core.UIPopupContainer;
+import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -109,11 +107,7 @@ public class UIDocumentDialogForm extends UIDialogForm {
     try {
       return templateService.getTemplatePathByUser(true, contentType, userName, repositoryName);
     } catch (Exception e) {
-      UIApplication uiApp = getAncestorOfType(UIApplication.class);
-      Object[] arg = { contentType };
-      uiApp.addMessage(new ApplicationMessage("UIDocumentForm.msg.not-support",
-                                              arg,
-                                              ApplicationMessage.ERROR));
+      Utils.createPopupMessage(this, "UIDocumentForm.msg.not-support", new Object[] {contentType}, ApplicationMessage.ERROR);
       return null;
     }
   }
@@ -121,7 +115,6 @@ public class UIDocumentDialogForm extends UIDialogForm {
   /* (non-Javadoc)
    * @see org.exoplatform.webui.core.UIComponent#getTemplateResourceResolver(org.exoplatform.webui.application.WebuiRequestContext, java.lang.String)
    */
-  @SuppressWarnings("unused")
   public ResourceResolver getTemplateResourceResolver(WebuiRequestContext context, String template) {
     try {
       if (resourceResolver == null) {
@@ -151,11 +144,10 @@ public class UIDocumentDialogForm extends UIDialogForm {
      */
     public void execute(Event<UIDocumentDialogForm> event) throws Exception {
       UIDocumentDialogForm uiDocumentDialogForm = event.getSource();
-      UIApplication uiApp = uiDocumentDialogForm.getAncestorOfType(UIApplication.class);
       Node documentNode = uiDocumentDialogForm.getNode();
       Session session = documentNode.getSession();      
-      List inputs = uiDocumentDialogForm.getChildren();
-      Map inputProperties = DialogFormUtil.prepareMap(inputs,
+      List<UIComponent> inputs = uiDocumentDialogForm.getChildren();
+      Map<String, JcrInputProperty> inputProperties = DialogFormUtil.prepareMap(inputs,
                                                       uiDocumentDialogForm.getInputProperties());
       String nodeTypeName = documentNode.getPrimaryNodeType().getName();
       Node homeNode = documentNode.getParent();
@@ -179,35 +171,21 @@ public class UIDocumentDialogForm extends UIDialogForm {
       } catch (AccessControlException ace) {
         throw new AccessDeniedException(ace.getMessage());
       } catch (VersionException ve) {
-        uiApp.addMessage(new ApplicationMessage("UIDocumentForm.msg.in-versioning",
-                                                null,
-                                                ApplicationMessage.WARNING));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+      	Utils.createPopupMessage(uiDocumentDialogForm, "UIDocumentForm.msg.in-versioning", null, ApplicationMessage.WARNING);
         return;
       } catch (ItemNotFoundException item) {
-        uiApp.addMessage(new ApplicationMessage("UIDocumentForm.msg.item-not-found",
-                                                null,
-                                                ApplicationMessage.WARNING));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+      	Utils.createPopupMessage(uiDocumentDialogForm, "UIDocumentForm.msg.item-not-found", null, ApplicationMessage.WARNING);
         return;
       } catch (RepositoryException repo) {
-        repo.printStackTrace();
         String key = "UIDocumentForm.msg.repository-exception";
-        if (ItemExistsException.class.isInstance(repo))
-          key = "UIDocumentForm.msg.not-allowed-same-name-sibling";
-        uiApp.addMessage(new ApplicationMessage(key, null, ApplicationMessage.WARNING));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        if (ItemExistsException.class.isInstance(repo)) key = "UIDocumentForm.msg.not-allowed-same-name-sibling";
+        Utils.createPopupMessage(uiDocumentDialogForm, key, null, ApplicationMessage.WARNING);
         return;
       } catch (NumberFormatException nume) {
-        String key = "UIDocumentForm.msg.numberformat-exception";
-        uiApp.addMessage(new ApplicationMessage(key, null, ApplicationMessage.WARNING));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+      	Utils.createPopupMessage(uiDocumentDialogForm, "UIDocumentForm.msg.numberformat-exception", null, ApplicationMessage.WARNING);
         return;
       } catch (Exception e) {
-        e.printStackTrace();
-        String key = "UIDocumentForm.msg.cannot-save";
-        uiApp.addMessage(new ApplicationMessage(key, null, ApplicationMessage.WARNING));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+      	Utils.createPopupMessage(uiDocumentDialogForm, "UIDocumentForm.msg.cannot-save", null, ApplicationMessage.WARNING);
         return;
       }
       boolean isCheckedOut = true;
@@ -218,8 +196,7 @@ public class UIDocumentDialogForm extends UIDialogForm {
       if (!isCheckedOut) {
         newNode.checkin();
       }
-      UIPopupContainer uiContentEdittingPopup = uiDocumentDialogForm.getAncestorOfType(UIPopupContainer.class);
-      uiContentEdittingPopup.deActivate();
+      Utils.closePopupWindow(uiDocumentDialogForm, "UIDocumentDialogFormPopupWindow");
       PortletRequestContext pContext = (PortletRequestContext) event.getRequestContext();
       Utils.updatePortal(pContext);
     }
@@ -229,11 +206,10 @@ public class UIDocumentDialogForm extends UIDialogForm {
   public static class FastPublishActionListener extends EventListener<UIDocumentDialogForm> {
     public void execute(Event<UIDocumentDialogForm> event) throws Exception {
       UIDocumentDialogForm uiDocumentDialogForm = event.getSource();
-      UIApplication uiApp = uiDocumentDialogForm.getAncestorOfType(UIApplication.class);
       Node documentNode = uiDocumentDialogForm.getNode();
       Session session = documentNode.getSession();      
-      List inputs = uiDocumentDialogForm.getChildren();
-      Map inputProperties = DialogFormUtil.prepareMap(inputs,
+      List<UIComponent> inputs = uiDocumentDialogForm.getChildren();
+      Map<String, JcrInputProperty> inputProperties = DialogFormUtil.prepareMap(inputs,
                                                       uiDocumentDialogForm.getInputProperties());
       String nodeTypeName = documentNode.getPrimaryNodeType().getName();
       Node homeNode = documentNode.getParent();
@@ -254,38 +230,24 @@ public class UIDocumentDialogForm extends UIDialogForm {
         } catch (Exception e) {
           e.printStackTrace();
         }
-      } catch (AccessControlException ace) {
-        throw new AccessDeniedException(ace.getMessage());
-      } catch (VersionException ve) {
-        uiApp.addMessage(new ApplicationMessage("UIDocumentForm.msg.in-versioning",
-                                                null,
-                                                ApplicationMessage.WARNING));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+      } catch (AccessControlException e) {
+        throw new AccessDeniedException(e.getMessage());
+      } catch (VersionException e) {
+      	Utils.createPopupMessage(uiDocumentDialogForm, "UIDocumentForm.msg.in-versioning", null, ApplicationMessage.WARNING);
         return;
-      } catch (ItemNotFoundException item) {
-        uiApp.addMessage(new ApplicationMessage("UIDocumentForm.msg.item-not-found",
-                                                null,
-                                                ApplicationMessage.WARNING));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+      } catch (ItemNotFoundException e) {
+      	Utils.createPopupMessage(uiDocumentDialogForm, "UIDocumentForm.msg.item-not-found", null, ApplicationMessage.WARNING);
         return;
-      } catch (RepositoryException repo) {
-        repo.printStackTrace();
+      } catch (RepositoryException e) {
         String key = "UIDocumentForm.msg.repository-exception";
-        if (ItemExistsException.class.isInstance(repo))
-          key = "UIDocumentForm.msg.not-allowed-same-name-sibling";
-        uiApp.addMessage(new ApplicationMessage(key, null, ApplicationMessage.WARNING));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        if (ItemExistsException.class.isInstance(e)) key = "UIDocumentForm.msg.not-allowed-same-name-sibling";
+        Utils.createPopupMessage(uiDocumentDialogForm, key, null, ApplicationMessage.WARNING);
         return;
       } catch (NumberFormatException nume) {
-        String key = "UIDocumentForm.msg.numberformat-exception";
-        uiApp.addMessage(new ApplicationMessage(key, null, ApplicationMessage.WARNING));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+      	Utils.createPopupMessage(uiDocumentDialogForm, "UIDocumentForm.msg.numberformat-exception", null, ApplicationMessage.WARNING);
         return;
       } catch (Exception e) {
-        e.printStackTrace();
-        String key = "UIDocumentForm.msg.cannot-save";
-        uiApp.addMessage(new ApplicationMessage(key, null, ApplicationMessage.WARNING));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+      	Utils.createPopupMessage(uiDocumentDialogForm, "UIDocumentForm.msg.cannot-save", null, ApplicationMessage.WARNING);
         return;
       }
       boolean isCheckedOut = true;
@@ -304,8 +266,7 @@ public class UIDocumentDialogForm extends UIDialogForm {
       }
       publicationPlugin.changeState(newNode, StageAndVersionPublicationConstant.LIVE_STATE, context);
       
-      UIPopupContainer uiContentEdittingPopup = uiDocumentDialogForm.getAncestorOfType(UIPopupContainer.class);
-      uiContentEdittingPopup.deActivate();
+      Utils.closePopupWindow(uiDocumentDialogForm, "UIDocumentDialogFormPopupWindow");
       PortletRequestContext pContext = (PortletRequestContext) event.getRequestContext();
       Utils.updatePortal(pContext);
     }    
@@ -324,9 +285,8 @@ public class UIDocumentDialogForm extends UIDialogForm {
    */
   public static class CancelActionListener extends EventListener<UIDocumentDialogForm> {
     public void execute(Event<UIDocumentDialogForm> event) throws Exception {
-      UIDocumentDialogForm uiDocumentDialogForm = event.getSource();                     
-      UIPopupContainer uiContentEdittingPopup = uiDocumentDialogForm.getAncestorOfType(UIPopupContainer.class);
-      uiContentEdittingPopup.deActivate();
+      UIDocumentDialogForm uiDocumentDialogForm = event.getSource();
+      Utils.closePopupWindow(uiDocumentDialogForm, "UIDocumentDialogFormPopupWindow");
     }
   }
 

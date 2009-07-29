@@ -143,7 +143,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
       ExtendedNodeTypeManager extendedNodeTypeManager = getApplicationComponent(RepositoryService.class).getRepository(repository).getNodeTypeManager(); 
       extendedNodeTypeManager.registerNodeType(newNodeType, ExtendedNodeTypeManager.FAIL_IF_EXISTS);
     } catch (Exception e) {
-      Utils.createPopupMessage(this, requestContext, "UINodeTypeForm.msg.register-failed", ApplicationMessage.WARNING);
+      Utils.createPopupMessage(this, "UINodeTypeForm.msg.register-failed", null, ApplicationMessage.WARNING);
     }
   }
   

@@ -68,8 +68,7 @@ public class UIParameterizedContentListViewerPortlet extends UIPortletApplicatio
       UIParameterizedContentListViewerContainer container = addChild(UIParameterizedContentListViewerContainer.class, null, null);
       container.init();
     } else if (PortletMode.EDIT.equals(mode)) {
-
-      //addChild(UIParameterizedManagementForm.class, null, null);
+      addChild(UIParameterizedManagementForm.class, null, null);
     }
   }
 }

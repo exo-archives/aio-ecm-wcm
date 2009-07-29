@@ -26,10 +26,10 @@ import javax.portlet.PortletPreferences;
 import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.exoplatform.ecm.webui.selector.UISelectable;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.cms.views.ApplicationTemplateManagerService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.selector.page.UIPageSelector;
@@ -38,9 +38,6 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
-import org.exoplatform.webui.core.UIPopupContainer;
-import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -55,8 +52,8 @@ import org.exoplatform.webui.form.ext.UIFormInputSetWithAction;
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          ngoc.tran@exoplatform.com
- * Jun 23, 2009  
+ * ngoc.tran@exoplatform.com
+ * Jun 23, 2009
  */
 @ComponentConfig(
                  lifecycle = UIFormLifecycle.class, 
@@ -85,12 +82,16 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
   /** The Constant ITEMS_PER_PAGE_SELECTOR. */
   public final static String ITEMS_PER_PAGE_INPUT              = "ItemsPerPage";
 
+  /** The Constant TARGET_PAGE_INPUT. */
   public final static String TARGET_PAGE_INPUT                 = "UIParameterizedTagetPageInput";
 
+  /** The Constant TARGET_PATH_SELECTOR_POPUP_WINDOW. */
   public final static String TARGET_PATH_SELECTOR_POPUP_WINDOW = "UIParameterTargetPathPopupWindow";
 
+  /** The Constant TARGET_PAGE_INPUT_SET_ACTION. */
   public final static String TARGET_PAGE_INPUT_SET_ACTION      = "UIParameterizedTagetPageInputSetAction";
 
+  /** The Constant PREFERENCE_TARGET_PATH. */
   public final static String PREFERENCE_TARGET_PATH            = "targetPath";
 
   /** The Constant FORM_VIEW_TEMPLATES_SELECTOR. */
@@ -120,24 +121,38 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
   /** The Constant AUTO_DETECT. */
   public static final String AUTO_DETECT                       = "AutomaticDetection";
 
+  /** The Constant SHOW_MORE_LINK. */
   public static final String SHOW_MORE_LINK                    = "ShowMoreLink";
 
+  /** The Constant SHOW_RSS_LINK. */
   public static final String SHOW_RSS_LINK                     = "ShowRSSLink";
 
+  /** The Constant SHOW_LINK. */
   public static final String SHOW_LINK                         = "ShowLink";
 
+  /** The Constant ORDER_BY. */
   public static final String ORDER_BY                          = "OrderBy";
 
+  /** The Constant ORDER_BY_DATE_CREATED. */
   public static final String ORDER_BY_DATE_CREATED             = "OrderByDateCreated";
 
+  /** The Constant ORDER_TYPES. */
   public static final String ORDER_TYPES                       = "OrderTypes";
 
+  /** The Constant ORDER_DESC. */
   public static final String ORDER_DESC                        = "OrderDesc";
 
+  /** The Constant ORDER_ASC. */
   public static final String ORDER_ASC                         = "OrderAsc";
 
+  /** The popup id. */
   private String popupId;
   
+  /**
+   * Instantiates a new uI parameterized management form.
+   * 
+   * @throws Exception the exception
+   */
   @SuppressWarnings("unchecked")
   public UIParameterizedManagementForm() throws Exception {
 
@@ -271,13 +286,13 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
     setActions(new String[] { "Save", "Cancel" });
   }
  
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.selector.UISelectable#doSelect(java.lang.String, java.lang.Object)
+   */
   public void doSelect(String selectField, Object value) throws Exception {
     UIFormStringInput formStringInput = findComponentById(selectField);
     formStringInput.setValue(value.toString()) ;
-    
-    UIParameterizedContentListViewerPortlet categoryNavigationPortlet = getAncestorOfType(UIParameterizedContentListViewerPortlet.class);
-    UIPopupContainer uiPopupContainer = categoryNavigationPortlet.getChild(UIPopupContainer.class);
-    Utils.closePopupWindow(uiPopupContainer, UIParameterizedContentListViewerConstant.PARAMETERIZED_TARGET_PAGE_POPUP_WINDOW);
+    Utils.closePopupWindow(this, UIParameterizedContentListViewerConstant.PARAMETERIZED_TARGET_PAGE_POPUP_WINDOW);
   }
   
   /**
@@ -293,7 +308,8 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
   private List<SelectItemOption<String>> getTemplateList(String portletName, String category) throws Exception {
     List<SelectItemOption<String>> templateOptionList = new ArrayList<SelectItemOption<String>>();
     ApplicationTemplateManagerService templateManagerService = getApplicationComponent(ApplicationTemplateManagerService.class);
-    SessionProvider provider = SessionProviderFactory.createSessionProvider();
+    ThreadLocalSessionProviderService threadLocalSessionProviderService = getApplicationComponent(ThreadLocalSessionProviderService.class);
+    SessionProvider provider = threadLocalSessionProviderService.getSessionProvider(null);
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     ManageableRepository manageableRepository = repositoryService.getCurrentRepository();
     String repository = manageableRepository.getConfiguration().getName();
@@ -310,70 +326,96 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
     return templateOptionList;
   }
   
+  /**
+   * The listener interface for receiving cancelAction events.
+   * The class that is interested in processing a cancelAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addCancelActionListener<code> method. When
+   * the cancelAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see CancelActionEvent
+   */
   public static class CancelActionListener extends EventListener<UIParameterizedManagementForm> {
-
     public void execute(Event<UIParameterizedManagementForm> event) throws Exception {
       UIParameterizedManagementForm viewerManagementForm = event.getSource();
-      UIApplication uiApp = viewerManagementForm.getAncestorOfType(UIApplication.class);
-      PortletRequestContext portletRequestContext = (PortletRequestContext) event.getRequestContext();
-      if (Utils.isEditPortletInCreatePageWizard()) {
-        uiApp.addMessage(new ApplicationMessage("Test =============================== Test", null, ApplicationMessage.INFO));
-      } else {
-        portletRequestContext.setApplicationMode(PortletMode.VIEW);
+      if (Utils.isQuickEditmode(viewerManagementForm, UIParameterizedContentListViewerConstant.PARAMETERIZED_MANAGEMENT_PORTLET_POPUP_WINDOW)) {
+        Utils.closePopupWindow(viewerManagementForm, UIParameterizedContentListViewerConstant.PARAMETERIZED_MANAGEMENT_PORTLET_POPUP_WINDOW);
       }
-      UIPopupContainer uiPopupContainer = (UIPopupContainer) viewerManagementForm.getAncestorOfType(UIPopupContainer.class);
-      Utils.closePopupWindow(uiPopupContainer, UIParameterizedContentListViewerConstant.PARAMETERIZED_MANAGEMENT_PORTLET_POPUP_WINDOW);
+      ((PortletRequestContext)event.getRequestContext()).setApplicationMode(PortletMode.VIEW);
     }
   }
   
+  /**
+   * The listener interface for receiving selectTargetPageAction events.
+   * The class that is interested in processing a selectTargetPageAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSelectTargetPageActionListener<code> method. When
+   * the selectTargetPageAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SelectTargetPageActionEvent
+   */
   public static class SelectTargetPageActionListener extends EventListener<UIParameterizedManagementForm> {
-
     public void execute(Event<UIParameterizedManagementForm> event) throws Exception {
       UIParameterizedManagementForm viewerManagementForm = event.getSource();
-      
-      UIParameterizedContentListViewerPortlet parameterizedPortlet = viewerManagementForm.getAncestorOfType(UIParameterizedContentListViewerPortlet.class);
-      
-      UIPopupContainer popupContainer = parameterizedPortlet.getChild(UIPopupContainer.class);
-      UIPopupWindow popupWindow = popupContainer.getChildById(UIParameterizedContentListViewerConstant.PARAMETERIZED_TARGET_PAGE_POPUP_WINDOW);
-      if (popupWindow == null) {
-        UIPageSelector pageSelector = popupContainer.createUIComponent(UIPageSelector.class, null, null);
-        pageSelector.setSourceComponent(viewerManagementForm, new String[] {TARGET_PAGE_INPUT});
-        Utils.createPopupWindow(popupContainer, pageSelector, event.getRequestContext(), UIParameterizedContentListViewerConstant.PARAMETERIZED_TARGET_PAGE_POPUP_WINDOW, 800, 600);
-      } else {
-        popupWindow.setShow(true);
-      }
+      UIPageSelector pageSelector = viewerManagementForm.createUIComponent(UIPageSelector.class, null, null);
+      pageSelector.setSourceComponent(viewerManagementForm, new String[] {TARGET_PAGE_INPUT});
+      Utils.createPopupWindow(viewerManagementForm, pageSelector, UIParameterizedContentListViewerConstant.PARAMETERIZED_TARGET_PAGE_POPUP_WINDOW, 800, 600);
       viewerManagementForm.setPopupId(UIParameterizedContentListViewerConstant.PARAMETERIZED_TARGET_PAGE_POPUP_WINDOW);
     }
   }
 
+  /**
+   * Gets the popup id.
+   * 
+   * @return the popup id
+   */
   public String getPopupId() {
     return popupId;
   }
 
+  /**
+   * Sets the popup id.
+   * 
+   * @param popupId the new popup id
+   */
   public void setPopupId(String popupId) {
     this.popupId = popupId;
   }
 
+  /**
+   * Gets the header.
+   * 
+   * @return the header
+   */
   private String getHeader(){
-    
     PortletRequestContext portletRequestContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) portletRequestContext.getRequest();
-    
     String requestURI = requestWrapper.getRequestURI();
-    
     String[] param = requestURI.split("/");
     String header = param[param.length - 1];
     return header;
   }
+  
+  /**
+   * The listener interface for receiving saveAction events.
+   * The class that is interested in processing a saveAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSaveActionListener<code> method. When
+   * the saveAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SaveActionEvent
+   */
   public static class SaveActionListener extends EventListener<UIParameterizedManagementForm> {
-
     public void execute(Event<UIParameterizedManagementForm> event) throws Exception {
       UIParameterizedManagementForm uiParameterizedManagementForm = event.getSource();
-
       PortletRequestContext portletRequestContext = (PortletRequestContext) event.getRequestContext();
       PortletPreferences portletPreferences = portletRequestContext.getRequest().getPreferences();
-      UIApplication uiApp = uiParameterizedManagementForm.getAncestorOfType(UIApplication.class);
-      
       RepositoryService repositoryService = uiParameterizedManagementForm.getApplicationComponent(RepositoryService.class);
       ManageableRepository manageableRepository = repositoryService.getCurrentRepository();
       
@@ -400,7 +442,6 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
       if(!Boolean.parseBoolean(autoDetect)) {
         header = uiParameterizedManagementForm.getUIStringInput(UIParameterizedManagementForm.HEADER).getValue();
       } 
-
       header = uiParameterizedManagementForm.getHeader();
       String targetPage = uiParameterizedManagementForm.getUIStringInput(UIParameterizedManagementForm.TARGET_PAGE_INPUT).getValue();
 
@@ -423,21 +464,13 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
       portletPreferences.setValue(UIParameterizedContentListViewerConstant.SHOW_RSS_LINK, showRssLink);
       portletPreferences.setValue(UIParameterizedContentListViewerConstant.SHOW_AUTO_DETECT, autoDetect);
       portletPreferences.setValue(UIParameterizedContentListViewerConstant.TARGET_PAGE, targetPage);
-      
       portletPreferences.store();
-      if (Utils.isEditPortletInCreatePageWizard()) {
-        uiApp.addMessage(new ApplicationMessage("UIMessageBoard.msg.saving-success", null, ApplicationMessage.INFO));
+      
+      if (Utils.isQuickEditmode(uiParameterizedManagementForm, UIParameterizedContentListViewerConstant.PARAMETERIZED_MANAGEMENT_PORTLET_POPUP_WINDOW)) {
+        Utils.closePopupWindow(uiParameterizedManagementForm, UIParameterizedContentListViewerConstant.PARAMETERIZED_MANAGEMENT_PORTLET_POPUP_WINDOW);
+      } else {
+        Utils.createPopupMessage(uiParameterizedManagementForm, "UIParameterizedManagementForm.msg.saving-success", null, ApplicationMessage.INFO);
       }
-      portletRequestContext.setApplicationMode(PortletMode.VIEW);
-
-      UIParameterizedContentListViewerPortlet uiparameterContentListViewerPortlet = uiParameterizedManagementForm.getAncestorOfType(UIParameterizedContentListViewerPortlet.class);
-      UIParameterizedContentListViewerContainer uiparameterContentListViewerContainer = uiparameterContentListViewerPortlet.getChild(UIParameterizedContentListViewerContainer.class);
-      
-      uiparameterContentListViewerContainer.getChildren().clear();
-      uiparameterContentListViewerContainer.init();
-      
-      UIPopupContainer uiPopupContainer = (UIPopupContainer) uiParameterizedManagementForm.getAncestorOfType(UIPopupContainer.class);
-      Utils.closePopupWindow(uiPopupContainer, UIParameterizedContentListViewerConstant.PARAMETERIZED_MANAGEMENT_PORTLET_POPUP_WINDOW);
     }
   }
 }

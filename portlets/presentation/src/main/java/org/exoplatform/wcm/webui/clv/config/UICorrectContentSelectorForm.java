@@ -24,15 +24,14 @@ import javax.portlet.PortletPreferences;
 
 import org.exoplatform.ecm.webui.tree.UIBaseNodeTreeSelector;
 import org.exoplatform.ecm.webui.tree.selectmany.UICategoriesSelectPanel;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.clv.UIContentListViewerPortlet;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIPopupComponent;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -46,7 +45,7 @@ import org.exoplatform.webui.event.EventListener;
   events = @EventConfig(listeners = UIFolderPathSelectorForm.CloseActionListener.class), 
   template = "app:/groovy/ContentListViewer/config/UIMultiContentSlection.gtmpl"
 )
-public class UICorrectContentSelectorForm extends UIBaseNodeTreeSelector implements UIPopupComponent {
+public class UICorrectContentSelectorForm extends UIBaseNodeTreeSelector {
 
   private List<String> existedCategoryList = new ArrayList<String>();
 
@@ -60,48 +59,33 @@ public class UICorrectContentSelectorForm extends UIBaseNodeTreeSelector impleme
     UIContentsSelectionTreeBuilder treeBuilder = getChild(UIContentsSelectionTreeBuilder.class);
     LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
     String currentPortalName = Util.getUIPortal().getName();
-    SessionProvider provider = SessionProviderFactory.createSessionProvider();
-    try {
-	    Node currentPortal = livePortalManagerService.getLivePortal(currentPortalName, provider);
-	    Node sharedPortal = livePortalManagerService.getLiveSharedPortal(provider);
-	    treeBuilder.setCurrentPortal(currentPortal);
-	    treeBuilder.setSharedPortal(sharedPortal);
-	    treeBuilder.setRootTreeNode(currentPortal.getParent());
-	    UIMultiSelectionPanel uiMultiSelectionPanel = getChild(UIMultiSelectionPanel.class);
-	    uiMultiSelectionPanel.updateGrid();
-	    UISelectedContentGrid contentsGrid = getChild(UISelectedContentGrid.class);
-	    PortletPreferences preferences = context.getRequest().getPreferences();
-	    String [] contents = preferences.getValues(UIContentListViewerPortlet.CONTENT_LIST, null);
-	    if (contents != null && contents.length > 0) {
-	      for (int i = 0; i < contents.length; i++) {
-	        if (contents[i] != null) existedCategoryList.add(contents[i]);
-	      }
-	    }
-	    contentsGrid.setSelectedCategories(existedCategoryList);    
-	    if (existedCategoryList.size() > 0) {
-	      contentsGrid.setRendered(true);
-	    }
-	    contentsGrid.updateGrid(contentsGrid.getUIPageIterator().getCurrentPage());
-    } finally {
-    	provider.close();
+    SessionProvider provider = Utils.getSessionProvider(this);
+    Node currentPortal = livePortalManagerService.getLivePortal(currentPortalName, provider);
+    Node sharedPortal = livePortalManagerService.getLiveSharedPortal(provider);
+    treeBuilder.setCurrentPortal(currentPortal);
+    treeBuilder.setSharedPortal(sharedPortal);
+    treeBuilder.setRootTreeNode(currentPortal.getParent());
+    UIMultiSelectionPanel uiMultiSelectionPanel = getChild(UIMultiSelectionPanel.class);
+    uiMultiSelectionPanel.updateGrid();
+    UISelectedContentGrid contentsGrid = getChild(UISelectedContentGrid.class);
+    PortletPreferences preferences = context.getRequest().getPreferences();
+    String [] contents = preferences.getValues(UIContentListViewerPortlet.CONTENT_LIST, null);
+    if (contents != null && contents.length > 0) {
+      for (int i = 0; i < contents.length; i++) {
+        if (contents[i] != null) existedCategoryList.add(contents[i]);
+      }
     }
+    contentsGrid.setSelectedCategories(existedCategoryList);    
+    if (existedCategoryList.size() > 0) {
+      contentsGrid.setRendered(true);
+    }
+    contentsGrid.updateGrid(contentsGrid.getUIPageIterator().getCurrentPage());
   }
 
-  @Override
   public void onChange(Node currentNode, Object context) throws Exception {
     UICategoriesSelectPanel uiCategoriesSelectPanel = getChild(UICategoriesSelectPanel.class);
     uiCategoriesSelectPanel.setParentNode(currentNode);
     uiCategoriesSelectPanel.updateGrid();
-  }
-
-  public void activate() throws Exception {
-    // TODO Auto-generated method stub
-
-  }
-
-  public void deActivate() throws Exception {
-    // TODO Auto-generated method stub
-
   }
 
   public static class CloseActionListener extends EventListener<UICorrectContentSelectorForm> {

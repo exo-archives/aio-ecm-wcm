@@ -32,7 +32,6 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
-import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -178,23 +177,18 @@ public class UISubcriptionForm extends UIForm {
         subscriptionHandler.edit(NewsLetterUtil.getPortalName(), newsletterSubscriptionConfig, sessionProvider);
       }
 
-      UIPopupContainer popupContainer = uiSubcriptionForm.getAncestorOfType(UIPopupContainer.class);
-      Utils.closePopupWindow(popupContainer, UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW);
-
-      event.getRequestContext().addUIComponentToUpdateByAjax(newsletterPortlet) ;
+      Utils.closePopupWindow(uiSubcriptionForm, UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW);
     }
   }
 
   static  public class CancelActionListener extends EventListener<UISubcriptionForm> {
     public void execute(Event<UISubcriptionForm> event) throws Exception {
       UISubcriptionForm uiSubcriptionForm = event.getSource();
-      UIPopupContainer popupContainer = uiSubcriptionForm.getAncestorOfType(UIPopupContainer.class);
-
       if (uiSubcriptionForm.getSubmitAction().equals("Cancel")) {
         uiSubcriptionForm.getComponentConfig().setValidators(null);
         uiSubcriptionForm.getChildren().clear();
       }
-      Utils.closePopupWindow(popupContainer, UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW);
+      Utils.closePopupWindow(uiSubcriptionForm, UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW);
     }
   }
 }

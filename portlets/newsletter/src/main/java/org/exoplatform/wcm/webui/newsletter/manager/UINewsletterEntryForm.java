@@ -55,7 +55,6 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
-import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -150,11 +149,10 @@ public class UINewsletterEntryForm extends UIDialogForm {
     session.save();
     
     // Close popup and update UI
-    UIPopupContainer popupContainer = getAncestorOfType(UIPopupContainer.class);
-    UINewsletterManagerPortlet managerPortlet = popupContainer.getAncestorOfType(UINewsletterManagerPortlet.class);
+    UINewsletterManagerPortlet managerPortlet = getAncestorOfType(UINewsletterManagerPortlet.class);
     UINewsletterEntryManager entryManager = managerPortlet.getChild(UINewsletterEntryManager.class);
     if(entryManager.isRendered()) entryManager.init();
-    Utils.closePopupWindow(popupContainer, UINewsletterConstant.ENTRY_FORM_POPUP_WINDOW);
+    Utils.closePopupWindow(this, UINewsletterConstant.ENTRY_FORM_POPUP_WINDOW);
     
     return newsletterNode;
   }
@@ -238,8 +236,7 @@ public class UINewsletterEntryForm extends UIDialogForm {
   public static class CancelActionListener extends EventListener<UINewsletterEntryForm> {
     public void execute(Event<UINewsletterEntryForm> event) throws Exception {
       UINewsletterEntryForm newsletterEntryForm = event.getSource();
-      UIPopupContainer popupContainer = newsletterEntryForm.getAncestorOfType(UIPopupContainer.class);
-      Utils.closePopupWindow(popupContainer, UINewsletterConstant.ENTRY_FORM_POPUP_WINDOW);
+      Utils.closePopupWindow(newsletterEntryForm, UINewsletterConstant.ENTRY_FORM_POPUP_WINDOW);
     }
   }
 

@@ -20,15 +20,12 @@ import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
 import org.exoplatform.wcm.webui.Utils;
-import org.exoplatform.wcm.webui.clv.config.UIPortletConfig;
-import org.exoplatform.wcm.webui.clv.config.UIStartEditionInPageWizard;
 import org.exoplatform.wcm.webui.clv.config.UIViewerManagementForm;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPopupContainer;
-import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 
@@ -101,8 +98,6 @@ public class UIContentListViewerPortlet extends UIPortletApplication {
   
   public static final String CONTENT_LIST = "contents";
   
-  public static final int portletConfigFormWidth = 800;
-
   /**
    * Instantiates a new uI content list viewer portlet.
    * 
@@ -134,8 +129,7 @@ public class UIContentListViewerPortlet extends UIPortletApplication {
    */
   private void activateMode(PortletMode mode) throws Exception {
     getChildren().clear();
-    UIPopupContainer uiPopup = addChild(UIPopupContainer.class, null, "UIViewerManagementPopup");
-    uiPopup.getChild(UIPopupWindow.class).setId("UIViewerManagementPopupWindow");
+    addChild(UIPopupContainer.class, null, null);
     PortletRequestContext context = WebuiRequestContext.getCurrentInstance();
     PortletPreferences preferences = context.getRequest().getPreferences();
     String viewerMode = preferences.getValue(VIEWER_MODE, null);        
@@ -149,15 +143,7 @@ public class UIContentListViewerPortlet extends UIPortletApplication {
         uiCorrectContentsViewer.init();
       }
     } else if (PortletMode.EDIT.equals(mode)) {
-      UIPopupContainer maskPopupContainer = getChild(UIPopupContainer.class);
-      UIStartEditionInPageWizard portletEditMode = createUIComponent(UIStartEditionInPageWizard.class, null, null);
-      addChild(portletEditMode);
-      UIPortletConfig portletConfig = portletEditMode.createUIComponent(UIPortletConfig.class, null, null);
-      portletEditMode.addChild(portletConfig);
-      portletConfig.setRendered(true);
-      maskPopupContainer.activate(portletConfig, portletConfigFormWidth, -1);
-      PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
-      portletRequestContext.addUIComponentToUpdateByAjax(maskPopupContainer);
+    	addChild(UIViewerManagementForm.class, null, null);
     }
   }
 

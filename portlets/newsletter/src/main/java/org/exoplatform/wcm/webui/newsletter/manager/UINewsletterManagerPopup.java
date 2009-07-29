@@ -23,7 +23,6 @@ import org.exoplatform.wcm.webui.newsletter.UINewsletterConstant;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIPopupComponent;
-import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -65,8 +64,7 @@ public class UINewsletterManagerPopup extends UIForm implements UIPopupComponent
   static  public class CloseActionListener extends EventListener<UINewsletterManagerPopup> {
     public void execute(Event<UINewsletterManagerPopup> event) throws Exception {
       UINewsletterManagerPopup uiNewsletterManagerPopup = event.getSource();
-      UIPopupContainer popupContainer = uiNewsletterManagerPopup.getAncestorOfType(UIPopupContainer.class);
-      Utils.closePopupWindow(popupContainer, UINewsletterConstant.UIVIEW_ENTRY_PUPUP_WINDOW);
+      Utils.closePopupWindow(uiNewsletterManagerPopup, UINewsletterConstant.UIVIEW_ENTRY_PUPUP_WINDOW);
     }
   }
 

@@ -20,15 +20,12 @@ import javax.portlet.PortletPreferences;
 
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
 import org.exoplatform.resolver.ResourceResolver;
-import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.wcm.webui.Utils;
-import org.exoplatform.wcm.webui.clv.config.UIPortletConfig;
+import org.exoplatform.wcm.webui.clv.config.UIViewerManagementForm;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.core.UIContainer;
-import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
@@ -81,24 +78,17 @@ public abstract class UIListViewerBase extends UIContainer implements RefreshDel
   }
 
   public ResourceResolver getTemplateResourceResolver() throws Exception {
-    RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     String repository = getPortletPreference().getValue(UIContentListViewerPortlet.REPOSITORY, null);
-      DMSConfiguration dmsConfiguration = getApplicationComponent(DMSConfiguration.class);
-      String workspace = dmsConfiguration.getConfig(repository).getSystemWorkspace();
-      return new JCRResourceResolver(repository, workspace, "exo:templateFile");
+    DMSConfiguration dmsConfiguration = getApplicationComponent(DMSConfiguration.class);
+    String workspace = dmsConfiguration.getConfig(repository).getSystemWorkspace();
+    return new JCRResourceResolver(repository, workspace, "exo:templateFile");
   }
 
   public static class QuickEditActionListener extends EventListener<UIFolderViewer> {
     public void execute(Event<UIFolderViewer> event) throws Exception {
       UIListViewerBase uiListViewerBase = event.getSource();
-      UIContentListViewerPortlet uiListViewerPortlet = uiListViewerBase.getAncestorOfType(UIContentListViewerPortlet.class);
-      UIPopupContainer uiMaskPopupContainer = uiListViewerPortlet.getChild(UIPopupContainer.class);
-      UIPortletConfig uiPortletConfig = uiMaskPopupContainer.createUIComponent(UIPortletConfig.class, null, null);
-      uiListViewerBase.addChild(uiPortletConfig);
-      uiPortletConfig.setRendered(true);
-      uiMaskPopupContainer.activate(uiPortletConfig, UIContentListViewerPortlet.portletConfigFormWidth, -1);
-      PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
-      context.addUIComponentToUpdateByAjax(uiMaskPopupContainer);      
+      UIViewerManagementForm viewerManagementForm = uiListViewerBase.createUIComponent(UIViewerManagementForm.class, null, null);
+      Utils.createPopupWindow(uiListViewerBase, viewerManagementForm, "UIViewerManagementPopupWindow", 800, 600);
     }    
   }
 

@@ -108,32 +108,20 @@ public class UIFCCActionList extends UIContainer {
   public static class AddActionListener extends EventListener<UIFCCActionList> {
     public void execute(Event<UIFCCActionList> event) throws Exception {
       UIFCCActionList fastContentCreatorActionList = event.getSource();
-      UIPopupContainer popupContainer = fastContentCreatorActionList.getAncestorOfType(UIFCCPortlet.class).getChild(UIPopupContainer.class);
-      UIPopupWindow popupWindow = popupContainer.getChildById(UIFCCConstant.ACTION_POPUP_WINDOW);
-      if (popupWindow == null) {
-        UIFCCActionContainer fastContentCreatorActionContainer = popupContainer.createUIComponent(UIFCCActionContainer.class, null, null);
-        Utils.createPopupWindow(popupContainer, fastContentCreatorActionContainer, event.getRequestContext(), UIFCCConstant.ACTION_POPUP_WINDOW, 500, 380);
-        fastContentCreatorActionContainer.getChild(UIFCCActionTypeForm.class).update();
-      } else { 
-        popupWindow.setShow(true);
-      }
+      UIFCCActionContainer fastContentCreatorActionContainer = fastContentCreatorActionList.createUIComponent(UIFCCActionContainer.class, null, null);
+      Utils.createPopupWindow(fastContentCreatorActionList, fastContentCreatorActionContainer, UIFCCConstant.ACTION_POPUP_WINDOW, 500, 380);
+      fastContentCreatorActionContainer.getChild(UIFCCActionTypeForm.class).update();
     }
   }
   
   public static class EditActionListener extends EventListener<UIFCCActionList> {
     public void execute(Event<UIFCCActionList> event) throws Exception {
       UIFCCActionList fastContentCreatorActionList = event.getSource();
-      UIPopupContainer popupContainer = fastContentCreatorActionList.getAncestorOfType(UIFCCPortlet.class).getChild(UIPopupContainer.class);
-      UIPopupWindow popupWindow = popupContainer.getChildById(UIFCCConstant.ACTION_POPUP_WINDOW);
-      if (popupWindow == null) {
-        UIFCCActionContainer fastContentCreatorActionContainer = popupContainer.createUIComponent(UIFCCActionContainer.class, null, null);
-        Utils.createPopupWindow(popupContainer, fastContentCreatorActionContainer, event.getRequestContext(), UIFCCConstant.ACTION_POPUP_WINDOW, 500, 380);
-        UIFCCActionTypeForm fastContentCreatorActionTypeForm = fastContentCreatorActionContainer.getChild(UIFCCActionTypeForm.class);
-        fastContentCreatorActionTypeForm.update();
-        fastContentCreatorActionTypeForm.init();
-      } else { 
-        popupWindow.setShow(true);
-      }
+      UIFCCActionContainer fastContentCreatorActionContainer = fastContentCreatorActionList.createUIComponent(UIFCCActionContainer.class, null, null);
+      UIFCCActionTypeForm fastContentCreatorActionTypeForm = fastContentCreatorActionContainer.getChild(UIFCCActionTypeForm.class);
+      fastContentCreatorActionTypeForm.update();
+      fastContentCreatorActionTypeForm.init();
+      Utils.createPopupWindow(fastContentCreatorActionList, fastContentCreatorActionContainer, UIFCCConstant.ACTION_POPUP_WINDOW, 500, 380);
     }
   }
   

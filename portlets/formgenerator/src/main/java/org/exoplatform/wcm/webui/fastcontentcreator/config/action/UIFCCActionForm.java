@@ -51,7 +51,6 @@ import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIGrid;
-import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -172,8 +171,7 @@ public class UIFCCActionForm extends UIDialogForm implements UISelectable {
       }
 
       // Close popup
-      UIPopupContainer popupContainer = fastContentCreatorActionForm.getAncestorOfType(UIPopupContainer.class);
-      Utils.closePopupWindow(popupContainer, UIFCCConstant.ACTION_POPUP_WINDOW);
+      Utils.closePopupWindow(fastContentCreatorActionForm, UIFCCConstant.ACTION_POPUP_WINDOW);
       
       try{
         Map<String, JcrInputProperty> sortedInputs = DialogFormUtil.prepareMap(fastContentCreatorActionForm.getChildren(), fastContentCreatorActionForm.getInputProperties());
@@ -245,8 +243,7 @@ public class UIFCCActionForm extends UIDialogForm implements UISelectable {
   static public class CloseActionListener extends EventListener<UIFCCActionForm> {
     public void execute(Event<UIFCCActionForm> event) throws Exception {
       UIFCCActionForm fastContentCreatorActionForm = event.getSource();
-      UIPopupContainer popupContainer = fastContentCreatorActionForm.getAncestorOfType(UIPopupContainer.class);
-      Utils.closePopupWindow(popupContainer, UIFCCConstant.ACTION_POPUP_WINDOW);
+      Utils.closePopupWindow(fastContentCreatorActionForm, UIFCCConstant.ACTION_POPUP_WINDOW);
     }
   }  
   
@@ -302,9 +299,7 @@ public class UIFCCActionForm extends UIDialogForm implements UISelectable {
         SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
         ((UIOneNodePathSelector)uiComp).init(sessionProvider);
       }
-      UIPopupContainer popupContainer = fastContentCreatorActionForm.getAncestorOfType(UIPopupContainer.class);
-      popupContainer.removeChildById(UIFCCConstant.SELECTOR_POPUP_WINDOW);
-      Utils.createPopupWindow(popupContainer, uiComp, event.getRequestContext(), UIFCCConstant.SELECTOR_POPUP_WINDOW, 640, 300);
+      Utils.createPopupWindow(fastContentCreatorActionForm, uiComp, UIFCCConstant.SELECTOR_POPUP_WINDOW, 640, 300);
       String param = "returnField=" + fieldName ;
       ((ComponentSelector)uiComp).setSourceComponent(fastContentCreatorActionForm, new String[]{param}) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;

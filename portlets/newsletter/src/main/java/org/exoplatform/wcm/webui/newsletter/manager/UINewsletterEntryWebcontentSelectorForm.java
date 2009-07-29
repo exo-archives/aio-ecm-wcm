@@ -24,8 +24,6 @@ import org.exoplatform.wcm.webui.selector.webcontent.UIWebContentPathSelector;
 import org.exoplatform.wcm.webui.selector.webcontent.UIWebContentTabSelector;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIPopupContainer;
-import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -74,24 +72,17 @@ public class UINewsletterEntryWebcontentSelectorForm extends UIForm implements U
   
   public void doSelect(String selectField, Object value) throws Exception {
     getUIStringInput(selectField).setValue((String) value);
-    UIPopupContainer popupContainer = getAncestorOfType(UIPopupContainer.class);
-    Utils.closePopupWindow(popupContainer, popupId);
+    Utils.closePopupWindow(this, popupId);
   }
   
   public static class SelectWebcontentActionListener extends EventListener<UINewsletterEntryWebcontentSelectorForm> {
     public void execute(Event<UINewsletterEntryWebcontentSelectorForm> event) throws Exception {
       UINewsletterEntryWebcontentSelectorForm newsletterEntryWebcontentSelector = event.getSource();
-      UIPopupContainer popupContainer = newsletterEntryWebcontentSelector.getAncestorOfType(UIPopupContainer.class);
-      UIPopupWindow popupWindow = popupContainer.getChildById(UINewsletterConstant.WEBCONTENT_SELECTOR_POPUP_WINDOW);
-      if (popupWindow == null) {
-        UIWebContentTabSelector webContentTabSelector = newsletterEntryWebcontentSelector.createUIComponent(UIWebContentTabSelector.class, null, null);
-        webContentTabSelector.init();
-        UIWebContentPathSelector webContentPathSelector = webContentTabSelector.getChild(UIWebContentPathSelector.class);
-        webContentPathSelector.setSourceComponent(newsletterEntryWebcontentSelector, new String[] {INPUT_WEBCONTENT_SELECTOR});
-        Utils.createPopupWindow(popupContainer, webContentTabSelector, event.getRequestContext(), UINewsletterConstant.WEBCONTENT_SELECTOR_POPUP_WINDOW, 650, 270);
-      } else { 
-        popupWindow.setShow(true);
-      }
+      UIWebContentTabSelector webContentTabSelector = newsletterEntryWebcontentSelector.createUIComponent(UIWebContentTabSelector.class, null, null);
+      webContentTabSelector.init();
+      UIWebContentPathSelector webContentPathSelector = webContentTabSelector.getChild(UIWebContentPathSelector.class);
+      webContentPathSelector.setSourceComponent(newsletterEntryWebcontentSelector, new String[] {INPUT_WEBCONTENT_SELECTOR});
+      Utils.createPopupWindow(newsletterEntryWebcontentSelector, webContentTabSelector, UINewsletterConstant.WEBCONTENT_SELECTOR_POPUP_WINDOW, 650, 270);
       newsletterEntryWebcontentSelector.setPopupId(UINewsletterConstant.WEBCONTENT_SELECTOR_POPUP_WINDOW);
     }
   }

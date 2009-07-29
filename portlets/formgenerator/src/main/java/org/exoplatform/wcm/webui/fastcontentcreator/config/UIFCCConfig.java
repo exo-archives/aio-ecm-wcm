@@ -40,7 +40,6 @@ import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.container.UIFormFieldSet;
 import org.exoplatform.wcm.webui.fastcontentcreator.UIFCCConstant;
-import org.exoplatform.wcm.webui.fastcontentcreator.UIFCCPortlet;
 import org.exoplatform.wcm.webui.fastcontentcreator.UIFCCUtils;
 import org.exoplatform.wcm.webui.fastcontentcreator.config.action.UIFCCActionList;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -50,7 +49,6 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIGrid;
-import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -277,9 +275,7 @@ public class UIFCCConfig extends UIForm implements UISelectable {
     } catch(Exception ex) {
       ex.printStackTrace() ;
     }
-    UIFCCPortlet fastContentCreatorPortlet = getAncestorOfType(UIFCCPortlet.class);
-    UIPopupContainer popupContainer = fastContentCreatorPortlet.getChild(UIPopupContainer.class);
-    Utils.closePopupWindow(popupContainer, UIFCCConstant.SELECTOR_POPUP_WINDOW);
+    Utils.closePopupWindow(this, UIFCCConstant.SELECTOR_POPUP_WINDOW);
   }
 
   public Node getSavedLocationNode() {
@@ -293,7 +289,6 @@ public class UIFCCConfig extends UIForm implements UISelectable {
   static public class SelectPathActionListener extends EventListener<UIFCCConfig> {
     public void execute(Event<UIFCCConfig> event) throws Exception {
       UIFCCConfig fastContentCreatorConfig = event.getSource() ;
-      UIFCCPortlet fastContentCreatorPortlet = fastContentCreatorConfig.getParent() ;
       String repositoryName = fastContentCreatorConfig.getUIFormSelectBox(UIFCCConstant.REPOSITORY_FORM_SELECTBOX).getValue() ;
       String workspaceName = fastContentCreatorConfig.getUIFormSelectBox(UIFCCConstant.WORKSPACE_FORM_SELECTBOX).getValue() ;
       
@@ -313,10 +308,8 @@ public class UIFCCConfig extends UIForm implements UISelectable {
         uiOneNodePathSelector.init(SessionProviderFactory.createSessionProvider()) ;
       }
       uiOneNodePathSelector.setSourceComponent(fastContentCreatorConfig, new String[] {UIFCCConstant.LOCATION_FORM_STRING_INPUT}) ;
-      
-      UIPopupContainer popupContainer = fastContentCreatorPortlet.getChild(UIPopupContainer.class);
-      popupContainer.removeChildById(UIFCCConstant.SELECTOR_POPUP_WINDOW);
-      Utils.createPopupWindow(popupContainer, uiOneNodePathSelector, event.getRequestContext(), UIFCCConstant.SELECTOR_POPUP_WINDOW, 610, 300);
+
+      Utils.createPopupWindow(fastContentCreatorConfig, uiOneNodePathSelector, UIFCCConstant.SELECTOR_POPUP_WINDOW, 610, 300);
     }
   }
   

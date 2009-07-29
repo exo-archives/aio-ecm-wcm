@@ -40,7 +40,6 @@ import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIPopupContainer;
-import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -174,7 +173,6 @@ public class UICategoryNavigationConfig extends UIForm implements UISelectable {
   
   public static class ChangeRepositoryActionListener extends EventListener<UICategoryNavigationConfig> {
     public void execute(Event<UICategoryNavigationConfig> event) throws Exception {
-      
     }
   }
   
@@ -183,14 +181,9 @@ public class UICategoryNavigationConfig extends UIForm implements UISelectable {
       UICategoryNavigationConfig categoryNavigationConfig = event.getSource();
       UICategoryNavigationPortlet categoryNavigationPortlet = categoryNavigationConfig.getAncestorOfType(UICategoryNavigationPortlet.class);
       UIPopupContainer popupContainer = categoryNavigationPortlet.getChild(UIPopupContainer.class);
-      UIPopupWindow popupWindow = popupContainer.getChildById(UICategoryNavigationConstant.TARGET_PATH_SELECTOR_POPUP_WINDOW);
-      if (popupWindow == null) {
-        UIPageSelector pageSelector = popupContainer.createUIComponent(UIPageSelector.class, null, null);
-        pageSelector.setSourceComponent(categoryNavigationConfig, new String[] {UICategoryNavigationConstant.TARGET_PATH_FORM_STRING_INPUT});
-        Utils.createPopupWindow(popupContainer, pageSelector, event.getRequestContext(), UICategoryNavigationConstant.TARGET_PATH_SELECTOR_POPUP_WINDOW, 700, 500);
-      } else {
-        popupWindow.setShow(true);
-      }
+      UIPageSelector pageSelector = popupContainer.createUIComponent(UIPageSelector.class, null, null);
+      pageSelector.setSourceComponent(categoryNavigationConfig, new String[] {UICategoryNavigationConstant.TARGET_PATH_FORM_STRING_INPUT});
+      Utils.createPopupWindow(popupContainer, pageSelector, UICategoryNavigationConstant.TARGET_PATH_SELECTOR_POPUP_WINDOW, 700, 500);
       categoryNavigationConfig.setPopupId(UICategoryNavigationConstant.TARGET_PATH_SELECTOR_POPUP_WINDOW);
     }
   }

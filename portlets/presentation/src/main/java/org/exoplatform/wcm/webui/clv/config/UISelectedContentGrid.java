@@ -19,12 +19,10 @@ package org.exoplatform.wcm.webui.clv.config;
 import java.util.List;
 
 import org.exoplatform.ecm.webui.tree.selectmany.UISelectedCategoriesGrid;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
-import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
@@ -64,14 +62,11 @@ public class UISelectedContentGrid extends UISelectedCategoriesGrid {
   public static class SaveCategoriesActionListener extends EventListener<UISelectedContentGrid> {
     public void execute(Event<UISelectedContentGrid> event) throws Exception {
       UISelectedContentGrid uiSelectedContentGrid = event.getSource();
-      PortletRequestContext context = (PortletRequestContext) event.getRequestContext();           
       UICorrectContentSelectorForm uiCorrectContentSelectorForm = uiSelectedContentGrid.getAncestorOfType(UICorrectContentSelectorForm.class);
       String returnField = uiCorrectContentSelectorForm.getReturnFieldName();
       List<String> selectedCategories = uiSelectedContentGrid.getSelectedCategories();
-      UIApplication uiApplication = uiSelectedContentGrid.getAncestorOfType(UIApplication.class);
       if (selectedCategories.size() == 0 && !uiSelectedContentGrid.isDeleteAllCategory()) {
-        uiApplication.addMessage(new ApplicationMessage("UISelectedContentGrid.msg.non-content", null, ApplicationMessage.INFO));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
+      	Utils.createPopupMessage(uiCorrectContentSelectorForm, "UISelectedContentGrid.msg.non-content", null, ApplicationMessage.INFO);
         return;
       }
       try {
@@ -80,29 +75,20 @@ public class UISelectedContentGrid extends UISelectedCategoriesGrid {
           contents.append(item).append(";");
         }        
         UIViewerManagementForm uiViewerManagementForm = (UIViewerManagementForm) uiCorrectContentSelectorForm.getSourceComponent();
-        List<String> currContents = uiViewerManagementForm.getViewAbleContentList();
-//        if (currContents != null && currContents.size() != 0) {
-//          for (String content : currContents) {
-//            contents.append(content).append(";");
-//            selectedCategories.add(content);
-//          } 
-//        }        
         uiViewerManagementForm.doSelect(returnField, contents.toString());        
         uiViewerManagementForm.setViewAbleContentList(selectedCategories);
       } catch (Exception e) {
-        e.printStackTrace();
-        uiApplication.addMessage(new ApplicationMessage("UISelectedCategoriesGrid.msg.cannot-save", null, ApplicationMessage.WARNING));
-        context.addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
+        Utils.createPopupMessage(uiCorrectContentSelectorForm, "UISelectedCategoriesGrid.msg.cannot-save", null, ApplicationMessage.WARNING);
+        return;
       }
-      uiCorrectContentSelectorForm.deActivate();
     }
   }
 
   public static class CancelActionListener extends EventListener<UISelectedContentGrid> {
     public void execute(Event<UISelectedContentGrid> event) throws Exception {
       UISelectedContentGrid uiSelectedContent = event.getSource();
-      UIPopupContainer uiPopupContainer = (UIPopupContainer) uiSelectedContent.getAncestorOfType(UIPopupContainer.class);
-      uiPopupContainer.deActivate();    
+      UICorrectContentSelectorForm uiCorrectContentSelectorForm = uiSelectedContent.getAncestorOfType(UICorrectContentSelectorForm.class);
+      Utils.closePopupWindow(uiCorrectContentSelectorForm, UIViewerManagementForm.CORRECT_CONTENT_SELECTOR_POPUP_WINDOW);    
     }
   }
 }

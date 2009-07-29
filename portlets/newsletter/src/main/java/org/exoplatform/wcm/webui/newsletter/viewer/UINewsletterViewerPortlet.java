@@ -21,7 +21,6 @@ import java.util.List;
 
 import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.wcm.newsletter.NewsletterPublicUser;
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 import org.exoplatform.wcm.webui.newsletter.manager.NewsLetterUtil;
 import org.exoplatform.webui.config.annotation.ComponentConfig;

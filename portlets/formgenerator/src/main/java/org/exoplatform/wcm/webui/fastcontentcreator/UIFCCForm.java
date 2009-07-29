@@ -62,8 +62,6 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
-import org.exoplatform.webui.core.UIPopupContainer;
-import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -422,9 +420,7 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
         ((UIOneTaxonomySelector)component).init(SessionProviderFactory.createSystemProvider());
         
       }
-      UIPopupContainer popupContainer = fastContentCreatorPortlet.getChild(UIPopupContainer.class);
-      popupContainer.removeChildById(UIFCCConstant.TAXONOMY_POPUP_WINDOW);
-      Utils.createPopupWindow(popupContainer, component, event.getRequestContext(), UIFCCConstant.TAXONOMY_POPUP_WINDOW, 640, 300);
+      Utils.createPopupWindow(fastContentCreatorForm, component, UIFCCConstant.TAXONOMY_POPUP_WINDOW, 640, 300);
       String param = "returnField=" + fieldName ;
       ((ComponentSelector)component).setSourceComponent(fastContentCreatorForm, new String[]{param}) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(fastContentCreatorPortlet) ;
@@ -468,13 +464,7 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
             uiOneTaxonomySelector.init(SessionProviderFactory.createSystemProvider());
             String param = "returnField=" + FIELD_TAXONOMY;        
             uiOneTaxonomySelector.setSourceComponent(fastContentCreatorForm, new String[]{param});
-            UIPopupContainer popupContainer = fastContentCreatorPortlet.getChild(UIPopupContainer.class);
-            UIPopupWindow popupWindow = popupContainer.getChildById(UIFCCConstant.TAXONOMY_POPUP_WINDOW);
-            if(popupWindow == null) {
-              Utils.createPopupWindow(popupContainer, uiOneTaxonomySelector, event.getRequestContext(), UIFCCConstant.TAXONOMY_POPUP_WINDOW, 640, 300);
-            } else {
-              popupWindow.setShow(true);
-            }
+            Utils.createPopupWindow(fastContentCreatorForm, uiOneTaxonomySelector, UIFCCConstant.TAXONOMY_POPUP_WINDOW, 640, 300);
           }
         }
         event.getRequestContext().addUIComponentToUpdateByAjax(fastContentCreatorPortlet);

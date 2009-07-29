@@ -22,6 +22,8 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
+import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.security.Identity;
 import org.exoplatform.services.security.IdentityRegistry;
 import org.exoplatform.services.security.MembershipEntry;
@@ -33,6 +35,7 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.UIPopupWindow;
+import org.exoplatform.webui.core.UIPortletApplication;
 
 import com.ibm.icu.text.Transliterator;
 
@@ -58,7 +61,7 @@ public class Utils {
       return true;
     return false;
   }
-
+  
   /**
    * Refresh browser.
    * 
@@ -67,8 +70,6 @@ public class Utils {
   public static void updatePortal(PortletRequestContext context) {
     UIPortalApplication portalApplication = Util.getUIPortalApplication();   
     PortalRequestContext portalRequestContext = (PortalRequestContext)context.getParentAppRequestContext();
-//    UIControlWorkspace uiControl = portalApplication.getChildById(UIPortalApplication.UI_CONTROL_WS_ID);
-//    portalRequestContext.addUIComponentToUpdateByAjax(uiControl);    
     UIWorkingWorkspace uiWorkingWS = portalApplication.getChildById(UIPortalApplication.UI_WORKING_WS_ID);    
     portalRequestContext.addUIComponentToUpdateByAjax(uiWorkingWS) ;    
     portalRequestContext.setFullRender(true);
@@ -116,13 +117,9 @@ public class Utils {
   }
   
   public static String cleanString(String str) {
-      
       Transliterator accentsconverter = Transliterator.getInstance("Latin; NFD; [:Nonspacing Mark:] Remove; NFC;");
-
       str = accentsconverter.transliterate(str); 
-
       //the character ? seems to not be changed to d by the transliterate function 
-
       StringBuffer cleanedStr = new StringBuffer(str.trim());
       // delete special character
       for(int i = 0; i < cleanedStr.length(); i++) {
@@ -130,44 +127,68 @@ public class Utils {
         if(c == ' ') {
           if (i > 0 && cleanedStr.charAt(i - 1) == '_') {
             cleanedStr.deleteCharAt(i--);
-          }
-          else {
+          } else {
             c = '_';
             cleanedStr.setCharAt(i, c);
           }
           continue;
         }
-
         if(!(Character.isLetterOrDigit(c) || c == '_')) {
           cleanedStr.deleteCharAt(i--);
           continue;
         }
-
         if(i > 0 && c == '_' && cleanedStr.charAt(i-1) == '_')
           cleanedStr.deleteCharAt(i--);
       }
       return cleanedStr.toString().toLowerCase();
   }
 
-  public static void createPopupWindow(UIPopupContainer popupContainer, UIComponent component, WebuiRequestContext requestContext, String id, int width, int height) throws Exception {
-    UIPopupWindow popupWindow = popupContainer.addChild(UIPopupWindow.class, null, id);
+  public static void createPopupWindow(UIContainer container, UIComponent component, String popupWindowId, int width, int height) throws Exception {
+    UIPopupContainer popupContainer = getPopupContainer(container);
+    popupContainer.removeChildById(popupWindowId);
+    UIPopupWindow popupWindow = popupContainer.addChild(UIPopupWindow.class, null, popupWindowId);
     popupWindow.setShowMask(true);
     popupWindow.setUIComponent(component);
     popupWindow.setWindowSize(width, height);
     popupWindow.setShow(true);
     popupWindow.setResizable(true);
+    WebuiRequestContext requestContext = WebuiRequestContext.getCurrentInstance();
     requestContext.addUIComponentToUpdateByAjax(popupContainer);
   }
   
-  public static void closePopupWindow(UIContainer container, String id) {
-    container.removeChildById(id);
+  public static void closePopupWindow(UIContainer container, String popupWindowId) {
+    UIPopupContainer popupContainer = getPopupContainer(container);
+    popupContainer.removeChildById(popupWindowId);
   }
   
-  public static void createPopupMessage(UIContainer container, WebuiRequestContext requestContext, String message, int type) {
+  public static boolean isQuickEditmode(UIContainer container, String popupWindowId) {
+    UIPopupContainer popupContainer = getPopupContainer(container);
+    if (popupContainer == null) return false;
+    UIPopupWindow popupWindow = popupContainer.getChildById(popupWindowId);
+    if (popupWindow == null) return false;
+    return true;
+  }
+  
+  public static UIPopupContainer getPopupContainer(UIContainer container) {
+  	if (container instanceof UIPortletApplication) return container.getChild(UIPopupContainer.class);
+    UIPortletApplication portletApplication = container.getAncestorOfType(UIPortletApplication.class);
+    return portletApplication.getChild(UIPopupContainer.class);
+  }
+  
+  public static void createPopupMessage(UIContainer container, String message, Object[] args, int type) {
     UIApplication application = container.getAncestorOfType(UIApplication.class);
-    application.addMessage(new ApplicationMessage(message, null, type)) ;
+    application.addMessage(new ApplicationMessage(message, args, type)) ;
+    WebuiRequestContext requestContext = WebuiRequestContext.getCurrentInstance();
     requestContext.addUIComponentToUpdateByAjax(application.getUIPopupMessages()) ;
-    return;
+  }
+
+  public static <T> T getService(UIContainer container, Class<T> clazz) {
+  	return clazz.cast(container.getApplicationComponent(clazz));
+  }
+  
+  public static SessionProvider getSessionProvider(UIContainer container) {
+  	ThreadLocalSessionProviderService threadLocalSessionProviderService = getService(container, ThreadLocalSessionProviderService.class);
+  	return threadLocalSessionProviderService.getSessionProvider(null);
   }
   
 }

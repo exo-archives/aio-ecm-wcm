@@ -17,9 +17,7 @@
 package org.exoplatform.wcm.webui.newsletter.manager;
 
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 
-import org.exoplatform.ecm.webui.form.field.UIFormCalendarField;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterTemplateHandler;

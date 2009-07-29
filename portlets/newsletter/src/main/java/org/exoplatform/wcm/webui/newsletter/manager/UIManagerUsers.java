@@ -38,7 +38,6 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIGrid;
 import org.exoplatform.webui.core.UIPageIterator;
-import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.UITabPane;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -218,8 +217,7 @@ public class UIManagerUsers extends UITabPane {
   static  public class CloseActionListener extends EventListener<UIManagerUsers> {
     public void execute(Event<UIManagerUsers> event) throws Exception {
       UIManagerUsers managerUsers = event.getSource();
-      UIPopupContainer popupContainer = managerUsers.getAncestorOfType(UIPopupContainer.class);
-      Utils.closePopupWindow(popupContainer, UINewsletterConstant.MANAGER_USERS_POPUP_WINDOW);
+      Utils.closePopupWindow(managerUsers, UINewsletterConstant.MANAGER_USERS_POPUP_WINDOW);
     }
   }
 }

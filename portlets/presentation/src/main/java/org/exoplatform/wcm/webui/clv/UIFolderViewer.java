@@ -26,14 +26,10 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.portlet.PortletPreferences;
 
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.utils.PaginatedNodeIterator;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -99,11 +95,6 @@ public class UIFolderViewer extends UIListViewerBase {
     contentListPresentation.setHeader(portletPreferences.getValue(UIContentListViewerPortlet.HEADER, null));
   }
   
-  @Override
-  public void processRender(WebuiRequestContext context) throws Exception {   
-    super.processRender(context);
-  }
-  
   public NodeIterator getRenderedContentNodes() throws Exception {
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     PortletPreferences preferences = portletRequestContext.getRequest().getPreferences();
@@ -114,10 +105,7 @@ public class UIFolderViewer extends UIListViewerBase {
       throw new ItemNotFoundException();
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);    
-    String userId = Util.getPortalRequestContext().getRemoteUser();
-    ThreadLocalSessionProviderService providerService = getApplicationComponent(ThreadLocalSessionProviderService.class);
-    SessionProvider sessionProvider = providerService.getSessionProvider(null);
-    Session session = sessionProvider.getSession(worksapce, manageableRepository);
+    Session session = Utils.getSessionProvider(this).getSession(worksapce, manageableRepository);
     TemplateService templateService = getApplicationComponent(TemplateService.class);
     List<String> listDocumentTypes = templateService.getDocumentTemplates(repository);
     StringBuffer documentTypeClause = new StringBuffer();

@@ -19,14 +19,12 @@ package org.exoplatform.wcm.webui.clv.config;
 import javax.jcr.Node;
 
 import org.exoplatform.ecm.webui.tree.UIBaseNodeTreeSelector;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIPopupComponent;
-import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -44,7 +42,7 @@ import org.exoplatform.webui.event.EventListener;
   events = @EventConfig(listeners = UIFolderPathSelectorForm.CloseActionListener.class), 
   template = "app:/groovy/ContentListViewer/config/UIFolderPathSelectorForm.gtmpl"
 )
-public class UIFolderPathSelectorForm extends UIBaseNodeTreeSelector implements UIPopupComponent {
+public class UIFolderPathSelectorForm extends UIBaseNodeTreeSelector {
 
   /**
    * Instantiates a new uI folder path selector form.
@@ -68,16 +66,12 @@ public class UIFolderPathSelectorForm extends UIBaseNodeTreeSelector implements 
     pathPanel.setAcceptedNodeTypes(acceptNodeTypes);
     LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
     String currentPortalName = Util.getUIPortal().getName();
-    SessionProvider provider = SessionProviderFactory.createSessionProvider();
-    try {
-    	Node currentPortal = livePortalManagerService.getLivePortal(currentPortalName, provider);
-    	Node sharedPortal = livePortalManagerService.getLiveSharedPortal(provider);
-    	treeBuilder.setCurrentPortal(currentPortal);
-    	treeBuilder.setSharedPortal(sharedPortal);
-    	treeBuilder.setRootTreeNode(currentPortal.getParent());
-    } finally {
-    	provider.close();
-    }
+    SessionProvider provider = Utils.getSessionProvider(this);
+  	Node currentPortal = livePortalManagerService.getLivePortal(currentPortalName, provider);
+  	Node sharedPortal = livePortalManagerService.getLiveSharedPortal(provider);
+  	treeBuilder.setCurrentPortal(currentPortal);
+  	treeBuilder.setSharedPortal(sharedPortal);
+  	treeBuilder.setRootTreeNode(currentPortal.getParent());
   }
 
   /*
@@ -110,25 +104,8 @@ public class UIFolderPathSelectorForm extends UIBaseNodeTreeSelector implements 
      */
     public void execute(Event<UIFolderPathSelectorForm> event) throws Exception {
       UIFolderPathSelectorForm uiFolderPathSelectorForm = event.getSource();
-      UIPopupContainer uiPopupContainer = uiFolderPathSelectorForm.getAncestorOfType(UIPopupContainer.class);
-      uiPopupContainer.deActivate();
+      Utils.closePopupWindow(uiFolderPathSelectorForm, UIViewerManagementForm.FOLDER_PATH_SELECTOR_POPUP_WINDOW);
     }
-  }
-
-  /*
-   * (non-Javadoc)
-   * 
-   * @see org.exoplatform.webui.core.UIPopupComponent#activate()
-   */
-  public void activate() throws Exception {
-  }
-
-  /*
-   * (non-Javadoc)
-   * 
-   * @see org.exoplatform.webui.core.UIPopupComponent#deActivate()
-   */
-  public void deActivate() throws Exception {
   }
 
 }

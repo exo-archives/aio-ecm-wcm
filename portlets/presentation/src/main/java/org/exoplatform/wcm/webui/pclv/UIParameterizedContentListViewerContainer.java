@@ -30,7 +30,6 @@ import javax.portlet.PortletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.apache.commons.lang.StringUtils;
-import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.container.UIContainer;
@@ -49,8 +48,6 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIPopupContainer;
-import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
@@ -68,9 +65,6 @@ import org.exoplatform.webui.event.EventListener;
  )
 public class UIParameterizedContentListViewerContainer extends UIContainer {
 
-  public UIParameterizedContentListViewerContainer() throws Exception {
-  }
-  
   public void init() throws Exception {
     PortletRequestContext portletRequestContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) portletRequestContext.getRequest();
@@ -142,34 +136,16 @@ public class UIParameterizedContentListViewerContainer extends UIContainer {
   }
   
   public void processRender(WebuiRequestContext context) throws Exception {   
-    try {
       init(); 
       super.processRender(context);
-    } catch (Exception e) {}
   }
 
   public static class QuickEditActionListener extends EventListener<UIParameterizedContentListViewerContainer> {
-
     public void execute(Event<UIParameterizedContentListViewerContainer> event) throws Exception {
       UIParameterizedContentListViewerContainer uiContentViewerContainer = event.getSource();
-
-      UIParameterizedContentListViewerPortlet uiListViewerPortlet = uiContentViewerContainer
-                                                                        .getAncestorOfType(UIParameterizedContentListViewerPortlet.class);
-      
-      UIPopupContainer popupContainer = uiListViewerPortlet.getChild(UIPopupContainer.class);
-      UIPopupWindow popupWindow = popupContainer.getChildById(UIParameterizedContentListViewerConstant.PARAMETERIZED_MANAGEMENT_PORTLET_POPUP_WINDOW);
-      if(popupWindow == null) {
-
-        UIParameterizedManagementForm parameterizedForm = 
-          popupContainer.createUIComponent(UIParameterizedManagementForm.class, null, null);
-        Utils.createPopupWindow(popupContainer,
-                                parameterizedForm,
-                                event.getRequestContext(),
-                                UIParameterizedContentListViewerConstant
-                                .PARAMETERIZED_MANAGEMENT_PORTLET_POPUP_WINDOW, 650, 800);
-      } else {
-        popupWindow.setShow(true);
-      }
+      UIParameterizedContentListViewerPortlet uiListViewerPortlet = uiContentViewerContainer.getAncestorOfType(UIParameterizedContentListViewerPortlet.class);
+      UIParameterizedManagementForm parameterizedForm = uiContentViewerContainer.createUIComponent(UIParameterizedManagementForm.class, null, null);
+      Utils.createPopupWindow(uiContentViewerContainer, parameterizedForm, UIParameterizedContentListViewerConstant.PARAMETERIZED_MANAGEMENT_PORTLET_POPUP_WINDOW, 650, 800);
     }
   }
 
@@ -181,21 +157,15 @@ public class UIParameterizedContentListViewerContainer extends UIContainer {
   }
   
   private NodeIterator getListSymlinkNode(PortletPreferences portletPreferences, String categoryPath) throws RepositoryException, RepositoryConfigurationException {
-
     String repository = portletPreferences.getValue(UIParameterizedContentListViewerConstant.REPOSITORY, null);
     String worksapce = portletPreferences.getValue(UIParameterizedContentListViewerConstant.WORKSPACE, null);
     String orderType = portletPreferences.getValue(UIParameterizedContentListViewerConstant.ORDER_TYPE, null);
     String orderBy = portletPreferences.getValue(UIParameterizedContentListViewerConstant.ORDER_BY, null);
     if (orderType == null) orderType = "DESC";
     if (orderBy == null) orderBy = "exo:dateCreated";
-    
     String orderQuery = " ORDER BY ";
     orderQuery += orderBy + " " + orderType;
-    
-    ThreadLocalSessionProviderService threadLocalSessionProviderService = ThreadLocalSessionProviderService.class
-    .cast(ExoContainerContext.getCurrentContainer()
-    .getComponentInstanceOfType(ThreadLocalSessionProviderService.class));
-    
+    ThreadLocalSessionProviderService threadLocalSessionProviderService = getApplicationComponent(ThreadLocalSessionProviderService.class);
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);    
     Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(worksapce, manageableRepository);

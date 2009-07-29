@@ -31,7 +31,6 @@ import javax.portlet.PortletPreferences;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.container.UIContainer;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleException;
@@ -39,7 +38,6 @@ import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.services.organization.UserProfileHandler;
@@ -58,7 +56,6 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIPageIterator;
-import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -292,7 +289,8 @@ import org.exoplatform.webui.event.EventListener;
    * 
    * @throws Exception the exception
    */
-  public List getCurrentPageData() throws Exception {
+  @SuppressWarnings("unchecked")
+	public List getCurrentPageData() throws Exception {
     return uiPaginator.getCurrentPageData();
   }
 
@@ -553,32 +551,18 @@ import org.exoplatform.webui.event.EventListener;
         throw new ItemNotFoundException();
       RepositoryService repositoryService = contentListPresentation.getApplicationComponent(RepositoryService.class);      
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
-      Session session = sessionProvider.getSession(worksapce, manageableRepository);
+      Session session = Utils.getSessionProvider(contentListPresentation).getSession(worksapce, manageableRepository);
       String contentType=null, nodePath=null;
-      try {
-    	  Node node = (Node) session.getItem(path);
-    	  contentType = node.getPrimaryNodeType().getName();
-    	  nodePath = node.getPath();
-      } finally {
-    	  sessionProvider.close();
-      }
-      UIListViewerBase uiListViewerBase = contentListPresentation.getAncestorOfType(UIListViewerBase.class);
-      UIContentListViewerPortlet uiListViewerPortlet = uiListViewerBase.getAncestorOfType(UIContentListViewerPortlet.class);
-      UIPopupContainer uiMaskPopupContainer = uiListViewerPortlet.getChild(UIPopupContainer.class);
-      UIContentEdittingPopup uiContentEdittingForm = uiMaskPopupContainer.createUIComponent(UIContentEdittingPopup.class, null, null);
-      UIDocumentDialogForm uiDocumentDialogForm = uiContentEdittingForm.getChild(UIDocumentDialogForm.class);
-
+  	  Node node = (Node) session.getItem(path);
+  	  contentType = node.getPrimaryNodeType().getName();
+  	  nodePath = node.getPath();
+      UIDocumentDialogForm uiDocumentDialogForm = contentListPresentation.createUIComponent(UIDocumentDialogForm.class, null, null);
       uiDocumentDialogForm.setRepositoryName(repository);
       uiDocumentDialogForm.setWorkspace(worksapce);
       uiDocumentDialogForm.setContentType(contentType);
       uiDocumentDialogForm.setNodePath(nodePath);
       uiDocumentDialogForm.setStoredPath(nodePath);
-
-      uiListViewerBase.addChild(uiContentEdittingForm);
-      uiContentEdittingForm.setRendered(true);
-      uiMaskPopupContainer.activate(uiContentEdittingForm, UIContentListViewerPortlet.portletConfigFormWidth, -1);      
-      context.addUIComponentToUpdateByAjax(uiMaskPopupContainer);      
+      Utils.createPopupWindow(contentListPresentation, uiDocumentDialogForm, "UIDocumentDialogFormPopupWindow", 800, 600);
     }
   }
 
