@@ -61,7 +61,6 @@ public class TestNewsletterTemplateHandler extends BaseWCMTestCase {
 			nodesTemp.addMixin(NodetypeConstant.EXO_NEWSLETTER_ENTRY);
 			session.save();
 			for(int i = 0 ; i < 5; i++) {
-				System.out.println("---------------------> add name: " + "testTemplate "+i);
 				try{
 					nodesTemp = subscriptionNode.getNode("testTemplate "+i);
 				}catch(Exception ex){
