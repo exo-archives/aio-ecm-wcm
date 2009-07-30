@@ -7,6 +7,7 @@ import javax.jcr.Node;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.BaseWCMTestCase;
+import org.exoplatform.services.wcm.core.NodetypeUtils;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
@@ -23,10 +24,10 @@ public class TestNewsletterSubscriptionHandler extends BaseWCMTestCase {
 	NewsletterManagerService newsletterManagerService;
 	public void setUp() throws Exception {
 		super.setUp();
-		Node newsletterApplicationNode = session.getRootNode().getNode("sites content/live").addNode("classic").addNode("ApplicationData")
-																.addNode("NewsletterApplication");
-		categoriesNode = newsletterApplicationNode.addNode("Categories");
-		userHomeNode = newsletterApplicationNode.addNode("Users");
+		NodetypeUtils.displayAllNode("collaboration", "repository");
+		Node newsletterApplicationNode = (Node) session.getItem("/sites content/live/classic/ApplicationData/NewsletterApplication");
+		categoriesNode = newsletterApplicationNode.getNode("Categories");
+		userHomeNode = newsletterApplicationNode.getNode("Users");
 		session.save();
 		
 		SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
@@ -51,7 +52,6 @@ public class TestNewsletterSubscriptionHandler extends BaseWCMTestCase {
 	public void testAddSubscription() throws Exception {
 		SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
 		newsletterSubscriptionHandler.add(sessionProvider, "classic", newsletterSubscriptionConfig);
-		
 		Node sub = (Node)categoriesNode.getNode("CategoryNameNewsletterSubcription").getNode("NameNewsletterSubcription");
 		assertNotNull(sub);
 		assertEquals(sub.getName(), newsletterSubscriptionConfig.getName());
@@ -78,7 +78,8 @@ public class TestNewsletterSubscriptionHandler extends BaseWCMTestCase {
 		newsletterSubscriptionHandler.add(sessionProvider, "classic", newsletterSubscriptionConfig);
 		
 		newsletterSubscriptionHandler.delete("classic", "CategoryNameNewsletterSubcription", newsletterSubscriptionConfig, sessionProvider);
-		assertEquals(1, categoriesNode.getNode("CategoryNameNewsletterSubcription").getNodes().getSize());
+		
+		assertEquals(3, categoriesNode.getNode("CategoryNameNewsletterSubcription").getNodes().getSize());
 	}
 	
 	public void testGetSubscriptionsByCategory() throws Exception {
@@ -92,7 +93,7 @@ public class TestNewsletterSubscriptionHandler extends BaseWCMTestCase {
 			newsletterSubscriptionHandler.add(sessionProvider, "classic", newsletterSubscriptionConfig);
 		}
 		
-		assertEquals(5, newsletterSubscriptionHandler.getSubscriptionsByCategory("classic", "CategoryNameNewsletterSubcription", sessionProvider).size());
+		assertEquals(7, newsletterSubscriptionHandler.getSubscriptionsByCategory("classic", "CategoryNameNewsletterSubcription", sessionProvider).size());
 	}
 	
 	public void testGetSubscriptionIdsByPublicUser() throws Exception {
@@ -130,7 +131,6 @@ public class TestNewsletterSubscriptionHandler extends BaseWCMTestCase {
 
 	protected void tearDown() throws Exception {
 		super.tearDown();
-		session.getRootNode().getNode("sites content/live").getNode("classic").remove();
 		session.save();
 	}
 }
