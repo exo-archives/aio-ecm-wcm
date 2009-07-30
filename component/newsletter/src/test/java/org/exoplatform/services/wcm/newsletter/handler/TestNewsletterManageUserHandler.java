@@ -70,6 +70,32 @@ public class TestNewsletterManageUserHandler extends BaseWCMTestCase {
 	    Node userFolderNode = (Node)session.getItem(userPath);
 	    userNode =  userFolderNode.getNode(userEmail);
 	}
+
+	public void testAddAdministrator() throws Exception {
+		newsletterManageUserHandler.addAdministrator("classic", "test01");
+		newsletterManageUserHandler.addAdministrator("classic", "test02");
+		List<String> listUser = newsletterManageUserHandler.getAllAdministrator("classic");
+		assertEquals(2, listUser.size());
+	}
+	
+	public void testDeleteUserAddministrator() throws Exception {
+		newsletterManageUserHandler.addAdministrator("classic", "userId01");
+		newsletterManageUserHandler.addAdministrator("classic", "userId02");
+		List<String> listUserAdd = newsletterManageUserHandler.getAllAdministrator("classic");
+		assertEquals(2,	listUserAdd.size());
+		newsletterManageUserHandler.deleteUserAddministrator("classic", "userId02");
+		List<String> listUserDelete = newsletterManageUserHandler.getAllAdministrator("classic");
+		assertEquals(1, listUserDelete.size());
+	}
+	
+	public void testGetAllAdministrator() throws Exception {
+		newsletterManageUserHandler.addAdministrator("classic", "user01");
+		newsletterManageUserHandler.addAdministrator("classic", "user02");
+		newsletterManageUserHandler.addAdministrator("classic", "user03");
+		List<String> listUser = newsletterManageUserHandler.getAllAdministrator("classic");
+		assertEquals(3, listUser.size());
+	}
+	
 	
 	public void testAdd() throws Exception {
 		newsletterManageUserHandler.add("classic", userEmail, sessionProvider);

@@ -87,7 +87,9 @@ public class NewsletterManageUserHandler {
   public List<String> getAllAdministrator(String portalName){
     try{
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspace, manageableRepository);
+      SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
+      if(sessionProvider == null) sessionProvider = SessionProvider.createSystemProvider();
+      Session session = sessionProvider.getSession(workspace, manageableRepository);
       Node categoriesNode = (Node) session.getItem(NewsletterConstant.generateCategoryPath(portalName));
       if(categoriesNode.hasProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR))
         return convertValuesToArray(categoriesNode.getProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR).getValues());
@@ -97,10 +99,12 @@ public class NewsletterManageUserHandler {
     return new ArrayList<String>();
   }
   
-  public List<String> getAllModerators(String portalName){
+  /*public List<String> getAllModerators(String portalName){
     try{
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspace, manageableRepository);
+      SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
+      if(sessionProvider == null) sessionProvider = SessionProvider.createSystemProvider();
+      Session session = sessionProvider.getSession(workspace, manageableRepository);
       Node categoriesNode = (Node) session.getItem(NewsletterConstant.generateCategoryPath(portalName));
       if(categoriesNode.hasProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR))
         return convertValuesToArray(categoriesNode.getProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR).getValues());
@@ -108,11 +112,13 @@ public class NewsletterManageUserHandler {
       ex.printStackTrace();
     }
     return new ArrayList<String>();
-  }
+  }*/
   
   public void addAdministrator(String portalName, String userId) throws Exception{
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-    Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspace, manageableRepository);
+    SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
+    if(sessionProvider == null) sessionProvider = SessionProvider.createSystemProvider();
+    Session session = sessionProvider.getSession(workspace, manageableRepository);
     Node categoriesNode = (Node) session.getItem(NewsletterConstant.generateCategoryPath(portalName));
     List<String> listUsers = new ArrayList<String>();
     if(categoriesNode.hasProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR))
@@ -125,7 +131,9 @@ public class NewsletterManageUserHandler {
   
   public void deleteUserAddministrator(String portalName, String userId) throws Exception{
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-    Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspace, manageableRepository);
+    SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
+    if(sessionProvider == null) sessionProvider = SessionProvider.createSystemProvider();
+    Session session = sessionProvider.getSession(workspace, manageableRepository);
     Node categoriesNode = (Node) session.getItem(NewsletterConstant.generateCategoryPath(portalName));
     List<String> listUsers = new ArrayList<String>();
     if(categoriesNode.hasProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR))

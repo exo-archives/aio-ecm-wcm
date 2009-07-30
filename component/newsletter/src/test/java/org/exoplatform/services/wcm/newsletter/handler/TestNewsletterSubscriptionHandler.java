@@ -124,7 +124,6 @@ public class TestNewsletterSubscriptionHandler extends BaseWCMTestCase {
 	public void testGetNumberOfNewslettersWaiting() throws Exception {
 		SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
 		newsletterSubscriptionHandler.add(sessionProvider, "classic", newsletterSubscriptionConfig);
-		System.out.println("\n\n\n ======>"+newsletterSubscriptionHandler.getNumberOfNewslettersWaiting("classic", "CategoryNameNewsletterSubcription", "NameNewsletterSubcription", sessionProvider)+"\n\n\n");
 		NewsletterEntryHandler newsletterEntryHandler = newsletterManagerService.getEntryHandler();
 		newsletterEntryHandler.add(sessionProvider);
 	}
