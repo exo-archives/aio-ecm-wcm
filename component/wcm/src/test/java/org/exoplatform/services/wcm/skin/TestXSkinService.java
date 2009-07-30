@@ -446,9 +446,12 @@ public class TestXSkinService extends BaseWCMTestCase {
 			createWebcontentNode(classicNode, WEB_CONTENT_NODE_NAME + "2", null, null, null);
 			Node jsFolder = webContent.getNode("css");
 			skinService.updatePortalSkinOnRemove(jsFolder, portal);
-			fail();
+			SkinService configService = getService(SkinService.class);
+      configService.addSkin("", "Default", "", "");
+			String cssData = configService.getMergedCSS("/portlet_app_1/css/jcr/classic/Default/Stylesheet.css");
+      assertEquals("", cssData);
 		} catch(Exception e) {
-			assertNotNull(e.getStackTrace());
+			fail();
 		}
 	}
 	
@@ -539,7 +542,7 @@ public class TestXSkinService extends BaseWCMTestCase {
 		Node rootNode = session.getRootNode();
 		if(rootNode.hasNode(WEB_CONTENT_NODE_NAME))
 			rootNode.getNode(WEB_CONTENT_NODE_NAME).remove();
-		Node sharedNode = rootNode.getNode("sites content").getNode("live").getNode("classic");
+		Node sharedNode = rootNode.getNode("sites content").getNode("live").getNode("classic").getNode("css");
 		NodeIterator nodeIterator = sharedNode.getNodes();
 		while(nodeIterator.hasNext()) {
 			nodeIterator.nextNode().remove();
