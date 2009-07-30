@@ -40,6 +40,7 @@ import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndV
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationPlugin;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationUtil;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class TestWCMPublicationService.
  */
@@ -474,11 +475,96 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
 
   /**
    * Test update lifecycle on remove page.
+   * 
+   * @throws Exception the exception
    */
-  public void testUpdateLifecycleOnRemovePage() {
+  public void testUpdateLifecycleOnRemovePage() throws Exception{
+    Node testNode = ((Node)collaborationSession.getItem("/sites content/live")).addNode("testSCV", "exo:webContent"); 
+    collaborationSession.save();
 
+    PageNavigation pageNavigation = createPageNavigation();
+    
+    // Create PageNode for test
+  	PageNode pageNode1 = new PageNode();
+  	pageNode1.setPageReference("portal::classic::testpage1");
+  	pageNode1.setName("testpage1");
+  	pageNode1.setUri("testpage1");
+  	
+  	PageNode pageNode2 = new PageNode();
+  	pageNode2.setPageReference("portal::classic::testpage2");
+  	pageNode2.setName("testpage2");
+  	pageNode2.setUri("testpage2");
+  	
+  	// Create Page for test
+    Page page = createPage();
+    
+	  Page page1 = new Page();
+	  page1.setPageId("portal::classic::testpage1");
+	  page1.setName("testpage1");
+	  page1.setOwnerType("portal");
+	  page1.setOwnerId("classic");
+    userPortalConfigService.create(page1);
+
+    Page page2 = new Page();
+	  page2.setPageId("portal::classic::testpage2");
+	  page2.setName("testpage2");
+	  page2.setOwnerType("portal");
+	  page2.setOwnerId("classic");
+    userPortalConfigService.create(page2);
+    
+    // Add Page to Navigation
+    pageNavigation.addNode(pageNode1);
+    pageNavigation.addNode(pageNode2);
+    userPortalConfigService.update(pageNavigation);
+
+    prepareNodeStatus(testNode);
+    
+    wcmPublicationService.publishContentSCV(testNode, page, "classic");
+    wcmPublicationService.publishContentSCV(testNode, page1, "classic");
+    wcmPublicationService.publishContentSCV(testNode, page2, "classic");
+    
+	  ArrayList<String> needCheckProperties = new ArrayList<String>();
+    needCheckProperties.add("publication:applicationIDs");
+    needCheckProperties.add("publication:navigationNodeURIs");
+    needCheckProperties.add("publication:webPageIDs");
+    
+    assertEquals("enrolled", testNode.getProperty("publication:currentState").getString());
+    assertEquals("testSCV", testNode.getProperty("exo:title").getString());
+    assertTrue(checkContentIdentifier(page, testNode.getUUID(), "SCVPortlet"));
+    assertTrue(hasNodeGotCorrectProperties(testNode, needCheckProperties, "testpage1", "testpage2", "testpage"));
+  	
+  	userPortalConfigService.remove(page1);
+  	userPortalConfigService.remove(page2);
+  	
+  	assertTrue(hasNodeGotCorrectProperties(testNode, needCheckProperties,  "testpage"));
+  	assertFalse(hasNodeGotCorrectProperties(testNode, needCheckProperties,  "testpage1"));
+  	assertFalse(hasNodeGotCorrectProperties(testNode, needCheckProperties,  "testpage2"));
+  	
+    userPortalConfigService.remove(page);
+    testNode.remove();
+    collaborationSession.save();
   }
 
+  /**
+   * Test is enrolled in wcm lifecycle.
+   * 
+   * @throws Exception the exception
+   */
+  public void testIsEnrolledInWCMLifecycle() throws Exception{
+    Node testNode = ((Node)collaborationSession.getItem("/sites content/live")).addNode("testSCV", "exo:webContent"); 
+    collaborationSession.save();
+    
+	  WebpagePublicationPlugin publicationPlugin = new StageAndVersionPublicationPlugin();
+    publicationPlugin.setName(StageAndVersionPublicationConstant.LIFECYCLE_NAME);
+    wcmPublicationService.addPublicationPlugin(publicationPlugin);
+    
+    assertFalse(wcmPublicationService.isEnrolledInWCMLifecycle(testNode));
+    
+    wcmPublicationService.enrollNodeInLifecycle(testNode, StageAndVersionPublicationConstant.LIFECYCLE_NAME);
+    
+    assertTrue(wcmPublicationService.isEnrolledInWCMLifecycle(testNode));
+  }
+  
 	/**
 	 * Generate window id string.
 	 * 
@@ -611,6 +697,7 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
     collaborationSession.save();
   }
 
+  
   /**
    * Suspend clv.
    * 
@@ -707,13 +794,14 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
     collaborationSession.save();
   }
 
-	/**
-	 * Creates the page.
-	 * 
-	 * @return the page
-	 * 
-	 * @throws Exception the exception
-	 */
+
+   /**
+    * Creates the page.
+    * 
+    * @return the page
+    * 
+    * @throws Exception the exception
+    */
 	private Page createPage() throws Exception {
 	  Page page = new Page();
 		page.setPageId("portal::classic::testpage");
@@ -723,6 +811,7 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
     userPortalConfigService.create(page);
 	  return page;
   }
+
 
 	/**
 	 * Creates the page navigation.
@@ -742,6 +831,7 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
   	return navigation;
   }
 	
+
 	/**
 	 * Prepare node status.
 	 * 
@@ -775,6 +865,7 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
     preference.setValues(listValue);
     return preference;
   }
+
 
   /**
    * Check content identifier.
@@ -849,7 +940,8 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
   	return false;
   }
 
-	/**
+
+  /**
 	 * Checks for node got correct properties.
 	 * 
 	 * @param testNode the test node
