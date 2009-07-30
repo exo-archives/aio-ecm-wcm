@@ -44,24 +44,48 @@ import org.exoplatform.services.rest.container.ResourceContainer;
 import org.exoplatform.services.rest.transformer.PassthroughInputTransformer;
 import org.exoplatform.services.rest.transformer.PassthroughOutputTransformer;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
- * Author : Hoa Pham	
- *          hoa.phamvu@exoplatform.com
- * Mar 31, 2009  
+ * Author : Hoa Pham
+ * hoa.phamvu@exoplatform.com
+ * Mar 31, 2009
  */
 @URITemplate("/images/{repositoryName}/{workspaceName}/{nodeIdentifier}/")
 public class RESTImagesRendererService implements ResourceContainer{
 
+  /** The session provider service. */
   private ThreadLocalSessionProviderService sessionProviderService;
+  
+  /** The repository service. */
   private RepositoryService repositoryService;
+  
+  /** The log. */
   static Log log = ExoLogger.getLogger(RESTImagesRendererService.class);
+  
+  /** The base rest uri. */
   private String baseRestURI = "/portal/rest/";
+  
+  /**
+   * Instantiates a new rEST images renderer service.
+   * 
+   * @param repositoryService the repository service
+   * @param sessionProviderService the session provider service
+   */
   public RESTImagesRendererService(RepositoryService repositoryService, ThreadLocalSessionProviderService sessionProviderService) {
     this.repositoryService = repositoryService;
     this.sessionProviderService = sessionProviderService;
   }
 
+  /**
+   * Serve image.
+   * 
+   * @param repository the repository
+   * @param workspace the workspace
+   * @param nodeIdentifier the node identifier
+   * 
+   * @return the response
+   */
   @HTTPMethod("GET")
   @QueryTemplate("type=file")
   @InputTransformer(PassthroughInputTransformer.class)
@@ -102,6 +126,16 @@ public class RESTImagesRendererService implements ResourceContainer{
     }
   }
   
+  /**
+   * Serve image.
+   * 
+   * @param repository the repository
+   * @param workspace the workspace
+   * @param nodeIdentifier the node identifier
+   * @param propertyName the property name
+   * 
+   * @return the response
+   */
   @HTTPMethod("GET")  
   @InputTransformer(PassthroughInputTransformer.class)
   @OutputTransformer(PassthroughOutputTransformer.class)
@@ -130,7 +164,15 @@ public class RESTImagesRendererService implements ResourceContainer{
     }
   }
   
-  
+  /**
+   * Generate uri.
+   * 
+   * @param file the file
+   * 
+   * @return the string
+   * 
+   * @throws Exception the exception
+   */
   public String generateURI(Node file) throws Exception {
     if(!file.isNodeType("nt:file")) throw new UnsupportedOperationException("The node isn't nt:file");
     StringBuilder builder = new StringBuilder();    
@@ -154,6 +196,16 @@ public class RESTImagesRendererService implements ResourceContainer{
                   .append(workspaceName).append("/").append(nodeIdentifiler).append("?type=file").toString();
   }
   
+  /**
+   * Generate uri.
+   * 
+   * @param file the file
+   * @param propertyName the property name
+   * 
+   * @return the string
+   * 
+   * @throws Exception the exception
+   */
   public String generateURI(Node file, String propertyName) throws Exception {
     StringBuilder builder = new StringBuilder();    
     String repository = ((ManageableRepository)file.getSession().getRepository()).getConfiguration().getName();
@@ -172,5 +224,4 @@ public class RESTImagesRendererService implements ResourceContainer{
     return builder.append(accessURI).append("images/").append(repository).append("/").append(workspaceName)
       .append("/").append(nodeIdentifiler).append("?propertyName=").append(propertyName).toString();
   }
-  
 }

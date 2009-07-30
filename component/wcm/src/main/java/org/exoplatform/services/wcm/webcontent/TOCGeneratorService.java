@@ -79,7 +79,7 @@ public class TOCGeneratorService {
    * @throws Exception the exception
    */
   public String getTOC(Node htmlNode) throws Exception {       
-    if(!htmlNode.hasProperty("exo:htmlTOC")) 
+    if(!htmlNode.hasProperty("exo:htmlTOC"))
       return null ;
 
     Value[] values = htmlNode.getProperty("exo:htmlTOC").getValues();
