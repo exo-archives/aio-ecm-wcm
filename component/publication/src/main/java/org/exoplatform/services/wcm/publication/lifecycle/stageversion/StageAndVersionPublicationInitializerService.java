@@ -37,20 +37,38 @@ import org.picocontainer.Startable;
 /**
  * Created by The eXo Platform SAS
  * Author : Phan Le Thanh Chuong
- *          phan.le.thanh.chuong@gmail.com, chuong_phan@exoplatform.com
- * Mar 25, 2009  
+ * phan.le.thanh.chuong@gmail.com, chuong_phan@exoplatform.com
+ * Mar 25, 2009
  */
 public class StageAndVersionPublicationInitializerService implements Startable{      
   
+  /** The live portal manager service. */
   private LivePortalManagerService livePortalManagerService;
+  
+  /** The publication service. */
   private PublicationService publicationService;
+  
+  /** The log. */
   private Log log = ExoLogger.getLogger(StageAndVersionPublicationInitializerService.class);
 
+  /**
+   * Instantiates a new stage and version publication initializer service.
+   * 
+   * @param livePortalManagerService the live portal manager service
+   * @param publicationService the publication service
+   */
   public StageAndVersionPublicationInitializerService(LivePortalManagerService livePortalManagerService, PublicationService publicationService) {
     this.livePortalManagerService = livePortalManagerService;
     this.publicationService = publicationService;
   }
   
+  /**
+   * Initialize publication.
+   * 
+   * @param portalNode the portal node
+   * 
+   * @throws Exception the exception
+   */
   public void initializePublication(Node portalNode) throws Exception{
     String sqlQuery = "select * from exo:webContent where jcr:path like '" + portalNode.getPath() + "/%' and not jcr:mixinTypes like '%" + StageAndVersionPublicationConstant.PUBLICATION_LIFECYCLE_TYPE + "%' order by exo:dateCreated";
     QueryManager queryManager = portalNode.getSession().getWorkspace().getQueryManager();
@@ -63,6 +81,9 @@ public class StageAndVersionPublicationInitializerService implements Startable{
     }
   }
   
+  /* (non-Javadoc)
+   * @see org.picocontainer.Startable#start()
+   */
   public void start() {
     log.info("Starting StageAndVersionPublicationInitializerService ...");
     SessionProvider sessionProvider = SessionProvider.createSystemProvider();
@@ -97,6 +118,9 @@ public class StageAndVersionPublicationInitializerService implements Startable{
     }
   }
   
+  /* (non-Javadoc)
+   * @see org.picocontainer.Startable#stop()
+   */
   public void stop() {   
     log.info("Stopping StageAndVersionPublicationInitializerService ...");
   }

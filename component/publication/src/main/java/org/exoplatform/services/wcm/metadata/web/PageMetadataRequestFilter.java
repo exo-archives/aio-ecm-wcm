@@ -61,16 +61,15 @@ public class PageMetadataRequestFilter implements Filter {
 
   /**
    * This method will filter a request to a portal page in wcm context to set page title, page metadata for the page
-   * These information is very important for search engine can indexing the page in Internet environment  
+   * These information is very important for search engine can indexing the page in Internet environment.
    * 
    * @param servletRequest request
-   * 
    * @param servletResponse response
-   * 
    * @param chain the filter chain
    * 
    * @throws IOException, ServletException
-   * 
+   * @throws IOException Signals that an I/O exception has occurred.
+   * @throws ServletException the servlet exception
    */
 
   public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain)
@@ -100,6 +99,7 @@ public class PageMetadataRequestFilter implements Filter {
     if(metadata != null) 
       req.setAttribute(PortalRequestContext.REQUEST_METADATA,metadata);
   }    
+  
   /**
    * Check and set metadata if request to pcv portlet.
    * 

@@ -46,7 +46,7 @@ public interface PageMetadataService {
   public final static String PAGE_TITLE = "pageTitle";     
   
   /**
-   * Extract metadata information from node
+   * Extract metadata information from node.
    * 
    * @param node the node
    * 
@@ -57,7 +57,7 @@ public interface PageMetadataService {
   public HashMap<String, String> extractMetadata(Node node) throws Exception;
   
   /**
-   * Retrieves  the portal metadata information for each request uri
+   * Retrieves  the portal metadata information for each request uri.
    * 
    * @param uri the uri
    * @param sessionProvider the session provider

@@ -48,8 +48,8 @@ import org.exoplatform.webui.form.UIForm;
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong_phan@exoplatform.com
- * Mar 2, 2009  
+ * chuong_phan@exoplatform.com
+ * Mar 2, 2009
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
@@ -68,12 +68,32 @@ import org.exoplatform.webui.form.UIForm;
 
 public class UIPublicationPanel extends UIForm {
 
+  /** The current node. */
   private Node currentNode;
+  
+  /** The current revision. */
   private Node currentRevision;  
+  
+  /** The revisions data map. */
   private Map<String,VersionData> revisionsDataMap = new HashMap<String,VersionData>();
+  
+  /** The viewed revisions. */
   private List<Node> viewedRevisions = new ArrayList<Node>(3);
+  
+  /**
+   * Instantiates a new uI publication panel.
+   * 
+   * @throws Exception the exception
+   */
   public UIPublicationPanel() throws Exception {}
   
+  /**
+   * Inits the.
+   * 
+   * @param node the node
+   * 
+   * @throws Exception the exception
+   */
   public void init(Node node) throws Exception {
     this.currentNode = node;    
     this.currentRevision = node;
@@ -84,6 +104,13 @@ public class UIPublicationPanel extends UIForm {
     cleanPublicationData(node);
   }
   
+  /**
+   * Clean publication data.
+   * 
+   * @param node the node
+   * 
+   * @throws Exception the exception
+   */
   private void cleanPublicationData(Node node) throws Exception {
     if(viewedRevisions.size() == 1 && revisionsDataMap.size()>1) {
       node.setProperty(StageAndVersionPublicationConstant.REVISION_DATA_PROP,new Value[] {});
@@ -94,6 +121,15 @@ public class UIPublicationPanel extends UIForm {
     }
   }
   
+  /**
+   * Gets the all revisions.
+   * 
+   * @param node the node
+   * 
+   * @return the all revisions
+   * 
+   * @throws Exception the exception
+   */
   public List<Node> getAllRevisions(Node node) throws Exception {
     List<Node> allversions = new ArrayList<Node>();
     VersionIterator iterator = node.getVersionHistory().getAllVersions();
@@ -108,10 +144,29 @@ public class UIPublicationPanel extends UIForm {
     return allversions;
   }  
 
+  /**
+   * Gets the current node.
+   * 
+   * @return the current node
+   */
   public Node getCurrentNode() { return currentNode; }
 
+  /**
+   * Gets the current revision.
+   * 
+   * @return the current revision
+   */
   public Node getCurrentRevision() { return currentRevision; }
 
+  /**
+   * Gets the revision author.
+   * 
+   * @param revision the revision
+   * 
+   * @return the revision author
+   * 
+   * @throws Exception the exception
+   */
   public String getRevisionAuthor(Node revision) throws Exception{
     VersionData revisionData = revisionsDataMap.get(revision.getUUID());
     if(revisionData!= null)
@@ -122,11 +177,29 @@ public class UIPublicationPanel extends UIForm {
     return null;
   }
 
+  /**
+   * Gets the revision by uuid.
+   * 
+   * @param revisionUUID the revision uuid
+   * 
+   * @return the revision by uuid
+   * 
+   * @throws Exception the exception
+   */
   public Node getRevisionByUUID(String revisionUUID) throws Exception {
     Session session = currentNode.getSession();
     return session.getNodeByUUID(revisionUUID);
   }
 
+  /**
+   * Gets the revision created date.
+   * 
+   * @param revision the revision
+   * 
+   * @return the revision created date
+   * 
+   * @throws Exception the exception
+   */
   public String getRevisionCreatedDate(Node revision) throws Exception {
     UIPublicationContainer container = getAncestorOfType(UIPublicationContainer.class);
     DateFormat dateFormater = container.getDateTimeFormater();
@@ -139,9 +212,24 @@ public class UIPublicationPanel extends UIForm {
     return dateFormater.format(calendar.getTime());
   }
 
+  /**
+   * Gets the revisions.
+   * 
+   * @return the revisions
+   */
   public List<Node> getRevisions() {
     return viewedRevisions;    
   }
+  
+  /**
+   * Gets the revision state.
+   * 
+   * @param revision the revision
+   * 
+   * @return the revision state
+   * 
+   * @throws Exception the exception
+   */
   public String getRevisionState(Node revision) throws Exception{
     VersionData revisionData = revisionsDataMap.get(revision.getUUID());
     if(revisionData!= null)
@@ -152,12 +240,27 @@ public class UIPublicationPanel extends UIForm {
     return null;
   }    
 
+  /**
+   * Sets the current revision.
+   * 
+   * @param revision the new current revision
+   */
   public void setCurrentRevision(Node revision) { this.currentRevision = revision; }
 
+  /**
+   * Sets the revisions.
+   * 
+   * @param revisions the new revisions
+   */
   public void setRevisions(List<Node> revisions) {
     this.viewedRevisions = revisions;
   }
 
+  /**
+   * Update panel.
+   * 
+   * @throws Exception the exception
+   */
   public void updatePanel() throws Exception{     
     UIPublicationContainer publicationContainer = getAncestorOfType(UIPublicationContainer.class);
     UIPublicationHistory publicationHistory = publicationContainer.getChild(UIPublicationHistory.class);
@@ -166,6 +269,16 @@ public class UIPublicationPanel extends UIForm {
     this.viewedRevisions = getLatestRevisions(3,currentNode);
   }
 
+  /**
+   * Gets the latest revisions.
+   * 
+   * @param limit the limit
+   * @param node the node
+   * 
+   * @return the latest revisions
+   * 
+   * @throws Exception the exception
+   */
   private List<Node> getLatestRevisions(int limit, Node node) throws Exception {
     List<Node> allversions = getAllRevisions(node);
     List<Node> latestVersions = new ArrayList<Node>();
@@ -177,6 +290,15 @@ public class UIPublicationPanel extends UIForm {
     return latestVersions;
   }
 
+  /**
+   * Gets the revision data.
+   * 
+   * @param node the node
+   * 
+   * @return the revision data
+   * 
+   * @throws Exception the exception
+   */
   private Map<String, VersionData> getRevisionData(Node node) throws Exception{
     Map<String,VersionData> map = new HashMap<String,VersionData>();    
     try {
@@ -190,7 +312,22 @@ public class UIPublicationPanel extends UIForm {
     return map;
   }   
   
+  /**
+   * The listener interface for receiving changeVersionAction events.
+   * The class that is interested in processing a changeVersionAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addChangeVersionActionListener<code> method. When
+   * the changeVersionAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see ChangeVersionActionEvent
+   */
   public static class ChangeVersionActionListener extends EventListener<UIPublicationPanel> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIPublicationPanel> event) throws Exception {
       UIPublicationPanel publicationPanel = event.getSource();
       String versionUUID = event.getRequestContext().getRequestParameter(OBJECTID);
@@ -201,7 +338,22 @@ public class UIPublicationPanel extends UIForm {
     }
   } 
 
+  /**
+   * The listener interface for receiving closeAction events.
+   * The class that is interested in processing a closeAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addCloseActionListener<code> method. When
+   * the closeAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see CloseActionEvent
+   */
   public static class CloseActionListener extends EventListener<UIPublicationPanel> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIPublicationPanel> event) throws Exception {
       UIPublicationPanel publicationPanel = event.getSource();
       UIPopupContainer uiPopupContainer = (UIPopupContainer) publicationPanel.getAncestorOfType(UIPopupContainer.class);
@@ -210,7 +362,22 @@ public class UIPublicationPanel extends UIForm {
     }
   } 
 
+  /**
+   * The listener interface for receiving draftAction events.
+   * The class that is interested in processing a draftAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addDraftActionListener<code> method. When
+   * the draftAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see DraftActionEvent
+   */
   public static class DraftActionListener extends EventListener<UIPublicationPanel> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIPublicationPanel> event) throws Exception {
       UIPublicationPanel publicationPanel = event.getSource();
       Node currentNode = publicationPanel.getCurrentNode();
@@ -234,7 +401,22 @@ public class UIPublicationPanel extends UIForm {
     }
   } 
 
+  /**
+   * The listener interface for receiving liveAction events.
+   * The class that is interested in processing a liveAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addLiveActionListener<code> method. When
+   * the liveAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see LiveActionEvent
+   */
   public static class LiveActionListener extends EventListener<UIPublicationPanel> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIPublicationPanel> event) throws Exception {
       UIPublicationPanel publicationPanel = event.getSource();      
       Node currentNode = publicationPanel.getCurrentNode();
@@ -257,7 +439,22 @@ public class UIPublicationPanel extends UIForm {
     }
   } 
 
+  /**
+   * The listener interface for receiving obsoleteAction events.
+   * The class that is interested in processing a obsoleteAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addObsoleteActionListener<code> method. When
+   * the obsoleteAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see ObsoleteActionEvent
+   */
   public static class ObsoleteActionListener extends EventListener<UIPublicationPanel> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIPublicationPanel> event) throws Exception {
       UIPublicationPanel publicationPanel = event.getSource();     
       Node currentNode = publicationPanel.getCurrentNode();
@@ -280,7 +477,22 @@ public class UIPublicationPanel extends UIForm {
     }
   }  
   
+  /**
+   * The listener interface for receiving previewVersionAction events.
+   * The class that is interested in processing a previewVersionAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addPreviewVersionActionListener<code> method. When
+   * the previewVersionAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see PreviewVersionActionEvent
+   */
   public static class PreviewVersionActionListener extends EventListener<UIPublicationPanel> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIPublicationPanel> event) throws Exception {
       UIPublicationPanel publicationPanel = event.getSource();
       UIPublicationContainer publicationContainer = publicationPanel.getAncestorOfType(UIPublicationContainer.class);
@@ -305,7 +517,22 @@ public class UIPublicationPanel extends UIForm {
     }
   }
 
+  /**
+   * The listener interface for receiving restoreVersionAction events.
+   * The class that is interested in processing a restoreVersionAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addRestoreVersionActionListener<code> method. When
+   * the restoreVersionAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see RestoreVersionActionEvent
+   */
   public static class RestoreVersionActionListener extends EventListener<UIPublicationPanel> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIPublicationPanel> event) throws Exception {      
       UIPublicationPanel publicationPanel = event.getSource();
       Node currentNode = publicationPanel.getCurrentNode();        
@@ -334,7 +561,22 @@ public class UIPublicationPanel extends UIForm {
     }
   } 
 
+  /**
+   * The listener interface for receiving seeAllVersionAction events.
+   * The class that is interested in processing a seeAllVersionAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSeeAllVersionActionListener<code> method. When
+   * the seeAllVersionAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SeeAllVersionActionEvent
+   */
   public static class SeeAllVersionActionListener extends EventListener<UIPublicationPanel> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIPublicationPanel> event) throws Exception {
       UIPublicationPanel publicationPanel = event.getSource();
       publicationPanel.setRevisions(publicationPanel.getAllRevisions(publicationPanel.getCurrentNode()));

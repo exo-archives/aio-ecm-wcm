@@ -21,14 +21,12 @@ import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleExcepti
 /**
  * Created by The eXo Platform SAS
  * Author : DANG TAN DUNG
- *          dzungdev@gmail.com
- * Oct 14, 2008  
+ * dzungdev@gmail.com
+ * Oct 14, 2008
  */
 public class NotInWCMPublicationException extends NotInPublicationLifecycleException {
 
-  /**
-   * 
-   */
+  /** The Constant serialVersionUID. */
   private static final long serialVersionUID = 1L;
 
 }

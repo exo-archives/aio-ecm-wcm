@@ -16,7 +16,6 @@
  */
 package org.exoplatform.services.wcm.publication.lifecycle.stageversion.ui;
 
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -33,8 +32,8 @@ import org.exoplatform.webui.form.UIForm;
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong_phan@exoplatform.com
- * Mar 4, 2009  
+ * chuong_phan@exoplatform.com
+ * Mar 4, 2009
  */
 
 @ComponentConfig(
@@ -43,10 +42,25 @@ import org.exoplatform.webui.form.UIForm;
 )
                
 public class UIPublicationContainer extends UIForm implements UIPopupComponent {  
+  
+  /** The selected tab id. */
   private static String selectedTabId = "";  
+  
+  /**
+   * Instantiates a new uI publication container.
+   */
   public UIPublicationContainer() { }
   
+  /** The date time formater. */
   private DateFormat dateTimeFormater;
+  
+  /**
+   * Inits the container.
+   * 
+   * @param node the node
+   * 
+   * @throws Exception the exception
+   */
   public void initContainer(Node node) throws Exception {
     UIPublicationPanel publicationPanel = addChild(UIPublicationPanel.class, null, null);
     publicationPanel.init(node);
@@ -62,18 +76,52 @@ public class UIPublicationContainer extends UIForm implements UIPopupComponent {
     dateTimeFormater = SimpleDateFormat.getDateTimeInstance(SimpleDateFormat.MEDIUM,SimpleDateFormat.MEDIUM,locale);
   }
   
+  /**
+   * Gets the date time formater.
+   * 
+   * @return the date time formater
+   */
   public DateFormat getDateTimeFormater() { return dateTimeFormater; }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.core.UIPopupComponent#activate()
+   */
   public void activate() throws Exception {
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.core.UIPopupComponent#deActivate()
+   */
   public void deActivate() throws Exception {
   }
   
+  /**
+   * Gets the selected tab id.
+   * 
+   * @return the selected tab id
+   */
   public String getSelectedTabId() { return selectedTabId; }
+  
+  /**
+   * Sets the selected tab.
+   * 
+   * @param renderTabId the new selected tab
+   */
   public void setSelectedTab(String renderTabId) { selectedTabId = renderTabId; }
+  
+  /**
+   * Sets the selected tab.
+   * 
+   * @param index the new selected tab
+   */
   public void setSelectedTab(int index) { selectedTabId = ((UIComponent)getChild(index-1)).getId();}
   
+  /**
+   * Sets the active tab.
+   * 
+   * @param component the component
+   * @param context the context
+   */
   public void setActiveTab(UIComponent component, WebuiRequestContext context) {
     for (UIComponent child : getChildren()) {
       child.setRendered(false);

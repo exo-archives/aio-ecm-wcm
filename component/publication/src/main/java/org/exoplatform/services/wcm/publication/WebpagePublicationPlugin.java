@@ -44,19 +44,22 @@ public abstract class WebpagePublicationPlugin extends PublicationPlugin {
    * 
    * @param content the jcr content node
    * @param page the portal page
-   * @param portalOwnerName TODO
+   * @param portalOwnerName the portal owner name
+   * 
    * @throws Exception the exception
    */
   public abstract void publishContentToSCV(Node content, Page page, String portalOwnerName) throws Exception;  
   
   /**
    * Publish content node to a portal page.
-   * @param content
-   * @param page
-   * @param clvPortletId
-   * @param portalOwnerName
-   * @param remoteUser
-   * @throws Exception
+   * 
+   * @param content the content
+   * @param page the page
+   * @param clvPortletId the clv portlet id
+   * @param portalOwnerName the portal owner name
+   * @param remoteUser the remote user
+   * 
+   * @throws Exception the exception
    */
   public abstract void publishContentToCLV(Node content, Page page, String clvPortletId, String portalOwnerName, String remoteUser) throws Exception;
   
@@ -67,43 +70,42 @@ public abstract class WebpagePublicationPlugin extends PublicationPlugin {
    * 
    * @param content the content
    * @param page the page
-   * @param remoteUser TODO
+   * @param remoteUser the remote user
+   * 
    * @throws Exception the exception
    */
   public abstract void suspendPublishedContentFromPage(Node content, Page page, String remoteUser) throws Exception;
       
   /**
-   * Update lifecyle state of the any content relates to the page when page is created
+   * Update lifecyle state of the any content relates to the page when page is created.
    * 
    * @param page the page
-   * @param remoteUser TODO
+   * @param remoteUser the remote user
    * 
    * @throws Exception the exception
    */
   public abstract void updateLifecyleOnCreatePage(Page page, String remoteUser) throws Exception;
   
   /**
-   * Update lifecyle state of the any content relates to the page when page is changed
+   * Update lifecyle state of the any content relates to the page when page is changed.
    * 
    * @param page the page
-   * @param remoteUser TODO
    * 
    * @throws Exception the exception
    */
   public abstract void updateLifecyleOnChangePage(Page page, String remoteUser) throws Exception;
   
   /**
-   * Update lifecyle state of the any content relates to the page when page is removed
+   * Update lifecyle state of the any content relates to the page when page is removed.
    * 
    * @param page the page
-   * @param remoteUser TODO
    * 
    * @throws Exception the exception
    */
   public abstract void updateLifecycleOnRemovePage(Page page, String remoteUser) throws Exception;
   
   /**
-   * Update lifecyle state of the any content relates to a navigation when the navigation is created
+   * Update lifecyle state of the any content relates to a navigation when the navigation is created.
    * 
    * @param navigation the navigation
    * 
@@ -112,17 +114,17 @@ public abstract class WebpagePublicationPlugin extends PublicationPlugin {
   public abstract void updateLifecyleOnCreateNavigation(PageNavigation navigation) throws Exception;
   
   /**
-   * Update lifecyle state of the any content relates to a navigation when the navigation is changed
+   * Update lifecyle state of the any content relates to a navigation when the navigation is changed.
    * 
    * @param navigation the navigation
-   * @param remoteUser TODO
+   * @param remoteUser the remote user
    * 
    * @throws Exception the exception
    */
   public abstract void updateLifecycleOnChangeNavigation(PageNavigation navigation, String remoteUser) throws Exception;
   
   /**
-   * Update lifecyle state of the any content relates to a navigation when the navigation is removed
+   * Update lifecyle state of the any content relates to a navigation when the navigation is removed.
    * 
    * @param navigation the navigation
    * 

@@ -33,20 +33,37 @@ import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
 
 /**
  * Created by The eXo Platform SAS
- * Author : Hoa Pham	
- *          hoa.phamvu@exoplatform.com
- * Mar 5, 2009  
+ * Author : Hoa Pham
+ * hoa.phamvu@exoplatform.com
+ * Mar 5, 2009
  */
 public class PostCreateContentEventListener extends Listener<CmsService, Node>{
+  
+  /** The publication service. */
   private PublicationService publicationService;
+  
+  /** The configuration service. */
   private WCMConfigurationService configurationService;
+  
+  /** The web content schema handler. */
   private WebContentSchemaHandler webContentSchemaHandler;
+  
+  /**
+   * Instantiates a new post create content event listener.
+   * 
+   * @param publicationService the publication service
+   * @param configurationService the configuration service
+   * @param schemaConfigService the schema config service
+   */
   public PostCreateContentEventListener(PublicationService publicationService,WCMConfigurationService configurationService, WebSchemaConfigService schemaConfigService) {
     this.publicationService = publicationService;
     this.configurationService = configurationService;
     webContentSchemaHandler = schemaConfigService.getWebSchemaHandlerByType(WebContentSchemaHandler.class);
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.listener.Listener#onEvent(org.exoplatform.services.listener.Event)
+   */
   public void onEvent(Event<CmsService, Node> event) throws Exception {
     Node currentNode = event.getData();
     if(currentNode.canAddMixin("exo:rss-enable")) {

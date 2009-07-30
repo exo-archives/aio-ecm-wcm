@@ -68,7 +68,7 @@ public class PageEventListenerDelegate {
    * Update lifecyle on create page.
    * 
    * @param page the page
-   * @param remoteUser TODO
+   * @param remoteUser the remote user
    * 
    * @throws Exception the exception
    */
@@ -80,7 +80,7 @@ public class PageEventListenerDelegate {
    * Update lifecyle on change page.
    * 
    * @param page the page
-   * @param remoteUser TODO
+   * @param remoteUser the remote user
    * 
    * @throws Exception the exception
    */
@@ -93,7 +93,7 @@ public class PageEventListenerDelegate {
    * Update lifecycle on remove page.
    * 
    * @param page the page
-   * @param remoteUser TODO
+   * @param remoteUser the remote user
    * 
    * @throws Exception the exception
    */
@@ -112,7 +112,7 @@ public class PageEventListenerDelegate {
    * Update added application.
    * 
    * @param page the page
-   * @param remoteUser TODO
+   * @param remoteUser the remote user
    * 
    * @throws Exception the exception
    */
@@ -129,7 +129,7 @@ public class PageEventListenerDelegate {
    * Update removed application.
    * 
    * @param page the page
-   * @param remoteUser TODO
+   * @param remoteUser the remote user
    * 
    * @throws Exception the exception
    */
@@ -186,7 +186,8 @@ public class PageEventListenerDelegate {
    * @param applicationId the application id
    * @param content the content
    * @param lifecycleName the lifecycle name
-   * @param remoteUser TODO
+   * @param remoteUser the remote user
+   * 
    * @throws Exception the exception
    */
   private void saveAddedApplication(Page page, String applicationId, Node content, String lifecycleName, String remoteUser) throws Exception {    
@@ -239,7 +240,8 @@ public class PageEventListenerDelegate {
    * @param page the page
    * @param applicationId the application id
    * @param content the content
-   * @param remoteUser TODO
+   * @param remoteUser the remote user
+   * 
    * @throws Exception the exception
    */
   private void saveRemovedApplication(Page page, String applicationId, Node content, String remoteUser) throws Exception {

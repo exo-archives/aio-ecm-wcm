@@ -38,7 +38,6 @@ import org.exoplatform.webui.core.UITree;
  * Sep 23, 2008
  */
 
-@SuppressWarnings("unused")
 @ComponentConfig(
     template = "system:/groovy/webui/core/UITree.gtmpl"
 )

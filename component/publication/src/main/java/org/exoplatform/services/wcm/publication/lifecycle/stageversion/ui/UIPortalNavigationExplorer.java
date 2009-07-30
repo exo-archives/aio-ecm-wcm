@@ -71,6 +71,7 @@ public class UIPortalNavigationExplorer extends UIContainer {
    * 
    * @param portalName the portal name
    * @param runningPortals the running portals
+   * 
    * @throws Exception the exception
    */
   public void init(String portalName, List<String> runningPortals) throws Exception {    
@@ -116,7 +117,9 @@ public class UIPortalNavigationExplorer extends UIContainer {
    * Gets the portal navigation.
    * 
    * @param portalName the portal name
+   * 
    * @return the portal navigation
+   * 
    * @throws Exception the exception
    */
   private PageNavigation getPortalNavigation(String portalName) throws Exception {
@@ -135,6 +138,7 @@ public class UIPortalNavigationExplorer extends UIContainer {
    * Select tree node by uri.
    * 
    * @param uri the uri
+   * 
    * @throws Exception the exception
    */
   @SuppressWarnings("unchecked")

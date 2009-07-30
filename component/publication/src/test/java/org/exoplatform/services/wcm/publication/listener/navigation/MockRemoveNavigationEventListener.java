@@ -28,9 +28,8 @@ import org.exoplatform.services.wcm.publication.WCMPublicationService;
 
 /**
  * Created by The eXo Platform SAS
- * Author : Hoa Pham
- * hoa.pham@exoplatform.com
- * Sep 24, 2008
+ * Author : Do Dang Thang
+ * thang.do@exoplatform.com
  */
 public class MockRemoveNavigationEventListener extends Listener<UserPortalConfigService, PageNavigation>{
   

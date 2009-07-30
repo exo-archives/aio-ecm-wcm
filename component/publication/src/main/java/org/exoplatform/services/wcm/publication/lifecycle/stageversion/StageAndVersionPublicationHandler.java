@@ -33,27 +33,47 @@ import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
 
 /**
  * Created by The eXo Platform SAS
- * Author : Hoa Pham	
- *          hoa.phamvu@exoplatform.com
- * Mar 5, 2009  
+ * Author : Hoa Pham
+ * hoa.phamvu@exoplatform.com
+ * Mar 5, 2009
  */
 public class StageAndVersionPublicationHandler extends BaseWebSchemaHandler {
+  
+  /** The template service. */
   private TemplateService templateService;   
+  
+  /** The publication service. */
   private PublicationService publicationService;
+  
+  /**
+   * Instantiates a new stage and version publication handler.
+   * 
+   * @param templateService the template service
+   * @param publicationService the publication service
+   */
   public StageAndVersionPublicationHandler(TemplateService templateService, PublicationService publicationService) {    
     this.templateService = templateService;   
     this.publicationService = publicationService;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.core.BaseWebSchemaHandler#getHandlerNodeType()
+   */
   protected String getHandlerNodeType() {
     return null;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.core.BaseWebSchemaHandler#getParentNodeType()
+   */
   @Override
   protected String getParentNodeType() {
     return null;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.core.BaseWebSchemaHandler#matchHandler(javax.jcr.Node, org.exoplatform.services.jcr.ext.common.SessionProvider)
+   */
   public boolean matchHandler(Node node, SessionProvider sessionProvider) throws Exception {
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     WebSchemaConfigService schemaConfigService = (WebSchemaConfigService)container.getComponentInstanceOfType(WebSchemaConfigService.class);
@@ -67,6 +87,9 @@ public class StageAndVersionPublicationHandler extends BaseWebSchemaHandler {
     return templateService.isManagedNodeType(primaryNodeType,repository);    
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.core.BaseWebSchemaHandler#onCreateNode(javax.jcr.Node, org.exoplatform.services.jcr.ext.common.SessionProvider)
+   */
   public void onCreateNode(Node node, SessionProvider sessionProvider) throws Exception {    
     Node checkNode = node;
     if(node.isNodeType("nt:file")) {
@@ -85,6 +108,10 @@ public class StageAndVersionPublicationHandler extends BaseWebSchemaHandler {
     publicationService.enrollNodeInLifecycle(checkNode,StageAndVersionPublicationConstant.LIFECYCLE_NAME);
     publicationService.changeState(checkNode,StageAndVersionPublicationConstant.DRAFT_STATE,new HashMap<String,String>());
   }   
+  
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.core.BaseWebSchemaHandler#onModifyNode(javax.jcr.Node, org.exoplatform.services.jcr.ext.common.SessionProvider)
+   */
   public void onModifyNode(Node node, SessionProvider sessionProvider) throws Exception {
     if(node.isNew())
       return;   

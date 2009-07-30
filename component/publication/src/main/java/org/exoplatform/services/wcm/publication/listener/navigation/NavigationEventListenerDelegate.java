@@ -79,7 +79,7 @@ public class NavigationEventListenerDelegate {
    * Update lifecycle on change navigation.
    * 
    * @param pageNavigation the page navigation
-   * @param remoteUser TODO
+   * @param remoteUser the remote user
    * 
    * @throws Exception the exception
    */
@@ -105,7 +105,7 @@ public class NavigationEventListenerDelegate {
    * Update added page node.
    * 
    * @param pageNavigation the page navigation
-   * @param remoteUser TODO
+   * @param remoteUser remoteUser
    * 
    * @throws Exception the exception
    */
@@ -132,7 +132,7 @@ public class NavigationEventListenerDelegate {
    * Update removed page node.
    * 
    * @param pageNavigation the page navigation
-   * @param remoteUser TODO
+   * @param remoteUser remoteUser
    * 
    * @throws Exception the exception
    */

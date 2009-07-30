@@ -36,14 +36,21 @@ import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong_phan@exoplatform.com
- * Mar 19, 2009  
+ * chuong_phan@exoplatform.com
+ * Mar 19, 2009
  */
 @ComponentConfig(
   lifecycle = UIContainerLifecycle.class
 )
 public class UIPublicationPagesContainer extends UIContainer {
   
+  /**
+   * Inits the.
+   * 
+   * @param node the node
+   * 
+   * @throws Exception the exception
+   */
   public void init(Node node) throws Exception {
     UIPublicationPages publicationPages = addChild(UIPublicationPages.class, null, null);
     List<String> runningPortals = getRunningPortals(node.getSession().getUserID());
@@ -54,6 +61,15 @@ public class UIPublicationPagesContainer extends UIContainer {
     if (popupWindow == null ) popupWindow = addChild(UIPopupWindow.class, null, "UIClvPopupContainer");
   }
   
+  /**
+   * Gets the portal for content.
+   * 
+   * @param contentNode the content node
+   * 
+   * @return the portal for content
+   * 
+   * @throws Exception the exception
+   */
   private String getPortalForContent(Node contentNode) throws Exception {
     LivePortalManagerService livePortalManagerService = StageAndVersionPublicationUtil.getServices(LivePortalManagerService.class);
     for(String portalPath:livePortalManagerService.getLivePortalsPath()) {
@@ -64,6 +80,15 @@ public class UIPublicationPagesContainer extends UIContainer {
     return null;
   }
   
+  /**
+   * Gets the running portals.
+   * 
+   * @param userId the user id
+   * 
+   * @return the running portals
+   * 
+   * @throws Exception the exception
+   */
   private List<String> getRunningPortals(String userId) throws Exception {
     List<String> listPortalName = new ArrayList<String>();
     DataStorage service = StageAndVersionPublicationUtil.getServices(DataStorage.class);

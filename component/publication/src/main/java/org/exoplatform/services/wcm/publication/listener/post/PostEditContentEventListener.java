@@ -28,17 +28,27 @@ import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndV
 
 /**
  * Created by The eXo Platform SAS
- * Author : Hoa Pham	
- *          hoa.phamvu@exoplatform.com
- * Mar 6, 2009  
+ * Author : Hoa Pham
+ * hoa.phamvu@exoplatform.com
+ * Mar 6, 2009
  */
 public class PostEditContentEventListener extends Listener<CmsService,Node> {
 
+  /** The pservice. */
   private PublicationService pservice;
+  
+  /**
+   * Instantiates a new post edit content event listener.
+   * 
+   * @param pservice the pservice
+   */
   public PostEditContentEventListener(PublicationService pservice) {
     this.pservice = pservice;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.listener.Listener#onEvent(org.exoplatform.services.listener.Event)
+   */
   public void onEvent(Event<CmsService, Node> event) throws Exception {
   	Node currentNode = event.getData();
 

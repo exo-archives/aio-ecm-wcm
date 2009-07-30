@@ -235,6 +235,14 @@ public class UIPublicationAction extends UIForm {
       publicationContainer.setActiveTab(publicationPagesContainer, event.getRequestContext());
     }
     
+    /**
+     * Gets the page node by uri.
+     * 
+     * @param pageNav the page nav
+     * @param uri the uri
+     * 
+     * @return the page node by uri
+     */
     private PageNode getPageNodeByUri(PageNavigation pageNav, String uri) {
       if(pageNav == null || uri == null) return null;
       List<PageNode> pageNodes = pageNav.getNodes();
@@ -246,6 +254,14 @@ public class UIPublicationAction extends UIForm {
       return null; 
     }  
     
+    /**
+     * Gets the page node by uri.
+     * 
+     * @param pageNode the page node
+     * @param uri the uri
+     * 
+     * @return the page node by uri
+     */
     private PageNode getPageNodeByUri(PageNode pageNode, String uri){
       if(pageNode.getUri().equals(uri)) return pageNode;
       List<PageNode> children = pageNode.getChildren();

@@ -45,8 +45,9 @@ public interface WCMPublicationService {
   * Publish content to a portal page when the node is in a publication lifecyle.
   * 
   * @param content the content
- * @param page the page
- * @param portalOwnerName TODO
+  * @param page the page
+  * @param portalOwnerName TODO
+  * 
   * @throws NotInPublicationLifecycleException the not in publication lifecycle exception
   * @throws Exception the exception
   */
@@ -54,11 +55,14 @@ public interface WCMPublicationService {
  
  /**
   * Publish content to a portal page when the node is in a publication lifecyle.
-  * @param content
- * @param page
- * @param clvPortletId
- * @param portalOwnerName
- * @param remoteUser
+  * 
+  * @param content the content
+  * @param page the page
+  * @param clvPortletId the clv portlet id
+  * @param portalOwnerName the portal owner name
+  * @param remoteUser the remote user
+  * 
+  * @throws Exception the exception
   */
  public void publishContentCLV(Node content, Page page, String clvPortletId, String portalOwnerName, String remoteUser) throws Exception;
  
@@ -66,8 +70,9 @@ public interface WCMPublicationService {
   * Suspend a published content from a portal page.
   * 
   * @param content the jcr content node
- * @param page the portal page
- * @param remoteUser TODO
+  * @param page the portal page
+  * @param remoteUser TODO
+  * 
   * @throws NotInPublicationLifecycleException the not in publication lifecycle exception
   * @throws Exception the exception
   */
@@ -81,13 +86,24 @@ public interface WCMPublicationService {
   */
  public Map<String, WebpagePublicationPlugin> getWebpagePublicationPlugins();
  
+ /**
+  * Checks if is enrolled in wcm lifecycle.
+  * 
+  * @param node the node
+  * 
+  * @return true, if is enrolled in wcm lifecycle
+  * 
+  * @throws NotInPublicationLifecycleException the not in publication lifecycle exception
+  * @throws Exception the exception
+  */
  public boolean isEnrolledInWCMLifecycle(Node node) throws NotInPublicationLifecycleException, Exception;
+ 
  /**
   * Enroll in a web page publication lifecycle. The method will be retrieve the
   * web page publication lifecycle by lifecycle name and enroll to lifecycle
   * 
   * @param node the node
-  * @param lifecycleName the lifecycle name 
+  * @param lifecycleName the lifecycle name
   * 
   * @throws Exception the exception
   */
@@ -104,37 +120,37 @@ public interface WCMPublicationService {
  public void unsubcribeLifecycle(Node node) throws NotInPublicationLifecycleException, Exception;
  
  /**
-  * Retrieves all web page lifecycles and update the publication lifecycle when a page is created
+  * Retrieves all web page lifecycles and update the publication lifecycle when a page is created.
   * 
   * @param page the page
- * @param remoteUser TODO
+  * @param remoteUser TODO
   * 
   * @throws Exception the exception
   */
  public void updateLifecyleOnCreatePage(Page page, String remoteUser) throws Exception;
  
  /**
-  * Retrieves all web page lifecycles and update the publication lifecycle when a page is changed
+  * Retrieves all web page lifecycles and update the publication lifecycle when a page is changed.
   * 
   * @param page the page
- * @param remoteUser TODO
+  * @param remoteUser TODO
   * 
   * @throws Exception the exception
   */
  public void updateLifecyleOnChangePage(Page page, String remoteUser) throws Exception;
  
  /**
-  * Retrieves all web page lifecycles and update the publication lifecycle when a page is removed
+  * Retrieves all web page lifecycles and update the publication lifecycle when a page is removed.
   * 
   * @param page the page
- * @param remoteUser TODO
+  * @param remoteUser TODO
   * 
   * @throws Exception the exception
   */
  public void updateLifecycleOnRemovePage(Page page, String remoteUser) throws Exception;
  
  /**
-  * Retrieves all web page lifecycles and update the publication lifecycle when a navigation is created
+  * Retrieves all web page lifecycles and update the publication lifecycle when a navigation is created.
   * 
   * @param navigation the navigation
   * 
@@ -143,17 +159,17 @@ public interface WCMPublicationService {
  public void updateLifecyleOnCreateNavigation(PageNavigation navigation) throws Exception;
  
  /**
-  * Retrieves all web page lifecycles and update the publication lifecycle when a navigation is changed
+  * Retrieves all web page lifecycles and update the publication lifecycle when a navigation is changed.
   * 
   * @param navigation the navigation
- * @param remoteUser TODO
+  * @param remoteUser TODO
   * 
   * @throws Exception the exception
   */
  public void updateLifecycleOnChangeNavigation(PageNavigation navigation, String remoteUser) throws Exception;
  
  /**
-  * Retrieves all web page lifecycles and update the publication lifecycle when a navigation is removed
+  * Retrieves all web page lifecycles and update the publication lifecycle when a navigation is removed.
   * 
   * @param navigation the navigation
   * 

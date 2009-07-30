@@ -44,12 +44,29 @@ import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndV
  */
 public class XMLDeploymentWithStagingPlugin extends DeploymentPlugin {
 
+  /** The init params. */
   private InitParams initParams;
+  
+  /** The configuration manager. */
   private ConfigurationManager configurationManager;
+  
+  /** The repository service. */
   private RepositoryService repositoryService;
+  
+  /** The publication service. */
   private StageAndVersionPublicationInitializerService publicationService;
+  
+  /** The log. */
   private Log log = ExoLogger.getLogger(this.getClass());
 
+  /**
+   * Instantiates a new xML deployment with staging plugin.
+   * 
+   * @param initParams the init params
+   * @param configurationManager the configuration manager
+   * @param repositoryService the repository service
+   * @param publicationService the publication service
+   */
   public XMLDeploymentWithStagingPlugin(InitParams initParams, ConfigurationManager configurationManager, RepositoryService repositoryService, StageAndVersionPublicationInitializerService publicationService) {
     this.initParams = initParams;
     this.configurationManager = configurationManager;
@@ -57,6 +74,9 @@ public class XMLDeploymentWithStagingPlugin extends DeploymentPlugin {
     this.publicationService = publicationService;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.deployment.DeploymentPlugin#deploy(org.exoplatform.services.jcr.ext.common.SessionProvider)
+   */
   public void deploy(SessionProvider sessionProvider) throws Exception {
     Iterator iterator = initParams.getObjectParamIterator();    
     while(iterator.hasNext()) {

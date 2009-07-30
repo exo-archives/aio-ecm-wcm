@@ -63,21 +63,27 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.form.UIForm;
 
 /**
- * Created by The eXo Platform SAS
- * Author : eXoPlatform
- *          chuong_phan@exoplatform.com
- * Mar 2, 2009  
+ * The Class StageAndVersionPublicationPlugin.
  */
 public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
 
+  /** The page event listener delegate. */
   private PageEventListenerDelegate pageEventListenerDelegate;  
+  
+  /** The navigation event listener delegate. */
   private NavigationEventListenerDelegate navigationEventListenerDelegate;  
 
+  /**
+   * Instantiates a new stage and version publication plugin.
+   */
   public StageAndVersionPublicationPlugin() {
     pageEventListenerDelegate = new PageEventListenerDelegate(StageAndVersionPublicationConstant.LIFECYCLE_NAME, ExoContainerContext.getCurrentContainer());
     navigationEventListenerDelegate = new NavigationEventListenerDelegate(StageAndVersionPublicationConstant.LIFECYCLE_NAME, ExoContainerContext.getCurrentContainer());
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.ecm.publication.PublicationPlugin#addMixin(javax.jcr.Node)
+   */
   public void addMixin(Node node) throws Exception {
     node.addMixin(StageAndVersionPublicationConstant.PUBLICATION_LIFECYCLE_TYPE);
     if(!node.isNodeType(StageAndVersionPublicationConstant.MIX_VERSIONABLE)) {
@@ -85,10 +91,16 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     }            
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.ecm.publication.PublicationPlugin#canAddMixin(javax.jcr.Node)
+   */
   public boolean canAddMixin(Node node) throws Exception {
     return node.canAddMixin(StageAndVersionPublicationConstant.PUBLICATION_LIFECYCLE_TYPE);   
   }    
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.ecm.publication.PublicationPlugin#changeState(javax.jcr.Node, java.lang.String, java.util.HashMap)
+   */
   public void changeState(Node node, String newState, HashMap<String, String> context) throws IncorrectStateUpdateLifecycleException,Exception {
     String versionName = context.get(StageAndVersionPublicationConstant.CURRENT_REVISION_NAME);        
     String logItemName = versionName;
@@ -182,6 +194,14 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
       node.save();
   }  
 
+  /**
+   * Gets the value.
+   * 
+   * @param node the node
+   * @param prop the prop
+   * 
+   * @return the value
+   */
   private Value getValue(Node node, String prop) {
     try {     
       return node.getProperty(prop).getValue();
@@ -190,6 +210,13 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     }
   }    
   
+  /**
+   * Gets the live revision.
+   * 
+   * @param node the node
+   * 
+   * @return the live revision
+   */
   private Node getLiveRevision(Node  node) {
     try {     
       return node.getProperty(StageAndVersionPublicationConstant.LIVE_REVISION_PROP).getNode();
@@ -198,6 +225,14 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     }
   }
   
+  /**
+   * Adds the log.
+   * 
+   * @param node the node
+   * @param versionLog the version log
+   * 
+   * @throws Exception the exception
+   */
   private void addLog(Node node, VersionLog versionLog) throws Exception{
     Value[] values = node.getProperty(StageAndVersionPublicationConstant.HISTORY).getValues();
     ValueFactory valueFactory = node.getSession().getValueFactory();
@@ -206,6 +241,14 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     node.setProperty(StageAndVersionPublicationConstant.HISTORY,list.toArray(new Value[]{})); 
   }
 
+  /**
+   * Adds the revision data.
+   * 
+   * @param node the node
+   * @param list the list
+   * 
+   * @throws Exception the exception
+   */
   private void addRevisionData(Node node, Collection<VersionData> list) throws Exception {
     List<Value> valueList = new ArrayList<Value>();
     ValueFactory factory = node.getSession().getValueFactory();
@@ -215,6 +258,15 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     node.setProperty(StageAndVersionPublicationConstant.REVISION_DATA_PROP,valueList.toArray(new Value[]{}));
   }
 
+  /**
+   * Gets the revision data.
+   * 
+   * @param node the node
+   * 
+   * @return the revision data
+   * 
+   * @throws Exception the exception
+   */
   private Map<String, VersionData> getRevisionData(Node node) throws Exception{
     Map<String,VersionData> map = new HashMap<String,VersionData>();    
     try {
@@ -228,6 +280,9 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     return map;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.ecm.publication.PublicationPlugin#getLocalizedAndSubstituteMessage(java.util.Locale, java.lang.String, java.lang.String[])
+   */
   public String getLocalizedAndSubstituteMessage(Locale locale, String key, String[] values) throws Exception {
     ClassLoader cl=this.getClass().getClassLoader();    
     ResourceBundle resourceBundle= ResourceBundle.getBundle(StageAndVersionPublicationConstant.LOCALIZATION, locale, cl);
@@ -239,6 +294,9 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
 
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.ecm.publication.PublicationPlugin#getNodeView(javax.jcr.Node, java.util.Map)
+   */
   public Node getNodeView(Node node, Map<String, Object> context) throws Exception {
     Object mode = null;
     if (context!=null) context.get(StageAndVersionPublicationConstant.RUNTIME_MODE);   
@@ -261,26 +319,41 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     return viewNode;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.ecm.publication.PublicationPlugin#getPossibleStates()
+   */
   public String[] getPossibleStates() {    
     return new String[] { StageAndVersionPublicationConstant.ENROLLED_STATE, StageAndVersionPublicationConstant.DRAFT_STATE, StageAndVersionPublicationConstant.AWAITING, StageAndVersionPublicationConstant.LIVE_STATE, StageAndVersionPublicationConstant.OBSOLETE_STATE};
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.ecm.publication.PublicationPlugin#getStateImage(javax.jcr.Node, java.util.Locale)
+   */
   public byte[] getStateImage(Node arg0, Locale arg1) throws IOException,
   FileNotFoundException,
   Exception {
     return null;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.ecm.publication.PublicationPlugin#getStateUI(javax.jcr.Node, org.exoplatform.webui.core.UIComponent)
+   */
   public UIForm getStateUI(Node node, UIComponent component) throws Exception {   
     UIPublicationContainer publicationContainer = component.createUIComponent(UIPublicationContainer.class, null, null);
     publicationContainer.initContainer(node);
     return publicationContainer;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.ecm.publication.PublicationPlugin#getUserInfo(javax.jcr.Node, java.util.Locale)
+   */
   public String getUserInfo(Node arg0, Locale arg1) throws Exception {
     return null;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.publication.WebpagePublicationPlugin#publishContentToSCV(javax.jcr.Node, org.exoplatform.portal.config.model.Page, java.lang.String)
+   */
   public void publishContentToSCV(Node content, Page page, String portalOwnerName) throws Exception {
     // Create portlet
     Application portlet = new Application();
@@ -314,6 +387,9 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     userPortalConfigService.update(page);
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.publication.WebpagePublicationPlugin#publishContentToCLV(javax.jcr.Node, org.exoplatform.portal.config.model.Page, java.lang.String, java.lang.String, java.lang.String)
+   */
   @SuppressWarnings("unchecked")
   public void publishContentToCLV(Node content, Page page, String clvPortletId, String portalOwnerName, String remoteUser) throws Exception {
     WCMConfigurationService wcmConfigurationService = StageAndVersionPublicationUtil.getServices(WCMConfigurationService.class);
@@ -388,6 +464,16 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     }
   }
   
+  /**
+   * Update on add node properties.
+   * 
+   * @param page the page
+   * @param content the content
+   * @param clvPortletId the clv portlet id
+   * @param remoteUser the remote user
+   * 
+   * @throws Exception the exception
+   */
   private void updateOnAddNodeProperties(Page page, Node content, String clvPortletId, String remoteUser) throws Exception {
     if (content.canAddMixin("publication:webpagesPublication")) content.addMixin("publication:webpagesPublication");
     List<String> listExistedNavigationNodeUri = StageAndVersionPublicationUtil.getValuesAsString(content, "publication:navigationNodeURIs");
@@ -415,6 +501,16 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     session.save();
   }
   
+  /**
+   * Update on remove node properties.
+   * 
+   * @param page the page
+   * @param content the content
+   * @param clvPortletId the clv portlet id
+   * @param remoteUser the remote user
+   * 
+   * @throws Exception the exception
+   */
   private void updateOnRemoveNodeProperties(Page page, Node content, String clvPortletId, String remoteUser) throws Exception {
     List<String> listExistedApplicationId = StageAndVersionPublicationUtil.getValuesAsString(content, "publication:applicationIDs");
     listExistedApplicationId.remove(StageAndVersionPublicationUtil.setMixedApplicationId(page.getPageId(), clvPortletId));
@@ -440,6 +536,14 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     session.save();
   }
   
+  /**
+   * Adds the preference.
+   * 
+   * @param name the name
+   * @param value the value
+   * 
+   * @return the preference
+   */
   private Preference addPreference(String name, String value) {
     Preference preference = new Preference();
     ArrayList<String> listValue = new ArrayList<String>();
@@ -449,6 +553,15 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     return preference;
   }
   
+  /**
+   * Save portlet preferences.
+   * 
+   * @param portletId the portlet id
+   * @param listPreference the list preference
+   * @param portalOwnerName the portal owner name
+   * 
+   * @throws Exception the exception
+   */
   private void savePortletPreferences(String portletId, ArrayList<Preference> listPreference, String portalOwnerName) throws Exception {
     PortletPreferences portletPreferences = new PortletPreferences();
     portletPreferences.setWindowId(portletId);
@@ -459,6 +572,9 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     dataStorage.save(portletPreferences);
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.publication.WebpagePublicationPlugin#suspendPublishedContentFromPage(javax.jcr.Node, org.exoplatform.portal.config.model.Page, java.lang.String)
+   */
   @SuppressWarnings("unchecked")
   public void suspendPublishedContentFromPage(Node content, Page page, String remoteUser) throws Exception {
     // Remove content from CLV portlet
@@ -505,30 +621,57 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     userPortalConfigService.update(page);
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.publication.WebpagePublicationPlugin#updateLifecycleOnChangeNavigation(org.exoplatform.portal.config.model.PageNavigation, java.lang.String)
+   */
   public void updateLifecycleOnChangeNavigation(PageNavigation pageNavigation, String remoteUser) throws Exception {
     navigationEventListenerDelegate.updateLifecycleOnChangeNavigation(pageNavigation, remoteUser);
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.publication.WebpagePublicationPlugin#updateLifecycleOnRemovePage(org.exoplatform.portal.config.model.Page, java.lang.String)
+   */
   public void updateLifecycleOnRemovePage(Page page, String remoteUser) throws Exception {
     pageEventListenerDelegate.updateLifecycleOnRemovePage(page, remoteUser);
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.publication.WebpagePublicationPlugin#updateLifecyleOnChangePage(org.exoplatform.portal.config.model.Page, java.lang.String)
+   */
   public void updateLifecyleOnChangePage(Page page, String remoteUser) throws Exception {
     pageEventListenerDelegate.updateLifecyleOnChangePage(page, remoteUser);
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.publication.WebpagePublicationPlugin#updateLifecyleOnCreateNavigation(org.exoplatform.portal.config.model.PageNavigation)
+   */
   public void updateLifecyleOnCreateNavigation(PageNavigation pageNavigation) throws Exception {
     navigationEventListenerDelegate.updateLifecyleOnCreateNavigation(pageNavigation);
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.publication.WebpagePublicationPlugin#updateLifecyleOnCreatePage(org.exoplatform.portal.config.model.Page, java.lang.String)
+   */
   public void updateLifecyleOnCreatePage(Page page, String remoteUser) throws Exception {
     pageEventListenerDelegate.updateLifecyleOnCreatePage(page, remoteUser);
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.publication.WebpagePublicationPlugin#updateLifecyleOnRemoveNavigation(org.exoplatform.portal.config.model.PageNavigation)
+   */
   public void updateLifecyleOnRemoveNavigation(PageNavigation pageNavigation) throws Exception {
     navigationEventListenerDelegate.updateLifecyleOnRemoveNavigation(pageNavigation);
   }
 
+  /**
+   * Gets the running portals.
+   * 
+   * @param userId the user id
+   * 
+   * @return the running portals
+   * 
+   * @throws Exception the exception
+   */
   private List<String> getRunningPortals(String userId) throws Exception {
     List<String> listPortalName = new ArrayList<String>();
     DataStorage service = StageAndVersionPublicationUtil.getServices(DataStorage.class);
@@ -544,6 +687,16 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     return listPortalName;
   }
 
+  /**
+   * Gets the list page navigation uri.
+   * 
+   * @param page the page
+   * @param remoteUser the remote user
+   * 
+   * @return the list page navigation uri
+   * 
+   * @throws Exception the exception
+   */
   public List<String> getListPageNavigationUri(Page page, String remoteUser) throws Exception {
     List<String> listPageNavigationUri = new ArrayList<String>();
     DataStorage dataStorage = StageAndVersionPublicationUtil.getServices(DataStorage.class);    

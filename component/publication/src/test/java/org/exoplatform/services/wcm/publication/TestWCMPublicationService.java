@@ -40,9 +40,11 @@ import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndV
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationPlugin;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationUtil;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class TestWCMPublicationService.
+ * Created by The eXo Platform SAS
+ * Author : Do Dang Thang
+ * thang.do@exoplatform.com
  */
 public class TestWCMPublicationService extends BaseWCMTestCase {
 	
@@ -286,7 +288,7 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
   }
   
   /**
-   * Test suspend published content from page_01.
+   * Test suspend published content from page.
    * 
    * @throws Exception the exception
    */
@@ -696,7 +698,6 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
     testNode.remove();
     collaborationSession.save();
   }
-
   
   /**
    * Suspend clv.
@@ -794,7 +795,6 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
     collaborationSession.save();
   }
 
-
    /**
     * Creates the page.
     * 
@@ -811,7 +811,6 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
     userPortalConfigService.create(page);
 	  return page;
   }
-
 
 	/**
 	 * Creates the page navigation.
@@ -830,7 +829,6 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
   	userPortalConfigService.update(navigation);
   	return navigation;
   }
-	
 
 	/**
 	 * Prepare node status.
@@ -865,7 +863,6 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
     preference.setValues(listValue);
     return preference;
   }
-
 
   /**
    * Check content identifier.
@@ -940,19 +937,18 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
   	return false;
   }
 
-
   /**
-	 * Checks for node got correct properties.
-	 * 
-	 * @param testNode the test node
-	 * @param values the names
-	 * @param needCheckProperties the need check properties
-	 * 
-	 * @return true, if successful
-	 * 
-	 * @throws RepositoryException the repository exception
-	 * @throws ValueFormatException the value format exception
-	 */
+   * Checks for node got correct properties.
+   * 
+   * @param testNode the test node
+   * @param needCheckProperties the need check properties
+   * @param values the values
+   * 
+   * @return true, if successful
+   * 
+   * @throws RepositoryException the repository exception
+   * @throws ValueFormatException the value format exception
+   */
 	private boolean hasNodeGotCorrectProperties(Node testNode, ArrayList<String> needCheckProperties, String... values) throws RepositoryException, ValueFormatException {
     PropertyIterator iter = testNode.getProperties();
     while (iter.hasNext()) {

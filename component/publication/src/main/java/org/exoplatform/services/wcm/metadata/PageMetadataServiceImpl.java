@@ -110,6 +110,15 @@ public class PageMetadataServiceImpl implements PageMetadataService {
     return metadata;
   }  
   
+  /**
+   * Extract dc element set metadata.
+   * 
+   * @param node the node
+   * 
+   * @return the hash map< string, string>
+   * 
+   * @throws Exception the exception
+   */
   private HashMap<String,String> extractDCElementSetMetadata(Node node) throws Exception {
     HashMap<String,String> metadata = new HashMap<String,String>();
     Node checkNode = node;
@@ -201,6 +210,16 @@ public class PageMetadataServiceImpl implements PageMetadataService {
     return node.hasProperty(propertyName)? node.getProperty(propertyName).getString():null;
   }
   
+  /**
+   * Gets the values.
+   * 
+   * @param node the node
+   * @param propertyName the property name
+   * 
+   * @return the values
+   * 
+   * @throws Exception the exception
+   */
   private String getValues(Node node, String propertyName) throws Exception {
     try {
       Property property = node.getProperty(propertyName);
@@ -229,6 +248,7 @@ public class PageMetadataServiceImpl implements PageMetadataService {
       return null;
     }    
   }
+  
   /**
    * Find portal.
    * 

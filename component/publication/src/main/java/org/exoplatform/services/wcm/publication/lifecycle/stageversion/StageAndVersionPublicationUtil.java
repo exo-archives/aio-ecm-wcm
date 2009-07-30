@@ -137,7 +137,17 @@ public class StageAndVersionPublicationUtil {
     }
   }   
   
+  /** The application. */
   private static Application application = null;
+  
+  /**
+   * Find app instances by id.
+   * 
+   * @param container the container
+   * @param applicationId the application id
+   * 
+   * @return the application
+   */
   public static Application findAppInstancesById(Container container, String applicationId) {
     ArrayList<Object> chidren = container.getChildren();
     if(chidren == null) return null;
@@ -271,6 +281,7 @@ public class StageAndVersionPublicationUtil {
    * Gets the list application id by page.
    * 
    * @param page the page
+   * @param portletName the portlet name
    * 
    * @return the list application id by page
    */

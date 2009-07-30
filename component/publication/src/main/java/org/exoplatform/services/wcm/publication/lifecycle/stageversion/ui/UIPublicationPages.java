@@ -33,8 +33,8 @@ import org.exoplatform.webui.form.UIForm;
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong_phan@exoplatform.com
- * Mar 4, 2009  
+ * chuong_phan@exoplatform.com
+ * Mar 4, 2009
  */
 @ComponentConfig (
                   lifecycle = UIFormLifecycle.class,
@@ -113,7 +113,22 @@ public class UIPublicationPages extends UIForm {
     return null;
   }
   
+  /**
+   * The listener interface for receiving closeAction events.
+   * The class that is interested in processing a closeAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addCloseActionListener<code> method. When
+   * the closeAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see CloseActionEvent
+   */
   public static class CloseActionListener extends EventListener<UIPublicationPages> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIPublicationPages> event) throws Exception {
       UIPublicationPages publicationPages = event.getSource();
       UIPopupContainer uiPopupContainer = (UIPopupContainer) publicationPages.getAncestorOfType(UIPopupContainer.class);

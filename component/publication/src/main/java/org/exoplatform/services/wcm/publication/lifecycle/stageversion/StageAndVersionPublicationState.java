@@ -20,17 +20,34 @@ import javax.jcr.Node;
 
 /**
  * Created by The eXo Platform SAS
- * Author : Hoa Pham	
- *          hoa.phamvu@exoplatform.com
- * Apr 1, 2009  
+ * Author : Hoa Pham
+ * hoa.phamvu@exoplatform.com
+ * Apr 1, 2009
  */
 public class StageAndVersionPublicationState {
+  
+  /** The Constant ENROLLED. */
   public static final String ENROLLED = "enrolled".intern(); 
+  
+  /** The Constant DRAFT. */
   public static final String DRAFT = "draft".intern();
+  
+  /** The Constant AWAITING. */
   public static final String AWAITING = "awaiting".intern();
+  
+  /** The Constant LIVE. */
   public static final String LIVE = "live".intern();
+  
+  /** The Constant OBSOLETE. */
   public static final String OBSOLETE = "obsolete".intern();
 
+  /**
+   * Gets the revision state.
+   * 
+   * @param currentNode the current node
+   * 
+   * @return the revision state
+   */
   public static String getRevisionState(Node currentNode) {
     String currentState = null;
     try {

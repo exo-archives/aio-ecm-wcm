@@ -23,10 +23,8 @@ import org.exoplatform.ecm.resolver.JCRResourceResolver;
 import org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
-import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.cms.impl.DMSConfiguration;
-import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -35,28 +33,58 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong_phan@exoplatform.com
- * Mar 5, 2009  
+ * chuong_phan@exoplatform.com
+ * Mar 5, 2009
  */
 @ComponentConfig(
   lifecycle = Lifecycle.class    
 )
 public class UIVersionViewer extends UIBaseNodePresentation {
 
+  /** The original node. */
   private Node originalNode;
+  
+  /** The node. */
   private Node node;
+  
+  /** The resource resolver. */
   private JCRResourceResolver resourceResolver ;
+  
+  /** The Constant log. */
   public static final Log log = ExoLogger.getLogger("wcm:StageAndVersionPubliciation");
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation#getNode()
+   */
   public Node getNode() throws Exception {return node ;}
+  
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.presentation.NodePresentation#setNode(javax.jcr.Node)
+   */
   public void setNode(Node node) {this.node = node;}
+  
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation#getOriginalNode()
+   */
   public Node getOriginalNode() throws Exception {return originalNode;}
+  
+  /**
+   * Sets the original node.
+   * 
+   * @param originalNode the new original node
+   */
   public void setOriginalNode(Node originalNode) {this.originalNode = originalNode;}
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation#getRepositoryName()
+   */
   public String getRepositoryName() throws Exception {
     return null;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.portal.webui.portal.UIPortalComponent#getTemplate()
+   */
   public String getTemplate() {
     TemplateService templateService = getApplicationComponent(TemplateService.class);
     String userName = Util.getPortalRequestContext().getRemoteUser() ;
@@ -71,10 +99,16 @@ public class UIVersionViewer extends UIBaseNodePresentation {
     return null ;
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation#getTemplatePath()
+   */
   public String getTemplatePath() throws Exception {
     return null;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.core.UIComponent#getTemplateResourceResolver(org.exoplatform.webui.application.WebuiRequestContext, java.lang.String)
+   */
   public ResourceResolver getTemplateResourceResolver(WebuiRequestContext context, String template) {
     try{
         String repository = getRepository();
@@ -87,10 +121,16 @@ public class UIVersionViewer extends UIBaseNodePresentation {
     return resourceResolver ;   
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.presentation.NodePresentation#getNodeType()
+   */
   public String getNodeType() throws Exception {
     return null;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.presentation.NodePresentation#isNodeTypeSupported()
+   */
   public boolean isNodeTypeSupported() {
     return false;
   }

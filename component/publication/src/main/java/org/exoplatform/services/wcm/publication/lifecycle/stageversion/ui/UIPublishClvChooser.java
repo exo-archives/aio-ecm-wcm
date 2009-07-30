@@ -48,8 +48,8 @@ import org.exoplatform.webui.form.UIForm;
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong_phan@exoplatform.com
- * Mar 19, 2009  
+ * chuong_phan@exoplatform.com
+ * Mar 19, 2009
  */
 @ComponentConfig (
     lifecycle = UIFormLifecycle.class,
@@ -61,17 +61,53 @@ import org.exoplatform.webui.form.UIForm;
 )
 public class UIPublishClvChooser extends UIForm implements UIPopupComponent {
   
+  /** The page. */
   private Page page;
+  
+  /** The node. */
   private Node node;
   
+  /**
+   * Gets the page.
+   * 
+   * @return the page
+   */
   public Page getPage() {return page;}
+  
+  /**
+   * Sets the page.
+   * 
+   * @param page the new page
+   */
   public void setPage(Page page) {this.page = page;}
+  
+  /**
+   * Gets the node.
+   * 
+   * @return the node
+   */
   public Node getNode() {return node;}
+  
+  /**
+   * Sets the node.
+   * 
+   * @param node the new node
+   */
   public void setNode(Node node) {this.node = node;}
   
+  /**
+   * Instantiates a new uI publish clv chooser.
+   */
   public UIPublishClvChooser() {
   }
   
+  /**
+   * Gets the clv portlets.
+   * 
+   * @return the clv portlets
+   * 
+   * @throws Exception the exception
+   */
   public List<Application> getClvPortlets() throws Exception {
     WCMConfigurationService wcmConfigurationService = StageAndVersionPublicationUtil.getServices(WCMConfigurationService.class);
     DataStorage dataStorage = StageAndVersionPublicationUtil.getServices(DataStorage.class);
@@ -93,7 +129,22 @@ public class UIPublishClvChooser extends UIForm implements UIPopupComponent {
     return applications;
   }
 
+  /**
+   * The listener interface for receiving chooseAction events.
+   * The class that is interested in processing a chooseAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addChooseActionListener<code> method. When
+   * the chooseAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see ChooseActionEvent
+   */
   public static class ChooseActionListener extends EventListener<UIPublishClvChooser> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIPublishClvChooser> event) throws Exception {
       UIPublishClvChooser clvChooser = event.getSource();
       String clvPortletId = event.getRequestContext().getRequestParameter(OBJECTID);
@@ -122,7 +173,22 @@ public class UIPublishClvChooser extends UIForm implements UIPopupComponent {
     }
   }
   
+  /**
+   * The listener interface for receiving closeAction events.
+   * The class that is interested in processing a closeAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addCloseActionListener<code> method. When
+   * the closeAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see CloseActionEvent
+   */
   public static class CloseActionListener extends EventListener<UIPublishClvChooser> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIPublishClvChooser> event) throws Exception {
       UIPublishClvChooser clvChooser = event.getSource();
       UIPopupWindow popupWindow = clvChooser.getAncestorOfType(UIPopupWindow.class);
@@ -130,9 +196,15 @@ public class UIPublishClvChooser extends UIForm implements UIPopupComponent {
     }
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.core.UIPopupComponent#activate()
+   */
   public void activate() throws Exception {
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.core.UIPopupComponent#deActivate()
+   */
   public void deActivate() throws Exception {
   }
 }

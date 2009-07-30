@@ -37,9 +37,9 @@ import org.exoplatform.webui.event.EventListener;
 /**
  * Created by The eXo Platform SARL
  * Author : Dang Van Minh
- *          minh.dang@exoplatform.com
+ * minh.dang@exoplatform.com
  * Edited : Phan Le Thanh Chuong
- *          chuong.phan@exoplatform.com
+ * chuong.phan@exoplatform.com
  * June 4, 2009 13:42:23 AM
  */
 @ComponentConfig(
@@ -50,17 +50,39 @@ import org.exoplatform.webui.event.EventListener;
 )
 public class UIPublicationHistory extends UIComponentDecorator {
   
+  /** The ui page iterator_. */
   private UIPageIterator uiPageIterator_ ;
+  
+  /** The current node_. */
   private Node currentNode_ ;
   
+  /**
+   * Instantiates a new uI publication history.
+   * 
+   * @throws Exception the exception
+   */
   public UIPublicationHistory() throws Exception {
     uiPageIterator_ = createUIComponent(UIPageIterator.class, null, "PublicationLogListIterator");
     setUIComponent(uiPageIterator_) ;
   }
   
+  /**
+   * Inits the.
+   * 
+   * @param node the node
+   */
   public void init(Node node) {
    currentNode_ = node;
   }  
+  
+  /**
+   * Gets the log.
+   * 
+   * @return the log
+   * 
+   * @throws NotInPublicationLifecycleException the not in publication lifecycle exception
+   * @throws Exception the exception
+   */
   public List<VersionLog> getLog() throws NotInPublicationLifecycleException, Exception {
     if (currentNode_ == null) return new ArrayList<VersionLog>();
     List<VersionLog> logs = new ArrayList<VersionLog>();
@@ -73,20 +95,56 @@ public class UIPublicationHistory extends UIComponentDecorator {
     return logs;
   }
   
-  @SuppressWarnings("unchecked")
+  /**
+   * Update grid.
+   * 
+   * @throws Exception the exception
+   */
   public void updateGrid() throws Exception {   
     ObjectPageList objPageList = new ObjectPageList(getLog(), 10) ;
     uiPageIterator_.setPageList(objPageList) ;
   }
   
+  /**
+   * Gets the uI page iterator.
+   * 
+   * @return the uI page iterator
+   */
   public UIPageIterator getUIPageIterator() { return uiPageIterator_ ; }
   
+  /**
+   * Gets the log list.
+   * 
+   * @return the log list
+   * 
+   * @throws Exception the exception
+   */
   @SuppressWarnings("unchecked")
   public List getLogList() throws Exception { return uiPageIterator_.getCurrentPageData() ; }
 
+  /**
+   * Gets the actions.
+   * 
+   * @return the actions
+   */
   public String[] getActions() {return new String[]{"Close"} ;}
   
+  /**
+   * The listener interface for receiving closeAction events.
+   * The class that is interested in processing a closeAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addCloseActionListener<code> method. When
+   * the closeAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see CloseActionEvent
+   */
   static public class CloseActionListener extends EventListener<UIPublicationHistory> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIPublicationHistory> event) throws Exception {      
       UIPublicationHistory uiPublicationLogList = event.getSource() ;
       UIPopupContainer uiPopupContainer = (UIPopupContainer) uiPublicationLogList.getAncestorOfType(UIPopupContainer.class);
@@ -95,25 +153,85 @@ public class UIPublicationHistory extends UIComponentDecorator {
     }
   }
   
+  /**
+   * The Class HistoryBean.
+   */
   public class HistoryBean {
+    
+    /** The date. */
     private String date;
+    
+    /** The new state. */
     private String newState;
+    
+    /** The user. */
     private String user;
+    
+    /** The description. */
     private String description;
     
+    /**
+     * Gets the date.
+     * 
+     * @return the date
+     */
     public String getDate() { return date; }
+    
+    /**
+     * Sets the date.
+     * 
+     * @param date the new date
+     */
     public void setDate(String date) { this.date = date; }
+    
+    /**
+     * Gets the description.
+     * 
+     * @return the description
+     */
     public String getDescription() { return description; }
+    
+    /**
+     * Sets the description.
+     * 
+     * @param description the new description
+     */
     public void setDescription(String description) { this.description = description; }
+    
+    /**
+     * Gets the new state.
+     * 
+     * @return the new state
+     */
     public String getNewState() { return newState; }
+    
+    /**
+     * Sets the new state.
+     * 
+     * @param newState the new new state
+     */
     public void setNewState(String newState) { this.newState = newState; }
+    
+    /**
+     * Gets the user.
+     * 
+     * @return the user
+     */
     public String getUser() { return user; }
+    
+    /**
+     * Sets the user.
+     * 
+     * @param user the new user
+     */
     public void setUser(String user) { this.user = user; }
     
     /**
-     * Updated by Nguyen Van Chien
-     * @param stringInput
-     * @return
+     * Updated by Nguyen Van Chien.
+     * 
+     * @param stringInput the string input
+     * 
+     * @return the string
      */
     public String formatStringByDateTime(String stringInput) {      
       String dateYear = stringInput.substring(0, 4);

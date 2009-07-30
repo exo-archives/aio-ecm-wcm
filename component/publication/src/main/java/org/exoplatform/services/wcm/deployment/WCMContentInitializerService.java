@@ -33,24 +33,42 @@ import org.picocontainer.Startable;
 
 /**
  * Created by The eXo Platform SAS
- * Author : Hoa Pham	
- *          hoa.pham@exoplatform.com
- * Sep 6, 2008  
+ * Author : Hoa Pham
+ * hoa.pham@exoplatform.com
+ * Sep 6, 2008
  */
 public class WCMContentInitializerService implements Startable{
   
+  /** The list deployment plugin. */
   private List<DeploymentPlugin> listDeploymentPlugin = new ArrayList<DeploymentPlugin>();
+  
+  /** The repository service. */
   private RepositoryService repositoryService;
+  
+  /** The log. */
   private Log log = ExoLogger.getLogger(this.getClass());
   
+  /**
+   * Instantiates a new wCM content initializer service.
+   * 
+   * @param repositoryService the repository service
+   */
   public WCMContentInitializerService(RepositoryService repositoryService) {
     this.repositoryService = repositoryService;
   }
   
+  /**
+   * Adds the plugin.
+   * 
+   * @param deploymentPlugin the deployment plugin
+   */
   public void addPlugin(DeploymentPlugin deploymentPlugin) {
     listDeploymentPlugin.add(deploymentPlugin);
   }
   
+  /* (non-Javadoc)
+   * @see org.picocontainer.Startable#start()
+   */
   public void start() {
     SessionProvider sessionProvider = SessionProvider.createSystemProvider();
     try {
@@ -90,6 +108,10 @@ public class WCMContentInitializerService implements Startable{
       sessionProvider.close();
     }
   }
+  
+  /* (non-Javadoc)
+   * @see org.picocontainer.Startable#stop()
+   */
   public void stop() {}
   
 }
