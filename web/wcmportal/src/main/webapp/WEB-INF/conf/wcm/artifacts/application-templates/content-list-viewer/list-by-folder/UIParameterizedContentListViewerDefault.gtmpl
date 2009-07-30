@@ -1,9 +1,9 @@
 <% 
 	import javax.jcr.Node;
 	import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
-	import org.exoplatform.wcm.webui.pclv.UIParameterizedContentListViewerConstant;
+	import org.exoplatform.wcm.webui.pclv.UIPCLVPortlet;
 	import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationState;
-	import org.exoplatform.wcm.webui.pclv.UIParameterizedContentListViewerForm;
+	import org.exoplatform.wcm.webui.pclv.UIPCLVForm;
 %>
 <div class="UIParameterizedContentListViewerDefault">
  	<%
@@ -22,7 +22,7 @@
 							<div class="Header"><%= header %></div>
 						</div>
 					<%
-						if (uicomponent.isShowField(UIParameterizedContentListViewerConstant.SHOW_RSS_LINK)) {
+						if (uicomponent.isShowField(UIPCLVPortlet.SHOW_RSS_LINK)) {
 							%>
 			  				<a class="RssIcon" href="#demo">RSS Feed</a>
 						<%
@@ -43,11 +43,11 @@
 					}  else 
 					{
 						def currentPageData = uicomponent.getCurrentPageData();
-						boolean isShowTitle = uicomponent.isShowField(UIParameterizedContentListViewerConstant.SHOW_TITLE);
-						boolean isShowSumary = uicomponent.isShowField(UIParameterizedContentListViewerConstant.SHOW_SUMMARY);
-						boolean isShowIllustrationImg = uicomponent.isShowField(UIParameterizedContentListViewerConstant.SHOW_THUMBNAILS_VIEW);
-						boolean isShowLink = uicomponent.isShowField(UIParameterizedContentListViewerConstant.SHOW_LINK);
-						boolean isShowCreatedDate = uicomponent.isShowField(UIParameterizedContentListViewerConstant.SHOW_DATE_CREATED);
+						boolean isShowTitle = uicomponent.isShowField(UIPCLVPortlet.SHOW_TITLE);
+						boolean isShowSumary = uicomponent.isShowField(UIPCLVPortlet.SHOW_SUMMARY);
+						boolean isShowIllustrationImg = uicomponent.isShowField(UIPCLVPortlet.SHOW_THUMBNAILS_VIEW);
+						boolean isShowLink = uicomponent.isShowField(UIPCLVPortlet.SHOW_LINK);
+						boolean isShowCreatedDate = uicomponent.isShowField(UIPCLVPortlet.SHOW_DATE_CREATED);
 						
 						int count = 0;
 						for (Node node : currentPageData) 

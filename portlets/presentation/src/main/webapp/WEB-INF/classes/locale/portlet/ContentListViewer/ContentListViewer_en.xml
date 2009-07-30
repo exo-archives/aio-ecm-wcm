@@ -10,7 +10,7 @@
 			<SelectFolderPath>Select folder path</SelectFolderPath>
 		</title>
 	</FolderPathInputSet>
-  <UIViewerManagementForm>
+  <UICLVConfig>
     <action>
       <Save>Save</Save>
       <Cancel>Cancel</Cancel>
@@ -48,7 +48,7 @@
       <ContentPath>Content</ContentPath>   
     </label>
     <title>Select folder to display its children documents or webcontent</title>
-  </UIViewerManagementForm>
+  </UICLVConfig>
   <UIMessageBoard>
     <msg>
       <folder-not-found>This viewer has not been configured yet.</folder-not-found>
@@ -74,10 +74,16 @@
   </UIStartEditionInPageWizard>
   <UIViewerManagementPopupWindow>
     <title>
-      <UIPortletConfig>Content list viewer management</UIPortletConfig>
+      <UICLVConfig>Content list viewer management</UICLVConfig>
       <UIContentEdittingPopup>Content editting</UIContentEdittingPopup>
     </title>
   </UIViewerManagementPopupWindow>
+  <UICLVContentSelectedGrid>
+		<action>
+			<SaveCategories>Save</SaveCategories>
+			<Cancel>Cancel</Cancel>
+		</action>
+  </UICLVContentSelectedGrid>
   <UISelectedContentGrid>
 		<action>
 			<SaveCategories>Save</SaveCategories>
@@ -95,17 +101,21 @@
 			<confirm-delete>Are you sure to delete this content from selected list?</confirm-delete>
 		</msg>
   </UISelectedContentGrid>
-  <UIFolderPathSelectPopupWindow>
+  <FolderPathSelectorPopupWindow>
   	<title>
-  		<UICorrectContentSelectorForm>Contents manually selection</UICorrectContentSelectorForm>
-  		<UIFolderPathSelectorForm>Select a folder to view it's content</UIFolderPathSelectorForm>
+  		<UICLVFolderSelector>Select a folder to view it's content</UICLVFolderSelector>
   	</title>
-  </UIFolderPathSelectPopupWindow>
-  <UIFolderPathSelectorForm>
+  </FolderPathSelectorPopupWindow>
+  <CorrectContentSelectorPopupWindow>
+  	<title>
+  		<UICLVContentSelector>Contents manually selection</UICLVContentSelector>
+  	</title>
+  </CorrectContentSelectorPopupWindow>
+  <UICLVFolderSelector>
   	<action>
   		<Close>Close</Close>
   	</action>
-  </UIFolderPathSelectorForm>
+  </UICLVFolderSelector>
   <UIContentSelectionPanel>
   	<label>
   		<header>Contents bellow can be selected</header>

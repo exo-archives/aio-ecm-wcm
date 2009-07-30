@@ -14,7 +14,7 @@ FCKConfig.EditorAreaCSS = '';
 FCKConfig.EditorAreaStyles = 'body{background: #ffffff; margin: 0px;} a{color: #0000CC; text-decoration: underline;}' ;
 FCKConfig.InsertedLinkColor = 'green';
 
-FCKConfig.SkinPath = FCKConfig.BasePath + 'skins/office2003/' ;
+FCKConfig.SkinPath = FCKConfig.BasePath + 'skins/default/' ;
 
 FCKConfig.ToolbarSets["CompleteWCM"] = [
 	['Source','Templates','-','FitWindow','ShowBlocks'],

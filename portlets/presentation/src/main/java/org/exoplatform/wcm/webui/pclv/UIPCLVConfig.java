@@ -29,8 +29,6 @@ import org.exoplatform.ecm.webui.selector.UISelectable;
 import org.exoplatform.services.cms.views.ApplicationTemplateManagerService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.selector.page.UIPageSelector;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -57,15 +55,15 @@ import org.exoplatform.webui.form.ext.UIFormInputSetWithAction;
  */
 @ComponentConfig(
                  lifecycle = UIFormLifecycle.class, 
-                 template = "app:/groovy/ParameterizedContentListViewer/UIParameterizedManagementForm.gtmpl",
+                 template = "app:/groovy/ParameterizedContentListViewer/UIPCLVConfig.gtmpl",
                  events = {
-                     @EventConfig(listeners = UIParameterizedManagementForm.CancelActionListener.class),
-                     @EventConfig(listeners = UIParameterizedManagementForm.SelectTargetPageActionListener.class),
-                     @EventConfig(listeners = UIParameterizedManagementForm.SaveActionListener.class)
+                     @EventConfig(listeners = UIPCLVConfig.CancelActionListener.class),
+                     @EventConfig(listeners = UIPCLVConfig.SelectTargetPageActionListener.class),
+                     @EventConfig(listeners = UIPCLVConfig.SaveActionListener.class)
                      
                    }
                )
-public class UIParameterizedManagementForm extends UIForm implements UISelectable {
+public class UIPCLVConfig extends UIForm implements UISelectable {
 
   /** The Constant HEADER. */
   public final static String HEADER                            = "Header";
@@ -154,7 +152,7 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
    * @throws Exception the exception
    */
   @SuppressWarnings("unchecked")
-  public UIParameterizedManagementForm() throws Exception {
+  public UIPCLVConfig() throws Exception {
 
     PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     PortletPreferences portletPreferences = context.getRequest().getPreferences();
@@ -167,7 +165,7 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
     orderTypeOptions.add(new SelectItemOption<String>(bundle.getString(rootBundleKey + ORDER_ASC), "ASC"));
 
     UIFormRadioBoxInput orderTypeRadioBoxInput = new UIFormRadioBoxInput(ORDER_TYPES, ORDER_TYPES, orderTypeOptions);
-    String orderTypePref = portletPreferences.getValue(UIParameterizedContentListViewerConstant.ORDER_TYPE, null);
+    String orderTypePref = portletPreferences.getValue(UIPCLVPortlet.ORDER_TYPE, null);
     if (orderTypePref == null) {
       orderTypeRadioBoxInput.setValue("DESC");
     } else {
@@ -177,12 +175,12 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
     List<SelectItemOption<String>> orderByOptions = new ArrayList<SelectItemOption<String>>();
     orderByOptions.add(new SelectItemOption<String>(bundle.getString(rootBundleKey + ORDER_BY_DATE_CREATED), "exo:dateCreated"));
     UIFormSelectBox orderBySelectBox = new UIFormSelectBox(ORDER_BY, ORDER_BY, orderByOptions);
-    String orderByPref = portletPreferences.getValue(UIParameterizedContentListViewerConstant.ORDER_BY, null);
+    String orderByPref = portletPreferences.getValue(UIPCLVPortlet.ORDER_BY, null);
     orderBySelectBox.setValue(orderByPref);
     
     UIFormCheckBoxInput autoDetect = new UIFormCheckBoxInput(AUTO_DETECT, AUTO_DETECT, null);
     autoDetect.setChecked(true);
-    String autoDetected = portletPreferences.getValue(UIParameterizedContentListViewerConstant.SHOW_AUTO_DETECT, null);
+    String autoDetected = portletPreferences.getValue(UIPCLVPortlet.SHOW_AUTO_DETECT, null);
     autoDetect.setChecked(Boolean.parseBoolean(autoDetected));
     
     UIFormStringInput headerInput = new UIFormStringInput(HEADER, HEADER, null);
@@ -190,7 +188,7 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
     if (!Boolean.parseBoolean(autoDetected)) {
       headerInput.setValue("");
 
-      String headerValue = portletPreferences.getValue(UIParameterizedContentListViewerConstant.HEADER, null);
+      String headerValue = portletPreferences.getValue(UIPCLVPortlet.HEADER, null);
       headerInput.setValue(headerValue);
     } else {
       headerInput.setValue(this.getHeader());
@@ -200,49 +198,49 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
     List<SelectItemOption<String>> paginatorTemplateList = getTemplateList(PORTLET_NAME, PAGINATOR_TEMPLATE_CATEGORY);
     
     UIFormStringInput itemsPerPageStringInput = new UIFormStringInput(ITEMS_PER_PAGE_INPUT, ITEMS_PER_PAGE_INPUT, null);
-    String itemsPerPageVal = portletPreferences.getValue(UIParameterizedContentListViewerConstant.ITEMS_PER_PAGE, null);
+    String itemsPerPageVal = portletPreferences.getValue(UIPCLVPortlet.ITEMS_PER_PAGE, null);
     itemsPerPageStringInput.setValue(itemsPerPageVal);
     itemsPerPageStringInput.setMaxLength(3);
     
     UIFormSelectBox formViewTemplateSelector = new UIFormSelectBox(FORM_VIEW_TEMPLATES_SELECTOR, FORM_VIEW_TEMPLATES_SELECTOR, formViewerTemplateList);
-    String formViewTemplate = portletPreferences.getValue(UIParameterizedContentListViewerConstant.FORM_VIEW_TEMPLATE_PATH, null);
+    String formViewTemplate = portletPreferences.getValue(UIPCLVPortlet.FORM_VIEW_TEMPLATE_PATH, null);
     formViewTemplateSelector.setValue(formViewTemplate);
     
     UIFormSelectBox paginatorTemplateSelector = new UIFormSelectBox(PAGINATOR_TEMPLATES_SELECTOR, PAGINATOR_TEMPLATES_SELECTOR, paginatorTemplateList);
-    String paginatorTemplate = portletPreferences.getValue(UIParameterizedContentListViewerConstant.PAGINATOR_TEMPlATE_PATH, null);
+    String paginatorTemplate = portletPreferences.getValue(UIPCLVPortlet.PAGINATOR_TEMPlATE_PATH, null);
     paginatorTemplateSelector.setValue(paginatorTemplate);
     
     UIFormCheckBoxInput viewerButtonRefreshCheckbox = new UIFormCheckBoxInput(VIEWER_BUTTON_REFRESH, VIEWER_BUTTON_REFRESH, null);
     viewerButtonRefreshCheckbox.setChecked(false);
-    String refreshAble = portletPreferences.getValue(UIParameterizedContentListViewerConstant.SHOW_REFRESH_BUTTON, null);
+    String refreshAble = portletPreferences.getValue(UIPCLVPortlet.SHOW_REFRESH_BUTTON, null);
     viewerButtonRefreshCheckbox.setChecked(Boolean.parseBoolean(refreshAble));
     
     UIFormCheckBoxInput thumbnailsViewCheckbox = new UIFormCheckBoxInput(VIEWER_THUMBNAILS_IMAGE, VIEWER_THUMBNAILS_IMAGE, null);
     thumbnailsViewCheckbox.setChecked(true);
-    String imageShowAble = portletPreferences.getValue(UIParameterizedContentListViewerConstant.SHOW_THUMBNAILS_VIEW, null);
+    String imageShowAble = portletPreferences.getValue(UIPCLVPortlet.SHOW_THUMBNAILS_VIEW, null);
     thumbnailsViewCheckbox.setChecked(Boolean.parseBoolean(imageShowAble));
     
     UIFormCheckBoxInput titleViewerCheckbox = new UIFormCheckBoxInput(VIEWER_TITLE, VIEWER_TITLE, null);
     titleViewerCheckbox.setChecked(true);
-    String titleShowAble = portletPreferences.getValue(UIParameterizedContentListViewerConstant.SHOW_TITLE, null);
+    String titleShowAble = portletPreferences.getValue(UIPCLVPortlet.SHOW_TITLE, null);
     titleViewerCheckbox.setChecked(Boolean.parseBoolean(titleShowAble));
     
     UIFormCheckBoxInput summaryViewerCheckbox = new UIFormCheckBoxInput(VIEWER_SUMMARY, VIEWER_SUMMARY, null);
     summaryViewerCheckbox.setChecked(true);
-    String summaryShowAble = portletPreferences.getValue(UIParameterizedContentListViewerConstant.SHOW_SUMMARY, null);
+    String summaryShowAble = portletPreferences.getValue(UIPCLVPortlet.SHOW_SUMMARY, null);
     summaryViewerCheckbox.setChecked(Boolean.parseBoolean(summaryShowAble));
     
     UIFormCheckBoxInput dateCreatedViewerCheckbox = new UIFormCheckBoxInput(VIEWER_DATE_CREATED, VIEWER_DATE_CREATED, null);
     dateCreatedViewerCheckbox.setChecked(true);
-    String dateShowAble = portletPreferences.getValue(UIParameterizedContentListViewerConstant.SHOW_DATE_CREATED, null);
+    String dateShowAble = portletPreferences.getValue(UIPCLVPortlet.SHOW_DATE_CREATED, null);
     dateCreatedViewerCheckbox.setChecked(Boolean.parseBoolean(dateShowAble));
 
     UIFormCheckBoxInput viewerHeader = new UIFormCheckBoxInput(VIEWER_HEADER, VIEWER_HEADER, null);
     viewerHeader.setChecked(true);
-    String viewHeader = portletPreferences.getValue(UIParameterizedContentListViewerConstant.SHOW_HEADER, null);
+    String viewHeader = portletPreferences.getValue(UIPCLVPortlet.SHOW_HEADER, null);
     viewerHeader.setChecked(Boolean.parseBoolean(viewHeader));
     
-    String preferenceTargetPath = portletPreferences.getValue(UIParameterizedContentListViewerConstant.TARGET_PAGE, null);
+    String preferenceTargetPath = portletPreferences.getValue(UIPCLVPortlet.TARGET_PAGE, null);
     UIFormInputSetWithAction targetPathFormInputSet = new UIFormInputSetWithAction(TARGET_PAGE_INPUT_SET_ACTION);
     UIFormStringInput targetPathFormStringInput = new UIFormStringInput(TARGET_PAGE_INPUT, TARGET_PAGE_INPUT, preferenceTargetPath);
     targetPathFormStringInput.setValue(preferenceTargetPath);
@@ -252,17 +250,17 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
     
     UIFormCheckBoxInput addMoreLink = new UIFormCheckBoxInput(SHOW_MORE_LINK, SHOW_MORE_LINK, null);
     addMoreLink.setChecked(true);
-    String showMoreLink = portletPreferences.getValue(UIParameterizedContentListViewerConstant.SHOW_MORE_LINK, null);
+    String showMoreLink = portletPreferences.getValue(UIPCLVPortlet.SHOW_MORE_LINK, null);
     addMoreLink.setChecked(Boolean.parseBoolean(showMoreLink));
     
     UIFormCheckBoxInput showRssLink = new UIFormCheckBoxInput(SHOW_RSS_LINK, SHOW_RSS_LINK, null);
     showRssLink.setChecked(true);
-    String rssLink = portletPreferences.getValue(UIParameterizedContentListViewerConstant.SHOW_RSS_LINK, null);
+    String rssLink = portletPreferences.getValue(UIPCLVPortlet.SHOW_RSS_LINK, null);
     showRssLink.setChecked(Boolean.parseBoolean(rssLink));
     
     UIFormCheckBoxInput showLink = new UIFormCheckBoxInput(SHOW_LINK, SHOW_LINK, null);
     showLink.setChecked(true);
-    String link = portletPreferences.getValue(UIParameterizedContentListViewerConstant.SHOW_LINK, null);
+    String link = portletPreferences.getValue(UIPCLVPortlet.SHOW_LINK, null);
     showLink.setChecked(Boolean.parseBoolean(link));
     
     addChild(orderBySelectBox);
@@ -292,7 +290,7 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
   public void doSelect(String selectField, Object value) throws Exception {
     UIFormStringInput formStringInput = findComponentById(selectField);
     formStringInput.setValue(value.toString()) ;
-    Utils.closePopupWindow(this, UIParameterizedContentListViewerConstant.PARAMETERIZED_TARGET_PAGE_POPUP_WINDOW);
+    Utils.closePopupWindow(this, UIPCLVPortlet.PARAMETERIZED_TARGET_PAGE_POPUP_WINDOW);
   }
   
   /**
@@ -308,20 +306,14 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
   private List<SelectItemOption<String>> getTemplateList(String portletName, String category) throws Exception {
     List<SelectItemOption<String>> templateOptionList = new ArrayList<SelectItemOption<String>>();
     ApplicationTemplateManagerService templateManagerService = getApplicationComponent(ApplicationTemplateManagerService.class);
-    ThreadLocalSessionProviderService threadLocalSessionProviderService = getApplicationComponent(ThreadLocalSessionProviderService.class);
-    SessionProvider provider = threadLocalSessionProviderService.getSessionProvider(null);
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     ManageableRepository manageableRepository = repositoryService.getCurrentRepository();
     String repository = manageableRepository.getConfiguration().getName();
-    try {
-      List<Node> templateNodeList = templateManagerService.getTemplatesByCategory(repository, portletName, category, provider);
-      for (Node templateNode : templateNodeList) {
-        String templateName = templateNode.getName();
-        String templatePath = templateNode.getPath();
-        templateOptionList.add(new SelectItemOption<String>(templateName, templatePath));
-      }
-    } finally {
-      provider.close();
+    List<Node> templateNodeList = templateManagerService.getTemplatesByCategory(repository, portletName, category, Utils.getSessionProvider(this));
+    for (Node templateNode : templateNodeList) {
+      String templateName = templateNode.getName();
+      String templatePath = templateNode.getPath();
+      templateOptionList.add(new SelectItemOption<String>(templateName, templatePath));
     }
     return templateOptionList;
   }
@@ -337,11 +329,11 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
    * 
    * @see CancelActionEvent
    */
-  public static class CancelActionListener extends EventListener<UIParameterizedManagementForm> {
-    public void execute(Event<UIParameterizedManagementForm> event) throws Exception {
-      UIParameterizedManagementForm viewerManagementForm = event.getSource();
-      if (Utils.isQuickEditmode(viewerManagementForm, UIParameterizedContentListViewerConstant.PARAMETERIZED_MANAGEMENT_PORTLET_POPUP_WINDOW)) {
-        Utils.closePopupWindow(viewerManagementForm, UIParameterizedContentListViewerConstant.PARAMETERIZED_MANAGEMENT_PORTLET_POPUP_WINDOW);
+  public static class CancelActionListener extends EventListener<UIPCLVConfig> {
+    public void execute(Event<UIPCLVConfig> event) throws Exception {
+      UIPCLVConfig viewerManagementForm = event.getSource();
+      if (Utils.isQuickEditmode(viewerManagementForm, UIPCLVPortlet.PARAMETERIZED_MANAGEMENT_PORTLET_POPUP_WINDOW)) {
+        Utils.closePopupWindow(viewerManagementForm, UIPCLVPortlet.PARAMETERIZED_MANAGEMENT_PORTLET_POPUP_WINDOW);
       }
       ((PortletRequestContext)event.getRequestContext()).setApplicationMode(PortletMode.VIEW);
     }
@@ -358,13 +350,13 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
    * 
    * @see SelectTargetPageActionEvent
    */
-  public static class SelectTargetPageActionListener extends EventListener<UIParameterizedManagementForm> {
-    public void execute(Event<UIParameterizedManagementForm> event) throws Exception {
-      UIParameterizedManagementForm viewerManagementForm = event.getSource();
+  public static class SelectTargetPageActionListener extends EventListener<UIPCLVConfig> {
+    public void execute(Event<UIPCLVConfig> event) throws Exception {
+      UIPCLVConfig viewerManagementForm = event.getSource();
       UIPageSelector pageSelector = viewerManagementForm.createUIComponent(UIPageSelector.class, null, null);
       pageSelector.setSourceComponent(viewerManagementForm, new String[] {TARGET_PAGE_INPUT});
-      Utils.createPopupWindow(viewerManagementForm, pageSelector, UIParameterizedContentListViewerConstant.PARAMETERIZED_TARGET_PAGE_POPUP_WINDOW, 800, 600);
-      viewerManagementForm.setPopupId(UIParameterizedContentListViewerConstant.PARAMETERIZED_TARGET_PAGE_POPUP_WINDOW);
+      Utils.createPopupWindow(viewerManagementForm, pageSelector, UIPCLVPortlet.PARAMETERIZED_TARGET_PAGE_POPUP_WINDOW, 800, 600);
+      viewerManagementForm.setPopupId(UIPCLVPortlet.PARAMETERIZED_TARGET_PAGE_POPUP_WINDOW);
     }
   }
 
@@ -411,9 +403,9 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
    * 
    * @see SaveActionEvent
    */
-  public static class SaveActionListener extends EventListener<UIParameterizedManagementForm> {
-    public void execute(Event<UIParameterizedManagementForm> event) throws Exception {
-      UIParameterizedManagementForm uiParameterizedManagementForm = event.getSource();
+  public static class SaveActionListener extends EventListener<UIPCLVConfig> {
+    public void execute(Event<UIPCLVConfig> event) throws Exception {
+      UIPCLVConfig uiParameterizedManagementForm = event.getSource();
       PortletRequestContext portletRequestContext = (PortletRequestContext) event.getRequestContext();
       PortletPreferences portletPreferences = portletRequestContext.getRequest().getPreferences();
       RepositoryService repositoryService = uiParameterizedManagementForm.getApplicationComponent(RepositoryService.class);
@@ -422,52 +414,52 @@ public class UIParameterizedManagementForm extends UIForm implements UISelectabl
       String repository = manageableRepository.getConfiguration().getName();
       String workspace = manageableRepository.getConfiguration().getDefaultWorkspaceName();
       
-      String formViewTemplatePath = uiParameterizedManagementForm.getUIFormSelectBox(UIParameterizedManagementForm.FORM_VIEW_TEMPLATES_SELECTOR).getValue();
-      String paginatorTemplatePath = uiParameterizedManagementForm.getUIFormSelectBox(UIParameterizedManagementForm.PAGINATOR_TEMPLATES_SELECTOR).getValue();
-      String itemsPerPage = uiParameterizedManagementForm.getUIStringInput(UIParameterizedManagementForm.ITEMS_PER_PAGE_INPUT).getValue();      
-      String showRefreshButton = uiParameterizedManagementForm.getUIFormCheckBoxInput(UIParameterizedManagementForm.VIEWER_BUTTON_REFRESH).isChecked() ? "true" : "false";
-      String viewThumbnails = uiParameterizedManagementForm.getUIFormCheckBoxInput(UIParameterizedManagementForm.VIEWER_THUMBNAILS_IMAGE).isChecked() ? "true" : "false";
-      String viewTitle = uiParameterizedManagementForm.getUIFormCheckBoxInput(UIParameterizedManagementForm.VIEWER_TITLE).isChecked() ? "true" : "false";
-      String viewSummary = uiParameterizedManagementForm.getUIFormCheckBoxInput(UIParameterizedManagementForm.VIEWER_SUMMARY).isChecked() ? "true" : "false";
-      String viewDateCreated = uiParameterizedManagementForm.getUIFormCheckBoxInput(UIParameterizedManagementForm.VIEWER_DATE_CREATED).isChecked() ? "true" : "false";
-      String viewerHeader = uiParameterizedManagementForm.getUIFormCheckBoxInput(UIParameterizedManagementForm.VIEWER_HEADER).isChecked() ? "true" : "false";
-      String viewerLink = uiParameterizedManagementForm.getUIFormCheckBoxInput(UIParameterizedManagementForm.SHOW_LINK).isChecked() ? "true" : "false";
-      UIFormRadioBoxInput orderTypeBoxInput = (UIFormRadioBoxInput) uiParameterizedManagementForm.getChildById(UIParameterizedManagementForm.ORDER_TYPES);
+      String formViewTemplatePath = uiParameterizedManagementForm.getUIFormSelectBox(UIPCLVConfig.FORM_VIEW_TEMPLATES_SELECTOR).getValue();
+      String paginatorTemplatePath = uiParameterizedManagementForm.getUIFormSelectBox(UIPCLVConfig.PAGINATOR_TEMPLATES_SELECTOR).getValue();
+      String itemsPerPage = uiParameterizedManagementForm.getUIStringInput(UIPCLVConfig.ITEMS_PER_PAGE_INPUT).getValue();      
+      String showRefreshButton = uiParameterizedManagementForm.getUIFormCheckBoxInput(UIPCLVConfig.VIEWER_BUTTON_REFRESH).isChecked() ? "true" : "false";
+      String viewThumbnails = uiParameterizedManagementForm.getUIFormCheckBoxInput(UIPCLVConfig.VIEWER_THUMBNAILS_IMAGE).isChecked() ? "true" : "false";
+      String viewTitle = uiParameterizedManagementForm.getUIFormCheckBoxInput(UIPCLVConfig.VIEWER_TITLE).isChecked() ? "true" : "false";
+      String viewSummary = uiParameterizedManagementForm.getUIFormCheckBoxInput(UIPCLVConfig.VIEWER_SUMMARY).isChecked() ? "true" : "false";
+      String viewDateCreated = uiParameterizedManagementForm.getUIFormCheckBoxInput(UIPCLVConfig.VIEWER_DATE_CREATED).isChecked() ? "true" : "false";
+      String viewerHeader = uiParameterizedManagementForm.getUIFormCheckBoxInput(UIPCLVConfig.VIEWER_HEADER).isChecked() ? "true" : "false";
+      String viewerLink = uiParameterizedManagementForm.getUIFormCheckBoxInput(UIPCLVConfig.SHOW_LINK).isChecked() ? "true" : "false";
+      UIFormRadioBoxInput orderTypeBoxInput = (UIFormRadioBoxInput) uiParameterizedManagementForm.getChildById(UIPCLVConfig.ORDER_TYPES);
       String orderType = orderTypeBoxInput.getValue();
       String orderBy = uiParameterizedManagementForm.getUIFormSelectBox(ORDER_BY).getValue();
-      String showMoreLink = uiParameterizedManagementForm.getUIFormCheckBoxInput(UIParameterizedManagementForm.SHOW_MORE_LINK).isChecked() ? "true" : "false";
-      String showRssLink = uiParameterizedManagementForm.getUIFormCheckBoxInput(UIParameterizedManagementForm.SHOW_RSS_LINK).isChecked() ? "true" : "false";
-      String autoDetect = uiParameterizedManagementForm.getUIFormCheckBoxInput(UIParameterizedManagementForm.AUTO_DETECT).isChecked() ? "true" : "false";
+      String showMoreLink = uiParameterizedManagementForm.getUIFormCheckBoxInput(UIPCLVConfig.SHOW_MORE_LINK).isChecked() ? "true" : "false";
+      String showRssLink = uiParameterizedManagementForm.getUIFormCheckBoxInput(UIPCLVConfig.SHOW_RSS_LINK).isChecked() ? "true" : "false";
+      String autoDetect = uiParameterizedManagementForm.getUIFormCheckBoxInput(UIPCLVConfig.AUTO_DETECT).isChecked() ? "true" : "false";
       String header = "";
       if(!Boolean.parseBoolean(autoDetect)) {
-        header = uiParameterizedManagementForm.getUIStringInput(UIParameterizedManagementForm.HEADER).getValue();
+        header = uiParameterizedManagementForm.getUIStringInput(UIPCLVConfig.HEADER).getValue();
       } 
       header = uiParameterizedManagementForm.getHeader();
-      String targetPage = uiParameterizedManagementForm.getUIStringInput(UIParameterizedManagementForm.TARGET_PAGE_INPUT).getValue();
+      String targetPage = uiParameterizedManagementForm.getUIStringInput(UIPCLVConfig.TARGET_PAGE_INPUT).getValue();
 
-      portletPreferences.setValue(UIParameterizedContentListViewerConstant.PREFERENCE_REPOSITORY, repository);
-      portletPreferences.setValue(UIParameterizedContentListViewerConstant.WORKSPACE, workspace);
-      portletPreferences.setValue(UIParameterizedContentListViewerConstant.FORM_VIEW_TEMPLATE_PATH, formViewTemplatePath);
-      portletPreferences.setValue(UIParameterizedContentListViewerConstant.PAGINATOR_TEMPlATE_PATH, paginatorTemplatePath);
-      portletPreferences.setValue(UIParameterizedContentListViewerConstant.ITEMS_PER_PAGE, itemsPerPage);      
-      portletPreferences.setValue(UIParameterizedContentListViewerConstant.SHOW_REFRESH_BUTTON, showRefreshButton);
-      portletPreferences.setValue(UIParameterizedContentListViewerConstant.SHOW_THUMBNAILS_VIEW, viewThumbnails);
-      portletPreferences.setValue(UIParameterizedContentListViewerConstant.SHOW_TITLE, viewTitle);
-      portletPreferences.setValue(UIParameterizedContentListViewerConstant.SHOW_DATE_CREATED, viewDateCreated);
-      portletPreferences.setValue(UIParameterizedContentListViewerConstant.SHOW_SUMMARY, viewSummary);
-      portletPreferences.setValue(UIParameterizedContentListViewerConstant.HEADER, header);
-      portletPreferences.setValue(UIParameterizedContentListViewerConstant.SHOW_HEADER, viewerHeader);
-      portletPreferences.setValue(UIParameterizedContentListViewerConstant.SHOW_LINK, viewerLink);
-      portletPreferences.setValue(UIParameterizedContentListViewerConstant.ORDER_TYPE, orderType);
-      portletPreferences.setValue(UIParameterizedContentListViewerConstant.ORDER_BY, orderBy);
-      portletPreferences.setValue(UIParameterizedContentListViewerConstant.SHOW_MORE_LINK, showMoreLink);
-      portletPreferences.setValue(UIParameterizedContentListViewerConstant.SHOW_RSS_LINK, showRssLink);
-      portletPreferences.setValue(UIParameterizedContentListViewerConstant.SHOW_AUTO_DETECT, autoDetect);
-      portletPreferences.setValue(UIParameterizedContentListViewerConstant.TARGET_PAGE, targetPage);
+      portletPreferences.setValue(UIPCLVPortlet.PREFERENCE_REPOSITORY, repository);
+      portletPreferences.setValue(UIPCLVPortlet.WORKSPACE, workspace);
+      portletPreferences.setValue(UIPCLVPortlet.FORM_VIEW_TEMPLATE_PATH, formViewTemplatePath);
+      portletPreferences.setValue(UIPCLVPortlet.PAGINATOR_TEMPlATE_PATH, paginatorTemplatePath);
+      portletPreferences.setValue(UIPCLVPortlet.ITEMS_PER_PAGE, itemsPerPage);      
+      portletPreferences.setValue(UIPCLVPortlet.SHOW_REFRESH_BUTTON, showRefreshButton);
+      portletPreferences.setValue(UIPCLVPortlet.SHOW_THUMBNAILS_VIEW, viewThumbnails);
+      portletPreferences.setValue(UIPCLVPortlet.SHOW_TITLE, viewTitle);
+      portletPreferences.setValue(UIPCLVPortlet.SHOW_DATE_CREATED, viewDateCreated);
+      portletPreferences.setValue(UIPCLVPortlet.SHOW_SUMMARY, viewSummary);
+      portletPreferences.setValue(UIPCLVPortlet.HEADER, header);
+      portletPreferences.setValue(UIPCLVPortlet.SHOW_HEADER, viewerHeader);
+      portletPreferences.setValue(UIPCLVPortlet.SHOW_LINK, viewerLink);
+      portletPreferences.setValue(UIPCLVPortlet.ORDER_TYPE, orderType);
+      portletPreferences.setValue(UIPCLVPortlet.ORDER_BY, orderBy);
+      portletPreferences.setValue(UIPCLVPortlet.SHOW_MORE_LINK, showMoreLink);
+      portletPreferences.setValue(UIPCLVPortlet.SHOW_RSS_LINK, showRssLink);
+      portletPreferences.setValue(UIPCLVPortlet.SHOW_AUTO_DETECT, autoDetect);
+      portletPreferences.setValue(UIPCLVPortlet.TARGET_PAGE, targetPage);
       portletPreferences.store();
       
-      if (Utils.isQuickEditmode(uiParameterizedManagementForm, UIParameterizedContentListViewerConstant.PARAMETERIZED_MANAGEMENT_PORTLET_POPUP_WINDOW)) {
-        Utils.closePopupWindow(uiParameterizedManagementForm, UIParameterizedContentListViewerConstant.PARAMETERIZED_MANAGEMENT_PORTLET_POPUP_WINDOW);
+      if (Utils.isQuickEditmode(uiParameterizedManagementForm, UIPCLVPortlet.PARAMETERIZED_MANAGEMENT_PORTLET_POPUP_WINDOW)) {
+        Utils.closePopupWindow(uiParameterizedManagementForm, UIPCLVPortlet.PARAMETERIZED_MANAGEMENT_PORTLET_POPUP_WINDOW);
       } else {
         Utils.createPopupMessage(uiParameterizedManagementForm, "UIParameterizedManagementForm.msg.saving-success", null, ApplicationMessage.INFO);
       }

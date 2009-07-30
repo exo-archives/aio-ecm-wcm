@@ -32,22 +32,22 @@ import org.exoplatform.webui.event.EventListener;
  */
 
 @ComponentConfig(
-  template = "app:/groovy/ContentListViewer/config/UISelectedContentGrid.gtmpl", 
+  template = "app:/groovy/ContentListViewer/config/UICLVContentSelectedGrid.gtmpl", 
   events = {
-    @EventConfig(listeners = UISelectedContentGrid.DeleteActionListener.class, confirm = "UISelectedContentGrid.msg.confirm-delete"),
-    @EventConfig(listeners = UISelectedContentGrid.SaveCategoriesActionListener.class),
-    @EventConfig(listeners = UISelectedContentGrid.CancelActionListener.class) 
+    @EventConfig(listeners = UICLVContentSelectedGrid.DeleteActionListener.class, confirm = "UISelectedContentGrid.msg.confirm-delete"),
+    @EventConfig(listeners = UICLVContentSelectedGrid.SaveCategoriesActionListener.class),
+    @EventConfig(listeners = UICLVContentSelectedGrid.CancelActionListener.class) 
   }
 )
-public class UISelectedContentGrid extends UISelectedCategoriesGrid {
+public class UICLVContentSelectedGrid extends UISelectedCategoriesGrid {
 
-  public UISelectedContentGrid() throws Exception {
+  public UICLVContentSelectedGrid() throws Exception {
     super();
   }
 
-  public static class DeleteActionListener extends EventListener<UISelectedContentGrid> {
-    public void execute(Event<UISelectedContentGrid> event) throws Exception {
-      UISelectedContentGrid uiSelectedContentGrid = event.getSource();
+  public static class DeleteActionListener extends EventListener<UICLVContentSelectedGrid> {
+    public void execute(Event<UICLVContentSelectedGrid> event) throws Exception {
+      UICLVContentSelectedGrid uiSelectedContentGrid = event.getSource();
       String value = event.getRequestContext().getRequestParameter(OBJECTID);
       uiSelectedContentGrid.removeCategory(value);
       if (uiSelectedContentGrid.getSelectedCategories().size() == 0) uiSelectedContentGrid.setDeleteAllCategory(true);
@@ -59,10 +59,10 @@ public class UISelectedContentGrid extends UISelectedCategoriesGrid {
     }
   }
 
-  public static class SaveCategoriesActionListener extends EventListener<UISelectedContentGrid> {
-    public void execute(Event<UISelectedContentGrid> event) throws Exception {
-      UISelectedContentGrid uiSelectedContentGrid = event.getSource();
-      UICorrectContentSelectorForm uiCorrectContentSelectorForm = uiSelectedContentGrid.getAncestorOfType(UICorrectContentSelectorForm.class);
+  public static class SaveCategoriesActionListener extends EventListener<UICLVContentSelectedGrid> {
+    public void execute(Event<UICLVContentSelectedGrid> event) throws Exception {
+      UICLVContentSelectedGrid uiSelectedContentGrid = event.getSource();
+      UICLVContentSelector uiCorrectContentSelectorForm = uiSelectedContentGrid.getAncestorOfType(UICLVContentSelector.class);
       String returnField = uiCorrectContentSelectorForm.getReturnFieldName();
       List<String> selectedCategories = uiSelectedContentGrid.getSelectedCategories();
       if (selectedCategories.size() == 0 && !uiSelectedContentGrid.isDeleteAllCategory()) {
@@ -74,7 +74,7 @@ public class UISelectedContentGrid extends UISelectedCategoriesGrid {
         for (String item : selectedCategories) {
           contents.append(item).append(";");
         }        
-        UIViewerManagementForm uiViewerManagementForm = (UIViewerManagementForm) uiCorrectContentSelectorForm.getSourceComponent();
+        UICLVConfig uiViewerManagementForm = (UICLVConfig) uiCorrectContentSelectorForm.getSourceComponent();
         uiViewerManagementForm.doSelect(returnField, contents.toString());        
         uiViewerManagementForm.setViewAbleContentList(selectedCategories);
       } catch (Exception e) {
@@ -84,11 +84,11 @@ public class UISelectedContentGrid extends UISelectedCategoriesGrid {
     }
   }
 
-  public static class CancelActionListener extends EventListener<UISelectedContentGrid> {
-    public void execute(Event<UISelectedContentGrid> event) throws Exception {
-      UISelectedContentGrid uiSelectedContent = event.getSource();
-      UICorrectContentSelectorForm uiCorrectContentSelectorForm = uiSelectedContent.getAncestorOfType(UICorrectContentSelectorForm.class);
-      Utils.closePopupWindow(uiCorrectContentSelectorForm, UIViewerManagementForm.CORRECT_CONTENT_SELECTOR_POPUP_WINDOW);    
+  public static class CancelActionListener extends EventListener<UICLVContentSelectedGrid> {
+    public void execute(Event<UICLVContentSelectedGrid> event) throws Exception {
+      UICLVContentSelectedGrid uiSelectedContent = event.getSource();
+      UICLVContentSelector uiCorrectContentSelectorForm = uiSelectedContent.getAncestorOfType(UICLVContentSelector.class);
+      Utils.closePopupWindow(uiCorrectContentSelectorForm, UICLVConfig.CORRECT_CONTENT_SELECTOR_POPUP_WINDOW);    
     }
   }
 }

@@ -45,7 +45,7 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 @ComponentConfig(
   events = @EventConfig(listeners = UINodeTreeBuilder.ChangeNodeActionListener.class)
 )
-public class UIContentsSelectionTreeBuilder extends UINodeTreeBuilder {
+public class UICLVContentTree extends UINodeTreeBuilder {
 
   /** The current portal. */
   private Node currentPortal;
@@ -58,7 +58,7 @@ public class UIContentsSelectionTreeBuilder extends UINodeTreeBuilder {
    * 
    * @throws Exception the exception
    */
-  public UIContentsSelectionTreeBuilder() throws Exception {
+  public UICLVContentTree() throws Exception {
     super();
   }
 

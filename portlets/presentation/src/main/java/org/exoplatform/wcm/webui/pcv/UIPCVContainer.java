@@ -28,7 +28,6 @@ import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
-import javax.portlet.PortletMode;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
@@ -44,19 +43,14 @@ import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationState;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant.SITE_MODE;
 import org.exoplatform.wcm.webui.Utils;
-import org.exoplatform.wcm.webui.WebUIPropertiesConfigService;
-import org.exoplatform.wcm.webui.WebUIPropertiesConfigService.PopupWindowProperties;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -68,12 +62,12 @@ import org.exoplatform.webui.event.EventListener;
 
 @ComponentConfig(
   lifecycle = Lifecycle.class, 
-  template = "app:/groovy/ParameterizedContentViewer/UIContentViewerContainer.gtmpl", 
+  template = "app:/groovy/ParameterizedContentViewer/UIPCVContainer.gtmpl", 
   events = { 
-    @EventConfig(listeners = UIContentViewerContainer.QuickEditActionListener.class) 
+    @EventConfig(listeners = UIPCVContainer.QuickEditActionListener.class) 
   }
 )
-public class UIContentViewerContainer extends UIContainer {
+public class UIPCVContainer extends UIContainer {
 
 	/** Flag indicating the draft revision. */
 	private boolean isDraftRevision = false;
@@ -82,7 +76,7 @@ public class UIContentViewerContainer extends UIContainer {
 	private boolean isObsoletedContent = false;
 
 	/** Content child of this content. */
-	private UIContentViewer uiContentViewer;
+	private UIPCVPresentation uiContentViewer;
 
 	/**
 	 * A flag used to display Print/Close buttons and hide Back one if its'
@@ -97,9 +91,9 @@ public class UIContentViewerContainer extends UIContainer {
 	 * @throws Exception
 	 *             the exception
 	 */
-	public UIContentViewerContainer() throws Exception {
-		addChild(UIContentViewer.class, null, null);
-		uiContentViewer = getChild(UIContentViewer.class);
+	public UIPCVContainer() throws Exception {
+		addChild(UIPCVPresentation.class, null, null);
+		uiContentViewer = getChild(UIPCVPresentation.class);
 	}
 
 	@Override
@@ -120,9 +114,9 @@ public class UIContentViewerContainer extends UIContainer {
 					"UTF-8");
 		} catch (UnsupportedEncodingException e) {
 		}
-		if (!parameters.matches(UIContentViewer.PARAMETER_REGX)) {
+		if (!parameters.matches(UIPCVPresentation.PARAMETER_REGX)) {
 			renderErrorMessage(context,
-					UIContentViewer.CONTENT_NOT_FOUND_EXC);
+					UIPCVPresentation.CONTENT_NOT_FOUND_EXC);
 			return;
 		}
 		String nodeIdentifier = null;
@@ -130,16 +124,14 @@ public class UIContentViewerContainer extends UIContainer {
 		String repository = params[0];
 		String workspace = params[1];
 		Node currentNode = null;
-		ThreadLocalSessionProviderService providerService = getApplicationComponent(ThreadLocalSessionProviderService.class);
-		SessionProvider sessionProvider = providerService.getSessionProvider(null);
-		Session session = null;		
+				
 		if (object instanceof ItemNotFoundException
 				|| object instanceof AccessControlException
 				|| object instanceof ItemNotFoundException || object == null) {
 			RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
 			try {
 				ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-				session = sessionProvider.getSession(workspace, manageableRepository);
+				Session session = Utils.getSessionProvider(this).getSession(workspace, manageableRepository);
 
 				if (params.length > 2) {
 					StringBuffer identifier = new StringBuffer();
@@ -158,7 +150,7 @@ public class UIContentViewerContainer extends UIContainer {
 							String uuid = params[params.length - 1];
 							currentNode = session.getNodeByUUID(uuid);
 						} catch (ItemNotFoundException exc) {
-							renderErrorMessage(context, UIContentViewer.CONTENT_NOT_FOUND_EXC);
+							renderErrorMessage(context, UIPCVPresentation.CONTENT_NOT_FOUND_EXC);
 							return;
 						}
 					}
@@ -178,13 +170,13 @@ public class UIContentViewerContainer extends UIContainer {
 					currentNode = taxonomyTree.getSession().getNodeByUUID(symLink.getProperty("exo:uuid").getString());
 				} catch (PathNotFoundException e) {
 					renderErrorMessage(context,
-							UIContentViewer.CONTENT_NOT_FOUND_EXC);
+							UIPCVPresentation.CONTENT_NOT_FOUND_EXC);
 				}
 			} catch (AccessControlException ace) {
-				renderErrorMessage(context, UIContentViewer.ACCESS_CONTROL_EXC);
+				renderErrorMessage(context, UIPCVPresentation.ACCESS_CONTROL_EXC);
 				return;
 			} catch (Exception e) {
-				renderErrorMessage(context, UIContentViewer.CONTENT_NOT_FOUND_EXC);
+				renderErrorMessage(context, UIPCVPresentation.CONTENT_NOT_FOUND_EXC);
 				return;
 			}
 
@@ -203,11 +195,11 @@ public class UIContentViewerContainer extends UIContainer {
 		}
 		if (currentNode.isNodeType("exo:hiddenable")) {
 			renderErrorMessage(context,
-					UIContentViewer.ACCESS_CONTROL_EXC);
+					UIPCVPresentation.ACCESS_CONTROL_EXC);
 			return;
 		} else if (isDocumentType) { // content is document
 			if (hasChildren()) {
-				removeChild(UIContentViewerContainer.class);
+				removeChild(UIPCVContainer.class);
 			}
 			PublicationService publicationService = uiPortal
 					.getApplicationComponent(PublicationService.class);
@@ -231,7 +223,7 @@ public class UIContentViewerContainer extends UIContainer {
 			{
 				PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(lifeCycleName);
 				if (publicationPlugin == null) {
-					renderErrorMessage(context, UIContentViewer.CONTENT_NOT_PRINTED);
+					renderErrorMessage(context, UIPCVPresentation.CONTENT_NOT_PRINTED);
 					return;
 				}
 				nodeView = publicationPlugin.getNodeView(currentNode,hmContext);
@@ -240,7 +232,7 @@ public class UIContentViewerContainer extends UIContainer {
       boolean isLiveMode = Utils.isLiveMode();
       if(isLiveMode) {
         if(nodeView == null) {
-          renderErrorMessage(context,UIContentViewer.CONTENT_NOT_PRINTED);
+          renderErrorMessage(context,UIPCVPresentation.CONTENT_NOT_PRINTED);
           return;
         }
         uiContentViewer.setNode(nodeView);
@@ -254,7 +246,7 @@ public class UIContentViewerContainer extends UIContainer {
 			if (StageAndVersionPublicationConstant.OBSOLETE_STATE.equals(state)) {
 				setObsoletedContent(true);
 				renderErrorMessage(context,
-						UIContentViewer.OBSOLETE_CONTENT);
+						UIPCVPresentation.OBSOLETE_CONTENT);
 				return;
 			} else {
 				setObsoletedContent(false);
@@ -268,7 +260,7 @@ public class UIContentViewerContainer extends UIContainer {
 			 isPrint = "isPrint=true".equals(request.getQueryString()) ? true :false;
 			 super.processRender(context);
 		} else { // content is folders
-			renderErrorMessage(context, UIContentViewer.CONTENT_UNSUPPORT_EXC);
+			renderErrorMessage(context, UIPCVPresentation.CONTENT_UNSUPPORT_EXC);
 		}
 	}
 
@@ -298,21 +290,21 @@ public class UIContentViewerContainer extends UIContainer {
 	 * @see QuickEditActionEvent
 	 */
 	public static class QuickEditActionListener extends
-			EventListener<UIContentViewerContainer> {
+			EventListener<UIPCVContainer> {
 
 		/*
 		 * (non-Javadoc)
 		 * 
 		 * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
 		 */
-		public void execute(Event<UIContentViewerContainer> event) throws Exception {
-			UIContentViewerContainer uiContentViewerContainer = event.getSource();
-			UIContentViewer uiContentViewer = uiContentViewerContainer.getChild(UIContentViewer.class);
+		public void execute(Event<UIPCVContainer> event) throws Exception {
+			UIPCVContainer uiContentViewerContainer = event.getSource();
+			UIPCVPresentation uiContentViewer = uiContentViewerContainer.getChild(UIPCVPresentation.class);
 			Node orginialNode = uiContentViewer.getOriginalNode();
 			ManageableRepository manageableRepository = (ManageableRepository) orginialNode.getSession().getRepository();
 			String repository = manageableRepository.getConfiguration().getName();
 			String workspace = orginialNode.getSession().getWorkspace().getName();
-			UIDocumentDialogForm uiDocumentForm = uiContentViewerContainer.createUIComponent(UIDocumentDialogForm.class, null, null);
+			UIPCVContentDialog uiDocumentForm = uiContentViewerContainer.createUIComponent(UIPCVContentDialog.class, null, null);
 			uiDocumentForm.setRepositoryName(repository);
 			uiDocumentForm.setWorkspace(workspace);
 			uiDocumentForm.setContentType(orginialNode.getPrimaryNodeType().getName());
@@ -320,14 +312,7 @@ public class UIContentViewerContainer extends UIContainer {
 			uiDocumentForm.setStoredPath(orginialNode.getParent().getPath());
 			uiDocumentForm.addNew(false);
 			uiContentViewerContainer.addChild(uiDocumentForm);
-			
-		  UIParameterizedContentViewerPortlet uiportlet = uiContentViewerContainer.getAncestorOfType(UIParameterizedContentViewerPortlet.class);
-		  uiportlet.activateMode(PortletMode.EDIT);
-		  UIPopupContainer maskPopupContainer = uiportlet.getChild(UIPopupContainer.class);
-		  WebUIPropertiesConfigService propertiesConfigService = uiContentViewerContainer.getApplicationComponent(WebUIPropertiesConfigService.class);
-      PopupWindowProperties popupProperties = (PopupWindowProperties)propertiesConfigService.getProperties(WebUIPropertiesConfigService.SCV_POPUP_SIZE_QUICK_EDIT);
-      maskPopupContainer.activate(uiDocumentForm, popupProperties.getWidth(), popupProperties.getHeight());
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiportlet);
+			Utils.createPopupWindow(uiContentViewerContainer, uiDocumentForm, "UIDocumentFormPopupWindow", 800, 600);
 		}
 	}
 

@@ -5,7 +5,7 @@
 	 */
 	import javax.jcr.Node;
 	import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
-	import org.exoplatform.wcm.webui.clv.UIContentListViewerPortlet;
+	import org.exoplatform.wcm.webui.clv.UICLVPortlet;
 	import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationState;
 %>
 
@@ -61,14 +61,14 @@
 					%>	
 						<div class="CaptionItem" style="border-bottom: 0px;">
 							<% 
-                                if(imgSrc != null && uicomponent.isShowField(UIContentListViewerPortlet.SHOW_THUMBNAILS_VIEW)) {
+                                if(imgSrc != null && uicomponent.isShowField(UICLVPortlet.SHOW_THUMBNAILS_VIEW)) {
                                     %><img src="$imgSrc" width="270px" style="padding-bottom:10px;" /><%
                                 }
-								if (uicomponent.isShowField(UIContentListViewerPortlet.SHOW_TITLE)) {
+								if (uicomponent.isShowField(UICLVPortlet.SHOW_TITLE)) {
 									%>
 										<div class="CaptionTitle" >
 											<% 
-												if (uicomponent.isShowField(UIContentListViewerPortlet.SHOW_LINK)) {
+												if (uicomponent.isShowField(UICLVPortlet.SHOW_LINK)) {
 													%><a href="$itemLink">$itemName</a><% 
 												} else { 
 													%>$itemName<% 
@@ -84,19 +84,19 @@
 										</div>
 									<%							
 								} 
-								if (itemDateCreated != null && uicomponent.isShowField(UIContentListViewerPortlet.SHOW_DATE_CREATED)) { 
+								if (itemDateCreated != null && uicomponent.isShowField(UICLVPortlet.SHOW_DATE_CREATED)) { 
 									%><div class="CaptionDate"><%=itemDateCreated%></div><% 
 								} 
 							%>											
 							<div class="CaptionContent">				
 								<% 
-									if (itemSummary != null && itemSummary.trim().length() != 0 && uicomponent.isShowField(UIContentListViewerPortlet.SHOW_SUMMARY)) {
+									if (itemSummary != null && itemSummary.trim().length() != 0 && uicomponent.isShowField(UICLVPortlet.SHOW_SUMMARY)) {
 										%><pre><%=itemSummary%></pre><% 
 									} 
 								%>															
 							</div>			
                             <%
-                            if (uicomponent.isShowField(UIContentListViewerPortlet.SHOW_READMORE)) {
+                            if (uicomponent.isShowField(UICLVPortlet.SHOW_READMORE)) {
                             %>
                             <div class="CaptionViewMore"><a href="$itemLink"><%=labelReadMore%>&raquo;</a></div>
                             <%

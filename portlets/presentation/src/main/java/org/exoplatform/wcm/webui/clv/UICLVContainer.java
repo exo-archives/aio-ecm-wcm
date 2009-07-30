@@ -22,7 +22,7 @@ import org.exoplatform.ecm.resolver.JCRResourceResolver;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.wcm.webui.Utils;
-import org.exoplatform.wcm.webui.clv.config.UIViewerManagementForm;
+import org.exoplatform.wcm.webui.clv.config.UICLVConfig;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.core.UIContainer;
@@ -35,7 +35,7 @@ import org.exoplatform.webui.event.EventListener;
  *          anh.do@exoplatform.com, anhdn86@gmail.com		
  * Feb 23, 2009  
  */
-public abstract class UIListViewerBase extends UIContainer implements RefreshDelegateActionListener {
+public abstract class UICLVContainer extends UIContainer implements RefreshDelegateActionListener {
 
   protected boolean viewAbleContent = false;
 
@@ -74,27 +74,27 @@ public abstract class UIListViewerBase extends UIContainer implements RefreshDel
   }
 
   protected String getFormViewTemplatePath() {
-    return getPortletPreference().getValue(UIContentListViewerPortlet.FORM_VIEW_TEMPLATE_PATH, null);
+    return getPortletPreference().getValue(UICLVPortlet.FORM_VIEW_TEMPLATE_PATH, null);
   }
 
   public ResourceResolver getTemplateResourceResolver() throws Exception {
-    String repository = getPortletPreference().getValue(UIContentListViewerPortlet.REPOSITORY, null);
+    String repository = getPortletPreference().getValue(UICLVPortlet.REPOSITORY, null);
     DMSConfiguration dmsConfiguration = getApplicationComponent(DMSConfiguration.class);
     String workspace = dmsConfiguration.getConfig(repository).getSystemWorkspace();
     return new JCRResourceResolver(repository, workspace, "exo:templateFile");
   }
 
-  public static class QuickEditActionListener extends EventListener<UIFolderViewer> {
-    public void execute(Event<UIFolderViewer> event) throws Exception {
-      UIListViewerBase uiListViewerBase = event.getSource();
-      UIViewerManagementForm viewerManagementForm = uiListViewerBase.createUIComponent(UIViewerManagementForm.class, null, null);
+  public static class QuickEditActionListener extends EventListener<UICLVFolderMode> {
+    public void execute(Event<UICLVFolderMode> event) throws Exception {
+      UICLVContainer uiListViewerBase = event.getSource();
+      UICLVConfig viewerManagementForm = uiListViewerBase.createUIComponent(UICLVConfig.class, null, null);
       Utils.createPopupWindow(uiListViewerBase, viewerManagementForm, "UIViewerManagementPopupWindow", 800, 600);
     }    
   }
 
-  public void onRefresh(Event<UIContentListPresentation> event) throws Exception {
-    UIContentListPresentation contentListPresentation = event.getSource();
-    UIListViewerBase uiListViewerBase = contentListPresentation.getParent();
+  public void onRefresh(Event<UICLVPresentation> event) throws Exception {
+    UICLVPresentation contentListPresentation = event.getSource();
+    UICLVContainer uiListViewerBase = contentListPresentation.getParent();
     uiListViewerBase.getChildren().clear();
     uiListViewerBase.init();
   }

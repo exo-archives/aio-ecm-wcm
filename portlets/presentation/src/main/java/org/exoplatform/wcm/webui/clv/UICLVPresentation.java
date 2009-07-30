@@ -72,12 +72,12 @@ import org.exoplatform.webui.event.EventListener;
   @ComponentConfig(
       lifecycle = Lifecycle.class, 
       events = {
-        @EventConfig(listeners = UIContentListPresentation.RefreshActionListener.class),
-        @EventConfig(listeners = UIContentListPresentation.EditContentActionListener.class)
+        @EventConfig(listeners = UICLVPresentation.RefreshActionListener.class),
+        @EventConfig(listeners = UICLVPresentation.EditContentActionListener.class)
       }
   ),
   @ComponentConfig(type = UICustomizeablePaginator.class, events = @EventConfig(listeners = UICustomizeablePaginator.ShowPageActionListener.class)) })
-  public class UIContentListPresentation extends UIContainer {
+  public class UICLVPresentation extends UIContainer {
 
   /** The template path. */
   private String                   templatePath;
@@ -109,7 +109,7 @@ import org.exoplatform.webui.event.EventListener;
   /**
    * Instantiates a new uI content list presentation.
    */
-  public UIContentListPresentation() {
+  public UICLVPresentation() {
   }
 
   /**
@@ -123,7 +123,7 @@ import org.exoplatform.webui.event.EventListener;
    */
   public void init(String templatePath, ResourceResolver resourceResolver, PageList dataPageList) throws Exception {
     PortletPreferences portletPreferences = getPortletPreferences();
-    String paginatorTemplatePath = portletPreferences.getValue(UIContentListViewerPortlet.PAGINATOR_TEMPlATE_PATH,
+    String paginatorTemplatePath = portletPreferences.getValue(UICLVPortlet.PAGINATOR_TEMPlATE_PATH,
         null);
     this.templatePath = templatePath;
     this.resourceResolver = resourceResolver;
@@ -150,7 +150,7 @@ import org.exoplatform.webui.event.EventListener;
    */
   public boolean showRefreshButton() {
     PortletPreferences portletPreferences = getPortletPreferences();
-    String isShow = portletPreferences.getValue(UIContentListViewerPortlet.SHOW_REFRESH_BUTTON,
+    String isShow = portletPreferences.getValue(UICLVPortlet.SHOW_REFRESH_BUTTON,
         null);
     return (isShow != null) ? Boolean.parseBoolean(isShow) : false;
   }
@@ -209,7 +209,7 @@ import org.exoplatform.webui.event.EventListener;
    */
   public boolean showPaginator() throws Exception {
     PortletPreferences portletPreferences = getPortletPreferences();
-    String itemsPerPage = portletPreferences.getValue(UIContentListViewerPortlet.ITEMS_PER_PAGE,
+    String itemsPerPage = portletPreferences.getValue(UICLVPortlet.ITEMS_PER_PAGE,
         null);
     int totalItems = uiPaginator.getTotalItems();
     if (totalItems > Integer.parseInt(itemsPerPage)) {
@@ -338,8 +338,8 @@ import org.exoplatform.webui.event.EventListener;
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     String portalURI = portalRequestContext.getPortalURI();
     PortletPreferences portletPreferences = getPortletPreferences();
-    String repository = portletPreferences.getValue(UIContentListViewerPortlet.REPOSITORY, null);
-    String workspace = portletPreferences.getValue(UIContentListViewerPortlet.WORKSPACE, null);
+    String repository = portletPreferences.getValue(UICLVPortlet.REPOSITORY, null);
+    String workspace = portletPreferences.getValue(UICLVPortlet.WORKSPACE, null);
     String baseURI = portletRequestContext.getRequest().getScheme() + "://"
     + portletRequestContext.getRequest().getServerName() + ":"
     + String.format("%s", portletRequestContext.getRequest().getServerPort());
@@ -525,28 +525,28 @@ import org.exoplatform.webui.event.EventListener;
    * 
    * @see RefreshActionEvent
    */
-  public static class RefreshActionListener extends EventListener<UIContentListPresentation> {
+  public static class RefreshActionListener extends EventListener<UICLVPresentation> {
 
     /*
      * (non-Javadoc)
      * 
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
-    public void execute(Event<UIContentListPresentation> event) throws Exception {
-      UIContentListPresentation contentListPresentation = event.getSource();
+    public void execute(Event<UICLVPresentation> event) throws Exception {
+      UICLVPresentation contentListPresentation = event.getSource();
       RefreshDelegateActionListener refreshListener = (RefreshDelegateActionListener) contentListPresentation.getParent();
       refreshListener.onRefresh(event);
     }
   }
 
-  public static class EditContentActionListener extends EventListener<UIContentListPresentation> {
-    public void execute(Event<UIContentListPresentation> event) throws Exception {
-      UIContentListPresentation contentListPresentation = event.getSource();
+  public static class EditContentActionListener extends EventListener<UICLVPresentation> {
+    public void execute(Event<UICLVPresentation> event) throws Exception {
+      UICLVPresentation contentListPresentation = event.getSource();
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
       PortletPreferences preferences = context.getRequest().getPreferences();
       String path = event.getRequestContext().getRequestParameter(OBJECTID);      
-      String repository = preferences.getValue(UIContentListViewerPortlet.REPOSITORY, null);
-      String worksapce = preferences.getValue(UIContentListViewerPortlet.WORKSPACE, null);      
+      String repository = preferences.getValue(UICLVPortlet.REPOSITORY, null);
+      String worksapce = preferences.getValue(UICLVPortlet.WORKSPACE, null);      
       if (repository == null || worksapce == null)
         throw new ItemNotFoundException();
       RepositoryService repositoryService = contentListPresentation.getApplicationComponent(RepositoryService.class);      
@@ -556,12 +556,13 @@ import org.exoplatform.webui.event.EventListener;
   	  Node node = (Node) session.getItem(path);
   	  contentType = node.getPrimaryNodeType().getName();
   	  nodePath = node.getPath();
-      UIDocumentDialogForm uiDocumentDialogForm = contentListPresentation.createUIComponent(UIDocumentDialogForm.class, null, null);
+      UICLVContentDialog uiDocumentDialogForm = contentListPresentation.createUIComponent(UICLVContentDialog.class, null, null);
       uiDocumentDialogForm.setRepositoryName(repository);
       uiDocumentDialogForm.setWorkspace(worksapce);
       uiDocumentDialogForm.setContentType(contentType);
       uiDocumentDialogForm.setNodePath(nodePath);
       uiDocumentDialogForm.setStoredPath(nodePath);
+      uiDocumentDialogForm.addNew(false);
       Utils.createPopupWindow(contentListPresentation, uiDocumentDialogForm, "UIDocumentDialogFormPopupWindow", 800, 600);
     }
   }

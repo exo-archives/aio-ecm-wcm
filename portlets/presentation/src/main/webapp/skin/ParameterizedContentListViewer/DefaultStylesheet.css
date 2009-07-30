@@ -1,11 +1,11 @@
 
-.UIParameterizedContentListViewerPortlet {
+.UIPCLVPortlet {
 	padding: 20px;
 	background: #f2f2f2;
 	font-family: arial;
 }
 
-.UIParameterizedContentListViewerPortlet form {
+.UIPCLVPortlet form {
 	background: #fff;
 	border: 1px solid #dbdbdb;
 }
@@ -17,7 +17,7 @@
 	cursor: pointer;
 }
 
-.UIParameterizedContentListViewerPortlet .TopBoxParameterized {
+.UIPCLVPortlet .TopBoxParameterized {
 	background: url('DefaultSkin/images/BGTopBox.gif') repeat-x left top;
 	border: 1px solid #cbe2f4;
 	line-height: 30px;
@@ -25,14 +25,14 @@
 	margin-bottom: 1px;
 }
 
-.UIParameterizedContentListViewerPortlet .TopBoxParameterized .Title {
+.UIPCLVPortlet .TopBoxParameterized .Title {
 	float: left;
 	color: #fff;
 	font-weight: bold;
 	font-size: 13px;
 }
 
-.UIParameterizedContentListViewerPortlet .TopBoxParameterized .RssIcon {
+.UIPCLVPortlet .TopBoxParameterized .RssIcon {
 	background: url('DefaultSkin/images/RSS.gif') no-repeat left top;
 	padding-left: 22px;
 	float: right;
@@ -43,17 +43,17 @@
 	font-size: 11px;
 }
 
-.UIParameterizedContentListViewerPortlet .CaptionItem {
+.UIPCLVPortlet .CaptionItem {
 	border-top: 1px solid #cbe2f4;
 	padding: 5px;
 }
 
-.UIParameterizedContentListViewerPortlet .CaptionItem .HotNews {
+.UIPCLVPortlet .CaptionItem .HotNews {
 	background: #edf5fb url('DefaultSkin/images/BGHotNews.gif') repeat-x left bottom;
 	padding: 25px;
 }
 
-.UIParameterizedContentListViewerPortlet .CaptionItem .ImageHotNews {
+.UIPCLVPortlet .CaptionItem .ImageHotNews {
 	background: #fff;
 	width: 248px;
 	border: 1px solid #dbdbdb;
@@ -62,14 +62,14 @@
 	display: block;
 }
 
-.UIParameterizedContentListViewerPortlet .CaptionItem .ContentHotNews {
+.UIPCLVPortlet .CaptionItem .ContentHotNews {
 	margin-right: 280px;
 	color: #6b6b6b;
 	font-size: 12px;
 	line-height: 16px;
 }
 
-.UIParameterizedContentListViewerPortlet .CaptionItem .TitleContentHotNews {
+.UIPCLVPortlet .CaptionItem .TitleContentHotNews {
 	color: #3a66d8;
 	text-decoration: none;
 	font-size: 15px;
@@ -78,15 +78,15 @@
 	display: block;
 }
 
-.UIParameterizedContentListViewerPortlet .CaptionItem .TitleContentHotNews:hover {
+.UIPCLVPortlet .CaptionItem .TitleContentHotNews:hover {
 	text-decoration: underline;
 }
 
-.UIParameterizedContentListViewerPortlet .CaptionItem .NormalNews {
+.UIPCLVPortlet .CaptionItem .NormalNews {
 	padding: 25px;
 }
 
-.UIParameterizedContentListViewerPortlet .CaptionItem .ImageNormalNews {
+.UIPCLVPortlet .CaptionItem .ImageNormalNews {
 	background: #fff;
 	width: 188px;
 	border: 1px solid #dbdbdb;
@@ -95,7 +95,7 @@
 	display: block;
 }
 
-.UIParameterizedContentListViewerPortlet .UIParameterizedManagementForm .TitleBar {	
+.UIPCLVPortlet .UIPCLVForm .TitleBar {	
 	background:transparent url('DefaultSkin/images/BgCategoryTitle1x25.gif') repeat-x scroll 0 0;
 	border-top:1px solid #B7B7B7;
 	border-left:1px solid #B7B7B7;
@@ -107,14 +107,14 @@
 	text-align: center;
 }
 
-.UIParameterizedContentListViewerPortlet .CaptionItem .ContentNormalNews {
+.UIPCLVPortlet .CaptionItem .ContentNormalNews {
 	margin-left : 220px;
 	color: #6b6b6b;
 	font-size: 12px;
 	line-height: 16px;
 }
 
-.UIParameterizedContentListViewerPortlet .CaptionItem .TitleContentNormalNews {
+.UIPCLVPortlet .CaptionItem .TitleContentNormalNews {
 	color: #3a66d8;
 	text-decoration: none;
 	font-size: 13px;
@@ -123,60 +123,60 @@
 	display: block;
 }
 
-.UIParameterizedContentListViewerPortlet .CaptionItem .TitleContentNormalNews:hover {
+.UIPCLVPortlet .CaptionItem .TitleContentNormalNews:hover {
 	text-decoration: underline;
 }
 
-.UIParameterizedContentListViewerPortlet .CaptionItem .LineNormalNews {
+.UIPCLVPortlet .CaptionItem .LineNormalNews {
 	height: 1px;
 	background: #dbdbdb;
 }
 
-.UIParameterizedContentListViewerPortlet .UIFormGrid {
+.UIPCLVPortlet .UIFormGrid {
 	margin: 0;
 }
 
-.UIParameterizedContentListViewerPortlet .HorizontalLayout .UIFormInputSet{
+.UIPCLVPortlet .HorizontalLayout .UIFormInputSet{
 	padding: 0;
 }
 
-.UIParameterizedContentListViewerPortlet .HorizontalLayout .FormContainer{
+.UIPCLVPortlet .HorizontalLayout .FormContainer{
 	padding: 0;
 }
 
-.UIParameterizedContentListViewerPortlet .UIPageSelector {
+.UIPCLVPortlet .UIPageSelector {
 	margin: 0;
 	width: auto;
 }
-.UIParameterizedContentListViewerPortlet #UIPageNodeSelector {
+.UIPCLVPortlet #UIPageNodeSelector {
 	float: left;
 	width: 49%;
 }
-.UIParameterizedContentListViewerPortlet .MiddleRightContainerOptions {
+.UIPCLVPortlet .MiddleRightContainerOptions {
 	width: 200%;
 }
 
-.UIParameterizedContentListViewerPortlet .UIPageNodeSelector {
+.UIPCLVPortlet .UIPageNodeSelector {
 	width: 100%;
 }
 
-.UIParameterizedContentListViewerPortlet #UIPageSelectorPanel {
+.UIPCLVPortlet #UIPageSelectorPanel {
 	float: left;
 	width: 49%;
 }
 
-.UIParameterizedContentListViewerPortlet .CaptionFunc {
+.UIPCLVPortlet .CaptionFunc {
     padding: 10px 0;
     height: 1%;
     overflow: hidden;
 }
 
-.UIParameterizedContentListViewerPortlet .CaptionFunc .CaptionRefresh {
+.UIPCLVPortlet .CaptionFunc .CaptionRefresh {
     width: 200px;
     float: left;
 }
 
-.UIParameterizedContentListViewerPortlet .CaptionFunc .CaptionRefresh a {
+.UIPCLVPortlet .CaptionFunc .CaptionRefresh a {
     display: block;
     padding: 0 3px 3px 25px;
     background: url('DefaultSkin/images/RefreshIcon.gif') no-repeat;

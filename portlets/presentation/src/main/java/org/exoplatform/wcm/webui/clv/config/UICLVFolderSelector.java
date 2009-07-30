@@ -39,19 +39,19 @@ import org.exoplatform.webui.event.EventListener;
  */
 @ComponentConfig(
   lifecycle = Lifecycle.class, 
-  events = @EventConfig(listeners = UIFolderPathSelectorForm.CloseActionListener.class), 
-  template = "app:/groovy/ContentListViewer/config/UIFolderPathSelectorForm.gtmpl"
+  events = @EventConfig(listeners = UICLVFolderSelector.CloseActionListener.class), 
+  template = "app:/groovy/ContentListViewer/config/UICLVFolderSelector.gtmpl"
 )
-public class UIFolderPathSelectorForm extends UIBaseNodeTreeSelector {
+public class UICLVFolderSelector extends UIBaseNodeTreeSelector {
 
   /**
    * Instantiates a new uI folder path selector form.
    * 
    * @throws Exception the exception
    */
-  public UIFolderPathSelectorForm() throws Exception {
-    addChild(UIContentsSelectionTreeBuilder.class, null, UIContentsSelectionTreeBuilder.class.getSimpleName() + hashCode());
-    addChild(UIFolderPathSelectionPanel.class, null, UIFolderPathSelectionPanel.class.getSimpleName() + hashCode());
+  public UICLVFolderSelector() throws Exception {
+    addChild(UICLVContentTree.class, null, UICLVContentTree.class.getSimpleName() + hashCode());
+    addChild(UICLVFolderSelectionPanel.class, null, UICLVFolderSelectionPanel.class.getSimpleName() + hashCode());
   }
 
   /**
@@ -60,8 +60,8 @@ public class UIFolderPathSelectorForm extends UIBaseNodeTreeSelector {
    * @throws Exception the exception
    */
   public void init() throws Exception {
-    UIContentsSelectionTreeBuilder treeBuilder = getChild(UIContentsSelectionTreeBuilder.class);
-    UIFolderPathSelectionPanel pathPanel = getChild(UIFolderPathSelectionPanel.class);
+    UICLVContentTree treeBuilder = getChild(UICLVContentTree.class);
+    UICLVFolderSelectionPanel pathPanel = getChild(UICLVFolderSelectionPanel.class);
     String[] acceptNodeTypes = new String[] { "nt:folder", "nt:unstructured" };
     pathPanel.setAcceptedNodeTypes(acceptNodeTypes);
     LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
@@ -81,7 +81,7 @@ public class UIFolderPathSelectorForm extends UIBaseNodeTreeSelector {
    *      java.lang.Object)
    */
   public void onChange(Node node, Object val) throws Exception {
-    UIFolderPathSelectionPanel selectPathPanel = getChild(UIFolderPathSelectionPanel.class);
+    UICLVFolderSelectionPanel selectPathPanel = getChild(UICLVFolderSelectionPanel.class);
     selectPathPanel.setParentNode(node);
   }
 
@@ -95,16 +95,16 @@ public class UIFolderPathSelectorForm extends UIBaseNodeTreeSelector {
    * 
    * @see CloseActionEvent
    */
-  public static class CloseActionListener extends EventListener<UIFolderPathSelectorForm> {
+  public static class CloseActionListener extends EventListener<UICLVFolderSelector> {
 
     /*
      * (non-Javadoc)
      * 
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
-    public void execute(Event<UIFolderPathSelectorForm> event) throws Exception {
-      UIFolderPathSelectorForm uiFolderPathSelectorForm = event.getSource();
-      Utils.closePopupWindow(uiFolderPathSelectorForm, UIViewerManagementForm.FOLDER_PATH_SELECTOR_POPUP_WINDOW);
+    public void execute(Event<UICLVFolderSelector> event) throws Exception {
+      UICLVFolderSelector uiFolderPathSelectorForm = event.getSource();
+      Utils.closePopupWindow(uiFolderPathSelectorForm, UICLVConfig.FOLDER_PATH_SELECTOR_POPUP_WINDOW);
     }
   }
 

@@ -38,7 +38,7 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
  * The Class UIContentViewer.
  */
 @ComponentConfig(lifecycle = Lifecycle.class)
-public class UIContentViewer extends UIBaseNodePresentation {
+public class UIPCVPresentation extends UIBaseNodePresentation {
 
   /** The content node. */
   private Node                contentNode;

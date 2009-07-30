@@ -52,7 +52,6 @@ import org.exoplatform.services.cms.taxonomy.TaxonomyService;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.config.RepositoryConfigurationException;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.upload.UploadService;
 import org.exoplatform.wcm.webui.Utils;
@@ -162,7 +161,7 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class) ;
     PortletPreferences preferences = UIFCCUtils.getPortletPreferences() ;
     Session session = 
-      SessionProviderFactory.createSystemProvider().getSession(
+      Utils.getSessionProvider(this).getSession(
         preferences.getValue(UIFCCConstant.PREFERENCE_WORKSPACE, ""), 
         repositoryService.getRepository(preferences.getValue(UIFCCConstant.PREFERENCE_REPOSITORY, ""))) ;
     return (Node) session.getItem(preferences.getValue("path", ""));
@@ -190,7 +189,7 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
   
   private Session getSession(String repository, String workspace) throws RepositoryException, RepositoryConfigurationException {
     RepositoryService repositoryService  = getApplicationComponent(RepositoryService.class);      
-    return SessionProviderFactory.createSessionProvider().getSession(workspace, repositoryService.getRepository(repository));
+    return Utils.getSessionProvider(this).getSession(workspace, repositoryService.getRepository(repository));
   }
   
   @SuppressWarnings("unchecked")
@@ -377,7 +376,6 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
       }
       if(component instanceof UIOneNodePathSelector) {
         String repositoryName = UIFCCUtils.getPreferenceRepository() ;
-        SessionProvider provider = SessionProviderFactory.createSystemProvider() ;                
         String wsFieldName = (String)fieldPropertiesMap.get("workspaceField") ;
         String wsName = "";
         if(wsFieldName != null && wsFieldName.length() > 0) {
@@ -402,7 +400,7 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
         if(rootPath == null) rootPath = "/";
         ((UIOneNodePathSelector)component).setRootNodeLocation(repositoryName, wsName, rootPath) ;
         ((UIOneNodePathSelector)component).setShowRootPathSelect(true);
-        ((UIOneNodePathSelector)component).init(provider);
+        ((UIOneNodePathSelector)component).init(Utils.getSessionProvider(fastContentCreatorForm));
       } else if (component instanceof UIOneTaxonomySelector) {
         String workspaceName = fastContentCreatorForm.getDMSWorkspace();
         ((UIOneTaxonomySelector)component).setIsDisable(workspaceName, false);
@@ -417,7 +415,7 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
         }
         
         ((UIOneTaxonomySelector)component).setRootNodeLocation(fastContentCreatorForm.repositoryName, workspaceName, rootTreePath);
-        ((UIOneTaxonomySelector)component).init(SessionProviderFactory.createSystemProvider());
+        ((UIOneTaxonomySelector)component).init(Utils.getSessionProvider(fastContentCreatorForm));
         
       }
       Utils.createPopupWindow(fastContentCreatorForm, component, UIFCCConstant.TAXONOMY_POPUP_WINDOW, 640, 300);
@@ -461,7 +459,7 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
               break;
             }
             uiOneTaxonomySelector.setRootNodeLocation(fastContentCreatorForm.repositoryName, workspaceName, rootTreePath);
-            uiOneTaxonomySelector.init(SessionProviderFactory.createSystemProvider());
+            uiOneTaxonomySelector.init(Utils.getSessionProvider(fastContentCreatorForm));
             String param = "returnField=" + FIELD_TAXONOMY;        
             uiOneTaxonomySelector.setSourceComponent(fastContentCreatorForm, new String[]{param});
             Utils.createPopupWindow(fastContentCreatorForm, uiOneTaxonomySelector, UIFCCConstant.TAXONOMY_POPUP_WINDOW, 640, 300);

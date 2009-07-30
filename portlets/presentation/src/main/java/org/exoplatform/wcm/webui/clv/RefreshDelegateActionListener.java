@@ -44,5 +44,5 @@ public interface RefreshDelegateActionListener {
    * 
    * @throws Exception the exception
    */
-  public void onRefresh(Event<UIContentListPresentation> event) throws Exception;
+  public void onRefresh(Event<UICLVPresentation> event) throws Exception;
 }

@@ -36,7 +36,6 @@ import org.exoplatform.services.cms.actions.ActionServiceContainer;
 import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.services.cms.impl.DMSRepositoryConfiguration;
 import org.exoplatform.services.cms.templates.TemplateService;
-import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.fastcontentcreator.UIFCCConstant;
@@ -295,9 +294,7 @@ public class UIFCCActionForm extends UIDialogForm implements UISelectable {
         if(rootPath == null) rootPath = "/";
         ((UIOneNodePathSelector)uiComp).setRootNodeLocation(UIFCCUtils.getPreferenceRepository(), wsName, rootPath) ;
         ((UIOneNodePathSelector)uiComp).setShowRootPathSelect(true);
-        ThreadLocalSessionProviderService threadLocalSessionProviderService = fastContentCreatorActionForm.getApplicationComponent(ThreadLocalSessionProviderService.class);
-        SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
-        ((UIOneNodePathSelector)uiComp).init(sessionProvider);
+        ((UIOneNodePathSelector)uiComp).init(Utils.getSessionProvider(fastContentCreatorActionForm));
       }
       Utils.createPopupWindow(fastContentCreatorActionForm, uiComp, UIFCCConstant.SELECTOR_POPUP_WINDOW, 640, 300);
       String param = "returnField=" + fieldName ;

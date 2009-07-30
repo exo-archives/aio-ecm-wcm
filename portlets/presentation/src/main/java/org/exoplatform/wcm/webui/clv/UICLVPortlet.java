@@ -20,7 +20,7 @@ import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
 import org.exoplatform.wcm.webui.Utils;
-import org.exoplatform.wcm.webui.clv.config.UIViewerManagementForm;
+import org.exoplatform.wcm.webui.clv.config.UICLVConfig;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -38,7 +38,7 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
  * The Class UIContentListViewerPortlet.
  */
 @ComponentConfig(lifecycle = UIApplicationLifecycle.class)
-public class UIContentListViewerPortlet extends UIPortletApplication {
+public class UICLVPortlet extends UIPortletApplication {
 
   /** The mode. */
   private PortletMode        mode                    = PortletMode.VIEW;
@@ -103,7 +103,7 @@ public class UIContentListViewerPortlet extends UIPortletApplication {
    * 
    * @throws Exception the exception
    */
-  public UIContentListViewerPortlet() throws Exception {
+  public UICLVPortlet() throws Exception {
     activateMode(mode);
   }
 
@@ -134,16 +134,16 @@ public class UIContentListViewerPortlet extends UIPortletApplication {
     PortletPreferences preferences = context.getRequest().getPreferences();
     String viewerMode = preferences.getValue(VIEWER_MODE, null);        
     if (PortletMode.VIEW.equals(mode)) {
-      if (viewerMode == null) viewerMode = UIViewerManagementForm.VIEWER_AUTO_MODE;
-      if (viewerMode.equals(UIViewerManagementForm.VIEWER_AUTO_MODE)) {        
-        UIFolderViewer uiFolderViewer = addChild(UIFolderViewer.class, null, UIPortletApplication.VIEW_MODE);
+      if (viewerMode == null) viewerMode = UICLVConfig.VIEWER_AUTO_MODE;
+      if (viewerMode.equals(UICLVConfig.VIEWER_AUTO_MODE)) {        
+        UICLVFolderMode uiFolderViewer = addChild(UICLVFolderMode.class, null, UIPortletApplication.VIEW_MODE);
         uiFolderViewer.init(); 
-      } else if (viewerMode.equals(UIViewerManagementForm.VIEWER_MANUAL_MODE)) {        
-        UICorrectContentsViewer uiCorrectContentsViewer = addChild(UICorrectContentsViewer.class, null, UIPortletApplication.VIEW_MODE);
+      } else if (viewerMode.equals(UICLVConfig.VIEWER_MANUAL_MODE)) {        
+        UICLVManualMode uiCorrectContentsViewer = addChild(UICLVManualMode.class, null, UIPortletApplication.VIEW_MODE);
         uiCorrectContentsViewer.init();
       }
     } else if (PortletMode.EDIT.equals(mode)) {
-    	addChild(UIViewerManagementForm.class, null, null);
+    	addChild(UICLVConfig.class, null, null);
     }
   }
 

@@ -49,12 +49,12 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 
 @ComponentConfig(      
   lifecycle = Lifecycle.class,                 
-   template = "app:/groovy/ContentListViewer/UIContentListViewer.gtmpl",
+   template = "app:/groovy/ContentListViewer/UICLVManualMode.gtmpl",
    events = { 
-     @EventConfig(listeners = UIFolderViewer.QuickEditActionListener.class) 
+     @EventConfig(listeners = UICLVFolderMode.QuickEditActionListener.class) 
    }
 )
-public class UIFolderViewer extends UIListViewerBase {
+public class UICLVFolderMode extends UICLVContainer {
 
   public void init() throws Exception {
     PortletPreferences portletPreferences = getPortletPreference();    
@@ -81,26 +81,26 @@ public class UIFolderViewer extends UIListViewerBase {
       setViewAbleContent(false);
       return;
     }
-    int itemsPerPage = Integer.parseInt(portletPreferences.getValue(UIContentListViewerPortlet.ITEMS_PER_PAGE, null));
+    int itemsPerPage = Integer.parseInt(portletPreferences.getValue(UICLVPortlet.ITEMS_PER_PAGE, null));
     PaginatedNodeIterator paginatedNodeIterator = new PaginatedNodeIterator(nodeIterator, itemsPerPage);
     getChildren().clear();
-    UIContentListPresentation contentListPresentation = addChild(UIContentListPresentation.class, null, null);    
+    UICLVPresentation contentListPresentation = addChild(UICLVPresentation.class, null, null);    
     String templatePath = getFormViewTemplatePath();
     ResourceResolver resourceResolver = getTemplateResourceResolver();    
     contentListPresentation.init(templatePath, resourceResolver, paginatedNodeIterator);    
-    contentListPresentation.setContentColumn(portletPreferences.getValue(UIContentListViewerPortlet.HEADER, null));
-    contentListPresentation.setShowLink(Boolean.parseBoolean(portletPreferences.getValue(UIContentListViewerPortlet.SHOW_LINK, null)));
-    contentListPresentation.setShowHeader(Boolean.parseBoolean(portletPreferences.getValue(UIContentListViewerPortlet.SHOW_HEADER, null)));
-    contentListPresentation.setShowReadmore(Boolean.parseBoolean(portletPreferences.getValue(UIContentListViewerPortlet.SHOW_READMORE, null)));
-    contentListPresentation.setHeader(portletPreferences.getValue(UIContentListViewerPortlet.HEADER, null));
+    contentListPresentation.setContentColumn(portletPreferences.getValue(UICLVPortlet.HEADER, null));
+    contentListPresentation.setShowLink(Boolean.parseBoolean(portletPreferences.getValue(UICLVPortlet.SHOW_LINK, null)));
+    contentListPresentation.setShowHeader(Boolean.parseBoolean(portletPreferences.getValue(UICLVPortlet.SHOW_HEADER, null)));
+    contentListPresentation.setShowReadmore(Boolean.parseBoolean(portletPreferences.getValue(UICLVPortlet.SHOW_READMORE, null)));
+    contentListPresentation.setHeader(portletPreferences.getValue(UICLVPortlet.HEADER, null));
   }
   
   public NodeIterator getRenderedContentNodes() throws Exception {
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     PortletPreferences preferences = portletRequestContext.getRequest().getPreferences();
-    String repository = preferences.getValue(UIContentListViewerPortlet.REPOSITORY, null);
-    String worksapce = preferences.getValue(UIContentListViewerPortlet.WORKSPACE, null);
-    String folderPath = preferences.getValue(UIContentListViewerPortlet.FOLDER_PATH, null);
+    String repository = preferences.getValue(UICLVPortlet.REPOSITORY, null);
+    String worksapce = preferences.getValue(UICLVPortlet.WORKSPACE, null);
+    String folderPath = preferences.getValue(UICLVPortlet.FOLDER_PATH, null);
     if (repository == null || worksapce == null || folderPath == null)
       throw new ItemNotFoundException();
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
@@ -118,8 +118,8 @@ public class UIFolderViewer extends UIListViewerBase {
     }
     QueryManager manager = session.getWorkspace().getQueryManager();
     String orderQuery = " ORDER BY ";
-    String orderBy = preferences.getValue(UIContentListViewerPortlet.ORDER_BY, null);
-    String orderType = preferences.getValue(UIContentListViewerPortlet.ORDER_TYPE, null);
+    String orderBy = preferences.getValue(UICLVPortlet.ORDER_BY, null);
+    String orderType = preferences.getValue(UICLVPortlet.ORDER_TYPE, null);
     if (orderType == null) orderType = "DESC";
     if (orderBy == null) orderBy = "exo:title";
     orderQuery += orderBy + " " + orderType;

@@ -7,7 +7,6 @@
   
 	def rcontext = _ctx.getRequestContext();
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
-	jsmanager.importJavascript('eXo.SiteAdministration.ShowAdminToolbar','/presentation/javascript');
 	
 	int currentRole = uicomponent.getRole();
 	boolean showable  = uicomponent.isShowWorkspaceArea();

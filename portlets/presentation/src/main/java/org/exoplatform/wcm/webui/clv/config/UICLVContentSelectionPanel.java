@@ -37,14 +37,14 @@ import org.exoplatform.webui.event.EventListener;
  */
 
 @ComponentConfig(
-  template = "app:/groovy/ContentListViewer/config/UIContentSelectionPanel.gtmpl", 
+  template = "app:/groovy/ContentListViewer/config/UICLVContentSelectionPanel.gtmpl", 
   events = { 
-    @EventConfig(listeners = UIMultiSelectionPanel.SelectActionListener.class)
+    @EventConfig(listeners = UICLVContentSelectionPanel.SelectActionListener.class)
   }
 )
-public class UIMultiSelectionPanel extends UICategoriesSelectPanel {
+public class UICLVContentSelectionPanel extends UICategoriesSelectPanel {
 
-  public UIMultiSelectionPanel() throws Exception {
+  public UICLVContentSelectionPanel() throws Exception {
     super();
   }
 
@@ -75,11 +75,11 @@ public class UIMultiSelectionPanel extends UICategoriesSelectPanel {
     return false;
   }
 
-  public static class SelectActionListener extends EventListener<UIMultiSelectionPanel> {
-    public void execute(Event<UIMultiSelectionPanel> event) throws Exception {
-      UIMultiSelectionPanel uiDefault = event.getSource();
-      UICorrectContentSelectorForm uiOneContentSelectorForm = uiDefault.getParent();
-      UISelectedContentGrid uiSelectedContentGrid = uiOneContentSelectorForm.getChild(UISelectedContentGrid.class);
+  public static class SelectActionListener extends EventListener<UICLVContentSelectionPanel> {
+    public void execute(Event<UICLVContentSelectionPanel> event) throws Exception {
+      UICLVContentSelectionPanel uiDefault = event.getSource();
+      UICLVContentSelector uiOneContentSelectorForm = uiDefault.getParent();
+      UICLVContentSelectedGrid uiSelectedContentGrid = uiOneContentSelectorForm.getChild(UICLVContentSelectedGrid.class);
       String value = event.getRequestContext().getRequestParameter(OBJECTID);
       if (!uiSelectedContentGrid.getSelectedCategories().contains(value)) {
         uiSelectedContentGrid.addCategory(value);

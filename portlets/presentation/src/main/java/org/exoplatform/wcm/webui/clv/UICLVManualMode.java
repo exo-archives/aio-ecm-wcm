@@ -42,31 +42,31 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 
 @ComponentConfig(      
   lifecycle = Lifecycle.class,                 
-   template = "app:/groovy/ContentListViewer/UIContentListViewer.gtmpl",
+   template = "app:/groovy/ContentListViewer/UICLVManualMode.gtmpl",
    events = { 
-     @EventConfig(listeners = UICorrectContentsViewer.QuickEditActionListener.class) 
+     @EventConfig(listeners = UICLVManualMode.QuickEditActionListener.class) 
    }
 )
-public class UICorrectContentsViewer extends UIListViewerBase {
+public class UICLVManualMode extends UICLVContainer {
 
   public void init() throws Exception {                       
     PortletPreferences portletPreferences = getPortletPreference();
     setViewAbleContent(true);
-    String repositoryName = portletPreferences.getValue(UIContentListViewerPortlet.REPOSITORY, null);
-    String workspaceName = portletPreferences.getValue(UIContentListViewerPortlet.WORKSPACE, null);
+    String repositoryName = portletPreferences.getValue(UICLVPortlet.REPOSITORY, null);
+    String workspaceName = portletPreferences.getValue(UICLVPortlet.WORKSPACE, null);
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     ManageableRepository repository = repositoryService.getRepository(repositoryName);
     Session session = Utils.getSessionProvider(this).getSession(workspaceName, repository);
     Node root = session.getRootNode();
 
-    String [] listContent = portletPreferences.getValues(UIContentListViewerPortlet.CONTENT_LIST, null);
+    String [] listContent = portletPreferences.getValues(UICLVPortlet.CONTENT_LIST, null);
     if (listContent == null || listContent.length == 0) {
       messageKey = "UIMessageBoard.msg.contents-not-found";
       setViewAbleContent(false);
       return;
     }
     List<String> contents = Arrays.asList(listContent);
-    int itemsPerPage = Integer.parseInt(portletPreferences.getValue(UIContentListViewerPortlet.ITEMS_PER_PAGE, null));
+    int itemsPerPage = Integer.parseInt(portletPreferences.getValue(UICLVPortlet.ITEMS_PER_PAGE, null));
     List<Node> nodes = new ArrayList<Node>();
     List<String> tempContents = new ArrayList<String>(contents);
     if (contents != null && contents.size() != 0) {
@@ -89,20 +89,20 @@ public class UICorrectContentsViewer extends UIListViewerBase {
       return;
     }    
     if (tempContents.size() != contents.size()) {
-      portletPreferences.setValues(UIContentListViewerPortlet.CONTENT_LIST, tempContents.toArray(new String[0]));      
+      portletPreferences.setValues(UICLVPortlet.CONTENT_LIST, tempContents.toArray(new String[0]));      
       portletPreferences.store();
     }        
     getChildren().clear();
     ObjectPageList pageList = new ObjectPageList(nodes, itemsPerPage);    
-    UIContentListPresentation contentListPresentation = addChild(UIContentListPresentation.class, null, null);
+    UICLVPresentation contentListPresentation = addChild(UICLVPresentation.class, null, null);
     String templatePath = getFormViewTemplatePath();
     ResourceResolver resourceResolver = getTemplateResourceResolver();       
     contentListPresentation.init(templatePath, resourceResolver, pageList);    
-    contentListPresentation.setContentColumn(portletPreferences.getValue(UIContentListViewerPortlet.HEADER, null));
-    contentListPresentation.setShowLink(Boolean.parseBoolean(portletPreferences.getValue(UIContentListViewerPortlet.SHOW_LINK, null)));
-    contentListPresentation.setShowHeader(Boolean.parseBoolean(portletPreferences.getValue(UIContentListViewerPortlet.SHOW_HEADER, null)));
-    contentListPresentation.setShowReadmore(Boolean.parseBoolean(portletPreferences.getValue(UIContentListViewerPortlet.SHOW_READMORE, null)));
-    contentListPresentation.setHeader(portletPreferences.getValue(UIContentListViewerPortlet.HEADER, null));
+    contentListPresentation.setContentColumn(portletPreferences.getValue(UICLVPortlet.HEADER, null));
+    contentListPresentation.setShowLink(Boolean.parseBoolean(portletPreferences.getValue(UICLVPortlet.SHOW_LINK, null)));
+    contentListPresentation.setShowHeader(Boolean.parseBoolean(portletPreferences.getValue(UICLVPortlet.SHOW_HEADER, null)));
+    contentListPresentation.setShowReadmore(Boolean.parseBoolean(portletPreferences.getValue(UICLVPortlet.SHOW_READMORE, null)));
+    contentListPresentation.setHeader(portletPreferences.getValue(UICLVPortlet.HEADER, null));
   }  
     
 }

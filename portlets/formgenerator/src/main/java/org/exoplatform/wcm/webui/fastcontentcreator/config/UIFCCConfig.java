@@ -31,12 +31,10 @@ import javax.portlet.PortletPreferences;
 
 import org.exoplatform.ecm.webui.selector.UISelectable;
 import org.exoplatform.ecm.webui.tree.selectone.UIOneNodePathSelector;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.config.RepositoryEntry;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.container.UIFormFieldSet;
 import org.exoplatform.wcm.webui.fastcontentcreator.UIFCCConstant;
@@ -119,8 +117,7 @@ public class UIFCCConfig extends UIForm implements UISelectable {
     String preferencePath = portletPreferences.getValue(UIFCCConstant.PREFERENCE_PATH, "");
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     ManageableRepository repository = repositoryService.getRepository(preferenceRepository);
-    ThreadLocalSessionProviderService threadLocalSessionProviderService = getApplicationComponent(ThreadLocalSessionProviderService.class);
-    Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(preferenceWorkspace, repository);
+    Session session = Utils.getSessionProvider(this).getSession(preferenceWorkspace, repository);
     fastContentCreatorActionList.updateGrid((Node)session.getItem(preferencePath), fastContentCreatorActionList.getChild(UIGrid.class).getUIPageIterator().getCurrentPage());
     
     addChild(actionField);
@@ -180,8 +177,7 @@ public class UIFCCConfig extends UIForm implements UISelectable {
     try {
       RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
       ManageableRepository repository = repositoryService.getRepository(repositoryName);
-      ThreadLocalSessionProviderService threadLocalSessionProviderService = getApplicationComponent(ThreadLocalSessionProviderService.class);
-      Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(workspaceName, repository);
+      Session session = Utils.getSessionProvider(this).getSession(workspaceName, repository);
       Node currentNode = null ;
       UIFormSelectBox uiSelectTemplate = getUIFormSelectBox(UIFCCConstant.TEMPLATE_FORM_SELECTBOX) ;
       List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>();
@@ -291,24 +287,12 @@ public class UIFCCConfig extends UIForm implements UISelectable {
       UIFCCConfig fastContentCreatorConfig = event.getSource() ;
       String repositoryName = fastContentCreatorConfig.getUIFormSelectBox(UIFCCConstant.REPOSITORY_FORM_SELECTBOX).getValue() ;
       String workspaceName = fastContentCreatorConfig.getUIFormSelectBox(UIFCCConstant.WORKSPACE_FORM_SELECTBOX).getValue() ;
-      
-      RepositoryService repositoryService = fastContentCreatorConfig.getApplicationComponent(RepositoryService.class);
-      ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
-      String systemWorkspaceName = manageableRepository.getConfiguration().getSystemWorkspaceName();
-      
       UIOneNodePathSelector uiOneNodePathSelector = fastContentCreatorConfig.createUIComponent(UIOneNodePathSelector.class, null, null);
       uiOneNodePathSelector.setIsDisable(workspaceName, true) ;
       uiOneNodePathSelector.setShowRootPathSelect(true) ;
       uiOneNodePathSelector.setRootNodeLocation(repositoryName, workspaceName, "/");
-      if(SessionProviderFactory.isAnonim()) {
-        uiOneNodePathSelector.init(SessionProviderFactory.createAnonimProvider()) ;
-      } else if(workspaceName.equals(systemWorkspaceName)){
-        uiOneNodePathSelector.init(SessionProviderFactory.createSystemProvider()) ;
-      } else {
-        uiOneNodePathSelector.init(SessionProviderFactory.createSessionProvider()) ;
-      }
+      uiOneNodePathSelector.init(Utils.getSessionProvider(fastContentCreatorConfig)) ;
       uiOneNodePathSelector.setSourceComponent(fastContentCreatorConfig, new String[] {UIFCCConstant.LOCATION_FORM_STRING_INPUT}) ;
-
       Utils.createPopupWindow(fastContentCreatorConfig, uiOneNodePathSelector, UIFCCConstant.SELECTOR_POPUP_WINDOW, 610, 300);
     }
   }

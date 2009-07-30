@@ -27,6 +27,7 @@ import javax.jcr.nodetype.NodeType;
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.ecm.webui.selector.UISelectable;
 import org.exoplatform.ecm.webui.tree.UIBaseNodeTreeSelector;
+import org.exoplatform.ecm.webui.tree.selectone.UIOneNodePathSelector;
 import org.exoplatform.ecm.webui.utils.Utils;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.services.cms.BasePath;
@@ -34,11 +35,9 @@ import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIBreadcumbs;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIPageIterator;
 import org.exoplatform.webui.core.UIPopupWindow;
-import org.exoplatform.webui.core.UIBreadcumbs.LocalPath;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
@@ -124,7 +123,8 @@ public class UISelectPathPanel extends UIContainer {
   public String[] getAcceptedMimeTypes() { return acceptedMimeTypes; }
   public void setAcceptedMimeTypes(String[] acceptedMimeTypes) { this.acceptedMimeTypes = acceptedMimeTypes; }  
 
-  public List getSelectableNodes() throws Exception { return uiPageIterator_.getCurrentPageData(); }
+  @SuppressWarnings("unchecked")
+	public List getSelectableNodes() throws Exception { return uiPageIterator_.getCurrentPageData(); }
   
   public void updateGrid() throws Exception {
     ObjectPageList objPageList = new ObjectPageList(getListSelectableNodes(), 10);

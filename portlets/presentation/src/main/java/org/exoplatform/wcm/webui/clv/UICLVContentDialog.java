@@ -64,13 +64,13 @@ import org.exoplatform.webui.event.Event.Phase;
 
 @ComponentConfig(
   lifecycle = UIFormLifecycle.class, events = {
-    @EventConfig(listeners = UIDocumentDialogForm.SaveAsDraftActionListener.class),
-    @EventConfig(listeners = UIDocumentDialogForm.FastPublishActionListener.class),
-    @EventConfig(listeners = UIDocumentDialogForm.CancelActionListener.class),
+    @EventConfig(listeners = UICLVContentDialog.SaveAsDraftActionListener.class),
+    @EventConfig(listeners = UICLVContentDialog.FastPublishActionListener.class),
+    @EventConfig(listeners = UICLVContentDialog.CancelActionListener.class),
     @EventConfig(listeners = DialogFormActionListeners.RemoveDataActionListener.class, confirm = "DialogFormField.msg.confirm-delete", phase = Phase.DECODE)
   }  
 )
-public class UIDocumentDialogForm extends UIDialogForm {
+public class UICLVContentDialog extends UIDialogForm {
 
   /** The document node. */
   private Node documentNode;
@@ -81,7 +81,7 @@ public class UIDocumentDialogForm extends UIDialogForm {
    * @param node the new document node
    */
   
-  public UIDocumentDialogForm() {
+  public UICLVContentDialog() {
     setActions(new String [] {"SaveAsDraft", "FastPublish", "Cancel"});
   }
   
@@ -137,13 +137,13 @@ public class UIDocumentDialogForm extends UIDialogForm {
    * 
    * @see SaveActionEvent
    */
-  public static class SaveAsDraftActionListener extends EventListener<UIDocumentDialogForm> {
+  public static class SaveAsDraftActionListener extends EventListener<UICLVContentDialog> {
 
     /* (non-Javadoc)
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
-    public void execute(Event<UIDocumentDialogForm> event) throws Exception {
-      UIDocumentDialogForm uiDocumentDialogForm = event.getSource();
+    public void execute(Event<UICLVContentDialog> event) throws Exception {
+      UICLVContentDialog uiDocumentDialogForm = event.getSource();
       Node documentNode = uiDocumentDialogForm.getNode();
       Session session = documentNode.getSession();      
       List<UIComponent> inputs = uiDocumentDialogForm.getChildren();
@@ -203,9 +203,9 @@ public class UIDocumentDialogForm extends UIDialogForm {
 
   }
   
-  public static class FastPublishActionListener extends EventListener<UIDocumentDialogForm> {
-    public void execute(Event<UIDocumentDialogForm> event) throws Exception {
-      UIDocumentDialogForm uiDocumentDialogForm = event.getSource();
+  public static class FastPublishActionListener extends EventListener<UICLVContentDialog> {
+    public void execute(Event<UICLVContentDialog> event) throws Exception {
+      UICLVContentDialog uiDocumentDialogForm = event.getSource();
       Node documentNode = uiDocumentDialogForm.getNode();
       Session session = documentNode.getSession();      
       List<UIComponent> inputs = uiDocumentDialogForm.getChildren();
@@ -283,9 +283,9 @@ public class UIDocumentDialogForm extends UIDialogForm {
    * 
    * @see CancelActionEvent
    */
-  public static class CancelActionListener extends EventListener<UIDocumentDialogForm> {
-    public void execute(Event<UIDocumentDialogForm> event) throws Exception {
-      UIDocumentDialogForm uiDocumentDialogForm = event.getSource();
+  public static class CancelActionListener extends EventListener<UICLVContentDialog> {
+    public void execute(Event<UICLVContentDialog> event) throws Exception {
+      UICLVContentDialog uiDocumentDialogForm = event.getSource();
       Utils.closePopupWindow(uiDocumentDialogForm, "UIDocumentDialogFormPopupWindow");
     }
   }

@@ -1,8 +1,8 @@
-.UIParameterizedContentViewerPortlet {
+.UIPCVContainer {
 
 }
 
-.UIParameterizedContentViewerPortlet .BackButton {
+.UIPCVContainer .BackButton {
 	background: url(DefaultSkin/images/BackIcon.gif) no-repeat center;
 	width: 20px; 
 	height: 20px;
@@ -11,34 +11,34 @@
 	padding-left: 20px;
 }
 
-.UIParameterizedContentViewerPortlet .UIContentViewerContainer .DocumentQuickEdit {
+.UIPCVContainer .UIPCVContainer .DocumentQuickEdit {
 	background: url('DefaultSkin/images/quickEdit.png') no-repeat right top;
 	height: 30px;
 	width: 65px;	
 	float: right;
 }
 
-.UIParameterizedContentViewerPortlet .ActionContainer {
+.UIPCVContainer .ActionContainer {
 	height: 28px; line-height: 28px;
 	text-align: center;
 	border-top: 1px dotted #b7b7b7;
 }
 
-.UIParameterizedContentViewerPortlet .ActionContainer .PrintFrameIcon {
+.UIPCVContainer .ActionContainer .PrintFrameIcon {
 	padding: 4px 15px 2px 23px;
 	font-size: 12px;
 }
 
-.UIParameterizedContentViewerPortlet .ActionContainer .PrintFrameIcon:hover {
+.UIPCVContainer .ActionContainer .PrintFrameIcon:hover {
 	text-decoration: underline;
 	color: #058ee6;
 }
 
-.UIParameterizedContentViewerPortlet .ActionContainer .PrintIcon {
+.UIPCVContainer .ActionContainer .PrintIcon {
 	background: url('DefaultSkin/images/PrintFrameIcon.gif') no-repeat top left;
 }
 
-.UIParameterizedContentViewerPortlet .ActionContainer .CloseIcon {
+.UIPCVContainer .ActionContainer .CloseIcon {
 	background: url('DefaultSkin/images/PrintFrameIcon.gif') no-repeat left -19px;
 }
 

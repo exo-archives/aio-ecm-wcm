@@ -10,7 +10,7 @@
 			<SelectFolderPath>Sélectionner le dossier chemin</SelectFolderPath>
 		</title>
 	</FolderPathInputSet>
-  <UIViewerManagementForm>
+  <UICLVConfig>
     <action>
       <Save>Sauver</Save>
       <Cancel>Annuler</Cancel>
@@ -48,7 +48,7 @@
       <ContentPath>Répertoire</ContentPath>                     
     </label>
     <title>Sélectionner un dossier pour montrer ses contenus web ou ses documents</title>
-  </UIViewerManagementForm>
+  </UICLVConfig>
   <UIMessageBoard>
     <msg>
       <folder-not-found>Ce visualiseur n'a pas été configuré.</folder-not-found>
@@ -74,10 +74,16 @@
   </UIStartEditionInPageWizard>
   <UIViewerManagementPopupWindow>
     <title>
-      <UIPortletConfig>Gestion du Content List Viewer</UIPortletConfig>
+      <UICLVConfig>Gestion du Content List Viewer</UICLVConfig>
       <UIContentEdittingPopup>Modifier le contenu</UIContentEdittingPopup>
     </title>
   </UIViewerManagementPopupWindow>
+  <UICLVContentSelectedGrid>
+		<action>
+			<SaveCategories>Sauver</SaveCategories>
+			<Cancel>Annuler</Cancel>
+		</action>
+  </UICLVContentSelectedGrid>
 	<UISelectedContentGrid>
 		<action>
 			<SaveCategories>Sauver</SaveCategories>
@@ -95,17 +101,21 @@
 			<confirm-delete>Confirmez-vous la suppression?</confirm-delete>
 		</msg>		
   </UISelectedContentGrid>
-  <UIFolderPathSelectPopupWindow>
+  <FolderPathSelectorPopupWindow>
   	<title>
-  		<UICorrectContentSelectorForm>Sélectionnez le contenu manuellement</UICorrectContentSelectorForm>
-  		<UIFolderPathSelectorForm>Sélectionner un dossier à visualiser</UIFolderPathSelectorForm>
+  		<UICLVFolderSelector>Sélectionner un dossier à visualiser</UICLVFolderSelector>
   	</title>
-  </UIFolderPathSelectPopupWindow>
-  <UIFolderPathSelectorForm>
+  </FolderPathSelectorPopupWindow>
+  <CorrectContentSelectorPopupWindow>
+  	<title>
+  		<UICLVContentSelector>Sélectionnez le contenu manuellement</UICLVContentSelector>
+  	</title>
+  </CorrectContentSelectorPopupWindow>
+  <UICLVFolderSelector>
   	<action>
   		<Close>Fermer</Close>
   	</action>
-  </UIFolderPathSelectorForm>  
+  </UICLVFolderSelector>  
   <UIContentSelectionPanel>
   	<label>
   		<header>Bellow est contenu peut être sélectionné</header>

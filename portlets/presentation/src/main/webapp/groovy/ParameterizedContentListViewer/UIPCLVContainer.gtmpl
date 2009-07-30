@@ -1,5 +1,4 @@
 <%
-import org.exoplatform.wcm.webui.pclv.UIParameterizedContentListViewerContainer;
 import org.exoplatform.webui.core.UIPopupContainer;
 import	org.exoplatform.wcm.webui.Utils;
 def portletId = uicomponent.getPortletId();

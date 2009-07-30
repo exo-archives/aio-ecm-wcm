@@ -28,7 +28,7 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.wcm.webui.Utils;
-import org.exoplatform.wcm.webui.clv.UIContentListViewerPortlet;
+import org.exoplatform.wcm.webui.clv.UICLVPortlet;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -42,21 +42,21 @@ import org.exoplatform.webui.event.EventListener;
  */
 @ComponentConfig(
   lifecycle = Lifecycle.class, 
-  events = @EventConfig(listeners = UIFolderPathSelectorForm.CloseActionListener.class), 
-  template = "app:/groovy/ContentListViewer/config/UIMultiContentSlection.gtmpl"
+  events = @EventConfig(listeners = UICLVFolderSelector.CloseActionListener.class), 
+  template = "app:/groovy/ContentListViewer/config/UICLVContentSelector.gtmpl"
 )
-public class UICorrectContentSelectorForm extends UIBaseNodeTreeSelector {
+public class UICLVContentSelector extends UIBaseNodeTreeSelector {
 
   private List<String> existedCategoryList = new ArrayList<String>();
 
-  public UICorrectContentSelectorForm() throws Exception {
-    addChild(UIContentsSelectionTreeBuilder.class, null, null);
-    addChild(UIMultiSelectionPanel.class, null, null);
-    addChild(UISelectedContentGrid.class, null, null).setRendered(false);        
+  public UICLVContentSelector() throws Exception {
+    addChild(UICLVContentTree.class, null, null);
+    addChild(UICLVContentSelectionPanel.class, null, null);
+    addChild(UICLVContentSelectedGrid.class, null, null).setRendered(false);        
   }
 
   public void init(PortletRequestContext context) throws Exception {
-    UIContentsSelectionTreeBuilder treeBuilder = getChild(UIContentsSelectionTreeBuilder.class);
+    UICLVContentTree treeBuilder = getChild(UICLVContentTree.class);
     LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
     String currentPortalName = Util.getUIPortal().getName();
     SessionProvider provider = Utils.getSessionProvider(this);
@@ -65,11 +65,11 @@ public class UICorrectContentSelectorForm extends UIBaseNodeTreeSelector {
     treeBuilder.setCurrentPortal(currentPortal);
     treeBuilder.setSharedPortal(sharedPortal);
     treeBuilder.setRootTreeNode(currentPortal.getParent());
-    UIMultiSelectionPanel uiMultiSelectionPanel = getChild(UIMultiSelectionPanel.class);
+    UICLVContentSelectionPanel uiMultiSelectionPanel = getChild(UICLVContentSelectionPanel.class);
     uiMultiSelectionPanel.updateGrid();
-    UISelectedContentGrid contentsGrid = getChild(UISelectedContentGrid.class);
+    UICLVContentSelectedGrid contentsGrid = getChild(UICLVContentSelectedGrid.class);
     PortletPreferences preferences = context.getRequest().getPreferences();
-    String [] contents = preferences.getValues(UIContentListViewerPortlet.CONTENT_LIST, null);
+    String [] contents = preferences.getValues(UICLVPortlet.CONTENT_LIST, null);
     if (contents != null && contents.length > 0) {
       for (int i = 0; i < contents.length; i++) {
         if (contents[i] != null) existedCategoryList.add(contents[i]);
@@ -88,8 +88,8 @@ public class UICorrectContentSelectorForm extends UIBaseNodeTreeSelector {
     uiCategoriesSelectPanel.updateGrid();
   }
 
-  public static class CloseActionListener extends EventListener<UICorrectContentSelectorForm> {
-    public void execute(Event<UICorrectContentSelectorForm> arg0) throws Exception {
+  public static class CloseActionListener extends EventListener<UICLVContentSelector> {
+    public void execute(Event<UICLVContentSelector> arg0) throws Exception {
 
     }
   }

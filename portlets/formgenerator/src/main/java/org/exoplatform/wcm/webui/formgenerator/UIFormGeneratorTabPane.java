@@ -338,7 +338,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
       String newGTMPLTemplate = formGeneratorTabPane.generateDialogTemplate(forms);
       String newViewTemplate = formGeneratorTabPane.generateViewTemplate(forms);
       
-      TemplateService templateService = formGeneratorTabPane.getApplicationComponent(TemplateService.class) ;
+      TemplateService templateService = Utils.getService(formGeneratorTabPane, TemplateService.class);
       templateService.addTemplate(true, nodetypeName, templateName, true, templateName, new String[] {"*"}, newGTMPLTemplate, preferenceRepository) ;
       templateService.addTemplate(false, nodetypeName, templateName, true, templateName, new String[] {"*"}, newViewTemplate, preferenceRepository) ;
     }

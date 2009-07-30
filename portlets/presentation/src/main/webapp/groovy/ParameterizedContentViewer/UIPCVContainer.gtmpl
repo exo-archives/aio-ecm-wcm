@@ -4,7 +4,7 @@
 		import javax.portlet.PortletPreferences;
 		import org.exoplatform.services.wcm.core.WCMConfigurationService;
 		import org.exoplatform.portal.webui.util.Util;
-		import org.exoplatform.wcm.webui.pcv.UIContentViewer;
+		import org.exoplatform.wcm.webui.pcv.UIPCVPresentation;
 		
 		String link = uicomponent.event("QuickEdit");
 		String lblBack = _ctx.appRes("UIContentViewerContainer.action.back");
@@ -14,7 +14,7 @@
 		WCMConfigurationService wcmConfigurationService = uicomponent.getApplicationComponent(WCMConfigurationService.class);
 		String parameterizedPageURI = wcmConfigurationService.getRuntimeContextParam("parameterizedPageURI");
 		String printPreviewPageURI = wcmConfigurationService.getRuntimeContextParam("printPageURI");
-	  	UIContentViewer uiContentViewer = uicomponent.getChild(UIContentViewer.class);
+	  	UIPCVPresentation uiContentViewer = uicomponent.getChild(UIPCVPresentation.class);
 	
 		String obsoleteMessage = "";
 		if(uicomponent.isObsoletedContent) { 

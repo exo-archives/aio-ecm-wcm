@@ -38,7 +38,7 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
  * The Class UIParameterizedContentViewerPortlet.
  */
 @ComponentConfig(lifecycle = UIApplicationLifecycle.class)
-public class UIParameterizedContentViewerPortlet extends UIPortletApplication {
+public class UIPCVPortlet extends UIPortletApplication {
 
   /** The Constant QUICK_EDIT_ABLE. */
   public final static String QUICK_EDIT_ABLE = "quickEditable";
@@ -51,18 +51,14 @@ public class UIParameterizedContentViewerPortlet extends UIPortletApplication {
    * 
    * @throws Exception the exception
    */
-  public UIParameterizedContentViewerPortlet() throws Exception {
+  public UIPCVPortlet() throws Exception {
     activateMode(mode) ;    
   }
   
   public void activateMode(PortletMode mode) throws Exception {
     getChildren().clear() ;
-    UIContentViewerContainer contentViewerContainer = getChild(UIContentViewerContainer.class);
-    if (contentViewerContainer == null) contentViewerContainer = addChild(UIContentViewerContainer.class, null, null);
-    if(PortletMode.EDIT.equals(mode)) {
-      UIPopupContainer maskPopupContainer = getChild(UIPopupContainer.class);
-      if (maskPopupContainer == null ) maskPopupContainer = addChild(UIPopupContainer.class, null, null);
-    }
+    addChild(UIPopupContainer.class, null, null);
+    addChild(UIPCVContainer.class, null, null);
   }
   /* (non-Javadoc)
    * @see org.exoplatform.webui.core.UIPortletApplication#processRender(org.exoplatform.webui.application.WebuiApplication, org.exoplatform.webui.application.WebuiRequestContext)

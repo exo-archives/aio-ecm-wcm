@@ -45,19 +45,19 @@ import org.exoplatform.webui.event.EventListener;
  * The Class UISelectFolderPathPanel.
  */
 @ComponentConfig(
-   template = "app:/groovy/ContentListViewer/config/UISelectFolderPathPanel.gtmpl", 
+   template = "app:/groovy/ContentListViewer/config/UICLVFolderSelectionPanel.gtmpl", 
    events = { 
-     @EventConfig(listeners = UIFolderPathSelectionPanel.SelectActionListener.class) 
+     @EventConfig(listeners = UICLVFolderSelectionPanel.SelectActionListener.class) 
    }
 )
-public class UIFolderPathSelectionPanel extends UISelectPathPanel {
+public class UICLVFolderSelectionPanel extends UISelectPathPanel {
 
   /**
    * Instantiates a new uI select folder path panel.
    * 
    * @throws Exception the exception
    */
-  public UIFolderPathSelectionPanel() throws Exception {
+  public UICLVFolderSelectionPanel() throws Exception {
   }
 
   /*
@@ -70,8 +70,8 @@ public class UIFolderPathSelectionPanel extends UISelectPathPanel {
     if (parentNode == null)
       return list;
     UIComponent parent = getParent();
-    UIContentsSelectionTreeBuilder uiFolderPathTreeBuilder = null;
-    uiFolderPathTreeBuilder = ((UIFolderPathSelectorForm) parent).getChild(UIContentsSelectionTreeBuilder.class);
+    UICLVContentTree uiFolderPathTreeBuilder = null;
+    uiFolderPathTreeBuilder = ((UICLVFolderSelector) parent).getChild(UICLVContentTree.class);
     Node root = uiFolderPathTreeBuilder.getRootTreeNode();
     Node currentPortal = uiFolderPathTreeBuilder.getCurrentPortal();
     Node sharedPortal = uiFolderPathTreeBuilder.getSharedPortal();
@@ -113,9 +113,9 @@ public class UIFolderPathSelectionPanel extends UISelectPathPanel {
     return false;
   }
   
-  public static class SelectActionListener extends EventListener<UIFolderPathSelectionPanel> {
-    public void execute(Event<UIFolderPathSelectionPanel> event) throws Exception {
-      UIFolderPathSelectionPanel folderPathSelectionPanel = event.getSource() ;
+  public static class SelectActionListener extends EventListener<UICLVFolderSelectionPanel> {
+    public void execute(Event<UICLVFolderSelectionPanel> event) throws Exception {
+      UICLVFolderSelectionPanel folderPathSelectionPanel = event.getSource() ;
       String value = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIContainer uiTreeSelector = folderPathSelectionPanel.getParent();
       if(uiTreeSelector instanceof UIOneNodePathSelector) {
