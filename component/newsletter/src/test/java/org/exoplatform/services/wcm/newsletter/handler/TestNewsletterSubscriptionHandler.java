@@ -1,12 +1,14 @@
 package org.exoplatform.services.wcm.newsletter.handler;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import javax.jcr.Node;
 
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.BaseWCMTestCase;
+import org.exoplatform.services.wcm.core.NodetypeConstant;
 import org.exoplatform.services.wcm.core.NodetypeUtils;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
@@ -123,10 +125,37 @@ public class TestNewsletterSubscriptionHandler extends BaseWCMTestCase {
 	}
 	
 	public void testGetNumberOfNewslettersWaiting() throws Exception {
-		SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
+
+		SessionProvider sessionProvider = SessionProvider.createSystemProvider();
+		NewsletterCategoryConfig newsletterCategoryConfig = new NewsletterCategoryConfig();
+		NewsletterCategoryHandler newsletterCategoryHandler = newsletterManagerService.getCategoryHandler();
+		newsletterCategoryConfig.setName("CategoryName");
+		newsletterCategoryConfig.setTitle("CategoryTitle");
+		newsletterCategoryConfig.setDescription("CategoryDescription");
+		newsletterCategoryConfig.setModerator("root");
+		newsletterCategoryHandler.add("classic", newsletterCategoryConfig, sessionProvider);
+		
+		Node categoryNode = categoriesNode.getNode("CategoryName");
+		
+		newsletterSubscriptionConfig = new NewsletterSubscriptionConfig();
+		newsletterSubscriptionConfig.setCategoryName("CategoryName");
+		newsletterSubscriptionConfig.setName("SubscriptionName");
+		newsletterSubscriptionConfig.setTitle("SubscriptionTitle");
+		newsletterSubscriptionConfig.setDescription("SubscriptionDescription");
 		newsletterSubscriptionHandler.add(sessionProvider, "classic", newsletterSubscriptionConfig);
-		NewsletterEntryHandler newsletterEntryHandler = newsletterManagerService.getEntryHandler();
-		//newsletterEntryHandler.add(sessionProvider);
+		
+		Node subscriptionNode = categoryNode.getNode("SubscriptionName");
+		Node nodeTemp;
+		for(int i = 0; i < 5; i++) {
+			nodeTemp = createWebcontentNode(subscriptionNode, "NewsletterEntry"+i, "test content of this node NewsletterEntry" + i, null, null);				
+			nodeTemp.addMixin(NodetypeConstant.EXO_NEWSLETTER_ENTRY);
+			nodeTemp.setProperty(NewsletterConstant.ENTRY_PROPERTY_DATE, Calendar.getInstance());
+			nodeTemp.setProperty(NewsletterConstant.ENTRY_PROPERTY_STATUS, NewsletterConstant.STATUS_AWAITING);
+		}
+		session.save();
+		
+		long numNewsletterWaiting = newsletterSubscriptionHandler.getNumberOfNewslettersWaiting("classic", "CategoryName", "SubscriptionName", sessionProvider);
+		assertEquals(5, numNewsletterWaiting);
 	}
 
 	protected void tearDown() throws Exception {
