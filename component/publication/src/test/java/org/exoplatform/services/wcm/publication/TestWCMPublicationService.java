@@ -13,7 +13,6 @@ import javax.jcr.PropertyIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.UnsupportedRepositoryOperationException;
-import javax.jcr.Value;
 import javax.jcr.ValueFormatException;
 import javax.jcr.lock.LockException;
 import javax.jcr.nodetype.ConstraintViolationException;
@@ -30,14 +29,12 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.portal.webui.navigation.PageNavigationUtils;
 import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleException;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
 import org.exoplatform.services.wcm.BaseWCMTestCase;
-import org.exoplatform.services.wcm.core.NodetypeUtils;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationPlugin;
@@ -194,15 +191,7 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
 
     prepareNodeStatus(testNode);
     
-    WCMConfigurationService configurationService = StageAndVersionPublicationUtil.getServices(WCMConfigurationService.class);
-    StringBuilder windowId = new StringBuilder();
-    windowId.append(PortalConfig.PORTAL_TYPE)
-            .append("#")
-            .append("classic")
-            .append(":")
-            .append(configurationService.getRuntimeContextParam("CLVPortlet"))
-            .append("/")
-            .append(IdGenerator.generate());
+    String windowId = generateWindowIdString(WCMConfigurationService.CLV_PORTLET);
     
     ArrayList<Preference> preferences = new ArrayList<Preference>();
     preferences.add(addPreference("repository", ((ManageableRepository) testNode.getSession().getRepository()).getConfiguration().getName()));
@@ -217,7 +206,7 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
     		"/sites content/live/classic/web contents/site artifacts/searchbox/Default"));
     
     PortletPreferences portletPreferences = new PortletPreferences();
-    portletPreferences.setWindowId(windowId.toString());
+    portletPreferences.setWindowId(windowId);
     portletPreferences.setOwnerType(PortalConfig.PORTAL_TYPE);
     portletPreferences.setOwnerId("classic");
     portletPreferences.setPreferences(preferences);
@@ -226,16 +215,16 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
     Application portlet = new Application();
     portlet.setApplicationType(org.exoplatform.web.application.Application.EXO_PORTLET_TYPE);
     portlet.setShowInfoBar(false);
-    portlet.setInstanceId(windowId.toString());
+    portlet.setInstanceId(windowId);
     
     ArrayList<Object> listPortlet = page.getChildren();
     listPortlet.add(portlet);
     page.setChildren(listPortlet);
     userPortalConfigService.update(page);
  
-    wcmPublicationService.publishContentCLV(testNode, page, windowId.toString(), "classic", "root");
+    wcmPublicationService.publishContentCLV(testNode, page, windowId, "classic", "root");
     
-  	PortletPreferences  newPortletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(windowId.toString()));      
+  	PortletPreferences  newPortletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(windowId));      
   	if (newPortletPreferences != null) {
   		for (Preference preference : (List<Preference>)newPortletPreferences.getPreferences()) {
   			if ("contents".equals(preference.getName())){
@@ -265,29 +254,21 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
     
     prepareNodeStatus(testNode);
     
-    WCMConfigurationService configurationService = StageAndVersionPublicationUtil.getServices(WCMConfigurationService.class);
-    StringBuilder windowId = new StringBuilder();
-    windowId.append(PortalConfig.PORTAL_TYPE)
-            .append("#")
-            .append("classic")
-            .append(":")
-            .append(configurationService.getRuntimeContextParam("CLVPortlet"))
-            .append("/")
-            .append(IdGenerator.generate());
+    String windowId = generateWindowIdString(WCMConfigurationService.CLV_PORTLET);
     
     Application portlet = new Application();
     portlet.setApplicationType(org.exoplatform.web.application.Application.EXO_PORTLET_TYPE);
     portlet.setShowInfoBar(false);
-    portlet.setInstanceId(windowId.toString());
+    portlet.setInstanceId(windowId);
     
     ArrayList<Object> listPortlet = page.getChildren();
     listPortlet.add(portlet);
     page.setChildren(listPortlet);
     userPortalConfigService.update(page);
  
-    wcmPublicationService.publishContentCLV(testNode, page, windowId.toString(), "classic", "root");
+    wcmPublicationService.publishContentCLV(testNode, page, windowId, "classic", "root");
 
-  	PortletPreferences  newPortletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(windowId.toString()));      
+  	PortletPreferences  newPortletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(windowId));      
   	if (newPortletPreferences != null) {
   		for (Preference preference : (List<Preference>)newPortletPreferences.getPreferences()) {
   			if ("contents".equals(preference.getName())){
@@ -369,10 +350,15 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
     wcmPublicationService.publishContentSCV(testNode, page1, "classic");
     wcmPublicationService.publishContentSCV(testNode, page2, "classic");
     
+	  ArrayList<String> needCheckProperties = new ArrayList<String>();
+    needCheckProperties.add("publication:applicationIDs");
+    needCheckProperties.add("publication:navigationNodeURIs");
+    needCheckProperties.add("publication:webPageIDs");
+    
     assertEquals("enrolled", testNode.getProperty("publication:currentState").getString());
     assertEquals("testSCV", testNode.getProperty("exo:title").getString());
     assertTrue(checkContentIdentifier(page, testNode.getUUID(), "SCVPortlet"));
-    assertTrue(hasNodeGotCorrectProperties(testNode, "testpage1", "testpage"));
+    assertTrue(hasNodeGotCorrectProperties(testNode, needCheckProperties, "testpage1", "testpage"));
     
   	pageNavigation.getNodes().remove(14);
   	pageNavigation.setNodes(pageNavigation.getNodes());
@@ -381,10 +367,11 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
   	pageNavigation.addNode(pageNode2);
   	userPortalConfigService.update(pageNavigation);
   	
-  	assertTrue(hasNodeGotCorrectProperties(testNode, "testpage2", "testpage"));
+  	assertTrue(hasNodeGotCorrectProperties(testNode, needCheckProperties, "testpage2", "testpage"));
   	
+  	userPortalConfigService.remove(page1);
+  	userPortalConfigService.remove(page2);
     userPortalConfigService.remove(page);
-    userPortalConfigService.remove(page2);
     testNode.remove();
     collaborationSession.save();
   }
@@ -398,23 +385,182 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
 
   /**
    * Test update lifecyle on create page.
+   * 
+   * @throws Exception the exception
    */
-  public void testUpdateLifecyleOnCreatePage() {
+  public void testUpdateLifecyleOnCreatePage() throws Exception{
+  	// Create new content
+    Node testNode = ((Node)collaborationSession.getItem("/sites content/live")).addNode("testSCV", "exo:webContent"); 
+    collaborationSession.save();
+    
+    prepareNodeStatus(testNode);
+    
+  	// Construct a page
+	  Page page = new Page();
+		page.setPageId("portal::classic::testpage");
+    page.setName("testpage");
+    page.setOwnerType("portal");
+    page.setOwnerId("classic");
+    
+    addPortletToPage(page, testNode, generateWindowIdString(WCMConfigurationService.SCV_PORTLET));
+    
+	  ArrayList<String> needCheckProperties = new ArrayList<String>();
+    needCheckProperties.add("publication:applicationIDs");
+    needCheckProperties.add("publication:navigationNodeURIs");
+    needCheckProperties.add("publication:webPageIDs");
+    
+    // Check before create page
+    assertFalse(hasNodeGotCorrectProperties(testNode, needCheckProperties, "testpage"));
 
+    // Create page
+    userPortalConfigService.create(page);
+    
+    // Check after create page
+    assertTrue(hasNodeGotCorrectProperties(testNode, needCheckProperties, "testpage"));
+    
+    userPortalConfigService.remove(page);
+    testNode.remove();
+    collaborationSession.save();
   }
 
   /**
    * Test update lifecyle on change page.
+   * 
+   * @throws Exception the exception
    */
-  public void testUpdateLifecyleOnChangePage() {
+  public void testUpdateLifecyleOnChangePage() throws Exception{
+  	// Create new content
+    Node testNode = ((Node)collaborationSession.getItem("/sites content/live")).addNode("testSCV", "exo:webContent"); 
+    collaborationSession.save();
+    
+    createPageNavigation();
+    
+    prepareNodeStatus(testNode);
+    
+  	// Construct a page
+	  Page page = new Page();
+		page.setPageId("portal::classic::testpage");
+    page.setName("testpage");
+    page.setOwnerType("portal");
+    page.setOwnerId("classic");
+    
+    String iD1 = generateWindowIdString(WCMConfigurationService.SCV_PORTLET);
+    String willBeAddedId = generateWindowIdString(WCMConfigurationService.SCV_PORTLET);
+    String iD2 = generateWindowIdString(WCMConfigurationService.SCV_PORTLET);
+    String willBeRemovedId = generateWindowIdString(WCMConfigurationService.SCV_PORTLET);
+    
+    addPortletToPage(page, testNode, iD1);
+    addPortletToPage(page, testNode, willBeRemovedId);
+    addPortletToPage(page, testNode, iD2);
+    
+    userPortalConfigService.create(page);
+    
+    ArrayList<String> needCheckProperties = new ArrayList<String>();
+    needCheckProperties.add("publication:applicationIDs");
+    
+    assertTrue(hasNodeGotCorrectProperties(testNode, needCheckProperties, iD1, willBeRemovedId, iD2));
+    
+    addPortletToPage(page, testNode, willBeAddedId);
+    removePortletFromPage(page, willBeRemovedId);
+    userPortalConfigService.update(page);
+    
+    assertFalse(hasNodeGotCorrectProperties(testNode, needCheckProperties, willBeRemovedId));
+    assertTrue(hasNodeGotCorrectProperties(testNode, needCheckProperties, willBeAddedId));
 
+    userPortalConfigService.remove(page);
+    testNode.remove();
+    collaborationSession.save();
   }
 
   /**
    * Test update lifecycle on remove page.
    */
-  public void testUpdateLifecycleOnRemovePage () {
+  public void testUpdateLifecycleOnRemovePage() {
 
+  }
+
+	/**
+	 * Generate window id string.
+	 * 
+	 * @param portletType the portlet type
+	 * 
+	 * @return the string
+	 */
+	private String generateWindowIdString(String portletType) {
+	  WCMConfigurationService configurationService = StageAndVersionPublicationUtil.getServices(WCMConfigurationService.class);
+    StringBuilder windowId = new StringBuilder();
+    windowId.append(PortalConfig.PORTAL_TYPE)
+            .append("#")
+            .append("classic")
+            .append(":")
+            .append(configurationService.getRuntimeContextParam(portletType))
+            .append("/")
+            .append(IdGenerator.generate());
+	  return windowId.toString();
+  }
+  
+  /**
+   * Adds the portlet to page.
+   * 
+   * @param page the page
+   * @param testNode the test node
+   * @param windowId the window id
+   * 
+   * @throws RepositoryException the repository exception
+   * @throws UnsupportedRepositoryOperationException the unsupported repository operation exception
+   * @throws Exception the exception
+   */
+  private void addPortletToPage(Page page, Node testNode, String windowId) throws RepositoryException,
+  UnsupportedRepositoryOperationException, Exception {
+  	// Create portlet
+  	Application portlet = new Application();
+  	portlet.setApplicationType(org.exoplatform.web.application.Application.EXO_PORTLET_TYPE);
+  	portlet.setShowInfoBar(false);
+  	portlet.setInstanceId(windowId);
+
+  	// Add preferences to portlet
+  	ArrayList<Preference> preferences = new ArrayList<Preference>();
+  	preferences.add(addPreference("repository", ((ManageableRepository) testNode.getSession().getRepository()).getConfiguration().getName()));
+  	preferences.add(addPreference("workspace", testNode.getSession().getWorkspace().getName()));
+  	preferences.add(addPreference("nodeIdentifier", testNode.getUUID()));
+
+  	PortletPreferences portletPreferences = new PortletPreferences();
+  	portletPreferences.setWindowId(windowId);
+  	portletPreferences.setOwnerType(PortalConfig.PORTAL_TYPE);
+  	portletPreferences.setOwnerId("classic");
+  	portletPreferences.setPreferences(preferences);
+  	dataStorage.save(portletPreferences);
+
+  	// Add portlet to page
+  	ArrayList<Object> listPortlet = page.getChildren();
+  	listPortlet.add(portlet);
+  	page.setChildren(listPortlet);
+  }
+  
+  /**
+   * Removes the portlet from page.
+   * 
+   * @param page the page
+   * @param windowId the window id
+   * 
+   * @throws RepositoryException the repository exception
+   * @throws UnsupportedRepositoryOperationException the unsupported repository operation exception
+   * @throws Exception the exception
+   */
+  private void removePortletFromPage(Page page, String windowId) throws RepositoryException,
+  UnsupportedRepositoryOperationException, Exception {
+  	dataStorage.remove(dataStorage.getPortletPreferences(new ExoWindowID(windowId)));
+
+  	ArrayList<Object> listPortlet = page.getChildren();
+
+  	for (Object portlet : listPortlet) {
+	    if (((Application)portlet).getInstanceId() == windowId) {
+	    	listPortlet.remove(portlet);
+	    	break;
+	    }
+    }
+  	
+  	page.setChildren(listPortlet);
   }
   
   /**
@@ -619,7 +765,7 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
    * 
    * @return the preference
    */
-  private Preference addPreference(String name, String... values ) {
+  private Preference addPreference(String name, String... values) {
     Preference preference = new Preference();
     ArrayList<String> listValue = new ArrayList<String>();
     for (String value : values) {
@@ -707,28 +853,24 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
 	 * Checks for node got correct properties.
 	 * 
 	 * @param testNode the test node
-	 * @param names the names
+	 * @param values the names
+	 * @param needCheckProperties the need check properties
 	 * 
 	 * @return true, if successful
 	 * 
 	 * @throws RepositoryException the repository exception
 	 * @throws ValueFormatException the value format exception
 	 */
-	private boolean hasNodeGotCorrectProperties(Node testNode, String... names) throws RepositoryException, ValueFormatException {
-	  ArrayList<String> al = new ArrayList<String>();
-    al.add("publication:applicationIDs");
-    al.add("publication:navigationNodeURIs");
-    al.add("publication:webPageIDs");
-
+	private boolean hasNodeGotCorrectProperties(Node testNode, ArrayList<String> needCheckProperties, String... values) throws RepositoryException, ValueFormatException {
     PropertyIterator iter = testNode.getProperties();
     while (iter.hasNext()) {
     	Property property = (Property)iter.next();
-    	if (al.contains(property.getName())){
-    		for (String name : names) {
+    	if (needCheckProperties.contains(property.getName())){
+    		for (String value : values) {
     			for (int i = 0; i < property.getValues().length; i++) {
-    				if (property.getValues()[i].getString().indexOf(name) < 0 && i < property.getValues().length -1) {
+    				if (property.getValues()[i].getString().indexOf(value) < 0 && i < property.getValues().length -1) {
     					continue;
-    				} else if (property.getValues()[i].getString().indexOf(name) >= 0){
+    				} else if (property.getValues()[i].getString().indexOf(value) >= 0){
     					break;
     				} else {
     					return false;

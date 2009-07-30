@@ -202,7 +202,8 @@ public class PageEventListenerDelegate {
     Session session = content.getSession();
     ValueFactory valueFactory = session.getValueFactory();
 
-    if (content.canAddMixin("publication:webpagesPublication")) content.addMixin("publication:webpagesPublication");
+    if (content.canAddMixin("publication:webpagesPublication")) 
+    	content.addMixin("publication:webpagesPublication");
     
     List<String> nodeAppIds = StageAndVersionPublicationUtil.getValuesAsString(content, "publication:applicationIDs");
     String mixedAppId = StageAndVersionPublicationUtil.setMixedApplicationId(page.getPageId(), applicationId);
@@ -215,9 +216,9 @@ public class PageEventListenerDelegate {
       return ;
     }            
     for (String uri : listPageNavigationUri) {
-      if(!listExistedNavigationNodeUri.contains(uri)) {
+//      if(!listExistedNavigationNodeUri.contains(uri)) {
         listExistedNavigationNodeUri.add(uri);                           
-      }            
+//      }            
     }                   
     content.setProperty("publication:navigationNodeURIs", StageAndVersionPublicationUtil.toValues(valueFactory, listExistedNavigationNodeUri));
 
@@ -253,7 +254,7 @@ public class PageEventListenerDelegate {
     content.setProperty("publication:applicationIDs", StageAndVersionPublicationUtil.toValues(valueFactory, listExistedApplicationId));
 
     List<String> listExistedPageId = StageAndVersionPublicationUtil.getValuesAsString(content, "publication:webPageIDs");
-    listExistedPageId.remove(0);
+    listExistedPageId.remove(page.getPageId());
     content.setProperty("publication:webPageIDs", StageAndVersionPublicationUtil.toValues(valueFactory, listExistedPageId));
 
     List<String> listPageNavigationUri = publicationPlugin.getListPageNavigationUri(page, remoteUser);
@@ -262,7 +263,8 @@ public class PageEventListenerDelegate {
     listExistedNavigationNodeUriTmp.addAll(listExistedNavigationNodeUri);    
     for (String existedNavigationNodeUri : listExistedNavigationNodeUriTmp) {
       if (listPageNavigationUri.contains(existedNavigationNodeUri)) {
-        listExistedNavigationNodeUri.remove(existedNavigationNodeUri);        
+        listExistedNavigationNodeUri.remove(existedNavigationNodeUri);
+        break;
       }
     }
     content.setProperty("publication:navigationNodeURIs", StageAndVersionPublicationUtil.toValues(valueFactory, listExistedNavigationNodeUri));
