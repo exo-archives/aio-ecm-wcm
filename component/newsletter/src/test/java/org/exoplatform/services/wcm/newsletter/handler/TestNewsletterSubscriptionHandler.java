@@ -125,7 +125,7 @@ public class TestNewsletterSubscriptionHandler extends BaseWCMTestCase {
 		SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
 		newsletterSubscriptionHandler.add(sessionProvider, "classic", newsletterSubscriptionConfig);
 		NewsletterEntryHandler newsletterEntryHandler = newsletterManagerService.getEntryHandler();
-		newsletterEntryHandler.add(sessionProvider);
+		//newsletterEntryHandler.add(sessionProvider);
 	}
 
 	protected void tearDown() throws Exception {

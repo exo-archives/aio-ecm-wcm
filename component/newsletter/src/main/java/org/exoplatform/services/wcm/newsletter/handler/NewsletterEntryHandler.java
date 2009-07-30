@@ -72,7 +72,7 @@ public class NewsletterEntryHandler {
     newsletterEntryConfig.setCategoryName(entryNode.getParent().getParent().getName());
     return newsletterEntryConfig;
   }
-  
+  /*
   public void add(SessionProvider sessionProvider) {
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
@@ -106,7 +106,7 @@ public class NewsletterEntryHandler {
     } catch (Exception e) {
       // TODO: handle exception
     }
-  }
+  }*/
   
   public void delete(String portalName, String categoryName, String subscriptionName, List<String> listIds) {
     try {

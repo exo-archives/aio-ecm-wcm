@@ -112,6 +112,5 @@ public class TestNewsletterCategoryHandler extends BaseWCMTestCase {
 		  session.save();
     } catch (Exception e) {}
 	}
-	
 }
 
