@@ -315,6 +315,7 @@ public class UIPCLVForm extends UIForm {
 		String preferenceRepository = portletPreferences.getValue(UIPCLVPortlet.PREFERENCE_REPOSITORY,
 																															"");
 		String preferenceTreeName = portletPreferences.getValue(UIPCLVPortlet.PREFERENCE_TREE_NAME, "");
+		String preferenceTargetPage = portletPreferences.getValue(UIPCLVPortlet.PREFERENCE_TARGET_PAGE, "");
 		TaxonomyService taxonomyService = getApplicationComponent(TaxonomyService.class);
 
 		Node treeNode = taxonomyService.getTaxonomyTree(preferenceRepository, preferenceTreeName);
@@ -328,8 +329,7 @@ public class UIPCLVForm extends UIForm {
 		Node newNode = categoryNode.getNode(node.getName());
 		String path = newNode.getPath();
 
-		String portalName = getPortalName() + "/";
-		String itemPath = path.substring(path.lastIndexOf(portalName) + portalName.length());
+		String itemPath = path.substring(path.indexOf(preferenceTreeName));
 		String backToCategory = "";
 		if (categoryPath.equals("")) {
 
@@ -339,7 +339,7 @@ public class UIPCLVForm extends UIForm {
 			backToCategory = itemPath.substring(0, itemPath.indexOf(newNode.getName()) - 1);
 		}
 
-		link = portalURI + itemPath + "?back" + "=" + "/" + backToCategory;
+		link = portalURI + preferenceTargetPage + "/" + itemPath + "?back" + "=" + "/" + backToCategory;
 
 		return link;
 	}
@@ -348,11 +348,6 @@ public class UIPCLVForm extends UIForm {
 		PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
 		PortletPreferences portletPreferences = context.getRequest().getPreferences();
 		return portletPreferences;
-	}
-
-	private String getPortalName() {
-		UIPortal portal = Util.getUIPortal();
-		return portal.getName();
 	}
 
 	public String getTemplatePath() {

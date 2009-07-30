@@ -46,6 +46,9 @@ public class UIPCLVPortlet extends UIPortletApplication {
 
 	/** The Constant PREFERENCE_TREE_NAME. */
 	public final static String	PREFERENCE_TREE_NAME													= "treeName";
+	
+	/** The Constant PREFERENCE_TARGET_PAGE. */
+	public final static String	PREFERENCE_TARGET_PAGE												= "targetPage";
 
 	/** The Constant WORKSPACE. */
 	public final static String	WORKSPACE																			= "workspace";

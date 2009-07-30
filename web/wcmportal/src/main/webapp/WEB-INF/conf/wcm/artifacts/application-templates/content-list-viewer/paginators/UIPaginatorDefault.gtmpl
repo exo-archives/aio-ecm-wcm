@@ -1,10 +1,10 @@
 <%
 	def totalPage = uicomponent.getAvailablePage();
 	def currentPage = uicomponent.getCurrentPage();
-	String firstPage = _ctx.appRes("UIPaginatorDeafault.label.first");
-	String previousPage = _ctx.appRes("UIPaginatorDeafault.label.previous");
-	String nextPage = _ctx.appRes("UIPaginatorDeafault.label.next");
-	String lastPage = _ctx.appRes("UIPaginatorDeafault.label.last");
+	String firstPage = _ctx.appRes("UIPaginatorDefault.label.first");
+	String previousPage = _ctx.appRes("UIPaginatorDefault.label.previous");
+	String nextPage = _ctx.appRes("UIPaginatorDefault.label.next");
+	String lastPage = _ctx.appRes("UIPaginatorDefault.label.last");
 %>
 
 <div class="UIPaginatorDefault">
