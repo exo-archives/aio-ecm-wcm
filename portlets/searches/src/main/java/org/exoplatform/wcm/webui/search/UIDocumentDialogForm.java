@@ -287,8 +287,7 @@ public class UIDocumentDialogForm extends UIDialogForm {
 				newNode.checkin();
 			}
 			PublicationService publicationService = uiDocumentDialogForm.getApplicationComponent(PublicationService.class);
-			PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins()
-																															.get(StageAndVersionPublicationConstant.LIFECYCLE_NAME);
+			PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(publicationService.getNodeLifecycleName(newNode));
 			HashMap<String, String> context = new HashMap<String, String>();
 			if (newNode != null) {
 				context.put(StageAndVersionPublicationConstant.CURRENT_REVISION_NAME, newNode.getName());

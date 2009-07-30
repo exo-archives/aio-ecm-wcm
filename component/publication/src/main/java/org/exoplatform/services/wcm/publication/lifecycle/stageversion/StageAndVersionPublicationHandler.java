@@ -16,19 +16,17 @@
  */
 package org.exoplatform.services.wcm.publication.lifecycle.stageversion;
 
-import java.util.HashMap;
-
 import javax.jcr.Node;
 
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.cms.templates.TemplateService;
-import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleException;
-import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.BaseWebSchemaHandler;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
+import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
 
 /**
@@ -43,7 +41,7 @@ public class StageAndVersionPublicationHandler extends BaseWebSchemaHandler {
   private TemplateService templateService;   
   
   /** The publication service. */
-  private PublicationService publicationService;
+  private WCMPublicationService publicationService;
   
   /**
    * Instantiates a new stage and version publication handler.
@@ -51,7 +49,7 @@ public class StageAndVersionPublicationHandler extends BaseWebSchemaHandler {
    * @param templateService the template service
    * @param publicationService the publication service
    */
-  public StageAndVersionPublicationHandler(TemplateService templateService, PublicationService publicationService) {    
+  public StageAndVersionPublicationHandler(TemplateService templateService, WCMPublicationService publicationService) {    
     this.templateService = templateService;   
     this.publicationService = publicationService;
   }
@@ -103,10 +101,22 @@ public class StageAndVersionPublicationHandler extends BaseWebSchemaHandler {
       if(parentNode.isNodeType("exo:webContent")) {
         checkNode = parentNode;        
       }      
-    }             
-    if(publicationService.isNodeEnrolledInLifecycle(checkNode)) return;
-    publicationService.enrollNodeInLifecycle(checkNode,StageAndVersionPublicationConstant.LIFECYCLE_NAME);
-    publicationService.changeState(checkNode,StageAndVersionPublicationConstant.DRAFT_STATE,new HashMap<String,String>());
+    }
+    
+    String siteName = null, remoteUser = null;
+    try {
+    	siteName = Util.getPortalRequestContext().getPortalOwner();
+    	remoteUser = Util.getPortalRequestContext().getRemoteUser();    	
+    } catch (Exception e) {
+    	
+    }
+    
+    publicationService.updateLifecyleOnChangeContent(checkNode, siteName, remoteUser);
+
+    
+//    if(publicationService.isNodeEnrolledInLifecycle(checkNode)) return;
+//    publicationService.enrollNodeInLifecycle(checkNode,StageAndVersionPublicationConstant.LIFECYCLE_NAME);
+//    publicationService.changeState(checkNode,StageAndVersionPublicationConstant.DRAFT_STATE,new HashMap<String,String>());
   }   
   
   /* (non-Javadoc)
@@ -122,18 +132,22 @@ public class StageAndVersionPublicationHandler extends BaseWebSchemaHandler {
         checkNode = parentNode;        
       }                 
     }
-    String lifecycle = null;
-    try {
-      lifecycle = publicationService.getNodeLifecycleName(checkNode);
-    } catch (NotInPublicationLifecycleException e) {
-      return;
-    }
+    String siteName = Util.getPortalRequestContext().getPortalOwner();
+    String remoteUser = Util.getPortalRequestContext().getRemoteUser();
+    publicationService.updateLifecyleOnChangeContent(checkNode, siteName, remoteUser);
 
-    if(!StageAndVersionPublicationConstant.LIFECYCLE_NAME.equalsIgnoreCase(lifecycle))   
-      return;
-    String currentState = publicationService.getCurrentState(checkNode);
-    if(!StageAndVersionPublicationConstant.ENROLLED_STATE.equalsIgnoreCase(currentState))
-      return;
-    publicationService.changeState(checkNode,StageAndVersionPublicationConstant.DRAFT_STATE,new HashMap<String,String>());
+//    String lifecycle = null;
+//    try {
+//      lifecycle = publicationService.getNodeLifecycleName(checkNode);
+//    } catch (NotInPublicationLifecycleException e) {
+//      return;
+//    }
+//
+//    if(!StageAndVersionPublicationConstant.LIFECYCLE_NAME.equalsIgnoreCase(lifecycle))   
+//      return;
+//    String currentState = publicationService.getCurrentState(checkNode);
+//    if(!StageAndVersionPublicationConstant.ENROLLED_STATE.equalsIgnoreCase(currentState))
+//      return;
+//    publicationService.changeState(checkNode,StageAndVersionPublicationConstant.DRAFT_STATE,new HashMap<String,String>());
   }
 }

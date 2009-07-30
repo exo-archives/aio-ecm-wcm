@@ -26,9 +26,11 @@ import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleExcepti
 
 /**
  * Created by The eXo Platform SAS
- * Author : Hoa Pham
- * hoa.pham@exoplatform.com
+ * Author : Hoa Pham (hoa.pham@exoplatform.com)
  * Sep 29, 2008
+ * Modified : Jul 29, 2009 - Benjamin Paillereau (benjamin.paillereau@exoplatform.com)
+ * 		- added enrollNodeInLifecycle by context
+ * 		- added updateLifecyleOnChangeContent by context
  */
 public interface WCMPublicationService {   
   
@@ -108,6 +110,20 @@ public interface WCMPublicationService {
   * @throws Exception the exception
   */
  public void enrollNodeInLifecycle(Node node, String lifecycleName) throws Exception; 
+
+ /**
+  * Enroll this node in the default publication lifecycle.
+  * Depending on implementation, the default lifecycle could be based on :
+  * - lifecycle per site (site provided as a parameter)
+  * - lifecycle per author (remoteUser provided as a parameter)
+  * - lifecycle per content type (based on the node primary nodetype or its jcr path)
+  * 
+  * @param node
+  * @param siteName
+  * @param author
+  * @throws Exception
+  */
+ public void enrollNodeInLifecycle(Node node, String siteName, String remoteUser) throws Exception; 
    
  /**
   * Unsubcribe node from a lifecycle plugin. After unsubcribe, the node can enroll to other publication lifecycle
@@ -176,5 +192,18 @@ public interface WCMPublicationService {
   * @throws Exception the exception
   */
  public void updateLifecyleOnRemoveNavigation(PageNavigation navigation) throws Exception;
+
+ /**
+  * Called by create and edit listeners. It allows to update the lifecycle of the content depending of its current state.
+  * 
+  * @see org.exoplatform.services.wcm.publication.listener.post.PostCreateContentEventListener
+  * @see org.exoplatform.services.wcm.publication.listener.post.PostEditContentEventListener
+  * 
+  * @param node
+  * @param currentSite
+  * @param remoteUser
+  * @throws Exception
+  */
+ public void updateLifecyleOnChangeContent(Node node, String siteName, String remoteUser) throws Exception;
  
 }

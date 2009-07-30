@@ -213,8 +213,6 @@ public class UIDMSSelectorForm extends UIForm implements UISelectable{
     public void execute(Event<UIDMSSelectorForm> event) throws Exception {
       UIDMSSelectorForm uiDMSSelectorForm = event.getSource();
       String dmsPath = uiDMSSelectorForm.getUIStringInput(UIDMSSelectorForm.PATH).getValue();
-      String lifecycleName =  "States and versions based publication";
-
       //String lifecycleName =  uiDMSSelectorForm.getUIStringInput(UIWebContentSelectorForm.PUBLICATION).getValue();
       if(dmsPath == null) {
         UIApplication uiApplication = uiDMSSelectorForm.getAncestorOfType(UIApplication.class);
@@ -233,27 +231,25 @@ public class UIDMSSelectorForm extends UIForm implements UISelectable{
       prefs.setValue(UISingleContentViewerPortlet.WORKSPACE, nodeIdentifier.getWorkspace());
       prefs.setValue(UISingleContentViewerPortlet.IDENTIFIER, nodeIdentifier.getUUID());
       prefs.store();
+      
+      String remoteUser = Util.getPortalRequestContext().getRemoteUser();
+      String currentSite = Util.getPortalRequestContext().getPortalOwner();
 
       WCMPublicationService wcmPublicationService = uiDMSSelectorForm.getApplicationComponent(WCMPublicationService.class);
       UIPortletConfig portletConfig = uiDMSSelectorForm.getAncestorOfType(UIPortletConfig.class);
-      if (portletConfig.isEditPortletInCreatePageWizard()) {
-        if (!wcmPublicationService.isEnrolledInWCMLifecycle(webContent)) {
-          wcmPublicationService.enrollNodeInLifecycle(webContent, lifecycleName);          
-        }
-      } else {
+
+      try {
+          wcmPublicationService.isEnrolledInWCMLifecycle(webContent);
+      } catch (NotInWCMPublicationException e){
+          wcmPublicationService.unsubcribeLifecycle(webContent);
+          wcmPublicationService.enrollNodeInLifecycle(webContent, currentSite, remoteUser);          
+      }
+      
+      if (!portletConfig.isEditPortletInCreatePageWizard()) {
         String pageId = Util.getUIPortal().getSelectedNode().getPageReference();
         UserPortalConfigService upcService = uiDMSSelectorForm.getApplicationComponent(UserPortalConfigService.class);
         Page page = upcService.getPage(pageId);
-        try {
-          if (!wcmPublicationService.isEnrolledInWCMLifecycle(webContent)) {
-            wcmPublicationService.enrollNodeInLifecycle(webContent, lifecycleName);
-            wcmPublicationService.updateLifecyleOnChangePage(page, event.getRequestContext().getRemoteUser());
-          }
-        }catch (NotInWCMPublicationException e){
-          wcmPublicationService.unsubcribeLifecycle(webContent);
-          wcmPublicationService.enrollNodeInLifecycle(webContent, lifecycleName);
-          wcmPublicationService.updateLifecyleOnChangePage(page, event.getRequestContext().getRemoteUser());
-        }
+        wcmPublicationService.updateLifecyleOnChangePage(page, event.getRequestContext().getRemoteUser());
       }
 
       UIPortletConfig uiPortletConfig = uiDMSSelectorForm.getAncestorOfType(UIPortletConfig.class);

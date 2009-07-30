@@ -10,16 +10,23 @@
 		    <type>org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationPlugin</type>
 		    <description>This publication lifecycle publish a web content or DMS document to a portal page with more state and version.</description>	    	    	   
 		  </component-plugin>
+		  <component-plugin>
+		    <name>Web Content Publishing</name>
+		    <set-method>addPublicationPlugin</set-method>
+		    <type>org.exoplatform.services.wcm.publication.lifecycle.simple.WCMPublicationPlugin</type>
+		    <description>This publication lifecycle publish a web content or DMS document to a portal page.</description>	    	    	   
+		  </component-plugin>
 	  </component-plugins>
   </component>
-  <external-component-plugins>
+
+  <!-- external-component-plugins>
   	<target-component>org.exoplatform.services.wcm.core.WebSchemaConfigService</target-component>		
 	  <component-plugin>
 	    <name>StageAndVersionPublicationHandler</name>
 	    <set-method>addWebSchemaHandler</set-method>
 	    <type>org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationHandler</type>	    
 	  </component-plugin>
-	</external-component-plugins>
+	</external-component-plugins -->
 	
 	<external-component-plugins>
 		<target-component>org.exoplatform.services.listener.ListenerService</target-component>
@@ -61,7 +68,7 @@
       <name>CmsService.event.postCreate</name>
       <set-method>addListener</set-method>
       <type>org.exoplatform.services.wcm.publication.listener.post.PostCreateContentEventListener</type>
-      <description>this listener will force the created document enrol to publication lifecycle</description>
+      <description>this listener will force the created document enroll to publication lifecycle</description>
     </component-plugin>    
     <component-plugin>
       <name>CmsService.event.postEdit</name>

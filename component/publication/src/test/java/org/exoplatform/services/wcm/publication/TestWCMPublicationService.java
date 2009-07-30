@@ -36,6 +36,7 @@ import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
 import org.exoplatform.services.wcm.BaseWCMTestCase;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
+import org.exoplatform.services.wcm.publication.lifecycle.simple.WCMPublicationPlugin;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationPlugin;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationUtil;
@@ -100,24 +101,49 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
   }
 
   /**
-   * Test enroll node in lifecycle.
+   * Test enroll node in default lifecycle.
    * 
    * @throws Exception the exception
    */
-  public void testEnrollNodeInLifecycle() throws Exception{
-    Node testNode = createWebcontentNode(collaborationSession.getRootNode(), "testSCV", null, null, null); 
+  public void testEnrollNodeInDefaultLifecycle() throws Exception{
+    Node testNode = createWebcontentNode(collaborationSession.getRootNode(), "testDefaultContent", null, null, null); 
     collaborationSession.save();
     
-	  WebpagePublicationPlugin publicationPlugin = new StageAndVersionPublicationPlugin();
+	WebpagePublicationPlugin publicationPlugin = new StageAndVersionPublicationPlugin();
     publicationPlugin.setName(StageAndVersionPublicationConstant.LIFECYCLE_NAME);
     wcmPublicationService.addPublicationPlugin(publicationPlugin);
 
-    wcmPublicationService.enrollNodeInLifecycle(testNode, StageAndVersionPublicationConstant.LIFECYCLE_NAME);
+    WebpagePublicationPlugin publicationPlugin2 = new WCMPublicationPlugin();
+    publicationPlugin2.setName(WCMPublicationPlugin.LIFECYCLE_NAME);
+    wcmPublicationService.addPublicationPlugin(publicationPlugin2);
+    
+    wcmPublicationService.enrollNodeInLifecycle(testNode, "classic", "root");
   	assertNotNull(testNode.getProperty("publication:history"));
   	assertEquals("enrolled", testNode.getProperty("publication:currentState").getString());
   	
   	testNode.remove();
   	collaborationSession.save();
+  }
+  
+  /**
+   * Test enroll node in lifecycle.
+   * 
+   * @throws Exception the exception
+   */
+  public void testEnrollNodeInLifecycle() throws Exception{
+	  Node testNode = createWebcontentNode(collaborationSession.getRootNode(), "testSCV", null, null, null); 
+	  collaborationSession.save();
+	  
+	  WebpagePublicationPlugin publicationPlugin = new StageAndVersionPublicationPlugin();
+	  publicationPlugin.setName(StageAndVersionPublicationConstant.LIFECYCLE_NAME);
+	  wcmPublicationService.addPublicationPlugin(publicationPlugin);
+	  
+	  wcmPublicationService.enrollNodeInLifecycle(testNode, StageAndVersionPublicationConstant.LIFECYCLE_NAME);
+	  assertNotNull(testNode.getProperty("publication:history"));
+	  assertEquals("enrolled", testNode.getProperty("publication:currentState").getString());
+	  
+	  testNode.remove();
+	  collaborationSession.save();
   }
   
   /**

@@ -220,7 +220,6 @@ public class UIWebContentSelectorForm extends UIForm implements UISelectable{
     public void execute(Event<UIWebContentSelectorForm> event) throws Exception {
       UIWebContentSelectorForm uiWebContentSelector = event.getSource();
       String webContentPath = uiWebContentSelector.getUIStringInput(UIWebContentSelectorForm.PATH).getValue();
-      String lifecycleName =  "States and versions based publication";
       //uiWebContentSelector.getUIStringInput(UIWebContentSelectorForm.PUBLICATION).getValue();
       if(webContentPath == null) {
         UIApplication uiApplication = uiWebContentSelector.getAncestorOfType(UIApplication.class);
@@ -233,33 +232,33 @@ public class UIWebContentSelectorForm extends UIForm implements UISelectable{
       Session session = SessionProvider.createSystemProvider().getSession(uiWebContentSelector.getWorkspace(), manageableRepository);
       Node webContent = (Node) session.getItem(webContentPath);
       NodeIdentifier identifier = NodeIdentifier.make(webContent);
-      PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
-      PortletPreferences prefs = context.getRequest().getPreferences();
+      PortletRequestContext pContext = (PortletRequestContext) event.getRequestContext();
+      PortletPreferences prefs = pContext.getRequest().getPreferences();
       prefs.setValue(UISingleContentViewerPortlet.REPOSITORY, identifier.getRepository());
       prefs.setValue(UISingleContentViewerPortlet.WORKSPACE, identifier.getWorkspace());
       prefs.setValue(UISingleContentViewerPortlet.IDENTIFIER, identifier.getUUID());
       prefs.store();
+      
+      String remoteUser = pContext.getRemoteUser();
+      String currentSite = Util.getPortalRequestContext().getPortalOwner();
+
       WCMPublicationService wcmPublicationService = uiWebContentSelector.getApplicationComponent(WCMPublicationService.class);
       UIPortletConfig portletConfig = uiWebContentSelector.getAncestorOfType(UIPortletConfig.class);
-      if (portletConfig.isEditPortletInCreatePageWizard()) {
-        if (!wcmPublicationService.isEnrolledInWCMLifecycle(webContent)) {
-          wcmPublicationService.enrollNodeInLifecycle(webContent, lifecycleName);          
-        }
-      } else {
+
+      try {
+          wcmPublicationService.isEnrolledInWCMLifecycle(webContent);
+      } catch (NotInWCMPublicationException e){
+          wcmPublicationService.unsubcribeLifecycle(webContent);
+          wcmPublicationService.enrollNodeInLifecycle(webContent, currentSite, remoteUser);          
+      }
+      
+      if (!portletConfig.isEditPortletInCreatePageWizard()) {
         String pageId = Util.getUIPortal().getSelectedNode().getPageReference();
         UserPortalConfigService upcService = uiWebContentSelector.getApplicationComponent(UserPortalConfigService.class);
         Page page = upcService.getPage(pageId);
-        try {
-          if (!wcmPublicationService.isEnrolledInWCMLifecycle(webContent)) {
-            wcmPublicationService.enrollNodeInLifecycle(webContent, lifecycleName);
-            wcmPublicationService.updateLifecyleOnChangePage(page, event.getRequestContext().getRemoteUser());
-          }
-        }catch (NotInWCMPublicationException e){
-          wcmPublicationService.unsubcribeLifecycle(webContent);
-          wcmPublicationService.enrollNodeInLifecycle(webContent, lifecycleName);
-          wcmPublicationService.updateLifecyleOnChangePage(page, event.getRequestContext().getRemoteUser());
-        }
+        wcmPublicationService.updateLifecyleOnChangePage(page, event.getRequestContext().getRemoteUser());
       }
+
       UIPortletConfig uiPortletConfig = uiWebContentSelector.getAncestorOfType(UIPortletConfig.class);
       uiPortletConfig.closePopupAndUpdateUI(event.getRequestContext(),true);
     }

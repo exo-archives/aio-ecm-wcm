@@ -131,4 +131,18 @@ public abstract class WebpagePublicationPlugin extends PublicationPlugin {
    * @throws Exception the exception
    */
   public abstract void updateLifecyleOnRemoveNavigation(PageNavigation navigation) throws Exception;
+  
+  /**
+   * Update the lifecycle of the content depending of its current state.
+   * This method is generally called when the node has been modified (saved).
+   * 
+   * @see PostCreateContentEventListener
+   * @see PostEditContentEventListener
+   * 
+   * @param node
+   * @param remoteUser
+   * @throws Exception
+   */
+  public abstract void updateLifecyleOnChangeContent(Node node, String remoteUser) throws Exception;
+
 }

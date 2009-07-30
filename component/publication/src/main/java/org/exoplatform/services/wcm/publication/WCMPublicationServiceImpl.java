@@ -194,5 +194,36 @@ public class WCMPublicationServiceImpl implements WCMPublicationService, Startab
     if(publicationPlugins.containsKey(lifecyleName))
       return true;
     throw new NotInWCMPublicationException();
-  }   
+  }
+
+	/**
+	 * This default implementation uses "States and versions based publication" as a default lifecycle for all sites and "Simple Publishing" for the root user.
+	 */
+	public void enrollNodeInLifecycle(Node node, String siteName, String remoteUser) throws Exception {
+		/*
+		 * TODO : lifecycle based on site (each site can define its own publication lifecycle)
+		 */
+		if ("root".equals(remoteUser)) {
+			enrollNodeInLifecycle(node, "Web Content Publishing");
+		} else {
+			enrollNodeInLifecycle(node, "States and versions based publication");
+		}
+		
+	}
+
+	/**
+	 * This default implementation simply delegates updates to the node WebpagePublicationPlugin.
+	 */
+	public void updateLifecyleOnChangeContent(Node node, String siteName, String remoteUser)
+			throws Exception {
+
+	    if(!publicationService.isNodeEnrolledInLifecycle(node)) {
+	    	enrollNodeInLifecycle(node,siteName, remoteUser);	    	
+	    }
+	    String lifecycleName = publicationService.getNodeLifecycleName(node);
+	    WebpagePublicationPlugin publicationPlugin = publicationPlugins.get(lifecycleName);
+	    
+	    publicationPlugin.updateLifecyleOnChangeContent(node, remoteUser);
+		
+	}   
 }

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.jcr.Node;
-import javax.jcr.Session;
 
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.BaseWCMTestCase;
@@ -13,8 +12,6 @@ import org.exoplatform.services.wcm.core.NodetypeUtils;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
-
-import com.sun.org.apache.xpath.internal.axes.NodeSequence;
 
 public class TestNewsletterTemplateHandler extends BaseWCMTestCase {
 	

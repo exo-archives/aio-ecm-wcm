@@ -376,7 +376,7 @@ public class UIQuickEditWebContentForm extends UIContentDialogForm{
 	        newNode.checkin();
 	      }
 	      PublicationService publicationService = uiQuickEditForm.getApplicationComponent(PublicationService.class);
-	      PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(StageAndVersionPublicationConstant.LIFECYCLE_NAME);
+	      PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(publicationService.getNodeLifecycleName(newNode));
 	      HashMap<String, String> context = new HashMap<String, String>();
 	      if(newNode != null) {
 	    	  context.put(StageAndVersionPublicationConstant.CURRENT_REVISION_NAME, newNode.getName());

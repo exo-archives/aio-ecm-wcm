@@ -20,14 +20,17 @@ import java.util.HashMap;
 
 import javax.jcr.Node;
 
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.cms.CmsService;
-import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
+import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
 
@@ -40,9 +43,9 @@ import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
 public class PostCreateContentEventListener extends Listener<CmsService, Node>{
   
   /** The publication service. */
-  private PublicationService publicationService;
+  private WCMPublicationService publicationService;
   
-  /** The configuration service. */
+  /** The publication service. */
   private WCMConfigurationService configurationService;
   
   /** The web content schema handler. */
@@ -55,7 +58,7 @@ public class PostCreateContentEventListener extends Listener<CmsService, Node>{
    * @param configurationService the configuration service
    * @param schemaConfigService the schema config service
    */
-  public PostCreateContentEventListener(PublicationService publicationService,WCMConfigurationService configurationService, WebSchemaConfigService schemaConfigService) {
+   public PostCreateContentEventListener(WCMPublicationService publicationService,WCMConfigurationService configurationService, WebSchemaConfigService schemaConfigService) {
     this.publicationService = publicationService;
     this.configurationService = configurationService;
     webContentSchemaHandler = schemaConfigService.getWebSchemaHandlerByType(WebContentSchemaHandler.class);
@@ -83,11 +86,16 @@ public class PostCreateContentEventListener extends Listener<CmsService, Node>{
       return;
     if(!currentNode.getPath().startsWith(nodeLocation.getPath()))
       return;
-    if(publicationService.isNodeEnrolledInLifecycle(currentNode))
-      return;
+
+    String siteName = null, remoteUser = null;
+    try {
+    	siteName = Util.getPortalRequestContext().getPortalOwner();
+    	remoteUser = Util.getPortalRequestContext().getRemoteUser();    	
+    } catch (Exception e) {
+    	
+    }
     
-    publicationService.enrollNodeInLifecycle(currentNode,StageAndVersionPublicationConstant.LIFECYCLE_NAME);
-    publicationService.changeState(currentNode,StageAndVersionPublicationConstant.DRAFT_STATE,new HashMap<String,String>());
+    publicationService.updateLifecyleOnChangeContent(currentNode, siteName, remoteUser);
   }
 
 }

@@ -713,4 +713,24 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     }
     return listPageNavigationUri;
   }
+
+/**
+ * In this publication process, we put the content in Draft state when editing it.
+ */
+public void updateLifecyleOnChangeContent(Node node, String remoteUser)
+		throws Exception {
+	
+    String state = node.getProperty(StageAndVersionPublicationConstant.CURRENT_STATE).getString();
+    
+    if(!StageAndVersionPublicationConstant.ENROLLED_STATE.equalsIgnoreCase(state))
+      return;
+    
+    HashMap<String, String> context = new HashMap<String, String>();
+    if(node != null) {
+      context.put(StageAndVersionPublicationConstant.CURRENT_REVISION_NAME, node.getName());
+    }
+    
+    changeState(node, StageAndVersionPublicationConstant.DRAFT_STATE, context);
+	
+}
 }

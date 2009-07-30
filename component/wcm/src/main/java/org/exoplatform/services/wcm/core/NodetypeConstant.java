@@ -150,6 +150,6 @@ public class NodetypeConstant {
   
   public static final String PUBLICATION_WEBPAGES_PUBLICATION = "publication:webpagesPublication";
   
-  public static final String PUBLICATION_STATE_AND_VERSION_BASED_PUBLICATION = "publication:stateAndVersionBasedPublication";
+//  public static final String PUBLICATION_STATE_AND_VERSION_BASED_PUBLICATION = "publication:stateAndVersionBasedPublication";
   
 }
