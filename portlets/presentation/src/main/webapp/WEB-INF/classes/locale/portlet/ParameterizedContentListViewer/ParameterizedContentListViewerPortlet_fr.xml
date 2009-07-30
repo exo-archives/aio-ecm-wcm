@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bundle>
-  <UIParameterizedContentListViewerContainer>
+	<UIParameterizedTagetPageInputSetAction>
+		<title>
+			<SelectTargetPage>Sélectionnez page cible</SelectTargetPage>
+		</title>
+	</UIParameterizedTagetPageInputSetAction>
+  <UIPCLVContainer>
   	<label>
   		<quickEditTitle>Quick Edit</quickEditTitle>
   	</label>
-  </UIParameterizedContentListViewerContainer>
+  </UIPCLVContainer>
   <UIParameterizedManagerPopupWindow>
   	<title>Sélectionner le dossier pour afficher les documents ou de ses enfants webContent</title>
   </UIParameterizedManagerPopupWindow>
-  <UIParameterizedManagementForm>
+  <UIPCLVConfig>
   	<title>Contenu de la paramétrés Viewer Edit Mode</title>
     <action>
       <Save>Sauver</Save>
@@ -59,7 +64,7 @@
       <ShowRSSLink>Voir lien RSS</ShowRSSLink>
     </label>
     
-  </UIParameterizedManagementForm>
+  </UIPCLVConfig>
   <UICategoryNavigationTargetPathPopupWindow>
 		<title>
 			<UIPageSelector>Page sélecteur</UIPageSelector>

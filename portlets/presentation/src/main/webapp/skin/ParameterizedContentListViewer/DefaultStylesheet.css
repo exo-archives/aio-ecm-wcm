@@ -10,7 +10,7 @@
 	border: 1px solid #dbdbdb;
 }
 
-.UIParameterizedManagementForm .SelectTargetPageIcon {
+.UIPCLVConfig .SelectTargetPageIcon {
 	background: url('DefaultSkin/images/SearchIcon.png') no-repeat;
 	width: 16px;
 	height: 16px;

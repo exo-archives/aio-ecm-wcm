@@ -408,7 +408,7 @@
 		</preference>
 		<preference>
 			<name>paginatorTemplatePath</name>
-			<value></value>
+			<value>/exo:ecm/views/templates/Parameterized Content List Viewer/paginators/UIPaginatorDefault.gtmpl</value>
 			<read-only>false</read-only>
 		</preference>
 		<preference>

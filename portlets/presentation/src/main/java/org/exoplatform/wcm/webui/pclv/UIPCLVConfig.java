@@ -158,7 +158,7 @@ public class UIPCLVConfig extends UIForm implements UISelectable {
     PortletPreferences portletPreferences = context.getRequest().getPreferences();
     
     ResourceBundle bundle = context.getApplicationResourceBundle();
-    String rootBundleKey = "UIParameterizedManagementForm.label.";
+    String rootBundleKey = "UIPCLVConfig.label.";
     
     List<SelectItemOption<String>> orderTypeOptions = new ArrayList<SelectItemOption<String>>();
     orderTypeOptions.add(new SelectItemOption<String>(bundle.getString(rootBundleKey + ORDER_DESC), "DESC"));
