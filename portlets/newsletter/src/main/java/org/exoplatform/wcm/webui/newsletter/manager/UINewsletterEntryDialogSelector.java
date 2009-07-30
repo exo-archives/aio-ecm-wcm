@@ -23,7 +23,6 @@ import java.util.List;
 import javax.jcr.Node;
 
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
@@ -87,8 +86,7 @@ public class UINewsletterEntryDialogSelector extends UIForm {
     List<SelectItemOption<String>> categories = new ArrayList<SelectItemOption<String>>();
     NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
     NewsletterCategoryHandler newsletterCategoryHandler = newsletterManagerService.getCategoryHandler();
-    ThreadLocalSessionProviderService threadLocalSessionProviderService = getApplicationComponent(ThreadLocalSessionProviderService.class);
-    SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
+    SessionProvider sessionProvider = Utils.getSessionProvider(this);
     List<NewsletterCategoryConfig> newsletterCategoryConfigs = newsletterCategoryHandler.getListCategories(Util.getUIPortal().getName(), sessionProvider);
     for (NewsletterCategoryConfig newsletterCategoryConfig : newsletterCategoryConfigs) {
       categories.add(new SelectItemOption<String>(newsletterCategoryConfig.getTitle(), newsletterCategoryConfig.getName()));
@@ -159,11 +157,9 @@ public class UINewsletterEntryDialogSelector extends UIForm {
       List<SelectItemOption<String>> subscriptions = new ArrayList<SelectItemOption<String>>();
       NewsletterManagerService newsletterManagerService = newsletterEntryDialogSelector.getApplicationComponent(NewsletterManagerService.class);
       NewsletterSubscriptionHandler newsletterSubscriptionHandler = newsletterManagerService.getSubscriptionHandler();
-      ThreadLocalSessionProviderService threadLocalSessionProviderService = newsletterEntryDialogSelector.getApplicationComponent(ThreadLocalSessionProviderService.class);
-      SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
       List<NewsletterSubscriptionConfig> newsletterSubscriptionConfigs = 
                                                 newsletterSubscriptionHandler.getSubscriptionsByCategory(Util.getUIPortal().getName(),
-                                                                                                         categorySelectBox.getValue(), sessionProvider);
+                                                                                                         categorySelectBox.getValue(), Utils.getSessionProvider(newsletterEntryDialogSelector));
       for (NewsletterSubscriptionConfig newsletterSubscriptionConfig : newsletterSubscriptionConfigs) {
         subscriptions.add(new SelectItemOption<String>(newsletterSubscriptionConfig.getTitle(), newsletterSubscriptionConfig.getName()));
       }

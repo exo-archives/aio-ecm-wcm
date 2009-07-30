@@ -34,20 +34,20 @@ import org.exoplatform.ecm.webui.form.DialogFormActionListeners;
 import org.exoplatform.ecm.webui.form.UIDialogForm;
 import org.exoplatform.ecm.webui.utils.DialogFormUtil;
 import org.exoplatform.ecm.webui.utils.LockUtil;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.CmsService;
+import org.exoplatform.services.cms.JcrInputProperty;
 import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.NodeIdentifier;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
 import org.exoplatform.wcm.webui.scv.config.social.UISocialInfo;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -56,6 +56,7 @@ import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
+import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -119,8 +120,7 @@ public class UIContentDialogForm extends UIDialogForm {
     String identifier = prefs.getValue(UISingleContentViewerPortlet.IDENTIFIER, null);
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
-    SessionProvider provider = SessionProviderFactory.createSessionProvider();
-    Session session = provider.getSession(workspace, manageableRepository);
+    Session session = Utils.getSessionProvider(this).getSession(workspace, manageableRepository);
     Node webContentNode = null;
     try {
       webContentNode = session.getNodeByUUID(identifier);
@@ -217,7 +217,8 @@ public class UIContentDialogForm extends UIDialogForm {
   /* (non-Javadoc)
    * @see org.exoplatform.ecm.webui.form.UIDialogForm#onchange(org.exoplatform.webui.event.Event)
    */
-  public void onchange(Event event) throws Exception {
+  @SuppressWarnings("unchecked")
+	public void onchange(Event event) throws Exception {
 
   }
 
@@ -234,8 +235,7 @@ public class UIContentDialogForm extends UIDialogForm {
     String workspace = storedLocation.getWorkspace();
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-    SessionProvider provider = SessionProviderFactory.createSessionProvider();
-    Session session = provider.getSession(workspace, manageableRepository);
+    Session session = Utils.getSessionProvider(this).getSession(workspace, manageableRepository);
     Node parentNode = (Node) session.getItem(path);
     return parentNode;
   }
@@ -334,7 +334,7 @@ public class UIContentDialogForm extends UIDialogForm {
         String identifier = prefs.getValue(UISingleContentViewerPortlet.IDENTIFIER, null);
         RepositoryService repositoryService = dialogForm.getApplicationComponent(RepositoryService.class);
         ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
-        Session session = SessionProviderFactory.createSystemProvider().getSession(workspaceName, manageableRepository);
+        Session session = Utils.getSessionProvider(dialogForm).getSession(workspaceName, manageableRepository);
         Node webContentNode = null;
         try {
           webContentNode = session.getNodeByUUID(identifier);
@@ -354,8 +354,8 @@ public class UIContentDialogForm extends UIDialogForm {
       }
       String nodeType;
       Node homeNode;
-      List inputs = dialogForm.getChildren();
-      Map inputProperties = DialogFormUtil.prepareMap(inputs, dialogForm.getInputProperties());
+      List<UIComponent> inputs = dialogForm.getChildren();
+      Map<String, JcrInputProperty> inputProperties = DialogFormUtil.prepareMap(inputs, dialogForm.getInputProperties());
       if (dialogForm.isAddNew()) {
         homeNode = dialogForm.getParentNode();
         nodeType = dialogForm.contentType;
@@ -442,7 +442,7 @@ public class UIContentDialogForm extends UIDialogForm {
 	        String identifier = prefs.getValue(UISingleContentViewerPortlet.IDENTIFIER, null);
 	        RepositoryService repositoryService = dialogForm.getApplicationComponent(RepositoryService.class);
 	        ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
-	        Session session = SessionProviderFactory.createSystemProvider().getSession(workspaceName, manageableRepository);
+	        Session session = Utils.getSessionProvider(dialogForm).getSession(workspaceName, manageableRepository);
 	        Node webContentNode = null;
 	        try {
 	          webContentNode = session.getNodeByUUID(identifier);
@@ -462,8 +462,8 @@ public class UIContentDialogForm extends UIDialogForm {
 	      }
 	      String nodeType;
 	      Node homeNode;
-	      List inputs = dialogForm.getChildren();
-	      Map inputProperties = DialogFormUtil.prepareMap(inputs, dialogForm.getInputProperties());
+	      List<UIComponent> inputs = dialogForm.getChildren();
+	      Map<String, JcrInputProperty> inputProperties = DialogFormUtil.prepareMap(inputs, dialogForm.getInputProperties());
 	      if (dialogForm.isAddNew()) {
 	        homeNode = dialogForm.getParentNode();
 	        nodeType = dialogForm.contentType;

@@ -23,7 +23,6 @@ import javax.jcr.Node;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.cms.views.ApplicationTemplateManagerService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
@@ -217,14 +216,13 @@ public class UISearchPageLayoutManager extends UIForm {
 	private List<SelectItemOption<String>> createTemplateList(String portletName, String category) throws Exception {
 		List<SelectItemOption<String>> templateList = new ArrayList<SelectItemOption<String>>();
 		ApplicationTemplateManagerService templateManagerService = getApplicationComponent(ApplicationTemplateManagerService.class);
-		SessionProvider provider = SessionProviderFactory.createSessionProvider();
 		RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
 		ManageableRepository manageableRepository = repositoryService.getCurrentRepository();
 		String repository = manageableRepository.getConfiguration().getName();
 		List<Node> templateNodeList = templateManagerService.getTemplatesByCategory(repository,
 																																								portletName,
 																																								category,
-																																								provider);
+																																								Utils.getSessionProvider(this));
 		for (Node templateNode : templateNodeList) {
 			String templateName = templateNode.getName();
 			String templatePath = templateNode.getPath();

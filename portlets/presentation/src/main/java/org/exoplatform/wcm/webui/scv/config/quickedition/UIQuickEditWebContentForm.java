@@ -32,17 +32,16 @@ import javax.portlet.PortletPreferences;
 import org.exoplatform.ecm.webui.form.DialogFormActionListeners;
 import org.exoplatform.ecm.webui.utils.DialogFormUtil;
 import org.exoplatform.ecm.webui.utils.LockUtil;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.cms.CmsService;
+import org.exoplatform.services.cms.JcrInputProperty;
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.NodeIdentifier;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.ui.UIPublicationPanel;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
 import org.exoplatform.wcm.webui.scv.config.UIContentDialogForm;
 import org.exoplatform.wcm.webui.scv.config.UIPortletConfig;
@@ -52,6 +51,7 @@ import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
+import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -97,7 +97,7 @@ public class UIQuickEditWebContentForm extends UIContentDialogForm{
     String nodeIdentifier = prefs.getValue(UISingleContentViewerPortlet.IDENTIFIER, null);
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
-    Session session = SessionProviderFactory.createSystemProvider().getSession(workspaceName, manageableRepository);
+    Session session = Utils.getSessionProvider(this).getSession(workspaceName, manageableRepository);
     Node webContentNode = null; 
     try {
       webContentNode = session.getNodeByUUID(nodeIdentifier);
@@ -129,8 +129,7 @@ public class UIQuickEditWebContentForm extends UIContentDialogForm{
     String workspace = storedLocation.getWorkspace();
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-    SessionProvider provider = SessionProviderFactory.createSessionProvider();
-    Session session = provider.getSession(workspace, manageableRepository);
+    Session session = Utils.getSessionProvider(this).getSession(workspace, manageableRepository);
     Node parentNode = (Node) session.getItem(path);
     return parentNode;
   }
@@ -179,7 +178,7 @@ public class UIQuickEditWebContentForm extends UIContentDialogForm{
       String nodeIdentifier = prefs.getValue(UISingleContentViewerPortlet.IDENTIFIER, null);
       RepositoryService repositoryService = uiQuickEditForm.getApplicationComponent(RepositoryService.class);
       ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
-      Session session = SessionProviderFactory.createSystemProvider().getSession(workspaceName, manageableRepository);
+      Session session = Utils.getSessionProvider(uiQuickEditForm).getSession(workspaceName, manageableRepository);
       Node webContentNode = null; 
       try {
         webContentNode = session.getNodeByUUID(nodeIdentifier);
@@ -201,8 +200,8 @@ public class UIQuickEditWebContentForm extends UIContentDialogForm{
         webContentNode.checkout();
       }
 
-      List inputs = uiQuickEditForm.getChildren();
-      Map inputProperties = DialogFormUtil.prepareMap(inputs, uiQuickEditForm.getInputProperties());
+      List<UIComponent> inputs = uiQuickEditForm.getChildren();
+      Map<String, JcrInputProperty> inputProperties = DialogFormUtil.prepareMap(inputs, uiQuickEditForm.getInputProperties());
       Node newNode = null;
       String nodeType;
       Node homeNode;
@@ -302,7 +301,7 @@ public class UIQuickEditWebContentForm extends UIContentDialogForm{
 	      String nodeIdentifier = prefs.getValue(UISingleContentViewerPortlet.IDENTIFIER, null);
 	      RepositoryService repositoryService = uiQuickEditForm.getApplicationComponent(RepositoryService.class);
 	      ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
-	      Session session = SessionProviderFactory.createSystemProvider().getSession(workspaceName, manageableRepository);
+	      Session session = Utils.getSessionProvider(uiQuickEditForm).getSession(workspaceName, manageableRepository);
 	      Node webContentNode = null; 
 	      try {
 	        webContentNode = session.getNodeByUUID(nodeIdentifier);
@@ -324,8 +323,8 @@ public class UIQuickEditWebContentForm extends UIContentDialogForm{
 	        webContentNode.checkout();
 	      }
 
-	      List inputs = uiQuickEditForm.getChildren();
-	      Map inputProperties = DialogFormUtil.prepareMap(inputs, uiQuickEditForm.getInputProperties());
+	      List<UIComponent> inputs = uiQuickEditForm.getChildren();
+	      Map<String, JcrInputProperty> inputProperties = DialogFormUtil.prepareMap(inputs, uiQuickEditForm.getInputProperties());
 	      Node newNode = null;
 	      String nodeType;
 	      Node homeNode;

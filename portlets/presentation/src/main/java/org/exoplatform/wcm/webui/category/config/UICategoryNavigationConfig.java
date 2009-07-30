@@ -29,8 +29,6 @@ import org.exoplatform.services.cms.views.ApplicationTemplateManagerService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.config.RepositoryEntry;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.category.UICategoryNavigationConstant;
 import org.exoplatform.wcm.webui.category.UICategoryNavigationPortlet;
@@ -120,13 +118,11 @@ public class UICategoryNavigationConfig extends UIForm implements UISelectable {
 
   private List<SelectItemOption<String>> getTemplateList(String portletName, String templateCategory) throws Exception {
     List<SelectItemOption<String>> templates = new ArrayList<SelectItemOption<String>>();
-    ThreadLocalSessionProviderService threadLocalSessionProviderService = getApplicationComponent(ThreadLocalSessionProviderService.class);
-    SessionProvider provider = threadLocalSessionProviderService.getSessionProvider(null);
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     ManageableRepository manageableRepository = repositoryService.getCurrentRepository();
     ApplicationTemplateManagerService applicationTemplateManagerService = getApplicationComponent(ApplicationTemplateManagerService.class);
     String repository = manageableRepository.getConfiguration().getName();
-    List<Node> templateNodes = applicationTemplateManagerService.getTemplatesByCategory(repository, portletName, templateCategory, provider);
+    List<Node> templateNodes = applicationTemplateManagerService.getTemplatesByCategory(repository, portletName, templateCategory, Utils.getSessionProvider(this));
     for (Node templateNode : templateNodes) {
       String templateName = templateNode.getName();
       String templatePath = templateNode.getPath();

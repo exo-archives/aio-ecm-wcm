@@ -23,10 +23,8 @@ import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.page.UIPage;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
@@ -199,8 +197,7 @@ public class UIWikiContentForm extends UIForm {
   private Node createNewWebContentNode(String webContentName, String title, String content) throws Exception {
     String portalName = Util.getUIPortal().getName();
     LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
-    SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
-    Node portalNode = livePortalManagerService.getLivePortal(portalName, sessionProvider);
+    Node portalNode = livePortalManagerService.getLivePortal(portalName, Utils.getSessionProvider(this));
     WebSchemaConfigService webSchemaConfigService = getApplicationComponent(WebSchemaConfigService.class);
     PortalFolderSchemaHandler handler = webSchemaConfigService
     .getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);

@@ -52,6 +52,7 @@ import org.exoplatform.services.cms.taxonomy.TaxonomyService;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.config.RepositoryConfigurationException;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.upload.UploadService;
 import org.exoplatform.wcm.webui.Utils;
@@ -374,6 +375,7 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
           }
         }
       }
+      SessionProvider sessionProvider = Utils.getSessionProvider(fastContentCreatorForm);
       if(component instanceof UIOneNodePathSelector) {
         String repositoryName = UIFCCUtils.getPreferenceRepository() ;
         String wsFieldName = (String)fieldPropertiesMap.get("workspaceField") ;
@@ -400,7 +402,7 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
         if(rootPath == null) rootPath = "/";
         ((UIOneNodePathSelector)component).setRootNodeLocation(repositoryName, wsName, rootPath) ;
         ((UIOneNodePathSelector)component).setShowRootPathSelect(true);
-        ((UIOneNodePathSelector)component).init(Utils.getSessionProvider(fastContentCreatorForm));
+        ((UIOneNodePathSelector)component).init(sessionProvider);
       } else if (component instanceof UIOneTaxonomySelector) {
         String workspaceName = fastContentCreatorForm.getDMSWorkspace();
         ((UIOneTaxonomySelector)component).setIsDisable(workspaceName, false);
@@ -415,7 +417,7 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
         }
         
         ((UIOneTaxonomySelector)component).setRootNodeLocation(fastContentCreatorForm.repositoryName, workspaceName, rootTreePath);
-        ((UIOneTaxonomySelector)component).init(Utils.getSessionProvider(fastContentCreatorForm));
+        ((UIOneTaxonomySelector)component).init(sessionProvider);
         
       }
       Utils.createPopupWindow(fastContentCreatorForm, component, UIFCCConstant.TAXONOMY_POPUP_WINDOW, 640, 300);

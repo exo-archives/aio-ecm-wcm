@@ -19,7 +19,6 @@ package org.exoplatform.wcm.webui.newsletter.manager;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
@@ -63,9 +62,7 @@ public class UICategories extends UIContainer {
 	@SuppressWarnings("unused")
   private long getNumberOfWaitingNewsletter(String categoryName, String subscriptionName){
 	  try{
-		  ThreadLocalSessionProviderService threadLocalSessionProviderService = getApplicationComponent(ThreadLocalSessionProviderService.class);
-		  SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
-	    return subscriptionHandler.getNumberOfNewslettersWaiting(portalName, categoryName, subscriptionName, sessionProvider);
+	    return subscriptionHandler.getNumberOfNewslettersWaiting(portalName, categoryName, subscriptionName, Utils.getSessionProvider(this));
 	  }catch(Exception ex){
 	    ex.printStackTrace();
 	    return 0;
@@ -80,10 +77,8 @@ public class UICategories extends UIContainer {
 	@SuppressWarnings("unused")
 	private List<NewsletterCategoryConfig> getListCategories(){
 	  List<NewsletterCategoryConfig> listCategories = new ArrayList<NewsletterCategoryConfig>();
-	  	ThreadLocalSessionProviderService threadLocalSessionProviderService = getApplicationComponent(ThreadLocalSessionProviderService.class);
-	  	SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
 		try{
-			listCategories = categoryHandler.getListCategories(NewsLetterUtil.getPortalName(), sessionProvider);
+			listCategories = categoryHandler.getListCategories(NewsLetterUtil.getPortalName(), Utils.getSessionProvider(this));
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -94,9 +89,7 @@ public class UICategories extends UIContainer {
   private List<NewsletterSubscriptionConfig> getListSubscription(String categoryName){
 	  List<NewsletterSubscriptionConfig> listSubscription = new ArrayList<NewsletterSubscriptionConfig>();
     try{
-    	ThreadLocalSessionProviderService threadLocalSessionProviderService = getApplicationComponent(ThreadLocalSessionProviderService.class);
-    	SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
-      listSubscription = subscriptionHandler.getSubscriptionsByCategory(NewsLetterUtil.getPortalName(), categoryName, sessionProvider);
+      listSubscription = subscriptionHandler.getSubscriptionsByCategory(NewsLetterUtil.getPortalName(), categoryName, Utils.getSessionProvider(this));
     }catch(Exception e){
       e.printStackTrace();
     }
@@ -125,10 +118,8 @@ public class UICategories extends UIContainer {
 	    String categoryName = event.getRequestContext().getRequestParameter(OBJECTID);
 	    UINewsletterManagerPortlet newsletterManagerPortlet = uiCategories.getAncestorOfType(UINewsletterManagerPortlet.class);
 	    UISubscriptions subsriptions = newsletterManagerPortlet.getChild(UISubscriptions.class);
-	    ThreadLocalSessionProviderService threadLocalSessionProviderService = subsriptions.getApplicationComponent(ThreadLocalSessionProviderService.class);
-	    SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);	    	
 	    subsriptions.setRendered(true);
-	    subsriptions.setCategory(uiCategories.categoryHandler.getCategoryByName(NewsLetterUtil.getPortalName(), categoryName, sessionProvider));
+	    subsriptions.setCategory(uiCategories.categoryHandler.getCategoryByName(NewsLetterUtil.getPortalName(), categoryName, Utils.getSessionProvider(uiCategories)));
 	    newsletterManagerPortlet.getChild(UICategories.class).setRendered(false);
 	    event.getRequestContext().addUIComponentToUpdateByAjax(newsletterManagerPortlet);
 	  }
@@ -162,8 +153,7 @@ public class UICategories extends UIContainer {
       
       String categoryName = categoryAndSubscription.split("/")[0];
       String subscriptionName = categoryAndSubscription.split("/")[1];
-      ThreadLocalSessionProviderService threadLocalSessionProviderService = uiCategory.getApplicationComponent(ThreadLocalSessionProviderService.class);
-      SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
+      SessionProvider sessionProvider = Utils.getSessionProvider(uiCategory);
       newsletterManager.setCategoryConfig(
                         uiCategory.categoryHandler.getCategoryByName(
                                                                      uiCategory.portalName,

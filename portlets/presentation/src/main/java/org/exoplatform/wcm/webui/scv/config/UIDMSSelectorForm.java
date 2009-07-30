@@ -26,7 +26,6 @@ import javax.portlet.PortletPreferences;
 import org.exoplatform.ecm.webui.selector.UISelectable;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
@@ -36,6 +35,7 @@ import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.publication.NotInWCMPublicationException;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.publication.WebpagePublicationPlugin;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -224,7 +224,7 @@ public class UIDMSSelectorForm extends UIForm implements UISelectable{
       }
       RepositoryService repositoryService = uiDMSSelectorForm.getApplicationComponent(RepositoryService.class);
       ManageableRepository manageableRepository = repositoryService.getRepository(uiDMSSelectorForm.getRepositoryName());
-      Session session = SessionProviderFactory.createSystemProvider().getSession(uiDMSSelectorForm.getWorkspace(), manageableRepository);
+      Session session = Utils.getSessionProvider(uiDMSSelectorForm).getSession(uiDMSSelectorForm.getWorkspace(), manageableRepository);
       Node webContent = (Node) session.getItem(dmsPath);
       NodeIdentifier nodeIdentifier = NodeIdentifier.make(webContent);
       PortletRequestContext pContext = (PortletRequestContext) event.getRequestContext();

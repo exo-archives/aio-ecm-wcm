@@ -41,12 +41,10 @@ import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.webui.page.UIPage;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
@@ -183,7 +181,7 @@ public class UINameWebContentForm extends UIForm {
     String UUID = prefs.getValue(UISingleContentViewerPortlet.IDENTIFIER, null);
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
-    Session session = SessionProviderFactory.createSystemProvider().getSession(workspace,
+    Session session = Utils.getSessionProvider(this).getSession(workspace,
         manageableRepository);
     return session.getNodeByUUID(UUID);
   }
@@ -221,8 +219,7 @@ public class UINameWebContentForm extends UIForm {
       String portalName = Util.getUIPortal().getName();
       LivePortalManagerService livePortalManagerService = uiNameWebContentForm
       .getApplicationComponent(LivePortalManagerService.class);
-      SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
-      Node portalNode = livePortalManagerService.getLivePortal(portalName, sessionProvider);
+      Node portalNode = livePortalManagerService.getLivePortal(portalName, Utils.getSessionProvider(uiNameWebContentForm));
       WebSchemaConfigService webSchemaConfigService = uiNameWebContentForm
       .getApplicationComponent(WebSchemaConfigService.class);
       PortalFolderSchemaHandler handler = webSchemaConfigService

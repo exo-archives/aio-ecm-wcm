@@ -20,7 +20,6 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.ecm.webui.form.UIFormInputSetWithAction;
 import org.exoplatform.ecm.webui.selector.UIGroupMemberSelector;
 import org.exoplatform.ecm.webui.selector.UISelectable;
-import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
@@ -119,7 +118,6 @@ public class UICategoryForm extends UIForm implements UIPopupComponent, UISelect
 	static  public class SaveActionListener extends EventListener<UICategoryForm> {
 		public void execute(Event<UICategoryForm> event) throws Exception {
 			UICategoryForm uiCategoryForm = event.getSource();
-			UINewsletterManagerPortlet newsletterPortlet = uiCategoryForm.getAncestorOfType(UINewsletterManagerPortlet.class);
 			NewsletterManagerService newsletterManagerService = 
 				(NewsletterManagerService)PortalContainer.getInstance().getComponentInstanceOfType(NewsletterManagerService.class) ;
 			NewsletterCategoryConfig categoryConfig = null;
@@ -150,19 +148,17 @@ public class UICategoryForm extends UIForm implements UIPopupComponent, UISelect
 
 			String portalName = NewsLetterUtil.getPortalName(); 
 			try{
+				SessionProvider sessionProvider = Utils.getSessionProvider(uiCategoryForm);
 			  if(uiCategoryForm.categoryConfig == null){ // if add new category then check cateogry's name is already exist or not
-				 ThreadLocalSessionProviderService threadLocalSessionProviderService =  uiCategoryForm.getApplicationComponent(ThreadLocalSessionProviderService.class);
-				 SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
   			  if(categoryHandler.getCategoryByName(portalName, categoryConfig.getName(), sessionProvider) != null){
   			    uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.categoryNameIsAlreadyExist", null, ApplicationMessage.WARNING));
   			    event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
   			    return;
   			  }else{
-  			    categoryHandler.add(portalName, categoryConfig, NewsLetterUtil.getSesssionProvider());
+  			    categoryHandler.add(portalName, categoryConfig, sessionProvider);
   			  }
 			  }else{ // Edit a category is already exist
-				  ThreadLocalSessionProviderService threadLocalSessionProviderService = uiCategoryForm.getApplicationComponent(ThreadLocalSessionProviderService.class);
-			    categoryHandler.edit(portalName, categoryConfig, threadLocalSessionProviderService.getSessionProvider(null));
+			    categoryHandler.edit(portalName, categoryConfig, sessionProvider);
 			  }
 			}catch(Exception ex){
 			  ex.printStackTrace();

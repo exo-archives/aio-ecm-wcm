@@ -26,7 +26,6 @@ import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
@@ -253,10 +252,9 @@ public class UINewsletterEntryManager extends UIForm {
       }
       String newsletterName = subIds.get(0);
       NewsletterManagerService newsletterManagerService = newsletterEntryManager.getApplicationComponent(NewsletterManagerService.class);
-      ThreadLocalSessionProviderService threadLocalSessionProviderService = newsletterEntryManager.getApplicationComponent(ThreadLocalSessionProviderService.class);
       RepositoryService repositoryService = newsletterEntryManager.getApplicationComponent(RepositoryService.class);
       ManageableRepository manageableRepository = repositoryService.getRepository(newsletterManagerService.getRepositoryName()); 
-      Session session = threadLocalSessionProviderService.getSessionProvider(null).getSession(newsletterManagerService.getWorkspaceName(), manageableRepository);
+      Session session = Utils.getSessionProvider(newsletterEntryManager).getSession(newsletterManagerService.getWorkspaceName(), manageableRepository);
       String newsletterPath = NewsletterConstant.generateNewsletterPath(Util.getUIPortal().getName(), categoryName, subscriptionName, newsletterName) ;
       Node newsletterNode = (Node) session.getItem(newsletterPath);
       NewsletterTemplateHandler newsletterTemplateHandler = newsletterManagerService.getTemplateHandler();

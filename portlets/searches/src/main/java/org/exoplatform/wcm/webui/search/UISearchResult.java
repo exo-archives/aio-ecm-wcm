@@ -36,7 +36,6 @@ import org.exoplatform.commons.utils.ISO8601;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.container.UIContainer;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
@@ -178,12 +177,11 @@ public class UISearchResult extends UIContainer {
 			queryCriteria.setKeyword(keyword);
 			queryCriteria.setSearchWebpage(true);
 			queryCriteria.setSearchDocument(true);
-			SessionProvider provider = SessionProviderFactory.createSessionProvider();
 			int itemsPerPage = Integer.parseInt(portletPreferences.getValue(UIWCMSearchPortlet.ITEMS_PER_PAGE,
 																																			null));
 			try {
 				WCMPaginatedQueryResult paginatedQueryResult = siteSearchService.searchSiteContents(queryCriteria,
-																																														provider,
+																																														Utils.getSessionProvider(this),
 																																														itemsPerPage);
 				setSearchTime(paginatedQueryResult.getQueryTimeInSecond());
 				setSuggestion(paginatedQueryResult.getSpellSuggestion());
@@ -543,8 +541,7 @@ public class UISearchResult extends UIContainer {
 				throw new ItemNotFoundException();
 			RepositoryService repositoryService = uiSearchResult.getApplicationComponent(RepositoryService.class);
 			ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-			SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
-			Session session = sessionProvider.getSession(worksapce, manageableRepository);
+			Session session = Utils.getSessionProvider(uiSearchResult).getSession(worksapce, manageableRepository);
 			Node node = (Node) session.getItem(path);
 
 			// UIWCMSearchPortlet uiWCMSearchPortlet =

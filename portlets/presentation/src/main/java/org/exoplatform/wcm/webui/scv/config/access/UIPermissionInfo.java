@@ -29,13 +29,13 @@ import javax.jcr.Node;
 import javax.jcr.Session;
 
 import org.exoplatform.commons.utils.ObjectPageList;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.access.AccessControlEntry;
 import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.access.SystemIdentity;
 import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.scv.config.UIContentDialogForm;
 import org.exoplatform.wcm.webui.scv.config.UIQuickCreationWizard;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -138,12 +138,12 @@ public class UIPermissionInfo extends UIContainer {
     Node node = getCurrentWebContent();
     ExtendedNode webContent = (ExtendedNode) node;
     List<PermissionBean> permissionBeans = new ArrayList<PermissionBean>();
-    List permissionList = webContent.getACL().getPermissionEntries();
+    List<AccessControlEntry> permissionList = webContent.getACL().getPermissionEntries();
     Map<String, List<String>> permissionMap = new HashMap<String, List<String>>();
-    Iterator permissionIterator = permissionList.iterator();
+    Iterator<AccessControlEntry> permissionIterator = permissionList.iterator();
 
     while (permissionIterator.hasNext()) {
-      AccessControlEntry accessControlEntry = (AccessControlEntry) permissionIterator.next();
+      AccessControlEntry accessControlEntry = permissionIterator.next();
       String currentIdentity = accessControlEntry.getIdentity();
       String currentPermission = accessControlEntry.getPermission();
       List<String> currentPermissionsList = permissionMap.get(currentIdentity);
@@ -157,8 +157,8 @@ public class UIPermissionInfo extends UIContainer {
       }
       permissionMap.put(currentIdentity, currentPermissionsList);
     }
-    Set keys = permissionMap.keySet();
-    Iterator keysIter = keys.iterator();
+    Set<String> keys = permissionMap.keySet();
+    Iterator<String> keysIter = keys.iterator();
     String owner = SystemIdentity.SYSTEM;
     if (getNodeOwner(node) != null)
       owner = getNodeOwner(node);
@@ -216,7 +216,7 @@ public class UIPermissionInfo extends UIContainer {
       .getApplicationComponent(RepositoryService.class);
       ManageableRepository manageableRepository = repositoryService.getCurrentRepository();
       String workspace = manageableRepository.getConfiguration().getDefaultWorkspaceName();
-      Session session = SessionProviderFactory.createSessionProvider().getSession(workspace, manageableRepository);
+      Session session = Utils.getSessionProvider(permissionInfo).getSession(workspace, manageableRepository);
       UIApplication uiApp = permissionInfo.getAncestorOfType(UIApplication.class);
       String name = event.getRequestContext().getRequestParameter(OBJECTID);
       Node webContent = permissionInfo.getCurrentWebContent();

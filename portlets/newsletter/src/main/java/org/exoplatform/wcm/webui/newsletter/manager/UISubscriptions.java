@@ -19,7 +19,6 @@ package org.exoplatform.wcm.webui.newsletter.manager;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
@@ -101,10 +100,8 @@ public class UISubscriptions extends UIForm {
   private List<NewsletterSubscriptionConfig> getListSubscription(){
     List<NewsletterSubscriptionConfig> listSubs = new ArrayList<NewsletterSubscriptionConfig>();
     try{
-    	ThreadLocalSessionProviderService threadLocalSessionProviderService = getApplicationComponent(ThreadLocalSessionProviderService.class);
-    	SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
       listSubs = 
-        subscriptionHandler.getSubscriptionsByCategory(NewsLetterUtil.getPortalName(), this.categoryConfig.getName(), sessionProvider);
+        subscriptionHandler.getSubscriptionsByCategory(NewsLetterUtil.getPortalName(), this.categoryConfig.getName(), Utils.getSessionProvider(this));
       init(listSubs);
     }catch(Exception e){
       e.printStackTrace();
@@ -115,9 +112,7 @@ public class UISubscriptions extends UIForm {
   @SuppressWarnings("unused")
   private long getNumberOfWaitingNewsletter(String subscriptionName){
     try{
-    	ThreadLocalSessionProviderService threadLocalSessionProviderService = getApplicationComponent(ThreadLocalSessionProviderService.class);
-    	SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
-      return subscriptionHandler.getNumberOfNewslettersWaiting(portalName, this.categoryConfig.getName(), subscriptionName, sessionProvider);
+      return subscriptionHandler.getNumberOfNewslettersWaiting(portalName, this.categoryConfig.getName(), subscriptionName, Utils.getSessionProvider(this));
     }catch(Exception ex){
       ex.printStackTrace();
       return 0;
@@ -165,12 +160,7 @@ public class UISubscriptions extends UIForm {
       UISubscriptions subsriptions = event.getSource();
       NewsletterManagerService newsletterManagerService = subsriptions.getApplicationComponent(NewsletterManagerService.class);
       NewsletterCategoryHandler categoryHandler = newsletterManagerService.getCategoryHandler();
-      SessionProvider sessionProvider = NewsLetterUtil.getSesssionProvider();
-      try{
-    	ThreadLocalSessionProviderService theLocalSessionProviderService = subsriptions.getApplicationComponent(ThreadLocalSessionProviderService.class);
-        categoryHandler.delete(NewsLetterUtil.getPortalName(), subsriptions.categoryConfig.getName(), theLocalSessionProviderService.getSessionProvider(null));
-      }catch(Exception e){}
-      sessionProvider.close();
+      categoryHandler.delete(NewsLetterUtil.getPortalName(), subsriptions.categoryConfig.getName(), Utils.getSessionProvider(subsriptions));
       UINewsletterManagerPortlet newsletterManagerPortlet = subsriptions.getAncestorOfType(UINewsletterManagerPortlet.class);
       UICategories categories = newsletterManagerPortlet.getChild(UICategories.class);
       categories.setRendered(true);
@@ -201,9 +191,7 @@ public class UISubscriptions extends UIForm {
         return;
       }
       UISubcriptionForm subcriptionForm = subsriptions.createUIComponent(UISubcriptionForm.class, null, null);
-      ThreadLocalSessionProviderService threadLocalSessionProviderService = subcriptionForm.getApplicationComponent(ThreadLocalSessionProviderService.class);
-      SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
-      NewsletterSubscriptionConfig subscriptionConfig = subsriptions.subscriptionHandler.getSubscriptionsByName(NewsLetterUtil.getPortalName(), subsriptions.categoryConfig.getName(), subId, sessionProvider);
+      NewsletterSubscriptionConfig subscriptionConfig = subsriptions.subscriptionHandler.getSubscriptionsByName(NewsLetterUtil.getPortalName(), subsriptions.categoryConfig.getName(), subId, Utils.getSessionProvider(subsriptions));
       subcriptionForm.setSubscriptionInfor(subscriptionConfig);
       Utils.createPopupWindow(subsriptions, subcriptionForm, UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW, 450, 280);
     }
@@ -220,8 +208,7 @@ public class UISubscriptions extends UIForm {
         if(checkbox.isChecked()){
 
           isChecked = true;
-          ThreadLocalSessionProviderService threadLocalSessionProviderService = subsriptions.getApplicationComponent(ThreadLocalSessionProviderService.class);
-          SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
+          SessionProvider sessionProvider = Utils.getSessionProvider(subsriptions);
           NewsletterSubscriptionConfig subscriptionConfig = 
             subsriptions.subscriptionHandler.getSubscriptionsByName( portalName, subsriptions.categoryConfig.getName(), checkbox.getName(), sessionProvider);
           if (subscriptionConfig != null) {
@@ -258,8 +245,7 @@ public class UISubscriptions extends UIForm {
       UINewsletterManagerPortlet newsletterManagerPortlet = uiSubscription.getAncestorOfType(UINewsletterManagerPortlet.class);
       UINewsletterEntryManager newsletterManager = newsletterManagerPortlet.getChild(UINewsletterEntryManager.class);
       newsletterManager.setRendered(true);
-      ThreadLocalSessionProviderService threadLocalSessionProviderService = uiSubscription.getApplicationComponent(ThreadLocalSessionProviderService.class);
-      SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
+      SessionProvider sessionProvider = Utils.getSessionProvider(uiSubscription);
       newsletterManager.setCategoryConfig(
                         uiSubscription.categoryHandler.getCategoryByName(
                                                                          uiSubscription.portalName,
@@ -282,8 +268,7 @@ public class UISubscriptions extends UIForm {
       UINewsletterManagerPortlet newsletterManagerPortlet = uiSubscriptions.getAncestorOfType(UINewsletterManagerPortlet.class);
       UINewsletterEntryManager newsletterManager = newsletterManagerPortlet.getChild(UINewsletterEntryManager.class);
       newsletterManager.setRendered(true);
-      ThreadLocalSessionProviderService threadLocalSessionProviderService = uiSubscriptions.getApplicationComponent(ThreadLocalSessionProviderService.class);
-      SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
+      SessionProvider sessionProvider = Utils.getSessionProvider(uiSubscriptions);
       newsletterManager.setCategoryConfig(
                         uiSubscriptions.categoryHandler.getCategoryByName(
                                                                          uiSubscriptions.portalName,

@@ -18,15 +18,9 @@ package org.exoplatform.wcm.webui.newsletter.manager;
 
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.portal.UIPortal;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
 public class NewsLetterUtil {
-	public static SessionProvider getSesssionProvider() {
-		return SessionProviderFactory.createSessionProvider();
-	}
-	
 	public static String getPortalName() {
 		UIPortal portal = Util.getUIPortal();
 		return portal.getName();  

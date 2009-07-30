@@ -22,9 +22,7 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.resolver.ResourceResolver;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.search.QueryCriteria;
 import org.exoplatform.services.wcm.search.SiteSearchService;
 import org.exoplatform.services.wcm.search.WCMPaginatedQueryResult;
@@ -218,7 +216,6 @@ public class UISearchForm extends UIForm {
 			PortletPreferences portletPreferences = portletRequestContext.getRequest().getPreferences();
 			UIApplication uiApp = uiSearchForm.getAncestorOfType(UIApplication.class);
 			SiteSearchService siteSearchService = uiSearchForm.getApplicationComponent(SiteSearchService.class);
-			SessionProvider provider = SessionProviderFactory.createSessionProvider();
 			UISearchPageLayout uiSearchPageContainer = uiSearchForm.getParent();
 			UISearchResult uiSearchResult = uiSearchPageContainer.getChild(UISearchResult.class);
 			UIFormStringInput uiKeywordInput = uiSearchForm.getUIStringInput(UISearchForm.KEYWORD_INPUT);
@@ -276,7 +273,7 @@ public class UISearchForm extends UIForm {
 																																			null));
 			try {
 				WCMPaginatedQueryResult paginatedQueryResult = siteSearchService.searchSiteContents(queryCriteria,
-																																														provider,
+																																														Utils.getSessionProvider(uiSearchForm),
 																																														itemsPerPage);
 				uiSearchResult.setKeyword(keyword);
 				uiSearchResult.setPageList(paginatedQueryResult);

@@ -17,12 +17,9 @@
 package org.exoplatform.wcm.webui.newsletter.viewer;
 
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
@@ -30,16 +27,15 @@ import org.exoplatform.services.wcm.newsletter.handler.NewsletterCategoryHandler
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterManageUserHandler;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterPublicUserHandler;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterSubscriptionHandler;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.newsletter.manager.NewsLetterUtil;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
-import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
@@ -140,9 +136,7 @@ public class UINewsletterViewerForm extends UIForm {
   @SuppressWarnings("unused")
   private List<NewsletterCategoryConfig> getListCategories() {
     try {
-    	ThreadLocalSessionProviderService threadLocalSessionProviderService = getApplicationComponent(ThreadLocalSessionProviderService.class);
-    	SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
-      return categoryHandler.getListCategories(NewsLetterUtil.getPortalName(), sessionProvider);
+      return categoryHandler.getListCategories(NewsLetterUtil.getPortalName(), Utils.getSessionProvider(this));
     } catch (Exception e) {
 
       return new ArrayList<NewsletterCategoryConfig>();
@@ -152,10 +146,8 @@ public class UINewsletterViewerForm extends UIForm {
   @SuppressWarnings("unused")
   private List<NewsletterSubscriptionConfig> getListSubscription(String categoryName) {
     try {
-    	ThreadLocalSessionProviderService threadLocalSessionProviderService = getApplicationComponent(ThreadLocalSessionProviderService.class);
-    	SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
       List<NewsletterSubscriptionConfig> listSubscription = 
-                                          subcriptionHandler.getSubscriptionsByCategory(NewsLetterUtil.getPortalName(), categoryName, sessionProvider);
+                                          subcriptionHandler.getSubscriptionsByCategory(NewsLetterUtil.getPortalName(), categoryName, Utils.getSessionProvider(this));
       this.init(listSubscription, categoryName);
 
       return listSubscription;
@@ -173,9 +165,7 @@ public class UINewsletterViewerForm extends UIForm {
   public static class ForgetEmailActionListener extends EventListener<UINewsletterViewerForm> {
     public void execute(Event<UINewsletterViewerForm> event) throws Exception {
       UINewsletterViewerForm newsletterForm = event.getSource();
-      ThreadLocalSessionProviderService threadLocalSessionProviderService = newsletterForm.getApplicationComponent(ThreadLocalSessionProviderService.class);
-      SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
-      newsletterForm.publicUserHandler.forgetEmail(NewsLetterUtil.getPortalName(), newsletterForm.userMail, sessionProvider);
+      newsletterForm.publicUserHandler.forgetEmail(NewsLetterUtil.getPortalName(), newsletterForm.userMail, Utils.getSessionProvider(newsletterForm));
       
       newsletterForm.isUpdated = false;
       newsletterForm.inputEmail.setValue("");
@@ -191,10 +181,8 @@ public class UINewsletterViewerForm extends UIForm {
       UINewsletterViewerForm newsletterForm = event.getSource();
       List<String> listSubcriptionPattern = new ArrayList<String>();
       listSubcriptionPattern = newsletterForm.listSubscriptionChecked();
-      ThreadLocalSessionProviderService threadLocalSessionProviderService = newsletterForm.getApplicationComponent(ThreadLocalSessionProviderService.class);
-      SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
       newsletterForm.publicUserHandler.updateSubscriptions(NewsLetterUtil.getPortalName(), 
-                                                           newsletterForm.inputEmail.getValue(), listSubcriptionPattern, sessionProvider);
+                                                           newsletterForm.inputEmail.getValue(), listSubcriptionPattern, Utils.getSessionProvider(newsletterForm));
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
       UIApplication uiApp = context.getUIApplication();
       uiApp.addMessage(new ApplicationMessage("UINewsletterViewerForm.msg.updateSuccess", null, ApplicationMessage.INFO));
@@ -227,8 +215,7 @@ public class UINewsletterViewerForm extends UIForm {
           String emailContent[] = new String[]{ res.getString("UINewsletterViewerForm.Email.ConfirmUser.Subject"),
                                                 res.getString("UINewsletterViewerForm.Email.ConfirmUser.Content")};
           
-          ThreadLocalSessionProviderService threadLocalSessionProviderService = newsletterForm.getApplicationComponent(ThreadLocalSessionProviderService.class);
-          newsletterForm.publicUserHandler.subscribe(portalName, userEmail, listCategorySubscription, newsletterForm.linkToSendMail, emailContent, threadLocalSessionProviderService.getSessionProvider(null));
+          newsletterForm.publicUserHandler.subscribe(portalName, userEmail, listCategorySubscription, newsletterForm.linkToSendMail, emailContent, Utils.getSessionProvider(newsletterForm));
           newsletterForm.inputEmail.setRendered(false);
           newsletterForm.userMail = userEmail;
           newsletterForm.isUpdated = true;
