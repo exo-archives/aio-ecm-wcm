@@ -153,7 +153,6 @@ public class NewsletterPublicUserHandler {
       ResourceBundle res = context.getApplicationResourceBundle() ;
       emailContent = new String[]{ res.getString("NewsletterPortlet.Email.ConfirmUser.Subject"),
                                    res.getString("NewsletterPortlet.Email.ConfirmUser.Content")};*/
-      if(userNode == null) System.out.println("\n\n\n\n----------------------> user node is null");
       String openTag = "<a href=\"" + link.replaceFirst("OBJECTID",userMail + "/" + 
                                                      userNode.getProperty(NewsletterConstant.USER_PROPERTY_VALIDATION_CODE).getString())+
                        "\">";
@@ -221,8 +220,6 @@ public class NewsletterPublicUserHandler {
       // Get current subscriptions which user subscribed (by query), compare with input subscriptions
       // to get which subscription user remove, which subscription user add, then update reference
     } catch (Exception e) {
-      System.out.println("\n\n\n\n-----------------> false");
-      e.printStackTrace();
       log.error("Update user's subscription for user " + email + " failed because of " + e.getMessage());
     }
   }
