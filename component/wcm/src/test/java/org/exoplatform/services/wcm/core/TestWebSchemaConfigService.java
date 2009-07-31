@@ -19,6 +19,7 @@ package org.exoplatform.services.wcm.core;
 import java.util.Date;
 
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
 
 import org.exoplatform.container.component.ComponentPlugin;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
@@ -296,32 +297,44 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
   /**
    * Test create html file schema handler
    */
-  public void testCreateHTMLFileSchemaHandler() throws Exception {
-    webSchemaConfigService.addWebSchemaHandler(new HTMLFileSchemaHandler());
-    webSchemaConfigService.addWebSchemaHandler(new WebContentSchemaHandler());
-    Node htmlFolder = liveNode.addNode("html", NodetypeConstant.EXO_WEB_FOLDER);
-    Node htmlNode = htmlFolder.addNode("webcontent", NodetypeConstant.NT_FILE);
-    Node htmlContent = htmlNode.addNode(NodetypeConstant.JCR_CONTENT, NodetypeConstant.NT_RESOURCE);
-    htmlContent.setProperty(NodetypeConstant.JCR_ENCODING, "UTF-8");
-    htmlContent.setProperty(NodetypeConstant.JCR_MIME_TYPE, "text/html");
-    htmlContent.setProperty(NodetypeConstant.JCR_LAST_MODIFIED, new Date().getTime());
-    htmlContent.setProperty(NodetypeConstant.JCR_DATA, "This is the default.html file.");
-    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
-    webSchemaConfigService.createSchema(htmlNode, sessionProvider);
-    
-    Node result = (Node)session.getItem("/sites content/live/html/webcontent/default.html");
-    assertTrue(result.isNodeType(NodetypeConstant.EXO_HTML_FILE));
-    assertTrue(result.isNodeType(NodetypeConstant.EXO_OWNEABLE));
-    assertEquals(result.getProperty(NodetypeConstant.EXO_PRESENTATION_TYPE).getString(), NodetypeConstant.EXO_HTML_FILE);
-    
-    htmlFolder.remove();
-    session.save();
+  public void testCreateHTMLFileSchemaHandler() {
+    try {
+      NodeIterator iterator = liveNode.getNodes();
+      while(iterator.hasNext()) {
+        String name = iterator.nextNode().getName();
+        System.out.println("Name of node is existed: " + name);
+      }
+      Node htmlFolder = liveNode.addNode("html", NodetypeConstant.EXO_WEB_FOLDER);
+      
+      Node htmlFile = htmlFolder.addNode("htmlFile", NodetypeConstant.NT_FILE);
+      
+      Node htmlContent = htmlFile.addNode(NodetypeConstant.JCR_CONTENT, NodetypeConstant.NT_RESOURCE);
+      htmlContent.setProperty(NodetypeConstant.JCR_ENCODING, "UTF-8");
+      htmlContent.setProperty(NodetypeConstant.JCR_MIME_TYPE, "text/html");
+      htmlContent.setProperty(NodetypeConstant.JCR_LAST_MODIFIED, new Date().getTime());
+      htmlContent.setProperty(NodetypeConstant.JCR_DATA, "This is the default.html file.");
+      session.save();
+      
+      SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
+      webSchemaConfigService.addWebSchemaHandler(new HTMLFileSchemaHandler());
+      webSchemaConfigService.addWebSchemaHandler(new WebContentSchemaHandler());
+      webSchemaConfigService.createSchema(htmlFile, sessionProvider);
+      session.save();
+      Node result = (Node)session.getItem("/sites content/live/html/htmlFile/default.html");
+      assertTrue(result.isNodeType(NodetypeConstant.EXO_HTML_FILE));
+      assertTrue(result.isNodeType(NodetypeConstant.EXO_OWNEABLE));
+      assertEquals(result.getProperty(NodetypeConstant.EXO_PRESENTATION_TYPE).getString(), NodetypeConstant.EXO_HTML_FILE);
+      } catch (Exception ex) {
+        fail();
+      }
   }
   
   /**
    * Test modified css file schema handler
    */
-  public void testUpdateCSSFileSchemaHandlerOnModify() throws Exception {}
+  public void testUpdateCSSFileSchemaHandlerOnModify() throws Exception {
+    
+  }
   
   /**
    * Test modified js file schema handler
@@ -331,16 +344,79 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
   /**
    * Test modified html file schema handler
    */
-  public void testUpdateHTMLFileSchemaHandlerOnModify() throws Exception {}
+  public void testUpdateHTMLFileSchemaHandlerOnModify() {
+    String htmlData = "<html>" + "<head>" + "<title>My own HTML file</title>"
+      + "</head>" + "<body>" + "<h1>the first h1 tag</h1>"
+      + "<h2>the first h2 tag</h2>"
+      + "<h2>the second h2 tag</h2>"
+      + "<h1>the second h1 tag</h1>"
+      + "<h2>the third second h2 tag</h2>"
+      + "<h3>the first h3 tag</h3>"
+      + "<a href=" + "#" + ">Test</a>"
+      + "</body>" + "</html>";
+    try {
+      NodeIterator iterator = liveNode.getNodes();
+      while(iterator.hasNext()) {
+        String name = iterator.nextNode().getName();
+        System.out.println("Name of node is existed: " + name);
+      }
+      Node htmlFolder = liveNode.addNode("html", NodetypeConstant.EXO_WEB_FOLDER);
+      
+      Node htmlFile = htmlFolder.addNode("htmlFile", NodetypeConstant.NT_FILE);
+      
+      Node htmlContent = htmlFile.addNode(NodetypeConstant.JCR_CONTENT, NodetypeConstant.NT_RESOURCE);
+      htmlContent.setProperty(NodetypeConstant.JCR_ENCODING, "UTF-8");
+      htmlContent.setProperty(NodetypeConstant.JCR_MIME_TYPE, "text/html");
+      htmlContent.setProperty(NodetypeConstant.JCR_LAST_MODIFIED, new Date().getTime());
+      htmlContent.setProperty(NodetypeConstant.JCR_DATA, htmlData);
+      
+      session.save();
+      
+      SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
+      webSchemaConfigService.addWebSchemaHandler(new HTMLFileSchemaHandler());
+      webSchemaConfigService.addWebSchemaHandler(new WebContentSchemaHandler());
+      webSchemaConfigService.createSchema(htmlFile, sessionProvider);
+      session.save();
+      Node result = (Node)session.getItem("/sites content/live/html/htmlFile/default.html");
+
+      assertTrue(result.isNodeType(NodetypeConstant.EXO_HTML_FILE));
+      assertTrue(result.isNodeType(NodetypeConstant.EXO_OWNEABLE));
+      assertEquals(result.getProperty(NodetypeConstant.EXO_PRESENTATION_TYPE).getString(), NodetypeConstant.EXO_HTML_FILE);
+      webSchemaConfigService.updateSchemaOnModify(htmlFile, sessionProvider);
+      
+      Node webContent = (Node)session.getItem("/sites content/live/html/htmlFile");
+      assertTrue(webContent.hasProperty("exo:links"));
+    } catch(Exception ex) {
+      ex.printStackTrace();
+      fail();
+    }
+  }
   
   /**
    * Test remove css file schema handler
    */
-  public void testUpdateCSSFileSchemaHandlerOnRemove() throws Exception {}
+  public void testUpdateCSSFileSchemaHandlerOnRemove() {
+    
+  }
   
   /**
    * Test remove js file schema handler
    */
   public void testUpdateJSFileSchemaHandlerOnRemove() throws Exception {}
-  
+
+  /*
+   * (nonJavadoc)
+   * @see junit.framework.TestCase#tearDown()
+   */
+  public void tearDown() throws Exception {
+
+    super.tearDown();
+    Node liveNode = (Node) session.getItem("/sites content/live");
+
+    NodeIterator nodeIterator = liveNode.getNodes();
+    while (nodeIterator.hasNext()) {
+      nodeIterator.nextNode().remove();
+    }
+    session.save();
+  }
 }
