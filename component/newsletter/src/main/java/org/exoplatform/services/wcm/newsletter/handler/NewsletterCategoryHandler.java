@@ -40,17 +40,32 @@ import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * May 21, 2009  
+ * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * May 21, 2009
  */
 public class NewsletterCategoryHandler {
 
+  /** The log. */
   private static Log log = ExoLogger.getLogger(NewsletterCategoryHandler.class);
+  
+  /** The repository service. */
   private RepositoryService repositoryService;
+  
+  /** The thread local session provider service. */
   private ThreadLocalSessionProviderService threadLocalSessionProviderService;
+  
+  /** The repository. */
   private String repository;
+  
+  /** The workspace. */
   private String workspace;
   
+  /**
+   * Instantiates a new newsletter category handler.
+   * 
+   * @param repository the repository
+   * @param workspace the workspace
+   */
   public NewsletterCategoryHandler(String repository, String workspace) {
     repositoryService = (RepositoryService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(RepositoryService.class);
     threadLocalSessionProviderService = ThreadLocalSessionProviderService.class.cast(
@@ -61,6 +76,15 @@ public class NewsletterCategoryHandler {
     this.workspace = workspace;
   }
 
+  /**
+   * Gets the category from node.
+   * 
+   * @param categoryNode the category node
+   * 
+   * @return the category from node
+   * 
+   * @throws Exception the exception
+   */
   protected NewsletterCategoryConfig getCategoryFromNode(Node categoryNode) throws Exception{
   	NewsletterCategoryConfig categoryConfig = null;
   	categoryConfig = new NewsletterCategoryConfig();
@@ -87,6 +111,13 @@ public class NewsletterCategoryHandler {
   	return categoryConfig;
   }
   
+  /**
+   * Adds the.
+   * 
+   * @param portalName the portal name
+   * @param categoryConfig the category config
+   * @param sessionProvider the session provider
+   */
   public void add(String portalName, NewsletterCategoryConfig categoryConfig, SessionProvider sessionProvider) {
     log.info("Trying to add category " + categoryConfig.getName());
     
@@ -111,6 +142,13 @@ public class NewsletterCategoryHandler {
     } 
   }
   
+  /**
+   * Edits the.
+   * 
+   * @param portalName the portal name
+   * @param categoryConfig the category config
+   * @param sessionProvider the session provider
+   */
   public void edit(String portalName, NewsletterCategoryConfig categoryConfig, SessionProvider sessionProvider) {
     log.info("Trying to edit category " + categoryConfig.getName());
     try {
@@ -133,6 +171,13 @@ public class NewsletterCategoryHandler {
     }
   }
   
+  /**
+   * Delete.
+   * 
+   * @param portalName the portal name
+   * @param categoryName the category name
+   * @param sessionProvider the session provider
+   */
   public void delete(String portalName, String categoryName, SessionProvider sessionProvider) {
     log.info("Trying to delete category " + categoryName);
     try {
@@ -147,6 +192,17 @@ public class NewsletterCategoryHandler {
     }
   }
   
+  /**
+   * Gets the category by name.
+   * 
+   * @param portalName the portal name
+   * @param categoryName the category name
+   * @param sessionProvider the session provider
+   * 
+   * @return the category by name
+   * 
+   * @throws Exception the exception
+   */
   public NewsletterCategoryConfig getCategoryByName(String portalName, String categoryName, SessionProvider sessionProvider) throws Exception{
   	try{ManageableRepository manageableRepository = repositoryService.getRepository(repository);
       Session session = sessionProvider.getSession(workspace, manageableRepository);
@@ -158,6 +214,16 @@ public class NewsletterCategoryHandler {
   	}
   }
   
+  /**
+   * Gets the list categories.
+   * 
+   * @param portalName the portal name
+   * @param sessionProvider the session provider
+   * 
+   * @return the list categories
+   * 
+   * @throws Exception the exception
+   */
   public List<NewsletterCategoryConfig> getListCategories(String portalName, SessionProvider sessionProvider) throws Exception{
     List<NewsletterCategoryConfig> listCategories = new ArrayList<NewsletterCategoryConfig>();
   	try{

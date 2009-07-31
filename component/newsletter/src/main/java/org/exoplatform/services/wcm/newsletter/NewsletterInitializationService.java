@@ -36,18 +36,36 @@ import org.picocontainer.Startable;
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * May 21, 2009  
+ * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * May 21, 2009
  */
 public class NewsletterInitializationService implements Startable {
   
+  /** The category configs. */
   private List<NewsletterCategoryConfig> categoryConfigs;
+  
+  /** The subscription configs. */
   private List<NewsletterSubscriptionConfig> subscriptionConfigs;
+  
+  /** The user configs. */
   private List<NewsletterUserConfig> userConfigs;
+  
+  /** The manager service. */
   private NewsletterManagerService managerService;
+  
+  /** The live portal manager service. */
   private LivePortalManagerService livePortalManagerService;
+  
+  /** The log. */
   private static Log log = ExoLogger.getLogger(NewsletterInitializationService.class);
   
+  /**
+   * Instantiates a new newsletter initialization service.
+   * 
+   * @param initParams the init params
+   * @param managerService the manager service
+   * @param livePortalManagerService the live portal manager service
+   */
   @SuppressWarnings("unchecked")
   public NewsletterInitializationService(InitParams initParams, NewsletterManagerService managerService, LivePortalManagerService livePortalManagerService) {
     categoryConfigs = initParams.getObjectParamValues(NewsletterCategoryConfig.class);
@@ -57,6 +75,9 @@ public class NewsletterInitializationService implements Startable {
     this.livePortalManagerService = livePortalManagerService;
   }
 
+  /* (non-Javadoc)
+   * @see org.picocontainer.Startable#start()
+   */
   public void start() {
     log.info("Starting NewsletterInitializationService ... ");
     SessionProvider sessionProvider = SessionProvider.createSystemProvider();
@@ -106,6 +127,9 @@ public class NewsletterInitializationService implements Startable {
     }
   }
 
+  /* (non-Javadoc)
+   * @see org.picocontainer.Startable#stop()
+   */
   public void stop() {
     log.info("Stopping NewsletterInitializationService ... ");
   }

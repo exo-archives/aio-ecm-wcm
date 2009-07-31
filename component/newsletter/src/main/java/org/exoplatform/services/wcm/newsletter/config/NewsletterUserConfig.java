@@ -19,26 +19,49 @@ package org.exoplatform.services.wcm.newsletter.config;
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * Jun 5, 2009  
+ * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * Jun 5, 2009
  */
 public class NewsletterUserConfig {
 
+  /** The mail. */
   private String mail;
+  
+  /** The is banned. */
   private boolean isBanned;
 
+  /**
+   * Gets the mail.
+   * 
+   * @return the mail
+   */
   public String getMail() {
     return mail;
   }
 
+  /**
+   * Sets the mail.
+   * 
+   * @param mail the new mail
+   */
   public void setMail(String mail) {
     this.mail = mail;
   }
 
+  /**
+   * Gets the checks if is banned.
+   * 
+   * @return the checks if is banned
+   */
   public boolean getIsBanned() {
     return isBanned;
   }
 
+  /**
+   * Sets the banned.
+   * 
+   * @param isBanned the new banned
+   */
   public void setBanned(boolean isBanned) {
     this.isBanned = isBanned;
   }

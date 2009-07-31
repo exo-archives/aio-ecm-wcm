@@ -43,17 +43,32 @@ import org.exoplatform.services.wcm.newsletter.config.NewsletterUserConfig;
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * May 21, 2009  
+ * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * May 21, 2009
  */
 public class NewsletterManageUserHandler {
 
+  /** The log. */
   private static Log log = ExoLogger.getLogger(NewsletterManageUserHandler.class);
+  
+  /** The repository service. */
   private RepositoryService repositoryService;
+  
+  /** The thread local session provider service. */
   private ThreadLocalSessionProviderService threadLocalSessionProviderService;
+  
+  /** The repository. */
   private String repository;
+  
+  /** The workspace. */
   private String workspace;
   
+  /**
+   * Instantiates a new newsletter manage user handler.
+   * 
+   * @param repository the repository
+   * @param workspace the workspace
+   */
   public NewsletterManageUserHandler(String repository, String workspace) {
     repositoryService = (RepositoryService) ExoContainerContext
       .getCurrentContainer().getComponentInstanceOfType(RepositoryService.class);
@@ -65,6 +80,15 @@ public class NewsletterManageUserHandler {
     this.workspace = workspace;
   }
   
+  /**
+   * Gets the user from node.
+   * 
+   * @param userNode the user node
+   * 
+   * @return the user from node
+   * 
+   * @throws Exception the exception
+   */
   private NewsletterUserConfig getUserFromNode(Node userNode) throws Exception{
     NewsletterUserConfig user = new NewsletterUserConfig();
     user.setMail(userNode.getProperty(NewsletterConstant.USER_PROPERTY_MAIL).getString());
@@ -72,6 +96,13 @@ public class NewsletterManageUserHandler {
     return user;
   }
   
+  /**
+   * Convert values to array.
+   * 
+   * @param values the values
+   * 
+   * @return the list< string>
+   */
   private List<String> convertValuesToArray(Value[] values){
     List<String> listString = new ArrayList<String>();
     for(Value value : values){
@@ -84,6 +115,13 @@ public class NewsletterManageUserHandler {
     return listString;
   }
   
+  /**
+   * Gets the all administrator.
+   * 
+   * @param portalName the portal name
+   * 
+   * @return the all administrator
+   */
   public List<String> getAllAdministrator(String portalName){
     try{
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
@@ -114,6 +152,14 @@ public class NewsletterManageUserHandler {
     return new ArrayList<String>();
   }*/
   
+  /**
+   * Adds the administrator.
+   * 
+   * @param portalName the portal name
+   * @param userId the user id
+   * 
+   * @throws Exception the exception
+   */
   public void addAdministrator(String portalName, String userId) throws Exception{
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
     SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
@@ -129,6 +175,14 @@ public class NewsletterManageUserHandler {
     session.save();
   }
   
+  /**
+   * Delete user addministrator.
+   * 
+   * @param portalName the portal name
+   * @param userId the user id
+   * 
+   * @throws Exception the exception
+   */
   public void deleteUserAddministrator(String portalName, String userId) throws Exception{
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
     SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
@@ -143,6 +197,15 @@ public class NewsletterManageUserHandler {
     session.save();
   }
   
+  /**
+   * Adds the.
+   * 
+   * @param portalName the portal name
+   * @param userMail the user mail
+   * @param sessionProvider the session provider
+   * 
+   * @return the node
+   */
   public Node add(String portalName, String userMail, SessionProvider sessionProvider) {
     log.info("Trying to add user " + userMail);
     Node userNode = null;
@@ -163,6 +226,17 @@ public class NewsletterManageUserHandler {
     return userNode;
   }
   
+  /**
+   * Gets the user node by email.
+   * 
+   * @param portalName the portal name
+   * @param userMail the user mail
+   * @param session the session
+   * 
+   * @return the user node by email
+   * 
+   * @throws Exception the exception
+   */
   private Node getUserNodeByEmail(String portalName, String userMail, Session session) throws Exception{
     String userPath = NewsletterConstant.generateUserPath(portalName);
     Node userFolderNode = (Node)session.getItem(userPath);
@@ -173,6 +247,13 @@ public class NewsletterManageUserHandler {
     }
   }
   
+  /**
+   * Change ban status.
+   * 
+   * @param portalName the portal name
+   * @param userMail the user mail
+   * @param isBanClicked the is ban clicked
+   */
   public void changeBanStatus(String portalName, String userMail, boolean isBanClicked) {
     log.info("Trying to ban/unban user " + userMail);
     try {
@@ -191,6 +272,12 @@ public class NewsletterManageUserHandler {
     }
   }
   
+  /**
+   * Delete.
+   * 
+   * @param portalName the portal name
+   * @param userMail the user mail
+   */
   public void delete(String portalName, String userMail) {
     log.info("Trying to delete user " + userMail);
     try {
@@ -230,6 +317,17 @@ public class NewsletterManageUserHandler {
     }
   }
 
+  /**
+   * Gets the users.
+   * 
+   * @param portalName the portal name
+   * @param categoryName the category name
+   * @param subscriptionName the subscription name
+   * 
+   * @return the users
+   * 
+   * @throws Exception the exception
+   */
   public List<NewsletterUserConfig> getUsers(String portalName, String categoryName, String subscriptionName) throws Exception{
     List<NewsletterUserConfig> listUsers = new ArrayList<NewsletterUserConfig>();
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
@@ -271,6 +369,16 @@ public class NewsletterManageUserHandler {
     return listUsers;
   }
 
+  /**
+   * Gets the users by subscription.
+   * 
+   * @param portalName the portal name
+   * @param categoryName the category name
+   * @param subscriptionName the subscription name
+   * @param session the session
+   * 
+   * @return the users by subscription
+   */
   private List<String> getUsersBySubscription(String portalName, String categoryName, String subscriptionName, Session session) {
     log.info("Trying to get list user by subscription " + portalName + "/" + categoryName + "/" + subscriptionName);
     List<String> subscribedUsers = new ArrayList<String>();
@@ -290,6 +398,15 @@ public class NewsletterManageUserHandler {
     return subscribedUsers;
   }
   
+  /**
+   * Gets the quantity user by subscription.
+   * 
+   * @param portalName the portal name
+   * @param categoryName the category name
+   * @param subscriptionName the subscription name
+   * 
+   * @return the quantity user by subscription
+   */
   public int getQuantityUserBySubscription(String portalName, String categoryName, String subscriptionName) {
     log.info("Trying to get user's quantity by subscription " + portalName + "/" + categoryName + "/" + subscriptionName);
     int countUser = 0;
@@ -310,6 +427,14 @@ public class NewsletterManageUserHandler {
     return countUser;
   }
   
+  /**
+   * Check existed email.
+   * 
+   * @param portalName the portal name
+   * @param email the email
+   * 
+   * @return true, if successful
+   */
   public boolean checkExistedEmail(String portalName, String email) {
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);

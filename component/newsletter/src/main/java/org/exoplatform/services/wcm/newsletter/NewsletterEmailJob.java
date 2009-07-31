@@ -26,13 +26,17 @@ import org.exoplatform.services.scheduler.JobContext;
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * May 21, 2009  
+ * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * May 21, 2009
  */
 public class NewsletterEmailJob extends BaseJob {
 
+  /** The log. */
   private static Log log = ExoLogger.getLogger(NewsletterEmailJob.class);
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.scheduler.BaseJob#execute(org.exoplatform.services.scheduler.JobContext)
+   */
   public void execute(JobContext arg0) throws Exception {
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     NewsletterManagerService newsletterManagerService = 

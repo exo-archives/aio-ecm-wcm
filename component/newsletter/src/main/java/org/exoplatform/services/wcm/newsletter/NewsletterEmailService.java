@@ -22,13 +22,17 @@ import org.exoplatform.services.log.ExoLogger;
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * May 21, 2009  
+ * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * May 21, 2009
  */
 public class NewsletterEmailService {
 
+  /** The log. */
   private static Log log = ExoLogger.getLogger(NewsletterEmailService.class);
   
+  /**
+   * Instantiates a new newsletter email service.
+   */
   public NewsletterEmailService() {
     log.info("Starting NewsletterEmailService ... ");
   }

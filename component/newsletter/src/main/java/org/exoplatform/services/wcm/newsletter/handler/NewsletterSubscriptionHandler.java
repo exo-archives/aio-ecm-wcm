@@ -39,17 +39,32 @@ import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * May 21, 2009  
+ * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * May 21, 2009
  */
 public class NewsletterSubscriptionHandler {
 
+  /** The log. */
   private static Log log = ExoLogger.getLogger(NewsletterSubscriptionHandler.class);
+  
+  /** The repository service. */
   private RepositoryService repositoryService;
+  
+  /** The thread local session provider service. */
   private ThreadLocalSessionProviderService threadLocalSessionProviderService;
+  
+  /** The repository. */
   private String repository;
+  
+  /** The workspace. */
   private String workspace;
   
+  /**
+   * Instantiates a new newsletter subscription handler.
+   * 
+   * @param repository the repository
+   * @param workspace the workspace
+   */
   public NewsletterSubscriptionHandler(String repository, String workspace) {
     repositoryService = (RepositoryService)ExoContainerContext.getCurrentContainer()
       .getComponentInstanceOfType(RepositoryService.class);
@@ -60,6 +75,15 @@ public class NewsletterSubscriptionHandler {
     this.workspace = workspace;
   }
   
+  /**
+   * Gets the subscription form node.
+   * 
+   * @param subscriptionNode the subscription node
+   * 
+   * @return the subscription form node
+   * 
+   * @throws Exception the exception
+   */
   private NewsletterSubscriptionConfig getSubscriptionFormNode(Node subscriptionNode) throws Exception{
     NewsletterSubscriptionConfig subscriptionConfig = new NewsletterSubscriptionConfig();
     subscriptionConfig.setName(subscriptionNode.getName());
@@ -70,6 +94,15 @@ public class NewsletterSubscriptionHandler {
     return subscriptionConfig;
   }
   
+  /**
+   * Adds the.
+   * 
+   * @param sessionProvider the session provider
+   * @param portalName the portal name
+   * @param subscription the subscription
+   * 
+   * @throws Exception the exception
+   */
   public void add(SessionProvider sessionProvider, String portalName,
                   NewsletterSubscriptionConfig subscription) throws Exception {
    
@@ -92,6 +125,13 @@ public class NewsletterSubscriptionHandler {
     }
   }
   
+  /**
+   * Edits the.
+   * 
+   * @param portalName the portal name
+   * @param subscription the subscription
+   * @param sessionProvider the session provider
+   */
   public void edit(String portalName, NewsletterSubscriptionConfig subscription, SessionProvider sessionProvider) {
     
     log.info("Trying to edit subcription " + subscription.getName());
@@ -112,6 +152,14 @@ public class NewsletterSubscriptionHandler {
     }
   }
 
+  /**
+   * Delete.
+   * 
+   * @param portalName the portal name
+   * @param categoryName the category name
+   * @param subscription the subscription
+   * @param sessionProvider the session provider
+   */
   public void delete(String portalName,
                      String categoryName, NewsletterSubscriptionConfig subscription, SessionProvider sessionProvider) {
     
@@ -129,6 +177,17 @@ public class NewsletterSubscriptionHandler {
     }
   }
   
+  /**
+   * Gets the subscriptions by category.
+   * 
+   * @param portalName the portal name
+   * @param categoryName the category name
+   * @param sessionProvider the session provider
+   * 
+   * @return the subscriptions by category
+   * 
+   * @throws Exception the exception
+   */
   public List<NewsletterSubscriptionConfig> getSubscriptionsByCategory(String portalName, String categoryName, SessionProvider sessionProvider)throws Exception{
     
     List<NewsletterSubscriptionConfig> listSubscriptions = new ArrayList<NewsletterSubscriptionConfig>();
@@ -151,6 +210,17 @@ public class NewsletterSubscriptionHandler {
     return listSubscriptions;
   }
   
+  /**
+   * Gets the subscription ids by public user.
+   * 
+   * @param portalName the portal name
+   * @param userEmail the user email
+   * @param sessionProvider the session provider
+   * 
+   * @return the subscription ids by public user
+   * 
+   * @throws Exception the exception
+   */
   public List<NewsletterSubscriptionConfig> getSubscriptionIdsByPublicUser(String portalName, String userEmail, SessionProvider sessionProvider) throws Exception{
     List<NewsletterSubscriptionConfig> listSubscriptions = new ArrayList<NewsletterSubscriptionConfig>();
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
@@ -171,6 +241,18 @@ public class NewsletterSubscriptionHandler {
     return listSubscriptions;
   }
 
+  /**
+   * Gets the subscriptions by name.
+   * 
+   * @param portalName the portal name
+   * @param categoryName the category name
+   * @param subCriptionName the sub cription name
+   * @param sessionProvider the session provider
+   * 
+   * @return the subscriptions by name
+   * 
+   * @throws Exception the exception
+   */
   public NewsletterSubscriptionConfig getSubscriptionsByName(String portalName, String categoryName, String subCriptionName, SessionProvider sessionProvider) throws Exception{
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
       Session session = sessionProvider.getSession(workspace, manageableRepository);
@@ -185,6 +267,18 @@ public class NewsletterSubscriptionHandler {
       }
   }
   
+  /**
+   * Gets the number of newsletters waiting.
+   * 
+   * @param portalName the portal name
+   * @param categoryName the category name
+   * @param subScriptionName the sub scription name
+   * @param sessionProvider the session provider
+   * 
+   * @return the number of newsletters waiting
+   * 
+   * @throws Exception the exception
+   */
   public long getNumberOfNewslettersWaiting(String portalName, String categoryName, String subScriptionName, SessionProvider sessionProvider)throws Exception{
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
     Session session = sessionProvider.getSession(workspace, manageableRepository);

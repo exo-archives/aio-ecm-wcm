@@ -45,17 +45,32 @@ import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * May 21, 2009  
+ * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * May 21, 2009
  */
 public class NewsletterPublicUserHandler {
 
+  /** The log. */
   private static Log log = ExoLogger.getLogger(NewsletterPublicUserHandler.class);
+  
+  /** The repository service. */
   private RepositoryService repositoryService;
+  
+  /** The thread local session provider service. */
   private ThreadLocalSessionProviderService threadLocalSessionProviderService;
+  
+  /** The repository. */
   private String repository;
+  
+  /** The workspace. */
   private String workspace;
   
+  /**
+   * Instantiates a new newsletter public user handler.
+   * 
+   * @param repository the repository
+   * @param workspace the workspace
+   */
   public NewsletterPublicUserHandler(String repository, String workspace) {
     repositoryService = (RepositoryService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(RepositoryService.class);
     threadLocalSessionProviderService = ThreadLocalSessionProviderService.class.cast(ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(ThreadLocalSessionProviderService.class));
@@ -63,6 +78,13 @@ public class NewsletterPublicUserHandler {
     this.workspace = workspace;
   }
   
+  /**
+   * Convert values to array.
+   * 
+   * @param values the values
+   * 
+   * @return the list< string>
+   */
   private List<String> convertValuesToArray(Value[] values){
     List<String> listString = new ArrayList<String>();
     for(Value value : values){
@@ -75,6 +97,16 @@ public class NewsletterPublicUserHandler {
     return listString;
   }
   
+  /**
+   * Update subscriptions.
+   * 
+   * @param session the session
+   * @param listCategorySubscription the list category subscription
+   * @param portalName the portal name
+   * @param userMail the user mail
+   * 
+   * @throws Exception the exception
+   */
   protected void updateSubscriptions(Session session, List<String> listCategorySubscription, String portalName, String userMail) throws Exception{
     String categoryName ;
     String subscriptionName ;
@@ -103,6 +135,12 @@ public class NewsletterPublicUserHandler {
     session.save();
   }
   
+  /**
+   * Clear email in subscription.
+   * 
+   * @param email the email
+   * @param sessionProvider the session provider
+   */
   protected void clearEmailInSubscription(String email, SessionProvider sessionProvider){
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
@@ -137,6 +175,16 @@ public class NewsletterPublicUserHandler {
   }
   
   
+  /**
+   * Subscribe.
+   * 
+   * @param portalName the portal name
+   * @param userMail the user mail
+   * @param listCategorySubscription the list category subscription
+   * @param link the link
+   * @param emailContent the email content
+   * @param sessionProvider the session provider
+   */
   public void subscribe(String portalName, String userMail, List<String> listCategorySubscription, String link, String[] emailContent, SessionProvider sessionProvider) {
     log.info("Trying to subscribe user " + userMail);
     try {
@@ -176,6 +224,18 @@ public class NewsletterPublicUserHandler {
     }
   }
   
+  /**
+   * Confirm public user.
+   * 
+   * @param Email the email
+   * @param userCode the user code
+   * @param portalName the portal name
+   * @param sessionProvider the session provider
+   * 
+   * @return true, if successful
+   * 
+   * @throws Exception the exception
+   */
   public boolean confirmPublicUser(String Email, String userCode, String portalName, SessionProvider sessionProvider) throws Exception{
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
     Session session = sessionProvider.getSession(workspace, manageableRepository);
@@ -193,6 +253,13 @@ public class NewsletterPublicUserHandler {
   }
 
   
+  /**
+   * Forget email.
+   * 
+   * @param portalName the portal name
+   * @param email the email
+   * @param sessionProvider the session provider
+   */
   public void forgetEmail(String portalName, String email, SessionProvider sessionProvider){
     log.info("Trying to update user's subscriptions for user " + email);
     try {
@@ -206,6 +273,14 @@ public class NewsletterPublicUserHandler {
   }
 
   // Pattern for categoryAndSubscriptions: categoryAAA#subscriptionBBB
+  /**
+   * Update subscriptions.
+   * 
+   * @param portalName the portal name
+   * @param email the email
+   * @param categoryAndSubscriptions the category and subscriptions
+   * @param sessionProvider the session provider
+   */
   public void updateSubscriptions(String portalName, String email, List<String> categoryAndSubscriptions, SessionProvider sessionProvider) {
     log.info("Trying to update user's subscriptions for user " + email);
     try {

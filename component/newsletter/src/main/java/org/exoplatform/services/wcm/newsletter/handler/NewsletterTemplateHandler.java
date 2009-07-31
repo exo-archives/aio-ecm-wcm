@@ -36,18 +36,35 @@ import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * May 26, 2009  
+ * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * May 26, 2009
  */
 public class NewsletterTemplateHandler {
 
+  /** The log. */
   private static Log log = ExoLogger.getLogger(NewsletterTemplateHandler.class);
+  
+  /** The repository service. */
   private RepositoryService repositoryService;
+  
+  /** The thread local session provider service. */
   private ThreadLocalSessionProviderService threadLocalSessionProviderService;
+  
+  /** The repository. */
   private String repository;
+  
+  /** The workspace. */
   private String workspace;
+  
+  /** The templates. */
   private List<Node> templates;
   
+  /**
+   * Instantiates a new newsletter template handler.
+   * 
+   * @param repository the repository
+   * @param workspace the workspace
+   */
   public NewsletterTemplateHandler(String repository, String workspace) {
     repositoryService = (RepositoryService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(RepositoryService.class);
     threadLocalSessionProviderService = ThreadLocalSessionProviderService.class.cast(ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(ThreadLocalSessionProviderService.class));
@@ -55,6 +72,14 @@ public class NewsletterTemplateHandler {
     this.workspace = workspace;
   }
   
+  /**
+   * Gets the templates.
+   * 
+   * @param portalName the portal name
+   * @param categoryConfig the category config
+   * 
+   * @return the templates
+   */
   public List<Node> getTemplates(String portalName, NewsletterCategoryConfig categoryConfig) {
     log.info("Trying to get templates of category " + categoryConfig);
     try {
@@ -87,6 +112,15 @@ public class NewsletterTemplateHandler {
     return null;
   }
   
+  /**
+   * Gets the template.
+   * 
+   * @param portalName the portal name
+   * @param categoryConfig the category config
+   * @param templateName the template name
+   * 
+   * @return the template
+   */
   public Node getTemplate(String portalName, NewsletterCategoryConfig categoryConfig, String templateName) {
     log.info("Trying to get template " + templateName);
     try {
@@ -104,6 +138,15 @@ public class NewsletterTemplateHandler {
     return null;
   }
   
+  /**
+   * Convert as template.
+   * 
+   * @param webcontentPath the webcontent path
+   * @param portalName the portal name
+   * @param categoryName the category name
+   * 
+   * @return true, if successful
+   */
   public boolean convertAsTemplate(String webcontentPath, String portalName, String categoryName) {
     log.info("Trying to convert node " + webcontentPath + " to template at category " + categoryName);
     try {

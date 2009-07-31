@@ -42,17 +42,32 @@ import org.exoplatform.services.wcm.skin.XSkinService;
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * May 21, 2009  
+ * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * May 21, 2009
  */
 public class NewsletterEntryHandler {
 
+  /** The log. */
   private static Log log = ExoLogger.getLogger(NewsletterEntryHandler.class);
+  
+  /** The repository service. */
   private RepositoryService repositoryService;
+  
+  /** The thread local session provider service. */
   private ThreadLocalSessionProviderService threadLocalSessionProviderService;
+  
+  /** The repository. */
   private String repository;
+  
+  /** The workspace. */
   private String workspace;
   
+  /**
+   * Instantiates a new newsletter entry handler.
+   * 
+   * @param repository the repository
+   * @param workspace the workspace
+   */
   public NewsletterEntryHandler(String repository, String workspace) {
     repositoryService = (RepositoryService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(RepositoryService.class);
     this.repository = repository;
@@ -62,6 +77,15 @@ public class NewsletterEntryHandler {
                                           .getComponentInstanceOfType(ThreadLocalSessionProviderService.class));
   }
   
+  /**
+   * Gets the entry from node.
+   * 
+   * @param entryNode the entry node
+   * 
+   * @return the entry from node
+   * 
+   * @throws Exception the exception
+   */
   private NewsletterManagerConfig getEntryFromNode(Node entryNode) throws Exception{
     NewsletterManagerConfig newsletterEntryConfig = new NewsletterManagerConfig();
     newsletterEntryConfig.setNewsletterName(entryNode.getName());
@@ -108,6 +132,14 @@ public class NewsletterEntryHandler {
     }
   }*/
   
+  /**
+   * Delete.
+   * 
+   * @param portalName the portal name
+   * @param categoryName the category name
+   * @param subscriptionName the subscription name
+   * @param listIds the list ids
+   */
   public void delete(String portalName, String categoryName, String subscriptionName, List<String> listIds) {
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
@@ -127,6 +159,17 @@ public class NewsletterEntryHandler {
     }
   }
   
+  /**
+   * Gets the newsletter entries by subscription.
+   * 
+   * @param portalName the portal name
+   * @param categoryName the category name
+   * @param subscriptionName the subscription name
+   * 
+   * @return the newsletter entries by subscription
+   * 
+   * @throws Exception the exception
+   */
   public List<NewsletterManagerConfig> getNewsletterEntriesBySubscription(String portalName, String categoryName, String subscriptionName) throws Exception{
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
     SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
@@ -150,6 +193,18 @@ public class NewsletterEntryHandler {
     return listNewsletterEntry;
   }
   
+  /**
+   * Gets the newsletter entry.
+   * 
+   * @param portalName the portal name
+   * @param categoryName the category name
+   * @param subscriptionName the subscription name
+   * @param newsletterName the newsletter name
+   * 
+   * @return the newsletter entry
+   * 
+   * @throws Exception the exception
+   */
   public NewsletterManagerConfig getNewsletterEntry(String portalName, String categoryName, String subscriptionName, String newsletterName) throws Exception{
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
     SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
@@ -159,6 +214,15 @@ public class NewsletterEntryHandler {
     return getEntryFromNode((Node)session.getItem(path));
   }
   
+  /**
+   * Gets the newsletter entry by path.
+   * 
+   * @param path the path
+   * 
+   * @return the newsletter entry by path
+   * 
+   * @throws Exception the exception
+   */
   public NewsletterManagerConfig getNewsletterEntryByPath(String path) throws Exception{
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
     SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
@@ -167,6 +231,18 @@ public class NewsletterEntryHandler {
     return getEntryFromNode((Node)session.getItem(path));
   }
   
+  /**
+   * Gets the content.
+   * 
+   * @param portalName the portal name
+   * @param categoryName the category name
+   * @param subscriptionName the subscription name
+   * @param newsletterName the newsletter name
+   * 
+   * @return the content
+   * 
+   * @throws Exception the exception
+   */
   public String getContent(String portalName, String categoryName, String subscriptionName, String newsletterName) throws Exception{
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
     SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
@@ -188,6 +264,15 @@ public class NewsletterEntryHandler {
     return null;
   }
   
+  /**
+   * Gets the content.
+   * 
+   * @param webContent the web content
+   * 
+   * @return the content
+   * 
+   * @throws Exception the exception
+   */
   public String getContent(Node webContent) throws Exception{
 		XSkinService xSkService = (XSkinService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(XSkinService.class);
 		try {
@@ -213,6 +298,13 @@ public class NewsletterEntryHandler {
 		return null;
   }
 	  
+  /**
+   * Removes the encoded character.
+   * 
+   * @param rawString the raw string
+   * 
+   * @return the string
+   */
   private String removeEncodedCharacter(String rawString){
 	  return  rawString.replaceAll("\t", " ").replaceAll("\n", " ");
   }
