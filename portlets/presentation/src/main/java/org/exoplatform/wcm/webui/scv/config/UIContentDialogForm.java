@@ -46,6 +46,7 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.wcm.core.NodeIdentifier;
 import org.exoplatform.services.wcm.core.NodeLocation;
+import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
@@ -519,7 +520,7 @@ public class UIContentDialogForm extends UIDialogForm {
 	      if(newNode != null) {
 	    	  context.put(StageAndVersionPublicationConstant.CURRENT_REVISION_NAME, newNode.getName());
 	      }
-	      publicationPlugin.changeState(newNode, StageAndVersionPublicationConstant.LIVE_STATE, context);
+	      publicationPlugin.changeState(newNode, PublicationDefaultStates.PUBLISHED, context);
 //	      UIQuickCreationWizard uiQuickWizard = dialogForm.getAncestorOfType(UIQuickCreationWizard.class);
 //	      UISocialInfo uiSocialInfo = uiQuickWizard.getChild(UISocialInfo.class);
 //	      UIPermissionManager uiPermissionManager = uiSocialInfo.getChild(UIPermissionManager.class);

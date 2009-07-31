@@ -39,6 +39,7 @@ import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
+import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
 
 /**
@@ -219,7 +220,7 @@ public class PageEventListenerDelegate {
 
     publicationPlugin.changeState(content, "published", null);
 
-    String[] logs = new String[] {new Date().toString(), WCMPublicationPlugin.PUBLISHED, session.getUserID(), "PublicationService.WCMPublicationPlugin.nodePublished", nodeURILogs};
+    String[] logs = new String[] {new Date().toString(), PublicationDefaultStates.PUBLISHED, session.getUserID(), "PublicationService.WCMPublicationPlugin.nodePublished", nodeURILogs};
     publicationService.addLog(content, logs);    
     session.save();
   } 
@@ -265,7 +266,7 @@ public class PageEventListenerDelegate {
       uris += uri + Util.HISTORY_SEPARATOR;
     }
 
-    String[] logs = new String[] {new Date().toString(), WCMPublicationPlugin.PUBLISHED, session.getUserID(), "PublicationService.WCMPublicationPlugin.nodeRemoved", uris};
+    String[] logs = new String[] {new Date().toString(), PublicationDefaultStates.PUBLISHED, session.getUserID(), "PublicationService.WCMPublicationPlugin.nodeRemoved", uris};
     publicationService.addLog(content, logs);
 
     if (listExistedPageId.isEmpty()) { 

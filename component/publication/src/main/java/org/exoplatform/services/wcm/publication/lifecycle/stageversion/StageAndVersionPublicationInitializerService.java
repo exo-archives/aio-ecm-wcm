@@ -77,7 +77,7 @@ public class StageAndVersionPublicationInitializerService implements Startable{
     for (NodeIterator nodeIterator = results.getNodes(); nodeIterator.hasNext();) {
       Node content = nodeIterator.nextNode();
       publicationService.enrollNodeInLifecycle(content, StageAndVersionPublicationConstant.LIFECYCLE_NAME);
-      publicationService.changeState(content, StageAndVersionPublicationConstant.LIVE_STATE, new HashMap<String, String>());
+      publicationService.changeState(content, StageAndVersionPublicationConstant.PUBLISHED_STATE, new HashMap<String, String>());
     }
   }
   

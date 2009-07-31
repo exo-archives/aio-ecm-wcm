@@ -55,6 +55,7 @@ import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
+import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
 import org.exoplatform.services.wcm.publication.WebpagePublicationPlugin;
 import org.exoplatform.services.wcm.publication.lifecycle.simple.ui.UIPublishingPanel;
 import org.exoplatform.web.application.RequestContext;
@@ -70,14 +71,8 @@ import org.exoplatform.webui.form.UIForm;
  */
 public class WCMPublicationPlugin extends WebpagePublicationPlugin{
 
-  /** The Constant ENROLLED. */
-  public static final String DRAFT = "draft".intern(); 
-  
-  /** The Constant PUBLISHED. */
-  public static final String PUBLISHED = "published".intern();
-
   /** The Constant DEFAULT_STATE. */
-  public static final String DEFAULT_STATE = DRAFT;
+  public static final String DEFAULT_STATE = PublicationDefaultStates.DRAFT;
   
   /** The Constant PUBLICATION. */
   public static final String PUBLICATION = "publication:publication".intern();    
@@ -161,13 +156,16 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin{
     node.setProperty(CURRENT_STATE, newState);
     PublicationService publicationService = Util.getServices(PublicationService.class);
 
-    if (newState.equals(DRAFT)) {
+    if (newState.equals(PublicationDefaultStates.DRAFT)) {
       String lifecycleName = node.getProperty("publication:lifecycleName").getString();
-      String[] logs = new String[] {new Date().toString(), DRAFT, session.getUserID(), "PublicationService.WCMPublicationPlugin.changeState.enrolled", lifecycleName};
+      String[] logs = new String[] {new Date().toString(), PublicationDefaultStates.DRAFT, session.getUserID(), "PublicationService.WCMPublicationPlugin.changeState.enrolled", lifecycleName};
       publicationService.addLog(node, logs);  
-    } else if (newState.equals(PUBLISHED)) {
-      String[] logs = new String[] {new Date().toString(), PUBLISHED, session.getUserID(), "PublicationService.WCMPublicationPlugin.changeState.published"};
+    } else if (newState.equals(PublicationDefaultStates.PUBLISHED)) {
+      String[] logs = new String[] {new Date().toString(), PublicationDefaultStates.PUBLISHED, session.getUserID(), "PublicationService.WCMPublicationPlugin.changeState.published"};
       publicationService.addLog(node, logs);  
+    } else if (newState.equals(PublicationDefaultStates.ENROLLED)) {
+    	String[] logs = new String[] {new Date().toString(), PublicationDefaultStates.ENROLLED, session.getUserID(), "PublicationService.WCMPublicationPlugin.changeState.published"};
+    	publicationService.addLog(node, logs);  
     } else {
       throw new Exception("WCMPublicationPlugin.changeState : Unknown state : " + node.getProperty(CURRENT_STATE).getString());
     }
@@ -178,7 +176,7 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin{
   /* (non-Javadoc)
    * @see org.exoplatform.services.ecm.publication.PublicationPlugin#getPossibleStates()
    */
-  public String[] getPossibleStates() { return new String[] { DRAFT,PUBLISHED }; }
+  public String[] getPossibleStates() { return new String[] { PublicationDefaultStates.ENROLLED, PublicationDefaultStates.DRAFT, PublicationDefaultStates.PUBLISHED}; }
 
   /* (non-Javadoc)
    * @see org.exoplatform.services.ecm.publication.PublicationPlugin#getStateImage(javax.jcr.Node, java.util.Locale)
@@ -189,7 +187,7 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin{
     byte[] bytes = null;
     String fileName= "WCM".intern();
     String currentState = node.getProperty(CURRENT_STATE).getString();
-    if (PUBLISHED.equals(currentState)) {
+    if (PublicationDefaultStates.PUBLISHED.equals(currentState)) {
       fileName+="Published";
     } else {
       fileName+="Unpublished";
@@ -516,11 +514,11 @@ public void updateLifecyleOnChangeContent(Node node, String remoteUser)
 		throws Exception {
     String state = node.getProperty(CURRENT_STATE).getString();
     
-    if(DRAFT.equalsIgnoreCase(state))
+    if(PublicationDefaultStates.DRAFT.equalsIgnoreCase(state))
       return;
 
     HashMap<String, String> context = new HashMap<String, String>();
-    changeState(node, DRAFT, context);
+    changeState(node, PublicationDefaultStates.DRAFT, context);
 	
 }
 

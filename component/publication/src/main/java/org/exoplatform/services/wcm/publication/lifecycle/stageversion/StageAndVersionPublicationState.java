@@ -36,7 +36,10 @@ public class StageAndVersionPublicationState {
   public static final String AWAITING = "awaiting".intern();
   
   /** The Constant LIVE. */
-  public static final String LIVE = "live".intern();
+//  public static final String LIVE = "live".intern();
+  
+  /** The Constant LIVE. */
+  public static final String PUBLISHED = "published".intern();
   
   /** The Constant OBSOLETE. */
   public static final String OBSOLETE = "obsolete".intern();
@@ -63,7 +66,7 @@ public class StageAndVersionPublicationState {
       } catch (Exception e) {       
       }
       if(liveRevision != null && liveRevision.length()>0) 
-        return LIVE;
+        return PUBLISHED;
       return OBSOLETE;
     }
     return null;

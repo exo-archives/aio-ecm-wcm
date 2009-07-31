@@ -135,7 +135,7 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
       }
       revisionsMap.put(node.getUUID(),versionData);
       addRevisionData(node,revisionsMap.values());
-    } else if(StageAndVersionPublicationConstant.LIVE_STATE.equals(newState)) {      
+    } else if(StageAndVersionPublicationConstant.PUBLISHED_STATE.equals(newState)) {      
       Version liveVersion = node.checkin();
       node.checkout();
       //Change current live revision to obsolete      
@@ -169,7 +169,7 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
       Value  liveVersionValue = valueFactory.createValue(liveVersion);
       node.setProperty(StageAndVersionPublicationConstant.LIVE_REVISION_PROP,liveVersionValue);
       node.setProperty(StageAndVersionPublicationConstant.LIVE_DATE_PROP,new GregorianCalendar());
-      VersionData liveRevisionData = new VersionData(liveVersion.getUUID(),StageAndVersionPublicationConstant.LIVE_STATE,userId);
+      VersionData liveRevisionData = new VersionData(liveVersion.getUUID(),StageAndVersionPublicationConstant.PUBLISHED_STATE,userId);
       revisionsMap.put(liveVersion.getUUID(),liveRevisionData);
       addRevisionData(node,revisionsMap.values());
     } else if(StageAndVersionPublicationConstant.OBSOLETE_STATE.equalsIgnoreCase(newState)) {      
@@ -323,7 +323,7 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
    * @see org.exoplatform.services.ecm.publication.PublicationPlugin#getPossibleStates()
    */
   public String[] getPossibleStates() {    
-    return new String[] { StageAndVersionPublicationConstant.ENROLLED_STATE, StageAndVersionPublicationConstant.DRAFT_STATE, StageAndVersionPublicationConstant.AWAITING, StageAndVersionPublicationConstant.LIVE_STATE, StageAndVersionPublicationConstant.OBSOLETE_STATE};
+    return new String[] { StageAndVersionPublicationConstant.ENROLLED_STATE, StageAndVersionPublicationConstant.DRAFT_STATE, StageAndVersionPublicationConstant.AWAITING, StageAndVersionPublicationConstant.PUBLISHED_STATE, StageAndVersionPublicationConstant.OBSOLETE_STATE};
   }
 
   /* (non-Javadoc)

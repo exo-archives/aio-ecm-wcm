@@ -182,7 +182,7 @@ public class UIPresentationContainer extends UIContainer{
           livePresentation.setViewNode(originalNode);          
           livePresentation.setOriginalNode(originalNode);
           setDraftRevision(true);          
-        } else if(StageAndVersionPublicationConstant.LIVE_STATE.equals(currentState)) {
+        } else if(StageAndVersionPublicationConstant.PUBLISHED_STATE.equals(currentState)) {
           Node liveRevision = getLiveRevision(originalNode);
           if (liveRevision!=null) setHasLiveRevision(true);
           livePresentation.setOriginalNode(originalNode);

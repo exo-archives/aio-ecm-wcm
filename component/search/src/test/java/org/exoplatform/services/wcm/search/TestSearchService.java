@@ -173,7 +173,7 @@ public class TestSearchService extends BaseWCMTestCase {
         wcmPublicationService.publishContentSCV(webContentNode, page, parentNode.getName());
         HashMap<String, String> context = new HashMap<String, String>();
         context.put(StageAndVersionPublicationConstant.CURRENT_REVISION_NAME, webContentNode.getName());
-        publicationPlugin.changeState(webContentNode, StageAndVersionPublicationConstant.LIVE_STATE, context);
+        publicationPlugin.changeState(webContentNode, StageAndVersionPublicationConstant.PUBLISHED_STATE, context);
       }catch(Exception ex){
         ex.printStackTrace();
       }

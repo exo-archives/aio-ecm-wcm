@@ -188,7 +188,7 @@ public class UISingleContentViewerPortlet extends UIPortletApplication {
       } catch (Exception e) {       
       }
       if(liveRevision != null && liveRevision.length()>0) 
-        return StageAndVersionPublicationConstant.LIVE_STATE;
+        return StageAndVersionPublicationConstant.PUBLISHED_STATE;
       return StageAndVersionPublicationConstant.OBSOLETE_STATE;
     }
     return null;

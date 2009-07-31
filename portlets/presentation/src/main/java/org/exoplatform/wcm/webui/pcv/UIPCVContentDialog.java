@@ -306,7 +306,7 @@ public class UIPCVContentDialog extends UIDialogForm {
       if(newNode != null) {
     	  context.put(StageAndVersionPublicationConstant.CURRENT_REVISION_NAME, newNode.getName());
       }
-      publicationPlugin.changeState(newNode, StageAndVersionPublicationConstant.LIVE_STATE, context);
+      publicationPlugin.changeState(newNode, StageAndVersionPublicationConstant.PUBLISHED_STATE, context);
       uiContentViewer.setNode(newNode);
       uiContentViewer.setRepository(repository);
       uiContentViewer.setWorkspace(workspace);
