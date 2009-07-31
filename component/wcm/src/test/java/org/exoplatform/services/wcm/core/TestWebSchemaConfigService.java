@@ -214,7 +214,6 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
     webSchemaConfigService.addWebSchemaHandler(new CSSFileHandler());
     Node cssFolder = liveNode.addNode("css", NodetypeConstant.EXO_CSS_FOLDER);
     Node cssNode = cssFolder.addNode("default.css", NodetypeConstant.NT_FILE);
-    cssNode.addMixin(NodetypeConstant.EXO_CSS_FILE);
     cssNode.setProperty(NodetypeConstant.EXO_ACTIVE, true);
     cssNode.setProperty(NodetypeConstant.EXO_PRIORITY, 1);
     cssNode.setProperty(NodetypeConstant.EXO_SHARED_CSS, true);
@@ -227,10 +226,13 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
     SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
     webSchemaConfigService.createSchema(cssNode, sessionProvider);
     
-    Node result = (Node)session.getItem("/testRoot/css/default.css");
+    Node result = (Node)session.getItem("/sites content/live/css/default.css");
     assertTrue(result.isNodeType(NodetypeConstant.EXO_CSS_FILE));
     assertTrue(result.isNodeType(NodetypeConstant.EXO_OWNEABLE));
     assertEquals(result.getProperty(NodetypeConstant.EXO_PRESENTATION_TYPE).getString(), NodetypeConstant.EXO_CSS_FILE);
+    
+    cssFolder.remove();
+    session.save();
   }
   
   /**
@@ -240,7 +242,6 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
     webSchemaConfigService.addWebSchemaHandler(new JSFileHandler());
     Node jsFolder = liveNode.addNode("js", NodetypeConstant.EXO_JS_FOLDER);
     Node jsNode = jsFolder.addNode("default.js", NodetypeConstant.NT_FILE);
-    jsNode.addMixin(NodetypeConstant.EXO_JS_FILE);
     jsNode.setProperty(NodetypeConstant.EXO_ACTIVE, true);
     jsNode.setProperty(NodetypeConstant.EXO_PRIORITY, 1);
     jsNode.setProperty(NodetypeConstant.EXO_SHARED_JS, true);
@@ -253,10 +254,13 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
     SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
     webSchemaConfigService.createSchema(jsNode, sessionProvider);
     
-    Node result = (Node)session.getItem("/testRoot/js/default.js");
+    Node result = (Node)session.getItem("/sites content/live/js/default.js");
     assertTrue(result.isNodeType(NodetypeConstant.EXO_JS_FILE));
     assertTrue(result.isNodeType(NodetypeConstant.EXO_OWNEABLE));
     assertEquals(result.getProperty(NodetypeConstant.EXO_PRESENTATION_TYPE).getString(), NodetypeConstant.EXO_JS_FILE);
+    
+    jsFolder.remove();
+    session.save();
   }
   
   /**
@@ -268,7 +272,7 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
     SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
     webSchemaConfigService.createSchema(webcontentNode, sessionProvider);
     
-    Node result = (Node)session.getItem("/testRoot/webcontent");
+    Node result = (Node)session.getItem("/sites content/live/webcontent");
     assertEquals("css", result.getNode("css").getName());
     assertEquals(NodetypeConstant.EXO_CSS_FOLDER, result.getNode("css").getPrimaryNodeType().getName());
     assertEquals("js", result.getNode("js").getName());
@@ -284,40 +288,9 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
     assertEquals(NodetypeConstant.NT_FOLDER, mediasNode.getNode("videos").getPrimaryNodeType().getName());
     assertEquals("audio", mediasNode.getNode("audio").getName());
     assertEquals(NodetypeConstant.NT_FOLDER, mediasNode.getNode("audio").getPrimaryNodeType().getName());
-  }
-  
-  /**
-   * Test create html file schema handler with full pre-defined folder 
-   */
-  public void testCreateWebcontentSchemaHandler_02() throws Exception {
-    webSchemaConfigService.addWebSchemaHandler(new WebContentSchemaHandler());
-    Node webcontentNode = liveNode.addNode("webcontent", NodetypeConstant.EXO_WEBCONTENT);
-    webcontentNode.addNode("css", NodetypeConstant.EXO_CSS_FOLDER);
-    webcontentNode.addNode("js", NodetypeConstant.EXO_JS_FOLDER);
-    webcontentNode.addNode("documents", NodetypeConstant.NT_UNSTRUCTURED);
-    Node mediasNode = webcontentNode.addNode("medias", NodetypeConstant.EXO_MULTIMEDIA_FOLDER);
-    mediasNode.addNode("images", NodetypeConstant.NT_FOLDER);
-    mediasNode.addNode("videos", NodetypeConstant.NT_FOLDER);
-    mediasNode.addNode("audio", NodetypeConstant.NT_FOLDER);
-    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
-    webSchemaConfigService.createSchema(webcontentNode, sessionProvider);
     
-    Node resultWebcontent = (Node)session.getItem("/testRoot/webcontent");
-    assertEquals("css", resultWebcontent.getNode("css").getName());
-    assertEquals(NodetypeConstant.EXO_CSS_FOLDER, resultWebcontent.getNode("css").getPrimaryNodeType().getName());
-    assertEquals("js", resultWebcontent.getNode("js").getName());
-    assertEquals(NodetypeConstant.EXO_JS_FOLDER, resultWebcontent.getNode("js").getPrimaryNodeType().getName());
-    assertEquals("documents", resultWebcontent.getNode("documents").getName());
-    assertEquals(NodetypeConstant.NT_UNSTRUCTURED, resultWebcontent.getNode("documents").getPrimaryNodeType().getName());
-    Node resultMedias = resultWebcontent.getNode("medias");
-    assertEquals("medias", resultMedias.getName());
-    assertEquals(NodetypeConstant.EXO_MULTIMEDIA_FOLDER, resultWebcontent.getNode("medias").getPrimaryNodeType().getName());
-    assertEquals("images", resultMedias.getNode("images").getName());
-    assertEquals(NodetypeConstant.NT_FOLDER, resultMedias.getNode("images").getPrimaryNodeType().getName());
-    assertEquals("videos", resultMedias.getNode("videos").getName());
-    assertEquals(NodetypeConstant.NT_FOLDER, resultMedias.getNode("videos").getPrimaryNodeType().getName());
-    assertEquals("audio", resultMedias.getNode("audio").getName());
-    assertEquals(NodetypeConstant.NT_FOLDER, resultMedias.getNode("audio").getPrimaryNodeType().getName());
+    result.remove();
+    session.save();
   }
   
   /**
@@ -328,7 +301,6 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
     webSchemaConfigService.addWebSchemaHandler(new WebContentSchemaHandler());
     Node htmlFolder = liveNode.addNode("html", NodetypeConstant.EXO_WEB_FOLDER);
     Node htmlNode = htmlFolder.addNode("webcontent", NodetypeConstant.NT_FILE);
-    htmlNode.addMixin(NodetypeConstant.EXO_HTML_FILE);
     Node htmlContent = htmlNode.addNode(NodetypeConstant.JCR_CONTENT, NodetypeConstant.NT_RESOURCE);
     htmlContent.setProperty(NodetypeConstant.JCR_ENCODING, "UTF-8");
     htmlContent.setProperty(NodetypeConstant.JCR_MIME_TYPE, "text/html");
@@ -337,10 +309,13 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
     SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
     webSchemaConfigService.createSchema(htmlNode, sessionProvider);
     
-    Node result = (Node)session.getItem("/testRoot/html/webcontent/default.html");
+    Node result = (Node)session.getItem("/sites content/live/html/webcontent/default.html");
     assertTrue(result.isNodeType(NodetypeConstant.EXO_HTML_FILE));
     assertTrue(result.isNodeType(NodetypeConstant.EXO_OWNEABLE));
     assertEquals(result.getProperty(NodetypeConstant.EXO_PRESENTATION_TYPE).getString(), NodetypeConstant.EXO_HTML_FILE);
+    
+    htmlFolder.remove();
+    session.save();
   }
   
   /**

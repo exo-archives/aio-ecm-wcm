@@ -178,8 +178,12 @@ public class UICategoryNavigationTree extends UIContainer {
     TaxonomyService taxonomyService = getApplicationComponent(TaxonomyService.class);
     Node treeNode = taxonomyService.getTaxonomyTree(preferenceRepository, preferenceTreeName);
     String categoryPath = parameters.substring(parameters.indexOf("/") + 1);
-    if (preferenceTreeName.equals(categoryPath)) categoryPath = ""; 
-    currentNode = treeNode.getNode(categoryPath);
+    if (preferenceTreeName.equals(categoryPath)) categoryPath = "";
+    try {
+    	currentNode = treeNode.getNode(categoryPath);
+		} catch (Exception e) {
+			currentNode = rootTreeNode;
+		}
     super.processRender(context);
   }
   
