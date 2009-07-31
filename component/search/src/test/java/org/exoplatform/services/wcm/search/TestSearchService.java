@@ -16,9 +16,13 @@
  */
 package org.exoplatform.services.wcm.search;
 
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 
 import javax.jcr.Node;
+import javax.jcr.PathNotFoundException;
+import javax.jcr.RepositoryException;
 
 import org.apache.commons.logging.Log;
 import org.exoplatform.portal.config.UserPortalConfigService;
@@ -32,6 +36,9 @@ import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.publication.WebpagePublicationPlugin;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationPlugin;
+import org.exoplatform.services.wcm.search.QueryCriteria.DATE_RANGE_SELECTED;
+import org.exoplatform.services.wcm.search.QueryCriteria.DatetimeRange;
+import org.exoplatform.services.wcm.search.QueryCriteria.QueryProperty;
 
 /**
  * Created by The eXo Platform SAS
@@ -40,6 +47,7 @@ import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndV
  * Jul 14, 2009
  */
 public class TestSearchService extends BaseWCMTestCase {
+  QueryCriteria queryCriteria = new QueryCriteria();
   
   /** The log. */
   private static Log log = ExoLogger.getLogger(TestSearchService.class);
@@ -94,6 +102,7 @@ public class TestSearchService extends BaseWCMTestCase {
    */
   public void setUp() throws Exception {
     super.setUp();
+    queryCriteria = new QueryCriteria();
     siteSearchService = (SiteSearchService) container.getComponentInstanceOfType(SiteSearchService.class);
     repositoryService = getService(RepositoryService.class);
     session = repositoryService.getRepository("repository").getSystemSession("collaboration");
@@ -195,7 +204,6 @@ public class TestSearchService extends BaseWCMTestCase {
    * @throws Exception the exception
    */
   private WCMPaginatedQueryResult getSearchResult() throws Exception{
-    QueryCriteria queryCriteria = new QueryCriteria();
     queryCriteria.setSiteName(searchSelectedPortal);
     queryCriteria.setKeyword(searchKeyword);
     if (searchDocumentChecked) {
@@ -626,6 +634,155 @@ public class TestSearchService extends BaseWCMTestCase {
       log.info("\n\tTest case 16: search contents are not page/documents with shared portal and not live mode \n\tTime search: " + timeSearch + " s\n");
       assertEquals(0, paginatedQueryResult.getPage(1).size());
       assertEquals(10, paginatedQueryResult.getTotalNodes());
+    }catch(Exception ex){
+      ex.printStackTrace();
+    }
+  }
+  
+  /**
+   * Test case 17:Test search contents is document or page in all portal. And search
+   * with created date and modified Date.
+   * Search all pages in share and live mode. With this case, values of parameters are:<br/>
+   * searchPageChecked = true<br>
+   * searchDocumentChecked = true<br>
+   * searchSelectedPortal = null<br>
+   * searchIsLiveMode = true<br>
+   */
+  public void testSearchPagesDocument_Date(){
+    this.searchDocumentChecked = true;
+    this.searchPageChecked = true;
+    this.searchIsLiveMode = true;
+    this.searchSelectedPortal = null;
+    Date date = new Date(2009, 05, 05);
+    GregorianCalendar calFrom = new GregorianCalendar() ;
+    calFrom.setTime(date);
+    date = new Date();
+    GregorianCalendar calTo = new GregorianCalendar() ;
+    calTo.setTime(date);
+    DatetimeRange datetimeRange = new DatetimeRange(calFrom, calTo);
+    queryCriteria.setCreatedDateRange(datetimeRange);
+    try{
+      WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
+      float timeSearch = paginatedQueryResult.getQueryTimeInSecond();
+      log.info("\n\tTest case 16: search contents are not page/documents with shared portal and not live mode \n\tTime search: " + timeSearch + " s\n");
+      assertEquals(10, paginatedQueryResult.getPage(1).size());
+      assertEquals(20, paginatedQueryResult.getTotalNodes());
+    }catch(Exception ex){
+      ex.printStackTrace();
+    }
+  }
+  
+  /**
+   * Test case 18:Test search contents is document or page in all portal. And search
+   * with created date and modified Date.
+   * Search all pages in share and live mode. With this case, values of parameters are:<br/>
+   * searchPageChecked = true<br>
+   * searchDocumentChecked = true<br>
+   * searchSelectedPortal = null<br>
+   * searchIsLiveMode = true<br>
+   */
+  public void testSearchPagesDocument_NotFultextSearch(){
+    this.searchDocumentChecked = true;
+    this.searchPageChecked = true;
+    this.searchIsLiveMode = true;
+    this.searchSelectedPortal = null;
+    queryCriteria.setFulltextSearch(false);
+    try{
+      WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
+      float timeSearch = paginatedQueryResult.getQueryTimeInSecond();
+      log.info("\n\tTest case 16: search contents are not page/documents with shared portal and not live mode \n\tTime search: " + timeSearch + " s\n");
+      assertEquals(0, paginatedQueryResult.getPage(1).size());
+    }catch(Exception ex){
+      ex.printStackTrace();
+    }
+  }
+  
+  /**
+   * Test case 19:Test search contents is document or page in all portal. And search
+   * with created date and modified Date.
+   * Search all pages in share and live mode. With this case, values of parameters are:<br/>
+   * searchPageChecked = true<br>
+   * searchDocumentChecked = true<br>
+   * searchSelectedPortal = null<br>
+   * searchIsLiveMode = true<br>
+   * keyWord = null;
+   */
+  public void testSearchPagesDocument_ContentType(){
+    this.searchDocumentChecked = true;
+    this.searchPageChecked = true;
+    this.searchIsLiveMode = true;
+    this.searchSelectedPortal = null;
+    this.searchKeyword = null;
+    queryCriteria.setContentTypes(new String[]{"exo:webContent", "exo:htmlFile"});
+    try{
+      WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
+      float timeSearch = paginatedQueryResult.getQueryTimeInSecond();
+      log.info("\n\tTest case 19: search contents are not page/documents with shared portal and not live mode \n\tTime search: " + timeSearch + " s\n");
+      assertEquals(10, paginatedQueryResult.getPage(1).size());
+    }catch(Exception ex){
+      ex.printStackTrace();
+    }
+  }
+  
+  /**
+   * Test case 20:Test search contents is document or page in all portal. And search
+   * with created date and modified Date.
+   * Search all pages in share and live mode. With this case, values of parameters are:<br/>
+   * searchPageChecked = true<br>
+   * searchDocumentChecked = true<br>
+   * searchSelectedPortal = null<br>
+   * searchIsLiveMode = true<br>
+   * keyWord = null;
+   */
+  public void testSearchPagesDocument_Property(){
+    this.searchDocumentChecked = true;
+    this.searchPageChecked = true;
+    this.searchIsLiveMode = true;
+    this.searchSelectedPortal = null;
+    this.searchKeyword = "This is*";
+    QueryProperty queryProperty1 = queryCriteria.new QueryProperty();
+    queryProperty1.setName("jcr:data");
+    queryProperty1.setValue("This is the");
+    QueryProperty queryProperty2 = queryCriteria.new QueryProperty();
+    queryProperty2.setName("jcr:data");
+    queryProperty2.setValue("the default.css file");
+    queryCriteria.setQueryMetadatas(new QueryProperty[]{queryProperty1, queryProperty2});
+    try{
+      WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
+      float timeSearch = paginatedQueryResult.getQueryTimeInSecond();
+      log.info("\n\tTest case 20: search contents are not page/documents with shared portal and not live mode \n\tTime search: " + timeSearch + " s\n");
+      assertEquals(0, paginatedQueryResult.getPage(1).size());
+    }catch(Exception ex){
+      ex.printStackTrace();
+    }
+  }
+  
+  /**
+   * Test case 21:Test search contents is document or page in all portal. And search
+   * with created date and modified Date.
+   * Search all pages in share and live mode. With this case, values of parameters are:<br/>
+   * searchPageChecked = true<br>
+   * searchDocumentChecked = true<br>
+   * searchSelectedPortal = null<br>
+   * searchIsLiveMode = true<br>
+   * keyWord = null;
+   * @throws RepositoryException 
+   * @throws PathNotFoundException 
+   */
+  public void testSearchPagesDocument_UUIDS() throws PathNotFoundException, RepositoryException{
+    this.searchDocumentChecked = true;
+    this.searchPageChecked = true;
+    this.searchIsLiveMode = true;
+    this.searchSelectedPortal = null;
+    this.searchKeyword = "This is";
+    Node documentNode = ((Node)session.getItem("/sites content/live/shared/documents")).getNode("documents webcontentNode 0");
+    Node livenode = ((Node)session.getItem("/sites content/live")).getNode("live webcontentNode 0");
+    queryCriteria.setCategoryUUIDs(new String[]{documentNode.getUUID(), livenode.getUUID()});
+    try{
+      WCMPaginatedQueryResult paginatedQueryResult = getSearchResult();
+      float timeSearch = paginatedQueryResult.getQueryTimeInSecond();
+      log.info("\n\tTest case 21: search contents are not page/documents with shared portal and not live mode \n\tTime search: " + timeSearch + " s\n");
+      assertEquals(0, paginatedQueryResult.getPage(1).size());
     }catch(Exception ex){
       ex.printStackTrace();
     }

@@ -286,12 +286,13 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     queryBuilder.closeGroup();
   }
 
-  private void mapSiteMode(QueryCriteria queryCriteria, SQLQueryBuilder queryBuilder) {
+  /*private void mapSiteMode(QueryCriteria queryCriteria, SQLQueryBuilder queryBuilder) {
     if(queryCriteria.isLiveMode()) {      
       queryBuilder.isNotNull("publication:liveRevision",LOGICAL.AND);
       queryBuilder.notEqual("publication:liveRevision","",LOGICAL.AND);
     }
-  }
+  }*/
+  
   private void mapQuerySpecificNodeTypes( final QueryCriteria queryCriteria, final SQLQueryBuilder queryBuilder, final NodeTypeManager nodeTypeManager) throws Exception {
     String[] contentTypes = queryCriteria.getContentTypes();
     NodeType fistType = nodeTypeManager.getNodeType(contentTypes[0]);    
