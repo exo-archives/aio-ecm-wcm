@@ -196,6 +196,9 @@
 				Envoyer la date est nulle. S'il vous plaît vérifier à nouveau!
 			</DateTimeIsNotNull>
 			<UpdateInformationSuccessful>L'information est mise à jour réussie</UpdateInformationSuccessful>
+			<NodeNameInvalid>
+				Impossible de créer newsletter Newsletter parce que son nom est déjà en place.<br/>S'il vous plaît essayez de nouveau!
+			</NodeNameInvalid>
 		</msg>
 	</UINewsletterEntryForm>
 	

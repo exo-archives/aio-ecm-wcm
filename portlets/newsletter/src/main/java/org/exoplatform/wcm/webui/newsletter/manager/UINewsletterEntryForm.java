@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.jcr.ItemExistsException;
 import javax.jcr.Node;
 import javax.jcr.Property;
 import javax.jcr.Session;
@@ -163,7 +164,14 @@ public class UINewsletterEntryForm extends UIDialogForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       }
-      newsletterEntryForm.saveContent();
+      try{
+        newsletterEntryForm.saveContent();
+      }catch(ItemExistsException itemExistsException){
+        UIApplication uiApp = newsletterEntryContainer.getAncestorOfType(UIApplication.class);
+        uiApp.addMessage(new ApplicationMessage("UINewsletterEntryForm.msg.NodeNameInvalid", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
+      }
     }
   }
 
