@@ -127,8 +127,10 @@ public class NavigationEventListenerDelegate {
     }
   }
 
-  /**
-   * Update removed page node.
+  /**   
+   * Up
+   * 
+   * date removed page node.
    * 
    * @param pageNavigation the page navigation
    * 

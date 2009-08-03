@@ -10,7 +10,7 @@
 	<groupId>org.exoplatform.ecm.wcm</groupId>
 	<artifactId>config</artifactId>
 	<name>eXo WCM Config</name>
-	<version>1.2-SNAPSHOT</version>
+	<version>1.2rc2</version>
 	<packaging>pom</packaging>
 
 	<modules>        
@@ -141,7 +141,7 @@
 				<org.exoplatform.pc.version>2.0.6</org.exoplatform.pc.version>
 				<org.exoplatform.portal.version>2.5.3</org.exoplatform.portal.version>
 				<org.exoplatform.ecm.dms.version>2.5</org.exoplatform.ecm.dms.version>
-				<org.exoplatform.wcm.version>1.2-SNAPSHOT</org.exoplatform.wcm.version>
+				<org.exoplatform.wcm.version>1.2rc2</org.exoplatform.wcm.version>
 				<exo.test.classes>Test</exo.test.classes>
 				<exo.test.skip>true</exo.test.skip>
 			</properties>
@@ -152,8 +152,8 @@
 			<exo.product.specification>1.2</exo.product.specification>
 	</properties>
 	<scm>
-		<connection>scm:svn:http://svn.exoplatform.org/projects/ecm/wcm/trunk</connection>
-		<developerConnection>scm:svn:http://svn.exoplatform.org/projects/ecm/wcm/trunk</developerConnection>
-		<url>http://fisheye.exoplatform.org/browse/projects/ecm/wcm/trunk</url>
+		<connection>scm:svn:http://svn.exoplatform.org/projects/ecm/wcm/tags/1.2rc2</connection>
+		<developerConnection>scm:svn:http://svn.exoplatform.org/projects/ecm/wcm/tags/1.2rc2</developerConnection>
+		<url>http://fisheye.exoplatform.org/browse/projects/ecm/wcm/tags/1.2rc2</url>
 	</scm>
 </project>
