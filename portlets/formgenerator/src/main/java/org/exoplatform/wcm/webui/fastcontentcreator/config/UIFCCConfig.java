@@ -188,7 +188,7 @@ public class UIFCCConfig extends UIForm implements UISelectable {
         setSavedLocationNode(currentNode);
       } catch(PathNotFoundException ex) {
         UIApplication uiApp = getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIFastContentCreatorConfig.msg.item-not-found", null, ApplicationMessage.WARNING)) ;
+        uiApp.addMessage(new ApplicationMessage("UIFCCConfig.msg.item-not-found", null, ApplicationMessage.WARNING)) ;
         session.logout();
         return ;
       }
@@ -341,13 +341,13 @@ public class UIFCCConfig extends UIForm implements UISelectable {
       String redirectPath = fastContentCreatorConfig.getUIStringInput(UIFCCConstant.REDIRECT_PATH_FORM_STRING_INPUT).getValue() ;
       String workspaceName = fastContentCreatorConfig.getUIFormSelectBox(UIFCCConstant.WORKSPACE_FORM_SELECTBOX).getValue() ;
       if(workspaceName == null || workspaceName.trim().length() == 0) {
-        uiApp.addMessage(new ApplicationMessage("UIFastContentCreatorConfig.msg.ws-empty", null, ApplicationMessage.WARNING)) ;
+        uiApp.addMessage(new ApplicationMessage("UIFCCConfig.msg.ws-empty", null, ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;        
       }
       String repositoryName = fastContentCreatorConfig.getUIFormSelectBox(UIFCCConstant.REPOSITORY_FORM_SELECTBOX).getValue() ;
       if(type == null || type.trim().length() == 0) {
-        uiApp.addMessage(new ApplicationMessage("UIFastContentCreatorConfig.msg.fileType-empty", null, ApplicationMessage.WARNING)) ;
+        uiApp.addMessage(new ApplicationMessage("UIFCCConfig.msg.fileType-empty", null, ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
@@ -360,7 +360,7 @@ public class UIFCCConfig extends UIForm implements UISelectable {
       portletPreferences.setValue(UIFCCConstant.PREFERENCE_IS_REDIRECT, isRedirect) ;
       portletPreferences.setValue(UIFCCConstant.PREFERENCE_REDIRECT_PATH, redirectPath) ;
       portletPreferences.store() ;
-      uiApp.addMessage(new ApplicationMessage("UIFastContentCreatorConfig.msg.save-successfully", null)) ;
+      uiApp.addMessage(new ApplicationMessage("UIFCCConfig.msg.save-successfully", null)) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
     }
   }
