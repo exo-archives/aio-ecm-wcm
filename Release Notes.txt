@@ -1,0 +1,66 @@
+==============================================
+	eXo WCM 1.2 release candidate
+==============================================
+
+- Introduction
+		eXo WCM (Web Content Management) - Keep your Websites under Control
+		With the web 2.0 and all the new technologies available to webmasters, creating and maintaining web sites is becoming 
+	more and more complex. Moreover, the Internet has evolved quickly over the years and websites now rely on many different people 
+	such as webmasters, web designers, content providers and others.
+		eXo WCM helps your company to keep its websites under control by providing a complete solution to build and maintain easily 
+	multiple web sites at a time.
+
+** Improvement
+    * [WCM-1641] - Update WCM core service
+    * [WCM-1642] - Update newsletter service
+    * [WCM-1643] - Update publication service
+    * [WCM-1644] - Update search service
+    * [WCM-1709] - CLONE -Update newsletter service
+    * [WCM-1710] - CLONE -Update publication service
+    * [WCM-1711] - CLONE -Update WCM core service
+    * [WCM-1734] - Fix some bug for form generator
+
+** Sub-task
+    * [WCM-1392] - Show message and can not add content in special case.
+    * [WCM-1519] - [TEST] - Newsletter manager portlet
+    * [WCM-1520] - [TEST] - Newsletter viewer portlet
+    * [WCM-1590] - [TEST] - Test Form generator portlet
+    * [WCM-1591] - [TEST] - Test Fast content creator portlet
+    * [WCM-1597] - [TEST] - Update testcase
+    * [WCM-1598] - [TEST] - Test PCLV portlet
+    * [WCM-1600] - [TEST] - Update testcase
+    * [WCM-1601] - [TEST] - Category navigation portlet
+    * [WCM-1602] - [TEST] - Update testcase for Form generator portlet
+    * [WCM-1603] - [TEST] - Update testcase for Fast content creator portlet
+    * [WCM-1604] - [TEST] - Update testcase
+    * [WCM-1645] - [JAVADOC] - Update javadoc for newsletter
+    * [WCM-1646] - [JAVADOC] - Update javadoc for search
+    * [WCM-1647] - [JAVADOC] - Update javadoc for publication
+    * [WCM-1648] - [DEV] - Update junit test for newsletter
+    * [WCM-1649] - [DEV] - Update junit test for publication
+    * [WCM-1650] - [DEV] - Update junit test for search
+    * [WCM-1651] - [JAVADOC] - Update javadoc for wcm core service
+    * [WCM-1652] - [DEV] - Update junit test for wcm core service
+    * [WCM-1653] - [JAVADOC] - Update javadoc for wcm portal service
+    * [WCM-1654] - [DEV] - Update junit test for wcm portal service
+    * [WCM-1726] - Update JS POM
+    * [WCM-1727] - Update README.txt, put migrate guide in readme
+    * [WCM-1728] - Make an SVN tag
+    * [WCM-1729] - Make a zip package
+    * [WCM-1730] - Make a sniff test
+    * [WCM-1731] - Wait for PM approval
+    * [WCM-1732] - Ensure artifacts are on eXo/VN maven repository
+    * [WCM-1733] - Announcement
+
+- System Requirements
+    + Web Browser: IE6, IE7, FF2, FF3, Safari, Google Chrome. Best for Frirefox.
+	+ JVM: version 1.5.0_xx only
+	+ Application Server : Tomcat, JBoss, Jonas, Websphere
+	+ Building Tools: Maven 2.0.6 and up
+
+- Other resources and links
+    + Company site        http://www.exoplatform.com
+    + Community JIRA      http://jira.exoplatform.org
+    + Comminity site      http://www.exoplatform.org
+    + Developers wiki     http://wiki.exoplatform.org
+    + Documentation       http://docs.exoplatform.org 
