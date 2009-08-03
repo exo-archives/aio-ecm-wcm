@@ -1,6 +1,7 @@
 <%
 	import org.exoplatform.web.application.JavascriptManager;
 	import org.exoplatform.portal.webui.util.Util;	
+	import org.exoplatform.portal.webui.navigation.PageNavigationUtils;
 	import org.exoplatform.services.wcm.navigation.NavigationService;
 	import org.exoplatform.portal.config.model.PageNavigation;
 	import javax.servlet.http.HttpSession;
@@ -13,8 +14,12 @@
   jsmanager.addOnResizeJavascript('eXo.portal.UIWorkingWorkspace.onResize') ;
   
   def userName = rcontext.getRemoteUser();
-  def language = rcontext.getLocale().getLanguage();  
-  List<PageNavigation> navigations = Util.getUIPortal().getNavigations();
+  def language = rcontext.getLocale().getLanguage();
+  List<PageNavigation> allNavigations = Util.getUIPortal().getNavigations();
+  List<PageNavigation> navigations = new ArrayList<PageNavigation>();
+  for(PageNavigation navigation : allNavigations) {
+    navigations.add(PageNavigationUtils.filter(navigation, userName));
+  }
   NavigationService navigationService = uicomponent.getApplicationComponent(NavigationService.class);
   def JSONnavigation = navigationService.getNavigationsAsJSON(navigations);
   def selectedNodeUri = Util.getUIPortal().getSelectedNode().getUri();
