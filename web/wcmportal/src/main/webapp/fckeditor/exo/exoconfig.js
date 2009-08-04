@@ -30,7 +30,7 @@ FCKConfig.ToolbarSets["CompleteWCM"] = [
 FCKConfig.ToolbarSets["BasicWCM"] = [
 	['Source','-','Bold','Italic','Underline','StrikeThrough','-','OrderedList','UnorderedList','Outdent','Indent'],
 	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
-	['Blockquote','-','Link','Unlink','WCMInsertPortalLink','Insert Image','WCMInsertDocument','-','FitWindow','ShowBlocks'],	
+	['Blockquote','-','Link','Unlink','WCMInsertPortalLink','WCMInsertImage','WCMInsertDocument','-','FitWindow','ShowBlocks'],	
 	['Style','FontFormat','FontName','FontSize']
 ] ;
 

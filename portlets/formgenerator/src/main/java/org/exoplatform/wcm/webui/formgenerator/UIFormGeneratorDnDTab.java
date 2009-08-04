@@ -17,8 +17,10 @@
 package org.exoplatform.wcm.webui.formgenerator;
 
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
+import org.exoplatform.webui.event.Event.Phase;
 
 /**
  * Created by The eXo Platform SAS
@@ -28,7 +30,10 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
  */
 @ComponentConfig(
     lifecycle = Lifecycle.class,
-    template = "app:/groovy/webui/FormGeneratorPortlet/UIFormGeneratorDnDTab.gtmpl"
+    template = "app:/groovy/webui/FormGeneratorPortlet/UIFormGeneratorDnDTab.gtmpl",
+    events = {
+      @EventConfig(listeners = UIFormGeneratorTabPane.SaveActionListener.class)
+    }
 )
 public class UIFormGeneratorDnDTab extends UIContainer {
 

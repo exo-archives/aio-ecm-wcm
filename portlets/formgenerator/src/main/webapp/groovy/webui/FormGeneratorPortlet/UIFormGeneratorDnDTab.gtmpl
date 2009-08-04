@@ -37,7 +37,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="LeftMenu" elementType="WYSWYG">
+					<div class="LeftMenu" elementType="WYSIWYG">
 						<div class="RightMenu">
 							<div class="CenterMenu">
 								<a class="IconMenu IconContent"><span></span></a>
@@ -99,14 +99,14 @@
 				<div class="MiddleLeftViewBoxStyle">
 					<div class="MiddleRightViewBoxStyle">
 						<div class="MiddleCenterViewBoxStyle" id='MiddleCenterViewBoxStyle'>
-							<div class="BoxContentBoxStyle">
+							<div class="BoxContentBoxStyle"  typecomponent="input">
 								<div class="TopContentBoxStyle">
 									<div class="UIForm UIFormEditBox">
 										<div class="HorizontalLayout">
 											<div class="FormContainer">
 												<table class="UIFormGrid">
 														<tr>
-															<td class="FieldLabel">Input field</td>
+															<td class="FieldLabel" value="Input field" mandatory="true" desc="This is description">Input field</td>
 															<td class="FieldComponent">
 																<input class="InputText" type="text" value="Input value"/>
 															</td>
@@ -178,3 +178,20 @@
 	</div>
 </div>
 <div class="ClearLeft"><span></span></div>
+<div class="UIAction">
+	<table class="ActionContainer">
+		<tr>
+			<td>
+				<div id="JsonObjectId" onclick="eXo.ecm.UIFormGeneratorPortlet.getStringJsonObject('<%= uicomponent.id %>');" class="ActionButton LightBlueStyle">
+  				<div class="ButtonLeft">
+	  				<div class="ButtonRight">
+	    				<div class="ButtonMiddle">
+    						<a href="javascript:void(0);">Save Form</a>
+	    				</div>
+    				</div>
+					</div>
+				</div>
+			</td>
+		</tr>
+	</table>
+</div>

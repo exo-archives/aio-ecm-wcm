@@ -25,7 +25,7 @@ UIFormGeneratorPortlet.prototype.renderComponent = function(typeComp) {
 
 	switch(typeComp){
 		case "label"		: 
-			fieldComponent  +=		"<td class='FieldLabel' colspan='2'>Label</td>";
+			fieldComponent  +=		"<td class='FieldLabel' colspan='2' value='Label'>Label</td>";
 			break;
 		case "input"		: 
 			fieldComponent  +=		"<td class='FieldLabel' value='Input Text'>Input field</td>";
@@ -37,12 +37,12 @@ UIFormGeneratorPortlet.prototype.renderComponent = function(typeComp) {
 			break;			
 		case "WYSIWYG"		: 
 			fieldComponent  +=		"<td class='FieldLabel' value='WYSIWYG'>WYSIWYG field</td>";
-			fieldComponent  +=		"<td class='FieldComponent'><textarea class='Textarea'>WYSIWYG value</textarea></td>";
-			
+			fieldComponent  +=		"<td class='FieldComponent'><textarea class='Textarea' id='RichTextEditorContent'>WYSIWYG value</textarea></td>";
+
 			advancedOption  +=	"<tr>";
 			advancedOption  +=		"<td class='FieldLabel'>Advance Options</td>";
 			advancedOption  +=		"<td class='FileComponent'>";
-			advancedOption  += 			"Toolbar: <select><option>Basic</option><option>Advanced</option></select>";
+			advancedOption  += 			"Toolbar: <select class='SelectBox'><option>Basic</option><option>BasicWCM</option><option>SuperBasicWCM</option><option>CompleteWCM</option></select>";
 			advancedOption  +=		"</td>";
 			advancedOption  +=	"</tr>";
 
@@ -76,7 +76,7 @@ UIFormGeneratorPortlet.prototype.renderComponent = function(typeComp) {
 			break;
 		case "upload"		: 
 			fieldComponent  +=		"<td class='FieldLabel' value='Upload'>Upload field</td>";
-			fieldComponent  +=		"<td class='FieldComponent'><input type='file' class='Upload'/><img src='/eXoResources/skin/sharedImages/Blank.gif' alt='' class='UploadButton'/></td>";
+			fieldComponent  +=		"<td class='FieldComponent'><input type='file' class='Upload' disabled='disabled'/><img src='/eXoResources/skin/sharedImages/Blank.gif' alt='' class='UploadButton'/></td>";
 			break;
 	}
 
@@ -162,6 +162,13 @@ UIFormGeneratorPortlet.prototype.renderComponent = function(typeComp) {
 	node.className = 'BoxContentBoxStyle';
 	node.setAttribute('typeComponent', typeComp);
 	document.getElementById('MiddleCenterViewBoxStyle').appendChild(node);
+
+	if(!FCKeditorAPI.GetInstance('RichTextEditorContent')) {
+		var oFCKEditor = new FCKeditor('RichTextEditorContent');
+		oFCKEditor.BasePath = '/portal/fckeditor/';
+		oFCKEditor.ToolbarSet = 'BasicWCM';
+		oFCKEditor.ReplaceTextarea();
+	}
 };
 
 
@@ -237,8 +244,10 @@ UIFormGeneratorPortlet.prototype.updateWidth = function(obj) {
 	var parentNode = DOMUtil.findAncestorByClass(obj, 'BoxContentBoxStyle');
 	var containerNode = DOMUtil.findFirstDescendantByClass(parentNode, 'div', 'TopContentBoxStyle');
 	var componentNode = DOMUtil.findFirstDescendantByClass(containerNode, 'td', 'FieldComponent');
-	var inputNode = componentNode.childNodes[0];
-	if (inputNode) inputNode.style.width = width;
+	if(componentNode) {
+		var inputNode = componentNode.childNodes[0];
+		if (inputNode) inputNode.style.width = width;
+	}
 };
 
 UIFormGeneratorPortlet.prototype.updateHeight = function(obj) {
@@ -257,8 +266,10 @@ UIFormGeneratorPortlet.prototype.updateHeight = function(obj) {
 	var parentNode = DOMUtil.findAncestorByClass(obj, 'BoxContentBoxStyle');
 	var containerNode = DOMUtil.findFirstDescendantByClass(parentNode, 'div', 'TopContentBoxStyle');
 	var componentNode = DOMUtil.findFirstDescendantByClass(containerNode, 'td', 'FieldComponent');
-	var inputNode = componentNode.childNodes[0];
-	if (inputNode) inputNode.style.height = height;
+	if(componentNode) {
+		var inputNode = componentNode.childNodes[0];
+		if (inputNode) inputNode.style.height = height;
+	}
 };
 
 UIFormGeneratorPortlet.prototype.updateRequired = function(obj) {
@@ -310,13 +321,13 @@ UIFormGeneratorPortlet.prototype.updateValue = function(evt) {
 				}
 			}
 			break;
-		case "textarea" :	
+		case "Textarea" :	
 			var textarea = DOMUtil.findFirstDescendantByClass(componentNode, 'textarea', 'Textarea');
 			textarea.value = srcEle.value;
 			break
 		case "WYSIWYG" :
-			var rte = DOMUtil.findFirstDescendantByClass(componentNode, 'textarea', 'Textarea');
-			rte.value = srcEle.value;
+			var oFCKEditor = FCKeditorAPI.GetInstance('RichTextEditorContent') ;
+			oFCKEditor.SetHTML(srcEle.value);
 			break;
 		case "upload" : 
 			break;
@@ -368,7 +379,7 @@ UIFormGeneratorPortlet.prototype.removeOption = function(obj) {
 	}
 };
 
-UIFormGeneratorPortlet.prototype.getStringJsonObject = function() {
+UIFormGeneratorPortlet.prototype.getStringJsonObject = function(uicomponent) {
 	var DOMUtil = eXo.core.DOMUtil;
 	var root = document.getElementById('MiddleCenterViewBoxStyle');
 	var boxsContent = DOMUtil.findDescendantsByClass(root, 'div', 'BoxContentBoxStyle');
@@ -379,13 +390,14 @@ UIFormGeneratorPortlet.prototype.getStringJsonObject = function() {
 			strJsonObject += ',';
 		}
 	}
-	alert(strJsonObject);
+	strJsonObject += "}";
+	
+	eXo.env.server.createPortalURL(uicomponent, "Save", true, strJsonObject);
 };
 
 UIFormGeneratorPortlet.prototype.getProperties = function(comp) {
 	var DOMUtil = eXo.core.DOMUtil;
 	var strObject = '{';
-	strObject += '"nodeName":'	
 	strObject += '"type":"'+comp.getAttribute("typeComponent")+'",';
 	var topContent = DOMUtil.findFirstDescendantByClass(comp, 'div', 'TopContentBoxStyle');
 	var fieldLabel = DOMUtil.findFirstDescendantByClass(topContent, 'td', 'FieldLabel');
@@ -397,35 +409,39 @@ UIFormGeneratorPortlet.prototype.getProperties = function(comp) {
 		nameComp = defaultValue;
 	}
 	
-	strObject += 'name:"'+nameComp+'",';
+	strObject += '"name":"'+nameComp+'",';
 	switch(comp.getAttribute("typeComponent")) {
 		case "input" :
 			inputNode = DOMUtil.findFirstDescendantByClass(topContent, 'input', "InputText");
 			var width	= inputNode.offsetWidth;
 			var mandatory = fieldLabel.getAttribute('mandatory');
 			var height  = inputNode.offsetHeight;
-			strObject +=  'value:"'+inputNode.value+'",width:"'+width+'",mandatory:"'+mandatory+'",height:"'+height+'",';
+			strObject +=  '"value":"'+inputNode.value+'","width":"'+width+'","mandatory":"'+mandatory+'","height":"'+height+'",';
 			break;
 		case "label" :
+			strObject +=  '"value":"null","width":"null","mandatory":"null","height":"null",';
 			break;
 		case "textarea" :
 			var textareaNode = DOMUtil.findFirstDescendantByClass(topContent, 'textarea', "Textarea");
 			var width	= textareaNode.offsetWidth;
 			var mandatory = fieldLabel.getAttribute('mandatory');
 			var height  = textareaNode.offsetHeight;
-			strObject +=  'value:"'+textareaNode.value+'",width:"'+width+'",mandatory:"'+mandatory+'",height:"'+height+'",';	
+			strObject +=  '"value":"'+textareaNode.value+'","width":"'+width+'","mandatory":"'+mandatory+'","height":"'+height+'",';	
 			break;
 		case "WYSIWYG" : 
-				break;
+			var midContent = DOMUtil.findNextElementByTagName(topContent, "div");
+			var selectNode = DOMUtil.findFirstDescendantByClass(midContent, 'select', "SelectBox");
+			strObject +=  '"value":"Type content here...","width":"null","mandatory":"null","height":"null","advanced":"'+selectNode.value+'",';	
+			break;
 		case "select" :
 			var selectNode = DOMUtil.findFirstDescendantByClass(topContent, 'select', "SelectBox");
 			var width	= selectNode.offsetWidth;
 			var mandatory = fieldLabel.getAttribute('mandatory');
 			var height  = selectNode.offsetHeight;
-			strObject +=  'value:"'+selectNode.value+'",width:"'+width+'",mandatory:"'+mandatory+'",height:"'+height+'",';		
+			strObject +=  '"value":"'+selectNode.value+'","width":"'+width+'","mandatory":"'+mandatory+'","height":"'+height+'",';		
 			var options = DOMUtil.getChildrenByTagName(selectNode, 'option');
 			var advOptions = '';
-			strObject += 	'advanced:"';
+			strObject += 	'"advanced":"';
 			for(var i = 0; i < options.length; i++) {
 				strObject += options[i].value;
 				if(i != (options.length-1)) {
@@ -435,10 +451,11 @@ UIFormGeneratorPortlet.prototype.getProperties = function(comp) {
 			strObject += '",';
 			break;
 		case "upload" :
+			strObject +=  '"value":"null","width":"null","mandatory":"null","height":"null",';	
 			break;
 	}
 
-	strObject += 'guildline:"'+fieldLabel.getAttribute('desc')+'"';
+	strObject += '"guildline":"'+fieldLabel.getAttribute('desc')+'"';
 	strObject += "}";
 	return strObject;
 };
