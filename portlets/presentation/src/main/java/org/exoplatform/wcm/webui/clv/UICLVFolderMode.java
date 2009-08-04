@@ -16,20 +16,15 @@
  */
 package org.exoplatform.wcm.webui.clv;
 
-import java.util.List;
+import java.util.HashMap;
 
 import javax.jcr.AccessDeniedException;
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.NodeIterator;
-import javax.jcr.Session;
-import javax.jcr.query.Query;
-import javax.jcr.query.QueryManager;
 import javax.portlet.PortletPreferences;
 
 import org.exoplatform.resolver.ResourceResolver;
-import org.exoplatform.services.cms.templates.TemplateService;
-import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.services.wcm.utils.PaginatedNodeIterator;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -99,40 +94,22 @@ public class UICLVFolderMode extends UICLVContainer {
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     PortletPreferences preferences = portletRequestContext.getRequest().getPreferences();
     String repository = preferences.getValue(UICLVPortlet.REPOSITORY, null);
-    String worksapce = preferences.getValue(UICLVPortlet.WORKSPACE, null);
+    String workspace = preferences.getValue(UICLVPortlet.WORKSPACE, null);
     String folderPath = preferences.getValue(UICLVPortlet.FOLDER_PATH, null);
-    if (repository == null || worksapce == null || folderPath == null)
+    if (repository == null || workspace == null || folderPath == null)
       throw new ItemNotFoundException();
-    RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
-    ManageableRepository manageableRepository = repositoryService.getRepository(repository);    
-    Session session = Utils.getSessionProvider(this).getSession(worksapce, manageableRepository);
-    TemplateService templateService = getApplicationComponent(TemplateService.class);
-    List<String> listDocumentTypes = templateService.getDocumentTemplates(repository);
-    StringBuffer documentTypeClause = new StringBuffer();
-    for (int i = 0; i < listDocumentTypes.size(); i++) {
-      String documentType = listDocumentTypes.get(i);
-      documentTypeClause.append("jcr:primaryType = '" + documentType + "'");
-      if (i != (listDocumentTypes.size() - 1)) {
-        documentTypeClause.append(" OR ");
-      }
-    }
-    QueryManager manager = session.getWorkspace().getQueryManager();
-    String orderQuery = " ORDER BY ";
+
+    WCMComposer wcmComposer = getApplicationComponent(WCMComposer.class);
+    HashMap<String, String> filters = new HashMap<String, String>();
+    filters.put(WCMComposer.FILTER_MODE, Utils.isLiveMode()?WCMComposer.MODE_LIVE:WCMComposer.MODE_EDIT);
     String orderBy = preferences.getValue(UICLVPortlet.ORDER_BY, null);
     String orderType = preferences.getValue(UICLVPortlet.ORDER_TYPE, null);
     if (orderType == null) orderType = "DESC";
     if (orderBy == null) orderBy = "exo:title";
-    orderQuery += orderBy + " " + orderType;
-    String statement = "select * from nt:base where jcr:path like '" + folderPath
-    + "/%' AND NOT jcr:path like'" + folderPath + "/%/%'" + " AND( "
-    + documentTypeClause.toString() + ")" + orderQuery;
-    if (Utils.isLiveMode()) {
-      statement = "select * from nt:base where jcr:path like '" + folderPath
-      + "/%' AND NOT jcr:path like'" + folderPath + "/%/%'" + " AND( "
-      + documentTypeClause.toString() + ") AND publication:liveRevision IS NOT NULL AND publication:liveRevision <> '' " + orderQuery;
-    }  
-    Query query = manager.createQuery(statement, Query.SQL);
-    return query.execute().getNodes();
+    filters.put(WCMComposer.FILTER_ORDER_BY, orderBy);
+    filters.put(WCMComposer.FILTER_ORDER_TYPE, orderType);
+    
+    return wcmComposer.getContents(repository, workspace, folderPath, filters);
   }
     
 }

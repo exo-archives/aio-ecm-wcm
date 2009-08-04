@@ -42,6 +42,8 @@ import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
+import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
+import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -250,21 +252,11 @@ public class UICLVContentDialog extends UIDialogForm {
       	Utils.createPopupMessage(uiDocumentDialogForm, "UIDocumentForm.msg.cannot-save", null, ApplicationMessage.WARNING);
         return;
       }
-      boolean isCheckedOut = true;
-      if (!documentNode.isCheckedOut()) {
-        isCheckedOut = false;
-        documentNode.checkout();
-      }
-      if (!isCheckedOut) {
-        newNode.checkin();
-      }
-      PublicationService publicationService = uiDocumentDialogForm.getApplicationComponent(PublicationService.class);
-      PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(StageAndVersionPublicationConstant.LIFECYCLE_NAME);
-      HashMap<String, String> context = new HashMap<String, String>();
-      if(newNode != null) {
-        context.put(StageAndVersionPublicationConstant.CURRENT_REVISION_NAME, newNode.getName());
-      }
-      publicationPlugin.changeState(newNode, StageAndVersionPublicationConstant.PUBLISHED_STATE, context);
+
+      WCMPublicationService publicationService = uiDocumentDialogForm.getApplicationComponent(WCMPublicationService.class);
+      publicationService.updateLifecyleOnChangeContent(newNode, Util.getPortalRequestContext().getPortalOwner(), Util.getPortalRequestContext().getRemoteUser(), 
+    		  PublicationDefaultStates.PUBLISHED);
+      
       
       Utils.closePopupWindow(uiDocumentDialogForm, "UIDocumentDialogFormPopupWindow");
       PortletRequestContext pContext = (PortletRequestContext) event.getRequestContext();

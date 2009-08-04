@@ -52,6 +52,7 @@ import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
+import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
 import org.exoplatform.services.wcm.publication.WebpagePublicationPlugin;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant.SITE_MODE;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.config.VersionData;
@@ -136,42 +137,45 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
       revisionsMap.put(node.getUUID(),versionData);
       addRevisionData(node,revisionsMap.values());
     } else if(StageAndVersionPublicationConstant.PUBLISHED_STATE.equals(newState)) {      
-      Version liveVersion = node.checkin();
-      node.checkout();
-      //Change current live revision to obsolete      
-      Node oldLiveRevision = getLiveRevision(node);
-      if(oldLiveRevision != null) {                
-        VersionData versionData = revisionsMap.get(oldLiveRevision.getUUID());
-        if(versionData != null) {
-          versionData.setAuthor(userId);
-          versionData.setState(StageAndVersionPublicationConstant.OBSOLETE_STATE);
-        }else {
-          versionData = new VersionData(oldLiveRevision.getUUID(),StageAndVersionPublicationConstant.OBSOLETE_STATE,userId);
-        }        
-        revisionsMap.put(oldLiveRevision.getUUID(),versionData);
-        versionLog = new VersionLog(oldLiveRevision.getName(),StageAndVersionPublicationConstant.OBSOLETE_STATE, userId, new GregorianCalendar(),StageAndVersionPublicationConstant.CHANGE_TO_OBSOLETE);
-        addLog(node,versionLog);
-      }
-      versionLog = new VersionLog(liveVersion.getName(),newState,userId,new GregorianCalendar(),StageAndVersionPublicationConstant.CHANGE_TO_LIVE);
-      addLog(node,versionLog);      
-      //change base version to draft state
-      node.setProperty(StageAndVersionPublicationConstant.CURRENT_STATE,StageAndVersionPublicationConstant.ENROLLED_STATE);
-      VersionData editableRevision = revisionsMap.get(node.getUUID());
-      if(editableRevision != null) {
-        editableRevision.setAuthor(userId);
-        editableRevision.setState(StageAndVersionPublicationConstant.ENROLLED_STATE);
-      }else {
-        editableRevision = new VersionData(node.getUUID(),StageAndVersionPublicationConstant.ENROLLED_STATE,userId);
-      }
-      revisionsMap.put(node.getUUID(),editableRevision);
-      versionLog = new VersionLog(node.getBaseVersion().getName(),StageAndVersionPublicationConstant.DRAFT_STATE,userId, new GregorianCalendar(),StageAndVersionPublicationConstant.ENROLLED_TO_LIFECYCLE);
-      //Change all awaiting, live revision to obsolete      
-      Value  liveVersionValue = valueFactory.createValue(liveVersion);
-      node.setProperty(StageAndVersionPublicationConstant.LIVE_REVISION_PROP,liveVersionValue);
-      node.setProperty(StageAndVersionPublicationConstant.LIVE_DATE_PROP,new GregorianCalendar());
-      VersionData liveRevisionData = new VersionData(liveVersion.getUUID(),StageAndVersionPublicationConstant.PUBLISHED_STATE,userId);
-      revisionsMap.put(liveVersion.getUUID(),liveRevisionData);
-      addRevisionData(node,revisionsMap.values());
+        if (!node.isCheckedOut()) {
+            node.checkout();
+          }
+        Version liveVersion = node.checkin();
+        node.checkout();
+		  //Change current live revision to obsolete      
+		  Node oldLiveRevision = getLiveRevision(node);
+		  if(oldLiveRevision != null) {                
+		    VersionData versionData = revisionsMap.get(oldLiveRevision.getUUID());
+		    if(versionData != null) {
+		      versionData.setAuthor(userId);
+		      versionData.setState(StageAndVersionPublicationConstant.OBSOLETE_STATE);
+		    }else {
+		      versionData = new VersionData(oldLiveRevision.getUUID(),StageAndVersionPublicationConstant.OBSOLETE_STATE,userId);
+		    }        
+		    revisionsMap.put(oldLiveRevision.getUUID(),versionData);
+		    versionLog = new VersionLog(oldLiveRevision.getName(),StageAndVersionPublicationConstant.OBSOLETE_STATE, userId, new GregorianCalendar(),StageAndVersionPublicationConstant.CHANGE_TO_OBSOLETE);
+		    addLog(node,versionLog);
+		  }
+		  versionLog = new VersionLog(liveVersion.getName(),newState,userId,new GregorianCalendar(),StageAndVersionPublicationConstant.CHANGE_TO_LIVE);
+		  addLog(node,versionLog);      
+		  //change base version to draft state
+		  node.setProperty(StageAndVersionPublicationConstant.CURRENT_STATE,StageAndVersionPublicationConstant.ENROLLED_STATE);
+		  VersionData editableRevision = revisionsMap.get(node.getUUID());
+		  if(editableRevision != null) {
+		    editableRevision.setAuthor(userId);
+		    editableRevision.setState(StageAndVersionPublicationConstant.ENROLLED_STATE);
+		  }else {
+		    editableRevision = new VersionData(node.getUUID(),StageAndVersionPublicationConstant.ENROLLED_STATE,userId);
+		  }
+		  revisionsMap.put(node.getUUID(),editableRevision);
+		  versionLog = new VersionLog(node.getBaseVersion().getName(),StageAndVersionPublicationConstant.DRAFT_STATE,userId, new GregorianCalendar(),StageAndVersionPublicationConstant.ENROLLED_TO_LIFECYCLE);
+		  //Change all awaiting, live revision to obsolete      
+		  Value  liveVersionValue = valueFactory.createValue(liveVersion);
+		  node.setProperty(StageAndVersionPublicationConstant.LIVE_REVISION_PROP,liveVersionValue);
+		  node.setProperty(StageAndVersionPublicationConstant.LIVE_DATE_PROP,new GregorianCalendar());
+		  VersionData liveRevisionData = new VersionData(liveVersion.getUUID(),StageAndVersionPublicationConstant.PUBLISHED_STATE,userId);
+		  revisionsMap.put(liveVersion.getUUID(),liveRevisionData);
+		  addRevisionData(node,revisionsMap.values());
     } else if(StageAndVersionPublicationConstant.OBSOLETE_STATE.equalsIgnoreCase(newState)) {      
       Value value = valueFactory.createValue(selectedRevision);
       Value liveRevision = getValue(node,StageAndVersionPublicationConstant.LIVE_REVISION_PROP);
@@ -714,23 +718,30 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     return listPageNavigationUri;
   }
 
+  /**
+   * In this publication process, we put the content in Draft state when editing it.
+   */
+  public void updateLifecyleOnChangeContent(Node node, String remoteUser)
+  throws Exception {
+	  updateLifecyleOnChangeContent(node, remoteUser, PublicationDefaultStates.DRAFT);
+  }
 /**
  * In this publication process, we put the content in Draft state when editing it.
  */
-public void updateLifecyleOnChangeContent(Node node, String remoteUser)
+public void updateLifecyleOnChangeContent(Node node, String remoteUser,String newState)
 		throws Exception {
 	
     String state = node.getProperty(StageAndVersionPublicationConstant.CURRENT_STATE).getString();
     
-    if(!StageAndVersionPublicationConstant.ENROLLED_STATE.equalsIgnoreCase(state))
+    if(state.equals(newState))
       return;
     
     HashMap<String, String> context = new HashMap<String, String>();
-    if(node != null) {
-      context.put(StageAndVersionPublicationConstant.CURRENT_REVISION_NAME, node.getName());
-    }
+//    if(node != null) {
+//      context.put(StageAndVersionPublicationConstant.CURRENT_REVISION_NAME, node.getName());
+//    }
     
-    changeState(node, StageAndVersionPublicationConstant.DRAFT_STATE, context);
+    changeState(node, newState, context);
 	
 }
 }

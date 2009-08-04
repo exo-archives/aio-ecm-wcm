@@ -44,10 +44,22 @@ public interface WCMComposer {
 	 */
 	public final static String FILTER_PRIMARY_TYPE = "filter-primary-type";
 	/**
+	 * Filter parameter to order results.
+	 * ex: exo:title, dc:title
+	 */
+	public final static String FILTER_ORDER_BY = "filter-order-by";
+	/**
+	 * Filter parameter to order results in ascendant order or descendant order.
+	 * values : ASC, DESC
+	 */
+	public final static String FILTER_ORDER_TYPE = "filter-order-type";
+	/**
 	 * Filter parameter to filter results by target mode.
 	 * ex: editing, approving, live
 	 */
 	public final static String FILTER_MODE = "filter-mode";
+	public final static String MODE_EDIT = "Edit";
+	public final static String MODE_LIVE = "Live";
 	/**
 	 * Filter parameter to filter results by site.
 	 * ex: classic
@@ -60,7 +72,7 @@ public interface WCMComposer {
 	public final static String FILTER_REMOTE_USER = "filter-remote-user";
 	
 	/**
-	 * returns content at the specified path with filters
+	 * returns content at the specified path based on filters
 	 * 
 	 * @param repository
 	 * @param workspace
@@ -70,7 +82,16 @@ public interface WCMComposer {
 	 */
 	public Node getContent(String repository, String workspace, String path, HashMap<String, String> filters) ;
 
-	public NodeIterator getContents(String repository, String workspace, String path, HashMap<String, String> filters) ;
+	/**
+	 * returns contents at the specified path based on filters
+	 * 
+	 * @param repository
+	 * @param workspace
+	 * @param path
+	 * @param filters
+	 * @return a jcr node
+	 */
+	public NodeIterator getContents(String repository, String workspace, String path, HashMap<String, String> filters) throws Exception ;
 
 	public boolean updateContent(String repository, String workspace, String path, HashMap<String, String> filters);
 	

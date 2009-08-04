@@ -80,6 +80,9 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin{
   /** The Constant LIFECYCLE_PROP. */
   public static final String LIFECYCLE_PROP = "publication:lifecycleName".intern();   
   
+  /** The Constant LIVE_REVISION_PROP. */
+  public static final String LIVE_REVISION_PROP = "publication:liveRevision".intern();
+
   /** The Constant CURRENT_STATE. */
   public static final String CURRENT_STATE = "publication:currentState".intern();
 
@@ -159,9 +162,11 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin{
     if (newState.equals(PublicationDefaultStates.DRAFT)) {
       String lifecycleName = node.getProperty("publication:lifecycleName").getString();
       String[] logs = new String[] {new Date().toString(), PublicationDefaultStates.DRAFT, session.getUserID(), "PublicationService.WCMPublicationPlugin.changeState.enrolled", lifecycleName};
-      publicationService.addLog(node, logs);  
+      node.setProperty(LIVE_REVISION_PROP, "");
+      publicationService.addLog(node, logs);
     } else if (newState.equals(PublicationDefaultStates.PUBLISHED)) {
       String[] logs = new String[] {new Date().toString(), PublicationDefaultStates.PUBLISHED, session.getUserID(), "PublicationService.WCMPublicationPlugin.changeState.published"};
+      node.setProperty(LIVE_REVISION_PROP, node.getUUID());
       publicationService.addLog(node, logs);  
     } else if (newState.equals(PublicationDefaultStates.ENROLLED)) {
     	String[] logs = new String[] {new Date().toString(), PublicationDefaultStates.ENROLLED, session.getUserID(), "PublicationService.WCMPublicationPlugin.changeState.published"};
@@ -512,13 +517,19 @@ public void suspendPublishedContentFromPage(Node content, Page page,
 @Override
 public void updateLifecyleOnChangeContent(Node node, String remoteUser)
 		throws Exception {
-    String state = node.getProperty(CURRENT_STATE).getString();
-    
-    if(PublicationDefaultStates.DRAFT.equalsIgnoreCase(state))
-      return;
+	updateLifecyleOnChangeContent(node, remoteUser, PublicationDefaultStates.DRAFT);
+}
 
-    HashMap<String, String> context = new HashMap<String, String>();
-    changeState(node, PublicationDefaultStates.DRAFT, context);
+@Override
+public void updateLifecyleOnChangeContent(Node node, String remoteUser, String newState)
+throws Exception {
+	String state = node.getProperty(CURRENT_STATE).getString();
+	
+	if(PublicationDefaultStates.DRAFT.equalsIgnoreCase(state) && PublicationDefaultStates.DRAFT.equals(newState))
+		return;
+	
+	HashMap<String, String> context = new HashMap<String, String>();
+	changeState(node, newState, context);
 	
 }
 

@@ -206,4 +206,15 @@ public interface WCMPublicationService {
   */
  public void updateLifecyleOnChangeContent(Node node, String siteName, String remoteUser) throws Exception;
  
+/**
+ * It allows to update the lifecycle of the content with a new state.
+ * 
+ * @param node
+ * @param currentSite
+ * @param remoteUser
+ * @param newState
+ * @throws Exception
+ */
+public void updateLifecyleOnChangeContent(Node node, String siteName, String remoteUser, String newState) throws Exception;
+
 }

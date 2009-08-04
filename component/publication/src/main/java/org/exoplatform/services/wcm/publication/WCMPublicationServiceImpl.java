@@ -43,14 +43,18 @@ public class WCMPublicationServiceImpl implements WCMPublicationService, Startab
   /** The publication service. */
   private PublicationService publicationService;
 
+  /** The content composer. */
+  private WCMComposer wcmComposer;
+  
   /**
    * Instantiates a new WCM publication service.
    * This service delegate to PublicationService to manage the publication
    * 
    * @param publicationService the publication service
    */
-  public WCMPublicationServiceImpl(PublicationService publicationService) {
+  public WCMPublicationServiceImpl(PublicationService publicationService, WCMComposer wcmComposer) {
     this.publicationService = publicationService;
+    this.wcmComposer = wcmComposer;
   }
 
   /* (non-Javadoc)
@@ -216,6 +220,14 @@ public class WCMPublicationServiceImpl implements WCMPublicationService, Startab
 	 */
 	public void updateLifecyleOnChangeContent(Node node, String siteName, String remoteUser)
 			throws Exception {
+		updateLifecyleOnChangeContent(node, siteName, remoteUser, null);
+	}
+
+	/**
+	 * This default implementation checks if the state is valid then delegates the update to the node WebpagePublicationPlugin.
+	 */
+	public void updateLifecyleOnChangeContent(Node node, String siteName, String remoteUser, String newState)
+			throws Exception {
 
 	    if(!publicationService.isNodeEnrolledInLifecycle(node)) {
 	    	enrollNodeInLifecycle(node,siteName, remoteUser);	    	
@@ -223,7 +235,20 @@ public class WCMPublicationServiceImpl implements WCMPublicationService, Startab
 	    String lifecycleName = publicationService.getNodeLifecycleName(node);
 	    WebpagePublicationPlugin publicationPlugin = publicationPlugins.get(lifecycleName);
 	    
-	    publicationPlugin.updateLifecyleOnChangeContent(node, remoteUser);
+	    boolean hasState = false;
+	    if (newState!=null) {
+	    	String[] states = publicationPlugin.getPossibleStates();
+	    	for (String state:states) {
+	    		if (state.equals(newState)) hasState=true;
+	    	}
+	    }
+	    if (hasState)
+	    	publicationPlugin.updateLifecyleOnChangeContent(node, remoteUser, newState);
+	    else
+	    	publicationPlugin.updateLifecyleOnChangeContent(node, remoteUser);
+	    
+	    wcmComposer.updateContent(node.getSession().getRepository().toString(), node.getSession().getWorkspace().getName(), node.getPath(), new HashMap<String, String>());
 		
-	}   
+	}
+
 }
