@@ -132,7 +132,7 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
     } catch (Exception e) {
       UIApplication uiApp = getAncestorOfType(UIApplication.class) ;
       Object[] arg = { documentType_ } ;
-      uiApp.addMessage(new ApplicationMessage("UIFastContentCreatorForm.msg.not-support", arg, ApplicationMessage.ERROR)) ;
+      uiApp.addMessage(new ApplicationMessage("UIFCCForm.msg.not-support", arg, ApplicationMessage.ERROR)) ;
       return null ;
     }
   }
