@@ -2,7 +2,7 @@
 	import org.exoplatform.webui.core.UIBreadcumbs;
 	import org.exoplatform.wcm.webui.selector.document.UIDocumentSearch;
 	import org.exoplatform.wcm.webui.selector.document.UIDocumentTreeBuilder;
-	import org.exoplatform.ecm.webui.tree.selectone.UISelectPathPanel; 
+	import org.exoplatform.wcm.webui.selector.UISelectPathPanel; 
 %>
 <div id="$uicomponent.id" class="UIWCMSearchContainer $uicomponent.id">
 	<div> <% uicomponent.renderChild(UIBreadcumbs.class); %> </div>
