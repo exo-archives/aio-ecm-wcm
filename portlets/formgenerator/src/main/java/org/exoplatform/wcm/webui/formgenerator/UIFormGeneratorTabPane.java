@@ -143,7 +143,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
       ExtendedNodeTypeManager extendedNodeTypeManager = getApplicationComponent(RepositoryService.class).getRepository(repository).getNodeTypeManager(); 
       extendedNodeTypeManager.registerNodeType(newNodeType, ExtendedNodeTypeManager.FAIL_IF_EXISTS);
     } catch (Exception e) {
-      Utils.createPopupMessage(this, "UINodeTypeForm.msg.register-failed", null, ApplicationMessage.WARNING);
+      Utils.createPopupMessage(this, "UIFormGeneratorTabPane.msg.register-failed", null, ApplicationMessage.WARNING);
     }
   }
   
@@ -341,6 +341,8 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
       TemplateService templateService = Utils.getService(formGeneratorTabPane, TemplateService.class);
       templateService.addTemplate(true, nodetypeName, templateName, true, templateName, new String[] {"*"}, newGTMPLTemplate, preferenceRepository) ;
       templateService.addTemplate(false, nodetypeName, templateName, true, templateName, new String[] {"*"}, newViewTemplate, preferenceRepository) ;
+      
+      Utils.createPopupMessage(formGeneratorTabPane, "UIFormGeneratorTabPane.msg.AddNewsSuccessful", new Object[]{templateName}, ApplicationMessage.INFO);
     }
   }
   

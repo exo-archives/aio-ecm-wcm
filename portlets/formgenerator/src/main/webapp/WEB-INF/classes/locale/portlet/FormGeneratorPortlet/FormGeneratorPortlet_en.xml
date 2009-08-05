@@ -16,5 +16,11 @@
 			<Save>Save</Save>
 			<Reset>Reset</Reset>
 		</action>
-	</UIFormGeneratorTabPane>
+  	<msg>
+  		<register-failed>
+  			NodeType registration is unsuccessfully. It is existing or Super types is invalid
+  		</register-failed>
+  		<AddNewsSuccessful>"<b>{0}</b>" is generated successful !</AddNewsSuccessful>
+  	</msg>
+  </UIFormGeneratorTabPane>
 </bundle>

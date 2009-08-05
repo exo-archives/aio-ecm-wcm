@@ -16,5 +16,9 @@
 			<Save>Sauver</Save>
 			<Reset>Reset</Reset>
 		</action>
-	</UIFormGeneratorTabPane>
+  	<msg>
+  		<register-failed>NodeType enregistrement est vain. Il est en vigueur ou Super types est invalide</register-failed>
+  		<AddNewsSuccessful>"<b>{0}</b>" est généré avec succès!</AddNewsSuccessful>
+  	</msg>
+  </UIFormGeneratorTabPane>
 </bundle>
