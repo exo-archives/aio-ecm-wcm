@@ -51,8 +51,10 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
 /**
- * Created by The eXo Platform SAS Author : eXoPlatform
- * ngoc.tran@exoplatform.com Jun 23, 2009
+ * Created by The eXo Platform SAS 
+ * Author : Tran Nguyen Ngoc
+ *          ngoc.tran@exoplatform.com
+ * Jun 23, 2009
  */
 @ComponentConfig(
 	template = "app:/groovy/ParameterizedContentListViewer/UIPCLVContainer.gtmpl", 
@@ -68,33 +70,33 @@ public class UIPCLVContainer extends UIContainer {
 		String portalURI = portalRequestContext.getPortalURI();
 		String requestURI = requestWrapper.getRequestURI();
 		String pageNodeSelected = uiPortal.getSelectedNode().getName();
-
+		
 		String parameters = null;
 		try {
-			parameters = URLDecoder.decode(StringUtils.substringAfter(requestURI,
-																																portalURI.concat(pageNodeSelected
-																																		+ "/")), "UTF-8");
+			parameters = URLDecoder.decode(StringUtils.substringAfter(requestURI, portalURI.concat(pageNodeSelected + "/")), "UTF-8");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		PortletRequest portletRequest = portletRequestContext.getRequest();
 		PortletPreferences portletPreferences = portletRequest.getPreferences();
-		String preferenceRepository = portletPreferences.getValue(UIPCLVPortlet.PREFERENCE_REPOSITORY,
-																															"");
-		String preferenceTreeName = portletPreferences.getValue(UIPCLVPortlet.PREFERENCE_TREE_NAME, "");
+		String preferenceRepository = portletPreferences.getValue(UIPCLVPortlet.PREFERENCE_REPOSITORY, "");
+		String preferenceTreeName = null;
+		
+		if(parameters == null || parameters.trim().length() < 1) preferenceTreeName = portletPreferences.getValue(UIPCLVPortlet.PREFERENCE_TREE_NAME, "");
+		else preferenceTreeName = parameters.substring(0, parameters.indexOf("/"));
+		
 		TaxonomyService taxonomyService = getApplicationComponent(TaxonomyService.class);
 		Node treeNode = taxonomyService.getTaxonomyTree(preferenceRepository, preferenceTreeName);
+		
 		String categoryPath = parameters.substring(parameters.indexOf("/") + 1);
 		if (preferenceTreeName.equals(categoryPath))
 			categoryPath = "";
+		
 		Node categoryNode = treeNode.getNode(categoryPath);
-		NodeIterator categoriesChildNode = this.getListSymlinkNode(	portletPreferences,
-																																categoryNode.getPath());
-		int itemsPerPage = Integer.parseInt(portletPreferences.getValue(UIPCLVPortlet.ITEMS_PER_PAGE,
-																																		null));
-		PaginatedNodeIterator paginatedNodeIterator = new PaginatedNodeIterator(categoriesChildNode,
-																																						itemsPerPage);
+		NodeIterator categoriesChildNode = this.getListSymlinkNode(	portletPreferences, categoryNode.getPath());
+		int itemsPerPage = Integer.parseInt(portletPreferences.getValue(UIPCLVPortlet.ITEMS_PER_PAGE, null));
+		PaginatedNodeIterator paginatedNodeIterator = new PaginatedNodeIterator(categoriesChildNode, itemsPerPage);
 		getChildren().clear();
 
 		UIPCLVForm parameterizedContentListViewer = addChild(	UIPCLVForm.class,
@@ -103,21 +105,14 @@ public class UIPCLVContainer extends UIContainer {
 		String templatePath = getFormViewTemplatePath();
 		ResourceResolver resourceResolver = getTemplateResourceResolver();
 		parameterizedContentListViewer.init(templatePath, resourceResolver, paginatedNodeIterator);
-		parameterizedContentListViewer.setContentColumn(portletPreferences.getValue(UIPCLVPortlet.HEADER,
-																																								null));
-		parameterizedContentListViewer.setShowLink(Boolean.parseBoolean(portletPreferences.getValue(UIPCLVPortlet.SHOW_LINK,
-																																																null)));
-		parameterizedContentListViewer.setShowHeader(Boolean.parseBoolean(portletPreferences.getValue(UIPCLVPortlet.SHOW_HEADER,
-																																																	null)));
-		parameterizedContentListViewer.setShowReadmore(Boolean.parseBoolean(portletPreferences.getValue(UIPCLVPortlet.SHOW_READMORE,
-																																																		null)));
+		parameterizedContentListViewer.setContentColumn(portletPreferences.getValue(UIPCLVPortlet.HEADER, null));
+		parameterizedContentListViewer.setShowLink(Boolean.parseBoolean(portletPreferences.getValue(UIPCLVPortlet.SHOW_LINK, null)));
+		parameterizedContentListViewer.setShowHeader(Boolean.parseBoolean(portletPreferences.getValue(UIPCLVPortlet.SHOW_HEADER, null)));
+		parameterizedContentListViewer.setShowReadmore(Boolean.parseBoolean(portletPreferences.getValue(UIPCLVPortlet.SHOW_READMORE, null)));
 		parameterizedContentListViewer.setHeader(portletPreferences.getValue(UIPCLVPortlet.HEADER, null));
-		parameterizedContentListViewer.setAutoDetection(portletPreferences.getValue(UIPCLVPortlet.SHOW_AUTO_DETECT,
-																																								null));
-		parameterizedContentListViewer.setShowMoreLink(portletPreferences.getValue(	UIPCLVPortlet.SHOW_MORE_LINK,
-																																								null));
-		parameterizedContentListViewer.setShowRSSLink(portletPreferences.getValue(UIPCLVPortlet.SHOW_RSS_LINK,
-																																							null));
+		parameterizedContentListViewer.setAutoDetection(portletPreferences.getValue(UIPCLVPortlet.SHOW_AUTO_DETECT, null));
+		parameterizedContentListViewer.setShowMoreLink(portletPreferences.getValue(	UIPCLVPortlet.SHOW_MORE_LINK, null));
+		parameterizedContentListViewer.setShowRSSLink(portletPreferences.getValue(UIPCLVPortlet.SHOW_RSS_LINK, null));
 	}
 
 	public PortletPreferences getPortletPreference() {
@@ -154,9 +149,7 @@ public class UIPCLVContainer extends UIContainer {
 	public static class QuickEditActionListener extends EventListener<UIPCLVContainer> {
 		public void execute(Event<UIPCLVContainer> event) throws Exception {
 			UIPCLVContainer uiContentViewerContainer = event.getSource();
-			UIPCLVConfig parameterizedForm = uiContentViewerContainer.createUIComponent(UIPCLVConfig.class,
-																																									null,
-																																									null);
+			UIPCLVConfig parameterizedForm = uiContentViewerContainer.createUIComponent(UIPCLVConfig.class, null, null);
 			Utils.createPopupWindow(uiContentViewerContainer,
 															parameterizedForm,
 															UIPCLVPortlet.PARAMETERIZED_MANAGEMENT_PORTLET_POPUP_WINDOW,

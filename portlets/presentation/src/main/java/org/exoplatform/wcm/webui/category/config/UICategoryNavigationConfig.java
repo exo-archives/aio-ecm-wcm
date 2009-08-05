@@ -24,6 +24,9 @@ import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 
 import org.exoplatform.ecm.webui.selector.UISelectable;
+import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.portal.webui.portal.UIPortal;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.cms.taxonomy.TaxonomyService;
 import org.exoplatform.services.cms.views.ApplicationTemplateManagerService;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -163,7 +166,15 @@ public class UICategoryNavigationConfig extends UIForm implements UISelectable {
       portletPreferences.setValue(UICategoryNavigationConstant.PREFERENCE_TREE_TITLE, preferenceTreeTitle);
       portletPreferences.setValue(UICategoryNavigationConstant.PREFERENCE_TARGET_PAGE, preferenceTargetPath);
       portletPreferences.store();
+
+      PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
+      UIPortal uiPortal = Util.getUIPortal();
+      
+      String pageNodeSelected = uiPortal.getSelectedNode().getName();
+      String portalURI = portalRequestContext.getPortalURI();
+
       ((PortletRequestContext)event.getRequestContext()).setApplicationMode(PortletMode.VIEW);
+      event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + portalURI + pageNodeSelected + "');");
     }
   }
   
@@ -183,5 +194,4 @@ public class UICategoryNavigationConfig extends UIForm implements UISelectable {
       categoryNavigationConfig.setPopupId(UICategoryNavigationConstant.TARGET_PATH_SELECTOR_POPUP_WINDOW);
     }
   }
-
 }

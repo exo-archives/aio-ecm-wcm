@@ -73,6 +73,7 @@ public class UICategoryNavigationTreeBase extends UITree {
     } else {
       shortPath = categoryPath.substring(categoryPath.lastIndexOf("/"));
     }
+
     String objId = requestURI + shortPath;
     StringBuilder builder = new StringBuilder();
     if(nodeIcon.equals(getExpandIcon())) {
@@ -147,5 +148,4 @@ public class UICategoryNavigationTreeBase extends UITree {
     if(selectedNode == null) return false;    
     return selectedNode.getPath().equals(node.getPath());
   }
-  
 }
