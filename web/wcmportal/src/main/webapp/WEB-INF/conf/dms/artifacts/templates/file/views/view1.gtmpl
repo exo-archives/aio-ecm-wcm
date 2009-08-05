@@ -73,6 +73,9 @@
 <%
 	import javax.jcr.Node;
 	import javax.jcr.NodeIterator;
+	
+	import org.exoplatform.download.DownloadService;
+	import org.exoplatform.download.InputStreamDownloadResource;
 
 	public boolean isVersionable(Node node) throws Exception {
     return node.isNodeType("mix:versionable");
@@ -92,11 +95,23 @@
     return currentNode ;
   }
   
+  public String getDownloadLink(Node node) throws Exception {
+    DownloadService dservice = uicomponent.getApplicationComponent(DownloadService.class) ;
+    InputStreamDownloadResource dresource ;
+    //if(!node.getPrimaryNodeType().getName().equals("nt:file")) node = originalNode; 
+    Node jcrContentNode = node.getNode("jcr:content") ;
+    InputStream input = jcrContentNode.getProperty("jcr:data").getStream() ;
+    dresource = new InputStreamDownloadResource(input, "image") ;
+    dresource.setDownloadName(node.getName()) ;
+    return dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;
+  }
+  
   def originalNode = uicomponent.getOriginalNode();
   def currentNode = uicomponent.getNode() ;
   def fileLangNode = getFileLangNode(currentNode) ;
   def contentNode = fileLangNode.getNode("jcr:content") ;
   def mimeType = contentNode.getProperty("jcr:mimeType").getString() ;
+  def imageUrl = getDownloadLink(fileLangNode);
   
   public String formatNodeName(String text) {
     return text.replaceAll("'", "\\\\'") ;
@@ -192,7 +207,7 @@
 
 		  <div class="NavigationContainer">       
 			<div class="TopTitle" style="float:left;">$originalNode.name</div>
-			<div class="TopLink" style="float:right;"><a href="javascript:void(0);" onclick="javascript:eXo.ecm.ECMUtils.generateWebDAVLink('<%=uicomponent.getWebDAVServerPrefix()%>','<%=uicomponent.getPortalName()%>','<%=uicomponent.getRepository()%>','<%=uicomponent.getWorkspaceName()%>','<%=formatNodeName(fileLangNode.getPath())%>','<%=mimeType%>')"><%=_ctx.appRes("File.view.label.download")%></a></div>
+			<div class="TopLink" style="float:right;"><a href="javascript:void(0);" onclick="ajaxRedirect('$imageUrl')"><%=_ctx.appRes("File.view.label.download")%></a></div>
 			<div class="TopTitle">&nbsp;</div>
 		    <!--div class="Content"-->
 		    	<!--div class="TextContent"-->
@@ -202,7 +217,7 @@
 					%>
 					<% if(mimeType.startsWith("image")) { %>
 						<!-- ############################ IMAGE ###################################### -->
-						<image src="$binarySrc" width="400" alt="$originalNode.name" />
+						<image src="$imageUrl" width="400" alt="$originalNode.name" />
 
 					<% } else if(mimeType.equals("application/x-shockwave-flash")) { %>
 						<!-- ############################ FLASH ########################################## -->
@@ -281,7 +296,7 @@
 			        	String rndString = String.valueOf(new Date().getTime());
 			        	String imgSrc = "";
 			        	if(isVersionable(originalNode)) {
-			        	  imgSrc = uicomponent.getDownloadLink(fileLangNode) ;
+			        	  imgSrc = imageUrl ;
 			        	} else {
 			        	  imgSrc = "/" + uicomponent.getPortalName() + "/rest/jcr/" + uicomponent.getRepository() + "/" + uicomponent.getWorkspaceName() + fileLangNode.getPath();
 			        	}  
