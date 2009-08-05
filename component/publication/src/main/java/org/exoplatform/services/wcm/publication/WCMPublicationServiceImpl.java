@@ -251,4 +251,13 @@ public class WCMPublicationServiceImpl implements WCMPublicationService, Startab
 		
 	}
 
+	public String getContentState(Node node) throws Exception {
+	    String currentState = null;
+	    try {
+	      currentState = node.getProperty("publication:currentState").getString();
+	    } catch (Exception e) {
+	    }
+	    return currentState;
+	}
+
 }

@@ -17,6 +17,7 @@
 package org.exoplatform.services.wcm.publication;
 
 import java.util.HashMap;
+import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -96,4 +97,17 @@ public interface WCMComposer {
 	public boolean updateContent(String repository, String workspace, String path, HashMap<String, String> filters);
 	
 	public boolean updateContents(String repository, String workspace, String path, HashMap<String, String> filters);
+	
+	/**
+	 * returns allowed states for a specified mode
+	 * 
+	 * @param repository
+	 * @param workspace
+	 * @param path
+	 * @param filters
+	 * @return a jcr node
+	 */
+	public List<String> getAllowedStates(String mode) throws Exception ;
+
+	
 }

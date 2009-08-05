@@ -33,6 +33,8 @@ import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.services.cms.BasePath;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+import org.exoplatform.services.wcm.publication.WCMComposer;
+import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
@@ -124,7 +126,9 @@ public class UISelectPathPanel extends UIContainer {
   public void setAcceptedMimeTypes(String[] acceptedMimeTypes) { this.acceptedMimeTypes = acceptedMimeTypes; }  
 
   @SuppressWarnings("unchecked")
-	public List getSelectableNodes() throws Exception { return uiPageIterator_.getCurrentPageData(); }
+	public List getSelectableNodes() throws Exception { 
+	  return uiPageIterator_.getCurrentPageData(); 
+	  }
   
   public void updateGrid() throws Exception {
     ObjectPageList objPageList = new ObjectPageList(getListSelectableNodes(), 10);
@@ -138,7 +142,8 @@ public class UISelectPathPanel extends UIContainer {
     for (NodeIterator iterator = realNode.getNodes();iterator.hasNext();) {
       Node child = iterator.nextNode();
       if(child.isNodeType("exo:hiddenable")) continue;
-      if(matchMimeType(Utils.getNodeSymLink(child)) && matchNodeType(Utils.getNodeSymLink(child))) {
+      Node symChild= Utils.getNodeSymLink(child);
+      if(matchMimeType(symChild) && matchNodeType(symChild) && isValidState(symChild)) {
         list.add(child);
       }
     }
@@ -148,6 +153,16 @@ public class UISelectPathPanel extends UIContainer {
     }
     return listNodeCheck;
   }      
+
+  private boolean isValidState(Node node) throws Exception {
+	  WCMPublicationService publicationService = getApplicationComponent(WCMPublicationService.class);
+	  String state = publicationService.getContentState(node);
+	  if (state==null) return true;
+	  WCMComposer composer = getApplicationComponent(WCMComposer.class);
+	  List<String> states = composer.getAllowedStates(WCMComposer.MODE_EDIT);
+	  return states.contains(state);
+	  
+  }
 
   protected boolean matchNodeType(Node node) throws Exception {
     if(acceptedNodeTypes == null || acceptedNodeTypes.length == 0) return true;

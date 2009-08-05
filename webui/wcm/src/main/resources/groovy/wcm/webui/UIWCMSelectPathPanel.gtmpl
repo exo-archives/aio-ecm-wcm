@@ -42,9 +42,6 @@
 		    	if(nodes.size() > 0) {
 			    	for(node in nodes) {
 			    		String revisionState = StageAndVersionPublicationState.getRevisionState(node);
-			    		if (StageAndVersionPublicationState.OBSOLETE.equals(revisionState)) {
-							continue;
-						}
 				      	if(even) {
 				      		rowClass = "EvenRow" ;  
 				      	} else {

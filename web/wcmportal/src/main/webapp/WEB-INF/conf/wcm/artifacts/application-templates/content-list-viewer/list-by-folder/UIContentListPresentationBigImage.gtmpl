@@ -34,10 +34,6 @@
 				Node viewNode = null;
 				Node tempNode = null;
 				for (Node node : currentPageData) {
-					String revisionState = StageAndVersionPublicationState.getRevisionState(node);
-					if (StageAndVersionPublicationState.OBSOLETE.equals(revisionState)) {
-						continue;
-					}
 					tempNode = node;
 					viewNode = uicomponent.getNodeView(node);
 					if (viewNode == null) {	

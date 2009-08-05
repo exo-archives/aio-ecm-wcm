@@ -192,6 +192,8 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
       }      
       revisionsMap.put(selectedRevision.getUUID(),versionData);
       addLog(node,versionLog);
+	  //change base version to published state
+	  node.setProperty(StageAndVersionPublicationConstant.CURRENT_STATE,StageAndVersionPublicationConstant.OBSOLETE_STATE);
       addRevisionData(node,revisionsMap.values());
     }
     if(!node.isNew())

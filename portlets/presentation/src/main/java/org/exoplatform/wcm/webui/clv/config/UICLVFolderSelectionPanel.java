@@ -29,6 +29,9 @@ import org.exoplatform.ecm.webui.tree.selectone.UISelectPathPanel;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
+import org.exoplatform.services.wcm.publication.WCMComposer;
+import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
@@ -95,12 +98,22 @@ public class UICLVFolderSelectionPanel extends UISelectPathPanel {
         Node child = iterator.nextNode();
         if (child.isNodeType("exo:hiddenable"))
           continue;
-        if (matchMimeType(child) && matchNodeType(child) && !isDocType(child)) {
+        if (matchMimeType(child) && matchNodeType(child) && !isDocType(child) && isValidState(child)) {
           list.add(child);
         }
       }
     }
     return list;
+  }
+
+  private boolean isValidState(Node node) throws Exception {
+	  WCMPublicationService publicationService = getApplicationComponent(WCMPublicationService.class);
+	  String state = publicationService.getContentState(node);
+	  if (state==null) return true;
+	  WCMComposer composer = getApplicationComponent(WCMComposer.class);
+	  List<String> states = composer.getAllowedStates(WCMComposer.MODE_EDIT);
+	  return states.contains(state);
+	  
   }
 
   public boolean isDocType(Node node) throws Exception {

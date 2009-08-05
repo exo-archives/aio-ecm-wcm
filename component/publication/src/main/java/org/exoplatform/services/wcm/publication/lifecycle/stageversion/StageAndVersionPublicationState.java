@@ -56,14 +56,17 @@ public class StageAndVersionPublicationState {
     try {
       currentState = currentNode.getProperty("publication:currentState").getString();
     } catch (Exception e) {
-    } 
-    if(DRAFT.equals(currentState))
-      return DRAFT;
-    if (PUBLISHED.equals(currentState))
-    	return PUBLISHED;
-    if(ENROLLED.equals(currentState)) {
-      return OBSOLETE;
     }
-    return null;
+    return currentState;
+//    if(DRAFT.equals(currentState))
+//      return DRAFT;
+//    else if (PUBLISHED.equals(currentState))
+//    	return PUBLISHED;
+//    else if (OBSOLETE.equals(currentState))
+//    	return OBSOLETE;
+//    else if(ENROLLED.equals(currentState)) {
+//      return ENROLLED;
+//    }
+//    return null;
   }
 }

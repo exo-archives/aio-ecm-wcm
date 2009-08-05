@@ -42,7 +42,7 @@
               <a class="DisableStatus"><%=_ctx.appRes("UIPublicationPanel.status.obsolete")%></a>
               <div style="clear: left;"><span></span></div>              
             <%
-          } else if (isCurrentRevision("live",currentRevision)) {
+          } else if (isCurrentRevision("published",currentRevision)) {
             %>
               <a class="DisableStatus"><%=_ctx.appRes("UIPublicationPanel.status.enrolled")%></a>
               <span class="StatusArrow"></span>

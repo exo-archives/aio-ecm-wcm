@@ -3,6 +3,7 @@
  */
 package org.exoplatform.services.wcm.publication;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -75,7 +76,9 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	    			+ templatesFilter + ")";
 	    if (MODE_LIVE.equals(mode)) {
 	      statement += "AND ( (publication:liveRevision IS NOT NULL AND publication:liveRevision <> '') OR publication:currentState = 'published')";
-	    } 
+	    } else {
+	    	statement += "AND ( publication:currentState <> 'obsolete' AND publication:currentState <> 'archived' )";
+	    }
 	    statement += orderFilter;
 	    
 	    Query query = manager.createQuery(statement, Query.SQL);
@@ -142,5 +145,20 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	    orderQuery += orderBy + " " + orderType;
 	    
 	    return orderQuery;
+	}
+
+	public List<String> getAllowedStates(String mode) {
+		List<String> states = new ArrayList<String>();
+		if (MODE_LIVE.equals(mode)) {
+			states.add(PublicationDefaultStates.PUBLISHED);
+		} else if (MODE_EDIT.equals(mode)) {
+			states.add(PublicationDefaultStates.PUBLISHED);
+			states.add(PublicationDefaultStates.DRAFT);
+			states.add(PublicationDefaultStates.PENDING);
+			states.add(PublicationDefaultStates.STAGED);
+			states.add(PublicationDefaultStates.APPROVED);
+		}
+		
+		return states;
 	}
 }
