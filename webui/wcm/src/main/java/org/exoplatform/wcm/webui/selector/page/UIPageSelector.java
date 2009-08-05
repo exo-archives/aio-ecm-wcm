@@ -16,13 +16,11 @@
  */
 package org.exoplatform.wcm.webui.selector.page;
 
-import org.exoplatform.portal.webui.navigation.UIPageNodeSelector;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
-import org.exoplatform.webui.core.UIRightClickPopupMenu;
 import org.exoplatform.webui.core.UITree;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
@@ -54,7 +52,7 @@ public class UIPageSelector extends UIForm {
     UIPageNodeSelector pageNodeSelector = addChild(UIPageNodeSelector.class, null, null);
     UITree uiTree = pageNodeSelector.getChild(UITree.class);
     uiTree.setUIRightClickPopupMenu(null);
-    pageNodeSelector.removeChild(UIRightClickPopupMenu.class);
+    //pageNodeSelector.removeChild(UIRightClickPopupMenu.class);
     pageNodeSelector.selectPageNodeByUri(null);
     
     UIPageSelectorPanel pageSelectorPanel = addChild(UIPageSelectorPanel.class, null, null);

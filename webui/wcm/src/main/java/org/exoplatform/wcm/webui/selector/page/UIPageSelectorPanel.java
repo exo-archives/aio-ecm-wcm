@@ -23,7 +23,6 @@ import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.ecm.webui.selector.UISelectable;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
-import org.exoplatform.portal.webui.navigation.UIPageNodeSelector;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
