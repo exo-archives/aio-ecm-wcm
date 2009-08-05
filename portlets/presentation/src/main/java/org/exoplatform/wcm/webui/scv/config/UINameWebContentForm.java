@@ -250,7 +250,7 @@ public class UINameWebContentForm extends UIForm {
       }
       if (webContentNode.hasProperty("exo:title")) {
     	  webContentNode.setProperty("exo:title", webContentTitle);
-    	  webContentNode.save();
+    	  if (!webContentNode.isNew()) webContentNode.save();
       }
       if (webContentNode.canAddMixin("mix:votable"))
         webContentNode.addMixin("mix:votable");

@@ -32,6 +32,7 @@ import java.util.ResourceBundle;
 
 import javax.jcr.Node;
 import javax.jcr.Session;
+import javax.jcr.ValueFactory;
 import javax.jcr.lock.LockException;
 import javax.jcr.version.VersionException;
 
@@ -156,12 +157,14 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin{
    */
   public void changeState(Node node, String newState, HashMap<String, String> context) throws IncorrectStateUpdateLifecycleException, Exception {
     Session session = node.getSession();
+//    ValueFactory valueFactory = session.getValueFactory();
     node.setProperty(CURRENT_STATE, newState);
     PublicationService publicationService = Util.getServices(PublicationService.class);
 
     if (newState.equals(PublicationDefaultStates.DRAFT)) {
       String lifecycleName = node.getProperty("publication:lifecycleName").getString();
       String[] logs = new String[] {new Date().toString(), PublicationDefaultStates.DRAFT, session.getUserID(), "PublicationService.WCMPublicationPlugin.changeState.enrolled", lifecycleName};
+//      node.setProperty(LIVE_REVISION_PROP, valueFactory.createValue(""));
 //      node.setProperty(LIVE_REVISION_PROP, "");
       publicationService.addLog(node, logs);
     } else if (newState.equals(PublicationDefaultStates.PUBLISHED)) {
@@ -175,6 +178,8 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin{
       throw new Exception("WCMPublicationPlugin.changeState : Unknown state : " + node.getProperty(CURRENT_STATE).getString());
     }
 
+//    if(!node.isNew())
+//        node.save();
     session.save();
   }
 

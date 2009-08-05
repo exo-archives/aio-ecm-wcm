@@ -158,8 +158,8 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
 		  }
 		  versionLog = new VersionLog(liveVersion.getName(),newState,userId,new GregorianCalendar(),StageAndVersionPublicationConstant.CHANGE_TO_LIVE);
 		  addLog(node,versionLog);      
-		  //change base version to draft state
-		  node.setProperty(StageAndVersionPublicationConstant.CURRENT_STATE,StageAndVersionPublicationConstant.ENROLLED_STATE);
+		  //change base version to published state
+		  node.setProperty(StageAndVersionPublicationConstant.CURRENT_STATE,StageAndVersionPublicationConstant.PUBLISHED_STATE);
 		  VersionData editableRevision = revisionsMap.get(node.getUUID());
 		  if(editableRevision != null) {
 		    editableRevision.setAuthor(userId);
