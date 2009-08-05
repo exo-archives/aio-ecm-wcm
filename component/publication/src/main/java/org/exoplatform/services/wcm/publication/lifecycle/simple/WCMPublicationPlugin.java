@@ -162,11 +162,11 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin{
     if (newState.equals(PublicationDefaultStates.DRAFT)) {
       String lifecycleName = node.getProperty("publication:lifecycleName").getString();
       String[] logs = new String[] {new Date().toString(), PublicationDefaultStates.DRAFT, session.getUserID(), "PublicationService.WCMPublicationPlugin.changeState.enrolled", lifecycleName};
-      node.setProperty(LIVE_REVISION_PROP, "");
+//      node.setProperty(LIVE_REVISION_PROP, "");
       publicationService.addLog(node, logs);
     } else if (newState.equals(PublicationDefaultStates.PUBLISHED)) {
       String[] logs = new String[] {new Date().toString(), PublicationDefaultStates.PUBLISHED, session.getUserID(), "PublicationService.WCMPublicationPlugin.changeState.published"};
-      node.setProperty(LIVE_REVISION_PROP, node.getUUID());
+//      node.setProperty(LIVE_REVISION_PROP, node.getUUID());
       publicationService.addLog(node, logs);  
     } else if (newState.equals(PublicationDefaultStates.ENROLLED)) {
     	String[] logs = new String[] {new Date().toString(), PublicationDefaultStates.ENROLLED, session.getUserID(), "PublicationService.WCMPublicationPlugin.changeState.published"};
