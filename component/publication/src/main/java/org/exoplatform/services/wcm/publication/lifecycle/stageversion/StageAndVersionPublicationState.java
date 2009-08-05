@@ -59,14 +59,9 @@ public class StageAndVersionPublicationState {
     } 
     if(DRAFT.equals(currentState))
       return DRAFT;
+    if (PUBLISHED.equals(currentState))
+    	return PUBLISHED;
     if(ENROLLED.equals(currentState)) {
-      String liveRevision = null;
-      try {
-        liveRevision = currentNode.getProperty("publication:liveRevision").getString();
-      } catch (Exception e) {       
-      }
-      if(liveRevision != null && liveRevision.length()>0) 
-        return PUBLISHED;
       return OBSOLETE;
     }
     return null;
