@@ -50,7 +50,6 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	/* (non-Javadoc)
 	 * @see org.exoplatform.services.wcm.publication.WCMComposer#getContent(java.lang.String, java.lang.String, java.lang.String, java.util.HashMap)
 	 */
-	@Override
 	public Node getContent(String repository, String workspace, String path,
 			HashMap<String, String> filters) {
 		// TODO Auto-generated method stub
@@ -60,7 +59,6 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	/* (non-Javadoc)
 	 * @see org.exoplatform.services.wcm.publication.WCMComposer#getContents(java.lang.String, java.lang.String, java.lang.String, java.util.HashMap)
 	 */
-	@Override
 	public NodeIterator getContents(String repository, String workspace,
 			String path, HashMap<String, String> filters) throws Exception {
 		String templatesFilter = getTemlatesSQLFilter();
@@ -87,7 +85,6 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	/* (non-Javadoc)
 	 * @see org.exoplatform.services.wcm.publication.WCMComposer#updateContent(java.lang.String, java.lang.String, java.lang.String, java.util.HashMap)
 	 */
-	@Override
 	public boolean updateContent(String repository, String workspace,
 			String path, HashMap<String, String> filters) {
 		// TODO As we don't use cache management, there's nothing to update here but it will be implemented when we provide content caching
@@ -97,20 +94,17 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	/* (non-Javadoc)
 	 * @see org.exoplatform.services.wcm.publication.WCMComposer#updateContents(java.lang.String, java.lang.String, java.lang.String, java.util.HashMap)
 	 */
-	@Override
 	public boolean updateContents(String repository, String workspace,
 			String path, HashMap<String, String> filters) {
 		// TODO As we don't use cache management, there's nothing to update here but it will be implemented when we provide content caching
 		return false;
 	}
 
-	@Override
 	public void start() {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
 	public void stop() {
 		// TODO Auto-generated method stub
 		
