@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
+import javax.jcr.RepositoryException;
 import javax.jcr.nodetype.NodeType;
 
 import org.exoplatform.portal.webui.util.Util;
@@ -60,7 +61,7 @@ public class UIFCCActionTypeForm extends UIForm {
   final static public String CHANGE_ACTION = "ChangeActionType" ;
 
   private List<SelectItemOption<String>> typeList_ ;
-
+  private String nodePath = null;
   public String defaultActionType_ ;
 
   public UIFCCActionTypeForm() throws Exception {
@@ -76,19 +77,24 @@ public class UIFCCActionTypeForm extends UIForm {
   }
 
   public void setDefaultActionType() throws Exception{    
+    boolean isNews = true;
+    UIFCCPortlet fastContentCreatorPortlet = getAncestorOfType(UIFCCPortlet.class);
+    UIFCCConfig fastContentCreatorConfig = fastContentCreatorPortlet.getChild(UIFCCConfig.class);
+    Node savedLocationNode = fastContentCreatorConfig.getSavedLocationNode() ;
+    UIFCCActionContainer fastContentCreatorActionContainer = getParent() ;
+    UIFCCActionForm fastContentCreatorActionForm = fastContentCreatorActionContainer.getChild(UIFCCActionForm.class) ;
     if(defaultActionType_ == null) {
       defaultActionType_ = "exo:sendMailAction" ;
-      UIFCCPortlet fastContentCreatorPortlet = getAncestorOfType(UIFCCPortlet.class);
-      UIFCCConfig fastContentCreatorConfig = fastContentCreatorPortlet.getChild(UIFCCConfig.class);
-      Node savedLocationNode = fastContentCreatorConfig.getSavedLocationNode() ;
-      UIFCCActionContainer fastContentCreatorActionContainer = getParent() ;
-      UIFCCActionForm fastContentCreatorActionForm = fastContentCreatorActionContainer.getChild(UIFCCActionForm.class) ;
-      fastContentCreatorActionForm.createNewAction(savedLocationNode, defaultActionType_, true) ;
-      fastContentCreatorActionForm.setNodePath(null) ;
-      fastContentCreatorActionForm.setWorkspace(savedLocationNode.getSession().getWorkspace().getName()) ;
-      fastContentCreatorActionForm.setStoredPath(savedLocationNode.getPath()) ;
-      getUIFormSelectBox(ACTION_TYPE).setValue(defaultActionType_) ;
+      isNews = true;
+    }else{
+      isNews = false;
     }
+    fastContentCreatorActionForm.setNodePath(nodePath) ;
+    getUIFormSelectBox(ACTION_TYPE).setValue(defaultActionType_).setDisabled(!isNews);
+    
+    fastContentCreatorActionForm.createNewAction(savedLocationNode, defaultActionType_, isNews) ;
+    fastContentCreatorActionForm.setWorkspace(savedLocationNode.getSession().getWorkspace().getName()) ;
+    fastContentCreatorActionForm.setStoredPath(savedLocationNode.getPath()) ;
   }  
 
   public void update() throws Exception {
@@ -101,8 +107,9 @@ public class UIFCCActionTypeForm extends UIForm {
     setDefaultActionType() ;
   }
 
-  public void init() {
-    
+  public void init(String nodePath, String actionType) throws RepositoryException {
+    this.nodePath = nodePath;
+    this.defaultActionType_ = actionType;
   }
   
   static public class ChangeActionTypeActionListener extends EventListener<UIFCCActionTypeForm> {

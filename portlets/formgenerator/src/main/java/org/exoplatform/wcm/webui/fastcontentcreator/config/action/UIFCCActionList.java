@@ -117,11 +117,17 @@ public class UIFCCActionList extends UIContainer {
   public static class EditActionListener extends EventListener<UIFCCActionList> {
     public void execute(Event<UIFCCActionList> event) throws Exception {
       UIFCCActionList fastContentCreatorActionList = event.getSource();
-      UIFCCActionContainer fastContentCreatorActionContainer = fastContentCreatorActionList.createUIComponent(UIFCCActionContainer.class, null, null);
-      UIFCCActionTypeForm fastContentCreatorActionTypeForm = fastContentCreatorActionContainer.getChild(UIFCCActionTypeForm.class);
-      fastContentCreatorActionTypeForm.update();
-      fastContentCreatorActionTypeForm.init();
-      Utils.createPopupWindow(fastContentCreatorActionList, fastContentCreatorActionContainer, UIFCCConstant.ACTION_POPUP_WINDOW, 500, 380);
+      String actionName = event.getRequestContext().getRequestParameter(OBJECTID);
+      UIFCCActionContainer fccActionContainer = fastContentCreatorActionList.createUIComponent(UIFCCActionContainer.class, null, null);
+      Utils.createPopupWindow(fastContentCreatorActionList, fccActionContainer, UIFCCConstant.ACTION_POPUP_WINDOW, 500, 380);
+      UIFCCActionTypeForm fccActionTypeForm = fccActionContainer.getChild(UIFCCActionTypeForm.class);
+      
+      ActionServiceContainer actionService = fastContentCreatorActionList.getApplicationComponent(ActionServiceContainer.class) ;
+      UIFCCConfig fastContentCreatorConfig = fastContentCreatorActionList.getAncestorOfType(UIFCCConfig.class) ;
+      Node parentNode = fastContentCreatorConfig.getSavedLocationNode();
+      Node actionNode= actionService.getAction(parentNode, actionName);
+      fccActionTypeForm.init(actionNode.getPath(), actionNode.getPrimaryNodeType().getName());
+      fccActionTypeForm.update();
     }
   }
   

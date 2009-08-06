@@ -70,10 +70,10 @@ public class PostCreateContentEventListener extends Listener<CmsService, Node>{
         currentNode.setProperty("exo:title",currentNode.getName()); 
       }      
     }
-    if(webContentSchemaHandler.isWebcontentChildNode(currentNode))
-      return;
-    if(currentNode.isNodeType("exo:cssFile") || currentNode.isNodeType("exo:jsFile"))
+    if(webContentSchemaHandler.isWebcontentChildNode(currentNode) || currentNode.isNodeType("exo:cssFile") || 
+        currentNode.isNodeType("exo:jsFile") || currentNode.getParent().isNodeType("exo:actionStorage")){
       return;    
+    }
     String repository = ((ManageableRepository)currentNode.getSession().getRepository()).getConfiguration().getName();
     String workspace = currentNode.getSession().getWorkspace().getName();
     NodeLocation nodeLocation = configurationService.getLivePortalsLocation(repository);
