@@ -81,7 +81,7 @@ public interface WCMComposer {
 	 * @param filters
 	 * @return a jcr node
 	 */
-	public Node getContent(String repository, String workspace, String path, HashMap<String, String> filters) ;
+	public Node getContent(String repository, String workspace, String path, HashMap<String, String> filters) throws Exception ;
 
 	/**
 	 * returns contents at the specified path based on filters

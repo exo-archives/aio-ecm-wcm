@@ -15,6 +15,8 @@ import javax.jcr.query.QueryManager;
 
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.cms.templates.TemplateService;
+import org.exoplatform.services.ecm.publication.PublicationPlugin;
+import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
@@ -30,13 +32,17 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	private TemplateService templateService;
 	private ThreadLocalSessionProviderService threadLocalSessionProviderService;
 	private RepositoryService repositoryService;
+	private PublicationService publicationService;
+	private WCMPublicationService wcmPublicationService;
 	
 	private String templatesFilter = null;
 	private String repository;
 	
-	public WCMComposerImpl(TemplateService templateService) throws Exception {
+	public WCMComposerImpl(TemplateService templateService, PublicationService publicationService, WCMPublicationService wcmPublicationService) throws Exception {
 		this.templateService = templateService;
 		this.repository = "repository";
+		this.publicationService = publicationService;
+		this.wcmPublicationService = wcmPublicationService;
 		init();
 	}
 	
@@ -52,9 +58,23 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	 * @see org.exoplatform.services.wcm.publication.WCMComposer#getContent(java.lang.String, java.lang.String, java.lang.String, java.util.HashMap)
 	 */
 	public Node getContent(String repository, String workspace, String path,
-			HashMap<String, String> filters) {
-		// TODO Auto-generated method stub
-		return null;
+			HashMap<String, String> filters) throws Exception {
+		SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
+	    ManageableRepository manageableRepository = repositoryService.getRepository(repository);    
+		Session session = sessionProvider.getSession(workspace, manageableRepository);
+		Node node = (Node)session.getItem(path);
+		String lifecycleName = publicationService.getNodeLifecycleName(node);
+	    PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(lifecycleName);
+	    Node nodeView = publicationPlugin.getNodeView(node, new HashMap<String, Object>());
+	    String state = wcmPublicationService.getContentState(node);
+	    String mode = filters.get(FILTER_MODE);
+	    List<String> states = getAllowedStates(mode);
+	    
+	    if (states.contains(state)) {
+	    	return nodeView;
+	    } else {
+	    	return null;
+	    }
 	}
 
 	/* (non-Javadoc)
@@ -103,6 +123,26 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 		return false;
 	}
 
+	/**
+	 * We currently support 2 modes :
+	 * MODE_LIVE : PUBLISHED state only
+	 * MODE_EDIT : PUBLISHED, DRAFT, PENDING, STAGED, APPROVED allowed
+	 */
+	public List<String> getAllowedStates(String mode) {
+		List<String> states = new ArrayList<String>();
+		if (MODE_LIVE.equals(mode)) {
+			states.add(PublicationDefaultStates.PUBLISHED);
+		} else if (MODE_EDIT.equals(mode)) {
+			states.add(PublicationDefaultStates.PUBLISHED);
+			states.add(PublicationDefaultStates.DRAFT);
+			states.add(PublicationDefaultStates.PENDING);
+			states.add(PublicationDefaultStates.STAGED);
+			states.add(PublicationDefaultStates.APPROVED);
+		}
+		
+		return states;
+	}
+
 	public void start() {
 		// TODO Auto-generated method stub
 		
@@ -147,18 +187,4 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	    return orderQuery;
 	}
 
-	public List<String> getAllowedStates(String mode) {
-		List<String> states = new ArrayList<String>();
-		if (MODE_LIVE.equals(mode)) {
-			states.add(PublicationDefaultStates.PUBLISHED);
-		} else if (MODE_EDIT.equals(mode)) {
-			states.add(PublicationDefaultStates.PUBLISHED);
-			states.add(PublicationDefaultStates.DRAFT);
-			states.add(PublicationDefaultStates.PENDING);
-			states.add(PublicationDefaultStates.STAGED);
-			states.add(PublicationDefaultStates.APPROVED);
-		}
-		
-		return states;
-	}
 }
