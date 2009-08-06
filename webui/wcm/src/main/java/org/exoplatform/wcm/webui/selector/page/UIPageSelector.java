@@ -16,7 +16,10 @@
  */
 package org.exoplatform.wcm.webui.selector.page;
 
+import java.util.ResourceBundle;
+
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -48,11 +51,16 @@ public class UIPageSelector extends UIForm {
   
   private String returnFieldName ;
   
+  private String pageTitle;
+  
   public UIPageSelector() throws Exception {
+    PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+    ResourceBundle bundle = context.getApplicationResourceBundle();
+    String rootBundleKey = "UICategoryNavigationTargetPathPopupWindow.title.UIPageSelector";
+    setPageTitle(bundle.getString(rootBundleKey));
     UIPageNodeSelector pageNodeSelector = addChild(UIPageNodeSelector.class, null, null);
     UITree uiTree = pageNodeSelector.getChild(UITree.class);
     uiTree.setUIRightClickPopupMenu(null);
-    //pageNodeSelector.removeChild(UIRightClickPopupMenu.class);
     pageNodeSelector.selectPageNodeByUri(null);
     
     UIPageSelectorPanel pageSelectorPanel = addChild(UIPageSelectorPanel.class, null, null);
@@ -85,6 +93,14 @@ public class UIPageSelector extends UIForm {
     if(event != null) event.broadcast() ;   
   }
   
+  public void setPageTitle(String pageTitle) {
+    this.pageTitle = pageTitle;
+  }
+
+  public String getPageTitle() {
+    return pageTitle;
+  }
+
   public static class ChangeNodeActionListener extends EventListener<UIPageSelector> {
     public void execute(Event<UIPageSelector> event) throws Exception {
       UIPageSelector pageSelector = event.getSource() ;
@@ -104,5 +120,4 @@ public class UIPageSelector extends UIForm {
       event.getRequestContext().addUIComponentToUpdateByAjax(pageSelector) ;
     }
   }
-  
 }

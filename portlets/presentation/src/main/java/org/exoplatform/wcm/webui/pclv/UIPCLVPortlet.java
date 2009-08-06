@@ -38,9 +38,6 @@ public class UIPCLVPortlet extends UIPortletApplication {
 	/** The Constant PARAMETERIZED_MANAGEMENT_PORTLET_POPUP_WINDOW. */
 	public static final String	PARAMETERIZED_MANAGEMENT_PORTLET_POPUP_WINDOW	= "UIParameterizedManagerPopupWindow";
 
-	/** The Constant PARAMETERIZED_TARGET_PAGE_POPUP_WINDOW. */
-	public static final String	PARAMETERIZED_TARGET_PAGE_POPUP_WINDOW				= "TagetPageInputPopupWindowForm";
-
 	/** The Constant REPOSITORY. */
 	public final static String	PREFERENCE_REPOSITORY													= "repository";
 
