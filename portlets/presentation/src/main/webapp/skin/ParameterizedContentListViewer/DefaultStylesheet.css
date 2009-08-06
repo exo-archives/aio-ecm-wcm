@@ -69,6 +69,12 @@
 	line-height: 16px;
 }
 
+.UIPCLVPortlet .CaptionItem .ContentHotNewsNoneImage {
+	color: #6b6b6b;
+	font-size: 12px;
+	line-height: 16px;
+}
+
 .UIPCLVPortlet .CaptionItem .TitleContentHotNews {
 	color: #3a66d8;
 	text-decoration: none;
@@ -109,6 +115,12 @@
 
 .UIPCLVPortlet .CaptionItem .ContentNormalNews {
 	margin-left : 220px;
+	color: #6b6b6b;
+	font-size: 12px;
+	line-height: 16px;
+}
+
+.UIPCLVPortlet .CaptionItem .ContentNormalNewsNoneImage {
 	color: #6b6b6b;
 	font-size: 12px;
 	line-height: 16px;

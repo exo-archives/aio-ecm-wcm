@@ -30,6 +30,7 @@ import org.exoplatform.services.cms.views.ApplicationTemplateManagerService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.wcm.webui.Utils;
+import org.exoplatform.wcm.webui.category.UICategoryNavigationConstant;
 import org.exoplatform.wcm.webui.selector.page.UIPageSelector;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -290,7 +291,7 @@ public class UIPCLVConfig extends UIForm implements UISelectable {
   public void doSelect(String selectField, Object value) throws Exception {
     UIFormStringInput formStringInput = findComponentById(selectField);
     formStringInput.setValue(value.toString()) ;
-    Utils.closePopupWindow(this, UIPCLVPortlet.PARAMETERIZED_TARGET_PAGE_POPUP_WINDOW);
+    Utils.closePopupWindow(this, UICategoryNavigationConstant.TARGET_PATH_SELECTOR_POPUP_WINDOW);
   }
   
   /**
@@ -355,8 +356,8 @@ public class UIPCLVConfig extends UIForm implements UISelectable {
       UIPCLVConfig viewerManagementForm = event.getSource();
       UIPageSelector pageSelector = viewerManagementForm.createUIComponent(UIPageSelector.class, null, null);
       pageSelector.setSourceComponent(viewerManagementForm, new String[] {TARGET_PAGE_INPUT});
-      Utils.createPopupWindow(viewerManagementForm, pageSelector, UIPCLVPortlet.PARAMETERIZED_TARGET_PAGE_POPUP_WINDOW, 800, 600);
-      viewerManagementForm.setPopupId(UIPCLVPortlet.PARAMETERIZED_TARGET_PAGE_POPUP_WINDOW);
+      Utils.createPopupWindow(viewerManagementForm, pageSelector, UICategoryNavigationConstant.TARGET_PATH_SELECTOR_POPUP_WINDOW, 800, 600);
+      viewerManagementForm.setPopupId(UICategoryNavigationConstant.TARGET_PATH_SELECTOR_POPUP_WINDOW);
     }
   }
 
@@ -461,7 +462,7 @@ public class UIPCLVConfig extends UIForm implements UISelectable {
       if (Utils.isQuickEditmode(uiParameterizedManagementForm, UIPCLVPortlet.PARAMETERIZED_MANAGEMENT_PORTLET_POPUP_WINDOW)) {
         Utils.closePopupWindow(uiParameterizedManagementForm, UIPCLVPortlet.PARAMETERIZED_MANAGEMENT_PORTLET_POPUP_WINDOW);
       } else {
-        Utils.createPopupMessage(uiParameterizedManagementForm, "UIParameterizedManagementForm.msg.saving-success", null, ApplicationMessage.INFO);
+        Utils.createPopupMessage(uiParameterizedManagementForm, "UIPCLVConfig.msg.saving-success", null, ApplicationMessage.INFO);
       }
     }
   }

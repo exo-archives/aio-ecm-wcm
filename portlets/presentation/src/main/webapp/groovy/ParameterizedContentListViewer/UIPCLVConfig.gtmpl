@@ -122,10 +122,10 @@
 							<%=uicomponent.getLabel(uiform.getChildById(uicomponent.SHOW_MORE_LINK).getName()) %>
 						</td>
 						<td class="FieldLabel">
-					    	<% uiform.renderField(uiform.getChildById(uicomponent.SHOW_RSS_LINK)) %>
+					    	<!-- <% uiform.renderField(uiform.getChildById(uicomponent.SHOW_RSS_LINK)) %> -->
 				      	</td>
 						<td class="FieldComponent">
-							<%=uicomponent.getLabel(uiform.getChildById(uicomponent.SHOW_RSS_LINK).getName()) %>
+							<!--<%=uicomponent.getLabel(uiform.getChildById(uicomponent.SHOW_RSS_LINK).getName()) %>-->
 						</td>				
 					</tr>																												
 	      </table>   					      	      
