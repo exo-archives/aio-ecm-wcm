@@ -24,7 +24,7 @@
 					<%
 						if (uicomponent.isShowField(UIPCLVPortlet.SHOW_RSS_LINK)) {
 							%>
-			  				<!-- <a class="RssIcon" href="#demo">RSS Feed</a> -->
+			  				<a class="RssIcon" href="#demo">RSS Feed</a>
 						<%
 						}
 					%>
@@ -48,15 +48,6 @@
 						boolean isShowIllustrationImg = uicomponent.isShowField(UIPCLVPortlet.SHOW_THUMBNAILS_VIEW);
 						boolean isShowLink = uicomponent.isShowField(UIPCLVPortlet.SHOW_LINK);
 						boolean isShowCreatedDate = uicomponent.isShowField(UIPCLVPortlet.SHOW_DATE_CREATED);
-						String cssClassHotNews = "";
-						String cssClassNormalNews = "";
-						if(isShowIllustrationImg) {
-						  cssClassNormalNews = "ContentNormalNews";
-						  cssClassHotNews = "ContentHotNews";
-						} else {
-						  cssClassNormalNews = "ContentNormalNewsNoneImage";
-						  cssClassHotNews = "ContentHotNewsNoneImage";
-						}
 						int count = 0;
 						for (Node node : currentPageData) 
 						{
@@ -82,7 +73,7 @@
 													<a class="ImageHotNews" href="$itemLink"><img width="248" alt="#" src="$imgSrc" /></a>
 												<%
 												} %>
-												<div class="$cssClassHotNews">
+												<div class="ContentHotNews">
 												<% 
 													if (isShowTitle) {
 														%>
@@ -130,7 +121,7 @@
 														<%
 													} 
 												%>
-												<div class="$cssClassNormalNews">
+												<div class="ContentNormalNews">
 													<% 
 														if (isShowTitle) {
 															%>
@@ -163,7 +154,7 @@
 														} 
 													%>
 												</div>
-												<div class="ClearLeft"><span></span></div>
+												<div style="clear: both;"><span></span></div>
 											</div>
 											<div class="LineNormalNews"><span></span></div>
 										<%

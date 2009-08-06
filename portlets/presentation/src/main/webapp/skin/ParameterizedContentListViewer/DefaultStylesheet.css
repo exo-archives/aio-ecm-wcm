@@ -59,17 +59,11 @@
 	border: 1px solid #dbdbdb;
 	padding: 5px;
 	float: right;
+	margin-left: 10px;
 	display: block;
 }
 
 .UIPCLVPortlet .CaptionItem .ContentHotNews {
-	margin-right: 280px;
-	color: #6b6b6b;
-	font-size: 12px;
-	line-height: 16px;
-}
-
-.UIPCLVPortlet .CaptionItem .ContentHotNewsNoneImage {
 	color: #6b6b6b;
 	font-size: 12px;
 	line-height: 16px;
@@ -99,6 +93,7 @@
 	padding: 5px;
 	float: left;
 	display: block;
+	margin-right: 10px;
 }
 
 .UIPCLVPortlet .UIPCLVForm .TitleBar {	
@@ -114,16 +109,10 @@
 }
 
 .UIPCLVPortlet .CaptionItem .ContentNormalNews {
-	margin-left : 220px;
 	color: #6b6b6b;
 	font-size: 12px;
 	line-height: 16px;
-}
-
-.UIPCLVPortlet .CaptionItem .ContentNormalNewsNoneImage {
-	color: #6b6b6b;
-	font-size: 12px;
-	line-height: 16px;
+	float: left;
 }
 
 .UIPCLVPortlet .CaptionItem .TitleContentNormalNews {
