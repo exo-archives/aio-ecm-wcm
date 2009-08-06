@@ -195,6 +195,9 @@
 			<DateTimeIsNotNull>
 				Envoyer la date est nulle. S'il vous plaît vérifier à nouveau!
 			</DateTimeIsNotNull>
+			<DateTimeIsInvalid>
+				Envoyer la date n'est pas valide. S'il vous plaît vérifier à nouveau!
+			</DateTimeIsInvalid>
 			<UpdateInformationSuccessful>L'information est mise à jour réussie</UpdateInformationSuccessful>
 			<NodeNameInvalid>
 				Impossible de créer newsletter Newsletter parce que son nom est déjà en place.<br/>S'il vous plaît essayez de nouveau!

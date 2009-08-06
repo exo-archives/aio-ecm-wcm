@@ -180,7 +180,11 @@ public class UINewsletterEntryDialogSelector extends UIForm {
       UINewsletterEntryContainer entryContainer = newsletterEntryDialogSelector.getAncestorOfType(UINewsletterEntryContainer.class);
       UIApplication uiApp = entryContainer.getAncestorOfType(UIApplication.class);
       if(calendar == null || formDateTimeInput.getValue().trim().length() < 1){
-        uiApp.addMessage(new ApplicationMessage("UINewsletterEntryForm.msg.DateTimeIsNotNull", null, ApplicationMessage.WARNING));
+        if(formDateTimeInput.getValue() == null || formDateTimeInput.getValue().trim().length() < 1){
+          uiApp.addMessage(new ApplicationMessage("UINewsletterEntryForm.msg.DateTimeIsNotNull", null, ApplicationMessage.WARNING));
+        }else {
+          uiApp.addMessage(new ApplicationMessage("UINewsletterEntryForm.msg.DateTimeIsInvalid", null, ApplicationMessage.WARNING));
+        }
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       }

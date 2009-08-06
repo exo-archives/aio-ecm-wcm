@@ -195,6 +195,9 @@
 			<DateTimeIsNotNull>
 				Send date is null. Please check again!
 			</DateTimeIsNotNull>
+			<DateTimeIsInvalid>
+				Send date is invalid. Please check again!
+			</DateTimeIsInvalid>
 			<UpdateInformationSuccessful>Information is updated successful</UpdateInformationSuccessful>
 			<NodeNameInvalid>
 				Can't create newsletter because Newsletter's name is already exist.<br/>Please try again!
