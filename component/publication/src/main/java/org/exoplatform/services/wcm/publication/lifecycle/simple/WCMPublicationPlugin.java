@@ -167,6 +167,7 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin{
 //      node.setProperty(LIVE_REVISION_PROP, valueFactory.createValue(""));
 //      node.setProperty(LIVE_REVISION_PROP, "");
       publicationService.addLog(node, logs);
+      changeState(node, PublicationDefaultStates.PUBLISHED, context);
     } else if (newState.equals(PublicationDefaultStates.PUBLISHED)) {
       String[] logs = new String[] {new Date().toString(), PublicationDefaultStates.PUBLISHED, session.getUserID(), "PublicationService.WCMPublicationPlugin.changeState.published"};
 //      node.setProperty(LIVE_REVISION_PROP, node.getUUID());

@@ -164,7 +164,6 @@ public class UIPresentationContainer extends UIContainer{
     } catch(RepositoryException rx) {
       originalNode =  null;
     }
-    ExtendedNode curnode = (ExtendedNode) originalNode;
     String currentState = StageAndVersionPublicationState.getRevisionState(originalNode);
     if(StageAndVersionPublicationConstant.OBSOLETE_STATE.equals(currentState)) {
       setObsoletedContent(true);
