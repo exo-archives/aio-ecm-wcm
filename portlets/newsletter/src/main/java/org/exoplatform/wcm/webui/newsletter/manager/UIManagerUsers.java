@@ -61,9 +61,11 @@ import org.exoplatform.webui.event.EventListener;
 )
 public class UIManagerUsers extends UITabPane {
   private String[] TITLE_  = {"Mail", "isBanned"};
-  private String[] ACTIONS_ = {"Edit", "BanUser", "UnBanUser", "DeleteUser"};
+  //private String[] ACTIONS_ = {"Edit", "BanUser", "UnBanUser", "DeleteUser"};
+  private String[] ACTIONS_ = {"BanUser", "UnBanUser", "DeleteUser"};
   private String[] MEMBER_TITLE_ = {"UserName", "FirstName", "LastName", "Email", "Role"};
-  private String[] MEMBER_ACTIONS_ = {"Edit", "AddAdministrator", "DeleteAdministrator"};
+  //private String[] MEMBER_ACTIONS_ = {"Edit", "AddAdministrator", "DeleteAdministrator"};
+  private String[] MEMBER_ACTIONS_ = {"AddAdministrator", "DeleteAdministrator"};
   private NewsletterManageUserHandler managerUserHandler = null;
   private String categoryName ;
   private String subscriptionName;
