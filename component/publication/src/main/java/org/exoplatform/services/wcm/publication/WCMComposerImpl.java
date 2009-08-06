@@ -33,16 +33,15 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	private ThreadLocalSessionProviderService threadLocalSessionProviderService;
 	private RepositoryService repositoryService;
 	private PublicationService publicationService;
-	private WCMPublicationService wcmPublicationService;
+	private WCMPublicationService wcmPublicationService = null;
 	
 	private String templatesFilter = null;
 	private String repository;
 	
-	public WCMComposerImpl(TemplateService templateService, PublicationService publicationService, WCMPublicationService wcmPublicationService) throws Exception {
+	public WCMComposerImpl(TemplateService templateService, PublicationService publicationService) throws Exception {
 		this.templateService = templateService;
 		this.repository = "repository";
 		this.publicationService = publicationService;
-		this.wcmPublicationService = wcmPublicationService;
 		init();
 	}
 	
@@ -52,6 +51,13 @@ public class WCMComposerImpl implements WCMComposer, Startable {
         .getComponentInstanceOfType(ThreadLocalSessionProviderService.class));
 		
 	    repositoryService = RepositoryService.class.cast(ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(RepositoryService.class));
+	}
+	
+	private WCMPublicationService getWCMPublicationService() {
+		if (wcmPublicationService==null) {
+			wcmPublicationService = WCMPublicationService.class.cast(ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(WCMPublicationService.class));
+		}
+		return wcmPublicationService;
 	}
 	
 	/* (non-Javadoc)
@@ -66,7 +72,7 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 		String lifecycleName = publicationService.getNodeLifecycleName(node);
 	    PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(lifecycleName);
 	    Node nodeView = publicationPlugin.getNodeView(node, new HashMap<String, Object>());
-	    String state = wcmPublicationService.getContentState(node);
+	    String state = getWCMPublicationService().getContentState(node);
 	    String mode = filters.get(FILTER_MODE);
 	    List<String> states = getAllowedStates(mode);
 	    
