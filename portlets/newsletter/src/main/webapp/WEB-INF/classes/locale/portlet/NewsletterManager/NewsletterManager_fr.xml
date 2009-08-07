@@ -200,7 +200,7 @@
 			</DateTimeIsInvalid>
 			<UpdateInformationSuccessful>L'information est mise à jour réussie</UpdateInformationSuccessful>
 			<NodeNameInvalid>
-				Impossible de créer newsletter Newsletter parce que son nom est déjà en place.<br/>S'il vous plaît essayez de nouveau!
+				Impossible de créer newsletter Newsletter parce que son nom est déjà en place. S'il vous plaît essayez de nouveau!
 			</NodeNameInvalid>
 		</msg>
 	</UINewsletterEntryForm>
