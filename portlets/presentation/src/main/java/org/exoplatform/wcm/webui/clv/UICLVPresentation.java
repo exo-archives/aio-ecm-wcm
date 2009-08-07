@@ -44,6 +44,7 @@ import org.exoplatform.services.organization.UserProfileHandler;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
 import org.exoplatform.services.wcm.images.RESTImagesRendererService;
+import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationState;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant.SITE_MODE;
@@ -172,9 +173,11 @@ import org.exoplatform.webui.event.EventListener;
     PublicationService publicationService = getApplicationComponent(PublicationService.class);
     HashMap<String, Object> context = new HashMap<String, Object>();
     if (org.exoplatform.wcm.webui.Utils.isLiveMode()) {
-      context.put(StageAndVersionPublicationConstant.RUNTIME_MODE, SITE_MODE.LIVE);
+//      context.put(StageAndVersionPublicationConstant.RUNTIME_MODE, SITE_MODE.LIVE);
+      context.put(WCMComposer.FILTER_MODE, WCMComposer.MODE_LIVE);
     } else {
-      context.put(StageAndVersionPublicationConstant.RUNTIME_MODE, SITE_MODE.EDITING);
+//      context.put(StageAndVersionPublicationConstant.RUNTIME_MODE, SITE_MODE.EDITING);
+      context.put(WCMComposer.FILTER_MODE, WCMComposer.MODE_EDIT);
     }
     String lifecyleName = null;
     	try {

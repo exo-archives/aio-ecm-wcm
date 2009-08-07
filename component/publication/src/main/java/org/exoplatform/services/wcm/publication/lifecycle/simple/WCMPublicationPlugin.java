@@ -32,7 +32,6 @@ import java.util.ResourceBundle;
 
 import javax.jcr.Node;
 import javax.jcr.Session;
-import javax.jcr.ValueFactory;
 import javax.jcr.lock.LockException;
 import javax.jcr.version.VersionException;
 
@@ -57,6 +56,7 @@ import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
+import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.services.wcm.publication.WebpagePublicationPlugin;
 import org.exoplatform.services.wcm.publication.lifecycle.simple.ui.UIPublishingPanel;
 import org.exoplatform.web.application.RequestContext;
@@ -432,8 +432,10 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin{
    */
   @SuppressWarnings("unused")
   public Node getNodeView(Node node, Map<String, Object> context) throws Exception {
-    
-    return node;
+  	if (context.get(WCMComposer.FILTER_MODE).equals(WCMComposer.MODE_EDIT))
+  		return node;
+
+    return null;
   }
 
   /* (non-Javadoc)

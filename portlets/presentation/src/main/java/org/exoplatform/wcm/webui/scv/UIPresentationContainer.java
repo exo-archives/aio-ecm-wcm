@@ -37,6 +37,7 @@ import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
+import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationState;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant.SITE_MODE;
@@ -72,6 +73,7 @@ public class UIPresentationContainer extends UIContainer{
   private boolean isDraftRevision = false;
   private boolean isObsoletedContent = false;
   private boolean hasLiveRevision = false;
+	private String currentContentState;
 
 
   /**
@@ -122,6 +124,14 @@ public class UIPresentationContainer extends UIContainer{
 	  this.hasLiveRevision = hasLiveRevision;
   }
   
+  private String getCurrentContentState() {
+  	return currentContentState;
+  }
+
+	private void setCurrentContentState(String currentContentState) {
+  	this.currentContentState = currentContentState;
+  }
+  
   public boolean isEditable() {
 	  //	  boolean isEditable = false;
 	  UISingleContentViewerPortlet uiportlet = getAncestorOfType(UISingleContentViewerPortlet.class);
@@ -165,6 +175,7 @@ public class UIPresentationContainer extends UIContainer{
       originalNode =  null;
     }
     String currentState = StageAndVersionPublicationState.getRevisionState(originalNode);
+    setCurrentContentState(currentState);
     if(StageAndVersionPublicationConstant.OBSOLETE_STATE.equals(currentState)) {
       setObsoletedContent(true);
     }else {
@@ -172,9 +183,13 @@ public class UIPresentationContainer extends UIContainer{
       UIPresentation livePresentation = getChild(UIPresentation.class);
       if(Utils.isLiveMode()) {
         Node liveRevision = getLiveRevision(originalNode);
-        if (liveRevision!=null) setHasLiveRevision(true);
+        if (liveRevision != null) setHasLiveRevision(true);
         livePresentation.setOriginalNode(originalNode);
-        livePresentation.setViewNode(liveRevision);      
+        if (liveRevision != null) {
+        	livePresentation.setViewNode(liveRevision);
+        } else {
+        	livePresentation.setViewNode(originalNode);
+        }
         setDraftRevision(false);       
       }else {        
         if(StageAndVersionPublicationConstant.DRAFT_STATE.equals(currentState)) {
@@ -185,7 +200,11 @@ public class UIPresentationContainer extends UIContainer{
           Node liveRevision = getLiveRevision(originalNode);
           if (liveRevision!=null) setHasLiveRevision(true);
           livePresentation.setOriginalNode(originalNode);
-          livePresentation.setViewNode(liveRevision);
+          if (liveRevision!=null) {
+          	livePresentation.setViewNode(liveRevision);
+          } else {
+          	livePresentation.setViewNode(originalNode);
+          }
           setDraftRevision(false);             
         }
       }  
@@ -196,7 +215,7 @@ public class UIPresentationContainer extends UIContainer{
   private Node getLiveRevision(Node content) throws Exception {
     if (content == null) return null;
     HashMap<String,Object> context = new HashMap<String, Object>();    
-    context.put(StageAndVersionPublicationConstant.RUNTIME_MODE, SITE_MODE.LIVE);    
+    context.put(WCMComposer.FILTER_MODE, WCMComposer.MODE_LIVE);    
     PublicationService pubService = getApplicationComponent(PublicationService.class);
     String lifecycleName = null;
     try {

@@ -36,9 +36,11 @@ import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndV
 					
 					Node viewNode = null;
 					Node tempNode = null;
+				    HashMap<String,Object> context = new HashMap<String, Object>();    
+    				context.put(WCMComposer.FILTER_MODE, WCMComposer.MODE_LIVE);
 					for (Node node : currentPageData) {
 						tempNode = node;
-						viewNode = uicomponent.getNodeView(node);
+						viewNode = uicomponent.getNodeView(node, context);
 						if (viewNode == null) {	
 							continue;				
 						} 
