@@ -5,7 +5,7 @@
  */
 import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
 import javax.jcr.Node;
-import org.exoplatform.wcm.webui.clv.;
+import org.exoplatform.wcm.webui.clv.UICLVPortlet;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationState;
 %>
@@ -62,10 +62,10 @@ import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndV
 						%>	
 							<div class="CaptionItem">
 								<% 
-									if (uicomponent.isShowField(.SHOW_TITLE)) {
+									if (uicomponent.isShowField(UICLVPortlet.SHOW_TITLE)) {
 										%>
 											<div class="CaptionTitle" >
-												<% if (uicomponent.isShowField(.SHOW_LINK)) {%>
+												<% if (uicomponent.isShowField(UICLVPortlet.SHOW_LINK)) {%>
 													<a href="$itemLink">$itemName</a>
 												<% } else { %>	
 													$itemName
@@ -82,18 +82,18 @@ import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndV
 									} 
 								%>	
 								<% 
-									if (itemDateCreated != null && uicomponent.isShowField(.SHOW_DATE_CREATED)) { 
+									if (itemDateCreated != null && uicomponent.isShowField(UICLVPortlet.SHOW_DATE_CREATED)) { 
 										%>
 											<div class="CaptionDate"><%=itemDateCreated%></div>		
 										<% 
 									} 
 								%>											
 								<% 
-									if (itemSummary != null && itemSummary.trim().length() != 0 && uicomponent.isShowField(.SHOW_SUMMARY)) { 
+									if (itemSummary != null && itemSummary.trim().length() != 0 && uicomponent.isShowField(UICLVPortlet.SHOW_SUMMARY)) { 
 										%>
 											<div class="CaptionContent">				
 												<% 
-													if(imgSrc != null && uicomponent.isShowField(.SHOW_THUMBNAILS_VIEW)) { 
+													if(imgSrc != null && uicomponent.isShowField(UICLVPortlet.SHOW_THUMBNAILS_VIEW)) { 
 														%>
 															<img style="float: left;" src="$imgSrc" width="91" height="53 /">				
 														<% 
