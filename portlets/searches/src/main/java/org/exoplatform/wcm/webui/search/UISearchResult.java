@@ -177,6 +177,12 @@ public class UISearchResult extends UIContainer {
 			queryCriteria.setKeyword(keyword);
 			queryCriteria.setSearchWebpage(true);
 			queryCriteria.setSearchDocument(true);
+			queryCriteria.setSearchWebContent(true);
+			if (Utils.isLiveMode()) {
+        queryCriteria.setLiveMode(true);
+      } else {
+        queryCriteria.setLiveMode(false);
+      }
 			int itemsPerPage = Integer.parseInt(portletPreferences.getValue(UIWCMSearchPortlet.ITEMS_PER_PAGE,
 																																			null));
 			try {
