@@ -1,14 +1,14 @@
-.UIContentListViewerPortlet .UIContentListPresentationDefault {
+.UICLVPortlet .UIContentListPresentationDefault {
 	border: 1px solid #b7b7b7;    
 	margin: 10px;
 	background: #fff;
 }
 
-.UIContentListViewerPortlet .UIContentListPresentationDefault .Caption {    
+.UICLVPortlet .UIContentListPresentationDefault .Caption {    
 	padding: 10px;
 }
 
-.UIContentListViewerPortlet .UIContentListPresentationDefault .Header {
+.UICLVPortlet .UIContentListPresentationDefault .Header {
 	background: url(icons/BgCategoryTitle1x25.gif) repeat-x;
 	border-bottom: 1px solid #B7B7B7;
 	line-height: 25px;	
@@ -17,18 +17,18 @@
 	color: #424242;
 }
 
-.UIContentListViewerPortlet .UIContentListPresentationDefault .Caption .CaptionItem {
+.UICLVPortlet .UIContentListPresentationDefault .Caption .CaptionItem {
 	border-bottom: 1px dotted #2f2f2f;
 	padding-top: 10px;
 }
 
-.UIContentListViewerPortlet .UIContentListPresentationDefault .Caption .CaptionTitle a {
+.UICLVPortlet .UIContentListPresentationDefault .Caption .CaptionTitle a {
 	font-size: 14px;
 	color: #0385d9;
 	font-weight: bold;
 }
 
-.UIContentListViewerPortlet .UIContentListPresentationDefault .Caption .CaptionTitle .CaptionDraft {
+.UICLVPortlet .UIContentListPresentationDefault .Caption .CaptionTitle .CaptionDraft {
 	color:gray;
 	font-size:11px;
 	height:16px;
@@ -37,7 +37,7 @@
 	background: url(icons/DraftIcon.gif) no-repeat;	
 }
 
-.UIContentListViewerPortlet .UIContentListPresentationDefault .Caption .CaptionTitle .CaptionEdit {
+.UICLVPortlet .UIContentListPresentationDefault .Caption .CaptionTitle .CaptionEdit {
 	width: 16px;
 	height: 16px;
 	font-size: 11px;
@@ -46,50 +46,50 @@
 	background: url(icons/Edit.gif) no-repeat;
 }
 
-.UIContentListViewerPortlet .UIContentListPresentationDefault .Caption .CaptionDate {
+.UICLVPortlet .UIContentListPresentationDefault .Caption .CaptionDate {
 	color: #8f8f8f;
 }
 
 
-.UIContentListViewerPortlet .UIContentListPresentationDefault .Caption .CaptionContent {
+.UICLVPortlet .UIContentListPresentationDefault .Caption .CaptionContent {
 	overflow:auto;	
 }
 
-.UIContentListViewerPortlet .UIContentListPresentationDefault .Caption .CaptionContent p {
+.UICLVPortlet .UIContentListPresentationDefault .Caption .CaptionContent p {
   padding: 5px 0;
 }
 
-.UIContentListViewerPortlet .UIContentListPresentationDefault .Caption .CaptionContent pre {
+.UICLVPortlet .UIContentListPresentationDefault .Caption .CaptionContent pre {
 	font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
 	white-space: normal;
 }
 
-.UIContentListViewerPortlet .UIContentListPresentationDefault .Caption .CaptionContent img {
+.UICLVPortlet .UIContentListPresentationDefault .Caption .CaptionContent img {
 	float: left;
 	margin: 5px 10px 0 0;
 }
 
-.UIContentListViewerPortlet .UIContentListPresentationDefault .Caption .CaptionViewMore {
+.UICLVPortlet .UIContentListPresentationDefault .Caption .CaptionViewMore {
 	text-align: right;
 }
 
-.UIContentListViewerPortlet .UIContentListPresentationDefault .Caption .CaptionViewMore a {
+.UICLVPortlet .UIContentListPresentationDefault .Caption .CaptionViewMore a {
 	color: #fd711c;
 	font-size: 10px;
 }
 
-.UIContentListViewerPortlet .UIContentListPresentationDefault .Caption .CaptionFunc {
+.UICLVPortlet .UIContentListPresentationDefault .Caption .CaptionFunc {
     padding: 10px 0;
     height: 1%;
     overflow: hidden;
 }
 
-.UIContentListViewerPortlet .UIContentListPresentationDefault .Caption .CaptionFunc .CaptionRefresh {
+.UICLVPortlet .UIContentListPresentationDefault .Caption .CaptionFunc .CaptionRefresh {
     width: 200px;
     float: left;
 }
 
-.UIContentListViewerPortlet .UIContentListPresentationDefault .Caption .CaptionFunc .CaptionRefresh a {
+.UICLVPortlet .UIContentListPresentationDefault .Caption .CaptionFunc .CaptionRefresh a {
     display: block;
     padding: 0 3px 3px 25px;
     background: url(icons/RefreshIcon.gif) no-repeat;

@@ -46,7 +46,7 @@
 				        </td>
 				        <td>
 			              <a href="<%=uicomponent.event("Select", node.getPath())%>">
-			                <div class="Select16x16Icon" style="margin-left:15px;"></div>
+			                <div class="Select16x16Icon" style="margin: auto;"></div>
 			              </a>
 				        </td>
 				      </tr>

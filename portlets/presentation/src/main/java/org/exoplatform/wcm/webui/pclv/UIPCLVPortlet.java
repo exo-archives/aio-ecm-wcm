@@ -113,9 +113,6 @@ public class UIPCLVPortlet extends UIPortletApplication {
 	/** The Constant REPOSITORY. */
 	public final static String	REPOSITORY																		= "repository";
 
-	/** The Constant PARAMETERIZED_CONTENT_LIST_VIEWER_FORM. */
-	public final static String	PARAMETERIZED_CONTENT_LIST_VIEWER_FORM				= "UIParameterizedContentListViewerForm";
-
 	/** The mode. */
 	private PortletMode					mode																					= PortletMode.VIEW;
 

@@ -23,13 +23,7 @@
 	margin-left:240px;
 }
 
-.UICLVPortlet .UICLVFolderSelector .UITreeList .UIGrid .Select16x16Icon {
-	background: url('DefaultSkin/icons/AddPage.gif') no-repeat left center;
-	width: 16px;
-	height: 16px;
-}
-
-.UICLVPortlet .UIFolderPathSelectorForm .Select16x16Icon {
+.UICLVPortlet .UICLVFolderSelector .Select16x16Icon {
 	background: url('DefaultSkin/icons/SelectPage.gif') no-repeat;
 	cursor: pointer;
 	height: 16px;

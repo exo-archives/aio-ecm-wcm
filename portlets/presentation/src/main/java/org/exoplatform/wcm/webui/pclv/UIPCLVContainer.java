@@ -99,9 +99,7 @@ public class UIPCLVContainer extends UIContainer {
 		PaginatedNodeIterator paginatedNodeIterator = new PaginatedNodeIterator(categoriesChildNode, itemsPerPage);
 		getChildren().clear();
 
-		UIPCLVForm parameterizedContentListViewer = addChild(	UIPCLVForm.class,
-																													null,
-																													UIPCLVPortlet.PARAMETERIZED_CONTENT_LIST_VIEWER_FORM);
+		UIPCLVForm parameterizedContentListViewer = addChild(	UIPCLVForm.class, null, null);
 		String templatePath = getFormViewTemplatePath();
 		ResourceResolver resourceResolver = getTemplateResourceResolver();
 		parameterizedContentListViewer.init(templatePath, resourceResolver, paginatedNodeIterator);

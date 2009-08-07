@@ -5,7 +5,7 @@
 	import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationState;
 	import org.exoplatform.wcm.webui.pclv.UIPCLVForm;
 %>
-<div class="UIParameterizedContentListViewerDefault">
+<div class="UIPCLVDefault">
  	<%
  		uiform.begin();
 	
