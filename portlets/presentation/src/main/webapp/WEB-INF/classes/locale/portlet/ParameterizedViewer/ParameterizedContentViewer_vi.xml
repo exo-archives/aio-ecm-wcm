@@ -39,5 +39,8 @@
 	  	<UIDocumentDialogForm>Form chỉnh sửa nội dung</UIDocumentDialogForm>
   	</title>
   </UIPopupWindow>
+  <UIPresentationContainer>
+  	<draft>Draft</draft>
+  </UIPresentationContainer>
 </bundle>
 

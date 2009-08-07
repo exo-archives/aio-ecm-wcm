@@ -39,5 +39,8 @@
 	  	<UIDocumentDialogForm>Document sous forme de dialogue</UIDocumentDialogForm>
   	</title>
   </UIPopupWindow>
+  <UIPresentationContainer>
+  	<draft>Draft</draft>
+  </UIPresentationContainer>
 </bundle>
 
