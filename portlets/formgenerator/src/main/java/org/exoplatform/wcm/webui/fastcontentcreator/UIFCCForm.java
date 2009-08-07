@@ -304,18 +304,16 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
         session.refresh(false) ;
         homeNode.getSession().refresh(false) ;
         
-        Object[] args = { preferencePath } ;
-        String preferenceSaveMessage = preferences.getValue(UIFCCConstant.PREFERENCE_SAVE_MESSAGE, "") ;
-        uiApp.addMessage(new ApplicationMessage("UIFastContentCreatorForm.msg." + preferenceSaveMessage, args)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        
         boolean preferenceIsRedirect = Boolean.parseBoolean(preferences.getValue(UIFCCConstant.PREFERENCE_IS_REDIRECT, "")) ;
         if (preferenceIsRedirect) {
           String preferenceRedirectPath = preferences.getValue(UIFCCConstant.PREFERENCE_REDIRECT_PATH, "") ;
-          PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
-          portalRequestContext.getResponse().sendRedirect(preferenceRedirectPath);
+          event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + preferenceRedirectPath + "');");
+        } else {
+          Object[] args = { preferencePath } ;
+          String preferenceSaveMessage = preferences.getValue(UIFCCConstant.PREFERENCE_SAVE_MESSAGE, "") ;
+          uiApp.addMessage(new ApplicationMessage("UIFastContentCreatorForm.msg." + preferenceSaveMessage, args)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         }
-        
         event.getRequestContext().addUIComponentToUpdateByAjax(fastContentCreatorForm.getParent()) ;
       } catch (AccessControlException ace) {
         throw new AccessDeniedException(ace.getMessage());
@@ -346,7 +344,6 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
           session.logout();
         }
       }
-      
     }
   }  
     
