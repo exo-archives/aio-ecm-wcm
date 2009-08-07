@@ -185,7 +185,15 @@ public class UINewsletterEntryForm extends UIDialogForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       }
-      Node newsletterNode = newsletterEntryForm.saveContent();
+      Node newsletterNode = null;
+      try{
+        newsletterNode = newsletterEntryForm.saveContent();
+      }catch(ItemExistsException itemExistsException){
+        UIApplication uiApp = newsletterEntryContainer.getAncestorOfType(UIApplication.class);
+        uiApp.addMessage(new ApplicationMessage("UINewsletterEntryForm.msg.NodeNameInvalid", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
+      }
       Session session = newsletterNode.getSession();
       UINewsletterEntryDialogSelector newsletterEntryDialogSelector = newsletterEntryContainer.getChild(UINewsletterEntryDialogSelector.class);
       Date currentDate = new Date();
