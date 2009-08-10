@@ -720,6 +720,27 @@ import org.exoplatform.webui.event.EventListener;
       preferenceQ.setValues(listValue);
       listPreference.add(preferenceQ);
 
+      Preference preferenceT = new Preference();
+      listValue = new ArrayList<String>();
+      listValue.add("true");
+      preferenceT.setName("ShowTitle");
+      preferenceT.setValues(listValue);
+      listPreference.add(preferenceT);
+   
+      Preference preferenceV = new Preference();
+      listValue = new ArrayList<String>();
+      listValue.add("true");
+      preferenceV.setName("ShowVote");
+      preferenceV.setValues(listValue);
+      listPreference.add(preferenceV);
+      
+      Preference preferenceC = new Preference();
+      listValue = new ArrayList<String>();
+      listValue.add("true");
+      preferenceC.setName("ShowComments");
+      preferenceC.setValues(listValue);
+      listPreference.add(preferenceC);
+      
       Preference preferenceP = new Preference();
       listValue = new ArrayList<String>();
       listValue.add("true");
@@ -727,12 +748,12 @@ import org.exoplatform.webui.event.EventListener;
       preferenceP.setValues(listValue);
       listPreference.add(preferenceP);
 
-      Preference preferenceC = new Preference();
+      Preference preferenceQC = new Preference();
       listValue = new ArrayList<String>();
       listValue.add("true");
-      preferenceC.setName("isQuickCreate");
-      preferenceC.setValues(listValue);
-      listPreference.add(preferenceC);
+      preferenceQC.setName("isQuickCreate");
+      preferenceQC.setValues(listValue);
+      listPreference.add(preferenceQC);
       
       portletPreferences.setPreferences(listPreference);
 
