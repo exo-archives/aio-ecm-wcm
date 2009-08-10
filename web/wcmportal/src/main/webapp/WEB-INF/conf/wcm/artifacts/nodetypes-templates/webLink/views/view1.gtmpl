@@ -60,7 +60,7 @@
 	    		}
 	    		if (contentNode.hasProperty("exo:linkDescription")) {
 	    			def description = uicomponent.encodeHTML(contentNode.getProperty("exo:linkDescription").getString());
-	    			content += "	<b>" + _ctx.appRes("WebLink.view.label.description") + ": </b>" + description +
+	    			content += "	<b>" + _ctx.appRes("WebLink.view.label.description") + ": </b>" + description;
 	    		}
 				content += "</pre>";
     			println content;
