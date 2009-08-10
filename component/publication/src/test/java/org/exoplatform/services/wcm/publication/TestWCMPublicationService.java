@@ -36,7 +36,7 @@ import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
 import org.exoplatform.services.wcm.BaseWCMTestCase;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
-import org.exoplatform.services.wcm.publication.lifecycle.simple.WCMPublicationPlugin;
+import org.exoplatform.services.wcm.publication.lifecycle.simple.SimplePublicationPlugin;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationPlugin;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationUtil;
@@ -113,8 +113,8 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
     publicationPlugin.setName(StageAndVersionPublicationConstant.LIFECYCLE_NAME);
     wcmPublicationService.addPublicationPlugin(publicationPlugin);
 
-    WebpagePublicationPlugin publicationPlugin2 = new WCMPublicationPlugin();
-    publicationPlugin2.setName(WCMPublicationPlugin.LIFECYCLE_NAME);
+    WebpagePublicationPlugin publicationPlugin2 = new SimplePublicationPlugin();
+    publicationPlugin2.setName(SimplePublicationPlugin.LIFECYCLE_NAME);
     wcmPublicationService.addPublicationPlugin(publicationPlugin2);
     
     wcmPublicationService.enrollNodeInLifecycle(testNode, "classic", "root");

@@ -53,6 +53,7 @@ import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
+import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.services.wcm.publication.WebpagePublicationPlugin;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant.SITE_MODE;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.config.VersionData;
@@ -223,9 +224,10 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
    * 
    * @return the live revision
    */
-  private Node getLiveRevision(Node  node) {
-    try {     
-      return node.getProperty(StageAndVersionPublicationConstant.LIVE_REVISION_PROP).getNode();
+  private Node getLiveRevision(Node node) {
+    try {
+      String nodeVersionUUID = node.getProperty(StageAndVersionPublicationConstant.LIVE_REVISION_PROP).getString(); 
+      return node.getVersionHistory().getSession().getNodeByUUID(nodeVersionUUID);
     } catch (Exception e) {      
       return null;
     }
@@ -304,25 +306,14 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
    * @see org.exoplatform.services.ecm.publication.PublicationPlugin#getNodeView(javax.jcr.Node, java.util.Map)
    */
   public Node getNodeView(Node node, Map<String, Object> context) throws Exception {
-    Object mode = null;
-    if (context!=null) context.get(StageAndVersionPublicationConstant.RUNTIME_MODE);   
-    SITE_MODE runtimeMode = null;
-    if(mode == null) {
-      runtimeMode = SITE_MODE.LIVE; 
-    }else {
-      runtimeMode = (SITE_MODE)mode;
+    // if current mode is edit mode
+    if (context.get(WCMComposer.FILTER_MODE).equals(WCMComposer.MODE_EDIT)) return node;
+    // if current mode is live mode
+    Node liveNode = getLiveRevision(node);
+    if(liveNode != null) {
+      return liveNode.getNode("jcr:frozenNode");
     }
-    Node viewNode = null;
-    Node liveRevision = getLiveRevision(node);
-    if(liveRevision != null) {
-      viewNode = liveRevision.getNode("jcr:frozenNode");
-    }    
-    if(viewNode == null)
-      viewNode = node;
-    if(runtimeMode == SITE_MODE.LIVE) {
-      return viewNode;
-    }
-    return viewNode;
+    return null;
   }
 
   /* (non-Javadoc)

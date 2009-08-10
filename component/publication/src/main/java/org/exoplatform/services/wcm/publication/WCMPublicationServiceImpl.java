@@ -26,6 +26,8 @@ import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleException;
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
+import org.exoplatform.services.wcm.publication.lifecycle.simple.SimplePublicationPlugin;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
 import org.picocontainer.Startable;
 
 /**
@@ -208,9 +210,9 @@ public class WCMPublicationServiceImpl implements WCMPublicationService, Startab
 		 * TODO : lifecycle based on site (each site can define its own publication lifecycle)
 		 */
 		if ("root".equals(remoteUser)) {
-			enrollNodeInLifecycle(node, "Web Content Publishing");
+			enrollNodeInLifecycle(node, SimplePublicationPlugin.LIFECYCLE_NAME);
 		} else {
-			enrollNodeInLifecycle(node, "States and versions based publication");
+			enrollNodeInLifecycle(node, StageAndVersionPublicationConstant.LIFECYCLE_NAME);
 		}
 		
 	}
@@ -252,12 +254,12 @@ public class WCMPublicationServiceImpl implements WCMPublicationService, Startab
 	}
 
 	public String getContentState(Node node) throws Exception {
-	    String currentState = null;
-	    try {
-	      currentState = node.getProperty("publication:currentState").getString();
-	    } catch (Exception e) {
-	    }
-	    return currentState;
+    String currentState = null;
+    try {
+      currentState = node.getProperty("publication:currentState").getString();
+    } catch (Exception e) {
+    }
+    return currentState;
 	}
 
 }

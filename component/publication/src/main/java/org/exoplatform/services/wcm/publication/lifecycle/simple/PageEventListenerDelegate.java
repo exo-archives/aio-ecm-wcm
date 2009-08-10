@@ -189,7 +189,7 @@ public class PageEventListenerDelegate {
     if (!lifecycleName.equals(nodeLifecycleName)) return;
 
     WCMPublicationService presentationService = Util.getServices(WCMPublicationService.class);
-    WCMPublicationPlugin publicationPlugin = (WCMPublicationPlugin) presentationService.getWebpagePublicationPlugins().get(WCMPublicationPlugin.LIFECYCLE_NAME);
+    SimplePublicationPlugin publicationPlugin = (SimplePublicationPlugin) presentationService.getWebpagePublicationPlugins().get(SimplePublicationPlugin.LIFECYCLE_NAME);
     Session session = content.getSession();
     ValueFactory valueFactory = session.getValueFactory();
 
@@ -237,7 +237,7 @@ public class PageEventListenerDelegate {
   private void saveRemovedApplication(Page page, String applicationId, Node content) throws Exception {
     WCMPublicationService presentationService = Util.getServices(WCMPublicationService.class);
     PublicationService publicationService = Util.getServices(PublicationService.class);
-    WCMPublicationPlugin publicationPlugin = (WCMPublicationPlugin) presentationService.getWebpagePublicationPlugins().get(WCMPublicationPlugin.LIFECYCLE_NAME);
+    SimplePublicationPlugin publicationPlugin = (SimplePublicationPlugin) presentationService.getWebpagePublicationPlugins().get(SimplePublicationPlugin.LIFECYCLE_NAME);
 
     Session session = content.getSession();
     ValueFactory valueFactory = session.getValueFactory();

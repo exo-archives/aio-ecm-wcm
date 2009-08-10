@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bundle>
   <PublicationService>
-    <WCMPublicationPlugin>
+    <SimplePublicationPlugin>
       <changeState>
         <enrolled>Nội dung đã được đưa vào chu trình %s</enrolled>
         <published>Nội dung đã được xuất bản</published>
@@ -9,7 +9,7 @@
       </changeState>
       <nodePublished>Nội dung đã được xuất bản vào trang %s</nodePublished>
       <nodeRemoved>Nội dung đã được ngừng xuất bản tại trang %s</nodeRemoved>
-    </WCMPublicationPlugin>
+    </SimplePublicationPlugin>
   </PublicationService>
 </bundle>
 

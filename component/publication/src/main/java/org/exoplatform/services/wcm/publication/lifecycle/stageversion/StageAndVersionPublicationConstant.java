@@ -33,7 +33,7 @@ public interface StageAndVersionPublicationConstant {
   //publication lifecycle definition
   public static final String PUBLICATION_LIFECYCLE_TYPE = "publication:stateAndVersionBasedPublication".intern();
   public static final String LIFECYCLE_NAME = "States and versions based publication".intern();   
-  public static final String LOCALIZATION = "artifacts.lifecycle.StageAndVersionPublication".intern();
+  public static final String LOCALIZATION = "artifacts.lifecycle.stageversion.StageAndVersionPublication".intern();
   //history log description
   public static final String ENROLLED_TO_LIFECYCLE = "Publication.log.description.enrolled".intern();
   public static final String CHANGE_TO_DRAFT = "Publication.log.description.change-to-draft-state".intern();

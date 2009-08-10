@@ -27,10 +27,8 @@ import javax.portlet.PortletPreferences;
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
 import org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation;
 import org.exoplatform.resolver.ResourceResolver;
-import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.cms.impl.DMSConfiguration;
-import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -69,9 +67,6 @@ public class UIPresentation extends UIBaseNodePresentation {
     return viewNode;
   }
 
-  public void setViewNode(Node node) throws Exception {
-    this.viewNode = node;
-  }
   /* (non-Javadoc)
    * @see org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation#getRepositoryName()
    */
@@ -169,12 +164,10 @@ public class UIPresentation extends UIBaseNodePresentation {
   @Override
   public String getTemplatePath() throws Exception {
     TemplateService templateService = getApplicationComponent(TemplateService.class);
-    if (viewNode != null) {
-      return templateService.getTemplatePath(orginalNode, false) ; 
-    }
-    return null;
+    return templateService.getTemplatePath(orginalNode, false) ;
   }
-
+    
+    
   /* (non-Javadoc)
    * @see org.exoplatform.webui.core.UIComponent#getTemplateResourceResolver(org.exoplatform.webui.application.WebuiRequestContext, java.lang.String)
    */
@@ -209,6 +202,6 @@ public class UIPresentation extends UIBaseNodePresentation {
   }
 
   public void setNode(Node node) {
-
+    this.viewNode = node;
   }
 }

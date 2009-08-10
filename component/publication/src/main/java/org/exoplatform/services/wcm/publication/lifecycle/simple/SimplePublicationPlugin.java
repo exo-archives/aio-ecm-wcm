@@ -57,6 +57,7 @@ import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
 import org.exoplatform.services.wcm.publication.WCMComposer;
+import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.publication.WebpagePublicationPlugin;
 import org.exoplatform.services.wcm.publication.lifecycle.simple.ui.UIPublishingPanel;
 import org.exoplatform.web.application.RequestContext;
@@ -70,7 +71,7 @@ import org.exoplatform.webui.form.UIForm;
  * hoa.pham@exoplatform.com
  * Sep 30, 2008
  */
-public class WCMPublicationPlugin extends WebpagePublicationPlugin{
+public class SimplePublicationPlugin extends WebpagePublicationPlugin{
 
   /** The Constant DEFAULT_STATE. */
   public static final String DEFAULT_STATE = PublicationDefaultStates.DRAFT;
@@ -94,10 +95,10 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin{
   public static final String WCM_PUBLICATION_MIXIN = "publication:wcmPublication".intern(); 
   
   /** The Constant LIFECYCLE_NAME. */
-  public static final String LIFECYCLE_NAME = "Web Content Publishing".intern();
+  public static final String LIFECYCLE_NAME = "Simple publication".intern();
 
   /** The Constant LOCALE_FILE. */
-  private static final String LOCALE_FILE = "artifacts.defaultlifecycle.WCMPublication".intern();  
+  private static final String LOCALE_FILE = "artifacts.lifecycle.simple.SimplePublication".intern();  
   
   /** The Constant IMG_PATH. */
   public static final String IMG_PATH = "artifacts/".intern();
@@ -111,7 +112,7 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin{
   /**
    * Instantiates a new wCM publication plugin.
    */
-  public WCMPublicationPlugin() {
+  public SimplePublicationPlugin() {
     pageEventListenerDelegate = new PageEventListenerDelegate(LIFECYCLE_NAME, ExoContainerContext.getCurrentContainer());
     navigationEventListenerDelegate = new NavigationEventListenerDelegate(LIFECYCLE_NAME, ExoContainerContext.getCurrentContainer());
 
@@ -430,12 +431,14 @@ public class WCMPublicationPlugin extends WebpagePublicationPlugin{
   /* (non-Javadoc)
    * @see org.exoplatform.services.ecm.publication.PublicationPlugin#getNodeView(javax.jcr.Node, java.util.Map)
    */
-  @SuppressWarnings("unused")
   public Node getNodeView(Node node, Map<String, Object> context) throws Exception {
-  	if (context.get(WCMComposer.FILTER_MODE).equals(WCMComposer.MODE_EDIT))
-  		return node;
-
-    return null;
+    WCMPublicationService wcmPublicationService = Util.getServices(WCMPublicationService.class);
+    String contentState = wcmPublicationService.getContentState(node);
+    // if content is NOT draft
+    if (!PublicationDefaultStates.DRAFT.equals(contentState)) return node;
+    // if content is draft AND current mode is edit mode
+    if (context.get(WCMComposer.FILTER_MODE).equals(WCMComposer.MODE_EDIT)) return node;
+    return null;  
   }
 
   /* (non-Javadoc)

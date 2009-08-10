@@ -37,6 +37,7 @@ import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
+import org.exoplatform.wcm.webui.scv.UIPresentationContainer;
 import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
 import org.exoplatform.web.application.RequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -105,7 +106,8 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
       addUIFormInput(radioInput);
     }else {
       UISingleContentViewerPortlet uiPresentationPortlet = getAncestorOfType(UISingleContentViewerPortlet.class);
-      Node node = uiPresentationPortlet.getReferencedContent();
+      UIPresentationContainer presentationContainer = uiPresentationPortlet.getChild(UIPresentationContainer.class);
+      Node node = presentationContainer.getReferenceNode();
       if(uiPresentationPortlet.canEditContent(node)) {
         option.add(new SelectItemOption<String>(labelEditContent, "EditCurrentWebContent"));
         option.add(new SelectItemOption<String>(labelSelectExistedContent, "SelectExistedContent"));

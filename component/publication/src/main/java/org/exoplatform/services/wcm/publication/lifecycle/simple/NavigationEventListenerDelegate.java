@@ -230,7 +230,7 @@ public class NavigationEventListenerDelegate {
     content.setProperty("publication:webPageIDs", Util.toValues(valueFactory, listExistedWebPageId));
 
     WCMPublicationService presentationService = Util.getServices(WCMPublicationService.class);
-    WCMPublicationPlugin publicationPlugin = (WCMPublicationPlugin) presentationService.getWebpagePublicationPlugins().get(WCMPublicationPlugin.LIFECYCLE_NAME);
+    SimplePublicationPlugin publicationPlugin = (SimplePublicationPlugin) presentationService.getWebpagePublicationPlugins().get(SimplePublicationPlugin.LIFECYCLE_NAME);
     publicationPlugin.changeState(content, "published", null);
 
     String[] logs = new String[] {new Date().toString(), PublicationDefaultStates.PUBLISHED, session.getUserID(), "PublicationService.WCMPublicationPlugin.nodePublished", nodeURILogs};
@@ -283,7 +283,7 @@ public class NavigationEventListenerDelegate {
 
     if (listExistedNavigationNodeUriTmp.isEmpty()) {
       WCMPublicationService presentationService = Util.getServices(WCMPublicationService.class);
-      WCMPublicationPlugin publicationPlugin = (WCMPublicationPlugin) presentationService.getWebpagePublicationPlugins().get(WCMPublicationPlugin.LIFECYCLE_NAME);
+      SimplePublicationPlugin publicationPlugin = (SimplePublicationPlugin) presentationService.getWebpagePublicationPlugins().get(SimplePublicationPlugin.LIFECYCLE_NAME);
       publicationPlugin.changeState(content, "unpublished", null);
     }
 

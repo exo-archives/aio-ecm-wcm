@@ -27,6 +27,7 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.security.Identity;
 import org.exoplatform.services.security.IdentityRegistry;
 import org.exoplatform.services.security.MembershipEntry;
+import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -114,6 +115,13 @@ public class Utils {
     if(obj == null)
       return true;          
     return !Boolean.parseBoolean(obj.toString());     
+  }
+  
+  public static String getCurrentMode() {
+    Object obj = Util.getPortalRequestContext().getRequest().getSession().getAttribute(Utils.TURN_ON_QUICK_EDIT);
+    if(obj == null) return WCMComposer.MODE_LIVE;
+    boolean turnOnQuickEdit = Boolean.parseBoolean(obj.toString()); 
+    return turnOnQuickEdit ? WCMComposer.MODE_EDIT : WCMComposer.MODE_LIVE;
   }
   
   public static String cleanString(String str) {

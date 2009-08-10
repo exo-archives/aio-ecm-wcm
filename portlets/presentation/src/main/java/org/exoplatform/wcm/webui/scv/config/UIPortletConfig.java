@@ -27,6 +27,7 @@ import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.WebUIPropertiesConfigService;
 import org.exoplatform.wcm.webui.WebUIPropertiesConfigService.PopupWindowProperties;
+import org.exoplatform.wcm.webui.scv.UIPresentationContainer;
 import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
 import org.exoplatform.wcm.webui.selector.document.UIDocumentPathSelector;
 import org.exoplatform.wcm.webui.selector.document.UIDocumentTabSelector;
@@ -81,6 +82,7 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent{
   public void init() throws Exception {
     isNewConfig = checkNewConfig();
     UISingleContentViewerPortlet uiPresentationPortlet = getAncestorOfType(UISingleContentViewerPortlet.class);
+    UIPresentationContainer presentationContainer = uiPresentationPortlet.getChild(UIPresentationContainer.class);
     if(!uiPresentationPortlet.canEditPortlet()) {     
       addChild(UINonEditable.class, null, null);
       return;
@@ -90,7 +92,7 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent{
       return;
     }    
     try{
-      Node node = uiPresentationPortlet.getReferencedContent();
+      Node node = presentationContainer.getReferenceNode();
       if(uiPresentationPortlet.canEditContent(node)) {
 //        addChild(UIQuickEditContainer.class, null, null);
         
@@ -145,9 +147,9 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent{
    * @return true, if successful
    */
   private boolean checkNewConfig(){
-    UISingleContentViewerPortlet uiportlet = getAncestorOfType(UISingleContentViewerPortlet.class);
+    UIPresentationContainer presentationContainer = getAncestorOfType(UIPresentationContainer.class);
     try {
-      uiportlet.getReferencedContent();
+      presentationContainer.getReferenceNode();
       return false;
     } catch (Exception e) {
       if(UISingleContentViewerPortlet.scvLog.isDebugEnabled()) {

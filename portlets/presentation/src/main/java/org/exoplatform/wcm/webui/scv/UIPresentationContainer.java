@@ -37,10 +37,10 @@ import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
+import org.exoplatform.services.wcm.core.WCMService;
+import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
 import org.exoplatform.services.wcm.publication.WCMComposer;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationState;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant.SITE_MODE;
+import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.WebUIPropertiesConfigService;
 import org.exoplatform.wcm.webui.WebUIPropertiesConfigService.PopupWindowProperties;
@@ -71,10 +71,15 @@ import org.exoplatform.webui.event.EventListener;
 public class UIPresentationContainer extends UIContainer{
 
   private boolean isDraftRevision = false;
-  private boolean isObsoletedContent = false;
-  private boolean hasLiveRevision = false;
-	private String currentContentState;
+  private boolean isShowDraft     = false;
 
+  public boolean isShowDraft() {
+    return isShowDraft;
+  }
+
+  public void setShowDraft(boolean isShowDraft) {
+    this.isShowDraft = isShowDraft;
+  }
 
   /**
    * Instantiates a new uI presentation container.
@@ -82,7 +87,7 @@ public class UIPresentationContainer extends UIContainer{
    * @throws Exception the exception
    */
   public UIPresentationContainer() throws Exception{   	  
-    addChild(UIPresentation.class,null,"UIPresentation");
+    addChild(UIPresentation.class, null, null);
   }
 
   /**
@@ -97,47 +102,19 @@ public class UIPresentationContainer extends UIContainer{
     return Utils.turnOnQuickEditable(portletRequestContext, true);
   }
 
-  public boolean isObsoletedContent() {
-    return isObsoletedContent;
-  }
-
-
-  public void setObsoletedContent(boolean isObsoletedContent) {
-    this.isObsoletedContent = isObsoletedContent;
-  }
-
-
-  private boolean isDraftRevision() {
+  public boolean isDraftRevision() {
     return isDraftRevision;
   }
 
 
-  private void setDraftRevision(boolean isDraftRevision) {
+  public void setDraftRevision(boolean isDraftRevision) {
     this.isDraftRevision = isDraftRevision;
   }
 
-  public boolean hasLiveRevision() {
-	  return hasLiveRevision;
-  }
-  
-  private void setHasLiveRevision(boolean hasLiveRevision) {
-	  this.hasLiveRevision = hasLiveRevision;
-  }
-  
-  private String getCurrentContentState() {
-  	return currentContentState;
-  }
-
-	private void setCurrentContentState(String currentContentState) {
-  	this.currentContentState = currentContentState;
-  }
-  
-  public boolean isEditable() {
-	  //	  boolean isEditable = false;
-	  UISingleContentViewerPortlet uiportlet = getAncestorOfType(UISingleContentViewerPortlet.class);
+  public boolean isEditable() throws Exception {
 	  Node originalNode = null;
 	  try {
-		  originalNode = uiportlet.getReferencedContent();
+		  originalNode = getReferenceNode();
 	  } catch(ItemNotFoundException ex) {
 		  originalNode =  null;
 	  } catch(RepositoryException rx) {
@@ -148,94 +125,69 @@ public class UIPresentationContainer extends UIContainer{
 
 	  try {
 		  ((ExtendedNode)originalNode).checkPermission(PermissionType.SET_PROPERTY);
-		  //content exists, we can edit it
 		  return true;
 	  } catch(AccessControlException e) {
-		  //content exists but no rights, we can't edit it
 		  return false;
 	  } catch(RepositoryException e) {
-		  // no access on the repository, we can't edit it
 		  return false;
 	  } catch(NullPointerException e) {
-		  // content is null, we can edit it to select a content or create one.
 		  return true;
 	  }
   }
   
-  @Override
-  public void processRender(WebuiRequestContext context) throws Exception {
-    UISingleContentViewerPortlet uiportlet = getAncestorOfType(UISingleContentViewerPortlet.class);
-    Node originalNode = null;
-    setHasLiveRevision(false);
-    try {
-      originalNode = uiportlet.getReferencedContent();
-    } catch(ItemNotFoundException ex) {
-      originalNode = null;
-    } catch(RepositoryException rx) {
-      originalNode =  null;
-    }
-    String currentState = StageAndVersionPublicationState.getRevisionState(originalNode);
-    setCurrentContentState(currentState);
-    if(StageAndVersionPublicationConstant.OBSOLETE_STATE.equals(currentState)) {
-      setObsoletedContent(true);
-    }else {
-      setObsoletedContent(false);
-      UIPresentation livePresentation = getChild(UIPresentation.class);
-      if(Utils.isLiveMode()) {
-        Node liveRevision = getLiveRevision(originalNode);
-        if (liveRevision != null) setHasLiveRevision(true);
-        livePresentation.setOriginalNode(originalNode);
-        if (liveRevision != null) {
-        	livePresentation.setViewNode(liveRevision);
-        } else {
-        	livePresentation.setViewNode(originalNode);
-        }
-        setDraftRevision(false);       
-      }else {        
-        if(StageAndVersionPublicationConstant.DRAFT_STATE.equals(currentState)) {
-          livePresentation.setViewNode(originalNode);          
-          livePresentation.setOriginalNode(originalNode);
-          setDraftRevision(true);          
-        } else if(currentState == null || StageAndVersionPublicationConstant.PUBLISHED_STATE.equals(currentState)) {
-          Node liveRevision = getLiveRevision(originalNode);
-          if (liveRevision!=null) setHasLiveRevision(true);
-          livePresentation.setOriginalNode(originalNode);
-          if (liveRevision!=null) {
-          	livePresentation.setViewNode(liveRevision);
-          } else {
-          	livePresentation.setViewNode(originalNode);
-          }
-          setDraftRevision(false);             
-        }
-      }  
-    }
-    super.processRender(context);
-  }
-
-  private Node getLiveRevision(Node content) throws Exception {
-    if (content == null) return null;
-    HashMap<String,Object> context = new HashMap<String, Object>();    
-    context.put(WCMComposer.FILTER_MODE, WCMComposer.MODE_LIVE);    
-    PublicationService pubService = getApplicationComponent(PublicationService.class);
+  private Node nodeReference;
+  
+  public Node getReferenceNode() throws Exception {
+    // Get node by reference
+    PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
+    PortletPreferences preferences = portletRequestContext.getRequest().getPreferences();
+    String repository = preferences.getValue(UISingleContentViewerPortlet.REPOSITORY, null);    
+    String workspace = preferences.getValue(UISingleContentViewerPortlet.WORKSPACE, null);
+    String nodeIdentifier = preferences.getValue(UISingleContentViewerPortlet.IDENTIFIER, null) ;
+    WCMService wcmService = getApplicationComponent(WCMService.class);
+    nodeReference = wcmService.getReferencedContent(repository, workspace, nodeIdentifier, Utils.getSessionProvider(this));
+    PublicationService publicationService = getApplicationComponent(PublicationService.class);
     String lifecycleName = null;
     try {
-    	lifecycleName = pubService.getNodeLifecycleName(content);
-		} catch (NotInPublicationLifecycleException e) {}
-		if (lifecycleName == null) return content;
-    PublicationPlugin pubPlugin = pubService.getPublicationPlugins().get(lifecycleName);
-    return pubPlugin.getNodeView(content, context);
+      lifecycleName = publicationService.getNodeLifecycleName(nodeReference);
+    } catch (NotInPublicationLifecycleException e) {}
+    if (lifecycleName == null) return nodeReference;
+    PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(lifecycleName);
+    HashMap<String,Object> context = new HashMap<String, Object>();    
+    context.put(WCMComposer.FILTER_MODE, Utils.getCurrentMode());
+    
+    // filter node by current mode
+    return publicationPlugin.getNodeView(nodeReference, context);
   }
-
-  /**
-   * Gets the portlet id.
-   * 
-   * @return the portlet id
-   */
-  public String getPortletId() {
-    PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();    
-    return pContext.getWindowId();
-  }
-
+  
+  public Node getNode() throws Exception {
+    Node nodeView = getReferenceNode();
+    
+    // Set draft for template
+    WCMPublicationService wcmPublicationService = getApplicationComponent(WCMPublicationService.class);
+    String contentState = wcmPublicationService.getContentState(nodeView);
+    if (PublicationDefaultStates.DRAFT.equals(contentState)) {
+      isDraftRevision = true;
+    }
+    
+    // set view draft for template
+    if (WCMComposer.MODE_EDIT.equals(Utils.getCurrentMode())) isShowDraft = true;
+    else isShowDraft = false;
+    
+    // Set original node for UIBaseNodePresentation (in case nodeView is a version node)
+    UIPresentation presentation = getChild(UIPresentation.class);
+    if (nodeView != null && nodeView.isNodeType("nt:frozenNode")) {
+      String nodeUUID = nodeView.getProperty("jcr:frozenUuid").getString();
+      presentation.setOriginalNode(nodeReference.getSession().getNodeByUUID(nodeUUID));
+      presentation.setNode(nodeView);
+    } else {
+      presentation.setOriginalNode(nodeView);
+      presentation.setNode(nodeView);
+    }
+    
+    return nodeView;
+  } 
+  
   /**
    * The listener interface for receiving quickEditAction events.
    * The class that is interested in processing a quickEditAction
