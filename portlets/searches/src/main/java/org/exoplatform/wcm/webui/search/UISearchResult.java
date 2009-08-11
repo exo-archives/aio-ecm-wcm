@@ -44,6 +44,7 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
+import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant.SITE_MODE;
 import org.exoplatform.services.wcm.search.QueryCriteria;
@@ -361,16 +362,11 @@ public class UISearchResult extends UIContainer {
 	public Node getNodeView(Node node) throws Exception {
 		PublicationService publicationService = getApplicationComponent(PublicationService.class);
 		HashMap<String, Object> context = new HashMap<String, Object>();
-		if (org.exoplatform.wcm.webui.Utils.isLiveMode()) {
-			context.put(StageAndVersionPublicationConstant.RUNTIME_MODE, SITE_MODE.LIVE);
-		} else {
-			context.put(StageAndVersionPublicationConstant.RUNTIME_MODE, SITE_MODE.EDITING);
-		}
+		context.put(WCMComposer.FILTER_MODE, Utils.getCurrentMode());
 		String lifecyleName = publicationService.getNodeLifecycleName(node);
 		PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins()
 																														.get(lifecyleName);
-		Node viewNode = publicationPlugin.getNodeView(node, context);
-		return viewNode;
+	  return publicationPlugin.getNodeView(node, context);
 	}
 
 	public String getPublishedNodeURI(String navNodeURI) {
