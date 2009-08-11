@@ -182,7 +182,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent, UISelect
       userMemberSelector.setShowSearch(true);
       userMemberSelector.setSourceComponent(categoryForm, new String[] {INPUT_CATEGORY_MODERATOR});
       userMemberSelector.init();
-      Utils.createPopupWindow(categoryForm, userMemberSelector, UINewsletterConstant.USER_SELECTOR_POPUP_WINDOW, 700, 315);
+      Utils.createPopupWindow(categoryForm, userMemberSelector, UINewsletterConstant.USER_SELECTOR_POPUP_WINDOW, 750, 315);
       categoryForm.setPopupId(UINewsletterConstant.USER_SELECTOR_POPUP_WINDOW);
 	  }
 	}
