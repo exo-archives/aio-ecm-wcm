@@ -232,6 +232,14 @@ public class UINewsletterEntryManager extends UIForm {
                                         + uiNewsletterEntryManager.categoryConfig.getName() + "/" 
                                         + uiNewsletterEntryManager.getSubscriptionConfig().getName() + "/" 
                                         + subIds.get(0));
+      //entryContainer.setCategoryConfig(uiNewsletterEntryManager.categoryConfig);
+      UINewsletterEntryDialogSelector newsletterEntryDialogSelector = entryContainer.getChild(UINewsletterEntryDialogSelector.class);
+      UIFormSelectBox categorySelectBox = newsletterEntryDialogSelector.getChildById(UINewsletterConstant.ENTRY_CATEGORY_SELECTBOX);
+      categorySelectBox.setValue(uiNewsletterEntryManager.categoryConfig.getName());
+      categorySelectBox.setDisabled(true);
+      UIFormSelectBox subscriptionSelectBox = newsletterEntryDialogSelector.getChildById(UINewsletterConstant.ENTRY_SUBSCRIPTION_SELECTBOX);
+      subscriptionSelectBox.setValue(uiNewsletterEntryManager.subscriptionConfig.getName());
+      subscriptionSelectBox.setDisabled(true);
       UINewsletterEntryForm newsletterEntryForm = entryContainer.getChild(UINewsletterEntryForm.class);
       newsletterEntryForm.addNew(false);
       Utils.createPopupWindow(uiNewsletterEntryManager, entryContainer, UINewsletterConstant.ENTRY_FORM_POPUP_WINDOW, 800, 600);
