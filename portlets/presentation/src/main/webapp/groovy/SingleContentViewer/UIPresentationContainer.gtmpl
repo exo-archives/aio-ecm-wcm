@@ -23,16 +23,16 @@
 		def isShowVote = Boolean.parseBoolean(preferences.getValue("ShowVote", null)); 
 		def isShowComments = Boolean.parseBoolean(preferences.getValue("ShowComments", null));
 		
-		if (node != null) {
-			if(isQuickEditable && isEditable) {
-				%>
-					<div style="position: relative; height: 0px;" id="<%=quickEditingBlockId%>">
-						<div style="position: absolute; width: 65px; right: 0px; top: 0px">
-							<a class="QuickEdit" href="<%= uicomponent.event("QuickEdit") %>" title="<%= _ctx.appRes("UIPresentationContainer.title") %>"></a>				
-						</div>
+		if(isQuickEditable && isEditable) {
+			%>
+				<div style="position: relative; height: 0px;" id="<%=quickEditingBlockId%>">
+					<div style="position: absolute; width: 65px; right: 0px; top: 0px">
+						<a class="QuickEdit" href="<%= uicomponent.event("QuickEdit") %>" title="<%= _ctx.appRes("UIPresentationContainer.title") %>"></a>				
 					</div>
-				<%			
-			}
+				</div>
+			<%			
+		}
+		if (node != null) {
 			if(isDraftRevision && isShowDraft) {
 				%>
 			 		<div style="padding: 5px 10px; line-height: 16px; ">
@@ -57,16 +57,22 @@
 				%><a class="ActionIcon PrintIcon" href="javascript: void(0);" onclick="window.open('$printUrl')" title="<%= _ctx.appRes("UIPresentationContainer.optionBar.print.info");%>"><%= _ctx.appRes("UIPresentationContainer.optionBar.print.label") %></a><% 
 			} 
 			if (isShowVote) { 
-				%><a class="ActionIcon VoteIcon" href="javascript: void(0);" onclick="" title="<%= _ctx.appRes("UIPresentationContainer.optionBar.vote.info");%>"><%= _ctx.appRes("UIPresentationContainer.optionBar.vote.label") %></a><% 
+				%><a class="ActionIcon VoteIcon" href="javascript: void(0);" onclick="" title="<%= _ctx.appRes("UIPresentationContainer.optionBar.vote.info") %>"><%= _ctx.appRes("UIPresentationContainer.optionBar.vote.label") %></a><% 
 			} 
 			if (isShowComments) { 
-				%><a class="ActionIcon CommentIcon" href="javascript: void(0);" onclick="" title="<%= _ctx.appRes("UIPresentationContainer.optionBar.comment.info");%>"><%= _ctx.appRes("UIPresentationContainer.optionBar.comment.label") %></a><% 
+				%><a class="ActionIcon CommentIcon" href="javascript: void(0);" onclick="" title="<%= _ctx.appRes("UIPresentationContainer.optionBar.comment.info") %>"><%= _ctx.appRes("UIPresentationContainer.optionBar.comment.label") %></a><% 
 			} 
 	
 			if (isShowPrint || isShowVote || isShowComments) {
 				%></div><%     
 			} 
 			uicomponent.renderChildren();
+		} else {
+		  %>
+		  	<div class="Message">
+		  		<span><%= _ctx.appRes("UIMessageBoard.msg.error-nodetype");%></span>
+		  	</div>
+			<%
 		}
 		
 	%>

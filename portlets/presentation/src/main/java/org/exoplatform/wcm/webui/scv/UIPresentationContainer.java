@@ -145,7 +145,11 @@ public class UIPresentationContainer extends UIContainer{
     String workspace = preferences.getValue(UISingleContentViewerPortlet.WORKSPACE, null);
     String nodeIdentifier = preferences.getValue(UISingleContentViewerPortlet.IDENTIFIER, null) ;
     WCMService wcmService = getApplicationComponent(WCMService.class);
-    nodeReference = wcmService.getReferencedContent(repository, workspace, nodeIdentifier, Utils.getSessionProvider(this));
+    try { 
+      nodeReference = wcmService.getReferencedContent(repository, workspace, nodeIdentifier, Utils.getSessionProvider(this));
+    } catch(ItemNotFoundException e) {
+      return null;
+    }
     PublicationService publicationService = getApplicationComponent(PublicationService.class);
     String lifecycleName = null;
     try {
