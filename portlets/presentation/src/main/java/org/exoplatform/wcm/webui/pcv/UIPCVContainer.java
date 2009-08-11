@@ -43,6 +43,9 @@ import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
+import org.exoplatform.services.wcm.publication.WCMComposer;
+import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationState;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant.SITE_MODE;
@@ -96,174 +99,317 @@ public class UIPCVContainer extends UIContainer {
 		uiContentViewer = getChild(UIPCVPresentation.class);
 	}
 
-	@Override
-	public void processRender(WebuiRequestContext context) throws Exception {
-		PortletRequestContext porletRequestContext = (PortletRequestContext) context;
-		HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) porletRequestContext.getRequest();
-		PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
-		UIPortal uiPortal = Util.getUIPortal();
-		String portalURI = portalRequestContext.getPortalURI();
-		String requestURI = requestWrapper.getRequestURI();
-		String pageNodeSelected = uiPortal.getSelectedNode().getUri();
-		String parameters = null;
-		Object object = requestWrapper.getAttribute("ParameterizedContentViewerPortlet.data.object");
+//	@Override
+//	public void processRender(WebuiRequestContext context) throws Exception {
+//		PortletRequestContext porletRequestContext = (PortletRequestContext) context;
+//		HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) porletRequestContext.getRequest();
+//		PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
+//		UIPortal uiPortal = Util.getUIPortal();
+//		String portalURI = portalRequestContext.getPortalURI();
+//		String requestURI = requestWrapper.getRequestURI();
+//		String pageNodeSelected = uiPortal.getSelectedNode().getUri();
+//		String parameters = null;
+	  
+	  
+//		Object object = requestWrapper.getAttribute("ParameterizedContentViewerPortlet.data.object");
 
-		try {
-			parameters = URLDecoder.decode(StringUtils.substringAfter(
-					requestURI, portalURI.concat(pageNodeSelected + "/")),
-					"UTF-8");
-		} catch (UnsupportedEncodingException e) {
-		}
-		if (!parameters.matches(UIPCVPresentation.PARAMETER_REGX)) {
-			renderErrorMessage(context,
-					UIPCVPresentation.CONTENT_NOT_FOUND_EXC);
-			return;
-		}
-		String nodeIdentifier = null;
-		String[] params = parameters.split("/");
-		String repository = params[0];
-		String workspace = params[1];
-		Node currentNode = null;
+//		try {
+//			parameters = URLDecoder.decode(StringUtils.substringAfter(
+//					requestURI, portalURI.concat(pageNodeSelected + "/")),
+//					"UTF-8");
+//		} catch (UnsupportedEncodingException e) {
+//		}
+//		if (!parameters.matches(UIPCVPresentation.PARAMETER_REGX)) {
+//			renderErrorMessage(context,
+//					UIPCVPresentation.CONTENT_NOT_FOUND_EXC);
+//			return;
+//		}
+//		String nodeIdentifier = null;
+//		String[] params = parameters.split("/");
+//		String repository = params[0];
+//		String workspace = params[1];
+//		Node currentNode = null;
 				
-		if (object instanceof ItemNotFoundException
-				|| object instanceof AccessControlException
-				|| object instanceof ItemNotFoundException || object == null) {
-			RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
-			try {
-				ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-				Session session = Utils.getSessionProvider(this).getSession(workspace, manageableRepository);
+//		if (object instanceof ItemNotFoundException
+//				|| object instanceof AccessControlException
+//				|| object instanceof ItemNotFoundException || object == null) {
+//			RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
+//			try {
+//				ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+//				Session session = Utils.getSessionProvider(this).getSession(workspace, manageableRepository);
+//
+//				if (params.length > 2) {
+//					StringBuffer identifier = new StringBuffer();
+//					for (int i = 2; i < params.length; i++) {
+//						identifier.append("/").append(params[i]);
+//					}
+//					nodeIdentifier = identifier.toString();
+//					boolean isUUID = false;
+//					try {
+//						currentNode = (Node) session.getItem(nodeIdentifier);
+//					} catch (Exception e) {
+//						isUUID = true;
+//					}
+//					if (isUUID) {
+//						try {
+//							String uuid = params[params.length - 1];
+//							currentNode = session.getNodeByUUID(uuid);
+//						} catch (ItemNotFoundException exc) {
+//							renderErrorMessage(context, UIPCVPresentation.CONTENT_NOT_FOUND_EXC);
+//							return;
+//						}
+//					}
+//				} else if (params.length == 2) {
+//					currentNode = session.getRootNode();
+//				}
+//			} catch (RepositoryException re) {
+//				repository = porletRequestContext.getRequest().getPreferences().getValue("repository", "");
+//				
+//				TaxonomyService taxonomyService = getApplicationComponent(TaxonomyService.class);
+//				Node taxonomyTree = taxonomyService.getTaxonomyTree(repository, params[0]);
+//				
+//	      String symLinkPath = parameters.substring(parameters.indexOf("/") + 1);
+//	      Node symLink;
+//				try {
+//					symLink = taxonomyTree.getNode(symLinkPath);
+//					currentNode = taxonomyTree.getSession().getNodeByUUID(symLink.getProperty("exo:uuid").getString());
+//				} catch (PathNotFoundException e) {
+//					renderErrorMessage(context,
+//							UIPCVPresentation.CONTENT_NOT_FOUND_EXC);
+//				}
+//			} catch (AccessControlException ace) {
+//				renderErrorMessage(context, UIPCVPresentation.ACCESS_CONTROL_EXC);
+//				return;
+//			} catch (Exception e) {
+//				renderErrorMessage(context, UIPCVPresentation.CONTENT_NOT_FOUND_EXC);
+//				return;
+//			}
 
-				if (params.length > 2) {
-					StringBuffer identifier = new StringBuffer();
-					for (int i = 2; i < params.length; i++) {
-						identifier.append("/").append(params[i]);
-					}
-					nodeIdentifier = identifier.toString();
-					boolean isUUID = false;
-					try {
-						currentNode = (Node) session.getItem(nodeIdentifier);
-					} catch (Exception e) {
-						isUUID = true;
-					}
-					if (isUUID) {
-						try {
-							String uuid = params[params.length - 1];
-							currentNode = session.getNodeByUUID(uuid);
-						} catch (ItemNotFoundException exc) {
-							renderErrorMessage(context, UIPCVPresentation.CONTENT_NOT_FOUND_EXC);
-							return;
-						}
-					}
-				} else if (params.length == 2) {
-					currentNode = session.getRootNode();
-				}
-			} catch (RepositoryException re) {
-				repository = porletRequestContext.getRequest().getPreferences().getValue("repository", "");
-				
-				TaxonomyService taxonomyService = getApplicationComponent(TaxonomyService.class);
-				Node taxonomyTree = taxonomyService.getTaxonomyTree(repository, params[0]);
-				
-	      String symLinkPath = parameters.substring(parameters.indexOf("/") + 1);
-	      Node symLink;
-				try {
-					symLink = taxonomyTree.getNode(symLinkPath);
-					currentNode = taxonomyTree.getSession().getNodeByUUID(symLink.getProperty("exo:uuid").getString());
-				} catch (PathNotFoundException e) {
-					renderErrorMessage(context,
-							UIPCVPresentation.CONTENT_NOT_FOUND_EXC);
-				}
-			} catch (AccessControlException ace) {
-				renderErrorMessage(context, UIPCVPresentation.ACCESS_CONTROL_EXC);
-				return;
-			} catch (Exception e) {
-				renderErrorMessage(context, UIPCVPresentation.CONTENT_NOT_FOUND_EXC);
-				return;
-			}
+//		} else {
+//			currentNode = (Node) object;
+//		}
 
-		} else {
-			currentNode = (Node) object;
-		}
+//		TemplateService templateService = getApplicationComponent(TemplateService.class);
+//		List<String> documentTypes = templateService.getDocumentTemplates(repository);
+//		Boolean isDocumentType = false;
+//		for (String docType : documentTypes) {
+//			if (currentNode.isNodeType(docType)) {
+//				isDocumentType = true;
+//				break;
+//			}
+//		}
+//		if (currentNode.isNodeType("exo:hiddenable")) {
+//			renderErrorMessage(context,
+//					UIPCVPresentation.ACCESS_CONTROL_EXC);
+//			return;
+//		} else if (isDocumentType) { // content is document
+//			if (hasChildren()) {
+//				removeChild(UIPCVContainer.class);
+//			}
+//			PublicationService publicationService = uiPortal
+//					.getApplicationComponent(PublicationService.class);
+//			HashMap<String, Object> hmContext = new HashMap<String, Object>();
+//			if (Utils.isLiveMode()) {
+//				hmContext.put(StageAndVersionPublicationConstant.RUNTIME_MODE, SITE_MODE.LIVE);
+//			} else {
+//				hmContext.put(StageAndVersionPublicationConstant.RUNTIME_MODE, SITE_MODE.EDITING);
+//			}
+//			String lifeCycleName = null;
+//			 try {
+//				 lifeCycleName = publicationService.getNodeLifecycleName(currentNode);
+//			} catch (NotInPublicationLifecycleException e) {}
+//
+//			Node nodeView;
+//			if (lifeCycleName == null) 
+//				{
+//					nodeView = currentNode;
+//				}
+//			else
+//			{
+//				PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(lifeCycleName);
+//				if (publicationPlugin == null) {
+//					renderErrorMessage(context, UIPCVPresentation.CONTENT_NOT_PRINTED);
+//					return;
+//				}
+//				nodeView = publicationPlugin.getNodeView(currentNode,hmContext);
+//			}
 
-		TemplateService templateService = getApplicationComponent(TemplateService.class);
-		List<String> documentTypes = templateService.getDocumentTemplates(repository);
-		Boolean isDocumentType = false;
-		for (String docType : documentTypes) {
-			if (currentNode.isNodeType(docType)) {
-				isDocumentType = true;
-				break;
-			}
-		}
-		if (currentNode.isNodeType("exo:hiddenable")) {
-			renderErrorMessage(context,
-					UIPCVPresentation.ACCESS_CONTROL_EXC);
-			return;
-		} else if (isDocumentType) { // content is document
-			if (hasChildren()) {
-				removeChild(UIPCVContainer.class);
-			}
-			PublicationService publicationService = uiPortal
-					.getApplicationComponent(PublicationService.class);
-			HashMap<String, Object> hmContext = new HashMap<String, Object>();
-			if (Utils.isLiveMode()) {
-				hmContext.put(StageAndVersionPublicationConstant.RUNTIME_MODE, SITE_MODE.LIVE);
-			} else {
-				hmContext.put(StageAndVersionPublicationConstant.RUNTIME_MODE, SITE_MODE.EDITING);
-			}
-			String lifeCycleName = null;
-			 try {
-				 lifeCycleName = publicationService.getNodeLifecycleName(currentNode);
-			} catch (NotInPublicationLifecycleException e) {}
+//      boolean isLiveMode = Utils.isLiveMode();
+//      if(isLiveMode) {
+//        if(nodeView == null) {
+//          renderErrorMessage(context,UIPCVPresentation.CONTENT_NOT_PRINTED);
+//          return;
+//        }
+//        uiContentViewer.setNode(nodeView);
+//      }else {
+//        uiContentViewer.setNode(currentNode);
+//      }
+//			uiContentViewer.setRepository(repository);
+//			uiContentViewer.setWorkspace(workspace);
+//			uiContentViewer.setOrginalNode(currentNode);     			
+//			String state = StageAndVersionPublicationState.getRevisionState(currentNode);
+//			if (StageAndVersionPublicationConstant.OBSOLETE_STATE.equals(state)) {
+//				setObsoletedContent(true);
+//				renderErrorMessage(context,
+//						UIPCVPresentation.OBSOLETE_CONTENT);
+//				return;
+//			} else {
+//				setObsoletedContent(false);
+//				if (StageAndVersionPublicationConstant.DRAFT_STATE.equals(state) && !isLiveMode) {
+//					setDraftRevision(true);
+//				} else {
+//					setDraftRevision(false);
+//				}
+//			}
+//			 HttpServletRequest request = context.getRequest();
+//			 isPrint = "isPrint=true".equals(request.getQueryString()) ? true :false;
+//			 super.processRender(context);
+//		} else { // content is folders
+//			renderErrorMessage(context, UIPCVPresentation.CONTENT_UNSUPPORT_EXC);
+//		}
+//	}
 
-			Node nodeView;
-			if (lifeCycleName == null) 
-				{
-					nodeView = currentNode;
-				}
-			else
-			{
-				PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(lifeCycleName);
-				if (publicationPlugin == null) {
-					renderErrorMessage(context, UIPCVPresentation.CONTENT_NOT_PRINTED);
-					return;
-				}
-				nodeView = publicationPlugin.getNodeView(currentNode,hmContext);
-			}
-
-      boolean isLiveMode = Utils.isLiveMode();
-      if(isLiveMode) {
-        if(nodeView == null) {
-          renderErrorMessage(context,UIPCVPresentation.CONTENT_NOT_PRINTED);
-          return;
-        }
-        uiContentViewer.setNode(nodeView);
-      }else {
-        uiContentViewer.setNode(currentNode);
+	
+	public Node getNode() throws Exception {
+	  String parameters = getRequestParameters();
+	  Node node = getNodebyPath(parameters);
+	  if (node == null) node = getNodeByCategory(parameters);
+	  if (node == null) return null;
+	  
+	  // check node is a document node
+	  TemplateService templateService = getApplicationComponent(TemplateService.class);
+    List<String> documentTypes = templateService.getDocumentTemplates(repository);
+    boolean isDocumentType = false;
+    for (String documentType : documentTypes) {
+      if (node.isNodeType(documentType)) {
+        isDocumentType = true;
+        break;
       }
-			uiContentViewer.setRepository(repository);
-			uiContentViewer.setWorkspace(workspace);
-			uiContentViewer.setOrginalNode(currentNode);     			
-			String state = StageAndVersionPublicationState.getRevisionState(currentNode);
-			if (StageAndVersionPublicationConstant.OBSOLETE_STATE.equals(state)) {
-				setObsoletedContent(true);
-				renderErrorMessage(context,
-						UIPCVPresentation.OBSOLETE_CONTENT);
-				return;
-			} else {
-				setObsoletedContent(false);
-				if (StageAndVersionPublicationConstant.DRAFT_STATE.equals(state) && !isLiveMode) {
-					setDraftRevision(true);
-				} else {
-					setDraftRevision(false);
-				}
-			}
-			 HttpServletRequest request = context.getRequest();
-			 isPrint = "isPrint=true".equals(request.getQueryString()) ? true :false;
-			 super.processRender(context);
-		} else { // content is folders
-			renderErrorMessage(context, UIPCVPresentation.CONTENT_UNSUPPORT_EXC);
-		}
+    }
+    if (!isDocumentType) return null;
+    if (hasChildren()) removeChild(UIPCVContainer.class);
+    PublicationService publicationService = getApplicationComponent(PublicationService.class);
+    String lifecycleName = null;
+    try {
+      lifecycleName = publicationService.getNodeLifecycleName(node);
+    } catch (NotInPublicationLifecycleException e) {}
+    Node nodeView = null;
+    // if content doesn't join to any lifecycle (deploy from xml)
+    if (lifecycleName == null) {
+      nodeView = node;
+    } else {
+      PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(lifecycleName);
+      HashMap<String, Object> context = new HashMap<String, Object>();
+      context.put(WCMComposer.FILTER_MODE, Utils.getCurrentMode());
+      nodeView = publicationPlugin.getNodeView(node, context);
+    }
+    
+    // set node view for UIPCVPresentation
+    if (nodeView != null && nodeView.isNodeType("nt:frozenNode")) {
+      String nodeUUID = nodeView.getProperty("jcr:frozenUuid").getString();
+      uiContentViewer.setOrginalNode(node.getSession().getNodeByUUID(nodeUUID));
+      uiContentViewer.setNode(nodeView);
+    } else {
+      uiContentViewer.setOrginalNode(nodeView);
+      uiContentViewer.setNode(nodeView);
+    }
+    uiContentViewer.setRepository(repository);
+    uiContentViewer.setWorkspace(workspace);
+    
+    // Set draft for template
+    WCMPublicationService wcmPublicationService = getApplicationComponent(WCMPublicationService.class);
+    String contentState = wcmPublicationService.getContentState(nodeView);
+    if (PublicationDefaultStates.DRAFT.equals(contentState)) isDraftRevision = true;
+    else isDraftRevision = false;
+    
+    PortletRequestContext porletRequestContext = WebuiRequestContext.getCurrentInstance();
+    HttpServletRequest request = (HttpServletRequest) porletRequestContext.getRequest();
+    isPrint = "isPrint=true".equals(request.getQueryString()) ? true :false;  
+	
+    return nodeView;
 	}
+	
+	private String repository;
+	
+	private String workspace;
+	
+	private String getRequestParameters() {
+	  PortletRequestContext porletRequestContext = WebuiRequestContext.getCurrentInstance();
+    HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) porletRequestContext.getRequest();
+    PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
+    UIPortal uiPortal = Util.getUIPortal();
+    String portalURI = portalRequestContext.getPortalURI();
+    String requestURI = requestWrapper.getRequestURI();
+    String pageNodeSelected = uiPortal.getSelectedNode().getUri();
+    String parameters = null;
+    try {
+      parameters = URLDecoder.decode(StringUtils.substringAfter(requestURI, portalURI.concat(pageNodeSelected + "/")), "UTF-8");
+    } catch (UnsupportedEncodingException e) {
+      return null;
+    }
+    if (!parameters.matches(UIPCVPresentation.PARAMETER_REGX)) {
+      return null;
+    }
+    return parameters;
+	}
+	
+	private Node getNodebyPath(String parameters) throws Exception {
+    String[] params = parameters.split("/");
+    repository = params[0];
+    workspace = params[1];
+    String nodeIdentifier = null;
+    Node currentNode = null;
+    
+    RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
+    ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+    Session session = Utils.getSessionProvider(this).getSession(workspace, manageableRepository);
 
+    if (params.length > 2) {
+      StringBuffer identifier = new StringBuffer();
+      for (int i = 2; i < params.length; i++) {
+        identifier.append("/").append(params[i]);
+      }
+      nodeIdentifier = identifier.toString();
+      boolean isUUID = false;
+      // try to get node by path
+      try {
+        currentNode = (Node) session.getItem(nodeIdentifier);
+      } catch (Exception e) {
+        isUUID = true;
+      }
+      if (isUUID) {
+        // try to get node by uuid
+        try {
+          String uuid = params[params.length - 1];
+          currentNode = session.getNodeByUUID(uuid);
+        } catch (ItemNotFoundException exc) {
+          return null;
+        }
+      }
+    } else if (params.length == 2) {
+      currentNode = session.getRootNode();
+    }
+    
+	  return currentNode;  
+	}
+	
+	private Node getNodeByCategory(String parameters) throws Exception {
+	  PortletRequestContext porletRequestContext = WebuiRequestContext.getCurrentInstance();
+	  repository = porletRequestContext.getRequest().getPreferences().getValue("repository", "");
+	  
+    TaxonomyService taxonomyService = getApplicationComponent(TaxonomyService.class);
+    String[] params = parameters.split("/");
+    Node taxonomyTree = taxonomyService.getTaxonomyTree(repository, params[0]);
+    
+    String symLinkPath = parameters.substring(parameters.indexOf("/") + 1);
+    try {
+      Node symLink = taxonomyTree.getNode(symLinkPath);
+      return taxonomyTree.getSession().getNodeByUUID(symLink.getProperty("exo:uuid").getString());
+    } catch (PathNotFoundException e) {
+      return null;
+    }
+	}
+	
 	/**
 	 * Checks if is quick edit able.
 	 * 
