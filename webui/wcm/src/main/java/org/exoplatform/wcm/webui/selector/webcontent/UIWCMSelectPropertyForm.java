@@ -13,6 +13,7 @@ import javax.jcr.nodetype.PropertyDefinition;
 
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.cms.BasePath;
+import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -77,7 +78,9 @@ public class UIWCMSelectPropertyForm extends UIForm{
     SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
     RepositoryService repoService = getApplicationComponent(RepositoryService.class);
     ManageableRepository manRepository = repoService.getCurrentRepository();
-    String workspaceName = manRepository.getConfiguration().getSystemWorkspaceName();
+    //String workspaceName = manRepository.getConfiguration().getSystemWorkspaceName();
+    DMSConfiguration dmsConfiguration = getApplicationComponent(DMSConfiguration.class);
+    String workspaceName = dmsConfiguration.getConfig(manRepository.getConfiguration().getName()).getSystemWorkspace();
     Session session = sessionProvider.getSession(workspaceName, manRepository);
     String metadataPath = nodeHierarchyCreator.getJcrPath(BasePath.METADATA_PATH);
     Node homeNode = (Node) session.getItem(metadataPath);
