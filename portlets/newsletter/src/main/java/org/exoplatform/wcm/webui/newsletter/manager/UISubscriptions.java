@@ -298,10 +298,8 @@ public class UISubscriptions extends UIForm {
       UISubscriptions uiSubscriptions = event.getSource();
       UINewsletterEntryContainer entryContainer = uiSubscriptions.createUIComponent(UINewsletterEntryContainer.class, null, null);
       entryContainer.setCategoryConfig(uiSubscriptions.categoryConfig);
-      UINewsletterEntryDialogSelector newsletterEntryDialogSelector = entryContainer.getChild(UINewsletterEntryDialogSelector.class);
-      UIFormSelectBox categorySelectBox = newsletterEntryDialogSelector.getChildById(UINewsletterConstant.ENTRY_CATEGORY_SELECTBOX);
-      categorySelectBox.setValue(uiSubscriptions.categoryConfig.getName());
-      categorySelectBox.setDisabled(true);
+      entryContainer.getChild(UINewsletterEntryDialogSelector.class).init(uiSubscriptions.categoryConfig.getName(), 
+                                                                          null);
       Utils.createPopupWindow(uiSubscriptions, entryContainer, UINewsletterConstant.ENTRY_FORM_POPUP_WINDOW, 800, 600);
     }
   }

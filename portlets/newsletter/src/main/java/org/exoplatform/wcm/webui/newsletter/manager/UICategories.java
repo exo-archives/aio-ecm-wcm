@@ -138,8 +138,9 @@ public class UICategories extends UIContainer {
     public void execute(Event<UICategories> event) throws Exception {
       UICategories uiCategories = event.getSource();
       UINewsletterEntryContainer entryContainer = uiCategories.createUIComponent(UINewsletterEntryContainer.class, null, null);
-      Utils.createPopupWindow(uiCategories, entryContainer, UINewsletterConstant.ENTRY_FORM_POPUP_WINDOW, 800, 600);
       entryContainer.setCategoryConfig(null);
+      entryContainer.getChild(UINewsletterEntryDialogSelector.class).init(null, null);
+      Utils.createPopupWindow(uiCategories, entryContainer, UINewsletterConstant.ENTRY_FORM_POPUP_WINDOW, 800, 600);
     }
   }
 	
