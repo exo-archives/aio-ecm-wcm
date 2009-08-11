@@ -172,13 +172,7 @@ import org.exoplatform.webui.event.EventListener;
   public Node getNodeView(Node node) throws Exception {
     PublicationService publicationService = getApplicationComponent(PublicationService.class);
     HashMap<String, Object> context = new HashMap<String, Object>();
-    if (org.exoplatform.wcm.webui.Utils.isLiveMode()) {
-//      context.put(StageAndVersionPublicationConstant.RUNTIME_MODE, SITE_MODE.LIVE);
-      context.put(WCMComposer.FILTER_MODE, WCMComposer.MODE_LIVE);
-    } else {
-//      context.put(StageAndVersionPublicationConstant.RUNTIME_MODE, SITE_MODE.EDITING);
-      context.put(WCMComposer.FILTER_MODE, WCMComposer.MODE_EDIT);
-    }
+    context.put(WCMComposer.FILTER_MODE, Utils.getCurrentMode());
     String lifecyleName = null;
     	try {
     		lifecyleName = publicationService.getNodeLifecycleName(node);

@@ -166,9 +166,8 @@ public class UIPresentationContainer extends UIContainer{
     // Set draft for template
     WCMPublicationService wcmPublicationService = getApplicationComponent(WCMPublicationService.class);
     String contentState = wcmPublicationService.getContentState(nodeView);
-    if (PublicationDefaultStates.DRAFT.equals(contentState)) {
-      isDraftRevision = true;
-    }
+    if (PublicationDefaultStates.DRAFT.equals(contentState)) isDraftRevision = true;
+    else isDraftRevision = false;
     
     // set view draft for template
     if (WCMComposer.MODE_EDIT.equals(Utils.getCurrentMode())) isShowDraft = true;

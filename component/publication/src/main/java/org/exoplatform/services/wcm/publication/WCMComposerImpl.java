@@ -70,17 +70,17 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 		Session session = sessionProvider.getSession(workspace, manageableRepository);
 		Node node = (Node)session.getItem(path);
 		String lifecycleName = publicationService.getNodeLifecycleName(node);
-	    PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(lifecycleName);
-	    Node nodeView = publicationPlugin.getNodeView(node, new HashMap<String, Object>());
-	    String state = getWCMPublicationService().getContentState(node);
-	    String mode = filters.get(FILTER_MODE);
-	    List<String> states = getAllowedStates(mode);
-	    
-	    if (states.contains(state)) {
-	    	return nodeView;
-	    } else {
-	    	return null;
-	    }
+		PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(lifecycleName);
+		Node nodeView = publicationPlugin.getNodeView(node, new HashMap<String, Object>());
+		String state = getWCMPublicationService().getContentState(node);
+		String mode = filters.get(FILTER_MODE);
+		List<String> states = getAllowedStates(mode);
+
+		if (states.contains(state)) {
+			return nodeView;
+		} else {
+			return null;
+		}
 	}
 
 	/* (non-Javadoc)
