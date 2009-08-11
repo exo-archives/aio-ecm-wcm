@@ -228,6 +228,7 @@ public class UIPublicationTree extends UITree {
       List<TreeNode> list = new ArrayList<TreeNode>();
       UserPortalConfigService userPortalConfigService = StageAndVersionPublicationUtil.getServices(UserPortalConfigService.class);
       for(PageNode pNode: pagesNodes) {
+      	if (pNode.getPageReference() == null) continue;
         Page page = userPortalConfigService.getPage(pNode.getPageReference(), org.exoplatform.portal.webui.util.Util.getPortalRequestContext().getRemoteUser());
         if (page == null) continue;
         if(!pNode.isDisplay()) continue;                
