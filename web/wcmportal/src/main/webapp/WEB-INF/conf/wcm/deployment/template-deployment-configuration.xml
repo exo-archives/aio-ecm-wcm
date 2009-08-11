@@ -18,10 +18,10 @@
    <external-component-plugins>
    		<target-component>org.exoplatform.services.wcm.portal.artifacts.PortalArtifactsInitializerService</target-component>    
       <component-plugin> 
-        <name>Inital webcontent artifact for each site</name>
+        <name>Initial webcontent artifact for each site</name>
         <set-method>addPlugin</set-method>
         <type>org.exoplatform.services.wcm.portal.artifacts.InitialWebContentPlugin</type>
-        <description>This plugin deploy some inital webcontent as site artifact to site artifact folder of portal when a portal is created</description>
+        <description>This plugin deploy some initial webcontent as site artifact to site artifact folder of portal when a portal is created</description>
         <init-params>
           <object-param>        
             <name>Portal banner data</name>

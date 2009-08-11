@@ -21,11 +21,11 @@
 				</value-param>
 				<value-param>
 					<name>path</name>
-					<value>/sites content/live/acme/categories</value>
+					<value>/sites content/live/backoffice/categories</value>
 				</value-param>
 				<value-param>
 					<name>treeName</name>
-					<value>ACME</value>
+					<value>Backoffice</value>
 				</value-param>
 				<object-param>
 					<name>permission.configuration</name>
@@ -119,13 +119,13 @@
 											<string></string>
 										</field>
 										<field name="homePath">
-											<string>collaboration:/sites content/live/acme/categories/ACME</string>
+											<string>collaboration:/sites content/live/backoffice/categories/Backoffice</string>
 										</field>
 										<field name="targetWspace">
 											<string>collaboration</string>
 										</field>
 										<field name="targetPath">
-											<string>/sites content/live/acme/web contents</string>
+											<string>/sites content/live/backoffice/web contents</string>
 										</field>
 										<field name="lifecyclePhase">
 											<string>add</string>
