@@ -17,6 +17,7 @@
 package org.exoplatform.services.wcm.search;
 
 import javax.jcr.Node;
+import javax.jcr.nodetype.NodeType;
 import javax.jcr.query.QueryResult;
 
 import org.apache.commons.lang.ArrayUtils;
@@ -135,7 +136,9 @@ public class WCMPaginatedQueryResult extends PaginatedQueryResult {
           return null;
       }
       if(queryCriteria.isSearchWebpage()) {
-        if (!displayNode.isNodeType("publication:stateAndVersionBasedPublication"))
+        // Check node'type: if node type is publication:publication then node is one of result. 
+        // But publication:publication is supper type of publication:wcmPublication 
+        if (!displayNode.isNodeType("publication:wcmPublication"))
           return null;
       }
     } else {
