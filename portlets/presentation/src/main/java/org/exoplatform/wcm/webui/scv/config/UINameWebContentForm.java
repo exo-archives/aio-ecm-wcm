@@ -318,15 +318,26 @@ public class UINameWebContentForm extends UIForm {
         String applicationId = application.getInstanceId();
         org.exoplatform.portal.application.PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(applicationId));
         if (portletPreferences == null) continue;
+        
+        boolean isQuickCreate = false;
+        String nodeIdentifier = null;
+        
         for (Object preferenceObject : portletPreferences.getPreferences()) {
-          Preference preference = Preference.class.cast(preferenceObject);
-          if ("isQuickCreate".equals(preference.getName())) {
-            boolean isQuickCreate = Boolean.valueOf(preference.getValues().get(0).toString());
-            if (isQuickCreate) {
-              applications.remove(applicationObject);
-              break;
-            }
-          }
+        	Preference preference = Preference.class.cast(preferenceObject);
+
+        	if ("isQuickCreate".equals(preference.getName())) {
+        		isQuickCreate = Boolean.valueOf(preference.getValues().get(0).toString());
+        		if (!isQuickCreate) break;
+        	}
+
+        	if ("nodeIdentifier".equals(preference.getName())) {
+        		nodeIdentifier = preference.getValues().get(0).toString();
+        		if (nodeIdentifier == null || nodeIdentifier == "") break;
+        	}
+        }
+        
+        if (isQuickCreate && (nodeIdentifier == null || nodeIdentifier == "")) {
+        	applications.remove(applicationObject);
         }
       }
       currentPage.setChildren(applications);

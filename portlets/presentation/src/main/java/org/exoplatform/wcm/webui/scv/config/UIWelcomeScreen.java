@@ -223,7 +223,6 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
 
     public void execute(Event<UIWelcomeScreen> event) throws Exception {
       UIWelcomeScreen uiWelcomeScreen = event.getSource();
-      if (uiWelcomeScreen.isNewContent) {
         UserPortalConfigService userPortalConfigService = uiWelcomeScreen.getApplicationComponent(UserPortalConfigService.class);
         UIPortal uiPortal = Util.getUIPortal();
         PageNode currentPageNode = uiPortal.getSelectedNode();
@@ -239,15 +238,26 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
           String applicationId = application.getInstanceId();
           PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(applicationId));
           if (portletPreferences == null) continue;
+          
+          boolean isQuickCreate = false;
+          String nodeIdentifier = null;
+          
           for (Object preferenceObject : portletPreferences.getPreferences()) {
-            Preference preference = Preference.class.cast(preferenceObject);
-            if ("isQuickCreate".equals(preference.getName())) {
-              boolean isQuickCreate = Boolean.valueOf(preference.getValues().get(0).toString());
-              if (isQuickCreate) {
-                applications.remove(applicationObject);
-                break;
-              }
-            }
+          	Preference preference = Preference.class.cast(preferenceObject);
+
+          	if ("isQuickCreate".equals(preference.getName())) {
+          		isQuickCreate = Boolean.valueOf(preference.getValues().get(0).toString());
+          		if (!isQuickCreate) break;
+          	}
+
+          	if ("nodeIdentifier".equals(preference.getName())) {
+          		nodeIdentifier = preference.getValues().get(0).toString();
+          		if (nodeIdentifier == null || nodeIdentifier == "") break;
+          	}
+          }
+
+          if (isQuickCreate && (nodeIdentifier == null || nodeIdentifier == "")) {
+          	applications.remove(applicationObject);
           }
         }
         currentPage.setChildren(applications);
@@ -255,9 +265,8 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
         UIPage uiPage = uiPortal.findFirstComponentOfType(UIPage.class);
         uiPage.setChildren(null);
         PortalDataMapper.toUIPage(uiPage, currentPage);
-      }
-      UIPortletConfig uiPortletConfig = uiWelcomeScreen.getAncestorOfType(UIPortletConfig.class);      
-      uiPortletConfig.closePopupAndUpdateUI(event.getRequestContext(),true);
+        UIPortletConfig uiPortletConfig = uiWelcomeScreen.getAncestorOfType(UIPortletConfig.class);      
+        uiPortletConfig.closePopupAndUpdateUI(event.getRequestContext(),true);
     }
   }
 
