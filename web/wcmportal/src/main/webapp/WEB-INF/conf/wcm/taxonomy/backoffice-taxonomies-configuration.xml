@@ -9,7 +9,7 @@
 			<init-params>
 				<value-param>
 					<name>autoCreateInNewRepository</name>
-					<value>true</value>
+					<value>false</value>
 				</value-param>
 				<value-param>
 					<name>repository</name>
