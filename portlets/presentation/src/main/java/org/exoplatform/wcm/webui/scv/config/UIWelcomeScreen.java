@@ -263,8 +263,10 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
         currentPage.setChildren(applications);
         userPortalConfigService.update(currentPage);
         UIPage uiPage = uiPortal.findFirstComponentOfType(UIPage.class);
-        uiPage.setChildren(null);
-        PortalDataMapper.toUIPage(uiPage, currentPage);
+        if (uiPage != null) {
+        	uiPage.setChildren(null);
+        	PortalDataMapper.toUIPage(uiPage, currentPage);
+        }
         UIPortletConfig uiPortletConfig = uiWelcomeScreen.getAncestorOfType(UIPortletConfig.class);      
         uiPortletConfig.closePopupAndUpdateUI(event.getRequestContext(),true);
     }

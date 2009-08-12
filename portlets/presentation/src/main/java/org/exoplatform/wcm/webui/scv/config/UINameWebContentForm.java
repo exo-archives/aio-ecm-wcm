@@ -343,8 +343,10 @@ public class UINameWebContentForm extends UIForm {
       currentPage.setChildren(applications);
       userPortalConfigService.update(currentPage);
       UIPage uiPage = uiPortal.findFirstComponentOfType(UIPage.class);
-      uiPage.setChildren(null);
-      PortalDataMapper.toUIPage(uiPage, currentPage);
+      if (uiPage != null) {
+      	uiPage.setChildren(null);
+      	PortalDataMapper.toUIPage(uiPage, currentPage);
+      }
       UIPortletConfig uiPortletConfig = event.getSource().getAncestorOfType(UIPortletConfig.class);
       uiPortletConfig.closePopupAndUpdateUI(event.getRequestContext(),true);
     }
