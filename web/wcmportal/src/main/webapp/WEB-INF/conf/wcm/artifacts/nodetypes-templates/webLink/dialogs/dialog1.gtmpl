@@ -7,7 +7,7 @@
 </style>
 <div class="UIForm">  
   <% uiform.begin() %>
-  <div class="HorizontalLayout" style="border:0px;">
+  <div class="HorizontalLayout">
     <table class="UIFormGrid">
         <tr>
           <td class="FieldLabel"><%=_ctx.appRes("WebLink.dialog.label.name")%></td>
