@@ -19,7 +19,6 @@ package org.exoplatform.wcm.webui.fastcontentcreator.config.action;
 import java.util.Map;
 
 import javax.jcr.Node;
-import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
@@ -38,7 +37,6 @@ import org.exoplatform.services.cms.actions.ActionServiceContainer;
 import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.services.cms.impl.DMSRepositoryConfiguration;
 import org.exoplatform.services.cms.templates.TemplateService;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.fastcontentcreator.UIFCCConstant;
 import org.exoplatform.wcm.webui.fastcontentcreator.UIFCCPortlet;
@@ -57,6 +55,7 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIFormInputBase;
+import org.exoplatform.webui.form.UIFormStringInput;
 
 /**
  * Created by The eXo Platform SAS
@@ -97,6 +96,20 @@ public class UIFCCActionForm extends UIDialogForm implements UISelectable {
   }
   
   private Node getParentNode() throws Exception{ return (Node) getSession().getItem(parentPath_) ; }
+  
+  public void renderField(String name) throws Exception {
+    UIComponent uiInput = findComponentById(name);
+    if ("homePath".equals(name)) {
+      String homPath = UIFCCUtils.getPreferenceWorkspace() + ":" + parentPath_;
+      if (homPath.endsWith("/"))
+        homPath = homPath.substring(0, homPath.length() - 1);
+      ((UIFormStringInput) uiInput).setValue(homPath);
+    }
+    if ("targetPath".equals(name) && (isOnchange()) && !isUpdateSelect) {
+      ((UIFormStringInput) uiInput).reset();
+    }
+    super.renderField(name);
+  }
   
   public void doSelect(String selectField, Object value) {
     isUpdateSelect = true ;
@@ -145,7 +158,10 @@ public class UIFCCActionForm extends UIDialogForm implements UISelectable {
   public String getRootPath(){return rootPath_;}
   
   public void onchange(Event<?> event) throws Exception {
-    event.getRequestContext().addUIComponentToUpdateByAjax(getParent()) ;
+    if(!isAddNew){
+      event.getRequestContext().addUIComponentToUpdateByAjax(getParent()) ;
+      return;
+    }
   }
   
   static public class SaveActionListener extends EventListener<UIFCCActionForm> {
