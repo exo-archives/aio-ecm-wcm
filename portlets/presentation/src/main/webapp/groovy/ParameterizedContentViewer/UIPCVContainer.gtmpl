@@ -49,7 +49,7 @@
 			}
 		} else {
 		  %>
-		  	<div style="padding-bottom: 20px; font-size: 14px; text-align: center; color: red;">
+		  	<div style="padding-bottom: 20px; font-size: 13px; text-align: center;">
 		  		<div class="Message"><span><%= _ctx.appRes("UIMessageBoard.msg.content-not-found") %></span></div>
 		  	</div>
 		  <%

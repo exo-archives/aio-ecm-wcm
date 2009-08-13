@@ -64,7 +64,7 @@
       <label>
 	      <readmore>En savoir plus</readmore>
 	      <draft>Esquisse</draft>
-	      <content-not-found>Le dossier est vide!</content-not-found>     
+	      <content-not-found>Le dossier est vide.</content-not-found>     
       </label>
   </UIContentListPresentationDefault>  
   <!--/n  ####################################################################################

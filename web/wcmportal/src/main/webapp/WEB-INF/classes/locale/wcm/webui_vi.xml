@@ -60,7 +60,7 @@
       <action>
         <refresh>Làm mới</refresh>
         <edit>Chỉnh sửa</edit>
-        <content-not-found>Thư mục hiện thời không có sản phẩm nào!!!</content-not-found>
+        <content-not-found>Thư mục hiện thời không có sản phẩm nào.</content-not-found>
       </action>
       <label>
 	      <readmore>Chi tiết</readmore>

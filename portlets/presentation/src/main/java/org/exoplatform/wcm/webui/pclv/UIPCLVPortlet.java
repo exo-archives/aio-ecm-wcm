@@ -140,10 +140,10 @@ public class UIPCLVPortlet extends UIPortletApplication {
 		getChildren().clear();
 		addChild(UIPopupContainer.class, null, null);
 		if (PortletMode.VIEW.equals(mode)) {
-			UIPCLVContainer container = addChild(UIPCLVContainer.class, null, null);
-			container.init();
-		} else if (PortletMode.EDIT.equals(mode)) {
-			addChild(UIPCLVConfig.class, null, null);
-		}
+      UIPCLVContainer container = addChild(UIPCLVContainer.class, null, null);
+      container.init();
+    } else if (PortletMode.EDIT.equals(mode)) {
+        addChild(UIPCLVConfig.class, null, null);
+    }
 	}
 }

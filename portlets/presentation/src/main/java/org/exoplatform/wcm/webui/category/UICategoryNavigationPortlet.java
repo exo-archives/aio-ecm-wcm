@@ -51,7 +51,7 @@ public class UICategoryNavigationPortlet extends UIPortletApplication {
       addChild(UICategoryNavigationTree.class, null, null);
     } else if (PortletMode.EDIT.equals(mode)) {
       addChild(UICategoryNavigationConfig.class, null, null);
-    }
+    } 
   }
   
   public void processRender(WebuiApplication app, WebuiRequestContext context) throws Exception {
