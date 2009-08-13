@@ -25,6 +25,7 @@ import java.util.List;
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
+import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
@@ -53,6 +54,7 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS Author : Phan Le Thanh Chuong
  * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com Nov 4, 2008
@@ -67,42 +69,70 @@ import org.exoplatform.webui.event.EventListener;
 )
 public class UIPCVContainer extends UIContainer {
 
-	/** Flag indicating the draft revision. */
-	private boolean isDraftRevision = false;
+  /** Flag indicating the draft revision. */
+  private boolean isDraftRevision = false;
 
-	/** Flag indicating the obsolete revision. */
-	private boolean isObsoletedContent = false;
+  /** Flag indicating the obsolete revision. */
+  private boolean isObsoletedContent = false;
 
-	/** Content child of this content. */
-	private UIPCVPresentation uiContentViewer;
+  /** Content child of this content. */
+  private UIPCVPresentation uiContentViewer;
+  
+  /** The repository. */
+  private String repository;
+  
+  /** A flag used to display Print/Close buttons and hide Back one if its' value is <code>true</code>. In <code>false</code> case, the Back button will be shown only */
+  private boolean isPrint;
 
-	/**
-	 * A flag used to display Print/Close buttons and hide Back one if its'
-	 * value is <code>true</code>. In <code>false</code> case, the Back
-	 * button will be shown only
-	 */
-	private boolean isPrint;
+  /**
+   * Instantiates a new uI content viewer container.
+   * 
+   * @throws Exception the exception
+   */
+  public UIPCVContainer() throws Exception {
+    
+    addChild(UIPCVPresentation.class, null, null);
+    uiContentViewer = getChild(UIPCVPresentation.class);
+  }
+  
+  /**
+   * Gets the repository.
+   * 
+   * @return the repository
+   * 
+   * @throws RepositoryException the repository exception
+   */
+  public String getRepository() throws RepositoryException {
+    PortletRequestContext porletRequestContext = WebuiRequestContext.getCurrentInstance();
+    repository = porletRequestContext.getRequest().getPreferences().getValue("repository", "");
+    return repository;
+  }
 
-	/**
-	 * Instantiates a new uI content viewer container.
-	 * 
-	 * @throws Exception
-	 *             the exception
-	 */
-	public UIPCVContainer() throws Exception {
-		addChild(UIPCVPresentation.class, null, null);
-		uiContentViewer = getChild(UIPCVPresentation.class);
-	}
-	
-	public Node getNode() throws Exception {
-	  String parameters = getRequestParameters();
-	  Node node = getNodebyPath(parameters);
-	  if (node == null) node = getNodeByCategory(parameters);
-	  if (node == null) return null;
-	  
-	  // check node is a document node
-	  TemplateService templateService = getApplicationComponent(TemplateService.class);
-    List<String> documentTypes = templateService.getDocumentTemplates(repository);
+  /**
+   * Sets the repository.
+   * 
+   * @param repository the new repository
+   */
+  public void setRepository(String repository) {
+    this.repository = repository;
+  }
+
+  /**
+   * Gets the node.
+   * 
+   * @return the node
+   * 
+   * @throws Exception the exception
+   */
+  public Node getNode() throws Exception {
+    String parameters = getRequestParameters();
+    Node node = getNodebyPath(parameters);
+    if (node == null) node = getNodeByCategory(parameters);
+    if (node == null) return null;
+
+    // check node is a document node
+    TemplateService templateService = getApplicationComponent(TemplateService.class);
+    List<String> documentTypes = templateService.getDocumentTemplates(this.getRepository());
     boolean isDocumentType = false;
     for (String documentType : documentTypes) {
       if (node.isNodeType(documentType)) {
@@ -133,12 +163,14 @@ public class UIPCVContainer extends UIContainer {
       String nodeUUID = nodeView.getProperty("jcr:frozenUuid").getString();
       uiContentViewer.setOrginalNode(node.getSession().getNodeByUUID(nodeUUID));
       uiContentViewer.setNode(nodeView);
+    } else if (nodeView == null) {
+      return null;
     } else {
       uiContentViewer.setOrginalNode(nodeView);
       uiContentViewer.setNode(nodeView);
     }
-    uiContentViewer.setRepository(repository);
-    uiContentViewer.setWorkspace(workspace);
+    uiContentViewer.setRepository(this.getRepository());
+    uiContentViewer.setWorkspace(nodeView.getSession().getWorkspace().getName());
     
     // Set draft for template
     WCMPublicationService wcmPublicationService = getApplicationComponent(WCMPublicationService.class);
@@ -149,16 +181,17 @@ public class UIPCVContainer extends UIContainer {
     PortletRequestContext porletRequestContext = WebuiRequestContext.getCurrentInstance();
     HttpServletRequest request = (HttpServletRequest) porletRequestContext.getRequest();
     isPrint = "isPrint=true".equals(request.getQueryString()) ? true :false;  
-	
+  
     return nodeView;
-	}
-	
-	private String repository;
-	
-	private String workspace;
-	
-	private String getRequestParameters() {
-	  PortletRequestContext porletRequestContext = WebuiRequestContext.getCurrentInstance();
+  }
+  
+  /**
+   * Gets the request parameters.
+   * 
+   * @return the request parameters
+   */
+  private String getRequestParameters() {
+    PortletRequestContext porletRequestContext = WebuiRequestContext.getCurrentInstance();
     HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) porletRequestContext.getRequest();
     PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
     UIPortal uiPortal = Util.getUIPortal();
@@ -175,19 +208,31 @@ public class UIPCVContainer extends UIContainer {
       return null;
     }
     return parameters;
-	}
-	
-	private Node getNodebyPath(String parameters) throws Exception {
+  }
+  
+  /**
+   * Gets the nodeby path.
+   * 
+   * @param parameters the parameters
+   * 
+   * @return the nodeby path
+   * 
+   * @throws Exception the exception
+   */
+  private Node getNodebyPath(String parameters) throws Exception {
+    ManageableRepository manageableRepository = null;
     String[] params = parameters.split("/");
-    repository = params[0];
-    workspace = params[1];
+    String repository = params[0];
+    String workspace = params[1];
+    try {
+      RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
+      manageableRepository = repositoryService.getRepository(repository);
+    } catch(Exception e) {
+      return null;
+    }
     String nodeIdentifier = null;
     Node currentNode = null;
-    
-    RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
-    ManageableRepository manageableRepository = repositoryService.getRepository(repository);
     Session session = Utils.getSessionProvider(this).getSession(workspace, manageableRepository);
-
     if (params.length > 2) {
       StringBuffer identifier = new StringBuffer();
       for (int i = 2; i < params.length; i++) {
@@ -214,16 +259,23 @@ public class UIPCVContainer extends UIContainer {
       currentNode = session.getRootNode();
     }
     
-	  return currentNode;  
-	}
-	
-	private Node getNodeByCategory(String parameters) throws Exception {
-	  PortletRequestContext porletRequestContext = WebuiRequestContext.getCurrentInstance();
-	  repository = porletRequestContext.getRequest().getPreferences().getValue("repository", "");
-	  
+    return currentNode;  
+  }
+  
+  /**
+   * Gets the node by category.
+   * 
+   * @param parameters the parameters
+   * 
+   * @return the node by category
+   * 
+   * @throws Exception the exception
+   */
+  private Node getNodeByCategory(String parameters) throws Exception {
+    
     TaxonomyService taxonomyService = getApplicationComponent(TaxonomyService.class);
     String[] params = parameters.split("/");
-    Node taxonomyTree = taxonomyService.getTaxonomyTree(repository, params[0]);
+    Node taxonomyTree = taxonomyService.getTaxonomyTree(this.getRepository(), params[0]);
     
     String symLinkPath = parameters.substring(parameters.indexOf("/") + 1);
     try {
@@ -232,147 +284,139 @@ public class UIPCVContainer extends UIContainer {
     } catch (PathNotFoundException e) {
       return null;
     }
-	}
-	
-	/**
-	 * Checks if is quick edit able.
-	 * 
-	 * @return true, if is quick edit able
-	 * 
-	 * @throws Exception
-	 *             the exception
-	 */
-	public boolean isQuickEditAble() throws Exception {
-		PortletRequestContext context = (PortletRequestContext) WebuiRequestContext
-				.getCurrentInstance();
-		return Utils.turnOnQuickEditable(context, true);
-	}
+  }
+  
+  /**
+   * Checks if is quick edit able.
+   * 
+   * @return true, if is quick edit able
+   * 
+   * @throws Exception the exception
+   */
+  public boolean isQuickEditAble() throws Exception {
+    PortletRequestContext context = (PortletRequestContext) WebuiRequestContext
+        .getCurrentInstance();
+    return Utils.turnOnQuickEditable(context, true);
+  }
 
-	/**
-	 * The listener interface for receiving quickEditAction events. The class
-	 * that is interested in processing a quickEditAction event implements this
-	 * interface, and the object created with that class is registered with a
-	 * component using the component's
-	 * <code>addQuickEditActionListener<code> method. When
-	 * the quickEditAction event occurs, that object's appropriate
-	 * method is invoked.
-	 * 
-	 * @see QuickEditActionEvent
-	 */
-	public static class QuickEditActionListener extends
-			EventListener<UIPCVContainer> {
+  /**
+   * The listener interface for receiving quickEditAction events. The class
+   * that is interested in processing a quickEditAction event implements this
+   * interface, and the object created with that class is registered with a
+   * component using the component's
+   * <code>addQuickEditActionListener<code> method. When
+   * the quickEditAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see QuickEditActionEvent
+   */
+  public static class QuickEditActionListener extends
+      EventListener<UIPCVContainer> {
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
+    public void execute(Event<UIPCVContainer> event) throws Exception {
+      UIPCVContainer uiContentViewerContainer = event.getSource();
+      UIPCVPresentation uiContentViewer = uiContentViewerContainer.getChild(UIPCVPresentation.class);
+      Node orginialNode = uiContentViewer.getOriginalNode();
+      ManageableRepository manageableRepository = (ManageableRepository) orginialNode.getSession().getRepository();
+      String repository = manageableRepository.getConfiguration().getName();
+      String workspace = orginialNode.getSession().getWorkspace().getName();
+      UIPCVContentDialog uiDocumentForm = uiContentViewerContainer.createUIComponent(UIPCVContentDialog.class, null, null);
+      uiDocumentForm.setRepositoryName(repository);
+      uiDocumentForm.setWorkspace(workspace);
+      uiDocumentForm.setContentType(orginialNode.getPrimaryNodeType().getName());
+      uiDocumentForm.setNodePath(orginialNode.getPath());
+      uiDocumentForm.setStoredPath(orginialNode.getParent().getPath());
+      uiDocumentForm.addNew(false);
+      uiContentViewerContainer.addChild(uiDocumentForm);
+      Utils.createPopupWindow(uiContentViewerContainer, uiDocumentForm, "UIDocumentFormPopupWindow", 800, 600);
+    }
+  }
 
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
-		 */
-		public void execute(Event<UIPCVContainer> event) throws Exception {
-			UIPCVContainer uiContentViewerContainer = event.getSource();
-			UIPCVPresentation uiContentViewer = uiContentViewerContainer.getChild(UIPCVPresentation.class);
-			Node orginialNode = uiContentViewer.getOriginalNode();
-			ManageableRepository manageableRepository = (ManageableRepository) orginialNode.getSession().getRepository();
-			String repository = manageableRepository.getConfiguration().getName();
-			String workspace = orginialNode.getSession().getWorkspace().getName();
-			
-      if (repository == null || workspace == null)
-        throw new ItemNotFoundException();
-      String contentType=null, nodePath=null;
-  	  contentType = orginialNode.getPrimaryNodeType().getName();
-  	  nodePath = orginialNode.getPath();
-  	  UIPCVContentDialog uiDocumentDialogForm = uiContentViewerContainer.createUIComponent(UIPCVContentDialog.class, null, null);
-      uiDocumentDialogForm.setRepositoryName(repository);
-      uiDocumentDialogForm.setWorkspace(workspace);
-      uiDocumentDialogForm.setContentType(contentType);
-      uiDocumentDialogForm.setNodePath(nodePath);
-      uiDocumentDialogForm.setStoredPath(nodePath);
-      uiDocumentDialogForm.addNew(false);
-      Utils.createPopupWindow(uiContentViewerContainer, uiDocumentDialogForm, "UIDocumentFormPopupWindow", 800, 600);
-		}
-	}
+  /**
+   * Render error message.
+   * 
+   * @param context the context
+   * @param keyBundle the key bundle
+   * 
+   * @throws Exception the exception
+   */
+  public void renderErrorMessage(WebuiRequestContext context, String keyBundle)
+      throws Exception {
+    Writer writer = context.getWriter();
+    String message = context.getApplicationResourceBundle().getString(
+        keyBundle);
+    writer
+        .write("<div style=\"height: 55px; font-size: 13px; text-align: center; padding-top: 10px;\">");
+    writer.write("<span>");
+    writer.write(message);
+    writer.write("</span>");
+    writer.write("</div>");
+    writer.close();
+  }
 
-	/**
-	 * Render error message.
-	 * 
-	 * @param context
-	 *            the context
-	 * @param keyBundle
-	 *            the key bundle
-	 * 
-	 * @throws Exception
-	 *             the exception
-	 */
-	public void renderErrorMessage(WebuiRequestContext context, String keyBundle)
-			throws Exception {
-		Writer writer = context.getWriter();
-		String message = context.getApplicationResourceBundle().getString(
-				keyBundle);
-		writer
-				.write("<div style=\"height: 55px; font-size: 13px; text-align: center; padding-top: 10px;\">");
-		writer.write("<span>");
-		writer.write(message);
-		writer.write("</span>");
-		writer.write("</div>");
-		writer.close();
-	}
+  /**
+   * Gets <code>isPrint</code> value that is used to display Print/Close
+   * buttons and hide Back one if its' value is <code>True</code>. In
+   * <code>False</code> case, the Back button will be shown only.
+   * 
+   * @return <code>isPrint</code>
+   */
+  public boolean getIsPrint() {
+    return isPrint;
+  }
 
-	/**
-	 * Gets <code>isPrint</code> value that is used to display Print/Close
-	 * buttons and hide Back one if its' value is <code>True</code>. In
-	 * <code>False</code> case, the Back button will be shown only.
-	 * 
-	 * @return <code>isPrint</code>
-	 */
-	public boolean getIsPrint() {
-		return isPrint;
-	}
+  /**
+   * Sets <code>isPrint</code> value that is used to display Print/Close
+   * buttons and hide Back one if its' value is <code>True</code>. In
+   * <code>False</code> case, the Back button will be shown only.
+   * 
+   * @param isPrint the is print
+   */
+  public void setIsPrint(boolean isPrint) {
+    this.isPrint = isPrint;
+  }
 
-	/**
-	 * Sets <code>isPrint</code> value that is used to display Print/Close
-	 * buttons and hide Back one if its' value is <code>True</code>. In
-	 * <code>False</code> case, the Back button will be shown only.
-	 */
-	public void setIsPrint(boolean isPrint) {
-		this.isPrint = isPrint;
-	}
+  /**
+   * Gets the draft revision value. If the revision is draft, an icon and one
+   * text is shown. Otherwise, false.
+   * 
+   * @return <code>isDraftRevision</code>
+   */
+  public boolean isDraftRevision() {
+    return isDraftRevision;
+  }
 
-	/**
-	 * Gets the draft revision value. If the revision is draft, an icon and one
-	 * text is shown. Otherwise, false.
-	 * 
-	 * @return <code>isDraftRevision</code>
-	 */
-	public boolean isDraftRevision() {
-		return isDraftRevision;
-	}
+  /**
+   * Sets the draft revision value. If the revision is draft, an icon and one
+   * text is shown. Otherwise, false.
+   * 
+   * @param isDraftRevision the is draft revision
+   */
+  public void setDraftRevision(boolean isDraftRevision) {
+    this.isDraftRevision = isDraftRevision;
+  }
 
-	/**
-	 * Sets the draft revision value. If the revision is draft, an icon and one
-	 * text is shown. Otherwise, false.
-	 * 
-	 * @param <code>isDraftRevision</code>
-	 */
-	public void setDraftRevision(boolean isDraftRevision) {
-		this.isDraftRevision = isDraftRevision;
-	}
+  /**
+   * Gets the draft obsolete value. If the revision is draft, the message is
+   * shown to inform users of this state. Otherwise, false.
+   * 
+   * @return <code>isDraftRevision</code>
+   */
+  public boolean isObsoletedContent() {
+    return isObsoletedContent;
+  }
 
-	/**
-	 * Gets the draft obsolete value. If the revision is draft, the message is
-	 * shown to inform users of this state. Otherwise, false.
-	 * 
-	 * @return <code>isDraftRevision</code>
-	 */
-	public boolean isObsoletedContent() {
-		return isObsoletedContent;
-	}
-
-	/**
-	 * Sets the draft obsolete value. If the revision is draft, the message is
-	 * shown to inform users of this state. Otherwise, false.
-	 * 
-	 * @param <code>isObsoletedContent</code>
-	 */
-	public void setObsoletedContent(boolean isObsoletedContent) {
-		this.isObsoletedContent = isObsoletedContent;
-	}
+  /**
+   * Sets the draft obsolete value. If the revision is draft, the message is
+   * shown to inform users of this state. Otherwise, false.
+   * 
+   * @param isObsoletedContent the is obsoleted content
+   */
+  public void setObsoletedContent(boolean isObsoletedContent) {
+    this.isObsoletedContent = isObsoletedContent;
+  }
 }
