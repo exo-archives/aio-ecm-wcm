@@ -19,14 +19,12 @@ package org.exoplatform.wcm.webui.pcv;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.URLDecoder;
-import java.security.AccessControlException;
 import java.util.HashMap;
 import java.util.List;
 
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
-import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
@@ -46,9 +44,6 @@ import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
 import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationState;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant.SITE_MODE;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -98,177 +93,6 @@ public class UIPCVContainer extends UIContainer {
 		addChild(UIPCVPresentation.class, null, null);
 		uiContentViewer = getChild(UIPCVPresentation.class);
 	}
-
-//	@Override
-//	public void processRender(WebuiRequestContext context) throws Exception {
-//		PortletRequestContext porletRequestContext = (PortletRequestContext) context;
-//		HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) porletRequestContext.getRequest();
-//		PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
-//		UIPortal uiPortal = Util.getUIPortal();
-//		String portalURI = portalRequestContext.getPortalURI();
-//		String requestURI = requestWrapper.getRequestURI();
-//		String pageNodeSelected = uiPortal.getSelectedNode().getUri();
-//		String parameters = null;
-	  
-	  
-//		Object object = requestWrapper.getAttribute("ParameterizedContentViewerPortlet.data.object");
-
-//		try {
-//			parameters = URLDecoder.decode(StringUtils.substringAfter(
-//					requestURI, portalURI.concat(pageNodeSelected + "/")),
-//					"UTF-8");
-//		} catch (UnsupportedEncodingException e) {
-//		}
-//		if (!parameters.matches(UIPCVPresentation.PARAMETER_REGX)) {
-//			renderErrorMessage(context,
-//					UIPCVPresentation.CONTENT_NOT_FOUND_EXC);
-//			return;
-//		}
-//		String nodeIdentifier = null;
-//		String[] params = parameters.split("/");
-//		String repository = params[0];
-//		String workspace = params[1];
-//		Node currentNode = null;
-				
-//		if (object instanceof ItemNotFoundException
-//				|| object instanceof AccessControlException
-//				|| object instanceof ItemNotFoundException || object == null) {
-//			RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
-//			try {
-//				ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-//				Session session = Utils.getSessionProvider(this).getSession(workspace, manageableRepository);
-//
-//				if (params.length > 2) {
-//					StringBuffer identifier = new StringBuffer();
-//					for (int i = 2; i < params.length; i++) {
-//						identifier.append("/").append(params[i]);
-//					}
-//					nodeIdentifier = identifier.toString();
-//					boolean isUUID = false;
-//					try {
-//						currentNode = (Node) session.getItem(nodeIdentifier);
-//					} catch (Exception e) {
-//						isUUID = true;
-//					}
-//					if (isUUID) {
-//						try {
-//							String uuid = params[params.length - 1];
-//							currentNode = session.getNodeByUUID(uuid);
-//						} catch (ItemNotFoundException exc) {
-//							renderErrorMessage(context, UIPCVPresentation.CONTENT_NOT_FOUND_EXC);
-//							return;
-//						}
-//					}
-//				} else if (params.length == 2) {
-//					currentNode = session.getRootNode();
-//				}
-//			} catch (RepositoryException re) {
-//				repository = porletRequestContext.getRequest().getPreferences().getValue("repository", "");
-//				
-//				TaxonomyService taxonomyService = getApplicationComponent(TaxonomyService.class);
-//				Node taxonomyTree = taxonomyService.getTaxonomyTree(repository, params[0]);
-//				
-//	      String symLinkPath = parameters.substring(parameters.indexOf("/") + 1);
-//	      Node symLink;
-//				try {
-//					symLink = taxonomyTree.getNode(symLinkPath);
-//					currentNode = taxonomyTree.getSession().getNodeByUUID(symLink.getProperty("exo:uuid").getString());
-//				} catch (PathNotFoundException e) {
-//					renderErrorMessage(context,
-//							UIPCVPresentation.CONTENT_NOT_FOUND_EXC);
-//				}
-//			} catch (AccessControlException ace) {
-//				renderErrorMessage(context, UIPCVPresentation.ACCESS_CONTROL_EXC);
-//				return;
-//			} catch (Exception e) {
-//				renderErrorMessage(context, UIPCVPresentation.CONTENT_NOT_FOUND_EXC);
-//				return;
-//			}
-
-//		} else {
-//			currentNode = (Node) object;
-//		}
-
-//		TemplateService templateService = getApplicationComponent(TemplateService.class);
-//		List<String> documentTypes = templateService.getDocumentTemplates(repository);
-//		Boolean isDocumentType = false;
-//		for (String docType : documentTypes) {
-//			if (currentNode.isNodeType(docType)) {
-//				isDocumentType = true;
-//				break;
-//			}
-//		}
-//		if (currentNode.isNodeType("exo:hiddenable")) {
-//			renderErrorMessage(context,
-//					UIPCVPresentation.ACCESS_CONTROL_EXC);
-//			return;
-//		} else if (isDocumentType) { // content is document
-//			if (hasChildren()) {
-//				removeChild(UIPCVContainer.class);
-//			}
-//			PublicationService publicationService = uiPortal
-//					.getApplicationComponent(PublicationService.class);
-//			HashMap<String, Object> hmContext = new HashMap<String, Object>();
-//			if (Utils.isLiveMode()) {
-//				hmContext.put(StageAndVersionPublicationConstant.RUNTIME_MODE, SITE_MODE.LIVE);
-//			} else {
-//				hmContext.put(StageAndVersionPublicationConstant.RUNTIME_MODE, SITE_MODE.EDITING);
-//			}
-//			String lifeCycleName = null;
-//			 try {
-//				 lifeCycleName = publicationService.getNodeLifecycleName(currentNode);
-//			} catch (NotInPublicationLifecycleException e) {}
-//
-//			Node nodeView;
-//			if (lifeCycleName == null) 
-//				{
-//					nodeView = currentNode;
-//				}
-//			else
-//			{
-//				PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(lifeCycleName);
-//				if (publicationPlugin == null) {
-//					renderErrorMessage(context, UIPCVPresentation.CONTENT_NOT_PRINTED);
-//					return;
-//				}
-//				nodeView = publicationPlugin.getNodeView(currentNode,hmContext);
-//			}
-
-//      boolean isLiveMode = Utils.isLiveMode();
-//      if(isLiveMode) {
-//        if(nodeView == null) {
-//          renderErrorMessage(context,UIPCVPresentation.CONTENT_NOT_PRINTED);
-//          return;
-//        }
-//        uiContentViewer.setNode(nodeView);
-//      }else {
-//        uiContentViewer.setNode(currentNode);
-//      }
-//			uiContentViewer.setRepository(repository);
-//			uiContentViewer.setWorkspace(workspace);
-//			uiContentViewer.setOrginalNode(currentNode);     			
-//			String state = StageAndVersionPublicationState.getRevisionState(currentNode);
-//			if (StageAndVersionPublicationConstant.OBSOLETE_STATE.equals(state)) {
-//				setObsoletedContent(true);
-//				renderErrorMessage(context,
-//						UIPCVPresentation.OBSOLETE_CONTENT);
-//				return;
-//			} else {
-//				setObsoletedContent(false);
-//				if (StageAndVersionPublicationConstant.DRAFT_STATE.equals(state) && !isLiveMode) {
-//					setDraftRevision(true);
-//				} else {
-//					setDraftRevision(false);
-//				}
-//			}
-//			 HttpServletRequest request = context.getRequest();
-//			 isPrint = "isPrint=true".equals(request.getQueryString()) ? true :false;
-//			 super.processRender(context);
-//		} else { // content is folders
-//			renderErrorMessage(context, UIPCVPresentation.CONTENT_UNSUPPORT_EXC);
-//		}
-//	}
-
 	
 	public Node getNode() throws Exception {
 	  String parameters = getRequestParameters();
@@ -450,15 +274,20 @@ public class UIPCVContainer extends UIContainer {
 			ManageableRepository manageableRepository = (ManageableRepository) orginialNode.getSession().getRepository();
 			String repository = manageableRepository.getConfiguration().getName();
 			String workspace = orginialNode.getSession().getWorkspace().getName();
-			UIPCVContentDialog uiDocumentForm = uiContentViewerContainer.createUIComponent(UIPCVContentDialog.class, null, null);
-			uiDocumentForm.setRepositoryName(repository);
-			uiDocumentForm.setWorkspace(workspace);
-			uiDocumentForm.setContentType(orginialNode.getPrimaryNodeType().getName());
-			uiDocumentForm.setNodePath(orginialNode.getPath());
-			uiDocumentForm.setStoredPath(orginialNode.getParent().getPath());
-			uiDocumentForm.addNew(false);
-			uiContentViewerContainer.addChild(uiDocumentForm);
-			Utils.createPopupWindow(uiContentViewerContainer, uiDocumentForm, "UIDocumentFormPopupWindow", 800, 600);
+			
+      if (repository == null || workspace == null)
+        throw new ItemNotFoundException();
+      String contentType=null, nodePath=null;
+  	  contentType = orginialNode.getPrimaryNodeType().getName();
+  	  nodePath = orginialNode.getPath();
+  	  UIPCVContentDialog uiDocumentDialogForm = uiContentViewerContainer.createUIComponent(UIPCVContentDialog.class, null, null);
+      uiDocumentDialogForm.setRepositoryName(repository);
+      uiDocumentDialogForm.setWorkspace(workspace);
+      uiDocumentDialogForm.setContentType(contentType);
+      uiDocumentDialogForm.setNodePath(nodePath);
+      uiDocumentDialogForm.setStoredPath(nodePath);
+      uiDocumentDialogForm.addNew(false);
+      Utils.createPopupWindow(uiContentViewerContainer, uiDocumentDialogForm, "UIDocumentFormPopupWindow", 800, 600);
 		}
 	}
 

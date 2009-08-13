@@ -17,7 +17,6 @@
 package org.exoplatform.wcm.webui.pcv;
 
 import java.security.AccessControlException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,11 +38,10 @@ import org.exoplatform.services.cms.CmsService;
 import org.exoplatform.services.cms.JcrInputProperty;
 import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.services.cms.templates.TemplateService;
-import org.exoplatform.services.ecm.publication.PublicationPlugin;
-import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
+import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
+import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -191,12 +189,14 @@ public class UIPCVContentDialog extends UIDialogForm {
         return;
       }
       UIPCVPortlet uiportlet = uiDocumentDialogForm.getAncestorOfType(UIPCVPortlet.class);
-      UIPCVContainer uiContentViewerContainer = uiportlet.getChild(UIPCVContainer.class);
-      UIPCVPresentation uiContentViewer = uiContentViewerContainer.getChild(UIPCVPresentation.class);
-      uiContentViewer.setNode(newNode);
-      uiContentViewer.setRepository(repository);
-      uiContentViewer.setWorkspace(workspace);
-      Utils.closePopupWindow(uiDocumentDialogForm, "UIDocumentFormPopupWindow");
+      if (uiportlet != null) {
+	      UIPCVContainer uiContentViewerContainer = uiportlet.getChild(UIPCVContainer.class);
+	      UIPCVPresentation uiContentViewer = uiContentViewerContainer.getChild(UIPCVPresentation.class);
+	      uiContentViewer.setNode(newNode);
+	      uiContentViewer.setRepository(repository);
+	      uiContentViewer.setWorkspace(workspace);
+      }
+			Utils.closePopupWindow(uiDocumentDialogForm, "UIDocumentFormPopupWindow");
       Utils.updatePortal(context);
     }
 
@@ -251,9 +251,6 @@ public class UIPCVContentDialog extends UIDialogForm {
       UIPCVContentDialog uiDocumentDialogForm = event.getSource();
       Node documentNode = uiDocumentDialogForm.getNode();
       Session session = documentNode.getSession();
-      ManageableRepository manageableRepository = (ManageableRepository) session.getRepository();
-      String repository = manageableRepository.getConfiguration().getName();
-      String workspace = session.getWorkspace().getName();
       List<UIComponent> inputs = uiDocumentDialogForm.getChildren();
       Map<String, JcrInputProperty> inputProperties = DialogFormUtil.prepareMap(inputs,
                                                       uiDocumentDialogForm.getInputProperties());
@@ -297,21 +294,12 @@ public class UIPCVContentDialog extends UIDialogForm {
       	Utils.createPopupMessage(uiDocumentDialogForm, "UIDocumentForm.msg.cannot-save", null, ApplicationMessage.WARNING);
         return;
       }
-      UIPCVPortlet uiportlet = uiDocumentDialogForm.getAncestorOfType(UIPCVPortlet.class);
-      UIPCVContainer uiContentViewerContainer = uiportlet.getChild(UIPCVContainer.class);
-      UIPCVPresentation uiContentViewer = uiContentViewerContainer.getChild(UIPCVPresentation.class);
-      PublicationService publicationService = uiDocumentDialogForm.getApplicationComponent(PublicationService.class);
-      PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(StageAndVersionPublicationConstant.LIFECYCLE_NAME);
-      HashMap<String, String> context = new HashMap<String, String>();
-      if(newNode != null) {
-    	  context.put(StageAndVersionPublicationConstant.CURRENT_REVISION_NAME, newNode.getName());
-      }
-      publicationPlugin.changeState(newNode, StageAndVersionPublicationConstant.PUBLISHED_STATE, context);
-      uiContentViewer.setNode(newNode);
-      uiContentViewer.setRepository(repository);
-      uiContentViewer.setWorkspace(workspace);
-      Utils.closePopupWindow(uiDocumentDialogForm, "UIDocumentFormPopupWindow");
       
+      WCMPublicationService publicationService = uiDocumentDialogForm.getApplicationComponent(WCMPublicationService.class);
+      publicationService.updateLifecyleOnChangeContent(newNode, Util.getPortalRequestContext().getPortalOwner(), Util.getPortalRequestContext().getRemoteUser(), 
+      		PublicationDefaultStates.PUBLISHED);
+      
+      Utils.closePopupWindow(uiDocumentDialogForm, "UIDocumentFormPopupWindow");
       PortletRequestContext pContext = (PortletRequestContext) event.getRequestContext();
       Utils.updatePortal(pContext);
     }

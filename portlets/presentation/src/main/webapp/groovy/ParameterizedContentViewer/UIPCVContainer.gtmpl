@@ -29,13 +29,13 @@
 				<%
 			}
 			if (isQuickEditable) {
-				%><a class="DocumentQuickEdit" href="<%= uicomponent.event("QuickEdit") %>>" title="<%= _ctx.appRes("UIContentViewerContainer.label.quickEditTitle") %>"></a><% 	
+				%><a class="DocumentQuickEdit" href="<%= uicomponent.event("QuickEdit") %>" title="<%= _ctx.appRes("UIContentViewerContainer.label.quickEditTitle") %>"></a><% 	
 			}
 			if (isDraftRevision) { 
 	 			%>
-	 				<div style="padding: 5px 10px; line-height: 16px; ">
-	 					[<span class="DraftIcon" style="padding-left: 20px"><%= _ctx.appRes("UIPresentationContainer.draft") %></span>]
-	 				</div>
+					<div style="padding: 5px 10px; line-height: 16px; ">
+						[ <span class="DraftIcon" style="padding-left: 20px"><%= _ctx.appRes("UIPresentationContainer.draft") %></span> ]
+					</div>  
 	 			<%
 			}
 			uicomponent.renderChildren();
