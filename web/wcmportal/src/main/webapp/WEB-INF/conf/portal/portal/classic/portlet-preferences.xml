@@ -413,7 +413,7 @@
 		</preference>
 		<preference>
 			<name>itemsPerPage</name>
-			<value>3</value>
+			<value>10</value>
 			<read-only>false</read-only>
 		</preference>
 		<preference>

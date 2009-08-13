@@ -143,7 +143,7 @@ public class UIPCLVConfig extends UIForm implements UISelectable {
 
   /** The Constant ORDER_ASC. */
   public static final String ORDER_ASC                         = "OrderAsc";
-
+  
   /** The popup id. */
   private String popupId;
   
@@ -417,7 +417,24 @@ public class UIPCLVConfig extends UIForm implements UISelectable {
       
       String formViewTemplatePath = uiParameterizedManagementForm.getUIFormSelectBox(UIPCLVConfig.FORM_VIEW_TEMPLATES_SELECTOR).getValue();
       String paginatorTemplatePath = uiParameterizedManagementForm.getUIFormSelectBox(UIPCLVConfig.PAGINATOR_TEMPLATES_SELECTOR).getValue();
-      String itemsPerPage = uiParameterizedManagementForm.getUIStringInput(UIPCLVConfig.ITEMS_PER_PAGE_INPUT).getValue();      
+      String itemsPerPage = uiParameterizedManagementForm.getUIStringInput(UIPCLVConfig.ITEMS_PER_PAGE_INPUT).getValue();
+      boolean isValidNumber = true;
+      if(itemsPerPage.trim().length() > 0) {
+        try {
+          int validNumber = Integer.parseInt(itemsPerPage);
+          if(validNumber <= 0) {
+            isValidNumber = false;
+          }
+        } catch(NumberFormatException e) {
+          isValidNumber = false;
+        }
+      } else {
+        isValidNumber = false;
+      }
+      if(!isValidNumber) {
+        Utils.createPopupMessage(uiParameterizedManagementForm, "UIPCLVConfig.msg.not-a-number", null, ApplicationMessage.INFO);
+        return;
+      }
       String showRefreshButton = uiParameterizedManagementForm.getUIFormCheckBoxInput(UIPCLVConfig.VIEWER_BUTTON_REFRESH).isChecked() ? "true" : "false";
       String viewThumbnails = uiParameterizedManagementForm.getUIFormCheckBoxInput(UIPCLVConfig.VIEWER_THUMBNAILS_IMAGE).isChecked() ? "true" : "false";
       String viewTitle = uiParameterizedManagementForm.getUIFormCheckBoxInput(UIPCLVConfig.VIEWER_TITLE).isChecked() ? "true" : "false";

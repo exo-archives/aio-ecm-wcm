@@ -26,6 +26,9 @@
    		<saving-success>
    			Parameterized Content List Viewer has been updated
    		</saving-success>
+   		<not-a-number>
+   			Item per page is not a number or value is not valid. Please in input valid number!!!
+   		</not-a-number>
    	</msg>
     <label>
       <ContentSelectionBlock>Contents selection</ContentSelectionBlock>
