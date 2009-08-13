@@ -63,7 +63,8 @@
       </action>
       <label>
 	      <readmore>Read more</readmore>
-	      <draft>Draft</draft>      
+	      <draft>Draft</draft>
+	      <content-not-found>The current folder is empty!!!</content-not-found>     
       </label>
   </UIContentListPresentationDefault>
   <!--/n  ####################################################################################
