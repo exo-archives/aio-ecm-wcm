@@ -146,17 +146,11 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent{
    * 
    * @return true, if successful
    */
-  private boolean checkNewConfig(){
+  private boolean checkNewConfig() throws Exception {
     UIPresentationContainer presentationContainer = getAncestorOfType(UIPresentationContainer.class);
-    try {
-      presentationContainer.getReferenceNode();
-      return false;
-    } catch (Exception e) {
-      if(UISingleContentViewerPortlet.scvLog.isDebugEnabled()) {
-        UISingleContentViewerPortlet.scvLog.debug(e);
-      }
-    }
-    return true;
+    Node content = presentationContainer.getReferenceNode();
+    if (content == null) return true;
+    return false;
   }
 
   /**
