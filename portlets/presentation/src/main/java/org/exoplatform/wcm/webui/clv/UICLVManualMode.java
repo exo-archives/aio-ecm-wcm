@@ -68,19 +68,12 @@ public class UICLVManualMode extends UICLVContainer {
     List<String> contents = Arrays.asList(listContent);
     int itemsPerPage = Integer.parseInt(portletPreferences.getValue(UICLVPortlet.ITEMS_PER_PAGE, null));
     List<Node> nodes = new ArrayList<Node>();
-    List<String> tempContents = new ArrayList<String>(contents);
     if (contents != null && contents.size() != 0) {
       for (int i = 0; i < contents.size(); i++) {
-        Node node = null;
         String path = contents.get(i);
         try {
-          node = root.getNode(path.substring(1, path.length()));
-        } catch (Exception e) {
-          tempContents.remove(i);
-        }
-        if (node != null) {          
-          nodes.add(node);       
-        }          
+          nodes.add(root.getNode(path.substring(1, path.length())));    
+        } catch (Exception e) {}
       }
     }
     if (nodes.size() == 0) {
@@ -88,10 +81,6 @@ public class UICLVManualMode extends UICLVContainer {
       setViewAbleContent(false);
       return;
     }    
-    if (tempContents.size() != contents.size()) {
-      portletPreferences.setValues(UICLVPortlet.CONTENT_LIST, tempContents.toArray(new String[0]));      
-      portletPreferences.store();
-    }        
     getChildren().clear();
     ObjectPageList pageList = new ObjectPageList(nodes, itemsPerPage);    
     UICLVPresentation contentListPresentation = addChild(UICLVPresentation.class, null, null);
