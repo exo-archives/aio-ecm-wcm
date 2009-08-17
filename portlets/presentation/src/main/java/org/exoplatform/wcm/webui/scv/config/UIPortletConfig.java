@@ -148,6 +148,7 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent{
    */
   private boolean checkNewConfig() throws Exception {
     UIPresentationContainer presentationContainer = getAncestorOfType(UIPresentationContainer.class);
+    if (presentationContainer == null) return true;
     Node content = presentationContainer.getReferenceNode();
     if (content == null) return true;
     return false;
