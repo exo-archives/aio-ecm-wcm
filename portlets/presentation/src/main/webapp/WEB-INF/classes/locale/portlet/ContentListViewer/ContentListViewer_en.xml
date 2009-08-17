@@ -28,6 +28,7 @@
       <ItemsPerPage>Items per page</ItemsPerPage>
       <ViewerButtonQuickEdit>Show quick edit button</ViewerButtonQuickEdit>
       <ViewerButtonRefresh>Show refresh button</ViewerButtonRefresh>
+      <ViewerReadmore>Read more</ViewerReadmore>
       <ViewerThumbnailsView>Show image</ViewerThumbnailsView>
       <ViewerTitle>Show title</ViewerTitle>
       <ViewerDateCreated>Show date created</ViewerDateCreated>

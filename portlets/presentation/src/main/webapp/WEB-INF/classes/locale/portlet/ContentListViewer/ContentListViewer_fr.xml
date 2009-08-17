@@ -28,6 +28,7 @@
       <ItemsPerPage>Eléments par page</ItemsPerPage>
       <ViewerButtonQuickEdit>Montrer le bouton d'édition rapide</ViewerButtonQuickEdit>
       <ViewerButtonRefresh>Montrer le bouton de rafraichissement</ViewerButtonRefresh>
+      <ViewerReadmore>En Savoir Plus</ViewerReadmore>
       <ViewerThumbnailsView>Montrer les vignettes</ViewerThumbnailsView>
       <ViewerTitle>Montrer le titre</ViewerTitle>
       <ViewerDateCreated>Montrer la date de création</ViewerDateCreated>

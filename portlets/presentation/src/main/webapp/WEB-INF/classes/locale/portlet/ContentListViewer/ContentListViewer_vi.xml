@@ -10,7 +10,7 @@
 			<SelectFolderPath>Lựa chọn thư mục</SelectFolderPath>
 		</title>
 	</FolderPathInputSet>
-  <UIViewerManagementForm>
+  <UICLVConfig>
     <action>
       <Save>Lưu lại</Save>
       <Cancel>Huỷ bỏ</Cancel>
@@ -28,6 +28,7 @@
       <ItemsPerPage>Số kết quả mỗi trang</ItemsPerPage>
       <ViewerButtonQuickEdit>Cho phép chỉnh sửa nhanh</ViewerButtonQuickEdit>
       <ViewerButtonRefresh>Cho phép làm mới trang trình bày</ViewerButtonRefresh>
+      <ViewerReadmore>Xem tiếp</ViewerReadmore>
       <ViewerThumbnailsView>Hiển thị ảnh minh hoạ tài liệu</ViewerThumbnailsView>
       <ViewerTitle>Hiển thị tiêu đề tài liệu</ViewerTitle>
       <ViewerDateCreated>Hiển thị ngày tạo tài liệu</ViewerDateCreated>
@@ -48,7 +49,7 @@
       <ContentPath>Tài liệu</ContentPath>                     
     </label>
     <title>Lựa chọn thư mục chứa tài liệu hoăc nội dung được hiển thị</title>
-  </UIViewerManagementForm>
+  </UICLVConfig>
   <UIMessageBoard>
     <msg>
       <folder-not-found>Trang hiển thị này chưa được cấu hình.</folder-not-found>
@@ -74,7 +75,7 @@
   </UIStartEditionInPageWizard>
   <UIViewerManagementPopupWindow>
     <title>
-      <UIPortletConfig>Quản lý trình hiển thị nội dung theo danh sách.</UIPortletConfig>
+      <UICLVConfig>Quản lý trình hiển thị nội dung theo danh sách.</UICLVConfig>
       <UIContentEdittingPopup>Chỉnh sửa nội dung</UIContentEdittingPopup>
     </title>
   </UIViewerManagementPopupWindow>
