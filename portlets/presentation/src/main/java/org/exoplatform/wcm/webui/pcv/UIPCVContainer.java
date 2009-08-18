@@ -324,15 +324,20 @@ public class UIPCVContainer extends UIContainer {
       ManageableRepository manageableRepository = (ManageableRepository) orginialNode.getSession().getRepository();
       String repository = manageableRepository.getConfiguration().getName();
       String workspace = orginialNode.getSession().getWorkspace().getName();
-      UIPCVContentDialog uiDocumentForm = uiContentViewerContainer.createUIComponent(UIPCVContentDialog.class, null, null);
-      uiDocumentForm.setRepositoryName(repository);
-      uiDocumentForm.setWorkspace(workspace);
-      uiDocumentForm.setContentType(orginialNode.getPrimaryNodeType().getName());
-      uiDocumentForm.setNodePath(orginialNode.getPath());
-      uiDocumentForm.setStoredPath(orginialNode.getParent().getPath());
-      uiDocumentForm.addNew(false);
-      uiContentViewerContainer.addChild(uiDocumentForm);
-      Utils.createPopupWindow(uiContentViewerContainer, uiDocumentForm, "UIDocumentFormPopupWindow", 800, 600);
+      
+      if (repository == null || workspace == null)
+        throw new ItemNotFoundException();
+      String contentType=null, nodePath=null;
+      contentType = orginialNode.getPrimaryNodeType().getName();
+      nodePath = orginialNode.getPath();
+      UIPCVContentDialog uiDocumentDialogForm = uiContentViewerContainer.createUIComponent(UIPCVContentDialog.class, null, null);
+      uiDocumentDialogForm.setRepositoryName(repository);
+      uiDocumentDialogForm.setWorkspace(workspace);
+      uiDocumentDialogForm.setContentType(contentType);
+      uiDocumentDialogForm.setNodePath(nodePath);
+      uiDocumentDialogForm.setStoredPath(nodePath);
+      uiDocumentDialogForm.addNew(false);
+      Utils.createPopupWindow(uiContentViewerContainer, uiDocumentDialogForm, "UIDocumentFormPopupWindow", 800, 600);
     }
   }
 
