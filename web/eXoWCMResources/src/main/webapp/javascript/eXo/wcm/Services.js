@@ -55,7 +55,7 @@ Vote = function(){
 //		var l1 = '<a href="#" onclick="javascript:eXo.wcm.vote.addVote("1.0");">1</a>';
 		var html = '<div style="border:1px solid #FF0000;">';
 		for (i=1 ; i<=5 ; i++) {
-			html += '<a href="#" onclick="javascript:eXo.wcm.vote.addVote(\'repository\', \'workspace\', \'/sites%20content/live/classic/categories/Classic/test\',  \''+i+'.0\', \'en\')">'+i+'</a>';
+			html += '<a href="#" onclick="javascript:eXo.wcm.vote.addVote(\'repository\', \'collaboration\', \'/sites%20content/live/classic/categories/Classic/test\',  \''+i+'.0\', \'en\')">'+i+'</a>';
 		}
 		html += '</div>';
 		target.innerHTML = html;
