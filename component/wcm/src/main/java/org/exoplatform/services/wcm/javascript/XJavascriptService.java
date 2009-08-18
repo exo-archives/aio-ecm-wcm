@@ -25,13 +25,9 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
-import org.exoplatform.services.cache.CacheService;
-import org.exoplatform.services.cache.ExoCache;
 import org.exoplatform.services.deployment.ContentInitializerService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
@@ -40,7 +36,6 @@ import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.web.application.javascript.JavascriptConfigService;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.picocontainer.Startable;
 
 // TODO: Auto-generated Javadoc
@@ -75,9 +70,6 @@ public class XJavascriptService implements Startable {
   
   /** The javascript mime types. */
   private CopyOnWriteArrayList<String> javascriptMimeTypes = new CopyOnWriteArrayList<String>();
-  
-  /** The js cache. */
-  private ExoCache jsCache;
 
   /** The log. */
   private Log log = ExoLogger.getLogger("wcm:XJavascriptService");  
@@ -90,12 +82,11 @@ public class XJavascriptService implements Startable {
    * @param servletContext the servlet context
    * @param configurationService the configuration service
    * @param contentInitializerService the content initializer service
-   * @param cacheService the cache service
    * 
    * @throws Exception the exception
    */
   public XJavascriptService(RepositoryService repositoryService,JavascriptConfigService jsConfigService,ServletContext servletContext, 
-      WCMConfigurationService configurationService, ContentInitializerService contentInitializerService, CacheService cacheService) throws Exception{    
+      WCMConfigurationService configurationService, ContentInitializerService contentInitializerService) throws Exception{    
     this.repositoryService = repositoryService ;
     this.jsConfigService = jsConfigService ;
     sContext = servletContext ;
@@ -103,7 +94,6 @@ public class XJavascriptService implements Startable {
     javascriptMimeTypes.addIfAbsent("text/javascript");
     javascriptMimeTypes.addIfAbsent("application/x-javascript");
     javascriptMimeTypes.addIfAbsent("text/ecmascript");
-    jsCache = cacheService.getCacheInstance(this.getClass().getName());
   }
 
   /**
@@ -116,30 +106,6 @@ public class XJavascriptService implements Startable {
    * @throws Exception the exception
    */
   public String getActiveJavaScript(Node home) throws Exception {
-    /** TODO
-     * 
-     * This is quick code to improve performance when rendering the web content.
-     * In future version, we should find a way use cache data in live mode. In edit mode, we will use raw data 
-     * 
-     * */
-    WebuiRequestContext requestContext = WebuiRequestContext.getCurrentInstance();
-    boolean useCachedData = false;    
-    if(requestContext != null) {
-      HttpServletRequest request = requestContext.getRequest();
-      HttpSession httpSession = request.getSession();
-      Object onEditMode = httpSession.getAttribute("turnOnQuickEdit");
-      if(onEditMode == null) {
-        useCachedData = true; 
-      } else {
-        useCachedData = !Boolean.parseBoolean((String)onEditMode);
-      }     
-    }
-    String cacheKey = home.getSession().getWorkspace().getName() + home.getPath();
-    if(useCachedData) {
-      String cachedJs = (String)jsCache.get(cacheKey);
-      if(cachedJs != null && cachedJs.length()>0)
-        return cachedJs;
-    }
     String jsQuery = "select * from exo:jsFile where jcr:path like '" + home.getPath()+ "/%' and exo:active='true'order by exo:priority DESC " ;
     //TODO the jcr can not search on jcr:system for normal workspace. Seem that this is the portal bug
     Session querySession = null;
@@ -164,7 +130,6 @@ public class XJavascriptService implements Startable {
       if(querySession != null)
         querySession.logout();
     }       
-    jsCache.put(cacheKey,jsData);
     return jsData;
   }   
 
