@@ -419,7 +419,9 @@ public class UIPCLVConfig extends UIForm implements UISelectable {
       String paginatorTemplatePath = uiParameterizedManagementForm.getUIFormSelectBox(UIPCLVConfig.PAGINATOR_TEMPLATES_SELECTOR).getValue();
       String itemsPerPage = uiParameterizedManagementForm.getUIStringInput(UIPCLVConfig.ITEMS_PER_PAGE_INPUT).getValue();
       boolean isValidNumber = true;
-      if(itemsPerPage.trim().length() > 0) {
+      if(("".equals(itemsPerPage)) || (itemsPerPage == null) || (itemsPerPage.trim().length() == 0)) {
+        isValidNumber = false;
+      } else {
         try {
           int validNumber = Integer.parseInt(itemsPerPage);
           if(validNumber <= 0) {
@@ -428,11 +430,9 @@ public class UIPCLVConfig extends UIForm implements UISelectable {
         } catch(NumberFormatException e) {
           isValidNumber = false;
         }
-      } else {
-        isValidNumber = false;
       }
       if(!isValidNumber) {
-        Utils.createPopupMessage(uiParameterizedManagementForm, "UIPCLVConfig.msg.not-a-number", null, ApplicationMessage.INFO);
+        Utils.createPopupMessage(uiParameterizedManagementForm, "UIPCLVConfig.msg.not-a-number", null, ApplicationMessage.ERROR);
         return;
       }
       String showRefreshButton = uiParameterizedManagementForm.getUIFormCheckBoxInput(UIPCLVConfig.VIEWER_BUTTON_REFRESH).isChecked() ? "true" : "false";
