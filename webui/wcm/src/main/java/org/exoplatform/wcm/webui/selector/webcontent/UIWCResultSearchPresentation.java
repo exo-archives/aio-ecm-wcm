@@ -98,15 +98,15 @@ public class UIWCResultSearchPresentation extends UIBaseNodePresentation {
         PortletRequestContext pContext = 
           (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
         PortletPreferences prefs = pContext.getRequest().getPreferences();
-        String workspace = prefs.getValue("workspace", null);
-        if(workspace == null) {
+//        String workspace = prefs.getValue("workspace", null);
+//        if(workspace == null) {
           //WCMConfigurationService wcmConfService =
             //getApplicationComponent(WCMConfigurationService.class);
           //NodeLocation nodeLocation = wcmConfService.getLivePortalsLocation(repository);
           //workspace = nodeLocation.getWorkspace();
             DMSConfiguration dmsConfiguration = getApplicationComponent(DMSConfiguration.class);
-            workspace = dmsConfiguration.getConfig(repository).getSystemWorkspace();
-        }
+            String workspace = dmsConfiguration.getConfig(repository).getSystemWorkspace();
+//        }
         resourceResolver = new JCRResourceResolver(repository, workspace, "exo:templateFile");
       }
     }catch(Exception ex) {
