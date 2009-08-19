@@ -226,11 +226,13 @@ public class UIPCVContentDialog extends UIDialogForm {
       String repository = manageableRepository.getConfiguration().getName();
       String workspace = session.getWorkspace().getName();
       UIPCVPortlet uiportlet = uiDocumentDialogForm.getAncestorOfType(UIPCVPortlet.class);
-      UIPCVContainer uiContentViewerContainer = uiportlet.getChild(UIPCVContainer.class);
-      UIPCVPresentation uiContentViewer = uiContentViewerContainer.getChild(UIPCVPresentation.class);
-      uiContentViewer.setNode(documentNode);
-      uiContentViewer.setRepository(repository);
-      uiContentViewer.setWorkspace(workspace);
+      if (uiportlet != null) {
+      	UIPCVContainer uiContentViewerContainer = uiportlet.getChild(UIPCVContainer.class);
+      	UIPCVPresentation uiContentViewer = uiContentViewerContainer.getChild(UIPCVPresentation.class);
+      	uiContentViewer.setNode(documentNode);
+      	uiContentViewer.setRepository(repository);
+      	uiContentViewer.setWorkspace(workspace);
+      }
       Utils.closePopupWindow(uiDocumentDialogForm, "UIDocumentFormPopupWindow");
     }
   }
