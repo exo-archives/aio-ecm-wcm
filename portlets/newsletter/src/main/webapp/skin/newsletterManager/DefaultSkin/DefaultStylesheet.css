@@ -246,3 +246,11 @@
 .UINewsletterManagerPortlet .DeleteAdministratorIcon {
 	background:transparent url('icons/16x16/DeleteAdmin.gif') repeat scroll 0 0;
 }
+
+.UINewsletterPortlet .openFolder{
+	background:transparent url(icons/16x16/folderopen1.png) no-repeat scroll left center;
+}
+
+.UINewsletterPortlet .convertAsTemplate{
+	background:transparent url(icons/16x16/copy1-16.png) no-repeat scroll left center;
+}

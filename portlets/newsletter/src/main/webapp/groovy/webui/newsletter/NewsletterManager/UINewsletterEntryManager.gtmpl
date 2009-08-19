@@ -78,7 +78,7 @@ import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 																					<div class="UIRightPopupMenuContainer" style="background: none;margin: 0px; padding-left: 8px; padding-right: 8px;">
 																						<!-- Detail action -->
 																						<div class="MenuItem" onclick="javaScript:void(0)">
-																							<div class="ItemIcon Pencil" style="padding-left:30px;text-align:left;">
+																							<div class="ItemIcon openFolder" style="padding-left:30px;text-align:left;">
 																								<a href="<%=uicomponent.event("OpenNewsletter")%>">
 																									<%=_ctx.appRes("NewsletterPortlet.action.Open")%>
 																								</a>
@@ -100,7 +100,7 @@ import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 																						</div>
 																						<hr style="width:90%"/>
 																						<div class="MenuItem" onclick="javaScript:void(0)">
-																							<div class="ItemIcon Pencil" style="padding-left:30px;text-align:left;">
+																							<div class="ItemIcon convertAsTemplate" style="padding-left:30px;text-align:left;">
 																								<a href="<%=uicomponent.event("ConvertTemplate")%>">
 																									<%=_ctx.appRes("UINewsletterEntryManager.title.ConvertAsTemplate")%>
 																								</a>
