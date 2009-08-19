@@ -184,8 +184,9 @@ public class NewsletterPublicUserHandler {
    * @param link the link
    * @param emailContent the email content
    * @param sessionProvider the session provider
+   * @throws Exception 
    */
-  public void subscribe(String portalName, String userMail, List<String> listCategorySubscription, String link, String[] emailContent, SessionProvider sessionProvider) {
+  public void subscribe(String portalName, String userMail, List<String> listCategorySubscription, String link, String[] emailContent, SessionProvider sessionProvider) throws Exception {
     log.info("Trying to subscribe user " + userMail);
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
@@ -194,6 +195,7 @@ public class NewsletterPublicUserHandler {
       Node userNode = manageUserHandler.add(portalName, userMail, sessionProvider);
       
       // update email into subscription
+      //SessionProvider sProvider = SessionProvider.createSystemProvider() ;
       Session session = sessionProvider.getSession(workspace, manageableRepository);
       updateSubscriptions(session, listCategorySubscription, portalName, userMail);
       //Send a verification code to user's email to validate and to get link
@@ -221,6 +223,7 @@ public class NewsletterPublicUserHandler {
     } catch (Exception e) {
       log.error("Subscribe user " + userMail + " failed because of " + e.getMessage());
       e.printStackTrace();
+      throw e;
     }
   }
   

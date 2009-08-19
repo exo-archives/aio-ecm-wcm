@@ -7,6 +7,7 @@
       <email-not-empty>Courrier électronique ne peut pas être vide!</email-not-empty>
       <checkSubscriptionToProcess>S'il vous plaît vérifier un ou plusieurs abonnements avant de soumettre!</checkSubscriptionToProcess>
       <alreadyExistedEmail>Le courrier électronique est déjà en place. S'il vous plaît d'entrée d'autres email!</alreadyExistedEmail>
+      <canNotSubcribed>Ne peut pas subcribed. S'il vous plaît essayez de nouveau!</canNotSubcribed>
     </msg>
     <action>
       <Subcribe>Inscrire</Subcribe>

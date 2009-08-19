@@ -29,6 +29,9 @@ import javax.jcr.query.QueryResult;
 import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.access.AccessControlEntry;
+import org.exoplatform.services.jcr.access.PermissionType;
+import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -118,6 +121,11 @@ public class NewsletterSubscriptionHandler {
       subscriptionNode.setProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_DECRIPTION, subscription.getDescription());
       subscriptionNode.setProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_CATEGORY_NAME, subscription.getCategoryName());
 
+      ExtendedNode extSubscriptionNode = (ExtendedNode)subscriptionNode ;
+      if (extSubscriptionNode.canAddMixin("exo:privilegeable")) extSubscriptionNode.addMixin("exo:privilegeable");
+      String[] arrayPers = {PermissionType.READ, PermissionType.SET_PROPERTY} ;
+      extSubscriptionNode.setPermission("any", arrayPers) ;
+      
       session.save();
     } catch (Exception e) {
       log.error("Add subcription " + subscription.getName() + " failed because of " + e.getMessage());
@@ -133,7 +141,6 @@ public class NewsletterSubscriptionHandler {
    * @param sessionProvider the session provider
    */
   public void edit(String portalName, NewsletterSubscriptionConfig subscription, SessionProvider sessionProvider) {
-    
     log.info("Trying to edit subcription " + subscription.getName());
     try {
 

@@ -215,12 +215,16 @@ public class UINewsletterViewerForm extends UIForm {
           String emailContent[] = new String[]{ res.getString("UINewsletterViewerForm.Email.ConfirmUser.Subject"),
                                                 res.getString("UINewsletterViewerForm.Email.ConfirmUser.Content")};
           
-          newsletterForm.publicUserHandler.subscribe(portalName, userEmail, listCategorySubscription, newsletterForm.linkToSendMail, emailContent, Utils.getSessionProvider(newsletterForm));
-          newsletterForm.inputEmail.setRendered(false);
-          newsletterForm.userMail = userEmail;
-          newsletterForm.isUpdated = true;
-          newsletterForm.setActions(new String[] { "ForgetEmail", "ChangeSubcriptions" });
-          contentOfMessage = "UINewsletterViewerForm.msg.subcribed";
+          try{
+            newsletterForm.publicUserHandler.subscribe(portalName, userEmail, listCategorySubscription, newsletterForm.linkToSendMail, emailContent, Utils.getSessionProvider(newsletterForm));
+            newsletterForm.inputEmail.setRendered(false);
+            newsletterForm.userMail = userEmail;
+            newsletterForm.isUpdated = true;
+            newsletterForm.setActions(new String[] { "ForgetEmail", "ChangeSubcriptions" });
+            contentOfMessage = "UINewsletterViewerForm.msg.subcribed";
+          }catch(Exception ex){
+            contentOfMessage = "UINewsletterViewerForm.msg.canNotSubcribed";
+          }
         }
       } else {
         contentOfMessage = "UINewsletterViewerForm.msg.alreadyExistedEmail";

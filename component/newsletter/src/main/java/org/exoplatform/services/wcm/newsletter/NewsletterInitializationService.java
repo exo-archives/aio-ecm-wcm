@@ -24,6 +24,8 @@ import javax.jcr.Session;
 
 import org.apache.commons.logging.Log;
 import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.services.jcr.access.PermissionType;
+import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.newsletter.config.NewsletterUserConfig;
@@ -105,6 +107,13 @@ public class NewsletterInitializationService implements Startable {
           for (NewsletterSubscriptionConfig subscriptionConfig : subscriptionConfigs) {
             subscriptionHandler.add(sessionProvider, portalName, subscriptionConfig);
           }
+          
+          String userPath = NewsletterConstant.generateUserPath(portalName);
+          Node userFolderNode = (Node)session.getItem(userPath);
+          ExtendedNode extUserFolderNode = (ExtendedNode)userFolderNode ;
+          if(extUserFolderNode.canAddMixin("exo:privilegeable")) extUserFolderNode.addMixin("exo:privilegeable");
+          String[] arrayPers = {PermissionType.READ, PermissionType.ADD_NODE, PermissionType.SET_PROPERTY, PermissionType.REMOVE} ;
+          extUserFolderNode.setPermission("any", arrayPers) ;
           
           NewsletterManageUserHandler manageUserHandler = managerService.getManageUserHandler();
           for (NewsletterUserConfig userConfig : userConfigs) {

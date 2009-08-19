@@ -205,8 +205,9 @@ public class NewsletterManageUserHandler {
    * @param sessionProvider the session provider
    * 
    * @return the node
+   * @throws Exception 
    */
-  public Node add(String portalName, String userMail, SessionProvider sessionProvider) {
+  public Node add(String portalName, String userMail, SessionProvider sessionProvider) throws Exception {
     log.info("Trying to add user " + userMail);
     Node userNode = null;
     try {
@@ -222,6 +223,9 @@ public class NewsletterManageUserHandler {
     } catch (Exception e) {
       log.error("Add user " + userMail + " failed because of " + e.getMessage());
       e.printStackTrace();
+    }
+    if(userNode == null){
+      throw new Exception("Can not add new user");
     }
     return userNode;
   }
