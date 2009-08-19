@@ -370,3 +370,7 @@
 	padding-left: 20px;
 }
 
+.HorizontalLayout .UIForm input {
+	font-size: 11px;
+	width: auto;
+}
