@@ -25,7 +25,8 @@ import javax.jcr.NodeIterator;
 import org.exoplatform.ecm.webui.tree.selectmany.UICategoriesSelectPanel;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationState;
+import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
+import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.event.Event;
@@ -49,15 +50,14 @@ public class UICLVContentSelectionPanel extends UICategoriesSelectPanel {
   }
 
   public List<Node> getListSelectableNodes() throws Exception {
+    WCMPublicationService wcmPublicationService = getApplicationComponent(WCMPublicationService.class);
     List<Node> list = new ArrayList<Node>();
     Node parentNode = getParentNode();
-    if (parentNode == null)
-      return list;
+    if (parentNode == null) return list;
     for (NodeIterator iterator = parentNode.getNodes(); iterator.hasNext();) {
       Node child = iterator.nextNode();
-      if (child.isNodeType("exo:hiddenable"))
-        continue;
-      if (StageAndVersionPublicationState.OBSOLETE.equals(StageAndVersionPublicationState.getRevisionState(child))) continue;
+      if (child.isNodeType("exo:hiddenable")) continue;
+      if (PublicationDefaultStates.OBSOLETE.equals(wcmPublicationService.getContentState(child))) continue;
       if (isDocType(child)) {
         list.add(child);
       }

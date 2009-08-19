@@ -308,6 +308,7 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
   public Node getNodeView(Node node, Map<String, Object> context) throws Exception {
     // if current mode is edit mode
     if (context.get(WCMComposer.FILTER_MODE).equals(WCMComposer.MODE_EDIT)) return node;
+    
     // if current mode is live mode
     Node liveNode = getLiveRevision(node);
     if(liveNode != null) {

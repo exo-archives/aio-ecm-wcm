@@ -16,12 +16,18 @@
  */
 package org.exoplatform.services.wcm.search;
 
+import java.util.HashMap;
+
 import javax.jcr.Node;
-import javax.jcr.nodetype.NodeType;
 import javax.jcr.query.QueryResult;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationState;
+import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.services.ecm.publication.PublicationPlugin;
+import org.exoplatform.services.ecm.publication.PublicationService;
+import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
+import org.exoplatform.services.wcm.publication.WCMComposer;
+import org.exoplatform.services.wcm.publication.WCMPublicationService;
 
 /**
  * Created by The eXo Platform SAS Author : Hoa Pham hoa.phamvu@exoplatform.com
@@ -101,15 +107,18 @@ public class WCMPaginatedQueryResult extends PaginatedQueryResult {
    * (javax.jcr.Node)
    */
   protected Node filterNodeToDisplay(Node node) throws Exception {
-    //Node displayNode = node;
     Node displayNode = getNodeToCheckState(node);
-    //String revisionState = StageAndVersionPublicationState.getRevisionState(node);
     if(displayNode == null) return null;
-    String revisionState = StageAndVersionPublicationState.getRevisionState(displayNode);
-    if (revisionState == null || StageAndVersionPublicationState.OBSOLETE.equals(revisionState)) {
-      return null;
-    }
-    return displayNode;
+    PublicationService publicationService = (PublicationService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(PublicationService.class);
+    String lifecycleName = null;
+    try {
+     lifecycleName = publicationService.getNodeLifecycleName(displayNode);
+    } catch (Exception e) {}
+    if (lifecycleName == null) return displayNode;
+    PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(lifecycleName);
+    HashMap<String, Object> context = new HashMap<String, Object>();
+    context.put(WCMComposer.FILTER_MODE, queryCriteria.isLiveMode() ? WCMComposer.MODE_LIVE : WCMComposer.MODE_EDIT);
+    return publicationPlugin.getNodeView(displayNode, context);
   }
   
   protected Node getNodeToCheckState(Node node)throws Exception{
@@ -137,8 +146,8 @@ public class WCMPaginatedQueryResult extends PaginatedQueryResult {
       }
       if(queryCriteria.isSearchWebpage()) {
         // Check node'type: if node type is publication:publication then node is one of result. 
-        // But publication:publication is supper type of publication:wcmPublication 
-        if (!displayNode.isNodeType("publication:wcmPublication"))
+        // But publication:publication is supper type of publication:simplePublication 
+        if (!displayNode.isNodeType("publication:simplePublication"))
           return null;
       }
     } else {

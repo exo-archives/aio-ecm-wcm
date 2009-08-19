@@ -42,11 +42,8 @@ import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.publication.WCMComposer;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant.SITE_MODE;
 import org.exoplatform.services.wcm.search.QueryCriteria;
 import org.exoplatform.services.wcm.search.SiteSearchService;
 import org.exoplatform.services.wcm.search.WCMPaginatedQueryResult;
@@ -337,12 +334,6 @@ public class UISearchResult extends UIContainer {
 	}
 
 	public boolean showDraftButton(Node node) throws Exception {
-		// boolean bool = false;
-		// if (node != null && !node.hasProperty("publication:liveRevision")) {
-		// bool = true;
-		// }
-		// return bool;
-		// If live mode is activated
 		Object obj = Util	.getPortalRequestContext()
 											.getRequest()
 											.getSession()
@@ -363,7 +354,11 @@ public class UISearchResult extends UIContainer {
 		PublicationService publicationService = getApplicationComponent(PublicationService.class);
 		HashMap<String, Object> context = new HashMap<String, Object>();
 		context.put(WCMComposer.FILTER_MODE, Utils.getCurrentMode());
-		String lifecyleName = publicationService.getNodeLifecycleName(node);
+		String lifecyleName = null;
+		try {
+		  lifecyleName = publicationService.getNodeLifecycleName(node);
+    } catch (Exception e) {}
+    if (lifecyleName == null) return node;
 		PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins()
 																														.get(lifecyleName);
 	  return publicationPlugin.getNodeView(node, context);

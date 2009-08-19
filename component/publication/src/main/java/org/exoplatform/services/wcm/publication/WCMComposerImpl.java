@@ -101,7 +101,7 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	    			+ "/%' AND NOT jcr:path like'" + path + "/%/%'" + " AND( "
 	    			+ templatesFilter + ")";
 	    if (MODE_LIVE.equals(mode)) {
-	      statement += "AND ( (publication:liveRevision IS NOT NULL AND publication:liveRevision <> '') OR publication:currentState = 'published')";
+	      statement += "AND ( publication:currentState = 'published' )";
 	    } else {
 	    	statement += "AND ( publication:currentState <> 'obsolete' AND publication:currentState <> 'archived' )";
 	    }

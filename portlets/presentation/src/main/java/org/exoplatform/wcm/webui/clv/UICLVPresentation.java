@@ -44,10 +44,8 @@ import org.exoplatform.services.organization.UserProfileHandler;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
 import org.exoplatform.services.wcm.images.RESTImagesRendererService;
+import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
 import org.exoplatform.services.wcm.publication.WCMComposer;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationState;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant.SITE_MODE;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
@@ -192,7 +190,7 @@ import org.exoplatform.webui.event.EventListener;
       currentState = node.getProperty("publication:currentState").getString();
     } catch (Exception e) {
     } 
-    if(StageAndVersionPublicationState.DRAFT.equals(currentState))
+    if(PublicationDefaultStates.DRAFT.equals(currentState))
       return true;
     return false;
   }

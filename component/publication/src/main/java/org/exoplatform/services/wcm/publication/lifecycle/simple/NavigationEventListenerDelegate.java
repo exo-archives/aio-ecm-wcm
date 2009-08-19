@@ -157,7 +157,7 @@ public class NavigationEventListenerDelegate {
     Session session = sessionProvider.getSession(workspaceName, repositoryService.getRepository(repositoryName));
 
     QueryManager queryManager = session.getWorkspace().getQueryManager();
-    Query query = queryManager.createQuery("select * from publication:wcmPublication where publication:lifecycleName='" + lifecycleName + "' and jcr:path like '" + path + "/%' order by jcr:score", Query.SQL);
+    Query query = queryManager.createQuery("select * from publication:simplePublication where publication:lifecycleName='" + lifecycleName + "' and jcr:path like '" + path + "/%' order by jcr:score", Query.SQL);
     QueryResult results = query.execute();
     for (NodeIterator nodeIterator = results.getNodes(); nodeIterator.hasNext();) {
       Node content = nodeIterator.nextNode();

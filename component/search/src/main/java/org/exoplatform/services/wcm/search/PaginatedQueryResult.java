@@ -16,6 +16,7 @@
  */
 package org.exoplatform.services.wcm.search;
 
+import java.util.HashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.jcr.Node;
@@ -23,6 +24,10 @@ import javax.jcr.query.QueryResult;
 import javax.jcr.query.Row;
 import javax.jcr.query.RowIterator;
 
+import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.services.ecm.publication.PublicationPlugin;
+import org.exoplatform.services.ecm.publication.PublicationService;
+import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.services.wcm.utils.PaginatedNodeIterator;
 
 /**
@@ -64,6 +69,7 @@ public class PaginatedQueryResult extends PaginatedNodeIterator {
   /* (non-Javadoc)
    * @see org.exoplatform.wcm.webui.paginator.PaginatedNodeIterator#populateCurrentPage(int)
    */
+  @SuppressWarnings("unchecked")
   protected void populateCurrentPage(int page) throws Exception {
     if(page == currentPage_ && (currentListPage_ != null && !currentListPage_.isEmpty())) {
       return;
@@ -103,18 +109,15 @@ public class PaginatedQueryResult extends PaginatedNodeIterator {
    * @throws Exception the exception
    */
   protected Node filterNodeToDisplay(Node node) throws Exception {
-    Node displayNode = node;
-    if(node.isNodeType("nt:resource")) {
-      displayNode = node.getParent();
-    }
-    if(this.queryCriteria.isLiveMode()){
-      if(displayNode.hasProperty("publication:liveRevision") &&
-          displayNode.getProperty("publication:liveRevision").getString().trim().length() > 1){
-        return displayNode;
-      }else{
-        return null;
-      }
-    }
+    Node displayNode = null;
+    if(node.isNodeType("nt:resource")) displayNode = node.getParent();
+    PublicationService publicationService = (PublicationService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(PublicationService.class);
+    String lifecycleName = publicationService.getNodeLifecycleName(node);
+    if (lifecycleName == null) return node;
+    PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(lifecycleName);
+    HashMap<String, Object> context = new HashMap<String, Object>();
+    context.put(WCMComposer.FILTER_MODE, queryCriteria.isLiveMode() ? WCMComposer.MODE_LIVE : WCMComposer.MODE_EDIT);
+    displayNode = publicationPlugin.getNodeView(node, context);
     return displayNode;
   }
 

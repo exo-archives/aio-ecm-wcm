@@ -81,9 +81,6 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
   
   /** The Constant LIFECYCLE_PROP. */
   public static final String LIFECYCLE_PROP = "publication:lifecycleName".intern();   
-  
-  /** The Constant LIVE_REVISION_PROP. */
-  public static final String LIVE_REVISION_PROP = "publication:liveRevision".intern();
 
   /** The Constant CURRENT_STATE. */
   public static final String CURRENT_STATE = "publication:currentState".intern();
@@ -92,7 +89,7 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
   public static final String HISTORY = "publication:history".intern();  
   
   /** The Constant WCM_PUBLICATION_MIXIN. */
-  public static final String WCM_PUBLICATION_MIXIN = "publication:wcmPublication".intern(); 
+  public static final String WCM_PUBLICATION_MIXIN = "publication:simplePublication".intern(); 
   
   /** The Constant LIFECYCLE_NAME. */
   public static final String LIFECYCLE_NAME = "Simple publication".intern();
@@ -434,10 +431,17 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
   public Node getNodeView(Node node, Map<String, Object> context) throws Exception {
     WCMPublicationService wcmPublicationService = Util.getServices(WCMPublicationService.class);
     String contentState = wcmPublicationService.getContentState(node);
-    // if content is NOT draft
-    if (!PublicationDefaultStates.DRAFT.equals(contentState)) return node;
-    // if content is draft AND current mode is edit mode
+    
+    // if node is obsolette
+    if (PublicationDefaultStates.OBSOLETE.equals(contentState)) return null;
+    
+    // if current mode is edit mode
     if (context.get(WCMComposer.FILTER_MODE).equals(WCMComposer.MODE_EDIT)) return node;
+    
+    // if current mode is live mode and content is NOT draft
+    if (!PublicationDefaultStates.DRAFT.equals(contentState)) return node;
+    
+    // else
     return null;  
   }
 

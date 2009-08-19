@@ -60,13 +60,7 @@ public class SmallPaginatedQueryResult extends WCMPaginatedQueryResult{
     RowIterator rowIterator = queryResult.getRows();    
     for(;nodeIterator.hasNext();) {
       Node viewNode = filterNodeToDisplay(nodeIterator.nextNode());
-      if(viewNode == null || 
-          (queryCriteria.isLiveMode() && (!viewNode.hasProperty("publication:liveRevision") ||
-                                          viewNode.getProperty("publication:liveRevision").getString().trim().length() < 1)
-           )
-         ){
-        continue;  
-      }
+      if(viewNode == null) continue;  
       //Skip back 1 position to get current row mapping to the node
       long position = nodeIterator.getPosition();
       long rowPosition = rowIterator.getPosition();        

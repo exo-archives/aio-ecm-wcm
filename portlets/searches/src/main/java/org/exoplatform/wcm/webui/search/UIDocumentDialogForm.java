@@ -42,6 +42,7 @@ import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
+import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -292,7 +293,7 @@ public class UIDocumentDialogForm extends UIDialogForm {
 			if (newNode != null) {
 				context.put(StageAndVersionPublicationConstant.CURRENT_REVISION_NAME, newNode.getName());
 			}
-			publicationPlugin.changeState(newNode, StageAndVersionPublicationConstant.PUBLISHED_STATE, context);
+			publicationPlugin.changeState(newNode, PublicationDefaultStates.PUBLISHED, context);
 			Utils.closePopupWindow(uiDocumentDialogForm, "UIContentEdittingPopupWindow");
 		}
 	}

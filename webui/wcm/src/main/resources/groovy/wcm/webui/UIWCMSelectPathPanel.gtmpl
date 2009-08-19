@@ -9,7 +9,7 @@
 	import javax.jcr.Node;
 	import org.exoplatform.ecm.webui.utils.Utils;
 	import org.exoplatform.services.jcr.impl.core.NodeImpl;
-	import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationState;
+	import org.exoplatform.services.wcm.publication.WCMPublicationService;
 	
 	String[] acceptedNodeTypes = uicomponent.getAcceptedNodeTypes();
 	
@@ -25,7 +25,8 @@
 	}
 	
 %>
-<div id="$uicomponent.id" class="UITreeList">
+
+<%@page import="org.exoplatform.services.wcm.publication.WCMPublicationService"%><div id="$uicomponent.id" class="UITreeList">
   	<table class="UIGrid">
 	  	<thead>
 	    	<tr>
@@ -40,8 +41,9 @@
         		def rowClass = "OddRow" ;
 		    	boolean even = true ;
 		    	if(nodes.size() > 0) {
+		    	  WCMPublicationService wcmPublicationService = uicomponent.getApplicationComponent(WCMPublicationService.class);
 			    	for(node in nodes) {
-			    		String revisionState = StageAndVersionPublicationState.getRevisionState(node);
+			    		String revisionState = wcmPublicationService.getContentState(node);
 				      	if(even) {
 				      		rowClass = "EvenRow" ;  
 				      	} else {

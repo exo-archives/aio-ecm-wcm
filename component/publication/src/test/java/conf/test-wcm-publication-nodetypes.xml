@@ -21,7 +21,7 @@
     </propertyDefinitions>
   </nodeType>
   
-  <nodeType name="publication:wcmPublication" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
+  <nodeType name="publication:simplePublication" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
 		<supertypes>      
       <supertype>publication:webpagesPublication</supertype>
     </supertypes>    

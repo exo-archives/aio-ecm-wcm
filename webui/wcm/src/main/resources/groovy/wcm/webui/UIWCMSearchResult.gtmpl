@@ -8,6 +8,7 @@
   import javax.jcr.Session;
   import org.exoplatform.ecm.webui.utils.Utils;
   import org.exoplatform.services.ecm.publication.PublicationService;
+  import org.exoplatform.services.wcm.publication.WCMPublicationService;
 
   String[] beanFields =  uicomponent.getBeanFields();  
   String[] beanActions =  uicomponent.getBeanActions();
@@ -16,36 +17,6 @@
   UIForm uiForm = uicomponent.getAncestorOfType(UIForm.class);
   Session session = uicomponent.getSession();
   DateFormat dateFormat = uicomponent.getDateFormat();
-  
-  /**
-   * Finds and returns <code>Node</code> status.
-   *
-   * @return String <code>Node</code> status.
-   */
-   public String getNodeState(Node node){
-     String state = null;    
-     try {
-       PublicationService publicationService = uicomponent
-                         .getApplicationComponent(PublicationService.class);
-       state = publicationService.getCurrentState(node);  
-     } catch (Exception e) {
-       return "";
-     } 
-     if("draft".equals(state)) 
-       return state;
-     String liveRevision = null;
-     try{
-       liveRevision = node.getProperty("publication:liveRevision").getValue().getString();
-     }catch(Exception e) {}    
-     if(liveRevision != null && liveRevision.length() != 0) {
-       state = "live";
-     } else if("enrolled".equals(state)){
-       state = "obsolete";
-     }else {
-       state = "";
-     }
-     return state;
-   }
 %>
 <div id="$uicomponent.id">
   <table class="UIGrid" cellspacing="0">
@@ -102,7 +73,8 @@
             float score = bean.getScore();
             Node node = bean.getNode();
             String date = dateFormat.format(uicomponent.getCreateDate(node));
-            String publicationState = getNodeState(node); 
+            WCMPublicationService wcmPublicationService = uicomponent.getApplicationComponent(WCMPublicationService.class);
+            String publicationState = wcmPublicationService.getContentState(node); 
     %>        
           <td>
             <div class="default16x16Icon ItemIcon <%=Utils.getNodeTypeIcon(node, "16x16Icon")%>" style="width: auto; height: auto; background-position: left top; padding-left: 20px">

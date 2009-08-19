@@ -17,7 +17,7 @@
   	import org.exoplatform.ecm.webui.utils.Utils ;
   	import org.exoplatform.web.application.Parameter ;
   	import org.exoplatform.webui.core.UIRightClickPopupMenu ;
-  	import org.exoplatform.services.ecm.publication.PublicationService;
+  	import org.exoplatform.services.wcm.publication.WCMPublicationService;
 	import org.exoplatform.services.ecm.publication.IncorrectStateUpdateLifecycleException;
   
   	UIRightClickPopupMenu contextMenu = uicomponent.getContextMenu() ;
@@ -69,43 +69,6 @@
   			date = uicomponent.getDateCreated(node);
   		}
   		return date;
-  	}
-  
-  	/**
-  	 * Finds and returns <code>Node</code> status.
-  	 *
-  	 * @return String <code>Node</code> status.
-  	 */
-  	public String getNodeState(Node node){
-  		String state = null;  	
-	  	String stateLabel = "";
-  		try {
-	  		PublicationService publicationService = uicomponent.getApplicationComponent(PublicationService.class);
-			state = publicationService.getCurrentState(node);  
-	  	} catch (Exception e) {
-  			return stateLabel;
-	  	} 
-  		if("draft".equals(state)) {
-  			stateLabel = "Draft";
-  		}
-  		String liveRevision = null;
-  		try {
-	  		liveRevision = node.getProperty("publication:liveRevision").getValue().getString();
-  		} catch(Exception e) {}  	
-		if(liveRevision != null && liveRevision.length() != 0) {
-			if("draft".equals(state)) {
-				stateLabel = "Live + Draft";
-			} else { 
-				stateLabel = "Live";
-			}
-		} else {
-			if("enrolled".equals(state)) {
-				stateLabel = "Obsolete";
-			} else { 
-				stateLabel = "Draft";
-			}
-		}
-  		return stateLabel;
   	}
 %>
 <div id="$componentId">
@@ -273,8 +236,9 @@
 	      		String serverUrl = uicomponent.getWebDAVServerPrefix();
 	      		String portalName = uicomponent.getPortalName() ;
 	      		String repository = uicomponent.getRepository();
+	      		WCMPublicationService wcmPublicationService = uicomponent.getApplicationComponent(WCMPublicationService.class);
 	        	for (data in uicomponent.getChildrenList()) {
-	        		def status = getNodeState(data);
+	        		def status = wcmPublicationService.getContentState(node);
 	        		Date date = getDate(data, status); 	        	        
 	          		def isPreferenceNode = uicomponent.isPreferenceNode(data) ;
 	          		def preferenceWS = data.getSession().getWorkspace().getName() ;
