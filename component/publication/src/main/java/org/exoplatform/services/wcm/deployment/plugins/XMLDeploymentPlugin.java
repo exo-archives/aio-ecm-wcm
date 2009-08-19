@@ -33,7 +33,6 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationInitializerService;
 
 /**
  * Created by The eXo Platform SAS
@@ -52,9 +51,6 @@ public class XMLDeploymentPlugin extends DeploymentPlugin {
   /** The repository service. */
   private RepositoryService repositoryService;
   
-  /** The publication service. */
-  private StageAndVersionPublicationInitializerService publicationService;
-  
   /** The log. */
   private Log log = ExoLogger.getLogger(this.getClass());
 
@@ -66,11 +62,10 @@ public class XMLDeploymentPlugin extends DeploymentPlugin {
    * @param repositoryService the repository service
    * @param publicationService the publication service
    */
-  public XMLDeploymentPlugin(InitParams initParams, ConfigurationManager configurationManager, RepositoryService repositoryService, StageAndVersionPublicationInitializerService publicationService) {
+  public XMLDeploymentPlugin(InitParams initParams, ConfigurationManager configurationManager, RepositoryService repositoryService) {
     this.initParams = initParams;
     this.configurationManager = configurationManager;
     this.repositoryService = repositoryService;
-    this.publicationService = publicationService;
   }
 
   /* (non-Javadoc)
@@ -88,8 +83,6 @@ public class XMLDeploymentPlugin extends DeploymentPlugin {
       Session session = sessionProvider.getSession(deploymentDescriptor.getTarget().getWorkspace(), repository);
       session.importXML(deploymentDescriptor.getTarget().getNodePath(), inputStream, ImportUUIDBehavior.IMPORT_UUID_CREATE_NEW );
       session.save();
-//      Node rootNode = session.getRootNode().getNode(deploymentDescriptor.getTarget().getNodePath().substring(1));
-//      publicationService.initializePublication(rootNode);
       if(log.isInfoEnabled()) {
         log.info(this.getName() + " is deployed succesfully in "+deploymentDescriptor.getTarget().getNodePath()+" at " + new Date().toString());
       }
