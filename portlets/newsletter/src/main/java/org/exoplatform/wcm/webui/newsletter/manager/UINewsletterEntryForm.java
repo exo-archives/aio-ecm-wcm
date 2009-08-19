@@ -142,7 +142,7 @@ public class UINewsletterEntryForm extends UIDialogForm {
     newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_SUBSCRIPTION_NAME, selectedSubsctiption);
     newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_STATUS, NewsletterConstant.STATUS_DRAFT);
     newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_TYPE, newsletterEntryDialogSelector.getDialog());
-    newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_DATE, ((UIFormDateTimeInput)newsletterEntryDialogSelector.getChildById(UINewsletterEntryDialogSelector.NEWSLETTER_ENTRY_SEND_DATE)).getCalendar().getInstance());
+    newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_DATE, ((UIFormDateTimeInput)newsletterEntryDialogSelector.getChildById(UINewsletterEntryDialogSelector.NEWSLETTER_ENTRY_SEND_DATE)).getCalendar());
     session.save();
     
     // Close popup and update UI

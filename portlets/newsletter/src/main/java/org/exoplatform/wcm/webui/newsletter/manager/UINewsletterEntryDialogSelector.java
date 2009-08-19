@@ -204,6 +204,7 @@ public class UINewsletterEntryDialogSelector extends UIForm {
         return;
       }
       entryContainer.setUpdated(true);
+      formDateTimeInput.setCalendar(calendar);
       uiApp.addMessage(new ApplicationMessage("UINewsletterEntryForm.msg.UpdateInformationSuccessful", null, ApplicationMessage.INFO));
       event.getRequestContext().addUIComponentToUpdateByAjax(newsletterEntryDialogSelector) ;
     }
