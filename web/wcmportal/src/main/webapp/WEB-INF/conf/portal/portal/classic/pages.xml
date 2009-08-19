@@ -191,7 +191,7 @@
 		<owner-id>classic</owner-id>
 		<name>newslettermanager</name>
 		<title>Newsletter Manager</title>
-		<access-permissions>*:/platform/administrators</access-permissions>
+		<access-permissions>*:/platform/web-contributors</access-permissions>
 		<edit-permission>*:/platform/administrators</edit-permission>
 		<application>
 			<instance-id>portal#classic:/newsletter/NewsletterManagerPortlet/classic-newslettermanager</instance-id>
