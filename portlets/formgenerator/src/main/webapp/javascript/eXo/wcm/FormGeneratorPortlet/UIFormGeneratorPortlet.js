@@ -379,20 +379,19 @@ UIFormGeneratorPortlet.prototype.removeOption = function(obj) {
 	}
 };
 
-UIFormGeneratorPortlet.prototype.getStringJsonObject = function(uicomponent) {
+UIFormGeneratorPortlet.prototype.getStringJsonObject = function() {
 	var DOMUtil = eXo.core.DOMUtil;
 	var root = document.getElementById('MiddleCenterViewBoxStyle');
 	var boxsContent = DOMUtil.findDescendantsByClass(root, 'div', 'BoxContentBoxStyle');
-	var strJsonObject = '{';	
+	var strJsonObject = '{ "inputs" : [';	
 	for(var i = 0; i < boxsContent.length; i++) {
 		strJsonObject += eXo.ecm.UIFormGeneratorPortlet.getProperties(boxsContent[i]);
 		if(i != (boxsContent.length-1)) {
 			strJsonObject += ',';
 		}
 	}
-	strJsonObject += "}";
-	
-	eXo.env.server.createPortalURL(uicomponent, "Save", true, strJsonObject);
+	strJsonObject += "]}";
+	return	strJsonObject; 		
 };
 
 UIFormGeneratorPortlet.prototype.getProperties = function(comp) {
@@ -440,7 +439,7 @@ UIFormGeneratorPortlet.prototype.getProperties = function(comp) {
 			var height  = selectNode.offsetHeight;
 			strObject +=  '"value":"'+selectNode.value+'","width":"'+width+'","mandatory":"'+mandatory+'","height":"'+height+'",';		
 			var options = DOMUtil.getChildrenByTagName(selectNode, 'option');
-			var advOptions = '';
+			var advOptions = '';	
 			strObject += 	'"advanced":"';
 			for(var i = 0; i < options.length; i++) {
 				strObject += options[i].value;
@@ -458,6 +457,12 @@ UIFormGeneratorPortlet.prototype.getProperties = function(comp) {
 	strObject += '"guildline":"'+fieldLabel.getAttribute('desc')+'"';
 	strObject += "}";
 	return strObject;
+};
+
+UIFormGeneratorPortlet.prototype.submitForm = function() {
+	var strJsonObject = eXo.ecm.UIFormGeneratorPortlet.getStringJsonObject();
+	var inputHidden = document.getElementById("UIFormGeneratorJsonObjectStringInput");
+	if(inputHidden) inputHidden.value = "" + strJsonObject;
 };
 
 eXo.ecm.UIFormGeneratorPortlet = new UIFormGeneratorPortlet();

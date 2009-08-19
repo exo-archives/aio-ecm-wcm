@@ -54,23 +54,24 @@
 	      		<table class="ActionContainer">
 	      			<tr>
 	     	 			<td>
-          					<% 
-          						for(action in uicomponent.getActions()) { 
-					      			String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
-					      			String link = uicomponent.event(action) ;
-			        				%>
-										<div onclick="$link" class="ActionButton LightBlueStyle">
-							  				<div class="ButtonLeft">
-								  				<div class="ButtonRight">
-								    				<div class="ButtonMiddle">
-							      						<a href="javascript:void(0);">$actionLabel</a>
-								    				</div>
-							    				</div>
-											</div>
+									<div onclick="eXo.ecm.UIFormGeneratorPortlet.submitForm();<%= uicomponent.event('Save'); %>" class="ActionButton LightBlueStyle">
+						  			<div class="ButtonLeft">
+							  			<div class="ButtonRight">
+							    			<div class="ButtonMiddle">
+						      				<a><%= _ctx.appRes(uicomponent.getName() + ".action.Save"); %></a>
+							    			</div>
+						    			</div>
 										</div>
-        							<%
-        						}
-        					%>
+									</div>
+									<div onclick="<%= uicomponent.event('Reset') %>" class="ActionButton LightBlueStyle">
+						  			<div class="ButtonLeft">
+							  			<div class="ButtonRight">
+							    			<div class="ButtonMiddle">
+						      				<a href="javascript:void(0);"><%= _ctx.appRes(uicomponent.getName() + ".action.Reset"); %></a>
+							    			</div>
+						    			</div>
+										</div>
+									</div>							
    						</td>
       				</tr>
       			</table>

@@ -40,6 +40,7 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.form.UIFormHiddenInput;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTabPane;
@@ -76,6 +77,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
     nameFormStringInput.addValidator(MandatoryValidator.class);
     nameFormStringInput.addValidator(ECMNameValidator.class);
     formGeneratorGeneralTab.addUIFormInput(nameFormStringInput);
+    formGeneratorGeneralTab.addUIFormInput(new UIFormHiddenInput(UIFormGeneratorConstant.JSON_OBJECT_FORM_GENERATOR, UIFormGeneratorConstant.JSON_OBJECT_FORM_GENERATOR, null));
     formGeneratorGeneralTab.addUIFormInput(new UIFormWYSIWYGInput(UIFormGeneratorConstant.DESCRIPTION_FORM_WYSIWYG_INPUT, UIFormGeneratorConstant.DESCRIPTION_FORM_WYSIWYG_INPUT, null));
     formGeneratorGeneralTab.addUIFormInput(new UIFormUploadInput(UIFormGeneratorConstant.ICON_FORM_UPLOAD_INPUT, UIFormGeneratorConstant.ICON_FORM_UPLOAD_INPUT));
     addUIFormInput(formGeneratorGeneralTab);
@@ -287,8 +289,15 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
   public static class SaveActionListener extends EventListener<UIFormGeneratorTabPane> {
     public void execute(Event<UIFormGeneratorTabPane> event) throws Exception {
       UIFormGeneratorTabPane formGeneratorTabPane = event.getSource();
-      String jsonObjectGenerated = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      jsonObjectGenerated = "{" +
+      UIFormInputSet formGeneratorGeneralTab = formGeneratorTabPane.getChildById(UIFormGeneratorConstant.FORM_GENERATOR_GENERAL_TAB);
+      UIFormHiddenInput hiddenInputJSonObject = formGeneratorGeneralTab.getChildById(UIFormGeneratorConstant.JSON_OBJECT_FORM_GENERATOR);
+      String jsonObjectGenerated = hiddenInputJSonObject.getValue();
+      
+      System.out.println("\n\n\n================================================\n\n\n");
+      System.out.println(jsonObjectGenerated);	
+      System.out.println("\n\n\n================================================\n\n\n");
+      
+      /*jsonObjectGenerated = "{" +
                               "\"inputs\":" +
                               "[" +
                                 "{" +
@@ -322,7 +331,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
                               "]" +
         		                "}";
       		
-      
+      */
       JsonHandler jsonHandler = new JsonDefaultHandler();
       new JsonParserImpl().parse(new InputStreamReader(new ByteArrayInputStream(jsonObjectGenerated.getBytes())), jsonHandler);
       JsonValue jsonValue = jsonHandler.getJsonObject();

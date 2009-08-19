@@ -178,20 +178,3 @@
 	</div>
 </div>
 <div class="ClearLeft"><span></span></div>
-<div class="UIAction">
-	<table class="ActionContainer">
-		<tr>
-			<td>
-				<div id="JsonObjectId" onclick="eXo.ecm.UIFormGeneratorPortlet.getStringJsonObject('<%= uicomponent.id %>');" class="ActionButton LightBlueStyle">
-  				<div class="ButtonLeft">
-	  				<div class="ButtonRight">
-	    				<div class="ButtonMiddle">
-    						<a href="javascript:void(0);">Save Form</a>
-	    				</div>
-    				</div>
-					</div>
-				</div>
-			</td>
-		</tr>
-	</table>
-</div>

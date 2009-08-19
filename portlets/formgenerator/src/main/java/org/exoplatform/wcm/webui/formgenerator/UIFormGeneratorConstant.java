@@ -57,6 +57,9 @@ public class UIFormGeneratorConstant {
   public static final String DESCRIPTION_FORM_WYSIWYG_INPUT = "UIFormGeneratorDescriptionFormWYSIWYGInput";
   
   public static final String ICON_FORM_UPLOAD_INPUT         = "UIFormGeneratorIconFormUploadInput";
+  
+  public static final String JSON_OBJECT_FORM_GENERATOR         = "UIFormGeneratorJsonObjectStringInput";
+  
 
   // Active this when working with 1.3 
 //  public static final String VOTE_FORM_CHECKBOX_INPUT       = "UIFormGeneratorVoteFormCheckboxInput";
