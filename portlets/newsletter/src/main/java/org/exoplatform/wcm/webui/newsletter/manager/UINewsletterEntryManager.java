@@ -229,6 +229,8 @@ public class UINewsletterEntryManager extends UIForm {
                                         + subIds.get(0));
       //entryContainer.setCategoryConfig(uiNewsletterEntryManager.categoryConfig);
       UINewsletterEntryDialogSelector newsletterEntryDialogSelector = entryContainer.getChild(UINewsletterEntryDialogSelector.class);
+      newsletterEntryDialogSelector.init(uiNewsletterEntryManager.categoryConfig.getName(), 
+                                         uiNewsletterEntryManager.subscriptionConfig.getName());
       UIFormSelectBox categorySelectBox = newsletterEntryDialogSelector.getChildById(UINewsletterConstant.ENTRY_CATEGORY_SELECTBOX);
       categorySelectBox.setValue(uiNewsletterEntryManager.categoryConfig.getName());
       categorySelectBox.setDisabled(true);
