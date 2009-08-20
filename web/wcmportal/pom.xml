@@ -44,6 +44,7 @@
             WEB-INF/locale/navigation/**/*.xml,
             WEB-INF/web.xml,
             WEB-INF/webui-configuration.xml,
+            groovy/portal/webui/container/UIContainer.gtmpl,
             groovy/portal/webui/workspace/UIWorkingWorkspace.gtmpl,
             groovy/webui/form/ext/UIFormInputSetWithAction.gtmpl,
             groovy/webui/form/UIFormUploadInput.gtmpl,

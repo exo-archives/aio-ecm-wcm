@@ -15,119 +15,119 @@
         <description>XML Deployment Plugin</description>
         <init-params>
           <object-param>        
-            <name>Classic Banner data</name>
+            <name>Classic Logo Data</name>
             <description>Deployment Descriptor</description>
             <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
               <field  name="target">
               	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
               		<field  name="repository"><string>repository</string></field>
               		<field  name="workspace"><string>collaboration</string></field>
-              		<field  name="nodePath"><string>/sites content/live/classic/web contents/site artifacts/banner</string></field>
+              		<field  name="nodePath"><string>/sites content/live/classic/web contents/site artifacts</string></field>
               	</object>
               </field>
-              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/classic/Banner.xml</string></field>
+              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/classic/Logo.xml</string></field>
             </object>
           </object-param>
           <object-param>        
-            <name>Classic Access data</name>
+            <name>Classic Searchbox Data</name>
             <description>Deployment Descriptor</description>
             <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
               <field  name="target">
               	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
               		<field  name="repository"><string>repository</string></field>
               		<field  name="workspace"><string>collaboration</string></field>
-              		<field  name="nodePath"><string>/sites content/live/classic/web contents/site artifacts/access</string></field>
+              		<field  name="nodePath"><string>/sites content/live/classic/web contents/site artifacts</string></field>
               	</object>
               </field>
-              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/classic/Access.xml</string></field>
+              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/classic/Searchbox.xml</string></field>
             </object>
           </object-param>
           <object-param>        
-            <name>Classic Navigation data</name>
+            <name>Classic Signin Data</name>
             <description>Deployment Descriptor</description>
             <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
               <field  name="target">
               	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
               		<field  name="repository"><string>repository</string></field>
               		<field  name="workspace"><string>collaboration</string></field>
-              		<field  name="nodePath"><string>/sites content/live/classic/web contents/site artifacts/navigation</string></field>
+              		<field  name="nodePath"><string>/sites content/live/classic/web contents/site artifacts</string></field>
               	</object>
               </field>
-              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/classic/Navigation.xml</string></field>
+              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/classic/Signin.xml</string></field>
             </object>
           </object-param>
           <object-param>        
-            <name>Classic Breadcrumb data</name>
+            <name>Classic Footer Data</name>
             <description>Deployment Descriptor</description>
             <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
               <field  name="target">
               	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
               		<field  name="repository"><string>repository</string></field>
               		<field  name="workspace"><string>collaboration</string></field>
-              		<field  name="nodePath"><string>/sites content/live/classic/web contents/site artifacts/breadcrumb</string></field>
-              	</object>
-              </field>
-              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/classic/Breadcrumb.xml</string></field>
-            </object>
-          </object-param>
-          <object-param>        
-            <name>Classic Homepage data</name>
-            <description>Deployment Descriptor</description>
-            <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
-              <field  name="target">
-              	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
-              		<field  name="repository"><string>repository</string></field>
-              		<field  name="workspace"><string>collaboration</string></field>
-              		<field  name="nodePath"><string>/sites content/live/classic/web contents/site artifacts/homepage</string></field>
-              	</object>
-              </field>
-              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/classic/Homepage.xml</string></field>
-            </object>
-          </object-param>
-          <object-param>        
-            <name>Classic Sitemap data</name>
-            <description>Deployment Descriptor</description>
-            <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
-              <field  name="target">
-              	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
-              		<field  name="repository"><string>repository</string></field>
-              		<field  name="workspace"><string>collaboration</string></field>
-              		<field  name="nodePath"><string>/sites content/live/classic/web contents/site artifacts/sitemap</string></field>
-              	</object>
-              </field>
-              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/classic/Sitemap.xml</string></field>
-            </object>
-          </object-param>
-          <object-param>        
-            <name>Classic SearchBox data</name>
-            <description>Deployment Descriptor</description>
-            <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
-              <field  name="target">
-              	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
-              		<field  name="repository"><string>repository</string></field>
-              		<field  name="workspace"><string>collaboration</string></field>
-              		<field  name="nodePath"><string>/sites content/live/classic/web contents/site artifacts/searchbox</string></field>
-              	</object>
-              </field>
-              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/classic/SearchBox.xml</string></field>
-            </object>
-          </object-param>
-          <object-param>        
-            <name>Classic Footer data</name>
-            <description>Deployment Descriptor</description>
-            <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
-              <field  name="target">
-              	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
-              		<field  name="repository"><string>repository</string></field>
-              		<field  name="workspace"><string>collaboration</string></field>
-              		<field  name="nodePath"><string>/sites content/live/classic/web contents/site artifacts/footer</string></field>
+              		<field  name="nodePath"><string>/sites content/live/classic/web contents/site artifacts</string></field>
               	</object>
               </field>
               <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/classic/Footer.xml</string></field>
             </object>
           </object-param>
           <object-param>        
-            <name>Classic Option bar stylesheet</name>
+            <name>Classic Introduce Data</name>
+            <description>Deployment Descriptor</description>
+            <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
+              <field  name="target">
+              	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
+              		<field  name="repository"><string>repository</string></field>
+              		<field  name="workspace"><string>collaboration</string></field>
+              		<field  name="nodePath"><string>/sites content/live/classic/web contents/site artifacts</string></field>
+              	</object>
+              </field>
+              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/classic/Introduce.xml</string></field>
+            </object>
+          </object-param>
+          <object-param>        
+            <name>Classic News Data</name>
+            <description>Deployment Descriptor</description>
+            <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
+              <field  name="target">
+              	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
+              		<field  name="repository"><string>repository</string></field>
+              		<field  name="workspace"><string>collaboration</string></field>
+              		<field  name="nodePath"><string>/sites content/live/classic/web contents/site artifacts</string></field>
+              	</object>
+              </field>
+              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/classic/News.xml</string></field>
+            </object>
+          </object-param>
+          <object-param>        
+            <name>Classic Howto Data</name>
+            <description>Deployment Descriptor</description>
+            <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
+              <field  name="target">
+              	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
+              		<field  name="repository"><string>repository</string></field>
+              		<field  name="workspace"><string>collaboration</string></field>
+              		<field  name="nodePath"><string>/sites content/live/classic/web contents/site artifacts</string></field>
+              	</object>
+              </field>
+              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/classic/Howto.xml</string></field>
+            </object>
+          </object-param>
+          <object-param>        
+            <name>Classic Test Data</name>
+            <description>Deployment Descriptor</description>
+            <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
+              <field  name="target">
+              	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
+              		<field  name="repository"><string>repository</string></field>
+              		<field  name="workspace"><string>collaboration</string></field>
+              		<field  name="nodePath"><string>/sites content/live/classic/web contents/site artifacts</string></field>
+              	</object>
+              </field>
+              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/classic/Test.xml</string></field>
+            </object>
+          </object-param>
+          <object-param>        
+            <name>Classic Stylesheet Data</name>
             <description>Deployment Descriptor</description>
             <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
               <field  name="target">
@@ -138,6 +138,20 @@
               	</object>
               </field>
               <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/classic/Stylesheet.xml</string></field>
+            </object>
+          </object-param>
+          <object-param>        
+            <name>Classic Images Data</name>
+            <description>Deployment Descriptor</description>
+            <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
+              <field  name="target">
+              	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
+              		<field  name="repository"><string>repository</string></field>
+              		<field  name="workspace"><string>collaboration</string></field>
+              		<field  name="nodePath"><string>/sites content/live/classic/medias/images</string></field>
+              	</object>
+              </field>
+              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/classic/Images.xml</string></field>
             </object>
           </object-param>
         </init-params>  

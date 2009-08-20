@@ -60,7 +60,6 @@
 				<% for(uiChild in uicomponent.getChildren()) { %>
 					<div class="${uiChild.id}TDContainer"><% uicomponent.renderUIComponent(uiChild) %></div>
 				<% } %>
-				<div style="clear: both; height: 0px; width: 50%;"><span></span></div>
 			</div>
 		</div>
     </div>    

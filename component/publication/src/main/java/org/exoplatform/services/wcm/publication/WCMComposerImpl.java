@@ -97,14 +97,15 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	    String mode = filters.get(FILTER_MODE);
 	    String statement="";
 	    
-	    statement = "select * from nt:base where jcr:path like '" + path
-	    			+ "/%' AND NOT jcr:path like'" + path + "/%/%'" + " AND( "
-	    			+ templatesFilter + ")";
-	    if (MODE_LIVE.equals(mode)) {
-	      statement += "AND ( publication:currentState = 'published' )";
-	    } else {
-	    	statement += "AND ( publication:currentState <> 'obsolete' AND publication:currentState <> 'archived' )";
-	    }
+	    statement = "select * from nt:base where " +
+	    		        "jcr:path like '" + path +"/%' AND " +
+	    		        "NOT jcr:path like '" + path + "/%/%'" + " AND " +
+	    		        templatesFilter + " AND " +
+	    		        "NOT publication:currentState like '%' ";
+	    if (MODE_LIVE.equals(mode))
+	      statement += "OR publication:currentState = 'published'";
+	    else
+	    	statement += "OR publication:currentState <> 'obsolete' AND publication:currentState <> 'archived'";
 	    statement += orderFilter;
 	    
 	    Query query = manager.createQuery(statement, Query.SQL);

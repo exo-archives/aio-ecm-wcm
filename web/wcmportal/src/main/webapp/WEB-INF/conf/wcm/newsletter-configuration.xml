@@ -123,7 +123,7 @@
 							</object>
 						</field>
 						<field name="sourcePath">
-							<string>war:/conf/wcm/artifacts/site-resources/classic/Banner.xml</string>
+							<string>war:/conf/wcm/artifacts/site-resources/classic/Introduce.xml</string>
 						</field>
 					</object>
 				</object-param>
@@ -145,7 +145,7 @@
 							</object>
 						</field>
 						<field name="sourcePath">
-							<string>war:/conf/wcm/artifacts/site-resources/classic/Homepage.xml</string>
+							<string>war:/conf/wcm/artifacts/site-resources/classic/Introduce.xml</string>
 						</field>
 					</object>
 				</object-param>
