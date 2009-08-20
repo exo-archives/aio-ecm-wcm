@@ -155,8 +155,10 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
     dialogTemplate.append("  <% uiform.begin() %>");
     dialogTemplate.append("    <div class=\"HorizontalLayout\">");
     dialogTemplate.append("      <table class=\"UIFormGrid\">");
+    
+    UIFormGeneratorInputBean nameForm = forms.get(0);
     dialogTemplate.append("        <tr>");
-    dialogTemplate.append("          <td class=\"FieldLabel\"><%=_ctx.appRes(\"Article.dialog.label.name\")%></td>");
+    dialogTemplate.append("          <td class=\"FieldLabel\"><%=_ctx.appRes(\"FormGenerator.dialog.label." + nameForm.getName() + "\")%></td>");
     dialogTemplate.append("          <td class=\"FieldComponent\">");
     dialogTemplate.append("            <%");
     dialogTemplate.append("              String[] fieldName = [\"jcrPath=/node\", \"mixintype=mix:i18n\", \"editable=if-null\", \"validate=empty,name\"] ;");
@@ -164,10 +166,11 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
     dialogTemplate.append("            %>");
     dialogTemplate.append("          </td>");
     dialogTemplate.append("        </tr>");
-    for (UIFormGeneratorInputBean form : forms) {
-      String inputName = Utils.cleanString(form.getName());
+    for (int i = 1; i < forms.size(); i++) {
+      UIFormGeneratorInputBean form = forms.get(i);
+      String inputName = form.getName();
       String inputType = form.getType();
-      String inputFieldName = inputName + "FieldName";
+      String inputFieldName = Utils.cleanString(inputName) + "FieldName";
       String validate = "validate=";
       String inputField = "";
       if (form.isMandatory())
@@ -297,41 +300,6 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
       System.out.println(jsonObjectGenerated);	
       System.out.println("\n\n\n================================================\n\n\n");
       
-      /*jsonObjectGenerated = "{" +
-                              "\"inputs\":" +
-                              "[" +
-                                "{" +
-                                  "\"type\":\"input\"," +
-                                  "\"name\":\"Test Input\"," +
-                                  "\"value\":\"This is test input\"," +
-                                  "\"width\":\"502\"," +
-                                  "\"mandatory\":\"true\"," +
-                                  "\"height\":\"34\"," +
-                                  "\"guildline\":\"descript inpiut\"" +
-                                "}," +
-                                "{" +
-                                  "\"type\":\"select\"," +
-                                  "\"name\":\"Select List\"," +
-                                  "\"value\":\"4\"," +
-                                  "\"width\":\"500\"," +
-                                  "\"mandatory\":\"null\"," +
-                                  "\"height\":\"20\"," +
-                                  "\"advanced\":\"1,2,3,4,5,6\"," +
-                                  "\"guildline\":\"desc dropdown list\"" +
-                                "}," +
-                                "{" +
-                                  "\"type\":\"textarea\"," +
-                                  "\"name\":\"Text plain\"," +
-                                  "\"value\":\"\"," +
-                                  "\"width\":\"452\"," +
-                                  "\"mandatory\":\"true\"," +
-                                  "\"height\":\"102\"," +
-                                  "\"guildline\":\"desc text area\"" +
-                                "}" +
-                              "]" +
-        		                "}";
-      		
-      */
       JsonHandler jsonHandler = new JsonDefaultHandler();
       new JsonParserImpl().parse(new InputStreamReader(new ByteArrayInputStream(jsonObjectGenerated.getBytes())), jsonHandler);
       JsonValue jsonValue = jsonHandler.getJsonObject();

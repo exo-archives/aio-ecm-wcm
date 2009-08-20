@@ -5,6 +5,7 @@
 			<UIFormGeneratorGeneralTab>General</UIFormGeneratorGeneralTab>
 			<UIFormGeneratorNameFormStringInput>Name</UIFormGeneratorNameFormStringInput>
 			<UIFormGeneratorNodetypeFormSelectBox>Based nodetype</UIFormGeneratorNodetypeFormSelectBox>
+			<UIFormGeneratorJsonObjectStringInput></UIFormGeneratorJsonObjectStringInput>
 			<UIFormGeneratorDescriptionFormWYSIWYGInput>Description</UIFormGeneratorDescriptionFormWYSIWYGInput>
 			<UIFormGeneratorIconFormUploadInput>Icon</UIFormGeneratorIconFormUploadInput>
 			<UIFormGeneratorDnDTab>Form builder</UIFormGeneratorDnDTab>
@@ -17,10 +18,8 @@
 			<Reset>Reset</Reset>
 		</action>
   	<msg>
-  		<register-failed>
-  			NodeType registration is unsuccessfully. It is existing or Super types is invalid
-  		</register-failed>
-  		<AddNewsSuccessful>"<b>{0}</b>" is generated successful !</AddNewsSuccessful>
+  		<register-failed>NodeType registration is unsuccessfully. It is existing or Super types is invalid</register-failed>
+  		<AddNewsSuccessful>Nodetype {0}'s template is generated successful</AddNewsSuccessful>
   	</msg>
   </UIFormGeneratorTabPane>
 </bundle>

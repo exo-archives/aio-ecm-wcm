@@ -35,14 +35,14 @@ UIFormGeneratorPortlet.prototype.renderComponent = function(typeComp) {
 			fieldComponent  +=		"<td class='FieldLabel' value='Textarea'>Textarea field</td>";
 			fieldComponent  +=		"<td class='FieldComponent'><textarea class='Textarea'>Textarea value</textarea></td>";
 			break;			
-		case "WYSIWYG"		: 
+		case "wysiwyg"		: 
 			fieldComponent  +=		"<td class='FieldLabel' value='WYSIWYG'>WYSIWYG field</td>";
 			fieldComponent  +=		"<td class='FieldComponent'><textarea class='Textarea' id='RichTextEditorContent'>WYSIWYG value</textarea></td>";
 
 			advancedOption  +=	"<tr>";
 			advancedOption  +=		"<td class='FieldLabel'>Advance Options</td>";
 			advancedOption  +=		"<td class='FileComponent'>";
-			advancedOption  += 			"Toolbar: <select class='SelectBox'><option>Basic</option><option>BasicWCM</option><option>SuperBasicWCM</option><option>CompleteWCM</option></select>";
+			advancedOption  += 			"Toolbar: <select class='SelectBox'><option>SuperBasicWCM</option><option>BasicWCM</option><option>CompleteWCM</option></select><option>Basic</option>";
 			advancedOption  +=		"</td>";
 			advancedOption  +=	"</tr>";
 
@@ -166,7 +166,7 @@ UIFormGeneratorPortlet.prototype.renderComponent = function(typeComp) {
 	if(!FCKeditorAPI.GetInstance('RichTextEditorContent')) {
 		var oFCKEditor = new FCKeditor('RichTextEditorContent');
 		oFCKEditor.BasePath = '/portal/fckeditor/';
-		oFCKEditor.ToolbarSet = 'BasicWCM';
+		oFCKEditor.ToolbarSet = 'SuperBasicWCM';
 		oFCKEditor.ReplaceTextarea();
 	}
 };
@@ -427,7 +427,7 @@ UIFormGeneratorPortlet.prototype.getProperties = function(comp) {
 			var height  = textareaNode.offsetHeight;
 			strObject +=  '"value":"'+textareaNode.value+'","width":"'+width+'","mandatory":"'+mandatory+'","height":"'+height+'",';	
 			break;
-		case "WYSIWYG" : 
+		case "wysiwyg" : 
 			var midContent = DOMUtil.findNextElementByTagName(topContent, "div");
 			var selectNode = DOMUtil.findFirstDescendantByClass(midContent, 'select', "SelectBox");
 			strObject +=  '"value":"Type content here...","width":"null","mandatory":"null","height":"null","advanced":"'+selectNode.value+'",';	

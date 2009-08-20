@@ -19,7 +19,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="LeftMenu" elementType="label">
+					<!--  <div class="LeftMenu" elementType="label">
 						<div class="RightMenu">
 							<div class="CenterMenu">
 								<a class="IconMenu IconLabel"><span></span></a>
@@ -27,7 +27,7 @@
 								<div class="ClearLeft"><span></span></div>
 							</div>
 						</div>
-					</div>
+					</div>-->
 					<div class="LeftMenu" elementType="textarea">
 						<div class="RightMenu">
 							<div class="CenterMenu">
@@ -37,7 +37,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="LeftMenu" elementType="WYSIWYG">
+					<div class="LeftMenu" elementType="wysiwyg">
 						<div class="RightMenu">
 							<div class="CenterMenu">
 								<a class="IconMenu IconContent"><span></span></a>
@@ -106,11 +106,11 @@
 											<div class="FormContainer">
 												<table class="UIFormGrid">
 														<tr>
-															<td class="FieldLabel" value="Input field" mandatory="true" desc="This is description">Input field</td>
+															<td class="FieldLabel" value="Name" mandatory="true" desc="">Name</td>
 															<td class="FieldComponent">
-																<input class="InputText" type="text" value="Input value"/>
+																<input class="InputText" type="text" value=""/><span style="color: red">*</span>
 															</td>
-															<td class="FieldIcon"><span><span/></td>
+															<td class="FieldIcon"><span></span></td>
 														</tr>
 												</table>
 											</div>

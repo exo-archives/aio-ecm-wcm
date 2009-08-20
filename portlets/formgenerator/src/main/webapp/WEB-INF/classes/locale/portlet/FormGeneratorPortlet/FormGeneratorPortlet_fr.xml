@@ -5,6 +5,7 @@
 			<UIFormGeneratorGeneralTab>Général</UIFormGeneratorGeneralTab>
 			<UIFormGeneratorNameFormStringInput>Nom</UIFormGeneratorNameFormStringInput>
 			<UIFormGeneratorNodetypeFormSelectBox>Sur la base nodeType</UIFormGeneratorNodetypeFormSelectBox>
+			<UIFormGeneratorJsonObjectStringInput></UIFormGeneratorJsonObjectStringInput>
 			<UIFormGeneratorDescriptionFormWYSIWYGInput>Description</UIFormGeneratorDescriptionFormWYSIWYGInput>
 			<UIFormGeneratorIconFormUploadInput>Icon</UIFormGeneratorIconFormUploadInput>
 			<UIFormGeneratorDnDTab>Formulaire de constructeur</UIFormGeneratorDnDTab>
@@ -18,7 +19,7 @@
 		</action>
   	<msg>
   		<register-failed>NodeType enregistrement est vain. Il est en vigueur ou Super types est invalide</register-failed>
-  		<AddNewsSuccessful>"<b>{0}</b>" est généré avec succès!</AddNewsSuccessful>
+  		<AddNewsSuccessful>Le modèle du noued est produit avec succès</AddNewsSuccessful>
   	</msg>
   </UIFormGeneratorTabPane>
 </bundle>
