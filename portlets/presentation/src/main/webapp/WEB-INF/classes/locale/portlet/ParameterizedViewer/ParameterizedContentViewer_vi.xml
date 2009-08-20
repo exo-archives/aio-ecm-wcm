@@ -40,7 +40,19 @@
   	</title>
   </UIPopupWindow>
   <UIPresentationContainer>
-  	<draft>Draft</draft>
+  	<draft>Nháp</draft>
   </UIPresentationContainer>
+  <UIParameterizedContentListViewerContainer>
+  	<label>
+  		<quickEditTitle>Chỉnh sửa nhanh</quickEditTitle>
+  	</label>
+  </UIParameterizedContentListViewerContainer>
+  <UIPCVContentDialog>
+  	<action>
+  		<SaveDraft>Lưu bản nháp</SaveDraft>
+  		<Cancel>Đóng lại</Cancel>
+  		<FastPublish>Hiển thị ngay</FastPublish>
+  	</action>
+  </UIPCVContentDialog>
 </bundle>
 

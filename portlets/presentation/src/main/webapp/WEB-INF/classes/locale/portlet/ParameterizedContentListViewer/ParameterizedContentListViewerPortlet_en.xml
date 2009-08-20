@@ -72,5 +72,11 @@
 		<title>
 			<UIPageSelector>Page selector</UIPageSelector>
 		</title>
-	</UICategoryNavigationTargetPathPopupWindow>
+  </UICategoryNavigationTargetPathPopupWindow>
+  
+  <UIParameterizedContentListViewerContainer>
+  	<label>
+  		<quickEditTitle>Quick Edit</quickEditTitle>
+  	</label>
+  </UIParameterizedContentListViewerContainer>
 </bundle>

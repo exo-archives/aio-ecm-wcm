@@ -21,6 +21,13 @@
   		<FastPublish>Fast Publish</FastPublish>
   	</action>
   </UIDocumentDialogForm>
+  <UIPCVContentDialog>
+  	<action>
+  		<SaveDraft>Save Draft</SaveDraft>
+  		<Cancel>Close</Cancel>
+  		<FastPublish>Fast Publish</FastPublish>
+  	</action>
+  </UIPCVContentDialog>
   <UIContentViewerContainer>
     <action>
       <back>Back</back>
@@ -43,5 +50,10 @@
   <UIPresentationContainer>
   	<draft>Draft</draft>
   </UIPresentationContainer>
+  <UIDocumentFormPopupWindow>
+  	<title>
+  		<UIPCVContentDialog>UI Parameter Content Viewer</UIPCVContentDialog>
+  	</title>
+  </UIDocumentFormPopupWindow>
 </bundle>
 

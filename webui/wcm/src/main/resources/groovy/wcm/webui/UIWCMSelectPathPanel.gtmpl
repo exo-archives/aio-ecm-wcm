@@ -26,7 +26,7 @@
 	
 %>
 
-<%@page import="org.exoplatform.services.wcm.publication.WCMPublicationService"%><div id="$uicomponent.id" class="UITreeList">
+<div id="$uicomponent.id" class="UITreeList">
   	<table class="UIGrid">
 	  	<thead>
 	    	<tr>

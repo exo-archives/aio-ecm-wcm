@@ -42,5 +42,18 @@
   <UIPresentationContainer>
   	<draft>Draft</draft>
   </UIPresentationContainer>
+  <UIParameterizedContentListViewerContainer>
+  	<label>
+  		<quickEditTitle>Quick Edit</quickEditTitle>
+  	</label>
+  </UIParameterizedContentListViewerContainer>
+  
+  <UIPCVContentDialog>
+  	<action>
+  		<SaveDraft>Sauver Esquisse</SaveDraft>
+  		<Cancel>Fermer</Cancel>
+  		<FastPublish>Fast Publier</FastPublish>
+  	</action>
+  </UIPCVContentDialog>
 </bundle>
 
