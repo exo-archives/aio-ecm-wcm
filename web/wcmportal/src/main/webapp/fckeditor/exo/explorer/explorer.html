@@ -605,7 +605,11 @@
 		} else if (eXp.resourceType == "File") {
 			var newTag = FCK.CreateElement("A");
 			if (K.remove.space(sContent) != "") newTag.innerHTML = sContent;
-			else newTag.innerHTML = sLink.substring(sLink.lastIndexOf('/') + 1);
+			else {
+				var label = sLink.substring(sLink.lastIndexOf('/') + 1);
+				label = label.replace('%20', ' ');
+				newTag.innerHTML = label;
+			}
 			newTag.setAttribute("href", sLink);
 		} else if (eXp.resourceType == "Image"){
 			var newTag = FCK.CreateElement("IMG");
