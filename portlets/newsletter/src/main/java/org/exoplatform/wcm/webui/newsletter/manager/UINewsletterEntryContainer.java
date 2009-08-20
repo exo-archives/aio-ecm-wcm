@@ -62,7 +62,7 @@ public class UINewsletterEntryContainer extends UIContainer {
     this.getChildren().clear();
     NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
     UINewsletterEntryDialogSelector newsletterEntryDialogSelector = addChild(UINewsletterEntryDialogSelector.class, null, null);
-    newsletterEntryDialogSelector.updateTemplateSelectBox();
+    //newsletterEntryDialogSelector.updateTemplateSelectBox();
     UINewsletterEntryForm newsletterEntryForm = createUIComponent(UINewsletterEntryForm.class, null, null);
     newsletterEntryForm.setRepositoryName(newsletterManagerService.getRepositoryName());
     newsletterEntryForm.setWorkspace(newsletterManagerService.getWorkspaceName());

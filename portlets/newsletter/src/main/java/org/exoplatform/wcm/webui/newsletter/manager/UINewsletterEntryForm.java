@@ -111,7 +111,8 @@ public class UINewsletterEntryForm extends UIDialogForm {
     return resourceResolver;
   }
 
-  private Node saveContent() throws Exception {
+  private Node saveContent(boolean isSend) throws Exception {
+    boolean isNull = true;
     // Prepare node store location
     UINewsletterEntryContainer newsletterEntryContainer = getAncestorOfType(UINewsletterEntryContainer.class);
     UINewsletterEntryDialogSelector newsletterEntryDialogSelector = newsletterEntryContainer.getChild(UINewsletterEntryDialogSelector.class);
@@ -137,12 +138,27 @@ public class UINewsletterEntryForm extends UIDialogForm {
 
     // Add newsletter mixin type
     Node newsletterNode = (Node)session.getItem(newsletterNodePath);
-    if(newsletterNode.canAddMixin(NewsletterConstant.ENTRY_NODETYPE)) newsletterNode.addMixin(NewsletterConstant.ENTRY_NODETYPE);
+    if(isAddNew() && newsletterNode.canAddMixin(NewsletterConstant.ENTRY_NODETYPE))
+      newsletterNode.addMixin(NewsletterConstant.ENTRY_NODETYPE);
     newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_CATEGORY_NAME, selectedCategory);
     newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_SUBSCRIPTION_NAME, selectedSubsctiption);
-    newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_STATUS, NewsletterConstant.STATUS_DRAFT);
     newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_TYPE, newsletterEntryDialogSelector.getDialog());
-    newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_DATE, ((UIFormDateTimeInput)newsletterEntryDialogSelector.getChildById(UINewsletterEntryDialogSelector.NEWSLETTER_ENTRY_SEND_DATE)).getCalendar());
+    Calendar calendar = ((UIFormDateTimeInput)newsletterEntryDialogSelector.
+                              getChildById(UINewsletterEntryDialogSelector.NEWSLETTER_ENTRY_SEND_DATE)).getCalendar();
+    if(calendar==null) calendar = Calendar.getInstance();
+    newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_DATE, calendar);
+    Date currentDate = new Date();
+    if(isSend){
+      if(calendar.getTimeInMillis() >= currentDate.getTime()){
+        newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_STATUS, NewsletterConstant.STATUS_AWAITING);
+        isNull = true;
+      }else{
+        isNull = false;
+        newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_STATUS, NewsletterConstant.STATUS_SENT);
+      }
+    }else{
+      newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_STATUS, NewsletterConstant.STATUS_DRAFT);
+    }
     session.save();
     
     // Close popup and update UI
@@ -151,6 +167,7 @@ public class UINewsletterEntryForm extends UIDialogForm {
     if(entryManager.isRendered()) entryManager.init();
     Utils.closePopupWindow(this, UINewsletterConstant.ENTRY_FORM_POPUP_WINDOW);
     
+    if(isNull) return null;
     return newsletterNode;
   }
   
@@ -165,7 +182,7 @@ public class UINewsletterEntryForm extends UIDialogForm {
         return;
       }
       try{
-        newsletterEntryForm.saveContent();
+        newsletterEntryForm.saveContent(false);
       }catch(ItemExistsException itemExistsException){
         UIApplication uiApp = newsletterEntryContainer.getAncestorOfType(UIApplication.class);
         uiApp.addMessage(new ApplicationMessage("UINewsletterEntryForm.msg.NodeNameInvalid", null, ApplicationMessage.WARNING));
@@ -187,25 +204,15 @@ public class UINewsletterEntryForm extends UIDialogForm {
       }
       Node newsletterNode = null;
       try{
-        newsletterNode = newsletterEntryForm.saveContent();
+        newsletterNode = newsletterEntryForm.saveContent(true);
       }catch(ItemExistsException itemExistsException){
         UIApplication uiApp = newsletterEntryContainer.getAncestorOfType(UIApplication.class);
         uiApp.addMessage(new ApplicationMessage("UINewsletterEntryForm.msg.NodeNameInvalid", null, ApplicationMessage.WARNING));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       }
-      Session session = newsletterNode.getSession();
-      UINewsletterEntryDialogSelector newsletterEntryDialogSelector = newsletterEntryContainer.getChild(UINewsletterEntryDialogSelector.class);
-      Date currentDate = new Date();
-      //DateFormat dateFormat = new SimpleDateFormat(ISO8601.SIMPLE_DATETIME_FORMAT);
-      UIFormDateTimeInput formDateTimeInput = newsletterEntryDialogSelector.getChild(UIFormDateTimeInput.class);
-      Calendar calendar = formDateTimeInput.getCalendar();
-      if(calendar==null) calendar = Calendar.getInstance();
-      newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_DATE, calendar);
-      if(calendar.getTimeInMillis() > currentDate.getTime()){
-        newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_STATUS, NewsletterConstant.STATUS_AWAITING);
-      }else{
-        newsletterNode.setProperty(NewsletterConstant.ENTRY_PROPERTY_STATUS, NewsletterConstant.STATUS_SENT);
+      if(newsletterNode != null){
+        Session session = newsletterNode.getSession();
         ExoContainer container = ExoContainerContext.getCurrentContainer() ;
         MailService mailService = (MailService)container.getComponentInstanceOfType(MailService.class) ;
         Message message = null;
@@ -240,8 +247,8 @@ public class UINewsletterEntryForm extends UIDialogForm {
             e.printStackTrace();
           }
         }
+        session.save();
       }
-      session.save();
     }
   }
 
