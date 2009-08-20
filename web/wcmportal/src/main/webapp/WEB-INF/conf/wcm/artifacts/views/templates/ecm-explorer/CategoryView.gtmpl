@@ -236,7 +236,7 @@
 	      		String repository = uicomponent.getRepository();
 	      		WCMPublicationService wcmPublicationService = uicomponent.getApplicationComponent(WCMPublicationService.class);
 	        	for (data in uicomponent.getChildrenList()) {
-	        		def status = wcmPublicationService.getContentState(node);
+	        		def status = wcmPublicationService.getContentState(data);
 	        		Date date = getDate(data, status); 	        	        
 	          		def isPreferenceNode = uicomponent.isPreferenceNode(data) ;
 	          		def preferenceWS = data.getSession().getWorkspace().getName() ;
