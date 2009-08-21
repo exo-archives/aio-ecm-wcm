@@ -15,31 +15,45 @@
         <description>XML Deployment Plugin</description>
         <init-params>
           <object-param>        
-            <name>ACME Banner data</name>
+            <name>ACME Logo data</name>
             <description>Deployment Descriptor</description>
             <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
               <field  name="target">
               	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
               		<field  name="repository"><string>repository</string></field>
               		<field  name="workspace"><string>collaboration</string></field>
-              		<field  name="nodePath"><string>/sites content/live/acme/web contents/site artifacts/banner</string></field>
+              		<field  name="nodePath"><string>/sites content/live/acme/web contents/site artifacts</string></field>
               	</object>
               </field>
-              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme/Banner.xml</string></field>
+              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme/Logo.xml</string></field>
             </object>
           </object-param>
           <object-param>        
-            <name>ACME SearchBox data</name>
+            <name>ACME Signin data</name>
             <description>Deployment Descriptor</description>
             <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
               <field  name="target">
               	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
               		<field  name="repository"><string>repository</string></field>
               		<field  name="workspace"><string>collaboration</string></field>
-              		<field  name="nodePath"><string>/sites content/live/acme/web contents/site artifacts/searchbox</string></field>
+              		<field  name="nodePath"><string>/sites content/live/acme/web contents/site artifacts</string></field>
               	</object>
               </field>
-              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme/SearchBox.xml</string></field>
+              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme/Signin.xml</string></field>
+            </object>
+          </object-param>
+          <object-param>        
+            <name>ACME Searchbox data</name>
+            <description>Deployment Descriptor</description>
+            <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
+              <field  name="target">
+              	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
+              		<field  name="repository"><string>repository</string></field>
+              		<field  name="workspace"><string>collaboration</string></field>
+              		<field  name="nodePath"><string>/sites content/live/acme/web contents/site artifacts</string></field>
+              	</object>
+              </field>
+              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme/Searchbox.xml</string></field>
             </object>
           </object-param>
           <object-param>        
@@ -50,56 +64,42 @@
               	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
               		<field  name="repository"><string>repository</string></field>
               		<field  name="workspace"><string>collaboration</string></field>
-              		<field  name="nodePath"><string>/sites content/live/acme/web contents/site artifacts/navigation</string></field>
+              		<field  name="nodePath"><string>/sites content/live/acme/web contents/site artifacts</string></field>
               	</object>
               </field>
               <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme/Navigation.xml</string></field>
             </object>
           </object-param>
           <object-param>        
-            <name>ACME Breadcrumb data</name>
+            <name>ACME Footer data</name>
             <description>Deployment Descriptor</description>
             <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
               <field  name="target">
               	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
               		<field  name="repository"><string>repository</string></field>
               		<field  name="workspace"><string>collaboration</string></field>
-              		<field  name="nodePath"><string>/sites content/live/acme/web contents/site artifacts/breadcrumb</string></field>
+              		<field  name="nodePath"><string>/sites content/live/acme/web contents/site artifacts</string></field>
               	</object>
               </field>
-              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme/Breadcrumb.xml</string></field>
+              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme/Footer.xml</string></field>
             </object>
           </object-param>
           <object-param>        
-            <name>ACME Homepage data</name>
+            <name>ACME Introduce data</name>
             <description>Deployment Descriptor</description>
             <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
               <field  name="target">
               	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
               		<field  name="repository"><string>repository</string></field>
               		<field  name="workspace"><string>collaboration</string></field>
-              		<field  name="nodePath"><string>/sites content/live/acme/web contents/site artifacts/homepage</string></field>
+              		<field  name="nodePath"><string>/sites content/live/acme/web contents/site artifacts</string></field>
               	</object>
               </field>
-              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme/Homepage.xml</string></field>
+              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme/Introduce.xml</string></field>
             </object>
           </object-param>
           <object-param>        
-            <name>ACME images data</name>
-            <description>Deployment Descriptor</description>
-            <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
-              <field  name="target">
-              	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
-              		<field  name="repository"><string>repository</string></field>
-              		<field  name="workspace"><string>collaboration</string></field>
-              		<field  name="nodePath"><string>/sites content/live/acme/medias/images</string></field>
-              	</object>
-              </field>
-              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme/Images.xml</string></field>
-            </object>
-          </object-param>
-          <object-param>        
-            <name>ACME stylesheet data</name>
+            <name>ACME Stylesheet data</name>
             <description>Deployment Descriptor</description>
             <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
               <field  name="target">
@@ -112,48 +112,20 @@
               <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme/Stylesheet.xml</string></field>
             </object>
           </object-param>
-          <object-param>        
-            <name>ACME Servives And Products data</name>
+          <!--object-param>        
+            <name>ACME Images data</name>
             <description>Deployment Descriptor</description>
             <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
               <field  name="target">
               	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
               		<field  name="repository"><string>repository</string></field>
               		<field  name="workspace"><string>collaboration</string></field>
-              		<field  name="nodePath"><string>/sites content/live/acme/web contents</string></field>
+              		<field  name="nodePath"><string>/sites content/live/acme/medias/images</string></field>
               	</object>
               </field>
-              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme/contents/ServicesAndProducts.xml</string></field>
+              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme/Images.xml</string></field>
             </object>
-          </object-param>
-          <object-param>        
-            <name>ACME Products data</name>
-            <description>Deployment Descriptor</description>
-            <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
-              <field  name="target">
-              	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
-              		<field  name="repository"><string>repository</string></field>
-              		<field  name="workspace"><string>collaboration</string></field>
-              		<field  name="nodePath"><string>/sites content/live/acme/web contents</string></field>
-              	</object>
-              </field>
-              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme/contents/Products.xml</string></field>
-            </object>
-          </object-param>
-          <object-param>        
-            <name>ACME Product data</name>
-            <description>Deployment Descriptor</description>
-            <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
-              <field  name="target">
-              	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
-              		<field  name="repository"><string>repository</string></field>
-              		<field  name="workspace"><string>collaboration</string></field>
-              		<field  name="nodePath"><string>/sites content/live/acme/web contents</string></field>
-              	</object>
-              </field>
-              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme/contents/Product.xml</string></field>
-            </object>
-          </object-param>
+          </object-param-->
           <object-param>        
             <name>ACME News data</name>
             <description>Deployment Descriptor</description>
@@ -162,69 +134,40 @@
               	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
               		<field  name="repository"><string>repository</string></field>
               		<field  name="workspace"><string>collaboration</string></field>
-              		<field  name="nodePath"><string>/sites content/live/acme/web contents</string></field>
+              		<field  name="nodePath"><string>/sites content/live/acme/web contents/site artifacts</string></field>
               	</object>
               </field>
-              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme/contents/News.xml</string></field>
+              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme/News.xml</string></field>
             </object>
           </object-param>
           <object-param>        
-            <name>ACME Services data</name>
+            <name>ACME Events data</name>
             <description>Deployment Descriptor</description>
             <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
               <field  name="target">
               	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
               		<field  name="repository"><string>repository</string></field>
               		<field  name="workspace"><string>collaboration</string></field>
-              		<field  name="nodePath"><string>/sites content/live/acme/web contents</string></field>
+              		<field  name="nodePath"><string>/sites content/live/acme/web contents/site artifacts</string></field>
               	</object>
               </field>
-              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme/contents/Services.xml</string></field>
+              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme/Events.xml</string></field>
             </object>
           </object-param>
           <object-param>        
-            <name>ACME About data</name>
+            <name>ACME Documents data</name>
             <description>Deployment Descriptor</description>
             <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
               <field  name="target">
               	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
               		<field  name="repository"><string>repository</string></field>
               		<field  name="workspace"><string>collaboration</string></field>
-              		<field  name="nodePath"><string>/sites content/live/acme/web contents</string></field>
+              		<field  name="nodePath"><string>/sites content/live/acme/web contents/site artifacts</string></field>
               	</object>
               </field>
-              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme/contents/About.xml</string></field>
+              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme/Documents.xml</string></field>
             </object>
           </object-param>
-          <object-param>        
-            <name>ACME Contact data</name>
-            <description>Deployment Descriptor</description>
-            <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
-              <field  name="target">
-              	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
-              		<field  name="repository"><string>repository</string></field>
-              		<field  name="workspace"><string>collaboration</string></field>
-              		<field  name="nodePath"><string>/sites content/live/acme/web contents</string></field>
-              	</object>
-              </field>
-              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme/contents/Contact.xml</string></field>
-            </object>
-          </object-param>
-          <object-param>        
-            <name>ACME Footer data</name>
-            <description>Deployment Descriptor</description>
-            <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
-              <field  name="target">
-              	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
-              		<field  name="repository"><string>repository</string></field>
-              		<field  name="workspace"><string>collaboration</string></field>
-              		<field  name="nodePath"><string>/sites content/live/acme/web contents/site artifacts/footer</string></field>
-              	</object>
-              </field>
-              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme/Footer.xml</string></field>
-            </object>
-          </object-param>
-
         </init-params>  
       </component-plugin> 
    </external-component-plugins>

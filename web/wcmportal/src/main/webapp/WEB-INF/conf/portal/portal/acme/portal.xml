@@ -12,36 +12,37 @@
 	    <show-info-bar>false</show-info-bar>
   	</application>	  
   	
-  	<container id="BannerContainer" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
-  		<container id="Banner" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+  	<container id="ACMEBanner" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
+  		<container id="ACMELogo" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
   			<application>
-			    <instance-id>portal#acme:/presentation/SingleContentViewer/acme-banner</instance-id>
-			    <show-info-bar>false</show-info-bar>
+			    <instance-id>portal#acme:/presentation/SingleContentViewer/acme-logo</instance-id>
+			    <title>Banner</title>
 			  </application>
   		</container>
-  		<container id="WCMSearchBox" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+  		<container id="ACMESignin" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
 	  		<application>
 			    <instance-id>portal#acme:/presentation/SingleContentViewer/acme-searchbox</instance-id>
-			    <show-info-bar>false</show-info-bar>
+			    <title>Access</title>
+			  </application>
+  		</container>
+  		<container id="ACMESearch" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+	  		<application>
+			    <instance-id>portal#acme:/presentation/SingleContentViewer/acme-signin</instance-id>
+			    <title>Search box</title>
 			  </application>
   		</container>
   	</container>
   		
   	<application>
 		 	<instance-id>portal#acme:/presentation/SingleContentViewer/acme-navigation</instance-id>
-  	  <show-info-bar>false</show-info-bar>
+  	  <title>Navigation</title>
 		</application>
   	
-  	<application>
-			<instance-id>portal#acme:/presentation/SingleContentViewer/acme-breadcrumb</instance-id>
-	  	<show-info-bar>false</show-info-bar>
-	  </application>
-		
 	  <page-body> </page-body>
 	  
 	  <application>
 	    <instance-id>portal#acme:/presentation/SingleContentViewer/acme-footer</instance-id>
-	    <show-info-bar>false</show-info-bar>
+	    <title>Footer</title>
 	  </application>
   </portal-layout>
   

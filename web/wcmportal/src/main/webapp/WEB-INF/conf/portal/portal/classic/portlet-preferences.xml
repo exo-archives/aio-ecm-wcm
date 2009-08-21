@@ -198,7 +198,7 @@
     </preference>
     <preference>
     	<name>formViewTemplatePath</name>
-    	<value>/exo:ecm/views/templates/Content List Viewer/list-by-folder/ClassicContentListViewer.gtmpl</value>
+    	<value>/exo:ecm/views/templates/Content List Viewer/list-by-folder/TwoColumnsCLVTemplate.gtmpl</value>
     	<read-only>false</read-only>
     </preference>
     <preference>
@@ -261,8 +261,6 @@
 			<value>true</value>
 			<read-only>false</read-only>
 		</preference>
-		
-    	 
   </portlet-preferences>
 	
 	<portlet-preferences>

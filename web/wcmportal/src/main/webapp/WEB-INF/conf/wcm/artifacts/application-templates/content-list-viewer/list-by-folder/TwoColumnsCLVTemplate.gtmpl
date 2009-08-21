@@ -11,7 +11,7 @@
 		import org.exoplatform.wcm.webui.clv.UICLVPortlet;
 %>
 
-<div id="$uicomponent.id" class="UIContentListPresentationDefault">
+<div id="$uicomponent.id" class="TwoColumnsCLVTemplate">
 	<div class="News">
 		<%
 			if (uicomponent.isShowHeader()) {

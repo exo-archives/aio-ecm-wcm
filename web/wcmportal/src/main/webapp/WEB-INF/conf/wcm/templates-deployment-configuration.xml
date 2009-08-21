@@ -68,11 +68,23 @@
 					</object>
 				</object-param>
 				<object-param>
-					<name>classic.content.list.viewer</name>
-					<description>Classic content list viewer groovy template</description>
+					<name>Two columns CLV template</name>
+					<description>Two columns CLV template</description>
 					<object type="org.exoplatform.services.cms.views.PortletTemplatePlugin$PortletTemplateConfig">
 						<field name="templateName">
-							<string>ClassicContentListViewer.gtmpl</string>
+							<string>TwoColumnsCLVTemplate.gtmpl</string>
+						</field>
+						<field name="category">
+							<string>list-by-folder</string>
+						</field>
+					</object>
+				</object-param>
+				<object-param>
+					<name>One column CLV template</name>
+					<description>One column CLV template</description>
+					<object type="org.exoplatform.services.cms.views.PortletTemplatePlugin$PortletTemplateConfig">
+						<field name="templateName">
+							<string>OneColumnCLVTemplate.gtmpl</string>
 						</field>
 						<field name="category">
 							<string>list-by-folder</string>
