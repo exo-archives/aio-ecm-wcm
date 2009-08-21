@@ -220,6 +220,7 @@ public class UIPCVContainer extends UIContainer {
    * @throws Exception the exception
    */
   private Node getNodebyPath(String parameters) throws Exception {
+    if (parameters == null) return null;
     ManageableRepository manageableRepository = null;
     String[] params = parameters.split("/");
     String repository = params[0];
