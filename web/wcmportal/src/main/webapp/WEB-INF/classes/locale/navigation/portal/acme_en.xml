@@ -13,6 +13,22 @@
       <parameterizedviewer>Parameterized Viewer</parameterizedviewer>
       <searchResult>Search Result</searchResult>
       <printviewer>Print Viewer</printviewer>
+      
+      
+      <products>Products</products>
+      <category>Category Navigation</category>
+      <pclv>Parameterized Content List Viewer</pclv>
+      <clv>Content List Viewer</clv>
+      <scv>Single Content Viewer</scv>
+      <pcv>Parameterized Content Viewer</pcv>
+      <sitemap>Site Map</sitemap>
+      <overview>Overview</overview>
+      <events>Events</events>
+      <publications>Publications</publications>
+      <newsletter>Newsletter</newsletter>
+      <newsletterviewer>Newsletter Viewer</newsletterviewer>
+      <newslettermanager>Newsletter Manager</newslettermanager>
+      <fastgenerator>Form Generator</fastgenerator>
     </acme>
   </portal>
 </bundle>

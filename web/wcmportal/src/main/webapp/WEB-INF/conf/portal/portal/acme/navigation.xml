@@ -28,13 +28,74 @@
 			<label>#{portal.acme.publications}</label>
 			<page-reference>portal::acme::publications</page-reference>	    
 		</node>
+		
 		<node>
-			<uri>parameterizedviewer</uri>
-			<name>parameterizedviewer</name>
-			<label>#{portal.acme.parameterizedviewer}</label>
-			<visible>false</visible>
-			<page-reference>portal::acme::parameterizedviewer</page-reference>
+			<uri>products</uri>
+			<name>products</name>
+			<label>#{portal.acme.products}</label>
+			<page-reference>portal::acme::category</page-reference>
+			<node>
+				<uri>products/category</uri>
+				<name>category</name>
+				<label>#{portal.acme.category}</label>
+				<page-reference>portal::acme::category</page-reference>
+			</node>
+			<node>
+				<uri>products/pclv</uri>
+				<name>pclv</name>
+				<label>#{portal.acme.pclv}</label>
+				<page-reference>portal::acme::pclv</page-reference>
+			</node>
+			<node>
+				<uri>products/clv</uri>
+				<name>clv</name>
+				<label>#{portal.acme.clv}</label>
+				<page-reference>portal::acme::clv</page-reference>
+			</node>
+			<node>
+				<uri>products/scv</uri>
+				<name>scv</name>
+				<label>#{portal.acme.scv}</label>
+				<page-reference>portal::acme::scv</page-reference>
+			</node>
+			<node>
+				<uri>products/pcv</uri>
+				<name>pcv</name>
+				<label>#{portal.acme.pcv}</label>
+				<page-reference>portal::acme::pcv</page-reference>
+			</node>
+			<node>
+				<uri>products/newsletter</uri>
+				<name>newsletter</name>
+				<label>#{portal.acme.newsletter}</label>
+				<page-reference>portal::acme::newsletterviewer</page-reference>
+				<node>
+					<uri>products/newsletter/newsletterviewer</uri>
+					<name>newsletterviewer</name>
+					<label>#{portal.acme.newsletterviewer}</label>
+					<page-reference>portal::acme::newsletterviewer</page-reference>
+				</node>
+				<node>
+					<uri>products/newsletter/newslettermanager</uri>
+					<name>newslettermanager</name>
+					<label>#{portal.acme.newslettermanager}</label>
+					<page-reference>portal::acme::newslettermanager</page-reference>
+				</node>
+			</node>
+			<node>
+				<uri>products/fastgenerator</uri>
+				<name>fastgenerator</name>
+				<label>#{portal.acme.fastgenerator}</label>
+				<page-reference>portal::acme::fastgenerator</page-reference>
+			</node>
+			<node>
+			<uri>products/searchResult</uri>
+			<name>searchResult</name>
+			<label>#{portal.acme.searchResult}</label>
+			<page-reference>portal::acme::searchResult</page-reference>	    
 		</node>
+		</node>
+		
 		<node>
 			<uri>printviewer</uri>
 			<name>printviewer</name>
@@ -42,12 +103,13 @@
 			<visible>false</visible>
 			<page-reference>portal::acme::printviewer</page-reference>
 		</node>
+		
+		
 		<node>
-			<uri>searchResult</uri>
-			<name>searchResult</name>
-			<label>#{portal.acme.searchResult}</label>
-			<visible>false</visible>			
-			<page-reference>portal::acme::searchResult</page-reference>	    
+			<uri>sitemap</uri>
+			<name>sitemap</name>
+			<label>#{portal.acme.sitemap}</label>
+			<page-reference>portal::acme::sitemap</page-reference>	    
 		</node>
 	</page-nodes>
 </node-navigation>

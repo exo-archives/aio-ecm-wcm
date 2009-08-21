@@ -106,10 +106,10 @@
   </page>
   
 	<page>
-		<page-id>portal::acme::parameterizedviewer</page-id>
+		<page-id>portal::acme::pcv</page-id>
 		<owner-type>portal</owner-type>
 		<owner-id>acme</owner-id>
-		<name>parameterizedviewer</name>
+		<name>pcv</name>
 		<title>ParameterizedViewer</title>
 		<access-permissions>Everyone</access-permissions>
 		<edit-permission>*:/platform/administrators</edit-permission>
@@ -134,6 +134,123 @@
 		<application>
 			<instance-id>portal#acme:/presentation/ParameterizedContentViewerPortlet/acme-printviewer</instance-id>
 			<title>printviewer</title>
+			<show-info-bar>false</show-info-bar>
+			<show-application-state>false</show-application-state>
+			<show-application-mode>false</show-application-mode>
+		</application>
+	</page>
+	
+	<page>
+		<page-id>portal::acme::pclv</page-id>
+		<owner-type>portal</owner-type>
+		<owner-id>acme</owner-id>
+		<name>pclv</name>
+		<title>ParameterizedContentListViewer</title>
+		<access-permissions>Everyone</access-permissions>
+		<edit-permission>*:/platform/administrators</edit-permission>
+		<application>
+			<instance-id>portal#acme:/presentation/ParameterizedContentListViewerPortlet/acme-parameterizedContentListViewer</instance-id>
+			<title>parameterizedContentListViewer</title>
+			<show-info-bar>false</show-info-bar>
+			<show-application-state>false</show-application-state>
+			<show-application-mode>false</show-application-mode>
+		</application>
+	</page>
+	
+	<page>
+		<page-id>portal::acme::category</page-id>
+		<owner-type>portal</owner-type>
+		<owner-id>acme</owner-id>
+		<name>category</name>
+		<title>Category</title>
+		<access-permissions>Everyone</access-permissions>
+		<edit-permission>*:/platform/administrators</edit-permission>
+		<application>
+			<instance-id>portal#acme:/presentation/CategoryNavigationPortlet/acme-category</instance-id>
+			<title>parameterizedContentListViewer</title>
+			<show-info-bar>false</show-info-bar>
+			<show-application-state>false</show-application-state>
+			<show-application-mode>false</show-application-mode>
+		</application>
+	</page>
+	
+	<page>
+		<page-id>portal::acme::clv</page-id>
+		<owner-type>portal</owner-type>
+		<owner-id>acme</owner-id>
+		<name>clv</name>
+		<title>Content List Viewer</title>
+		<access-permissions>Everyone</access-permissions>
+		<edit-permission>*:/platform/administrators</edit-permission>
+		<application>
+			<instance-id>portal#acme:/presentation/ContentListViewerPortlet/acme-contentlistviewer</instance-id>
+			<title>Content List Viewer</title>
+			<show-info-bar>false</show-info-bar>
+			<show-application-state>false</show-application-state>
+			<show-application-mode>false</show-application-mode>
+		</application>
+	</page>
+	
+	<page>
+		<page-id>portal::acme::scv</page-id>
+		<owner-type>portal</owner-type>
+		<owner-id>acme</owner-id>
+		<name>scv</name>
+		<title>SingleContentViewer</title>
+		<access-permissions>Everyone</access-permissions>
+		<edit-permission>*:/platform/administrators</edit-permission>
+		<application>
+			<instance-id>portal#acme:/presentation/SingleContentViewer/acme-presentation</instance-id>
+			<title>Presentation</title>
+			<show-info-bar>false</show-info-bar>
+			<show-application-state>false</show-application-state>
+			<show-application-mode>false</show-application-mode>
+		</application>
+	</page>
+
+	<page>
+		<page-id>portal::acme::newsletterviewer</page-id>
+		<owner-type>portal</owner-type>
+		<owner-id>acme</owner-id>
+		<name>newsletterviewer</name>
+		<title>Newsletter Viewer</title>
+		<access-permissions>Everyone</access-permissions>
+		<edit-permission>*:/platform/administrators</edit-permission>
+		<application>
+			<instance-id>portal#acme:/newsletter/NewsletterViewerPortlet/acme-newsletterviewer</instance-id>
+			<title>Newsletter viewer</title>
+			<show-info-bar>false</show-info-bar>
+			<show-application-state>false</show-application-state>
+			<show-application-mode>false</show-application-mode>
+		</application>
+	</page>
+	<page>
+		<page-id>portal::acme::newslettermanager</page-id>
+		<owner-type>portal</owner-type>
+		<owner-id>acme</owner-id>
+		<name>newslettermanager</name>
+		<title>Newsletter Manager</title>
+		<access-permissions>*:/platform/administrators</access-permissions>
+		<edit-permission>*:/platform/administrators</edit-permission>
+		<application>
+			<instance-id>portal#acme:/newsletter/NewsletterManagerPortlet/acme-newslettermanager</instance-id>
+			<title>Newsletter Manager</title>
+			<show-info-bar>false</show-info-bar>
+			<show-application-state>false</show-application-state>
+			<show-application-mode>false</show-application-mode>
+		</application>
+	</page>
+	<page>
+		<page-id>portal::acme::fastgenerator</page-id>
+		<owner-type>portal</owner-type>
+		<owner-id>acme</owner-id>
+		<name>fastgenerator</name>
+		<title>Form Generator</title>
+		<access-permissions>*:/platform/administrators</access-permissions>
+		<edit-permission>*:/platform/administrators</edit-permission>
+		<application>
+			<instance-id>portal#acme:/formgenerator/FormGeneratorPortlet/acme-formgenerator</instance-id>
+			<title>FormGenerator</title>
 			<show-info-bar>false</show-info-bar>
 			<show-application-state>false</show-application-state>
 			<show-application-mode>false</show-application-mode>
