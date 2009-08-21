@@ -11,7 +11,7 @@
       <about>About us</about>
       <contentviewer>Content Viewer</contentviewer>
       <parameterizedviewer>Parameterized Viewer</parameterizedviewer>
-      <searchResult>Search Result</searchResult>
+      <search>Search</search>
       <printviewer>Print Viewer</printviewer>
       
       
@@ -29,6 +29,7 @@
       <newsletterviewer>Newsletter Viewer</newsletterviewer>
       <newslettermanager>Newsletter Manager</newslettermanager>
       <fastgenerator>Form Generator</fastgenerator>
+      <presentation>Presentation</presentation>
     </acme>
   </portal>
 </bundle>

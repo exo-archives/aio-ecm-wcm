@@ -33,7 +33,38 @@
 			<uri>products</uri>
 			<name>products</name>
 			<label>#{portal.acme.products}</label>
-			<page-reference>portal::acme::category</page-reference>
+			<page-reference>portal::acme::scv</page-reference>
+			
+			<node>
+				<uri>products/presentation</uri>
+				<name>presentation</name>
+				<label>#{portal.acme.presentation}</label>
+				<page-reference>portal::acme::scv</page-reference>
+				<node>
+					<uri>products/presentation/scv</uri>
+					<name>scv</name>
+					<label>#{portal.acme.scv}</label>
+					<page-reference>portal::acme::scv</page-reference>
+				</node>
+				<node>
+					<uri>products/presentation/clv</uri>
+					<name>clv</name>
+					<label>#{portal.acme.clv}</label>
+					<page-reference>portal::acme::clv</page-reference>
+				</node>
+				<node>
+					<uri>products/presentation/pcv</uri>
+					<name>pcv</name>
+					<label>#{portal.acme.pcv}</label>
+					<page-reference>portal::acme::pcv</page-reference>
+				</node>
+				<node>
+					<uri>products/presentation/search</uri>
+					<name>search</name>
+					<label>#{portal.acme.search}</label>
+					<page-reference>portal::acme::search</page-reference>
+				</node>
+			</node>
 			<node>
 				<uri>products/category</uri>
 				<name>category</name>
@@ -45,24 +76,6 @@
 				<name>pclv</name>
 				<label>#{portal.acme.pclv}</label>
 				<page-reference>portal::acme::pclv</page-reference>
-			</node>
-			<node>
-				<uri>products/clv</uri>
-				<name>clv</name>
-				<label>#{portal.acme.clv}</label>
-				<page-reference>portal::acme::clv</page-reference>
-			</node>
-			<node>
-				<uri>products/scv</uri>
-				<name>scv</name>
-				<label>#{portal.acme.scv}</label>
-				<page-reference>portal::acme::scv</page-reference>
-			</node>
-			<node>
-				<uri>products/pcv</uri>
-				<name>pcv</name>
-				<label>#{portal.acme.pcv}</label>
-				<page-reference>portal::acme::pcv</page-reference>
 			</node>
 			<node>
 				<uri>products/newsletter</uri>
@@ -83,17 +96,11 @@
 				</node>
 			</node>
 			<node>
-				<uri>products/fastgenerator</uri>
-				<name>fastgenerator</name>
+				<uri>products/fastcontentcreator</uri>
+				<name>fastcontentcreator</name>
 				<label>#{portal.acme.fastgenerator}</label>
-				<page-reference>portal::acme::fastgenerator</page-reference>
+				<page-reference>portal::acme::fastcontentcreator</page-reference>
 			</node>
-			<node>
-			<uri>products/searchResult</uri>
-			<name>searchResult</name>
-			<label>#{portal.acme.searchResult}</label>
-			<page-reference>portal::acme::searchResult</page-reference>	    
-		</node>
 		</node>
 		
 		<node>

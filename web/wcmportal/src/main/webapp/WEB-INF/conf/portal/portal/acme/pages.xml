@@ -89,16 +89,16 @@
   </page>
   
   <page>
-  	<page-id>portal::acme::searchResult</page-id>
+  	<page-id>portal::acme::search</page-id>
     <owner-type>portal</owner-type>
     <owner-id>acme</owner-id>
-    <name>searchResult</name>
-    <title>SearchResult</title>
+    <name>search</name>
+    <title>search</title>
 	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>editor:/platform/web-contributors</edit-permission>
     <application>
       <instance-id>portal#acme:/searches/WCMAdvanceSearchPortlet/acme-searchResult</instance-id>
-      <title>Search Result</title>
+      <title>Search</title>
       <show-info-bar>false</show-info-bar>      
       <show-application-state>false</show-application-state>
       <show-application-mode>false</show-application-mode>
@@ -241,10 +241,10 @@
 		</application>
 	</page>
 	<page>
-		<page-id>portal::acme::fastgenerator</page-id>
+		<page-id>portal::acme::fastcontentcreator</page-id>
 		<owner-type>portal</owner-type>
 		<owner-id>acme</owner-id>
-		<name>fastgenerator</name>
+		<name>fastcontentcreator</name>
 		<title>Form Generator</title>
 		<access-permissions>*:/platform/administrators</access-permissions>
 		<edit-permission>*:/platform/administrators</edit-permission>
