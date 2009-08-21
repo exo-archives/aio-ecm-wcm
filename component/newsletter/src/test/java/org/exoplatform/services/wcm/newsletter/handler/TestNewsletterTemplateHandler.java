@@ -86,10 +86,8 @@ public class TestNewsletterTemplateHandler extends BaseWCMTestCase {
 	
 	public void testConvertAsTemplate() throws Exception {
 		List<Node> listTemplates = newsletterTemplateHandler.getTemplates("classic", newsletterCategoryConfig);
-		boolean isTemplate = true;
 		for(Node node : listTemplates) {
-			isTemplate = newsletterTemplateHandler.convertAsTemplate(node.getPath(), "classic", "CategoryName");
-			assertEquals(true, isTemplate);
+			newsletterTemplateHandler.convertAsTemplate(node.getPath(), "classic", "CategoryName");
 		}
 	}
 }

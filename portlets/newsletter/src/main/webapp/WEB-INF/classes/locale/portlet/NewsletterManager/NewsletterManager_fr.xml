@@ -121,6 +121,8 @@
     	<checkOnlyOneSubScriptionToDelete>S'il vous plaît cocher une seule case pour supprimer l'abonnement!</checkOnlyOneSubScriptionToDelete>
     	<subscriptionNotfound>Abonnement nom n'existe pas!</subscriptionNotfound>
     	<checkOnlyOneSubScriptionToOpen>S'il vous plaît cocher une seule case d'abonnement à ouvrir!</checkOnlyOneSubScriptionToOpen>
+    	<convertSuccessful>Convertir succès!</convertSuccessful>
+    	<templateIsExist>Il existe déjà un modèle ont le même nom! S'il vous plaît vérifier à nouveau.</templateIsExist>
     </msg>
     <title>
     	<ManageCategory>Gérer la catégorie!</ManageCategory>

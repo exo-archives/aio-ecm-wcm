@@ -249,21 +249,28 @@ public class UINewsletterEntryManager extends UIForm {
       String categoryName = newsletterEntryManager.categoryConfig.getName();
       String subscriptionName = newsletterEntryManager.subscriptionConfig.getName();
       List<String> subIds = newsletterEntryManager.getChecked();
+      String message;
       if(subIds == null || subIds.size() != 1){
-        UIApplication uiApp = newsletterEntryManager.getAncestorOfType(UIApplication.class);
-        uiApp.addMessage(new ApplicationMessage("UISubscription.msg.checkOnlyOneSubScriptionToOpen", null, ApplicationMessage.WARNING));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-        return;
+        message = "UISubscription.msg.checkOnlyOneSubScriptionToOpen";
+      } else {
+        try{
+          String newsletterName = subIds.get(0);
+          NewsletterManagerService newsletterManagerService = newsletterEntryManager.getApplicationComponent(NewsletterManagerService.class);
+          RepositoryService repositoryService = newsletterEntryManager.getApplicationComponent(RepositoryService.class);
+          ManageableRepository manageableRepository = repositoryService.getRepository(newsletterManagerService.getRepositoryName()); 
+          Session session = Utils.getSessionProvider(newsletterEntryManager).getSession(newsletterManagerService.getWorkspaceName(), manageableRepository);
+          String newsletterPath = NewsletterConstant.generateNewsletterPath(Util.getUIPortal().getName(), categoryName, subscriptionName, newsletterName) ;
+          Node newsletterNode = (Node) session.getItem(newsletterPath);
+          NewsletterTemplateHandler newsletterTemplateHandler = newsletterManagerService.getTemplateHandler();
+          newsletterTemplateHandler.convertAsTemplate(newsletterNode.getPath(), Util.getUIPortal().getName(), categoryName);
+          message = "UISubscription.msg.convertSuccessful";
+        }catch(Exception ex){
+          message = "UISubscription.msg.templateIsExist";
+        }
       }
-      String newsletterName = subIds.get(0);
-      NewsletterManagerService newsletterManagerService = newsletterEntryManager.getApplicationComponent(NewsletterManagerService.class);
-      RepositoryService repositoryService = newsletterEntryManager.getApplicationComponent(RepositoryService.class);
-      ManageableRepository manageableRepository = repositoryService.getRepository(newsletterManagerService.getRepositoryName()); 
-      Session session = Utils.getSessionProvider(newsletterEntryManager).getSession(newsletterManagerService.getWorkspaceName(), manageableRepository);
-      String newsletterPath = NewsletterConstant.generateNewsletterPath(Util.getUIPortal().getName(), categoryName, subscriptionName, newsletterName) ;
-      Node newsletterNode = (Node) session.getItem(newsletterPath);
-      NewsletterTemplateHandler newsletterTemplateHandler = newsletterManagerService.getTemplateHandler();
-      newsletterTemplateHandler.convertAsTemplate(newsletterNode.getPath(), Util.getUIPortal().getName(), categoryName);
+      UIApplication uiApp = newsletterEntryManager.getAncestorOfType(UIApplication.class);
+      uiApp.addMessage(new ApplicationMessage(message, null, ApplicationMessage.INFO));
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
     }
   }
   

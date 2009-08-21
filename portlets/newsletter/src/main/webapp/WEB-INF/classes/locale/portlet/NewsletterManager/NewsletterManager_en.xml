@@ -121,6 +121,8 @@
     	<checkOnlyOneSubScriptionToDelete>Please check only one subscription to delete!</checkOnlyOneSubScriptionToDelete>
     	<subscriptionNotfound>Subcription name doesn't exist!</subscriptionNotfound>
     	<checkOnlyOneSubScriptionToOpen>Please check only one subscription to open!</checkOnlyOneSubScriptionToOpen>
+    	<convertSuccessful>Convert successful!</convertSuccessful>
+    	<templateIsExist>Already exist a template have same name! Please check again.</templateIsExist>
     </msg>
     <title>
     	<ManageCategory>Manage Category</ManageCategory>

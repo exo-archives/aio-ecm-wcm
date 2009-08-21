@@ -146,8 +146,9 @@ public class NewsletterTemplateHandler {
    * @param categoryName the category name
    * 
    * @return true, if successful
+   * @throws Exception 
    */
-  public boolean convertAsTemplate(String webcontentPath, String portalName, String categoryName) {
+  public void convertAsTemplate(String webcontentPath, String portalName, String categoryName) throws Exception {
     log.info("Trying to convert node " + webcontentPath + " to template at category " + categoryName);
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
@@ -155,15 +156,17 @@ public class NewsletterTemplateHandler {
       if(sessionProvider == null) sessionProvider = SessionProvider.createSystemProvider();
       Session session = sessionProvider.getSession(workspace, manageableRepository);
       Node categoryTemplateFolder = (Node)session.getItem(NewsletterConstant.generateCategoryTemplateBasePath(portalName, categoryName));
-      session.getWorkspace().copy(webcontentPath, categoryTemplateFolder.getPath() + "/" + webcontentPath.substring(webcontentPath.lastIndexOf("/") + 1));
-      session.save();
-      //session.logout();
-      return true;
+      String templateName = webcontentPath.substring(webcontentPath.lastIndexOf("/") + 1);
+      if(!categoryTemplateFolder.hasNode(templateName)){
+        session.getWorkspace().copy(webcontentPath, categoryTemplateFolder.getPath() + "/" + templateName);
+        session.save();
+      }else{
+        throw new Exception("Same name");
+      }
     } catch (Exception e) {
-      e.printStackTrace();
       log.error("Convert node " + webcontentPath + " to template at category " + categoryName + " failed because of " + e.getMessage());
+      throw e;
     }
-    return false;
   }
   
 }

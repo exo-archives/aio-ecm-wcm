@@ -109,13 +109,13 @@ public class NewsletterConstant {
   public static final String PORTAL_NAME                         = "portalName";
   
   /** The TEMPLAT e_ bas e_ path. */
-  public static String       TEMPLATE_BASE_PATH                  = "/sites content/live/" + PORTAL_NAME + "/ApplicationData/NewsletterApplication/DefaultTemplates";
+  public static String       TEMPLATE_BASE_PATH                  = "/sites content/live/classic/ApplicationData/NewsletterApplication/DefaultTemplates";
   
   /** The CATEGOR y_ bas e_ path. */
-  public static String       CATEGORY_BASE_PATH                  = "/sites content/live/" + PORTAL_NAME + "/ApplicationData/NewsletterApplication/Categories";
+  public static String       CATEGORY_BASE_PATH                  = "/sites content/live/classic/ApplicationData/NewsletterApplication/Categories";
 
   /** The USE r_ bas e_ path. */
-  public static String       USER_BASE_PATH                      = "/sites content/live/" + PORTAL_NAME + "/ApplicationData/NewsletterApplication/Users";
+  public static String       USER_BASE_PATH                      = "/sites content/live/classic/ApplicationData/NewsletterApplication/Users";
   
   
   
