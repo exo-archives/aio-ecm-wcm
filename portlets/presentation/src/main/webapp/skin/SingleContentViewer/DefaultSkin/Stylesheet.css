@@ -72,8 +72,13 @@
 	width: auto;
 }
 
+.UISingleContentViewerPortlet .UIPermissionSetting .UIFormGrid {
+	width: 600px;
+	table-layout: fixed;
+}
+
 .UISingleContentViewerPortlet .UIPermissionSetting td.FieldLabel {
-	width: 140px;
+	width: auto;
 }
 
 .UISingleContentViewerPortlet .QuickEditToolBar {

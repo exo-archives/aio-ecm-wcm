@@ -5,7 +5,7 @@
 	font-family: arial;
 }
 
-.UIPCLVPortlet form {
+.UIPCLVPortlet .UIPCLVDefault {
 	background: #fff;
 	border: 1px solid #dbdbdb;
 }
@@ -67,6 +67,7 @@
 	color: #6b6b6b;
 	font-size: 12px;
 	line-height: 16px;
+	float: left;
 }
 
 .UIPCLVPortlet .CaptionItem .TitleContentHotNews {
