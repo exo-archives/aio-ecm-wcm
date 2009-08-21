@@ -53,8 +53,10 @@
 <%}%>
   <div class="VIEW-CONTAINER">
     <div id="$uicomponent.id">
-      <div class="UIRowContainer"><%uicomponent.renderChildren()%></div>
-      <div class="ClearBoth"><span></span></div>
+      <div class="UIRowContainer">
+      	<%uicomponent.renderChildren()%>
+      	<div class="ClearBoth"><span></span></div>
+      </div>
 	  </div>
 	</div>  
 </div>

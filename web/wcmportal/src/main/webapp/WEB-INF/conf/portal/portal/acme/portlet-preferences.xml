@@ -310,12 +310,12 @@
     </preference>
     <preference>
     	<name>header</name>
-    	<value></value>
+    	<value>COMPANY NEWS</value>
     	<read-only>false</read-only>
     </preference>
     <preference>
     	<name>showHeader</name>
-    	<value>false</value>
+    	<value>true</value>
     	<read-only>false</read-only>
     </preference>
     <preference>
@@ -350,17 +350,17 @@
     </preference>	    
     <preference>
     	<name>showThumbnailsView</name>
-    	<value>true</value>	    	
+    	<value>false</value>	    	
     	<read-only>false</read-only>
     </preference>	    	    
     <preference>
     	<name>showTitle</name>
-    	<value>false</value>	    	
+    	<value>true</value>	    	
     	<read-only>false</read-only>
     </preference>
     <preference>
     	<name>showDateCreated</name>
-    	<value>false</value>	    	
+    	<value>true</value>	    	
     	<read-only>false</read-only>
     </preference>
     <preference>
@@ -380,7 +380,7 @@
 		</preference>
 		<preference>
 			<name>showLink</name>
-			<value>false</value>
+			<value>true</value>
 			<read-only>false</read-only>
 		</preference>
 		<preference>
@@ -406,12 +406,12 @@
     </preference>
     <preference>
     	<name>header</name>
-    	<value></value>
+    	<value>DOCUMENTS</value>
     	<read-only>false</read-only>
     </preference>
     <preference>
     	<name>showHeader</name>
-    	<value>false</value>
+    	<value>true</value>
     	<read-only>false</read-only>
     </preference>
     <preference>
@@ -446,12 +446,12 @@
     </preference>	    
     <preference>
     	<name>showThumbnailsView</name>
-    	<value>true</value>	    	
+    	<value>false</value>	    	
     	<read-only>false</read-only>
     </preference>	    	    
     <preference>
     	<name>showTitle</name>
-    	<value>false</value>	    	
+    	<value>true</value>	    	
     	<read-only>false</read-only>
     </preference>
     <preference>
@@ -476,12 +476,12 @@
 		</preference>
 		<preference>
 			<name>showLink</name>
-			<value>false</value>
+			<value>true</value>
 			<read-only>false</read-only>
 		</preference>
 		<preference>
 			<name>showReadmore</name>
-			<value>true</value>
+			<value>false</value>
 			<read-only>false</read-only>
 		</preference>
   </portlet-preferences>
@@ -502,12 +502,12 @@
     </preference>
     <preference>
     	<name>header</name>
-    	<value></value>
+    	<value>LATEST NEWS</value>
     	<read-only>false</read-only>
     </preference>
     <preference>
     	<name>showHeader</name>
-    	<value>false</value>
+    	<value>true</value>
     	<read-only>false</read-only>
     </preference>
     <preference>
@@ -547,7 +547,7 @@
     </preference>	    	    
     <preference>
     	<name>showTitle</name>
-    	<value>false</value>	    	
+    	<value>true</value>	    	
     	<read-only>false</read-only>
     </preference>
     <preference>
@@ -572,12 +572,12 @@
 		</preference>
 		<preference>
 			<name>showLink</name>
-			<value>false</value>
+			<value>true</value>
 			<read-only>false</read-only>
 		</preference>
 		<preference>
 			<name>showReadmore</name>
-			<value>true</value>
+			<value>false</value>
 			<read-only>false</read-only>
 		</preference>
   </portlet-preferences>
