@@ -5,7 +5,7 @@
 		<component-plugin>
 			<name>Initial taxonomy tree for each site</name>
 			<set-method>addPlugin</set-method>
-			<type>org.exoplatform.services.wcm.portal.artifacts.InitialTaxonomyPlugin</type>
+			<type>org.exoplatform.services.wcm.category.InitialTaxonomyPlugin</type>
 			<description>This plugin deploy taxonomy tree to categories folder of portal when a portal is created</description>
 			<init-params>
 				<value-param>

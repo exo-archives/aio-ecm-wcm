@@ -56,26 +56,22 @@
 					<uri>products/presentation/pcv</uri>
 					<name>pcv</name>
 					<label>#{portal.acme.pcv}</label>
+					<visible>false</visible>
 					<page-reference>portal::acme::pcv</page-reference>
 				</node>
 				<node>
-					<uri>products/presentation/search</uri>
-					<name>search</name>
-					<label>#{portal.acme.search}</label>
-					<page-reference>portal::acme::search</page-reference>
+					<uri>products/presentation/category</uri>
+					<name>category</name>
+					<label>#{portal.acme.category}</label>
+					<page-reference>portal::acme::category</page-reference>
 				</node>
-			</node>
-			<node>
-				<uri>products/category</uri>
-				<name>category</name>
-				<label>#{portal.acme.category}</label>
-				<page-reference>portal::acme::category</page-reference>
-			</node>
-			<node>
-				<uri>products/pclv</uri>
-				<name>pclv</name>
-				<label>#{portal.acme.pclv}</label>
-				<page-reference>portal::acme::pclv</page-reference>
+				<node>
+					<uri>products/presentation/pclv</uri>
+					<name>pclv</name>
+					<label>#{portal.acme.pclv}</label>
+					<visible>false</visible>
+					<page-reference>portal::acme::pclv</page-reference>
+				</node>
 			</node>
 			<node>
 				<uri>products/newsletter</uri>
@@ -96,9 +92,15 @@
 				</node>
 			</node>
 			<node>
+				<uri>products/formgenerator</uri>
+				<name>formgenerator</name>
+				<label>#{portal.acme.formgenerator}</label>
+				<page-reference>portal::acme::formgenerator</page-reference>
+			</node>
+			<node>
 				<uri>products/fastcontentcreator</uri>
 				<name>fastcontentcreator</name>
-				<label>#{portal.acme.fastgenerator}</label>
+				<label>#{portal.acme.fastcontentcreator}</label>
 				<page-reference>portal::acme::fastcontentcreator</page-reference>
 			</node>
 		</node>
@@ -110,13 +112,14 @@
 			<visible>false</visible>
 			<page-reference>portal::acme::printviewer</page-reference>
 		</node>
-		
-		
+
 		<node>
-			<uri>sitemap</uri>
-			<name>sitemap</name>
-			<label>#{portal.acme.sitemap}</label>
-			<page-reference>portal::acme::sitemap</page-reference>	    
+			<uri>searchResult</uri>
+			<name>searchResult</name>
+			<label>#{portal.acme.searchResult}</label>
+			<visible>false</visible>			
+			<page-reference>portal::acme::searchResult</page-reference>	    
 		</node>
+		
 	</page-nodes>
 </node-navigation>

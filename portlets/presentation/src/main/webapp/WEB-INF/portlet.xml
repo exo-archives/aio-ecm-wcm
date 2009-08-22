@@ -276,7 +276,7 @@
 		</portlet-preferences>
 	</portlet>
 	
-	<portlet>
+	<!--portlet>
 		<description xml:lang="EN">Wiki Mode</description>
 		<portlet-name>wikipresentation</portlet-name>
 		<display-name xml:lang="EN">Wiki mode portlet</display-name>
@@ -302,7 +302,7 @@
 			<short-title>Wiki Presentation</short-title>
 			<keywords>portlet, content</keywords>
 		</portlet-info>
-	</portlet>
+	</portlet-->
 	
 	<portlet>
 		<description xml:lang="EN">Category Navigation Portlet</description>
@@ -338,7 +338,7 @@
 			</preference>
 			<preference>
 				<name>treeName</name>
-				<value>Classic</value>
+				<value>Acme</value>
 				<read-only>false</read-only>
 			</preference>
 			<preference>
@@ -358,7 +358,7 @@
 			</preference>
 			<preference>
 				<name>targetPath</name>
-				<value>products/pclv</value>
+				<value>products/presentation/pclv</value>
 				<read-only>false</read-only>
 			</preference>
 		</portlet-preferences>
@@ -483,12 +483,12 @@
 			</preference>
 			<preference>
 				<name>targetPage</name>
-				<value>categories</value>
+				<value>products/presentation/pcv</value>
 				<read-only>false</read-only>
 			</preference>
 			<preference>
 				<name>treeName</name>
-				<value>Classic</value>
+				<value>Acme</value>
 				<read-only>false</read-only>
 			</preference>
 		</portlet-preferences>

@@ -44,6 +44,8 @@ import org.picocontainer.Startable;
  */
 public class NewsletterInitializationService implements Startable {
   
+  private List<String> portalNames;
+  
   /** The category configs. */
   private List<NewsletterCategoryConfig> categoryConfigs;
   
@@ -54,9 +56,8 @@ public class NewsletterInitializationService implements Startable {
   private List<NewsletterUserConfig> userConfigs;
   
   /** The manager service. */
-  private NewsletterManagerService managerService;
+  private NewsletterManagerService newsletterManagerService;
   
-  /** The live portal manager service. */
   private LivePortalManagerService livePortalManagerService;
   
   /** The log. */
@@ -71,12 +72,13 @@ public class NewsletterInitializationService implements Startable {
    */
   //  TODO: chuong.phan: DO NOT REMOVE WCMContentInitializerService, THIS IS DEPENDENCY FOR DEPLOYMENT
   @SuppressWarnings("unchecked")
-  public NewsletterInitializationService(InitParams initParams, NewsletterManagerService managerService, LivePortalManagerService livePortalManagerService, WCMContentInitializerService wcmContentInitializerService) {
+  public NewsletterInitializationService(InitParams initParams, NewsletterManagerService newsletterManagerService, LivePortalManagerService livePortalManagerService, WCMContentInitializerService wcmContentInitializerService) {
+    portalNames = initParams.getValuesParam("portalNames").getValues();
     categoryConfigs = initParams.getObjectParamValues(NewsletterCategoryConfig.class);
     subscriptionConfigs = initParams.getObjectParamValues(NewsletterSubscriptionConfig.class);
     userConfigs = initParams.getObjectParamValues(NewsletterUserConfig.class);
-    this.managerService = managerService;
     this.livePortalManagerService = livePortalManagerService;
+    this.newsletterManagerService = newsletterManagerService;
   }
 
   /* (non-Javadoc)
@@ -86,9 +88,7 @@ public class NewsletterInitializationService implements Startable {
     log.info("Starting NewsletterInitializationService ... ");
     SessionProvider sessionProvider = SessionProvider.createSystemProvider();
     try {
-      List<Node> portalNodes = livePortalManagerService.getLivePortals(sessionProvider);
-      if (portalNodes.isEmpty()) return;
-      Node dummyNode = portalNodes.get(0);
+      Node dummyNode = livePortalManagerService.getLivePortal(portalNames.get(0), sessionProvider);
       Session session = dummyNode.getSession();
       Node serviceFolder = session.getRootNode().getNode("exo:services");
       Node newsletterInitializationService = null;
@@ -98,38 +98,35 @@ public class NewsletterInitializationService implements Startable {
         newsletterInitializationService = serviceFolder.addNode("NewsletterInitializationService", "nt:unstructured");
       }
       if (!newsletterInitializationService.hasNode("NewsletterInitializationServiceLog")) {
-        for (Node portalNode : portalNodes) {
-          String portalName = portalNode.getName();
-          NewsletterCategoryHandler categoryHandler = managerService.getCategoryHandler();
+        for (String portalName : portalNames) {
+          NewsletterCategoryHandler categoryHandler = newsletterManagerService.getCategoryHandler();
           for (NewsletterCategoryConfig categoryConfig : categoryConfigs) {
             categoryHandler.add(portalName, categoryConfig, sessionProvider);
           }
           
-          NewsletterSubscriptionHandler subscriptionHandler = managerService.getSubscriptionHandler();
+          NewsletterSubscriptionHandler subscriptionHandler = newsletterManagerService.getSubscriptionHandler();
           for (NewsletterSubscriptionConfig subscriptionConfig : subscriptionConfigs) {
             subscriptionHandler.add(sessionProvider, portalName, subscriptionConfig);
           }
-          
-          String userPath = NewsletterConstant.generateUserPath(portalName);
-          Node userFolderNode = (Node)session.getItem(userPath);
-          ExtendedNode extUserFolderNode = (ExtendedNode)userFolderNode ;
-          if(extUserFolderNode.canAddMixin("exo:privilegeable")) extUserFolderNode.addMixin("exo:privilegeable");
-          String[] arrayPers = {PermissionType.READ, PermissionType.ADD_NODE, PermissionType.SET_PROPERTY, PermissionType.REMOVE} ;
-          extUserFolderNode.setPermission("any", arrayPers) ;
-          
-          NewsletterManageUserHandler manageUserHandler = managerService.getManageUserHandler();
+
+          Node userNode = null;
+          NewsletterManageUserHandler manageUserHandler = newsletterManagerService.getManageUserHandler();
           for (NewsletterUserConfig userConfig : userConfigs) {
-            manageUserHandler.add(portalName, userConfig.getMail(), sessionProvider);
+            userNode = manageUserHandler.add(portalName, userConfig.getMail(), sessionProvider);
           }
+          ExtendedNode userFolderNode = (ExtendedNode) userNode.getParent();
+          if(userFolderNode.canAddMixin("exo:privilegeable")) 
+            userFolderNode.addMixin("exo:privilegeable");
+          userFolderNode.setPermission("any", PermissionType.ALL) ;
+          
+          Node newsletterInitializationServiceLog = newsletterInitializationService.addNode("NewsletterInitializationServiceLog", "nt:file");
+          Node newsletterInitializationServiceLogContent = newsletterInitializationServiceLog.addNode("jcr:content", "nt:resource");
+          newsletterInitializationServiceLogContent.setProperty("jcr:encoding", "UTF-8");
+          newsletterInitializationServiceLogContent.setProperty("jcr:mimeType", "text/plain");
+          newsletterInitializationServiceLogContent.setProperty("jcr:data", "Newsletter was created successfully");
+          newsletterInitializationServiceLogContent.setProperty("jcr:lastModified", new Date().getTime());
+          session.save();
         }
-        
-        Node newsletterInitializationServiceLog = newsletterInitializationService.addNode("NewsletterInitializationServiceLog", "nt:file");
-        Node newsletterInitializationServiceLogContent = newsletterInitializationServiceLog.addNode("jcr:content", "nt:resource");
-        newsletterInitializationServiceLogContent.setProperty("jcr:encoding", "UTF-8");
-        newsletterInitializationServiceLogContent.setProperty("jcr:mimeType", "text/plain");
-        newsletterInitializationServiceLogContent.setProperty("jcr:data", "Newsletter was created successfully");
-        newsletterInitializationServiceLogContent.setProperty("jcr:lastModified", new Date().getTime());
-        session.save();
       }
     } catch (Throwable e) {
       log.info("Starting NewsletterInitializationService fail because of " + e.getMessage());

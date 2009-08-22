@@ -69,7 +69,7 @@ public class UIPCLVContainer extends UIContainer {
 		UIPortal uiPortal = Util.getUIPortal();
 		String portalURI = portalRequestContext.getPortalURI();
 		String requestURI = requestWrapper.getRequestURI();
-		String pageNodeSelected = uiPortal.getSelectedNode().getName();
+		String pageNodeSelected = uiPortal.getSelectedNode().getUri();
 		
 		String parameters = null;
 		try {

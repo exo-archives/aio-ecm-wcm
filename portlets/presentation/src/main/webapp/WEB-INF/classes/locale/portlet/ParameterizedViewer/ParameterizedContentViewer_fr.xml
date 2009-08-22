@@ -34,11 +34,11 @@
     	<print>Imprimer cette page</print>
     </quickPrint>
   </UIContentViewerContainer>
-  <UIPopupWindow>
+  <UIContentEdittingPopupWindow>
   	<title>
 	  	<UIDocumentDialogForm>Document sous forme de dialogue</UIDocumentDialogForm>
   	</title>
-  </UIPopupWindow>
+  </UIContentEdittingPopupWindow>
   <UIPresentationContainer>
   	<draft>Draft</draft>
   </UIPresentationContainer>

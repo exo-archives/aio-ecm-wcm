@@ -273,7 +273,7 @@ public class UIPCVContainer extends UIContainer {
    * @throws Exception the exception
    */
   private Node getNodeByCategory(String parameters) throws Exception {
-    
+    if (parameters == null) return null;
     TaxonomyService taxonomyService = getApplicationComponent(TaxonomyService.class);
     String[] params = parameters.split("/");
     Node taxonomyTree = taxonomyService.getTaxonomyTree(this.getRepository(), params[0]);

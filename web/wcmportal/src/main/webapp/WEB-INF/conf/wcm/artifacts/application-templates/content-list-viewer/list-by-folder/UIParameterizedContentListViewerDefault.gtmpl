@@ -28,7 +28,7 @@
 						<%
 						}
 					%>
-					<div class="ClearBoth"><span></span></div>
+					<!--div class="ClearBoth"><span></span></div-->
 				</div>
 				<%
 					}

@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
 import org.exoplatform.ecm.webui.utils.Utils;
+import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.impl.DMSConfiguration;
@@ -63,18 +64,23 @@ public class UICategoryNavigationTreeBase extends UITree {
     }
     PortletRequestContext porletRequestContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) porletRequestContext.getRequest();
+    // requestURI: /portal/private/acme/products/presentation/category
     String requestURI = requestWrapper.getRequestURI();
     PortletPreferences portletPreferences = UICategoryNavigationUtils.getPortletPreferences();
     String preferenceTreeName = portletPreferences.getValue(UICategoryNavigationConstant.PREFERENCE_TREE_NAME, "");
     String categoryPath = String.valueOf(getId(obj));
+    // shortPath: /Classic/News
     String shortPath = "";
     if (requestURI.indexOf(preferenceTreeName) < 0) {
       shortPath = categoryPath.substring(categoryPath.indexOf(preferenceTreeName) - 1);  
     } else {
       shortPath = categoryPath.substring(categoryPath.lastIndexOf("/"));
     }
-
-    String objId = requestURI + shortPath;
+    // portalURI: /portal/private/acme/
+    String portalURI = Util.getPortalRequestContext().getPortalURI();
+    // preferenceTargetPage: products/presentation/pclv
+    String preferenceTargetPage = portletPreferences.getValue(UICategoryNavigationConstant.PREFERENCE_TARGET_PAGE, "");
+    String objId = portalURI + preferenceTargetPage +  shortPath;
     StringBuilder builder = new StringBuilder();
     if(nodeIcon.equals(getExpandIcon())) {
       builder.append(" <a class=\"").append(nodeIcon).append(" ").append(nodeTypeIcon).append("\" href=\"").append(objId).append("\">") ;
@@ -137,7 +143,7 @@ public class UICategoryNavigationTreeBase extends UITree {
     String preferenceTreeName = portletPreferences.getValue(UICategoryNavigationConstant.PREFERENCE_TREE_NAME, "");
     String preferenceTargetPage = portletPreferences.getValue(UICategoryNavigationConstant.PREFERENCE_TARGET_PAGE, "");
     String backPath = requestURI.substring(0, requestURI.lastIndexOf("/"));
-    if (backPath.endsWith(preferenceTargetPage) || backPath.endsWith(Util.getUIPortal().getName())) backPath = "javascript:void(0)";
+    if (backPath.endsWith(preferenceTargetPage) || requestURI.endsWith(Util.getUIPortal().getSelectedNode().getUri())) backPath = "javascript:void(0)";
     else if (backPath.endsWith(preferenceTreeName)) backPath = backPath.substring(0, backPath.lastIndexOf("/"));
     return backPath;
   }

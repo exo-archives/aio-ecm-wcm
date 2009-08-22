@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.services.wcm.portal.artifacts;
+package org.exoplatform.services.wcm.category;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,6 +51,7 @@ import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+import org.exoplatform.services.wcm.portal.artifacts.BasePortalArtifactsPlugin;
 
 /**
  * Created by The eXo Platform SAS

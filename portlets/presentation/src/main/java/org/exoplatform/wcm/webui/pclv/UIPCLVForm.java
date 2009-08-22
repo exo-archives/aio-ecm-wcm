@@ -300,7 +300,7 @@ public class UIPCLVForm extends UIForm {
 		String link = null;
 		String portalURI = portalRequestContext.getPortalURI();
 		String requestURI = requestWrapper.getRequestURI();
-		String pageNodeSelected = uiPortal.getSelectedNode().getName();
+		String pageNodeSelected = uiPortal.getSelectedNode().getUri();
 		String parameters = null;
 
 		try {

@@ -1,6 +1,5 @@
 <div class="$uicomponent.id">
 	<% uiform.begin() %>
-		<a href="<%= uicomponent.event("OpenWebcontentSelectorForm") %>" class="ActionButton LightBlueStyle"><%= _ctx.appRes(uicomponent.getName() + ".action.OpenWebcontentSelectorForm") %></a>
 		<div class="HorizontalLayout" style="padding:10px 0px;margin:5px">
 			<div class="UIFormInput">
 				<table class="UIFormGrid" style="width:95%">
