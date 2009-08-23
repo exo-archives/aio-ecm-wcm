@@ -80,13 +80,13 @@
 													%><div class="Title">$itemName</div><%
 												}
 											}
-												if(isShowDraft) { 
-													%>
-														<span>[ </span>
-														<a class="CaptionDraft"><%= _ctx.appRes("UIContentListPresentationDefault.label.draft") %></a>, <a class="CaptionEdit" href="$contentEditLink"><%= _ctx.appRes("UIContentListPresentationDefault.action.edit") %></a>
-														<span> ]</span>
-													<% 
-												}
+											if(isShowDraft) { 
+												%>
+													<span>[ </span>
+													<a class="CaptionDraft"><%= _ctx.appRes("UIContentListPresentationDefault.label.draft") %></a>, <a class="CaptionEdit" href="$contentEditLink"><%= _ctx.appRes("UIContentListPresentationDefault.action.edit") %></a>
+													<span> ]</span>
+												<% 
+											}
 											if (isShowSummary) { 
 												%><div class="Summary">$itemSummary</div><% 
 											}
