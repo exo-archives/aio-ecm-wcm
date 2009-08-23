@@ -10,7 +10,7 @@
 	<groupId>org.exoplatform.ecm.wcm</groupId>
 	<artifactId>config</artifactId>
 	<name>eXo WCM Config</name>
-	<version>1.2-SNAPSHOT</version>
+	<version>1.2rc3</version>
 	<packaging>pom</packaging>
 
 	<modules>        
