@@ -23,7 +23,7 @@
   </UIPublicationComponentStatus>
   <UIPopupWindow>
   	<title>
-  		<UIPublicationContainer>Gérer le publication</UIPublicationContainer>
+  		<UIPublicationContainer>Gérer la publication</UIPublicationContainer>
   	</title>
   </UIPopupWindow>
   <UITabPane>
@@ -31,14 +31,14 @@
       <UIPublishingPanel>Panneau de publication</UIPublishingPanel>
       <UIPublicationPanel>Publication de l'état</UIPublicationPanel>
       <UIPublicationPagesContainer>Publication des pages</UIPublicationPagesContainer>
-      <UIPublicationHistory>Publication de l'histoire</UIPublicationHistory>
+      <UIPublicationHistory>Historique de Publication</UIPublicationHistory>
       <UIVersionViewer>Visualiseur de version</UIVersionViewer>
     </title>
   </UITabPane>
   <UIClvPopupContainer>
   	<title>
-  		<UIClvPopupContainer>Content list viewer popup container</UIClvPopupContainer>
-  		<UIPublishClvChooser>Choisir un CLV portlet</UIPublishClvChooser>
+  		<UIClvPopupContainer>Conteneur de list de contenus</UIClvPopupContainer>
+  		<UIPublishClvChooser>Choisir un bloc de contenus</UIPublishClvChooser>
   	</title>
   	<action>
  			<close>Fermer</close>
@@ -65,25 +65,25 @@
   		<close>Fermer</close>
   	</button>
   	<revisions>
-  		<version>Révisions</version>
+  		<version>Versions</version>
   		<date>Date</date>
   		<author>Auteur</author>
-  		<status>L'état</status>
-  		<action>L'action</action>
-  		<label>Révision</label>
-  		<none>Non révision</none>
-  		<seeall>Voir toute les révisions</seeall>
-  		<currentVersion>Révision courant</currentVersion>
-  		<confirm>You will lost your draft work, do you really want to restore this revision and replace the current revision ?</confirm>
+  		<status>Etat</status>
+  		<action>Action</action>
+  		<label>Version</label>
+  		<none>Aucune version</none>
+  		<seeall>Voir toutes les versions</seeall>
+  		<currentVersion>Version courante</currentVersion>
+  		<confirm>Vous allez perdre votre brouillon, voulez-vous restaurer cette version et remplacer le brouillon courant ?</confirm>
   	</revisions>
   	<status>
   		<version>Révision</version>
-  		<title>L'état</title>
-  		<enrolled>Enrôler</enrolled>
-  		<draft>Draft</draft>
-  		<awaiting>Awaiting</awaiting>
-  		<live>Live</live>
-  		<obsolete>Obsolete</obsolete>
+  		<title>Etat</title>
+  		<enrolled>Créé</enrolled>
+  		<draft>Brouillon</draft>
+  		<awaiting>En attente</awaiting>
+  		<live>Publié</live>
+  		<obsolete>Obsolète</obsolete>
   	</status>
   	<scheduled>
   		<title>Planifier</title>
@@ -91,18 +91,18 @@
   		<to>à</to>
   	</scheduled>
   	<title>
-  		<preview>Prévoir</preview>
-  		<restore>Restorer</restore>
+  		<preview>Prévisualiser</preview>
+  		<restore>Restaurer</restore>
   	</title>
   	<msg>
     	<have-no-view-template>Le formulaire de consultation n'est pas supporté</have-no-view-template>
-    	<restore-complete>Restore completed</restore-complete>
+    	<restore-complete>Restauration complète</restore-complete>
     </msg>
   </UIPublicationPanel>
   <UIPublicationHistory>
   	<header>
   		<date>La date</date>
-  		<versionName>Le nom de révision</versionName>
+  		<versionName>Le nom de version</versionName>
   		<currentState>L'état courant</currentState>
   		<user>L'auteur</user>
   		<description>La description</description>
@@ -111,10 +111,10 @@
   <Publication>
   	<log>
 	  	<description>
-	  		<enrolled>Le contenu a enrôlé</enrolled>
-	  		<change-to-draft-state>Le contenu a créé</change-to-draft-state>
-	  		<change-to-live-state>de Draft à Live</change-to-live-state>
-	  		<change-to-obsolete-state>de Live à Obsolete</change-to-obsolete-state>
+	  		<enrolled>Le contenu a été créé</enrolled>
+	  		<change-to-draft-state>Modification d'un brouillon</change-to-draft-state>
+	  		<change-to-live-state>Publication d'un brouillon</change-to-live-state>
+	  		<change-to-obsolete-state>Dépublication d'une version</change-to-obsolete-state>
 	  	</description>
   	</log>
   </Publication>
