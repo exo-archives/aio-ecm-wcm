@@ -39,8 +39,8 @@ import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.organization.OrganizationService;
-import org.exoplatform.services.organization.UserProfile;
-import org.exoplatform.services.organization.UserProfileHandler;
+import org.exoplatform.services.organization.User;
+import org.exoplatform.services.organization.UserHandler;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
 import org.exoplatform.services.wcm.images.RESTImagesRendererService;
@@ -299,8 +299,18 @@ import org.exoplatform.webui.event.EventListener;
    * @throws Exception the exception
    */
   public String getTitle(Node node) throws Exception {
-    return node.hasProperty("exo:title") ? node.getProperty("exo:title").getValue().getString()
-        : node.getName();
+	  String title = null;
+	  if (node.hasProperty("exo:title")) {
+		  title = node.getProperty("exo:title").getValue().getString();
+	  } else if (node.hasNode("jcr:content")) {
+		  Node content = node.getNode("jcr:content");
+		  if (content.hasProperty("dc:title")) {
+			  title = content.getProperty("dc:title").getValue().getString();
+		  }
+	  }
+	  if (title==null) title = node.getName();
+	  
+	  return title;
   }
 
   /**
@@ -313,8 +323,16 @@ import org.exoplatform.webui.event.EventListener;
    * @throws Exception the exception
    */
   public String getSummary(Node node) throws Exception {
-    return node.hasProperty("exo:summary") ? node.getProperty("exo:summary").getValue().getString()
-        : null;
+	  String desc = null;
+	  if (node.hasProperty("exo:summary")) {
+		  desc = node.getProperty("exo:summary").getValue().getString();
+	  } else if (node.hasNode("jcr:content")) {
+		  Node content = node.getNode("jcr:content");
+		  if (content.hasProperty("dc:description")) {
+			  desc = content.getProperty("dc:description").getValue().getString();
+		  }
+	  }
+	  return desc;
   }
 
   /**
@@ -357,9 +375,10 @@ import org.exoplatform.webui.event.EventListener;
     if (node.hasProperty("exo:owner")) {
       String ownerId = node.getProperty("exo:owner").getValue().getString();
       OrganizationService organizationService = getApplicationComponent(OrganizationService.class);
-      UserProfileHandler handler = organizationService.getUserProfileHandler();
-      UserProfile userProfile = handler.findUserProfileByName(ownerId);
-      return userProfile.getUserInfoMap().get("user.name.given");
+      UserHandler handler = organizationService.getUserHandler();
+      User user = handler.findUserByName(ownerId);
+      return user.getFullName();
+      
     }
     return null;
   }

@@ -68,7 +68,9 @@ public class CreateLivePortalEventListener extends Listener<DataStorageImpl, Por
     .getComponentInstanceOfType(WCMConfigurationService.class);        
     try {
       Node portal = livePortalManagerService.getLivePortal(portalConfig.getName(), sessionProvider);
-      createPortalDrive(portal,portalConfig,configurationService,manageDriveService);
+      if (!"backoffice".equals(portal.getName())) {
+    	  createPortalDrive(portal,portalConfig,configurationService,manageDriveService);
+      }
     } catch (Exception e) {
       log.error("Error when create drive for portal: " + portalConfig.getName(), e);
     }      

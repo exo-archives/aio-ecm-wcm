@@ -215,7 +215,7 @@ public class XSkinService implements Startable {
     String cssData = getCSSDataBySQLQuery(portal.getSession(),statement, exceptedPath);
     if(appendedCSS != null) {
       if(cssData == null) cssData = appendedCSS;
-      else cssData = cssData.concat(appendedCSS);
+//      else cssData = cssData.concat(appendedCSS);
     } 
     if(!allowEmptyCSS) {
       if(cssData == null || cssData.length() == 0)        

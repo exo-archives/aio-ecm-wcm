@@ -6,17 +6,24 @@
 	 	* Aug 20, 2009  
 	 	*/
 
+	 	import javax.jcr.Node;
 		import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
 		import org.exoplatform.wcm.webui.clv.UICLVPortlet;
 %>
 
 <div id="$uicomponent.id" class="TwoColumnsCLVTemplate">
-	<div class="News">
+	<div class="CLV">
 		<%
 			def header = uicomponent.getHeader();
 			def isShowHeader = uicomponent.isShowHeader() && header != null && header.trim().length() != 0;
 			if (isShowHeader) {
-				%><div class="TitleNews"><%= uicomponent.getHeader() %></div><%
+			%>
+					<div class="TitleBarL">
+						<div class="TitleBarR">
+							<div class="TitleBarM"><%= uicomponent.getHeader() %></div>
+						</div>
+					</div>
+			<%
 			}
 	
 			if (uicomponent.getUIPageIterator().getAvailable() == 0) {
@@ -26,6 +33,9 @@
 					</div>
 				<%
 			} else {
+			%>
+		    	<div class="Contents">			
+			<%
 			  def currentPageData = uicomponent.getCurrentPageData();							
 				for (def i = 0; i < currentPageData.size(); i++) {
 				  def node = currentPageData.get(i);
@@ -53,34 +63,32 @@
 					def itemSummary = uicomponent.getSummary(viewNode);
 					def isShowSummary = uicomponent.isShowField(UICLVPortlet.SHOW_SUMMARY) && itemSummary != null;
 					
-					def contentkEdittingLink = uicomponent.event("EditContent", viewNode.getPath());
-				  if (i % 2 == 0) {
-				    %>
-				    	<div class="ContentNews">
-								<div class="ContentNewsLeft">
-									<%
-										if(isShowImage) {
-										  %><a class="Image"><img alt="$imgSrc" src="$imgSrc" /></a><%
-										}
+					def contentEditLink = uicomponent.event("EditContent", viewNode.getPath());
+								%>
+								<div class="Column2">
+								<%
+									if(isShowImage) {
+									  %><a class="Image"><img alt="$imgSrc" src="$imgSrc" /></a><%
+									}
 									%>
 									<div class="Content">
 										<%
 											if (isShowTitle) {
 												if (isShowLink) {
-													%><span><a href="$itemLink">$itemName</a></span><br/><%
+													%><div class="Title"><a href="$itemLink">$itemName</a></div><%
 												} else {
-													%><span>$itemName</span><br/><%
+													%><div class="Title">$itemName</div><%
 												}
+											}
 												if(isShowDraft) { 
 													%>
 														<span>[ </span>
-														<a class="CaptionDraft"><%= _ctx.appRes("UIContentListPresentationDefault.label.draft") %></a>, <a class="CaptionEdit" href="$contentkEdittingLink"><%= _ctx.appRes("UIContentListPresentationDefault.action.edit") %></a>
+														<a class="CaptionDraft"><%= _ctx.appRes("UIContentListPresentationDefault.label.draft") %></a>, <a class="CaptionEdit" href="$contentEditLink"><%= _ctx.appRes("UIContentListPresentationDefault.action.edit") %></a>
 														<span> ]</span>
 													<% 
 												}
-											}
 											if (isShowSummary) { 
-												%>$itemSummary<% 
+												%><div class="Summary">$itemSummary</div><% 
 											}
 										%>
 									</div>
@@ -91,48 +99,13 @@
 									%>
 									<div class="ClearBoth"><span></span></div>
 								</div>
-								<%
-				  } else {
-								%>
-								<div class="ContentNewsRight">
-									<%
-										if(isShowImage) {
-										  %><a class="Image"><img alt="$imgSrc" src="$imgSrc" /></a><%
-										}
-									%>
-									<div class="Content">
-										<%
-											if (isShowField) {
-												if (isShowLink) {
-													%><span><a href="$itemLink">$itemName</a></span><br/><%
-												} else {
-													%><span>$itemName</span><br/><%
-												}
-												if(isShowDraft) { 
-													%>
-														<span>[ </span>
-														<a class="CaptionDraft"><%= _ctx.appRes("UIContentListPresentationDefault.label.draft") %></a>, <a class="CaptionEdit" href="$contentkEdittingLink"><%= _ctx.appRes("UIContentListPresentationDefault.action.edit") %></a>
-														<span> ]</span>
-													<% 
-												}
-											}
-											if (isShowSummary) { 
-												%>$itemSummary<% 
-											}
-										%>
-									</div>
-									<%
-										if (isShowReadmore) {
-										  %><div class="LinkMore"><a href="$itemLink"><%= _ctx.appRes("UIContentListPresentationDefault.label.readmore") %></a></div><%
-										}
-									%>
-									<div class="ClearBoth"><span></span></div>
-								</div>
-								<div class="ClearBoth"><span></span></div>
-							</div>
+							<% if ((i+1) % 2 == 0) { %>	
+							<div class="ClearBoth"><span></span></div>
+							<% } %>
+							
 				    <%
-				  }
 				}
+			%>	</div> <%
 			}
 		%>
 	</div>
