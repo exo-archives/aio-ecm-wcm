@@ -4,7 +4,6 @@
     <acme>
       <home>Home</home>
       <news>News</news>
-      <products>Products</products>
       <services>Services</services>
       <search>Search</search>
       <contact>Contact us</contact>
@@ -25,12 +24,12 @@
       <overview>Overview</overview>
       <events>Events</events>
       <publications>Publications</publications>
-      <newsletter>Newsletter</newsletter>
-      <newsletterviewer>Newsletter Viewer</newsletterviewer>
+      <newsletters>Newsletters</newsletters>
       <newslettermanager>Newsletter Manager</newslettermanager>
       <fastcontentcreator>Fast Content Creator</fastcontentcreator>
       <formgenerator>Form Generator</formgenerator>
       <presentation>Presentation</presentation>
+      <contactus>Contact Us</contactus>
     </acme>
   </portal>
 </bundle>

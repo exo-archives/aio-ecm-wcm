@@ -13,7 +13,7 @@
       <Edit>Edit</Edit>
       <Moderation>Moderation</Moderation>
       <CreateLetter>New Letter</CreateLetter>  
-      <UpdateNewsletter>Update Newsletter's infor</UpdateNewsletter>
+      <UpdateNewsletter>Update sending parameters</UpdateNewsletter>
     </action>
     <title>
     	<eXoNewsletter>eXo Newsletter</eXoNewsletter>
@@ -89,10 +89,10 @@
       <inputModeratorEmpty>You must select user or member moderator!</inputModeratorEmpty>
     </msg>
 		<label>
-    	<CategoryName>Category Name</CategoryName>
-    	<CategoryTitle>Category Title</CategoryTitle>
-    	<CategoryDescription>Category Description</CategoryDescription>
-			<FormCategoryModerator>Category moderator</FormCategoryModerator>
+    	<CategoryName>Name</CategoryName>
+    	<CategoryTitle>Title</CategoryTitle>
+    	<CategoryDescription>Description</CategoryDescription>
+			<FormCategoryModerator>Moderator</FormCategoryModerator>
 			<CategoryModerator></CategoryModerator>
 		</label>
 		<action>
@@ -175,8 +175,8 @@
       <subcriptionNameIsAlreadyExist>This subcription's name is already exist!</subcriptionNameIsAlreadyExist>
     </msg>
     <title>
-    	<SubcriptionName>Subcription Name</SubcriptionName>
-    	<SubcriptionTitle>Subcription Title</SubcriptionTitle>
+    	<SubcriptionName>Name</SubcriptionName>
+    	<SubcriptionTitle>Title</SubcriptionTitle>
     	<SubcriptionDescription>Description</SubcriptionDescription>
     	<CategoryName>Category</CategoryName>
     </title>
@@ -192,17 +192,17 @@
 		</action>
 		<msg>
 			<UpdateBeforeSave>
-				Please click to update newsletter's infor before send or save! 
+				Please update newsletter's sending preferences before send or save! 
 			</UpdateBeforeSave>
 			<DateTimeIsNotNull>
-				Send date is null. Please check again!
+				Send date is empty. Please check again!
 			</DateTimeIsNotNull>
 			<DateTimeIsInvalid>
 				Send date is invalid. Please check again!
 			</DateTimeIsInvalid>
-			<UpdateInformationSuccessful>Information is updated successful</UpdateInformationSuccessful>
+			<UpdateInformationSuccessful>Information is updated successfully</UpdateInformationSuccessful>
 			<NodeNameInvalid>
-				Can't create newsletter because Newsletter's name is already exist. Please try again!
+				Can't create newsletter because this name already exists. Please try again!
 			</NodeNameInvalid>
 		</msg>
 	</UINewsletterEntryForm>
@@ -237,7 +237,7 @@
 				<BanOrUnBanUser>Ban/Unban User</BanOrUnBanUser>
 				<DeleteUser>Delete User</DeleteUser>
 				<Addministrator>Administrator</Addministrator>
-				<AddAdministrator>Set is Administrator of Newsletter</AddAdministrator>
+				<AddAdministrator>Set as Administrator of Newsletters</AddAdministrator>
 				<DeleteAdministrator>Delete Administrator</DeleteAdministrator>
 			</title>
 		</action>

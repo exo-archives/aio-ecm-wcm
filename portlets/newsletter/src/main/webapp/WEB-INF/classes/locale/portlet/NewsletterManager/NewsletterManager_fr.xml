@@ -13,7 +13,7 @@
       <Edit>Modifier</Edit>
       <Moderation>Modération</Moderation>
       <CreateLetter>Nouvelle Lettre</CreateLetter> 
-      <UpdateNewsletter>Mise à jour de l'information</UpdateNewsletter> 
+      <UpdateNewsletter>Mise à jour de l'abonnement</UpdateNewsletter> 
     </action>
     <title>
     	<eXoNewsletter>eXo Newsletter</eXoNewsletter>
@@ -30,13 +30,13 @@
 	
 	<UIWebcontentSelectorFormPopupWindow>
 		<title>
-			<UINewsletterEntryWebcontentSelectorForm>Webcontent sélecteur de la forme</UINewsletterEntryWebcontentSelectorForm>
+			<UINewsletterEntryWebcontentSelectorForm>Sélection des formulaires</UINewsletterEntryWebcontentSelectorForm>
 		</title>
 	</UIWebcontentSelectorFormPopupWindow>
 	
 	<UIWebcontentSelectorPopupWindow>
 		<title>
-			<UIWebContentTabSelector>Webcontent sélecteur</UIWebContentTabSelector>
+			<UIWebContentTabSelector>Sélection de contenus</UIWebContentTabSelector>
 		</title>
 	</UIWebcontentSelectorPopupWindow>
 	
@@ -48,26 +48,26 @@
 	
 	<FormWebcontentSelector>
 		<title>
-			<SelectWebcontent>Sélectionnez webContent</SelectWebcontent>
+			<SelectWebcontent>Sélectionnez un contenu</SelectWebcontent>
 		</title>
 	</FormWebcontentSelector>
 	
 	<UICategoryFormPopupWindow>
 		<title>
-			<UICategoryForm>Catégorie forme</UICategoryForm>
+			<UICategoryForm>Edition d'une Catégorie</UICategoryForm>
 		</title>
 	</UICategoryFormPopupWindow>
 	
 	<UISubscriptionFormPopupWindow>
 		<title>
-			<UISubcriptionForm>Formulaire d'inscription</UISubcriptionForm>
-			<UIManagerUsers>Gestionnaire des utilisateurs</UIManagerUsers>
+			<UISubcriptionForm>Formulaire d'abonnement</UISubcriptionForm>
+			<UIManagerUsers>Gestion des utilisateurs</UIManagerUsers>
 		</title>
 	</UISubscriptionFormPopupWindow>
 	
 	<UINewsletterEntryFormPopupWindow>
 		<title>
-			<UINewsletterEntryContainer>Newsletter bulletin d'inscription</UINewsletterEntryContainer>
+			<UINewsletterEntryContainer>Abonnement aux Newsletters</UINewsletterEntryContainer>
 		</title>
 		<action>
 			<Cancel>Annuler</Cancel>
@@ -76,23 +76,23 @@
 	
 	<UIManagerUsersFormPopupWindow>
 		<title>
-			<UIManagerUsers>Gestionnaire des utilisateurs</UIManagerUsers>
+			<UIManagerUsers>Gestion des utilisateurs</UIManagerUsers>
 		</title>
 	</UIManagerUsersFormPopupWindow>
 	
   <UICategoryForm>
     <msg>
-      <saveSuccess>Catégorie a été enregistré.</saveSuccess>
-      <categoryNameIsNotEmpty>Nom de la catégorie ne peut pas être vide!</categoryNameIsNotEmpty>
-      <categoryTitleIsNotEmpty>Catégorie de titre ne peut pas être vide!</categoryTitleIsNotEmpty>
-      <categoryNameIsAlreadyExist>Cette catégorie est le nom existe déjà!</categoryNameIsAlreadyExist>
-      <inputModeratorEmpty>Vous devez sélectionner l'utilisateur ou le membre de modérateur!</inputModeratorEmpty>
+      <saveSuccess>La catégorie a été enregistrée.</saveSuccess>
+      <categoryNameIsNotEmpty>Le nom de la catégorie ne peut pas être vide!</categoryNameIsNotEmpty>
+      <categoryTitleIsNotEmpty>Le titre de la catégorie ne peut pas être vide!</categoryTitleIsNotEmpty>
+      <categoryNameIsAlreadyExist>Ce nom de catégorie existe déjà!</categoryNameIsAlreadyExist>
+      <inputModeratorEmpty>Vous devez sélectionner un modérateur</inputModeratorEmpty>
     </msg>
 		<label>
-    	<CategoryName>Nom de la Catégorie</CategoryName>
-    	<CategoryTitle>Catégorie Titre</CategoryTitle>
-    	<CategoryDescription>Catégorie Description</CategoryDescription>
-			<FormCategoryModerator>Catégorie modérateur</FormCategoryModerator>
+    	<CategoryName>Nom</CategoryName>
+    	<CategoryTitle>Titre</CategoryTitle>
+    	<CategoryDescription>Description</CategoryDescription>
+			<FormCategoryModerator>Modérateur</FormCategoryModerator>
 			<CategoryModerator></CategoryModerator>
 		</label>
 		<action>
@@ -105,9 +105,9 @@
     <title>
     	<SubScription>Abonnement</SubScription>
     	<NumberOfUser>Nombre d'utilisateurs</NumberOfUser>
-    	<AWaitingLetter>En attente de la lettre</AWaitingLetter>
+    	<AWaitingLetter>En attente d'envoi</AWaitingLetter>
     	<NewsLetter>Nouvelle lettre</NewsLetter>
-    	<NewsSubscription>Nouvelle inscription</NewsSubscription>
+    	<NewsSubscription>Nouvel abonnement</NewsSubscription>
     	<NewsCategory>Nouvelle catégorie</NewsCategory>
     	<Administration>Administration</Administration>
     </title>
@@ -119,13 +119,13 @@
     	<confirmDeleteSubscription>Êtes-vous sûr de vouloir supprimer cet abonnement?</confirmDeleteSubscription>
     	<checkOnlyOneSubScriptionToEdit>S'il vous plaît cocher une seule case d'abonnement à modifier!</checkOnlyOneSubScriptionToEdit>
     	<checkOnlyOneSubScriptionToDelete>S'il vous plaît cocher une seule case pour supprimer l'abonnement!</checkOnlyOneSubScriptionToDelete>
-    	<subscriptionNotfound>Abonnement nom n'existe pas!</subscriptionNotfound>
+    	<subscriptionNotfound>Cet abonnement n'existe pas!</subscriptionNotfound>
     	<checkOnlyOneSubScriptionToOpen>S'il vous plaît cocher une seule case d'abonnement à ouvrir!</checkOnlyOneSubScriptionToOpen>
-    	<convertSuccessful>Convertir succès!</convertSuccessful>
-    	<templateIsExist>Il existe déjà un modèle ont le même nom! S'il vous plaît vérifier à nouveau.</templateIsExist>
+    	<convertSuccessful>Lettre convertie en tant que modèle avec succès</convertSuccessful>
+    	<templateIsExist>Il existe déjà un modèle avec le même nom! Merci de modifier le titre et de réessayer.</templateIsExist>
     </msg>
     <title>
-    	<ManageCategory>Gérer la catégorie!</ManageCategory>
+    	<ManageCategory>Gérer la catégorie</ManageCategory>
     	<EditCategory>Éditer une catégorie</EditCategory>
     	<DeleteCategory>Supprimer la catégorie</DeleteCategory>
     	<Edit>Éditer</Edit>
@@ -138,13 +138,13 @@
 	<FormCategoryModerator>
 		<title>
 			<SelectUser>Sélectionnez l'utilisateur</SelectUser>
-			<SelectMember>Sélectionnez membre</SelectMember>
+			<SelectMember>Sélectionnez le membre</SelectMember>
 		</title>
 	</FormCategoryModerator>
 	
 	<UIGroupMemberSelector>
 		<label>
-			<selectGroup>Sélectionnez la groupe</selectGroup>
+			<selectGroup>Sélectionnez le groupe</selectGroup>
 			<selectMembership>Sélectionnez l'adhésion</selectMembership>
 		</label>
 	</UIGroupMemberSelector>
@@ -157,26 +157,26 @@
   
 	<UIUserMemberSelectorPopupWindow>
 		<title>
-			<UIUserMemberSelector>User sélecteur</UIUserMemberSelector>
+			<UIUserMemberSelector>Sélecteur d'utilisateur</UIUserMemberSelector>
 		</title>
 	</UIUserMemberSelectorPopupWindow>
 	
 	<UIGroupMemberSelectorPopupWindow>
 		<title>
-			<UIGroupMemberSelector>Groupe sélecteur</UIGroupMemberSelector>
+			<UIGroupMemberSelector>Sélecteur de groupe</UIGroupMemberSelector>
 		</title>
 	</UIGroupMemberSelectorPopupWindow>
 	
   <UISubcriptionForm>
     <msg>
-      <saveSuccess>Abonnement a été enregistré.</saveSuccess>
-      <subcriptionNameIsNotEmpty>Abonnement nom ne peut pas être vide!</subcriptionNameIsNotEmpty>
-      <subcriptionTitleIsNotEmpty>Abonnement titre ne peut pas être vide!</subcriptionTitleIsNotEmpty>
-      <subcriptionNameIsAlreadyExist>Cet abonnement est le nom existe déjà!</subcriptionNameIsAlreadyExist>
+      <saveSuccess>L'abonnement a été enregistré.</saveSuccess>
+      <subcriptionNameIsNotEmpty>Le nom d'abonnement ne peut pas être vide!</subcriptionNameIsNotEmpty>
+      <subcriptionTitleIsNotEmpty>le titre d'abonnement ne peut pas être vide!</subcriptionTitleIsNotEmpty>
+      <subcriptionNameIsAlreadyExist>Le nom de cet abonnement existe déjà!</subcriptionNameIsAlreadyExist>
     </msg>
     <title>
-    	<SubcriptionName>Nom abonnement</SubcriptionName>
-    	<SubcriptionTitle>Titre abonnement</SubcriptionTitle>
+    	<SubcriptionName>Nom</SubcriptionName>
+    	<SubcriptionTitle>Titre</SubcriptionTitle>
     	<SubcriptionDescription>Description</SubcriptionDescription>
     	<CategoryName>Catégorie</CategoryName>
     </title>
@@ -184,36 +184,36 @@
 	
 	<UINewsletterEntryForm>
 		<action>
-			<Select>Sélectionnez</Select>
-			<Preview>Preview</Preview>
+			<Select>Sélectionner</Select>
+			<Preview>Prévisualiser</Preview>
 			<Save>Sauver</Save>
 			<Send>Envoyer</Send>
 			<Cancel>Annuler</Cancel>
 		</action>
 		<msg>
 			<UpdateBeforeSave>
-				S'il vous plaît cliquer sur la mise à jour du bulletin d'information avant d'envoyer ou mettre! 
+				Merci de valider la date d'envoi envoyer d'enregistrer la lettre. 
 			</UpdateBeforeSave>
 			<DateTimeIsNotNull>
-				Envoyer la date est nulle. S'il vous plaît vérifier à nouveau!
+				la date d'envoi est nulle. Merci de vérifier à nouveau!
 			</DateTimeIsNotNull>
 			<DateTimeIsInvalid>
-				Envoyer la date n'est pas valide. S'il vous plaît vérifier à nouveau!
+				La date d'envoi n'est pas valide. Merci de vérifier à nouveau!
 			</DateTimeIsInvalid>
-			<UpdateInformationSuccessful>L'information est mise à jour réussie</UpdateInformationSuccessful>
+			<UpdateInformationSuccessful>Mise à jour des informations réussie!</UpdateInformationSuccessful>
 			<NodeNameInvalid>
-				Impossible de créer newsletter Newsletter parce que son nom est déjà en place. S'il vous plaît essayez de nouveau!
+				Impossible de créer la lettre car son nom existe déjà. Merci d'essayer à nouveau!
 			</NodeNameInvalid>
 		</msg>
 	</UINewsletterEntryForm>
 	
 	<UINewsletterEntryDialogSelector>
 		<action>
-			<OpenWebcontentSelectorForm>Ouvert WebContent sélecteur</OpenWebcontentSelectorForm>
+			<OpenWebcontentSelectorForm>Parcourir les contenus</OpenWebcontentSelectorForm>
 		</action>
 		<title>
 			<UINewsletterEntryTemplate>Modèle</UINewsletterEntryTemplate>
-			<UINewsletterEntrySendDate>Send date</UINewsletterEntrySendDate>
+			<UINewsletterEntrySendDate>Date d'envoi</UINewsletterEntrySendDate>
 			<UINewsletterEntryCategorySelectBox>Catégorie</UINewsletterEntryCategorySelectBox>
 			<UINetterEntrySubscriptionSelectBox>Abonnement</UINetterEntrySubscriptionSelectBox>
 			<UINewsletterEntrySubscriptionSelectBox>Abonnement</UINewsletterEntrySubscriptionSelectBox>
@@ -223,22 +223,22 @@
 	<UIManagerUsers>
 		<header>
 			<Mail>Email</Mail>
-			<isBanned>Banned</isBanned>
+			<isBanned>Exclu</isBanned>
 			<action> </action>
 			<UserName>Nom d'utilisateur</UserName>
 			<FirstName>Prénom</FirstName>
-			<LastName>Nom de famille</LastName>
+			<LastName>Nom</LastName>
 			<Email>Email</Email>
 			<Role>Rôle</Role>
 		</header>
 		<action>
 			<title>
 				<Edit>Éditer</Edit>
-				<BanOrUnBanUser>Ban / unban utilisateur</BanOrUnBanUser>
+				<BanOrUnBanUser>Exclure / Accepter utilisateur</BanOrUnBanUser>
 				<DeleteUser>Supprimer l'utilisateur</DeleteUser>
 				<Addministrator>Administrateur</Addministrator>
-				<AddAdministrator>Set est administrateur de la Newsletter</AddAdministrator>
-				<DeleteAdministrator>Supprimer l'administrateur</DeleteAdministrator>
+				<AddAdministrator>Donner le profil Administrateur</AddAdministrator>
+				<DeleteAdministrator>Supprimer le profil Administrateur</DeleteAdministrator>
 			</title>
 		</action>
 		<role>
@@ -250,7 +250,7 @@
 	
 	<UINewsletterEntryManager>
 		<msg>
-			<confirmDeleteNewsletter>Êtes-vous sûr de vouloir supprimer cette newsletter?</confirmDeleteNewsletter>
+			<confirmDeleteNewsletter>Êtes-vous sûr de vouloir supprimer cette Newsletter ?</confirmDeleteNewsletter>
 		</msg>
 		<title>
 			<ConvertAsTemplate>Convertir en tant que modèle</ConvertAsTemplate>

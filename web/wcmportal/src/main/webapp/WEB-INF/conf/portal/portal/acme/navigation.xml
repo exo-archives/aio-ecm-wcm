@@ -16,7 +16,7 @@
 			<label>#{portal.acme.news}</label>
 			<page-reference>portal::acme::news</page-reference>
 		</node>    
-		<node>
+		<!-- node>
 			<uri>events</uri>
 			<name>events</name>
 			<label>#{portal.acme.events}</label>
@@ -27,7 +27,21 @@
 			<name>publications</name>
 			<label>#{portal.acme.publications}</label>
 			<page-reference>portal::acme::publications</page-reference>	    
+		</node-->
+		<node>
+			<uri>newsletters</uri>
+			<name>newsletters</name>
+			<label>#{portal.acme.newsletters}</label>
+			<page-reference>portal::acme::newsletters</page-reference>
 		</node>
+		
+		<node>
+			<uri>contactus</uri>
+			<name>contactus</name>
+			<label>#{portal.acme.contactus}</label>
+			<page-reference>portal::acme::contactus</page-reference>
+		</node>
+
 		
 		<node>
 			<uri>products</uri>
@@ -72,36 +86,6 @@
 					<visible>false</visible>
 					<page-reference>portal::acme::pclv</page-reference>
 				</node>
-			</node>
-			<node>
-				<uri>products/newsletter</uri>
-				<name>newsletter</name>
-				<label>#{portal.acme.newsletter}</label>
-				<page-reference>portal::acme::newsletterviewer</page-reference>
-				<node>
-					<uri>products/newsletter/newsletterviewer</uri>
-					<name>newsletterviewer</name>
-					<label>#{portal.acme.newsletterviewer}</label>
-					<page-reference>portal::acme::newsletterviewer</page-reference>
-				</node>
-				<node>
-					<uri>products/newsletter/newslettermanager</uri>
-					<name>newslettermanager</name>
-					<label>#{portal.acme.newslettermanager}</label>
-					<page-reference>portal::acme::newslettermanager</page-reference>
-				</node>
-			</node>
-			<node>
-				<uri>products/formgenerator</uri>
-				<name>formgenerator</name>
-				<label>#{portal.acme.formgenerator}</label>
-				<page-reference>portal::acme::formgenerator</page-reference>
-			</node>
-			<node>
-				<uri>products/fastcontentcreator</uri>
-				<name>fastcontentcreator</name>
-				<label>#{portal.acme.fastcontentcreator}</label>
-				<page-reference>portal::acme::fastcontentcreator</page-reference>
 			</node>
 		</node>
 		

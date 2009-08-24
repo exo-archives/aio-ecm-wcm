@@ -209,32 +209,16 @@
 	</page>
 
 	<page>
-		<page-id>portal::acme::newsletterviewer</page-id>
+		<page-id>portal::acme::newsletters</page-id>
 		<owner-type>portal</owner-type>
 		<owner-id>acme</owner-id>
-		<name>newsletterviewer</name>
-		<title>Newsletter Viewer Portlet</title>
+		<name>newsletters</name>
+		<title>Newsletter Viewer</title>
 		<access-permissions>Everyone</access-permissions>
 		<edit-permission>*:/platform/administrators</edit-permission>
 		<application>
 			<instance-id>portal#acme:/newsletter/NewsletterViewerPortlet/acme-newsletterviewer</instance-id>
-			<title>Newsletter Viewer Portlet</title>
-			<show-info-bar>false</show-info-bar>
-			<show-application-state>false</show-application-state>
-			<show-application-mode>false</show-application-mode>
-		</application>
-	</page>
-	<page>
-		<page-id>portal::acme::newslettermanager</page-id>
-		<owner-type>portal</owner-type>
-		<owner-id>acme</owner-id>
-		<name>newslettermanager</name>
-		<title>Newsletter Manager Portlet</title>
-		<access-permissions>*:/platform/administrators</access-permissions>
-		<edit-permission>*:/platform/administrators</edit-permission>
-		<application>
-			<instance-id>portal#acme:/newsletter/NewsletterManagerPortlet/acme-newslettermanager</instance-id>
-			<title>Newsletter Manager Portlet</title>
+			<title>Newsletter Viewer</title>
 			<show-info-bar>false</show-info-bar>
 			<show-application-state>false</show-application-state>
 			<show-application-mode>false</show-application-mode>
@@ -242,33 +226,16 @@
 	</page>
 	
 	<page>
-		<page-id>portal::acme::fastcontentcreator</page-id>
+		<page-id>portal::acme::contactus</page-id>
 		<owner-type>portal</owner-type>
 		<owner-id>acme</owner-id>
-		<name>fastcontentcreator</name>
-		<title>Fast Content Creator Portlet</title>
-		<access-permissions>*:/platform/administrators</access-permissions>
-		<edit-permission>*:/platform/administrators</edit-permission>
+		<name>contactus</name>
+		<title>Contact Us</title>
+		<access-permissions>Everyone</access-permissions>
+		<edit-permission>*:/platform/web-contributors</edit-permission>
 		<application>
-			<instance-id>portal#acme:/formgenerator/FastContentCreatorPortlet/acme-fcc</instance-id>
-			<title>Fast Content Creator Portlet</title>
-			<show-info-bar>false</show-info-bar>
-			<show-application-state>false</show-application-state>
-			<show-application-mode>false</show-application-mode>
-		</application>
-	</page>
-	
-	<page>
-		<page-id>portal::acme::formgenerator</page-id>
-		<owner-type>portal</owner-type>
-		<owner-id>acme</owner-id>
-		<name>formgenerator</name>
-		<title>Form Generator Portlet</title>
-		<access-permissions>*:/platform/administrators</access-permissions>
-		<edit-permission>*:/platform/administrators</edit-permission>
-		<application>
-			<instance-id>portal#acme:/formgenerator/FormGeneratorPortlet/acme-fg</instance-id>
-			<title>Form Generator Portlet</title>
+			<instance-id>portal#acme:/formgenerator/FastContentCreatorPortlet/acme-contactus</instance-id>
+			<title>Contact Us</title>
 			<show-info-bar>false</show-info-bar>
 			<show-application-state>false</show-application-state>
 			<show-application-mode>false</show-application-mode>

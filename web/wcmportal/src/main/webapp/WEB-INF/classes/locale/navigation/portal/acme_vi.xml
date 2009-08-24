@@ -4,7 +4,6 @@
     <acme>
       <home>Trang chủ</home>
       <news>Tin tức</news>
-      <products>Sản phẩm</products>
       <services>Dịch vụ</services>
       <search>Tìm kiếm</search>
       <contact>Liên hệ</contact>
@@ -14,7 +13,6 @@
       <searchResult>Kết quả tìm kiếm</searchResult>
       <printviewer>Ứng dụng hiện thị trang in</printviewer>
       <products>Sản Phẩm</products>
-      <products>Products</products>
       <category>Category Navigation</category>
       <pclv>Parameterized Content List Viewer</pclv>
       <clv>Content List Viewer</clv>
@@ -23,8 +21,10 @@
       <sitemap>Site Map</sitemap>
       <overview>Overview</overview>
       <events>Events</events>
+      <newsletters>Newsletters</newsletters>
       <publications>Publications</publications>
       <presentation>Presentation</presentation>
+      <contactus>Contact Us</contactus>
     </acme>
   </portal>
 </bundle>

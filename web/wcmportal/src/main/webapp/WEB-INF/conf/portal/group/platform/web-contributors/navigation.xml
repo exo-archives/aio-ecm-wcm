@@ -11,19 +11,34 @@
       <label>#{administration.wcm}</label>     
       <page-reference>group::platform/web-contributors::wcm</page-reference>
       
-      <node>
+      	<node>
 	      <uri>wcm/siteExplorer</uri>
 	      <name>siteExplorer</name>
 	      <label>#{administration.siteExplorer}</label>     
 	      <page-reference>group::platform/web-contributors::SiteExplorer</page-reference>            
     	</node>
     	    		    
+		<node>
+			<uri>wcm/newslettermanager</uri>
+			<name>newslettermanager</name>
+			<label>#{administration.newslettermanager}</label>
+			<page-reference>group::platform/web-contributors::newslettermanager</page-reference>
+		</node>
+		
+		<node>
+			<uri>wcm/formgenerator</uri>
+			<name>formgenerator</name>
+			<label>#{administration.formgenerator}</label>
+			<page-reference>group::platform/web-contributors::formgenerator</page-reference>
+		</node>
+		
 	    <node>
 	      <uri>wcm/wcmAdmin</uri>
 	      <name>wcmAdmin</name>
 	      <label>#{administration.wcmAdmin}</label>     
 	      <page-reference>group::platform/web-contributors::WcmAdmin</page-reference>            
 	    </node>                
+
     </node>                                                    
   </page-nodes>
 </node-navigation>

@@ -3,8 +3,7 @@
   <portal>
     <acme>
       <home>Accueil</home>
-      <news>Actualité</news>
-      <products>Produits</products>
+      <news>Actualités</news>
       <services>Services</services>
       <search>Recherche</search>
       <contact>Contact</contact>
@@ -24,12 +23,12 @@
       <overview>Présentation</overview>
       <events>Evénements</events>
       <publications>Publications</publications>
-      <newsletter>Newsletter</newsletter>
-      <newsletterviewer>Newsletter Viewer</newsletterviewer>
+      <newsletters>Newsletters</newsletters>
       <newslettermanager>Newsletter Manager</newslettermanager>
       <fastcontentcreator>Fast Content Creator</fastcontentcreator>
-      <formgenerator>Form Generator</formgenerator>
+      <formgenerator>Générateur de formulaires</formgenerator>
       <presentation>Présentation</presentation>
+      <contactus>Contactez Nous</contactus>
     </acme>
   </portal>
 </bundle>

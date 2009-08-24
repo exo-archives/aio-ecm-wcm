@@ -3,26 +3,26 @@
   <UINewsletterViewerForm>
     <msg>
       <updateSuccess>Votre abonnement a été mis à jour.</updateSuccess>
-      <subcribed>Vous êtes subcribed!</subcribed>
-      <email-not-empty>Courrier électronique ne peut pas être vide!</email-not-empty>
-      <checkSubscriptionToProcess>S'il vous plaît vérifier un ou plusieurs abonnements avant de soumettre!</checkSubscriptionToProcess>
-      <alreadyExistedEmail>Le courrier électronique est déjà en place. S'il vous plaît d'entrée d'autres email!</alreadyExistedEmail>
-      <canNotSubcribed>Ne peut pas subcribed. S'il vous plaît essayez de nouveau!</canNotSubcribed>
+      <subcribed>Vous êtes inscrit.</subcribed>
+      <email-not-empty>L'email ne peut pas être vide</email-not-empty>
+      <checkSubscriptionToProcess>S'il vous plaît, valider un ou plusieurs abonnements avant de soumettre</checkSubscriptionToProcess>
+      <alreadyExistedEmail>Cet email est déjà inscrit. Merci d'utiliser une autre adresse.</alreadyExistedEmail>
+      <canNotSubcribed>Inscription impossible. Merci d'essayer à nouveau.</canNotSubcribed>
     </msg>
     <action>
       <Subcribe>Inscrire</Subcribe>
-      <ForgetEmail>Oubliez ce message</ForgetEmail>
-      <ChangeSubcribe>Changez votre Abonnements</ChangeSubcribe>
+      <ForgetEmail>Oublier cet abonnement</ForgetEmail>
+      <ChangeSubcribe>Modifier votre Abonnement</ChangeSubcribe>
 	  </action>
     <title>
-    	<userEmail>User Email</userEmail>
+    	<userEmail>Email</userEmail>
     	<subscription>Abonnement</subscription>
     	<yourStatus>Votre statut</yourStatus>
     </title>
     <Email>
     	<ConfirmUser>
-    		<Subject>exo Newsletter Confirmer</Subject>
-    		<Content>Cliquez sur les points de vue #ici# vos bulletins</Content>
+    		<Subject>Confirmation d'abonnement aux Newsletters</Subject>
+    		<Content>Cliquez #ici# pour valider votre inscription aux Newsletters.</Content>
     	</ConfirmUser>
     </Email>
   </UINewsletterViewerForm>
