@@ -102,7 +102,7 @@
 									%>
 									<div class="Content">
 										<%
-											if (isShowField) {
+											if (isShowTitle) {
 												if (isShowLink) {
 													%><span><a href="$itemLink">$itemName</a></span><br/><%
 												} else {
