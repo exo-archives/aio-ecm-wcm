@@ -130,13 +130,16 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
     if(runningPortals.size() == 0) {
       throw new AccessControlException("Current user doesn't have access permission to any portal");      
     }
-    String portalName = getPortalForContent(node);
-    if(portalName == null) {
-      throw new PortalNotFoundException("This content doen't belong to any portal");
-    }   
-    if(!isSharedPortal(portalName) && !runningPortals.contains(portalName)) {
-      throw new PortalNotFoundException("The portal can be dead.");
-    }
+    
+    // TODO: chuong.phan: maybe we don't need this exception, because document can be stored in 
+    //                    Group drivers (user/Documents e.g.). Bug TESTVN-108
+//    String portalName = getPortalForContent(node);
+//    if(portalName == null) {
+//      throw new PortalNotFoundException("This content doen't belong to any portal");
+//    }   
+//    if(!isSharedPortal(portalName) && !runningPortals.contains(portalName)) {
+//      throw new PortalNotFoundException("The portal can be dead.");
+//    }
 
     //TODO: Need compare LockToken in session of current user with LockToken of LockedOwner
     if (node.isLocked()) {
