@@ -225,7 +225,6 @@ public class UISearchResult extends UIContainer {
 					String newKeyword = bundle.getString("UISearchResult.msg.try-different-key");
 					writer.write("<ul><li>" + newKeyword + "</li></ul>");
 				} else {
-					setKeyword(keySuggestion);
 					writer.write("<ul><li><a class=\"KeySuggestions\" style=\"cursor: pointer;\">"
 							+ keySuggestion + "</a></li></ul>");
 				}
