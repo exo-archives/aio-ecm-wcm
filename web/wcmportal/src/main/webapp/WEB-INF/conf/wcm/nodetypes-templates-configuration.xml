@@ -199,7 +199,7 @@
                           <value>                    
                             <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">             
                               <field name="templateFile"><string>/siteSearchBoxWebContent/dialogs/dialog1.gtmpl</string></field>
-                              <field name="roles"><string>*:/platform/administrators</string></field>                
+                              <field name="roles"><string>*:/platform/web-contributors</string></field>                
                             </object>                      
                           </value>                      
                         </collection>
@@ -312,7 +312,7 @@
                           <value>                    
                             <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">             
                               <field name="templateFile"><string>/siteNavigationWebContent/dialogs/dialog1.gtmpl</string></field>
-                              <field name="roles"><string>*:/platform/administrators</string></field>                
+                              <field name="roles"><string>*:/platform/web-contributors</string></field>                
                             </object>                      
                           </value>                      
                         </collection>
@@ -368,7 +368,7 @@
                           <value>                    
                             <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">             
                               <field name="templateFile"><string>/webLink/dialogs/dialog1.gtmpl</string></field>
-                              <field name="roles"><string>webdesigner:/platform/web-contributors</string></field>                
+                              <field name="roles"><string>*:/platform/web-contributors</string></field>                
                             </object>                      
                           </value>                      
                         </collection>
