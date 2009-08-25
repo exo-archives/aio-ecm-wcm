@@ -47,7 +47,11 @@ if(uicomponent.categoryConfig != null){
 							</div>
 						</div>
 					</div>
-					<div style="float:left;line-height:26px;padding-left:10px"><%=uicomponent.categoryConfig.getDescription()%></div>
+					<%
+						def categoryDescription = uicomponent.categoryConfig.getDescription();
+						if (categoryDescription == null) categoryDescription = "";
+					%>
+					<div style="float:left;line-height:26px;padding-left:10px">$categoryDescription</div>
 					
 					<!-- ----------------------------------- Button -------------------------------------------------- -->
 					<div class="UIAction" style="float:right; padding:0px 10px;"> 

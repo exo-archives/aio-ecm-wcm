@@ -45,7 +45,11 @@ import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 						</div>
 					</div>
 					<div style="float:left;line-height:26px;padding-left:10px">
-						<%=uicomponent.subscriptionConfig.getDescription()%>
+						<%
+							def subscriptionDescription = uicomponent.subscriptionConfig.getDescription();
+							if (subscriptionDescription == null) subscriptionDescription = "";
+						%>
+						$subscriptionDescription
 					</div>
 					
 					<!-- ----------------------------------- Button -------------------------------------------------- -->
