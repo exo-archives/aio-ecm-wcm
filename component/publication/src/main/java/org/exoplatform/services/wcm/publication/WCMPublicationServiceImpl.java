@@ -209,7 +209,8 @@ public class WCMPublicationServiceImpl implements WCMPublicationService, Startab
 		/*
 		 * TODO : lifecycle based on site (each site can define its own publication lifecycle)
 		 */
-		if ("root".equals(remoteUser)) {
+//		if ("root".equals(remoteUser) && "backoffice".equals(siteName)) {
+		if ("backoffice".equals(siteName)) {
 			enrollNodeInLifecycle(node, SimplePublicationPlugin.LIFECYCLE_NAME);
 		} else {
 			enrollNodeInLifecycle(node, StageAndVersionPublicationConstant.LIFECYCLE_NAME);

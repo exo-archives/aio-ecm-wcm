@@ -98,7 +98,7 @@ import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 		<div class="UICategories">
 			<div style="width:100%;">
 				<!-- Category infor -->
-				<div class="CategoryTittle">
+				<div class="CategoryTitle">
 					<div class="LeftTitle">
 						<div class="RightTitle">
 							<div class="CenterTitle">

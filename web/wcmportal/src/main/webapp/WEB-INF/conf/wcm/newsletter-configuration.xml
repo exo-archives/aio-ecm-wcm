@@ -8,46 +8,56 @@
         <name>portalNames</name>
         <value>classic</value>
         <value>acme</value>
-        <value>backoffice</value>	        
+        <!-- value>backoffice</value -->	        
       </values-param>
 			<object-param>
-				<name>category1</name>
-				<description>category1</description>
+				<name>marketing</name>
+				<description>marketing</description>
 				<object type="org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig">
-					<field name="name"><string>category1</string></field>
-					<field name="title"><string>category1</string></field>
-					<field name="description"><string>category1's description</string></field>
+					<field name="name"><string>marketing</string></field>
+					<field name="title"><string>Marketing</string></field>
+					<field name="description"><string>You want to know where we are, where we go ?</string></field>
 					<field name="moderator"><string>root</string></field>
 				</object>
 			</object-param>
 			<object-param>
-				<name>category2</name>
-				<description>category2</description>
+				<name>general</name>
+				<description>general</description>
 				<object type="org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig">
-					<field name="name"><string>category2</string></field>
-					<field name="title"><string>category2</string></field>
-					<field name="description"><string>category2's description</string></field>
+					<field name="name"><string>general</string></field>
+					<field name="title"><string>General</string></field>
+					<field name="description"><string>General information about us</string></field>
 					<field name="moderator"><string>root</string></field>
-				</object>
-			</object-param>
-			<object-param>
-				<name>subscription1</name>
-				<description>subscription1</description>
-				<object type="org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig">
-					<field name="name"><string>subscription1</string></field>
-					<field name="title"><string>subscription1</string></field>
-					<field name="description"><string>subscription1's description</string></field>
-					<field name="categoryName"><string>category1</string></field>
 				</object>
 			</object-param>
 			<object-param>
 				<name>subscription2</name>
 				<description>subscription2</description>
 				<object type="org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig">
-					<field name="name"><string>subscription2</string></field>
-					<field name="title"><string>subscription2</string></field>
-					<field name="description"><string>subscription2's description</string></field>
-					<field name="categoryName"><string>category2</string></field>
+					<field name="name"><string>results</string></field>
+					<field name="title"><string>Results</string></field>
+					<field name="description"><string>Monthly newsletter about our results and forecasts</string></field>
+					<field name="categoryName"><string>general</string></field>
+				</object>
+			</object-param>
+			<object-param>
+				<name>subscription1</name>
+				<description>subscription1</description>
+				<object type="org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig">
+					<field name="name"><string>checklist</string></field>
+					<field name="title"><string>Check-List</string></field>
+					<field name="description"><string>Weekly newsletter with general topics</string></field>
+					<field name="categoryName"><string>general</string></field>
+				</object>
+			</object-param>
+			<object-param>
+				<name>subscription3</name>
+				<description>subscription3</description>
+				<object type="org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig">
+					<field name="name"><string>market</string></field>
+					<field name="title"><string>The market</string></field>
+					<field name="description"><string>What's on the market today ?</string></field>
+					<field name="categoryName"><string>marketing</string></field>
 				</object>
 			</object-param>
 			<object-param>
@@ -76,93 +86,23 @@
 			<description>This plugin deploy newsletter data of portal when a portal is created</description>
 			<init-params>
 				<object-param>
-					<name>category1</name>
-					<description>category1</description>
+					<name>general</name>
+					<description>general</description>
 					<object type="org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig">
-						<field name="name">
-							<string>category1</string>
-						</field>
-						<field name="title">
-							<string>category1</string>
-						</field>
-						<field name="description">
-							<string>category1's description</string>
-						</field>
-						<field name="moderator">
-							<string>root</string>
-						</field>
+						<field name="name"><string>general</string></field>
+						<field name="title"><string>General</string></field>
+						<field name="description"><string>General information about us</string></field>
+						<field name="moderator"><string>root</string></field>
 					</object>
 				</object-param>
 				<object-param>
-					<name>category2</name>
-					<description>category2</description>
-					<object type="org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig">
-						<field name="name">
-							<string>category2</string>
-						</field>
-						<field name="title">
-							<string>category2</string>
-						</field>
-						<field name="description">
-							<string>category2's description</string>
-						</field>
-						<field name="moderator">
-							<string>root</string>
-						</field>
-					</object>
-				</object-param>
-				<object-param>
-					<name>subscription1</name>
-					<description>subscription1</description>
+					<name>checklist</name>
+					<description>checklist</description>
 					<object type="org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig">
-						<field name="name">
-							<string>subscription1</string>
-						</field>
-						<field name="title">
-							<string>subscription1</string>
-						</field>
-						<field name="description">
-							<string>subscription1's description</string>
-						</field>
-						<field name="categoryName">
-							<string>category1</string>
-						</field>
-					</object>
-				</object-param>
-				<object-param>
-					<name>subscription2</name>
-					<description>subscription2</description>
-					<object type="org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig">
-						<field name="name">
-							<string>subscription2</string>
-						</field>
-						<field name="title">
-							<string>subscription2</string>
-						</field>
-						<field name="description">
-							<string>subscription2's description</string>
-						</field>
-						<field name="categoryName">
-							<string>category2</string>
-						</field>
-					</object>
-				</object-param>
-				<object-param>
-					<name>user1@gmail.com</name>
-					<description>user1@gmail.com</description>
-					<object type="org.exoplatform.services.wcm.newsletter.config.NewsletterUserConfig">
-						<field name="mail">
-							<string>user1@gmail.com</string>
-						</field>
-					</object>
-				</object-param>
-				<object-param>
-					<name>user2@gmail.com</name>
-					<description>user2@gmail.com</description>
-					<object type="org.exoplatform.services.wcm.newsletter.config.NewsletterUserConfig">
-						<field name="mail">
-							<string>user2@gmail.com</string>
-						</field>
+						<field name="name"><string>checklist</string></field>
+						<field name="title"><string>Check-List</string></field>
+						<field name="description"><string>Weekly newsletter with general topics</string></field>
+						<field name="categoryName"><string>general</string></field>
 					</object>
 				</object-param>
 			</init-params>
@@ -189,7 +129,7 @@
 							</object>
 						</field>
 						<field name="sourcePath">
-							<string>war:/conf/wcm/artifacts/site-resources/classic/Introduce.xml</string>
+							<string>war:/conf/wcm/artifacts/site-resources/templates/newsletterBasicTemplate.xml</string>
 						</field>
 					</object>
 				</object-param>
@@ -205,23 +145,7 @@
 							</object>
 						</field>
 						<field name="sourcePath">
-							<string>war:/conf/wcm/artifacts/site-resources/acme/Introduce.xml</string>
-						</field>
-					</object>
-				</object-param>
-				<object-param>
-					<name>Demo newsletter for backoffice site</name>
-					<description>Deployment Descriptor</description>
-					<object type="org.exoplatform.services.deployment.DeploymentDescriptor">
-						<field name="target">
-							<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
-								<field name="repository"><string>repository</string></field>
-								<field name="workspace"><string>collaboration</string></field>
-								<field name="nodePath"><string>/sites content/live/backoffice/ApplicationData/NewsletterApplication/DefaultTemplates</string></field>
-							</object>
-						</field>
-						<field name="sourcePath">
-							<string>war:/conf/wcm/artifacts/site-resources/classic/Introduce.xml</string>
+							<string>war:/conf/wcm/artifacts/site-resources/templates/newsletterBasicTemplate.xml</string>
 						</field>
 					</object>
 				</object-param>
@@ -249,7 +173,7 @@
               	</object>
               </field>
               <field name="sourcePath">
-              	<string>war:/conf/wcm/artifacts/site-resources/acme/Introduce.xml</string>
+              	<string>war:/conf/wcm/artifacts/site-resources/templates/newsletterBasicTemplate.xml</string>
               </field>
 					</object>
 				</object-param>

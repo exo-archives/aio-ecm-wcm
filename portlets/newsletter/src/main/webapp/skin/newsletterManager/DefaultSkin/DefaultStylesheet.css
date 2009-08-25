@@ -28,6 +28,7 @@
 .UINewsletterPortlet .NewsletterBoxContent {
 	padding: 10px;
 	background: #ebedf2;
+	border: 1px solid #D0D0D0;
 }
 
 .UINewLetterPopup .TopRightRightClickPopupMenu {
@@ -149,33 +150,33 @@
 }
 	
 .UINewsletterPortlet .UICategories {
-	background: #fefef9;
+	background: #fefefe;
 	padding: 8px;
-	margin-bottom: 10px;
+	/*margin-bottom: 10px;*/
 }
 
-.UICategories .CategoryTittle {
+.UICategories .CategoryTitle {
 	overflow: hidden;
 }
 
-.UICategories .CategoryTittle .LeftTitle { 
+.UICategories .CategoryTitle .LeftTitle { 
 	background: url('background/TabBg.gif') no-repeat top left;
 	padding-left: 7px;
 	float: left;
 }
 
-.UICategories .CategoryTittle .RightTitle { 
+.UICategories .CategoryTitle .RightTitle { 
 	background: url('background/TabBg.gif') no-repeat right -26px;
 	padding-right: 19px;
 }
 
-.UICategories .CategoryTittle .CenterTitle { 
+.UICategories .CategoryTitle .CenterTitle { 
 	background: url('background/TabBg.gif') repeat-x left -52px;
 	height: 26px;
 	padding: 0px 10px;
 }
 
-.UICategories .CategoryTittle  .IconCategory {
+.UICategories .CategoryTitle  .IconCategory {
 	background: url('background/CategoryIco.gif') no-repeat left center;
 	padding-left: 35px;
 	line-height: 26px;
