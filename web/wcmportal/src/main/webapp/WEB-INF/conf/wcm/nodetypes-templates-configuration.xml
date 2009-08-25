@@ -178,7 +178,7 @@
                     </object>
                   </value>
                   
-                  
+                  <!-- Only webdesigner profile can edit this content -->
                   <value>
                     <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$NodeType">
                       <field  name="nodetypeName"><string>exo:siteSearchBox</string></field>
@@ -199,7 +199,7 @@
                           <value>                    
                             <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">             
                               <field name="templateFile"><string>/siteSearchBoxWebContent/dialogs/dialog1.gtmpl</string></field>
-                              <field name="roles"><string>*:/platform/web-contributors</string></field>                
+                              <field name="roles"><string>webdesigner:/platform/web-contributors</string></field>                
                             </object>                      
                           </value>                      
                         </collection>
@@ -292,6 +292,7 @@
                   </value>
                   
                  
+                  <!-- Only webdesigner profile can edit this content -->
                   <value>
                     <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$NodeType">
                       <field  name="nodetypeName"><string>exo:siteNavigationWebContent</string></field>
@@ -312,7 +313,7 @@
                           <value>                    
                             <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">             
                               <field name="templateFile"><string>/siteNavigationWebContent/dialogs/dialog1.gtmpl</string></field>
-                              <field name="roles"><string>*:/platform/web-contributors</string></field>                
+                              <field name="roles"><string>webdesigner:/platform/web-contributors</string></field>                
                             </object>                      
                           </value>                      
                         </collection>
@@ -320,6 +321,7 @@
                     </object>
                   </value>
                   
+                  <!-- Only webdesigner profile can edit this content -->
                   <value>
                     <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$NodeType">
                       <field  name="nodetypeName"><string>exo:siteBreadcrumb</string></field>
@@ -340,7 +342,7 @@
                           <value>                    
                             <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">             
                               <field name="templateFile"><string>/siteBreadcrumb/dialogs/dialog1.gtmpl</string></field>
-                              <field name="roles"><string>*:/platform/administrators</string></field>                
+                              <field name="roles"><string>webdesigner:/platform/web-contributors</string></field>                
                             </object>                      
                           </value>                      
                         </collection>
@@ -348,6 +350,7 @@
                     </object>
                   </value>
                   
+                  <!-- All contributors profiles can edit this content -->
                   <value>
                     <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$NodeType">
                       <field  name="nodetypeName"><string>exo:link</string></field>
