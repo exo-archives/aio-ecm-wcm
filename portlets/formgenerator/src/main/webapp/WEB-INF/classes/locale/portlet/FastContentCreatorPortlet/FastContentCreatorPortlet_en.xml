@@ -203,4 +203,9 @@
     </label>
   </UITreeTaxonomyList>
   
+  <UIFCCTaxonomyPopupWindow>
+  	<title>
+  		<UIOneTaxonomySelector>Taxonomy selector</UIOneTaxonomySelector>
+  	</title>
+  </UIFCCTaxonomyPopupWindow>
 </bundle>

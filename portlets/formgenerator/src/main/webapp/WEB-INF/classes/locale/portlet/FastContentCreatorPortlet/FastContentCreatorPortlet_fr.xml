@@ -257,7 +257,11 @@
     </label>
   </UITreeTaxonomyList>
   
-  
+	<UIFCCTaxonomyPopupWindow>
+  	<title>
+  		<UIOneTaxonomySelector>Taxonomie sélecteur</UIOneTaxonomySelector>
+  	</title>
+  </UIFCCTaxonomyPopupWindow>  
 	
 
 
