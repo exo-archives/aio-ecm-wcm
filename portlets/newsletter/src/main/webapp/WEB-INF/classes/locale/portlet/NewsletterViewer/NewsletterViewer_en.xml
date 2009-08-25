@@ -10,7 +10,7 @@
       <canNotSubcribed>Can't subcribe. Please try again!</canNotSubcribed>
     </msg>
     <action>
-      <Subcribe>Subcribe</Subcribe>
+      <Subcribe>Subscribe</Subcribe>
       <ForgetEmail>Forget this email</ForgetEmail>
       <ChangeSubcriptions>Change your subcriptions</ChangeSubcriptions>
     </action>

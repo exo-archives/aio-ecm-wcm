@@ -10,9 +10,9 @@
       <canNotSubcribed>Inscription impossible. Merci d'essayer à nouveau.</canNotSubcribed>
     </msg>
     <action>
-      <Subcribe>Inscrire</Subcribe>
-      <ForgetEmail>Oublier cet abonnement</ForgetEmail>
-      <ChangeSubcribe>Modifier votre Abonnement</ChangeSubcribe>
+      <Subcribe>Je m'inscris</Subcribe>
+      <ForgetEmail>Oublier cet email</ForgetEmail>
+      <ChangeSubcribe>Modifier mon Abonnement</ChangeSubcribe>
 	  </action>
     <title>
     	<userEmail>Email</userEmail>
