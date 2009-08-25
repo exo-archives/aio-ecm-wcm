@@ -202,7 +202,7 @@
 			</DateTimeIsInvalid>
 			<UpdateInformationSuccessful>Mise à jour des informations réussie!</UpdateInformationSuccessful>
 			<NodeNameInvalid>
-				Impossible de créer la lettre car son nom existe déjà. Merci d'essayer à nouveau!
+				Impossible de créer la lettre car son titre existe déjà. Merci d'essayer à nouveau!
 			</NodeNameInvalid>
 		</msg>
 	</UINewsletterEntryForm>

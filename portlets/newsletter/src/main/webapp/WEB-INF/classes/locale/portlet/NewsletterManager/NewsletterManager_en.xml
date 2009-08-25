@@ -202,7 +202,7 @@
 			</DateTimeIsInvalid>
 			<UpdateInformationSuccessful>Information is updated successfully</UpdateInformationSuccessful>
 			<NodeNameInvalid>
-				Can't create newsletter because this name already exists. Please try again!
+				Can't create newsletter because this title already exists. Please try again!
 			</NodeNameInvalid>
 		</msg>
 	</UINewsletterEntryForm>
