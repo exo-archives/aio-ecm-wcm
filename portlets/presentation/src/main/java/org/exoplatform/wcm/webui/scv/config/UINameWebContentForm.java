@@ -16,6 +16,7 @@
  */
 package org.exoplatform.wcm.webui.scv.config;
 
+import java.security.AccessControlException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -29,6 +30,7 @@ import javax.jcr.nodetype.NodeTypeManager;
 import javax.portlet.PortletPreferences;
 
 import org.apache.commons.lang.StringUtils;
+import org.exoplatform.ecm.webui.comparator.ItemOptionNameComparator;
 import org.exoplatform.ecm.webui.form.validator.ECMNameValidator;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.application.Preference;
@@ -116,35 +118,49 @@ public class UINameWebContentForm extends UIForm {
    * @throws Exception the exception
    */
   public void init() throws Exception {
-    TemplateService templateService = getApplicationComponent(TemplateService.class);
-    RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
-    String repositoryName = repositoryService.getCurrentRepository().getConfiguration().getName();
-    NodeTypeManager nodeTypeManager = repositoryService.getRepository(repositoryName).getNodeTypeManager();
-    List<String> documentTemplates = templateService.getDocumentTemplates(repositoryName);
-    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>();
-    PortalRequestContext requestContext = Util.getPortalRequestContext();
-    ResourceBundle resourceBundle = requestContext.getApplicationResourceBundle();
-    for (String documentTemplate: documentTemplates) {
-      NodeType nodeType = nodeTypeManager.getNodeType(documentTemplate);
-      if (nodeType.isNodeType("exo:webContent")) {
-        String contentType = nodeType.getName();
-        String templateLabel = templateService.getTemplateLabel(contentType, repositoryName);
-        String resolveLabel = templateLabel;
-        try {
-          resolveLabel = resourceBundle.getString("ContentType.lable."+ StringUtils.deleteWhitespace(templateLabel));
-        } catch(Exception e) {
-
-        }
-        options.add(new SelectItemOption<String>(resolveLabel, contentType));
-      }
-    }
-    UIFormSelectBox templateSelect = new UIFormSelectBox(FIELD_SELECT, FIELD_SELECT, options) ;
+    UIFormSelectBox templateSelect = new UIFormSelectBox(FIELD_SELECT, FIELD_SELECT, getListFileType()) ;
     templateSelect.setSelectedValues(new String[] {"exo:webContent"});
     templateSelect.setOnChange("ChangeTemplateType");
     templateSelect.setDefaultValue("exo:webContent");    
     setPictureDescribe("exo_webContent");
     addUIFormInput(templateSelect) ;
   }
+  
+  public List<SelectItemOption<String>> getListFileType() throws Exception {
+	    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>();    
+	    TemplateService templateService = getApplicationComponent(TemplateService.class) ;
+	    RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
+	    String repositoryName = repositoryService.getCurrentRepository().getConfiguration().getName();
+	    NodeTypeManager nodeTypeManager = repositoryService.getRepository(repositoryName).getNodeTypeManager();
+	    PortalRequestContext requestContext = Util.getPortalRequestContext();
+	    ResourceBundle resourceBundle = requestContext.getApplicationResourceBundle();
+	    List<String> acceptableContentTypes = templateService.getDocumentTemplates(repositoryName);
+	    if(acceptableContentTypes.size() == 0) return options;
+	    String userName = Util.getPortalRequestContext().getRemoteUser();
+	    for(String contentType: acceptableContentTypes) {
+	        NodeType nodeType = nodeTypeManager.getNodeType(contentType);
+	        if (nodeType.isNodeType("exo:webContent")) {
+	        	String label = templateService.getTemplateLabel(contentType,repositoryName);
+	            String resolveLabel = label;
+	            try {
+	              resolveLabel = resourceBundle.getString("ContentType.lable."+ StringUtils.deleteWhitespace(resolveLabel));
+	            } catch(Exception e) {
+
+	            }
+	        	try {
+	        		String templatePath = templateService.getTemplatePathByUser(true, contentType, userName, repositoryName);
+	        		if ((templatePath != null) && (templatePath.length() > 0)) {
+	        			options.add(new SelectItemOption<String>(label, contentType));
+	        		}
+	        	} catch (AccessControlException e) {
+	        	} catch (Exception e) {  
+	        	}	        	
+	        }
+	    }    
+	    Collections.sort(options, new ItemOptionNameComparator()) ;
+	    return options ;
+	  }
+
 
   /**
    * Back.
