@@ -172,7 +172,7 @@ public class UINewsletterEntryManager extends UIForm {
       UINewsletterEntryManager uiNewsletterEntryManager = event.getSource();
       List<String> subIds = uiNewsletterEntryManager.getChecked();
       if(subIds == null || subIds.size() != 1){
-        Utils.createPopupMessage(uiNewsletterEntryManager, "UISubscription.msg.checkOnlyOneSubScriptionToOpen", null, ApplicationMessage.WARNING);
+        Utils.createPopupMessage(uiNewsletterEntryManager, "UISubscription.msg.checkOnlyOneNewsletterToOpen", null, ApplicationMessage.WARNING);
         return;
       }
       UINewsletterManagerPopup newsletterManagerPopup = uiNewsletterEntryManager.createUIComponent(UINewsletterManagerPopup.class, null, null);
@@ -219,7 +219,7 @@ public class UINewsletterEntryManager extends UIForm {
       UINewsletterEntryManager uiNewsletterEntryManager = event.getSource();
       List<String> subIds = uiNewsletterEntryManager.getChecked();
       if(subIds == null || subIds.size() != 1){
-        Utils.createPopupMessage(uiNewsletterEntryManager, "UISubscription.msg.checkOnlyOneSubScriptionToOpen", null, ApplicationMessage.WARNING);
+        Utils.createPopupMessage(uiNewsletterEntryManager, "UISubscription.msg.checkOnlyOneNewsletterToOpen", null, ApplicationMessage.WARNING);
         return;
       }
       UINewsletterEntryContainer entryContainer = uiNewsletterEntryManager.createUIComponent(UINewsletterEntryContainer.class, null, null);
@@ -251,7 +251,7 @@ public class UINewsletterEntryManager extends UIForm {
       List<String> subIds = newsletterEntryManager.getChecked();
       String message;
       if(subIds == null || subIds.size() != 1){
-        message = "UISubscription.msg.checkOnlyOneSubScriptionToOpen";
+        message = "UISubscription.msg.checkOnlyOneNewsletterToOpen";
       } else {
         try{
           String newsletterName = subIds.get(0);

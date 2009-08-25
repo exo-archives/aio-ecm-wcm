@@ -121,6 +121,9 @@
     	<checkOnlyOneSubScriptionToDelete>Please check only one subscription to delete!</checkOnlyOneSubScriptionToDelete>
     	<subscriptionNotfound>Subcription name doesn't exist!</subscriptionNotfound>
     	<checkOnlyOneSubScriptionToOpen>Please check only one subscription to open!</checkOnlyOneSubScriptionToOpen>
+    	<checkOnlyOneNewsletterToEdit>Please check only one newsletter to edit!</checkOnlyOneNewsletterToEdit>
+    	<checkOnlyOneNewsletterToDelete>Please check only one newsletter to delete!</checkOnlyOneNewsletterToDelete>
+    	<checkOnlyOneNewsletterToOpen>Please check only one newsletter to open!</checkOnlyOneNewsletterToOpen>
     	<convertSuccessful>Convert successful!</convertSuccessful>
     	<templateIsExist>Already exist a template have same name! Please check again.</templateIsExist>
     </msg>
