@@ -217,6 +217,13 @@
 		<access-permissions>Everyone</access-permissions>
 		<edit-permission>*:/platform/administrators</edit-permission>
 		<application>
+			<instance-id>portal#acme:/presentation/SingleContentViewer/acme-newsletter-header</instance-id>
+			<title>Newsletter Header</title>
+			<show-info-bar>false</show-info-bar>
+			<show-application-state>false</show-application-state>
+			<show-application-mode>false</show-application-mode>
+		</application>
+		<application>
 			<instance-id>portal#acme:/newsletter/NewsletterViewerPortlet/acme-newsletterviewer</instance-id>
 			<title>Newsletter Viewer</title>
 			<show-info-bar>false</show-info-bar>

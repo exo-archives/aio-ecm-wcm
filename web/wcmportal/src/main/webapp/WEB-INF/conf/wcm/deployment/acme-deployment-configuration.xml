@@ -168,6 +168,20 @@
               <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme/Documents.xml</string></field>
             </object>
           </object-param>
+          <object-param>        
+            <name>ACME Newsletter header</name>
+            <description>Deployment Descriptor</description>
+            <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
+              <field  name="target">
+              	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
+              		<field  name="repository"><string>repository</string></field>
+              		<field  name="workspace"><string>collaboration</string></field>
+              		<field  name="nodePath"><string>/sites content/live/acme/web contents/site artifacts</string></field>
+              	</object>
+              </field>
+              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme/NewsletterHeader.xml</string></field>
+            </object>
+          </object-param>
         </init-params>  
       </component-plugin> 
    </external-component-plugins>
