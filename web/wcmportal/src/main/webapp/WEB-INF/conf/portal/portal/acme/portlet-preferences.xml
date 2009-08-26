@@ -612,6 +612,76 @@
 			<read-only>false</read-only>
 		</preference>
 	</portlet-preferences>
+
+	<portlet-preferences>
+		<owner-type>portal</owner-type>
+		<owner-id>acme</owner-id>
+		<window-id>portal#acme:/formgenerator/FastContentCreatorPortlet/acme-contactus</window-id>
+		<preference>
+			<name>redirectPath</name>
+			<value>/portal/public/acme/contactus/confirmation</value>
+		</preference>
+		<preference>
+			<name>workspace</name>
+			<value>collaboration</value>
+		</preference>
+		<preference>
+			<name>repository</name>
+			<value>repository</value>
+		</preference>
+		<preference>
+			<name>isRedirect</name>
+			<value>true</value>
+		</preference>
+		<preference>
+			<name>path</name>
+			<value>/sites content/live/acme/documents</value>
+		</preference>
+		<preference>
+			<name>saveMessage</name>
+			<value>Your comment has been received. We appreciate your feedback.</value>
+		</preference>
+		<preference>
+			<name>saveButton</name>
+			<value>Send</value>
+		</preference>
+		<preference>
+			<name>type</name>
+			<value>exo:contact_us</value>
+		</preference>
+	</portlet-preferences>	
+	
+	<portlet-preferences>
+		<owner-type>portal</owner-type>
+		<owner-id>acme</owner-id>
+		<window-id>portal#acme:/presentation/SingleContentViewer/acme-confirmation</window-id>
+		<preference>
+			<name>repository</name>
+			<value>repository</value>
+			<read-only>false</read-only>
+		</preference>
+		<preference>
+			<name>workspace</name>
+			<value>collaboration</value>
+			<read-only>false</read-only>
+		</preference>
+		<preference>
+			<name>nodeIdentifier</name>
+			<value>/sites content/live/acme/web contents/site artifacts/contact_form_confirmation</value>
+			<read-only>false</read-only>
+		</preference>
+		<preference>
+			<name>ShowQuickEdit</name>
+			<value>true</value>
+			<read-only>false</read-only>
+		</preference>
+		<preference>
+			<name>ShowPrintAction</name>
+			<value>false</value>
+			<read-only>false</read-only>
+		</preference>
+	</portlet-preferences>
+
 	
 	
 </portlet-preferences-set>

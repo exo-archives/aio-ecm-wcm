@@ -30,6 +30,7 @@
       <formgenerator>Form Generator</formgenerator>
       <presentation>Presentation</presentation>
       <contactus>Contact Us</contactus>
+      <confirmation>Contact Form Confirmation</confirmation>
     </acme>
   </portal>
 </bundle>

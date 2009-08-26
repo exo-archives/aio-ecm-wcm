@@ -52,4 +52,8 @@ public class UIFCCUtils {
     return getPortletPreferences().getValue(UIFCCConstant.PREFERENCE_PATH, "");
   }
   
+  public static String getPreferenceSaveMessage() {
+	  return getPortletPreferences().getValue(UIFCCConstant.PREFERENCE_SAVE_MESSAGE, "");
+  }
+  
 }

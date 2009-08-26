@@ -40,6 +40,13 @@
 			<name>contactus</name>
 			<label>#{portal.acme.contactus}</label>
 			<page-reference>portal::acme::contactus</page-reference>
+			<node>
+				<uri>contactus/confirmation</uri>
+				<name>confirmation</name>
+				<label>#{portal.acme.confirmation}</label>
+				<visible>false</visible>
+				<page-reference>portal::acme::confirmation</page-reference>
+			</node>
 		</node>
 
 		
@@ -47,6 +54,7 @@
 			<uri>products</uri>
 			<name>products</name>
 			<label>#{portal.acme.products}</label>
+			<visible>false</visible>
 			<page-reference>portal::acme::scv</page-reference>
 			
 			<node>

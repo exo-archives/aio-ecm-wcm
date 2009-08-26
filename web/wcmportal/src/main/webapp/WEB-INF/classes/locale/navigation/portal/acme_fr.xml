@@ -29,6 +29,7 @@
       <formgenerator>Générateur de formulaires</formgenerator>
       <presentation>Présentation</presentation>
       <contactus>Contactez Nous</contactus>
+      <confirmation>Confirmation de contact</confirmation>
     </acme>
   </portal>
 </bundle>

@@ -36,7 +36,7 @@ public class UIFCCConstant {
   
   public static final String PREFERENCE_SAVE_MESSAGE           = "saveMessage";
   
-  public static final String PREFERENCE_IS_REDIRECT           = "isRedirecr";
+  public static final String PREFERENCE_IS_REDIRECT           = "isRedirect";
 
   public static final String PREFERENCE_REDIRECT_PATH         = "redirectPath";
   
