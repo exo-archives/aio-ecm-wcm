@@ -70,21 +70,11 @@
 									<div class="NormalTab">
 										<div class="LeftTab">
 											<div class="RightTab">                
-												<div class="MiddleTab" onClick="eXo.webui.UIHorizontalTabs.displayTabContent(this);"><%=_ctx.appRes("WebContent.dialog.label.cssFile")%></div>
+												<div class="MiddleTab" onClick="eXo.webui.UIHorizontalTabs.displayTabContent(this);"><%=_ctx.appRes("WebContent.dialog.label.Advanced")%></div>
 											</div>
 										</div>
 									</div>
 								</div>
-								
-								<div class="UITab NormalTabStyle">
-									<div class="NormalTab">
-										<div class="LeftTab">
-											<div class="RightTab">                
-												<div class="MiddleTab" onClick="eXo.webui.UIHorizontalTabs.displayTabContent(this);"><%=_ctx.appRes("WebContent.dialog.label.jsFile")%></div>
-											</div>
-										</div>
-									</div>
-								</div>																
 								
 							</div> <!-- End of TabsContainer-->
 						</div>	<!-- End of CenterHorizontalTabs -->
@@ -235,9 +225,6 @@
 					<!-- End of Illustration tab -->		
 								
 					<div class="UITabContent" style="display: none;">
-						<div class="FormHint">
-							<%=_ctx.appRes("WebContent.dialog.label.hintCSS")%>
-						</div>
 						<table class="UIFormGrid">
 							<tr>
 								<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.ContentCSS")%></td>
@@ -318,14 +305,16 @@
 									uicomponent.addTextAreaField(cssFormId, fieldContentCSS) ;
 								%>
 								</td>
+								<td width="260px">
+									<div class="FormHint" style="margin-top:5px">
+										<%=_ctx.appRes("WebContent.dialog.label.hintCSS")%>
+									</div>
+								</td>
 							</tr>
 						</table>
 					</div>
 					
 					<div class="UITabContent" style="display: none;">
-						<div class="FormHint">
-							<%=_ctx.appRes("WebContent.dialog.label.hintJS")%>
-						</div>
 						<table class="UIFormGrid">
 							<tr>
 								<td class="FieldLabel"><%=_ctx.appRes("WebContent.dialog.label.ContentJS")%></td>
@@ -475,6 +464,11 @@
 									String[] fieldContentJS = ["jcrPath=/node/js/default.js/jcr:content/jcr:data", jsContent];
 									uicomponent.addTextAreaField(jsFormId, fieldContentJS); 								
 								%>
+								</td>
+								<td width="260px">
+									<div class="FormHint" style="margin-top:5px">
+										<%=_ctx.appRes("WebContent.dialog.label.hintJS")%>
+									</div>
 								</td>
 							</tr>
 						</table>
