@@ -99,7 +99,7 @@
 				<div class="MiddleLeftViewBoxStyle">
 					<div class="MiddleRightViewBoxStyle">
 						<div class="MiddleCenterViewBoxStyle" id='MiddleCenterViewBoxStyle'>
-							<div class="BoxContentBoxStyle"  typecomponent="input">
+							<!-- div class="BoxContentBoxStyle"  typecomponent="input">
 								<div class="TopContentBoxStyle">
 									<div class="UIForm UIFormEditBox">
 										<div class="HorizontalLayout">
@@ -164,7 +164,7 @@
 										</div>
 									</div>
 								</div>
-							</div>
+							</div -->
 						</div>
 					</div>
 				</div>
