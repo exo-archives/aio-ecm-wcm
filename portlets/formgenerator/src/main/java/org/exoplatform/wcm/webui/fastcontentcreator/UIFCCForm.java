@@ -305,8 +305,8 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
         homeNode.getSession().refresh(false) ;
         
         boolean preferenceIsRedirect = Boolean.parseBoolean(preferences.getValue(UIFCCConstant.PREFERENCE_IS_REDIRECT, "")) ;
-        if (preferenceIsRedirect) {
-          String preferenceRedirectPath = preferences.getValue(UIFCCConstant.PREFERENCE_REDIRECT_PATH, "") ;
+        String preferenceRedirectPath = preferences.getValue(UIFCCConstant.PREFERENCE_REDIRECT_PATH, "") ;
+        if (preferenceIsRedirect && preferenceRedirectPath != null) {
           event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + preferenceRedirectPath + "');");
         } else {
           Object[] args = { preferencePath } ;
