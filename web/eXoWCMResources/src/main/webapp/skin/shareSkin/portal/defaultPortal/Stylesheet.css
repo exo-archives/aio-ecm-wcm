@@ -183,8 +183,11 @@ td {
 
 /* Quick fix for new dms explorer (until dms 2.5.1 patch) */
 .UIJCRExplorerPortlet .UIJCRExplorer .UIWorkingArea {
-	height:475px;
+	height:475px !important;
 }
 .UIJCRExplorerPortlet .UIListView .UIListGrid {
-	height:475px;
+	height:475px !important;
+}
+.UIJCRExplorerPortlet .UISideBar .UIResizableBlock {
+	height:475px !important;
 }
