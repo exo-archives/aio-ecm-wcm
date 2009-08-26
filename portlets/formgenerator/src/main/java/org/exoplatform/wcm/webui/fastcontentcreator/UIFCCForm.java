@@ -217,7 +217,7 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
           String[] arrFilterChar = {"&", "$", "@", ":", "]", "[", "*", "%", "!", "+", "(", ")", "'", "#", ";", "}", "{", "/", "|", "\""};          
           String valueName = input.getValue().toString().trim();          
           if (!org.exoplatform.ecm.webui.utils.Utils.isNameValid(valueName, arrFilterChar)) {
-            uiApp.addMessage(new ApplicationMessage("UIFastContentCreatorForm.msg.name-not-allowed", null, ApplicationMessage.WARNING));
+            uiApp.addMessage(new ApplicationMessage("UIFCCForm.msg.name-not-allowed", null, ApplicationMessage.WARNING));
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
             return;
           }
@@ -263,13 +263,13 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
         homeNode = (Node) session.getItem(preferencePath);
       } catch (AccessDeniedException ade){
         Object[] args = { preferencePath } ;
-        uiApp.addMessage(new ApplicationMessage("UIFastContentCreatorForm.msg.access-denied", args, 
+        uiApp.addMessage(new ApplicationMessage("UIFCCForm.msg.access-denied", args, 
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return;
       } catch(PathNotFoundException pnfe) {
         Object[] args = { preferencePath } ;
-        uiApp.addMessage(new ApplicationMessage("UIFastContentCreatorForm.msg.path-not-found", args, 
+        uiApp.addMessage(new ApplicationMessage("UIFCCForm.msg.path-not-found", args, 
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return;
@@ -310,33 +310,34 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
           event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + preferenceRedirectPath + "');");
         } else {
           Object[] args = { preferencePath } ;
-          String preferenceSaveMessage = preferences.getValue(UIFCCConstant.PREFERENCE_SAVE_MESSAGE, "") ;
-          uiApp.addMessage(new ApplicationMessage("UIFastContentCreatorForm.msg." + preferenceSaveMessage, args)) ;
+          String saveMessage = preferences.getValue(UIFCCConstant.PREFERENCE_SAVE_MESSAGE, "") ;
+          if (saveMessage == null) saveMessage = "saved-successfully"; 
+          uiApp.addMessage(new ApplicationMessage("UIFCCForm.msg." + saveMessage, args)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         }
         event.getRequestContext().addUIComponentToUpdateByAjax(fastContentCreatorForm.getParent()) ;
       } catch (AccessControlException ace) {
         throw new AccessDeniedException(ace.getMessage());
       } catch(VersionException ve) {
-        uiApp.addMessage(new ApplicationMessage("UIFastContentCreatorForm.msg.in-versioning", null, 
+        uiApp.addMessage(new ApplicationMessage("UIFCCForm.msg.in-versioning", null, 
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return;
       } catch(AccessDeniedException e) {
         Object[] args = { preferencePath } ;
-        String key = "UIFastContentCreatorForm.msg.access-denied" ;
+        String key = "UIFCCForm.msg.access-denied" ;
         uiApp.addMessage(new ApplicationMessage(key, args, ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return;
       } catch(LockException lock) {
         Object[] args = { preferencePath } ;
-        String key = "UIFastContentCreatorForm.msg.node-locked" ;
+        String key = "UIFCCForm.msg.node-locked" ;
         uiApp.addMessage(new ApplicationMessage(key, args, ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return;
       } catch(ItemExistsException item) {
         Object[] args = { preferencePath } ;
-        String key = "UIFastContentCreatorForm.msg.node-isExist" ;
+        String key = "UIFCCForm.msg.node-isExist" ;
         uiApp.addMessage(new ApplicationMessage(key, args, ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
       } finally {
