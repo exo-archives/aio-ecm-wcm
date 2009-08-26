@@ -239,6 +239,7 @@
 	      		WCMPublicationService wcmPublicationService = uicomponent.getApplicationComponent(WCMPublicationService.class);
 	        	for (data in uicomponent.getChildrenList()) {
 	        		def status = wcmPublicationService.getContentState(data);
+	        		if (status == null) status = "";
 	        		Date date = getDate(data, status); 	        	        
 	          		def isPreferenceNode = uicomponent.isPreferenceNode(data) ;
 	          		def preferenceWS = data.getSession().getWorkspace().getName() ;
