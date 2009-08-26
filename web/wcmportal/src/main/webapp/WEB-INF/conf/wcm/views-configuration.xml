@@ -34,10 +34,30 @@
                 <collection type="java.util.ArrayList">               
                   <value>
                     <object type="org.exoplatform.services.cms.views.ViewConfig$Tab">
-                      <field  name="tabName"><string>WCM Actions</string></field>
+                      <field  name="tabName"><string>Publication</string></field>
                       <field  name="buttons">
                       	<string>
-                      		addFolder; addDocument; editDocument; upload; managePublications; viewPermissions; viewMetadatas; manageCategories; taggingDocument; vote; Comment; viewProperties; manageVersions; exportNode; importNode
+                      		addFolder; addDocument; editDocument; upload; managePublications; manageCategories
+                      	</string>
+                      </field>
+                    </object>
+                  </value>                                                      
+                  <value>
+                    <object type="org.exoplatform.services.cms.views.ViewConfig$Tab">
+                      <field  name="tabName"><string>Collaboration</string></field>
+                      <field  name="buttons">
+                      	<string>
+                      		viewMetadatas; taggingDocument; vote; Comment
+                      	</string>
+                      </field>
+                    </object>
+                  </value>                                                      
+                  <value>
+                    <object type="org.exoplatform.services.cms.views.ViewConfig$Tab">
+                      <field  name="tabName"><string>System</string></field>
+                      <field  name="buttons">
+                      	<string>
+                      		viewPermissions; viewProperties; manageVersions; exportNode; importNode
                       	</string>
                       </field>
                     </object>

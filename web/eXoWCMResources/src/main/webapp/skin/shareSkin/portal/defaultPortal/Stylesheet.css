@@ -180,3 +180,11 @@ td {
 	float: right;
 	width: 70%; 
 }
+
+/* Quick fix for new dms explorer (until dms 2.5.1 patch) */
+.UIJCRExplorerPortlet .UIJCRExplorer .UIWorkingArea {
+	height:475px;
+}
+.UIJCRExplorerPortlet .UIListView .UIListGrid {
+	height:475px;
+}
