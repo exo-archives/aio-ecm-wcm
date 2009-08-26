@@ -186,6 +186,8 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
       String inputFieldName = Utils.cleanString(inputName) + "FieldName";
       String validate = "validate=";
       String inputField = "";
+      String guideLine = form.getGuildLine();
+      if (guideLine == null) guideLine = "";
       if (form.isMandatory())
         validate += "empty,";
       if (UIFormGeneratorConstant.TEXTAREA.equals(inputType)) {
@@ -252,6 +254,12 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
     	  
       }
       
+      dialogTemplate.append("      <tr>");
+      dialogTemplate.append("        <td>&nbsp;</td>");
+      dialogTemplate.append("        <td>");
+      dialogTemplate.append("          <div class=\"GuideLine\">" + guideLine + "</div>");
+      dialogTemplate.append("        </td>");
+      dialogTemplate.append("      </tr>");
     }
     dialogTemplate.append("      </table>");
     dialogTemplate.append("      <div class=\"UIAction\">");

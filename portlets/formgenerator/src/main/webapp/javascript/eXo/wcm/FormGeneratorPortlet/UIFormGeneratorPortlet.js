@@ -415,29 +415,29 @@ UIFormGeneratorPortlet.prototype.getProperties = function(comp) {
 			var width	= inputNode.offsetWidth;
 			var mandatory = fieldLabel.getAttribute('mandatory');
 			var height  = inputNode.offsetHeight;
-			strObject +=  '"value":"'+inputNode.value+'","width":"'+width+'","mandatory":"'+mandatory+'","height":"'+height+'",';
+			strObject +=  '"value":"'+inputNode.value+'","width":'+width+',"mandatory":'+mandatory+',"height":'+height+',';
 			break;
 		case "label" :
-			strObject +=  '"value":"null","width":"null","mandatory":"null","height":"null",';
+			strObject +=  '"value":"null","width":0,"mandatory":'+mandatory+',"height":0,';
 			break;
 		case "textarea" :
 			var textareaNode = DOMUtil.findFirstDescendantByClass(topContent, 'textarea', "Textarea");
 			var width	= textareaNode.offsetWidth;
 			var mandatory = fieldLabel.getAttribute('mandatory');
 			var height  = textareaNode.offsetHeight;
-			strObject +=  '"value":"'+textareaNode.value+'","width":"'+width+'","mandatory":"'+mandatory+'","height":"'+height+'",';	
+			strObject +=  '"value":"'+textareaNode.value+'","width":'+width+',"mandatory":'+mandatory+',"height":'+height+',';	
 			break;
 		case "wysiwyg" : 
 			var midContent = DOMUtil.findNextElementByTagName(topContent, "div");
 			var selectNode = DOMUtil.findFirstDescendantByClass(midContent, 'select', "SelectBox");
-			strObject +=  '"value":"Type content here...","width":"null","mandatory":"null","height":"null","advanced":"'+selectNode.value+'",';	
+			strObject +=  '"value":"Type content here...","width":0,"mandatory":'+mandatory+',"height":0,"advanced":"'+selectNode.value+'",';	
 			break;
 		case "select" :
 			var selectNode = DOMUtil.findFirstDescendantByClass(topContent, 'select', "SelectBox");
 			var width	= selectNode.offsetWidth;
 			var mandatory = fieldLabel.getAttribute('mandatory');
 			var height  = selectNode.offsetHeight;
-			strObject +=  '"value":"'+selectNode.value+'","width":"'+width+'","mandatory":"'+mandatory+'","height":"'+height+'",';		
+			strObject +=  '"value":"'+selectNode.value+'","width":'+width+',"mandatory":'+mandatory+',"height":'+height+',';		
 			var options = DOMUtil.getChildrenByTagName(selectNode, 'option');
 			var advOptions = '';	
 			strObject += 	'"advanced":"';
@@ -450,7 +450,7 @@ UIFormGeneratorPortlet.prototype.getProperties = function(comp) {
 			strObject += '",';
 			break;
 		case "upload" :
-			strObject +=  '"value":"null","width":"null","mandatory":"null","height":"null",';	
+			strObject +=  '"value":"null","width":0,"mandatory":'+mandatory+',"height":0,';	
 			break;
 	}
 
