@@ -213,7 +213,7 @@ UIWCMNavigation.prototype.buildMenu = function(popupMenu) {
     if (!item.getAttribute('hidesubmenu')) {
       item.onmousemove = eXo.portal.UIWCMNavigation.tabOnMouseMove ;
     }
-    item.style.width = item.offsetWidth + "px";
+    item.style.width = item.offsetWidth + 3 +"px";
     /**
      * TODO: fix IE7;
      */
