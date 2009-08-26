@@ -68,6 +68,10 @@ import org.exoplatform.ws.frameworks.json.value.JsonValue;
     }
 )
 public class UIFormGeneratorTabPane extends UIFormTabPane {
+	
+	static final String PROPERTY_PREFIX = "exo:fg_p_";
+	static final String NODE_PREFIX = "exo:";
+	static final String NODE_SUFFIX = "_fg_n";
 
   public UIFormGeneratorTabPane() throws Exception {
     super(UIFormGeneratorConstant.FORM_GENERATOR_TABPANE);
@@ -99,11 +103,15 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
   }
   
   private String getNodetypeName(String nodetypeName) {
-    return "exo:fg_n_" + Utils.cleanString(nodetypeName);
+	  /*
+	   * PREFIX is used to declare the nodetype inside "exo" namespace
+	   * SUFFIX is used to maintain a more logical alphabetic order by nodetype but preserves unicity.
+	   */
+    return NODE_PREFIX + Utils.cleanString(nodetypeName) + NODE_SUFFIX;
   }
   
   private String getPropertyName(String inputName) {
-    return "exo:fg_p_" + Utils.cleanString(inputName);
+    return PROPERTY_PREFIX + Utils.cleanString(inputName);
   }
   
   private void addNodetype(WebuiRequestContext requestContext, String repository, String nodetypeName, List<UIFormGeneratorInputBean> formBeans) throws Exception {
@@ -170,7 +178,11 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
     dialogTemplate.append("      <table class=\"UIFormGrid\">");
     
 //    UIFormGeneratorInputBean nameForm = forms.get(0);
-    dialogTemplate.append("        <tr>");
+    /* TODO : in WCM 1.2, we disable name and use a automatic timestamp name. 
+     * We will offer the possibility to choose in WCM 1.3 
+     * (show name, use timestamp, convert from another field like exo:title for example) 
+     */
+    dialogTemplate.append("        <tr style=\"display:none;\">");
     dialogTemplate.append("          <td class=\"FieldLabel\"><%=_ctx.appRes(\"FormGenerator.dialog.label." + "Date" + "\")%></td>");
     dialogTemplate.append("          <td class=\"FieldComponent\">");
     dialogTemplate.append("            $timestampName <div style=\"display:none;\"><%");
@@ -186,8 +198,10 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
       String inputFieldName = Utils.cleanString(inputName) + "FieldName";
       String validate = "validate=";
       String inputField = "";
-      String guideLine = form.getGuildLine();
-      if (guideLine == null) guideLine = "";
+      String guideline = form.getGuideline();
+      if (guideline == null || "null".equals(guideline)) guideline = "";
+      String value = form.getValue();
+      if (value==null || "null".equals(value)) value="";
       if (form.isMandatory())
         validate += "empty,";
       if (UIFormGeneratorConstant.TEXTAREA.equals(inputType)) {
@@ -207,7 +221,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
       String propertyName = getPropertyName(inputName);
       if (UIFormGeneratorConstant.LABEL.equals(inputType)) {
     	  dialogTemplate.append("      <tr>");
-    	  dialogTemplate.append("        <td class=\"FieldLabel\" colspan=\"2\">"+form.getValue()+"</td>");
+    	  dialogTemplate.append("        <td class=\"FieldLabel\" colspan=\"2\">"+value+"</td>");
     	  dialogTemplate.append("        </td>");
     	  dialogTemplate.append("      </tr>");
     	  
@@ -245,7 +259,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
     		  dialogTemplate.append("             uicomponent.addUploadField(\"image\", fieldImage) ;");
     		  dialogTemplate.append("           }");
     	  } else {
-    		  dialogTemplate.append("           String[] " + inputFieldName + " = [\"jcrPath=/node/" + propertyName + "\", \"defaultValues=" + form.getValue() + "\", \"" + validate + "\", \"options=" + form.getAdvanced() + "\"];");
+    		  dialogTemplate.append("           String[] " + inputFieldName + " = [\"jcrPath=/node/" + propertyName + "\", \"defaultValues=" + value + "\", \"" + validate + "\", \"options=" + form.getAdvanced() + "\"];");
     		  dialogTemplate.append("           uicomponent.add" + inputField + "(\"" + inputFieldName + "\", " + inputFieldName + ");");
     	  }
     	  dialogTemplate.append("          %>");
@@ -257,7 +271,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
       dialogTemplate.append("      <tr>");
       dialogTemplate.append("        <td>&nbsp;</td>");
       dialogTemplate.append("        <td>");
-      dialogTemplate.append("          <div class=\"GuideLine\">" + guideLine + "</div>");
+      dialogTemplate.append("          <div class=\"GuideLine\">" + guideline + "</div>");
       dialogTemplate.append("        </td>");
       dialogTemplate.append("      </tr>");
     }
@@ -297,7 +311,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
     StringBuilder viewTemplate = new StringBuilder();
     viewTemplate.append(" <% def currentNode = uicomponent.getNode() ; %>");
     viewTemplate.append(" <div>");
-    viewTemplate.append("   <table width='90%' border='1px'>");
+    viewTemplate.append("   <table style=\"width:95%;margin:5px;border:1px solid;\">");
     viewTemplate.append("     <tr>");
     viewTemplate.append("       <th>Name</th>");
     viewTemplate.append("       <th>Value</th>");
@@ -307,9 +321,12 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
       viewTemplate.append("   <tr>");
       viewTemplate.append("     <%");
       viewTemplate.append("       if (currentNode.hasProperty(\"" + propertyName + "\")) {");
+      viewTemplate.append("       		String cleanName = currentNode.getProperty(\"" + propertyName + "\").getName();"); 
+      viewTemplate.append("       		if (cleanName.startsWith(\""+NODE_PREFIX+"\")) cleanName = cleanName.substring(9);"); 
+      viewTemplate.append("       		cleanName = cleanName.replaceAll(\"_\", \" \");"); 
       viewTemplate.append("         %>");
-      viewTemplate.append("           <td><%= currentNode.getProperty(\"" + propertyName + "\").getName() %></td>");
-      viewTemplate.append("           <td><%= currentNode.getProperty(\"" + propertyName + "\").getString() %></td>");
+      viewTemplate.append("           <td style=\"padding:5px\"><%= cleanName %></td>");
+      viewTemplate.append("           <td style=\"padding:5px\"><%= currentNode.getProperty(\"" + propertyName + "\").getString() %></td>");
       viewTemplate.append("         <%");
       viewTemplate.append("       }");
       viewTemplate.append("     %>");
@@ -330,6 +347,8 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
       System.out.println("\n\n\n================================================\n\n\n");
       System.out.println(jsonObjectGenerated);	
       System.out.println("\n\n\n================================================\n\n\n");
+      
+      jsonObjectGenerated = jsonObjectGenerated.replaceAll("\n", "<br/>");
       
       JsonHandler jsonHandler = new JsonDefaultHandler();
       new JsonParserImpl().parse(new InputStreamReader(new ByteArrayInputStream(jsonObjectGenerated.getBytes())), jsonHandler);

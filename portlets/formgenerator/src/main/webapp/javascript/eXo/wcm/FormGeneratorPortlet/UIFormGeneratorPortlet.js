@@ -29,7 +29,7 @@ UIFormGeneratorPortlet.prototype.renderComponent = function(typeComp) {
 			break;
 		case "input"		: 
 			fieldComponent  +=		"<td class='FieldLabel' value='Input Text'>Input field</td>";
-			fieldComponent  +=		"<td class='FieldComponent'><input type='text' class='InputText' value='Input value'/></td>";
+			fieldComponent  +=		"<td class='FieldComponent'><input type='text' class='InputText' value=''/></td>";
 			break;
 		case "textarea"	:
 			fieldComponent  +=		"<td class='FieldLabel' value='Textarea'>Textarea field</td>";
@@ -454,7 +454,7 @@ UIFormGeneratorPortlet.prototype.getProperties = function(comp) {
 			break;
 	}
 
-	strObject += '"guildline":"'+fieldLabel.getAttribute('desc')+'"';
+	strObject += '"guideline":"'+fieldLabel.getAttribute('desc')+'"';
 	strObject += "}";
 	return strObject;
 };

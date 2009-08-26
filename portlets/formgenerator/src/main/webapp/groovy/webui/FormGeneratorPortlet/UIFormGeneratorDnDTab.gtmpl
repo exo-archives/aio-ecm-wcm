@@ -19,7 +19,7 @@
 							</div>
 						</div>
 					</div>
-					<!--  <div class="LeftMenu" elementType="label">
+					<div class="LeftMenu" elementType="label">
 						<div class="RightMenu">
 							<div class="CenterMenu">
 								<a class="IconMenu IconLabel"><span></span></a>
@@ -27,7 +27,7 @@
 								<div class="ClearLeft"><span></span></div>
 							</div>
 						</div>
-					</div>-->
+					</div>
 					<div class="LeftMenu" elementType="textarea">
 						<div class="RightMenu">
 							<div class="CenterMenu">
@@ -99,72 +99,6 @@
 				<div class="MiddleLeftViewBoxStyle">
 					<div class="MiddleRightViewBoxStyle">
 						<div class="MiddleCenterViewBoxStyle" id='MiddleCenterViewBoxStyle'>
-							<!-- div class="BoxContentBoxStyle"  typecomponent="input">
-								<div class="TopContentBoxStyle">
-									<div class="UIForm UIFormEditBox">
-										<div class="HorizontalLayout">
-											<div class="FormContainer">
-												<table class="UIFormGrid">
-														<tr>
-															<td class="FieldLabel" value="Name" mandatory="true" desc="">Name</td>
-															<td class="FieldComponent">
-																<input class="InputText" type="text" value=""/><span style="color: red">*</span>
-															</td>
-															<td class="FieldIcon"><span></span></td>
-														</tr>
-												</table>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="MiddleContentBoxStyle" style="display: none;">
-									<div class="UIForm UIFormEditBox">
-										<div class="HorizontalLayout">
-											<div class="FormContainer">
-												<table class="UIFormGrid">
-														<tr>
-															<td class="FieldLabel">Field Label</td>
-															<td class="FieldComponent"><input class="InputText" type="text" /></td>
-														</tr>
-														<tr>
-															<td class="FieldLabel">Width</td>
-															<td class="FieldComponent">
-																<input class="InputText" type="number" style="width: 50%; float: left;" value=""/>
-																<div class="BoxRules">
-																	Rules:
-																	<input class="Requied" type="checkbox"/>
-																	Required
-																</div>
-															</td>
-															<td class="FieldIcon"><span><span/></td>
-														</tr>
-														<tr>
-															<td class="FieldLabel">Height</td>
-															<td class="FieldComponent">
-																<input class="InputText" type="number" style="width: 50%; float: left;" value=""/>
-															</td>
-															<td class="FieldIcon"><span><span/></td>
-														</tr>
-														<tr>
-															<td class="FieldLabel">Default Value</td>
-															<td class="FieldComponent">
-																<input class="InputText" type="text" />
-															</td>
-															<td class="FieldIcon"><span><span/></td>
-														</tr>
-														<tr>
-															<td class="FieldLabel">Guidelines for User</td>
-															<td class="FieldComponent">
-																<textarea class="Textarea"></textarea>
-															</td>
-															<td class="FieldIcon"><span><span/></td>
-														</tr>
-												</table>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div -->
 						</div>
 					</div>
 				</div>

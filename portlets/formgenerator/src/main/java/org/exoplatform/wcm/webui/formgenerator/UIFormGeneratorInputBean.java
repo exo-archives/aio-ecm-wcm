@@ -36,7 +36,7 @@ public class UIFormGeneratorInputBean {
   
   private String advanced;
   
-  private String guildLine;
+  private String guideline;
   
   private int width;
   
@@ -84,12 +84,12 @@ public class UIFormGeneratorInputBean {
     this.value = value;
   }
 
-  public String getGuildLine() {
-    return guildLine;
+  public String getGuideline() {
+    return guideline;
   }
 
-  public void setGuildLine(String guildLine) {
-    this.guildLine = guildLine;
+  public void setGuideline(String guideline) {
+    this.guideline = guideline;
   }
 
   public boolean isMandatory() {
