@@ -351,12 +351,19 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
       templateService.addTemplate(false, nodetypeName, templateName, true, templateName, new String[] {"*"}, newViewTemplate, preferenceRepository) ;
       
       Utils.createPopupMessage(formGeneratorTabPane, "UIFormGeneratorTabPane.msg.AddNewsSuccessful", new Object[]{templateName}, ApplicationMessage.INFO);
+      
+      nameFormStringInput.setValue("");
+      ((UIFormWYSIWYGInput)formGeneratorTabPane.getChildById(UIFormGeneratorConstant.DESCRIPTION_FORM_WYSIWYG_INPUT)).setValue("");
+      event.getRequestContext().addUIComponentToUpdateByAjax(formGeneratorTabPane);
     }
   }
   
   public static class ResetActionListener extends EventListener<UIFormGeneratorTabPane> {
     public void execute(Event<UIFormGeneratorTabPane> event) throws Exception {
-      
+      UIFormGeneratorTabPane formGeneratorTabPane = event.getSource();
+      formGeneratorTabPane.getUIStringInput(UIFormGeneratorConstant.NAME_FORM_STRING_INPUT).setValue("");
+      ((UIFormWYSIWYGInput)formGeneratorTabPane.getChildById(UIFormGeneratorConstant.DESCRIPTION_FORM_WYSIWYG_INPUT)).setValue("");
+      event.getRequestContext().addUIComponentToUpdateByAjax(formGeneratorTabPane);
     }
   }
   
