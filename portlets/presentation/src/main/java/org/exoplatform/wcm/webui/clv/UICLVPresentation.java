@@ -25,6 +25,7 @@ import java.util.Locale;
 
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
+import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.portlet.PortletPreferences;
 
@@ -300,13 +301,13 @@ import org.exoplatform.webui.event.EventListener;
    */
   public String getTitle(Node node) throws Exception {
 	  String title = null;
-	  if (node.hasProperty("exo:title")) {
-		  title = node.getProperty("exo:title").getValue().getString();
-	  } else if (node.hasNode("jcr:content")) {
+	  if (node.hasNode("jcr:content")) {
 		  Node content = node.getNode("jcr:content");
 		  if (content.hasProperty("dc:title")) {
-			  title = content.getProperty("dc:title").getValue().getString();
+			  title = content.getProperty("dc:title").getValues()[0].getString();
 		  }
+	  } else if (node.hasProperty("exo:title")) {
+		  title = node.getProperty("exo:title").getValue().getString();
 	  }
 	  if (title==null) title = node.getName();
 	  
@@ -329,7 +330,7 @@ import org.exoplatform.webui.event.EventListener;
 	  } else if (node.hasNode("jcr:content")) {
 		  Node content = node.getNode("jcr:content");
 		  if (content.hasProperty("dc:description")) {
-			  desc = content.getProperty("dc:description").getValue().getString();
+			  desc = content.getProperty("dc:description").getValues()[0].getString();
 		  }
 	  }
 	  return desc;
@@ -362,6 +363,28 @@ import org.exoplatform.webui.event.EventListener;
     return link;
   }
 
+  /**
+   * Gets the WebDAV uRL.
+   * 
+   * @param node the node
+   * 
+   * @return the WebDAV URL
+   * 
+   * @throws Exception the exception
+   */
+  public String getWebdavURL(Node node) throws Exception {
+	  String link = null;
+	  PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
+	  PortletPreferences portletPreferences = getPortletPreferences();
+	  String repository = portletPreferences.getValue(UICLVPortlet.REPOSITORY, null);
+	  String workspace = portletPreferences.getValue(UICLVPortlet.WORKSPACE, null);
+	  String baseURI = portletRequestContext.getRequest().getScheme() + "://"
+	  + portletRequestContext.getRequest().getServerName() + ":"
+	  + String.format("%s", portletRequestContext.getRequest().getServerPort());
+	  link = baseURI + "/rest/jcr/" + repository + "/" + workspace + node.getPath();
+	  return link;
+  }
+  
   /**
    * Gets the author.
    * 
@@ -436,6 +459,11 @@ import org.exoplatform.webui.event.EventListener;
    * @return the content icon
    */
   public String getContentIcon(Node node) {
+	  try {
+		return "Icon16x16 default16x16Icon "+org.exoplatform.ecm.webui.utils.Utils.getNodeTypeIcon(node, "16x16Icon");
+	} catch (RepositoryException e) {
+		e.printStackTrace();
+	}
     return null;
   }
 

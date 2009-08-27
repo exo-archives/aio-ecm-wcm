@@ -416,12 +416,12 @@
     </preference>
     <preference>
     	<name>folderPath</name>
-    	<value>/sites content/live/acme/web contents/site artifacts/Documents</value>
+    	<value>/sites content/live/acme/documents</value>
     	<read-only>false</read-only>
     </preference>
     <preference>
     	<name>formViewTemplatePath</name>
-    	<value>/exo:ecm/views/templates/Content List Viewer/list-by-folder/OneColumnCLVTemplate.gtmpl</value>
+    	<value>/exo:ecm/views/templates/Content List Viewer/list-by-folder/DocumentsTemplate.gtmpl</value>
     	<read-only>false</read-only>
     </preference>
     <preference>
@@ -456,7 +456,7 @@
     </preference>
     <preference>
     	<name>showDateCreated</name>
-    	<value>false</value>	    	
+    	<value>true</value>	    	
     	<read-only>false</read-only>
     </preference>
     <preference>
