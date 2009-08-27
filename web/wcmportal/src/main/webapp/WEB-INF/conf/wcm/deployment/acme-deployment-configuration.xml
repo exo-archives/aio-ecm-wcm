@@ -99,7 +99,7 @@
             </object>
           </object-param>
           <object-param>        
-            <name>ACME Stylesheet data</name>
+            <name>ACME Stylesheet Green data</name>
             <description>Deployment Descriptor</description>
             <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
               <field  name="target">
@@ -109,7 +109,21 @@
               		<field  name="nodePath"><string>/sites content/live/acme/css</string></field>
               	</object>
               </field>
-              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme/Stylesheet.xml</string></field>
+              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme/StylesheetGreen.xml</string></field>
+            </object>
+          </object-param>
+          <object-param>        
+            <name>ACME Stylesheet Blue data</name>
+            <description>Deployment Descriptor</description>
+            <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
+              <field  name="target">
+              	<object type="org.exoplatform.services.deployment.DeploymentDescriptor$Target">
+              		<field  name="repository"><string>repository</string></field>
+              		<field  name="workspace"><string>collaboration</string></field>
+              		<field  name="nodePath"><string>/sites content/live/acme/css</string></field>
+              	</object>
+              </field>
+              <field  name="sourcePath"><string>war:/conf/wcm/artifacts/site-resources/acme/StylesheetBlue.xml</string></field>
             </object>
           </object-param>
           <object-param>        
