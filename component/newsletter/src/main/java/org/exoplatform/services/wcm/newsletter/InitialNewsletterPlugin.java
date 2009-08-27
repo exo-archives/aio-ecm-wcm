@@ -28,7 +28,6 @@ import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
-import org.exoplatform.services.wcm.deployment.WCMContentInitializerService;
 import org.exoplatform.services.wcm.newsletter.config.NewsletterUserConfig;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterCategoryHandler;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterManageUserHandler;
@@ -67,8 +66,7 @@ public class InitialNewsletterPlugin extends BasePortalArtifactsPlugin {
                                  ConfigurationManager configurationManager,
                                  RepositoryService repositoryService,
                                  NewsletterManagerService newsletterManagerService, 
-                                 LivePortalManagerService livePortalManagerService, 
-                                 WCMContentInitializerService wcmContentInitializerService) {
+                                 LivePortalManagerService livePortalManagerService) {
     super(initParams, configurationManager, repositoryService);
     
     categoryConfigs = initParams.getObjectParamValues(NewsletterCategoryConfig.class);

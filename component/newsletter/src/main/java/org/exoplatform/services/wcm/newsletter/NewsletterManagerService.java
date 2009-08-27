@@ -16,14 +16,12 @@
  */
 package org.exoplatform.services.wcm.newsletter;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
-import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.Value;
@@ -50,7 +48,6 @@ import org.exoplatform.services.wcm.newsletter.handler.NewsletterManageUserHandl
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterPublicUserHandler;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterSubscriptionHandler;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterTemplateHandler;
-import org.exoplatform.services.wcm.utils.SQLQueryBuilder;
 
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform
@@ -172,22 +169,14 @@ public class NewsletterManagerService {
 		MailService mailService = (MailService) container.getComponentInstanceOfType(MailService.class);
 
 		Message message = null;
-
 		QueryManager queryManager = session.getWorkspace().getQueryManager();
-		SQLQueryBuilder queryBuilder = new SQLQueryBuilder();
 
-		queryBuilder.selectTypes(null);
-		queryBuilder.fromNodeTypes(new String[] { NewsletterConstant.ENTRY_NODETYPE });
-		queryBuilder.like(NewsletterConstant.ENTRY_PROPERTY_STATUS, NewsletterConstant.STATUS_AWAITING, null);
-
-		Calendar toDate = Calendar.getInstance();
-		SimpleDateFormat formatter= new SimpleDateFormat(ISO8601.SIMPLE_DATETIME_FORMAT);
-		String dateNow = formatter.format(toDate.getTime());
-
-//		queryBuilder.beforeDate(NewsletterConstant.ENTRY_PROPERTY_DATE, dateNow, LOGICAL.AND);
-
-		String sqlQuery = queryBuilder.createQueryStatement();
-
+		String sqlQuery = 		
+		"SELECT * FROM exo:newsletterEntry WHERE exo:newsletterEntryStatus LIKE '%" +
+		NewsletterConstant.STATUS_AWAITING +
+		"%' AND exo:newsletterEntryDate <= TIMESTAMP '" +
+		ISO8601.format(Calendar.getInstance()) + "'";
+		
 		Query query = queryManager.createQuery(sqlQuery, Query.SQL);
 		QueryResult queryResult = query.execute();
 		NodeIterator nodeIterator = queryResult.getNodes();
