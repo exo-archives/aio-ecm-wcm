@@ -206,6 +206,10 @@ public class UINewsletterEntryManager extends UIForm {
     public void execute(Event<UINewsletterEntryManager> event) throws Exception {
       UINewsletterEntryManager uiNewsletterEntryManager = event.getSource();
       List<String> subIds = uiNewsletterEntryManager.getChecked();
+      if(subIds == null || subIds.size() == 0){
+        Utils.createPopupMessage(uiNewsletterEntryManager, "UISubscription.msg.checkOnlyOneNewsletterToDelete", null, ApplicationMessage.WARNING);
+        return;
+      }
       uiNewsletterEntryManager.newsletterEntryHandler.delete(NewsLetterUtil.getPortalName(), 
                                                              uiNewsletterEntryManager.categoryConfig.getName(), 
                                                              uiNewsletterEntryManager.subscriptionConfig.getName(), subIds);
@@ -219,7 +223,7 @@ public class UINewsletterEntryManager extends UIForm {
       UINewsletterEntryManager uiNewsletterEntryManager = event.getSource();
       List<String> subIds = uiNewsletterEntryManager.getChecked();
       if(subIds == null || subIds.size() != 1){
-        Utils.createPopupMessage(uiNewsletterEntryManager, "UISubscription.msg.checkOnlyOneNewsletterToOpen", null, ApplicationMessage.WARNING);
+        Utils.createPopupMessage(uiNewsletterEntryManager, "UISubscription.msg.checkOnlyOneNewsletterToEdit", null, ApplicationMessage.WARNING);
         return;
       }
       UINewsletterEntryContainer entryContainer = uiNewsletterEntryManager.createUIComponent(UINewsletterEntryContainer.class, null, null);
@@ -250,8 +254,10 @@ public class UINewsletterEntryManager extends UIForm {
       String subscriptionName = newsletterEntryManager.subscriptionConfig.getName();
       List<String> subIds = newsletterEntryManager.getChecked();
       String message;
+      int messageType;
       if(subIds == null || subIds.size() != 1){
-        message = "UISubscription.msg.checkOnlyOneNewsletterToOpen";
+        message = "UISubscription.msg.checkOnlyOneNewsletterToConvert";
+        messageType = ApplicationMessage.WARNING;
       } else {
         try{
           String newsletterName = subIds.get(0);
@@ -264,12 +270,14 @@ public class UINewsletterEntryManager extends UIForm {
           NewsletterTemplateHandler newsletterTemplateHandler = newsletterManagerService.getTemplateHandler();
           newsletterTemplateHandler.convertAsTemplate(newsletterNode.getPath(), Util.getUIPortal().getName(), categoryName);
           message = "UISubscription.msg.convertSuccessful";
+          messageType = ApplicationMessage.INFO;
         }catch(Exception ex){
           message = "UISubscription.msg.templateIsExist";
+          messageType = ApplicationMessage.ERROR;
         }
       }
       UIApplication uiApp = newsletterEntryManager.getAncestorOfType(UIApplication.class);
-      uiApp.addMessage(new ApplicationMessage(message, null, ApplicationMessage.INFO));
+      uiApp.addMessage(new ApplicationMessage(message, null, messageType));
       event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
     }
   }
