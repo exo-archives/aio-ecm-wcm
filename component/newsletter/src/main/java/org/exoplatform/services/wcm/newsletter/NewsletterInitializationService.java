@@ -28,6 +28,7 @@ import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.wcm.deployment.WCMContentInitializerService;
 import org.exoplatform.services.wcm.newsletter.config.NewsletterUserConfig;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterCategoryHandler;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterManageUserHandler;
@@ -71,7 +72,7 @@ public class NewsletterInitializationService implements Startable {
    */
   //  TODO: chuong.phan: DO NOT REMOVE WCMContentInitializerService, THIS IS DEPENDENCY FOR DEPLOYMENT
   @SuppressWarnings("unchecked")
-  public NewsletterInitializationService(InitParams initParams, NewsletterManagerService newsletterManagerService, LivePortalManagerService livePortalManagerService) {
+  public NewsletterInitializationService(InitParams initParams, NewsletterManagerService newsletterManagerService, LivePortalManagerService livePortalManagerService, WCMContentInitializerService wcmContentInitializerService) {
     portalNames = initParams.getValuesParam("portalNames").getValues();
     categoryConfigs = initParams.getObjectParamValues(NewsletterCategoryConfig.class);
     subscriptionConfigs = initParams.getObjectParamValues(NewsletterSubscriptionConfig.class);
