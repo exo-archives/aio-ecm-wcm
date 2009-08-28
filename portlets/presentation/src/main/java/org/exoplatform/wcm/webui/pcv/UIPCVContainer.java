@@ -19,6 +19,9 @@ package org.exoplatform.wcm.webui.pcv;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.URLDecoder;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -80,9 +83,19 @@ public class UIPCVContainer extends UIContainer {
   
   /** The repository. */
   private String repository;
+
+  private boolean showTitle;
+  private boolean showDateCreated;
   
   /** A flag used to display Print/Close buttons and hide Back one if its' value is <code>true</code>. In <code>false</code> case, the Back button will be shown only */
   private boolean isPrint;
+  
+  public static final String PREFERENCE_REPOSITORY = "repository";
+  public static final String PREFERENCE_SHOW_TITLE = "showTitle";
+  public static final String PREFERENCE_SHOW_DATE = "showDateCreated";
+
+  /** The date formatter. */
+  private DateFormat               dateFormatter = null;
 
   /**
    * Instantiates a new uI content viewer container.
@@ -93,9 +106,70 @@ public class UIPCVContainer extends UIContainer {
     
     addChild(UIPCVPresentation.class, null, null);
     uiContentViewer = getChild(UIPCVPresentation.class);
+    PortletRequestContext porletRequestContext = WebuiRequestContext.getCurrentInstance();
+    repository = porletRequestContext.getRequest().getPreferences().getValue(PREFERENCE_REPOSITORY, "");
+    showDateCreated = Boolean.parseBoolean(porletRequestContext.getRequest().getPreferences().getValue(PREFERENCE_SHOW_DATE, ""));
+    showTitle = Boolean.parseBoolean(porletRequestContext.getRequest().getPreferences().getValue(PREFERENCE_SHOW_TITLE, ""));
+    dateFormatter = new SimpleDateFormat();
+    ((SimpleDateFormat) dateFormatter).applyPattern("dd.MM.yyyy '|' hh'h'mm");
+    
   }
-  
-  /**
+
+  	
+	
+	public boolean isShowTitle() {
+		return showTitle;
+	}
+
+	  /**
+	   * Gets the title.
+	   * 
+	   * @param node the node
+	   * 
+	   * @return the title
+	   * 
+	   * @throws Exception the exception
+	   */
+	  public String getTitle(Node node) throws Exception {
+		  String title = null;
+		  if (node.hasNode("jcr:content")) {
+			  Node content = node.getNode("jcr:content");
+			  if (content.hasProperty("dc:title")) {
+				  title = content.getProperty("dc:title").getValues()[0].getString();
+			  }
+		  } else if (node.hasProperty("exo:title")) {
+			  title = node.getProperty("exo:title").getValue().getString();
+		  }
+		  if (title==null) title = node.getName();
+		  
+		  return title;
+	  }
+
+
+	public boolean isShowDateCreated() {
+		return showDateCreated;
+	}
+
+	  /**
+	   * Gets the created date.
+	   * 
+	   * @param node the node
+	   * 
+	   * @return the created date
+	   * 
+	   * @throws Exception the exception
+	   */
+	  public String getCreatedDate(Node node) throws Exception {
+	    if (node.hasProperty("exo:dateCreated")) {
+	      Calendar calendar = node.getProperty("exo:dateCreated").getValue().getDate();
+	      return dateFormatter.format(calendar.getTime());
+	    }
+	    return null;
+	  }
+
+
+
+	/**
    * Gets the repository.
    * 
    * @return the repository
@@ -103,8 +177,6 @@ public class UIPCVContainer extends UIContainer {
    * @throws RepositoryException the repository exception
    */
   public String getRepository() throws RepositoryException {
-    PortletRequestContext porletRequestContext = WebuiRequestContext.getCurrentInstance();
-    repository = porletRequestContext.getRequest().getPreferences().getValue("repository", "");
     return repository;
   }
 

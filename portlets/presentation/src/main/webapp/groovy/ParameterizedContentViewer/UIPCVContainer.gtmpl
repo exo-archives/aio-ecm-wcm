@@ -11,6 +11,10 @@
 	def isQuickEditable = uicomponent.isQuickEditAble();
 	def isPrint = uicomponent.getIsPrint();
 	def lblBack = _ctx.appRes("UIContentViewerContainer.action.back");
+
+	def showTitle = uicomponent.isShowTitle();
+	
+	def showDate = uicomponent.isShowDateCreated();
 	
 	def wcmConfigurationService = uicomponent.getApplicationComponent(WCMConfigurationService.class);
 	def parameterizedPageURI = wcmConfigurationService.getRuntimeContextParam("parameterizedPageURI");
@@ -18,14 +22,24 @@
 %>
 
 <div id="$uicomponent.id" class="$uicomponent.id">
+	<div class="PCV">
 	<%
 		if (node != null) {
+			def title = uicomponent.getTitle(node);
+			def dateCreated = uicomponent.getCreatedDate(node);
+			if(showTitle) {
+					%>	<div class="Title">$title</div> <%   
+			} 
+			if(showDate) { 
+					%>	<div class="DateAndMail">$dateCreated</div> <%   
+			} 
+		
 			if(!isPrint) {
 				%>
 					<div class="UIOptionBar">
-						<div class="BackButton" title="$lblBack" onclick="history.go(-1)"><span></span></div>     
+						<div class="BackButton" title="$lblBack" onclick="history.go(-1)"><span></span></div>
 						<a class="ActionIcon PrintIcon" href="javascript: void(0);" onclick="window.open(location.href.replace('<%=parameterizedPageURI%>','<%=printPreviewPageURI%>') + '?isPrint=true')" title="<%= _ctx.appRes("UIContentViewerContainer.quickPrint.title");%>"><%= _ctx.appRes("UIContentViewerContainer.quickPrint.print");%></a>
-	  		</div>
+			  		</div>
 				<%
 			}
 			if (isQuickEditable) {
@@ -55,4 +69,5 @@
 		  <%
 		}
 	%>
+	</div>
 </div>
