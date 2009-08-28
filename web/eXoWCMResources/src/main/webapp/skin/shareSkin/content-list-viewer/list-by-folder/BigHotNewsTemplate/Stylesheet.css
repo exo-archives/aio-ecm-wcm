@@ -4,18 +4,30 @@
 }
 
 .UIPCLVHotNews .TopBoxParameterized {
-	background: url('DefaultSkin/images/BGTopBox.gif') repeat-x left top;
-	border: 1px solid #cbe2f4;
+/*	background: url('DefaultSkin/images/BGTopBox.gif') repeat-x left top;*/
+/*	border: 1px solid #cbe2f4;*/
 	line-height: 30px;
-	padding: 0px 10px;
+	padding: 0px 5px;
 	margin-bottom: 1px;
 }
 
 .UIPCLVHotNews .TopBoxParameterized .Title {
 	/*float: left;*/
-	color: #fff;
-	font-weight: bold;
-	font-size: 13px;
+	color: #666666;
+	font-weight: normal;
+	font-size: 18px;
+	float: left;
+}
+
+.UIPCLVHotNews .TopBoxParameterized .RssIcon {
+	background: url('images/RSS.gif') no-repeat left top;
+	padding-left: 22px;
+	float: right;
+	color: #fe9832;
+	display: block;
+	margin-top: 9px;
+	line-height: 16px;
+	font-size: 11px;
 }
 
 .UIPCLVHotNews .CaptionItem {
@@ -44,6 +56,13 @@
 
 .UIPCLVHotNews .CaptionItem .HotNews {
 	background: none;
+}
+
+.UIPCLVHotNews .CaptionItem .Date {
+	background: none;
+	color: #999999;
+	font-weight: normal;
+	font-size: 10px;
 }
 
 .UIPCLVHotNews .CaptionItem .ImageHotNews {

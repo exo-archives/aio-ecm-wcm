@@ -26,7 +26,7 @@
 							%><a class="RssIcon">RSS Feed</a><%
 						}
 					%>
-					<!--div class="ClearBoth"><span></span></div-->
+					<div class="ClearBoth"><span></span></div>
 				</div>
 			<%
 		}
@@ -81,11 +81,11 @@
 												}
 											
 												if (isShowSumary) {
-													%><div>$itemSummary</div><%
+													%><div class="Summary">$itemSummary</div><%
 												} 
 										
 												if (isShowCreatedDate) {
-													%><div style="color: red;">$itemDateCreated</div><%
+													%><div class="Date">$itemDateCreated</div><%
 												}
 											%>
 										</div>
@@ -118,11 +118,11 @@
 												}
 											
 												if (isShowSumary) {
-													%><div>$itemSummary</div><%
+													%><div class="Summary">$itemSummary</div><%
 												} 
 												
 												if (isShowCreatedDate) {
-													%><div style="color: red;"><%=itemDateCreated%></div><%
+													%><div class="Date"><%=itemDateCreated%></div><%
 												} 
 											%>
 										</div>

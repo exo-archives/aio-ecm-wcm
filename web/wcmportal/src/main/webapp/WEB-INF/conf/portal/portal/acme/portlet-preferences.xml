@@ -739,7 +739,7 @@
 		</preference>
 		<preference>
 			<name>header</name>
-			<value>Parameterize Content List Viewer</value>
+			<value>Top News</value>
 			<read-only>false</read-only>
 		</preference>
 		<preference>
@@ -779,7 +779,7 @@
 		</preference>
 		<preference>
 			<name>showDateCreated</name>
-			<value>false</value>
+			<value>true</value>
 			<read-only>false</read-only>
 		</preference>
 		<preference>
@@ -789,7 +789,7 @@
 		</preference>
 		<preference>
 			<name>showHeader</name>
-			<value>false</value>
+			<value>true</value>
 			<read-only>false</read-only>
 		</preference>
 		<preference>
@@ -814,12 +814,12 @@
 		</preference>
 		<preference>
 			<name>showRssLink</name>
-			<value>false</value>
+			<value>true</value>
 			<read-only>false</read-only>
 		</preference>
 		<preference>
 			<name>showAutoDetect</name>
-			<value>false</value>
+			<value>true</value>
 			<read-only>false</read-only>
 		</preference>
 		<preference>
