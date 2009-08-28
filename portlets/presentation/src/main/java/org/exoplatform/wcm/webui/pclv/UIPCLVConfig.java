@@ -26,6 +26,7 @@ import javax.portlet.PortletPreferences;
 import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.exoplatform.ecm.webui.selector.UISelectable;
+import org.exoplatform.services.cms.taxonomy.TaxonomyService;
 import org.exoplatform.services.cms.views.ApplicationTemplateManagerService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
@@ -116,7 +117,7 @@ public class UIPCLVConfig extends UIForm implements UISelectable {
 
   /** The Constant VIEWER_HEADER. */
   public static final String VIEWER_HEADER                     = "ViewerHeader";
-
+  
   /** The Constant AUTO_DETECT. */
   public static final String AUTO_DETECT                       = "AutomaticDetection";
 
@@ -143,6 +144,12 @@ public class UIPCLVConfig extends UIForm implements UISelectable {
 
   /** The Constant ORDER_ASC. */
   public static final String ORDER_ASC                         = "OrderAsc";
+  
+  public static final String PREFERENCE_REPOSITORY            = "repository";
+  
+  public static final String PREFERENCE_TREE_NAME             = "treeName";
+
+  public static final String TREE_NAME_FORM_SELECTBOX         = "UICategoryNavigationTreeNameFormSelectBox";
   
   /** The popup id. */
   private String popupId;
@@ -183,7 +190,7 @@ public class UIPCLVConfig extends UIForm implements UISelectable {
     autoDetect.setChecked(true);
     String autoDetected = portletPreferences.getValue(UIPCLVPortlet.SHOW_AUTO_DETECT, null);
     autoDetect.setChecked(Boolean.parseBoolean(autoDetected));
-    
+
     UIFormStringInput headerInput = new UIFormStringInput(HEADER, HEADER, null);
     
     if (!Boolean.parseBoolean(autoDetected)) {
@@ -197,6 +204,12 @@ public class UIPCLVConfig extends UIForm implements UISelectable {
     
     List<SelectItemOption<String>> formViewerTemplateList = getTemplateList(PORTLET_NAME, FORM_VIEW_TEMPLATE_CATEGORY);
     List<SelectItemOption<String>> paginatorTemplateList = getTemplateList(PORTLET_NAME, PAGINATOR_TEMPLATE_CATEGORY);
+    
+    String preferenceRepository = portletPreferences.getValue(PREFERENCE_REPOSITORY, "");
+    String preferenceTreeName = portletPreferences.getValue(PREFERENCE_TREE_NAME, "");
+    List<SelectItemOption<String>> trees = getTaxonomyTrees(preferenceRepository);
+    UIFormSelectBox treeNameFormSelectBox = new UIFormSelectBox(TREE_NAME_FORM_SELECTBOX, TREE_NAME_FORM_SELECTBOX, trees);
+    treeNameFormSelectBox.setValue(preferenceTreeName);
     
     UIFormStringInput itemsPerPageStringInput = new UIFormStringInput(ITEMS_PER_PAGE_INPUT, ITEMS_PER_PAGE_INPUT, null);
     String itemsPerPageVal = portletPreferences.getValue(UIPCLVPortlet.ITEMS_PER_PAGE, null);
@@ -270,6 +283,7 @@ public class UIPCLVConfig extends UIForm implements UISelectable {
     addChild(autoDetect);
     addChild(formViewTemplateSelector);
     addChild(paginatorTemplateSelector);
+    addChild(treeNameFormSelectBox);
     addChild(itemsPerPageStringInput);    
     addChild(viewerButtonRefreshCheckbox);
     addChild(thumbnailsViewCheckbox);
@@ -285,6 +299,16 @@ public class UIPCLVConfig extends UIForm implements UISelectable {
     setActions(new String[] { "Save", "Cancel" });
   }
  
+  private List<SelectItemOption<String>> getTaxonomyTrees(String repository) throws Exception {
+    TaxonomyService taxonomyService = getApplicationComponent(TaxonomyService.class);
+    List<Node> taxonomyNodes = taxonomyService.getAllTaxonomyTrees(repository);
+    List<SelectItemOption<String>> taxonomyTrees = new ArrayList<SelectItemOption<String>>();
+    for(Node itemNode : taxonomyNodes) {
+      taxonomyTrees.add(new SelectItemOption<String>(itemNode.getName(), itemNode.getName()));
+    }
+    return taxonomyTrees;
+  }
+  
   /* (non-Javadoc)
    * @see org.exoplatform.ecm.webui.selector.UISelectable#doSelect(java.lang.String, java.lang.Object)
    */
@@ -448,6 +472,7 @@ public class UIPCLVConfig extends UIForm implements UISelectable {
       String showMoreLink = uiParameterizedManagementForm.getUIFormCheckBoxInput(UIPCLVConfig.SHOW_MORE_LINK).isChecked() ? "true" : "false";
       String showRssLink = uiParameterizedManagementForm.getUIFormCheckBoxInput(UIPCLVConfig.SHOW_RSS_LINK).isChecked() ? "true" : "false";
       String autoDetect = uiParameterizedManagementForm.getUIFormCheckBoxInput(UIPCLVConfig.AUTO_DETECT).isChecked() ? "true" : "false";
+      String treeName = uiParameterizedManagementForm.getUIStringInput(UIPCLVConfig.TREE_NAME_FORM_SELECTBOX).getValue();
       String header = "";
       if(!Boolean.parseBoolean(autoDetect)) {
         header = uiParameterizedManagementForm.getUIStringInput(UIPCLVConfig.HEADER).getValue();
@@ -455,6 +480,7 @@ public class UIPCLVConfig extends UIForm implements UISelectable {
       header = uiParameterizedManagementForm.getHeader();
       String targetPage = uiParameterizedManagementForm.getUIStringInput(UIPCLVConfig.TARGET_PAGE_INPUT).getValue();
 
+      portletPreferences.setValue(UIPCLVConfig.PREFERENCE_TREE_NAME, treeName);
       portletPreferences.setValue(UIPCLVPortlet.PREFERENCE_REPOSITORY, repository);
       portletPreferences.setValue(UIPCLVPortlet.WORKSPACE, workspace);
       portletPreferences.setValue(UIPCLVPortlet.FORM_VIEW_TEMPLATE_PATH, formViewTemplatePath);

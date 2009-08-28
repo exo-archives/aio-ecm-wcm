@@ -35,6 +35,7 @@
       <FolderPathInput>Chemin du dossier</FolderPathInput>
       <FormViewTemplate>Viewer modèle</FormViewTemplate>
       <PaginatorTemplate>Paginator modèle</PaginatorTemplate>
+      <UICategoryNavigationTreeNameFormSelectBox>Arbre taxinomique</UICategoryNavigationTreeNameFormSelectBox>
       <ItemsPerPage>Articles par page</ItemsPerPage>
       <AutoDetect>Détection automatique</AutoDetect>
       <ViewerButtonQuickEdit>Voir l'édition rapide bouton</ViewerButtonQuickEdit>

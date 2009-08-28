@@ -38,6 +38,7 @@
       <FolderPathInput>Folder path</FolderPathInput>
       <FormViewTemplate>Viewer template</FormViewTemplate>
       <PaginatorTemplate>Paginator template</PaginatorTemplate>
+      <UICategoryNavigationTreeNameFormSelectBox>Taxonomy tree</UICategoryNavigationTreeNameFormSelectBox>
       <ItemsPerPage>Items per page</ItemsPerPage>
       <AutoDetect>Automatic Detection</AutoDetect>
       <ViewerButtonQuickEdit>Show quick edit button</ViewerButtonQuickEdit>

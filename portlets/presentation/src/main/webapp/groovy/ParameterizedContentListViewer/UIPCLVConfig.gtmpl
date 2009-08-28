@@ -58,6 +58,12 @@
 			      </td>
 				  <td class="FieldComponent" colspan="3"><% uiform.renderField(uiform.getChildById(uicomponent.PAGINATOR_TEMPLATES_SELECTOR)) %></td>								
 			</tr>
+			<tr>
+			      <td class="FieldLabel">
+			      <%=uicomponent.getLabel(uiform.getChildById(uicomponent.TREE_NAME_FORM_SELECTBOX).getName()) %>
+			      </td>
+				  <td class="FieldComponent" colspan="3"><% uiform.renderField(uiform.getChildById(uicomponent.TREE_NAME_FORM_SELECTBOX)) %></td>								
+			</tr>
 					<tr>
 			      <td class="FieldLabel">
 				      <%=uicomponent.getLabel(uiform.getChildById(uicomponent.ITEMS_PER_PAGE_INPUT).getName()) %>
