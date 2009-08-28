@@ -183,7 +183,7 @@
     </preference>
     <preference>
     	<name>header</name>
-    	<value>lastest project news</value>
+    	<value>Last Project News</value>
     	<read-only>false</read-only>
     </preference>
     <preference>
@@ -253,12 +253,12 @@
 		</preference>
 		<preference>
 			<name>showLink</name>
-			<value>true</value>
+			<value>false</value>
 			<read-only>false</read-only>
 		</preference>
 		<preference>
 			<name>showReadmore</name>
-			<value>true</value>
+			<value>false</value>
 			<read-only>false</read-only>
 		</preference>
   </portlet-preferences>
