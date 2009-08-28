@@ -10,57 +10,73 @@
 		eXo WCM helps your company to keep its websites under control by providing a complete solution to build and maintain easily 
 	multiple web sites at a time.
 
-** Improvement
-    * [WCM-1641] - Update WCM core service
-    * [WCM-1642] - Update newsletter service
-    * [WCM-1643] - Update publication service
-    * [WCM-1644] - Update search service
-    * [WCM-1709] - CLONE -Update newsletter service
-    * [WCM-1710] - CLONE -Update publication service
-    * [WCM-1711] - CLONE -Update WCM core service
-    * [WCM-1734] - Fix some bug for form generator
+Release Notes - exo-ecm-wcm - Version wcm-1.2rc3
+
+** Bug
+    * [WCM-820] - Create web content by VietNamese text--> display error font.
+    * [WCM-1011] - IE6- Didn't display admin toolbar after login
+    * [WCM-1012] - IE6- when i click on Viewer navigation--> display error index
+    * [WCM-1042] - Bug when view webdav on MAC
+    * [WCM-1215] - IE7-Broken UI when minimise browser
+    * [WCM-1352] - [DEV-JS]-Fix bugs navigations in Safari
+    * [WCM-1443] - Cannot add mix:i18n to exo:webContent
+    * [WCM-1530] - NullPointerException while requesting rss feed
+    * [WCM-1536] - Safari 4 compliance
+    * [WCM-1563] - Error with Abort button in Add/Edit content form
+    * [WCM-1571] - ECM Content Browser portlet does not work with WCM content (Webcontent and associated template)
+    * [WCM-1576] - NullPointerException when opening 'Manage publications' window
+    * [WCM-1578] - Modifying content via WebDav causes 'Save draft' and 'Fast publish' actions to fail
+    * [WCM-1581] - getActiveStylesheet exception when rendering exo:webcontent
+    * [WCM-1660] - NullPointerException when clicking on the manage publications icon in the file explorer.
+    * [WCM-1680] - No one can access "backoffice" & drive of new added site
+    * [WCM-1682] - Safari4: Error popup when abort edit page wizard while selecting Form Generator page
+    * [WCM-1699] - The Page Selector form is shown behind the Config form of Parameterized Content List Viewer in special case
+    * [WCM-1705] - Error when try to edit page by wizard while showing page content in search result
+    * [WCM-1713] - There's no initial values for new added repository in Site Administration
+    * [WCM-1717] - WCM can not FastPublish when some sub-nodes of the site are not in checkouted state
+    * [WCM-1722] - FCKEditor. Link to a navigation entry of the site does not show any entries.
+    * [WCM-1735] - Draft content still display in edit mode
+    * [WCM-1738] - Cannot edit content in PCV portlet
+    * [WCM-1739] - Cannot save draft or fast publish when edit content by CLV
+    * [WCM-1745] - Breadcrumb display wrong in PCV portlet when show PCV from PCLV
+    * [WCM-1749] - Error with the position of search icon in User Selector form
+    * [WCM-1753] - Error when put invalid value in Iterm per page field of PCLV portlet
+    * [WCM-1754] - Unknown error when click icon to choose metadata when search document for SCV
+    * [WCM-1756] - Lose border in form to create Web link
+    * [WCM-1757] - Error when view Web Link in PCLV
+    * [WCM-1759] - Can not set home path of exo:taxonomy action
+    * [WCM-1760] - Error in displaying content of CLV
+    * [WCM-1761] - New added content can not be shown in SCV in edit mode 
+    * [WCM-1762] -  Document is not listed in Document folder of specific site after uploaded
+    * [WCM-1766] - Little error in showing date time in Publication history form
+    * [WCM-1767] - Can not search with both "Page" & "Document" conditions
+    * [WCM-1768] - Broken UI in search form in SCV content selector in create page wizard
+    * [WCM-1769] - Error when creating document using new node type created in Generator Portlet
+    * [WCM-1770] - Can not view found document in SCV after search
+    * [WCM-1772] - Can not edit js/css file
+    * [WCM-1773] - There's no default config for pages in ACME site
+    * [WCM-1774] - Little error in showing text in Content List Viewer management form
+    * [WCM-1775] - Content of CLV disappears after deleted document/web content that was selected to view in that page
+    * [WCM-1776] - Always show subscription1 in form to create new letter
+    * [WCM-1777] - No result found when do advanced search in Sites Explorer
+    * [WCM-1779] - The content of SCV was replaced by user without right
+    * [WCM-1780] - IE7: Little UI error in Permission Settings form when add new content
+    * [WCM-1782] - IE7: Error in displaying document in Category
+    * [WCM-1783] - Content of selected category disappears after choose Help from portlet mode
+    * [WCM-1785] - IE7: Error when showing Admin bar while showing Site Administration page
+    * [WCM-1787] - IE7: Error when display node in Site Explorer with long name
+    * [WCM-1816] - Add products to ACME page.
+
+** Task
+    * [WCM-1790] - Release 1.2rc3
 
 ** Sub-task
-    * [WCM-1392] - Show message and can not add content in special case.
-    * [WCM-1519] - [TEST] - Newsletter manager portlet
-    * [WCM-1520] - [TEST] - Newsletter viewer portlet
-    * [WCM-1590] - [TEST] - Test Form generator portlet
-    * [WCM-1591] - [TEST] - Test Fast content creator portlet
-    * [WCM-1597] - [TEST] - Update testcase
-    * [WCM-1598] - [TEST] - Test PCLV portlet
-    * [WCM-1600] - [TEST] - Update testcase
-    * [WCM-1601] - [TEST] - Category navigation portlet
-    * [WCM-1602] - [TEST] - Update testcase for Form generator portlet
-    * [WCM-1603] - [TEST] - Update testcase for Fast content creator portlet
-    * [WCM-1604] - [TEST] - Update testcase
-    * [WCM-1645] - [JAVADOC] - Update javadoc for newsletter
-    * [WCM-1646] - [JAVADOC] - Update javadoc for search
-    * [WCM-1647] - [JAVADOC] - Update javadoc for publication
-    * [WCM-1648] - [DEV] - Update junit test for newsletter
-    * [WCM-1649] - [DEV] - Update junit test for publication
-    * [WCM-1650] - [DEV] - Update junit test for search
-    * [WCM-1651] - [JAVADOC] - Update javadoc for wcm core service
-    * [WCM-1652] - [DEV] - Update junit test for wcm core service
-    * [WCM-1653] - [JAVADOC] - Update javadoc for wcm portal service
-    * [WCM-1654] - [DEV] - Update junit test for wcm portal service
-    * [WCM-1726] - Update JS POM
-    * [WCM-1727] - Update README.txt, put migrate guide in readme
-    * [WCM-1728] - Make an SVN tag
-    * [WCM-1729] - Make a zip package
-    * [WCM-1730] - Make a sniff test
-    * [WCM-1731] - Wait for PM approval
-    * [WCM-1732] - Ensure artifacts are on eXo/VN maven repository
-    * [WCM-1733] - Announcement
+    * [WCM-1791] - Update JS poms
+    * [WCM-1792] - Update README.txt, put migrate guide in readme
+    * [WCM-1793] - Make an SVN tag
+    * [WCM-1794] - Make a zip package
+    * [WCM-1795] - Make a sniff test
+    * [WCM-1797] - Ensure artifacts are on eXo/VN maven repository
+    * [WCM-1798] - Announcement
+    * [WCM-1799] - Close JIRA stuffs
 
-- System Requirements
-    + Web Browser: IE6, IE7, FF2, FF3, Safari, Google Chrome. Best for Frirefox.
-	+ JVM: version 1.5.0_xx only
-	+ Application Server : Tomcat, JBoss, Jonas, Websphere
-	+ Building Tools: Maven 2.0.6 and up
-
-- Other resources and links
-    + Company site        http://www.exoplatform.com
-    + Community JIRA      http://jira.exoplatform.org
-    + Comminity site      http://www.exoplatform.org
-    + Developers wiki     http://wiki.exoplatform.org
-    + Documentation       http://docs.exoplatform.org 
