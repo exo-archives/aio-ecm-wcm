@@ -43,8 +43,6 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormDateTimeInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
-import org.hibernate.cache.UpdateTimestampsCache;
-import org.hibernate.hql.ast.tree.UpdateStatement;
 
 /**
  * Created by The eXo Platform SAS
@@ -204,6 +202,10 @@ public class UINewsletterEntryDialogSelector extends UIForm {
       String templateName = newsletterEntryTemplate.getValue();
       UIFormDateTimeInput formDateTimeInput = newsletterEntryDialogSelector.getChild(UIFormDateTimeInput.class);
       Calendar calendar = formDateTimeInput.getCalendar();
+      
+      UIFormSelectBox categorySelectBox = newsletterEntryDialogSelector.getChildById("UINewsletterEntryCategorySelectBox");
+      UIFormSelectBox subcriptionSelectBox = newsletterEntryDialogSelector.getChildById("UINewsletterEntrySubscriptionSelectBox");
+     
       UINewsletterEntryContainer entryContainer = newsletterEntryDialogSelector.getAncestorOfType(UINewsletterEntryContainer.class);
       UIApplication uiApp = entryContainer.getAncestorOfType(UIApplication.class);
       if(calendar == null || formDateTimeInput.getValue().trim().length() < 1){
@@ -215,6 +217,13 @@ public class UINewsletterEntryDialogSelector extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       }
+      if (categorySelectBox.getValue() == null || subcriptionSelectBox.getValue() == null
+      		|| categorySelectBox.getValue().toString() == "" || subcriptionSelectBox.getValue().toString() == "")
+      {
+      	Utils.createPopupMessage(newsletterEntryDialogSelector, "UINewsletterEntryDialogSelector.msg.subcriptionIsNotEmpty", null, ApplicationMessage.WARNING);
+      	return;
+      }
+      
       entryContainer.setUpdated(true);
       formDateTimeInput.setCalendar(calendar);
       uiApp.addMessage(new ApplicationMessage("UINewsletterEntryForm.msg.UpdateInformationSuccessful", null, ApplicationMessage.INFO));

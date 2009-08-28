@@ -222,6 +222,9 @@
 			<UINetterEntrySubscriptionSelectBox>Subscription</UINetterEntrySubscriptionSelectBox>
 			<UINewsletterEntrySubscriptionSelectBox>Subscription</UINewsletterEntrySubscriptionSelectBox>
 		</title>
+		<msg>
+	      	<subcriptionIsNotEmpty>Subcription name cannot be empty!</subcriptionIsNotEmpty>
+		</msg>
 	</UINewsletterEntryDialogSelector>
 	
 	<UIManagerUsers>
