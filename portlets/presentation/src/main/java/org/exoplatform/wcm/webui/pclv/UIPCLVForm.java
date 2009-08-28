@@ -235,13 +235,11 @@ public class UIPCLVForm extends UIForm {
 	 * @throws Exception the exception
 	 */
 	public String getSummary(Node node) throws Exception {
-
 		Node currentNode = this.getCurrentNode(node);
 		if (currentNode.hasProperty("exo:summary")) {
-
 			return currentNode.getProperty("exo:summary").getValue().getString();
 		}
-		return "In a general manner, it's a beginning on a Restful XML oriented exposure. In a near future, the CLV could access to contents not directly by java, but by a rest call. By doing that, we could open the wcm platform to other technology and front-end (gagdet, php platform by mashup, etc).In a general manner, it's a beginning on a Restful XML oriented exposure. In a near future, the CLV could access to contents not directly by java, but by a rest call.";
+		return null;
 	}
 
 	private Node getCurrentNode(Node node) throws RepositoryException {

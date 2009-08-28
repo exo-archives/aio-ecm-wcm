@@ -192,15 +192,7 @@ public class UIPCLVConfig extends UIForm implements UISelectable {
     autoDetect.setChecked(Boolean.parseBoolean(autoDetected));
 
     UIFormStringInput headerInput = new UIFormStringInput(HEADER, HEADER, null);
-    
-    if (!Boolean.parseBoolean(autoDetected)) {
-      headerInput.setValue("");
-
-      String headerValue = portletPreferences.getValue(UIPCLVPortlet.HEADER, null);
-      headerInput.setValue(headerValue);
-    } else {
-      headerInput.setValue(this.getHeader());
-    }
+    headerInput.setValue(portletPreferences.getValue(UIPCLVPortlet.HEADER, null));
     
     List<SelectItemOption<String>> formViewerTemplateList = getTemplateList(PORTLET_NAME, FORM_VIEW_TEMPLATE_CATEGORY);
     List<SelectItemOption<String>> paginatorTemplateList = getTemplateList(PORTLET_NAME, PAGINATOR_TEMPLATE_CATEGORY);
@@ -473,11 +465,7 @@ public class UIPCLVConfig extends UIForm implements UISelectable {
       String showRssLink = uiParameterizedManagementForm.getUIFormCheckBoxInput(UIPCLVConfig.SHOW_RSS_LINK).isChecked() ? "true" : "false";
       String autoDetect = uiParameterizedManagementForm.getUIFormCheckBoxInput(UIPCLVConfig.AUTO_DETECT).isChecked() ? "true" : "false";
       String treeName = uiParameterizedManagementForm.getUIStringInput(UIPCLVConfig.TREE_NAME_FORM_SELECTBOX).getValue();
-      String header = "";
-      if(!Boolean.parseBoolean(autoDetect)) {
-        header = uiParameterizedManagementForm.getUIStringInput(UIPCLVConfig.HEADER).getValue();
-      } 
-      header = uiParameterizedManagementForm.getHeader();
+      String header = uiParameterizedManagementForm.getUIStringInput(UIPCLVConfig.HEADER).getValue();
       String targetPage = uiParameterizedManagementForm.getUIStringInput(UIPCLVConfig.TARGET_PAGE_INPUT).getValue();
 
       portletPreferences.setValue(UIPCLVConfig.PREFERENCE_TREE_NAME, treeName);

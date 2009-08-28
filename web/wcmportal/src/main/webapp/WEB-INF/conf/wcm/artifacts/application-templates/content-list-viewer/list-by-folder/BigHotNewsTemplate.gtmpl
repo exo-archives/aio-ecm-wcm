@@ -56,6 +56,7 @@
 							def isShowLink = uicomponent.isShowField(UIPCLVPortlet.SHOW_LINK);
 							def isShowCreatedDate = uicomponent.isShowField(UIPCLVPortlet.SHOW_DATE_CREATED) && itemDateCreated != null;
 							
+							if (itemSummary == null) itemSummary = "";
 							if (imgSrc == null) 
 							  imgSrc = "/eXoWCMResources/skin/shareSkin/content-list-viewer/list-by-folder/defaultParameterizedContentListViewer/background/IIlustrationImages.jpg";
 							if (itemTitle != null && itemTitle.trim().length() != 0)

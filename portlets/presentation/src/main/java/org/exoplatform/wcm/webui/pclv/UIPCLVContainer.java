@@ -62,6 +62,22 @@ import org.exoplatform.webui.event.EventListener;
 )
 public class UIPCLVContainer extends UIContainer {
 
+  /**
+   * Gets the header.
+   * 
+   * @return the header
+   */
+  private String getHeader(){
+    PortletRequestContext portletRequestContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+    HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) portletRequestContext.getRequest();
+    String requestURI = requestWrapper.getRequestURI();
+    String selectedPage = Util.getUIPortal().getSelectedNode().getUri();
+    if (requestURI.endsWith(selectedPage)) return null;
+    String[] param = requestURI.split("/");
+    String header = param[param.length - 1];
+    return header;
+  }
+  
 	public void init() throws Exception {
 		PortletRequestContext portletRequestContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
 		HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) portletRequestContext.getRequest();
@@ -105,10 +121,17 @@ public class UIPCLVContainer extends UIContainer {
 		parameterizedContentListViewer.init(templatePath, resourceResolver, paginatedNodeIterator);
 		parameterizedContentListViewer.setContentColumn(portletPreferences.getValue(UIPCLVPortlet.HEADER, null));
 		parameterizedContentListViewer.setShowLink(Boolean.parseBoolean(portletPreferences.getValue(UIPCLVPortlet.SHOW_LINK, null)));
+		
+		String autoDetect = portletPreferences.getValue(UIPCLVPortlet.SHOW_AUTO_DETECT, null);
+		String currentHeader = getHeader();
+		if ("true".equals(autoDetect) && currentHeader != null)
+		  parameterizedContentListViewer.setHeader(currentHeader);
+		else 
+		  parameterizedContentListViewer.setHeader(portletPreferences.getValue(UIPCLVPortlet.HEADER, null));
+		
 		parameterizedContentListViewer.setShowHeader(Boolean.parseBoolean(portletPreferences.getValue(UIPCLVPortlet.SHOW_HEADER, null)));
 		parameterizedContentListViewer.setShowReadmore(Boolean.parseBoolean(portletPreferences.getValue(UIPCLVPortlet.SHOW_READMORE, null)));
-		parameterizedContentListViewer.setHeader(portletPreferences.getValue(UIPCLVPortlet.HEADER, null));
-		parameterizedContentListViewer.setAutoDetection(portletPreferences.getValue(UIPCLVPortlet.SHOW_AUTO_DETECT, null));
+		parameterizedContentListViewer.setAutoDetection(autoDetect);
 		parameterizedContentListViewer.setShowMoreLink(portletPreferences.getValue(	UIPCLVPortlet.SHOW_MORE_LINK, null));
 		parameterizedContentListViewer.setShowRSSLink(portletPreferences.getValue(UIPCLVPortlet.SHOW_RSS_LINK, null));
 	}
