@@ -161,6 +161,18 @@
 					</object>
 				</object-param>
 				<object-param>
+					<name>Big hot news template</name>
+					<description>Big hot news template</description>
+					<object type="org.exoplatform.services.cms.views.PortletTemplatePlugin$PortletTemplateConfig">
+						<field name="templateName">
+							<string>BigHotNewsTemplate.gtmpl</string>
+						</field>
+						<field name="category">
+							<string>list-by-folder</string>
+						</field>
+					</object>
+				</object-param>
+				<object-param>
 					<name>default.paginator</name>
 					<description>Default paginator groovy template</description>
 					<object type="org.exoplatform.services.cms.views.PortletTemplatePlugin$PortletTemplateConfig">
@@ -272,12 +284,20 @@
 	        </value-param>	    
           <object-param>        
             <name>DefaultVerticalHierachy</name>
-            <description>Default search page layout template</description>
+            <description>Default vertical hierachy with two levels</description>
             <object type="org.exoplatform.services.cms.views.PortletTemplatePlugin$PortletTemplateConfig">
               <field  name="templateName"><string>DefaultVerticalHierachy.gtmpl</string></field>  
               <field  name="category"><string>vertical-hierachy</string></field>
             </object>
           </object-param>		  	      		           	        
+          <object-param>        
+            <name>SimpleVerticalHierachy</name>
+            <description>Simple vertical hierachy with all levers</description>
+            <object type="org.exoplatform.services.cms.views.PortletTemplatePlugin$PortletTemplateConfig">
+              <field  name="templateName"><string>SimpleVerticalHierachy.gtmpl</string></field>  
+              <field  name="category"><string>vertical-hierachy</string></field>
+            </object>
+          </object-param>
         </init-params>  
       </component-plugin> 
    </external-component-plugins> 

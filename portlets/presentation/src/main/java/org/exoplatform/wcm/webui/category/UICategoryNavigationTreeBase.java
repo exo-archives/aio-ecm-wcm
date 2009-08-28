@@ -16,16 +16,25 @@
  */
 package org.exoplatform.wcm.webui.category;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
 import javax.portlet.PortletPreferences;
 import javax.servlet.http.HttpServletRequestWrapper;
 
+import org.apache.commons.lang.StringUtils;
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
 import org.exoplatform.ecm.webui.utils.Utils;
+import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.impl.DMSConfiguration;
+import org.exoplatform.services.cms.taxonomy.TaxonomyService;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -62,25 +71,8 @@ public class UICategoryNavigationTreeBase extends UITree {
       if(getFieldValue(obj, beanIconField) != null)
         iconGroup = (String)getFieldValue(obj, beanIconField);
     }
-    PortletRequestContext porletRequestContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
-    HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) porletRequestContext.getRequest();
-    // requestURI: /portal/private/acme/products/presentation/category
-    String requestURI = requestWrapper.getRequestURI();
-    PortletPreferences portletPreferences = UICategoryNavigationUtils.getPortletPreferences();
-    String preferenceTreeName = portletPreferences.getValue(UICategoryNavigationConstant.PREFERENCE_TREE_NAME, "");
-    String categoryPath = String.valueOf(getId(obj));
-    // shortPath: /Classic/News
-    String shortPath = "";
-    if (requestURI.indexOf(preferenceTreeName) < 0) {
-      shortPath = categoryPath.substring(categoryPath.indexOf(preferenceTreeName) - 1);  
-    } else {
-      shortPath = categoryPath.substring(categoryPath.lastIndexOf("/"));
-    }
-    // portalURI: /portal/private/acme/
-    String portalURI = Util.getPortalRequestContext().getPortalURI();
-    // preferenceTargetPage: products/presentation/pclv
-    String preferenceTargetPage = portletPreferences.getValue(UICategoryNavigationConstant.PREFERENCE_TARGET_PAGE, "");
-    String objId = portalURI + preferenceTargetPage +  shortPath;
+    renderCategoryLink(node);
+    String objId = String.valueOf(getId(obj));
     StringBuilder builder = new StringBuilder();
     if(nodeIcon.equals(getExpandIcon())) {
       builder.append(" <a class=\"").append(nodeIcon).append(" ").append(nodeTypeIcon).append("\" href=\"").append(objId).append("\">") ;
@@ -154,4 +146,97 @@ public class UICategoryNavigationTreeBase extends UITree {
     if(selectedNode == null) return false;    
     return selectedNode.getPath().equals(node.getPath());
   }
+  
+  
+  // TODO chuong.phan: These methods are temporary, they are used for Simple Vertical Hierarchy (Full tree)
+  // categoryPath = "/"             => treeNode.getNode("").getNodes()
+  // ----------------------------------------------------------------
+  // categoryPath = "/News"         => treeNode.getNode("").getNodes()
+  //                                => treeNode.getNode("News").getNodes()
+  //----------------------------------------------------------------
+  // categoryPath = "/News/France"  => treeNode.getNode("").getNodes()
+  //                                => treeNode.getNode("News").getNodes()
+  //                                => treeNode.getNode("France").getNodes()
+  
+  public List<Node> getSubcategories(String categoryPath) throws Exception {
+    TaxonomyService taxonomyService = getApplicationComponent(TaxonomyService.class);
+    PortletPreferences portletPreferences = UICategoryNavigationUtils.getPortletPreferences();
+    String preferenceRepository = portletPreferences.getValue(UICategoryNavigationConstant.PREFERENCE_REPOSITORY, "");
+    String preferenceTreeName = portletPreferences.getValue(UICategoryNavigationConstant.PREFERENCE_TREE_NAME, "");
+    Node treeNode = taxonomyService.getTaxonomyTree(preferenceRepository, preferenceTreeName);
+    Node categoryNode = treeNode.getNode(categoryPath);
+    NodeIterator nodeIterator = categoryNode.getNodes();
+    List<Node> subcategories = new ArrayList<Node>();
+    while (nodeIterator.hasNext()) {
+      Node subcategory = nodeIterator.nextNode();
+      if (subcategory.isNodeType("exo:taxonomy"))
+        subcategories.add(subcategory);
+    }
+    return subcategories; 
+  }
+  
+  public String resolveCategoryPathByUri(WebuiRequestContext context) {
+    PortletRequestContext porletRequestContext = (PortletRequestContext) context;
+    HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) porletRequestContext.getRequest();
+    PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
+    UIPortal uiPortal = Util.getUIPortal();
+    String portalURI = portalRequestContext.getPortalURI();
+    String requestURI = requestWrapper.getRequestURI();
+    String pageNodeSelected = uiPortal.getSelectedNode().getName();
+    String parameters = null;
+    try {
+      // parameters: Classic/News/France/Blah/Bom
+      parameters = URLDecoder.decode(StringUtils.substringAfter(requestURI, portalURI.concat(pageNodeSelected + "/")),"UTF-8");
+    } catch (UnsupportedEncodingException e) {}
+    
+    // categoryPath: /News/France/Blah/Bom
+    String categoryPath = parameters.indexOf("/") >= 0 ? parameters.substring(parameters.indexOf("/")) : "";
+    
+    return categoryPath;
+  }
+  
+  public List<String> getCategoriesByUri(String categoryUri) throws Exception {
+    PortletPreferences portletPreferences = UICategoryNavigationUtils.getPortletPreferences();
+    String preferenceTreeName = portletPreferences.getValue(UICategoryNavigationConstant.PREFERENCE_TREE_NAME, "");
+    if (preferenceTreeName.equals(categoryUri)) categoryUri = "";
+    
+    // categories: {"/", "News", "News/France", "News/France/Blah", "News/France/Blah/Bom"}
+    List<String> categories = new ArrayList<String>();
+    String[] tempCategories = categoryUri.split("/");
+    String tempCategory = "";
+    for (int i = 0; i < tempCategories.length; i++) {
+      if (i == 0) tempCategory = "";
+      else if (i == 1) tempCategory = tempCategories[1];
+      else tempCategory += "/" + tempCategories[i];
+      categories.add(tempCategory);
+    }
+    return categories;
+  }
+
+  public String renderCategoryLink(Node node) throws Exception {
+    // portalURI: /portal/private/acme/
+    String portalURI = Util.getPortalRequestContext().getPortalURI();
+    
+    // preferenceTargetPage: products/presentation/pclv
+    PortletPreferences portletPreferences = UICategoryNavigationUtils.getPortletPreferences();
+    String preferenceTargetPage = portletPreferences.getValue(UICategoryNavigationConstant.PREFERENCE_TARGET_PAGE, "");
+    
+    PortletRequestContext porletRequestContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+    HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) porletRequestContext.getRequest();
+    
+    // requestURI: /portal/private/acme/products/presentation/category
+    String requestURI = requestWrapper.getRequestURI();
+    String preferenceTreeName = portletPreferences.getValue(UICategoryNavigationConstant.PREFERENCE_TREE_NAME, "");
+    String categoryPath = String.valueOf(node.getPath());
+    // shortPath: /Classic/News
+    String shortPath = "";
+    if (requestURI.indexOf(preferenceTreeName) >= 0) {
+      shortPath = categoryPath.substring(categoryPath.indexOf(preferenceTreeName) - 1);  
+    } else {
+      shortPath = categoryPath.substring(categoryPath.lastIndexOf("/"));
+    }
+    
+    return portalURI + preferenceTargetPage +  shortPath;
+  }
+  
 }

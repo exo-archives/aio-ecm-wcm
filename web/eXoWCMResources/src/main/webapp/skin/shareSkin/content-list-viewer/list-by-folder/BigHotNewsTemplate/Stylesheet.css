@@ -1,0 +1,72 @@
+.UIPCLVHotNews {
+	border: 1px solid #EDEDEE;    
+	background: #fff;
+}
+
+.UIPCLVHotNews .TopBoxParameterized {
+	background: url('DefaultSkin/images/BGTopBox.gif') repeat-x left top;
+	border: 1px solid #cbe2f4;
+	line-height: 30px;
+	padding: 0px 10px;
+	margin-bottom: 1px;
+}
+
+.UIPCLVHotNews .TopBoxParameterized .Title {
+	/*float: left;*/
+	color: #fff;
+	font-weight: bold;
+	font-size: 13px;
+}
+
+.UIPCLVHotNews .CaptionItem {
+	border-top: 1px solid #cbe2f4;
+	padding: 5px;
+}
+
+.UIPCLVHotNews .CaptionItem .ContentNormalNews {
+	color: #6b6b6b;
+}
+
+.UIPCLVHotNews .CaptionItem .TitleContentNormalNews {
+	color: #565759;
+	font-weight: bold;
+	margin-bottom: 8px;
+	display: block;
+}
+
+.UIPCLVHotNews .CaptionItem .TitleContentNormalNews:hover {
+	text-decoration: underline;
+}
+
+.UIPCLVHotNews .CaptionItem .LineNormalNews {
+	height: 1px;
+	background: #dbdbdb;
+}
+
+.UIPCLVHotNews .CaptionItem .HotNews {
+	background: none;
+}
+
+.UIPCLVHotNews .CaptionItem .ImageHotNews {
+	float: right;
+}
+
+.UIPCLVHotNews .CaptionItem .TitleContentHotNews {
+	color: #565759;
+	font-weight: bold;
+	margin-bottom: 8px;
+	display: block;
+}
+
+.UIPCLVHotNews .CaptionItem .TitleContentHotNews:hover {
+	text-decoration: underline;
+}
+
+.UIPCLVHotNews .CaptionItem .NormalNews {
+	margin-top: 25px;
+}
+
+.UIPCLVHotNews .CaptionItem .ImageNormalNews {
+	float: left;
+	padding-right: 17px;
+}

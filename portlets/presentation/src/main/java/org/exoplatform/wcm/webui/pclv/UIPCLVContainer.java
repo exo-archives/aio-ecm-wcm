@@ -165,14 +165,12 @@ public class UIPCLVContainer extends UIContainer {
 
 	private NodeIterator getListSymlinkNode(PortletPreferences portletPreferences, String categoryPath)	throws RepositoryException,
 																																																			RepositoryConfigurationException {
-		String repository = portletPreferences.getValue(UIPCLVPortlet.REPOSITORY, null);
-		String worksapce = portletPreferences.getValue(UIPCLVPortlet.WORKSPACE, null);
-		String orderType = portletPreferences.getValue(UIPCLVPortlet.ORDER_TYPE, null);
-		String orderBy = portletPreferences.getValue(UIPCLVPortlet.ORDER_BY, null);
-		if (orderType == null)
-			orderType = "DESC";
-		if (orderBy == null)
-			orderBy = "exo:dateCreated";
+		String repository = portletPreferences.getValue(UIPCLVPortlet.REPOSITORY, "");
+		String worksapce = portletPreferences.getValue(UIPCLVPortlet.WORKSPACE, "");
+		String orderType = portletPreferences.getValue(UIPCLVPortlet.ORDER_TYPE, "");
+		String orderBy = portletPreferences.getValue(UIPCLVPortlet.ORDER_BY, "");
+		if ("".equals(orderType)) orderType = "DESC";
+		if ("".equals(orderBy)) orderBy = "exo:dateCreated";
 		String orderQuery = " ORDER BY ";
 		orderQuery += orderBy + " " + orderType;
 		RepositoryService repositoryService = Utils.getService(this, RepositoryService.class);

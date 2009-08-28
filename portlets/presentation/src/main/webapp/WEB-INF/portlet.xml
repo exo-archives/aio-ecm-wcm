@@ -458,12 +458,12 @@
 			</preference>
 			<preference>
 				<name>orderBy</name>
-				<value></value>
+				<value>exo:title</value>
 				<read-only>false</read-only>
 			</preference>
 			<preference>
 				<name>orderType</name>
-				<value></value>
+				<value>DESC</value>
 				<read-only>false</read-only>
 			</preference>
 			<preference>

@@ -44,10 +44,20 @@
     <title>News</title>
 	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>editor:/platform/web-contributors</edit-permission>
-	  <application>
-	    <instance-id>portal#acme:/presentation/SingleContentViewer/acme-news</instance-id>
-	    <title>News</title>
-	  </application>
+	  <container id="ACMEBody" template="system:/groovy/portal/webui/container/UITableColumnContainer.gtmpl">
+	  	<container id="ACMECategories" template="system:/groovy/portal/webui/container/UIContainer.gtmpl" width="200px">
+	  		<application>
+			    <instance-id>portal#acme:/presentation/CategoryNavigationPortlet/acme-categories</instance-id>
+			    <title>Categories</title>
+			  </application>
+	  	</container>
+	  	<container id="ACMEParameterized" template="system:/groovy/portal/webui/container/UIContainer.gtmpl" width="680px">
+	  		<application>
+			    <instance-id>portal#acme:/presentation/ParameterizedContentListViewerPortlet/acme-parameterized</instance-id>
+			    <title>Parameterized</title>
+			  </application>
+	  	</container>
+	  </container>
   </page>
   
   <page>

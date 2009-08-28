@@ -182,7 +182,8 @@ public class UICategoryNavigationTree extends UIContainer {
     try {
     	currentNode = treeNode.getNode(categoryPath);
 		} catch (Exception e) {
-			currentNode = rootTreeNode;
+		  System.out.println("------------------------------------------- loi roai");
+//			currentNode = rootTreeNode;
 		}
     super.processRender(context);
   }
