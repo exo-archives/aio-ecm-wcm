@@ -233,7 +233,7 @@ public class UICategoryNavigationTreeBase extends UITree {
     if (requestURI.indexOf(preferenceTreeName) >= 0) {
       shortPath = categoryPath.substring(categoryPath.indexOf(preferenceTreeName) - 1);  
     } else {
-      shortPath = categoryPath.substring(categoryPath.lastIndexOf("/"));
+      shortPath = "/" + preferenceTreeName + categoryPath.substring(categoryPath.lastIndexOf("/"));
     }
     
     return portalURI + preferenceTargetPage +  shortPath;
