@@ -5,6 +5,17 @@
 	cursor: pointer;
 }
 
+.UIPCLVPortlet .RssIcon {
+	background: url('DefaultSkin/images/RSS.gif') no-repeat left top;
+	padding-left: 22px;
+	float: right;
+	color: #fe9832;
+	display: block;
+	margin-top: 9px;
+	line-height: 16px;
+	font-size: 11px;
+}
+
 .UIPCLVPortlet .UIFormGrid {
 	margin: 0;
 }

@@ -104,8 +104,18 @@ public class UIPCLVForm extends UIForm {
 
 	/** Show RSS link. */
 	private String										showRSSLink;
+	
+	private String                     rssLink;
 
-	public UIPCLVForm() {
+	public String getRssLink() {
+    return rssLink;
+  }
+
+  public void setRssLink(String rssLink) {
+    this.rssLink = rssLink;
+  }
+
+  public UIPCLVForm() {
 	}
 
 	public void init(String templatePath, ResourceResolver resourceResolver, PageList dataPageList) throws Exception {

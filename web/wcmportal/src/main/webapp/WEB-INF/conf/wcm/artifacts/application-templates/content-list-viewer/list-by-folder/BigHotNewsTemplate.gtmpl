@@ -13,13 +13,14 @@
  	<%
 	 	uiform.begin();
 		def header = uicomponent.getHeader();
+		def rssLink = uicomponent.getRssLink();
 		def isShowHeader = uicomponent.isShowHeader() && header != null && header.trim().length() != 0;
 		def isShowRSSLink = uicomponent.isShowField(UIPCLVPortlet.SHOW_RSS_LINK);
 		if (isShowHeader) {
 			%>
 				<div class="TopBoxParameterized">
 					<div class="Title">
-						<div class="Header">$header</div>
+						<div class="Header" href="$rssLink">$header</div>
 					</div>
 					<%
 						if (isShowRSSLink) {

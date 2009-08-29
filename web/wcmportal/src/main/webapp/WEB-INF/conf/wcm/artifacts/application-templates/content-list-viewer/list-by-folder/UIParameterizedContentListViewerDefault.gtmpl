@@ -8,6 +8,7 @@
  	<%
 	 	uiform.begin();
 		def header = uicomponent.getHeader();
+		def rssLink = uicomponent.getRssLink();
 		def isShowHeader = uicomponent.isShowHeader() && header != null && header.trim().length() != 0;
 		def isShowRSSLink = uicomponent.isShowField(UIPCLVPortlet.SHOW_RSS_LINK);
 		if (isShowHeader) {
@@ -18,7 +19,7 @@
 					</div>
 					<%
 						if (isShowRSSLink) {
-							%><a class="RssIcon">RSS Feed</a><%
+							%><a class="RssIcon" href="$rssLink">RSS Feed</a><%
 						}
 					%>
 					<!--div class="ClearBoth"><span></span></div-->

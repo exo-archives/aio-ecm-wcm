@@ -134,6 +134,10 @@ public class UIPCLVContainer extends UIContainer {
 		parameterizedContentListViewer.setAutoDetection(autoDetect);
 		parameterizedContentListViewer.setShowMoreLink(portletPreferences.getValue(	UIPCLVPortlet.SHOW_MORE_LINK, null));
 		parameterizedContentListViewer.setShowRSSLink(portletPreferences.getValue(UIPCLVPortlet.SHOW_RSS_LINK, null));
+		String repository = ((ManageableRepository)categoryNode.getSession().getRepository()).getConfiguration().getName();
+		String workspace = categoryNode.getSession().getWorkspace().getName();
+		
+		parameterizedContentListViewer.setRssLink("/rest/rss/generate?repository=" + repository + "&workspace=" + workspace + "&categoryPath=" + ("".equals(categoryPath) ? preferenceTreeName : categoryPath));
 	}
 
 	public PortletPreferences getPortletPreference() {

@@ -19,17 +19,6 @@
 	font-size: 13px;
 }
 
-.UIPCLVDefault .TopBoxParameterized .RssIcon {
-	background: url('DefaultSkin/images/RSS.gif') no-repeat left top;
-	padding-left: 22px;
-	float: right;
-	color: #fe9832;
-	display: block;
-	margin-top: 9px;
-	line-height: 16px;
-	font-size: 11px;
-}
-
 .UIPCLVDefault .Header {
 	background: url(icons/BgCategoryTitle1x25.gif) repeat-x;
 	border-bottom: 1px solid #B7B7B7;
