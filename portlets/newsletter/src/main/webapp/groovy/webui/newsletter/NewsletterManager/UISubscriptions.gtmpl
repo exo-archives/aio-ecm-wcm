@@ -1,4 +1,8 @@
 <%
+  	def rcontext = _ctx.getRequestContext() ;
+	rcontext.getJavascriptManager().importJavascript('UINewsletterUtil','/newsletter/javascript/eXo/wcm/newsletter/NewsletterManager/');
+%>
+<%
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 %>
 <%
@@ -167,7 +171,7 @@ if(uicomponent.categoryConfig != null){
 								<%=_ctx.appRes("UICategories.title.AWaitingLetter")%>
 							</th>
 							<th class="thContent Title" style="border-right:none;">
-								<input type="checkbox">
+								<input type="checkbox" onclick="eXo.ecm.UINewsletterUtil.checkAllSelected(this);">
 							</th>
 						</tr>
 						<%List<NewsletterSubscriptionConfig> listSubscriptions = uicomponent.getListSubscription();
