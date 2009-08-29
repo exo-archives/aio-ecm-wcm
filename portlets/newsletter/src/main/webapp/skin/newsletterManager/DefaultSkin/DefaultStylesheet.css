@@ -273,4 +273,10 @@
 	height: 22px;
 }
 
+.UINewsletterPortlet .UIRightClickPopupMenu .UIContextMenuContainer {
+	width: 160px;
+}
 
+.UINewsletterPortlet .UIRightClickPopupMenu .UIRightPopupMenuContainer {
+	padding: 0px 8px;
+}
