@@ -20,11 +20,11 @@
 			%>
 				<div class="TopBoxParameterized">
 					<div class="Title">
-						<div class="Header" href="$rssLink">$header</div>
+						<div class="Header">$header</div>
 					</div>
 					<%
 						if (isShowRSSLink) {
-							%><a class="RssIcon">RSS Feed</a><%
+							%><a class="RssIcon" href="$rssLink">RSS Feed</a><%
 						}
 					%>
 					<div class="ClearBoth"><span></span></div>
