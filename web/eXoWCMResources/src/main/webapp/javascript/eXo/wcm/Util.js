@@ -112,18 +112,18 @@ function getKeynum(event) {
 }
 
 function quickSearch(resultPageURI) {
-  var searchBox = document.getElementById("siteSearchBox");
-  var keyWordInput = eXo.core.DOMUtil.findFirstDescendantByClass(searchBox, "input", "keyword");
-  var keyword = keyWordInput.value;
-  var resultPageURIDefault = "searchResult";
-  var params = "portal=" + eXo.env.portal.portalName + "&keyword=" + keyword;
-  var baseURI = getHostName() + eXo.env.portal.context + "/" + eXo.env.portal.accessMode + "/" + eXo.env.portal.portalName; 
-  if (resultPageURI != undefined) {
+	var searchBox = document.getElementById("siteSearchBox");
+	var keyWordInput = eXo.core.DOMUtil.findFirstDescendantByClass(searchBox, "input", "keyword");
+	var keyword = encodeURI(keyWordInput.value);
+	var resultPageURIDefault = "searchResult";
+	var params = "portal=" + eXo.env.portal.portalName + "&keyword=" + keyword;
+	var baseURI = getHostName() + eXo.env.portal.context + "/" + eXo.env.portal.accessMode + "/" + eXo.env.portal.portalName; 
+	if (resultPageURI != undefined) {
 		baseURI = baseURI + "/" + resultPageURI; 
-  } else {
+	} else {
 		baseURI = baseURI + "/" + resultPageURIDefault;  
-  }
-  window.location = baseURI + "?" + params;
+	}
+	window.location = baseURI + "?" + params;
 }
 
 function quickSearchOnEnter(event, resultPageURI) {
@@ -147,13 +147,13 @@ function search(comId) {
 }	
 
 function keepKeywordOnBoxSearch() {
-	var queryRegex = /^portal=\w+&keyword=\w+/;
+	//var queryRegex = /^portal=\w+&keyword=\w+/;
 	var searchBox = document.getElementById("siteSearchBox");
 	var keyWordInput = eXo.core.DOMUtil.findFirstDescendantByClass(searchBox, "input", "keyword");
 	var queryString = location.search.substring(1);  
-	if (!queryString.match(queryRegex)) { return; }
+	//if (!queryString.match(queryRegex)) {return;}
 	var portalParam = queryString.split('&')[0];
-	var keyword = queryString.substring((portalParam + "keyword=").length +1);
+	var keyword = decodeURI(queryString.substring((portalParam + "keyword=").length +1));
 	if (keyword != undefined && keyword.length != 0) {
 		keyWordInput.value = unescape(keyword); 
 	}
