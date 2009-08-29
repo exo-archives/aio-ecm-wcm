@@ -71,7 +71,7 @@
   		return date;
   	}
 %>
-<div id="$componentId">
+<div id="$componentId" class="WCMContentView">
 	<div id="${componentId}-$viewComponentId" class="UIListView" style="">	
 		<div class="UIListGrid">
 			<div class="TitleTable">

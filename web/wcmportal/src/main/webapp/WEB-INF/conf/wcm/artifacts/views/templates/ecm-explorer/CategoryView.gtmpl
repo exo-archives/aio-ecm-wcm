@@ -72,7 +72,7 @@
   
   	
 %>
-<div id="$componentId">
+<div id="$componentId" class="WCMCategoryView">
 	<div id="${componentId}-$viewComponentId" class="UIListView" style="">	
 		<div class="UIListGrid">
 			<div class="TitleTable">

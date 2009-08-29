@@ -70,3 +70,11 @@
 .WebContentTitle {
 	color:#058EE6;
 }
+
+.UIJCRExplorerPortlet .WCMContentView .UIListGrid .LeftColumn .Icon16x16 {
+	position: static;
+}
+
+.UIJCRExplorerPortlet .WCMCategoryView .UIListGrid .LeftColumn .Icon16x16 {
+	position: static;
+}
