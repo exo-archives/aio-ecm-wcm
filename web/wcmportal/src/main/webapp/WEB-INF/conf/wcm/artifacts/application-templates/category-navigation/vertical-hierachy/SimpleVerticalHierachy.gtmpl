@@ -15,8 +15,10 @@
   	for (subcategory in subcategories) {
       def subcategoryName = subcategory.getName();
       def margin = 16 * (level - 1) + "px";
+      def selectedClass = "";
+      if (categoryUri.equals("/" + categoryPath + "/" + subcategoryName)) selectedClass = "SubCategorySelected";
       def categoryLink = uicomponent.renderCategoryLink(subcategory);
-      %><a style="margin-left: $margin" class="SubCategory" href="$categoryLink">$subcategoryName</a><%
+      %><a style="margin-left: $margin" class="SubCategory $selectedClass" href="$categoryLink">$subcategoryName</a><%
       if (subcategory.hasNodes() && categoryUri.startsWith("/" + categoryPath + "/" + subcategoryName)) 
         renderChild(categoryUri, categories, level + 1);
     }
