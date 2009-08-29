@@ -39,12 +39,15 @@
 						def count = 0;
 						def currentPageData = uicomponent.getCurrentPageData();
 						for (node in currentPageData) {
-						  String itemName = node.getName();
-						  String itemLink = uicomponent.generateLink(node);
-							String itemSummary = uicomponent.getSummary(node);
-					    String itemTitle = uicomponent.getTitle(node);
-							String itemDateCreated = uicomponent.getCreatedDate(node);
-							String imgSrc = uicomponent.getIllustrativeImage(node);
+						  def viewNode = uicomponent.getNodeView(node);
+							if (viewNode == null)	continue;
+						  
+						  String itemName = viewNode.getName();
+						  String itemLink = uicomponent.generateLink(viewNode);
+							String itemSummary = uicomponent.getSummary(viewNode);
+					    String itemTitle = uicomponent.getTitle(viewNode);
+							String itemDateCreated = uicomponent.getCreatedDate(viewNode);
+							String imgSrc = uicomponent.getIllustrativeImage(viewNode);
 							
 							def isShowTitle = uicomponent.isShowField(UIPCLVPortlet.SHOW_TITLE);
 							def isShowSumary = uicomponent.isShowField(UIPCLVPortlet.SHOW_SUMMARY);

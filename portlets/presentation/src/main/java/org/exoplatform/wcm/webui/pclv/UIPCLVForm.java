@@ -21,6 +21,7 @@ import java.net.URLDecoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -38,9 +39,14 @@ import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.taxonomy.TaxonomyService;
+import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleException;
+import org.exoplatform.services.ecm.publication.PublicationPlugin;
+import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
 import org.exoplatform.services.wcm.images.RESTImagesRendererService;
+import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -230,11 +236,7 @@ public class UIPCLVForm extends UIForm {
 	 * @throws Exception the exception
 	 */
 	public String getTitle(Node node) throws Exception {
-
-		Node currentNode = this.getCurrentNode(node);
-		return currentNode.hasProperty("exo:title") ? currentNode	.getProperty("exo:title")
-																															.getValue()
-																															.getString() : currentNode.getName();
+		return node.hasProperty("exo:title") ? node.getProperty("exo:title").getString() : node.getName();
 	}
 
 	/**
@@ -245,19 +247,10 @@ public class UIPCLVForm extends UIForm {
 	 * @throws Exception the exception
 	 */
 	public String getSummary(Node node) throws Exception {
-		Node currentNode = this.getCurrentNode(node);
-		if (currentNode.hasProperty("exo:summary")) {
-			return currentNode.getProperty("exo:summary").getValue().getString();
+		if (node.hasProperty("exo:summary")) {
+			return node.getProperty("exo:summary").getValue().getString();
 		}
 		return null;
-	}
-
-	private Node getCurrentNode(Node node) throws RepositoryException {
-
-		Session session = node.getSession();
-		Node newNode = session.getNodeByUUID(node.getProperty("exo:uuid").getValue().getString());
-
-		return newNode;
 	}
 
 	/**
@@ -283,15 +276,13 @@ public class UIPCLVForm extends UIForm {
 	 * @throws Exception the exception
 	 */
 	public String getIllustrativeImage(Node node) throws Exception {
-
-		Node currentNode = this.getCurrentNode(node);
 		WebSchemaConfigService schemaConfigService = getApplicationComponent(WebSchemaConfigService.class);
 		WebContentSchemaHandler contentSchemaHandler = schemaConfigService.getWebSchemaHandlerByType(WebContentSchemaHandler.class);
 		Node illustrativeImage = null;
 		RESTImagesRendererService imagesRendererService = getApplicationComponent(RESTImagesRendererService.class);
 		String uri = null;
 		try {
-			illustrativeImage = contentSchemaHandler.getIllustrationImage(currentNode);
+			illustrativeImage = contentSchemaHandler.getIllustrationImage(node);
 			uri = imagesRendererService.generateURI(illustrativeImage);
 		} catch (Exception e) {
 		}
@@ -299,7 +290,6 @@ public class UIPCLVForm extends UIForm {
 	}
 
 	public String generateLink(Node node) throws Exception {
-
 		PortletRequestContext portletRequestContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
 		HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) portletRequestContext.getRequest();
 		PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
@@ -458,6 +448,23 @@ public class UIPCLVForm extends UIForm {
 		return templatePath;
 	}
 
+	public Node getNodeView(Node node) throws Exception {
+	  String realNodeUUID = node.getProperty("exo:uuid").getString();
+	  Node realNode = node.getSession().getNodeByUUID(realNodeUUID);
+    PublicationService publicationService = getApplicationComponent(PublicationService.class);
+    HashMap<String, Object> context = new HashMap<String, Object>();
+    context.put(WCMComposer.FILTER_MODE, Utils.getCurrentMode());
+    String lifecyleName = null;
+    try {
+      lifecyleName = publicationService.getNodeLifecycleName(realNode);
+    } catch (NotInPublicationLifecycleException e) {}
+    if (lifecyleName == null) return realNode;
+      
+    PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(lifecyleName);
+    Node viewNode = publicationPlugin.getNodeView(realNode, context);
+    return viewNode;
+  }
+	
 	public static class RefreshActionListener extends EventListener<UIPCLVForm> {
 
 		public void execute(Event<UIPCLVForm> event) throws Exception {
