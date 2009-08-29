@@ -256,3 +256,21 @@
 .UINewsletterPortlet .convertAsTemplate{
 	background:transparent url(icons/16x16/copy1-16.png) no-repeat scroll left center;
 }
+
+.UINewsletterPortlet .UIAction .ActionButton {
+	float: none;
+}
+
+.UINewsletterPortlet .UIAction .LightBlueStyle .ButtonLeft {
+	height: 22px;
+}
+
+.UINewsletterPortlet .UIAction .LightBlueStyle .ButtonRight {
+	height: 22px;
+}
+
+.UINewsletterPortlet .UIAction .LightBlueStyle .ButtonMiddle {
+	height: 22px;
+}
+
+

@@ -58,7 +58,7 @@ if(uicomponent.categoryConfig != null){
 					<div style="float:left;line-height:26px;padding-left:10px">$categoryDescription</div>
 					
 					<!-- ----------------------------------- Button -------------------------------------------------- -->
-					<div class="UIAction" style="float:right; padding:0px 10px;"> 
+					<div class="UIAction" style="float:right; padding:0px 10px; width: 120px;"> 
 						<table class="ActionContainer" style="text-align:center">
 							<tr>
 								<td>
@@ -71,7 +71,7 @@ if(uicomponent.categoryConfig != null){
 														
 														
 														<!-- action of this category -->
-														<div class="Line FloatLeft" style="background: none;" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+														<div class="Line" style="background: none;" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
 															<a href="#" class="NewsAdmin"><%=_ctx.appRes("UICategories.title.Administration")%></a>
 															<div style="position:absolute;">
 																<div class="UIPopupCategory" style="display:none; left:-46px; top:-2px; ">
