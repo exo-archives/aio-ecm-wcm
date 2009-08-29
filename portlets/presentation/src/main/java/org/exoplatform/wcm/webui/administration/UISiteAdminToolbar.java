@@ -36,6 +36,7 @@ import org.exoplatform.portal.webui.page.UIWizardPageSetInfo;
 import org.exoplatform.portal.webui.portal.PageNodeEvent;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.portal.UIPortalForm;
+import org.exoplatform.portal.webui.portal.UISkinSelector;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIControlWorkspace;
@@ -571,11 +572,14 @@ import org.exoplatform.webui.event.EventListener;
   public static class SkinSettingsActionListener extends EventListener<UISiteAdminToolbar> {
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       event.setRequestContext(Util.getPortalRequestContext());
-      UIPortalApplication uiApp = Util.getUIPortalApplication();
-      UIControlWorkspace uiControlWorkspace = uiApp.getChild(UIControlWorkspace.class);
-      UIExoStart uiExoStart = uiControlWorkspace.getChild(UIExoStart.class);
-      uiExoStart.createEvent("SkinSettings", Event.Phase.PROCESS, event.getRequestContext())
-      .broadcast();
+      UIPortal uiPortal = Util.getUIPortal();
+      UIPortalApplication uiApp = uiPortal.getAncestorOfType(UIPortalApplication.class);      
+      UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID) ; 
+      UISkinSelector uiChangeSkin = uiMaskWS.createUIComponent(UISkinSelector.class, null, null);
+      uiMaskWS.setUIComponent(uiChangeSkin);
+      uiMaskWS.setWindowSize(640, 400);
+      uiMaskWS.setShow(true);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMaskWS);
     }
   }
 
@@ -593,11 +597,8 @@ import org.exoplatform.webui.event.EventListener;
   public static class LanguageSettingsActionListener extends EventListener<UISiteAdminToolbar> {
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       event.setRequestContext(Util.getPortalRequestContext());
-      UIPortalApplication uiApp = Util.getUIPortalApplication();
-      UIControlWorkspace uiControlWorkspace = uiApp.getChild(UIControlWorkspace.class);
-      UIExoStart uiExoStart = uiControlWorkspace.getChild(UIExoStart.class);
-      uiExoStart.createEvent("LanguageSettings", Event.Phase.PROCESS, event.getRequestContext())
-      .broadcast();
+      UIPortal uiPortal = Util.getUIPortal();
+      uiPortal.createEvent("ChangeLanguage", Event.Phase.PROCESS, event.getRequestContext()).broadcast();
     }
   }
 
@@ -615,11 +616,8 @@ import org.exoplatform.webui.event.EventListener;
   public static class AccountSettingsActionListener extends EventListener<UISiteAdminToolbar> {
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       event.setRequestContext(Util.getPortalRequestContext());
-      UIPortalApplication uiApp = Util.getUIPortalApplication();
-      UIControlWorkspace uiControlWorkspace = uiApp.getChild(UIControlWorkspace.class);
-      UIExoStart uiExoStart = uiControlWorkspace.getChild(UIExoStart.class);
-      uiExoStart.createEvent("AccountSettings", Event.Phase.PROCESS, event.getRequestContext())
-      .broadcast();
+      UIPortal uiPortal = Util.getUIPortal();
+      uiPortal.createEvent("AccountSettings", Event.Phase.PROCESS, event.getRequestContext()).broadcast();
     }
   }
 
