@@ -1,39 +1,17 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <page-set>  
   <page>
-  	<page-id>portal::@owner@::homepage</page-id>
+  	<page-id>portal::@owner@::overview</page-id>
     <owner-type>portal</owner-type>
     <owner-id>@owner@</owner-id>
-    <name>homepage</name>
-    <title>Home Page</title>
+    <name>overview</name>
+    <title>Overview</title>
 	  <access-permissions>Everyone</access-permissions>
-	  <edit-permission>*:/platform/administrators</edit-permission>
-	  <container id="@owner@Homepage" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-	  	<application>
-	      <instance-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-homepage</instance-id>
-	      <title>Homepage</title>
-	    </application>
-			<container id="@owner@Container" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
-	  		<container id="@owner@SerProContainer" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-	  			<application>
-				    <instance-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-serpro</instance-id>
-				    <title>Services and Products</title>
-				  </application>
-	  		</container>
-	  		<container id="@owner@About" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-	  			<application>
-			    	<instance-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-about-header</instance-id>
-			    	<title>About</title>
-			  	</application>
-			  </container>
-	  		<container id="@owner@Features" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-	  			<application>
-				    <instance-id>portal#@owner@:/presentation/ContentListViewerPortlet/@owner@-news-header</instance-id>
-				    <title>Features</title>
-				  </application>
-	  		</container>
-	  	</container>
-	  </container>
+	  <edit-permission>editor:/platform/web-contributors</edit-permission>
+	  <application>
+	    <instance-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-introduce</instance-id>
+	    <title>Introduce</title>
+	  </application>
   </page>
   
   <page>
@@ -43,170 +21,43 @@
     <name>news</name>
     <title>News</title>
 	  <access-permissions>Everyone</access-permissions>
-	  <edit-permission>*:/platform/administrators</edit-permission>
-	  <container id="@owner@NewsPage" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-	  	<container id="@owner@Container" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
-	  		<container id="@owner@SerProContainer" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-	  			<application>
-				    <instance-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-serpro</instance-id>
-				    <title>Services and Products</title>
-				  </application>
-	  		</container>
-	  		<container id="@owner@News" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-	  			<application>
-				    <instance-id>portal#@owner@:/presentation/ContentListViewerPortlet/@owner@-news-noheader</instance-id>
-				    <title>News</title>
-				  </application>
-	  		</container>
-	  	</container>
-	  </container>
+	  <edit-permission>editor:/platform/web-contributors</edit-permission>
+	  <application>
+	    <instance-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-news</instance-id>
+	    <title>News</title>
+	  </application>
   </page>
   
   <page>
-  	<page-id>portal::@owner@::about</page-id>
+  	<page-id>portal::@owner@::events</page-id>
     <owner-type>portal</owner-type>
     <owner-id>@owner@</owner-id>
-    <name>about</name>
-    <title>About Us</title>
+    <name>events</name>
+    <title>Events</title>
 	  <access-permissions>Everyone</access-permissions>
-	  <edit-permission>*:/platform/administrators</edit-permission>
-	  <container id="@owner@AboutPage" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-	  	<container id="@owner@Container" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
-	  		<container id="@owner@SerProContainer" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-	  			<application>
-				    <instance-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-serpro</instance-id>
-				    <title>Services and Products</title>
-				  </application>
-	  		</container>
-	  		<container id="@owner@About" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-	  			<application>
-				    <instance-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-about-noheader</instance-id>
-				    <title>About</title>
-				  </application>
-	  		</container>
-	  	</container>
-	  </container>
+	  <edit-permission>editor:/platform/web-contributors</edit-permission>
+	  <application>
+	    <instance-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-events</instance-id>
+	    <title>Events</title>
+	  </application>
   </page>
   
-  <page>
-  	<page-id>portal::@owner@::contact</page-id>
-    <owner-type>portal</owner-type>
-    <owner-id>@owner@</owner-id>
-    <name>contact</name>
-    <title>Contact</title>
-	  <access-permissions>Everyone</access-permissions>
-	  <edit-permission>*:/platform/administrators</edit-permission>
-	  <container id="@owner@ContactPage" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-	  	<container id="@owner@Container" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
-	  		<container id="@owner@About" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-	  			<application>
-				    <instance-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-about-header</instance-id>
-				    <title>About</title>
-				  </application>
-	  		</container>
-	  		<container id="@owner@Contact" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-	  			<application>
-				    <instance-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-contact</instance-id>
-				    <title>Contact</title>
-				  </application>
-	  		</container>
-	  	</container>
-	  </container>
-  </page>
-  
-  <page>
-  	<page-id>portal::@owner@::product</page-id>
-    <owner-type>portal</owner-type>
-    <owner-id>@owner@</owner-id>
-    <name>product</name>
-    <title>Product</title>
-	  <access-permissions>Everyone</access-permissions>
-	  <edit-permission>*:/platform/administrators</edit-permission>
-	  <container id="@owner@ProductsPage" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-	  	<container id="@owner@Container" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
-	  		<container id="@owner@Services" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-	  			<application>
-				    <instance-id>portal#@owner@:/presentation/ContentListViewerPortlet/@owner@-services-header</instance-id>
-				    <title>Services</title>
-				  </application>
-	  		</container>
-	  		<container id="@owner@Product" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-	  			<application>
-				    <instance-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-product</instance-id>
-				    <title>Product</title>
-				  </application>
-	  		</container>
-	  	</container>
-	  </container>
-  </page>
-  
-  <page>
-  	<page-id>portal::@owner@::services</page-id>
-    <owner-type>portal</owner-type>
-    <owner-id>@owner@</owner-id>
-    <name>services</name>
-    <title>Services</title>
-	  <access-permissions>Everyone</access-permissions>
-	  <edit-permission>*:/platform/administrators</edit-permission>
-	  <container id="@owner@ServicesPage" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-	  	<container id="@owner@Container" template="system:/groovy/wcm/webui/container/UITableColumnContainer.gtmpl">
-	  		<container id="@owner@Products" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-	  			<application>
-				    <instance-id>portal#@owner@:/presentation/ContentListViewerPortlet/@owner@-products-header</instance-id>
-				    <title>Products</title>
-				  </application>
-	  		</container>
-	  		<container id="@owner@Services" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
-	  			<application>
-				    <instance-id>portal#@owner@:/presentation/ContentListViewerPortlet/@owner@-services-noheader</instance-id>
-				    <title>Services</title>
-				  </application>
-	  		</container>
-	  	</container>
-	  </container>
-  </page>
-  
-  <page>
-  	<page-id>portal::@owner@::search</page-id>
-    <owner-type>portal</owner-type>
-    <owner-id>@owner@</owner-id>
-    <name>search</name>
-    <title>Search</title>
-	  <access-permissions>Everyone</access-permissions>
-	  <edit-permission>*:/platform/administrators</edit-permission>
-    <application>
-      <instance-id>portal#@owner@:/searches/WCMAdvanceSearchPortlet/@owner@-search</instance-id>
-      <title>Search</title>
-    </application>
-  </page>
-  
-  <page>
-  	<page-id>portal::@owner@::admintoolbar</page-id>
-    <owner-type>portal</owner-type>
-    <owner-id>@owner@</owner-id>
-    <name>admintoolbar</name>
-    <title>Toolbar</title>
-	  <access-permissions>Everyone</access-permissions>
-	  <edit-permission>*:/platform/administrators</edit-permission>
-    <application>
-      <instance-id>portal#@owner@:/presentation/SiteAdministrationPortlet/@owner@-admintoolbar</instance-id>
-      <title>AdminToolbar</title>
-    </application>
-  </page> 
-  
-  <page>
-  	<page-id>portal::@owner@::contentviewer</page-id>
-    <owner-type>portal</owner-type>
-    <owner-id>@owner@</owner-id>
-    <name>contentviewer</name>
-    <title>ContentViewer</title>
-	  <access-permissions>Everyone</access-permissions>
-	  <edit-permission>*:/platform/administrators</edit-permission>
-    <application>
-      <instance-id>portal#@owner@:/ecm/ContentViewerPortlet/@owner@-contentviewer</instance-id>
-      <title>ContentViewer</title>
-    </application>
-  </page>
+	<page>
+		<page-id>portal::@owner@::contactus</page-id>
+		<owner-type>portal</owner-type>
+		<owner-id>@owner@</owner-id>
+		<name>contactus</name>
+		<title>Contact Us</title>
+		<access-permissions>Everyone</access-permissions>
+		<edit-permission>*:/platform/web-contributors</edit-permission>
+		<application>
+			<instance-id>portal#@owner@:/formgenerator/FastContentCreatorPortlet/@owner@-contactus</instance-id>
+			<title>Contact Us</title>
+			<show-info-bar>false</show-info-bar>
+			<show-application-state>false</show-application-state>
+			<show-application-mode>false</show-application-mode>
+		</application>
+	</page>
   
   <page>
   	<page-id>portal::@owner@::searchResult</page-id>
@@ -215,7 +66,7 @@
     <name>searchResult</name>
     <title>SearchResult</title>
 	  <access-permissions>Everyone</access-permissions>
-	  <edit-permission>*:/platform/administrators</edit-permission>
+	  <edit-permission>editor:/platform/web-contributors</edit-permission>
     <application>
       <instance-id>portal#@owner@:/searches/WCMAdvanceSearchPortlet/@owner@-searchResult</instance-id>
       <title>SearchResult</title>
@@ -223,39 +74,41 @@
       <show-application-state>false</show-application-state>
       <show-application-mode>false</show-application-mode>
     </application>
-  </page> 
+  </page>
   
-  <page>
-  	<page-id>portal::@owner@::parameterizedviewer</page-id>
-    <owner-type>portal</owner-type>
-    <owner-id>@owner@</owner-id>
-    <name>parameterizedviewer</name>
-    <title>ParameterizedViewer</title>
-    <access-permissions>Everyone</access-permissions> 
-    <edit-permission>*:/platform/administrators</edit-permission>
-    <application>
-      <instance-id>portal#@owner@:/presentation/ParameterizedContentViewerPortlet/@owner@-parameterizedviewer</instance-id>
-      <title>parameterizedviewer</title>
-      <show-info-bar>false</show-info-bar>      
-      <show-application-state>false</show-application-state>
-      <show-application-mode>false</show-application-mode>
-    </application>
-  </page>
-  <page>
-  	<page-id>portal::@owner@::printviewer</page-id>
-    <owner-type>portal</owner-type>
-    <owner-id>@owner@</owner-id>
-    <name>printviewer</name>
-    <title>printviewer</title>
-    <access-permissions>Everyone</access-permissions> 
-    <edit-permission>*:/platform/administrators</edit-permission>
-    <show-max-window>true</show-max-window>
-    <application>
-      <instance-id>portal#@owner@:/presentation/ParameterizedContentViewerPortlet/@owner@-printviewer</instance-id>
-      <title>printviewer</title>
-      <show-info-bar>false</show-info-bar>      
-      <show-application-state>false</show-application-state>
-      <show-application-mode>false</show-application-mode>
-    </application>
-  </page>
+	<page>
+		<page-id>portal::@owner@::pcv</page-id>
+		<owner-type>portal</owner-type>
+		<owner-id>@owner@</owner-id>
+		<name>pcv</name>
+		<title>Parameterized content viewer portlet</title>
+		<access-permissions>Everyone</access-permissions>
+		<edit-permission>*:/platform/administrators</edit-permission>
+		<application>
+			<instance-id>portal#@owner@:/presentation/ParameterizedContentViewerPortlet/@owner@-pcv</instance-id>
+			<title>Parameterized content viewer portlet</title>
+			<show-info-bar>false</show-info-bar>
+			<show-application-state>false</show-application-state>
+			<show-application-mode>false</show-application-mode>
+		</application>
+	</page>
+	
+	<page>
+		<page-id>portal::@owner@::printviewer</page-id>
+		<owner-type>portal</owner-type>
+		<owner-id>@owner@</owner-id>
+		<name>printviewer</name>
+		<title>Print viewer</title>
+		<access-permissions>Everyone</access-permissions>
+		<edit-permission>*:/platform/administrators</edit-permission>
+		<show-max-window>true</show-max-window>
+		<application>
+			<instance-id>portal#@owner@:/presentation/ParameterizedContentViewerPortlet/@owner@-printviewer</instance-id>
+			<title>Print viewer</title>
+			<show-info-bar>false</show-info-bar>
+			<show-application-state>false</show-application-state>
+			<show-application-mode>false</show-application-mode>
+		</application>
+	</page>
+	
 </page-set>

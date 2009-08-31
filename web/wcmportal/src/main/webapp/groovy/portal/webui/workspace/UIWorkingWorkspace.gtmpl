@@ -15,11 +15,7 @@
   
   def userName = rcontext.getRemoteUser();
   def language = rcontext.getLocale().getLanguage();
-  List<PageNavigation> allNavigations = Util.getUIPortal().getNavigations();
-  List<PageNavigation> navigations = new ArrayList<PageNavigation>();
-  for(PageNavigation navigation : allNavigations) {
-    navigations.add(PageNavigationUtils.filter(navigation, userName));
-  }
+  List<PageNavigation> navigations = Util.getUIPortal().getNavigations();
   NavigationService navigationService = uicomponent.getApplicationComponent(NavigationService.class);
   def JSONnavigation = navigationService.getNavigationsAsJSON(navigations);
   def selectedNodeUri = Util.getUIPortal().getSelectedNode().getUri();

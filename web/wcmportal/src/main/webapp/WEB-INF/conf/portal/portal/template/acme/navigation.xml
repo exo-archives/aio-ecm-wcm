@@ -5,35 +5,67 @@
 	<priority>1</priority>
 	<page-nodes>
 		<node>
-			<uri>home</uri>
-			<name>home</name>
-			<label>#{portal.@owner@.home}</label>
-			<page-reference>portal::@owner@::homepage</page-reference>	    
+			<uri>overview</uri>
+			<name>overview</name>
+			<label>#{portal.@owner@.overview}</label>
+			<page-reference>portal::@owner@::overview</page-reference>	    
 		</node>	         	  	  	  	 	     	  	    
+
 		<node>
 			<uri>news</uri>
 			<name>news</name>
 			<label>#{portal.@owner@.news}</label>
 			<page-reference>portal::@owner@::news</page-reference>
 		</node>    
+
+		<node>
+			<uri>newsletters</uri>
+			<name>newsletters</name>
+			<label>#{portal.@owner@.newsletters}</label>
+			<page-reference>portal::@owner@::newsletters</page-reference>
+		</node>
+		
+		<node>
+			<uri>contactus</uri>
+			<name>contactus</name>
+			<label>#{portal.@owner@.contactus}</label>
+			<page-reference>portal::@owner@::contactus</page-reference>
+			<node>
+				<uri>contactus/confirmation</uri>
+				<name>confirmation</name>
+				<label>#{portal.@owner@.confirmation}</label>
+				<visible>false</visible>
+				<page-reference>portal::@owner@::confirmation</page-reference>
+			</node>
+		</node>
+
 		<node>
 			<uri>products</uri>
 			<name>products</name>
 			<label>#{portal.@owner@.products}</label>
-			<page-reference>portal::@owner@::product</page-reference>	    
-		</node>	         	  	  	  	 	     	  	   
-	  <node>
-			<uri>services</uri>
-			<name>services</name>
-			<label>#{portal.@owner@.services}</label>
-			<page-reference>portal::@owner@::services</page-reference>	    
+			<visible>false</visible>
+			<node>
+				<uri>products/presentation</uri>
+				<name>presentation</name>
+				<label>#{portal.@owner@.presentation}</label>
+				<node>
+					<uri>products/presentation/pcv</uri>
+					<name>pcv</name>
+					<label>#{portal.@owner@.pcv}</label>
+					<visible>false</visible>
+					<page-reference>portal::@owner@::pcv</page-reference>
+				</node>
+			</node>
 		</node>
+		
 		<node>
-			<uri>search</uri>
-			<name>search</name>
-			<label>#{portal.@owner@.search}</label>
-			<page-reference>portal::@owner@::search</page-reference>	    
+			<uri>printviewer</uri>
+			<name>printviewer</name>
+			<label>#{portal.@owner@.printviewer}</label>
+			<visible>false</visible>
+			<page-reference>portal::@owner@::printviewer</page-reference>
 		</node>
+
 		<node>
 			<uri>searchResult</uri>
 			<name>searchResult</name>
@@ -41,31 +73,6 @@
 			<visible>false</visible>			
 			<page-reference>portal::@owner@::searchResult</page-reference>	    
 		</node>
-		<node>
-			<uri>parameterizedviewer</uri>
-			<name>parameterizedviewer</name>
-			<label>#{portal.@owner@.parameterizedviewer}</label>
-			<visible>false</visible>
-			<page-reference>portal::@owner@::parameterizedviewer</page-reference>
-		</node> 
-		<node>
-			<uri>about</uri>
-			<name>about</name>
-			<label>#{portal.@owner@.about}</label>
-			<page-reference>portal::@owner@::about</page-reference>	    
-		</node>
-		<node>
-			<uri>contact</uri>
-			<name>contact</name>
-			<label>#{portal.@owner@.contact}</label>
-			<page-reference>portal::@owner@::contact</page-reference>	    
-		</node>  
-		<node>
-			<uri>contentviewer</uri>
-			<name>contentviewer</name>
-			<label>#{portal.@owner@.contentviewer}</label>
-			<visible>false</visible>
-			<page-reference>portal::@owner@::contentviewer</page-reference>
-		</node> 	        	    
+		
 	</page-nodes>
 </node-navigation>
