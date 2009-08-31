@@ -24,7 +24,7 @@
 					</div>
 					<%
 						if (isShowRSSLink) {
-							%><a class="RssIcon" href="$rssLink">RSS Feed</a><%
+							%><a class="RssIcon" href="$rssLink" target="_newrss">RSS Feed</a><%
 						}
 					%>
 					<div class="ClearBoth"><span></span></div>
@@ -48,7 +48,7 @@
 							if (viewNode == null)	continue;
 							
 						  String itemName = viewNode.getName();
-						  String itemLink = uicomponent.generateLink(viewNode);
+						  String itemLink = uicomponent.generateLink(node);
 							String itemSummary = uicomponent.getSummary(viewNode);
 					    String itemTitle = uicomponent.getTitle(viewNode);
 							String itemDateCreated = uicomponent.getCreatedDate(viewNode);

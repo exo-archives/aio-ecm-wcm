@@ -26,8 +26,6 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.jcr.Node;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
@@ -302,16 +300,13 @@ public class UIPCLVForm extends UIForm {
 		String parameters = null;
 
 		try {
-			parameters = URLDecoder.decode(StringUtils.substringAfter(requestURI,
-																																portalURI.concat(pageNodeSelected
-																																		+ "/")), "UTF-8");
+			parameters = URLDecoder.decode(StringUtils.substringAfter(requestURI, portalURI.concat(pageNodeSelected+ "/")), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 		}
 
 		PortletRequest portletRequest = portletRequestContext.getRequest();
 		PortletPreferences portletPreferences = portletRequest.getPreferences();
-		String preferenceRepository = portletPreferences.getValue(UIPCLVPortlet.PREFERENCE_REPOSITORY,
-																															"");
+		String preferenceRepository = portletPreferences.getValue(UIPCLVPortlet.PREFERENCE_REPOSITORY, "");
 		String preferenceTreeName = portletPreferences.getValue(UIPCLVPortlet.PREFERENCE_TREE_NAME, "");
 		String preferenceTargetPage = portletPreferences.getValue(UIPCLVPortlet.PREFERENCE_TARGET_PAGE, "");
 		TaxonomyService taxonomyService = getApplicationComponent(TaxonomyService.class);
