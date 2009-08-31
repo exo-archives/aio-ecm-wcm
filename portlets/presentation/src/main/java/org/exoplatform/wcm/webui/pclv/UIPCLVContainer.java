@@ -75,6 +75,7 @@ public class UIPCLVContainer extends UIContainer {
     if (requestURI.endsWith(selectedPage)) return null;
     String[] param = requestURI.split("/");
     String header = param[param.length - 1];
+    header = header.replaceAll("%20", " ");
     return header;
   }
   
