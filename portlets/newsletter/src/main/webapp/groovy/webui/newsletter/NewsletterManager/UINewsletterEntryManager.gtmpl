@@ -157,7 +157,7 @@ import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 							<th class="thContent Title">
 								<%=_ctx.appRes("UINewsletterEntryManager.title.Status")%>
 							</th>
-							<th class="thContent Title" style="border-right:none;width:50px">
+							<th class="thContent Title" style="border-right:none;">
 								<input type="checkbox" onclick="eXo.ecm.UINewsletterUtil.checkAllSelected(this);">
 							</th>
 						</tr>
@@ -173,9 +173,9 @@ import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 											<%=newsletter.getNewsletterTitle()%>
 										</a>
 									</td>
-									<td class="tdContent" style="width:200px"><%=newsletter.getNewsletterSentDate()%></td>
+									<td class="tdContent"><%=newsletter.getNewsletterSentDate()%></td>
 									<td class="tdContent"><%=newsletter.getStatus()%></td>
-									<td class="tdContent" style="border:none;width:50px">
+									<td class="tdContent" style="border:none;">
 										<%uicomponent.renderChild(newsletter.getNewsletterName())%>
 									</td>
 								</tr>
