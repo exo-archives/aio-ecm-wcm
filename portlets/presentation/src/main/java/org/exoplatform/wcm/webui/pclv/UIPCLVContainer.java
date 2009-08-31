@@ -97,16 +97,17 @@ public class UIPCLVContainer extends UIContainer {
 		PortletRequest portletRequest = portletRequestContext.getRequest();
 		PortletPreferences portletPreferences = portletRequest.getPreferences();
 		String preferenceRepository = portletPreferences.getValue(UIPCLVPortlet.PREFERENCE_REPOSITORY, "");
-		String preferenceTreeName = null;
+		String preferenceTreeName = portletPreferences.getValue(UIPCLVPortlet.PREFERENCE_TREE_NAME, "");
+		String treeName = null;
 		
-		if(parameters == null || parameters.trim().length() < 1) preferenceTreeName = portletPreferences.getValue(UIPCLVPortlet.PREFERENCE_TREE_NAME, "");
-		else preferenceTreeName = parameters.substring(0, parameters.indexOf("/"));
+		if(parameters == null || parameters.trim().length() < 1) treeName = preferenceTreeName;
+		else treeName = parameters.substring(0, parameters.indexOf("/"));
 		
 		TaxonomyService taxonomyService = getApplicationComponent(TaxonomyService.class);
-		Node treeNode = taxonomyService.getTaxonomyTree(preferenceRepository, preferenceTreeName);
+		Node treeNode = taxonomyService.getTaxonomyTree(preferenceRepository, treeName);
 		
 		String categoryPath = parameters.substring(parameters.indexOf("/") + 1);
-		if (preferenceTreeName.equals(categoryPath))
+		if (treeName.equals(categoryPath))
 			categoryPath = "";
 		
 		Node categoryNode = treeNode.getNode(categoryPath);
@@ -137,7 +138,7 @@ public class UIPCLVContainer extends UIContainer {
 		String repository = ((ManageableRepository)categoryNode.getSession().getRepository()).getConfiguration().getName();
 		String workspace = categoryNode.getSession().getWorkspace().getName();
 		
-		parameterizedContentListViewer.setRssLink("/rest/rss/generate?repository=" + repository + "&workspace=" + workspace + "&categoryPath=" + ("".equals(categoryPath) ? preferenceTreeName : categoryPath));
+		parameterizedContentListViewer.setRssLink("/rest/rss/generate?repository=" + repository + "&workspace=" + workspace + "&categoryPath=" + ("".equals(categoryPath) ? preferenceTreeName : preferenceTreeName + "/" + categoryPath));
 	}
 
 	public PortletPreferences getPortletPreference() {
