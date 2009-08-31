@@ -17,7 +17,6 @@
 package org.exoplatform.wcm.webui.scv.config.access;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -38,6 +37,7 @@ import org.exoplatform.services.jcr.access.SystemIdentity;
 import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.scv.config.UIContentDialogForm;
 import org.exoplatform.wcm.webui.scv.config.UIQuickCreationWizard;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -129,8 +129,8 @@ public class UIPermissionSetting extends UIForm implements UISelectable {
       .getApplicationComponent(RepositoryService.class);
       ManageableRepository manageableRepository = repositoryService.getCurrentRepository();
       String workspace = manageableRepository.getConfiguration().getDefaultWorkspaceName();
-      Session session = SessionProvider.createSystemProvider().getSession(workspace,
-          manageableRepository);
+      SessionProvider sessionProvider = Utils.getSessionProvider(permissionSettingForm);
+      Session session = sessionProvider.getSession(workspace,manageableRepository);
       UIApplication uiApp = permissionSettingForm.getAncestorOfType(UIApplication.class);
       UIQuickCreationWizard quickCreationWizard = permissionSettingForm
       .getAncestorOfType(UIQuickCreationWizard.class);

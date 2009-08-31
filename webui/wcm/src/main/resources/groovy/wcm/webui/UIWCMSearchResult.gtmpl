@@ -15,7 +15,6 @@
   UIComponent uiParent = uicomponent.getParent() ;
   String name = uicomponent.getLabel();
   UIForm uiForm = uicomponent.getAncestorOfType(UIForm.class);
-  Session session = uicomponent.getSession();
   DateFormat dateFormat = uicomponent.getDateFormat();
 %>
 <div id="$uicomponent.id">

@@ -18,6 +18,7 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.selector.document.UIDocumentSearchForm;
 import org.exoplatform.wcm.webui.selector.document.UIDocumentTabSelector;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -75,7 +76,7 @@ public class UIWCMSelectPropertyForm extends UIForm{
     UIFormSelectBox uiSelect = new UIFormSelectBox(METADATA_TYPE, METADATA_TYPE, options);
     uiSelect.setOnChange("ChangeMetadataType");
     addUIFormInput(uiSelect);
-    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
+    SessionProvider sessionProvider = Utils.getSessionProvider(this);
     RepositoryService repoService = getApplicationComponent(RepositoryService.class);
     ManageableRepository manRepository = repoService.getCurrentRepository();
     //String workspaceName = manRepository.getConfiguration().getSystemWorkspaceName();
@@ -94,15 +95,13 @@ public class UIWCMSelectPropertyForm extends UIForm{
     }
     addUIFormInput(new UIFormRadioBoxInput(PROPERTY_SELECT, null, properties).
         setAlign(UIFormRadioBoxInput.VERTICAL_ALIGN));
-    session.logout();
-    sessionProvider.close();
   }
 
   public void setFieldName(String fieldName) { this.fieldName = fieldName ; }
 
   public void renderProperties(String metadata) throws Exception {
     properties.clear() ;
-    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
+    SessionProvider sessionProvider = Utils.getSessionProvider(this);
     RepositoryService repoService = getApplicationComponent(RepositoryService.class);
     ManageableRepository manRepository = repoService.getCurrentRepository();
     String workspaceName = manRepository.getConfiguration().getSystemWorkspaceName();
@@ -116,7 +115,6 @@ public class UIWCMSelectPropertyForm extends UIForm{
         this.properties.add(new SelectItemOption<String>(name,name));
       }
     }
-    session.logout();
   }
 
   static  public class CancelActionListener extends EventListener<UIWCMSelectPropertyForm> {

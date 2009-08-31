@@ -33,6 +33,7 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.config.RepositoryConfigurationException;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -128,7 +129,10 @@ public class UIWorkspaceList extends UIForm {
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
     SessionProvider sessionProvider =  SessionProviderFactory.createSessionProvider();
-    return sessionProvider.getSession(workspaceName, manageableRepository).getRootNode(); 
+    Session session = sessionProvider.getSession(workspaceName, manageableRepository);
+    Node rootNode = session.getRootNode();
+    sessionProvider.close();
+    return rootNode;
   }
   
   static public class ChangeWorkspaceActionListener extends EventListener<UIWorkspaceList> {
@@ -164,7 +168,8 @@ public class UIWorkspaceList extends UIForm {
       String repositoryName = uiJBrowser.getRepositoryName();
       RepositoryService repositoryService = uiWorkspaceList.getApplicationComponent(RepositoryService.class);
       ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
-      Session session = SessionProviderFactory.createSystemProvider().getSession(workspaceName, manageableRepository);
+      SessionProvider sessionProvider = Utils.getSessionProvider(uiWorkspaceList);
+      Session session = sessionProvider.getSession(workspaceName, manageableRepository);
       String value = session.getRootNode().getPath();
       if(!uiJBrowser.isDisable()) value = uiJBrowser.getWorkspaceName() + ":" + value;
       ((UISelectable)uiJBrowser.getSourceComponent()).doSelect(returnField, value);

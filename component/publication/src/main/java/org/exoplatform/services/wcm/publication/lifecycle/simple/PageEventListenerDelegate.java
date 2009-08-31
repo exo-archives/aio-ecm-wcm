@@ -157,7 +157,7 @@ public class PageEventListenerDelegate {
     String repositoryName = nodeLocation.getRepository();
     String workspaceName = nodeLocation.getWorkspace();
     String path = nodeLocation.getPath();
-    SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
+    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
     Session session = sessionProvider.getSession(workspaceName, repositoryService.getRepository(repositoryName));
 
     List<Node> listPublishedNode = new ArrayList<Node>();
@@ -167,6 +167,7 @@ public class PageEventListenerDelegate {
     for (NodeIterator nodeIterator = results.getNodes(); nodeIterator.hasNext();) {
       listPublishedNode.add(nodeIterator.nextNode());
     }
+    sessionProvider.close();
     return listPublishedNode;
   }
 

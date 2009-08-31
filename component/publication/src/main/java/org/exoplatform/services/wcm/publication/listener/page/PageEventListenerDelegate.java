@@ -176,6 +176,7 @@ public class PageEventListenerDelegate {
     for (NodeIterator nodeIterator = results.getNodes(); nodeIterator.hasNext();) {
       listPublishedNode.add(nodeIterator.nextNode());
     }
+    sessionProvider.close();
     return listPublishedNode;
   }
 

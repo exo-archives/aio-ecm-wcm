@@ -61,30 +61,26 @@ public class UIWCMCategorySelectForm extends UIBaseNodeTreeSelector {
   public void init(SessionProvider sessionProvider) throws Exception {
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
-    try {
 //    TODO: Should review this method to make sure we have no problem with permission when use system session      
-      Node rootNode;
-      if (rootTreePath.trim().equals("/")) {
-        rootNode = manageableRepository.getSystemSession(workspaceName).getRootNode();
-      } else {
-        Session session = sessionProvider.getSession(workspaceName, manageableRepository);
-        rootNode = (Node)session.getItem(rootTreePath);
-      }
+    Node rootNode;
+    if (rootTreePath.trim().equals("/")) {
+      rootNode = manageableRepository.getSystemSession(workspaceName).getRootNode();
+    } else {
+      Session session = sessionProvider.getSession(workspaceName, manageableRepository);
+      rootNode = (Node)session.getItem(rootTreePath);
+    }
 
 //    UIWorkspaceList uiWorkspaceList = getChild(UIWorkspaceList.class);
 //    uiWorkspaceList.setWorkspaceList(repositoryName);
 //    uiWorkspaceList.setIsDisable(workspaceName, isDisable);
-      UINodeTreeBuilder builder = getChild(UINodeTreeBuilder.class);    
-      builder.setAcceptedNodeTypes(acceptedNodeTypesInTree);    
-      builder.setRootTreeNode(rootNode);
+    UINodeTreeBuilder builder = getChild(UINodeTreeBuilder.class);    
+    builder.setAcceptedNodeTypes(acceptedNodeTypesInTree);    
+    builder.setRootTreeNode(rootNode);
 
-      UISelectPathPanel selectPathPanel = getChild(UISelectPathPanel.class);
-      selectPathPanel.setAcceptedNodeTypes(acceptedNodeTypesInPathPanel);
-      selectPathPanel.setAcceptedMimeTypes(acceptedMimeTypes);
-      selectPathPanel.updateGrid();
-    } finally {
-      sessionProvider.close();
-    }        
+    UISelectPathPanel selectPathPanel = getChild(UISelectPathPanel.class);
+    selectPathPanel.setAcceptedNodeTypes(acceptedNodeTypesInPathPanel);
+    selectPathPanel.setAcceptedMimeTypes(acceptedMimeTypes);
+    selectPathPanel.updateGrid();
   }
 
   public void setRootNodeLocation(String repository, String workspace, String rootPath) throws Exception {

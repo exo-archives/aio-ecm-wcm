@@ -236,7 +236,6 @@ public class StageAndVersionPublicationUtil {
    * @throws Exception the exception
    */
   public static Node getNodeByApplicationId(String applicationId) throws Exception {
-    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
     DataStorage dataStorage = getServices(DataStorage.class);
     RepositoryService repositoryService = getServices(RepositoryService.class);
     PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(applicationId));
@@ -254,6 +253,7 @@ public class StageAndVersionPublicationUtil {
         nodeIdentifier = preference.getValues().get(0).toString();
       }      
     }
+    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
     if (repositoryName != null && workspaceName != null && nodeIdentifier != null) {
       Session session = sessionProvider.getSession(workspaceName, repositoryService.getRepository(repositoryName));        
       Node content = null;
@@ -262,8 +262,10 @@ public class StageAndVersionPublicationUtil {
       } catch (ItemNotFoundException e) {
         content = (Node)session.getItem(nodeIdentifier);
       }
+      sessionProvider.close();
       return content;
     }
+    sessionProvider.close();
     return null;
   }
   

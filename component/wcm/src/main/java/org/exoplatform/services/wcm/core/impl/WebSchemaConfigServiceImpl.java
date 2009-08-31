@@ -26,6 +26,7 @@ import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.component.ComponentPlugin;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -132,7 +133,7 @@ public class WebSchemaConfigServiceImpl implements WebSchemaConfigService, Start
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     RepositoryService repositoryService = 
       (RepositoryService)container.getComponentInstanceOfType(RepositoryService.class);
-    SessionProvider sessionProvider = SessionProvider.createSystemProvider();
+    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
     for (NodeLocation locationEntry: wcmConfigService.getAllLivePortalsLocation()) {
       String repoName = locationEntry.getRepository();
       try {

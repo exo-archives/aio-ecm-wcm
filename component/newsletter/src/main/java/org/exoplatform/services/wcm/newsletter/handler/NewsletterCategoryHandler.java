@@ -209,9 +209,8 @@ public class NewsletterCategoryHandler {
       String categoryPath = NewsletterConstant.generateCategoryPath(portalName);
       Node categoriesNode = (Node)session.getItem(categoryPath);
       return getCategoryFromNode(categoriesNode.getNode(categoryName));
-  	}catch(Exception ex){
-  	  return null;
-  	}
+  	} catch(Exception ex){}
+  	return null;
   }
   
   /**

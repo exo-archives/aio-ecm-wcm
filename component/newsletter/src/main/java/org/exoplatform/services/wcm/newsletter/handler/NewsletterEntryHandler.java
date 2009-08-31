@@ -33,7 +33,6 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.jcr.impl.core.SessionFactory;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
 import org.exoplatform.services.wcm.newsletter.config.NewsletterManagerConfig;
@@ -141,10 +140,10 @@ public class NewsletterEntryHandler {
    * @param listIds the list ids
    */
   public void delete(String portalName, String categoryName, String subscriptionName, List<String> listIds) {
+    SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
+    if(sessionProvider == null) sessionProvider = SessionProviderFactory.createSystemProvider();
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
-      if(sessionProvider == null) sessionProvider = SessionProvider.createSystemProvider();
       Session session = sessionProvider.getSession(workspace, manageableRepository);
       String path = NewsletterConstant.generateCategoryPath(portalName) + "/" + categoryName + "/" + subscriptionName;
       Node subscriptionNode = (Node)session.getItem(path);
@@ -157,6 +156,7 @@ public class NewsletterEntryHandler {
     } catch (Exception e) {
       e.printStackTrace();
     }
+    sessionProvider.close();
   }
   
   /**
@@ -173,7 +173,7 @@ public class NewsletterEntryHandler {
   public List<NewsletterManagerConfig> getNewsletterEntriesBySubscription(String portalName, String categoryName, String subscriptionName) throws Exception{
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
     SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
-    if(sessionProvider == null) sessionProvider = SessionProvider.createSystemProvider();
+    if(sessionProvider == null) sessionProvider = SessionProviderFactory.createSystemProvider();
     Session session = sessionProvider.getSession(workspace, manageableRepository);
     String path = NewsletterConstant.generateCategoryPath(portalName) + "/" + categoryName + "/" + subscriptionName;
     QueryManager queryManager = session.getWorkspace().getQueryManager();
@@ -190,6 +190,7 @@ public class NewsletterEntryHandler {
         continue;
       }
     }
+    sessionProvider.close();
     return listNewsletterEntry;
   }
   
@@ -208,10 +209,12 @@ public class NewsletterEntryHandler {
   public NewsletterManagerConfig getNewsletterEntry(String portalName, String categoryName, String subscriptionName, String newsletterName) throws Exception{
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
     SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
-    if(sessionProvider == null) sessionProvider = SessionProvider.createSystemProvider();
+    if(sessionProvider == null) sessionProvider = SessionProviderFactory.createSystemProvider();
     Session session = sessionProvider.getSession(workspace, manageableRepository);
     String path = NewsletterConstant.generateCategoryPath(portalName) + "/" + categoryName + "/" + subscriptionName + "/" + newsletterName;
-    return getEntryFromNode((Node)session.getItem(path));
+    NewsletterManagerConfig newsletterManagerConfig = getEntryFromNode((Node)session.getItem(path));
+    sessionProvider.close();
+    return newsletterManagerConfig;
   }
   
   /**
@@ -226,9 +229,11 @@ public class NewsletterEntryHandler {
   public NewsletterManagerConfig getNewsletterEntryByPath(String path) throws Exception{
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
     SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
-    if(sessionProvider == null) sessionProvider = SessionProvider.createSystemProvider();
+    if(sessionProvider == null) sessionProvider = SessionProviderFactory.createSystemProvider();
     Session session = sessionProvider.getSession(workspace, manageableRepository);
-    return getEntryFromNode((Node)session.getItem(path));
+    NewsletterManagerConfig newsletterManagerConfig = getEntryFromNode((Node)session.getItem(path));
+    sessionProvider.close();
+    return newsletterManagerConfig;
   }
   
   /**
@@ -246,7 +251,7 @@ public class NewsletterEntryHandler {
   public String getContent(String portalName, String categoryName, String subscriptionName, String newsletterName) throws Exception{
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
     SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
-    if(sessionProvider == null) sessionProvider = SessionProvider.createSystemProvider();
+    if(sessionProvider == null) sessionProvider = SessionProviderFactory.createSystemProvider();
     Session session = sessionProvider.getSession(workspace, manageableRepository);
     String path = NewsletterConstant.generateCategoryPath(portalName) + "/" + categoryName + "/" + subscriptionName + "/" + newsletterName;
     Node newsletterNode = (Node)session.getItem(path);
@@ -257,10 +262,12 @@ public class NewsletterEntryHandler {
       sb.append(removeEncodedCharacter(xSkService.getActiveStylesheet(newsletterNode)));
       sb.append("</style>");
       sb.append(newsletterNode.getNode("default.html").getNode("jcr:content").getProperty("jcr:data").getString());
+      sessionProvider.close();
       return sb.toString();
     } catch (Exception e) {
       e.printStackTrace();
     }
+    sessionProvider.close();
     return null;
   }
   

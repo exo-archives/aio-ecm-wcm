@@ -24,6 +24,7 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.config.jcr.DataStorageImpl;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.cms.drives.DriveData;
 import org.exoplatform.services.cms.drives.ManageDriveService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
@@ -53,7 +54,7 @@ public class CreateLivePortalEventListener extends Listener<DataStorageImpl, Por
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     LivePortalManagerService livePortalManagerService = (LivePortalManagerService) container
     .getComponentInstanceOfType(LivePortalManagerService.class);
-    SessionProvider sessionProvider = SessionProvider.createSystemProvider();
+    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
     // Create site content storage for the portal
     try {
       livePortalManagerService.addLivePortal(portalConfig, sessionProvider);

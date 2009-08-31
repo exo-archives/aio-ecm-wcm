@@ -22,6 +22,7 @@ import org.apache.commons.chain.Context;
 import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.command.action.Action;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
@@ -41,7 +42,7 @@ public class WebSchemaRemoverAction implements Action{
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     WebSchemaConfigService schemaConfigService = 
       (WebSchemaConfigService) container.getComponentInstanceOfType(WebSchemaConfigService.class);    
-    SessionProvider sessionProvider = SessionProvider.createSystemProvider();
+    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
     try {      
       schemaConfigService.updateSchemaOnRemove(node, sessionProvider);
     } catch (Exception e) { 

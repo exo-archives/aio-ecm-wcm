@@ -5,14 +5,15 @@ import java.util.List;
 
 import javax.jcr.Node;
 
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.wcm.core.*;
+import org.exoplatform.services.wcm.BaseWCMTestCase;
+import org.exoplatform.services.wcm.core.NodetypeUtils;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 import org.exoplatform.services.wcm.newsletter.config.NewsletterUserConfig;
-import org.exoplatform.services.wcm.BaseWCMTestCase;
 
 public class TestNewsletterManageUserHandler extends BaseWCMTestCase {
 	
@@ -46,7 +47,7 @@ public class TestNewsletterManageUserHandler extends BaseWCMTestCase {
 		newsletterPublicUserHandler = newsletterManagerService.getPublicUserHandler();
 		newsletterManageUserHandler = newsletterManagerService.getManageUserHandler();
 		
-		sessionProvider = SessionProvider.createSystemProvider();
+		sessionProvider = SessionProviderFactory.createSystemProvider();
 		
 		newsletterCategoryConfig = new NewsletterCategoryConfig();
 		newsletterCategoryConfig.setName("CategoryName");
@@ -113,7 +114,7 @@ public class TestNewsletterManageUserHandler extends BaseWCMTestCase {
 	}
 	
 	public void testDelete() throws Exception {
-		SessionProvider sessionProvider = SessionProvider.createSystemProvider();
+		SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
 		newsletterManageUserHandler.delete("classic", userEmail);
 		List<NewsletterSubscriptionConfig> listSubscription = newsSubscriptionHandler.getSubscriptionIdsByPublicUser("classic", userEmail, sessionProvider);
 		assertEquals(0, listSubscription.size());

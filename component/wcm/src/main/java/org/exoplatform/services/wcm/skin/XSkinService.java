@@ -31,6 +31,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.webui.skin.SkinService;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.deployment.ContentInitializerService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -276,7 +277,7 @@ public class XSkinService implements Startable {
    */
   public void start() {  
     log.info("Start WCMSkinService...");
-    SessionProvider sessionProvider = SessionProvider.createSystemProvider();    
+    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();    
     try {      
       LivePortalManagerService livePortalManagerService = 
         (LivePortalManagerService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(LivePortalManagerService.class);
@@ -290,9 +291,8 @@ public class XSkinService implements Startable {
       if(log.isErrorEnabled()) {
         log.error("Exception when start XSkinService",e);
       }
-    }finally {
-      sessionProvider.close();
     }
+    sessionProvider.close();
   }
 
   /* (non-Javadoc)

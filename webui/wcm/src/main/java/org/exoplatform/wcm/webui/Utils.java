@@ -190,12 +190,12 @@ public class Utils {
     requestContext.addUIComponentToUpdateByAjax(application.getUIPopupMessages()) ;
   }
 
-  public static <T> T getService(UIContainer container, Class<T> clazz) {
-  	return clazz.cast(container.getApplicationComponent(clazz));
+  public static <T> T getService(UIComponent component, Class<T> clazz) {
+  	return clazz.cast(component.getApplicationComponent(clazz));
   }
   
-  public static SessionProvider getSessionProvider(UIContainer container) {
-  	ThreadLocalSessionProviderService threadLocalSessionProviderService = getService(container, ThreadLocalSessionProviderService.class);
+  public static SessionProvider getSessionProvider(UIComponent component) {
+  	ThreadLocalSessionProviderService threadLocalSessionProviderService = getService(component, ThreadLocalSessionProviderService.class);
   	return threadLocalSessionProviderService.getSessionProvider(null);
   }
   

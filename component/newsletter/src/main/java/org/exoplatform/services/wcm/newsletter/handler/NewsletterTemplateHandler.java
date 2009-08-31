@@ -25,6 +25,7 @@ import javax.jcr.Session;
 
 import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
@@ -82,11 +83,11 @@ public class NewsletterTemplateHandler {
    */
   public List<Node> getTemplates(String portalName, NewsletterCategoryConfig categoryConfig) {
     log.info("Trying to get templates of category " + categoryConfig);
+    SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null); 
+    if(sessionProvider ==  null) sessionProvider = SessionProviderFactory.createSystemProvider();
     try {
       List<Node> templates = new ArrayList<Node>();
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null); 
-      if(sessionProvider ==  null) sessionProvider = SessionProvider.createSystemProvider();
       Session session = sessionProvider.getSession(workspace, manageableRepository);
       
       Node defaultTemplateFolder = (Node)session.getItem(NewsletterConstant.generateDefaultTemplatePath(portalName));
@@ -104,11 +105,13 @@ public class NewsletterTemplateHandler {
       }
       
       this.templates = templates;
+      sessionProvider.close();
       return templates;
     } catch (Exception e) {
       e.printStackTrace();
       log.error("Get templates of category " + categoryConfig + " failed because of " + e.getMessage());
     }
+    sessionProvider.close();
     return null;
   }
   
@@ -150,10 +153,10 @@ public class NewsletterTemplateHandler {
    */
   public void convertAsTemplate(String webcontentPath, String portalName, String categoryName) throws Exception {
     log.info("Trying to convert node " + webcontentPath + " to template at category " + categoryName);
+    SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
+    if(sessionProvider == null) sessionProvider = SessionProviderFactory.createSystemProvider();
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
-      if(sessionProvider == null) sessionProvider = SessionProvider.createSystemProvider();
       Session session = sessionProvider.getSession(workspace, manageableRepository);
       Node categoryTemplateFolder = (Node)session.getItem(NewsletterConstant.generateCategoryTemplateBasePath(portalName, categoryName));
       String templateName = webcontentPath.substring(webcontentPath.lastIndexOf("/") + 1);
@@ -167,6 +170,7 @@ public class NewsletterTemplateHandler {
       log.error("Convert node " + webcontentPath + " to template at category " + categoryName + " failed because of " + e.getMessage());
       throw e;
     }
+    sessionProvider.close();
   }
   
 }

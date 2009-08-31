@@ -55,9 +55,6 @@ public class WCMServiceImpl implements WCMService {
 		  } catch(Exception exception) {
 		    content = null;
 		  }
-		} finally {
-		  session.logout();
-			sessionProvider.close();
 		}
 		return content;
 	}
@@ -69,12 +66,8 @@ public class WCMServiceImpl implements WCMService {
 		ExoContainer container = ExoContainerContext.getCurrentContainer();
 		LivePortalManagerService livePortalManagerService = (LivePortalManagerService)container.getComponentInstanceOfType(LivePortalManagerService.class);
 		boolean isShared = false;
-	    try {
-	    	Node sharedPortal = livePortalManagerService.getLiveSharedPortal(sessionProvider);
-	    	isShared = sharedPortal.getName().equals(portalName);
-	    } finally {
-	    	sessionProvider.close();
-	    }
+  	Node sharedPortal = livePortalManagerService.getLiveSharedPortal(sessionProvider);
+  	isShared = sharedPortal.getName().equals(portalName);
 		return isShared; 
 	}
 	

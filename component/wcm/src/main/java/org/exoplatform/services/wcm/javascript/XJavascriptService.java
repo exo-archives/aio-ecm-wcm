@@ -28,6 +28,7 @@ import javax.servlet.ServletContext;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.deployment.ContentInitializerService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
@@ -226,7 +227,7 @@ public class XJavascriptService implements Startable {
    */
   public void start() {    
     log.info("Start WCM Javascript service...");
-    SessionProvider sessionProvider = SessionProvider.createSystemProvider();
+    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
     try {                         
       String sharedJS = getJavascriptOfAllPortals(sessionProvider,null) ;
       if(sharedJS != null && sharedJS.length()!= 0) {

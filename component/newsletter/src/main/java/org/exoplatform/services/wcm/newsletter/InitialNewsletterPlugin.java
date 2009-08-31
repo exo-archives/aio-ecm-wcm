@@ -100,8 +100,6 @@ public class InitialNewsletterPlugin extends BasePortalArtifactsPlugin {
         
     } catch (Throwable e) {
       log.info("Starting NewsletterInitializationService fail because of " + e.getMessage());
-    } finally {
-      sessionProvider.close();
     }
   }
    

@@ -24,6 +24,7 @@ import javax.jcr.Session;
 
 import org.apache.commons.logging.Log;
 import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -86,7 +87,7 @@ public class NewsletterInitializationService implements Startable {
    */
   public void start() {
     log.info("Starting NewsletterInitializationService ... ");
-    SessionProvider sessionProvider = SessionProvider.createSystemProvider();
+    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
     try {
       Node dummyNode = livePortalManagerService.getLivePortal(portalNames.get(0), sessionProvider);
       Session session = dummyNode.getSession();
@@ -130,9 +131,8 @@ public class NewsletterInitializationService implements Startable {
       }
     } catch (Throwable e) {
       log.info("Starting NewsletterInitializationService fail because of " + e.getMessage());
-    } finally {
-      sessionProvider.close();
     }
+    sessionProvider.close();
   }
 
   /* (non-Javadoc)

@@ -22,12 +22,12 @@ import java.util.List;
 import javax.jcr.Node;
 
 import org.exoplatform.ecm.webui.tree.UIBaseNodeTreeSelector;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.selector.UISelectPathPanel;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
@@ -93,7 +93,7 @@ public class UIDocumentPathSelector extends UIBaseNodeTreeSelector implements UI
   public void init() throws Exception {
     LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
     String currentPortalName = Util.getUIPortal().getName();
-    SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
+    SessionProvider sessionProvider = Utils.getSessionProvider(this);
     currentPortal = livePortalManagerService.getLivePortal(currentPortalName, sessionProvider);
     sharedPortal = livePortalManagerService.getLiveSharedPortal(sessionProvider);
     String repositoryName = ((ManageableRepository)(currentPortal.getSession().getRepository())).getConfiguration().getName();
@@ -107,7 +107,6 @@ public class UIDocumentPathSelector extends UIBaseNodeTreeSelector implements UI
     treeBuilder.setCurrentPortal(currentPortal);
     treeBuilder.setSharedPortal(sharedPortal);
     treeBuilder.setRootTreeNode(currentPortal.getParent());
-    sessionProvider.close();
   }
 
   /* (non-Javadoc)

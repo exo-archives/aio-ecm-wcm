@@ -28,6 +28,7 @@ import org.exoplatform.portal.webui.util.Util;
 
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.selector.UISelectPathPanel;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
@@ -93,7 +94,7 @@ public class UIWebContentPathSelector extends UIBaseNodeTreeSelector implements 
     selectPathPanel.setAcceptedNodeTypes(acceptedNodeTypes);       
     LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
     String currentPortalName = Util.getUIPortal().getName();
-    SessionProvider provider = SessionProviderFactory.createSessionProvider();
+    SessionProvider provider = Utils.getSessionProvider(this);
     currentPortal = livePortalManagerService.getLivePortal(currentPortalName,provider);
     sharedPortal = livePortalManagerService.getLiveSharedPortal(provider);
     UIWebContentTreeBuilder builder = getChild(UIWebContentTreeBuilder.class);    

@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.jcr.Node;
 
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.BaseWCMTestCase;
 import org.exoplatform.services.wcm.core.NodetypeConstant;
@@ -31,7 +32,7 @@ public class TestNewsletterTemplateHandler extends BaseWCMTestCase {
 	public void setUp() throws Exception {
 		super.setUp();
 		NodetypeUtils.displayAllNode("collaboration", "repository");
-		SessionProvider sessionProvider = SessionProvider.createSystemProvider();
+		SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
 		newsletterManagerService = getService(NewsletterManagerService.class);
 		newsletterCategoryHandler = newsletterManagerService.getCategoryHandler();
 		newsletterSubscriptionHandler = newsletterManagerService.getSubscriptionHandler();

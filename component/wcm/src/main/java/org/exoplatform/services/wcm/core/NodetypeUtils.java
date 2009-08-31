@@ -52,6 +52,7 @@ public class NodetypeUtils {
     Session session = sessionProvider.getSession(workspaceName, repository);
     Node root = session.getRootNode();
     displayAllChildNode(root);
+    sessionProvider.close();
   }
   
   /**

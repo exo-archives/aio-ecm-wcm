@@ -24,6 +24,7 @@ import javax.jcr.Node;
 import javax.jcr.Session;
 
 import org.apache.commons.logging.Log;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.deployment.DeploymentPlugin;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
@@ -70,7 +71,7 @@ public class WCMContentInitializerService implements Startable{
    * @see org.picocontainer.Startable#start()
    */
   public void start() {
-    SessionProvider sessionProvider = SessionProvider.createSystemProvider();
+    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
     try {
       // TODO: should get exo:services folder by NodeHierarchyCrerator service
       ManageableRepository repository = repositoryService.getCurrentRepository();
@@ -103,10 +104,8 @@ public class WCMContentInitializerService implements Startable{
         contentInitializerServiceLogContent.setProperty("jcr:lastModified", date.getTime());
         session.save();
       }
-    } catch (Exception e) { 
-    } finally {
-      sessionProvider.close();
-    }
+    } catch (Exception e) {}
+    sessionProvider.close();
   }
   
   /* (non-Javadoc)

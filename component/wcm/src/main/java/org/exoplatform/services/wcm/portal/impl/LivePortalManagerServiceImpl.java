@@ -30,6 +30,7 @@ import javax.jcr.query.QueryResult;
 
 import org.apache.commons.logging.Log;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.core.ManageableRepository;
@@ -212,7 +213,7 @@ public class LivePortalManagerServiceImpl implements LivePortalManagerService, S
 
   public void start() {
     log.info("Start LivePortalManagementService....");
-    SessionProvider sessionProvider = SessionProvider.createSystemProvider();
+    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
     try {
       ManageableRepository repository = repositoryService.getCurrentRepository();
       NodeLocation nodeLocation = wcmConfigService.getLivePortalsLocation(repository.getConfiguration().getName());
@@ -226,9 +227,8 @@ public class LivePortalManagerServiceImpl implements LivePortalManagerService, S
       }
     } catch (Exception e) {
       log.error("Error when starting LivePortalManagerService: ",e);
-    }finally {
-      sessionProvider.close(); 
-    }    
+    }
+    sessionProvider.close(); 
   }
 
   public void stop() {    

@@ -16,9 +16,11 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.search.PaginatedQueryResult;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.selector.document.UIDocumentPathSelector;
 import org.exoplatform.wcm.webui.selector.document.UIDocumentTabSelector;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -85,22 +87,6 @@ public class UIWCMSearchResult extends UIGrid {
   }
 
   private Node getResultNode(String nodePath) throws Exception {
-    Session session = getSession();
-    Node resultNode = (Node) session.getItem(nodePath);
-    return resultNode;
-  }
-
-  public String getExpect(String expect) {
-    expect = expect.replaceAll("<[^>]*/?>", "");
-    return expect;
-  }
-  
-  public String getCurrentState(Node node) throws Exception {
-    PublicationService pubService = getApplicationComponent(PublicationService.class);
-    return pubService.getCurrentState(node);
-  }
-
-  public Session getSession() throws Exception {
     RepositoryService repoService = getApplicationComponent(RepositoryService.class);
     ManageableRepository maRepository = repoService.getCurrentRepository();
     String repository = maRepository.getConfiguration().getName();
@@ -113,9 +99,20 @@ public class UIWCMSearchResult extends UIGrid {
       NodeLocation nodeLocation = wcmConfService.getLivePortalsLocation(repository);
       workspace = nodeLocation.getWorkspace();
     }
-    Session session = 
-      SessionProviderFactory.createSessionProvider().getSession(workspace, maRepository);
-    return session;
+    SessionProvider sessionProvider = Utils.getSessionProvider(this);
+    Session session = sessionProvider.getSession(workspace, maRepository);
+    Node resultNode = (Node) session.getItem(nodePath);
+    return resultNode;
+  }
+
+  public String getExpect(String expect) {
+    expect = expect.replaceAll("<[^>]*/?>", "");
+    return expect;
+  }
+  
+  public String getCurrentState(Node node) throws Exception {
+    PublicationService pubService = getApplicationComponent(PublicationService.class);
+    return pubService.getCurrentState(node);
   }
 
   public static class SelectActionListener extends EventListener<UIWCMSearchResult> {

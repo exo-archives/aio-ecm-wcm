@@ -30,6 +30,7 @@ import org.apache.commons.logging.Log;
 import org.exoplatform.commons.utils.ISO8601;
 import org.exoplatform.services.cms.categories.CategoriesService;
 import org.exoplatform.services.cms.folksonomy.FolksonomyService;
+import org.exoplatform.services.cms.taxonomy.TaxonomyService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
@@ -50,7 +51,7 @@ public class PageMetadataServiceImpl implements PageMetadataService {
   private LivePortalManagerService livePortalManagerService; 
   
   /** The categories service. */
-  private CategoriesService categoriesService;
+  private TaxonomyService taxonomyService;
   
   /** The folksonomy service. */
   private FolksonomyService folksonomyService;
@@ -64,9 +65,11 @@ public class PageMetadataServiceImpl implements PageMetadataService {
    * 
    * @throws Exception the exception
    */
-  public PageMetadataServiceImpl(LivePortalManagerService livePortalManagerService, CategoriesService categoriesService, FolksonomyService folksonomyService) throws Exception {        
+  public PageMetadataServiceImpl(LivePortalManagerService livePortalManagerService, 
+                                 TaxonomyService taxonomyService, 
+                                 FolksonomyService folksonomyService) throws Exception {        
     this.livePortalManagerService = livePortalManagerService;    
-    this.categoriesService = categoriesService;
+    this.taxonomyService = taxonomyService;
     this.folksonomyService = folksonomyService;
   }      
   
@@ -186,7 +189,7 @@ public class PageMetadataServiceImpl implements PageMetadataService {
   private String computeContentKeywords(Node node, String title) throws Exception {
     StringBuilder builder = new StringBuilder();    
     String repository = ((ManageableRepository)node.getSession().getRepository()).getConfiguration().getName();    
-    for(Node category: categoriesService.getCategories(node,repository)) {
+    for(Node category: taxonomyService.getCategories(node,repository)) {
       builder.append(category.getName()).append(",");
     }    
     for(Node tag: folksonomyService.getLinkedTagsOfDocument(node,repository)) {

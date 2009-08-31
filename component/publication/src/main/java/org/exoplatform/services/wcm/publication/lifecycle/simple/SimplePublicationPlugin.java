@@ -52,6 +52,7 @@ import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.ecm.publication.IncorrectStateUpdateLifecycleException;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
@@ -422,9 +423,12 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
    * 
    * @throws Exception the exception
    */
+  @SuppressWarnings("unused")
   private boolean isSharedPortal(String portalName) throws Exception{
     LivePortalManagerService livePortalManagerService = Util.getServices(LivePortalManagerService.class);
-    Node sharedPortal = livePortalManagerService.getLiveSharedPortal(SessionProviderFactory.createSessionProvider());
+    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
+    Node sharedPortal = livePortalManagerService.getLiveSharedPortal(sessionProvider);
+    sessionProvider.close();
     return sharedPortal.getName().equals(portalName);    
   }
 

@@ -110,7 +110,7 @@ public class LiveLinkManagerServiceImpl implements LiveLinkManagerService {
    * @see org.exoplatform.services.wcm.link.LiveLinkManagerService#getBrokenLinks(java.lang.String)
    */
   public List<LinkBean> getBrokenLinks(String portalName) throws Exception {
-    SessionProvider sessionProvider = SessionProvider.createSystemProvider();
+    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
     Node portal = livePortalManagerService.getLivePortal(portalName, sessionProvider);
     String path = portal.getPath();
     Session session = portal.getSession();
@@ -166,26 +166,22 @@ public class LiveLinkManagerServiceImpl implements LiveLinkManagerService {
         Session session = sessionProvider.getSession(workspace, manageableRepository);
         updateLinkStatus(session, "select * from exo:linkable where jcr:path like '" + path + "/%'");      
       } 
-    } catch (Exception e) {
-    }finally {
-      sessionProvider.close();
-    }        
+    } catch (Exception e) {}
+    sessionProvider.close();
   }
 
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.link.LiveLinkManagerService#validateLink(java.lang.String)
    */
   public void updateLinks(String portalName) throws Exception {
-    SessionProvider sessionProvider = SessionProvider.createSystemProvider();
+    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
     try {
       Node portal = livePortalManagerService.getLivePortal(portalName, sessionProvider);
       String path = portal.getPath();
       Session session = portal.getSession();
       updateLinkStatus(session, "select * from exo:linkable where jcr:path like '" + path + "/%'"); 
-    } catch (Exception e) {
-    }finally {
-      sessionProvider.close();
-    }        
+    } catch (Exception e) {}
+    sessionProvider.close();
   }
 
   /**

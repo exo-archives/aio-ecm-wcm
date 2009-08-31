@@ -39,6 +39,7 @@ import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.config.RepositoryConfigurationException;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.mail.MailService;
 import org.exoplatform.services.mail.Message;
@@ -163,7 +164,8 @@ public class NewsletterManagerService {
 		RepositoryService repositoryService =
 			(RepositoryService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(RepositoryService.class);
 		ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
-		Session session = SessionProviderFactory.createSystemProvider().getSession(workspaceName, manageableRepository);
+		SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
+		Session session = sessionProvider.getSession(workspaceName, manageableRepository);
 
 		ExoContainer container = ExoContainerContext.getCurrentContainer();
 		MailService mailService = (MailService) container.getComponentInstanceOfType(MailService.class);
@@ -212,6 +214,7 @@ public class NewsletterManagerService {
 				}
 			}
 		}
+		sessionProvider.close();
 	}
 
 	/**

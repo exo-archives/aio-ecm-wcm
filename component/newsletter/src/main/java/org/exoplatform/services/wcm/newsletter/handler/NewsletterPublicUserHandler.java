@@ -195,7 +195,7 @@ public class NewsletterPublicUserHandler {
       Node userNode = manageUserHandler.add(portalName, userMail, sessionProvider);
       
       // update email into subscription
-      //SessionProvider sProvider = SessionProvider.createSystemProvider() ;
+      //SessionProvider sProvider = SessionProviderFactory.createSystemProvider() ;
       Session session = sessionProvider.getSession(workspace, manageableRepository);
       updateSubscriptions(session, listCategorySubscription, portalName, userMail);
       //Send a verification code to user's email to validate and to get link

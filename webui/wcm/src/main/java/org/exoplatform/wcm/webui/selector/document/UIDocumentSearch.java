@@ -32,10 +32,12 @@ import org.exoplatform.ecm.webui.tree.selectone.UISelectPathPanel;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.search.PaginatedQueryResult;
 import org.exoplatform.services.wcm.search.QueryCriteria;
 import org.exoplatform.services.wcm.search.SiteSearchService;
 import org.exoplatform.services.wcm.search.WCMPaginatedQueryResult;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -89,11 +91,14 @@ public class UIDocumentSearch extends UIForm {
     qCriteria.setKeyword(keyword);
     SiteSearchService siteSearchService = getApplicationComponent(SiteSearchService.class);
     int pageSize = 10;
-    return siteSearchService.searchSiteContents(qCriteria, SessionProviderFactory.createSessionProvider(), pageSize);
+    SessionProvider sessionProvider = Utils.getSessionProvider(this);
+    WCMPaginatedQueryResult wcmPaginatedQueryResult = siteSearchService.searchSiteContents(qCriteria, sessionProvider, pageSize);
+    return wcmPaginatedQueryResult;
   }
 
   private PaginatedQueryResult searchDMSByName(Node currentNode, String keyword, String workspace, ManageableRepository maRepository) throws Exception {
-    Session session = SessionProviderFactory.createSessionProvider().getSession(workspace, maRepository);
+    SessionProvider sessionProvider = Utils.getSessionProvider(this);
+    Session session = sessionProvider.getSession(workspace, maRepository);
     String sqlQuery = "SELECT * FROM nt:base " 
       + "WHERE (";
     String tempPrimaryType = "";
