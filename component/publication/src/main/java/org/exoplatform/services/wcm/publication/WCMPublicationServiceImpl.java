@@ -208,9 +208,9 @@ public class WCMPublicationServiceImpl implements WCMPublicationService, Startab
 	public void enrollNodeInLifecycle(Node node, String siteName, String remoteUser) throws Exception {
 		/*
 		 * TODO : lifecycle based on site (each site can define its own publication lifecycle)
+		 * We choose to use a different publication plugin for testing only for now (test has to be created separetly)
 		 */
-//		if ("root".equals(remoteUser) && "backoffice".equals(siteName)) {
-		if ("backoffice".equals(siteName)) {
+		if ("test".equals(siteName)) {
 			enrollNodeInLifecycle(node, SimplePublicationPlugin.LIFECYCLE_NAME);
 		} else {
 			enrollNodeInLifecycle(node, StageAndVersionPublicationConstant.LIFECYCLE_NAME);

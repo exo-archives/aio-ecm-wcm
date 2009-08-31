@@ -72,7 +72,7 @@
 	                <!-- value><string>empty</string></value -->
 	                <value><string>acme</string></value>
 	                <value><string>classic</string></value>	                
-	                <value><string>backoffice</string></value>
+	                <!-- value><string>backoffice</string></value -->
 	              </collection>
 	            </field>
 	            <field  name="ownerType"><string>portal</string></field>

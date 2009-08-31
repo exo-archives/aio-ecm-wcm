@@ -1,6 +1,6 @@
 <% 
 	import org.exoplatform.wcm.webui.Utils;
-  import org.exoplatform.portal.config.model.PageNavigation;
+    import org.exoplatform.portal.config.model.PageNavigation;
 	import org.exoplatform.portal.config.model.PageNode;
 	import org.exoplatform.wcm.webui.administration.UISiteAdminToolbar;
 	import org.exoplatform.web.application.JavascriptManager;
@@ -39,7 +39,6 @@
 	String browsePageLabel = _ctx.appRes("UISiteAdminToolbar.action.BrowsePage");	
 	String editPageAndNaviLabel = _ctx.appRes("UISiteAdminToolbar.action.EditPageAndNavigation");
 	String logoutLabel = _ctx.appRes("UISiteAdminToolbar.action.Logout");	
-	String dashboardLabel = _ctx.appRes("UISiteAdminToolbar.action.Dashboard");		
 	String sitesLabel = _ctx.appRes("UISiteAdminToolbar.action.Sites");		
 	String groupsLabel = _ctx.appRes("UISiteAdminToolbar.action.Groups");		
 	String editorLabel = _ctx.appRes("UISiteAdminToolbar.action.Editor");		
@@ -188,13 +187,7 @@
 	      </div>
 		</div>
 	</div>	
-	
-	<!-- Dashboard -->	
-	<div class="TBItem">
-		<!-- a href="<%=uicomponent.getCurrentPortalURI()%>/dashboard" class="DashboardIcon TBIcon">$dashboardLabel</a -->
-		<a href="/portal/private/backoffice/dashboard" class="DashboardIcon TBIcon">$dashboardLabel</a>
-	</div>
-	
+		
 	<!-- Sites -->
 	<% 
 	List<String> portals = uicomponent.getAllPortals(); 

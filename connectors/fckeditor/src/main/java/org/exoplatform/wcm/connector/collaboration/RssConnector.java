@@ -120,14 +120,18 @@ public class RssConnector extends BaseConnector implements ResourceContainer {
       @QueryParam("categoryPath") String categoryPath) throws Exception {
     
     this.categoryPath = categoryPath;
+    String currentCat = categoryPath;
+    if (currentCat.lastIndexOf("/")!=-1) {
+    	currentCat = currentCat.substring(currentCat.lastIndexOf("/")+1);
+    }
 
     Map<String, String> contextRss = new HashMap<String, String>();
     contextRss.put(REPOSITORY, repositoryName);
     contextRss.put(WORKSPACE, workspaceName);
     contextRss.put("actionName", "actionName");
     contextRss.put(RSS_VERSION, "rss_2.0");
-    contextRss.put(FEED_TITLE, "WCM RSS feedtitle");
-    contextRss.put(DESCRIPTION, "WCM RSS description");
+    contextRss.put(FEED_TITLE, currentCat);
+    contextRss.put(DESCRIPTION, categoryPath.replaceAll("/", " : "));
     contextRss.put(QUERY_PATH, "select * from exo:taxonomyLink where jcr:path like '%/categories/" + categoryPath + "/%' order by exo:dateCreated DESC");    
     contextRss.put(LINK, "http://localhost:8080/portal/acme");
     String feedXML = generateRSS(contextRss);
