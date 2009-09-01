@@ -14,6 +14,7 @@ import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 
 /**
@@ -123,4 +124,9 @@ public class UIWCResultSearchPresentation extends UIBaseNodePresentation {
     }
     super.processRender(context) ;
   }
+
+public UIComponent getCommentComponent() {
+	// TODO Auto-generated method stub
+	return null;
+}
 }

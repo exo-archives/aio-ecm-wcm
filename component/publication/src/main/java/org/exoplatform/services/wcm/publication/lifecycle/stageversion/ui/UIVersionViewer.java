@@ -28,6 +28,7 @@ import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 
 /**
@@ -134,4 +135,9 @@ public class UIVersionViewer extends UIBaseNodePresentation {
   public boolean isNodeTypeSupported() {
     return false;
   }
+
+public UIComponent getCommentComponent() {
+	// TODO Auto-generated method stub
+	return null;
+}
 }
