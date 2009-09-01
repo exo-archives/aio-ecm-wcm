@@ -3,32 +3,32 @@
 	<parent>
 		<groupId>org.exoplatform</groupId>
 		<artifactId>parent</artifactId>
-		<version>1.1.0</version>
+		<version>1.1.1</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.exoplatform.ecm.wcm</groupId>
-	<artifactId>config</artifactId>
+	<artifactId>wcm</artifactId>
 	<name>eXo WCM Config</name>
 	<version>1.2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<modules>        
+	<modules>
 		<module>benchmark</module>
 		<module>component/wcm</module>
 		<module>component/publication</module>
 		<module>component/search</module>
 		<module>component/newsletter</module>
 		<module>webui/wcm</module>
-		<module>portlets/presentation</module>    
+		<module>portlets/presentation</module>
 		<module>portlets/searches</module>
 		<module>portlets/newsletter</module>
 		<module>portlets/formgenerator</module>
-		<module>connectors/fckeditor</module>    
+		<module>connectors/fckeditor</module>
 		<module>web/eXoWCMResources</module>
 		<module>web/wcmportal</module>
 		<module>packaging</module>
-  </modules>
+	</modules>
 
 	<build>
 		<resources>
@@ -40,6 +40,7 @@
 				</includes>
 			</resource>
 		</resources>
+		
 		<testResources>
 			<testResource>
 				<directory>src/test/java</directory>
@@ -48,7 +49,8 @@
 					<include>**/*.xml</include>
 				</includes>
 			</testResource>
-		</testResources>    
+		</testResources>
+		
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -58,6 +60,7 @@
 					<target>1.5</target>
 				</configuration>
 			</plugin>
+			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -101,6 +104,7 @@
 					</systemProperties>
 				</configuration>
 			</plugin>
+			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-antrun-plugin</artifactId>
@@ -125,10 +129,11 @@
 				</executions>
 			</plugin>
 		</plugins>
-	</build>  
+	</build>
+	
 	<profiles>
 		<profile>
-			<id>default</id>  
+			<id>default</id>
 			<activation>
 				<property><name>default</name></property>
 				<activeByDefault>true</activeByDefault>
@@ -147,10 +152,12 @@
 			</properties>
 		</profile>	
 	</profiles>
+	
 	<properties>
 			<exo.product.name>exo-wcm</exo.product.name>
 			<exo.product.specification>1.2</exo.product.specification>
 	</properties>
+	
 	<scm>
 		<connection>scm:svn:http://svn.exoplatform.org/projects/ecm/wcm/trunk</connection>
 		<developerConnection>scm:svn:http://svn.exoplatform.org/projects/ecm/wcm/trunk</developerConnection>
