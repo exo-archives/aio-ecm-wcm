@@ -654,7 +654,7 @@
 	<portlet-preferences>
 		<owner-type>portal</owner-type>
 		<owner-id>acme</owner-id>
-		<window-id>portal#acme:/presentation/CategoryNavigationPortlet/acme-confirmation</window-id>
+		<window-id>portal#acme:/presentation/SingleContentViewer/acme-confirmation</window-id>
 		<preference>
 			<name>repository</name>
 			<value>repository</value>
