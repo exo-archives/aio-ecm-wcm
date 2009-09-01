@@ -22,6 +22,9 @@
 		def isShowPrint = Boolean.parseBoolean(preferences.getValue("ShowPrintAction", null)); 
 		def isShowVote = Boolean.parseBoolean(preferences.getValue("ShowVote", null)); 
 		def isShowComments = Boolean.parseBoolean(preferences.getValue("ShowComments", null));
+		def isShowTitle = Boolean.parseBoolean(preferences.getValue("ShowTitle", null));
+		
+		
 		
 		if(isQuickEditable && isEditable) {
 			%>
@@ -40,7 +43,20 @@
 			    </div>  
 				<% 
 			}
-			if (isShowPrint || isShowVote || isShowComments) {
+			
+			if (isShowTitle) {
+				def title = uicomponent.getTitle(node);
+				def dateCreated = uicomponent.getCreatedDate(node);
+				%>
+				<div class="PCV">
+					<div class="Title">$title</div>
+					<div class="DateAndMail">$dateCreated</div>
+				</div>
+				<%
+			}
+			
+			if (isShowPrint) {
+//			if (isShowPrint || isShowVote || isShowComments) {
 				%><div class="UIOptionBar"><%     
 			}
 			if (isShowPrint) { 
@@ -55,15 +71,18 @@
 				WCMConfigurationService wcmConfigurationService = uicomponent.getApplicationComponent(WCMConfigurationService.class);
 				String printUrl = portalURI + wcmConfigurationService.getRuntimeContextParam("printViewerPage") + "/" + repository + "/" + workspace + nodeIdentifier + "?isPrint=true";
 				%><a class="ActionIcon PrintIcon" href="javascript: void(0);" onclick="window.open('$printUrl')" title="<%= _ctx.appRes("UIPresentationContainer.optionBar.print.info");%>"><%= _ctx.appRes("UIPresentationContainer.optionBar.print.label") %></a><% 
-			} 
+			}
+			/*
 			if (isShowVote) { 
 				%><a class="ActionIcon VoteIcon" href="javascript: void(0);" onclick="javascript:eXo.wcm.vote.showVoteWindow('scvvote');" title="<%= _ctx.appRes("UIPresentationContainer.optionBar.vote.info") %>"><%= _ctx.appRes("UIPresentationContainer.optionBar.vote.label") %></a><%
 			} 
 			if (isShowComments) { 
 				%><a class="ActionIcon CommentIcon" href="javascript: void(0);" onclick="" title="<%= _ctx.appRes("UIPresentationContainer.optionBar.comment.info") %>"><%= _ctx.appRes("UIPresentationContainer.optionBar.comment.label") %></a><% 
 			} 
-	
-			if (isShowPrint || isShowVote || isShowComments) {
+			*/
+			
+			if (isShowPrint) {
+//			if (isShowPrint || isShowVote || isShowComments) {
 				%></div><%     
 			} 
 			%><div id="scvvote" style="display:none;">&nbsp;</div><% 

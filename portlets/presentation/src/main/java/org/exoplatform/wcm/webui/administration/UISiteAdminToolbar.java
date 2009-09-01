@@ -727,14 +727,14 @@ import org.exoplatform.webui.event.EventListener;
    
       Preference preferenceV = new Preference();
       listValue = new ArrayList<String>();
-      listValue.add("true");
+      listValue.add("false");
       preferenceV.setName("ShowVote");
       preferenceV.setValues(listValue);
       listPreference.add(preferenceV);
       
       Preference preferenceC = new Preference();
       listValue = new ArrayList<String>();
-      listValue.add("true");
+      listValue.add("false");
       preferenceC.setName("ShowComments");
       preferenceC.setValues(listValue);
       listPreference.add(preferenceC);
