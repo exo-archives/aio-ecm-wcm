@@ -118,6 +118,8 @@ public class RssConnector extends BaseConnector implements ResourceContainer {
   public Response generate ( 
       @QueryParam("repository") String repositoryName, 
       @QueryParam("workspace") String workspaceName,
+      @QueryParam("server") String server,
+      @QueryParam("siteName") String siteName,
       @QueryParam("categoryPath") String categoryPath) throws Exception {
     
     this.categoryPath = categoryPath;
@@ -125,7 +127,8 @@ public class RssConnector extends BaseConnector implements ResourceContainer {
     if (currentCat.lastIndexOf("/")!=-1) {
     	currentCat = currentCat.substring(currentCat.lastIndexOf("/")+1);
     }
-
+    
+    
     Map<String, String> contextRss = new HashMap<String, String>();
     contextRss.put(REPOSITORY, repositoryName);
     contextRss.put(WORKSPACE, workspaceName);
@@ -133,8 +136,8 @@ public class RssConnector extends BaseConnector implements ResourceContainer {
     contextRss.put(RSS_VERSION, "rss_2.0");
     contextRss.put(FEED_TITLE, currentCat);
     contextRss.put(DESCRIPTION, "Powered by eXo WCM 1.2");
-    contextRss.put(QUERY_PATH, "select * from exo:taxonomyLink where jcr:path like '%/categories/" + categoryPath + "/%' order by exo:dateCreated DESC");    
-    contextRss.put(LINK, "http://localhost:8080/portal/acme");
+    contextRss.put(QUERY_PATH, "select * from exo:taxonomyLink where jcr:path like '%/"+siteName+"/categories/" + categoryPath + "/%' and not jcr:path like '%/"+siteName+"/categories/" + categoryPath + "/%/%' order by exo:dateCreated DESC");    
+    contextRss.put(LINK, server + "/portal/public/"+siteName);
     String feedXML = generateRSS(contextRss);
     Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new ByteArrayInputStream(feedXML.getBytes()));
     Response response = Response.Builder.ok(document).build();

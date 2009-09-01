@@ -87,6 +87,7 @@ public class UIPCLVContainer extends UIContainer {
 		String portalURI = portalRequestContext.getPortalURI();
 		String requestURI = requestWrapper.getRequestURI();
 		String pageNodeSelected = uiPortal.getSelectedNode().getUri();
+		String siteName = uiPortal.getOwner();
 		
 		String parameters = null;
 		try {
@@ -139,7 +140,10 @@ public class UIPCLVContainer extends UIContainer {
 		String repository = ((ManageableRepository)categoryNode.getSession().getRepository()).getConfiguration().getName();
 		String workspace = categoryNode.getSession().getWorkspace().getName();
 		
-		parameterizedContentListViewer.setRssLink("/rest/rss/generate?repository=" + repository + "&workspace=" + workspace + "&categoryPath=" + ("".equals(categoryPath) ? preferenceTreeName : preferenceTreeName + "/" + categoryPath));
+		String server =  Util.getPortalRequestContext().getRequest().getRequestURL().toString();
+		server = server.substring(0, server.indexOf('/', 8));
+		
+		parameterizedContentListViewer.setRssLink("/rest/rss/generate?repository=" + repository + "&workspace=" + workspace + "&server=" + server + "&siteName=" + siteName + "&categoryPath=" + ("".equals(categoryPath) ? preferenceTreeName : preferenceTreeName + "/" + categoryPath));
 	}
 
 	public PortletPreferences getPortletPreference() {
