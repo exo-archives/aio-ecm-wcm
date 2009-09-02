@@ -88,10 +88,11 @@
 			%><div id="scvvote" style="display:none;">&nbsp;</div><% 
 			uicomponent.renderChildren();
 		} else {
+			/* We don't display anything stupid in Live mode because the site is visible by every body, that's the rule ;-) */
 		  %>
-		  	<div class="Message">
+		  	<!--div class="Message">
 		  		<span><%= _ctx.appRes("UIMessageBoard.msg.error-nodetype");%></span>
-		  	</div>
+		  	</div-->
 			<%
 		}
 		
