@@ -6,6 +6,7 @@
 	import org.exoplatform.webui.application.portlet.PortletRequestContext;
 	import org.exoplatform.services.cms.folksonomy.FolksonomyService;
 	import org.exoplatform.wcm.webui.WikiLinkParser;
+	import org.exoplatform.web.application.Parameter;
 	
 	public boolean getPortletPreference(String name) {
     PortletRequestContext portletRequestContext = _ctx.getRequestContext() ;
