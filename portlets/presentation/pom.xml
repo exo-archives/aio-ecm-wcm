@@ -52,6 +52,7 @@
 			<groupId>org.exoplatform.jcr</groupId>
 			<artifactId>exo.jcr.component.core</artifactId>
 			<version>${org.exoplatform.jcr.version}</version>
+			<scope>provided</scope>
 		</dependency>
 			
 		<dependency>
