@@ -22,6 +22,7 @@ import javax.jcr.Node;
 
 import org.exoplatform.common.http.HTTPMethods;
 import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.ecm.connector.fckeditor.FCKUtils;
 import org.exoplatform.services.rest.HTTPMethod;
 import org.exoplatform.services.rest.HeaderParam;
@@ -50,13 +51,15 @@ import org.exoplatform.wcm.connector.BaseConnector;
 @URITemplate("/wcmImage/")
 public class ImageConnector extends BaseConnector implements ResourceContainer {
 
+  private int limit;
   /**
    * Instantiates a new image connector.
    * 
    * @param container the container
    */
-  public ImageConnector(ExoContainer container) {
+  public ImageConnector(ExoContainer container, InitParams params) {
     super(container);
+    limit = Integer.parseInt(params.getValueParam("upload.limit.size").getValue());
   }
 
   /**
@@ -166,7 +169,7 @@ public class ImageConnector extends BaseConnector implements ResourceContainer {
       String contentType, @HeaderParam("content-length")
       String contentLength) throws Exception {
     return createUploadFileResponse(inputStream, repositoryName, workspaceName, currentFolder,
-        currentPortal, jcrPath, uploadId, language, contentType, contentLength);
+        currentPortal, jcrPath, uploadId, language, contentType, contentLength, limit);
   }
 
   /**

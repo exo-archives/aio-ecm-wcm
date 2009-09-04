@@ -23,6 +23,7 @@ import javax.jcr.NodeIterator;
 
 import org.exoplatform.common.http.HTTPMethods;
 import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.ecm.connector.fckeditor.FCKUtils;
 import org.exoplatform.services.rest.ContextParam;
 import org.exoplatform.services.rest.HTTPMethod;
@@ -54,15 +55,18 @@ import org.w3c.dom.Element;
 public class DocumentConnector extends BaseConnector implements ResourceContainer {
 
   protected DocumentLinkHandler documentLinkHandler;
+  
+  private int limit;
 
   /**
    * Instantiates a new document connector.
    * 
    * @param container the container
    */
-  public DocumentConnector(ExoContainer container) {
+  public DocumentConnector(ExoContainer container, InitParams param) {
     super(container);
     documentLinkHandler = new DocumentLinkHandler(container);
+    limit = Integer.parseInt(param.getValueParam("upload.limit.size").getValue());
   }
 
   /**
@@ -220,7 +224,8 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
           uploadId,
           language,
           contentType,
-          contentLength); 
+          contentLength,
+          limit); 
     } catch (Exception e) {
     }    
     return Response.Builder.serverError().build();
