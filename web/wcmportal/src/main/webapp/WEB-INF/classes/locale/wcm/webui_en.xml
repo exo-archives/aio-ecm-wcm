@@ -281,4 +281,12 @@
       <empty-input>The value of field '{0}' is null or empty!</empty-input>
     </msg>
   </ECMNameValidator>
+  
+  <Drives>
+  	<label>
+  		<Managesites>Manage site</Managesites>
+  		<Sharedsite>Shared site</Sharedsite>
+  	</label>
+  </Drives>
+  
 </bundle>

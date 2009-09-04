@@ -288,4 +288,11 @@
       <empty-input>La valeur du champ '{0}' est nulle ou vide !</empty-input>
     </msg>
   </ECMNameValidator>
+  
+  <Drives>
+  	<label>
+  		<Managesites>Gérer le site</Managesites>
+  		<Sharedsite>Le site du partager</Sharedsite>
+  	</label>
+  </Drives>
 </bundle>
