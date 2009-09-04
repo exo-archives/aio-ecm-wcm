@@ -56,19 +56,19 @@
 		</dependency>
 			
 		<dependency>
-			<groupId>org.exoplatform.ecm.wcm</groupId>
+			<groupId>org.exoplatform.ecm</groupId>
 			<artifactId>exo.ecm.wcm.component.wcm</artifactId>
 			<version>${org.exoplatform.ecm.wcm.version}</version>
 		</dependency>
 			
 		<dependency>
-			<groupId>org.exoplatform.ecm.wcm</groupId>
+			<groupId>org.exoplatform.ecm</groupId>
 			<artifactId>exo.ecm.wcm.component.search</artifactId>
 			<version>${org.exoplatform.ecm.wcm.version}</version>
 		</dependency>
 			
 		<dependency>
-			<groupId>org.exoplatform.ecm.wcm</groupId>
+			<groupId>org.exoplatform.ecm</groupId>
 			<artifactId>exo.ecm.wcm.component.publication</artifactId>
 			<version>${org.exoplatform.ecm.wcm.version}</version>
 			</dependency>
