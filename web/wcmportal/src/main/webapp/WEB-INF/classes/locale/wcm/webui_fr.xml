@@ -291,8 +291,8 @@
   
   <Drives>
   	<label>
-  		<Managesites>Gérer le site</Managesites>
-  		<Sharedsite>Le site du partager</Sharedsite>
+  		<ManageSites>Gérer le site</ManageSites>
+  		<SharedSite>Le site du partager</SharedSite>
   	</label>
   </Drives>
 </bundle>

@@ -284,8 +284,8 @@
   
   <Drives>
   	<label>
-  		<Managesites>Manage site</Managesites>
-  		<Sharedsite>Shared site</Sharedsite>
+  		<ManageSites>Manage site</ManageSites>
+  		<SharedSite>Shared site</SharedSite>
   	</label>
   </Drives>
   
