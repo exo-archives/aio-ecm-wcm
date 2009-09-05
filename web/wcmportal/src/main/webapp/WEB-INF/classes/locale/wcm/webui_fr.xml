@@ -291,7 +291,7 @@
   
   <Drives>
   	<label>
-  		<ManageSites>Gérer le site</ManageSites>
+  		<ManagedSites>Gérer le site</ManagedSites>
   		<SharedSite>Le site du partager</SharedSite>
   	</label>
   </Drives>
