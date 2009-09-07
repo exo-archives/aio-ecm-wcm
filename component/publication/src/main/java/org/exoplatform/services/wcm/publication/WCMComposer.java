@@ -22,6 +22,8 @@ import java.util.List;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
+
 /**
  * This class is responsible of getting contents inside the WCM product.
  * We shouldn't access directly contents from the jcr on front side.
@@ -81,7 +83,7 @@ public interface WCMComposer {
 	 * @param filters
 	 * @return a jcr node
 	 */
-	public Node getContent(String repository, String workspace, String path, HashMap<String, String> filters) throws Exception ;
+	public Node getContent(String repository, String workspace, String path, HashMap<String, String> filters, SessionProvider sessionProvider) throws Exception ;
 
 	/**
 	 * returns contents at the specified path based on filters
@@ -92,7 +94,7 @@ public interface WCMComposer {
 	 * @param filters
 	 * @return a jcr node
 	 */
-	public NodeIterator getContents(String repository, String workspace, String path, HashMap<String, String> filters) throws Exception ;
+	public NodeIterator getContents(String repository, String workspace, String path, HashMap<String, String> filters, SessionProvider sessionProvider) throws Exception ;
 
 	public boolean updateContent(String repository, String workspace, String path, HashMap<String, String> filters);
 	

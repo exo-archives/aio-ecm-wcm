@@ -71,7 +71,7 @@ public class UICategories extends UIContainer {
 	
 	@SuppressWarnings("unused")
   private int getNumberOfUser(String categoryName, String subscriptionName){
-	  return userHandler.getQuantityUserBySubscription(portalName, categoryName, subscriptionName);
+	  return userHandler.getQuantityUserBySubscription(portalName, categoryName, subscriptionName, Utils.getSessionProvider(this));
 	}
 	
 	@SuppressWarnings("unused")

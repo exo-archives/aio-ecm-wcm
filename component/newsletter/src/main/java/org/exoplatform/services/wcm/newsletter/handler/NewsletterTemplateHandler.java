@@ -28,7 +28,6 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
@@ -48,9 +47,6 @@ public class NewsletterTemplateHandler {
   /** The repository service. */
   private RepositoryService repositoryService;
   
-  /** The thread local session provider service. */
-  private ThreadLocalSessionProviderService threadLocalSessionProviderService;
-  
   /** The repository. */
   private String repository;
   
@@ -68,7 +64,6 @@ public class NewsletterTemplateHandler {
    */
   public NewsletterTemplateHandler(String repository, String workspace) {
     repositoryService = (RepositoryService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(RepositoryService.class);
-    threadLocalSessionProviderService = ThreadLocalSessionProviderService.class.cast(ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(ThreadLocalSessionProviderService.class));
     this.repository = repository;
     this.workspace = workspace;
   }
@@ -81,9 +76,8 @@ public class NewsletterTemplateHandler {
    * 
    * @return the templates
    */
-  public List<Node> getTemplates(String portalName, NewsletterCategoryConfig categoryConfig) {
+  public List<Node> getTemplates(String portalName, NewsletterCategoryConfig categoryConfig, SessionProvider sessionProvider) {
     log.info("Trying to get templates of category " + categoryConfig);
-    SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null); 
     if(sessionProvider ==  null) sessionProvider = SessionProviderFactory.createSystemProvider();
     try {
       List<Node> templates = new ArrayList<Node>();
@@ -124,10 +118,14 @@ public class NewsletterTemplateHandler {
    * 
    * @return the template
    */
-  public Node getTemplate(String portalName, NewsletterCategoryConfig categoryConfig, String templateName) {
+  public Node getTemplate(
+                          String portalName,
+                          NewsletterCategoryConfig categoryConfig,
+                          String templateName,
+                          SessionProvider sessionProvider) {
     log.info("Trying to get template " + templateName);
     try {
-      if (templates == null) templates = getTemplates(portalName, categoryConfig);
+      if (templates == null) templates = getTemplates(portalName, categoryConfig, sessionProvider);
       if (templateName == null && templates.size() > 0) return templates.get(0);
       for (Node template : templates) {
         if (templateName.equals(template.getName())) {
@@ -151,9 +149,12 @@ public class NewsletterTemplateHandler {
    * @return true, if successful
    * @throws Exception 
    */
-  public void convertAsTemplate(String webcontentPath, String portalName, String categoryName) throws Exception {
+  public void convertAsTemplate(
+                                String webcontentPath,
+                                String portalName,
+                                String categoryName,
+                                SessionProvider sessionProvider) throws Exception {
     log.info("Trying to convert node " + webcontentPath + " to template at category " + categoryName);
-    SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
     if(sessionProvider == null) sessionProvider = SessionProviderFactory.createSystemProvider();
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);

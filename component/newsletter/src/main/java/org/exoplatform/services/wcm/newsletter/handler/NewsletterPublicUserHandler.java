@@ -35,7 +35,6 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.StandaloneContainer;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.mail.MailService;
@@ -56,9 +55,6 @@ public class NewsletterPublicUserHandler {
   /** The repository service. */
   private RepositoryService repositoryService;
   
-  /** The thread local session provider service. */
-  private ThreadLocalSessionProviderService threadLocalSessionProviderService;
-  
   /** The repository. */
   private String repository;
   
@@ -73,7 +69,6 @@ public class NewsletterPublicUserHandler {
    */
   public NewsletterPublicUserHandler(String repository, String workspace) {
     repositoryService = (RepositoryService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(RepositoryService.class);
-    threadLocalSessionProviderService = ThreadLocalSessionProviderService.class.cast(ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(ThreadLocalSessionProviderService.class));
     this.repository = repository;
     this.workspace = workspace;
   }
@@ -186,12 +181,18 @@ public class NewsletterPublicUserHandler {
    * @param sessionProvider the session provider
    * @throws Exception 
    */
-  public void subscribe(String portalName, String userMail, List<String> listCategorySubscription, String link, String[] emailContent, SessionProvider sessionProvider) throws Exception {
+  public void subscribe(
+                        String portalName,
+                        String userMail,
+                        List<String> listCategorySubscription,
+                        String link,
+                        String[] emailContent,
+                        SessionProvider sessionProvider) throws Exception {
     log.info("Trying to subscribe user " + userMail);
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
       // add new user email into users node
-      NewsletterManageUserHandler manageUserHandler = new NewsletterManageUserHandler(repository, workspace);
+      NewsletterManageUserHandler manageUserHandler = new NewsletterManageUserHandler(repository, workspace, sessionProvider);
       Node userNode = manageUserHandler.add(portalName, userMail, sessionProvider);
       
       // update email into subscription
@@ -268,8 +269,8 @@ public class NewsletterPublicUserHandler {
     try {
       clearEmailInSubscription(email, sessionProvider);
       //  update for users node
-      NewsletterManageUserHandler manageUserHandler = new NewsletterManageUserHandler(repository, workspace);
-      manageUserHandler.delete(portalName, email);
+      NewsletterManageUserHandler manageUserHandler = new NewsletterManageUserHandler(repository, workspace, sessionProvider);
+      manageUserHandler.delete(portalName, email, sessionProvider);
     } catch (Exception e) {
       log.error("Update user's subscription for user " + email + " failed because of " + e.getMessage());
     }

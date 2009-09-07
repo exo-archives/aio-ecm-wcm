@@ -31,7 +31,6 @@ import org.exoplatform.services.jcr.access.AccessControlEntry;
 import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
@@ -51,9 +50,6 @@ public class NewsletterCategoryHandler {
   /** The repository service. */
   private RepositoryService repositoryService;
   
-  /** The thread local session provider service. */
-  private ThreadLocalSessionProviderService threadLocalSessionProviderService;
-  
   /** The repository. */
   private String repository;
   
@@ -68,10 +64,6 @@ public class NewsletterCategoryHandler {
    */
   public NewsletterCategoryHandler(String repository, String workspace) {
     repositoryService = (RepositoryService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(RepositoryService.class);
-    threadLocalSessionProviderService = ThreadLocalSessionProviderService.class.cast(
-                                                                                     ExoContainerContext.getCurrentContainer()
-                                                                                     .getComponentInstanceOfType(
-                                                                                                                 ThreadLocalSessionProviderService.class));
     this.repository = repository;
     this.workspace = workspace;
   }

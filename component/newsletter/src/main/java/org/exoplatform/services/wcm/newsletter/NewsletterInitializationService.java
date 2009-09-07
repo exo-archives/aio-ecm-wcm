@@ -107,7 +107,7 @@ public class NewsletterInitializationService implements Startable {
           
           NewsletterSubscriptionHandler subscriptionHandler = newsletterManagerService.getSubscriptionHandler();
           for (NewsletterSubscriptionConfig subscriptionConfig : subscriptionConfigs) {
-            subscriptionHandler.add(sessionProvider, portalName, subscriptionConfig);
+            subscriptionHandler.add(portalName, subscriptionConfig, sessionProvider);
           }
 
           Node userNode = null;

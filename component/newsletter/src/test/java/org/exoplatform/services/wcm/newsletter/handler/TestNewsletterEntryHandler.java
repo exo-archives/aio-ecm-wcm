@@ -17,29 +17,61 @@ import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 import org.exoplatform.services.wcm.newsletter.config.NewsletterManagerConfig;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TestNewsletterEntryHandler.
+ */
 public class TestNewsletterEntryHandler extends BaseWCMTestCase {
 	
+  /** The session provider. */
+  private SessionProvider sessionProvider;
+	
+	/** The newsletter application node. */
 	private Node newsletterApplicationNode;
+	
+	/** The categories node. */
 	private Node categoriesNode;
+	
+	/** The category node. */
 	private Node categoryNode;
+	
+	/** The subscription node. */
 	private Node subscriptionNode;
+	
+	/** The node temp. */
 	private Node nodeTemp;
 	
+	/** The newsletter manager service. */
 	private NewsletterManagerService newsletterManagerService;
+	
+	/** The newsletter category handler. */
 	private NewsletterCategoryHandler newsletterCategoryHandler;
+	
+	/** The newsletter subscription handler. */
 	private NewsletterSubscriptionHandler newsletterSubscriptionHandler;
+	
+	/** The newsletter entry handler. */
 	private NewsletterEntryHandler newsletterEntryHandler;
+	
+	/** The newsletter category config. */
 	private NewsletterCategoryConfig newsletterCategoryConfig;
+	
+	/** The newsletter subscription config. */
 	private NewsletterSubscriptionConfig newsletterSubscriptionConfig;
+	
+	/** The is added. */
 	private static boolean isAdded = false;
 	
+	/* (non-Javadoc)
+	 * @see org.exoplatform.services.wcm.BaseWCMTestCase#setUp()
+	 */
 	public void setUp() throws Exception {
 		super.setUp();
 		NodetypeUtils.displayAllNode("collaboration", "repository");
 		newsletterApplicationNode = (Node) session.getItem("/sites content/live/classic/ApplicationData/NewsletterApplication");
 		categoriesNode = newsletterApplicationNode.getNode("Categories");
 		
-		SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
+		sessionProvider = SessionProviderFactory.createSystemProvider();
 		
 		newsletterManagerService = getService(NewsletterManagerService.class);
 		newsletterCategoryHandler = newsletterManagerService.getCategoryHandler();
@@ -62,7 +94,7 @@ public class TestNewsletterEntryHandler extends BaseWCMTestCase {
 			newsletterSubscriptionConfig.setName("SubscriptionName");
 			newsletterSubscriptionConfig.setTitle("SubscriptionTitle");
 			newsletterSubscriptionConfig.setDescription("SubscriptionDescription");
-			newsletterSubscriptionHandler.add(sessionProvider, "classic", newsletterSubscriptionConfig);
+			newsletterSubscriptionHandler.add("classic", newsletterSubscriptionConfig, sessionProvider);
 			
 			subscriptionNode = categoryNode.getNode("SubscriptionName");
 			
@@ -79,34 +111,68 @@ public class TestNewsletterEntryHandler extends BaseWCMTestCase {
 		isAdded = true;
 	}
 	
+	/**
+	 * Test delete newsletter entry.
+	 * 
+	 * @throws Exception the exception
+	 */
 	public void testDeleteNewsletterEntry() throws Exception {
 		List<String> listIds = Arrays.asList(new String[]{"NewsletterEntry0", "NewsletterEntry1"});
-		newsletterEntryHandler.delete("classic", "CategoryName", "SubscriptionName", listIds);
+		newsletterEntryHandler.delete("classic", "CategoryName", "SubscriptionName", listIds, sessionProvider);
 		long countEntry = subscriptionNode.getNodes().getSize();
 		assertEquals(3, countEntry);
 	}
 	
+	/**
+	 * Test get newsletter entries by subscription.
+	 * 
+	 * @throws Exception the exception
+	 */
 	public void testGetNewsletterEntriesBySubscription() throws Exception {
-		List<NewsletterManagerConfig> listNewslleterEntries = newsletterEntryHandler.getNewsletterEntriesBySubscription("classic", "CategoryName", "SubscriptionName");
+		List<NewsletterManagerConfig> listNewslleterEntries = newsletterEntryHandler
+		  .getNewsletterEntriesBySubscription("classic", "CategoryName", "SubscriptionName", sessionProvider);
 		assertEquals(3, listNewslleterEntries.size());
 	}
 	
+	/**
+	 * Test get newsletter entry.
+	 * 
+	 * @throws Exception the exception
+	 */
 	public void testGetNewsletterEntry() throws Exception {
-		NewsletterManagerConfig newsletterManagerConfig = newsletterEntryHandler.getNewsletterEntry("classic", "CategoryName", "SubscriptionName", "NewsletterEntry2");
+		NewsletterManagerConfig newsletterManagerConfig = newsletterEntryHandler
+		  .getNewsletterEntry("classic", "CategoryName", "SubscriptionName", "NewsletterEntry2", sessionProvider);
 		assertEquals("NewsletterEntry2", newsletterManagerConfig.getNewsletterName());
 	}
 	
+	/**
+	 * Test get newsletter entry by path.
+	 * 
+	 * @throws Exception the exception
+	 */
 	public void testGetNewsletterEntryByPath() throws Exception {
 		String path = "/sites content/live/classic/ApplicationData/NewsletterApplication/Categories/CategoryName/SubscriptionName/NewsletterEntry2";
-		NewsletterManagerConfig newsletterManagerConfig = newsletterEntryHandler.getNewsletterEntryByPath(path);
+		NewsletterManagerConfig newsletterManagerConfig = newsletterEntryHandler
+		  .getNewsletterEntryByPath(path, sessionProvider);
 		assertEquals("NewsletterEntry2", newsletterManagerConfig.getNewsletterName());
 	}
 	
+	/**
+	 * Test get content.
+	 * 
+	 * @throws Exception the exception
+	 */
 	public void testGetContent() throws Exception {
-		String strContent = newsletterEntryHandler.getContent("classic", "CategoryName", "SubscriptionName", "NewsletterEntry2");
+		String strContent = newsletterEntryHandler
+		  .getContent("classic", "CategoryName", "SubscriptionName", "NewsletterEntry2", sessionProvider);
 		assertTrue(strContent.indexOf("test content of this node NewsletterEntry2") > 0);
 	}
 	
+	/**
+	 * Test get content entry.
+	 * 
+	 * @throws Exception the exception
+	 */
 	public void testGetContentEntry() throws Exception {
 		if(nodeTemp == null) 
 			nodeTemp = ((Node) session.getItem("/sites content/live/classic/ApplicationData/NewsletterApplication"))
@@ -116,4 +182,16 @@ public class TestNewsletterEntryHandler extends BaseWCMTestCase {
 		assertTrue(strContent.indexOf("test content of this node NewsletterEntry2") > 0);
 	}
 	
+	/**
+	 * Tear dow.
+	 */
+	public void tearDow() {
+    try {
+      super.tearDown();
+    } catch (Exception e) {
+      sessionProvider.close();
+    } finally {
+      sessionProvider.close();
+    }
+  }
 }

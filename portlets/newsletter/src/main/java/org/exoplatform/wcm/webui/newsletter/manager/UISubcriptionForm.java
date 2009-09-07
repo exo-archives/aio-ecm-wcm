@@ -160,7 +160,7 @@ public class UISubcriptionForm extends UIForm {
         newsletterSubscriptionConfig.setDescription(subcriptionDecription);
         newsletterSubscriptionConfig.setTitle(subcriptionTitle);
 
-        subscriptionHandler.add(sessionProvider, NewsLetterUtil.getPortalName(), newsletterSubscriptionConfig);
+        subscriptionHandler.add(NewsLetterUtil.getPortalName(), newsletterSubscriptionConfig, sessionProvider);
       } else {
 
         newsletterSubscriptionConfig = uiSubcriptionForm.subscriptionConfig;

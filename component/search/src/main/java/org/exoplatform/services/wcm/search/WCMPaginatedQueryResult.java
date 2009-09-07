@@ -25,9 +25,7 @@ import org.apache.commons.lang.ArrayUtils;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
-import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
 import org.exoplatform.services.wcm.publication.WCMComposer;
-import org.exoplatform.services.wcm.publication.WCMPublicationService;
 
 /**
  * Created by The eXo Platform SAS Author : Hoa Pham hoa.phamvu@exoplatform.com
@@ -195,5 +193,4 @@ public class WCMPaginatedQueryResult extends PaginatedQueryResult {
   public void setSpellSuggestion(String spellSuggestion) {
     this.spellSuggestion = spellSuggestion;
   }
-  
 }

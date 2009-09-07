@@ -15,15 +15,33 @@ import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 
-import antlr.collections.List;
-
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TestNewsletterSubscriptionHandler.
+ */
 public class TestNewsletterSubscriptionHandler extends BaseWCMTestCase {
 	
+  /** The session provider. */
+  private SessionProvider sessionProvider;
+	
+	/** The newsletter subscription config. */
 	private NewsletterSubscriptionConfig newsletterSubscriptionConfig;
+	
+	/** The newsletter subscription handler. */
 	private NewsletterSubscriptionHandler newsletterSubscriptionHandler;
+	
+	/** The categories node. */
 	private Node categoriesNode;
+	
+	/** The user home node. */
 	private Node userHomeNode;
+	
+	/** The newsletter manager service. */
 	NewsletterManagerService newsletterManagerService;
+	
+	/* (non-Javadoc)
+	 * @see org.exoplatform.services.wcm.BaseWCMTestCase#setUp()
+	 */
 	public void setUp() throws Exception {
 		super.setUp();
 		NodetypeUtils.displayAllNode("collaboration", "repository");
@@ -32,7 +50,7 @@ public class TestNewsletterSubscriptionHandler extends BaseWCMTestCase {
 		userHomeNode = newsletterApplicationNode.getNode("Users");
 		session.save();
 		
-		SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
+		sessionProvider = SessionProviderFactory.createSystemProvider();
 		newsletterManagerService = getService(NewsletterManagerService.class);
 		NewsletterCategoryHandler newsletterCategoryHandler = newsletterManagerService.getCategoryHandler();
 		NewsletterCategoryConfig newsletterCategoryConfig = new NewsletterCategoryConfig();
@@ -51,9 +69,14 @@ public class TestNewsletterSubscriptionHandler extends BaseWCMTestCase {
 		newsletterSubscriptionConfig.setDescription("DescriptionNewsletterSubcription");
 	}
 	
+	/**
+	 * Test add subscription.
+	 * 
+	 * @throws Exception the exception
+	 */
 	public void testAddSubscription() throws Exception {
 		SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
-		newsletterSubscriptionHandler.add(sessionProvider, "classic", newsletterSubscriptionConfig);
+		newsletterSubscriptionHandler.add("classic", newsletterSubscriptionConfig, sessionProvider);
 		Node sub = (Node)categoriesNode.getNode("CategoryNameNewsletterSubcription").getNode("NameNewsletterSubcription");
 		assertNotNull(sub);
 		assertEquals(sub.getName(), newsletterSubscriptionConfig.getName());
@@ -62,9 +85,13 @@ public class TestNewsletterSubscriptionHandler extends BaseWCMTestCase {
 		assertEquals(sub.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_DECRIPTION).getString(), newsletterSubscriptionConfig.getDescription());
 	}
 	
+	/**
+	 * Test edit subscription.
+	 * 
+	 * @throws Exception the exception
+	 */
 	public void testEditSubscription() throws Exception {
-		SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
-		newsletterSubscriptionHandler.add(sessionProvider, "classic", newsletterSubscriptionConfig);
+		newsletterSubscriptionHandler.add("classic", newsletterSubscriptionConfig, sessionProvider);
 		
 		newsletterSubscriptionConfig.setTitle("Sub Title");
 		newsletterSubscriptionConfig.setDescription("Sub Desc");
@@ -75,29 +102,42 @@ public class TestNewsletterSubscriptionHandler extends BaseWCMTestCase {
 		assertEquals(sub.getProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_DECRIPTION).getString(), newsletterSubscriptionConfig.getDescription());
 	}
 	
+	/**
+	 * Test delete subscription.
+	 * 
+	 * @throws Exception the exception
+	 */
 	public void testDeleteSubscription() throws Exception {
-		SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
-		newsletterSubscriptionHandler.add(sessionProvider, "classic", newsletterSubscriptionConfig);
+		newsletterSubscriptionHandler.add("classic", newsletterSubscriptionConfig, sessionProvider);
 		
 		newsletterSubscriptionHandler.delete("classic", "CategoryNameNewsletterSubcription", newsletterSubscriptionConfig, sessionProvider);
 		
 		assertEquals(3, categoriesNode.getNode("CategoryNameNewsletterSubcription").getNodes().getSize());
 	}
 	
+	/**
+	 * Test get subscriptions by category.
+	 * 
+	 * @throws Exception the exception
+	 */
 	public void testGetSubscriptionsByCategory() throws Exception {
-		SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
 		for(int i = 0 ; i < 5; i++) {
 			newsletterSubscriptionConfig = new	NewsletterSubscriptionConfig();
 			newsletterSubscriptionConfig.setCategoryName("CategoryNameNewsletterSubcription");
 			newsletterSubscriptionConfig.setName("Sub_"+i);
 			newsletterSubscriptionConfig.setTitle("Title_"+i);
 			newsletterSubscriptionConfig.setDescription("Desc_"+i);
-			newsletterSubscriptionHandler.add(sessionProvider, "classic", newsletterSubscriptionConfig);
+			newsletterSubscriptionHandler.add("classic", newsletterSubscriptionConfig, sessionProvider);
 		}
 		
 		assertEquals(7, newsletterSubscriptionHandler.getSubscriptionsByCategory("classic", "CategoryNameNewsletterSubcription", sessionProvider).size());
 	}
 	
+	/**
+	 * Test get subscription ids by public user.
+	 * 
+	 * @throws Exception the exception
+	 */
 	public void testGetSubscriptionIdsByPublicUser() throws Exception {
 		SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
 		java.util.List<String> list = new ArrayList<String>();
@@ -107,7 +147,7 @@ public class TestNewsletterSubscriptionHandler extends BaseWCMTestCase {
 			newsletterSubscriptionConfig.setName("Sub_"+i);
 			newsletterSubscriptionConfig.setTitle("Title_"+i);
 			newsletterSubscriptionConfig.setDescription("Desc_"+i);
-			newsletterSubscriptionHandler.add(sessionProvider, "classic", newsletterSubscriptionConfig);
+			newsletterSubscriptionHandler.add("classic", newsletterSubscriptionConfig, sessionProvider);
 			list.add(newsletterSubscriptionConfig.getCategoryName() + "#" + newsletterSubscriptionConfig.getName());
 		}
 
@@ -117,16 +157,24 @@ public class TestNewsletterSubscriptionHandler extends BaseWCMTestCase {
 		assertEquals(5, newsletterSubscriptionHandler.getSubscriptionIdsByPublicUser("classic", "abc@local.com", sessionProvider).size());
 	}
 	
+	/**
+	 * Test get subscriptions by name.
+	 * 
+	 * @throws Exception the exception
+	 */
 	public void testGetSubscriptionsByName() throws Exception {
-		SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
-		newsletterSubscriptionHandler.add(sessionProvider, "classic", newsletterSubscriptionConfig);
+		newsletterSubscriptionHandler.add("classic", newsletterSubscriptionConfig, sessionProvider);
 		NewsletterSubscriptionConfig sub = newsletterSubscriptionHandler.getSubscriptionsByName("classic", "CategoryNameNewsletterSubcription", newsletterSubscriptionConfig.getName(), sessionProvider);
 		assertEquals("NameNewsletterSubcription", sub.getName());
 	}
 	
+	/**
+	 * Test get number of newsletters waiting.
+	 * 
+	 * @throws Exception the exception
+	 */
 	public void testGetNumberOfNewslettersWaiting() throws Exception {
 
-		SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
 		NewsletterCategoryConfig newsletterCategoryConfig = new NewsletterCategoryConfig();
 		NewsletterCategoryHandler newsletterCategoryHandler = newsletterManagerService.getCategoryHandler();
 		newsletterCategoryConfig.setName("CategoryName");
@@ -142,7 +190,7 @@ public class TestNewsletterSubscriptionHandler extends BaseWCMTestCase {
 		newsletterSubscriptionConfig.setName("SubscriptionName");
 		newsletterSubscriptionConfig.setTitle("SubscriptionTitle");
 		newsletterSubscriptionConfig.setDescription("SubscriptionDescription");
-		newsletterSubscriptionHandler.add(sessionProvider, "classic", newsletterSubscriptionConfig);
+		newsletterSubscriptionHandler.add("classic", newsletterSubscriptionConfig, sessionProvider);
 		
 		Node subscriptionNode = categoryNode.getNode("SubscriptionName");
 		Node nodeTemp;
@@ -158,8 +206,18 @@ public class TestNewsletterSubscriptionHandler extends BaseWCMTestCase {
 		assertEquals(5, numNewsletterWaiting);
 	}
 
-	protected void tearDown() throws Exception {
-		super.tearDown();
-		session.save();
+	/* (non-Javadoc)
+	 * @see junit.framework.TestCase#tearDown()
+	 */
+	protected void tearDown() {
+		try {
+      super.tearDown();
+      session.save();
+    } catch (Exception e) {
+      sessionProvider.close();
+    } finally {
+      sessionProvider.close();
+    }
+		
 	}
 }

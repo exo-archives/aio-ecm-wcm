@@ -96,7 +96,7 @@ public class NewsletterManagerService {
 		categoryHandler = new NewsletterCategoryHandler(repositoryName, workspaceName);
 		subscriptionHandler = new NewsletterSubscriptionHandler(repositoryName, workspaceName);
 		entryHandler = new NewsletterEntryHandler(repositoryName, workspaceName);
-		manageUserHandler = new NewsletterManageUserHandler(repositoryName, workspaceName);
+		manageUserHandler = new NewsletterManageUserHandler(repositoryName, workspaceName, SessionProviderFactory.createSystemProvider());
 		publicUserHandler = new NewsletterPublicUserHandler(repositoryName, workspaceName);
 		templateHandler = new NewsletterTemplateHandler(repositoryName, workspaceName);
 	}

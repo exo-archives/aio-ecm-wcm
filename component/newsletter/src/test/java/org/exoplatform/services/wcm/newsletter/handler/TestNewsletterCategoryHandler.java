@@ -21,23 +21,35 @@ import javax.jcr.Node;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.BaseWCMTestCase;
-import org.exoplatform.services.wcm.core.NodetypeUtils;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform
  * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com Jul 14, 2009
  */
 public class TestNewsletterCategoryHandler extends BaseWCMTestCase {
 	
+  /** The session provider. */
+  private SessionProvider sessionProvider;
+	
+	/** The newsletter category config. */
 	private NewsletterCategoryConfig newsletterCategoryConfig;
+	
+	/** The categories node. */
 	private Node categoriesNode;
+	
+	/** The newsletter category handler. */
 	private NewsletterCategoryHandler newsletterCategoryHandler;
 	
+	/* (non-Javadoc)
+	 * @see org.exoplatform.services.wcm.BaseWCMTestCase#setUp()
+	 */
 	public void setUp() throws Exception {
 		super.setUp();
+		sessionProvider = SessionProviderFactory.createSystemProvider();
 		categoriesNode = session.getRootNode().getNode("sites content/live/classic/ApplicationData/NewsletterApplication/Categories");
 		session.save();	
 		
@@ -51,8 +63,12 @@ public class TestNewsletterCategoryHandler extends BaseWCMTestCase {
 		newsletterCategoryConfig.setModerator("root");
 	}
 	
+	/**
+	 * Test add category.
+	 * 
+	 * @throws Exception the exception
+	 */
 	public void testAddCategory() throws Exception {
-		SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
 		newsletterCategoryHandler.add("classic", newsletterCategoryConfig,sessionProvider);
 
 		Node node = categoriesNode.getNode(newsletterCategoryConfig.getName());
@@ -62,8 +78,12 @@ public class TestNewsletterCategoryHandler extends BaseWCMTestCase {
 		assertEquals(node.getProperty(NewsletterConstant.CATEGORY_PROPERTY_TITLE).getString(), newsletterCategoryConfig.getTitle());	
 	}
 	
+	/**
+	 * Test edit category.
+	 * 
+	 * @throws Exception the exception
+	 */
 	public void testEditCategory()  throws Exception {
-		SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
 		newsletterCategoryHandler.add("classic", newsletterCategoryConfig, sessionProvider);
 
 		newsletterCategoryConfig.setTitle("Sport News");
@@ -78,22 +98,34 @@ public class TestNewsletterCategoryHandler extends BaseWCMTestCase {
 		assertEquals(node.getProperty(NewsletterConstant.CATEGORY_PROPERTY_DESCRIPTION).getString(), newsletterCategoryConfig.getDescription());
 	}
 
+	/**
+	 * Test delete category.
+	 * 
+	 * @throws Exception the exception
+	 */
 	public void testDeleteCategory() throws Exception {
-		SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
 		newsletterCategoryHandler.add("classic", newsletterCategoryConfig, sessionProvider);
 		newsletterCategoryHandler.delete("classic", newsletterCategoryConfig.getName(), sessionProvider);
 		assertEquals(0, categoriesNode.getNodes().getSize());
 	}
 	
+	/**
+	 * Test get category by name.
+	 * 
+	 * @throws Exception the exception
+	 */
 	public void testGetCategoryByName() throws Exception {
-		SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
 		newsletterCategoryHandler.add("classic", newsletterCategoryConfig, sessionProvider);
 		NewsletterCategoryConfig cat = newsletterCategoryHandler.getCategoryByName("classic", newsletterCategoryConfig.getName(), sessionProvider); 
 		assertEquals("newsletter01", cat.getName());
 	}
 	
+	/**
+	 * Test get list categories by name.
+	 * 
+	 * @throws Exception the exception
+	 */
 	public void testGetListCategoriesByName() throws Exception {
-		SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
 		for(int i =0; i < 5; i ++) {
 			NewsletterCategoryConfig newsletterCategoryConfig = new NewsletterCategoryConfig();
 			newsletterCategoryConfig.setName("cat_" + i);
@@ -105,12 +137,19 @@ public class TestNewsletterCategoryHandler extends BaseWCMTestCase {
 		assertEquals(5, newsletterCategoryHandler.getListCategories("classic", sessionProvider).size());
 	}
 	
+	/* (non-Javadoc)
+	 * @see junit.framework.TestCase#tearDown()
+	 */
 	protected void tearDown() throws Exception {
 		super.tearDown();
 		try {
 		  session.getRootNode().getNode("sites content/live/classic/ApplicationData/NewsletterApplication/Categories/newsletter01").remove();
 		  session.save();
-    } catch (Exception e) {}
+    } catch (Exception e) {
+      sessionProvider.close();
+    } finally {
+      sessionProvider.close();
+    }
 	}
 }
 

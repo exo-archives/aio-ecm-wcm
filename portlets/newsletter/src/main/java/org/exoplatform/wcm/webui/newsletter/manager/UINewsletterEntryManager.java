@@ -93,8 +93,12 @@ public class UINewsletterEntryManager extends UIForm {
     this.getChildren().clear();
     listNewsletterConfig = new ArrayList<NewsletterManagerConfig>();
     try{
-      listNewsletterConfig.addAll(newsletterEntryHandler.getNewsletterEntriesBySubscription(NewsLetterUtil.getPortalName(), 
-                                  categoryConfig.getName(), subscriptionConfig.getName()));
+      listNewsletterConfig.addAll(newsletterEntryHandler
+                                    .getNewsletterEntriesBySubscription(
+                                                                        NewsLetterUtil.getPortalName(), 
+                                                                        categoryConfig.getName(),
+                                                                        subscriptionConfig.getName(),
+                                                                        Utils.getSessionProvider(this)));
       for (NewsletterManagerConfig newletter : listNewsletterConfig) {
         checkBoxInput = new UIFormCheckBoxInput<Boolean>(newletter.getNewsletterName(), newletter.getNewsletterName(), false);
         this.addChild(checkBoxInput);
@@ -212,7 +216,9 @@ public class UINewsletterEntryManager extends UIForm {
       }
       uiNewsletterEntryManager.newsletterEntryHandler.delete(NewsLetterUtil.getPortalName(), 
                                                              uiNewsletterEntryManager.categoryConfig.getName(), 
-                                                             uiNewsletterEntryManager.subscriptionConfig.getName(), subIds);
+                                                             uiNewsletterEntryManager.subscriptionConfig.getName(),
+                                                             subIds,
+                                                             Utils.getSessionProvider(uiNewsletterEntryManager));
       uiNewsletterEntryManager.init();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiNewsletterEntryManager) ;
     }
@@ -268,7 +274,11 @@ public class UINewsletterEntryManager extends UIForm {
           String newsletterPath = NewsletterConstant.generateNewsletterPath(Util.getUIPortal().getName(), categoryName, subscriptionName, newsletterName) ;
           Node newsletterNode = (Node) session.getItem(newsletterPath);
           NewsletterTemplateHandler newsletterTemplateHandler = newsletterManagerService.getTemplateHandler();
-          newsletterTemplateHandler.convertAsTemplate(newsletterNode.getPath(), Util.getUIPortal().getName(), categoryName);
+          newsletterTemplateHandler.convertAsTemplate(
+                                                      newsletterNode.getPath(),
+                                                      Util.getUIPortal().getName(),
+                                                      categoryName,
+                                                      Utils.getSessionProvider(newsletterEntryManager));
           message = "UISubscription.msg.convertSuccessful";
           messageType = ApplicationMessage.INFO;
         }catch(Exception ex){

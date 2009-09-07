@@ -79,7 +79,7 @@ public class InitialNewsletterPlugin extends BasePortalArtifactsPlugin {
       
       NewsletterSubscriptionHandler subscriptionHandler = newsletterManagerService.getSubscriptionHandler();
       for (NewsletterSubscriptionConfig subscriptionConfig : subscriptionConfigs) {
-        subscriptionHandler.add(sessionProvider, portalName, subscriptionConfig);
+        subscriptionHandler.add(portalName, subscriptionConfig, sessionProvider);
       }
       
       Node portalNode = livePortalManagerService.getLivePortal(portalName, sessionProvider);

@@ -27,26 +27,36 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.impl.core.NodeImpl;
 import org.exoplatform.test.BasicTestCase;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * Jul 14, 2009  
+ * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * Jul 14, 2009
  */
 public abstract class BaseWCMTestCase extends BasicTestCase {
 
+	/** The container. */
 	protected StandaloneContainer   container;
 
+	/** The session. */
 	protected Session               session;
 
+	/** The REP o_ name. */
 	protected final String          REPO_NAME        = "repository".intern();
 
+	/** The DMSSYSTE m_ ws. */
 	protected final String          DMSSYSTEM_WS     = "dms-system".intern();
 
+	/** The SYSTE m_ ws. */
 	protected final String          SYSTEM_WS        = "system".intern();
 
+	/** The COLLABORATIO n_ ws. */
 	protected final String          COLLABORATION_WS = "collaboration".intern();
 
+	/* (non-Javadoc)
+	 * @see junit.framework.TestCase#setUp()
+	 */
 	public void setUp() throws Exception {
 		String containerConf = getClass().getResource("/conf/standalone/test-configuration.xml").toString();
 		String loginConf = Thread.currentThread().getContextClassLoader().getResource("login.conf").toString();
@@ -61,6 +71,12 @@ public abstract class BaseWCMTestCase extends BasicTestCase {
 		session = repositoryService.getRepository(REPO_NAME).getSystemSession(COLLABORATION_WS);
 	}
 
+	/**
+	 * Check mixins.
+	 * 
+	 * @param mixins the mixins
+	 * @param node the node
+	 */
 	protected void checkMixins(String[] mixins, NodeImpl node) {
 		try {
 			String[] nodeMixins = node.getMixinTypeNames();
@@ -72,6 +88,12 @@ public abstract class BaseWCMTestCase extends BasicTestCase {
 		}
 	}
 
+	/**
+	 * Compare mixins.
+	 * 
+	 * @param mixins the mixins
+	 * @param nodeMixins the node mixins
+	 */
 	protected void compareMixins(String[] mixins, String[] nodeMixins) {
 		nextMixin: for (String mixin : mixins) {
 			for (String nodeMixin : nodeMixins) {
@@ -83,6 +105,11 @@ public abstract class BaseWCMTestCase extends BasicTestCase {
 		}
 	}
 
+	/**
+	 * Memory info.
+	 * 
+	 * @return the string
+	 */
 	protected String memoryInfo() {
 		String info = "";
 		info = "free: " + mb(Runtime.getRuntime().freeMemory()) + "M of "
@@ -92,19 +119,53 @@ public abstract class BaseWCMTestCase extends BasicTestCase {
 	}
 
 	// bytes to Mbytes
+	/**
+	 * Mb.
+	 * 
+	 * @param mem the mem
+	 * 
+	 * @return the string
+	 */
 	protected String mb(long mem) {
 		return String.valueOf(Math.round(mem * 100d / (1024d * 1024d)) / 100d);
 	}
 
+	/**
+	 * Exec time.
+	 * 
+	 * @param from the from
+	 * 
+	 * @return the string
+	 */
 	protected String execTime(long from) {
 		return Math.round(((System.currentTimeMillis() - from) * 100.00d / 60000.00d)) / 100.00d
 		+ "min";
 	}
 
+	/**
+	 * Gets the service.
+	 * 
+	 * @param clazz the clazz
+	 * 
+	 * @return the service
+	 */
 	protected <T> T getService(Class<T> clazz) {
 		return clazz.cast(container.getComponentInstanceOfType(clazz));
 	}
 
+	/**
+	 * Creates the webcontent node.
+	 * 
+	 * @param parentNode the parent node
+	 * @param nodeName the node name
+	 * @param htmlData the html data
+	 * @param cssData the css data
+	 * @param jsData the js data
+	 * 
+	 * @return the node
+	 * 
+	 * @throws Exception the exception
+	 */
 	protected Node createWebcontentNode(Node parentNode,
 			String nodeName,
 			String htmlData,

@@ -31,7 +31,6 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
@@ -52,9 +51,6 @@ public class NewsletterEntryHandler {
   /** The repository service. */
   private RepositoryService repositoryService;
   
-  /** The thread local session provider service. */
-  private ThreadLocalSessionProviderService threadLocalSessionProviderService;
-  
   /** The repository. */
   private String repository;
   
@@ -71,9 +67,6 @@ public class NewsletterEntryHandler {
     repositoryService = (RepositoryService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(RepositoryService.class);
     this.repository = repository;
     this.workspace = workspace;
-    threadLocalSessionProviderService = ThreadLocalSessionProviderService.class
-                                          .cast(ExoContainerContext.getCurrentContainer()
-                                          .getComponentInstanceOfType(ThreadLocalSessionProviderService.class));
   }
   
   /**
@@ -95,41 +88,6 @@ public class NewsletterEntryHandler {
     newsletterEntryConfig.setCategoryName(entryNode.getParent().getParent().getName());
     return newsletterEntryConfig;
   }
-  /*
-  public void add(SessionProvider sessionProvider) {
-    try {
-      ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      Session session = sessionProvider.getSession(workspace, manageableRepository);
-      // TODO: Needs to implement
-      // Add new newsletter entry node with node name is the title
-      // Set property "exo:newsletterEntryType" is template type
-      // Set property "exo:newsletterEntryDate" is sending date
-      // Set property "exo:newsletterEntryStatus" is draft
-    } catch (Exception e) {
-      // TODO: handle exception
-    }
-  }
-
-  public void updateStatus(SessionProvider sessionProvider) {
-    try {
-      ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      Session session = sessionProvider.getSession(workspace, manageableRepository);
-      // TODO: Needs to implement
-      // Update the status of newsletter, from draft to awaiting or sent, or from awaiting to sent
-    } catch (Exception e) {
-      // TODO: handle exception
-    }
-  }
-
-  public void edit(SessionProvider sessionProvider) {
-    try {
-      ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      Session session = sessionProvider.getSession(workspace, manageableRepository);
-      // TODO: Needs to implement
-    } catch (Exception e) {
-      // TODO: handle exception
-    }
-  }*/
   
   /**
    * Delete.
@@ -139,8 +97,12 @@ public class NewsletterEntryHandler {
    * @param subscriptionName the subscription name
    * @param listIds the list ids
    */
-  public void delete(String portalName, String categoryName, String subscriptionName, List<String> listIds) {
-    SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
+  public void delete(
+                     String portalName,
+                     String categoryName,
+                     String subscriptionName,
+                     List<String> listIds,
+                     SessionProvider sessionProvider) {
     if(sessionProvider == null) sessionProvider = SessionProviderFactory.createSystemProvider();
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
@@ -170,9 +132,13 @@ public class NewsletterEntryHandler {
    * 
    * @throws Exception the exception
    */
-  public List<NewsletterManagerConfig> getNewsletterEntriesBySubscription(String portalName, String categoryName, String subscriptionName) throws Exception{
+  public List<NewsletterManagerConfig> getNewsletterEntriesBySubscription(
+                                                                          String portalName,
+                                                                          String categoryName,
+                                                                          String subscriptionName,
+                                                                          SessionProvider sessionProvider)
+    throws Exception{
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-    SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
     if(sessionProvider == null) sessionProvider = SessionProviderFactory.createSystemProvider();
     Session session = sessionProvider.getSession(workspace, manageableRepository);
     String path = NewsletterConstant.generateCategoryPath(portalName) + "/" + categoryName + "/" + subscriptionName;
@@ -206,9 +172,13 @@ public class NewsletterEntryHandler {
    * 
    * @throws Exception the exception
    */
-  public NewsletterManagerConfig getNewsletterEntry(String portalName, String categoryName, String subscriptionName, String newsletterName) throws Exception{
+  public NewsletterManagerConfig getNewsletterEntry(
+                                                    String portalName,
+                                                    String categoryName,
+                                                    String subscriptionName,
+                                                    String newsletterName,
+                                                    SessionProvider sessionProvider) throws Exception{
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-    SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
     if(sessionProvider == null) sessionProvider = SessionProviderFactory.createSystemProvider();
     Session session = sessionProvider.getSession(workspace, manageableRepository);
     String path = NewsletterConstant.generateCategoryPath(portalName) + "/" + categoryName + "/" + subscriptionName + "/" + newsletterName;
@@ -226,9 +196,8 @@ public class NewsletterEntryHandler {
    * 
    * @throws Exception the exception
    */
-  public NewsletterManagerConfig getNewsletterEntryByPath(String path) throws Exception{
+  public NewsletterManagerConfig getNewsletterEntryByPath(String path, SessionProvider sessionProvider) throws Exception{
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-    SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
     if(sessionProvider == null) sessionProvider = SessionProviderFactory.createSystemProvider();
     Session session = sessionProvider.getSession(workspace, manageableRepository);
     NewsletterManagerConfig newsletterManagerConfig = getEntryFromNode((Node)session.getItem(path));
@@ -248,9 +217,13 @@ public class NewsletterEntryHandler {
    * 
    * @throws Exception the exception
    */
-  public String getContent(String portalName, String categoryName, String subscriptionName, String newsletterName) throws Exception{
+  public String getContent(
+                           String portalName,
+                           String categoryName,
+                           String subscriptionName,
+                           String newsletterName,
+                           SessionProvider sessionProvider) throws Exception {
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-    SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
     if(sessionProvider == null) sessionProvider = SessionProviderFactory.createSystemProvider();
     Session session = sessionProvider.getSession(workspace, manageableRepository);
     String path = NewsletterConstant.generateCategoryPath(portalName) + "/" + categoryName + "/" + subscriptionName + "/" + newsletterName;

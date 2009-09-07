@@ -132,7 +132,8 @@ public class UINewsletterEntryDialogSelector extends UIForm {
     NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
     NewsletterTemplateHandler newsletterTemplateHandler = newsletterManagerService.getTemplateHandler();
     List<Node> templateNodes = newsletterTemplateHandler.getTemplates(Util.getUIPortal().getName(), 
-                                                                      categoryConfig);
+                                                                      categoryConfig,
+                                                                      Utils.getSessionProvider(this));
     for (Node template : templateNodes) {
       templates.add(new SelectItemOption<String>(template.getProperty("exo:title").getString(), template.getName()));
     }
@@ -151,7 +152,8 @@ public class UINewsletterEntryDialogSelector extends UIForm {
       UINewsletterEntryForm newsletterEntryForm = newsletterEntryContainer.getChild(UINewsletterEntryForm.class) ;
       newsletterEntryForm.setNodePath(newsletterTemplateHandler.getTemplate(Util.getUIPortal().getName(), 
                                                                             newsletterEntryContainer.getCategoryConfig(), 
-                                                                            templateName).getPath());
+                                                                            templateName,
+                                                                            Utils.getSessionProvider(newsletterEntryDialogSelector)).getPath());
       newsletterEntryForm.getChildren().clear();
       newsletterEntryForm.resetProperties();
       event.getRequestContext().addUIComponentToUpdateByAjax(newsletterEntryContainer) ;

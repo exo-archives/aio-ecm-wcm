@@ -57,7 +57,11 @@ public class UINewsletterManagerPopup extends UIForm implements UIPopupComponent
     NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
     NewsletterEntryHandler newsletterEntryHandler = newsletterManagerService.getEntryHandler();
     newsletterEntryContent_ = 
-                      newsletterEntryHandler.getContent(NewsLetterUtil.getPortalName(), categoryName, subscriptoinName, newsletterName);
+                      newsletterEntryHandler.getContent(
+                                                        NewsLetterUtil.getPortalName(),
+                                                        categoryName, subscriptoinName,
+                                                        newsletterName,
+                                                        Utils.getSessionProvider(this));
   }
   
 

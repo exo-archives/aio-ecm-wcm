@@ -21,6 +21,7 @@ import java.util.Calendar;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterTemplateHandler;
+import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
@@ -68,12 +69,12 @@ public class UINewsletterEntryContainer extends UIContainer {
     newsletterEntryForm.setWorkspace(newsletterManagerService.getWorkspaceName());
     if(this.newsletterPath == null){
       NewsletterTemplateHandler newsletterTemplateHandler = newsletterManagerService.getTemplateHandler();
-      this.newsletterPath = newsletterTemplateHandler.getTemplate(NewsLetterUtil.getPortalName(), categoryConfig, null).getPath();
+      this.newsletterPath = newsletterTemplateHandler.getTemplate(NewsLetterUtil.getPortalName(), categoryConfig, null, Utils.getSessionProvider(this)).getPath();
       newsletterEntryForm.addNew(true);
     }else{
       UIFormDateTimeInput dateTimeInput = newsletterEntryDialogSelector.getChild(UIFormDateTimeInput.class);
       Calendar calendar = dateTimeInput.getCalendar().getInstance();
-      calendar.setTime(newsletterManagerService.getEntryHandler().getNewsletterEntryByPath(this.newsletterPath).getNewsletterSentDate());
+      calendar.setTime(newsletterManagerService.getEntryHandler().getNewsletterEntryByPath(this.newsletterPath, Utils.getSessionProvider(this)).getNewsletterSentDate());
       dateTimeInput.setCalendar(calendar);
       newsletterEntryForm.addNew(false);
     }

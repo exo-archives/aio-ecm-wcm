@@ -34,7 +34,6 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.log.ExoLogger;
@@ -55,9 +54,6 @@ public class NewsletterManageUserHandler {
   /** The repository service. */
   private RepositoryService repositoryService;
   
-  /** The thread local session provider service. */
-  private ThreadLocalSessionProviderService threadLocalSessionProviderService;
-  
   /** The repository. */
   private String repository;
   
@@ -70,13 +66,9 @@ public class NewsletterManageUserHandler {
    * @param repository the repository
    * @param workspace the workspace
    */
-  public NewsletterManageUserHandler(String repository, String workspace) {
+  public NewsletterManageUserHandler(String repository, String workspace, SessionProvider sessionProvider) {
     repositoryService = (RepositoryService) ExoContainerContext
       .getCurrentContainer().getComponentInstanceOfType(RepositoryService.class);
-    
-    threadLocalSessionProviderService = ThreadLocalSessionProviderService.class
-      .cast(ExoContainerContext.getCurrentContainer()
-            .getComponentInstanceOfType(ThreadLocalSessionProviderService.class));
     this.repository = repository;
     this.workspace = workspace;
   }
@@ -123,8 +115,7 @@ public class NewsletterManageUserHandler {
    * 
    * @return the all administrator
    */
-  public List<String> getAllAdministrator(String portalName){
-    SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
+  public List<String> getAllAdministrator(String portalName, SessionProvider sessionProvider){
     if(sessionProvider == null) sessionProvider = SessionProviderFactory.createSystemProvider();
     try{
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
@@ -165,9 +156,8 @@ public class NewsletterManageUserHandler {
    * 
    * @throws Exception the exception
    */
-  public void addAdministrator(String portalName, String userId) throws Exception{
+  public void addAdministrator(String portalName, String userId, SessionProvider sessionProvider) throws Exception{
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-    SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
     if(sessionProvider == null) sessionProvider = SessionProviderFactory.createSystemProvider();
     Session session = sessionProvider.getSession(workspace, manageableRepository);
     Node categoriesNode = (Node) session.getItem(NewsletterConstant.generateCategoryPath(portalName));
@@ -192,9 +182,8 @@ public class NewsletterManageUserHandler {
    * 
    * @throws Exception the exception
    */
-  public void deleteUserAddministrator(String portalName, String userId) throws Exception{
+  public void deleteUserAddministrator(String portalName, String userId, SessionProvider sessionProvider) throws Exception{
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-    SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
     if(sessionProvider == null) sessionProvider = SessionProviderFactory.createSystemProvider();
     Session session = sessionProvider.getSession(workspace, manageableRepository);
     Node categoriesNode = (Node) session.getItem(NewsletterConstant.generateCategoryPath(portalName));
@@ -268,9 +257,8 @@ public class NewsletterManageUserHandler {
    * @param userMail the user mail
    * @param isBanClicked the is ban clicked
    */
-  public void changeBanStatus(String portalName, String userMail, boolean isBanClicked) {
+  public void changeBanStatus(String portalName, String userMail, boolean isBanClicked, SessionProvider sessionProvider) {
     log.info("Trying to ban/unban user " + userMail);
-    SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
     if(sessionProvider == null) sessionProvider = SessionProviderFactory.createSystemProvider();
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
@@ -293,9 +281,8 @@ public class NewsletterManageUserHandler {
    * @param portalName the portal name
    * @param userMail the user mail
    */
-  public void delete(String portalName, String userMail) {
+  public void delete(String portalName, String userMail, SessionProvider sessionProvider) {
     log.info("Trying to delete user " + userMail);
-    SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
     if(sessionProvider == null) sessionProvider = SessionProviderFactory.createSystemProvider();
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
@@ -344,10 +331,13 @@ public class NewsletterManageUserHandler {
    * 
    * @throws Exception the exception
    */
-  public List<NewsletterUserConfig> getUsers(String portalName, String categoryName, String subscriptionName) throws Exception{
+  public List<NewsletterUserConfig> getUsers(
+                                             String portalName,
+                                             String categoryName,
+                                             String subscriptionName,
+                                             SessionProvider sessionProvider) throws Exception{
     List<NewsletterUserConfig> listUsers = new ArrayList<NewsletterUserConfig>();
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-    SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
     if(sessionProvider == null) sessionProvider = SessionProviderFactory.createSystemProvider();
     Session session = sessionProvider.getSession(workspace, manageableRepository);
     String userPath = NewsletterConstant.generateUserPath(portalName);
@@ -424,9 +414,12 @@ public class NewsletterManageUserHandler {
    * 
    * @return the quantity user by subscription
    */
-  public int getQuantityUserBySubscription(String portalName, String categoryName, String subscriptionName) {
+  public int getQuantityUserBySubscription(
+                                           String portalName,
+                                           String categoryName,
+                                           String subscriptionName,
+                                           SessionProvider sessionProvider) {
     log.info("Trying to get user's quantity by subscription " + portalName + "/" + categoryName + "/" + subscriptionName);
-    SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
     if(sessionProvider == null) sessionProvider = SessionProviderFactory.createSystemProvider();
     int countUser = 0;
     try {
@@ -453,8 +446,7 @@ public class NewsletterManageUserHandler {
    * 
    * @return true, if successful
    */
-  public boolean checkExistedEmail(String portalName, String email) {
-    SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
+  public boolean checkExistedEmail(String portalName, String email, SessionProvider sessionProvider) {
     if(sessionProvider == null) sessionProvider = SessionProviderFactory.createSystemProvider();
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);

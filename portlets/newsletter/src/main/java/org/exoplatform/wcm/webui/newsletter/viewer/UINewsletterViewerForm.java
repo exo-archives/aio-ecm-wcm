@@ -203,7 +203,11 @@ public class UINewsletterViewerForm extends UIForm {
       String userEmail = newsletterForm.inputEmail.getValue();
       List<String> listCategorySubscription = newsletterForm.listSubscriptionChecked();
       String contentOfMessage;
-      boolean isExistedEmail = newsletterForm.managerUserHandler.checkExistedEmail(portalName, userEmail);
+      boolean isExistedEmail = newsletterForm.managerUserHandler
+        .checkExistedEmail(
+                           portalName,
+                           userEmail,
+                           Utils.getSessionProvider(newsletterForm));
       
       if (!isExistedEmail) {
         if(listCategorySubscription.size() < 1){

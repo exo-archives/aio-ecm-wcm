@@ -93,7 +93,11 @@ public class UISubscriptions extends UIForm {
 
   @SuppressWarnings("unused")
   private int getNumberOfUser(String subscriptionName){
-    return userHandler.getQuantityUserBySubscription(portalName, this.categoryConfig.getName(), subscriptionName);
+    return userHandler.getQuantityUserBySubscription(
+                                                     portalName,
+                                                     this.categoryConfig.getName(),
+                                                     subscriptionName,
+                                                     Utils.getSessionProvider(this));
   }
 
   @SuppressWarnings("unused")

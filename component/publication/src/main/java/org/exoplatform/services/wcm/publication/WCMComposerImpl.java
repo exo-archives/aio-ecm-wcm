@@ -30,7 +30,6 @@ import org.picocontainer.Startable;
 public class WCMComposerImpl implements WCMComposer, Startable {
 
 	private TemplateService templateService;
-	private ThreadLocalSessionProviderService threadLocalSessionProviderService;
 	private RepositoryService repositoryService;
 	private PublicationService publicationService;
 	private WCMPublicationService wcmPublicationService = null;
@@ -46,10 +45,6 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	}
 	
 	private void init() throws Exception {
-	    threadLocalSessionProviderService = ThreadLocalSessionProviderService.class
-        .cast(ExoContainerContext.getCurrentContainer()
-        .getComponentInstanceOfType(ThreadLocalSessionProviderService.class));
-		
 	    repositoryService = RepositoryService.class.cast(ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(RepositoryService.class));
 	}
 	
@@ -64,8 +59,7 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	 * @see org.exoplatform.services.wcm.publication.WCMComposer#getContent(java.lang.String, java.lang.String, java.lang.String, java.util.HashMap)
 	 */
 	public Node getContent(String repository, String workspace, String path,
-			HashMap<String, String> filters) throws Exception {
-		SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
+			HashMap<String, String> filters, SessionProvider sessionProvider) throws Exception {
 	    ManageableRepository manageableRepository = repositoryService.getRepository(repository);    
 		Session session = sessionProvider.getSession(workspace, manageableRepository);
 		Node node = (Node)session.getItem(path);
@@ -87,9 +81,8 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	 * @see org.exoplatform.services.wcm.publication.WCMComposer#getContents(java.lang.String, java.lang.String, java.lang.String, java.util.HashMap)
 	 */
 	public NodeIterator getContents(String repository, String workspace,
-			String path, HashMap<String, String> filters) throws Exception {
+			String path, HashMap<String, String> filters, SessionProvider sessionProvider) throws Exception {
 		String templatesFilter = getTemlatesSQLFilter();
-		SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
 	    ManageableRepository manageableRepository = repositoryService.getRepository(repository);    
 		Session session = sessionProvider.getSession(workspace, manageableRepository);
 	    QueryManager manager = session.getWorkspace().getQueryManager();
