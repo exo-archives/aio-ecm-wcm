@@ -55,12 +55,12 @@
 			</preference>
 			<preference>
 				<name>ShowVote</name>
-				<value>true</value>
+				<value>false</value>
 				<read-only>false</read-only>
 			</preference>
 			<preference>
 				<name>ShowComments</name>
-				<value>true</value>
+				<value>false</value>
 				<read-only>false</read-only>
 			</preference>
 			<preference>

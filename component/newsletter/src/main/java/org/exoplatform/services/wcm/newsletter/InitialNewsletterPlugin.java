@@ -28,9 +28,7 @@ import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
-import org.exoplatform.services.wcm.newsletter.config.NewsletterUserConfig;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterCategoryHandler;
-import org.exoplatform.services.wcm.newsletter.handler.NewsletterManageUserHandler;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterSubscriptionHandler;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.services.wcm.portal.artifacts.BasePortalArtifactsPlugin;
@@ -49,16 +47,13 @@ public class InitialNewsletterPlugin extends BasePortalArtifactsPlugin {
   /** The subscription configs. */
   private List<NewsletterSubscriptionConfig> subscriptionConfigs;
   
-  /** The user configs. */
-  private List<NewsletterUserConfig> userConfigs;
-  
   /** The manager service. */
   private NewsletterManagerService newsletterManagerService;
   
   private LivePortalManagerService livePortalManagerService;
   
   /** The log. */
-  private static Log log = ExoLogger.getLogger(NewsletterInitializationService.class);
+  private static Log log = ExoLogger.getLogger(InitialNewsletterPlugin.class);
   
   
   @SuppressWarnings("unchecked")
@@ -71,7 +66,6 @@ public class InitialNewsletterPlugin extends BasePortalArtifactsPlugin {
     
     categoryConfigs = initParams.getObjectParamValues(NewsletterCategoryConfig.class);
     subscriptionConfigs = initParams.getObjectParamValues(NewsletterSubscriptionConfig.class);
-    userConfigs = initParams.getObjectParamValues(NewsletterUserConfig.class);
     this.livePortalManagerService = livePortalManagerService;
     this.newsletterManagerService = newsletterManagerService;
   }
@@ -88,18 +82,15 @@ public class InitialNewsletterPlugin extends BasePortalArtifactsPlugin {
         subscriptionHandler.add(sessionProvider, portalName, subscriptionConfig);
       }
       
-      Node userNode = null;
-      NewsletterManageUserHandler manageUserHandler = newsletterManagerService.getManageUserHandler();
-      for (NewsletterUserConfig userConfig : userConfigs) {
-        userNode = manageUserHandler.add(portalName, userConfig.getMail(), sessionProvider);
-      }
-      ExtendedNode userFolderNode = (ExtendedNode) userNode.getParent();
+      Node portalNode = livePortalManagerService.getLivePortal(portalName, sessionProvider);
+      String userFolderPath = NewsletterConstant.generateUserPath(portalName);
+      ExtendedNode userFolderNode = (ExtendedNode) ((Node) portalNode.getSession().getItem(userFolderPath)) ;
       if(userFolderNode.canAddMixin("exo:privilegeable")) 
         userFolderNode.addMixin("exo:privilegeable");
       userFolderNode.setPermission("any", PermissionType.ALL) ;
         
-    } catch (Throwable e) {
-      log.info("Starting NewsletterInitializationService fail because of " + e.getMessage());
+    } catch (Exception e) {
+      log.info("InitialNewsletterPlugin fail because of " + e.getMessage());
     }
   }
    

@@ -28,7 +28,6 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.ecm.connector.fckeditor.FCKFileHandler;
 import org.exoplatform.ecm.connector.fckeditor.FCKFolderHandler;
 import org.exoplatform.ecm.connector.fckeditor.FCKUtils;
-import org.exoplatform.ecm.connector.fckeditor.FileUploadHandler;
 import org.exoplatform.services.cms.link.LinkManager;
 import org.exoplatform.services.cms.voting.VotingService;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -538,7 +537,8 @@ public abstract class BaseConnector {
                                               String uploadId,
                                               String language,
                                               String contentType,
-                                              String contentLength) throws Exception {
+                                              String contentLength,
+                                              int limit) throws Exception {
     Node sharedPortal = livePortalManagerService.getLiveSharedPortal(localSessionProvider.getSessionProvider(null));
     Node currentPortal = getCurrentPortalNode(repositoryName,
                                               jcrPath,
@@ -551,7 +551,8 @@ public abstract class BaseConnector {
                                     Double.parseDouble(contentLength),
                                     inputStream,
                                     currentNode,
-                                    language);
+                                    language,
+                                    limit);
   }
 
   /**

@@ -12,10 +12,10 @@
         <description>Nothing</description>
         <init-params>    
            <object-param>        
-            <name>managed sites</name>
-            <description>managed sites</description>
+            <name>Managed Sites</name>
+            <description>Managed Sites</description>
             <object type="org.exoplatform.services.cms.drives.DriveData">
-              <field  name="name"><string>Managed sites</string></field>
+              <field  name="name"><string>Managed Sites</string></field>
               <field  name="repository"><string>repository</string></field>
               <field  name="workspace"><string>collaboration</string></field>
               <field  name="permissions"><string>*:/platform/administrators</string></field>
@@ -30,10 +30,10 @@
             </object>
           </object-param>            
 		  <object-param>        
-            <name>shared</name>
-            <description>shared</description>
+            <name>Shared Site</name>
+            <description>Shared Site</description>
             <object type="org.exoplatform.services.cms.drives.DriveData">
-              <field  name="name"><string>Shared site</string></field>
+              <field  name="name"><string>Shared Site</string></field>
               <field  name="repository"><string>repository</string></field>
               <field  name="workspace"><string>collaboration</string></field>
               <field  name="permissions"><string>*:/platform/web-contributors</string></field>

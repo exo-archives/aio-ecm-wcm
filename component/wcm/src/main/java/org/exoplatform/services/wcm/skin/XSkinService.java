@@ -103,7 +103,7 @@ public class XSkinService implements Startable {
    * @throws Exception the exception
    */
   public String getActiveStylesheet(Node home) throws Exception {
-    String cssQuery = "select * from exo:cssFile where jcr:path like '" +home.getPath()+ "/%' and exo:active='true'order by exo:priority DESC " ;
+    String cssQuery = "select * from exo:cssFile where jcr:path like '" +home.getPath()+ "/%' and exo:active='true' order by exo:priority DESC " ;
     //TODO the jcr can not search on jcr:system for normal workspace. Seem that this is the portal bug
     Session querySession = null;
     String cssData = null;

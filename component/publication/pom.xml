@@ -1,13 +1,12 @@
 <project>
 	<parent>
-		<groupId>org.exoplatform.ecm.wcm</groupId>
-		<artifactId>config</artifactId>
+		<groupId>org.exoplatform.ecm</groupId>
+		<artifactId>wcm</artifactId>
 		<version>1.2</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>exo.ecm.wcm.component.publication</artifactId>
-	<version>${org.exoplatform.wcm.version}</version>
 	<packaging>jar</packaging>
 	<name>eXo WCM Publication Service</name>
 	<url>http://www.exoplatform.org</url>
@@ -99,9 +98,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.exoplatform.ecm.wcm</groupId>
+			<groupId>org.exoplatform.ecm</groupId>
 			<artifactId>exo.ecm.wcm.component.wcm</artifactId>
-			<version>${org.exoplatform.wcm.version}</version>
+			<version>${org.exoplatform.ecm.wcm.version}</version>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>

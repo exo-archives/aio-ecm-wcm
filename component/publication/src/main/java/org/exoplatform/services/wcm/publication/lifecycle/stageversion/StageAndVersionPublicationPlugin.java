@@ -377,8 +377,8 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     preferences.add(addPreference("nodeIdentifier", content.getUUID()));
     preferences.add(addPreference("ShowQuickEdit", "true"));
     preferences.add(addPreference("ShowTitle", "true"));
-    preferences.add(addPreference("ShowVote", "true"));
-    preferences.add(addPreference("ShowComments", "true"));
+    preferences.add(addPreference("ShowVote", "false"));
+    preferences.add(addPreference("ShowComments", "false"));
     preferences.add(addPreference("ShowPrintAction", "true"));
     preferences.add(addPreference("isQuickCreate", "false"));
     savePortletPreferences(windowId.toString(), preferences, portalOwnerName);

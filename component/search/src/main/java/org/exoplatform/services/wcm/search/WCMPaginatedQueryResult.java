@@ -117,7 +117,12 @@ public class WCMPaginatedQueryResult extends PaginatedQueryResult {
     if (lifecycleName == null) return displayNode;
     PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(lifecycleName);
     HashMap<String, Object> context = new HashMap<String, Object>();
-    context.put(WCMComposer.FILTER_MODE, queryCriteria.isLiveMode() ? WCMComposer.MODE_LIVE : WCMComposer.MODE_EDIT);
+//    context.put(WCMComposer.FILTER_MODE, queryCriteria.isLiveMode() ? WCMComposer.MODE_LIVE : WCMComposer.MODE_EDIT);
+    /**
+     * We will improve the search manager in WCM 1.3
+     * Since then, we use Edit mode to search and display contents.
+     */
+    context.put(WCMComposer.FILTER_MODE, WCMComposer.MODE_EDIT);
     return publicationPlugin.getNodeView(displayNode, context);
   }
   

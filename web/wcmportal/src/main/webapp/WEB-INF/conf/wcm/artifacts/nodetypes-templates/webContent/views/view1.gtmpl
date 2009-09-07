@@ -6,6 +6,7 @@
 	import org.exoplatform.webui.application.portlet.PortletRequestContext;
 	import org.exoplatform.services.cms.folksonomy.FolksonomyService;
 	import org.exoplatform.wcm.webui.WikiLinkParser;
+	import org.exoplatform.web.application.Parameter;
 	
 	public boolean getPortletPreference(String name) {
     PortletRequestContext portletRequestContext = _ctx.getRequestContext() ;
@@ -25,7 +26,6 @@
   
 	ManageableRepository mRepository = (ManageableRepository)currentNode.getSession().getRepository();
     String repositoryName = mRepository.getConfiguration().getName();
-    boolean isShowTitle = getPortletPreference("ShowTitle");
 	boolean isShowCategories = getPortletPreference("ShowCategories");
 	boolean isShowTags = getPortletPreference("ShowTags");
 	boolean isShowVote = getPortletPreference("ShowVote");
@@ -51,16 +51,11 @@
 <% } %>
 
 <% 
-	if (isShowTitle || isShowCategories || isShowTags) {
+	if (isShowCategories || isShowTags) {
 		%>
 				<div class="WebContentContainer">
 					<div class="WebContentInformation">
 						<% 
-							if (isShowTitle && currentNode.hasProperty("exo:title")) {
-								%>
-									<h1 class="WebContentTitle"><%= currentNode.getProperty("exo:title").getString(); %></h1>
-								<%
-							}
 							if(isShowCategories) {
 								StringBuffer categories = new StringBuffer();
 								CategoriesService categoriesService = uicomponent.getApplicationComponent(CategoriesService.class);

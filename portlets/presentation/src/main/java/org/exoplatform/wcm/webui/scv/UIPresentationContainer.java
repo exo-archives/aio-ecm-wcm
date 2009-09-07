@@ -17,7 +17,10 @@
 package org.exoplatform.wcm.webui.scv;
 
 import java.security.AccessControlException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -73,6 +76,9 @@ public class UIPresentationContainer extends UIContainer{
   private boolean isDraftRevision = false;
   private boolean isShowDraft     = false;
 
+  /** The date formatter. */
+  private DateFormat               dateFormatter = null;
+
   public boolean isShowDraft() {
     return isShowDraft;
   }
@@ -88,6 +94,8 @@ public class UIPresentationContainer extends UIContainer{
    */
   public UIPresentationContainer() throws Exception{   	  
     addChild(UIPresentation.class, null, null);
+    dateFormatter = new SimpleDateFormat();
+    ((SimpleDateFormat) dateFormatter).applyPattern("dd.MM.yyyy '|' hh'h'mm");
   }
 
   /**
@@ -134,6 +142,48 @@ public class UIPresentationContainer extends UIContainer{
 		  return true;
 	  }
   }
+  
+  /**
+   * Gets the title.
+   * 
+   * @param node the node
+   * 
+   * @return the title
+   * 
+   * @throws Exception the exception
+   */
+  public String getTitle(Node node) throws Exception {
+	  String title = null;
+	  if (node.hasNode("jcr:content")) {
+		  Node content = node.getNode("jcr:content");
+		  if (content.hasProperty("dc:title")) {
+			  title = content.getProperty("dc:title").getValues()[0].getString();
+		  }
+	  } else if (node.hasProperty("exo:title")) {
+		  title = node.getProperty("exo:title").getValue().getString();
+	  }
+	  if (title==null) title = node.getName();
+	  
+	  return title;
+  }
+
+  /**
+   * Gets the created date.
+   * 
+   * @param node the node
+   * 
+   * @return the created date
+   * 
+   * @throws Exception the exception
+   */
+  public String getCreatedDate(Node node) throws Exception {
+    if (node.hasProperty("exo:dateCreated")) {
+      Calendar calendar = node.getProperty("exo:dateCreated").getValue().getDate();
+      return dateFormatter.format(calendar.getTime());
+    }
+    return null;
+  }
+
   
   private Node nodeReference;
   

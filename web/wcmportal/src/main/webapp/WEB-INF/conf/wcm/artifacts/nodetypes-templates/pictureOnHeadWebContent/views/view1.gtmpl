@@ -42,7 +42,6 @@
   
 	ManageableRepository mRepository = (ManageableRepository)currentNode.getSession().getRepository();
   String repositoryName = mRepository.getConfiguration().getName();
-  boolean isShowTitle = getPortletPreference("ShowTitle");
 	boolean isShowCategories = getPortletPreference("ShowCategories");
 	boolean isShowTags = getPortletPreference("ShowTags");
 
@@ -75,16 +74,11 @@
 <% } %>
 
 <% 
-	if (isShowTitle || isShowCategories || isShowTags) {
+	if (isShowCategories || isShowTags) {
 		%>
 				<div class="WebContentContainer">
 					<div class="WebContentInformation">
 						<% 
-							if (isShowTitle && currentNode.hasProperty("exo:title")) {
-								%>
-									<h1 class="WebContentTitle"><%= currentNode.getProperty("exo:title").getString(); %></h1>
-								<%
-							}
 							if(isShowCategories) {
 								StringBuffer categories = new StringBuffer();
 								CategoriesService categoriesService = uicomponent.getApplicationComponent(CategoriesService.class);

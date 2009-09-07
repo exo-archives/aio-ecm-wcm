@@ -108,20 +108,20 @@
 			%>	</div> <%
 			}
 		%>
-	</div>
-	<div class="CaptionFunc">
-		<% 
-			if (uicomponent.showRefreshButton()) { 
-				String link = uicomponent.event("Refresh");
-				%>				
-					<div class="CaptionRefresh">
-						<a href="$link">$labelRefreshAction</a>
-					</div>
-				<% 
-			}
-			if (uicomponent.showPaginator()) { 
-					uicomponent.renderChild(UICustomizeablePaginator.class)
-			} 
-		%>
+		<div class="CaptionFunc">
+			<% 
+				if (uicomponent.showRefreshButton()) { 
+					String link = uicomponent.event("Refresh");
+					%>				
+						<div class="CaptionRefresh">
+							<a href="$link">$labelRefreshAction</a>
+						</div>
+					<% 
+				}
+				if (uicomponent.showPaginator()) { 
+						uicomponent.renderChild(UICustomizeablePaginator.class)
+				} 
+			%>
+		</div>
 	</div>
 </div>

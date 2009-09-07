@@ -7,52 +7,25 @@
 		<node>
 			<uri>overview</uri>
 			<name>overview</name>
-			<label>#{portal.@owner@.overview}</label>
+			<label>Overview</label>
 			<page-reference>portal::@owner@::overview</page-reference>	    
 		</node>	         	  	  	  	 	     	  	    
-
-		<node>
-			<uri>news</uri>
-			<name>news</name>
-			<label>#{portal.@owner@.news}</label>
-			<page-reference>portal::@owner@::news</page-reference>
-		</node>    
-
-		<node>
-			<uri>newsletters</uri>
-			<name>newsletters</name>
-			<label>#{portal.@owner@.newsletters}</label>
-			<page-reference>portal::@owner@::newsletters</page-reference>
-		</node>
-		
-		<node>
-			<uri>contactus</uri>
-			<name>contactus</name>
-			<label>#{portal.@owner@.contactus}</label>
-			<page-reference>portal::@owner@::contactus</page-reference>
-			<node>
-				<uri>contactus/confirmation</uri>
-				<name>confirmation</name>
-				<label>#{portal.@owner@.confirmation}</label>
-				<visible>false</visible>
-				<page-reference>portal::@owner@::confirmation</page-reference>
-			</node>
-		</node>
 
 		<node>
 			<uri>products</uri>
 			<name>products</name>
 			<label>#{portal.@owner@.products}</label>
 			<visible>false</visible>
+			<page-reference>portal::@owner@::pcv</page-reference>
 			<node>
 				<uri>products/presentation</uri>
 				<name>presentation</name>
 				<label>#{portal.@owner@.presentation}</label>
+				<page-reference>portal::@owner@::pcv</page-reference>
 				<node>
 					<uri>products/presentation/pcv</uri>
 					<name>pcv</name>
 					<label>#{portal.@owner@.pcv}</label>
-					<visible>false</visible>
 					<page-reference>portal::@owner@::pcv</page-reference>
 				</node>
 			</node>

@@ -25,6 +25,7 @@ import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 
 /*
@@ -185,4 +186,9 @@ public class UIPCVPresentation extends UIBaseNodePresentation {
   public void processRender(WebuiRequestContext context) throws Exception {
 	  super.processRender(context);
   }
+
+public UIComponent getCommentComponent() {
+	// TODO Auto-generated method stub
+	return null;
+}
 }

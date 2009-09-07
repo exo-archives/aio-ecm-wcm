@@ -34,7 +34,7 @@
 }
 
 .UIItemSelector .ItemDetailList .TemplateContainer .ACMESiteImage {
- 	background:transparent url(images/Acme.png) scroll center;
+ 	background:transparent url(images/Acme.png) no-repeat center;
 	height: 235px;
 	width: 296px;
 	margin: 3px auto;

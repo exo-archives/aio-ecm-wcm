@@ -8,56 +8,8 @@
     <title>Overview</title>
 	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>editor:/platform/web-contributors</edit-permission>
-	  <application>
-	    <instance-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-introduce</instance-id>
-	    <title>Introduce</title>
-	  </application>
   </page>
   
-  <page>
-  	<page-id>portal::@owner@::news</page-id>
-    <owner-type>portal</owner-type>
-    <owner-id>@owner@</owner-id>
-    <name>news</name>
-    <title>News</title>
-	  <access-permissions>Everyone</access-permissions>
-	  <edit-permission>editor:/platform/web-contributors</edit-permission>
-	  <application>
-	    <instance-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-news</instance-id>
-	    <title>News</title>
-	  </application>
-  </page>
-  
-  <page>
-  	<page-id>portal::@owner@::events</page-id>
-    <owner-type>portal</owner-type>
-    <owner-id>@owner@</owner-id>
-    <name>events</name>
-    <title>Events</title>
-	  <access-permissions>Everyone</access-permissions>
-	  <edit-permission>editor:/platform/web-contributors</edit-permission>
-	  <application>
-	    <instance-id>portal#@owner@:/presentation/SingleContentViewer/@owner@-events</instance-id>
-	    <title>Events</title>
-	  </application>
-  </page>
-  
-	<page>
-		<page-id>portal::@owner@::contactus</page-id>
-		<owner-type>portal</owner-type>
-		<owner-id>@owner@</owner-id>
-		<name>contactus</name>
-		<title>Contact Us</title>
-		<access-permissions>Everyone</access-permissions>
-		<edit-permission>*:/platform/web-contributors</edit-permission>
-		<application>
-			<instance-id>portal#@owner@:/formgenerator/FastContentCreatorPortlet/@owner@-contactus</instance-id>
-			<title>Contact Us</title>
-			<show-info-bar>false</show-info-bar>
-			<show-application-state>false</show-application-state>
-			<show-application-mode>false</show-application-mode>
-		</application>
-	</page>
   
   <page>
   	<page-id>portal::@owner@::searchResult</page-id>

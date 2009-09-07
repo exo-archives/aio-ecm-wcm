@@ -76,6 +76,7 @@
 	
 	import org.exoplatform.download.DownloadService;
 	import org.exoplatform.download.InputStreamDownloadResource;
+	import org.exoplatform.web.application.Parameter;
 
 	public boolean isVersionable(Node node) throws Exception {
     return node.isNodeType("mix:versionable");
