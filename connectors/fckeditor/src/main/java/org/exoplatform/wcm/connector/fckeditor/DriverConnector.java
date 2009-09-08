@@ -135,69 +135,6 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
     }    
     return Response.Builder.ok().build();
   }
-
-  private Response buildXMLResponseForChildren(Node node, String command, String repositoryName, String filterBy) throws Exception {
-    Element rootElement = FCKUtils.createRootElement(command, node, folderHandler.getFolderType(node));
-    Document document = rootElement.getOwnerDocument();
-    Element folders = document.createElement("Foders");
-    Element files = document.createElement("Files");
-    
-    for (NodeIterator iterator = node.getNodes(); iterator.hasNext();) {
-      Node child = iterator.nextNode();
-      
-      if (child.isNodeType(FCKUtils.EXO_HIDDENABLE))
-        continue;
-
-      if (!NodetypeConstant.EXO_WEBCONTENT.equals(child.getPrimaryNodeType().getName())
-      		&& child.getPrimaryNodeType().isNodeType(FCKUtils.NT_UNSTRUCTURED)
-      		|| child.getPrimaryNodeType().isNodeType(FCKUtils.NT_FOLDER)) {
-        Element folder = folderHandler.createFolderElement(document, child, child.getPrimaryNodeType().getName());
-        folders.appendChild(folder);
-      } else {
-      	String fileType = null;
-      	if (child.getPrimaryNodeType().isNodeType(NodetypeConstant.EXO_WEBCONTENT) && FILE_TYPE_WEBCONTENT.equals(filterBy)) {
-      		fileType = FILE_TYPE_WEBCONTENT;
-      	} else if (isDMSDocument(child, repositoryName)&& FILE_TYPE_DMSDOC.equals(filterBy)) {
-      		fileType = FILE_TYPE_DMSDOC;
-      	} else if (FILE_TYPE_MEDIAS.equals(filterBy)){
-      		fileType = FILE_TYPE_MEDIAS;
-      	} 
-      	
-      	if (fileType != null) {
-      		Element file = fileHandler.createFileElement(document, child, fileType);
-      		files.appendChild(file);
-      	}
-      }
-    }
-    
-    rootElement.appendChild(folders);
-    rootElement.appendChild(files);
-    return getResponse(document);
-  }
-  
-  private boolean isDMSDocument(Node node, String repositoryName) throws Exception {
-  	TemplateService templateService = (TemplateService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(TemplateService.class);
-  	List<String> dmsDocumentList = templateService.getDocumentTemplates(repositoryName);
-  	dmsDocumentList.remove(NodetypeConstant.EXO_WEBCONTENT);
-  	for (String documentType : dmsDocumentList) {
-	    if (node.getPrimaryNodeType().isNodeType(documentType)) {
-	    	return true;
-	    }
-    }
-  	return false;
-  }
-  
-	private Element appendDrivers(Document document, List<DriveData> driversList, String groupName) {
-	  Element folders = document.createElement("Folders");
-	  folders.setAttribute("name", groupName);
-    for (DriveData driver : driversList) {
-      Element folder = document.createElement("Folder");
-      folder.setAttribute("name", driver.getName());
-      folder.setAttribute("driverPath", driver.getHomePath());
-      folders.appendChild(folder);  
-    }
-	  return folders;
-  }
 	
   private List<DriveData> getDriversByUserId(String repoName, String userId) throws Exception {    
     ManageDriveService driveService = (ManageDriveService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(ManageDriveService.class);      
@@ -250,19 +187,30 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
     return driveList; 
   }
   
-  private List<DriveData> generalDrivers(List<DriveData> driverList) throws Exception {
-    List<DriveData> generalDrivers = new ArrayList<DriveData>();
+	private Element appendDrivers(Document document, List<DriveData> driversList, String groupName) {
+	  Element folders = document.createElement("Folders");
+	  folders.setAttribute("name", groupName);
+    for (DriveData driver : driversList) {
+      Element folder = document.createElement("Folder");
+      folder.setAttribute("name", driver.getName());
+      folder.setAttribute("driverPath", driver.getHomePath());
+      folders.appendChild(folder);  
+    }
+	  return folders;
+  }
+  
+  private List<DriveData> personalDrivers(List<DriveData> driveList) {
+    List<DriveData> personalDrivers = new ArrayList<DriveData>();
     NodeHierarchyCreator nodeHierarchyCreator = (NodeHierarchyCreator)
     	ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(NodeHierarchyCreator.class);
     String userPath = nodeHierarchyCreator.getJcrPath(BasePath.CMS_USERS_PATH);
-    String groupPath = nodeHierarchyCreator.getJcrPath(BasePath.CMS_GROUPS_PATH);
-    for(DriveData drive : driverList) {
-      if((!drive.getHomePath().startsWith(userPath) && !drive.getHomePath().startsWith(groupPath)) 
-          || drive.getHomePath().equals(userPath)) {
-        generalDrivers.add(drive);
+    for(DriveData drive : driveList) {
+      if(drive.getHomePath().startsWith(userPath + "/${userId}/")) {
+        personalDrivers.add(drive);
       }
     }
-    return generalDrivers;
+    Collections.sort(personalDrivers);
+    return personalDrivers;
   }
   
   private List<DriveData> groupDrivers(List<DriveData> driverList, String userId) throws Exception {
@@ -285,20 +233,21 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
     return groupDrivers;
   }
   
-  private List<DriveData> personalDrivers(List<DriveData> driveList) {
-    List<DriveData> personalDrivers = new ArrayList<DriveData>();
+  private List<DriveData> generalDrivers(List<DriveData> driverList) throws Exception {
+    List<DriveData> generalDrivers = new ArrayList<DriveData>();
     NodeHierarchyCreator nodeHierarchyCreator = (NodeHierarchyCreator)
     	ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(NodeHierarchyCreator.class);
     String userPath = nodeHierarchyCreator.getJcrPath(BasePath.CMS_USERS_PATH);
-    for(DriveData drive : driveList) {
-      if(drive.getHomePath().startsWith(userPath + "/${userId}/")) {
-        personalDrivers.add(drive);
+    String groupPath = nodeHierarchyCreator.getJcrPath(BasePath.CMS_GROUPS_PATH);
+    for(DriveData drive : driverList) {
+      if((!drive.getHomePath().startsWith(userPath) && !drive.getHomePath().startsWith(groupPath)) 
+          || drive.getHomePath().equals(userPath)) {
+        generalDrivers.add(drive);
       }
     }
-    Collections.sort(personalDrivers);
-    return personalDrivers;
+    return generalDrivers;
   }
-  
+
   private static List<String> getMemberships(String userId) throws Exception {
   	OrganizationService oservice = (OrganizationService)
   		ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
@@ -329,6 +278,57 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
       groupList.add(groupPath);
     }
     return groupList;
+  }
+
+  private Response buildXMLResponseForChildren(Node node, String command, String repositoryName, String filterBy) throws Exception {
+    Element rootElement = FCKUtils.createRootElement(command, node, folderHandler.getFolderType(node));
+    Document document = rootElement.getOwnerDocument();
+    Element folders = document.createElement("Foders");
+    Element files = document.createElement("Files");
+    
+    for (NodeIterator iterator = node.getNodes(); iterator.hasNext();) {
+      Node child = iterator.nextNode();
+      
+      if (child.isNodeType(FCKUtils.EXO_HIDDENABLE))
+        continue;
+
+      if (!NodetypeConstant.EXO_WEBCONTENT.equals(child.getPrimaryNodeType().getName())
+      		&& child.getPrimaryNodeType().isNodeType(FCKUtils.NT_UNSTRUCTURED)
+      		|| child.getPrimaryNodeType().isNodeType(FCKUtils.NT_FOLDER)) {
+        Element folder = folderHandler.createFolderElement(document, child, child.getPrimaryNodeType().getName());
+        folders.appendChild(folder);
+      } else {
+      	String fileType = null;
+      	if (child.getPrimaryNodeType().isNodeType(NodetypeConstant.EXO_WEBCONTENT) && FILE_TYPE_WEBCONTENT.equals(filterBy)) {
+      		fileType = FILE_TYPE_WEBCONTENT;
+      	} else if (isDMSDocument(child, repositoryName)&& FILE_TYPE_DMSDOC.equals(filterBy)) {
+      		fileType = FILE_TYPE_DMSDOC;
+      	} else if (FILE_TYPE_MEDIAS.equals(filterBy)){
+      		fileType = FILE_TYPE_MEDIAS;
+      	} 
+      	
+      	if (fileType != null) {
+      		Element file = fileHandler.createFileElement(document, child, fileType);
+      		files.appendChild(file);
+      	}
+      }
+    }
+    
+    rootElement.appendChild(folders);
+    rootElement.appendChild(files);
+    return getResponse(document);
+  }
+  
+  private boolean isDMSDocument(Node node, String repositoryName) throws Exception {
+  	TemplateService templateService = (TemplateService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(TemplateService.class);
+  	List<String> dmsDocumentList = templateService.getDocumentTemplates(repositoryName);
+  	dmsDocumentList.remove(NodetypeConstant.EXO_WEBCONTENT);
+  	for (String documentType : dmsDocumentList) {
+	    if (node.getPrimaryNodeType().isNodeType(documentType)) {
+	    	return true;
+	    }
+    }
+  	return false;
   }
   
 	@Override
