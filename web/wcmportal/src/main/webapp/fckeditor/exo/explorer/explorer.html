@@ -607,7 +607,7 @@
 			if (K.remove.space(sContent) != "") newTag.innerHTML = sContent;
 			else {
 				var label = sLink.substring(sLink.lastIndexOf('/') + 1);
-				label = label.replace('%20', ' ');
+				label = label.replace(/%20/g, ' ');
 				newTag.innerHTML = label;
 			}
 			newTag.setAttribute("href", sLink);
