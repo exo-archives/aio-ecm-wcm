@@ -22,7 +22,7 @@ import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.BaseWCMTestCase;
 
-
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
@@ -114,5 +114,4 @@ public class TestWCMService extends BaseWCMTestCase {
     session.getRootNode().getNode("parentNode").remove();
     session.save();
   }
-  
 }

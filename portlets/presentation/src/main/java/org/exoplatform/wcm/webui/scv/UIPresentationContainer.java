@@ -56,6 +56,7 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
+// TODO: Auto-generated Javadoc
 /**
  * Author : Do Ngoc Anh *
  * Email: anh.do@exoplatform.com *
@@ -73,16 +74,29 @@ import org.exoplatform.webui.event.EventListener;
 
 public class UIPresentationContainer extends UIContainer{
 
+  /** The is draft revision. */
   private boolean isDraftRevision = false;
+  
+  /** The is show draft. */
   private boolean isShowDraft     = false;
 
   /** The date formatter. */
   private DateFormat               dateFormatter = null;
 
+  /**
+   * Checks if is show draft.
+   * 
+   * @return true, if is show draft
+   */
   public boolean isShowDraft() {
     return isShowDraft;
   }
 
+  /**
+   * Sets the show draft.
+   * 
+   * @param isShowDraft the new show draft
+   */
   public void setShowDraft(boolean isShowDraft) {
     this.isShowDraft = isShowDraft;
   }
@@ -110,15 +124,31 @@ public class UIPresentationContainer extends UIContainer{
     return Utils.turnOnQuickEditable(portletRequestContext, true);
   }
 
+  /**
+   * Checks if is draft revision.
+   * 
+   * @return true, if is draft revision
+   */
   public boolean isDraftRevision() {
     return isDraftRevision;
   }
 
-
+  /**
+   * Sets the draft revision.
+   * 
+   * @param isDraftRevision the new draft revision
+   */
   public void setDraftRevision(boolean isDraftRevision) {
     this.isDraftRevision = isDraftRevision;
   }
 
+  /**
+   * Checks if is editable.
+   * 
+   * @return true, if is editable
+   * 
+   * @throws Exception the exception
+   */
   public boolean isEditable() throws Exception {
 	  Node originalNode = null;
 	  try {
@@ -185,8 +215,16 @@ public class UIPresentationContainer extends UIContainer{
   }
 
   
+  /** The node reference. */
   private Node nodeReference;
   
+  /**
+   * Gets the reference node.
+   * 
+   * @return the reference node
+   * 
+   * @throws Exception the exception
+   */
   public Node getReferenceNode() throws Exception {
     // Get node by reference
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
@@ -214,6 +252,13 @@ public class UIPresentationContainer extends UIContainer{
     return publicationPlugin.getNodeView(nodeReference, context);
   }
   
+  /**
+   * Gets the node.
+   * 
+   * @return the node
+   * 
+   * @throws Exception the exception
+   */
   public Node getNode() throws Exception {
     Node nodeView = getReferenceNode();
     

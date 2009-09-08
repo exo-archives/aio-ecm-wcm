@@ -42,10 +42,6 @@ import org.w3c.dom.Element;
  * benjamin.paillereau@exoplatform.com
  * July 10, 2009
  */
-
-/**
- * The Class VoteConnector.
- */
 @URITemplate("/contents/vote/")
 public class VoteConnector extends BaseConnector implements ResourceContainer {
 
@@ -129,15 +125,12 @@ public class VoteConnector extends BaseConnector implements ResourceContainer {
 			  document.appendChild(element);
 
 			  return Response.Builder.ok(document, "text/xml").build();
-
 		  }
 	  } catch (Exception e) {
 		  Response.Builder.serverError().build();
 	  }    
 	  return Response.Builder.ok().build();
   }
-  
-  
   
   /*
    * (non-Javadoc)
@@ -166,5 +159,4 @@ public class VoteConnector extends BaseConnector implements ResourceContainer {
   protected String getContentStorageType() throws Exception {
     return FCKUtils.DOCUMENT_TYPE;
   }
-
 }

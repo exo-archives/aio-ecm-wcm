@@ -1,10 +1,23 @@
+/*
+ * Copyright (C) 2003-2008 eXo Platform SAS.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation; either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see<http://www.gnu.org/licenses/>.
+ */
 package org.exoplatform.wcm.benchmark.preparation.repository;
 
-
 import java.util.Calendar;
-
 import javax.jcr.PropertyType;
-
 import org.apache.commons.logging.Log;
 import org.exoplatform.services.jcr.access.AccessControlList;
 import org.exoplatform.services.jcr.dataflow.ItemState;
@@ -27,30 +40,60 @@ import org.exoplatform.services.jcr.storage.WorkspaceStorageConnection;
 import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.log.ExoLogger;
 
+// TODO: Auto-generated Javadoc
 /**
- * Fast access to the JCR 
+ * Fast access to the JCR.
  */
 public class FastAPI {
   
+  /** The search index. */
   private SearchManager searchIndex;
   
+  /** The chahges log. */
   private PlainChangesLogImpl chahgesLog; 
   
+  /** The log. */
   protected Log log = ExoLogger.getLogger("repload.FastAPI");
   
+  /** The session. */
   SessionImpl session     = null;
+  
+  /** The workspace data container. */
   WorkspaceDataContainerBase workspaceDataContainer;
+  
+  /** The file cleaner. */
   FileCleaner fileCleaner = null;
+  
+  /** The con. */
   WorkspaceStorageConnection con = null;
+  
+  /** The date. */
   Calendar date = null;
   
+  /**
+   * The Class DCPropertyQName.
+   */
   protected static class DCPropertyQName {
+    
+    /** The dc element set. */
     public static InternalQName dcElementSet;
+    
+    /** The dc title. */
     public static InternalQName dcTitle;
+    
+    /** The dc creator. */
     public static InternalQName dcCreator;
+    
+    /** The dc subject. */
     public static InternalQName dcSubject;
   }
 
+  /**
+   * Instantiates a new fast api.
+   * 
+   * @param session the session
+   */
+  @SuppressWarnings("deprecation")
   public FastAPI(SessionImpl session) {
 
     try {
@@ -97,17 +140,21 @@ public class FastAPI {
     }
   }
   
+  /**
+   * Release.
+   */
   public void release() {
     try {
       commit();
-      //this.session.save();
-      //this.session.logout();
     }
     catch(Exception ignore) {
       log.error(ignore.getLocalizedMessage(), ignore);
     }
   }
   
+  /**
+   * Commit.
+   */
   public void commit() {
     try {
       this.con.commit();
@@ -118,15 +165,38 @@ public class FastAPI {
     }
   }
   
+  /**
+   * Save changes log.
+   * 
+   * @param cLog the c log
+   */
   private void saveChangesLog( PlainChangesLog cLog) {
     searchIndex.onSaveItems(chahgesLog); // Indexer work
     chahgesLog = new PlainChangesLogImpl();
   }
   
+  /**
+   * Gets the connection.
+   * 
+   * @return the connection
+   * 
+   * @throws Exception the exception
+   */
   private WorkspaceStorageConnection getConnection() throws Exception {
     return workspaceDataContainer.openConnection();
   }
   
+  /**
+   * Adds the node.
+   * 
+   * @param name the name
+   * @param orderNum the order num
+   * @param parentNode the parent node
+   * 
+   * @return the transient node data
+   * 
+   * @throws Exception the exception
+   */
   public TransientNodeData addNode(
     String name,
     int orderNum,
@@ -153,6 +223,15 @@ public class FastAPI {
     return nodeData;
   }
   
+  /**
+   * Creates the node data_nt_folder.
+   * 
+   * @param name the name
+   * @param orderNum the order num
+   * @param parentNode the parent node
+   * 
+   * @return the transient node data
+   */
   public TransientNodeData createNodeData_nt_folder(
     String name,
     int orderNum,
@@ -174,6 +253,17 @@ public class FastAPI {
     return nodeData;
   }
   
+  /**
+   * Adds the node.
+   * 
+   * @param name the name
+   * @param orderNum the order num
+   * @param parentNode the parent node
+   * 
+   * @return the transient node data
+   * 
+   * @throws Exception the exception
+   */
   public TransientNodeData addNode(
       String name,
       int orderNum,
@@ -200,6 +290,19 @@ public class FastAPI {
     return nodeData;
   }
   
+  /**
+   * Creates the node data.
+   * 
+   * @param iQName the i q name
+   * @param orderNum the order num
+   * @param parentNode the parent node
+   * @param primaryType the primary type
+   * @param mixinName the mixin name
+   * 
+   * @return the transient node data
+   * 
+   * @throws Exception the exception
+   */
   public TransientNodeData createNodeData(InternalQName iQName, int orderNum,
       TransientNodeData parentNode, InternalQName primaryType, InternalQName mixinName)
       throws Exception {
@@ -225,6 +328,19 @@ public class FastAPI {
     return nodeData;
   }
   
+  /**
+   * Adds the node_file.
+   * 
+   * @param name the name
+   * @param orderNum the order num
+   * @param metadata the metadata
+   * @param parentNode the parent node
+   * @param fData the f data
+   * @param mimeType the mime type
+   * @param title the title
+   * 
+   * @throws Exception the exception
+   */
   protected void addNode_file(
     String name,
     int orderNum,
@@ -303,6 +419,16 @@ public class FastAPI {
     addDcElementSet(con, contentNode, metadata, title);
   }
 
+  /**
+   * Adds the dc element set.
+   * 
+   * @param con the con
+   * @param nodeData the node data
+   * @param value the value
+   * @param title the title
+   * 
+   * @throws Exception the exception
+   */
   private void addDcElementSet(WorkspaceStorageConnection con,
                                TransientNodeData nodeData,
                                String value,
@@ -312,6 +438,16 @@ public class FastAPI {
     addDCProperty(con, nodeData, DCPropertyQName.dcSubject, value);
   }
   
+  /**
+   * Adds the dc property.
+   * 
+   * @param con the con
+   * @param dcNode the dc node
+   * @param propertyQName the property q name
+   * @param propertyContent the property content
+   * 
+   * @throws Exception the exception
+   */
   private void addDCProperty(WorkspaceStorageConnection con, TransientNodeData dcNode,
       InternalQName propertyQName, String propertyContent) throws Exception {
 

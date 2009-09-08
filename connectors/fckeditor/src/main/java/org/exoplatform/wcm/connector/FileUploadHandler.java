@@ -36,11 +36,12 @@ import org.exoplatform.upload.UploadService;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
- * Author : eXoPlatform
- *          exo@exoplatform.com
- * Sep 4, 2009  
+ * Author : Tran Nguyen Ngoc
+ * ngoc.tran@exoplatform.com
+ * Sep 4, 2009
  */
 public class FileUploadHandler {
 
@@ -59,9 +60,12 @@ public class FileUploadHandler {
   /** The Constant SAVE_ACTION. */
   public final static String SAVE_ACTION = "save".intern();
 
+  /** The upload service. */
   private UploadService uploadService;
 
+  /** The fck message. */
   private FCKMessage fckMessage;
+  
   /**
    * Instantiates a new file upload handler.
    * 
@@ -72,6 +76,21 @@ public class FileUploadHandler {
     fckMessage = new FCKMessage();
   }
   
+  /**
+   * Upload.
+   * 
+   * @param uploadId the upload id
+   * @param contentType the content type
+   * @param contentLength the content length
+   * @param inputStream the input stream
+   * @param currentNode the current node
+   * @param language the language
+   * @param limit the limit
+   * 
+   * @return the response
+   * 
+   * @throws Exception the exception
+   */
   public Response upload(String uploadId, String contentType, double contentLength, InputStream inputStream, Node currentNode, String language, int limit) throws Exception {
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
@@ -82,6 +101,16 @@ public class FileUploadHandler {
     return Response.Builder.ok().mediaType("text/xml").cacheControl(cacheControl).build();            
   }
 
+  /**
+   * Control.
+   * 
+   * @param uploadId the upload id
+   * @param action the action
+   * 
+   * @return the response
+   * 
+   * @throws Exception the exception
+   */
   public Response control(String uploadId, String action) throws Exception {
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
@@ -98,6 +127,18 @@ public class FileUploadHandler {
     return Response.Builder.badRequest().mediaType("text/xml").cacheControl(cacheControl).build();
   }
   
+  /**
+   * Save as nt file.
+   * 
+   * @param parent the parent
+   * @param uploadId the upload id
+   * @param fileName the file name
+   * @param language the language
+   * 
+   * @return the response
+   * 
+   * @throws Exception the exception
+   */
   public Response saveAsNTFile(Node parent, String uploadId, String fileName, String language) throws Exception {
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
@@ -136,6 +177,15 @@ public class FileUploadHandler {
     return Response.Builder.ok().mediaType("text/xml").cacheControl(cacheControl).build();
   }
   
+  /**
+   * Gets the progress.
+   * 
+   * @param uploadId the upload id
+   * 
+   * @return the progress
+   * 
+   * @throws Exception the exception
+   */
   private Document getProgress(String uploadId) throws Exception {    
     UploadResource resource = uploadService.getUploadResource(uploadId);
     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();

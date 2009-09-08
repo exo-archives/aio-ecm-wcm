@@ -40,7 +40,6 @@ public abstract class BaseWebSchemaHandler extends BaseComponentPlugin implement
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.core.WebSchemaHandler#matchHandler(javax.jcr.Node)
    */
-  @SuppressWarnings("unused")
   public boolean matchHandler(Node node, SessionProvider sessionProvider) throws Exception {
     String handlerNodeType = getHandlerNodeType();    
     String parentNodeType = getParentNodeType();
@@ -54,19 +53,16 @@ public abstract class BaseWebSchemaHandler extends BaseComponentPlugin implement
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.core.WebSchemaHandler#onCreateNode(javax.jcr.Node)
    */
-  @SuppressWarnings("unused")
   public void onCreateNode(Node node, SessionProvider sessionProvider) throws Exception { } 
   
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.core.WebSchemaHandler#onModifyNode(javax.jcr.Node)
    */
-  @SuppressWarnings("unused")
   public void onModifyNode(Node node, SessionProvider sessionProvider) throws Exception { }
 
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.core.WebSchemaHandler#onRemoveNode(javax.jcr.Node)
    */
-  @SuppressWarnings("unused")
   public void onRemoveNode(Node node, SessionProvider sessionProvider) throws Exception { }
 
   /**

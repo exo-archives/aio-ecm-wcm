@@ -166,9 +166,7 @@ public class UIPublicationAction extends UIForm {
           presentationService.publishContentCLV(node, page, clvPortletId, Util.getUIPortal().getOwner(), event.getRequestContext().getRemoteUser());
         }
       }
-      
       publicationAction.updateUI();
-      
       UIPublicationContainer publicationContainer = publicationAction.getAncestorOfType(UIPublicationContainer.class);
       publicationContainer.setActiveTab(publicationPagesContainer, event.getRequestContext());
     }
@@ -205,7 +203,6 @@ public class UIPublicationAction extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(application.getUIPopupMessages());
         return;
       }
-      
       String portalName = selectedNavigationNodeURI.substring(1, selectedNavigationNodeURI.indexOf("/", 1));
       String pageNodeUri = selectedNavigationNodeURI.replaceFirst("/\\w+/", "");
       PageNavigation pageNavigation = null;
@@ -223,13 +220,10 @@ public class UIPublicationAction extends UIForm {
           page = userPortalConfigService.getPage(pageNode.getPageReference(), event.getRequestContext().getRemoteUser());
         }
       }
-      
       WCMPublicationService presentationService = publicationAction.getApplicationComponent(WCMPublicationService.class);
       StageAndVersionPublicationPlugin publicationPlugin = (StageAndVersionPublicationPlugin) presentationService.getWebpagePublicationPlugins().get(StageAndVersionPublicationConstant.LIFECYCLE_NAME);
       publicationPlugin.suspendPublishedContentFromPage(publicationPages.getNode(), page, event.getRequestContext().getRemoteUser());
-      
       publicationAction.updateUI();
-
       UIPublicationPagesContainer publicationPagesContainer = publicationPages.getAncestorOfType(UIPublicationPagesContainer.class);
       UIPublicationContainer publicationContainer = publicationAction.getAncestorOfType(UIPublicationContainer.class);
       publicationContainer.setActiveTab(publicationPagesContainer, event.getRequestContext());

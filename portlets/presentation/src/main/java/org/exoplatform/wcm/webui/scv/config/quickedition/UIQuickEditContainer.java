@@ -42,7 +42,6 @@ import org.exoplatform.webui.event.EventListener;
       @EventConfig(listeners = UIQuickEditContainer.BackToNormalWizardActionListener.class)
     }
 )
-
 public class UIQuickEditContainer extends UIContainer {
   
   /**
@@ -77,7 +76,6 @@ public class UIQuickEditContainer extends UIContainer {
       UIPopupContainer popupContainer = viewerPortlet.getChild(UIPopupContainer.class);
       UIPortletConfig uiPortletConfig = uiQuickEditContainer.getAncestorOfType(UIPortletConfig.class);
       uiPortletConfig.getChildren().clear();
-//      uiPortletConfig.addUIWelcomeScreen(); 
       
       UIQuickCreationWizard uiQuickCreationWizard = uiPortletConfig.addChild(UIQuickCreationWizard.class, null, null);
       uiQuickCreationWizard.viewStep(3);

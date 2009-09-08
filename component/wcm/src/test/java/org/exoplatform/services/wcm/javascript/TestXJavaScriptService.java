@@ -60,7 +60,6 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	 * When parameter input is null
 	 */
 	public void testGetActiveJavaScript_01() {
-
 		try {
 			javascriptService.getActiveJavaScript(null);
 			fail();
@@ -75,19 +74,14 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	 * When node input node type is not exo:webcontent.
 	 */
 	public void testGetActiveJavaScript_02() {
-	
 		try {
-			
 			Node root = session.getRootNode();
 			Node nodeInput = root.addNode(WEB_CONTENT_NODE_NAME);
 			session.save();
-			
 			String jsData = javascriptService.getActiveJavaScript(nodeInput);
-			
 			assertEquals("", jsData);
 		} catch(Exception e) {
-
-			fail("Exception can't raise here!!!");
+			fail();
 		}
 	}
 	
@@ -97,9 +91,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	 * When node input is exo:webcontent and have some child node but does not content mixin type.
 	 */
 	public void testGetActiveJavaScript_03() {
-	
 		try {
-			
 			Node root = session.getRootNode();
 			Node webContent = root.addNode(WEB_CONTENT_NODE_NAME, "exo:webContent");
 			
@@ -113,8 +105,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 
 			assertEquals("", jsData);
 		} catch(Exception e) {
-
-			fail("Exception can't raise here!!!");
+			fail();
 		}
 	}
 	
@@ -124,35 +115,29 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	 * When node input is exo:webcontent and have some child node but have mixin type does not exo:jsFile.
 	 */
 	public void testGetActiveJavaScript_04() {
-	
 		try {
-			
 			Node root = session.getRootNode();
 			Node webContent = root.addNode(WEB_CONTENT_NODE_NAME, "exo:webContent");
-			
 			webContent.setProperty("exo:title", WEB_CONTENT_NODE_NAME);
 			Node jsFolder = webContent.addNode("js", "exo:jsFolder");
-		    Node jsNode = jsFolder.addNode("default.js", "nt:file");
-		    
-		    jsNode.addMixin("exo:cssFile");
-		    jsNode.setProperty("exo:active", true);
-		    jsNode.setProperty("exo:priority", 1);
-		    jsNode.setProperty("exo:sharedCSS", true);
-		    
-		    Node jsContent = jsNode.addNode("jcr:content", "nt:resource");
-		    jsContent.setProperty("jcr:encoding", "UTF-8");
-		    jsContent.setProperty("jcr:mimeType", "text/javascript");
-		    jsContent.setProperty("jcr:lastModified", new Date().getTime());
-		    jsContent.setProperty("jcr:data", "This is the default.js file.");
-		    
-		    session.save();
+	    Node jsNode = jsFolder.addNode("default.js", "nt:file");
+	    
+	    jsNode.addMixin("exo:cssFile");
+	    jsNode.setProperty("exo:active", true);
+	    jsNode.setProperty("exo:priority", 1);
+	    jsNode.setProperty("exo:sharedCSS", true);
+	    
+	    Node jsContent = jsNode.addNode("jcr:content", "nt:resource");
+	    jsContent.setProperty("jcr:encoding", "UTF-8");
+	    jsContent.setProperty("jcr:mimeType", "text/javascript");
+	    jsContent.setProperty("jcr:lastModified", new Date().getTime());
+	    jsContent.setProperty("jcr:data", "This is the default.js file.");
+	    session.save();
 
 			String jsData = javascriptService.getActiveJavaScript(webContent);
-
 			assertEquals("", jsData);
 		} catch(Exception e) {
-
-			fail("Exception can't raise here!!!");
+			fail();
 		}
 	}
 
@@ -163,22 +148,17 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	 * - "exo:active": false
 	 */
 	public void testGetActiveJavaScript_05() {
-		
 		try {
 			Node root = session.getRootNode();
 			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
 			Node jsNode = webContent.getNode("js").getNode("default.js");
-			
 			jsNode.setProperty("exo:active", false);
-			
 			session.save();
 			
 			String jsData = javascriptService.getActiveJavaScript(webContent);
-
 			assertEquals("", jsData);
 		} catch(Exception e) {
-
-			fail("Exception can't raise here!!!");
+			fail();
 		}
 	}
 	
@@ -189,23 +169,18 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	 * - "jcr:mimeType": text/html
 	 */
 	public void testGetActiveJavaScript_06() {
-		
 		try {
 			Node root = session.getRootNode();
 			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
 			Node jsNode = webContent.getNode("js").getNode("default.js");
 			Node jsContent = jsNode.getNode("jcr:content");
-			
 			jsContent.setProperty("jcr:mimeType", "text/html");
-			
 			session.save();
 			
 			String jsData = javascriptService.getActiveJavaScript(webContent);
-
 			assertEquals("", jsData);
 		} catch(Exception e) {
-
-			fail("Exception can't raise here!!!");
+			fail();
 		}
 	}
 	
@@ -216,23 +191,18 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	 * - "jcr:mimeType": text/javascript
 	 */
 	public void testGetActiveJavaScript_07() {
-		
 		try {
 			Node root = session.getRootNode();
 			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
 			Node jsNode = webContent.getNode("js").getNode("default.js");
 			Node jsContent = jsNode.getNode("jcr:content");
-			
 			jsContent.setProperty("jcr:mimeType", "text/javascript");
-			
 			session.save();
 			
 			String jsData = javascriptService.getActiveJavaScript(webContent);
-
 			assertEquals("This is the default.js file.", jsData);
 		} catch(Exception e) {
-
-			fail("Exception can't raise here!!!");
+			fail();
 		}
 	}
 	
@@ -243,23 +213,18 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	 * - "jcr:mimeType": application/x-javascript
 	 */
 	public void testGetActiveJavaScript_08() {
-		
 		try {
 			Node root = session.getRootNode();
 			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
 			Node jsNode = webContent.getNode("js").getNode("default.js");
 			Node jsContent = jsNode.getNode("jcr:content");
-			
 			jsContent.setProperty("jcr:mimeType", "application/x-javascript");
-			
 			session.save();
 			
 			String jsData = javascriptService.getActiveJavaScript(webContent);
-
 			assertEquals("This is the default.js file.", jsData);
 		} catch(Exception e) {
-
-			fail("Exception can't raise here!!!");
+			fail();
 		}
 	}
 	
@@ -270,23 +235,18 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	 * - "jcr:mimeType": text/ecmascript
 	 */
 	public void testGetActiveJavaScript_09() {
-		
 		try {
 			Node root = session.getRootNode();
 			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
 			Node jsNode = webContent.getNode("js").getNode("default.js");
 			Node jsContent = jsNode.getNode("jcr:content");
-			
 			jsContent.setProperty("jcr:mimeType", "text/ecmascript");
-			
 			session.save();
 			
 			String jsData = javascriptService.getActiveJavaScript(webContent);
-
 			assertEquals("This is the default.js file.", jsData);
 		} catch(Exception e) {
-
-			fail("Exception can't raise here!!!");
+			fail();
 		}
 	}
 	
@@ -296,23 +256,18 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	 * Child node have properties normal and value of jcr:data is ""
 	 */
 	public void testGetActiveJavaScript_10() {
-		
 		try {
 			Node root = session.getRootNode();
 			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
 			Node jsNode = webContent.getNode("js").getNode("default.js");
 			Node jsContent = jsNode.getNode("jcr:content");
-			
 			jsContent.setProperty("jcr:data", "");
-			
 			session.save();
 			
 			String jsData = javascriptService.getActiveJavaScript(webContent);
-
 			assertEquals("", jsData);
 		} catch(Exception e) {
-
-			fail("Exception can't raise here!!!");
+			fail();
 		}
 	}
 	
@@ -323,23 +278,18 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	 * - "jcr:data": This is the default.js file.
 	 */
 	public void testGetActiveJavaScript_11() {
-		
 		try {
 			Node root = session.getRootNode();
 			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
 			Node jsNode = webContent.getNode("js").getNode("default.js");
 			Node jsContent = jsNode.getNode("jcr:content");
-			
 			jsContent.setProperty("jcr:data", "This is the default.js file.");
-			
 			session.save();
 			
 			String jsData = javascriptService.getActiveJavaScript(webContent);
-
 			assertEquals("This is the default.js file.", jsData);
 		} catch(Exception e) {
-
-			fail("Exception can't raise here!!!");
+			fail();
 		}
 	}
 	
@@ -350,18 +300,14 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	 * - "jcr:data": alert('Test method getActiveJavaScript()');.
 	 */
 	public void testGetActiveJavaScript_12() {
-		
 		try {
 			Node root = session.getRootNode();
 			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, "alert('Test method getActiveJavaScript()');");
 			session.save();
-			
 			String jsData = javascriptService.getActiveJavaScript(webContent);
-
 			assertEquals("alert('Test method getActiveJavaScript()');", jsData);
 		} catch(Exception e) {
-
-			fail("Exception can't raise here!!!");
+			fail();
 		}
 	}
 	
@@ -371,11 +317,9 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	 * In case normal
 	 */
 	public void testGetActiveJavaScript_13() {
-		
 		try {
 			Node root = session.getRootNode();
 			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
-			
 			String jsData = javascriptService.getActiveJavaScript(webContent);
 			assertEquals("This is the default.js file.", jsData);
 		} catch (Exception e) {
@@ -389,7 +333,6 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	 */
 	public void testUpdatePortalJSOnModify_01() {
 		try {
-			
 			SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
 			javascriptService.updatePortalJSOnModify(null, sessionProvider);
 			fail();
@@ -444,16 +387,13 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 			Node liveNode = root.getNode("sites content").getNode("live");
 			Node webContent = createWebcontentNode(liveNode, WEB_CONTENT_NODE_NAME + "1", null, null, "");
 			createWebcontentNode(liveNode, WEB_CONTENT_NODE_NAME + "2", null, null, null);
-			
 			Node jsNode = webContent.getNode("js").getNode("default.js");
-			
 			javascriptService.updatePortalJSOnModify(jsNode, sessionProvider);
 			session.save();
 			
 			configService = getService(JavascriptConfigService.class);
 			String jsData = new String(configService.getMergedJavascript());
 			assertEquals("\nThis is the default.js file.", jsData);
-			
 		} catch(Exception e) {
 			fail();
 		}
@@ -473,14 +413,11 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 			createWebcontentNode(liveNode, WEB_CONTENT_NODE_NAME + "2", null, null, null);
 			
 			Node jsNode = webContent.getNode("js").getNode("default.js");
-
 			javascriptService.updatePortalJSOnModify(jsNode, sessionProvider);
 			session.save();
-			
 			configService = getService(JavascriptConfigService.class);
 			String jsData = new String(configService.getMergedJavascript());
 			assertEquals("\nThis is the default.js file.When perform testUpdatePortalJSOnModify...", jsData);
-			
 		} catch(Exception e) {
 			fail();
 		}
@@ -498,10 +435,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 			Node liveNode = root.getNode("sites content").getNode("live");
 			Node webContent = createWebcontentNode(liveNode, WEB_CONTENT_NODE_NAME + "1", null, null, "alert('testUpdatePortalJSOnModify...');");
 			createWebcontentNode(liveNode, WEB_CONTENT_NODE_NAME + "1", null, null, null);
-			
-			
 			Node jsNode = webContent.getNode("js").getNode("default.js");
-			
 			javascriptService.updatePortalJSOnModify(jsNode, sessionProvider);
 			session.save();
 			
@@ -519,7 +453,6 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	 */
 	public void testUpdatePortalJSOnRemove_01() {
 		try {
-			
 			SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
 			javascriptService.updatePortalJSOnRemove(null, sessionProvider);
 			fail();
@@ -559,13 +492,10 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 			Node jsFolder = webContent.getNode("js");
 			javascriptService.updatePortalJSOnRemove(jsFolder, sessionProvider);
 			session.save();
-
 			String jsData = "";
 			configService = getService(JavascriptConfigService.class);
-
 			jsData = new String(configService.getMergedJavascript());
 			assertEquals("\nThis is the default.js file.", jsData);
-
 		} catch(Exception e) {
 			fail();
 		}
@@ -577,29 +507,21 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	 */
 	public void testUpdatePortalJSOnRemove_04() {
 		try {
-			
 			SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
 			JavascriptConfigService configService = null;
 			Node root = session.getRootNode();
 			Node liveNode = root.getNode("sites content").getNode("live");
-			
 			Node webContent = createWebcontentNode(liveNode, WEB_CONTENT_NODE_NAME + "1", null, null, "");
 			createWebcontentNode(liveNode, WEB_CONTENT_NODE_NAME + "2", null, null, null);
-			
 			Node jsNode = webContent.getNode("js").getNode("default.js");
-			
 			javascriptService.updatePortalJSOnModify(jsNode, sessionProvider);
 			session.save();
-			
 			String jsData = "";
 			configService = getService(JavascriptConfigService.class);
-			
 			jsData = new String(configService.getMergedJavascript());
 			assertEquals("\nThis is the default.js file.", jsData);
-			
 			javascriptService.updatePortalJSOnRemove(jsNode, sessionProvider);
 			session.save();
-			
 			jsData = new String(configService.getMergedJavascript());
 			assertEquals("\nThis is the default.js file.", jsData);
 		} catch(Exception e) {
@@ -617,20 +539,15 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 			JavascriptConfigService configService = null;
 			Node root = session.getRootNode();
 			Node liveNode = root.getNode("sites content").getNode("live");
-			
 			Node webContent = createWebcontentNode(liveNode, WEB_CONTENT_NODE_NAME + "1", null, null, "alert('testUpdatePortalJSOnModify...');");
 			createWebcontentNode(liveNode, WEB_CONTENT_NODE_NAME + "2", null, null, null);
-			
 			Node jsNode = webContent.getNode("js").getNode("default.js");
-			
 			javascriptService.updatePortalJSOnModify(jsNode, sessionProvider);
 			session.save();
-			
 			String jsData = "";
 			configService = getService(JavascriptConfigService.class);
 			jsData = new String(configService.getMergedJavascript());
 			assertEquals("\nThis is the default.js file.alert('testUpdatePortalJSOnModify...');", jsData);
-			
 			javascriptService.updatePortalJSOnRemove(jsNode, sessionProvider);
 			session.save();
 			jsData = new String(configService.getMergedJavascript());
@@ -644,7 +561,6 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	 * @see junit.framework.TestCase#tearDown()
 	 */
 	public void tearDown() throws Exception {
-		
 		super.tearDown();
 		Node rootNode = session.getRootNode();
 		if(rootNode.hasNode(WEB_CONTENT_NODE_NAME))

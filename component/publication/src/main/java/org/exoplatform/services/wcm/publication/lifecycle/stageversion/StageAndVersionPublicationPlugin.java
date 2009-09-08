@@ -55,7 +55,6 @@ import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
 import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.services.wcm.publication.WebpagePublicationPlugin;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant.SITE_MODE;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.config.VersionData;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.config.VersionLog;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.ui.UIPublicationContainer;
@@ -138,11 +137,11 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
       revisionsMap.put(node.getUUID(),versionData);
       addRevisionData(node,revisionsMap.values());
     } else if(StageAndVersionPublicationConstant.PUBLISHED_STATE.equals(newState)) {      
-        if (!node.isCheckedOut()) {
-            node.checkout();
-          }
-        Version liveVersion = node.checkin();
+      if (!node.isCheckedOut()) {
         node.checkout();
+      }
+      Version liveVersion = node.checkin();
+      node.checkout();
 		  //Change current live revision to obsolete      
 		  Node oldLiveRevision = getLiveRevision(node);
 		  if(oldLiveRevision != null) {                
@@ -193,8 +192,8 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
       }      
       revisionsMap.put(selectedRevision.getUUID(),versionData);
       addLog(node,versionLog);
-	  //change base version to published state
-	  node.setProperty(StageAndVersionPublicationConstant.CURRENT_STATE,StageAndVersionPublicationConstant.OBSOLETE_STATE);
+      //change base version to published state
+      node.setProperty(StageAndVersionPublicationConstant.CURRENT_STATE,StageAndVersionPublicationConstant.OBSOLETE_STATE);
       addRevisionData(node,revisionsMap.values());
     }
     if(!node.isNew())
@@ -296,10 +295,9 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     ResourceBundle resourceBundle= ResourceBundle.getBundle(StageAndVersionPublicationConstant.LOCALIZATION, locale, cl);
     String result = resourceBundle.getString(key);
     if(values != null) {
-      return String.format(result, values); 
+      return String.format(result, (Object[])values); 
     }        
     return result;
-
   }
 
   /* (non-Javadoc)
@@ -531,7 +529,6 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
         listExistedNavigationNodeUri.remove(existedNavigationNodeUri);        
       }
     }
-    
     Session session = content.getSession();
     ValueFactory valueFactory = session.getValueFactory();    
     content.setProperty("publication:applicationIDs", StageAndVersionPublicationUtil.toValues(valueFactory, listExistedApplicationId));
@@ -608,7 +605,6 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
         }
       }
     }
-    
     // Remove content from SCV portlet
     String pageId = page.getPageId();
     List<String> mixedApplicationIDs = StageAndVersionPublicationUtil.getValuesAsString(content, "publication:applicationIDs");
@@ -725,23 +721,19 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
   throws Exception {
 	  updateLifecyleOnChangeContent(node, remoteUser, PublicationDefaultStates.DRAFT);
   }
-/**
- * In this publication process, we put the content in Draft state when editing it.
- */
-public void updateLifecyleOnChangeContent(Node node, String remoteUser,String newState)
-		throws Exception {
-	
+
+  /**
+   * In this publication process, we put the content in Draft state when editing
+   * it.
+   */
+  public void updateLifecyleOnChangeContent(Node node, String remoteUser, String newState) throws Exception {
+
     String state = node.getProperty(StageAndVersionPublicationConstant.CURRENT_STATE).getString();
-    
-    if(state.equals(newState))
+
+    if (state.equals(newState))
       return;
-    
+
     HashMap<String, String> context = new HashMap<String, String>();
-//    if(node != null) {
-//      context.put(StageAndVersionPublicationConstant.CURRENT_REVISION_NAME, node.getName());
-//    }
-    
     changeState(node, newState, context);
-	
-}
+  }
 }

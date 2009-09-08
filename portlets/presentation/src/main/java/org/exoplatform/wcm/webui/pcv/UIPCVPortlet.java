@@ -27,15 +27,12 @@ import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 
+// TODO: Auto-generated Javadoc
 /*
  * Created by The eXo Platform SAS 
  * Author : Anh Do Ngoc 
  * anh.do@exoplatform.com
  * Sep 24, 2008
- */
-
-/**
- * The Class UIParameterizedContentViewerPortlet.
  */
 @ComponentConfig(lifecycle = UIApplicationLifecycle.class)
 public class UIPCVPortlet extends UIPortletApplication {
@@ -55,6 +52,13 @@ public class UIPCVPortlet extends UIPortletApplication {
     activateMode(mode) ;    
   }
   
+  /**
+   * Activate mode.
+   * 
+   * @param mode the mode
+   * 
+   * @throws Exception the exception
+   */
   public void activateMode(PortletMode mode) throws Exception {
     getChildren().clear() ;
     addChild(UIPopupContainer.class, null, null);

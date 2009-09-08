@@ -38,24 +38,24 @@ import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
 import org.exoplatform.wcm.connector.BaseConnector;
 
+// TODO: Auto-generated Javadoc
 /**
- * Created by The eXo Platform SAS 
- * Author : Anh Do Ngoc 
+ * Created by The eXo Platform SAS
+ * Author : Anh Do Ngoc
  * anh.do@exoplatform.com
  * Sep 10, 2008
- */
-
-/**
- * The Class ImageConnector.
  */
 @URITemplate("/wcmImage/")
 public class ImageConnector extends BaseConnector implements ResourceContainer {
 
+  /** The limit. */
   private int limit;
+  
   /**
    * Instantiates a new image connector.
    * 
    * @param container the container
+   * @param params the params
    */
   public ImageConnector(ExoContainer container, InitParams params) {
     super(container);
@@ -233,5 +233,4 @@ public class ImageConnector extends BaseConnector implements ResourceContainer {
   protected String getContentStorageType() throws Exception {
     return FCKUtils.IMAGE_TYPE;
   }
-
 }

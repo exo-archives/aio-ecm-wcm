@@ -42,6 +42,10 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.NameValidator;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class UICategoryForm.
+ */
 @ComponentConfig(
 		lifecycle = UIFormLifecycle.class ,
 		template = "system:/groovy/webui/form/UIForm.gtmpl",
@@ -53,14 +57,33 @@ import org.exoplatform.webui.form.validator.NameValidator;
 		}
 )
 public class UICategoryForm extends UIForm implements UIPopupComponent, UISelectable {
+  
+  /** The category config. */
   private NewsletterCategoryConfig categoryConfig;
+  
+  /** The popup id. */
   private String popupId;
+  
+  /** The Constant INPUT_CATEGORY_NAME. */
   public static final String INPUT_CATEGORY_NAME           = "CategoryName"; 
+	
+	/** The Constant INPUT_CATEGORY_TITLE. */
 	public static final String INPUT_CATEGORY_TITLE          = "CategoryTitle"; 
+	
+	/** The Constant INPUT_CATEGORY_DESCRIPTION. */
 	public static final String INPUT_CATEGORY_DESCRIPTION    = "CategoryDescription";
+	
+	/** The Constant FORM_CATEGORY_MODERATOR. */
 	public static final String FORM_CATEGORY_MODERATOR       = "FormCategoryModerator";
+	
+	/** The Constant INPUT_CATEGORY_MODERATOR. */
 	public static final String INPUT_CATEGORY_MODERATOR      = "CategoryModerator"; 
 	
+	/**
+	 * Instantiates a new uI category form.
+	 * 
+	 * @throws Exception the exception
+	 */
 	public UICategoryForm() throws Exception{
 		UIFormStringInput inputCateName = new UIFormStringInput(INPUT_CATEGORY_NAME, null, null);
 		UIFormStringInput inputCateTitle = new UIFormStringInput(INPUT_CATEGORY_TITLE, null, null);
@@ -84,23 +107,47 @@ public class UICategoryForm extends UIForm implements UIPopupComponent, UISelect
 		setActions(new String[]{"Save", "Cancel"});
 	}
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.selector.UISelectable#doSelect(java.lang.String, java.lang.Object)
+   */
   public void doSelect(String selectField, Object value) throws Exception {
     getUIStringInput(selectField).setValue((String) value);
     Utils.closePopupWindow(this, popupId);
   }
 
+  /**
+   * Gets the popup id.
+   * 
+   * @return the popup id
+   */
   public String getPopupId() {
     return popupId;
   }
 
+  /**
+   * Sets the popup id.
+   * 
+   * @param popupId the new popup id
+   */
   public void setPopupId(String popupId) {
     this.popupId = popupId;
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.core.UIPopupComponent#activate()
+   */
   public void activate() throws Exception {}
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.core.UIPopupComponent#deActivate()
+   */
   public void deActivate() throws Exception {}
   
+	/**
+	 * Sets the category info.
+	 * 
+	 * @param categoryConfig the new category info
+	 */
 	public void setCategoryInfo(NewsletterCategoryConfig categoryConfig){
 	  this.categoryConfig = categoryConfig;
 	  UIFormStringInput inputCateName = this.getChildById(INPUT_CATEGORY_NAME);
@@ -115,7 +162,22 @@ public class UICategoryForm extends UIForm implements UIPopupComponent, UISelect
     inputModerator.setValue(categoryConfig.getModerator());
 	}
 	
+	/**
+	 * The listener interface for receiving saveAction events.
+	 * The class that is interested in processing a saveAction
+	 * event implements this interface, and the object created
+	 * with that class is registered with a component using the
+	 * component's <code>addSaveActionListener<code> method. When
+	 * the saveAction event occurs, that object's appropriate
+	 * method is invoked.
+	 * 
+	 * @see SaveActionEvent
+	 */
 	static  public class SaveActionListener extends EventListener<UICategoryForm> {
+		
+		/* (non-Javadoc)
+		 * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+		 */
 		public void execute(Event<UICategoryForm> event) throws Exception {
 			UICategoryForm uiCategoryForm = event.getSource();
 			NewsletterManagerService newsletterManagerService = 
@@ -160,22 +222,50 @@ public class UICategoryForm extends UIForm implements UIPopupComponent, UISelect
 			  }else{ // Edit a category is already exist
 			    categoryHandler.edit(portalName, categoryConfig, sessionProvider);
 			  }
-			}catch(Exception ex){
-			  ex.printStackTrace();
-			}
+			}catch(Exception ex){}
 			Utils.closePopupWindow(uiCategoryForm, UINewsletterConstant.CATEGORY_FORM_POPUP_WINDOW);
 		}
 	}
 	
+	/**
+	 * The listener interface for receiving cancelAction events.
+	 * The class that is interested in processing a cancelAction
+	 * event implements this interface, and the object created
+	 * with that class is registered with a component using the
+	 * component's <code>addCancelActionListener<code> method. When
+	 * the cancelAction event occurs, that object's appropriate
+	 * method is invoked.
+	 * 
+	 * @see CancelActionEvent
+	 */
 	static  public class CancelActionListener extends EventListener<UICategoryForm> {
+		
+		/* (non-Javadoc)
+		 * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+		 */
 		public void execute(Event<UICategoryForm> event) throws Exception {
 			UICategoryForm uiCategoryForm = event.getSource();
 			Utils.closePopupWindow(uiCategoryForm, UINewsletterConstant.CATEGORY_FORM_POPUP_WINDOW);
 		}
 	}
 
+	/**
+	 * The listener interface for receiving selectUserAction events.
+	 * The class that is interested in processing a selectUserAction
+	 * event implements this interface, and the object created
+	 * with that class is registered with a component using the
+	 * component's <code>addSelectUserActionListener<code> method. When
+	 * the selectUserAction event occurs, that object's appropriate
+	 * method is invoked.
+	 * 
+	 * @see SelectUserActionEvent
+	 */
 	public static class SelectUserActionListener extends EventListener<UICategoryForm> {
-	  public void execute(Event<UICategoryForm> event) throws Exception {
+	  
+  	/* (non-Javadoc)
+  	 * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+  	 */
+  	public void execute(Event<UICategoryForm> event) throws Exception {
 	    UICategoryForm categoryForm = event.getSource();
       UIUserMemberSelector userMemberSelector = categoryForm.createUIComponent(UIUserMemberSelector.class, null, null);
       userMemberSelector.setMulti(false);
@@ -187,8 +277,23 @@ public class UICategoryForm extends UIForm implements UIPopupComponent, UISelect
 	  }
 	}
 
+	/**
+	 * The listener interface for receiving selectMemberAction events.
+	 * The class that is interested in processing a selectMemberAction
+	 * event implements this interface, and the object created
+	 * with that class is registered with a component using the
+	 * component's <code>addSelectMemberActionListener<code> method. When
+	 * the selectMemberAction event occurs, that object's appropriate
+	 * method is invoked.
+	 * 
+	 * @see SelectMemberActionEvent
+	 */
 	public static class SelectMemberActionListener extends EventListener<UICategoryForm> {
-	  public void execute(Event<UICategoryForm> event) throws Exception {
+	  
+  	/* (non-Javadoc)
+  	 * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+  	 */
+  	public void execute(Event<UICategoryForm> event) throws Exception {
 	    UICategoryForm categoryForm = event.getSource();
       UIGroupMemberSelector groupMemberSelector = categoryForm.createUIComponent(UIGroupMemberSelector.class, null, null);
       groupMemberSelector.setShowAnyPermission(false);
@@ -197,5 +302,4 @@ public class UICategoryForm extends UIForm implements UIPopupComponent, UISelect
 	    categoryForm.setPopupId(UINewsletterConstant.GROUP_SELECTOR_POPUP_WINDOW);
 	  }
 	}
-
 }

@@ -1,60 +1,97 @@
+/*
+ * Copyright (C) 2003-2008 eXo Platform SAS.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation; either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see<http://www.gnu.org/licenses/>.
+ */
 package org.exoplatform.wcm.benchmark.preparation.repository;
 
 import org.exoplatform.container.StandaloneContainer;
 import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.impl.core.NodeImpl;
-import org.exoplatform.services.jcr.impl.core.SessionImpl;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class RepoloadRun.
+ */
 public class RepoloadRun {
 
-  // protected Log log = ExoLogger.getLogger("repload.RepoloadRun");
-
+  /** The nt folder count. */
   private int                 ntFolderCount;
 
+  /** The nt file count. */
   private int                 ntFileCount;
 
+  /** The read property. */
   private boolean             readProperty = true;
 
+  /** The repository service. */
   private RepositoryService   repositoryService;
 
+  /** The repoload. */
   private RepoloadServiceImpl repoload;
 
-  private SessionImpl         session;
-
-  private NodeImpl            root;
-
+  /** The l1. */
   private int                 l1           = 0;
 
+  /** The l2. */
   private int                 l2           = 0;
 
+  /** The l3. */
   private int                 l3           = 0;
 
+  /** The l4. */
   private int                 l4           = 0;
 
+  /** The mime type. */
   private String              mimeType     = "";
 
+  /** The repository. */
   private String              repository   = "";
 
+  /** The workspace. */
   private String              workspace    = "";
 
+  /** The start node. */
   private String              startNode    = "";
 
+  /** The first word. */
   private int                 firstWord    = 1;
 
+  /** The second word. */
   private int                 secondWord   = 2;
 
+  /** The start index. */
   private int                 startIndex   = 0;
 
+  /** The random period. */
   private int                 randomPeriod = 0;
 
+  /** The config. */
+  @SuppressWarnings("unused")
   private String              config       = "conf/hsql/test-configuration.xml";
 
+  /** The container. */
   private StandaloneContainer container;
 
   // argument config
   // 8 150 100 100 "text/html" "repository" "production" "/teststorage/root2" 2
   // 10 8 ora
 
+  /**
+   * Instantiates a new repoload run.
+   * 
+   * @param args the args
+   */
   public RepoloadRun(String[] args) {
     l1 = Integer.valueOf(args[0]).intValue();
     l2 = Integer.valueOf(args[1]).intValue();
@@ -69,20 +106,15 @@ public class RepoloadRun {
     firstWord = Integer.valueOf(args[8]).intValue();
     secondWord = Integer.valueOf(args[9]).intValue();
     startIndex = Integer.valueOf(args[10]).intValue();
+    @SuppressWarnings("unused")
     String conf = args[11];
     printConfig();
   }
 
+  /**
+   * Prints the config.
+   */
   private void printConfig() {
-    // log.info("tree = \t" + l1 + "-" + l2 + "-" + l3 + "-" + l4);
-    // log.info("mime type = \t"+ mimeType);
-    // log.info("repository = \t"+ repository);
-    // log.info("workspace = \t"+ workspace);
-    // log.info("start node = \t"+ startNode);
-    // log.info("first word, % = \t"+ firstWord);
-    // log.info("second word, % = \t"+ secondWord);
-    // log.info("start Index, % = \t"+ startIndex);
-    // log.info("database type, % = \t"+ config);
     System.out.println("tree = \t" + l1 + "-" + l2 + "-" + l3 + "-" + l4);
     System.out.println("mime type = \t" + mimeType);
     System.out.println("repository = \t" + repository);
@@ -95,6 +127,11 @@ public class RepoloadRun {
     System.out.println("jcr config file, % = \t" + System.getProperty("jcr.configuration.file"));
   }
 
+  /**
+   * Sets the up.
+   * 
+   * @throws Exception the exception
+   */
   public void setUp() throws Exception {
 
     StandaloneContainer.addConfigurationPath(System.getProperty("jcr.configuration.file"));
@@ -105,20 +142,18 @@ public class RepoloadRun {
       System.setProperty("java.security.auth.login.config", "conf/login.conf");
 
     repositoryService = (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class);
-
-    // Credentials credentials = new CredentialsImpl("admin",
-    // "admin".toCharArray());
-    // RepositoryImpl repository = (RepositoryImpl)
-    // repositoryService.getDefaultRepository();
-
-    // session = (SessionImpl) repository.login(credentials, "production");
-    // root = (NodeImpl) session.getRootNode();
   }
 
+  /**
+   * Stop.
+   */
   public void stop() {
     container.stop();
   }
 
+  /**
+   * Run.
+   */
   public void run() {
     repoload = new RepoloadServiceImpl(15000,
                                        l1,
@@ -139,6 +174,11 @@ public class RepoloadRun {
 
   }
 
+  /**
+   * The main method.
+   * 
+   * @param args the arguments
+   */
   public static void main(String[] args) {
     try {
       RepoloadRun repoloadRun = new RepoloadRun(args);
@@ -147,9 +187,61 @@ public class RepoloadRun {
       repoloadRun.stop();
       System.exit(0);
     } catch (Exception re) {
-      // TODO: handle exception
       re.printStackTrace();
     }
   }
 
+  /**
+   * Gets the nt folder count.
+   * 
+   * @return the ntFolderCount
+   */
+  public int getNtFolderCount() {
+    return ntFolderCount;
+  }
+
+  /**
+   * Sets the nt folder count.
+   * 
+   * @param ntFolderCount the ntFolderCount to set
+   */
+  public void setNtFolderCount(int ntFolderCount) {
+    this.ntFolderCount = ntFolderCount;
+  }
+
+  /**
+   * Gets the nt file count.
+   * 
+   * @return the ntFileCount
+   */
+  public int getNtFileCount() {
+    return ntFileCount;
+  }
+
+  /**
+   * Sets the nt file count.
+   * 
+   * @param ntFileCount the ntFileCount to set
+   */
+  public void setNtFileCount(int ntFileCount) {
+    this.ntFileCount = ntFileCount;
+  }
+
+  /**
+   * Checks if is read property.
+   * 
+   * @return the readProperty
+   */
+  public boolean isReadProperty() {
+    return readProperty;
+  }
+
+  /**
+   * Sets the read property.
+   * 
+   * @param readProperty the readProperty to set
+   */
+  public void setReadProperty(boolean readProperty) {
+    this.readProperty = readProperty;
+  }
 }

@@ -28,7 +28,6 @@ import javax.jcr.nodetype.PropertyDefinition;
 
 import org.apache.commons.logging.Log;
 import org.exoplatform.commons.utils.ISO8601;
-import org.exoplatform.services.cms.categories.CategoriesService;
 import org.exoplatform.services.cms.folksonomy.FolksonomyService;
 import org.exoplatform.services.cms.taxonomy.TaxonomyService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
@@ -264,8 +263,7 @@ public class PageMetadataServiceImpl implements PageMetadataService {
   protected Node findPortal(Node child) throws Exception{                       
     try {
       return livePortalManagerService.getLivePortalByChild(child);
-    } catch (Exception e) {
-    }
+    } catch (Exception e) {}
     return null;
   }               
 }

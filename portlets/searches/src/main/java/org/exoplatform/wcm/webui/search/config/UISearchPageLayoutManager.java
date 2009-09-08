@@ -26,7 +26,6 @@ import javax.portlet.PortletPreferences;
 import org.exoplatform.services.cms.views.ApplicationTemplateManagerService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.search.UIWCMSearchPortlet;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -42,13 +41,10 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormSelectBox;
 
+// TODO: Auto-generated Javadoc
 /*
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Oct 31, 2008
- */
-
-/**
- * The Class UISearchPageLayoutManager.
  */
 @ComponentConfig(
 	lifecycle = UIFormLifecycle.class, 
@@ -201,7 +197,6 @@ public class UISearchPageLayoutManager extends UIForm {
 			searchPageLayoutTemplateSelector.setRendered(true);
 			searchModeSelector.setValue(searchMode);
 		}
-
 		setActions(new String[] { "Save", "Cancel" });
 	}
 
@@ -210,7 +205,9 @@ public class UISearchPageLayoutManager extends UIForm {
 	 * 
 	 * @param portletName the portlet name
 	 * @param category the category
+	 * 
 	 * @return the list< select item option< string>>
+	 * 
 	 * @throws Exception the exception
 	 */
 	private List<SelectItemOption<String>> createTemplateList(String portletName, String category) throws Exception {
@@ -235,6 +232,7 @@ public class UISearchPageLayoutManager extends UIForm {
 	 * Creates the search mode list.
 	 * 
 	 * @return the list< select item option< string>>
+	 * 
 	 * @throws Exception the exception
 	 */
 	private List<SelectItemOption<String>> createSearchModeList() throws Exception {
@@ -395,5 +393,4 @@ public class UISearchPageLayoutManager extends UIForm {
 			event.getRequestContext().addUIComponentToUpdateByAjax(uiSearchPageLayoutManager.getParent());
 		}
 	}
-
 }

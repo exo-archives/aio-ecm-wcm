@@ -53,11 +53,12 @@ import org.exoplatform.ws.frameworks.json.impl.JsonDefaultHandler;
 import org.exoplatform.ws.frameworks.json.impl.JsonParserImpl;
 import org.exoplatform.ws.frameworks.json.value.JsonValue;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * Jun 22, 2009  
+ * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * Jun 22, 2009
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
@@ -69,10 +70,20 @@ import org.exoplatform.ws.frameworks.json.value.JsonValue;
 )
 public class UIFormGeneratorTabPane extends UIFormTabPane {
 	
+	/** The Constant PROPERTY_PREFIX. */
 	static final String PROPERTY_PREFIX = "exo:fg_p_";
+	
+	/** The Constant NODE_PREFIX. */
 	static final String NODE_PREFIX = "exo:";
+	
+	/** The Constant NODE_SUFFIX. */
 	static final String NODE_SUFFIX = "_fg_n";
 
+  /**
+   * Instantiates a new uI form generator tab pane.
+   * 
+   * @throws Exception the exception
+   */
   public UIFormGeneratorTabPane() throws Exception {
     super(UIFormGeneratorConstant.FORM_GENERATOR_TABPANE);
     
@@ -91,6 +102,14 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
     setSelectedTab(formGeneratorGeneralTab.getId());
   }
   
+  /**
+   * Gets the number require type.
+   * 
+   * @param formType the form type
+   * @param size the size
+   * 
+   * @return the number require type
+   */
   private int getNumberRequireType(String formType, int size) {
     if (UIFormGeneratorConstant.UPLOAD.equals(formType))
       return PropertyType.BINARY;
@@ -102,6 +121,13 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
       return PropertyType.STRING;
   }
   
+  /**
+   * Gets the nodetype name.
+   * 
+   * @param nodetypeName the nodetype name
+   * 
+   * @return the nodetype name
+   */
   private String getNodetypeName(String nodetypeName) {
 	  /*
 	   * PREFIX is used to declare the nodetype inside "exo" namespace
@@ -110,10 +136,27 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
     return NODE_PREFIX + Utils.cleanString(nodetypeName) + NODE_SUFFIX;
   }
   
+  /**
+   * Gets the property name.
+   * 
+   * @param inputName the input name
+   * 
+   * @return the property name
+   */
   private String getPropertyName(String inputName) {
     return PROPERTY_PREFIX + Utils.cleanString(inputName);
   }
   
+  /**
+   * Adds the nodetype.
+   * 
+   * @param requestContext the request context
+   * @param repository the repository
+   * @param nodetypeName the nodetype name
+   * @param formBeans the form beans
+   * 
+   * @throws Exception the exception
+   */
   private void addNodetype(WebuiRequestContext requestContext, String repository, String nodetypeName, List<UIFormGeneratorInputBean> formBeans) throws Exception {
     NodeTypeValue newNodeType = new NodeTypeValue() ;                             
     newNodeType.setName(nodetypeName) ;
@@ -157,6 +200,15 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
     }
   }
   
+  /**
+   * Generate dialog template.
+   * 
+   * @param forms the forms
+   * 
+   * @return the string
+   * 
+   * @throws Exception the exception
+   */
   private String generateDialogTemplate(List<UIFormGeneratorInputBean> forms) throws Exception {
     StringBuilder dialogTemplate = new StringBuilder();
     dialogTemplate.append("<%\n");
@@ -170,14 +222,12 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
     dialogTemplate.append(" }\n");
     dialogTemplate.append(" String timestampName = getTimestampName();\n");
     dialogTemplate.append(" %>\n");
-
     
     dialogTemplate.append("<div class=\"UIForm FormLayout\">");
     dialogTemplate.append("  <% uiform.begin() %>");
     dialogTemplate.append("    <div class=\"HorizontalLayout\">");
     dialogTemplate.append("      <table class=\"UIFormGrid\">");
     
-//    UIFormGeneratorInputBean nameForm = forms.get(0);
     /* TODO : in WCM 1.2, we disable name and use a automatic timestamp name. 
      * We will offer the possibility to choose in WCM 1.3 
      * (show name, use timestamp, convert from another field like exo:title for example) 
@@ -265,7 +315,6 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
     	  dialogTemplate.append("          %>");
     	  dialogTemplate.append("        </td>");
     	  dialogTemplate.append("      </tr>");
-    	  
       }
       
       dialogTemplate.append("      <tr>");
@@ -307,6 +356,13 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
     return dialogTemplate.toString();
   }
   
+  /**
+   * Generate view template.
+   * 
+   * @param forms the forms
+   * 
+   * @return the string
+   */
   private String generateViewTemplate(List<UIFormGeneratorInputBean> forms) {
     StringBuilder viewTemplate = new StringBuilder();
     viewTemplate.append(" <% def currentNode = uicomponent.getNode() ; %>");
@@ -337,16 +393,27 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
     return viewTemplate.toString();
   }
   
+  /**
+   * The listener interface for receiving saveAction events.
+   * The class that is interested in processing a saveAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSaveActionListener<code> method. When
+   * the saveAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SaveActionEvent
+   */
   public static class SaveActionListener extends EventListener<UIFormGeneratorTabPane> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIFormGeneratorTabPane> event) throws Exception {
       UIFormGeneratorTabPane formGeneratorTabPane = event.getSource();
       UIFormInputSet formGeneratorGeneralTab = formGeneratorTabPane.getChildById(UIFormGeneratorConstant.FORM_GENERATOR_GENERAL_TAB);
       UIFormHiddenInput hiddenInputJSonObject = formGeneratorGeneralTab.getChildById(UIFormGeneratorConstant.JSON_OBJECT_FORM_GENERATOR);
       String jsonObjectGenerated = hiddenInputJSonObject.getValue();
-      
-      System.out.println("\n\n\n================================================\n\n\n");
-      System.out.println(jsonObjectGenerated);	
-      System.out.println("\n\n\n================================================\n\n\n");
       
       jsonObjectGenerated = jsonObjectGenerated.replaceAll("\n", "<br/>");
       
@@ -377,7 +444,22 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
     }
   }
   
+  /**
+   * The listener interface for receiving resetAction events.
+   * The class that is interested in processing a resetAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addResetActionListener<code> method. When
+   * the resetAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see ResetActionEvent
+   */
   public static class ResetActionListener extends EventListener<UIFormGeneratorTabPane> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIFormGeneratorTabPane> event) throws Exception {
       UIFormGeneratorTabPane formGeneratorTabPane = event.getSource();
       UIFormInputSet formGeneratorGeneralTab = formGeneratorTabPane.getChildById(UIFormGeneratorConstant.FORM_GENERATOR_GENERAL_TAB);
@@ -386,5 +468,4 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
       event.getRequestContext().addUIComponentToUpdateByAjax(formGeneratorTabPane);
     }
   }
-  
 }

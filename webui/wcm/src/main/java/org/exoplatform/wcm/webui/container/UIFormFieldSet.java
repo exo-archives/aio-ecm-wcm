@@ -24,24 +24,36 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.form.UIForm;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * Jun 26, 2009  
+ * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * Jun 26, 2009
  */
 public class UIFormFieldSet extends UIContainer {
 
+  /**
+   * Instantiates a new uI form field set.
+   * 
+   * @param name the name
+   */
   public UIFormFieldSet(String name) {
     setId(name) ;
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.core.UIComponent#processDecode(org.exoplatform.webui.application.WebuiRequestContext)
+   */
   public void processDecode(WebuiRequestContext context) throws Exception {
     for(UIComponent child : getChildren())  {
       child.processDecode(context) ;
     }
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.core.UIComponent#processRender(org.exoplatform.webui.application.WebuiRequestContext)
+   */
   public void processRender(WebuiRequestContext context) throws Exception {
     if (getComponentConfig() != null) {
       super.processRender(context);
@@ -75,5 +87,4 @@ public class UIFormFieldSet extends UIContainer {
     writer.write("</fieldset>") ;
     writer.write("</div>") ;
   }
-  
 }

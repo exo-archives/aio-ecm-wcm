@@ -115,7 +115,6 @@ public class WCMPaginatedQueryResult extends PaginatedQueryResult {
     if (lifecycleName == null) return displayNode;
     PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(lifecycleName);
     HashMap<String, Object> context = new HashMap<String, Object>();
-//    context.put(WCMComposer.FILTER_MODE, queryCriteria.isLiveMode() ? WCMComposer.MODE_LIVE : WCMComposer.MODE_EDIT);
     /**
      * We will improve the search manager in WCM 1.3
      * Since then, we use Edit mode to search and display contents.
@@ -153,20 +152,12 @@ public class WCMPaginatedQueryResult extends PaginatedQueryResult {
         if (!displayNode.isNodeType("publication:simplePublication"))
           return null;
       }
-    } else {
-      /*if(queryCriteria.isSearchDocument()) {
-        if(!queryCriteria.isSearchWebContent()) {
-          if(displayNode.isNodeType("exo:webContent")) 
-            return null;
-        }
-      }*/
-      if(queryCriteria.isSearchWebpage()) {
+    } else if(queryCriteria.isSearchWebpage()) {
         if (queryCriteria.isSearchDocument()) {
           return displayNode;
         } else if (!displayNode.isNodeType("publication:webpagesPublication"))
           return null;
-      }      
-    }            
+    }      
     String[] contentTypes = queryCriteria.getContentTypes();
     if(contentTypes != null && contentTypes.length>0) {
       String primaryNodeType = displayNode.getPrimaryNodeType().getName();

@@ -175,5 +175,4 @@ public class UIPublicationComponentStatus extends UIForm {
       popupAction.setRendered(false);
     }
   }
-
 }

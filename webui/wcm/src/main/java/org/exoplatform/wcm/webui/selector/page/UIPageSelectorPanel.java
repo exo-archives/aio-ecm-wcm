@@ -30,11 +30,12 @@ import org.exoplatform.webui.core.UIPageIterator;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * Jun 30, 2009  
+ * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * Jun 30, 2009
  */
 @ComponentConfig(
     template = "classpath:groovy/wcm/webui/selector/page/UIPageSelectorPanel.gtmpl",
@@ -44,16 +45,27 @@ import org.exoplatform.webui.event.EventListener;
 )
 public class UIPageSelectorPanel extends UIContainer {
 
+  /** The Constant PAGE_SELECTOR_ITERATOR. */
   private static final String PAGE_SELECTOR_ITERATOR = "UIPageSelectorIterator";
 
+  /** The page iterator. */
   private UIPageIterator pageIterator;
   
+  /** The selected page. */
   private PageNode selectedPage;
   
+  /**
+   * Instantiates a new uI page selector panel.
+   * 
+   * @throws Exception the exception
+   */
   public UIPageSelectorPanel() throws Exception {
     pageIterator = addChild(UIPageIterator.class, null, PAGE_SELECTOR_ITERATOR);
   }
   
+  /**
+   * Update grid.
+   */
   public void updateGrid() {
     List<PageNode> children = null;
     if (selectedPage == null) {
@@ -69,28 +81,70 @@ public class UIPageSelectorPanel extends UIContainer {
     pageIterator.setPageList(pageList);
   }
   
+  /**
+   * Gets the selectable pages.
+   * 
+   * @return the selectable pages
+   * 
+   * @throws Exception the exception
+   */
   @SuppressWarnings("unchecked")
   public List getSelectablePages() throws Exception { 
     return pageIterator.getCurrentPageData(); 
   }
   
+  /**
+   * Gets the selected page.
+   * 
+   * @return the selected page
+   */
   public PageNode getSelectedPage() {
     return selectedPage;
   }
   
+  /**
+   * Sets the selected page.
+   * 
+   * @param selectedPage the new selected page
+   */
   public void setSelectedPage(PageNode selectedPage) {
     this.selectedPage = selectedPage;
   }
   
+  /**
+   * Gets the page iterator.
+   * 
+   * @return the page iterator
+   */
   public UIPageIterator getPageIterator() {
     return pageIterator;
   }
 
+  /**
+   * Sets the page iterator.
+   * 
+   * @param pageIterator the new page iterator
+   */
   public void setPageIterator(UIPageIterator pageIterator) {
     this.pageIterator = pageIterator;
   }
 
+  /**
+   * The listener interface for receiving selectAction events.
+   * The class that is interested in processing a selectAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSelectActionListener<code> method. When
+   * the selectAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SelectActionEvent
+   */
   public static class SelectActionListener extends EventListener<UIPageSelectorPanel> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIPageSelectorPanel> event) throws Exception {
       UIPageSelectorPanel pageSelectorPanel = event.getSource();
       String uri = event.getRequestContext().getRequestParameter(OBJECTID) ;
@@ -98,5 +152,4 @@ public class UIPageSelectorPanel extends UIContainer {
       ((UISelectable)pageSelector.getSourceComponent()).doSelect(pageSelector.getReturnFieldName(), uri);
     }
   }
-
 }

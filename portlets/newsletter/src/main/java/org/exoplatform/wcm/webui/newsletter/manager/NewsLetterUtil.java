@@ -20,12 +20,29 @@ import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class NewsLetterUtil.
+ */
 public class NewsLetterUtil {
+	
+	/**
+	 * Gets the portal name.
+	 * 
+	 * @return the portal name
+	 */
 	public static String getPortalName() {
 		UIPortal portal = Util.getUIPortal();
 		return portal.getName();  
 	}
 	
+	/**
+	 * Generate link.
+	 * 
+	 * @param url the url
+	 * 
+	 * @return the string
+	 */
 	public static String generateLink(String url){
     String link = url.replaceFirst("Subcribe", "ConfirmUserCode")
                       .replaceFirst("UINewsletterViewerForm", "UINewsletterViewerPortlet")

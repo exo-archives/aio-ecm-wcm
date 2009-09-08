@@ -101,9 +101,7 @@ public class NewsletterManageUserHandler {
     for(Value value : values){
       try {
         listString.add(value.getString());
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
+      } catch (Exception e) {}
     }
     return listString;
   }
@@ -126,27 +124,11 @@ public class NewsletterManageUserHandler {
         return convertValuesToArray(categoriesNode.getProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR).getValues());
       }
     } catch(Exception ex){
-      ex.printStackTrace();
+      log.error("getAllAdministrator() failed because of " + ex.getMessage());
     }
     sessionProvider.close();
     return new ArrayList<String>();
   }
-  
-  /*public List<String> getAllModerators(String portalName){
-      SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
-      if(sessionProvider == null) sessionProvider = SessionProviderFactory.createSystemProvider();
-    try{
-      ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      Session session = sessionProvider.getSession(workspace, manageableRepository);
-      Node categoriesNode = (Node) session.getItem(NewsletterConstant.generateCategoryPath(portalName));
-      if(categoriesNode.hasProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR))
-        return convertValuesToArray(categoriesNode.getProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR).getValues());
-    }catch(Exception ex){
-      ex.printStackTrace();
-    }
-    sessionProvider.close();
-    return new ArrayList<String>();
-  }*/
   
   /**
    * Adds the administrator.
@@ -221,7 +203,6 @@ public class NewsletterManageUserHandler {
       session.save();
     } catch (Exception e) {
       log.error("Add user " + userMail + " failed because of " + e.getMessage());
-      e.printStackTrace();
     }
     if(userNode == null){
       throw new Exception("Can not add new user");
@@ -269,7 +250,6 @@ public class NewsletterManageUserHandler {
                            !userNode.getProperty(NewsletterConstant.USER_PROPERTY_BANNED).getBoolean());
       session.save();
     } catch (Exception e) {
-    	e.printStackTrace();
       log.error("Ban/UnBan user " + userMail + " failed because of " + e.getMessage());
     }
     sessionProvider.close();
@@ -459,10 +439,9 @@ public class NewsletterManageUserHandler {
       sessionProvider.close();
       return false;
     } catch (Exception e) {
-      e.printStackTrace();
+      log.error("checkExistedEmail() failed because of " + e.getMessage());
     }
     sessionProvider.close();
     return false;
   }
-  
 }

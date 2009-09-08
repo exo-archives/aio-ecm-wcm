@@ -60,11 +60,12 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.ext.UIFormInputSetWithAction;
 
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * Jun 25, 2009  
+ * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * Jun 25, 2009
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
@@ -78,8 +79,14 @@ import org.exoplatform.webui.form.ext.UIFormInputSetWithAction;
 )
 public class UIFCCConfig extends UIForm implements UISelectable {
 
+  /** The saved location node. */
   private Node savedLocationNode;
   
+  /**
+   * Instantiates a new uIFCC config.
+   * 
+   * @throws Exception the exception
+   */
   public UIFCCConfig() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
 
@@ -125,6 +132,11 @@ public class UIFCCConfig extends UIForm implements UISelectable {
     setActions(new String[] {"Save"}) ;
   }
   
+  /**
+   * Inits the edit mode.
+   * 
+   * @throws Exception the exception
+   */
   public void initEditMode() throws Exception {
     PortletPreferences preferences = UIFCCUtils.getPortletPreferences();
     String preferenceRepository = preferences.getValue(UIFCCConstant.PREFERENCE_REPOSITORY, "") ;
@@ -173,6 +185,15 @@ public class UIFCCConfig extends UIForm implements UISelectable {
     getUIStringInput(UIFCCConstant.REDIRECT_PATH_FORM_STRING_INPUT).setValue(preferences.getValue(UIFCCConstant.PREFERENCE_REDIRECT_PATH, "")) ;
   }
   
+  /**
+   * Sets the template options.
+   * 
+   * @param nodePath the node path
+   * @param repositoryName the repository name
+   * @param workspaceName the workspace name
+   * 
+   * @throws Exception the exception
+   */
   private void setTemplateOptions(String nodePath, String repositoryName, String workspaceName) throws Exception {
     try {
       RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
@@ -252,15 +273,14 @@ public class UIFCCConfig extends UIForm implements UISelectable {
           defaultValue = options.get(0).getValue() ;
           uiSelectTemplate.setValue(defaultValue);
         } 
-      } catch(Exception e) {
-        e.printStackTrace() ;
-      }
+      } catch(Exception e) {}
       session.logout();
-    } catch(Exception ex) {
-      ex.printStackTrace() ;
-    }
+    } catch(Exception ex) {}
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.selector.UISelectable#doSelect(java.lang.String, java.lang.Object)
+   */
   public void doSelect(String selectField, Object value) {
     getUIStringInput(selectField).setValue(value.toString()) ;
     String repositoryName = getUIFormSelectBox(UIFCCConstant.REPOSITORY_FORM_SELECTBOX).getValue() ;
@@ -268,21 +288,44 @@ public class UIFCCConfig extends UIForm implements UISelectable {
     String savedLocationPath = value.toString();
     try {
       setTemplateOptions(savedLocationPath, repositoryName, workspaceName) ;
-    } catch(Exception ex) {
-      ex.printStackTrace() ;
-    }
+    } catch(Exception ex) {}
     Utils.closePopupWindow(this, UIFCCConstant.SELECTOR_POPUP_WINDOW);
   }
 
+  /**
+   * Gets the saved location node.
+   * 
+   * @return the saved location node
+   */
   public Node getSavedLocationNode() {
     return savedLocationNode;
   }
 
+  /**
+   * Sets the saved location node.
+   * 
+   * @param savedLocationNode the new saved location node
+   */
   public void setSavedLocationNode(Node savedLocationNode) {
     this.savedLocationNode = savedLocationNode;
   }
   
+  /**
+   * The listener interface for receiving selectPathAction events.
+   * The class that is interested in processing a selectPathAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSelectPathActionListener<code> method. When
+   * the selectPathAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SelectPathActionEvent
+   */
   static public class SelectPathActionListener extends EventListener<UIFCCConfig> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIFCCConfig> event) throws Exception {
       UIFCCConfig fastContentCreatorConfig = event.getSource() ;
       String repositoryName = fastContentCreatorConfig.getUIFormSelectBox(UIFCCConstant.REPOSITORY_FORM_SELECTBOX).getValue() ;
@@ -297,7 +340,22 @@ public class UIFCCConfig extends UIForm implements UISelectable {
     }
   }
   
+  /**
+   * The listener interface for receiving changeWorkspaceAction events.
+   * The class that is interested in processing a changeWorkspaceAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addChangeWorkspaceActionListener<code> method. When
+   * the changeWorkspaceAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see ChangeWorkspaceActionEvent
+   */
   static public class ChangeWorkspaceActionListener extends EventListener<UIFCCConfig> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIFCCConfig> event) throws Exception {
       UIFCCConfig fastContentCreatorConfig = event.getSource() ;
       fastContentCreatorConfig.getUIStringInput(UIFCCConstant.LOCATION_FORM_STRING_INPUT).setValue("/") ;
@@ -308,7 +366,22 @@ public class UIFCCConfig extends UIForm implements UISelectable {
     }
   }
   
+  /**
+   * The listener interface for receiving changeRepositoryAction events.
+   * The class that is interested in processing a changeRepositoryAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addChangeRepositoryActionListener<code> method. When
+   * the changeRepositoryAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see ChangeRepositoryActionEvent
+   */
   static public class ChangeRepositoryActionListener extends EventListener<UIFCCConfig> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIFCCConfig> event) throws Exception {
       UIFCCConfig fastContentCreatorConfig = event.getSource() ;
       RepositoryService repositoryService = fastContentCreatorConfig.getApplicationComponent(RepositoryService.class) ;
@@ -328,7 +401,22 @@ public class UIFCCConfig extends UIForm implements UISelectable {
     }
   }
   
+  /**
+   * The listener interface for receiving saveAction events.
+   * The class that is interested in processing a saveAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSaveActionListener<code> method. When
+   * the saveAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SaveActionEvent
+   */
   static public class SaveActionListener extends EventListener<UIFCCConfig> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIFCCConfig> event) throws Exception {
       UIFCCConfig fastContentCreatorConfig = event.getSource() ;
       UIApplication uiApp = fastContentCreatorConfig.getAncestorOfType(UIApplication.class) ;
@@ -364,5 +452,4 @@ public class UIFCCConfig extends UIForm implements UISelectable {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
     }
   }
-  
 }

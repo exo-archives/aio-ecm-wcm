@@ -82,7 +82,6 @@ public class JSFileHandler extends BaseWebSchemaHandler {
     return file.getPath().startsWith(jsFolder.getPath());       
   }    
   
-  @SuppressWarnings("unused")
   public void onCreateNode(Node file, SessionProvider sessionProvider) throws Exception {
     addMixin(file, "exo:jsFile") ;
     addMixin(file,"exo:owneable");

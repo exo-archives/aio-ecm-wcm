@@ -42,6 +42,7 @@ public class TestRESTImagesRendererService extends BaseWCMTestCase {
   /** The Constant WEB_CONTENT_NODE_NAME. */
   private static final String WEB_CONTENT_NODE_NAME = "webContent";
   
+  /** The Constant IMAGE_NODE_NAME. */
   private static final String IMAGE_NODE_NAME = "webContent";
   
   /* (non-Javadoc)
@@ -195,6 +196,8 @@ public class TestRESTImagesRendererService extends BaseWCMTestCase {
   /**
    * Gets the file images.
    * 
+   * @param file the file
+   * 
    * @return the file images
    * 
    * @throws Exception the exception
@@ -213,6 +216,7 @@ public class TestRESTImagesRendererService extends BaseWCMTestCase {
    * 
    * @param parentNode the parent node
    * @param file the file
+   * @param nodeName the node name
    * 
    * @return the node
    * 

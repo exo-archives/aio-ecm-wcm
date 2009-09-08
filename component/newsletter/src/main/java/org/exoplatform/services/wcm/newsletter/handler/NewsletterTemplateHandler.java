@@ -76,7 +76,10 @@ public class NewsletterTemplateHandler {
    * 
    * @return the templates
    */
-  public List<Node> getTemplates(String portalName, NewsletterCategoryConfig categoryConfig, SessionProvider sessionProvider) {
+  public List<Node> getTemplates(
+                                 String portalName,
+                                 NewsletterCategoryConfig categoryConfig,
+                                 SessionProvider sessionProvider) {
     log.info("Trying to get templates of category " + categoryConfig);
     if(sessionProvider ==  null) sessionProvider = SessionProviderFactory.createSystemProvider();
     try {
@@ -89,7 +92,6 @@ public class NewsletterTemplateHandler {
       while(defaultTemplates.hasNext()) {
         templates.add(defaultTemplates.nextNode());
       }
-      
       if (categoryConfig != null) {
         Node categoryTemplateFolder = (Node)session.getItem(NewsletterConstant.generateCategoryTemplateBasePath(portalName, categoryConfig.getName()));
         NodeIterator categoryTemplates = categoryTemplateFolder.getNodes();
@@ -97,12 +99,10 @@ public class NewsletterTemplateHandler {
           templates.add(categoryTemplates.nextNode());
         }
       }
-      
       this.templates = templates;
       sessionProvider.close();
       return templates;
     } catch (Exception e) {
-      e.printStackTrace();
       log.error("Get templates of category " + categoryConfig + " failed because of " + e.getMessage());
     }
     sessionProvider.close();
@@ -133,7 +133,6 @@ public class NewsletterTemplateHandler {
         }
       }
     } catch (Exception e) {
-      e.printStackTrace();
       log.error("Get dialog " + templateName + " failed because of " + e.getMessage());
     }
     return null;
@@ -173,5 +172,4 @@ public class NewsletterTemplateHandler {
     }
     sessionProvider.close();
   }
-  
 }

@@ -57,6 +57,7 @@ public class UINonEditable extends UIForm {
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
     public void execute(Event<UINonEditable> event) throws Exception {
+      @SuppressWarnings("unused")
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
     }
   }

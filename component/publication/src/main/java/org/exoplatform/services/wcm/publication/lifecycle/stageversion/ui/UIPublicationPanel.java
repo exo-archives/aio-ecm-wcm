@@ -392,7 +392,6 @@ public class UIPublicationPanel extends UIForm {
         publicationPlugin.changeState(currentNode,StageAndVersionPublicationConstant.DRAFT_STATE,context);
         publicationPanel.updatePanel();
       } catch (Exception e) {
-        e.printStackTrace();
         UIApplication uiApp = publicationPanel.getAncestorOfType(UIApplication.class);
         JCRExceptionManager.process(uiApp,e);
       }

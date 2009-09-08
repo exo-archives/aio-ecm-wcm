@@ -56,10 +56,6 @@ import org.w3c.dom.Element;
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Jul 11, 2008
  */
-
-/**
- * The Class PortalLinkConnector.
- */
 @URITemplate("/portalLinks/")
 public class PortalLinkConnector implements ResourceContainer {
 
@@ -120,8 +116,7 @@ public class PortalLinkConnector implements ResourceContainer {
     try {
       String userId = getCurrentUser();
       return buildReponse(currentFolder, command, userId); 
-    } catch (Exception e) {
-    }    
+    } catch (Exception e) {}    
     return Response.Builder.ok().build();
   }
 
@@ -344,5 +339,4 @@ public class PortalLinkConnector implements ResourceContainer {
     }
     return null;
   }
-
 }

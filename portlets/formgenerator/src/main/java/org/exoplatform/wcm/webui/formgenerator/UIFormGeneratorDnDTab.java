@@ -20,13 +20,13 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
-import org.exoplatform.webui.event.Event.Phase;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * Jun 23, 2009  
+ * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * Jun 23, 2009
  */
 @ComponentConfig(
     lifecycle = Lifecycle.class,
@@ -37,6 +37,8 @@ import org.exoplatform.webui.event.Event.Phase;
 )
 public class UIFormGeneratorDnDTab extends UIContainer {
 
+  /**
+   * Instantiates a new uI form generator dn d tab.
+   */
   public UIFormGeneratorDnDTab() {}
-  
 }

@@ -20,19 +20,24 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * Jun 22, 2009  
+ * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * Jun 22, 2009
  */
 @ComponentConfig(
     lifecycle = UIApplicationLifecycle.class
 )
 public class UIFormGeneratorPortlet extends UIPortletApplication {
 
+  /**
+   * Instantiates a new uI form generator portlet.
+   * 
+   * @throws Exception the exception
+   */
   public UIFormGeneratorPortlet() throws Exception {
     addChild(UIFormGeneratorTabPane.class, null, null);
   }
-  
 }

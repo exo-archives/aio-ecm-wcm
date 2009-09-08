@@ -7,14 +7,18 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInput;
 import org.exoplatform.webui.form.validator.Validator;
 
-
+// TODO: Auto-generated Javadoc
 /**
  * Author : TAN DUNG DANG
- *          dzungdev@gmail.com
- * Mar 30, 2009  
+ * dzungdev@gmail.com
+ * Mar 30, 2009
  */
 public class ImageSizeValidator implements Validator {
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.form.validator.Validator#validate(org.exoplatform.webui.form.UIFormInput)
+   */
+  @SuppressWarnings("unchecked")
   public void validate(UIFormInput uiInput) throws Exception {
     if (uiInput.getValue()==null || ((String)uiInput.getValue()).length()==0) return;
     UIComponent uiComponent = (UIComponent) uiInput ;
@@ -39,5 +43,4 @@ public class ImageSizeValidator implements Validator {
       throw new MessageException(new ApplicationMessage("NumberFormatValidator.msg.Invalid-number", args)) ;
     }
   }
-
 }

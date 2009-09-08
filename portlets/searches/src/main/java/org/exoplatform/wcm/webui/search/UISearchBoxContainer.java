@@ -23,13 +23,10 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
+// TODO: Auto-generated Javadoc
 /*
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Nov 10, 2008
- */
-
-/**
- * The Class UISearchBoxContainer.
  */
 @ComponentConfig(
 	lifecycle = Lifecycle.class, 
@@ -90,5 +87,4 @@ public class UISearchBoxContainer extends UIContainer {
 			context.setApplicationMode(PortletMode.EDIT);
 		}
 	}
-
 }

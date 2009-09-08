@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2003-2008 eXo Platform SAS.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation; either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see<http://www.gnu.org/licenses/>.
+ */
 package org.exoplatform.wcm.webui.wiki;
 
 import java.util.ArrayList;
@@ -46,10 +62,11 @@ import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.wysiwyg.UIFormWYSIWYGInput;
 
+// TODO: Auto-generated Javadoc
 /**
  * Author : TAN DUNG DANG
- *          dzungdev@gmail.com
- * Mar 4, 2009  
+ * dzungdev@gmail.com
+ * Mar 4, 2009
  */
 
 @ComponentConfig(
@@ -60,17 +77,31 @@ import org.exoplatform.webui.form.wysiwyg.UIFormWYSIWYGInput;
       @EventConfig(listeners = UIWikiContentForm.CancelActionListener.class)
     }
 )
-
 public class UIWikiContentForm extends UIForm {
 
+  /** The Constant NAME_CONTENT. */
   public static final String NAME_CONTENT = "Name";
+  
+  /** The Constant CONTENT. */
   public static final String CONTENT = "Content";
+  
+  /** The Constant TITLE. */
   public static final String TITLE = "Title";
 
+  /** The parent uri. */
   private String parentUri;
+  
+  /** The page uri. */
   private String pageUri;
+  
+  /** The page navigation. */
   private PageNavigation pageNavigation;
 
+  /**
+   * Instantiates a new uI wiki content form.
+   * 
+   * @throws Exception the exception
+   */
   public UIWikiContentForm() throws Exception {
     UIFormStringInput nameInput = new UIFormStringInput(NAME_CONTENT, "");
     addChild(nameInput);
@@ -81,6 +112,16 @@ public class UIWikiContentForm extends UIForm {
     addChild(uiWYSWYGInput);
   }
 
+  /**
+   * Creates the new page.
+   * 
+   * @param pageName the page name
+   * @param newNodeUUID the new node uuid
+   * 
+   * @return the string
+   * 
+   * @throws Exception the exception
+   */
   public String createNewPage(String pageName, String newNodeUUID) throws Exception {
     //Step 1 : create a UIPortlet
     UIPortal uiPortal = Util.getUIPortal(); 
@@ -113,6 +154,16 @@ public class UIWikiContentForm extends UIForm {
     return newPageNode.getUri();
   }
 
+  /**
+   * Creates the new page node.
+   * 
+   * @param parentPageNode the parent page node
+   * @param pageId the page id
+   * 
+   * @return the page node
+   * 
+   * @throws Exception the exception
+   */
   private PageNode createNewPageNode(PageNode parentPageNode, String pageId) throws Exception {
     PageNode newPageNode = null;
     if (getPageUri().indexOf("/") > 0) {
@@ -127,6 +178,16 @@ public class UIWikiContentForm extends UIForm {
     return newPageNode;
   }
 
+  /**
+   * Creates the scv portlet.
+   * 
+   * @param uiPortal the ui portal
+   * @param newNodeUUID the new node uuid
+   * 
+   * @return the uI portlet
+   * 
+   * @throws Exception the exception
+   */
   private UIPortlet createSCVPortlet(UIPortal uiPortal, String newNodeUUID) throws Exception {
     UIPortlet scvPortlet = new UIPortlet();
     scvPortlet.setShowInfoBar(false);
@@ -183,6 +244,16 @@ public class UIWikiContentForm extends UIForm {
     return scvPortlet;
   }
 
+  /**
+   * Adds the scv portlet into page.
+   * 
+   * @param scvPortlet the scv portlet
+   * @param uiPage the ui page
+   * @param page the page
+   * @param userPortalCfgService the user portal cfg service
+   * 
+   * @throws Exception the exception
+   */
   private void addSCVPortletIntoPage(UIPortlet scvPortlet, UIPage uiPage, 
       Page page,
       UserPortalConfigService userPortalCfgService) throws Exception {
@@ -194,6 +265,17 @@ public class UIWikiContentForm extends UIForm {
     PortalDataMapper.toUIPage(uiPage, page);
   }
 
+  /**
+   * Creates the new web content node.
+   * 
+   * @param webContentName the web content name
+   * @param title the title
+   * @param content the content
+   * 
+   * @return the node
+   * 
+   * @throws Exception the exception
+   */
   private Node createNewWebContentNode(String webContentName, String title, String content) throws Exception {
     String portalName = Util.getUIPortal().getName();
     LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
@@ -214,6 +296,17 @@ public class UIWikiContentForm extends UIForm {
     return webContentNode;
   }
 
+  /**
+   * Creates the new page node.
+   * 
+   * @param parentPageNode the parent page node
+   * @param newPageNodeName the new page node name
+   * @param pageID the page id
+   * 
+   * @return the page node
+   * 
+   * @throws Exception the exception
+   */
   private PageNode createNewPageNode(PageNode parentPageNode, String newPageNodeName, String pageID) throws Exception {
     PageNode newPageNode = new PageNode();
     newPageNode.setName(newPageNodeName);
@@ -235,7 +328,22 @@ public class UIWikiContentForm extends UIForm {
     return newPageNode;
   }
 
+  /**
+   * The listener interface for receiving saveAction events.
+   * The class that is interested in processing a saveAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSaveActionListener<code> method. When
+   * the saveAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SaveActionEvent
+   */
   public static class SaveActionListener extends EventListener<UIWikiContentForm> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIWikiContentForm> event) throws Exception {
       UIWikiContentForm uiWikiForm = event.getSource();
       PortletRequestContext pContext = (PortletRequestContext) event.getRequestContext();
@@ -254,6 +362,14 @@ public class UIWikiContentForm extends UIForm {
     }
   }
 
+  /**
+   * Gets the new node url.
+   * 
+   * @param reqWrapper the req wrapper
+   * @param newNodeUri the new node uri
+   * 
+   * @return the new node url
+   */
   private String getNewNodeURL(HttpServletRequestWrapper reqWrapper, 
       String newNodeUri) {
     String scheme = reqWrapper.getScheme();
@@ -266,6 +382,9 @@ public class UIWikiContentForm extends UIForm {
     return link;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.form.UIForm#processRender(org.exoplatform.webui.application.WebuiRequestContext)
+   */
   @Override
   public void processRender(WebuiRequestContext context) throws Exception {
     PortletRequestContext porletRequestContext = (PortletRequestContext) context;
@@ -290,32 +409,77 @@ public class UIWikiContentForm extends UIForm {
     super.processRender(context);
   }
 
+  /**
+   * The listener interface for receiving cancelAction events.
+   * The class that is interested in processing a cancelAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addCancelActionListener<code> method. When
+   * the cancelAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see CancelActionEvent
+   */
   public static class CancelActionListener extends EventListener<UIWikiContentForm> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIWikiContentForm> event) throws Exception {
       event.getRequestContext().getJavascriptManager().addJavascript("history.go(-1);");
     }
   }
 
+  /**
+   * Gets the page navigation.
+   * 
+   * @return the page navigation
+   */
   public PageNavigation getPageNavigation() {
     return pageNavigation;
   }
 
+  /**
+   * Sets the page navigation.
+   * 
+   * @param pageNavigation the new page navigation
+   */
   public void setPageNavigation(PageNavigation pageNavigation) {
     this.pageNavigation = pageNavigation;
   }
 
+  /**
+   * Gets the parent uri.
+   * 
+   * @return the parent uri
+   */
   public String getParentUri() {
     return parentUri;
   }
 
+  /**
+   * Sets the parent uri.
+   * 
+   * @param parentUri the new parent uri
+   */
   public void setParentUri(String parentUri) {
     this.parentUri = parentUri;
   }
 
+  /**
+   * Gets the page uri.
+   * 
+   * @return the page uri
+   */
   public String getPageUri() {
     return pageUri;
   }
 
+  /**
+   * Sets the page uri.
+   * 
+   * @param pageUri the new page uri
+   */
   public void setPageUri(String pageUri) {
     this.pageUri = pageUri;
   }

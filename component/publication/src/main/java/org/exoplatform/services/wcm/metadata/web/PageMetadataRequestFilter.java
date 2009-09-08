@@ -79,8 +79,7 @@ public class PageMetadataRequestFilter implements Filter {
       boolean check = checkAndSetMetadataIfRequestToPCVPortlet(req);      
       if(!check)
         setPortalMetadata(req);
-    } catch (Exception e) {      
-    } 
+    } catch (Exception e) {} 
     chain.doFilter(servletRequest,servletResponse);
   }  
 
@@ -93,11 +92,11 @@ public class PageMetadataRequestFilter implements Filter {
    */
   private void setPortalMetadata(HttpServletRequest req) throws Exception {
     String pathInfo = req.getPathInfo();
-    PageMetadataService metadataRegistry = getService(PageMetadataService.class);      
-    ThreadLocalSessionProviderService localSessionProviderService = getService(ThreadLocalSessionProviderService.class);
-    HashMap<String,String> metadata = metadataRegistry.getPortalMetadata(pathInfo,localSessionProviderService.getSessionProvider(null));
+    PageMetadataService metadataRegistry = getService(PageMetadataService.class);
+    ThreadLocalSessionProviderService threadLocalSessionProviderService = getService(ThreadLocalSessionProviderService.class);
+    HashMap<String,String> metadata = metadataRegistry.getPortalMetadata(pathInfo, threadLocalSessionProviderService.getSessionProvider(null));
     if(metadata != null) 
-      req.setAttribute(PortalRequestContext.REQUEST_METADATA,metadata);
+      req.setAttribute(PortalRequestContext.REQUEST_METADATA, metadata);
   }    
   
   /**

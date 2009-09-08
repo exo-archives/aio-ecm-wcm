@@ -29,7 +29,6 @@ import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
 import org.exoplatform.ecm.webui.tree.selectone.UISelectPathPanel;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -50,11 +49,12 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : DANG TAN DUNG
- *          dzungdev@gmail.com
- * Jan 7, 2009  
+ * dzungdev@gmail.com
+ * Jan 7, 2009
  */
 
 @ComponentConfig(
@@ -67,11 +67,23 @@ import org.exoplatform.webui.form.UIFormStringInput;
 
 public class UIDocumentSearch extends UIForm {
 
+  /** The Constant KEYWORD_INPUT. */
   private static final String KEYWORD_INPUT = "keyword".intern();
+  
+  /** The Constant SEARCH_TYPE_NAME. */
   private static final String SEARCH_TYPE_NAME = "By name".intern();
+  
+  /** The Constant SEARCH_TYPE_TEXT_FULL. */
   private static final String SEARCH_TYPE_TEXT_FULL = "By content".intern();
+  
+  /** The Constant SEARCH_TYPE. */
   private static final String SEARCH_TYPE = "searchtype".intern();
 
+  /**
+   * Instantiates a new uI document search.
+   * 
+   * @throws Exception the exception
+   */
   public UIDocumentSearch() throws Exception {
     UIFormStringInput uiFormStringInput = new UIFormStringInput(KEYWORD_INPUT, KEYWORD_INPUT, null);
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>();
@@ -82,12 +94,21 @@ public class UIDocumentSearch extends UIForm {
     addChild(uiFormSelectBox);
   }
 
+  /**
+   * Search full text.
+   * 
+   * @param currentNode the current node
+   * @param keyword the keyword
+   * 
+   * @return the wCM paginated query result
+   * 
+   * @throws Exception the exception
+   */
   private WCMPaginatedQueryResult searchFullText(Node currentNode,String keyword) throws Exception {
     QueryCriteria qCriteria = new QueryCriteria();
     qCriteria.setSearchDocument(true);
     qCriteria.setSearchWebContent(false);
     qCriteria.setSearchWebpage(false);
-//    qCriteria.setQueryPath(currentNode.getPath());
     qCriteria.setKeyword(keyword);
     SiteSearchService siteSearchService = getApplicationComponent(SiteSearchService.class);
     int pageSize = 10;
@@ -96,11 +117,22 @@ public class UIDocumentSearch extends UIForm {
     return wcmPaginatedQueryResult;
   }
 
+  /**
+   * Search dms by name.
+   * 
+   * @param currentNode the current node
+   * @param keyword the keyword
+   * @param workspace the workspace
+   * @param maRepository the ma repository
+   * 
+   * @return the paginated query result
+   * 
+   * @throws Exception the exception
+   */
   private PaginatedQueryResult searchDMSByName(Node currentNode, String keyword, String workspace, ManageableRepository maRepository) throws Exception {
     SessionProvider sessionProvider = Utils.getSessionProvider(this);
     Session session = sessionProvider.getSession(workspace, maRepository);
-    String sqlQuery = "SELECT * FROM nt:base " 
-      + "WHERE (";
+    String sqlQuery = "SELECT * FROM nt:base " + "WHERE (";
     String tempPrimaryType = "";
     List<String> documentTypes = getDocumentTypes(session);
     int count = 0;
@@ -128,6 +160,15 @@ public class UIDocumentSearch extends UIForm {
     return new PaginatedQueryResult(queryResult, pageSize);
   }
 
+  /**
+   * Gets the document types.
+   * 
+   * @param session the session
+   * 
+   * @return the document types
+   * 
+   * @throws Exception the exception
+   */
   private List<String> getDocumentTypes(Session session) throws Exception {
     List<String> webContentTypes = new ArrayList<String>(10);
     NodeTypeManager nodeTypeManager = session.getWorkspace().getNodeTypeManager();
@@ -142,7 +183,22 @@ public class UIDocumentSearch extends UIForm {
     return documentTypes;
   }
 
+  /**
+   * The listener interface for receiving searchDMSAction events.
+   * The class that is interested in processing a searchDMSAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSearchDMSActionListener<code> method. When
+   * the searchDMSAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SearchDMSActionEvent
+   */
   public static class SearchDMSActionListener extends EventListener<UIDocumentSearch> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIDocumentSearch> event) throws Exception {
       UIDocumentSearch uiDMSSearch = event.getSource();
       UIDocumentPathSelector uiDMSPathSelector = uiDMSSearch.getAncestorOfType(UIDocumentPathSelector.class);

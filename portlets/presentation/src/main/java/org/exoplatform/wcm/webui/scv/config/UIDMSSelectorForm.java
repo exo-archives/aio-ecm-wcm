@@ -127,6 +127,7 @@ public class UIDMSSelectorForm extends UIForm implements UISelectable{
    * 
    * @return true, if is only one publication plugin
    */
+  @SuppressWarnings("unused")
   private boolean isOnlyOnePublicationPlugin() {
     WCMPublicationService wcmService = getApplicationComponent(WCMPublicationService.class);
     Map<String,WebpagePublicationPlugin> publicationPluginMap = wcmService.getWebpagePublicationPlugins();
@@ -304,5 +305,4 @@ public class UIDMSSelectorForm extends UIForm implements UISelectable{
       event.getRequestContext().addUIComponentToUpdateByAjax(uiDMSSelectorForm.getParent());
     }
   }
-
 }

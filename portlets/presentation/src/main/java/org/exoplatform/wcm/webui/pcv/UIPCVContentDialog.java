@@ -53,6 +53,7 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : Anh Do Ngoc
@@ -165,9 +166,7 @@ public class UIPCVContentDialog extends UIDialogForm {
           homeNode.save();
           newNode = (Node) homeNode.getSession().getItem(addedPath);
           event.getRequestContext().setAttribute("nodePath", newNode.getPath());
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
+        } catch (Exception e) {}
       } catch (AccessControlException ace) {
         throw new AccessDeniedException(ace.getMessage());
       } catch (VersionException ve) {
@@ -238,17 +237,21 @@ public class UIPCVContentDialog extends UIDialogForm {
   }
   
   /**
-  * The listener interface for receiving fastPublishAction events.
-  * The class that is interested in processing a fastPublishAction
-  * event implements this interface, and the object created
-  * with that class is registered with a component using the
-  * component's <code>addFastPublishActionListener<code> method. When
-  * the cancelAction event occurs, that object's appropriate
-  * method is invoked.
-  * 
-  * @see FastPublishActionEvent
-  */
+   * The listener interface for receiving fastPublishAction events.
+   * The class that is interested in processing a fastPublishAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addFastPublishActionListener<code> method. When
+   * the cancelAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see FastPublishActionEvent
+   */
   public static class FastPublishActionListener extends EventListener<UIPCVContentDialog> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIPCVContentDialog> event) throws Exception {
       UIPCVContentDialog uiDocumentDialogForm = event.getSource();
       Node documentNode = uiDocumentDialogForm.getNode();
@@ -272,9 +275,7 @@ public class UIPCVContentDialog extends UIDialogForm {
           homeNode.save();
           newNode = (Node) homeNode.getSession().getItem(addedPath);
           event.getRequestContext().setAttribute("nodePath", newNode.getPath());
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
+        } catch (Exception e) {}
       } catch (AccessControlException ace) {
         throw new AccessDeniedException(ace.getMessage());
       } catch (VersionException ve) {
@@ -306,5 +307,4 @@ public class UIPCVContentDialog extends UIDialogForm {
       Utils.updatePortal(pContext);
     }
   }
-
 }

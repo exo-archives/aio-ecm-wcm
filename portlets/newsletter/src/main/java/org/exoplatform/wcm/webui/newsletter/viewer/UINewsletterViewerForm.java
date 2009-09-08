@@ -43,8 +43,9 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 
+// TODO: Auto-generated Javadoc
 /**
- * Created by The eXo Platform SAS Author : eXoPlatform
+ * Created by The eXo Platform SAS Author : Tran Nguyen Ngoc
  * ngoc.tran@exoplatform.com May 25, 2009
  */
 @ComponentConfig(
@@ -56,19 +57,48 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
         @EventConfig(listeners = UINewsletterViewerForm.ChangeSubcriptionsActionListener.class) }
 )
 public class UINewsletterViewerForm extends UIForm {
+  
+  /** The user code. */
   public String userCode;
+  
+  /** The input email. */
   public UIFormStringInput inputEmail;
+  
+  /** The user mail. */
   public String userMail = "";
+  
+  /** The is updated. */
   public boolean isUpdated = false;
+  
+  /** The subcription handler. */
   public NewsletterSubscriptionHandler subcriptionHandler ;
+  
+  /** The public user handler. */
   public NewsletterPublicUserHandler publicUserHandler ;
+  
+  /** The check box input. */
   private UIFormCheckBoxInput<Boolean> checkBoxInput;
+  
+  /** The category handler. */
   private NewsletterCategoryHandler categoryHandler ;
+  
+  /** The manager user handler. */
   private NewsletterManageUserHandler managerUserHandler ;
+  
+  /** The newsletter manager service. */
   private NewsletterManagerService newsletterManagerService;
+  
+  /** The link to send mail. */
   private String linkToSendMail;
+  
+  /** The list ids. */
   private List<String> listIds;
 
+  /**
+   * Instantiates a new uI newsletter viewer form.
+   * 
+   * @throws Exception the exception
+   */
   public UINewsletterViewerForm() throws Exception {
     newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
     categoryHandler = newsletterManagerService.getCategoryHandler();
@@ -82,10 +112,23 @@ public class UINewsletterViewerForm extends UIForm {
     this.addChild(inputEmail);
   }
   
+  /**
+   * Sets the list ids.
+   * 
+   * @param listIds the new list ids
+   */
   public void setListIds(List<String> listIds){
     this.listIds = listIds;
   }
   
+  /**
+   * Inits the.
+   * 
+   * @param listNewsletterSubcription the list newsletter subcription
+   * @param categoryName the category name
+   * 
+   * @throws Exception the exception
+   */
   public void init(List<NewsletterSubscriptionConfig> listNewsletterSubcription, String categoryName) throws Exception {
     if(userCode != null && userCode.trim().length() > 0){ // run when confirm user code
       String subcriptionPattern;
@@ -110,18 +153,32 @@ public class UINewsletterViewerForm extends UIForm {
     }
   }
   
+  /**
+   * Sets the infor confirm.
+   * 
+   * @param userEmail the user email
+   * @param userCode the user code
+   */
   public void setInforConfirm(String userEmail, String userCode){
     this.userMail = userEmail;
     this.userCode = userCode;
   }
   
+  /**
+   * Sets the action again.
+   */
   @SuppressWarnings("unused")
   private void setActionAgain(){
     this.setActions(new String[] { "ForgetEmail", "ChangeSubcriptions" });
     this.isUpdated = true;
   }
   
-  @SuppressWarnings({ "unused", "unchecked" })
+  /**
+   * List subscription checked.
+   * 
+   * @return the list< string>
+   */
+  @SuppressWarnings({ "unchecked" })
   private List<String> listSubscriptionChecked(){
     List<String> listSubscription = new ArrayList<String>();
     for(UIComponent component : this.getChildren()){
@@ -133,36 +190,65 @@ public class UINewsletterViewerForm extends UIForm {
     return listSubscription;
   }
 
+  /**
+   * Gets the list categories.
+   * 
+   * @return the list categories
+   */
   @SuppressWarnings("unused")
   private List<NewsletterCategoryConfig> getListCategories() {
     try {
       return categoryHandler.getListCategories(NewsLetterUtil.getPortalName(), Utils.getSessionProvider(this));
     } catch (Exception e) {
-
       return new ArrayList<NewsletterCategoryConfig>();
     }
   }
 
+  /**
+   * Gets the list subscription.
+   * 
+   * @param categoryName the category name
+   * 
+   * @return the list subscription
+   */
   @SuppressWarnings("unused")
   private List<NewsletterSubscriptionConfig> getListSubscription(String categoryName) {
     try {
       List<NewsletterSubscriptionConfig> listSubscription = 
                                           subcriptionHandler.getSubscriptionsByCategory(NewsLetterUtil.getPortalName(), categoryName, Utils.getSessionProvider(this));
       this.init(listSubscription, categoryName);
-
       return listSubscription;
     } catch (Exception e) {
-      e.printStackTrace();
       return new ArrayList<NewsletterSubscriptionConfig>();
     }
   }
   
+  /**
+   * Sets the link.
+   * 
+   * @param url the new link
+   */
   @SuppressWarnings("unused")
   private void setLink(String url){
     this.linkToSendMail = NewsLetterUtil.generateLink(url);
   }
 
+  /**
+   * The listener interface for receiving forgetEmailAction events.
+   * The class that is interested in processing a forgetEmailAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addForgetEmailActionListener<code> method. When
+   * the forgetEmailAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see ForgetEmailActionEvent
+   */
   public static class ForgetEmailActionListener extends EventListener<UINewsletterViewerForm> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UINewsletterViewerForm> event) throws Exception {
       UINewsletterViewerForm newsletterForm = event.getSource();
       newsletterForm.publicUserHandler.forgetEmail(NewsLetterUtil.getPortalName(), newsletterForm.userMail, Utils.getSessionProvider(newsletterForm));
@@ -176,7 +262,22 @@ public class UINewsletterViewerForm extends UIForm {
     }
   }
 
+  /**
+   * The listener interface for receiving changeSubcriptionsAction events.
+   * The class that is interested in processing a changeSubcriptionsAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addChangeSubcriptionsActionListener<code> method. When
+   * the changeSubcriptionsAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see ChangeSubcriptionsActionEvent
+   */
   public static class ChangeSubcriptionsActionListener extends EventListener<UINewsletterViewerForm> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UINewsletterViewerForm> event) throws Exception {
       UINewsletterViewerForm newsletterForm = event.getSource();
       List<String> listSubcriptionPattern = new ArrayList<String>();
@@ -196,7 +297,22 @@ public class UINewsletterViewerForm extends UIForm {
     }
   }
 
+  /**
+   * The listener interface for receiving subcribeAction events.
+   * The class that is interested in processing a subcribeAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSubcribeActionListener<code> method. When
+   * the subcribeAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SubcribeActionEvent
+   */
   public static class SubcribeActionListener extends EventListener<UINewsletterViewerForm> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UINewsletterViewerForm> event) throws Exception {
       UINewsletterViewerForm newsletterForm = event.getSource();
       String portalName = NewsLetterUtil.getPortalName();

@@ -32,11 +32,11 @@ import org.exoplatform.webui.organization.account.UIUserSelector;
  * dzungdev@gmail.com
  * Dec 10, 2008
  */
+@SuppressWarnings("deprecation")
 @ComponentConfig(
     lifecycle = UIContainerLifecycle.class,
     events = {@EventConfig(listeners = UIWCMUserContainer.AddUserActionListener.class)}
 )
-
 public class UIWCMUserContainer extends UIContainer implements UIPopupComponent  {
 
   /**

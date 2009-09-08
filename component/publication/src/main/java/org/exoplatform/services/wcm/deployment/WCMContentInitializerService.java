@@ -112,5 +112,4 @@ public class WCMContentInitializerService implements Startable{
    * @see org.picocontainer.Startable#stop()
    */
   public void stop() {}
-  
 }

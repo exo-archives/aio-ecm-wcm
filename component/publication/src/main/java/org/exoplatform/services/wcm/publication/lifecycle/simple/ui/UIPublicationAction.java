@@ -45,9 +45,7 @@ public class UIPublicationAction extends UIForm {
    * 
    * @throws Exception the exception
    */
-  private void updateUI() throws Exception {
-    
-  }
+  private void updateUI() throws Exception {}
   
   /**
    * The listener interface for receiving addAction events.

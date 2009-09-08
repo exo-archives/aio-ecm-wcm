@@ -22,18 +22,23 @@ import javax.portlet.PortletRequest;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * Jun 29, 2009  
+ * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * Jun 29, 2009
  */
 public class UICategoryNavigationUtils {
 
+  /**
+   * Gets the portlet preferences.
+   * 
+   * @return the portlet preferences
+   */
   public static PortletPreferences getPortletPreferences() {
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     PortletRequest request = portletRequestContext.getRequest();
     return request.getPreferences();
   }
-  
 }

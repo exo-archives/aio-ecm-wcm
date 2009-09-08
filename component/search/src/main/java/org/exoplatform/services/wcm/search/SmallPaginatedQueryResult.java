@@ -72,13 +72,13 @@ public class SmallPaginatedQueryResult extends WCMPaginatedQueryResult{
     }
     setPageSize(pageSize);
     setAvailablePage(arrayList.size());    
-    
     getAvailablePage();
   }
 
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.utils.PaginatedNodeIterator#getPage(int)
    */
+  @SuppressWarnings("unchecked")
   public List getPage(int page) throws Exception {
     checkAndSetPage(page);
     populateCurrentPage(page);

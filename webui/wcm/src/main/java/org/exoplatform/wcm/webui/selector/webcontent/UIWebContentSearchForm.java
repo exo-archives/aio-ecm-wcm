@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
@@ -43,13 +42,13 @@ import org.exoplatform.webui.form.UIFormDateTimeInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : DANG TAN DUNG
- *          dzungdev@gmail.com
- * Jan 5, 2009  
+ * dzungdev@gmail.com
+ * Jan 5, 2009
  */
-
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
     template = "classpath:groovy/wcm/webui/UIWebContentSearchForm.gtmpl",
@@ -59,34 +58,81 @@ import org.exoplatform.webui.form.UIFormStringInput;
       @EventConfig(listeners = UIWebContentSearchForm.AddNodeTypeActionListener.class)
     }
 )
-
 public class UIWebContentSearchForm extends UIForm {
 
+  /** The Constant LOCATION. */
   public static final String LOCATION = "location".intern();
+  
+  /** The Constant SEARCH_BY_NAME. */
   public static final String SEARCH_BY_NAME = "name".intern();
+  
+  /** The Constant SEARCH_BY_CONTENT. */
   public static final String SEARCH_BY_CONTENT = "content".intern();
+  
+  /** The Constant RADIO_NAME. */
   public static final String RADIO_NAME = "WcmRadio".intern();
+  
+  /** The Constant TIME_OPTION. */
   final static public String TIME_OPTION = "timeOpt";
+  
+  /** The Constant PROPERTY. */
   final static public String PROPERTY = "property";  
+  
+  /** The Constant CONTAIN. */
   final static public String CONTAIN = "contain";
+  
+  /** The Constant START_TIME. */
   final static public String START_TIME = "startTime";
+  
+  /** The Constant END_TIME. */
   final static public String END_TIME = "endTime";
+  
+  /** The Constant DOC_TYPE. */
   final static public String DOC_TYPE = "docType";
+  
+  /** The Constant CATEGORY. */
   final static public String CATEGORY = "category";
+  
+  /** The Constant CREATED_DATE. */
   final static public String CREATED_DATE = "CREATED";
+  
+  /** The Constant MODIFIED_DATE. */
   final static public String MODIFIED_DATE = "MODIFIED";
+  
+  /** The Constant EXACTLY_PROPERTY. */
   final static public String EXACTLY_PROPERTY = "exactlyPro";
+  
+  /** The Constant CONTAIN_PROPERTY. */
   final static public String CONTAIN_PROPERTY = "containPro";
+  
+  /** The Constant NOT_CONTAIN_PROPERTY. */
   final static public String NOT_CONTAIN_PROPERTY = "notContainPro";
+  
+  /** The Constant DATE_PROPERTY. */
   final static public String DATE_PROPERTY = "datePro";
+  
+  /** The Constant NODETYPE_PROPERTY. */
   final static public String NODETYPE_PROPERTY = "nodetypePro";
+  
+  /** The Constant CHECKED_RADIO_ID. */
   final static public String CHECKED_RADIO_ID = "checkedRadioId".intern();
 
+  /** The checked radio id. */
   private String checkedRadioId;
 
+  /**
+   * Instantiates a new uI web content search form.
+   * 
+   * @throws Exception the exception
+   */
   public UIWebContentSearchForm() throws Exception {
   }
 
+  /**
+   * Inits the.
+   * 
+   * @throws Exception the exception
+   */
   public void init() throws Exception {
     List<SelectItemOption<String>> portalNameOptions = new ArrayList<SelectItemOption<String>>();
     List<String> portalNames = getPortalNames();
@@ -112,11 +158,17 @@ public class UIWebContentSearchForm extends UIForm {
     UIFormDateTimeInput endTime = new UIFormDateTimeInput(END_TIME, END_TIME, null, true);
     addUIFormInput(endTime);
     addUIFormInput(new UIFormStringInput(DOC_TYPE, DOC_TYPE, null));
-//  addUIFormInput(new UIFormStringInput(CATEGORY, CATEGORY, null));
 
     setActions(new String[] {"SearchWebContent"} );
   }
 
+  /**
+   * Gets the portal names.
+   * 
+   * @return the portal names
+   * 
+   * @throws Exception the exception
+   */
   private List<String> getPortalNames() throws Exception {
     List<String> portalNames = new ArrayList<String>();
     String currentPortalName = org.exoplatform.portal.webui.util.Util.getUIPortal().getName();
@@ -129,7 +181,22 @@ public class UIWebContentSearchForm extends UIForm {
     return portalNames;
   }
 
+  /**
+   * The listener interface for receiving addMetadataTypeAction events.
+   * The class that is interested in processing a addMetadataTypeAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addAddMetadataTypeActionListener<code> method. When
+   * the addMetadataTypeAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see AddMetadataTypeActionEvent
+   */
   public static class AddMetadataTypeActionListener extends EventListener<UIWebContentSearchForm> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIWebContentSearchForm> event) throws Exception {
       UIWebContentSearchForm uiWCSearchForm = event.getSource();
       UIWebContentTabSelector uiWCTabSelector = uiWCSearchForm.getParent();
@@ -139,7 +206,22 @@ public class UIWebContentSearchForm extends UIForm {
     }
   }
 
+  /**
+   * The listener interface for receiving addNodeTypeAction events.
+   * The class that is interested in processing a addNodeTypeAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addAddNodeTypeActionListener<code> method. When
+   * the addNodeTypeAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see AddNodeTypeActionEvent
+   */
   public static class AddNodeTypeActionListener extends EventListener<UIWebContentSearchForm> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIWebContentSearchForm> event) throws Exception {
       UIWebContentSearchForm uiWCSearchForm = event.getSource();
       UIWebContentTabSelector uiWCTabSelector = uiWCSearchForm.getParent();
@@ -149,6 +231,17 @@ public class UIWebContentSearchForm extends UIForm {
     }    
   } 
 
+  /**
+   * Search web content by name.
+   * 
+   * @param keyword the keyword
+   * @param qCriteria the q criteria
+   * @param pageSize the page size
+   * 
+   * @return the paginated query result
+   * 
+   * @throws Exception the exception
+   */
   private PaginatedQueryResult searchWebContentByName(String keyword, QueryCriteria qCriteria, int pageSize) throws Exception {
     qCriteria.setFulltextSearch(false);
     qCriteria.setKeyword(keyword);
@@ -159,6 +252,17 @@ public class UIWebContentSearchForm extends UIForm {
     return paginatedQueryResult;
   }
 
+  /**
+   * Search web content by fulltext.
+   * 
+   * @param keyword the keyword
+   * @param qCriteria the q criteria
+   * @param pageSize the page size
+   * 
+   * @return the paginated query result
+   * 
+   * @throws Exception the exception
+   */
   private PaginatedQueryResult searchWebContentByFulltext(String keyword, QueryCriteria qCriteria, int pageSize) throws Exception {
     qCriteria.setFulltextSearch(true);
     qCriteria.setFulltextSearchProperty(QueryCriteria.ALL_PROPERTY_SCOPE);
@@ -170,6 +274,18 @@ public class UIWebContentSearchForm extends UIForm {
     return paginatedQueryResult;
   }
 
+  /**
+   * Search web content by property.
+   * 
+   * @param property the property
+   * @param keyword the keyword
+   * @param qCriteria the q criteria
+   * @param pageSize the page size
+   * 
+   * @return the paginated query result
+   * 
+   * @throws Exception the exception
+   */
   private PaginatedQueryResult searchWebContentByProperty(String property, String keyword, QueryCriteria qCriteria, int pageSize) throws Exception {
     qCriteria.setFulltextSearch(true);
     qCriteria.setFulltextSearchProperty(property);
@@ -181,6 +297,19 @@ public class UIWebContentSearchForm extends UIForm {
     return paginatedQueryResult;
   }
 
+  /**
+   * Search web content by date.
+   * 
+   * @param dateRangeSelected the date range selected
+   * @param fromDate the from date
+   * @param endDate the end date
+   * @param qCriteria the q criteria
+   * @param pageSize the page size
+   * 
+   * @return the paginated query result
+   * 
+   * @throws Exception the exception
+   */
   private PaginatedQueryResult searchWebContentByDate(DATE_RANGE_SELECTED dateRangeSelected, 
       Calendar fromDate, Calendar endDate, QueryCriteria qCriteria, int pageSize) throws Exception {
     qCriteria.setDateRangeSelected(dateRangeSelected);
@@ -199,6 +328,17 @@ public class UIWebContentSearchForm extends UIForm {
     return paginatedQueryResult;
   }
 
+  /**
+   * Search web content by document type.
+   * 
+   * @param documentType the document type
+   * @param qCriteria the q criteria
+   * @param pageSize the page size
+   * 
+   * @return the paginated query result
+   * 
+   * @throws Exception the exception
+   */
   private PaginatedQueryResult searchWebContentByDocumentType(String documentType, 
       QueryCriteria qCriteria, int pageSize) throws Exception {
     qCriteria.setFulltextSearch(true);
@@ -211,6 +351,13 @@ public class UIWebContentSearchForm extends UIForm {
     return paginatedQueryResult;
   }
 
+  /**
+   * Gets the initial query criteria.
+   * 
+   * @param siteName the site name
+   * 
+   * @return the initial query criteria
+   */
   private QueryCriteria getInitialQueryCriteria(String siteName) {
     QueryCriteria qCriteria = new QueryCriteria();
     qCriteria.setSearchDocument(false);
@@ -221,6 +368,17 @@ public class UIWebContentSearchForm extends UIForm {
     return qCriteria;
   }
 
+  /**
+   * Have empty field.
+   * 
+   * @param uiApp the ui app
+   * @param event the event
+   * @param fields the fields
+   * 
+   * @return true, if successful
+   * 
+   * @throws Exception the exception
+   */
   private boolean haveEmptyField(UIApplication uiApp, Event<UIWebContentSearchForm> event, Object... fields) throws Exception {
     for(Object field : fields) {
       if(field == null) {
@@ -233,7 +391,22 @@ public class UIWebContentSearchForm extends UIForm {
     return false;
   }
 
+  /**
+   * The listener interface for receiving searchWebContentAction events.
+   * The class that is interested in processing a searchWebContentAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSearchWebContentActionListener<code> method. When
+   * the searchWebContentAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SearchWebContentActionEvent
+   */
   static public class SearchWebContentActionListener extends EventListener<UIWebContentSearchForm> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIWebContentSearchForm> event) throws Exception {
       UIWebContentSearchForm uiWCSearch = event.getSource();
       String radioValue = event.getRequestContext().getRequestParameter(RADIO_NAME);
@@ -286,10 +459,20 @@ public class UIWebContentSearchForm extends UIForm {
     }
   }
 
+  /**
+   * Gets the checked radio id.
+   * 
+   * @return the checked radio id
+   */
   public String getCheckedRadioId() {
     return checkedRadioId;
   }
 
+  /**
+   * Sets the checked radio id.
+   * 
+   * @param checkedRadioId the new checked radio id
+   */
   public void setCheckedRadioId(String checkedRadioId) {
     this.checkedRadioId = checkedRadioId;
   }

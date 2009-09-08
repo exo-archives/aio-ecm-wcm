@@ -51,5 +51,4 @@ public class UpdatePageEventListener extends Listener<UserPortalConfigService, P
       log.error("Exception when update publication lifecyle", e);
     }       
   }
-
 }

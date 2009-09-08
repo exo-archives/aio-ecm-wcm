@@ -49,28 +49,45 @@ import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong_phan@exoplatform.com
- * Jan 21, 2009  
+ * chuong_phan@exoplatform.com
+ * Jan 21, 2009
  */
-
 @URITemplate("/wcmGadget/")
 public class GadgetConnector implements ResourceContainer {
   
+  /** The Constant FCK_RESOURCE_BUNDLE_FILE. */
   public static final String FCK_RESOURCE_BUNDLE_FILE   = "locale.services.fckeditor.FCKConnector".intern();
   
+  /** The application registry service. */
   private ApplicationRegistryService applicationRegistryService;
+  
+  /** The gadget registry service. */
   private GadgetRegistryService gadgetRegistryService;
+  
+  /** The internal server path. */
   private String internalServerPath;
   
+  /**
+   * Instantiates a new gadget connector.
+   * 
+   * @param container the container
+   * @param initParams the init params
+   */
   public GadgetConnector(ExoContainer container, InitParams initParams) {
     applicationRegistryService = (ApplicationRegistryService)container.getComponentInstanceOfType(ApplicationRegistryService.class);
     gadgetRegistryService = (GadgetRegistryService) container.getComponentInstanceOfType(GadgetRegistryService.class) ;
     readServerConfig(initParams);
   }
   
+  /**
+   * Read server config.
+   * 
+   * @param initParams the init params
+   */
   private void readServerConfig(InitParams initParams) {
     PropertiesParam propertiesParam = initParams.getPropertiesParam("server.config");
     String scheme = propertiesParam.getProperty("scheme");
@@ -81,6 +98,16 @@ public class GadgetConnector implements ResourceContainer {
     internalServerPath = builder.toString();
   }
   
+  /**
+   * Gets the folders and files.
+   * 
+   * @param currentFolder the current folder
+   * @param language the language
+   * 
+   * @return the folders and files
+   * 
+   * @throws Exception the exception
+   */
   @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/getFoldersAndFiles/")
   @OutputTransformer(XMLOutputTransformer.class)
@@ -94,6 +121,16 @@ public class GadgetConnector implements ResourceContainer {
     return Response.Builder.ok().build();
   }
   
+  /**
+   * Builds the xml response.
+   * 
+   * @param currentFolder the current folder
+   * @param language the language
+   * 
+   * @return the response
+   * 
+   * @throws Exception the exception
+   */
   public Response buildXMLResponse(String currentFolder, String language) throws Exception {
     List<ApplicationCategory> applicationCategories = getGadgetCategories();
     Element rootElement = createRootElement(currentFolder, applicationCategories, language);
@@ -103,6 +140,17 @@ public class GadgetConnector implements ResourceContainer {
     return Response.Builder.ok(document).mediaType("text/xml").cacheControl(cacheControl).build();
   }
   
+  /**
+   * Creates the root element.
+   * 
+   * @param currentFolder the current folder
+   * @param applicationCategories the application categories
+   * @param language the language
+   * 
+   * @return the element
+   * 
+   * @throws Exception the exception
+   */
   private Element createRootElement(String currentFolder, List<ApplicationCategory> applicationCategories, String language) throws Exception {
     Document document = null;
     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -142,6 +190,16 @@ public class GadgetConnector implements ResourceContainer {
     }
   }
   
+  /**
+   * Creates the folder element.
+   * 
+   * @param document the document
+   * @param applicationCategories the application categories
+   * 
+   * @return the element
+   * 
+   * @throws Exception the exception
+   */
   private Element createFolderElement(Document document, List<ApplicationCategory> applicationCategories) throws Exception {
     Element folders = document.createElement("Folders");
     for (ApplicationCategory applicationCategory : applicationCategories) {
@@ -152,6 +210,16 @@ public class GadgetConnector implements ResourceContainer {
     return folders;
   }
   
+  /**
+   * Creates the file element.
+   * 
+   * @param document the document
+   * @param applicationCategory the application category
+   * 
+   * @return the element
+   * 
+   * @throws Exception the exception
+   */
   private Element createFileElement(Document document, ApplicationCategory applicationCategory) throws Exception {
     Element files = document.createElement("Files");
     List<Application> listApplication = applicationRegistryService.getApplications(applicationCategory, org.exoplatform.web.application.Application.EXO_GAGGET_TYPE);
@@ -188,6 +256,13 @@ public class GadgetConnector implements ResourceContainer {
     return files;
   }
   
+  /**
+   * Gets the gadget categories.
+   * 
+   * @return the gadget categories
+   * 
+   * @throws Exception the exception
+   */
   private List<ApplicationCategory> getGadgetCategories() throws Exception {
     List<ApplicationCategory> applicationCategories = applicationRegistryService.getApplicationCategories();
     List<ApplicationCategory> gadgetCategories = new ArrayList<ApplicationCategory>();

@@ -27,16 +27,21 @@ import org.exoplatform.services.wcm.core.NodetypeConstant;
 import org.exoplatform.services.wcm.link.LinkBean;
 import org.exoplatform.services.wcm.link.LiveLinkManagerService;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * Jul 22, 2009  
+ * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * Jul 22, 2009
  */
 public class TestLiveLinkManagerService extends BaseWCMTestCase {
 
+  /** The live link manager service. */
   private LiveLinkManagerService liveLinkManagerService;
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.BaseWCMTestCase#setUp()
+   */
   public void setUp() throws Exception {
     super.setUp();
     liveLinkManagerService = getService(LiveLinkManagerService.class);
@@ -44,6 +49,11 @@ public class TestLiveLinkManagerService extends BaseWCMTestCase {
     createWebcontentNode(folder, "webcontent", "This is the live link: <a href='http://www.google.com'>Goolge</a> and this is the broken link: <a href='http://www.thiscannotbeanactivelink.com'>Broken</a>", null, null);
   }
   
+  /**
+   * Test update links.
+   * 
+   * @throws Exception the exception
+   */
   public void testUpdateLinks() throws Exception {
     liveLinkManagerService.updateLinks();
     Node result = (Node) session.getItem("/sites content/live/classic/web contents/webcontent");
@@ -53,6 +63,11 @@ public class TestLiveLinkManagerService extends BaseWCMTestCase {
     assertEquals("status=broken@url=http://www.thiscannotbeanactivelink.com", values[1].getString());
   }
   
+  /**
+   * Test validate link with portal name.
+   * 
+   * @throws Exception the exception
+   */
   public void testValidateLinkWithPortalName() throws Exception {
     liveLinkManagerService.updateLinks("classic");
     Node result = (Node) session.getItem("/sites content/live/classic/web contents/webcontent");
@@ -62,6 +77,11 @@ public class TestLiveLinkManagerService extends BaseWCMTestCase {
     assertEquals("status=broken@url=http://www.thiscannotbeanactivelink.com", values[1].getString());
   }
   
+  /**
+   * Test get broken links by portal name.
+   * 
+   * @throws Exception the exception
+   */
   public void testGetBrokenLinksByPortalName() throws Exception {
     liveLinkManagerService.updateLinks("classic");
     List<LinkBean> linkBeans = liveLinkManagerService.getBrokenLinks("classic");
@@ -70,6 +90,11 @@ public class TestLiveLinkManagerService extends BaseWCMTestCase {
     assertEquals("broken", linkBeans.get(0).getStatus());
   }
   
+  /**
+   * Test get broken links by webcontent.
+   * 
+   * @throws Exception the exception
+   */
   public void testGetBrokenLinksByWebcontent() throws Exception {
     liveLinkManagerService.updateLinks("classic");
     Node result = (Node) session.getItem("/sites content/live/classic/web contents/webcontent");
@@ -78,6 +103,11 @@ public class TestLiveLinkManagerService extends BaseWCMTestCase {
     assertEquals("http://www.thiscannotbeanactivelink.com", links.get(0));
   }
 
+  /**
+   * Test extract links.
+   * 
+   * @throws Exception the exception
+   */
   public void testExtractLinks() throws Exception {
     Node result = (Node) session.getItem("/sites content/live/classic/web contents/webcontent");
     Node htmlFile = result.getNode("default.html");
@@ -87,6 +117,11 @@ public class TestLiveLinkManagerService extends BaseWCMTestCase {
     assertEquals("http://www.thiscannotbeanactivelink.com", links.get(1));
   }
   
+  /**
+   * Test update link data for node.
+   * 
+   * @throws Exception the exception
+   */
   public void testUpdateLinkDataForNode() throws Exception {
     liveLinkManagerService.updateLinks("classic");
     Node result = (Node) session.getItem("/sites content/live/classic/web contents/webcontent");
@@ -99,6 +134,9 @@ public class TestLiveLinkManagerService extends BaseWCMTestCase {
     assertEquals("status=unchecked@url=http://www.mozilla.com", values[0].getString());
   }
   
+  /* (non-Javadoc)
+   * @see junit.framework.TestCase#tearDown()
+   */
   protected void tearDown() throws Exception {
     super.tearDown();
     session.getItem("/sites content/live/classic/web contents/webcontent").remove();

@@ -186,7 +186,6 @@ public class NavigationEventListenerDelegate {
             applicationId = applicationIdTmp;
           }
         }
-
         saveRemovedPageNode(navigationNodeUri, pageId, applicationId, content);
       }
     }
@@ -287,7 +286,6 @@ public class NavigationEventListenerDelegate {
       SimplePublicationPlugin publicationPlugin = (SimplePublicationPlugin) presentationService.getWebpagePublicationPlugins().get(SimplePublicationPlugin.LIFECYCLE_NAME);
       publicationPlugin.changeState(content, "unpublished", null);
     }
-
     session.save();
   }
 }

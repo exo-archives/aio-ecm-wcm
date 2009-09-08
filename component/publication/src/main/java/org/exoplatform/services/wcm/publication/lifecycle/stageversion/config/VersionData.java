@@ -215,5 +215,4 @@ public class VersionData {
   public void setUUID(String uuid) {
     UUID = uuid;
   }  
-  
 }

@@ -125,5 +125,4 @@ public class UIPublishedPages extends UIContainer {
       publicationContainer.setActiveTab(publicationPagesContainer, event.getRequestContext());
     }
   }
-  
 }

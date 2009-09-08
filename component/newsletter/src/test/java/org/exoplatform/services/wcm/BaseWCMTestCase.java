@@ -60,7 +60,6 @@ public abstract class BaseWCMTestCase extends BasicTestCase {
 	public void setUp() throws Exception {
 		String containerConf = getClass().getResource("/conf/standalone/test-configuration.xml").toString();
 		String loginConf = Thread.currentThread().getContextClassLoader().getResource("login.conf").toString();
-
 		StandaloneContainer.addConfigurationURL(containerConf);
 		container = StandaloneContainer.getInstance();
 
@@ -100,7 +99,6 @@ public abstract class BaseWCMTestCase extends BasicTestCase {
 				if (mixin.equals(nodeMixin))
 					continue nextMixin;
 			}
-
 			fail("Mixin '" + mixin + "' isn't accessible");
 		}
 	}
@@ -271,5 +269,4 @@ public abstract class BaseWCMTestCase extends BasicTestCase {
 		session.save();
 		return webcontent;
 	}
-
 }

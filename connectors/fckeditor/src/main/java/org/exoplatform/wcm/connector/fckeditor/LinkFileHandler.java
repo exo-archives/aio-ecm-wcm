@@ -27,9 +27,6 @@ import org.exoplatform.ecm.connector.fckeditor.FCKFileHandler;
  *          anh.do@exoplatform.com
  * Sep 12, 2008  
  */
-/**
- * The Class LinkFileHandler.
- */
 public class LinkFileHandler extends FCKFileHandler {
 
   /**
@@ -47,5 +44,4 @@ public class LinkFileHandler extends FCKFileHandler {
   protected String getFileURL(final Node file) throws Exception {
     return file.getProperty("exo:linkURL").getString();
   }
-
 }

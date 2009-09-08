@@ -225,7 +225,6 @@ public class StageAndVersionPublicationUtil {
     return list.toArray(new Value[list.size()]);
   }
   
-  
   /**
    * Gets the node by application id.
    * 

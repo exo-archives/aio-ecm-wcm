@@ -62,7 +62,6 @@ import org.exoplatform.webui.event.EventListener;
  * dzungdev@gmail.com
  * Sep 16, 2008
  */
-
 @ComponentConfig (
     lifecycle = UIFormLifecycle.class,
     events = {
@@ -385,6 +384,6 @@ public class UIQuickEditWebContentForm extends UIContentDialogForm{
 	      
 	      UIPortletConfig uiPortletConfig = uiQuickEditForm.getAncestorOfType(UIPortletConfig.class);
 	      uiPortletConfig.closePopupAndUpdateUI(event.getRequestContext(),true);
-	}
+	  }
   }
 }

@@ -103,7 +103,6 @@ public class NewsletterSubscriptionHandler {
    
     log.info("Trying to add subcription " + subscription.getName());
     try {
-
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
       Session session = sessionProvider.getSession(workspace, manageableRepository);
       String path = NewsletterConstant.generateCategoryPath(portalName);
@@ -135,7 +134,6 @@ public class NewsletterSubscriptionHandler {
   public void edit(String portalName, NewsletterSubscriptionConfig subscription, SessionProvider sessionProvider) {
     log.info("Trying to edit subcription " + subscription.getName());
     try {
-
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
       Session session = sessionProvider.getSession(workspace, manageableRepository);
       String path = NewsletterConstant.generateCategoryPath(portalName);
@@ -187,7 +185,11 @@ public class NewsletterSubscriptionHandler {
    * 
    * @throws Exception the exception
    */
-  public List<NewsletterSubscriptionConfig> getSubscriptionsByCategory(String portalName, String categoryName, SessionProvider sessionProvider)throws Exception{
+  public List<NewsletterSubscriptionConfig> getSubscriptionsByCategory(
+                                                                       String portalName,
+                                                                       String categoryName,
+                                                                       SessionProvider sessionProvider)
+                                                                       throws Exception{
     
     List<NewsletterSubscriptionConfig> listSubscriptions = new ArrayList<NewsletterSubscriptionConfig>();
 
@@ -205,7 +207,6 @@ public class NewsletterSubscriptionHandler {
         log.error("Error when get subcriptions by category " + categoryName + " failed because of " + ex.getMessage());
       }
     }
-
     return listSubscriptions;
   }
   
@@ -220,7 +221,11 @@ public class NewsletterSubscriptionHandler {
    * 
    * @throws Exception the exception
    */
-  public List<NewsletterSubscriptionConfig> getSubscriptionIdsByPublicUser(String portalName, String userEmail, SessionProvider sessionProvider) throws Exception{
+  public List<NewsletterSubscriptionConfig> getSubscriptionIdsByPublicUser(
+                                                                           String portalName,
+                                                                           String userEmail,
+                                                                           SessionProvider sessionProvider)
+                                                                           throws Exception{
     List<NewsletterSubscriptionConfig> listSubscriptions = new ArrayList<NewsletterSubscriptionConfig>();
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
     Session session = sessionProvider.getSession(workspace, manageableRepository);
@@ -234,7 +239,7 @@ public class NewsletterSubscriptionHandler {
       try{
         listSubscriptions.add(getSubscriptionFormNode(nodeIterator.nextNode()));
       } catch(Exception ex) {
-        ex.printStackTrace();
+        log.error("getSubscriptionIdsByPublicUser() failed because of " + ex.getMessage());
       }
     }
     return listSubscriptions;
@@ -252,7 +257,12 @@ public class NewsletterSubscriptionHandler {
    * 
    * @throws Exception the exception
    */
-  public NewsletterSubscriptionConfig getSubscriptionsByName(String portalName, String categoryName, String subCriptionName, SessionProvider sessionProvider) throws Exception{
+  public NewsletterSubscriptionConfig getSubscriptionsByName(
+                                                             String portalName,
+                                                             String categoryName,
+                                                             String subCriptionName,
+                                                             SessionProvider sessionProvider)
+                                                             throws Exception{
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
       Session session = sessionProvider.getSession(workspace, manageableRepository);
       String path = NewsletterConstant.generateCategoryPath(portalName);
@@ -278,7 +288,12 @@ public class NewsletterSubscriptionHandler {
    * 
    * @throws Exception the exception
    */
-  public long getNumberOfNewslettersWaiting(String portalName, String categoryName, String subScriptionName, SessionProvider sessionProvider)throws Exception{
+  public long getNumberOfNewslettersWaiting(
+                                            String portalName,
+                                            String categoryName,
+                                            String subScriptionName,
+                                            SessionProvider sessionProvider)
+                                            throws Exception{
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
     Session session = sessionProvider.getSession(workspace, manageableRepository);
     String path = NewsletterConstant.generateCategoryPath(portalName) + "/" + categoryName + "/" + subScriptionName;

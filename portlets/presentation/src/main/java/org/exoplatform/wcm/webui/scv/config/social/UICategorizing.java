@@ -36,11 +36,10 @@ import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
  * dzungdev@gmail.com
  * May 28, 2008
  */
-
+@SuppressWarnings("deprecation")
 @ComponentConfig(
     lifecycle = UIContainerLifecycle.class
 )
-
 public class UICategorizing extends UIContainer implements UISelectable {
 
   /** The Constant PATH_CATEGORY. */
@@ -51,7 +50,6 @@ public class UICategorizing extends UIContainer implements UISelectable {
 
   /** The existed categories. */
   private List<String> existedCategories = new ArrayList<String>();
-
 
   /**
    * Instantiates a new uI categorizing.

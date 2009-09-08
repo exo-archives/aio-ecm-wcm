@@ -86,11 +86,8 @@ public class PostCreateContentEventListener extends Listener<CmsService, Node>{
     try {
     	siteName = Util.getPortalRequestContext().getPortalOwner();
     	remoteUser = Util.getPortalRequestContext().getRemoteUser();    	
-    } catch (Exception e) {
-    	
-    }
+    } catch (Exception e) {}
     
     publicationService.updateLifecyleOnChangeContent(currentNode, siteName, remoteUser);
   }
-
 }

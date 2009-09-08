@@ -44,7 +44,6 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
  * dzungdev@gmail.com
  * Jun 9, 2008
  */
-
 @ComponentConfig(
     lifecycle = UIApplicationLifecycle.class    
 )

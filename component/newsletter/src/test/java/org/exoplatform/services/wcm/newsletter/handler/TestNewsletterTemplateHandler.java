@@ -123,7 +123,8 @@ public class TestNewsletterTemplateHandler extends BaseWCMTestCase {
 	 * 
 	 * @throws Exception the exception
 	 */
-	public void testGetTemplates() throws Exception {
+	@SuppressWarnings("unchecked")
+  public void testGetTemplates() throws Exception {
 		List listTemplates = newsletterTemplateHandler.getTemplates("classic", newsletterCategoryConfig, sessionProvider);
 		assertEquals(5, listTemplates.size());
 	}
@@ -153,4 +154,3 @@ public class TestNewsletterTemplateHandler extends BaseWCMTestCase {
     }
 	}
 }
-

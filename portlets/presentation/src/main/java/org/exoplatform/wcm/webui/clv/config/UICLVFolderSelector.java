@@ -29,13 +29,10 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
+// TODO: Auto-generated Javadoc
 /*
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Oct 15, 2008
- */
-
-/**
- * The Class UIFolderPathSelectorForm.
  */
 @ComponentConfig(
   lifecycle = Lifecycle.class, 
@@ -107,5 +104,4 @@ public class UICLVFolderSelector extends UIBaseNodeTreeSelector {
       Utils.closePopupWindow(uiFolderPathSelectorForm, UICLVConfig.FOLDER_PATH_SELECTOR_POPUP_WINDOW);
     }
   }
-
 }

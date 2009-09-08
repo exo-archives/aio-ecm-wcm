@@ -29,7 +29,6 @@ import org.exoplatform.ecm.webui.tree.selectone.UISelectPathPanel;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
 import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -39,13 +38,10 @@ import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
+// TODO: Auto-generated Javadoc
 /*
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Oct 17, 2008
- */
-
-/**
- * The Class UISelectFolderPathPanel.
  */
 @ComponentConfig(
    template = "app:/groovy/ContentListViewer/config/UICLVFolderSelectionPanel.gtmpl", 
@@ -106,6 +102,15 @@ public class UICLVFolderSelectionPanel extends UISelectPathPanel {
     return list;
   }
 
+  /**
+   * Checks if is valid state.
+   * 
+   * @param node the node
+   * 
+   * @return true, if is valid state
+   * 
+   * @throws Exception the exception
+   */
   private boolean isValidState(Node node) throws Exception {
 	  WCMPublicationService publicationService = getApplicationComponent(WCMPublicationService.class);
 	  String state = publicationService.getContentState(node);
@@ -116,6 +121,15 @@ public class UICLVFolderSelectionPanel extends UISelectPathPanel {
 	  
   }
 
+  /**
+   * Checks if is doc type.
+   * 
+   * @param node the node
+   * 
+   * @return true, if is doc type
+   * 
+   * @throws Exception the exception
+   */
   public boolean isDocType(Node node) throws Exception {
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     String repository = repositoryService.getCurrentRepository().getConfiguration().getName();
@@ -126,7 +140,22 @@ public class UICLVFolderSelectionPanel extends UISelectPathPanel {
     return false;
   }
   
+  /**
+   * The listener interface for receiving selectAction events.
+   * The class that is interested in processing a selectAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSelectActionListener<code> method. When
+   * the selectAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SelectActionEvent
+   */
   public static class SelectActionListener extends EventListener<UICLVFolderSelectionPanel> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UICLVFolderSelectionPanel> event) throws Exception {
       UICLVFolderSelectionPanel folderPathSelectionPanel = event.getSource() ;
       String value = event.getRequestContext().getRequestParameter(OBJECTID) ;

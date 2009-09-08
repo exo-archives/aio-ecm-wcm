@@ -50,5 +50,4 @@ public class RemovePageEventListener extends Listener<UserPortalConfigService, P
       log.error("Exception when update publication lifecyle", e);
     }    
   }
-
 }

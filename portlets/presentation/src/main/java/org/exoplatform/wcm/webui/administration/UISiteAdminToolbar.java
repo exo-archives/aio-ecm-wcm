@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2003-2008 eXo Platform SAS.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation; either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see<http://www.gnu.org/licenses/>.
+ */
 package org.exoplatform.wcm.webui.administration;
 
 import java.util.ArrayList;
@@ -63,32 +79,12 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
-/*
- * Copyright (C) 2003-2008 eXo Platform SAS.
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; either version 3
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see<http://www.gnu.org/licenses/>.
- */
-
+// TODO: Auto-generated Javadoc
 /*
  * Created by The eXo Platform SAS
  * Author : Anh Do Ngoc
  *          anh.do@exoplatform.com
  * Oct 6, 2008  
- */
-
-/**
- * The Class UISiteAdminToolbar.
  */
 @ComponentConfig(template = "app:/groovy/SiteAdministration/UISiteAdminToolBar.gtmpl", events = {
     @EventConfig(listeners = UISiteAdminToolbar.AddPageActionListener.class),
@@ -106,28 +102,33 @@ import org.exoplatform.webui.event.EventListener;
     @EventConfig(listeners = UISiteAdminToolbar.ChangePageActionListener.class),
     @EventConfig(listeners = UISiteAdminToolbar.TurnOnQuickEditActionListener.class),
     @EventConfig(listeners = UISiteAdminToolbar.TurnOffQuickEditActionListener.class) })
-    public class UISiteAdminToolbar extends UIContainer {
+public class UISiteAdminToolbar extends UIContainer {
 
   /** The Constant MESSAGE. */
   public static final String MESSAGE            = "UISiteAdminToolbar.msg.not-permission";
 
+  /** The Constant TURN_ON_QUICK_EDIT. */
   public static final String TURN_ON_QUICK_EDIT = "isTurnOn";
 
+  /** The Constant ADMIN. */
   public static final int ADMIN              = 2;
 
+  /** The Constant EDITOR. */
   public static final int EDITOR             = 1;
 
+  /** The Constant REDACTOR. */
   public static final int REDACTOR           = 0;
 
+  /** The Constant VISITOR. */
   public static final int VISITOR           = -1;
 
-  /** Does the current user have group navigations ? */
+  /** Does the current user have group navigations ?. */
   private boolean hasGroupNavigations = false;
 
-  /** Group navigations nodes list */
+  /** Group navigations nodes list. */
   private List<PageNavigation> groupNavigations = null;
 
-  /** Current site navigation list */
+  /** Current site navigation list. */
   private List<PageNavigation> currentSiteNavigations = null;
 
 
@@ -136,6 +137,8 @@ import org.exoplatform.webui.event.EventListener;
 
   /**
    * Instantiates a new uI site admin toolbar.
+   * 
+   * @throws Exception the exception
    */
   public UISiteAdminToolbar() throws Exception {
     refresh();
@@ -143,7 +146,8 @@ import org.exoplatform.webui.event.EventListener;
 
   /**
    * Sets the role of the current user. Needs to be refreshed each time we change site
-   * @throws Exception
+   * 
+   * @throws Exception the exception
    */
   protected void setRole() throws Exception {
     String userId = Util.getPortalRequestContext().getRemoteUser();
@@ -195,7 +199,6 @@ import org.exoplatform.webui.event.EventListener;
         return;
       }
     }
-
     role = UISiteAdminToolbar.VISITOR;
   }
 
@@ -203,20 +206,28 @@ import org.exoplatform.webui.event.EventListener;
    * gets the current user role based on the current site context.
    * 
    * @return user role
+   * 
+   * @throws Exception the exception
    */
   public int getRole() throws Exception {    
     return role;
   }
 
   /**
-   * Checks if we changed portal in order to refresh the user role and the navigation if needed
-   * @return
+   * Checks if we changed portal in order to refresh the user role and the navigation if needed.
+   * 
+   * @throws Exception the exception
    */
   public void refresh() throws Exception {	  
     setRole();
     buildNavigations();    
   }
   
+  /**
+   * Change navigations language.
+   * 
+   * @param language the language
+   */
   public void changeNavigationsLanguage(String language) {
     LocaleConfig localeConfig = getApplicationComponent(LocaleConfigService.class).getLocaleConfig(language) ;
     for(PageNavigation nav : groupNavigations) {      
@@ -233,6 +244,12 @@ import org.exoplatform.webui.event.EventListener;
     }
   }    
   
+  /**
+   * Resolve label.
+   * 
+   * @param res the res
+   * @param node the node
+   */
   private void resolveLabel(ResourceBundle res, PageNode node) {
     node.setResolvedLabel(res) ;
     if(node.getChildren() == null) return;
@@ -245,6 +262,7 @@ import org.exoplatform.webui.event.EventListener;
    * Checks if is show workspace area.
    * 
    * @return true, if is show workspace area
+   * 
    * @throws Exception the exception
    */
   public boolean isShowWorkspaceArea() throws Exception {
@@ -256,6 +274,11 @@ import org.exoplatform.webui.event.EventListener;
     return false;
   }
 
+  /**
+   * Gets the current portal uri.
+   * 
+   * @return the current portal uri
+   */
   public String getCurrentPortalURI() {
     PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
     String portalContextURI = portalRequestContext.getPortalURI();
@@ -265,6 +288,13 @@ import org.exoplatform.webui.event.EventListener;
     return baseURI;
   }
 
+  /**
+   * Gets the all portals.
+   * 
+   * @return the all portals
+   * 
+   * @throws Exception the exception
+   */
   public List<String> getAllPortals() throws Exception {
     List<String> portals = new ArrayList<String>();
     DataStorage dataStorage = getApplicationComponent(DataStorage.class);
@@ -291,9 +321,9 @@ import org.exoplatform.webui.event.EventListener;
   }
 
   /**
-   * Return true if the user has at least one group navigation node
+   * Return true if the user has at least one group navigation node.
    * 
-   * @return
+   * @return true, if checks for group navigations
    */
   public boolean hasGroupNavigations() {
     return hasGroupNavigations;
@@ -302,7 +332,7 @@ import org.exoplatform.webui.event.EventListener;
   /**
    * Allows to set a list of the user group navigation.
    * 
-   * @throws Exception
+   * @throws Exception the exception
    */
   
   private void buildNavigations() throws Exception {
@@ -322,18 +352,23 @@ import org.exoplatform.webui.event.EventListener;
     }
   }
 
-
+  /**
+   * Gets the current site navigations.
+   * 
+   * @return the current site navigations
+   * 
+   * @throws Exception the exception
+   */
   public List<PageNavigation> getCurrentSiteNavigations() throws Exception {   
     return currentSiteNavigations;
   }
 
-
-
   /**
-   * Get the list of group navigation nodes
+   * Get the list of group navigation nodes.
    * 
    * @return A list of navigation nodes
-   * @throws Exception
+   * 
+   * @throws Exception the exception
    */
   public List<PageNavigation> getGroupNavigations() throws Exception {    
     return groupNavigations;
@@ -351,6 +386,10 @@ import org.exoplatform.webui.event.EventListener;
    * @see AddPageActionEvent
    */
   public static class AddPageActionListener extends EventListener<UISiteAdminToolbar> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       UIPortalApplication uiApp = Util.getUIPortalApplication();
       PortalRequestContext portalContext = Util.getPortalRequestContext();
@@ -395,6 +434,10 @@ import org.exoplatform.webui.event.EventListener;
    * @see EditPageActionEvent
    */
   public static class EditPageActionListener extends EventListener<UISiteAdminToolbar> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       PortalRequestContext portalContext = Util.getPortalRequestContext();
       event.setRequestContext(Util.getPortalRequestContext());
@@ -440,6 +483,10 @@ import org.exoplatform.webui.event.EventListener;
    * @see CreatePortalActionEvent
    */
   public static class CreatePortalActionListener extends EventListener<UISiteAdminToolbar> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       event.setRequestContext(Util.getPortalRequestContext());
       PortalRequestContext portalContext = Util.getPortalRequestContext();
@@ -472,6 +519,10 @@ import org.exoplatform.webui.event.EventListener;
    * @see EditPortalActionEvent
    */
   public static class EditPortalActionListener extends EventListener<UISiteAdminToolbar> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       event.setRequestContext(Util.getPortalRequestContext());      
       UIPortal uiPortal = Util.getUIPortal();
@@ -501,6 +552,10 @@ import org.exoplatform.webui.event.EventListener;
    * @see BrowsePortalActionEvent
    */
   public static class BrowsePortalActionListener extends EventListener<UISiteAdminToolbar> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       event.setRequestContext(Util.getPortalRequestContext());            
       UIPortalApplication uiApp = Util.getUIPortalApplication();           
@@ -523,6 +578,10 @@ import org.exoplatform.webui.event.EventListener;
    * @see BrowsePageActionEvent
    */
   public static class BrowsePageActionListener extends EventListener<UISiteAdminToolbar> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       event.setRequestContext(Util.getPortalRequestContext());            
       UIPortalApplication uiApp = Util.getUIPortalApplication();            
@@ -548,6 +607,10 @@ import org.exoplatform.webui.event.EventListener;
    * @see ChangePortalActionEvent
    */
   public static class ChangePortalActionListener extends EventListener<UISiteAdminToolbar> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       event.setRequestContext(Util.getPortalRequestContext());
       UIPortalApplication uiApp = Util.getUIPortalApplication();
@@ -570,6 +633,10 @@ import org.exoplatform.webui.event.EventListener;
    * @see SkinSettingsActionEvent
    */
   public static class SkinSettingsActionListener extends EventListener<UISiteAdminToolbar> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       event.setRequestContext(Util.getPortalRequestContext());
       UIPortal uiPortal = Util.getUIPortal();
@@ -595,6 +662,10 @@ import org.exoplatform.webui.event.EventListener;
    * @see LanguageSettingsActionEvent
    */
   public static class LanguageSettingsActionListener extends EventListener<UISiteAdminToolbar> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       event.setRequestContext(Util.getPortalRequestContext());
       UIPortal uiPortal = Util.getUIPortal();
@@ -614,6 +685,10 @@ import org.exoplatform.webui.event.EventListener;
    * @see AccountSettingsActionEvent
    */
   public static class AccountSettingsActionListener extends EventListener<UISiteAdminToolbar> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       event.setRequestContext(Util.getPortalRequestContext());
       UIPortal uiPortal = Util.getUIPortal();
@@ -633,6 +708,10 @@ import org.exoplatform.webui.event.EventListener;
    * @see EditPageAndNavigationActionEvent
    */
   public static class EditPageAndNavigationActionListener extends EventListener<UISiteAdminToolbar> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       event.setRequestContext(Util.getPortalRequestContext());
       UIPortalApplication uiApp = Util.getUIPortalApplication();
@@ -643,7 +722,22 @@ import org.exoplatform.webui.event.EventListener;
     }
   }
 
+  /**
+   * The listener interface for receiving changePageAction events.
+   * The class that is interested in processing a changePageAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addChangePageActionListener<code> method. When
+   * the changePageAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see ChangePageActionEvent
+   */
   public static class ChangePageActionListener extends EventListener<UISiteAdminToolbar> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       String uri = event.getRequestContext().getRequestParameter(OBJECTID);
       UIPortal uiPortal = Util.getUIPortal();
@@ -667,6 +761,10 @@ import org.exoplatform.webui.event.EventListener;
    * @see AddContentActionEvent
    */
   public static class AddContentActionListener extends EventListener<UISiteAdminToolbar> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       UISiteAdminToolbar siteAdminToolbar = event.getSource();
       UIPortal uiPortal = Util.getUIPortal();
@@ -774,7 +872,22 @@ import org.exoplatform.webui.event.EventListener;
     }
   }
 
+  /**
+   * The listener interface for receiving turnOnQuickEditAction events.
+   * The class that is interested in processing a turnOnQuickEditAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addTurnOnQuickEditActionListener<code> method. When
+   * the turnOnQuickEditAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see TurnOnQuickEditActionEvent
+   */
   public static class TurnOnQuickEditActionListener extends EventListener<UISiteAdminToolbar> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       PortalRequestContext context = Util.getPortalRequestContext();
       context.getRequest().getSession().setAttribute(Utils.TURN_ON_QUICK_EDIT, true);
@@ -782,12 +895,26 @@ import org.exoplatform.webui.event.EventListener;
     }
   }
 
+  /**
+   * The listener interface for receiving turnOffQuickEditAction events.
+   * The class that is interested in processing a turnOffQuickEditAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addTurnOffQuickEditActionListener<code> method. When
+   * the turnOffQuickEditAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see TurnOffQuickEditActionEvent
+   */
   public static class TurnOffQuickEditActionListener extends EventListener<UISiteAdminToolbar> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       PortalRequestContext context = Util.getPortalRequestContext();
       context.getRequest().getSession().setAttribute(Utils.TURN_ON_QUICK_EDIT, false);
       Utils.updatePortal((PortletRequestContext) event.getRequestContext());
     }
   }
-
 }

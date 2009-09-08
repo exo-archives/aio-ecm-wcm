@@ -175,9 +175,7 @@ public class CategoryInitializationPlugin extends TaxonomyPlugin {
     taxonomyStorageNode.save();
     try {
       this.taxonomyService.addTaxonomyTree(taxonomyStorageNodeSystem);
-    } catch (TaxonomyAlreadyExistsException e) {
-      e.printStackTrace();
-    }
+    } catch (TaxonomyAlreadyExistsException e) {}
     session.save();
     session.logout();
   }

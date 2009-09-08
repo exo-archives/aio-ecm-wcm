@@ -54,64 +54,77 @@ import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.feed.synd.SyndFeedImpl;
 import com.sun.syndication.io.SyndFeedOutput;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong_phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * 29-08-2009  
+ * chuong_phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * 29-08-2009
  */
 
 @URITemplate("/rss/")
 public class RssConnector extends BaseConnector implements ResourceContainer {
 
+  /** The WORKSPACE. */
   static private String WORKSPACE = "workspace".intern() ;
+  
+  /** The REPOSITORY. */
   static private String REPOSITORY = "repository".intern() ;
   
+  /** The RS s_ version. */
   static private String RSS_VERSION = "rss_2.0".intern() ;
+  
+  /** The FEE d_ title. */
   static private String FEED_TITLE = "exo:feedTitle".intern() ;
+  
+  /** The DESCRIPTION. */
   static private String DESCRIPTION = "exo:description".intern() ;
+  
+  /** The TITLE. */
   static private String TITLE = "exo:title";
+  
+  /** The LINK. */
   static private String LINK = "exo:link".intern() ;
+  
+  /** The QUER y_ path. */
   static private String QUERY_PATH = "exo:queryPath".intern() ;
+  
+  /** The SUMMARY. */
   static private String SUMMARY = "exo:summary";
-//  static private String FEED_NAME = "exo:feedName".intern() ;
-//  static private String FEED_TYPE = "exo:feedType".intern() ;
-//  static private String URL = "exo:url".intern() ;
-//  static private String STORE_PATH = "exo:storePath".intern() ;
-//  static private String KEYWORDS = "exo:keywords".intern() ;
-//  static private String LANGUAGE = "exo:language".intern() ;
-//  static private String COPYRIGHT = "exo:copyright".intern() ;
-//  static private String PUBDATE = "exo:pubDate".intern() ;
-//  static private String OWNER_NAME = "exo:ownerName".intern() ;
-//  static private String OWNER_MAIL = "exo:ownerEmail".intern() ;
-//  static private String IMAGE_URL = "exo:imageURL".intern() ;
-//  static private String CATEGORY = "exo:podcastCategory".intern() ;
-//  static private String PUBLISHED_DATE = "exo:publishedDate".intern() ;
-//  static private String AUTHOR = "exo:author".intern() ;
-//  static private String EXPLICIT = "exo:explicit".intern() ;
-//  static private String LENGTH = "exo:length".intern() ;
-//  static private String JCR_CONTENT = "jcr:content".intern() ;
-//  static private String JCR_DATA = "jcr:data".intern() ;
-//  static private String JCR_MIMETYPE = "jcr:mimeType".intern() ;
-//  static private String JCR_LASTMODIFIED = "jcr:lastModified".intern() ;
-//  static private String NT_UNSTRUCTURED = "nt:unstructured".intern() ;
-//  static private String NT_FILE = "nt:file".intern() ;
-//  static private String NT_RESOURCE = "nt:resource".intern() ;  
-//  static private String RSS = "/rss".intern() ;
-//  static private String MIX_VERSIONABLE = "mix:versionable".intern() ;
 
+  /** The repository service. */
   private RepositoryService repositoryService;
   
+  /** The wcm configuration service. */
   private WCMConfigurationService wcmConfigurationService;
   
+  /** The category path. */
   private String categoryPath;
   
+  /**
+   * Instantiates a new rss connector.
+   * 
+   * @param container the container
+   */
   public RssConnector(ExoContainer container) {
     super(container);
     repositoryService = (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class);
     wcmConfigurationService = (WCMConfigurationService) container.getComponentInstanceOfType(WCMConfigurationService.class);
   }
 
+  /**
+   * Generate.
+   * 
+   * @param repositoryName the repository name
+   * @param workspaceName the workspace name
+   * @param server the server
+   * @param siteName the site name
+   * @param categoryPath the category path
+   * 
+   * @return the response
+   * 
+   * @throws Exception the exception
+   */
   @HTTPMethod("GET")
   @URITemplate("/generate/")
   @OutputTransformer(XMLOutputTransformer.class)
@@ -127,8 +140,6 @@ public class RssConnector extends BaseConnector implements ResourceContainer {
     if (currentCat.lastIndexOf("/")!=-1) {
     	currentCat = currentCat.substring(currentCat.lastIndexOf("/")+1);
     }
-    
-    
     Map<String, String> contextRss = new HashMap<String, String>();
     contextRss.put(REPOSITORY, repositoryName);
     contextRss.put(WORKSPACE, workspaceName);
@@ -144,6 +155,13 @@ public class RssConnector extends BaseConnector implements ResourceContainer {
     return response;
   }
   
+  /**
+   * Generate rss.
+   * 
+   * @param context the context
+   * 
+   * @return the string
+   */
   private String generateRSS(Map<String, String> context) {  
     String actionName = (String)context.get("actionName") ;
     String workspace = (String)context.get(WORKSPACE);                   
@@ -197,24 +215,35 @@ public class RssConnector extends BaseConnector implements ResourceContainer {
       feedXML = StringUtils.replace(feedXML,"&amp;","&");
       sessionProvider.close();
       return feedXML;
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+    } catch (Exception e) {}
     sessionProvider.close();
     return null;
   }
 
+  /**
+   * Gets the entry url.
+   * 
+   * @param host the host
+   * @param nodeName the node name
+   * 
+   * @return the entry url
+   */
   private String getEntryUrl(String host, String nodeName) {
     String pcvPageUri = wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.PARAMETERIZED_PAGE_URI);
     return host + pcvPageUri + "/" + categoryPath +  "/" + nodeName;
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.wcm.connector.BaseConnector#getContentStorageType()
+   */
   protected String getContentStorageType() throws Exception {
     return null;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.wcm.connector.BaseConnector#getRootContentStorage(javax.jcr.Node)
+   */
   protected Node getRootContentStorage(Node node) throws Exception {
     return null;
   }
-
 }

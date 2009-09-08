@@ -77,6 +77,4 @@ public class UIPublishingPanel extends UIForm {
     UIPublicationComponentStatus publicationComponentStatus = getChild(UIPublicationComponentStatus.class);
     publicationComponentStatus.setNode(currentNode);
   }
-
-
 }

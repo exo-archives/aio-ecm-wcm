@@ -60,13 +60,10 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
+// TODO: Auto-generated Javadoc
 /*
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Oct 21, 2008
- */
-
-/**
- * The Class UIContentListPresentation.
  */
 @ComponentConfigs( {
   @ComponentConfig(
@@ -137,6 +134,11 @@ import org.exoplatform.webui.event.EventListener;
         locale);
   }
 
+  /**
+   * Gets the portlet preferences.
+   * 
+   * @return the portlet preferences
+   */
   private PortletPreferences getPortletPreferences() {
     PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     PortletPreferences portletPreferences = context.getRequest().getPreferences();
@@ -150,8 +152,7 @@ import org.exoplatform.webui.event.EventListener;
    */
   public boolean showRefreshButton() {
     PortletPreferences portletPreferences = getPortletPreferences();
-    String isShow = portletPreferences.getValue(UICLVPortlet.SHOW_REFRESH_BUTTON,
-        null);
+    String isShow = portletPreferences.getValue(UICLVPortlet.SHOW_REFRESH_BUTTON, null);
     return (isShow != null) ? Boolean.parseBoolean(isShow) : false;
   }
 
@@ -168,6 +169,15 @@ import org.exoplatform.webui.event.EventListener;
     return (showAble != null) ? Boolean.parseBoolean(showAble) : false;
   }
 
+  /**
+   * Gets the node view.
+   * 
+   * @param node the node
+   * 
+   * @return the node view
+   * 
+   * @throws Exception the exception
+   */
   public Node getNodeView(Node node) throws Exception {
     PublicationService publicationService = getApplicationComponent(PublicationService.class);
     HashMap<String, Object> context = new HashMap<String, Object>();
@@ -184,13 +194,21 @@ import org.exoplatform.webui.event.EventListener;
     return viewNode;
   }
 
+  /**
+   * Show draft button.
+   * 
+   * @param node the node
+   * 
+   * @return true, if successful
+   * 
+   * @throws Exception the exception
+   */
   public boolean showDraftButton(Node node) throws Exception {
     String currentState = null;
     if (Utils.isLiveMode()) return false;
     try {
       currentState = node.getProperty("publication:currentState").getString();
-    } catch (Exception e) {
-    } 
+    } catch (Exception e) {} 
     if(PublicationDefaultStates.DRAFT.equals(currentState))
       return true;
     return false;
@@ -401,7 +419,6 @@ import org.exoplatform.webui.event.EventListener;
       UserHandler handler = organizationService.getUserHandler();
       User user = handler.findUserByName(ownerId);
       return user.getFullName();
-      
     }
     return null;
   }
@@ -461,9 +478,7 @@ import org.exoplatform.webui.event.EventListener;
   public String getContentIcon(Node node) {
 	  try {
 		return "Icon16x16 default16x16Icon "+org.exoplatform.ecm.webui.utils.Utils.getNodeTypeIcon(node, "16x16Icon");
-	} catch (RepositoryException e) {
-		e.printStackTrace();
-	}
+	} catch (RepositoryException e) {}
     return null;
   }
 
@@ -496,8 +511,7 @@ import org.exoplatform.webui.event.EventListener;
     try {
       illustrativeImage = contentSchemaHandler.getIllustrationImage(node);
       uri = imagesRendererService.generateURI(illustrativeImage);      
-    } catch (Exception e) {            
-    }
+    } catch (Exception e) {}
     return uri;
   }
 
@@ -581,7 +595,22 @@ import org.exoplatform.webui.event.EventListener;
     }
   }
 
+  /**
+   * The listener interface for receiving editContentAction events.
+   * The class that is interested in processing a editContentAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addEditContentActionListener<code> method. When
+   * the editContentAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see EditContentActionEvent
+   */
   public static class EditContentActionListener extends EventListener<UICLVPresentation> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UICLVPresentation> event) throws Exception {
       UICLVPresentation contentListPresentation = event.getSource();
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
@@ -638,7 +667,7 @@ import org.exoplatform.webui.event.EventListener;
   
   /**
    * Checks if is show readmore.
-   *
+   * 
    * @return true, if is show readmore
    */
   public boolean isShowReadmore() {
@@ -656,7 +685,7 @@ import org.exoplatform.webui.event.EventListener;
 
   /**
    * Sets the show readmore.
-   *
+   * 
    * @param showReadmore the new show readmore
    */
   public void setShowReadmore(boolean showReadmore) {

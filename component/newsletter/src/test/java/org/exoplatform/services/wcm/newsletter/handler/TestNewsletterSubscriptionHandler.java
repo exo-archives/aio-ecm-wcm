@@ -34,7 +34,8 @@ public class TestNewsletterSubscriptionHandler extends BaseWCMTestCase {
 	private Node categoriesNode;
 	
 	/** The user home node. */
-	private Node userHomeNode;
+	@SuppressWarnings("unused")
+  private Node userHomeNode;
 	
 	/** The newsletter manager service. */
 	NewsletterManagerService newsletterManagerService;
@@ -59,7 +60,6 @@ public class TestNewsletterSubscriptionHandler extends BaseWCMTestCase {
 		newsletterCategoryConfig.setDescription("DescriptionCategory");
 		newsletterCategoryConfig.setModerator("root");
 		newsletterCategoryHandler.add("classic", newsletterCategoryConfig, sessionProvider);
-		
 		
 		newsletterSubscriptionHandler = newsletterManagerService.getSubscriptionHandler();
 		newsletterSubscriptionConfig  = new NewsletterSubscriptionConfig();
@@ -218,6 +218,5 @@ public class TestNewsletterSubscriptionHandler extends BaseWCMTestCase {
     } finally {
       sessionProvider.close();
     }
-		
 	}
 }

@@ -22,38 +22,68 @@ import javax.portlet.PortletRequest;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * Jun 25, 2009  
+ * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * Jun 25, 2009
  */
 public class UIFCCUtils {
 
+  /**
+   * Gets the portlet preferences.
+   * 
+   * @return the portlet preferences
+   */
   public static PortletPreferences getPortletPreferences() {
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     PortletRequest request = portletRequestContext.getRequest();
     return request.getPreferences();
   }
   
+  /**
+   * Gets the preference repository.
+   * 
+   * @return the preference repository
+   */
   public static String getPreferenceRepository() {
     return getPortletPreferences().getValue(UIFCCConstant.PREFERENCE_REPOSITORY, "");
   }
 
+  /**
+   * Gets the preference workspace.
+   * 
+   * @return the preference workspace
+   */
   public static String getPreferenceWorkspace() {
     return getPortletPreferences().getValue(UIFCCConstant.PREFERENCE_WORKSPACE, "");
   }
   
+  /**
+   * Gets the preference type.
+   * 
+   * @return the preference type
+   */
   public static String getPreferenceType() {
     return getPortletPreferences().getValue(UIFCCConstant.PREFERENCE_TYPE, "");
   }
   
+  /**
+   * Gets the preference path.
+   * 
+   * @return the preference path
+   */
   public static String getPreferencePath() {
     return getPortletPreferences().getValue(UIFCCConstant.PREFERENCE_PATH, "");
   }
   
+  /**
+   * Gets the preference save message.
+   * 
+   * @return the preference save message
+   */
   public static String getPreferenceSaveMessage() {
 	  return getPortletPreferences().getValue(UIFCCConstant.PREFERENCE_SAVE_MESSAGE, "");
   }
-  
 }

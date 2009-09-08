@@ -47,6 +47,7 @@ import org.exoplatform.services.wcm.utils.AbstractQueryBuilder.ORDERBY;
 import org.exoplatform.services.wcm.utils.AbstractQueryBuilder.PATH_TYPE;
 import org.exoplatform.services.wcm.utils.AbstractQueryBuilder.QueryTermHelper;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS Author : Hoa Pham hoa.pham@exoplatform.com
  * Oct 8, 2008
@@ -133,7 +134,7 @@ public class SiteSearchServiceImpl implements SiteSearchService {
    * Gets the spell suggestion.
    * 
    * @param checkingWord the checking word
-   * @param queryManager the query manager
+   * @param manageableRepository the manageable repository
    * 
    * @return the spell suggestion
    * 
@@ -183,7 +184,6 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     mapDatetimeRangeSelected(queryCriteria,queryBuilder);
     mapMetadataProperties(queryCriteria,queryBuilder);
     orderBy(queryCriteria, queryBuilder);
-    //mapSiteMode(queryCriteria,queryBuilder); 
     String queryStatement = queryBuilder.createQueryStatement();
     Query query = queryManager.createQuery(queryStatement, Query.SQL);
     return query.execute();
@@ -201,6 +201,15 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     queryBuilder.setQueryPath(getSitePath(queryCriteria), PATH_TYPE.DECENDANTS);
   }
 
+  /**
+   * Gets the site path.
+   * 
+   * @param queryCriteria the query criteria
+   * 
+   * @return the site path
+   * 
+   * @throws Exception the exception
+   */
   private String getSitePath(final QueryCriteria queryCriteria) throws Exception {
     String siteName = queryCriteria.getSiteName();
     String sitePath = null;
@@ -240,10 +249,24 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     }                   
   }
 
+  /**
+   * Search by node name.
+   * 
+   * @param queryCriteria the query criteria
+   * @param queryBuilder the query builder
+   * 
+   * @throws Exception the exception
+   */
   private void searchByNodeName(final QueryCriteria queryCriteria, final SQLQueryBuilder queryBuilder) throws Exception {    
     queryBuilder.queryByNodeName(getSitePath(queryCriteria),queryCriteria.getKeyword());
   }      
 
+  /**
+   * Map datetime range selected.
+   * 
+   * @param queryCriteria the query criteria
+   * @param queryBuilder the query builder
+   */
   private void mapDatetimeRangeSelected(final QueryCriteria queryCriteria, final SQLQueryBuilder queryBuilder) {
     DATE_RANGE_SELECTED selectedDateRange = queryCriteria.getDateRangeSelected();
     if(selectedDateRange == null) return;
@@ -260,6 +283,12 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     }    
   }  
 
+  /**
+   * Map categories condition.
+   * 
+   * @param queryCriteria the query criteria
+   * @param queryBuilder the query builder
+   */
   private void mapCategoriesCondition(QueryCriteria queryCriteria, SQLQueryBuilder queryBuilder) {
     String[] categoryUUIDs = queryCriteria.getCategoryUUIDs();
     if(categoryUUIDs == null) return;
@@ -273,6 +302,12 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     queryBuilder.closeGroup();
   }
 
+  /**
+   * Map metadata properties.
+   * 
+   * @param queryCriteria the query criteria
+   * @param queryBuilder the query builder
+   */
   private void mapMetadataProperties(final QueryCriteria queryCriteria, SQLQueryBuilder queryBuilder) {
     QueryProperty[] queryProperty = queryCriteria.getQueryMetadatas();
     if(queryProperty == null) return;
@@ -286,6 +321,15 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     queryBuilder.closeGroup();
   }
 
+  /**
+   * Map query specific node types.
+   * 
+   * @param queryCriteria the query criteria
+   * @param queryBuilder the query builder
+   * @param nodeTypeManager the node type manager
+   * 
+   * @throws Exception the exception
+   */
   private void mapQuerySpecificNodeTypes( final QueryCriteria queryCriteria, final SQLQueryBuilder queryBuilder, final NodeTypeManager nodeTypeManager) throws Exception {
     String[] contentTypes = queryCriteria.getContentTypes();
     NodeType fistType = nodeTypeManager.getNodeType(contentTypes[0]);    
@@ -313,6 +357,7 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     queryBuilder.like("jcr:mixinTypes","exo:jsFile",LOGICAL.OR);
     queryBuilder.closeGroup();
   }
+  
   /**
    * Map query types.
    * 

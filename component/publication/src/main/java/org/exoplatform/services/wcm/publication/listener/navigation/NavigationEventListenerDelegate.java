@@ -169,14 +169,12 @@ public class NavigationEventListenerDelegate {
           navigationNodeUri = existedNavigationNodeUri;
         }
       }
-
       String pageId = "";
       for (String existedPageId : StageAndVersionPublicationUtil.getValuesAsString(content, "publication:webPageIDs")) {
         if (!listPageReference.contains(existedPageId) && !listPortalNavigationUri.contains(navigationNodeUri)) {
           pageId = existedPageId;
         }
       }
-
       if (!pageId.equals("")) {
         String applicationId = "";
         UserPortalConfigService userPortalConfigService = StageAndVersionPublicationUtil.getServices(UserPortalConfigService.class);
@@ -188,7 +186,6 @@ public class NavigationEventListenerDelegate {
             applicationId = applicationIdTmp;
           }
         }
-
         saveRemovedPageNode(navigationNodeUri, pageId, applicationId, content);
       }
     }
@@ -230,13 +227,6 @@ public class NavigationEventListenerDelegate {
     List<String> listExistedWebPageId = StageAndVersionPublicationUtil.getValuesAsString(content, "publication:webPageIDs");
     listExistedWebPageId.add(pageNode.getPageReference());
     content.setProperty("publication:webPageIDs", StageAndVersionPublicationUtil.toValues(valueFactory, listExistedWebPageId));
-
-//    WCMPublicationService presentationService = Util.getServices(WCMPublicationService.class);
-//    StageAndVersionBasedPublicationPlugin publicationPlugin = (StageAndVersionBasedPublicationPlugin) presentationService.getWebpagePublicationPlugins().get(Constant.LIFECYCLE_NAME);
-//    HashMap<String,String> context = new HashMap<String,String>();
-//    context.put(Constant.CURRENT_VERSION_NAME,content.getName()); 
-//    publicationPlugin.changeState(content, Constant.LIVE, context);
-
     session.save();
   }
 
@@ -274,15 +264,6 @@ public class NavigationEventListenerDelegate {
       listExistedApplicationIdTmp.remove(applicationId);
     }
     content.setProperty("publication:applicationIDs", StageAndVersionPublicationUtil.toValues(valueFactory, listExistedApplicationIdTmp));
-
-//    if (listExistedNavigationNodeUriTmp.isEmpty()) {
-//      WCMPublicationService presentationService = Util.getServices(WCMPublicationService.class);
-//      StageAndVersionBasedPublicationPlugin publicationPlugin = (StageAndVersionBasedPublicationPlugin) presentationService.getWebpagePublicationPlugins().get(Constant.LIFECYCLE_NAME);
-//      HashMap<String,String> context = new HashMap<String,String>();
-//      context.put(Constant.CURRENT_VERSION_NAME,content.getName());
-//      publicationPlugin.changeState(content, Constant.DRAFT, context);
-//    }
-
     session.save();
   }
 }

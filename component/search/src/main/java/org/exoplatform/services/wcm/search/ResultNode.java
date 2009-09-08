@@ -49,15 +49,12 @@ import javax.jcr.version.Version;
 import javax.jcr.version.VersionException;
 import javax.jcr.version.VersionHistory;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
- * Author : Hoa Pham	
- *          hoa.phamvu@exoplatform.com
- * Feb 2, 2009  
- */
-
-/**
- * The Class ResultNode.
+ * Author : Hoa Pham
+ * hoa.phamvu@exoplatform.com
+ * Feb 2, 2009
  */
 public class ResultNode implements Node{ 
 
@@ -90,6 +87,7 @@ public class ResultNode implements Node{
    * @return the node
    */
   public Node getNode() { return node; }
+  
   /**
    * Sets the node.
    * 
@@ -129,6 +127,13 @@ public class ResultNode implements Node{
     this.excerpt = excerpt;
   }
 
+  /**
+   * Gets the title.
+   * 
+   * @return the title
+   * 
+   * @throws Exception the exception
+   */
   public String getTitle() throws Exception {
     if(node.hasProperty("exo:title")) {
       return node.getProperty("exo:title").getString();
@@ -136,6 +141,13 @@ public class ResultNode implements Node{
     return node.getName();
   }
 
+  /**
+   * Gets the summary.
+   * 
+   * @return the summary
+   * 
+   * @throws Exception the exception
+   */
   public String getSummary() throws Exception {
     if(node.hasProperty("exo:summary")) {
       return node.getProperty("exo:summary").getString();
@@ -687,6 +699,9 @@ public class ResultNode implements Node{
     return node.getSession();
   }
   
+  /* (non-Javadoc)
+   * @see java.lang.Object#equals(java.lang.Object)
+   */
   @Override
   public boolean equals(Object obj) {    
     try {

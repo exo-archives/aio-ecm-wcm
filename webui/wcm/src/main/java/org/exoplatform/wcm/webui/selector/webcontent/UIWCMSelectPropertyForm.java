@@ -11,7 +11,6 @@ import javax.jcr.nodetype.NodeType;
 import javax.jcr.nodetype.NodeTypeManager;
 import javax.jcr.nodetype.PropertyDefinition;
 
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.cms.BasePath;
 import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -33,12 +32,12 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormRadioBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 
+// TODO: Auto-generated Javadoc
 /**
  * Author : TAN DUNG DANG
- *          dzungdev@gmail.com
- * Jan 21, 2009  
+ * dzungdev@gmail.com
+ * Jan 21, 2009
  */
-
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
     template =  "system:/groovy/webui/form/UIForm.gtmpl",
@@ -50,17 +49,30 @@ import org.exoplatform.webui.form.UIFormSelectBox;
 )
 public class UIWCMSelectPropertyForm extends UIForm{
 
+  /** The Constant METADATA_TYPE. */
   final static public String METADATA_TYPE = "metadataType" ;
+  
+  /** The Constant PROPERTY_SELECT. */
   final static public String PROPERTY_SELECT = "property_select" ;
 
+  /** The field name. */
   private String fieldName = null ;
 
+  /** The properties. */
   private List<SelectItemOption<String>> properties = new ArrayList<SelectItemOption<String>>() ;
 
+  /**
+   * Instantiates a new uIWCM select property form.
+   * 
+   * @throws Exception the exception
+   */
   public UIWCMSelectPropertyForm() throws Exception {
     setActions(new String[] {"Add", "Cancel"}) ;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.form.UIForm#getLabel(java.util.ResourceBundle, java.lang.String)
+   */
   public String getLabel(ResourceBundle res, String id)  {
     try {
       return super.getLabel(res, id) ;
@@ -69,6 +81,11 @@ public class UIWCMSelectPropertyForm extends UIForm{
     }
   }
 
+  /**
+   * Inits the.
+   * 
+   * @throws Exception the exception
+   */
   public void init() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>();
     NodeHierarchyCreator nodeHierarchyCreator = getApplicationComponent(NodeHierarchyCreator.class);
@@ -79,7 +96,6 @@ public class UIWCMSelectPropertyForm extends UIForm{
     SessionProvider sessionProvider = Utils.getSessionProvider(this);
     RepositoryService repoService = getApplicationComponent(RepositoryService.class);
     ManageableRepository manRepository = repoService.getCurrentRepository();
-    //String workspaceName = manRepository.getConfiguration().getSystemWorkspaceName();
     DMSConfiguration dmsConfiguration = getApplicationComponent(DMSConfiguration.class);
     String workspaceName = dmsConfiguration.getConfig(manRepository.getConfiguration().getName()).getSystemWorkspace();
     Session session = sessionProvider.getSession(workspaceName, manRepository);
@@ -97,8 +113,20 @@ public class UIWCMSelectPropertyForm extends UIForm{
         setAlign(UIFormRadioBoxInput.VERTICAL_ALIGN));
   }
 
+  /**
+   * Sets the field name.
+   * 
+   * @param fieldName the new field name
+   */
   public void setFieldName(String fieldName) { this.fieldName = fieldName ; }
 
+  /**
+   * Render properties.
+   * 
+   * @param metadata the metadata
+   * 
+   * @throws Exception the exception
+   */
   public void renderProperties(String metadata) throws Exception {
     properties.clear() ;
     SessionProvider sessionProvider = Utils.getSessionProvider(this);
@@ -117,7 +145,22 @@ public class UIWCMSelectPropertyForm extends UIForm{
     }
   }
 
+  /**
+   * The listener interface for receiving cancelAction events.
+   * The class that is interested in processing a cancelAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addCancelActionListener<code> method. When
+   * the cancelAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see CancelActionEvent
+   */
   static  public class CancelActionListener extends EventListener<UIWCMSelectPropertyForm> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIWCMSelectPropertyForm> event) throws Exception {
       UIWCMSelectPropertyForm uiForm = event.getSource();
       UIPopupWindow uiPopupWindow = uiForm.getAncestorOfType(UIPopupWindow.class);
@@ -141,7 +184,22 @@ public class UIWCMSelectPropertyForm extends UIForm{
     }
   }
 
+  /**
+   * The listener interface for receiving addAction events.
+   * The class that is interested in processing a addAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addAddActionListener<code> method. When
+   * the addAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see AddActionEvent
+   */
   static  public class AddActionListener extends EventListener<UIWCMSelectPropertyForm> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIWCMSelectPropertyForm> event) throws Exception {
       UIWCMSelectPropertyForm uiForm = event.getSource();
       String property = uiForm.<UIFormRadioBoxInput>getUIInput(PROPERTY_SELECT).getValue();
@@ -168,7 +226,22 @@ public class UIWCMSelectPropertyForm extends UIForm{
     }
   }
 
+  /**
+   * The listener interface for receiving changeMetadataTypeAction events.
+   * The class that is interested in processing a changeMetadataTypeAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addChangeMetadataTypeActionListener<code> method. When
+   * the changeMetadataTypeAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see ChangeMetadataTypeActionEvent
+   */
   static  public class ChangeMetadataTypeActionListener extends EventListener<UIWCMSelectPropertyForm> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIWCMSelectPropertyForm> event) throws Exception {
       UIWCMSelectPropertyForm uiForm = event.getSource();
       uiForm.renderProperties(uiForm.getUIFormSelectBox(METADATA_TYPE).getValue());
@@ -176,6 +249,11 @@ public class UIWCMSelectPropertyForm extends UIForm{
     }
   }
 
+  /**
+   * Gets the field name.
+   * 
+   * @return the field name
+   */
   public String getFieldName() {
     return fieldName;
   }

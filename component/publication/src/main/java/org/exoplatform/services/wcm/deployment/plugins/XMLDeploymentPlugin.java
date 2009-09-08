@@ -17,7 +17,6 @@
 package org.exoplatform.services.wcm.deployment.plugins;
 
 import java.io.InputStream;
-import java.util.Date;
 import java.util.Iterator;
 
 import javax.jcr.ImportUUIDBehavior;
@@ -71,6 +70,7 @@ public class XMLDeploymentPlugin extends DeploymentPlugin {
   /* (non-Javadoc)
    * @see org.exoplatform.services.deployment.DeploymentPlugin#deploy(org.exoplatform.services.jcr.ext.common.SessionProvider)
    */
+  @SuppressWarnings("unchecked")
   public void deploy(SessionProvider sessionProvider) throws Exception {
     Iterator iterator = initParams.getObjectParamIterator();    
     while(iterator.hasNext()) {
@@ -87,8 +87,5 @@ public class XMLDeploymentPlugin extends DeploymentPlugin {
         log.info(deploymentDescriptor.getSourcePath() + " is deployed succesfully into "+deploymentDescriptor.getTarget().getNodePath());
       }
     }   
-    
-
   }
-
 }

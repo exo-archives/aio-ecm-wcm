@@ -50,13 +50,10 @@ import org.exoplatform.webui.form.UIFormRadioBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 
+// TODO: Auto-generated Javadoc
 /*
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Oct 15, 2008
- */
-
-/**
- * The Class UIViewerManagementForm.
  */
 @ComponentConfig(
   lifecycle = UIFormLifecycle.class, 
@@ -72,6 +69,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
 )
 public class UICLVConfig extends UIForm implements UISelectable {
 
+  /** The content list. */
   private List<String>       contentList                  = new ArrayList<String>();
 
   /** The Constant HEADER. */
@@ -125,49 +123,74 @@ public class UICLVConfig extends UIForm implements UISelectable {
   /** The Constant VIEWER_LINK. */
   public static final String VIEWER_LINK                = "ViewerLink";
   
+  /** The Constant VIEWER_MODES. */
   public static final String VIEWER_MODES                 = "ViewerMode";
 
+  /** The Constant VIEWER_MANUAL_MODE. */
   public static final String VIEWER_MANUAL_MODE           = "ManualViewerMode";
 
+  /** The Constant VIEWER_AUTO_MODE. */
   public static final String VIEWER_AUTO_MODE             = "AutoViewerMode";
 
+  /** The Constant ORDER_BY. */
   public static final String ORDER_BY                     = "OrderBy";
 
+  /** The Constant ORDER_BY_TITLE. */
   public static final String ORDER_BY_TITLE               = "OrderByTitle";
 
+  /** The Constant ORDER_BY_DATE_CREATED. */
   public static final String ORDER_BY_DATE_CREATED        = "OrderByDateCreated";
 
+  /** The Constant ORDER_BY_DATE_MODIFIED. */
   public static final String ORDER_BY_DATE_MODIFIED       = "OrderByDateModified";
 
+  /** The Constant ORDER_BY_DATE_PUBLISHED. */
   public static final String ORDER_BY_DATE_PUBLISHED      = "OrderByDatePublished";
   
+  /** The Constant ORDER_TYPES. */
   public static final String ORDER_TYPES = "OrderTypes";
   
+  /** The Constant ORDER_DESC. */
   public static final String ORDER_DESC = "OrderDesc";
   
+  /** The Constant ORDER_ASC. */
   public static final String ORDER_ASC = "OrderAsc";
   
+  /** The Constant popupWidth. */
   public static final int popupWidth = 700;
   
+  /** The Constant FOLDER_PATH_SELECTOR_POPUP_WINDOW. */
   public static final String FOLDER_PATH_SELECTOR_POPUP_WINDOW = "FolderPathSelectorPopupWindow";
   
+  /** The Constant CORRECT_CONTENT_SELECTOR_POPUP_WINDOW. */
   public static final String CORRECT_CONTENT_SELECTOR_POPUP_WINDOW = "CorrectContentSelectorPopupWindow";
 
+  /** The popup id. */
   private String popupId;
   
+  /**
+   * Gets the popup id.
+   * 
+   * @return the popup id
+   */
   public String getPopupId() {
 		return popupId;
 	}
 
+	/**
+	 * Sets the popup id.
+	 * 
+	 * @param popupId the new popup id
+	 */
 	public void setPopupId(String popupId) {
 		this.popupId = popupId;
 	}
 
 	/**
-   * Instantiates a new uI viewer management form.
-   * 
-   * @throws Exception the exception
-   */
+	 * Instantiates a new uI viewer management form.
+	 * 
+	 * @throws Exception the exception
+	 */
   public UICLVConfig() throws Exception {
     PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     PortletPreferences portletPreferences = context.getRequest().getPreferences();
@@ -283,10 +306,20 @@ public class UICLVConfig extends UIForm implements UISelectable {
     setActions(new String[] { "Save", "Cancel" });
   }
 
+  /**
+   * Sets the view able content list.
+   * 
+   * @param list the new view able content list
+   */
   public void setViewAbleContentList(List<String> list) {
     this.contentList = list;
   }
 
+  /**
+   * Gets the view able content list.
+   * 
+   * @return the view able content list
+   */
   public List<String> getViewAbleContentList() {
     return this.contentList;
   }
@@ -302,6 +335,11 @@ public class UICLVConfig extends UIForm implements UISelectable {
     Utils.closePopupWindow(this, popupId);
   }
 
+  /**
+   * Checks if is manual mode.
+   * 
+   * @return true, if is manual mode
+   */
   public boolean isManualMode() {
     PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     PortletPreferences preferences = context.getRequest().getPreferences();
@@ -337,6 +375,13 @@ public class UICLVConfig extends UIForm implements UISelectable {
     return templateOptionList;
   }
   
+  /**
+   * Active new viewer mode.
+   * 
+   * @param uiNewViewer the ui new viewer
+   * 
+   * @throws Exception the exception
+   */
   public void activeNewViewerMode(UICLVContainer uiNewViewer) throws Exception {
     UICLVPortlet uiListViewerPortlet = getAncestorOfType(UICLVPortlet.class);
     uiListViewerPortlet.removeChild(UICLVContainer.class);
@@ -344,6 +389,13 @@ public class UICLVConfig extends UIForm implements UISelectable {
     uiNewViewer.init();
   }
   
+  /**
+   * Reset viewer mode.
+   * 
+   * @param uiViewer the ui viewer
+   * 
+   * @throws Exception the exception
+   */
   public void resetViewerMode(UICLVContainer uiViewer) throws Exception {
     uiViewer.getChildren().clear();
     uiViewer.init();
@@ -500,6 +552,10 @@ public class UICLVConfig extends UIForm implements UISelectable {
    * @see SelectFolderPathActionEvent
    */
   public static class SelectFolderPathActionListener extends EventListener<UICLVConfig> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UICLVConfig> event) throws Exception {
       UICLVConfig uiViewerManagementForm = event.getSource();
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
@@ -524,7 +580,22 @@ public class UICLVConfig extends UIForm implements UISelectable {
     }
   }
 
+  /**
+   * The listener interface for receiving increaseAction events.
+   * The class that is interested in processing a increaseAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addIncreaseActionListener<code> method. When
+   * the increaseAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see IncreaseActionEvent
+   */
   public static class IncreaseActionListener extends EventListener<UICLVConfig> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UICLVConfig> event) throws Exception {
       UICLVConfig uiForm = event.getSource();
       List<String> contentList = uiForm.getViewAbleContentList();
@@ -537,7 +608,22 @@ public class UICLVConfig extends UIForm implements UISelectable {
     }
   }
 
+  /**
+   * The listener interface for receiving decreaseAction events.
+   * The class that is interested in processing a decreaseAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addDecreaseActionListener<code> method. When
+   * the decreaseAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see DecreaseActionEvent
+   */
   public static class DecreaseActionListener extends EventListener<UICLVConfig> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UICLVConfig> event) throws Exception {
       UICLVConfig uiForm = event.getSource();
       List<String> contentList = uiForm.getViewAbleContentList();
@@ -550,7 +636,22 @@ public class UICLVConfig extends UIForm implements UISelectable {
     }
   }
   
+  /**
+   * The listener interface for receiving deleteAction events.
+   * The class that is interested in processing a deleteAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addDeleteActionListener<code> method. When
+   * the deleteAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see DeleteActionEvent
+   */
   public static class DeleteActionListener extends EventListener<UICLVConfig> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UICLVConfig> event) throws Exception {
       UICLVConfig uiForm = event.getSource();      
       int currIndex = Integer.parseInt(event.getRequestContext().getRequestParameter(OBJECTID));
@@ -558,5 +659,4 @@ public class UICLVConfig extends UIForm implements UISelectable {
       contentList.remove(currIndex);
     }
   }
-
 }

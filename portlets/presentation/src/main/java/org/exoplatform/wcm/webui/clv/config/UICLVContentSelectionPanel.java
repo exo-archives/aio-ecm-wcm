@@ -32,6 +32,7 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS Author : anh.do anh.do@exoplatform.com,
  * anhdn86@gmail.com Feb 16, 2009
@@ -45,10 +46,18 @@ import org.exoplatform.webui.event.EventListener;
 )
 public class UICLVContentSelectionPanel extends UICategoriesSelectPanel {
 
+  /**
+   * Instantiates a new uICLV content selection panel.
+   * 
+   * @throws Exception the exception
+   */
   public UICLVContentSelectionPanel() throws Exception {
     super();
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.tree.selectmany.UICategoriesSelectPanel#getListSelectableNodes()
+   */
   public List<Node> getListSelectableNodes() throws Exception {
     WCMPublicationService wcmPublicationService = getApplicationComponent(WCMPublicationService.class);
     List<Node> list = new ArrayList<Node>();
@@ -65,6 +74,15 @@ public class UICLVContentSelectionPanel extends UICategoriesSelectPanel {
     return list;
   }
 
+  /**
+   * Checks if is doc type.
+   * 
+   * @param node the node
+   * 
+   * @return true, if is doc type
+   * 
+   * @throws Exception the exception
+   */
   public boolean isDocType(Node node) throws Exception {
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     String repository = repositoryService.getCurrentRepository().getConfiguration().getName();
@@ -75,7 +93,22 @@ public class UICLVContentSelectionPanel extends UICategoriesSelectPanel {
     return false;
   }
 
+  /**
+   * The listener interface for receiving selectAction events.
+   * The class that is interested in processing a selectAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSelectActionListener<code> method. When
+   * the selectAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SelectActionEvent
+   */
   public static class SelectActionListener extends EventListener<UICLVContentSelectionPanel> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UICLVContentSelectionPanel> event) throws Exception {
       UICLVContentSelectionPanel uiDefault = event.getSource();
       UICLVContentSelector uiOneContentSelectorForm = uiDefault.getParent();

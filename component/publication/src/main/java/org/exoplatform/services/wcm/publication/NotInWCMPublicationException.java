@@ -28,5 +28,4 @@ public class NotInWCMPublicationException extends NotInPublicationLifecycleExcep
 
   /** The Constant serialVersionUID. */
   private static final long serialVersionUID = 1L;
-
 }

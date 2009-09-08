@@ -44,11 +44,12 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormDateTimeInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * Jun 12, 2009  
+ * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * Jun 12, 2009
  */
 @ComponentConfig (
                   lifecycle = UIFormLifecycle.class,
@@ -62,20 +63,38 @@ import org.exoplatform.webui.form.UIFormSelectBox;
 )
 public class UINewsletterEntryDialogSelector extends UIForm {
 
+  /** The Constant NEWSLETTER_ENTRY_TEMPLATE. */
   public static final String NEWSLETTER_ENTRY_TEMPLATE = "UINewsletterEntryTemplate";
 
+  /** The Constant NEWSLETTER_ENTRY_SEND_DATE. */
   public static final String NEWSLETTER_ENTRY_SEND_DATE = "UINewsletterEntrySendDate";
 
+  /** The dialog. */
   private String dialog = "dialog1";
 
+  /**
+   * Gets the dialog.
+   * 
+   * @return the dialog
+   */
   public String getDialog() {
     return dialog;
   }
 
+  /**
+   * Sets the dialog.
+   * 
+   * @param dialog the new dialog
+   */
   public void setDialog(String dialog) {
     this.dialog = dialog;
   }
 
+  /**
+   * Instantiates a new uI newsletter entry dialog selector.
+   * 
+   * @throws Exception the exception
+   */
   public UINewsletterEntryDialogSelector() throws Exception {
     this.setActions(new String[]{"UpdateNewsletter"});
     UIFormSelectBox newsletterEntryTemplate = new UIFormSelectBox(NEWSLETTER_ENTRY_TEMPLATE, NEWSLETTER_ENTRY_TEMPLATE, new ArrayList<SelectItemOption<String>>());
@@ -84,6 +103,14 @@ public class UINewsletterEntryDialogSelector extends UIForm {
     addUIFormInput(new UIFormDateTimeInput(NEWSLETTER_ENTRY_SEND_DATE, NEWSLETTER_ENTRY_SEND_DATE, null, true));
   }
 
+  /**
+   * Inits the.
+   * 
+   * @param CategoryName the category name
+   * @param subScriptionName the sub scription name
+   * 
+   * @throws Exception the exception
+   */
   public void init(String CategoryName, String subScriptionName) throws Exception{
     NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
     NewsletterCategoryHandler newsletterCategoryHandler = newsletterManagerService.getCategoryHandler();
@@ -127,6 +154,13 @@ public class UINewsletterEntryDialogSelector extends UIForm {
     updateTemplateSelectBox(categoryConfig);
   }
 
+  /**
+   * Update template select box.
+   * 
+   * @param categoryConfig the category config
+   * 
+   * @throws Exception the exception
+   */
   public void updateTemplateSelectBox(NewsletterCategoryConfig categoryConfig) throws Exception {
     List<SelectItemOption<String>> templates = new ArrayList<SelectItemOption<String>>();
     NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
@@ -140,7 +174,22 @@ public class UINewsletterEntryDialogSelector extends UIForm {
     getUIFormSelectBox(NEWSLETTER_ENTRY_TEMPLATE).setOptions(templates);
   }
 
+  /**
+   * The listener interface for receiving changeTemplateAction events.
+   * The class that is interested in processing a changeTemplateAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addChangeTemplateActionListener<code> method. When
+   * the changeTemplateAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see ChangeTemplateActionEvent
+   */
   public static class ChangeTemplateActionListener extends EventListener<UINewsletterEntryDialogSelector> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UINewsletterEntryDialogSelector> event) throws Exception {
       UINewsletterEntryDialogSelector newsletterEntryDialogSelector = event.getSource();
       UIFormSelectBox newsletterEntryTemplate = newsletterEntryDialogSelector.getChildById(NEWSLETTER_ENTRY_TEMPLATE);
@@ -161,7 +210,22 @@ public class UINewsletterEntryDialogSelector extends UIForm {
     }
   }
 
+  /**
+   * The listener interface for receiving openWebcontentSelectorFormAction events.
+   * The class that is interested in processing a openWebcontentSelectorFormAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addOpenWebcontentSelectorFormActionListener<code> method. When
+   * the openWebcontentSelectorFormAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see OpenWebcontentSelectorFormActionEvent
+   */
   public static class OpenWebcontentSelectorFormActionListener extends EventListener<UINewsletterEntryDialogSelector> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UINewsletterEntryDialogSelector> event) throws Exception {
       UINewsletterEntryDialogSelector newsletterEntryDialogSelector = event.getSource();
       UINewsletterEntryWebcontentSelectorForm newsletterEntryWebcontentSelector = newsletterEntryDialogSelector.createUIComponent(UINewsletterEntryWebcontentSelectorForm.class, null, null);
@@ -169,7 +233,22 @@ public class UINewsletterEntryDialogSelector extends UIForm {
     }
   }
 
+  /**
+   * The listener interface for receiving changeCategoryAction events.
+   * The class that is interested in processing a changeCategoryAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addChangeCategoryActionListener<code> method. When
+   * the changeCategoryAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see ChangeCategoryActionEvent
+   */
   public static class ChangeCategoryActionListener extends EventListener<UINewsletterEntryDialogSelector> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UINewsletterEntryDialogSelector> event) throws Exception {
       UINewsletterEntryDialogSelector newsletterEntryDialogSelector = event.getSource();
 
@@ -197,7 +276,22 @@ public class UINewsletterEntryDialogSelector extends UIForm {
     }
   }
 
+  /**
+   * The listener interface for receiving updateNewsletterAction events.
+   * The class that is interested in processing a updateNewsletterAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addUpdateNewsletterActionListener<code> method. When
+   * the updateNewsletterAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see UpdateNewsletterActionEvent
+   */
   public static class UpdateNewsletterActionListener extends EventListener<UINewsletterEntryDialogSelector> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UINewsletterEntryDialogSelector> event) throws Exception {
       UINewsletterEntryDialogSelector newsletterEntryDialogSelector = event.getSource();
       UIFormSelectBox newsletterEntryTemplate = newsletterEntryDialogSelector.getChildById(NEWSLETTER_ENTRY_TEMPLATE);
@@ -233,5 +327,4 @@ public class UINewsletterEntryDialogSelector extends UIForm {
       newsletterEntryTemplate.setValue(templateName);
     }
   }
-
 }

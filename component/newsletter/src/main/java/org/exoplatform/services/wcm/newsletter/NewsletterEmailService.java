@@ -36,5 +36,4 @@ public class NewsletterEmailService {
   public NewsletterEmailService() {
     log.info("Starting NewsletterEmailService ... ");
   }
-  
 }

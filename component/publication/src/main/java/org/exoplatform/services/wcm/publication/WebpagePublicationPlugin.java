@@ -157,5 +157,4 @@ public abstract class WebpagePublicationPlugin extends PublicationPlugin {
    * @throws Exception
    */
   public abstract void updateLifecyleOnChangeContent(Node node, String remoteUser, String newState) throws Exception;
-  
 }

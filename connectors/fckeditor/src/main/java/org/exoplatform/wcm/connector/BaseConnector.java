@@ -504,7 +504,6 @@ public abstract class BaseConnector {
     ManageableRepository manageableRepository = null;
     try {
       manageableRepository = repositoryService.getRepository(repositoryName);
-//      workspaceName = manageableRepository.getConfiguration().getDefaultWorkspaceName();
       SessionProvider sessionProvider = localSessionProvider.getSessionProvider(null);
       return sessionProvider.getSession(workspaceName, manageableRepository);
     } catch (Exception e) {

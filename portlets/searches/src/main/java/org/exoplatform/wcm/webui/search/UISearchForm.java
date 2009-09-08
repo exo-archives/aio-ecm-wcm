@@ -42,12 +42,10 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 
+// TODO: Auto-generated Javadoc
 /*
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Oct 31, 2008
- */
-/**
- * The Class UISearchForm.
  */
 @ComponentConfig(
 	lifecycle = UIFormLifecycle.class, 
@@ -138,7 +136,6 @@ public class UISearchForm extends UIForm {
 				}
 			}
 		}
-
 		super.processRender(context);
 	}
 
@@ -175,6 +172,7 @@ public class UISearchForm extends UIForm {
 	 * Gets the portal list.
 	 * 
 	 * @return the portal list
+	 * 
 	 * @throws Exception the exception
 	 */
 	@SuppressWarnings("unchecked")
@@ -289,5 +287,4 @@ public class UISearchForm extends UIForm {
 			portletRequestContext.addUIComponentToUpdateByAjax(uiSearchPageContainer);
 		}
 	}
-
 }

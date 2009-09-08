@@ -63,6 +63,7 @@ public class WCMConfigurationService {
   
   public static final String PAGINATOR_TEMPLAET_PATH        = "paginatorTemplatePath";
 
+  @SuppressWarnings("unchecked")
   public WCMConfigurationService(InitParams initParams) throws Exception {
     Iterator<PropertiesParam> iterator = initParams.getPropertiesParamIterator();
     while (iterator.hasNext()) {

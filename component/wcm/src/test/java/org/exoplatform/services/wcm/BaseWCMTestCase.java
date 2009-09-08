@@ -100,7 +100,6 @@ public abstract class BaseWCMTestCase extends BasicTestCase {
         if (mixin.equals(nodeMixin))
           continue nextMixin;
       }
-
       fail("Mixin '" + mixin + "' isn't accessible");
     }
   }

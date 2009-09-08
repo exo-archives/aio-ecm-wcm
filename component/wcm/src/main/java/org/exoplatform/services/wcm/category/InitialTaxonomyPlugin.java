@@ -250,9 +250,7 @@ public class InitialTaxonomyPlugin extends BasePortalArtifactsPlugin {
     taxonomyStorageNode.save();
     try {
       taxonomyService_.addTaxonomyTree(taxonomyStorageNodeSystem);
-    } catch (TaxonomyAlreadyExistsException e) {
-      e.printStackTrace();
-    }
+    } catch (TaxonomyAlreadyExistsException e) {}
     session.save();
     session.logout();
   }

@@ -50,10 +50,11 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
+// TODO: Auto-generated Javadoc
 /**
- * Created by The eXo Platform SAS 
+ * Created by The eXo Platform SAS
  * Author : Tran Nguyen Ngoc
- *          ngoc.tran@exoplatform.com
+ * ngoc.tran@exoplatform.com
  * Jun 23, 2009
  */
 @ComponentConfig(
@@ -79,6 +80,11 @@ public class UIPCLVContainer extends UIContainer {
     return header;
   }
   
+	/**
+	 * Inits the.
+	 * 
+	 * @throws Exception the exception
+	 */
 	public void init() throws Exception {
 		PortletRequestContext portletRequestContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
 		HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) portletRequestContext.getRequest();
@@ -92,9 +98,7 @@ public class UIPCLVContainer extends UIContainer {
 		String parameters = null;
 		try {
 			parameters = URLDecoder.decode(StringUtils.substringAfter(requestURI, portalURI.concat(pageNodeSelected + "/")), "UTF-8");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		} catch (Exception e) {}
 
 		PortletRequest portletRequest = portletRequestContext.getRequest();
 		PortletPreferences portletPreferences = portletRequest.getPreferences();
@@ -146,17 +150,34 @@ public class UIPCLVContainer extends UIContainer {
 		parameterizedContentListViewer.setRssLink("/rest/rss/generate?repository=" + repository + "&workspace=" + workspace + "&server=" + server + "&siteName=" + siteName + "&categoryPath=" + ("".equals(categoryPath) ? preferenceTreeName : preferenceTreeName + "/" + categoryPath));
 	}
 
+	/**
+	 * Gets the portlet preference.
+	 * 
+	 * @return the portlet preference
+	 */
 	public PortletPreferences getPortletPreference() {
 		PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
 		return portletRequestContext.getRequest().getPreferences();
 	}
 
+	/**
+	 * Gets the form view template path.
+	 * 
+	 * @return the form view template path
+	 */
 	public String getFormViewTemplatePath() {
 		PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
 		PortletPreferences references = portletRequestContext.getRequest().getPreferences();
 		return references.getValue(UIPCLVPortlet.FORM_VIEW_TEMPLATE_PATH, null);
 	}
 
+	/**
+	 * Gets the template resource resolver.
+	 * 
+	 * @return the template resource resolver
+	 * 
+	 * @throws Exception the exception
+	 */
 	public ResourceResolver getTemplateResourceResolver() throws Exception {
 		PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
 		PortletPreferences references = portletRequestContext.getRequest().getPreferences();
@@ -167,17 +188,40 @@ public class UIPCLVContainer extends UIContainer {
 		return new JCRResourceResolver(repository, workspace, "exo:templateFile");
 	}
 
+	/**
+	 * Gets the portlet id.
+	 * 
+	 * @return the portlet id
+	 */
 	public String getPortletId() {
 		PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
 		return pContext.getWindowId();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.exoplatform.webui.core.UIComponent#processRender(org.exoplatform.webui.application.WebuiRequestContext)
+	 */
 	public void processRender(WebuiRequestContext context) throws Exception {
 		init();
 		super.processRender(context);
 	}
 
+	/**
+	 * The listener interface for receiving quickEditAction events.
+	 * The class that is interested in processing a quickEditAction
+	 * event implements this interface, and the object created
+	 * with that class is registered with a component using the
+	 * component's <code>addQuickEditActionListener<code> method. When
+	 * the quickEditAction event occurs, that object's appropriate
+	 * method is invoked.
+	 * 
+	 * @see QuickEditActionEvent
+	 */
 	public static class QuickEditActionListener extends EventListener<UIPCLVContainer> {
+		
+		/* (non-Javadoc)
+		 * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+		 */
 		public void execute(Event<UIPCLVContainer> event) throws Exception {
 			UIPCLVContainer uiContentViewerContainer = event.getSource();
 			UIPCLVConfig parameterizedForm = uiContentViewerContainer.createUIComponent(UIPCLVConfig.class, null, null);
@@ -189,6 +233,13 @@ public class UIPCLVContainer extends UIContainer {
 		}
 	}
 
+	/**
+	 * On refresh.
+	 * 
+	 * @param event the event
+	 * 
+	 * @throws Exception the exception
+	 */
 	public void onRefresh(Event<UIPCLVForm> event) throws Exception {
 		UIPCLVForm contentListPresentation = event.getSource();
 		UIPCLVContainer uiParameterizedContentListontainer = contentListPresentation.getParent();
@@ -196,6 +247,17 @@ public class UIPCLVContainer extends UIContainer {
 		uiParameterizedContentListontainer.init();
 	}
 
+	/**
+	 * Gets the list symlink node.
+	 * 
+	 * @param portletPreferences the portlet preferences
+	 * @param categoryPath the category path
+	 * 
+	 * @return the list symlink node
+	 * 
+	 * @throws RepositoryException the repository exception
+	 * @throws RepositoryConfigurationException the repository configuration exception
+	 */
 	private NodeIterator getListSymlinkNode(PortletPreferences portletPreferences, String categoryPath)	throws RepositoryException,
 																																																			RepositoryConfigurationException {
 		String repository = portletPreferences.getValue(UIPCLVPortlet.REPOSITORY, "");

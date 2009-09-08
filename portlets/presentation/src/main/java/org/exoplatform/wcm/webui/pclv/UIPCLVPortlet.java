@@ -26,6 +26,7 @@ import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform
  * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com Jun 19, 2009
@@ -116,10 +117,18 @@ public class UIPCLVPortlet extends UIPortletApplication {
 	/** The mode. */
 	private PortletMode					mode																					= PortletMode.VIEW;
 
+	/**
+	 * Instantiates a new uIPCLV portlet.
+	 * 
+	 * @throws Exception the exception
+	 */
 	public UIPCLVPortlet() throws Exception {
 		activateMode(mode);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.exoplatform.webui.core.UIPortletApplication#processRender(org.exoplatform.webui.application.WebuiApplication, org.exoplatform.webui.application.WebuiRequestContext)
+	 */
 	public void processRender(WebuiApplication app, WebuiRequestContext context) throws Exception {
 		PortletRequestContext pContext = (PortletRequestContext) context;
 		PortletMode newMode = pContext.getApplicationMode();
@@ -134,6 +143,7 @@ public class UIPCLVPortlet extends UIPortletApplication {
 	 * Activate mode.
 	 * 
 	 * @param mode the mode
+	 * 
 	 * @throws Exception the exception
 	 */
 	private void activateMode(PortletMode mode) throws Exception {

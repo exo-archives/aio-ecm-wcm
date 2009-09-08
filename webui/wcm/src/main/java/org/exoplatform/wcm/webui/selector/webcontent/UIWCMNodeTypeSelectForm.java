@@ -13,7 +13,6 @@ import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.wcm.webui.selector.document.UIDocumentSearchForm;
 import org.exoplatform.wcm.webui.selector.document.UIDocumentTabSelector;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIPopupWindow;
@@ -24,12 +23,12 @@ import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 
+// TODO: Auto-generated Javadoc
 /**
  * Author : TAN DUNG DANG
- *          dzungdev@gmail.com
- * Feb 2, 2009  
+ * dzungdev@gmail.com
+ * Feb 2, 2009
  */
-
 @ComponentConfig (
     lifecycle = UIFormLifecycle.class,
     template = "system:/groovy/webui/form/UIForm.gtmpl",
@@ -38,12 +37,19 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
       @EventConfig(listeners = UIWCMNodeTypeSelectForm.CancelActionListener.class, phase=Phase.DECODE)
     }
 )
-
 public class UIWCMNodeTypeSelectForm extends UIForm {
 
+  /**
+   * Instantiates a new uIWCM node type select form.
+   * 
+   * @throws Exception the exception
+   */
   public UIWCMNodeTypeSelectForm() throws Exception {
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.form.UIForm#getLabel(java.util.ResourceBundle, java.lang.String)
+   */
   public String getLabel(ResourceBundle res, String id)  {
     try {
       return res.getString("UIWCMNodeTypeSelectForm.label." + id) ;
@@ -52,7 +58,11 @@ public class UIWCMNodeTypeSelectForm extends UIForm {
     }
   }
 
-  @SuppressWarnings("unchecked")
+  /**
+   * Inits the.
+   * 
+   * @throws Exception the exception
+   */
   public void init() throws Exception {
     getChildren().clear();
     UIFormCheckBoxInput<String> uiCheckBox;
@@ -73,6 +83,13 @@ public class UIWCMNodeTypeSelectForm extends UIForm {
     }
   }
 
+  /**
+   * Properties selected.
+   * 
+   * @param name the name
+   * 
+   * @return true, if successful
+   */
   private boolean propertiesSelected(String name) {
     UIPopupWindow uiPopupWindow = getParent();
     UIWebContentTabSelector uiWCTabSelector = 
@@ -101,6 +118,12 @@ public class UIWCMNodeTypeSelectForm extends UIForm {
     return false ;
   }
 
+  /**
+   * Sets the node types.
+   * 
+   * @param selectedNodeTypes the selected node types
+   * @param uiWCSearchForm the ui wc search form
+   */
   private void setNodeTypes(List<String> selectedNodeTypes, UIWebContentSearchForm uiWCSearchForm) {
     String strNodeTypes = null ;
     for(int i = 0 ; i < selectedNodeTypes.size() ; i++) {
@@ -110,6 +133,12 @@ public class UIWCMNodeTypeSelectForm extends UIForm {
     uiWCSearchForm.getUIStringInput(UIWebContentSearchForm.DOC_TYPE).setValue(strNodeTypes) ;
   }
 
+  /**
+   * Sets the node types.
+   * 
+   * @param selectedNodeTypes the selected node types
+   * @param uiDocSearchForm the ui doc search form
+   */
   private void setNodeTypes(List<String> selectedNodeTypes, UIDocumentSearchForm uiDocSearchForm) {
     String strNodeTypes = null ;
     for(int i = 0 ; i < selectedNodeTypes.size() ; i++) {
@@ -119,6 +148,13 @@ public class UIWCMNodeTypeSelectForm extends UIForm {
     uiDocSearchForm.getUIStringInput(UIWebContentSearchForm.DOC_TYPE).setValue(strNodeTypes) ;
   }
 
+  /**
+   * Gets the web content node types.
+   * 
+   * @return the web content node types
+   * 
+   * @throws Exception the exception
+   */
   private List<String> getWebContentNodeTypes() throws Exception {
     List<String> webContentNodeTypes = new ArrayList<String>();
     RepositoryService repoService = getApplicationComponent(RepositoryService.class);
@@ -130,6 +166,13 @@ public class UIWCMNodeTypeSelectForm extends UIForm {
     return webContentNodeTypes;
   }
 
+  /**
+   * Gets the document node types.
+   * 
+   * @return the document node types
+   * 
+   * @throws Exception the exception
+   */
   private List<String> getDocumentNodeTypes() throws Exception {
     List<String> documentNodeTypes = new ArrayList<String>();
     RepositoryService repoService = getApplicationComponent(RepositoryService.class);
@@ -145,7 +188,23 @@ public class UIWCMNodeTypeSelectForm extends UIForm {
     return resultNodeTypes;
   }
 
+  /**
+   * The listener interface for receiving saveAction events.
+   * The class that is interested in processing a saveAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSaveActionListener<code> method. When
+   * the saveAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SaveActionEvent
+   */
   public static class SaveActionListener extends EventListener<UIWCMNodeTypeSelectForm> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
+    @SuppressWarnings("unchecked")
     public void execute(Event<UIWCMNodeTypeSelectForm> event) throws Exception {
       UIWCMNodeTypeSelectForm uiNTSelectForm = event.getSource();
       UIPopupWindow uiPopup = uiNTSelectForm.getAncestorOfType(UIPopupWindow.class);
@@ -180,6 +239,16 @@ public class UIWCMNodeTypeSelectForm extends UIForm {
     }
   }
 
+  /**
+   * Make selected node.
+   * 
+   * @param nodeTypesValue the node types value
+   * @param selectedNodeTypes the selected node types
+   * @param listCheckbox the list checkbox
+   * 
+   * @throws Exception the exception
+   */
+  @SuppressWarnings("unchecked")
   private void makeSelectedNode(String nodeTypesValue, 
       List<String> selectedNodeTypes, List<UIFormCheckBoxInput> listCheckbox) throws Exception {
     if(nodeTypesValue != null && nodeTypesValue.length() > 0) {
@@ -201,7 +270,22 @@ public class UIWCMNodeTypeSelectForm extends UIForm {
     }
   } 
 
+  /**
+   * The listener interface for receiving cancelAction events.
+   * The class that is interested in processing a cancelAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addCancelActionListener<code> method. When
+   * the cancelAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see CancelActionEvent
+   */
   public static class CancelActionListener extends EventListener<UIWCMNodeTypeSelectForm> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIWCMNodeTypeSelectForm> event) throws Exception {
       UIWCMNodeTypeSelectForm uiNTSelectForm = event.getSource();
       UIPopupWindow uiPopupWindow = uiNTSelectForm.getAncestorOfType(UIPopupWindow.class);

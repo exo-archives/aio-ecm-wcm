@@ -28,6 +28,7 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 
+// TODO: Auto-generated Javadoc
 /*
  * Created by The eXo Platform SAS 
  * Author : Anh Do Ngoc 
@@ -43,7 +44,10 @@ public class UIPCVPresentation extends UIBaseNodePresentation {
 
   /** The content node. */
   private Node                contentNode;
+  
+  /** The orginal node. */
   private Node  orginalNode;
+  
   /** The resource resolver. */
   private JCRResourceResolver resourceResolver;
 
@@ -62,10 +66,10 @@ public class UIPCVPresentation extends UIBaseNodePresentation {
   /** The Constant CONTENT_UNSUPPORT_EXC. */
   public final static String  CONTENT_UNSUPPORT_EXC = "UIMessageBoard.msg.content-unsupport-exc";
   
-  /** Content can't be printed.*/
+  /** Content can't be printed. */
   public final static String  CONTENT_NOT_PRINTED = "UIMessageBoard.msg.content-invisible";
   
-  /** Content is obsolete.*/
+  /** Content is obsolete. */
   public final static String OBSOLETE_CONTENT = "UIMessageBoard.msg.content-obsolete";
 
   /** The Constant PARAMETER_REGX. */
@@ -87,6 +91,11 @@ public class UIPCVPresentation extends UIBaseNodePresentation {
 	  return orginalNode;
   }
   
+  /**
+   * Sets the orginal node.
+   * 
+   * @param orginalNode the new orginal node
+   */
   public void setOrginalNode(Node orginalNode) {
 	this.orginalNode = orginalNode;
 }
@@ -112,7 +121,6 @@ public class UIPCVPresentation extends UIBaseNodePresentation {
   @Override
   public String getTemplatePath() throws Exception {
     TemplateService templateService = getApplicationComponent(TemplateService.class);
-    
     return templateService.getTemplatePath(orginalNode, false);
   }
 
@@ -135,9 +143,7 @@ public class UIPCVPresentation extends UIBaseNodePresentation {
         DMSConfiguration dmsConfiguration = getApplicationComponent(DMSConfiguration.class);
         String workspace = dmsConfiguration.getConfig(repository).getSystemWorkspace();
         resourceResolver = new JCRResourceResolver(repository, workspace, "exo:templateFile");
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+    } catch (Exception e) {}
     return resourceResolver;
   }
 
@@ -187,8 +193,11 @@ public class UIPCVPresentation extends UIBaseNodePresentation {
 	  super.processRender(context);
   }
 
-public UIComponent getCommentComponent() {
-	// TODO Auto-generated method stub
-	return null;
-}
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.presentation.NodePresentation#getCommentComponent()
+   */
+  public UIComponent getCommentComponent() {
+  	// TODO Auto-generated method stub
+  	return null;
+  }
 }

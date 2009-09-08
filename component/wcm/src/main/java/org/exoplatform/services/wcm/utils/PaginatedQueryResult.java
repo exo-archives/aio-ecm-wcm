@@ -64,6 +64,7 @@ public class PaginatedQueryResult extends PaginatedNodeIterator {
   /* (non-Javadoc)
    * @see org.exoplatform.wcm.webui.paginator.PaginatedNodeIterator#populateCurrentPage(int)
    */
+  @SuppressWarnings("unchecked")
   protected void populateCurrentPage(int page) throws Exception {   
     checkAndSetPosition(page);
     TwoWayRangeIterator twoWayRangeIterator = (TwoWayRangeIterator)nodeIterator;

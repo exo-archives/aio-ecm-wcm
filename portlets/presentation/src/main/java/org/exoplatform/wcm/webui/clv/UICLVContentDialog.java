@@ -163,9 +163,7 @@ public class UICLVContentDialog extends UIDialogForm {
           homeNode.save();
           newNode = (Node) homeNode.getSession().getItem(addedPath);
           event.getRequestContext().setAttribute("nodePath", newNode.getPath());
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
+        } catch (Exception e) {}
       } catch (AccessControlException ace) {
         throw new AccessDeniedException(ace.getMessage());
       } catch (VersionException ve) {
@@ -198,7 +196,6 @@ public class UICLVContentDialog extends UIDialogForm {
       PortletRequestContext pContext = (PortletRequestContext) event.getRequestContext();
       Utils.updatePortal(pContext);
     }
-
   }
   
   public static class FastPublishActionListener extends EventListener<UICLVContentDialog> {
@@ -225,9 +222,7 @@ public class UICLVContentDialog extends UIDialogForm {
           homeNode.save();
           newNode = (Node) homeNode.getSession().getItem(addedPath);
           event.getRequestContext().setAttribute("nodePath", newNode.getPath());
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
+        } catch (Exception e) {}
       } catch (AccessControlException e) {
         throw new AccessDeniedException(e.getMessage());
       } catch (VersionException e) {
@@ -253,7 +248,6 @@ public class UICLVContentDialog extends UIDialogForm {
       publicationService.updateLifecyleOnChangeContent(newNode, Util.getPortalRequestContext().getPortalOwner(), Util.getPortalRequestContext().getRemoteUser(), 
     		  PublicationDefaultStates.PUBLISHED);
       
-      
       Utils.closePopupWindow(uiDocumentDialogForm, "UIDocumentDialogFormPopupWindow");
       PortletRequestContext pContext = (PortletRequestContext) event.getRequestContext();
       Utils.updatePortal(pContext);
@@ -277,5 +271,4 @@ public class UICLVContentDialog extends UIDialogForm {
       Utils.closePopupWindow(uiDocumentDialogForm, "UIDocumentDialogFormPopupWindow");
     }
   }
-
 }

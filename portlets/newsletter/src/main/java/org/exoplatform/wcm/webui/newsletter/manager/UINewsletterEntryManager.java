@@ -48,11 +48,12 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          ngoc.tran@exoplatform.com
- * Jun 9, 2009  
+ * ngoc.tran@exoplatform.com
+ * Jun 9, 2009
  */
 @ComponentConfig(
      lifecycle = UIFormLifecycle.class,
@@ -69,19 +70,43 @@ import org.exoplatform.webui.form.UIFormSelectBox;
      }
  )
 public class UINewsletterEntryManager extends UIForm {
+  
+  /** The check box input. */
   private UIFormCheckBoxInput<Boolean>  checkBoxInput;
+  
+  /** The subscription config. */
   private NewsletterSubscriptionConfig subscriptionConfig;
+  
+  /** The category config. */
   private NewsletterCategoryConfig categoryConfig;
+  
+  /** The list newsletter config. */
   private List<NewsletterManagerConfig> listNewsletterConfig;
+  
+  /** The newsletter entry handler. */
   private NewsletterEntryHandler newsletterEntryHandler ;
+  
+  /** The PAGEITERATO r_ id. */
   private String PAGEITERATOR_ID = "NewsletterEntryManagerPageIterator";
+  
+  /** The ui page iterator_. */
   private UIPageIterator uiPageIterator_;
 
+  /**
+   * Instantiates a new uI newsletter entry manager.
+   * 
+   * @throws Exception the exception
+   */
   public UINewsletterEntryManager () throws Exception {
     NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
     newsletterEntryHandler = newsletterManagerService.getEntryHandler();
   }
   
+  /**
+   * Inits the.
+   * 
+   * @throws Exception the exception
+   */
   public void init() throws Exception{
     ObjectPageList objPageList = new ObjectPageList(setListNewsletterEntries(), 10) ;
     uiPageIterator_ = createUIComponent(UIPageIterator.class, null, PAGEITERATOR_ID);
@@ -89,6 +114,11 @@ public class UINewsletterEntryManager extends UIForm {
     uiPageIterator_.setPageList(objPageList) ;
   }
   
+  /**
+   * Sets the list newsletter entries.
+   * 
+   * @return the list< newsletter manager config>
+   */
   private List<NewsletterManagerConfig> setListNewsletterEntries(){
     this.getChildren().clear();
     listNewsletterConfig = new ArrayList<NewsletterManagerConfig>();
@@ -103,18 +133,29 @@ public class UINewsletterEntryManager extends UIForm {
         checkBoxInput = new UIFormCheckBoxInput<Boolean>(newletter.getNewsletterName(), newletter.getNewsletterName(), false);
         this.addChild(checkBoxInput);
       }
-    }catch(Exception ex){
-      ex.printStackTrace();
-    }
+    }catch(Exception ex){}
     return listNewsletterConfig;
   }
   
+  /**
+   * Gets the list newsletter entries.
+   * 
+   * @return the list newsletter entries
+   * 
+   * @throws Exception the exception
+   */
   @SuppressWarnings("unchecked")
   public List getListNewsletterEntries() throws Exception { 
     if(uiPageIterator_ != null)return uiPageIterator_.getCurrentPageData() ;
     else return new ArrayList<NewsletterManagerConfig>();
   }
 
+  /**
+   * Gets the checked.
+   * 
+   * @return the checked
+   */
+  @SuppressWarnings("unchecked")
   public List<String> getChecked(){
     List<String> newsletterId = new ArrayList<String>();
     UIFormCheckBoxInput<Boolean> checkbox = null;
@@ -129,23 +170,58 @@ public class UINewsletterEntryManager extends UIForm {
     return newsletterId;
   }
 
+  /**
+   * Gets the subscription config.
+   * 
+   * @return the subscription config
+   */
   public NewsletterSubscriptionConfig getSubscriptionConfig() {
     return subscriptionConfig;
   }
 
+  /**
+   * Sets the subscription config.
+   * 
+   * @param subscriptionConfig the new subscription config
+   */
   public void setSubscriptionConfig(NewsletterSubscriptionConfig subscriptionConfig) {
     this.subscriptionConfig = subscriptionConfig;
   }
   
+  /**
+   * Gets the category config.
+   * 
+   * @return the category config
+   */
   public NewsletterCategoryConfig getCategoryConfig() {
     return categoryConfig;
   }
 
+  /**
+   * Sets the category config.
+   * 
+   * @param categoryConfig the new category config
+   */
   public void setCategoryConfig(NewsletterCategoryConfig categoryConfig) {
     this.categoryConfig = categoryConfig;
   }
   
+  /**
+   * The listener interface for receiving backToSubcriptionsAction events.
+   * The class that is interested in processing a backToSubcriptionsAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addBackToSubcriptionsActionListener<code> method. When
+   * the backToSubcriptionsAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see BackToSubcriptionsActionEvent
+   */
   static  public class BackToSubcriptionsActionListener extends EventListener<UINewsletterEntryManager> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UINewsletterEntryManager> event) throws Exception {
       UINewsletterEntryManager uiNewsletterEntryManager = event.getSource();
       UINewsletterManagerPortlet newsletterManagerPortlet = uiNewsletterEntryManager.getAncestorOfType(UINewsletterManagerPortlet.class);
@@ -158,7 +234,22 @@ public class UINewsletterEntryManager extends UIForm {
     }
   }
 
+  /**
+   * The listener interface for receiving backToCategoriesAction events.
+   * The class that is interested in processing a backToCategoriesAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addBackToCategoriesActionListener<code> method. When
+   * the backToCategoriesAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see BackToCategoriesActionEvent
+   */
   static  public class BackToCategoriesActionListener extends EventListener<UINewsletterEntryManager> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UINewsletterEntryManager> event) throws Exception {
       UINewsletterEntryManager newsletter = event.getSource();
       UINewsletterManagerPortlet newsletterManagerPortlet = newsletter.getAncestorOfType(UINewsletterManagerPortlet.class);
@@ -171,7 +262,22 @@ public class UINewsletterEntryManager extends UIForm {
     }
   }
 
+  /**
+   * The listener interface for receiving openNewsletterAction events.
+   * The class that is interested in processing a openNewsletterAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addOpenNewsletterActionListener<code> method. When
+   * the openNewsletterAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see OpenNewsletterActionEvent
+   */
   static  public class OpenNewsletterActionListener extends EventListener<UINewsletterEntryManager> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UINewsletterEntryManager> event) throws Exception {
       UINewsletterEntryManager uiNewsletterEntryManager = event.getSource();
       List<String> subIds = uiNewsletterEntryManager.getChecked();
@@ -185,7 +291,22 @@ public class UINewsletterEntryManager extends UIForm {
     }
   }
   
+  /**
+   * The listener interface for receiving selectNewsletterAction events.
+   * The class that is interested in processing a selectNewsletterAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSelectNewsletterActionListener<code> method. When
+   * the selectNewsletterAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SelectNewsletterActionEvent
+   */
   static  public class SelectNewsletterActionListener extends EventListener<UINewsletterEntryManager> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UINewsletterEntryManager> event) throws Exception {
       UINewsletterEntryManager uiNewsletterEntryManager = event.getSource();
       String newsletterName = event.getRequestContext().getRequestParameter(OBJECTID);
@@ -195,7 +316,22 @@ public class UINewsletterEntryManager extends UIForm {
     }
   }
   
+  /**
+   * The listener interface for receiving addEntryAction events.
+   * The class that is interested in processing a addEntryAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addAddEntryActionListener<code> method. When
+   * the addEntryAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see AddEntryActionEvent
+   */
   public static class AddEntryActionListener extends EventListener<UINewsletterEntryManager> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UINewsletterEntryManager> event) throws Exception {
       UINewsletterEntryManager uiNewsletterEntryManager = event.getSource();
       UINewsletterEntryContainer entryContainer = uiNewsletterEntryManager.createUIComponent(UINewsletterEntryContainer.class, null, null);
@@ -206,7 +342,22 @@ public class UINewsletterEntryManager extends UIForm {
     }
   }
   
+  /**
+   * The listener interface for receiving deleteNewsletterEntryAction events.
+   * The class that is interested in processing a deleteNewsletterEntryAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addDeleteNewsletterEntryActionListener<code> method. When
+   * the deleteNewsletterEntryAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see DeleteNewsletterEntryActionEvent
+   */
   public static class DeleteNewsletterEntryActionListener extends EventListener<UINewsletterEntryManager> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UINewsletterEntryManager> event) throws Exception {
       UINewsletterEntryManager uiNewsletterEntryManager = event.getSource();
       List<String> subIds = uiNewsletterEntryManager.getChecked();
@@ -224,7 +375,22 @@ public class UINewsletterEntryManager extends UIForm {
     }
   }
   
+  /**
+   * The listener interface for receiving editNewsletterEntryAction events.
+   * The class that is interested in processing a editNewsletterEntryAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addEditNewsletterEntryActionListener<code> method. When
+   * the editNewsletterEntryAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see EditNewsletterEntryActionEvent
+   */
   public static class EditNewsletterEntryActionListener extends EventListener<UINewsletterEntryManager> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UINewsletterEntryManager> event) throws Exception {
       UINewsletterEntryManager uiNewsletterEntryManager = event.getSource();
       List<String> subIds = uiNewsletterEntryManager.getChecked();
@@ -237,7 +403,6 @@ public class UINewsletterEntryManager extends UIForm {
                                         + uiNewsletterEntryManager.categoryConfig.getName() + "/" 
                                         + uiNewsletterEntryManager.getSubscriptionConfig().getName() + "/" 
                                         + subIds.get(0));
-      //entryContainer.setCategoryConfig(uiNewsletterEntryManager.categoryConfig);
       UINewsletterEntryDialogSelector newsletterEntryDialogSelector = entryContainer.getChild(UINewsletterEntryDialogSelector.class);
       newsletterEntryDialogSelector.init(uiNewsletterEntryManager.categoryConfig.getName(), 
                                          uiNewsletterEntryManager.subscriptionConfig.getName());
@@ -253,7 +418,22 @@ public class UINewsletterEntryManager extends UIForm {
     }
   }
   
+  /**
+   * The listener interface for receiving convertTemplateAction events.
+   * The class that is interested in processing a convertTemplateAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addConvertTemplateActionListener<code> method. When
+   * the convertTemplateAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see ConvertTemplateActionEvent
+   */
   public static class ConvertTemplateActionListener extends EventListener<UINewsletterEntryManager> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UINewsletterEntryManager> event) throws Exception {
       UINewsletterEntryManager newsletterEntryManager = event.getSource();
       String categoryName = newsletterEntryManager.categoryConfig.getName();
@@ -291,5 +471,4 @@ public class UINewsletterEntryManager extends UIForm {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
     }
   }
-  
 }

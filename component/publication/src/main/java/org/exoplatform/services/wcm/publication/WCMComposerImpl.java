@@ -19,24 +19,43 @@ import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.picocontainer.Startable;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class WCMComposerImpl.
+ * 
  * @author benjamin
- *
  */
 public class WCMComposerImpl implements WCMComposer, Startable {
 
+	/** The template service. */
 	private TemplateService templateService;
+	
+	/** The repository service. */
 	private RepositoryService repositoryService;
+	
+	/** The publication service. */
 	private PublicationService publicationService;
+	
+	/** The wcm publication service. */
 	private WCMPublicationService wcmPublicationService = null;
 	
+	/** The templates filter. */
 	private String templatesFilter = null;
+	
+	/** The repository. */
 	private String repository;
 	
+	/**
+	 * Instantiates a new wCM composer impl.
+	 * 
+	 * @param templateService the template service
+	 * @param publicationService the publication service
+	 * 
+	 * @throws Exception the exception
+	 */
 	public WCMComposerImpl(TemplateService templateService, PublicationService publicationService) throws Exception {
 		this.templateService = templateService;
 		this.repository = "repository";
@@ -44,10 +63,20 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 		init();
 	}
 	
+	/**
+	 * Inits the.
+	 * 
+	 * @throws Exception the exception
+	 */
 	private void init() throws Exception {
 	    repositoryService = RepositoryService.class.cast(ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(RepositoryService.class));
 	}
 	
+	/**
+	 * Gets the wCM publication service.
+	 * 
+	 * @return the wCM publication service
+	 */
 	private WCMPublicationService getWCMPublicationService() {
 		if (wcmPublicationService==null) {
 			wcmPublicationService = WCMPublicationService.class.cast(ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(WCMPublicationService.class));
@@ -58,9 +87,13 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	/* (non-Javadoc)
 	 * @see org.exoplatform.services.wcm.publication.WCMComposer#getContent(java.lang.String, java.lang.String, java.lang.String, java.util.HashMap)
 	 */
-	public Node getContent(String repository, String workspace, String path,
-			HashMap<String, String> filters, SessionProvider sessionProvider) throws Exception {
-	    ManageableRepository manageableRepository = repositoryService.getRepository(repository);    
+	public Node getContent(
+	                       String repository,
+	                       String workspace,
+	                       String path,
+	                       HashMap<String, String> filters,
+	                       SessionProvider sessionProvider) throws Exception {
+	  ManageableRepository manageableRepository = repositoryService.getRepository(repository);    
 		Session session = sessionProvider.getSession(workspace, manageableRepository);
 		Node node = (Node)session.getItem(path);
 		String lifecycleName = publicationService.getNodeLifecycleName(node);
@@ -80,29 +113,31 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	/* (non-Javadoc)
 	 * @see org.exoplatform.services.wcm.publication.WCMComposer#getContents(java.lang.String, java.lang.String, java.lang.String, java.util.HashMap)
 	 */
-	public NodeIterator getContents(String repository, String workspace,
-			String path, HashMap<String, String> filters, SessionProvider sessionProvider) throws Exception {
-		String templatesFilter = getTemlatesSQLFilter();
-	    ManageableRepository manageableRepository = repositoryService.getRepository(repository);    
-		Session session = sessionProvider.getSession(workspace, manageableRepository);
-	    QueryManager manager = session.getWorkspace().getQueryManager();
-	    String orderFilter = getOrderSQLFilter(filters);
-	    String mode = filters.get(FILTER_MODE);
-	    String statement="";
-	    
-	    statement = "select * from nt:base where " +
-	    		        "jcr:path like '" + path +"/%' AND " +
-	    		        "NOT jcr:path like '" + path + "/%/%'" + " AND " +
-	    		        templatesFilter + " AND " +
-	    		        "NOT publication:currentState like '%' ";
-	    if (MODE_LIVE.equals(mode))
-	      statement += "OR publication:currentState = 'published'";
-	    else
-	    	statement += "OR publication:currentState <> 'obsolete' AND publication:currentState <> 'archived'";
-	    statement += orderFilter;
-	    
-	    Query query = manager.createQuery(statement, Query.SQL);
-	    return query.execute().getNodes();
+	public NodeIterator getContents(
+	                                String repository,
+	                                String workspace,
+	                                String path,
+	                                HashMap<String, String> filters,
+	                                SessionProvider sessionProvider) throws Exception {
+    String templatesFilter = getTemlatesSQLFilter();
+    ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+    Session session = sessionProvider.getSession(workspace, manageableRepository);
+    QueryManager manager = session.getWorkspace().getQueryManager();
+    String orderFilter = getOrderSQLFilter(filters);
+    String mode = filters.get(FILTER_MODE);
+    String statement = "";
+
+    statement = "select * from nt:base where " + "jcr:path like '" + path + "/%' AND "
+        + "NOT jcr:path like '" + path + "/%/%'" + " AND " + templatesFilter + " AND "
+        + "NOT publication:currentState like '%' ";
+    if (MODE_LIVE.equals(mode))
+      statement += "OR publication:currentState = 'published'";
+    else
+      statement += "OR publication:currentState <> 'obsolete' AND publication:currentState <> 'archived'";
+    statement += orderFilter;
+
+    Query query = manager.createQuery(statement, Query.SQL);
+    return query.execute().getNodes();
 	}
 
 	/* (non-Javadoc)
@@ -126,7 +161,11 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	/**
 	 * We currently support 2 modes :
 	 * MODE_LIVE : PUBLISHED state only
-	 * MODE_EDIT : PUBLISHED, DRAFT, PENDING, STAGED, APPROVED allowed
+	 * MODE_EDIT : PUBLISHED, DRAFT, PENDING, STAGED, APPROVED allowed.
+	 * 
+	 * @param mode the mode
+	 * 
+	 * @return the allowed states
 	 */
 	public List<String> getAllowedStates(String mode) {
 		List<String> states = new ArrayList<String>();
@@ -139,20 +178,28 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 			states.add(PublicationDefaultStates.STAGED);
 			states.add(PublicationDefaultStates.APPROVED);
 		}
-		
 		return states;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.picocontainer.Startable#start()
+	 */
 	public void start() {
 		// TODO Auto-generated method stub
-		
 	}
 
+	/* (non-Javadoc)
+	 * @see org.picocontainer.Startable#stop()
+	 */
 	public void stop() {
 		// TODO Auto-generated method stub
-		
 	}
 	
+	/**
+	 * Gets the temlates sql filter.
+	 * 
+	 * @return the temlates sql filter
+	 */
 	private String getTemlatesSQLFilter() {
 		if (templatesFilter!=null)
 			return templatesFilter;
@@ -169,13 +216,18 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 			    }
 			    templatesFilter = documentTypeClause.toString();
 			    return templatesFilter;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			} catch (Exception e) {}
 		}
 		return "";
 	}
 
+	/**
+	 * Gets the order sql filter.
+	 * 
+	 * @param filters the filters
+	 * 
+	 * @return the order sql filter
+	 */
 	private String getOrderSQLFilter(HashMap<String, String> filters) {
 	    String orderQuery = " ORDER BY ";
 	    String orderBy = filters.get(FILTER_ORDER_BY);
@@ -186,5 +238,4 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	    
 	    return orderQuery;
 	}
-
 }

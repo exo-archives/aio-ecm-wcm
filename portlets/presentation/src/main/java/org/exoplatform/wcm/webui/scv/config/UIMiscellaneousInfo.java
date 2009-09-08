@@ -51,28 +51,14 @@ public class UIMiscellaneousInfo extends UIForm {
    * 
    * @throws Exception the exception
    */
+  @SuppressWarnings("unchecked")
   public UIMiscellaneousInfo() throws Exception {
     PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     PortletPreferences prefs = context.getRequest().getPreferences();
     boolean isShowTitle = Boolean.parseBoolean(prefs.getValue("ShowTitle", null));
     boolean isShowPrint = Boolean.parseBoolean(prefs.getValue("ShowPrintAction", null));
-//    boolean isShowTags = Boolean.parseBoolean(prefs.getValue("ShowTags", null));
-//    boolean isShowCategories = Boolean.parseBoolean(prefs.getValue("ShowCategories", null));
-//    boolean isQuickEdit = Boolean.parseBoolean(prefs.getValue("ShowQuickEdit", null));
     addUIFormInput(new UIFormCheckBoxInput("ShowTitle", "ShowTitle", null).setChecked(isShowTitle));
     addUIFormInput(new UIFormCheckBoxInput("ShowPrintAction", "ShowPrintAction", null).setChecked(isShowPrint));
-    // because WCM remove UITagging, UICategorizing, we don't add UIFormInput for them
-//    addUIFormInput(new UIFormCheckBoxInput("ShowTags", "ShowTags", null).setChecked(isShowTags));
-
-    /*
-     * IN COMMENT UNTIL WCM 1.3
-     */
-//    boolean isShowVote = Boolean.parseBoolean(prefs.getValue("ShowVote", "false"));
-//    boolean isShowComments = Boolean.parseBoolean(prefs.getValue("ShowComments", "false"));
-//    addUIFormInput(new UIFormCheckBoxInput("ShowVote", "ShowVote", null).setChecked(isShowVote));
-//    addUIFormInput(new UIFormCheckBoxInput("ShowComments", "ShowComments", null).setChecked(isShowComments));
-
-    //    addUIFormInput(new UIFormCheckBoxInput("ShowCategories", "ShowCategories", null).setChecked(isShowCategories));
   }
 
   /**
@@ -95,30 +81,14 @@ public class UIMiscellaneousInfo extends UIForm {
       UIMiscellaneousInfo uiMiscellaneousInfo = event.getSource();
       boolean isShowTitle = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowTitle").isChecked();
       boolean isShowPrint = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowPrintAction").isChecked();
-//      boolean isQuickEdit = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowQuickEdit").isChecked();
-//      boolean isShowTags = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowTags").isChecked();
-//      boolean isShowCategories = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowCategories").isChecked();
       PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
       PortletPreferences prefs = context.getRequest().getPreferences();
       prefs.setValue("ShowTitle", Boolean.toString(isShowTitle));
       prefs.setValue("ShowPrintAction", Boolean.toString(isShowPrint));
-//      prefs.setValue("ShowQuickEdit", Boolean.toString(isQuickEdit));
-//      prefs.setValue("ShowTags", Boolean.toString(isShowTags));
-      /*
-       * IN COMMENT UNTIL WCM 1.3
-       */
-//      boolean isShowVote = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowVote").isChecked();
-//      boolean isShowComments = uiMiscellaneousInfo.getUIFormCheckBoxInput("ShowComments").isChecked();
-//      prefs.setValue("ShowVote", Boolean.toString(isShowVote));
-//      prefs.setValue("ShowComments", Boolean.toString(isShowComments));
-
-      //      prefs.setValue("ShowCategories", Boolean.toString(isShowCategories));
       prefs.store();
       UIApplication uiApplication = uiMiscellaneousInfo.getAncestorOfType(UIApplication.class);
       uiApplication.addMessage(new ApplicationMessage("UIMiscellaneousInfo.msg-successfully", null, ApplicationMessage.INFO));
       event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
     }     
   }
-
-
 }

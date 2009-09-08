@@ -218,9 +218,7 @@ public class PageEventListenerDelegate {
       return ;
     }            
     for (String uri : listPageNavigationUri) {
-//      if(!listExistedNavigationNodeUri.contains(uri)) {
         listExistedNavigationNodeUri.add(uri);                           
-//      }            
     }                   
     content.setProperty("publication:navigationNodeURIs", StageAndVersionPublicationUtil.toValues(valueFactory, listExistedNavigationNodeUri));
 
@@ -229,9 +227,6 @@ public class PageEventListenerDelegate {
     nodeAppIds.add(mixedAppId);
     content.setProperty("publication:applicationIDs", StageAndVersionPublicationUtil.toValues(valueFactory, nodeAppIds));
     content.setProperty("publication:webPageIDs", StageAndVersionPublicationUtil.toValues(valueFactory, nodeWebPageIds));
-//    HashMap<String,String> context = new HashMap<String,String>();
-//    context.put(Constant.CURRENT_VERSION_NAME,content.getName()); 
-//    publicationPlugin.changeState(content, Constant.LIVE, context);
     session.save();
   } 
 
@@ -271,13 +266,6 @@ public class PageEventListenerDelegate {
       }
     }
     content.setProperty("publication:navigationNodeURIs", StageAndVersionPublicationUtil.toValues(valueFactory, listExistedNavigationNodeUri));
-
-//    if (listExistedPageId.isEmpty()) { 
-//      HashMap<String,String> context = new HashMap<String,String>();
-//      context.put(Constant.CURRENT_VERSION_NAME,content.getName()); 
-//      publicationPlugin.changeState(content, Constant.DRAFT, context);
-//    }
-
     session.save();
   }
 }

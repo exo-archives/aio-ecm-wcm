@@ -34,32 +34,58 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : anh.do
- *          anh.do@exoplatform.com, anhdn86@gmail.com		
- * Mar 2, 2009  
+ * anh.do@exoplatform.com, anhdn86@gmail.com
+ * Mar 2, 2009
  */
 public class WikiLinkParser {
 
+  /** The data source. */
   private String dataSource; 
   
+  /** The Constant XWIKI_LINK. */
   public final static Pattern XWIKI_LINK = Pattern.compile("(\\[)([\\w\\W&&[^\\]]]+)(\\>)([:/\\w\\s\\.]+)(\\])");
   
+  /** The links. */
   Map<String, String> links = new HashMap<String, String>();
   
+  /**
+   * Instantiates a new wiki link parser.
+   * 
+   * @param source the source
+   */
   public WikiLinkParser(String source) {
     this.dataSource = source;
   }
   
+  /**
+   * Sets the data source.
+   * 
+   * @param dataSource the new data source
+   */
   public void setDataSource(String dataSource) {
     this.dataSource = dataSource;
   }
   
+  /**
+   * Gets the data source.
+   * 
+   * @return the data source
+   */
   public String getDataSource() {
     return this.dataSource;
   }
   
+  /**
+   * Gets the navigations.
+   * 
+   * @return the navigations
+   * 
+   * @throws Exception the exception
+   */
   protected static List<PageNavigation> getNavigations() throws Exception {
     List<PageNavigation> allNav = Util.getUIPortal().getNavigations();
     String remoteUser = Util.getPortalRequestContext().getRemoteUser();
@@ -70,6 +96,11 @@ public class WikiLinkParser {
     return result;
   }  
   
+  /**
+   * Gets the base uri.
+   * 
+   * @return the base uri
+   */
   private String getBaseURI() {
     PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
     HttpServletRequest servletRequest = portalRequestContext.getRequest();
@@ -80,6 +111,16 @@ public class WikiLinkParser {
     return baseURI.concat(wikiContext);
   }
   
+  /**
+   * Generate link.
+   * 
+   * @param uri the uri
+   * @param label the label
+   * 
+   * @return the string
+   * 
+   * @throws Exception the exception
+   */
   private String generateLink(String uri, String label) throws Exception {
     if (uri == null || uri.trim().length() == 0 || uri.startsWith(".") || uri.endsWith(".")) return "#";    
     if (uri.contains("//")) {      
@@ -111,6 +152,13 @@ public class WikiLinkParser {
     }    
   }
   
+  /**
+   * Correct links.
+   * 
+   * @param list the list
+   * 
+   * @throws Exception the exception
+   */
   private void correctLinks(List<String> list) throws Exception {
     String [] arr = links.keySet().toArray(new String [0]);
     for (int i = list.size() - 1; i >= 0; i -- ) {
@@ -121,6 +169,13 @@ public class WikiLinkParser {
     }
   }
   
+  /**
+   * Parses the html.
+   * 
+   * @return the string
+   * 
+   * @throws Exception the exception
+   */
   public String parseHTML() throws Exception {
     dataSource = dataSource.replace("&gt;", ">");    
     Matcher matcher = XWIKI_LINK.matcher(dataSource);
@@ -134,5 +189,4 @@ public class WikiLinkParser {
     correctLinks(list);
     return dataSource;
   }
-  
 }

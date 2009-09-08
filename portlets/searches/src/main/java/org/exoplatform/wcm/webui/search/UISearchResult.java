@@ -60,12 +60,10 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
+// TODO: Auto-generated Javadoc
 /*
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Oct 31, 2008
- */
-/**
- * The Class UISearchResult.
  */
 @ComponentConfigs( {
 	@ComponentConfig(
@@ -77,6 +75,7 @@ import org.exoplatform.webui.event.EventListener;
 })
 public class UISearchResult extends UIContainer {
 
+	/** The Constant DRAFT. */
 	public static final String				DRAFT							= "draft".intern();
 
 	/** The template path. */
@@ -117,6 +116,7 @@ public class UISearchResult extends UIContainer {
 	 * 
 	 * @param templatePath the template path
 	 * @param resourceResolver the resource resolver
+	 * 
 	 * @throws Exception the exception
 	 */
 	public void init(String templatePath, ResourceResolver resourceResolver) throws Exception {
@@ -294,6 +294,7 @@ public class UISearchResult extends UIContainer {
 	 * Gets the current page data.
 	 * 
 	 * @return the current page data
+	 * 
 	 * @throws Exception the exception
 	 */
 	@SuppressWarnings("unchecked")
@@ -305,7 +306,9 @@ public class UISearchResult extends UIContainer {
 	 * Gets the title.
 	 * 
 	 * @param node the node
+	 * 
 	 * @return the title
+	 * 
 	 * @throws Exception the exception
 	 */
 	public String getTitle(Node node) throws Exception {
@@ -317,7 +320,9 @@ public class UISearchResult extends UIContainer {
 	 * Gets the uRL.
 	 * 
 	 * @param node the node
+	 * 
 	 * @return the uRL
+	 * 
 	 * @throws Exception the exception
 	 */
 	public List<String> getURLs(Node node) throws Exception {
@@ -332,6 +337,15 @@ public class UISearchResult extends UIContainer {
 		return urls;
 	}
 
+	/**
+	 * Show draft button.
+	 * 
+	 * @param node the node
+	 * 
+	 * @return true, if successful
+	 * 
+	 * @throws Exception the exception
+	 */
 	public boolean showDraftButton(Node node) throws Exception {
 		Object obj = Util	.getPortalRequestContext()
 											.getRequest()
@@ -342,13 +356,21 @@ public class UISearchResult extends UIContainer {
 		String currentState = null;
 		try {
 			currentState = node.getProperty("publication:currentState").getString();
-		} catch (Exception e) {
-		}
+		} catch (Exception e) {}
 		if (Boolean.parseBoolean(obj.toString()) && DRAFT.equals(currentState))
 			return true;
 		return false;
 	}
 
+	/**
+	 * Gets the node view.
+	 * 
+	 * @param node the node
+	 * 
+	 * @return the node view
+	 * 
+	 * @throws Exception the exception
+	 */
 	public Node getNodeView(Node node) throws Exception {
 		PublicationService publicationService = getApplicationComponent(PublicationService.class);
 		HashMap<String, Object> context = new HashMap<String, Object>();
@@ -363,6 +385,13 @@ public class UISearchResult extends UIContainer {
 	  return publicationPlugin.getNodeView(node, context);
 	}
 
+	/**
+	 * Gets the published node uri.
+	 * 
+	 * @param navNodeURI the nav node uri
+	 * 
+	 * @return the published node uri
+	 */
 	public String getPublishedNodeURI(String navNodeURI) {
 		PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
 		String accessMode = null;
@@ -381,6 +410,15 @@ public class UISearchResult extends UIContainer {
 		return baseURI + portalRequestContext.getRequestContextPath() + "/" + accessMode + navNodeURI;
 	}
 
+	/**
+	 * Gets the uRL.
+	 * 
+	 * @param node the node
+	 * 
+	 * @return the uRL
+	 * 
+	 * @throws Exception the exception
+	 */
 	public String getURL(Node node) throws Exception {
 		String link = null;
 		PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
@@ -403,7 +441,9 @@ public class UISearchResult extends UIContainer {
 	 * Gets the created date.
 	 * 
 	 * @param node the node
+	 * 
 	 * @return the created date
+	 * 
 	 * @throws Exception the exception
 	 */
 	public String getCreatedDate(Node node) throws Exception {
@@ -418,6 +458,7 @@ public class UISearchResult extends UIContainer {
 	 * Checks if is show paginator.
 	 * 
 	 * @return true, if is show paginator
+	 * 
 	 * @throws Exception the exception
 	 */
 	public boolean isShowPaginator() throws Exception {
@@ -461,7 +502,7 @@ public class UISearchResult extends UIContainer {
 	/**
 	 * Sets the suggestion.
 	 * 
-	 * @param suggestions the new suggestion
+	 * @param suggestion the suggestion
 	 */
 	public void setSuggestion(String suggestion) {
 		this.suggestion = suggestion;
@@ -479,7 +520,7 @@ public class UISearchResult extends UIContainer {
 	/**
 	 * Sets the suggestion URL.
 	 * 
-	 * @param suggestions the new suggestion URL
+	 * @param suggestionURL the suggestion url
 	 */
 	public void setSuggestionURL(String suggestionURL) {
 		this.suggestionURL = suggestionURL;
@@ -521,11 +562,31 @@ public class UISearchResult extends UIContainer {
 		this.resultType = resultType;
 	}
 
+	/**
+	 * Gets the number of page.
+	 * 
+	 * @return the number of page
+	 */
 	public int getNumberOfPage() {
 		return uiPaginator.getPageList().getAvailablePage();
 	}
 
+	/**
+	 * The listener interface for receiving editContentAction events.
+	 * The class that is interested in processing a editContentAction
+	 * event implements this interface, and the object created
+	 * with that class is registered with a component using the
+	 * component's <code>addEditContentActionListener<code> method. When
+	 * the editContentAction event occurs, that object's appropriate
+	 * method is invoked.
+	 * 
+	 * @see EditContentActionEvent
+	 */
 	public static class EditContentActionListener extends EventListener<UISearchResult> {
+		
+		/* (non-Javadoc)
+		 * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+		 */
 		public void execute(Event<UISearchResult> event) throws Exception {
 			UISearchResult uiSearchResult = event.getSource();
 			PortletRequestContext context = (PortletRequestContext) event.getRequestContext();
@@ -540,13 +601,6 @@ public class UISearchResult extends UIContainer {
 			Session session = Utils.getSessionProvider(uiSearchResult).getSession(worksapce, manageableRepository);
 			Node node = (Node) session.getItem(path);
 
-			// UIWCMSearchPortlet uiWCMSearchPortlet =
-			// uiSearchResult.getAncestorOfType(UIWCMSearchPortlet.class);
-			// UIPopupContainer uiMaskPopupContainer =
-			// uiWCMSearchPortlet.getChild(UIPopupContainer.class);
-			// UIContentEdittingPopup uiContentEdittingForm =
-			// uiSearchResult.createUIComponent(UIContentEdittingPopup.class, null,
-			// null);
 			UIDocumentDialogForm uiDocumentDialogForm = uiSearchResult.createUIComponent(	UIDocumentDialogForm.class,
 																																										null,
 																																										null);
@@ -556,11 +610,6 @@ public class UISearchResult extends UIContainer {
 			uiDocumentDialogForm.setContentType(node.getPrimaryNodeType().getName());
 			uiDocumentDialogForm.setNodePath(node.getPath());
 			uiDocumentDialogForm.setStoredPath(node.getPath());
-
-			// uiWCMSearchPortlet.addChild(uiContentEdittingForm);
-			// uiContentEdittingForm.setRendered(true);
-			// uiMaskPopupContainer.activate(uiContentEdittingForm, 700, -1);
-			// context.addUIComponentToUpdateByAjax(uiMaskPopupContainer);
 
 			Utils.createPopupWindow(uiSearchResult,
 																			uiDocumentDialogForm,

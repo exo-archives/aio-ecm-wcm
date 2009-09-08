@@ -48,13 +48,10 @@ import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
+// TODO: Auto-generated Javadoc
 /*
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Aug 15, 2008
- */
-
-/**
- * The Class UIPermissionInfo.
  */
 @ComponentConfig(
     lifecycle = UIContainerLifecycle.class, 
@@ -345,7 +342,5 @@ public class UIPermissionInfo extends UIContainer {
     public void setAccessible(boolean bool) {
       accessible = bool;
     }
-
   }
-
 }

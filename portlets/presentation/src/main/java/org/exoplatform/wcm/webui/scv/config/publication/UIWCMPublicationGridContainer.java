@@ -30,7 +30,6 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 @ComponentConfig (
     lifecycle = UIContainerLifecycle.class
 )
-
 public class UIWCMPublicationGridContainer extends UIContainer{
 
   /**

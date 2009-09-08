@@ -318,6 +318,7 @@ public class UIPermissionSetting extends UIForm implements UISelectable {
    * 
    * @throws Exception the exception
    */
+  @SuppressWarnings("unchecked")
   public void fillForm(String user, ExtendedNode node) throws Exception {
     UIFormInputSetWithAction inputSet = getChildById(USERS_INPUTSET);
     inputSet.getUIStringInput(USERS_STRINGINPUT).setValue(user);
@@ -367,5 +368,4 @@ public class UIPermissionSetting extends UIForm implements UISelectable {
     getUIFormCheckBoxInput(ACCESSIBLE).setEnable(!isLock);
     getUIFormCheckBoxInput(EDITABLE).setEnable(!isLock);
   }
-
 }

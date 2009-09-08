@@ -43,11 +43,12 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.NameValidator;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
- * Author : eXoPlatform
- *          ngoc.tran@exoplatform.com
- * Jun 4, 2009  
+ * Author : Tran Nguyen Ngoc
+ * ngoc.tran@exoplatform.com
+ * Jun 4, 2009
  */
 @ComponentConfig(
                 lifecycle = UIFormLifecycle.class ,
@@ -59,18 +60,29 @@ import org.exoplatform.webui.form.validator.NameValidator;
 )
 public class UISubcriptionForm extends UIForm {
 
+  /** The Constant INPUT_SUBCRIPTION_NAME. */
   private static final String          INPUT_SUBCRIPTION_NAME        = "SubcriptionName";
 
+  /** The Constant INPUT_SUBCRIPTION_DESCRIPTION. */
   private static final String          INPUT_SUBCRIPTION_DESCRIPTION = "SubcriptionDescription";
 
+  /** The Constant INPUT_SUBCRIPTION_TITLE. */
   private static final String          INPUT_SUBCRIPTION_TITLE       = "SubcriptionTitle";
 
+  /** The Constant SELECT_CATEGORIES_NAME. */
   private static final String          SELECT_CATEGORIES_NAME        = "CategoryName";
 
+  /** The category handler. */
   private NewsletterCategoryHandler    categoryHandler               = null;
 
+  /** The subscription config. */
   private NewsletterSubscriptionConfig subscriptionConfig            = null;
   
+  /**
+   * Instantiates a new uI subcription form.
+   * 
+   * @throws Exception the exception
+   */
   public UISubcriptionForm() throws Exception{
 
     setActions(new String[]{"Save", "Cancel"});
@@ -94,6 +106,11 @@ public class UISubcriptionForm extends UIForm {
     addChild(new UIFormTextAreaInput(INPUT_SUBCRIPTION_DESCRIPTION, null, null));
   }
 
+  /**
+   * Sets the subscription infor.
+   * 
+   * @param subscriptionConfig the new subscription infor
+   */
   public void setSubscriptionInfor(NewsletterSubscriptionConfig subscriptionConfig){
     
     this.subscriptionConfig = subscriptionConfig;
@@ -110,21 +127,37 @@ public class UISubcriptionForm extends UIForm {
     formSelectBox.setDisabled(true);
   }
 
+  /**
+   * Gets the list categories.
+   * 
+   * @return the list categories
+   */
   private List<NewsletterCategoryConfig> getListCategories(){
-    
     NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
-    
     categoryHandler = newsletterManagerService.getCategoryHandler();
-    
     try{
       return categoryHandler.getListCategories(NewsLetterUtil.getPortalName(), Utils.getSessionProvider(this));
     }catch(Exception e){
-
       return new ArrayList<NewsletterCategoryConfig>();
     }
   }
   
+  /**
+   * The listener interface for receiving saveAction events.
+   * The class that is interested in processing a saveAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSaveActionListener<code> method. When
+   * the saveAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SaveActionEvent
+   */
   static  public class SaveActionListener extends EventListener<UISubcriptionForm> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UISubcriptionForm> event) throws Exception {
       
       UISubcriptionForm uiSubcriptionForm = event.getSource();
@@ -162,20 +195,32 @@ public class UISubcriptionForm extends UIForm {
 
         subscriptionHandler.add(NewsLetterUtil.getPortalName(), newsletterSubscriptionConfig, sessionProvider);
       } else {
-
         newsletterSubscriptionConfig = uiSubcriptionForm.subscriptionConfig;
-
         newsletterSubscriptionConfig.setCategoryName(categoryName);
         newsletterSubscriptionConfig.setDescription(subcriptionDecription);
         newsletterSubscriptionConfig.setTitle(subcriptionTitle);
         subscriptionHandler.edit(NewsLetterUtil.getPortalName(), newsletterSubscriptionConfig, sessionProvider);
       }
-
       Utils.closePopupWindow(uiSubcriptionForm, UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW);
     }
   }
 
+  /**
+   * The listener interface for receiving cancelAction events.
+   * The class that is interested in processing a cancelAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addCancelActionListener<code> method. When
+   * the cancelAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see CancelActionEvent
+   */
   static  public class CancelActionListener extends EventListener<UISubcriptionForm> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UISubcriptionForm> event) throws Exception {
       UISubcriptionForm uiSubcriptionForm = event.getSource();
       if (uiSubcriptionForm.getSubmitAction().equals("Cancel")) {

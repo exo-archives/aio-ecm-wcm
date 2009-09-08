@@ -27,23 +27,37 @@ import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * Jun 19, 2009  
+ * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * Jun 19, 2009
  */
 @ComponentConfig(
     lifecycle = UIApplicationLifecycle.class
 )
 public class UICategoryNavigationPortlet extends UIPortletApplication {
   
+  /** The mode. */
   private PortletMode mode = PortletMode.VIEW;
   
+  /**
+   * Instantiates a new uI category navigation portlet.
+   * 
+   * @throws Exception the exception
+   */
   public UICategoryNavigationPortlet() throws Exception {
     activateMode(mode);
   }
   
+  /**
+   * Activate mode.
+   * 
+   * @param mode the mode
+   * 
+   * @throws Exception the exception
+   */
   public void activateMode(PortletMode mode) throws Exception {
     getChildren().clear();
     addChild(UIPopupContainer.class, null, null);
@@ -54,6 +68,9 @@ public class UICategoryNavigationPortlet extends UIPortletApplication {
     } 
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.core.UIPortletApplication#processRender(org.exoplatform.webui.application.WebuiApplication, org.exoplatform.webui.application.WebuiRequestContext)
+   */
   public void processRender(WebuiApplication app, WebuiRequestContext context) throws Exception {
     PortletRequestContext pContext = (PortletRequestContext) context;
     PortletMode newMode = pContext.getApplicationMode();

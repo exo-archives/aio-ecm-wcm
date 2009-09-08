@@ -23,10 +23,12 @@ public class TestNewsletterPublicUserHandler extends BaseWCMTestCase {
   private SessionProvider sessionProvider;
 	
 	/** The categories node. */
-	private Node categoriesNode;
+	@SuppressWarnings("unused")
+  private Node categoriesNode;
 	
 	/** The user home node. */
-	private Node userHomeNode;
+	@SuppressWarnings("unused")
+  private Node userHomeNode;
 	
 	/** The newsletter manager service. */
 	private NewsletterManagerService newsletterManagerService;
@@ -141,8 +143,8 @@ public class TestNewsletterPublicUserHandler extends BaseWCMTestCase {
 	public void testConfirmPublicUser() throws Exception {
 		newsletterPublicUserHandler.subscribe("classic", userEmail, listSubs, "http://test.com", new String[]{"test", "asdas", "ssss"}, sessionProvider);
 		String userPath = NewsletterConstant.generateUserPath("classic");
-	    Node userFolderNode = (Node)session.getItem(userPath);
-	    Node node =  userFolderNode.getNode(userEmail);
+    Node userFolderNode = (Node)session.getItem(userPath);
+    Node node =  userFolderNode.getNode(userEmail);
 		boolean isPublicUser = newsletterPublicUserHandler.confirmPublicUser(userEmail, node.getProperty(NewsletterConstant.USER_PROPERTY_VALIDATION_CODE).getString(), "classic", sessionProvider);
 		assertEquals(true, isPublicUser);
 	}

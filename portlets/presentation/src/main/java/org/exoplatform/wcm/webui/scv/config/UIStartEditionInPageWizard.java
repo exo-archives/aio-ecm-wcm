@@ -34,7 +34,6 @@ import org.exoplatform.webui.event.EventListener;
  * dzungdev@gmail.com
  * Sep 15, 2008
  */
-
 @ComponentConfig(
     lifecycle = Lifecycle.class,
     template = "app:/groovy/SingleContentViewer/config/UIStartEditionInPageWizard.gtmpl",

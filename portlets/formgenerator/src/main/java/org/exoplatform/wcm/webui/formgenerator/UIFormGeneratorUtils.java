@@ -22,19 +22,24 @@ import javax.portlet.PortletRequest;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * Jun 28, 2009  
+ * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * Jun 28, 2009
  */
 public class UIFormGeneratorUtils {
 
+  /**
+   * Gets the preference repository.
+   * 
+   * @return the preference repository
+   */
   public static String getPreferenceRepository() {
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     PortletRequest request = portletRequestContext.getRequest();
     PortletPreferences portletPreferences = request.getPreferences();
     return portletPreferences.getValue(UIFormGeneratorConstant.PREFERENCE_REPOSITORY, "");
   }
-  
 }

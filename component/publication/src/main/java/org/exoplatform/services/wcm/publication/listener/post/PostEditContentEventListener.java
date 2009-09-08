@@ -56,7 +56,5 @@ public class PostEditContentEventListener extends Listener<CmsService,Node> {
     String siteName = Util.getPortalRequestContext().getPortalOwner();
     String remoteUser = Util.getPortalRequestContext().getRemoteUser();
     publicationService.updateLifecyleOnChangeContent(currentNode, siteName, remoteUser);
-
   }
-
 }

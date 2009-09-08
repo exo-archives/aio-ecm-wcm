@@ -45,7 +45,6 @@ import org.exoplatform.webui.event.EventListener;
         @EventConfig(listeners = UIWCMPublicationGrid.SelectActionListener.class)
     }
 )
-
 public class UIWCMPublicationGrid extends UIGrid {
 
   /** The Constant LIFECYCLE_NAME. */
@@ -167,7 +166,6 @@ public class UIWCMPublicationGrid extends UIGrid {
     public void setLifecycleName(String lifecycleName) {
       LifecycleName = lifecycleName;
     }
-
   }
 
   /**

@@ -94,15 +94,11 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent{
     try{
       Node node = presentationContainer.getReferenceNode();
       if(uiPresentationPortlet.canEditContent(node)) {
-//        addChild(UIQuickEditContainer.class, null, null);
-        
         UIQuickCreationWizard uiQuickCreationWizard = addChild(UIQuickCreationWizard.class, null, null);
         UIContentDialogForm contentDialogForm  = uiQuickCreationWizard.getChild(UIContentDialogForm.class);
         contentDialogForm.setEditNotIntegrity(false);
         contentDialogForm.init();
         uiQuickCreationWizard.viewStep(2);
-
-        
         return;
       }      
     }catch(Exception e) {
@@ -123,7 +119,6 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent{
     uiWelcomeScreen.setCreateMode(checkNewConfig());
     uiBackComponent = uiWelcomeScreen ;
   }
-
 
   /**
    * Checks if is quick editable.
@@ -236,6 +231,7 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent{
     popupContainer.activate(this,properties.getWidth(),properties.getHeight());
     requestContext.addUIComponentToUpdateByAjax(popupContainer);
   }
+  
   /* (non-Javadoc)
    * @see org.exoplatform.webui.core.UIPopupComponent#activate()
    */

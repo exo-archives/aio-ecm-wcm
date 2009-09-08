@@ -177,13 +177,12 @@ public class TestNewsletterEntryHandler extends BaseWCMTestCase {
 		if(nodeTemp == null) 
 			nodeTemp = ((Node) session.getItem("/sites content/live/classic/ApplicationData/NewsletterApplication"))
 							.getNode("Categories").getNode("CategoryName").getNode("SubscriptionName").getNode("NewsletterEntry2");
-		String str = nodeTemp.getSession().getWorkspace().getName() + nodeTemp.getPath();
 		String strContent = newsletterEntryHandler.getContent(nodeTemp);
 		assertTrue(strContent.indexOf("test content of this node NewsletterEntry2") > 0);
 	}
 	
 	/**
-	 * Tear dow.
+	 * TearDow.
 	 */
 	public void tearDow() {
     try {

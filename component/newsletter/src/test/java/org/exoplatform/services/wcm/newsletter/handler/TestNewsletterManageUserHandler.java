@@ -22,10 +22,12 @@ import org.exoplatform.services.wcm.newsletter.config.NewsletterUserConfig;
 public class TestNewsletterManageUserHandler extends BaseWCMTestCase {
 	
 	/** The categories node. */
-	private Node categoriesNode;
+	@SuppressWarnings("unused")
+  private Node categoriesNode;
 	
 	/** The user home node. */
-	private Node userHomeNode;
+	@SuppressWarnings("unused")
+  private Node userHomeNode;
 	
 	/** The newsletter category config. */
 	private NewsletterCategoryConfig newsletterCategoryConfig;
@@ -227,6 +229,5 @@ public class TestNewsletterManageUserHandler extends BaseWCMTestCase {
     } finally {
       sessionProvider.close();
     }
-		
 	}
 }

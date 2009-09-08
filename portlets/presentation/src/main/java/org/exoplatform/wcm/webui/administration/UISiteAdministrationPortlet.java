@@ -26,6 +26,7 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 
+// TODO: Auto-generated Javadoc
 /*
  * Created by The eXo Platform SAS 
  * Author : Anh Do Ngoc 
@@ -38,9 +39,17 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 @ComponentConfig(lifecycle = UIApplicationLifecycle.class)
 public class UISiteAdministrationPortlet extends UIPortletApplication {
 
+  /** The last portal uri. */
   private String lastPortalURI = null;
+  
+  /** The last locale. */
   private Locale lastLocale = null;
   
+  /**
+   * Instantiates a new uI site administration portlet.
+   * 
+   * @throws Exception the exception
+   */
   public UISiteAdministrationPortlet() throws Exception {
     PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
     String userId = portalRequestContext.getRemoteUser();
@@ -74,5 +83,4 @@ public class UISiteAdministrationPortlet extends UIPortletApplication {
     }        
     super.processRender(app, context);
   }
-
 }

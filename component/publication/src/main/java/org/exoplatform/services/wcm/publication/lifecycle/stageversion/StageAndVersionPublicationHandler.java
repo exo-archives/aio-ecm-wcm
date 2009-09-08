@@ -107,16 +107,8 @@ public class StageAndVersionPublicationHandler extends BaseWebSchemaHandler {
     try {
     	siteName = Util.getPortalRequestContext().getPortalOwner();
     	remoteUser = Util.getPortalRequestContext().getRemoteUser();    	
-    } catch (Exception e) {
-    	
-    }
-    
+    } catch (Exception e) {}
     publicationService.updateLifecyleOnChangeContent(checkNode, siteName, remoteUser);
-
-    
-//    if(publicationService.isNodeEnrolledInLifecycle(checkNode)) return;
-//    publicationService.enrollNodeInLifecycle(checkNode,StageAndVersionPublicationConstant.LIFECYCLE_NAME);
-//    publicationService.changeState(checkNode,StageAndVersionPublicationConstant.DRAFT_STATE,new HashMap<String,String>());
   }   
   
   /* (non-Javadoc)
@@ -135,19 +127,5 @@ public class StageAndVersionPublicationHandler extends BaseWebSchemaHandler {
     String siteName = Util.getPortalRequestContext().getPortalOwner();
     String remoteUser = Util.getPortalRequestContext().getRemoteUser();
     publicationService.updateLifecyleOnChangeContent(checkNode, siteName, remoteUser);
-
-//    String lifecycle = null;
-//    try {
-//      lifecycle = publicationService.getNodeLifecycleName(checkNode);
-//    } catch (NotInPublicationLifecycleException e) {
-//      return;
-//    }
-//
-//    if(!StageAndVersionPublicationConstant.LIFECYCLE_NAME.equalsIgnoreCase(lifecycle))   
-//      return;
-//    String currentState = publicationService.getCurrentState(checkNode);
-//    if(!StageAndVersionPublicationConstant.ENROLLED_STATE.equalsIgnoreCase(currentState))
-//      return;
-//    publicationService.changeState(checkNode,StageAndVersionPublicationConstant.DRAFT_STATE,new HashMap<String,String>());
   }
 }

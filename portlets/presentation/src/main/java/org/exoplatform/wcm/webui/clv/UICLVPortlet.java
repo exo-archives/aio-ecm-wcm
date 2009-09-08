@@ -29,13 +29,10 @@ import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 
+// TODO: Auto-generated Javadoc
 /*
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Oct 15, 2008
- */
-
-/**
- * The Class UIContentListViewerPortlet.
  */
 @ComponentConfig(lifecycle = UIApplicationLifecycle.class)
 public class UICLVPortlet extends UIPortletApplication {
@@ -88,14 +85,19 @@ public class UICLVPortlet extends UIPortletApplication {
   /** The Constant SHOW_LINK. */
   public final static String SHOW_LINK             = "showLink";
   
+  /** The Constant CONTENT_SOURCE. */
   public static final String CONTENT_SOURCE = "source";
   
+  /** The Constant VIEWER_MODE. */
   public static final String VIEWER_MODE = "mode";
   
+  /** The Constant ORDER_BY. */
   public static final String ORDER_BY = "orderBy";
   
+  /** The Constant ORDER_TYPE. */
   public static final String ORDER_TYPE = "orderType";
   
+  /** The Constant CONTENT_LIST. */
   public static final String CONTENT_LIST = "contents";
   
   /**
@@ -159,5 +161,4 @@ public class UICLVPortlet extends UIPortletApplication {
     String userId = context.getRemoteUser();       
     return Utils.canEditCurrentPortal(userId);
   }
-
 }

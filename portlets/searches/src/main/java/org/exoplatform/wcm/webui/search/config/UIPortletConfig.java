@@ -20,14 +20,12 @@ import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 
+// TODO: Auto-generated Javadoc
 /*
  * Created by The eXo Platform SAS 
  * Author : Anh Do Ngoc 
  * anh.do@exoplatform.com
  * Oct 31, 2008
- */
-/**
- * The Class UIPortletConfig.
  */
 @ComponentConfig(lifecycle = UIContainerLifecycle.class)
 public class UIPortletConfig extends UIContainer {

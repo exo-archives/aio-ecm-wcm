@@ -24,12 +24,10 @@ import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 
+// TODO: Auto-generated Javadoc
 /*
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Oct 31, 2008
- */
-/**
- * The Class UIWCMSearchPortlet.
  */
 @ComponentConfig(
 	lifecycle = UIApplicationLifecycle.class
@@ -100,6 +98,7 @@ public class UIWCMSearchPortlet extends UIPortletApplication {
 	 * Activate mode.
 	 * 
 	 * @param mode the mode
+	 * 
 	 * @throws Exception the exception
 	 */
 	private void activateMode(PortletMode mode) throws Exception {
@@ -118,5 +117,4 @@ public class UIWCMSearchPortlet extends UIPortletApplication {
 			addChild(UIPortletConfig.class, null, UIPortletApplication.EDIT_MODE);
 		}
 	}
-
 }

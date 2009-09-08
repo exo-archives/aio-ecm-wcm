@@ -50,6 +50,7 @@ import org.exoplatform.services.wcm.newsletter.handler.NewsletterPublicUserHandl
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterSubscriptionHandler;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterTemplateHandler;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform
  * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com May 21, 2009
@@ -209,9 +210,7 @@ public class NewsletterManagerService {
 					mailService.sendMessage(message);
 					newsletterEntry.setProperty(NewsletterConstant.ENTRY_PROPERTY_STATUS, NewsletterConstant.STATUS_SENT);
 					session.save();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				} catch (Exception e) {}
 			}
 		}
 		sessionProvider.close();
@@ -240,9 +239,7 @@ public class NewsletterManagerService {
 		for (Value value : values) {
 			try {
 				listString.add(value.getString());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			} catch (Exception e) {}
 		}
 		return listString;
 	}
@@ -282,5 +279,4 @@ public class NewsletterManagerService {
 	public void setWorkspaceName(String workspaceName) {
 		this.workspaceName = workspaceName;
 	}
-
 }

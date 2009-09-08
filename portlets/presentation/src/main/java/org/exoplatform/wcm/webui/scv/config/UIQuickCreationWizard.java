@@ -16,26 +16,22 @@
  */
 package org.exoplatform.wcm.webui.scv.config;
 
-import javax.portlet.PortletPreferences;
-
 import org.exoplatform.services.wcm.core.NodeIdentifier;
-import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
 import org.exoplatform.wcm.webui.scv.config.social.UISocialInfo;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : DANG TAN DUNG
  * dzungdev@gmail.com
  * Jun 9, 2008
  */
-
 @ComponentConfig(
     template = "app:/groovy/SingleContentViewer/config/UIWizard.gtmpl",
     events = {
@@ -45,7 +41,6 @@ import org.exoplatform.webui.event.EventListener;
         @EventConfig(listeners = UIQuickCreationWizard.BackActionListener.class)
     }
 )
-
 public class UIQuickCreationWizard extends UIBaseWizard {
 
   /**
@@ -170,5 +165,4 @@ public class UIQuickCreationWizard extends UIBaseWizard {
       }
     }
   }
-
 }

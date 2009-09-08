@@ -57,11 +57,12 @@ import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIFormInputBase;
 import org.exoplatform.webui.form.UIFormStringInput;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * Jun 25, 2009  
+ * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * Jun 25, 2009
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
@@ -75,16 +76,40 @@ import org.exoplatform.webui.form.UIFormStringInput;
 )
 public class UIFCCActionForm extends UIDialogForm implements UISelectable {
 
+  /** The parent path_. */
   private String parentPath_ ;
+  
+  /** The node type name_. */
   private String nodeTypeName_ = null ;
+  
+  /** The script path_. */
   private String scriptPath_ = null ;
+  
+  /** The root path_. */
   private String rootPath_ = null;
+  
+  /** The is add new. */
   private boolean isAddNew = false;
   
+  /** The Constant EXO_ACTIONS. */
   private static final String EXO_ACTIONS = "exo:actions".intern();
   
+  /**
+   * Instantiates a new uIFCC action form.
+   * 
+   * @throws Exception the exception
+   */
   public UIFCCActionForm() throws Exception {setActions(new String[]{"Save","Close"}) ;}
   
+  /**
+   * Creates the new action.
+   * 
+   * @param parentNode the parent node
+   * @param actionType the action type
+   * @param isAddNew the is add new
+   * 
+   * @throws Exception the exception
+   */
   public void createNewAction(Node parentNode, String actionType, boolean isAddNew) throws Exception {
     reset() ;
     parentPath_ = parentNode.getPath() ;
@@ -95,8 +120,18 @@ public class UIFCCActionForm extends UIDialogForm implements UISelectable {
     getChildren().clear() ;
   }
   
+  /**
+   * Gets the parent node.
+   * 
+   * @return the parent node
+   * 
+   * @throws Exception the exception
+   */
   private Node getParentNode() throws Exception{ return (Node) getSession().getItem(parentPath_) ; }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.form.UIDialogForm#renderField(java.lang.String)
+   */
   public void renderField(String name) throws Exception {
     UIComponent uiInput = findComponentById(name);
     if ("homePath".equals(name)) {
@@ -111,25 +146,46 @@ public class UIFCCActionForm extends UIDialogForm implements UISelectable {
     super.renderField(name);
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.selector.UISelectable#doSelect(java.lang.String, java.lang.Object)
+   */
   public void doSelect(String selectField, Object value) {
     isUpdateSelect = true ;
     getUIStringInput(selectField).setValue(value.toString()) ;
   }
   
+  /**
+   * Gets the current path.
+   * 
+   * @return the current path
+   * 
+   * @throws Exception the exception
+   */
   public String getCurrentPath() throws Exception { 
     UIFCCPortlet fastContentCreatorPortlet = getAncestorOfType(UIFCCPortlet.class);
     UIFCCConfig fastContentCreatorConfig = fastContentCreatorPortlet.getChild(UIFCCConfig.class); 
     return fastContentCreatorConfig.getSavedLocationNode().getPath();
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.core.UIComponent#getTemplateResourceResolver(org.exoplatform.webui.application.WebuiRequestContext, java.lang.String)
+   */
   public ResourceResolver getTemplateResourceResolver(WebuiRequestContext context, String template) {
     DMSConfiguration dmsConfiguration = getApplicationComponent(DMSConfiguration.class);
     DMSRepositoryConfiguration repositoryConfiguration = dmsConfiguration.getConfig(repositoryName);
     return new JCRResourceResolver(repositoryName, repositoryConfiguration.getSystemWorkspace(), "exo:templateFile") ;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.form.UIDialogForm#getTemplate()
+   */
   public String getTemplate() { return getDialogPath() ; }
 
+  /**
+   * Gets the dialog path.
+   * 
+   * @return the dialog path
+   */
   public String getDialogPath() {
     repositoryName = UIFCCUtils.getPreferenceRepository() ;
     TemplateService templateService = getApplicationComponent(TemplateService.class) ;
@@ -138,25 +194,51 @@ public class UIFCCActionForm extends UIDialogForm implements UISelectable {
     if (nodeTypeName_ != null) {
       try {
         dialogPath = templateService.getTemplatePathByUser(true, nodeTypeName_, userName, repositoryName);
-      } catch (Exception e){
-        e.printStackTrace() ;
-      }      
+      } catch (Exception e){}      
     }
     return dialogPath ;    
   }
   
+  /**
+   * Gets the repository name.
+   * 
+   * @return the repository name
+   */
   public String getRepositoryName() { return repositoryName; }
 
+  /**
+   * Gets the template node type.
+   * 
+   * @return the template node type
+   */
   public String getTemplateNodeType() { return nodeTypeName_ ; }
 
+  /**
+   * Gets the path.
+   * 
+   * @return the path
+   */
   public String getPath() { return scriptPath_ ; }  
 
+  /**
+   * Sets the root path.
+   * 
+   * @param rootPath the new root path
+   */
   public void setRootPath(String rootPath){
    rootPath_ = rootPath;
   }
   
+  /**
+   * Gets the root path.
+   * 
+   * @return the root path
+   */
   public String getRootPath(){return rootPath_;}
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.form.UIDialogForm#onchange(org.exoplatform.webui.event.Event)
+   */
   public void onchange(Event<?> event) throws Exception {
     if(!isAddNew){
       event.getRequestContext().addUIComponentToUpdateByAjax(getParent()) ;
@@ -164,7 +246,22 @@ public class UIFCCActionForm extends UIDialogForm implements UISelectable {
     }
   }
   
+  /**
+   * The listener interface for receiving saveAction events.
+   * The class that is interested in processing a saveAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSaveActionListener<code> method. When
+   * the saveAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SaveActionEvent
+   */
   static public class SaveActionListener extends EventListener<UIFCCActionForm> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIFCCActionForm> event) throws Exception {
       UIFCCActionForm fccActionForm = event.getSource();
       UIApplication uiApp = fccActionForm.getAncestorOfType(UIApplication.class) ;
@@ -199,7 +296,6 @@ public class UIFCCActionForm extends UIDialogForm implements UISelectable {
             currentNode.getSession().addLockToken(lockToken);
           }
         }
-  
         // Close popup
         Utils.closePopupWindow(fccActionForm, UIFCCConstant.ACTION_POPUP_WINDOW);
         
@@ -269,14 +365,44 @@ public class UIFCCActionForm extends UIDialogForm implements UISelectable {
     }
   }
   
+  /**
+   * The listener interface for receiving closeAction events.
+   * The class that is interested in processing a closeAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addCloseActionListener<code> method. When
+   * the closeAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see CloseActionEvent
+   */
   static public class CloseActionListener extends EventListener<UIFCCActionForm> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIFCCActionForm> event) throws Exception {
       UIFCCActionForm fastContentCreatorActionForm = event.getSource();
       Utils.closePopupWindow(fastContentCreatorActionForm, UIFCCConstant.ACTION_POPUP_WINDOW);
     }
   }  
   
+  /**
+   * The listener interface for receiving removeReferenceAction events.
+   * The class that is interested in processing a removeReferenceAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addRemoveReferenceActionListener<code> method. When
+   * the removeReferenceAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see RemoveReferenceActionEvent
+   */
   static public class RemoveReferenceActionListener extends EventListener<UIFCCActionForm> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIFCCActionForm> event) throws Exception {
       UIFCCActionForm fastContentCreatorActionForm = event.getSource() ;
       fastContentCreatorActionForm.isRemovePreference = true;
@@ -286,8 +412,23 @@ public class UIFCCActionForm extends UIDialogForm implements UISelectable {
     }
   }
   
+  /**
+   * The listener interface for receiving showComponentAction events.
+   * The class that is interested in processing a showComponentAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addShowComponentActionListener<code> method. When
+   * the showComponentAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see ShowComponentActionEvent
+   */
   @SuppressWarnings("unchecked")
   static public class ShowComponentActionListener extends EventListener<UIFCCActionForm> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIFCCActionForm> event) throws Exception {
       UIFCCActionForm fastContentCreatorActionForm = event.getSource() ;
       UIContainer uiContainer = fastContentCreatorActionForm.getParent() ;

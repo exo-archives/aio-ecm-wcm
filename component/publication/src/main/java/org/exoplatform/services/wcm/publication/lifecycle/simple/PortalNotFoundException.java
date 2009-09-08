@@ -35,5 +35,4 @@ public class PortalNotFoundException extends Exception{
   public PortalNotFoundException(String message) {
     super(message);
   }
-
 }

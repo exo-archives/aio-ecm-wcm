@@ -94,9 +94,7 @@ public class UIVersionViewer extends UIBaseNodePresentation {
       String repositoryName = getRepository();
       if(templateService.isManagedNodeType(nodeType, repositoryName)) 
         return templateService.getTemplatePathByUser(false, nodeType, userName, repositoryName) ;
-    } catch (Exception e) {
-       e.printStackTrace();
-    }
+    } catch (Exception e) {}
     return null ;
   }
   
@@ -116,9 +114,7 @@ public class UIVersionViewer extends UIBaseNodePresentation {
         DMSConfiguration dmsConfiguration = getApplicationComponent(DMSConfiguration.class);
         String workspace = dmsConfiguration.getConfig(repository).getSystemWorkspace();
         resourceResolver = new JCRResourceResolver(repository, workspace, "exo:templateFile");
-    }catch (Exception e) {
-      e.printStackTrace();
-    }    
+    }catch (Exception e) {}    
     return resourceResolver ;   
   }
   
@@ -136,8 +132,8 @@ public class UIVersionViewer extends UIBaseNodePresentation {
     return false;
   }
 
-public UIComponent getCommentComponent() {
-	// TODO Auto-generated method stub
-	return null;
-}
+  public UIComponent getCommentComponent() {
+  	// TODO Auto-generated method stub
+  	return null;
+  }
 }

@@ -36,6 +36,7 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : DANG TAN DUNG
@@ -51,14 +52,17 @@ public class UIPresentation extends UIBaseNodePresentation {
   /** The resource resolver. */
   private JCRResourceResolver  resourceResolver ;
 
+  /** Instantiates a new uI presentation. */
+  private Node orginalNode = null;
+  
+  /** The view node. */
+  private Node viewNode = null;
+
   /**
    * Instantiates a new uI presentation.
    * 
    * @throws Exception the exception
    */
-  private Node orginalNode = null;
-  private Node viewNode = null;
-
   public UIPresentation() throws Exception {}
 
   /* (non-Javadoc)
@@ -97,9 +101,17 @@ public class UIPresentation extends UIBaseNodePresentation {
     return orginalNode;
   }  
 
+  /**
+   * Sets the original node.
+   * 
+   * @param node the new original node
+   * 
+   * @throws Exception the exception
+   */
   public void setOriginalNode(Node node) throws Exception{
     this.orginalNode = node;
   }
+  
   /* (non-Javadoc)
    * @see org.exoplatform.portal.webui.portal.UIPortalComponent#getTemplate()
    */
@@ -202,12 +214,18 @@ public class UIPresentation extends UIBaseNodePresentation {
     return false;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.presentation.NodePresentation#setNode(javax.jcr.Node)
+   */
   public void setNode(Node node) {
     this.viewNode = node;
   }
 
-public UIComponent getCommentComponent() {
-	// TODO Auto-generated method stub
-	return null;
-}
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.presentation.NodePresentation#getCommentComponent()
+   */
+  public UIComponent getCommentComponent() {
+  	// TODO Auto-generated method stub
+  	return null;
+  }
 }

@@ -113,5 +113,4 @@ public class DocumentLinkHandler extends FCKFileHandler {
   public String getCurrentPortal() {
     return this.currentPortal;
   }
-
 }

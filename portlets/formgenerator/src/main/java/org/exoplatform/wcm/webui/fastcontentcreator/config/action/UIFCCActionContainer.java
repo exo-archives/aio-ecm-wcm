@@ -20,20 +20,25 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * Jun 25, 2009  
+ * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * Jun 25, 2009
  */
 @ComponentConfig(
     lifecycle = UIContainerLifecycle.class
 )
 public class UIFCCActionContainer extends UIContainer {
 
+  /**
+   * Instantiates a new uIFCC action container.
+   * 
+   * @throws Exception the exception
+   */
   public UIFCCActionContainer() throws Exception {
     addChild(UIFCCActionTypeForm.class, null, null);
     addChild(UIFCCActionForm.class, null, null);
   }
-  
 }

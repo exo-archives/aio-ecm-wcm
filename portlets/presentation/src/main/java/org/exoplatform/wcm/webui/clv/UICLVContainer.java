@@ -29,38 +29,71 @@ import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : anh.do
- *          anh.do@exoplatform.com, anhdn86@gmail.com		
- * Feb 23, 2009  
+ * anh.do@exoplatform.com, anhdn86@gmail.com
+ * Feb 23, 2009
  */
 public abstract class UICLVContainer extends UIContainer implements RefreshDelegateActionListener {
 
+  /** The view able content. */
   protected boolean viewAbleContent = false;
 
+  /** The message key. */
   protected String  messageKey;
 
+  /**
+   * Inits the.
+   * 
+   * @throws Exception the exception
+   */
   public abstract void init() throws Exception;
 
+  /**
+   * Gets the message.
+   * 
+   * @return the message
+   * 
+   * @throws Exception the exception
+   */
   public String getMessage() throws Exception {
     WebuiRequestContext requestContext = WebuiRequestContext.getCurrentInstance();
     return requestContext.getApplicationResourceBundle().getString(messageKey);
   }
 
+  /**
+   * Checks if is view able content.
+   * 
+   * @return true, if is view able content
+   */
   public boolean isViewAbleContent() {
     return viewAbleContent;
   }
 
+  /**
+   * Sets the view able content.
+   * 
+   * @param bool the new view able content
+   */
   public void setViewAbleContent(boolean bool) {
     viewAbleContent = bool;
   }
 
+  /**
+   * Gets the portlet id.
+   * 
+   * @return the portlet id
+   */
   public String getPortletId() {
     PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     return pContext.getWindowId();
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.core.UIComponent#processRender(org.exoplatform.webui.application.WebuiRequestContext)
+   */
   public void processRender(WebuiRequestContext context) throws Exception {
     if(!Utils.isLiveMode() || context.getFullRender()) {
       init(); 
@@ -68,15 +101,32 @@ public abstract class UICLVContainer extends UIContainer implements RefreshDeleg
     super.processRender(context);
   }
   
+  /**
+   * Gets the portlet preference.
+   * 
+   * @return the portlet preference
+   */
   protected PortletPreferences getPortletPreference() {
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     return portletRequestContext.getRequest().getPreferences();
   }
 
+  /**
+   * Gets the form view template path.
+   * 
+   * @return the form view template path
+   */
   protected String getFormViewTemplatePath() {
     return getPortletPreference().getValue(UICLVPortlet.FORM_VIEW_TEMPLATE_PATH, null);
   }
 
+  /**
+   * Gets the template resource resolver.
+   * 
+   * @return the template resource resolver
+   * 
+   * @throws Exception the exception
+   */
   public ResourceResolver getTemplateResourceResolver() throws Exception {
     String repository = getPortletPreference().getValue(UICLVPortlet.REPOSITORY, null);
     DMSConfiguration dmsConfiguration = getApplicationComponent(DMSConfiguration.class);
@@ -84,7 +134,22 @@ public abstract class UICLVContainer extends UIContainer implements RefreshDeleg
     return new JCRResourceResolver(repository, workspace, "exo:templateFile");
   }
 
+  /**
+   * The listener interface for receiving quickEditAction events.
+   * The class that is interested in processing a quickEditAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addQuickEditActionListener<code> method. When
+   * the quickEditAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see QuickEditActionEvent
+   */
   public static class QuickEditActionListener extends EventListener<UICLVFolderMode> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UICLVFolderMode> event) throws Exception {
       UICLVContainer uiListViewerBase = event.getSource();
       UICLVConfig viewerManagementForm = uiListViewerBase.createUIComponent(UICLVConfig.class, null, null);
@@ -92,11 +157,13 @@ public abstract class UICLVContainer extends UIContainer implements RefreshDeleg
     }    
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.wcm.webui.clv.RefreshDelegateActionListener#onRefresh(org.exoplatform.webui.event.Event)
+   */
   public void onRefresh(Event<UICLVPresentation> event) throws Exception {
     UICLVPresentation contentListPresentation = event.getSource();
     UICLVContainer uiListViewerBase = contentListPresentation.getParent();
     uiListViewerBase.getChildren().clear();
     uiListViewerBase.init();
   }
-
 }

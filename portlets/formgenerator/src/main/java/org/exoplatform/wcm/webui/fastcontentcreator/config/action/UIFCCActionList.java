@@ -42,11 +42,12 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * Jun 25, 2009  
+ * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * Jun 25, 2009
  */
 @ComponentConfig(
     lifecycle = Lifecycle.class,
@@ -59,15 +60,30 @@ import org.exoplatform.webui.event.EventListener;
 )
 public class UIFCCActionList extends UIContainer {
 
+  /** The Constant HEADERS. */
   private static final String[] HEADERS = {"name", "description", "instanceOf"};
   
+  /** The Constant ACTIONS. */
   private static final String[] ACTIONS = {"Edit", "Delete"};
   
+  /**
+   * Instantiates a new uIFCC action list.
+   * 
+   * @throws Exception the exception
+   */
   public UIFCCActionList() throws Exception {
     UIGrid grid = addChild(UIGrid.class, null, null);
     grid.configure(UIFCCConstant.ACTION_GRID, HEADERS , ACTIONS );
   }
   
+  /**
+   * Update grid.
+   * 
+   * @param node the node
+   * @param currentPage the current page
+   * 
+   * @throws Exception the exception
+   */
   public void updateGrid(Node node, int currentPage) throws Exception {
     UIPageIterator uiIterator = getChild(UIGrid.class).getUIPageIterator();
     ObjectPageList objPageList = new ObjectPageList(getAllActions(node), 10) ;
@@ -78,8 +94,18 @@ public class UIFCCActionList extends UIContainer {
       uiIterator.setCurrentPage(currentPage);
   }
 
+  /**
+   * Gets the actions.
+   * 
+   * @return the actions
+   */
   public String[] getActions() { return ACTIONS ; }
 
+  /**
+   * Checks for actions.
+   * 
+   * @return true, if successful
+   */
   public boolean hasActions() {
     UIFCCConfig fastContentCreatorConfig = getAncestorOfType(UIFCCConfig.class) ;
     ActionServiceContainer actionService = getApplicationComponent(ActionServiceContainer.class) ;
@@ -90,6 +116,13 @@ public class UIFCCActionList extends UIContainer {
     }
   }
 
+  /**
+   * Gets the all actions.
+   * 
+   * @param node the node
+   * 
+   * @return the all actions
+   */
   public List<Node> getAllActions(Node node) {
     ActionServiceContainer actionService = getApplicationComponent(ActionServiceContainer.class) ;
     try {
@@ -99,13 +132,35 @@ public class UIFCCActionList extends UIContainer {
     }
   }
 
+  /**
+   * Gets the list actions.
+   * 
+   * @return the list actions
+   * 
+   * @throws Exception the exception
+   */
   @SuppressWarnings("unchecked")
   public List getListActions() throws Exception {
     UIPageIterator uiIterator = getChild(UIGrid.class).getUIPageIterator();
     return uiIterator.getCurrentPageData() ; 
   }
   
+  /**
+   * The listener interface for receiving addAction events.
+   * The class that is interested in processing a addAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addAddActionListener<code> method. When
+   * the addAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see AddActionEvent
+   */
   public static class AddActionListener extends EventListener<UIFCCActionList> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIFCCActionList> event) throws Exception {
       UIFCCActionList fastContentCreatorActionList = event.getSource();
       UIFCCActionContainer fastContentCreatorActionContainer = fastContentCreatorActionList.createUIComponent(UIFCCActionContainer.class, null, null);
@@ -114,7 +169,22 @@ public class UIFCCActionList extends UIContainer {
     }
   }
   
+  /**
+   * The listener interface for receiving editAction events.
+   * The class that is interested in processing a editAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addEditActionListener<code> method. When
+   * the editAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see EditActionEvent
+   */
   public static class EditActionListener extends EventListener<UIFCCActionList> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIFCCActionList> event) throws Exception {
       UIFCCActionList fastContentCreatorActionList = event.getSource();
       String actionName = event.getRequestContext().getRequestParameter(OBJECTID);
@@ -131,7 +201,22 @@ public class UIFCCActionList extends UIContainer {
     }
   }
   
+  /**
+   * The listener interface for receiving deleteAction events.
+   * The class that is interested in processing a deleteAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addDeleteActionListener<code> method. When
+   * the deleteAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see DeleteActionEvent
+   */
   public static class DeleteActionListener extends EventListener<UIFCCActionList> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIFCCActionList> event) throws Exception {
       UIFCCActionList fastContentCreatorActionList = event.getSource() ;
       UIFCCConfig fastContentCreatorConfig = fastContentCreatorActionList.getAncestorOfType(UIFCCConfig.class) ;

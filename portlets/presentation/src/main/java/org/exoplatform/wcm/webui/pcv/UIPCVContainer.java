@@ -84,14 +84,22 @@ public class UIPCVContainer extends UIContainer {
   /** The repository. */
   private String repository;
 
+  /** The show title. */
   private boolean showTitle;
+  
+  /** The show date created. */
   private boolean showDateCreated;
   
   /** A flag used to display Print/Close buttons and hide Back one if its' value is <code>true</code>. In <code>false</code> case, the Back button will be shown only */
   private boolean isPrint;
   
+  /** The Constant PREFERENCE_REPOSITORY. */
   public static final String PREFERENCE_REPOSITORY = "repository";
+  
+  /** The Constant PREFERENCE_SHOW_TITLE. */
   public static final String PREFERENCE_SHOW_TITLE = "showTitle";
+  
+  /** The Constant PREFERENCE_SHOW_DATE. */
   public static final String PREFERENCE_SHOW_DATE = "showDateCreated";
 
   /** The date formatter. */
@@ -112,11 +120,13 @@ public class UIPCVContainer extends UIContainer {
     showTitle = Boolean.parseBoolean(porletRequestContext.getRequest().getPreferences().getValue(PREFERENCE_SHOW_TITLE, ""));
     dateFormatter = new SimpleDateFormat();
     ((SimpleDateFormat) dateFormatter).applyPattern("dd.MM.yyyy '|' hh'h'mm");
-    
   }
 
-  	
-	
+	/**
+	 * Checks if is show title.
+	 * 
+	 * @return true, if is show title
+	 */
 	public boolean isShowTitle() {
 		return showTitle;
 	}
@@ -149,36 +159,39 @@ public class UIPCVContainer extends UIContainer {
 	  return title;
   }
 
+	/**
+	 * Checks if is show date created.
+	 * 
+	 * @return true, if is show date created
+	 */
 	public boolean isShowDateCreated() {
 		return showDateCreated;
 	}
 
-	  /**
-	   * Gets the created date.
-	   * 
-	   * @param node the node
-	   * 
-	   * @return the created date
-	   * 
-	   * @throws Exception the exception
-	   */
-	  public String getCreatedDate(Node node) throws Exception {
-	    if (node.hasProperty("exo:dateCreated")) {
-	      Calendar calendar = node.getProperty("exo:dateCreated").getValue().getDate();
-	      return dateFormatter.format(calendar.getTime());
-	    }
-	    return null;
-	  }
-
-
+  /**
+	 * Gets the created date.
+	 * 
+	 * @param node the node
+	 * 
+	 * @return the created date
+	 * 
+	 * @throws Exception the exception
+	 */
+  public String getCreatedDate(Node node) throws Exception {
+    if (node.hasProperty("exo:dateCreated")) {
+      Calendar calendar = node.getProperty("exo:dateCreated").getValue().getDate();
+      return dateFormatter.format(calendar.getTime());
+    }
+    return null;
+  }
 
 	/**
-   * Gets the repository.
-   * 
-   * @return the repository
-   * 
-   * @throws RepositoryException the repository exception
-   */
+	 * Gets the repository.
+	 * 
+	 * @return the repository
+	 * 
+	 * @throws RepositoryException the repository exception
+	 */
   public String getRepository() throws RepositoryException {
     return repository;
   }
@@ -386,8 +399,7 @@ public class UIPCVContainer extends UIContainer {
    * 
    * @see QuickEditActionEvent
    */
-  public static class QuickEditActionListener extends
-      EventListener<UIPCVContainer> {
+  public static class QuickEditActionListener extends EventListener<UIPCVContainer> {
     /*
      * (non-Javadoc)
      * 

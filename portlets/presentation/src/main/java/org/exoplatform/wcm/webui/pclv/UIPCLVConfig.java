@@ -49,6 +49,7 @@ import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.ext.UIFormInputSetWithAction;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
@@ -62,7 +63,6 @@ import org.exoplatform.webui.form.ext.UIFormInputSetWithAction;
                      @EventConfig(listeners = UIPCLVConfig.CancelActionListener.class),
                      @EventConfig(listeners = UIPCLVConfig.SelectTargetPageActionListener.class),
                      @EventConfig(listeners = UIPCLVConfig.SaveActionListener.class)
-                     
                    }
                )
 public class UIPCLVConfig extends UIForm implements UISelectable {
@@ -145,10 +145,13 @@ public class UIPCLVConfig extends UIForm implements UISelectable {
   /** The Constant ORDER_ASC. */
   public static final String ORDER_ASC                         = "OrderAsc";
   
+  /** The Constant PREFERENCE_REPOSITORY. */
   public static final String PREFERENCE_REPOSITORY            = "repository";
   
+  /** The Constant PREFERENCE_TREE_NAME. */
   public static final String PREFERENCE_TREE_NAME             = "treeName";
 
+  /** The Constant TREE_NAME_FORM_SELECTBOX. */
   public static final String TREE_NAME_FORM_SELECTBOX         = "UICategoryNavigationTreeNameFormSelectBox";
   
   /** The popup id. */
@@ -291,6 +294,15 @@ public class UIPCLVConfig extends UIForm implements UISelectable {
     setActions(new String[] { "Save", "Cancel" });
   }
  
+  /**
+   * Gets the taxonomy trees.
+   * 
+   * @param repository the repository
+   * 
+   * @return the taxonomy trees
+   * 
+   * @throws Exception the exception
+   */
   private List<SelectItemOption<String>> getTaxonomyTrees(String repository) throws Exception {
     TaxonomyService taxonomyService = getApplicationComponent(TaxonomyService.class);
     List<Node> taxonomyNodes = taxonomyService.getAllTaxonomyTrees(repository);
@@ -347,6 +359,10 @@ public class UIPCLVConfig extends UIForm implements UISelectable {
    * @see CancelActionEvent
    */
   public static class CancelActionListener extends EventListener<UIPCLVConfig> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIPCLVConfig> event) throws Exception {
       UIPCLVConfig viewerManagementForm = event.getSource();
       if (Utils.isQuickEditmode(viewerManagementForm, UIPCLVPortlet.PARAMETERIZED_MANAGEMENT_PORTLET_POPUP_WINDOW)) {
@@ -368,6 +384,10 @@ public class UIPCLVConfig extends UIForm implements UISelectable {
    * @see SelectTargetPageActionEvent
    */
   public static class SelectTargetPageActionListener extends EventListener<UIPCLVConfig> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIPCLVConfig> event) throws Exception {
       UIPCLVConfig viewerManagementForm = event.getSource();
       UIPageSelector pageSelector = viewerManagementForm.createUIComponent(UIPageSelector.class, null, null);
@@ -400,6 +420,7 @@ public class UIPCLVConfig extends UIForm implements UISelectable {
    * 
    * @return the header
    */
+  @SuppressWarnings("unused")
   private String getHeader(){
     PortletRequestContext portletRequestContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) portletRequestContext.getRequest();
@@ -421,6 +442,10 @@ public class UIPCLVConfig extends UIForm implements UISelectable {
    * @see SaveActionEvent
    */
   public static class SaveActionListener extends EventListener<UIPCLVConfig> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIPCLVConfig> event) throws Exception {
       UIPCLVConfig uiParameterizedManagementForm = event.getSource();
       PortletRequestContext portletRequestContext = (PortletRequestContext) event.getRequestContext();

@@ -41,7 +41,6 @@ import org.exoplatform.ecm.webui.tree.selectone.UIOneNodePathSelector;
 import org.exoplatform.ecm.webui.tree.selectone.UIOneTaxonomySelector;
 import org.exoplatform.ecm.webui.utils.DialogFormUtil;
 import org.exoplatform.ecm.webui.utils.LockUtil;
-import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
@@ -72,11 +71,12 @@ import org.exoplatform.webui.form.UIFormMultiValueInputSet;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormUploadInput;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * Jun 25, 2009  
+ * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * Jun 25, 2009
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
@@ -88,38 +88,74 @@ import org.exoplatform.webui.form.UIFormUploadInput;
       @EventConfig(listeners = UIFCCForm.RemoveReferenceActionListener.class, confirm = "DialogFormField.msg.confirm-delete", phase = Phase.DECODE)
     }
 )
-
 public class UIFCCForm extends UIDialogForm implements UISelectable {
 
+  /** The Constant FIELD_TAXONOMY. */
   final static public String FIELD_TAXONOMY = "categories";
+  
+  /** The Constant POPUP_TAXONOMY. */
   final static public String POPUP_TAXONOMY = "UIPopupTaxonomy";
   
+  /** The list taxonomy. */
   private List<String> listTaxonomy = new ArrayList<String>();
+  
+  /** The list taxonomy name. */
   private List<String> listTaxonomyName = new ArrayList<String>();
   
+  /** The document type_. */
   private String documentType_ ;
+  
+  /** The jcr template resource resolver_. */
   private JCRResourceResolver jcrTemplateResourceResolver_ ;
 
+  /**
+   * Instantiates a new uIFCC form.
+   * 
+   * @throws Exception the exception
+   */
   public UIFCCForm() throws Exception {
     setActions(new String[]{"Save"}) ;
   }
   
+  /**
+   * Gets the list taxonomy.
+   * 
+   * @return the list taxonomy
+   */
   public List<String> getListTaxonomy() {
     return listTaxonomy;
   }
   
+  /**
+   * Gets the list taxonomy name.
+   * 
+   * @return the list taxonomy name
+   */
   public List<String> getlistTaxonomyName() {
     return listTaxonomyName;
   }
   
+  /**
+   * Sets the list taxonomy.
+   * 
+   * @param listTaxonomyNew the new list taxonomy
+   */
   public void setListTaxonomy(List<String> listTaxonomyNew) {
     listTaxonomy = listTaxonomyNew;
   }
   
+  /**
+   * Sets the list taxonomy name.
+   * 
+   * @param listTaxonomyNameNew the new list taxonomy name
+   */
   public void setListTaxonomyName(List<String> listTaxonomyNameNew) {
     listTaxonomyName = listTaxonomyNameNew;
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.form.UIDialogForm#getTemplate()
+   */
   public String getTemplate() {
     TemplateService templateService = getApplicationComponent(TemplateService.class) ;
     String userName = Util.getPortalRequestContext().getRemoteUser() ;
@@ -137,6 +173,9 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
     }
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.selector.UISelectable#doSelect(java.lang.String, java.lang.Object)
+   */
   @SuppressWarnings("unchecked")
   public void doSelect(String selectField, Object value) throws Exception {
     this.isUpdateSelect = true;
@@ -158,6 +197,13 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
     uiContainer.removeChildById("PopupComponent");    
   }
 
+  /**
+   * Gets the current node.
+   * 
+   * @return the current node
+   * 
+   * @throws Exception the exception
+   */
   public Node getCurrentNode() throws Exception {  
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class) ;
     PortletPreferences preferences = UIFCCUtils.getPortletPreferences() ;
@@ -168,33 +214,78 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
     return (Node) session.getItem(preferences.getValue("path", ""));
   }
 
+  /**
+   * Sets the template node.
+   * 
+   * @param type the new template node
+   */
   public void setTemplateNode(String type) { documentType_ = type ; }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.form.UIDialogForm#isEditing()
+   */
   public boolean isEditing() { return false ; }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.core.UIComponent#getTemplateResourceResolver(org.exoplatform.webui.application.WebuiRequestContext, java.lang.String)
+   */
   public ResourceResolver getTemplateResourceResolver(WebuiRequestContext context, String template) {
     if(jcrTemplateResourceResolver_ == null) newJCRTemplateResourceResolver() ; 
     return jcrTemplateResourceResolver_; 
   }
 
+  /**
+   * New jcr template resource resolver.
+   */
   public void newJCRTemplateResourceResolver() {
     try {
       jcrTemplateResourceResolver_ = new JCRResourceResolver(repositoryName, getDMSWorkspace(), "exo:templateFile") ;
     } catch(Exception e) { }
   }
   
+  /**
+   * Gets the dMS workspace.
+   * 
+   * @return the dMS workspace
+   */
   private String getDMSWorkspace() {
     DMSConfiguration dmsConfiguration = getApplicationComponent(DMSConfiguration.class);
     return dmsConfiguration.getConfig(repositoryName).getSystemWorkspace();   
   }
   
+  /**
+   * Gets the session.
+   * 
+   * @param repository the repository
+   * @param workspace the workspace
+   * 
+   * @return the session
+   * 
+   * @throws RepositoryException the repository exception
+   * @throws RepositoryConfigurationException the repository configuration exception
+   */
   private Session getSession(String repository, String workspace) throws RepositoryException, RepositoryConfigurationException {
     RepositoryService repositoryService  = getApplicationComponent(RepositoryService.class);      
     return Utils.getSessionProvider(this).getSession(workspace, repositoryService.getRepository(repository));
   }
   
+  /**
+   * The listener interface for receiving saveAction events.
+   * The class that is interested in processing a saveAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSaveActionListener<code> method. When
+   * the saveAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SaveActionEvent
+   */
   @SuppressWarnings("unchecked")
   static public class SaveActionListener extends EventListener<UIFCCForm> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIFCCForm> event) throws Exception {
       UIFCCForm fastContentCreatorForm = event.getSource() ;
       UIApplication uiApp = fastContentCreatorForm.getAncestorOfType(UIApplication.class);
@@ -348,8 +439,23 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
     }
   }  
     
+  /**
+   * The listener interface for receiving showComponentAction events.
+   * The class that is interested in processing a showComponentAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addShowComponentActionListener<code> method. When
+   * the showComponentAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see ShowComponentActionEvent
+   */
   @SuppressWarnings("unchecked")
   static public class ShowComponentActionListener extends EventListener<UIFCCForm> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIFCCForm> event) throws Exception {
       UIFCCForm fastContentCreatorForm = event.getSource() ;
       UIFCCPortlet fastContentCreatorPortlet = fastContentCreatorForm.getParent() ;
@@ -416,7 +522,6 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
         
         ((UIOneTaxonomySelector)component).setRootNodeLocation(fastContentCreatorForm.repositoryName, workspaceName, rootTreePath);
         ((UIOneTaxonomySelector)component).init(sessionProvider);
-        
       }
       Utils.createPopupWindow(fastContentCreatorForm, component, UIFCCConstant.TAXONOMY_POPUP_WINDOW, 640, 300);
       String param = "returnField=" + fieldName ;
@@ -425,7 +530,22 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
     }
   }      
   
+  /**
+   * The listener interface for receiving removeReferenceAction events.
+   * The class that is interested in processing a removeReferenceAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addRemoveReferenceActionListener<code> method. When
+   * the removeReferenceAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see RemoveReferenceActionEvent
+   */
   static public class RemoveReferenceActionListener extends EventListener<UIFCCForm> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIFCCForm> event) throws Exception {
       UIFCCForm fastContentCreatorForm = event.getSource() ;
       fastContentCreatorForm.isRemovePreference = true;
@@ -435,7 +555,22 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
     }
   }  
 
+  /**
+   * The listener interface for receiving addAction events.
+   * The class that is interested in processing a addAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addAddActionListener<code> method. When
+   * the addAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see AddActionEvent
+   */
   static public class AddActionListener extends EventListener<UIFCCForm> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIFCCForm> event) throws Exception {
       UIFCCForm fastContentCreatorForm = event.getSource();
       UIFCCPortlet fastContentCreatorPortlet = fastContentCreatorForm.getParent();
@@ -472,7 +607,22 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
     }
   }
 
+  /**
+   * The listener interface for receiving removeAction events.
+   * The class that is interested in processing a removeAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addRemoveActionListener<code> method. When
+   * the removeAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see RemoveActionEvent
+   */
   static public class RemoveActionListener extends EventListener<UIFCCForm> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIFCCForm> event) throws Exception {
       event.getRequestContext().addUIComponentToUpdateByAjax(event.getSource().getParent()) ;
     }

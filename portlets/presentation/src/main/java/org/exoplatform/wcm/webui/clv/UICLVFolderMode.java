@@ -33,13 +33,10 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 
+// TODO: Auto-generated Javadoc
 /*
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Oct 15, 2008
- */
-
-/**
- * The Class UIFolderViewer.
  */
 
 @ComponentConfig(      
@@ -51,6 +48,9 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 )
 public class UICLVFolderMode extends UICLVContainer {
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.wcm.webui.clv.UICLVContainer#init()
+   */
   public void init() throws Exception {
     PortletPreferences portletPreferences = getPortletPreference();    
     NodeIterator nodeIterator = null;
@@ -90,6 +90,13 @@ public class UICLVFolderMode extends UICLVContainer {
     contentListPresentation.setHeader(portletPreferences.getValue(UICLVPortlet.HEADER, null));
   }
   
+  /**
+   * Gets the rendered content nodes.
+   * 
+   * @return the rendered content nodes
+   * 
+   * @throws Exception the exception
+   */
   public NodeIterator getRenderedContentNodes() throws Exception {
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     PortletPreferences preferences = portletRequestContext.getRequest().getPreferences();
@@ -111,5 +118,4 @@ public class UICLVFolderMode extends UICLVContainer {
     
     return wcmComposer.getContents(repository, workspace, folderPath, filters, Utils.getSessionProvider(this));
   }
-    
 }

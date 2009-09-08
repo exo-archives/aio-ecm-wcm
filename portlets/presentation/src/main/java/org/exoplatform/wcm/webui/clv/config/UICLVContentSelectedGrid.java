@@ -26,6 +26,7 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS Author : anh.do anh.do@exoplatform.com,
  * anhdn86@gmail.com Feb 16, 2009
@@ -41,11 +42,31 @@ import org.exoplatform.webui.event.EventListener;
 )
 public class UICLVContentSelectedGrid extends UISelectedCategoriesGrid {
 
+  /**
+   * Instantiates a new uICLV content selected grid.
+   * 
+   * @throws Exception the exception
+   */
   public UICLVContentSelectedGrid() throws Exception {
     super();
   }
 
+  /**
+   * The listener interface for receiving deleteAction events.
+   * The class that is interested in processing a deleteAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addDeleteActionListener<code> method. When
+   * the deleteAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see DeleteActionEvent
+   */
   public static class DeleteActionListener extends EventListener<UICLVContentSelectedGrid> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UICLVContentSelectedGrid> event) throws Exception {
       UICLVContentSelectedGrid uiSelectedContentGrid = event.getSource();
       String value = event.getRequestContext().getRequestParameter(OBJECTID);
@@ -59,7 +80,22 @@ public class UICLVContentSelectedGrid extends UISelectedCategoriesGrid {
     }
   }
 
+  /**
+   * The listener interface for receiving saveCategoriesAction events.
+   * The class that is interested in processing a saveCategoriesAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSaveCategoriesActionListener<code> method. When
+   * the saveCategoriesAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SaveCategoriesActionEvent
+   */
   public static class SaveCategoriesActionListener extends EventListener<UICLVContentSelectedGrid> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UICLVContentSelectedGrid> event) throws Exception {
       UICLVContentSelectedGrid uiSelectedContentGrid = event.getSource();
       UICLVContentSelector uiCorrectContentSelectorForm = uiSelectedContentGrid.getAncestorOfType(UICLVContentSelector.class);
@@ -84,7 +120,22 @@ public class UICLVContentSelectedGrid extends UISelectedCategoriesGrid {
     }
   }
 
+  /**
+   * The listener interface for receiving cancelAction events.
+   * The class that is interested in processing a cancelAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addCancelActionListener<code> method. When
+   * the cancelAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see CancelActionEvent
+   */
   public static class CancelActionListener extends EventListener<UICLVContentSelectedGrid> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UICLVContentSelectedGrid> event) throws Exception {
       UICLVContentSelectedGrid uiSelectedContent = event.getSource();
       UICLVContentSelector uiCorrectContentSelectorForm = uiSelectedContent.getAncestorOfType(UICLVContentSelector.class);

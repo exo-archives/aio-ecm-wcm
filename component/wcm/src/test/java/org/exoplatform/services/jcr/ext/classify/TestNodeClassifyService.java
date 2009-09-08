@@ -28,18 +28,27 @@ import org.exoplatform.services.jcr.ext.classify.impl.TypeClassifyPlugin;
 import org.exoplatform.services.wcm.BaseWCMTestCase;
 import org.exoplatform.services.wcm.core.NodetypeConstant;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : Anh Do Ngoc
- *          anh.do@exoplatform.com
- * Jun 2, 2008  
+ * anh.do@exoplatform.com
+ * Jun 2, 2008
  */
 public class TestNodeClassifyService extends BaseWCMTestCase {
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.BaseWCMTestCase#setUp()
+   */
   public void setUp() throws Exception {
     super.setUp();
   }
   
+  /**
+   * Test classify plugin manager.
+   * 
+   * @throws Exception the exception
+   */
   public void testClassifyPluginManager() throws Exception {
     NodeClassifyService classifyService = 
       (NodeClassifyService)container.getComponentInstanceOfType(NodeClassifyService.class);
@@ -48,6 +57,11 @@ public class TestNodeClassifyService extends BaseWCMTestCase {
     assertNotNull(classifyPlugin);
   }
 
+  /**
+   * Test alphabet classify.
+   * 
+   * @throws Exception the exception
+   */
   public void testAlphabetClassify() throws Exception {    
     NodeClassifyService classifyService = 
       (NodeClassifyService)container.getComponentInstanceOfType(NodeClassifyService.class);
@@ -98,6 +112,11 @@ public class TestNodeClassifyService extends BaseWCMTestCase {
     session.save();
   }
 
+  /**
+   * Test date time classify.
+   * 
+   * @throws Exception the exception
+   */
   public void testDateTimeClassify() throws Exception{
     NodeClassifyService classifyService = 
       (NodeClassifyService)container.getComponentInstanceOfType(NodeClassifyService.class) ;
@@ -196,6 +215,11 @@ public class TestNodeClassifyService extends BaseWCMTestCase {
     session.save();    
   }
 
+  /**
+   * Test type classify.
+   * 
+   * @throws Exception the exception
+   */
   public void testTypeClassify() throws Exception{    
     NodeClassifyService classifyService = 
       (NodeClassifyService)container.getComponentInstanceOfType(NodeClassifyService.class) ;
@@ -236,5 +260,4 @@ public class TestNodeClassifyService extends BaseWCMTestCase {
 
     }catch(PathNotFoundException ex){} 
   }
-
 }

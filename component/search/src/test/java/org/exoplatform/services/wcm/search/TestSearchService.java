@@ -36,7 +36,6 @@ import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.publication.WebpagePublicationPlugin;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationPlugin;
-import org.exoplatform.services.wcm.search.QueryCriteria.DATE_RANGE_SELECTED;
 import org.exoplatform.services.wcm.search.QueryCriteria.DatetimeRange;
 import org.exoplatform.services.wcm.search.QueryCriteria.QueryProperty;
 
@@ -251,7 +250,6 @@ public class TestSearchService extends BaseWCMTestCase {
    * 
    * @throws Exception the exception
    */
-  @SuppressWarnings("unchecked")
   public void testSearchSharedPortalNotLiveMode() throws Exception {
     searchPageChecked = true;
     searchDocumentChecked = true;
@@ -277,7 +275,6 @@ public class TestSearchService extends BaseWCMTestCase {
    * 
    * @throws Exception the exception
    */
-  @SuppressWarnings("unchecked")
   public void testSearchSharedPortalLiveMode() throws Exception {
     searchPageChecked = true;
     searchDocumentChecked = true;
@@ -304,7 +301,6 @@ public class TestSearchService extends BaseWCMTestCase {
    * 
    * @throws Exception the exception
    */
-  @SuppressWarnings("unchecked")
   public void testSearchAllPortalNotLiveMode() throws Exception {
     searchPageChecked = true;
     searchDocumentChecked = true;
@@ -331,7 +327,6 @@ public class TestSearchService extends BaseWCMTestCase {
    * 
    * @throws Exception the exception
    */
-  @SuppressWarnings("unchecked")
   public void testSearchAllPortalLiveMode() throws Exception {
     searchPageChecked = true;
     searchDocumentChecked = true;
@@ -648,6 +643,7 @@ public class TestSearchService extends BaseWCMTestCase {
    * searchSelectedPortal = null<br>
    * searchIsLiveMode = true<br>
    */
+  @SuppressWarnings("deprecation")
   public void testSearchPagesDocument_Date(){
     this.searchDocumentChecked = true;
     this.searchPageChecked = true;

@@ -34,12 +34,10 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 
+// TODO: Auto-generated Javadoc
 /*
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Oct 31, 2008
- */
-/**
- * The Class UISearchBox.
  */
 @ComponentConfig(
 	lifecycle = UIFormLifecycle.class, 
@@ -128,7 +126,7 @@ public class UISearchBox extends UIForm {
 	 * and the object created with that class is registered with a component using
 	 * the component's
 	 * <code>addSearchActionListener<code> method. When the searchAction
- * event occurs, that object's appropriate method is invoked.
+	 * event occurs, that object's appropriate method is invoked.
 	 * 
 	 * @see SearchActionEvent
 	 */
@@ -154,5 +152,4 @@ public class UISearchBox extends UIForm {
 			prContext.getResponse().sendRedirect(redirect);
 		}
 	}
-
 }

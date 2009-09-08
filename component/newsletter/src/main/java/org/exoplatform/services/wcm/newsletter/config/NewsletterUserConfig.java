@@ -65,5 +65,4 @@ public class NewsletterUserConfig {
   public void setBanned(boolean isBanned) {
     this.isBanned = isBanned;
   }
-  
 }

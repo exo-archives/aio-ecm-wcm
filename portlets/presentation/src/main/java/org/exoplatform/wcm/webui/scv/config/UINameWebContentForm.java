@@ -76,7 +76,6 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
  * Created by The eXo Platform SAS Author : DANG TAN DUNG dzungdev@gmail.com Sep
  * 8, 2008
  */
-
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class, 
     template = "app:/groovy/SingleContentViewer/config/UINameWebContentForm.gtmpl", 
@@ -127,39 +126,36 @@ public class UINameWebContentForm extends UIForm {
   }
   
   public List<SelectItemOption<String>> getListFileType() throws Exception {
-	    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>();    
-	    TemplateService templateService = getApplicationComponent(TemplateService.class) ;
-	    RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
-	    String repositoryName = repositoryService.getCurrentRepository().getConfiguration().getName();
-	    NodeTypeManager nodeTypeManager = repositoryService.getRepository(repositoryName).getNodeTypeManager();
-	    PortalRequestContext requestContext = Util.getPortalRequestContext();
-	    ResourceBundle resourceBundle = requestContext.getApplicationResourceBundle();
-	    List<String> acceptableContentTypes = templateService.getDocumentTemplates(repositoryName);
-	    if(acceptableContentTypes.size() == 0) return options;
-	    String userName = Util.getPortalRequestContext().getRemoteUser();
-	    for(String contentType: acceptableContentTypes) {
-	        NodeType nodeType = nodeTypeManager.getNodeType(contentType);
-	        if (nodeType.isNodeType("exo:webContent")) {
-	        	String label = templateService.getTemplateLabel(contentType,repositoryName);
-	            String resolveLabel = label;
-	            try {
-	              resolveLabel = resourceBundle.getString("ContentType.lable."+ StringUtils.deleteWhitespace(resolveLabel));
-	            } catch(Exception e) {
-
-	            }
-	        	try {
-	        		String templatePath = templateService.getTemplatePathByUser(true, contentType, userName, repositoryName);
-	        		if ((templatePath != null) && (templatePath.length() > 0)) {
-	        			options.add(new SelectItemOption<String>(label, contentType));
-	        		}
-	        	} catch (AccessControlException e) {
-	        	} catch (Exception e) {  
-	        	}	        	
-	        }
-	    }    
-	    Collections.sort(options, new ItemOptionNameComparator()) ;
-	    return options ;
-	  }
+    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>();    
+    TemplateService templateService = getApplicationComponent(TemplateService.class) ;
+    RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
+    String repositoryName = repositoryService.getCurrentRepository().getConfiguration().getName();
+    NodeTypeManager nodeTypeManager = repositoryService.getRepository(repositoryName).getNodeTypeManager();
+    PortalRequestContext requestContext = Util.getPortalRequestContext();
+    ResourceBundle resourceBundle = requestContext.getApplicationResourceBundle();
+    List<String> acceptableContentTypes = templateService.getDocumentTemplates(repositoryName);
+    if(acceptableContentTypes.size() == 0) return options;
+    String userName = Util.getPortalRequestContext().getRemoteUser();
+    for(String contentType: acceptableContentTypes) {
+        NodeType nodeType = nodeTypeManager.getNodeType(contentType);
+        if (nodeType.isNodeType("exo:webContent")) {
+        	String label = templateService.getTemplateLabel(contentType,repositoryName);
+            String resolveLabel = label;
+            try {
+              resolveLabel = resourceBundle.getString("ContentType.lable."+ StringUtils.deleteWhitespace(resolveLabel));
+            } catch(Exception e) {}
+        	try {
+        		String templatePath = templateService.getTemplatePathByUser(true, contentType, userName, repositoryName);
+        		if ((templatePath != null) && (templatePath.length() > 0)) {
+        			options.add(new SelectItemOption<String>(label, contentType));
+        		}
+        	} catch (AccessControlException e) {
+        	} catch (Exception e) {}	        	
+        }
+    }    
+    Collections.sort(options, new ItemOptionNameComparator()) ;
+    return options ;
+	}
 
 
   /**
@@ -301,7 +297,6 @@ public class UINameWebContentForm extends UIForm {
       }
       uiQuickCreationWizard.viewStep(2);
     }
-    
   }
 
   /**
@@ -408,5 +403,4 @@ public class UINameWebContentForm extends UIForm {
   public void setPictureDescribe(String pictureDescribe) {
     this.pictureDescribe = pictureDescribe;
   }
-
 }

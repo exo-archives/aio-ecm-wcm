@@ -77,6 +77,7 @@ public class NewsletterCategoryHandler {
    * 
    * @throws Exception the exception
    */
+  @SuppressWarnings("unchecked")
   protected NewsletterCategoryConfig getCategoryFromNode(Node categoryNode) throws Exception{
   	NewsletterCategoryConfig categoryConfig = null;
   	categoryConfig = new NewsletterCategoryConfig();
@@ -129,7 +130,6 @@ public class NewsletterCategoryHandler {
       }
       session.save();
     } catch(Exception e) {
-    	e.printStackTrace();
       log.error("Add category " + categoryConfig.getName() + " failed because of " + e.getMessage());
     } 
   }
@@ -227,13 +227,12 @@ public class NewsletterCategoryHandler {
         try{
           listCategories.add(getCategoryFromNode(nodeIterator.nextNode()));
         }catch(Exception ex){
-          ex.printStackTrace();
+          log.error("Get category " + nodeIterator.nextNode().getName() + " failed because of " + ex.getMessage());
         }
       }
   	}catch(Exception e){
-	    e.printStackTrace();
+  	  log.error("Get list categories  failed because of " + e.getMessage());
 	  }
     return listCategories;
   }
-
 }

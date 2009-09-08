@@ -57,6 +57,7 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform
  * ngoc.tran@exoplatform.com Jun 23, 2009
@@ -109,19 +110,42 @@ public class UIPCLVForm extends UIForm {
 	/** Show RSS link. */
 	private String										showRSSLink;
 	
+	/** The rss link. */
 	private String                     rssLink;
 
+	/**
+	 * Gets the rss link.
+	 * 
+	 * @return the rss link
+	 */
 	public String getRssLink() {
     return rssLink;
   }
 
+  /**
+   * Sets the rss link.
+   * 
+   * @param rssLink the new rss link
+   */
   public void setRssLink(String rssLink) {
     this.rssLink = rssLink;
   }
 
+  /**
+   * Instantiates a new uIPCLV form.
+   */
   public UIPCLVForm() {
 	}
 
+	/**
+	 * Inits the.
+	 * 
+	 * @param templatePath the template path
+	 * @param resourceResolver the resource resolver
+	 * @param dataPageList the data page list
+	 * 
+	 * @throws Exception the exception
+	 */
 	public void init(String templatePath, ResourceResolver resourceResolver, PageList dataPageList) throws Exception {
 
 		PortletPreferences portletPreferences = getPortletPreferences();
@@ -150,6 +174,11 @@ public class UIPCLVForm extends UIForm {
 		return (isShow != null) ? Boolean.parseBoolean(isShow) : false;
 	}
 
+	/**
+	 * Show rss link.
+	 * 
+	 * @return true, if successful
+	 */
 	public boolean showRSSLink() {
 		PortletPreferences portletPreferences = getPortletPreferences();
 		String isShow = portletPreferences.getValue(UIPCLVPortlet.SHOW_RSS_LINK, null);
@@ -160,6 +189,7 @@ public class UIPCLVForm extends UIForm {
 	 * Checks if is show field.
 	 * 
 	 * @param field the field
+	 * 
 	 * @return true, if is show field
 	 */
 	public boolean isShowField(String field) {
@@ -172,6 +202,7 @@ public class UIPCLVForm extends UIForm {
 	 * Show paginator.
 	 * 
 	 * @return true, if successful
+	 * 
 	 * @throws Exception the exception
 	 */
 	public boolean showPaginator() throws Exception {
@@ -211,6 +242,9 @@ public class UIPCLVForm extends UIForm {
 		return uiPaginator;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.exoplatform.webui.core.UIComponent#getTemplateResourceResolver(org.exoplatform.webui.application.WebuiRequestContext, java.lang.String)
+	 */
 	public ResourceResolver getTemplateResourceResolver(WebuiRequestContext context, String template) {
 		return resourceResolver;
 	}
@@ -219,6 +253,7 @@ public class UIPCLVForm extends UIForm {
 	 * Gets the current page data.
 	 * 
 	 * @return the current page data
+	 * 
 	 * @throws Exception the exception
 	 */
 	@SuppressWarnings("unchecked")
@@ -227,14 +262,14 @@ public class UIPCLVForm extends UIForm {
 	}
 
 	/**
-   * Gets the title.
-   * 
-   * @param node the node
-   * 
-   * @return the title
-   * 
-   * @throws Exception the exception
-   */
+	 * Gets the title.
+	 * 
+	 * @param node the node
+	 * 
+	 * @return the title
+	 * 
+	 * @throws Exception the exception
+	 */
   public String getTitle(Node node) throws Exception {
     String title = null;
     if (node.hasNode("jcr:content")) {
@@ -258,7 +293,9 @@ public class UIPCLVForm extends UIForm {
 	 * Gets the summary.
 	 * 
 	 * @param node the node
+	 * 
 	 * @return the summary
+	 * 
 	 * @throws Exception the exception
 	 */
 	public String getSummary(Node node) throws Exception {
@@ -272,7 +309,9 @@ public class UIPCLVForm extends UIForm {
 	 * Gets the created date.
 	 * 
 	 * @param node the node
+	 * 
 	 * @return the created date
+	 * 
 	 * @throws Exception the exception
 	 */
 	public String getCreatedDate(Node node) throws Exception {
@@ -287,7 +326,9 @@ public class UIPCLVForm extends UIForm {
 	 * Gets the illustrative image.
 	 * 
 	 * @param node the node
+	 * 
 	 * @return the illustrative image
+	 * 
 	 * @throws Exception the exception
 	 */
 	public String getIllustrativeImage(Node node) throws Exception {
@@ -299,11 +340,19 @@ public class UIPCLVForm extends UIForm {
 		try {
 			illustrativeImage = contentSchemaHandler.getIllustrationImage(node);
 			uri = imagesRendererService.generateURI(illustrativeImage);
-		} catch (Exception e) {
-		}
+		} catch (Exception e) {}
 		return uri;
 	}
 
+	/**
+	 * Generate link.
+	 * 
+	 * @param node the node
+	 * 
+	 * @return the string
+	 * 
+	 * @throws Exception the exception
+	 */
 	public String generateLink(Node node) throws Exception {
 		PortletRequestContext portletRequestContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
 		HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) portletRequestContext.getRequest();
@@ -354,112 +403,249 @@ public class UIPCLVForm extends UIForm {
 		return link;
 	}
 
+	/**
+	 * Gets the portlet preferences.
+	 * 
+	 * @return the portlet preferences
+	 */
 	private PortletPreferences getPortletPreferences() {
 		PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
 		PortletPreferences portletPreferences = context.getRequest().getPreferences();
 		return portletPreferences;
 	}
 
+	/**
+	 * Gets the template path.
+	 * 
+	 * @return the template path
+	 */
 	public String getTemplatePath() {
 		return templatePath;
 	}
 
+	/**
+	 * Sets the template path.
+	 * 
+	 * @param templatePath the new template path
+	 */
 	public void setTemplatePath(String templatePath) {
 		this.templatePath = templatePath;
 	}
 
+	/**
+	 * Gets the resource resolver.
+	 * 
+	 * @return the resource resolver
+	 */
 	public ResourceResolver getResourceResolver() {
 		return resourceResolver;
 	}
 
+	/**
+	 * Sets the resource resolver.
+	 * 
+	 * @param resourceResolver the new resource resolver
+	 */
 	public void setResourceResolver(ResourceResolver resourceResolver) {
 		this.resourceResolver = resourceResolver;
 	}
 
+	/**
+	 * Gets the ui paginator.
+	 * 
+	 * @return the ui paginator
+	 */
 	public UICustomizeablePaginator getUiPaginator() {
 		return uiPaginator;
 	}
 
+	/**
+	 * Sets the ui paginator.
+	 * 
+	 * @param uiPaginator the new ui paginator
+	 */
 	public void setUiPaginator(UICustomizeablePaginator uiPaginator) {
 		this.uiPaginator = uiPaginator;
 	}
 
+	/**
+	 * Gets the content column.
+	 * 
+	 * @return the content column
+	 */
 	public String getContentColumn() {
 		return contentColumn;
 	}
 
+	/**
+	 * Sets the content column.
+	 * 
+	 * @param contentColumn the new content column
+	 */
 	public void setContentColumn(String contentColumn) {
 		this.contentColumn = contentColumn;
 	}
 
+	/**
+	 * Checks if is show link.
+	 * 
+	 * @return true, if is show link
+	 */
 	public boolean isShowLink() {
 		return showLink;
 	}
 
+	/**
+	 * Sets the show link.
+	 * 
+	 * @param showLink the new show link
+	 */
 	public void setShowLink(boolean showLink) {
 		this.showLink = showLink;
 	}
 
+	/**
+	 * Checks if is show header.
+	 * 
+	 * @return true, if is show header
+	 */
 	public boolean isShowHeader() {
 		return showHeader;
 	}
 
+	/**
+	 * Sets the show header.
+	 * 
+	 * @param showHeader the new show header
+	 */
 	public void setShowHeader(boolean showHeader) {
 		this.showHeader = showHeader;
 	}
 
+	/**
+	 * Checks if is show readmore.
+	 * 
+	 * @return true, if is show readmore
+	 */
 	public boolean isShowReadmore() {
 		return showReadmore;
 	}
 
+	/**
+	 * Sets the show readmore.
+	 * 
+	 * @param showReadmore the new show readmore
+	 */
 	public void setShowReadmore(boolean showReadmore) {
 		this.showReadmore = showReadmore;
 	}
 
+	/**
+	 * Gets the header.
+	 * 
+	 * @return the header
+	 */
 	public String getHeader() {
 		return header;
 	}
 
+	/**
+	 * Sets the header.
+	 * 
+	 * @param header the new header
+	 */
 	public void setHeader(String header) {
 		this.header = header;
 	}
 
+	/**
+	 * Gets the date formatter.
+	 * 
+	 * @return the date formatter
+	 */
 	public DateFormat getDateFormatter() {
 		return dateFormatter;
 	}
 
+	/**
+	 * Sets the date formatter.
+	 * 
+	 * @param dateFormatter the new date formatter
+	 */
 	public void setDateFormatter(DateFormat dateFormatter) {
 		this.dateFormatter = dateFormatter;
 	}
 
+	/**
+	 * Gets the auto detection.
+	 * 
+	 * @return the auto detection
+	 */
 	public String getAutoDetection() {
 		return autoDetection;
 	}
 
+	/**
+	 * Sets the auto detection.
+	 * 
+	 * @param autoDetection the new auto detection
+	 */
 	public void setAutoDetection(String autoDetection) {
 		this.autoDetection = autoDetection;
 	}
 
+	/**
+	 * Gets the show more link.
+	 * 
+	 * @return the show more link
+	 */
 	public String getShowMoreLink() {
 		return showMoreLink;
 	}
 
+	/**
+	 * Sets the show more link.
+	 * 
+	 * @param showMoreLink the new show more link
+	 */
 	public void setShowMoreLink(String showMoreLink) {
 		this.showMoreLink = showMoreLink;
 	}
 
+	/**
+	 * Gets the show rss link.
+	 * 
+	 * @return the show rss link
+	 */
 	public String getShowRSSLink() {
 		return showRSSLink;
 	}
 
+	/**
+	 * Sets the show rss link.
+	 * 
+	 * @param showRSSLink the new show rss link
+	 */
 	public void setShowRSSLink(String showRSSLink) {
 		this.showRSSLink = showRSSLink;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.exoplatform.webui.core.UIComponent#getTemplate()
+	 */
 	public String getTemplate() {
 		return templatePath;
 	}
 
+	/**
+	 * Gets the node view.
+	 * 
+	 * @param node the node
+	 * 
+	 * @return the node view
+	 * 
+	 * @throws Exception the exception
+	 */
 	public Node getNodeView(Node node) throws Exception {
 	  String realNodeUUID = node.getProperty("exo:uuid").getString();
 	  Node realNode = node.getSession().getNodeByUUID(realNodeUUID);
@@ -477,8 +663,22 @@ public class UIPCLVForm extends UIForm {
     return viewNode;
   }
 	
+	/**
+	 * The listener interface for receiving refreshAction events.
+	 * The class that is interested in processing a refreshAction
+	 * event implements this interface, and the object created
+	 * with that class is registered with a component using the
+	 * component's <code>addRefreshActionListener<code> method. When
+	 * the refreshAction event occurs, that object's appropriate
+	 * method is invoked.
+	 * 
+	 * @see RefreshActionEvent
+	 */
 	public static class RefreshActionListener extends EventListener<UIPCLVForm> {
 
+		/* (non-Javadoc)
+		 * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+		 */
 		public void execute(Event<UIPCLVForm> event) throws Exception {
 			UIPCLVForm contentListPresentation = event.getSource();
 			UIPCLVContainer container = contentListPresentation.getParent();

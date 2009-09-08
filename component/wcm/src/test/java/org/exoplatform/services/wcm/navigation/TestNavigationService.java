@@ -54,6 +54,7 @@ public class TestNavigationService extends BaseWCMTestCase {
     pageNavigations.add(pageNavigation);
     String jsonResult = navigationService.getNavigationsAsJSON(pageNavigations);
     
+    @SuppressWarnings("unused")
     UserPortalConfigService userPortalConfigService = getService(UserPortalConfigService.class);
     String jsonExpert = "[" +
     		                  "{" +
@@ -70,5 +71,4 @@ public class TestNavigationService extends BaseWCMTestCase {
     		                "]";
     assertEquals(jsonExpert, jsonResult);
   }
-  
 }

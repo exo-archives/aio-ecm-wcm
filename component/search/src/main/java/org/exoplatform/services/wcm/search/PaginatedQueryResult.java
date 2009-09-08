@@ -99,7 +99,6 @@ public class PaginatedQueryResult extends PaginatedNodeIterator {
     currentPage_ = page;
   }      
 
-
   /**
    * Filter node to display.
    * 
@@ -120,5 +119,4 @@ public class PaginatedQueryResult extends PaginatedNodeIterator {
     displayNode = publicationPlugin.getNodeView(node, context);
     return displayNode;
   }
-
 }

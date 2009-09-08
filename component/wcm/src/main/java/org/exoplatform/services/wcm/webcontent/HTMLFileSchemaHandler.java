@@ -21,8 +21,6 @@ import java.util.List;
 import javax.jcr.Node;
 import javax.jcr.Session;
 
-import org.exoplatform.services.html.HTMLDocument;
-import org.exoplatform.services.html.parser.HTMLParser;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.BaseWebSchemaHandler;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;

@@ -215,7 +215,6 @@ public class WCMPublicationServiceImpl implements WCMPublicationService, Startab
 		} else {
 			enrollNodeInLifecycle(node, StageAndVersionPublicationConstant.LIFECYCLE_NAME);
 		}
-		
 	}
 
 	/**
@@ -251,16 +250,13 @@ public class WCMPublicationServiceImpl implements WCMPublicationService, Startab
 	    	publicationPlugin.updateLifecyleOnChangeContent(node, remoteUser);
 	    
 	    wcmComposer.updateContent(node.getSession().getRepository().toString(), node.getSession().getWorkspace().getName(), node.getPath(), new HashMap<String, String>());
-		
 	}
 
 	public String getContentState(Node node) throws Exception {
     String currentState = null;
     try {
       currentState = node.getProperty("publication:currentState").getString();
-    } catch (Exception e) {
-    }
+    } catch (Exception e) {}
     return currentState;
 	}
-
 }

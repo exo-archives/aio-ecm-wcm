@@ -85,9 +85,7 @@ public class NewsletterPublicUserHandler {
     for(Value value : values){
       try {
         listString.add(value.getString());
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
+      } catch (Exception e) {}
     }
     return listString;
   }
@@ -124,7 +122,7 @@ public class NewsletterPublicUserHandler {
           subscriptionNode.setProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_USER, new String[]{userMail});
         }
       }catch(Exception ex){
-        ex.printStackTrace();
+        log.error("updateSubscriptions() failed because of " + ex.getMessage());
       }
     }
     session.save();
@@ -164,7 +162,6 @@ public class NewsletterPublicUserHandler {
       }
       session.save();
     } catch (Exception e) {
-    	e.printStackTrace();
       log.error("Update user's subscription for user " + email + " failed because of " + e.getMessage());
     }
   }
@@ -196,14 +193,8 @@ public class NewsletterPublicUserHandler {
       Node userNode = manageUserHandler.add(portalName, userMail, sessionProvider);
       
       // update email into subscription
-      //SessionProvider sProvider = SessionProviderFactory.createSystemProvider() ;
       Session session = sessionProvider.getSession(workspace, manageableRepository);
       updateSubscriptions(session, listCategorySubscription, portalName, userMail);
-      //Send a verification code to user's email to validate and to get link
-      /*WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-      ResourceBundle res = context.getApplicationResourceBundle() ;
-      emailContent = new String[]{ res.getString("NewsletterPortlet.Email.ConfirmUser.Subject"),
-                                   res.getString("NewsletterPortlet.Email.ConfirmUser.Content")};*/
       String openTag = "<a href=\"" + link.replaceFirst("OBJECTID",userMail + "/" + 
                                                      userNode.getProperty(NewsletterConstant.USER_PROPERTY_VALIDATION_CODE).getString())+
                        "\">";
@@ -223,7 +214,6 @@ public class NewsletterPublicUserHandler {
       }
     } catch (Exception e) {
       log.error("Subscribe user " + userMail + " failed because of " + e.getMessage());
-      e.printStackTrace();
       throw e;
     }
   }
@@ -255,7 +245,6 @@ public class NewsletterPublicUserHandler {
     }
     return false;
   }
-
   
   /**
    * Forget email.

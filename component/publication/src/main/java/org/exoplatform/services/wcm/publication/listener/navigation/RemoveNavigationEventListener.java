@@ -50,5 +50,4 @@ public class RemoveNavigationEventListener extends Listener<UserPortalConfigServ
       log.error("Exception when update publication lifecyle", e);
     }
   }
-
 }

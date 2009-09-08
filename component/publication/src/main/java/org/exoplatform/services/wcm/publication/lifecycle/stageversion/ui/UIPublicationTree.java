@@ -106,7 +106,6 @@ public class UIPublicationTree extends UITree {
       this.navigation = navigation;
       this.resourceBundle = res;
       this.isPageNode = isPageNode;
-
     }
     
     /**

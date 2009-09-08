@@ -30,11 +30,12 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
- * Author : eXoPlatform
- *          ngoc.tran@exoplatform.com
- * Jun 1, 2009  
+ * Author : Tran Nguyen Ngoc
+ * ngoc.tran@exoplatform.com
+ * Jun 1, 2009
  */
 @ComponentConfig(
   lifecycle = UIApplicationLifecycle.class,
@@ -44,11 +45,31 @@ import org.exoplatform.webui.event.EventListener;
 )
 public class UINewsletterViewerPortlet extends UIPortletApplication {
 
+  /**
+   * Instantiates a new uI newsletter viewer portlet.
+   * 
+   * @throws Exception the exception
+   */
   public UINewsletterViewerPortlet() throws Exception {
     this.addChild(UINewsletterViewerForm.class, null, null);
   }
   
+  /**
+   * The listener interface for receiving confirmUserCodeAction events.
+   * The class that is interested in processing a confirmUserCodeAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addConfirmUserCodeActionListener<code> method. When
+   * the confirmUserCodeAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see ConfirmUserCodeActionEvent
+   */
   public static class ConfirmUserCodeActionListener extends EventListener<UINewsletterViewerPortlet> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UINewsletterViewerPortlet> event) throws Exception {
       UINewsletterViewerPortlet newsletterViewerPortlet = event.getSource();
       UINewsletterViewerForm newsletterForm = newsletterViewerPortlet.getChild(UINewsletterViewerForm.class);

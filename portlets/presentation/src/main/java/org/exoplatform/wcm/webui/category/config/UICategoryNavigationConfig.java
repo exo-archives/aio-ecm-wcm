@@ -50,11 +50,12 @@ import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.ext.UIFormInputSetWithAction;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * Jun 28, 2009  
+ * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * Jun 28, 2009
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
@@ -67,8 +68,14 @@ import org.exoplatform.webui.form.ext.UIFormInputSetWithAction;
 )
 public class UICategoryNavigationConfig extends UIForm implements UISelectable {
 
+  /** The popup id. */
   private String popupId;
   
+  /**
+   * Instantiates a new uI category navigation config.
+   * 
+   * @throws Exception the exception
+   */
   public UICategoryNavigationConfig() throws Exception {
     PortletPreferences preferences = UICategoryNavigationUtils.getPortletPreferences();
 
@@ -111,14 +118,34 @@ public class UICategoryNavigationConfig extends UIForm implements UISelectable {
     setActions(new String[] {"Save"});
   }
   
+  /**
+   * Gets the popup id.
+   * 
+   * @return the popup id
+   */
   public String getPopupId() {
     return popupId;
   }
 
+  /**
+   * Sets the popup id.
+   * 
+   * @param popupId the new popup id
+   */
   public void setPopupId(String popupId) {
     this.popupId = popupId;
   }
 
+  /**
+   * Gets the template list.
+   * 
+   * @param portletName the portlet name
+   * @param templateCategory the template category
+   * 
+   * @return the template list
+   * 
+   * @throws Exception the exception
+   */
   private List<SelectItemOption<String>> getTemplateList(String portletName, String templateCategory) throws Exception {
     List<SelectItemOption<String>> templates = new ArrayList<SelectItemOption<String>>();
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
@@ -134,6 +161,15 @@ public class UICategoryNavigationConfig extends UIForm implements UISelectable {
     return templates;
   }
   
+  /**
+   * Gets the taxonomy trees.
+   * 
+   * @param repository the repository
+   * 
+   * @return the taxonomy trees
+   * 
+   * @throws Exception the exception
+   */
   private List<SelectItemOption<String>> getTaxonomyTrees(String repository) throws Exception {
     TaxonomyService taxonomyService = getApplicationComponent(TaxonomyService.class);
     List<Node> taxonomyNodes = taxonomyService.getAllTaxonomyTrees(repository);
@@ -144,6 +180,9 @@ public class UICategoryNavigationConfig extends UIForm implements UISelectable {
     return taxonomyTrees;
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.selector.UISelectable#doSelect(java.lang.String, java.lang.Object)
+   */
   public void doSelect(String selectField, Object value) throws Exception {
     UIFormStringInput formStringInput = findComponentById(selectField);
     formStringInput.setValue(value.toString()) ;
@@ -153,7 +192,22 @@ public class UICategoryNavigationConfig extends UIForm implements UISelectable {
     Utils.closePopupWindow(popupContainer, popupId);
   }
   
+  /**
+   * The listener interface for receiving saveAction events.
+   * The class that is interested in processing a saveAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSaveActionListener<code> method. When
+   * the saveAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SaveActionEvent
+   */
   public static class SaveActionListener extends EventListener<UICategoryNavigationConfig> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UICategoryNavigationConfig> event) throws Exception {
       UICategoryNavigationConfig categoryNavigationConfig = event.getSource();
       String preferenceRepository = categoryNavigationConfig.getUIFormSelectBox(UICategoryNavigationConstant.REPOSITORY_FORM_SELECTBOX).getValue();
@@ -178,12 +232,42 @@ public class UICategoryNavigationConfig extends UIForm implements UISelectable {
     }
   }
   
+  /**
+   * The listener interface for receiving changeRepositoryAction events.
+   * The class that is interested in processing a changeRepositoryAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addChangeRepositoryActionListener<code> method. When
+   * the changeRepositoryAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see ChangeRepositoryActionEvent
+   */
   public static class ChangeRepositoryActionListener extends EventListener<UICategoryNavigationConfig> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UICategoryNavigationConfig> event) throws Exception {
     }
   }
   
+  /**
+   * The listener interface for receiving selectTargetPathAction events.
+   * The class that is interested in processing a selectTargetPathAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSelectTargetPathActionListener<code> method. When
+   * the selectTargetPathAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SelectTargetPathActionEvent
+   */
   public static class SelectTargetPathActionListener extends EventListener<UICategoryNavigationConfig> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UICategoryNavigationConfig> event) throws Exception {
       UICategoryNavigationConfig categoryNavigationConfig = event.getSource();
       UICategoryNavigationPortlet categoryNavigationPortlet = categoryNavigationConfig.getAncestorOfType(UICategoryNavigationPortlet.class);

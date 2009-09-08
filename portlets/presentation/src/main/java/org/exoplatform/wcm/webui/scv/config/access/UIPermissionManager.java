@@ -22,15 +22,12 @@ import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : Anh Do Ngoc
- *          anh.do@exoplatform.com
- * Aug 15, 2008  
- */
-
-/**
- * The Class UIPermissionManager.
+ * anh.do@exoplatform.com
+ * Aug 15, 2008
  */
 @ComponentConfig(lifecycle = UIContainerLifecycle.class)
 public class UIPermissionManager extends UIContainer {
@@ -64,5 +61,4 @@ public class UIPermissionManager extends UIContainer {
     uiPopup.setShow(true);
     uiPopup.setResizable(true);
   }
-
 }

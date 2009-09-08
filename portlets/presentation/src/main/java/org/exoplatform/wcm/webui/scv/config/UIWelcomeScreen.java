@@ -51,13 +51,13 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormRadioBoxInput;
 
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : DANG TAN DUNG
  * dzungdev@gmail.com
  * May 26, 2008
  */
-
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class, 
     template = "app:/groovy/SingleContentViewer/config/UIWelcomeScreen.gtmpl",
@@ -75,6 +75,7 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
    */
   public UIWelcomeScreen() throws Exception {}
 
+  /** The is new content. */
   private boolean isNewContent = false;
   
   /**
@@ -127,6 +128,13 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
     return this ;
   }
   
+  /**
+   * Goto edit wizard.
+   * 
+   * @param step the step
+   * 
+   * @throws Exception the exception
+   */
   public void GotoEditWizard(int step) throws Exception {
       UIPortletConfig uiPortletConfig = this.getAncestorOfType(UIPortletConfig.class);      
       this.setRendered(false);
@@ -152,6 +160,9 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
     uiConfig.addChild(type, config, id);
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.selector.UISelectable#doSelect(java.lang.String, java.lang.Object)
+   */
   public void doSelect(String arg0, Object arg1) throws Exception {}
 
   /**
@@ -167,6 +178,9 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
    */
   public static class NextActionListener extends EventListener<UIWelcomeScreen> {
 
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIWelcomeScreen> event) throws Exception {
       UIWelcomeScreen uiWelcomeScreen = event.getSource();
       String radioValue = uiWelcomeScreen.<UIFormRadioBoxInput>getUIInput("radio").getValue();
@@ -221,6 +235,9 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
    */
   public static class AbortActionListener extends EventListener<UIWelcomeScreen> {
 
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIWelcomeScreen> event) throws Exception {
       UIWelcomeScreen uiWelcomeScreen = event.getSource();
         UserPortalConfigService userPortalConfigService = uiWelcomeScreen.getApplicationComponent(UserPortalConfigService.class);
@@ -272,12 +289,21 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
     }
   }
 
+  /**
+   * Checks if is new content.
+   * 
+   * @return true, if is new content
+   */
   public boolean isNewContent() {
     return isNewContent;
   }
 
+  /**
+   * Sets the new content.
+   * 
+   * @param isNewContent the new new content
+   */
   public void setNewContent(boolean isNewContent) {
     this.isNewContent = isNewContent;
   }
-
 }

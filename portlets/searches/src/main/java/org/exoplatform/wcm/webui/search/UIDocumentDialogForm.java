@@ -55,11 +55,11 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com,
  * anhdn86@gmail.com Nov 13, 2008
  */
-
 @ComponentConfig(
 	lifecycle = UIFormLifecycle.class, events = {
 		@EventConfig(listeners = UIDocumentDialogForm.SaveAsDraftActionListener.class),
@@ -75,14 +75,16 @@ public class UIDocumentDialogForm extends UIDialogForm {
 
 	/**
 	 * Sets the document node.
-	 * 
-	 * @param node the new document node
 	 */
-
 	public UIDocumentDialogForm() {
 		setActions(new String[] { "SaveAsDraft", "FastPublish", "Cancel" });
 	}
 
+	/**
+	 * Sets the document node.
+	 * 
+	 * @param node the new document node
+	 */
 	public void setDocumentNode(Node node) {
 		documentNode = node;
 	}
@@ -137,7 +139,7 @@ public class UIDocumentDialogForm extends UIDialogForm {
 	 * the object created with that class is registered with a component using the
 	 * component's <code>addSaveActionListener<code> method. When
 	 * the saveAction event occurs, that object's appropriate
-   * method is invoked.
+	 * method is invoked.
 	 * 
 	 * @see SaveActionEvent
 	 */
@@ -217,10 +219,24 @@ public class UIDocumentDialogForm extends UIDialogForm {
 			}
 			Utils.closePopupWindow(uiDocumentDialogForm, "UIContentEdittingPopupWindow");
 		}
-
 	}
 
+	/**
+	 * The listener interface for receiving fastPublishAction events.
+	 * The class that is interested in processing a fastPublishAction
+	 * event implements this interface, and the object created
+	 * with that class is registered with a component using the
+	 * component's <code>addFastPublishActionListener<code> method. When
+	 * the fastPublishAction event occurs, that object's appropriate
+	 * method is invoked.
+	 * 
+	 * @see FastPublishActionEvent
+	 */
 	public static class FastPublishActionListener extends EventListener<UIDocumentDialogForm> {
+		
+		/* (non-Javadoc)
+		 * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+		 */
 		public void execute(Event<UIDocumentDialogForm> event) throws Exception {
 			UIDocumentDialogForm uiDocumentDialogForm = event.getSource();
 			Node documentNode = uiDocumentDialogForm.getNode();
@@ -304,15 +320,18 @@ public class UIDocumentDialogForm extends UIDialogForm {
 	 * and the object created with that class is registered with a component using
 	 * the component's <code>addCancelActionListener<code> method. When
 	 * the cancelAction event occurs, that object's appropriate
-   * method is invoked.
+	 * method is invoked.
 	 * 
 	 * @see CancelActionEvent
 	 */
 	public static class CancelActionListener extends EventListener<UIDocumentDialogForm> {
+		
+		/* (non-Javadoc)
+		 * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+		 */
 		public void execute(Event<UIDocumentDialogForm> event) throws Exception {
 			UIDocumentDialogForm uiDocumentDialogForm = event.getSource();
 			Utils.closePopupWindow(uiDocumentDialogForm, "UIContentEdittingPopupWindow");
 		}
 	}
-
 }

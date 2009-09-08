@@ -33,13 +33,13 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : anh.do
- *          anh.do@exoplatform.com, anhdn86@gmail.com		
- * Feb 23, 2009  
+ * anh.do@exoplatform.com, anhdn86@gmail.com
+ * Feb 23, 2009
  */
-
 @ComponentConfig(      
   lifecycle = Lifecycle.class,                 
    template = "app:/groovy/ContentListViewer/UICLVManualMode.gtmpl",
@@ -49,6 +49,9 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 )
 public class UICLVManualMode extends UICLVContainer {
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.wcm.webui.clv.UICLVContainer#init()
+   */
   public void init() throws Exception {                       
     PortletPreferences portletPreferences = getPortletPreference();
     setViewAbleContent(true);
@@ -93,5 +96,4 @@ public class UICLVManualMode extends UICLVContainer {
     contentListPresentation.setShowReadmore(Boolean.parseBoolean(portletPreferences.getValue(UICLVPortlet.SHOW_READMORE, null)));
     contentListPresentation.setHeader(portletPreferences.getValue(UICLVPortlet.HEADER, null));
   }  
-    
 }

@@ -68,7 +68,6 @@ import org.exoplatform.webui.event.EventListener;
  * dzungdev@gmail.com
  * Jun 9, 2008
  */
-
 @ComponentConfig (
     lifecycle = UIFormLifecycle.class,
     events = {
@@ -79,7 +78,6 @@ import org.exoplatform.webui.event.EventListener;
       @EventConfig(listeners = DialogFormActionListeners.RemoveDataActionListener.class)
     }
 )
-
 public class UIContentDialogForm extends UIDialogForm {
 
   /** The resource resolver. */
@@ -203,8 +201,8 @@ public class UIContentDialogForm extends UIDialogForm {
     try{
       if (resourceResolver == null) {
         RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
-          DMSConfiguration dmsConfiguration = getApplicationComponent(DMSConfiguration.class);
-          String workspace = dmsConfiguration.getConfig(this.repositoryName).getSystemWorkspace();
+        DMSConfiguration dmsConfiguration = getApplicationComponent(DMSConfiguration.class);
+        String workspace = dmsConfiguration.getConfig(this.repositoryName).getSystemWorkspace();
         resourceResolver = new JCRResourceResolver(this.repositoryName, workspace, TemplateService.EXO_TEMPLATE_FILE_PROP);
       }
     }catch(Exception e) {
@@ -220,7 +218,6 @@ public class UIContentDialogForm extends UIDialogForm {
    */
   @SuppressWarnings("unchecked")
 	public void onchange(Event event) throws Exception {
-
   }
 
   /**
@@ -297,13 +294,13 @@ public class UIContentDialogForm extends UIDialogForm {
 	   * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
 	   */
 	  public void execute(Event<UIContentDialogForm> event) throws Exception {
-	      UIContentDialogForm dialogForm = event.getSource();
-	      UIQuickCreationWizard uiQuickWizard = dialogForm.getAncestorOfType(UIQuickCreationWizard.class);
-	      UISocialInfo uiSocialInfo = uiQuickWizard.getChild(UISocialInfo.class);
-	      uiSocialInfo.update();
-	      uiQuickWizard.viewStep(3);
-	      UIPortletConfig portletConfig = uiQuickWizard.getAncestorOfType(UIPortletConfig.class);
-	      portletConfig.showPopup(event.getRequestContext());
+      UIContentDialogForm dialogForm = event.getSource();
+      UIQuickCreationWizard uiQuickWizard = dialogForm.getAncestorOfType(UIQuickCreationWizard.class);
+      UISocialInfo uiSocialInfo = uiQuickWizard.getChild(UISocialInfo.class);
+      uiSocialInfo.update();
+      uiQuickWizard.viewStep(3);
+      UIPortletConfig portletConfig = uiQuickWizard.getAncestorOfType(UIPortletConfig.class);
+      portletConfig.showPopup(event.getRequestContext());
 	  }
   }
   
@@ -405,14 +402,6 @@ public class UIContentDialogForm extends UIDialogForm {
       if (!isCheckOut) {
         newNode.checkin();
       }
-//      UIQuickCreationWizard uiQuickWizard = dialogForm.getAncestorOfType(UIQuickCreationWizard.class);
-//      UISocialInfo uiSocialInfo = uiQuickWizard.getChild(UISocialInfo.class);
-//      UIPermissionManager uiPermissionManager = uiSocialInfo.getChild(UIPermissionManager.class);
-//      uiPermissionManager.getChild(UIPermissionInfo.class).updateGrid();
-//      uiQuickWizard.viewStep(3);
-//      UIPortletConfig portletConfig = uiQuickWizard.getAncestorOfType(UIPortletConfig.class);
-//      portletConfig.showPopup(event.getRequestContext());
-      
       UIPortletConfig uiPortletConfig = dialogForm.getAncestorOfType(UIPortletConfig.class);
       uiPortletConfig.closePopupAndUpdateUI(event.getRequestContext(),true);      
     }
@@ -431,35 +420,35 @@ public class UIContentDialogForm extends UIDialogForm {
    */
   public static class FastPublishActionListener extends EventListener<UIContentDialogForm> {
 	  @Override
-	public void execute(Event<UIContentDialogForm> event) throws Exception {
+	  public void execute(Event<UIContentDialogForm> event) throws Exception {
 		  UIContentDialogForm dialogForm = event.getSource();
-	      UIApplication uiApplication = dialogForm.getAncestorOfType(UIApplication.class);
-	      PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
-	      PortletPreferences prefs = pContext.getRequest().getPreferences();
-	      String repositoryName = prefs.getValue(UISingleContentViewerPortlet.REPOSITORY, null);
-	      boolean isCheckOut = true;
-	      if (repositoryName != null) {
-	        String workspaceName = prefs.getValue(UISingleContentViewerPortlet.WORKSPACE, null);
-	        String identifier = prefs.getValue(UISingleContentViewerPortlet.IDENTIFIER, null);
-	        RepositoryService repositoryService = dialogForm.getApplicationComponent(RepositoryService.class);
-	        ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
-	        Session session = Utils.getSessionProvider(dialogForm).getSession(workspaceName, manageableRepository);
-	        Node webContentNode = null;
-	        try {
-	          webContentNode = session.getNodeByUUID(identifier);
-	        } catch (Exception e) {
-	          webContentNode = (Node) session.getItem(identifier);
-	        }
-	        if (dialogForm.nodeIsLocked(webContentNode)) {
-	          Object[] objs = { webContentNode.getPath() };
-	          uiApplication.addMessage(new ApplicationMessage("UIPopupMenu.msg.node-locked", objs));
-	          event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
-	          return;
-	        }
-	        if (!webContentNode.isCheckedOut()) {
-	          isCheckOut = false;
-	          webContentNode.checkout();
-	        }
+      UIApplication uiApplication = dialogForm.getAncestorOfType(UIApplication.class);
+      PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+      PortletPreferences prefs = pContext.getRequest().getPreferences();
+      String repositoryName = prefs.getValue(UISingleContentViewerPortlet.REPOSITORY, null);
+      boolean isCheckOut = true;
+      if (repositoryName != null) {
+          String workspaceName = prefs.getValue(UISingleContentViewerPortlet.WORKSPACE, null);
+          String identifier = prefs.getValue(UISingleContentViewerPortlet.IDENTIFIER, null);
+          RepositoryService repositoryService = dialogForm.getApplicationComponent(RepositoryService.class);
+          ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
+          Session session = Utils.getSessionProvider(dialogForm).getSession(workspaceName, manageableRepository);
+          Node webContentNode = null;
+          try {
+            webContentNode = session.getNodeByUUID(identifier);
+          } catch (Exception e) {
+            webContentNode = (Node) session.getItem(identifier);
+          }
+          if (dialogForm.nodeIsLocked(webContentNode)) {
+            Object[] objs = { webContentNode.getPath() };
+            uiApplication.addMessage(new ApplicationMessage("UIPopupMenu.msg.node-locked", objs));
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
+            return;
+          }
+          if (!webContentNode.isCheckedOut()) {
+            isCheckOut = false;
+            webContentNode.checkout();
+          }
 	      }
 	      String nodeType;
 	      Node homeNode;
@@ -486,7 +475,6 @@ public class UIContentDialogForm extends UIDialogForm {
 	          }
 	        } 
 	      }catch(AccessControlException ace) {
-//	      throw new AccessDeniedException(ace.getMessage());
 	        if(UISingleContentViewerPortlet.scvLog.isDebugEnabled()) {
 	          UISingleContentViewerPortlet.scvLog.debug(ace);
 	        }
@@ -521,18 +509,9 @@ public class UIContentDialogForm extends UIDialogForm {
 	    	  context.put(StageAndVersionPublicationConstant.CURRENT_REVISION_NAME, newNode.getName());
 	      }
 	      publicationPlugin.changeState(newNode, PublicationDefaultStates.PUBLISHED, context);
-//	      UIQuickCreationWizard uiQuickWizard = dialogForm.getAncestorOfType(UIQuickCreationWizard.class);
-//	      UISocialInfo uiSocialInfo = uiQuickWizard.getChild(UISocialInfo.class);
-//	      UIPermissionManager uiPermissionManager = uiSocialInfo.getChild(UIPermissionManager.class);
-//	      uiPermissionManager.getChild(UIPermissionInfo.class).updateGrid();
-//	      uiQuickWizard.viewStep(3);
-//	      UIPortletConfig portletConfig = uiQuickWizard.getAncestorOfType(UIPortletConfig.class);
-//	      portletConfig.showPopup(event.getRequestContext());
-	      
 	      UIPortletConfig uiPortletConfig = dialogForm.getAncestorOfType(UIPortletConfig.class);
 	      uiPortletConfig.closePopupAndUpdateUI(event.getRequestContext(),true);
-
-	}
+	  }
   }
 
   /**

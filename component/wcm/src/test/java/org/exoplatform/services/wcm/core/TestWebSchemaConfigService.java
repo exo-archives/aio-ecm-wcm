@@ -31,6 +31,7 @@ import org.exoplatform.services.wcm.skin.CSSFileHandler;
 import org.exoplatform.services.wcm.webcontent.HTMLFileSchemaHandler;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
@@ -39,8 +40,10 @@ import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
  */
 public class TestWebSchemaConfigService extends BaseWCMTestCase {
 
+  /** The web schema config service. */
   private WebSchemaConfigService webSchemaConfigService;
   
+  /** The live node. */
   private Node liveNode;
   
   /* (non-Javadoc)
@@ -136,6 +139,7 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
   /**
    * Test add double portal folder schema handler.
    * css
+   * 
    * @throws Exception the exception
    */
   public void testAddDoublePortalFolderSchemaHandler() throws Exception {
@@ -172,6 +176,8 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
   
   /**
    * Test get all web schema handler.
+   * 
+   * @throws Exception the exception
    */
   public void testGetAllWebSchemaHandler() throws Exception {
     webSchemaConfigService.addWebSchemaHandler(new JSFileHandler());
@@ -184,6 +190,8 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
   
   /**
    * Test get web schema handler by type.
+   * 
+   * @throws Exception the exception
    */
   public void testGetWebSchemaHandlerByType() throws Exception {
     webSchemaConfigService.addWebSchemaHandler(new JSFileHandler());
@@ -209,7 +217,9 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
   }
   
   /**
-   * Test create css file schema handler
+   * Test create css file schema handler.
+   * 
+   * @throws Exception the exception
    */
   public void testCreateCSSFileSchemaHandler() throws Exception {
     webSchemaConfigService.addWebSchemaHandler(new CSSFileHandler());
@@ -237,7 +247,9 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
   }
   
   /**
-   * Test create js file schema handler
+   * Test create js file schema handler.
+   * 
+   * @throws Exception the exception
    */
   public void testCreateJSFileSchemaHandler() throws Exception {
     webSchemaConfigService.addWebSchemaHandler(new JSFileHandler());
@@ -265,7 +277,9 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
   }
   
   /**
-   * Test create html file schema handler with no pre-defined folder 
+   * Test create html file schema handler with no pre-defined folder.
+   * 
+   * @throws Exception the exception
    */
   public void testCreateWebcontentSchemaHandler_01() throws Exception {
     webSchemaConfigService.addWebSchemaHandler(new WebContentSchemaHandler());
@@ -295,7 +309,7 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
   }
   
   /**
-   * Test create html file schema handler
+   * Test create html file schema handler.
    */
   public void testCreateHTMLFileSchemaHandler() {
     try {
@@ -330,19 +344,23 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
   }
   
   /**
-   * Test modified css file schema handler
+   * Test modified css file schema handler.
+   * 
+   * @throws Exception the exception
    */
   public void testUpdateCSSFileSchemaHandlerOnModify() throws Exception {
     
   }
   
   /**
-   * Test modified js file schema handler
+   * Test modified js file schema handler.
+   * 
+   * @throws Exception the exception
    */
   public void testUpdateJSFileSchemaHandlerOnModify() throws Exception {}
   
   /**
-   * Test modified html file schema handler
+   * Test modified html file schema handler.
    */
   public void testUpdateHTMLFileSchemaHandlerOnModify() {
     String htmlData = "<html>" + "<head>" + "<title>My own HTML file</title>"
@@ -393,19 +411,24 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
   }
   
   /**
-   * Test remove css file schema handler
+   * Test remove css file schema handler.
    */
   public void testUpdateCSSFileSchemaHandlerOnRemove() {
     
   }
   
   /**
-   * Test remove js file schema handler
+   * Test remove js file schema handler.
+   * 
+   * @throws Exception the exception
    */
   public void testUpdateJSFileSchemaHandlerOnRemove() throws Exception {}
 
   /*
    * (nonJavadoc)
+   * @see junit.framework.TestCase#tearDown()
+   */
+  /* (non-Javadoc)
    * @see junit.framework.TestCase#tearDown()
    */
   public void tearDown() throws Exception {

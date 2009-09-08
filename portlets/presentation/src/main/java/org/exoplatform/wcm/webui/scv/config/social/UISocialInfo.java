@@ -37,12 +37,11 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
  * dzungdev@gmail.com
  * May 28, 2008
  */
-
+@SuppressWarnings("deprecation")
 @ComponentConfig(
     lifecycle=Lifecycle.class,
     template =  "app:/groovy/SingleContentViewer/config/UITabPane_New.gtmpl"
 )
-
 public class UISocialInfo extends UITabPane {
   
   /**
@@ -52,11 +51,8 @@ public class UISocialInfo extends UITabPane {
    */
   public UISocialInfo() throws Exception {
     UIPermissionManager uiPermission = addChild(UIPermissionManager.class, null, null);
-	  UIMiscellaneousInfo uiMiscellaneousInfo = addChild(UIMiscellaneousInfo.class, null, null);
-    // Comment adding UITagging and UICategorizing but don't delete.
-    // because WCM can use UITagging and UICategorizing later.
-//    addChild(UITagging.class, null, null);
-//    addChild(UICategorizing.class, null, null);
+	  @SuppressWarnings("unused")
+    UIMiscellaneousInfo uiMiscellaneousInfo = addChild(UIMiscellaneousInfo.class, null, null);
 	  setSelectedTab(uiPermission.getId()) ;
   }
   
@@ -64,20 +60,6 @@ public class UISocialInfo extends UITabPane {
 	  UIPermissionManager uiPermissionManager = getChild(UIPermissionManager.class);
 	  uiPermissionManager.getChild(UIPermissionInfo.class).updateGrid();
   }
-
-  /**
-   * Inits the ui categorizing.
-   * 
-   * @param webContentNode the web content node
-   * 
-   * @throws Exception the exception
-   */
-//  public void initUICategorizing(Node webContentNode) throws Exception {
-//    UICategorizing uiCategorizing = getChild(UICategorizing.class);
-//    uiCategorizing.setWebContentNode(webContentNode);
-//    uiCategorizing.setExistedCategories(getExistedCategory(webContentNode));
-//    uiCategorizing.initUICategoriesSelector();
-//  }
 
   /**
    * Gets the existed category.
@@ -88,6 +70,7 @@ public class UISocialInfo extends UITabPane {
    * 
    * @throws Exception the exception
    */
+  @SuppressWarnings("unused")
   private List<String> getExistedCategory(Node webContentNode) throws Exception {
     List<String> existedCategory = new ArrayList<String>();
     Session session = webContentNode.getSession();

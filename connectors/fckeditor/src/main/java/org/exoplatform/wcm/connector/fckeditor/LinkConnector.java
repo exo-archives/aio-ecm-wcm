@@ -40,10 +40,6 @@ import org.w3c.dom.Element;
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Jun 24, 2008
  */
-
-/**
- * The Class LinkConnector.
- */
 @URITemplate("/wcmLink/")
 public class LinkConnector extends BaseConnector implements ResourceContainer {
 
@@ -197,5 +193,4 @@ public class LinkConnector extends BaseConnector implements ResourceContainer {
   protected String getContentStorageType() throws Exception {
     return FCKUtils.LINK_TYPE;
   }
-
 }

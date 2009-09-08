@@ -31,12 +31,10 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
+// TODO: Auto-generated Javadoc
 /*
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Oct 31, 2008
- */
-/**
- * The Class UISearchPageLayout.
  */
 @ComponentConfig(
 	lifecycle = Lifecycle.class, 
@@ -92,6 +90,7 @@ public class UISearchPageLayout extends UIContainer {
 	 * Gets the template path.
 	 * 
 	 * @param templateType the template type
+	 * 
 	 * @return the template path
 	 */
 	private String getTemplatePath(String templateType) {
@@ -142,7 +141,7 @@ public class UISearchPageLayout extends UIContainer {
 	 * component using the component's
 	 * <code>addQuickEditActionListener<code> method. When
 	 * the quickEditAction event occurs, that object's appropriate
-   * method is invoked.
+	 * method is invoked.
 	 * 
 	 * @see QuickEditActionEvent
 	 */
@@ -159,5 +158,4 @@ public class UISearchPageLayout extends UIContainer {
 			context.setApplicationMode(PortletMode.EDIT);
 		}
 	}
-
 }

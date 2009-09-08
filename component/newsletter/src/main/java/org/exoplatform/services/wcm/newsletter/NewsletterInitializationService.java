@@ -37,6 +37,7 @@ import org.exoplatform.services.wcm.newsletter.handler.NewsletterSubscriptionHan
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.picocontainer.Startable;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
@@ -45,6 +46,7 @@ import org.picocontainer.Startable;
  */
 public class NewsletterInitializationService implements Startable {
   
+  /** The portal names. */
   private List<String> portalNames;
   
   /** The category configs. */
@@ -59,6 +61,7 @@ public class NewsletterInitializationService implements Startable {
   /** The manager service. */
   private NewsletterManagerService newsletterManagerService;
   
+  /** The live portal manager service. */
   private LivePortalManagerService livePortalManagerService;
   
   /** The log. */
@@ -68,8 +71,9 @@ public class NewsletterInitializationService implements Startable {
    * Instantiates a new newsletter initialization service.
    * 
    * @param initParams the init params
-   * @param managerService the manager service
    * @param livePortalManagerService the live portal manager service
+   * @param newsletterManagerService the newsletter manager service
+   * @param wcmContentInitializerService the wcm content initializer service
    */
   //  TODO: chuong.phan: DO NOT REMOVE WCMContentInitializerService, THIS IS DEPENDENCY FOR DEPLOYMENT
   @SuppressWarnings("unchecked")
@@ -141,5 +145,4 @@ public class NewsletterInitializationService implements Startable {
   public void stop() {
     log.info("Stopping NewsletterInitializationService ... ");
   }
-  
 }

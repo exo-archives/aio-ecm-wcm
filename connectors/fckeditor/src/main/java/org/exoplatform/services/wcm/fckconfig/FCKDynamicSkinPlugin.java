@@ -55,5 +55,4 @@ public class FCKDynamicSkinPlugin extends FCKConfigPlugin {
     
     editorConfig.put("EditorAreaCSS", cssMerged);
   }
-  
 }

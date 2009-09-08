@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
@@ -29,12 +28,12 @@ import org.exoplatform.webui.form.UIFormDateTimeInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 
+// TODO: Auto-generated Javadoc
 /**
  * Author : TAN DUNG DANG
- *          dzungdev@gmail.com
- * Feb 14, 2009  
+ * dzungdev@gmail.com
+ * Feb 14, 2009
  */
-
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
     template = "classpath:groovy/wcm/webui/UIWebContentSearchForm.gtmpl",
@@ -44,19 +43,34 @@ import org.exoplatform.webui.form.UIFormStringInput;
       @EventConfig(listeners = UIDocumentSearchForm.AddNodeTypeActionListener.class)
     }
 )
-
 public class UIDocumentSearchForm extends UIForm {
 
+  /** The checked radio id. */
   private String checkedRadioId;
 
+  /**
+   * Gets the checked radio id.
+   * 
+   * @return the checked radio id
+   */
   public String getCheckedRadioId() {
     return checkedRadioId;
   }
 
+  /**
+   * Sets the checked radio id.
+   * 
+   * @param checkedRadioId the new checked radio id
+   */
   public void setCheckedRadioId(String checkedRadioId) {
     this.checkedRadioId = checkedRadioId;
   }
 
+  /**
+   * Inits the.
+   * 
+   * @throws Exception the exception
+   */
   public void init() throws Exception {
     List<SelectItemOption<String>> portalNameOptions = new ArrayList<SelectItemOption<String>>();
     List<String> portalNames = getPortalNames();
@@ -90,6 +104,13 @@ public class UIDocumentSearchForm extends UIForm {
     setActions(new String[] {"SearchWebContent"} );
   }
 
+  /**
+   * Gets the portal names.
+   * 
+   * @return the portal names
+   * 
+   * @throws Exception the exception
+   */
   private List<String> getPortalNames() throws Exception {
     List<String> portalNames = new ArrayList<String>();
     String currentPortalName = org.exoplatform.portal.webui.util.Util.getUIPortal().getName();
@@ -102,6 +123,13 @@ public class UIDocumentSearchForm extends UIForm {
     return portalNames;
   }
 
+  /**
+   * Gets the initial query criteria.
+   * 
+   * @param siteName the site name
+   * 
+   * @return the initial query criteria
+   */
   private QueryCriteria getInitialQueryCriteria(String siteName) {
     QueryCriteria qCriteria = new QueryCriteria();
     qCriteria.setSearchDocument(true);
@@ -112,6 +140,17 @@ public class UIDocumentSearchForm extends UIForm {
     return qCriteria;
   }
 
+  /**
+   * Search document by name.
+   * 
+   * @param keyword the keyword
+   * @param qCriteria the q criteria
+   * @param pageSize the page size
+   * 
+   * @return the paginated query result
+   * 
+   * @throws Exception the exception
+   */
   private PaginatedQueryResult searchDocumentByName(String keyword, 
       QueryCriteria qCriteria, int pageSize) throws Exception {
     qCriteria.setFulltextSearch(false);
@@ -123,6 +162,17 @@ public class UIDocumentSearchForm extends UIForm {
     return paginatedQueryResult;
   }
 
+  /**
+   * Search document by fulltext.
+   * 
+   * @param keyword the keyword
+   * @param qCriteria the q criteria
+   * @param pageSize the page size
+   * 
+   * @return the paginated query result
+   * 
+   * @throws Exception the exception
+   */
   private PaginatedQueryResult searchDocumentByFulltext(String keyword, QueryCriteria qCriteria, int pageSize) throws Exception {
     qCriteria.setFulltextSearch(true);
     qCriteria.setFulltextSearchProperty(QueryCriteria.ALL_PROPERTY_SCOPE);
@@ -134,6 +184,18 @@ public class UIDocumentSearchForm extends UIForm {
     return paginatedQueryResult;
   }
 
+  /**
+   * Search document by property.
+   * 
+   * @param property the property
+   * @param keyword the keyword
+   * @param qCriteria the q criteria
+   * @param pageSize the page size
+   * 
+   * @return the paginated query result
+   * 
+   * @throws Exception the exception
+   */
   private PaginatedQueryResult searchDocumentByProperty(String property, 
       String keyword, QueryCriteria qCriteria, int pageSize) throws Exception {
     qCriteria.setFulltextSearch(true);
@@ -146,6 +208,19 @@ public class UIDocumentSearchForm extends UIForm {
     return paginatedQueryResult;
   }
 
+  /**
+   * Search document by date.
+   * 
+   * @param dateRangeSelected the date range selected
+   * @param fromDate the from date
+   * @param endDate the end date
+   * @param qCriteria the q criteria
+   * @param pageSize the page size
+   * 
+   * @return the paginated query result
+   * 
+   * @throws Exception the exception
+   */
   private PaginatedQueryResult searchDocumentByDate(DATE_RANGE_SELECTED dateRangeSelected, 
       Calendar fromDate, Calendar endDate, QueryCriteria qCriteria, int pageSize) throws Exception {
     qCriteria.setDateRangeSelected(dateRangeSelected);
@@ -164,6 +239,17 @@ public class UIDocumentSearchForm extends UIForm {
     return paginatedQueryResult;
   }
 
+  /**
+   * Search document by type.
+   * 
+   * @param documentType the document type
+   * @param qCriteria the q criteria
+   * @param pageSize the page size
+   * 
+   * @return the paginated query result
+   * 
+   * @throws Exception the exception
+   */
   private PaginatedQueryResult searchDocumentByType(String documentType, QueryCriteria qCriteria, int pageSize) throws Exception {
     qCriteria.setFulltextSearch(true);
     qCriteria.setFulltextSearchProperty(null);
@@ -175,6 +261,17 @@ public class UIDocumentSearchForm extends UIForm {
     return paginatedQueryResult;
   }
 
+  /**
+   * Have empty field.
+   * 
+   * @param uiApp the ui app
+   * @param event the event
+   * @param fields the fields
+   * 
+   * @return true, if successful
+   * 
+   * @throws Exception the exception
+   */
   private boolean haveEmptyField(UIApplication uiApp, Event<UIDocumentSearchForm> event, Object... fields) throws Exception {
     for(Object field : fields) {
       if(field == null) {
@@ -187,7 +284,22 @@ public class UIDocumentSearchForm extends UIForm {
     return false;
   }
 
+  /**
+   * The listener interface for receiving searchWebContentAction events.
+   * The class that is interested in processing a searchWebContentAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSearchWebContentActionListener<code> method. When
+   * the searchWebContentAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SearchWebContentActionEvent
+   */
   public static class SearchWebContentActionListener extends EventListener<UIDocumentSearchForm> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIDocumentSearchForm> event) throws Exception {
       UIDocumentSearchForm uiDocSearchForm = event.getSource();
       String radioValue = event.getRequestContext().getRequestParameter(UIWebContentSearchForm.RADIO_NAME);
@@ -240,7 +352,22 @@ public class UIDocumentSearchForm extends UIForm {
     }
   }
 
+  /**
+   * The listener interface for receiving addMetadataTypeAction events.
+   * The class that is interested in processing a addMetadataTypeAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addAddMetadataTypeActionListener<code> method. When
+   * the addMetadataTypeAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see AddMetadataTypeActionEvent
+   */
   public static class AddMetadataTypeActionListener extends EventListener<UIDocumentSearchForm> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIDocumentSearchForm> event) throws Exception {
       UIDocumentSearchForm uiDocumentSearch = event.getSource();
       UIDocumentTabSelector uiDocumentTabSelector = uiDocumentSearch.getParent();
@@ -250,7 +377,22 @@ public class UIDocumentSearchForm extends UIForm {
     }
   }
 
+  /**
+   * The listener interface for receiving addNodeTypeAction events.
+   * The class that is interested in processing a addNodeTypeAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addAddNodeTypeActionListener<code> method. When
+   * the addNodeTypeAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see AddNodeTypeActionEvent
+   */
   public static class AddNodeTypeActionListener extends EventListener<UIDocumentSearchForm> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIDocumentSearchForm> event) throws Exception {
       UIDocumentSearchForm uiDocSearchForm = event.getSource();
       UIDocumentTabSelector uiDocTabSelector = uiDocSearchForm.getParent();

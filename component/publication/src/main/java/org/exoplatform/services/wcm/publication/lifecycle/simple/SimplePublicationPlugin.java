@@ -131,18 +131,6 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
     if(runningPortals.size() == 0) {
       throw new AccessControlException("Current user doesn't have access permission to any portal");      
     }
-    
-    // TODO: chuong.phan: maybe we don't need this exception, because document can be stored in 
-    //                    Group drivers (user/Documents e.g.). Bug TESTVN-108
-//    String portalName = getPortalForContent(node);
-//    if(portalName == null) {
-//      throw new PortalNotFoundException("This content doen't belong to any portal");
-//    }   
-//    if(!isSharedPortal(portalName) && !runningPortals.contains(portalName)) {
-//      throw new PortalNotFoundException("The portal can be dead.");
-//    }
-
-    //TODO: Need compare LockToken in session of current user with LockToken of LockedOwner
     if (node.isLocked()) {
       throw new LockException("This node is locked");
     }
@@ -410,7 +398,6 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
         return livePortalManagerService.getPortalNameByPath(portalPath);
       }
     }
-
     return null;
   }
 
@@ -503,49 +490,42 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
     ResourceBundle resourceBundle= ResourceBundle.getBundle(LOCALE_FILE, locale, cl);
     String result = resourceBundle.getString(key);
     if(values != null) {
-      return String.format(result, values); 
+      return String.format(result, (Object[])values); 
     }        
     return result;
   }
 
-@Override
-public void publishContentToCLV(Node content, Page page, String clvPortletId,
-		String portalOwnerName, String remoteUser) throws Exception {
-	// TODO Auto-generated method stub
-	
-}
+  @Override
+  public void publishContentToCLV(Node content,
+                                  Page page,
+                                  String clvPortletId,
+                                  String portalOwnerName,
+                                  String remoteUser) throws Exception {
+  }
 
-@Override
-public void publishContentToSCV(Node content, Page page, String portalOwnerName)
-		throws Exception {
-	// TODO Auto-generated method stub
-	
-}
+  @Override
+  public void publishContentToSCV(Node content, Page page, String portalOwnerName) throws Exception {
+  }
 
-@Override
-public void suspendPublishedContentFromPage(Node content, Page page,
-		String remoteUser) throws Exception {
-	// TODO Auto-generated method stub
-	
-}
+  @Override
+  public void suspendPublishedContentFromPage(Node content, Page page, String remoteUser) throws Exception {
+  }
 
-@Override
-public void updateLifecyleOnChangeContent(Node node, String remoteUser)
-		throws Exception {
-	updateLifecyleOnChangeContent(node, remoteUser, PublicationDefaultStates.DRAFT);
-}
+  @Override
+  public void updateLifecyleOnChangeContent(Node node, String remoteUser) throws Exception {
+    updateLifecyleOnChangeContent(node, remoteUser, PublicationDefaultStates.DRAFT);
+  }
 
-@Override
-public void updateLifecyleOnChangeContent(Node node, String remoteUser, String newState)
-throws Exception {
-	String state = node.getProperty(CURRENT_STATE).getString();
-	
-	if(PublicationDefaultStates.DRAFT.equalsIgnoreCase(state) && PublicationDefaultStates.DRAFT.equals(newState))
-		return;
-	
-	HashMap<String, String> context = new HashMap<String, String>();
-	changeState(node, newState, context);
-	
-}
+  @Override
+  public void updateLifecyleOnChangeContent(Node node, String remoteUser, String newState) throws Exception {
+    String state = node.getProperty(CURRENT_STATE).getString();
 
+    if (PublicationDefaultStates.DRAFT.equalsIgnoreCase(state)
+        && PublicationDefaultStates.DRAFT.equals(newState))
+      return;
+
+    HashMap<String, String> context = new HashMap<String, String>();
+    changeState(node, newState, context);
+
+  }
 }

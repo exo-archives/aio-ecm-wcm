@@ -152,4 +152,3 @@ public class TestNewsletterCategoryHandler extends BaseWCMTestCase {
     }
 	}
 }
-

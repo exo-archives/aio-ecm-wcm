@@ -45,11 +45,12 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * Jun 19, 2009  
+ * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * Jun 19, 2009
  */
 @ComponentConfig(
     lifecycle = Lifecycle.class,
@@ -60,12 +61,16 @@ import org.exoplatform.webui.event.EventListener;
 )
 public class UICategoryNavigationTree extends UIContainer {
   
+  /** The allow publish. */
   private boolean            allowPublish        = false;
 
+  /** The publication service_. */
   private PublicationService publicationService_ = null;
 
+  /** The templates_. */
   private List<String>       templates_          = null;
 
+  /** The accepted node types. */
   private String[]           acceptedNodeTypes   = {};
 
   /** The root tree node. */
@@ -74,10 +79,22 @@ public class UICategoryNavigationTree extends UIContainer {
   /** The current node. */
   protected Node             currentNode;
 
+  /**
+   * Checks if is allow publish.
+   * 
+   * @return true, if is allow publish
+   */
   public boolean isAllowPublish() {
     return allowPublish;
   }
 
+  /**
+   * Sets the allow publish.
+   * 
+   * @param allowPublish the allow publish
+   * @param publicationService the publication service
+   * @param templates the templates
+   */
   public void setAllowPublish(boolean allowPublish, PublicationService publicationService, List<String> templates) {
     this.allowPublish = allowPublish;
     publicationService_ = publicationService;
@@ -117,6 +134,7 @@ public class UICategoryNavigationTree extends UIContainer {
    * Sets the root tree node.
    * 
    * @param node the new root tree node
+   * 
    * @throws Exception the exception
    */
   public final void setRootTreeNode(Node node) throws Exception {
@@ -160,6 +178,9 @@ public class UICategoryNavigationTree extends UIContainer {
     this.acceptedNodeTypes = acceptedNodeTypes;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.core.UIComponent#processRender(org.exoplatform.webui.application.WebuiRequestContext)
+   */
   public void processRender(WebuiRequestContext context) throws Exception {
     PortletRequestContext porletRequestContext = (PortletRequestContext) context;
     HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) porletRequestContext.getRequest();
@@ -181,13 +202,15 @@ public class UICategoryNavigationTree extends UIContainer {
     if (preferenceTreeName.equals(categoryPath)) categoryPath = "";
     try {
     	currentNode = treeNode.getNode(categoryPath);
-		} catch (Exception e) {
-		  System.out.println("------------------------------------------- loi roai");
-//			currentNode = rootTreeNode;
-		}
+		} catch (Exception e) {}
     super.processRender(context);
   }
   
+  /**
+   * Builds the tree.
+   * 
+   * @throws Exception the exception
+   */
   public void buildTree() throws Exception {
     NodeIterator sibbling = null;
     NodeIterator children = null;
@@ -211,6 +234,15 @@ public class UICategoryNavigationTree extends UIContainer {
     }
   }
 
+  /**
+   * Adds the node publish.
+   * 
+   * @param listNode the list node
+   * @param node the node
+   * @param publicationService the publication service
+   * 
+   * @throws Exception the exception
+   */
   private void addNodePublish(List<Node> listNode, Node node, PublicationService publicationService) throws Exception {
     if (isAllowPublish()) {
       NodeType nt = node.getPrimaryNodeType();
@@ -227,6 +259,15 @@ public class UICategoryNavigationTree extends UIContainer {
     }
   }
 
+  /**
+   * Filter.
+   * 
+   * @param iterator the iterator
+   * 
+   * @return the list< node>
+   * 
+   * @throws Exception the exception
+   */
   private List<Node> filter(final NodeIterator iterator) throws Exception {
     List<Node> list = new ArrayList<Node>();
     if (acceptedNodeTypes.length > 0) {
@@ -260,11 +301,12 @@ public class UICategoryNavigationTree extends UIContainer {
   }
 
   /**
-   * When a node is change in tree. This method will be rerender the children & sibbling nodes of 
+   * When a node is change in tree. This method will be rerender the children & sibbling nodes of
    * current node and broadcast change node event to other uicomponent
    * 
    * @param path the path
-   * @param requestContext the request context
+   * @param context the context
+   * 
    * @throws Exception the exception
    */
   public void changeNode(String path, Object context) throws Exception {
@@ -293,6 +335,10 @@ public class UICategoryNavigationTree extends UIContainer {
    * @see ChangeNodeActionEvent
    */
   static public class ChangeNodeActionListener extends EventListener<UITree> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UITree> event) throws Exception {
       UICategoryNavigationTree categoryNavigationTree = event.getSource().getParent();
       String uri = event.getRequestContext().getRequestParameter(OBJECTID);

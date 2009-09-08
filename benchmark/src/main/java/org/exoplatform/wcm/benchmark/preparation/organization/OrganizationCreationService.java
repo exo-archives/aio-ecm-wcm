@@ -23,20 +23,36 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.UserHandler;
 import org.picocontainer.Startable;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
- * Author : Hoa Pham	
- *          hoa.phamvu@exoplatform.com
- * Dec 2, 2008  
+ * Author : Hoa Pham
+ * hoa.phamvu@exoplatform.com
+ * Dec 2, 2008
  */
 public class OrganizationCreationService implements Startable{
 
+  /** The user name prefix. */
   private String userNamePrefix;
+  
+  /** The common password. */
   private String commonPassword;
+  
+  /** The number of users. */
   private int numberOfUsers;
+  
+  /** The organization service. */
   private OrganizationService organizationService;
+  
+  /** The log. */
   private static Log log = ExoLogger.getLogger("lab:organization");
 
+  /**
+   * Instantiates a new organization creation service.
+   * 
+   * @param initParams the init params
+   * @param organizationService the organization service
+   */
   public OrganizationCreationService(InitParams initParams, OrganizationService organizationService) {
     userNamePrefix = initParams.getValueParam("userNamePrefix").getValue();
     numberOfUsers = Integer.parseInt(initParams.getValueParam("numberOfUsers").getValue());
@@ -44,6 +60,9 @@ public class OrganizationCreationService implements Startable{
     this.organizationService = organizationService;
   }
 
+  /**
+   * Creates the users.
+   */
   private void createUsers() {
     log.info("Start create users for organization with: "+ numberOfUsers + " users, users name prefix: " + userNamePrefix + " and common password is: "+ commonPassword);
     long start = System.currentTimeMillis();
@@ -67,11 +86,16 @@ public class OrganizationCreationService implements Startable{
     log.info("Create " + numberOfUsers + " users in " + creationTime/1000 + "s");
   }
 
+  /* (non-Javadoc)
+   * @see org.picocontainer.Startable#start()
+   */
   public void start() {    
     createUsers();
   }
 
+  /* (non-Javadoc)
+   * @see org.picocontainer.Startable#stop()
+   */
   public void stop() {    
   }
-
 }

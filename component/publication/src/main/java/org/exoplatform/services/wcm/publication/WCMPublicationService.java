@@ -42,7 +42,6 @@ public interface WCMPublicationService {
   */
  public void addPublicationPlugin(WebpagePublicationPlugin p); 
  
- 
  /**
   * Publish content to a portal page when the node is in a publication lifecyle.
   * 
@@ -225,5 +224,4 @@ public void updateLifecyleOnChangeContent(Node node, String siteName, String rem
  * @return the revision state stored in publication:currentState property
  */
 public String getContentState(Node node) throws Exception ;
-
 }

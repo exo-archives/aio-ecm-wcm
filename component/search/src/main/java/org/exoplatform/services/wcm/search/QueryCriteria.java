@@ -18,7 +18,7 @@ package org.exoplatform.services.wcm.search;
 
 import java.util.Calendar;
 
-
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : Hoa Pham
@@ -31,7 +31,9 @@ import java.util.Calendar;
  * */
 public class QueryCriteria {  
   
+  /** The Constant ALL_PROPERTY_SCOPE. */
   public static final String ALL_PROPERTY_SCOPE = ".";
+  
   /** The site name. */
   private String siteName;
 
@@ -76,21 +78,37 @@ public class QueryCriteria {
 
   /** The fulltext search. */
   private boolean fulltextSearch = true;
+  
+  /** The is live mode. */
   private boolean isLiveMode = true;
   
+  /**
+   * Checks if is live mode.
+   * 
+   * @return true, if is live mode
+   */
   public boolean isLiveMode() {
     return isLiveMode;
   }
 
+  /**
+   * Sets the live mode.
+   * 
+   * @param isLiveMode the new live mode
+   */
   public void setLiveMode(boolean isLiveMode) {
     this.isLiveMode = isLiveMode;
   }
 
+  /** The query metadatas. */
   private QueryProperty[] queryMetadatas = null;
   
+  /** The fulltext search property. */
   private String fulltextSearchProperty = ALL_PROPERTY_SCOPE;
   
+  /** The date range selected. */
   private DATE_RANGE_SELECTED dateRangeSelected = null;
+  
   /**
    * Gets the site name.
    * 
@@ -362,65 +380,154 @@ public class QueryCriteria {
     }    
   }
 
-  public enum DATE_RANGE_SELECTED {CREATED, MODIFIDED, START_PUBLICATION, END_PUBLICATION}
+  /**
+   * The Enum DATE_RANGE_SELECTED.
+   */
+  public enum DATE_RANGE_SELECTED {
+    /** The CREATED. */
+    CREATED, /** The MODIFIDED. */
+    MODIFIDED, /** The STAR t_ publication. */
+    START_PUBLICATION, /** The EN d_ publication. */
+    END_PUBLICATION
+  }
 
+  /**
+   * Gets the date range selected.
+   * 
+   * @return the date range selected
+   */
   public DATE_RANGE_SELECTED getDateRangeSelected() {
     return dateRangeSelected;
   }
 
+  /**
+   * Sets the date range selected.
+   * 
+   * @param dateRangeSelected the new date range selected
+   */
   public void setDateRangeSelected(DATE_RANGE_SELECTED dateRangeSelected) {
     this.dateRangeSelected = dateRangeSelected;
   }
 
+  /**
+   * Gets the category uui ds.
+   * 
+   * @return the category uui ds
+   */
   public String[] getCategoryUUIDs() {
     return categoryUUIDs;
   }
 
+  /**
+   * Sets the category uui ds.
+   * 
+   * @param categoryUUIDs the new category uui ds
+   */
   public void setCategoryUUIDs(String[] categoryUUIDs) {
     this.categoryUUIDs = categoryUUIDs;
   }
 
+  /**
+   * Gets the tag uui ds.
+   * 
+   * @return the tag uui ds
+   */
   public String[] getTagUUIDs() {
     return tagUUIDs;
   }
 
+  /**
+   * Sets the tag uui ds.
+   * 
+   * @param tagUUIDs the new tag uui ds
+   */
   public void setTagUUIDs(String[] tagUUIDs) {
     this.tagUUIDs = tagUUIDs;
   };
 
 
+  /**
+   * The Class QueryProperty.
+   */
   public class QueryProperty {
+    
+    /** The name. */
     private String name;
+    
+    /** The value. */
     private String value;
+    
+    /**
+     * Gets the name.
+     * 
+     * @return the name
+     */
     public String getName() {
       return name;
     }
+    
+    /**
+     * Sets the name.
+     * 
+     * @param name the new name
+     */
     public void setName(String name) {
       this.name = name;
     }
+    
+    /**
+     * Gets the value.
+     * 
+     * @return the value
+     */
     public String getValue() {
       return value;
     }
+    
+    /**
+     * Sets the value.
+     * 
+     * @param value the new value
+     */
     public void setValue(String value) {
       this.value = value;
     }    
   }
 
 
+  /**
+   * Gets the query metadatas.
+   * 
+   * @return the query metadatas
+   */
   public QueryProperty[] getQueryMetadatas() {
     return queryMetadatas;
   }
 
+  /**
+   * Sets the query metadatas.
+   * 
+   * @param queryMetadatas the new query metadatas
+   */
   public void setQueryMetadatas(QueryProperty[] queryMetadatas) {
     this.queryMetadatas = queryMetadatas;
   }
 
+  /**
+   * Gets the fulltext search property.
+   * 
+   * @return the fulltext search property
+   */
   public String getFulltextSearchProperty() {
     return fulltextSearchProperty;
   }
 
+  /**
+   * Sets the fulltext search property.
+   * 
+   * @param fulltextSearchProperty the new fulltext search property
+   */
   public void setFulltextSearchProperty(String fulltextSearchProperty) {
     this.fulltextSearchProperty = fulltextSearchProperty;
   }
-    
 }

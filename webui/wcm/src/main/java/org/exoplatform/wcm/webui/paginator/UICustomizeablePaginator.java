@@ -27,13 +27,13 @@ import org.exoplatform.webui.core.UIPageIterator;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : Hoa Pham
  * hoa.phamvu@exoplatform.com
  * Oct 23, 2008
  */
-
 @ComponentConfig(
     lifecycle = Lifecycle.class,
     events = @EventConfig(listeners = UICustomizeablePaginator.ShowPageActionListener.class )    

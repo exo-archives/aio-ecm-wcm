@@ -40,11 +40,12 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          ha.mai@exoplatform.com
- * Jun 5, 2009  
+ * ha.mai@exoplatform.com
+ * Jun 5, 2009
  */
 
 @ComponentConfig(
@@ -64,12 +65,27 @@ import org.exoplatform.webui.form.UIFormSelectBox;
     }
 )
 public class UISubscriptions extends UIForm {
+  
+  /** The subscription handler. */
   NewsletterSubscriptionHandler subscriptionHandler;
+  
+  /** The category handler. */
   NewsletterCategoryHandler categoryHandler;
+  
+  /** The category config. */
   NewsletterCategoryConfig categoryConfig;
+  
+  /** The user handler. */
   NewsletterManageUserHandler userHandler = null;
+  
+  /** The portal name. */
   String portalName;
 
+  /**
+   * Instantiates a new uI subscriptions.
+   * 
+   * @throws Exception the exception
+   */
   public UISubscriptions()throws Exception{
     NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
     subscriptionHandler = newsletterManagerService.getSubscriptionHandler();
@@ -78,10 +94,20 @@ public class UISubscriptions extends UIForm {
     portalName = NewsLetterUtil.getPortalName();
   }
   
+  /**
+   * Sets the category.
+   * 
+   * @param categoryConfig the new category
+   */
   public void setCategory(NewsletterCategoryConfig categoryConfig){
     this.categoryConfig = categoryConfig;
   }
   
+  /**
+   * Inits the.
+   * 
+   * @param listSubScritpions the list sub scritpions
+   */
   private void init(List<NewsletterSubscriptionConfig> listSubScritpions){
     this.getChildren().clear();
     UIFormCheckBoxInput<Boolean> checkBoxInput = null;
@@ -91,6 +117,13 @@ public class UISubscriptions extends UIForm {
     }
   }
 
+  /**
+   * Gets the number of user.
+   * 
+   * @param subscriptionName the subscription name
+   * 
+   * @return the number of user
+   */
   @SuppressWarnings("unused")
   private int getNumberOfUser(String subscriptionName){
     return userHandler.getQuantityUserBySubscription(
@@ -100,6 +133,11 @@ public class UISubscriptions extends UIForm {
                                                      Utils.getSessionProvider(this));
   }
 
+  /**
+   * Gets the list subscription.
+   * 
+   * @return the list subscription
+   */
   @SuppressWarnings("unused")
   private List<NewsletterSubscriptionConfig> getListSubscription(){
     List<NewsletterSubscriptionConfig> listSubs = new ArrayList<NewsletterSubscriptionConfig>();
@@ -107,22 +145,31 @@ public class UISubscriptions extends UIForm {
       listSubs = 
         subscriptionHandler.getSubscriptionsByCategory(NewsLetterUtil.getPortalName(), this.categoryConfig.getName(), Utils.getSessionProvider(this));
       init(listSubs);
-    }catch(Exception e){
-      e.printStackTrace();
-    }
+    }catch(Exception e){}
     return listSubs;
   }
 
+  /**
+   * Gets the number of waiting newsletter.
+   * 
+   * @param subscriptionName the subscription name
+   * 
+   * @return the number of waiting newsletter
+   */
   @SuppressWarnings("unused")
   private long getNumberOfWaitingNewsletter(String subscriptionName){
     try{
       return subscriptionHandler.getNumberOfNewslettersWaiting(portalName, this.categoryConfig.getName(), subscriptionName, Utils.getSessionProvider(this));
     }catch(Exception ex){
-      ex.printStackTrace();
       return 0;
     }
   }
   
+  /**
+   * Gets the checked.
+   * 
+   * @return the checked
+   */
   @SuppressWarnings("unchecked")
   public String getChecked(){
     String subscriptionId = null;
@@ -139,7 +186,22 @@ public class UISubscriptions extends UIForm {
     return subscriptionId;
   }
 
+  /**
+   * The listener interface for receiving backToCategoriesAction events.
+   * The class that is interested in processing a backToCategoriesAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addBackToCategoriesActionListener<code> method. When
+   * the backToCategoriesAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see BackToCategoriesActionEvent
+   */
   static  public class BackToCategoriesActionListener extends EventListener<UISubscriptions> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UISubscriptions> event) throws Exception {
       UISubscriptions subsriptions = event.getSource();
       UINewsletterManagerPortlet newsletterManagerPortlet = subsriptions.getAncestorOfType(UINewsletterManagerPortlet.class);
@@ -150,7 +212,22 @@ public class UISubscriptions extends UIForm {
     }
   }
 
+  /**
+   * The listener interface for receiving editCategoryAction events.
+   * The class that is interested in processing a editCategoryAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addEditCategoryActionListener<code> method. When
+   * the editCategoryAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see EditCategoryActionEvent
+   */
   static  public class EditCategoryActionListener extends EventListener<UISubscriptions> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UISubscriptions> event) throws Exception {
       UISubscriptions subsriptions = event.getSource();
       UICategoryForm categoryForm = subsriptions.createUIComponent(UICategoryForm.class, null, null);
@@ -159,7 +236,22 @@ public class UISubscriptions extends UIForm {
     }
   }
 
+  /**
+   * The listener interface for receiving deleteCategoryAction events.
+   * The class that is interested in processing a deleteCategoryAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addDeleteCategoryActionListener<code> method. When
+   * the deleteCategoryAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see DeleteCategoryActionEvent
+   */
   static  public class DeleteCategoryActionListener extends EventListener<UISubscriptions> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UISubscriptions> event) throws Exception {
       UISubscriptions subsriptions = event.getSource();
       NewsletterManagerService newsletterManagerService = subsriptions.getApplicationComponent(NewsletterManagerService.class);
@@ -173,7 +265,22 @@ public class UISubscriptions extends UIForm {
     }
   }
 
+  /**
+   * The listener interface for receiving addSubcriptionAction events.
+   * The class that is interested in processing a addSubcriptionAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addAddSubcriptionActionListener<code> method. When
+   * the addSubcriptionAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see AddSubcriptionActionEvent
+   */
   static  public class AddSubcriptionActionListener extends EventListener<UISubscriptions> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UISubscriptions> event) throws Exception {
       UISubscriptions subsriptions = event.getSource();
       UISubcriptionForm subcriptionForm = subsriptions.createUIComponent(UISubcriptionForm.class, null, null);
@@ -184,7 +291,22 @@ public class UISubscriptions extends UIForm {
     }
   }
 
+  /**
+   * The listener interface for receiving editSubscriptionAction events.
+   * The class that is interested in processing a editSubscriptionAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addEditSubscriptionActionListener<code> method. When
+   * the editSubscriptionAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see EditSubscriptionActionEvent
+   */
   static  public class EditSubscriptionActionListener extends EventListener<UISubscriptions> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UISubscriptions> event) throws Exception {
       UISubscriptions subsriptions = event.getSource();
       String subId = subsriptions.getChecked();
@@ -201,7 +323,23 @@ public class UISubscriptions extends UIForm {
     }
   }
 
+  /**
+   * The listener interface for receiving deleteSubscriptionAction events.
+   * The class that is interested in processing a deleteSubscriptionAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addDeleteSubscriptionActionListener<code> method. When
+   * the deleteSubscriptionAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see DeleteSubscriptionActionEvent
+   */
   static  public class DeleteSubscriptionActionListener extends EventListener<UISubscriptions> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
+    @SuppressWarnings("unchecked")
     public void execute(Event<UISubscriptions> event) throws Exception {
       UISubscriptions subsriptions = event.getSource();
       boolean isChecked = false;
@@ -210,7 +348,6 @@ public class UISubscriptions extends UIForm {
       for(UIComponent component : subsriptions.getChildren()){
         checkbox = (UIFormCheckBoxInput<Boolean>)component;
         if(checkbox.isChecked()){
-
           isChecked = true;
           SessionProvider sessionProvider = Utils.getSessionProvider(subsriptions);
           NewsletterSubscriptionConfig subscriptionConfig = 
@@ -235,7 +372,22 @@ public class UISubscriptions extends UIForm {
     }
   }
 
+  /**
+   * The listener interface for receiving openSubscriptionAction events.
+   * The class that is interested in processing a openSubscriptionAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addOpenSubscriptionActionListener<code> method. When
+   * the openSubscriptionAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see OpenSubscriptionActionEvent
+   */
   static  public class OpenSubscriptionActionListener extends EventListener<UISubscriptions> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UISubscriptions> event) throws Exception {
       UISubscriptions uiSubscription = event.getSource();
       String subId = uiSubscription.getChecked();
@@ -265,7 +417,22 @@ public class UISubscriptions extends UIForm {
     }
   }
 
+  /**
+   * The listener interface for receiving selectSubscriptionAction events.
+   * The class that is interested in processing a selectSubscriptionAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSelectSubscriptionActionListener<code> method. When
+   * the selectSubscriptionAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SelectSubscriptionActionEvent
+   */
   public static class SelectSubscriptionActionListener extends EventListener<UISubscriptions> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UISubscriptions> event) throws Exception {
       UISubscriptions uiSubscriptions = event.getSource();
       String subscriptionId = event.getRequestContext().getRequestParameter(OBJECTID);
@@ -288,7 +455,22 @@ public class UISubscriptions extends UIForm {
     }
   }
   
+  /**
+   * The listener interface for receiving managerUsersAction events.
+   * The class that is interested in processing a managerUsersAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addManagerUsersActionListener<code> method. When
+   * the managerUsersAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see ManagerUsersActionEvent
+   */
   static  public class ManagerUsersActionListener extends EventListener<UISubscriptions> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UISubscriptions> event) throws Exception {
       UISubscriptions uiSubscription = event.getSource();
       UIManagerUsers managerUsers = uiSubscription.createUIComponent(UIManagerUsers.class, null, null);
@@ -297,13 +479,27 @@ public class UISubscriptions extends UIForm {
     }
   }
   
+  /**
+   * The listener interface for receiving addEntryAction events.
+   * The class that is interested in processing a addEntryAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addAddEntryActionListener<code> method. When
+   * the addEntryAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see AddEntryActionEvent
+   */
   public static class AddEntryActionListener extends EventListener<UISubscriptions> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UISubscriptions> event) throws Exception {
       UISubscriptions uiSubscriptions = event.getSource();
       UINewsletterEntryContainer entryContainer = uiSubscriptions.createUIComponent(UINewsletterEntryContainer.class, null, null);
       entryContainer.setCategoryConfig(uiSubscriptions.categoryConfig);
-      entryContainer.getChild(UINewsletterEntryDialogSelector.class).init(uiSubscriptions.categoryConfig.getName(), 
-                                                                          null);
+      entryContainer.getChild(UINewsletterEntryDialogSelector.class).init(uiSubscriptions.categoryConfig.getName(), null);
       Utils.createPopupWindow(uiSubscriptions, entryContainer, UINewsletterConstant.ENTRY_FORM_POPUP_WINDOW, 800, 600);
     }
   }

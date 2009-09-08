@@ -33,11 +33,12 @@ import org.exoplatform.services.wcm.newsletter.handler.NewsletterSubscriptionHan
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.services.wcm.portal.artifacts.BasePortalArtifactsPlugin;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong_phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * Aug 21, 2009  
+ * chuong_phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * Aug 21, 2009
  */
 public class InitialNewsletterPlugin extends BasePortalArtifactsPlugin {
 
@@ -50,12 +51,21 @@ public class InitialNewsletterPlugin extends BasePortalArtifactsPlugin {
   /** The manager service. */
   private NewsletterManagerService newsletterManagerService;
   
+  /** The live portal manager service. */
   private LivePortalManagerService livePortalManagerService;
   
   /** The log. */
   private static Log log = ExoLogger.getLogger(InitialNewsletterPlugin.class);
   
-  
+  /**
+   * Instantiates a new initial newsletter plugin.
+   * 
+   * @param initParams the init params
+   * @param configurationManager the configuration manager
+   * @param repositoryService the repository service
+   * @param newsletterManagerService the newsletter manager service
+   * @param livePortalManagerService the live portal manager service
+   */
   @SuppressWarnings("unchecked")
   public InitialNewsletterPlugin(InitParams initParams,
                                  ConfigurationManager configurationManager,
@@ -70,13 +80,16 @@ public class InitialNewsletterPlugin extends BasePortalArtifactsPlugin {
     this.newsletterManagerService = newsletterManagerService;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.portal.artifacts.BasePortalArtifactsPlugin#deployToPortal(java.lang.String, org.exoplatform.services.jcr.ext.common.SessionProvider)
+   */
   public void deployToPortal(String portalName, SessionProvider sessionProvider) throws Exception {
     try {
       NewsletterCategoryHandler categoryHandler = newsletterManagerService.getCategoryHandler();
       for (NewsletterCategoryConfig categoryConfig : categoryConfigs) {
         categoryHandler.add(portalName, categoryConfig, sessionProvider);
       }
-      
+
       NewsletterSubscriptionHandler subscriptionHandler = newsletterManagerService.getSubscriptionHandler();
       for (NewsletterSubscriptionConfig subscriptionConfig : subscriptionConfigs) {
         subscriptionHandler.add(portalName, subscriptionConfig, sessionProvider);
@@ -88,10 +101,8 @@ public class InitialNewsletterPlugin extends BasePortalArtifactsPlugin {
       if(userFolderNode.canAddMixin("exo:privilegeable")) 
         userFolderNode.addMixin("exo:privilegeable");
       userFolderNode.setPermission("any", PermissionType.ALL) ;
-        
     } catch (Exception e) {
       log.info("InitialNewsletterPlugin fail because of " + e.getMessage());
     }
   }
-   
 }

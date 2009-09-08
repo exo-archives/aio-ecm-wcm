@@ -34,6 +34,10 @@ import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class UICategories.
+ */
 @ComponentConfig(
 		template = "app:/groovy/webui/newsletter/NewsletterManager/UICategories.gtmpl",
 		events = {
@@ -46,11 +50,24 @@ import org.exoplatform.webui.event.EventListener;
 		}
 )
 public class UICategories extends UIContainer {
+	
+	/** The category handler. */
 	NewsletterCategoryHandler categoryHandler = null;
+	
+	/** The subscription handler. */
 	NewsletterSubscriptionHandler subscriptionHandler = null;
+	
+	/** The user handler. */
 	NewsletterManageUserHandler userHandler = null;
+	
+	/** The portal name. */
 	String portalName;
 	
+	/**
+	 * Instantiates a new uI categories.
+	 * 
+	 * @throws Exception the exception
+	 */
 	public UICategories()throws Exception{
 		NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
 		categoryHandler = newsletterManagerService.getCategoryHandler();
@@ -59,44 +76,82 @@ public class UICategories extends UIContainer {
 		portalName = NewsLetterUtil.getPortalName();
 	}
 	
+	/**
+	 * Gets the number of waiting newsletter.
+	 * 
+	 * @param categoryName the category name
+	 * @param subscriptionName the subscription name
+	 * 
+	 * @return the number of waiting newsletter
+	 */
 	@SuppressWarnings("unused")
   private long getNumberOfWaitingNewsletter(String categoryName, String subscriptionName){
 	  try{
 	    return subscriptionHandler.getNumberOfNewslettersWaiting(portalName, categoryName, subscriptionName, Utils.getSessionProvider(this));
 	  }catch(Exception ex){
-	    ex.printStackTrace();
 	    return 0;
 	  }
 	}
 	
+	/**
+	 * Gets the number of user.
+	 * 
+	 * @param categoryName the category name
+	 * @param subscriptionName the subscription name
+	 * 
+	 * @return the number of user
+	 */
 	@SuppressWarnings("unused")
   private int getNumberOfUser(String categoryName, String subscriptionName){
 	  return userHandler.getQuantityUserBySubscription(portalName, categoryName, subscriptionName, Utils.getSessionProvider(this));
 	}
 	
+	/**
+	 * Gets the list categories.
+	 * 
+	 * @return the list categories
+	 */
 	@SuppressWarnings("unused")
 	private List<NewsletterCategoryConfig> getListCategories(){
 	  List<NewsletterCategoryConfig> listCategories = new ArrayList<NewsletterCategoryConfig>();
 		try{
 			listCategories = categoryHandler.getListCategories(NewsLetterUtil.getPortalName(), Utils.getSessionProvider(this));
-		}catch(Exception e){
-			e.printStackTrace();
-		}
+		}catch(Exception e){}
 		return listCategories;
 	}
 	
+	/**
+	 * Gets the list subscription.
+	 * 
+	 * @param categoryName the category name
+	 * 
+	 * @return the list subscription
+	 */
 	@SuppressWarnings("unused")
   private List<NewsletterSubscriptionConfig> getListSubscription(String categoryName){
 	  List<NewsletterSubscriptionConfig> listSubscription = new ArrayList<NewsletterSubscriptionConfig>();
     try{
       listSubscription = subscriptionHandler.getSubscriptionsByCategory(NewsLetterUtil.getPortalName(), categoryName, Utils.getSessionProvider(this));
-    }catch(Exception e){
-      e.printStackTrace();
-    }
+    }catch(Exception e){}
     return listSubscription;
   }
 	
+	/**
+	 * The listener interface for receiving addCategoryAction events.
+	 * The class that is interested in processing a addCategoryAction
+	 * event implements this interface, and the object created
+	 * with that class is registered with a component using the
+	 * component's <code>addAddCategoryActionListener<code> method. When
+	 * the addCategoryAction event occurs, that object's appropriate
+	 * method is invoked.
+	 * 
+	 * @see AddCategoryActionEvent
+	 */
 	static  public class AddCategoryActionListener extends EventListener<UICategories> {
+		
+		/* (non-Javadoc)
+		 * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+		 */
 		public void execute(Event<UICategories> event) throws Exception {
 			UICategories uiCategories = event.getSource();
       UICategoryForm categoryForm = uiCategories.createUIComponent(UICategoryForm.class, null, null);
@@ -104,7 +159,22 @@ public class UICategories extends UIContainer {
 		}
 	}
   
+  /**
+   * The listener interface for receiving addSubcriptionAction events.
+   * The class that is interested in processing a addSubcriptionAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addAddSubcriptionActionListener<code> method. When
+   * the addSubcriptionAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see AddSubcriptionActionEvent
+   */
   static  public class AddSubcriptionActionListener extends EventListener<UICategories> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UICategories> event) throws Exception {
       UICategories uiCategories = event.getSource();
       UISubcriptionForm subcriptionForm = uiCategories.createUIComponent(UISubcriptionForm.class, null, null);
@@ -112,8 +182,23 @@ public class UICategories extends UIContainer {
     }
   }
 	
+	/**
+	 * The listener interface for receiving openCategoryAction events.
+	 * The class that is interested in processing a openCategoryAction
+	 * event implements this interface, and the object created
+	 * with that class is registered with a component using the
+	 * component's <code>addOpenCategoryActionListener<code> method. When
+	 * the openCategoryAction event occurs, that object's appropriate
+	 * method is invoked.
+	 * 
+	 * @see OpenCategoryActionEvent
+	 */
 	static  public class OpenCategoryActionListener extends EventListener<UICategories> {
-	  public void execute(Event<UICategories> event) throws Exception {
+	  
+  	/* (non-Javadoc)
+  	 * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+  	 */
+  	public void execute(Event<UICategories> event) throws Exception {
 	    UICategories uiCategories = event.getSource();
 	    String categoryName = event.getRequestContext().getRequestParameter(OBJECTID);
 	    UINewsletterManagerPortlet newsletterManagerPortlet = uiCategories.getAncestorOfType(UINewsletterManagerPortlet.class);
@@ -125,8 +210,23 @@ public class UICategories extends UIContainer {
 	  }
 	}
 	
+	/**
+	 * The listener interface for receiving managerUsersAction events.
+	 * The class that is interested in processing a managerUsersAction
+	 * event implements this interface, and the object created
+	 * with that class is registered with a component using the
+	 * component's <code>addManagerUsersActionListener<code> method. When
+	 * the managerUsersAction event occurs, that object's appropriate
+	 * method is invoked.
+	 * 
+	 * @see ManagerUsersActionEvent
+	 */
 	static  public class ManagerUsersActionListener extends EventListener<UICategories> {
-	  public void execute(Event<UICategories> event) throws Exception {
+	  
+  	/* (non-Javadoc)
+  	 * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+  	 */
+  	public void execute(Event<UICategories> event) throws Exception {
 	    UICategories uiCategories = event.getSource();
       UIManagerUsers managerUsers = uiCategories.createUIComponent(UIManagerUsers.class, null, null);
       managerUsers.setInfor(null, null);
@@ -134,7 +234,22 @@ public class UICategories extends UIContainer {
 	  }
 	}
 	
+	/**
+	 * The listener interface for receiving addEntryAction events.
+	 * The class that is interested in processing a addEntryAction
+	 * event implements this interface, and the object created
+	 * with that class is registered with a component using the
+	 * component's <code>addAddEntryActionListener<code> method. When
+	 * the addEntryAction event occurs, that object's appropriate
+	 * method is invoked.
+	 * 
+	 * @see AddEntryActionEvent
+	 */
 	public static class AddEntryActionListener extends EventListener<UICategories> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UICategories> event) throws Exception {
       UICategories uiCategories = event.getSource();
       UINewsletterEntryContainer entryContainer = uiCategories.createUIComponent(UINewsletterEntryContainer.class, null, null);
@@ -144,7 +259,22 @@ public class UICategories extends UIContainer {
     }
   }
 	
+	/**
+	 * The listener interface for receiving selectSubscriptionAction events.
+	 * The class that is interested in processing a selectSubscriptionAction
+	 * event implements this interface, and the object created
+	 * with that class is registered with a component using the
+	 * component's <code>addSelectSubscriptionActionListener<code> method. When
+	 * the selectSubscriptionAction event occurs, that object's appropriate
+	 * method is invoked.
+	 * 
+	 * @see SelectSubscriptionActionEvent
+	 */
 	public static class SelectSubscriptionActionListener extends EventListener<UICategories> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UICategories> event) throws Exception {
       UICategories uiCategory = event.getSource();
       String categoryAndSubscription = event.getRequestContext().getRequestParameter(OBJECTID);

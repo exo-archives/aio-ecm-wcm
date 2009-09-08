@@ -42,11 +42,12 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormSelectBox;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * Jun 25, 2009  
+ * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * Jun 25, 2009
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
@@ -57,13 +58,26 @@ import org.exoplatform.webui.form.UIFormSelectBox;
 )
 public class UIFCCActionTypeForm extends UIForm {
 
+  /** The Constant ACTION_TYPE. */
   final static public String ACTION_TYPE = "actionType" ;
+  
+  /** The Constant CHANGE_ACTION. */
   final static public String CHANGE_ACTION = "ChangeActionType" ;
 
+  /** The type list_. */
   private List<SelectItemOption<String>> typeList_ ;
+  
+  /** The node path. */
   private String nodePath = null;
+  
+  /** The default action type_. */
   public String defaultActionType_ ;
 
+  /**
+   * Instantiates a new uIFCC action type form.
+   * 
+   * @throws Exception the exception
+   */
   public UIFCCActionTypeForm() throws Exception {
     typeList_ = new ArrayList<SelectItemOption<String>>() ;
     UIFormSelectBox uiSelectBox = new UIFormSelectBox(ACTION_TYPE, ACTION_TYPE, new ArrayList<SelectItemOption<String>>()) ;
@@ -71,11 +85,23 @@ public class UIFCCActionTypeForm extends UIForm {
     addUIFormInput(uiSelectBox) ;
   }
 
+  /**
+   * Gets the created action types.
+   * 
+   * @return the created action types
+   * 
+   * @throws Exception the exception
+   */
   private Iterator<NodeType> getCreatedActionTypes() throws Exception {
     ActionServiceContainer actionService = getApplicationComponent(ActionServiceContainer.class) ;
     return actionService.getCreatedActionTypes(UIFCCUtils.getPreferenceRepository()).iterator();
   }
 
+  /**
+   * Sets the default action type.
+   * 
+   * @throws Exception the exception
+   */
   public void setDefaultActionType() throws Exception{    
     boolean isNews = true;
     UIFCCPortlet fastContentCreatorPortlet = getAncestorOfType(UIFCCPortlet.class);
@@ -97,6 +123,11 @@ public class UIFCCActionTypeForm extends UIForm {
     fastContentCreatorActionForm.setStoredPath(savedLocationNode.getPath()) ;
   }  
 
+  /**
+   * Update.
+   * 
+   * @throws Exception the exception
+   */
   public void update() throws Exception {
     Iterator<NodeType> actions = getCreatedActionTypes(); 
     while(actions.hasNext()){
@@ -107,12 +138,35 @@ public class UIFCCActionTypeForm extends UIForm {
     setDefaultActionType() ;
   }
 
+  /**
+   * Inits the.
+   * 
+   * @param nodePath the node path
+   * @param actionType the action type
+   * 
+   * @throws RepositoryException the repository exception
+   */
   public void init(String nodePath, String actionType) throws RepositoryException {
     this.nodePath = nodePath;
     this.defaultActionType_ = actionType;
   }
   
+  /**
+   * The listener interface for receiving changeActionTypeAction events.
+   * The class that is interested in processing a changeActionTypeAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addChangeActionTypeActionListener<code> method. When
+   * the changeActionTypeAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see ChangeActionTypeActionEvent
+   */
   static public class ChangeActionTypeActionListener extends EventListener<UIFCCActionTypeForm> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIFCCActionTypeForm> event) throws Exception {
       UIFCCActionTypeForm fastContentCreatorActionTypeForm = event.getSource() ;
       UIFCCPortlet fastContentCreatorPortlet = fastContentCreatorActionTypeForm.getAncestorOfType(UIFCCPortlet.class);
@@ -154,5 +208,4 @@ public class UIFCCActionTypeForm extends UIForm {
       event.getRequestContext().addUIComponentToUpdateByAjax(fastContentCreatorActionContainer) ;
     }
   }
-  
 }

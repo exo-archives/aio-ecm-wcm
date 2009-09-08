@@ -49,6 +49,7 @@ import org.exoplatform.services.wcm.portal.LivePortalManagerService;
  */
 public class InitialWebContentPlugin extends BasePortalArtifactsPlugin {
   
+  @SuppressWarnings("unused")
   private static Log log = ExoLogger.getLogger(BasePortalArtifactsPlugin.class);   
   private InitParams initParams;   
   private ConfigurationManager configurationManager;  
@@ -75,6 +76,7 @@ public class InitialWebContentPlugin extends BasePortalArtifactsPlugin {
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.portal.artifacts.BasePortalArtifactsPlugin#deployToPortal(java.lang.String, org.exoplatform.services.jcr.ext.common.SessionProvider)
    */
+  @SuppressWarnings("unchecked")
   public void deployToPortal(String portalName, SessionProvider sessionProvider) throws Exception {
     Iterator iterator = initParams.getObjectParamIterator();    
     while(iterator.hasNext()) {

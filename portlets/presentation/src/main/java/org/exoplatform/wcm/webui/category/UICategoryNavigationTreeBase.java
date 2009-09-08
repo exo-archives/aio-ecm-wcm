@@ -43,18 +43,22 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIRightClickPopupMenu;
 import org.exoplatform.webui.core.UITree;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
  * Comment: Change objId from node's path to category's path
- * Jun 30, 2009  
+ * Jun 30, 2009
  */
 @ComponentConfig(
     events = @EventConfig(listeners = UITree.ChangeNodeActionListener.class)
 )  
 public class UICategoryNavigationTreeBase extends UITree {
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.core.UITree#renderNode(java.lang.Object)
+   */
   public String renderNode(Object obj) throws Exception {
     Node node = (Node) obj;
     String nodeTypeIcon = Utils.getNodeTypeIcon(node,"16x16Icon");
@@ -116,10 +120,16 @@ public class UICategoryNavigationTreeBase extends UITree {
     return builder.toString();
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.core.UIComponent#getTemplate()
+   */
   public String getTemplate() {
     return UICategoryNavigationUtils.getPortletPreferences().getValue(UICategoryNavigationConstant.PREFERENCE_TEMPLATE_PATH, null);
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.core.UIComponent#getTemplateResourceResolver(org.exoplatform.webui.application.WebuiRequestContext, java.lang.String)
+   */
   public ResourceResolver getTemplateResourceResolver(WebuiRequestContext context, String template) {
     String repository = UICategoryNavigationUtils.getPortletPreferences().getValue(UICategoryNavigationConstant.PREFERENCE_REPOSITORY, null);
     DMSConfiguration dmsConfiguration = getApplicationComponent(DMSConfiguration.class);
@@ -127,6 +137,9 @@ public class UICategoryNavigationTreeBase extends UITree {
     return new JCRResourceResolver(repository, workspace, TemplateService.EXO_TEMPLATE_FILE_PROP);
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.core.UITree#getActionLink()
+   */
   public String getActionLink() throws Exception {
     PortletRequestContext porletRequestContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
     HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) porletRequestContext.getRequest();
@@ -140,24 +153,25 @@ public class UICategoryNavigationTreeBase extends UITree {
     return backPath;
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.core.UITree#isSelected(java.lang.Object)
+   */
   public boolean isSelected(Object obj) throws Exception {
     Node selectedNode = this.getSelected();
     Node node = (Node) obj;
     if(selectedNode == null) return false;    
     return selectedNode.getPath().equals(node.getPath());
   }
-  
-  
-  // TODO chuong.phan: These methods are temporary, they are used for Simple Vertical Hierarchy (Full tree)
-  // categoryPath = "/"             => treeNode.getNode("").getNodes()
-  // ----------------------------------------------------------------
-  // categoryPath = "/News"         => treeNode.getNode("").getNodes()
-  //                                => treeNode.getNode("News").getNodes()
-  //----------------------------------------------------------------
-  // categoryPath = "/News/France"  => treeNode.getNode("").getNodes()
-  //                                => treeNode.getNode("News").getNodes()
-  //                                => treeNode.getNode("France").getNodes()
-  
+
+  /**
+   * Gets the subcategories.
+   * 
+   * @param categoryPath the category path
+   * 
+   * @return the subcategories
+   * 
+   * @throws Exception the exception
+   */
   public List<Node> getSubcategories(String categoryPath) throws Exception {
     TaxonomyService taxonomyService = getApplicationComponent(TaxonomyService.class);
     PortletPreferences portletPreferences = UICategoryNavigationUtils.getPortletPreferences();
@@ -175,6 +189,13 @@ public class UICategoryNavigationTreeBase extends UITree {
     return subcategories; 
   }
   
+  /**
+   * Resolve category path by uri.
+   * 
+   * @param context the context
+   * 
+   * @return the string
+   */
   public String resolveCategoryPathByUri(WebuiRequestContext context) {
     PortletRequestContext porletRequestContext = (PortletRequestContext) context;
     HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper) porletRequestContext.getRequest();
@@ -195,6 +216,15 @@ public class UICategoryNavigationTreeBase extends UITree {
     return categoryPath;
   }
   
+  /**
+   * Gets the categories by uri.
+   * 
+   * @param categoryUri the category uri
+   * 
+   * @return the categories by uri
+   * 
+   * @throws Exception the exception
+   */
   public List<String> getCategoriesByUri(String categoryUri) throws Exception {
     PortletPreferences portletPreferences = UICategoryNavigationUtils.getPortletPreferences();
     String preferenceTreeName = portletPreferences.getValue(UICategoryNavigationConstant.PREFERENCE_TREE_NAME, "");
@@ -213,6 +243,15 @@ public class UICategoryNavigationTreeBase extends UITree {
     return categories;
   }
 
+  /**
+   * Render category link.
+   * 
+   * @param node the node
+   * 
+   * @return the string
+   * 
+   * @throws Exception the exception
+   */
   public String renderCategoryLink(Node node) throws Exception {
     // portalURI: /portal/private/acme/
     String portalURI = Util.getPortalRequestContext().getPortalURI();
@@ -238,5 +277,4 @@ public class UICategoryNavigationTreeBase extends UITree {
     
     return portalURI + preferenceTargetPage +  shortPath;
   }
-  
 }

@@ -36,6 +36,7 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS Author : anh.do anh.do@exoplatform.com,
  * anhdn86@gmail.com Feb 13, 2009
@@ -47,14 +48,27 @@ import org.exoplatform.webui.event.EventListener;
 )
 public class UICLVContentSelector extends UIBaseNodeTreeSelector {
 
+  /** The existed category list. */
   private List<String> existedCategoryList = new ArrayList<String>();
 
+  /**
+   * Instantiates a new uICLV content selector.
+   * 
+   * @throws Exception the exception
+   */
   public UICLVContentSelector() throws Exception {
     addChild(UICLVContentTree.class, null, null);
     addChild(UICLVContentSelectionPanel.class, null, null);
     addChild(UICLVContentSelectedGrid.class, null, null).setRendered(false);        
   }
 
+  /**
+   * Inits the.
+   * 
+   * @param context the context
+   * 
+   * @throws Exception the exception
+   */
   public void init(PortletRequestContext context) throws Exception {
     UICLVContentTree treeBuilder = getChild(UICLVContentTree.class);
     LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
@@ -82,16 +96,32 @@ public class UICLVContentSelector extends UIBaseNodeTreeSelector {
     contentsGrid.updateGrid(contentsGrid.getUIPageIterator().getCurrentPage());
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.tree.UIBaseNodeTreeSelector#onChange(javax.jcr.Node, java.lang.Object)
+   */
   public void onChange(Node currentNode, Object context) throws Exception {
     UICategoriesSelectPanel uiCategoriesSelectPanel = getChild(UICategoriesSelectPanel.class);
     uiCategoriesSelectPanel.setParentNode(currentNode);
     uiCategoriesSelectPanel.updateGrid();
   }
 
+  /**
+   * The listener interface for receiving closeAction events.
+   * The class that is interested in processing a closeAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addCloseActionListener<code> method. When
+   * the closeAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see CloseActionEvent
+   */
   public static class CloseActionListener extends EventListener<UICLVContentSelector> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UICLVContentSelector> arg0) throws Exception {
-
     }
   }
-
 }

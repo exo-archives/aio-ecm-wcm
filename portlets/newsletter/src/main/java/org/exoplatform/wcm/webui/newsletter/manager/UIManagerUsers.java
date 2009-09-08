@@ -40,11 +40,12 @@ import org.exoplatform.webui.core.UITabPane;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          ha.mai@exoplatform.com
- * Jun 10, 2009  
+ * ha.mai@exoplatform.com
+ * Jun 10, 2009
  */
 
 @ComponentConfig(
@@ -60,32 +61,62 @@ import org.exoplatform.webui.event.EventListener;
     }
 )
 public class UIManagerUsers extends UITabPane {
+  
+  /** The TITL e_. */
   private String[] TITLE_  = {"Mail", "isBanned"};
-  //private String[] ACTIONS_ = {"Edit", "BanUser", "UnBanUser", "DeleteUser"};
+  
+  /** The ACTION s_. */
   private String[] ACTIONS_ = {"BanUser", "UnBanUser", "DeleteUser"};
+  
+  /** The MEMBE r_ titl e_. */
   private String[] MEMBER_TITLE_ = {"UserName", "FirstName", "LastName", "Email", "Role"};
-  //private String[] MEMBER_ACTIONS_ = {"Edit", "AddAdministrator", "DeleteAdministrator"};
+
+  /** The MEMBE r_ action s_. */
   private String[] MEMBER_ACTIONS_ = {"AddAdministrator", "DeleteAdministrator"};
+  
+  /** The manager user handler. */
   private NewsletterManageUserHandler managerUserHandler = null;
+  
+  /** The category name. */
   private String categoryName ;
+  
+  /** The subscription name. */
   private String subscriptionName;
+  
+  /** The UIGRI d_ manage r_ users. */
   private String UIGRID_MANAGER_USERS = "UIManagerUsers";
+  
+  /** The UIGRI d_ manage r_ moderator. */
   private String UIGRID_MANAGER_MODERATOR = "UIManagerModerator";
+  
+  /** The is view tab. */
   public boolean isViewTab = false;
+  
+  /** The list moderator. */
   private List<String> listModerator = new ArrayList<String>();
+  
+  /** The permissions. */
   private String[] permissions ;
 
+  /**
+   * Gets the list public user.
+   * 
+   * @return the list public user
+   */
   public void getListPublicUser(){
     try{
       UIGrid uiGrid = getChildById(UIGRID_MANAGER_USERS);
       ObjectPageList objPageList = 
                       new ObjectPageList(managerUserHandler.getUsers(NewsLetterUtil.getPortalName(), categoryName, subscriptionName, Utils.getSessionProvider(this)), 5);
       uiGrid.getUIPageIterator().setPageList(objPageList);
-    }catch(Exception ex){
-      ex.printStackTrace();
-    }
+    }catch(Exception ex){}
   }
   
+  /**
+   * Update list user.
+   * 
+   * @throws Exception the exception
+   */
   private void updateListUser() throws Exception{
     // get all administrator of newsletter
     List<String> listAdministrator = managerUserHandler.getAllAdministrator(NewsLetterUtil.getPortalName(), Utils.getSessionProvider(this));
@@ -118,6 +149,11 @@ public class UIManagerUsers extends UITabPane {
     this.setSelectedTab(UIGRID_MANAGER_USERS);
   }
 
+  /**
+   * Instantiates a new uI manager users.
+   * 
+   * @throws Exception the exception
+   */
   public UIManagerUsers() throws Exception{
     NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
     managerUserHandler = newsletterManagerService.getManageUserHandler();
@@ -141,6 +177,12 @@ public class UIManagerUsers extends UITabPane {
     addChild(uiGrid);
   }
   
+  /**
+   * Sets the infor.
+   * 
+   * @param categoryName the category name
+   * @param subscriptionName the subscription name
+   */
   public void setInfor(String categoryName, String subscriptionName){
     this.categoryName = categoryName;
     this.subscriptionName = subscriptionName;
@@ -157,13 +199,26 @@ public class UIManagerUsers extends UITabPane {
         this.setSelectedTab(UIGRID_MANAGER_USERS);
         
         updateListUser();
-      }catch(Exception ex){
-        ex.printStackTrace();
-      }
+      }catch(Exception ex){}
     }
   }
   
+  /**
+   * The listener interface for receiving unBanUserAction events.
+   * The class that is interested in processing a unBanUserAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addUnBanUserActionListener<code> method. When
+   * the unBanUserAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see UnBanUserActionEvent
+   */
   static  public class UnBanUserActionListener extends EventListener<UIManagerUsers> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIManagerUsers> event) throws Exception {
       UIManagerUsers managerUsers = event.getSource();
       String email = event.getRequestContext().getRequestParameter(OBJECTID);
@@ -172,8 +227,23 @@ public class UIManagerUsers extends UITabPane {
     }
   }
   
+  /**
+   * The listener interface for receiving banUserAction events.
+   * The class that is interested in processing a banUserAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addBanUserActionListener<code> method. When
+   * the banUserAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see BanUserActionEvent
+   */
   static  public class BanUserActionListener extends EventListener<UIManagerUsers> {
-	  public void execute(Event<UIManagerUsers> event) throws Exception {
+	  
+  	/* (non-Javadoc)
+  	 * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+  	 */
+  	public void execute(Event<UIManagerUsers> event) throws Exception {
 		  UIManagerUsers managerUsers = event.getSource();
 		  String email = event.getRequestContext().getRequestParameter(OBJECTID);
 		  managerUsers.managerUserHandler.changeBanStatus(NewsLetterUtil.getPortalName(), email, true, Utils.getSessionProvider(managerUsers));
@@ -181,7 +251,22 @@ public class UIManagerUsers extends UITabPane {
 	  }
   }
   
+  /**
+   * The listener interface for receiving deleteUserAction events.
+   * The class that is interested in processing a deleteUserAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addDeleteUserActionListener<code> method. When
+   * the deleteUserAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see DeleteUserActionEvent
+   */
   static  public class DeleteUserActionListener extends EventListener<UIManagerUsers> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIManagerUsers> event) throws Exception {
       UIManagerUsers managerUsers = event.getSource();
       String email = event.getRequestContext().getRequestParameter(OBJECTID);
@@ -190,7 +275,22 @@ public class UIManagerUsers extends UITabPane {
     }
   }
   
+  /**
+   * The listener interface for receiving addAdministratorAction events.
+   * The class that is interested in processing a addAdministratorAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addAddAdministratorActionListener<code> method. When
+   * the addAdministratorAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see AddAdministratorActionEvent
+   */
   static  public class AddAdministratorActionListener extends EventListener<UIManagerUsers> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIManagerUsers> event) throws Exception {
       UIManagerUsers managerUsers = event.getSource();
       String userId = event.getRequestContext().getRequestParameter(OBJECTID);
@@ -201,7 +301,22 @@ public class UIManagerUsers extends UITabPane {
     }
   }
   
+  /**
+   * The listener interface for receiving deleteAdministratorAction events.
+   * The class that is interested in processing a deleteAdministratorAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addDeleteAdministratorActionListener<code> method. When
+   * the deleteAdministratorAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see DeleteAdministratorActionEvent
+   */
   static  public class DeleteAdministratorActionListener extends EventListener<UIManagerUsers> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIManagerUsers> event) throws Exception {
       UIManagerUsers managerUsers = event.getSource();
       String userId = event.getRequestContext().getRequestParameter(OBJECTID);
@@ -212,7 +327,22 @@ public class UIManagerUsers extends UITabPane {
     }
   }
   
+  /**
+   * The listener interface for receiving closeAction events.
+   * The class that is interested in processing a closeAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addCloseActionListener<code> method. When
+   * the closeAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see CloseActionEvent
+   */
   static  public class CloseActionListener extends EventListener<UIManagerUsers> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIManagerUsers> event) throws Exception {
       UIManagerUsers managerUsers = event.getSource();
       Utils.closePopupWindow(managerUsers, UINewsletterConstant.MANAGER_USERS_POPUP_WINDOW);

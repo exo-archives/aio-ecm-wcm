@@ -21,21 +21,29 @@ import java.util.Collection;
 import org.exoplatform.services.cms.drives.DriveData;
 import org.exoplatform.services.wcm.BaseWCMTestCase;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * Jul 20, 2009  
+ * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * Jul 20, 2009
  */
 public class TestWCMConfigurationService extends BaseWCMTestCase {
 
+  /** The configuration service. */
   private WCMConfigurationService configurationService;
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.BaseWCMTestCase#setUp()
+   */
   public void setUp() throws Exception {
     super.setUp();
     configurationService = getService(WCMConfigurationService.class);
   }
   
+  /**
+   * Test get site drive config.
+   */
   public void testGetSiteDriveConfig() {
     DriveData driveData = configurationService.getSiteDriveConfig();
     assertEquals("{siteName}", driveData.getName());
@@ -52,6 +60,9 @@ public class TestWCMConfigurationService extends BaseWCMTestCase {
     assertEquals("Both", driveData.getAllowCreateFolder());
   }
   
+  /**
+   * Test get live portals location.
+   */
   public void testGetLivePortalsLocation() {
     NodeLocation nodeLocation = configurationService.getLivePortalsLocation("repository");
     assertEquals("repository", nodeLocation.getRepository());
@@ -59,6 +70,9 @@ public class TestWCMConfigurationService extends BaseWCMTestCase {
     assertEquals("/sites content/live", nodeLocation.getPath());
   }
   
+  /**
+   * Test get runtime context param.
+   */
   public void testGetRuntimeContextParam() {
     assertEquals("redactor", configurationService.getRuntimeContextParam(WCMConfigurationService.REDACTOR_MEMBERSHIP_TYPE));
     assertEquals("/parameterizedviewer", configurationService.getRuntimeContextParam(WCMConfigurationService.PARAMETERIZED_PAGE_URI));
@@ -71,6 +85,9 @@ public class TestWCMConfigurationService extends BaseWCMTestCase {
     assertEquals("/exo:ecm/views/templates/Content List Viewer/paginators/UIPaginatorDefault.gtmpl", configurationService.getRuntimeContextParam(WCMConfigurationService.PAGINATOR_TEMPLAET_PATH));
   }
   
+  /**
+   * Test get runtime context params.
+   */
   public void testGetRuntimeContextParams() {
     Collection<String> runtimeContextParams = configurationService.getRuntimeContextParams();
     assertTrue(runtimeContextParams.contains("redactor"));
@@ -85,13 +102,18 @@ public class TestWCMConfigurationService extends BaseWCMTestCase {
     assertEquals(9, runtimeContextParams.size());
   }
   
+  /**
+   * Test get shared portal name.
+   */
   public void testGetSharedPortalName() {
     assertEquals("shared", configurationService.getSharedPortalName("repository"));
   }
   
+  /**
+   * Test get all live portals location.
+   */
   public void testGetAllLivePortalsLocation() {
     Collection<NodeLocation> nodeLocations = configurationService.getAllLivePortalsLocation();
     assertEquals(1, nodeLocations.size());
   }
-  
 }

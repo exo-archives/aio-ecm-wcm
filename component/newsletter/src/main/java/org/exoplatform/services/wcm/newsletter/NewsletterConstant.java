@@ -190,5 +190,4 @@ public class NewsletterConstant {
   public static String generateNewsletterPath(String portalName, String categoryName, String subscriptionName, String newsletterName) {
     return generateSubscriptionPath(portalName, categoryName, subscriptionName).concat("/" + newsletterName);
   }
-  
 }

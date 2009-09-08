@@ -54,7 +54,6 @@ import org.exoplatform.webui.form.ext.UIFormInputSetWithAction;
  * dzungdev@gmail.com
  * May 27, 2008
  */
-
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
     template = "system:/groovy/webui/form/UIFormWithTitle.gtmpl",
@@ -64,7 +63,6 @@ import org.exoplatform.webui.form.ext.UIFormInputSetWithAction;
       @EventConfig(listeners = UIWebContentSelectorForm.BrowseActionListener.class)
     }
 )
-
 public class UIWebContentSelectorForm extends UIForm implements UISelectable{
 
   /** The Constant PATH. */
@@ -220,7 +218,6 @@ public class UIWebContentSelectorForm extends UIForm implements UISelectable{
     public void execute(Event<UIWebContentSelectorForm> event) throws Exception {
       UIWebContentSelectorForm uiWebContentSelector = event.getSource();
       String webContentPath = uiWebContentSelector.getUIStringInput(UIWebContentSelectorForm.PATH).getValue();
-      //uiWebContentSelector.getUIStringInput(UIWebContentSelectorForm.PUBLICATION).getValue();
       if(webContentPath == null) {
         UIApplication uiApplication = uiWebContentSelector.getAncestorOfType(UIApplication.class);
         uiApplication.addMessage(new ApplicationMessage("UIWebContentSelector.msg.require-choose", null, ApplicationMessage.WARNING));
@@ -289,5 +286,4 @@ public class UIWebContentSelectorForm extends UIForm implements UISelectable{
       uiPConfig.showPopup(event.getRequestContext());
     }
   }
-
 }

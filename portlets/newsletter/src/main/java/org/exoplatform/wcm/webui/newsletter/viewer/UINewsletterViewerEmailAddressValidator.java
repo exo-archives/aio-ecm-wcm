@@ -7,15 +7,21 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInput;
 import org.exoplatform.webui.form.validator.Validator;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform
  * thang.do@exoplatform.com Jun 25, 2009
  */
 public class UINewsletterViewerEmailAddressValidator implements Validator {
 
+	/** The Constant EMAIL_REGEX. */
 	static private final String EMAIL_REGEX = "[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@.+\\.[a-zA-Z0-9]+";
 
-	public void validate(UIFormInput uiInput) throws Exception {
+	/* (non-Javadoc)
+	 * @see org.exoplatform.webui.form.validator.Validator#validate(org.exoplatform.webui.form.UIFormInput)
+	 */
+	@SuppressWarnings("unchecked")
+  public void validate(UIFormInput uiInput) throws Exception {
 		UIComponent uiComponent = (UIComponent) uiInput;
 		UIForm uiForm = uiComponent.getAncestorOfType(UIForm.class);
 		String label;

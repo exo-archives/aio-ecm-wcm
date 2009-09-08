@@ -40,12 +40,14 @@ import org.exoplatform.webui.core.UIPortletApplication;
 
 import com.ibm.icu.text.Transliterator;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS Author : Hoa Pham hoa.phamvu@exoplatform.com
  * Oct 23, 2008
  */
 public class Utils {
 
+  /** The Constant TURN_ON_QUICK_EDIT. */
   public static final String TURN_ON_QUICK_EDIT = "turnOnQuickEdit";
 
   /**
@@ -80,7 +82,9 @@ public class Utils {
    * Can edit current portal.
    * 
    * @param remoteUser the remote user
+   * 
    * @return true, if successful
+   * 
    * @throws Exception the exception
    */
   public static boolean canEditCurrentPortal(String remoteUser) throws Exception {
@@ -98,6 +102,16 @@ public class Utils {
     return identity.isMemberOf(membershipEntry);
   }
 
+  /**
+   * Turn on quick editable.
+   * 
+   * @param context the context
+   * @param showAblePref the show able pref
+   * 
+   * @return true, if successful
+   * 
+   * @throws Exception the exception
+   */
   public static boolean turnOnQuickEditable(PortletRequestContext context, boolean showAblePref) throws Exception {
     Object obj = Util.getPortalRequestContext().getRequest().getSession().getAttribute(Utils.TURN_ON_QUICK_EDIT);    
     boolean turnOnFlag = false;
@@ -110,6 +124,11 @@ public class Utils {
     return false;
   }
 
+  /**
+   * Checks if is live mode.
+   * 
+   * @return true, if is live mode
+   */
   public static boolean isLiveMode() {
     Object obj = Util.getPortalRequestContext().getRequest().getSession().getAttribute(Utils.TURN_ON_QUICK_EDIT);
     if(obj == null)
@@ -117,6 +136,11 @@ public class Utils {
     return !Boolean.parseBoolean(obj.toString());     
   }
   
+  /**
+   * Gets the current mode.
+   * 
+   * @return the current mode
+   */
   public static String getCurrentMode() {
     Object obj = Util.getPortalRequestContext().getRequest().getSession().getAttribute(Utils.TURN_ON_QUICK_EDIT);
     if(obj == null) return WCMComposer.MODE_LIVE;
@@ -124,6 +148,13 @@ public class Utils {
     return turnOnQuickEdit ? WCMComposer.MODE_EDIT : WCMComposer.MODE_LIVE;
   }
   
+  /**
+   * Clean string.
+   * 
+   * @param str the str
+   * 
+   * @return the string
+   */
   public static String cleanString(String str) {
       Transliterator accentsconverter = Transliterator.getInstance("Latin; NFD; [:Nonspacing Mark:] Remove; NFC;");
       str = accentsconverter.transliterate(str); 
@@ -151,6 +182,17 @@ public class Utils {
       return cleanedStr.toString().toLowerCase();
   }
 
+  /**
+   * Creates the popup window.
+   * 
+   * @param container the container
+   * @param component the component
+   * @param popupWindowId the popup window id
+   * @param width the width
+   * @param height the height
+   * 
+   * @throws Exception the exception
+   */
   public static void createPopupWindow(UIContainer container, UIComponent component, String popupWindowId, int width, int height) throws Exception {
     UIPopupContainer popupContainer = getPopupContainer(container);
     popupContainer.removeChildById(popupWindowId);
@@ -164,11 +206,25 @@ public class Utils {
     requestContext.addUIComponentToUpdateByAjax(popupContainer);
   }
   
+  /**
+   * Close popup window.
+   * 
+   * @param container the container
+   * @param popupWindowId the popup window id
+   */
   public static void closePopupWindow(UIContainer container, String popupWindowId) {
     UIPopupContainer popupContainer = getPopupContainer(container);
     popupContainer.removeChildById(popupWindowId);
   }
   
+  /**
+   * Checks if is quick editmode.
+   * 
+   * @param container the container
+   * @param popupWindowId the popup window id
+   * 
+   * @return true, if is quick editmode
+   */
   public static boolean isQuickEditmode(UIContainer container, String popupWindowId) {
     UIPopupContainer popupContainer = getPopupContainer(container);
     if (popupContainer == null) return false;
@@ -177,12 +233,27 @@ public class Utils {
     return true;
   }
   
+  /**
+   * Gets the popup container.
+   * 
+   * @param container the container
+   * 
+   * @return the popup container
+   */
   public static UIPopupContainer getPopupContainer(UIContainer container) {
   	if (container instanceof UIPortletApplication) return container.getChild(UIPopupContainer.class);
     UIPortletApplication portletApplication = container.getAncestorOfType(UIPortletApplication.class);
     return portletApplication.getChild(UIPopupContainer.class);
   }
   
+  /**
+   * Creates the popup message.
+   * 
+   * @param container the container
+   * @param message the message
+   * @param args the args
+   * @param type the type
+   */
   public static void createPopupMessage(UIContainer container, String message, Object[] args, int type) {
     UIApplication application = container.getAncestorOfType(UIApplication.class);
     application.addMessage(new ApplicationMessage(message, args, type)) ;
@@ -190,13 +261,27 @@ public class Utils {
     requestContext.addUIComponentToUpdateByAjax(application.getUIPopupMessages()) ;
   }
 
+  /**
+   * Gets the service.
+   * 
+   * @param component the component
+   * @param clazz the clazz
+   * 
+   * @return the service
+   */
   public static <T> T getService(UIComponent component, Class<T> clazz) {
   	return clazz.cast(component.getApplicationComponent(clazz));
   }
   
+  /**
+   * Gets the session provider.
+   * 
+   * @param component the component
+   * 
+   * @return the session provider
+   */
   public static SessionProvider getSessionProvider(UIComponent component) {
   	ThreadLocalSessionProviderService threadLocalSessionProviderService = getService(component, ThreadLocalSessionProviderService.class);
   	return threadLocalSessionProviderService.getSessionProvider(null);
   }
-  
 }

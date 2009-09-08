@@ -43,25 +43,25 @@ import org.exoplatform.wcm.connector.BaseConnector;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+// TODO: Auto-generated Javadoc
 /*
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Sep 10, 2008
  */
-
-/**
- * The Class DocumentConnector.
- */
 @URITemplate("/wcmDocument/")
 public class DocumentConnector extends BaseConnector implements ResourceContainer {
-
+  
+  /** The document link handler. */
   protected DocumentLinkHandler documentLinkHandler;
   
+  /** The limit. */
   private int limit;
 
   /**
    * Instantiates a new document connector.
    * 
    * @param container the container
+   * @param param the param
    */
   public DocumentConnector(ExoContainer container, InitParams param) {
     super(container);
@@ -79,7 +79,10 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
    * @param command the command
    * @param type the type
    * @param currentPortal the current portal
+   * @param baseURI the base uri
+   * 
    * @return the folders and files
+   * 
    * @throws Exception the exception
    */
   @HTTPMethod(HTTPMethods.GET)
@@ -115,6 +118,9 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
     return Response.Builder.ok().build();
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.wcm.connector.BaseConnector#buildXMLResponseForContentStorage(javax.jcr.Node, java.lang.String)
+   */
   protected Response buildXMLResponseForContentStorage(Node node, String command) throws Exception {
     Element rootElement = FCKUtils.createRootElement(command,
         node,
@@ -154,7 +160,9 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
    * @param command the command
    * @param language the language
    * @param currentPortal the current portal
+   * 
    * @return the response
+   * 
    * @throws Exception the exception
    */
   @HTTPMethod(HTTPMethods.GET)
@@ -197,7 +205,9 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
    * @param contentType the content type
    * @param contentLength the content length
    * @param currentPortal the current portal
+   * 
    * @return the response
+   * 
    * @throws Exception the exception
    */
   @HTTPMethod(HTTPMethods.POST)
@@ -243,7 +253,9 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
    * @param fileName the file name
    * @param uploadId the upload id
    * @param currentPortal the current portal
+   * 
    * @return the response
+   * 
    * @throws Exception the exception
    */
   @HTTPMethod(HTTPMethods.GET)
@@ -293,5 +305,4 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
   protected String getContentStorageType() throws Exception {
     return FCKUtils.DOCUMENT_TYPE;
   }
-
 }

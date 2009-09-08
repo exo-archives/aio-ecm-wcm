@@ -39,10 +39,11 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SARL
  * Author : chungnv
- *          nguyenchung136@yahoo.com
+ * nguyenchung136@yahoo.com
  * Jun 23, 2006
  * 10:07:15 AM
  */
@@ -63,17 +64,25 @@ import org.exoplatform.webui.event.Event.Phase;
       }
     )
 })
-
 public class UIPageNodeSelector extends UIContainer {
   
+  /** The navigations. */
   private List<PageNavigation> navigations;
   
+  /** The selected node. */
   private SelectedNode selectedNode;
   
+  /** The copy node. */
   private SelectedNode copyNode;
   
+  /** The delete navigations. */
   private List<PageNavigation> deleteNavigations = new ArrayList<PageNavigation>();
   
+	/**
+	 * Instantiates a new uI page node selector.
+	 * 
+	 * @throws Exception the exception
+	 */
 	public UIPageNodeSelector() throws Exception {    
     
     UIDropDownControl uiDopDownControl = addChild(UIDropDownControl.class, "UIDropDown", "UIDropDown");
@@ -89,6 +98,11 @@ public class UIPageNodeSelector extends UIContainer {
     loadNavigations();
 	}
 	
+  /**
+   * Load navigations.
+   * 
+   * @throws Exception the exception
+   */
   public void loadNavigations() throws Exception {
     navigations = new ArrayList<PageNavigation>();
     List<PageNavigation> pnavigations = getExistedNavigation(Util.getUIPortal().getNavigations()) ;
@@ -108,6 +122,9 @@ public class UIPageNodeSelector extends UIContainer {
     selectNavigation();
   }
   
+  /**
+   * Update ui.
+   */
   private void updateUI() {
     if(navigations == null || navigations.size() < 1) {
       getChild(UIDropDownControl.class).setOptions(null) ;
@@ -124,6 +141,9 @@ public class UIPageNodeSelector extends UIContainer {
     if(options.size() > 0) uiNavigationSelector.setValue(0);
   }
 
+  /**
+   * Select navigation.
+   */
   private void selectNavigation() {
     if(navigations == null || navigations.size() < 1) return;
     if (selectedNode == null) {
@@ -135,6 +155,11 @@ public class UIPageNodeSelector extends UIContainer {
     if(selectedNode.getNode() != null) selectPageNodeByUri(selectedNode.getNode().getUri()) ;
   }
   
+  /**
+   * Select navigation.
+   * 
+   * @param id the id
+   */
   public void selectNavigation(int id){    
     for(int i = 0; i < navigations.size(); i++){
       if(navigations.get(i).getId() != id) continue ;
@@ -147,6 +172,11 @@ public class UIPageNodeSelector extends UIContainer {
     }
   }
   
+  /**
+   * Select page node by uri.
+   * 
+   * @param uri the uri
+   */
   public void selectPageNodeByUri(String uri){   
     if(selectedNode == null) return ;
     UITree tree = getChild(UITree.class);
@@ -164,6 +194,14 @@ public class UIPageNodeSelector extends UIContainer {
     tree.setSibbling(sibbling);
   }
   
+  /**
+   * Search page node by uri.
+   * 
+   * @param pageNav the page nav
+   * @param uri the uri
+   * 
+   * @return the page node
+   */
   public PageNode searchPageNodeByUri(PageNavigation pageNav, String uri) {
     if(pageNav == null || uri == null) return null;
     List<PageNode> pageNodes = pageNav.getNodes();
@@ -177,6 +215,15 @@ public class UIPageNodeSelector extends UIContainer {
     return null; 
   }  
     
+  /**
+   * Search page node by uri.
+   * 
+   * @param pageNode the page node
+   * @param uri the uri
+   * @param tree the tree
+   * 
+   * @return the page node
+   */
   private PageNode searchPageNodeByUri(PageNode pageNode, String uri, UITree tree){
     if(pageNode.getUri().equals(uri)) return pageNode;
     List<PageNode> children = pageNode.getChildren();
@@ -192,11 +239,23 @@ public class UIPageNodeSelector extends UIContainer {
     return null;
   }
   
+  /**
+   * Gets the page navigations.
+   * 
+   * @return the page navigations
+   */
   public List<PageNavigation> getPageNavigations() { 
     if(navigations == null) navigations = new ArrayList<PageNavigation>();    
     return navigations;  
   }
 
+  /**
+   * Gets the page navigation.
+   * 
+   * @param id the id
+   * 
+   * @return the page navigation
+   */
   public PageNavigation getPageNavigation(int id) {
     for(PageNavigation ele : getPageNavigations()) {
       if(ele.getId() == id) return ele ;
@@ -204,6 +263,9 @@ public class UIPageNodeSelector extends UIContainer {
     return null ;
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.core.UIComponent#processRender(org.exoplatform.webui.application.WebuiRequestContext)
+   */
   public void processRender(WebuiRequestContext context) throws Exception {
     UIRightClickPopupMenu uiPopupMenu = getChild(UIRightClickPopupMenu.class);
     if(uiPopupMenu != null) {
@@ -213,9 +275,29 @@ public class UIPageNodeSelector extends UIContainer {
     super.processRender(context) ;
   }
   
+  /**
+   * Gets the copy node.
+   * 
+   * @return the copy node
+   */
   public SelectedNode getCopyNode() { return copyNode; }
+  
+  /**
+   * Sets the copy node.
+   * 
+   * @param copyNode the new copy node
+   */
   public void setCopyNode(SelectedNode copyNode) { this.copyNode = copyNode; }
   
+  /**
+   * Gets the existed navigation.
+   * 
+   * @param navis the navis
+   * 
+   * @return the existed navigation
+   * 
+   * @throws Exception the exception
+   */
   private List<PageNavigation> getExistedNavigation(List<PageNavigation> navis) throws Exception {
     Iterator<PageNavigation> itr = navis.iterator() ;
     UserPortalConfigService configService = getApplicationComponent(UserPortalConfigService.class);
@@ -226,7 +308,22 @@ public class UIPageNodeSelector extends UIContainer {
     return navis ;
   }
   
+  /**
+   * The listener interface for receiving selectNavigationAction events.
+   * The class that is interested in processing a selectNavigationAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSelectNavigationActionListener<code> method. When
+   * the selectNavigationAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SelectNavigationActionEvent
+   */
   static public class SelectNavigationActionListener  extends EventListener<UIDropDownControl> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIDropDownControl> event) throws Exception {
       String id = event.getRequestContext().getRequestParameter(OBJECTID);
       UIDropDownControl uiDropDownControl = event.getSource();
@@ -240,59 +337,152 @@ public class UIPageNodeSelector extends UIContainer {
         pageSelectorPanel.updateGrid();
         
         event.getRequestContext().addUIComponentToUpdateByAjax(pageSelector) ;
-      }catch(Exception ex){
-        ex.printStackTrace();
-      }
+      }catch(Exception ex){}
       uiPageNodeSelector.<UIComponent>getParent().broadcast(event, event.getExecutionPhase()) ;
       
     }
   }
 
+  /**
+   * The Class SelectedNode.
+   */
   public static class SelectedNode {
     
+    /** The nav. */
     private PageNavigation nav;
     
+    /** The parent node. */
     private PageNode parentNode;
     
+    /** The node. */
     private PageNode node;
     
+    /** The delete node. */
     private boolean deleteNode = false;
     
+    /** The clone node. */
     private boolean cloneNode = false;
     
+    /**
+     * Instantiates a new selected node.
+     * 
+     * @param nav the nav
+     * @param parentNode the parent node
+     * @param node the node
+     */
     public SelectedNode(PageNavigation nav, PageNode parentNode, PageNode node) {
       this.nav = nav;
       this.parentNode = parentNode;
       this.node = node;
     }
 
+    /**
+     * Gets the page navigation.
+     * 
+     * @return the page navigation
+     */
     public PageNavigation getPageNavigation() { return nav; }
+    
+    /**
+     * Sets the page navigation.
+     * 
+     * @param nav the new page navigation
+     */
     public void setPageNavigation(PageNavigation nav) { this.nav = nav; }
 
+    /**
+     * Gets the parent node.
+     * 
+     * @return the parent node
+     */
     public PageNode getParentNode() { return parentNode; }
+    
+    /**
+     * Sets the parent node.
+     * 
+     * @param parentNode the new parent node
+     */
     public void setParentNode(PageNode parentNode) { this.parentNode = parentNode; }
 
+    /**
+     * Gets the node.
+     * 
+     * @return the node
+     */
     public PageNode getNode() { return node; }
+    
+    /**
+     * Sets the node.
+     * 
+     * @param node the new node
+     */
     public void setNode(PageNode node) { this.node = node; }
 
+    /**
+     * Checks if is delete node.
+     * 
+     * @return true, if is delete node
+     */
     public boolean isDeleteNode() { return deleteNode; }
+    
+    /**
+     * Sets the delete node.
+     * 
+     * @param deleteNode the new delete node
+     */
     public void setDeleteNode(boolean deleteNode) { this.deleteNode = deleteNode; }
     
+    /**
+     * Checks if is clone node.
+     * 
+     * @return true, if is clone node
+     */
     public boolean isCloneNode() { return cloneNode; }
+    
+    /**
+     * Sets the clone node.
+     * 
+     * @param b the new clone node
+     */
     public void setCloneNode(boolean b) { cloneNode = b; }
   }
 
+  /**
+   * Gets the selected node.
+   * 
+   * @return the selected node
+   */
   public SelectedNode getSelectedNode() { return selectedNode; }
   
+  /**
+   * Gets the selected navigation.
+   * 
+   * @return the selected navigation
+   */
   public PageNavigation getSelectedNavigation(){ 
     return selectedNode == null ? null : selectedNode.getPageNavigation(); 
   }  
   
+  /**
+   * Gets the selected page node.
+   * 
+   * @return the selected page node
+   */
   public PageNode getSelectedPageNode() { 
     return selectedNode == null ? null : selectedNode.getNode() ; 
   }
   
+  /**
+   * Gets the up level uri.
+   * 
+   * @return the up level uri
+   */
   public String getUpLevelUri () { return selectedNode.getParentNode().getUri() ; }
 
+  /**
+   * Gets the delete navigations.
+   * 
+   * @return the delete navigations
+   */
   public List<PageNavigation> getDeleteNavigations() { return deleteNavigations; }
 }

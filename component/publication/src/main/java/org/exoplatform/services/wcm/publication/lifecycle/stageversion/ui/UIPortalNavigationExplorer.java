@@ -45,11 +45,11 @@ import org.exoplatform.webui.event.EventListener;
  * Created by The eXo Platform SAS Author : Hoa Pham hoa.pham@exoplatform.com
  * Sep 9, 2008
  */
-
 @ComponentConfig(lifecycle = Lifecycle.class, template = "classpath:groovy/wcm/webui/publication/lifecycle/stageversion/ui/UIPortalNavigationExplorer.gtmpl", events = { @EventConfig(listeners = UIPortalNavigationExplorer.ChangeNodeActionListener.class) })
 public class UIPortalNavigationExplorer extends UIContainer {
 
   /** The portal name. */
+  @SuppressWarnings("unused")
   private String       portalName;
 
   /** The running portals. */
@@ -272,5 +272,4 @@ public class UIPortalNavigationExplorer extends UIContainer {
   public void setSelectedNode(TreeNode selectedNode) {
     this.currentNode = selectedNode;
   }
-
 }

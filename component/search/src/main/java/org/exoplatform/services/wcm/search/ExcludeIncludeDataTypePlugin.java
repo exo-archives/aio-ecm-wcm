@@ -50,6 +50,7 @@ public class ExcludeIncludeDataTypePlugin extends BaseComponentPlugin{
    * 
    * @param initParams the init params
    */
+  @SuppressWarnings("unchecked")
   public ExcludeIncludeDataTypePlugin(InitParams initParams) {
     Iterator iterator = initParams.getPropertiesParamIterator() ;
     for(;iterator.hasNext();) {

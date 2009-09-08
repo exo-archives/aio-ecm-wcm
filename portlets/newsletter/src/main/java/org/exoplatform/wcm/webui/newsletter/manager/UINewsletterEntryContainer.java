@@ -27,43 +27,75 @@ import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 import org.exoplatform.webui.form.UIFormDateTimeInput;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * Jun 10, 2009  
+ * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * Jun 10, 2009
  */
 @ComponentConfig (
     lifecycle = UIContainerLifecycle.class
 )
 public class UINewsletterEntryContainer extends UIContainer {
 
+  /** The category config. */
   private NewsletterCategoryConfig categoryConfig;
+  
+  /** The newsletter path. */
   private String newsletterPath = null;
+  
+  /** The is updated. */
   private boolean isUpdated = false;
   
+  /**
+   * Instantiates a new uI newsletter entry container.
+   * 
+   * @throws Exception the exception
+   */
   public UINewsletterEntryContainer() throws Exception {
-    //init();
   }
   
+  /**
+   * Sets the updated.
+   * 
+   * @param isUpdated the new updated
+   */
   public void setUpdated(boolean isUpdated){
     this.isUpdated = isUpdated;
   }
   
+  /**
+   * Checks if is updated.
+   * 
+   * @return true, if is updated
+   */
   public boolean isUpdated(){
     return this.isUpdated;
   }
   
+  /**
+   * Sets the newsletter infor.
+   * 
+   * @param newsletterPath the new newsletter infor
+   * 
+   * @throws Exception the exception
+   */
   public void setNewsletterInfor(String newsletterPath) throws Exception{
     this.newsletterPath = newsletterPath;
     init();
   }
   
+  /**
+   * Inits the.
+   * 
+   * @throws Exception the exception
+   */
+  @SuppressWarnings("static-access")
   private void init() throws Exception{
     this.getChildren().clear();
     NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
     UINewsletterEntryDialogSelector newsletterEntryDialogSelector = addChild(UINewsletterEntryDialogSelector.class, null, null);
-    //newsletterEntryDialogSelector.updateTemplateSelectBox();
     UINewsletterEntryForm newsletterEntryForm = createUIComponent(UINewsletterEntryForm.class, null, null);
     newsletterEntryForm.setRepositoryName(newsletterManagerService.getRepositoryName());
     newsletterEntryForm.setWorkspace(newsletterManagerService.getWorkspaceName());
@@ -85,10 +117,22 @@ public class UINewsletterEntryContainer extends UIContainer {
     this.newsletterPath = null;
   }
 
+  /**
+   * Gets the category config.
+   * 
+   * @return the category config
+   */
   public NewsletterCategoryConfig getCategoryConfig() {
     return categoryConfig;
   }
   
+  /**
+   * Sets the category config.
+   * 
+   * @param categoryConfig the new category config
+   * 
+   * @throws Exception the exception
+   */
   public void setCategoryConfig(NewsletterCategoryConfig categoryConfig) throws Exception {
     this.categoryConfig = categoryConfig;
     init();

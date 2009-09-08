@@ -61,11 +61,12 @@ import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIFormDateTimeInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * Jun 11, 2009  
+ * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * Jun 11, 2009
  */
 @ComponentConfig (
     lifecycle = UIFormLifecycle.class,
@@ -77,11 +78,20 @@ import org.exoplatform.webui.form.UIFormSelectBox;
 )
 public class UINewsletterEntryForm extends UIDialogForm {
 
+  /** The Constant log. */
   private static final Log log  = ExoLogger.getLogger("wcm:UINewsletterEntryForm");
 
+  /**
+   * Instantiates a new uI newsletter entry form.
+   * 
+   * @throws Exception the exception
+   */
   public UINewsletterEntryForm() throws Exception {
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.form.UIDialogForm#getTemplate()
+   */
   public String getTemplate() {
     TemplateService templateService = getApplicationComponent(TemplateService.class) ;
     String userName = Util.getPortalRequestContext().getRemoteUser();
@@ -95,6 +105,9 @@ public class UINewsletterEntryForm extends UIDialogForm {
     return null;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.core.UIComponent#getTemplateResourceResolver(org.exoplatform.webui.application.WebuiRequestContext, java.lang.String)
+   */
   public ResourceResolver getTemplateResourceResolver(WebuiRequestContext context, String template) {
     try{
       if (resourceResolver == null) {
@@ -105,12 +118,20 @@ public class UINewsletterEntryForm extends UIDialogForm {
         resourceResolver = new JCRResourceResolver(repositoryName, workspace, TemplateService.EXO_TEMPLATE_FILE_PROP);
       }
     }catch(Exception e) {
-      e.printStackTrace();
       log.error("Get template resource resolver failed because of " + e.getMessage(), e);
     }
     return resourceResolver;
   }
 
+  /**
+   * Save content.
+   * 
+   * @param isSend the is send
+   * 
+   * @return the node
+   * 
+   * @throws Exception the exception
+   */
   private Node saveContent(boolean isSend) throws Exception {
     boolean isNull = true;
     // Prepare node store location
@@ -171,7 +192,22 @@ public class UINewsletterEntryForm extends UIDialogForm {
     return newsletterNode;
   }
   
+  /**
+   * The listener interface for receiving saveAction events.
+   * The class that is interested in processing a saveAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSaveActionListener<code> method. When
+   * the saveAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SaveActionEvent
+   */
   public static class SaveActionListener extends EventListener<UINewsletterEntryForm> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UINewsletterEntryForm> event) throws Exception {
       UINewsletterEntryForm newsletterEntryForm = event.getSource();
       UINewsletterEntryContainer newsletterEntryContainer = newsletterEntryForm.getAncestorOfType(UINewsletterEntryContainer.class);
@@ -192,7 +228,22 @@ public class UINewsletterEntryForm extends UIDialogForm {
     }
   }
 
+  /**
+   * The listener interface for receiving sendAction events.
+   * The class that is interested in processing a sendAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSendActionListener<code> method. When
+   * the sendAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SendActionEvent
+   */
   public static class SendActionListener extends EventListener<UINewsletterEntryForm> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UINewsletterEntryForm> event) throws Exception {
       UINewsletterEntryForm newsletterEntryForm = event.getSource();
       UINewsletterEntryContainer newsletterEntryContainer = newsletterEntryForm.getAncestorOfType(UINewsletterEntryContainer.class);
@@ -225,9 +276,7 @@ public class UINewsletterEntryForm extends UIDialogForm {
           for(Value value : subscribedUserProperty.getValues()){
             try {
               listEmailAddress.add(value.getString());
-            } catch (Exception e) {
-              e.printStackTrace();
-            }
+            } catch (Exception e) {}
           }
         }
         if (listEmailAddress.size() > 0) {
@@ -243,20 +292,32 @@ public class UINewsletterEntryForm extends UIDialogForm {
           message.setMimeType("text/html") ;
           try {
             mailService.sendMessage(message);
-          }catch (Exception e) {
-            e.printStackTrace();
-          }
+          }catch (Exception e) {}
         }
         session.save();
       }
     }
   }
 
+  /**
+   * The listener interface for receiving cancelAction events.
+   * The class that is interested in processing a cancelAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addCancelActionListener<code> method. When
+   * the cancelAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see CancelActionEvent
+   */
   public static class CancelActionListener extends EventListener<UINewsletterEntryForm> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UINewsletterEntryForm> event) throws Exception {
       UINewsletterEntryForm newsletterEntryForm = event.getSource();
       Utils.closePopupWindow(newsletterEntryForm, UINewsletterConstant.ENTRY_FORM_POPUP_WINDOW);
     }
   }
-
 }

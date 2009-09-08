@@ -30,11 +30,12 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * Jun 15, 2009  
+ * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * Jun 15, 2009
  */
 @ComponentConfig (
     lifecycle = UIFormLifecycle.class,
@@ -44,12 +45,18 @@ import org.exoplatform.webui.form.UIFormStringInput;
 )
 public class UINewsletterEntryWebcontentSelectorForm extends UIForm implements UISelectable {
   
+  /** The popup id. */
   private String popupId;
   
+  /** The Constant FORM_WEBCONTENT_SELECTOR. */
   public static final String FORM_WEBCONTENT_SELECTOR = "FormWebcontentSelector";
   
+  /** The Constant INPUT_WEBCONTENT_SELECTOR. */
   public static final String INPUT_WEBCONTENT_SELECTOR = "WebcontentSelector";
   
+  /**
+   * Instantiates a new uI newsletter entry webcontent selector form.
+   */
   public UINewsletterEntryWebcontentSelectorForm() {
     UIFormStringInput inputWebcontentSelector = new UIFormStringInput(INPUT_WEBCONTENT_SELECTOR, INPUT_WEBCONTENT_SELECTOR, null);
     inputWebcontentSelector.setEditable(false);
@@ -62,20 +69,48 @@ public class UINewsletterEntryWebcontentSelectorForm extends UIForm implements U
     addChild(formWebcontentSelector);
   }
 
+  /**
+   * Gets the popup id.
+   * 
+   * @return the popup id
+   */
   public String getPopupId() {
     return popupId;
   }
 
+  /**
+   * Sets the popup id.
+   * 
+   * @param popupId the new popup id
+   */
   public void setPopupId(String popupId) {
     this.popupId = popupId;
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.ecm.webui.selector.UISelectable#doSelect(java.lang.String, java.lang.Object)
+   */
   public void doSelect(String selectField, Object value) throws Exception {
     getUIStringInput(selectField).setValue((String) value);
     Utils.closePopupWindow(this, popupId);
   }
   
+  /**
+   * The listener interface for receiving selectWebcontentAction events.
+   * The class that is interested in processing a selectWebcontentAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSelectWebcontentActionListener<code> method. When
+   * the selectWebcontentAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SelectWebcontentActionEvent
+   */
   public static class SelectWebcontentActionListener extends EventListener<UINewsletterEntryWebcontentSelectorForm> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UINewsletterEntryWebcontentSelectorForm> event) throws Exception {
       UINewsletterEntryWebcontentSelectorForm newsletterEntryWebcontentSelector = event.getSource();
       UIWebContentTabSelector webContentTabSelector = newsletterEntryWebcontentSelector.createUIComponent(UIWebContentTabSelector.class, null, null);

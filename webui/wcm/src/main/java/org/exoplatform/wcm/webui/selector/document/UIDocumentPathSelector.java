@@ -39,6 +39,7 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : DANG TAN DUNG
@@ -69,16 +70,21 @@ import org.exoplatform.webui.event.EventListener;
 )
 public class UIDocumentPathSelector extends UIBaseNodeTreeSelector implements UIPopupComponent{
 
+  /** Instantiates a new UI document path selector. */
+
+  private Node currentPortal;
+  
+  /** The shared portal. */
+  private Node sharedPortal;
+  
+  /** The current node. */
+  private Node currentNode;
+
   /**
-   * Instantiates a new UI document path selector.
+   * Instantiates a new uI document path selector.
    * 
    * @throws Exception the exception
    */
-
-  private Node currentPortal;
-  private Node sharedPortal;
-  private Node currentNode;
-
   public UIDocumentPathSelector() throws Exception {
     addChild(UIBreadcumbs.class, "UIBreadcrumbDocumentPathSelector", "UIBreadcrumbDocumentPathSelector");
     addChild(UIDocumentTreeBuilder.class, null, UIDocumentTreeBuilder.class.getSimpleName() + hashCode());
@@ -121,11 +127,28 @@ public class UIDocumentPathSelector extends UIBaseNodeTreeSelector implements UI
     uiSelectPathPanel.updateGrid();
   }
 
+  /**
+   * Change folder.
+   * 
+   * @param selectedNode the selected node
+   * 
+   * @throws Exception the exception
+   */
   private void changeFolder(Node selectedNode) throws Exception {
     UIBreadcumbs uiBreadcrumb = getChild(UIBreadcumbs.class);
     uiBreadcrumb.setPath(getPath(null, selectedNode));
   }
 
+  /**
+   * Gets the path.
+   * 
+   * @param list the list
+   * @param selectedNode the selected node
+   * 
+   * @return the path
+   * 
+   * @throws Exception the exception
+   */
   private List<LocalPath> getPath(List<LocalPath> list, Node selectedNode) throws Exception {
     if(list == null) list = new ArrayList<LocalPath>(5);
     if(selectedNode == null || selectedNode.getPath().equalsIgnoreCase(currentPortal.getParent().getPath()) 
@@ -148,6 +171,8 @@ public class UIDocumentPathSelector extends UIBaseNodeTreeSelector implements UI
   }
 
   /**
+   * Gets the current portal.
+   * 
    * @return the currentPortal
    */
   public Node getCurrentPortal() {
@@ -155,6 +180,8 @@ public class UIDocumentPathSelector extends UIBaseNodeTreeSelector implements UI
   }
 
   /**
+   * Sets the current portal.
+   * 
    * @param currentPortal the currentPortal to set
    */
   public void setCurrentPortal(Node currentPortal) {
@@ -162,6 +189,8 @@ public class UIDocumentPathSelector extends UIBaseNodeTreeSelector implements UI
   }
 
   /**
+   * Gets the shared portal.
+   * 
    * @return the sharedPortal
    */
   public Node getSharedPortal() {
@@ -169,6 +198,8 @@ public class UIDocumentPathSelector extends UIBaseNodeTreeSelector implements UI
   }
 
   /**
+   * Sets the shared portal.
+   * 
    * @param sharedPortal the sharedPortal to set
    */
   public void setSharedPortal(Node sharedPortal) {
@@ -176,6 +207,8 @@ public class UIDocumentPathSelector extends UIBaseNodeTreeSelector implements UI
   }
 
   /**
+   * Gets the current node.
+   * 
    * @return the currentNode
    */
   public Node getCurrentNode() {
@@ -183,13 +216,30 @@ public class UIDocumentPathSelector extends UIBaseNodeTreeSelector implements UI
   }
 
   /**
+   * Sets the current node.
+   * 
    * @param currentNode the currentNode to set
    */
   public void setCurrentNode(Node currentNode) {
     this.currentNode = currentNode;
   }
 
+  /**
+   * The listener interface for receiving selectPathAction events.
+   * The class that is interested in processing a selectPathAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSelectPathActionListener<code> method. When
+   * the selectPathAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SelectPathActionEvent
+   */
   public static class SelectPathActionListener extends EventListener<UIBreadcumbs> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIBreadcumbs> event) throws Exception {
       UIBreadcumbs uiBreadcumbs = event.getSource();
       String selectedNodePath = event.getRequestContext().getRequestParameter(OBJECTID);

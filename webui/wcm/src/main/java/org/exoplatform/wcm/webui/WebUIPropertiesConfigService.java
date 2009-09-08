@@ -23,6 +23,7 @@ import org.apache.commons.lang.StringUtils;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.PropertiesParam;
 
+// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : Hoa Pham
@@ -51,6 +52,7 @@ public class WebUIPropertiesConfigService {
    * 
    * @param params the params
    */
+  @SuppressWarnings("unchecked")
   public WebUIPropertiesConfigService(InitParams params) {    
     for(Iterator iterator = params.getPropertiesParamIterator();iterator.hasNext();) {
       PropertiesParam propertiesParam = (PropertiesParam)iterator.next();
