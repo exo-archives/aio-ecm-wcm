@@ -889,6 +889,15 @@ public class UISiteAdminToolbar extends UIContainer {
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
+      UIPortalApplication uiApp = Util.getUIPortalApplication();
+      PortalRequestContext portalContext = Util.getPortalRequestContext();
+      UserACL userACL = uiApp.getApplicationComponent(UserACL.class);
+      PortalConfig portalConfig = PortalDataMapper.toPortal(Util.getUIPortal());
+      if (!userACL.hasPermission(portalConfig.getEditPermission())) {
+        uiApp.addMessage(new ApplicationMessage(UISiteAdminToolbar.MESSAGE, null));
+        portalContext.addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
+      }
       PortalRequestContext context = Util.getPortalRequestContext();
       context.getRequest().getSession().setAttribute(Utils.TURN_ON_QUICK_EDIT, true);
       Utils.updatePortal((PortletRequestContext) event.getRequestContext());      
@@ -912,6 +921,15 @@ public class UISiteAdminToolbar extends UIContainer {
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
+      UIPortalApplication uiApp = Util.getUIPortalApplication();
+      PortalRequestContext portalContext = Util.getPortalRequestContext();
+      UserACL userACL = uiApp.getApplicationComponent(UserACL.class);
+      PortalConfig portalConfig = PortalDataMapper.toPortal(Util.getUIPortal());
+      if (!userACL.hasPermission(portalConfig.getEditPermission())) {
+        uiApp.addMessage(new ApplicationMessage(UISiteAdminToolbar.MESSAGE, null));
+        portalContext.addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
+      }
       PortalRequestContext context = Util.getPortalRequestContext();
       context.getRequest().getSession().setAttribute(Utils.TURN_ON_QUICK_EDIT, false);
       Utils.updatePortal((PortletRequestContext) event.getRequestContext());
