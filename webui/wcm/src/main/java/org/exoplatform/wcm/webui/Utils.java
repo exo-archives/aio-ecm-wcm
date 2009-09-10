@@ -18,11 +18,11 @@ package org.exoplatform.wcm.webui;
 
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.portal.UIPortal;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
-import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.security.Identity;
 import org.exoplatform.services.security.IdentityRegistry;
@@ -281,7 +281,17 @@ public class Utils {
    * @return the session provider
    */
   public static SessionProvider getSessionProvider(UIComponent component) {
-  	ThreadLocalSessionProviderService threadLocalSessionProviderService = getService(component, ThreadLocalSessionProviderService.class);
-  	return threadLocalSessionProviderService.getSessionProvider(null);
+  	return SessionProviderFactory.createSessionProvider();
+  }
+  
+  /**
+   * Gets the system provider.
+   * 
+   * @param component the component
+   * 
+   * @return the system provider
+   */
+  public static SessionProvider getSystemProvider(UIComponent component) {
+    return SessionProviderFactory.createSystemProvider();
   }
 }
