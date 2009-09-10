@@ -29,12 +29,11 @@ import org.exoplatform.ecm.webui.selector.UISelectable;
 import org.exoplatform.services.cms.views.ApplicationTemplateManagerService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.wcm.webui.Utils;
-import org.exoplatform.wcm.webui.clv.UICLVPortlet;
-import org.exoplatform.wcm.webui.clv.UICLVManualMode;
-import org.exoplatform.wcm.webui.clv.UICLVFolderMode;
 import org.exoplatform.wcm.webui.clv.UICLVContainer;
+import org.exoplatform.wcm.webui.clv.UICLVFolderMode;
+import org.exoplatform.wcm.webui.clv.UICLVManualMode;
+import org.exoplatform.wcm.webui.clv.UICLVPortlet;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -362,11 +361,14 @@ public class UICLVConfig extends UIForm implements UISelectable {
   private List<SelectItemOption<String>> getTemplateList(String portletName, String category) throws Exception {
     List<SelectItemOption<String>> templateOptionList = new ArrayList<SelectItemOption<String>>();
     ApplicationTemplateManagerService templateManagerService = getApplicationComponent(ApplicationTemplateManagerService.class);
-    SessionProvider provider = Utils.getSessionProvider(this);
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     ManageableRepository manageableRepository = repositoryService.getCurrentRepository();
     String repository = manageableRepository.getConfiguration().getName();
-    List<Node> templateNodeList = templateManagerService.getTemplatesByCategory(repository, portletName, category, provider);
+    List<Node> templateNodeList = templateManagerService.getTemplatesByCategory(
+                                                                                repository,
+                                                                                portletName,
+                                                                                category,
+                                                                                Utils.getSessionProvider(this));
     for (Node templateNode : templateNodeList) {
       String templateName = templateNode.getName();
       String templatePath = templateNode.getPath();

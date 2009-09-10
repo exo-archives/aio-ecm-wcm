@@ -5,13 +5,13 @@ import java.util.List;
 
 import javax.jcr.Node;
 
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.BaseWCMTestCase;
 import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -70,7 +70,7 @@ public class TestNewsletterPublicUserHandler extends BaseWCMTestCase {
 		newsletterSubscriptionHandler = newsletterManagerService.getSubscriptionHandler();
 		newsletterPublicUserHandler = newsletterManagerService.getPublicUserHandler();
 		
-		sessionProvider = SessionProviderFactory.createSystemProvider();
+		sessionProvider = WCMCoreUtils.getSessionProvider();
 		
 		newsletterCategoryConfig = new NewsletterCategoryConfig();
 		newsletterCategoryConfig.setName("CatNameNewsletters");

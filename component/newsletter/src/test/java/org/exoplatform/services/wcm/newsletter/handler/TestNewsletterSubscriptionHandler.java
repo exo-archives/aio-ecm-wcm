@@ -5,7 +5,6 @@ import java.util.Calendar;
 
 import javax.jcr.Node;
 
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.BaseWCMTestCase;
 import org.exoplatform.services.wcm.core.NodetypeConstant;
@@ -14,6 +13,7 @@ import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -51,7 +51,7 @@ public class TestNewsletterSubscriptionHandler extends BaseWCMTestCase {
 		userHomeNode = newsletterApplicationNode.getNode("Users");
 		session.save();
 		
-		sessionProvider = SessionProviderFactory.createSystemProvider();
+		sessionProvider = WCMCoreUtils.getSessionProvider();
 		newsletterManagerService = getService(NewsletterManagerService.class);
 		NewsletterCategoryHandler newsletterCategoryHandler = newsletterManagerService.getCategoryHandler();
 		NewsletterCategoryConfig newsletterCategoryConfig = new NewsletterCategoryConfig();
@@ -75,7 +75,7 @@ public class TestNewsletterSubscriptionHandler extends BaseWCMTestCase {
 	 * @throws Exception the exception
 	 */
 	public void testAddSubscription() throws Exception {
-		SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
+		SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
 		newsletterSubscriptionHandler.add("classic", newsletterSubscriptionConfig, sessionProvider);
 		Node sub = (Node)categoriesNode.getNode("CategoryNameNewsletterSubcription").getNode("NameNewsletterSubcription");
 		assertNotNull(sub);
@@ -139,7 +139,7 @@ public class TestNewsletterSubscriptionHandler extends BaseWCMTestCase {
 	 * @throws Exception the exception
 	 */
 	public void testGetSubscriptionIdsByPublicUser() throws Exception {
-		SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
+		SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
 		java.util.List<String> list = new ArrayList<String>();
 		for(int i = 0 ; i < 5; i++) {
 			newsletterSubscriptionConfig = new	NewsletterSubscriptionConfig();

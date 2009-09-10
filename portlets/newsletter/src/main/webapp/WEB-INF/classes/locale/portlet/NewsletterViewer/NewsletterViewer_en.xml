@@ -6,7 +6,7 @@
       <subcribed>You are now subscribed to the selected newletters.</subcribed>
       <email-not-empty>Email cannot be empty</email-not-empty>
       <checkSubscriptionToProcess>Please check one or more subscriptions before submit!</checkSubscriptionToProcess>
-      <alreadyExistedEmail>this Email already exists. Please input another email</alreadyExistedEmail>
+      <alreadyExistedEmail>This Email already exists. Please input another email</alreadyExistedEmail>
       <canNotSubcribed>Can't subcribe. Please try again!</canNotSubcribed>
     </msg>
     <action>

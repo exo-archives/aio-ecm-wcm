@@ -24,10 +24,10 @@ import javax.jcr.Session;
 import javax.jcr.Value;
 
 import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 
 /**
  * Created by The eXo Platform SAS
@@ -46,7 +46,7 @@ public class NodetypeUtils {
    * @throws Exception the exception
    */
   public static void displayAllNode(String workspaceName, String repositoryName) throws Exception {
-    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
+    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
     RepositoryService repositoryService = (RepositoryService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(RepositoryService.class);
     ManageableRepository repository = repositoryService.getRepository(repositoryName); 
     Session session = sessionProvider.getSession(workspaceName, repository);

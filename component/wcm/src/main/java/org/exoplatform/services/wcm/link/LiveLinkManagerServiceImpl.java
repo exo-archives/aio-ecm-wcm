@@ -37,7 +37,6 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.logging.Log;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.PropertiesParam;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.cache.ExoCache;
 import org.exoplatform.services.html.HTMLDocument;
@@ -50,6 +49,7 @@ import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 
 /**
  * Created by The eXo Platform SAS Author : Phan Le Thanh Chuong
@@ -110,7 +110,7 @@ public class LiveLinkManagerServiceImpl implements LiveLinkManagerService {
    * @see org.exoplatform.services.wcm.link.LiveLinkManagerService#getBrokenLinks(java.lang.String)
    */
   public List<LinkBean> getBrokenLinks(String portalName) throws Exception {
-    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
+    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
     Node portal = livePortalManagerService.getLivePortal(portalName, sessionProvider);
     String path = portal.getPath();
     Session session = portal.getSession();
@@ -156,7 +156,7 @@ public class LiveLinkManagerServiceImpl implements LiveLinkManagerService {
    */
   public void updateLinks() throws Exception {
     Collection<NodeLocation> nodeLocationCollection = configurationService.getAllLivePortalsLocation();
-    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
+    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
     try {
       for (NodeLocation nodeLocation : nodeLocationCollection) {
         String repository = nodeLocation.getRepository();
@@ -174,7 +174,7 @@ public class LiveLinkManagerServiceImpl implements LiveLinkManagerService {
    * @see org.exoplatform.services.wcm.link.LiveLinkManagerService#validateLink(java.lang.String)
    */
   public void updateLinks(String portalName) throws Exception {
-    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
+    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
     try {
       Node portal = livePortalManagerService.getLivePortal(portalName, sessionProvider);
       String path = portal.getPath();

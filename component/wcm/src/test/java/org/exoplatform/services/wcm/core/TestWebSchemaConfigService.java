@@ -22,12 +22,12 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 
 import org.exoplatform.container.component.ComponentPlugin;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.BaseWCMTestCase;
 import org.exoplatform.services.wcm.javascript.JSFileHandler;
 import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
 import org.exoplatform.services.wcm.skin.CSSFileHandler;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.services.wcm.webcontent.HTMLFileSchemaHandler;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
 
@@ -234,7 +234,7 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
     cssContent.setProperty(NodetypeConstant.JCR_MIME_TYPE, "text/css");
     cssContent.setProperty(NodetypeConstant.JCR_LAST_MODIFIED, new Date().getTime());
     cssContent.setProperty(NodetypeConstant.JCR_DATA, "This is the default.css file.");
-    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
+    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
     webSchemaConfigService.createSchema(cssNode, sessionProvider);
     
     Node result = (Node)session.getItem("/sites content/live/css/default.css");
@@ -264,7 +264,7 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
     jsContent.setProperty(NodetypeConstant.JCR_MIME_TYPE, "text/javascript");
     jsContent.setProperty(NodetypeConstant.JCR_LAST_MODIFIED, new Date().getTime());
     jsContent.setProperty(NodetypeConstant.JCR_DATA, "This is the default.js file.");
-    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
+    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
     webSchemaConfigService.createSchema(jsNode, sessionProvider);
     
     Node result = (Node)session.getItem("/sites content/live/js/default.js");
@@ -284,7 +284,7 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
   public void testCreateWebcontentSchemaHandler_01() throws Exception {
     webSchemaConfigService.addWebSchemaHandler(new WebContentSchemaHandler());
     Node webcontentNode = liveNode.addNode("webcontent", NodetypeConstant.EXO_WEBCONTENT);
-    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
+    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
     webSchemaConfigService.createSchema(webcontentNode, sessionProvider);
     
     Node result = (Node)session.getItem("/sites content/live/webcontent");
@@ -329,7 +329,7 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
       htmlContent.setProperty(NodetypeConstant.JCR_DATA, "This is the default.html file.");
       session.save();
       
-      SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
+      SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
       webSchemaConfigService.addWebSchemaHandler(new HTMLFileSchemaHandler());
       webSchemaConfigService.addWebSchemaHandler(new WebContentSchemaHandler());
       webSchemaConfigService.createSchema(htmlFile, sessionProvider);
@@ -390,7 +390,7 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
       
       session.save();
       
-      SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
+      SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
       webSchemaConfigService.addWebSchemaHandler(new HTMLFileSchemaHandler());
       webSchemaConfigService.addWebSchemaHandler(new WebContentSchemaHandler());
       webSchemaConfigService.createSchema(htmlFile, sessionProvider);

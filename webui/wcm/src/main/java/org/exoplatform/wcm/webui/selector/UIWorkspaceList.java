@@ -28,11 +28,11 @@ import org.exoplatform.ecm.webui.form.UIFormInputSetWithAction;
 import org.exoplatform.ecm.webui.selector.UISelectable;
 import org.exoplatform.ecm.webui.tree.UINodeTreeBuilder;
 import org.exoplatform.ecm.webui.tree.selectone.UIOneNodePathSelector;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.config.RepositoryConfigurationException;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -181,7 +181,7 @@ public class UIWorkspaceList extends UIForm {
   private Node getRootNode(String repositoryName, String workspaceName) throws RepositoryException, RepositoryConfigurationException {
     RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
     ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
-    SessionProvider sessionProvider =  SessionProviderFactory.createSessionProvider();
+    SessionProvider sessionProvider =  WCMCoreUtils.getSessionProvider();
     Session session = sessionProvider.getSession(workspaceName, manageableRepository);
     Node rootNode = session.getRootNode();
     sessionProvider.close();

@@ -334,9 +334,14 @@ public class UINewsletterViewerForm extends UIForm {
           ResourceBundle res = context.getApplicationResourceBundle() ;
           String emailContent[] = new String[]{ res.getString("UINewsletterViewerForm.Email.ConfirmUser.Subject"),
                                                 res.getString("UINewsletterViewerForm.Email.ConfirmUser.Content")};
-          
           try{
-            newsletterForm.publicUserHandler.subscribe(portalName, userEmail, listCategorySubscription, newsletterForm.linkToSendMail, emailContent, Utils.getSessionProvider(newsletterForm));
+            newsletterForm.publicUserHandler.subscribe(
+                                                       portalName,
+                                                       userEmail,
+                                                       listCategorySubscription,
+                                                       newsletterForm.linkToSendMail,
+                                                       emailContent,
+                                                       Utils.getSystemProvider(newsletterForm));
             newsletterForm.inputEmail.setRendered(false);
             newsletterForm.userMail = userEmail;
             newsletterForm.isUpdated = true;

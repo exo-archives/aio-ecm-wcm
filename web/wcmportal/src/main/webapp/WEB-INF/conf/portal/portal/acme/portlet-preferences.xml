@@ -648,6 +648,7 @@
 		<preference>
 			<name>type</name>
 			<value>exo:contact_us</value>
+			<read-only>false</read-only>
 		</preference>
 	</portlet-preferences>	
 	

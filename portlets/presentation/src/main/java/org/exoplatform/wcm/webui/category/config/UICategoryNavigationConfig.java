@@ -152,7 +152,11 @@ public class UICategoryNavigationConfig extends UIForm implements UISelectable {
     ManageableRepository manageableRepository = repositoryService.getCurrentRepository();
     ApplicationTemplateManagerService applicationTemplateManagerService = getApplicationComponent(ApplicationTemplateManagerService.class);
     String repository = manageableRepository.getConfiguration().getName();
-    List<Node> templateNodes = applicationTemplateManagerService.getTemplatesByCategory(repository, portletName, templateCategory, Utils.getSessionProvider(this));
+    List<Node> templateNodes = applicationTemplateManagerService.getTemplatesByCategory(
+                                                                                        repository,
+                                                                                        portletName,
+                                                                                        templateCategory,
+                                                                                        Utils.getSessionProvider(this));
     for (Node templateNode : templateNodes) {
       String templateName = templateNode.getName();
       String templatePath = templateNode.getPath();

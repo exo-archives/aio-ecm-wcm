@@ -268,7 +268,7 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
     RepositoryService repositoryService  = getApplicationComponent(RepositoryService.class);      
     return Utils.getSessionProvider(this).getSession(workspace, repositoryService.getRepository(repository));
   }
-  
+
   /**
    * The listener interface for receiving saveAction events.
    * The class that is interested in processing a saveAction

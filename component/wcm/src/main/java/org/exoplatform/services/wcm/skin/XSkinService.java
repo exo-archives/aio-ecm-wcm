@@ -31,7 +31,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.webui.skin.SkinService;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.deployment.ContentInitializerService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -40,6 +39,7 @@ import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.picocontainer.Startable;
 
 // TODO: Auto-generated Javadoc
@@ -277,7 +277,7 @@ public class XSkinService implements Startable {
    */
   public void start() {  
     log.info("Start WCMSkinService...");
-    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();    
+    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();    
     try {      
       LivePortalManagerService livePortalManagerService = 
         (LivePortalManagerService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(LivePortalManagerService.class);

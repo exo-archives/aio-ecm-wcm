@@ -25,7 +25,6 @@ import javax.jcr.Session;
 
 import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -81,7 +80,6 @@ public class NewsletterTemplateHandler {
                                  NewsletterCategoryConfig categoryConfig,
                                  SessionProvider sessionProvider) {
     log.info("Trying to get templates of category " + categoryConfig);
-    if(sessionProvider ==  null) sessionProvider = SessionProviderFactory.createSystemProvider();
     try {
       List<Node> templates = new ArrayList<Node>();
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
@@ -154,7 +152,6 @@ public class NewsletterTemplateHandler {
                                 String categoryName,
                                 SessionProvider sessionProvider) throws Exception {
     log.info("Trying to convert node " + webcontentPath + " to template at category " + categoryName);
-    if(sessionProvider == null) sessionProvider = SessionProviderFactory.createSystemProvider();
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
       Session session = sessionProvider.getSession(workspace, manageableRepository);

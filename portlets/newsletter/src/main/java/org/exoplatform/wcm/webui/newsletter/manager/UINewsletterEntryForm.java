@@ -96,8 +96,6 @@ public class UINewsletterEntryForm extends UIDialogForm {
     TemplateService templateService = getApplicationComponent(TemplateService.class) ;
     String userName = Util.getPortalRequestContext().getRemoteUser();
     try{
-      NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
-      String repositoryName = newsletterManagerService.getRepositoryName();
       return templateService.getTemplatePathByUser(true, "exo:webContent", userName, repositoryName);
     } catch(Exception e) {
       log.error("Get template failed because of " + e.getMessage(), e);
@@ -111,11 +109,9 @@ public class UINewsletterEntryForm extends UIDialogForm {
   public ResourceResolver getTemplateResourceResolver(WebuiRequestContext context, String template) {
     try{
       if (resourceResolver == null) {
-        NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
-        String repositoryName = newsletterManagerService.getRepositoryName();
         DMSConfiguration dmsConfiguration = getApplicationComponent(DMSConfiguration.class);
-        String workspace = dmsConfiguration.getConfig(repositoryName).getSystemWorkspace();
-        resourceResolver = new JCRResourceResolver(repositoryName, workspace, TemplateService.EXO_TEMPLATE_FILE_PROP);
+        String workspace = dmsConfiguration.getConfig(this.repositoryName).getSystemWorkspace();
+        resourceResolver = new JCRResourceResolver(this.repositoryName, workspace, TemplateService.EXO_TEMPLATE_FILE_PROP);
       }
     }catch(Exception e) {
       log.error("Get template resource resolver failed because of " + e.getMessage(), e);

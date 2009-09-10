@@ -30,7 +30,6 @@ import javax.jcr.query.QueryResult;
 
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleException;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -39,9 +38,10 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationPlugin;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
+import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationPlugin;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationUtil;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 
 /**
  * Created by The eXo Platform SAS
@@ -166,7 +166,7 @@ public class PageEventListenerDelegate {
     String repositoryName = nodeLocation.getRepository();
     String workspaceName = nodeLocation.getWorkspace();
     String path = nodeLocation.getPath();
-    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
+    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
     Session session = sessionProvider.getSession(workspaceName, repositoryService.getRepository(repositoryName));
 
     List<Node> listPublishedNode = new ArrayList<Node>();

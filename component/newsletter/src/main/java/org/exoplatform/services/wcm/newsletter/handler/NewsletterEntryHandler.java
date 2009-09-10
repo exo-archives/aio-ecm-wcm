@@ -28,7 +28,6 @@ import javax.jcr.query.QueryResult;
 
 import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -103,7 +102,6 @@ public class NewsletterEntryHandler {
                      String subscriptionName,
                      List<String> listIds,
                      SessionProvider sessionProvider) {
-    if(sessionProvider == null) sessionProvider = SessionProviderFactory.createSystemProvider();
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
       Session session = sessionProvider.getSession(workspace, manageableRepository);
@@ -139,7 +137,6 @@ public class NewsletterEntryHandler {
                                                                           SessionProvider sessionProvider)
     throws Exception{
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-    if(sessionProvider == null) sessionProvider = SessionProviderFactory.createSystemProvider();
     Session session = sessionProvider.getSession(workspace, manageableRepository);
     String path = NewsletterConstant.generateCategoryPath(portalName) + "/" + categoryName + "/" + subscriptionName;
     QueryManager queryManager = session.getWorkspace().getQueryManager();
@@ -179,7 +176,6 @@ public class NewsletterEntryHandler {
                                                     String newsletterName,
                                                     SessionProvider sessionProvider) throws Exception{
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-    if(sessionProvider == null) sessionProvider = SessionProviderFactory.createSystemProvider();
     Session session = sessionProvider.getSession(workspace, manageableRepository);
     String path = NewsletterConstant.generateCategoryPath(portalName) + "/" + categoryName + "/" + subscriptionName + "/" + newsletterName;
     NewsletterManagerConfig newsletterManagerConfig = getEntryFromNode((Node)session.getItem(path));
@@ -198,7 +194,6 @@ public class NewsletterEntryHandler {
    */
   public NewsletterManagerConfig getNewsletterEntryByPath(String path, SessionProvider sessionProvider) throws Exception{
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-    if(sessionProvider == null) sessionProvider = SessionProviderFactory.createSystemProvider();
     Session session = sessionProvider.getSession(workspace, manageableRepository);
     NewsletterManagerConfig newsletterManagerConfig = getEntryFromNode((Node)session.getItem(path));
     sessionProvider.close();
@@ -224,7 +219,6 @@ public class NewsletterEntryHandler {
                            String newsletterName,
                            SessionProvider sessionProvider) throws Exception {
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-    if(sessionProvider == null) sessionProvider = SessionProviderFactory.createSystemProvider();
     Session session = sessionProvider.getSession(workspace, manageableRepository);
     String path = NewsletterConstant.generateCategoryPath(portalName) + "/" + categoryName + "/" + subscriptionName + "/" + newsletterName;
     Node newsletterNode = (Node)session.getItem(path);

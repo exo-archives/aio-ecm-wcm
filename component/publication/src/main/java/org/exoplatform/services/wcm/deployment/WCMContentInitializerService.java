@@ -24,12 +24,12 @@ import javax.jcr.Node;
 import javax.jcr.Session;
 
 import org.apache.commons.logging.Log;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.deployment.DeploymentPlugin;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.picocontainer.Startable;
 
 /**
@@ -71,7 +71,7 @@ public class WCMContentInitializerService implements Startable{
    * @see org.picocontainer.Startable#start()
    */
   public void start() {
-    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
+    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
     try {
       // TODO: should get exo:services folder by NodeHierarchyCrerator service
       ManageableRepository repository = repositoryService.getCurrentRepository();

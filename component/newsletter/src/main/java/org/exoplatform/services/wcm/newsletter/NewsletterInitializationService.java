@@ -24,7 +24,6 @@ import javax.jcr.Session;
 
 import org.apache.commons.logging.Log;
 import org.exoplatform.container.xml.InitParams;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -35,6 +34,7 @@ import org.exoplatform.services.wcm.newsletter.handler.NewsletterCategoryHandler
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterManageUserHandler;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterSubscriptionHandler;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.picocontainer.Startable;
 
 // TODO: Auto-generated Javadoc
@@ -91,7 +91,7 @@ public class NewsletterInitializationService implements Startable {
    */
   public void start() {
     log.info("Starting NewsletterInitializationService ... ");
-    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
+    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
     try {
       Node dummyNode = livePortalManagerService.getLivePortal(portalNames.get(0), sessionProvider);
       Session session = dummyNode.getSession();

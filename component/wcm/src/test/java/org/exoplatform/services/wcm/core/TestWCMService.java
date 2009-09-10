@@ -18,9 +18,9 @@ package org.exoplatform.services.wcm.core;
 
 import javax.jcr.Node;
 
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.BaseWCMTestCase;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -55,7 +55,7 @@ public class TestWCMService extends BaseWCMTestCase {
    */
   public void testGetReferencedContent1() throws Exception {
     String nodePath = "/parentNode/childNode";
-    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
+    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
     Node resultNode = wcmService.getReferencedContent(REPO_NAME, COLLABORATION_WS, nodePath, sessionProvider);
     assertEquals(resultNode.getPath(), nodePath);
   }
@@ -67,7 +67,7 @@ public class TestWCMService extends BaseWCMTestCase {
    */
   public void testGetReferencedContent2() throws Exception {
     String nodeUUID = node.getUUID();
-    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
+    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
     Node resultNode = wcmService.getReferencedContent(REPO_NAME, COLLABORATION_WS, nodeUUID, sessionProvider);
     assertEquals(resultNode.getUUID(), nodeUUID);
   }
@@ -79,7 +79,7 @@ public class TestWCMService extends BaseWCMTestCase {
    */
   public void testGetReferencedContent3() throws Exception {
     String nodeIdentifier = "WrongIdentifier";
-    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
+    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
     Node resultNode = wcmService.getReferencedContent(REPO_NAME, COLLABORATION_WS, nodeIdentifier, sessionProvider);
     assertNull(resultNode);
   }
@@ -90,7 +90,7 @@ public class TestWCMService extends BaseWCMTestCase {
    * @throws Exception the exception
    */
   public void testIsSharedPortal1() throws Exception {
-    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
+    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
     boolean isSharedPortal = wcmService.isSharedPortal("shared", sessionProvider);
     assertTrue(isSharedPortal);
   }
@@ -101,7 +101,7 @@ public class TestWCMService extends BaseWCMTestCase {
    * @throws Exception the exception
    */
   public void testIsSharedPortal2() throws Exception {
-    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
+    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
     boolean isSharedPortal = wcmService.isSharedPortal("classic", sessionProvider);
     assertFalse(isSharedPortal);
   }

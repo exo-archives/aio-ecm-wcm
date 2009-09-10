@@ -49,6 +49,7 @@ import org.exoplatform.services.wcm.newsletter.handler.NewsletterManageUserHandl
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterPublicUserHandler;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterSubscriptionHandler;
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterTemplateHandler;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -165,7 +166,7 @@ public class NewsletterManagerService {
 		RepositoryService repositoryService =
 			(RepositoryService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(RepositoryService.class);
 		ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
-		SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
+		SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
 		Session session = sessionProvider.getSession(workspaceName, manageableRepository);
 
 		ExoContainer container = ExoContainerContext.getCurrentContainer();

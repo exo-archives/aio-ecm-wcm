@@ -116,6 +116,11 @@ public class UICLVFolderMode extends UICLVContainer {
     filters.put(WCMComposer.FILTER_ORDER_BY, orderBy);
     filters.put(WCMComposer.FILTER_ORDER_TYPE, orderType);
     
-    return wcmComposer.getContents(repository, workspace, folderPath, filters, Utils.getSessionProvider(this));
+    return wcmComposer.getContents(
+                                   repository,
+                                   workspace,
+                                   folderPath,
+                                   filters,
+                                   Utils.getSessionProvider(this));
   }
 }

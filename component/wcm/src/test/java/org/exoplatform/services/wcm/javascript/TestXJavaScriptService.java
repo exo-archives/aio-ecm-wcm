@@ -22,9 +22,9 @@ import java.util.Date;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.BaseWCMTestCase;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.web.application.javascript.JavascriptConfigService;
 
 // TODO: Auto-generated Javadoc
@@ -44,13 +44,15 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	/** The Constant WEB_CONTENT_NODE_NAME. */
 	private static final String WEB_CONTENT_NODE_NAME = "webContent";
 	
+	SessionProvider sessionProvider;
+	
 	/* (non-Javadoc)
 	 * @see org.exoplatform.services.wcm.BaseWCMTestCase#setUp()
 	 */
 	public void setUp() throws Exception {
 		
 		super.setUp();
-		
+		sessionProvider = WCMCoreUtils.getSessionProvider();
 		javascriptService = getService(XJavascriptService.class);
 	}
 	
@@ -333,7 +335,6 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	 */
 	public void testUpdatePortalJSOnModify_01() {
 		try {
-			SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
 			javascriptService.updatePortalJSOnModify(null, sessionProvider);
 			fail();
 		} catch(Exception e) {
@@ -363,7 +364,6 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	 */
 	public void testUpdatePortalJSOnModify_03() {
 		try {
-			SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
 			Node root = session.getRootNode();
 			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME + "1", null, null, null);
 			createWebcontentNode(root, WEB_CONTENT_NODE_NAME + "2", null, null, null);
@@ -381,7 +381,6 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	 */
 	public void testUpdatePortalJSOnModify_04() {
 		try {
-			SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
 			Node root = session.getRootNode();
 			JavascriptConfigService configService = null;
 			Node liveNode = root.getNode("sites content").getNode("live");
@@ -405,7 +404,6 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	 */
 	public void testUpdatePortalJSOnModify_05() {
 		try {
-			SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
 			Node root = session.getRootNode();
 			JavascriptConfigService configService = null;
 			Node liveNode = root.getNode("sites content").getNode("live");
@@ -429,7 +427,6 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	 */
 	public void testUpdatePortalJSOnModify_06() {
 		try {
-			SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
 			Node root = session.getRootNode();
 			JavascriptConfigService configService = null;
 			Node liveNode = root.getNode("sites content").getNode("live");
@@ -453,7 +450,6 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	 */
 	public void testUpdatePortalJSOnRemove_01() {
 		try {
-			SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
 			javascriptService.updatePortalJSOnRemove(null, sessionProvider);
 			fail();
 		} catch(Exception e) {
@@ -483,7 +479,6 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	 */
 	public void testUpdatePortalJSOnRemove_03() {
 		try {
-			SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
 			JavascriptConfigService configService = null;
 			Node root = session.getRootNode();
 			Node liveNode = root.getNode("sites content").getNode("live");
@@ -507,7 +502,6 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	 */
 	public void testUpdatePortalJSOnRemove_04() {
 		try {
-			SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
 			JavascriptConfigService configService = null;
 			Node root = session.getRootNode();
 			Node liveNode = root.getNode("sites content").getNode("live");
@@ -535,7 +529,6 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	 */
 	public void testUpdatePortalJSOnRemove_05() {
 		try {
-			SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
 			JavascriptConfigService configService = null;
 			Node root = session.getRootNode();
 			Node liveNode = root.getNode("sites content").getNode("live");
@@ -571,5 +564,6 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 			nodeIterator.nextNode().remove();
 		}
 		session.save();
+		sessionProvider.close();
 	}
 }

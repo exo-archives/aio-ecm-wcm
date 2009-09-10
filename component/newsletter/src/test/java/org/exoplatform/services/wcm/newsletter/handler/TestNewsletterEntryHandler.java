@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.jcr.Node;
 
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.BaseWCMTestCase;
 import org.exoplatform.services.wcm.core.NodetypeConstant;
@@ -16,6 +15,7 @@ import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
 import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 import org.exoplatform.services.wcm.newsletter.config.NewsletterManagerConfig;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -71,7 +71,7 @@ public class TestNewsletterEntryHandler extends BaseWCMTestCase {
 		newsletterApplicationNode = (Node) session.getItem("/sites content/live/classic/ApplicationData/NewsletterApplication");
 		categoriesNode = newsletterApplicationNode.getNode("Categories");
 		
-		sessionProvider = SessionProviderFactory.createSystemProvider();
+		sessionProvider = WCMCoreUtils.getSessionProvider();
 		
 		newsletterManagerService = getService(NewsletterManagerService.class);
 		newsletterCategoryHandler = newsletterManagerService.getCategoryHandler();

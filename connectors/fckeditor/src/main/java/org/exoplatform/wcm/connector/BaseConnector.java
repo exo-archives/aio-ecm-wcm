@@ -32,12 +32,12 @@ import org.exoplatform.services.cms.link.LinkManager;
 import org.exoplatform.services.cms.voting.VotingService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.rest.CacheControl;
 import org.exoplatform.services.rest.Response;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -63,7 +63,7 @@ public abstract class BaseConnector {
   protected RepositoryService                 repositoryService;
 
   /** The local session provider. */
-  protected ThreadLocalSessionProviderService localSessionProvider;
+  //protected SessionProviderService sessionProviderService;
 
   /** The voting service. */
   protected VotingService votingService;  
@@ -101,7 +101,8 @@ public abstract class BaseConnector {
    */
   public BaseConnector(ExoContainer container) {
     livePortalManagerService = (LivePortalManagerService) container.getComponentInstanceOfType(LivePortalManagerService.class);
-    localSessionProvider = (ThreadLocalSessionProviderService) container.getComponentInstanceOfType(ThreadLocalSessionProviderService.class);
+    //sessionProviderService = (ThreadLocalSessionProviderService) container.getComponentInstanceOfType(ThreadLocalSessionProviderService.class);
+    //sessionProviderService = (SessionProviderService)container.getComponentInstanceOfType(SessionProviderService.class);
     repositoryService = (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class);
     webSchemaConfigService = (WebSchemaConfigService) container.getComponentInstanceOfType(WebSchemaConfigService.class);
     votingService = (VotingService) container.getComponentInstanceOfType(VotingService.class);
@@ -130,7 +131,7 @@ public abstract class BaseConnector {
                                               String jcrPath,
                                               String command) throws Exception {
     Node sharedPortalNode = livePortalManagerService.getLiveSharedPortal(repositoryName,
-                                                                         localSessionProvider.getSessionProvider(null));
+                                                                         WCMCoreUtils.getSessionProvider());
     Node activePortalNode = getCurrentPortalNode(repositoryName,
                                                  jcrPath,
                                                  runningPortal,
@@ -184,7 +185,7 @@ public abstract class BaseConnector {
     cacheControl.setNoCache(true);
     Node currentNode = null;
     Node sharedPortal = livePortalManagerService.getLiveSharedPortal(repositoryName,
-                                                                     localSessionProvider.getSessionProvider(null));
+                                                                     WCMCoreUtils.getSessionProvider());
     Node currentPortalNode = getCurrentPortalNode(repositoryName,
                                                   jcrPath,
                                                   runningPortal,
@@ -474,7 +475,7 @@ public abstract class BaseConnector {
     List<Node> livePortaNodes = new ArrayList<Node>();
     try {
       livePortaNodes = livePortalManagerService.getLivePortals(repositoryName,
-                                                               localSessionProvider.getSessionProvider(null));
+                                                               WCMCoreUtils.getSessionProvider());
       if (sharedPortal != null)
         livePortaNodes.add(sharedPortal);
       for (Node portalNode : livePortaNodes) {
@@ -485,7 +486,7 @@ public abstract class BaseConnector {
       if (currentPortal == null)
         currentPortal = livePortalManagerService.getLivePortal(repositoryName,
                                                                runningPortal,
-                                                               localSessionProvider.getSessionProvider(null));
+                                                               WCMCoreUtils.getSessionProvider());
       return currentPortal;
     } catch (Exception e) {
       return null;
@@ -504,7 +505,7 @@ public abstract class BaseConnector {
     ManageableRepository manageableRepository = null;
     try {
       manageableRepository = repositoryService.getRepository(repositoryName);
-      SessionProvider sessionProvider = localSessionProvider.getSessionProvider(null);
+      SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
       return sessionProvider.getSession(workspaceName, manageableRepository);
     } catch (Exception e) {
       return null;
@@ -538,7 +539,7 @@ public abstract class BaseConnector {
                                               String contentType,
                                               String contentLength,
                                               int limit) throws Exception {
-    Node sharedPortal = livePortalManagerService.getLiveSharedPortal(localSessionProvider.getSessionProvider(null));
+    Node sharedPortal = livePortalManagerService.getLiveSharedPortal(WCMCoreUtils.getSessionProvider());
     Node currentPortal = getCurrentPortalNode(repositoryName,
                                               jcrPath,
                                               runningPortalName,
@@ -581,7 +582,7 @@ public abstract class BaseConnector {
     if (FileUploadHandler.SAVE_ACTION.equals(action)) {
       CacheControl cacheControl = new CacheControl();
       cacheControl.setNoCache(true);
-      Node sharedPortal = livePortalManagerService.getLiveSharedPortal(localSessionProvider.getSessionProvider(null));
+      Node sharedPortal = livePortalManagerService.getLiveSharedPortal(WCMCoreUtils.getSessionProvider());
       Node currentPortal = getCurrentPortalNode(repositoryName,
                                                 jcrPath,
                                                 runningPortalName,

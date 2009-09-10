@@ -29,12 +29,12 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
-import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.resources.LocaleConfig;
 import org.exoplatform.services.resources.LocaleConfigService;
 import org.exoplatform.services.wcm.core.WCMService;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.ui.UIPublicationTree.TreeNode;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
@@ -81,8 +81,9 @@ public class UIPortalNavigationExplorer extends UIContainer {
     UIPortalApplication portalApplication = Util.getUIPortalApplication();
     LocaleConfig localeConfig = getApplicationComponent(LocaleConfigService.class).getLocaleConfig(portalApplication.getLocale().getLanguage());
     WCMService wcmService = getApplicationComponent(WCMService.class);
-    ThreadLocalSessionProviderService threadLocalSessionProviderService = getApplicationComponent(ThreadLocalSessionProviderService.class);
-    SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
+    //ThreadLocalSessionProviderService threadLocalSessionProviderService = getApplicationComponent(ThreadLocalSessionProviderService.class);
+    //SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
+    SessionProvider sessionProvider =WCMCoreUtils.getSessionProvider();
     if(wcmService.isSharedPortal(portalName, sessionProvider)) {
       UIPublicationTree tree = addChild(UIPublicationTree.class, null, "UIPortalTree");      
       for(String portal : this.runningPortals) {

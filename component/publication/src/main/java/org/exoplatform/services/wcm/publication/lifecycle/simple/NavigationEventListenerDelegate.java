@@ -34,7 +34,6 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleException;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -44,6 +43,7 @@ import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 
 /**
  * Created by The eXo Platform SAS
@@ -153,7 +153,7 @@ public class NavigationEventListenerDelegate {
     String repositoryName = nodeLocation.getRepository();
     String workspaceName = nodeLocation.getWorkspace();
     String path = nodeLocation.getPath();
-    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
+    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
     Session session = sessionProvider.getSession(workspaceName, repositoryService.getRepository(repositoryName));
 
     QueryManager queryManager = session.getWorkspace().getQueryManager();

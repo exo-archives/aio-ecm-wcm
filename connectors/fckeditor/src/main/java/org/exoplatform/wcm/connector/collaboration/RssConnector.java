@@ -32,7 +32,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.lang.StringUtils;
 import org.exoplatform.container.ExoContainer;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.rest.HTTPMethod;
@@ -43,6 +42,7 @@ import org.exoplatform.services.rest.URITemplate;
 import org.exoplatform.services.rest.container.ResourceContainer;
 import org.exoplatform.services.rest.transformer.XMLOutputTransformer;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.wcm.connector.BaseConnector;
 import org.w3c.dom.Document;
 
@@ -172,7 +172,7 @@ public class RssConnector extends BaseConnector implements ResourceContainer {
     String feedLink = (String) context.get(LINK) ;
     String repository = (String) context.get(REPOSITORY) ;
     if(feedTitle == null || feedTitle.length() == 0) feedTitle = actionName ;
-    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
+    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
     try {
       Session session = sessionProvider.getSession(workspace, repositoryService.getRepository(repository));
       QueryManager queryManager = session.getWorkspace().getQueryManager();

@@ -37,10 +37,10 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.metadata.PageMetadataService;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 
 /**
  * Created by The eXo Platform SAS
@@ -93,8 +93,8 @@ public class PageMetadataRequestFilter implements Filter {
   private void setPortalMetadata(HttpServletRequest req) throws Exception {
     String pathInfo = req.getPathInfo();
     PageMetadataService metadataRegistry = getService(PageMetadataService.class);
-    ThreadLocalSessionProviderService threadLocalSessionProviderService = getService(ThreadLocalSessionProviderService.class);
-    HashMap<String,String> metadata = metadataRegistry.getPortalMetadata(pathInfo, threadLocalSessionProviderService.getSessionProvider(null));
+    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
+    HashMap<String,String> metadata = metadataRegistry.getPortalMetadata(pathInfo, sessionProvider);
     if(metadata != null) 
       req.setAttribute(PortalRequestContext.REQUEST_METADATA, metadata);
   }    
@@ -132,8 +132,7 @@ public class PageMetadataRequestFilter implements Filter {
     String workspace = parameter.substring(firstSlash + 1, secondSlash);
     String nodeIdentifier = parameter.substring(secondSlash + 1);
     RepositoryService repositoryService = getService(RepositoryService.class);
-    ThreadLocalSessionProviderService localSessionProviderService = getService(ThreadLocalSessionProviderService.class);
-    SessionProvider sessionProvider = localSessionProviderService.getSessionProvider(null);
+    SessionProvider sessionProvider =WCMCoreUtils.getSessionProvider();
     Node node = null;
     Session session = null;
     try {

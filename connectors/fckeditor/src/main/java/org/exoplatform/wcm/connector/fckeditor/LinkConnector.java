@@ -32,6 +32,7 @@ import org.exoplatform.services.rest.URITemplate;
 import org.exoplatform.services.rest.container.ResourceContainer;
 import org.exoplatform.services.rest.transformer.XMLOutputTransformer;
 import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.wcm.connector.BaseConnector;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -108,7 +109,7 @@ public class LinkConnector extends BaseConnector implements ResourceContainer {
                                               String jcrPath,
                                               String command) throws Exception {    
     Node sharedPortal = livePortalManagerService.getLiveSharedPortal(repositoryName,
-                                                                     localSessionProvider.getSessionProvider(null));
+                                                                     WCMCoreUtils.getSessionProvider());
     Node currentPortalNode = getCurrentPortalNode(repositoryName,
                                                   jcrPath,
                                                   runningPortal,

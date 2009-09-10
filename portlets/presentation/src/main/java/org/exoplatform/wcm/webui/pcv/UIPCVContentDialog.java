@@ -29,6 +29,7 @@ import javax.jcr.Session;
 import javax.jcr.version.VersionException;
 
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
+import org.exoplatform.ecm.webui.form.DialogFormActionListeners;
 import org.exoplatform.ecm.webui.form.UIDialogForm;
 import org.exoplatform.ecm.webui.utils.DialogFormUtil;
 import org.exoplatform.ecm.webui.utils.LockUtil;
@@ -38,7 +39,6 @@ import org.exoplatform.services.cms.CmsService;
 import org.exoplatform.services.cms.JcrInputProperty;
 import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.services.cms.templates.TemplateService;
-import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
@@ -65,7 +65,8 @@ import org.exoplatform.webui.event.EventListener;
   lifecycle = UIFormLifecycle.class, events = {
     @EventConfig(listeners = UIPCVContentDialog.SaveDraftActionListener.class),
     @EventConfig(listeners = UIPCVContentDialog.FastPublishActionListener.class),
-    @EventConfig(listeners = UIPCVContentDialog.CancelActionListener.class)  
+    @EventConfig(listeners = UIPCVContentDialog.CancelActionListener.class),
+    @EventConfig(listeners = DialogFormActionListeners.RemoveDataActionListener.class)
   }  
 )
 public class UIPCVContentDialog extends UIDialogForm {
@@ -108,11 +109,9 @@ public class UIPCVContentDialog extends UIDialogForm {
   /* (non-Javadoc)
    * @see org.exoplatform.webui.core.UIComponent#getTemplateResourceResolver(org.exoplatform.webui.application.WebuiRequestContext, java.lang.String)
    */
-  @SuppressWarnings("unused")
   public ResourceResolver getTemplateResourceResolver(WebuiRequestContext context, String template) {
     try {
       if (resourceResolver == null) {
-        RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
           DMSConfiguration dmsConfiguration = getApplicationComponent(DMSConfiguration.class);
           String workspace = dmsConfiguration.getConfig(this.repositoryName).getSystemWorkspace();
         resourceResolver = new JCRResourceResolver(this.repositoryName,
@@ -198,7 +197,6 @@ public class UIPCVContentDialog extends UIDialogForm {
 			Utils.closePopupWindow(uiDocumentDialogForm, "UIDocumentFormPopupWindow");
       Utils.updatePortal(context);
     }
-
   }
 
   /**

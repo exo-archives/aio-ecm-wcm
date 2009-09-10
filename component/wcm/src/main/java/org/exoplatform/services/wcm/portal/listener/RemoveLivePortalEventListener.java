@@ -23,7 +23,6 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.config.jcr.DataStorageImpl;
 import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.cms.drives.ManageDriveService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -31,6 +30,7 @@ import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 
 /**
  * Created by The eXo Platform SAS
@@ -50,7 +50,7 @@ public class RemoveLivePortalEventListener extends Listener<DataStorageImpl, Por
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     LivePortalManagerService livePortalManagerService = (LivePortalManagerService) container
     .getComponentInstanceOfType(LivePortalManagerService.class);
-    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();    
+    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();    
     ManageDriveService manageDriveService = (ManageDriveService) container
     .getComponentInstanceOfType(ManageDriveService.class);    
     String drive = portalConfig.getName();        

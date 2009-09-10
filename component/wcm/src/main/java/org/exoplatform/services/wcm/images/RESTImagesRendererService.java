@@ -29,7 +29,7 @@ import org.exoplatform.common.http.HTTPStatus;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.access.SystemIdentity;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
+import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.rest.HTTPMethod;
@@ -55,7 +55,7 @@ import org.exoplatform.services.rest.transformer.PassthroughOutputTransformer;
 public class RESTImagesRendererService implements ResourceContainer{
 
   /** The session provider service. */
-  private ThreadLocalSessionProviderService sessionProviderService;
+  private SessionProviderService sessionProviderService;
   
   /** The repository service. */
   private RepositoryService repositoryService;
@@ -72,7 +72,7 @@ public class RESTImagesRendererService implements ResourceContainer{
    * @param repositoryService the repository service
    * @param sessionProviderService the session provider service
    */
-  public RESTImagesRendererService(RepositoryService repositoryService, ThreadLocalSessionProviderService sessionProviderService) {
+  public RESTImagesRendererService(RepositoryService repositoryService, SessionProviderService sessionProviderService) {
     this.repositoryService = repositoryService;
     this.sessionProviderService = sessionProviderService;
   }

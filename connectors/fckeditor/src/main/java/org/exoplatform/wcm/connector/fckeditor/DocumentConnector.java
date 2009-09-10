@@ -38,6 +38,7 @@ import org.exoplatform.services.rest.container.ResourceContainer;
 import org.exoplatform.services.rest.transformer.PassthroughInputTransformer;
 import org.exoplatform.services.rest.transformer.XMLOutputTransformer;
 import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
 import org.exoplatform.wcm.connector.BaseConnector;
 import org.w3c.dom.Document;
@@ -97,7 +98,7 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
       @QueryParam("type") String type,
       @ContextParam(ResourceDispatcher.CONTEXT_PARAM_BASE_URI) String baseURI) throws Exception {
     try {
-      Node sharedPortal = livePortalManagerService.getLiveSharedPortal(repositoryName,                                                                     localSessionProvider.getSessionProvider(null));
+      Node sharedPortal = livePortalManagerService.getLiveSharedPortal(repositoryName, WCMCoreUtils.getSessionProvider());
       Node activePortal = getCurrentPortalNode(repositoryName, jcrPath, currentPortal, null);
       if (sharedPortal.getPath().equals(activePortal.getPath())) {
         documentLinkHandler.setCurrentPortal(currentPortal);
