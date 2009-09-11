@@ -237,11 +237,11 @@
 }
 
 .UIFormGenerator .UIFormEditBox .InputText {
-  width: 98%;
+  width: 95%;
 }
 
 .UIFormGenerator .UIFormEditBox .Label {
-  width: 98%;
+  width: 95%;
 }
 
 .UIFormGenerator .UIFormEditBox .CheckBox {
@@ -259,7 +259,7 @@
 }
 
 .UIFormGenerator .UIFormEditBox .Textarea {
-  width: 98%;
+  width: 95%;
 }
 
 .UIFormGenerator .UIFormEditBox .Upload {
@@ -272,6 +272,7 @@
   border: 1px solid #edecec;
   float: right;
   padding: 3px 7px;
+  width: 40px;
 }
 
 .UIFormGenerator .UIFormEditBox .FieldIcon .ControlIcon  {
