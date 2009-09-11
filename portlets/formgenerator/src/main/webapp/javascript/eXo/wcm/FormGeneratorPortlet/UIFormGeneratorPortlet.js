@@ -402,8 +402,8 @@ UIFormGeneratorPortlet.prototype.getProperties = function(comp) {
 	var fieldLabel = DOMUtil.findFirstDescendantByClass(topContent, 'td', 'FieldLabel');
 	var defaultValue = fieldLabel.getAttribute('value'); 
 	var nameComp = '';		
-	if(fieldLabel && fieldLabel.textContent != '') {
-		nameComp = fieldLabel.textContent;
+	if(fieldLabel && fieldLabel.innerHTML != '') {
+		nameComp = fieldLabel.innerHTML;
 	} else {
 		nameComp = defaultValue;
 	}
