@@ -34,8 +34,8 @@
 			
 		<value-param>
 			<name>update-policy</name>
-			<value>create-version</value>
-			<!--value>replace</value -->
+			<!-->value>create-version</value -->
+			<value>replace</value>
 			<!-- value>add</value -->
 		</value-param>
 	</init-params>
