@@ -39,7 +39,6 @@ import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.publication.lifecycle.simple.SimplePublicationPlugin;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationPlugin;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationUtil;
 
 /**
  * The Class TestWCMPublicationService.
@@ -73,7 +72,7 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
     wcmPublicationService = getService(WCMPublicationService.class);
     repositoryService = getService(RepositoryService.class);
     userPortalConfigService = getService(UserPortalConfigService.class);
-    dataStorage = StageAndVersionPublicationUtil.getServices(DataStorage.class);
+    dataStorage = PublicationUtil.getServices(DataStorage.class);
     
     collaborationSession = repositoryService.getRepository(REPO_NAME).getSystemSession(COLLABORATION_WS);
   }
@@ -601,7 +600,7 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
 	 * @return the string
 	 */
 	private String generateWindowIdString(String portletType) {
-	  WCMConfigurationService configurationService = StageAndVersionPublicationUtil.getServices(WCMConfigurationService.class);
+	  WCMConfigurationService configurationService = PublicationUtil.getServices(WCMConfigurationService.class);
     StringBuilder windowId = new StringBuilder();
     windowId.append(PortalConfig.PORTAL_TYPE)
             .append("#")
@@ -751,7 +750,7 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
 
   	prepareNodeStatus(testNode);
 
-  	WCMConfigurationService configurationService = StageAndVersionPublicationUtil.getServices(WCMConfigurationService.class);
+  	WCMConfigurationService configurationService = PublicationUtil.getServices(WCMConfigurationService.class);
   	StringBuilder windowId = new StringBuilder();
   	windowId.append(PortalConfig.PORTAL_TYPE)
   	.append("#")
@@ -903,9 +902,9 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
    */
   @SuppressWarnings("unchecked")
   private static boolean checkContentIdentifier(Page page, String contentUUID, String portletType) throws Exception {
-    WCMConfigurationService wcmConfigurationService = StageAndVersionPublicationUtil.getServices(WCMConfigurationService.class);
-    DataStorage dataStorage = StageAndVersionPublicationUtil.getServices(DataStorage.class);
-    List<String> scvPortletsId = StageAndVersionPublicationUtil.findAppInstancesByName(page, wcmConfigurationService.getRuntimeContextParam(portletType));
+    WCMConfigurationService wcmConfigurationService = PublicationUtil.getServices(WCMConfigurationService.class);
+    DataStorage dataStorage = PublicationUtil.getServices(DataStorage.class);
+    List<String> scvPortletsId = PublicationUtil.findAppInstancesByName(page, wcmConfigurationService.getRuntimeContextParam(portletType));
     for (String scvPortletId : scvPortletsId) {
       PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(scvPortletId));      
       if (portletPreferences != null) {
@@ -932,8 +931,8 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
    * @return the number portlets of page
    */
   private static int getNumberPortletsOfPage(Page page, String portletType) {
-  	 WCMConfigurationService wcmConfigurationService = StageAndVersionPublicationUtil.getServices(WCMConfigurationService.class);
-     List<String> scvPortletsId = StageAndVersionPublicationUtil.findAppInstancesByName(page, wcmConfigurationService.getRuntimeContextParam(portletType));
+  	 WCMConfigurationService wcmConfigurationService = PublicationUtil.getServices(WCMConfigurationService.class);
+     List<String> scvPortletsId = PublicationUtil.findAppInstancesByName(page, wcmConfigurationService.getRuntimeContextParam(portletType));
      
       try {
 	      return scvPortletsId.size();

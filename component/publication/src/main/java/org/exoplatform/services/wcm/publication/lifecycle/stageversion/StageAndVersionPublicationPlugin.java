@@ -53,6 +53,7 @@ import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
+import org.exoplatform.services.wcm.publication.PublicationUtil;
 import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.services.wcm.publication.WebpagePublicationPlugin;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.config.VersionData;
@@ -82,6 +83,11 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     navigationEventListenerDelegate = new NavigationEventListenerDelegate(StageAndVersionPublicationConstant.LIFECYCLE_NAME, ExoContainerContext.getCurrentContainer());
   }
 
+  public String getLifecycleType() {
+  	return StageAndVersionPublicationConstant.PUBLICATION_LIFECYCLE_TYPE;
+  }
+  
+  
   /* (non-Javadoc)
    * @see org.exoplatform.services.ecm.publication.PublicationPlugin#addMixin(javax.jcr.Node)
    */
@@ -357,7 +363,7 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     portlet.setShowInfoBar(false);
     
     //// generate new portlet's id
-    WCMConfigurationService configurationService = StageAndVersionPublicationUtil.getServices(WCMConfigurationService.class);
+    WCMConfigurationService configurationService = PublicationUtil.getServices(WCMConfigurationService.class);
     StringBuilder windowId = new StringBuilder();
     windowId.append(PortalConfig.PORTAL_TYPE)
             .append("#")
@@ -385,7 +391,7 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     ArrayList<Object> listPortlet = page.getChildren();
     listPortlet.add(portlet);
     page.setChildren(listPortlet);
-    UserPortalConfigService userPortalConfigService = StageAndVersionPublicationUtil.getServices(UserPortalConfigService.class);
+    UserPortalConfigService userPortalConfigService = PublicationUtil.getServices(UserPortalConfigService.class);
     userPortalConfigService.update(page);
   }
 
@@ -394,10 +400,10 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
    */
   @SuppressWarnings("unchecked")
   public void publishContentToCLV(Node content, Page page, String clvPortletId, String portalOwnerName, String remoteUser) throws Exception {
-    WCMConfigurationService wcmConfigurationService = StageAndVersionPublicationUtil.getServices(WCMConfigurationService.class);
+    WCMConfigurationService wcmConfigurationService = PublicationUtil.getServices(WCMConfigurationService.class);
     ArrayList<Preference> preferences = new ArrayList<Preference>();
     
-    DataStorage dataStorage = StageAndVersionPublicationUtil.getServices(DataStorage.class);
+    DataStorage dataStorage = PublicationUtil.getServices(DataStorage.class);
     PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(clvPortletId));
     
     if (portletPreferences == null) {
@@ -478,7 +484,7 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
    */
   private void updateOnAddNodeProperties(Page page, Node content, String clvPortletId, String remoteUser) throws Exception {
     if (content.canAddMixin("publication:webpagesPublication")) content.addMixin("publication:webpagesPublication");
-    List<String> listExistedNavigationNodeUri = StageAndVersionPublicationUtil.getValuesAsString(content, "publication:navigationNodeURIs");
+    List<String> listExistedNavigationNodeUri = PublicationUtil.getValuesAsString(content, "publication:navigationNodeURIs");
     List<String> listPageNavigationUri = getListPageNavigationUri(page, remoteUser);
     if (listPageNavigationUri.isEmpty()) return ;
     for (String uri : listPageNavigationUri) {
@@ -487,19 +493,19 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
       }            
     }   
     
-    List<String> nodeAppIds = StageAndVersionPublicationUtil.getValuesAsString(content, "publication:applicationIDs");
-    String mixedAppId = StageAndVersionPublicationUtil.setMixedApplicationId(page.getPageId(), clvPortletId);
+    List<String> nodeAppIds = PublicationUtil.getValuesAsString(content, "publication:applicationIDs");
+    String mixedAppId = PublicationUtil.setMixedApplicationId(page.getPageId(), clvPortletId);
     if(nodeAppIds.contains(mixedAppId)) return;
     nodeAppIds.add(mixedAppId);
     
-    List<String> nodeWebPageIds = StageAndVersionPublicationUtil.getValuesAsString(content, "publication:webPageIDs");
+    List<String> nodeWebPageIds = PublicationUtil.getValuesAsString(content, "publication:webPageIDs");
     nodeWebPageIds.add(page.getPageId());
     
     Session session = content.getSession();
     ValueFactory valueFactory = session.getValueFactory();    
-    content.setProperty("publication:navigationNodeURIs", StageAndVersionPublicationUtil.toValues(valueFactory, listExistedNavigationNodeUri));
-    content.setProperty("publication:applicationIDs", StageAndVersionPublicationUtil.toValues(valueFactory, nodeAppIds));
-    content.setProperty("publication:webPageIDs", StageAndVersionPublicationUtil.toValues(valueFactory, nodeWebPageIds));
+    content.setProperty("publication:navigationNodeURIs", PublicationUtil.toValues(valueFactory, listExistedNavigationNodeUri));
+    content.setProperty("publication:applicationIDs", PublicationUtil.toValues(valueFactory, nodeAppIds));
+    content.setProperty("publication:webPageIDs", PublicationUtil.toValues(valueFactory, nodeWebPageIds));
     session.save();
   }
   
@@ -514,14 +520,14 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
    * @throws Exception the exception
    */
   private void updateOnRemoveNodeProperties(Page page, Node content, String clvPortletId, String remoteUser) throws Exception {
-    List<String> listExistedApplicationId = StageAndVersionPublicationUtil.getValuesAsString(content, "publication:applicationIDs");
-    listExistedApplicationId.remove(StageAndVersionPublicationUtil.setMixedApplicationId(page.getPageId(), clvPortletId));
+    List<String> listExistedApplicationId = PublicationUtil.getValuesAsString(content, "publication:applicationIDs");
+    listExistedApplicationId.remove(PublicationUtil.setMixedApplicationId(page.getPageId(), clvPortletId));
     
-    List<String> listExistedPageId = StageAndVersionPublicationUtil.getValuesAsString(content, "publication:webPageIDs");
+    List<String> listExistedPageId = PublicationUtil.getValuesAsString(content, "publication:webPageIDs");
     listExistedPageId.remove(0);
     
     List<String> listPageNavigationUri = getListPageNavigationUri(page, remoteUser);
-    List<String> listExistedNavigationNodeUri = StageAndVersionPublicationUtil.getValuesAsString(content, "publication:navigationNodeURIs");
+    List<String> listExistedNavigationNodeUri = PublicationUtil.getValuesAsString(content, "publication:navigationNodeURIs");
     List<String> listExistedNavigationNodeUriTmp = new ArrayList<String>();
     listExistedNavigationNodeUriTmp.addAll(listExistedNavigationNodeUri);    
     for (String existedNavigationNodeUri : listExistedNavigationNodeUriTmp) {
@@ -531,9 +537,9 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     }
     Session session = content.getSession();
     ValueFactory valueFactory = session.getValueFactory();    
-    content.setProperty("publication:applicationIDs", StageAndVersionPublicationUtil.toValues(valueFactory, listExistedApplicationId));
-    content.setProperty("publication:webPageIDs", StageAndVersionPublicationUtil.toValues(valueFactory, listExistedPageId));
-    content.setProperty("publication:navigationNodeURIs", StageAndVersionPublicationUtil.toValues(valueFactory, listExistedNavigationNodeUri));
+    content.setProperty("publication:applicationIDs", PublicationUtil.toValues(valueFactory, listExistedApplicationId));
+    content.setProperty("publication:webPageIDs", PublicationUtil.toValues(valueFactory, listExistedPageId));
+    content.setProperty("publication:navigationNodeURIs", PublicationUtil.toValues(valueFactory, listExistedNavigationNodeUri));
     session.save();
   }
   
@@ -569,7 +575,7 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     portletPreferences.setOwnerType(PortalConfig.PORTAL_TYPE);
     portletPreferences.setOwnerId(portalOwnerName);
     portletPreferences.setPreferences(listPreference);
-    DataStorage dataStorage = StageAndVersionPublicationUtil.getServices(DataStorage.class);
+    DataStorage dataStorage = PublicationUtil.getServices(DataStorage.class);
     dataStorage.save(portletPreferences);
   }
   
@@ -579,9 +585,9 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
   @SuppressWarnings("unchecked")
   public void suspendPublishedContentFromPage(Node content, Page page, String remoteUser) throws Exception {
     // Remove content from CLV portlet
-    DataStorage dataStorage = StageAndVersionPublicationUtil.getServices(DataStorage.class);
-    WCMConfigurationService wcmConfigurationService = StageAndVersionPublicationUtil.getServices(WCMConfigurationService.class);
-    List<String> clvPortletsId = StageAndVersionPublicationUtil.findAppInstancesByName(page, wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.CLV_PORTLET));
+    DataStorage dataStorage = PublicationUtil.getServices(DataStorage.class);
+    WCMConfigurationService wcmConfigurationService = PublicationUtil.getServices(WCMConfigurationService.class);
+    List<String> clvPortletsId = PublicationUtil.findAppInstancesByName(page, wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.CLV_PORTLET));
     if (content != null && !clvPortletsId.isEmpty()) {
       for (String clvPortletId : clvPortletsId) {
         PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(clvPortletId));
@@ -607,17 +613,17 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
     }
     // Remove content from SCV portlet
     String pageId = page.getPageId();
-    List<String> mixedApplicationIDs = StageAndVersionPublicationUtil.getValuesAsString(content, "publication:applicationIDs");
+    List<String> mixedApplicationIDs = PublicationUtil.getValuesAsString(content, "publication:applicationIDs");
     ArrayList<String> removedApplicationIDs = new ArrayList<String>();
     for(String mixedID: mixedApplicationIDs) {
       if(mixedID.startsWith(pageId) && mixedID.contains(wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.SCV_PORTLET))) {
-        String realAppID = StageAndVersionPublicationUtil.parseMixedApplicationId(mixedID)[1];
+        String realAppID = PublicationUtil.parseMixedApplicationId(mixedID)[1];
         removedApplicationIDs.add(realAppID);
       }
     }
     if(removedApplicationIDs.size() == 0) return;
-    StageAndVersionPublicationUtil.removeApplicationFromPage(page, removedApplicationIDs);
-    UserPortalConfigService userPortalConfigService = StageAndVersionPublicationUtil.getServices(UserPortalConfigService.class);
+    PublicationUtil.removeApplicationFromPage(page, removedApplicationIDs);
+    UserPortalConfigService userPortalConfigService = PublicationUtil.getServices(UserPortalConfigService.class);
     userPortalConfigService.update(page);
   }
 
@@ -632,14 +638,14 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
    * @see org.exoplatform.services.wcm.publication.WebpagePublicationPlugin#updateLifecycleOnRemovePage(org.exoplatform.portal.config.model.Page, java.lang.String)
    */
   public void updateLifecycleOnRemovePage(Page page, String remoteUser) throws Exception {
-    pageEventListenerDelegate.updateLifecycleOnRemovePage(page, remoteUser);
+    pageEventListenerDelegate.updateLifecycleOnRemovePage(page, remoteUser, this);
   }
 
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.publication.WebpagePublicationPlugin#updateLifecyleOnChangePage(org.exoplatform.portal.config.model.Page, java.lang.String)
    */
   public void updateLifecyleOnChangePage(Page page, String remoteUser) throws Exception {
-    pageEventListenerDelegate.updateLifecyleOnChangePage(page, remoteUser);
+    pageEventListenerDelegate.updateLifecyleOnChangePage(page, remoteUser, this);
   }
 
   /* (non-Javadoc)
@@ -653,7 +659,7 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
    * @see org.exoplatform.services.wcm.publication.WebpagePublicationPlugin#updateLifecyleOnCreatePage(org.exoplatform.portal.config.model.Page, java.lang.String)
    */
   public void updateLifecyleOnCreatePage(Page page, String remoteUser) throws Exception {
-    pageEventListenerDelegate.updateLifecyleOnCreatePage(page, remoteUser);
+    pageEventListenerDelegate.updateLifecyleOnCreatePage(page, remoteUser, this);
   }
 
   /* (non-Javadoc)
@@ -674,10 +680,10 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
    */
   private List<String> getRunningPortals(String userId) throws Exception {
     List<String> listPortalName = new ArrayList<String>();
-    DataStorage service = StageAndVersionPublicationUtil.getServices(DataStorage.class);
+    DataStorage service = PublicationUtil.getServices(DataStorage.class);
     Query<PortalConfig> query = new Query<PortalConfig>(null, null, null, null, PortalConfig.class) ;
     PageList pageList = service.find(query) ;
-    UserACL userACL = StageAndVersionPublicationUtil.getServices(UserACL.class);
+    UserACL userACL = PublicationUtil.getServices(UserACL.class);
     for(Object object:pageList.getAll()) {
       PortalConfig portalConfig = (PortalConfig)object;
       if(userACL.hasPermission(portalConfig, userId)) {
@@ -699,15 +705,15 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
    */
   public List<String> getListPageNavigationUri(Page page, String remoteUser) throws Exception {
     List<String> listPageNavigationUri = new ArrayList<String>();
-    DataStorage dataStorage = StageAndVersionPublicationUtil.getServices(DataStorage.class);    
+    DataStorage dataStorage = PublicationUtil.getServices(DataStorage.class);    
     for (String portalName : getRunningPortals(remoteUser)) {
       Query<PageNavigation> query = new Query<PageNavigation>(PortalConfig.PORTAL_TYPE,portalName,PageNavigation.class);
       PageList list = dataStorage.find(query);
       for(Object object: list.getAll()) {
         PageNavigation pageNavigation = PageNavigation.class.cast(object);
-        List<PageNode> listPageNode = StageAndVersionPublicationUtil.findPageNodeByPageId(pageNavigation, page.getPageId());        
+        List<PageNode> listPageNode = PublicationUtil.findPageNodeByPageId(pageNavigation, page.getPageId());        
         for (PageNode pageNode : listPageNode) {
-          listPageNavigationUri.add(StageAndVersionPublicationUtil.setMixedNavigationUri(portalName, pageNode.getUri()));
+          listPageNavigationUri.add(PublicationUtil.setMixedNavigationUri(portalName, pageNode.getUri()));
         }
       }
     }

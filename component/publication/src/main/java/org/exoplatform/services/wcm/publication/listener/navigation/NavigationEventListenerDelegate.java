@@ -40,7 +40,7 @@ import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationUtil;
+import org.exoplatform.services.wcm.publication.PublicationUtil;
 import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 
 /**
@@ -110,16 +110,16 @@ public class NavigationEventListenerDelegate {
    * @throws Exception the exception
    */
   private void updateAddedPageNode(PageNavigation pageNavigation, String remoteUser) throws Exception {
-    UserPortalConfigService userPortalConfigService = StageAndVersionPublicationUtil.getServices(UserPortalConfigService.class);
-    WCMConfigurationService wcmConfigurationService = StageAndVersionPublicationUtil.getServices(WCMConfigurationService.class);
+    UserPortalConfigService userPortalConfigService = PublicationUtil.getServices(UserPortalConfigService.class);
+    WCMConfigurationService wcmConfigurationService = PublicationUtil.getServices(WCMConfigurationService.class);
     for (PageNode pageNode : pageNavigation.getNodes()) {
       Page page = userPortalConfigService.getPage(pageNode.getPageReference(), remoteUser);
       if (page != null) {
-        for (String applicationId : StageAndVersionPublicationUtil.getListApplicationIdByPage(page, wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.SCV_PORTLET))) {
-          Node content = StageAndVersionPublicationUtil.getNodeByApplicationId(applicationId);
+        for (String applicationId : PublicationUtil.getListApplicationIdByPage(page, wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.SCV_PORTLET))) {
+          Node content = PublicationUtil.getNodeByApplicationId(applicationId);
           if (content != null) {
-            List<String> listExistedApplicationId = StageAndVersionPublicationUtil.getValuesAsString(content, "publication:applicationIDs"); 
-            if (!listExistedApplicationId.contains(StageAndVersionPublicationUtil.setMixedApplicationId(page.getPageId(), applicationId))) {
+            List<String> listExistedApplicationId = PublicationUtil.getValuesAsString(content, "publication:applicationIDs"); 
+            if (!listExistedApplicationId.contains(PublicationUtil.setMixedApplicationId(page.getPageId(), applicationId))) {
               saveAddedPageNode(pageNavigation.getOwnerId(), pageNode, applicationId, content);
             }
           }
@@ -142,13 +142,13 @@ public class NavigationEventListenerDelegate {
     List<String> listPortalNavigationUri = new ArrayList<String>();
     List<String> listPageReference = new ArrayList<String>();
     for (PageNode portalPageNode : listPortalPageNode) {
-      String mixedNavigationNodeUri = StageAndVersionPublicationUtil.setMixedNavigationUri(portalName, portalPageNode.getUri());
+      String mixedNavigationNodeUri = PublicationUtil.setMixedNavigationUri(portalName, portalPageNode.getUri());
       listPortalNavigationUri.add(mixedNavigationNodeUri);
       listPageReference.add(portalPageNode.getPageReference());
     }
 
-    RepositoryService repositoryService = StageAndVersionPublicationUtil.getServices(RepositoryService.class);
-    WCMConfigurationService wcmConfigurationService = StageAndVersionPublicationUtil.getServices(WCMConfigurationService.class);
+    RepositoryService repositoryService = PublicationUtil.getServices(RepositoryService.class);
+    WCMConfigurationService wcmConfigurationService = PublicationUtil.getServices(WCMConfigurationService.class);
     ManageableRepository repository = repositoryService.getCurrentRepository();
     NodeLocation nodeLocation = wcmConfigurationService.getLivePortalsLocation(repository.getConfiguration().getName());
 
@@ -164,24 +164,24 @@ public class NavigationEventListenerDelegate {
     for (NodeIterator nodeIterator = results.getNodes(); nodeIterator.hasNext();) {
       Node content = nodeIterator.nextNode();
       String navigationNodeUri = "";
-      for (String existedNavigationNodeUri : StageAndVersionPublicationUtil.getValuesAsString(content, "publication:navigationNodeURIs")) {
+      for (String existedNavigationNodeUri : PublicationUtil.getValuesAsString(content, "publication:navigationNodeURIs")) {
         if (existedNavigationNodeUri.startsWith("/" + portalName) && !listPortalNavigationUri.contains(existedNavigationNodeUri)) {
           navigationNodeUri = existedNavigationNodeUri;
         }
       }
       String pageId = "";
-      for (String existedPageId : StageAndVersionPublicationUtil.getValuesAsString(content, "publication:webPageIDs")) {
+      for (String existedPageId : PublicationUtil.getValuesAsString(content, "publication:webPageIDs")) {
         if (!listPageReference.contains(existedPageId) && !listPortalNavigationUri.contains(navigationNodeUri)) {
           pageId = existedPageId;
         }
       }
       if (!pageId.equals("")) {
         String applicationId = "";
-        UserPortalConfigService userPortalConfigService = StageAndVersionPublicationUtil.getServices(UserPortalConfigService.class);
+        UserPortalConfigService userPortalConfigService = PublicationUtil.getServices(UserPortalConfigService.class);
         Page page = userPortalConfigService.getPage(pageId, remoteUser);
-        for (String applicationIdTmp : StageAndVersionPublicationUtil.getListApplicationIdByPage(page, wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.SCV_PORTLET))) {
-          applicationIdTmp = StageAndVersionPublicationUtil.setMixedApplicationId(pageId, applicationIdTmp);
-          List<String> listExistedApplicationId = StageAndVersionPublicationUtil.getValuesAsString(content, "publication:applicationIDs");
+        for (String applicationIdTmp : PublicationUtil.getListApplicationIdByPage(page, wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.SCV_PORTLET))) {
+          applicationIdTmp = PublicationUtil.setMixedApplicationId(pageId, applicationIdTmp);
+          List<String> listExistedApplicationId = PublicationUtil.getValuesAsString(content, "publication:applicationIDs");
           if (listExistedApplicationId.contains(applicationIdTmp)) {
             applicationId = applicationIdTmp;
           }
@@ -203,7 +203,7 @@ public class NavigationEventListenerDelegate {
    * @throws Exception the exception
    */
   private void saveAddedPageNode(String portalName, PageNode pageNode, String applicationId, Node content) throws Exception {    
-    PublicationService publicationService = StageAndVersionPublicationUtil.getServices(PublicationService.class);                 
+    PublicationService publicationService = PublicationUtil.getServices(PublicationService.class);                 
     String nodeLifecycleName = null;
     try {
       nodeLifecycleName = publicationService.getNodeLifecycleName(content);
@@ -213,20 +213,20 @@ public class NavigationEventListenerDelegate {
     Session session = content.getSession();
     ValueFactory valueFactory = session.getValueFactory();
 
-    List<String> listExistedApplicationId = StageAndVersionPublicationUtil.getValuesAsString(content, "publication:applicationIDs");
-    String mixedApplicationId = StageAndVersionPublicationUtil.setMixedApplicationId(pageNode.getPageReference(), applicationId);
+    List<String> listExistedApplicationId = PublicationUtil.getValuesAsString(content, "publication:applicationIDs");
+    String mixedApplicationId = PublicationUtil.setMixedApplicationId(pageNode.getPageReference(), applicationId);
     if(listExistedApplicationId.contains(mixedApplicationId)) return ;        
     listExistedApplicationId.add(mixedApplicationId);
-    content.setProperty("publication:applicationIDs", StageAndVersionPublicationUtil.toValues(valueFactory, listExistedApplicationId));
+    content.setProperty("publication:applicationIDs", PublicationUtil.toValues(valueFactory, listExistedApplicationId));
 
-    List<String> listExistedNavigationNodeUri = StageAndVersionPublicationUtil.getValuesAsString(content, "publication:navigationNodeURIs");    
-    String mixedNavigationNodeUri = StageAndVersionPublicationUtil.setMixedNavigationUri(portalName, pageNode.getUri());
+    List<String> listExistedNavigationNodeUri = PublicationUtil.getValuesAsString(content, "publication:navigationNodeURIs");    
+    String mixedNavigationNodeUri = PublicationUtil.setMixedNavigationUri(portalName, pageNode.getUri());
     listExistedNavigationNodeUri.add(mixedNavigationNodeUri);    
-    content.setProperty("publication:navigationNodeURIs", StageAndVersionPublicationUtil.toValues(valueFactory, listExistedNavigationNodeUri));
+    content.setProperty("publication:navigationNodeURIs", PublicationUtil.toValues(valueFactory, listExistedNavigationNodeUri));
 
-    List<String> listExistedWebPageId = StageAndVersionPublicationUtil.getValuesAsString(content, "publication:webPageIDs");
+    List<String> listExistedWebPageId = PublicationUtil.getValuesAsString(content, "publication:webPageIDs");
     listExistedWebPageId.add(pageNode.getPageReference());
-    content.setProperty("publication:webPageIDs", StageAndVersionPublicationUtil.toValues(valueFactory, listExistedWebPageId));
+    content.setProperty("publication:webPageIDs", PublicationUtil.toValues(valueFactory, listExistedWebPageId));
     session.save();
   }
 
@@ -244,26 +244,26 @@ public class NavigationEventListenerDelegate {
     Session session = content.getSession();
     ValueFactory valueFactory = session.getValueFactory();
 
-    List<String> listExistedNavigationNodeUri = StageAndVersionPublicationUtil.getValuesAsString(content, "publication:navigationNodeURIs");
-    List<String> listExistedNavigationNodeUriTmp = StageAndVersionPublicationUtil.getValuesAsString(content, "publication:navigationNodeURIs");    
+    List<String> listExistedNavigationNodeUri = PublicationUtil.getValuesAsString(content, "publication:navigationNodeURIs");
+    List<String> listExistedNavigationNodeUriTmp = PublicationUtil.getValuesAsString(content, "publication:navigationNodeURIs");    
     if (listExistedNavigationNodeUri.contains(navigationNodeUri)) {
       listExistedNavigationNodeUriTmp.remove(navigationNodeUri);            
     }
-    content.setProperty("publication:navigationNodeURIs", StageAndVersionPublicationUtil.toValues(valueFactory, listExistedNavigationNodeUriTmp));
+    content.setProperty("publication:navigationNodeURIs", PublicationUtil.toValues(valueFactory, listExistedNavigationNodeUriTmp));
 
-    List<String> listExistedPageId = StageAndVersionPublicationUtil.getValuesAsString(content, "publication:webPageIDs");
-    List<String> listExistedPageIdTmp = StageAndVersionPublicationUtil.getValuesAsString(content, "publication:webPageIDs");
+    List<String> listExistedPageId = PublicationUtil.getValuesAsString(content, "publication:webPageIDs");
+    List<String> listExistedPageIdTmp = PublicationUtil.getValuesAsString(content, "publication:webPageIDs");
     if (listExistedPageId.contains(pageId)) {
       listExistedPageIdTmp.remove(pageId);
     }
-    content.setProperty("publication:webPageIDs", StageAndVersionPublicationUtil.toValues(valueFactory, listExistedPageIdTmp));
+    content.setProperty("publication:webPageIDs", PublicationUtil.toValues(valueFactory, listExistedPageIdTmp));
 
-    List<String> listExistedApplicationId = StageAndVersionPublicationUtil.getValuesAsString(content, "publication:applicationIDs");
-    List<String> listExistedApplicationIdTmp = StageAndVersionPublicationUtil.getValuesAsString(content, "publication:applicationIDs");
+    List<String> listExistedApplicationId = PublicationUtil.getValuesAsString(content, "publication:applicationIDs");
+    List<String> listExistedApplicationIdTmp = PublicationUtil.getValuesAsString(content, "publication:applicationIDs");
     if (listExistedApplicationId.contains(applicationId)) {
       listExistedApplicationIdTmp.remove(applicationId);
     }
-    content.setProperty("publication:applicationIDs", StageAndVersionPublicationUtil.toValues(valueFactory, listExistedApplicationIdTmp));
+    content.setProperty("publication:applicationIDs", PublicationUtil.toValues(valueFactory, listExistedApplicationIdTmp));
     session.save();
   }
 }

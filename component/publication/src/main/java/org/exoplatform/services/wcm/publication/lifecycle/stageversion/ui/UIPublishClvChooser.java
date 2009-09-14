@@ -30,10 +30,10 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
+import org.exoplatform.services.wcm.publication.PublicationUtil;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationPlugin;
-import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationUtil;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -109,12 +109,12 @@ public class UIPublishClvChooser extends UIForm implements UIPopupComponent {
    * @throws Exception the exception
    */
   public List<Application> getClvPortlets() throws Exception {
-    WCMConfigurationService wcmConfigurationService = StageAndVersionPublicationUtil.getServices(WCMConfigurationService.class);
-    DataStorage dataStorage = StageAndVersionPublicationUtil.getServices(DataStorage.class);
-    List<String> clvPortletsId = StageAndVersionPublicationUtil.findAppInstancesByName(page, wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.CLV_PORTLET));
+    WCMConfigurationService wcmConfigurationService = PublicationUtil.getServices(WCMConfigurationService.class);
+    DataStorage dataStorage = PublicationUtil.getServices(DataStorage.class);
+    List<String> clvPortletsId = PublicationUtil.findAppInstancesByName(page, wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.CLV_PORTLET));
     List<Application> applications = new ArrayList<Application>();
     for (String clvPortletId : clvPortletsId) {
-      Application application = StageAndVersionPublicationUtil.findAppInstancesById(page, clvPortletId);
+      Application application = PublicationUtil.findAppInstancesById(page, clvPortletId);
       PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(clvPortletId));      
       if (portletPreferences != null) {
         for (Object object : portletPreferences.getPreferences()) {
@@ -149,7 +149,7 @@ public class UIPublishClvChooser extends UIForm implements UIPopupComponent {
       UIPublishClvChooser clvChooser = event.getSource();
       String clvPortletId = event.getRequestContext().getRequestParameter(OBJECTID);
       clvPortletId = PortalConfig.PORTAL_TYPE + "#" + org.exoplatform.portal.webui.util.Util.getUIPortal().getOwner() + ":" + clvPortletId;
-      DataStorage dataStorage = StageAndVersionPublicationUtil.getServices(DataStorage.class);
+      DataStorage dataStorage = PublicationUtil.getServices(DataStorage.class);
       PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(clvPortletId));
       if (portletPreferences != null) {
         for (Object object : portletPreferences.getPreferences()) {

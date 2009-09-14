@@ -56,10 +56,12 @@ import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
+import org.exoplatform.services.wcm.publication.PublicationUtil;
 import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.publication.WebpagePublicationPlugin;
 import org.exoplatform.services.wcm.publication.lifecycle.simple.ui.UIPublishingPanel;
+import org.exoplatform.services.wcm.publication.listener.page.PageEventListenerDelegate;
 import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.web.application.RequestContext;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -116,6 +118,10 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
 
   }
 
+  public String getLifecycleType() {
+  	return "publication:simplePublication";
+  }
+  
   /* (non-Javadoc)
    * @see org.exoplatform.services.ecm.publication.PublicationPlugin#addMixin(javax.jcr.Node)
    */
@@ -148,7 +154,7 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
   public void changeState(Node node, String newState, HashMap<String, String> context) throws IncorrectStateUpdateLifecycleException, Exception {
     Session session = node.getSession();
     node.setProperty(CURRENT_STATE, newState);
-    PublicationService publicationService = Util.getServices(PublicationService.class);
+    PublicationService publicationService = PublicationUtil.getServices(PublicationService.class);
 
     if (newState.equals(PublicationDefaultStates.DRAFT)) {
       String lifecycleName = node.getProperty("publication:lifecycleName").getString();
@@ -255,10 +261,10 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
    */
   private List<String> getRunningPortals(String userId) throws Exception {
     List<String> listPortalName = new ArrayList<String>();
-    DataStorage service = Util.getServices(DataStorage.class);
+    DataStorage service = PublicationUtil.getServices(DataStorage.class);
     Query<PortalConfig> query = new Query<PortalConfig>(null, null, null, null, PortalConfig.class) ;
     PageList pageList = service.find(query) ;
-    UserACL userACL = Util.getServices(UserACL.class);
+    UserACL userACL = PublicationUtil.getServices(UserACL.class);
     for(Object object:pageList.getAll()) {
       PortalConfig portalConfig = (PortalConfig)object;
       if(userACL.hasPermission(portalConfig, userId)) {
@@ -272,13 +278,13 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
    * @see org.exoplatform.services.wcm.publication.WebpagePublicationPlugin#publishContentToPage(javax.jcr.Node, org.exoplatform.portal.config.model.Page)
    */
   public void publishContentToPage(Node content, Page page) throws Exception {
-    UserPortalConfigService userPortalConfigService = Util.getServices(UserPortalConfigService.class);
+    UserPortalConfigService userPortalConfigService = PublicationUtil.getServices(UserPortalConfigService.class);
     Application portlet = new Application();
     portlet.setApplicationType(org.exoplatform.web.application.Application.EXO_PORTLET_TYPE);
     portlet.setShowInfoBar(false);
 
     // Create portlet
-    WCMConfigurationService configurationService = Util.getServices(WCMConfigurationService.class);
+    WCMConfigurationService configurationService = PublicationUtil.getServices(WCMConfigurationService.class);
     StringBuilder windowId = new StringBuilder();
     windowId.append(PortalConfig.PORTAL_TYPE)
             .append("#")
@@ -326,7 +332,7 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
     
     portletPreferences.setPreferences(listPreference);
 
-    DataStorage dataStorage = Util.getServices(DataStorage.class);
+    DataStorage dataStorage = PublicationUtil.getServices(DataStorage.class);
     dataStorage.save(portletPreferences);
 
     // Add portlet to page
@@ -341,17 +347,17 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
    */
   public void suspendPublishedContentFromPage(Node content, Page page) throws Exception {
     String pageId = page.getPageId();
-    List<String> mixedApplicationIDs = Util.getValuesAsString(content, "publication:applicationIDs");
+    List<String> mixedApplicationIDs = PublicationUtil.getValuesAsString(content, "publication:applicationIDs");
     ArrayList<String> removedApplicationIDs = new ArrayList<String>();
     for(String mixedID: mixedApplicationIDs) {
       if(mixedID.startsWith(pageId)) {
-        String realAppID = Util.parseMixedApplicationId(mixedID)[1];
+        String realAppID = PublicationUtil.parseMixedApplicationId(mixedID)[1];
         removedApplicationIDs.add(realAppID);
       }
     }
     if(removedApplicationIDs.size() == 0) return;
-    Util.removeApplicationFromPage(page, removedApplicationIDs);
-    UserPortalConfigService userPortalConfigService = Util.getServices(UserPortalConfigService.class);
+    PublicationUtil.removeApplicationFromPage(page, removedApplicationIDs);
+    UserPortalConfigService userPortalConfigService = PublicationUtil.getServices(UserPortalConfigService.class);
     userPortalConfigService.update(page);
   }
 
@@ -364,18 +370,18 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
    * 
    * @throws Exception the exception
    */
-  public List<String> getListPageNavigationUri(Page page) throws Exception {
+  public List<String> getListPageNavigationUri(Page page, String remoteUser) throws Exception {
     List<String> listPageNavigationUri = new ArrayList<String>();
-    DataStorage dataStorage = Util.getServices(DataStorage.class);    
+    DataStorage dataStorage = PublicationUtil.getServices(DataStorage.class);    
     RequestContext requestContext = WebuiRequestContext.getCurrentInstance();
     for (String portalName : getRunningPortals(requestContext.getRemoteUser())) {
       Query<PageNavigation> query = new Query<PageNavigation>(PortalConfig.PORTAL_TYPE,portalName,PageNavigation.class);
       PageList list = dataStorage.find(query);
       for(Object object: list.getAll()) {
         PageNavigation pageNavigation = PageNavigation.class.cast(object);
-        List<PageNode> listPageNode = Util.findPageNodeByPageId(pageNavigation, page.getPageId());        
+        List<PageNode> listPageNode = PublicationUtil.findPageNodeByPageId(pageNavigation, page.getPageId());        
         for (PageNode pageNode : listPageNode) {
-          listPageNavigationUri.add(Util.setMixedNavigationUri(portalName, pageNode.getUri()));
+          listPageNavigationUri.add(PublicationUtil.setMixedNavigationUri(portalName, pageNode.getUri()));
         }
       }
     }
@@ -392,7 +398,7 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
    * @throws Exception the exception
    */
   private String getPortalForContent(Node contentNode) throws Exception {
-    LivePortalManagerService livePortalManagerService = org.exoplatform.services.wcm.publication.lifecycle.simple.Util.getServices(LivePortalManagerService.class);
+    LivePortalManagerService livePortalManagerService = PublicationUtil.getServices(LivePortalManagerService.class);
     for(String portalPath:livePortalManagerService.getLivePortalsPath()) {
       if(contentNode.getPath().startsWith(portalPath)) {
         return livePortalManagerService.getPortalNameByPath(portalPath);
@@ -412,7 +418,7 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
    */
   @SuppressWarnings("unused")
   private boolean isSharedPortal(String portalName) throws Exception{
-    LivePortalManagerService livePortalManagerService = Util.getServices(LivePortalManagerService.class);
+    LivePortalManagerService livePortalManagerService = PublicationUtil.getServices(LivePortalManagerService.class);
     SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
     Node sharedPortal = livePortalManagerService.getLiveSharedPortal(sessionProvider);
     sessionProvider.close();
@@ -423,7 +429,7 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
    * @see org.exoplatform.services.ecm.publication.PublicationPlugin#getNodeView(javax.jcr.Node, java.util.Map)
    */
   public Node getNodeView(Node node, Map<String, Object> context) throws Exception {
-    WCMPublicationService wcmPublicationService = Util.getServices(WCMPublicationService.class);
+    WCMPublicationService wcmPublicationService = PublicationUtil.getServices(WCMPublicationService.class);
     String contentState = wcmPublicationService.getContentState(node);
     
     // if node is obsolette
@@ -450,14 +456,14 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
    * @see org.exoplatform.services.wcm.publication.WebpagePublicationPlugin#updateLifecycleOnRemovePage(org.exoplatform.portal.config.model.Page)
    */
   public void updateLifecycleOnRemovePage(Page page, String remoteUser) throws Exception {
-    pageEventListenerDelegate.updateLifecycleOnRemovePage(page);
+    pageEventListenerDelegate.updateLifecycleOnRemovePage(page, remoteUser, this);
   }
 
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.publication.WebpagePublicationPlugin#updateLifecyleOnChangePage(org.exoplatform.portal.config.model.Page)
    */
   public void updateLifecyleOnChangePage(Page page, String remoteUser) throws Exception {
-    pageEventListenerDelegate.updateLifecyleOnChangePage(page);
+    pageEventListenerDelegate.updateLifecyleOnChangePage(page, remoteUser, this);
   }
 
   /* (non-Javadoc)
@@ -471,7 +477,7 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
    * @see org.exoplatform.services.wcm.publication.WebpagePublicationPlugin#updateLifecyleOnCreatePage(org.exoplatform.portal.config.model.Page)
    */
   public void updateLifecyleOnCreatePage(Page page, String remoteUser) throws Exception {
-    pageEventListenerDelegate.updateLifecyleOnCreatePage(page);
+    pageEventListenerDelegate.updateLifecyleOnCreatePage(page, remoteUser, this);
   }
 
   /* (non-Javadoc)
