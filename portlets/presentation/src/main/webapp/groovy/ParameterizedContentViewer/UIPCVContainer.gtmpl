@@ -25,6 +25,7 @@
   #ad{ display:none;}
   #leftbar{ display:none;}
   #contentarea{ width:100%;}
+  a{ display:none;}
 }
 </style>
 <div id="$uicomponent.id" class="$uicomponent.id">
