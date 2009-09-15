@@ -268,8 +268,12 @@ public class UIPCVContainer extends UIContainer {
     
     PortletRequestContext porletRequestContext = WebuiRequestContext.getCurrentInstance();
     HttpServletRequest request = (HttpServletRequest) porletRequestContext.getRequest();
-    isPrint = "isPrint=true".equals(request.getQueryString()) ? true :false;  
-  
+    if(request.getQueryString() == null) {
+      isPrint = false;
+    } else {
+      isPrint = request.getQueryString().endsWith("isPrint=true") ? true : false;
+    }
+    
     return nodeView;
   }
   

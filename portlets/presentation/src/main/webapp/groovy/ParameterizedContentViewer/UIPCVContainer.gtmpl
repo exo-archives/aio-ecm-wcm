@@ -20,7 +20,13 @@
 	def parameterizedPageURI = wcmConfigurationService.getRuntimeContextParam("parameterizedPageURI");
 	def printPreviewPageURI = wcmConfigurationService.getRuntimeContextParam("printPageURI");
 %>
-
+<style type="text/css">
+@media print{
+  #ad{ display:none;}
+  #leftbar{ display:none;}
+  #contentarea{ width:100%;}
+}
+</style>
 <div id="$uicomponent.id" class="$uicomponent.id">
 	<div class="PCV">
 	<%
@@ -56,7 +62,7 @@
 			if(isPrint) {
 				%>
 					<div class="ActionContainer">
-						<a class="PrintFrameIcon PrintIcon" href="javascript: void(0)" onclick="var parent = this.parentNode; parent.removeChild(document.getElementById('CloseIcon')); parent.removeChild(this); window.print();"><%= _ctx.appRes("UIContentViewerContainer.action.print") %></a> 
+						<a class="PrintFrameIcon PrintIcon" href="javascript: void(0)" onclick="window.print();"><%= _ctx.appRes("UIContentViewerContainer.action.print") %></a>
 						<a class="PrintFrameIcon CloseIcon" id="CloseIcon" href="javascript: void(0)" onclick="window.close();"><%= _ctx.appRes("UIContentViewerContainer.action.close") %></a>
 					</div>
 				<%
