@@ -120,6 +120,7 @@ public class UIDMSSelectorForm extends UIForm implements UISelectable{
    * @throws Exception the exception
    */
   public void init() throws Exception {
+    System.out.println("\n\n\n\n----------------->init UIDMSSSelectorForm");
   }
 
   /**

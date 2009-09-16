@@ -131,3 +131,83 @@
 .UIWebContentPathSelector .UIBreadcumbs {
 	margin: 5px 0px;
 }
+
+/*********************** UITreeView ********************************************/
+.UIWebContentTreeView {
+	overflow:auto; 
+	padding:10px; 
+	height:250px;
+}
+
+.UIWebContentTreeView .ViewChildNodes{
+	padding-left:20px; 
+	display:none;
+}
+
+.UIWebContentTreeView .SelectNodeIcon{
+	background: url(background/CollapseIcon.gif) no-repeat left center;
+	height:auto;
+	padding-left:18px;
+	white-space:nowrap;
+	width:auto;
+	margin:5px 0;
+	cursor:pointer;
+}
+
+.UIWebContentTreeView .NoneSelectNodeIcon{
+	background: url(background/ExpandIcon.gif) no-repeat left center;
+	height:auto;
+	padding-left:18px;
+	white-space:nowrap;
+	width:auto;
+	margin:5px 0;
+	cursor:pointer;
+}
+
+.UIWebContentTreeView .DefaultPageIcon {
+	background:transparent url(background/DefaultPageIcon.gif) no-repeat scroll left center;
+	background-position:left center;
+	display:block;
+	height:20px;
+	line-height:20px;
+	padding-left:20px;
+	white-space:nowrap;
+	width:auto;
+}
+
+/******************* UITreeViewBreadcumbs ******************************************/
+.UITreeViewBreadcumbs {
+	border: 1px solid gray;
+	margin: 10px 0px;
+	height:25px;
+	line-height:25px;
+	overflow:hidden;
+	white-space:nowrap;
+}
+
+.UITreeViewBreadcumbs .TreeHomeIcon {
+	background:transparent url(background/HomeIcon.gif) no-repeat scroll left center;
+	line-height:16px;
+	height: 16px;
+	margin-top:5px;
+	margin-left: 5px;
+	padding-left:25px;
+	float:left;
+	width:100%;
+}
+
+.UITreeViewBreadcumbs .FirstNode {
+	line-height:13px;
+	padding:0px 5px;
+	float:left;
+	cursor:pointer;
+}
+
+.UITreeViewBreadcumbs .RightArrowIcon {
+	background:transparent url(background/RightArrowIcon.gif) no-repeat scroll left center;
+	line-height:13px;
+	padding:0px 5px;
+	float:left;
+	cursor:pointer;
+}
+

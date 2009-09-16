@@ -116,6 +116,14 @@
         <title>Recherche</title>
       </searchbox>
     </SelectContent>
+    <selectBoxTitle>
+    	Filtrer par
+    </selectBoxTitle>
+    <selectBoxValues>
+    	<WebContent>Contenu Web</WebContent>
+    	<DMSDocument>Document</DMSDocument>
+    	<Media>Médias</Media>
+    </selectBoxValues>
   </UISinglePortletContentViewer>  
 
 

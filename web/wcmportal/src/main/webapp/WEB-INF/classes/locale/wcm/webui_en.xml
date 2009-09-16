@@ -113,6 +113,14 @@
         <title>Search</title>
       </searchbox>
     </SelectContent>
+    <selectBoxTitle>
+    	Filter by
+    </selectBoxTitle>
+    <selectBoxValues>
+    	<WebContent>Web Content</WebContent>
+    	<DMSDocument>Document</DMSDocument>
+    	<Media>Media</Media>
+    </selectBoxValues>
   </UISinglePortletContentViewer>
   <UIWebContentSearch>
   	<msg-choose-portal>You don't choose any portal. Please choosing a portal to search!</msg-choose-portal>

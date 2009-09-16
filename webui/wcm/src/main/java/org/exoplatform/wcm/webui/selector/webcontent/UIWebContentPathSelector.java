@@ -23,6 +23,8 @@ import javax.jcr.Node;
 
 import org.exoplatform.ecm.webui.tree.UIBaseNodeTreeSelector;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.cms.templates.TemplateService;
+import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.wcm.webui.Utils;
@@ -37,7 +39,7 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
-// TODO: Auto-generated Javadoc
+//TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS.
  * 
@@ -45,34 +47,36 @@ import org.exoplatform.webui.event.EventListener;
  */
 @ComponentConfigs({
   @ComponentConfig(
-      lifecycle = Lifecycle.class,
-      template = "classpath:groovy/wcm/webui/UIWebContentPathSelector.gtmpl",
-      events = {
-        @EventConfig(listeners = UIWebContentPathSelector.SelectPathActionListener.class)
-      }
+                   lifecycle = Lifecycle.class,
+                   template = "classpath:groovy/wcm/webui/UIWebContentPathSelector.gtmpl",
+                   events = {
+                     @EventConfig(listeners = UIWebContentPathSelector.SelectPathActionListener.class)
+                   }
   ),
   @ComponentConfig(
-      type = UIBreadcumbs.class,
-      id = "UIBreadcrumbWebContentPathSelector",
-      template = "system:/groovy/webui/core/UIBreadcumbs.gtmpl",
-      events = @EventConfig(listeners = UIBreadcumbs.SelectPathActionListener.class)
+                   type = UIBreadcumbs.class,
+                   id = "UIBreadcrumbWebContentPathSelector",
+                   template = "system:/groovy/webui/core/UIBreadcumbs.gtmpl",
+                   events = @EventConfig(listeners = UIBreadcumbs.SelectPathActionListener.class)
   ),
   @ComponentConfig(
-      type = UISelectPathPanel.class,      
-      id = "UIWCMSelectPathPanel",
-      template = "classpath:groovy/wcm/webui/UIWCMSelectPathPanel.gtmpl",
-      events = @EventConfig(listeners = UISelectPathPanel.SelectActionListener.class)
+                   type = UISelectPathPanel.class,      
+                   id = "UIWCMSelectPathPanel",
+                   template = "classpath:groovy/wcm/webui/UIWCMSelectPathPanel.gtmpl",
+                   events = @EventConfig(listeners = UISelectPathPanel.SelectActionListener.class)
   )
 }
 )
 public class UIWebContentPathSelector extends UIBaseNodeTreeSelector implements UIPopupComponent{
-  
+
   /** Instantiates a new uI web content path selector. */
 
   private Node currentPortal;
-  
+
   /** The shared portal. */
   private Node sharedPortal;
+
+  public String contentType;
 
   /**
    * Instantiates a new uI web content path selector.
@@ -80,6 +84,8 @@ public class UIWebContentPathSelector extends UIBaseNodeTreeSelector implements 
    * @throws Exception the exception
    */
   public UIWebContentPathSelector() throws Exception {
+    contentType = UISelectContentByType.WEBCONENT;
+    addChild(UISelectContentByType.class, "UISelectContentByType", "UISelectContentByType");
     addChild(UIBreadcumbs.class, "UIBreadcrumbWebContentPathSelector", "UIBreadcrumbWebContentPathSelector");
     addChild(UIWebContentTreeBuilder.class,null, UIWebContentTreeBuilder.class.getName()+hashCode());
     addChild(UISelectPathPanel.class, "UIWCMSelectPathPanel", "UIWCMSelectPathPanel");
@@ -91,7 +97,15 @@ public class UIWebContentPathSelector extends UIBaseNodeTreeSelector implements 
    * @throws Exception the exception
    */
   public void init() throws Exception {
-    String[] acceptedNodeTypes = {"exo:webContent"};
+    String[] acceptedNodeTypes = null;
+    if(contentType == null || contentType.equals(UISelectContentByType.WEBCONENT)){
+      acceptedNodeTypes = new String[]{"exo:webContent"};
+    }else if(contentType.equals(UISelectContentByType.DMSDOCUMENT)){
+      String repositoryName = ((ManageableRepository)(currentPortal.getSession().getRepository())).getConfiguration().getName();
+      List<String> listAcceptedNodeTypes = getApplicationComponent(TemplateService.class).getDocumentTemplates(repositoryName);
+      acceptedNodeTypes = new String[listAcceptedNodeTypes.size()];
+      listAcceptedNodeTypes.toArray(acceptedNodeTypes);
+    }
     UISelectPathPanel selectPathPanel = getChild(UISelectPathPanel.class);
     selectPathPanel.setAcceptedNodeTypes(acceptedNodeTypes);       
     LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
@@ -115,6 +129,15 @@ public class UIWebContentPathSelector extends UIBaseNodeTreeSelector implements 
     changeFolder(node);
     selectPathPanel.setParentNode(node);
     selectPathPanel.updateGrid();
+  }
+
+  public void reRenderChild(String typeContent) throws Exception{
+    if(typeContent == null || typeContent.equals(UISelectContentByType.WEBCONENT)){
+      contentType = UISelectContentByType.WEBCONENT;
+    }else if(typeContent.equals(UISelectContentByType.DMSDOCUMENT)){
+      contentType = UISelectContentByType.DMSDOCUMENT;
+    }
+    //this.renderUIComponent(contentByType);
   }
 
   /**
@@ -211,7 +234,7 @@ public class UIWebContentPathSelector extends UIBaseNodeTreeSelector implements 
    * @see SelectPathActionEvent
    */
   public static class SelectPathActionListener extends EventListener<UIBreadcumbs> {
-    
+
     /* (non-Javadoc)
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */

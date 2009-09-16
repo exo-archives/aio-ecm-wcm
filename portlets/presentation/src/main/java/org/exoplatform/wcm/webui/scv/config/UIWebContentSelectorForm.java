@@ -116,6 +116,7 @@ public class UIWebContentSelectorForm extends UIForm implements UISelectable{
    * @throws Exception the exception
    */
   public void init() throws Exception {
+    System.out.println("\n\n\n\n-----------------> Init UIWebContentSelectForm");
   }
 
   /* (non-Javadoc)
@@ -194,7 +195,8 @@ public class UIWebContentSelectorForm extends UIForm implements UISelectable{
      */
     public void execute(Event<UIWebContentSelectorForm> event) throws Exception {
       UIWebContentSelectorForm uiWebContentSelector = event.getSource();
-      ((UIPortletConfig) uiWebContentSelector.getParent()).initPopupWebContentSelector();
+      //((UIPortletConfig) uiWebContentSelector.getParent()).initPopupWebContentSelector();
+      ((UIPortletConfig) uiWebContentSelector.getParent()).initPopupWebcontentView();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiWebContentSelector.getParent());
     }
   }

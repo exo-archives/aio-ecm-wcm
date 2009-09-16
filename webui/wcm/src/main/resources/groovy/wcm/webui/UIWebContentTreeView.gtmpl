@@ -1,0 +1,115 @@
+<%
+	import java.util.List;
+	import java.util.ArrayList;
+  import org.exoplatform.wcm.webui.selector.webContentView.TreeNode ;
+  import org.exoplatform.web.application.JavascriptManager;
+  
+  def rcontext = _ctx.getRequestContext() ;
+	JavascriptManager jsmanager = rcontext.getJavascriptManager();
+	//jsmanager.addOnLoadJavascript('eXo.wcm.UIWCMTreeView.init');
+%>
+<script type="text/javascript">
+	function MyUIWCMTreeView(){
+		this.constParentNode = 'UIWCMTreeParentNode';
+		this.constChildNode = 'UIWCMTreeChildNode';
+		this.constBreadcumbsElement ='UITreeViewBreadcumbsElement';
+		this.oldId;
+	};
+	
+	MyUIWCMTreeView.prototype.selectNode = function(childId) {
+		var objParent = document.getElementById(this.constParentNode + childId);
+		
+		if(objParent){
+			objParent.style.fontWeight="bold";
+			if(objParent.className == "NoneSelectNodeIcon")objParent.className = "SelectNodeIcon";
+			else objParent.className = "NoneSelectNodeIcon";
+			if(this.oldId != (this.constParentNode + childId)){
+				oldObject = document.getElementById(this.oldId);
+				if(oldObject) oldObject.style.fontWeight="normal";
+				this.oldId = this.constParentNode + childId;
+				ajaxAction = objParent.getAttribute("ajaxAction").replace('javascript:', '');
+				eval(ajaxAction);
+
+				// Update Breadcumbs
+				this.updateBreadcumbsElement(objParent);
+			}
+			
+			// Jum Scroll to Posistion of Div which is selected
+			this.jumbToDivSelected(childId);
+		}
+		
+		var objChild = document.getElementById(this.constChildNode + childId);
+		if(objChild)
+			if(objChild.style.display === "block") objChild.style.display = "none";
+			else objChild.style.display = "block";
+	};
+	
+	MyUIWCMTreeView.prototype.updateBreadcumbsElement = function(objParent) {
+		var objBreadcumbs = document.getElementById("UIWCMTreeViewBreadcumbsHomeIcon");
+		objBreadcumbs.innerHTML = "";
+		var nodeNames = objParent.getAttribute("treePath").split("/");
+		for(var i = nodeNames.length - 1; i >=0; i --){
+			newDiv = document.createElement("div");
+			newDiv.id = this.constBreadcumbsElement + i;
+			if(i <= 1) newDiv.className ="FirstNode";
+			else newDiv.className ="RightArrowIcon";
+			if(i != 0) newDiv.innerHTML = nodeNames[i];
+			else newDiv.innerHTML = "<span></span>";                
+			if(objParent){
+				action = objParent.getAttribute("onclick") + ";" + objParent.getAttribute('ajaxAction');
+			} else action = "javaScript: void(0);";
+			newDiv.setAttribute('onclick', action);
+			
+			brotherDiv = document.getElementById(this.constBreadcumbsElement + (i + 1));
+			if(brotherDiv) objBreadcumbs.insertBefore(newDiv, brotherDiv)
+			else objBreadcumbs.appendChild(newDiv);
+			
+			try{
+				objParent = document.getElementById(objParent.parentNode.id.replace(this.constChildNode, this.constParentNode));
+			}catch(err){
+				objParent = null;
+			}
+		}
+		objParent = document.getElementById(this.constBreadcumbsElement + (nodeNames.length - 1));
+		objParent.style.color="#1B59AA";
+		objParent.style.cursor="normal";
+		objParent.setAttribute('onclick', 'javaScript:void(0);');
+	}
+	
+	MyUIWCMTreeView.prototype.jumbToDivSelected = function(childId) {
+		var obj = document.getElementById(this.constParentNode + childId);
+		if(obj){
+			var wcmTreeNodeView = document.getElementById("$uicomponent.id") ;
+			var scroll = eXo.core.Browser.findPosYInContainer(obj, wcmTreeNodeView) ;
+			wcmTreeNodeView.scrollTop = scroll ;
+		}
+	}
+	
+	eXo.wcm.MyUIWCMTreeView = new MyUIWCMTreeView();
+</script>
+
+<div class="UIWebContentTreeView $uicomponent.id" id = "$uicomponent.id">
+	<%
+	TreeNode treeNode = null;
+	List listTrees = uicomponent.getTreeNode();
+	int sub = 0;
+	String action = null;
+	for(int i = 0; i < listTrees.size(); i ++){
+		treeNode = listTrees.get(i);
+		try{
+			sub = listTrees.get(i-1).getDeep() - treeNode.getDeep();
+		}catch(Exception ex){
+			sub = 0;
+		}
+		for(int j = 0; j <= sub && i > 0; j ++) println "</div>";
+		if(treeNode.getNodePath() != null)action = uicomponent.event("ChangeNode", treeNode.getNodePath() + "/" + treeNode.getWorkSpaceName());
+		else action = "";
+		println "	<div onclick=\"eXo.wcm.MyUIWCMTreeView.selectNode('"+i+"');\" ajaxAction=\""+action+";\" treePath=\""+treeNode.getTreePath()+
+									"\" style=\"\" id=\"UIWCMTreeParentNode" + i + "\" class=\"NoneSelectNodeIcon\">";
+		println "		<div class=\"DefaultPageIcon\">" + treeNode.getName().replaceAll("\\.", "/") + "</div>";
+		println "	</div>";
+		println "	<div id=\"UIWCMTreeChildNode"+i+"\" class=\"ViewChildNodes\">";
+	}
+	for(int i = 0; i <= treeNode.getDeep(); i ++) println "</div>";
+	%>
+</div>

@@ -44,6 +44,7 @@
 		    	  WCMPublicationService wcmPublicationService = uicomponent.getApplicationComponent(WCMPublicationService.class);
 			    	for(node in nodes) {
 			    		String revisionState = wcmPublicationService.getContentState(node);
+			    		if(revisionState == null) revisionState = "";
 				      	if(even) {
 				      		rowClass = "EvenRow" ;  
 				      	} else {
@@ -80,7 +81,7 @@
 		    	} else {
 		  			%>
 		  				<tr class="EvenRow">
-		  					<td colspan="2" style="align:center;"><%=_ctx.appRes("UITreeList.info.child-not-found")%></td>
+		  					<td colspan="3" style="color:blue; font-style:italic; text-align:center;"><%=_ctx.appRes("UITreeList.info.child-not-found")%></td>
 		  				</tr>
 		  			<%  	
 		    	}

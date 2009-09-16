@@ -33,6 +33,24 @@
 	margin-left: 200px;
 }
 
+.UISingleContentViewerPortlet .UIWelcomeScreen .FormContainer .CreateNewContent{
+	background:transparent url(/ecm/skin/icons/24x24/DefaultSkin/AddDocument.gif) no-repeat scroll left center;
+	height:22px;
+	line-height:22px;
+	margin:5px 0px 5px 250px;
+	padding-left:25px;
+	width:auto;
+}
+
+.UISingleContentViewerPortlet .UIWelcomeScreen .FormContainer .SelectContent{
+	background:transparent url(icons/16x16/BlueOpenFolder.gif) no-repeat scroll left center;
+	height:22px;
+	line-height:22px;
+	margin:5px 0px 5px 250px;
+	padding-left:25px;
+	width:auto;
+}
+
 .UISingleContentViewerPortlet .UIWelcomeScreen .WelcomeScreen {
 	padding: 20px 0px 10px;
 	font-weight: bold;

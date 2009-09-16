@@ -62,7 +62,8 @@ import org.exoplatform.webui.form.UIFormRadioBoxInput;
     lifecycle = UIFormLifecycle.class, 
     template = "app:/groovy/SingleContentViewer/config/UIWelcomeScreen.gtmpl",
     events = {
-      @EventConfig(listeners = UIWelcomeScreen.NextActionListener.class),
+      @EventConfig(listeners = UIWelcomeScreen.SelectContentActionListener.class),
+      @EventConfig(listeners = UIWelcomeScreen.CreateNewContentActionListener.class),
       @EventConfig(listeners = UIWelcomeScreen.AbortActionListener.class)
     }
 )
@@ -73,7 +74,9 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
    * 
    * @throws Exception the exception
    */
-  public UIWelcomeScreen() throws Exception {}
+  public UIWelcomeScreen() throws Exception {
+    this.setActions(new String[]{"Abort"});
+  }
 
   /** The is new content. */
   private boolean isNewContent = false;
@@ -99,12 +102,12 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
     String labelSelectExistedContent = res.getString(getId() + ".label.ExistedContent");
     if(isNewConfig) {
       isNewConfig = true;
-      option.add(new SelectItemOption<String>(labelQuickCreate, "QuickCreateWebContent"));
+      /*option.add(new SelectItemOption<String>(labelQuickCreate, "QuickCreateWebContent"));
       option.add(new SelectItemOption<String>(labelSelectExistedContent, "SelectExistedContent"));
       UIFormRadioBoxInput radioInput = new UIFormRadioBoxInput("radio", "radio", option);
       radioInput.setAlign(UIFormRadioBoxInput.VERTICAL_ALIGN);
       radioInput.setValue("QuickCreateWebContent");
-      addUIFormInput(radioInput);
+      addUIFormInput(radioInput);*/
     }else {
       UISingleContentViewerPortlet uiPresentationPortlet = getAncestorOfType(UISingleContentViewerPortlet.class);
       UIPresentationContainer presentationContainer = uiPresentationPortlet.getChild(UIPresentationContainer.class);
@@ -116,14 +119,14 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
         radioInput.setAlign(UIFormRadioBoxInput.VERTICAL_ALIGN);
         radioInput.setValue("EditCurrentWebContent");
         addUIFormInput(radioInput);
-      } else {
+      }/* else {
         option.add(new SelectItemOption<String>(labelSelectExistedWebContent, "SelectExistedWebContent"));
         option.add(new SelectItemOption<String>(labelSelectExistedDMS,"SelectExistedDMS"));
         UIFormRadioBoxInput radioInput = new UIFormRadioBoxInput("radio", "radio", option);
         radioInput.setAlign(UIFormRadioBoxInput.VERTICAL_ALIGN);
         radioInput.setValue("SelectExistedWebContent");
         addUIFormInput(radioInput);
-      }
+      }*/
     }
     return this ;
   }
@@ -176,11 +179,7 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
    * 
    * @see StartProcessActionEvent
    */
-  public static class NextActionListener extends EventListener<UIWelcomeScreen> {
-
-    /* (non-Javadoc)
-     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
-     */
+  /*public static class SelectContentActionListener extends EventListener<UIWelcomeScreen> {
     public void execute(Event<UIWelcomeScreen> event) throws Exception {
       UIWelcomeScreen uiWelcomeScreen = event.getSource();
       String radioValue = uiWelcomeScreen.<UIFormRadioBoxInput>getUIInput("radio").getValue();
@@ -220,6 +219,28 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
       }
       uiPortletConfig.showPopup(event.getRequestContext());
     }
+  }*/
+  
+  public static class SelectContentActionListener extends EventListener<UIWelcomeScreen> {
+
+    public void execute(Event<UIWelcomeScreen> event) throws Exception {
+      UIWelcomeScreen uiWelcomeScreen = event.getSource();
+      //((UIPortletConfig) uiWelcomeScreen.getParent()).initPopupWebContentSelector();
+      ((UIPortletConfig) uiWelcomeScreen.getParent()).initPopupWebcontentView();
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiWelcomeScreen.getParent());
+    }
+  }
+  
+  public static class CreateNewContentActionListener extends EventListener<UIWelcomeScreen> {
+    
+    public void execute(Event<UIWelcomeScreen> event) throws Exception {
+      UIWelcomeScreen uiWelcomeScreen = event.getSource();
+      UIPortletConfig uiPortletConfig = uiWelcomeScreen.getAncestorOfType(UIPortletConfig.class);      
+      uiWelcomeScreen.setRendered(false);
+      UIQuickCreationWizard uiQuickCreationWizard = uiPortletConfig.addChild(UIQuickCreationWizard.class, null, null);
+      uiQuickCreationWizard.getChild(UINameWebContentForm.class).init();
+      uiPortletConfig.showPopup(event.getRequestContext());
+    }
   }
 
   /**
@@ -234,10 +255,6 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
    * @see BackActionEvent
    */
   public static class AbortActionListener extends EventListener<UIWelcomeScreen> {
-
-    /* (non-Javadoc)
-     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
-     */
     public void execute(Event<UIWelcomeScreen> event) throws Exception {
       UIWelcomeScreen uiWelcomeScreen = event.getSource();
         UserPortalConfigService userPortalConfigService = uiWelcomeScreen.getApplicationComponent(UserPortalConfigService.class);

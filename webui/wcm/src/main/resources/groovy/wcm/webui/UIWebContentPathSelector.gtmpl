@@ -1,10 +1,33 @@
 <%
-	import org.exoplatform.webui.core.UIBreadcumbs;
-	import org.exoplatform.wcm.webui.selector.webcontent.UIWebContentTreeBuilder;
 	import org.exoplatform.wcm.webui.selector.UISelectPathPanel; 
+	import org.exoplatform.wcm.webui.selector.webContentView.UIWebContentTreeBuilder;
 %>
 <div id="$uicomponent.id" class="UIWCMSearchContainer $uicomponent.id">
-	<div> <% uicomponent.renderChild(UIBreadcumbs.class); %> </div>
+	<div style="padding:10px;float:left">
+		<div style="float:left;padding:5px;">
+			<%= _ctx.appRes("UISinglePortletContentViewer.selectBoxTitle")%> :
+		</div>
+		<div style="float:left;padding:5px;">
+			<select>
+				<%String selected = "";
+					for(String type : uicomponent.types){
+						if(type.equals(uicomponent.selectedValues)) selected = "selected";
+						else selected = "";
+				%>
+						<option id="$type" $selected value="$type" onclick="<%=uicomponent.event("ChangeContentType", type)%>">
+							<%= _ctx.appRes("UISinglePortletContentViewer.selectBoxValues." + type) %>
+						</option>
+				<%}%>
+			</select>
+		</div>
+	</div>
+	<div style="clear:left"><span></span></div>
+	<div>
+		<div class="UITreeViewBreadcumbs" id = "UIWCMTreeViewBreadcumbs">
+			<div id="UIWCMTreeViewBreadcumbsHomeIcon" class="TreeHomeIcon"></div>
+			<div style="clear:left"><span></span></div>
+		</div>
+	</div>
 	<div class="SelectContent"> 
 		<div class="UITreeBuilder">
 			<div class="Title" title="<%= _ctx.appRes("UISinglePortletContentViewer.SelectContent.leftcolumn.title") %>"><%= _ctx.appRes("UISinglePortletContentViewer.SelectContent.leftcolumn.title") %></div>

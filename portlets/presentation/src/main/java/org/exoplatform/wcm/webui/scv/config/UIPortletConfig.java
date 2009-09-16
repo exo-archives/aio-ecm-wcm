@@ -31,8 +31,10 @@ import org.exoplatform.wcm.webui.scv.UIPresentationContainer;
 import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
 import org.exoplatform.wcm.webui.selector.document.UIDocumentPathSelector;
 import org.exoplatform.wcm.webui.selector.document.UIDocumentTabSelector;
-import org.exoplatform.wcm.webui.selector.webcontent.UIWebContentPathSelector;
-import org.exoplatform.wcm.webui.selector.webcontent.UIWebContentTabSelector;
+//import org.exoplatform.wcm.webui.selector.webcontent.UIWebContentPathSelector;
+//import org.exoplatform.wcm.webui.selector.webcontent.UIWebContentTabSelector;
+import org.exoplatform.wcm.webui.selector.webContentView.UIWebContentPathSelector;
+import org.exoplatform.wcm.webui.selector.webContentView.UIWebContentTabSelector;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -249,7 +251,7 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent{
    * 
    * @throws Exception the exception
    */
-  public void initPopupWebContentSelector() throws Exception {
+  /*public void initPopupWebContentSelector() throws Exception {
     UIPopupWindow uiPopup = getChildById(POPUP_WEBCONTENT_SELECTOR);
     if(uiPopup == null) {
       uiPopup = addChild(UIPopupWindow.class, null, POPUP_WEBCONTENT_SELECTOR);
@@ -262,6 +264,24 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent{
     uiPopup.setUIComponent(uiWCTabSelector);
     uiPopup.setWindowSize(750,450);
     uiPopup.setShow(true);
+    
+    UIWelcomeScreen uiWelcomeScreen = this.getChild(UIWelcomeScreen.class);
+    uiWelcomeScreen.setRendered(false);
+    this.addChild(uiWCTabSelector);
+    uiWCTabSelector.setRendered(true);
+  }*/
+  
+  public void initPopupWebcontentView() throws Exception{
+    UIWebContentTabSelector uiWCTabSelector = this.createUIComponent(UIWebContentTabSelector.class, null, null);
+    uiWCTabSelector.init();
+    UIWebContentPathSelector webContentPathSelector= uiWCTabSelector.getChild(UIWebContentPathSelector.class);
+    UIWebContentSelectorForm uiWebContentSelector = this.getChild(UIWebContentSelectorForm.class);
+    webContentPathSelector.setSourceComponent(uiWebContentSelector, new String[] {UIWebContentSelectorForm.PATH});
+    
+    UIWelcomeScreen uiWelcomeScreen = this.getChild(UIWelcomeScreen.class);
+    uiWelcomeScreen.setRendered(false);
+    this.addChild(uiWCTabSelector);
+    uiWCTabSelector.setRendered(true);
   }
 
   /**

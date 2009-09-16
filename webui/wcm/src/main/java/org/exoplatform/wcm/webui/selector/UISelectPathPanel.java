@@ -22,24 +22,38 @@ import java.util.List;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
+import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
+import javax.portlet.PortletPreferences;
 
 import org.exoplatform.commons.utils.ObjectPageList;
-import org.exoplatform.ecm.webui.selector.UISelectable;
-import org.exoplatform.ecm.webui.tree.UIBaseNodeTreeSelector;
 import org.exoplatform.ecm.webui.tree.selectone.UIOneNodePathSelector;
 import org.exoplatform.ecm.webui.utils.Utils;
+import org.exoplatform.portal.config.UserPortalConfigService;
+import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.webui.container.UIContainer;
+import org.exoplatform.portal.webui.portal.UIPortal;
+import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.services.cms.BasePath;
 import org.exoplatform.services.ecm.publication.PublicationService;
+import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+import org.exoplatform.services.wcm.core.NodeIdentifier;
+import org.exoplatform.services.wcm.core.NodeLocation;
+import org.exoplatform.services.wcm.core.WCMConfigurationService;
+import org.exoplatform.services.wcm.publication.NotInWCMPublicationException;
+import org.exoplatform.services.wcm.publication.PublicationUtil;
 import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
+import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIPageIterator;
-import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
@@ -85,6 +99,8 @@ public class UISelectPathPanel extends UIContainer {
   
   /** The templates_. */
   private List<String> templates_ = null;
+  
+  final static String PATH = "path".intern();
   
   /**
    * Instantiates a new uI select path panel.
@@ -362,7 +378,7 @@ public class UISelectPathPanel extends UIContainer {
     NodeHierarchyCreator nodeHierarchyCreator = getApplicationComponent(NodeHierarchyCreator.class);
     return nodeHierarchyCreator.getJcrPath(BasePath.TAXONOMIES_TREE_STORAGE_PATH);
   }
-
+  
   /**
    * The listener interface for receiving selectAction events.
    * The class that is interested in processing a selectAction
@@ -375,37 +391,58 @@ public class UISelectPathPanel extends UIContainer {
    * @see SelectActionEvent
    */
   static public class SelectActionListener extends EventListener<UISelectPathPanel> {
-    
-    /* (non-Javadoc)
-     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
-     */
     public void execute(Event<UISelectPathPanel> event) throws Exception {
       UISelectPathPanel uiSelectPathPanel = event.getSource();      
       UIContainer uiTreeSelector = uiSelectPathPanel.getParent();
-
       String value = event.getRequestContext().getRequestParameter(OBJECTID);
-      
       if(uiTreeSelector instanceof UIOneNodePathSelector) {
         if(!((UIOneNodePathSelector)uiTreeSelector).isDisable()) {
           value = ((UIOneNodePathSelector)uiTreeSelector).getWorkspaceName() + ":" + value ;
         }
       } 
-      String returnField = ((UIBaseNodeTreeSelector)uiTreeSelector).getReturnFieldName();
-      ((UISelectable)((UIBaseNodeTreeSelector)uiTreeSelector).getSourceComponent()).doSelect(returnField, value) ;
-      
-      UIComponent uiOneNodePathSelector = uiSelectPathPanel.getParent();
-      if (uiOneNodePathSelector instanceof UIOneNodePathSelector) {
-        UIComponent uiComponent = uiOneNodePathSelector.getParent();
-        if (uiComponent instanceof UIPopupWindow) {
-          ((UIPopupWindow)uiComponent).setShow(false);
-          ((UIPopupWindow)uiComponent).setRendered(false);
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent);
-        }
-        UIComponent component = ((UIOneNodePathSelector)uiOneNodePathSelector).getSourceComponent().getParent();
-        if (component != null) {
-          event.getRequestContext().addUIComponentToUpdateByAjax(component);
-        }
+
+      if(value == null) {
+        UIApplication uiApplication = uiSelectPathPanel.getAncestorOfType(UIApplication.class);
+        uiApplication.addMessage(new ApplicationMessage("UIDMSSelectorForm.msg.require-choose", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
+        return;
       }
+      RepositoryService repositoryService = uiSelectPathPanel.getApplicationComponent(RepositoryService.class);
+      String repoName = repositoryService.getCurrentRepository().getConfiguration().getName();
+      WCMConfigurationService configurationService = uiSelectPathPanel.getApplicationComponent(WCMConfigurationService.class);
+      NodeLocation nodeLocation = configurationService.getLivePortalsLocation(repoName);
+      
+      ManageableRepository manageableRepository = repositoryService.getRepository(nodeLocation.getRepository());
+      Session session = uiSelectPathPanel.getApplicationComponent(ThreadLocalSessionProviderService.class).getSessionProvider(null)
+                                          .getSession(nodeLocation.getWorkspace(), manageableRepository);
+      Node webContent = (Node) session.getItem(value);
+      NodeIdentifier nodeIdentifier = NodeIdentifier.make(webContent);
+      PortletRequestContext pContext = (PortletRequestContext) event.getRequestContext();
+      PortletPreferences prefs = pContext.getRequest().getPreferences();
+      prefs.setValue("repository", nodeIdentifier.getRepository());
+      prefs.setValue("workspace", nodeIdentifier.getWorkspace());
+      prefs.setValue("nodeIdentifier", nodeIdentifier.getUUID());
+      prefs.store();
+      
+      String remoteUser = Util.getPortalRequestContext().getRemoteUser();
+      String currentSite = Util.getPortalRequestContext().getPortalOwner();
+
+      WCMPublicationService wcmPublicationService = uiSelectPathPanel.getApplicationComponent(WCMPublicationService.class);
+
+      try {
+          wcmPublicationService.isEnrolledInWCMLifecycle(webContent);
+      } catch (NotInWCMPublicationException e){
+          wcmPublicationService.unsubcribeLifecycle(webContent);
+          wcmPublicationService.enrollNodeInLifecycle(webContent, currentSite, remoteUser);          
+      }
+
+      UserPortalConfigService userPortalConfigService = PublicationUtil.getServices(UserPortalConfigService.class);
+      UIPortalApplication uiApp = Util.getUIPortalApplication();
+      UIPortal uiPortal = Util.getUIPortal();
+      String pageId = uiPortal.getSelectedNode().getPageReference();
+      UserPortalConfigService portalConfigService = uiApp.getApplicationComponent(UserPortalConfigService.class);
+      Page currentPage = portalConfigService.getPage(pageId, remoteUser);
+      userPortalConfigService.update(currentPage);
     }
   }
 }
