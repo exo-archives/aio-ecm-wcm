@@ -17,10 +17,11 @@ public class FCKFileHandler {
     file.setAttribute("dateCreated", formatter.format(child.getProperty("exo:dateCreated").getDate().getTime()));    
     file.setAttribute("dateModified", formatter.format(child.getProperty("exo:dateModified").getDate().getTime()));      
     file.setAttribute("creator", child.getProperty("exo:owner").getString());
-    if (!child.hasProperty("exo:presentationType")) {
-    	file.setAttribute("nodeType", child.getPrimaryNodeType().getName());
+    if (child.isNodeType("nt:file")) {
+    	Node content = child.getNode("jcr:content");
+    	file.setAttribute("nodeType", content.getProperty("jcr:mimeType").getString());
     } else {
-    	file.setAttribute("nodeType", child.getProperty("exo:presentationType").getString());
+    	file.setAttribute("nodeType", child.getPrimaryNodeType().getName());
     }
     file.setAttribute("url",getFileURL(child));        
     if(child.isNodeType(FCKUtils.NT_FILE)) {
