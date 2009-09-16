@@ -58,6 +58,7 @@ import org.exoplatform.services.wcm.core.NodetypeConstant;
 import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
 import org.exoplatform.wcm.connector.BaseConnector;
+import org.exoplatform.wcm.connector.handler.FCKFileHandler;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -308,7 +309,7 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
       	} 
       	
       	if (fileType != null) {
-      		Element file = fileHandler.createFileElement(document, child, fileType);
+      		Element file = FCKFileHandler.createFileElement(document, child, fileType);
       		files.appendChild(file);
       	}
       }
