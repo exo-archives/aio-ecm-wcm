@@ -379,8 +379,6 @@ public class SiteSearchServiceImpl implements SiteSearchService {
       return;
     }    
     List<String> selectedNodeTypes = templateService.getDocumentTemplates(currentRepository.getConfiguration().getName());    
-    selectedNodeTypes.remove("exo:cssFile");
-    selectedNodeTypes.remove("exo:jsFile");            
     queryBuilder.openGroup(LOGICAL.AND);
     queryBuilder.equal("jcr:primaryType", "nt:resource", LOGICAL.NULL);
     // query on exo:rss-enable nodetypes for title, summary field
