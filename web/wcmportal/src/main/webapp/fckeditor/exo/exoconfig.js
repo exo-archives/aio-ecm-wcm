@@ -8,6 +8,7 @@ FCKConfig.Plugins.Add('insertImage', 'en,fr,vi', FCKConfig.eXoPath + "plugins/")
 FCKConfig.Plugins.Add('insertDocument', 'en,fr,vi', FCKConfig.eXoPath + "plugins/") ;
 FCKConfig.Plugins.Add('insertPortalLink', 'en,fr,vi', FCKConfig.eXoPath + "plugins/") ;
 FCKConfig.Plugins.Add('insertGadget', 'en,fr,vi', FCKConfig.eXoPath + "plugins/") ;
+FCKConfig.Plugins.Add('insertContent', 'en,fr,vi', FCKConfig.eXoPath + "plugins/") ;
 
 //config style
 FCKConfig.EditorAreaCSS = '';
@@ -19,7 +20,7 @@ FCKConfig.SkinPath = FCKConfig.BasePath + 'skins/default/' ;
 FCKConfig.ToolbarSets["CompleteWCM"] = [
 	['Source','Templates','-','FitWindow','ShowBlocks'],
 	['Cut','Copy','PasteText','-','SpellCheck','-','Undo','Redo'],
-	['WCMInsertGadget', 'WCMInsertImage','WCMInsertDocument','Flash','Table','SpecialChar'],
+	['WCMInsertGadget', 'WCMInsertImage','WCMInsertDocument','Flash','Table','SpecialChar', 'WCMInsertContent'],
 	'/',
 	['Bold','Italic','Underline','StrikeThrough','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','-','OrderedList','UnorderedList','-','TextColor','BGColor','-','RemoveFormat'],
 	['Link','WCMInsertPortalLink','Unlink','Anchor'],
