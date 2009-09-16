@@ -61,6 +61,7 @@ import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.publication.WebpagePublicationPlugin;
 import org.exoplatform.services.wcm.publication.lifecycle.simple.ui.UIPublishingPanel;
+import org.exoplatform.services.wcm.publication.listener.navigation.NavigationEventListenerDelegate;
 import org.exoplatform.services.wcm.publication.listener.page.PageEventListenerDelegate;
 import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.web.application.RequestContext;
@@ -449,7 +450,7 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
    * @see org.exoplatform.services.wcm.publication.WebpagePublicationPlugin#updateLifecycleOnChangeNavigation(org.exoplatform.portal.config.model.PageNavigation)
    */
   public void updateLifecycleOnChangeNavigation(PageNavigation navigation, String remoteUser) throws Exception {
-    navigationEventListenerDelegate.updateLifecycleOnChangeNavigation(navigation);
+    navigationEventListenerDelegate.updateLifecycleOnChangeNavigation(navigation, remoteUser, this);
   }
 
   /* (non-Javadoc)

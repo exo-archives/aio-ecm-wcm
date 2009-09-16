@@ -41,6 +41,7 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.publication.PublicationUtil;
+import org.exoplatform.services.wcm.publication.WebpagePublicationPlugin;
 import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 
 /**
@@ -80,12 +81,13 @@ public class NavigationEventListenerDelegate {
    * 
    * @param pageNavigation the page navigation
    * @param remoteUser the remote user
-   * 
+   * @param plugin TODO
    * @throws Exception the exception
    */
-  public void updateLifecycleOnChangeNavigation(PageNavigation pageNavigation, String remoteUser) throws Exception {
+  public void updateLifecycleOnChangeNavigation(
+  		PageNavigation pageNavigation, String remoteUser, WebpagePublicationPlugin plugin) throws Exception {
     if (pageNavigation.getOwnerType().equals(PortalConfig.PORTAL_TYPE)) {
-      updateRemovedPageNode(pageNavigation, remoteUser);
+      updateRemovedPageNode(pageNavigation, remoteUser, plugin);
       updateAddedPageNode(pageNavigation, remoteUser);
     }
   }
@@ -133,10 +135,11 @@ public class NavigationEventListenerDelegate {
    * 
    * @param pageNavigation the page navigation
    * @param remoteUser remoteUser
-   * 
+   * @param plugin TODO
    * @throws Exception the exception
    */
-  private void updateRemovedPageNode(PageNavigation pageNavigation, String remoteUser) throws Exception {
+  private void updateRemovedPageNode(
+  		PageNavigation pageNavigation, String remoteUser, WebpagePublicationPlugin plugin) throws Exception {
     String portalName = pageNavigation.getOwnerId();
     List<PageNode> listPortalPageNode = pageNavigation.getNodes();
     List<String> listPortalNavigationUri = new ArrayList<String>();
@@ -159,7 +162,7 @@ public class NavigationEventListenerDelegate {
     Session session = sessionProvider.getSession(workspaceName, repositoryService.getRepository(repositoryName));
 
     QueryManager queryManager = session.getWorkspace().getQueryManager();
-    Query query = queryManager.createQuery("select * from publication:webpagesPublication where publication:lifecycleName='" + lifecycleName + "' and jcr:path like '" + path + "/%' order by jcr:score", Query.SQL);
+    Query query = queryManager.createQuery("select * from " + plugin.getLifecycleType() + " where publication:lifecycleName='" + lifecycleName + "' and jcr:path like '" + path + "/%' order by jcr:score", Query.SQL);
     QueryResult results = query.execute();
     for (NodeIterator nodeIterator = results.getNodes(); nodeIterator.hasNext();) {
       Node content = nodeIterator.nextNode();

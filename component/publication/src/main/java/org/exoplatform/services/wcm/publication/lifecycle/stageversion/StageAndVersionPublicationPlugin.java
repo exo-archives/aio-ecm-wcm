@@ -631,7 +631,7 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
    * @see org.exoplatform.services.wcm.publication.WebpagePublicationPlugin#updateLifecycleOnChangeNavigation(org.exoplatform.portal.config.model.PageNavigation, java.lang.String)
    */
   public void updateLifecycleOnChangeNavigation(PageNavigation pageNavigation, String remoteUser) throws Exception {
-    navigationEventListenerDelegate.updateLifecycleOnChangeNavigation(pageNavigation, remoteUser);
+    navigationEventListenerDelegate.updateLifecycleOnChangeNavigation(pageNavigation, remoteUser, this);
   }
 
   /* (non-Javadoc)
