@@ -17,7 +17,7 @@ public class FCKFileHandler {
     file.setAttribute("dateCreated", formatter.format(child.getProperty("exo:dateCreated").getDate().getTime()));    
     file.setAttribute("dateModified", formatter.format(child.getProperty("exo:dateModified").getDate().getTime()));      
     file.setAttribute("creator", child.getProperty("exo:owner").getString());
-    if (child.getProperty("exo:presentationType") == null ) {
+    if (!child.hasProperty("exo:presentationType")) {
     	file.setAttribute("nodeType", child.getPrimaryNodeType().getName());
     } else {
     	file.setAttribute("nodeType", child.getProperty("exo:presentationType").getString());
