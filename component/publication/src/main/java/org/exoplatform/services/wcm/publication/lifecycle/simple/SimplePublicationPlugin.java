@@ -120,7 +120,7 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
   }
 
   public String getLifecycleType() {
-  	return "publication:simplePublication";
+  	return WCM_PUBLICATION_MIXIN;
   }
   
   /* (non-Javadoc)
