@@ -147,11 +147,11 @@ function search(comId) {
 }	
 
 function keepKeywordOnBoxSearch() {
-	//var queryRegex = /^portal=\w+&keyword=\w+/;
+	var queryRegex = /^portal=[\w%]+&keyword=[\w%]+/;
 	var searchBox = document.getElementById("siteSearchBox");
 	var keyWordInput = eXo.core.DOMUtil.findFirstDescendantByClass(searchBox, "input", "keyword");
-	var queryString = location.search.substring(1);  
-	//if (!queryString.match(queryRegex)) {return;}
+	var queryString = location.search.substring(1);
+	if (!queryString.match(queryRegex)) {return;}
 	var portalParam = queryString.split('&')[0];
 	var keyword = decodeURI(queryString.substring((portalParam + "keyword=").length +1));
 	if (keyword != undefined && keyword.length != 0) {
