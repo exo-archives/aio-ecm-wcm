@@ -49,7 +49,7 @@
 			  		</div>
 				<%
 			}
-			if (isQuickEditable) {
+			if (isQuickEditable && !isPrint) {
 				%><a class="DocumentQuickEdit" href="<%= uicomponent.event("QuickEdit") %>" title="<%= _ctx.appRes("UIContentViewerContainer.label.quickEditTitle") %>"></a><% 	
 			}
 			if (isDraftRevision) { 
