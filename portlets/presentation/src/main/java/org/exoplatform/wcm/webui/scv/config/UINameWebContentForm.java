@@ -144,7 +144,7 @@ public class UINameWebContentForm extends UIForm {
             try {
               resolveLabel = resourceBundle.getString("ContentType.lable."+ StringUtils.deleteWhitespace(resolveLabel));
             } catch(Exception e) {
-              Utils.createPopupMessage(this, "UIMessageBoard.msg.get-resource-bundle", null, ApplicationMessage.ERROR);
+              // You shouldn't throw popup message, because some exception often rise here.
             }
         	try {
         		String templatePath = templateService.getTemplatePathByUser(true, contentType, userName, repositoryName);
