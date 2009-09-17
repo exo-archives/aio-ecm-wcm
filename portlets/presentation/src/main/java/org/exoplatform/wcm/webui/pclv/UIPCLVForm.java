@@ -659,7 +659,7 @@ public class UIPCLVForm extends UIForm {
     try {
       lifecyleName = publicationService.getNodeLifecycleName(realNode);
     } catch (NotInPublicationLifecycleException e) {
-   // You shouldn't throw popup message, because some exception often rise here.
+      // You shouldn't throw popup message, because some exception often rise here.
     }
     if (lifecyleName == null) return realNode;
       
