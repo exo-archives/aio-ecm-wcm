@@ -79,7 +79,7 @@ public class PublicationInitializerService implements Startable{
           initializePublication(portalNode);
         }
         
-        Node publicationInitializerServiceLog = publicationInitializerService.addNode("ContentInitializerServiceLog", "nt:file");
+        Node publicationInitializerServiceLog = publicationInitializerService.addNode("PublicationInitializerServiceLog", "nt:file");
         Node publicationInitializerServiceLogContent = publicationInitializerServiceLog.addNode("jcr:content", "nt:resource");
         publicationInitializerServiceLogContent.setProperty("jcr:encoding", "UTF-8");
         publicationInitializerServiceLogContent.setProperty("jcr:mimeType", "text/plain");
