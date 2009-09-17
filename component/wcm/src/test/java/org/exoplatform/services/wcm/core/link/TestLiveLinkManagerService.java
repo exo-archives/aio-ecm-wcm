@@ -27,7 +27,6 @@ import org.exoplatform.services.wcm.core.NodetypeConstant;
 import org.exoplatform.services.wcm.link.LinkBean;
 import org.exoplatform.services.wcm.link.LiveLinkManagerService;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform

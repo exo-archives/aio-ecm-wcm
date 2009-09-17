@@ -28,7 +28,6 @@ import javax.jcr.Property;
 import javax.jcr.Session;
 import javax.jcr.Value;
 
-import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
@@ -42,7 +41,6 @@ import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.mail.MailService;
 import org.exoplatform.services.mail.Message;
 import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
@@ -61,7 +59,6 @@ import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIFormDateTimeInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
@@ -77,9 +74,6 @@ import org.exoplatform.webui.form.UIFormSelectBox;
     }
 )
 public class UINewsletterEntryForm extends UIDialogForm {
-
-  /** The Constant log. */
-  private static final Log log  = ExoLogger.getLogger("wcm:UINewsletterEntryForm");
 
   /**
    * Instantiates a new uI newsletter entry form.
@@ -98,7 +92,7 @@ public class UINewsletterEntryForm extends UIDialogForm {
     try{
       return templateService.getTemplatePathByUser(true, "exo:webContent", userName, repositoryName);
     } catch(Exception e) {
-      log.error("Get template failed because of " + e.getMessage(), e);
+      Utils.createPopupMessage(this, "UINewsletterEntryForm.msg.get-template", null, ApplicationMessage.ERROR);
     }
     return null;
   }
@@ -114,7 +108,7 @@ public class UINewsletterEntryForm extends UIDialogForm {
         resourceResolver = new JCRResourceResolver(this.repositoryName, workspace, TemplateService.EXO_TEMPLATE_FILE_PROP);
       }
     }catch(Exception e) {
-      log.error("Get template resource resolver failed because of " + e.getMessage(), e);
+      Utils.createPopupMessage(this, "UINewsletterEntryForm.msg.get-template-resource", null, ApplicationMessage.ERROR);
     }
     return resourceResolver;
   }
@@ -272,7 +266,9 @@ public class UINewsletterEntryForm extends UIDialogForm {
           for(Value value : subscribedUserProperty.getValues()){
             try {
               listEmailAddress.add(value.getString());
-            } catch (Exception e) {}
+            } catch (Exception e) {
+              Utils.createPopupMessage(newsletterEntryForm, "UINewsletterEntryForm.msg.add-email-newsletter", null, ApplicationMessage.ERROR);
+            }
           }
         }
         if (listEmailAddress.size() > 0) {
@@ -288,7 +284,9 @@ public class UINewsletterEntryForm extends UIDialogForm {
           message.setMimeType("text/html") ;
           try {
             mailService.sendMessage(message);
-          }catch (Exception e) {}
+          }catch (Exception e) {
+            Utils.createPopupMessage(newsletterEntryForm, "UINewsletterEntryForm.msg.send-newsletter", null, ApplicationMessage.ERROR);
+          }
         }
         session.save();
       }

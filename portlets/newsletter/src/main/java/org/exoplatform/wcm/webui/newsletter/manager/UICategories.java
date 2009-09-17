@@ -28,13 +28,13 @@ import org.exoplatform.services.wcm.newsletter.handler.NewsletterManageUserHandl
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterSubscriptionHandler;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.newsletter.UINewsletterConstant;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class UICategories.
  */
@@ -116,7 +116,9 @@ public class UICategories extends UIContainer {
 	  List<NewsletterCategoryConfig> listCategories = new ArrayList<NewsletterCategoryConfig>();
 		try{
 			listCategories = categoryHandler.getListCategories(NewsLetterUtil.getPortalName(), Utils.getSessionProvider(this));
-		}catch(Exception e){}
+		}catch(Exception e){
+		  Utils.createPopupMessage(this, "UICategories.msg.get-list-categories", null, ApplicationMessage.ERROR);
+		}
 		return listCategories;
 	}
 	
@@ -132,7 +134,9 @@ public class UICategories extends UIContainer {
 	  List<NewsletterSubscriptionConfig> listSubscription = new ArrayList<NewsletterSubscriptionConfig>();
     try{
       listSubscription = subscriptionHandler.getSubscriptionsByCategory(NewsLetterUtil.getPortalName(), categoryName, Utils.getSessionProvider(this));
-    }catch(Exception e){}
+    }catch(Exception e){
+      Utils.createPopupMessage(this, "UICategories.msg.get-list-subscriptions", null, ApplicationMessage.ERROR);
+    }
     return listSubscription;
   }
 	

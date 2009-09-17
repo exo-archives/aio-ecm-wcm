@@ -100,7 +100,9 @@ public class NewsletterManageUserHandler {
     for(Value value : values){
       try {
         listString.add(value.getString());
-      } catch (Exception e) {}
+      }catch (Exception e) {
+        log.error("Error when convert values to array: ", e.fillInStackTrace());
+      }
     }
     return listString;
   }
@@ -121,7 +123,7 @@ public class NewsletterManageUserHandler {
         return convertValuesToArray(categoriesNode.getProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR).getValues());
       }
     } catch(Exception ex){
-      log.error("getAllAdministrator() failed because of " + ex.getMessage());
+      log.error("getAllAdministrator() failed because of ", ex.fillInStackTrace());
     }
     return new ArrayList<String>();
   }
@@ -193,7 +195,7 @@ public class NewsletterManageUserHandler {
       userNode.setProperty(NewsletterConstant.USER_PROPERTY_VALIDATION_CODE, "PublicUser" + IdGenerator.generate() );
       session.save();
     } catch (Exception e) {
-      log.error("Add user " + userMail + " failed because of " + e.getMessage());
+      log.error("Add user " + userMail + " failed because of ", e.fillInStackTrace());
     }
     if(userNode == null){
       throw new Exception("Can not add new user");
@@ -242,7 +244,7 @@ public class NewsletterManageUserHandler {
                            !userNode.getProperty(NewsletterConstant.USER_PROPERTY_BANNED).getBoolean());
       session.save();
     } catch (Exception e) {
-      log.error("Ban/UnBan user " + userMail + " failed because of " + e.getMessage());
+      log.error("Ban/UnBan user " + userMail + " failed because of ", e.fillInStackTrace());
     }
   }
   
@@ -285,7 +287,7 @@ public class NewsletterManageUserHandler {
       }
       session.save();
     } catch (Exception e) {
-      log.error("Delete user " + userMail + " failed because of " + e.getMessage());
+      log.error("Delete user " + userMail + " failed because of ", e.fillInStackTrace());
     }
   }
 
@@ -367,7 +369,7 @@ public class NewsletterManageUserHandler {
         }
       }
     } catch (Exception e) {
-      log.error("Get list user by subscription " + portalName + "/" + categoryName + "/" + subscriptionName + " failed because of " + e.getMessage());
+      log.error("Get list user by subscription " + portalName + "/" + categoryName + "/" + subscriptionName + " failed because of ", e.fillInStackTrace());
     }
     return subscribedUsers;
   }
@@ -398,7 +400,7 @@ public class NewsletterManageUserHandler {
         countUser = subscribedUserProperty.getValues().length;
       }
     } catch (Exception e) {
-      log.error("Get user's quantity by subscription " + portalName + "/" + categoryName + "/" + subscriptionName + " failed because of " + e.getMessage());
+      log.error("Get user's quantity by subscription " + portalName + "/" + categoryName + "/" + subscriptionName + " failed because of ", e.fillInStackTrace());
     }
     return countUser;
   }
@@ -419,7 +421,7 @@ public class NewsletterManageUserHandler {
       }
       return false;
     } catch (Exception e) {
-      log.error("checkExistedEmail() failed because of " + e.getMessage());
+      log.error("checkExistedEmail() failed because of ", e.fillInStackTrace());
     }
     return false;
   }

@@ -14,7 +14,6 @@ import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 import org.exoplatform.services.wcm.newsletter.NewsletterSubscriptionConfig;
 import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class TestNewsletterTemplateHandler.
  */

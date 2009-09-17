@@ -29,7 +29,7 @@
       <UIOneNodePathSelector>Định vị vị trí</UIOneNodePathSelector>
     </title>
   </UIPopupWindow>
-  <UIFastContentCreatortForm>
+  <UIFCCForm>
     <msg>
       <name-not-allowed>Tên này không được chấp nhận.</name-not-allowed>
       <in-versioning>Bạn cần check out node hiện tại trước khi thêm node con cho nó</in-versioning>
@@ -41,12 +41,13 @@
       <path-not-found>Đường dẫn '{0}' đã bị xóa hoặc đó là đường dẫn không đúng.</path-not-found>
       <node-locked>Nút '{0}' đã bị khóa. Nút phải được mở khóa trước khi tạo tài liệu.</node-locked>
       <node-isExist>Nút này đã tồn tại trong '{0}' và tên cùng mức không được chấp nhận</node-isExist>
+      <get-dialog-path>Có lỗi khi thực hiện lấy path cho dialog.</get-dialog-path>
     </msg>
     <action>
       <Save>Lưu</Save>
       <Cancel>Hủy</Cancel>
     </action>
-  </UIFastContentCreatortForm>
+  </UIFCCForm>
   <EmptyFieldValidator>
     <msg>
       <empty-input>Hãy nhập giá trị cho trường '{0}'</empty-input>

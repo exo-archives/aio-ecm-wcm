@@ -21,7 +21,6 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : Tran Nguyen Ngoc

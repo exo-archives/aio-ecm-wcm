@@ -29,7 +29,6 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.log.ExoLogger;
 import org.picocontainer.Startable;
 
-// TODO: Auto-generated Javadoc
 /**
  * Repository Loader for CTI This loader builds a tree of 4 levels. All trees starting in the first
  * level are created using Threads.

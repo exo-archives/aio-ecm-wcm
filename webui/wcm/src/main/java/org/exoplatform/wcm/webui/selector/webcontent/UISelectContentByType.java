@@ -22,18 +22,16 @@ import java.util.List;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIBreadcumbs;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIFormSelectBox;
-import org.exoplatform.wcm.webui.selector.webContentView.UIWebContentTreeBuilder;
 
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          maivanha1610@gmail.com
- * Aug 26, 2009  
+ * maivanha1610@gmail.com
+ * Aug 26, 2009
  */
 @ComponentConfig(
      template = "classpath:groovy/wcm/webui/UISelectContentByType.gtmpl",
@@ -42,13 +40,30 @@ import org.exoplatform.wcm.webui.selector.webContentView.UIWebContentTreeBuilder
      }
  )
 public class UISelectContentByType  extends UIContainer{
+  
+  /** The Constant WEBCONENT. */
   public static final String WEBCONENT = "WebContent";
+  
+  /** The Constant DMSDOCUMENT. */
   public static final String DMSDOCUMENT = "DMSDocument";
+  
+  /** The Constant MEDIA. */
   public static final String MEDIA = "Media";
+  
+  /** The SELEC t_ typ e_ content. */
   public final String SELECT_TYPE_CONTENT = "selectTypeContent";
+  
+  /** The types. */
   public String[] types = new String[]{WEBCONENT, DMSDOCUMENT, MEDIA};
+  
+  /** The selected values. */
   private String selectedValues = WEBCONENT;
   
+  /**
+   * Instantiates a new uI select content by type.
+   * 
+   * @throws Exception the exception
+   */
   public UISelectContentByType() throws Exception{
     List<SelectItemOption<String>> listTypes = new ArrayList<SelectItemOption<String>>();
     SelectItemOption<String> option = null;
@@ -61,17 +76,28 @@ public class UISelectContentByType  extends UIContainer{
     addChild(formSelectBox);
   }
 
+  /**
+   * The listener interface for receiving changeContentTypeAction events.
+   * The class that is interested in processing a changeContentTypeAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addChangeContentTypeActionListener<code> method. When
+   * the changeContentTypeAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see ChangeContentTypeActionEvent
+   */
   public static class ChangeContentTypeActionListener extends EventListener<UISelectContentByType> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UISelectContentByType> event) throws Exception {
       UISelectContentByType contentByType = event.getSource();
       String type = event.getRequestContext().getRequestParameter(OBJECTID);
       if(type.equals(contentByType.selectedValues)) return;
       contentByType.selectedValues = type;
       UIWebContentPathSelector contentPathSelector = contentByType.getParent();
-      /*UIWebContentPathSelector uiWCPathSelector = contentPathSelector.getChild(UIBreadcumbs.class)
-                                                                      .getAncestorOfType(UIWebContentPathSelector.class);*/
-      //UIWebContentTreeBuilder uiWCTreeBuilder = uiWCPathSelector.getChild(UIWebContentTreeBuilder.class);
-      //uiWCTreeBuilder.changeNode("", event.getRequestContext());
       contentPathSelector.reRenderChild(contentByType.selectedValues);
       contentPathSelector.init();
       event.getRequestContext().addUIComponentToUpdateByAjax(contentPathSelector);

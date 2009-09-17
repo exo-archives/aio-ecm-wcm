@@ -21,11 +21,13 @@ import java.util.Map;
 
 import javax.jcr.Node;
 
+import org.apache.commons.logging.Log;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleException;
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
+import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.publication.lifecycle.simple.SimplePublicationPlugin;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
 import org.picocontainer.Startable;
@@ -47,6 +49,9 @@ public class WCMPublicationServiceImpl implements WCMPublicationService, Startab
 
   /** The content composer. */
   private WCMComposer wcmComposer;
+  
+  /** The log. */
+  private static Log log = ExoLogger.getLogger(WCMPublicationServiceImpl.class);
   
   /**
    * Instantiates a new WCM publication service.
@@ -207,7 +212,7 @@ public class WCMPublicationServiceImpl implements WCMPublicationService, Startab
 	 */
 	public void enrollNodeInLifecycle(Node node, String siteName, String remoteUser) throws Exception {
 		/*
-		 * TODO : lifecycle based on site (each site can define its own publication lifecycle)
+		 * lifecycle based on site (each site can define its own publication lifecycle)
 		 * We choose to use a different publication plugin for testing only for now (test has to be created separetly)
 		 */
 		if ("test".equals(siteName)) {
@@ -255,8 +260,12 @@ public class WCMPublicationServiceImpl implements WCMPublicationService, Startab
 	public String getContentState(Node node) throws Exception {
     String currentState = null;
     try {
-      currentState = node.getProperty("publication:currentState").getString();
-    } catch (Exception e) {}
+      if(node.hasProperty("publication:currentState")) {
+        currentState = node.getProperty("publication:currentState").getString();
+      }
+    } catch (Exception e) {
+      log.error("Error when perform getContentState: ", e.fillInStackTrace());
+    }
     return currentState;
 	}
 }

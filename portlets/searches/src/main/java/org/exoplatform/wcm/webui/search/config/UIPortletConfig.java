@@ -20,7 +20,6 @@ import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 
-// TODO: Auto-generated Javadoc
 /*
  * Created by The eXo Platform SAS 
  * Author : Anh Do Ngoc 

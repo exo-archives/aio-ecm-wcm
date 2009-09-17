@@ -1,6 +1,5 @@
 package org.exoplatform.services.wcm.publication;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Interface PublicationDefaultStates.
  */

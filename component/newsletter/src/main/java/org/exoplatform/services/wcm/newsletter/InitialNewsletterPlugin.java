@@ -33,7 +33,6 @@ import org.exoplatform.services.wcm.newsletter.handler.NewsletterSubscriptionHan
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.services.wcm.portal.artifacts.BasePortalArtifactsPlugin;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
@@ -102,7 +101,7 @@ public class InitialNewsletterPlugin extends BasePortalArtifactsPlugin {
         userFolderNode.addMixin("exo:privilegeable");
       userFolderNode.setPermission("any", PermissionType.ALL) ;
     } catch (Exception e) {
-      log.info("InitialNewsletterPlugin fail because of " + e.getMessage());
+      log.info("InitialNewsletterPlugin fail because of ", e.fillInStackTrace());
     }
   }
 }

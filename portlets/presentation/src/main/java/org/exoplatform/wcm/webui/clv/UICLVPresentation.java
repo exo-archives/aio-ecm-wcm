@@ -50,6 +50,7 @@ import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -60,7 +61,6 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
-// TODO: Auto-generated Javadoc
 /*
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Oct 21, 2008
@@ -185,7 +185,9 @@ import org.exoplatform.webui.event.EventListener;
     String lifecyleName = null;
     	try {
     		lifecyleName = publicationService.getNodeLifecycleName(node);
-			} catch (NotInPublicationLifecycleException e) {}
+			} catch (NotInPublicationLifecycleException e) {
+			  // You shouldn't throw popup message, because some exception often rise here.
+			}
 		if (lifecyleName == null) return node;
 			
     PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins()
@@ -208,7 +210,9 @@ import org.exoplatform.webui.event.EventListener;
     if (Utils.isLiveMode()) return false;
     try {
       currentState = node.getProperty("publication:currentState").getString();
-    } catch (Exception e) {} 
+    } catch (Exception e) {
+      Utils.createPopupMessage(this, "UIMessageBoard.msg.show-draft-button", null, ApplicationMessage.ERROR);
+    } 
     if(PublicationDefaultStates.DRAFT.equals(currentState))
       return true;
     return false;
@@ -478,7 +482,9 @@ import org.exoplatform.webui.event.EventListener;
   public String getContentIcon(Node node) {
 	  try {
 		return "Icon16x16 default16x16Icon "+org.exoplatform.ecm.webui.utils.Utils.getNodeTypeIcon(node, "16x16Icon");
-	} catch (RepositoryException e) {}
+	} catch (RepositoryException e) {
+	  Utils.createPopupMessage(this, "UIMessageBoard.msg.get-content-icon", null, ApplicationMessage.ERROR);
+	}
     return null;
   }
 
@@ -511,7 +517,9 @@ import org.exoplatform.webui.event.EventListener;
     try {
       illustrativeImage = contentSchemaHandler.getIllustrationImage(node);
       uri = imagesRendererService.generateURI(illustrativeImage);      
-    } catch (Exception e) {}
+    } catch (Exception e) {
+      // You shouldn't throw popup message, because some exception often rise here.
+    }
     return uri;
   }
 

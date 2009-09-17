@@ -27,6 +27,7 @@ import javax.jcr.Node;
 import javax.jcr.Session;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
 import org.exoplatform.container.configuration.ConfigurationManager;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ObjectParameter;
@@ -51,42 +52,73 @@ import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.portal.artifacts.BasePortalArtifactsPlugin;
 
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong_phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * Aug 11, 2009  
+ * chuong_phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * Aug 11, 2009
  */
 public class InitialTaxonomyPlugin extends BasePortalArtifactsPlugin {
 
+  /** The workspace. */
   private String                  workspace                  = "";
 
+  /** The path. */
   private String                  path                       = "";
 
+  /** The tree name. */
   private String                  treeName                   = "";
 
+  /** The permissions. */
   private List<Permission>        permissions                = new ArrayList<Permission>(4);
 
+  /** The auto create in new repository_. */
   private boolean                 autoCreateInNewRepository_ = true;
 
+  /** The repository service_. */
   private RepositoryService       repositoryService_;
 
+  /** The taxonomy service_. */
   private TaxonomyService         taxonomyService_;
 
+  /** The base taxonomies storage_. */
   private String                  baseTaxonomiesStorage_;
 
+  /** The action service container_. */
   private ActionServiceContainer  actionServiceContainer_;
 
+  /** The params_. */
   private InitParams              params_;
   
+  /** The dms configuration_. */
   private DMSConfiguration        dmsConfiguration_;
   
+  /** The portal name. */
   private String                  portalName;
   
+  /** The name. */
   private String                  name;
   
+  /** The log. */
+  private static Log log = ExoLogger.getLogger(CategoryInitializationPlugin.class);
+  
+  
+  /**
+   * Instantiates a new initial taxonomy plugin.
+   * 
+   * @param params the params
+   * @param configurationManager the configuration manager
+   * @param repositoryService the repository service
+   * @param nodeHierarchyCreator the node hierarchy creator
+   * @param taxonomyService the taxonomy service
+   * @param actionServiceContainer the action service container
+   * @param dmsConfiguration the dms configuration
+   * 
+   * @throws Exception the exception
+   */
   public InitialTaxonomyPlugin(InitParams params, 
                                ConfigurationManager configurationManager,
                                RepositoryService repositoryService,
@@ -119,6 +151,9 @@ public class InitialTaxonomyPlugin extends BasePortalArtifactsPlugin {
     dmsConfiguration_ = dmsConfiguration;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.wcm.portal.artifacts.BasePortalArtifactsPlugin#deployToPortal(java.lang.String, org.exoplatform.services.jcr.ext.common.SessionProvider)
+   */
   public void deployToPortal(String portalName, SessionProvider sessionProvider) throws Exception {
     this.portalName = portalName;
     // Replace with real data
@@ -128,6 +163,11 @@ public class InitialTaxonomyPlugin extends BasePortalArtifactsPlugin {
     init();
   }
 
+  /**
+   * Inits the.
+   * 
+   * @throws Exception the exception
+   */
   public void init() throws Exception {
     if (autoCreateInNewRepository_) {
       for (RepositoryEntry repositoryEntry : repositoryService_.getConfig()
@@ -146,44 +186,94 @@ public class InitialTaxonomyPlugin extends BasePortalArtifactsPlugin {
     importPredefineTaxonomies(repository);
   }
   
+  /**
+   * Inits the.
+   * 
+   * @param repository the repository
+   * 
+   * @throws Exception the exception
+   */
   public void init(String repository) throws Exception {
     if (!autoCreateInNewRepository_)
       return;
     importPredefineTaxonomies(repository);
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.deployment.DeploymentPlugin#getName()
+   */
   public String getName() {
     return name;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.deployment.DeploymentPlugin#setName(java.lang.String)
+   */
   public void setName(String name) {
     this.name = name;
   }
 
+  /**
+   * Gets the path.
+   * 
+   * @return the path
+   */
   public String getPath() {
     return path;
   }
 
+  /**
+   * Sets the path.
+   * 
+   * @param path the new path
+   */
   public void setPath(String path) {
     this.path = path;
   }
 
+  /**
+   * Gets the permissions.
+   * 
+   * @return the permissions
+   */
   public List<Permission> getPermissions() {
     return permissions;
   }
 
+  /**
+   * Sets the permissions.
+   * 
+   * @param permissions the new permissions
+   */
   public void setPermissions(List<Permission> permissions) {
     this.permissions = permissions;
   }
 
+  /**
+   * Gets the workspace.
+   * 
+   * @return the workspace
+   */
   public String getWorkspace() {
     return workspace;
   }
 
+  /**
+   * Sets the workspace.
+   * 
+   * @param workspace the new workspace
+   */
   public void setWorkspace(String workspace) {
     this.workspace = workspace;
   }
   
+  /**
+   * Import predefine taxonomies.
+   * 
+   * @param repository the repository
+   * 
+   * @throws Exception the exception
+   */
   @SuppressWarnings("unchecked")
   private void importPredefineTaxonomies(String repository) throws Exception {
     ManageableRepository manageableRepository = repositoryService_.getRepository(repository);
@@ -250,11 +340,22 @@ public class InitialTaxonomyPlugin extends BasePortalArtifactsPlugin {
     taxonomyStorageNode.save();
     try {
       taxonomyService_.addTaxonomyTree(taxonomyStorageNodeSystem);
-    } catch (TaxonomyAlreadyExistsException e) {}
+    } catch (TaxonomyAlreadyExistsException e) {
+      log.error("Error when perform importPredefineTaxonomies: ", e.fillInStackTrace());
+    }
     session.save();
     session.logout();
   }
 
+  /**
+   * Adds the action.
+   * 
+   * @param action the action
+   * @param srcNode the src node
+   * @param repository the repository
+   * 
+   * @throws Exception the exception
+   */
   @SuppressWarnings("unchecked")
   private void addAction(ActionConfig.TaxonomyAction action, Node srcNode, String repository)
       throws Exception {
@@ -318,6 +419,13 @@ public class InitialTaxonomyPlugin extends BasePortalArtifactsPlugin {
     actionNode.getSession().save();
   }
 
+  /**
+   * Gets the permissions.
+   * 
+   * @param listPermissions the list permissions
+   * 
+   * @return the permissions
+   */
   private Map<String, String[]> getPermissions(List<Permission> listPermissions) {
     Map<String, String[]> permissionsMap = new HashMap<String, String[]>();
     for (Permission permission : listPermissions) {

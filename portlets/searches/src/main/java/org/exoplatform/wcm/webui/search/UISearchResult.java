@@ -60,7 +60,6 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
-// TODO: Auto-generated Javadoc
 /*
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Oct 31, 2008
@@ -356,7 +355,9 @@ public class UISearchResult extends UIContainer {
 		String currentState = null;
 		try {
 			currentState = node.getProperty("publication:currentState").getString();
-		} catch (Exception e) {}
+		} catch (Exception e) {
+		  Utils.createPopupMessage(this, "UISearchForm.message.get-property", null, ApplicationMessage.ERROR);
+		}
 		if (Boolean.parseBoolean(obj.toString()) && DRAFT.equals(currentState))
 			return true;
 		return false;
@@ -378,7 +379,9 @@ public class UISearchResult extends UIContainer {
 		String lifecyleName = null;
 		try {
 		  lifecyleName = publicationService.getNodeLifecycleName(node);
-    } catch (Exception e) {}
+    } catch (Exception e) {
+      // You shouldn't throw popup message, because some exception often rise here.
+    }
     if (lifecyleName == null) return node;
 		PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins()
 																														.get(lifecyleName);

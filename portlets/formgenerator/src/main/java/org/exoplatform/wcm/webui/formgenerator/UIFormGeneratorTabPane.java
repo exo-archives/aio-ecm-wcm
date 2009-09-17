@@ -53,7 +53,6 @@ import org.exoplatform.ws.frameworks.json.impl.JsonDefaultHandler;
 import org.exoplatform.ws.frameworks.json.impl.JsonParserImpl;
 import org.exoplatform.ws.frameworks.json.value.JsonValue;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
@@ -160,13 +159,9 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
   private void addNodetype(WebuiRequestContext requestContext, String repository, String nodetypeName, List<UIFormGeneratorInputBean> formBeans) throws Exception {
     NodeTypeValue newNodeType = new NodeTypeValue() ;                             
     newNodeType.setName(nodetypeName) ;
-    // TODO: Need update in 1.3
     newNodeType.setPrimaryItemName(null);
-    // TODO: Need update in 1.3
     newNodeType.setMixin(false) ;
-    // TODO: Need update in 1.3
     newNodeType.setOrderableChild(false) ;
-    // TODO: Need update in 1.3
     List<String> supertypes = new ArrayList<String>();
     supertypes.add("nt:base");
     newNodeType.setDeclaredSupertypeNames(supertypes) ;      
@@ -176,21 +171,16 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
       PropertyDefinitionValue property = new PropertyDefinitionValue() ;
       property.setName(getPropertyName(form.getName())) ;          
       property.setRequiredType(getNumberRequireType(form.getType(), formBeans.size())) ;
-      // TODO: Need update in 1.3
       property.setMultiple(false) ;    
       property.setMandatory(form.isMandatory()) ;
-      // TODO: Need update in 1.3
       property.setAutoCreate(false) ;
-      // TODO: Need update in 1.3
       property.setReadOnly(false) ;
-      // TODO: Need update in 1.3
       property.setOnVersion(OnParentVersionAction.COPY) ; 
       property.setValueConstraints(null) ;
       properties.add(property) ;
     }
     newNodeType.setDeclaredPropertyDefinitionValues(properties) ;
     
-    // TODO: Need update in 1.3
     newNodeType.setDeclaredChildNodeDefinitionValues(new ArrayList<NodeDefinitionValue>()) ;
     try {
       ExtendedNodeTypeManager extendedNodeTypeManager = getApplicationComponent(RepositoryService.class).getRepository(repository).getNodeTypeManager(); 
@@ -228,7 +218,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
     dialogTemplate.append("    <div class=\"HorizontalLayout\">");
     dialogTemplate.append("      <table class=\"UIFormGrid\">");
     
-    /* TODO : in WCM 1.2, we disable name and use a automatic timestamp name. 
+    /* in WCM 1.2, we disable name and use a automatic timestamp name. 
      * We will offer the possibility to choose in WCM 1.3 
      * (show name, use timestamp, convert from another field like exo:title for example) 
      */

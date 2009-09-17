@@ -87,6 +87,7 @@
       <categoryTitleIsNotEmpty>Category title cannot be empty!</categoryTitleIsNotEmpty>
       <categoryNameIsAlreadyExist>This category's name is already exist!</categoryNameIsAlreadyExist>
       <inputModeratorEmpty>You must select user or member moderator!</inputModeratorEmpty>
+      <error-add-category>Error when add or edit category.</error-add-category>
     </msg>
 		<label>
     	<CategoryName>Name</CategoryName>
@@ -111,6 +112,10 @@
     	<NewsCategory>New Category</NewsCategory>
     	<Administration>Administration</Administration>
     </title>
+    <msg>
+    	<get-list-categories>Error when perform get list categories.</get-list-categories>
+    	<get-list-subscriptions>Error when perform get list subscriptions.</get-list-subscriptions>
+    </msg>
   </UICategories>
   
   <UISubscription>
@@ -127,6 +132,7 @@
     	<checkOnlyOneNewsletterToConvert>Please check only one newsletter to convert!</checkOnlyOneNewsletterToConvert>
     	<convertSuccessful>Convert successful!</convertSuccessful>
     	<templateIsExist>Already exist a template have same name! Please check again.</templateIsExist>
+    	<get-list-subscriptions>Error when perform get list subscriptions.</get-list-subscriptions>
     </msg>
     <title>
     	<ManageCategory>Manage Category</ManageCategory>
@@ -208,6 +214,10 @@
 			<NodeNameInvalid>
 				Can't create newsletter because this title already exists. Please try again!
 			</NodeNameInvalid>
+			<get-template>Error when perform get template.</get-template>
+			<get-template-resource>Error when perform get template resource resolver</get-template-resource>
+			<add-email-newsletter>Error when perform add list email address.</add-email-newsletter>
+			<send-newsletter>Error when perform send newsletter.</send-newsletter>
 		</msg>
 	</UINewsletterEntryForm>
 	
@@ -253,11 +263,17 @@
 			<Moderator>Moderator</Moderator>
 			<Redactor>Redactor</Redactor>
 		</role>
+		<msg>
+			<get-list-users>Error when get list public users.</get-list-users>
+			<set-infor-users>Error when set information for users.</set-infor-users>
+		</msg>
 	</UIManagerUsers>
 	
 	<UINewsletterEntryManager>
 		<msg>
 			<confirmDeleteNewsletter>Are you sure you want to delete this newsletter?</confirmDeleteNewsletter>
+			<set-list-newsletter>Error when perform set list newsletter entries.</set-list-newsletter>
+			<get-checked>Error when perform get newsletter or subscription are checked.</get-checked>
 		</msg>
 		<title>
 			<ConvertAsTemplate>Convert As Template</ConvertAsTemplate>

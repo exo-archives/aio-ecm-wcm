@@ -47,7 +47,7 @@ public class RemoveNavigationEventListener extends Listener<UserPortalConfigServ
     try {
       publicationService.updateLifecyleOnRemoveNavigation(event.getData());
     } catch (Exception e) {
-      log.error("Exception when update publication lifecyle", e);
+      log.error("Exception when update publication lifecyle", e.fillInStackTrace());
     }
   }
 }

@@ -33,11 +33,13 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.metadata.PageMetadataService;
 import org.exoplatform.services.wcm.utils.WCMCoreUtils;
@@ -50,6 +52,8 @@ import org.exoplatform.services.wcm.utils.WCMCoreUtils;
  */
 public class PageMetadataRequestFilter implements Filter {  
 
+  /** The log. */
+  private Log log = ExoLogger.getLogger(this.getClass());
   /** The Constant PCV_PARAMETER_REGX. */
   public final static String PCV_PARAMETER_REGX           = "(.*)/(.*)/(.*)";
 
@@ -79,7 +83,9 @@ public class PageMetadataRequestFilter implements Filter {
       boolean check = checkAndSetMetadataIfRequestToPCVPortlet(req);      
       if(!check)
         setPortalMetadata(req);
-    } catch (Exception e) {} 
+    } catch (Exception e) {
+      log.error("Error when doFilter: ", e.fillInStackTrace());
+    } 
     chain.doFilter(servletRequest,servletResponse);
   }  
 

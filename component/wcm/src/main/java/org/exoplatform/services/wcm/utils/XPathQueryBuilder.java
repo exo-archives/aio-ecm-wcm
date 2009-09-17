@@ -68,97 +68,66 @@ public class XPathQueryBuilder extends AbstractQueryBuilder {
 
   @Override
   public void afterDate(String datePropertyName, String date, LOGICAL condition) {
-    // TODO Auto-generated method stub
-    
   }
 
   @Override
   public void beforeDate(String datePropertyName, String date, LOGICAL condition) {
-    // TODO Auto-generated method stub
-    
   }
 
   @Override
   public void betweenDates(String datePropertyName, String startDate, String endDate,
       LOGICAL condition) {
-    // TODO Auto-generated method stub
-    
   }
 
   @Override
   public void contains(String scope, String term, LOGICAL condition) {
-    // TODO Auto-generated method stub
-    
   }
 
   @Override
   public String createQueryStatement() {
-    // TODO Auto-generated method stub
     return null;
   }  
 
   @Override
   public void merge(AbstractQueryBuilder other) {
-    // TODO Auto-generated method stub
-    
   }
 
   @Override
   public void notContains(String scope, String term, LOGICAL condition) {
-    // TODO Auto-generated method stub
-    
   }
 
   @Override
   public void orderBy(String properyName, ORDERBY orderby) {
-    // TODO Auto-generated method stub
-    
   }
 
   @Override
   public void reference(String propName, String value, LOGICAL condition) {
-    // TODO Auto-generated method stub
-    
   } 
   
   public void spellCheck(String value) {  
-    
   }
 
   @Override
   public void setQueryPath(String path, PATH_TYPE pathtype) {
-    // TODO Auto-generated method stub
-    
   }
 
   @Override
   public void excerpt(boolean enable) {
-    // TODO Auto-generated method stub
-    
   }
 
   @Override
   public void fromNodeTypes(String[] nodetypes) {
-    // TODO Auto-generated method stub
-    
   }
 
   @Override
   public void selectTypes(String[] returnTypes) {
-    // TODO Auto-generated method stub
-    
   }
 
   @Override
   public void closeGroup() {
-    // TODO Auto-generated method stub
-    
   }
 
   @Override
   public void openGroup(LOGICAL logical) {
-    // TODO Auto-generated method stub
-    
   }       
-  
 }

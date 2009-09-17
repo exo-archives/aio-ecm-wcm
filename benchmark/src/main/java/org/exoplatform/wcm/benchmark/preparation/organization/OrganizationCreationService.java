@@ -23,7 +23,6 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.UserHandler;
 import org.picocontainer.Startable;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : Hoa Pham
@@ -79,7 +78,7 @@ public class OrganizationCreationService implements Startable{
         user.setLastName("exo");
         handler.createUser(user,true);
       } catch (Exception e) {
-        log.error("Error when create user" + userName,e);
+        log.error("Error when create user" + userName, e.fillInStackTrace());
       }           
     }
     long creationTime = System.currentTimeMillis() - start;

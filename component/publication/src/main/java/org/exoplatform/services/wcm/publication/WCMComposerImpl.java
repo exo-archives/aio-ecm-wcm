@@ -13,6 +13,7 @@ import javax.jcr.Session;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 
+import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
@@ -20,9 +21,9 @@ import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.log.ExoLogger;
 import org.picocontainer.Startable;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class WCMComposerImpl.
  * 
@@ -47,6 +48,9 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	
 	/** The repository. */
 	private String repository;
+	
+	/** The log. */
+  private static Log log = ExoLogger.getLogger(WCMComposerImpl.class);
 	
 	/**
 	 * Instantiates a new wCM composer impl.
@@ -144,8 +148,7 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	 * @see org.exoplatform.services.wcm.publication.WCMComposer#updateContent(java.lang.String, java.lang.String, java.lang.String, java.util.HashMap)
 	 */
 	public boolean updateContent(String repository, String workspace,
-			String path, HashMap<String, String> filters) {
-		// TODO As we don't use cache management, there's nothing to update here but it will be implemented when we provide content caching
+		String path, HashMap<String, String> filters) {
 		return false;
 	}
 
@@ -153,8 +156,7 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	 * @see org.exoplatform.services.wcm.publication.WCMComposer#updateContents(java.lang.String, java.lang.String, java.lang.String, java.util.HashMap)
 	 */
 	public boolean updateContents(String repository, String workspace,
-			String path, HashMap<String, String> filters) {
-		// TODO As we don't use cache management, there's nothing to update here but it will be implemented when we provide content caching
+		String path, HashMap<String, String> filters) {
 		return false;
 	}
 
@@ -185,14 +187,12 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 	 * @see org.picocontainer.Startable#start()
 	 */
 	public void start() {
-		// TODO Auto-generated method stub
 	}
 
 	/* (non-Javadoc)
 	 * @see org.picocontainer.Startable#stop()
 	 */
 	public void stop() {
-		// TODO Auto-generated method stub
 	}
 	
 	/**
@@ -216,7 +216,9 @@ public class WCMComposerImpl implements WCMComposer, Startable {
 			    }
 			    templatesFilter = documentTypeClause.toString();
 			    return templatesFilter;
-			} catch (Exception e) {}
+			} catch (Exception e) {
+			  log.error("Error when perform getTemlatesSQLFilter: ", e.fillInStackTrace());
+			}
 		}
 		return "";
 	}

@@ -40,7 +40,6 @@ import org.exoplatform.services.jcr.storage.WorkspaceStorageConnection;
 import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.log.ExoLogger;
 
-// TODO: Auto-generated Javadoc
 /**
  * Fast access to the JCR.
  */

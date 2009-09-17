@@ -59,16 +59,12 @@ public class UIWCMUserContainer extends UIContainer implements UIPopupComponent 
    * @see org.exoplatform.ecm.webui.popup.UIPopupComponent#activate()
    */
   public void activate() throws Exception {
-    // TODO Auto-generated method stub
-
   }
 
   /* (non-Javadoc)
    * @see org.exoplatform.ecm.webui.popup.UIPopupComponent#deActivate()
    */
   public void deActivate() throws Exception {
-    // TODO Auto-generated method stub
-
   }
 
   /**

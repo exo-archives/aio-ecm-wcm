@@ -11,6 +11,9 @@
       <access-control-exc>Accès au contenu supprimé.</access-control-exc>
       <content-not-printed></content-not-printed>
       <content-obsolete></content-obsolete>
+      <get-node-publication> erreur lorsque vous nœud cycle de publication lyfe. </get-node-publication>
+      <get-template-resource> erreur lorsque vous effectuez obtenir modèle de résolution de ressources. </get-template-resource>
+      <get-node> erreur lorsque vous effectuez obtenir nœud enfant. </get-node>
     </msg>
   </UIMessageBoard>
   <UIDocumentDialogForm>

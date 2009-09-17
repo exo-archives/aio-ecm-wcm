@@ -18,7 +18,6 @@ package org.exoplatform.services.wcm.search;
 
 import java.util.Calendar;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : Hoa Pham

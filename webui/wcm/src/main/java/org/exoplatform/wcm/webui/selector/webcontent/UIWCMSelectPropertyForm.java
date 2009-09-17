@@ -32,7 +32,6 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormRadioBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 
-// TODO: Auto-generated Javadoc
 /**
  * Author : TAN DUNG DANG
  * dzungdev@gmail.com

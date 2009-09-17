@@ -87,6 +87,7 @@
       <categoryTitleIsNotEmpty>Le titre de la catégorie ne peut pas être vide!</categoryTitleIsNotEmpty>
       <categoryNameIsAlreadyExist>Ce nom de catégorie existe déjà!</categoryNameIsAlreadyExist>
       <inputModeratorEmpty>Vous devez sélectionner un modérateur</inputModeratorEmpty>
+      <error-add-category>Erreur lors de l'ajouter ou modifier catégorie.</error-add-category>
     </msg>
 		<label>
     	<CategoryName>Nom</CategoryName>
@@ -111,6 +112,10 @@
     	<NewsCategory>Nouvelle catégorie</NewsCategory>
     	<Administration>Administration</Administration>
     </title>
+    <msg>
+    	<get-list-categories>erreur lorsque vous effectuez obtenir liste des catégories.</get-list-categories>
+    	<get-list-subscriptions>erreur lorsque vous effectuez obtenir abonnements liste.</get-list-subscriptions>
+    </msg>
   </UICategories>
   
   <UISubscription>
@@ -127,6 +132,8 @@
     	<checkOnlyOneNewsletterToConvert>S'il vous plaît cocher une seule lettre d'information pour convertir!</checkOnlyOneNewsletterToConvert>
     	<convertSuccessful>Lettre convertie en tant que modèle avec succès</convertSuccessful>
     	<templateIsExist>Il existe déjà un modèle avec le même nom! Merci de modifier le titre et de réessayer.</templateIsExist>
+    		
+<get-list-subscriptions>erreur lorsque vous effectuez obtenir abonnements liste. </get-list-subscriptions>
     </msg>
     <title>
     	<ManageCategory>Gérer la catégorie</ManageCategory>
@@ -208,6 +215,10 @@
 			<NodeNameInvalid>
 				Impossible de créer la lettre car son titre existe déjà. Merci d'essayer à nouveau!
 			</NodeNameInvalid>
+			<get-template>erreur lorsque vous effectuez obtenir template. </get-template>
+			<get-template-resource>erreur lorsque vous effectuez obtenir modèle de résolution de ressource </get-template-resource>
+			<add-email-newsletter>erreur lorsque vous effectuez ajouter l'adresse e-mail liste. </add-email-newsletter>
+			<send-newsletter>erreur lorsque vous effectuez envoyer des lettres d'informations. </send-newsletter>
 		</msg>
 	</UINewsletterEntryForm>
 	
@@ -253,12 +264,19 @@
 			<Moderator>Modérateur</Moderator>
 			<Redactor>Rédacteur</Redactor>
 		</role>
+		<msg>
+			<get-list-users> erreur lorsque obtenir la liste des utilisateurs publics. </get-list-users>
+			<set-infor-users> erreur lorsque ensemble d'information pour les utilisateurs. </set-infor-users>
+		</msg>
 	</UIManagerUsers>
 	
 	<UINewsletterEntryManager>
 		<msg>
 			<confirmDeleteNewsletter>Êtes-vous sûr de vouloir supprimer cette Newsletter ?</confirmDeleteNewsletter>
+			<get-checked>erreur lorsque vous effectuez obtenir un bulletin ou de souscription est cochée. </get-checked>
+			<set-list-newsletter>erreur lorsque vous effectuez ensemble des entrées newsletter liste. </set-list-newsletter>
 		</msg>
+		
 		<title>
 			<ConvertAsTemplate>Convertir en tant que modèle</ConvertAsTemplate>
 			<Letter>Lettre</Letter>

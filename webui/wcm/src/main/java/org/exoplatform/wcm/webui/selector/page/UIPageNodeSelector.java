@@ -25,6 +25,7 @@ import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.webui.navigation.UIPageNavigationActionListener.CreateNavigationActionListener;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
@@ -39,7 +40,6 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SARL
  * Author : chungnv
@@ -337,7 +337,9 @@ public class UIPageNodeSelector extends UIContainer {
         pageSelectorPanel.updateGrid();
         
         event.getRequestContext().addUIComponentToUpdateByAjax(pageSelector) ;
-      }catch(Exception ex){}
+      }catch(Exception ex){
+        org.exoplatform.wcm.webui.Utils.createPopupMessage(uiPageNodeSelector, "UIMessageBoard.msg.select-navigation", null, ApplicationMessage.ERROR);
+      }
       uiPageNodeSelector.<UIComponent>getParent().broadcast(event, event.getExecutionPhase()) ;
       
     }

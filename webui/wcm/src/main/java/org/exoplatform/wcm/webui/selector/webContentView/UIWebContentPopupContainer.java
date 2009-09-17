@@ -39,12 +39,8 @@ public class UIWebContentPopupContainer extends UIContainer implements UIPopupCo
   }
 
   public void activate() throws Exception {
-    // TODO Auto-generated method stub
-
   }
 
   public void deActivate() throws Exception {
-    // TODO Auto-generated method stub
-
   }
 }

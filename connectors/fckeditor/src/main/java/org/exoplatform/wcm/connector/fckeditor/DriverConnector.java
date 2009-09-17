@@ -30,6 +30,7 @@ import javax.jcr.Session;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.apache.commons.logging.Log;
 import org.exoplatform.common.http.HTTPMethods;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
@@ -43,6 +44,7 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.OrganizationService;
@@ -65,19 +67,44 @@ import org.w3c.dom.Element;
 /**
  * Created by The eXo Platform SEA
  * Author : Do Dang Thang
- *          thang.do@exoplatform.com
+ * thang.do@exoplatform.com
  * Sep 7, 2009
  */
 @URITemplate("/wcmDriver/")
 public class DriverConnector extends BaseConnector implements ResourceContainer {
+  
+  /** The Constant FILE_TYPE_WEBCONTENT. */
   public static final String FILE_TYPE_WEBCONTENT                        = "Web Contents"; 
+  
+  /** The Constant FILE_TYPE_DMSDOC. */
   public static final String FILE_TYPE_DMSDOC                        = "DMS Documents"; 
+  
+  /** The Constant FILE_TYPE_MEDIAS. */
   public static final String FILE_TYPE_MEDIAS                       = "Medias"; 
-
+  
+  /** The log. */
+  private static Log log = ExoLogger.getLogger(DriverConnector.class);
+  
+  /**
+   * Instantiates a new driver connector.
+   * 
+   * @param container the container
+   */
   public DriverConnector(ExoContainer container) {
     super(container);
   }
 	
+  /**
+   * Gets the drivers.
+   * 
+   * @param repositoryName the repository name
+   * @param workspaceName the workspace name
+   * @param userId the user id
+   * 
+   * @return the drivers
+   * 
+   * @throws Exception the exception
+   */
   @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/getDrivers/")
   @OutputTransformer(XMLOutputTransformer.class)
@@ -104,6 +131,20 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
     return Response.Builder.ok(document).mediaType("text/xml").cacheControl(cacheControl).build();
   }
 
+  /**
+   * Gets the folders and files.
+   * 
+   * @param driverName the driver name
+   * @param currentFolder the current folder
+   * @param repositoryName the repository name
+   * @param workspaceName the workspace name
+   * @param filterBy the filter by
+   * @param userId the user id
+   * 
+   * @return the folders and files
+   * 
+   * @throws Exception the exception
+   */
   @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/getFoldersAndFiles/")
   @OutputTransformer(XMLOutputTransformer.class)
@@ -132,11 +173,21 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
       return buildXMLResponseForChildren(node, null, repositoryName, filterBy);
 
     } catch (Exception e) {
-    	e.printStackTrace();
+      log.error("Error when perform getFoldersAndFiles: ", e.fillInStackTrace());
     }    
     return Response.Builder.ok().build();
   }
 	
+  /**
+   * Gets the drivers by user id.
+   * 
+   * @param repoName the repo name
+   * @param userId the user id
+   * 
+   * @return the drivers by user id
+   * 
+   * @throws Exception the exception
+   */
   private List<DriveData> getDriversByUserId(String repoName, String userId) throws Exception {    
     ManageDriveService driveService = (ManageDriveService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(ManageDriveService.class);      
     List<DriveData> driveList = new ArrayList<DriveData>();    
@@ -188,6 +239,15 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
     return driveList; 
   }
   
+	/**
+	 * Append drivers.
+	 * 
+	 * @param document the document
+	 * @param driversList the drivers list
+	 * @param groupName the group name
+	 * 
+	 * @return the element
+	 */
 	private Element appendDrivers(Document document, List<DriveData> driversList, String groupName) {
 	  Element folders = document.createElement("Folders");
 	  folders.setAttribute("name", groupName);
@@ -200,6 +260,13 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
 	  return folders;
   }
   
+  /**
+   * Personal drivers.
+   * 
+   * @param driveList the drive list
+   * 
+   * @return the list< drive data>
+   */
   private List<DriveData> personalDrivers(List<DriveData> driveList) {
     List<DriveData> personalDrivers = new ArrayList<DriveData>();
     NodeHierarchyCreator nodeHierarchyCreator = (NodeHierarchyCreator)
@@ -214,6 +281,16 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
     return personalDrivers;
   }
   
+  /**
+   * Group drivers.
+   * 
+   * @param driverList the driver list
+   * @param userId the user id
+   * 
+   * @return the list< drive data>
+   * 
+   * @throws Exception the exception
+   */
   private List<DriveData> groupDrivers(List<DriveData> driverList, String userId) throws Exception {
     NodeHierarchyCreator nodeHierarchyCreator = (NodeHierarchyCreator)
     	ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(NodeHierarchyCreator.class);
@@ -234,6 +311,15 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
     return groupDrivers;
   }
   
+  /**
+   * General drivers.
+   * 
+   * @param driverList the driver list
+   * 
+   * @return the list< drive data>
+   * 
+   * @throws Exception the exception
+   */
   private List<DriveData> generalDrivers(List<DriveData> driverList) throws Exception {
     List<DriveData> generalDrivers = new ArrayList<DriveData>();
     NodeHierarchyCreator nodeHierarchyCreator = (NodeHierarchyCreator)
@@ -249,6 +335,15 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
     return generalDrivers;
   }
 
+  /**
+   * Gets the memberships.
+   * 
+   * @param userId the user id
+   * 
+   * @return the memberships
+   * 
+   * @throws Exception the exception
+   */
   private static List<String> getMemberships(String userId) throws Exception {
   	OrganizationService oservice = (OrganizationService)
   		ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
@@ -265,6 +360,15 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
     return userMemberships;
   }
 
+  /**
+   * Gets the groups.
+   * 
+   * @param userId the user id
+   * 
+   * @return the groups
+   * 
+   * @throws Exception the exception
+   */
   private static List<String> getGroups(String userId) throws Exception {
     OrganizationService oservice = (OrganizationService) 
     	ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
@@ -281,6 +385,18 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
     return groupList;
   }
 
+  /**
+   * Builds the xml response for children.
+   * 
+   * @param node the node
+   * @param command the command
+   * @param repositoryName the repository name
+   * @param filterBy the filter by
+   * 
+   * @return the response
+   * 
+   * @throws Exception the exception
+   */
   private Response buildXMLResponseForChildren(Node node, String command, String repositoryName, String filterBy) throws Exception {
     Element rootElement = FCKUtils.createRootElement(command, node, folderHandler.getFolderType(node));
     Document document = rootElement.getOwnerDocument();
@@ -320,6 +436,16 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
     return getResponse(document);
   }
   
+  /**
+   * Checks if is dMS document.
+   * 
+   * @param node the node
+   * @param repositoryName the repository name
+   * 
+   * @return true, if is dMS document
+   * 
+   * @throws Exception the exception
+   */
   private boolean isDMSDocument(Node node, String repositoryName) throws Exception {
   	TemplateService templateService = (TemplateService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(TemplateService.class);
   	List<String> dmsDocumentList = templateService.getDocumentTemplates(repositoryName);
@@ -332,11 +458,17 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
   	return false;
   }
   
+	/* (non-Javadoc)
+	 * @see org.exoplatform.wcm.connector.BaseConnector#getContentStorageType()
+	 */
 	@Override
 	protected String getContentStorageType() throws Exception {
     return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.exoplatform.wcm.connector.BaseConnector#getRootContentStorage(javax.jcr.Node)
+	 */
 	@Override
 	protected Node getRootContentStorage(Node node) throws Exception {
     try {

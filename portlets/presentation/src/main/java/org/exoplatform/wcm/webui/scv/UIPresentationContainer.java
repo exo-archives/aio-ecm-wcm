@@ -56,13 +56,11 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
-// TODO: Auto-generated Javadoc
 /**
  * Author : Do Ngoc Anh *
  * Email: anh.do@exoplatform.com *
  * May 14, 2008
  */
-
 @ComponentConfig(
     lifecycle=Lifecycle.class,
     template="app:/groovy/SingleContentViewer/UIPresentationContainer.gtmpl",
@@ -70,8 +68,6 @@ import org.exoplatform.webui.event.EventListener;
       @EventConfig(listeners=UIPresentationContainer.QuickEditActionListener.class)
     }
 )
-
-
 public class UIPresentationContainer extends UIContainer{
 
   /** The is draft revision. */
@@ -160,7 +156,6 @@ public class UIPresentationContainer extends UIContainer{
 	  } catch(Exception rx) {
 		  originalNode =  null;
 	  }
-
 	  try {
 		  ((ExtendedNode)originalNode).checkPermission(PermissionType.SET_PROPERTY);
 		  return true;
@@ -242,7 +237,9 @@ public class UIPresentationContainer extends UIContainer{
     String lifecycleName = null;
     try {
       lifecycleName = publicationService.getNodeLifecycleName(nodeReference);
-    } catch (NotInPublicationLifecycleException e) {}
+    } catch (NotInPublicationLifecycleException e) {
+      // You shouldn't throw popup message, because some exception often rise here.
+    }
     if (lifecycleName == null) return nodeReference;
     PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(lifecycleName);
     HashMap<String,Object> context = new HashMap<String, Object>();    

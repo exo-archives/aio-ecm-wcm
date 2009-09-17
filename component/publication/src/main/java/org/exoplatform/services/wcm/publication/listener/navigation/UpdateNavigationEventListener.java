@@ -48,7 +48,7 @@ public class UpdateNavigationEventListener extends Listener<UserPortalConfigServ
     try {
       publicationService.updateLifecycleOnChangeNavigation(event.getData(), ConversationState.getCurrent().getIdentity().getUserId());
     } catch (Exception e) {
-      log.error("Exception when update publication lifecyle", e);
+      log.error("Exception when update publication lifecyle", e.fillInStackTrace());
     }    
   }
 }

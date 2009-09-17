@@ -20,10 +20,12 @@ import java.io.InputStream;
 
 import javax.jcr.Node;
 
+import org.apache.commons.logging.Log;
 import org.exoplatform.common.http.HTTPMethods;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.ecm.connector.fckeditor.FCKUtils;
+import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.rest.HTTPMethod;
 import org.exoplatform.services.rest.HeaderParam;
 import org.exoplatform.services.rest.InputTransformer;
@@ -38,7 +40,6 @@ import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
 import org.exoplatform.wcm.connector.BaseConnector;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : Anh Do Ngoc
@@ -50,6 +51,9 @@ public class ImageConnector extends BaseConnector implements ResourceContainer {
 
   /** The limit. */
   private int limit;
+  
+  /** The log. */
+  private static Log log = ExoLogger.getLogger(ImageConnector.class);
   
   /**
    * Instantiates a new image connector.
@@ -94,6 +98,7 @@ public class ImageConnector extends BaseConnector implements ResourceContainer {
       if (response != null)        
         return response; 
     } catch (Exception e) {
+      log.error("Error when perform getFoldersAndFiles: ", e.fillInStackTrace());
     }    
     return Response.Builder.ok().build();
   }
@@ -132,6 +137,7 @@ public class ImageConnector extends BaseConnector implements ResourceContainer {
       if (response != null)        
         return response; 
     } catch (Exception e) {
+      log.error("Error when perform createFolder: ", e.fillInStackTrace());
     }    
     return Response.Builder.serverError().build();
   }
@@ -206,6 +212,7 @@ public class ImageConnector extends BaseConnector implements ResourceContainer {
       return createProcessUploadResponse(repositoryName, workspaceName, currentFolder,currentPortal ,jcrPath,
           action, language, fileName, uploadId);  
     } catch (Exception e) {
+      log.error("Error when perform processUpload: ", e.fillInStackTrace());
     }
     return Response.Builder.ok().build();
   }

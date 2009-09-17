@@ -31,9 +31,11 @@ import javax.jcr.query.QueryResult;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.rest.HTTPMethod;
 import org.exoplatform.services.rest.OutputTransformer;
 import org.exoplatform.services.rest.QueryParam;
@@ -54,7 +56,6 @@ import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.feed.synd.SyndFeedImpl;
 import com.sun.syndication.io.SyndFeedOutput;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
@@ -100,6 +101,9 @@ public class RssConnector extends BaseConnector implements ResourceContainer {
   
   /** The category path. */
   private String categoryPath;
+  
+  /** The log. */
+  private static Log log = ExoLogger.getLogger(RssConnector.class);
   
   /**
    * Instantiates a new rss connector.
@@ -216,7 +220,9 @@ public class RssConnector extends BaseConnector implements ResourceContainer {
       feedXML = StringUtils.replace(feedXML,"&amp;","&");
       sessionProvider.close();
       return feedXML;
-    } catch (Exception e) {}
+    } catch (Exception e) {
+      log.error("Error when perform generateRSS: ", e.fillInStackTrace());
+    }
     finally {
       if (session != null) session.logout();
       sessionProvider.close();

@@ -17,6 +17,7 @@
 package org.exoplatform.services.wcm.metadata;
 
 import java.util.HashMap;
+import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.Property;
@@ -188,9 +189,15 @@ public class PageMetadataServiceImpl implements PageMetadataService {
   private String computeContentKeywords(Node node, String title) throws Exception {
     StringBuilder builder = new StringBuilder();    
     String repository = ((ManageableRepository)node.getSession().getRepository()).getConfiguration().getName();    
-    for(Node category: taxonomyService.getCategories(node,repository)) {
-      builder.append(category.getName()).append(",");
-    }    
+    try {
+      List<Node> iterator = taxonomyService.getCategories(node,repository);
+      for(Node category: iterator) {
+        builder.append(category.getName()).append(",");
+      }  
+    } catch(Exception e) {
+      return builder.toString();
+    }
+    
     for(Node tag: folksonomyService.getLinkedTagsOfDocument(node,repository)) {
       builder.append(tag.getName()).append(",");
     }
@@ -263,7 +270,9 @@ public class PageMetadataServiceImpl implements PageMetadataService {
   protected Node findPortal(Node child) throws Exception{                       
     try {
       return livePortalManagerService.getLivePortalByChild(child);
-    } catch (Exception e) {}
+    } catch (Exception e) {
+      log.error("Error when findPortal: ", e.fillInStackTrace());
+    }
     return null;
   }               
 }

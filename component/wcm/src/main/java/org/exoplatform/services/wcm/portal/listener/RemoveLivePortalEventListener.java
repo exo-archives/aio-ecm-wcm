@@ -61,7 +61,8 @@ public class RemoveLivePortalEventListener extends Listener<DataStorageImpl, Por
       livePortalManagerService.removeLivePortal(portalConfig, sessionProvider);
       log.info("Resources storage of portal: " + portalConfig.getName() + " was invalid");
     } catch (Exception e) {
-      log.error("Exception when remove resources storage for portal: " + portalConfig.getName(), e);
+      log.error("Exception when remove resources storage for portal: " + portalConfig.getName(),
+                e.fillInStackTrace());
     }    
     sessionProvider.close();
   }

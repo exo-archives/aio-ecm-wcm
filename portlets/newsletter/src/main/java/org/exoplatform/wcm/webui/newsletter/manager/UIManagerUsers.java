@@ -31,6 +31,7 @@ import org.exoplatform.services.wcm.newsletter.handler.NewsletterCategoryHandler
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterManageUserHandler;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.newsletter.UINewsletterConstant;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -40,7 +41,6 @@ import org.exoplatform.webui.core.UITabPane;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
@@ -109,7 +109,9 @@ public class UIManagerUsers extends UITabPane {
       ObjectPageList objPageList = 
                       new ObjectPageList(managerUserHandler.getUsers(NewsLetterUtil.getPortalName(), categoryName, subscriptionName, Utils.getSessionProvider(this)), 5);
       uiGrid.getUIPageIterator().setPageList(objPageList);
-    }catch(Exception ex){}
+    }catch(Exception ex){
+      Utils.createPopupMessage(this, "UIManagerUsers.msg.get-list-users", null, ApplicationMessage.ERROR);
+    }
   }
   
   /**
@@ -199,7 +201,9 @@ public class UIManagerUsers extends UITabPane {
         this.setSelectedTab(UIGRID_MANAGER_USERS);
         
         updateListUser();
-      }catch(Exception ex){}
+      }catch(Exception ex){
+        Utils.createPopupMessage(this, "UIManagerUsers.msg.set-infor-users", null, ApplicationMessage.ERROR);
+      }
     }
   }
   

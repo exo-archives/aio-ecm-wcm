@@ -28,7 +28,6 @@ import org.exoplatform.services.jcr.ext.classify.impl.TypeClassifyPlugin;
 import org.exoplatform.services.wcm.BaseWCMTestCase;
 import org.exoplatform.services.wcm.core.NodetypeConstant;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : Anh Do Ngoc

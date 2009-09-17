@@ -37,7 +37,6 @@ import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.picocontainer.Startable;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
@@ -75,7 +74,7 @@ public class NewsletterInitializationService implements Startable {
    * @param newsletterManagerService the newsletter manager service
    * @param wcmContentInitializerService the wcm content initializer service
    */
-  //  TODO: chuong.phan: DO NOT REMOVE WCMContentInitializerService, THIS IS DEPENDENCY FOR DEPLOYMENT
+  // chuong.phan: DO NOT REMOVE WCMContentInitializerService, THIS IS DEPENDENCY FOR DEPLOYMENT
   @SuppressWarnings("unchecked")
   public NewsletterInitializationService(InitParams initParams, NewsletterManagerService newsletterManagerService, LivePortalManagerService livePortalManagerService, WCMContentInitializerService wcmContentInitializerService) {
     portalNames = initParams.getValuesParam("portalNames").getValues();
@@ -135,7 +134,7 @@ public class NewsletterInitializationService implements Startable {
         }
       }
     } catch (Throwable e) {
-      log.info("Starting NewsletterInitializationService fail because of " + e.getMessage());
+      log.info("Starting NewsletterInitializationService fail because of ", e.fillInStackTrace());
     } finally {
       if (session != null) session.logout();
       sessionProvider.close();

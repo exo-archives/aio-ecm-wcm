@@ -130,7 +130,7 @@ public class NewsletterCategoryHandler {
       }
       session.save();
     } catch(Exception e) {
-      log.error("Add category " + categoryConfig.getName() + " failed because of " + e.getMessage());
+      log.error("Add category " + categoryConfig.getName() + " failed because of: ", e.fillInStackTrace());
     } 
   }
   
@@ -159,7 +159,7 @@ public class NewsletterCategoryHandler {
       
       session.save();
     } catch (Exception e) {
-      log.info("Edit category " + categoryConfig.getName() + " failed because of " + e.getMessage());
+      log.info("Edit category " + categoryConfig.getName() + " failed because of ", e.fillInStackTrace());
     }
   }
   
@@ -180,7 +180,7 @@ public class NewsletterCategoryHandler {
       categoryNode.remove();
       session.save();
     } catch (Exception e) {
-      log.error("Delete category " + categoryName + " failed because of " + e.getMessage());
+      log.error("Delete category " + categoryName + " failed because of ", e.fillInStackTrace());
     }
   }
   
@@ -201,7 +201,9 @@ public class NewsletterCategoryHandler {
       String categoryPath = NewsletterConstant.generateCategoryPath(portalName);
       Node categoriesNode = (Node)session.getItem(categoryPath);
       return getCategoryFromNode(categoriesNode.getNode(categoryName));
-  	} catch(Exception ex){}
+  	} catch(Exception ex){
+  	  log.error("Error when getCategoryByName: " + ex.fillInStackTrace());
+  	}
   	return null;
   }
   
@@ -227,11 +229,11 @@ public class NewsletterCategoryHandler {
         try{
           listCategories.add(getCategoryFromNode(nodeIterator.nextNode()));
         }catch(Exception ex){
-          log.error("Get category " + nodeIterator.nextNode().getName() + " failed because of " + ex.getMessage());
+          log.error("Get category " + nodeIterator.nextNode().getName() + " failed because of ", ex.fillInStackTrace());
         }
       }
   	}catch(Exception e){
-  	  log.error("Get list categories  failed because of " + e.getMessage());
+  	  log.error("Get list categories  failed because of ", e.fillInStackTrace());
 	  }
     return listCategories;
   }

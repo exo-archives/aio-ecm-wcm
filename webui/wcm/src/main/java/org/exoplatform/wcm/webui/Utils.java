@@ -40,7 +40,6 @@ import org.exoplatform.webui.core.UIPortletApplication;
 
 import com.ibm.icu.text.Transliterator;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS Author : Hoa Pham hoa.phamvu@exoplatform.com
  * Oct 23, 2008
@@ -96,7 +95,7 @@ public class Utils {
     if (identity == null)
       return false;
     UIPortal uiPortal = Util.getUIPortal();
-    //TODO this code only work for single edit permission
+    // this code only work for single edit permission
     String editPermission = uiPortal.getEditPermission();
     MembershipEntry membershipEntry = MembershipEntry.parse(editPermission);
     return identity.isMemberOf(membershipEntry);

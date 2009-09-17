@@ -22,9 +22,11 @@ import javax.jcr.Node;
 import javax.jcr.query.QueryResult;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
+import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.publication.WCMComposer;
 
 /**
@@ -33,8 +35,11 @@ import org.exoplatform.services.wcm.publication.WCMComposer;
  */
 public class WCMPaginatedQueryResult extends PaginatedQueryResult {
   /** The query time. */
-  private long queryTime;  
-
+  private long queryTime;
+  
+  /** The log. */
+  private static Log log = ExoLogger.getLogger(WCMPaginatedQueryResult.class);
+  
   /** The spell suggestion. */
   private String spellSuggestion;
 
@@ -111,7 +116,9 @@ public class WCMPaginatedQueryResult extends PaginatedQueryResult {
     String lifecycleName = null;
     try {
      lifecycleName = publicationService.getNodeLifecycleName(displayNode);
-    } catch (Exception e) {}
+    } catch (Exception e) {
+      log.error("Error when perform filterNodeToDisplay: ", e.fillInStackTrace());
+    }
     if (lifecycleName == null) return displayNode;
     PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(lifecycleName);
     HashMap<String, Object> context = new HashMap<String, Object>();

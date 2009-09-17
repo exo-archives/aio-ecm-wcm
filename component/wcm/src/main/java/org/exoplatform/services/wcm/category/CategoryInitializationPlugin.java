@@ -26,6 +26,7 @@ import javax.jcr.Node;
 import javax.jcr.Session;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ObjectParameter;
 import org.exoplatform.container.xml.ValueParam;
@@ -47,29 +48,52 @@ import org.exoplatform.services.jcr.config.RepositoryEntry;
 import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+import org.exoplatform.services.log.ExoLogger;
 
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
- *          chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
- * Jun 21, 2009  
+ * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com
+ * Jun 21, 2009
  */
 public class CategoryInitializationPlugin extends TaxonomyPlugin {
 
+  /** The tree name. */
   private String treeName = "";
   
+  /** The auto create in new repository. */
   private boolean autoCreateInNewRepository = true;
   
+  /** The repository service. */
   private RepositoryService repositoryService;
   
+  /** The taxonomy service. */
   private TaxonomyService taxonomyService;
 
+  /** The action service container. */
   private ActionServiceContainer actionServiceContainer;
   
+  /** The dms configuration. */
   private DMSConfiguration dmsConfiguration;
   
+  /** The params. */
   private InitParams params;
   
+  /** The log. */
+  private static Log log = ExoLogger.getLogger(CategoryInitializationPlugin.class);
+  
+  /**
+   * Instantiates a new category initialization plugin.
+   * 
+   * @param params the params
+   * @param repositoryService the repository service
+   * @param nodeHierarchyCreator the node hierarchy creator
+   * @param taxonomyService the taxonomy service
+   * @param actionServiceContainer the action service container
+   * @param dmsConfiguration the dms configuration
+   * 
+   * @throws Exception the exception
+   */
   public CategoryInitializationPlugin(InitParams params, 
                                       RepositoryService repositoryService,
                                       NodeHierarchyCreator nodeHierarchyCreator, 
@@ -99,6 +123,9 @@ public class CategoryInitializationPlugin extends TaxonomyPlugin {
     }
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.cms.taxonomy.impl.TaxonomyPlugin#init()
+   */
   public void init() throws Exception {
     if (this.autoCreateInNewRepository) {
       for (RepositoryEntry repositoryEntry : this.repositoryService.getConfig()
@@ -117,6 +144,13 @@ public class CategoryInitializationPlugin extends TaxonomyPlugin {
     importPredefineTaxonomies(repository);
   }
 
+  /**
+   * Import predefine taxonomies.
+   * 
+   * @param repository the repository
+   * 
+   * @throws Exception the exception
+   */
   @SuppressWarnings("unchecked")
   private void importPredefineTaxonomies(String repository) throws Exception {
     ManageableRepository manageableRepository = this.repositoryService.getRepository(repository);
@@ -170,16 +204,26 @@ public class CategoryInitializationPlugin extends TaxonomyPlugin {
           addAction(action, taxonomyStorageNodeSystem, repository);
         }
       }
-
     }
     taxonomyStorageNode.save();
     try {
       this.taxonomyService.addTaxonomyTree(taxonomyStorageNodeSystem);
-    } catch (TaxonomyAlreadyExistsException e) {}
+    } catch (TaxonomyAlreadyExistsException e) {
+      log.error("Error when perform importPredefineTaxonomies: ", e.fillInStackTrace());
+    }
     session.save();
     session.logout();
   }
   
+  /**
+   * Adds the action.
+   * 
+   * @param action the action
+   * @param srcNode the src node
+   * @param repository the repository
+   * 
+   * @throws Exception the exception
+   */
   @SuppressWarnings("unchecked")
   private void addAction(ActionConfig.TaxonomyAction action, Node srcNode, String repository) throws Exception {
     Map<String, JcrInputProperty> sortedInputs = new HashMap<String, JcrInputProperty>();

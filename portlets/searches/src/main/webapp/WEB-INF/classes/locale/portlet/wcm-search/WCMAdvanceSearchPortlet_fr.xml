@@ -25,6 +25,8 @@
       <keyword-not-empty>Le mot n'est pas vide.</keyword-not-empty>
       <not-checked>Vous devez sélectionner un type de contenu à rechercher.</not-checked>
       <keyword-not-support>Le moteur de recherche ne peut actuellement fonctionner avec les mots spécifiés.</keyword-not-support>
+      <get-property> erreur lorsque offres de biens nœud. </get-property>
+      <node-publication-error> d'erreur lorsque vous effectuez obtenir noeud cycle de publication de vie. </node-publication-error>
     </message>
   </UISearchForm>
   <!--/n  #########################################################################################

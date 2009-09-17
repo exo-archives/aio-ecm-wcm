@@ -42,7 +42,6 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.NameValidator;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class UICategoryForm.
  */
@@ -222,7 +221,9 @@ public class UICategoryForm extends UIForm implements UIPopupComponent, UISelect
 			  }else{ // Edit a category is already exist
 			    categoryHandler.edit(portalName, categoryConfig, sessionProvider);
 			  }
-			}catch(Exception ex){}
+			}catch(Exception ex){
+			  Utils.createPopupMessage(uiCategoryForm, "UICategoryForm.msg.error-add-category", null, ApplicationMessage.ERROR);
+			}
 			Utils.closePopupWindow(uiCategoryForm, UINewsletterConstant.CATEGORY_FORM_POPUP_WINDOW);
 		}
 	}

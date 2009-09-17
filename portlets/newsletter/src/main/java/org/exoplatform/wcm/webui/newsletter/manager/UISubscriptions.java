@@ -40,7 +40,6 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
@@ -145,7 +144,9 @@ public class UISubscriptions extends UIForm {
       listSubs = 
         subscriptionHandler.getSubscriptionsByCategory(NewsLetterUtil.getPortalName(), this.categoryConfig.getName(), Utils.getSessionProvider(this));
       init(listSubs);
-    }catch(Exception e){}
+    }catch(Exception e){
+      Utils.createPopupMessage(this, "UISubscription.msg.get-list-subscriptions", null, ApplicationMessage.ERROR);
+    }
     return listSubs;
   }
 
@@ -181,7 +182,9 @@ public class UISubscriptions extends UIForm {
           if(subscriptionId == null)subscriptionId = checkbox.getName(); 
           else return null;
         }
-      }catch(Exception e){}
+      }catch(Exception e){
+        // You shouldn't throw popup message, because some exception often rise here.
+      }
     }
     return subscriptionId;
   }

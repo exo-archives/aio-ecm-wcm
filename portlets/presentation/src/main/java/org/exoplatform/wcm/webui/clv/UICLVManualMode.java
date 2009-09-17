@@ -29,11 +29,11 @@ import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.wcm.webui.Utils;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : anh.do
@@ -76,7 +76,9 @@ public class UICLVManualMode extends UICLVContainer {
         String path = contents.get(i);
         try {
           nodes.add(root.getNode(path.substring(1, path.length())));    
-        } catch (Exception e) {}
+        } catch (Exception e) {
+          Utils.createPopupMessage(this, "UIMessageBoard.msg.add-node-error", null, ApplicationMessage.ERROR);
+        }
       }
     }
     if (nodes.size() == 0) {

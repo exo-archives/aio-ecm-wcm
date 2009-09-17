@@ -60,7 +60,6 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.ext.UIFormInputSetWithAction;
 
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
@@ -272,8 +271,12 @@ public class UIFCCConfig extends UIForm implements UISelectable {
           defaultValue = options.get(0).getValue() ;
           uiSelectTemplate.setValue(defaultValue);
         } 
-      } catch(Exception e) {}
-    } catch(Exception ex) {}
+      } catch(Exception e) {
+        Utils.createPopupMessage(this, "UIFCCConfig.msg.get-template", null, ApplicationMessage.ERROR);
+      }
+    } catch(Exception ex) {
+      Utils.createPopupMessage(this, "UIFCCConfig.msg.set-template-option", null, ApplicationMessage.ERROR);
+    }
   }
   
   /* (non-Javadoc)
@@ -286,7 +289,9 @@ public class UIFCCConfig extends UIForm implements UISelectable {
     String savedLocationPath = value.toString();
     try {
       setTemplateOptions(savedLocationPath, repositoryName, workspaceName) ;
-    } catch(Exception ex) {}
+    } catch(Exception ex) {
+      Utils.createPopupMessage(this, "UIFCCConfig.msg.do-select", null, ApplicationMessage.ERROR);
+    }
     Utils.closePopupWindow(this, UIFCCConstant.SELECTOR_POPUP_WINDOW);
   }
 

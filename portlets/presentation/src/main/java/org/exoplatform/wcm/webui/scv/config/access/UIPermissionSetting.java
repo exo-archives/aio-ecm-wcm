@@ -177,7 +177,7 @@ public class UIPermissionSetting extends UIForm implements UISelectable {
       node.setPermission(userOrGroup, permsArray);
       node.save();
       session.save();
-      //TODO: should have a other method to set permission to child node of web content
+      // should have a other method to set permission to child node of web content
       String queryString = "select * from nt:base where jcr:path like '"+ node.getPath()+"/%'";
       QueryManager queryManager = session.getWorkspace().getQueryManager();
       Query query = queryManager.createQuery(queryString, Query.SQL) ;

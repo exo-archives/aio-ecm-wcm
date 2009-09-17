@@ -48,7 +48,6 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
@@ -133,7 +132,9 @@ public class UINewsletterEntryManager extends UIForm {
         checkBoxInput = new UIFormCheckBoxInput<Boolean>(newletter.getNewsletterName(), newletter.getNewsletterName(), false);
         this.addChild(checkBoxInput);
       }
-    }catch(Exception ex){}
+    }catch(Exception ex){
+      Utils.createPopupMessage(this, "UINewsletterEntryManager.msg.set-list-newsletter", null, ApplicationMessage.ERROR);
+    }
     return listNewsletterConfig;
   }
   
@@ -165,7 +166,9 @@ public class UINewsletterEntryManager extends UIForm {
         if(checkbox.isChecked()){
           newsletterId.add(checkbox.getName());
         }
-      }catch(Exception e){}
+      }catch(Exception e){
+        // You shouldn't throw popup message, because some exception often rise here.
+      }
     }
     return newsletterId;
   }

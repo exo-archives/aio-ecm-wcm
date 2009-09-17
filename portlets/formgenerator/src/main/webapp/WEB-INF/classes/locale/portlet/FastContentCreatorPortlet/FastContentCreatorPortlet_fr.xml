@@ -13,6 +13,8 @@
       <path-not-found>Path '{0}' a été supprimé ou est invalide chemin.</path-not-found>
       <node-locked>PathNode '{0}' est verrouillé. Unlock ce noeud avant de créer des documents.</node-locked>
       <node-isExist>Ce nœud existe déjà dans '{0}' et le même nom de frère n'est pas autorisé</node-isExist>
+      <get-dialog-path>erreur lorsque obtenir le chemin de dialogue.</get-dialog-path>
+      <new-jcr-template>erreur lorsque vous effectuez la création de nouveaux newJCRTemplateResourceResolver </new-jcr-template>>
     </msg>
     <action>
       <Save>Sauver</Save>
@@ -54,6 +56,9 @@
       <item-not-found>Ce chemin n'est pas valide!</item-not-found>
       <fileType-empty>Vous devez choisir le type de fichier avant d'enregistrer cette configuration.</fileType-empty>
       <ws-empty>Vous devez choisir l'une de travail.</ws-empty>
+      <get-template>erreur lorsque vous template.</get-template>
+      <set-template-option>erreur lorsque mis template option.</set-template-option>
+      <do-select>erreur lorsque ne sélectionnez.</do-select>
     </msg>
     <action>
       <Save>Sauver</Save>

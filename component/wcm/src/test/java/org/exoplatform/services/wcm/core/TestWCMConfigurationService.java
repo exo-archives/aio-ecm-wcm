@@ -21,7 +21,6 @@ import java.util.Collection;
 import org.exoplatform.services.cms.drives.DriveData;
 import org.exoplatform.services.wcm.BaseWCMTestCase;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform

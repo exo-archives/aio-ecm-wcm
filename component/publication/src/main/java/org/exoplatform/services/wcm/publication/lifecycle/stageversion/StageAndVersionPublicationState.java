@@ -18,6 +18,9 @@ package org.exoplatform.services.wcm.publication.lifecycle.stageversion;
 
 import javax.jcr.Node;
 
+import org.apache.commons.logging.Log;
+import org.exoplatform.services.log.ExoLogger;
+
 /**
  * Created by The eXo Platform SAS
  * Author : Hoa Pham
@@ -41,6 +44,9 @@ public class StageAndVersionPublicationState {
   /** The Constant OBSOLETE. */
   public static final String OBSOLETE = "obsolete".intern();
 
+  /** The log. */
+  private static Log log = ExoLogger.getLogger(StageAndVersionPublicationState.class);
+  
   /**
    * Gets the revision state.
    * 
@@ -53,6 +59,7 @@ public class StageAndVersionPublicationState {
     try {
       currentState = currentNode.getProperty("publication:currentState").getString();
     } catch (Exception e) {
+      log.error("Error when getRevisionState: ", e.fillInStackTrace());
     }
     return currentState;
   }

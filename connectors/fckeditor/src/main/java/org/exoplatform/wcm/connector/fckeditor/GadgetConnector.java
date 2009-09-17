@@ -28,6 +28,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.logging.Log;
 import org.exoplatform.application.gadget.Gadget;
 import org.exoplatform.application.gadget.GadgetRegistryService;
 import org.exoplatform.application.registry.Application;
@@ -37,6 +38,7 @@ import org.exoplatform.common.http.HTTPMethods;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.PropertiesParam;
+import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.rest.CacheControl;
 import org.exoplatform.services.rest.HTTPMethod;
 import org.exoplatform.services.rest.OutputTransformer;
@@ -49,7 +51,6 @@ import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
@@ -70,6 +71,9 @@ public class GadgetConnector implements ResourceContainer {
   
   /** The internal server path. */
   private String internalServerPath;
+  
+  /** The log. */
+  private static Log log = ExoLogger.getLogger(GadgetConnector.class);
   
   /**
    * Instantiates a new gadget connector.
@@ -117,6 +121,7 @@ public class GadgetConnector implements ResourceContainer {
       if (response != null)
         return response; 
     } catch (Exception e) {
+      log.error("Error when perform getFoldersAndFiles: ", e.fillInStackTrace());
     }    
     return Response.Builder.ok().build();
   }

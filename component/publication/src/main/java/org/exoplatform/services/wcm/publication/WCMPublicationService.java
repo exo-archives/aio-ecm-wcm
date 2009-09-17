@@ -47,7 +47,7 @@ public interface WCMPublicationService {
   * 
   * @param content the content
   * @param page the page
-  * @param portalOwnerName TODO
+  * @param portalOwnerName
   * 
   * @throws NotInPublicationLifecycleException the not in publication lifecycle exception
   * @throws Exception the exception
@@ -72,7 +72,7 @@ public interface WCMPublicationService {
   * 
   * @param content the jcr content node
   * @param page the portal page
-  * @param remoteUser TODO
+  * @param remoteUser
   * 
   * @throws NotInPublicationLifecycleException the not in publication lifecycle exception
   * @throws Exception the exception
@@ -138,7 +138,7 @@ public interface WCMPublicationService {
   * Retrieves all web page lifecycles and update the publication lifecycle when a page is created.
   * 
   * @param page the page
-  * @param remoteUser TODO
+  * @param remoteUser
   * 
   * @throws Exception the exception
   */
@@ -148,7 +148,7 @@ public interface WCMPublicationService {
   * Retrieves all web page lifecycles and update the publication lifecycle when a page is changed.
   * 
   * @param page the page
-  * @param remoteUser TODO
+  * @param remoteUser
   * 
   * @throws Exception the exception
   */
@@ -158,7 +158,7 @@ public interface WCMPublicationService {
   * Retrieves all web page lifecycles and update the publication lifecycle when a page is removed.
   * 
   * @param page the page
-  * @param remoteUser TODO
+  * @param remoteUser
   * 
   * @throws Exception the exception
   */
@@ -177,7 +177,7 @@ public interface WCMPublicationService {
   * Retrieves all web page lifecycles and update the publication lifecycle when a navigation is changed.
   * 
   * @param navigation the navigation
-  * @param remoteUser TODO
+  * @param remoteUser
   * 
   * @throws Exception the exception
   */

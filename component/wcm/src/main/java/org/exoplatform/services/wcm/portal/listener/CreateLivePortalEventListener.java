@@ -61,7 +61,8 @@ public class CreateLivePortalEventListener extends Listener<DataStorageImpl, Por
       livePortalManagerService.addLivePortal(portalConfig, sessionProvider);
       log.info("Create new resource storage for portal: " + portalConfig.getName());
     } catch (Exception e) {
-      log.error("Error when create new resource storage: " + portalConfig.getName(), e);
+      log.error("Error when create new resource storage: " + portalConfig.getName(),
+                e.fillInStackTrace());
     }        
     // create drive for the site content storage
     ManageDriveService manageDriveService = (ManageDriveService) container
@@ -72,7 +73,8 @@ public class CreateLivePortalEventListener extends Listener<DataStorageImpl, Por
       Node portal = livePortalManagerService.getLivePortal(portalConfig.getName(), sessionProvider);
       createPortalDrive(portal,portalConfig,configurationService,manageDriveService);
     } catch (Exception e) {
-      log.error("Error when create drive for portal: " + portalConfig.getName(), e);
+      log.error("Error when create drive for portal: " + portalConfig.getName(),
+                e.fillInStackTrace());
     }      
     //Deploy initial artifacts for this portal 
     PortalArtifactsInitializerService artifactsInitializerService = (PortalArtifactsInitializerService)
@@ -80,7 +82,8 @@ public class CreateLivePortalEventListener extends Listener<DataStorageImpl, Por
     try {      
       artifactsInitializerService.deployArtifactsToPortal(portalConfig.getName(),sessionProvider);
     } catch (Exception e) {
-      log.error("Error when create drive for portal: " + portalConfig.getName(), e);
+      log.error("Error when create drive for portal: " + portalConfig.getName(),
+                e.fillInStackTrace());
     }
     // Update skin for new portal
     XSkinService xSkinService = (XSkinService) container.getComponentInstanceOfType(XSkinService.class);

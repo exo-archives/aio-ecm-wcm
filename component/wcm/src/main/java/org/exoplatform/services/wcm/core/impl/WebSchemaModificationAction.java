@@ -51,7 +51,7 @@ public class WebSchemaModificationAction implements Action{
     try {            
       schemaConfigService.updateSchemaOnModify(grandParent, sessionProvider);
     } catch (Exception e) { 
-      log.error("Error when update schema when modify node: "+grandParent.getPath() , e);
+      log.error("Error when update schema when modify node: "+grandParent.getPath(), e.fillInStackTrace());
     }       
     sessionProvider.close();
     return true;    

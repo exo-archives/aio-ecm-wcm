@@ -7,7 +7,6 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInput;
 import org.exoplatform.webui.form.validator.Validator;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform
  * thang.do@exoplatform.com Jun 25, 2009

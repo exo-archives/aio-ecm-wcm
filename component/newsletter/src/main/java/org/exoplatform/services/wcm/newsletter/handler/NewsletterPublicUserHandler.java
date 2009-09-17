@@ -85,7 +85,9 @@ public class NewsletterPublicUserHandler {
     for(Value value : values){
       try {
         listString.add(value.getString());
-      } catch (Exception e) {}
+      } catch (Exception e) {
+        log.error("Error when convert values to array: ", e.fillInStackTrace());
+      }
     }
     return listString;
   }
@@ -123,8 +125,8 @@ public class NewsletterPublicUserHandler {
         }else{
           subscriptionNode.setProperty(NewsletterConstant.SUBSCRIPTION_PROPERTY_USER, new String[]{userMail});
         }
-      }catch(Exception ex){
-        log.error("updateSubscriptions() failed because of " + ex.getMessage());
+      } catch(Exception ex){
+        log.error("updateSubscriptions() failed because of ", ex.fillInStackTrace());
       }
     }
     session.save();
@@ -164,7 +166,7 @@ public class NewsletterPublicUserHandler {
       }
       session.save();
     } catch (Exception e) {
-      log.error("Update user's subscription for user " + email + " failed because of " + e.getMessage());
+      log.error("Update user's subscription for user " + email + " failed because of ", e.fillInStackTrace());
     }
   }
   
@@ -208,12 +210,12 @@ public class NewsletterPublicUserHandler {
       try{
         MailService mService = (MailService)PortalContainer.getComponent(MailService.class) ;
         mService.sendMessage(message) ;   
-      }catch(Exception e) {
+      } catch(Exception e) {
         MailService mService = (MailService)StandaloneContainer.getInstance().getComponentInstanceOfType(MailService.class) ;
         mService.sendMessage(message) ;   
       }
-    } catch (Exception e) {
-      log.error("Subscribe user " + userMail + " failed because of " + e.getMessage());
+    } catch(Exception e) {
+      log.error("Subscribe user " + userMail + " failed because of ", e.fillInStackTrace());
       throw e;
     }
   }
@@ -260,8 +262,8 @@ public class NewsletterPublicUserHandler {
       //  update for users node
       NewsletterManageUserHandler manageUserHandler = new NewsletterManageUserHandler(repository, workspace, sessionProvider);
       manageUserHandler.delete(portalName, email, sessionProvider);
-    } catch (Exception e) {
-      log.error("Update user's subscription for user " + email + " failed because of " + e.getMessage());
+    } catch(Exception e) {
+      log.error("Update user's subscription for user " + email + " failed because of ", e.fillInStackTrace());
     }
   }
 
@@ -284,8 +286,8 @@ public class NewsletterPublicUserHandler {
       
       // Get current subscriptions which user subscribed (by query), compare with input subscriptions
       // to get which subscription user remove, which subscription user add, then update reference
-    } catch (Exception e) {
-      log.error("Update user's subscription for user " + email + " failed because of " + e.getMessage());
+    } catch(Exception e) {
+      log.error("Update user's subscription for user " + email + " failed because of ", e.fillInStackTrace());
     }
   }
 }

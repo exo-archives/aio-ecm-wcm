@@ -36,7 +36,6 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : DANG TAN DUNG
@@ -225,7 +224,6 @@ public class UIPresentation extends UIBaseNodePresentation {
    * @see org.exoplatform.ecm.webui.presentation.NodePresentation#getCommentComponent()
    */
   public UIComponent getCommentComponent() {
-  	// TODO Auto-generated method stub
   	return null;
   }
 }

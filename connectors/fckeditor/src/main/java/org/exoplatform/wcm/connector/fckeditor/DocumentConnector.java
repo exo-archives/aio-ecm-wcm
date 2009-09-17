@@ -21,10 +21,12 @@ import java.io.InputStream;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 
+import org.apache.commons.logging.Log;
 import org.exoplatform.common.http.HTTPMethods;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.ecm.connector.fckeditor.FCKUtils;
+import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.rest.ContextParam;
 import org.exoplatform.services.rest.HTTPMethod;
@@ -45,7 +47,6 @@ import org.exoplatform.wcm.connector.BaseConnector;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-// TODO: Auto-generated Javadoc
 /*
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
  * Sep 10, 2008
@@ -58,6 +59,9 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
   
   /** The limit. */
   private int limit;
+  
+  /** The log. */
+  private static Log log = ExoLogger.getLogger(DocumentConnector.class);
 
   /**
    * Instantiates a new document connector.
@@ -116,7 +120,8 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
           command);
       if(response != null)
         return response;
-    } catch (Exception e) {         
+    } catch (Exception e) {
+      log.error("Error when perform getFoldersAndFiles: ", e.fillInStackTrace());
     } finally {
       sessionProvider.close();
     }    
@@ -193,6 +198,7 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
       if (response != null)        
         return response; 
     } catch (Exception e) {
+      log.error("Error when perform createFolder: ", e.fillInStackTrace());
     }    
     return Response.Builder.ok().build();
   }
@@ -242,6 +248,7 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
           contentLength,
           limit); 
     } catch (Exception e) {
+      log.error("Error when perform uploadFile: ", e.fillInStackTrace());
     }    
     return Response.Builder.serverError().build();
   }
@@ -279,6 +286,7 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
       return createProcessUploadResponse(repositoryName, workspaceName,currentFolder, currentPortal,
           jcrPath, action,language,fileName,uploadId);  
     } catch (Exception e) {
+      log.error("Error when perform processUpload: ", e.fillInStackTrace());
     }
     return Response.Builder.serverError().build();
   }

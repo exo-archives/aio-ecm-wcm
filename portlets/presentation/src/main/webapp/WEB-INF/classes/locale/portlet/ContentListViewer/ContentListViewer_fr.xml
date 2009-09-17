@@ -130,6 +130,10 @@
   		<FastPublish>Fast Publier</FastPublish>
   		<SaveAsDraft>Enregistrer en tant que projet de</SaveAsDraft>  		  		
   	</action>
+  	<msg>
+   		<get-template-resource>erreur lorsque vous effectuez obtenir la ressource template. </get-template-resource>
+   		<get-node-error> d'erreur lorsque vous effectuez obtenir nœud. </get-node-error>
+   </msg>
   </UIDocumentDialogForm>
   <UIMessageBoard>
   	<msg>  	
@@ -137,6 +141,12 @@
   		<no-permission>Permission d'accès refusée</no-permission>
   		<error-nodetype>Type de noeud ne correspond</error-nodetype>
   		<folder-empty>Le dossier est vide</folder-empty>
+  		<add-node-error> erreur lorsque Ajouter le noeud. </add-node-error>
+  		<node-publication-error>erreur lorsque vous effectuez obtenir noeud cycle de publication de vie. </node-publication-error>
+  		<show-draft-button> erreur lorsque montrent projet de bouton. </show-draft-button>
+  		<get-content-icon> erreur lorsque vous onglet Contenu. </get-content-icon>
+  		<get-illustration-image> erreur lorsque vous l'image d'illustration. </get-illustration-image>
+  		
   	</msg>
   </UIMessageBoard>
   <UIPresentationContainer>

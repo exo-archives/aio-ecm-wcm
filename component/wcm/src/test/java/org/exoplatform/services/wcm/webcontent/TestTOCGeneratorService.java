@@ -31,7 +31,6 @@ import org.exoplatform.services.html.parser.HTMLParser;
 import org.exoplatform.services.wcm.BaseWCMTestCase;
 import org.exoplatform.services.wcm.webcontent.TOCGeneratorService.Heading;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : Tran Nguyen Ngoc

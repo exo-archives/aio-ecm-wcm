@@ -43,7 +43,6 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS Author : Tran Nguyen Ngoc
  * ngoc.tran@exoplatform.com May 25, 2009
@@ -185,7 +184,9 @@ public class UINewsletterViewerForm extends UIForm {
       try{
         if(((UIFormCheckBoxInput<Boolean>) component).isChecked())
           listSubscription.add(component.getName());
-      }catch(ClassCastException ex){};
+      }catch(ClassCastException ex){
+        // You shouldn't throw popup message, because some exception often rise here.
+      };
     }
     return listSubscription;
   }

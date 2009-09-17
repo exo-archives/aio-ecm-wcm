@@ -143,14 +143,19 @@ public class UINameWebContentForm extends UIForm {
             String resolveLabel = label;
             try {
               resolveLabel = resourceBundle.getString("ContentType.lable."+ StringUtils.deleteWhitespace(resolveLabel));
-            } catch(Exception e) {}
+            } catch(Exception e) {
+              Utils.createPopupMessage(this, "UIMessageBoard.msg.get-resource-bundle", null, ApplicationMessage.ERROR);
+            }
         	try {
         		String templatePath = templateService.getTemplatePathByUser(true, contentType, userName, repositoryName);
         		if ((templatePath != null) && (templatePath.length() > 0)) {
         			options.add(new SelectItemOption<String>(label, contentType));
         		}
         	} catch (AccessControlException e) {
-        	} catch (Exception e) {}	        	
+        	  Utils.createPopupMessage(this, "UIMessageBoard.msg.access-control", null, ApplicationMessage.ERROR);
+        	} catch (Exception e) {
+        	  Utils.createPopupMessage(this, "UIMessageBoard.msg.list-file-type", null, ApplicationMessage.ERROR);
+        	}	        	
         }
     }    
     Collections.sort(options, new ItemOptionNameComparator()) ;

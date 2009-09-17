@@ -26,10 +26,12 @@ import javax.jcr.NodeIterator;
 import javax.jcr.Session;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
 import org.exoplatform.commons.utils.ISO8601;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.PropertiesParam;
 import org.exoplatform.services.jcr.ext.classify.NodeClassifyPlugin;
+import org.exoplatform.services.log.ExoLogger;
 
 
 
@@ -39,18 +41,40 @@ import org.exoplatform.services.jcr.ext.classify.NodeClassifyPlugin;
  *          hoa.pham@exoplatform.com
  * Apr 9, 2008  
  */
+/**
+ * The Class DateTimeClassifyPlugin.
+ */
 public class DateTimeClassifyPlugin extends NodeClassifyPlugin {
 
+  /** The Constant MONTHS. */
   private static final int MONTHS = 12;
 
+  /** The template date time. */
   private String templateDateTime;
+  
+  /** The property date time. */
   private String propertyDateTime;
+  
+  /** The start date time. */
   private Calendar startDateTime;
+  
+  /** The end date time. */
   private Calendar endDateTime;  
+  
+  /** The increment. */
   private int increment;
+  
+  /** The increment type. */
   private char incrementType;
 
-
+  /** The log. */
+  private static Log log = ExoLogger.getLogger(DateTimeClassifyPlugin.class);
+  
+  /**
+   * Instantiates a new date time classify plugin.
+   * 
+   * @param initParams the init params
+   */
   public DateTimeClassifyPlugin(final InitParams initParams) {
     try {
       PropertiesParam propertiesParam = initParams.getPropertiesParam("plugin-params");
@@ -63,9 +87,14 @@ public class DateTimeClassifyPlugin extends NodeClassifyPlugin {
       startDateTime = getCalendar(startDateTimeParam);
       endDateTime = getCalendar(endDateTimeParam);           
       setIncrement();        
-    } catch (Exception e) { }    
+    } catch (Exception e) {
+      log.error("Error when perform DateTimeClassifyPlugin: ", e.fillInStackTrace());
+    }    
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.services.jcr.ext.classify.NodeClassifyPlugin#classifyChildrenNode(javax.jcr.Node)
+   */
   public void classifyChildrenNode(Node parent) throws Exception {
     Session session = parent.getSession();        
     for (NodeIterator nodes = parent.getNodes(); nodes.hasNext();) {
@@ -80,6 +109,14 @@ public class DateTimeClassifyPlugin extends NodeClassifyPlugin {
     }      
   }
 
+  /**
+   * Gets the date time structured.
+   * 
+   * @param templDateTime the templ date time
+   * @param calendar the calendar
+   * 
+   * @return the date time structured
+   */
   private String getDateTimeStructured(String templDateTime, Calendar calendar) {    
     int year =  calendar.get(Calendar.YEAR),
     month =  calendar.get(Calendar.MONTH) + 1,   
@@ -115,6 +152,13 @@ public class DateTimeClassifyPlugin extends NodeClassifyPlugin {
   }  
 
 
+  /**
+   * Operate expression.
+   * 
+   * @param expression the expression
+   * 
+   * @return the string
+   */
   private String operateExpression(String expression) {        
     String [] items = StringUtils.split(expression, "+");
     int rel = Integer.parseInt(items[0]) + Integer.parseInt(items[1]);
@@ -125,6 +169,16 @@ public class DateTimeClassifyPlugin extends NodeClassifyPlugin {
     return result; 
   }
 
+  /**
+   * Creates the new date time node.
+   * 
+   * @param parentNode the parent node
+   * @param path the path
+   * 
+   * @return the node
+   * 
+   * @throws Exception the exception
+   */
   private Node createNewDateTimeNode(Node parentNode, String path) throws Exception {  
     String [] items = path.split("/");    
     Node currNode = null;
@@ -137,6 +191,13 @@ public class DateTimeClassifyPlugin extends NodeClassifyPlugin {
     return currNode;
   }    
 
+  /**
+   * Gets the well templ date time.
+   * 
+   * @param templ the templ
+   * 
+   * @return the well templ date time
+   */
   private String getWellTemplDateTime(String templ) {
     templ = templ.replace(" ", "");
     List<String> temp = new ArrayList<String>();    
@@ -168,6 +229,13 @@ public class DateTimeClassifyPlugin extends NodeClassifyPlugin {
     return templ;
   }
 
+  /**
+   * Checks if is valid field.
+   * 
+   * @param field the field
+   * 
+   * @return true, if is valid field
+   */
   private boolean isValidField(String field) {
     if ((!"YYYY".equals(field)) && (!"MM".equals(field)) && (!"WW".equals(field.toUpperCase())) && (!"DD".equals(field.toUpperCase())))
       return false;    
@@ -175,15 +243,27 @@ public class DateTimeClassifyPlugin extends NodeClassifyPlugin {
   }
 
 
+  /**
+   * Gets the calendar.
+   * 
+   * @param datetime the datetime
+   * 
+   * @return the calendar
+   */
   private Calendar getCalendar(String datetime) {
     Calendar calendar = new GregorianCalendar();
     try {
       calendar = ISO8601.parse(datetime);
       return calendar;
-    } catch (Exception e) { } 
+    } catch (Exception e) {
+      log.error("Error when perform getCalendar: ", e.fillInStackTrace());
+    } 
     return null;
   }
 
+  /**
+   * Sets the increment.
+   */
   private void setIncrement() {
     String subStr = templateDateTime.substring(templateDateTime.indexOf("+") + 1 , templateDateTime.indexOf("}"));
     increment = Integer.parseInt(subStr);

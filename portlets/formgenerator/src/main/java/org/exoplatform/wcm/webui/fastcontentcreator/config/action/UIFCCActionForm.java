@@ -57,7 +57,6 @@ import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIFormInputBase;
 import org.exoplatform.webui.form.UIFormStringInput;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
@@ -196,7 +195,9 @@ public class UIFCCActionForm extends UIDialogForm implements UISelectable {
     if (nodeTypeName_ != null) {
       try {
         dialogPath = templateService.getTemplatePathByUser(true, nodeTypeName_, userName, repositoryName);
-      } catch (Exception e){}      
+      } catch (Exception e){
+        Utils.createPopupMessage(this, "UIFCCForm.msg.get-dialog-path", null, ApplicationMessage.ERROR);
+      }      
     }
     return dialogPath ;    
   }

@@ -16,7 +16,6 @@
  */
 package org.exoplatform.services.wcm.publication.lifecycle.stageversion;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : Hoa Pham

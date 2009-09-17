@@ -23,7 +23,6 @@ import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 
-// TODO: Auto-generated Javadoc
 /**
  * Author : TAN DUNG DANG
  * dzungdev@gmail.com

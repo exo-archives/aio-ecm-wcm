@@ -39,6 +39,7 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.wcm.core.NodetypeConstant;
 import org.exoplatform.wcm.webui.selector.UISelectPathPanel;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.event.Event;
@@ -63,12 +64,27 @@ public class UIWebContentTreeBuilder extends UIContainer {
    */
   public UIWebContentTreeBuilder() throws Exception {  }
 
+  /**
+   * Checks if is sym link.
+   * 
+   * @param node the node
+   * 
+   * @return true, if is sym link
+   * 
+   * @throws Exception the exception
+   */
   public boolean isSymLink(Node node) throws Exception {
     LinkManager linkManager = getApplicationComponent(LinkManager.class);
     return linkManager.isLink(node);
   }
 
-  @SuppressWarnings("unchecked")
+  /**
+   * Gets the drives.
+   * 
+   * @return the drives
+   * 
+   * @throws Exception the exception
+   */
   private List<DriveData> getDrives() throws Exception {    
     String repoName = getApplicationComponent(RepositoryService.class).getDefaultRepository().getConfiguration().getName();
     ManageDriveService driveService = getApplicationComponent(ManageDriveService.class);      
@@ -123,6 +139,13 @@ public class UIWebContentTreeBuilder extends UIContainer {
   }
 
 
+  /**
+   * Personal drives.
+   * 
+   * @param driveList the drive list
+   * 
+   * @return the list< drive data>
+   */
   private List<DriveData> personalDrives(List<DriveData> driveList) {
     List<DriveData> personalDrives = new ArrayList<DriveData>();
     NodeHierarchyCreator nodeHierarchyCreator = getApplicationComponent(NodeHierarchyCreator.class);
@@ -138,6 +161,15 @@ public class UIWebContentTreeBuilder extends UIContainer {
     return personalDrives;
   }
 
+  /**
+   * Group drives.
+   * 
+   * @param driveList the drive list
+   * 
+   * @return the list< drive data>
+   * 
+   * @throws Exception the exception
+   */
   private List<DriveData> groupDrives(List<DriveData> driveList) throws Exception {
     NodeHierarchyCreator nodeHierarchyCreator = getApplicationComponent(NodeHierarchyCreator.class);
     List<DriveData> groupDrives = new ArrayList<DriveData>();
@@ -157,6 +189,15 @@ public class UIWebContentTreeBuilder extends UIContainer {
     return groupDrives;
   }
 
+  /**
+   * General drives.
+   * 
+   * @param driveList the drive list
+   * 
+   * @return the list< drive data>
+   * 
+   * @throws Exception the exception
+   */
   private List<DriveData> generalDrives(List<DriveData> driveList) throws Exception {
     List<DriveData> generalDrives = new ArrayList<DriveData>();
     NodeHierarchyCreator nodeHierarchyCreator = getApplicationComponent(NodeHierarchyCreator.class);
@@ -171,11 +212,29 @@ public class UIWebContentTreeBuilder extends UIContainer {
     return generalDrives;
   }
 
+  /**
+   * Gets the session.
+   * 
+   * @param workSpaceName the work space name
+   * 
+   * @return the session
+   * 
+   * @throws Exception the exception
+   */
   private Session getSession(String workSpaceName) throws Exception {  
     return SessionProviderFactory.createSessionProvider().getSession(workSpaceName, 
                                                                      getApplicationComponent(RepositoryService.class).getDefaultRepository());
   }
 
+  /**
+   * Adds the tree from drives.
+   * 
+   * @param path the path
+   * @param list the list
+   * @param listDris the list dris
+   * 
+   * @throws Exception the exception
+   */
   private void addTreeFromDrives(String path, List<TreeNode> list, List<DriveData> listDris) throws Exception{
     for(DriveData dri : listDris){
       Node node = (Node)getSession(dri.getWorkspace()).getItem(dri.getHomePath());
@@ -183,6 +242,13 @@ public class UIWebContentTreeBuilder extends UIContainer {
     }
   }
 
+  /**
+   * Adds the root drives.
+   * 
+   * @param list the list
+   * 
+   * @throws Exception the exception
+   */
   private void addRootDrives(List<TreeNode> list) throws Exception{
     List<DriveData> listDris = getDrives();
     // Add Personal Drives into tree view
@@ -198,6 +264,13 @@ public class UIWebContentTreeBuilder extends UIContainer {
     addTreeFromDrives("/General Drives", list, generalDrives(listDris));
   }
 
+  /**
+   * Gets the tree node.
+   * 
+   * @return the tree node
+   * 
+   * @throws Exception the exception
+   */
   public List<TreeNode> getTreeNode() throws Exception{
     List<TreeNode> list = new ArrayList<TreeNode>();
     addRootDrives(list);
@@ -221,14 +294,31 @@ public class UIWebContentTreeBuilder extends UIContainer {
               list.add(j, new TreeNode(path, workSpaceName, node, deep));
               j ++;
             }
-          }catch(Exception ex){ }
+          }catch(Exception ex){
+            org.exoplatform.wcm.webui.Utils.createPopupMessage(this, "UIMessageBoard.msg.get-tree-node", null, ApplicationMessage.ERROR);
+          }
         }
       }
     }
     return list;
   }
   
+  /**
+   * The listener interface for receiving changeNodeAction events.
+   * The class that is interested in processing a changeNodeAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addChangeNodeActionListener<code> method. When
+   * the changeNodeAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see ChangeNodeActionEvent
+   */
   static public class ChangeNodeActionListener extends EventListener<UIWebContentTreeBuilder> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIWebContentTreeBuilder> event) throws Exception {
       UIWebContentTreeBuilder treeBuilder = event.getSource();      
       String value = event.getRequestContext().getRequestParameter(OBJECTID);

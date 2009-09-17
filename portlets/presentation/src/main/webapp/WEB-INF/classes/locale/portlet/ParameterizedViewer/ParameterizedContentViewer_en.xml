@@ -12,6 +12,9 @@
       <access-control-exc>Content access denied.</access-control-exc>
       <content-not-printed>Content cannot be printed</content-not-printed>
       <content-obsolete>Content is obsolete</content-obsolete>
+      <get-node-publication>Error when get node publication lyfe cycle.</get-node-publication>
+      <get-template-resource>Error when perform get template resource resolver.</get-template-resource>
+      <get-node>Error when perform get child node.</get-node>
     </msg>
   </UIMessageBoard>
   <UIDocumentDialogForm>

@@ -101,7 +101,7 @@ public class NewsletterTemplateHandler {
       sessionProvider.close();
       return templates;
     } catch (Exception e) {
-      log.error("Get templates of category " + categoryConfig + " failed because of " + e.getMessage());
+      log.error("Get templates of category " + categoryConfig + " failed because of ", e.fillInStackTrace());
     }
     return null;
   }
@@ -130,7 +130,7 @@ public class NewsletterTemplateHandler {
         }
       }
     } catch (Exception e) {
-      log.error("Get dialog " + templateName + " failed because of " + e.getMessage());
+      log.error("Get dialog " + templateName + " failed because of ", e.fillInStackTrace());
     }
     return null;
   }
@@ -163,7 +163,7 @@ public class NewsletterTemplateHandler {
         throw new Exception("Same name");
       }
     } catch (Exception e) {
-      log.error("Convert node " + webcontentPath + " to template at category " + categoryName + " failed because of " + e.getMessage());
+      log.error("Convert node " + webcontentPath + " to template at category " + categoryName + " failed because of ", e.fillInStackTrace());
       throw e;
     }
   }

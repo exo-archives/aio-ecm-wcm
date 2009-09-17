@@ -9,13 +9,14 @@ import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.wcm.webui.Utils;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 
-// TODO: Auto-generated Javadoc
 /**
  * Author : TAN DUNG DANG
  * dzungdev@gmail.com
@@ -151,7 +152,9 @@ public class UIWCResultSearchPresentation extends UIBaseNodePresentation {
         String workspace = dmsConfiguration.getConfig(repository).getSystemWorkspace();
         resourceResolver = new JCRResourceResolver(repository, workspace, "exo:templateFile");
       }
-    }catch(Exception ex) {}
+    }catch(Exception ex) {
+      Utils.createPopupMessage(this, "UIMessageBoard.msg.get-resource-resolver", null, ApplicationMessage.ERROR);
+    }
     return resourceResolver;
   }
 
@@ -161,7 +164,9 @@ public class UIWCResultSearchPresentation extends UIBaseNodePresentation {
   public void processRender(WebuiRequestContext context) throws Exception {
     try{
       getTemplatePath();
-    }catch(Exception ex) {}
+    }catch(Exception ex) {
+      Utils.createPopupMessage(this, "UIMessageBoard.msg.render", null, ApplicationMessage.ERROR);
+    }
     super.processRender(context) ;
   }
 
@@ -169,7 +174,6 @@ public class UIWCResultSearchPresentation extends UIBaseNodePresentation {
    * @see org.exoplatform.ecm.webui.presentation.NodePresentation#getCommentComponent()
    */
   public UIComponent getCommentComponent() {
-  	// TODO Auto-generated method stub
   	return null;
   }
 }

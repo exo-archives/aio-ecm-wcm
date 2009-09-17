@@ -18,7 +18,6 @@ package org.exoplatform.wcm.webui.formgenerator;
 
 import java.util.List;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform

@@ -268,10 +268,6 @@
 			<homepage>Home page</homepage>
 		</tooltip>
 	</UIExoStart>
-	
-	
-	
-	
 	<UIPageSelectorPanel>
 		<header>
 			<path>Path</path>
@@ -281,7 +277,14 @@
 			<child-not-found>No page found</child-not-found>
 		</msg>
 	</UIPageSelectorPanel>
-	
+	<UIMessageBoard>
+		<msg>
+			<get-resource-resolver>Error when get template resource resolver.</get-resource-resolver>
+			<render>Error when process render.</render>
+			<select-navigation>Error when perform select navigation action.</select-navigation>
+			<get-tree-node>Error when perform get tree node.</get-tree-node>
+		</msg>
+	</UIMessageBoard>
 	
 	<ECMNameValidator>
     <msg>

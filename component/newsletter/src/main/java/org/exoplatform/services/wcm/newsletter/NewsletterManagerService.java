@@ -51,7 +51,6 @@ import org.exoplatform.services.wcm.newsletter.handler.NewsletterSubscriptionHan
 import org.exoplatform.services.wcm.newsletter.handler.NewsletterTemplateHandler;
 import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform
  * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com May 21, 2009
@@ -211,7 +210,9 @@ public class NewsletterManagerService {
 					mailService.sendMessage(message);
 					newsletterEntry.setProperty(NewsletterConstant.ENTRY_PROPERTY_STATUS, NewsletterConstant.STATUS_SENT);
 					session.save();
-				} catch (Exception e) {}
+				} catch (Exception e) {
+				  log.error("Error when send newsletter: ", e.fillInStackTrace());
+				}
 			}
 		}
 		session.logout();
@@ -241,7 +242,9 @@ public class NewsletterManagerService {
 		for (Value value : values) {
 			try {
 				listString.add(value.getString());
-			} catch (Exception e) {}
+			} catch(Exception e) {
+			  log.error("Error when convert values to array: ", e.fillInStackTrace());
+			}
 		}
 		return listString;
 	}

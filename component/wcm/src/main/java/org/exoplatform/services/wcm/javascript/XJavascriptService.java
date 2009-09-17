@@ -39,7 +39,6 @@ import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.web.application.javascript.JavascriptConfigService;
 import org.picocontainer.Startable;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : Hoa.Pham
@@ -108,7 +107,7 @@ public class XJavascriptService implements Startable {
    */
   public String getActiveJavaScript(Node home) throws Exception {
     String jsQuery = "select * from exo:jsFile where jcr:path like '" + home.getPath()+ "/%' and exo:active='true'order by exo:priority DESC " ;
-    //TODO the jcr can not search on jcr:system for normal workspace. Seem that this is the portal bug
+    // the jcr can not search on jcr:system for normal workspace. Seem that this is the portal bug
     Session querySession = null;
     String jsData = null;
     try {  
@@ -234,7 +233,7 @@ public class XJavascriptService implements Startable {
         addJavascript(sharedJS); 
       }       
     } catch (Exception e) {      
-      log.error("Error when start XJavaScriptService",e);      
+      log.error("Error when start XJavaScriptService", e.fillInStackTrace());      
     }
     sessionProvider.close();        
   }

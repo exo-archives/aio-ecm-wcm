@@ -26,7 +26,6 @@ import org.exoplatform.portal.webui.skin.SkinService;
 import org.exoplatform.services.wcm.BaseWCMTestCase;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class TestXJavaScriptService.
  * 

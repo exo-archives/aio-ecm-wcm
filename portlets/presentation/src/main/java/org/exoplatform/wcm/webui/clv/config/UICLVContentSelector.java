@@ -36,7 +36,6 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS Author : anh.do anh.do@exoplatform.com,
  * anhdn86@gmail.com Feb 13, 2009

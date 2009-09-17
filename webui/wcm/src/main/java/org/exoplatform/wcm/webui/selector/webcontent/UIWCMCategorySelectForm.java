@@ -21,7 +21,6 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 
-// TODO: Auto-generated Javadoc
 /**
  * Author : TAN DUNG DANG
  * dzungdev@gmail.com

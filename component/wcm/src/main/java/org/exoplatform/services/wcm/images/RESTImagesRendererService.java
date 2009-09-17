@@ -44,7 +44,6 @@ import org.exoplatform.services.rest.container.ResourceContainer;
 import org.exoplatform.services.rest.transformer.PassthroughInputTransformer;
 import org.exoplatform.services.rest.transformer.PassthroughOutputTransformer;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : Hoa Pham
@@ -121,7 +120,7 @@ public class RESTImagesRendererService implements ResourceContainer{
     }catch (ItemNotFoundException e) {
       return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).build();
     }catch (Exception e) {
-      log.error(e.getMessage(),e);
+      log.error("Error when serveImage: ", e.fillInStackTrace());
       return Response.Builder.serverError().build(); 
     }
   }
@@ -159,7 +158,7 @@ public class RESTImagesRendererService implements ResourceContainer{
     }catch (ItemNotFoundException e) {
       return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).build();
     }catch (Exception e) {
-      log.error(e.getMessage(),e);
+      log.error("Error when serve image: ", e.fillInStackTrace());
       return Response.Builder.serverError().build(); 
     }
   }

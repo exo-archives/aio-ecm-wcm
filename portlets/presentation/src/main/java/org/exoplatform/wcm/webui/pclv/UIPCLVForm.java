@@ -46,6 +46,7 @@ import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -57,7 +58,6 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform
  * ngoc.tran@exoplatform.com Jun 23, 2009
@@ -340,7 +340,9 @@ public class UIPCLVForm extends UIForm {
 		try {
 			illustrativeImage = contentSchemaHandler.getIllustrationImage(node);
 			uri = imagesRendererService.generateURI(illustrativeImage);
-		} catch (Exception e) {}
+		} catch (Exception e) {
+		  // You shouldn't throw popup message, because some exception often rise here.
+		}
 		return uri;
 	}
 
@@ -368,6 +370,7 @@ public class UIPCLVForm extends UIForm {
 		try {
 			parameters = URLDecoder.decode(StringUtils.substringAfter(requestURI, portalURI.concat(pageNodeSelected+ "/")), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
+		  Utils.createPopupMessage(this, "UIPCLVConfig.msg.decode", null, ApplicationMessage.ERROR);
 		}
 
 		PortletRequest portletRequest = portletRequestContext.getRequest();
@@ -655,7 +658,9 @@ public class UIPCLVForm extends UIForm {
     String lifecyleName = null;
     try {
       lifecyleName = publicationService.getNodeLifecycleName(realNode);
-    } catch (NotInPublicationLifecycleException e) {}
+    } catch (NotInPublicationLifecycleException e) {
+   // You shouldn't throw popup message, because some exception often rise here.
+    }
     if (lifecyleName == null) return realNode;
       
     PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(lifecyleName);

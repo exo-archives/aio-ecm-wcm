@@ -50,8 +50,6 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormRadioBoxInput;
 
-
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : DANG TAN DUNG
@@ -95,19 +93,13 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
     List<SelectItemOption<String>> option = new ArrayList<SelectItemOption<String>>();
     RequestContext context = RequestContext.<RequestContext>getCurrentInstance();
     ResourceBundle res = context.getApplicationResourceBundle();
-    String labelQuickCreate = res.getString(getId() + ".label.QuickCreateWebContent");
-    String labelSelectExistedWebContent = res.getString(getId() + ".label.SelectExistedWebContent");
-    String labelSelectExistedDMS = res.getString(getId() + ".label.SelectExistedDMS");
+    //String labelQuickCreate = res.getString(getId() + ".label.QuickCreateWebContent");
+    //String labelSelectExistedWebContent = res.getString(getId() + ".label.SelectExistedWebContent");
+    //String labelSelectExistedDMS = res.getString(getId() + ".label.SelectExistedDMS");
     String labelEditContent = res.getString(getId() + ".label.EditWebContent");
     String labelSelectExistedContent = res.getString(getId() + ".label.ExistedContent");
     if(isNewConfig) {
       isNewConfig = true;
-      /*option.add(new SelectItemOption<String>(labelQuickCreate, "QuickCreateWebContent"));
-      option.add(new SelectItemOption<String>(labelSelectExistedContent, "SelectExistedContent"));
-      UIFormRadioBoxInput radioInput = new UIFormRadioBoxInput("radio", "radio", option);
-      radioInput.setAlign(UIFormRadioBoxInput.VERTICAL_ALIGN);
-      radioInput.setValue("QuickCreateWebContent");
-      addUIFormInput(radioInput);*/
     }else {
       UISingleContentViewerPortlet uiPresentationPortlet = getAncestorOfType(UISingleContentViewerPortlet.class);
       UIPresentationContainer presentationContainer = uiPresentationPortlet.getChild(UIPresentationContainer.class);
@@ -119,14 +111,7 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
         radioInput.setAlign(UIFormRadioBoxInput.VERTICAL_ALIGN);
         radioInput.setValue("EditCurrentWebContent");
         addUIFormInput(radioInput);
-      }/* else {
-        option.add(new SelectItemOption<String>(labelSelectExistedWebContent, "SelectExistedWebContent"));
-        option.add(new SelectItemOption<String>(labelSelectExistedDMS,"SelectExistedDMS"));
-        UIFormRadioBoxInput radioInput = new UIFormRadioBoxInput("radio", "radio", option);
-        radioInput.setAlign(UIFormRadioBoxInput.VERTICAL_ALIGN);
-        radioInput.setValue("SelectExistedWebContent");
-        addUIFormInput(radioInput);
-      }*/
+      }
     }
     return this ;
   }
@@ -167,72 +152,46 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
    * @see org.exoplatform.ecm.webui.selector.UISelectable#doSelect(java.lang.String, java.lang.Object)
    */
   public void doSelect(String arg0, Object arg1) throws Exception {}
-
+  
   /**
-   * The listener interface for receiving startProcessAction events.
-   * The class that is interested in processing a startProcessAction
+   * The listener interface for receiving selectContentAction events.
+   * The class that is interested in processing a selectContentAction
    * event implements this interface, and the object created
    * with that class is registered with a component using the
-   * component's <code>addStartProcessActionListener<code> method. When
-   * the startProcessAction event occurs, that object's appropriate
+   * component's <code>addSelectContentActionListener<code> method. When
+   * the selectContentAction event occurs, that object's appropriate
    * method is invoked.
    * 
-   * @see StartProcessActionEvent
+   * @see SelectContentActionEvent
    */
-  /*public static class SelectContentActionListener extends EventListener<UIWelcomeScreen> {
-    public void execute(Event<UIWelcomeScreen> event) throws Exception {
-      UIWelcomeScreen uiWelcomeScreen = event.getSource();
-      String radioValue = uiWelcomeScreen.<UIFormRadioBoxInput>getUIInput("radio").getValue();
-      UIPortletConfig uiPortletConfig = uiWelcomeScreen.getAncestorOfType(UIPortletConfig.class);      
-      if("QuickCreateWebContent".equals(radioValue)) {
-        uiWelcomeScreen.setRendered(false);
-        UIQuickCreationWizard uiQuickCreationWizard = uiPortletConfig.addChild(UIQuickCreationWizard.class, null, null);
-        uiQuickCreationWizard.getChild(UINameWebContentForm.class).init();
-      } else if ("EditCurrentWebContent".equals(radioValue)) {
-        uiWelcomeScreen.setRendered(false);
-        UIQuickCreationWizard uiQuickCreationWizard = uiPortletConfig.addChild(UIQuickCreationWizard.class, null, null);
-        UIContentDialogForm contentDialogForm  = uiQuickCreationWizard.getChild(UIContentDialogForm.class);
-        contentDialogForm.setEditNotIntegrity(true);
-        contentDialogForm.init();
-        uiQuickCreationWizard.viewStep(2);
-      } else if("SelectExistedContent".equals(radioValue)) {
-        uiWelcomeScreen.getChildren().clear();
-        List<SelectItemOption<String>> option = new ArrayList<SelectItemOption<String>>();
-        RequestContext context = RequestContext.<RequestContext>getCurrentInstance();
-        ResourceBundle res = context.getApplicationResourceBundle();
-        String labelSelectExistedWebContent = res.getString(uiWelcomeScreen.getId() + ".label.SelectExistedWebContent");
-        String labelSelectExistedDMS = res.getString(uiWelcomeScreen.getId() + ".label.SelectExistedDMS");
-        option.add(new SelectItemOption<String>(labelSelectExistedWebContent, "SelectExistedWebContent"));
-        option.add(new SelectItemOption<String>(labelSelectExistedDMS, "SelectExistedDMS"));
-        UIFormRadioBoxInput radioInput = new UIFormRadioBoxInput("radio", "radio", option);
-        radioInput.setAlign(UIFormRadioBoxInput.VERTICAL_ALIGN);
-        radioInput.setValue("SelectExistedWebContent");
-        uiWelcomeScreen.addChild(radioInput);       
-      } else if("SelectExistedWebContent".equals(radioValue)) {
-        uiWelcomeScreen.setRendered(false);
-        UIWebContentSelectorForm webContentSelectorForm = uiPortletConfig.addChild(UIWebContentSelectorForm.class, null, null);
-        webContentSelectorForm.init();
-      } else if("SelectExistedDMS".equals(radioValue)) {
-        uiWelcomeScreen.setRendered(false);
-        UIDMSSelectorForm dmSelectorForm = uiPortletConfig.addChild(UIDMSSelectorForm.class, null, null);
-        dmSelectorForm.init();
-      }
-      uiPortletConfig.showPopup(event.getRequestContext());
-    }
-  }*/
-  
   public static class SelectContentActionListener extends EventListener<UIWelcomeScreen> {
 
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIWelcomeScreen> event) throws Exception {
       UIWelcomeScreen uiWelcomeScreen = event.getSource();
-      //((UIPortletConfig) uiWelcomeScreen.getParent()).initPopupWebContentSelector();
       ((UIPortletConfig) uiWelcomeScreen.getParent()).initPopupWebcontentView();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiWelcomeScreen.getParent());
     }
   }
   
+  /**
+   * The listener interface for receiving createNewContentAction events.
+   * The class that is interested in processing a createNewContentAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addCreateNewContentActionListener<code> method. When
+   * the createNewContentAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see CreateNewContentActionEvent
+   */
   public static class CreateNewContentActionListener extends EventListener<UIWelcomeScreen> {
     
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIWelcomeScreen> event) throws Exception {
       UIWelcomeScreen uiWelcomeScreen = event.getSource();
       UIPortletConfig uiPortletConfig = uiWelcomeScreen.getAncestorOfType(UIPortletConfig.class);      
@@ -244,65 +203,69 @@ public class UIWelcomeScreen extends UIForm implements UISelectable {
   }
 
   /**
-   * The listener interface for receiving backAction events.
-   * The class that is interested in processing a backAction
+   * The listener interface for receiving abortAction events.
+   * The class that is interested in processing a abortAction
    * event implements this interface, and the object created
    * with that class is registered with a component using the
-   * component's <code>addBackActionListener<code> method. When
-   * the backAction event occurs, that object's appropriate
+   * component's <code>addAbortActionListener<code> method. When
+   * the abortAction event occurs, that object's appropriate
    * method is invoked.
    * 
-   * @see BackActionEvent
+   * @see AbortActionEvent
    */
   public static class AbortActionListener extends EventListener<UIWelcomeScreen> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIWelcomeScreen> event) throws Exception {
       UIWelcomeScreen uiWelcomeScreen = event.getSource();
-        UserPortalConfigService userPortalConfigService = uiWelcomeScreen.getApplicationComponent(UserPortalConfigService.class);
-        UIPortal uiPortal = Util.getUIPortal();
-        PageNode currentPageNode = uiPortal.getSelectedNode();
-        Page currentPage = userPortalConfigService.getPage(currentPageNode.getPageReference());
-        ArrayList<Object> applications = new ArrayList<Object>();
-        applications.addAll(currentPage.getChildren());
-        ArrayList<Object> applicationsTmp = currentPage.getChildren(); 
-        Collections.reverse(applicationsTmp);
-        DataStorage dataStorage = uiWelcomeScreen.getApplicationComponent(DataStorage.class);
-        for (Object applicationObject : applicationsTmp) {
-          if (applicationObject instanceof Container) continue;
-          Application application = Application.class.cast(applicationObject);
-          String applicationId = application.getInstanceId();
-          PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(applicationId));
-          if (portletPreferences == null) continue;
-          
-          boolean isQuickCreate = false;
-          String nodeIdentifier = null;
-          
-          for (Object preferenceObject : portletPreferences.getPreferences()) {
-          	Preference preference = Preference.class.cast(preferenceObject);
+      UserPortalConfigService userPortalConfigService = uiWelcomeScreen.getApplicationComponent(UserPortalConfigService.class);
+      UIPortal uiPortal = Util.getUIPortal();
+      PageNode currentPageNode = uiPortal.getSelectedNode();
+      Page currentPage = userPortalConfigService.getPage(currentPageNode.getPageReference());
+      ArrayList<Object> applications = new ArrayList<Object>();
+      applications.addAll(currentPage.getChildren());
+      ArrayList<Object> applicationsTmp = currentPage.getChildren(); 
+      Collections.reverse(applicationsTmp);
+      DataStorage dataStorage = uiWelcomeScreen.getApplicationComponent(DataStorage.class);
+      for (Object applicationObject : applicationsTmp) {
+        if (applicationObject instanceof Container) continue;
+        Application application = Application.class.cast(applicationObject);
+        String applicationId = application.getInstanceId();
+        PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(applicationId));
+        if (portletPreferences == null) continue;
+        
+        boolean isQuickCreate = false;
+        String nodeIdentifier = null;
+        
+        for (Object preferenceObject : portletPreferences.getPreferences()) {
+        	Preference preference = Preference.class.cast(preferenceObject);
 
-          	if ("isQuickCreate".equals(preference.getName())) {
-          		isQuickCreate = Boolean.valueOf(preference.getValues().get(0).toString());
-          		if (!isQuickCreate) break;
-          	}
+        	if ("isQuickCreate".equals(preference.getName())) {
+        		isQuickCreate = Boolean.valueOf(preference.getValues().get(0).toString());
+        		if (!isQuickCreate) break;
+        	}
 
-          	if ("nodeIdentifier".equals(preference.getName())) {
-          		nodeIdentifier = preference.getValues().get(0).toString();
-          		if (nodeIdentifier == null || nodeIdentifier == "") break;
-          	}
-          }
-
-          if (isQuickCreate && (nodeIdentifier == null || nodeIdentifier == "")) {
-          	applications.remove(applicationObject);
-          }
+        	if ("nodeIdentifier".equals(preference.getName())) {
+        		nodeIdentifier = preference.getValues().get(0).toString();
+        		if (nodeIdentifier == null || nodeIdentifier == "") break;
+        	}
         }
-        currentPage.setChildren(applications);
-        userPortalConfigService.update(currentPage);
-        UIPage uiPage = uiPortal.findFirstComponentOfType(UIPage.class);
-        if (uiPage != null) {
-        	uiPage.setChildren(null);
-        	PortalDataMapper.toUIPage(uiPage, currentPage);
+
+        if (isQuickCreate && (nodeIdentifier == null || nodeIdentifier == "")) {
+        	applications.remove(applicationObject);
         }
-        UIPortletConfig uiPortletConfig = uiWelcomeScreen.getAncestorOfType(UIPortletConfig.class);      
-        uiPortletConfig.closePopupAndUpdateUI(event.getRequestContext(),true);
+      }
+      currentPage.setChildren(applications);
+      userPortalConfigService.update(currentPage);
+      UIPage uiPage = uiPortal.findFirstComponentOfType(UIPage.class);
+      if (uiPage != null) {
+      	uiPage.setChildren(null);
+      	PortalDataMapper.toUIPage(uiPage, currentPage);
+      }
+      UIPortletConfig uiPortletConfig = uiWelcomeScreen.getAncestorOfType(UIPortletConfig.class);      
+      uiPortletConfig.closePopupAndUpdateUI(event.getRequestContext(),true);
     }
   }
 

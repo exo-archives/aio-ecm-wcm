@@ -326,7 +326,6 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
    * Test update lifecyle on create navigation.
    */
   public void testUpdateLifecyleOnCreateNavigation() {
-  	// TODO: Don't support function updateLifecyleOnCreateNavigation in this version
   }
 
   /**
@@ -408,7 +407,6 @@ public class TestWCMPublicationService extends BaseWCMTestCase {
    * Test update lifecyle on remove navigation.
    */
   public void testUpdateLifecyleOnRemoveNavigation() {
-  	// TODO: Don't support function updateLifecyleOnRemoveNavigation in this version
   }
 
   /**

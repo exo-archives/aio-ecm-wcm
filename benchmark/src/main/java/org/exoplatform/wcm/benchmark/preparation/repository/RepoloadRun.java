@@ -19,7 +19,6 @@ package org.exoplatform.wcm.benchmark.preparation.repository;
 import org.exoplatform.container.StandaloneContainer;
 import org.exoplatform.services.jcr.RepositoryService;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class RepoloadRun.
  */

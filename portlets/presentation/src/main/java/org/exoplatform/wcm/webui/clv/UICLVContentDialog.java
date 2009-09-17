@@ -120,7 +120,9 @@ public class UICLVContentDialog extends UIDialogForm {
           String workspace = dmsConfiguration.getConfig(this.repositoryName).getSystemWorkspace();
           resourceResolver = new JCRResourceResolver(this.repositoryName, workspace, TemplateService.EXO_TEMPLATE_FILE_PROP);
       }
-    } catch (Exception e) { }
+    } catch (Exception e) {
+      Utils.createPopupMessage(this, "UIDocumentDialogForm.msg.get-template-resource", new Object[] {contentType}, ApplicationMessage.ERROR);
+    }
     return resourceResolver;
   }
 
@@ -163,7 +165,9 @@ public class UICLVContentDialog extends UIDialogForm {
           homeNode.save();
           newNode = (Node) homeNode.getSession().getItem(addedPath);
           event.getRequestContext().setAttribute("nodePath", newNode.getPath());
-        } catch (Exception e) {}
+        } catch (Exception e) {
+          Utils.createPopupMessage(uiDocumentDialogForm, "UIDocumentDialogForm.msg.get-node-error", null, ApplicationMessage.ERROR);
+        }
       } catch (AccessControlException ace) {
         throw new AccessDeniedException(ace.getMessage());
       } catch (VersionException ve) {
@@ -222,7 +226,9 @@ public class UICLVContentDialog extends UIDialogForm {
           homeNode.save();
           newNode = (Node) homeNode.getSession().getItem(addedPath);
           event.getRequestContext().setAttribute("nodePath", newNode.getPath());
-        } catch (Exception e) {}
+        } catch (Exception e) {
+          Utils.createPopupMessage(uiDocumentDialogForm, "UIDocumentDialogForm.msg.get-node-error", null, ApplicationMessage.ERROR);
+        }
       } catch (AccessControlException e) {
         throw new AccessDeniedException(e.getMessage());
       } catch (VersionException e) {

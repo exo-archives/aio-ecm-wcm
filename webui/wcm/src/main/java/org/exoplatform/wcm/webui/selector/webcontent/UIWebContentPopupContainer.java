@@ -6,7 +6,6 @@ import org.exoplatform.webui.core.UIPopupComponent;
 import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 
-// TODO: Auto-generated Javadoc
 /**
  * Author : TAN DUNG DANG
  * dzungdev@gmail.com
@@ -62,13 +61,11 @@ public class UIWebContentPopupContainer extends UIContainer implements UIPopupCo
    * @see org.exoplatform.webui.core.UIPopupComponent#activate()
    */
   public void activate() throws Exception {
-    // TODO Auto-generated method stub
   }
 
   /* (non-Javadoc)
    * @see org.exoplatform.webui.core.UIPopupComponent#deActivate()
    */
   public void deActivate() throws Exception {
-    // TODO Auto-generated method stub
   }
 }

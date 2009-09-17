@@ -57,7 +57,6 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS Author : Phan Le Thanh Chuong
  * chuong.phan@exoplatform.com, phan.le.thanh.chuong@gmail.com Nov 4, 2008
@@ -234,7 +233,9 @@ public class UIPCVContainer extends UIContainer {
     String lifecycleName = null;
     try {
       lifecycleName = publicationService.getNodeLifecycleName(node);
-    } catch (NotInPublicationLifecycleException e) {}
+    } catch (NotInPublicationLifecycleException e) {
+      // You shouldn't throw popup message, because some exception often rise here.
+    }
     Node nodeView = null;
     // if content doesn't join to any lifecycle (deploy from xml)
     if (lifecycleName == null) {

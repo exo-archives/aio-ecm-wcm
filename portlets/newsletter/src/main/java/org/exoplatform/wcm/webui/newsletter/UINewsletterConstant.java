@@ -16,7 +16,6 @@
  */
 package org.exoplatform.wcm.webui.newsletter;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform

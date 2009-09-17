@@ -36,7 +36,6 @@ import org.exoplatform.upload.UploadService;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : Tran Nguyen Ngoc

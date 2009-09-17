@@ -24,6 +24,8 @@
       <keyword-not-empty>Keyword is not empty.</keyword-not-empty>
       <not-checked>You should check type of result which you want to search.</not-checked>
       <keyword-not-support>The search engine can not currently work with the keywords you supplied.</keyword-not-support>
+      <get-property>Error when get node property.</get-property>
+      <node-publication-error>Error when perform get node publication life cycle.</node-publication-error>
     </message>
   </UISearchForm>
   <!--/n  #########################################################################################

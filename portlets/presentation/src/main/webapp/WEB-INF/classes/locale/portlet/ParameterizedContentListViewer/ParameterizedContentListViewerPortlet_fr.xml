@@ -26,6 +26,9 @@
    		<saving-success>
    			Parameterized Contenu Liste Viewer a été mis à jour!
    		</saving-success>
+   		<decode> Unsupport encodage.</decode>
+   		<get-illustration-image> erreur lorsque vous l'image d'illustration. </get-illustration-image>
+   		<get-node-publication> erreur lorsque vous nœud cycle de publication lyfe. </get-node-publication>
    	</msg>
     <label>
       <ContentSelectionBlock>Sommaire sélection</ContentSelectionBlock>

@@ -142,6 +142,10 @@
       <content-not-found>Contenu non trouvé ou cet emplacement n'a pas été configuré!</content-not-found>
       <no-permission>Vous n'avez pas les permissions requises pour afficher le contenu!</no-permission>
       <error-nodetype>Ce visualiseur n'a pas été configuré.</error-nodetype>
+      <get-resource-bundle> erreur lorsque vous bundle de ressources. </get-resource-bundle>
+      <access-control>Contrôle d'accès erreur.</access-control>
+      <list-file-type> erreur lorsque reçoivent le type de fichier liste. </list-file-type>
+      <node-publication-error> d'erreur lorsque vous effectuez obtenir noeud cycle de publication de vie. </node-publication-error>
     </msg>
   </UIMessageBoard>
   <!--/n  ###################################################################

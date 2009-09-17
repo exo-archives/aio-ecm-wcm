@@ -39,7 +39,6 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
-//TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS.
  * 
@@ -175,15 +174,12 @@ public class UIWebContentPathSelector extends UIBaseNodeTreeSelector implements 
    * @see org.exoplatform.webui.core.UIPopupComponent#activate()
    */
   public void activate() throws Exception {
-    // TODO Auto-generated method stub
-
   }
 
   /* (non-Javadoc)
    * @see org.exoplatform.webui.core.UIPopupComponent#deActivate()
    */
   public void deActivate() throws Exception {
-    // TODO Auto-generated method stub
   }
 
   /**

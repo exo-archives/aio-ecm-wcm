@@ -74,7 +74,6 @@ public class WCMContentInitializerService implements Startable{
     SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
     Session session = null;
     try {
-      // TODO: should get exo:services folder by NodeHierarchyCrerator service
       ManageableRepository repository = repositoryService.getCurrentRepository();
       session = sessionProvider.getSession(repository.getConfiguration().getDefaultWorkspaceName(), repository);
       Node serviceFolder = session.getRootNode().getNode("exo:services");
@@ -92,8 +91,8 @@ public class WCMContentInitializerService implements Startable{
             deploymentPlugin.deploy(sessionProvider);
             logData.append("deploy " + deploymentPlugin.getName() + " deployment plugin succesfully at " + date.toString() + "\n");
           } catch (Exception e) {
-            log.error("deploy " + deploymentPlugin.getName() + " deployment plugin failure at " + date.toString() + " by " + e.getMessage() + "\n");
-            logData.append("deploy " + deploymentPlugin.getName() + " deployment plugin failure at " + date.toString() + " by " + e.getMessage() + "\n");
+            log.error("deploy " + deploymentPlugin.getName() + " deployment plugin failure at " + date.toString() + " by " + e.fillInStackTrace() + "\n");
+            logData.append("deploy " + deploymentPlugin.getName() + " deployment plugin failure at " + date.toString() + " by " + e.fillInStackTrace() + "\n");
           }                            
         } 
         
@@ -105,7 +104,9 @@ public class WCMContentInitializerService implements Startable{
         contentInitializerServiceLogContent.setProperty("jcr:lastModified", date.getTime());
         session.save();
       }
-    } catch (Exception e) {}
+    } catch (Exception e) {
+      log.error("Error when start WCMContentInitializerService: ", e.fillInStackTrace());
+    }
     finally {
       if (session != null) session.logout();
       sessionProvider.close();

@@ -24,6 +24,7 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Session;
 
+import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.ecm.connector.fckeditor.FCKFileHandler;
 import org.exoplatform.ecm.connector.fckeditor.FCKFolderHandler;
@@ -33,6 +34,7 @@ import org.exoplatform.services.cms.voting.VotingService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.rest.CacheControl;
 import org.exoplatform.services.rest.Response;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
@@ -62,8 +64,8 @@ public abstract class BaseConnector {
   /** The repository service. */
   protected RepositoryService                 repositoryService;
 
-  /** The local session provider. */
-  //protected SessionProviderService sessionProviderService;
+  /** The log. */
+  private static Log log = ExoLogger.getLogger(BaseConnector.class);
 
   /** The voting service. */
   protected VotingService votingService;  
@@ -116,7 +118,7 @@ public abstract class BaseConnector {
    * Builds the xml response on expand.
    * 
    * @param currentFolder the current folder
-   * @param runningPortal TODO
+   * @param runningPortal
    * @param workspaceName the workspace name
    * @param repositoryName the repository name
    * @param jcrPath the jcr path
@@ -440,6 +442,7 @@ public abstract class BaseConnector {
       if (NodeTypeFilter==null || (NodeTypeFilter!=null && content.isNodeType(NodeTypeFilter)) ) 
     	  return content;
     } catch (Exception e) {
+      log.error("Error when perform getContent: ", e.fillInStackTrace());
     } finally {
       if (session != null) session.logout();
       sessionProvider.close();
@@ -508,7 +511,7 @@ public abstract class BaseConnector {
    * @param repositoryName the repository name
    * @param workspaceName the workspace name
    * @param currentFolder the current folder
-   * @param runningPortalName TODO
+   * @param runningPortalName
    * @param jcrPath the jcr path
    * @param uploadId the upload id
    * @param language the language

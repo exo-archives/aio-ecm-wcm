@@ -60,6 +60,11 @@
       <empty-folder-path>You must select a folder.</empty-folder-path>
       <not-valid-action>Viewer mode is not suitable with contents selected. You should change viewer mode.</not-valid-action>
       <none-action-excuted>No action will be executed.</none-action-excuted>
+      <add-node-error>Error when add node.</add-node-error>
+      <node-publication-error>Error when perform get node publication life cycle.</node-publication-error>
+      <show-draft-button>Error when show draft button.</show-draft-button>
+      <get-content-icon>Error when get content icon.</get-content-icon>
+      <get-illustration-image>Error when get illustration image.</get-illustration-image>
     </msg>
   </UIMessageBoard>
   <UIFolderTreeList>
@@ -130,6 +135,10 @@
   		<FastPublish>Fast Publish</FastPublish>
   		<SaveAsDraft>Save as Draft</SaveAsDraft>  		  		
   	</action>
+  	<msg>
+  		<get-template-resource>Error when perform get template resource.</get-template-resource>
+  		<get-node-error>Error when perform get node.</get-node-error>
+  	</msg>
   </UIDocumentDialogForm>
   <UIMessageBoard>
   	<msg>  	

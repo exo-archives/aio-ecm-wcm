@@ -36,6 +36,7 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.cms.link.NodeFinder;
 import org.exoplatform.services.cms.taxonomy.TaxonomyService;
 import org.exoplatform.services.ecm.publication.PublicationService;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -45,7 +46,6 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
@@ -192,7 +192,9 @@ public class UICategoryNavigationTree extends UIContainer {
     String parameters = null;
     try {
       parameters = URLDecoder.decode(StringUtils.substringAfter(requestURI, portalURI.concat(pageNodeSelected + "/")),"UTF-8");
-    } catch (UnsupportedEncodingException e) {}
+    } catch (UnsupportedEncodingException e) {
+      org.exoplatform.wcm.webui.Utils.createPopupMessage(this, "UICategoryNavigationConfig.msg.not-support-encoding", null, ApplicationMessage.ERROR);
+    }
     PortletPreferences portletPreferences = UICategoryNavigationUtils.getPortletPreferences();
     String preferenceRepository = portletPreferences.getValue(UICategoryNavigationConstant.PREFERENCE_REPOSITORY, "");
     String preferenceTreeName = portletPreferences.getValue(UICategoryNavigationConstant.PREFERENCE_TREE_NAME, "");
@@ -202,7 +204,9 @@ public class UICategoryNavigationTree extends UIContainer {
     if (preferenceTreeName.equals(categoryPath)) categoryPath = "";
     try {
     	currentNode = treeNode.getNode(categoryPath);
-		} catch (Exception e) {}
+		} catch (Exception e) {
+		  org.exoplatform.wcm.webui.Utils.createPopupMessage(this, "UICategoryNavigationConfig.msg.render", null, ApplicationMessage.ERROR);
+		}
     super.processRender(context);
   }
   

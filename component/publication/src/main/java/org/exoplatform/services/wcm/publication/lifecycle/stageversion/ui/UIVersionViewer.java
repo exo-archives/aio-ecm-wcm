@@ -133,7 +133,6 @@ public class UIVersionViewer extends UIBaseNodePresentation {
   }
 
   public UIComponent getCommentComponent() {
-  	// TODO Auto-generated method stub
   	return null;
   }
 }

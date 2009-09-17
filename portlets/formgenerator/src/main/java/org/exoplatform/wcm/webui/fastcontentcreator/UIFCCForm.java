@@ -69,7 +69,6 @@ import org.exoplatform.webui.form.UIFormMultiValueInputSet;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormUploadInput;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
@@ -238,7 +237,9 @@ public class UIFCCForm extends UIDialogForm implements UISelectable {
   public void newJCRTemplateResourceResolver() {
     try {
       jcrTemplateResourceResolver_ = new JCRResourceResolver(repositoryName, getDMSWorkspace(), "exo:templateFile") ;
-    } catch(Exception e) { }
+    } catch(Exception e) {
+      Utils.createPopupMessage(this, "UIFCCForm.msg.new-jcr-template", null, ApplicationMessage.ERROR);
+    }
   }
   
   /**

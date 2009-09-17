@@ -31,7 +31,6 @@ import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.services.wcm.webcontent.HTMLFileSchemaHandler;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform

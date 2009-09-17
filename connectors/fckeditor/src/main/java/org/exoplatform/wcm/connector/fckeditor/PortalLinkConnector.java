@@ -26,6 +26,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.logging.Log;
 import org.exoplatform.common.http.HTTPMethods;
 import org.exoplatform.commons.utils.ISO8601;
 import org.exoplatform.commons.utils.PageList;
@@ -40,6 +41,7 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.rest.CacheControl;
 import org.exoplatform.services.rest.HTTPMethod;
 import org.exoplatform.services.rest.OutputTransformer;
@@ -80,6 +82,9 @@ public class PortalLinkConnector implements ResourceContainer {
   /** The servlet context. */
   private ServletContext servletContext;
 
+  /** The log. */
+  private static Log log = ExoLogger.getLogger(PortalLinkConnector.class);
+  
   /**
    * Instantiates a new portal link connector.
    * 
@@ -116,7 +121,9 @@ public class PortalLinkConnector implements ResourceContainer {
     try {
       String userId = getCurrentUser();
       return buildReponse(currentFolder, command, userId); 
-    } catch (Exception e) {}    
+    } catch (Exception e) {
+      log.error("Error when perform getPageURI: ", e.fillInStackTrace());
+    }    
     return Response.Builder.ok().build();
   }
 
@@ -130,6 +137,7 @@ public class PortalLinkConnector implements ResourceContainer {
       ConversationState conversationState = ConversationState.getCurrent();
       return conversationState.getIdentity().getUserId();
     } catch (Exception e) {
+      log.error("Error when perform getCurrentUser: ", e.fillInStackTrace());
     }
     return null;
   }
@@ -266,7 +274,7 @@ public class PortalLinkConnector implements ResourceContainer {
    * @param portalName the portal name
    * @param pageNode the page node
    * @param foldersElement the root element
-   * @param filesElement TODO
+   * @param filesElement
    * @param userId the user id
    * @param portalConfigService the portal config service
    * 

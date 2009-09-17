@@ -8,6 +8,7 @@
       <checkSubscriptionToProcess>S'il vous plaît, valider un ou plusieurs abonnements avant de soumettre</checkSubscriptionToProcess>
       <alreadyExistedEmail>Cet email est déjà inscrit. Merci d'utiliser une autre adresse.</alreadyExistedEmail>
       <canNotSubcribed>Inscription impossible. Merci d'essayer à nouveau.</canNotSubcribed>
+      <get-checked>erreur lorsque vous effectuez obtenir d'abonnement sont contrôlés. </get-checked>
     </msg>
     <action>
       <Subcribe>Je m'inscris</Subcribe>

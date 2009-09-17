@@ -73,7 +73,6 @@ public class NavigationEventListenerDelegate {
    * @throws Exception the exception
    */
   public void updateLifecyleOnCreateNavigation(PageNavigation pageNavigation) throws Exception {
-    // TODO: Don't support in this version
   }
 
   /**
@@ -81,7 +80,7 @@ public class NavigationEventListenerDelegate {
    * 
    * @param pageNavigation the page navigation
    * @param remoteUser the remote user
-   * @param plugin TODO
+   * @param plugin
    * @throws Exception the exception
    */
   public void updateLifecycleOnChangeNavigation(
@@ -100,7 +99,6 @@ public class NavigationEventListenerDelegate {
    * @throws Exception the exception
    */
   public void updateLifecyleOnRemoveNavigation(PageNavigation pageNavigation) throws Exception {
-    // TODO: Don't support in this version
   }
 
   /**
@@ -135,7 +133,7 @@ public class NavigationEventListenerDelegate {
    * 
    * @param pageNavigation the page navigation
    * @param remoteUser remoteUser
-   * @param plugin TODO
+   * @param plugin
    * @throws Exception the exception
    */
   private void updateRemovedPageNode(

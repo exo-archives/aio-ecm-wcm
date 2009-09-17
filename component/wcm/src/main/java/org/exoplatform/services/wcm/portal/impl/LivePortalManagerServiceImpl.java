@@ -66,7 +66,7 @@ public class LivePortalManagerServiceImpl implements LivePortalManagerService, S
    * @param configService the config service
    * @param repositoryService the repository service
    */
-//TODO: chuong.phan: DO NOT REMOVE WebSchemaConfigService, THIS IS DEPENDENCY FOR DEPLOYMENT
+  //chuong.phan: DO NOT REMOVE WebSchemaConfigService, THIS IS DEPENDENCY FOR DEPLOYMENT
   public LivePortalManagerServiceImpl(final WCMConfigurationService configService, final RepositoryService repositoryService, WebSchemaConfigService schemaConfigService) {
     this.wcmConfigService = configService;
     this.repositoryService = repositoryService;
@@ -227,7 +227,7 @@ public class LivePortalManagerServiceImpl implements LivePortalManagerService, S
         livePortalPaths.putIfAbsent(portalNode.getName(),portalNode.getPath());
       }
     } catch (Exception e) {
-      log.error("Error when starting LivePortalManagerService: ",e);
+      log.error("Error when starting LivePortalManagerService: ", e.fillInStackTrace());
     } finally {
       if (session != null) session.logout();
       sessionProvider.close();

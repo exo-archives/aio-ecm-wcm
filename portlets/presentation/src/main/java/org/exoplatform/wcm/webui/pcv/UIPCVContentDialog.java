@@ -52,7 +52,6 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : Anh Do Ngoc
@@ -116,7 +115,9 @@ public class UIPCVContentDialog extends UIDialogForm {
                                                    workspace,
                                                    TemplateService.EXO_TEMPLATE_FILE_PROP);
       }
-    } catch (Exception e) { }
+    } catch (Exception e) {
+      Utils.createPopupMessage(this, "UIMessageBoard.msg.get-template-resource", null, ApplicationMessage.ERROR);
+    }
     return resourceResolver;
   }
 
@@ -163,7 +164,9 @@ public class UIPCVContentDialog extends UIDialogForm {
           homeNode.save();
           newNode = (Node) homeNode.getSession().getItem(addedPath);
           event.getRequestContext().setAttribute("nodePath", newNode.getPath());
-        } catch (Exception e) {}
+        } catch (Exception e) {
+          Utils.createPopupMessage(uiDocumentDialogForm, "UIMessageBoard.msg.get-node", null, ApplicationMessage.ERROR);
+        }
       } catch (AccessControlException ace) {
         throw new AccessDeniedException(ace.getMessage());
       } catch (VersionException ve) {
@@ -271,7 +274,9 @@ public class UIPCVContentDialog extends UIDialogForm {
           homeNode.save();
           newNode = (Node) homeNode.getSession().getItem(addedPath);
           event.getRequestContext().setAttribute("nodePath", newNode.getPath());
-        } catch (Exception e) {}
+        } catch (Exception e) {
+          Utils.createPopupMessage(uiDocumentDialogForm, "UIMessageBoard.msg.get-node", null, ApplicationMessage.ERROR);
+        }
       } catch (AccessControlException ace) {
         throw new AccessDeniedException(ace.getMessage());
       } catch (VersionException ve) {

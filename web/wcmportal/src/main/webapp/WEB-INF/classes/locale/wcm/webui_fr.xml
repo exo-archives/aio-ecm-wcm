@@ -275,10 +275,17 @@
 			<homepage>Page d'accueil</homepage>
 		</tooltip>
 	</UIExoStart>  
-
-
-
-
+	
+	<UIMessageBoard>
+		<msg>
+			<get-resource-resolver>erreur lorsque vous template résolveur de ressources.</get-resource-resolver>
+			<render>erreur lorsque de processus de rendu.</render>
+			<select-navigation>erreur lorsque vous effectuez une action de navigation sélectionner.</select-navigation>
+				
+<get-tree-node>erreur lorsque vous effectuez obtenir nœud de l'arbre. </get-tree-node>
+		</msg>
+	</UIMessageBoard>
+	
 	<UIPageSelectorPanel>
 		<header>
 			<path>Chemin</path>

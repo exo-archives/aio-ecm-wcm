@@ -26,6 +26,10 @@
 			<UICategoryNavigationTreeTitleFormStringInput>Titre</UICategoryNavigationTreeTitleFormStringInput>
 			<UICategoryNavigationTargetPathFormInputSet>Target Path</UICategoryNavigationTargetPathFormInputSet>
 		</label>
+		<msg>
+			<render> erreur lorsque processus de rendu. </render>
+			<not-support-encoding>L'encodage est prend pas en charge.</not-support-encoding>
+		</msg>
 		<action>
 			<Save>Sauver</Save>
 		</action>

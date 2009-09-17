@@ -11,8 +11,6 @@ import javax.portlet.PortletPreferences;
 
 import org.exoplatform.ecm.webui.selector.UISelectable;
 import org.exoplatform.ecm.webui.tree.UIBaseNodeTreeSelector;
-import org.exoplatform.ecm.webui.tree.selectone.UIOneNodePathSelector;
-import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.ecm.publication.PublicationService;
@@ -25,23 +23,20 @@ import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.publication.NotInWCMPublicationException;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.search.PaginatedQueryResult;
-import org.exoplatform.wcm.webui.selector.UISelectPathPanel;
 import org.exoplatform.wcm.webui.selector.document.UIDocumentPathSelector;
 import org.exoplatform.wcm.webui.selector.document.UIDocumentTabSelector;
-import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIGrid;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
 /**
  * Author : TAN DUNG DANG
- *          dzungdev@gmail.com
- * Feb 10, 2009  
+ * dzungdev@gmail.com
+ * Feb 10, 2009
  */
 
 @ComponentConfig(
@@ -54,37 +49,87 @@ import org.exoplatform.webui.event.EventListener;
 
 public class UIWCMSearchResult extends UIGrid {
 
+  /** The Constant TITLE. */
   public static final String TITLE = "title".intern();
+  
+  /** The Constant NODE_EXPECT. */
   public static final String NODE_EXPECT = "excerpt".intern();
+  
+  /** The Constant SCORE. */
   public static final String SCORE = "score".intern();
+  
+  /** The Constant CREATE_DATE. */
   public static final String CREATE_DATE = "CreateDate".intern();
+  
+  /** The Constant PUBLICATION_STATE. */
   public static final String PUBLICATION_STATE = "publicationstate".intern();
+  
+  /** The Constant NODE_PATH. */
   public static final String NODE_PATH = "path".intern();
+  
+  /** The Actions. */
   public String[] Actions = {"Select", "View"};
+  
+  /** The BEA n_ fields. */
   public String[] BEAN_FIELDS = {TITLE, SCORE, PUBLICATION_STATE};
 
 
+  /**
+   * Instantiates a new uIWCM search result.
+   * 
+   * @throws Exception the exception
+   */
   public UIWCMSearchResult() throws Exception {
     configure(NODE_PATH, BEAN_FIELDS, Actions);
     getUIPageIterator().setId("UIWCMSearchResultPaginator");
   }
 
+  /**
+   * Gets the date format.
+   * 
+   * @return the date format
+   */
   public DateFormat getDateFormat() {
     Locale locale = new Locale(Util.getUIPortal().getLocale());
     DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, locale);
     return dateFormat;
   }
 
+  /**
+   * Update grid.
+   * 
+   * @param paginatedResult the paginated result
+   * 
+   * @throws Exception the exception
+   */
   public void updateGrid(PaginatedQueryResult paginatedResult) throws Exception {           
     getUIPageIterator().setPageList(paginatedResult); 
   }
 
 
+  /**
+   * Gets the title node.
+   * 
+   * @param node the node
+   * 
+   * @return the title node
+   * 
+   * @throws Exception the exception
+   */
   public String getTitleNode(Node node) throws Exception {
     return node.hasProperty("exo:title") ? 
                                           node.getProperty("exo:title").getValue().getString() : node.getName();
   }
 
+  /**
+   * Gets the creates the date.
+   * 
+   * @param node the node
+   * 
+   * @return the creates the date
+   * 
+   * @throws Exception the exception
+   */
   public Date getCreateDate(Node node) throws Exception {
     if(node.hasProperty("exo:dateCreated")) {
       Calendar cal = node.getProperty("exo:dateCreated").getValue().getDate();
@@ -93,22 +138,54 @@ public class UIWCMSearchResult extends UIGrid {
     return null;
   }
 
+  /**
+   * Gets the result node.
+   * 
+   * @param nodePath the node path
+   * 
+   * @return the result node
+   * 
+   * @throws Exception the exception
+   */
   private Node getResultNode(String nodePath) throws Exception {
     Session session = getSession();
     Node resultNode = (Node) session.getItem(nodePath);
     return resultNode;
   }
 
+  /**
+   * Gets the expect.
+   * 
+   * @param expect the expect
+   * 
+   * @return the expect
+   */
   public String getExpect(String expect) {
     expect = expect.replaceAll("<[^>]*/?>", "");
     return expect;
   }
 
+  /**
+   * Gets the current state.
+   * 
+   * @param node the node
+   * 
+   * @return the current state
+   * 
+   * @throws Exception the exception
+   */
   public String getCurrentState(Node node) throws Exception {
     PublicationService pubService = getApplicationComponent(PublicationService.class);
     return pubService.getCurrentState(node);
   }
 
+  /**
+   * Gets the session.
+   * 
+   * @return the session
+   * 
+   * @throws Exception the exception
+   */
   public Session getSession() throws Exception {
     RepositoryService repoService = getApplicationComponent(RepositoryService.class);
     ManageableRepository maRepository = repoService.getCurrentRepository();
@@ -127,7 +204,22 @@ public class UIWCMSearchResult extends UIGrid {
     return session;
   }
 
+  /**
+   * The listener interface for receiving selectAction events.
+   * The class that is interested in processing a selectAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addSelectActionListener<code> method. When
+   * the selectAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see SelectActionEvent
+   */
   public static class SelectActionListener extends EventListener<UIWCMSearchResult> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIWCMSearchResult> event) throws Exception {
       UIWCMSearchResult uiWCSearchResult = event.getSource();
       UIWebContentTabSelector uiWCTabSelector = 
@@ -175,7 +267,22 @@ public class UIWCMSearchResult extends UIGrid {
     }
   }
 
+  /**
+   * The listener interface for receiving viewAction events.
+   * The class that is interested in processing a viewAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addViewActionListener<code> method. When
+   * the viewAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see ViewActionEvent
+   */
   public static class ViewActionListener extends EventListener<UIWCMSearchResult> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
     public void execute(Event<UIWCMSearchResult> event) throws Exception {
       UIWCMSearchResult uiWCSearchResult = event.getSource();
       UIWebContentTabSelector uiWCTabSelector = 

@@ -67,7 +67,7 @@ public class PageEventListenerDelegate {
    * 
    * @param page the page
    * @param remoteUser the remote user
-   * @param plugin TODO
+   * @param plugin
    * @throws Exception the exception
    */
   public void updateLifecyleOnCreatePage(Page page, String remoteUser, WebpagePublicationPlugin plugin) throws Exception { 
@@ -79,7 +79,7 @@ public class PageEventListenerDelegate {
    * 
    * @param page the page
    * @param remoteUser the remote user
-   * @param plugin TODO
+   * @param plugin
    * @throws Exception the exception
    */
   public void updateLifecyleOnChangePage(Page page, String remoteUser, WebpagePublicationPlugin plugin) throws Exception {
@@ -92,7 +92,7 @@ public class PageEventListenerDelegate {
    * 
    * @param page the page
    * @param remoteUser the remote user
-   * @param plugin TODO
+   * @param plugin
    * @throws Exception the exception
    */
   public void updateLifecycleOnRemovePage(Page page, String remoteUser, WebpagePublicationPlugin plugin) throws Exception {
@@ -113,7 +113,7 @@ public class PageEventListenerDelegate {
    * 
    * @param page the page
    * @param remoteUser the remote user
-   * @param plugin TODO
+   * @param plugin
    * @throws Exception the exception
    */
   private void updateAddedApplication(Page page, String remoteUser, WebpagePublicationPlugin plugin) throws Exception {
@@ -130,7 +130,7 @@ public class PageEventListenerDelegate {
    * 
    * @param page the page
    * @param remoteUser the remote user
-   * @param plugin TODO
+   * @param plugin
    * @throws Exception the exception
    */
   private void updateRemovedApplication(Page page, String remoteUser, WebpagePublicationPlugin plugin) throws Exception {
@@ -152,7 +152,7 @@ public class PageEventListenerDelegate {
    * Gets the list node by application id.
    * 
    * @param page the page
-   * @param plugin TODO
+   * @param plugin
    * 
    * @return the list node by application id
    * 
@@ -190,7 +190,7 @@ public class PageEventListenerDelegate {
    * @param content the content
    * @param lifecycleName the lifecycle name
    * @param remoteUser the remote user
-   * @param plugin TODO
+   * @param plugin
    * @throws Exception the exception
    */
   private void saveAddedApplication(
@@ -239,7 +239,7 @@ public class PageEventListenerDelegate {
    * @param applicationId the application id
    * @param content the content
    * @param remoteUser the remote user
-   * @param plugin TODO
+   * @param plugin
    * @throws Exception the exception
    */
   private void saveRemovedApplication(Page page, String applicationId, Node content, String remoteUser, WebpagePublicationPlugin plugin) throws Exception {

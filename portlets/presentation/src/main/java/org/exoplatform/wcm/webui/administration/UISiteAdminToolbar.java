@@ -79,7 +79,6 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
-// TODO: Auto-generated Javadoc
 /*
  * Created by The eXo Platform SAS
  * Author : Anh Do Ngoc
@@ -588,7 +587,7 @@ public class UISiteAdminToolbar extends UIContainer {
       UIControlWorkspace uiControlWorkspace = uiApp.getChild(UIControlWorkspace.class);
       UIExoStart uiExoStart = uiControlWorkspace.getChild(UIExoStart.class);      
       WebuiApplication webuiApplication = (WebuiApplication)Util.getPortalRequestContext().getApplication();
-      //TODO put UIBrowserPageForm component config into ConfigurationManager to avoid exception when add new page
+      // put UIBrowserPageForm component config into ConfigurationManager to avoid exception when add new page
       //this is strange bug in WCM
       webuiApplication.getConfigurationManager().getComponentConfig(UIPageBrowser.class,"UIBrowserPageForm");
       uiExoStart.createEvent("BrowsePage", Event.Phase.PROCESS,Util.getPortalRequestContext()).broadcast();

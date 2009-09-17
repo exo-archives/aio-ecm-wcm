@@ -18,7 +18,6 @@ package org.exoplatform.wcm.connector.fckeditor;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
-import javax.jcr.Session;
 
 import org.apache.commons.logging.Log;
 import org.exoplatform.common.http.HTTPMethods;
@@ -93,6 +92,7 @@ public class LinkConnector extends BaseConnector implements ResourceContainer {
       if (response != null)              
         return response; 
     } catch (Exception e) {
+      log.error("Error when perform getFoldersAndFiles: ", e.fillInStackTrace());
     }    
     return Response.Builder.ok().build();
   }

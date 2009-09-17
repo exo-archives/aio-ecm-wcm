@@ -146,7 +146,7 @@ public class WebSchemaConfigServiceImpl implements WebSchemaConfigService, Start
           session.save(); 
         }        
       } catch (Exception e) {
-        log.error("Error when try to create share portal folder for repository: "+ repoName, e);
+        log.error("Error when try to create share portal folder for repository: "+ repoName, e.fillInStackTrace());
       }            
     }
     sessionProvider.close();

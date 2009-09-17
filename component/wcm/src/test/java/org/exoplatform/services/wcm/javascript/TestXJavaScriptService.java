@@ -27,7 +27,6 @@ import org.exoplatform.services.wcm.BaseWCMTestCase;
 import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.web.application.javascript.JavascriptConfigService;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class TestXJavaScriptService.
  * 

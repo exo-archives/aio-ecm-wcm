@@ -27,7 +27,6 @@ import javax.jcr.NodeIterator;
 
 import org.exoplatform.services.wcm.BaseWCMTestCase;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS
  * Author : Tran Nguyen Ngoc

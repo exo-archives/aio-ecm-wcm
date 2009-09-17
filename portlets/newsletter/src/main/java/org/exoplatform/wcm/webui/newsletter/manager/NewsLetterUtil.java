@@ -20,7 +20,6 @@ import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class NewsLetterUtil.
  */

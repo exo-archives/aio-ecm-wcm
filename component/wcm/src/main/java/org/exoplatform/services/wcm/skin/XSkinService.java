@@ -42,7 +42,6 @@ import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
 import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.picocontainer.Startable;
 
-// TODO: Auto-generated Javadoc
 /**
  * Created by The eXo Platform SAS Author : Hoa.Pham hoa.pham@exoplatform.com
  * Apr 9, 2008
@@ -104,7 +103,7 @@ public class XSkinService implements Startable {
    */
   public String getActiveStylesheet(Node home) throws Exception {
     String cssQuery = "select * from exo:cssFile where jcr:path like '" +home.getPath()+ "/%' and exo:active='true' order by exo:priority DESC " ;
-    //TODO the jcr can not search on jcr:system for normal workspace. Seem that this is the portal bug
+    // the jcr can not search on jcr:system for normal workspace. Seem that this is the portal bug
     Session querySession = null;
     String cssData = null;
     try {
@@ -289,7 +288,7 @@ public class XSkinService implements Startable {
       }
     }catch (Exception e) {
       if(log.isErrorEnabled()) {
-        log.error("Exception when start XSkinService",e);
+        log.error("Exception when start XSkinService", e.fillInStackTrace());
       }
     }
     sessionProvider.close();

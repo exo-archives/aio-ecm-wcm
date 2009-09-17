@@ -24,7 +24,6 @@ import javax.jcr.NodeIterator;
 
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
-// TODO: Auto-generated Javadoc
 /**
  * This class is responsible of getting contents inside the WCM product.
  * We shouldn't access directly contents from the jcr on front side.

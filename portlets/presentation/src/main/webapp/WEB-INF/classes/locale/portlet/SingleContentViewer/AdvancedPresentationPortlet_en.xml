@@ -135,6 +135,10 @@
       <content-not-found>Content not found or this portlet has not been configured yet!</content-not-found>
       <no-permission>You do not have permission to access the content!</no-permission>
       <error-nodetype>This viewer has not been configured yet.</error-nodetype>
+      <get-resource-bundle>Error when get resource bundle.</get-resource-bundle>
+      <access-control>Access control error.</access-control>
+      <list-file-type>Error when get list file type.</list-file-type>
+      <node-publication-error>Error when perform get node publication life cycle.</node-publication-error>
     </msg>
   </UIMessageBoard>
   <!--/n  ###################################################################
