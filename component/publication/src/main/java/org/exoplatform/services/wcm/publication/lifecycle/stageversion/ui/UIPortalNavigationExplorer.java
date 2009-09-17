@@ -112,6 +112,7 @@ public class UIPortalNavigationExplorer extends UIContainer {
       tree.setIcon("DefaultPageIcon");    
       tree.setSelectedIcon("DefaultPageIcon");
     }
+    sessionProvider.close();
   }
 
   /**

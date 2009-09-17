@@ -127,7 +127,9 @@ public class UIFCCActionForm extends UIDialogForm implements UISelectable {
    * 
    * @throws Exception the exception
    */
-  private Node getParentNode() throws Exception{ return (Node) getSession().getItem(parentPath_) ; }
+  private Node getParentNode(Node node) throws Exception{
+    return (Node) node.getSession().getItem(parentPath_) ; 
+  }
   
   /* (non-Javadoc)
    * @see org.exoplatform.ecm.webui.form.UIDialogForm#renderField(java.lang.String)
@@ -283,7 +285,7 @@ public class UIFCCActionForm extends UIDialogForm implements UISelectable {
       // Update action node:
       if(!fccActionForm.isAddNew) {
         CmsService cmsService = fccActionForm.getApplicationComponent(CmsService.class) ;      
-        Node storedHomeNode = fccActionForm.getParentNode().getNode("exo:actions");
+        Node storedHomeNode = fccActionForm.getParentNode(currentNode).getNode("exo:actions");
         cmsService.storeNode(fccActionForm.nodeTypeName_, storedHomeNode, sortedInputs, false, repository) ;
         storedHomeNode.getSession().save();
         Utils.closePopupWindow(fccActionForm, UIFCCConstant.ACTION_POPUP_WINDOW);
@@ -310,7 +312,7 @@ public class UIFCCActionForm extends UIDialogForm implements UISelectable {
             rootProp.setValue((sortedInputs.get("/node/exo:name")).getValue());
           }
           String actionName = (String)(sortedInputs.get("/node/exo:name")).getValue() ;
-          Node parentNode = fccActionForm.getParentNode();
+          Node parentNode = fccActionForm.getParentNode(currentNode);
           
           // Check if action existed
           if(parentNode.hasNode(EXO_ACTIONS)) {

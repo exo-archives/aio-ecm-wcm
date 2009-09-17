@@ -184,6 +184,7 @@ public class UIWorkspaceList extends UIForm {
     SessionProvider sessionProvider =  WCMCoreUtils.getSessionProvider();
     Session session = sessionProvider.getSession(workspaceName, manageableRepository);
     Node rootNode = session.getRootNode();
+    session.logout();
     sessionProvider.close();
     return rootNode;
   }

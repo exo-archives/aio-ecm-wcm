@@ -103,7 +103,6 @@ public class NewsletterTemplateHandler {
     } catch (Exception e) {
       log.error("Get templates of category " + categoryConfig + " failed because of " + e.getMessage());
     }
-    sessionProvider.close();
     return null;
   }
   
@@ -167,6 +166,5 @@ public class NewsletterTemplateHandler {
       log.error("Convert node " + webcontentPath + " to template at category " + categoryName + " failed because of " + e.getMessage());
       throw e;
     }
-    sessionProvider.close();
   }
 }

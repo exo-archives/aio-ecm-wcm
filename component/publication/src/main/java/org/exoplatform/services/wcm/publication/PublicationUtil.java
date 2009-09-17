@@ -260,11 +260,12 @@ public class PublicationUtil {
         content = session.getNodeByUUID(nodeIdentifier);
       } catch (ItemNotFoundException e) {
         content = (Node)session.getItem(nodeIdentifier);
+      } finally {
+        if (session != null) session.logout();
+        sessionProvider.close();
       }
-      sessionProvider.close();
       return content;
     }
-    sessionProvider.close();
     return null;
   }
   

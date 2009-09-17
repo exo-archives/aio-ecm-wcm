@@ -100,13 +100,15 @@ public class NewsletterPublicUserHandler {
    * 
    * @throws Exception the exception
    */
-  protected void updateSubscriptions(Session session, List<String> listCategorySubscription, String portalName, String userMail) throws Exception{
+  protected void updateSubscriptions(SessionProvider sessionProvider, List<String> listCategorySubscription, String portalName, String userMail) throws Exception{
     String categoryName ;
     String subscriptionName ;
     Node subscriptionNode ;
     Property subscribedUserProperty ;
     List<String> subscribedUsers = new ArrayList<String>() ;
     String categryHomePath = NewsletterConstant.generateCategoryPath(portalName);
+    ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+    Session session = sessionProvider.getSession(workspace, manageableRepository);
     for (String categoryAndSubscription : listCategorySubscription) {
       categoryName = categoryAndSubscription.split("#")[0];
       subscriptionName = categoryAndSubscription.split("#")[1];
@@ -187,14 +189,12 @@ public class NewsletterPublicUserHandler {
                         SessionProvider sessionProvider) throws Exception {
     log.info("Trying to subscribe user " + userMail);
     try {
-      ManageableRepository manageableRepository = repositoryService.getRepository(repository);
       // add new user email into users node
       NewsletterManageUserHandler manageUserHandler = new NewsletterManageUserHandler(repository, workspace, sessionProvider);
       Node userNode = manageUserHandler.add(portalName, userMail, sessionProvider);
       
       // update email into subscription
-      Session session = sessionProvider.getSession(workspace, manageableRepository);
-      updateSubscriptions(session, listCategorySubscription, portalName, userMail);
+      updateSubscriptions(sessionProvider, listCategorySubscription, portalName, userMail);
       String openTag = "<a href=\"" + link.replaceFirst("OBJECTID",userMail + "/" + 
                                                      userNode.getProperty(NewsletterConstant.USER_PROPERTY_VALIDATION_CODE).getString())+
                        "\">";
@@ -277,13 +277,10 @@ public class NewsletterPublicUserHandler {
   public void updateSubscriptions(String portalName, String email, List<String> categoryAndSubscriptions, SessionProvider sessionProvider) {
     log.info("Trying to update user's subscriptions for user " + email);
     try {
-      ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      Session session = sessionProvider.getSession(workspace, manageableRepository);
-      
       clearEmailInSubscription(email, sessionProvider);
       
       // Update new data
-      this.updateSubscriptions(session, categoryAndSubscriptions, portalName, email);
+      this.updateSubscriptions(sessionProvider, categoryAndSubscriptions, portalName, email);
       
       // Get current subscriptions which user subscribed (by query), compare with input subscriptions
       // to get which subscription user remove, which subscription user add, then update reference

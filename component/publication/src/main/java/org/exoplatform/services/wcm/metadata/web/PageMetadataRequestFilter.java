@@ -97,6 +97,7 @@ public class PageMetadataRequestFilter implements Filter {
     HashMap<String,String> metadata = metadataRegistry.getPortalMetadata(pathInfo, sessionProvider);
     if(metadata != null) 
       req.setAttribute(PortalRequestContext.REQUEST_METADATA, metadata);
+    sessionProvider.close();
   }    
   
   /**
@@ -149,7 +150,10 @@ public class PageMetadataRequestFilter implements Filter {
       req.setAttribute("ParameterizedContentViewerPortlet.data.object",e);     
     }catch (Exception e) {
       req.setAttribute("ParameterizedContentViewerPortlet.data.object",new ItemNotFoundException());
-    }    
+    }finally {
+      if (session != null) session.logout();
+      sessionProvider.close();
+    }
     if(node != null) {      
       req.setAttribute("ParameterizedContentViewerPortlet.data.object",node);
       PageMetadataService pageMetadataService = getService(PageMetadataService.class);      

@@ -214,6 +214,7 @@ public class NewsletterManagerService {
 				} catch (Exception e) {}
 			}
 		}
+		session.logout();
 		sessionProvider.close();
 	}
 

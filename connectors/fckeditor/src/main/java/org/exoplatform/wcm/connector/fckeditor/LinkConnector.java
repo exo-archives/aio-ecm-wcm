@@ -18,11 +18,13 @@ package org.exoplatform.wcm.connector.fckeditor;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.Session;
 
 import org.apache.commons.logging.Log;
 import org.exoplatform.common.http.HTTPMethods;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.ecm.connector.fckeditor.FCKUtils;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.rest.HTTPMethod;
 import org.exoplatform.services.rest.OutputTransformer;
@@ -107,13 +109,14 @@ public class LinkConnector extends BaseConnector implements ResourceContainer {
                                               String workspaceName,
                                               String repositoryName,
                                               String jcrPath,
-                                              String command) throws Exception {    
-    Node sharedPortal = livePortalManagerService.getLiveSharedPortal(repositoryName,
-                                                                     WCMCoreUtils.getSessionProvider());
+                                              String command) throws Exception {
+    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
+    Node sharedPortal = livePortalManagerService.getLiveSharedPortal(repositoryName, sessionProvider);
     Node currentPortalNode = getCurrentPortalNode(repositoryName,
                                                   jcrPath,
                                                   runningPortal,
                                                   sharedPortal);
+    sessionProvider.close();
     if (currentFolder.length() == 0 || "/".equals(currentFolder))
       return buildXMLResponseForRoot(currentPortalNode, sharedPortal, command);
     String currentPortalRelPath = "/" + currentPortalNode.getName() + "/";

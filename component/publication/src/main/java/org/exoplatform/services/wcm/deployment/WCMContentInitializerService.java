@@ -72,10 +72,11 @@ public class WCMContentInitializerService implements Startable{
    */
   public void start() {
     SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
+    Session session = null;
     try {
       // TODO: should get exo:services folder by NodeHierarchyCrerator service
       ManageableRepository repository = repositoryService.getCurrentRepository();
-      Session session = sessionProvider.getSession(repository.getConfiguration().getDefaultWorkspaceName(), repository);
+      session = sessionProvider.getSession(repository.getConfiguration().getDefaultWorkspaceName(), repository);
       Node serviceFolder = session.getRootNode().getNode("exo:services");
       Node contentInitializerService = null;
       if (serviceFolder.hasNode("WCMContentInitializerService")) {
@@ -105,7 +106,10 @@ public class WCMContentInitializerService implements Startable{
         session.save();
       }
     } catch (Exception e) {}
-    sessionProvider.close();
+    finally {
+      if (session != null) session.logout();
+      sessionProvider.close();
+    }
   }
   
   /* (non-Javadoc)

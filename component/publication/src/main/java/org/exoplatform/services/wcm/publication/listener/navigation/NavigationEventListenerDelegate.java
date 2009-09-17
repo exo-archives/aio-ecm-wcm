@@ -192,6 +192,7 @@ public class NavigationEventListenerDelegate {
         saveRemovedPageNode(navigationNodeUri, pageId, applicationId, content);
       }
     }
+    session.logout();
     sessionProvider.close();
   }
 

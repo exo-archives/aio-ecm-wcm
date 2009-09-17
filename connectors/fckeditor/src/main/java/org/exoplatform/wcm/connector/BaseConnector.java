@@ -130,8 +130,9 @@ public abstract class BaseConnector {
                                               String repositoryName,
                                               String jcrPath,
                                               String command) throws Exception {
-    Node sharedPortalNode = livePortalManagerService.getLiveSharedPortal(repositoryName,
-                                                                         WCMCoreUtils.getSessionProvider());
+    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
+    Node sharedPortalNode = livePortalManagerService.getLiveSharedPortal(repositoryName, sessionProvider);
+    sessionProvider.close();
     Node activePortalNode = getCurrentPortalNode(repositoryName,
                                                  jcrPath,
                                                  runningPortal,
@@ -184,14 +185,15 @@ public abstract class BaseConnector {
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
     Node currentNode = null;
-    Node sharedPortal = livePortalManagerService.getLiveSharedPortal(repositoryName,
-                                                                     WCMCoreUtils.getSessionProvider());
+    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
+    Node sharedPortal = livePortalManagerService.getLiveSharedPortal(repositoryName, sessionProvider);
     Node currentPortalNode = getCurrentPortalNode(repositoryName,
                                                   jcrPath,
                                                   runningPortal,
                                                   sharedPortal);
     Node webContent = getWebContent(repositoryName, workspaceName, jcrPath);
     currentNode = getActiveFolder(currentFolder, currentPortalNode, sharedPortal, webContent);
+    sessionProvider.close();
     return folderHandler.createNewFolder(currentNode, newFolderName, language);
   }
 
@@ -425,8 +427,11 @@ public abstract class BaseConnector {
   protected Node getContent(String repositoryName, String workspaceName, String jcrPath, String NodeTypeFilter) throws Exception {
     if (jcrPath == null || jcrPath.trim().length() == 0)
       return null;
+    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
+    Session session = null;
     try {
-      Session session = getSession(repositoryName, workspaceName);
+      ManageableRepository repository = repositoryService.getRepository(repositoryName);
+      session = sessionProvider.getSession(workspaceName, repository);
       Node content = (Node) session.getItem(jcrPath);
       if (content.isNodeType("exo:taxonomyLink")) {
     	  content = linkManager.getTarget(content);
@@ -435,6 +440,9 @@ public abstract class BaseConnector {
       if (NodeTypeFilter==null || (NodeTypeFilter!=null && content.isNodeType(NodeTypeFilter)) ) 
     	  return content;
     } catch (Exception e) {
+    } finally {
+      if (session != null) session.logout();
+      sessionProvider.close();
     }
     return null;
   }
@@ -473,9 +481,9 @@ public abstract class BaseConnector {
       return null;
     Node currentPortal = null;
     List<Node> livePortaNodes = new ArrayList<Node>();
+    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
     try {
-      livePortaNodes = livePortalManagerService.getLivePortals(repositoryName,
-                                                               WCMCoreUtils.getSessionProvider());
+      livePortaNodes = livePortalManagerService.getLivePortals(repositoryName, sessionProvider);
       if (sharedPortal != null)
         livePortaNodes.add(sharedPortal);
       for (Node portalNode : livePortaNodes) {
@@ -484,29 +492,10 @@ public abstract class BaseConnector {
           currentPortal = portalNode;
       }
       if (currentPortal == null)
-        currentPortal = livePortalManagerService.getLivePortal(repositoryName,
-                                                               runningPortal,
-                                                               WCMCoreUtils.getSessionProvider());
+        currentPortal = livePortalManagerService.getLivePortal(repositoryName, runningPortal, sessionProvider);
+      
+      sessionProvider.close();
       return currentPortal;
-    } catch (Exception e) {
-      return null;
-    }
-  }
-
-  /**
-   * Gets the session.
-   * 
-   * @param repositoryName the repository name
-   * @param workspaceName the workspace name
-   * @return the session
-   * @throws Exception the exception
-   */
-  private Session getSession(String repositoryName, String workspaceName) throws Exception {
-    ManageableRepository manageableRepository = null;
-    try {
-      manageableRepository = repositoryService.getRepository(repositoryName);
-      SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
-      return sessionProvider.getSession(workspaceName, manageableRepository);
     } catch (Exception e) {
       return null;
     }
@@ -539,13 +528,15 @@ public abstract class BaseConnector {
                                               String contentType,
                                               String contentLength,
                                               int limit) throws Exception {
-    Node sharedPortal = livePortalManagerService.getLiveSharedPortal(WCMCoreUtils.getSessionProvider());
+    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
+    Node sharedPortal = livePortalManagerService.getLiveSharedPortal(sessionProvider);
     Node currentPortal = getCurrentPortalNode(repositoryName,
                                               jcrPath,
                                               runningPortalName,
                                               sharedPortal);
     Node webContent = getWebContent(repositoryName, workspaceName, jcrPath);
     Node currentNode = getActiveFolder(currentFolder, currentPortal, sharedPortal, webContent);
+    sessionProvider.close();
     return fileUploadHandler.upload(uploadId,
                                     contentType,
                                     Double.parseDouble(contentLength),
@@ -582,13 +573,15 @@ public abstract class BaseConnector {
     if (FileUploadHandler.SAVE_ACTION.equals(action)) {
       CacheControl cacheControl = new CacheControl();
       cacheControl.setNoCache(true);
-      Node sharedPortal = livePortalManagerService.getLiveSharedPortal(WCMCoreUtils.getSessionProvider());
+      SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
+      Node sharedPortal = livePortalManagerService.getLiveSharedPortal(sessionProvider);
       Node currentPortal = getCurrentPortalNode(repositoryName,
                                                 jcrPath,
                                                 runningPortalName,
                                                 sharedPortal);
       Node webContent = getWebContent(repositoryName, workspaceName, jcrPath);
       Node currentNode = getActiveFolder(currentFolder, currentPortal, sharedPortal, webContent);
+      sessionProvider.close();
       return fileUploadHandler.saveAsNTFile(currentNode, uploadId, fileName, language);
     }
     return fileUploadHandler.control(uploadId, action);

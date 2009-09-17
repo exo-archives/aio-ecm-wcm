@@ -173,8 +173,9 @@ public class RssConnector extends BaseConnector implements ResourceContainer {
     String repository = (String) context.get(REPOSITORY) ;
     if(feedTitle == null || feedTitle.length() == 0) feedTitle = actionName ;
     SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
+    Session session = null;
     try {
-      Session session = sessionProvider.getSession(workspace, repositoryService.getRepository(repository));
+      session = sessionProvider.getSession(workspace, repositoryService.getRepository(repository));
       QueryManager queryManager = session.getWorkspace().getQueryManager();
       Query query = queryManager.createQuery(queryPath, Query.SQL);
       QueryResult queryResult = query.execute();            
@@ -216,7 +217,10 @@ public class RssConnector extends BaseConnector implements ResourceContainer {
       sessionProvider.close();
       return feedXML;
     } catch (Exception e) {}
-    sessionProvider.close();
+    finally {
+      if (session != null) session.logout();
+      sessionProvider.close();
+    }
     return null;
   }
 

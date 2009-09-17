@@ -118,13 +118,11 @@ public class NewsletterManageUserHandler {
       Session session = sessionProvider.getSession(workspace, manageableRepository);
       Node categoriesNode = (Node) session.getItem(NewsletterConstant.generateCategoryPath(portalName));
       if(categoriesNode.hasProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR)) {
-        sessionProvider.close();
         return convertValuesToArray(categoriesNode.getProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR).getValues());
       }
     } catch(Exception ex){
       log.error("getAllAdministrator() failed because of " + ex.getMessage());
     }
-    sessionProvider.close();
     return new ArrayList<String>();
   }
   
@@ -144,13 +142,11 @@ public class NewsletterManageUserHandler {
     if(categoriesNode.hasProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR))
       listUsers.addAll(convertValuesToArray(categoriesNode.getProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR).getValues()));
     if(listUsers.contains(userId)) {
-      sessionProvider.close();
       return;
     }
     listUsers.add(userId);
     categoriesNode.setProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR, listUsers.toArray(new String[]{}));
     session.save();
-    sessionProvider.close();
   }
   
   /**
@@ -171,7 +167,6 @@ public class NewsletterManageUserHandler {
     listUsers.remove(userId);
     categoriesNode.setProperty(NewsletterConstant.CATEGORIES_PROPERTY_ADDMINISTRATOR, listUsers.toArray(new String[]{}));
     session.save();
-    sessionProvider.close();
   }
   
   /**
@@ -217,10 +212,12 @@ public class NewsletterManageUserHandler {
    * 
    * @throws Exception the exception
    */
-  private Node getUserNodeByEmail(String portalName, String userMail, Session session) throws Exception{
-    String userPath = NewsletterConstant.generateUserPath(portalName);
-    Node userFolderNode = (Node)session.getItem(userPath);
+  private Node getUserNodeByEmail(String portalName, String userMail, SessionProvider sessionProvider) throws Exception{
     try{
+      ManageableRepository manageableRepository = repositoryService.getRepository(repository);
+      Session session = sessionProvider.getSession(workspace, manageableRepository);
+      String userPath = NewsletterConstant.generateUserPath(portalName);
+      Node userFolderNode = (Node)session.getItem(userPath);
       return userFolderNode.getNode(userMail);
     }catch(Exception ex){
       return null;
@@ -239,7 +236,7 @@ public class NewsletterManageUserHandler {
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
       Session session = sessionProvider.getSession(workspace, manageableRepository);
-      Node userNode = getUserNodeByEmail(portalName, userMail, session);
+      Node userNode = getUserNodeByEmail(portalName, userMail, sessionProvider);
       if (userNode.getProperty(NewsletterConstant.USER_PROPERTY_BANNED).getBoolean() == isBanClicked) return;
       userNode.setProperty(NewsletterConstant.USER_PROPERTY_BANNED, 
                            !userNode.getProperty(NewsletterConstant.USER_PROPERTY_BANNED).getBoolean());
@@ -247,7 +244,6 @@ public class NewsletterManageUserHandler {
     } catch (Exception e) {
       log.error("Ban/UnBan user " + userMail + " failed because of " + e.getMessage());
     }
-    sessionProvider.close();
   }
   
   /**
@@ -291,7 +287,6 @@ public class NewsletterManageUserHandler {
     } catch (Exception e) {
       log.error("Delete user " + userMail + " failed because of " + e.getMessage());
     }
-    sessionProvider.close();
   }
 
   /**
@@ -345,7 +340,6 @@ public class NewsletterManageUserHandler {
         listUsers.add(getUserFromNode((userHomeNode.getNode(email))));
       }
     }
-    sessionProvider.close();
     return listUsers;
   }
 
@@ -406,7 +400,6 @@ public class NewsletterManageUserHandler {
     } catch (Exception e) {
       log.error("Get user's quantity by subscription " + portalName + "/" + categoryName + "/" + subscriptionName + " failed because of " + e.getMessage());
     }
-    sessionProvider.close();
     return countUser;
   }
   
@@ -420,19 +413,14 @@ public class NewsletterManageUserHandler {
    */
   public boolean checkExistedEmail(String portalName, String email, SessionProvider sessionProvider) {
     try {
-      ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      Session session = sessionProvider.getSession(workspace, manageableRepository);
-      Node userNode = getUserNodeByEmail(portalName, email, session);
+      Node userNode = getUserNodeByEmail(portalName, email, sessionProvider);
       if(userNode != null){
-        sessionProvider.close();
         return true;
       }
-      sessionProvider.close();
       return false;
     } catch (Exception e) {
       log.error("checkExistedEmail() failed because of " + e.getMessage());
     }
-    sessionProvider.close();
     return false;
   }
 }

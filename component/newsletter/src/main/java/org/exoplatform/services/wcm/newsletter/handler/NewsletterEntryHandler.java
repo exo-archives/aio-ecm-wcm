@@ -116,7 +116,6 @@ public class NewsletterEntryHandler {
     } catch (Exception e) {
       log.error("Delete newsletter entry failed because of " + e.getMessage());
     }
-    sessionProvider.close();
   }
   
   /**
@@ -153,7 +152,6 @@ public class NewsletterEntryHandler {
         continue;
       }
     }
-    sessionProvider.close();
     return listNewsletterEntry;
   }
   
@@ -179,7 +177,6 @@ public class NewsletterEntryHandler {
     Session session = sessionProvider.getSession(workspace, manageableRepository);
     String path = NewsletterConstant.generateCategoryPath(portalName) + "/" + categoryName + "/" + subscriptionName + "/" + newsletterName;
     NewsletterManagerConfig newsletterManagerConfig = getEntryFromNode((Node)session.getItem(path));
-    sessionProvider.close();
     return newsletterManagerConfig;
   }
   
@@ -196,7 +193,6 @@ public class NewsletterEntryHandler {
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
     Session session = sessionProvider.getSession(workspace, manageableRepository);
     NewsletterManagerConfig newsletterManagerConfig = getEntryFromNode((Node)session.getItem(path));
-    sessionProvider.close();
     return newsletterManagerConfig;
   }
   
@@ -232,7 +228,6 @@ public class NewsletterEntryHandler {
       sessionProvider.close();
       return sb.toString();
     } catch (Exception e) {}
-    sessionProvider.close();
     return null;
   }
   

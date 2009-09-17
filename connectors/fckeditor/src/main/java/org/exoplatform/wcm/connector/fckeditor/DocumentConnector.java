@@ -25,6 +25,7 @@ import org.exoplatform.common.http.HTTPMethods;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.ecm.connector.fckeditor.FCKUtils;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.rest.ContextParam;
 import org.exoplatform.services.rest.HTTPMethod;
 import org.exoplatform.services.rest.HeaderParam;
@@ -97,8 +98,9 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
       @QueryParam("command") String command,
       @QueryParam("type") String type,
       @ContextParam(ResourceDispatcher.CONTEXT_PARAM_BASE_URI) String baseURI) throws Exception {
+    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
     try {
-      Node sharedPortal = livePortalManagerService.getLiveSharedPortal(repositoryName, WCMCoreUtils.getSessionProvider());
+      Node sharedPortal = livePortalManagerService.getLiveSharedPortal(repositoryName, sessionProvider);
       Node activePortal = getCurrentPortalNode(repositoryName, jcrPath, currentPortal, null);
       if (sharedPortal.getPath().equals(activePortal.getPath())) {
         documentLinkHandler.setCurrentPortal(currentPortal);
@@ -115,6 +117,8 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
       if(response != null)
         return response;
     } catch (Exception e) {         
+    } finally {
+      sessionProvider.close();
     }    
     return Response.Builder.ok().build();
   }

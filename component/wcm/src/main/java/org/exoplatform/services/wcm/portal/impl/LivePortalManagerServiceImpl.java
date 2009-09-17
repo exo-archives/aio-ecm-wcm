@@ -214,10 +214,11 @@ public class LivePortalManagerServiceImpl implements LivePortalManagerService, S
   public void start() {
     log.info("Start LivePortalManagementService....");
     SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
+    Session session = null;
     try {
       ManageableRepository repository = repositoryService.getCurrentRepository();
       NodeLocation nodeLocation = wcmConfigService.getLivePortalsLocation(repository.getConfiguration().getName());
-      Session session = sessionProvider.getSession(nodeLocation.getWorkspace(),repository);
+      session = sessionProvider.getSession(nodeLocation.getWorkspace(),repository);
       String statement = "select * from exo:portalFolder where jcr:path like '" + nodeLocation.getPath() + "/%'";
       Query query = session.getWorkspace().getQueryManager().createQuery(statement,Query.SQL);
       QueryResult result = query.execute();
@@ -227,8 +228,10 @@ public class LivePortalManagerServiceImpl implements LivePortalManagerService, S
       }
     } catch (Exception e) {
       log.error("Error when starting LivePortalManagerService: ",e);
+    } finally {
+      if (session != null) session.logout();
+      sessionProvider.close();
     }
-    sessionProvider.close(); 
   }
 
   public void stop() {    

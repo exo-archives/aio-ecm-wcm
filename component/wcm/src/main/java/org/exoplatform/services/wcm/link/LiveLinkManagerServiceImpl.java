@@ -127,6 +127,7 @@ public class LiveLinkManagerServiceImpl implements LiveLinkManagerService {
         listBrokenLinks.add(linkBean);
       }      
     }
+    session.logout();
     sessionProvider.close();
     return listBrokenLinks;
   }
@@ -157,17 +158,21 @@ public class LiveLinkManagerServiceImpl implements LiveLinkManagerService {
   public void updateLinks() throws Exception {
     Collection<NodeLocation> nodeLocationCollection = configurationService.getAllLivePortalsLocation();
     SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
+    Session session = null;
     try {
       for (NodeLocation nodeLocation : nodeLocationCollection) {
         String repository = nodeLocation.getRepository();
         String workspace = nodeLocation.getWorkspace();
         String path = nodeLocation.getPath();
         ManageableRepository manageableRepository = repositoryService.getRepository(repository);      
-        Session session = sessionProvider.getSession(workspace, manageableRepository);
+        session = sessionProvider.getSession(workspace, manageableRepository);
         updateLinkStatus(session, "select * from exo:linkable where jcr:path like '" + path + "/%'");      
       } 
     } catch (Exception e) {}
-    sessionProvider.close();
+    finally {
+      if (session != null) session.logout();
+      sessionProvider.close();
+    }
   }
 
   /* (non-Javadoc)
@@ -175,13 +180,17 @@ public class LiveLinkManagerServiceImpl implements LiveLinkManagerService {
    */
   public void updateLinks(String portalName) throws Exception {
     SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
+    Session session = null;
     try {
       Node portal = livePortalManagerService.getLivePortal(portalName, sessionProvider);
       String path = portal.getPath();
-      Session session = portal.getSession();
+      session = portal.getSession();
       updateLinkStatus(session, "select * from exo:linkable where jcr:path like '" + path + "/%'"); 
     } catch (Exception e) {}
-    sessionProvider.close();
+    finally {
+      if (session != null) session.logout();
+      sessionProvider.close();
+    }
   }
 
   /**

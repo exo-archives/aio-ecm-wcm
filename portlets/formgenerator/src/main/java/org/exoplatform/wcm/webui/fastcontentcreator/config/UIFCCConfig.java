@@ -210,10 +210,9 @@ public class UIFCCConfig extends UIForm implements UISelectable {
       } catch(PathNotFoundException ex) {
         UIApplication uiApp = getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIFCCConfig.msg.item-not-found", null, ApplicationMessage.WARNING)) ;
-        session.logout();
         return ;
       }
-      NodeTypeManager ntManager = currentNode.getSession().getWorkspace().getNodeTypeManager() ; 
+      NodeTypeManager ntManager = session.getWorkspace().getNodeTypeManager() ; 
       NodeType currentNodeType = currentNode.getPrimaryNodeType() ; 
       NodeDefinition[] childDefs = currentNodeType.getChildNodeDefinitions() ;
       TemplateService templateService = getApplicationComponent(TemplateService.class) ;
@@ -274,7 +273,6 @@ public class UIFCCConfig extends UIForm implements UISelectable {
           uiSelectTemplate.setValue(defaultValue);
         } 
       } catch(Exception e) {}
-      session.logout();
     } catch(Exception ex) {}
   }
   
