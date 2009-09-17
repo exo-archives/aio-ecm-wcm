@@ -76,11 +76,16 @@ window.onload = function()
 
 		document.getElementById('txtWidth').value		= iWidth || '' ;
 		document.getElementById('txtHeight').value		= iHeight || '' ;
-		document.getElementById('txtBorder').value		= GetAttribute( table, 'border', '' ) ;
+		document.getElementById('txtBorder').value		=
+			getValueFromMultiValuesStyle(GetAttribute( table, 'style', '' ), 'border', 1);
 		document.getElementById('selAlignment').value	= GetAttribute( table, 'align', '' ) ;
-		document.getElementById('txtCellPadding').value	= GetAttribute( table, 'cellPadding', '' ) ;
-		document.getElementById('txtCellSpacing').value	= GetAttribute( table, 'cellSpacing', '' ) ;
+		document.getElementById('txtCellPadding').value	=
+			getValueFromStyle(GetAttribute( table.getElementsByTagName('td')[0], 'style', '' ), 'padding');
+		document.getElementById('txtCellSpacing').value	=
+			getValueFromStyle(GetAttribute( table, 'style', '' ), 'border-spacing');
 		document.getElementById('txtSummary').value     = GetAttribute( table, 'summary', '' ) ;
+		document.getElementById('txtBgColor').value     = getHexColorFromStyle(GetAttribute( table, 'style', '' ), "background-color");
+		document.getElementById('txtBorderColor').value     = getHexColorFromStyle(GetAttribute( table, 'style', '' ), "border");
 //		document.getElementById('cmbFontStyle').value	= table.className ;
 
 		var eCaption = oEditor.FCKDomTools.GetFirstChild( table, 'CAPTION' ) ;
@@ -115,12 +120,13 @@ function Ok()
 	var strStyle;
 	strStyle = "width: " + sWidth + ";" + "height: " + GetE('txtHeight').value + "px;";
 	strStyle += "border: " +  GetE('txtBorder').value + "px " + "solid" + " " + GetE('txtBorderColor').value + ";";
-	strStyle += "background-color:" + GetE('txtBgColor').value + ";";
+	strStyle += "background-color: " + GetE('txtBgColor').value + ";";
 	strStyle += "border-collapse: separate;";
-	strStyle += "border-spacing:" +  GetE('txtCellPadding').value + "px;";
+	strStyle += "border-spacing:" +  GetE('txtCellSpacing').value + "px;";
 	strStyle += "vertical-align: middle;";
 	strStyle += GetE('txtInlineStyle').value;
 	SetAttribute( table, 'style'		, strStyle) ;
+	
 	var eCaption = oEditor.FCKDomTools.GetFirstChild( table, 'CAPTION' ) ;
 
 	if ( document.getElementById('txtCaption').value != '')
@@ -155,6 +161,7 @@ function Ok()
 			{
 				var oCell = oRow.insertCell(-1) ;
 				var strCellStyle = "border: " +  GetE('txtBorder').value + "px " + "solid" + " " + GetE('txtBorderColor').value + ";";
+				strCellStyle += "padding: " +  GetE('txtCellPadding').value + "px;";
 				SetAttribute( oCell, 'style'		, strCellStyle) ;
 				if ( oEditor.FCKBrowserInfo.IsGeckoLike )
 					oEditor.FCKTools.AppendBogusBr( oCell ) ;
@@ -164,12 +171,119 @@ function Ok()
 		oEditor.FCKUndo.SaveUndoStep() ;
 
 		oEditor.FCK.InsertElement( table ) ;
+	} else {
+		var cells = table.getElementsByTagName('td');
+		var strCellStyle = "border: " +  GetE('txtBorder').value + "px " + "solid" + " " + GetE('txtBorderColor').value + ";";
+		strCellStyle += "padding: " +  GetE('txtCellPadding').value + "px;";
+		for ( var i = 0 ; i < cells.length ; i++ )
+		{
+			SetAttribute( cells[i], 'style' , strCellStyle) ;
+		}
 	}
-
+	
 	return true ;
 }
 
-	</script>
+function getValueFromStyle(styleString, key) {
+	var valuesArray = styleString.split(";");
+
+	for (i = 0; i < valuesArray.length; i++)
+	{
+		if(valuesArray[i].split(":")[0].replace(" ", "") == key)
+			return valuesArray[i].split(":")[1].replace(" ", "").replace("px", "");
+	}
+}
+
+function getValueFromMultiValuesStyle(styleString, key, valueNum) {
+	var valuesArray = styleString.split(";");
+
+	for (i = 0; i < valuesArray.length; i++)
+	{
+		if(valuesArray[i].split(":")[0].replace(" ", "") == key)
+			return (valuesArray[i].split(":")[1].split(" ")[valueNum].replace("px", ""));
+	}
+}
+
+function getHexColorFromStyle(styleString, key)
+{
+	var hexString = "#";
+	var valuesArray = styleString.split(";");
+	for (i = 0; i < valuesArray.length; i++)
+	{
+		if(valuesArray[i].split(":")[0].replace(" ", "") == key)
+		{
+			var colorDeciValues =
+				 valuesArray[i].split(":")[1].split("rgb")[1].replace(/[() ]/g,"").split(",");
+			for (k = 0; k < colorDeciValues.length; k++)
+			{
+				hexString += deciToHex(colorDeciValues[k]);
+			}
+		 }
+	}
+	return hexString;
+}
+
+function deciToHex(arg)
+{
+	res2 = 999;
+	args = arg;
+	while(args>15)
+	{
+		arg1=parseInt(args/16);
+		arg2=args%16;
+		arg2=getHexNum(arg2);
+		args=arg1;
+
+		if(res2 == 999)
+		{
+			res2=arg2.toString();
+		}
+		else
+		{
+			res2=arg2.toString()+res2.toString();
+		}
+
+	}
+	if(args<16 && res2 != 999)
+	{
+		def = getHexNum(args);
+		//document.first.deciBin.value = def;
+		res2=def+res2.toString();
+	}
+	 else if(res2 == 999)
+	{
+		if(args < 16)
+		{
+			res2= getHexNum(args);
+		}
+		else
+		{
+			res2= 1;
+		}
+	}
+
+	if(res2.length == 1)
+	{
+	  res2 = "0"+res2;
+	}	
+	return res2;
+}
+
+function getHexNum(num)
+{
+	ar1 = new Array('0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15');
+	ar2 = new Array('0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F');
+	if(num > 15)
+	{
+		return num;
+	}
+	else
+	{
+		red = ar2[num];
+		return red;
+	}
+}
+</script>
 </head>
 <body style="overflow: hidden">
 	<table id="otable" cellspacing="0" cellpadding="0" width="100%" border="0" style="height: 100%">
