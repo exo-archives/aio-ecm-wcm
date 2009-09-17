@@ -211,7 +211,7 @@ import org.exoplatform.webui.event.EventListener;
     try {
       currentState = node.getProperty("publication:currentState").getString();
     } catch (Exception e) {
-      Utils.createPopupMessage(this, "UIMessageBoard.msg.show-draft-button", null, ApplicationMessage.ERROR);
+      // You shouldn't throw popup message, because some exception often rise here.
     } 
     if(PublicationDefaultStates.DRAFT.equals(currentState))
       return true;
