@@ -29,12 +29,10 @@ import javax.portlet.PortletPreferences;
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.ecm.webui.tree.selectone.UIOneNodePathSelector;
 import org.exoplatform.ecm.webui.utils.Utils;
-import org.exoplatform.portal.config.UserPortalConfigService;
-import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.webui.container.UIContainer;
+import org.exoplatform.portal.webui.page.UIPageBody;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.services.cms.BasePath;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -45,7 +43,6 @@ import org.exoplatform.services.wcm.core.NodeIdentifier;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.publication.NotInWCMPublicationException;
-import org.exoplatform.services.wcm.publication.PublicationUtil;
 import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -65,42 +62,42 @@ import org.exoplatform.webui.event.EventListener;
  * Jun 23, 2008
  */
 @ComponentConfig(
-    template =  "classpath:groovy/ecm/webui/tree/selectone/UISelectPathPanel.gtmpl",
-    events = {
-        @EventConfig(listeners = UISelectPathPanel.SelectActionListener.class)
-    }
+                 template =  "classpath:groovy/ecm/webui/tree/selectone/UISelectPathPanel.gtmpl",
+                 events = {
+                     @EventConfig(listeners = UISelectPathPanel.SelectActionListener.class)
+                 }
 )
 public class UISelectPathPanel extends UIContainer {
-  
+
   /** The ui page iterator_. */
   private UIPageIterator uiPageIterator_;
-  
+
   /** The accepted mime types. */
   public String[] acceptedMimeTypes = {};
-  
+
   /** The parent node. */
   protected Node parentNode;
-  
+
   /** The accepted node types. */
   private String[] acceptedNodeTypes = {};
-  
+
   /** The excepted node types. */
   private String[] exceptedNodeTypes = {};
-  
+
   /** The default excepted node types. */
   private String[] defaultExceptedNodeTypes = {};
-  
+
   /** The allow publish. */
   private boolean allowPublish = false;
-  
+
   /** The publication service_. */
   private PublicationService publicationService_ = null;
-  
+
   /** The templates_. */
   private List<String> templates_ = null;
-  
+
   final static String PATH = "path".intern();
-  
+
   /**
    * Instantiates a new uI select path panel.
    * 
@@ -109,14 +106,14 @@ public class UISelectPathPanel extends UIContainer {
   public UISelectPathPanel() throws Exception { 
     uiPageIterator_ = addChild(UIPageIterator.class, null, "UISelectPathIterate");
   }
-  
+
   /**
    * Gets the uI page iterator.
    * 
    * @return the uI page iterator
    */
   public UIPageIterator getUIPageIterator() { return uiPageIterator_; }
-  
+
   /**
    * Checks if is allow publish.
    * 
@@ -138,7 +135,7 @@ public class UISelectPathPanel extends UIContainer {
     publicationService_ = publicationService;
     templates_ = templates;
   }
-  
+
   /**
    * Adds the node publish.
    * 
@@ -163,14 +160,14 @@ public class UISelectPathPanel extends UIContainer {
       listNode.add(node);
     }
   }
-  
+
   /**
    * Sets the parent node.
    * 
    * @param node the new parent node
    */
   public void setParentNode(Node node) { this.parentNode = node; }
-  
+
   /**
    * Gets the parent node.
    * 
@@ -193,7 +190,7 @@ public class UISelectPathPanel extends UIContainer {
   public void setAcceptedNodeTypes(String[] acceptedNodeTypes) { 
     this.acceptedNodeTypes = acceptedNodeTypes;
   }
-  
+
   /**
    * Gets the excepted node types.
    * 
@@ -209,14 +206,14 @@ public class UISelectPathPanel extends UIContainer {
   public void setExceptedNodeTypes(String[] exceptedNodeTypes) { 
     this.exceptedNodeTypes = exceptedNodeTypes;
   }
-  
+
   /**
    * Gets the default excepted node types.
    * 
    * @return the default excepted node types
    */
   public String[] getDefaultExceptedNodeTypes() { return defaultExceptedNodeTypes; }
-  
+
   /**
    * Sets the default excepted node types.
    * 
@@ -225,7 +222,7 @@ public class UISelectPathPanel extends UIContainer {
   public void setDefaultExceptedNodeTypes(String[] defaultExceptedNodeTypes) {
     this.defaultExceptedNodeTypes = defaultExceptedNodeTypes;
   }
-  
+
 
   /**
    * Gets the accepted mime types.
@@ -233,7 +230,7 @@ public class UISelectPathPanel extends UIContainer {
    * @return the accepted mime types
    */
   public String[] getAcceptedMimeTypes() { return acceptedMimeTypes; }
-  
+
   /**
    * Sets the accepted mime types.
    * 
@@ -249,10 +246,10 @@ public class UISelectPathPanel extends UIContainer {
    * @throws Exception the exception
    */
   @SuppressWarnings("unchecked")
-	public List getSelectableNodes() throws Exception { 
-	  return uiPageIterator_.getCurrentPageData(); 
-	  }
-  
+  public List getSelectableNodes() throws Exception { 
+    return uiPageIterator_.getCurrentPageData(); 
+  }
+
   /**
    * Update grid.
    * 
@@ -262,7 +259,7 @@ public class UISelectPathPanel extends UIContainer {
     ObjectPageList objPageList = new ObjectPageList(getListSelectableNodes(), 10);
     uiPageIterator_.setPageList(objPageList);
   }
-  
+
   /**
    * Gets the list selectable nodes.
    * 
@@ -299,12 +296,12 @@ public class UISelectPathPanel extends UIContainer {
    * @throws Exception the exception
    */
   private boolean isValidState(Node node) throws Exception {
-	  WCMPublicationService publicationService = getApplicationComponent(WCMPublicationService.class);
-	  String state = publicationService.getContentState(node);
-	  if (state==null) return true;
-	  WCMComposer composer = getApplicationComponent(WCMComposer.class);
-	  List<String> states = composer.getAllowedStates(WCMComposer.MODE_EDIT);
-	  return states.contains(state);
+    WCMPublicationService publicationService = getApplicationComponent(WCMPublicationService.class);
+    String state = publicationService.getContentState(node);
+    if (state==null) return true;
+    WCMComposer composer = getApplicationComponent(WCMComposer.class);
+    List<String> states = composer.getAllowedStates(WCMComposer.MODE_EDIT);
+    return states.contains(state);
   }
 
   /**
@@ -323,7 +320,7 @@ public class UISelectPathPanel extends UIContainer {
     }
     return false;
   }
-  
+
   /**
    * Checks if is excepted node type.
    * 
@@ -365,7 +362,7 @@ public class UISelectPathPanel extends UIContainer {
     }
     return false;
   }
-  
+
   /**
    * Gets the path taxonomy.
    * 
@@ -377,7 +374,7 @@ public class UISelectPathPanel extends UIContainer {
     NodeHierarchyCreator nodeHierarchyCreator = getApplicationComponent(NodeHierarchyCreator.class);
     return nodeHierarchyCreator.getJcrPath(BasePath.TAXONOMIES_TREE_STORAGE_PATH);
   }
-  
+
   /**
    * The listener interface for receiving selectAction events.
    * The class that is interested in processing a selectAction
@@ -410,10 +407,10 @@ public class UISelectPathPanel extends UIContainer {
       String repoName = repositoryService.getCurrentRepository().getConfiguration().getName();
       WCMConfigurationService configurationService = uiSelectPathPanel.getApplicationComponent(WCMConfigurationService.class);
       NodeLocation nodeLocation = configurationService.getLivePortalsLocation(repoName);
-      
+
       ManageableRepository manageableRepository = repositoryService.getRepository(nodeLocation.getRepository());
       Session session = uiSelectPathPanel.getApplicationComponent(ThreadLocalSessionProviderService.class).getSessionProvider(null)
-                                          .getSession(nodeLocation.getWorkspace(), manageableRepository);
+                                         .getSession(nodeLocation.getWorkspace(), manageableRepository);
       Node webContent = (Node) session.getItem(value);
       NodeIdentifier nodeIdentifier = NodeIdentifier.make(webContent);
       PortletRequestContext pContext = (PortletRequestContext) event.getRequestContext();
@@ -422,26 +419,25 @@ public class UISelectPathPanel extends UIContainer {
       prefs.setValue("workspace", nodeIdentifier.getWorkspace());
       prefs.setValue("nodeIdentifier", nodeIdentifier.getUUID());
       prefs.store();
-      
+
       String remoteUser = Util.getPortalRequestContext().getRemoteUser();
-      String currentSite = Util.getPortalRequestContext().getPortalOwner();
+      String portalOwner = Util.getPortalRequestContext().getPortalOwner();
 
       WCMPublicationService wcmPublicationService = uiSelectPathPanel.getApplicationComponent(WCMPublicationService.class);
 
       try {
-          wcmPublicationService.isEnrolledInWCMLifecycle(webContent);
+        wcmPublicationService.isEnrolledInWCMLifecycle(webContent);
       } catch (NotInWCMPublicationException e){
-          wcmPublicationService.unsubcribeLifecycle(webContent);
-          wcmPublicationService.enrollNodeInLifecycle(webContent, currentSite, remoteUser);          
+        wcmPublicationService.unsubcribeLifecycle(webContent);
+        wcmPublicationService.enrollNodeInLifecycle(webContent, portalOwner, remoteUser);          
       }
 
-      UserPortalConfigService userPortalConfigService = PublicationUtil.getServices(UserPortalConfigService.class);
-      UIPortalApplication uiApp = Util.getUIPortalApplication();
+      // Update Page And Close PopUp
       UIPortal uiPortal = Util.getUIPortal();
-      String pageId = uiPortal.getSelectedNode().getPageReference();
-      UserPortalConfigService portalConfigService = uiApp.getApplicationComponent(UserPortalConfigService.class);
-      Page currentPage = portalConfigService.getPage(pageId, remoteUser);
-      userPortalConfigService.update(currentPage);
+      UIPageBody uiPageBody = uiPortal.findFirstComponentOfType(UIPageBody.class);
+      uiPageBody.setUIComponent(null);
+      uiPageBody.setMaximizedUIComponent(null);
+      org.exoplatform.wcm.webui.Utils.updatePortal((PortletRequestContext)event.getRequestContext());
     }
   }
 }

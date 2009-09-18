@@ -106,7 +106,7 @@
 		else action = "";
 		println "	<div onclick=\"eXo.wcm.MyUIWCMTreeView.selectNode('"+i+"');\" ajaxAction=\""+action+";\" treePath=\""+treeNode.getTreePath()+
 									"\" style=\"\" id=\"UIWCMTreeParentNode" + i + "\" class=\"NoneSelectNodeIcon\">";
-		println "		<div class=\"DefaultPageIcon\">" + treeNode.getName().replaceAll("\\.", "/") + "</div>";
+		println "		<div class=\"DefaultPageIcon\">" + ((i > 1)?treeNode.getName().replaceAll("\\.", "/") : treeNode.getName()) + "</div>";
 		println "	</div>";
 		println "	<div id=\"UIWCMTreeChildNode"+i+"\" class=\"ViewChildNodes\">";
 	}

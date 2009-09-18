@@ -5,6 +5,8 @@ import javax.portlet.PortletPreferences;
 
 import org.exoplatform.ecm.webui.selector.UISelectable;
 import org.exoplatform.ecm.webui.tree.UIBaseNodeTreeSelector;
+import org.exoplatform.portal.webui.page.UIPageBody;
+import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.wcm.core.NodeIdentifier;
 import org.exoplatform.services.wcm.publication.NotInWCMPublicationException;
@@ -90,6 +92,12 @@ public class UIResultView extends UIContainer {
           wcmPublicationService.unsubcribeLifecycle(webContent);
           wcmPublicationService.enrollNodeInLifecycle(webContent, currentSite, remoteUser);          
         }
+        
+        UIPortal uiPortal = Util.getUIPortal();
+        UIPageBody uiPageBody = uiPortal.findFirstComponentOfType(UIPageBody.class);
+        uiPageBody.setUIComponent(null);
+        uiPageBody.setMaximizedUIComponent(null);
+        org.exoplatform.wcm.webui.Utils.updatePortal((PortletRequestContext)event.getRequestContext());
       }
     }    
   }
