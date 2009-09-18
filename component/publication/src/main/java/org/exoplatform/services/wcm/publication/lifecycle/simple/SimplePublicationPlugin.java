@@ -64,8 +64,6 @@ import org.exoplatform.services.wcm.publication.lifecycle.simple.ui.UIPublishing
 import org.exoplatform.services.wcm.publication.listener.navigation.NavigationEventListenerDelegate;
 import org.exoplatform.services.wcm.publication.listener.page.PageEventListenerDelegate;
 import org.exoplatform.services.wcm.utils.WCMCoreUtils;
-import org.exoplatform.web.application.RequestContext;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.form.UIForm;
 
@@ -374,8 +372,7 @@ public class SimplePublicationPlugin extends WebpagePublicationPlugin{
   public List<String> getListPageNavigationUri(Page page, String remoteUser) throws Exception {
     List<String> listPageNavigationUri = new ArrayList<String>();
     DataStorage dataStorage = PublicationUtil.getServices(DataStorage.class);    
-    RequestContext requestContext = WebuiRequestContext.getCurrentInstance();
-    for (String portalName : getRunningPortals(requestContext.getRemoteUser())) {
+    for (String portalName : getRunningPortals(remoteUser)) {
       Query<PageNavigation> query = new Query<PageNavigation>(PortalConfig.PORTAL_TYPE,portalName,PageNavigation.class);
       PageList list = dataStorage.find(query);
       for(Object object: list.getAll()) {
