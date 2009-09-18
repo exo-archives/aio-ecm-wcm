@@ -98,10 +98,10 @@ public class UIWebContentPathSelector extends UIBaseNodeTreeSelector implements 
     }else if(contentType.equals(DMSDOCUMENT)){
       String repositoryName = ((ManageableRepository)(currentPortal.getSession().getRepository())).getConfiguration().getName();
       List<String> listAcceptedNodeTypes = getApplicationComponent(TemplateService.class).getDocumentTemplates(repositoryName);
+      listAcceptedNodeTypes.remove("exo:webContent");
       acceptedNodeTypes = new String[listAcceptedNodeTypes.size()];
       listAcceptedNodeTypes.toArray(acceptedNodeTypes);
     }
-    
     UISelectPathPanel selectPathPanel = getChild(UISelectPathPanel.class);
     selectPathPanel.setAcceptedNodeTypes(acceptedNodeTypes);       
     LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
