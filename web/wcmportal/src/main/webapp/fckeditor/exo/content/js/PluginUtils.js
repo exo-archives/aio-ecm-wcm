@@ -32,7 +32,7 @@ PluginUtils.prototype.renderTree = function(objXML) {
 		tmpStrName = nodeList[i].getAttribute("name") ;
 		treeHTML += '<div class="Node" onclick="eXoWCM.PluginUtils.actionColExp(this);">';
 		treeHTML += 	'<div class="ExpandIcon">';		
-		treeHTML += 		'<a title="'+tmpStrName+'" class="NodeIcon DefaultPageIcon" href="javascript:void(0);" onclick="getDir(this, event);" name="'+tmpStrName+'" id="'+tmpStrName.replace(" ", "")+'">';
+		treeHTML += 		'<a title="'+tmpStrName+'" class="NodeIcon DefaultPageIcon" href="javascript:void(0);" onclick="eXoWCM.PluginUtils.renderBreadcrumbs(this);" name="'+tmpStrName+'" id="'+tmpStrName.replace(" ", "")+'">';
 		treeHTML +=			tmpStrName;	
 		treeHTML +=			'</a>';
 		treeHTML += 	'</div>';			
@@ -54,7 +54,7 @@ PluginUtils.prototype.renderSubTree = function(currentNode) {
 			var tmpStrName = nodeList[i].getAttribute("name");
 			treeHTML += '<div class="Node" onclick="eXoWCM.PluginUtils.actionColExp(this);">';
 			treeHTML += 	'<div class="ExpandIcon">';
-			treeHTML +=			'<a title="'+tmpStrName+'" class="NodeIcon DefaultPageIcon" href="javascript:void(0);" onclick="getDir(this, event);" name="'+tmpStrName+'" id="'+tmpStrName.replace(" ", "")+'"  driverPath="'+nodeList[i].getAttribute("driverPath")+'">';
+			treeHTML +=			'<a title="'+tmpStrName+'" class="NodeIcon DefaultPageIcon" href="javascript:void(0);" onclick="getDir(this, event);eXoWCM.PluginUtils.renderBreadcrumbs(this);" name="'+tmpStrName+'" id="'+tmpStrName.replace(" ", "")+'"  driverPath="'+nodeList[i].getAttribute("driverPath")+'">';
 			treeHTML +=				tmpStrName;	
 			treeHTML += 		'</a>';
 			treeHTML +=		'</div>';
@@ -79,11 +79,12 @@ PluginUtils.prototype.renderSubTrees = function(currentNode, event, connector) {
 			var tmpStrName = nodeList[i].getAttribute("name");
 			treeHTML += '<div class="Node" onclick="eXoWCM.PluginUtils.actionColExp(this);">';
 			treeHTML += 	'<div class="ExpandIcon">';
-			treeHTML +=			'<a title="'+ tmpStrName +'" class="NodeIcon DefaultPageIcon" href="javascript:void(0);" onclick="getDir(this, event);" name="'+tmpStrName+'" id="'+tmpStrName+'">';
+			treeHTML +=			'<a title="'+ tmpStrName +'" class="NodeIcon DefaultPageIcon" href="javascript:void(0);" onclick="getDir(this, event);eXoWCM.PluginUtils.renderBreadcrumbs(this);" name="'+tmpStrName+'" id="'+tmpStrName+'">';
 			treeHTML +=				tmpStrName;	
 			treeHTML += 		'</a>';
 			treeHTML +=		'</div>';
 			treeHTML +=	'</div>';
+			
 		}
 		treeHTML += '</div>';
 	} else {
@@ -95,7 +96,7 @@ PluginUtils.prototype.renderSubTrees = function(currentNode, event, connector) {
 				var	tmpStrName	= currentNodeList[i].getAttribute("name");
 				treeHTML += '<div class="Node" onclick="eXoWCM.PluginUtils.actionColExp(this);">';
 				treeHTML += 	'<div class="ExpandIcon">';
-				treeHTML +=			'<a title="'+tmpStrName+'" class="NodeIcon DefaultPageIcon" href="javascript:void(0);" onclick="getDir(this, event);" name="'+tmpStrName+'" id="'+tmpStrName.replace(" ", "")+'">';
+				treeHTML +=			'<a title="'+tmpStrName+'" class="NodeIcon DefaultPageIcon" href="javascript:void(0);" onclick="getDir(this, event);eXoWCM.PluginUtils.renderBreadcrumbs(this);" name="'+tmpStrName+'" id="'+tmpStrName.replace(" ", "")+'">';
 				treeHTML +=				tmpStrName;	
 				treeHTML += 		'</a>';
 				treeHTML +=		'</div>';
@@ -175,24 +176,41 @@ PluginUtils.prototype.getClazzIcon = function(nodeType) {
 };
 
 PluginUtils.prototype.renderBreadcrumbs = function(currentNode) {
-	return;
 	if(!currentNode) return;
-	var sHTML = '';
 	var breadscrumbsContainer = document.getElementById("BreadcumbsContainer");
+	breadscrumbsContainer.innerHTML = '';
+	var beforeNode = null;
+	
+	var test = '';
+	
 	while(currentNode.className != "LeftWorkspace") {
-		breadscrumbsContainer.innerHTML = '';
+		strHTML = '';
 		var curName = currentNode.getAttribute('name');
-		if(curName) {
-			var strHTML = '<a class="Nomal">'+curName+'</a>';
-			if(!currentNode) {
-				strHTML 	 += '<div class="RightArrowIcon"><span></span></div>';
-			} 
-		} 
-		var tmpNode = document.createElement("div");
-		tmpNode.innerHTML = strHTML;
-		breadscrumbsContainer.appendChild(tmpNode);
+		if(curName != null) {
+			var tmpNode = document.createElement("div");	
+			tmpNode.className = 'BreadcumbTab';
+			if(beforeNode == null) {
+				strHTML += '<a class="Nomal">'+curName+'</a>';
+				tmpNode.innerHTML = strHTML;
+				breadscrumbsContainer.appendChild(tmpNode);
+			} else {
+				strHTML += '<a class="Nomal">'+curName+'</a>';
+				strHTML += '<div class="RightArrowIcon"><span></span></div>';
+				tmpNode.innerHTML = strHTML;
+				breadscrumbsContainer.insertBefore(tmpNode, beforeNode);
+			}
+			
+			beforeNode = tmpNode;
+		}
+		
 		currentNode = currentNode.parentNode;
-	} 
+		
+		if(currentNode != null && currentNode.className == 'ChildrenContainer'){
+			currentNode = eXo.core.DOMUtil.findPreviousElementByTagName(currentNode, 'div');
+			currentNode = currentNode.getElementsByTagName('div')[0].getElementsByTagName('a')[0];
+		}
+		
+	}
 };
 
 PluginUtils.prototype.referNode = function(objNode, event) {

@@ -556,6 +556,10 @@ body {
 	Float: left;
 }
 
+.UIHomePagePortlet  .UIWorkingWorkspace .BreadcumbsPortlet .BreadcumbTab{
+	Float: left;
+}
+
 .UIHomePagePortlet  .UIWorkingWorkspace .BreadcumbsPortlet .HomeIcon{
 	background: url('../images/HomeIcon.gif') no-repeat center;
 	float: left;
