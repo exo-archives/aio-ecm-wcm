@@ -306,8 +306,8 @@
   
   <Drives>
   	<label>
-  		<ManagedSites>Gérer le site</ManagedSites>
-  		<SharedSite>Le site du partager</SharedSite>
+  		<ManagedSites>Gestion des Sites</ManagedSites>
+  		<SharedSite>Espace Partagé</SharedSite>
   	</label>
   </Drives>
 </bundle>

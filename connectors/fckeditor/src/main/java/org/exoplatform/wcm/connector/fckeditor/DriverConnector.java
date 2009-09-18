@@ -122,9 +122,9 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
     Element rootElement = document.createElement("Connector");
     document.appendChild(rootElement);
 
-    rootElement.appendChild(appendDrivers(document, personalDrivers(listDriver), "Personal Drivers"));
-    rootElement.appendChild(appendDrivers(document, groupDrivers(listDriver, userId), "Group Driver"));
-    rootElement.appendChild(appendDrivers(document, generalDrivers(listDriver), "General Drivers"));
+    rootElement.appendChild(appendDrivers(document, generalDrivers(listDriver), "General Drives"));
+    rootElement.appendChild(appendDrivers(document, groupDrivers(listDriver, userId), "Group Drives"));
+    rootElement.appendChild(appendDrivers(document, personalDrivers(listDriver), "Personal Drives"));
     
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
