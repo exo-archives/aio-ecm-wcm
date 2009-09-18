@@ -1,0 +1,223 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+		<title>FCKEditor Plugins eXo Utils</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+		<meta http-equiv="cache-control" content="no-cache"/>
+		<meta http-equiv="pragma" content="no-cache"/>
+		<meta http-equiv="eXpires" content="0"/>
+		<link type="text/css" rel="stylesheet" href="css/content.css"/>
+		<link type="text/css" rel="stylesheet" href="../../../../eXoDMSResources/skin/DefaultSkin/Stylesheet.css"/>
+		<link type="text/css" rel="stylesheet" href="../../../../eXoWCMResources/skin/DefaultSkin/Stylesheet.css"/>
+		<script type="text/javascript" src="../../../../eXoResources/javascript/eXo.js"></script>
+		<script type="text/javascript" src="../../../../eXoResources/javascript/eXo/core/DOMUtil.js"></script>
+		<script type="text/javascript" src="js/PluginUtils.js"></script>
+		<script type="text/javascript">
+			var FCKConfig = window.opener.FCKConfig;
+			var FCK = window.opener.FCK;
+			var eXoPlugin = FCK.eXoPlugin;
+			var KLang = null;
+			eXoPlugin.userLanguage = FCK.Language.GetActiveLanguage() || "en";
+			eXoPlugin.loadScript(window, "lang/" + eXoPlugin.userLanguage + ".js");
+		</script>
+</head>
+<body>
+	<div class="UIHomePagePortlet">
+		<div class="UIHomePageDT" >
+			
+			<div class="TitleBar">
+				CONTENT SELECTOR
+			</div>
+			<div class="UIWorkingWorkspace">
+				<div class="ActionBar">
+					<div class="FinterTitle">Finter: </div>
+					<div class="FinterInput">
+						<select class="Pinter" id="Pinter" onchange="window.location.reload();">
+							<option value="Web Contents" selected="selected">Web Contents</option>
+							<option value="DMS Documents">DMS Documents</option>
+							<option value="Medias">Medias</option>
+						</select>
+					</div>
+					<div class="SeparatorLineL"><span></span></div>
+					<div class="ControlButton InsertLinksIcon">
+						<a href="#">Insert a links</a>
+					</div>
+					<div class="ControlButton UploadIcon">
+						<a href="#">Upload</a>
+					</div>
+					<div class="SettingIcon">
+						<a href="#">Setting</a>
+					</div>
+					<div class="SeparatorLineR"><span></span></div>
+					<div style="clear: both;"><span></span></div>
+				</div>
+				<div class="BreadcumbsPortlet">
+					<div class="HomeIcon"><span></span></div> 
+					<div class="BreadcumbsContainer" id="BreadcumbsContainer">
+					
+						<a class="Nomal" title="Home" href="#">Home</a>
+						<div class="RightArrowIcon"><span></span></div>
+						<a class="Nomal" title="" href="#" >Webcontent</a>
+						<div class="RightArrowIcon"><span></span></div>
+						<a class="Selected" title="Live demo">Live demo</a>
+						
+					</div>
+				</div>
+				<div class="ListContainer" id="ListContainer">
+					<div class="LeftWorkspace">
+					
+					</div>
+					<div class="RightWorkspace">
+						<div class="ListView">
+						  	<table cellspacing="0" style="table-layout: fixed; width: 100%;" >
+						    	<thead>
+						    		<tr>
+						    		  <th class="THBar"> Name </th>
+							   	      <th class="THBar" style="width: 120px;"> Date </th>
+							   	      <th class="THBar" style="width: 80px;"> Size </th>
+						    	 	</tr>
+						    	</thead>
+					        <tbody id="RightWorkspace">
+					        
+					      	</tbody>
+						  	</table>
+						  </div>
+					</div>
+					<div style="clear: left;"><span></span></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript">
+
+function getUrlParam(paramName) {
+	var oRegex = new RegExp("[\?&]" + paramName + "=([^&]+)", "i");
+	var oMatch = oRegex.exec(window.location.search) ; 
+	if (oMatch && oMatch.length > 1) return oMatch[1];
+	else return "";
+}
+
+var eXp = {
+		resourceType: getUrlParam("Type") || eXoPlugin.eXoFileManager.ResourceType,
+		connector: getUrlParam("Connector") || eXoPlugin.eXoFileManager.Connector,
+		disableUploading: getUrlParam("disableUploading") || false,
+		disableCreatingFolder: getUrlParam("disableCreatingFolder") || false,
+		command: {
+//			init: "getFoldersAndFiles",
+// 			need todo remove userId
+			init: "&workspaceName=collaboration&userId=root",
+			uploadFile: "uploadFile/upload",
+			controlUpload: "uploadFile/control",
+			createFolder: "createFolder"
+		},
+		store: {
+			currentNode: {},
+			currentFolder: "/",
+			temporaryNode: {},
+			data: {},
+			driverName: "",
+			strConnection: "",
+		},
+		buildParam: function() {
+			if (arguments.length < 1) return null;
+			var arr = [];
+			for (var i = 0; i < arguments.length; ++i) {
+				arr.push(arguments[i]);
+			}
+			arr.push("language=" + eXoPlugin.userLanguage);
+			return arr.join("&");
+		},
+		getNodes: function(DomX, nodeName) {
+			if (!DomX || !nodeName) return null;
+			var node = DomX.getElementsByTagName(nodeName);
+			if (node.length) return node;
+			else return null;
+		},
+		getSingleNode: function(DomX, nodeName) {
+			var nodes = this.getNodes(DomX, nodeName);
+			if (nodes[0]) return nodes[0];
+			else return null;
+		},
+		getNodeValue: function(node, name) {
+			if (node || name !== undefined) {
+				var attribute = node.attributes.getNamedItem(name);
+				if (attribute) return attribute.value;
+			}
+			return new String();
+		},
+		getID: function() {
+			return Math.random().toString().substring(2);
+		},
+		sendRequest: function(connector)  {
+			eXoWCM.PluginUtils.renderTree(connector);
+		},
+		
+		senRequestGetDir: function(connector) {
+			eXoWCM.PluginUtils.renderSubTrees(connector);
+			
+		}
+	}
+
+	function buildXParam() {
+		var repositoryName = FCKConfig.repositoryName;
+		var workspaceName = FCKConfig.workspaceName;
+		var jcrPath = FCKConfig.jcrPath;
+		var param = '';
+		if (repositoryName !== undefined) param += 'repositoryName=' + repositoryName;
+		if (workspaceName !== undefined) param += '&workspaceName=' + workspaceName;
+		if (jcrPath !== undefined) param += "&jcrPath=" + jcrPath;		
+		return param;
+	}
+
+	function requestInit() {
+		var connector = eXoPlugin.hostName + eXp.connector + eXp.command.init;
+		eXp.sendRequest(connector);
+	}
+
+	function getDir(currentNode, event) {
+		var strConnector = eXp.connector;
+		var currentFolder;
+		var driverName;
+		var driverPath = currentNode.getAttribute("driverPath");
+		if(driverPath && driverPath != "") {
+			driverName =	currentNode.getAttribute('name');
+			eXp.store.driverName = driverName;
+			currentFolder = '';
+		} else {
+				var nodeContainer = eXo.core.DOMUtil.findAncestorByClass(currentNode, "ChildrenContainer");
+				if(!nodeContainer) return;
+				var nodeParent = eXo.core.DOMUtil.findPreviousElementByTagName(nodeContainer, "div");
+				if(!nodeParent) return;
+				var nodeLink = eXo.core.DOMUtil.findFirstDescendantByClass(nodeParent, "a", "NodeIcon");
+				if(nodeLink) {
+					if(nodeLink.getAttribute('currentFolder') && nodeLink.getAttribute('currentFolder') != null) {
+						currentFolder = nodeLink.getAttribute('currentFolder') + '/' + currentNode.getAttribute('name');
+						currentNode.setAttribute("currentFolder", currentFolder);
+					}	else {
+						currentFolder = currentNode.getAttribute('name');
+						currentNode.setAttribute("currentFolder", currentFolder);
+					}				
+				} else {
+					currentFolder = currentNode.getAttribute('name');
+					currentNode.setAttribute("currentFolder", currentFolder);
+				}
+		}
+		driverName = eXp.store.driverName;
+		var strReplace 	= "getFoldersAndFiles?driverName="+driverName+"&currentFolder="+currentFolder+"&";	
+		strConnector 		= strConnector.replace("getDrivers?",strReplace);
+		var filter = '';
+		var dropdownlist = document.getElementById("Pinter");
+		if(dropdownlist) filter = dropdownlist.options[dropdownlist.selectedIndex].value;
+		else filter = 'Web Contents';
+		var connector = eXoPlugin.hostName + strConnector+ "&workspaceName=collaboration&userId=root&filterBy="+filter;
+		if(eXp.strConnection == connector) return;	
+		eXp.strConnection = connector;
+		eXoWCM.PluginUtils.renderSubTrees(currentNode, event, connector);
+	}
+
+	window.onload = function() {
+		requestInit();
+	};
+</script>
+</html>
