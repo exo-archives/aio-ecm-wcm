@@ -58,7 +58,7 @@ public class CreateLivePortalEventListener extends Listener<DataStorageImpl, Por
     SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
     // Create site content storage for the portal
     try {
-      livePortalManagerService.addLivePortal(portalConfig, sessionProvider);
+      livePortalManagerService.addLivePortal(sessionProvider, portalConfig);
       log.info("Create new resource storage for portal: " + portalConfig.getName());
     } catch (Exception e) {
       log.error("Error when create new resource storage: " + portalConfig.getName(),
@@ -70,7 +70,7 @@ public class CreateLivePortalEventListener extends Listener<DataStorageImpl, Por
     WCMConfigurationService configurationService = (WCMConfigurationService) container
     .getComponentInstanceOfType(WCMConfigurationService.class);        
     try {
-      Node portal = livePortalManagerService.getLivePortal(portalConfig.getName(), sessionProvider);
+      Node portal = livePortalManagerService.getLivePortal(sessionProvider, portalConfig.getName());
       createPortalDrive(portal,portalConfig,configurationService,manageDriveService);
     } catch (Exception e) {
       log.error("Error when create drive for portal: " + portalConfig.getName(),
@@ -80,7 +80,7 @@ public class CreateLivePortalEventListener extends Listener<DataStorageImpl, Por
     PortalArtifactsInitializerService artifactsInitializerService = (PortalArtifactsInitializerService)
     container.getComponentInstanceOfType(PortalArtifactsInitializerService.class);
     try {      
-      artifactsInitializerService.deployArtifactsToPortal(portalConfig.getName(),sessionProvider);
+      artifactsInitializerService.deployArtifactsToPortal(sessionProvider, portalConfig.getName());
     } catch (Exception e) {
       log.error("Error when create drive for portal: " + portalConfig.getName(),
                 e.fillInStackTrace());

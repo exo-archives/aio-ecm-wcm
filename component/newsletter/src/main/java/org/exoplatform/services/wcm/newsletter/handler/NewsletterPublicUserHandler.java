@@ -40,6 +40,7 @@ import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.mail.MailService;
 import org.exoplatform.services.mail.Message;
 import org.exoplatform.services.wcm.newsletter.NewsletterConstant;
+import org.exoplatform.services.wcm.newsletter.NewsletterManagerService;
 
 /**
  * Created by The eXo Platform SAS
@@ -138,7 +139,7 @@ public class NewsletterPublicUserHandler {
    * @param email the email
    * @param sessionProvider the session provider
    */
-  protected void clearEmailInSubscription(String email, SessionProvider sessionProvider){
+  protected void clearEmailInSubscription(SessionProvider sessionProvider, String email){
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
       Session session = sessionProvider.getSession(workspace, manageableRepository);
@@ -183,17 +184,18 @@ public class NewsletterPublicUserHandler {
    * @throws Exception 
    */
   public void subscribe(
+                        SessionProvider sessionProvider, 
                         String portalName,
                         String userMail,
                         List<String> listCategorySubscription,
                         String link,
-                        String[] emailContent,
-                        SessionProvider sessionProvider) throws Exception {
+                        String[] emailContent) throws Exception {
     log.info("Trying to subscribe user " + userMail);
     try {
       // add new user email into users node
-      NewsletterManageUserHandler manageUserHandler = new NewsletterManageUserHandler(repository, workspace, sessionProvider);
-      Node userNode = manageUserHandler.add(portalName, userMail, sessionProvider);
+      NewsletterManagerService newsletterManagerService = (NewsletterManagerService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(NewsletterManagerService.class);
+      NewsletterManageUserHandler manageUserHandler = newsletterManagerService.getManageUserHandler();
+      Node userNode = manageUserHandler.add(sessionProvider, portalName, userMail);
       
       // update email into subscription
       updateSubscriptions(sessionProvider, listCategorySubscription, portalName, userMail);
@@ -232,7 +234,7 @@ public class NewsletterPublicUserHandler {
    * 
    * @throws Exception the exception
    */
-  public boolean confirmPublicUser(String Email, String userCode, String portalName, SessionProvider sessionProvider) throws Exception{
+  public boolean confirmPublicUser(SessionProvider sessionProvider, String Email, String userCode, String portalName) throws Exception{
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
     Session session = sessionProvider.getSession(workspace, manageableRepository);
     QueryManager queryManager = session.getWorkspace().getQueryManager();
@@ -255,13 +257,14 @@ public class NewsletterPublicUserHandler {
    * @param email the email
    * @param sessionProvider the session provider
    */
-  public void forgetEmail(String portalName, String email, SessionProvider sessionProvider){
+  public void forgetEmail(SessionProvider sessionProvider, String portalName, String email){
     log.info("Trying to update user's subscriptions for user " + email);
     try {
-      clearEmailInSubscription(email, sessionProvider);
+      clearEmailInSubscription(sessionProvider, email);
       //  update for users node
-      NewsletterManageUserHandler manageUserHandler = new NewsletterManageUserHandler(repository, workspace, sessionProvider);
-      manageUserHandler.delete(portalName, email, sessionProvider);
+      NewsletterManagerService newsletterManagerService = (NewsletterManagerService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(NewsletterManagerService.class);
+      NewsletterManageUserHandler manageUserHandler = newsletterManagerService.getManageUserHandler();
+      manageUserHandler.delete(sessionProvider, portalName, email);
     } catch(Exception e) {
       log.error("Update user's subscription for user " + email + " failed because of ", e.fillInStackTrace());
     }
@@ -276,10 +279,10 @@ public class NewsletterPublicUserHandler {
    * @param categoryAndSubscriptions the category and subscriptions
    * @param sessionProvider the session provider
    */
-  public void updateSubscriptions(String portalName, String email, List<String> categoryAndSubscriptions, SessionProvider sessionProvider) {
+  public void updateSubscriptions(SessionProvider sessionProvider, String portalName, String email, List<String> categoryAndSubscriptions) {
     log.info("Trying to update user's subscriptions for user " + email);
     try {
-      clearEmailInSubscription(email, sessionProvider);
+      clearEmailInSubscription(sessionProvider, email);
       
       // Update new data
       this.updateSubscriptions(sessionProvider, categoryAndSubscriptions, portalName, email);

@@ -107,7 +107,7 @@ public class UIManagerUsers extends UITabPane {
     try{
       UIGrid uiGrid = getChildById(UIGRID_MANAGER_USERS);
       ObjectPageList objPageList = 
-                      new ObjectPageList(managerUserHandler.getUsers(NewsLetterUtil.getPortalName(), categoryName, subscriptionName, Utils.getSessionProvider(this)), 5);
+                      new ObjectPageList(managerUserHandler.getUsers(Utils.getSessionProvider(this), NewsLetterUtil.getPortalName(), categoryName, subscriptionName), 5);
       uiGrid.getUIPageIterator().setPageList(objPageList);
     }catch(Exception ex){
       Utils.createPopupMessage(this, "UIManagerUsers.msg.get-list-users", null, ApplicationMessage.ERROR);
@@ -121,7 +121,7 @@ public class UIManagerUsers extends UITabPane {
    */
   private void updateListUser() throws Exception{
     // get all administrator of newsletter
-    List<String> listAdministrator = managerUserHandler.getAllAdministrator(NewsLetterUtil.getPortalName(), Utils.getSessionProvider(this));
+    List<String> listAdministrator = managerUserHandler.getAllAdministrator(Utils.getSessionProvider(this), NewsLetterUtil.getPortalName());
     
     UIGrid uiGrid = this.getChildById(UIGRID_MANAGER_MODERATOR);
     UIPageIterator uiIterator_ = uiGrid.getUIPageIterator();
@@ -226,7 +226,7 @@ public class UIManagerUsers extends UITabPane {
     public void execute(Event<UIManagerUsers> event) throws Exception {
       UIManagerUsers managerUsers = event.getSource();
       String email = event.getRequestContext().getRequestParameter(OBJECTID);
-      managerUsers.managerUserHandler.changeBanStatus(NewsLetterUtil.getPortalName(), email, false, Utils.getSessionProvider(managerUsers));
+      managerUsers.managerUserHandler.changeBanStatus(Utils.getSessionProvider(managerUsers), NewsLetterUtil.getPortalName(), email, false);
       event.getRequestContext().addUIComponentToUpdateByAjax(managerUsers) ;
     }
   }
@@ -250,7 +250,7 @@ public class UIManagerUsers extends UITabPane {
   	public void execute(Event<UIManagerUsers> event) throws Exception {
 		  UIManagerUsers managerUsers = event.getSource();
 		  String email = event.getRequestContext().getRequestParameter(OBJECTID);
-		  managerUsers.managerUserHandler.changeBanStatus(NewsLetterUtil.getPortalName(), email, true, Utils.getSessionProvider(managerUsers));
+		  managerUsers.managerUserHandler.changeBanStatus(Utils.getSessionProvider(managerUsers), NewsLetterUtil.getPortalName(), email, true);
 		  event.getRequestContext().addUIComponentToUpdateByAjax(managerUsers) ;
 	  }
   }
@@ -274,7 +274,7 @@ public class UIManagerUsers extends UITabPane {
     public void execute(Event<UIManagerUsers> event) throws Exception {
       UIManagerUsers managerUsers = event.getSource();
       String email = event.getRequestContext().getRequestParameter(OBJECTID);
-      managerUsers.managerUserHandler.delete(NewsLetterUtil.getPortalName(), email, Utils.getSessionProvider(managerUsers));
+      managerUsers.managerUserHandler.delete(Utils.getSessionProvider(managerUsers), NewsLetterUtil.getPortalName(), email);
       event.getRequestContext().addUIComponentToUpdateByAjax(managerUsers) ;
     }
   }
@@ -298,7 +298,7 @@ public class UIManagerUsers extends UITabPane {
     public void execute(Event<UIManagerUsers> event) throws Exception {
       UIManagerUsers managerUsers = event.getSource();
       String userId = event.getRequestContext().getRequestParameter(OBJECTID);
-      managerUsers.managerUserHandler.addAdministrator(NewsLetterUtil.getPortalName(), userId, Utils.getSessionProvider(managerUsers));
+      managerUsers.managerUserHandler.addAdministrator(Utils.getSessionProvider(managerUsers), NewsLetterUtil.getPortalName(), userId);
       managerUsers.updateListUser();
       event.getRequestContext().addUIComponentToUpdateByAjax(managerUsers.getChildById(managerUsers.UIGRID_MANAGER_MODERATOR)) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(managerUsers) ;
@@ -324,7 +324,7 @@ public class UIManagerUsers extends UITabPane {
     public void execute(Event<UIManagerUsers> event) throws Exception {
       UIManagerUsers managerUsers = event.getSource();
       String userId = event.getRequestContext().getRequestParameter(OBJECTID);
-      managerUsers.managerUserHandler.deleteUserAddministrator(NewsLetterUtil.getPortalName(), userId, Utils.getSessionProvider(managerUsers));
+      managerUsers.managerUserHandler.deleteUserAddministrator(Utils.getSessionProvider(managerUsers), NewsLetterUtil.getPortalName(), userId);
       managerUsers.updateListUser();
       event.getRequestContext().addUIComponentToUpdateByAjax(managerUsers.getChildById(managerUsers.UIGRID_MANAGER_MODERATOR)) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(managerUsers) ;

@@ -111,12 +111,12 @@ public class NewsletterCategoryHandler {
    * @param categoryConfig the category config
    * @param sessionProvider the session provider
    */
-  public void add(String portalName, NewsletterCategoryConfig categoryConfig, SessionProvider sessionProvider) {
+  public void add(SessionProvider sessionProvider, String portalName, NewsletterCategoryConfig categoryConfig) {
     log.info("Trying to add category " + categoryConfig.getName());
-    
+    Session session = null;
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      Session session = sessionProvider.getSession(workspace, manageableRepository);
+      session = sessionProvider.getSession(workspace, manageableRepository);
       String categoryPath = NewsletterConstant.generateCategoryPath(portalName);
       Node categoriesNode = (Node)session.getItem(categoryPath);
       Node categoryNode = categoriesNode.addNode(categoryConfig.getName(), NewsletterConstant.CATEGORY_NODETYPE);
@@ -131,7 +131,9 @@ public class NewsletterCategoryHandler {
       session.save();
     } catch(Exception e) {
       log.error("Add category " + categoryConfig.getName() + " failed because of: ", e.fillInStackTrace());
-    } 
+    } finally {
+      if (session != null) session.logout();
+    }
   }
   
   /**
@@ -141,7 +143,7 @@ public class NewsletterCategoryHandler {
    * @param categoryConfig the category config
    * @param sessionProvider the session provider
    */
-  public void edit(String portalName, NewsletterCategoryConfig categoryConfig, SessionProvider sessionProvider) {
+  public void edit(SessionProvider sessionProvider, String portalName, NewsletterCategoryConfig categoryConfig) {
     log.info("Trying to edit category " + categoryConfig.getName());
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
@@ -170,7 +172,7 @@ public class NewsletterCategoryHandler {
    * @param categoryName the category name
    * @param sessionProvider the session provider
    */
-  public void delete(String portalName, String categoryName, SessionProvider sessionProvider) {
+  public void delete(SessionProvider sessionProvider, String portalName, String categoryName) {
     log.info("Trying to delete category " + categoryName);
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
@@ -195,7 +197,7 @@ public class NewsletterCategoryHandler {
    * 
    * @throws Exception the exception
    */
-  public NewsletterCategoryConfig getCategoryByName(String portalName, String categoryName, SessionProvider sessionProvider) throws Exception{
+  public NewsletterCategoryConfig getCategoryByName(SessionProvider sessionProvider, String portalName, String categoryName) throws Exception{
   	try{ManageableRepository manageableRepository = repositoryService.getRepository(repository);
       Session session = sessionProvider.getSession(workspace, manageableRepository);
       String categoryPath = NewsletterConstant.generateCategoryPath(portalName);

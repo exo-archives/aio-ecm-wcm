@@ -93,7 +93,7 @@ public class NewsletterInitializationService implements Startable {
     SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
     Session session = null;
     try {
-      Node dummyNode = livePortalManagerService.getLivePortal(portalNames.get(0), sessionProvider);
+      Node dummyNode = livePortalManagerService.getLivePortal(sessionProvider, portalNames.get(0));
       session = dummyNode.getSession();
       Node serviceFolder = session.getRootNode().getNode("exo:services");
       Node newsletterInitializationService = null;
@@ -106,18 +106,18 @@ public class NewsletterInitializationService implements Startable {
         for (String portalName : portalNames) {
           NewsletterCategoryHandler categoryHandler = newsletterManagerService.getCategoryHandler();
           for (NewsletterCategoryConfig categoryConfig : categoryConfigs) {
-            categoryHandler.add(portalName, categoryConfig, sessionProvider);
+            categoryHandler.add(sessionProvider, portalName, categoryConfig);
           }
           
           NewsletterSubscriptionHandler subscriptionHandler = newsletterManagerService.getSubscriptionHandler();
           for (NewsletterSubscriptionConfig subscriptionConfig : subscriptionConfigs) {
-            subscriptionHandler.add(portalName, subscriptionConfig, sessionProvider);
+            subscriptionHandler.add(sessionProvider, portalName, subscriptionConfig);
           }
 
           Node userNode = null;
           NewsletterManageUserHandler manageUserHandler = newsletterManagerService.getManageUserHandler();
           for (NewsletterUserConfig userConfig : userConfigs) {
-            userNode = manageUserHandler.add(portalName, userConfig.getMail(), sessionProvider);
+            userNode = manageUserHandler.add(sessionProvider, portalName, userConfig.getMail());
           }
           ExtendedNode userFolderNode = (ExtendedNode) userNode.getParent();
           if(userFolderNode.canAddMixin("exo:privilegeable")) 

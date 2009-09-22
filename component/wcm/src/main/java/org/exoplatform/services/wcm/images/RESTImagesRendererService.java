@@ -92,9 +92,10 @@ public class RESTImagesRendererService implements ResourceContainer{
   public Response serveImage(@URIParam("repositoryName") String repository, @URIParam("workspaceName") String workspace,
       @URIParam("nodeIdentifier") String nodeIdentifier) { 
     Node node = null;
+    SessionProvider sessionProvider = sessionProviderService.getSessionProvider(null);
+    Session session = null;
     try {            
-      SessionProvider sessionProvider = sessionProviderService.getSessionProvider(null);
-      Session session = sessionProvider.getSession(workspace,repositoryService.getRepository(repository));
+      session = sessionProvider.getSession(workspace,repositoryService.getRepository(repository));
       if(nodeIdentifier.contains("/"))
         node = session.getRootNode().getNode(nodeIdentifier);
       else
@@ -122,6 +123,9 @@ public class RESTImagesRendererService implements ResourceContainer{
     }catch (Exception e) {
       log.error("Error when serveImage: ", e.fillInStackTrace());
       return Response.Builder.serverError().build(); 
+    } finally {
+      if (session != null) session.logout();
+      sessionProvider.close();
     }
   }
   
@@ -141,9 +145,10 @@ public class RESTImagesRendererService implements ResourceContainer{
   public Response serveImage(@URIParam("repositoryName") String repository, @URIParam("workspaceName") String workspace,
       @URIParam("nodeIdentifier") String nodeIdentifier, @QueryParam("propertyName") String propertyName) {
     Node node = null;
+    SessionProvider sessionProvider = sessionProviderService.getSessionProvider(null);
+    Session session = null;
     try {            
-      SessionProvider sessionProvider = sessionProviderService.getSessionProvider(null);
-      Session session = sessionProvider.getSession(workspace,repositoryService.getRepository(repository));
+      session = sessionProvider.getSession(workspace,repositoryService.getRepository(repository));
       if(nodeIdentifier.contains("/"))
         node = session.getRootNode().getNode(nodeIdentifier);
       else
@@ -160,6 +165,9 @@ public class RESTImagesRendererService implements ResourceContainer{
     }catch (Exception e) {
       log.error("Error when serve image: ", e.fillInStackTrace());
       return Response.Builder.serverError().build(); 
+    } finally {
+      if (session != null) session.logout();
+      sessionProvider.close();
     }
   }
   

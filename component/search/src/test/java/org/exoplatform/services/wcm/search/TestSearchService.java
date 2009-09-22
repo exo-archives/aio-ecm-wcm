@@ -214,7 +214,7 @@ public class TestSearchService extends BaseWCMTestCase {
     }
     queryCriteria.setSearchWebpage(searchPageChecked);
     queryCriteria.setLiveMode(searchIsLiveMode);
-    WCMPaginatedQueryResult queryResult = this.siteSearchService.searchSiteContents(queryCriteria, sessionProvider, seachItemsPerPage); 
+    WCMPaginatedQueryResult queryResult = this.siteSearchService.searchSiteContents(sessionProvider, queryCriteria, seachItemsPerPage); 
     return queryResult;
   }
   

@@ -269,8 +269,9 @@ public class UISearchForm extends UIForm {
 			int itemsPerPage = Integer.parseInt(portletPreferences.getValue(UIWCMSearchPortlet.ITEMS_PER_PAGE,
 																																			null));
 			try {
-				WCMPaginatedQueryResult paginatedQueryResult = siteSearchService.searchSiteContents(queryCriteria,
-																																														Utils.getSessionProvider(uiSearchForm),
+				WCMPaginatedQueryResult paginatedQueryResult = siteSearchService.searchSiteContents(
+				                                                                                    Utils.getSessionProvider(uiSearchForm),
+				                                                                                    queryCriteria,
 																																														itemsPerPage);
 				uiSearchResult.setKeyword(keyword);
 				uiSearchResult.setPageList(paginatedQueryResult);

@@ -132,8 +132,8 @@ public class UINewsletterEntryDialogSelector extends UIForm {
     if(CategoryName == null) CategoryName = categories.get(0).getValue();
     NewsletterSubscriptionHandler newsletterSubscriptionHandler = newsletterManagerService.getSubscriptionHandler();
     List<NewsletterSubscriptionConfig> listSubscriptions = 
-                                              newsletterSubscriptionHandler.getSubscriptionsByCategory(portalName, 
-                                                                                                       CategoryName, sessionProvider);
+                                              newsletterSubscriptionHandler.getSubscriptionsByCategory(sessionProvider, portalName, 
+                                                                                                       CategoryName);
     List<SelectItemOption<String>> subscriptions = new ArrayList<SelectItemOption<String>>();
     for (NewsletterSubscriptionConfig newsletterSubscriptionConfig : listSubscriptions) {
       subscriptions.add(new SelectItemOption<String>(newsletterSubscriptionConfig.getTitle(), newsletterSubscriptionConfig.getName()));
@@ -164,9 +164,10 @@ public class UINewsletterEntryDialogSelector extends UIForm {
     List<SelectItemOption<String>> templates = new ArrayList<SelectItemOption<String>>();
     NewsletterManagerService newsletterManagerService = getApplicationComponent(NewsletterManagerService.class);
     NewsletterTemplateHandler newsletterTemplateHandler = newsletterManagerService.getTemplateHandler();
-    List<Node> templateNodes = newsletterTemplateHandler.getTemplates(Util.getUIPortal().getName(), 
-                                                                      categoryConfig,
-                                                                      Utils.getSessionProvider(this));
+    List<Node> templateNodes = newsletterTemplateHandler.getTemplates(
+                                                                      Utils.getSessionProvider(this),
+                                                                      Util.getUIPortal().getName(), 
+                                                                      categoryConfig);
     for (Node template : templateNodes) {
       templates.add(new SelectItemOption<String>(template.getProperty("exo:title").getString(), template.getName()));
     }
@@ -198,10 +199,11 @@ public class UINewsletterEntryDialogSelector extends UIForm {
       NewsletterTemplateHandler newsletterTemplateHandler = newsletterManagerService.getTemplateHandler();
       UINewsletterEntryContainer newsletterEntryContainer = newsletterEntryDialogSelector.getAncestorOfType(UINewsletterEntryContainer.class);
       UINewsletterEntryForm newsletterEntryForm = newsletterEntryContainer.getChild(UINewsletterEntryForm.class) ;
-      newsletterEntryForm.setNodePath(newsletterTemplateHandler.getTemplate(Util.getUIPortal().getName(), 
+      newsletterEntryForm.setNodePath(newsletterTemplateHandler.getTemplate(
+                                                                            Utils.getSessionProvider(newsletterEntryDialogSelector),
+                                                                            Util.getUIPortal().getName(), 
                                                                             newsletterEntryContainer.getCategoryConfig(), 
-                                                                            templateName,
-                                                                            Utils.getSessionProvider(newsletterEntryDialogSelector)).getPath());
+                                                                            templateName).getPath());
       newsletterEntryForm.getChildren().clear();
       newsletterEntryForm.resetProperties();
       event.getRequestContext().addUIComponentToUpdateByAjax(newsletterEntryContainer) ;
@@ -259,11 +261,10 @@ public class UINewsletterEntryDialogSelector extends UIForm {
       NewsletterSubscriptionHandler newsletterSubscriptionHandler = newsletterManagerService.getSubscriptionHandler();
       String portalName = Util.getUIPortal().getName();
       SessionProvider sessionProvider = Utils.getSessionProvider(newsletterEntryDialogSelector);
-      NewsletterCategoryConfig categoryConfig = newsletterManagerService.getCategoryHandler().getCategoryByName(portalName, 
-                                                                                                                categorySelectBox.getValue(),
-                                                                                                                sessionProvider);
+      NewsletterCategoryConfig categoryConfig = newsletterManagerService.getCategoryHandler().getCategoryByName(sessionProvider, portalName, 
+                                                                                                                categorySelectBox.getValue());
       List<NewsletterSubscriptionConfig> newsletterSubscriptionConfigs = 
-              newsletterSubscriptionHandler.getSubscriptionsByCategory(portalName, categorySelectBox.getValue(), sessionProvider);
+              newsletterSubscriptionHandler.getSubscriptionsByCategory(sessionProvider, portalName, categorySelectBox.getValue());
       for (NewsletterSubscriptionConfig newsletterSubscriptionConfig : newsletterSubscriptionConfigs) {
         subscriptions.add(new SelectItemOption<String>(newsletterSubscriptionConfig.getTitle(), newsletterSubscriptionConfig.getName()));
       }

@@ -216,7 +216,7 @@ public class UINewsletterViewerForm extends UIForm {
   private List<NewsletterSubscriptionConfig> getListSubscription(String categoryName) {
     try {
       List<NewsletterSubscriptionConfig> listSubscription = 
-                                          subcriptionHandler.getSubscriptionsByCategory(NewsLetterUtil.getPortalName(), categoryName, Utils.getSessionProvider(this));
+                                          subcriptionHandler.getSubscriptionsByCategory(Utils.getSessionProvider(this), NewsLetterUtil.getPortalName(), categoryName);
       this.init(listSubscription, categoryName);
       return listSubscription;
     } catch (Exception e) {
@@ -252,7 +252,7 @@ public class UINewsletterViewerForm extends UIForm {
      */
     public void execute(Event<UINewsletterViewerForm> event) throws Exception {
       UINewsletterViewerForm newsletterForm = event.getSource();
-      newsletterForm.publicUserHandler.forgetEmail(NewsLetterUtil.getPortalName(), newsletterForm.userMail, Utils.getSessionProvider(newsletterForm));
+      newsletterForm.publicUserHandler.forgetEmail(Utils.getSessionProvider(newsletterForm), NewsLetterUtil.getPortalName(), newsletterForm.userMail);
       
       newsletterForm.isUpdated = false;
       newsletterForm.inputEmail.setValue("");
@@ -283,8 +283,8 @@ public class UINewsletterViewerForm extends UIForm {
       UINewsletterViewerForm newsletterForm = event.getSource();
       List<String> listSubcriptionPattern = new ArrayList<String>();
       listSubcriptionPattern = newsletterForm.listSubscriptionChecked();
-      newsletterForm.publicUserHandler.updateSubscriptions(NewsLetterUtil.getPortalName(), 
-                                                           newsletterForm.inputEmail.getValue(), listSubcriptionPattern, Utils.getSessionProvider(newsletterForm));
+      newsletterForm.publicUserHandler.updateSubscriptions(Utils.getSessionProvider(newsletterForm), NewsLetterUtil.getPortalName(), 
+                                                           newsletterForm.inputEmail.getValue(), listSubcriptionPattern);
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
       UIApplication uiApp = context.getUIApplication();
       uiApp.addMessage(new ApplicationMessage("UINewsletterViewerForm.msg.updateSuccess", null, ApplicationMessage.INFO));
@@ -321,10 +321,7 @@ public class UINewsletterViewerForm extends UIForm {
       List<String> listCategorySubscription = newsletterForm.listSubscriptionChecked();
       String contentOfMessage;
       boolean isExistedEmail = newsletterForm.managerUserHandler
-        .checkExistedEmail(
-                           portalName,
-                           userEmail,
-                           Utils.getSessionProvider(newsletterForm));
+        .checkExistedEmail(Utils.getSessionProvider(newsletterForm), portalName, userEmail);
       
       if (!isExistedEmail) {
         if(listCategorySubscription.size() < 1){
@@ -337,12 +334,12 @@ public class UINewsletterViewerForm extends UIForm {
                                                 res.getString("UINewsletterViewerForm.Email.ConfirmUser.Content")};
           try{
             newsletterForm.publicUserHandler.subscribe(
+                                                       Utils.getSessionProvider(newsletterForm),
                                                        portalName,
                                                        userEmail,
                                                        listCategorySubscription,
                                                        newsletterForm.linkToSendMail,
-                                                       emailContent,
-                                                       Utils.getSystemProvider(newsletterForm));
+                                                       emailContent);
             newsletterForm.inputEmail.setRendered(false);
             newsletterForm.userMail = userEmail;
             newsletterForm.isUpdated = true;

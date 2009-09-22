@@ -43,5 +43,5 @@ public interface PortalArtifactsInitializerService {
    * 
    * @throws Exception the exception
    */
-  public void deployArtifactsToPortal(String portalName, SessionProvider sessionProvider) throws Exception;  
+  public void deployArtifactsToPortal(SessionProvider sessionProvider, String portalName) throws Exception;  
 }

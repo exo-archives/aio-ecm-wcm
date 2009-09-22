@@ -97,11 +97,11 @@ public class NewsletterEntryHandler {
    * @param listIds the list ids
    */
   public void delete(
+                     SessionProvider sessionProvider,
                      String portalName,
                      String categoryName,
                      String subscriptionName,
-                     List<String> listIds,
-                     SessionProvider sessionProvider) {
+                     List<String> listIds) {
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
       Session session = sessionProvider.getSession(workspace, manageableRepository);
@@ -130,10 +130,10 @@ public class NewsletterEntryHandler {
    * @throws Exception the exception
    */
   public List<NewsletterManagerConfig> getNewsletterEntriesBySubscription(
+                                                                          SessionProvider sessionProvider,
                                                                           String portalName,
                                                                           String categoryName,
-                                                                          String subscriptionName,
-                                                                          SessionProvider sessionProvider)
+                                                                          String subscriptionName)
     throws Exception{
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
     Session session = sessionProvider.getSession(workspace, manageableRepository);
@@ -168,11 +168,11 @@ public class NewsletterEntryHandler {
    * @throws Exception the exception
    */
   public NewsletterManagerConfig getNewsletterEntry(
+                                                    SessionProvider sessionProvider,
                                                     String portalName,
                                                     String categoryName,
                                                     String subscriptionName,
-                                                    String newsletterName,
-                                                    SessionProvider sessionProvider) throws Exception{
+                                                    String newsletterName) throws Exception{
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
     Session session = sessionProvider.getSession(workspace, manageableRepository);
     String path = NewsletterConstant.generateCategoryPath(portalName) + "/" + categoryName + "/" + subscriptionName + "/" + newsletterName;
@@ -189,7 +189,7 @@ public class NewsletterEntryHandler {
    * 
    * @throws Exception the exception
    */
-  public NewsletterManagerConfig getNewsletterEntryByPath(String path, SessionProvider sessionProvider) throws Exception{
+  public NewsletterManagerConfig getNewsletterEntryByPath(SessionProvider sessionProvider, String path) throws Exception{
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
     Session session = sessionProvider.getSession(workspace, manageableRepository);
     NewsletterManagerConfig newsletterManagerConfig = getEntryFromNode((Node)session.getItem(path));
@@ -209,11 +209,11 @@ public class NewsletterEntryHandler {
    * @throws Exception the exception
    */
   public String getContent(
+                           SessionProvider sessionProvider,
                            String portalName,
                            String categoryName,
                            String subscriptionName,
-                           String newsletterName,
-                           SessionProvider sessionProvider) throws Exception {
+                           String newsletterName) throws Exception {
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
     Session session = sessionProvider.getSession(workspace, manageableRepository);
     String path = NewsletterConstant.generateCategoryPath(portalName) + "/" + categoryName + "/" + subscriptionName + "/" + newsletterName;
@@ -242,7 +242,7 @@ public class NewsletterEntryHandler {
    * 
    * @throws Exception the exception
    */
-  public String getContent(Node webContent) throws Exception{
+  public String getContent(SessionProvider sessionProvider, Node webContent) throws Exception{
 		XSkinService xSkService = (XSkinService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(XSkinService.class);
 		try {
 		  StringBuilder sb = new StringBuilder();

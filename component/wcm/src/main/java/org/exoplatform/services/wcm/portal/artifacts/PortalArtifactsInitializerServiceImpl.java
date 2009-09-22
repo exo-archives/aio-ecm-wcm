@@ -49,13 +49,13 @@ public class PortalArtifactsInitializerServiceImpl implements PortalArtifactsIni
     artifactPlugins.put(artifactsPlugin.getName(),artifactsPlugin);
   }
 
-  public void deployArtifactsToPortal(String portalName, SessionProvider sessionProvider)
+  public void deployArtifactsToPortal(SessionProvider sessionProvider, String portalName)
   throws Exception {
     //Do not initalize portal artifact for predefined portal
     if(initialPortals.contains(portalName)) return ;
 
     for(BasePortalArtifactsPlugin plugin: artifactPlugins.values()) {
-      plugin.deployToPortal(portalName,sessionProvider);
+      plugin.deployToPortal(sessionProvider, portalName);
     }
     
     listenerService.broadcast(CREATE_PORTAL_EVENT, portalName, sessionProvider);

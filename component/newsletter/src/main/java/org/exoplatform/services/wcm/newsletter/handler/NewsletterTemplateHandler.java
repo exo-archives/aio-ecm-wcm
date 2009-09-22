@@ -76,9 +76,9 @@ public class NewsletterTemplateHandler {
    * @return the templates
    */
   public List<Node> getTemplates(
+                                 SessionProvider sessionProvider,
                                  String portalName,
-                                 NewsletterCategoryConfig categoryConfig,
-                                 SessionProvider sessionProvider) {
+                                 NewsletterCategoryConfig categoryConfig) {
     log.info("Trying to get templates of category " + categoryConfig);
     try {
       List<Node> templates = new ArrayList<Node>();
@@ -116,13 +116,13 @@ public class NewsletterTemplateHandler {
    * @return the template
    */
   public Node getTemplate(
+                          SessionProvider sessionProvider,
                           String portalName,
                           NewsletterCategoryConfig categoryConfig,
-                          String templateName,
-                          SessionProvider sessionProvider) {
+                          String templateName) {
     log.info("Trying to get template " + templateName);
     try {
-      if (templates == null) templates = getTemplates(portalName, categoryConfig, sessionProvider);
+      if (templates == null) templates = getTemplates(sessionProvider, portalName, categoryConfig);
       if (templateName == null && templates.size() > 0) return templates.get(0);
       for (Node template : templates) {
         if (templateName.equals(template.getName())) {
@@ -146,10 +146,10 @@ public class NewsletterTemplateHandler {
    * @throws Exception 
    */
   public void convertAsTemplate(
+                                SessionProvider sessionProvider,
                                 String webcontentPath,
                                 String portalName,
-                                String categoryName,
-                                SessionProvider sessionProvider) throws Exception {
+                                String categoryName) throws Exception {
     log.info("Trying to convert node " + webcontentPath + " to template at category " + categoryName);
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);

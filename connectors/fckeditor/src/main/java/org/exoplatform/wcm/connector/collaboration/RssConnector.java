@@ -218,7 +218,6 @@ public class RssConnector extends BaseConnector implements ResourceContainer {
       SyndFeedOutput output = new SyndFeedOutput();      
       String feedXML = output.outputString(feed);      
       feedXML = StringUtils.replace(feedXML,"&amp;","&");
-      sessionProvider.close();
       return feedXML;
     } catch (Exception e) {
       log.error("Error when perform generateRSS: ", e.fillInStackTrace());

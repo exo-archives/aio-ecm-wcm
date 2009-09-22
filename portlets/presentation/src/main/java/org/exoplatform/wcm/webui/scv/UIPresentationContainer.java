@@ -229,7 +229,7 @@ public class UIPresentationContainer extends UIContainer{
     String nodeIdentifier = preferences.getValue(UISingleContentViewerPortlet.IDENTIFIER, null) ;
     WCMService wcmService = getApplicationComponent(WCMService.class);
     try { 
-      nodeReference = wcmService.getReferencedContent(repository, workspace, nodeIdentifier, Utils.getSessionProvider(this));
+      nodeReference = wcmService.getReferencedContent(Utils.getSessionProvider(this), repository, workspace, nodeIdentifier);
     } catch(ItemNotFoundException e) {
       return null;
     }

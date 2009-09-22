@@ -76,11 +76,11 @@ public class PageMetadataServiceImpl implements PageMetadataService {
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.metadata.PageMetadataService#getPortalMetadata(java.lang.String, org.exoplatform.services.jcr.ext.common.SessionProvider)
    */
-  public HashMap<String, String> getPortalMetadata(String uri, SessionProvider sessionProvider)
+  public HashMap<String, String> getPortalMetadata(SessionProvider sessionProvider, String uri)
   throws Exception {
     String portalName = uri.split("/")[1];      
     try {
-      Node portal = livePortalManagerService.getLivePortal(portalName,sessionProvider);
+      Node portal = livePortalManagerService.getLivePortal(sessionProvider, portalName);
       return extractPortalMetadata(portal);      
     } catch (Exception e) {
       if(log.isDebugEnabled())

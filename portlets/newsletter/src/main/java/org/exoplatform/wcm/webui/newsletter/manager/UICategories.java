@@ -87,7 +87,7 @@ public class UICategories extends UIContainer {
 	@SuppressWarnings("unused")
   private long getNumberOfWaitingNewsletter(String categoryName, String subscriptionName){
 	  try{
-	    return subscriptionHandler.getNumberOfNewslettersWaiting(portalName, categoryName, subscriptionName, Utils.getSessionProvider(this));
+	    return subscriptionHandler.getNumberOfNewslettersWaiting(Utils.getSessionProvider(this), portalName, categoryName, subscriptionName);
 	  }catch(Exception ex){
 	    return 0;
 	  }
@@ -103,7 +103,7 @@ public class UICategories extends UIContainer {
 	 */
 	@SuppressWarnings("unused")
   private int getNumberOfUser(String categoryName, String subscriptionName){
-	  return userHandler.getQuantityUserBySubscription(portalName, categoryName, subscriptionName, Utils.getSessionProvider(this));
+	  return userHandler.getQuantityUserBySubscription(Utils.getSessionProvider(this), portalName, categoryName, subscriptionName);
 	}
 	
 	/**
@@ -133,7 +133,7 @@ public class UICategories extends UIContainer {
   private List<NewsletterSubscriptionConfig> getListSubscription(String categoryName){
 	  List<NewsletterSubscriptionConfig> listSubscription = new ArrayList<NewsletterSubscriptionConfig>();
     try{
-      listSubscription = subscriptionHandler.getSubscriptionsByCategory(NewsLetterUtil.getPortalName(), categoryName, Utils.getSessionProvider(this));
+      listSubscription = subscriptionHandler.getSubscriptionsByCategory(Utils.getSessionProvider(this), NewsLetterUtil.getPortalName(), categoryName);
     }catch(Exception e){
       Utils.createPopupMessage(this, "UICategories.msg.get-list-subscriptions", null, ApplicationMessage.ERROR);
     }
@@ -208,7 +208,7 @@ public class UICategories extends UIContainer {
 	    UINewsletterManagerPortlet newsletterManagerPortlet = uiCategories.getAncestorOfType(UINewsletterManagerPortlet.class);
 	    UISubscriptions subsriptions = newsletterManagerPortlet.getChild(UISubscriptions.class);
 	    subsriptions.setRendered(true);
-	    subsriptions.setCategory(uiCategories.categoryHandler.getCategoryByName(NewsLetterUtil.getPortalName(), categoryName, Utils.getSessionProvider(uiCategories)));
+	    subsriptions.setCategory(uiCategories.categoryHandler.getCategoryByName(Utils.getSessionProvider(uiCategories), NewsLetterUtil.getPortalName(), categoryName));
 	    newsletterManagerPortlet.getChild(UICategories.class).setRendered(false);
 	    event.getRequestContext().addUIComponentToUpdateByAjax(newsletterManagerPortlet);
 	  }
@@ -291,12 +291,15 @@ public class UICategories extends UIContainer {
       SessionProvider sessionProvider = Utils.getSessionProvider(uiCategory);
       newsletterManager.setCategoryConfig(
                         uiCategory.categoryHandler.getCategoryByName(
+                                                                     sessionProvider, 
                                                                      uiCategory.portalName,
-                                                                     categoryName, sessionProvider));
+                                                                     categoryName));
       newsletterManager.setSubscriptionConfig(
-                        uiCategory.subscriptionHandler.getSubscriptionsByName(uiCategory.portalName,
+                        uiCategory.subscriptionHandler.getSubscriptionsByName(
+                                                                              sessionProvider, 
+                                                                              uiCategory.portalName,
                                                                               categoryName,
-                                                                              subscriptionName, sessionProvider));
+                                                                              subscriptionName));
       newsletterManager.init();
       newsletterManagerPortlet.getChild(UICategories.class).setRendered(false);
       newsletterManagerPortlet.getChild(UISubscriptions.class).setRendered(false);

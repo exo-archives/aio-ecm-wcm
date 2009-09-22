@@ -154,7 +154,7 @@ public class InitialTaxonomyPlugin extends BasePortalArtifactsPlugin {
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.portal.artifacts.BasePortalArtifactsPlugin#deployToPortal(java.lang.String, org.exoplatform.services.jcr.ext.common.SessionProvider)
    */
-  public void deployToPortal(String portalName, SessionProvider sessionProvider) throws Exception {
+  public void deployToPortal(SessionProvider sessionProvider, String portalName) throws Exception {
     this.portalName = portalName;
     // Replace with real data
     String firstCharactor = portalName.substring(0, 1).toUpperCase();

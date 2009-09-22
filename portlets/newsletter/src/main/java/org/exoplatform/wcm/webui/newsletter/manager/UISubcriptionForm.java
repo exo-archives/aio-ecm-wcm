@@ -177,7 +177,7 @@ public class UISubcriptionForm extends UIForm {
       SessionProvider sessionProvider = Utils.getSessionProvider(uiSubcriptionForm);
       if(uiSubcriptionForm.subscriptionConfig == null) {
         newsletterSubscriptionConfig = subscriptionHandler
-          .getSubscriptionsByName(NewsLetterUtil.getPortalName(), categoryName, subcriptionName, sessionProvider);
+          .getSubscriptionsByName(sessionProvider, NewsLetterUtil.getPortalName(), categoryName, subcriptionName);
         if (newsletterSubscriptionConfig != null) {
 
           uiApp.addMessage(new ApplicationMessage("UISubcriptionForm.msg.subcriptionNameIsAlreadyExist", null, ApplicationMessage.WARNING));
@@ -192,13 +192,13 @@ public class UISubcriptionForm extends UIForm {
         newsletterSubscriptionConfig.setDescription(subcriptionDecription);
         newsletterSubscriptionConfig.setTitle(subcriptionTitle);
 
-        subscriptionHandler.add(NewsLetterUtil.getPortalName(), newsletterSubscriptionConfig, sessionProvider);
+        subscriptionHandler.add(sessionProvider, NewsLetterUtil.getPortalName(), newsletterSubscriptionConfig);
       } else {
         newsletterSubscriptionConfig = uiSubcriptionForm.subscriptionConfig;
         newsletterSubscriptionConfig.setCategoryName(categoryName);
         newsletterSubscriptionConfig.setDescription(subcriptionDecription);
         newsletterSubscriptionConfig.setTitle(subcriptionTitle);
-        subscriptionHandler.edit(NewsLetterUtil.getPortalName(), newsletterSubscriptionConfig, sessionProvider);
+        subscriptionHandler.edit(sessionProvider, NewsLetterUtil.getPortalName(), newsletterSubscriptionConfig);
       }
       Utils.closePopupWindow(uiSubcriptionForm, UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW);
     }

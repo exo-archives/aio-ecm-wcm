@@ -77,14 +77,14 @@ public class TestNewsletterTemplateHandler extends BaseWCMTestCase {
 			newsletterCategoryConfig.setTitle("CategoryTitle");
 			newsletterCategoryConfig.setDescription("CategoryDescription");
 			newsletterCategoryConfig.setModerator("root");
-			newsletterCategoryHandler.add("classic", newsletterCategoryConfig, sessionProvider);
+			newsletterCategoryHandler.add(sessionProvider, "classic", newsletterCategoryConfig);
 			
 			newsletterSubscriptionConfig = new NewsletterSubscriptionConfig();
 			newsletterSubscriptionConfig.setCategoryName("CategoryName");
 			newsletterSubscriptionConfig.setName("SubscriptionName");
 			newsletterSubscriptionConfig.setTitle("SubscriptionTitle");
 			newsletterSubscriptionConfig.setDescription("SubScriptionDescription");
-			newsletterSubscriptionHandler.add("classic", newsletterSubscriptionConfig, sessionProvider);
+			newsletterSubscriptionHandler.add(sessionProvider, "classic", newsletterSubscriptionConfig);
 			
 			subscriptionNode = categoriesNode.getNode("CategoryName/SubscriptionName");
 			nodesTemp = subscriptionNode.addNode("testTemplate", NodetypeConstant.EXO_WEBCONTENT);
@@ -99,10 +99,10 @@ public class TestNewsletterTemplateHandler extends BaseWCMTestCase {
 				nodesTemp.addMixin(NodetypeConstant.EXO_NEWSLETTER_ENTRY);
 				session.save();
 				listNode.add(nodesTemp);
-				newsletterTemplateHandler.convertAsTemplate(nodesTemp.getPath(), "classic", newsletterCategoryConfig.getName(), sessionProvider);
+				newsletterTemplateHandler.convertAsTemplate(sessionProvider, nodesTemp.getPath(), "classic", newsletterCategoryConfig.getName());
 			}
 		} else {
-			newsletterCategoryConfig = newsletterCategoryHandler.getCategoryByName("classic", "CategoryName", sessionProvider);
+			newsletterCategoryConfig = newsletterCategoryHandler.getCategoryByName(sessionProvider, "classic", "CategoryName");
 		}
 		isAdded = true;
 	}
@@ -113,7 +113,7 @@ public class TestNewsletterTemplateHandler extends BaseWCMTestCase {
 	 * @throws Exception the exception
 	 */
 	public void testGetTemplate() throws Exception {
-		nodesTemp = newsletterTemplateHandler.getTemplate("classic", newsletterCategoryConfig, nodesTemp.getName(), sessionProvider);
+		nodesTemp = newsletterTemplateHandler.getTemplate(sessionProvider, "classic", newsletterCategoryConfig, nodesTemp.getName());
 		assertNotNull(nodesTemp);
 	}
 	
@@ -124,7 +124,7 @@ public class TestNewsletterTemplateHandler extends BaseWCMTestCase {
 	 */
 	@SuppressWarnings("unchecked")
   public void testGetTemplates() throws Exception {
-		List listTemplates = newsletterTemplateHandler.getTemplates("classic", newsletterCategoryConfig, sessionProvider);
+		List listTemplates = newsletterTemplateHandler.getTemplates(sessionProvider, "classic", newsletterCategoryConfig);
 		assertEquals(5, listTemplates.size());
 	}
 	
@@ -134,9 +134,9 @@ public class TestNewsletterTemplateHandler extends BaseWCMTestCase {
 	 * @throws Exception the exception
 	 */
 	public void testConvertAsTemplate() throws Exception {
-		List<Node> listTemplates = newsletterTemplateHandler.getTemplates("classic", newsletterCategoryConfig, sessionProvider);
+		List<Node> listTemplates = newsletterTemplateHandler.getTemplates(sessionProvider, "classic", newsletterCategoryConfig);
 		for(Node node : listTemplates) {
-			newsletterTemplateHandler.convertAsTemplate(node.getPath(), "classic", "CategoryName", sessionProvider);
+			newsletterTemplateHandler.convertAsTemplate(sessionProvider, node.getPath(), "classic", "CategoryName");
 		}
 	}
 	

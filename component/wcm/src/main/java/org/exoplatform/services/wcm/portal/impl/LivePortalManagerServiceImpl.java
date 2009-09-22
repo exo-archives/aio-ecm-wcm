@@ -75,9 +75,9 @@ public class LivePortalManagerServiceImpl implements LivePortalManagerService, S
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.portal.LivePortalManagerService#getLivePortal(java.lang.String, org.exoplatform.services.jcr.ext.common.SessionProvider)
    */
-  public final Node getLivePortal(final String portalName, final SessionProvider sessionProvider) throws Exception {
+  public final Node getLivePortal(final SessionProvider sessionProvider, final String portalName) throws Exception {
     String currentRepository = repositoryService.getCurrentRepository().getConfiguration().getName();
-    return getLivePortal(currentRepository, portalName, sessionProvider);    
+    return getLivePortal(sessionProvider, currentRepository, portalName);    
   }
 
   /* (non-Javadoc)
@@ -85,7 +85,7 @@ public class LivePortalManagerServiceImpl implements LivePortalManagerService, S
    */
   public final List<Node> getLivePortals(final SessionProvider sessionProvider) throws Exception {
     String currentRepository = repositoryService.getCurrentRepository().getConfiguration().getName();
-    return getLivePortals(currentRepository,sessionProvider);
+    return getLivePortals(sessionProvider, currentRepository);
   }
 
   /* (non-Javadoc)
@@ -93,13 +93,13 @@ public class LivePortalManagerServiceImpl implements LivePortalManagerService, S
    */
   public final Node getLiveSharedPortal(final SessionProvider sessionProvider) throws Exception {
     String currentRepository = repositoryService.getCurrentRepository().getConfiguration().getName();
-    return getLiveSharedPortal(currentRepository, sessionProvider);    
+    return getLiveSharedPortal(sessionProvider, currentRepository);    
   }  
 
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.portal.LivePortalManagerService#getLivePortal(java.lang.String, java.lang.String, org.exoplatform.services.jcr.ext.common.SessionProvider)
    */
-  public final Node getLivePortal(final String repository, final String portalName, final SessionProvider sessionProvider) throws Exception {
+  public final Node getLivePortal(final SessionProvider sessionProvider, final String repository, final String portalName) throws Exception {
     Node portalsStorage = getLivePortalsStorage(sessionProvider, repository);
     return portalsStorage.getNode(portalName); 
   }
@@ -107,7 +107,7 @@ public class LivePortalManagerServiceImpl implements LivePortalManagerService, S
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.portal.LivePortalManagerService#getLivePortals(java.lang.String, org.exoplatform.services.jcr.ext.common.SessionProvider)
    */
-  public final List<Node> getLivePortals(final String repository, final SessionProvider sessionProvider) throws Exception {
+  public final List<Node> getLivePortals(final SessionProvider sessionProvider, final String repository) throws Exception {
     List<Node> list = new ArrayList<Node>();    
     Node portalsStorage = getLivePortalsStorage(sessionProvider, repository);
     for (NodeIterator iterator = portalsStorage.getNodes(); iterator.hasNext(); ) {
@@ -122,7 +122,7 @@ public class LivePortalManagerServiceImpl implements LivePortalManagerService, S
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.portal.LivePortalManagerService#getLiveSharedPortal(java.lang.String, org.exoplatform.services.jcr.ext.common.SessionProvider)
    */
-  public final Node getLiveSharedPortal(final String repository, final SessionProvider sessionProvider) throws Exception {
+  public final Node getLiveSharedPortal(final SessionProvider sessionProvider, final String repository) throws Exception {
     Node portalsStorage = getLivePortalsStorage(sessionProvider, repository);
     String sharePortalName = wcmConfigService.getSharedPortalName(repository);
     return portalsStorage.getNode(sharePortalName);
@@ -140,7 +140,7 @@ public class LivePortalManagerServiceImpl implements LivePortalManagerService, S
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.portal.LivePortalManagerService#addLivePortal(org.exoplatform.portal.config.model.PortalConfig, org.exoplatform.services.jcr.ext.common.SessionProvider)
    */
-  public final void addLivePortal(final PortalConfig portalConfig, final SessionProvider sessionProvider)
+  public final void addLivePortal(final SessionProvider sessionProvider, final PortalConfig portalConfig)
   throws Exception {
     String currentRepository = repositoryService.getCurrentRepository().getConfiguration().getName();
     Node livePortalsStorage = getLivePortalsStorage(sessionProvider,currentRepository) ;
@@ -174,14 +174,15 @@ public class LivePortalManagerServiceImpl implements LivePortalManagerService, S
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.portal.LivePortalManagerService#removeLivePortal(org.exoplatform.portal.config.model.PortalConfig, org.exoplatform.services.jcr.ext.common.SessionProvider)
    */
-  public void removeLivePortal(final PortalConfig portalConfig, final SessionProvider sessionProvider)
+  public void removeLivePortal(final SessionProvider sessionProvider, final PortalConfig portalConfig)
   throws Exception {    
     //Remove site content folder for the portal in this version
     //for next version, we will move it to backup ws
-    Node node = getLivePortal(portalConfig.getName(), sessionProvider);
+    Node node = getLivePortal(sessionProvider, portalConfig.getName());
     Session session = node.getSession();
     node.remove();
     session.save();
+    session.logout();
     livePortalPaths.remove(portalConfig.getName());
   }
 

@@ -126,10 +126,10 @@ public class UISubscriptions extends UIForm {
   @SuppressWarnings("unused")
   private int getNumberOfUser(String subscriptionName){
     return userHandler.getQuantityUserBySubscription(
+                                                     Utils.getSessionProvider(this),
                                                      portalName,
                                                      this.categoryConfig.getName(),
-                                                     subscriptionName,
-                                                     Utils.getSessionProvider(this));
+                                                     subscriptionName);
   }
 
   /**
@@ -142,7 +142,7 @@ public class UISubscriptions extends UIForm {
     List<NewsletterSubscriptionConfig> listSubs = new ArrayList<NewsletterSubscriptionConfig>();
     try{
       listSubs = 
-        subscriptionHandler.getSubscriptionsByCategory(NewsLetterUtil.getPortalName(), this.categoryConfig.getName(), Utils.getSessionProvider(this));
+        subscriptionHandler.getSubscriptionsByCategory(Utils.getSessionProvider(this), NewsLetterUtil.getPortalName(), this.categoryConfig.getName());
       init(listSubs);
     }catch(Exception e){
       Utils.createPopupMessage(this, "UISubscription.msg.get-list-subscriptions", null, ApplicationMessage.ERROR);
@@ -160,7 +160,7 @@ public class UISubscriptions extends UIForm {
   @SuppressWarnings("unused")
   private long getNumberOfWaitingNewsletter(String subscriptionName){
     try{
-      return subscriptionHandler.getNumberOfNewslettersWaiting(portalName, this.categoryConfig.getName(), subscriptionName, Utils.getSessionProvider(this));
+      return subscriptionHandler.getNumberOfNewslettersWaiting(Utils.getSessionProvider(this), portalName, this.categoryConfig.getName(), subscriptionName);
     }catch(Exception ex){
       return 0;
     }
@@ -259,7 +259,7 @@ public class UISubscriptions extends UIForm {
       UISubscriptions subsriptions = event.getSource();
       NewsletterManagerService newsletterManagerService = subsriptions.getApplicationComponent(NewsletterManagerService.class);
       NewsletterCategoryHandler categoryHandler = newsletterManagerService.getCategoryHandler();
-      categoryHandler.delete(NewsLetterUtil.getPortalName(), subsriptions.categoryConfig.getName(), Utils.getSessionProvider(subsriptions));
+      categoryHandler.delete(Utils.getSessionProvider(subsriptions), NewsLetterUtil.getPortalName(), subsriptions.categoryConfig.getName());
       UINewsletterManagerPortlet newsletterManagerPortlet = subsriptions.getAncestorOfType(UINewsletterManagerPortlet.class);
       UICategories categories = newsletterManagerPortlet.getChild(UICategories.class);
       categories.setRendered(true);
@@ -320,7 +320,8 @@ public class UISubscriptions extends UIForm {
         return;
       }
       UISubcriptionForm subcriptionForm = subsriptions.createUIComponent(UISubcriptionForm.class, null, null);
-      NewsletterSubscriptionConfig subscriptionConfig = subsriptions.subscriptionHandler.getSubscriptionsByName(NewsLetterUtil.getPortalName(), subsriptions.categoryConfig.getName(), subId, Utils.getSessionProvider(subsriptions));
+      NewsletterSubscriptionConfig subscriptionConfig 
+      = subsriptions.subscriptionHandler.getSubscriptionsByName(Utils.getSessionProvider(subsriptions), NewsLetterUtil.getPortalName(), subsriptions.categoryConfig.getName(), subId);
       subcriptionForm.setSubscriptionInfor(subscriptionConfig);
       Utils.createPopupWindow(subsriptions, subcriptionForm, UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW, 450, 280);
     }
@@ -354,9 +355,9 @@ public class UISubscriptions extends UIForm {
           isChecked = true;
           SessionProvider sessionProvider = Utils.getSessionProvider(subsriptions);
           NewsletterSubscriptionConfig subscriptionConfig = 
-            subsriptions.subscriptionHandler.getSubscriptionsByName( portalName, subsriptions.categoryConfig.getName(), checkbox.getName(), sessionProvider);
+            subsriptions.subscriptionHandler.getSubscriptionsByName(sessionProvider, portalName, subsriptions.categoryConfig.getName(), checkbox.getName());
           if (subscriptionConfig != null) {
-            subsriptions.subscriptionHandler.delete( NewsLetterUtil.getPortalName(), subsriptions.categoryConfig.getName(),subscriptionConfig, sessionProvider);
+            subsriptions.subscriptionHandler.delete(sessionProvider, NewsLetterUtil.getPortalName(), subsriptions.categoryConfig.getName(),subscriptionConfig);
           } else {
             UIApplication uiApp = subsriptions.getAncestorOfType(UIApplication.class);
             uiApp.addMessage(new ApplicationMessage("UISubscription.msg.subscriptionNotfound", null, ApplicationMessage.WARNING));
@@ -407,12 +408,15 @@ public class UISubscriptions extends UIForm {
       SessionProvider sessionProvider = Utils.getSessionProvider(uiSubscription);
       newsletterManager.setCategoryConfig(
                         uiSubscription.categoryHandler.getCategoryByName(
+                                                                         sessionProvider, 
                                                                          uiSubscription.portalName,
-                                                                         uiSubscription.categoryConfig.getName(),sessionProvider));
+                                                                         uiSubscription.categoryConfig.getName()));
       newsletterManager.setSubscriptionConfig(
-                        uiSubscription.subscriptionHandler.getSubscriptionsByName(uiSubscription.portalName,
+                        uiSubscription.subscriptionHandler.getSubscriptionsByName(
+                                                                                  sessionProvider, 
+                                                                                  uiSubscription.portalName,
                                                                                   uiSubscription.categoryConfig.getName(),
-                                                                                  subId, sessionProvider));
+                                                                                  subId));
       newsletterManager.init();
       newsletterManagerPortlet.getChild(UICategories.class).setRendered(false);
       newsletterManagerPortlet.getChild(UISubscriptions.class).setRendered(false);
@@ -445,12 +449,15 @@ public class UISubscriptions extends UIForm {
       SessionProvider sessionProvider = Utils.getSessionProvider(uiSubscriptions);
       newsletterManager.setCategoryConfig(
                         uiSubscriptions.categoryHandler.getCategoryByName(
+                                                                          sessionProvider, 
                                                                          uiSubscriptions.portalName,
-                                                                         uiSubscriptions.categoryConfig.getName(), sessionProvider));
+                                                                         uiSubscriptions.categoryConfig.getName()));
       newsletterManager.setSubscriptionConfig(
-                        uiSubscriptions.subscriptionHandler.getSubscriptionsByName(uiSubscriptions.portalName,
+                        uiSubscriptions.subscriptionHandler.getSubscriptionsByName(
+                                                                                   sessionProvider,
+                                                                                   uiSubscriptions.portalName,
                                                                                    uiSubscriptions.categoryConfig.getName(),
-                                                                                   subscriptionId, sessionProvider));
+                                                                                   subscriptionId));
       newsletterManager.init();
       newsletterManagerPortlet.getChild(UICategories.class).setRendered(false);
       newsletterManagerPortlet.getChild(UISubscriptions.class).setRendered(false);

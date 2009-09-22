@@ -73,7 +73,7 @@ public class UICLVContentSelector extends UIBaseNodeTreeSelector {
     LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
     String currentPortalName = Util.getUIPortal().getName();
     SessionProvider provider = Utils.getSessionProvider(this);
-    Node currentPortal = livePortalManagerService.getLivePortal(currentPortalName, provider);
+    Node currentPortal = livePortalManagerService.getLivePortal(provider, currentPortalName);
     Node sharedPortal = livePortalManagerService.getLiveSharedPortal(provider);
     treeBuilder.setCurrentPortal(currentPortal);
     treeBuilder.setSharedPortal(sharedPortal);

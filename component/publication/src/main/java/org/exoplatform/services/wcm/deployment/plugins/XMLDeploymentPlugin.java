@@ -83,6 +83,7 @@ public class XMLDeploymentPlugin extends DeploymentPlugin {
       Session session = sessionProvider.getSession(deploymentDescriptor.getTarget().getWorkspace(), repository);
       session.importXML(deploymentDescriptor.getTarget().getNodePath(), inputStream, ImportUUIDBehavior.IMPORT_UUID_CREATE_NEW );
       session.save();
+      session.logout();
       if(log.isInfoEnabled()) {
         log.info(deploymentDescriptor.getSourcePath() + " is deployed succesfully into "+deploymentDescriptor.getTarget().getNodePath());
       }

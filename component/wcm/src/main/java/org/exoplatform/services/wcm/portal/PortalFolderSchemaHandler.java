@@ -198,7 +198,7 @@ public class PortalFolderSchemaHandler extends BaseWebSchemaHandler {
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.core.BaseWebSchemaHandler#process(javax.jcr.Node)
    */
-  public void onCreateNode(final Node portalFolder, SessionProvider sessionProvider) throws Exception {
+  public void onCreateNode(SessionProvider sessionProvider, final Node portalFolder) throws Exception {
     Calendar calendar = new GregorianCalendar();
     Node jsFolder = portalFolder.addNode("js","exo:jsFolder");
     addMixin(jsFolder,"exo:owneable");

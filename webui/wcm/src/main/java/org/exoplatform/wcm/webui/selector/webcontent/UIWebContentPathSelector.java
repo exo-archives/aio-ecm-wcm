@@ -110,7 +110,7 @@ public class UIWebContentPathSelector extends UIBaseNodeTreeSelector implements 
     LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
     String currentPortalName = Util.getUIPortal().getName();
     SessionProvider provider = Utils.getSessionProvider(this);
-    currentPortal = livePortalManagerService.getLivePortal(currentPortalName,provider);
+    currentPortal = livePortalManagerService.getLivePortal(provider, currentPortalName);
     sharedPortal = livePortalManagerService.getLiveSharedPortal(provider);
     UIWebContentTreeBuilder builder = getChild(UIWebContentTreeBuilder.class);    
     builder.setCurrentPortal(currentPortal);

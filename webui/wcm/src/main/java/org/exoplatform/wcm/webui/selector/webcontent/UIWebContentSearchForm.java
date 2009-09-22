@@ -246,7 +246,7 @@ public class UIWebContentSearchForm extends UIForm {
     qCriteria.setKeyword(keyword);
     SiteSearchService siteSearch = getApplicationComponent(SiteSearchService.class);
     SessionProvider sessionProvider = Utils.getSessionProvider(this);
-    PaginatedQueryResult paginatedQueryResult = siteSearch.searchSiteContents(qCriteria, sessionProvider, pageSize); 
+    PaginatedQueryResult paginatedQueryResult = siteSearch.searchSiteContents(sessionProvider, qCriteria, pageSize); 
     sessionProvider.close();
     return paginatedQueryResult;
   }
@@ -268,7 +268,7 @@ public class UIWebContentSearchForm extends UIForm {
     qCriteria.setKeyword(keyword);
     SiteSearchService siteSearch = getApplicationComponent(SiteSearchService.class);
     SessionProvider sessionProvider = Utils.getSessionProvider(this);
-    PaginatedQueryResult paginatedQueryResult = siteSearch.searchSiteContents(qCriteria, sessionProvider, pageSize); 
+    PaginatedQueryResult paginatedQueryResult = siteSearch.searchSiteContents(sessionProvider, qCriteria, pageSize); 
     sessionProvider.close();
     return paginatedQueryResult;
   }
@@ -291,7 +291,7 @@ public class UIWebContentSearchForm extends UIForm {
     qCriteria.setKeyword(keyword);
     SiteSearchService siteSearchService = getApplicationComponent(SiteSearchService.class);
     SessionProvider sessionProvider = Utils.getSessionProvider(this);
-    PaginatedQueryResult paginatedQueryResult = siteSearchService.searchSiteContents(qCriteria, sessionProvider, pageSize); 
+    PaginatedQueryResult paginatedQueryResult = siteSearchService.searchSiteContents(sessionProvider, qCriteria, pageSize); 
     sessionProvider.close();
     return paginatedQueryResult;
   }
@@ -322,7 +322,7 @@ public class UIWebContentSearchForm extends UIForm {
     qCriteria.setFulltextSearchProperty(null);
     SiteSearchService siteSearch = getApplicationComponent(SiteSearchService.class);
     SessionProvider sessionProvider = Utils.getSessionProvider(this);
-    PaginatedQueryResult paginatedQueryResult = siteSearch.searchSiteContents(qCriteria, sessionProvider, pageSize); 
+    PaginatedQueryResult paginatedQueryResult = siteSearch.searchSiteContents(sessionProvider, qCriteria, pageSize); 
     sessionProvider.close();
     return paginatedQueryResult;
   }
@@ -345,7 +345,7 @@ public class UIWebContentSearchForm extends UIForm {
     qCriteria.setContentTypes(documentType.split(","));
     SiteSearchService siteSearch = getApplicationComponent(SiteSearchService.class);
     SessionProvider sessionProvider = Utils.getSessionProvider(this);
-    PaginatedQueryResult paginatedQueryResult = siteSearch.searchSiteContents(qCriteria, sessionProvider, pageSize); 
+    PaginatedQueryResult paginatedQueryResult = siteSearch.searchSiteContents(sessionProvider, qCriteria, pageSize); 
     sessionProvider.close();
     return paginatedQueryResult;
   }

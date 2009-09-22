@@ -109,7 +109,7 @@ public class SiteSearchServiceImpl implements SiteSearchService {
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.search.SiteSearchService#searchSiteContents(org.exoplatform.services.wcm.search.QueryCriteria, org.exoplatform.services.jcr.ext.common.SessionProvider, int)
    */
-  public WCMPaginatedQueryResult searchSiteContents( QueryCriteria queryCriteria, SessionProvider sessionProvider, int pageSize) throws Exception {
+  public WCMPaginatedQueryResult searchSiteContents(SessionProvider sessionProvider, QueryCriteria queryCriteria, int pageSize) throws Exception {
     ManageableRepository currentRepository = repositoryService.getCurrentRepository();
     NodeLocation location = configurationService.getLivePortalsLocation(currentRepository.getConfiguration().getName());    
     Session session = sessionProvider.getSession(location.getWorkspace(),currentRepository);

@@ -98,13 +98,12 @@ public class NewsletterSubscriptionHandler {
    * 
    * @throws Exception the exception
    */
-  public void add(String portalName,
-                  NewsletterSubscriptionConfig subscription, SessionProvider sessionProvider) throws Exception {
-   
+  public void add(SessionProvider sessionProvider, String portalName, NewsletterSubscriptionConfig subscription) throws Exception {
     log.info("Trying to add subcription " + subscription.getName());
+    Session session = null;
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
-      Session session = sessionProvider.getSession(workspace, manageableRepository);
+      session = sessionProvider.getSession(workspace, manageableRepository);
       String path = NewsletterConstant.generateCategoryPath(portalName);
       Node categoryNode = ((Node)session.getItem(path)).getNode(subscription.getCategoryName());
       Node subscriptionNode = categoryNode.addNode(subscription.getName(), NewsletterConstant.SUBSCRIPTION_NODETYPE);
@@ -121,6 +120,8 @@ public class NewsletterSubscriptionHandler {
     } catch (Exception e) {
       log.error("Add subcription " + subscription.getName() + " failed because of ", e.fillInStackTrace());
       throw e;
+    } finally {
+      if (session != null) session.logout();
     }
   }
   
@@ -131,7 +132,7 @@ public class NewsletterSubscriptionHandler {
    * @param subscription the subscription
    * @param sessionProvider the session provider
    */
-  public void edit(String portalName, NewsletterSubscriptionConfig subscription, SessionProvider sessionProvider) {
+  public void edit(SessionProvider sessionProvider, String portalName, NewsletterSubscriptionConfig subscription) {
     log.info("Trying to edit subcription " + subscription.getName());
     try {
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
@@ -157,8 +158,8 @@ public class NewsletterSubscriptionHandler {
    * @param subscription the subscription
    * @param sessionProvider the session provider
    */
-  public void delete(String portalName,
-                     String categoryName, NewsletterSubscriptionConfig subscription, SessionProvider sessionProvider) {
+  public void delete(SessionProvider sessionProvider, String portalName,
+                     String categoryName, NewsletterSubscriptionConfig subscription) {
     
     log.info("Trying to delete subcription " + subscription.getName());
     try {
@@ -186,9 +187,9 @@ public class NewsletterSubscriptionHandler {
    * @throws Exception the exception
    */
   public List<NewsletterSubscriptionConfig> getSubscriptionsByCategory(
+                                                                       SessionProvider sessionProvider, 
                                                                        String portalName,
-                                                                       String categoryName,
-                                                                       SessionProvider sessionProvider)
+                                                                       String categoryName)
                                                                        throws Exception{
     
     List<NewsletterSubscriptionConfig> listSubscriptions = new ArrayList<NewsletterSubscriptionConfig>();
@@ -222,9 +223,9 @@ public class NewsletterSubscriptionHandler {
    * @throws Exception the exception
    */
   public List<NewsletterSubscriptionConfig> getSubscriptionIdsByPublicUser(
+                                                                           SessionProvider sessionProvider, 
                                                                            String portalName,
-                                                                           String userEmail,
-                                                                           SessionProvider sessionProvider)
+                                                                           String userEmail)
                                                                            throws Exception{
     List<NewsletterSubscriptionConfig> listSubscriptions = new ArrayList<NewsletterSubscriptionConfig>();
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
@@ -258,10 +259,10 @@ public class NewsletterSubscriptionHandler {
    * @throws Exception the exception
    */
   public NewsletterSubscriptionConfig getSubscriptionsByName(
+                                                             SessionProvider sessionProvider, 
                                                              String portalName,
                                                              String categoryName,
-                                                             String subCriptionName,
-                                                             SessionProvider sessionProvider)
+                                                             String subCriptionName)
                                                              throws Exception{
       ManageableRepository manageableRepository = repositoryService.getRepository(repository);
       Session session = sessionProvider.getSession(workspace, manageableRepository);
@@ -289,10 +290,10 @@ public class NewsletterSubscriptionHandler {
    * @throws Exception the exception
    */
   public long getNumberOfNewslettersWaiting(
+                                            SessionProvider sessionProvider, 
                                             String portalName,
                                             String categoryName,
-                                            String subScriptionName,
-                                            SessionProvider sessionProvider)
+                                            String subScriptionName)
                                             throws Exception{
     ManageableRepository manageableRepository = repositoryService.getRepository(repository);
     Session session = sessionProvider.getSession(workspace, manageableRepository);

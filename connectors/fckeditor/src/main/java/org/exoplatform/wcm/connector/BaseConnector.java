@@ -133,7 +133,7 @@ public abstract class BaseConnector {
                                               String jcrPath,
                                               String command) throws Exception {
     SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
-    Node sharedPortalNode = livePortalManagerService.getLiveSharedPortal(repositoryName, sessionProvider);
+    Node sharedPortalNode = livePortalManagerService.getLiveSharedPortal(sessionProvider, repositoryName);
     sessionProvider.close();
     Node activePortalNode = getCurrentPortalNode(repositoryName,
                                                  jcrPath,
@@ -188,7 +188,7 @@ public abstract class BaseConnector {
     cacheControl.setNoCache(true);
     Node currentNode = null;
     SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
-    Node sharedPortal = livePortalManagerService.getLiveSharedPortal(repositoryName, sessionProvider);
+    Node sharedPortal = livePortalManagerService.getLiveSharedPortal(sessionProvider, repositoryName);
     Node currentPortalNode = getCurrentPortalNode(repositoryName,
                                                   jcrPath,
                                                   runningPortal,
@@ -486,7 +486,7 @@ public abstract class BaseConnector {
     List<Node> livePortaNodes = new ArrayList<Node>();
     SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
     try {
-      livePortaNodes = livePortalManagerService.getLivePortals(repositoryName, sessionProvider);
+      livePortaNodes = livePortalManagerService.getLivePortals(sessionProvider, repositoryName);
       if (sharedPortal != null)
         livePortaNodes.add(sharedPortal);
       for (Node portalNode : livePortaNodes) {
@@ -495,7 +495,7 @@ public abstract class BaseConnector {
           currentPortal = portalNode;
       }
       if (currentPortal == null)
-        currentPortal = livePortalManagerService.getLivePortal(repositoryName, runningPortal, sessionProvider);
+        currentPortal = livePortalManagerService.getLivePortal(sessionProvider, repositoryName, runningPortal);
       
       sessionProvider.close();
       return currentPortal;

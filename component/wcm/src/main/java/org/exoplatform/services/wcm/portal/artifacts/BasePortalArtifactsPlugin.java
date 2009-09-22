@@ -50,5 +50,5 @@ public abstract class BasePortalArtifactsPlugin extends XMLDeploymentPlugin {
    * 
    * @throws Exception the exception
    */
-  public abstract void deployToPortal(String portalName, SessionProvider sessionProvider) throws Exception;
+  public abstract void deployToPortal(SessionProvider sessionProvider, String portalName) throws Exception;
 }

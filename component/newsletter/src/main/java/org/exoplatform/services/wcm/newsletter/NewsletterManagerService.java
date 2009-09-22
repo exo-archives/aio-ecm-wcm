@@ -34,7 +34,6 @@ import org.exoplatform.commons.utils.ISO8601;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.xml.InitParams;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.config.RepositoryConfigurationException;
@@ -97,7 +96,7 @@ public class NewsletterManagerService {
 		categoryHandler = new NewsletterCategoryHandler(repositoryName, workspaceName);
 		subscriptionHandler = new NewsletterSubscriptionHandler(repositoryName, workspaceName);
 		entryHandler = new NewsletterEntryHandler(repositoryName, workspaceName);
-		manageUserHandler = new NewsletterManageUserHandler(repositoryName, workspaceName, SessionProviderFactory.createSystemProvider());
+		manageUserHandler = new NewsletterManageUserHandler(repositoryName, workspaceName);
 		publicUserHandler = new NewsletterPublicUserHandler(repositoryName, workspaceName);
 		templateHandler = new NewsletterTemplateHandler(repositoryName, workspaceName);
 	}
@@ -203,7 +202,7 @@ public class NewsletterManagerService {
 				}
 				message.setBCC(receiver);
 				message.setSubject(newsletterEntry.getProperty("exo:title").getString());
-				message.setBody(entryHandler.getContent(newsletterEntry));
+				message.setBody(entryHandler.getContent(sessionProvider, newsletterEntry));
 				message.setMimeType("text/html");
 
 				try {

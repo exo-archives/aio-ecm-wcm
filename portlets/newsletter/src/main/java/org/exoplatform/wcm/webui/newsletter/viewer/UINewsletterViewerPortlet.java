@@ -75,10 +75,10 @@ public class UINewsletterViewerPortlet extends UIPortletApplication {
       String[] confirms = event.getRequestContext().getRequestParameter(OBJECTID).split("/");
       List<String> listIds = new ArrayList<String>();
       SessionProvider sessionProvider = Utils.getSessionProvider(newsletterViewerPortlet);
-      boolean correctUser = newsletterForm.publicUserHandler.confirmPublicUser(confirms[0], confirms[1], NewsLetterUtil.getPortalName(), sessionProvider);
+      boolean correctUser = newsletterForm.publicUserHandler.confirmPublicUser(sessionProvider, confirms[0], confirms[1], NewsLetterUtil.getPortalName());
       if(correctUser){
         List<NewsletterSubscriptionConfig> listSubscriptions = 
-          newsletterForm.subcriptionHandler.getSubscriptionIdsByPublicUser(NewsLetterUtil.getPortalName(), confirms[0], sessionProvider);
+          newsletterForm.subcriptionHandler.getSubscriptionIdsByPublicUser(sessionProvider, NewsLetterUtil.getPortalName(), confirms[0]);
         for(NewsletterSubscriptionConfig subscriptionConfig : listSubscriptions){
           listIds.add(subscriptionConfig.getCategoryName() + "#" + subscriptionConfig.getName());
         }

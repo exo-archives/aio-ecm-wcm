@@ -68,7 +68,7 @@ public class TestNewsletterCategoryHandler extends BaseWCMTestCase {
 	 * @throws Exception the exception
 	 */
 	public void testAddCategory() throws Exception {
-		newsletterCategoryHandler.add("classic", newsletterCategoryConfig,sessionProvider);
+		newsletterCategoryHandler.add(sessionProvider, "classic", newsletterCategoryConfig);
 
 		Node node = categoriesNode.getNode(newsletterCategoryConfig.getName());
 		assertNotNull(node);
@@ -83,12 +83,12 @@ public class TestNewsletterCategoryHandler extends BaseWCMTestCase {
 	 * @throws Exception the exception
 	 */
 	public void testEditCategory()  throws Exception {
-		newsletterCategoryHandler.add("classic", newsletterCategoryConfig, sessionProvider);
+		newsletterCategoryHandler.add(sessionProvider, "classic", newsletterCategoryConfig);
 
 		newsletterCategoryConfig.setTitle("Sport News");
 		newsletterCategoryConfig.setDescription("Soccer,tennis,...");
 		newsletterCategoryConfig.setModerator("john");
-		newsletterCategoryHandler.edit("classic", newsletterCategoryConfig, sessionProvider);
+		newsletterCategoryHandler.edit(sessionProvider, "classic", newsletterCategoryConfig);
 		
 		// get node and edit
 		Node node = categoriesNode.getNode(newsletterCategoryConfig.getName());
@@ -103,8 +103,8 @@ public class TestNewsletterCategoryHandler extends BaseWCMTestCase {
 	 * @throws Exception the exception
 	 */
 	public void testDeleteCategory() throws Exception {
-		newsletterCategoryHandler.add("classic", newsletterCategoryConfig, sessionProvider);
-		newsletterCategoryHandler.delete("classic", newsletterCategoryConfig.getName(), sessionProvider);
+		newsletterCategoryHandler.add(sessionProvider, "classic", newsletterCategoryConfig);
+		newsletterCategoryHandler.delete(sessionProvider, "classic", newsletterCategoryConfig.getName());
 		assertEquals(0, categoriesNode.getNodes().getSize());
 	}
 	
@@ -114,8 +114,8 @@ public class TestNewsletterCategoryHandler extends BaseWCMTestCase {
 	 * @throws Exception the exception
 	 */
 	public void testGetCategoryByName() throws Exception {
-		newsletterCategoryHandler.add("classic", newsletterCategoryConfig, sessionProvider);
-		NewsletterCategoryConfig cat = newsletterCategoryHandler.getCategoryByName("classic", newsletterCategoryConfig.getName(), sessionProvider); 
+		newsletterCategoryHandler.add(sessionProvider, "classic", newsletterCategoryConfig);
+		NewsletterCategoryConfig cat = newsletterCategoryHandler.getCategoryByName(sessionProvider, "classic", newsletterCategoryConfig.getName()); 
 		assertEquals("newsletter01", cat.getName());
 	}
 	
@@ -131,7 +131,7 @@ public class TestNewsletterCategoryHandler extends BaseWCMTestCase {
 			newsletterCategoryConfig.setTitle("title_" + i);
 			newsletterCategoryConfig.setDescription("description_" + i);
 			newsletterCategoryConfig.setModerator("root");
-			newsletterCategoryHandler.add("classic", newsletterCategoryConfig, sessionProvider);
+			newsletterCategoryHandler.add(sessionProvider, "classic", newsletterCategoryConfig);
 		}
 		assertEquals(5, newsletterCategoryHandler.getListCategories("classic", sessionProvider).size());
 	}

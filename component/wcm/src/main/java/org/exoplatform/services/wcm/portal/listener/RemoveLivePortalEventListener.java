@@ -55,10 +55,10 @@ public class RemoveLivePortalEventListener extends Listener<DataStorageImpl, Por
     .getComponentInstanceOfType(ManageDriveService.class);    
     String drive = portalConfig.getName();        
     try {      
-      Node portal = livePortalManagerService.getLivePortal(portalConfig.getName(), sessionProvider);
+      Node portal = livePortalManagerService.getLivePortal(sessionProvider, portalConfig.getName());
       String repository = ((ManageableRepository)portal.getSession().getRepository()).getConfiguration().getName();      
       manageDriveService.removeDrive(drive, repository);
-      livePortalManagerService.removeLivePortal(portalConfig, sessionProvider);
+      livePortalManagerService.removeLivePortal(sessionProvider, portalConfig);
       log.info("Resources storage of portal: " + portalConfig.getName() + " was invalid");
     } catch (Exception e) {
       log.error("Exception when remove resources storage for portal: " + portalConfig.getName(),

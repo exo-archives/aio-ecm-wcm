@@ -83,7 +83,7 @@ public class TestNewsletterEntryHandler extends BaseWCMTestCase {
 			newsletterCategoryConfig.setTitle("CategoryTitle");
 			newsletterCategoryConfig.setDescription("CategoryDescription");
 			newsletterCategoryConfig.setModerator("root");
-			newsletterCategoryHandler.add("classic", newsletterCategoryConfig, sessionProvider);
+			newsletterCategoryHandler.add(sessionProvider, "classic", newsletterCategoryConfig);
 			session.save();
 			
 			categoryNode = categoriesNode.getNode("CategoryName");
@@ -93,7 +93,7 @@ public class TestNewsletterEntryHandler extends BaseWCMTestCase {
 			newsletterSubscriptionConfig.setName("SubscriptionName");
 			newsletterSubscriptionConfig.setTitle("SubscriptionTitle");
 			newsletterSubscriptionConfig.setDescription("SubscriptionDescription");
-			newsletterSubscriptionHandler.add("classic", newsletterSubscriptionConfig, sessionProvider);
+			newsletterSubscriptionHandler.add(sessionProvider, "classic", newsletterSubscriptionConfig);
 			
 			subscriptionNode = categoryNode.getNode("SubscriptionName");
 			
@@ -105,7 +105,7 @@ public class TestNewsletterEntryHandler extends BaseWCMTestCase {
 			}
 			session.save();
 		} else {
-			newsletterCategoryConfig = newsletterCategoryHandler.getCategoryByName("classic", "CategoryName", sessionProvider);
+			newsletterCategoryConfig = newsletterCategoryHandler.getCategoryByName(sessionProvider, "classic", "CategoryName");
 		}
 		isAdded = true;
 	}
@@ -117,7 +117,7 @@ public class TestNewsletterEntryHandler extends BaseWCMTestCase {
 	 */
 	public void testDeleteNewsletterEntry() throws Exception {
 		List<String> listIds = Arrays.asList(new String[]{"NewsletterEntry0", "NewsletterEntry1"});
-		newsletterEntryHandler.delete("classic", "CategoryName", "SubscriptionName", listIds, sessionProvider);
+		newsletterEntryHandler.delete(sessionProvider, "classic", "CategoryName", "SubscriptionName", listIds);
 		long countEntry = subscriptionNode.getNodes().getSize();
 		assertEquals(3, countEntry);
 	}
@@ -129,7 +129,7 @@ public class TestNewsletterEntryHandler extends BaseWCMTestCase {
 	 */
 	public void testGetNewsletterEntriesBySubscription() throws Exception {
 		List<NewsletterManagerConfig> listNewslleterEntries = newsletterEntryHandler
-		  .getNewsletterEntriesBySubscription("classic", "CategoryName", "SubscriptionName", sessionProvider);
+		  .getNewsletterEntriesBySubscription(sessionProvider, "classic", "CategoryName", "SubscriptionName");
 		assertEquals(3, listNewslleterEntries.size());
 	}
 	
@@ -140,7 +140,7 @@ public class TestNewsletterEntryHandler extends BaseWCMTestCase {
 	 */
 	public void testGetNewsletterEntry() throws Exception {
 		NewsletterManagerConfig newsletterManagerConfig = newsletterEntryHandler
-		  .getNewsletterEntry("classic", "CategoryName", "SubscriptionName", "NewsletterEntry2", sessionProvider);
+		  .getNewsletterEntry(sessionProvider, "classic", "CategoryName", "SubscriptionName", "NewsletterEntry2");
 		assertEquals("NewsletterEntry2", newsletterManagerConfig.getNewsletterName());
 	}
 	
@@ -152,7 +152,7 @@ public class TestNewsletterEntryHandler extends BaseWCMTestCase {
 	public void testGetNewsletterEntryByPath() throws Exception {
 		String path = "/sites content/live/classic/ApplicationData/NewsletterApplication/Categories/CategoryName/SubscriptionName/NewsletterEntry2";
 		NewsletterManagerConfig newsletterManagerConfig = newsletterEntryHandler
-		  .getNewsletterEntryByPath(path, sessionProvider);
+		  .getNewsletterEntryByPath(sessionProvider, path);
 		assertEquals("NewsletterEntry2", newsletterManagerConfig.getNewsletterName());
 	}
 	
@@ -163,7 +163,7 @@ public class TestNewsletterEntryHandler extends BaseWCMTestCase {
 	 */
 	public void testGetContent() throws Exception {
 		String strContent = newsletterEntryHandler
-		  .getContent("classic", "CategoryName", "SubscriptionName", "NewsletterEntry2", sessionProvider);
+		  .getContent(sessionProvider, "classic", "CategoryName", "SubscriptionName", "NewsletterEntry2");
 		assertTrue(strContent.indexOf("test content of this node NewsletterEntry2") > 0);
 	}
 	
@@ -176,7 +176,7 @@ public class TestNewsletterEntryHandler extends BaseWCMTestCase {
 		if(nodeTemp == null) 
 			nodeTemp = ((Node) session.getItem("/sites content/live/classic/ApplicationData/NewsletterApplication"))
 							.getNode("Categories").getNode("CategoryName").getNode("SubscriptionName").getNode("NewsletterEntry2");
-		String strContent = newsletterEntryHandler.getContent(nodeTemp);
+		String strContent = newsletterEntryHandler.getContent(sessionProvider, nodeTemp);
 		assertTrue(strContent.indexOf("test content of this node NewsletterEntry2") > 0);
 	}
 	

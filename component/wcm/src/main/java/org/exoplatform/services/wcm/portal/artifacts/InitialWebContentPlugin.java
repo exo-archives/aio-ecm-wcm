@@ -77,7 +77,7 @@ public class InitialWebContentPlugin extends BasePortalArtifactsPlugin {
    * @see org.exoplatform.services.wcm.portal.artifacts.BasePortalArtifactsPlugin#deployToPortal(java.lang.String, org.exoplatform.services.jcr.ext.common.SessionProvider)
    */
   @SuppressWarnings("unchecked")
-  public void deployToPortal(String portalName, SessionProvider sessionProvider) throws Exception {
+  public void deployToPortal(SessionProvider sessionProvider, String portalName) throws Exception {
     Iterator iterator = initParams.getObjectParamIterator();    
     while(iterator.hasNext()) {
       ObjectParameter objectParameter = (ObjectParameter)iterator.next();
@@ -98,7 +98,7 @@ public class InitialWebContentPlugin extends BasePortalArtifactsPlugin {
       session.importXML(realTargetFolder, inputStream, ImportUUIDBehavior.IMPORT_UUID_CREATE_NEW);
       session.save();           
     }
-    Node portalNode = livePortalManagerService.getLivePortal(portalName,sessionProvider);         
+    Node portalNode = livePortalManagerService.getLivePortal(sessionProvider, portalName);         
     configure(portalNode,portalName);
     portalNode.getSession().save();    
   }

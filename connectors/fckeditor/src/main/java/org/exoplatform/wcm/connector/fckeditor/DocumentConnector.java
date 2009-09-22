@@ -104,7 +104,7 @@ public class DocumentConnector extends BaseConnector implements ResourceContaine
       @ContextParam(ResourceDispatcher.CONTEXT_PARAM_BASE_URI) String baseURI) throws Exception {
     SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
     try {
-      Node sharedPortal = livePortalManagerService.getLiveSharedPortal(repositoryName, sessionProvider);
+      Node sharedPortal = livePortalManagerService.getLiveSharedPortal(sessionProvider, repositoryName);
       Node activePortal = getCurrentPortalNode(repositoryName, jcrPath, currentPortal, null);
       if (sharedPortal.getPath().equals(activePortal.getPath())) {
         documentLinkHandler.setCurrentPortal(currentPortal);

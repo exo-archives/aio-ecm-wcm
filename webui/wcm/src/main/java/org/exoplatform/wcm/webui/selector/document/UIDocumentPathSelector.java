@@ -99,7 +99,7 @@ public class UIDocumentPathSelector extends UIBaseNodeTreeSelector implements UI
     LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
     String currentPortalName = Util.getUIPortal().getName();
     SessionProvider sessionProvider = Utils.getSessionProvider(this);
-    currentPortal = livePortalManagerService.getLivePortal(currentPortalName, sessionProvider);
+    currentPortal = livePortalManagerService.getLivePortal(sessionProvider, currentPortalName);
     sharedPortal = livePortalManagerService.getLiveSharedPortal(sessionProvider);
     String repositoryName = ((ManageableRepository)(currentPortal.getSession().getRepository())).getConfiguration().getName();
     TemplateService templateService = getApplicationComponent(TemplateService.class);

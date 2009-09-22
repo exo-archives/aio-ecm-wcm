@@ -100,7 +100,7 @@ public class PageMetadataRequestFilter implements Filter {
     String pathInfo = req.getPathInfo();
     PageMetadataService metadataRegistry = getService(PageMetadataService.class);
     SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
-    HashMap<String,String> metadata = metadataRegistry.getPortalMetadata(pathInfo, sessionProvider);
+    HashMap<String,String> metadata = metadataRegistry.getPortalMetadata(sessionProvider, pathInfo);
     if(metadata != null) 
       req.setAttribute(PortalRequestContext.REQUEST_METADATA, metadata);
     sessionProvider.close();

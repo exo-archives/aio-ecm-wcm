@@ -141,7 +141,7 @@ public class XJavascriptService implements Startable {
    * 
    * @throws Exception the exception
    */
-  public void updatePortalJSOnModify(Node jsFile, SessionProvider sessionProvider) throws Exception {    
+  public void updatePortalJSOnModify(SessionProvider sessionProvider, Node jsFile) throws Exception {    
     String javascript = getJavascriptOfAllPortals(sessionProvider,jsFile.getPath());
     String modifiedJS = jsFile.getNode("jcr:content").getProperty("jcr:data").getString();
     javascript = javascript.concat(modifiedJS);
@@ -156,7 +156,7 @@ public class XJavascriptService implements Startable {
    * 
    * @throws Exception the exception
    */
-  public void updatePortalJSOnRemove(Node jsFile, SessionProvider sessionProvider) throws Exception {    
+  public void updatePortalJSOnRemove(SessionProvider sessionProvider, Node jsFile) throws Exception {    
     String javascript = getJavascriptOfAllPortals(sessionProvider,jsFile.getPath());
     addJavascript(javascript);
   }

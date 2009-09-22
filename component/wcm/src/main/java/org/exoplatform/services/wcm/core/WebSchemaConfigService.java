@@ -67,7 +67,7 @@ public interface WebSchemaConfigService {
    * 
    * @throws Exception the exception
    */
-  public void createSchema(final Node node, SessionProvider sessionProvider) throws Exception;
+  public void createSchema(SessionProvider sessionProvider, final Node node) throws Exception;
   
   /**
    * Update schema when a node is modified.
@@ -77,7 +77,7 @@ public interface WebSchemaConfigService {
    * 
    * @throws Exception the exception
    */
-  public void updateSchemaOnModify(final Node node, SessionProvider sessionProvider) throws Exception;
+  public void updateSchemaOnModify(SessionProvider sessionProvider, final Node node) throws Exception;
   
   /**
    * Update schema on when a node is removed.
@@ -87,5 +87,5 @@ public interface WebSchemaConfigService {
    * 
    * @throws Exception the exception
    */
-  public void updateSchemaOnRemove(final Node node, SessionProvider sessionProvider) throws Exception;
+  public void updateSchemaOnRemove(SessionProvider sessionProvider, final Node node) throws Exception;
 }

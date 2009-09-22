@@ -33,7 +33,7 @@ public interface WebSchemaHandler {
    * @return true, if successful
    * @throws Exception the exception
    */
-  public boolean matchHandler(final Node node, SessionProvider sessionProvider) throws Exception;
+  public boolean matchHandler(SessionProvider sessionProvider, final Node node) throws Exception;
   
   /**
    * Process schema when crete node
@@ -41,7 +41,7 @@ public interface WebSchemaHandler {
    * @param node the node
    * @throws Exception the exception
    */
-  public void onCreateNode(final Node node, SessionProvider sessionProvider) throws Exception;
+  public void onCreateNode(SessionProvider sessionProvider, final Node node) throws Exception;
   
   /**
    * Update schema when modify node
@@ -49,7 +49,7 @@ public interface WebSchemaHandler {
    * @param node the node
    * @throws Exception the exception
    */
-  public void onModifyNode(final Node node, SessionProvider sessionProvider) throws Exception;
+  public void onModifyNode(SessionProvider sessionProvider, final Node node) throws Exception;
   
   /**
    * Update schema before a node is removed
@@ -57,5 +57,5 @@ public interface WebSchemaHandler {
    * @param node the node
    * @throws Exception the exception
    */
-  public void onRemoveNode(final Node node, SessionProvider sessionProvider) throws Exception;
+  public void onRemoveNode(SessionProvider sessionProvider, final Node node) throws Exception;
 }

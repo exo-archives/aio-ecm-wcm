@@ -234,7 +234,7 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
     cssContent.setProperty(NodetypeConstant.JCR_LAST_MODIFIED, new Date().getTime());
     cssContent.setProperty(NodetypeConstant.JCR_DATA, "This is the default.css file.");
     SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
-    webSchemaConfigService.createSchema(cssNode, sessionProvider);
+    webSchemaConfigService.createSchema(sessionProvider, cssNode);
     
     Node result = (Node)session.getItem("/sites content/live/css/default.css");
     assertTrue(result.isNodeType(NodetypeConstant.EXO_CSS_FILE));
@@ -264,7 +264,7 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
     jsContent.setProperty(NodetypeConstant.JCR_LAST_MODIFIED, new Date().getTime());
     jsContent.setProperty(NodetypeConstant.JCR_DATA, "This is the default.js file.");
     SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
-    webSchemaConfigService.createSchema(jsNode, sessionProvider);
+    webSchemaConfigService.createSchema(sessionProvider, jsNode);
     
     Node result = (Node)session.getItem("/sites content/live/js/default.js");
     assertTrue(result.isNodeType(NodetypeConstant.EXO_JS_FILE));
@@ -284,7 +284,7 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
     webSchemaConfigService.addWebSchemaHandler(new WebContentSchemaHandler());
     Node webcontentNode = liveNode.addNode("webcontent", NodetypeConstant.EXO_WEBCONTENT);
     SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
-    webSchemaConfigService.createSchema(webcontentNode, sessionProvider);
+    webSchemaConfigService.createSchema(sessionProvider, webcontentNode);
     
     Node result = (Node)session.getItem("/sites content/live/webcontent");
     assertEquals("css", result.getNode("css").getName());
@@ -331,7 +331,7 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
       SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
       webSchemaConfigService.addWebSchemaHandler(new HTMLFileSchemaHandler());
       webSchemaConfigService.addWebSchemaHandler(new WebContentSchemaHandler());
-      webSchemaConfigService.createSchema(htmlFile, sessionProvider);
+      webSchemaConfigService.createSchema(sessionProvider, htmlFile);
       session.save();
       Node result = (Node)session.getItem("/sites content/live/html/htmlFile/default.html");
       assertTrue(result.isNodeType(NodetypeConstant.EXO_HTML_FILE));
@@ -392,14 +392,14 @@ public class TestWebSchemaConfigService extends BaseWCMTestCase {
       SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
       webSchemaConfigService.addWebSchemaHandler(new HTMLFileSchemaHandler());
       webSchemaConfigService.addWebSchemaHandler(new WebContentSchemaHandler());
-      webSchemaConfigService.createSchema(htmlFile, sessionProvider);
+      webSchemaConfigService.createSchema(sessionProvider, htmlFile);
       session.save();
       Node result = (Node)session.getItem("/sites content/live/html/htmlFile/default.html");
 
       assertTrue(result.isNodeType(NodetypeConstant.EXO_HTML_FILE));
       assertTrue(result.isNodeType(NodetypeConstant.EXO_OWNEABLE));
       assertEquals(result.getProperty(NodetypeConstant.EXO_PRESENTATION_TYPE).getString(), NodetypeConstant.EXO_HTML_FILE);
-      webSchemaConfigService.updateSchemaOnModify(htmlFile, sessionProvider);
+      webSchemaConfigService.updateSchemaOnModify(sessionProvider, htmlFile);
       
       Node webContent = (Node)session.getItem("/sites content/live/html/htmlFile");
       assertTrue(webContent.hasProperty("exo:links"));

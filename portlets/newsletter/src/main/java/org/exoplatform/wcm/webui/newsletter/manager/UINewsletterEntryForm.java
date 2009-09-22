@@ -280,7 +280,7 @@ public class UINewsletterEntryForm extends UIDialogForm {
           message.setBCC(receiver);
           message.setSubject(newsletterNode.getName()) ;
           NewsletterManagerService newsletterManagerService = newsletterEntryForm.getApplicationComponent(NewsletterManagerService.class); 
-          message.setBody(newsletterManagerService.getEntryHandler().getContent(newsletterNode)) ;
+          message.setBody(newsletterManagerService.getEntryHandler().getContent(Utils.getSessionProvider(newsletterEntryForm), newsletterNode)) ;
           message.setMimeType("text/html") ;
           try {
             mailService.sendMessage(message);

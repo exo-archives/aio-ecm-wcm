@@ -48,12 +48,12 @@ public class CSSFileHandler extends BaseWebSchemaHandler {
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.core.BaseWebSchemaHandler#matchHandler(javax.jcr.Node, org.exoplatform.services.jcr.ext.common.SessionProvider)
    */
-  public boolean matchHandler(Node node, SessionProvider sessionProvider) throws Exception {
+  public boolean matchHandler(SessionProvider sessionProvider, Node node) throws Exception {
     if(!matchNodeType(node))
       return false;
     if(!matchMimeType(node))
       return false;
-    isInPortalCSSFolder = matchPortalCSSFolder(node,sessionProvider);
+    isInPortalCSSFolder = matchPortalCSSFolder(sessionProvider, node);
     if(isInPortalCSSFolder)
       return true;
     if(!matchParentNodeType(node)) {      
@@ -116,8 +116,8 @@ public class CSSFileHandler extends BaseWebSchemaHandler {
    * 
    * @throws Exception the exception
    */
-  private boolean matchPortalCSSFolder(Node file, SessionProvider sessionProvider) throws Exception{
-    Node portal = findPortalNode(file,sessionProvider);    
+  private boolean matchPortalCSSFolder(SessionProvider sessionProvider, Node file) throws Exception{
+    Node portal = findPortalNode(sessionProvider, file);    
     if(portal == null) return false;
     WebSchemaConfigService schemaConfigService = getService(WebSchemaConfigService.class);
     PortalFolderSchemaHandler schemaHandler = schemaConfigService.getWebSchemaHandlerByType(PortalFolderSchemaHandler.class);            
@@ -128,7 +128,7 @@ public class CSSFileHandler extends BaseWebSchemaHandler {
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.core.BaseWebSchemaHandler#onCreateNode(javax.jcr.Node, org.exoplatform.services.jcr.ext.common.SessionProvider)
    */
-  public void onCreateNode(Node file, SessionProvider sessionProvider) throws Exception {  
+  public void onCreateNode(SessionProvider sessionProvider, Node file) throws Exception {  
     addMixin(file, "exo:cssFile");
     addMixin(file,"exo:owneable");
     file.setProperty("exo:presentationType","exo:cssFile");
@@ -140,22 +140,22 @@ public class CSSFileHandler extends BaseWebSchemaHandler {
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.core.BaseWebSchemaHandler#onModifyNode(javax.jcr.Node, org.exoplatform.services.jcr.ext.common.SessionProvider)
    */
-  public void onModifyNode(Node file, SessionProvider sessionProvider) throws Exception {
+  public void onModifyNode(SessionProvider sessionProvider, Node file) throws Exception {
     if(isInPortalCSSFolder) {
-      Node portal = findPortalNode(file,sessionProvider);
+      Node portal = findPortalNode(sessionProvider, file);
       XSkinService skinService = getService(XSkinService.class);      
-      skinService.updatePortalSkinOnModify(file,portal); 
+      skinService.updatePortalSkinOnModify(file, portal); 
     }          
   }
 
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.core.BaseWebSchemaHandler#onRemoveNode(javax.jcr.Node, org.exoplatform.services.jcr.ext.common.SessionProvider)
    */
-  public void onRemoveNode(Node file, SessionProvider sessionProvider) throws Exception {
+  public void onRemoveNode(SessionProvider sessionProvider, Node file) throws Exception {
     if(isInPortalCSSFolder){          
       XSkinService skinService = getService(XSkinService.class);
-      Node portal = findPortalNode(file,sessionProvider);
-      skinService.updatePortalSkinOnRemove(file,portal);
+      Node portal = findPortalNode(sessionProvider, file);
+      skinService.updatePortalSkinOnRemove(file, portal);
     }
   }    
 

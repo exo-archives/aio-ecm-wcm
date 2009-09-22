@@ -82,19 +82,19 @@ public class InitialNewsletterPlugin extends BasePortalArtifactsPlugin {
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.portal.artifacts.BasePortalArtifactsPlugin#deployToPortal(java.lang.String, org.exoplatform.services.jcr.ext.common.SessionProvider)
    */
-  public void deployToPortal(String portalName, SessionProvider sessionProvider) throws Exception {
+  public void deployToPortal(SessionProvider sessionProvider, String portalName) throws Exception {
     try {
       NewsletterCategoryHandler categoryHandler = newsletterManagerService.getCategoryHandler();
       for (NewsletterCategoryConfig categoryConfig : categoryConfigs) {
-        categoryHandler.add(portalName, categoryConfig, sessionProvider);
+        categoryHandler.add(sessionProvider, portalName, categoryConfig);
       }
 
       NewsletterSubscriptionHandler subscriptionHandler = newsletterManagerService.getSubscriptionHandler();
       for (NewsletterSubscriptionConfig subscriptionConfig : subscriptionConfigs) {
-        subscriptionHandler.add(portalName, subscriptionConfig, sessionProvider);
+        subscriptionHandler.add(sessionProvider, portalName, subscriptionConfig);
       }
       
-      Node portalNode = livePortalManagerService.getLivePortal(portalName, sessionProvider);
+      Node portalNode = livePortalManagerService.getLivePortal(sessionProvider, portalName);
       String userFolderPath = NewsletterConstant.generateUserPath(portalName);
       ExtendedNode userFolderNode = (ExtendedNode) ((Node) portalNode.getSession().getItem(userFolderPath)) ;
       if(userFolderNode.canAddMixin("exo:privilegeable")) 

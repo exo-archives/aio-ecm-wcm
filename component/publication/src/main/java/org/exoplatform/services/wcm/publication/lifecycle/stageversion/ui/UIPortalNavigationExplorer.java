@@ -81,10 +81,8 @@ public class UIPortalNavigationExplorer extends UIContainer {
     UIPortalApplication portalApplication = Util.getUIPortalApplication();
     LocaleConfig localeConfig = getApplicationComponent(LocaleConfigService.class).getLocaleConfig(portalApplication.getLocale().getLanguage());
     WCMService wcmService = getApplicationComponent(WCMService.class);
-    //ThreadLocalSessionProviderService threadLocalSessionProviderService = getApplicationComponent(ThreadLocalSessionProviderService.class);
-    //SessionProvider sessionProvider = threadLocalSessionProviderService.getSessionProvider(null);
     SessionProvider sessionProvider =WCMCoreUtils.getSessionProvider();
-    if(wcmService.isSharedPortal(portalName, sessionProvider)) {
+    if(wcmService.isSharedPortal(sessionProvider, portalName)) {
       UIPublicationTree tree = addChild(UIPublicationTree.class, null, "UIPortalTree");      
       for(String portal : this.runningPortals) {
         PageNavigation pageNavigation = getPortalNavigation(portal);

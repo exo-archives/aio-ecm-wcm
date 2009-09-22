@@ -35,7 +35,7 @@ public class WebContentSchemaHandler extends BaseWebSchemaHandler {
   protected String getHandlerNodeType() { return "exo:webContent"; }  
   protected String getParentNodeType() { return "nt:unstructured"; }
 
-  public boolean matchHandler(Node node, SessionProvider sessionProvider) throws Exception {    
+  public boolean matchHandler(SessionProvider sessionProvider, Node node) throws Exception {    
     String handlerNodeType = getHandlerNodeType();    
     String parentNodeType = getParentNodeType();
     if(!node.isNodeType(handlerNodeType)) 
@@ -45,7 +45,7 @@ public class WebContentSchemaHandler extends BaseWebSchemaHandler {
     return true;    
   }
 
-  public void onCreateNode(final Node webContent, SessionProvider sessionProvider) throws Exception {
+  public void onCreateNode(SessionProvider sessionProvider, final Node webContent) throws Exception {
     Session session = webContent.getSession();
     createSchema(webContent);
     session.save();

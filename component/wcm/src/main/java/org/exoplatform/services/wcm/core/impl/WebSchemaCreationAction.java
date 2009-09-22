@@ -45,7 +45,7 @@ public class WebSchemaCreationAction implements Action {
       (WebSchemaConfigService) container.getComponentInstanceOfType(WebSchemaConfigService.class);
     SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
     try {      
-      schemaConfigService.createSchema(node, sessionProvider);
+      schemaConfigService.createSchema(sessionProvider, node);
     } catch (Exception e) { 
       log.error("Error when creat web schema for node"+node.getPath() , e.fillInStackTrace());
     }       

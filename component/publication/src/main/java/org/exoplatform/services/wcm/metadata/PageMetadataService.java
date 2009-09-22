@@ -66,5 +66,5 @@ public interface PageMetadataService {
    * 
    * @throws Exception the exception
    */
-  public HashMap<String,String> getPortalMetadata(String uri, SessionProvider sessionProvider) throws Exception;    
+  public HashMap<String,String> getPortalMetadata(SessionProvider sessionProvider, String uri) throws Exception;    
 }

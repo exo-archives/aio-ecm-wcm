@@ -95,10 +95,10 @@ public class WebSchemaConfigServiceImpl implements WebSchemaConfigService, Start
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.core.WebSchemaConfigService#createSchema(javax.jcr.Node, org.exoplatform.services.jcr.ext.common.SessionProvider)
    */
-  public void createSchema(Node node, SessionProvider sessionProvider) throws Exception {
+  public void createSchema(SessionProvider sessionProvider, Node node) throws Exception {
     for (WebSchemaHandler handler: getAllWebSchemaHandler()) {      
-      if (handler.matchHandler(node, sessionProvider)) {               
-        handler.onCreateNode(node,sessionProvider);        
+      if (handler.matchHandler(sessionProvider, node)) {               
+        handler.onCreateNode(sessionProvider, node);        
       }
     }    
   }
@@ -106,10 +106,10 @@ public class WebSchemaConfigServiceImpl implements WebSchemaConfigService, Start
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.core.WebSchemaConfigService#updateSchemaOnModify(javax.jcr.Node, org.exoplatform.services.jcr.ext.common.SessionProvider)
    */
-  public void updateSchemaOnModify(Node node, SessionProvider sessionProvider) throws Exception {
+  public void updateSchemaOnModify(SessionProvider sessionProvider, Node node) throws Exception {
     for (WebSchemaHandler handler: getAllWebSchemaHandler()) {
-      if (handler.matchHandler(node, sessionProvider)) {
-        handler.onModifyNode(node, sessionProvider);        
+      if (handler.matchHandler(sessionProvider, node)) {
+        handler.onModifyNode(sessionProvider, node);        
       }
     }
   }
@@ -117,10 +117,10 @@ public class WebSchemaConfigServiceImpl implements WebSchemaConfigService, Start
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.core.WebSchemaConfigService#updateSchemaOnRemove(javax.jcr.Node, org.exoplatform.services.jcr.ext.common.SessionProvider)
    */
-  public void updateSchemaOnRemove(Node node, SessionProvider sessionProvider) throws Exception {
+  public void updateSchemaOnRemove(SessionProvider sessionProvider, Node node) throws Exception {
     for (WebSchemaHandler handler: getAllWebSchemaHandler()) {
-      if (handler.matchHandler(node, sessionProvider)) {
-        handler.onRemoveNode(node, sessionProvider);
+      if (handler.matchHandler(sessionProvider, node)) {
+        handler.onRemoveNode(sessionProvider, node);
         return;
       }
     }

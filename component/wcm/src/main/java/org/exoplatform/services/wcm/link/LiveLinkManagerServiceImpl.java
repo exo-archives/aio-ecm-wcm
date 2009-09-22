@@ -111,7 +111,7 @@ public class LiveLinkManagerServiceImpl implements LiveLinkManagerService {
    */
   public List<LinkBean> getBrokenLinks(String portalName) throws Exception {
     SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
-    Node portal = livePortalManagerService.getLivePortal(portalName, sessionProvider);
+    Node portal = livePortalManagerService.getLivePortal(sessionProvider, portalName);
     String path = portal.getPath();
     Session session = portal.getSession();
     List<LinkBean> listBrokenLinks = new ArrayList<LinkBean>();
@@ -184,7 +184,7 @@ public class LiveLinkManagerServiceImpl implements LiveLinkManagerService {
     SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
     Session session = null;
     try {
-      Node portal = livePortalManagerService.getLivePortal(portalName, sessionProvider);
+      Node portal = livePortalManagerService.getLivePortal(sessionProvider, portalName);
       String path = portal.getPath();
       session = portal.getSession();
       updateLinkStatus(session, "select * from exo:linkable where jcr:path like '" + path + "/%'"); 

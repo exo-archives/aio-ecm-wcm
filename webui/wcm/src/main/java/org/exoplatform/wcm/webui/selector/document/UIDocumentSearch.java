@@ -112,7 +112,7 @@ public class UIDocumentSearch extends UIForm {
     SiteSearchService siteSearchService = getApplicationComponent(SiteSearchService.class);
     int pageSize = 10;
     SessionProvider sessionProvider = Utils.getSessionProvider(this);
-    WCMPaginatedQueryResult wcmPaginatedQueryResult = siteSearchService.searchSiteContents(qCriteria, sessionProvider, pageSize);
+    WCMPaginatedQueryResult wcmPaginatedQueryResult = siteSearchService.searchSiteContents(sessionProvider, qCriteria, pageSize);
     return wcmPaginatedQueryResult;
   }
 

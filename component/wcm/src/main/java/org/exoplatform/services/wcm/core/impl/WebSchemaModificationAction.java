@@ -49,7 +49,7 @@ public class WebSchemaModificationAction implements Action{
       (WebSchemaConfigService) container.getComponentInstanceOfType(WebSchemaConfigService.class);
     SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
     try {            
-      schemaConfigService.updateSchemaOnModify(grandParent, sessionProvider);
+      schemaConfigService.updateSchemaOnModify(sessionProvider, grandParent);
     } catch (Exception e) { 
       log.error("Error when update schema when modify node: "+grandParent.getPath(), e.fillInStackTrace());
     }       

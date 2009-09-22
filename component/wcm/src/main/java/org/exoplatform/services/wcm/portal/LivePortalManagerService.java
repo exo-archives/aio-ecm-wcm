@@ -72,7 +72,7 @@ public interface LivePortalManagerService {
    * @return the live portal
    * @throws Exception the exception
    */
-  public Node getLivePortal(final String portalName, final SessionProvider sessionProvider) throws Exception;
+  public Node getLivePortal(final SessionProvider sessionProvider, final String portalName) throws Exception;
 
   /**
    * Gets the live shared portal on specific repository.
@@ -82,7 +82,7 @@ public interface LivePortalManagerService {
    * @return the live shared portal
    * @throws Exception the exception
    */
-  public Node getLiveSharedPortal(final String repository,final SessionProvider sessionProvider) throws Exception;
+  public Node getLiveSharedPortal(final SessionProvider sessionProvider, final String repository) throws Exception;
   
   public Node getLivePortalByChild(Node childNode) throws Exception;  
   /**
@@ -93,7 +93,7 @@ public interface LivePortalManagerService {
    * @return the live portals
    * @throws Exception the exception
    */
-  public List<Node> getLivePortals(final String repository, final SessionProvider sessionProvider) throws Exception;
+  public List<Node> getLivePortals(final SessionProvider sessionProvider, final String repository) throws Exception;
   
   /**
    * Gets the live portal on specific repository.
@@ -104,7 +104,7 @@ public interface LivePortalManagerService {
    * @return the live portal
    * @throws Exception the exception
    */
-  public Node getLivePortal(final String repository, final String portalName, final SessionProvider sessionProvider) throws Exception;
+  public Node getLivePortal(final SessionProvider sessionProvider, final String repository, final String portalName) throws Exception;
   
   /**
    * Adds the live portal on current repository.
@@ -113,7 +113,7 @@ public interface LivePortalManagerService {
    * @param sessionProvider the session provider
    * @throws Exception the exception
    */
-  public void addLivePortal(final PortalConfig portalConfig, final SessionProvider sessionProvider) throws Exception;
+  public void addLivePortal(final SessionProvider sessionProvider, final PortalConfig portalConfig) throws Exception;
   
   /**
    * Removes the live portal on current repository.
@@ -122,5 +122,5 @@ public interface LivePortalManagerService {
    * @param sessionProvider the session provider
    * @throws Exception the exception
    */
-  public void removeLivePortal(final PortalConfig portalConfig, final SessionProvider sessionProvider) throws Exception;
+  public void removeLivePortal(final SessionProvider sessionProvider, final PortalConfig portalConfig) throws Exception;
 }

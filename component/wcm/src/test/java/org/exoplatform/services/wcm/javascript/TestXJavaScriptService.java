@@ -334,7 +334,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	 */
 	public void testUpdatePortalJSOnModify_01() {
 		try {
-			javascriptService.updatePortalJSOnModify(null, sessionProvider);
+			javascriptService.updatePortalJSOnModify(sessionProvider, null);
 			fail();
 		} catch(Exception e) {
 			assertNotNull(e.getStackTrace());
@@ -350,7 +350,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 			Node root = session.getRootNode();
 			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
 			Node jsNode = webContent.getNode("js").getNode("default.js");
-			javascriptService.updatePortalJSOnModify(jsNode, null);
+			javascriptService.updatePortalJSOnModify(sessionProvider, jsNode);
 			fail();
 		} catch(Exception e) {
 			assertNotNull(e.getStackTrace());
@@ -367,7 +367,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME + "1", null, null, null);
 			createWebcontentNode(root, WEB_CONTENT_NODE_NAME + "2", null, null, null);
 			Node jsFolder = webContent.getNode("js");
-			javascriptService.updatePortalJSOnModify(jsFolder, sessionProvider);
+			javascriptService.updatePortalJSOnModify(sessionProvider, jsFolder);
 			fail();
 		} catch(Exception e) {
 			assertNotNull(e.getStackTrace());
@@ -386,7 +386,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 			Node webContent = createWebcontentNode(liveNode, WEB_CONTENT_NODE_NAME + "1", null, null, "");
 			createWebcontentNode(liveNode, WEB_CONTENT_NODE_NAME + "2", null, null, null);
 			Node jsNode = webContent.getNode("js").getNode("default.js");
-			javascriptService.updatePortalJSOnModify(jsNode, sessionProvider);
+			javascriptService.updatePortalJSOnModify(sessionProvider, jsNode);
 			session.save();
 			
 			configService = getService(JavascriptConfigService.class);
@@ -410,7 +410,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 			createWebcontentNode(liveNode, WEB_CONTENT_NODE_NAME + "2", null, null, null);
 			
 			Node jsNode = webContent.getNode("js").getNode("default.js");
-			javascriptService.updatePortalJSOnModify(jsNode, sessionProvider);
+			javascriptService.updatePortalJSOnModify(sessionProvider, jsNode);
 			session.save();
 			configService = getService(JavascriptConfigService.class);
 			String jsData = new String(configService.getMergedJavascript());
@@ -432,7 +432,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 			Node webContent = createWebcontentNode(liveNode, WEB_CONTENT_NODE_NAME + "1", null, null, "alert('testUpdatePortalJSOnModify...');");
 			createWebcontentNode(liveNode, WEB_CONTENT_NODE_NAME + "1", null, null, null);
 			Node jsNode = webContent.getNode("js").getNode("default.js");
-			javascriptService.updatePortalJSOnModify(jsNode, sessionProvider);
+			javascriptService.updatePortalJSOnModify(sessionProvider, jsNode);
 			session.save();
 			
 			configService = getService(JavascriptConfigService.class);
@@ -449,7 +449,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 	 */
 	public void testUpdatePortalJSOnRemove_01() {
 		try {
-			javascriptService.updatePortalJSOnRemove(null, sessionProvider);
+			javascriptService.updatePortalJSOnRemove(sessionProvider, null);
 			fail();
 		} catch(Exception e) {
 			assertNotNull(e.getStackTrace());
@@ -465,7 +465,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 			Node root = session.getRootNode();
 			Node webContent = createWebcontentNode(root, WEB_CONTENT_NODE_NAME, null, null, null);
 			Node jsNode = webContent.getNode("js").getNode("default.js");
-			javascriptService.updatePortalJSOnRemove(jsNode, null);
+			javascriptService.updatePortalJSOnRemove(sessionProvider, jsNode);
 			fail();
 		} catch(Exception e) {
 			assertNotNull(e.getStackTrace());
@@ -484,7 +484,7 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 			Node webContent = createWebcontentNode(liveNode, WEB_CONTENT_NODE_NAME + "1", null, null, null);
 			createWebcontentNode(root, WEB_CONTENT_NODE_NAME + "2", null, null, null);
 			Node jsFolder = webContent.getNode("js");
-			javascriptService.updatePortalJSOnRemove(jsFolder, sessionProvider);
+			javascriptService.updatePortalJSOnRemove(sessionProvider, jsFolder);
 			session.save();
 			String jsData = "";
 			configService = getService(JavascriptConfigService.class);
@@ -507,13 +507,13 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 			Node webContent = createWebcontentNode(liveNode, WEB_CONTENT_NODE_NAME + "1", null, null, "");
 			createWebcontentNode(liveNode, WEB_CONTENT_NODE_NAME + "2", null, null, null);
 			Node jsNode = webContent.getNode("js").getNode("default.js");
-			javascriptService.updatePortalJSOnModify(jsNode, sessionProvider);
+			javascriptService.updatePortalJSOnModify(sessionProvider, jsNode);
 			session.save();
 			String jsData = "";
 			configService = getService(JavascriptConfigService.class);
 			jsData = new String(configService.getMergedJavascript());
 			assertEquals("\nThis is the default.js file.", jsData);
-			javascriptService.updatePortalJSOnRemove(jsNode, sessionProvider);
+			javascriptService.updatePortalJSOnRemove(sessionProvider, jsNode);
 			session.save();
 			jsData = new String(configService.getMergedJavascript());
 			assertEquals("\nThis is the default.js file.", jsData);
@@ -534,13 +534,13 @@ public class TestXJavaScriptService extends BaseWCMTestCase {
 			Node webContent = createWebcontentNode(liveNode, WEB_CONTENT_NODE_NAME + "1", null, null, "alert('testUpdatePortalJSOnModify...');");
 			createWebcontentNode(liveNode, WEB_CONTENT_NODE_NAME + "2", null, null, null);
 			Node jsNode = webContent.getNode("js").getNode("default.js");
-			javascriptService.updatePortalJSOnModify(jsNode, sessionProvider);
+			javascriptService.updatePortalJSOnModify(sessionProvider, jsNode);
 			session.save();
 			String jsData = "";
 			configService = getService(JavascriptConfigService.class);
 			jsData = new String(configService.getMergedJavascript());
 			assertEquals("\nThis is the default.js file.alert('testUpdatePortalJSOnModify...');", jsData);
-			javascriptService.updatePortalJSOnRemove(jsNode, sessionProvider);
+			javascriptService.updatePortalJSOnRemove(sessionProvider, jsNode);
 			session.save();
 			jsData = new String(configService.getMergedJavascript());
 			assertEquals("\nThis is the default.js file.", jsData);

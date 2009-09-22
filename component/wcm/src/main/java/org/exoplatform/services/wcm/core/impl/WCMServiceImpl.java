@@ -40,7 +40,7 @@ public class WCMServiceImpl implements WCMService {
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.core.WCMService#getReferencedContent(java.lang.String, java.lang.String, java.lang.String, org.exoplatform.services.jcr.ext.common.SessionProvider)
    */
-  public Node getReferencedContent(String repository, String workspace, String nodeIdentifier, SessionProvider sessionProvider) throws Exception {
+  public Node getReferencedContent(SessionProvider sessionProvider, String repository, String workspace, String nodeIdentifier) throws Exception {
 		if(repository == null || workspace == null || nodeIdentifier == null) throw new ItemNotFoundException();
 		ExoContainer container = ExoContainerContext.getCurrentContainer();
 		RepositoryService repositoryService = (RepositoryService)container.getComponentInstanceOfType(RepositoryService.class);
@@ -62,7 +62,7 @@ public class WCMServiceImpl implements WCMService {
 	/* (non-Javadoc)
 	 * @see org.exoplatform.services.wcm.core.WCMService#isSharedPortal(java.lang.String, org.exoplatform.services.jcr.ext.common.SessionProvider)
 	 */
-	public boolean isSharedPortal(String portalName, SessionProvider sessionProvider) throws Exception {
+	public boolean isSharedPortal(SessionProvider sessionProvider, String portalName) throws Exception {
 		ExoContainer container = ExoContainerContext.getCurrentContainer();
 		LivePortalManagerService livePortalManagerService = (LivePortalManagerService)container.getComponentInstanceOfType(LivePortalManagerService.class);
 		boolean isShared = false;

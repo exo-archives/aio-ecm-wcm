@@ -49,7 +49,7 @@ public class HTMLFileSchemaHandler extends BaseWebSchemaHandler {
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.core.BaseWebSchemaHandler#matchHandler(javax.jcr.Node, org.exoplatform.services.jcr.ext.common.SessionProvider)
    */
-  public boolean matchHandler(Node node, SessionProvider sessionProvider) throws Exception {
+  public boolean matchHandler(SessionProvider sessionProvider, Node node) throws Exception {
     if(!matchNodeType(node))
       return false;
     if(!matchMimeType(node))
@@ -124,7 +124,7 @@ public class HTMLFileSchemaHandler extends BaseWebSchemaHandler {
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.core.BaseWebSchemaHandler#onCreateNode(javax.jcr.Node, org.exoplatform.services.jcr.ext.common.SessionProvider)
    */
-  public void onCreateNode(final Node file, SessionProvider sessionProvider) throws Exception {
+  public void onCreateNode(SessionProvider sessionProvider, final Node file) throws Exception {
     Session session = file.getSession();    
     Node webFolder = file.getParent();
     String fileName = file.getName();
@@ -155,7 +155,7 @@ public class HTMLFileSchemaHandler extends BaseWebSchemaHandler {
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.core.BaseWebSchemaHandler#onModifyNode(javax.jcr.Node, org.exoplatform.services.jcr.ext.common.SessionProvider)
    */
-  public void onModifyNode(final Node node, final SessionProvider sessionProvider) throws Exception {        
+  public void onModifyNode(final SessionProvider sessionProvider, final Node node) throws Exception {        
     Node parent = node.getParent();
     if(!parent.isNodeType("exo:webContent"))
       return;    

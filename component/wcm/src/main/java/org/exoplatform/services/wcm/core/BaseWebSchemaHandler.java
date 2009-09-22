@@ -40,7 +40,7 @@ public abstract class BaseWebSchemaHandler extends BaseComponentPlugin implement
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.core.WebSchemaHandler#matchHandler(javax.jcr.Node)
    */
-  public boolean matchHandler(Node node, SessionProvider sessionProvider) throws Exception {
+  public boolean matchHandler(SessionProvider sessionProvider, Node node) throws Exception {
     String handlerNodeType = getHandlerNodeType();    
     String parentNodeType = getParentNodeType();
     if(!node.getPrimaryNodeType().getName().equals(handlerNodeType)) 
@@ -53,17 +53,17 @@ public abstract class BaseWebSchemaHandler extends BaseComponentPlugin implement
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.core.WebSchemaHandler#onCreateNode(javax.jcr.Node)
    */
-  public void onCreateNode(Node node, SessionProvider sessionProvider) throws Exception { } 
+  public void onCreateNode(SessionProvider sessionProvider, Node node) throws Exception { } 
   
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.core.WebSchemaHandler#onModifyNode(javax.jcr.Node)
    */
-  public void onModifyNode(Node node, SessionProvider sessionProvider) throws Exception { }
+  public void onModifyNode(SessionProvider sessionProvider, Node node) throws Exception { }
 
   /* (non-Javadoc)
    * @see org.exoplatform.services.wcm.core.WebSchemaHandler#onRemoveNode(javax.jcr.Node)
    */
-  public void onRemoveNode(Node node, SessionProvider sessionProvider) throws Exception { }
+  public void onRemoveNode(SessionProvider sessionProvider, Node node) throws Exception { }
 
   /**
    * Gets the handler node type.
@@ -95,7 +95,7 @@ public abstract class BaseWebSchemaHandler extends BaseComponentPlugin implement
     return clazz.cast(container.getComponentInstanceOfType(clazz));
   }
 
-  protected Node findPortalNode(Node child, SessionProvider sessionProvider) throws Exception{    
+  protected Node findPortalNode(SessionProvider sessionProvider, Node child) throws Exception{    
     LivePortalManagerService livePortalManagerService = getService(LivePortalManagerService.class);                
     String portalName = null;
     for(String portalPath: livePortalManagerService.getLivePortalsPath()) {
@@ -105,7 +105,7 @@ public abstract class BaseWebSchemaHandler extends BaseComponentPlugin implement
       }      
     }
     if(portalName == null) return null;    
-    return livePortalManagerService.getLivePortal(portalName,sessionProvider);
+    return livePortalManagerService.getLivePortal(sessionProvider, portalName);
   }
 
   protected String getFileMimeType(Node file) throws Exception{

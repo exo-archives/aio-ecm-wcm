@@ -35,12 +35,12 @@ public class JSFileHandler extends BaseWebSchemaHandler {
   protected String getParentNodeType() { return "exo:jsFolder" ;}
   private boolean isPortalJSFolder = false;
 
-  public boolean matchHandler(Node node, SessionProvider sessionProvider) throws Exception {
+  public boolean matchHandler(SessionProvider sessionProvider, Node node) throws Exception {
     if(!matchNodeType(node)) 
       return false;
     if(!matchMimeType(node)) 
       return false;
-    isPortalJSFolder = isInPortalJSFolder(node,sessionProvider);
+    isPortalJSFolder = isInPortalJSFolder(sessionProvider, node);
     if(isPortalJSFolder) {
       return true; 
     }      
@@ -71,8 +71,8 @@ public class JSFileHandler extends BaseWebSchemaHandler {
     return false;
   }
 
-  private boolean isInPortalJSFolder(Node file, SessionProvider sessionProvider) throws Exception {
-    Node portal = findPortalNode(file,sessionProvider);
+  private boolean isInPortalJSFolder(SessionProvider sessionProvider, Node file) throws Exception {
+    Node portal = findPortalNode(sessionProvider, file);
     if(portal == null)  {      
       return false;
     }    
@@ -82,7 +82,7 @@ public class JSFileHandler extends BaseWebSchemaHandler {
     return file.getPath().startsWith(jsFolder.getPath());       
   }    
   
-  public void onCreateNode(Node file, SessionProvider sessionProvider) throws Exception {
+  public void onCreateNode(SessionProvider sessionProvider, Node file) throws Exception {
     addMixin(file, "exo:jsFile") ;
     addMixin(file,"exo:owneable");
     file.setProperty("exo:presentationType","exo:jsFile");
@@ -92,17 +92,17 @@ public class JSFileHandler extends BaseWebSchemaHandler {
     }    
   }  
 
-  public void onModifyNode(Node file, SessionProvider sessionProvider) throws Exception {
+  public void onModifyNode(SessionProvider sessionProvider, Node file) throws Exception {
     if(isPortalJSFolder) { 
       XJavascriptService javascriptService = getService(XJavascriptService.class);
-      javascriptService.updatePortalJSOnModify(file, sessionProvider);
+      javascriptService.updatePortalJSOnModify(sessionProvider, file);
     }
   }
 
-  public void onRemoveNode(Node file, SessionProvider sessionProvider) throws Exception { 
+  public void onRemoveNode(SessionProvider sessionProvider, Node file) throws Exception { 
     if(isPortalJSFolder) { 
       XJavascriptService javascriptService = getService(XJavascriptService.class);
-      javascriptService.updatePortalJSOnRemove(file, sessionProvider);
+      javascriptService.updatePortalJSOnRemove(sessionProvider, file);
     }
   }
 

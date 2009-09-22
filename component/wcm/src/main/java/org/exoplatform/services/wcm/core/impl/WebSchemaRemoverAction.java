@@ -44,7 +44,7 @@ public class WebSchemaRemoverAction implements Action{
       (WebSchemaConfigService) container.getComponentInstanceOfType(WebSchemaConfigService.class);    
     SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
     try {      
-      schemaConfigService.updateSchemaOnRemove(node, sessionProvider);
+      schemaConfigService.updateSchemaOnRemove(sessionProvider, node);
     } catch (Exception e) { 
       log.error("Error when update web schema before remove node: " + node.getPath() , e.fillInStackTrace());
     }       
