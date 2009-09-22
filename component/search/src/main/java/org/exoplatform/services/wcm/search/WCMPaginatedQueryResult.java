@@ -119,6 +119,10 @@ public class WCMPaginatedQueryResult extends PaginatedQueryResult {
     /**
      * We will improve the search manager in WCM 1.3
      * Since then, we use Edit mode to search and display contents.
+     * 
+     * This is maybe a problem:
+     * Search result will include draft nodes while searching in live mode.
+     * 
      */
     context.put(WCMComposer.FILTER_MODE, WCMComposer.MODE_EDIT);
     return publicationPlugin.getNodeView(displayNode, context);
