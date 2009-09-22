@@ -357,7 +357,7 @@ public class UISearchResult extends UIContainer {
 		try {
 			currentState = node.getProperty("publication:currentState").getString();
 		} catch (Exception e) {
-		  Utils.createPopupMessage(this, "UISearchForm.message.get-property", null, ApplicationMessage.ERROR);
+			return false;
 		}
 		if (Boolean.parseBoolean(obj.toString()) && DRAFT.equals(currentState))
 			return true;
