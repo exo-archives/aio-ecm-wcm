@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.jcr.nodetype.NoSuchNodeTypeException;
+
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.search.PaginatedQueryResult;
@@ -317,7 +319,13 @@ public class UIWebContentSearchForm extends UIForm {
         } else if(UIWebContentSearchForm.DOC_TYPE.equals(radioValue)) {
           String documentType = uiWCSearch.getUIStringInput(UIWebContentSearchForm.DOC_TYPE).getValue();
           if(uiWCSearch.haveEmptyField(uiApp, event, documentType)) return;
-          pagResult = uiWCSearch.searchWebContentByDocumentType(documentType, qCriteria, pageSize);
+          try{
+            pagResult = uiWCSearch.searchWebContentByDocumentType(documentType, qCriteria, pageSize);
+          }catch(NoSuchNodeTypeException ex){
+            uiApp.addMessage(new ApplicationMessage("UIWebContentSearchForm.invalid-nodeType", new Object[]{documentType}, ApplicationMessage.ERROR));
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+            return;
+          }
         }
       }else if(typeSearch.equals(UIWebContentPathSelector.DMSDOCUMENT)){
         if(UIWebContentSearchForm.SEARCH_BY_NAME.equals(radioValue)) {

@@ -164,6 +164,7 @@
   <UIWebContentSearchForm>
   	<empty-field>You don't choose value to search! Please choose term</empty-field>
 		<invalid-date>"To Date" have to greater than "From Date"</invalid-date>
+		<invalid-nodeType>Node type "{0}" is invalid! Please check again.</invalid-nodeType>
   </UIWebContentSearchForm>
   <UIDocumentSearchForm>
   	<action>
