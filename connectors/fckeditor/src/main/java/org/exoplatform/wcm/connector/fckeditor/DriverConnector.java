@@ -400,7 +400,7 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
   private Response buildXMLResponseForChildren(Node node, String command, String repositoryName, String filterBy) throws Exception {
     Element rootElement = FCKUtils.createRootElement(command, node, folderHandler.getFolderType(node));
     Document document = rootElement.getOwnerDocument();
-    Element folders = document.createElement("Foders");
+    Element folders = document.createElement("Folders");
     Element files = document.createElement("Files");
     
     for (NodeIterator iterator = node.getNodes(); iterator.hasNext();) {
