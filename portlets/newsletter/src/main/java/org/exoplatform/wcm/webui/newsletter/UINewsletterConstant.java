@@ -30,6 +30,9 @@ public class UINewsletterConstant {
   /** The Constant CATEGORY_FORM_POPUP_WINDOW. */
   public static final String CATEGORY_FORM_POPUP_WINDOW = "UICategoryFormPopupWindow";
   
+  /** The Constant CATEGORY_FORM_POPUP_WINDOW. */
+  public static final String REMOVE_MODERATORS_FORM_POPUP_WINDOW = "UIRemoveModeratorsFormPopupWindow";
+  
   /** The Constant SUBSCRIPTION_FORM_POPUP_WINDOW. */
   public static final String SUBSCRIPTION_FORM_POPUP_WINDOW = "UISubscriptionFormPopupWindow";
   

@@ -56,6 +56,7 @@ public class TreeNode {
    * @param deep the deep
    */
   public TreeNode(String path, String workSpaceName, Node node, int deep) {
+    this.name = null;
     node_ = node ;
     this.deep = deep;
     this.workSpaceName = workSpaceName;

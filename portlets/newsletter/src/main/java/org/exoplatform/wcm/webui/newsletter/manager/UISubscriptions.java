@@ -235,7 +235,7 @@ public class UISubscriptions extends UIForm {
       UISubscriptions subsriptions = event.getSource();
       UICategoryForm categoryForm = subsriptions.createUIComponent(UICategoryForm.class, null, null);
       categoryForm.setCategoryInfo(subsriptions.categoryConfig);
-      Utils.createPopupWindow(subsriptions, categoryForm, UINewsletterConstant.CATEGORY_FORM_POPUP_WINDOW, 450, 298);
+      Utils.createPopupWindow(subsriptions, categoryForm, UINewsletterConstant.CATEGORY_FORM_POPUP_WINDOW, 480, 300);
     }
   }
 
@@ -323,7 +323,7 @@ public class UISubscriptions extends UIForm {
       NewsletterSubscriptionConfig subscriptionConfig 
       = subsriptions.subscriptionHandler.getSubscriptionsByName(Utils.getSessionProvider(subsriptions), NewsLetterUtil.getPortalName(), subsriptions.categoryConfig.getName(), subId);
       subcriptionForm.setSubscriptionInfor(subscriptionConfig);
-      Utils.createPopupWindow(subsriptions, subcriptionForm, UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW, 450, 280);
+      Utils.createPopupWindow(subsriptions, subcriptionForm, UINewsletterConstant.SUBSCRIPTION_FORM_POPUP_WINDOW, 435, 230);
     }
   }
 

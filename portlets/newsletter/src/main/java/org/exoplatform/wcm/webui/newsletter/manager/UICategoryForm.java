@@ -16,6 +16,10 @@
  */
 package org.exoplatform.wcm.webui.newsletter.manager;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.ecm.webui.form.UIFormInputSetWithAction;
 import org.exoplatform.ecm.webui.selector.UIGroupMemberSelector;
@@ -51,6 +55,7 @@ import org.exoplatform.webui.form.validator.NameValidator;
 		events = {
 			@EventConfig(listeners = UICategoryForm.SaveActionListener.class),
 			@EventConfig(listeners = UICategoryForm.CancelActionListener.class, phase = Phase.DECODE),
+			@EventConfig(listeners = UICategoryForm.DeleteModeratorActionListener.class, phase = Phase.DECODE),
 			@EventConfig(listeners = UICategoryForm.SelectUserActionListener.class, phase = Phase.DECODE),
 			@EventConfig(listeners = UICategoryForm.SelectMemberActionListener.class, phase = Phase.DECODE)
 		}
@@ -92,7 +97,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent, UISelect
 		inputModerator.setEditable(false);
 		UIFormInputSetWithAction formCategoryModerator = new UIFormInputSetWithAction(FORM_CATEGORY_MODERATOR);
 		formCategoryModerator.addChild(inputModerator);
-		formCategoryModerator.setActionInfo(INPUT_CATEGORY_MODERATOR, new String[] {"SelectUser", "SelectMember"});
+		formCategoryModerator.setActionInfo(INPUT_CATEGORY_MODERATOR, new String[] {"SelectUser", "SelectMember", "DeleteModerator"});
 		formCategoryModerator.showActionInfo(true);
 		
 		inputCateName.addValidator(MandatoryValidator.class).addValidator(NameValidator.class);
@@ -110,7 +115,18 @@ public class UICategoryForm extends UIForm implements UIPopupComponent, UISelect
    * @see org.exoplatform.ecm.webui.selector.UISelectable#doSelect(java.lang.String, java.lang.Object)
    */
   public void doSelect(String selectField, Object value) throws Exception {
-    getUIStringInput(selectField).setValue((String) value);
+    UIFormInputSetWithAction formCategoryModerator = getChildById(FORM_CATEGORY_MODERATOR);
+    UIFormStringInput stringInput = formCategoryModerator.getChildById(selectField);
+    List<String> values = new ArrayList<String>();
+    values.addAll(Arrays.asList(stringInput.getValue().split(",")));
+    String result = (String) value;
+    if(!values.contains(result)) values.add(result);
+    result = "";
+    for(String str : values){
+      if(result.trim().length() > 0) result += ",";
+      result += str;
+    }
+    stringInput.setValue(result);
     Utils.closePopupWindow(this, popupId);
   }
 
@@ -159,6 +175,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent, UISelect
     UIFormInputSetWithAction inputSetWithAction = getChildById(FORM_CATEGORY_MODERATOR);
     UIFormStringInput inputModerator = inputSetWithAction.getChildById(INPUT_CATEGORY_MODERATOR);
     inputModerator.setValue(categoryConfig.getModerator());
+    
 	}
 	
 	/**
@@ -301,6 +318,20 @@ public class UICategoryForm extends UIForm implements UIPopupComponent, UISelect
       groupMemberSelector.setSourceComponent(categoryForm, new String[] {INPUT_CATEGORY_MODERATOR});
       Utils.createPopupWindow(categoryForm, groupMemberSelector, UINewsletterConstant.GROUP_SELECTOR_POPUP_WINDOW, 540, 300);
 	    categoryForm.setPopupId(UINewsletterConstant.GROUP_SELECTOR_POPUP_WINDOW);
+	  }
+	}
+	
+	public static class DeleteModeratorActionListener extends EventListener<UICategoryForm> {
+	  
+	  /* (non-Javadoc)
+	   * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+	   */
+	  public void execute(Event<UICategoryForm> event) throws Exception {
+	    UICategoryForm categoryForm = event.getSource();
+	    UIRemoveModerators removeModerators = categoryForm.createUIComponent(UIRemoveModerators.class, null, null);
+	    removeModerators.init(((UIFormStringInput)((UIFormInputSetWithAction)categoryForm.getChildById(FORM_CATEGORY_MODERATOR)).getChildById(INPUT_CATEGORY_MODERATOR)).getValue());
+	    Utils.createPopupWindow(categoryForm, removeModerators, UINewsletterConstant.REMOVE_MODERATORS_FORM_POPUP_WINDOW, 480, 300);
+	    categoryForm.setPopupId(UINewsletterConstant.REMOVE_MODERATORS_FORM_POPUP_WINDOW);
 	  }
 	}
 }

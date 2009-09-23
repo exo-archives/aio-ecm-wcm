@@ -14,6 +14,7 @@
       <Moderation>Modération</Moderation>
       <CreateLetter>Nouvelle Lettre</CreateLetter> 
       <UpdateNewsletter>Mise à jour de l'abonnement</UpdateNewsletter> 
+      <RemoveModerators>Supprimer</RemoveModerators>
     </action>
     <title>
     	<eXoNewsletter>eXo Newsletter</eXoNewsletter>
@@ -150,6 +151,7 @@
 		<title>
 			<SelectUser>Sélectionnez l'utilisateur</SelectUser>
 			<SelectMember>Sélectionnez le membre</SelectMember>
+			<DeleteModerator>Supprimer Modérateur</DeleteModerator>
 		</title>
 	</FormCategoryModerator>
 	
@@ -298,4 +300,10 @@
 			</label>
 		</dialog>
 	</WebContent>	
+	
+	<UIRemoveModeratorsFormPopupWindow>
+		<title>
+			<UIRemoveModerators>Retirer Modérateurs</UIRemoveModerators>
+		</title>
+	</UIRemoveModeratorsFormPopupWindow>
 </bundle>

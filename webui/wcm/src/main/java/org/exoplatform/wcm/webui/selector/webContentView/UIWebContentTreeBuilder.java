@@ -39,7 +39,6 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.wcm.core.NodetypeConstant;
 import org.exoplatform.wcm.webui.selector.UISelectPathPanel;
-import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.event.Event;
@@ -275,34 +274,38 @@ public class UIWebContentTreeBuilder extends UIContainer {
     List<TreeNode> list = new ArrayList<TreeNode>();
     addRootDrives(list);
     String workSpaceName = null;
-    String path = null;
     TreeNode treeNode = null;
+    NodeIterator nodeIterator = null;
+    Node node = null;
+    int j = 0;
+    int deep = 0;
     for(int i = 0; i < list.size(); i ++){
       treeNode = list.get(i);
-      Node node = treeNode.getNode();
-      path = treeNode.getTreePath();
+      node = treeNode.getNode();
       if(node != null){
-        int j = i + 1;
-        int deep = treeNode.getDeep() + 1;
-        if(treeNode.getDeep() == 1) workSpaceName = treeNode.getWorkSpaceName();
-        for(NodeIterator ni = node.getNodes(); ni.hasNext();){
+        j = i + 1;
+        deep = treeNode.getDeep() + 1;
+        if(deep == 2){
+          workSpaceName = treeNode.getWorkSpaceName();
+        }
+        nodeIterator = node.getNodes();
+        while(nodeIterator.hasNext()){
           try{
-            node = ni.nextNode();
-            node.getPrimaryNodeType().getName();
+            node = nodeIterator.nextNode();
             if (!node.isNodeType(NodetypeConstant.EXO_WEBCONTENT) && !node.isNodeType(NodetypeConstant.EXO_HIDDENABLE) &&
                 (node.isNodeType(NodetypeConstant.NT_UNSTRUCTURED) || node.isNodeType(NodetypeConstant.NT_FOLDER)) ) {
-              list.add(j, new TreeNode(path, workSpaceName, node, deep));
+              list.add(j, new TreeNode(treeNode.getTreePath(), workSpaceName, node, deep));
               j ++;
             }
           }catch(Exception ex){
-            org.exoplatform.wcm.webui.Utils.createPopupMessage(this, "UIMessageBoard.msg.get-tree-node", null, ApplicationMessage.ERROR);
+            ex.printStackTrace();
           }
         }
       }
     }
     return list;
   }
-  
+
   /**
    * The listener interface for receiving changeNodeAction events.
    * The class that is interested in processing a changeNodeAction
@@ -315,7 +318,7 @@ public class UIWebContentTreeBuilder extends UIContainer {
    * @see ChangeNodeActionEvent
    */
   static public class ChangeNodeActionListener extends EventListener<UIWebContentTreeBuilder> {
-    
+
     /* (non-Javadoc)
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
