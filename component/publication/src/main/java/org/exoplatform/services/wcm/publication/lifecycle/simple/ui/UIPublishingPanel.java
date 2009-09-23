@@ -21,6 +21,7 @@ import java.util.List;
 import javax.jcr.Node;
 
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.core.UIPopupComponent;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 import org.exoplatform.webui.form.UIForm;
 
@@ -34,7 +35,7 @@ import org.exoplatform.webui.form.UIForm;
     lifecycle = UIApplicationLifecycle.class,
     template = "classpath:groovy/wcm/webui/publication/lifecycle/simple/ui/UIPublishingPanel.gtmpl"
 )
-public class UIPublishingPanel extends UIForm {
+public class UIPublishingPanel extends UIForm implements UIPopupComponent {
 
   /** The current node. */
   private Node currentNode;
@@ -76,5 +77,15 @@ public class UIPublishingPanel extends UIForm {
     this.currentNode = node;
     UIPublicationComponentStatus publicationComponentStatus = getChild(UIPublicationComponentStatus.class);
     publicationComponentStatus.setNode(currentNode);
+  }
+
+	public void activate() throws Exception {
+	  // TODO Auto-generated method stub
+	  
+  }
+
+	public void deActivate() throws Exception {
+	  // TODO Auto-generated method stub
+	  
   }
 }
