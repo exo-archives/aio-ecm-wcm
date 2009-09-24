@@ -118,7 +118,9 @@ public class UICategoryForm extends UIForm implements UIPopupComponent, UISelect
     UIFormInputSetWithAction formCategoryModerator = getChildById(FORM_CATEGORY_MODERATOR);
     UIFormStringInput stringInput = formCategoryModerator.getChildById(selectField);
     List<String> values = new ArrayList<String>();
-    values.addAll(Arrays.asList(stringInput.getValue().split(",")));
+    String oldValue = stringInput.getValue();
+    if(oldValue != null && oldValue.length() > 0)
+      values.addAll(Arrays.asList(oldValue.split(",")));
     String result = (String) value;
     if(!values.contains(result)) values.add(result);
     result = "";
