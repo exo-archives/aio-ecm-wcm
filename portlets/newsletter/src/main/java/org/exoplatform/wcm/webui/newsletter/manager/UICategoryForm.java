@@ -330,6 +330,14 @@ public class UICategoryForm extends UIForm implements UIPopupComponent, UISelect
 	   */
 	  public void execute(Event<UICategoryForm> event) throws Exception {
 	    UICategoryForm categoryForm = event.getSource();
+	    UIFormInputSetWithAction formCategoryModerator = categoryForm.getChildById(FORM_CATEGORY_MODERATOR);
+	    UIFormStringInput stringInput = formCategoryModerator.getChildById(INPUT_CATEGORY_MODERATOR);
+	    if(stringInput.getValue() == null || stringInput.getValue().trim().length() < 1) {
+	      UIApplication uiApp = categoryForm.getAncestorOfType(UIApplication.class);
+	      uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.doNotHaveModerators", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
+	    };
 	    UIRemoveModerators removeModerators = categoryForm.createUIComponent(UIRemoveModerators.class, null, null);
 	    removeModerators.init(((UIFormStringInput)((UIFormInputSetWithAction)categoryForm.getChildById(FORM_CATEGORY_MODERATOR)).getChildById(INPUT_CATEGORY_MODERATOR)).getValue());
 	    Utils.createPopupWindow(categoryForm, removeModerators, UINewsletterConstant.REMOVE_MODERATORS_FORM_POPUP_WINDOW, 480, 300);

@@ -89,6 +89,7 @@
       <categoryNameIsAlreadyExist>This category's name is already exist!</categoryNameIsAlreadyExist>
       <inputModeratorEmpty>You must select user or member moderator!</inputModeratorEmpty>
       <error-add-category>Error when add or edit category.</error-add-category>
+      <doNotHaveModerators>Don't have any moderators!</doNotHaveModerators>
     </msg>
 		<label>
     	<CategoryName>Name</CategoryName>

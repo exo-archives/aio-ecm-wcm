@@ -44,7 +44,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
                  template = "app:/groovy/webui/newsletter/NewsletterManager/UIRemoveModerators.gtmpl",
                  events = {
                    @EventConfig(listeners = UIRemoveModerators.RemoveModeratorsActionListener.class),
-                   @EventConfig(listeners = UIRemoveModerators.CloseActionListener.class)
+                   @EventConfig(listeners = UIRemoveModerators.CancelActionListener.class)
                  }
 )
 
@@ -85,7 +85,7 @@ public class UIRemoveModerators extends UIForm {
     }
   }
   
-  static  public class CloseActionListener extends EventListener<UIRemoveModerators> {
+  static  public class CancelActionListener extends EventListener<UIRemoveModerators> {
     
     /* (non-Javadoc)
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)

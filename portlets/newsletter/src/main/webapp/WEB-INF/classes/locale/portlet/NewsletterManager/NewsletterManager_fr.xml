@@ -89,6 +89,7 @@
       <categoryNameIsAlreadyExist>Ce nom de catégorie existe déjà!</categoryNameIsAlreadyExist>
       <inputModeratorEmpty>Vous devez sélectionner un modérateur</inputModeratorEmpty>
       <error-add-category>Erreur lors de l'ajouter ou modifier catégorie.</error-add-category>
+      <doNotHaveModerators>Ne pas avoir d'animateurs!</doNotHaveModerators>
     </msg>
 		<label>
     	<CategoryName>Nom</CategoryName>
