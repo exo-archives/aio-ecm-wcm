@@ -17,10 +17,12 @@
 package org.exoplatform.wcm.webui.pclv;
 
 import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
-import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
@@ -38,9 +40,12 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.services.cms.taxonomy.TaxonomyService;
+import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleException;
+import org.exoplatform.services.ecm.publication.PublicationPlugin;
+import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.config.RepositoryConfigurationException;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.services.wcm.utils.PaginatedNodeIterator;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -62,6 +67,27 @@ import org.exoplatform.webui.event.EventListener;
 	events = @EventConfig(listeners = UIPCLVContainer.QuickEditActionListener.class)
 )
 public class UIPCLVContainer extends UIContainer {
+
+  /** The list noode. */
+  private List<Node> listNoode;
+  
+  /**
+   * Gets the list noode.
+   * 
+   * @return the listNoode
+   */
+  public List<Node> getListNoode() {
+    return listNoode;
+  }
+
+  /**
+   * Sets the list noode.
+   * 
+   * @param listNoode the listNoode to set
+   */
+  public void setListNoode(List<Node> listNoode) {
+    this.listNoode = listNoode;
+  }
 
   /**
    * Gets the header.
@@ -119,9 +145,10 @@ public class UIPCLVContainer extends UIContainer {
 			categoryPath = "";
 		
 		Node categoryNode = treeNode.getNode(categoryPath);
-		NodeIterator categoriesChildNode = this.getListSymlinkNode(	portletPreferences, categoryNode.getPath());
+		List<Node> nodes = this.getListSymlinkNode(	portletPreferences, categoryNode.getPath());
+		this.setListNoode(nodes);
 		int itemsPerPage = Integer.parseInt(portletPreferences.getValue(UIPCLVPortlet.ITEMS_PER_PAGE, null));
-		PaginatedNodeIterator paginatedNodeIterator = new PaginatedNodeIterator(categoriesChildNode, itemsPerPage);
+		PaginatedNodeIterator paginatedNodeIterator = new PaginatedNodeIterator(nodes, itemsPerPage);
 		getChildren().clear();
 
 		UIPCLVForm parameterizedContentListViewer = addChild(	UIPCLVForm.class, null, null);
@@ -257,11 +284,9 @@ public class UIPCLVContainer extends UIContainer {
 	 * 
 	 * @return the list symlink node
 	 * 
-	 * @throws RepositoryException the repository exception
-	 * @throws RepositoryConfigurationException the repository configuration exception
+	 * @throws Exception the exception
 	 */
-	private NodeIterator getListSymlinkNode(PortletPreferences portletPreferences, String categoryPath)	throws RepositoryException,
-																																																			RepositoryConfigurationException {
+	private List<Node> getListSymlinkNode(PortletPreferences portletPreferences, String categoryPath)	throws Exception {
 		String repository = portletPreferences.getValue(UIPCLVPortlet.REPOSITORY, "");
 		String worksapce = portletPreferences.getValue(UIPCLVPortlet.WORKSPACE, "");
 		String orderType = portletPreferences.getValue(UIPCLVPortlet.ORDER_TYPE, "");
@@ -274,16 +299,53 @@ public class UIPCLVContainer extends UIContainer {
 		ManageableRepository manageableRepository = repositoryService.getRepository(repository);
 		Session session = Utils.getSessionProvider(this).getSession(worksapce, manageableRepository);
 		QueryManager queryManager = session.getWorkspace().getQueryManager();
-		StringBuffer sqlQuery = new StringBuffer("select * from exo:taxonomyLink where jcr:path LIKE '").append(categoryPath)
-																																																		.append("/%'")
-																																																		.append(" AND NOT jcr:path LIKE '")
-																																																		.append(categoryPath)
-																																																		.append("/%/%'")
-																																																		.append(" "
-																																																				+ orderQuery);
+		StringBuffer sqlQuery = new StringBuffer("select * from exo:taxonomyLink where jcr:path LIKE '")
+  		.append(categoryPath)
+  		.append("/%'")
+  		.append(" AND NOT jcr:path LIKE '")
+  		.append(categoryPath)
+  		.append("/%/%'")
+  		.append(" " + orderQuery);
 		Query query = queryManager.createQuery(sqlQuery.toString(), Query.SQL);
 		QueryResult queryResult = query.execute();
 		NodeIterator iterator = queryResult.getNodes();
-		return iterator;
+		List<Node> listNodes = new ArrayList<Node>();
+		Node node = null;
+		Node viewNode = null;
+		while(iterator.hasNext()) {
+        node = iterator.nextNode();
+        viewNode = this.getNodeView(node);
+        if(viewNode != null) {
+          listNodes.add(viewNode);
+        }
+		}
+		return listNodes;
 	}
+	
+	/**
+	 * Gets the node view.
+	 * 
+	 * @param node the node
+	 * 
+	 * @return the node view
+	 * 
+	 * @throws Exception the exception
+	 */
+	private Node getNodeView(Node node) throws Exception {
+    PublicationService publicationService = getApplicationComponent(PublicationService.class);
+    HashMap<String, Object> context = new HashMap<String, Object>();
+    context.put(WCMComposer.FILTER_MODE, Utils.getCurrentMode());
+    String lifecyleName = null;
+      try {
+        lifecyleName = publicationService.getNodeLifecycleName(node);
+      } catch (NotInPublicationLifecycleException e) {
+        // You shouldn't throw popup message, because some exception often rise here.
+      }
+    if (lifecyleName == null) return node;
+      
+    PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins()
+      .get(lifecyleName);
+    Node viewNode = publicationPlugin.getNodeView(node, context);
+    return viewNode;
+  }
 }

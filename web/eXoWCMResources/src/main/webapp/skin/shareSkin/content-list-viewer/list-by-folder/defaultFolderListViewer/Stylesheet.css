@@ -82,6 +82,7 @@
     padding: 10px 0;
     height: 1%;
     overflow: hidden;
+    margin: 2px 0px;
 }
 
 .UICLVPortlet .UIContentListPresentationDefault .Caption .CaptionFunc .CaptionRefresh {
@@ -96,4 +97,8 @@
     color: #ff4200;
     font-weight: bold;
     font-size: 13px;
+}
+
+.OneColumnCLVTemplate .Contents .Column1 img {
+	width:51px;
 }

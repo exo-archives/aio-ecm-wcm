@@ -36,7 +36,7 @@
 			%>
 		    	<div class="Contents">			
 			<%
-			  def currentPageData = uicomponent.getCurrentPageData();							
+			  def currentPageData = uicomponent.getCurrentPageData();
 				for (def i = 0; i < currentPageData.size(); i++) {
 				  def node = currentPageData.get(i);
 				  def viewNode = uicomponent.getNodeView(node);
@@ -108,8 +108,9 @@
 			%>	</div> <%
 			}
 		%>
+		<div class="ClearBoth"><span></span></div>
 		<div class="CaptionFunc">
-			<% 
+			<% String labelRefreshAction = _ctx.appRes("UIContentListPresentationDefault.action.refresh");
 				if (uicomponent.showRefreshButton()) { 
 					String link = uicomponent.event("Refresh");
 					%>				
@@ -122,6 +123,7 @@
 						uicomponent.renderChild(UICustomizeablePaginator.class)
 				} 
 			%>
+			<div style="clear: left;"><span></span></div>
 		</div>
 	</div>
 </div>

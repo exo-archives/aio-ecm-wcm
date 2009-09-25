@@ -21,13 +21,11 @@ import java.util.Map;
 
 import javax.jcr.Node;
 
-import org.apache.commons.logging.Log;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleException;
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
-import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.wcm.publication.lifecycle.simple.SimplePublicationPlugin;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
 import org.picocontainer.Startable;
@@ -49,9 +47,6 @@ public class WCMPublicationServiceImpl implements WCMPublicationService, Startab
 
   /** The content composer. */
   private WCMComposer wcmComposer;
-  
-  /** The log. */
-  private static Log log = ExoLogger.getLogger(WCMPublicationServiceImpl.class);
   
   /**
    * Instantiates a new WCM publication service.
@@ -264,7 +259,7 @@ public class WCMPublicationServiceImpl implements WCMPublicationService, Startab
         currentState = node.getProperty("publication:currentState").getString();
       }
     } catch (Exception e) {
-      log.error("Error when perform getContentState: ", e.fillInStackTrace());
+      //log.error("Error when perform getContentState: ", e.fillInStackTrace());
     }
     return currentState;
 	}

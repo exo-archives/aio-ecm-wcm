@@ -175,7 +175,7 @@ public class UISearchResult extends UIContainer {
 			queryCriteria.setSearchWebpage(true);
 			queryCriteria.setSearchDocument(true);
 			queryCriteria.setSearchWebContent(true);
-			if (Utils.isLiveMode()) {
+			if (Boolean.parseBoolean(Utils.getCurrentMode())) {
         queryCriteria.setLiveMode(true);
       } else {
         queryCriteria.setLiveMode(false);
@@ -194,6 +194,7 @@ public class UISearchResult extends UIContainer {
 				setSuggestionURL(suggestionURL);
 				setPageList(paginatedQueryResult);
 			} catch (Exception e) {
+			  e.printStackTrace();
 				UIApplication uiApp = getAncestorOfType(UIApplication.class);
 				uiApp.addMessage(new ApplicationMessage(UISearchForm.MESSAGE_NOT_SUPPORT_KEYWORD,
 																								null,

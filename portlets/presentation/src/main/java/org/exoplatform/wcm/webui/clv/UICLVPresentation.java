@@ -207,7 +207,7 @@ import org.exoplatform.webui.event.EventListener;
    */
   public boolean showDraftButton(Node node) throws Exception {
     String currentState = null;
-    if (Utils.isLiveMode()) return false;
+    if (Boolean.parseBoolean(Utils.getCurrentMode())) return false;
     try {
       currentState = node.getProperty("publication:currentState").getString();
     } catch (Exception e) {

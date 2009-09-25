@@ -52,6 +52,7 @@
 .UIPCLVPortlet .CaptionFunc {
     height: 1%;
     overflow: hidden;
+    margin: 2px 0px;
 }
 
 .UIPCLVPortlet .CaptionFunc .CaptionRefresh {

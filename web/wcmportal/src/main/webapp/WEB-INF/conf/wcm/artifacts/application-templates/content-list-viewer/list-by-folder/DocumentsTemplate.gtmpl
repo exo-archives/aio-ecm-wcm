@@ -116,6 +116,7 @@
 	</div>
 	<div class="CaptionFunc">
 		<% 
+		String labelRefreshAction = _ctx.appRes("UIContentListPresentationDefault.action.refresh");
 			if (uicomponent.showRefreshButton()) { 
 				String link = uicomponent.event("Refresh");
 				%>				
@@ -124,9 +125,10 @@
 					</div>
 				<% 
 			}
-			if (uicomponent.showPaginator()) { 
-					uicomponent.renderChild(UICustomizeablePaginator.class)
+			if (uicomponent.showPaginator()) {
+				uicomponent.renderChild(UICustomizeablePaginator.class);
 			} 
 		%>
+		<div style="clear: left"><span></span></div>
 	</div>
 </div>

@@ -185,8 +185,6 @@ public class SiteSearchServiceImpl implements SiteSearchService {
     orderBy(queryCriteria, queryBuilder);
     String queryStatement = queryBuilder.createQueryStatement();
     
-    System.out.println("\n\n\n\n-----------------> querry of search : \n" + queryStatement);
-    
     Query query = queryManager.createQuery(queryStatement, Query.SQL);
     return query.execute();
   }

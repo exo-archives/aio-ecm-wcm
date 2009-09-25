@@ -123,6 +123,7 @@
 						uicomponent.renderChild(UICustomizeablePaginator.class)
 				} 
 			%>
+			<div style="clear: left;"><span></span></div>
 		</div>
 	</div>
 </div>

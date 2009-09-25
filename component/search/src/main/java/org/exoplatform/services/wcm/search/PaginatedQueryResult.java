@@ -16,10 +16,12 @@
  */
 package org.exoplatform.services.wcm.search;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
 import javax.jcr.query.QueryResult;
 import javax.jcr.query.Row;
 import javax.jcr.query.RowIterator;
@@ -37,11 +39,34 @@ import org.exoplatform.services.wcm.utils.PaginatedNodeIterator;
  * Oct 17, 2008
  */
 public class PaginatedQueryResult extends PaginatedNodeIterator {
+  
   /** The query criteria. */
   protected QueryCriteria queryCriteria; 
 
   /** The row iterator. */  
   protected QueryResult queryResult;
+  
+  /** The iterator. */
+  private NodeIterator iterator;
+  
+  /**
+   * Gets the iterator.
+   * 
+   * @return the iterator
+   */
+  public NodeIterator getIterator() {
+    return iterator;
+  }
+
+  /**
+   * Sets the iterator.
+   * 
+   * @param iterator the iterator to set
+   */
+  public void setIterator(NodeIterator iterator) {
+    this.iterator = iterator;
+  }
+
   /**
    * Instantiates a new paginated query result.
    * 
@@ -62,10 +87,18 @@ public class PaginatedQueryResult extends PaginatedNodeIterator {
    */
   public PaginatedQueryResult(QueryResult queryResult,int pageSize) throws Exception{
     super(pageSize);         
-    this.nodeIterator = queryResult.getNodes();
-    this.setAvailablePage((int)nodeIterator.getSize());    
+    NodeIterator nodeIterator = queryResult.getNodes();
+    this.setIterator(nodeIterator);
+    Node node = null;
+    nodes = new ArrayList<Node>();
+    while(nodeIterator.hasNext()) {
+      node = nodeIterator.nextNode();
+      nodes.add(node);
+    }
+    this.setAvailablePage(nodes.size());
     this.queryResult = queryResult;    
-  }      
+  }
+
   /* (non-Javadoc)
    * @see org.exoplatform.wcm.webui.paginator.PaginatedNodeIterator#populateCurrentPage(int)
    */
@@ -77,9 +110,10 @@ public class PaginatedQueryResult extends PaginatedNodeIterator {
     checkAndSetPosition(page);            
     currentListPage_ = new CopyOnWriteArrayList<ResultNode>();
     int count = 0;    
-    RowIterator iterator = queryResult.getRows();    
-    while (nodeIterator.hasNext()) {      
-      Node node = nodeIterator.nextNode();      
+    RowIterator iterator = queryResult.getRows();
+    NodeIterator nodeIterator = this.getIterator();
+    while(nodeIterator.hasNext()) {
+    Node node = nodeIterator.nextNode();      
       Node viewNode = filterNodeToDisplay(node); 
       
       if(viewNode != null) {
@@ -103,6 +137,7 @@ public class PaginatedQueryResult extends PaginatedNodeIterator {
    * Filter node to display.
    * 
    * @param node the node
+   * 
    * @return the node
    * 
    * @throws Exception the exception

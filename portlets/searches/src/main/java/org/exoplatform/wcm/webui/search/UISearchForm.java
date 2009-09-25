@@ -261,7 +261,7 @@ public class UISearchForm extends UIForm {
 				queryCriteria.setSearchWebContent(false);
 			}
 			queryCriteria.setSearchWebpage(Boolean.parseBoolean(pageChecked));
-			if (Utils.isLiveMode()) {
+			if (Boolean.parseBoolean(Utils.getCurrentMode())) {
 				queryCriteria.setLiveMode(true);
 			} else {
 				queryCriteria.setLiveMode(false);

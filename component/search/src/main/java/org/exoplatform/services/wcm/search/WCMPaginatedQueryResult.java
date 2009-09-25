@@ -32,6 +32,7 @@ import org.exoplatform.services.wcm.publication.WCMComposer;
  * Oct 21, 2008
  */
 public class WCMPaginatedQueryResult extends PaginatedQueryResult {
+  
   /** The query time. */
   private long queryTime;
   
@@ -116,6 +117,7 @@ public class WCMPaginatedQueryResult extends PaginatedQueryResult {
     }
     PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins().get(lifecycleName);
     HashMap<String, Object> context = new HashMap<String, Object>();
+    
     /**
      * We will improve the search manager in WCM 1.3
      * Since then, we use Edit mode to search and display contents.

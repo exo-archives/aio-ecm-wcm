@@ -45,12 +45,14 @@
 						def currentPageData = uicomponent.getCurrentPageData();
 						for (node in currentPageData) {
 						  def viewNode = uicomponent.getNodeView(node);
-							if (viewNode == null)	continue;
+							if (viewNode == null) {
+							  continue;
+							}
 							
 						  String itemName = viewNode.getName();
 						  String itemLink = uicomponent.generateLink(node);
 							String itemSummary = uicomponent.getSummary(viewNode);
-					    String itemTitle = uicomponent.getTitle(viewNode);
+					      String itemTitle = uicomponent.getTitle(viewNode);
 							String itemDateCreated = uicomponent.getCreatedDate(viewNode);
 							String imgSrc = uicomponent.getIllustrativeImage(viewNode);
 							
@@ -67,6 +69,7 @@
 								itemName = itemTitle;
 							
 							if(count == 0) { 
+							  count = 1;
 								%>
 									<div class="HotNews">
 										<%
@@ -96,7 +99,6 @@
 										<div class="ClearRight"><span></span></div>
 									</div>
 								<%
-								count = 1;
 							} else {
 								%>
 									<div class="NormalNews">
@@ -152,6 +154,7 @@
 							uicomponent.renderChild(UICustomizeablePaginator.class)
 						} 
 					%>
+					<div style="clear:left"><span></span></div>
 				</div>
 			<%
 		uiform.end()

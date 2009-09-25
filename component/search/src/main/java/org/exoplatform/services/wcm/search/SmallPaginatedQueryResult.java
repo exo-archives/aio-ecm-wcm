@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
 import javax.jcr.query.QueryResult;
 import javax.jcr.query.Row;
 import javax.jcr.query.RowIterator;
@@ -52,27 +53,30 @@ public class SmallPaginatedQueryResult extends WCMPaginatedQueryResult{
    * @param queryResult the query result
    * @param queryCriteria the query criteria
    * @param pageSize the page size
+   * @throws Exception 
    * 
    * @throws Exception the exception
    */
-  public SmallPaginatedQueryResult(QueryResult queryResult, QueryCriteria queryCriteria, int pageSize) throws Exception{
-    super(queryResult,queryCriteria,pageSize);    
-    RowIterator rowIterator = queryResult.getRows();    
-    for(;nodeIterator.hasNext();) {
-      Node viewNode = filterNodeToDisplay(nodeIterator.nextNode());
-      if(viewNode == null) continue;  
-      //Skip back 1 position to get current row mapping to the node
-      long position = nodeIterator.getPosition();
-      long rowPosition = rowIterator.getPosition();        
-      long skipNum = position - rowPosition;
-      rowIterator.skip(skipNum -1);        
-      Row row = rowIterator.nextRow();
-      ResultNode resultNode = new ResultNode(viewNode,row);
-      arrayList.addIfAbsent(resultNode);
-    }
-    setPageSize(pageSize);
-    setAvailablePage(arrayList.size());    
-    getAvailablePage();
+  public SmallPaginatedQueryResult(QueryResult queryResult, QueryCriteria queryCriteria, int pageSize) throws Exception {
+    super(queryResult,queryCriteria,pageSize);   
+      RowIterator rowIterator = queryResult.getRows();
+      NodeIterator nodeIterator = queryResult.getNodes();
+      while(nodeIterator.hasNext()) {
+        Node node = nodeIterator.nextNode();
+        Node viewNode = filterNodeToDisplay(node);
+        if(viewNode == null) continue;  
+        //Skip back 1 position to get current row mapping to the node
+        long position = nodeIterator.getPosition();
+        long rowPosition = rowIterator.getPosition();        
+        long skipNum = position - rowPosition;
+        rowIterator.skip(skipNum -1);        
+        Row row = rowIterator.nextRow();
+        ResultNode resultNode = new ResultNode(viewNode,row);
+        arrayList.addIfAbsent(resultNode);
+      }
+      setPageSize(pageSize);
+      setAvailablePage(arrayList.size());    
+      getAvailablePage();
   }
 
   /* (non-Javadoc)

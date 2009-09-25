@@ -234,7 +234,7 @@
     </preference>
     <preference>
     	<name>paginatorTemplatePath</name>
-    	<value></value>
+    	<value>/exo:ecm/views/templates/Content List Viewer/paginators/UIPaginatorDefault.gtmpl</value>
     	<read-only>false</read-only>
     </preference>	    
     <preference>
@@ -330,7 +330,7 @@
     </preference>
     <preference>
     	<name>paginatorTemplatePath</name>
-    	<value></value>
+    	<value>/exo:ecm/views/templates/Content List Viewer/paginators/UIPaginatorDefault.gtmpl</value>
     	<read-only>false</read-only>
     </preference>	    
     <preference>
@@ -426,7 +426,7 @@
     </preference>
     <preference>
     	<name>paginatorTemplatePath</name>
-    	<value></value>
+    	<value>/exo:ecm/views/templates/Content List Viewer/paginators/UIPaginatorDefault.gtmpl</value>
     	<read-only>false</read-only>
     </preference>	    
     <preference>
@@ -522,7 +522,7 @@
     </preference>
     <preference>
     	<name>paginatorTemplatePath</name>
-    	<value></value>
+    	<value>/exo:ecm/views/templates/Content List Viewer/paginators/UIPaginatorDefault.gtmpl</value>
     	<read-only>false</read-only>
     </preference>	    
     <preference>
@@ -755,7 +755,7 @@
 		</preference>
 		<preference>
 			<name>itemsPerPage</name>
-			<value>10</value>
+			<value>5</value>
 			<read-only>false</read-only>
 		</preference>
 		<preference>

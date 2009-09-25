@@ -94,7 +94,7 @@ public abstract class UICLVContainer extends UIContainer implements RefreshDeleg
    * @see org.exoplatform.webui.core.UIComponent#processRender(org.exoplatform.webui.application.WebuiRequestContext)
    */
   public void processRender(WebuiRequestContext context) throws Exception {
-    if(!Utils.isLiveMode() || context.getFullRender()) {
+    if(!Boolean.parseBoolean(Utils.getCurrentMode()) || context.getFullRender()) {
       init(); 
     }    
     super.processRender(context);

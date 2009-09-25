@@ -208,8 +208,15 @@ public class UIPCLVForm extends UIForm {
 	public boolean showPaginator() throws Exception {
 		PortletPreferences portletPreferences = getPortletPreferences();
 		String itemsPerPage = portletPreferences.getValue(UIPCLVPortlet.ITEMS_PER_PAGE, null);
-		int totalItems = uiPaginator.getTotalItems();
-		if (totalItems > Integer.parseInt(itemsPerPage)) {
+		UIPCLVContainer container = getAncestorOfType(UIPCLVContainer.class);
+		List<Node> nodes = container.getListNoode();
+		int count = 0;
+		for(Node node : nodes) {
+		  if(this.getNodeView(node) != null) {
+		    count++;
+		  }
+		}
+		if (count > Integer.parseInt(itemsPerPage)) {
 			return true;
 		}
 		return false;

@@ -163,7 +163,6 @@ import org.exoplatform.services.wcm.newsletter.NewsletterCategoryConfig;
 									<td class="Infor"><%=newsletter.getNewsletterSentDate()%></td>
 									<td class="Infor"><%=newsletter.getStatus()%></td>
 									<td class="Infor">
-										<%System.out.println(newsletter.getNewsletterName())%>
 										<%uicomponent.renderChild(newsletter.getNewsletterName())%>
 									</td>
 								</tr>

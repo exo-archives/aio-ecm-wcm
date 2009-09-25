@@ -122,18 +122,18 @@ public class Utils {
     } 
     return false;
   }
-
-  /**
+/*
+  *//**
    * Checks if is live mode.
    * 
    * @return true, if is live mode
-   */
+   *//*
   public static boolean isLiveMode() {
     Object obj = Util.getPortalRequestContext().getRequest().getSession().getAttribute(Utils.TURN_ON_QUICK_EDIT);
     if(obj == null)
       return true;          
     return !Boolean.parseBoolean(obj.toString());     
-  }
+  }*/
   
   /**
    * Gets the current mode.

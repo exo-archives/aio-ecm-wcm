@@ -16,14 +16,20 @@
  */
 package org.exoplatform.wcm.webui.clv;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.jcr.AccessDeniedException;
 import javax.jcr.ItemNotFoundException;
+import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.portlet.PortletPreferences;
 
 import org.exoplatform.resolver.ResourceResolver;
+import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleException;
+import org.exoplatform.services.ecm.publication.PublicationPlugin;
+import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.wcm.publication.WCMComposer;
 import org.exoplatform.services.wcm.utils.PaginatedNodeIterator;
 import org.exoplatform.wcm.webui.Utils;
@@ -38,6 +44,9 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
  * Oct 15, 2008
  */
 
+/**
+ * The Class UICLVFolderMode.
+ */
 @ComponentConfig(      
   lifecycle = Lifecycle.class,                 
    template = "app:/groovy/ContentListViewer/UICLVManualMode.gtmpl",
@@ -52,11 +61,12 @@ public class UICLVFolderMode extends UICLVContainer {
    */
   public void init() throws Exception {
     PortletPreferences portletPreferences = getPortletPreference();    
-    NodeIterator nodeIterator = null;
+    
+    List<Node> nodes = null;
     setViewAbleContent(true);
     messageKey = null;
     try {
-      nodeIterator = getRenderedContentNodes();
+      nodes = getRenderedContentNodes();
     } catch (ItemNotFoundException e) {
       messageKey = "UIMessageBoard.msg.folder-not-found";
       setViewAbleContent(false);
@@ -70,13 +80,13 @@ public class UICLVFolderMode extends UICLVContainer {
       setViewAbleContent(false);
       return;
     }
-    if (nodeIterator.getSize() == 0) {
+    if (nodes.size() == 0) {
       messageKey = "UIMessageBoard.msg.folder-empty";
       setViewAbleContent(false);
       return;
     }
     int itemsPerPage = Integer.parseInt(portletPreferences.getValue(UICLVPortlet.ITEMS_PER_PAGE, null));
-    PaginatedNodeIterator paginatedNodeIterator = new PaginatedNodeIterator(nodeIterator, itemsPerPage);
+    PaginatedNodeIterator paginatedNodeIterator = new PaginatedNodeIterator(nodes, itemsPerPage);
     getChildren().clear();
     UICLVPresentation contentListPresentation = addChild(UICLVPresentation.class, null, null);    
     String templatePath = getFormViewTemplatePath();
@@ -96,7 +106,7 @@ public class UICLVFolderMode extends UICLVContainer {
    * 
    * @throws Exception the exception
    */
-  public NodeIterator getRenderedContentNodes() throws Exception {
+  public List<Node> getRenderedContentNodes() throws Exception {
     PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
     PortletPreferences preferences = portletRequestContext.getRequest().getPreferences();
     String repository = preferences.getValue(UICLVPortlet.REPOSITORY, null);
@@ -107,7 +117,7 @@ public class UICLVFolderMode extends UICLVContainer {
 
     WCMComposer wcmComposer = getApplicationComponent(WCMComposer.class);
     HashMap<String, String> filters = new HashMap<String, String>();
-    filters.put(WCMComposer.FILTER_MODE, Utils.isLiveMode()?WCMComposer.MODE_LIVE:WCMComposer.MODE_EDIT);
+    filters.put(WCMComposer.FILTER_MODE, Utils.getCurrentMode());
     String orderBy = preferences.getValue(UICLVPortlet.ORDER_BY, null);
     String orderType = preferences.getValue(UICLVPortlet.ORDER_TYPE, null);
     if (orderType == null) orderType = "DESC";
@@ -115,11 +125,49 @@ public class UICLVFolderMode extends UICLVContainer {
     filters.put(WCMComposer.FILTER_ORDER_BY, orderBy);
     filters.put(WCMComposer.FILTER_ORDER_TYPE, orderType);
     
-    return wcmComposer.getContents(
+    NodeIterator nodeIterator = wcmComposer.getContents(
                                    repository,
                                    workspace,
                                    folderPath,
                                    filters,
                                    Utils.getSessionProvider(this));
+    Node node = null;
+    Node viewNode = null;
+    List<Node> nodes = new ArrayList<Node>();
+    while(nodeIterator.hasNext()) {
+      node = nodeIterator.nextNode();
+      viewNode = getNodeView(node);
+      if(viewNode != null) {
+        nodes.add(viewNode);
+      }
+    }
+    return nodes;
+  }
+  
+  /**
+   * Gets the node view.
+   * 
+   * @param node the node
+   * 
+   * @return the node view
+   * 
+   * @throws Exception the exception
+   */
+  private Node getNodeView(Node node) throws Exception {
+    PublicationService publicationService = getApplicationComponent(PublicationService.class);
+    HashMap<String, Object> context = new HashMap<String, Object>();
+    context.put(WCMComposer.FILTER_MODE, Utils.getCurrentMode());
+    String lifecyleName = null;
+      try {
+        lifecyleName = publicationService.getNodeLifecycleName(node);
+      } catch (NotInPublicationLifecycleException e) {
+        // You shouldn't throw popup message, because some exception often rise here.
+      }
+    if (lifecyleName == null) return node;
+      
+    PublicationPlugin publicationPlugin = publicationService.getPublicationPlugins()
+      .get(lifecyleName);
+    Node viewNode = publicationPlugin.getNodeView(node, context);
+    return viewNode;
   }
 }

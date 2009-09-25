@@ -165,3 +165,31 @@
 .UICLVPortlet .UICLVConfig .ItemsPerPage input {
 	width: 20px;
 }
+
+.UICLVPortlet .UIContentListPresentationDefault .Caption .CaptionFunc {
+    padding: 10px 0;
+    height: 39px;
+    overflow: hidden;
+}
+
+.UICLVPortlet .CaptionFunc .UIPaginatorDefault {
+    text-align: right;
+    float: left;
+}
+
+.UICLVPortlet .CaptionFunc .CaptionRefresh {
+    float: left;
+}
+
+.UICLVPortlet .CaptionFunc .CaptionRefresh a {
+    display: block;
+    padding: 0 3px 3px 25px;
+    background: url('DefaultSkin/icons/RefreshIcon.gif') no-repeat;
+    color: #ff4200;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.OneColumnCLVTemplate .Contents .Column1 img {
+	width:51px;
+}

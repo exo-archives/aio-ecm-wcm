@@ -19,7 +19,7 @@ package org.exoplatform.services.wcm.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.jcr.NodeIterator;
+import javax.jcr.Node;
 
 import org.exoplatform.commons.exception.ExoMessageException;
 import org.exoplatform.commons.utils.PageList;
@@ -33,7 +33,26 @@ import org.exoplatform.services.jcr.impl.core.query.lucene.TwoWayRangeIterator;
  */
 public class PaginatedNodeIterator  extends PageList {
 
-  protected NodeIterator nodeIterator;
+  /** The nodes. */
+  protected List<Node> nodes;
+
+  /**
+   * Gets the nodes.
+   * 
+   * @return the nodes
+   */
+  public List<Node> getNodes() {
+    return nodes;
+  }
+
+  /**
+   * Sets the nodes.
+   * 
+   * @param nodes the nodes to set
+   */
+  public void setNodes(List<Node> nodes) {
+    this.nodes = nodes;
+  }
 
   /**
    * Instantiates a new paginated node iterator.
@@ -47,16 +66,16 @@ public class PaginatedNodeIterator  extends PageList {
   /**
    * Instantiates a new paginated node iterator.
    * 
-   * @param nodeIterator the node iterator
    * @param pageSize the page size
+   * @param nodes the nodes
    */
-  public PaginatedNodeIterator(NodeIterator nodeIterator, int pageSize) {
+  public PaginatedNodeIterator(List<Node> nodes, int pageSize) {
     super(pageSize);
-    this.nodeIterator = nodeIterator;
-    this.setAvailablePage((int)nodeIterator.getSize());
+    this.nodes = nodes;
+    this.setAvailablePage(nodes.size());
     this.currentListPage_ = null;
-  }   
-
+  }
+  
   /* (non-Javadoc)
    * @see org.exoplatform.commons.utils.PageList#populateCurrentPage(int)
    */
@@ -69,29 +88,15 @@ public class PaginatedNodeIterator  extends PageList {
     checkAndSetPosition(page);
     currentListPage_ = new ArrayList();
     int count = 0;
-    while (nodeIterator.hasNext()) {
-      currentListPage_.add(nodeIterator.next());
-      count ++;
+    for(int i = ((page - 1)*this.getPageSize()); i < nodes.size(); i++) {
+      currentListPage_.add(nodes.get(i));
+      count++;
       if(count == getPageSize()) {
         break;
-      }      
+      }  
     }
     currentPage_ = page;
   }
-
-  /**
-   * Retrieve the node iterator.
-   * 
-   * @return the node iterator
-   */
-  public NodeIterator getNodeIterator() { return this.nodeIterator; }
-
-  /**
-   * Sets the node iterator.
-   * 
-   * @param iterator the new node iterator
-   */
-  public void setNodeIterator(NodeIterator iterator) { this.nodeIterator = iterator; }
 
   /**
    * Retrieve the total pages.
@@ -108,14 +113,16 @@ public class PaginatedNodeIterator  extends PageList {
   public int getNodesPerPage() { return getPageSize(); }    
 
   /**
-   * Retrieve the total nodes
+   * Retrieve the total nodes.
    * 
    * @return the total nodes
    */
-  public long getTotalNodes() { return nodeIterator.getSize(); }
+  public long getTotalNodes() { 
+    return nodes.size();  
+  }
 
   /**
-   * Retrieve the nodes of current page
+   * Retrieve the nodes of current page.
    * 
    * @return the current page data
    * 
@@ -125,7 +132,7 @@ public class PaginatedNodeIterator  extends PageList {
   public List getCurrentPageData() throws Exception {
     return currentPage();
   }
-
+  
   /* (non-Javadoc)
    * @see org.exoplatform.commons.utils.PageList#getPage(int)
    */
@@ -151,21 +158,23 @@ public class PaginatedNodeIterator  extends PageList {
   }
 
   /**
-   * Check and set current cursor position in iterator
+   * Check and set current cursor position in iterator.
    * 
    * @param page the page
    */
   protected void checkAndSetPosition(int page) {
-    //Iterate next
-    if (page > currentPage_) {
-      long skipNextNum = (page - (currentPage_ + 1)) * getPageSize();
-      nodeIterator.skip(skipNextNum);
-    } else if(page <currentPage_) {
-      //Iterate back
-      int currentPageSize = currentListPage_.size();
-      long skipBackNum = ((currentPage_ - page) * getPageSize()) + currentPageSize;      
-      ((TwoWayRangeIterator)nodeIterator).skipBack(skipBackNum);           
-    }
+    try {
+      //Iterate next
+      if (page > currentPage_) {
+        long skipNextNum = (page - (currentPage_ + 1)) * getPageSize();
+        ((TwoWayRangeIterator)nodes).skip(skipNextNum);
+      } else if(page <currentPage_) {
+        //Iterate back
+        int currentPageSize = currentListPage_.size();
+        long skipBackNum = ((currentPage_ - page) * getPageSize()) + currentPageSize;      
+        ((TwoWayRangeIterator)nodes).skipBack(skipBackNum);
+      }
+    }catch(Exception e) {}
   }
 
   /* (non-Javadoc)
