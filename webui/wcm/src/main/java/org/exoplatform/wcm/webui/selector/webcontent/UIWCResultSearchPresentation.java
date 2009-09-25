@@ -9,6 +9,7 @@ import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -28,7 +29,7 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 public class UIWCResultSearchPresentation extends UIBaseNodePresentation {
 
   /** The present node. */
-  private Node presentNode;
+  private NodeLocation presentNodeLocation;
   
   /** The is document. */
   private boolean isDocument;
@@ -47,7 +48,7 @@ public class UIWCResultSearchPresentation extends UIBaseNodePresentation {
    * @see org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation#getNode()
    */
   public Node getNode() throws Exception {
-    return presentNode;
+    return NodeLocation.getNodeByLocation(presentNodeLocation);
   }
 
   /* (non-Javadoc)
@@ -116,7 +117,7 @@ public class UIWCResultSearchPresentation extends UIBaseNodePresentation {
    * @see org.exoplatform.ecm.webui.presentation.NodePresentation#setNode(javax.jcr.Node)
    */
   public void setNode(Node node) {
-    presentNode = node;
+    presentNodeLocation = NodeLocation.make(node);
   }
 
   /**

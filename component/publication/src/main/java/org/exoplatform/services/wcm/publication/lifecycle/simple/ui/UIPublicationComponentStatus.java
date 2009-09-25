@@ -25,6 +25,7 @@ import javax.jcr.Node;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.services.ecm.publication.PublicationService;
+import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIPopupWindow;
@@ -50,7 +51,7 @@ import org.exoplatform.webui.form.UIForm;
 public class UIPublicationComponentStatus extends UIForm {
 
   /** The node_. */
-  private Node node_;
+  private NodeLocation nodeLocation;
 
   /**
    * Instantiates a new uI publication component status.
@@ -68,7 +69,7 @@ public class UIPublicationComponentStatus extends UIForm {
    * @throws Exception the exception
    */
   public UIPublicationComponentStatus(Node node) throws Exception {
-    this.node_=node;
+    nodeLocation = NodeLocation.make(node);
   }
 
   /**
@@ -77,7 +78,7 @@ public class UIPublicationComponentStatus extends UIForm {
    * @return the node
    */
   public Node getNode() {
-    return this.node_;
+    return NodeLocation.getNodeByLocation(nodeLocation);
   }
 
   /**
@@ -86,7 +87,7 @@ public class UIPublicationComponentStatus extends UIForm {
    * @param node the new node
    */
   public void setNode(Node node) {
-    this.node_=node;
+    nodeLocation = NodeLocation.make(node);
   }
 
   /**
@@ -96,7 +97,7 @@ public class UIPublicationComponentStatus extends UIForm {
    */
   public String getNodeName() {
     try {
-      return node_.getName();
+      return getNode().getName();
     } catch (Exception e) {
       return "Error in getNodeName";
     }
@@ -110,7 +111,7 @@ public class UIPublicationComponentStatus extends UIForm {
   public String getLifeCycleName () {
     try {
       PublicationService service = getApplicationComponent(PublicationService.class) ;
-      return service.getNodeLifecycleName(node_);
+      return service.getNodeLifecycleName(getNode());
     } catch (Exception e) {
       return "Error in getLifeCycleName";
     }
@@ -124,7 +125,7 @@ public class UIPublicationComponentStatus extends UIForm {
   public String getStateName () {
     try {
       PublicationService service = getApplicationComponent(PublicationService.class) ;
-      return service.getCurrentState(node_);
+      return service.getCurrentState(getNode());
     } catch (Exception e) {
       return "Error in getStateName";
     }
@@ -142,7 +143,7 @@ public class UIPublicationComponentStatus extends UIForm {
       DownloadService dS = getApplicationComponent(DownloadService.class);
       PublicationService service = getApplicationComponent(PublicationService.class) ;
 
-      byte[] bytes=service.getStateImage(node_,locale);
+      byte[] bytes=service.getStateImage(getNode(),locale);
       InputStream iS = new ByteArrayInputStream(bytes);    
       String id = dS.addDownloadResource(new InputStreamDownloadResource(iS, "image/gif"));
       return dS.getDownloadLink(id);

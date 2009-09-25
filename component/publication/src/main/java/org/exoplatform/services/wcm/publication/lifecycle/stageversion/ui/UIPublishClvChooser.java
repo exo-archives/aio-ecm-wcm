@@ -29,6 +29,7 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
+import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.publication.PublicationUtil;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
@@ -65,7 +66,7 @@ public class UIPublishClvChooser extends UIForm implements UIPopupComponent {
   private Page page;
   
   /** The node. */
-  private Node node;
+  private NodeLocation nodeLocation;
   
   /**
    * Gets the page.
@@ -86,14 +87,18 @@ public class UIPublishClvChooser extends UIForm implements UIPopupComponent {
    * 
    * @return the node
    */
-  public Node getNode() {return node;}
+  public Node getNode() {
+    return NodeLocation.getNodeByLocation(nodeLocation);
+  }
   
   /**
    * Sets the node.
    * 
    * @param node the new node
    */
-  public void setNode(Node node) {this.node = node;}
+  public void setNode(Node node) {
+    nodeLocation = NodeLocation.make(node);
+  }
   
   /**
    * Instantiates a new uI publish clv chooser.
@@ -151,12 +156,13 @@ public class UIPublishClvChooser extends UIForm implements UIPopupComponent {
       clvPortletId = PortalConfig.PORTAL_TYPE + "#" + org.exoplatform.portal.webui.util.Util.getUIPortal().getOwner() + ":" + clvPortletId;
       DataStorage dataStorage = PublicationUtil.getServices(DataStorage.class);
       PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(clvPortletId));
+      Node node = clvChooser.getNode();
       if (portletPreferences != null) {
         for (Object object : portletPreferences.getPreferences()) {
           Preference preference = (Preference) object;
           if ("contents".equals(preference.getName())) {
             String contentValues = preference.getValues().get(0).toString();
-            if (contentValues.indexOf(clvChooser.node.getPath()) >= 0) {
+            if (contentValues.indexOf(node.getPath()) >= 0) {
               UIApplication application = clvChooser.getAncestorOfType(UIApplication.class);
               application.addMessage(new ApplicationMessage("UIPublishClvChooser.msg.duplicate", null, ApplicationMessage.WARNING));
               event.getRequestContext().addUIComponentToUpdateByAjax(application.getUIPopupMessages());
@@ -167,7 +173,7 @@ public class UIPublishClvChooser extends UIForm implements UIPopupComponent {
       }
       WCMPublicationService presentationService = clvChooser.getApplicationComponent(WCMPublicationService.class);
       StageAndVersionPublicationPlugin publicationPlugin = (StageAndVersionPublicationPlugin) presentationService.getWebpagePublicationPlugins().get(StageAndVersionPublicationConstant.LIFECYCLE_NAME);
-      publicationPlugin.publishContentToCLV(clvChooser.node, clvChooser.page, clvPortletId, Util.getUIPortal().getOwner(), event.getRequestContext().getRemoteUser());
+      publicationPlugin.publishContentToCLV(node, clvChooser.page, clvPortletId, Util.getUIPortal().getOwner(), event.getRequestContext().getRemoteUser());
       UIPopupWindow popupWindow = clvChooser.getAncestorOfType(UIPopupWindow.class);
       popupWindow.setShow(false);
     }

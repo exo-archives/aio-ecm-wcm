@@ -20,7 +20,14 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
+import org.apache.commons.logging.Log;
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.ext.app.SessionProviderService;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.log.ExoLogger;
 
 /*
  * Created by The eXo Platform SAS
@@ -29,6 +36,9 @@ import org.exoplatform.services.jcr.core.ManageableRepository;
  * Jun 20, 2008  
  */
 public class NodeLocation {
+  
+  private static Log log = ExoLogger.getLogger("wcm:NodeLocation");
+  
   private String repository;
   private String workspace;
   private String path;
@@ -57,14 +67,37 @@ public class NodeLocation {
     return null;
   }
 
-  public static final NodeLocation make(final Node node) throws RepositoryException {
-    Session session = node.getSession();
-    String repository = ((ManageableRepository)session.getRepository()).getConfiguration().getName();
-    String workspace = session.getWorkspace().getName();
-    String path = node.getPath();
-    return new NodeLocation(repository, workspace, path);
+  public static final NodeLocation make(final Node node) {
+    try {
+      Session session = node.getSession();
+      String repository = ((ManageableRepository)session.getRepository()).getConfiguration().getName();
+      String workspace = session.getWorkspace().getName();
+      String path = node.getPath();
+      return new NodeLocation(repository, workspace, path);
+    } catch (RepositoryException e) {
+      log.error("Exception in getNodeByLocation: ", e.fillInStackTrace());
+    }
+    return null;
   }
 
+  public static Node getNodeByLocation(NodeLocation nodeLocation) {
+    try {
+      ExoContainer container = ExoContainerContext.getCurrentContainer();
+      RepositoryService repositoryService = (RepositoryService)container.getComponentInstanceOfType(RepositoryService.class);
+      SessionProviderService sessionProviderService = (SessionProviderService)container.getComponentInstanceOfType(SessionProviderService.class);
+      ManageableRepository repository = repositoryService.getRepository(nodeLocation.getRepository());
+      SessionProvider sessionProvider = sessionProviderService.getSessionProvider(null);
+      Session session = sessionProvider.getSession(nodeLocation.getWorkspace(), repository);
+      Node node = (Node)session.getItem(nodeLocation.getPath());
+      session.logout();
+      sessionProvider.close();
+      return node;
+    } catch (Exception e) {
+      log.error("Exception in getNodeByLocation: ", e.fillInStackTrace());
+    }
+    return null;
+  }
+  
   public static final String serialize(final NodeLocation location) {
     StringBuffer buffer = new StringBuffer();
     buffer.append(location.getRepository()).append("::")

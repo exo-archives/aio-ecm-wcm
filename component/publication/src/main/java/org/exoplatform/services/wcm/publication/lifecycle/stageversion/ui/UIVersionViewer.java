@@ -26,6 +26,7 @@ import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIComponent;
@@ -43,10 +44,10 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 public class UIVersionViewer extends UIBaseNodePresentation {
 
   /** The original node. */
-  private Node originalNode;
+  private NodeLocation originalNodeLocation;
   
   /** The node. */
-  private Node node;
+  private NodeLocation nodeLocation;
   
   /** The resource resolver. */
   private JCRResourceResolver resourceResolver ;
@@ -57,24 +58,32 @@ public class UIVersionViewer extends UIBaseNodePresentation {
   /* (non-Javadoc)
    * @see org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation#getNode()
    */
-  public Node getNode() throws Exception {return node ;}
+  public Node getNode() throws Exception {
+    return NodeLocation.getNodeByLocation(nodeLocation);
+  }
   
   /* (non-Javadoc)
    * @see org.exoplatform.ecm.webui.presentation.NodePresentation#setNode(javax.jcr.Node)
    */
-  public void setNode(Node node) {this.node = node;}
+  public void setNode(Node node) {
+    nodeLocation = NodeLocation.make(node);
+  }
   
   /* (non-Javadoc)
    * @see org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation#getOriginalNode()
    */
-  public Node getOriginalNode() throws Exception {return originalNode;}
+  public Node getOriginalNode() throws Exception {
+    return NodeLocation.getNodeByLocation(originalNodeLocation);
+  }
   
   /**
    * Sets the original node.
    * 
    * @param originalNode the new original node
    */
-  public void setOriginalNode(Node originalNode) {this.originalNode = originalNode;}
+  public void setOriginalNode(Node originalNode) {
+    originalNodeLocation = NodeLocation.make(originalNode);
+  }
 
   /* (non-Javadoc)
    * @see org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation#getRepositoryName()
@@ -90,7 +99,7 @@ public class UIVersionViewer extends UIBaseNodePresentation {
     TemplateService templateService = getApplicationComponent(TemplateService.class);
     String userName = Util.getPortalRequestContext().getRemoteUser() ;
     try {
-      String nodeType = originalNode.getPrimaryNodeType().getName();
+      String nodeType = getOriginalNode().getPrimaryNodeType().getName();
       String repositoryName = getRepository();
       if(templateService.isManagedNodeType(nodeType, repositoryName)) 
         return templateService.getTemplatePathByUser(false, nodeType, userName, repositoryName) ;

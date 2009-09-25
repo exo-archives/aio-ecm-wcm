@@ -21,6 +21,7 @@ import javax.jcr.RepositoryException;
 
 import org.apache.commons.logging.Log;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.wcm.core.NodeLocation;
 
 /**
  * Created by The eXo Platform SARL
@@ -39,7 +40,7 @@ public class TreeNode {
   private String name;
   
   /** The node_. */
-  private Node node_ ; 
+  private NodeLocation nodeLocation;
   
   /** The work space name. */
   private String workSpaceName;
@@ -57,7 +58,7 @@ public class TreeNode {
    */
   public TreeNode(String path, String workSpaceName, Node node, int deep) {
     this.name = null;
-    node_ = node ;
+    nodeLocation = NodeLocation.make(node);
     this.deep = deep;
     this.workSpaceName = workSpaceName;
     try {
@@ -75,7 +76,7 @@ public class TreeNode {
   public TreeNode(String name){
     this.name = name;
     this.treePath = "/" + name;
-    node_ = null;
+    nodeLocation = null;
     deep = 0;
   }
   
@@ -90,7 +91,7 @@ public class TreeNode {
    */
   public TreeNode(String path, String name, String workSpaceName, Node node, int deep){
     this.name = name;
-    this.node_ = node;
+    nodeLocation = NodeLocation.make(node);
     this.deep = deep;
     this.workSpaceName = workSpaceName;
     this.treePath = path + "/" + name;
@@ -106,8 +107,9 @@ public class TreeNode {
   public String getName() throws RepositoryException {
     StringBuilder buffer = new StringBuilder(128);
     if(name == null || name.trim().length() < 1){
-      buffer.append(node_.getName());
-      int index = node_.getIndex();
+      Node node = getNode();
+      buffer.append(node.getName());
+      int index = node.getIndex();
       if (index > 1) {
         buffer.append('[');
         buffer.append(index);
@@ -126,8 +128,9 @@ public class TreeNode {
    * 
    * @throws RepositoryException the repository exception
    */
-  public String getNodePath() throws RepositoryException { 
-    if(node_ != null) return node_.getPath();
+  public String getNodePath() throws RepositoryException {
+    Node node = getNode();
+    if(node != null) return node.getPath();
     else return null;
     }
 
@@ -136,14 +139,18 @@ public class TreeNode {
    * 
    * @return the node
    */
-  public Node getNode() { return node_ ; }  
+  public Node getNode() { 
+    return NodeLocation.getNodeByLocation(nodeLocation); 
+  }  
   
   /**
    * Sets the node.
    * 
    * @param node the new node
    */
-  public void setNode(Node node) { node_ = node ; }
+  public void setNode(Node node) { 
+    nodeLocation = NodeLocation.make(node); 
+  }
 
   /**
    * Gets the deep.

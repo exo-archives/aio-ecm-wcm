@@ -51,4 +51,5 @@ public class WCMCoreUtils {
     SessionProvider sessionProvider = sessionProviderService.getSystemSessionProvider(null);
     return sessionProvider;
   }
+  
 }

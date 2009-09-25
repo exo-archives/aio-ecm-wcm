@@ -24,6 +24,7 @@ import javax.jcr.Value;
 
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.services.ecm.publication.NotInPublicationLifecycleException;
+import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.config.VersionLog;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -54,7 +55,7 @@ public class UIPublicationHistory extends UIComponentDecorator {
   private UIPageIterator uiPageIterator_ ;
   
   /** The current node_. */
-  private Node currentNode_ ;
+  private NodeLocation currentNodeLocation ;
   
   /**
    * Instantiates a new uI publication history.
@@ -72,7 +73,7 @@ public class UIPublicationHistory extends UIComponentDecorator {
    * @param node the node
    */
   public void init(Node node) {
-   currentNode_ = node;
+   currentNodeLocation = NodeLocation.make(node);
   }  
   
   /**
@@ -84,8 +85,9 @@ public class UIPublicationHistory extends UIComponentDecorator {
    * @throws Exception the exception
    */
   public List<VersionLog> getLog() throws NotInPublicationLifecycleException, Exception {
-    if (currentNode_ == null) return new ArrayList<VersionLog>();
+    if (currentNodeLocation == null) return new ArrayList<VersionLog>();
     List<VersionLog> logs = new ArrayList<VersionLog>();
+    Node currentNode_ = NodeLocation.getNodeByLocation(currentNodeLocation);
     Value[] values = currentNode_.getProperty(StageAndVersionPublicationConstant.HISTORY).getValues();
     for (Value value : values) {
       String logString = value.getString();

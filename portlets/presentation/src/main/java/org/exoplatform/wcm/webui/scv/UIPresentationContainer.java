@@ -39,6 +39,7 @@ import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;
+import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.core.WCMService;
 import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
@@ -211,7 +212,7 @@ public class UIPresentationContainer extends UIContainer{
 
   
   /** The node reference. */
-  private Node nodeReference;
+  private NodeLocation nodeReferenceLocation;
   
   /**
    * Gets the reference node.
@@ -228,6 +229,7 @@ public class UIPresentationContainer extends UIContainer{
     String workspace = preferences.getValue(UISingleContentViewerPortlet.WORKSPACE, null);
     String nodeIdentifier = preferences.getValue(UISingleContentViewerPortlet.IDENTIFIER, null) ;
     WCMService wcmService = getApplicationComponent(WCMService.class);
+    Node nodeReference = null;
     try { 
       nodeReference = wcmService.getReferencedContent(Utils.getSessionProvider(this), repository, workspace, nodeIdentifier);
     } catch(ItemNotFoundException e) {
@@ -273,7 +275,7 @@ public class UIPresentationContainer extends UIContainer{
     UIPresentation presentation = getChild(UIPresentation.class);
     if (nodeView != null && nodeView.isNodeType("nt:frozenNode")) {
       String nodeUUID = nodeView.getProperty("jcr:frozenUuid").getString();
-      presentation.setOriginalNode(nodeReference.getSession().getNodeByUUID(nodeUUID));
+      presentation.setOriginalNode(getNode().getSession().getNodeByUUID(nodeUUID));
       presentation.setNode(nodeView);
     } else {
       presentation.setOriginalNode(nodeView);

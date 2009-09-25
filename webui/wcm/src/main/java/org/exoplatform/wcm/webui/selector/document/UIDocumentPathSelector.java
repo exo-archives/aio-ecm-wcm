@@ -26,6 +26,7 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.selector.UISelectPathPanel;
@@ -71,13 +72,13 @@ public class UIDocumentPathSelector extends UIBaseNodeTreeSelector implements UI
 
   /** Instantiates a new UI document path selector. */
 
-  private Node currentPortal;
+  private NodeLocation currentPortalLocation;
   
   /** The shared portal. */
-  private Node sharedPortal;
+  private NodeLocation sharedPortalLocation;
   
   /** The current node. */
-  private Node currentNode;
+  private NodeLocation currentNodeLocation;
 
   /**
    * Instantiates a new uI document path selector.
@@ -99,8 +100,10 @@ public class UIDocumentPathSelector extends UIBaseNodeTreeSelector implements UI
     LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
     String currentPortalName = Util.getUIPortal().getName();
     SessionProvider sessionProvider = Utils.getSessionProvider(this);
-    currentPortal = livePortalManagerService.getLivePortal(sessionProvider, currentPortalName);
-    sharedPortal = livePortalManagerService.getLiveSharedPortal(sessionProvider);
+    Node currentPortal = livePortalManagerService.getLivePortal(sessionProvider, currentPortalName);
+    currentPortalLocation = NodeLocation.make(currentPortal);
+    Node sharedPortal = livePortalManagerService.getLiveSharedPortal(sessionProvider);
+    sharedPortalLocation = NodeLocation.make(sharedPortal);
     String repositoryName = ((ManageableRepository)(currentPortal.getSession().getRepository())).getConfiguration().getName();
     TemplateService templateService = getApplicationComponent(TemplateService.class);
     List<String> acceptedNodeTypes = templateService.getDocumentTemplates(repositoryName);
@@ -150,7 +153,7 @@ public class UIDocumentPathSelector extends UIBaseNodeTreeSelector implements UI
    */
   private List<LocalPath> getPath(List<LocalPath> list, Node selectedNode) throws Exception {
     if(list == null) list = new ArrayList<LocalPath>(5);
-    if(selectedNode == null || selectedNode.getPath().equalsIgnoreCase(currentPortal.getParent().getPath()) 
+    if(selectedNode == null || selectedNode.getPath().equalsIgnoreCase(getCurrentPortal().getParent().getPath()) 
         || selectedNode.getPath().equals("/")) return list;
     list.add(0, new LocalPath(selectedNode.getPath(), selectedNode.getName()));    
     getPath(list, selectedNode.getParent());
@@ -175,7 +178,7 @@ public class UIDocumentPathSelector extends UIBaseNodeTreeSelector implements UI
    * @return the currentPortal
    */
   public Node getCurrentPortal() {
-    return currentPortal;
+    return NodeLocation.getNodeByLocation(currentPortalLocation);
   }
 
   /**
@@ -184,7 +187,7 @@ public class UIDocumentPathSelector extends UIBaseNodeTreeSelector implements UI
    * @param currentPortal the currentPortal to set
    */
   public void setCurrentPortal(Node currentPortal) {
-    this.currentPortal = currentPortal;
+    currentPortalLocation = NodeLocation.make(currentPortal);
   }
 
   /**
@@ -193,7 +196,7 @@ public class UIDocumentPathSelector extends UIBaseNodeTreeSelector implements UI
    * @return the sharedPortal
    */
   public Node getSharedPortal() {
-    return sharedPortal;
+    return NodeLocation.getNodeByLocation(sharedPortalLocation);
   }
 
   /**
@@ -202,7 +205,7 @@ public class UIDocumentPathSelector extends UIBaseNodeTreeSelector implements UI
    * @param sharedPortal the sharedPortal to set
    */
   public void setSharedPortal(Node sharedPortal) {
-    this.sharedPortal = sharedPortal;
+    sharedPortalLocation = NodeLocation.make(sharedPortal);
   }
 
   /**
@@ -211,7 +214,7 @@ public class UIDocumentPathSelector extends UIBaseNodeTreeSelector implements UI
    * @return the currentNode
    */
   public Node getCurrentNode() {
-    return currentNode;
+    return NodeLocation.getNodeByLocation(currentNodeLocation);
   }
 
   /**
@@ -220,7 +223,7 @@ public class UIDocumentPathSelector extends UIBaseNodeTreeSelector implements UI
    * @param currentNode the currentNode to set
    */
   public void setCurrentNode(Node currentNode) {
-    this.currentNode = currentNode;
+    currentNodeLocation = NodeLocation.make(currentNode);
   }
 
   /**

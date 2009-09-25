@@ -29,6 +29,7 @@ import org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.services.cms.templates.TemplateService;
+import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -52,10 +53,10 @@ public class UIPresentation extends UIBaseNodePresentation {
   private JCRResourceResolver  resourceResolver ;
 
   /** Instantiates a new uI presentation. */
-  private Node orginalNode = null;
+  private NodeLocation originalNodeLocation;
   
   /** The view node. */
-  private Node viewNode = null;
+  private NodeLocation viewNodeLocation;
 
   /**
    * Instantiates a new uI presentation.
@@ -68,7 +69,7 @@ public class UIPresentation extends UIBaseNodePresentation {
    * @see org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation#getNode()
    */
   public Node getNode() throws Exception {
-    return viewNode;
+    return NodeLocation.getNodeByLocation(viewNodeLocation);
   }
 
   /* (non-Javadoc)
@@ -97,7 +98,7 @@ public class UIPresentation extends UIBaseNodePresentation {
    * @see org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation#getOriginalNode()
    */
   public Node getOriginalNode() throws Exception {
-    return orginalNode;
+    return NodeLocation.getNodeByLocation(originalNodeLocation);
   }  
 
   /**
@@ -108,7 +109,7 @@ public class UIPresentation extends UIBaseNodePresentation {
    * @throws Exception the exception
    */
   public void setOriginalNode(Node node) throws Exception{
-    this.orginalNode = node;
+    originalNodeLocation = NodeLocation.make(node);
   }
   
   /* (non-Javadoc)
@@ -176,7 +177,7 @@ public class UIPresentation extends UIBaseNodePresentation {
   @Override
   public String getTemplatePath() throws Exception {
     TemplateService templateService = getApplicationComponent(TemplateService.class);
-    return templateService.getTemplatePath(orginalNode, false) ;
+    return templateService.getTemplatePath(getOriginalNode(), false) ;
   }
     
     
@@ -217,7 +218,7 @@ public class UIPresentation extends UIBaseNodePresentation {
    * @see org.exoplatform.ecm.webui.presentation.NodePresentation#setNode(javax.jcr.Node)
    */
   public void setNode(Node node) {
-    this.viewNode = node;
+    viewNodeLocation = NodeLocation.make(node);
   }
 
   /* (non-Javadoc)

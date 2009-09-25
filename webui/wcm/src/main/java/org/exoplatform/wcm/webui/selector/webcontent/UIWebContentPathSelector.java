@@ -26,6 +26,7 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.selector.UISelectPathPanel;
@@ -70,10 +71,10 @@ public class UIWebContentPathSelector extends UIBaseNodeTreeSelector implements 
 
   /** Instantiates a new uI web content path selector. */
 
-  private Node currentPortal;
+  private NodeLocation currentPortalLocation;
 
   /** The shared portal. */
-  private Node sharedPortal;
+  private NodeLocation sharedPortalLocation;
 
   public String contentType;
 
@@ -97,6 +98,7 @@ public class UIWebContentPathSelector extends UIBaseNodeTreeSelector implements 
    */
   public void init() throws Exception {
     String[] acceptedNodeTypes = null;
+    Node currentPortal = getCurrentPortal();
     if(contentType == null || contentType.equals(UISelectContentByType.WEBCONENT)){
       acceptedNodeTypes = new String[]{"exo:webContent"};
     }else if(contentType.equals(UISelectContentByType.DMSDOCUMENT)){
@@ -110,6 +112,7 @@ public class UIWebContentPathSelector extends UIBaseNodeTreeSelector implements 
     LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
     String currentPortalName = Util.getUIPortal().getName();
     SessionProvider provider = Utils.getSessionProvider(this);
+    Node sharedPortal = getSharedPortal();
     currentPortal = livePortalManagerService.getLivePortal(provider, currentPortalName);
     sharedPortal = livePortalManagerService.getLiveSharedPortal(provider);
     UIWebContentTreeBuilder builder = getChild(UIWebContentTreeBuilder.class);    
@@ -163,7 +166,7 @@ public class UIWebContentPathSelector extends UIBaseNodeTreeSelector implements 
    */
   private List<LocalPath> getPath(List<LocalPath> list, Node selectedNode) throws Exception {
     if(list == null) list = new ArrayList<LocalPath>(5);
-    if(selectedNode == null || selectedNode.getPath().equalsIgnoreCase(currentPortal.getParent().getPath()) 
+    if(selectedNode == null || selectedNode.getPath().equalsIgnoreCase(getCurrentPortal().getParent().getPath()) 
         || selectedNode.getPath().equals("/")) return list;
     list.add(0, new LocalPath(selectedNode.getPath(), selectedNode.getName()));    
     getPath(list, selectedNode.getParent());
@@ -188,7 +191,7 @@ public class UIWebContentPathSelector extends UIBaseNodeTreeSelector implements 
    * @return the currentPortal
    */
   public Node getCurrentPortal() {
-    return currentPortal;
+    return NodeLocation.getNodeByLocation(currentPortalLocation);
   }
 
   /**
@@ -197,7 +200,7 @@ public class UIWebContentPathSelector extends UIBaseNodeTreeSelector implements 
    * @param currentPortal the currentPortal to set
    */
   public void setCurrentPortal(Node currentPortal) {
-    this.currentPortal = currentPortal;
+    currentPortalLocation = NodeLocation.make(currentPortal);
   }
 
   /**
@@ -206,7 +209,7 @@ public class UIWebContentPathSelector extends UIBaseNodeTreeSelector implements 
    * @return the sharedPortal
    */
   public Node getSharedPortal() {
-    return sharedPortal;
+    return NodeLocation.getNodeByLocation(sharedPortalLocation);
   }
 
   /**
@@ -215,7 +218,7 @@ public class UIWebContentPathSelector extends UIBaseNodeTreeSelector implements 
    * @param sharedPortal the sharedPortal to set
    */
   public void setSharedPortal(Node sharedPortal) {
-    this.sharedPortal = sharedPortal;
+    sharedPortalLocation = NodeLocation.make(sharedPortal);
   }
 
   /**

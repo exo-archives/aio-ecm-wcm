@@ -33,6 +33,7 @@ import javax.jcr.version.VersionIterator;
 import org.exoplatform.ecm.webui.utils.JCRExceptionManager;
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
+import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.config.VersionData;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -69,10 +70,10 @@ import org.exoplatform.webui.form.UIForm;
 public class UIPublicationPanel extends UIForm {
 
   /** The current node. */
-  private Node currentNode;
+  private NodeLocation currentNodeLocation;
   
   /** The current revision. */
-  private Node currentRevision;  
+  private NodeLocation currentRevisionLocation;
   
   /** The revisions data map. */
   private Map<String,VersionData> revisionsDataMap = new HashMap<String,VersionData>();
@@ -95,8 +96,8 @@ public class UIPublicationPanel extends UIForm {
    * @throws Exception the exception
    */
   public void init(Node node) throws Exception {
-    this.currentNode = node;    
-    this.currentRevision = node;
+    currentNodeLocation = NodeLocation.make(node);    
+    currentRevisionLocation = NodeLocation.make(node);
     this.viewedRevisions = getLatestRevisions(3,node);    
     this.revisionsDataMap = getRevisionData(node);
     //In somecases as copy a a node, we will lost all version of the node
@@ -149,14 +150,18 @@ public class UIPublicationPanel extends UIForm {
    * 
    * @return the current node
    */
-  public Node getCurrentNode() { return currentNode; }
+  public Node getCurrentNode() {
+    return NodeLocation.getNodeByLocation(currentNodeLocation);
+  }
 
   /**
    * Gets the current revision.
    * 
    * @return the current revision
    */
-  public Node getCurrentRevision() { return currentRevision; }
+  public Node getCurrentRevision() {
+    return NodeLocation.getNodeByLocation(currentRevisionLocation); 
+  }
 
   /**
    * Gets the revision author.
@@ -169,6 +174,7 @@ public class UIPublicationPanel extends UIForm {
    */
   public String getRevisionAuthor(Node revision) throws Exception{
     VersionData revisionData = revisionsDataMap.get(revision.getUUID());
+    Node currentNode = getCurrentNode();
     if(revisionData!= null)
       return revisionData.getAuthor();
     if(revision.getUUID().equalsIgnoreCase(currentNode.getUUID())) {
@@ -187,7 +193,7 @@ public class UIPublicationPanel extends UIForm {
    * @throws Exception the exception
    */
   public Node getRevisionByUUID(String revisionUUID) throws Exception {
-    Session session = currentNode.getSession();
+    Session session = getCurrentNode().getSession();
     return session.getNodeByUUID(revisionUUID);
   }
 
@@ -232,6 +238,7 @@ public class UIPublicationPanel extends UIForm {
    */
   public String getRevisionState(Node revision) throws Exception{
     VersionData revisionData = revisionsDataMap.get(revision.getUUID());
+    Node currentNode = getCurrentNode();
     if(revisionData!= null)
       return revisionData.getState();
     if(revision.getUUID().equalsIgnoreCase(currentNode.getUUID())) {
@@ -245,7 +252,9 @@ public class UIPublicationPanel extends UIForm {
    * 
    * @param revision the new current revision
    */
-  public void setCurrentRevision(Node revision) { this.currentRevision = revision; }
+  public void setCurrentRevision(Node revision) {
+    currentRevisionLocation = NodeLocation.make(revision);
+  }
 
   /**
    * Sets the revisions.
@@ -265,6 +274,7 @@ public class UIPublicationPanel extends UIForm {
     UIPublicationContainer publicationContainer = getAncestorOfType(UIPublicationContainer.class);
     UIPublicationHistory publicationHistory = publicationContainer.getChild(UIPublicationHistory.class);
     publicationHistory.updateGrid();
+    Node currentNode = getCurrentNode();
     this.revisionsDataMap = getRevisionData(currentNode);
     this.viewedRevisions = getLatestRevisions(3,currentNode);
   }

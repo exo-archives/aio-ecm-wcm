@@ -9,6 +9,7 @@ import org.exoplatform.portal.webui.page.UIPageBody;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.wcm.core.NodeIdentifier;
+import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.publication.NotInWCMPublicationException;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.wcm.webui.selector.document.UIDocumentPathSelector;
@@ -35,7 +36,7 @@ import org.exoplatform.webui.event.EventListener;
 
 public class UIResultView extends UIContainer {
 
-  private Node presentNode;
+  private NodeLocation presentNodeLocation;
   private boolean isDocument;
 
   public UIResultView() throws Exception {
@@ -45,10 +46,10 @@ public class UIResultView extends UIContainer {
   public void init(Node presentNode, boolean isDocument) {
     UIWCResultSearchPresentation uiResultPresentation = 
       getChild(UIWCResultSearchPresentation.class);
-    this.presentNode = presentNode;
+    presentNodeLocation = NodeLocation.make(presentNode);
     this.isDocument = isDocument;
-    uiResultPresentation.setDocument(this.isDocument);
-    uiResultPresentation.setNode(this.presentNode);
+    uiResultPresentation.setDocument(isDocument);
+    uiResultPresentation.setNode(presentNode);
   }
 
   public String[] getActions() {
@@ -60,6 +61,7 @@ public class UIResultView extends UIContainer {
       UIResultView uiResultView = event.getSource();
       UIWebContentTabSelector uiWCTabSelector = 
         uiResultView.getAncestorOfType(UIWebContentTabSelector.class);
+      Node presentNode = NodeLocation.getNodeByLocation(uiResultView.presentNodeLocation);
       if(uiWCTabSelector == null) {
         UIDocumentTabSelector uiDocTabSelector = 
           uiResultView.getAncestorOfType(UIDocumentTabSelector.class);
@@ -67,12 +69,12 @@ public class UIResultView extends UIContainer {
           uiDocTabSelector.getChild(UIDocumentPathSelector.class);
         String returnField = ((UIBaseNodeTreeSelector) uiDocPathSelector).getReturnFieldName();
         ((UISelectable)((UIBaseNodeTreeSelector) uiDocPathSelector)
-            .getSourceComponent()).doSelect(returnField, uiResultView.presentNode.getPath());
+            .getSourceComponent()).doSelect(returnField, presentNode.getPath());
         uiDocTabSelector.removeChild(UIResultView.class);
         event.getRequestContext().addUIComponentToUpdateByAjax(
             ((UIBaseNodeTreeSelector) uiDocPathSelector).getSourceComponent().getParent());
       } else {
-        Node webContent = uiResultView.presentNode;
+        Node webContent = presentNode;
         NodeIdentifier nodeIdentifier = NodeIdentifier.make(webContent);
         PortletRequestContext pContext = (PortletRequestContext) event.getRequestContext();
         PortletPreferences prefs = pContext.getRequest().getPreferences();

@@ -26,6 +26,7 @@ import org.exoplatform.ecm.webui.selector.UISelectable;
 import org.exoplatform.ecm.webui.tree.selectmany.UICategoriesSelector;
 import org.exoplatform.services.cms.categories.CategoriesService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
@@ -46,7 +47,7 @@ public class UICategorizing extends UIContainer implements UISelectable {
   final static String PATH_CATEGORY = "path".intern(); 
 
   /** The web content node. */
-  private Node webContentNode = null;
+  private NodeLocation webContentNodeLocation;
 
   /** The existed categories. */
   private List<String> existedCategories = new ArrayList<String>();
@@ -116,7 +117,7 @@ public class UICategorizing extends UIContainer implements UISelectable {
    * @return the web content node
    */
   public Node getWebContentNode() {
-    return this.webContentNode;
+    return NodeLocation.getNodeByLocation(webContentNodeLocation);
   }
 
   /**
@@ -125,6 +126,6 @@ public class UICategorizing extends UIContainer implements UISelectable {
    * @param webContentNode the new web content node
    */
   public void setWebContentNode(Node webContentNode) {
-    this.webContentNode = webContentNode;
+    webContentNodeLocation = NodeLocation.make(webContentNode);
   }
 }

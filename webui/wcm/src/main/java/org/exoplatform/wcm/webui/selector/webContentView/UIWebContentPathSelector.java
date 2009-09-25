@@ -26,6 +26,7 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.wcm.webui.selector.UISelectPathPanel;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -69,7 +70,7 @@ public class UIWebContentPathSelector extends UIBaseNodeTreeSelector implements 
    * 
    * @throws Exception the exception
    */
-  private Node currentPortal;
+  private NodeLocation currentPortalLocation;
   public String contentType;
 
   public UIWebContentPathSelector() throws Exception {
@@ -93,6 +94,7 @@ public class UIWebContentPathSelector extends UIBaseNodeTreeSelector implements 
    */
   public void init() throws Exception {
     String[] acceptedNodeTypes = null;
+    Node currentPortal = getCurrentPortal();
     if(contentType == null || contentType.equals(WEBCONENT)){
       acceptedNodeTypes = new String[]{"exo:webContent"};
     }else if(contentType.equals(DMSDOCUMENT)){
@@ -108,6 +110,7 @@ public class UIWebContentPathSelector extends UIBaseNodeTreeSelector implements 
     String currentPortalName = Util.getUIPortal().getName();
     SessionProvider provider = SessionProviderFactory.createSessionProvider();
     currentPortal = livePortalManagerService.getLivePortal(provider, currentPortalName);
+    currentPortalLocation = NodeLocation.make(currentPortal);
     
     provider.close();
   }
@@ -123,14 +126,14 @@ public class UIWebContentPathSelector extends UIBaseNodeTreeSelector implements 
    * @return the currentPortal
    */
   public Node getCurrentPortal() {
-    return currentPortal;
+    return NodeLocation.getNodeByLocation(currentPortalLocation);
   }
 
   /**
    * @param currentPortal the currentPortal to set
    */
   public void setCurrentPortal(Node currentPortal) {
-    this.currentPortal = currentPortal;
+    currentPortalLocation = NodeLocation.make(currentPortal);
   }
   
   public static class ChangeContentTypeActionListener extends EventListener<UIWebContentPathSelector> {

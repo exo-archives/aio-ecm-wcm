@@ -39,6 +39,7 @@ import org.exoplatform.services.cms.JcrInputProperty;
 import org.exoplatform.services.cms.impl.DMSConfiguration;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.wcm.webui.Utils;
@@ -69,7 +70,7 @@ import org.exoplatform.webui.event.EventListener;
 public class UIPCVContentDialog extends UIDialogForm {
 
   /** The document node. */
-  private Node documentNode;
+  private NodeLocation documentNodeLocation;
 
   /**
    * Sets the document node.
@@ -77,7 +78,7 @@ public class UIPCVContentDialog extends UIDialogForm {
    * @param node the new document node
    */
   public void setDocumentNode(Node node) {
-    documentNode = node;
+    documentNodeLocation = NodeLocation.make(node);
   }
 
   /**
@@ -86,7 +87,7 @@ public class UIPCVContentDialog extends UIDialogForm {
    * @return the document node
    */
   public Node getDocumentNode() {
-    return documentNode;
+    return NodeLocation.getNodeByLocation(documentNodeLocation);
   }
 
   /* (non-Javadoc)
