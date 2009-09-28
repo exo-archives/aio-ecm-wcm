@@ -259,7 +259,7 @@ public class WCMPublicationServiceImpl implements WCMPublicationService, Startab
         currentState = node.getProperty("publication:currentState").getString();
       }
     } catch (Exception e) {
-      //log.error("Error when perform getContentState: ", e.fillInStackTrace());
+      //log.info("Error when perform getContentState: " + e.getMessage());
     }
     return currentState;
 	}

@@ -4,12 +4,13 @@
 %>
 <div id="$uicomponent.id" class="UIWCMSearchContainer $uicomponent.id">
 	<div style="padding:10px;float:left">
+		<%String selected = "";%>
 		<div style="float:left;padding:5px;">
-			<%= _ctx.appRes("UISinglePortletContentViewer.selectBoxTitle")%> :
+			<%= _ctx.appRes("UISinglePortletContentViewer.selectBoxValues.filterBy")%> :
 		</div>
 		<div style="float:left;padding:5px;">
 			<select>
-				<%String selected = "";
+				<%
 					for(String type : uicomponent.types){
 						if(type.equals(uicomponent.selectedValues)) selected = "selected";
 						else selected = "";

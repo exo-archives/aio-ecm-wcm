@@ -102,7 +102,7 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent{
         contentDialogForm.init();
         uiQuickCreationWizard.viewStep(2);
         return;
-      }      
+      }
     }catch(Exception e) {
       if(UISingleContentViewerPortlet.scvLog.isDebugEnabled()) {
         UISingleContentViewerPortlet.scvLog.debug(e);

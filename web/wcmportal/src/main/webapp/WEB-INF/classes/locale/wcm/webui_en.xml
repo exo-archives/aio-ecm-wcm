@@ -113,10 +113,8 @@
         <title>Search</title>
       </searchbox>
     </SelectContent>
-    <selectBoxTitle>
-    	Filter by
-    </selectBoxTitle>
     <selectBoxValues>
+	    <FilterBy>Filter by</FilterBy>
     	<WebContent>Web Content</WebContent>
     	<DMSDocument>Document</DMSDocument>
     	<Media>Media</Media>
