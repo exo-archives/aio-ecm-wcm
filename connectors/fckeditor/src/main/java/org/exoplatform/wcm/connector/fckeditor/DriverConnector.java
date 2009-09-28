@@ -16,6 +16,7 @@
  */
 package org.exoplatform.wcm.connector.fckeditor;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -34,6 +35,7 @@ import org.apache.commons.logging.Log;
 import org.exoplatform.common.http.HTTPMethods;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.ecm.connector.fckeditor.FCKUtils;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.cms.BasePath;
@@ -50,11 +52,14 @@ import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.rest.CacheControl;
 import org.exoplatform.services.rest.HTTPMethod;
+import org.exoplatform.services.rest.HeaderParam;
+import org.exoplatform.services.rest.InputTransformer;
 import org.exoplatform.services.rest.OutputTransformer;
 import org.exoplatform.services.rest.QueryParam;
 import org.exoplatform.services.rest.Response;
 import org.exoplatform.services.rest.URITemplate;
 import org.exoplatform.services.rest.container.ResourceContainer;
+import org.exoplatform.services.rest.transformer.PassthroughInputTransformer;
 import org.exoplatform.services.rest.transformer.XMLOutputTransformer;
 import org.exoplatform.services.wcm.core.NodetypeConstant;
 import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
@@ -84,14 +89,18 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
   
   /** The log. */
   private static Log log = ExoLogger.getLogger(DriverConnector.class);
+
+  /** The limit. */
+  private int limit;
   
   /**
    * Instantiates a new driver connector.
    * 
    * @param container the container
    */
-  public DriverConnector(ExoContainer container) {
+  public DriverConnector(ExoContainer container, InitParams params) {
     super(container);
+    limit = Integer.parseInt(params.getValueParam("upload.limit.size").getValue());
   }
 	
   /**
@@ -178,6 +187,82 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
     return Response.Builder.ok().build();
   }
 	
+
+  /**
+   * Upload file.
+   * 
+   * @param inputStream the input stream
+   * @param repositoryName the repository name
+   * @param workspaceName the workspace name
+   * @param currentFolder the current folder
+   * @param jcrPath the jcr path
+   * @param uploadId the upload id
+   * @param language the language
+   * @param contentType the content type
+   * @param contentLength the content length
+   * @param currentPortal the current portal
+   * 
+   * @return the response
+   * 
+   * @throws Exception the exception
+   */
+  @HTTPMethod(HTTPMethods.POST)
+  @URITemplate("/uploadFile/upload/")
+  @InputTransformer(PassthroughInputTransformer.class)
+  @OutputTransformer(XMLOutputTransformer.class)
+  public Response uploadFile(InputStream inputStream, @QueryParam("repositoryName")
+      String repositoryName, @QueryParam("workspaceName")
+      String workspaceName, @QueryParam("currentFolder")
+      String currentFolder, @QueryParam("currentPortal")
+      String currentPortal,@QueryParam("jcrPath")
+      String jcrPath, @QueryParam("uploadId")
+      String uploadId, @QueryParam("language")
+      String language, @HeaderParam("content-type")
+      String contentType, @HeaderParam("content-length")
+      String contentLength) throws Exception {
+    return createUploadFileResponse(inputStream, repositoryName, workspaceName, currentFolder,
+        currentPortal, jcrPath, uploadId, language, contentType, contentLength, limit);
+  }
+
+  /**
+   * Process upload.
+   * 
+   * @param repositoryName the repository name
+   * @param workspaceName the workspace name
+   * @param currentFolder the current folder
+   * @param jcrPath the jcr path
+   * @param action the action
+   * @param language the language
+   * @param fileName the file name
+   * @param uploadId the upload id
+   * @param currentPortal the current portal
+   * 
+   * @return the response
+   * 
+   * @throws Exception the exception
+   */
+  @HTTPMethod(HTTPMethods.GET)
+  @URITemplate("/uploadFile/control/")
+  @OutputTransformer(XMLOutputTransformer.class)
+  public Response processUpload(@QueryParam("repositoryName")
+      String repositoryName, @QueryParam("workspaceName")
+      String workspaceName, @QueryParam("currentFolder")
+      String currentFolder, @QueryParam("currentPortal")
+      String currentPortal, @QueryParam("jcrPath")
+      String jcrPath, @QueryParam("action")
+      String action, @QueryParam("language")
+      String language, @QueryParam("fileName")
+      String fileName, @QueryParam("uploadId")
+      String uploadId) throws Exception {
+    try {
+      return createProcessUploadResponse(repositoryName, workspaceName, currentFolder,currentPortal ,jcrPath,
+          action, language, fileName, uploadId);  
+    } catch (Exception e) {
+      log.error("Error when perform processUpload: ", e.fillInStackTrace());
+    }
+    return Response.Builder.ok().build();
+  }
+  
   /**
    * Gets the drivers by user id.
    * 
