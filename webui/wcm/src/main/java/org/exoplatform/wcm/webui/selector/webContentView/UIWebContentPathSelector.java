@@ -101,6 +101,7 @@ public class UIWebContentPathSelector extends UIBaseNodeTreeSelector implements 
       String repositoryName = ((ManageableRepository)(currentPortal.getSession().getRepository())).getConfiguration().getName();
       List<String> listAcceptedNodeTypes = getApplicationComponent(TemplateService.class).getDocumentTemplates(repositoryName);
       listAcceptedNodeTypes.remove("exo:webContent");
+      listAcceptedNodeTypes.remove("exo:pictureOnHeadWebcontent");
       acceptedNodeTypes = new String[listAcceptedNodeTypes.size()];
       listAcceptedNodeTypes.toArray(acceptedNodeTypes);
     }
