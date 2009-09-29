@@ -55,6 +55,8 @@ import org.exoplatform.webui.event.EventListener;
                  events = @EventConfig(listeners = UIWebContentTreeBuilder.ChangeNodeActionListener.class)
 )
 public class UIWebContentTreeBuilder extends UIContainer {
+  
+  private String path;
 
   /**
    * Instantiates a new uI web content tree builder.
@@ -324,9 +326,11 @@ public class UIWebContentTreeBuilder extends UIContainer {
      */
     public void execute(Event<UIWebContentTreeBuilder> event) throws Exception {
       UIWebContentTreeBuilder treeBuilder = event.getSource();      
-      String value = event.getRequestContext().getRequestParameter(OBJECTID);
-      String workSpaceName = value.substring(value.lastIndexOf("/") + 1);
-      String nodePath = value.substring(0, value.lastIndexOf("/"));
+      String values = event.getRequestContext().getRequestParameter(OBJECTID);
+      treeBuilder.path = values.substring(values.lastIndexOf("/") + 1);
+      values = values.substring(0, values.lastIndexOf("/"));
+      String workSpaceName = values.substring(values.lastIndexOf("/") + 1);
+      String nodePath = values.substring(0, values.lastIndexOf("/"));
       Node rootNode = (Node)treeBuilder.getSession(workSpaceName).getItem(nodePath);
       UISelectPathPanel selectPathPanel = treeBuilder.getAncestorOfType(UIWebContentPathSelector.class).getChild(UISelectPathPanel.class);
       selectPathPanel.setParentNode(rootNode);

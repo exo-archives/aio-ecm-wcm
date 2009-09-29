@@ -278,6 +278,8 @@ public class UIPresentationContainer extends UIContainer{
       presentation.setOriginalNode(getNode().getSession().getNodeByUUID(nodeUUID));
       presentation.setNode(nodeView);
     } else {
+      if(presentation == null) System.out.println("--------------> die");
+      else System.out.println("--------------------> ok");
       presentation.setOriginalNode(nodeView);
       presentation.setNode(nodeView);
     }

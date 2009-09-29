@@ -13,6 +13,7 @@
 		this.constParentNode = 'UIWCMTreeParentNode';
 		this.constChildNode = 'UIWCMTreeChildNode';
 		this.constBreadcumbsElement ='UITreeViewBreadcumbsElement';
+		this.constComponentId = "$uicomponent.id";
 		this.oldId;
 	};
 	
@@ -85,6 +86,23 @@
 		}
 	}
 	
+	MyUIWCMTreeView.prototype.OpenPath = function(path) {
+		this.selectNode(path);
+		obj = document.getElementById(this.constChildNode + path);
+		obj.style.display = "block";
+		obj = document.getElementById(this.constParentNode + path);
+		obj.style.fontWeight="bold";
+		obj.className = "SelectNodeIcon";
+		var next = true;
+		while(next){
+			obj = obj.parentNode;
+			if(obj && obj.id != this.constComponentId) obj.style.display = "block";
+			else {
+				next = false;
+			}
+		}
+	}
+	
 	eXo.wcm.MyUIWCMTreeView = new MyUIWCMTreeView();
 </script>
 
@@ -102,7 +120,8 @@
 			sub = 0;
 		}
 		for(int j = 0; j <= sub && i > 0; j ++) println "</div>";
-		if(treeNode.getNodePath() != null)action = uicomponent.event("ChangeNode", treeNode.getNodePath() + "/" + treeNode.getWorkSpaceName());
+		if(treeNode.getNodePath() != null)action = uicomponent.event("ChangeNode", treeNode.getNodePath() + "/" + treeNode.getWorkSpaceName() +
+																																								"/" + i);
 		else action = "";
 		println "	<div onclick=\"eXo.wcm.MyUIWCMTreeView.selectNode('"+i+"');\" ajaxAction=\""+action+";\" treePath=\""+treeNode.getTreePath()+
 									"\" style=\"\" id=\"UIWCMTreeParentNode" + i + "\" class=\"NoneSelectNodeIcon\">";
@@ -113,3 +132,11 @@
 	for(int i = 0; i <= treeNode.getDeep(); i ++) println "</div>";
 	%>
 </div>
+<%
+	if(uicomponent.path != null && uicomponent.path.trim().length() > 0) {
+		//rcontext.getJavascriptManager().addJavascript("eXo.wcm.MyUIWCMTreeView.OpenPath('" + uicomponent.path + "');");
+		println "<script type=\"text/javascript\">";
+		println "eXo.wcm.MyUIWCMTreeView.OpenPath('" + uicomponent.path + "');";
+		println "</script>"
+	}
+%>
