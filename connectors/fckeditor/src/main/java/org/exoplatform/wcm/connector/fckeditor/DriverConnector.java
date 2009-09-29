@@ -65,6 +65,7 @@ import org.exoplatform.services.wcm.core.NodetypeConstant;
 import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
 import org.exoplatform.services.wcm.webcontent.WebContentSchemaHandler;
 import org.exoplatform.wcm.connector.BaseConnector;
+import org.exoplatform.wcm.connector.FileUploadHandler;
 import org.exoplatform.wcm.connector.handler.FCKFileHandler;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -210,17 +211,20 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
   @URITemplate("/uploadFile/upload/")
   @InputTransformer(PassthroughInputTransformer.class)
   @OutputTransformer(XMLOutputTransformer.class)
-  public Response uploadFile(InputStream inputStream, @QueryParam("repositoryName")
-      String repositoryName, @QueryParam("workspaceName")
-      String workspaceName, @QueryParam("currentFolder")
-      String currentFolder, @QueryParam("currentPortal")
-      String currentPortal,@QueryParam("jcrPath")
-      String jcrPath, @QueryParam("uploadId")
-      String uploadId, @QueryParam("language")
-      String language, @HeaderParam("content-type")
-      String contentType, @HeaderParam("content-length")
-      String contentLength) throws Exception {
-    return createUploadFileResponse(inputStream, repositoryName, workspaceName, currentFolder,
+  public Response uploadFile(InputStream inputStream,
+  		@QueryParam("repositoryName") String repositoryName,
+  		@QueryParam("workspaceName") String workspaceName,
+  		@QueryParam("driverName") String driverName,
+      @QueryParam("currentFolder") String currentFolder,
+      @QueryParam("currentPortal") String currentPortal,
+      @QueryParam("jcrPath") String jcrPath,
+      @QueryParam("uploadId") String uploadId,
+      @QueryParam("language") String language,
+      @HeaderParam("content-type") String contentType,
+      @HeaderParam("content-length") String contentLength) throws Exception {
+
+  	Node currentFolderNode = getParentFolderNode(repositoryName, workspaceName, driverName, currentFolder);
+    return createUploadFileResponse(inputStream, repositoryName, workspaceName, currentFolderNode,
         currentPortal, jcrPath, uploadId, language, contentType, contentLength, limit);
   }
 
@@ -244,18 +248,20 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
   @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/uploadFile/control/")
   @OutputTransformer(XMLOutputTransformer.class)
-  public Response processUpload(@QueryParam("repositoryName")
-      String repositoryName, @QueryParam("workspaceName")
-      String workspaceName, @QueryParam("currentFolder")
-      String currentFolder, @QueryParam("currentPortal")
-      String currentPortal, @QueryParam("jcrPath")
-      String jcrPath, @QueryParam("action")
-      String action, @QueryParam("language")
-      String language, @QueryParam("fileName")
-      String fileName, @QueryParam("uploadId")
-      String uploadId) throws Exception {
+  public Response processUpload(
+  		@QueryParam("repositoryName") String repositoryName,
+      @QueryParam("workspaceName") String workspaceName,
+      @QueryParam("driverName") String driverName,
+      @QueryParam("currentFolder") String currentFolder,
+      @QueryParam("currentPortal") String currentPortal,
+      @QueryParam("jcrPath") String jcrPath,
+      @QueryParam("action") String action,
+      @QueryParam("language") String language,
+      @QueryParam("fileName") String fileName,
+      @QueryParam("uploadId") String uploadId) throws Exception {
     try {
-      return createProcessUploadResponse(repositoryName, workspaceName, currentFolder,currentPortal ,jcrPath,
+    	Node currentFolderNode = getParentFolderNode(repositoryName, workspaceName, driverName, currentFolder);
+      return createProcessUploadResponse(repositoryName, workspaceName, currentFolderNode,currentPortal ,jcrPath,
           action, language, fileName, uploadId);  
     } catch (Exception e) {
       log.error("Error when perform processUpload: ", e.fillInStackTrace());
@@ -566,4 +572,105 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
       return webContentSchemaHandler.getImagesFolders(node);
     }
 	}
+	
+
+  /**
+   * Creates the upload file response.
+   * 
+   * @param inputStream the input stream
+   * @param repositoryName the repository name
+   * @param workspaceName the workspace name
+   * @param currentFolder the current folder
+   * @param runningPortalName
+   * @param jcrPath the jcr path
+   * @param uploadId the upload id
+   * @param language the language
+   * @param contentType the content type
+   * @param contentLength the content length
+   * @return the response
+   * @throws Exception the exception
+   */
+  protected Response createUploadFileResponse(InputStream inputStream,
+                                              String repositoryName,
+                                              String workspaceName,
+                                              Node currentFolderNode,
+                                              String runningPortalName,
+                                              String jcrPath,
+                                              String uploadId,
+                                              String language,
+                                              String contentType,
+                                              String contentLength,
+                                              int limit) throws Exception {
+//    SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
+//    Node sharedPortal = livePortalManagerService.getLiveSharedPortal(sessionProvider);
+//    Node currentPortal = getCurrentPortalNode(repositoryName,
+//                                              jcrPath,
+//                                              runningPortalName,
+//                                              sharedPortal);
+//    Node webContent = getWebContent(repositoryName, workspaceName, jcrPath);
+//    sessionProvider.close();
+    return fileUploadHandler.upload(uploadId,
+                                    contentType,
+                                    Double.parseDouble(contentLength),
+                                    inputStream,
+                                    currentFolderNode,
+                                    language,
+                                    limit);
+  }
+
+  /**
+   * Creates the process upload response.
+   * 
+   * @param repositoryName the repository name
+   * @param workspaceName the workspace name
+   * @param currentFolder the current folder
+   * @param jcrPath the jcr path
+   * @param action the action
+   * @param language the language
+   * @param fileName the file name
+   * @param uploadId the upload id
+   * @param runningPortalName the portal name
+   * @return the response
+   * @throws Exception the exception
+   */
+  protected Response createProcessUploadResponse(String repositoryName,
+                                                 String workspaceName,
+                                                 Node currentFolderNode,
+                                                 String runningPortalName,
+                                                 String jcrPath,
+                                                 String action,
+                                                 String language,
+                                                 String fileName,
+                                                 String uploadId) throws Exception {
+    if (FileUploadHandler.SAVE_ACTION.equals(action)) {
+      CacheControl cacheControl = new CacheControl();
+      cacheControl.setNoCache(true);
+//      SessionProvider sessionProvider = WCMCoreUtils.getSessionProvider();
+//      Node sharedPortal = livePortalManagerService.getLiveSharedPortal(sessionProvider);
+//      Node currentPortal = getCurrentPortalNode(repositoryName,
+//                                                jcrPath,
+//                                                runningPortalName,
+//                                                sharedPortal);
+//      Node webContent = getWebContent(repositoryName, workspaceName, jcrPath);
+//      sessionProvider.close();
+      return fileUploadHandler.saveAsNTFile(currentFolderNode, uploadId, fileName, language);
+    }
+    return fileUploadHandler.control(uploadId, action);
+  }
+  
+  private Node getParentFolderNode(
+  		String repositoryName, String workspaceName, String driverName, String currentFolder) throws Exception{
+    SessionProvider sessionProvider = SessionProviderFactory.createSystemProvider();
+    RepositoryService repositoryService = (RepositoryService)ExoContainerContext.getCurrentContainer()
+    	.getComponentInstanceOfType(RepositoryService.class);
+    ManageableRepository manageableRepository = repositoryService.getRepository(repositoryName);
+    Session session = sessionProvider.getSession(workspaceName, manageableRepository);
+    ManageDriveService manageDriveService = (ManageDriveService)ExoContainerContext.getCurrentContainer()
+    	.getComponentInstanceOfType(ManageDriveService.class);
+    
+    return (Node)session.getItem(
+    		manageDriveService.getDriveByName(driverName, repositoryName).getHomePath()
+        + ((currentFolder != null && currentFolder.length() != 0) ? "/" : "")
+        + currentFolder);
+  }
 }

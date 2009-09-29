@@ -139,7 +139,7 @@ public class NavigationEventListenerDelegate {
   private void updateRemovedPageNode(
   		PageNavigation pageNavigation, String remoteUser, WebpagePublicationPlugin plugin) throws Exception {
     String portalName = pageNavigation.getOwnerId();
-    List<PageNode> listPortalPageNode = pageNavigation.getNodes();
+    List<PageNode> listPortalPageNode = getAllPageNodeFromPageNavigation(pageNavigation);
     List<String> listPortalNavigationUri = new ArrayList<String>();
     List<String> listPageReference = new ArrayList<String>();
     for (PageNode portalPageNode : listPortalPageNode) {
