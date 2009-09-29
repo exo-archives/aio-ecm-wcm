@@ -18,6 +18,7 @@
 
 .UIPCLVPortlet .UIFormGrid {
 	margin: 0;
+	margin-left: 40px;
 }
 
 .UIPCLVPortlet .HorizontalLayout .UIFormInputSet{

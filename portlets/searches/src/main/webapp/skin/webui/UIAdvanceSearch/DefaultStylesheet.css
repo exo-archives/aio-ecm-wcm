@@ -1,0 +1,9 @@
+.UIForm .UIFormGrid td.FieldLabel {
+	padding:4px;
+	text-align:right;
+	vertical-align:top;
+	width:40%;
+}
+td {
+	min-width:20px;
+}
