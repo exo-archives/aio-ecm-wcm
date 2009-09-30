@@ -78,7 +78,9 @@ public class UIPublicationAction extends UIForm {
     if (node.hasProperty("publication:navigationNodeURIs")) {
       Value[] navigationNodeURIs = node.getProperty("publication:navigationNodeURIs").getValues();
       for (Value navigationNodeURI : navigationNodeURIs) {
-        listPublishedPage.add(navigationNodeURI.getString());
+      	if (PublicationUtil.isNodeContentPublishedToPageNode(node, navigationNodeURI.getString())) {
+      		listPublishedPage.add(navigationNodeURI.getString());
+      	}
       }
       publishedPages.setListNavigationNodeURI(listPublishedPage);    
       UIPublicationContainer publicationContainer = getAncestorOfType(UIPublicationContainer.class);

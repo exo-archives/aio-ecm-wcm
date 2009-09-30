@@ -22,7 +22,13 @@ import java.util.List;
 import javax.jcr.Node;
 import javax.jcr.Value;
 
+import org.exoplatform.portal.config.DataStorage;
+import org.exoplatform.portal.config.model.PageNavigation;
+import org.exoplatform.portal.config.model.PageNode;
+import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.container.UIContainer;
+import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.wcm.publication.PublicationUtil;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
@@ -92,7 +98,9 @@ public class UIPublishedPages extends UIContainer {
       listNavigationNodeURI = new ArrayList<String>();
       Value[] values = contentNode.getProperty("publication:navigationNodeURIs").getValues();
       for (Value value : values) {
-        listNavigationNodeURI.add(value.getString()); 
+      	if (PublicationUtil.isNodeContentPublishedToPageNode(contentNode, value.getString())) {
+      		listNavigationNodeURI.add(value.getString()); 
+      	}
       }
     } else {
       listNavigationNodeURI = new ArrayList<String>();

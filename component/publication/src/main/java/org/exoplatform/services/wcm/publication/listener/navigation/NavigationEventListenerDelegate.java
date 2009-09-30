@@ -112,7 +112,7 @@ public class NavigationEventListenerDelegate {
   private void updateAddedPageNode(PageNavigation pageNavigation, String remoteUser) throws Exception {
     UserPortalConfigService userPortalConfigService = PublicationUtil.getServices(UserPortalConfigService.class);
     WCMConfigurationService wcmConfigurationService = PublicationUtil.getServices(WCMConfigurationService.class);
-    for (PageNode pageNode : getAllPageNodeFromPageNavigation(pageNavigation)) {
+    for (PageNode pageNode : PublicationUtil.getAllPageNodeFromPageNavigation(pageNavigation)) {
       Page page = userPortalConfigService.getPage(pageNode.getPageReference(), remoteUser);
       if (page != null) {
         for (String applicationId : PublicationUtil.getListApplicationIdByPage(page, wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.SCV_PORTLET))) {
@@ -139,7 +139,7 @@ public class NavigationEventListenerDelegate {
   private void updateRemovedPageNode(
   		PageNavigation pageNavigation, String remoteUser, WebpagePublicationPlugin plugin) throws Exception {
     String portalName = pageNavigation.getOwnerId();
-    List<PageNode> listPortalPageNode = getAllPageNodeFromPageNavigation(pageNavigation);
+    List<PageNode> listPortalPageNode = PublicationUtil.getAllPageNodeFromPageNavigation(pageNavigation);
     List<String> listPortalNavigationUri = new ArrayList<String>();
     List<String> listPageReference = new ArrayList<String>();
     for (PageNode portalPageNode : listPortalPageNode) {
@@ -267,41 +267,5 @@ public class NavigationEventListenerDelegate {
     }
     content.setProperty("publication:applicationIDs", PublicationUtil.toValues(valueFactory, listExistedApplicationIdTmp));
     session.save();
-  }
-  
-  /**
-   * Gets the all page node from page navigation.
-   * 
-   * @param pageNavigation the page navigation
-   * 
-   * @return the all page node from page navigation
-   */
-  private ArrayList<PageNode> getAllPageNodeFromPageNavigation(PageNavigation pageNavigation){
-  	ArrayList<PageNode> pageNodeList = new ArrayList<PageNode>();
-  	for (PageNode pageNode : pageNavigation.getNodes()) {
-  		pageNodeList.add(pageNode);
-	    pageNodeList.addAll(getChildrenPageNodes(pageNode));
-    }
-  	return pageNodeList;
-  }
-  
-  /**
-   * Gets the children page nodes.
-   * 
-   * @param parentPageNode the parent page node
-   * 
-   * @return the children page nodes
-   */
-  private ArrayList<PageNode> getChildrenPageNodes(PageNode parentPageNode){
-  	ArrayList<PageNode> pageNodeList = new ArrayList<PageNode>();
-  	if (parentPageNode.getChildren() == null) return pageNodeList;
-  	
-  	for (PageNode pageNode : parentPageNode.getChildren()) {
-	    pageNodeList.add(pageNode);
-	    if(pageNode.getChildren() != null && pageNode.getChildren().size() > 0) {
-	    	pageNodeList.addAll(getChildrenPageNodes(pageNode));
-	    }
-    }
-  	return pageNodeList;
   }
 }

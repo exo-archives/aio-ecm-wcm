@@ -36,6 +36,7 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
@@ -352,5 +353,78 @@ public class PublicationUtil {
   public static <T> T getServices(Class<T> clazz) {
     ExoContainer exoContainer = ExoContainerContext.getCurrentContainer();
     return clazz.cast(exoContainer.getComponentInstanceOfType(clazz));
+  }
+  
+  /**
+   * Checks if is node content published to page node.
+   * 
+   * @param contentNode the content node
+   * @param navNodeURI the nav node uri
+   * 
+   * @return true, if is node content published to page node
+   * 
+   * @throws Exception the exception
+   */
+  public static boolean isNodeContentPublishedToPageNode(Node contentNode, String navNodeURI) throws Exception{
+  	DataStorage dataStorage = PublicationUtil.getServices(DataStorage.class);
+  	PageNavigation pageNavigation = dataStorage.getPageNavigation(PortalConfig.PORTAL_TYPE, Util.getUIPortal().getName());
+  	ArrayList<PageNode> lisPageNodes = PublicationUtil.getAllPageNodeFromPageNavigation(pageNavigation);
+  	PageNode pageNode = null;
+  	
+  	for (PageNode tempPageNode : lisPageNodes) {
+	    if (tempPageNode.getUri().equals(navNodeURI.replace("/" + Util.getUIPortal().getName() + "/", ""))){
+	    	pageNode = tempPageNode;
+	    	break;
+	    }
+    }
+  	
+  	if (pageNode == null || pageNode.getPageReference() == null) return false;
+  	
+  	return
+  		PublicationUtil.getValuesAsString(contentNode, "publication:webPageIDs").contains(pageNode.getPageReference());
+  }
+  
+  /**
+   * Gets the all page node from page navigation.
+   * 
+   * @param pageNavigation the page navigation
+   * 
+   * @return the all page node from page navigation
+   */
+  public static ArrayList<PageNode> getAllPageNodeFromPageNavigation(PageNavigation pageNavigation){
+  	ArrayList<PageNode> pageNodeList = new ArrayList<PageNode>();
+  	
+  	if (pageNavigation == null || pageNavigation.getNodes() == null)
+  		return null;
+  	
+  	for (PageNode pageNode : pageNavigation.getNodes()) {
+  		pageNodeList.add(pageNode);
+	    pageNodeList.addAll(getChildrenPageNodes(pageNode));
+    }
+  	
+  	return pageNodeList;
+  }
+  
+  /**
+   * Gets the children page nodes.
+   * 
+   * @param parentPageNode the parent page node
+   * 
+   * @return the children page nodes
+   */
+  private static ArrayList<PageNode> getChildrenPageNodes(PageNode parentPageNode){
+  	ArrayList<PageNode> pageNodeList = new ArrayList<PageNode>();
+  	
+  	if (parentPageNode == null || parentPageNode.getChildren() == null)
+  		return pageNodeList;
+  	
+  	for (PageNode pageNode : parentPageNode.getChildren()) {
+	    pageNodeList.add(pageNode);
+	    if(pageNode.getChildren() != null && pageNode.getChildren().size() > 0) {
+	    	pageNodeList.addAll(getChildrenPageNodes(pageNode));
+	    }
+    }
+  	
+  	return pageNodeList;
   }
 } 
