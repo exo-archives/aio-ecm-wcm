@@ -39,7 +39,6 @@ import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;
-import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.core.WCMService;
 import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
@@ -210,10 +209,6 @@ public class UIPresentationContainer extends UIContainer{
     return null;
   }
 
-  
-  /** The node reference. */
-  private NodeLocation nodeReferenceLocation;
-  
   /**
    * Gets the reference node.
    * 
@@ -275,7 +270,7 @@ public class UIPresentationContainer extends UIContainer{
     UIPresentation presentation = getChild(UIPresentation.class);
     if (nodeView != null && nodeView.isNodeType("nt:frozenNode")) {
       String nodeUUID = nodeView.getProperty("jcr:frozenUuid").getString();
-      presentation.setOriginalNode(getNode().getSession().getNodeByUUID(nodeUUID));
+      presentation.setOriginalNode(nodeView.getSession().getNodeByUUID(nodeUUID));
       presentation.setNode(nodeView);
     } else {
       presentation.setOriginalNode(nodeView);
