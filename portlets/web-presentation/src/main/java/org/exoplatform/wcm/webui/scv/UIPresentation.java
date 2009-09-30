@@ -22,14 +22,18 @@ import javax.jcr.AccessDeniedException;
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
+import javax.jcr.Session;
 import javax.portlet.PortletPreferences;
 
 import org.exoplatform.ecm.resolver.JCRResourceResolver;
 import org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -56,8 +60,8 @@ public class UIPresentation extends UIBaseNodePresentation {
    * 
    * @throws Exception the exception
    */
-  private Node orginalNode = null;
-  private Node viewNode = null;
+  private NodeLocation originalNodeLocation;
+  private NodeLocation viewNodeLocation;
 
   public UIPresentation() throws Exception {}
 
@@ -65,11 +69,11 @@ public class UIPresentation extends UIBaseNodePresentation {
    * @see org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation#getNode()
    */
   public Node getNode() throws Exception {
-    return viewNode;
+	  return NodeLocation.getNodeByLocation(viewNodeLocation);
   }
 
   public void setViewNode(Node node) throws Exception {
-    this.viewNode = node;
+	  viewNodeLocation = NodeLocation.make(node);
   }
   /* (non-Javadoc)
    * @see org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation#getRepositoryName()
@@ -97,11 +101,11 @@ public class UIPresentation extends UIBaseNodePresentation {
    * @see org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation#getOriginalNode()
    */
   public Node getOriginalNode() throws Exception {
-    return orginalNode;
+	  return NodeLocation.getNodeByLocation(originalNodeLocation);
   }  
 
   public void setOriginalNode(Node node) throws Exception{
-    this.orginalNode = node;
+	  originalNodeLocation = NodeLocation.make(node);
   }
   /* (non-Javadoc)
    * @see org.exoplatform.portal.webui.portal.UIPortalComponent#getTemplate()
@@ -168,8 +172,8 @@ public class UIPresentation extends UIBaseNodePresentation {
   @Override
   public String getTemplatePath() throws Exception {
     TemplateService templateService = getApplicationComponent(TemplateService.class);
-    if (viewNode != null) {
-      return templateService.getTemplatePath(orginalNode, false) ; 
+    if (getNode() != null) {
+      return templateService.getTemplatePath(getOriginalNode(), false) ; 
     }
     return null;
   }
@@ -210,5 +214,19 @@ public class UIPresentation extends UIBaseNodePresentation {
 
   public void setNode(Node node) {
 
+  }
+  
+  public Node getNodeTest(String path) {
+	  try {
+		  SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
+		  RepositoryService repositoryService = getApplicationComponent(RepositoryService.class);
+		  ManageableRepository repository = repositoryService.getRepository("repository");
+		  Session session = sessionProvider.getSession("collaboration", repository);
+		  Node node = (Node)session.getItem(path);
+		  return node;
+	} catch (Exception e) {
+		e.printStackTrace();
+		return null;
+	}
   }
 }

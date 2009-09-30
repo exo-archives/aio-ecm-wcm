@@ -22,6 +22,7 @@ import org.exoplatform.ecm.resolver.JCRResourceResolver;
 import org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cms.templates.TemplateService;
+import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
@@ -40,8 +41,9 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 public class UIContentViewer extends UIBaseNodePresentation {
 
   /** The content node. */
-  private Node                contentNode;
-  private Node  orginalNode;
+  private NodeLocation contentNodeLocation;
+  private NodeLocation originalNodeLocation;
+  
   /** The resource resolver. */
   private JCRResourceResolver resourceResolver;
 
@@ -74,7 +76,7 @@ public class UIContentViewer extends UIBaseNodePresentation {
    */
   @Override
   public Node getNode() throws Exception {
-    return contentNode;
+    return NodeLocation.getNodeByLocation(contentNodeLocation);
   }
 
   /* (non-Javadoc)
@@ -82,12 +84,12 @@ public class UIContentViewer extends UIBaseNodePresentation {
    */
   @Override
   public Node getOriginalNode() throws Exception {
-	  return orginalNode;
+	return NodeLocation.getNodeByLocation(originalNodeLocation);
   }
   
-  public void setOrginalNode(Node orginalNode) {
-	this.orginalNode = orginalNode;
-}
+  public void setOrginalNode(Node originalNode) {
+	originalNodeLocation = NodeLocation.make(originalNode);
+  }
 
   /* (non-Javadoc)
    * @see org.exoplatform.ecm.webui.presentation.UIBaseNodePresentation#getRepositoryName()
@@ -111,7 +113,7 @@ public class UIContentViewer extends UIBaseNodePresentation {
   public String getTemplatePath() throws Exception {
     TemplateService templateService = getApplicationComponent(TemplateService.class);
     
-    return templateService.getTemplatePath(orginalNode, false);
+    return templateService.getTemplatePath(getOriginalNode(), false);
   }
 
   /* (non-Javadoc)
@@ -141,7 +143,7 @@ public class UIContentViewer extends UIBaseNodePresentation {
    * @see org.exoplatform.ecm.webui.presentation.NodePresentation#getNodeType()
    */
   public String getNodeType() throws Exception {
-    return orginalNode.getPrimaryNodeType().getName();
+    return getOriginalNode().getPrimaryNodeType().getName();
   }
 
   /* (non-Javadoc)
@@ -155,7 +157,7 @@ public class UIContentViewer extends UIBaseNodePresentation {
    * @see org.exoplatform.ecm.webui.presentation.NodePresentation#setNode(javax.jcr.Node)
    */
   public void setNode(Node node) {
-    this.contentNode = node;
+    contentNodeLocation = NodeLocation.make(node);
   }
 
   /**

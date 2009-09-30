@@ -33,6 +33,7 @@ import javax.jcr.version.VersionIterator;
 import org.exoplatform.ecm.webui.utils.JCRExceptionManager;
 import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
+import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -66,15 +67,15 @@ import org.exoplatform.webui.form.UIForm;
 
 public class UIPublicationPanel extends UIForm {
 
-  private Node currentNode;
-  private Node currentRevision;  
+  private NodeLocation currentNodeLocation;
+  private NodeLocation currentRevisionLocation;
   private Map<String,VersionData> revisionsDataMap = new HashMap<String,VersionData>();
   private List<Node> viewedRevisions = new ArrayList<Node>(3);
   public UIPublicationPanel() throws Exception {}
   
   public void init(Node node) throws Exception {
-    this.currentNode = node;    
-    this.currentRevision = node;
+	currentNodeLocation = NodeLocation.make(node);    
+	currentRevisionLocation = NodeLocation.make(node);
     this.viewedRevisions = getLatestRevisions(3,node);    
     this.revisionsDataMap = getRevisionData(node);
     //In somecases as copy a a node, we will lost all version of the node
@@ -106,12 +107,17 @@ public class UIPublicationPanel extends UIForm {
     return allversions;
   }  
 
-  public Node getCurrentNode() { return currentNode; }
+  public Node getCurrentNode() {
+	return NodeLocation.getNodeByLocation(currentNodeLocation);
+  }
 
-  public Node getCurrentRevision() { return currentRevision; }
+  public Node getCurrentRevision() {
+	return NodeLocation.getNodeByLocation(currentRevisionLocation);
+  }
 
   public String getRevisionAuthor(Node revision) throws Exception{
     VersionData revisionData = revisionsDataMap.get(revision.getUUID());
+    Node currentNode = getCurrentNode();
     if(revisionData!= null)
       return revisionData.getAuthor();
     if(revision.getUUID().equalsIgnoreCase(currentNode.getUUID())) {
@@ -121,7 +127,7 @@ public class UIPublicationPanel extends UIForm {
   }
 
   public Node getRevisionByUUID(String revisionUUID) throws Exception {
-    Session session = currentNode.getSession();
+    Session session = getCurrentNode().getSession();
     return session.getNodeByUUID(revisionUUID);
   }
 
@@ -142,6 +148,7 @@ public class UIPublicationPanel extends UIForm {
   }
   public String getRevisionState(Node revision) throws Exception{
     VersionData revisionData = revisionsDataMap.get(revision.getUUID());
+    Node currentNode = getCurrentNode();
     if(revisionData!= null)
       return revisionData.getState();
     if(revision.getUUID().equalsIgnoreCase(currentNode.getUUID())) {
@@ -150,7 +157,9 @@ public class UIPublicationPanel extends UIForm {
     return null;
   }    
 
-  public void setCurrentRevision(Node revision) { this.currentRevision = revision; }
+  public void setCurrentRevision(Node revision) { 
+	currentRevisionLocation = NodeLocation.make(revision);
+  }
 
   public void setRevisions(List<Node> revisions) {
     this.viewedRevisions = revisions;
@@ -160,6 +169,7 @@ public class UIPublicationPanel extends UIForm {
     UIPublicationContainer publicationContainer = getAncestorOfType(UIPublicationContainer.class);
     UIPublicationHistory publicationHistory = publicationContainer.getChild(UIPublicationHistory.class);
     publicationHistory.updateGrid();
+    Node currentNode = getCurrentNode();
     this.revisionsDataMap = getRevisionData(currentNode);
     this.viewedRevisions = getLatestRevisions(3,currentNode);
   }

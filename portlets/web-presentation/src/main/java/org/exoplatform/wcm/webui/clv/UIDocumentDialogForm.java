@@ -42,6 +42,7 @@ import org.exoplatform.services.ecm.publication.PublicationPlugin;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.Constant;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -74,7 +75,7 @@ import org.exoplatform.webui.event.Event.Phase;
 public class UIDocumentDialogForm extends UIDialogForm {
 
   /** The document node. */
-  private Node documentNode;
+  private NodeLocation documentNodeLocation;
 
   /**
    * Sets the document node.
@@ -87,7 +88,7 @@ public class UIDocumentDialogForm extends UIDialogForm {
   }
   
   public void setDocumentNode(Node node) {
-    documentNode = node;
+    documentNodeLocation = NodeLocation.make(node);
   }
 
   /**
@@ -96,7 +97,7 @@ public class UIDocumentDialogForm extends UIDialogForm {
    * @return the document node
    */
   public Node getDocumentNode() {
-    return documentNode;
+    return NodeLocation.getNodeByLocation(documentNodeLocation);
   }
 
   /* (non-Javadoc)

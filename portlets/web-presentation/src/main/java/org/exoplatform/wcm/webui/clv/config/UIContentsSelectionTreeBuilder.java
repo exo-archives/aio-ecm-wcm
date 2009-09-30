@@ -28,6 +28,7 @@ import org.exoplatform.ecm.webui.tree.UINodeTree;
 import org.exoplatform.ecm.webui.tree.UINodeTreeBuilder;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WebSchemaConfigService;
 import org.exoplatform.services.wcm.portal.PortalFolderSchemaHandler;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -49,10 +50,10 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 public class UIContentsSelectionTreeBuilder extends UINodeTreeBuilder {
 
   /** The current portal. */
-  private Node currentPortal;
+  private NodeLocation currentPortalLocation;
 
   /** The shared portal. */
-  private Node sharedPortal;
+  private NodeLocation sharedPortalLocation;
 
   /**
    * Instantiates a new uI folder path tree builder.
@@ -87,7 +88,7 @@ public class UIContentsSelectionTreeBuilder extends UINodeTreeBuilder {
    * @return the current portal
    */
   public Node getCurrentPortal() {
-    return currentPortal;
+    return NodeLocation.getNodeByLocation(currentPortalLocation);
   }
 
   /**
@@ -96,7 +97,7 @@ public class UIContentsSelectionTreeBuilder extends UINodeTreeBuilder {
    * @param currentPortal the new current portal
    */
   public void setCurrentPortal(Node currentPortal) {
-    this.currentPortal = currentPortal;
+    currentPortalLocation = NodeLocation.make(currentPortal);
   }
 
   /**
@@ -105,7 +106,7 @@ public class UIContentsSelectionTreeBuilder extends UINodeTreeBuilder {
    * @return the shared portal
    */
   public Node getSharedPortal() {
-    return sharedPortal;
+    return NodeLocation.getNodeByLocation(sharedPortalLocation);
   }
 
   /**
@@ -114,7 +115,7 @@ public class UIContentsSelectionTreeBuilder extends UINodeTreeBuilder {
    * @param sharedPortal the new shared portal
    */
   public void setSharedPortal(Node sharedPortal) {
-    this.sharedPortal = sharedPortal;
+    sharedPortalLocation = NodeLocation.make(sharedPortal);
   }
 
   /*
@@ -125,6 +126,8 @@ public class UIContentsSelectionTreeBuilder extends UINodeTreeBuilder {
   public void buildTree() throws Exception {
     UINodeTree tree = getChild(UINodeTree.class);
     tree.setSelected(currentNode);
+    Node currentPortal = getCurrentPortal();
+    Node sharedPortal = getSharedPortal();
     String currentPath = currentNode.getPath();
     String currentPortalPath = currentPortal.getPath();
     String sharedPortalPath = sharedPortal.getPath();

@@ -4,6 +4,7 @@ import javax.jcr.Node;
 
 import org.exoplatform.ecm.webui.selector.UISelectable;
 import org.exoplatform.ecm.webui.tree.UIBaseNodeTreeSelector;
+import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.wcm.webui.selector.document.UIDocumentPathSelector;
 import org.exoplatform.wcm.webui.selector.document.UIDocumentTabSelector;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -27,7 +28,7 @@ import org.exoplatform.webui.event.EventListener;
 
 public class UIResultView extends UIContainer {
 
-  private Node presentNode;
+  private NodeLocation presentNodeLocation;
   private boolean isDocument;
 
   public UIResultView() throws Exception {
@@ -37,10 +38,10 @@ public class UIResultView extends UIContainer {
   public void init(Node presentNode, boolean isDocument) {
     UIWCResultSearchPresentation uiResultPresentation = 
       getChild(UIWCResultSearchPresentation.class);
-    this.presentNode = presentNode;
+    presentNodeLocation = NodeLocation.make(presentNode);
     this.isDocument = isDocument;
     uiResultPresentation.setDocument(this.isDocument);
-    uiResultPresentation.setNode(this.presentNode);
+    uiResultPresentation.setNode(presentNode);
   }
 
   public String[] getActions() {
@@ -52,6 +53,7 @@ public class UIResultView extends UIContainer {
       UIResultView uiResultView = event.getSource();
       UIWebContentTabSelector uiWCTabSelector = 
         uiResultView.getAncestorOfType(UIWebContentTabSelector.class);
+      Node presentNode = NodeLocation.getNodeByLocation(uiResultView.presentNodeLocation);
       if(uiWCTabSelector == null) {
         UIDocumentTabSelector uiDocTabSelector = 
           uiResultView.getAncestorOfType(UIDocumentTabSelector.class);
@@ -59,7 +61,7 @@ public class UIResultView extends UIContainer {
           uiDocTabSelector.getChild(UIDocumentPathSelector.class);
         String returnField = ((UIBaseNodeTreeSelector) uiDocPathSelector).getReturnFieldName();
         ((UISelectable)((UIBaseNodeTreeSelector) uiDocPathSelector)
-            .getSourceComponent()).doSelect(returnField, uiResultView.presentNode.getPath());
+            .getSourceComponent()).doSelect(returnField, presentNode.getPath());
         uiDocTabSelector.removeChild(UIResultView.class);
         event.getRequestContext().addUIComponentToUpdateByAjax(
             ((UIBaseNodeTreeSelector) uiDocPathSelector).getSourceComponent().getParent());
@@ -68,7 +70,7 @@ public class UIResultView extends UIContainer {
           uiWCTabSelector.getChild(UIWebContentPathSelector.class);
         String returnField = ((UIBaseNodeTreeSelector) uiWCPathSelector).getReturnFieldName();
         ((UISelectable)((UIBaseNodeTreeSelector) uiWCPathSelector)
-            .getSourceComponent()).doSelect(returnField, uiResultView.presentNode.getPath());
+            .getSourceComponent()).doSelect(returnField, presentNode.getPath());
         uiWCTabSelector.removeChild(UIResultView.class);
         event.getRequestContext().addUIComponentToUpdateByAjax(
             ((UIBaseNodeTreeSelector) uiWCPathSelector).getSourceComponent().getParent());

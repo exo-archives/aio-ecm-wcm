@@ -27,14 +27,14 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 
 public class UIWCResultSearchPresentation extends UIBaseNodePresentation {
 
-  private Node presentNode;
+  private NodeLocation presentNodeLocation;
   private boolean isDocument;
   private JCRResourceResolver resourceResolver;
 
   public UIWCResultSearchPresentation() throws Exception {}
 
   public Node getNode() throws Exception {
-    return presentNode;
+    return NodeLocation.getNodeByLocation(presentNodeLocation);
   }
 
   @Override
@@ -79,7 +79,7 @@ public class UIWCResultSearchPresentation extends UIBaseNodePresentation {
   }
 
   public void setNode(Node node) {
-    presentNode = node;
+    presentNodeLocation = NodeLocation.make(node);
   }
 
   public boolean isDocument() {

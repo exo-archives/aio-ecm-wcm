@@ -176,14 +176,14 @@ public class PageMetadataServiceImpl implements PageMetadataService {
    */
   private String computeContentKeywords(Node node, String title) throws Exception {
     StringBuilder builder = new StringBuilder();    
-    String repository = ((ManageableRepository)node.getSession().getRepository()).getConfiguration().getName();    
-    for(Node category: categoriesService.getCategories(node,repository)) {
-      builder.append(category.getName()).append(",");
-    }    
-    for(Node tag: folksonomyService.getLinkedTagsOfDocument(node,repository)) {
-      builder.append(tag.getName()).append(",");
-    }
-    builder.append(title.replaceAll(" ",","));
+//    String repository = ((ManageableRepository)node.getSession().getRepository()).getConfiguration().getName();    
+//    for(Node category: categoriesService.getCategories(node,repository)) {
+//      builder.append(category.getName()).append(",");
+//    }    
+//    for(Node tag: folksonomyService.getLinkedTagsOfDocument(node,repository)) {
+//      builder.append(tag.getName()).append(",");
+//    }
+//    builder.append(title.replaceAll(" ",","));
     return builder.toString();
   }
   

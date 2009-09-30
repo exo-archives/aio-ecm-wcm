@@ -31,6 +31,7 @@ import javax.jcr.query.QueryResult;
 import org.exoplatform.ecm.webui.form.UIFormInputSetWithAction;
 import org.exoplatform.ecm.webui.selector.UIGroupMemberSelector;
 import org.exoplatform.ecm.webui.selector.UISelectable;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.access.AccessControlEntry;
 import org.exoplatform.services.jcr.access.PermissionType;
@@ -129,8 +130,8 @@ public class UIPermissionSetting extends UIForm implements UISelectable {
       .getApplicationComponent(RepositoryService.class);
       ManageableRepository manageableRepository = repositoryService.getCurrentRepository();
       String workspace = manageableRepository.getConfiguration().getDefaultWorkspaceName();
-      Session session = SessionProvider.createSystemProvider().getSession(workspace,
-          manageableRepository);
+      SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
+      Session session = sessionProvider.getSession(workspace,manageableRepository);
       UIApplication uiApp = permissionSettingForm.getAncestorOfType(UIApplication.class);
       UIQuickCreationWizard quickCreationWizard = permissionSettingForm
       .getAncestorOfType(UIQuickCreationWizard.class);
@@ -192,6 +193,9 @@ public class UIPermissionSetting extends UIForm implements UISelectable {
         childExNode.save();
         session.save();
       }
+      
+      session.logout();
+      sessionProvider.close();
       UIPermissionInfo permissionInfo = permissionManager.getChild(UIPermissionInfo.class);
       permissionInfo.updateGrid();
       permissionSettingForm.reset();

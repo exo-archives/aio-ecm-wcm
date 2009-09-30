@@ -20,6 +20,7 @@ import java.util.List;
 
 import javax.jcr.Node;
 
+import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.publication.defaultlifecycle.UIPublicationTree.TreeNode;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
@@ -38,21 +39,25 @@ import org.exoplatform.webui.form.UIForm;
 public class UIPublishingPanel extends UIForm {
 
   /** The current node. */
-  private Node currentNode;
+  private NodeLocation currentNodeLocation;
 
   /**
    * Gets the node.
    * 
    * @return the node
    */
-  public Node getNode() {return this.currentNode;}
+  public Node getNode() {
+	return NodeLocation.getNodeByLocation(currentNodeLocation);
+  }
   
   /**
    * Sets the node.
    * 
    * @param node the new node
    */
-  public void setNode(Node node) {this.currentNode = node; }  
+  public void setNode(Node node) {
+	currentNodeLocation = NodeLocation.make(node);
+  }  
 
   /**
    * Instantiates a new uI publishing panel.
@@ -76,13 +81,13 @@ public class UIPublishingPanel extends UIForm {
    * @throws Exception the exception
    */
   public void initPanel(Node node,String portalName,List<String> runningPortals) throws Exception {
-    this.currentNode = node;    
+	currentNodeLocation = NodeLocation.make(node);    
     UIPortalNavigationExplorer poExplorer = getChild(UIPortalNavigationExplorer.class);
     poExplorer.init(portalName,runningPortals);
     UIPublishedPages publishedPages = getChild(UIPublishedPages.class);
     publishedPages.init();
     UIPublicationComponentStatus publicationComponentStatus = getChild(UIPublicationComponentStatus.class);
-    publicationComponentStatus.setNode(currentNode);
+    publicationComponentStatus.setNode(node);
   }
 
   /**

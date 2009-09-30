@@ -26,6 +26,7 @@ import org.exoplatform.ecm.webui.tree.selectone.UISelectPathPanel;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
@@ -71,8 +72,8 @@ public class UIWebContentPathSelector extends UIBaseNodeTreeSelector implements 
    * @throws Exception the exception
    */
 
-  private Node currentPortal;
-  private Node sharedPortal;
+  private NodeLocation currentPortalLocation;
+  private NodeLocation sharedPortalLocation;
 
   public UIWebContentPathSelector() throws Exception {
     addChild(UIBreadcumbs.class, "UIBreadcrumbWebContentPathSelector", "UIBreadcrumbWebContentPathSelector");
@@ -92,8 +93,10 @@ public class UIWebContentPathSelector extends UIBaseNodeTreeSelector implements 
     LivePortalManagerService livePortalManagerService = getApplicationComponent(LivePortalManagerService.class);
     String currentPortalName = Util.getUIPortal().getName();
     SessionProvider provider = SessionProviderFactory.createSessionProvider();
-    currentPortal = livePortalManagerService.getLivePortal(currentPortalName,provider);
-    sharedPortal = livePortalManagerService.getLiveSharedPortal(provider);
+    Node currentPortal = livePortalManagerService.getLivePortal(currentPortalName,provider);
+    currentPortalLocation = NodeLocation.make(currentPortal);
+    Node sharedPortal = livePortalManagerService.getLiveSharedPortal(provider);
+    sharedPortalLocation = NodeLocation.make(sharedPortal);
     UIWebContentTreeBuilder builder = getChild(UIWebContentTreeBuilder.class);    
     builder.setCurrentPortal(currentPortal);
     builder.setSharedPortal(sharedPortal);
@@ -119,7 +122,7 @@ public class UIWebContentPathSelector extends UIBaseNodeTreeSelector implements 
 
   private List<LocalPath> getPath(List<LocalPath> list, Node selectedNode) throws Exception {
     if(list == null) list = new ArrayList<LocalPath>(5);
-    if(selectedNode == null || selectedNode.getPath().equalsIgnoreCase(currentPortal.getParent().getPath()) 
+    if(selectedNode == null || selectedNode.getPath().equalsIgnoreCase(getCurrentPortal().getParent().getPath()) 
         || selectedNode.getPath().equals("/")) return list;
     list.add(0, new LocalPath(selectedNode.getPath(), selectedNode.getName()));    
     getPath(list, selectedNode.getParent());
@@ -140,28 +143,28 @@ public class UIWebContentPathSelector extends UIBaseNodeTreeSelector implements 
    * @return the currentPortal
    */
   public Node getCurrentPortal() {
-    return currentPortal;
+    return NodeLocation.getNodeByLocation(currentPortalLocation);
   }
 
   /**
    * @param currentPortal the currentPortal to set
    */
   public void setCurrentPortal(Node currentPortal) {
-    this.currentPortal = currentPortal;
+    currentPortalLocation = NodeLocation.make(currentPortal);
   }
 
   /**
    * @return the sharedPortal
    */
   public Node getSharedPortal() {
-    return sharedPortal;
+    return NodeLocation.getNodeByLocation(sharedPortalLocation);
   }
 
   /**
    * @param sharedPortal the sharedPortal to set
    */
   public void setSharedPortal(Node sharedPortal) {
-    this.sharedPortal = sharedPortal;
+    sharedPortalLocation = NodeLocation.make(sharedPortal);
   }
 
   public static class SelectPathActionListener extends EventListener<UIBreadcumbs> {

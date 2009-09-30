@@ -27,6 +27,7 @@ import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
@@ -42,15 +43,23 @@ import org.exoplatform.webui.core.lifecycle.Lifecycle;
 )
 public class UIVersionViewer extends UIBaseNodePresentation {
 
-  private Node originalNode;
-  private Node node;
+  private NodeLocation originalNodeLocation;
+  private NodeLocation nodeLocation;
   private JCRResourceResolver resourceResolver ;
   public static final Log log = ExoLogger.getLogger("wcm:StageAndVersionPubliciation");
   
-  public Node getNode() throws Exception {return node ;}
-  public void setNode(Node node) {this.node = node;}
-  public Node getOriginalNode() throws Exception {return originalNode;}
-  public void setOriginalNode(Node originalNode) {this.originalNode = originalNode;}
+  public Node getNode() throws Exception {
+	return NodeLocation.getNodeByLocation(nodeLocation);
+  }
+  public void setNode(Node node) {
+	nodeLocation = NodeLocation.make(node);
+  }
+  public Node getOriginalNode() throws Exception {
+	return NodeLocation.getNodeByLocation(originalNodeLocation);
+  }
+  public void setOriginalNode(Node originalNode) {
+	originalNodeLocation = NodeLocation.make(originalNode);
+  }
 
   public String getRepositoryName() throws Exception {
     return null;
@@ -60,7 +69,7 @@ public class UIVersionViewer extends UIBaseNodePresentation {
     TemplateService templateService = getApplicationComponent(TemplateService.class);
     String userName = Util.getPortalRequestContext().getRemoteUser() ;
     try {
-      String nodeType = originalNode.getPrimaryNodeType().getName();
+      String nodeType = getOriginalNode().getPrimaryNodeType().getName();
       String repositoryName = getRepository();
       if(templateService.isManagedNodeType(nodeType, repositoryName)) 
         return templateService.getTemplatePathByUser(false, nodeType, userName, repositoryName) ;
