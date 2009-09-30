@@ -26,6 +26,9 @@
    		<saving-success>
    			Parameterized Contenu Liste Viewer a été mis à jour!
    		</saving-success>
+   		<not-a-number>
+   			Item per page n'est pas un nombre ou la valeur n'est pas valide. S'il vous plaît entrer un numéro valide.
+   		</not-a-number>
    		<decode> Unsupport encodage.</decode>
    		<get-illustration-image> erreur lorsque vous l'image d'illustration. </get-illustration-image>
    		<get-node-publication> erreur lorsque vous nœud cycle de publication lyfe. </get-node-publication>
