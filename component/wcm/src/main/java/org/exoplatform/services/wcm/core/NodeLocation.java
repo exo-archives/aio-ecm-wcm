@@ -68,6 +68,7 @@ public class NodeLocation {
   }
 
   public static final NodeLocation make(final Node node) {
+    if (node == null) return null;
     try {
       Session session = node.getSession();
       String repository = ((ManageableRepository)session.getRepository()).getConfiguration().getName();
@@ -81,6 +82,7 @@ public class NodeLocation {
   }
 
   public static Node getNodeByLocation(NodeLocation nodeLocation) {
+    if (nodeLocation == null) return null; 
     try {
       ExoContainer container = ExoContainerContext.getCurrentContainer();
       RepositoryService repositoryService = (RepositoryService)container.getComponentInstanceOfType(RepositoryService.class);
