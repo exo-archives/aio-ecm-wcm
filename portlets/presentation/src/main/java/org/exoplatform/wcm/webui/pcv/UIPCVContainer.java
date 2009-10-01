@@ -25,6 +25,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.jcr.AccessDeniedException;
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
@@ -347,6 +348,8 @@ public class UIPCVContainer extends UIContainer {
           currentNode = session.getNodeByUUID(uuid);
         } catch (ItemNotFoundException exc) {
           return null;
+        } catch (AccessDeniedException ex) {
+        	return null;
         }
       }
     } else if (params.length == 2) {
@@ -369,13 +372,12 @@ public class UIPCVContainer extends UIContainer {
     if (parameters == null) return null;
     TaxonomyService taxonomyService = getApplicationComponent(TaxonomyService.class);
     String[] params = parameters.split("/");
-    Node taxonomyTree = taxonomyService.getTaxonomyTree(this.getRepository(), params[0]);
-    
-    String symLinkPath = parameters.substring(parameters.indexOf("/") + 1);
     try {
+    	Node taxonomyTree = taxonomyService.getTaxonomyTree(this.getRepository(), params[0]);
+    	String symLinkPath = parameters.substring(parameters.indexOf("/") + 1);
       Node symLink = taxonomyTree.getNode(symLinkPath);
       return taxonomyTree.getSession().getNodeByUUID(symLink.getProperty("exo:uuid").getString());
-    } catch (PathNotFoundException e) {
+    } catch (Exception e) {
       return null;
     }
   }
