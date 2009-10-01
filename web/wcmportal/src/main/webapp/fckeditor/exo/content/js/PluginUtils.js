@@ -87,7 +87,7 @@ PluginUtils.prototype.renderSubTrees = function(currentNode, event, connector) {
 		}
 		treeHTML += '</div>';
 	} else {
-		var xmlTreeNodes = PluginUtils.prototype.request(connector);
+		var xmlTreeNodes = eXoWCM.PluginUtils.request(connector);
 		var currentNodeList = xmlTreeNodes.getElementsByTagName('Folder');
 		fileList = xmlTreeNodes.getElementsByTagName('File');
 		if(currentNodeList && currentNodeList.length > 0) {
@@ -130,7 +130,8 @@ PluginUtils.prototype.actionColExp = function(objNode) {
 	if(!objNode) return;
 	var nextElt = eXo.core.DOMUtil.findNextElementByTagName(objNode, "div");
 	var iconElt = eXo.core.DOMUtil.getChildrenByTagName(objNode, "div")[0];
-	if(nextElt && nextElt.style.display != 'block') {
+	if(!nextElt) return;
+	if(nextElt.style.display != 'block') {
 		nextElt.style.display = 'block';
 		iconElt.className = 'CollapseIcon';
 	} else {
@@ -156,7 +157,7 @@ PluginUtils.prototype.listFiles = function(list) {
 		var url 			= filesList[i].getAttribute("url");
 		var nodeType	= filesList[i].getAttribute("nodeType");
 		var node = filesList[i].getAttribute("name");
-		listItem += 	'<td class="Item '+clazzItem+'" url="'+url+'" nodeType="'+nodeType+'" onclick="eXoWCM.PluginUtils.insertContent(this);">'+name+'</td>';
+		listItem += 	'<td class="Item '+clazzItem+'" url="'+url+'" nodeType="'+nodeType+'" onclick="eXoWCM.PluginUtils.insertContent(this);">'+node+'</td>';
 		listItem +=		'<td class="Item">'+ filesList[i].getAttribute("dateCreated") +'</td>';
 		listItem +=		'<td class="Item">'+ filesList[i].getAttribute("size")+'&nbsp;kb' +'</td>';
 		listItem +=	'</tr>'
@@ -250,6 +251,57 @@ PluginUtils.prototype.insertContent = function(objContent) {
 	}
 	FCK.InsertHtml(strHTML);
 	FCK.OnAfterSetHTML = window.close();
+};
+
+PluginUtils.prototype.showSettings = function(obj) {
+	if(!obj) return;
+	if(obj.Timeout) clearTimeout(obj.Timeout);
+	var settingContainer = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "div", "SettingContainer");
+	var popupMenu = eXo.core.DOMUtil.findFirstChildByClass(settingContainer, "div", "UIRightClickPopupMenu");
+	if(popupMenu && popupMenu.style.display != "block") {
+		popupMenu.style.display = 'block';
+		popupMenu.onmouseout = function(){
+			obj.Timeout = setTimeout(function() {
+				popupMenu.style.display = 'none';
+				popupMenu.onmouseover = null;
+				popupMenu.onmouseout  = null;
+			},1*1000);
+		};
+	
+		popupMenu.onmouseover = function() {
+			if(obj.Timeout) clearTimeout(obj.Timeout);
+			obj.Timeout = null;
+		};
+		eXo.core.DOMUtil.hideElements();
+	}
+};
+
+PluginUtils.prototype.showSubMenuSettings = function(obj) {
+	if(!obj) return;
+	if(obj.Timeout) clearTimeout(obj.Timeout);	
+	var childrenContainer = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "div", "ChildrenContainer");
+	if(childrenContainer) {
+		var viewSubMenuContainer = eXo.core.DOMUtil.findFirstChildByClass(childrenContainer, "div", "UIRightClickPopupMenu");
+		if(viewSubMenuContainer && viewSubMenuContainer.style.display != 'block') {
+			viewSubMenuContainer.style.display = 'block';
+			viewSubMenuContainer.style.left 	= -viewSubMenuContainer.offsetWidth + 'px';
+			viewSubMenuContainer.style.top 		= -obj.offsetHeight + 'px';
+			viewSubMenuContainer.onmouseout = function() {
+				obj.Timeout = setTimeout(function() {
+					viewSubMenuContainer.style.display = 'none';
+					viewSubMenuContainer.onmouseover = null;
+					viewSubMenuContainer.onmouseout = null;
+				}, 1*1000);
+			};
+			
+			viewSubMenuContainer.onmouseover = function() {
+				if(obj.Timeout) clearTimeout(obj.Timeout);
+				obj.Timeout = null;
+			};
+			
+			eXo.core.DOMUtil.hideElements();
+		}
+	}
 };
 
 if(!window.eXoWCM) eXoWCM = new Object();

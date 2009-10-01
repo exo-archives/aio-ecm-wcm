@@ -7,18 +7,23 @@
 		<meta http-equiv="pragma" content="no-cache"/>
 		<meta http-equiv="eXpires" content="0"/>
 		<link type="text/css" rel="stylesheet" href="css/content.css"/>
+		<link type="text/css" rel="stylesheet" href="../../../../eXoResources/skin/Stylesheet.css"/>
 		<link type="text/css" rel="stylesheet" href="../../../../eXoDMSResources/skin/DefaultSkin/Stylesheet.css"/>
 		<link type="text/css" rel="stylesheet" href="../../../../eXoWCMResources/skin/DefaultSkin/Stylesheet.css"/>
 		<script type="text/javascript" src="../../../../eXoResources/javascript/eXo.js"></script>
+		<script type="text/javascript" src="../../../../eXoResources/javascript/eXo/core/Util.js"></script>		
 		<script type="text/javascript" src="../../../../eXoResources/javascript/eXo/core/DOMUtil.js"></script>
+		<script type="text/javascript" src="../../../../eXoResources/javascript/eXo/core/Browser.js"></script>
+		<script type="text/javascript" src="../../../../eXoResources/javascript/eXo/core/UIMaskLayer.js"></script>
 		<script type="text/javascript" src="js/PluginUtils.js"></script>
+		<script type="text/javascript" src="js/UploadForm.js"></script>
 		<script type="text/javascript">
 			var FCKConfig = window.opener.FCKConfig;
 			var FCK = window.opener.FCK;
 			var eXoPlugin = FCK.eXoPlugin;
-			var KLang = null;
-			eXoPlugin.userLanguage = FCK.Language.GetActiveLanguage() || "en";
-			eXoPlugin.loadScript(window, "lang/" + eXoPlugin.userLanguage + ".js");
+			//var KLang = null;
+			//eXoPlugin.userLanguage = FCK.Language.GetActiveLanguage() || "en";
+			//eXoPlugin.loadScript(window, "lang/" + eXoPlugin.userLanguage + ".js");
 		</script>
 </head>
 <body>
@@ -40,144 +45,17 @@
 					</div>
 					<div class="SeparatorLineL"><span></span></div>
 					<div class="ControlButton InsertLinksIcon">
-						<a href="#">Insert a links</a>
+						<a href="javascript: void(0);" class="InseartButton">Insert a links</a>
 					</div>
+					<!-====================================== UPLOAD ============================================-->
 					<div class="ControlButton UploadIcon">
-						<a href="#">Upload</a>
-						
-						
-						
-						
-						
-						<div id="UploadContainer" style="display: none; position: relative;">
-							<div class="UploadForm" style="overflow: auto; position: absolute;">
-								<table border=0 bordercolor="red" class="ActionContainer">
-									<tr>
-										<td colspan="2" style="width: 100%; overflow: hidden;">
-											<span userLanguage="KLang.LabelFolder"> Folder </span>: ${idShort}
-										</td>
-									</tr>
-									<tr class="UploadField">
-										<td width="238px">
-											<iframe name="iFrameUpload" class="iFrameUpload" frameborder="0px" border="0px" style="width: 100%; height: 23px;">
-											</iframe>
-											<xmp id="iContentUpLoad" style="display: none;">
-												<html style="padding: 0px; margin: 0px;">
-													<body style="margin: 0px; padding: 0px; overflow: hidden;">
-														<form enctype="multipart/form-data" method="post" target="iTarget" style="width: 235px;">
-															<input type="file" name="file" class="file" />
-														</form>
-														<iframe name="iTarget" id="iTarget" style="display: none"></iframe>
-													</body>
-												</html>
-											</xmp>
-										</td>
-									</tr>
-									<tr class="UploadInfo Abort" style="display: none;">
-										<td width="238">
-											<div class="GraphProgress"></div>
-											<div class="NumberProgress">0%</div>
-										</td>
-										<td>
-											<a href="javascript: void(0);" class="ActionButton Abort">
-												<div class="ButtonLeft">
-													<div class="ButtonRight">
-														<div class="ButtonMiddle" userLanguage="KLang.BtnAbort" onclick="uploadFile.Abort()">
-															Abort
-														</div>
-													</div>
-												</div>
-											</a>
-											<a href="javascript: void(0);" class="ActionButton Delete">
-												<div class="ButtonLeft">
-													<div class="ButtonRight">
-														<div class="ButtonMiddle" userLanguage="KLang.BtnDelete" onclick="uploadFile.Delete()">
-															Delete
-														</div>
-													</div>
-												</div>
-											</a>
-										</td>
-									</tr>
-									<tr class="UploadAction" style="display: none;">
-										<td colspan="2">
-											<div style="margin: 3px 0px 3px 0px">
-												<span userLanguage="KLang.LabelName"> Name </span>:
-												<input type="text" name="fileName" style="width: 238px;" maxlength="128"/>
-											</div>
-											<table class="ActionContainer" align="center">
-												<tr>
-													<td>
-														<a href="javascript: void(0);" class="ActionButton">
-															<div class="ButtonLeft">
-																<div class="ButtonRight">
-																	<div class="ButtonMiddle" userLanguage="KLang.BtnSave" onclick="Save()">
-																		Save
-																	</div>
-																</div>
-															</div>
-														</a>
-														<a href="javascript: void(0);" class="ActionButton">
-															<div class="ButtonLeft">
-																<div class="ButtonRight">
-																	<div class="ButtonMiddle" userLanguage="KLang.BtnCancel" onclick="uploadFile.Cancel()">
-																		Cancel
-																	</div>
-																</div>
-															</div>
-														</a>
-														<div style="clear: left;"><span style="display: none;"></span></div>
-													</td>
-												</tr>
-											</table>
-										</td>
-									</tr>	
-									<tr class="CancelAction">
-										<td colspan="2">
-											<table class="ActionContainer" align="center">
-												<tr>
-													<td>
-														<a href="javascript: void(0);" class="ActionButton" style="margin-top: 21px">
-															<div class="ButtonLeft">
-																<div class="ButtonRight">
-																	<div class="ButtonMiddle" userLanguage="KLang.BtnUpload" onclick="uploadFile()">
-																		Upload
-																	</div>
-																</div>
-															</div>
-														</a>
-													</td>
-													<td>
-														<a href="javascript: void(0);" class="ActionButton" style="margin-top: 21px">
-															<div class="ButtonLeft">
-																<div class="ButtonRight">
-																	<div class="ButtonMiddle" userLanguage="KLang.BtnCancel" onclick="removeMask()">
-																		Cancel
-																	</div>
-																</div>
-															</div>
-														</a>
-													</td>
-												</tr>
-											</table>
-										</td>
-									</tr>
-								</table>
-							</div>
-						</div>
-						
-						
-						
-						
-										
+							<a class="Item IconUpload" href="javascript:void(0);" onclick="eXoWCM.UploadForm.showUploadForm();">Upload File</a>
 					</div>
-					<div class="SettingIcon">
+					<!-====================================== UPLOAD ============================================-->					
+					<!-====================================== SETTING ============================================-->
+					<div class="SettingIcon" onmouseover="eXoWCM.PluginUtils.showSettings(this);" style="position:relative;">
 						<a href="#">Setting</a>
-						
-						
-						
-						
-						<div style="position: relative;">
+						<div class="SettingContainer">
 				      <div style="display: none; position: absolute;" class="UIRightClickPopupMenu">
 				      	<div class="UIContextMenuContainer">
 					        <div class="TopLeftRightClickPopupMenu">
@@ -188,14 +66,80 @@
 					        <div class="MiddleLeftRightClickPopupMenu">
 					          <div class="MiddleRightRightClickPopupMenu">
 					            <div class="UIRightPopupMenuContainer">
-					              <div class="MenuItem" style="white-space:nowrap;">   
-					                <a href="#" class="ItemIcon MarkReadIcon">Mark as read</a>
+					              <div class="MenuItem" style="white-space:nowrap;" onmouseover="eXoWCM.PluginUtils.showSubMenuSettings(this);">   
+					                <a href="#" class="DefaultPageIcon ItemIcon MarkReadIcon">View</a>
+				                	<div class="ChildrenContainer" style="position: relative;">
+														<div style="display: none; position: absolute;" class="UIRightClickPopupMenu">
+															<div class="UIContextMenuContainer">
+																<div class="TopLeftRightClickPopupMenu">
+																	<div class="TopRightRightClickPopupMenu">
+																		<div class="TopCenterRightClickPopupMenu"><span/></div>
+																	</div>
+																</div>
+																<div class="MiddleLeftRightClickPopupMenu">
+																	<div class="MiddleRightRightClickPopupMenu">
+																		<div class="UIRightPopupMenuContainer">
+																			<div class="MenuItem" style="white-space:nowrap;">   
+																				<a href="#" class="DefaultPageIcon ItemIcon MarkReadIcon">List</a>   
+																			</div>
+																			<div class="MenuItem">   
+																				<a href="#" class="DefaultPageIcon ItemIcon MarkReadIcon">Thumbnails</a>  
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																<div class="BottomLeftRightClickPopupMenu">
+																<div class="BottomRightRightClickPopupMenu">
+																	<div class="BottomCenterRightClickPopupMenu"><span/></div>
+																</div>
+															</div>
+															</div>
+														</div>
+													</div>
+					                
+					                
+					                
+					                
 					              </div>
 					              <div class="MenuItem">   
-					                <a href="#" class="ItemIcon MarkReadIcon">Mark as read</a>
-					              </div>
-					              <div class="MenuItem">   
-					                <a href="#" class="ItemIcon MarkReadIcon">Mark as read</a>
+					              
+					                <a href="#" class="DefaultPageIcon ItemIcon MarkReadIcon">Sort</a>
+					                	<div class="ChildrenContainer" style="position: relative;">
+															<div style="display: none; position: absolute;" class="UIRightClickPopupMenu">
+																<div class="UIContextMenuContainer">
+																	<div class="TopLeftRightClickPopupMenu">
+																		<div class="TopRightRightClickPopupMenu">
+																			<div class="TopCenterRightClickPopupMenu"><span/></div>
+																		</div>
+																	</div>
+																	<div class="MiddleLeftRightClickPopupMenu">
+																		<div class="MiddleRightRightClickPopupMenu">
+																			<div class="UIRightPopupMenuContainer">
+																				<div class="MenuItem" style="white-space:nowrap;">   
+																					<a href="#" class="DefaultPageIcon ItemIcon MarkReadIcon">By Name</a>   
+																				</div>
+																				<div class="MenuItem">   
+																					<a href="#" class="DefaultPageIcon ItemIcon MarkReadIcon">By Date</a>  
+																				</div>
+																				<div class="MenuItem">   
+																					<a href="#" class="DefaultPageIcon ItemIcon MarkReadIcon">By Size</a>  
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																	<div class="BottomLeftRightClickPopupMenu">
+																	<div class="BottomRightRightClickPopupMenu">
+																		<div class="BottomCenterRightClickPopupMenu"><span/></div>
+																	</div>
+																</div>
+																</div>
+															</div>
+														</div>
+					                	
+					                	
+					                	
+					                	
+					                	
 					              </div>
 					            </div>
 					          </div>
@@ -252,6 +196,152 @@
 			</div>
 		</div>
 	</div>
+	
+<!=================================BEGIN UPLOAD ======================================>
+<div id="hideContainer" class="HideContainer" style="display: none;">
+		
+	<div class="AlertContainer">
+		<div class="AlertForm">
+			<div align="center"><span userLanguage="KLang.LabelAlert"> Please choose a file before upload !</span></div>
+			<table class="ActionContainer" align="center">
+				<tr>
+					<td align="center">
+						<a href="javascript: void(0);" class="ActionButton" style="margin-top: 21px">
+							<div class="ButtonLeft">
+								<div class="ButtonRight">
+									<div class="ButtonMiddle" onclick="eXoWCM.UploadForm.showUploadForm();">
+										Close
+									</div>
+								</div>
+							</div>
+						</a>
+						<div style="clear: left;"><span style="dislay: none"></span></div>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+
+	<div id="UploadContainer" style="display: none;">
+		<div class="UploadForm" style="overflow: auto;">
+			<table border="0" bordercolor="red" class="ActionContainer">
+				<tr class="PathFolder">
+					<td colspan="2" style="width: 100%; overflow: hidden;">
+						<span class="PathFolder"> Folder </span>
+					</td>
+				</tr>
+				<tr class="UploadField">
+					<td width="280px">
+						<iframe name="iFrameUpload" class="iFrameUpload" frameborder="0px" border="0px" style="width: 100%; height: 23px;">
+						</iframe>
+						<xmp id="iContentUpLoad" style="display: none;">
+							<html style="padding: 0px; margin: 0px;">
+								<body style="margin: 0px; padding: 0px; overflow: hidden;">
+									<form enctype="multipart/form-data" method="post" target="iTarget" style="width: 235px;">
+										<input type="file" name="file" class="file" />
+									</form>
+									<iframe name="iTarget" id="iTarget" style="display: none"></iframe>
+								</body>
+							</html>
+						</xmp>
+					</td>
+				</tr>
+				<tr class="UploadInfo Abort" style="display: none;">
+					<td width="238">
+						<div class="GraphProgress"></div>
+						<div class="NumberProgress">0%</div>
+					</td>
+					<td>
+						<a href="javascript: void(0);" class="ActionButton Abort">
+							<div class="ButtonLeft">
+								<div class="ButtonRight">
+									<div class="ButtonMiddle" onclick="eXoWCM.UploadForm.uploadFileAbort();">
+										Abort
+									</div>
+								</div>
+							</div>
+						</a>
+						<a href="javascript: void(0);" class="ActionButton Delete">
+							<div class="ButtonLeft">
+								<div class="ButtonRight">
+									<div class="ButtonMiddle" onclick="eXoWCM.UploadForm.uploadFileDelete();">
+										Delete
+									</div>
+								</div>
+							</div>
+						</a>
+					</td>
+				</tr>
+				<tr class="UploadAction" style="display: none;">
+					<td colspan="2">
+						<div style="margin: 3px 0px 3px 0px">
+							<span> Name </span>:
+							<input type="text" name="fileName" style="width: 238px;" maxlength="128"/>
+						</div>
+						<table class="ActionContainer" align="center">
+							<tr>
+								<td>
+									<a href="javascript: void(0);" class="ActionButton">
+										<div class="ButtonLeft">
+											<div class="ButtonRight">
+												<div class="ButtonMiddle" onclick="eXoWCM.UploadForm.uploadFileSave();">
+													Save
+												</div>
+											</div>
+										</div>
+									</a>
+									<a href="javascript: void(0);" class="ActionButton">
+										<div class="ButtonLeft">
+											<div class="ButtonRight">
+												<div class="ButtonMiddle" onclick="eXoWCM.UploadForm.uploadFileCancel();">
+													Cancel
+												</div>
+											</div>
+										</div>
+									</a>
+									<div style="clear: left;"><span style="display: none;"></span></div>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>	
+				<tr class="CancelAction">
+					<td colspan="2">
+						<table class="ActionContainer" align="center">
+							<tr>
+								<td>
+									<a href="javascript: void(0);" class="ActionButton" style="margin-top: 21px">
+										<div class="ButtonLeft">
+											<div class="ButtonRight">
+												<div class="ButtonMiddle" onclick="eXoWCM.UploadForm.uploadFile();">
+													Upload
+												</div>
+											</div>
+										</div>
+									</a>
+								</td>
+								<td>
+									<a href="javascript: void(0);" class="ActionButton" style="margin-top: 21px">
+										<div class="ButtonLeft">
+											<div class="ButtonRight">
+	 											<div class="ButtonMiddle" onclick="eXoWCM.UploadForm.removeMask();">
+													Cancel
+												</div>
+											</div>
+										</div>
+									</a>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>	
+<!=================================END UPLOAD ========================================>
+<div class="Mask" id="Mask"></div>
+<div class="PopupContainer"  id="PopupContainer"></div>
 </body>
 <script type="text/javascript">
 
@@ -282,6 +372,7 @@ var eXp = {
 			data: {},
 			driverName: "",
 			strConnection: "",
+			rootFolder: ""
 		},
 		buildParam: function() {
 			if (arguments.length < 1) return null;
@@ -317,9 +408,16 @@ var eXp = {
 			eXoWCM.PluginUtils.renderTree(connector);
 		},
 		
-		senRequestGetDir: function(connector) {
+		sendRequestGetDir: function(connector) {
 			eXoWCM.PluginUtils.renderSubTrees(connector);
-			
+		},
+		
+		sendRequestUpload: function(connector) {
+			eXoWCM.PluginUtils.request(connector);
+		},
+		
+		sendRequestSave: function(connector) {
+			eXoWCM.PluginUtils.request(connector);
 		}
 	}
 
@@ -367,6 +465,8 @@ var eXp = {
 					currentNode.setAttribute("currentFolder", currentFolder);
 				}
 		}
+		eXp.store.currentFolder = currentFolder;
+		eXp.store.currentNode = currentNode;
 		driverName = eXp.store.driverName;
 		var strReplace 	= "getFoldersAndFiles?driverName="+driverName+"&currentFolder="+currentFolder+"&";	
 		strConnector 		= strConnector.replace("getDrivers?",strReplace);
