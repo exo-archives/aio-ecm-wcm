@@ -86,4 +86,9 @@
   		<UIContentEdittingPopup>Chỉnh sửa nội dung</UIContentEdittingPopup>
   	</title>
   </UISearchedContentEdittingPopupWindow>  
+  <UIContentEdittingPopupWindow>
+  	<title>
+  		<UIDocumentDialogForm>Chỉnh sửa nội dung</UIDocumentDialogForm>
+  	</title>
+  </UIContentEdittingPopupWindow>
 </bundle>

@@ -22,12 +22,7 @@ import java.util.List;
 import javax.jcr.Node;
 import javax.jcr.Value;
 
-import org.exoplatform.portal.config.DataStorage;
-import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.portal.config.model.PageNode;
-import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.container.UIContainer;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.wcm.publication.PublicationUtil;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;

@@ -88,7 +88,12 @@
   </UIDocumentDialogForm>    
   <UISearchedContentEdittingPopupWindow>
   	<title>
-  		<UIContentEdittingPopup></UIContentEdittingPopup>
+  		<UIContentEdittingPopup>Contenu Editting</UIContentEdittingPopup>
   	</title>
-  </UISearchedContentEdittingPopupWindow>  
+  </UISearchedContentEdittingPopupWindow>
+  <UIContentEdittingPopupWindow>
+  	<title>
+  		<UIDocumentDialogForm>Contenu Editting</UIDocumentDialogForm>
+  	</title>
+  </UIContentEdittingPopupWindow>
 </bundle>

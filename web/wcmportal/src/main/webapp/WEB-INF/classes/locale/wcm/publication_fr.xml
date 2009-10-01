@@ -24,6 +24,7 @@
   <UIPopupWindow>
   	<title>
   		<UIPublicationContainer>Gérer la publication</UIPublicationContainer>
+  		<UIPublishingPanel>Gérer la publication</UIPublishingPanel>
   	</title>
   </UIPopupWindow>
   <UITabPane>

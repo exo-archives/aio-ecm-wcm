@@ -24,6 +24,7 @@
   <UIPopupWindow>
   	<title>
   		<UIPublicationContainer>Quản lý xuất bản</UIPublicationContainer>
+  		<UIPublishingPanel>Quản lý xuất bản</UIPublishingPanel>
   	</title>
   </UIPopupWindow>
   <UITabPane>
