@@ -224,14 +224,16 @@ public class UICategoryNavigationConfig extends UIForm implements UISelectable {
       portletPreferences.setValue(UICategoryNavigationConstant.PREFERENCE_TARGET_PAGE, preferenceTargetPath);
       portletPreferences.store();
 
-      PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
-      UIPortal uiPortal = Util.getUIPortal();
-      
-      String pageNodeSelected = uiPortal.getSelectedNode().getName();
-      String portalURI = portalRequestContext.getPortalURI();
+      if (!Utils.isEditPortletInCreatePageWizard()) { 
+        PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
+        UIPortal uiPortal = Util.getUIPortal();
+        
+        String pageNodeSelected = uiPortal.getSelectedNode().getName();
+        String portalURI = portalRequestContext.getPortalURI();
 
-      ((PortletRequestContext)event.getRequestContext()).setApplicationMode(PortletMode.VIEW);
-      event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + portalURI + pageNodeSelected + "');");
+        ((PortletRequestContext)event.getRequestContext()).setApplicationMode(PortletMode.VIEW);
+        event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + portalURI + pageNodeSelected + "');");
+      }
     }
   }
   
