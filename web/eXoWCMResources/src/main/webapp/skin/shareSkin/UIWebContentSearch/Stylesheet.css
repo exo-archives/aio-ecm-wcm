@@ -111,6 +111,17 @@
 	padding: 4px 0px;
 }
 
+.ContentSearchForm .TitleTextBox {
+	float:left;
+	line-height:20px;
+	margin:0px 5px;
+}
+
+.ContentSearchForm .DateInput {
+	position:relative;
+	float:left;
+}
+
 /********************  UIDocumentPathSelector  ***************************/
 .UIDocumentPathSelector {}	
 	
