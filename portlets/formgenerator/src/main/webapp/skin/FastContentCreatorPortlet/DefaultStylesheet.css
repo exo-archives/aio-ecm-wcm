@@ -55,7 +55,7 @@
 }
 
 .UIFCCPortlet .UIFormGrid .FieldLabel {
-	width: 120px;
+	width: 150px;
 }
 
 .UIFCCPortlet .MultiValueContainer a  {
@@ -101,6 +101,10 @@
 .UIFCCPortlet .UIFCCConfig .FieldComponent .actionInput {
 	width: 100%;
 	padding: 0px;
+}
+
+.UIFCCPortlet .UIFCCConfig .UIForm .HorizontalLayout input.checkbox {
+	width: 16px;
 }
 
 .UIFCCPortlet .UIFCCConfig .UIForm .HorizontalLayout input {
