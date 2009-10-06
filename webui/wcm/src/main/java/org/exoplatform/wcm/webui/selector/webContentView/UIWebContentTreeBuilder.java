@@ -238,8 +238,10 @@ public class UIWebContentTreeBuilder extends UIContainer {
    */
   private void addTreeFromDrives(String path, List<TreeNode> list, List<DriveData> listDris) throws Exception{
     for(DriveData dri : listDris){
-      Node node = (Node)getSession(dri.getWorkspace()).getItem(dri.getHomePath());
-      list.add(new TreeNode(path, dri.getName(), dri.getWorkspace(), node, 1));
+      try{
+        Node node = (Node)getSession(dri.getWorkspace()).getItem(dri.getHomePath());
+        list.add(new TreeNode(path, dri.getName(), dri.getWorkspace(), node, 1));
+      }catch(Exception ex){ }
     }
   }
 
