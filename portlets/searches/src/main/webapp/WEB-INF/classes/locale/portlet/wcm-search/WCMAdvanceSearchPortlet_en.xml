@@ -93,4 +93,9 @@
   		<UIDocumentDialogForm>Content editting</UIDocumentDialogForm>
   	</title>
   </UIContentEdittingPopupWindow>
+  <UIDocumentForm>
+  	<msg>
+  		<repository-exception>Permission access denied.</repository-exception>
+  	</msg>
+  </UIDocumentForm>
 </bundle>

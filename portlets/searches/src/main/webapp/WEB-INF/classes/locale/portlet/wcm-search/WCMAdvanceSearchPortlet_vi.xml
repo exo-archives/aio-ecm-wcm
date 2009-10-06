@@ -91,4 +91,9 @@
   		<UIDocumentDialogForm>Chỉnh sửa nội dung</UIDocumentDialogForm>
   	</title>
   </UIContentEdittingPopupWindow>
+   <UIDocumentForm>
+	<msg>
+		<repository-exception>Không có quyền truy cập.</repository-exception>
+	</msg>
+  </UIDocumentForm>
 </bundle>
