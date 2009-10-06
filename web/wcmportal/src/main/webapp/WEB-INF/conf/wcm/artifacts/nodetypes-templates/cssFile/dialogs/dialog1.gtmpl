@@ -46,7 +46,7 @@
         	<td class="FieldLabel"><%=_ctx.appRes("CSSFile.dialog.label.priority")%></td>
         	<td class="FieldComponent">
         		<%
-        			String[] fieldPriority = ["jcrPath=/node/exo:priority"] ;
+        			String[] fieldPriority = ["jcrPath=/node/exo:priority", "validate=org.exoplatform.webui.form.validator.NumberFormatValidator"] ;
         			uicomponent.addTextField("CSSpriority", fieldPriority) ;
         		%>
         	</td>

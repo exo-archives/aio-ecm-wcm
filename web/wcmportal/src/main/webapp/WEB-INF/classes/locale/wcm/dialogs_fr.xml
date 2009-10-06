@@ -89,5 +89,11 @@
       </label>
     </dialog>
   </SiteMetadata>
+  
+  <NumberFormatValidator>
+    <msg>
+      <Invalid-number>Le format du nombre dans le champ "{0}" est invalide.</Invalid-number>
+    </msg>
+  </NumberFormatValidator>
 </bundle>
 
