@@ -123,16 +123,17 @@ public class UIPublicationAction extends UIForm {
       
       String selectedNavigationNodeURI = selectedNode.getUri();
       Node node = publicationPages.getNode();
-      
-      if (node.hasProperty("publication:navigationNodeURIs")) {
-        Value[] navigationNodeURIs = node.getProperty("publication:navigationNodeURIs").getValues();
-        for (Value navigationNodeURI : navigationNodeURIs) {
-          if (navigationNodeURI.getString().equals(selectedNavigationNodeURI)) {
-            application.addMessage(new ApplicationMessage("UIPublicationAction.msg.duplicate", null, ApplicationMessage.WARNING));
-            event.getRequestContext().addUIComponentToUpdateByAjax(application.getUIPopupMessages());
-            return;
-          }
-        }
+
+      if (node.hasProperty("publication:navigationNodeURIs")
+      		&& PublicationUtil.isNodeContentPublishedToPageNode(node, selectedNavigationNodeURI)) {
+      	Value[] navigationNodeURIs = node.getProperty("publication:navigationNodeURIs").getValues();
+      	for (Value navigationNodeURI : navigationNodeURIs) {
+      		if (navigationNodeURI.getString().equals(selectedNavigationNodeURI)) {
+      			application.addMessage(new ApplicationMessage("UIPublicationAction.msg.duplicate", null, ApplicationMessage.WARNING));
+      			event.getRequestContext().addUIComponentToUpdateByAjax(application.getUIPopupMessages());
+      			return;
+      		}
+      	}
       }
       
       PageNode pageNode = selectedNode.getPageNode();

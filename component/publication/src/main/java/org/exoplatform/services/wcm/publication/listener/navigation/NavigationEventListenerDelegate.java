@@ -166,13 +166,13 @@ public class NavigationEventListenerDelegate {
       Node content = nodeIterator.nextNode();
       String navigationNodeUri = "";
       for (String existedNavigationNodeUri : PublicationUtil.getValuesAsString(content, "publication:navigationNodeURIs")) {
-        if (existedNavigationNodeUri.startsWith("/" + portalName) && !listPortalNavigationUri.contains(existedNavigationNodeUri)) {
+        if (existedNavigationNodeUri.startsWith("/" + portalName)/* && !listPortalNavigationUri.contains(existedNavigationNodeUri)*/) {
           navigationNodeUri = existedNavigationNodeUri;
         }
       }
       String pageId = "";
       for (String existedPageId : PublicationUtil.getValuesAsString(content, "publication:webPageIDs")) {
-        if (!listPageReference.contains(existedPageId) && !listPortalNavigationUri.contains(navigationNodeUri)) {
+        if (!listPageReference.contains(existedPageId) /*&& !listPortalNavigationUri.contains(navigationNodeUri)*/) {
           pageId = existedPageId;
         }
       }
