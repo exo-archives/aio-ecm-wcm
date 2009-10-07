@@ -280,7 +280,7 @@ public class UIFCCActionForm extends UIDialogForm implements UISelectable {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return;
       }
-      
+      UIFCCActionList fastContentCreatorActionList = null;
       Map<String, JcrInputProperty> sortedInputs = DialogFormUtil.prepareMap(fccActionForm.getChildren(), fccActionForm.getInputProperties());
       String repository = UIFCCUtils.getPreferenceRepository() ;
       // Update action node:
@@ -341,7 +341,7 @@ public class UIFCCActionForm extends UIDialogForm implements UISelectable {
           
           // Create action
           fccActionForm.createNewAction(fastContentCreatorConfig.getSavedLocationNode(), fccActionForm.nodeTypeName_, true) ;
-          UIFCCActionList fastContentCreatorActionList = fastContentCreatorConfig.findFirstComponentOfType(UIFCCActionList.class) ;  
+          fastContentCreatorActionList = fastContentCreatorConfig.findFirstComponentOfType(UIFCCActionList.class) ;  
           fastContentCreatorActionList.updateGrid(parentNode, fastContentCreatorActionList.getChild(UIGrid.class).getUIPageIterator().getCurrentPage());
           fccActionForm.reset() ;
         } catch(RepositoryException repo) {      
@@ -364,7 +364,7 @@ public class UIFCCActionForm extends UIDialogForm implements UISelectable {
           return;
         }      
       }
-      event.getRequestContext().addUIComponentToUpdateByAjax(fastContentCreatorPortlet) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(fastContentCreatorActionList) ;
     }
   }
   
