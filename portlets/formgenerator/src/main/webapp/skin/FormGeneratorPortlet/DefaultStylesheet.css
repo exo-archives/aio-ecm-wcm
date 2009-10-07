@@ -204,7 +204,7 @@
 }
 
 .UIFormGenerator .UITabPane .UITabContentContainer .UIFormGrid .FieldIcon  {
-  padding: 4px;
+  padding: 0px;
 }
 
 .UIFormGenerator .UIFormEditBox input {
