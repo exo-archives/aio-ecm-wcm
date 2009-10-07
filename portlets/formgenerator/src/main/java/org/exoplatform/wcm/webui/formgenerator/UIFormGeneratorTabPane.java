@@ -411,7 +411,15 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
       new JsonParserImpl().parse(new InputStreamReader(new ByteArrayInputStream(jsonObjectGenerated.getBytes())), jsonHandler);
       JsonValue jsonValue = jsonHandler.getJsonObject();
       List<UIFormGeneratorInputBean> forms = ((UIFormGeneratorInputBean)new BeanBuilder().createObject(UIFormGeneratorInputBean.class, jsonValue)).getInputs();
-
+      
+      for(int i = 0; i < forms.size(); i++) {
+        for(int j = i + 1; j < forms.size(); j++){
+          if(forms.get(i).getName().equals(forms.get(j).getName())) {
+            Utils.createPopupMessage(formGeneratorTabPane, "UIFormGeneratorTabPane.msg.duplicate-name", null, ApplicationMessage.INFO);
+            return;
+          }
+        }
+      }
       UIFormStringInput nameFormStringInput = formGeneratorTabPane.getUIStringInput(UIFormGeneratorConstant.NAME_FORM_STRING_INPUT);
       String templateName = nameFormStringInput.getValue();
       String nodetypeName = formGeneratorTabPane.getNodetypeName(templateName);

@@ -20,6 +20,7 @@
   	<msg>
   		<register-failed>NodeType registration is unsuccessfully. It is existing or Super types is invalid</register-failed>
   		<AddNewsSuccessful>Nodetype {0}'s template is generated successful</AddNewsSuccessful>
+  		<duplicate-name>Field label's name is duplicated, please input difference name</duplicate-name>
   	</msg>
   </UIFormGeneratorTabPane>
 </bundle>
