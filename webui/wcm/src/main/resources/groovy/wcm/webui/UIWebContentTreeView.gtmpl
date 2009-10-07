@@ -86,8 +86,23 @@
 		}
 	}
 	
-	MyUIWCMTreeView.prototype.OpenPath = function(path) {
-		this.selectNode(path);
+	MyUIWCMTreeView.prototype.OpenPath = function(path) {		
+		var objParent = document.getElementById(this.constParentNode + path);		
+		if(objParent){
+			objParent.style.fontWeight="bold";
+			if(objParent.className == "NoneSelectNodeIcon")objParent.className = "SelectNodeIcon";
+			else objParent.className = "NoneSelectNodeIcon";			
+			this.oldId = this.constParentNode + path;
+			// Update Breadcumbs
+			this.updateBreadcumbsElement(objParent);			
+			// Jum Scroll to Posistion of Div which is selected
+			this.jumbToDivSelected(path);
+		}		
+		var objChild = document.getElementById(this.constChildNode + path);
+		if(objChild)
+			if(objChild.style.display === "block") objChild.style.display = "none";
+			else objChild.style.display = "block";
+		
 		obj = document.getElementById(this.constChildNode + path);
 		obj.style.display = "block";
 		obj = document.getElementById(this.constParentNode + path);
