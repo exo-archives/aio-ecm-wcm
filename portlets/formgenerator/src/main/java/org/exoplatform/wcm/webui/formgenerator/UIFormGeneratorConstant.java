@@ -64,7 +64,7 @@ public class UIFormGeneratorConstant {
   public static final String FORM_GENERATOR_OPTIONS_TAB     = "UIFormGeneratorOptionsTab";
   
   /** The Constant NAME_FORM_STRING_INPUT. */
-  public static final String NAME_FORM_STRING_INPUT         = "UIFormGeneratorNameFormStringInput";
+  public static final String NAME_FORM_STRING_INPUT         = "FormGeneratorName";
   
   /** The Constant DESCRIPTION_FORM_WYSIWYG_INPUT. */
   public static final String DESCRIPTION_FORM_WYSIWYG_INPUT = "UIFormGeneratorDescriptionFormWYSIWYGInput";
