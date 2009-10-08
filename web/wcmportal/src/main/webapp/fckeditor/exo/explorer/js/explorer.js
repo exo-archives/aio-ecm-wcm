@@ -128,7 +128,17 @@ function getElementsByClassPath(root, path) {
 		oNodeGroup.innerHTML = sHTML;
 		
 		if (eXp.resourceType == 'Gadget') {
-			getDir(document.getElementsByName('/' + eXp.getNodeValue(eXp.getNodes(sXML, "CurrentFolder")[0], "name") + '/')[0]);
+			var currentFolder = eXp.getNodes(sXML, "CurrentFolder")[0];
+			var nodeValue = eXp.getNodeValue(currentFolder, "name");
+			var currentNode = '';
+			var nodeList = oNodeGroup.getElementsByTagName("div");
+			for(var i = 0; i < nodeList.length; i++)	 {
+				var nodeAttribute = nodeList[i].getAttribute("name");
+				if(nodeAttribute && nodeAttribute.indexOf(nodeValue) > 0) {
+					currentNode = nodeList[i];
+				}
+			}
+			getDir(currentNode);
 		}
 	}
 	

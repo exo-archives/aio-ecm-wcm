@@ -593,7 +593,7 @@
 	function insertLink(element) {
 		if (element) var sLink = element.title;
 		else var sLink = K('contextMenu').select({where: "className == 'ContextMenu ListItemOption'"})[0].title;
-		var sContent = eXoPlugin.getContent();
+		var sContent = eXoPlugin.getContent(); 
 		var parent = window.opener.window;
 		if (parent.document.getElementById("txtUrl")) {
 			parent.document.getElementById("txtUrl").value = sLink;
@@ -615,28 +615,31 @@
 			var newTag = FCK.CreateElement("IMG");
 			newTag.setAttribute("src", sLink);
 		} else if (eXp.resourceType == "Gadget") {
-			var random = new Date().getTime();
-			var newTag = FCK.CreateElement("div");
-			newTag.setAttribute("id", random);
-			newTag.setAttribute("style", "float: left;");
-			newTag.innerHTML = "<span></span>";
-			var newScript = FCK.CreateElement("script");
-			newScript.innerHTML = "/*WCM gadgets random\"" + random + "\" metadata\"" + element.getAttribute('metadata') + "\" userprefs\"{}\" thumbnail\"" + element.src + "\" url\"" + element.lang + "\"*/eXo.core.Browser.addOnLoadCallback('" + random + "', function() {eXo.gadget.UIGadget.createGadget('" + element.lang + "','" + random + "', " + element.getAttribute('metadata').replace(/\${quote}/g, '"') + ", {}, 'home', 1, 0, 0)});";
-			if ( !newTag ) {
-				FCK.InsertElement(newTag);
+			try{
+				var random = new Date().getTime();
+				var newTag = FCK.CreateElement("div");
+				newTag.setAttribute("id", random);
+				newTag.style.Float = "left";
+				newTag.innerHTML = "<span></span>";
+				var newScript = FCK.CreateElement("script");
+				newScript.text = "/*WCM gadgets random\"" + random + "\" metadata\"" + element.getAttribute('metadata') + "\" userprefs\"{}\" thumbnail\"" + element.src + "\" url\"" + element.lang + "\"*/eXo.core.Browser.addOnLoadCallback('" + random + "', function() {eXo.gadget.UIGadget.createGadget('" + element.lang + "','" + random + "', " + element.getAttribute('metadata').replace(/\${quote}/g, '"') + ", {}, 'home', 1, 0, 0)});";
+				if ( !newTag ) 	FCK.InsertElement(newTag);
+
+				var oFakeNode = FCK.EditorDocument.createElement( 'IMG' ) ;
+				oFakeNode.className = 'FCK__Flash' ; 
+				oFakeNode.src = element.src;
+				oFakeNode.setAttribute( '_fckfakelement', 'true', 0 ) ;
+				oFakeNode.setAttribute( '_fckrealelement', window.opener.FCKTempBin.AddElement( newTag ), 0 ) ;
+				oFakeNode.setAttribute( '_fckgadgetnumber', random, 0 ) ;
+				oFakeNode.setAttribute( '_fckgadgeturl', element.lang, 0 ) ;
+				oFakeNode.setAttribute( '_fckgadgetmetadata', element.getAttribute('metadata'), 0 ) ;
+				oFakeNode.setAttribute( '_fckgadgetuserprefs', '{}', 0 ) ;
+				oFakeNode.setAttribute( '_fckgadgetthumbnail', element.src, 0 ) ;
+				newTag.parentNode.insertBefore( oFakeNode, newTag ) ;
+				newTag.parentNode.removeChild( newTag ) ;
+			} catch(e) {
+				alert("error: "+e.description);
 			}
-			var oFakeNode = FCK.EditorDocument.createElement( 'IMG' ) ;
-			oFakeNode.className = 'FCK__Flash' ; 
-			oFakeNode.src = element.src;
-			oFakeNode.setAttribute( '_fckfakelement', 'true', 0 ) ;
-			oFakeNode.setAttribute( '_fckrealelement', window.opener.FCKTempBin.AddElement( newTag ), 0 ) ;
-			oFakeNode.setAttribute( '_fckgadgetnumber', random, 0 ) ;
-			oFakeNode.setAttribute( '_fckgadgeturl', element.lang, 0 ) ;
-			oFakeNode.setAttribute( '_fckgadgetmetadata', element.getAttribute('metadata'), 0 ) ;
-			oFakeNode.setAttribute( '_fckgadgetuserprefs', '{}', 0 ) ;
-			oFakeNode.setAttribute( '_fckgadgetthumbnail', element.src, 0 ) ;
-			newTag.parentNode.insertBefore( oFakeNode, newTag ) ;
-			newTag.parentNode.removeChild( newTag ) ;
 		}
 		window.close();
 	}
