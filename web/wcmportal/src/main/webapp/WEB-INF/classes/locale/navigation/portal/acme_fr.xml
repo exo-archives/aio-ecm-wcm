@@ -30,6 +30,7 @@
       <presentation>Présentation</presentation>
       <contactus>Contactez Nous</contactus>
       <confirmation>Confirmation de contact</confirmation>
+      <newAccount>Nouveau compte</newAccount>
     </acme>
   </portal>
 </bundle>

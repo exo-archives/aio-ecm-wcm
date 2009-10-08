@@ -47,5 +47,13 @@
 			<page-reference>portal::@owner@::searchResult</page-reference>	    
 		</node>
 		
+		<node>
+	    <uri>newAccount</uri>
+	    <name>newAccount</name>
+	    <label>#{portal.@owner@.newAccount}</label>
+	    <visible>false</visible>
+	    <page-reference>portal::@owner@::newAccount</page-reference>
+    </node>
+		
 	</page-nodes>
 </node-navigation>

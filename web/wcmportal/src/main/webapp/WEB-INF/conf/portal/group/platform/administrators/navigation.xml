@@ -17,14 +17,14 @@
 		    <label>#{administration.application-registry}</label>
 		    <page-reference>group::platform/administrators::applicationRegistry</page-reference>
 	    </node>
-	    
+	    <!-- 
 	    <node>
 		    <uri>administration/newAccount</uri>
 		    <name>newAccount</name>
 		    <label>#{administration.newAccount}</label>
 		    <page-reference>group::platform/administrators::newAccount</page-reference>
 	    </node>
-	    
+	    -->
 	    <node>
 		    <uri>administration/comunityManagement</uri>
 		    <name>comunityManagement</name>

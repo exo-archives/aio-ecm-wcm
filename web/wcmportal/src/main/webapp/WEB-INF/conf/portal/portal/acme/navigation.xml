@@ -113,5 +113,13 @@
 			<page-reference>portal::acme::searchResult</page-reference>	    
 		</node>
 		
+		<node>
+	    <uri>newAccount</uri>
+	    <name>newAccount</name>
+	    <label>#{portal.acme.newAccount}</label>
+	    <visible>false</visible>
+	    <page-reference>portal::acme::newAccount</page-reference>
+    </node>
+		
 	</page-nodes>
 </node-navigation>

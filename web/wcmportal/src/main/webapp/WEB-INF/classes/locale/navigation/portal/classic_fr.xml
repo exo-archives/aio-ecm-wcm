@@ -19,6 +19,7 @@
       <newsletterviewer>Newsletter Viewer</newsletterviewer>
       <newslettermanager>Newsletter Gestionnaire</newslettermanager>
       <printviewer></printviewer>
+      <newAccount>Nouveau compte</newAccount>
     </classic>
   </portal>
 </bundle>

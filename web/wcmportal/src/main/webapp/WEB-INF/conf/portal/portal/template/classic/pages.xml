@@ -125,4 +125,21 @@
       <show-application-mode>false</show-application-mode>
     </application>
   </page>
+  
+  <!--<page>
+  	<page-id>portal::classic::newAccount</page-id>
+  	<owner-type>portal</owner-type>
+    <owner-id>@owner@</owner-id>
+    <name>newAccount</name>
+    <access-permissions>Everyone</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>
+    <application>
+      <instance-id>protal#classic:/exoadmin/AccountPortlet/Account</instance-id>
+      <title>New Account</title>
+      <show-info-bar>false</show-info-bar>
+      <show-application-state>false</show-application-state>
+			<show-application-mode>false</show-application-mode>
+    </application>  
+  </page>-->
+  
 </page-set>

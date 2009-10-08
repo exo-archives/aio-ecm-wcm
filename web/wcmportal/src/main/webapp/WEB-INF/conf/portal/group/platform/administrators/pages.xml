@@ -13,7 +13,7 @@
       <show-info-bar>false</show-info-bar>
     </application>                     
    </page>    
-         
+       <!--  
   <page>
   	<page-id>group::platform/administrators::newAccount</page-id>
   	<owner-type>group</owner-type>
@@ -26,7 +26,7 @@
       <title>New Account</title>
       <show-info-bar>false</show-info-bar>
     </application>  
-  </page>           
+  </page>     -->      
   
   <page>
   	<page-id>group::platform/administrators::communityManagement</page-id>

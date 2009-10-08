@@ -338,7 +338,6 @@ public class UIWebContentTreeBuilder extends UIContainer {
       selectPathPanel.setParentNode(rootNode);
       selectPathPanel.updateGrid();
       event.getRequestContext().addUIComponentToUpdateByAjax(selectPathPanel);
-      return;
     }
   }
 }
