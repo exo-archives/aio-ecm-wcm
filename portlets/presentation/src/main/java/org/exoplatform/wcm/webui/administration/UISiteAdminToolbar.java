@@ -859,6 +859,7 @@ public class UISiteAdminToolbar extends UIContainer {
       UserPortalConfigService userPortalConfigService = siteAdminToolbar.getApplicationComponent(UserPortalConfigService.class);
       Page page = userPortalConfigService.getPage(uiPortal.getSelectedNode().getPageReference(),
           Util.getPortalRequestContext().getRemoteUser());
+      if (page == null) return;
       ArrayList<Object> listPortlet = page.getChildren();
       listPortlet.add(PortalDataMapper.toPortletModel(uiPortlet));
       page.setChildren(listPortlet);
