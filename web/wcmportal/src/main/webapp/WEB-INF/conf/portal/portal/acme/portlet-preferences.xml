@@ -809,7 +809,7 @@
 			<read-only>false</read-only>
 		</preference>
 		<preference>
-			<name>showMoreLink</name>
+			<name>showReadMore</name>
 			<value>false</value>
 			<read-only>false</read-only>
 		</preference>

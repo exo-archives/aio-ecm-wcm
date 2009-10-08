@@ -121,7 +121,7 @@ public class UIPCLVConfig extends UIForm implements UISelectable {
   public static final String AUTO_DETECT                       = "AutomaticDetection";
 
   /** The Constant SHOW_MORE_LINK. */
-  public static final String SHOW_MORE_LINK                    = "ShowMoreLink";
+  public static final String SHOW_READMORE                    = "ShowReadMore";
 
   /** The Constant SHOW_RSS_LINK. */
   public static final String SHOW_RSS_LINK                     = "ShowRSSLink";
@@ -256,10 +256,10 @@ public class UIPCLVConfig extends UIForm implements UISelectable {
     targetPathFormInputSet.setActionInfo(TARGET_PAGE_INPUT, new String[] {"SelectTargetPage"}) ;
     targetPathFormInputSet.addUIFormInput(targetPathFormStringInput);
     
-    UIFormCheckBoxInput addMoreLink = new UIFormCheckBoxInput(SHOW_MORE_LINK, SHOW_MORE_LINK, null);
-    addMoreLink.setChecked(true);
-    String showMoreLink = portletPreferences.getValue(UIPCLVPortlet.SHOW_MORE_LINK, null);
-    addMoreLink.setChecked(Boolean.parseBoolean(showMoreLink));
+    UIFormCheckBoxInput readMoreLink = new UIFormCheckBoxInput(SHOW_READMORE, SHOW_READMORE, null);
+    readMoreLink.setChecked(true);
+    String showReadMore = portletPreferences.getValue(UIPCLVPortlet.SHOW_READMORE, null);
+    readMoreLink.setChecked(Boolean.parseBoolean(showReadMore));
     
     UIFormCheckBoxInput showRssLink = new UIFormCheckBoxInput(SHOW_RSS_LINK, SHOW_RSS_LINK, null);
     showRssLink.setChecked(true);
@@ -287,7 +287,7 @@ public class UIPCLVConfig extends UIForm implements UISelectable {
     addChild(viewerHeader);
     addChild(showLink);
     addChild(targetPathFormInputSet);
-    addChild(addMoreLink);
+    addChild(readMoreLink);
     addChild(showRssLink);
     
     setActions(new String[] { "Save", "Cancel" });
@@ -485,7 +485,7 @@ public class UIPCLVConfig extends UIForm implements UISelectable {
       UIFormRadioBoxInput orderTypeBoxInput = (UIFormRadioBoxInput) uiParameterizedManagementForm.getChildById(UIPCLVConfig.ORDER_TYPES);
       String orderType = orderTypeBoxInput.getValue();
       String orderBy = uiParameterizedManagementForm.getUIFormSelectBox(ORDER_BY).getValue();
-      String showMoreLink = uiParameterizedManagementForm.getUIFormCheckBoxInput(UIPCLVConfig.SHOW_MORE_LINK).isChecked() ? "true" : "false";
+      String showReadMore = uiParameterizedManagementForm.getUIFormCheckBoxInput(UIPCLVConfig.SHOW_READMORE).isChecked() ? "true" : "false";
       String showRssLink = uiParameterizedManagementForm.getUIFormCheckBoxInput(UIPCLVConfig.SHOW_RSS_LINK).isChecked() ? "true" : "false";
       String autoDetect = uiParameterizedManagementForm.getUIFormCheckBoxInput(UIPCLVConfig.AUTO_DETECT).isChecked() ? "true" : "false";
       String treeName = uiParameterizedManagementForm.getUIStringInput(UIPCLVConfig.TREE_NAME_FORM_SELECTBOX).getValue();
@@ -508,7 +508,7 @@ public class UIPCLVConfig extends UIForm implements UISelectable {
       portletPreferences.setValue(UIPCLVPortlet.SHOW_LINK, viewerLink);
       portletPreferences.setValue(UIPCLVPortlet.ORDER_TYPE, orderType);
       portletPreferences.setValue(UIPCLVPortlet.ORDER_BY, orderBy);
-      portletPreferences.setValue(UIPCLVPortlet.SHOW_MORE_LINK, showMoreLink);
+      portletPreferences.setValue(UIPCLVPortlet.SHOW_READMORE, showReadMore);
       portletPreferences.setValue(UIPCLVPortlet.SHOW_RSS_LINK, showRssLink);
       portletPreferences.setValue(UIPCLVPortlet.SHOW_AUTO_DETECT, autoDetect);
       portletPreferences.setValue(UIPCLVPortlet.TARGET_PAGE, targetPage);

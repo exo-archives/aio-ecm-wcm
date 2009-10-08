@@ -54,7 +54,7 @@
 							def isShowIllustrationImg = uicomponent.isShowField(UIPCLVPortlet.SHOW_THUMBNAILS_VIEW);
 							def isShowLink = uicomponent.isShowField(UIPCLVPortlet.SHOW_LINK);
 							def isShowCreatedDate = uicomponent.isShowField(UIPCLVPortlet.SHOW_DATE_CREATED) && itemDateCreated != null;
-							
+							def isShowReadmore = uicomponent.isShowField(UIPCLVPortlet.SHOW_READMORE);
 							if (itemSummary == null) itemSummary = "";
 							if (imgSrc == null) 
 								imgSrc = "/eXoWCMResources/skin/shareSkin/content-list-viewer/list-by-folder/defaultParameterizedContentListViewer/background/IIlustrationImages.jpg";
@@ -92,6 +92,9 @@
 														%>
 													</div>
 													<div class="ClearRight"><span></span></div>
+													<% if (isShowReadmore) { %>
+												  		<div class="ReadLink"><a href="$itemLink"><%= _ctx.appRes("UIPCLVConfig.label.readmore") %></a></div><%
+													}%>
 												</div>
 											<%
 											count = 1;
@@ -130,6 +133,9 @@
 													</div>
 													<div style="clear: both;"><span></span></div>
 												</div>
+												<% if (isShowReadmore) { %>
+												  		<div class="ReadLink"><a href="$itemLink"><%= _ctx.appRes("UIPCLVConfig.label.readmore") %></a></div><%
+													}%>
 												<div class="LineNormalNews"><span></span></div>
 											<%
 										} // End is else

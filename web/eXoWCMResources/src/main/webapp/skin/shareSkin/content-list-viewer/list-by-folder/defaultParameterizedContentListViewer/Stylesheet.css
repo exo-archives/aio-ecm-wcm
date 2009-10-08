@@ -6,7 +6,6 @@
 
 .UIPCLVDefault .TopBoxParameterized {
 	background: url('DefaultSkin/images/BGTopBox.gif') repeat-x left top;
-	border: 1px solid #cbe2f4;
 	line-height: 30px;
 	padding: 0px 10px;
 	margin-bottom: 1px;
@@ -106,4 +105,30 @@
 	float: left;
 	display: block;
 	margin-right: 10px;
+}
+
+.UIPCLVDefault .CaptionItem .ReadLink {
+	margin-bottom:6px;
+	text-align:right;
+}
+
+.UIPCLVDefault .CaptionItem .ReadLink  a{
+	color: #00BAEB;
+}
+
+.UIPCLVDefault .CaptionItem .ReadLink  a:hover{
+	color: #058EE6;
+}
+
+.UIPCLVDefault .CaptionItem .HotNews .ReadLink {
+	margin-bottom:6px;
+	text-align:right;
+}
+
+.UIPCLVDefault .CaptionItem .HotNews .ReadLink  a{
+	color: #00BAEB;
+}
+
+.UIPCLVDefault .CaptionItem .HotNews .ReadLink  a:hover{
+	color: #058EE6;
 }

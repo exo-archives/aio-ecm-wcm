@@ -104,9 +104,6 @@ public class UIPCLVForm extends UIForm {
 	/** Auto detection. */
 	private String										autoDetection;
 
-	/** Show more link. */
-	private String										showMoreLink;
-
 	/** Show RSS link. */
 	private String										showRSSLink;
 	
@@ -184,6 +181,17 @@ public class UIPCLVForm extends UIForm {
 		String isShow = portletPreferences.getValue(UIPCLVPortlet.SHOW_RSS_LINK, null);
 		return (isShow != null) ? Boolean.parseBoolean(isShow) : false;
 	}
+	
+	/**
+   * Show rss link.
+   * 
+   * @return true, if successful
+   */
+  public boolean showReadMore() {
+    PortletPreferences portletPreferences = getPortletPreferences();
+    String isShow = portletPreferences.getValue(UIPCLVPortlet.SHOW_READMORE, null);
+    return (isShow != null) ? Boolean.parseBoolean(isShow) : false;
+  }
 
 	/**
 	 * Checks if is show field.
@@ -602,24 +610,6 @@ public class UIPCLVForm extends UIForm {
 	 */
 	public void setAutoDetection(String autoDetection) {
 		this.autoDetection = autoDetection;
-	}
-
-	/**
-	 * Gets the show more link.
-	 * 
-	 * @return the show more link
-	 */
-	public String getShowMoreLink() {
-		return showMoreLink;
-	}
-
-	/**
-	 * Sets the show more link.
-	 * 
-	 * @param showMoreLink the new show more link
-	 */
-	public void setShowMoreLink(String showMoreLink) {
-		this.showMoreLink = showMoreLink;
 	}
 
 	/**

@@ -69,6 +69,8 @@
       <AutomaticDetection>Détection automatique</AutomaticDetection>
       <ShowMoreLink>Voir plus de lien</ShowMoreLink>
       <ShowRSSLink>Voir lien RSS</ShowRSSLink>
+      <ShowReadMore>Afficher lire la suite</ShowReadMore>
+      <readmore>Lire la suite</readmore>
     </label>
     
   </UIPCLVConfig>

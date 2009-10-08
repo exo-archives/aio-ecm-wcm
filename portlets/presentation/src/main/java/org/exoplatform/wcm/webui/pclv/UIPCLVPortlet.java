@@ -56,9 +56,6 @@ public class UIPCLVPortlet extends UIPortletApplication {
 	/** The Constant HEADER. */
 	public final static String	HEADER																				= "header";
 
-	/** The Constant SHOW_READMORE. */
-	public final static String	SHOW_READMORE																	= "header";
-
 	/** The Constant ORDER_TYPE. */
 	public static final String	ORDER_TYPE																		= "orderType";
 
@@ -96,7 +93,7 @@ public class UIPCLVPortlet extends UIPortletApplication {
 	public final static String	SHOW_DATE_CREATED															= "showDateCreated";
 
 	/** The Constant SHOW_MORE_LINK. */
-	public final static String	SHOW_MORE_LINK																= "showMoreLink";
+	public final static String	SHOW_READMORE																= "showReadMore";
 
 	/** The Constant SHOW_RSS_LINK. */
 	public final static String	SHOW_RSS_LINK																	= "showRssLink";

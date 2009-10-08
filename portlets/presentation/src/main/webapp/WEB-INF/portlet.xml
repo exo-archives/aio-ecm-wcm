@@ -487,7 +487,7 @@
 				<read-only>false</read-only>
 			</preference>
 			<preference>
-				<name>showMoreLink</name>
+				<name>showReadMore</name>
 				<value>true</value>
 				<read-only>false</read-only>
 			</preference>

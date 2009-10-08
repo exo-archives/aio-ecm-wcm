@@ -65,6 +65,19 @@
 	display: block;
 }
 
+.UIPCLVHotNews .CaptionItem .ReadLink {
+	margin-bottom:6px;
+	text-align:right;
+}
+
+.UIPCLVHotNews .CaptionItem .ReadLink  a{
+	color: #00BAEB;
+}
+
+.UIPCLVHotNews .CaptionItem .ReadLink  a:hover{
+	color: #058EE6;
+}
+
 .UIPCLVHotNews .CaptionItem .TitleContentHotNews:hover {
 	text-decoration: underline;
 }

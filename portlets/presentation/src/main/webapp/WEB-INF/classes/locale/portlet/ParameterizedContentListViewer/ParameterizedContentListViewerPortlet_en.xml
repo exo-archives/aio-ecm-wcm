@@ -67,8 +67,9 @@
       <UIParameterizedTagetPageInputSetAction>Target page</UIParameterizedTagetPageInputSetAction>
       <AddDateToTheLink>Add date in the link</AddDateToTheLink>
       <AutomaticDetection>Automatic Detection</AutomaticDetection>
-      <ShowMoreLink>Show more link</ShowMoreLink>
+      <ShowReadMore>Show read more</ShowReadMore>
       <ShowRSSLink>Show RSS link</ShowRSSLink>
+      <readmore>Read more</readmore>
     </label>
     
   </UIPCLVConfig>
