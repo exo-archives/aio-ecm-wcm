@@ -28,9 +28,6 @@
 				oldObject = document.getElementById(this.oldId);
 				if(oldObject) oldObject.style.fontWeight="normal";
 				this.oldId = this.constParentNode + childId;
-				ajaxAction = objParent.getAttribute("ajaxAction").replace('javascript:', '');
-				eval(ajaxAction);
-
 				// Update Breadcumbs
 				this.updateBreadcumbsElement(objParent);
 			}
@@ -57,7 +54,8 @@
 			if(i != 0) newDiv.innerHTML = nodeNames[i];
 			else newDiv.innerHTML = "<span></span>";                
 			if(objParent){
-				action = objParent.getAttribute("onclick") + ";" + objParent.getAttribute('ajaxAction');
+				//action = objParent.getAttribute("onclick") + ";" + objParent.getAttribute('ajaxAction');
+				action = objParent.getAttribute("onclick") + ";" + objParent.getElementsByTagName("a")[0].href;
 			} else action = "javaScript: void(0);";
 			newDiv.setAttribute('onclick', action);
 			
@@ -134,24 +132,28 @@
 		}catch(Exception ex){
 			sub = 0;
 		}
-		for(int j = 0; j <= sub && i > 0; j ++) println "</div>";
-		if(treeNode.getNodePath() != null)action = uicomponent.event("ChangeNode", treeNode.getNodePath() + "/" + treeNode.getWorkSpaceName() +
-																																								"/" + i);
-		else action = "";
-		println "	<div onclick=\"eXo.wcm.MyUIWCMTreeView.selectNode('"+i+"');\" ajaxAction=\""+action+";\" treePath=\""+treeNode.getTreePath()+
-									"\" style=\"\" id=\"UIWCMTreeParentNode" + i + "\" class=\"NoneSelectNodeIcon\">";
-		println "		<div class=\"DefaultPageIcon\">" + ((i > 1)?treeNode.getName().replaceAll("\\.", "/") : treeNode.getName()) + "</div>";
-		println "	</div>";
-		println "	<div id=\"UIWCMTreeChildNode"+i+"\" class=\"ViewChildNodes\">";
+		for(int j = 0; j <= sub && i > 0; j ++){%>
+			</div>
+	<%	}
+		if(treeNode.getNodePath() != null)action = uicomponent.event("ChangeNode",treeNode.getNodePath()+"/"+treeNode.getWorkSpaceName()+"/" + i);
+		else action = "javaScript:void(0)";%>
+		<div onclick="eXo.wcm.MyUIWCMTreeView.selectNode('$i');" treePath="<%=treeNode.getTreePath()%>" style="" id="UIWCMTreeParentNode$i" class="NoneSelectNodeIcon">
+			<a href="javaScript:void(0);" onclick="$action" class="DefaultPageIcon">
+				<%=((i == 2)?treeNode.getName().replaceAll("\\.", "/") : treeNode.getName())%>
+			</a>
+		</div>
+		<div id="UIWCMTreeChildNode$i" class="ViewChildNodes">
+	<%
 	}
-	for(int i = 0; i <= treeNode.getDeep(); i ++) println "</div>";
-	%>
+	for(int i = 0; i <= treeNode.getDeep(); i ++){%>
+		</div>
+<%}%>
 </div>
 <%
 	if(uicomponent.path != null && uicomponent.path.trim().length() > 0) {
 		//rcontext.getJavascriptManager().addJavascript("eXo.wcm.MyUIWCMTreeView.OpenPath('" + uicomponent.path + "');");
 		println "<script type=\"text/javascript\">";
-		println "eXo.wcm.MyUIWCMTreeView.OpenPath('" + uicomponent.path + "');";
+		println "eval(\"eXo.wcm.MyUIWCMTreeView.OpenPath('" + uicomponent.path + "')\");";
 		println "</script>"
 	}
 %>
