@@ -297,7 +297,7 @@ public class UIWebContentTreeBuilder extends UIContainer {
           try{
             node = nodeIterator.nextNode();
             if (!node.isNodeType(NodetypeConstant.EXO_WEBCONTENT) && !node.isNodeType(NodetypeConstant.EXO_HIDDENABLE) &&
-                (node.isNodeType(NodetypeConstant.NT_UNSTRUCTURED) || node.isNodeType(NodetypeConstant.NT_FOLDER)) ) {
+            		(node.isNodeType(NodetypeConstant.EXO_TAXONOMY) || node.isNodeType(NodetypeConstant.NT_UNSTRUCTURED) || node.isNodeType(NodetypeConstant.NT_FOLDER)) ) {
               list.add(j, new TreeNode(treeNode.getTreePath(), workSpaceName, node, deep));
               j ++;
             }
