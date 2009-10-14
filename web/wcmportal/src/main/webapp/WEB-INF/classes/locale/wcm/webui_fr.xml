@@ -87,30 +87,26 @@
       <Tablelayoutwebcontent>Table Layout</Tablelayoutwebcontent>
     </lable>
   </ContentType>
-  <portal>
-    <template>
-	  <home>Accueil</home>
-	  <news>Actualité</news>
-	  <products>Produits</products>
-	  <services>Services</services>
-	  <search>Recherche</search>
-	  <contact>Contact</contact>
-	  <about>A propos</about>
-	  <contentviewer>Visualiseur de contenus</contentviewer>
-	  <parameterizedviewer>Visualiseur de contenus paramétré</parameterizedviewer>
-	  <searchResult>Résultats de recherche</searchResult>
-	</template>
-  </portal>
-    
-  <UISinglePortletContentViewer>
+   <!--  
+  ##########################################################################################
+  # exo.ecm.wcm.webui.wcm.groovy.wcm.webui                                                 # 
+  ##########################################################################################
+  -->
+  <UITabPane>
+  	<title>
+  		<UIContentBrowsePanel>Sélectionner</UIContentBrowsePanel>
+  		<UIContentSearchForm>Recherche</UIContentSearchForm>
+  		<UIContentSearchResult>Résultats</UIContentSearchResult>
+  		<WebContentMetadataPopup></WebContentMetadataPopup>
+  	</title>
+  </UITabPane>
+  <UIContentBrowsePanel>
     <SelectContent>
       <leftcolumn>
-
-        <title>Ci-dessous sont les dossiers possibles où le contenu peut être affiché</title>
+        <title>Ci-dessous sont les dossiers possibles oÃ¹ le contenu peut Ãªtre affichÃ©</title>
       </leftcolumn>
       <rightcolumn>
-
-        <title>Ci-dessous sont les content où le contenu est affiché</title>
+        <title>Ci-dessous sont les content oÃ¹ le contenu est affichÃ©</title>
       </rightcolumn>
       <searchbox>
         <title>Recherche</title>
@@ -120,79 +116,22 @@
     	<FilterBy>Filtrer par</FilterBy>
     	<WebContent>Contenu Web</WebContent>
     	<DMSDocument>Document</DMSDocument>
-    	<Media>Médias</Media>
+    	<Media>MÃ©dias</Media>
     </selectBoxValues>
-  </UISinglePortletContentViewer>  
-
-
-
-       
-   <!--  
-  ##########################################################################################
-  # exo.ecm.wcm.webui.wcm.groovy.wcm.webui                                                 # 
-  ##########################################################################################
-  -->
-  <PopupWebContentSelector>
-  	<title>
-  		<UIWebContentTabSelector>Sélectionner un contenu web</UIWebContentTabSelector>
-  	</title>
-  </PopupWebContentSelector>
-  <PopupDMSSelector>
-  	<title>
-  		<UIDocumentTabSelector>Sélectionner un contenu documentaire</UIDocumentTabSelector>
-  	</title>
-  </PopupDMSSelector>
-  <UITabPane>
-  	<title>
-  		<UIWebContentPathSelector>Sélectionner</UIWebContentPathSelector>
-  		<UIWebContentSearchForm>Recherche</UIWebContentSearchForm>
-  		<UISelectPathPanel>Résultats</UISelectPathPanel>
-  		<UIDocumentPathSelector>Sélectionner</UIDocumentPathSelector>
-  		<UIDocumentSearchForm>Recherche</UIDocumentSearchForm>
-  		<UIWCMSearchResult>Résultats</UIWCMSearchResult>
-  		<UIResultView>Formulaire de visualisation</UIResultView>
-  		<WebContentNodeTypePopup>Veuillez sélectionner un type de noeud</WebContentNodeTypePopup>
-  		<WebContentMetadataPopup>Sélectionner un medata </WebContentMetadataPopup>
-  		<DocumentMetadataPopup>Veuillez sélectionner un type de noeud</DocumentMetadataPopup>
-  		<DocumentNodeTypePopup>Type de Document</DocumentNodeTypePopup>
-  	</title>
-  </UITabPane>
-  <UIWebContentSearchForm>
-  	<action>
-  		<SearchWebContent>Recherche</SearchWebContent>
-  	</action>
-  </UIWebContentSearchForm>
-  <UIWebContentSearchForm>
+  </UIContentBrowsePanel>
+  <UIContentSearchForm>
   	<empty-field>La valeur de ce champ est nulle ou vide!</empty-field>
 		<invalid-date>"To Date" have to greater than "From Date"</invalid-date>
 		<invalid-nodeType>Type de noeud "(0)" n'est pas valide! S'il vous plaît vérifiez à nouveau.</invalid-nodeType>
-  </UIWebContentSearchForm>
-  <UIDocumentSearchForm>
   	<action>
   		<SearchWebContent>Recherche</SearchWebContent>
   	</action>
-  </UIDocumentSearchForm>  
-  <UIDocumentTabSelector>
-  	<header>
-  		<title>Titre</title>
-  		<NodeExpect>Excerpt</NodeExpect>
-  		<score>Score</score>
-  		<CreateDate>Date de création</CreateDate>
-  		<action>Action</action>
-  		<Select>Sélectionner</Select>
-  		<View>Voir</View>
-  		<publicationstate>État de publication</publicationstate>
-  	</header>  	
-
-  </UIDocumentTabSelector>
-  <UIWebContentTabSelector>
+  </UIContentSearchForm>
+  <UIContentSelector>
   	<header>
   		<title>Titre</title>
   		<score>Score</score>
-  		<CreateDate>Date de création</CreateDate>
   		<action>Action</action>
-  		<Select>Sélectionner</Select>
-  		<View>Voir</View>
   		<publicationstate>État de publication</publicationstate>
   	</header>
   	<action>
@@ -201,13 +140,8 @@
   			<View>Voir</View>
   		</title>
   	</action>
-  </UIWebContentTabSelector>
-  <UIResultView>
-  	<action>
-  		<Select>Sélectionner</Select>
-  	</action>
-  </UIResultView>  
-  <UIWebContentSearchForm>
+  </UIContentSelector>
+  <UIContentSearchForm>
   	<title>
   		<Location>Site nom</Location>
   		<SearchByName>Recherche par nom</SearchByName>
@@ -218,43 +152,33 @@
   		<ToDate>à</ToDate>
   		<DocumentType>Type de document</DocumentType>
   	</title>
-  </UIWebContentSearchForm>
+  </UIContentSearchForm>
   <WebContentNodeTypePopup>
   	<title>
-  		<UIWCMNodeTypeSelectForm>Veuillez sélectionner un type de noeud</UIWCMNodeTypeSelectForm>
+  		<UIContentNodeTypeSelector>Veuillez sélectionner un type de noeud</UIContentNodeTypeSelector>
   	</title>
   </WebContentNodeTypePopup>
   <UIWCMNodeTypeSelectForm>
   	<action>
-  		<Save>#{word.save}</Save>
-  		<Cancel>#{word.cancel}</Cancel>
+  		<Save>Sauver</Save>
+  		<Cancel>Annuer</Cancel>
   	</action>
   </UIWCMNodeTypeSelectForm>
   <WebContentMetadataPopup>
   	<title>
-  		<UIWCMSelectPropertyForm>Veuillez sélectionner propriété</UIWCMSelectPropertyForm>
+  		<UIContentPropertySelector>Veuillez sélectionner propriété</UIContentPropertySelector>
   	</title>
   </WebContentMetadataPopup>
-  <UIWCMSelectPropertyForm>
+  <UIContentPropertySelector>
   	<action>
   		<Add>Ajouter</Add>
-  		<Cancel>#{word.cancel}</Cancel>
+  		<Cancel>Annuer</Cancel>
   	</action>
   	<label>
 			<metadataType>Type de metadata</metadataType>
 			<property_select>Propriété</property_select>
 		</label>
-  </UIWCMSelectPropertyForm>
-  <DocumentMetadataPopup>
-  	<title>
-  		<UIWCMSelectPropertyForm>Veuillez sélectionner propriété</UIWCMSelectPropertyForm>
-  	</title>
-  </DocumentMetadataPopup>
-  <DocumentNodeTypePopup>
-  	<title>
-  		<UIWCMNodeTypeSelectForm>Veuillez sélectionner un type de noeud</UIWCMNodeTypeSelectForm>
-  	</title>
-  </DocumentNodeTypePopup>
+  </UIContentPropertySelector>
   <WCMContentView>
   	<header>
 	  	<title>Titre</title>
@@ -273,17 +197,6 @@
 			<homepage>Page d'accueil</homepage>
 		</tooltip>
 	</UIExoStart>  
-	
-	<UIMessageBoard>
-		<msg>
-			<get-resource-resolver>erreur lorsque vous template résolveur de ressources.</get-resource-resolver>
-			<render>erreur lorsque de processus de rendu.</render>
-			<select-navigation>erreur lorsque vous effectuez une action de navigation sélectionner.</select-navigation>
-				
-<get-tree-node>erreur lorsque vous effectuez obtenir nœud de l'arbre. </get-tree-node>
-		</msg>
-	</UIMessageBoard>
-	
 	<UIPageSelectorPanel>
 		<header>
 			<path>Chemin</path>
@@ -293,7 +206,14 @@
 			<child-not-found>Aucune page trouvée</child-not-found>
 		</msg>
 	</UIPageSelectorPanel>
-
+	<UIMessageBoard>
+		<msg>
+			<get-resource-resolver>erreur lorsque vous template résolveur de ressources.</get-resource-resolver>
+			<render>erreur lorsque de processus de rendu.</render>
+			<select-navigation>erreur lorsque vous effectuez une action de navigation sélectionner.</select-navigation>
+			<get-tree-node>erreur lorsque vous effectuez obtenir nœud de l'arbre. </get-tree-node>
+		</msg>
+	</UIMessageBoard>
 	
 	<ECMNameValidator>
     <msg>
@@ -308,4 +228,5 @@
   		<SharedSite>Espace Partagé</SharedSite>
   	</label>
   </Drives>
+  
 </bundle>

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.wcm.webui.selector.webContentView;
+package org.exoplatform.wcm.webui.selector.content;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -51,10 +51,10 @@ import org.exoplatform.webui.event.EventListener;
  */
 
 @ComponentConfig(
-                 template = "classpath:groovy/wcm/webui/UIWebContentTreeView.gtmpl",
-                 events = @EventConfig(listeners = UIWebContentTreeBuilder.ChangeNodeActionListener.class)
+                 template = "classpath:groovy/wcm/webui/selector/content/UIContentTreeBuilder.gtmpl",
+                 events = @EventConfig(listeners = UIContentTreeBuilder.ChangeNodeActionListener.class)
 )
-public class UIWebContentTreeBuilder extends UIContainer {
+public class UIContentTreeBuilder extends UIContainer {
   
   private String path;
 
@@ -63,7 +63,7 @@ public class UIWebContentTreeBuilder extends UIContainer {
    * 
    * @throws Exception the exception
    */
-  public UIWebContentTreeBuilder() throws Exception {  }
+  public UIContentTreeBuilder() throws Exception {  }
 
   /**
    * Checks if is sym link.
@@ -236,11 +236,11 @@ public class UIWebContentTreeBuilder extends UIContainer {
    * 
    * @throws Exception the exception
    */
-  private void addTreeFromDrives(String path, List<TreeNode> list, List<DriveData> listDris) throws Exception{
+  private void addTreeFromDrives(String path, List<UIContentTreeNode> list, List<DriveData> listDris) throws Exception{
     for(DriveData dri : listDris){
       try{
         Node node = (Node)getSession(dri.getWorkspace()).getItem(dri.getHomePath());
-        list.add(new TreeNode(path, dri.getName(), dri.getWorkspace(), node, 1));
+        list.add(new UIContentTreeNode(path, dri.getName(), dri.getWorkspace(), node, 1));
       }catch(Exception ex){ }
     }
   }
@@ -252,18 +252,18 @@ public class UIWebContentTreeBuilder extends UIContainer {
    * 
    * @throws Exception the exception
    */
-  private void addRootDrives(List<TreeNode> list) throws Exception{
+  private void addRootDrives(List<UIContentTreeNode> list) throws Exception{
     List<DriveData> listDris = getDrives();
     // Add Personal Drives into tree view
-    list.add(new TreeNode("Personal Drives"));
+    list.add(new UIContentTreeNode("Personal Drives"));
     addTreeFromDrives("/Personal Drives", list, personalDrives(listDris));
 
     // Add Group Drives into tree view
-    list.add(new TreeNode("Group Drives"));
+    list.add(new UIContentTreeNode("Group Drives"));
     addTreeFromDrives("/Group Drives", list, groupDrives(listDris));
 
     // Add General Drives into tree view
-    list.add(new TreeNode("General Drives"));
+    list.add(new UIContentTreeNode("General Drives"));
     addTreeFromDrives("/General Drives", list, generalDrives(listDris));
   }
 
@@ -274,11 +274,11 @@ public class UIWebContentTreeBuilder extends UIContainer {
    * 
    * @throws Exception the exception
    */
-  public List<TreeNode> getTreeNode() throws Exception{
-    List<TreeNode> list = new ArrayList<TreeNode>();
+  public List<UIContentTreeNode> getTreeNode() throws Exception{
+    List<UIContentTreeNode> list = new ArrayList<UIContentTreeNode>();
     addRootDrives(list);
     String workSpaceName = null;
-    TreeNode treeNode = null;
+    UIContentTreeNode treeNode = null;
     NodeIterator nodeIterator = null;
     Node node = null;
     int j = 0;
@@ -298,7 +298,7 @@ public class UIWebContentTreeBuilder extends UIContainer {
             node = nodeIterator.nextNode();
             if (!node.isNodeType(NodetypeConstant.EXO_WEBCONTENT) && !node.isNodeType(NodetypeConstant.EXO_HIDDENABLE) &&
             		(node.isNodeType(NodetypeConstant.EXO_TAXONOMY) || node.isNodeType(NodetypeConstant.NT_UNSTRUCTURED) || node.isNodeType(NodetypeConstant.NT_FOLDER)) ) {
-              list.add(j, new TreeNode(treeNode.getTreePath(), workSpaceName, node, deep));
+              list.add(j, new UIContentTreeNode(treeNode.getTreePath(), workSpaceName, node, deep));
               j ++;
             }
           }catch(Exception ex){
@@ -321,20 +321,20 @@ public class UIWebContentTreeBuilder extends UIContainer {
    * 
    * @see ChangeNodeActionEvent
    */
-  static public class ChangeNodeActionListener extends EventListener<UIWebContentTreeBuilder> {
+  static public class ChangeNodeActionListener extends EventListener<UIContentTreeBuilder> {
 
     /* (non-Javadoc)
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
-    public void execute(Event<UIWebContentTreeBuilder> event) throws Exception {
-      UIWebContentTreeBuilder treeBuilder = event.getSource();      
+    public void execute(Event<UIContentTreeBuilder> event) throws Exception {
+      UIContentTreeBuilder contentTreeBuilder = event.getSource();      
       String values = event.getRequestContext().getRequestParameter(OBJECTID);
-      treeBuilder.path = values.substring(values.lastIndexOf("/") + 1);
+      contentTreeBuilder.path = values.substring(values.lastIndexOf("/") + 1);
       values = values.substring(0, values.lastIndexOf("/"));
       String workSpaceName = values.substring(values.lastIndexOf("/") + 1);
       String nodePath = values.substring(0, values.lastIndexOf("/"));
-      Node rootNode = (Node)treeBuilder.getSession(workSpaceName).getItem(nodePath);
-      UISelectPathPanel selectPathPanel = treeBuilder.getAncestorOfType(UIWebContentPathSelector.class).getChild(UISelectPathPanel.class);
+      Node rootNode = (Node)contentTreeBuilder.getSession(workSpaceName).getItem(nodePath);
+      UISelectPathPanel selectPathPanel = contentTreeBuilder.getAncestorOfType(UIContentBrowsePanel.class).getChild(UISelectPathPanel.class);
       selectPathPanel.setParentNode(rootNode);
       selectPathPanel.updateGrid();
       event.getRequestContext().addUIComponentToUpdateByAjax(selectPathPanel);

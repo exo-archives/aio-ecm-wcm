@@ -29,12 +29,8 @@ import org.exoplatform.wcm.webui.WebUIPropertiesConfigService;
 import org.exoplatform.wcm.webui.WebUIPropertiesConfigService.PopupWindowProperties;
 import org.exoplatform.wcm.webui.scv.UIPresentationContainer;
 import org.exoplatform.wcm.webui.scv.UISingleContentViewerPortlet;
-import org.exoplatform.wcm.webui.selector.document.UIDocumentPathSelector;
-import org.exoplatform.wcm.webui.selector.document.UIDocumentTabSelector;
-//import org.exoplatform.wcm.webui.selector.webcontent.UIWebContentPathSelector;
-//import org.exoplatform.wcm.webui.selector.webcontent.UIWebContentTabSelector;
-import org.exoplatform.wcm.webui.selector.webContentView.UIWebContentPathSelector;
-import org.exoplatform.wcm.webui.selector.webContentView.UIWebContentTabSelector;
+import org.exoplatform.wcm.webui.selector.content.UIContentBrowsePanel;
+import org.exoplatform.wcm.webui.selector.content.UIContentSelector;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -42,7 +38,6 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIPopupComponent;
 import org.exoplatform.webui.core.UIPopupContainer;
-import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 
 /**
@@ -246,62 +241,17 @@ public class UIPortletConfig extends UIContainer implements UIPopupComponent{
   public void deActivate() throws Exception {    
   }
 
-  /**
-   * Inits the popup web content selector.
-   * 
-   * @throws Exception the exception
-   */
-  /*public void initPopupWebContentSelector() throws Exception {
-    UIPopupWindow uiPopup = getChildById(POPUP_WEBCONTENT_SELECTOR);
-    if(uiPopup == null) {
-      uiPopup = addChild(UIPopupWindow.class, null, POPUP_WEBCONTENT_SELECTOR);
-    }
-    UIWebContentTabSelector uiWCTabSelector = this.createUIComponent(UIWebContentTabSelector.class, null, null);
-    uiWCTabSelector.init();
-    UIWebContentPathSelector webContentPathSelector= uiWCTabSelector.getChild(UIWebContentPathSelector.class);
-    UIWebContentSelectorForm uiWebContentSelector = this.getChild(UIWebContentSelectorForm.class);
-    webContentPathSelector.setSourceComponent(uiWebContentSelector, new String[] {UIWebContentSelectorForm.PATH});
-    uiPopup.setUIComponent(uiWCTabSelector);
-    uiPopup.setWindowSize(750,450);
-    uiPopup.setShow(true);
-    
-    UIWelcomeScreen uiWelcomeScreen = this.getChild(UIWelcomeScreen.class);
-    uiWelcomeScreen.setRendered(false);
-    this.addChild(uiWCTabSelector);
-    uiWCTabSelector.setRendered(true);
-  }*/
   
   public void initPopupWebcontentView() throws Exception{
-    UIWebContentTabSelector uiWCTabSelector = this.createUIComponent(UIWebContentTabSelector.class, null, null);
-    uiWCTabSelector.init();
-    UIWebContentPathSelector webContentPathSelector= uiWCTabSelector.getChild(UIWebContentPathSelector.class);
+    UIContentSelector contentSelector = this.createUIComponent(UIContentSelector.class, null, null);
+    contentSelector.init();
+    UIContentBrowsePanel contentBrowserPanel= contentSelector.getChild(UIContentBrowsePanel.class);
     UIWebContentSelectorForm uiWebContentSelector = this.getChild(UIWebContentSelectorForm.class);
-    webContentPathSelector.setSourceComponent(uiWebContentSelector, new String[] {UIWebContentSelectorForm.PATH});
+    contentBrowserPanel.setSourceComponent(uiWebContentSelector, new String[] {UIWebContentSelectorForm.PATH});
     
     UIWelcomeScreen uiWelcomeScreen = this.getChild(UIWelcomeScreen.class);
     uiWelcomeScreen.setRendered(false);
-    this.addChild(uiWCTabSelector);
-    uiWCTabSelector.setRendered(true);
-  }
-
-  /**
-   * Inits the popup dms selector.
-   * 
-   * @throws Exception the exception
-   */
-  public void initPopupDMSSelector() throws Exception {
-    UIPopupWindow uiPopup = getChildById(POPUP_DMS_SELECTOR);
-    if(uiPopup == null) {
-      uiPopup = addChild(UIPopupWindow.class, null, POPUP_DMS_SELECTOR);
-    }
-    UIDocumentTabSelector uiDocTabSelector = createUIComponent(UIDocumentTabSelector.class, null, null);
-    uiDocTabSelector.init();
-    UIDocumentPathSelector dmsSelector = uiDocTabSelector.getChild(UIDocumentPathSelector.class);
-    UIDMSSelectorForm dmsSelectorForm = this.getChild(UIDMSSelectorForm.class);
-    dmsSelector.setSourceComponent(dmsSelectorForm, new String[] {UIDMSSelectorForm.PATH});
-    uiPopup.setUIComponent(uiDocTabSelector);
-    dmsSelector.init();
-    uiPopup.setWindowSize(750,450);
-    uiPopup.setShow(true);
+    this.addChild(contentSelector);
+    contentSelector.setRendered(true);
   }
 }

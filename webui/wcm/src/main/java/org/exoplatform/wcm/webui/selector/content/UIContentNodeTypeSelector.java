@@ -1,4 +1,4 @@
-package org.exoplatform.wcm.webui.selector.webcontent;
+package org.exoplatform.wcm.webui.selector.content;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,8 +11,6 @@ import javax.jcr.nodetype.NodeTypeManager;
 
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.wcm.webui.selector.document.UIDocumentSearchForm;
-import org.exoplatform.wcm.webui.selector.document.UIDocumentTabSelector;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIPopupWindow;
@@ -28,22 +26,24 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
  * dzungdev@gmail.com
  * Feb 2, 2009
  */
+
 @ComponentConfig (
     lifecycle = UIFormLifecycle.class,
     template = "system:/groovy/webui/form/UIForm.gtmpl",
     events = {
-      @EventConfig(listeners = UIWCMNodeTypeSelectForm.SaveActionListener.class),
-      @EventConfig(listeners = UIWCMNodeTypeSelectForm.CancelActionListener.class, phase=Phase.DECODE)
+      @EventConfig(listeners = UIContentNodeTypeSelector.SaveActionListener.class),
+      @EventConfig(listeners = UIContentNodeTypeSelector.CancelActionListener.class, phase=Phase.DECODE)
     }
 )
-public class UIWCMNodeTypeSelectForm extends UIForm {
+
+public class UIContentNodeTypeSelector extends UIForm {
 
   /**
    * Instantiates a new uIWCM node type select form.
    * 
    * @throws Exception the exception
    */
-  public UIWCMNodeTypeSelectForm() throws Exception {
+  public UIContentNodeTypeSelector() throws Exception {
   }
 
   /* (non-Javadoc)
@@ -66,8 +66,8 @@ public class UIWCMNodeTypeSelectForm extends UIForm {
     getChildren().clear();
     UIFormCheckBoxInput<String> uiCheckBox;
     UIPopupWindow uiPopup = getAncestorOfType(UIPopupWindow.class);
-    UIWebContentTabSelector uiWCTabSelector = 
-      uiPopup.getAncestorOfType(UIWebContentTabSelector.class);
+    UIContentSelector uiWCTabSelector = 
+      uiPopup.getAncestorOfType(UIContentSelector.class);
     List<String> nodeTypes = new ArrayList<String>();
     if(uiWCTabSelector != null) {
       nodeTypes = getWebContentNodeTypes();
@@ -91,20 +91,9 @@ public class UIWCMNodeTypeSelectForm extends UIForm {
    */
   private boolean propertiesSelected(String name) {
     UIPopupWindow uiPopupWindow = getParent();
-    UIWebContentTabSelector uiWCTabSelector = 
-      uiPopupWindow.getAncestorOfType(UIWebContentTabSelector.class);
-    String typeValues = "";
-    if(uiWCTabSelector == null) {
-      UIDocumentTabSelector uiDocTabSelector =
-        uiPopupWindow.getAncestorOfType(UIDocumentTabSelector.class);
-      UIDocumentSearchForm uiDocSearchForm = 
-        uiDocTabSelector.getChild(UIDocumentSearchForm.class);
-      typeValues = uiDocSearchForm.getUIStringInput(UIWebContentSearchForm.DOC_TYPE).getValue() ;
-    } else { 
-      UIWebContentSearchForm uiWCSearchForm = 
-        uiWCTabSelector.getChild(UIWebContentSearchForm.class);
-      typeValues = uiWCSearchForm.getUIStringInput(UIWebContentSearchForm.DOC_TYPE).getValue() ;
-    }
+    UIContentSelector contentSelector = uiPopupWindow.getAncestorOfType(UIContentSelector.class);
+    UIContentSearchForm contentSearchForm = contentSelector.getChild(UIContentSearchForm.class);
+    String typeValues = contentSearchForm.getUIStringInput(UIContentSearchForm.DOC_TYPE).getValue() ;
     if(typeValues == null) return false ;
     if(typeValues.indexOf(",") > -1) {
       String[] values = typeValues.split(",") ;
@@ -123,28 +112,13 @@ public class UIWCMNodeTypeSelectForm extends UIForm {
    * @param selectedNodeTypes the selected node types
    * @param uiWCSearchForm the ui wc search form
    */
-  private void setNodeTypes(List<String> selectedNodeTypes, UIWebContentSearchForm uiWCSearchForm) {
+  private void setNodeTypes(List<String> selectedNodeTypes, UIContentSearchForm uiWCSearchForm) {
     String strNodeTypes = null ;
     for(int i = 0 ; i < selectedNodeTypes.size() ; i++) {
       if(strNodeTypes == null) strNodeTypes = selectedNodeTypes.get(i) ;
       else strNodeTypes = strNodeTypes + "," + selectedNodeTypes.get(i) ;
     }
-    uiWCSearchForm.getUIStringInput(UIWebContentSearchForm.DOC_TYPE).setValue(strNodeTypes) ;
-  }
-
-  /**
-   * Sets the node types.
-   * 
-   * @param selectedNodeTypes the selected node types
-   * @param uiDocSearchForm the ui doc search form
-   */
-  private void setNodeTypes(List<String> selectedNodeTypes, UIDocumentSearchForm uiDocSearchForm) {
-    String strNodeTypes = null ;
-    for(int i = 0 ; i < selectedNodeTypes.size() ; i++) {
-      if(strNodeTypes == null) strNodeTypes = selectedNodeTypes.get(i) ;
-      else strNodeTypes = strNodeTypes + "," + selectedNodeTypes.get(i) ;
-    }
-    uiDocSearchForm.getUIStringInput(UIWebContentSearchForm.DOC_TYPE).setValue(strNodeTypes) ;
+    uiWCSearchForm.getUIStringInput(UIContentSearchForm.DOC_TYPE).setValue(strNodeTypes) ;
   }
 
   /**
@@ -198,43 +172,26 @@ public class UIWCMNodeTypeSelectForm extends UIForm {
    * 
    * @see SaveActionEvent
    */
-  public static class SaveActionListener extends EventListener<UIWCMNodeTypeSelectForm> {
+  public static class SaveActionListener extends EventListener<UIContentNodeTypeSelector> {
     
     /* (non-Javadoc)
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
     @SuppressWarnings("unchecked")
-    public void execute(Event<UIWCMNodeTypeSelectForm> event) throws Exception {
-      UIWCMNodeTypeSelectForm uiNTSelectForm = event.getSource();
-      UIPopupWindow uiPopup = uiNTSelectForm.getAncestorOfType(UIPopupWindow.class);
-      UIWebContentTabSelector uiWCTabSelector = 
-        uiPopup.getAncestorOfType(UIWebContentTabSelector.class);
+    public void execute(Event<UIContentNodeTypeSelector> event) throws Exception {
+      UIContentNodeTypeSelector contentNodetypeSelector = event.getSource();
+      UIPopupWindow uiPopup = contentNodetypeSelector.getAncestorOfType(UIPopupWindow.class);
+      UIContentSelector contentSelector = uiPopup.getAncestorOfType(UIContentSelector.class);
       List<String> selectedNodeTypes = new ArrayList<String>();
       List<UIFormCheckBoxInput> listCheckbox =  new ArrayList<UIFormCheckBoxInput>();
-      uiNTSelectForm.findComponentOfType(listCheckbox, UIFormCheckBoxInput.class);
-      if(uiWCTabSelector == null) {
-        UIDocumentTabSelector uiDocTabSelector = 
-          uiPopup.getAncestorOfType(UIDocumentTabSelector.class);
-        UIDocumentSearchForm uiDocSearchForm = 
-          uiDocTabSelector.getChild(UIDocumentSearchForm.class);
-        String nodeTypesValue = 
-          uiDocSearchForm.getUIStringInput(UIWebContentSearchForm.DOC_TYPE).getValue();
-        uiNTSelectForm.makeSelectedNode(nodeTypesValue, selectedNodeTypes, listCheckbox);
-        uiNTSelectForm.setNodeTypes(selectedNodeTypes, uiDocSearchForm);
-        uiDocTabSelector.removeChild(UIPopupWindow.class);
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiDocTabSelector);
-        uiDocTabSelector.setSelectedTab(uiDocSearchForm.getId());
-      } else {
-        UIWebContentSearchForm uiWCSearchForm = 
-          uiWCTabSelector.getChild(UIWebContentSearchForm.class);
-        String nodeTypesValue = 
-          uiWCSearchForm.getUIStringInput(UIWebContentSearchForm.DOC_TYPE).getValue();
-        uiNTSelectForm.makeSelectedNode(nodeTypesValue, selectedNodeTypes, listCheckbox);
-        uiNTSelectForm.setNodeTypes(selectedNodeTypes, uiWCSearchForm);
-        uiWCTabSelector.removeChild(UIPopupWindow.class);
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiWCTabSelector);
-        uiWCTabSelector.setSelectedTab(uiWCSearchForm.getId());
-      }
+      contentNodetypeSelector.findComponentOfType(listCheckbox, UIFormCheckBoxInput.class);
+      UIContentSearchForm contentSearchForm = contentSelector.getChild(UIContentSearchForm.class);
+      String nodeTypesValue = contentSearchForm.getUIStringInput(UIContentSearchForm.DOC_TYPE).getValue();
+      contentNodetypeSelector.makeSelectedNode(nodeTypesValue, selectedNodeTypes, listCheckbox);
+      contentNodetypeSelector.setNodeTypes(selectedNodeTypes, contentSearchForm);
+      contentSelector.removeChild(UIPopupWindow.class);
+      event.getRequestContext().addUIComponentToUpdateByAjax(contentSelector);
+      contentSelector.setSelectedTab(contentSearchForm.getId());
     }
   }
 
@@ -280,31 +237,19 @@ public class UIWCMNodeTypeSelectForm extends UIForm {
    * 
    * @see CancelActionEvent
    */
-  public static class CancelActionListener extends EventListener<UIWCMNodeTypeSelectForm> {
+  public static class CancelActionListener extends EventListener<UIContentNodeTypeSelector> {
     
     /* (non-Javadoc)
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
-    public void execute(Event<UIWCMNodeTypeSelectForm> event) throws Exception {
-      UIWCMNodeTypeSelectForm uiNTSelectForm = event.getSource();
-      UIPopupWindow uiPopupWindow = uiNTSelectForm.getAncestorOfType(UIPopupWindow.class);
-      UIWebContentTabSelector uiWCTabSelector = 
-        uiPopupWindow.getAncestorOfType(UIWebContentTabSelector.class);
-      if(uiWCTabSelector == null) {
-        UIDocumentTabSelector uiDocTabSelector = 
-          uiPopupWindow.getAncestorOfType(UIDocumentTabSelector.class);
-        UIDocumentSearchForm uiDocSearchForm = 
-          uiDocTabSelector.getChild(UIDocumentSearchForm.class);
-        uiDocTabSelector.removeChild(UIPopupWindow.class);
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiDocTabSelector);
-        uiDocTabSelector.setSelectedTab(uiDocSearchForm.getId());
-      } else {
-        UIWebContentSearchForm uiWCSearchForm = 
-          uiWCTabSelector.getChild(UIWebContentSearchForm.class);
-        uiWCTabSelector.removeChild(UIPopupWindow.class);
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiWCTabSelector);
-        uiWCTabSelector.setSelectedTab(uiWCSearchForm.getId());
-      }
+    public void execute(Event<UIContentNodeTypeSelector> event) throws Exception {
+      UIContentNodeTypeSelector contentNodetypeSelector = event.getSource();
+      UIPopupWindow uiPopupWindow = contentNodetypeSelector.getAncestorOfType(UIPopupWindow.class);
+      UIContentSelector contentSelector = uiPopupWindow.getAncestorOfType(UIContentSelector.class);
+      UIContentSearchForm contentSearchForm = contentSelector.getChild(UIContentSearchForm.class);
+      contentSelector.removeChild(UIPopupWindow.class);
+      event.getRequestContext().addUIComponentToUpdateByAjax(contentSelector);
+      contentSelector.setSelectedTab(contentSearchForm.getId());
     }
   }
 }

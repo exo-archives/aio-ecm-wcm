@@ -87,21 +87,20 @@
       <Tablelayoutwebcontent>Table Layout</Tablelayoutwebcontent>
     </lable>
   </ContentType>
-  <portal>
-    <template>
-      <home>Home</home>
-      <news>News</news>
-      <products>Products</products>
-      <services>Services</services>
-      <search>Search</search>
-      <contact>Contact us</contact>
-      <about>About us</about>
-      <contentviewer>Content Viewer</contentviewer>
-      <parameterizedviewer>Parameterized Viewer</parameterizedviewer>
-      <searchResult>Search Result</searchResult>
-    </template>
-  </portal>
-  <UISinglePortletContentViewer>
+  <!--  
+  ##########################################################################################
+  # exo.ecm.wcm.webui.wcm.groovy.wcm.webui                                                 # 
+  ##########################################################################################
+  -->
+  <UITabPane>
+  	<title>
+  		<UIContentBrowsePanel>Web Content Tree Selector</UIContentBrowsePanel>
+  		<UIContentSearchForm>Web content search form</UIContentSearchForm>
+  		<UIContentSearchResult>Result form</UIContentSearchResult>
+  		<WebContentMetadataPopup></WebContentMetadataPopup>
+  	</title>
+  </UITabPane>
+  <UIContentBrowsePanel>
     <SelectContent>
       <leftcolumn>
         <title>Select a folder to display its children as content</title>
@@ -119,74 +118,20 @@
     	<DMSDocument>Document</DMSDocument>
     	<Media>Media</Media>
     </selectBoxValues>
-  </UISinglePortletContentViewer>
-  <UIWebContentSearch>
-  	<msg-choose-portal>You don't choose any portal. Please choosing a portal to search!</msg-choose-portal>
-  </UIWebContentSearch>
-  
-  <!--  
-  ##########################################################################################
-  # exo.ecm.wcm.webui.wcm.groovy.wcm.webui                                                 # 
-  ##########################################################################################
-  -->
-  <PopupWebContentSelector>
-  	<title>
-  		<UIWebContentTabSelector>Web Content Selector</UIWebContentTabSelector>
-  	</title>
-  </PopupWebContentSelector>
-  <PopupDMSSelector>
-  	<title>
-  		<UIDocumentTabSelector>Document Selector</UIDocumentTabSelector>
-  	</title>
-  </PopupDMSSelector>
-  <UITabPane>
-  	<title>
-  		<UIWebContentPathSelector>Web Content Tree Selector</UIWebContentPathSelector>
-  		<UIWebContentSearchForm>Web content search form</UIWebContentSearchForm>
-  		<UISelectPathPanel>Result form</UISelectPathPanel>
-  		<UIDocumentPathSelector>Document Tree Selector</UIDocumentPathSelector>
-  		<UIDocumentSearchForm>Document Search Form</UIDocumentSearchForm>
-  		<UIWCMSearchResult>Search Results</UIWCMSearchResult>
-  		<UIResultView>Result Viewer</UIResultView>
-  		<WebContentNodeTypePopup>NodeType Selector</WebContentNodeTypePopup>
-  		<WebContentMetadataPopup>Metadata Selector</WebContentMetadataPopup>
-  		<DocumentMetadataPopup>Metadata Selector</DocumentMetadataPopup>
-  		<DocumentNodeTypePopup>NodeType Selector</DocumentNodeTypePopup>
-  	</title>
-  </UITabPane>
-  <UIWebContentSearchForm>
-  	<action>
-  		<SearchWebContent>Search</SearchWebContent>
-  	</action>
-  </UIWebContentSearchForm>
-  <UIWebContentSearchForm>
+  </UIContentBrowsePanel>
+  <UIContentSearchForm>
   	<empty-field>You don't choose value to search! Please choose term</empty-field>
 		<invalid-date>"To Date" have to greater than "From Date"</invalid-date>
 		<invalid-nodeType>Node type "{0}" is invalid! Please check again.</invalid-nodeType>
-  </UIWebContentSearchForm>
-  <UIDocumentSearchForm>
   	<action>
   		<SearchWebContent>Search</SearchWebContent>
   	</action>
-  </UIDocumentSearchForm>
-  <UIDocumentTabSelector>
+  </UIContentSearchForm>
+  <UIContentSelector>
   	<header>
   		<title>Title</title>
   		<score>Score</score>
   		<action>Action</action>
-  		<Select>Select</Select>
-  		<View>View</View>
-  		<publicationstate>Publication State</publicationstate>
-  	</header>
-  	
-  </UIDocumentTabSelector>
-  <UIWebContentTabSelector>
-  	<header>
-  		<title>Title</title>
-  		<score>Score</score>
-  		<action>Action</action>
-  		<Select>Select</Select>
-  		<View>View</View>
   		<publicationstate>Publication State</publicationstate>
   	</header>
   	<action>
@@ -195,13 +140,8 @@
   			<View>View</View>
   		</title>
   	</action>
-  </UIWebContentTabSelector>
-  <UIResultView>
-  	<action>
-  		<Select>Select</Select>
-  	</action>
-  </UIResultView>
-  <UIWebContentSearchForm>
+  </UIContentSelector>
+  <UIContentSearchForm>
   	<title>
   		<Location>Site Name</Location>
   		<SearchByName>Search by name</SearchByName>
@@ -212,24 +152,24 @@
   		<ToDate>to date</ToDate>
   		<DocumentType>Document Type</DocumentType>
   	</title>
-  </UIWebContentSearchForm>
+  </UIContentSearchForm>
   <WebContentNodeTypePopup>
   	<title>
-  		<UIWCMNodeTypeSelectForm>NodeType Select Form</UIWCMNodeTypeSelectForm>
+  		<UIContentNodeTypeSelector>NodeType Selector</UIContentNodeTypeSelector>
   	</title>
   </WebContentNodeTypePopup>
-  <UIWCMNodeTypeSelectForm>
+  <UIContentNodeTypeSelector>
   	<action>
   		<Save>Save</Save>
   		<Cancel>Cancel</Cancel>
   	</action>
-  </UIWCMNodeTypeSelectForm>
+  </UIContentNodeTypeSelector>
   <WebContentMetadataPopup>
   	<title>
-  		<UIWCMSelectPropertyForm>Property Select Form</UIWCMSelectPropertyForm>
+  		<UIContentPropertySelector>Property Selector</UIContentPropertySelector>
   	</title>
   </WebContentMetadataPopup>
-  <UIWCMSelectPropertyForm>
+  <UIContentPropertySelector>
   	<action>
   		<Add>Add</Add>
   		<Cancel>Cancel</Cancel>
@@ -238,17 +178,7 @@
 			<metadataType>Metadata type</metadataType>
 			<property_select>Property select</property_select>
 		</label>
-  </UIWCMSelectPropertyForm>
-  <DocumentMetadataPopup>
-  	<title>
-  		<UIWCMSelectPropertyForm>Property Select Form</UIWCMSelectPropertyForm>
-  	</title>
-  </DocumentMetadataPopup>
-  <DocumentNodeTypePopup>
-  	<title>
-  		<UIWCMNodeTypeSelectForm>NodeType Select Form</UIWCMNodeTypeSelectForm>
-  	</title>
-  </DocumentNodeTypePopup>
+  </UIContentPropertySelector>
   <WCMContentView>
   	<header>
 	  	<title>Title</title>

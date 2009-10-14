@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.wcm.webui.selector.webContentView;
+package org.exoplatform.wcm.webui.selector.content;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -52,15 +52,15 @@ import org.exoplatform.webui.form.UIFormStringInput;
 
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template = "classpath:groovy/wcm/webui/UIWebContentSearchForm.gtmpl",
+    template = "classpath:groovy/wcm/webui/selector/content/UIContentSearchForm.gtmpl",
     events = {
-      @EventConfig(listeners = UIWebContentSearchForm.SearchWebContentActionListener.class),
-      @EventConfig(listeners = UIWebContentSearchForm.AddMetadataTypeActionListener.class),
-      @EventConfig(listeners = UIWebContentSearchForm.AddNodeTypeActionListener.class)
+      @EventConfig(listeners = UIContentSearchForm.SearchWebContentActionListener.class),
+      @EventConfig(listeners = UIContentSearchForm.AddMetadataTypeActionListener.class),
+      @EventConfig(listeners = UIContentSearchForm.AddNodeTypeActionListener.class)
     }
 )
 
-public class UIWebContentSearchForm extends UIForm {
+public class UIContentSearchForm extends UIForm {
 
   public static final String LOCATION = "location".intern();
   public static final String SEARCH_BY_NAME = "name".intern();
@@ -84,7 +84,7 @@ public class UIWebContentSearchForm extends UIForm {
 
   private String checkedRadioId;
 
-  public UIWebContentSearchForm() throws Exception {
+  public UIContentSearchForm() throws Exception {
   }
 
   public void init() throws Exception {
@@ -129,23 +129,23 @@ public class UIWebContentSearchForm extends UIForm {
     return portalNames;
   }
 
-  public static class AddMetadataTypeActionListener extends EventListener<UIWebContentSearchForm> {
-    public void execute(Event<UIWebContentSearchForm> event) throws Exception {
-      UIWebContentSearchForm uiWCSearchForm = event.getSource();
-      UIWebContentTabSelector uiWCTabSelector = uiWCSearchForm.getParent();
-      uiWCSearchForm.setCheckedRadioId(event.getRequestContext().getRequestParameter(CHECKED_RADIO_ID));
-      uiWCTabSelector.initMetadataPopup();
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiWCTabSelector);
+  public static class AddMetadataTypeActionListener extends EventListener<UIContentSearchForm> {
+    public void execute(Event<UIContentSearchForm> event) throws Exception {
+      UIContentSearchForm contentSearchForm = event.getSource();
+      UIContentSelector contentSelector = contentSearchForm.getParent();
+      contentSearchForm.setCheckedRadioId(event.getRequestContext().getRequestParameter(CHECKED_RADIO_ID));
+      contentSelector.initMetadataPopup();
+      event.getRequestContext().addUIComponentToUpdateByAjax(contentSelector);
     }
   }
 
-  public static class AddNodeTypeActionListener extends EventListener<UIWebContentSearchForm> {
-    public void execute(Event<UIWebContentSearchForm> event) throws Exception {
-      UIWebContentSearchForm uiWCSearchForm = event.getSource();
-      UIWebContentTabSelector uiWCTabSelector = uiWCSearchForm.getParent();
-      uiWCSearchForm.setCheckedRadioId(event.getRequestContext().getRequestParameter(CHECKED_RADIO_ID));
-      uiWCTabSelector.initNodeTypePopup();
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiWCTabSelector);
+  public static class AddNodeTypeActionListener extends EventListener<UIContentSearchForm> {
+    public void execute(Event<UIContentSearchForm> event) throws Exception {
+      UIContentSearchForm contentSearchForm = event.getSource();
+      UIContentSelector contentSelector = contentSearchForm.getParent();
+      contentSearchForm.setCheckedRadioId(event.getRequestContext().getRequestParameter(CHECKED_RADIO_ID));
+      contentSelector.initNodeTypePopup();
+      event.getRequestContext().addUIComponentToUpdateByAjax(contentSelector);
     }    
   } 
 
@@ -209,7 +209,7 @@ public class UIWebContentSearchForm extends UIForm {
     return qCriteria;
   }
 
-  private boolean haveEmptyField(UIApplication uiApp, Event<UIWebContentSearchForm> event, Object... fields) throws Exception {
+  private boolean haveEmptyField(UIApplication uiApp, Event<UIContentSearchForm> event, Object... fields) throws Exception {
     for(Object field : fields) {
       if(field == null) {
         uiApp.addMessage(new ApplicationMessage(
@@ -271,53 +271,53 @@ public class UIWebContentSearchForm extends UIForm {
     return siteSearch.searchSiteContents(Utils.getSessionProvider(this), qCriteria, pageSize);
   }
 
-  static public class SearchWebContentActionListener extends EventListener<UIWebContentSearchForm> {
-    public void execute(Event<UIWebContentSearchForm> event) throws Exception {
-      UIWebContentSearchForm uiWCSearch = event.getSource();
-      String typeSearch = uiWCSearch.getAncestorOfType(UIWebContentTabSelector.class)
-                                      .getChild(UIWebContentPathSelector.class).contentType;
+  static public class SearchWebContentActionListener extends EventListener<UIContentSearchForm> {
+    public void execute(Event<UIContentSearchForm> event) throws Exception {
+      UIContentSearchForm uiWCSearch = event.getSource();
+      String typeSearch = uiWCSearch.getAncestorOfType(UIContentSelector.class)
+                                      .getChild(UIContentBrowsePanel.class).contentType;
       int pageSize = 5;
       String radioValue = event.getRequestContext().getRequestParameter(RADIO_NAME);
-      String siteName = uiWCSearch.getUIStringInput(UIWebContentSearchForm.LOCATION).getValue();
-      UIWebContentTabSelector uiWCTabSelector = uiWCSearch.getParent();
+      String siteName = uiWCSearch.getUIStringInput(UIContentSearchForm.LOCATION).getValue();
+      UIContentSelector uiWCTabSelector = uiWCSearch.getParent();
       UIApplication uiApp = uiWCSearch.getAncestorOfType(UIApplication.class);
       QueryCriteria qCriteria = uiWCSearch.getInitialQueryCriteria(siteName);
       PaginatedQueryResult pagResult = null; 
 
-      if(typeSearch.equals(UIWebContentPathSelector.WEBCONENT)){
-        if(UIWebContentSearchForm.SEARCH_BY_NAME.equals(radioValue)) {
+      if(typeSearch.equals(UIContentBrowsePanel.WEBCONENT)){
+        if(UIContentSearchForm.SEARCH_BY_NAME.equals(radioValue)) {
           String keyword = uiWCSearch.getUIStringInput(radioValue).getValue();
           if(uiWCSearch.haveEmptyField(uiApp, event, keyword)) return;
           pagResult = uiWCSearch.searchWebContentByName(keyword, qCriteria, pageSize);
-        } else if(UIWebContentSearchForm.SEARCH_BY_CONTENT.equals(radioValue)) {
+        } else if(UIContentSearchForm.SEARCH_BY_CONTENT.equals(radioValue)) {
           String keyword = uiWCSearch.getUIStringInput(radioValue).getValue();
           if(uiWCSearch.haveEmptyField(uiApp, event, keyword)) return;
           pagResult =  uiWCSearch.searchWebContentByFulltext(keyword, qCriteria, pageSize);
-        } else if(UIWebContentSearchForm.PROPERTY.equals(radioValue)) {
-          String property = uiWCSearch.getUIStringInput(UIWebContentSearchForm.PROPERTY).getValue();
-          String keyword = uiWCSearch.getUIStringInput(UIWebContentSearchForm.CONTAIN).getValue();
+        } else if(UIContentSearchForm.PROPERTY.equals(radioValue)) {
+          String property = uiWCSearch.getUIStringInput(UIContentSearchForm.PROPERTY).getValue();
+          String keyword = uiWCSearch.getUIStringInput(UIContentSearchForm.CONTAIN).getValue();
           if(uiWCSearch.haveEmptyField(uiApp, event, property, keyword)) return;
           pagResult = uiWCSearch.searchWebContentByProperty(property, keyword, qCriteria, pageSize);
-        } else if(UIWebContentSearchForm.TIME_OPTION.equals(radioValue)) {
-          Calendar fromDate = uiWCSearch.getUIFormDateTimeInput(UIWebContentSearchForm.START_TIME).getCalendar();
+        } else if(UIContentSearchForm.TIME_OPTION.equals(radioValue)) {
+          Calendar fromDate = uiWCSearch.getUIFormDateTimeInput(UIContentSearchForm.START_TIME).getCalendar();
           if(uiWCSearch.haveEmptyField(uiApp, event, fromDate)) return;
-          Calendar endDate = uiWCSearch.getUIFormDateTimeInput(UIWebContentSearchForm.END_TIME).getCalendar();
+          Calendar endDate = uiWCSearch.getUIFormDateTimeInput(UIContentSearchForm.END_TIME).getCalendar();
           if(endDate == null) endDate = Calendar.getInstance();
           if (fromDate.getTimeInMillis() > endDate.getTimeInMillis()) {
             uiApp.addMessage(new ApplicationMessage("UIWebContentSearchForm.invalid-date", null, ApplicationMessage.WARNING));
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
             return;
           }
-          String dateRangeSelected = uiWCSearch.getUIStringInput(UIWebContentSearchForm.TIME_OPTION).getValue();
-          if(UIWebContentSearchForm.CREATED_DATE.equals(dateRangeSelected)) {
+          String dateRangeSelected = uiWCSearch.getUIStringInput(UIContentSearchForm.TIME_OPTION).getValue();
+          if(UIContentSearchForm.CREATED_DATE.equals(dateRangeSelected)) {
             pagResult =  uiWCSearch.searchWebContentByDate(DATE_RANGE_SELECTED.CREATED, 
                 fromDate, endDate, qCriteria, pageSize);
           } else {
             pagResult = uiWCSearch.searchWebContentByDate(DATE_RANGE_SELECTED.MODIFIDED, 
                 fromDate, endDate, qCriteria, pageSize);
           }
-        } else if(UIWebContentSearchForm.DOC_TYPE.equals(radioValue)) {
-          String documentType = uiWCSearch.getUIStringInput(UIWebContentSearchForm.DOC_TYPE).getValue();
+        } else if(UIContentSearchForm.DOC_TYPE.equals(radioValue)) {
+          String documentType = uiWCSearch.getUIStringInput(UIContentSearchForm.DOC_TYPE).getValue();
           if(uiWCSearch.haveEmptyField(uiApp, event, documentType)) return;
           try{
             pagResult = uiWCSearch.searchWebContentByDocumentType(documentType, qCriteria, pageSize);
@@ -327,45 +327,45 @@ public class UIWebContentSearchForm extends UIForm {
             return;
           }
         }
-      }else if(typeSearch.equals(UIWebContentPathSelector.DMSDOCUMENT)){
-        if(UIWebContentSearchForm.SEARCH_BY_NAME.equals(radioValue)) {
+      }else if(typeSearch.equals(UIContentBrowsePanel.DMSDOCUMENT)){
+        if(UIContentSearchForm.SEARCH_BY_NAME.equals(radioValue)) {
           String keyword = uiWCSearch.getUIStringInput(radioValue).getValue();
           if(uiWCSearch.haveEmptyField(uiApp, event, keyword)) return;
           pagResult = uiWCSearch.searchDocumentByName(keyword, qCriteria, pageSize);
-        } else if(UIWebContentSearchForm.SEARCH_BY_CONTENT.equals(radioValue)) {
+        } else if(UIContentSearchForm.SEARCH_BY_CONTENT.equals(radioValue)) {
           String keyword = uiWCSearch.getUIStringInput(radioValue).getValue();
           if(uiWCSearch.haveEmptyField(uiApp, event, keyword)) return;
           pagResult =  uiWCSearch.searchDocumentByFulltext(keyword, qCriteria, pageSize);
-        } else if(UIWebContentSearchForm.PROPERTY.equals(radioValue)) {
-          String property = uiWCSearch.getUIStringInput(UIWebContentSearchForm.PROPERTY).getValue();
-          String keyword = uiWCSearch.getUIStringInput(UIWebContentSearchForm.CONTAIN).getValue();
+        } else if(UIContentSearchForm.PROPERTY.equals(radioValue)) {
+          String property = uiWCSearch.getUIStringInput(UIContentSearchForm.PROPERTY).getValue();
+          String keyword = uiWCSearch.getUIStringInput(UIContentSearchForm.CONTAIN).getValue();
           if(uiWCSearch.haveEmptyField(uiApp, event, property, keyword)) return;
           pagResult = uiWCSearch.searchDocumentByProperty(property, keyword, qCriteria, pageSize);
-        } else if(UIWebContentSearchForm.TIME_OPTION.equals(radioValue)) {
-          Calendar fromDate = uiWCSearch.getUIFormDateTimeInput(UIWebContentSearchForm.START_TIME).getCalendar();
+        } else if(UIContentSearchForm.TIME_OPTION.equals(radioValue)) {
+          Calendar fromDate = uiWCSearch.getUIFormDateTimeInput(UIContentSearchForm.START_TIME).getCalendar();
           if(uiWCSearch.haveEmptyField(uiApp, event, fromDate)) return;
-          Calendar endDate = uiWCSearch.getUIFormDateTimeInput(UIWebContentSearchForm.END_TIME).getCalendar();
+          Calendar endDate = uiWCSearch.getUIFormDateTimeInput(UIContentSearchForm.END_TIME).getCalendar();
           if(endDate == null) endDate = Calendar.getInstance();
           if (fromDate.getTimeInMillis() > endDate.getTimeInMillis()) {
             uiApp.addMessage(new ApplicationMessage("UIWebContentSearchForm.invalid-date", null, ApplicationMessage.WARNING));
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
             return;
           }
-          String dateRangeSelected = uiWCSearch.getUIStringInput(UIWebContentSearchForm.TIME_OPTION).getValue();
-          if(UIWebContentSearchForm.CREATED_DATE.equals(dateRangeSelected)) {
+          String dateRangeSelected = uiWCSearch.getUIStringInput(UIContentSearchForm.TIME_OPTION).getValue();
+          if(UIContentSearchForm.CREATED_DATE.equals(dateRangeSelected)) {
             pagResult =  uiWCSearch.searchDocumentByDate(DATE_RANGE_SELECTED.CREATED, 
                 fromDate, endDate, qCriteria, pageSize);
           } else {
             pagResult = uiWCSearch.searchDocumentByDate(DATE_RANGE_SELECTED.MODIFIDED, 
                 fromDate, endDate, qCriteria, pageSize);
           }
-        } else if(UIWebContentSearchForm.DOC_TYPE.equals(radioValue)) {
-          String documentType = uiWCSearch.getUIStringInput(UIWebContentSearchForm.DOC_TYPE).getValue();
+        } else if(UIContentSearchForm.DOC_TYPE.equals(radioValue)) {
+          String documentType = uiWCSearch.getUIStringInput(UIContentSearchForm.DOC_TYPE).getValue();
           if(uiWCSearch.haveEmptyField(uiApp, event, documentType)) return;
           pagResult = uiWCSearch.searchDocumentByType(documentType, qCriteria, pageSize);
         }
       }
-      UIWCMSearchResult uiWCSearchResult = uiWCTabSelector.getChild(UIWCMSearchResult.class);
+      UIContentSearchResult uiWCSearchResult = uiWCTabSelector.getChild(UIContentSearchResult.class);
       uiWCSearchResult.updateGrid(pagResult);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiWCTabSelector);
       uiWCTabSelector.setSelectedTab(uiWCSearchResult.getId());

@@ -1,9 +1,8 @@
 <%
-  import org.exoplatform.webui.core.UIComponent;
+	import org.exoplatform.webui.core.UIComponent;
   import org.exoplatform.webui.form.UIForm;
   import java.text.DateFormat;
   import java.text.SimpleDateFormat;
-  import org.exoplatform.wcm.webui.selector.webcontent.UIWCMSearchResult;
   import javax.jcr.Node;
   import javax.jcr.Session;
   import org.exoplatform.ecm.webui.utils.Utils;

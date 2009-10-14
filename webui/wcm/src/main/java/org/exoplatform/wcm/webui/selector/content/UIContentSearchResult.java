@@ -1,4 +1,4 @@
-package org.exoplatform.wcm.webui.selector.webcontent;
+package org.exoplatform.wcm.webui.selector.content;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -9,19 +9,21 @@ import javax.jcr.Node;
 import javax.jcr.Session;
 import javax.portlet.PortletPreferences;
 
-import org.exoplatform.ecm.webui.selector.UISelectable;
-import org.exoplatform.ecm.webui.tree.UIBaseNodeTreeSelector;
+import org.exoplatform.portal.webui.page.UIPageBody;
+import org.exoplatform.portal.webui.portal.UIPortal;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.ecm.publication.PublicationService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
+import org.exoplatform.services.wcm.core.NodeIdentifier;
 import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
+import org.exoplatform.services.wcm.publication.NotInWCMPublicationException;
+import org.exoplatform.services.wcm.publication.WCMPublicationService;
 import org.exoplatform.services.wcm.search.PaginatedQueryResult;
 import org.exoplatform.wcm.webui.Utils;
-import org.exoplatform.wcm.webui.selector.document.UIDocumentPathSelector;
-import org.exoplatform.wcm.webui.selector.document.UIDocumentTabSelector;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -35,14 +37,16 @@ import org.exoplatform.webui.event.EventListener;
  * dzungdev@gmail.com
  * Feb 10, 2009
  */
+
 @ComponentConfig(
-    template = "classpath:groovy/wcm/webui/UIWCMSearchResult.gtmpl",
-    events = {
-        @EventConfig(listeners = UIWCMSearchResult.SelectActionListener.class),
-        @EventConfig(listeners = UIWCMSearchResult.ViewActionListener.class)
-    }
+                 template = "classpath:groovy/wcm/webui/selector/content/UIContentSearchResult.gtmpl",
+                 events = {
+                     @EventConfig(listeners = UIContentSearchResult.SelectActionListener.class),
+                     @EventConfig(listeners = UIContentSearchResult.ViewActionListener.class)
+                 }
 )
-public class UIWCMSearchResult extends UIGrid {
+
+public class UIContentSearchResult extends UIGrid {
 
   /** The Constant TITLE. */
   public static final String TITLE = "title".intern();
@@ -67,13 +71,14 @@ public class UIWCMSearchResult extends UIGrid {
   
   /** The BEA n_ fields. */
   public String[] BEAN_FIELDS = {TITLE, SCORE, PUBLICATION_STATE};
-  
+
+
   /**
    * Instantiates a new uIWCM search result.
    * 
    * @throws Exception the exception
    */
-  public UIWCMSearchResult() throws Exception {
+  public UIContentSearchResult() throws Exception {
     configure(NODE_PATH, BEAN_FIELDS, Actions);
     getUIPageIterator().setId("UIWCMSearchResultPaginator");
   }
@@ -112,7 +117,7 @@ public class UIWCMSearchResult extends UIGrid {
    */
   public String getTitleNode(Node node) throws Exception {
     return node.hasProperty("exo:title") ? 
-        node.getProperty("exo:title").getValue().getString() : node.getName();
+                                          node.getProperty("exo:title").getValue().getString() : node.getName();
   }
 
   /**
@@ -133,34 +138,6 @@ public class UIWCMSearchResult extends UIGrid {
   }
 
   /**
-   * Gets the result node.
-   * 
-   * @param nodePath the node path
-   * 
-   * @return the result node
-   * 
-   * @throws Exception the exception
-   */
-  private Node getResultNode(String nodePath) throws Exception {
-    RepositoryService repoService = getApplicationComponent(RepositoryService.class);
-    ManageableRepository maRepository = repoService.getCurrentRepository();
-    String repository = maRepository.getConfiguration().getName();
-    PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
-    PortletPreferences prefs = pContext.getRequest().getPreferences();
-    String workspace = prefs.getValue("workspace", null);
-    if(workspace == null) {
-      WCMConfigurationService wcmConfService = 
-        getApplicationComponent(WCMConfigurationService.class);
-      NodeLocation nodeLocation = wcmConfService.getLivePortalsLocation(repository);
-      workspace = nodeLocation.getWorkspace();
-    }
-    SessionProvider sessionProvider = Utils.getSessionProvider(this);
-    Session session = sessionProvider.getSession(workspace, maRepository);
-    Node resultNode = (Node) session.getItem(nodePath);
-    return resultNode;
-  }
-
-  /**
    * Gets the expect.
    * 
    * @param expect the expect
@@ -171,7 +148,7 @@ public class UIWCMSearchResult extends UIGrid {
     expect = expect.replaceAll("<[^>]*/?>", "");
     return expect;
   }
-  
+
   /**
    * Gets the current state.
    * 
@@ -187,6 +164,31 @@ public class UIWCMSearchResult extends UIGrid {
   }
 
   /**
+   * Gets the session.
+   * 
+   * @return the session
+   * 
+   * @throws Exception the exception
+   */
+  public Session getSession() throws Exception {
+    RepositoryService repoService = getApplicationComponent(RepositoryService.class);
+    ManageableRepository maRepository = repoService.getCurrentRepository();
+    String repository = maRepository.getConfiguration().getName();
+    PortletRequestContext pContext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+    PortletPreferences prefs = pContext.getRequest().getPreferences();
+    String workspace = prefs.getValue("workspace", null);
+    if(workspace == null) {
+      WCMConfigurationService wcmConfService = 
+        getApplicationComponent(WCMConfigurationService.class);
+      NodeLocation nodeLocation = wcmConfService.getLivePortalsLocation(repository);
+      workspace = nodeLocation.getWorkspace();
+    }
+    Session session = 
+      SessionProviderFactory.createSessionProvider().getSession(workspace, maRepository);
+    return session;
+  }
+
+  /**
    * The listener interface for receiving selectAction events.
    * The class that is interested in processing a selectAction
    * event implements this interface, and the object created
@@ -197,33 +199,49 @@ public class UIWCMSearchResult extends UIGrid {
    * 
    * @see SelectActionEvent
    */
-  public static class SelectActionListener extends EventListener<UIWCMSearchResult> {
+  public static class SelectActionListener extends EventListener<UIContentSearchResult> {
     
     /* (non-Javadoc)
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
-    public void execute(Event<UIWCMSearchResult> event) throws Exception {
-      UIWCMSearchResult uiWCSearchResult = event.getSource();
-      UIWebContentTabSelector uiWCTabSelector = 
-        uiWCSearchResult.getAncestorOfType(UIWebContentTabSelector.class);
+    public void execute(Event<UIContentSearchResult> event) throws Exception {
+      UIContentSearchResult contentSearchResult = event.getSource();
       String nodePath = event.getRequestContext().getRequestParameter(OBJECTID);
-      if(uiWCTabSelector == null) {
-        UIDocumentTabSelector uiDocTabSelector = 
-          uiWCSearchResult.getAncestorOfType(UIDocumentTabSelector.class);
-        UIDocumentPathSelector uiDocPathSelector =
-          uiDocTabSelector.getChild(UIDocumentPathSelector.class);
-        String returnField = ((UIBaseNodeTreeSelector)uiDocPathSelector).getReturnFieldName();
-        ((UISelectable)((UIBaseNodeTreeSelector)uiDocPathSelector).getSourceComponent()).doSelect(returnField, nodePath);
-        event.getRequestContext().addUIComponentToUpdateByAjax(
-            ((UIBaseNodeTreeSelector)uiDocPathSelector).getSourceComponent().getParent());
-      } else {
-        UIWebContentPathSelector uiWCPathSelector = 
-          uiWCTabSelector.getChild(UIWebContentPathSelector.class);
-        String returnField = ((UIBaseNodeTreeSelector)uiWCPathSelector).getReturnFieldName();
-        ((UISelectable)((UIBaseNodeTreeSelector)uiWCPathSelector).getSourceComponent()).doSelect(returnField, nodePath);
-        event.getRequestContext().addUIComponentToUpdateByAjax(
-            ((UIBaseNodeTreeSelector)uiWCPathSelector).getSourceComponent().getParent());
+      RepositoryService repositoryService = contentSearchResult.getApplicationComponent(RepositoryService.class);
+      String repoName = repositoryService.getCurrentRepository().getConfiguration().getName();
+      WCMConfigurationService configurationService = contentSearchResult.getApplicationComponent(WCMConfigurationService.class);
+      NodeLocation nodeLocation = configurationService.getLivePortalsLocation(repoName);
+
+      ManageableRepository manageableRepository = repositoryService.getRepository(nodeLocation.getRepository());
+      Session session = contentSearchResult.getApplicationComponent(ThreadLocalSessionProviderService.class).getSessionProvider(null)
+      .getSession(nodeLocation.getWorkspace(), manageableRepository);
+      Node webContent = (Node) session.getItem(nodePath);
+      NodeIdentifier nodeIdentifier = NodeIdentifier.make(webContent);
+      PortletRequestContext pContext = (PortletRequestContext) event.getRequestContext();
+      PortletPreferences prefs = pContext.getRequest().getPreferences();
+      prefs.setValue("repository", nodeIdentifier.getRepository());
+      prefs.setValue("workspace", nodeIdentifier.getWorkspace());
+      prefs.setValue("nodeIdentifier", nodeIdentifier.getUUID());
+      prefs.store();
+
+      String remoteUser = Util.getPortalRequestContext().getRemoteUser();
+      String currentSite = Util.getPortalRequestContext().getPortalOwner();
+
+      WCMPublicationService wcmPublicationService = contentSearchResult.getApplicationComponent(WCMPublicationService.class);
+
+      try {
+        wcmPublicationService.isEnrolledInWCMLifecycle(webContent);
+      } catch (NotInWCMPublicationException e){
+        wcmPublicationService.unsubcribeLifecycle(webContent);
+        wcmPublicationService.enrollNodeInLifecycle(webContent, currentSite, remoteUser);          
       }
+      
+      // Update and Close
+      UIPortal uiPortal = Util.getUIPortal();
+      UIPageBody uiPageBody = uiPortal.findFirstComponentOfType(UIPageBody.class);
+      uiPageBody.setUIComponent(null);
+      uiPageBody.setMaximizedUIComponent(null);
+      Utils.updatePortal((PortletRequestContext)event.getRequestContext());
     }
   }
 
@@ -238,37 +256,20 @@ public class UIWCMSearchResult extends UIGrid {
    * 
    * @see ViewActionEvent
    */
-  public static class ViewActionListener extends EventListener<UIWCMSearchResult> {
+  public static class ViewActionListener extends EventListener<UIContentSearchResult> {
     
     /* (non-Javadoc)
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
      */
-    public void execute(Event<UIWCMSearchResult> event) throws Exception {
-      UIWCMSearchResult uiWCSearchResult = event.getSource();
-      UIWebContentTabSelector uiWCTabSelector = 
-        uiWCSearchResult.getAncestorOfType(UIWebContentTabSelector.class);
-      String nodePath = event.getRequestContext().getRequestParameter(OBJECTID);
-      if(uiWCTabSelector == null) {
-        UIDocumentTabSelector uiDocTabSelector = 
-          uiWCSearchResult.getAncestorOfType(UIDocumentTabSelector.class);
-        Node resultNode = uiWCSearchResult.getResultNode(nodePath);
-        UIResultView uiResultView = uiDocTabSelector.getChild(UIResultView.class);
-        if(uiResultView == null) {
-          uiResultView = uiDocTabSelector.addChild(UIResultView.class, null, null);
-        }
-        uiResultView.init(resultNode, false);
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiDocTabSelector);
-        uiDocTabSelector.setSelectedTab(uiResultView.getId());
-      } else {
-        Node resultNode = uiWCSearchResult.getResultNode(nodePath);
-        UIResultView uiResultView = uiWCTabSelector.getChild(UIResultView.class);
-        if(uiResultView == null) {
-          uiResultView = uiWCTabSelector.addChild(UIResultView.class, null, null);
-        }
-        uiResultView.init(resultNode, false);
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiWCTabSelector);
-        uiWCTabSelector.setSelectedTab(uiResultView.getId());
+    public void execute(Event<UIContentSearchResult> event) throws Exception {
+      UIContentSearchResult contentSearchResult = event.getSource();
+      UIContentSelector contentSelector = contentSearchResult.getAncestorOfType(UIContentSelector.class);
+      UIContentResultViewer contentResultViewer = contentSelector.getChild(UIContentResultViewer.class);
+      if(contentResultViewer == null) {
+        contentResultViewer = contentSelector.addChild(UIContentResultViewer.class, null, null);
       }
+      event.getRequestContext().addUIComponentToUpdateByAjax(contentSelector);
+      contentSelector.setSelectedTab(contentResultViewer.getId());
     }
   }  
 }

@@ -1,12 +1,11 @@
 <%
 	import java.util.List;
 	import java.util.ArrayList;
-  import org.exoplatform.wcm.webui.selector.webContentView.TreeNode ;
+  import org.exoplatform.wcm.webui.selector.content.UIContentTreeNode ;
   import org.exoplatform.web.application.JavascriptManager;
   
   def rcontext = _ctx.getRequestContext() ;
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
-	//jsmanager.addOnLoadJavascript('eXo.wcm.UIWCMTreeView.init');
 %>
 <script type="text/javascript">
 	function MyUIWCMTreeView(){
@@ -121,18 +120,19 @@
 
 <div class="UIWebContentTreeView $uicomponent.id" id = "$uicomponent.id">
 	<%
-	TreeNode treeNode = null;
-	List listTrees = uicomponent.getTreeNode();
-	int sub = 0;
-	String action = null;
-	for(int i = 0; i < listTrees.size(); i ++){
-		treeNode = listTrees.get(i);
-		try{
-			sub = listTrees.get(i-1).getDeep() - treeNode.getDeep();
-		}catch(Exception ex){
-			sub = 0;
-		}
-		for(int j = 0; j <= sub && i > 0; j ++){%>
+		UIContentTreeNode treeNode = null;
+		List listTrees = uicomponent.getTreeNode();
+		int sub = 0;
+		String action = null;
+		for(int i = 0; i < listTrees.size(); i ++){
+			treeNode = listTrees.get(i);
+			try{
+		sub = listTrees.get(i-1).getDeep() - treeNode.getDeep();
+			}catch(Exception ex){
+		sub = 0;
+			}
+			for(int j = 0; j <= sub && i > 0; j ++){
+	%>
 			</div>
 	<%	}
 		if(treeNode.getNodePath() != null)action = uicomponent.event("ChangeNode",treeNode.getNodePath()+"/"+treeNode.getWorkSpaceName()+"/" + i);

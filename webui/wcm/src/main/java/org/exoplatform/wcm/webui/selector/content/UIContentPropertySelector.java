@@ -1,4 +1,4 @@
-package org.exoplatform.wcm.webui.selector.webContentView;
+package org.exoplatform.wcm.webui.selector.content;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,8 +18,6 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
-import org.exoplatform.wcm.webui.selector.document.UIDocumentSearchForm;
-import org.exoplatform.wcm.webui.selector.document.UIDocumentTabSelector;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIPopupWindow;
@@ -42,12 +40,12 @@ import org.exoplatform.webui.form.UIFormSelectBox;
     lifecycle = UIFormLifecycle.class,
     template =  "system:/groovy/webui/form/UIForm.gtmpl",
     events = {
-      @EventConfig(phase=Phase.DECODE, listeners = UIWCMSelectPropertyForm.CancelActionListener.class),
-      @EventConfig(listeners = UIWCMSelectPropertyForm.AddActionListener.class),
-      @EventConfig(listeners = UIWCMSelectPropertyForm.ChangeMetadataTypeActionListener.class)
+      @EventConfig(phase=Phase.DECODE, listeners = UIContentPropertySelector.CancelActionListener.class),
+      @EventConfig(listeners = UIContentPropertySelector.AddActionListener.class),
+      @EventConfig(listeners = UIContentPropertySelector.ChangeMetadataTypeActionListener.class)
     }    
 )
-public class UIWCMSelectPropertyForm extends UIForm{
+public class UIContentPropertySelector extends UIForm{
 
   final static public String METADATA_TYPE = "metadataType" ;
   final static public String PROPERTY_SELECT = "property_select" ;
@@ -56,7 +54,7 @@ public class UIWCMSelectPropertyForm extends UIForm{
 
   private List<SelectItemOption<String>> properties = new ArrayList<SelectItemOption<String>>() ;
 
-  public UIWCMSelectPropertyForm() throws Exception {
+  public UIContentPropertySelector() throws Exception {
     setActions(new String[] {"Add", "Cancel"}) ;
   }
 
@@ -119,62 +117,37 @@ public class UIWCMSelectPropertyForm extends UIForm{
     session.logout();
   }
 
-  static  public class CancelActionListener extends EventListener<UIWCMSelectPropertyForm> {
-    public void execute(Event<UIWCMSelectPropertyForm> event) throws Exception {
-      UIWCMSelectPropertyForm uiForm = event.getSource();
-      UIPopupWindow uiPopupWindow = uiForm.getAncestorOfType(UIPopupWindow.class);
-      UIWebContentTabSelector uiWCTabSelector = 
-        uiPopupWindow.getAncestorOfType(UIWebContentTabSelector.class);
-      if(uiWCTabSelector == null) {
-        UIDocumentTabSelector uiDocTabSelector = 
-          uiPopupWindow.getAncestorOfType(UIDocumentTabSelector.class);
-        UIDocumentSearchForm uiDocSearchForm = 
-          uiDocTabSelector.findFirstComponentOfType(UIDocumentSearchForm.class);
-        uiDocTabSelector.removeChild(UIPopupWindow.class);
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiDocTabSelector);
-        uiDocTabSelector.setSelectedTab(uiDocSearchForm.getId());
-      } else {
-        uiWCTabSelector.removeChild(UIPopupWindow.class);
-        UIWebContentSearchForm uiWCSearchForm = 
-          uiWCTabSelector.getChild(UIWebContentSearchForm.class);
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiWCTabSelector);
-        uiWCTabSelector.setSelectedTab(uiWCSearchForm.getId());
-      }
+  static  public class CancelActionListener extends EventListener<UIContentPropertySelector> {
+    public void execute(Event<UIContentPropertySelector> event) throws Exception {
+      UIContentPropertySelector contentPropertySelector = event.getSource();
+      UIPopupWindow uiPopupWindow = contentPropertySelector.getAncestorOfType(UIPopupWindow.class);
+      UIContentSelector contentSelector = uiPopupWindow.getAncestorOfType(UIContentSelector.class);
+      contentSelector.removeChild(UIPopupWindow.class);
+      UIContentSearchForm contentSearchForm = contentSelector.getChild(UIContentSearchForm.class);
+      event.getRequestContext().addUIComponentToUpdateByAjax(contentSelector);
+      contentSelector.setSelectedTab(contentSearchForm.getId());
     }
   }
 
-  static  public class AddActionListener extends EventListener<UIWCMSelectPropertyForm> {
-    public void execute(Event<UIWCMSelectPropertyForm> event) throws Exception {
-      UIWCMSelectPropertyForm uiForm = event.getSource();
-      String property = uiForm.<UIFormRadioBoxInput>getUIInput(PROPERTY_SELECT).getValue();
-      UIPopupWindow uiPopupWindow = uiForm.getAncestorOfType(UIPopupWindow.class);
-      UIWebContentTabSelector uiWCTabSelector = 
-        uiPopupWindow.getAncestorOfType(UIWebContentTabSelector.class);
-      if(uiWCTabSelector == null) {
-        UIDocumentTabSelector uiDocTabSelector = 
-          uiPopupWindow.getAncestorOfType(UIDocumentTabSelector.class);
-        UIDocumentSearchForm uiDocSearchForm = 
-          uiDocTabSelector.findFirstComponentOfType(UIDocumentSearchForm.class);
-        uiDocSearchForm.getUIStringInput(uiForm.getFieldName()).setValue(property);
-        uiDocTabSelector.removeChild(UIPopupWindow.class);
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiDocTabSelector);
-        uiDocTabSelector.setSelectedTab(uiDocSearchForm.getId());
-      } else {
-        UIWebContentSearchForm uiWCSearchForm =
-          uiWCTabSelector.findFirstComponentOfType(UIWebContentSearchForm.class);
-        uiWCSearchForm.getUIStringInput(uiForm.getFieldName()).setValue(property);
-        uiWCTabSelector.removeChild(UIPopupWindow.class);
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiWCTabSelector);
-        uiWCTabSelector.setSelectedTab(uiWCSearchForm.getId());
-      }
+  static  public class AddActionListener extends EventListener<UIContentPropertySelector> {
+    public void execute(Event<UIContentPropertySelector> event) throws Exception {
+      UIContentPropertySelector contentPropertySelector = event.getSource();
+      String property = contentPropertySelector.<UIFormRadioBoxInput>getUIInput(PROPERTY_SELECT).getValue();
+      UIPopupWindow uiPopupWindow = contentPropertySelector.getAncestorOfType(UIPopupWindow.class);
+      UIContentSelector contentSelector = uiPopupWindow.getAncestorOfType(UIContentSelector.class);
+      UIContentSearchForm contentSearchForm =contentSelector.findFirstComponentOfType(UIContentSearchForm.class);
+      contentSearchForm.getUIStringInput(contentPropertySelector.getFieldName()).setValue(property);
+      contentSelector.removeChild(UIPopupWindow.class);
+      event.getRequestContext().addUIComponentToUpdateByAjax(contentSelector);
+      contentSelector.setSelectedTab(contentSearchForm.getId());
     }
   }
 
-  static  public class ChangeMetadataTypeActionListener extends EventListener<UIWCMSelectPropertyForm> {
-    public void execute(Event<UIWCMSelectPropertyForm> event) throws Exception {
-      UIWCMSelectPropertyForm uiForm = event.getSource();
-      uiForm.renderProperties(uiForm.getUIFormSelectBox(METADATA_TYPE).getValue());
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);
+  static  public class ChangeMetadataTypeActionListener extends EventListener<UIContentPropertySelector> {
+    public void execute(Event<UIContentPropertySelector> event) throws Exception {
+      UIContentPropertySelector contentPropertySelector = event.getSource();
+      contentPropertySelector.renderProperties(contentPropertySelector.getUIFormSelectBox(METADATA_TYPE).getValue());
+      event.getRequestContext().addUIComponentToUpdateByAjax(contentPropertySelector);
     }
   }
 

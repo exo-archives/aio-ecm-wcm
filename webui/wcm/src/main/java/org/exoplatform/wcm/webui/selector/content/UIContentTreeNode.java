@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.wcm.webui.selector.webContentView;
+package org.exoplatform.wcm.webui.selector.content;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
@@ -28,7 +28,7 @@ import org.exoplatform.services.wcm.core.NodeLocation;
  * Author : Ha Mai Van
  * maivanha1610@gmail.com
  */
-public class TreeNode {
+public class UIContentTreeNode {
   
   /** The tree path. */
   private String treePath;
@@ -46,7 +46,7 @@ public class TreeNode {
   private String workSpaceName;
   
   /** The log. */
-  private static Log log = ExoLogger.getLogger(TreeNode.class);
+  private static Log log = ExoLogger.getLogger(UIContentTreeNode.class);
 
   /**
    * Instantiates a new tree node.
@@ -56,7 +56,7 @@ public class TreeNode {
    * @param node the node
    * @param deep the deep
    */
-  public TreeNode(String path, String workSpaceName, Node node, int deep) {
+  public UIContentTreeNode(String path, String workSpaceName, Node node, int deep) {
     this.name = null;
     nodeLocation = NodeLocation.make(node);
     this.deep = deep;
@@ -73,7 +73,7 @@ public class TreeNode {
    * 
    * @param name the name
    */
-  public TreeNode(String name){
+  public UIContentTreeNode(String name){
     this.name = name;
     this.treePath = "/" + name;
     nodeLocation = null;
@@ -89,7 +89,7 @@ public class TreeNode {
    * @param node the node
    * @param deep the deep
    */
-  public TreeNode(String path, String name, String workSpaceName, Node node, int deep){
+  public UIContentTreeNode(String path, String name, String workSpaceName, Node node, int deep){
     this.name = name;
     nodeLocation = NodeLocation.make(node);
     this.deep = deep;

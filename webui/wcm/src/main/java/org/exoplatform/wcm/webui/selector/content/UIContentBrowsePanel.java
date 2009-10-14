@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.wcm.webui.selector.webContentView;
+package org.exoplatform.wcm.webui.selector.content;
 
 import java.util.List;
 
@@ -45,19 +45,19 @@ import org.exoplatform.webui.event.EventListener;
 @ComponentConfigs({
   @ComponentConfig(
       lifecycle = Lifecycle.class,
-      template = "classpath:groovy/wcm/webui/UIWebContentPathSelector.gtmpl",
+      template = "classpath:groovy/wcm/webui/selector/content/UIContentBrowsePanel.gtmpl",
       events = {
-        @EventConfig(listeners = UIWebContentPathSelector.ChangeContentTypeActionListener.class)
+        @EventConfig(listeners = UIContentBrowsePanel.ChangeContentTypeActionListener.class)
       }
   ),
   @ComponentConfig(
       type = UISelectPathPanel.class,
-      id = "UIWCMSelectPathPanel",
-      template = "classpath:groovy/wcm/webui/UIWCMSelectPathPanel.gtmpl",
+      id = "UIContentBrowsePathSelector",
+      template = "classpath:groovy/wcm/webui/selector/content/UIContentBrowsePathSelector.gtmpl",
       events = @EventConfig(listeners = UISelectPathPanel.SelectActionListener.class)
   )
 })
-public class UIWebContentPathSelector extends UIBaseNodeTreeSelector implements UIPopupComponent{
+public class UIContentBrowsePanel extends UIBaseNodeTreeSelector implements UIPopupComponent{
   public static final String WEBCONENT = "WebContent";
   public static final String DMSDOCUMENT = "DMSDocument";
   public static final String MEDIA = "Media";
@@ -73,10 +73,10 @@ public class UIWebContentPathSelector extends UIBaseNodeTreeSelector implements 
   private NodeLocation currentPortalLocation;
   public String contentType;
 
-  public UIWebContentPathSelector() throws Exception {
+  public UIContentBrowsePanel() throws Exception {
     contentType = WEBCONENT;
-    addChild(UIWebContentTreeBuilder.class,null, UIWebContentTreeBuilder.class.getName()+hashCode());
-    addChild(UISelectPathPanel.class, "UIWCMSelectPathPanel", "UIWCMSelectPathPanel");
+    addChild(UIContentTreeBuilder.class,null, UIContentTreeBuilder.class.getName()+hashCode());
+    addChild(UISelectPathPanel.class, "UIContentBrowsePathSelector", "UIContentBrowsePathSelector");
   }
   
   public void reRenderChild(String typeContent) throws Exception{
@@ -137,18 +137,18 @@ public class UIWebContentPathSelector extends UIBaseNodeTreeSelector implements 
     currentPortalLocation = NodeLocation.make(currentPortal);
   }
   
-  public static class ChangeContentTypeActionListener extends EventListener<UIWebContentPathSelector> {
-    public void execute(Event<UIWebContentPathSelector> event) throws Exception {
-      UIWebContentPathSelector contentPathSelector = event.getSource();
+  public static class ChangeContentTypeActionListener extends EventListener<UIContentBrowsePanel> {
+    public void execute(Event<UIContentBrowsePanel> event) throws Exception {
+      UIContentBrowsePanel contentBrowsePanel = event.getSource();
       String type = event.getRequestContext().getRequestParameter(OBJECTID);
-      if(type.equals(contentPathSelector.selectedValues)) return;
-      contentPathSelector.selectedValues = type;
-      UISelectPathPanel selectPathPanel = contentPathSelector.getChild(UISelectPathPanel.class);
+      if(type.equals(contentBrowsePanel.selectedValues)) return;
+      contentBrowsePanel.selectedValues = type;
+      UISelectPathPanel selectPathPanel = contentBrowsePanel.getChild(UISelectPathPanel.class);
       selectPathPanel.setParentNode(null);
       selectPathPanel.updateGrid();
-      contentPathSelector.reRenderChild(contentPathSelector.selectedValues);
-      contentPathSelector.init();
-      event.getRequestContext().addUIComponentToUpdateByAjax(contentPathSelector);
+      contentBrowsePanel.reRenderChild(contentBrowsePanel.selectedValues);
+      contentBrowsePanel.init();
+      event.getRequestContext().addUIComponentToUpdateByAjax(contentBrowsePanel);
     }
   }
 }

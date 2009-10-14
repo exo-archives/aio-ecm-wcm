@@ -84,71 +84,55 @@
       <Pictureonheadlayoutwebcontent>Bố cục nội dung trang web có một ảnh</Pictureonheadlayoutwebcontent>
       <Sitesearchboxwebcontent>hộp tìm kiếm</Sitesearchboxwebcontent>
       <Freelayoutwebcontent>Bố cục tuỳ biến</Freelayoutwebcontent>
+      <Tablelayoutwebcontent>Bố cục bảng </Tablelayoutwebcontent>
     </lable>
   </ContentType>
-  
   <!--  
   ##########################################################################################
   # exo.ecm.wcm.webui.wcm.groovy.wcm.webui                                                 # 
   ##########################################################################################
   -->
-  <PopupWebContentSelector>
-  	<title>
-  		<UIWebContentTabSelector>Bộ tìm kiếm nội dung trang web</UIWebContentTabSelector>
-  	</title>
-  </PopupWebContentSelector>
-  <PopupDMSSelector>
-  	<title>
-  		<UIDocumentTabSelector>Bộ tìm kiếm tài liệu</UIDocumentTabSelector>
-  	</title>
-  </PopupDMSSelector>
   <UITabPane>
   	<title>
-  		<UIWebContentPathSelector>Cây tìm kiếm nội dung web</UIWebContentPathSelector>
-  		<UIWebContentSearchForm>Bảng tìm kiếm nội dung web</UIWebContentSearchForm>
-  		<UISelectPathPanel>Bảng kết quả</UISelectPathPanel>
-  		<UIDocumentPathSelector>Cây tìm kiếm tài liệu</UIDocumentPathSelector>
-  		<UIDocumentSearchForm>Bảng tìm kiếm tài liệu</UIDocumentSearchForm>
-  		<UIWCMSearchResult>Bảng kết quả</UIWCMSearchResult>
-  		<UIResultView>Hiển thị nội dung kết quả tìm kiếm</UIResultView>
-  		<WebContentNodeTypePopup>Bộ chọn kiểu tài liệu</WebContentNodeTypePopup>
-  		<WebContentMetadataPopup>Bộ chọn thuộc tính</WebContentMetadataPopup>
-  		<DocumentMetadataPopup>Bộ chọn thuộc tính</DocumentMetadataPopup>
-  		<DocumentNodeTypePopup>Bộ chọn kiểu tài liệu</DocumentNodeTypePopup>
+  		<UIContentBrowsePanel>Cây tìm kiếm nội dung web</UIContentBrowsePanel>
+  		<UIContentSearchForm>Bảng tìm kiếm nội dung web</UIContentSearchForm>
+  		<UIContentSearchResult>Bảng kết quả</UIContentSearchResult>
+  		<WebContentMetadataPopup></WebContentMetadataPopup>
   	</title>
   </UITabPane>
-  <UIWebContentSearchForm>
-  	<action>
-  		<SearchWebContent>Tìm kiếm</SearchWebContent>
-  	</action>
+  <UIContentBrowsePanel>
+    <SelectContent>
+      <leftcolumn>
+        <title>Chọn thư mục để hiển thị các dữ liệu bên trong nó</title>
+      </leftcolumn>
+      <rightcolumn>
+        <title>Dưới đây là những dữ liệu có thể được lựa chọn</title>
+      </rightcolumn>
+      <searchbox>
+        <title>Tìm kiếm</title>
+      </searchbox>
+    </SelectContent>
+    <selectBoxValues>
+	    <FilterBy>Lọc bởi</FilterBy>
+    	<WebContent>Dữ liệu web</WebContent>
+    	<DMSDocument>Tài liệu</DMSDocument>
+    	<Media>Tài nguyên khác</Media>
+    </selectBoxValues>
+  </UIContentBrowsePanel>
+  <UIContentSearchForm>
   	<empty-field>Bạn không nhập giá trị để tìm kiếm! Xin vui lòng nhập giá trị</empty-field>
 		<invalid-date>Giá trị "Đến ngày" phải lớn hơn giá trị "Từ ngày"</invalid-date>
-  </UIWebContentSearchForm>
-  <UIDocumentSearchForm>
+		<invalid-nodeType>Kiểu node"{0}" không đúng! Hãy kiểm tra lại.</invalid-nodeType>
   	<action>
   		<SearchWebContent>Tìm kiếm</SearchWebContent>
   	</action>
-  </UIDocumentSearchForm>
-  <UIDocumentTabSelector>
+  </UIContentSearchForm>
+  <UIContentSelector>
   	<header>
-  		<NameFile>Title</NameFile>
-  		<NodeExpect>Mong chờ</NodeExpect>
-  		<Score>Điểm</Score>
-  		<CreateDate>Ngày Tạo</CreateDate>
+  		<title>Tên</title>
+  		<score>Điểm</score>
   		<action>Hoạt động</action>
-  		<Select>Chọn</Select>
-  		<View>Hiển thị</View>
-  	</header>
-  </UIDocumentTabSelector>
-  <UIWebContentTabSelector>
-  	<header>
-  		<NameFile>Tên</NameFile>
-  		<NodeExpect>Mong chờ</NodeExpect>
-  		<Score>Điểm</Score>
-  		<CreateDate>Ngày Tạo</CreateDate>
-  		<action>Hoạt động</action>
-  		<Select>Chọn</Select>
-  		<View>Hiển thị</View>
+  		<publicationstate>Ngày xuát bản</publicationstate>
   	</header>
   	<action>
   		<title>
@@ -156,13 +140,8 @@
   			<View>Hiển thị</View>
   		</title>
   	</action>
-  </UIWebContentTabSelector>
-  <UIResultView>
-  	<action>
-  		<Select>Chọn</Select>
-  	</action>
-  </UIResultView>
-  <UIWebContentSearchForm>
+  </UIContentSelector>
+  <UIContentSearchForm>
   	<title>
   		<Location>Tên trang</Location>
   		<SearchByName>Tìm kiếm theo tên</SearchByName>
@@ -173,24 +152,24 @@
   		<ToDate>đến ngày</ToDate>
   		<DocumentType>Kiểu tài liệu</DocumentType>
   	</title>
-  </UIWebContentSearchForm>
+  </UIContentSearchForm>
   <WebContentNodeTypePopup>
   	<title>
-  		<UIWCMNodeTypeSelectForm>Form chọn kiểu tài liệu</UIWCMNodeTypeSelectForm>
+  		<UIContentNodeTypeSelector>Form chọn kiểu tài liệu</UIContentNodeTypeSelector>
   	</title>
   </WebContentNodeTypePopup>
-  <UIWCMNodeTypeSelectForm>
+  <UIContentNodeTypeSelector>
   	<action>
   		<Save>Lưu trữ</Save>
   		<Cancel>Huỷ bỏ</Cancel>
   	</action>
-  </UIWCMNodeTypeSelectForm>
+  </UIContentNodeTypeSelector>
   <WebContentMetadataPopup>
   	<title>
-  		<UIWCMSelectPropertyForm>Form chọn kiểu thuộc tính</UIWCMSelectPropertyForm>
+  		<UIContentPropertySelector>Form chọn kiểu thuộc tính</UIContentPropertySelector>
   	</title>
   </WebContentMetadataPopup>
-  <UIWCMSelectPropertyForm>
+  <UIContentPropertySelector>
   	<action>
   		<Add>Thêm</Add>
   		<Cancel>Huỷ bỏ</Cancel>
@@ -199,17 +178,7 @@
 			<metadataType>Kiểu dữ liệu</metadataType>
 			<property_select>Chọn thuộc tính</property_select>
 		</label>
-  </UIWCMSelectPropertyForm>
-  <DocumentMetadataPopup>
-  	<title>
-  		<UIWCMSelectPropertyForm>Form chọn kiểu thuộc tính</UIWCMSelectPropertyForm>
-  	</title>
-  </DocumentMetadataPopup>
-  <DocumentNodeTypePopup>
-  	<title>
-  		<UIWCMNodeTypeSelectForm>Form chọn kiểu dữ liệu</UIWCMNodeTypeSelectForm>
-  	</title>
-  </DocumentNodeTypePopup>
+  </UIContentPropertySelector>
   <WCMContentView>
   	<header>
 	  	<title>Tiêu đề</title>
@@ -228,13 +197,36 @@
 			<homepage>Trang chủ</homepage>
 		</tooltip>
 	</UIExoStart>
-	
-	
+	<UIPageSelectorPanel>
+		<header>
+			<path>Đường dẫn</path>
+			<action>Hành động</action>
+		</header>
+		<msg>
+			<child-not-found>Không có trang nào được tìm thấy</child-not-found>
+		</msg>
+	</UIPageSelectorPanel>
+	<UIMessageBoard>
+		<msg>
+			<get-resource-resolver>Có lôi khi lấy mẫu</get-resource-resolver>
+			<render>Có lỗi khi tải trang</render>
+			<select-navigation>Có lỗi khi chon điều hướng</select-navigation>
+			<get-tree-node>Có lỗi khi lấy node</get-tree-node>
+		</msg>
+	</UIMessageBoard>
 	
 	<ECMNameValidator>
     <msg>
       <Invalid-char>Có một vài kí tự không hợp lệ trong trường'{0}'. Hãy chọn giá trị khác!</Invalid-char>
       <empty-input>Giá trị của trường '{0}' là rỗng!</empty-input>
     </msg>
-  </ECMNameValidator>  
+  </ECMNameValidator>
+  
+	<Drives>
+  	<label>
+  		<ManagedSites>Quản lý tất cả các website</ManagedSites>
+  		<SharedSite>Website chung</SharedSite>
+  	</label>
+  </Drives> 
+   
 </bundle>
