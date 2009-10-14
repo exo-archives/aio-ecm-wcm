@@ -3,7 +3,7 @@
 	<UIFormGeneratorTabPane>
 		<label>
 			<UIFormGeneratorGeneralTab>Général</UIFormGeneratorGeneralTab>
-			<UIFormGeneratorNameFormStringInput>Nom</UIFormGeneratorNameFormStringInput>
+			<FormGeneratorName>Nom</FormGeneratorName>
 			<UIFormGeneratorNodetypeFormSelectBox>Sur la base nodeType</UIFormGeneratorNodetypeFormSelectBox>
 			<UIFormGeneratorJsonObjectStringInput></UIFormGeneratorJsonObjectStringInput>
 			<UIFormGeneratorDescriptionFormWYSIWYGInput>Description</UIFormGeneratorDescriptionFormWYSIWYGInput>

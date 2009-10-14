@@ -24,7 +24,6 @@ import java.util.List;
 import javax.jcr.PropertyType;
 import javax.jcr.version.OnParentVersionAction;
 
-import org.exoplatform.ecm.webui.form.validator.ECMNameValidator;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.nodetype.ExtendedNodeTypeManager;
@@ -205,6 +204,9 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
     dialogTemplate.append("<%\n");
     dialogTemplate.append(" import java.util.Calendar;\n");
     dialogTemplate.append(" import java.text.SimpleDateFormat;\n");
+    dialogTemplate.append(" import org.exoplatform.download.DownloadService;\n");
+    dialogTemplate.append(" import org.exoplatform.download.InputStreamDownloadResource;\n");
+    dialogTemplate.append(" import java.io.InputStream;\n");
 
     dialogTemplate.append(" private String getTimestampName() {\n");
     dialogTemplate.append(" 	Calendar now = Calendar.getInstance();\n");
@@ -271,14 +273,18 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
     	  dialogTemplate.append("        <td class=\"FieldLabel\"><%=_ctx.appRes(\"FormGenerator.dialog.label." + inputName + "\")%></td>\n");
     	  dialogTemplate.append("        <td class=\"FieldComponent\">\n");
     	  dialogTemplate.append("          <%\n");
+    	  
     	  if (UIFormGeneratorConstant.UPLOAD.equals(inputType)) {
     		  dialogTemplate.append("           if(uicomponent.isEditing()) {\n");
     		  dialogTemplate.append("             def curNode = uicomponent.getNode() ;\n");
-    		  dialogTemplate.append("             if(curNode.hasNode(\"" + propertyName + "\")) {\n");
-    		  dialogTemplate.append("               def imageNode = curNode.getNode(\"" + propertyName + "\") ;\n");
-    		  dialogTemplate.append("               if(imageNode.getProperty(\"jcr:data\").getStream().available() > 0) {\n");
-    		  dialogTemplate.append("                 def imgSrc = uicomponent.getImage(curNode, \"" + propertyName + "\");\n");
-    		  dialogTemplate.append("                 def actionLink = uicomponent.event(\"RemoveData\", \"/" + propertyName + "\");\n");
+    		  dialogTemplate.append("             if(curNode.hasProperty(\"" + propertyName + "\")) {\n");
+    		  dialogTemplate.append("               if(curNode.getProperty(\"" + propertyName + "\").getStream().available() > 0) {\n");
+    		  dialogTemplate.append("                 DownloadService dservice = uicomponent.getApplicationComponent(DownloadService.class);\n");
+          dialogTemplate.append("                 InputStream input = curNode.getProperty(\"" + propertyName + "\").getStream();\n");
+          dialogTemplate.append("                 InputStreamDownloadResource dresource = new InputStreamDownloadResource(input, \"" + inputName + "\");\n");
+          dialogTemplate.append("                 dresource.setDownloadName(curNode.getName());\n");
+          dialogTemplate.append("                 def imgSrc = dservice.getDownloadLink(dservice.addDownloadResource(dresource));\n");
+    		  dialogTemplate.append("                 def actionLink = uicomponent.event(\"RemoveData\", \"" + propertyName + "\");\n");
     		  dialogTemplate.append("                 %>\n");
     		  dialogTemplate.append("                   <div>\n");
     		  dialogTemplate.append("                     <image src=\"$imgSrc\" width=\"100px\" height=\"80px\"/>\n");
@@ -288,16 +294,19 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
     		  dialogTemplate.append("                   </div>\n");
     		  dialogTemplate.append("                 <%\n");
     		  dialogTemplate.append("               } else {\n");
-    		  dialogTemplate.append("                 String[] fieldImage = [\"jcrPath=/node/" + propertyName + "/jcr:data\"] ;\n");
-    		  dialogTemplate.append("                 uicomponent.addUploadField(\"image\", fieldImage) ;\n");
+    		  dialogTemplate.append("                 String[] fieldImage = [\"jcrPath=/node/" + propertyName + "\"] ;\n");
+    		  dialogTemplate.append("                 uicomponent.addUploadField(\"" + inputName + "\", fieldImage) ;\n");
     		  dialogTemplate.append("               }\n");
-    		  dialogTemplate.append("             }\n");
+    		  dialogTemplate.append("             } else {\n");
+          dialogTemplate.append("               String[] fieldImage = [\"jcrPath=/node/" + propertyName + "\"] ;\n");
+          dialogTemplate.append("               uicomponent.addUploadField(\"" + inputName + "\", fieldImage) ;\n");
+          dialogTemplate.append("             }\n");
     		  dialogTemplate.append("           } else if(uicomponent.dataRemoved()) {\n");
-    		  dialogTemplate.append("             String[] fieldImage = [\"jcrPath=/node/" + propertyName + "/jcr:data\"] ;\n");
-    		  dialogTemplate.append("             uicomponent.addUploadField(\"image\", fieldImage) ;\n");
+    		  dialogTemplate.append("             String[] fieldImage = [\"jcrPath=/node/" + propertyName + "\"] ;\n");
+    		  dialogTemplate.append("             uicomponent.addUploadField(\"" + inputName + "\", fieldImage) ;\n");
     		  dialogTemplate.append("           } else {\n");
-    		  dialogTemplate.append("             String[] fieldImage = [\"jcrPath=/node/" + propertyName + "/jcr:data\"] ;\n");
-    		  dialogTemplate.append("             uicomponent.addUploadField(\"image\", fieldImage) ;\n");
+    		  dialogTemplate.append("             String[] fieldImage = [\"jcrPath=/node/" + propertyName + "\"] ;\n");
+    		  dialogTemplate.append("             uicomponent.addUploadField(\"" + inputName + "\", fieldImage) ;\n");
     		  dialogTemplate.append("           }\n");
     	  } else {
     		  dialogTemplate.append("           String[] " + inputFieldName + " = [\"jcrPath=/node/" + propertyName + "\", \"defaultValues=" + value + "\", \"" + validate + "\", \"options=" + form.getAdvanced() + "\"];\n");
@@ -323,6 +332,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
     dialogTemplate.append("              <%\n");
     dialogTemplate.append("                for(action in uicomponent.getActions()) {\n");
     dialogTemplate.append("                  String actionLabel = _ctx.appRes(uicomponent.getName() + \".action.\" + action);\n");
+    dialogTemplate.append("                  if(action.equals(\"RemoveData\")) continue;\n");
     dialogTemplate.append("                  String link = uicomponent.event(action);\n");
     dialogTemplate.append("                  %>\n");
     dialogTemplate.append("                    <div onclick=\"$link\" class=\"ActionButton LightBlueStyle\">\n");
@@ -356,7 +366,11 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
    */
   private String generateViewTemplate(List<UIFormGeneratorInputBean> forms) {
     StringBuilder viewTemplate = new StringBuilder();
-    viewTemplate.append("\n <% def currentNode = uicomponent.getNode() ; %>\n");
+    viewTemplate.append("<%\n");
+    viewTemplate.append(" import org.exoplatform.download.DownloadService;\n");
+    viewTemplate.append(" import org.exoplatform.download.InputStreamDownloadResource;\n");
+    viewTemplate.append(" import java.io.InputStream;\n");
+    viewTemplate.append("\n def currentNode = uicomponent.getNode() ; %>\n");
     viewTemplate.append(" <div>\n");
     viewTemplate.append("   <table style=\"width:95%;margin:5px;border:1px solid;\">\n");
     viewTemplate.append("     <tr>\n");
@@ -373,7 +387,18 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
       viewTemplate.append("       		cleanName = cleanName.replaceAll(\"_\", \" \");\n"); 
       viewTemplate.append("         %>\n");
       viewTemplate.append("           <td style=\"padding:5px\"><%= cleanName %></td>\n");
-      viewTemplate.append("           <td style=\"padding:5px\"><%= currentNode.getProperty(\"" + propertyName + "\").getString() %></td>\n");
+      if(UIFormGeneratorConstant.UPLOAD.equals(form.getType())) {
+        viewTemplate.append("<%\n");
+        viewTemplate.append("           DownloadService dservice = uicomponent.getApplicationComponent(DownloadService.class);\n");
+        viewTemplate.append("           InputStream input = currentNode.getProperty(\"" + propertyName + "\").getStream();\n");
+        viewTemplate.append("           InputStreamDownloadResource dresource = new InputStreamDownloadResource(input, \"" + form.getName() + "\");\n");
+        viewTemplate.append("           dresource.setDownloadName(currentNode.getName());\n");
+        viewTemplate.append("           def imgSrc = dservice.getDownloadLink(dservice.addDownloadResource(dresource));\n");
+        viewTemplate.append("%>\n");
+        viewTemplate.append("           <td style=\"padding:5px\"><image src=\"$imgSrc\" width=\"100px\" height=\"80px\"/></td>\n");
+      } else {
+        viewTemplate.append("           <td style=\"padding:5px\"><%= currentNode.getProperty(\"" + propertyName + "\").getString() %></td>\n");
+      }
       viewTemplate.append("         <%\n");
       viewTemplate.append("       }\n");
       viewTemplate.append("     %>\n");
