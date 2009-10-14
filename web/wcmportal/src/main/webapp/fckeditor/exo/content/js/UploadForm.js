@@ -211,7 +211,7 @@ UploadForm.prototype.uploadFileSave = function() {
 		}
 		var iFrameUpload = eXo.core.DOMUtil.findFirstDescendantByClass(popupContainer, "iframe", "iFrameUpload");
 		var formUpload = iFrameUpload.contentWindow.document.getElementsByTagName("form")[0];
-		if (eXoWCM.UploadForm.isInvalidName(formUpload.file.value) && eXoWCM.UploadForm.isInvalidName(nodeName)) {
+		if ((!nodeName && eXoWCM.UploadForm.isInvalidName(formUpload.file.value)) || eXoWCM.UploadForm.isInvalidName(nodeName)) {
 			alert('Invalid file name!');
 			return;
 		}
@@ -272,7 +272,7 @@ UploadForm.prototype.updateFiles = function(nodeId) {
 };
 
 UploadForm.prototype.isInvalidName = function(name) {
-	if (name && name.match('[/,[,*,\',",|]') == null && name.indexOf(']') < 0) return false;
+	if (name.match('[/,[,*,\',",|,#]') == null && name.indexOf(']') < 0) return false;
 	return true;
 }
 
