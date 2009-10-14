@@ -116,7 +116,6 @@ public class UIWebContentSelectorForm extends UIForm implements UISelectable{
    * @throws Exception the exception
    */
   public void init() throws Exception {
-    System.out.println("\n\n\n\n-----------------> Init UIWebContentSelectForm");
   }
 
   /* (non-Javadoc)

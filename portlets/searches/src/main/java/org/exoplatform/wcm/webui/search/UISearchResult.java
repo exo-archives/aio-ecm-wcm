@@ -49,6 +49,7 @@ import org.exoplatform.services.wcm.search.SiteSearchService;
 import org.exoplatform.services.wcm.search.WCMPaginatedQueryResult;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.wcm.webui.paginator.UICustomizeablePaginator;
+import org.exoplatform.wcm.webui.search.config.access.UIPermissionManager;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -110,7 +111,7 @@ public class UISearchResult extends UIContainer {
 	/** The Constant RESULT_NOT_FOUND. */
 	public final static String				RESULT_NOT_FOUND	= "UISearchResult.msg.result-not-found";
 
-	/**
+  /**
 	 * Inits the.
 	 * 
 	 * @param templatePath the template path
@@ -194,7 +195,6 @@ public class UISearchResult extends UIContainer {
 				setSuggestionURL(suggestionURL);
 				setPageList(paginatedQueryResult);
 			} catch (Exception e) {
-			  e.printStackTrace();
 				UIApplication uiApp = getAncestorOfType(UIApplication.class);
 				uiApp.addMessage(new ApplicationMessage(UISearchForm.MESSAGE_NOT_SUPPORT_KEYWORD,
 																								null,
@@ -615,12 +615,12 @@ public class UISearchResult extends UIContainer {
 			uiDocumentDialogForm.setContentType(node.getPrimaryNodeType().getName());
 			uiDocumentDialogForm.setNodePath(node.getPath());
 			uiDocumentDialogForm.setStoredPath(node.getPath());
-
 			Utils.createPopupWindow(uiSearchResult,
 																			uiDocumentDialogForm,
 																			"UIContentEdittingPopupWindow",
-																			700,
+																			850,
 																			500);
+			uiSearchResult.addChild(UIPermissionManager.class, null, null).setRendered(false);
 		}
 	}
 }

@@ -2,8 +2,20 @@
 	padding:4px;
 	text-align:right;
 	vertical-align:top;
-	width:40%;
+	width:20%;
 }
+
 td {
 	min-width:20px;
+}
+.UIForm .HorizontalLayout .UIFormInputSet {
+	margin:auto;
+	padding:0px;
+}
+
+.UIForm .HorizontalLayout .FieldComponent {
+}
+
+.UIForm .UIFormGrid .FieldComponent .usersInputSet {
+	margin-left: 0px;
 }

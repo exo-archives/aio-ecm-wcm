@@ -286,7 +286,7 @@ public class UIContentDialogForm extends UIDialogForm {
    * the PreferencesAction event occurs, that object's appropriate
    * method is invoked.
    * 
-   * @see CancelActionEvent
+   * @see PreferencesActionEvent
    */
   static public class PreferencesActionListener extends EventListener<UIContentDialogForm> {
 	  

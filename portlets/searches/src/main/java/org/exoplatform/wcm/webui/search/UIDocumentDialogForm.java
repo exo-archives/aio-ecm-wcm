@@ -46,11 +46,15 @@ import org.exoplatform.services.wcm.core.NodeLocation;
 import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
 import org.exoplatform.services.wcm.publication.lifecycle.stageversion.StageAndVersionPublicationConstant;
 import org.exoplatform.wcm.webui.Utils;
+import org.exoplatform.wcm.webui.search.config.access.UIPermissionInfo;
+import org.exoplatform.wcm.webui.search.config.access.UIPermissionManager;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.webui.core.UIPopupContainer;
+import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -64,20 +68,23 @@ import org.exoplatform.webui.event.Event.Phase;
 	lifecycle = UIFormLifecycle.class, events = {
 		@EventConfig(listeners = UIDocumentDialogForm.SaveAsDraftActionListener.class),
 		@EventConfig(listeners = UIDocumentDialogForm.FastPublishActionListener.class),
+		@EventConfig(listeners = UIDocumentDialogForm.PreferencesActionListener.class),
 		@EventConfig(listeners = UIDocumentDialogForm.CancelActionListener.class),
 		@EventConfig(listeners = DialogFormActionListeners.RemoveDataActionListener.class, confirm = "DialogFormField.msg.confirm-delete", phase = Phase.DECODE) 
 	}
 )
 public class UIDocumentDialogForm extends UIDialogForm {
-
+  
 	/** The document node. */
   private NodeLocation documentNodeLocation;
 
+  public boolean isRendered = false;
 	/**
 	 * Sets the document node.
+	 * @throws Exception 
 	 */
-	public UIDocumentDialogForm() {
-		setActions(new String[] { "SaveAsDraft", "FastPublish", "Cancel" });
+	public UIDocumentDialogForm() throws Exception {
+		setActions(new String[] { "SaveAsDraft", "FastPublish", "Preferences", "Cancel" });
 	}
 
 	/**
@@ -314,6 +321,35 @@ public class UIDocumentDialogForm extends UIDialogForm {
 		}
 	}
 
+	/**
+   * The listener interface for receiving preferencesAction events.
+   * The class that is interested in processing a preferencesAction
+   * event implements this interface, and the object created
+   * with that class is registered with a component using the
+   * component's <code>addPreferencesActionListener<code> method. When
+   * the PreferencesAction event occurs, that object's appropriate
+   * method is invoked.
+   * 
+   * @see PreferencesActionEvent
+   */
+  static public class PreferencesActionListener extends EventListener<UIDocumentDialogForm> {
+    
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
+    public void execute(Event<UIDocumentDialogForm> event) throws Exception {
+      UIDocumentDialogForm dialogForm = event.getSource();
+      UIWCMSearchPortlet viewerPortlet = dialogForm.getAncestorOfType(UIWCMSearchPortlet.class);
+      UIPopupContainer popupContainer = viewerPortlet.getChildById("UISearchedContentEdittingPopup");
+      UIPopupWindow popupWindow = popupContainer.findComponentById("UIContentEdittingPopupWindow");
+      popupWindow.setShow(false);
+      UISearchResult uiSearchResult = viewerPortlet.getChild(UISearchPageLayout.class).getChild(UISearchResult.class);
+      UIPermissionManager uiPermissionManager = uiSearchResult.getChild(UIPermissionManager.class);
+      uiPermissionManager.getChild(UIPermissionInfo.class).updateGrid();
+      Utils.createPopupWindow(uiSearchResult, uiPermissionManager, "UIPermissionManagerPopupWindow", 850, 500);
+    }
+  }
+	
 	/**
 	 * The listener interface for receiving cancelAction events. The class that is
 	 * interested in processing a cancelAction event implements this interface,
