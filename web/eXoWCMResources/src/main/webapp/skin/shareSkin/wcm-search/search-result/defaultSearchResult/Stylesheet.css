@@ -101,3 +101,7 @@
     height: 1%;
     overflow: hidden;
 }
+
+.UIWCMSearchPortlet .UISearchedContentEdittingPopup .UIForm .UIFormGrid td.FieldLabel{
+	width: 160px;
+}
