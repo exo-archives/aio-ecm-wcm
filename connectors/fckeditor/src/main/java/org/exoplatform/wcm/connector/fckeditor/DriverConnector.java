@@ -500,21 +500,23 @@ public class DriverConnector extends BaseConnector implements ResourceContainer 
       if (child.isNodeType(FCKUtils.EXO_HIDDENABLE))
         continue;
 
-      if (!NodetypeConstant.EXO_WEBCONTENT.equals(child.getPrimaryNodeType().getName())
-      		&& child.getPrimaryNodeType().isNodeType(FCKUtils.NT_UNSTRUCTURED)
-      		|| child.getPrimaryNodeType().isNodeType(FCKUtils.NT_FOLDER)) {
+      if (child.isNodeType(NodetypeConstant.EXO_WEBCONTENT)) {
+      	Element folder = folderHandler.createFolderElement(document, child, child.getPrimaryNodeType().getName());
+      	folders.appendChild(folder);
+      	Element file = FCKFileHandler.createFileElement(document, child, FILE_TYPE_WEBCONTENT);
+      	files.appendChild(file);
+      } else if (child.isNodeType(FCKUtils.NT_UNSTRUCTURED) || child.isNodeType(FCKUtils.NT_FOLDER) || child.isNodeType(NodetypeConstant.EXO_TAXONOMY)) {
         Element folder = folderHandler.createFolderElement(document, child, child.getPrimaryNodeType().getName());
         folders.appendChild(folder);
       } else {
       	String fileType = null;
-      	if (child.getPrimaryNodeType().isNodeType(NodetypeConstant.EXO_WEBCONTENT) && FILE_TYPE_WEBCONTENT.equals(filterBy)) {
+      	if (child.isNodeType(NodetypeConstant.EXO_WEBCONTENT) && FILE_TYPE_WEBCONTENT.equals(filterBy)) {
       		fileType = FILE_TYPE_WEBCONTENT;
       	} else if (isDMSDocument(child, repositoryName)&& FILE_TYPE_DMSDOC.equals(filterBy)) {
       		fileType = FILE_TYPE_DMSDOC;
       	} else if (FILE_TYPE_MEDIAS.equals(filterBy)){
       		fileType = FILE_TYPE_MEDIAS;
       	} 
-      	
       	if (fileType != null) {
       		Element file = FCKFileHandler.createFileElement(document, child, fileType);
       		files.appendChild(file);

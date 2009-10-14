@@ -141,9 +141,6 @@ PluginUtils.prototype.actionColExp = function(objNode) {
 };
 
 PluginUtils.prototype.listFiles = function(list) {
-	if(!list && list.length < 0) return;
-	var filesList = list;
-	var listItem = '';
 	var rightWS = document.getElementById('RightWorkspace');
 	var tblRWS  = eXo.core.DOMUtil.findDescendantsByTagName(rightWS, "table")[0];
 	var rowsRWS = eXo.core.DOMUtil.findDescendantsByTagName(tblRWS, "tr");
@@ -152,22 +149,30 @@ PluginUtils.prototype.listFiles = function(list) {
 			if(i > 0) tblRWS.deleteRow(rowsRWS[i].rowIndex);
 		}
 	} 
+	if(!list || list.length <= 0) {
+		var tdNoContent = tblRWS.insertRow(1).insertCell(0);
+		tdNoContent.innerHTML = "There is no content";
+		tdNoContent.className = "Item TRNoContent";
+		tdNoContent.setAttribute('colspan', 3);
+		return;
+	}
+	var listItem = '';
 	var clazz = 'OddItem';
-	for(var i = 0; i < filesList.length; i++) {
+	for(var i = 0; i < list.length; i++) {
 		if(clazz == 'EventItem') {
 			clazz = 'OddItem';
 		} else if(clazz == 'OddItem') {
 			clazz = 'EventItem';
 		}
-		var clazzItem = eXoWCM.PluginUtils.getClazzIcon(filesList[i].getAttribute("nodeType"));
-		var url 			= filesList[i].getAttribute("url");
-		var nodeType	= filesList[i].getAttribute("nodeType");
-		var node = filesList[i].getAttribute("name");
+		var clazzItem = eXoWCM.PluginUtils.getClazzIcon(list[i].getAttribute("nodeType"));
+		var url 			= list[i].getAttribute("url");
+		var nodeType	= list[i].getAttribute("nodeType");
+		var node = list[i].getAttribute("name");
 		var newRow = tblRWS.insertRow(i+1);
 		newRow.className = clazz;
 		newRow.insertCell(0).innerHTML = '<div class="Item '+clazzItem+'" url="'+url+'" nodeType="'+nodeType+'" onclick="eXoWCM.PluginUtils.insertContent(this);">'+node+'</div>';
-		newRow.insertCell(1).innerHTML = '<div class="Item">'+ filesList[i].getAttribute("dateCreated") +'</div>';
-		newRow.insertCell(2).innerHTML =	'<div class="Item">'+ filesList[i].getAttribute("size")+'&nbsp;kb' +'</div>';
+		newRow.insertCell(1).innerHTML = '<div class="Item">'+ list[i].getAttribute("dateCreated") +'</div>';
+		newRow.insertCell(2).innerHTML =	'<div class="Item">'+ list[i].getAttribute("size")+'&nbsp;kb' +'</div>';
 	}
 };
 

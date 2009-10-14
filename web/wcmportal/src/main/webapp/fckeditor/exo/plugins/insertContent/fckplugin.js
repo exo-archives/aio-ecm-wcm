@@ -1,7 +1,7 @@
 (function() {
 	var oContent = new Object();
 	oContent.Execute = function() {
-		var width = 800;
+		var width = 900;
 		var height = 600;
 		var iLeft = ( FCKConfig.ScreenWidth  - width ) / 2;
 		var iTop  = ( FCKConfig.ScreenHeight - height ) / 2;

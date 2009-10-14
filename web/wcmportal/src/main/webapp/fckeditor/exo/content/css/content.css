@@ -161,7 +161,7 @@ a {
 .ActionButton .ButtonMiddle {
 	background: url('../images/Button6x44.gif') repeat-x bottom center;
 	line-height: 22px;
-	padding: 0px 12px;
+	padding: 0px 15px;
 }
 
 .ActionButton .ButtonLeft {
@@ -598,6 +598,12 @@ body {
 	line-height: 20px;
 }
 
+.UIHomePagePortlet  .UIWorkingWorkspace .RightWorkspace .TRNoContent{
+	font-style: italic;
+	color: #FF5604;
+	text-align: center;
+}
+
 .UIHomePagePortlet  .UIWorkingWorkspace .RightWorkspace .EvenItem{
 	background: #f5f4ee;
 	text-align: left;
@@ -616,8 +622,9 @@ body {
 .UIHomePagePortlet  .UIWorkingWorkspace .RightWorkspace .Item{
 	padding-left: 20px;
 	border-left: 1px solid #f4f4f4;
-	line-height: 20px;
+	line-height: 26px;
 	background-position: left 3px;
+	cursor: pointer;
 }
 
 .UIHomePagePortlet  .UIWorkingWorkspace .RightWorkspace .ListView{
