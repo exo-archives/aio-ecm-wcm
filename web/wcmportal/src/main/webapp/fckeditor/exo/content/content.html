@@ -37,7 +37,7 @@
 				<div class="ActionBar">
 					<div class="FinterTitle">Finter: </div>
 					<div class="FinterInput">
-						<select class="Pinter" id="Pinter" onchange="window.location.reload();">
+						<select class="Pinter" id="Pinter" onchange="eXoWCM.PluginUtils.changeFilter();">
 							<option value="Web Contents" selected="selected">Web Contents</option>
 							<option value="DMS Documents">DMS Documents</option>
 							<option value="Medias">Medias</option>
@@ -54,7 +54,7 @@
 					<!-- ====================================== UPLOAD ============================================-->					
 					<!-- ====================================== SETTING ============================================-->
 					<!-- div class="SettingIcon" onmouseover="eXoWCM.PluginUtils.showSettings(this);" style="position:relative;">  -->
-					<div class="SettingIcon" onmouseover="eXoWCM.PluginUtils.showSettings(this);" style="position:relative;">	
+					<div class="SettingIcon" onmouseover="" style="position:relative;">	
 						<a href="#">Setting</a>
 						<div class="SettingContainer">
 				      <div style="display: none; position: absolute;" class="UIRightClickPopupMenu">
@@ -97,13 +97,8 @@
 															</div>
 														</div>
 													</div>
-					                
-					                
-					                
-					                
 					              </div>
 					              <div class="MenuItem">   
-					              
 					                <a href="#" class="DefaultPageIcon ItemIcon MarkReadIcon">Sort</a>
 					                	<div class="ChildrenContainer" style="position: relative;">
 															<div style="display: none; position: absolute;" class="UIRightClickPopupMenu">
@@ -136,11 +131,6 @@
 																</div>
 															</div>
 														</div>
-					                	
-					                	
-					                	
-					                	
-					                	
 					              </div>
 					            </div>
 					          </div>
@@ -153,11 +143,6 @@
 				        </div>
 				      </div>
 				    </div>
-        
-        
-        
-        
-        
 					</div>
 					<div class="SeparatorLineR"><span></span></div>
 					<div style="clear: both;"><span></span></div>
@@ -166,17 +151,13 @@
 					<div class="HomeIcon"><span></span></div> 
 					<div class="BreadcumbsContainer" id="BreadcumbsContainer">
 						<a class="Nomal" title="Home" href="#">Home</a>
-						<div class="RightArrowIcon"><span></span></div>
-						<a class="Nomal" title="" href="#" >Webcontent</a>
-						<div class="RightArrowIcon"><span></span></div>
-						<a class="Selected" title="Live demo">Live demo</a>
 					</div>
 				</div>
 				<div class="ListContainer">
 					<div class="LeftWorkspace" id="LeftWorkspace">
 					
 					</div>
-					<div class="RightWorkspace">
+					<div class="RightWorkspace" id="RightWorkspace">
 						<div class="ListView">
 						  	<table cellspacing="0" style="table-layout: fixed; width: 100%;" >
 						    	<thead>
@@ -186,9 +167,6 @@
 							   	      <th class="THBar" style="width: 80px;"> Size </th>
 						    	 	</tr>
 						    	</thead>
-					        <tbody id="RightWorkspace">
-
-					      	</tbody>
 						  	</table>
 						  </div>
 					</div>
@@ -204,22 +182,24 @@
 	<div class="AlertContainer">
 		<div class="AlertForm">
 			<div align="center"><span userLanguage="KLang.LabelAlert"> Please choose a file before upload !</span></div>
-			<table class="ActionContainer" align="center">
-				<tr>
-					<td align="center">
-						<a href="javascript: void(0);" class="ActionButton" style="margin-top: 21px">
-							<div class="ButtonLeft">
-								<div class="ButtonRight">
-									<div class="ButtonMiddle" onclick="eXoWCM.UploadForm.showUploadForm();">
-										Close
+			<div class="UIAction">
+				<table class="ActionContainer LightBlueStyle" align="center">
+					<tr>
+						<td align="center">
+							<a href="javascript: void(0);" class="ActionButton" style="margin-top: 21px">
+								<div class="ButtonLeft">
+									<div class="ButtonRight">
+										<div class="ButtonMiddle" onclick="eXoWCM.UploadForm.showUploadForm();">
+											Close
+										</div>
 									</div>
 								</div>
-							</div>
-						</a>
-						<div style="clear: left;"><span style="dislay: none"></span></div>
-					</td>
-				</tr>
-			</table>
+							</a>
+							<div style="clear: left;"><span style="dislay: none"></span></div>
+						</td>
+					</tr>
+				</table>
+			</div>
 		</div>
 	</div>
 
@@ -253,15 +233,24 @@
 						<div class="NumberProgress">0%</div>
 					</td>
 					<td>
-						<a href="javascript: void(0);" class="ActionButton Abort">
-							<div class="ButtonLeft">
-								<div class="ButtonRight">
-									<div class="ButtonMiddle" onclick="eXoWCM.UploadForm.uploadFileAbort();">
-										Abort
-									</div>
-								</div>
-							</div>
-						</a>
+						<div class="UIAction Abort">
+							<table class="ActionContainer LightBlueStyle" align="center">
+								<tr>
+									<td>
+										<a href="javascript: void(0);" class="ActionButton">
+											<div class="ButtonLeft">
+												<div class="ButtonRight">
+													<div class="ButtonMiddle" onclick="eXoWCM.UploadForm.uploadFileAbort();">
+														Abort
+													</div>
+												</div>
+											</div>
+										</a>
+										<div style="clear: left;"><span style="display: none;"></span></div>
+									</td>
+								</tr>
+							</table>
+						</div>
 						<a href="javascript: void(0);" class="ActionButton Delete">
 							<div class="ButtonLeft">
 								<div class="ButtonRight">
@@ -279,61 +268,65 @@
 							<span> Name </span>:
 							<input type="text" name="fileName" style="width: 238px;" maxlength="128"/>
 						</div>
-						<table class="ActionContainer" align="center">
-							<tr>
-								<td>
-									<a href="javascript: void(0);" class="ActionButton">
-										<div class="ButtonLeft">
-											<div class="ButtonRight">
-												<div class="ButtonMiddle" onclick="eXoWCM.UploadForm.uploadFileSave();">
-													Save
+						<div class="UIAction">
+							<table class="ActionContainer LightBlueStyle" align="center">
+								<tr>
+									<td>
+										<a href="javascript: void(0);" class="ActionButton">
+											<div class="ButtonLeft">
+												<div class="ButtonRight">
+													<div class="ButtonMiddle" onclick="eXoWCM.UploadForm.uploadFileSave();">
+														Save
+													</div>
 												</div>
 											</div>
-										</div>
-									</a>
-									<a href="javascript: void(0);" class="ActionButton">
-										<div class="ButtonLeft">
-											<div class="ButtonRight">
-												<div class="ButtonMiddle" onclick="eXoWCM.UploadForm.uploadFileCancel();">
-													Cancel
+										</a>
+										<a href="javascript: void(0);" class="ActionButton">
+											<div class="ButtonLeft">
+												<div class="ButtonRight">
+													<div class="ButtonMiddle" onclick="eXoWCM.UploadForm.uploadFileCancel();">
+														Cancel
+													</div>
 												</div>
 											</div>
-										</div>
-									</a>
-									<div style="clear: left;"><span style="display: none;"></span></div>
-								</td>
-							</tr>
-						</table>
+										</a>
+										<div style="clear: left;"><span style="display: none;"></span></div>
+									</td>
+								</tr>
+							</table>
+						</div>
 					</td>
 				</tr>	
 				<tr class="CancelAction">
 					<td colspan="2">
-						<table class="ActionContainer" align="center">
-							<tr>
-								<td>
-									<a href="javascript: void(0);" class="ActionButton" style="margin-top: 21px">
-										<div class="ButtonLeft">
-											<div class="ButtonRight">
-												<div class="ButtonMiddle" onclick="eXoWCM.UploadForm.uploadFile();">
-													Upload
+						<div class="UIAction">
+							<table class="ActionContainer LightBlueStyle" align="center">
+								<tr>
+									<td>
+										<a href="javascript: void(0);" class="ActionButton" style="margin-top: 21px">
+											<div class="ButtonLeft">
+												<div class="ButtonRight">
+													<div class="ButtonMiddle" onclick="eXoWCM.UploadForm.uploadFile();">
+														Upload
+													</div>
 												</div>
 											</div>
-										</div>
-									</a>
-								</td>
-								<td>
-									<a href="javascript: void(0);" class="ActionButton" style="margin-top: 21px">
-										<div class="ButtonLeft">
-											<div class="ButtonRight">
-	 											<div class="ButtonMiddle" onclick="eXoWCM.UploadForm.removeMask();">
-													Cancel
+										</a>
+									</td>
+									<td>
+										<a href="javascript: void(0);" class="ActionButton" style="margin-top: 21px">
+											<div class="ButtonLeft">
+												<div class="ButtonRight">
+		 											<div class="ButtonMiddle" onclick="eXoWCM.UploadForm.removeMask();">
+														Cancel
+													</div>
 												</div>
 											</div>
-										</div>
-									</a>
-								</td>
-							</tr>
-						</table>
+										</a>
+									</td>
+								</tr>
+							</table>
+						</div>
 					</td>
 				</tr>
 			</table>

@@ -114,7 +114,7 @@ PluginUtils.prototype.renderSubTrees = function(currentNode, event, connector) {
 				tmpNode.style.display = "block";
 			} else if(nextElementNode && nextElementNode.className == "ChildrenContainer"){
 				eXoWCM.PluginUtils.actionColExp(parentNode);
-				if(nodeIcon) nodeIcon.className = 'CollapseIcon';
+				if(nodeIcon) nodeIcon.className = 'ExpandIcon';
 			} else {
 				var cldrContainer = eXo.core.DOMUtil.findAncestorByClass(currentNode, "ChildrenContainer");
 				nodeIcon.className = 'CollapseIcon';
@@ -145,6 +145,13 @@ PluginUtils.prototype.listFiles = function(list) {
 	var filesList = list;
 	var listItem = '';
 	var rightWS = document.getElementById('RightWorkspace');
+	var tblRWS  = eXo.core.DOMUtil.findDescendantsByTagName(rightWS, "table")[0];
+	var rowsRWS = eXo.core.DOMUtil.findDescendantsByTagName(tblRWS, "tr");
+	if(rowsRWS && rowsRWS.length > 0) {
+		for(var i = 0; i < rowsRWS.length; i++) {
+			if(i > 0) tblRWS.deleteRow(rowsRWS[i].rowIndex);
+		}
+	} 
 	var clazz = 'OddItem';
 	for(var i = 0; i < filesList.length; i++) {
 		if(clazz == 'EventItem') {
@@ -152,17 +159,16 @@ PluginUtils.prototype.listFiles = function(list) {
 		} else if(clazz == 'OddItem') {
 			clazz = 'EventItem';
 		}
-		listItem += '<tr class="'+clazz+'">';
 		var clazzItem = eXoWCM.PluginUtils.getClazzIcon(filesList[i].getAttribute("nodeType"));
 		var url 			= filesList[i].getAttribute("url");
 		var nodeType	= filesList[i].getAttribute("nodeType");
 		var node = filesList[i].getAttribute("name");
-		listItem += 	'<td class="Item '+clazzItem+'" url="'+url+'" nodeType="'+nodeType+'" onclick="eXoWCM.PluginUtils.insertContent(this);">'+node+'</td>';
-		listItem +=		'<td class="Item">'+ filesList[i].getAttribute("dateCreated") +'</td>';
-		listItem +=		'<td class="Item">'+ filesList[i].getAttribute("size")+'&nbsp;kb' +'</td>';
-		listItem +=	'</tr>'
+		var newRow = tblRWS.insertRow(i+1);
+		newRow.className = clazz;
+		newRow.insertCell(0).innerHTML = '<div class="Item '+clazzItem+'" url="'+url+'" nodeType="'+nodeType+'" onclick="eXoWCM.PluginUtils.insertContent(this);">'+node+'</div>';
+		newRow.insertCell(1).innerHTML = '<div class="Item">'+ filesList[i].getAttribute("dateCreated") +'</div>';
+		newRow.insertCell(2).innerHTML =	'<div class="Item">'+ filesList[i].getAttribute("size")+'&nbsp;kb' +'</div>';
 	}
-	rightWS.innerHTML =  listItem;
 };
 
 PluginUtils.prototype.getClazzIcon = function(nodeType) {
@@ -235,6 +241,14 @@ PluginUtils.prototype.actionBreadcrumbs = function(nodeId) {
 	var node =  eXo.core.DOMUtil.findAncestorByClass(element, "Node");
 	eXoWCM.PluginUtils.actionColExp(node);
 	eXoWCM.PluginUtils.renderBreadcrumbs(element);
+	var rightWS = document.getElementById('RightWorkspace');
+	var tblRWS  = eXo.core.DOMUtil.findDescendantsByTagName(rightWS, "table")[0];
+	var rowsRWS = eXo.core.DOMUtil.findDescendantsByTagName(tblRWS, "tr");
+	if(rowsRWS && rowsRWS.length > 0) {
+		for(var i = 0; i < rowsRWS.length; i++) {
+			if(i > 0) tblRWS.deleteRow(rowsRWS[i].rowIndex);
+		}
+	} 
 };
 
 PluginUtils.prototype.insertContent = function(objContent) {
@@ -293,16 +307,28 @@ PluginUtils.prototype.showSubMenuSettings = function(obj) {
 					viewSubMenuContainer.onmouseout = null;
 				}, 1*1000);
 			};
-			
 			viewSubMenuContainer.onmouseover = function() {
 				if(obj.Timeout) clearTimeout(obj.Timeout);
 				obj.Timeout = null;
 			};
-			
 			eXo.core.DOMUtil.hideElements();
 		}
 	}
 };
 
+PluginUtils.prototype.changeFilter = function() {
+//	var objSelect = document.getElementById("Pinter");
+	var breadscrumbsContainer = document.getElementById("BreadcumbsContainer");		
+	if(breadscrumbsContainer)	breadscrumbsContainer.innerHTML = '<a class="Nomal" title="Home" href="#">Home</a>';
+	var rightWS = document.getElementById('RightWorkspace');
+	var tblRWS	= eXo.core.DOMUtil.findDescendantsByTagName(rightWS, "table")[0];
+	var rowsRWS = eXo.core.DOMUtil.findDescendantsByTagName(tblRWS, "tr");
+	if(rowsRWS && rowsRWS.length > 0) {
+		for(var i = 0; i < rowsRWS.length; i++) {
+			if(i > 0) tblRWS.deleteRow(rowsRWS[i].rowIndex);
+		}
+	} 
+	requestInit();
+}
 if(!window.eXoWCM) eXoWCM = new Object();
 eXoWCM.PluginUtils = new PluginUtils();
