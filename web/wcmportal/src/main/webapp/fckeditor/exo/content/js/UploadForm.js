@@ -272,7 +272,7 @@ UploadForm.prototype.updateFiles = function(nodeId) {
 };
 
 UploadForm.prototype.isInvalidName = function(name) {
-	if (name.match('[/,[,*,\',",|,#]') == null && name.indexOf(']') < 0) return false;
+	if (name.match('[/,[,*,\',",|,#,%,&,^]') == null && name.indexOf(']') < 0) return false;
 	return true;
 }
 
