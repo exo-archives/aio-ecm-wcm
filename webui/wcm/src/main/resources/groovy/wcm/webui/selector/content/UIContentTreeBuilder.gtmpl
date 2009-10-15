@@ -17,25 +17,25 @@
 	};
 	
 	MyUIWCMTreeView.prototype.selectNode = function(childId) {
-		var objParent = document.getElementById(this.constParentNode + childId);
+		var objParent = document.getElementById(eXo.wcm.MyUIWCMTreeView.constParentNode + childId);
 		
 		if(objParent){
 			objParent.style.fontWeight="bold";
 			if(objParent.className == "NoneSelectNodeIcon")objParent.className = "SelectNodeIcon";
 			else objParent.className = "NoneSelectNodeIcon";
-			if(this.oldId != (this.constParentNode + childId)){
-				oldObject = document.getElementById(this.oldId);
+			if(eXo.wcm.MyUIWCMTreeView.oldId != (eXo.wcm.MyUIWCMTreeView.constParentNode + childId)){
+				oldObject = document.getElementById(eXo.wcm.MyUIWCMTreeView.oldId);
 				if(oldObject) oldObject.style.fontWeight="normal";
-				this.oldId = this.constParentNode + childId;
+				eXo.wcm.MyUIWCMTreeView.oldId = eXo.wcm.MyUIWCMTreeView.constParentNode + childId;
 				// Update Breadcumbs
-				this.updateBreadcumbsElement(objParent);
+				eXo.wcm.MyUIWCMTreeView.updateBreadcumbsElement(objParent);
 			}
 			
 			// Jum Scroll to Posistion of Div which is selected
-			this.jumbToDivSelected(childId);
+			//eXo.wcm.MyUIWCMTreeView.jumbToDivSelected(childId);
 		}
 		
-		var objChild = document.getElementById(this.constChildNode + childId);
+		var objChild = document.getElementById(eXo.wcm.MyUIWCMTreeView.constChildNode + childId);
 		if(objChild)
 			if(objChild.style.display === "block") objChild.style.display = "none";
 			else objChild.style.display = "block";
@@ -46,69 +46,74 @@
 		objBreadcumbs.innerHTML = "";
 		var nodeNames = objParent.getAttribute("treePath").split("/");
 		for(var i = nodeNames.length - 1; i >=0; i --){
+			var action = "";
 			newDiv = document.createElement("div");
-			newDiv.id = this.constBreadcumbsElement + i;
+			newDiv.id = eXo.wcm.MyUIWCMTreeView.constBreadcumbsElement + i;
 			if(i <= 1) newDiv.className ="FirstNode";
 			else newDiv.className ="RightArrowIcon";
 			if(i != 0) newDiv.innerHTML = nodeNames[i];
-			else newDiv.innerHTML = "<span></span>";                
+			else newDiv.innerHTML = "";
 			if(objParent){
 				//action = objParent.getAttribute("onclick") + ";" + objParent.getAttribute('ajaxAction');
-				action = objParent.getAttribute("onclick") + ";" + objParent.getElementsByTagName("a")[0].href;
-			} else action = "javaScript: void(0);";
+				if(objParent.getAttribute("onclick") && objParent.getAttribute("onclick") != null && objParent.getAttribute("onclick") != "null")
+					action = objParent.getAttribute("onclick") + ";";
+				action += objParent.getElementsByTagName("a")[0].href;
+			} else action = "javaScript: void(0)";
 			newDiv.setAttribute('onclick', action);
 			
-			brotherDiv = document.getElementById(this.constBreadcumbsElement + (i + 1));
+			brotherDiv = document.getElementById(eXo.wcm.MyUIWCMTreeView.constBreadcumbsElement + (i + 1));
 			if(brotherDiv) objBreadcumbs.insertBefore(newDiv, brotherDiv)
 			else objBreadcumbs.appendChild(newDiv);
 			
-			try{
-				objParent = document.getElementById(objParent.parentNode.id.replace(this.constChildNode, this.constParentNode));
-			}catch(err){
+			if(objParent != null)objParent = objParent.parentNode;
+			if(objParent && objParent != null && objParent.id && objParent.id != null && objParent.id.indexOf(eXo.wcm.MyUIWCMTreeView.constChildNode) > -1){
+				objParentId = objParent.id.replace(eXo.wcm.MyUIWCMTreeView.constChildNode, eXo.wcm.MyUIWCMTreeView.constParentNode);
+				objParent = document.getElementById(objParentId);
+			}else{
 				objParent = null;
 			}
 		}
-		objParent = document.getElementById(this.constBreadcumbsElement + (nodeNames.length - 1));
+		objParent = document.getElementById(eXo.wcm.MyUIWCMTreeView.constBreadcumbsElement + (nodeNames.length - 1));
 		objParent.style.color="#1B59AA";
-		objParent.style.cursor="normal";
-		objParent.setAttribute('onclick', 'javaScript:void(0);');
+		objParent.setAttribute('onclick', 'javaScript:void(0)');
 	}
 	
+	/*
 	MyUIWCMTreeView.prototype.jumbToDivSelected = function(childId) {
-		var obj = document.getElementById(this.constParentNode + childId);
+		var obj = document.getElementById(eXo.wcm.MyUIWCMTreeView.constParentNode + childId);
 		if(obj){
 			var wcmTreeNodeView = document.getElementById("$uicomponent.id") ;
 			var scroll = eXo.core.Browser.findPosYInContainer(obj, wcmTreeNodeView) ;
 			wcmTreeNodeView.scrollTop = scroll ;
 		}
-	}
+	}*/
 	
 	MyUIWCMTreeView.prototype.OpenPath = function(path) {		
-		var objParent = document.getElementById(this.constParentNode + path);		
+		var objParent = document.getElementById(eXo.wcm.MyUIWCMTreeView.constParentNode + path);		
 		if(objParent){
 			objParent.style.fontWeight="bold";
 			if(objParent.className == "NoneSelectNodeIcon")objParent.className = "SelectNodeIcon";
 			else objParent.className = "NoneSelectNodeIcon";			
-			this.oldId = this.constParentNode + path;
+			eXo.wcm.MyUIWCMTreeView.oldId = eXo.wcm.MyUIWCMTreeView.constParentNode + path;
 			// Update Breadcumbs
-			this.updateBreadcumbsElement(objParent);			
+			eXo.wcm.MyUIWCMTreeView.updateBreadcumbsElement(objParent);			
 			// Jum Scroll to Posistion of Div which is selected
-			this.jumbToDivSelected(path);
+			//eXo.wcm.MyUIWCMTreeView.jumbToDivSelected(path);
 		}		
-		var objChild = document.getElementById(this.constChildNode + path);
+		var objChild = document.getElementById(eXo.wcm.MyUIWCMTreeView.constChildNode + path);
 		if(objChild)
 			if(objChild.style.display === "block") objChild.style.display = "none";
 			else objChild.style.display = "block";
 		
-		obj = document.getElementById(this.constChildNode + path);
+		obj = document.getElementById(eXo.wcm.MyUIWCMTreeView.constChildNode + path);
 		obj.style.display = "block";
-		obj = document.getElementById(this.constParentNode + path);
+		obj = document.getElementById(eXo.wcm.MyUIWCMTreeView.constParentNode + path);
 		obj.style.fontWeight="bold";
 		obj.className = "SelectNodeIcon";
 		var next = true;
 		while(next){
 			obj = obj.parentNode;
-			if(obj && obj.id != this.constComponentId) obj.style.display = "block";
+			if(obj && obj.id != eXo.wcm.MyUIWCMTreeView.constComponentId) obj.style.display = "block";
 			else {
 				next = false;
 			}
@@ -153,7 +158,7 @@
 	if(uicomponent.path != null && uicomponent.path.trim().length() > 0) {
 		//rcontext.getJavascriptManager().addJavascript("eXo.wcm.MyUIWCMTreeView.OpenPath('" + uicomponent.path + "');");
 		println "<script type=\"text/javascript\">";
-		println "eval(\"eXo.wcm.MyUIWCMTreeView.OpenPath('" + uicomponent.path + "')\");";
+		println "eXo.wcm.MyUIWCMTreeView.OpenPath('" + uicomponent.path + "');";
 		println "</script>"
 	}
 %>
