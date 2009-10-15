@@ -98,7 +98,9 @@
 				</div>
 				<div class="MiddleLeftViewBoxStyle">
 					<div class="MiddleRightViewBoxStyle">
-						<div class="MiddleCenterViewBoxStyle" id='MiddleCenterViewBoxStyle'>
+						<div class="MiddleCenterViewBoxStyle">
+							<div class="ViewBoxStyleContainer" id='MiddleCenterViewBoxStyle'>
+							</div>
 						</div>
 					</div>
 				</div>

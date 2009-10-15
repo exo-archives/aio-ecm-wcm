@@ -172,13 +172,14 @@
   padding: 9px;
 }
 
-.UIFormGenerator .UITabPane .UITabContentContainer .RightContent .DecoratorBox {
-  height: 551px;
-  overflow: auto;
-}
 
 .UIFormGenerator .UITabPane .UITabContentContainer .RightContent .MiddleCenterViewBoxStyle  {
   padding: 5px 10px;
+}
+
+.UIFormGenerator .UITabPane .UITabContentContainer .RightContent .MiddleCenterViewBoxStyle .ViewBoxStyleContainer {
+  overflow: auto;
+  height: 525px;
 }
 
 .UIFormGenerator .UITabPane .UITabContentContainer .RightContent .TopContentBoxStyle {
