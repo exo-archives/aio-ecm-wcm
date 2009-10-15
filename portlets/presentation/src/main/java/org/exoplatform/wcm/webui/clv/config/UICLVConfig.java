@@ -48,6 +48,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormRadioBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
+import org.exoplatform.webui.form.validator.PositiveNumberFormatValidator;
 
 /*
  * Created by The eXo Platform SAS Author : Anh Do Ngoc anh.do@exoplatform.com
@@ -268,6 +269,7 @@ public class UICLVConfig extends UIForm implements UISelectable {
     String paginatorTemplate = portletPreferences.getValue(UICLVPortlet.PAGINATOR_TEMPlATE_PATH, null);
     paginatorTemplateSelector.setValue(paginatorTemplate);
     String itemsPerPageVal = portletPreferences.getValue(UICLVPortlet.ITEMS_PER_PAGE, null);
+    itemsPerPageStringInput.addValidator(PositiveNumberFormatValidator.class);
     itemsPerPageStringInput.setValue(itemsPerPageVal);
     itemsPerPageStringInput.setMaxLength(3);    
     if (isManualMode()) {

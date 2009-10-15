@@ -221,6 +221,11 @@
       <empty-input>La valeur du champ '{0}' est nulle ou vide !</empty-input>
     </msg>
   </ECMNameValidator>
+  <ZeroValidator>
+  	<msg>
+  		<Invalid-number>Zéro n'est pas acceptée dans le champ '{0}'</Invalid-number>
+  	</msg>
+  </ZeroValidator>
   
   <Drives>
   	<label>

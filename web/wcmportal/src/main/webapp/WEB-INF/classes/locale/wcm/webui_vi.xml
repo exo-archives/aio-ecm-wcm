@@ -221,6 +221,11 @@
       <empty-input>Giá trị của trường '{0}' là rỗng!</empty-input>
     </msg>
   </ECMNameValidator>
+  <ZeroValidator>
+  	<msg>
+  		<Invalid-number>Số 0 không được chấp nhận trong trường '{0}'</Invalid-number>
+  	</msg>
+  </ZeroValidator>
   
 	<Drives>
   	<label>

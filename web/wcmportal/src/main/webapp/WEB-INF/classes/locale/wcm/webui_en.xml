@@ -221,6 +221,11 @@
       <empty-input>The value of field '{0}' is null or empty!</empty-input>
     </msg>
   </ECMNameValidator>
+  <ZeroValidator>
+  	<msg>
+  		<Invalid-number>Zero is not accepted in field '{0}'</Invalid-number>
+  	</msg>
+  </ZeroValidator>
   
   <Drives>
   	<label>
