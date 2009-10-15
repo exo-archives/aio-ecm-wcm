@@ -20,55 +20,12 @@ style="!width: expression(this.previousSibling.offsetWidth - 2 + 'px'); margin: 
 									<div class="StepTitle"><%= _ctx.appRes(uicomponent.getId() + ".label.step" + String.valueOf(step) + ".title")%></div>
 									
 									<% String stepInfoTitle =  _ctx.appRes(uicomponent.getId() + ".label.stepInfo"); %>
-                  <div class="ShowHelp" title="$stepInfoTitle" onclick="showDivBlock(this, 'PageNodeContainer', 'SelectedPageInfo')">
-                    <%= _ctx.appRes(uicomponent.getId() + ".label.stepInfo") %>
-                  </div>
 									<div style="clear: both;"><span></span></div>
 								</div>
 							</div>
 							<div class="WizardStepContent">
 								<div class="UIWizardPageSetInfo">
 									<div class="OverflowContainer">
-										<div class="PageNodeContainer">
-											<div class="TopLeftContainerOptions">
-												<div class="TopRightContainerOptions">
-													<div class="TopCenterContainerOptions"><span/></div>
-												</div>
-											</div>
-											<div class="MiddleLeftContainerOptions">
-												<div class="MiddleRightContainerOptions">
-													<div class="UIContainerConfigOptions ItemSelectorAncestor"> 
-														<div class="ContainerConfigOptions">
-															<div class="StepNavigationTitle"> <%= _ctx.appRes(uicomponent.getId() + ".label.wizardSteps")%></div>
-															<div class="DetailStepContent">
-																<% 
-																	int numberSteps = uicomponent.getNumberSteps() ;
-																	int i = 1;
-																	String wizardStep = _ctx.appRes(uicomponent.getId() + ".label.wizardStep") ;
-																	String strStep ;
-																	def actionLink = "#" ;
-																	while (i <= (numberSteps)) {
-																		strStep = _ctx.appRes(uicomponent.getId() + ".label.step" + String.valueOf(i)+ ".title") ;
-																		if (i != step) {
-																			actionLink = uicomponent.url("ViewStep" + String.valueOf(i));
-																			print ("<a href=\"$actionLink\" title=\"$strStep\">") ;
-																		} else {
-																			print ("<a href=\"#\" style=\"color: #058ee6;font-weight: bold;\" title=\"$strStep\">") ;
-																		}
-																		print (wizardStep + " " + String.valueOf(i)) ;
-																		println(": " + strStep +"</a>") ;
-																%>
-																<div class="DescripberStep"><%= _ctx.appRes(uicomponent.getId() + ".label.step" + String.valueOf(i)+ ".describe")%></div>
-																<%
-																		i++ ;
-																	}
-																%>
-															</div>
-														</div>  <!-- End of ContainerConfigOptions -->
-													</div> <!-- End of UIContainerConfigOptions ItemSelectorAncestor -->
-												</div> <!-- End of MiddleRightContainerOptions -->
-											</div> <!-- End of MiddleLeftContainerOptions -->
-										</div>	<!-- End of PageNodeContainer -->
 										<div class="SelectedPageInfo">
 											<div class="PageInfoContainer">
 												<% uicomponent.renderChildren() ;%>
