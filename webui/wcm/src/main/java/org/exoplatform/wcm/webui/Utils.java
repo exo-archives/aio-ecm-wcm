@@ -171,7 +171,7 @@ public class Utils {
           }
           continue;
         }
-        if(!(Character.isLetterOrDigit(c) || c == '_')) {
+        if(i > 0 && !(Character.isLetterOrDigit(c) || c == '_')) {
           cleanedStr.deleteCharAt(i--);
           continue;
         }
