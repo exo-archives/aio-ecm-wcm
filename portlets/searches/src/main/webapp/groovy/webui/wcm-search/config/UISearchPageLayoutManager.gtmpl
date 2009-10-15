@@ -6,7 +6,6 @@
 	def portletId = pContext.getWindowId();
 	def quickEditingBlockId = portletId + "-QuickEditingBlock";
 	def rcontext = _ctx.getRequestContext() ;
- 	rcontext.getJavascriptManager().importJavascript('eXo.webpresentation.Utils','/presentation/javascript');
 	rcontext.getJavascriptManager().addOnLoadJavascript('eXo.wcm.removeQuickeditingBlock("' + portletId + '","' + quickEditingBlockId + '")');
 	String fieldName;
 %>

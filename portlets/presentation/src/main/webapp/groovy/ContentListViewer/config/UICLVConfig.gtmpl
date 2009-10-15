@@ -7,7 +7,6 @@
 	def portletId = pContext.getWindowId();
 	def quickEditingBlockId = portletId + "-QuickEditingBlock";
 	def rcontext = _ctx.getRequestContext() ;
- 	rcontext.getJavascriptManager().importJavascript('eXo.webpresentation.Utils','/presentation/javascript');
  	rcontext.getJavascriptManager().addOnLoadJavascript("showHideOrderBy");
  	String contentSelectionBlockTitle = _ctx.appRes(uicomponent.id + ".label.ContentSelectionBlock");
  	String displaySettingBlockTitle = _ctx.appRes(uicomponent.id + ".label.DisplaySettingBlock");
