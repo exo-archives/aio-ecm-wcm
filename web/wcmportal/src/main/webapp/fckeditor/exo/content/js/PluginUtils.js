@@ -322,7 +322,6 @@ PluginUtils.prototype.showSubMenuSettings = function(obj) {
 };
 
 PluginUtils.prototype.changeFilter = function() {
-//	var objSelect = document.getElementById("Pinter");
 	var breadscrumbsContainer = document.getElementById("BreadcumbsContainer");		
 	if(breadscrumbsContainer)	breadscrumbsContainer.innerHTML = '<a class="Nomal" title="Home" href="#">Home</a>';
 	var rightWS = document.getElementById('RightWorkspace');

@@ -9,32 +9,22 @@ wcm.insertCSSFromTextArea2FCK = function(Instance, ContentCSS) {
 	
 	function updateStyle() {
 		var sValue = eContentCSS.value;
-		
+		if(!sValue)	return;
 		var iDoc = FCKeditorAPI.Instances[Instance].EditorWindow.document;
+		var eHead = iDoc.getElementsByTagName("head")[0];
+		var eStyle = iDoc.getElementById(sContentCSSId);
+		if (eStyle) {
+			eHead.removeChild(eStyle);
+		}
+		eStyle = iDoc.createElement("style");
+		eStyle.setAttribute("type", "text/css");
+		eStyle.setAttribute("id", sContentCSSId);
 		if (eXo.core.Browser.isFF()) { //for FF			
-			var eHead = iDoc.getElementsByTagName("head")[0];
-			var eStyle = iDoc.getElementById(sContentCSSId);
-			if (eStyle) {
-				eHead.removeChild(eStyle);
-			}
-			eStyle = iDoc.createElement("style");
-			eStyle.setAttribute("type", "text/css");
-			eStyle.setAttribute("id", sContentCSSId);
 			eStyle.innerHTML = sValue;
-			eHead.appendChild(eStyle);
 		} else {
-			var eHtml = iDoc.getElementsByTagName('html')[0];
-			var strHTML = eHtml.innerHTML;
-			var eStyle = iDoc.getElementById(sContentCSSId);
-			if (eStyle) {
-				strHTML = strHTML.replace(eStyle.outerHTML, '');
-			}
-			strHTML += '<style id="' + sContentCSSId + '">' + sValue + '</style>';
-
-			iDoc.open();
-			iDoc.write(strHTML);
-			iDoc.close();
-		}		
+			eStyle.styleSheet.cssText = sValue;
+		}
+		eHead.appendChild(eStyle);
 	};
 	
 	(function checkFCKEditorAPI() {
