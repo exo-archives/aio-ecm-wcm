@@ -18,6 +18,7 @@ package org.exoplatform.wcm.webui.formgenerator;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,15 +69,15 @@ import org.exoplatform.ws.frameworks.json.value.JsonValue;
     }
 )
 public class UIFormGeneratorTabPane extends UIFormTabPane {
-	
-	/** The Constant PROPERTY_PREFIX. */
-	static final String PROPERTY_PREFIX = "exo:fg_p_";
-	
-	/** The Constant NODE_PREFIX. */
-	static final String NODE_PREFIX = "exo:";
-	
-	/** The Constant NODE_SUFFIX. */
-	static final String NODE_SUFFIX = "_fg_n";
+  
+  /** The Constant PROPERTY_PREFIX. */
+  static final String PROPERTY_PREFIX = "exo:fg_p_";
+  
+  /** The Constant NODE_PREFIX. */
+  static final String NODE_PREFIX = "exo:";
+  
+  /** The Constant NODE_SUFFIX. */
+  static final String NODE_SUFFIX = "_fg_n";
 
   /**
    * Instantiates a new uI form generator tab pane.
@@ -128,10 +129,10 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
    * @return the nodetype name
    */
   private String getNodetypeName(String nodetypeName) {
-	  /*
-	   * PREFIX is used to declare the nodetype inside "exo" namespace
-	   * SUFFIX is used to maintain a more logical alphabetic order by nodetype but preserves unicity.
-	   */
+    /*
+     * PREFIX is used to declare the nodetype inside "exo" namespace
+     * SUFFIX is used to maintain a more logical alphabetic order by nodetype but preserves unicity.
+     */
     return NODE_PREFIX + Utils.cleanString(nodetypeName) + NODE_SUFFIX;
   }
   
@@ -209,9 +210,9 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
     dialogTemplate.append(" import java.io.InputStream;\n");
 
     dialogTemplate.append(" private String getTimestampName() {\n");
-    dialogTemplate.append(" 	Calendar now = Calendar.getInstance();\n");
-    dialogTemplate.append(" 	SimpleDateFormat formatter = new SimpleDateFormat(\"yyyy.MM.dd '-' hh'h'mm'm'ss\");\n");
-    dialogTemplate.append(" 	return formatter.format(now.getTime());\n");
+    dialogTemplate.append("   Calendar now = Calendar.getInstance();\n");
+    dialogTemplate.append("   SimpleDateFormat formatter = new SimpleDateFormat(\"yyyy.MM.dd '-' hh'h'mm'm'ss\");\n");
+    dialogTemplate.append("   return formatter.format(now.getTime());\n");
     dialogTemplate.append(" }\n");
     dialogTemplate.append(" String timestampName = getTimestampName();\n");
     dialogTemplate.append(" %>\n");
@@ -226,9 +227,9 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
      * (show name, use timestamp, convert from another field like exo:title for example) 
      */
     dialogTemplate.append("        <tr style=\"display:none;\">\n");
-    dialogTemplate.append("          <td class=\"FieldLabel\"><%=_ctx.appRes(\"FormGenerator.dialog.label." + "Date" + "\")%></td>\n");
+    dialogTemplate.append("          <td class=\"FieldLabel\"><%=_ctx.appRes(\"FormGenerator.dialog.label.Date\")%></td>\n");
     dialogTemplate.append("          <td class=\"FieldComponent\">\n");
-    dialogTemplate.append("            $timestampName <div style=\"display:none;\"><%\n");
+    dialogTemplate.append("            $timestampName \n               <div style=\"display:none;\"><%\n");
     dialogTemplate.append("              String[] fieldName = [\"jcrPath=/node\", \"mixintype=mix:i18n\", \"editable=if-null\", \"validate=empty,name\", timestampName] ;\n");
     dialogTemplate.append("              uicomponent.addTextField(\"name\", fieldName) ;\n");
     dialogTemplate.append("            %></div>\n");
@@ -263,58 +264,59 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
       if (validate.endsWith("=")) validate = "";
       String propertyName = getPropertyName(inputName);
       if (UIFormGeneratorConstant.LABEL.equals(inputType)) {
-    	  dialogTemplate.append("\n      <tr>\n");
-    	  dialogTemplate.append("        <td class=\"FieldLabel\" colspan=\"2\">"+value+"</td>\n");
-    	  dialogTemplate.append("        </td>\n");
-    	  dialogTemplate.append("      </tr>\n");
-    	  
+        dialogTemplate.append("\n      <tr>\n");
+        dialogTemplate.append("        <td class=\"FieldLabel\" colspan=\"2\">"+value+"</td>\n");
+        dialogTemplate.append("        </td>\n");
+        dialogTemplate.append("      </tr>\n");
+        
       } else {
-    	  dialogTemplate.append("      <tr>\n");
-    	  dialogTemplate.append("        <td class=\"FieldLabel\"><%=_ctx.appRes(\"FormGenerator.dialog.label." + inputName + "\")%></td>\n");
-    	  dialogTemplate.append("        <td class=\"FieldComponent\">\n");
-    	  dialogTemplate.append("          <%\n");
-    	  
-    	  if (UIFormGeneratorConstant.UPLOAD.equals(inputType)) {
-    		  dialogTemplate.append("           if(uicomponent.isEditing()) {\n");
-    		  dialogTemplate.append("             def curNode = uicomponent.getNode() ;\n");
-    		  dialogTemplate.append("             if(curNode.hasProperty(\"" + propertyName + "\")) {\n");
-    		  dialogTemplate.append("               if(curNode.getProperty(\"" + propertyName + "\").getStream().available() > 0) {\n");
-    		  dialogTemplate.append("                 DownloadService dservice = uicomponent.getApplicationComponent(DownloadService.class);\n");
+        dialogTemplate.append("      <tr>\n");
+        
+        dialogTemplate.append("        <td class=\"FieldLabel\"><%=_ctx.appRes(\"FormGenerator.dialog.label." + inputFieldName + "\")%></td>\n");
+        dialogTemplate.append("        <td class=\"FieldComponent\">\n");
+        dialogTemplate.append("          <%\n");
+        
+        if (UIFormGeneratorConstant.UPLOAD.equals(inputType)) {
+          dialogTemplate.append("           if(uicomponent.isEditing()) {\n");
+          dialogTemplate.append("             def curNode = uicomponent.getNode() ;\n");
+          dialogTemplate.append("             if(curNode.hasProperty(\"" + propertyName + "\")) {\n");
+          dialogTemplate.append("               if(curNode.getProperty(\"" + propertyName + "\").getStream().available() > 0) {\n");
+          dialogTemplate.append("                 DownloadService dservice = uicomponent.getApplicationComponent(DownloadService.class);\n");
           dialogTemplate.append("                 InputStream input = curNode.getProperty(\"" + propertyName + "\").getStream();\n");
-          dialogTemplate.append("                 InputStreamDownloadResource dresource = new InputStreamDownloadResource(input, \"" + inputName + "\");\n");
+          dialogTemplate.append("                 InputStreamDownloadResource dresource = new InputStreamDownloadResource(input, \"" + inputFieldName + "\");\n");
           dialogTemplate.append("                 dresource.setDownloadName(curNode.getName());\n");
           dialogTemplate.append("                 def imgSrc = dservice.getDownloadLink(dservice.addDownloadResource(dresource));\n");
-    		  dialogTemplate.append("                 def actionLink = uicomponent.event(\"RemoveData\", \"" + propertyName + "\");\n");
-    		  dialogTemplate.append("                 %>\n");
-    		  dialogTemplate.append("                   <div>\n");
-    		  dialogTemplate.append("                     <image src=\"$imgSrc\" width=\"100px\" height=\"80px\"/>\n");
-    		  dialogTemplate.append("                     <a href=\"$actionLink\">\n");
-    		  dialogTemplate.append("                       <img src=\"/eXoResources/skin/DefaultSkin/background/Blank.gif\" alt=\"\" class=\"ActionIcon Remove16x16Icon\"/>\n");
-    		  dialogTemplate.append("                     </a>\n");
-    		  dialogTemplate.append("                   </div>\n");
-    		  dialogTemplate.append("                 <%\n");
-    		  dialogTemplate.append("               } else {\n");
-    		  dialogTemplate.append("                 String[] fieldImage = [\"jcrPath=/node/" + propertyName + "\"] ;\n");
-    		  dialogTemplate.append("                 uicomponent.addUploadField(\"" + inputName + "\", fieldImage) ;\n");
-    		  dialogTemplate.append("               }\n");
-    		  dialogTemplate.append("             } else {\n");
+          dialogTemplate.append("                 def actionLink = uicomponent.event(\"RemoveData\", \"" + propertyName + "\");\n");
+          dialogTemplate.append("                 %>\n");
+          dialogTemplate.append("                   <div>\n");
+          dialogTemplate.append("                     <image src=\"$imgSrc\" width=\"100px\" height=\"80px\"/>\n");
+          dialogTemplate.append("                     <a href=\"$actionLink\">\n");
+          dialogTemplate.append("                       <img src=\"/eXoResources/skin/DefaultSkin/background/Blank.gif\" alt=\"\" class=\"ActionIcon Remove16x16Icon\"/>\n");
+          dialogTemplate.append("                     </a>\n");
+          dialogTemplate.append("                   </div>\n");
+          dialogTemplate.append("                 <%\n");
+          dialogTemplate.append("               } else {\n");
+          dialogTemplate.append("                 String[] fieldImage = [\"jcrPath=/node/" + propertyName + "\"] ;\n");
+          dialogTemplate.append("                 uicomponent.addUploadField(\"" + inputFieldName + "\", fieldImage) ;\n");
+          dialogTemplate.append("               }\n");
+          dialogTemplate.append("             } else {\n");
           dialogTemplate.append("               String[] fieldImage = [\"jcrPath=/node/" + propertyName + "\"] ;\n");
-          dialogTemplate.append("               uicomponent.addUploadField(\"" + inputName + "\", fieldImage) ;\n");
+          dialogTemplate.append("               uicomponent.addUploadField(\"" + inputFieldName + "\", fieldImage) ;\n");
           dialogTemplate.append("             }\n");
-    		  dialogTemplate.append("           } else if(uicomponent.dataRemoved()) {\n");
-    		  dialogTemplate.append("             String[] fieldImage = [\"jcrPath=/node/" + propertyName + "\"] ;\n");
-    		  dialogTemplate.append("             uicomponent.addUploadField(\"" + inputName + "\", fieldImage) ;\n");
-    		  dialogTemplate.append("           } else {\n");
-    		  dialogTemplate.append("             String[] fieldImage = [\"jcrPath=/node/" + propertyName + "\"] ;\n");
-    		  dialogTemplate.append("             uicomponent.addUploadField(\"" + inputName + "\", fieldImage) ;\n");
-    		  dialogTemplate.append("           }\n");
-    	  } else {
-    		  dialogTemplate.append("           String[] " + inputFieldName + " = [\"jcrPath=/node/" + propertyName + "\", \"defaultValues=" + value + "\", \"" + validate + "\", \"options=" + form.getAdvanced() + "\"];\n");
-    		  dialogTemplate.append("           uicomponent.add" + inputField + "(\"" + inputFieldName + "\", " + inputFieldName + ");\n");
-    	  }
-    	  dialogTemplate.append("          %>\n");
-    	  dialogTemplate.append("        </td>\n");
-    	  dialogTemplate.append("      </tr>\n");
+          dialogTemplate.append("           } else if(uicomponent.dataRemoved()) {\n");
+          dialogTemplate.append("             String[] fieldImage = [\"jcrPath=/node/" + propertyName + "\"] ;\n");
+          dialogTemplate.append("             uicomponent.addUploadField(\"" + inputFieldName + "\", fieldImage) ;\n");
+          dialogTemplate.append("           } else {\n");
+          dialogTemplate.append("             String[] fieldImage = [\"jcrPath=/node/" + propertyName + "\"] ;\n");
+          dialogTemplate.append("             uicomponent.addUploadField(\"" + inputFieldName + "\", fieldImage) ;\n");
+          dialogTemplate.append("           }\n");
+        } else {
+          dialogTemplate.append("           String[] " + inputFieldName + " = [\"jcrPath=/node/" + propertyName + "\", \"defaultValues=" + value + "\", \"" + validate + "\", \"options=" + form.getAdvanced() + "\"];\n");
+          dialogTemplate.append("           uicomponent.add" + inputField + "(\"" + inputFieldName + "\", " + inputFieldName + ");\n");
+        }
+        dialogTemplate.append("          %>\n");
+        dialogTemplate.append("        </td>\n");
+        dialogTemplate.append("      </tr>\n");
       }
       
       dialogTemplate.append("      <tr>\n");
@@ -382,9 +384,9 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
       viewTemplate.append("   <tr>\n");
       viewTemplate.append("     <%\n");
       viewTemplate.append("       if (currentNode.hasProperty(\"" + propertyName + "\")) {\n");
-      viewTemplate.append("       		String cleanName = currentNode.getProperty(\"" + propertyName + "\").getName();\n"); 
-      viewTemplate.append("       		if (cleanName.startsWith(\""+NODE_PREFIX+"\")) cleanName = cleanName.substring(9);\n"); 
-      viewTemplate.append("       		cleanName = cleanName.replaceAll(\"_\", \" \");\n"); 
+      viewTemplate.append("           String cleanName = currentNode.getProperty(\"" + propertyName + "\").getName();\n"); 
+      viewTemplate.append("           if (cleanName.startsWith(\""+NODE_PREFIX+"\")) cleanName = cleanName.substring(9);\n"); 
+      viewTemplate.append("           cleanName = cleanName.replaceAll(\"_\", \" \");\n"); 
       viewTemplate.append("         %>\n");
       viewTemplate.append("           <td style=\"padding:5px\"><%= cleanName %></td>\n");
       if(UIFormGeneratorConstant.UPLOAD.equals(form.getType())) {
@@ -434,7 +436,8 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
       jsonObjectGenerated = jsonObjectGenerated.replaceAll("\n", "<br/>");
       
       JsonHandler jsonHandler = new JsonDefaultHandler();
-      new JsonParserImpl().parse(new InputStreamReader(new ByteArrayInputStream(jsonObjectGenerated.getBytes())), jsonHandler);
+      Charset cs = Charset.forName("utf-8");
+      new JsonParserImpl().parse(new InputStreamReader(new ByteArrayInputStream(jsonObjectGenerated.getBytes("utf-8")), cs), jsonHandler);
       JsonValue jsonValue = jsonHandler.getJsonObject();
       List<UIFormGeneratorInputBean> forms = ((UIFormGeneratorInputBean)new BeanBuilder().createObject(UIFormGeneratorInputBean.class, jsonValue)).getInputs();
       

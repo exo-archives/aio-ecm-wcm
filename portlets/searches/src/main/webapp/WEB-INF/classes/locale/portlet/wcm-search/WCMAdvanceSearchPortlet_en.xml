@@ -98,4 +98,27 @@
   		<repository-exception>Permission access denied.</repository-exception>
   	</msg>
   </UIDocumentForm>
+  <UIPermissionSetting>
+    <label>
+      <usersInputSet>UIPermissionSetting</usersInputSet>
+      <usersStringInput>User Or Group</usersStringInput>
+      <editable>Edit Right</editable>
+      <accessible>Access Right</accessible>
+    </label>
+    <action>
+      <Save>Save</Save>
+      <Reset>Reset</Reset>
+    </action>
+    <msg>
+      <userOrGroup-required>Require select user or group.</userOrGroup-required>
+      <checkbox-require>You should set right.</checkbox-require>
+    </msg>
+  </UIPermissionSetting>
+  <usersInputSet>
+    <title>
+      <SelectUser>Select user</SelectUser>
+      <SelectMember>Select member</SelectMember>
+      <AddAny>Add any permission</AddAny>
+    </title>
+  </usersInputSet>
 </bundle>

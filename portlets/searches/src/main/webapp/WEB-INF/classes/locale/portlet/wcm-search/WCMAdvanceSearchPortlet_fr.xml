@@ -101,4 +101,27 @@
 		<repository-exception>Permission d'accès refusée.</repository-exception>
 	</msg>
   </UIDocumentForm>
+  <UIPermissionSetting>
+    <label>
+      <usersInputSet>UIPermissionSetting</usersInputSet>
+      <usersStringInput>Utilisateur ou groupe</usersStringInput>
+      <editable>Droits d'édition</editable>
+      <accessible>Droits de visualisation</accessible>
+    </label>
+    <action>
+      <Save>Sauver</Save>
+      <Reset>Réinitialiser</Reset>
+    </action>
+    <msg>
+      <userOrGroup-required>Un utilisateur ou un groupe est requis.</userOrGroup-required>
+      <checkbox-require>Un droit est requis.</checkbox-require>
+    </msg>
+  </UIPermissionSetting>
+  <usersInputSet>
+    <title>
+      <SelectUser>Sélectionnez l'utilisateur</SelectUser>
+      <SelectMember>Sélectionnez membre</SelectMember>
+      <AddAny>Ajouter toute autorisation</AddAny>
+    </title>
+  </usersInputSet>
 </bundle>
