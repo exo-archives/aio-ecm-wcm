@@ -234,4 +234,9 @@
   	</label>
   </Drives> 
    
+  <UIWebContentSearchForm>
+  	<msg>
+  		<invalid-format>Định dạng ngày tháng ở trường '{0}' không đúng</invalid-format>
+  	</msg>
+  </UIWebContentSearchForm>
 </bundle>

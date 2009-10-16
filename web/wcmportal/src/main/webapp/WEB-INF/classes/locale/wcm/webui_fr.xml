@@ -234,4 +234,9 @@
   	</label>
   </Drives>
   
+  <UIWebContentSearchForm>
+  	<msg>
+  		<invalid-format>Invalid format datetime in field '{0}'</invalid-format>
+  	</msg>
+  </UIWebContentSearchForm>
 </bundle>
