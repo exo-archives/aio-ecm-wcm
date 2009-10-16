@@ -113,14 +113,19 @@
   		<name>Tài liệu</name>
   		<add>Thêm</add>  		  		
   	</label>
-  </UIContentSelectionPanel>  
-  <UIDocumentDialogForm>
+  </UIContentSelectionPanel>
+  <UIDocumentDialogFormPopupWindow>
+  	<title>
+  		<UICLVContentDialog>Chỉnh sửa nội dung</UICLVContentDialog>
+  	</title>
+  </UIDocumentDialogFormPopupWindow>  
+  <UICLVContentDialog>
   	<action>
   		<Cancel>Hủy bỏ</Cancel>
   		<FastPublish>Xuất bản nhanh</FastPublish>
   		<SaveAsDraft>Lưu lại</SaveAsDraft>  		  		
   	</action>
-  </UIDocumentDialogForm>  
+  </UICLVContentDialog>  
   <UIMessageBoard>
   	<msg>
   	  <contents-not-found>Không tìm thấy nội dung</contents-not-found>

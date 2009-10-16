@@ -124,7 +124,12 @@
   		<add>Ajouter</add>  		  		
   	</label>
   </UIContentSelectionPanel>
-  <UIDocumentDialogForm>
+  <UIDocumentDialogFormPopupWindow>
+  	<title>
+  		<UICLVContentDialog>Forme de dialogue</UICLVContentDialog>
+  	</title>
+  </UIDocumentDialogFormPopupWindow>
+  <UICLVContentDialog>
   	<action>
   		<Cancel>Fermer</Cancel>
   		<FastPublish>Fast Publier</FastPublish>
@@ -134,7 +139,7 @@
    		<get-template-resource>erreur lorsque vous effectuez obtenir la ressource template. </get-template-resource>
    		<get-node-error> d'erreur lorsque vous effectuez obtenir nœud. </get-node-error>
    </msg>
-  </UIDocumentDialogForm>
+  </UICLVContentDialog>
   <UIMessageBoard>
   	<msg>  	
   		<contents-not-found>Contenu introuvable</contents-not-found>
