@@ -108,8 +108,10 @@ public class UIContentSearchForm extends UIForm {
     dateOptions.add(new SelectItemOption<String>(MODIFIED_DATE,MODIFIED_DATE));
     addUIFormInput(new UIFormSelectBox(TIME_OPTION,TIME_OPTION, dateOptions));
     UIFormDateTimeInput startTime = new UIFormDateTimeInput(START_TIME, START_TIME, null, true);
+    startTime.setEditable(false);
     addUIFormInput(startTime);
     UIFormDateTimeInput endTime = new UIFormDateTimeInput(END_TIME, END_TIME, null, true);
+    endTime.setEditable(false);
     addUIFormInput(endTime);
     addUIFormInput(new UIFormStringInput(DOC_TYPE, DOC_TYPE, null));
 //  addUIFormInput(new UIFormStringInput(CATEGORY, CATEGORY, null));
