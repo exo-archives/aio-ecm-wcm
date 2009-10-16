@@ -1,5 +1,5 @@
-.UIPCVContainer {
-
+.UIPCVPortlet {
+	overflow: auto;
 }
 
 .UIPCVContainer .BackButton {
