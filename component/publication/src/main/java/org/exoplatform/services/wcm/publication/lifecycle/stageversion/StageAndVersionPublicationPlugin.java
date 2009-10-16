@@ -43,6 +43,7 @@ import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Application;
+import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
@@ -521,26 +522,27 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
    */
   private void updateOnRemoveNodeProperties(Page page, Node content, String clvPortletId, String remoteUser) throws Exception {
     List<String> listExistedApplicationId = PublicationUtil.getValuesAsString(content, "publication:applicationIDs");
-    listExistedApplicationId.remove(PublicationUtil.setMixedApplicationId(page.getPageId(), clvPortletId));
     
-    List<String> listExistedPageId = PublicationUtil.getValuesAsString(content, "publication:webPageIDs");
-    listExistedPageId.remove(0);
-    
-    List<String> listPageNavigationUri = getListPageNavigationUri(page, remoteUser);
-    List<String> listExistedNavigationNodeUri = PublicationUtil.getValuesAsString(content, "publication:navigationNodeURIs");
-    List<String> listExistedNavigationNodeUriTmp = new ArrayList<String>();
-    listExistedNavigationNodeUriTmp.addAll(listExistedNavigationNodeUri);    
-    for (String existedNavigationNodeUri : listExistedNavigationNodeUriTmp) {
-      if (listPageNavigationUri.contains(existedNavigationNodeUri)) {
-        listExistedNavigationNodeUri.remove(existedNavigationNodeUri);        
-      }
+    if (listExistedApplicationId.remove(PublicationUtil.setMixedApplicationId(page.getPageId(), clvPortletId))) {
+	    List<String> listExistedPageId = PublicationUtil.getValuesAsString(content, "publication:webPageIDs");
+	    listExistedPageId.remove(page.getPageId());
+	    
+	    List<String> listPageNavigationUri = getListPageNavigationUri(page, remoteUser);
+	    List<String> listExistedNavigationNodeUri = PublicationUtil.getValuesAsString(content, "publication:navigationNodeURIs");
+	    List<String> listExistedNavigationNodeUriTmp = new ArrayList<String>();
+	    listExistedNavigationNodeUriTmp.addAll(listExistedNavigationNodeUri);    
+	    for (String existedNavigationNodeUri : listExistedNavigationNodeUriTmp) {
+	      if (listPageNavigationUri.contains(existedNavigationNodeUri)) {
+	        listExistedNavigationNodeUri.remove(existedNavigationNodeUri);        
+	      }
+	    }
+	    Session session = content.getSession();
+	    ValueFactory valueFactory = session.getValueFactory();    
+	    content.setProperty("publication:applicationIDs", PublicationUtil.toValues(valueFactory, listExistedApplicationId));
+	    content.setProperty("publication:webPageIDs", PublicationUtil.toValues(valueFactory, listExistedPageId));
+	    content.setProperty("publication:navigationNodeURIs", PublicationUtil.toValues(valueFactory, listExistedNavigationNodeUri));
+	    session.save();
     }
-    Session session = content.getSession();
-    ValueFactory valueFactory = session.getValueFactory();    
-    content.setProperty("publication:applicationIDs", PublicationUtil.toValues(valueFactory, listExistedApplicationId));
-    content.setProperty("publication:webPageIDs", PublicationUtil.toValues(valueFactory, listExistedPageId));
-    content.setProperty("publication:navigationNodeURIs", PublicationUtil.toValues(valueFactory, listExistedNavigationNodeUri));
-    session.save();
   }
   
   /**
@@ -645,7 +647,7 @@ public class StageAndVersionPublicationPlugin extends WebpagePublicationPlugin{
    * @see org.exoplatform.services.wcm.publication.WebpagePublicationPlugin#updateLifecyleOnChangePage(org.exoplatform.portal.config.model.Page, java.lang.String)
    */
   public void updateLifecyleOnChangePage(Page page, String remoteUser) throws Exception {
-    pageEventListenerDelegate.updateLifecyleOnChangePage(page, remoteUser, this);
+  	pageEventListenerDelegate.updateLifecyleOnChangePage(page, remoteUser, this);
   }
 
   /* (non-Javadoc)

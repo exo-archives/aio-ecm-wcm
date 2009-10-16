@@ -23,6 +23,8 @@ import javax.jcr.Node;
 import javax.jcr.Value;
 
 import org.exoplatform.commons.utils.PageList;
+import org.exoplatform.portal.application.PortletPreferences;
+import org.exoplatform.portal.application.Preference;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.UserPortalConfigService;
@@ -31,6 +33,7 @@ import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.portletcontainer.pci.ExoWindowID;
 import org.exoplatform.services.wcm.core.WCMConfigurationService;
 import org.exoplatform.services.wcm.publication.PublicationUtil;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
@@ -69,7 +72,7 @@ public class UIPublicationAction extends UIForm {
    * 
    * @throws Exception the exception
    */
-  private void updateUI() throws Exception {
+  public void updateUI() throws Exception {
     UIPublicationPages publicationPages = getAncestorOfType(UIPublicationPages.class);
     UIPublishedPages publishedPages = publicationPages.getChild(UIPublishedPages.class);
     
@@ -146,10 +149,9 @@ public class UIPublicationAction extends UIForm {
       WCMPublicationService presentationService = publicationAction.getApplicationComponent(WCMPublicationService.class);
       
       UIPublicationPagesContainer publicationPagesContainer = publicationPages.getAncestorOfType(UIPublicationPagesContainer.class);
-      WCMConfigurationService wcmConfigurationService = PublicationUtil.getServices(WCMConfigurationService.class);
       UserPortalConfigService userPortalConfigService = publicationAction.getApplicationComponent(UserPortalConfigService.class);
       Page page = userPortalConfigService.getPage(pageNode.getPageReference(), event.getRequestContext().getRemoteUser());
-      List<String> clvPortletIds = PublicationUtil.findAppInstancesByName(page, wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.CLV_PORTLET));
+      List<String> clvPortletIds = getManualModeCLVPortletIDs(page);
       if (clvPortletIds.isEmpty()) {
       	presentationService.publishContentSCV(node, page, Util.getUIPortal().getOwner());
       } else {
@@ -270,5 +272,28 @@ public class UIPublicationAction extends UIForm {
       }
       return null;
     }
+  }
+  
+  private static List<String> getManualModeCLVPortletIDs(Page page) throws Exception {
+    WCMConfigurationService wcmConfigurationService = PublicationUtil.getServices(WCMConfigurationService.class);
+    DataStorage dataStorage = PublicationUtil.getServices(DataStorage.class);
+    List<String> clvPortletsId = PublicationUtil.findAppInstancesByName(page, wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.CLV_PORTLET));
+    List<String> applicationIDs = new ArrayList<String>();
+    for (String clvPortletId : clvPortletsId) {
+    	boolean isManualViewerMode = false;
+      PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(clvPortletId));
+      if (portletPreferences != null) {
+        for (Object object : portletPreferences.getPreferences()) {
+          Preference preference = (Preference) object;
+          if ("mode".equals(preference.getName()) && preference.getValues().size() > 0) {
+          	isManualViewerMode = "ManualViewerMode".equals(preference.getValues().get(0).toString());
+          }
+        }
+      }
+      
+      if (isManualViewerMode)
+      	applicationIDs.add(clvPortletId);
+    }
+    return applicationIDs;
   }
 }

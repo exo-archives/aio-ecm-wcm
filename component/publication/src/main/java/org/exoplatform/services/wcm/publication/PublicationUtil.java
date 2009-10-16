@@ -165,30 +165,31 @@ public class PublicationUtil {
     }
     return application;
   }
-  
-  
+
   /**
    * Removed app instances in container by names.
    * 
    * @param container the container
    * @param removingApplicationIds the removing application ids
    */
-  private static void removedAppInstancesInContainerByNames(Container container, List<String> removingApplicationIds) {
+  private static void removedAppInstancesInContainerByNames(
+  		Container container, List<String> removingApplicationIds) {
+  	ArrayList<Object> childrenTmp = new ArrayList<Object>();    
     ArrayList<Object> chidren = container.getChildren();    
-    ArrayList<Object> chidrenTmp = new ArrayList<Object>();
     if(chidren == null) return ;
     for(Object object: chidren) {
       if(object instanceof Application) {
         Application application = Application.class.cast(object);
         if(!removingApplicationIds.contains(application.getInstanceId())) {
-          chidrenTmp.add(object);
+        	childrenTmp.add(object);
         }        
       } else if(object instanceof Container) {
         Container child = Container.class.cast(object);
         removedAppInstancesInContainerByNames(child,removingApplicationIds);
+        childrenTmp.add(child);
       }
     }
-    container.setChildren(chidrenTmp);
+    container.setChildren(childrenTmp);
   }
   
   /**
@@ -279,7 +280,7 @@ public class PublicationUtil {
   public static void removeApplicationFromPage(Page page, List<String> removedApplicationIds) {
     removedAppInstancesInContainerByNames(page, removedApplicationIds);
   }
-  
+
   /**
    * Gets the list application id by page.
    * 

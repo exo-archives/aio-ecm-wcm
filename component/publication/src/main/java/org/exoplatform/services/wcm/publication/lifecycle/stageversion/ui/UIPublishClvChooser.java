@@ -16,10 +16,13 @@
  */
 package org.exoplatform.services.wcm.publication.lifecycle.stageversion.ui;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.jcr.Node;
+import javax.jcr.Value;
 
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.application.Preference;
@@ -39,6 +42,8 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
+import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIPopupComponent;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -119,6 +124,7 @@ public class UIPublishClvChooser extends UIForm implements UIPopupComponent {
     List<String> clvPortletsId = PublicationUtil.findAppInstancesByName(page, wcmConfigurationService.getRuntimeContextParam(WCMConfigurationService.CLV_PORTLET));
     List<Application> applications = new ArrayList<Application>();
     for (String clvPortletId : clvPortletsId) {
+    	boolean isManualViewerMode = false;
       Application application = PublicationUtil.findAppInstancesById(page, clvPortletId);
       PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(clvPortletId));      
       if (portletPreferences != null) {
@@ -127,9 +133,13 @@ public class UIPublishClvChooser extends UIForm implements UIPopupComponent {
           if ("header".equals(preference.getName()) && preference.getValues().size() > 0) {
             application.setTitle(preference.getValues().get(0).toString());
           }
+          if ("mode".equals(preference.getName()) && preference.getValues().size() > 0) {
+          	isManualViewerMode = "ManualViewerMode".equals(preference.getValues().get(0).toString());
+          }
         }
       }
-      applications.add(application);
+      if (isManualViewerMode)
+      	applications.add(application);
     }
     return applications;
   }
@@ -152,8 +162,9 @@ public class UIPublishClvChooser extends UIForm implements UIPopupComponent {
      */
     public void execute(Event<UIPublishClvChooser> event) throws Exception {
       UIPublishClvChooser clvChooser = event.getSource();
-      String clvPortletId = event.getRequestContext().getRequestParameter(OBJECTID);
-      clvPortletId = PortalConfig.PORTAL_TYPE + "#" + org.exoplatform.portal.webui.util.Util.getUIPortal().getOwner() + ":" + clvPortletId;
+      String clvPortletId = URLDecoder.decode(event.getRequestContext().getRequestParameter(OBJECTID), "UTF-8");
+      WCMPublicationService presentationService = clvChooser.getApplicationComponent(WCMPublicationService.class);
+//      clvPortletId = PortalConfig.PORTAL_TYPE + "#" + org.exoplatform.portal.webui.util.Util.getUIPortal().getOwner() + ":" + clvPortletId;
       DataStorage dataStorage = PublicationUtil.getServices(DataStorage.class);
       PortletPreferences portletPreferences = dataStorage.getPortletPreferences(new ExoWindowID(clvPortletId));
       Node node = clvChooser.getNode();
@@ -171,9 +182,14 @@ public class UIPublishClvChooser extends UIForm implements UIPopupComponent {
           }
         }
       }
-      WCMPublicationService presentationService = clvChooser.getApplicationComponent(WCMPublicationService.class);
       StageAndVersionPublicationPlugin publicationPlugin = (StageAndVersionPublicationPlugin) presentationService.getWebpagePublicationPlugins().get(StageAndVersionPublicationConstant.LIFECYCLE_NAME);
       publicationPlugin.publishContentToCLV(node, clvChooser.page, clvPortletId, Util.getUIPortal().getOwner(), event.getRequestContext().getRemoteUser());
+       
+      UIPublicationPagesContainer uiPublicationPagesContainer =
+      	clvChooser.getAncestorOfType(UIPublicationPagesContainer.class);
+      UIPublicationAction publicationAction = 
+      	((UIContainer) uiPublicationPagesContainer.getChildById("UIPublicationPages")).getChildById("UIPublicationAction");
+      publicationAction.updateUI();
       UIPopupWindow popupWindow = clvChooser.getAncestorOfType(UIPopupWindow.class);
       popupWindow.setShow(false);
     }
