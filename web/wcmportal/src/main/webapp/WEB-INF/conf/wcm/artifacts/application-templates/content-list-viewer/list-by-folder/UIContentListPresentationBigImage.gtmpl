@@ -30,29 +30,21 @@
 				String draftLabel = _ctx.appRes("UIContentListPresentationDefault.label.draft");
 				String editActionLabel = _ctx.appRes("UIContentListPresentationDefault.action.edit");
 				
-				Node viewNode = null;
-				Node tempNode = null;
 				for (Node node : currentPageData) {
-					tempNode = node;
-					viewNode = uicomponent.getNodeView(node);
-					if (viewNode == null) {	
-						continue;				
-					} 
-					boolean isShowDraft = uicomponent.showDraftButton(tempNode);
-					if (!isShowDraft) {
-						node = viewNode;
-					}
-					String itemLink = uicomponent.getURL(tempNode);			
-					String itemName = node.getName();
-					String itemSummary = uicomponent.getSummary(node);
-			    	String itemTitle = uicomponent.getTitle(node);
-					String itemDateCreated = uicomponent.getCreatedDate(node);
-					String itemOwner = uicomponent.getAuthor(node);			
-					String imgSrc = uicomponent.getIllustrativeImage(node);								
+				  def viewNode = uicomponent.getNodeView(node);
+				  if (viewNode == null)	continue;
+					def isShowDraft = uicomponent.showDraftButton(viewNode);
+					String itemLink = uicomponent.getURL(viewNode);			
+					String itemName = viewNode.getName();
+					String itemSummary = uicomponent.getSummary(viewNode);
+			    	String itemTitle = uicomponent.getTitle(viewNode);
+					String itemDateCreated = uicomponent.getCreatedDate(viewNode);
+					String itemOwner = uicomponent.getAuthor(viewNode);			
+					String imgSrc = uicomponent.getIllustrativeImage(viewNode);								
 					if (itemTitle != null && itemTitle.trim().length() != 0) {
 						itemName = itemTitle;
 					}						
-					String contentkEdittingLink = uicomponent.event("EditContent", tempNode.getPath());		
+					String contentkEdittingLink = uicomponent.event("EditContent", viewNode.getPath());		
 					%>	
 						<div class="CaptionItem" style="border-bottom: 0px;">
 							<% 
