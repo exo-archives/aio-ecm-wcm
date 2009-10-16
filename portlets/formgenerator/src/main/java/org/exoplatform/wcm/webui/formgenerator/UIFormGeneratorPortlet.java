@@ -16,6 +16,11 @@
  */
 package org.exoplatform.wcm.webui.formgenerator;
 
+import javax.portlet.PortletMode;
+
+import org.exoplatform.webui.application.WebuiApplication;
+import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
@@ -31,12 +36,41 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 )
 public class UIFormGeneratorPortlet extends UIPortletApplication {
 
+	/** The portlet mode. */
+  private PortletMode        mode                    = PortletMode.VIEW;
+	
   /**
    * Instantiates a new uI form generator portlet.
    * 
    * @throws Exception the exception
    */
   public UIFormGeneratorPortlet() throws Exception {
-    addChild(UIFormGeneratorTabPane.class, null, null);
+    activateMode(mode);
+  }
+  
+  /* (non-Javadoc)
+   * @see org.exoplatform.webui.core.UIPortletApplication#processRender(org.exoplatform.webui.application.WebuiApplication, org.exoplatform.webui.application.WebuiRequestContext)
+   */
+  public void processRender(WebuiApplication app, WebuiRequestContext context) throws Exception {
+    PortletRequestContext pContext = (PortletRequestContext) context;
+    PortletMode newMode = pContext.getApplicationMode();
+    if (!mode.equals(newMode)) {
+      activateMode(newMode);
+      mode = newMode;
+    }
+    super.processRender(app, context);
+  }
+  
+  /**
+   * Activate mode.
+   * 
+   * @param mode the mode
+   * 
+   * @throws Exception the exception
+   */
+  private void activateMode(PortletMode mode) throws Exception {
+    if (PortletMode.VIEW.equals(mode)) {
+    	addChild(UIFormGeneratorTabPane.class, null, null);
+    }
   }
 }
