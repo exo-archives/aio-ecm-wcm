@@ -34,6 +34,7 @@ import org.exoplatform.wcm.webui.clv.UICLVContainer;
 import org.exoplatform.wcm.webui.clv.UICLVFolderMode;
 import org.exoplatform.wcm.webui.clv.UICLVManualMode;
 import org.exoplatform.wcm.webui.clv.UICLVPortlet;
+import org.exoplatform.wcm.webui.validator.ZeroNumberValidator;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -269,8 +270,9 @@ public class UICLVConfig extends UIForm implements UISelectable {
     String paginatorTemplate = portletPreferences.getValue(UICLVPortlet.PAGINATOR_TEMPlATE_PATH, null);
     paginatorTemplateSelector.setValue(paginatorTemplate);
     String itemsPerPageVal = portletPreferences.getValue(UICLVPortlet.ITEMS_PER_PAGE, null);
-    itemsPerPageStringInput.addValidator(PositiveNumberFormatValidator.class);
     itemsPerPageStringInput.setValue(itemsPerPageVal);
+    itemsPerPageStringInput.addValidator(ZeroNumberValidator.class);
+    itemsPerPageStringInput.addValidator(PositiveNumberFormatValidator.class);
     itemsPerPageStringInput.setMaxLength(3);    
     if (isManualMode()) {
       orderBySelectBox.setRendered(false);
