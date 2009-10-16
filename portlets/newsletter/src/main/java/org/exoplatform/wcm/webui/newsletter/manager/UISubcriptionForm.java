@@ -42,6 +42,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.NameValidator;
+import org.exoplatform.webui.form.validator.SpecialCharacterValidator;
 
 /**
  * Created by The eXo Platform SAS
@@ -94,7 +95,8 @@ public class UISubcriptionForm extends UIForm {
     }
 
     UIFormStringInput inputSubcriptionName = new UIFormStringInput(INPUT_SUBCRIPTION_NAME, null);
-    inputSubcriptionName.addValidator(MandatoryValidator.class).addValidator(NameValidator.class);
+    inputSubcriptionName.addValidator(MandatoryValidator.class).addValidator(NameValidator.class)
+    										.addValidator(SpecialCharacterValidator.class);
                                                                       
     UIFormStringInput inputSubcriptionTitle = new UIFormStringInput(INPUT_SUBCRIPTION_TITLE, null);
     inputSubcriptionTitle.addValidator(MandatoryValidator.class);

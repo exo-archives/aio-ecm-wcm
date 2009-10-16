@@ -45,6 +45,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.NameValidator;
+import org.exoplatform.webui.form.validator.SpecialCharacterValidator;
 
 /**
  * The Class UICategoryForm.
@@ -100,7 +101,8 @@ public class UICategoryForm extends UIForm implements UIPopupComponent, UISelect
 		formCategoryModerator.setActionInfo(INPUT_CATEGORY_MODERATOR, new String[] {"SelectUser", "SelectMember", "DeleteModerator"});
 		formCategoryModerator.showActionInfo(true);
 		
-		inputCateName.addValidator(MandatoryValidator.class).addValidator(NameValidator.class);
+		inputCateName.addValidator(MandatoryValidator.class).addValidator(NameValidator.class)
+									.addValidator(SpecialCharacterValidator.class);;
 		inputCateTitle.addValidator(MandatoryValidator.class);
 		inputModerator.addValidator(MandatoryValidator.class);
 		
