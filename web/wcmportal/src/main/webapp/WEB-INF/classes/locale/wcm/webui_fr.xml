@@ -236,7 +236,7 @@
   
   <UIWebContentSearchForm>
   	<msg>
-  		<invalid-format>Invalid format datetime in field '{0}'</invalid-format>
+  		<invalid-format>Blancs datetime format dans le champ '{0}'</invalid-format>
   	</msg>
   </UIWebContentSearchForm>
 </bundle>
