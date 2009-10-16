@@ -13,19 +13,19 @@
 	     	    <div class="CenterHorizontalTabs">
 			        <div class="TabsContainer">
 			          <%
+			          	String url = uicomponent.url("SelectTab") ;
 			          	String selTabId = uicomponent.getSelectedTabId() ;
 			            for(uiChild in uicomponent.getChildren()) {
 			              if(!uiChild.isRendered()) continue ;
 			              String style = "NormalTab" ;
 			              String tabId = uiChild.getId();
-			              String paneId = uicomponent.getId();
-			              if(uiChild.isRendered()) style="SelectedTab" ;
+			              if(tabId.equals(selTabId)) style="SelectedTab" ;
 			          %>
 			            <div class="UITab NormalTabStyle">
 			              <div class="$style">
 			                <div class="LeftTab">
 			                  <div class="RightTab">                
-			                    <div class="MiddleTab" onClick="eXo.webui.UIHorizontalTabs.changeTabForUITabPane(this, '$paneId', '$tabId')"><%=_ctx.appRes("UITabPane.title." + uiChild.getId());%></div>
+			                    <div class="MiddleTab" onClick="eXo.webui.UIHorizontalTabs.changeTabForUITabPane(this, '$tabId', '$url')"><%=_ctx.appRes("UITabPane.title." + uiChild.getId());%></div>
 			                  </div>
 			                </div>
 			              </div>
