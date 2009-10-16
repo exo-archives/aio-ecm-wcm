@@ -40,6 +40,7 @@ import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.webui.UIWelcomeComponent;
+import org.exoplatform.portal.webui.application.UIApplication;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.navigation.PageNavigationUtils;
@@ -396,8 +397,7 @@ public class UISiteAdminToolbar extends UIContainer {
       UserACL userACL = uiApp.getApplicationComponent(UserACL.class);
       String remoteUser = portalContext.getRemoteUser();
       if (!userACL.hasAccessControlWorkspacePermission(remoteUser)) {
-        uiApp.addMessage(new ApplicationMessage(UISiteAdminToolbar.MESSAGE, null));
-        portalContext.addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        Utils.createPopupMessage(event.getSource(), UISiteAdminToolbar.MESSAGE, null, ApplicationMessage.WARNING);
         return;
       }
       UIControlWorkspace uiControl = uiApp.getChild(UIControlWorkspace.class);
@@ -447,10 +447,8 @@ public class UISiteAdminToolbar extends UIContainer {
       String pageId = uiPortal.getSelectedNode().getPageReference();
       UserPortalConfigService portalConfigService = uiApp.getApplicationComponent(UserPortalConfigService.class);
       Page currentPage = portalConfigService.getPage(pageId, remoteUser);
-      if (!userACL.hasAccessControlWorkspacePermission(remoteUser)
-          || !userACL.hasEditPermission(currentPage, remoteUser)) {
-        uiApp.addMessage(new ApplicationMessage(UISiteAdminToolbar.MESSAGE, null));
-        portalContext.addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+      if (!userACL.hasAccessControlWorkspacePermission(remoteUser) || !userACL.hasEditPermission(currentPage, remoteUser)) {
+      	Utils.createPopupMessage(event.getSource(), UISiteAdminToolbar.MESSAGE, null, ApplicationMessage.WARNING);
         return;
       }
       uiApp.setEditting(true);
@@ -492,8 +490,7 @@ public class UISiteAdminToolbar extends UIContainer {
       UIPortalApplication uiApp = Util.getUIPortalApplication();
       UserACL userACL = uiApp.getApplicationComponent(UserACL.class);
       if (!userACL.hasCreatePortalPermission(portalContext.getRemoteUser())) {
-        uiApp.addMessage(new ApplicationMessage(UISiteAdminToolbar.MESSAGE, null));
-        portalContext.addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+      	Utils.createPopupMessage(event.getSource(), UISiteAdminToolbar.MESSAGE, null, ApplicationMessage.WARNING);
         return;
       }
       UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
@@ -527,9 +524,7 @@ public class UISiteAdminToolbar extends UIContainer {
       UIPortal uiPortal = Util.getUIPortal();
       UIPortalApplication uiApp = Util.getUIPortalApplication();      
       if (!uiPortal.isModifiable()) {
-        uiApp.addMessage(new ApplicationMessage(UISiteAdminToolbar.MESSAGE,
-            new String[] { uiPortal.getName() }));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+      	Utils.createPopupMessage(event.getSource(), UISiteAdminToolbar.MESSAGE, null, ApplicationMessage.WARNING);
         return;
       }
       UIControlWorkspace uiControlWorkspace = uiApp.getChild(UIControlWorkspace.class);
@@ -890,12 +885,10 @@ public class UISiteAdminToolbar extends UIContainer {
      */
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       UIPortalApplication uiApp = Util.getUIPortalApplication();
-      PortalRequestContext portalContext = Util.getPortalRequestContext();
       UserACL userACL = uiApp.getApplicationComponent(UserACL.class);
       PortalConfig portalConfig = PortalDataMapper.toPortal(Util.getUIPortal());
       if (!userACL.hasPermission(portalConfig.getEditPermission())) {
-        uiApp.addMessage(new ApplicationMessage(UISiteAdminToolbar.MESSAGE, null));
-        portalContext.addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+      	Utils.createPopupMessage(event.getSource(), UISiteAdminToolbar.MESSAGE, null, ApplicationMessage.WARNING);
         return;
       }
       PortalRequestContext context = Util.getPortalRequestContext();
@@ -922,12 +915,10 @@ public class UISiteAdminToolbar extends UIContainer {
      */
     public void execute(Event<UISiteAdminToolbar> event) throws Exception {
       UIPortalApplication uiApp = Util.getUIPortalApplication();
-      PortalRequestContext portalContext = Util.getPortalRequestContext();
       UserACL userACL = uiApp.getApplicationComponent(UserACL.class);
       PortalConfig portalConfig = PortalDataMapper.toPortal(Util.getUIPortal());
       if (!userACL.hasPermission(portalConfig.getEditPermission())) {
-        uiApp.addMessage(new ApplicationMessage(UISiteAdminToolbar.MESSAGE, null));
-        portalContext.addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+      	Utils.createPopupMessage(event.getSource(), UISiteAdminToolbar.MESSAGE, null, ApplicationMessage.WARNING);
         return;
       }
       PortalRequestContext context = Util.getPortalRequestContext();
