@@ -358,12 +358,11 @@ public class UIPermissionSetting extends UIForm implements UISelectable {
   protected void lockForm(boolean isLock) {
     UIFormInputSetWithAction inputSet = getChildById(USERS_INPUTSET);
     if (isLock) {
-      setActions(new String[] { "Reset" });
+      setActions(new String[] {});
       inputSet.setActionInfo(USERS_STRINGINPUT, null);
     } else {
       setActions(new String[] { "Save", "Reset" });
-      inputSet.setActionInfo(USERS_STRINGINPUT, new String[] { "SelectUser", "SelectMember",
-      "AddAny" });
+      inputSet.setActionInfo(USERS_STRINGINPUT, new String[] { "SelectUser", "SelectMember", "AddAny" });
     }
     getUIFormCheckBoxInput(ACCESSIBLE).setEnable(!isLock);
     getUIFormCheckBoxInput(EDITABLE).setEnable(!isLock);
