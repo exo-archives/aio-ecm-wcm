@@ -16,7 +16,6 @@
  */
 package org.exoplatform.wcm.webui.scv.config;
 
-import java.security.AccessControlException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -137,26 +136,16 @@ public class UINameWebContentForm extends UIForm {
     if(acceptableContentTypes.size() == 0) return options;
     String userName = Util.getPortalRequestContext().getRemoteUser();
     for(String contentType: acceptableContentTypes) {
-        NodeType nodeType = nodeTypeManager.getNodeType(contentType);
-        if (nodeType.isNodeType("exo:webContent")) {
-        	String label = templateService.getTemplateLabel(contentType,repositoryName);
-            String resolveLabel = label;
-            try {
-              resolveLabel = resourceBundle.getString("ContentType.lable."+ StringUtils.deleteWhitespace(resolveLabel));
-            } catch(Exception e) {
-              // You shouldn't throw popup message, because some exception often rise here.
-            }
-        	try {
-        		String templatePath = templateService.getTemplatePathByUser(true, contentType, userName, repositoryName);
-        		if ((templatePath != null) && (templatePath.length() > 0)) {
-        			options.add(new SelectItemOption<String>(label, contentType));
-        		}
-        	} catch (AccessControlException e) {
-        	  Utils.createPopupMessage(this, "UIMessageBoard.msg.access-control", null, ApplicationMessage.ERROR);
-        	} catch (Exception e) {
-        	  Utils.createPopupMessage(this, "UIMessageBoard.msg.list-file-type", null, ApplicationMessage.ERROR);
-        	}	        	
-        }
+      NodeType nodeType = nodeTypeManager.getNodeType(contentType);
+      if (nodeType.isNodeType("exo:webContent")) {
+      	String label = templateService.getTemplateLabel(contentType,repositoryName);
+        String resolveLabel = label;
+        resolveLabel = resourceBundle.getString("ContentType.lable."+ StringUtils.deleteWhitespace(resolveLabel));
+    		String templatePath = templateService.getTemplatePathByUser(true, contentType, userName, repositoryName);
+    		if ((templatePath != null) && (templatePath.length() > 0)) {
+    			options.add(new SelectItemOption<String>(label, contentType));
+    		}
+      }
     }    
     Collections.sort(options, new ItemOptionNameComparator()) ;
     return options ;
