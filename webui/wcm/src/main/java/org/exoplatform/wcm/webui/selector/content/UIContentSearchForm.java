@@ -352,7 +352,7 @@ public class UIContentSearchForm extends UIForm {
         }
       }else if(typeSearch.equals(UIContentBrowsePanel.DMSDOCUMENT)){
         if(UIContentSearchForm.SEARCH_BY_NAME.equals(radioValue)) {
-          String keyword = uiWCSearch.getUIStringInput(radioValue).getValue();
+          String keyword = uiWCSearch.getUIStringInput(radioValue).getValue().trim();
           if(uiWCSearch.haveEmptyField(uiApp, event, keyword)) return;
           pagResult = uiWCSearch.searchDocumentByName(keyword, qCriteria, pageSize);
         } else if(UIContentSearchForm.SEARCH_BY_CONTENT.equals(radioValue)) {
