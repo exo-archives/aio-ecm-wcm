@@ -25,6 +25,7 @@ import java.util.List;
 import javax.jcr.PropertyType;
 import javax.jcr.version.OnParentVersionAction;
 
+import org.exoplatform.ecm.webui.form.validator.ECMNameValidator;
 import org.exoplatform.services.cms.templates.TemplateService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.nodetype.ExtendedNodeTypeManager;
@@ -90,7 +91,7 @@ public class UIFormGeneratorTabPane extends UIFormTabPane {
     UIFormInputSet formGeneratorGeneralTab = new UIFormInputSet(UIFormGeneratorConstant.FORM_GENERATOR_GENERAL_TAB);
     UIFormStringInput nameFormStringInput = new UIFormStringInput(UIFormGeneratorConstant.NAME_FORM_STRING_INPUT, UIFormGeneratorConstant.NAME_FORM_STRING_INPUT, null); 
     nameFormStringInput.addValidator(MandatoryValidator.class);
-    nameFormStringInput.addValidator(NameValidator.class);
+    nameFormStringInput.addValidator(ECMNameValidator.class);
     formGeneratorGeneralTab.addUIFormInput(nameFormStringInput);
     formGeneratorGeneralTab.addUIFormInput(new UIFormHiddenInput(UIFormGeneratorConstant.JSON_OBJECT_FORM_GENERATOR, UIFormGeneratorConstant.JSON_OBJECT_FORM_GENERATOR, null));
     formGeneratorGeneralTab.addUIFormInput(new UIFormWYSIWYGInput(UIFormGeneratorConstant.DESCRIPTION_FORM_WYSIWYG_INPUT, UIFormGeneratorConstant.DESCRIPTION_FORM_WYSIWYG_INPUT, null));
